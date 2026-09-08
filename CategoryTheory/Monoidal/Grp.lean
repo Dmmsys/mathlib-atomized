@@ -30,28 +30,19 @@ open CategoryTheory Category Limits MonoidalCategory CartesianMonoidalCategory M
 namespace CategoryTheory
 variable {C : Type u₁} [Category.{v₁} C] [CartesianMonoidalCategory.{v₁} C]
 
-/--
-Definition of `AddGrpObj` / `AddGrpObj` 的定义
+/-- An additive group object internal to a cartesian monoidal category.
+Also see the bundled `AddGrp`. -/
+/-
+**CategoryTheory.AddGrpObj** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：AddGrpObj (X : C) extends AddMonObj X where /-- The negation in a group ob
+ject -/ neg : X ⟶ X left_neg (X) : lift neg (𝟙 X) ≫ add = toUnit _ ≫ zero
+参数：X : C。
+继承自：AddMonObj X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AddGrpObj
-  parameters: (X : C)
-  extends: AddMonObj X
-  axioms and operations (3):
-    - neg : X ⟶ X
-    - left_neg((X)) : lift neg (𝟙 X) ≫ add = toUnit _ ≫ zero  [default: by cat_disch]
-    - right_neg((X)) : lift (𝟙 X) neg ≫ add = toUnit _ ≫ zero  [default: by cat_disch]
-
-中文:
-类 加法GrpObj
-  参数: (X : C)
-  继承: 加法MonObj X
-  公理与运算 (3 个):
-    - neg : X ⟶ X
-    - left_neg((X)) : lift neg (𝟙 X) ≫ add = toUnit _ ≫ zero  [默认: by cat_disch]
-    - right_neg((X)) : lift (𝟙 X) neg ≫ add = toUnit _ ≫ zero  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, right_neg, toUnit
+--- 原说明 ---
+An additive group object internal to a cartesian monoidal category.
+Also see the bundled `AddGrp`.
 -/
 class AddGrpObj (X : C) extends AddMonObj X where
   /-- The negation in a group object -/
@@ -61,28 +52,17 @@ class AddGrpObj (X : C) extends AddMonObj X where
 
 /-- A group object internal to a cartesian monoidal category. Also see the bundled `Grp`. -/
 @[to_additive]
-/--
-Definition of `GrpObj` / `GrpObj` 的定义
+/-
+**CategoryTheory.GrpObj** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：GrpObj (X : C) extends MonObj X where /-- The inverse in a group object -/
+ inv : X ⟶ X left_inv (X) : lift inv (𝟙 X) ≫ mul = toUnit _ ≫ one
+参数：X : C。
+继承自：MonObj X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class GrpObj
-  parameters: (X : C)
-  extends: MonObj X
-  axioms and operations (3):
-    - inv : X ⟶ X
-    - left_inv((X)) : lift inv (𝟙 X) ≫ mul = toUnit _ ≫ one  [default: by cat_disch]
-    - right_inv((X)) : lift (𝟙 X) inv ≫ mul = toUnit _ ≫ one  [default: by cat_disch]
-
-中文:
-类 GrpObj
-  参数: (X : C)
-  继承: MonObj X
-  公理与运算 (3 个):
-    - inv : X ⟶ X
-    - left_inv((X)) : lift inv (𝟙 X) ≫ mul = toUnit _ ≫ one  [默认: by cat_disch]
-    - right_inv((X)) : lift (𝟙 X) inv ≫ mul = toUnit _ ≫ one  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, right_inv, toUnit
+--- 原说明 ---
+A group object internal to a cartesian monoidal category. Also see the bundled `
+Grp`.
 -/
 class GrpObj (X : C) extends MonObj X where
   /-- The inverse in a group object -/
@@ -104,18 +84,12 @@ attribute [reassoc (attr := simp)] AddGrpObj.left_neg AddGrpObj.right_neg
 attribute [to_additive existing] left_inv_assoc right_inv_assoc
 
 @[to_additive]
-/--
-Instance `instTensorUnit` / 实例 `instTensorUnit`
-
-English:
-instance instTensorUnit
-  signature: : GrpObj (𝟙_ C) where
-  body: 𝟙 (𝟙_ C)
-
-中文:
-实例 instTensorUnit
-  签名: : GrpObj (𝟙_ C) where
-  定义体: 𝟙 (𝟙_ C)
+/-
+**CategoryTheory.GrpObj.instTensorUnit** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.GrpObj`。
+形式化陈述：instTensorUnit : GrpObj (𝟙_ C) where inv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instTensorUnit : GrpObj (𝟙_ C) where
   inv := 𝟙 (𝟙_ C)
@@ -126,22 +100,15 @@ attribute [simps neg] AddGrpObj.instTensorAddUnit
 end GrpObj
 
 variable (C) in
-/--
-Definition of `AddGrp` / `AddGrp` 的定义
+/-- An additive group object in a Cartesian monoidal category. -/
+/-
+**CategoryTheory.AddGrp** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] → [CategoryT
+heory.CartesianMonoidalCategory C] → Type (max u₁ v₁)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddGrp
-  parameters: where
-  axioms and operations (2):
-    - X : C
-    - [addGrp : AddGrpObj X]
-
-中文:
-结构 加法群
-  参数: where
-  公理与运算 (2 个):
-    - X : C
-    - [addGrp : 加法GrpObj X]
+--- 原说明 ---
+An additive group object in a Cartesian monoidal category.
 -/
 structure AddGrp where
   /-- The underlying object in the ambient monoidal category -/
@@ -151,22 +118,14 @@ structure AddGrp where
 variable (C) in
 /-- A group object in a Cartesian monoidal category. -/
 @[to_additive]
-/--
-Definition of `Grp` / `Grp` 的定义
+/-
+**CategoryTheory.Grp** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] → [CategoryT
+heory.CartesianMonoidalCategory C] → Type (max u₁ v₁)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Grp
-  parameters: where
-  axioms and operations (2):
-    - X : C
-    - [grp : GrpObj X]
-
-中文:
-结构 群
-  参数: where
-  公理与运算 (2 个):
-    - X : C
-    - [grp : GrpObj X]
+--- 原说明 ---
+A group object in a Cartesian monoidal category.
 -/
 structure Grp where
   /-- The underlying object in the ambient monoidal category -/
@@ -180,169 +139,98 @@ namespace Grp
 /-- A group object is a monoid object. -/
 @[to_additive (attr := simps -isSimp X) toAddMon
 /-- An additive group object is an additive monoid object. -/]
-/--
-Definition of `toMon` / `toMon` 的定义
-
-English:
-abbreviation toMon
-  signature: (A : Grp C)
-  body: ⟨A.X⟩
-
-中文:
-缩写 toMon
-  签名: (A : 群 C)
-  定义体: ⟨A.X⟩
+/-
+**CategoryTheory.Grp.toMon** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：toMon (A : Grp C) : Mon C
+参数：A : Grp C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev toMon (A : Grp C) : Mon C := ⟨A.X⟩
 
 variable (C) in
 /-- The trivial group object. -/
 @[to_additive (attr := simps!) /-- The trivial additive group object. -/]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.Grp.trivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：trivial : Grp C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: : Grp C
-  body: { Mon.trivial C with grp := GrpObj.instTensorUnit }
-
-@[to_additive]
-
-中文:
-定义 trivial
-  签名: : 群 C
-  定义体: { Mon.trivial C with grp := GrpObj.instTensorUnit }
-
-@[to_additive]
-
-Depends on / 依赖: GrpObj, GrpObj.instTensorUnit, Mon.trivial, instTensorUnit
+--- 原说明 ---
+The trivial group object.
 -/
 def trivial : Grp C := { Mon.trivial C with grp := GrpObj.instTensorUnit }
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Grp C)
-  body: trivial C
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 (群 C)
-  定义体: trivial C
-
-@[to_additive]
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Grp C) where
   default := trivial C
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (Grp C)
-  body: inferInstanceAs (Category (InducedCategory _ Grp.toMon))
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 范畴 (群 C)
-  定义体: inferInstanceAs (Category (InducedCategory _ Grp.toMon))
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Category, Grp.toMon, InducedCategory
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (Grp C) :=
   inferInstanceAs (Category (InducedCategory _ Grp.toMon))
 
 @[to_additive (attr := simp)]
-/--
-theorem `id_hom_hom` / 定理 `id_hom_hom`
-
-English:
-theorem id_hom_hom
-  given: (A : Grp C)
-  statement: Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X
-  proof: rfl
-
-@[to_additive (attr := simp, reassoc)]
-
-中文:
-定理 id_hom_hom
-  条件: (A : 群 C)
-  结论: 幺半群.态射.hom (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.X
-  证明: rfl
-
-@[to_additive (attr := simp, reassoc)]
+/-
+**CategoryTheory.Grp.id_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：id_hom_hom (A : Grp C) : Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A
+.X
+参数：A : Grp C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom_hom (A : Grp C) : Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X :=
   rfl
 
 @[to_additive (attr := simp, reassoc)]
-/--
-theorem `comp_hom_hom` / 定理 `comp_hom_hom`
-
-English:
-theorem comp_hom_hom
-  given: {R S T : Grp C} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-@[to_additive (attr := ext)]
-
-中文:
-定理 comp_hom_hom
-  条件: {R S T : 群 C} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
-
-@[to_additive (attr := ext)]
+/-
+**CategoryTheory.Grp.comp_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`
+。
+形式化陈述：comp_hom_hom {R S T : Grp C} (f : R ⟶ S) (g : S ⟶ T) : Mon.Hom.hom (f ≫ g)
+.hom = f.hom.hom ≫ g.hom.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom_hom {R S T : Grp C} (f : R ⟶ S) (g : S ⟶ T) :
     Mon.Hom.hom (f ≫ g).hom = f.hom.hom ≫ g.hom.hom :=
   rfl
 
 @[to_additive (attr := ext)]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  given: {A B : Grp C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
-  statement: f = g
-  proof: InducedCategory.hom_ext (Mon.Hom.ext h)
-
-中文:
-定理 hom_ext
-  条件: {A B : 群 C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
-  结论: f = g
-  证明: InducedCategory.hom_ext (Mon.Hom.ext h)
-
-Depends on / 依赖: InducedCategory, InducedCategory.hom_ext, Mon.Hom.ext, hom_ext
+/-
+**CategoryTheory.Grp.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：hom_ext {A B : Grp C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom) : f = g
+参数：f g : A ⟶ B；h : f.hom.hom = g.hom.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `CategoryTheory.Mon.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Categ
+ory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {M N : CategoryTh
+eory.Mon C} {x y…
 -/
 theorem hom_ext {A B : Grp C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom) : f = g :=
   InducedCategory.hom_ext (Mon.Hom.ext h)
 
 /-- Constructor for morphisms in `Grp C`. -/
 @[to_additive (attr := simps) /-- Constructor for morphisms in `AddGrp C`. -/]
-/--
-Definition of `homMk'` / `homMk'` 的定义
+/-
+**CategoryTheory.Grp.homMk'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：homMk' {A B : Grp C} (f : A.toMon ⟶ B.toMon) : A ⟶ B where hom
+参数：f : A.toMon ⟶ B.toMon。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk'
-  signature: {A B : Grp C} (f : A.toMon ⟶ B.toMon)
-  body: f
-
-中文:
-定义 homMk'
-  签名: {A B : 群 C} (f : A.toMon ⟶ B.toMon)
-  定义体: f
+--- 原说明 ---
+Constructor for morphisms in `Grp C`.
 -/
 def homMk' {A B : Grp C} (f : A.toMon ⟶ B.toMon) : A ⟶ B where
   hom := f
@@ -352,108 +240,69 @@ instance. -/
 @[to_additive (attr := simps!)
 /-- Construct a morphism `A ⟶ B` of `AddGrp C` from a map `f : A.X ⟶ A.X` and a `IsAddMonHom f`
 instance.-/]
-/--
-Definition of `homMk` / `homMk` 的定义
-
-English:
-definition homMk
-  signature: {A B : Grp C} (f : A.X ⟶ B.X) [IsMonHom f]
-  body: homMk' (.mk f)
-
-中文:
-定义 homMk
-  签名: {A B : 群 C} (f : A.X ⟶ B.X) [是幺半群态射 f]
-  定义体: homMk' (.mk f)
+/-
+**CategoryTheory.Grp.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：homMk {A B : Grp C} (f : A.X ⟶ B.X) [IsMonHom f] : A ⟶ B
+参数：f : A.X ⟶ B.X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def homMk {A B : Grp C} (f : A.X ⟶ B.X) [IsMonHom f] : A ⟶ B :=
   homMk' (.mk f)
 
-/-- Construct a morphism `Grp.mk G ⟶ Grp.mk H` from a map `f : G ⟶ H` and a `IsMonHom f`
+/-- Construct a morphism `Grp.mk G ⟶ Grp.mk H` from a  map `f : G ⟶ H` and a `IsMonHom f`
 instance. -/
 @[to_additive (attr := simps!)
-/-- Construct a morphism `AddGrp.mk G ⟶ AddGrp.mk H` from a map `f : G ⟶ H` and a `IsAddMonHom f`
+/-- Construct a morphism `AddGrp.mk G ⟶ AddGrp.mk H` from a  map `f : G ⟶ H` and a `IsAddMonHom f`
 instance. -/]
-/--
-Definition of `ofHom` / `ofHom` 的定义
-
-English:
-definition ofHom
-  signature: {A B : C} [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
-  body: Grp.homMk f
-
-中文:
-定义 ofHom
-  签名: {A B : C} [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
-  定义体: Grp.homMk f
-
-Depends on / 依赖: Grp.homMk
+/-
+**CategoryTheory.Grp.ofHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：ofHom {A B : C} [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : Grp.mk A 
+⟶ Grp.mk B
+参数：f : A ⟶ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofHom {A B : C} [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : Grp.mk A ⟶ Grp.mk B :=
   Grp.homMk f
 
 /-- Constructor for morphisms in `Grp C`. -/
 @[to_additive (attr := simps!) /-- Constructor for morphisms in `AddGrp C`. -/]
-/--
-Definition of `homMk''` / `homMk''` 的定义
+/-
+**CategoryTheory.Grp.homMk''** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：homMk'' {A B : Grp C} (f : A.X ⟶ B.X) (one_f : η ≫ f = η
+参数：f : A.X ⟶ B.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk''
-  signature: {A B : Grp C} (f : A.X ⟶ B.X)
-  body: haveI : IsMonHom f := ⟨one_f, mul_f⟩
-  homMk f
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 homMk''
-  签名: {A B : 群 C} (f : A.X ⟶ B.X)
-  定义体: haveI : IsMonHom f := ⟨one_f, mul_f⟩
-  homMk f
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: IsMonHom, cat_disch, mul_f, one_f
+--- 原说明 ---
+Constructor for morphisms in `Grp C`.
 -/
 def homMk'' {A B : Grp C} (f : A.X ⟶ B.X)
     (one_f : η ≫ f = η := by cat_disch)
-    (mul_f : μ ≫ f = (f otimesₘ f) ≫ μ := by cat_disch) : A ⟶ B :=
+    (mul_f : μ ≫ f = (f ⊗ₘ f) ≫ μ := by cat_disch) : A ⟶ B :=
   haveI : IsMonHom f := ⟨one_f, mul_f⟩
   homMk f
 
 @[to_additive (attr := simp)]
-/--
-lemma `id'` / 引理 `id'`
-
-English:
-lemma id'
-  given: (A : Grp C)
-  proof: rfl
-
-@[to_additive (attr := simp, reassoc)]
-
-中文:
-引理 id'
-  条件: (A : 群 C)
-  证明: rfl
-
-@[to_additive (attr := simp, reassoc)]
+/-
+**CategoryTheory.Grp.id'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：id' (A : Grp C) : (InducedCategory.Hom.hom (𝟙 A) : A.toMon ⟶ A.toMon) = 𝟙 
+(A.toMon)
+参数：A : Grp C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id' (A : Grp C) :
     (InducedCategory.Hom.hom (𝟙 A) : A.toMon ⟶ A.toMon) = 𝟙 (A.toMon) := rfl
 
 @[to_additive (attr := simp, reassoc)]
-/--
-lemma `comp'` / 引理 `comp'`
-
-English:
-lemma comp'
-  given: {A₁ A₂ A₃ : Grp C} (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
-  proof: rfl
-
-中文:
-引理 comp'
-  条件: {A₁ A₂ A₃ : 群 C} (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
-  证明: rfl
+/-
+**CategoryTheory.Grp.comp'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：comp' {A₁ A₂ A₃ : Grp C} (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃) : (InducedCategory.Ho
+m.hom (f ≫ g : A₁ ⟶ A₃) : A₁.toMon ⟶ A₃.toMon) = f.hom ≫ g.hom
+参数：f : A₁ ⟶ A₂；g : A₂ ⟶ A₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp' {A₁ A₂ A₃ : Grp C} (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃) :
     (InducedCategory.Hom.hom (f ≫ g : A₁ ⟶ A₃) : A₁.toMon ⟶ A₃.toMon) =
@@ -467,28 +316,39 @@ variable {G X : C} [GrpObj G]
 variable {A : C} {B : C}
 
 @[to_additive (attr := reassoc (attr := simp))]
-/--
-theorem `lift_comp_inv_right` / 定理 `lift_comp_inv_right`
-
-English:
-theorem lift_comp_inv_right
-  given: [GrpObj B] (f : A ⟶ B)
-  proof: by
-  have := f ≫= right_inv B
-  rwa [comp_lift_assoc, comp_id, reassoc_of% toUnit_unique (f ≫ toUnit B) (toUnit A)] at this
-
-@[to_additive (attr := reassoc)]
-
-中文:
-定理 lift_comp_inv_right
-  条件: [GrpObj B] (f : A ⟶ B)
-  证明: by
-  have := f ≫= right_inv B
-  rwa [comp_lift_assoc, comp_id, reassoc_of% toUnit_unique (f ≫ toUnit B) (toUnit A)] at this
-
-@[to_additive (attr := reassoc)]
-
-Depends on / 依赖: comp_id, comp_lift_assoc, reassoc_of, right_inv, toUnit, toUnit_unique
+/-
+**CategoryTheory.GrpObj.lift_comp_inv_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.GrpObj`。
+形式化陈述：lift_comp_inv_right [GrpObj B] (f : A ⟶ B) : lift f (f ≫ ι) ≫ μ = toUnit _
+ ≫ η
+参数：f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.whisker_eq`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {X Y Z : C} {f g : Y ⟶ X} (h : Z ⟶ Y),   f = g → CategoryTheory.Cate
+goryStruct.comp…
+· 使用定理 `CategoryTheory.GrpObj.right_inv`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X 
+: C) [self : Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.comp_lift_assoc`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMon
+oidalCategory C]   {V W X Y : C} (f : V ⟶ W) (…
 -/
 theorem lift_comp_inv_right [GrpObj B] (f : A ⟶ B) :
     lift f (f ≫ ι) ≫ μ = toUnit _ ≫ η := by
@@ -496,28 +356,36 @@ theorem lift_comp_inv_right [GrpObj B] (f : A ⟶ B) :
   rwa [comp_lift_assoc, comp_id, reassoc_of% toUnit_unique (f ≫ toUnit B) (toUnit A)] at this
 
 @[to_additive (attr := reassoc)]
-/--
-theorem `lift_inv_comp_right` / 定理 `lift_inv_comp_right`
-
-English:
-theorem lift_inv_comp_right
-  given: [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
-  proof: by
-  have := right_inv A =≫ f
-  rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
-
-@[to_additive (attr := reassoc (attr := simp))]
-
-中文:
-定理 lift_inv_comp_right
-  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
-  证明: by
-  have := right_inv A =≫ f
-  rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
-
-@[to_additive (attr := reassoc (attr := simp))]
-
-Depends on / 依赖: IsMonHom, IsMonHom.mul_hom, IsMonHom.one_hom, id_comp, lift_map_assoc, mul_hom, one_hom, right_inv
+/-
+**CategoryTheory.GrpObj.lift_inv_comp_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.GrpObj`。
+形式化陈述：lift_inv_comp_right [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : lift 
+f (ι ≫ f) ≫ μ = toUnit _ ≫ η
+参数：f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.GrpObj.right_inv`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X 
+: C) [self : Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_map_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {V W X Y Z : C} (f : V ⟶ W)…
+· 使用定理 `CategoryTheory.IsMonHom.one_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsMonHom.mul_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
 -/
 theorem lift_inv_comp_right [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] :
     lift f (ι ≫ f) ≫ μ = toUnit _ ≫ η := by
@@ -525,28 +393,39 @@ theorem lift_inv_comp_right [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] :
   rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
 
 @[to_additive (attr := reassoc (attr := simp))]
-/--
-theorem `lift_comp_inv_left` / 定理 `lift_comp_inv_left`
-
-English:
-theorem lift_comp_inv_left
-  given: [GrpObj B] (f : A ⟶ B)
-  proof: by
-  have := f ≫= left_inv B
-  rwa [comp_lift_assoc, comp_id, reassoc_of% toUnit_unique (f ≫ toUnit B) (toUnit A)] at this
-
-@[to_additive (attr := reassoc)]
-
-中文:
-定理 lift_comp_inv_left
-  条件: [GrpObj B] (f : A ⟶ B)
-  证明: by
-  have := f ≫= left_inv B
-  rwa [comp_lift_assoc, comp_id, reassoc_of% toUnit_unique (f ≫ toUnit B) (toUnit A)] at this
-
-@[to_additive (attr := reassoc)]
-
-Depends on / 依赖: comp_id, comp_lift_assoc, left_inv, reassoc_of, toUnit, toUnit_unique
+/-
+**CategoryTheory.GrpObj.lift_comp_inv_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.GrpObj`。
+形式化陈述：lift_comp_inv_left [GrpObj B] (f : A ⟶ B) : lift (f ≫ ι) f ≫ μ = toUnit _ 
+≫ η
+参数：f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.whisker_eq`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {X Y Z : C} {f g : Y ⟶ X} (h : Z ⟶ Y),   f = g → CategoryTheory.Cate
+goryStruct.comp…
+· 使用定理 `CategoryTheory.GrpObj.left_inv`：∀ {C : Type u₁} {inst : CategoryTheory.C
+ategory.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X :
+ C) [self : Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.comp_lift_assoc`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMon
+oidalCategory C]   {V W X Y : C} (f : V ⟶ W) (…
 -/
 theorem lift_comp_inv_left [GrpObj B] (f : A ⟶ B) :
     lift (f ≫ ι) f ≫ μ = toUnit _ ≫ η := by
@@ -554,28 +433,36 @@ theorem lift_comp_inv_left [GrpObj B] (f : A ⟶ B) :
   rwa [comp_lift_assoc, comp_id, reassoc_of% toUnit_unique (f ≫ toUnit B) (toUnit A)] at this
 
 @[to_additive (attr := reassoc)]
-/--
-theorem `lift_inv_comp_left` / 定理 `lift_inv_comp_left`
-
-English:
-theorem lift_inv_comp_left
-  given: [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
-  proof: by
-  have := left_inv A =≫ f
-  rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
-
-@[to_additive]
-
-中文:
-定理 lift_inv_comp_left
-  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
-  证明: by
-  have := left_inv A =≫ f
-  rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
-
-@[to_additive]
-
-Depends on / 依赖: IsMonHom, IsMonHom.mul_hom, IsMonHom.one_hom, id_comp, left_inv, lift_map_assoc, mul_hom, one_hom
+/-
+**CategoryTheory.GrpObj.lift_inv_comp_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.GrpObj`。
+形式化陈述：lift_inv_comp_left [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : lift (
+ι ≫ f) f ≫ μ = toUnit _ ≫ η
+参数：f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.GrpObj.left_inv`：∀ {C : Type u₁} {inst : CategoryTheory.C
+ategory.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X :
+ C) [self : Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_map_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {V W X Y Z : C} (f : V ⟶ W)…
+· 使用定理 `CategoryTheory.IsMonHom.one_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsMonHom.mul_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
 -/
 theorem lift_inv_comp_left [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] :
     lift (ι ≫ f) f ≫ μ = toUnit _ ≫ η := by
@@ -583,184 +470,170 @@ theorem lift_inv_comp_left [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] :
   rwa [assoc, IsMonHom.mul_hom, assoc, IsMonHom.one_hom, lift_map_assoc, id_comp] at this
 
 @[to_additive]
-/--
-theorem `eq_lift_inv_left` / 定理 `eq_lift_inv_left`
-
-English:
-theorem eq_lift_inv_left
-  given: [GrpObj B] (f g h : A ⟶ B)
-  proof: by
-  refine ⟨?_, ?_⟩ <;> (rintro rfl; simp [← lift_lift_assoc])
-
-@[to_additive]
-
-中文:
-定理 eq_lift_inv_left
-  条件: [GrpObj B] (f g h : A ⟶ B)
-  证明: by
-  refine ⟨?_, ?_⟩ <;> (rintro rfl; simp [← lift_lift_assoc])
-
-@[to_additive]
-
-Depends on / 依赖: lift_lift_assoc
+/-
+**CategoryTheory.GrpObj.eq_lift_inv_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.GrpObj`。
+形式化陈述：eq_lift_inv_left [GrpObj B] (f g h : A ⟶ B) : f = lift (g ≫ ι) h ≫ μ ↔ lif
+t g f ≫ μ = h
+参数：f g h : A ⟶ B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_right`：lift_comp_inv_right [GrpObj B
+] (f : A ⟶ B) : lift f (f ≫ ι) ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.MonObj.lift_comp_one_left`：lift_comp_one_left {A : C} {B 
+: C} [MonObj B] (f : A ⟶ 𝟙_ C) (g : A ⟶ B) : lift (f ≫ η) g ≫ μ = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_left`：lift_comp_inv_left [GrpObj B] 
+(f : A ⟶ B) : lift (f ≫ ι) f ≫ μ = toUnit _ ≫ η
 -/
 theorem eq_lift_inv_left [GrpObj B] (f g h : A ⟶ B) :
     f = lift (g ≫ ι) h ≫ μ ↔ lift g f ≫ μ = h := by
   refine ⟨?_, ?_⟩ <;> (rintro rfl; simp [← lift_lift_assoc])
 
 @[to_additive]
-/--
-theorem `lift_inv_left_eq` / 定理 `lift_inv_left_eq`
-
-English:
-theorem lift_inv_left_eq
-  given: [GrpObj B] (f g h : A ⟶ B)
-  proof: by
-  rw [eq_comm]; rw [eq_lift_inv_left]; rw [eq_comm]
-
-@[to_additive]
-
-中文:
-定理 lift_inv_left_eq
-  条件: [GrpObj B] (f g h : A ⟶ B)
-  证明: by
-  rw [eq_comm]; rw [eq_lift_inv_left]; rw [eq_comm]
-
-@[to_additive]
-
-Depends on / 依赖: eq_comm, eq_lift_inv_left
+/-
+**CategoryTheory.GrpObj.lift_inv_left_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.GrpObj`。
+形式化陈述：lift_inv_left_eq [GrpObj B] (f g h : A ⟶ B) : lift (f ≫ ι) g ≫ μ = h ↔ g =
+ lift f h ≫ μ
+参数：f g h : A ⟶ B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `CategoryTheory.GrpObj.eq_lift_inv_left`：eq_lift_inv_left [GrpObj B] (f g
+ h : A ⟶ B) : f = lift (g ≫ ι) h ≫ μ ↔ lift g f ≫ μ = h
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lift_inv_left_eq [GrpObj B] (f g h : A ⟶ B) :
     lift (f ≫ ι) g ≫ μ = h ↔ g = lift f h ≫ μ := by
-  rw [eq_comm]; rw [eq_lift_inv_left]; rw [eq_comm]
+  rw [eq_comm, eq_lift_inv_left, eq_comm]
 
 @[to_additive]
-/--
-theorem `eq_lift_inv_right` / 定理 `eq_lift_inv_right`
-
-English:
-theorem eq_lift_inv_right
-  given: [GrpObj B] (f g h : A ⟶ B)
-  proof: by
-  refine ⟨?_, ?_⟩ <;> (rintro rfl; simp [lift_lift_assoc])
-
-@[to_additive]
-
-中文:
-定理 eq_lift_inv_right
-  条件: [GrpObj B] (f g h : A ⟶ B)
-  证明: by
-  refine ⟨?_, ?_⟩ <;> (rintro rfl; simp [lift_lift_assoc])
-
-@[to_additive]
-
-Depends on / 依赖: lift_lift_assoc
+/-
+**CategoryTheory.GrpObj.eq_lift_inv_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.GrpObj`。
+形式化陈述：eq_lift_inv_right [GrpObj B] (f g h : A ⟶ B) : f = lift g (h ≫ ι) ≫ μ ↔ li
+ft f h ≫ μ = g
+参数：f g h : A ⟶ B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonObj.lift_lift_assoc`：lift_lift_assoc {A : C} {B : C} [
+MonObj B] (f g h : A ⟶ B) : lift (lift f g ≫ μ) h ≫ μ = lift f (lift g h ≫ μ) ≫ 
+μ
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_left`：lift_comp_inv_left [GrpObj B] 
+(f : A ⟶ B) : lift (f ≫ ι) f ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.MonObj.lift_comp_one_right`：lift_comp_one_right {A : C} {
+B : C} [MonObj B] (f : A ⟶ B) (g : A ⟶ 𝟙_ C) : lift f (g ≫ η) ≫ μ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_right`：lift_comp_inv_right [GrpObj B
+] (f : A ⟶ B) : lift f (f ≫ ι) ≫ μ = toUnit _ ≫ η
 -/
 theorem eq_lift_inv_right [GrpObj B] (f g h : A ⟶ B) :
     f = lift g (h ≫ ι) ≫ μ ↔ lift f h ≫ μ = g := by
   refine ⟨?_, ?_⟩ <;> (rintro rfl; simp [lift_lift_assoc])
 
 @[to_additive]
-/--
-theorem `lift_inv_right_eq` / 定理 `lift_inv_right_eq`
-
-English:
-theorem lift_inv_right_eq
-  given: [GrpObj B] (f g h : A ⟶ B)
-  proof: by
-  rw [eq_comm]; rw [eq_lift_inv_right]; rw [eq_comm]
-
-@[to_additive]
-
-中文:
-定理 lift_inv_right_eq
-  条件: [GrpObj B] (f g h : A ⟶ B)
-  证明: by
-  rw [eq_comm]; rw [eq_lift_inv_right]; rw [eq_comm]
-
-@[to_additive]
-
-Depends on / 依赖: eq_comm, eq_lift_inv_right
+/-
+**CategoryTheory.GrpObj.lift_inv_right_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.GrpObj`。
+形式化陈述：lift_inv_right_eq [GrpObj B] (f g h : A ⟶ B) : lift f (g ≫ ι) ≫ μ = h ↔ f 
+= lift h g ≫ μ
+参数：f g h : A ⟶ B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `CategoryTheory.GrpObj.eq_lift_inv_right`：eq_lift_inv_right [GrpObj B] (f
+ g h : A ⟶ B) : f = lift g (h ≫ ι) ≫ μ ↔ lift f h ≫ μ = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lift_inv_right_eq [GrpObj B] (f g h : A ⟶ B) :
     lift f (g ≫ ι) ≫ μ = h ↔ f = lift h g ≫ μ := by
-  rw [eq_comm]; rw [eq_lift_inv_right]; rw [eq_comm]
+  rw [eq_comm, eq_lift_inv_right, eq_comm]
 
 @[to_additive]
-/--
-theorem `lift_left_mul_ext` / 定理 `lift_left_mul_ext`
-
-English:
-theorem lift_left_mul_ext
-  statement: [GrpObj B] {f g : A ⟶ B} (i : A ⟶ B)
-  proof: by
-  rwa [← eq_lift_inv_right, lift_lift_assoc, lift_comp_inv_right, lift_comp_one_right] at h
-
-@[to_additive (attr := reassoc (attr := simp))]
-
-中文:
-定理 lift_left_mul_ext
-  结论: [GrpObj B] {f g : A ⟶ B} (i : A ⟶ B)
-  证明: by
-  rwa [← eq_lift_inv_right, lift_lift_assoc, lift_comp_inv_right, lift_comp_one_right] at h
-
-@[to_additive (attr := reassoc (attr := simp))]
-
-Depends on / 依赖: eq_lift_inv_right, lift_comp_inv_right, lift_comp_one_right, lift_lift_assoc
+/-
+**CategoryTheory.GrpObj.lift_left_mul_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.GrpObj`。
+形式化陈述：lift_left_mul_ext [GrpObj B] {f g : A ⟶ B} (i : A ⟶ B) (h : lift f i ≫ μ =
+ lift g i ≫ μ) : f = g
+参数：i : A ⟶ B；h : lift f i ≫ μ = lift g i ≫ μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonObj.lift_comp_one_right`：lift_comp_one_right {A : C} {
+B : C} [MonObj B] (f : A ⟶ B) (g : A ⟶ 𝟙_ C) : lift f (g ≫ η) ≫ μ = f
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_right`：lift_comp_inv_right [GrpObj B
+] (f : A ⟶ B) : lift f (f ≫ ι) ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.MonObj.lift_lift_assoc`：lift_lift_assoc {A : C} {B : C} [
+MonObj B] (f g h : A ⟶ B) : lift (lift f g ≫ μ) h ≫ μ = lift f (lift g h ≫ μ) ≫ 
+μ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.GrpObj.eq_lift_inv_right`：eq_lift_inv_right [GrpObj B] (f
+ g h : A ⟶ B) : f = lift g (h ≫ ι) ≫ μ ↔ lift f h ≫ μ = g
 -/
 theorem lift_left_mul_ext [GrpObj B] {f g : A ⟶ B} (i : A ⟶ B)
     (h : lift f i ≫ μ = lift g i ≫ μ) : f = g := by
   rwa [← eq_lift_inv_right, lift_lift_assoc, lift_comp_inv_right, lift_comp_one_right] at h
 
 @[to_additive (attr := reassoc (attr := simp))]
-/--
-theorem `inv_comp_inv` / 定理 `inv_comp_inv`
-
-English:
-theorem inv_comp_inv
-  given: (A : C) [GrpObj A]
-  statement: ι ≫ ι = 𝟙 A
-  proof: by
-  apply lift_left_mul_ext ι[A]
-  rw [right_inv]; rw [← comp_toUnit_assoc ι]; rw [← left_inv]; rw [comp_lift_assoc]; rw [Category.comp_id]
-
-中文:
-定理 inv_comp_inv
-  条件: (A : C) [GrpObj A]
-  结论: ι ≫ ι = 𝟙 A
-  证明: by
-  apply lift_left_mul_ext ι[A]
-  rw [right_inv]; rw [← comp_toUnit_assoc ι]; rw [← left_inv]; rw [comp_lift_assoc]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, comp_lift_assoc, comp_toUnit_assoc, left_inv, lift_left_mul_ext, right_inv
+/-
+**CategoryTheory.GrpObj.inv_comp_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.G
+rpObj`。
+形式化陈述：inv_comp_inv (A : C) [GrpObj A] : ι ≫ ι = 𝟙 A
+参数：A : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrpObj.lift_left_mul_ext`：lift_left_mul_ext [GrpObj B] {f
+ g : A ⟶ B} (i : A ⟶ B) (h : lift f i ≫ μ = lift g i ≫ μ) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.GrpObj.right_inv`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X 
+: C) [self : Category…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.comp_toUnit_assoc`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.SemiCa
+rtesianMonoidalCategory C]   {X Y : C} (f : X ⟶ Y) {…
+· 使用定理 `CategoryTheory.GrpObj.left_inv`：∀ {C : Type u₁} {inst : CategoryTheory.C
+ategory.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X :
+ C) [self : Category…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.comp_lift_assoc`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMon
+oidalCategory C]   {V W X Y : C} (f : V ⟶ W) (…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem inv_comp_inv (A : C) [GrpObj A] : ι ≫ ι = 𝟙 A := by
   apply lift_left_mul_ext ι[A]
-  rw [right_inv]; rw [← comp_toUnit_assoc ι]; rw [← left_inv]; rw [comp_lift_assoc]; rw [Category.comp_id]
+  rw [right_inv, ← comp_toUnit_assoc ι, ← left_inv, comp_lift_assoc, Category.comp_id]
 
 /-- Transfer `AddGrpObj` along an isomorphism. -/
 -- Note: The simps lemmas are not tagged simp because their `#discr_tree_simp_key` are too generic.
 @[simps! -isSimp]
-/--
-Definition of `_root_.CategoryTheory.AddGrpObj.ofIso` / `_root_.CategoryTheory.AddGrpObj.ofIso` 的定义
-
-English:
-abbreviation _root_.CategoryTheory.AddGrpObj.ofIso
-  signature: {G' X : C} [AddGrpObj G'] (e : G' ≅ X)
-  body: AddMonObj.ofIso e
-  neg := e.inv ≫ AddGrpObj.neg ≫ e.hom
-  left_neg := by simp +instances [AddMonObj.ofIso]
-  right_neg := by simp +instances [AddMonObj.ofIso]
-
-中文:
-缩写 _root_.范畴论.加法GrpObj.ofIso
-  签名: {G' X : C} [加法GrpObj G'] (e : G' ≅ X)
-  定义体: AddMonObj.ofIso e
-  neg := e.inv ≫ AddGrpObj.neg ≫ e.hom
-  left_neg := by simp +instances [AddMonObj.ofIso]
-  right_neg := by simp +instances [AddMonObj.ofIso]
-
-Depends on / 依赖: AddMonObj, AddMonObj.ofIso
+/-
+**CategoryTheory.GrpObj._root_.CategoryTheory.AddGrpObj.ofIso** 是 Mathlib 中的一个缩写
+定义，位于命名空间 `CategoryTheory.GrpObj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev _root_.CategoryTheory.AddGrpObj.ofIso {G' X : C} [AddGrpObj G'] (e : G' ≅ X) :
     AddGrpObj X where
@@ -772,24 +645,13 @@ abbrev _root_.CategoryTheory.AddGrpObj.ofIso {G' X : C} [AddGrpObj G'] (e : G' �
 /-- Transfer `GrpObj` along an isomorphism. -/
 -- Note: The simps lemmas are not tagged simp because their `#discr_tree_simp_key` are too generic.
 @[simps! -isSimp]
-/--
-Definition of `ofIso` / `ofIso` 的定义
-
-English:
-abbreviation ofIso
-  signature: (e : G ≅ X)
-  body: .ofIso e
-  inv := e.inv ≫ ι[G] ≫ e.hom
-  left_inv := by simp +instances [MonObj.ofIso]
-  right_inv := by simp +instances [MonObj.ofIso]
-
-中文:
-缩写 ofIso
-  签名: (e : G ≅ X)
-  定义体: .ofIso e
-  inv := e.inv ≫ ι[G] ≫ e.hom
-  left_inv := by simp +instances [MonObj.ofIso]
-  right_inv := by simp +instances [MonObj.ofIso]
+/-
+**CategoryTheory.GrpObj.ofIso** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.GrpObj
+`。
+形式化陈述：ofIso (e : G ≅ X) : GrpObj X where toMonObj
+参数：e : G ≅ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev ofIso (e : G ≅ X) : GrpObj X where
   toMonObj := .ofIso e
@@ -800,145 +662,156 @@ abbrev ofIso (e : G ≅ X) : GrpObj X where
 attribute [to_additive existing] ofIso
 
 @[to_additive]
+/-
+**CategoryTheory.GrpObj.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.GrpObj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : C) [GrpObj A] : IsIso ι[A] := ⟨ι, by simp, by simp⟩
 
 /-- For `inv ≫ inv = 𝟙` see `inv_comp_inv`. -/
 @[to_additive (attr := simp) /-- For `neg ≫ neg = 𝟙` see `neg_comp_neg`. -/]
-/--
-theorem `inv_inv` / 定理 `inv_inv`
+/-
+**CategoryTheory.GrpObj.inv_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.GrpObj
+`。
+形式化陈述：inv_inv (A : C) [GrpObj A] : CategoryTheory.inv ι = ι[A]
+参数：A : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrpObj.instIsIsoInv`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   
+(A : C) [inst_2 : Catego…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.inv_comp_eq_id`：inv_comp_eq_id (g : X ⟶ Y) [IsIso g] {f :
+ X ⟶ Y} : inv g ≫ f = 𝟙 Y ↔ f = g
+· 使用定理 `CategoryTheory.IsIso.inv_inv`：inv_inv [IsIso f] : inv (inv f) = f
+· 使用定理 `CategoryTheory.GrpObj.inv_comp_inv`：inv_comp_inv (A : C) [GrpObj A] : ι 
+≫ ι = 𝟙 A
 
-English:
-theorem inv_inv
-  given: (A : C) [GrpObj A]
-  statement: CategoryTheory.inv ι = ι[A]
-  proof: by
-  rw [eq_comm]; rw [← CategoryTheory.inv_comp_eq_id]; rw [IsIso.inv_inv]; rw [inv_comp_inv]
-
-@[to_additive (attr := reassoc)]
-
-中文:
-定理 inv_inv
-  条件: (A : C) [GrpObj A]
-  结论: 范畴论.inv ι = ι[A]
-  证明: by
-  rw [eq_comm]; rw [← CategoryTheory.inv_comp_eq_id]; rw [IsIso.inv_inv]; rw [inv_comp_inv]
-
-@[to_additive (attr := reassoc)]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.inv_comp_eq_id, IsIso.inv_inv, eq_comm, inv_comp_eq_id, inv_comp_inv, inv_inv
+--- 原说明 ---
+For `inv ≫ inv = 𝟙` see `inv_comp_inv`.
 -/
 theorem inv_inv (A : C) [GrpObj A] : CategoryTheory.inv ι = ι[A] := by
-  rw [eq_comm]; rw [← CategoryTheory.inv_comp_eq_id]; rw [IsIso.inv_inv]; rw [inv_comp_inv]
+  rw [eq_comm, ← CategoryTheory.inv_comp_eq_id, IsIso.inv_inv, inv_comp_inv]
 
 @[to_additive (attr := reassoc)]
-/--
-theorem `mul_inv` / 定理 `mul_inv`
-
-English:
-theorem mul_inv
-  given: [BraidedCategory C] (A : C) [GrpObj A]
-  proof: by
-  apply lift_left_mul_ext μ
-  nth_rw 2 [← Category.comp_id μ]
-  rw [← comp_lift]; rw [Category.assoc]; rw [left_inv]; rw [← Category.assoc (β_ A A).hom]; rw [← lift_snd_fst]; rw [lift_map]; rw [lift_lift_assoc]
-  nth_rw 2 [← Category.id_comp μ]
-  rw [← lift_fst_snd]; rw [← lift_lift_assoc (fst A A ≫ _)]; rw [lift_comp_inv_left]; rw [lift_comp_one_left]; rw [lift_comp_inv_left]; rw [comp_toUnit_assoc]
-
-@[to_additive (attr := reassoc)]
-
-中文:
-定理 mul_inv
-  条件: [辫范畴 C] (A : C) [GrpObj A]
-  证明: by
-  apply lift_left_mul_ext μ
-  nth_rw 2 [← Category.comp_id μ]
-  rw [← comp_lift]; rw [Category.assoc]; rw [left_inv]; rw [← Category.assoc (β_ A A).hom]; rw [← lift_snd_fst]; rw [lift_map]; rw [lift_lift_assoc]
-  nth_rw 2 [← Category.id_comp μ]
-  rw [← lift_fst_snd]; rw [← lift_lift_assoc (fst A A ≫ _)]; rw [lift_comp_inv_left]; rw [lift_comp_one_left]; rw [lift_comp_inv_left]; rw [comp_toUnit_assoc]
-
-@[to_additive (attr := reassoc)]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, comp_id, comp_lift, comp_toUnit_assoc, id_comp, left_inv, lift_comp_inv_left, lift_comp_one_left, lift_fst_snd, lift_left_mul_ext, lift_lift_assoc, lift_map, lift_snd_fst, nth_rw
+/-
+**CategoryTheory.GrpObj.mul_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.GrpObj
+`。
+形式化陈述：mul_inv [BraidedCategory C] (A : C) [GrpObj A] : μ ≫ ι = (β_ A A).hom ≫ (ι
+ otimesₘ ι) ≫ μ
+参数：A : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrpObj.lift_left_mul_ext`：lift_left_mul_ext [GrpObj B] {f
+ g : A ⟶ B} (i : A ⟶ B) (h : lift f i ≫ μ = lift g i ≫ μ) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.comp_lift`：comp_lift {V W X Y :
+ C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) : f ≫ lift g h = lift (f ≫ g) (f ≫ h)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.GrpObj.left_inv`：∀ {C : Type u₁} {inst : CategoryTheory.C
+ategory.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X :
+ C) [self : Category…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_snd_fst`：lift_snd_fst {X Y
+ : C} : lift (snd X Y) (fst X Y) = (β_ X Y).hom
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_map`：lift_map {V W X Y Z :
+ C} (f : V ⟶ W) (g : V ⟶ X) (h : W ⟶ Y) (k : X ⟶ Z) : lift f g ≫ (h otimesₘ k) =
+ lift (f ≫ h) (g ≫ k)
+· 使用定理 `CategoryTheory.MonObj.lift_lift_assoc`：lift_lift_assoc {A : C} {B : C} [
+MonObj B] (f g h : A ⟶ B) : lift (lift f g ≫ μ) h ≫ μ = lift f (lift g h ≫ μ) ≫ 
+μ
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst_snd`：lift_fst_snd {X Y
+ : C} : lift (fst X Y) (snd X Y) = 𝟙 (X otimes Y)
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_left`：lift_comp_inv_left [GrpObj B] 
+(f : A ⟶ B) : lift (f ≫ ι) f ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.MonObj.lift_comp_one_left`：lift_comp_one_left {A : C} {B 
+: C} [MonObj B] (f : A ⟶ 𝟙_ C) (g : A ⟶ B) : lift (f ≫ η) g ≫ μ = g
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.comp_toUnit_assoc`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.SemiCa
+rtesianMonoidalCategory C]   {X Y : C} (f : X ⟶ Y) {…
 -/
 theorem mul_inv [BraidedCategory C] (A : C) [GrpObj A] :
-    μ ≫ ι = (β_ A A).hom ≫ (ι otimesₘ ι) ≫ μ := by
+    μ ≫ ι = (β_ A A).hom ≫ (ι ⊗ₘ ι) ≫ μ := by
   apply lift_left_mul_ext μ
   nth_rw 2 [← Category.comp_id μ]
-  rw [← comp_lift]; rw [Category.assoc]; rw [left_inv]; rw [← Category.assoc (β_ A A).hom]; rw [← lift_snd_fst]; rw [lift_map]; rw [lift_lift_assoc]
+  rw [← comp_lift, Category.assoc, left_inv, ← Category.assoc (β_ A A).hom,
+    ← lift_snd_fst, lift_map, lift_lift_assoc]
   nth_rw 2 [← Category.id_comp μ]
-  rw [← lift_fst_snd]; rw [← lift_lift_assoc (fst A A ≫ _)]; rw [lift_comp_inv_left]; rw [lift_comp_one_left]; rw [lift_comp_inv_left]; rw [comp_toUnit_assoc]
+  rw [← lift_fst_snd, ← lift_lift_assoc (fst A A ≫ _), lift_comp_inv_left, lift_comp_one_left,
+    lift_comp_inv_left, comp_toUnit_assoc]
 
 @[to_additive (attr := reassoc)]
-/--
-theorem `tensorHom_inv_inv_mul` / 定理 `tensorHom_inv_inv_mul`
-
-English:
-theorem tensorHom_inv_inv_mul
-  given: [BraidedCategory C] (A : C) [GrpObj A]
-  proof: by
-  rw [mul_inv A]; rw [SymmetricCategory.symmetry_assoc]
-
-@[to_additive (attr := reassoc)]
-
-中文:
-定理 tensorHom_inv_inv_mul
-  条件: [辫范畴 C] (A : C) [GrpObj A]
-  证明: by
-  rw [mul_inv A]; rw [SymmetricCategory.symmetry_assoc]
-
-@[to_additive (attr := reassoc)]
-
-Depends on / 依赖: SymmetricCategory, SymmetricCategory.symmetry_assoc, mul_inv, symmetry_assoc
+/-
+**CategoryTheory.GrpObj.tensorHom_inv_inv_mul** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.GrpObj`。
+形式化陈述：tensorHom_inv_inv_mul [BraidedCategory C] (A : C) [GrpObj A] : (ι[A] otime
+sₘ ι[A]) ≫ μ = (β_ A A).hom ≫ μ ≫ ι
+参数：A : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.GrpObj.mul_inv`：mul_inv [BraidedCategory C] (A : C) [GrpO
+bj A] : μ ≫ ι = (β_ A A).hom ≫ (ι otimesₘ ι) ≫ μ
+· 使用定理 `CategoryTheory.SymmetricCategory.symmetry_assoc`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.MonoidalCategory C}  
+ [self : CategoryTheory.SymmetricCate…
 -/
 theorem tensorHom_inv_inv_mul [BraidedCategory C] (A : C) [GrpObj A] :
-    (ι[A] otimesₘ ι[A]) ≫ μ = (β_ A A).hom ≫ μ ≫ ι := by
-  rw [mul_inv A]; rw [SymmetricCategory.symmetry_assoc]
+    (ι[A] ⊗ₘ ι[A]) ≫ μ = (β_ A A).hom ≫ μ ≫ ι := by
+  rw [mul_inv A, SymmetricCategory.symmetry_assoc]
 
 @[to_additive (attr := reassoc)]
-/--
-lemma `mul_inv_rev` / 引理 `mul_inv_rev`
-
-English:
-lemma mul_inv_rev
-  given: [BraidedCategory C] (G : C) [GrpObj G]
-  proof: by simp [tensorHom_inv_inv_mul]
-
-中文:
-引理 mul_inv_rev
-  条件: [辫范畴 C] (G : C) [GrpObj G]
-  证明: by simp [tensorHom_inv_inv_mul]
-
-Depends on / 依赖: tensorHom_inv_inv_mul
+/-
+**CategoryTheory.GrpObj.mul_inv_rev** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Gr
+pObj`。
+形式化陈述：mul_inv_rev [BraidedCategory C] (G : C) [GrpObj G] : μ ≫ ι = (ι[G] otimesₘ
+ ι) ≫ (β_ _ _).hom ≫ μ
+参数：G : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.BraidedCategory.braiding_naturality_assoc`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCate
+gory C]   [inst_2 : CategoryTheory.BraidedCate…
+· 使用定理 `CategoryTheory.GrpObj.tensorHom_inv_inv_mul`：tensorHom_inv_inv_mul [Brai
+dedCategory C] (A : C) [GrpObj A] : (ι[A] otimesₘ ι[A]) ≫ μ = (β_ A A).hom ≫ μ ≫
+ ι
+· 使用定理 `CategoryTheory.SymmetricCategory.symmetry_assoc`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.MonoidalCategory C}  
+ [self : CategoryTheory.SymmetricCate…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mul_inv_rev [BraidedCategory C] (G : C) [GrpObj G] :
-    μ ≫ ι = (ι[G] otimesₘ ι) ≫ (β_ _ _).hom ≫ μ := by simp [tensorHom_inv_inv_mul]
+    μ ≫ ι = (ι[G] ⊗ₘ ι) ≫ (β_ _ _).hom ≫ μ := by simp [tensorHom_inv_inv_mul]
 
 /-- The map `(· * f)`. -/
 @[to_additive (attr := simps) /-- The map `(· + f)`. -/]
-/--
-Definition of `mulRight` / `mulRight` 的定义
+/-
+**CategoryTheory.GrpObj.mulRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.GrpOb
+j`。
+形式化陈述：mulRight {A : C} [GrpObj A] (f : 𝟙_ C ⟶ A) : A ≅ A where hom
+参数：f : 𝟙_ C ⟶ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulRight
-  signature: {A : C} [GrpObj A] (f : 𝟙_ C ⟶ A)
-  body: lift (𝟙 _) (toUnit _ ≫ f) ≫ μ
-  inv := lift (𝟙 _) (toUnit _ ≫ f ≫ ι) ≫ μ
-  hom_inv_id := by simp [comp_lift_assoc, lift_lift_assoc, ← comp_lift]
-  inv_hom_id := by simp [comp_lift_assoc, lift_lift_assoc, ← comp_lift]
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mulRight
-  签名: {A : C} [GrpObj A] (f : 𝟙_ C ⟶ A)
-  定义体: lift (𝟙 _) (toUnit _ ≫ f) ≫ μ
-  inv := lift (𝟙 _) (toUnit _ ≫ f ≫ ι) ≫ μ
-  hom_inv_id := by simp [comp_lift_assoc, lift_lift_assoc, ← comp_lift]
-  inv_hom_id := by simp [comp_lift_assoc, lift_lift_assoc, ← comp_lift]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: toUnit
+--- 原说明 ---
+The map `(· * f)`.
 -/
 def mulRight {A : C} [GrpObj A] (f : 𝟙_ C ⟶ A) : A ≅ A where
   hom := lift (𝟙 _) (toUnit _ ≫ f) ≫ μ
@@ -947,22 +820,26 @@ def mulRight {A : C} [GrpObj A] (f : 𝟙_ C ⟶ A) : A ≅ A where
   inv_hom_id := by simp [comp_lift_assoc, lift_lift_assoc, ← comp_lift]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulRight_one` / 引理 `mulRight_one`
-
-English:
-lemma mulRight_one
-  given: (A : C) [GrpObj A]
-  statement: mulRight η[A] = Iso.refl A
-  proof: by
-  ext; simp
-
-中文:
-引理 mulRight_one
-  条件: (A : C) [GrpObj A]
-  结论: mulRight η[A] = 同构.refl A
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.GrpObj.mulRight_one** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.G
+rpObj`。
+形式化陈述：mulRight_one (A : C) [GrpObj A] : mulRight η[A] = Iso.refl A
+参数：A : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.GrpObj.mulRight_hom`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   
+{A : C} [inst_2 : Catego…
+· 使用定理 `CategoryTheory.MonObj.lift_comp_one_right`：lift_comp_one_right {A : C} {
+B : C} [MonObj B] (f : A ⟶ B) (g : A ⟶ 𝟙_ C) : lift f (g ≫ η) ≫ μ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mulRight_one (A : C) [GrpObj A] : mulRight η[A] = Iso.refl A := by
   ext; simp
@@ -977,79 +854,82 @@ follow from this result. -/
 In fact, any additive monoid object whose associativity diagram is Cartesian can be made into an
 additive group object (we do not prove this in this file), so we should expect that many properties
 of additive group objects follow from this result. -/]
-/--
-theorem `isPullback` / 定理 `isPullback`
-
-English:
-theorem isPullback
-  given: (A : C) [GrpObj A]
-  proof: by simp
-isLimit' := Nonempty.intro PullbackCone.IsLimit.mk _
-    (fun s => lift
-      (lift
-        (s.snd ≫ fst _ _)
-        (lift (s.snd ≫ fst _ _ ≫ ι) (s.fst ≫ fst _ _) ≫ μ))
-      (s.fst ≫ snd _ _))
-    (by
-      refine fun s => CartesianMonoidalCategory.hom_ext _ _ ?_ (by simp)
-      simp only [lift_whiskerRight, lift_fst]
-      rw [← lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_right]; rw [lift_comp_one_left])
-    (by
-      refine fun s => CartesianMonoidalCategory.hom_ext _ _ (by simp) ?_
-      simp only [lift_lift_associator_hom_assoc, lift_whiskerLeft, lift_snd]
-      have : lift (s.snd ≫ fst _ _ ≫ ι) (s.fst ≫ fst _ _) ≫ μ =
-          lift (s.snd ≫ snd _ _) (s.fst ≫ snd _ _ ≫ ι) ≫ μ := by
-        rw [← assoc s.fst]; rw [eq_lift_inv_right]; rw [lift_lift_assoc]; rw [← assoc s.snd]; rw [lift_inv_left_eq]; rw [lift_comp_fst_snd]; rw [lift_comp_fst_snd]; rw [s.condition]
-      rw [this]; rw [lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_left]; rw [lift_comp_one_right])
-    (by
-      intro s m hm₁ hm₂
-      refine CartesianMonoidalCategory.hom_ext _ _ (CartesianMonoidalCategory.hom_ext _ _ ?_ ?_) ?_
-      · simpa using hm₂ =≫ fst _ _
-      · have h : m ≫ fst _ _ ≫ fst _ _ = s.snd ≫ fst _ _ := by simpa using hm₂ =≫ fst _ _
-        have := hm₁ =≫ fst _ _
-        simp only [assoc, whiskerRight_fst, lift_fst, lift_snd] at this ⊢
-        rw [← assoc]; rw [← lift_comp_fst_snd (m ≫ _)]; rw [assoc]; rw [assoc]; rw [h] at this
-        rwa [← assoc s.snd, eq_lift_inv_left]
-      · simpa using hm₁ =≫ snd _ _)
-
-中文:
-定理 isPullback
-  条件: (A : C) [GrpObj A]
-  证明: by simp
-isLimit' := Nonempty.intro PullbackCone.IsLimit.mk _
-    (fun s => lift
-      (lift
-        (s.snd ≫ fst _ _)
-        (lift (s.snd ≫ fst _ _ ≫ ι) (s.fst ≫ fst _ _) ≫ μ))
-      (s.fst ≫ snd _ _))
-    (by
-      refine fun s => CartesianMonoidalCategory.hom_ext _ _ ?_ (by simp)
-      simp only [lift_whiskerRight, lift_fst]
-      rw [← lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_right]; rw [lift_comp_one_left])
-    (by
-      refine fun s => CartesianMonoidalCategory.hom_ext _ _ (by simp) ?_
-      simp only [lift_lift_associator_hom_assoc, lift_whiskerLeft, lift_snd]
-      have : lift (s.snd ≫ fst _ _ ≫ ι) (s.fst ≫ fst _ _) ≫ μ =
-          lift (s.snd ≫ snd _ _) (s.fst ≫ snd _ _ ≫ ι) ≫ μ := by
-        rw [← assoc s.fst]; rw [eq_lift_inv_right]; rw [lift_lift_assoc]; rw [← assoc s.snd]; rw [lift_inv_left_eq]; rw [lift_comp_fst_snd]; rw [lift_comp_fst_snd]; rw [s.condition]
-      rw [this]; rw [lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_left]; rw [lift_comp_one_right])
-    (by
-      intro s m hm₁ hm₂
-      refine CartesianMonoidalCategory.hom_ext _ _ (CartesianMonoidalCategory.hom_ext _ _ ?_ ?_) ?_
-      · simpa using hm₂ =≫ fst _ _
-      · have h : m ≫ fst _ _ ≫ fst _ _ = s.snd ≫ fst _ _ := by simpa using hm₂ =≫ fst _ _
-        have := hm₁ =≫ fst _ _
-        simp only [assoc, whiskerRight_fst, lift_fst, lift_snd] at this ⊢
-        rw [← assoc]; rw [← lift_comp_fst_snd (m ≫ _)]; rw [assoc]; rw [assoc]; rw [h] at this
-        rwa [← assoc s.snd, eq_lift_inv_left]
-      · simpa using hm₁ =≫ snd _ _)
-
-Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.hom_ext, IsLimit, Nonempty, Nonempty.intro, PullbackCone, PullbackCone.IsLimit.mk, hom_ext, isLimit, lift_comp_inv_right, lift_comp_one_left, lift_fst, lift_lift_assoc, lift_lift_associator_hom_assoc, lift_whiskerLef, lift_whiskerRight, s.fst, s.snd
+/-
+**CategoryTheory.GrpObj.isPullback** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp
+Obj`。
+形式化陈述：isPullback (A : C) [GrpObj A] : IsPullback (μ ▷ A) ((α_ A A A).hom ≫ (A ◁ 
+μ)) μ μ where w
+参数：A : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonObj.mul_assoc`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} (X : C)   [sel
+f : CategoryTheory.Mo…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_whiskerRight`：lift_whisker
+Right {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Y ⟶ W) : lift f g ≫ (h ▷ Z) = l
+ift (f ≫ h) g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonObj.lift_lift_assoc`：lift_lift_assoc {A : C} {B : C} [
+MonObj B] (f g h : A ⟶ B) : lift (lift f g ≫ μ) h ≫ μ = lift f (lift g h ≫ μ) ≫ 
+μ
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_right`：lift_comp_inv_right [GrpObj B
+] (f : A ⟶ B) : lift f (f ≫ ι) ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.MonObj.lift_comp_one_left`：lift_comp_one_left {A : C} {B 
+: C} [MonObj B] (f : A ⟶ 𝟙_ C) (g : A ⟶ B) : lift (f ≫ η) g ≫ μ = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_lift_associator_hom_assoc`
+：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheo
+ry.CartesianMonoidalCategory C]   {X Y Z W : C} (f : X ⟶ Y) (…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_whiskerLeft`：lift_whiskerL
+eft {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Z ⟶ W) : lift f g ≫ (Y ◁ h) = lif
+t f (g ≫ h)
+· 使用定理 `CategoryTheory.GrpObj.eq_lift_inv_right`：eq_lift_inv_right [GrpObj B] (f
+ g h : A ⟶ B) : f = lift g (h ≫ ι) ≫ μ ↔ lift f h ≫ μ = g
+· 使用定理 `CategoryTheory.GrpObj.lift_inv_left_eq`：lift_inv_left_eq [GrpObj B] (f g
+ h : A ⟶ B) : lift (f ≫ ι) g ≫ μ = h ↔ g = lift f h ≫ μ
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_comp_fst_snd`：lift_comp_fs
+t_snd {X Y Z : C} (f : X ⟶ Y otimes Z) : lift (f ≫ fst _ _) (f ≫ snd _ _) = f
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_left`：lift_comp_inv_left [GrpObj B] 
+(f : A ⟶ B) : lift (f ≫ ι) f ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.MonObj.lift_comp_one_right`：lift_comp_one_right {A : C} {
+B : C} [MonObj B] (f : A ⟶ B) (g : A ⟶ 𝟙_ C) : lift f (g ≫ η) ≫ μ = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst`：whiskerLeft_fs
+t (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_hom_fst`：associator_
+hom_fst (X Y Z : C) : (α_ X Y Z).hom ≫ fst _ _ = fst _ _ ≫ fst _ _
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.GrpObj.eq_lift_inv_left`：eq_lift_inv_left [GrpObj B] (f g
+ h : A ⟶ B) : f = lift (g ≫ ι) h ≫ μ ↔ lift g f ≫ μ = h
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_fst`：whiskerRight_
+fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd`：whiskerRight_
+snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _
 -/
 theorem isPullback (A : C) [GrpObj A] :
     IsPullback (μ ▷ A) ((α_ A A A).hom ≫ (A ◁ μ)) μ μ where
   w := by simp
-isLimit' := Nonempty.intro PullbackCone.IsLimit.mk _
+  isLimit' := Nonempty.intro <| PullbackCone.IsLimit.mk _
     (fun s => lift
       (lift
         (s.snd ≫ fst _ _)
@@ -1058,14 +938,15 @@ isLimit' := Nonempty.intro PullbackCone.IsLimit.mk _
     (by
       refine fun s => CartesianMonoidalCategory.hom_ext _ _ ?_ (by simp)
       simp only [lift_whiskerRight, lift_fst]
-      rw [← lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_right]; rw [lift_comp_one_left])
+      rw [← lift_lift_assoc, ← assoc, lift_comp_inv_right, lift_comp_one_left])
     (by
       refine fun s => CartesianMonoidalCategory.hom_ext _ _ (by simp) ?_
       simp only [lift_lift_associator_hom_assoc, lift_whiskerLeft, lift_snd]
       have : lift (s.snd ≫ fst _ _ ≫ ι) (s.fst ≫ fst _ _) ≫ μ =
           lift (s.snd ≫ snd _ _) (s.fst ≫ snd _ _ ≫ ι) ≫ μ := by
-        rw [← assoc s.fst]; rw [eq_lift_inv_right]; rw [lift_lift_assoc]; rw [← assoc s.snd]; rw [lift_inv_left_eq]; rw [lift_comp_fst_snd]; rw [lift_comp_fst_snd]; rw [s.condition]
-      rw [this]; rw [lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_left]; rw [lift_comp_one_right])
+        rw [← assoc s.fst, eq_lift_inv_right, lift_lift_assoc, ← assoc s.snd, lift_inv_left_eq,
+          lift_comp_fst_snd, lift_comp_fst_snd, s.condition]
+      rw [this, lift_lift_assoc, ← assoc, lift_comp_inv_left, lift_comp_one_right])
     (by
       intro s m hm₁ hm₂
       refine CartesianMonoidalCategory.hom_ext _ _ (CartesianMonoidalCategory.hom_ext _ _ ?_ ?_) ?_
@@ -1073,41 +954,59 @@ isLimit' := Nonempty.intro PullbackCone.IsLimit.mk _
       · have h : m ≫ fst _ _ ≫ fst _ _ = s.snd ≫ fst _ _ := by simpa using hm₂ =≫ fst _ _
         have := hm₁ =≫ fst _ _
         simp only [assoc, whiskerRight_fst, lift_fst, lift_snd] at this ⊢
-        rw [← assoc]; rw [← lift_comp_fst_snd (m ≫ _)]; rw [assoc]; rw [assoc]; rw [h] at this
+        rw [← assoc, ← lift_comp_fst_snd (m ≫ _), assoc, assoc, h] at this
         rwa [← assoc s.snd, eq_lift_inv_left]
       · simpa using hm₁ =≫ snd _ _)
 
 /-- Morphisms of group objects preserve inverses. -/
 @[to_additive (attr := reassoc (attr := simp))
 /-- Morphisms of group objects preserve negations. -/]
-/--
-theorem `inv_hom` / 定理 `inv_hom`
-
-English:
-theorem inv_hom
-  given: [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f]
-  statement: ι ≫ f = f ≫ ι
-  proof: by
-  suffices lift (lift f (ι ≫ f)) f =
-      lift (lift f (f ≫ ι)) f by simpa using (this =≫ fst _ _) =≫ snd _ _
-  apply (isPullback B).hom_ext <;> apply CartesianMonoidalCategory.hom_ext <;>
-    simp [lift_inv_comp_right, lift_inv_comp_left]
-
-@[to_additive]
-
-中文:
-定理 inv_hom
-  条件: [GrpObj A] [GrpObj B] (f : A ⟶ B) [是幺半群态射 f]
-  结论: ι ≫ f = f ≫ ι
-  证明: by
-  suffices lift (lift f (ι ≫ f)) f =
-      lift (lift f (f ≫ ι)) f by simpa using (this =≫ fst _ _) =≫ snd _ _
-  apply (isPullback B).hom_ext <;> apply CartesianMonoidalCategory.hom_ext <;>
-    simp [lift_inv_comp_right, lift_inv_comp_left]
-
-@[to_additive]
-
-Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.hom_ext, hom_ext, isPullback, lift_inv_comp_left, lift_inv_comp_right
+/-
+**CategoryTheory.GrpObj.inv_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.GrpObj
+`。
+形式化陈述：inv_hom [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : ι ≫ f = f ≫ ι
+参数：f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.hom_ext`：hom_ext (hP : IsPullback fst snd f g)
+ {W : C} {k l : W ⟶ P} (h₀ : k ≫ fst = l ≫ fst) (h₁ : k ≫ snd = l ≫ snd) : k = l
+· 使用定理 `CategoryTheory.GrpObj.isPullback`：isPullback (A : C) [GrpObj A] : IsPull
+back (μ ▷ A) ((α_ A A A).hom ≫ (A ◁ μ)) μ μ where w
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_whiskerRight`：lift_whisker
+Right {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Y ⟶ W) : lift f g ≫ (h ▷ Z) = l
+ift (f ≫ h) g
+· 使用定理 `CategoryTheory.GrpObj.lift_inv_comp_right`：lift_inv_comp_right [GrpObj A
+] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : lift f (ι ≫ f) ≫ μ = toUnit _ ≫ η
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_right`：lift_comp_inv_right [GrpObj B
+] (f : A ⟶ B) : lift f (f ≫ ι) ≫ μ = toUnit _ ≫ η
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_lift_associator_hom_assoc`
+：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheo
+ry.CartesianMonoidalCategory C]   {X Y Z W : C} (f : X ⟶ Y) (…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_whiskerLeft`：lift_whiskerL
+eft {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Z ⟶ W) : lift f g ≫ (Y ◁ h) = lif
+t f (g ≫ h)
+· 使用定理 `CategoryTheory.GrpObj.lift_inv_comp_left`：lift_inv_comp_left [GrpObj A] 
+[GrpObj B] (f : A ⟶ B) [IsMonHom f] : lift (ι ≫ f) f ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.GrpObj.lift_comp_inv_left`：lift_comp_inv_left [GrpObj B] 
+(f : A ⟶ B) : lift (f ≫ ι) f ≫ μ = toUnit _ ≫ η
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
 -/
 theorem inv_hom [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : ι ≫ f = f ≫ ι := by
   suffices lift (lift f (ι ≫ f)) f =
@@ -1116,36 +1015,26 @@ theorem inv_hom [GrpObj A] [GrpObj B] (f : A ⟶ B) [IsMonHom f] : ι ≫ f = f 
     simp [lift_inv_comp_right, lift_inv_comp_left]
 
 @[to_additive]
-/--
-lemma `toMonObj_injective` / 引理 `toMonObj_injective`
-
-English:
-lemma toMonObj_injective
-  given: {X : C}
-  proof: by
-  intro h₁ h₂ e
-  suffices h₁.inv = h₂.inv by cases h₁; congr!
-  apply lift_left_mul_ext (𝟙 _)
-  rw [left_inv]
-  convert! @left_inv _ _ _ _ h₁ using 2
-  exacts [congr(($e.symm).mul), congr(($e.symm).one)]
-
-@[to_additive (attr := ext)]
-
-中文:
-引理 toMonObj_injective
-  条件: {X : C}
-  证明: by
-  intro h₁ h₂ e
-  suffices h₁.inv = h₂.inv by cases h₁; congr!
-  apply lift_left_mul_ext (𝟙 _)
-  rw [left_inv]
-  convert! @left_inv _ _ _ _ h₁ using 2
-  exacts [congr(($e.symm).mul), congr(($e.symm).one)]
-
-@[to_additive (attr := ext)]
-
-Depends on / 依赖: convert, e.symm, exacts, left_inv, lift_left_mul_ext
+/-
+**CategoryTheory.GrpObj.toMonObj_injective** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.GrpObj`。
+形式化陈述：toMonObj_injective {X : C} : Function.Injective (@GrpObj.toMonObj C ‹_› ‹_
+› X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrpObj.lift_left_mul_ext`：lift_left_mul_ext [GrpObj B] {f
+ g : A ⟶ B} (i : A ⟶ B) (h : lift f i ≫ μ = lift g i ≫ μ) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.GrpObj.left_inv`：∀ {C : Type u₁} {inst : CategoryTheory.C
+ategory.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X :
+ C) [self : Category…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `CategoryTheory.GrpObj.right_inv`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   (X 
+: C) [self : Category…
 -/
 lemma toMonObj_injective {X : C} :
     Function.Injective (@GrpObj.toMonObj C ‹_› ‹_› X) := by
@@ -1157,22 +1046,14 @@ lemma toMonObj_injective {X : C} :
   exacts [congr(($e.symm).mul), congr(($e.symm).one)]
 
 @[to_additive (attr := ext)]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X : C} (h₁ h₂ : GrpObj X) (H : h₁.toMonObj = h₂.toMonObj)
-  statement: h₁ = h₂
-  proof: GrpObj.toMonObj_injective H
-
-中文:
-引理 ext
-  条件: {X : C} (h₁ h₂ : GrpObj X) (H : h₁.toMonObj = h₂.toMonObj)
-  结论: h₁ = h₂
-  证明: GrpObj.toMonObj_injective H
-
-Depends on / 依赖: GrpObj, GrpObj.toMonObj_injective, toMonObj_injective
+/-
+**CategoryTheory.GrpObj.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrpObj`。
+形式化陈述：ext {X : C} (h₁ h₂ : GrpObj X) (H : h₁.toMonObj = h₂.toMonObj) : h₁ = h₂
+参数：h₁ h₂ : GrpObj X；H : h₁.toMonObj = h₂.toMonObj。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GrpObj.toMonObj_injective`：toMonObj_injective {X : C} : F
+unction.Injective (@GrpObj.toMonObj C ‹_› ‹_› X)
 -/
 lemma ext {X : C} (h₁ h₂ : GrpObj X) (H : h₁.toMonObj = h₂.toMonObj) : h₁ = h₂ :=
   GrpObj.toMonObj_injective H
@@ -1180,42 +1061,25 @@ lemma ext {X : C} (h₁ h₂ : GrpObj X) (H : h₁.toMonObj = h₂.toMonObj) : h
 -- Note: `Invertible` has no additive variant
 /-- A monoid object with invertible homs is a group object. -/
 @[instance_reducible]
-/--
-Definition of `ofInvertible` / `ofInvertible` 的定义
+/-
+**CategoryTheory.GrpObj.ofInvertible** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.G
+rpObj`。
+形式化陈述：ofInvertible (G : C) [MonObj G] (h : forall X (f : X ⟶ G), Invertible f) :
+ GrpObj G where inv
+参数：G : C；h : forall X (f : X ⟶ G), Invertible f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInvertible
-  signature: (G : C) [MonObj G] (h : forall X (f : X ⟶ G), Invertible f)
-  body: Yoneda.fullyFaithful.preimage
-    ⟨fun X => ↾fun f => (h X.unop f).invOf, fun X Y f => by
-      ext g
-      simp only [yoneda_obj_map, TypeCat.Fun.toFun_apply, comp_apply,
-        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, invOf_eq_iff_left]
-      rw [← comp_mul]; rw [invOf_mul_self]; rw [comp_one]⟩
-  left_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
-  right_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
-
-中文:
-定义 ofInvertible
-  签名: (G : C) [MonObj G] (h : 对任意 X (f : X ⟶ G), 可逆 f)
-  定义体: Yoneda.fullyFaithful.preimage
-    ⟨fun X => ↾fun f => (h X.unop f).invOf, fun X Y f => by
-      ext g
-      simp only [yoneda_obj_map, TypeCat.Fun.toFun_apply, comp_apply,
-        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, invOf_eq_iff_left]
-      rw [← comp_mul]; rw [invOf_mul_self]; rw [comp_one]⟩
-  left_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
-  right_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
-
-Depends on / 依赖: Yoneda, Yoneda.fullyFaithful.preimage, fullyFaithful, preimage
+--- 原说明 ---
+A monoid object with invertible homs is a group object.
 -/
-def ofInvertible (G : C) [MonObj G] (h : forall X (f : X ⟶ G), Invertible f) : GrpObj G where
+def ofInvertible (G : C) [MonObj G] (h : ∀ X (f : X ⟶ G), Invertible f) : GrpObj G where
   inv := Yoneda.fullyFaithful.preimage
-    ⟨fun X => ↾fun f => (h X.unop f).invOf, fun X Y f => by
+    ⟨fun X ↦ ↾fun f ↦ (h X.unop f).invOf, fun X Y f ↦ by
       ext g
       simp only [yoneda_obj_map, TypeCat.Fun.toFun_apply, comp_apply,
         ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, invOf_eq_iff_left]
-      rw [← comp_mul]; rw [invOf_mul_self]; rw [comp_one]⟩
+      rw [← comp_mul, invOf_mul_self, comp_one]⟩
   left_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
   right_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
 
@@ -1223,21 +1087,15 @@ namespace tensorObj
 variable [BraidedCategory C] {G H : C} [GrpObj G] [GrpObj H]
 
 @[to_additive]
-/--
-Instance `instTensorObj` / 实例 `instTensorObj`
-
-English:
-instance instTensorObj
-  signature: : GrpObj (G otimes H) where
-  body: ι otimesₘ ι
-
-中文:
-实例 instTensorObj
-  签名: : GrpObj (G otimes H) where
-  定义体: ι otimesₘ ι
+/-
+**CategoryTheory.GrpObj.tensorObj.instTensorObj** 是 Mathlib 中的一个实例，位于命名空间 `Categ
+oryTheory.GrpObj.tensorObj`。
+形式化陈述：instTensorObj : GrpObj (G otimes H) where inv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instTensorObj : GrpObj (G otimes H) where
-  inv := ι otimesₘ ι
+instance instTensorObj : GrpObj (G ⊗ H) where
+  inv := ι ⊗ₘ ι
 
 attribute [simps inv] instTensorObj
 attribute [simps neg] AddGrpObj.tensorObj.instTensorObj
@@ -1253,20 +1111,12 @@ variable (C)
 /-- The forgetful functor from group objects to monoid objects. -/
 @[to_additive (attr := simps! obj_X)
 /-- The forgetful functor from additive group objects to additive monoid objects. -/]
-/--
-Definition of `forget₂Mon` / `forget₂Mon` 的定义
-
-English:
-definition forget₂Mon
-  signature: : Grp C ⥤ Mon C
-  body: inducedFunctor Grp.toMon
-
-中文:
-定义 forget₂Mon
-  签名: : 群 C ⥤ 幺半群 C
-  定义体: inducedFunctor Grp.toMon
-
-Depends on / 依赖: Grp.toMon, inducedFunctor
+/-
+**CategoryTheory.Grp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] → CategoryTheory.Functor (Catego
+ryTheory.Grp C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def forget₂Mon : Grp C ⥤ Mon C :=
   inducedFunctor Grp.toMon
@@ -1275,114 +1125,55 @@ def forget₂Mon : Grp C ⥤ Mon C :=
 @[to_additive
 /-- The forgetful functor from additive group objects to additive monoid objects
 is fully faithful. -/]
-/--
-Definition of `fullyFaithfulForget₂Mon` / `fullyFaithfulForget₂Mon` 的定义
-
-English:
-definition fullyFaithfulForget₂Mon
-  signature: : (forget₂Mon C).FullyFaithful
-  body: fullyFaithfulInducedFunctor _
-
-中文:
-定义 fullyFaithfulForget₂Mon
-  签名: : (forget₂Mon C).满忠实
-  定义体: fullyFaithfulInducedFunctor _
-
-Depends on / 依赖: fullyFaithfulInducedFunctor
+/-
+**CategoryTheory.Grp.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def fullyFaithfulForget₂Mon : (forget₂Mon C).FullyFaithful :=
   fullyFaithfulInducedFunctor _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂Mon C).Full
-  body: InducedCategory.full _
-
-中文:
-实例 :
-  签名: (forget₂Mon C).满
-  定义体: InducedCategory.full _
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : (forget₂Mon C).Full := InducedCategory.full _
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂Mon C).Faithful
-  body: InducedCategory.faithful _
-
-中文:
-实例 :
-  签名: (forget₂Mon C).忠实
-  定义体: InducedCategory.faithful _
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : (forget₂Mon C).Faithful := InducedCategory.faithful _
 
 variable {C}
 
 @[to_additive (attr := simp) forget₂AddMon_obj_zero]
-/--
-theorem `forget₂Mon_obj_one` / 定理 `forget₂Mon_obj_one`
-
-English:
-theorem forget₂Mon_obj_one
-  given: (A : Grp C)
-  statement: η[((forget₂Mon C).obj A).X] = η[A.X]
-  proof: rfl
-
-@[to_additive (attr := simp) forget₂AddMon_obj_add]
-
-中文:
-定理 forget₂Mon_obj_one
-  条件: (A : 群 C)
-  结论: η[((forget₂Mon C).obj A).X] = η[A.X]
-  证明: rfl
-
-@[to_additive (attr := simp) forget₂AddMon_obj_add]
+/-
+**CategoryTheory.Grp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] → CategoryTheory.Functor (Catego
+ryTheory.Grp C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_obj_one (A : Grp C) : η[((forget₂Mon C).obj A).X] = η[A.X] :=
   rfl
 
 @[to_additive (attr := simp) forget₂AddMon_obj_add]
-/--
-theorem `forget₂Mon_obj_mul` / 定理 `forget₂Mon_obj_mul`
-
-English:
-theorem forget₂Mon_obj_mul
-  given: (A : Grp C)
-  statement: μ[((forget₂Mon C).obj A).X] = μ[A.X]
-  proof: rfl
-
-@[to_additive (attr := simp) forget₂AddMon_map_hom]
-
-中文:
-定理 forget₂Mon_obj_mul
-  条件: (A : 群 C)
-  结论: μ[((forget₂Mon C).obj A).X] = μ[A.X]
-  证明: rfl
-
-@[to_additive (attr := simp) forget₂AddMon_map_hom]
+/-
+**CategoryTheory.Grp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] → CategoryTheory.Functor (Catego
+ryTheory.Grp C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_obj_mul (A : Grp C) : μ[((forget₂Mon C).obj A).X] = μ[A.X] :=
   rfl
 
 @[to_additive (attr := simp) forget₂AddMon_map_hom]
-/--
-theorem `forget₂Mon_map_hom` / 定理 `forget₂Mon_map_hom`
-
-English:
-theorem forget₂Mon_map_hom
-  given: {A B : Grp C} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-定理 forget₂Mon_map_hom
-  条件: {A B : 群 C} (f : A ⟶ B)
-  证明: rfl
+/-
+**CategoryTheory.Grp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] → CategoryTheory.Functor (Catego
+ryTheory.Grp C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_map_hom {A B : Grp C} (f : A ⟶ B) :
     ((forget₂Mon C).map f).hom = f.hom.hom :=
@@ -1393,65 +1184,40 @@ variable (C)
 /-- The forgetful functor from group objects to the ambient category. -/
 @[to_additive (attr := simps!)
 /-- The forgetful functor from additive group objects to the ambient category. -/]
-/--
-Definition of `forget` / `forget` 的定义
-
-English:
-definition forget
-  signature: : Grp C ⥤ C
-  body: forget₂Mon C ⋙ Mon.forget C
-
-@[to_additive]
-
-中文:
-定义 forget
-  签名: : 群 C ⥤ C
-  定义体: forget₂Mon C ⋙ Mon.forget C
-
-@[to_additive]
-
-Depends on / 依赖: Mon.forget, forget
+/-
+**CategoryTheory.Grp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] → CategoryTheory.Functor (Catego
+ryTheory.Grp C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def forget : Grp C ⥤ C :=
   forget₂Mon C ⋙ Mon.forget C
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget C).Faithful
-
-中文:
-实例 :
-  签名: (forget C).忠实
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget C).Faithful where
 
 @[to_additive (attr := simp) forget₂AddMon_comp_forget]
-/--
-theorem `forget₂Mon_comp_forget` / 定理 `forget₂Mon_comp_forget`
-
-English:
-theorem forget₂Mon_comp_forget
-  statement: forget₂Mon C ⋙ Mon.forget C = forget C
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 forget₂Mon_comp_forget
-  结论: forget₂Mon C ⋙ 幺半群.forget C = forget C
-  证明: rfl
-
-@[to_additive]
+/-
+**CategoryTheory.Grp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] → CategoryTheory.Functor (Catego
+ryTheory.Grp C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_comp_forget : forget₂Mon C ⋙ Mon.forget C = forget C := rfl
 
 @[to_additive]
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G H : Grp C} {f : G ⟶ H} [IsIso f] : IsIso f.hom.hom :=
-inferInstanceAs IsIso (forget C).map f
+  inferInstanceAs <| IsIso <| (forget C).map f
 
 end
 
@@ -1460,20 +1226,15 @@ objects. -/
 @[to_additive (attr := simps!)
 /-- Construct an isomorphism of additive group objects by giving an additive monoid
 isomorphism between the underlying objects. -/]
-/--
-Definition of `mkIso'` / `mkIso'` 的定义
-
-English:
-definition mkIso'
-  signature: {G H : C} (e : G ≅ H) [GrpObj G] [GrpObj H] [IsMonHom e.hom]
-  body: (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
-
-中文:
-定义 mkIso'
-  签名: {G H : C} (e : G ≅ H) [GrpObj G] [GrpObj H] [是幺半群态射 e.hom]
-  定义体: (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
-
-Depends on / 依赖: Mon.mkIso, preimageIso
+/-
+**CategoryTheory.Grp.mkIso'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {G H : C} →         (e :
+ G ≅ H) →           [inst_2 : CategoryTheory.GrpObj G] →             [inst_3 : C
+ategoryTheory.GrpObj H] →               [CategoryTheory.IsMonHom e.hom] → { X :=
+ G, grp := inst_2 } ≅ { X := H, grp := inst_3 }
+参数：e : G ≅ H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mkIso' {G H : C} (e : G ≅ H) [GrpObj G] [GrpObj H] [IsMonHom e.hom] : mk G ≅ mk H :=
   (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
@@ -1484,161 +1245,105 @@ objects and checking compatibility with unit and multiplication only in the forw
 /-- Construct an isomorphism of additive group objects by giving an isomorphism between
 the underlying objects and checking compatibility with zero and addition only in the
 forward direction. -/]
-/--
-Definition of `mkIso` / `mkIso` 的定义
-
-English:
-abbreviation mkIso
-  signature: {G H : Grp C} (e : G.X ≅ H.X) (one_f : η[G.X] ≫ e.hom = η[H.X] := by cat_disch)
-  body: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
-  mkIso' e
-
-@[to_additive]
-
-中文:
-缩写 mkIso
-  签名: {G H : 群 C} (e : G.X ≅ H.X) (one_f : η[G.X] ≫ e.hom = η[H.X] := by cat_disch)
-  定义体: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
-  mkIso' e
-
-@[to_additive]
-
-Depends on / 依赖: IsMonHom, cat_disch, e.hom, mul_f, one_f
+/-
+**CategoryTheory.Grp.mkIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {G H : CategoryTheory.Gr
+p C} →         (e : G.X ≅ H.X) →           autoParam (CategoryTheory.CategoryStr
+uct.comp CategoryTheory.MonObj.one e.hom = CategoryTheory.MonObj.one)           
+    CategoryTheory.Grp.mkIso._auto_1 →             autoParam                 (Ca
+tegoryTheory.CategoryStruct.comp CategoryTheory.MonObj.mul e.hom =              
+     CategoryTheory.CategoryStruct.comp (CategoryTheory.MonoidalCategoryStruct.t
+ensorHom e.hom e.hom)                     CategoryTheory.MonObj.mul)            
+     CategoryTheory.Grp.mkIso._auto_3 →               (G ≅ H)
+参数：e : G.X ≅ H.X；CategoryTheory.CategoryStruct.comp CategoryTheory.MonObj.one e.
+hom = CategoryTheory.MonObj.one；CategoryTheory.CategoryStruct.comp CategoryTheor
+y.MonObj.mul e.hom =                   CategoryTheory.CategoryStruct.comp (Categ
+oryTheory.MonoidalCategoryStruct.tensorHom e.hom e.hom)                     Cate
+goryTheory.MonObj.mul；G ≅ H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev mkIso {G H : Grp C} (e : G.X ≅ H.X) (one_f : η[G.X] ≫ e.hom = η[H.X] := by cat_disch)
-    (mul_f : μ[G.X] ≫ e.hom = (e.hom otimesₘ e.hom) ≫ μ[H.X] := by cat_disch) : G ≅ H :=
+    (mul_f : μ[G.X] ≫ e.hom = (e.hom ⊗ₘ e.hom) ≫ μ[H.X] := by cat_disch) : G ≅ H :=
   have : IsMonHom e.hom := ⟨one_f, mul_f⟩
   mkIso' e
 
 @[to_additive]
-/--
-Instance `uniqueHomFromTrivial` / 实例 `uniqueHomFromTrivial`
-
-English:
-instance uniqueHomFromTrivial
-  signature: (A : Grp C)
-  body: (show _ ≃ (Mon.trivial C ⟶ A.toMon) from InducedCategory.homEquiv).unique
-
-@[to_additive]
-
-中文:
-实例 uniqueHomFromTrivial
-  签名: (A : 群 C)
-  定义体: (show _ ≃ (Mon.trivial C ⟶ A.toMon) from InducedCategory.homEquiv).unique
-
-@[to_additive]
-
-Depends on / 依赖: A.toMon, InducedCategory, InducedCategory.homEquiv, Mon.trivial, homEquiv, unique
+/-
+**CategoryTheory.Grp.uniqueHomFromTrivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       (A : CategoryTheory.Grp 
+C) → Unique (CategoryTheory.Grp.trivial C ⟶ A)
+参数：A : CategoryTheory.Grp C；CategoryTheory.Grp.trivial C ⟶ A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance uniqueHomFromTrivial (A : Grp C) : Unique (trivial C ⟶ A) :=
   (show _ ≃ (Mon.trivial C ⟶ A.toMon) from InducedCategory.homEquiv).unique
 
 @[to_additive]
-/--
-Instance `uniqueHomToTrivial` / 实例 `uniqueHomToTrivial`
-
-English:
-instance uniqueHomToTrivial
-  signature: (A : Grp C)
-  body: (show _ ≃ (A.toMon ⟶ Mon.trivial C) from InducedCategory.homEquiv).unique
-
-中文:
-实例 uniqueHomToTrivial
-  签名: (A : 群 C)
-  定义体: (show _ ≃ (A.toMon ⟶ Mon.trivial C) from InducedCategory.homEquiv).unique
-
-Depends on / 依赖: A.toMon, InducedCategory, InducedCategory.homEquiv, Mon.trivial, homEquiv, unique
+/-
+**CategoryTheory.Grp.uniqueHomToTrivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       (A : CategoryTheory.Grp 
+C) → Unique (A ⟶ CategoryTheory.Grp.trivial C)
+参数：A : CategoryTheory.Grp C；A ⟶ CategoryTheory.Grp.trivial C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance uniqueHomToTrivial (A : Grp C) : Unique (A ⟶ trivial C) :=
   (show _ ≃ (A.toMon ⟶ Mon.trivial C) from InducedCategory.homEquiv).unique
 
 variable (C) in
 @[to_additive]
-/--
-lemma `isZero_trivial` / 引理 `isZero_trivial`
-
-English:
-lemma isZero_trivial
-  statement: IsZero (trivial C) where
-  proof: nonempty_unique (trivial C ⟶ A)
-  unique_from A := nonempty_unique (A ⟶ trivial C)
-
-@[to_additive]
-
-中文:
-引理 isZero_trivial
-  结论: 是零 (trivial C) where
-  证明: nonempty_unique (trivial C ⟶ A)
-  unique_from A := nonempty_unique (A ⟶ trivial C)
-
-@[to_additive]
-
-Depends on / 依赖: nonempty_unique
+/-
+**CategoryTheory.Grp.isZero_trivial** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Gr
+p`。
+形式化陈述：∀ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C],   CategoryTheory.Limits.IsZero (Categor
+yTheory.Grp.trivial C)
+参数：C : Type u₁；CategoryTheory.Grp.trivial C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_unique`：nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty
+ α] : Nonempty (Unique α)
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 lemma isZero_trivial : IsZero (trivial C) where
   unique_to A := nonempty_unique (trivial C ⟶ A)
   unique_from A := nonempty_unique (A ⟶ trivial C)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasZeroObject (Grp C)
-  body: ⟨Grp.trivial C, isZero_trivial C⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 有ZeroObject (群 C)
-  定义体: ⟨Grp.trivial C, isZero_trivial C⟩
-
-@[to_additive]
-
-Depends on / 依赖: Grp.trivial, isZero_trivial
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasZeroObject (Grp C) where
   zero := ⟨Grp.trivial C, isZero_trivial C⟩
 
 @[to_additive]
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (G H : Grp C) : Zero (G ⟶ H) where
   zero := Grp.homMk (toUnit _ ≫ η)
 
 @[to_additive (attr := simp)]
-/--
-lemma `zero_hom` / 引理 `zero_hom`
-
-English:
-lemma zero_hom
-  given: (G H : Grp C)
-  statement: (0 : G ⟶ H).hom = 0
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 zero_hom
-  条件: (G H : 群 C)
-  结论: (0 : G ⟶ H).hom = 0
-  证明: rfl
-
-@[to_additive]
+/-
+**CategoryTheory.Grp.zero_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   (G H : CategoryTheory.Grp C), Category
+Theory.InducedCategory.Hom.hom 0 = 0
+参数：G H : CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma zero_hom (G H : Grp C) : (0 : G ⟶ H).hom = 0 := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasZeroMorphisms (Grp C)
-
-中文:
-实例 :
-  签名: 有ZeroMorphisms (群 C)
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : HasZeroMorphisms (Grp C) where
 
@@ -1647,43 +1352,17 @@ noncomputable instance : HasZeroMorphisms (Grp C) where
 variable [BraidedCategory C] {G H H₁ H₂ : Grp C}
 
 @[to_additive (attr := simps! tensorObj_X tensorHom_hom)]
-/--
-Instance `instMonoidalCategoryStruct` / 实例 `instMonoidalCategoryStruct`
-
-English:
-instance instMonoidalCategoryStruct
-  signature: : MonoidalCategoryStruct (Grp C) where
-  body: ⟨G.X otimes H.X⟩
-  tensorHom f g := homMk' (tensorHom (C := Mon C) f.hom g.hom)
-  whiskerRight f G := homMk' (whiskerRight (C := Mon C) f.hom G.toMon)
-  whiskerLeft G _ _ f := homMk' (MonoidalCategoryStruct.whiskerLeft (C := Mon C) G.toMon f.hom)
-  tensorUnit := ⟨𝟙_ C⟩
-  associator X Y Z :=
-    (Grp.fullyFaithfulForget₂Mon C).preimageIso (associator X.toMon Y.toMon Z.toMon)
-  leftUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (leftUnitor G.toMon)
-  rightUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (rightUnitor G.toMon)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instMonoidalCategoryStruct
-  签名: : 幺半群范畴结构 (群 C) where
-  定义体: ⟨G.X otimes H.X⟩
-  tensorHom f g := homMk' (tensorHom (C := Mon C) f.hom g.hom)
-  whiskerRight f G := homMk' (whiskerRight (C := Mon C) f.hom G.toMon)
-  whiskerLeft G _ _ f := homMk' (MonoidalCategoryStruct.whiskerLeft (C := Mon C) G.toMon f.hom)
-  tensorUnit := ⟨𝟙_ C⟩
-  associator X Y Z :=
-    (Grp.fullyFaithfulForget₂Mon C).preimageIso (associator X.toMon Y.toMon Z.toMon)
-  leftUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (leftUnitor G.toMon)
-  rightUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (rightUnitor G.toMon)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: otimes
+/-
+**CategoryTheory.Grp.instMonoidalCategoryStruct** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       [CategoryTheory.BraidedC
+ategory C] → CategoryTheory.MonoidalCategoryStruct (CategoryTheory.Grp C)
+参数：CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoidalCategoryStruct : MonoidalCategoryStruct (Grp C) where
-  tensorObj G H := ⟨G.X otimes H.X⟩
+  tensorObj G H := ⟨G.X ⊗ H.X⟩
   tensorHom f g := homMk' (tensorHom (C := Mon C) f.hom g.hom)
   whiskerRight f G := homMk' (whiskerRight (C := Mon C) f.hom G.toMon)
   whiskerLeft G _ _ f := homMk' (MonoidalCategoryStruct.whiskerLeft (C := Mon C) G.toMon f.hom)
@@ -1694,280 +1373,193 @@ instance instMonoidalCategoryStruct : MonoidalCategoryStruct (Grp C) where
   rightUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (rightUnitor G.toMon)
 
 @[to_additive (attr := simp)]
-/--
-lemma `tensorUnit_X` / 引理 `tensorUnit_X`
-
-English:
-lemma tensorUnit_X
-  statement: (𝟙_ (Grp C)).X = 𝟙_ C
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 tensorUnit_X
-  结论: (𝟙_ (群 C)).X = 𝟙_ C
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.tensorUnit_X** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`
+。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C],   (CategoryTheory.MonoidalCategoryStruct.tensorUnit (CategoryTheory.Grp C
+)).X =     CategoryTheory.MonoidalCategoryStruct.tensorUnit C
+参数：CategoryTheory.MonoidalCategoryStruct.tensorUnit (CategoryTheory.Grp C)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorUnit_X : (𝟙_ (Grp C)).X = 𝟙_ C := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `tensorUnit_one` / 引理 `tensorUnit_one`
-
-English:
-lemma tensorUnit_one
-  statement: η[(𝟙_ (Grp C)).X] = η[𝟙_ C]
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 tensorUnit_one
-  结论: η[(𝟙_ (群 C)).X] = η[𝟙_ C]
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.tensorUnit_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Gr
+p`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C], CategoryTheory.MonObj.one = CategoryTheory.MonObj.one
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorUnit_one : η[(𝟙_ (Grp C)).X] = η[𝟙_ C] := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `tensorUnit_mul` / 引理 `tensorUnit_mul`
-
-English:
-lemma tensorUnit_mul
-  statement: μ[(𝟙_ (Grp C)).X] = μ[𝟙_ C]
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 tensorUnit_mul
-  结论: μ[(𝟙_ (群 C)).X] = μ[𝟙_ C]
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.tensorUnit_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Gr
+p`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C], CategoryTheory.MonObj.mul = CategoryTheory.MonObj.mul
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorUnit_mul : μ[(𝟙_ (Grp C)).X] = μ[𝟙_ C] := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `tensorObj_one` / 引理 `tensorObj_one`
-
-English:
-lemma tensorObj_one
-  given: (G H : Grp C)
-  statement: η[(G otimes H).X] = η[G.X otimes H.X]
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 tensorObj_one
-  条件: (G H : 群 C)
-  结论: η[(G otimes H).X] = η[G.X otimes H.X]
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.tensorObj_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp
+`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H : CategoryTheory.Grp C),   CategoryTheory.MonObj.one = CategoryTheory
+.MonObj.one
+参数：G H : CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorObj_one (G H : Grp C) : η[(G otimes H).X] = η[G.X otimes H.X] := rfl
+lemma tensorObj_one (G H : Grp C) : η[(G ⊗ H).X] = η[G.X ⊗ H.X] := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `tensorObj_mul` / 引理 `tensorObj_mul`
-
-English:
-lemma tensorObj_mul
-  given: (G H : Grp C)
-  statement: μ[(G otimes H).X] = μ[G.X otimes H.X]
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 tensorObj_mul
-  条件: (G H : 群 C)
-  结论: μ[(G otimes H).X] = μ[G.X otimes H.X]
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.tensorObj_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp
+`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H : CategoryTheory.Grp C),   CategoryTheory.MonObj.mul = CategoryTheory
+.MonObj.mul
+参数：G H : CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorObj_mul (G H : Grp C) : μ[(G otimes H).X] = μ[G.X otimes H.X] := rfl
+lemma tensorObj_mul (G H : Grp C) : μ[(G ⊗ H).X] = μ[G.X ⊗ H.X] := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `whiskerLeft_hom_hom` / 引理 `whiskerLeft_hom_hom`
-
-English:
-lemma whiskerLeft_hom_hom
-  given: {G H : Grp C} (f : G ⟶ H) (I : Grp C)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 whiskerLeft_hom_hom
-  条件: {G H : 群 C} (f : G ⟶ H) (I : 群 C)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.whiskerLeft_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] {G H : CategoryTheory.Grp C} (f : G ⟶ H) (I : CategoryTheory.Grp C),   (Ca
+tegoryTheory.MonoidalCategoryStruct.whiskerRight f I).hom.hom =     CategoryTheo
+ry.MonoidalCategoryStruct.whiskerRight f.hom.hom I.X
+参数：f : G ⟶ H；I : CategoryTheory.Grp C；CategoryTheory.MonoidalCategoryStruct.whis
+kerRight f I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft_hom_hom {G H : Grp C} (f : G ⟶ H) (I : Grp C) :
     (f ▷ I).hom.hom = f.hom.hom ▷ I.X := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `whiskerRight_hom_hom` / 引理 `whiskerRight_hom_hom`
-
-English:
-lemma whiskerRight_hom_hom
-  given: (G : Grp C) {H I : Grp C} (f : H ⟶ I)
-  proof: rfl
-
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 whiskerRight_hom_hom
-  条件: (G : 群 C) {H I : 群 C} (f : H ⟶ I)
-  证明: rfl
-
-
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.whiskerRight_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G : CategoryTheory.Grp C) {H I : CategoryTheory.Grp C} (f : H ⟶ I),   (Ca
+tegoryTheory.MonoidalCategoryStruct.whiskerLeft G f).hom.hom =     CategoryTheor
+y.MonoidalCategoryStruct.whiskerLeft G.X f.hom.hom
+参数：G : CategoryTheory.Grp C；f : H ⟶ I；CategoryTheory.MonoidalCategoryStruct.whis
+kerLeft G f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerRight_hom_hom (G : Grp C) {H I : Grp C} (f : H ⟶ I) :
     (G ◁ f).hom.hom = G.X ◁ f.hom.hom := rfl
 
 
 @[to_additive (attr := simp)]
-/--
-lemma `leftUnitor_hom_hom_hom` / 引理 `leftUnitor_hom_hom_hom`
-
-English:
-lemma leftUnitor_hom_hom_hom
-  given: (G : Grp C)
-  statement: (fun_ G).hom.hom.hom = (fun_ G.X).hom
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 leftUnitor_hom_hom_hom
-  条件: (G : 群 C)
-  结论: (fun_ G).hom.hom.hom = (fun_ G.X).hom
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.leftUnitor_hom_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G : CategoryTheory.Grp C),   (CategoryTheory.MonoidalCategoryStruct.leftU
+nitor G).hom.hom.hom =     (CategoryTheory.MonoidalCategoryStruct.leftUnitor G.X
+).hom
+参数：G : CategoryTheory.Grp C；CategoryTheory.MonoidalCategoryStruct.leftUnitor G；C
+ategoryTheory.MonoidalCategoryStruct.leftUnitor G.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma leftUnitor_hom_hom_hom (G : Grp C) : (fun_ G).hom.hom.hom = (fun_ G.X).hom := rfl
+lemma leftUnitor_hom_hom_hom (G : Grp C) : (λ_ G).hom.hom.hom = (λ_ G.X).hom := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `leftUnitor_inv_hom_hom` / 引理 `leftUnitor_inv_hom_hom`
-
-English:
-lemma leftUnitor_inv_hom_hom
-  given: (G : Grp C)
-  statement: (fun_ G).inv.hom.hom = (fun_ G.X).inv
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 leftUnitor_inv_hom_hom
-  条件: (G : 群 C)
-  结论: (fun_ G).inv.hom.hom = (fun_ G.X).inv
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.leftUnitor_inv_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G : CategoryTheory.Grp C),   (CategoryTheory.MonoidalCategoryStruct.leftU
+nitor G).inv.hom.hom =     (CategoryTheory.MonoidalCategoryStruct.leftUnitor G.X
+).inv
+参数：G : CategoryTheory.Grp C；CategoryTheory.MonoidalCategoryStruct.leftUnitor G；C
+ategoryTheory.MonoidalCategoryStruct.leftUnitor G.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma leftUnitor_inv_hom_hom (G : Grp C) : (fun_ G).inv.hom.hom = (fun_ G.X).inv := rfl
+lemma leftUnitor_inv_hom_hom (G : Grp C) : (λ_ G).inv.hom.hom = (λ_ G.X).inv := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `rightUnitor_hom_hom_hom` / 引理 `rightUnitor_hom_hom_hom`
-
-English:
-lemma rightUnitor_hom_hom_hom
-  given: (G : Grp C)
-  statement: (ρ_ G).hom.hom.hom = (ρ_ G.X).hom
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 rightUnitor_hom_hom_hom
-  条件: (G : 群 C)
-  结论: (ρ_ G).hom.hom.hom = (ρ_ G.X).hom
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.rightUnitor_hom_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G : CategoryTheory.Grp C),   (CategoryTheory.MonoidalCategoryStruct.right
+Unitor G).hom.hom.hom =     (CategoryTheory.MonoidalCategoryStruct.rightUnitor G
+.X).hom
+参数：G : CategoryTheory.Grp C；CategoryTheory.MonoidalCategoryStruct.rightUnitor G；
+CategoryTheory.MonoidalCategoryStruct.rightUnitor G.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_hom_hom_hom (G : Grp C) : (ρ_ G).hom.hom.hom = (ρ_ G.X).hom := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `rightUnitor_inv_hom_hom` / 引理 `rightUnitor_inv_hom_hom`
-
-English:
-lemma rightUnitor_inv_hom_hom
-  given: (G : Grp C)
-  statement: (ρ_ G).inv.hom.hom = (ρ_ G.X).inv
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 rightUnitor_inv_hom_hom
-  条件: (G : 群 C)
-  结论: (ρ_ G).inv.hom.hom = (ρ_ G.X).inv
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.rightUnitor_inv_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G : CategoryTheory.Grp C),   (CategoryTheory.MonoidalCategoryStruct.right
+Unitor G).inv.hom.hom =     (CategoryTheory.MonoidalCategoryStruct.rightUnitor G
+.X).inv
+参数：G : CategoryTheory.Grp C；CategoryTheory.MonoidalCategoryStruct.rightUnitor G；
+CategoryTheory.MonoidalCategoryStruct.rightUnitor G.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_inv_hom_hom (G : Grp C) : (ρ_ G).inv.hom.hom = (ρ_ G.X).inv := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `associator_hom_hom_hom` / 引理 `associator_hom_hom_hom`
-
-English:
-lemma associator_hom_hom_hom
-  given: (G H I : Grp C)
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 associator_hom_hom_hom
-  条件: (G H I : 群 C)
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.associator_hom_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H I : CategoryTheory.Grp C),   (CategoryTheory.MonoidalCategoryStruct.a
+ssociator G H I).hom.hom.hom =     (CategoryTheory.MonoidalCategoryStruct.associ
+ator G.X H.X I.X).hom
+参数：G H I : CategoryTheory.Grp C；CategoryTheory.MonoidalCategoryStruct.associator
+ G H I；CategoryTheory.MonoidalCategoryStruct.associator G.X H.X I.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma associator_hom_hom_hom (G H I : Grp C) :
     (α_ G H I).hom.hom.hom = (α_ G.X H.X I.X).hom := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `associator_inv_hom_hom` / 引理 `associator_inv_hom_hom`
-
-English:
-lemma associator_inv_hom_hom
-  given: (G H I : Grp C)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 associator_inv_hom_hom
-  条件: (G H I : 群 C)
-  证明: rfl
-
-@[to_additive]
+/-
+**CategoryTheory.Grp.associator_inv_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H I : CategoryTheory.Grp C),   (CategoryTheory.MonoidalCategoryStruct.a
+ssociator G H I).inv.hom.hom =     (CategoryTheory.MonoidalCategoryStruct.associ
+ator G.X H.X I.X).inv
+参数：G H I : CategoryTheory.Grp C；CategoryTheory.MonoidalCategoryStruct.associator
+ G H I；CategoryTheory.MonoidalCategoryStruct.associator G.X H.X I.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma associator_inv_hom_hom (G H I : Grp C) :
     (α_ G H I).inv.hom.hom = (α_ G.X H.X I.X).inv := rfl
 
 @[to_additive]
-/--
-Instance `instMonoidalCategory` / 实例 `instMonoidalCategory`
-
-English:
-instance instMonoidalCategory
-  signature: : MonoidalCategory (Grp C) where
-  body: by intros; ext; simp [tensorHom_def]
-  triangle _ _ := by ext; exact triangle _ _
-
-中文:
-实例 instMonoidalCategory
-  签名: : 幺半群范畴 (群 C) where
-  定义体: by intros; ext; simp [tensorHom_def]
-  triangle _ _ := by ext; exact triangle _ _
-
-Depends on / 依赖: intros, tensorHom_def, triangle
+/-
+**CategoryTheory.Grp.instMonoidalCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       [CategoryTheory.BraidedC
+ategory C] → CategoryTheory.MonoidalCategory (CategoryTheory.Grp C)
+参数：CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoidalCategory : MonoidalCategory (Grp C) where
   tensorHom_def := by intros; ext; simp [tensorHom_def]
@@ -1976,126 +1568,70 @@ instance instMonoidalCategory : MonoidalCategory (Grp C) where
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[to_additive]
-/--
-Instance `instCartesianMonoidalCategory` / 实例 `instCartesianMonoidalCategory`
-
-English:
-instance instCartesianMonoidalCategory
-  signature: : CartesianMonoidalCategory (Grp C) where
-  body: .ofUniqueHom (fun G => homMk' (toUnit G.toMon)) fun G f => by ext; exact toUnit_unique ..
-  fst G H := homMk' (fst G.toMon H.toMon)
-  snd G H := homMk' (snd G.toMon H.toMon)
-  tensorProductIsBinaryProduct G H :=
-    BinaryFan.IsLimit.mk _ (fun {T} f g => .mk (lift f.hom g.hom))
-      (by aesop_cat) (by aesop_cat) (by aesop_cat)
-  fst_def G H := by ext; apply fst_def
-  snd_def G H := by ext; apply snd_def
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instCartesianMonoidalCategory
-  签名: : CartesianMonoidal范畴 (群 C) where
-  定义体: .ofUniqueHom (fun G => homMk' (toUnit G.toMon)) fun G f => by ext; exact toUnit_unique ..
-  fst G H := homMk' (fst G.toMon H.toMon)
-  snd G H := homMk' (snd G.toMon H.toMon)
-  tensorProductIsBinaryProduct G H :=
-    BinaryFan.IsLimit.mk _ (fun {T} f g => .mk (lift f.hom g.hom))
-      (by aesop_cat) (by aesop_cat) (by aesop_cat)
-  fst_def G H := by ext; apply fst_def
-  snd_def G H := by ext; apply snd_def
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.mk, G.toMon, H.toMon, IsLimit, aesop_cat, f.hom, fst_def, g.hom, ofUniqueHom, snd_def, tensorProductIsBinaryProduct, toUnit, toUnit_unique
+/-
+**CategoryTheory.Grp.instCartesianMonoidalCategory** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       [CategoryTheory.BraidedC
+ategory C] → CategoryTheory.CartesianMonoidalCategory (CategoryTheory.Grp C)
+参数：CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCartesianMonoidalCategory : CartesianMonoidalCategory (Grp C) where
   isTerminalTensorUnit :=
-    .ofUniqueHom (fun G => homMk' (toUnit G.toMon)) fun G f => by ext; exact toUnit_unique ..
+    .ofUniqueHom (fun G ↦ homMk' (toUnit G.toMon)) fun G f ↦ by ext; exact toUnit_unique ..
   fst G H := homMk' (fst G.toMon H.toMon)
   snd G H := homMk' (snd G.toMon H.toMon)
   tensorProductIsBinaryProduct G H :=
-    BinaryFan.IsLimit.mk _ (fun {T} f g => .mk (lift f.hom g.hom))
+    BinaryFan.IsLimit.mk _ (fun {T} f g ↦ .mk (lift f.hom g.hom))
       (by aesop_cat) (by aesop_cat) (by aesop_cat)
   fst_def G H := by ext; apply fst_def
   snd_def G H := by ext; apply snd_def
 
 @[to_additive (attr := simp)]
-/--
-lemma `lift_hom` / 引理 `lift_hom`
-
-English:
-lemma lift_hom
-  given: (f : G ⟶ H₁) (g : G ⟶ H₂)
-  statement: (lift f g).hom = (lift f.hom g.hom)
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 lift_hom
-  条件: (f : G ⟶ H₁) (g : G ⟶ H₂)
-  结论: (lift f g).hom = (lift f.hom g.hom)
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.lift_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] {G H₁ H₂ : CategoryTheory.Grp C} (f : G ⟶ H₁) (g : G ⟶ H₂),   (CategoryThe
+ory.CartesianMonoidalCategory.lift f g).hom = CategoryTheory.CartesianMonoidalCa
+tegory.lift f.hom g.hom
+参数：f : G ⟶ H₁；g : G ⟶ H₂；CategoryTheory.CartesianMonoidalCategory.lift f g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lift_hom (f : G ⟶ H₁) (g : G ⟶ H₂) : (lift f g).hom = (lift f.hom g.hom) := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `fst_hom_hom` / 引理 `fst_hom_hom`
-
-English:
-lemma fst_hom_hom
-  given: (G H : Grp C)
-  statement: (fst G H).hom.hom = fst G.X H.X
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 fst_hom_hom
-  条件: (G H : 群 C)
-  结论: (fst G H).hom.hom = fst G.X H.X
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.fst_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H : CategoryTheory.Grp C),   (CategoryTheory.SemiCartesianMonoidalCateg
+ory.fst G H).hom.hom =     CategoryTheory.SemiCartesianMonoidalCategory.fst G.X 
+H.X
+参数：G H : CategoryTheory.Grp C；CategoryTheory.SemiCartesianMonoidalCategory.fst G
+ H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fst_hom_hom (G H : Grp C) : (fst G H).hom.hom = fst G.X H.X := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `snd_hom_hom` / 引理 `snd_hom_hom`
-
-English:
-lemma snd_hom_hom
-  given: (G H : Grp C)
-  statement: (snd G H).hom.hom = snd G.X H.X
-  proof: rfl
-
-中文:
-引理 snd_hom_hom
-  条件: (G H : 群 C)
-  结论: (snd G H).hom.hom = snd G.X H.X
-  证明: rfl
+/-
+**CategoryTheory.Grp.snd_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H : CategoryTheory.Grp C),   (CategoryTheory.SemiCartesianMonoidalCateg
+ory.snd G H).hom.hom =     CategoryTheory.SemiCartesianMonoidalCategory.snd G.X 
+H.X
+参数：G H : CategoryTheory.Grp C；CategoryTheory.SemiCartesianMonoidalCategory.snd G
+ H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma snd_hom_hom (G H : Grp C) : (snd G H).hom.hom = snd G.X H.X := rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive (attr := simps)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂Mon C).Monoidal
-  body: 𝟙 _
-  «μ» G H := 𝟙 _
-  «η» := 𝟙 _
-  δ G H := 𝟙 _
-
-中文:
-实例 :
-  签名: (forget₂Mon C).幺半群
-  定义体: 𝟙 _
-  «μ» G H := 𝟙 _
-  «η» := 𝟙 _
-  δ G H := 𝟙 _
+/-
+**CategoryTheory.Grp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂Mon C).Monoidal where
   ε := 𝟙 _
@@ -2107,62 +1643,41 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 attribute [local simp] MonObj.tensorObj.mul_def mul_eq_mul comp_mul in
 @[to_additive]
-/--
-Instance `instBraidedCategory` / 实例 `instBraidedCategory`
-
-English:
-instance instBraidedCategory
-  signature: : BraidedCategory (Grp C)
-  body: .ofFaithful (forget₂Mon C) fun G H => Grp.mkIso (β_ G.X H.X)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instBraidedCategory
-  签名: : 辫范畴 (群 C)
-  定义体: .ofFaithful (forget₂Mon C) fun G H => Grp.mkIso (β_ G.X H.X)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Grp.mkIso, ofFaithful
+/-
+**CategoryTheory.Grp.instBraidedCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Grp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory
+.BraidedCategory C] → CategoryTheory.BraidedCategory (CategoryTheory.Grp C)
+参数：CategoryTheory.Grp C。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Grp.instFaithfulMonForget₂Mon`：∀ (C : Type u₁) [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCate
+gory C],   (CategoryTheory.Grp.for…
 -/
 instance instBraidedCategory : BraidedCategory (Grp C) :=
-  .ofFaithful (forget₂Mon C) fun G H => Grp.mkIso (β_ G.X H.X)
+  .ofFaithful (forget₂Mon C) fun G H ↦ Grp.mkIso (β_ G.X H.X)
 
 @[to_additive (attr := simp)]
-/--
-lemma `braiding_hom_hom_hom` / 引理 `braiding_hom_hom_hom`
-
-English:
-lemma braiding_hom_hom_hom
-  given: (G H : Grp C)
-  statement: (β_ G H).hom.hom.hom = (β_ G.X H.X).hom
-  proof: rfl
-@[to_additive (attr := simp)]
-
-中文:
-引理 braiding_hom_hom_hom
-  条件: (G H : 群 C)
-  结论: (β_ G H).hom.hom.hom = (β_ G.X H.X).hom
-  证明: rfl
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Grp.braiding_hom_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H : CategoryTheory.Grp C), (β_ G H).hom.hom.hom = (β_ G.X H.X).hom
+参数：G H : CategoryTheory.Grp C；β_ G H；β_ G.X H.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma braiding_hom_hom_hom (G H : Grp C) : (β_ G H).hom.hom.hom = (β_ G.X H.X).hom := rfl
 @[to_additive (attr := simp)]
-/--
-lemma `braiding_inv_hom_hom` / 引理 `braiding_inv_hom_hom`
-
-English:
-lemma braiding_inv_hom_hom
-  given: (G H : Grp C)
-  statement: (β_ G H).inv.hom.hom = (β_ G.X H.X).inv
-  proof: rfl
-
-中文:
-引理 braiding_inv_hom_hom
-  条件: (G H : 群 C)
-  结论: (β_ G H).inv.hom.hom = (β_ G.X H.X).inv
-  证明: rfl
+/-
+**CategoryTheory.Grp.braiding_inv_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Grp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] (G H : CategoryTheory.Grp C), (β_ G H).inv.hom.hom = (β_ G.X H.X).inv
+参数：G H : CategoryTheory.Grp C；β_ G H；β_ G.X H.X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma braiding_inv_hom_hom (G H : Grp C) : (β_ G H).inv.hom.hom = (β_ G.X H.X).inv := rfl
 
@@ -2183,42 +1698,17 @@ open scoped Obj
 /-- The image of a group object under a monoidal functor is a group object. -/
 @[to_additive (attr := simp)
 /-- The image of an additive group object under a monoidal functor is an additive group object. -/]
-/--
-Definition of `grpObjObj` / `grpObjObj` 的定义
-
-English:
-abbreviation grpObjObj
-  signature: {G : C} [GrpObj G]
-  body: F.map ι
-  left_inv := by
-    simp [← Functor.map_id, Functor.Monoidal.lift_μ_assoc,
-      Functor.Monoidal.toUnit_ε_assoc, ← Functor.map_comp]
-  right_inv := by
-    simp [← Functor.map_id, Functor.Monoidal.lift_μ_assoc,
-      Functor.Monoidal.toUnit_ε_assoc, ← Functor.map_comp]
-
-scoped[CategoryTheory.Obj] attribute [instance] CategoryTheory.Functor.grpObjObj
-  CategoryTheory.Functor.addGrpObjObj
-
-@[to_additive (attr := reassoc, simp) neg_def]
-
-中文:
-缩写 grpObjObj
-  签名: {G : C} [GrpObj G]
-  定义体: F.map ι
-  left_inv := by
-    simp [← Functor.map_id, Functor.Monoidal.lift_μ_assoc,
-      Functor.Monoidal.toUnit_ε_assoc, ← Functor.map_comp]
-  right_inv := by
-    simp [← Functor.map_id, Functor.Monoidal.lift_μ_assoc,
-      Functor.Monoidal.toUnit_ε_assoc, ← Functor.map_comp]
-
-scoped[CategoryTheory.Obj] attribute [instance] CategoryTheory.Functor.grpObjObj
-  CategoryTheory.Functor.addGrpObjObj
-
-@[to_additive (attr := reassoc, simp) neg_def]
-
-Depends on / 依赖: F.map
+/-
+**CategoryTheory.Functor.grpObjObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             {F : CategoryTheory.Functor C D} →
+               [F.Monoidal] → {G : C} → [CategoryTheory.GrpObj G] → CategoryTheo
+ry.GrpObj (F.obj G)
+参数：F.obj G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev grpObjObj {G : C} [GrpObj G] : GrpObj (F.obj G) where
   inv := F.map ι
@@ -2233,20 +1723,10 @@ scoped[CategoryTheory.Obj] attribute [instance] CategoryTheory.Functor.grpObjObj
   CategoryTheory.Functor.addGrpObjObj
 
 @[to_additive (attr := reassoc, simp) neg_def]
-/--
-lemma `obj.ι_def` / 引理 `obj.ι_def`
-
-English:
-lemma obj.ι_def
-  given: {G : C} [GrpObj G]
-  statement: ι[F.obj G] = F.map ι
-  proof: rfl
-
-中文:
-引理 obj.ι_def
-  条件: {G : C} [GrpObj G]
-  结论: ι[F.obj G] = F.map ι
-  证明: rfl
+/-
+**CategoryTheory.Functor.obj.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma obj.ι_def {G : C} [GrpObj G] : ι[F.obj G] = F.map ι := rfl
 
@@ -2256,46 +1736,42 @@ variable (F) in
 /-- A finite-product-preserving functor takes group objects to group objects. -/
 @[to_additive (attr := simps!)
 /-- A finite-product-preserving functor takes additive group objects to additive group objects. -/]
-/--
-Definition of `mapGrp` / `mapGrp` 的定义
-
-English:
-definition mapGrp
-  signature: : Grp C ⥤ Grp D where
-  body: .mk (F.obj A.X)
-  map f := Grp.homMk' (F.mapMon.map f.hom)
-
-@[to_additive]
-
-中文:
-定义 mapGrp
-  签名: : 群 C ⥤ 群 D where
-  定义体: .mk (F.obj A.X)
-  map f := Grp.homMk' (F.mapMon.map f.hom)
-
-@[to_additive]
-
-Depends on / 依赖: F.obj
+/-
+**CategoryTheory.Functor.mapGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functo
+r`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             (F : CategoryTheory.Functor C D) →
+               [F.Monoidal] → CategoryTheory.Functor (CategoryTheory.Grp C) (Cat
+egoryTheory.Grp D)
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Grp C；CategoryTheory.Grp D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapGrp : Grp C ⥤ Grp D where
   obj A := .mk (F.obj A.X)
   map f := Grp.homMk' (F.mapMon.map f.hom)
 
 @[to_additive]
-/--
-Instance `Faithful.mapGrp` / 实例 `Faithful.mapGrp`
-
-English:
-instance Faithful.mapGrp
-  signature: [F.Faithful]
-  body: (Grp.forget₂Mon _).map_injective
-      (F.mapMon.map_injective ((Grp.forget₂Mon _).congr_map hfg))
-
-中文:
-实例 忠实.mapGrp
-  签名: [F.忠实]
-  定义体: (Grp.forget₂Mon _).map_injective
-      (F.mapMon.map_injective ((Grp.forget₂Mon _).congr_map hfg))
+/-
+**CategoryTheory.Functor.Faithful.mapGrp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   {F
+ : CategoryTheory.Functor C D} [inst_4 : F.Monoidal] [F.Faithful], F.mapGrp.Fait
+hful
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.Grp.instFaithfulMonForget₂Mon`：∀ (C : Type u₁) [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCate
+gory C],   (CategoryTheory.Grp.for…
+· 使用定理 `CategoryTheory.Functor.Faithful.mapMon`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {D : Ty
+pe u₂}   [inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
 -/
 protected instance Faithful.mapGrp [F.Faithful] : F.mapGrp.Faithful where
   map_injective hfg :=
@@ -2307,123 +1783,107 @@ set_option backward.isDefEq.respectTransparency.types false in
 `F.mapGrp : Grp C ⥤ Grp D` is fully faithful too. -/
 @[to_additive /-- If `F : C ⥤ D` is a fully faithful monoidal functor, then
 `F.mapAddGrp : AddGrp C ⥤ AddGrp D` is fully faithful too. -/]
-/--
-Definition of `FullyFaithful.mapGrp` / `FullyFaithful.mapGrp` 的定义
-
-English:
-definition FullyFaithful.mapGrp
-  signature: (hF : F.FullyFaithful)
-  body: Grp.homMk' (hF.mapMon.preimage f.hom)
-
-中文:
-定义 满忠实.mapGrp
-  签名: (hF : F.满忠实)
-  定义体: Grp.homMk' (hF.mapMon.preimage f.hom)
+/-
+**CategoryTheory.Functor.FullyFaithful.mapGrp** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor.FullyFaithful`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             {F : CategoryTheory.Functor C D} →
+ [inst_4 : F.Monoidal] → F.FullyFaithful → F.mapGrp.FullyFaithful
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def FullyFaithful.mapGrp (hF : F.FullyFaithful) : F.mapGrp.FullyFaithful where
   preimage f := Grp.homMk' (hF.mapMon.preimage f.hom)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_additive]
-/--
-Instance `Full.mapGrp` / 实例 `Full.mapGrp`
-
-English:
-instance Full.mapGrp
-  signature: [F.Full] [F.Faithful]
-  body: ((FullyFaithful.ofFullyFaithful F).mapGrp).full
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 满.mapGrp
-  签名: [F.满] [F.忠实]
-  定义体: ((FullyFaithful.ofFullyFaithful F).mapGrp).full
-
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Functor.Full.mapGrp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   {F
+ : CategoryTheory.Functor C D} [inst_4 : F.Monoidal] [F.Full] [F.Faithful], F.ma
+pGrp.Full
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 protected instance Full.mapGrp [F.Full] [F.Faithful] : F.mapGrp.Full :=
   ((FullyFaithful.ofFullyFaithful F).mapGrp).full
 
 @[to_additive (attr := simp)]
-/--
-theorem `mapGrp_id_one` / 定理 `mapGrp_id_one`
-
-English:
-theorem mapGrp_id_one
-  given: (A : Grp C)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mapGrp_id_one
-  条件: (A : 群 C)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CategoryTheory.Functor.mapGrp_id_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   (A : CategoryTheory.Grp C),   Category
+Theory.MonObj.one =     CategoryTheory.CategoryStruct.comp       (CategoryTheory
+.CategoryStruct.id (CategoryTheory.MonoidalCategoryStruct.tensorUnit C)) Categor
+yTheory.MonObj.one
+参数：A : CategoryTheory.Grp C；CategoryTheory.CategoryStruct.id (CategoryTheory.Mon
+oidalCategoryStruct.tensorUnit C)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapGrp_id_one (A : Grp C) :
     η[((𝟭 C).mapGrp.obj A).X] = 𝟙 _ ≫ η[A.X] :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mapGrp_id_mul` / 定理 `mapGrp_id_mul`
-
-English:
-theorem mapGrp_id_mul
-  given: (A : Grp C)
-  proof: rfl
-
-@[to_additive (attr := simp, reassoc)]
-
-中文:
-定理 mapGrp_id_mul
-  条件: (A : 群 C)
-  证明: rfl
-
-@[to_additive (attr := simp, reassoc)]
+/-
+**CategoryTheory.Functor.mapGrp_id_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   (A : CategoryTheory.Grp C),   Category
+Theory.MonObj.mul =     CategoryTheory.CategoryStruct.comp       (CategoryTheory
+.CategoryStruct.id (CategoryTheory.MonoidalCategoryStruct.tensorObj A.X A.X))   
+    CategoryTheory.MonObj.mul
+参数：A : CategoryTheory.Grp C；CategoryTheory.CategoryStruct.id (CategoryTheory.Mon
+oidalCategoryStruct.tensorObj A.X A.X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapGrp_id_mul (A : Grp C) :
     μ[((𝟭 C).mapGrp.obj A).X] = 𝟙 _ ≫ μ[A.X] :=
   rfl
 
 @[to_additive (attr := simp, reassoc)]
-/--
-theorem `comp_mapGrp_one` / 定理 `comp_mapGrp_one`
-
-English:
-theorem comp_mapGrp_one
-  given: (A : Grp C)
-  proof: rfl
-
-@[to_additive (attr := simp, reassoc)]
-
-中文:
-定理 comp_mapGrp_one
-  条件: (A : 群 C)
-  证明: rfl
-
-@[to_additive (attr := simp, reassoc)]
+/-
+**CategoryTheory.Functor.comp_mapGrp_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   {E
+ : Type u₃} [inst_4 : CategoryTheory.Category.{v₃, u₃} E] [inst_5 : CategoryTheo
+ry.CartesianMonoidalCategory E]   {F : CategoryTheory.Functor C D} {G : Category
+Theory.Functor D E} [inst_6 : F.Monoidal] [inst_7 : G.Monoidal]   (A : CategoryT
+heory.Grp C),   CategoryTheory.MonObj.one =     CategoryTheory.CategoryStruct.co
+mp (CategoryTheory.Functor.LaxMonoidal.ε (F.comp G))       ((F.comp G).map Categ
+oryTheory.MonObj.one)
+参数：A : CategoryTheory.Grp C；CategoryTheory.Functor.LaxMonoidal.ε (F.comp G)；(F.c
+omp G).map CategoryTheory.MonObj.one。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_mapGrp_one (A : Grp C) :
     η[((F ⋙ G).mapGrp.obj A).X] = LaxMonoidal.ε (F ⋙ G) ≫ (F ⋙ G).map η[A.X] :=
   rfl
 
 @[to_additive (attr := simp, reassoc)]
-/--
-theorem `comp_mapGrp_mul` / 定理 `comp_mapGrp_mul`
-
-English:
-theorem comp_mapGrp_mul
-  given: (A : Grp C)
-  proof: rfl
-
-中文:
-定理 comp_mapGrp_mul
-  条件: (A : 群 C)
-  证明: rfl
+/-
+**CategoryTheory.Functor.comp_mapGrp_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   {E
+ : Type u₃} [inst_4 : CategoryTheory.Category.{v₃, u₃} E] [inst_5 : CategoryTheo
+ry.CartesianMonoidalCategory E]   {F : CategoryTheory.Functor C D} {G : Category
+Theory.Functor D E} [inst_6 : F.Monoidal] [inst_7 : G.Monoidal]   (A : CategoryT
+heory.Grp C),   CategoryTheory.MonObj.mul =     CategoryTheory.CategoryStruct.co
+mp (CategoryTheory.Functor.LaxMonoidal.μ (F.comp G) A.X A.X)       ((F.comp G).m
+ap CategoryTheory.MonObj.mul)
+参数：A : CategoryTheory.Grp C；CategoryTheory.Functor.LaxMonoidal.μ (F.comp G) A.X 
+A.X；(F.comp G).map CategoryTheory.MonObj.mul。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_mapGrp_mul (A : Grp C) :
     μ[((F ⋙ G).mapGrp.obj A).X] = LaxMonoidal.μ (F ⋙ G) _ _ ≫ (F ⋙ G).map μ[A.X] :=
@@ -2433,65 +1893,59 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The identity functor is also the identity on group objects. -/
 @[to_additive (attr := simps!)
 /-- The identity functor is also the identity on additive group objects. -/]
-/--
-Definition of `mapGrpIdIso` / `mapGrpIdIso` 的定义
-
-English:
-definition mapGrpIdIso
-  signature: : mapGrp (𝟭 C) ≅ 𝟭 (Grp C)
-  body: NatIso.ofComponents fun X => Grp.mkIso (.refl _)
-
-中文:
-定义 mapGrpIdIso
-  签名: : mapGrp (𝟭 C) ≅ 𝟭 (群 C)
-  定义体: NatIso.ofComponents fun X => Grp.mkIso (.refl _)
-
-Depends on / 依赖: Grp.mkIso, NatIso, NatIso.ofComponents, ofComponents
+/-
+**CategoryTheory.Functor.mapGrpIdIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       (CategoryTheory.Functor.
+id C).mapGrp ≅ CategoryTheory.Functor.id (CategoryTheory.Grp C)
+参数：CategoryTheory.Functor.id C；CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapGrpIdIso : mapGrp (𝟭 C) ≅ 𝟭 (Grp C) :=
-  NatIso.ofComponents fun X => Grp.mkIso (.refl _)
+  NatIso.ofComponents fun X ↦ Grp.mkIso (.refl _)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The composition functor is also the composition on group objects. -/
 @[to_additive (attr := simps!)
 /-- The composition functor is also the composition on additive group objects. -/]
-/--
-Definition of `mapGrpCompIso` / `mapGrpCompIso` 的定义
-
-English:
-definition mapGrpCompIso
-  signature: : (F ⋙ G).mapGrp ≅ F.mapGrp ⋙ G.mapGrp
-  body: NatIso.ofComponents fun X => Grp.mkIso (.refl _)
-
-中文:
-定义 mapGrpCompIso
-  签名: : (F ⋙ G).mapGrp ≅ F.mapGrp ⋙ G.mapGrp
-  定义体: NatIso.ofComponents fun X => Grp.mkIso (.refl _)
-
-Depends on / 依赖: Grp.mkIso, NatIso, NatIso.ofComponents, ofComponents
+/-
+**CategoryTheory.Functor.mapGrpCompIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             {E : Type u₃} →               [ins
+t_4 : CategoryTheory.Category.{v₃, u₃} E] →                 [inst_5 : CategoryTh
+eory.CartesianMonoidalCategory E] →                   {F : CategoryTheory.Functo
+r C D} →                     {G : CategoryTheory.Functor D E} →                 
+      [inst_6 : F.Monoidal] → [inst_7 : G.Monoidal] → (F.comp G).mapGrp ≅ F.mapG
+rp.comp G.mapGrp
+参数：F.comp G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapGrpCompIso : (F ⋙ G).mapGrp ≅ F.mapGrp ⋙ G.mapGrp :=
-  NatIso.ofComponents fun X => Grp.mkIso (.refl _)
+  NatIso.ofComponents fun X ↦ Grp.mkIso (.refl _)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Natural transformations between functors lift to group objects. -/
 @[to_additive (attr := simps!)
 /-- Natural transformations between functors lift to additive group objects. -/]
-/--
-Definition of `mapGrpNatTrans` / `mapGrpNatTrans` 的定义
-
-English:
-definition mapGrpNatTrans
-  signature: (f : F ⟶ F')
-  body: Grp.homMk' ((mapMonNatTrans f).app X.toMon)
-
-中文:
-定义 mapGrp自然数Trans
-  签名: (f : F ⟶ F')
-  定义体: Grp.homMk' ((mapMonNatTrans f).app X.toMon)
-
-Depends on / 依赖: Grp.homMk, X.toMon, mapMonNatTrans
+/-
+**CategoryTheory.Functor.mapGrpNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             {F F' : CategoryTheory.Functor C D
+} →               [inst_4 : F.Monoidal] → [inst_5 : F'.Monoidal] → (F ⟶ F') → (F
+.mapGrp ⟶ F'.mapGrp)
+参数：F ⟶ F'；F.mapGrp ⟶ F'.mapGrp。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.of_cartesianMonoidalCategory`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Ca
+rtesianMonoidalCategory C]   {D : Type u₂} [inst_2 : …
 -/
 def mapGrpNatTrans (f : F ⟶ F') : F.mapGrp ⟶ F'.mapGrp where
   app X := Grp.homMk' ((mapMonNatTrans f).app X.toMon)
@@ -2501,23 +1955,20 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Natural isomorphisms between functors lift to group objects. -/
 @[to_additive (attr := simps!)
 /-- Natural isomorphisms between functors lift to additive group objects. -/]
-/--
-Definition of `mapGrpNatIso` / `mapGrpNatIso` 的定义
-
-English:
-definition mapGrpNatIso
-  signature: (e : F ≅ F')
-  body: NatIso.ofComponents fun X => Grp.mkIso (e.app _)
-
-中文:
-定义 mapGrp自然数Iso
-  签名: (e : F ≅ F')
-  定义体: NatIso.ofComponents fun X => Grp.mkIso (e.app _)
-
-Depends on / 依赖: Grp.mkIso, NatIso, NatIso.ofComponents, e.app, ofComponents
+/-
+**CategoryTheory.Functor.mapGrpNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             {F F' : CategoryTheory.Functor C D
+} →               [inst_4 : F.Monoidal] → [inst_5 : F'.Monoidal] → (F ≅ F') → (F
+.mapGrp ≅ F'.mapGrp)
+参数：F ≅ F'；F.mapGrp ≅ F'.mapGrp。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapGrpNatIso (e : F ≅ F') : F.mapGrp ≅ F'.mapGrp :=
-  NatIso.ofComponents fun X => Grp.mkIso (e.app _)
+  NatIso.ofComponents fun X ↦ Grp.mkIso (e.app _)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
@@ -2525,22 +1976,16 @@ attribute [local instance] Monoidal.ofChosenFiniteProducts in
 /-- `mapGrp` is functorial in the left-exact functor. -/
 @[to_additive (attr := simps)
 /-- `mapAddGrp` is functorial in the left-exact functor. -/]
-/--
-Definition of `mapGrpFunctor` / `mapGrpFunctor` 的定义
-
-English:
-definition mapGrpFunctor
-  signature: : (C ⥤ₗ D) ⥤ Grp C ⥤ Grp D where
-  body: F.1.mapGrp
-  map {F G} α := { app A := Grp.homMk'' (α.hom.app A.X) }
-
-中文:
-定义 mapGrpFunctor
-  签名: : (C ⥤ₗ D) ⥤ 群 C ⥤ 群 D where
-  定义体: F.1.mapGrp
-  map {F G} α := { app A := Grp.homMk'' (α.hom.app A.X) }
-
-Depends on / 依赖: mapGrp
+/-
+**CategoryTheory.Functor.mapGrpFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             CategoryTheory.Functor (C ⥤ₗ D) (C
+ategoryTheory.Functor (CategoryTheory.Grp C) (CategoryTheory.Grp D))
+参数：C ⥤ₗ D；CategoryTheory.Functor (CategoryTheory.Grp C) (CategoryTheory.Grp D)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def mapGrpFunctor : (C ⥤ₗ D) ⥤ Grp C ⥤ Grp D where
   obj F := F.1.mapGrp
@@ -2549,38 +1994,25 @@ noncomputable def mapGrpFunctor : (C ⥤ₗ D) ⥤ Grp C ⥤ Grp D where
 /-- Pullback a group object along a fully faithful monoidal functor. -/
 @[to_additive (attr := simps)
 /-- Pullback an additive group object along a fully faithful monoidal functor. -/]
-/--
-Definition of `FullyFaithful.grpObj` / `FullyFaithful.grpObj` 的定义
-
-English:
-abbreviation FullyFaithful.grpObj
-  signature: (hF : F.FullyFaithful) (X : C) [GrpObj (F.obj X)]
-  body: hF.monObj X
-  inv := hF.preimage ι[F.obj X]
-left_inv := hF.map_injective by
-    simp [OplaxMonoidal.η_of_cartesianMonoidalCategory]
-right_inv := hF.map_injective by
-    simp [OplaxMonoidal.η_of_cartesianMonoidalCategory]
-
-中文:
-缩写 满忠实.grpObj
-  签名: (hF : F.满忠实) (X : C) [GrpObj (F.obj X)]
-  定义体: hF.monObj X
-  inv := hF.preimage ι[F.obj X]
-left_inv := hF.map_injective by
-    simp [OplaxMonoidal.η_of_cartesianMonoidalCategory]
-right_inv := hF.map_injective by
-    simp [OplaxMonoidal.η_of_cartesianMonoidalCategory]
-
-Depends on / 依赖: hF.monObj, monObj
+/-
+**CategoryTheory.Functor.FullyFaithful.grpObj** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor.FullyFaithful`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             {F : CategoryTheory.Functor C D} →
+               [F.Monoidal] → F.FullyFaithful → (X : C) → [CategoryTheory.GrpObj
+ (F.obj X)] → CategoryTheory.GrpObj X
+参数：X : C；F.obj X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev FullyFaithful.grpObj (hF : F.FullyFaithful) (X : C) [GrpObj (F.obj X)] :
     GrpObj X where
   __ := hF.monObj X
   inv := hF.preimage ι[F.obj X]
-left_inv := hF.map_injective by
+  left_inv := hF.map_injective <| by
     simp [OplaxMonoidal.η_of_cartesianMonoidalCategory]
-right_inv := hF.map_injective by
+  right_inv := hF.map_injective <| by
     simp [OplaxMonoidal.η_of_cartesianMonoidalCategory]
 
 set_option backward.isDefEq.respectTransparency false in
@@ -2590,30 +2022,46 @@ same on group objects as on objects. -/
 @[to_additive (attr := simp)
 /-- The essential image of a full and faithful functor between cartesian-monoidal categories is the
 same on additive group objects as on objects. -/]
-/--
-lemma `essImage_mapGrp` / 引理 `essImage_mapGrp`
-
-English:
-lemma essImage_mapGrp
-  given: [F.Full] [F.Faithful] {G : Grp D}
-  proof: by rintro ⟨H, ⟨e⟩⟩; exact ⟨H.X, ⟨(Grp.forget _).mapIso e⟩⟩
-  mpr := by
-    rintro ⟨H, ⟨e⟩⟩
-    let : GrpObj (F.obj H) := .ofIso e.symm
-    let : GrpObj H := (FullyFaithful.ofFullyFaithful F).grpObj H
-    refine ⟨⟨H⟩, ⟨Grp.mkIso e ?_ ?_⟩⟩ <;> simp
-
-中文:
-引理 essImage_mapGrp
-  条件: [F.满] [F.忠实] {G : 群 D}
-  证明: by rintro ⟨H, ⟨e⟩⟩; exact ⟨H.X, ⟨(Grp.forget _).mapIso e⟩⟩
-  mpr := by
-    rintro ⟨H, ⟨e⟩⟩
-    let : GrpObj (F.obj H) := .ofIso e.symm
-    let : GrpObj H := (FullyFaithful.ofFullyFaithful F).grpObj H
-    refine ⟨⟨H⟩, ⟨Grp.mkIso e ?_ ?_⟩⟩ <;> simp
-
-Depends on / 依赖: F.obj, FullyFaithful, FullyFaithful.ofFullyFaithful, Grp.forget, Grp.mkIso, GrpObj, e.symm, forget, grpObj, mapIso, ofFullyFaithful
+/-
+**CategoryTheory.Functor.essImage_mapGrp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   {F
+ : CategoryTheory.Functor C D} [inst_4 : F.Monoidal] [F.Full] [F.Faithful] {G : 
+CategoryTheory.Grp D},   F.mapGrp.essImage G ↔ F.essImage G.X
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonObj.ofIso_one`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {M X : C}   [i
+nst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.map_preimage`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.Monoidal.ε_η_assoc`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D :
+ Type u₂}   {inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.MonObj.ofIso_mul`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {M X : C}   [i
+nst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.Monoidal.μ_δ_assoc`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D :
+ Type u₂}   {inst_2 : CategoryT…
 -/
 lemma essImage_mapGrp [F.Full] [F.Faithful] {G : Grp D} :
     F.mapGrp.essImage G ↔ F.essImage G.X where
@@ -2632,48 +2080,18 @@ variable [BraidedCategory C] [BraidedCategory D] (F : C ⥤ D) [F.Braided]
 open Monoidal LaxMonoidal
 
 @[to_additive]
-/--
-Instance `mapGrp.instMonoidal` / 实例 `mapGrp.instMonoidal`
-
-English:
-instance mapGrp.instMonoidal
-  signature: : F.mapGrp.Monoidal
-  body: Functor.CoreMonoidal.toMonoidal
-  { εIso := (Grp.fullyFaithfulForget₂Mon _).preimageIso (εIso F.mapMon)
-    μIso X Y := (Grp.fullyFaithfulForget₂Mon _).preimageIso (μIso F.mapMon X.toMon Y.toMon)
-    μIso_hom_natural_left f Z :=
-      (Grp.forget₂Mon _).map_injective (μ_natural_left F.mapMon f.hom Z.toMon)
-    μIso_hom_natural_right Z f :=
-      (Grp.forget₂Mon _).map_injective (μ_natural_right F.mapMon Z.toMon f.hom)
-    associativity X Y Z :=
-      (Grp.forget₂Mon _).map_injective (associativity F.mapMon X.toMon Y.toMon Z.toMon)
-    left_unitality X :=
-      (Grp.forget₂Mon _).map_injective (left_unitality F.mapMon X.toMon)
-    right_unitality X :=
-      (Grp.forget₂Mon _).map_injective (right_unitality F.mapMon X.toMon) }
-
-@[to_additive]
-
-中文:
-实例 mapGrp.instMonoidal
-  签名: : F.mapGrp.幺半群
-  定义体: Functor.CoreMonoidal.toMonoidal
-  { εIso := (Grp.fullyFaithfulForget₂Mon _).preimageIso (εIso F.mapMon)
-    μIso X Y := (Grp.fullyFaithfulForget₂Mon _).preimageIso (μIso F.mapMon X.toMon Y.toMon)
-    μIso_hom_natural_left f Z :=
-      (Grp.forget₂Mon _).map_injective (μ_natural_left F.mapMon f.hom Z.toMon)
-    μIso_hom_natural_right Z f :=
-      (Grp.forget₂Mon _).map_injective (μ_natural_right F.mapMon Z.toMon f.hom)
-    associativity X Y Z :=
-      (Grp.forget₂Mon _).map_injective (associativity F.mapMon X.toMon Y.toMon Z.toMon)
-    left_unitality X :=
-      (Grp.forget₂Mon _).map_injective (left_unitality F.mapMon X.toMon)
-    right_unitality X :=
-      (Grp.forget₂Mon _).map_injective (right_unitality F.mapMon X.toMon) }
-
-@[to_additive]
-
-Depends on / 依赖: CoreMonoidal, F.mapMon, Functor, Functor.CoreMonoidal.toMonoidal, Grp.forget, Grp.fullyFaithfulForget, X.toMon, Y.toMon, Z.toMon, associativity, f.hom, mapMon, map_injective, preimageIso, toMonoidal
+/-
+**CategoryTheory.Functor.mapGrp.instMonoidal** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Functor.mapGrp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             [inst_4 : CategoryTheory.BraidedCa
+tegory C] →               [inst_5 : CategoryTheory.BraidedCategory D] →         
+        (F : CategoryTheory.Functor C D) → [inst_6 : F.Braided] → F.mapGrp.Monoi
+dal
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance mapGrp.instMonoidal : F.mapGrp.Monoidal :=
   Functor.CoreMonoidal.toMonoidal
@@ -2691,20 +2109,18 @@ noncomputable instance mapGrp.instMonoidal : F.mapGrp.Monoidal :=
       (Grp.forget₂Mon _).map_injective (right_unitality F.mapMon X.toMon) }
 
 @[to_additive]
-/--
-Instance `mapGrp.instBraided` / 实例 `mapGrp.instBraided`
-
-English:
-instance mapGrp.instBraided
-  signature: : F.mapGrp.Braided where
-  body: (Grp.forget₂Mon _).map_injective (Braided.braided X.toMon Y.toMon)
-
-中文:
-实例 mapGrp.instBraided
-  签名: : F.mapGrp.辫 where
-  定义体: (Grp.forget₂Mon _).map_injective (Braided.braided X.toMon Y.toMon)
-
-Depends on / 依赖: Braided, Braided.braided, Grp.forget, X.toMon, Y.toMon, braided, map_injective
+/-
+**CategoryTheory.Functor.mapGrp.instBraided** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor.mapGrp`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             [inst_4 : CategoryTheory.BraidedCa
+tegory C] →               [inst_5 : CategoryTheory.BraidedCategory D] →         
+        (F : CategoryTheory.Functor C D) → [inst_6 : F.Braided] → F.mapGrp.Braid
+ed
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance mapGrp.instBraided : F.mapGrp.Braided where
   braided X Y :=
@@ -2724,22 +2140,17 @@ set_option backward.defeqAttrib.useBackward true in
 @[to_additive (attr := simps)
 /-- An adjunction of monoidal functors lifts to an adjunction of their lifts
 to additive group objects. -/]
-/--
-Definition of `mapGrp` / `mapGrp` 的定义
-
-English:
-definition mapGrp
-  signature: : F.mapGrp ⊣ G.mapGrp where
-  body: mapGrpIdIso.inv ≫ mapGrpNatTrans a.unit ≫ mapGrpCompIso.hom
-  counit := mapGrpCompIso.inv ≫ mapGrpNatTrans a.counit ≫ mapGrpIdIso.hom
-
-中文:
-定义 mapGrp
-  签名: : F.mapGrp ⊣ G.mapGrp where
-  定义体: mapGrpIdIso.inv ≫ mapGrpNatTrans a.unit ≫ mapGrpCompIso.hom
-  counit := mapGrpCompIso.inv ≫ mapGrpNatTrans a.counit ≫ mapGrpIdIso.hom
-
-Depends on / 依赖: a.unit, mapGrpCompIso, mapGrpCompIso.hom, mapGrpIdIso, mapGrpIdIso.inv, mapGrpNatTrans
+/-
+**CategoryTheory.Adjunction.mapGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Adj
+unction`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             {F : CategoryTheory.Functor C D} →
+               {G : CategoryTheory.Functor D C} →                 (F ⊣ G) → [ins
+t_4 : F.Monoidal] → [inst_5 : G.Monoidal] → F.mapGrp ⊣ G.mapGrp
+参数：F ⊣ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapGrp : F.mapGrp ⊣ G.mapGrp where
   unit := mapGrpIdIso.inv ≫ mapGrpNatTrans a.unit ≫ mapGrpCompIso.hom
@@ -2755,26 +2166,16 @@ set_option backward.defeqAttrib.useBackward true in
 /-- An equivalence of categories lifts to an equivalence of their group objects. -/
 @[to_additive (attr := simps)
 /-- An equivalence of categories lifts to an equivalence of their additive group objects. -/]
-/--
-Definition of `mapGrp` / `mapGrp` 的定义
-
-English:
-definition mapGrp
-  signature: : Grp C ≌ Grp D where
-  body: e.functor.mapGrp
-  inverse := e.inverse.mapGrp
-  unitIso := mapGrpIdIso.symm ≪≫ mapGrpNatIso e.unitIso ≪≫ mapGrpCompIso
-  counitIso := mapGrpCompIso.symm ≪≫ mapGrpNatIso e.counitIso ≪≫ mapGrpIdIso
-
-中文:
-定义 mapGrp
-  签名: : 群 C ≌ 群 D where
-  定义体: e.functor.mapGrp
-  inverse := e.inverse.mapGrp
-  unitIso := mapGrpIdIso.symm ≪≫ mapGrpNatIso e.unitIso ≪≫ mapGrpCompIso
-  counitIso := mapGrpCompIso.symm ≪≫ mapGrpNatIso e.counitIso ≪≫ mapGrpIdIso
-
-Depends on / 依赖: e.functor.mapGrp, functor, mapGrp
+/-
+**CategoryTheory.Equivalence.mapGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Eq
+uivalence`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             (e : C ≌ D) → [e.functor.Monoidal]
+ → [e.inverse.Monoidal] → CategoryTheory.Grp C ≌ CategoryTheory.Grp D
+参数：e : C ≌ D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapGrp : Grp C ≌ Grp D where
   functor := e.functor.mapGrp
@@ -2783,3 +2184,4 @@ def mapGrp : Grp C ≌ Grp D where
   counitIso := mapGrpCompIso.symm ≪≫ mapGrpNatIso e.counitIso ≪≫ mapGrpIdIso
 
 end CategoryTheory.Equivalence
+

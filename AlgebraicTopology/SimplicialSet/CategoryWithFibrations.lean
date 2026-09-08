@@ -33,135 +33,88 @@ namespace SSet
 
 namespace modelCategoryQuillen
 
-/--
-Definition of `I` / `I` 的定义
+/-- The generating cofibrations: this is the family of morphisms in `SSet`
+which consists of boundary inclusions `∂Δ[n].ι : ∂Δ[n] ⟶ Δ[n]`. -/
+/-
+**SSet.modelCategoryQuillen.I** 是 Mathlib 中的一个定义，位于命名空间 `SSet.modelCategoryQuill
+en`。
+形式化陈述：I : MorphismProperty SSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition I
-  signature: : MorphismProperty SSet.{u}
-  body: .ofHoms (fun n => ∂Δ[n].ι)
-
-中文:
-定义 I
-  签名: : MorphismProperty SSet.{u}
-  定义体: .ofHoms (fun n => ∂Δ[n].ι)
-
-Depends on / 依赖: ofHoms
+--- 原说明 ---
+The generating cofibrations: this is the family of morphisms in `SSet`
+which consists of boundary inclusions `∂Δ[n].ι : ∂Δ[n] ⟶ Δ[n]`.
 -/
 def I : MorphismProperty SSet.{u} :=
-  .ofHoms (fun n => ∂Δ[n].ι)
-
-/--
-lemma `boundary_ι_mem_I` / 引理 `boundary_ι_mem_I`
-
-English:
-lemma boundary_ι_mem_I
-  given: (n : Nat)
-  proof: by constructor
-
-中文:
-引理 boundary_ι_mem_I
-  条件: (n : 自然数)
-  证明: by constructor
+  .ofHoms (fun n ↦ ∂Δ[n].ι)
+/-
+**SSet.modelCategoryQuillen.boundary_** 是 Mathlib 中的一个引理，位于命名空间 `SSet.modelCateg
+oryQuillen`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma boundary_ι_mem_I (n : Nat) :
+lemma boundary_ι_mem_I (n : ℕ) :
     I (boundary.{u} n).ι := by constructor
 
-/--
-Definition of `J` / `J` 的定义
+/-- The generating trivial cofibrations: this is the family of morphisms in `SSet`
+which consists of horn inclusions `Λ[n, i].ι : Λ[n, i] ⟶ Δ[n]` (for positive `n`). -/
+/-
+**SSet.modelCategoryQuillen.J** 是 Mathlib 中的一个定义，位于命名空间 `SSet.modelCategoryQuill
+en`。
+形式化陈述：J : MorphismProperty SSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition J
-  signature: : MorphismProperty SSet.{u}
-  body: ⨆ n, .ofHoms (fun (i : Fin (n + 2)) => Λ[n + 1, i].ι)
-
-中文:
-定义 J
-  签名: : MorphismProperty SSet.{u}
-  定义体: ⨆ n, .ofHoms (fun (i : Fin (n + 2)) => Λ[n + 1, i].ι)
-
-Depends on / 依赖: ofHoms
+--- 原说明 ---
+The generating trivial cofibrations: this is the family of morphisms in `SSet`
+which consists of horn inclusions `Λ[n, i].ι : Λ[n, i] ⟶ Δ[n]` (for positive `n`
+).
 -/
 def J : MorphismProperty SSet.{u} :=
-  ⨆ n, .ofHoms (fun (i : Fin (n + 2)) => Λ[n + 1, i].ι)
-
-/--
-lemma `horn_ι_mem_J` / 引理 `horn_ι_mem_J`
-
-English:
-lemma horn_ι_mem_J
-  given: (n : Nat) [NeZero n] (i : Fin (n + 1))
-  proof: by
-  obtain _ | n := n
-  · exact (NeZero.ne 0 rfl).elim
-  · simp only [J, iSup_iff]
-    exact ⟨n, ⟨i⟩⟩
-
-中文:
-引理 horn_ι_mem_J
-  条件: (n : 自然数) [NeZero n] (i : 有限集 (n + 1))
-  证明: by
-  obtain _ | n := n
-  · exact (NeZero.ne 0 rfl).elim
-  · simp only [J, iSup_iff]
-    exact ⟨n, ⟨i⟩⟩
-
-Depends on / 依赖: NeZero, NeZero.ne, iSup_iff
+  ⨆ n, .ofHoms (fun (i : Fin (n + 2)) ↦ Λ[n + 1, i].ι)
+/-
+**SSet.modelCategoryQuillen.horn_** 是 Mathlib 中的一个引理，位于命名空间 `SSet.modelCategoryQ
+uillen`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma horn_ι_mem_J (n : Nat) [NeZero n] (i : Fin (n + 1)) :
+lemma horn_ι_mem_J (n : ℕ) [NeZero n] (i : Fin (n + 1)) :
     J (horn.{u} n i).ι := by
   obtain _ | n := n
   · exact (NeZero.ne 0 rfl).elim
   · simp only [J, iSup_iff]
     exact ⟨n, ⟨i⟩⟩
-
-/--
-lemma `I_le_monomorphisms` / 引理 `I_le_monomorphisms`
-
-English:
-lemma I_le_monomorphisms
-  statement: I.{u} <= monomorphisms _
-  proof: by
-  rintro _ _ _ ⟨n⟩
-  exact monomorphisms.infer_property _
-
-中文:
-引理 I_le_monomorphisms
-  结论: I.{u} <= monomorphisms _
-  证明: by
-  rintro _ _ _ ⟨n⟩
-  exact monomorphisms.infer_property _
-
-Depends on / 依赖: infer_property, monomorphisms, monomorphisms.infer_property
+/-
+**SSet.modelCategoryQuillen.I_le_monomorphisms** 是 Mathlib 中的一个引理，位于命名空间 `SSet.m
+odelCategoryQuillen`。
+形式化陈述：I_le_monomorphisms : I.{u} <= monomorphisms _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.monomorphisms.infer_property`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [hf : Categ
+oryTheory.Mono f],   CategoryTheory.MorphismProper…
+· 使用定理 `SSet.Subcomplex.instMonoι`：∀ {X : _root_.SSet} (A : X.Subcomplex), Categ
+oryTheory.Mono A.ι
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-lemma I_le_monomorphisms : I.{u} <= monomorphisms _ := by
+lemma I_le_monomorphisms : I.{u} ≤ monomorphisms _ := by
   rintro _ _ _ ⟨n⟩
   exact monomorphisms.infer_property _
-
-/--
-lemma `J_le_monomorphisms` / 引理 `J_le_monomorphisms`
-
-English:
-lemma J_le_monomorphisms
-  statement: J.{u} <= monomorphisms _
-  proof: by
-  rintro _ _ _ h
-  simp only [J, iSup_iff] at h
-  obtain ⟨n, ⟨i⟩⟩ := h
-  exact monomorphisms.infer_property _
-
-中文:
-引理 J_le_monomorphisms
-  结论: J.{u} <= monomorphisms _
-  证明: by
-  rintro _ _ _ h
-  simp only [J, iSup_iff] at h
-  obtain ⟨n, ⟨i⟩⟩ := h
-  exact monomorphisms.infer_property _
-
-Depends on / 依赖: iSup_iff, infer_property, monomorphisms, monomorphisms.infer_property
+/-
+**SSet.modelCategoryQuillen.J_le_monomorphisms** 是 Mathlib 中的一个引理，位于命名空间 `SSet.m
+odelCategoryQuillen`。
+形式化陈述：J_le_monomorphisms : J.{u} <= monomorphisms _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.monomorphisms.infer_property`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [hf : Categ
+oryTheory.Mono f],   CategoryTheory.MorphismProper…
+· 使用定理 `SSet.Subcomplex.instMonoι`：∀ {X : _root_.SSet} (A : X.Subcomplex), Categ
+oryTheory.Mono A.ι
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-lemma J_le_monomorphisms : J.{u} <= monomorphisms _ := by
+lemma J_le_monomorphisms : J.{u} ≤ monomorphisms _ := by
   rintro _ _ _ h
   simp only [J, iSup_iff] at h
   obtain ⟨n, ⟨i⟩⟩ := h
@@ -169,42 +122,47 @@ lemma J_le_monomorphisms : J.{u} <= monomorphisms _ := by
 
 /-- The cofibrations for the Quillen model category structure (TODO)
 on `SSet` are monomorphisms. -/
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The cofibrations for the Quillen model category structure (TODO)
+on `SSet` are monomorphisms.
+-/
 scoped instance : CategoryWithCofibrations SSet.{u} where
   cofibrations := .monomorphisms _
 
 /-- The fibrations for the Quillen model category structure (TODO)
 on `SSet` are the morphisms which have the right lifting property
 with respect to horn inclusions. -/
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The fibrations for the Quillen model category structure (TODO)
+on `SSet` are the morphisms which have the right lifting property
+with respect to horn inclusions.
+-/
 scoped instance : CategoryWithFibrations SSet.{u} where
   fibrations := J.rlp
-
-/--
-lemma `cofibrations_eq` / 引理 `cofibrations_eq`
-
-English:
-lemma cofibrations_eq
-  statement: cofibrations SSet.{u} = monomorphisms _
-  proof: rfl
-
-中文:
-引理 cofibrations_eq
-  结论: cofibrations SSet.{u} = monomorphisms _
-  证明: rfl
+/-
+**SSet.modelCategoryQuillen.cofibrations_eq** 是 Mathlib 中的一个引理，位于命名空间 `SSet.mode
+lCategoryQuillen`。
+形式化陈述：cofibrations_eq : cofibrations SSet.{u} = monomorphisms _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cofibrations_eq : cofibrations SSet.{u} = monomorphisms _ := rfl
-
-/--
-lemma `fibrations_eq` / 引理 `fibrations_eq`
-
-English:
-lemma fibrations_eq
-  statement: fibrations SSet.{u} = J.rlp
-  proof: rfl
-
-中文:
-引理 fibrations_eq
-  结论: fibrations SSet.{u} = J.rlp
-  证明: rfl
+/-
+**SSet.modelCategoryQuillen.fibrations_eq** 是 Mathlib 中的一个引理，位于命名空间 `SSet.modelC
+ategoryQuillen`。
+形式化陈述：fibrations_eq : fibrations SSet.{u} = J.rlp
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fibrations_eq : fibrations SSet.{u} = J.rlp := rfl
 
@@ -212,204 +170,109 @@ section
 
 variable {X Y : SSet.{u}} (f : X ⟶ Y)
 
-/--
-lemma `cofibration_iff` / 引理 `cofibration_iff`
-
-English:
-lemma cofibration_iff
-  statement: Cofibration f ↔ Mono f
-  proof: by
-  rw [HomotopicalAlgebra.cofibration_iff]
-  rfl
-
-中文:
-引理 cofibration_iff
-  结论: 余纤维化 f ↔ 单态射 f
-  证明: by
-  rw [HomotopicalAlgebra.cofibration_iff]
-  rfl
-
-Depends on / 依赖: HomotopicalAlgebra, HomotopicalAlgebra.cofibration_iff, cofibration_iff
+/-
+**SSet.modelCategoryQuillen.cofibration_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.mode
+lCategoryQuillen`。
+形式化陈述：cofibration_iff : Cofibration f ↔ Mono f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomotopicalAlgebra.cofibration_iff`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : HomotopicalAlgebra.Catego
+ryWithCofibrations C],  …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma cofibration_iff : Cofibration f ↔ Mono f := by
   rw [HomotopicalAlgebra.cofibration_iff]
   rfl
-
-/--
-lemma `fibration_iff` / 引理 `fibration_iff`
-
-English:
-lemma fibration_iff
-  statement: Fibration f ↔ J.rlp f
-  proof: by
-  rw [HomotopicalAlgebra.fibration_iff]
-  rfl
-
-中文:
-引理 fibration_iff
-  结论: 纤维化 f ↔ J.rlp f
-  证明: by
-  rw [HomotopicalAlgebra.fibration_iff]
-  rfl
-
-Depends on / 依赖: HomotopicalAlgebra, HomotopicalAlgebra.fibration_iff, fibration_iff
+/-
+**SSet.modelCategoryQuillen.fibration_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.modelC
+ategoryQuillen`。
+形式化陈述：fibration_iff : Fibration f ↔ J.rlp f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomotopicalAlgebra.fibration_iff`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : HomotopicalAlgebra.Category
+WithFibrations C],   H…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma fibration_iff : Fibration f ↔ J.rlp f := by
   rw [HomotopicalAlgebra.fibration_iff]
   rfl
-
-/--
-Instance `mono_of_cofibration` / 实例 `mono_of_cofibration`
-
-English:
-instance mono_of_cofibration
-  signature: [Cofibration f]
-  body: by rwa [← cofibration_iff]
-
-中文:
-实例 mono_of_cofibration
-  签名: [余纤维化 f]
-  定义体: by rwa [← cofibration_iff]
-
-Depends on / 依赖: cofibration_iff
+/-
+**SSet.modelCategoryQuillen.mono_of_cofibration** 是 Mathlib 中的一个实例，位于命名空间 `SSet.
+modelCategoryQuillen`。
+形式化陈述：mono_of_cofibration [Cofibration f] : Mono f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.modelCategoryQuillen.cofibration_iff`：cofibration_iff : Cofibration
+ f ↔ Mono f
 -/
 instance mono_of_cofibration [Cofibration f] : Mono f := by rwa [← cofibration_iff]
-
-/--
-lemma `cofibration_of_mono` / 引理 `cofibration_of_mono`
-
-English:
-lemma cofibration_of_mono
-  given: [Mono f]
-  statement: Cofibration f
-  proof: by rwa [cofibration_iff]
-
-中文:
-引理 cofibration_of_mono
-  条件: [单态射 f]
-  结论: 余纤维化 f
-  证明: by rwa [cofibration_iff]
-
-Depends on / 依赖: cofibration_iff
+/-
+**SSet.modelCategoryQuillen.cofibration_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `SSet.
+modelCategoryQuillen`。
+形式化陈述：cofibration_of_mono [Mono f] : Cofibration f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.modelCategoryQuillen.cofibration_iff`：cofibration_iff : Cofibration
+ f ↔ Mono f
 -/
 lemma cofibration_of_mono [Mono f] : Cofibration f := by rwa [cofibration_iff]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [hf
-  signature: : Fibration f] {n : Nat} (i : Fin (n + 2)) :
-  body: by
-  rw [fibration_iff] at hf
-  exact hf _ (horn_ι_mem_J _ _)
-
-中文:
-实例 [hf
-  签名: : 纤维化 f] {n : 自然数} (i : 有限集 (n + 2)) :
-  定义体: by
-  rw [fibration_iff] at hf
-  exact hf _ (horn_ι_mem_J _ _)
-
-Depends on / 依赖: fibration_iff
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [hf : Fibration f] {n : Nat} (i : Fin (n + 2)) :
+instance [hf : Fibration f] {n : ℕ} (i : Fin (n + 2)) :
     HasLiftingProperty (horn (n + 1) i).ι f := by
   rw [fibration_iff] at hf
   exact hf _ (horn_ι_mem_J _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (fibrations SSet.{u}).IsMultiplicative
-  body: by
-  rw [fibrations_eq]
-  infer_instance
-
-中文:
-实例 :
-  签名: (fibrations SSet.{u}).是Multiplicative
-  定义体: by
-  rw [fibrations_eq]
-  infer_instance
-
-Depends on / 依赖: fibrations_eq, infer_instance
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (fibrations SSet.{u}).IsMultiplicative := by
   rw [fibrations_eq]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (fibrations SSet.{u}).IsStableUnderRetracts
-  body: by
-  rw [fibrations_eq]
-  infer_instance
-
-中文:
-实例 :
-  签名: (fibrations SSet.{u}).是StableUnderRetracts
-  定义体: by
-  rw [fibrations_eq]
-  infer_instance
-
-Depends on / 依赖: fibrations_eq, infer_instance
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (fibrations SSet.{u}).IsStableUnderRetracts := by
   rw [fibrations_eq]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (cofibrations SSet.{u}).IsMultiplicative
-  body: by
-  rw [cofibrations_eq]
-  infer_instance
-
-中文:
-实例 :
-  签名: (cofibrations SSet.{u}).是Multiplicative
-  定义体: by
-  rw [cofibrations_eq]
-  infer_instance
-
-Depends on / 依赖: cofibrations_eq, infer_instance
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (cofibrations SSet.{u}).IsMultiplicative := by
   rw [cofibrations_eq]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (cofibrations SSet.{u}).IsStableUnderRetracts
-  body: by
-  rw [cofibrations_eq]
-  infer_instance
-
-中文:
-实例 :
-  签名: (cofibrations SSet.{u}).是StableUnderRetracts
-  定义体: by
-  rw [cofibrations_eq]
-  infer_instance
-
-Depends on / 依赖: cofibrations_eq, infer_instance
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (cofibrations SSet.{u}).IsStableUnderRetracts := by
   rw [cofibrations_eq]
   infer_instance
-
+/-
+**SSet.modelCategoryQuillen.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.modelCategoryQuille
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : SSet.{u}} (f : X ⟶ Y) [IsIso f] : Fibration f := by
   rw [fibration_iff]
   apply rlp_of_isIso
@@ -419,135 +282,134 @@ end
 end modelCategoryQuillen
 
 open modelCategoryQuillen in
-/--
-lemma `rlp_monomorphisms` / 引理 `rlp_monomorphisms`
-
-English:
-lemma rlp_monomorphisms
-  proof: le_antisymm (antitone_rlp I_le_monomorphisms)
-    (fun _ _ _ hp _ _ i _ =>
-      transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp.{u} I Nat i
-        ⟨(relativeCellComplexOfMono i).transfiniteCompositionOfShape' (fun _ => ⟨_⟩)⟩ _ hp)
-
-中文:
-引理 rlp_monomorphisms
-  证明: le_antisymm (antitone_rlp I_le_monomorphisms)
-    (fun _ _ _ hp _ _ i _ =>
-      transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp.{u} I Nat i
-        ⟨(relativeCellComplexOfMono i).transfiniteCompositionOfShape' (fun _ => ⟨_⟩)⟩ _ hp)
-
-Depends on / 依赖: I_le_monomorphisms, antitone_rlp, le_antisymm, relativeCellComplexOfMono, transfiniteCompositionOfShape, transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
+/-
+**SSet.rlp_monomorphisms** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+形式化陈述：rlp_monomorphisms : (MorphismProperty.monomorphisms SSet.{u}).rlp = I.rlp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.MorphismProperty.antitone_rlp`：antitone_rlp : Antitone (r
+lp : MorphismProperty C -> _)
+· 使用引理 `SSet.modelCategoryQuillen.I_le_monomorphisms`：I_le_monomorphisms : I.{u}
+ <= monomorphisms _
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_pushouts_
+coproducts_le_llp_rlp`：transfiniteCompositionsOfShape_pushouts_coproducts_le_llp
+_rlp : (coproducts.{t} W).pushouts.transfiniteCompositionsOfShape J <= W.rlp.llp
+· 使用定理 `instWellFoundedLTNat`：WellFoundedLT ℕ
 -/
 lemma rlp_monomorphisms :
     (MorphismProperty.monomorphisms SSet.{u}).rlp = I.rlp :=
   le_antisymm (antitone_rlp I_le_monomorphisms)
-    (fun _ _ _ hp _ _ i _ =>
-      transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp.{u} I Nat i
-        ⟨(relativeCellComplexOfMono i).transfiniteCompositionOfShape' (fun _ => ⟨_⟩)⟩ _ hp)
+    (fun _ _ _ hp _ _ i _ ↦
+      transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp.{u} I ℕ i
+        ⟨(relativeCellComplexOfMono i).transfiniteCompositionOfShape' (fun _ ↦ ⟨_⟩)⟩  _ hp)
 
 namespace horn.IsCompatible
 
 open modelCategoryQuillen
 
-variable {X : SSet.{u}} {n : Nat}
-  {i : Fin (n + 2)} {f : forall (j : Fin (n + 2)) (_ : j != i), Δ[n] ⟶ X}
+variable {X : SSet.{u}} {n : ℕ}
+  {i : Fin (n + 2)} {f : ∀ (j : Fin (n + 2)) (_ : j ≠ i), Δ[n] ⟶ X}
   (hf : horn.IsCompatible f) {Y : SSet.{u}} (p : X ⟶ Y) [Fibration p]
   (b : Δ[n + 1] ⟶ Y)
-  (comm : forall (j : Fin (n + 2)) (hj : j != i), f j hj ≫ p = stdSimplex.δ j ≫ b)
+  (comm : ∀ (j : Fin (n + 2)) (hj : j ≠ i), f j hj ≫ p = stdSimplex.δ j ≫ b)
 
 include hf comm in
-/--
-lemma `exists_lift` / 引理 `exists_lift`
-
-English:
-lemma exists_lift
-  proof: by
-  have sq : CommSq hf.desc Λ[n + 1, i].ι p b :=
-    ⟨horn.hom_ext' (fun j hj => by simpa using comm j hj)⟩
-  exact ⟨sq.lift, fun j hj => by simp [← ι_ι_assoc i j hj], by simp⟩
-
-中文:
-引理 存在_lift
-  证明: by
-  have sq : CommSq hf.desc Λ[n + 1, i].ι p b :=
-    ⟨horn.hom_ext' (fun j hj => by simpa using comm j hj)⟩
-  exact ⟨sq.lift, fun j hj => by simp [← ι_ι_assoc i j hj], by simp⟩
-
-Depends on / 依赖: CommSq, hf.desc, hom_ext, horn.hom_ext, sq.lift
+/-
+**SSet.horn.IsCompatible.exists_lift** 是 Mathlib 中的一个引理，位于命名空间 `SSet.horn.IsComp
+atible`。
+形式化陈述：exists_lift : exists (φ : Δ[n + 1] ⟶ X), (forall (j : Fin (n + 2)) (hj : j
+ != i), stdSimplex.δ j ≫ φ = f j hj) ∧ φ ≫ p = b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.horn.hom_ext'`：hom_ext' {i : Fin (n + 2)} {f g : (Λ[n + 1, i] : SSe
+t) ⟶ X} (h : forall (j : Fin (n + 2)) (hj : j != i), horn.ι i j hj ≫ f = horn.ι 
+i j hj ≫…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SSet.horn.IsCompatible.ι_desc_assoc`：∀ {n : ℕ} {X : _root_.SSet} {i : Fi
+n (n + 2)} {f : (j : Fin (n + 2)) → j ≠ i → (SSet.stdSimplex.obj { len := n } ⟶ 
+X)}   (hf : SSet.horn.IsC…
+· 使用定理 `SSet.horn.ι_ι_assoc`：∀ {n : ℕ} (i j : Fin (n + 2)) (hij : j ≠ i) {Z : _r
+oot_.SSet} (h : SSet.stdSimplex.obj { len := n + 1 } ⟶ Z),   CategoryTheory.Cate
+goryStruc…
+· 使用定理 `CategoryTheory.sq_hasLift_of_hasLiftingProperty`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] {A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) {f
+ : A ⟶ X}   {g : B ⟶ Y} (sq : Categor…
+· 使用定理 `SSet.modelCategoryQuillen.instHasLiftingPropertyιHornHAddNatOfNatOfFibra
+tion`：∀ {X Y : _root_.SSet} (f : X ⟶ Y) [hf : HomotopicalAlgebra.Fibration f] {n
+ : ℕ} (i : Fin (n + 2)),   CategoryTheory.HasLiftingProperty (SSet…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.CommSq.fac_left`：fac_left [hsq : HasLift sq] : i ≫ sq.lif
+t = f
+· 使用引理 `SSet.horn.IsCompatible.ι_desc`：ι_desc (hf : horn.IsCompatible f) (j : Fi
+n (n + 2)) (hj : j != i) : horn.ι i j hj ≫ hf.desc = f j hj
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CommSq.fac_right`：∀ {C : Type u_1} [inst : CategoryTheory
+.Category.{v_1, u_1} C] {A B X Y : C} {f : X ⟶ A} {i : B ⟶ A} {p : Y ⟶ X}   {g :
+ Y ⟶ B} (sq : Categor…
 -/
 lemma exists_lift :
-    exists (φ : Δ[n + 1] ⟶ X),
-      (forall (j : Fin (n + 2)) (hj : j != i), stdSimplex.δ j ≫ φ = f j hj) ∧
+    ∃ (φ : Δ[n + 1] ⟶ X),
+      (∀ (j : Fin (n + 2)) (hj : j ≠ i), stdSimplex.δ j ≫ φ = f j hj) ∧
       φ ≫ p = b := by
   have sq : CommSq hf.desc Λ[n + 1, i].ι p b :=
-    ⟨horn.hom_ext' (fun j hj => by simpa using comm j hj)⟩
-  exact ⟨sq.lift, fun j hj => by simp [← ι_ι_assoc i j hj], by simp⟩
+    ⟨horn.hom_ext' (fun j hj ↦ by simpa using comm j hj)⟩
+  exact ⟨sq.lift, fun j hj ↦ by simp [← ι_ι_assoc i j hj], by simp⟩
 
 /-- If `f : ∀ (j : Fin (n + 2)) (_ : j ≠ i), Δ[n] ⟶ X` is a compatible family
 of morphisms (which defines a morphism `Λ[n + 1, i] ⟶ X`), `p : X ⟶ Y` a Kan fibration
 and `b : Δ[n + 1] ⟶ Y` such that for all `j ≠ i`, `f j _ ≫ p = stdSimplex.δ j ≫ b`,
 then this is a lifting `Δ[n + 1] ⟶ X`. -/
 @[no_expose]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**SSet.horn.IsCompatible.lift** 是 Mathlib 中的一个定义，位于命名空间 `SSet.horn.IsCompatible`
+。
+形式化陈述：lift : Δ[n + 1] ⟶ X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.horn.IsCompatible.exists_lift`：exists_lift : exists (φ : Δ[n + 1] ⟶
+ X), (forall (j : Fin (n + 2)) (hj : j != i), stdSimplex.δ j ≫ φ = f j hj) ∧ φ ≫
+ p = b
 
-English:
-definition lift
-  signature: : Δ[n + 1] ⟶ X
-  body: (hf.exists_lift p b comm).choose
-
-@[reassoc]
-
-中文:
-定义 lift
-  签名: : Δ[n + 1] ⟶ X
-  定义体: (hf.exists_lift p b comm).choose
-
-@[reassoc]
-
-Depends on / 依赖: exists_lift, hf.exists_lift
+--- 原说明 ---
+If `f : ∀ (j : Fin (n + 2)) (_ : j ≠ i), Δ[n] ⟶ X` is a compatible family
+of morphisms (which defines a morphism `Λ[n + 1, i] ⟶ X`), `p : X ⟶ Y` a Kan fib
+ration
+and `b : Δ[n + 1] ⟶ Y` such that for all `j ≠ i`, `f j _ ≫ p = stdSimplex.δ j ≫ 
+b`,
+then this is a lifting `Δ[n + 1] ⟶ X`.
 -/
 noncomputable def lift : Δ[n + 1] ⟶ X := (hf.exists_lift p b comm).choose
 
 @[reassoc]
-/--
-lemma `δ_lift` / 引理 `δ_lift`
-
-English:
-lemma δ_lift
-  given: (j : Fin (n + 2)) (hj : j != i := by grind)
-  proof: ((hf.exists_lift p b comm).choose_spec).1 j hj
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 δ_lift
-  条件: (j : 有限集 (n + 2)) (hj : j != i := by grind)
-  证明: ((hf.exists_lift p b comm).choose_spec).1 j hj
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: choose_spec, exists_lift, hf.exists_lift, hf.lift, stdSimplex
+/-
+**SSet.horn.IsCompatible.** 是 Mathlib 中的一个引理，位于命名空间 `SSet.horn.IsCompatible`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_lift (j : Fin (n + 2)) (hj : j != i := by grind) :
+lemma δ_lift (j : Fin (n + 2)) (hj : j ≠ i := by grind) :
     stdSimplex.δ j ≫ hf.lift p b comm = f j hj :=
   ((hf.exists_lift p b comm).choose_spec).1 j hj
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_comp` / 引理 `lift_comp`
-
-English:
-lemma lift_comp
-  statement: hf.lift p b comm ≫ p = b
-  proof: ((hf.exists_lift p b comm).choose_spec).2
-
-中文:
-引理 lift_comp
-  结论: hf.lift p b comm ≫ p = b
-  证明: ((hf.exists_lift p b comm).choose_spec).2
-
-Depends on / 依赖: choose_spec, exists_lift, hf.exists_lift
+/-
+**SSet.horn.IsCompatible.lift_comp** 是 Mathlib 中的一个引理，位于命名空间 `SSet.horn.IsCompat
+ible`。
+形式化陈述：lift_comp : hf.lift p b comm ≫ p = b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `SSet.horn.IsCompatible.exists_lift`：exists_lift : exists (φ : Δ[n + 1] ⟶
+ X), (forall (j : Fin (n + 2)) (hj : j != i), stdSimplex.δ j ≫ φ = f j hj) ∧ φ ≫
+ p = b
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 lemma lift_comp : hf.lift p b comm ≫ p = b :=
   ((hf.exists_lift p b comm).choose_spec).2
@@ -555,3 +417,4 @@ lemma lift_comp : hf.lift p b comm ≫ p = b :=
 end horn.IsCompatible
 
 end SSet
+

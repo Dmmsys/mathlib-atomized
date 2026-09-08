@@ -38,159 +38,140 @@ variable [Semiring R] [AddCommMonoid M] [Module R M] (r s : R) (x : M)
 
 variable (R)
 
-/--
-Definition of `Function.Surjective.moduleLeft` / `Function.Surjective.moduleLeft` 的定义
+/-- Push forward the action of `R` on `M` along a compatible surjective map `f : R →+* S`.
 
-English:
-abbreviation Function.Surjective.moduleLeft
-  signature: {R S M : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
-  body: { hf.distribMulActionLeft f.toMonoidHom hsmul with
-    zero_smul := fun x => by rw [← f.map_zero, hsmul, zero_smul]
-    add_smul := hf.forall₂.mpr fun a b x => by simp only [← f.map_add, hsmul, add_smul] }
+See also `Function.Surjective.mulActionLeft` and `Function.Surjective.distribMulActionLeft`.
+-/
+/-
+**Function.Surjective.moduleLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Function.Surjective.moduleLeft {R S M : Type*} [Semiring R] [AddCommMonoid
+ M] [Module R M] [Semiring S] [SMul S M] (f : R ->+* S) (hf : Function.Surjectiv
+e f) (hsmul : forall (c) (x : M), f c • x = c • x) : Module S M
+参数：f : R ->+* S；hf : Function.Surjective f；hsmul : forall (c) (x : M), f c • x =
+ c • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 函数.满射.moduleLeft
-  签名: {R S M : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: { hf.distribMulActionLeft f.toMonoidHom hsmul with
-    zero_smul := fun x => by rw [← f.map_zero, hsmul, zero_smul]
-    add_smul := hf.forall₂.mpr fun a b x => by simp only [← f.map_add, hsmul, add_smul] }
+--- 原说明 ---
+Push forward the action of `R` on `M` along a compatible surjective map `f : R →
++* S`.
 
-Depends on / 依赖: add_smul, distribMulActionLeft, f.map_add, f.map_zero, f.toMonoidHom, hf.distribMulActionLeft, hf.forall, map_add, map_zero, toMonoidHom, zero_smul
+See also `Function.Surjective.mulActionLeft` and `Function.Surjective.distribMul
+ActionLeft`.
 -/
 abbrev Function.Surjective.moduleLeft {R S M : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
-    [Semiring S] [SMul S M] (f : R ->+* S) (hf : Function.Surjective f)
-    (hsmul : forall (c) (x : M), f c • x = c • x) : Module S M :=
+    [Semiring S] [SMul S M] (f : R →+* S) (hf : Function.Surjective f)
+    (hsmul : ∀ (c) (x : M), f c • x = c • x) : Module S M :=
   { hf.distribMulActionLeft f.toMonoidHom hsmul with
     zero_smul := fun x => by rw [← f.map_zero, hsmul, zero_smul]
     add_smul := hf.forall₂.mpr fun a b x => by simp only [← f.map_add, hsmul, add_smul] }
 
 variable {R} (M)
 
-/--
-Definition of `Module.compHom` / `Module.compHom` 的定义
+/-- Compose a `Module` with a `RingHom`, with action `f s • m`.
 
-English:
-abbreviation Module.compHom
-  signature: [Semiring S] (f : S ->+* R)
-  body: { MulActionWithZero.compHom M f.toMonoidWithZeroHom, DistribMulAction.compHom M (f : S ->* R) with
-    -- Porting note: the `show f (r + s) • x = f r • x + f s • x` wasn't needed in mathlib3.
-    -- Somehow, now that `SMul` is heterogeneous, it can't unfold earlier fields of a definition for
-    -- use in later fields. See
-    -- https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topic/Heterogeneous.20scalar.20multiplication
-    -- TODO(jmc): there should be a rw-lemma `smul_comp` close to `SMulZeroClass.compFun`
-    add_smul := fun r s x => show f (r + s) • x = f r • x + f s • x by simp [add_smul] }
+See note [reducible non-instances]. -/
+/-
+**Module.compHom** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Module.compHom [Semiring S] (f : S ->+* R) : Module S M
+参数：f : S ->+* R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 模.compHom
-  签名: [半环 S] (f : S ->+* R)
-  定义体: { MulActionWithZero.compHom M f.toMonoidWithZeroHom, DistribMulAction.compHom M (f : S ->* R) with
-    -- Porting note: the `show f (r + s) • x = f r • x + f s • x` wasn't needed in mathlib3.
-    -- Somehow, now that `SMul` is heterogeneous, it can't unfold earlier fields of a definition for
-    -- use in later fields. See
-    -- https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topic/Heterogeneous.20scalar.20multiplication
-    -- TODO(jmc): there should be a rw-lemma `smul_comp` close to `SMulZeroClass.compFun`
-    add_smul := fun r s x => show f (r + s) • x = f r • x + f s • x by simp [add_smul] }
+--- 原说明 ---
+Compose a `Module` with a `RingHom`, with action `f s • m`.
 
-Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, MulActionWithZero, MulActionWithZero.compHom, compHom, f.toMonoidWithZeroHom, toMonoidWithZeroHom
+See note [reducible non-instances].
 -/
-abbrev Module.compHom [Semiring S] (f : S ->+* R) : Module S M :=
-  { MulActionWithZero.compHom M f.toMonoidWithZeroHom, DistribMulAction.compHom M (f : S ->* R) with
+abbrev Module.compHom [Semiring S] (f : S →+* R) : Module S M :=
+  { MulActionWithZero.compHom M f.toMonoidWithZeroHom, DistribMulAction.compHom M (f : S →* R) with
     -- Porting note: the `show f (r + s) • x = f r • x + f s • x` wasn't needed in mathlib3.
     -- Somehow, now that `SMul` is heterogeneous, it can't unfold earlier fields of a definition for
-    -- use in later fields. See
+    -- use in later fields.  See
     -- https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topic/Heterogeneous.20scalar.20multiplication
     -- TODO(jmc): there should be a rw-lemma `smul_comp` close to `SMulZeroClass.compFun`
     add_smul := fun r s x => show f (r + s) • x = f r • x + f s • x by simp [add_smul] }
 
 end AddCommMonoid
 
-/--
-Definition of `RingHom.toModule` / `RingHom.toModule` 的定义
+/-- A ring homomorphism `f : R →+* M` defines a module structure by `r • x = f r * x`.
+See note [reducible non-instances]. -/
+/-
+**RingHom.toModule** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：RingHom.toModule [Semiring R] [Semiring S] (f : R ->+* S) : Module R S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RingHom.toModule
-  signature: [Semiring R] [Semiring S] (f : R ->+* S)
-  body: Module.compHom S f
-
-中文:
-缩写 环态射.toModule
-  签名: [半环 R] [半环 S] (f : R ->+* S)
-  定义体: Module.compHom S f
-
-Depends on / 依赖: Module, Module.compHom, compHom
+--- 原说明 ---
+A ring homomorphism `f : R →+* M` defines a module structure by `r • x = f r * x
+`.
+See note [reducible non-instances].
 -/
-abbrev RingHom.toModule [Semiring R] [Semiring S] (f : R ->+* S) : Module R S :=
+abbrev RingHom.toModule [Semiring R] [Semiring S] (f : R →+* S) : Module R S :=
   Module.compHom S f
-
-/--
-lemma `RingHom.toModule_smul` / 引理 `RingHom.toModule_smul`
-
-English:
-lemma RingHom.toModule_smul
-  given: [Semiring R] [Semiring S] (f : R ->+* S) (x : R) (y : S)
-  proof: f.toModule
-    x • y = f x * y :=
-  rfl
-
-中文:
-引理 环态射.toModule_smul
-  条件: [半环 R] [半环 S] (f : R ->+* S) (x : R) (y : S)
-  证明: f.toModule
-    x • y = f x * y :=
-  rfl
-
-Depends on / 依赖: f.toModule, toModule
+/-
+**RingHom.toModule_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：RingHom.toModule_smul [Semiring R] [Semiring S] (f : R ->+* S) (x : R) (y 
+: S) : letI
+参数：f : R ->+* S；x : R；y : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma RingHom.toModule_smul [Semiring R] [Semiring S] (f : R ->+* S) (x : R) (y : S) :
+lemma RingHom.toModule_smul [Semiring R] [Semiring S] (f : R →+* S) (x : R) (y : S) :
     letI := f.toModule
     x • y = f x * y :=
   rfl
 
-/--
-Definition of `RingHom.smulOneHom` / `RingHom.smulOneHom` 的定义
+/-- If the module action of `R` on `S` is compatible with multiplication on `S`, then
+`fun x ↦ x • 1` is a ring homomorphism from `R` to `S`.
 
-English:
-definition RingHom.smulOneHom
-  body: MonoidHom.smulOneHom
-  map_zero' := zero_smul R 1
-  map_add' := (add_smul · · 1)
+This is the `RingHom` version of `MonoidHom.smulOneHom`.
 
-中文:
-定义 环态射.smulOneHom
-  定义体: MonoidHom.smulOneHom
-  map_zero' := zero_smul R 1
-  map_add' := (add_smul · · 1)
+When `R` is commutative, usually `algebraMap` should be preferred. -/
+/-
+**RingHom.smulOneHom** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Semiring R] → [inst_1 : No
+nAssocSemiring S] → [inst_2 : _root_.Module R S] → [IsScalarTower R S S] → R →+*
+ S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If the module action of `R` on `S` is compatible with multiplication on `S`, the
+n
+`fun x ↦ x • 1` is a ring homomorphism from `R` to `S`.
+
+This is the `RingHom` version of `MonoidHom.smulOneHom`.
+
+When `R` is commutative, usually `algebraMap` should be preferred.
 -/
 @[simps!] def RingHom.smulOneHom
-    [Semiring R] [NonAssocSemiring S] [Module R S] [IsScalarTower R S S] : R ->+* S where
+    [Semiring R] [NonAssocSemiring S] [Module R S] [IsScalarTower R S S] : R →+* S where
   __ := MonoidHom.smulOneHom
   map_zero' := zero_smul R 1
   map_add' := (add_smul · · 1)
 
-/--
-Definition of `ringHomEquivModuleIsScalarTower` / `ringHomEquivModuleIsScalarTower` 的定义
+/-- A homomorphism between semirings R and S can be equivalently specified by an R-module
+/-
+**on** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+structure on S such that S/S/R is a scalar tower. -/
+/-
+**ringHomEquivModuleIsScalarTower** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ringHomEquivModuleIsScalarTower [Semiring R] [Semiring S] : (R ->+* S) ≃ {
+_inst : Module R S // IsScalarTower R S S} where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringHomEquivModuleIsScalarTower
-  signature: [Semiring R] [Semiring S]
-  body: ⟨Module.compHom S f, SMul.comp.isScalarTower _⟩
-  invFun := fun ⟨_, _⟩ => RingHom.smulOneHom
-  left_inv f := RingHom.ext fun r => mul_one (f r)
-right_inv := fun ⟨_, _⟩ => Subtype.ext Module.ext funext₂ smul_one_smul S
-
-中文:
-定义 ringHomEquivModuleIsScalarTower
-  签名: [半环 R] [半环 S]
-  定义体: ⟨Module.compHom S f, SMul.comp.isScalarTower _⟩
-  invFun := fun ⟨_, _⟩ => RingHom.smulOneHom
-  left_inv f := RingHom.ext fun r => mul_one (f r)
-right_inv := fun ⟨_, _⟩ => Subtype.ext Module.ext funext₂ smul_one_smul S
-
-Depends on / 依赖: Module, Module.compHom, SMul.comp.isScalarTower, compHom, isScalarTower
+--- 原说明 ---
+A homomorphism between semirings R and S can be equivalently specified by an R-m
+odule
+structure on S such that S/S/R is a scalar tower.
 -/
 def ringHomEquivModuleIsScalarTower [Semiring R] [Semiring S] :
-    (R ->+* S) ≃ {_inst : Module R S // IsScalarTower R S S} where
+    (R →+* S) ≃ {_inst : Module R S // IsScalarTower R S S} where
   toFun f := ⟨Module.compHom S f, SMul.comp.isScalarTower _⟩
-  invFun := fun ⟨_, _⟩ => RingHom.smulOneHom
-  left_inv f := RingHom.ext fun r => mul_one (f r)
-right_inv := fun ⟨_, _⟩ => Subtype.ext Module.ext funext₂ smul_one_smul S
+  invFun := fun ⟨_, _⟩ ↦ RingHom.smulOneHom
+  left_inv f := RingHom.ext fun r ↦ mul_one (f r)
+  right_inv := fun ⟨_, _⟩ ↦ Subtype.ext <| Module.ext <| funext₂ <| smul_one_smul S

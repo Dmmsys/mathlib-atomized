@@ -22,62 +22,62 @@ open Cardinal
 
 /-- The cardinality of the complex numbers, as a type. -/
 @[simp]
-/--
-theorem `Cardinal.mk_complex` / 定理 `Cardinal.mk_complex`
+/-
+**Cardinal.mk_complex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Cardinal.mk_complex : #Complex = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_congr`：mk_congr (e : α ≃ β) : #α = #β
+· 使用定理 `Cardinal.mk_prod`：mk_prod (α : Type u) (β : Type v) : #(α × β) = lift.{v
+, u} #α * lift.{u, v} #β
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Cardinal.mk_real`：mk_real : #Real = 𝔠
+· 使用定理 `Cardinal.continuum_mul_self`：continuum_mul_self : 𝔠 * 𝔠 = 𝔠
 
-English:
-theorem Cardinal.mk_complex
-  statement: #Complex = 𝔠
-  proof: by
-  rw [mk_congr Complex.equivRealProd]; rw [mk_prod]; rw [lift_id]; rw [mk_real]; rw [continuum_mul_self]
-
-中文:
-定理 基数.mk_complex
-  结论: #复形 = 𝔠
-  证明: by
-  rw [mk_congr Complex.equivRealProd]; rw [mk_prod]; rw [lift_id]; rw [mk_real]; rw [continuum_mul_self]
-
-Depends on / 依赖: Complex.equivRealProd, continuum_mul_self, equivRealProd, lift_id, mk_congr, mk_prod, mk_real
+--- 原说明 ---
+The cardinality of the complex numbers, as a type.
 -/
-theorem Cardinal.mk_complex : #Complex = 𝔠 := by
-  rw [mk_congr Complex.equivRealProd]; rw [mk_prod]; rw [lift_id]; rw [mk_real]; rw [continuum_mul_self]
+theorem Cardinal.mk_complex : #ℂ = 𝔠 := by
+  rw [mk_congr Complex.equivRealProd, mk_prod, lift_id, mk_real, continuum_mul_self]
 
-/--
-theorem `Cardinal.mk_univ_complex` / 定理 `Cardinal.mk_univ_complex`
+/-- The cardinality of the complex numbers, as a set. -/
+/-
+**Cardinal.mk_univ_complex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Cardinal.mk_univ_complex : #(Set.univ : Set Complex) = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_univ`：mk_univ {α : Type u} : #(@univ α) = #α
+· 使用定理 `Cardinal.mk_complex`：Cardinal.mk_complex : #Complex = 𝔠
 
-English:
-theorem Cardinal.mk_univ_complex
-  statement: #(Set.univ : Set Complex) = 𝔠
-  proof: by rw [mk_univ, mk_complex]
-
-中文:
-定理 基数.mk_univ_complex
-  结论: #(集合.univ : 集合 复形) = 𝔠
-  证明: by rw [mk_univ, mk_complex]
-
-Depends on / 依赖: mk_complex, mk_univ
+--- 原说明 ---
+The cardinality of the complex numbers, as a set.
 -/
-theorem Cardinal.mk_univ_complex : #(Set.univ : Set Complex) = 𝔠 := by rw [mk_univ, mk_complex]
+theorem Cardinal.mk_univ_complex : #(Set.univ : Set ℂ) = 𝔠 := by rw [mk_univ, mk_complex]
 
-/--
-theorem `not_countable_complex` / 定理 `not_countable_complex`
+/-- The complex numbers are not countable. -/
+/-
+**not_countable_complex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_countable_complex : ¬(Set.univ : Set Complex).Countable
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.le_aleph0_iff_set_countable`：le_aleph0_iff_set_countable {s : S
+et α} : #s <= ℵ₀ ↔ s.Countable
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Cardinal.mk_univ_complex`：Cardinal.mk_univ_complex : #(Set.univ : Set Co
+mplex) = 𝔠
+· 使用定理 `Cardinal.cantor`：cantor (a : Cardinal.{u}) : a < 2 ^ a
 
-English:
-theorem not_countable_complex
-  statement: ¬(Set.univ : Set Complex).Countable
-  proof: by
-  rw [← le_aleph0_iff_set_countable]; rw [not_le]; rw [Cardinal.mk_univ_complex]
-  apply cantor
-
-中文:
-定理 not_countable_complex
-  结论: ¬(集合.univ : 集合 复形).可数
-  证明: by
-  rw [← le_aleph0_iff_set_countable]; rw [not_le]; rw [Cardinal.mk_univ_complex]
-  apply cantor
-
-Depends on / 依赖: Cardinal, Cardinal.mk_univ_complex, cantor, le_aleph0_iff_set_countable, mk_univ_complex, not_le
+--- 原说明 ---
+The complex numbers are not countable.
 -/
-theorem not_countable_complex : ¬(Set.univ : Set Complex).Countable := by
-  rw [← le_aleph0_iff_set_countable]; rw [not_le]; rw [Cardinal.mk_univ_complex]
+theorem not_countable_complex : ¬(Set.univ : Set ℂ).Countable := by
+  rw [← le_aleph0_iff_set_countable, not_le, Cardinal.mk_univ_complex]
   apply cantor

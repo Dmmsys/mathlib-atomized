@@ -28,72 +28,47 @@ open Limits
 
 variable {C : Type u} [Category.{v} C] (P : ObjectProperty C)
 
-/--
-Definition of `IsStableUnderRetracts` / `IsStableUnderRetracts` 的定义
+/-- A predicate `C → Prop` on the objects of a category is stable under retracts
+if whenever `P Y`, then all the objects `X` that are retracts of `Y` also satisfy `P X`. -/
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts** 是 Mathlib 中的一个归纳类型，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+ObjectProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStableUnderRetracts
-  parameters: where
-  axioms and operations (1):
-    - of_retract({X Y : C} (_ : Retract X Y) (_ : P Y)) : P X
-
-中文:
-类 是StableUnderRetracts
-  参数: where
-  公理与运算 (1 个):
-    - of_retract({X Y : C} (_ : 收缩 X Y) (_ : P Y)) : P X
+--- 原说明 ---
+A predicate `C → Prop` on the objects of a category is stable under retracts
+if whenever `P Y`, then all the objects `X` that are retracts of `Y` also satisf
+y `P X`.
 -/
 class IsStableUnderRetracts where
   of_retract {X Y : C} (_ : Retract X Y) (_ : P Y) : P X
-
-/--
-lemma `prop_of_retract` / 引理 `prop_of_retract`
-
-English:
-lemma prop_of_retract
-  given: [IsStableUnderRetracts P] {X Y : C} (h : Retract X Y) (hY : P Y)
-  statement: P X
-  proof: IsStableUnderRetracts.of_retract h hY
-
-中文:
-引理 prop_of_retract
-  条件: [是StableUnderRetracts P] {X Y : C} (h : 收缩 X Y) (hY : P Y)
-  结论: P X
-  证明: IsStableUnderRetracts.of_retract h hY
-
-Depends on / 依赖: IsStableUnderRetracts, IsStableUnderRetracts.of_retract, of_retract
+/-
+**CategoryTheory.ObjectProperty.prop_of_retract** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.ObjectProperty`。
+形式化陈述：prop_of_retract [IsStableUnderRetracts P] {X Y : C} (h : Retract X Y) (hY 
+: P Y) : P X
+参数：h : Retract X Y；hY : P Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_retract`：∀ {C : T
+ype u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectPrope
+rty C}   [self : P.IsStableUnderRetracts] {X Y : C} …
 -/
 lemma prop_of_retract [IsStableUnderRetracts P] {X Y : C} (h : Retract X Y) (hY : P Y) : P X :=
   IsStableUnderRetracts.of_retract h hY
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsStableUnderRetracts (⊥ : ObjectProperty C)
-  body: h
-
-中文:
-实例 :
-  签名: 是StableUnderRetracts (⊥ : ObjectProperty C)
-  定义体: h
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsStableUnderRetracts (⊥ : ObjectProperty C) where
   of_retract _ h := h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsStableUnderRetracts (⊤ : ObjectProperty C)
-  body: by trivial
-
-中文:
-实例 :
-  签名: 是StableUnderRetracts (⊤ : ObjectProperty C)
-  定义体: by trivial
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsStableUnderRetracts (⊤ : ObjectProperty C) where
   of_retract _ _ := by trivial
@@ -104,305 +79,210 @@ open scoped ZeroObject
 
 variable [P.IsStableUnderRetracts]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: P.IsClosedUnderIsomorphisms
-  body: IsStableUnderRetracts.of_retract i.symm.retract h
-
-中文:
-实例 :
-  签名: P.在同构下封闭
-  定义体: IsStableUnderRetracts.of_retract i.symm.retract h
-
-Depends on / 依赖: IsStableUnderRetracts, IsStableUnderRetracts.of_retract, i.symm.retract, of_retract, retract
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : P.IsClosedUnderIsomorphisms where
   of_iso i h := IsStableUnderRetracts.of_retract i.symm.retract h
 
 -- see Note [lower instance priority]
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [HasZeroObject C] [P.Nonempty] : P.ContainsZero where
   exists_zero := ⟨0, isZero_zero _, of_retract ((isZero_zero _).retract _) P.prop_arbitrary⟩
 
 @[deprecated instContainsZeroOfHasZeroObjectOfNonempty (since := "2026-04-03")]
-/--
-lemma `containsZero` / 引理 `containsZero`
-
-English:
-lemma containsZero
-  given: [HasZeroObject C] {X : C} (h : P X)
-  statement: P.ContainsZero where
-  proof: ⟨0, isZero_zero _, of_retract ((isZero_zero _).retract X) h⟩
-
-中文:
-引理 containsZero
-  条件: [有ZeroObject C] {X : C} (h : P X)
-  结论: P.余ntainsZero where
-  证明: ⟨0, isZero_zero _, of_retract ((isZero_zero _).retract X) h⟩
-
-Depends on / 依赖: isZero_zero, of_retract, retract
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.containsZero** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+形式化陈述：containsZero [HasZeroObject C] {X : C} (h : P X) : P.ContainsZero where ex
+ists_zero
+参数：h : P X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.isZero_zero`：isZero_zero : IsZero (0 : C)
+· 使用定理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_retract`：∀ {C : T
+ype u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectPrope
+rty C}   [self : P.IsStableUnderRetracts] {X Y : C} …
 -/
 lemma containsZero [HasZeroObject C] {X : C} (h : P X) : P.ContainsZero where
   exists_zero := ⟨0, isZero_zero _, of_retract ((isZero_zero _).retract X) h⟩
-
-/--
-lemma `of_binaryBicone_left` / 引理 `of_binaryBicone_left`
-
-English:
-lemma of_binaryBicone_left
-  given: [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
-  proof: of_retract c.retract_left h
-
-中文:
-引理 of_binaryBicone_left
-  条件: [有ZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
-  证明: of_retract c.retract_left h
-
-Depends on / 依赖: c.retract_left, of_retract, retract_left
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_binaryBicone_left** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+形式化陈述：of_binaryBicone_left [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y)
+ (h : P c.pt) : P X
+参数：c : BinaryBicone X Y；h : P c.pt。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_retract`：∀ {C : T
+ype u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectPrope
+rty C}   [self : P.IsStableUnderRetracts] {X Y : C} …
 -/
 lemma of_binaryBicone_left [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt) :
     P X :=
   of_retract c.retract_left h
-
-/--
-lemma `of_binaryBicone_right` / 引理 `of_binaryBicone_right`
-
-English:
-lemma of_binaryBicone_right
-  given: [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
-  proof: of_retract c.retract_right h
-
-中文:
-引理 of_binaryBicone_right
-  条件: [有ZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt)
-  证明: of_retract c.retract_right h
-
-Depends on / 依赖: c.retract_right, of_retract, retract_right
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_binaryBicone_right** 是 
+Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+形式化陈述：of_binaryBicone_right [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y
+) (h : P c.pt) : P Y
+参数：c : BinaryBicone X Y；h : P c.pt。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_retract`：∀ {C : T
+ype u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectPrope
+rty C}   [self : P.IsStableUnderRetracts] {X Y : C} …
 -/
 lemma of_binaryBicone_right [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h : P c.pt) :
     P Y :=
   of_retract c.retract_right h
-
-/--
-lemma `of_biprod_left` / 引理 `of_biprod_left`
-
-English:
-lemma of_biprod_left
-  given: [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h : P (X ⊞ Y))
-  proof: of_binaryBicone_left P (BinaryBiproduct.bicone X Y) h
-
-中文:
-引理 of_biprod_left
-  条件: [有ZeroMorphisms C] {X Y : C} [有BinaryBiproduct X Y] (h : P (X ⊞ Y))
-  证明: of_binaryBicone_left P (BinaryBiproduct.bicone X Y) h
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone, of_binaryBicone_left
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_biprod_left** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+形式化陈述：of_biprod_left [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h 
+: P (X ⊞ Y)) : P X
+参数：h : P (X ⊞ Y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_binaryBicone_left
+`：of_binaryBicone_left [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (h 
+: P c.pt) : P X
 -/
 lemma of_biprod_left [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h : P (X ⊞ Y)) :
     P X :=
   of_binaryBicone_left P (BinaryBiproduct.bicone X Y) h
-
-/--
-lemma `of_biprod_right` / 引理 `of_biprod_right`
-
-English:
-lemma of_biprod_right
-  given: [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h : P (X ⊞ Y))
-  proof: of_binaryBicone_right P (BinaryBiproduct.bicone X Y) h
-
-中文:
-引理 of_biprod_right
-  条件: [有ZeroMorphisms C] {X Y : C} [有BinaryBiproduct X Y] (h : P (X ⊞ Y))
-  证明: of_binaryBicone_right P (BinaryBiproduct.bicone X Y) h
-
-Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.bicone, bicone, of_binaryBicone_right
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_biprod_right** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+形式化陈述：of_biprod_right [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h
+ : P (X ⊞ Y)) : P Y
+参数：h : P (X ⊞ Y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_binaryBicone_righ
+t`：of_binaryBicone_right [HasZeroMorphisms C] {X Y : C} (c : BinaryBicone X Y) (
+h : P c.pt) : P Y
 -/
 lemma of_biprod_right [HasZeroMorphisms C] {X Y : C} [HasBinaryBiproduct X Y] (h : P (X ⊞ Y)) :
     P Y :=
   of_binaryBicone_right P (BinaryBiproduct.bicone X Y) h
-
-/--
-lemma `of_bicone` / 引理 `of_bicone`
-
-English:
-lemma of_bicone
-  given: [HasZeroMorphisms C] {J : Type*} (F : J -> C) (c : Bicone F) (h : P c.pt) (j : J)
-  proof: of_retract (c.retract j) h
-
-中文:
-引理 of_bicone
-  条件: [有ZeroMorphisms C] {J : 类型} (F : J -> C) (c : Bicone F) (h : P c.pt) (j : J)
-  证明: of_retract (c.retract j) h
-
-Depends on / 依赖: c.retract, of_retract, retract
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_bicone** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+形式化陈述：of_bicone [HasZeroMorphisms C] {J : Type*} (F : J -> C) (c : Bicone F) (h 
+: P c.pt) (j : J) : P (F j)
+参数：F : J -> C；c : Bicone F；h : P c.pt；j : J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_retract`：∀ {C : T
+ype u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectPrope
+rty C}   [self : P.IsStableUnderRetracts] {X Y : C} …
 -/
-lemma of_bicone [HasZeroMorphisms C] {J : Type*} (F : J -> C) (c : Bicone F) (h : P c.pt) (j : J) :
+lemma of_bicone [HasZeroMorphisms C] {J : Type*} (F : J → C) (c : Bicone F) (h : P c.pt) (j : J) :
     P (F j) :=
   of_retract (c.retract j) h
-
-/--
-lemma `of_biproduct` / 引理 `of_biproduct`
-
-English:
-lemma of_biproduct
-  statement: [HasZeroMorphisms C] {J : Type*} (F : J -> C) [HasBiproduct F] (h : P (⨁ F))
-  proof: of_bicone P F (biproduct.bicone F) h j
-
-中文:
-引理 of_biproduct
-  结论: [有ZeroMorphisms C] {J : 类型} (F : J -> C) [有Biproduct F] (h : P (⨁ F))
-  证明: of_bicone P F (biproduct.bicone F) h j
-
-Depends on / 依赖: bicone, biproduct, biproduct.bicone, of_bicone
+/-
+**CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_biproduct** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ObjectProperty.IsStableUnderRetracts`。
+形式化陈述：of_biproduct [HasZeroMorphisms C] {J : Type*} (F : J -> C) [HasBiproduct F
+] (h : P (⨁ F)) (j : J) : P (F j)
+参数：F : J -> C；h : P (⨁ F)；j : J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.IsStableUnderRetracts.of_bicone`：of_bicone
+ [HasZeroMorphisms C] {J : Type*} (F : J -> C) (c : Bicone F) (h : P c.pt) (j : 
+J) : P (F j)
 -/
-lemma of_biproduct [HasZeroMorphisms C] {J : Type*} (F : J -> C) [HasBiproduct F] (h : P (⨁ F))
+lemma of_biproduct [HasZeroMorphisms C] {J : Type*} (F : J → C) [HasBiproduct F] (h : P (⨁ F))
     (j : J) : P (F j) :=
   of_bicone P F (biproduct.bicone F) h j
 
 end IsStableUnderRetracts
 
-/--
-Definition of `retractClosure` / `retractClosure` 的定义
+/-- The closure by retracts of a predicate on objects in a category. -/
+/-
+**CategoryTheory.ObjectProperty.retractClosure** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.ObjectProperty`。
+形式化陈述：retractClosure : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition retractClosure
-  signature: : ObjectProperty C
-  body: fun X => exists (Y : C) (_ : P Y), Nonempty (Retract X Y)
-
-中文:
-定义 retractClosure
-  签名: : ObjectProperty C
-  定义体: fun X => exists (Y : C) (_ : P Y), Nonempty (Retract X Y)
-
-Depends on / 依赖: Nonempty, Retract
+--- 原说明 ---
+The closure by retracts of a predicate on objects in a category.
 -/
-def retractClosure : ObjectProperty C := fun X => exists (Y : C) (_ : P Y), Nonempty (Retract X Y)
-
-/--
-lemma `prop_retractClosure_iff` / 引理 `prop_retractClosure_iff`
-
-English:
-lemma prop_retractClosure_iff
-  given: (X : C)
-  proof: by rfl
-
-中文:
-引理 prop_retractClosure_iff
-  条件: (X : C)
-  证明: by rfl
+def retractClosure : ObjectProperty C := fun X => ∃ (Y : C) (_ : P Y), Nonempty (Retract X Y)
+/-
+**CategoryTheory.ObjectProperty.prop_retractClosure_iff** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+形式化陈述：prop_retractClosure_iff (X : C) : retractClosure P X ↔ exists (Y : C) (_ :
+ P Y), Nonempty (Retract X Y)
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma prop_retractClosure_iff (X : C) :
-    retractClosure P X ↔ exists (Y : C) (_ : P Y), Nonempty (Retract X Y) := by rfl
+    retractClosure P X ↔ ∃ (Y : C) (_ : P Y), Nonempty (Retract X Y) := by rfl
 
 variable {P} in
-/--
-lemma `prop_retractClosure` / 引理 `prop_retractClosure`
-
-English:
-lemma prop_retractClosure
-  given: {X Y : C} (h : P Y) (r : Retract X Y)
-  statement: retractClosure P X
-  proof: ⟨Y, h, ⟨r⟩⟩
-
-中文:
-引理 prop_retractClosure
-  条件: {X Y : C} (h : P Y) (r : 收缩 X Y)
-  结论: retractClosure P X
-  证明: ⟨Y, h, ⟨r⟩⟩
+/-
+**CategoryTheory.ObjectProperty.prop_retractClosure** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ObjectProperty`。
+形式化陈述：prop_retractClosure {X Y : C} (h : P Y) (r : Retract X Y) : retractClosure
+ P X
+参数：h : P Y；r : Retract X Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prop_retractClosure {X Y : C} (h : P Y) (r : Retract X Y) : retractClosure P X :=
   ⟨Y, h, ⟨r⟩⟩
-
-/--
-lemma `le_retractClosure` / 引理 `le_retractClosure`
-
-English:
-lemma le_retractClosure
-  statement: P <= retractClosure P
-  proof: fun X hX => ⟨X, hX, ⟨Retract.refl X⟩⟩
-
-中文:
-引理 le_retractClosure
-  结论: P <= retractClosure P
-  证明: fun X hX => ⟨X, hX, ⟨Retract.refl X⟩⟩
-
-Depends on / 依赖: Retract, Retract.refl
+/-
+**CategoryTheory.ObjectProperty.le_retractClosure** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ObjectProperty`。
+形式化陈述：le_retractClosure : P <= retractClosure P
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le_retractClosure : P <= retractClosure P :=
+lemma le_retractClosure : P ≤ retractClosure P :=
   fun X hX => ⟨X, hX, ⟨Retract.refl X⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.Nonempty]
-  signature: : P.retractClosure.Nonempty
-  body: .mono P.le_retractClosure
-
-中文:
-实例 [P.非空]
-  签名: : P.retractClosure.非空
-  定义体: .mono P.le_retractClosure
-
-Depends on / 依赖: P.le_retractClosure, le_retractClosure
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.Nonempty] : P.retractClosure.Nonempty :=
   .mono P.le_retractClosure
 
 variable {P Q} in
-/--
-lemma `monotone_retractClosure` / 引理 `monotone_retractClosure`
-
-English:
-lemma monotone_retractClosure
-  given: (h : P <= Q)
-  statement: retractClosure P <= retractClosure Q
-  proof: by
-  rintro X ⟨X', hX', ⟨e⟩⟩
-  exact ⟨X', h _ hX', ⟨e⟩⟩
-
-中文:
-引理 monotone_retractClosure
-  条件: (h : P <= Q)
-  结论: retractClosure P <= retractClosure Q
-  证明: by
-  rintro X ⟨X', hX', ⟨e⟩⟩
-  exact ⟨X', h _ hX', ⟨e⟩⟩
+/-
+**CategoryTheory.ObjectProperty.monotone_retractClosure** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+形式化陈述：monotone_retractClosure (h : P <= Q) : retractClosure P <= retractClosure 
+Q
+参数：h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monotone_retractClosure (h : P <= Q) : retractClosure P <= retractClosure Q := by
+lemma monotone_retractClosure (h : P ≤ Q) : retractClosure P ≤ retractClosure Q := by
   rintro X ⟨X', hX', ⟨e⟩⟩
   exact ⟨X', h _ hX', ⟨e⟩⟩
-
-/--
-lemma `retractClosure_eq_self` / 引理 `retractClosure_eq_self`
-
-English:
-lemma retractClosure_eq_self
-  given: [IsStableUnderRetracts P]
-  statement: retractClosure P = P
-  proof: by
-  apply le_antisymm
-  · intro X ⟨Y, hY, ⟨e⟩⟩
-    exact prop_of_retract P e hY
-  · exact le_retractClosure P
-
-@[simp]
-
-中文:
-引理 retractClosure_eq_self
-  条件: [是StableUnderRetracts P]
-  结论: retractClosure P = P
-  证明: by
-  apply le_antisymm
-  · intro X ⟨Y, hY, ⟨e⟩⟩
-    exact prop_of_retract P e hY
-  · exact le_retractClosure P
-
-@[simp]
-
-Depends on / 依赖: le_antisymm, le_retractClosure, prop_of_retract
+/-
+**CategoryTheory.ObjectProperty.retractClosure_eq_self** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ObjectProperty`。
+形式化陈述：retractClosure_eq_self [IsStableUnderRetracts P] : retractClosure P = P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_retract`：prop_of_retract [IsStable
+UnderRetracts P] {X Y : C} (h : Retract X Y) (hY : P Y) : P X
+· 使用引理 `CategoryTheory.ObjectProperty.le_retractClosure`：le_retractClosure : P <
+= retractClosure P
 -/
 lemma retractClosure_eq_self [IsStableUnderRetracts P] : retractClosure P = P := by
   apply le_antisymm
@@ -411,114 +291,79 @@ lemma retractClosure_eq_self [IsStableUnderRetracts P] : retractClosure P = P :=
   · exact le_retractClosure P
 
 @[simp]
-/--
-lemma `retractClosure_bot` / 引理 `retractClosure_bot`
-
-English:
-lemma retractClosure_bot
-  statement: retractClosure (⊥ : ObjectProperty C) = ⊥
-  proof: retractClosure_eq_self _
-
-@[simp]
-
-中文:
-引理 retractClosure_bot
-  结论: retractClosure (⊥ : ObjectProperty C) = ⊥
-  证明: retractClosure_eq_self _
-
-@[simp]
-
-Depends on / 依赖: retractClosure_eq_self
+/-
+**CategoryTheory.ObjectProperty.retractClosure_bot** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：retractClosure_bot : retractClosure (⊥ : ObjectProperty C) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.retractClosure_eq_self`：retractClosure_eq_
+self [IsStableUnderRetracts P] : retractClosure P = P
+· 使用定理 `CategoryTheory.ObjectProperty.instIsStableUnderRetractsBot`：∀ {C : Type 
+u} [inst : CategoryTheory.Category.{v, u} C], ⊥.IsStableUnderRetracts
 -/
 lemma retractClosure_bot : retractClosure (⊥ : ObjectProperty C) = ⊥ :=
   retractClosure_eq_self _
 
 @[simp]
-/--
-lemma `retractClosure_top` / 引理 `retractClosure_top`
-
-English:
-lemma retractClosure_top
-  statement: retractClosure (⊤ : ObjectProperty C) = ⊤
-  proof: retractClosure_eq_self _
-
-中文:
-引理 retractClosure_top
-  结论: retractClosure (⊤ : ObjectProperty C) = ⊤
-  证明: retractClosure_eq_self _
-
-Depends on / 依赖: retractClosure_eq_self
+/-
+**CategoryTheory.ObjectProperty.retractClosure_top** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：retractClosure_top : retractClosure (⊤ : ObjectProperty C) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.retractClosure_eq_self`：retractClosure_eq_
+self [IsStableUnderRetracts P] : retractClosure P = P
+· 使用定理 `CategoryTheory.ObjectProperty.instIsStableUnderRetractsTop`：∀ {C : Type 
+u} [inst : CategoryTheory.Category.{v, u} C], ⊤.IsStableUnderRetracts
 -/
 lemma retractClosure_top : retractClosure (⊤ : ObjectProperty C) = ⊤ :=
   retractClosure_eq_self _
-
-/--
-lemma `retractClosure_le_iff` / 引理 `retractClosure_le_iff`
-
-English:
-lemma retractClosure_le_iff
-  given: (Q : ObjectProperty C) [IsStableUnderRetracts Q]
-  proof: ⟨(le_retractClosure P).trans,
-    fun h => (monotone_retractClosure h).trans (by rw [retractClosure_eq_self])⟩
-
-中文:
-引理 retractClosure_le_iff
-  条件: (Q : ObjectProperty C) [是StableUnderRetracts Q]
-  证明: ⟨(le_retractClosure P).trans,
-    fun h => (monotone_retractClosure h).trans (by rw [retractClosure_eq_self])⟩
-
-Depends on / 依赖: le_retractClosure, monotone_retractClosure, retractClosure_eq_self
+/-
+**CategoryTheory.ObjectProperty.retractClosure_le_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.ObjectProperty`。
+形式化陈述：retractClosure_le_iff (Q : ObjectProperty C) [IsStableUnderRetracts Q] : r
+etractClosure P <= Q ↔ P <= Q
+参数：Q : ObjectProperty C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.ObjectProperty.le_retractClosure`：le_retractClosure : P <
+= retractClosure P
+· 使用引理 `CategoryTheory.ObjectProperty.monotone_retractClosure`：monotone_retractC
+losure (h : P <= Q) : retractClosure P <= retractClosure Q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.retractClosure_eq_self`：retractClosure_eq_
+self [IsStableUnderRetracts P] : retractClosure P = P
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 lemma retractClosure_le_iff (Q : ObjectProperty C) [IsStableUnderRetracts Q] :
-    retractClosure P <= Q ↔ P <= Q :=
+    retractClosure P ≤ Q ↔ P ≤ Q :=
   ⟨(le_retractClosure P).trans,
     fun h => (monotone_retractClosure h).trans (by rw [retractClosure_eq_self])⟩
-
-/--
-lemma `retractClosure_isoClosure` / 引理 `retractClosure_isoClosure`
-
-English:
-lemma retractClosure_isoClosure
-  proof: by
-  refine le_antisymm ?_ (monotone_retractClosure P.le_isoClosure)
-  rintro Y ⟨X, ⟨X', hX', ⟨e⟩⟩, ⟨h⟩⟩
-  exact ⟨_, hX', ⟨h.trans (Retract.ofIso e)⟩⟩
-
-中文:
-引理 retractClosure_isoClosure
-  证明: by
-  refine le_antisymm ?_ (monotone_retractClosure P.le_isoClosure)
-  rintro Y ⟨X, ⟨X', hX', ⟨e⟩⟩, ⟨h⟩⟩
-  exact ⟨_, hX', ⟨h.trans (Retract.ofIso e)⟩⟩
-
-Depends on / 依赖: P.le_isoClosure, Retract, Retract.ofIso, h.trans, le_antisymm, le_isoClosure, monotone_retractClosure
+/-
+**CategoryTheory.ObjectProperty.retractClosure_isoClosure** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：retractClosure_isoClosure : P.isoClosure.retractClosure = P.retractClosure
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.monotone_retractClosure`：monotone_retractC
+losure (h : P <= Q) : retractClosure P <= retractClosure Q
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
 -/
 lemma retractClosure_isoClosure :
     P.isoClosure.retractClosure = P.retractClosure := by
   refine le_antisymm ?_ (monotone_retractClosure P.le_isoClosure)
   rintro Y ⟨X, ⟨X', hX', ⟨e⟩⟩, ⟨h⟩⟩
   exact ⟨_, hX', ⟨h.trans (Retract.ofIso e)⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsStableUnderRetracts (retractClosure P)
-  body: by
-    rintro X Y r₁ ⟨Z, hZ, ⟨r₂⟩⟩
-    refine ⟨Z, hZ, ⟨r₁.trans r₂⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是StableUnderRetracts (retractClosure P)
-  定义体: by
-    rintro X Y r₁ ⟨Z, hZ, ⟨r₂⟩⟩
-    refine ⟨Z, hZ, ⟨r₁.trans r₂⟩⟩
-
-@[simp]
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsStableUnderRetracts (retractClosure P) where
   of_retract := by
@@ -526,79 +371,26 @@ instance : IsStableUnderRetracts (retractClosure P) where
     refine ⟨Z, hZ, ⟨r₁.trans r₂⟩⟩
 
 @[simp]
-/--
-lemma `retractClosure_retractClosure` / 引理 `retractClosure_retractClosure`
-
-English:
-lemma retractClosure_retractClosure
-  proof: retractClosure_eq_self P.retractClosure
-
-中文:
-引理 retractClosure_retractClosure
-  证明: retractClosure_eq_self P.retractClosure
-
-Depends on / 依赖: P.retractClosure, retractClosure, retractClosure_eq_self
+/-
+**CategoryTheory.ObjectProperty.retractClosure_retractClosure** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：retractClosure_retractClosure : P.retractClosure.retractClosure = P.retrac
+tClosure
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.retractClosure_eq_self`：retractClosure_eq_
+self [IsStableUnderRetracts P] : retractClosure P = P
+· 使用定理 `CategoryTheory.ObjectProperty.instIsStableUnderRetractsRetractClosure`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.Obje
+ctProperty C),   P.retractClosure.IsStableUnderRetracts
 -/
 lemma retractClosure_retractClosure :
     P.retractClosure.retractClosure = P.retractClosure :=
   retractClosure_eq_self P.retractClosure
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ObjectProperty.EssentiallySmall.{w}
-  signature: P] [LocallySmall.{w} C] :
-  body: by
-    obtain ⟨Q, _, h₁, h₂⟩ := ObjectProperty.EssentiallySmall.exists_small_le.{w} P
-    let α := Σ (X : Subtype Q), { p : X.1 ⟶ X.1 // p ≫ p = p }
-    let g {X Y : C} (h : Retract Y X) (hX : Q X) : α := ⟨⟨X, hX⟩, h.r ≫ h.i, by simp⟩
-    let R (a : α) : Prop := exists (X Y : C) (h : Retract Y X) (hX : Q X), g h hX = a
-    choose X Y h hX using fun (a : Subtype R) => a.2
-    refine ⟨.ofObj Y, inferInstance, (monotone_retractClosure h₂).trans ?_⟩
-    rw [retractClosure_isoClosure]
-    rintro y ⟨x, hx, ⟨r⟩⟩
-    obtain ⟨a, h₁, h₂⟩ : exists (a : Subtype R) (h₁ : Q (X a)), g (h a) h₁ = g r hx := by
-      obtain ⟨_, hr⟩ := hX ⟨⟨⟨_, hx⟩, r.r ≫ r.i, by simp⟩, ⟨_, _, r, hx, rfl⟩⟩
-      exact ⟨_, _, hr⟩
-    obtain rfl : x = X a := Subtype.ext_iff.1 (congr_arg Sigma.fst h₂.symm)
-    have hri : (h a).r ≫ (h a).i = r.r ≫ r.i := by
-      rw [Sigma.ext_iff]; rw [heq_eq_eq] at h₂
-      exact Subtype.ext_iff.1 h₂.2
-    exact ⟨_, ⟨a.1, a.2⟩, ⟨{
-      hom := r.i ≫ (h a).r
-      inv := (h a).i ≫ r.r
-      hom_inv_id := by simp [reassoc_of% hri]
-      inv_hom_id := by simp [← reassoc_of% hri]
-    }⟩⟩
-
-中文:
-实例 [ObjectProperty.EssentiallySmall.{w}
-  签名: P] [LocallySmall.{w} C] :
-  定义体: by
-    obtain ⟨Q, _, h₁, h₂⟩ := ObjectProperty.EssentiallySmall.exists_small_le.{w} P
-    let α := Σ (X : Subtype Q), { p : X.1 ⟶ X.1 // p ≫ p = p }
-    let g {X Y : C} (h : Retract Y X) (hX : Q X) : α := ⟨⟨X, hX⟩, h.r ≫ h.i, by simp⟩
-    let R (a : α) : Prop := exists (X Y : C) (h : Retract Y X) (hX : Q X), g h hX = a
-    choose X Y h hX using fun (a : Subtype R) => a.2
-    refine ⟨.ofObj Y, inferInstance, (monotone_retractClosure h₂).trans ?_⟩
-    rw [retractClosure_isoClosure]
-    rintro y ⟨x, hx, ⟨r⟩⟩
-    obtain ⟨a, h₁, h₂⟩ : exists (a : Subtype R) (h₁ : Q (X a)), g (h a) h₁ = g r hx := by
-      obtain ⟨_, hr⟩ := hX ⟨⟨⟨_, hx⟩, r.r ≫ r.i, by simp⟩, ⟨_, _, r, hx, rfl⟩⟩
-      exact ⟨_, _, hr⟩
-    obtain rfl : x = X a := Subtype.ext_iff.1 (congr_arg Sigma.fst h₂.symm)
-    have hri : (h a).r ≫ (h a).i = r.r ≫ r.i := by
-      rw [Sigma.ext_iff]; rw [heq_eq_eq] at h₂
-      exact Subtype.ext_iff.1 h₂.2
-    exact ⟨_, ⟨a.1, a.2⟩, ⟨{
-      hom := r.i ≫ (h a).r
-      inv := (h a).i ≫ r.r
-      hom_inv_id := by simp [reassoc_of% hri]
-      inv_hom_id := by simp [← reassoc_of% hri]
-    }⟩⟩
-
-Depends on / 依赖: EssentiallySmall, ObjectProperty, ObjectProperty.EssentiallySmall.exists_small_le, Retract, Subtype, exists_small_le, monotone_retractClosure, retractClosure_isoClosure
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ObjectProperty.EssentiallySmall.{w} P] [LocallySmall.{w} C] :
     ObjectProperty.EssentiallySmall.{w} P.retractClosure where
@@ -606,17 +398,17 @@ instance [ObjectProperty.EssentiallySmall.{w} P] [LocallySmall.{w} C] :
     obtain ⟨Q, _, h₁, h₂⟩ := ObjectProperty.EssentiallySmall.exists_small_le.{w} P
     let α := Σ (X : Subtype Q), { p : X.1 ⟶ X.1 // p ≫ p = p }
     let g {X Y : C} (h : Retract Y X) (hX : Q X) : α := ⟨⟨X, hX⟩, h.r ≫ h.i, by simp⟩
-    let R (a : α) : Prop := exists (X Y : C) (h : Retract Y X) (hX : Q X), g h hX = a
-    choose X Y h hX using fun (a : Subtype R) => a.2
+    let R (a : α) : Prop := ∃ (X Y : C) (h : Retract Y X) (hX : Q X), g h hX = a
+    choose X Y h hX using fun (a : Subtype R) ↦ a.2
     refine ⟨.ofObj Y, inferInstance, (monotone_retractClosure h₂).trans ?_⟩
     rw [retractClosure_isoClosure]
     rintro y ⟨x, hx, ⟨r⟩⟩
-    obtain ⟨a, h₁, h₂⟩ : exists (a : Subtype R) (h₁ : Q (X a)), g (h a) h₁ = g r hx := by
+    obtain ⟨a, h₁, h₂⟩ : ∃ (a : Subtype R) (h₁ : Q (X a)), g (h a) h₁ = g r hx := by
       obtain ⟨_, hr⟩ := hX ⟨⟨⟨_, hx⟩, r.r ≫ r.i, by simp⟩, ⟨_, _, r, hx, rfl⟩⟩
       exact ⟨_, _, hr⟩
     obtain rfl : x = X a := Subtype.ext_iff.1 (congr_arg Sigma.fst h₂.symm)
     have hri : (h a).r ≫ (h a).i = r.r ≫ r.i := by
-      rw [Sigma.ext_iff]; rw [heq_eq_eq] at h₂
+      rw [Sigma.ext_iff, heq_eq_eq] at h₂
       exact Subtype.ext_iff.1 h₂.2
     exact ⟨_, ⟨a.1, a.2⟩, ⟨{
       hom := r.i ≫ (h a).r
@@ -626,3 +418,4 @@ instance [ObjectProperty.EssentiallySmall.{w} P] [LocallySmall.{w} C] :
     }⟩⟩
 
 end CategoryTheory.ObjectProperty
+

@@ -51,230 +51,171 @@ open WithPiTopology
 
 variable {R : Type*} [CommRing R]
 variable {S : Type*} [CommRing S]
-variable {φ : R ->+* S}
+variable {φ : R →+* S}
 
 section
 
 variable [TopologicalSpace R] [TopologicalSpace S]
 
-/--
-Definition of `HasEval` / `HasEval` 的定义
+/-- Points at which evaluation of power series is well behaved -/
+/-
+**PowerSeries.HasEval** 是 Mathlib 中的一个缩写定义，位于命名空间 `PowerSeries`。
+形式化陈述：HasEval (a : S)
+参数：a : S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasEval
-  signature: (a : S)
-  body: IsTopologicallyNilpotent a
-
-中文:
-缩写 有Eval
-  签名: (a : S)
-  定义体: IsTopologicallyNilpotent a
-
-Depends on / 依赖: IsTopologicallyNilpotent
+--- 原说明 ---
+Points at which evaluation of power series is well behaved
 -/
 abbrev HasEval (a : S) := IsTopologicallyNilpotent a
-
-/--
-theorem `hasEval_def` / 定理 `hasEval_def`
-
-English:
-theorem hasEval_def
-  given: (a : S)
-  statement: HasEval a ↔ IsTopologicallyNilpotent a
-  proof: .rfl
-
-中文:
-定理 hasEval_def
-  条件: (a : S)
-  结论: 有Eval a ↔ IsTopologicallyNilpotent a
-  证明: .rfl
-
-Depends on / 依赖: Ultrafilter, X.str
+/-
+**PowerSeries.hasEval_def** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：hasEval_def (a : S) : HasEval a ↔ IsTopologicallyNilpotent a
+参数：a : S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem hasEval_def (a : S) : HasEval a ↔ IsTopologicallyNilpotent a := .rfl
-
-/--
-theorem `hasEval_iff` / 定理 `hasEval_iff`
-
-English:
-theorem hasEval_iff
-  given: {a : S}
-  proof: ⟨fun ha => ⟨fun _ => ha, by simp⟩, fun ha => ha.hpow default⟩
-
-中文:
-定理 hasEval_iff
-  条件: {a : S}
-  证明: ⟨fun ha => ⟨fun _ => ha, by simp⟩, fun ha => ha.hpow default⟩
-
-Depends on / 依赖: ha.hpow
+/-
+**PowerSeries.hasEval_iff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：hasEval_iff {a : S} : HasEval a ↔ MvPowerSeries.HasEval (fun (_ : Unit) =>
+ a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.cofinite_eq_bot`：cofinite_eq_bot [Finite α] : @cofinite α = ⊥
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `MvPowerSeries.HasEval.hpow`：∀ {σ : Type u_1} {S : Type u_3} [inst : Comm
+Ring S] [inst_1 : TopologicalSpace S] {a : σ → S},   MvPowerSeries.HasEval a → ∀
+ (s : σ), IsTopo…
 -/
 theorem hasEval_iff {a : S} :
-    HasEval a ↔ MvPowerSeries.HasEval (fun (_ : Unit) => a) :=
-  ⟨fun ha => ⟨fun _ => ha, by simp⟩, fun ha => ha.hpow default⟩
-
-/--
-theorem `hasEval` / 定理 `hasEval`
-
-English:
-theorem hasEval
-  given: {a : S} (ha : HasEval a)
-  proof: hasEval_iff.mp ha
-
-中文:
-定理 hasEval
-  条件: {a : S} (ha : 有Eval a)
-  证明: hasEval_iff.mp ha
-
-Depends on / 依赖: X.str, hasEval_iff, hasEval_iff.mp, isCompact_iff_ultrafilter_le_nhds, le_nhds_iff
+    HasEval a ↔ MvPowerSeries.HasEval (fun (_ : Unit) ↦ a) :=
+  ⟨fun ha ↦ ⟨fun _ ↦ ha, by simp⟩, fun ha ↦ ha.hpow default⟩
+/-
+**PowerSeries.hasEval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：hasEval {a : S} (ha : HasEval a) : MvPowerSeries.HasEval (fun (_ : Unit) =
+> a)
+参数：ha : HasEval a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PowerSeries.hasEval_iff`：hasEval_iff {a : S} : HasEval a ↔ MvPowerSeries
+.HasEval (fun (_ : Unit) => a)
 -/
 theorem hasEval {a : S} (ha : HasEval a) :
-    MvPowerSeries.HasEval (fun (_ : Unit) => a) := hasEval_iff.mp ha
-
-/--
-theorem `HasEval.mono` / 定理 `HasEval.mono`
-
-English:
-theorem HasEval.mono
-  statement: {S : Type*} [CommRing S] {a : S}
-  proof: by
-  simp only [hasEval_iff] at ha ⊢
-  exact ha.mono h
-
-中文:
-定理 有Eval.mono
-  结论: {S : 类型} [交换环 S] {a : S}
-  证明: by
-  simp only [hasEval_iff] at ha ⊢
-  exact ha.mono h
+    MvPowerSeries.HasEval (fun (_ : Unit) ↦ a) := hasEval_iff.mp ha
+/-
+**PowerSeries.HasEval.mono** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.HasEval`。
+形式化陈述：∀ {S : Type u_3} [inst : CommRing S] {a : S} {t u : TopologicalSpace S},  
+ t ≤ u → PowerSeries.HasEval a → PowerSeries.HasEval a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.HasEval.mono`：∀ {σ : Type u_1} {S : Type u_4} [inst : Comm
+Ring S] {a : σ → S} {t u : TopologicalSpace S},   t ≤ u → MvPowerSeries.HasEval 
+a → MvPowerSerie…
 -/
 theorem HasEval.mono {S : Type*} [CommRing S] {a : S}
-    {t u : TopologicalSpace S} (h : t <= u) (ha : @HasEval _ _ t a) :
+    {t u : TopologicalSpace S} (h : t ≤ u) (ha : @HasEval _ _ t a) :
     @HasEval _ _ u a := by
   simp only [hasEval_iff] at ha ⊢
   exact ha.mono h
-
-/--
-theorem `HasEval.zero` / 定理 `HasEval.zero`
-
-English:
-theorem HasEval.zero
-  statement: HasEval (0 : S)
-  proof: by
-    rw [hasEval_iff]; exact MvPowerSeries.HasEval.zero
-
-中文:
-定理 有Eval.zero
-  结论: 有Eval (0 : S)
-  证明: by
-    rw [hasEval_iff]; exact MvPowerSeries.HasEval.zero
+/-
+**PowerSeries.HasEval.zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.HasEval`。
+形式化陈述：∀ {S : Type u_2} [inst : CommRing S] [inst_1 : TopologicalSpace S], PowerS
+eries.HasEval 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.hasEval_iff`：hasEval_iff {a : S} : HasEval a ↔ MvPowerSeries
+.HasEval (fun (_ : Unit) => a)
+· 使用定理 `MvPowerSeries.HasEval.zero`：∀ {σ : Type u_1} {S : Type u_3} [inst : Comm
+Ring S] [inst_1 : TopologicalSpace S], MvPowerSeries.HasEval 0
 -/
 theorem HasEval.zero : HasEval (0 : S) := by
     rw [hasEval_iff]; exact MvPowerSeries.HasEval.zero
-
-/--
-theorem `HasEval.add` / 定理 `HasEval.add`
-
-English:
-theorem HasEval.add
-  statement: [ContinuousAdd S] [IsLinearTopology S S]
-  proof: by
-  simp only [hasEval_iff] at ha hb ⊢
-  exact ha.add hb
-
-中文:
-定理 有Eval.add
-  结论: [连续加法 S] [是线性拓扑 S S]
-  证明: by
-  simp only [hasEval_iff] at ha hb ⊢
-  exact ha.add hb
+/-
+**PowerSeries.HasEval.add** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.HasEval`。
+形式化陈述：∀ {S : Type u_2} [inst : CommRing S] [inst_1 : TopologicalSpace S] [Contin
+uousAdd S] [IsLinearTopology S S] {a b : S},   PowerSeries.HasEval a → PowerSeri
+es.HasEval b → PowerSeries.HasEval (a + b)
+参数：a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.HasEval.add`：∀ {σ : Type u_1} {S : Type u_3} [inst : CommR
+ing S] [inst_1 : TopologicalSpace S] [ContinuousAdd S]   [IsLinearTopology S S] 
+{a b : σ → S}, …
 -/
 theorem HasEval.add [ContinuousAdd S] [IsLinearTopology S S]
     {a b : S} (ha : HasEval a) (hb : HasEval b) : HasEval (a + b) := by
   simp only [hasEval_iff] at ha hb ⊢
   exact ha.add hb
-
-/--
-theorem `HasEval.mul_left` / 定理 `HasEval.mul_left`
-
-English:
-theorem HasEval.mul_left
-  statement: [IsLinearTopology S S]
-  proof: by
-  simp only [hasEval_iff] at hx ⊢
-  exact hx.mul_left _
-
-中文:
-定理 有Eval.mul_left
-  结论: [是线性拓扑 S S]
-  证明: by
-  simp only [hasEval_iff] at hx ⊢
-  exact hx.mul_left _
-
-Depends on / 依赖: str_eq_of_le_nhds, t2_iff_ultrafilter
+/-
+**PowerSeries.HasEval.mul_left** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.HasEval`。
+形式化陈述：∀ {S : Type u_2} [inst : CommRing S] [inst_1 : TopologicalSpace S] [IsLine
+arTopology S S] (c : S) {x : S},   PowerSeries.HasEval x → PowerSeries.HasEval (
+c * x)
+参数：c : S；c * x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.HasEval.mul_left`：∀ {σ : Type u_1} {S : Type u_3} [inst : 
+CommRing S] [inst_1 : TopologicalSpace S] [IsLinearTopology S S] (c : σ → S)   {
+x : σ → S}, MvPowerS…
 -/
 theorem HasEval.mul_left [IsLinearTopology S S]
     (c : S) {x : S} (hx : HasEval x) : HasEval (c * x) := by
   simp only [hasEval_iff] at hx ⊢
   exact hx.mul_left _
-
-/--
-theorem `HasEval.mul_right` / 定理 `HasEval.mul_right`
-
-English:
-theorem HasEval.mul_right
-  statement: [IsLinearTopology S S]
-  proof: by
-  simp only [hasEval_iff] at hx ⊢
-  exact hx.mul_right _
-
-中文:
-定理 有Eval.mul_right
-  结论: [是线性拓扑 S S]
-  证明: by
-  simp only [hasEval_iff] at hx ⊢
-  exact hx.mul_right _
+/-
+**PowerSeries.HasEval.mul_right** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.HasEval`。
+形式化陈述：∀ {S : Type u_2} [inst : CommRing S] [inst_1 : TopologicalSpace S] [IsLine
+arTopology S S] (c : S) {x : S},   PowerSeries.HasEval x → PowerSeries.HasEval (
+x * c)
+参数：c : S；x * c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.HasEval.mul_right`：∀ {σ : Type u_1} {S : Type u_3} [inst :
+ CommRing S] [inst_1 : TopologicalSpace S] [IsLinearTopology S S] (c : σ → S)   
+{x : σ → S}, MvPowerS…
 -/
 theorem HasEval.mul_right [IsLinearTopology S S]
     (c : S) {x : S} (hx : HasEval x) : HasEval (x * c) := by
   simp only [hasEval_iff] at hx ⊢
   exact hx.mul_right _
 
-/--
-theorem `HasEval.map` / 定理 `HasEval.map`
+/-- [Bourbaki, *Algebra*, chap. 4, §4, n°3, Prop. 4 (i) (a & b)][bourbaki1981]. -/
+/-
+**PowerSeries.HasEval.map** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.HasEval`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {S : Type u_2} [inst_1 : CommRing S] 
+{φ : R →+* S} [inst_2 : TopologicalSpace R]   [inst_3 : TopologicalSpace S], Con
+tinuous ⇑φ → ∀ {a : R}, PowerSeries.HasEval a → PowerSeries.HasEval (φ a)
+参数：φ a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.HasEval.map`：∀ {σ : Type u_1} {R : Type u_2} [inst : CommR
+ing R] [inst_1 : TopologicalSpace R] {S : Type u_3} [inst_2 : CommRing S]   [ins
+t_3 : Topologic…
 
-English:
-theorem HasEval.map
-  given: (hφ : Continuous φ) {a : R} (ha : HasEval a)
-  proof: by
-  simp only [hasEval_iff] at ha ⊢
-  exact ha.map hφ
-
-中文:
-定理 有Eval.map
-  条件: (hφ : 连续 φ) {a : R} (ha : 有Eval a)
-  证明: by
-  simp only [hasEval_iff] at ha ⊢
-  exact ha.map hφ
+--- 原说明 ---
+[Bourbaki, *Algebra*, chap. 4, §4, n°3, Prop. 4 (i) (a & b)][bourbaki1981].
 -/
 theorem HasEval.map (hφ : Continuous φ) {a : R} (ha : HasEval a) :
     HasEval (φ a) := by
   simp only [hasEval_iff] at ha ⊢
   exact ha.map hφ
-
-/--
-theorem `HasEval.X` / 定理 `HasEval.X`
-
-English:
-theorem HasEval.X
-  proof: by
-  rw [hasEval_iff]
-  exact MvPowerSeries.HasEval.X
-
-中文:
-定理 有Eval.X
-  证明: by
-  rw [hasEval_iff]
-  exact MvPowerSeries.HasEval.X
+/-
+**PowerSeries.HasEval.X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.HasEval`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] [inst_1 : TopologicalSpace R], PowerS
+eries.HasEval PowerSeries.X
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.hasEval_iff`：hasEval_iff {a : S} : HasEval a ↔ MvPowerSeries
+.HasEval (fun (_ : Unit) => a)
+· 使用定理 `MvPowerSeries.HasEval.X`：∀ {σ : Type u_1} {R : Type u_2} [inst : CommRin
+g R] [inst_1 : TopologicalSpace R],   MvPowerSeries.HasEval fun s => MvPowerSeri
+es.X s
 -/
 protected theorem HasEval.X :
     HasEval (X : R⟦X⟧) := by
@@ -286,26 +227,19 @@ variable [IsTopologicalRing S] [IsLinearTopology S S]
 
 /-- The domain of evaluation of `MvPowerSeries`, as an ideal -/
 @[simps]
-/--
-Definition of `hasEvalIdeal` / `hasEvalIdeal` 的定义
+/-
+**PowerSeries.hasEvalIdeal** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：hasEvalIdeal : Ideal S where carrier
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.HasEval.zero`：∀ {S : Type u_2} [inst : CommRing S] [inst_1 :
+ TopologicalSpace S], PowerSeries.HasEval 0
+· 使用定理 `PowerSeries.HasEval.mul_left`：∀ {S : Type u_2} [inst : CommRing S] [inst
+_1 : TopologicalSpace S] [IsLinearTopology S S] (c : S) {x : S},   PowerSeries.H
+asEval x → PowerSe…
 
-English:
-definition hasEvalIdeal
-  signature: : Ideal S where
-  body: {a | HasEval a}
-  add_mem' := HasEval.add
-  zero_mem' := HasEval.zero
-  smul_mem' := HasEval.mul_left
-
-中文:
-定义 hasEvalIdeal
-  签名: : 理想 S where
-  定义体: {a | HasEval a}
-  add_mem' := HasEval.add
-  zero_mem' := HasEval.zero
-  smul_mem' := HasEval.mul_left
-
-Depends on / 依赖: HasEval
+--- 原说明 ---
+The domain of evaluation of `MvPowerSeries`, as an ideal
 -/
 def hasEvalIdeal : Ideal S where
   carrier := {a | HasEval a}
@@ -314,133 +248,80 @@ def hasEvalIdeal : Ideal S where
   smul_mem' := HasEval.mul_left
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mem_hasEvalIdeal_iff` / 定理 `mem_hasEvalIdeal_iff`
-
-English:
-theorem mem_hasEvalIdeal_iff
-  given: {a : S}
-  proof: by
-  simp [hasEvalIdeal]
-
-中文:
-定理 mem_hasEvalIdeal_iff
-  条件: {a : S}
-  证明: by
-  simp [hasEvalIdeal]
-
-Depends on / 依赖: hasEvalIdeal
+/-
+**PowerSeries.mem_hasEvalIdeal_iff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mem_hasEvalIdeal_iff {a : S} : a in hasEvalIdeal ↔ HasEval a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.HasEval.zero`：∀ {S : Type u_2} [inst : CommRing S] [inst_1 :
+ TopologicalSpace S], PowerSeries.HasEval 0
+· 使用定理 `PowerSeries.HasEval.mul_left`：∀ {S : Type u_2} [inst : CommRing S] [inst
+_1 : TopologicalSpace S] [IsLinearTopology S S] (c : S) {x : S},   PowerSeries.H
+asEval x → PowerSe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_hasEvalIdeal_iff {a : S} :
-    a in hasEvalIdeal ↔ HasEval a := by
+    a ∈ hasEvalIdeal ↔ HasEval a := by
   simp [hasEvalIdeal]
 
 end
 
-variable (φ : R ->+* S) (a : S)
+variable (φ : R →+* S) (a : S)
 
 variable [UniformSpace R] [UniformSpace S]
 
-/--
-Definition of `eval₂` / `eval₂` 的定义
+/-- Evaluation of a power series `f` at a point `a`.
 
-English:
-definition eval₂
-  signature: : PowerSeries R -> S
-  body: MvPowerSeries.eval₂ φ (fun _ => a)
+It coincides with the evaluation of `f` as a polynomial if `f` is the coercion of a polynomial.
+Otherwise, it is only relevant if `φ` is continuous and `a` is topologically nilpotent. -/
+/-
+**PowerSeries.eval** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Evaluation of a power series `f` at a point `a`.
 
-中文:
-定义 eval₂
-  签名: : 幂级数 R -> S
-  定义体: MvPowerSeries.eval₂ φ (fun _ => a)
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.eval
+It coincides with the evaluation of `f` as a polynomial if `f` is the coercion o
+f a polynomial.
+Otherwise, it is only relevant if `φ` is continuous and `a` is topologically nil
+potent.
 -/
-noncomputable def eval₂ : PowerSeries R -> S :=
-  MvPowerSeries.eval₂ φ (fun _ => a)
+noncomputable def eval₂ : PowerSeries R → S :=
+  MvPowerSeries.eval₂ φ (fun _ ↦ a)
 
 @[simp]
-/--
-theorem `eval₂_coe` / 定理 `eval₂_coe`
-
-English:
-theorem eval₂_coe
-  given: (f : Polynomial R)
-  statement: eval₂ φ a f = f.eval₂ φ a
-  proof: by
-  rw [← (MvPolynomial.uniqueAlgEquiv R Unit).apply_symm_apply f]
-  simp only [PowerSeries.eval₂, MvPolynomial.eval₂_const_uniqueAlgEquiv]
-  rw [← MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]; rw [MvPowerSeries.eval₂_coe]
-
-@[simp]
-
-中文:
-定理 eval₂_coe
-  条件: (f : 多项式 R)
-  结论: eval₂ φ a f = f.eval₂ φ a
-  证明: by
-  rw [← (MvPolynomial.uniqueAlgEquiv R Unit).apply_symm_apply f]
-  simp only [PowerSeries.eval₂, MvPolynomial.eval₂_const_uniqueAlgEquiv]
-  rw [← MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]; rw [MvPowerSeries.eval₂_coe]
-
-@[simp]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.eval, MvPolynomial.toMvPowerSeries_pUnitAlgEquiv, MvPolynomial.uniqueAlgEquiv, MvPowerSeries, MvPowerSeries.eval, PowerSeries, PowerSeries.eval, apply_symm_apply, toMvPowerSeries_pUnitAlgEquiv, uniqueAlgEquiv
+/-
+**PowerSeries.eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_coe (f : Polynomial R) : eval₂ φ a f = f.eval₂ φ a := by
   rw [← (MvPolynomial.uniqueAlgEquiv R Unit).apply_symm_apply f]
   simp only [PowerSeries.eval₂, MvPolynomial.eval₂_const_uniqueAlgEquiv]
-  rw [← MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]; rw [MvPowerSeries.eval₂_coe]
+  rw [← MvPolynomial.toMvPowerSeries_pUnitAlgEquiv, MvPowerSeries.eval₂_coe]
 
 @[simp]
-/--
-theorem `eval₂_C` / 定理 `eval₂_C`
-
-English:
-theorem eval₂_C
-  given: (r : R)
-  proof: by
-  rw [← Polynomial.coe_C]; rw [eval₂_coe]; rw [Polynomial.eval₂_C]
-
-@[simp]
-
-中文:
-定理 eval₂_C
-  条件: (r : R)
-  证明: by
-  rw [← Polynomial.coe_C]; rw [eval₂_coe]; rw [Polynomial.eval₂_C]
-
-@[simp]
-
-Depends on / 依赖: Polynomial, Polynomial.coe_C, Polynomial.eval, coe_C
+/-
+**PowerSeries.eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_C (r : R) :
     eval₂ φ a (C r) = φ r := by
-  rw [← Polynomial.coe_C]; rw [eval₂_coe]; rw [Polynomial.eval₂_C]
+  rw [← Polynomial.coe_C, eval₂_coe, Polynomial.eval₂_C]
 
 @[simp]
-/--
-theorem `eval₂_X` / 定理 `eval₂_X`
-
-English:
-theorem eval₂_X
-  proof: by
-  rw [← Polynomial.coe_X]; rw [eval₂_coe]; rw [Polynomial.eval₂_X]
-
-中文:
-定理 eval₂_X
-  证明: by
-  rw [← Polynomial.coe_X]; rw [eval₂_coe]; rw [Polynomial.eval₂_X]
-
-Depends on / 依赖: Polynomial, Polynomial.coe_X, Polynomial.eval, coe_X
+/-
+**PowerSeries.eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_X :
     eval₂ φ a X = a := by
-  rw [← Polynomial.coe_X]; rw [eval₂_coe]; rw [Polynomial.eval₂_X]
+  rw [← Polynomial.coe_X, eval₂_coe, Polynomial.eval₂_X]
 
 variable {φ a}
 
@@ -448,39 +329,20 @@ variable [IsUniformAddGroup R] [IsTopologicalSemiring R]
     [IsUniformAddGroup S] [T2Space S] [CompleteSpace S]
     [IsTopologicalRing S] [IsLinearTopology S S]
 
-/--
-Definition of `eval₂Hom` / `eval₂Hom` 的定义
+/-- The evaluation homomorphism at `a` on `PowerSeries`, as a `RingHom`. -/
+/-
+**PowerSeries.eval** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval₂Hom
-  signature: (hφ : Continuous φ) (ha : HasEval a)
-  body: MvPowerSeries.eval₂Hom hφ (hasEval ha)
-
-中文:
-定义 eval₂Hom
-  签名: (hφ : 连续 φ) (ha : 有Eval a)
-  定义体: MvPowerSeries.eval₂Hom hφ (hasEval ha)
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.eval, hasEval
+--- 原说明 ---
+The evaluation homomorphism at `a` on `PowerSeries`, as a `RingHom`.
 -/
 noncomputable def eval₂Hom (hφ : Continuous φ) (ha : HasEval a) :
-    PowerSeries R ->+* S :=
+    PowerSeries R →+* S :=
   MvPowerSeries.eval₂Hom hφ (hasEval ha)
-
-/--
-theorem `coe_eval₂Hom` / 定理 `coe_eval₂Hom`
-
-English:
-theorem coe_eval₂Hom
-  given: (hφ : Continuous φ) (ha : HasEval a)
-  proof: MvPowerSeries.coe_eval₂Hom hφ (hasEval ha)
-
-中文:
-定理 coe_eval₂Hom
-  条件: (hφ : 连续 φ) (ha : 有Eval a)
-  证明: MvPowerSeries.coe_eval₂Hom hφ (hasEval ha)
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.coe_eval, hasEval
+/-
+**PowerSeries.coe_eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_eval₂Hom (hφ : Continuous φ) (ha : HasEval a) :
     ⇑(eval₂Hom hφ ha) = eval₂ φ a :=
@@ -489,324 +351,217 @@ theorem coe_eval₂Hom (hφ : Continuous φ) (ha : HasEval a) :
 -- Note: this is still true without the `T2Space` hypothesis, by arguing that the case
 -- disjunction in the definition of `eval₂` only replaces some values by topologically
 -- inseparable ones.
-/--
-theorem `uniformContinuous_eval₂` / 定理 `uniformContinuous_eval₂`
-
-English:
-theorem uniformContinuous_eval₂
-  given: (hφ : Continuous φ) (ha : HasEval a)
-  proof: MvPowerSeries.uniformContinuous_eval₂ hφ (hasEval ha)
-
-中文:
-定理 uniformContinuous_eval₂
-  条件: (hφ : 连续 φ) (ha : 有Eval a)
-  证明: MvPowerSeries.uniformContinuous_eval₂ hφ (hasEval ha)
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.uniformContinuous_eval, hasEval
+/-
+**PowerSeries.uniformContinuous_eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uniformContinuous_eval₂ (hφ : Continuous φ) (ha : HasEval a) :
     UniformContinuous (eval₂ φ a) :=
   MvPowerSeries.uniformContinuous_eval₂ hφ (hasEval ha)
-
-/--
-theorem `continuous_eval₂` / 定理 `continuous_eval₂`
-
-English:
-theorem continuous_eval₂
-  given: (hφ : Continuous φ) (ha : HasEval a)
-  proof: (uniformContinuous_eval₂ hφ ha).continuous
-
-中文:
-定理 continuous_eval₂
-  条件: (hφ : 连续 φ) (ha : 有Eval a)
-  证明: (uniformContinuous_eval₂ hφ ha).continuous
-
-Depends on / 依赖: continuous
+/-
+**PowerSeries.continuous_eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem continuous_eval₂ (hφ : Continuous φ) (ha : HasEval a) :
-    Continuous (eval₂ φ a : PowerSeries R -> S) :=
+    Continuous (eval₂ φ a : PowerSeries R → S) :=
   (uniformContinuous_eval₂ hφ ha).continuous
-
-/--
-theorem `hasSum_eval₂` / 定理 `hasSum_eval₂`
-
-English:
-theorem hasSum_eval₂
-  given: (hφ : Continuous φ) (ha : HasEval a) (f : PowerSeries R)
-  proof: by
-  have := MvPowerSeries.hasSum_eval₂ hφ (hasEval ha) f
-  simp only [PowerSeries.eval₂]
-  rw [← (Finsupp.single_injective ()).hasSum_iff] at this
-  · convert this; simp
-  · intro d hd
-    exact False.elim (hd ⟨d (), by ext; simp⟩)
-
-中文:
-定理 hasSum_eval₂
-  条件: (hφ : 连续 φ) (ha : 有Eval a) (f : 幂级数 R)
-  证明: by
-  have := MvPowerSeries.hasSum_eval₂ hφ (hasEval ha) f
-  simp only [PowerSeries.eval₂]
-  rw [← (Finsupp.single_injective ()).hasSum_iff] at this
-  · convert this; simp
-  · intro d hd
-    exact False.elim (hd ⟨d (), by ext; simp⟩)
-
-Depends on / 依赖: False.elim, Finsupp, Finsupp.single_injective, MvPowerSeries, MvPowerSeries.hasSum_eval, PowerSeries, PowerSeries.eval, convert, hasEval, hasSum_iff, single_injective
+/-
+**PowerSeries.hasSum_eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hasSum_eval₂ (hφ : Continuous φ) (ha : HasEval a) (f : PowerSeries R) :
-    HasSum (fun (d : Nat) => φ (coeff d f) * a ^ d) (f.eval₂ φ a) := by
+    HasSum (fun (d : ℕ) ↦ φ (coeff d f) * a ^ d) (f.eval₂ φ a) := by
   have := MvPowerSeries.hasSum_eval₂ hφ (hasEval ha) f
   simp only [PowerSeries.eval₂]
   rw [← (Finsupp.single_injective ()).hasSum_iff] at this
   · convert this; simp
   · intro d hd
     exact False.elim (hd ⟨d (), by ext; simp⟩)
-
-/--
-theorem `eval₂_eq_tsum` / 定理 `eval₂_eq_tsum`
-
-English:
-theorem eval₂_eq_tsum
-  given: (hφ : Continuous φ) (ha : HasEval a) (f : PowerSeries R)
-  proof: (hasSum_eval₂ hφ ha f).tsum_eq.symm
-
-中文:
-定理 eval₂_eq_tsum
-  条件: (hφ : 连续 φ) (ha : 有Eval a) (f : 幂级数 R)
-  证明: (hasSum_eval₂ hφ ha f).tsum_eq.symm
-
-Depends on / 依赖: tsum_eq, tsum_eq.symm
+/-
+**PowerSeries.eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_eq_tsum (hφ : Continuous φ) (ha : HasEval a) (f : PowerSeries R) :
     PowerSeries.eval₂ φ a f =
-      ∑' d : Nat, φ (coeff d f) * a ^ d :=
+      ∑' d : ℕ, φ (coeff d f) * a ^ d :=
   (hasSum_eval₂ hφ ha f).tsum_eq.symm
-
-/--
-theorem `eval₂_unique` / 定理 `eval₂_unique`
-
-English:
-theorem eval₂_unique
-  statement: (hφ : Continuous φ) (ha : HasEval a)
-  proof: by
-  refine MvPowerSeries.eval₂_unique hφ (hasEval ha) hε (fun p => ?_)
-  rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]; rw [h]; rw [← MvPolynomial.eval₂_uniqueAlgEquiv]
-
-中文:
-定理 eval₂_unique
-  结论: (hφ : 连续 φ) (ha : 有Eval a)
-  证明: by
-  refine MvPowerSeries.eval₂_unique hφ (hasEval ha) hε (fun p => ?_)
-  rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]; rw [h]; rw [← MvPolynomial.eval₂_uniqueAlgEquiv]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.eval, MvPolynomial.toMvPowerSeries_pUnitAlgEquiv, MvPowerSeries, MvPowerSeries.eval, hasEval, toMvPowerSeries_pUnitAlgEquiv
+/-
+**PowerSeries.eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_unique (hφ : Continuous φ) (ha : HasEval a)
-    {ε : PowerSeries R -> S} (hε : Continuous ε)
-    (h : forall p : Polynomial R, ε p = Polynomial.eval₂ φ a p) :
+    {ε : PowerSeries R → S} (hε : Continuous ε)
+    (h : ∀ p : Polynomial R, ε p = Polynomial.eval₂ φ a p) :
     ε = eval₂ φ a := by
-  refine MvPowerSeries.eval₂_unique hφ (hasEval ha) hε (fun p => ?_)
-  rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]; rw [h]; rw [← MvPolynomial.eval₂_uniqueAlgEquiv]
-
-/--
-theorem `comp_eval₂` / 定理 `comp_eval₂`
-
-English:
-theorem comp_eval₂
-  statement: (hφ : Continuous φ) (ha : HasEval a)
-  proof: by
-  refine eval₂_unique (by simp only [RingHom.coe_comp, hε.comp hφ]) (ha.map hε)
-    (hε.comp (continuous_eval₂ hφ ha)) (fun p => ?_)
-  simpa [Function.comp_apply, eval₂_coe] using p.hom_eval₂ φ ε a
-
-中文:
-定理 comp_eval₂
-  结论: (hφ : 连续 φ) (ha : 有Eval a)
-  证明: by
-  refine eval₂_unique (by simp only [RingHom.coe_comp, hε.comp hφ]) (ha.map hε)
-    (hε.comp (continuous_eval₂ hφ ha)) (fun p => ?_)
-  simpa [Function.comp_apply, eval₂_coe] using p.hom_eval₂ φ ε a
-
-Depends on / 依赖: Function, Function.comp_apply, RingHom, RingHom.coe_comp, coe_comp, comp_apply, ha.map, p.hom_eval
+  refine MvPowerSeries.eval₂_unique hφ (hasEval ha) hε (fun p ↦ ?_)
+  rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv, h, ← MvPolynomial.eval₂_uniqueAlgEquiv]
+/-
+**PowerSeries.comp_eval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_eval₂ (hφ : Continuous φ) (ha : HasEval a)
     {T : Type*} [UniformSpace T] [CompleteSpace T] [T2Space T]
     [CommRing T] [IsTopologicalRing T] [IsLinearTopology T T] [IsUniformAddGroup T]
-    {ε : S ->+* T} (hε : Continuous ε) :
+    {ε : S →+* T} (hε : Continuous ε) :
     ε ∘ eval₂ φ a = eval₂ (ε.comp φ) (ε a) := by
   refine eval₂_unique (by simp only [RingHom.coe_comp, hε.comp hφ]) (ha.map hε)
-    (hε.comp (continuous_eval₂ hφ ha)) (fun p => ?_)
+    (hε.comp (continuous_eval₂ hφ ha)) (fun p ↦ ?_)
   simpa [Function.comp_apply, eval₂_coe] using p.hom_eval₂ φ ε a
 
 variable [Algebra R S] [ContinuousSMul R S]
 
-/--
-Definition of `aeval` / `aeval` 的定义
+/-- For `HasEval a`,
+the evaluation homomorphism at `a` on `PowerSeries`, as an `AlgHom`. -/
+/-
+**PowerSeries.aeval** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：aeval (ha : HasEval a) : PowerSeries R ->ₐ[R] S
+参数：ha : HasEval a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition aeval
-  signature: (ha : HasEval a)
-  body: MvPowerSeries.aeval (hasEval ha)
-
-中文:
-定义 aeval
-  签名: (ha : 有Eval a)
-  定义体: MvPowerSeries.aeval (hasEval ha)
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.aeval, hasEval
+--- 原说明 ---
+For `HasEval a`,
+the evaluation homomorphism at `a` on `PowerSeries`, as an `AlgHom`.
 -/
 noncomputable def aeval (ha : HasEval a) :
-    PowerSeries R ->ₐ[R] S :=
+    PowerSeries R →ₐ[R] S :=
   MvPowerSeries.aeval (hasEval ha)
-
-/--
-theorem `coe_aeval` / 定理 `coe_aeval`
-
-English:
-theorem coe_aeval
-  given: (ha : HasEval a)
-  proof: MvPowerSeries.coe_aeval (hasEval ha)
-
-中文:
-定理 coe_aeval
-  条件: (ha : 有Eval a)
-  证明: MvPowerSeries.coe_aeval (hasEval ha)
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.coe_aeval, coe_aeval, hasEval
+/-
+**PowerSeries.coe_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coe_aeval (ha : HasEval a) : ↑(aeval ha) = eval₂ (algebraMap R S) a
+参数：ha : HasEval a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.coe_aeval`：coe_aeval (ha : HasEval a) : ↑(aeval ha) = eval
+₂ (algebraMap R S) a
+· 使用定理 `PowerSeries.hasEval`：hasEval {a : S} (ha : HasEval a) : MvPowerSeries.Ha
+sEval (fun (_ : Unit) => a)
 -/
 theorem coe_aeval (ha : HasEval a) :
     ↑(aeval ha) = eval₂ (algebraMap R S) a :=
   MvPowerSeries.coe_aeval (hasEval ha)
-
-/--
-theorem `continuous_aeval` / 定理 `continuous_aeval`
-
-English:
-theorem continuous_aeval
-  given: (ha : HasEval a)
-  proof: MvPowerSeries.continuous_aeval (hasEval ha)
-
-@[simp]
-
-中文:
-定理 continuous_aeval
-  条件: (ha : 有Eval a)
-  证明: MvPowerSeries.continuous_aeval (hasEval ha)
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.continuous_aeval, continuous_aeval, hasEval
+/-
+**PowerSeries.continuous_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：continuous_aeval (ha : HasEval a) : Continuous (aeval ha : PowerSeries R -
+> S)
+参数：ha : HasEval a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.continuous_aeval`：continuous_aeval (ha : HasEval a) : Cont
+inuous (aeval ha : MvPowerSeries σ R -> S)
+· 使用定理 `PowerSeries.hasEval`：hasEval {a : S} (ha : HasEval a) : MvPowerSeries.Ha
+sEval (fun (_ : Unit) => a)
 -/
 theorem continuous_aeval (ha : HasEval a) :
-    Continuous (aeval ha : PowerSeries R -> S) :=
+    Continuous (aeval ha : PowerSeries R → S) :=
   MvPowerSeries.continuous_aeval (hasEval ha)
 
 @[simp]
-/--
-theorem `aeval_coe` / 定理 `aeval_coe`
-
-English:
-theorem aeval_coe
-  given: (ha : HasEval a) (p : Polynomial R)
-  proof: by
-  rw [coe_aeval]; rw [Polynomial.aeval_def]; rw [eval₂_coe]
-
-中文:
-定理 aeval_coe
-  条件: (ha : 有Eval a) (p : 多项式 R)
-  证明: by
-  rw [coe_aeval]; rw [Polynomial.aeval_def]; rw [eval₂_coe]
-
-Depends on / 依赖: Polynomial, Polynomial.aeval_def, aeval_def, coe_aeval
+/-
+**PowerSeries.aeval_coe** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：aeval_coe (ha : HasEval a) (p : Polynomial R) : aeval ha (p : PowerSeries 
+R) = Polynomial.aeval a p
+参数：ha : HasEval a；p : Polynomial R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coe_aeval`：coe_aeval (ha : HasEval a) : ↑(aeval ha) = eval₂ 
+(algebraMap R S) a
+· 使用定理 `Polynomial.aeval_def`：aeval_def (p : R[X]) : aeval x p = eval₂ (algebraM
+ap R A) x p
+· 使用定理 `PowerSeries.eval₂_coe`：eval₂_coe (f : Polynomial R) : eval₂ φ a f = f.ev
+al₂ φ a
 -/
 theorem aeval_coe (ha : HasEval a) (p : Polynomial R) :
     aeval ha (p : PowerSeries R) = Polynomial.aeval a p := by
-  rw [coe_aeval]; rw [Polynomial.aeval_def]; rw [eval₂_coe]
-
-/--
-theorem `aeval_unique` / 定理 `aeval_unique`
-
-English:
-theorem aeval_unique
-  given: {ε : PowerSeries R ->ₐ[R] S} (hε : Continuous ε)
-  proof: MvPowerSeries.aeval_unique hε
-
-中文:
-定理 aeval_unique
-  条件: {ε : 幂级数 R ->ₐ[R] S} (hε : 连续 ε)
-  证明: MvPowerSeries.aeval_unique hε
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.aeval_unique, aeval_unique
+  rw [coe_aeval, Polynomial.aeval_def, eval₂_coe]
+/-
+**PowerSeries.aeval_unique** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：aeval_unique {ε : PowerSeries R ->ₐ[R] S} (hε : Continuous ε) : aeval (Has
+Eval.X.map hε) = ε
+参数：hε : Continuous ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.aeval_unique`：aeval_unique {ε : MvPowerSeries σ R ->ₐ[R] S
+} (hε : Continuous ε) : aeval (HasEval.X.map hε) = ε
 -/
-theorem aeval_unique {ε : PowerSeries R ->ₐ[R] S} (hε : Continuous ε) :
+theorem aeval_unique {ε : PowerSeries R →ₐ[R] S} (hε : Continuous ε) :
     aeval (HasEval.X.map hε) = ε :=
   MvPowerSeries.aeval_unique hε
-
-/--
-theorem `hasSum_aeval` / 定理 `hasSum_aeval`
-
-English:
-theorem hasSum_aeval
-  given: (ha : HasEval a) (f : PowerSeries R)
-  proof: by
-  simp_rw [coe_aeval, ← algebraMap_smul (R := R) S, smul_eq_mul]
-  exact hasSum_eval₂ (continuous_algebraMap R S) ha f
-
-中文:
-定理 hasSum_aeval
-  条件: (ha : 有Eval a) (f : 幂级数 R)
-  证明: by
-  simp_rw [coe_aeval, ← algebraMap_smul (R := R) S, smul_eq_mul]
-  exact hasSum_eval₂ (continuous_algebraMap R S) ha f
-
-Depends on / 依赖: algebraMap_smul, coe_aeval, continuous_algebraMap, simp_rw, smul_eq_mul
+/-
+**PowerSeries.hasSum_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：hasSum_aeval (ha : HasEval a) (f : PowerSeries R) : HasSum (fun d => coeff
+ d f • a ^ d) (f.aeval ha)
+参数：ha : HasEval a；f : PowerSeries R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.coe_aeval`：coe_aeval (ha : HasEval a) : ↑(aeval ha) = eval₂ 
+(algebraMap R S) a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `algebraMap_smul`：algebraMap_smul (r : R) (m : M) : (algebraMap R A) r • 
+m = r • m
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `PowerSeries.hasSum_eval₂`：hasSum_eval₂ (hφ : Continuous φ) (ha : HasEval
+ a) (f : PowerSeries R) : HasSum (fun (d : Nat) => φ (coeff d f) * a ^ d) (f.eva
+l₂ φ a)
+· 使用定理 `continuous_algebraMap`：continuous_algebraMap [ContinuousSMul R A] : Cont
+inuous (algebraMap R A)
 -/
 theorem hasSum_aeval (ha : HasEval a) (f : PowerSeries R) :
-    HasSum (fun d => coeff d f • a ^ d) (f.aeval ha) := by
+    HasSum (fun d ↦ coeff d f • a ^ d) (f.aeval ha) := by
   simp_rw [coe_aeval, ← algebraMap_smul (R := R) S, smul_eq_mul]
   exact hasSum_eval₂ (continuous_algebraMap R S) ha f
-
-/--
-theorem `aeval_eq_sum` / 定理 `aeval_eq_sum`
-
-English:
-theorem aeval_eq_sum
-  given: (ha : HasEval a) (f : PowerSeries R)
-  proof: (hasSum_aeval ha f).tsum_eq.symm
-
-中文:
-定理 aeval_eq_sum
-  条件: (ha : 有Eval a) (f : 幂级数 R)
-  证明: (hasSum_aeval ha f).tsum_eq.symm
-
-Depends on / 依赖: hasSum_aeval, tsum_eq, tsum_eq.symm
+/-
+**PowerSeries.aeval_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：aeval_eq_sum (ha : HasEval a) (f : PowerSeries R) : aeval ha f = tsum fun 
+d => coeff d f • a ^ d
+参数：ha : HasEval a；f : PowerSeries R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HasSum.tsum_eq`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α} {a : α} [T2
+Spac…
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `PowerSeries.hasSum_aeval`：hasSum_aeval (ha : HasEval a) (f : PowerSeries
+ R) : HasSum (fun d => coeff d f • a ^ d) (f.aeval ha)
 -/
 theorem aeval_eq_sum (ha : HasEval a) (f : PowerSeries R) :
-    aeval ha f = tsum fun d => coeff d f • a ^ d :=
+    aeval ha f = tsum fun d ↦ coeff d f • a ^ d :=
   (hasSum_aeval ha f).tsum_eq.symm
-
-/--
-theorem `comp_aeval` / 定理 `comp_aeval`
-
-English:
-theorem comp_aeval
-  statement: (ha : HasEval a)
-  proof: MvPowerSeries.comp_aeval (hasEval ha) hε
-
-中文:
-定理 comp_aeval
-  结论: (ha : 有Eval a)
-  证明: MvPowerSeries.comp_aeval (hasEval ha) hε
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.comp_aeval, comp_aeval, hasEval
+/-
+**PowerSeries.comp_aeval** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：comp_aeval (ha : HasEval a) {T : Type*} [CommRing T] [UniformSpace T] [IsU
+niformAddGroup T] [IsTopologicalRing T] [IsLinearTopology T T] [T2Space T] [Alge
+bra R T] [ContinuousSMul R T] [CompleteSpace T] {ε : S ->ₐ[R] T} (hε : Continuou
+s ε) : ε.comp (aeval ha) = aeval (ha.map hε)
+参数：ha : HasEval a；hε : Continuous ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.comp_aeval`：comp_aeval (ha : HasEval a) {T : Type*} [CommR
+ing T] [UniformSpace T] [IsUniformAddGroup T] [IsTopologicalRing T] [IsLinearTop
+ology T T] [T2…
+· 使用定理 `PowerSeries.hasEval`：hasEval {a : S} (ha : HasEval a) : MvPowerSeries.Ha
+sEval (fun (_ : Unit) => a)
 -/
 theorem comp_aeval (ha : HasEval a)
     {T : Type*} [CommRing T] [UniformSpace T] [IsUniformAddGroup T]
     [IsTopologicalRing T] [IsLinearTopology T T]
     [T2Space T] [Algebra R T] [ContinuousSMul R T] [CompleteSpace T]
-    {ε : S ->ₐ[R] T} (hε : Continuous ε) :
+    {ε : S →ₐ[R] T} (hε : Continuous ε) :
     ε.comp (aeval ha) = aeval (ha.map hε) :=
   MvPowerSeries.comp_aeval (hasEval ha) hε
 
 end PowerSeries
+

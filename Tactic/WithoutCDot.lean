@@ -18,23 +18,12 @@ namespace Lean.Elab.Term
 
 open Parser
 
-/--
-Definition of `withoutCDotContents` / `withoutCDotContents` 的定义
-
-English:
-definition withoutCDotContents
-  signature: : Parser
-  body: withoutPosition
-    withoutForbidden (termParser >> optional (" :" >> optional (ppSpace >> termParser)))
-
-中文:
-定义 withoutCDotContents
-  签名: : Parser
-  定义体: withoutPosition
-    withoutForbidden (termParser >> optional (" :" >> optional (ppSpace >> termParser)))
+/-
+**Lean.Elab.Term.withoutCDotContents** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Term`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def withoutCDotContents : Parser :=
-withoutPosition
+  withoutPosition <|
     withoutForbidden (termParser >> optional (" :" >> optional (ppSpace >> termParser)))
 
 /-- A set of parentheses, supporting type ascriptions, which does not process `·`.
@@ -42,40 +31,30 @@ withoutPosition
 Primarily, this is useful when quoting user-provided syntax inside parentheses, as it prevents `·`s
 from the caller being interpreted in the context of `()`s from the macro. -/
 @[term_parser]
-/--
-Definition of `withoutCDot` / `withoutCDot` 的定义
+/-
+**Lean.Elab.Term.withoutCDot** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Term`。
+形式化陈述：withoutCDot
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withoutCDot
-  body: leading_parser
-  "without_cdot(" >> withoutCDotContents >> ")"
+--- 原说明 ---
+A set of parentheses, supporting type ascriptions, which does not process `·`.
 
-中文:
-定义 withoutCDot
-  定义体: leading_parser
-  "without_cdot(" >> withoutCDotContents >> ")"
-
-Depends on / 依赖: leading_parser
+Primarily, this is useful when quoting user-provided syntax inside parentheses, 
+as it prevents `·`s
+from the caller being interpreted in the context of `()`s from the macro.
 -/
 def withoutCDot := leading_parser
   "without_cdot(" >> withoutCDotContents >> ")"
 
 /-- Implementation detail of `withoutCDot` -/
 @[term_parser]
-/--
-Definition of `withoutCDotImpl` / `withoutCDotImpl` 的定义
+/-
+**Lean.Elab.Term.withoutCDotImpl** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Term`。
+形式化陈述：withoutCDotImpl
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withoutCDotImpl
-  body: leading_parser
-  "without_cdot_impl(" >> withoutCDotContents >> ")"
-
-中文:
-定义 withoutCDotImpl
-  定义体: leading_parser
-  "without_cdot_impl(" >> withoutCDotContents >> ")"
-
-Depends on / 依赖: leading_parser
+--- 原说明 ---
+Implementation detail of `withoutCDot`
 -/
 def withoutCDotImpl := leading_parser
   "without_cdot_impl(" >> withoutCDotContents >> ")"
@@ -87,30 +66,25 @@ macro_rules
   | `(without_cdot($e)) => `(without_cdot_impl($e))
 
 @[term_elab withoutCDotImpl, inherit_doc withoutCDot]
-/--
-Definition of `elabWithoutCDot` / `elabWithoutCDot` 的定义
-
-English:
-definition elabWithoutCDot
-  signature: : TermElab
-
-中文:
-定义 elabWithoutCDot
-  签名: : TermElab
-
-Depends on / 依赖: elabType
+/-
+**Lean.Elab.Term.elabWithoutCDot** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Term`。
+形式化陈述：elabWithoutCDot : TermElab -- copied from `elabTypeAscription` | `(without
+_cdot_impl($e : $type)), _ => do let type ← withSynthesize (postpone
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabWithoutCDot : TermElab
   -- copied from `elabTypeAscription`
   | `(without_cdot_impl($e : $type)), _ => do
-let type ← withSynthesize (postpone := .yes) elabType type
+    let type ← withSynthesize (postpone := .yes) <| elabType type
     let e ← elabTerm e type
     ensureHasType type e
   | `(without_cdot_impl($e :)), expectedType? => do
-let e ← withSynthesize (postpone := .no) elabTerm e none
+    let e ← withSynthesize (postpone := .no) <| elabTerm e none
     ensureHasType expectedType? e
   | `(without_cdot_impl($e)), expectedType? => do
     elabTerm e expectedType?
   | _, _ => throwUnsupportedSyntax
 
 end Lean.Elab.Term
+

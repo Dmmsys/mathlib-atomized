@@ -24,385 +24,260 @@ This file defines pairwise relations.
 
 open Function
 
-variable {α β ι : Type*} {r p : α -> α -> Prop}
+variable {α β ι : Type*} {r p : α → α → Prop}
 
 section Pairwise
 
-variable {f : ι -> α} {s : Set α} {a b : α}
+variable {f : ι → α} {s : Set α} {a b : α}
 
-/--
-Definition of `Pairwise` / `Pairwise` 的定义
+/-- A relation `r` holds pairwise if `r i j` for all `i ≠ j`. -/
+/-
+**Pairwise** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Pairwise (r : α -> α -> Prop)
+参数：r : α -> α -> Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pairwise
-  signature: (r : α -> α -> Prop)
-  body: forall ⦃i j⦄, i != j -> r i j
-
-中文:
-定义 两两
-  签名: (r : α -> α -> 命题)
-  定义体: forall ⦃i j⦄, i != j -> r i j
+--- 原说明 ---
+A relation `r` holds pairwise if `r i j` for all `i ≠ j`.
 -/
-def Pairwise (r : α -> α -> Prop) :=
-  forall ⦃i j⦄, i != j -> r i j
-
-/--
-theorem `Pairwise.mono` / 定理 `Pairwise.mono`
-
-English:
-theorem Pairwise.mono
-  given: (hr : Pairwise r) (h : forall ⦃i j⦄, r i j -> p i j)
-  statement: Pairwise p
-  proof: fun _i _j hij => h hr hij
-
-中文:
-定理 两两.mono
-  条件: (hr : 两两 r) (h : 对任意 ⦃i j⦄, r i j -> p i j)
-  结论: 两两 p
-  证明: fun _i _j hij => h hr hij
+def Pairwise (r : α → α → Prop) :=
+  ∀ ⦃i j⦄, i ≠ j → r i j
+/-
+**Pairwise.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Pairwise.mono (h : t subseteq s) (hs : s.Pairwise r) : t.Pairwise r
+参数：h : t subseteq s；hs : s.Pairwise r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Pairwise.mono (hr : Pairwise r) (h : forall ⦃i j⦄, r i j -> p i j) : Pairwise p :=
-fun _i _j hij => h hr hij
-
-/--
-theorem `Pairwise.eq` / 定理 `Pairwise.eq`
-
-English:
-theorem Pairwise.eq
-  given: (h : Pairwise r)
-  statement: ¬r a b -> a = b
-  proof: not_imp_comm.1 @h _ _
+theorem Pairwise.mono (hr : Pairwise r) (h : ∀ ⦃i j⦄, r i j → p i j) : Pairwise p :=
+  fun _i _j hij => h <| hr hij
+/-
+**Pairwise.eq** 是 Mathlib 中的一个定理，位于命名空间 `Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {a b : α}, Pairwise r → ¬r a b → a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_imp_comm`：not_imp_comm : ¬a -> b ↔ ¬b -> a
+-/
+protected theorem Pairwise.eq (h : Pairwise r) : ¬r a b → a = b :=
+  not_imp_comm.1 <| @h _ _
 
 @[simp]
-
-中文:
-定理 两两.eq
-  条件: (h : 两两 r)
-  结论: ¬r a b -> a = b
-  证明: not_imp_comm.1 @h _ _
-
-@[simp]
--/
-protected theorem Pairwise.eq (h : Pairwise r) : ¬r a b -> a = b :=
-not_imp_comm.1 @h _ _
-
-@[simp]
-/--
-lemma `Subsingleton.pairwise` / 引理 `Subsingleton.pairwise`
-
-English:
-lemma Subsingleton.pairwise
-  given: [Subsingleton α]
-  statement: Pairwise r
-  proof: fun _ _ h => False.elim h.elim Subsingleton.elim _ _
-
-中文:
-引理 子单例.pairwise
-  条件: [子单例 α]
-  结论: 两两 r
-  证明: fun _ _ h => False.elim h.elim Subsingleton.elim _ _
+/-
+**Subsingleton.pairwise** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [Subsingleton α], Pairwise r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 protected lemma Subsingleton.pairwise [Subsingleton α] : Pairwise r :=
-fun _ _ h => False.elim h.elim Subsingleton.elim _ _
-
-/--
-theorem `Function.injective_iff_pairwise_ne` / 定理 `Function.injective_iff_pairwise_ne`
-
-English:
-theorem Function.injective_iff_pairwise_ne
-  statement: Injective f ↔ Pairwise ((· != ·) on f)
-  proof: forall₂_congr fun _i _j => not_imp_not.symm
-
-alias ⟨Function.Injective.pairwise_ne, _⟩ := Function.injective_iff_pairwise_ne
-
-中文:
-定理 函数.injective_iff_pairwise_ne
-  结论: 单射 f ↔ 两两 ((· != ·) on f)
-  证明: forall₂_congr fun _i _j => not_imp_not.symm
-
-alias ⟨Function.Injective.pairwise_ne, _⟩ := Function.injective_iff_pairwise_ne
-
-Depends on / 依赖: not_imp_not, not_imp_not.symm
+  fun _ _ h ↦ False.elim <| h.elim <| Subsingleton.elim _ _
+/-
+**Function.injective_iff_pairwise_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.injective_iff_pairwise_ne : Injective f ↔ Pairwise ((· != ·) on f
+)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
 -/
-theorem Function.injective_iff_pairwise_ne : Injective f ↔ Pairwise ((· != ·) on f) :=
+theorem Function.injective_iff_pairwise_ne : Injective f ↔ Pairwise ((· ≠ ·) on f) :=
   forall₂_congr fun _i _j => not_imp_not.symm
 
 alias ⟨Function.Injective.pairwise_ne, _⟩ := Function.injective_iff_pairwise_ne
-
-/--
-lemma `Pairwise.comp_of_injective` / 引理 `Pairwise.comp_of_injective`
-
-English:
-lemma Pairwise.comp_of_injective
-  given: (hr : Pairwise r) {f : β -> α} (hf : Injective f)
-  proof: fun _ _ h => hr hf.ne h
-
-中文:
-引理 两两.comp_of_injective
-  条件: (hr : 两两 r) {f : β -> α} (hf : 单射 f)
-  证明: fun _ _ h => hr hf.ne h
-
-Depends on / 依赖: hf.ne
+/-
+**Pairwise.comp_of_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pairwise.comp_of_injective (hr : Pairwise r) {f : β -> α} (hf : Injective 
+f) : Pairwise (r on f)
+参数：hr : Pairwise r；hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
 -/
-lemma Pairwise.comp_of_injective (hr : Pairwise r) {f : β -> α} (hf : Injective f) :
+lemma Pairwise.comp_of_injective (hr : Pairwise r) {f : β → α} (hf : Injective f) :
     Pairwise (r on f) :=
-fun _ _ h => hr hf.ne h
-
-/--
-lemma `Pairwise.of_comp_of_surjective` / 引理 `Pairwise.of_comp_of_surjective`
-
-English:
-lemma Pairwise.of_comp_of_surjective
-  given: {f : β -> α} (hr : Pairwise (r on f)) (hf : Surjective f)
-  proof: hf.forall₂.2 fun _ _ h => hr ne_of_apply_ne f h
-
-中文:
-引理 两两.of_comp_of_surjective
-  条件: {f : β -> α} (hr : 两两 (r on f)) (hf : 满射 f)
-  证明: hf.forall₂.2 fun _ _ h => hr ne_of_apply_ne f h
-
-Depends on / 依赖: hf.forall, ne_of_apply_ne
+  fun _ _ h ↦ hr <| hf.ne h
+/-
+**Pairwise.of_comp_of_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pairwise.of_comp_of_surjective {f : β -> α} (hr : Pairwise (r on f)) (hf :
+ Surjective f) : Pairwise r
+参数：hr : Pairwise (r on f)；hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall₂`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}
+,   Function.Surjective f → ∀ {p : β → β → Prop}, (∀ (y₁ y₂ : β), p y₁ y₂) ↔ ∀ (
+x₁ x₂ : α), p (f …
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
 -/
-lemma Pairwise.of_comp_of_surjective {f : β -> α} (hr : Pairwise (r on f)) (hf : Surjective f) :
-Pairwise r := hf.forall₂.2 fun _ _ h => hr ne_of_apply_ne f h
-
-/--
-lemma `Function.Bijective.pairwise_comp_iff` / 引理 `Function.Bijective.pairwise_comp_iff`
-
-English:
-lemma Function.Bijective.pairwise_comp_iff
-  given: {f : β -> α} (hf : Bijective f)
-  proof: ⟨fun hr => hr.of_comp_of_surjective hf.surjective, fun hr => hr.comp_of_injective hf.injective⟩
-
-中文:
-引理 函数.双射.pairwise_comp_iff
-  条件: {f : β -> α} (hf : 双射 f)
-  证明: ⟨fun hr => hr.of_comp_of_surjective hf.surjective, fun hr => hr.comp_of_injective hf.injective⟩
-
-Depends on / 依赖: comp_of_injective, hf.injective, hf.surjective, hr.comp_of_injective, hr.of_comp_of_surjective, injective, of_comp_of_surjective, surjective
+lemma Pairwise.of_comp_of_surjective {f : β → α} (hr : Pairwise (r on f)) (hf : Surjective f) :
+    Pairwise r := hf.forall₂.2 fun _ _ h ↦ hr <| ne_of_apply_ne f h
+/-
+**Function.Bijective.pairwise_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Bijective.pairwise_comp_iff {f : β -> α} (hf : Bijective f) : Pai
+rwise (r on f) ↔ Pairwise r
+参数：hf : Bijective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Pairwise.of_comp_of_surjective`：Pairwise.of_comp_of_surjective {f : β ->
+ α} (hr : Pairwise (r on f)) (hf : Surjective f) : Pairwise r
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用引理 `Pairwise.comp_of_injective`：Pairwise.comp_of_injective (hr : Pairwise r)
+ {f : β -> α} (hf : Injective f) : Pairwise (r on f)
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
 -/
-lemma Function.Bijective.pairwise_comp_iff {f : β -> α} (hf : Bijective f) :
+lemma Function.Bijective.pairwise_comp_iff {f : β → α} (hf : Bijective f) :
     Pairwise (r on f) ↔ Pairwise r :=
-  ⟨fun hr => hr.of_comp_of_surjective hf.surjective, fun hr => hr.comp_of_injective hf.injective⟩
-
-/--
-theorem `pairwise_fin_succ_iff` / 定理 `pairwise_fin_succ_iff`
-
-English:
-theorem pairwise_fin_succ_iff
-  given: {n : Nat} {R : Fin n.succ -> Fin n.succ -> Prop}
-  proof: ⟨
-    fun _ => h (Fin.succ_ne_zero _), fun _ => h (Fin.succ_ne_zero _).symm,
-fun _i _j hij => h Fin.succ_inj.not.2 hij⟩
-  mpr
-  | ⟨hi, hj, h⟩ =>
-    Fin.cases
-      (Fin.cases nofun fun j _ => hj j)
-      (fun i => Fin.cases (fun _ => hi i) fun _j hij => h (ne_of_apply_ne _ hij))
-
-中文:
-定理 pairwise_fin_succ_iff
-  条件: {n : 自然数} {R : 有限集 n.succ -> 有限集 n.succ -> 命题}
-  证明: ⟨
-    fun _ => h (Fin.succ_ne_zero _), fun _ => h (Fin.succ_ne_zero _).symm,
-fun _i _j hij => h Fin.succ_inj.not.2 hij⟩
-  mpr
-  | ⟨hi, hj, h⟩ =>
-    Fin.cases
-      (Fin.cases nofun fun j _ => hj j)
-      (fun i => Fin.cases (fun _ => hi i) fun _j hij => h (ne_of_apply_ne _ hij))
+  ⟨fun hr ↦ hr.of_comp_of_surjective hf.surjective, fun hr ↦ hr.comp_of_injective hf.injective⟩
+/-
+**pairwise_fin_succ_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pairwise_fin_succ_iff {n : Nat} {R : Fin n.succ -> Fin n.succ -> Prop} : P
+airwise R ↔ (forall i, R (Fin.succ i) 0) ∧ (forall j, R 0 (Fin.succ j)) ∧ Pairwi
+se fun i j => R (Fin.succ i) (Fin.succ j) where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Fin.succ_ne_zero`：∀ {n : ℕ} (k : Fin n), k.succ ≠ 0
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Fin.succ_inj`：∀ {n : ℕ} {a b : Fin n}, a.succ = b.succ ↔ a = b
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
 -/
-theorem pairwise_fin_succ_iff {n : Nat} {R : Fin n.succ -> Fin n.succ -> Prop} :
+theorem pairwise_fin_succ_iff {n : ℕ} {R : Fin n.succ → Fin n.succ → Prop} :
     Pairwise R ↔
-      (forall i, R (Fin.succ i) 0) ∧ (forall j, R 0 (Fin.succ j)) ∧
+      (∀ i, R (Fin.succ i) 0) ∧ (∀ j, R 0 (Fin.succ j)) ∧
       Pairwise fun i j => R (Fin.succ i) (Fin.succ j) where
   mp h := ⟨
     fun _ => h (Fin.succ_ne_zero _), fun _ => h (Fin.succ_ne_zero _).symm,
-fun _i _j hij => h Fin.succ_inj.not.2 hij⟩
+    fun _i _j hij => h <| Fin.succ_inj.not.2 hij⟩
   mpr
   | ⟨hi, hj, h⟩ =>
     Fin.cases
       (Fin.cases nofun fun j _ => hj j)
       (fun i => Fin.cases (fun _ => hi i) fun _j hij => h (ne_of_apply_ne _ hij))
-
-/--
-theorem `pairwise_fin_succ_iff_of_isSymm` / 定理 `pairwise_fin_succ_iff_of_isSymm`
-
-English:
-theorem pairwise_fin_succ_iff_of_isSymm
-  given: {n : Nat} {R : Fin n.succ -> Fin n.succ -> Prop} [Std.Symm R]
-  proof: by
-  simp only [pairwise_fin_succ_iff, comm (b := 0) (r := R), and_self_left]
-
-中文:
-定理 pairwise_fin_succ_iff_of_isSymm
-  条件: {n : 自然数} {R : 有限集 n.succ -> 有限集 n.succ -> 命题} [Std.Symm R]
-  证明: by
-  simp only [pairwise_fin_succ_iff, comm (b := 0) (r := R), and_self_left]
-
-Depends on / 依赖: and_self_left, pairwise_fin_succ_iff
+/-
+**pairwise_fin_succ_iff_of_isSymm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pairwise_fin_succ_iff_of_isSymm {n : Nat} {R : Fin n.succ -> Fin n.succ ->
+ Prop} [Std.Symm R] : Pairwise R ↔ (forall j, R 0 (Fin.succ j)) ∧ Pairwise fun i
+ j => R (Fin.succ i) (Fin.succ j)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `comm`：comm [Std.Symm r] {a b : α} : r a b ↔ r b a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem pairwise_fin_succ_iff_of_isSymm {n : Nat} {R : Fin n.succ -> Fin n.succ -> Prop} [Std.Symm R] :
-    Pairwise R ↔ (forall j, R 0 (Fin.succ j)) ∧ Pairwise fun i j => R (Fin.succ i) (Fin.succ j) := by
+theorem pairwise_fin_succ_iff_of_isSymm {n : ℕ} {R : Fin n.succ → Fin n.succ → Prop} [Std.Symm R] :
+    Pairwise R ↔ (∀ j, R 0 (Fin.succ j)) ∧ Pairwise fun i j => R (Fin.succ i) (Fin.succ j) := by
   simp only [pairwise_fin_succ_iff, comm (b := 0) (r := R), and_self_left]
 
 namespace Set
 
-/--
-Definition of `Pairwise` / `Pairwise` 的定义
+/-- The relation `r` holds pairwise on the set `s` if `r x y` for all *distinct* `x y ∈ s`. -/
+/-
+**Set.Pairwise** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u_1} → Set α → (α → α → Prop) → Prop
+参数：α → α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pairwise
-  signature: (s : Set α) (r : α -> α -> Prop)
-  body: forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> x != y -> r x y
-
-中文:
-定义 两两
-  签名: (s : 集合 α) (r : α -> α -> 命题)
-  定义体: forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> x != y -> r x y
+--- 原说明 ---
+The relation `r` holds pairwise on the set `s` if `r x y` for all *distinct* `x 
+y ∈ s`.
 -/
-protected def Pairwise (s : Set α) (r : α -> α -> Prop) :=
-  forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> x != y -> r x y
-
-/--
-theorem `pairwise_of_forall` / 定理 `pairwise_of_forall`
-
-English:
-theorem pairwise_of_forall
-  given: (s : Set α) (r : α -> α -> Prop) (h : forall a b, r a b)
-  statement: s.Pairwise r
-  proof: fun a _ b _ _ => h a b
-
-中文:
-定理 pairwise_of_对任意
-  条件: (s : 集合 α) (r : α -> α -> 命题) (h : 对任意 a b, r a b)
-  结论: s.两两 r
-  证明: fun a _ b _ _ => h a b
+protected def Pairwise (s : Set α) (r : α → α → Prop) :=
+  ∀ ⦃x⦄, x ∈ s → ∀ ⦃y⦄, y ∈ s → x ≠ y → r x y
+/-
+**Set.pairwise_of_forall** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：pairwise_of_forall (s : Set α) (r : α -> α -> Prop) (h : forall a b, r a b
+) : s.Pairwise r
+参数：s : Set α；r : α -> α -> Prop；h : forall a b, r a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pairwise_of_forall (s : Set α) (r : α -> α -> Prop) (h : forall a b, r a b) : s.Pairwise r :=
+theorem pairwise_of_forall (s : Set α) (r : α → α → Prop) (h : ∀ a b, r a b) : s.Pairwise r :=
   fun a _ b _ _ => h a b
-
-/--
-theorem `Pairwise.imp_on` / 定理 `Pairwise.imp_on`
-
-English:
-theorem Pairwise.imp_on
-  given: (h : s.Pairwise r) (hrp : s.Pairwise fun ⦃a b : α⦄ => r a b -> p a b)
-  proof: fun _a ha _b hb hab => hrp ha hb hab h ha hb hab
-
-中文:
-定理 两两.imp_on
-  条件: (h : s.两两 r) (hrp : s.两两 fun ⦃a b : α⦄ => r a b -> p a b)
-  证明: fun _a ha _b hb hab => hrp ha hb hab h ha hb hab
+/-
+**Set.Pairwise.imp_on** 是 Mathlib 中的一个定理，位于命名空间 `Set.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r p : α → α → Prop} {s : Set α}, s.Pairwise r → (s.Pairw
+ise fun ⦃a b⦄ => r a b → p a b) → s.Pairwise p
+参数：s.Pairwise fun ⦃a b⦄ => r a b → p a b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Pairwise.imp_on (h : s.Pairwise r) (hrp : s.Pairwise fun ⦃a b : α⦄ => r a b -> p a b) :
+theorem Pairwise.imp_on (h : s.Pairwise r) (hrp : s.Pairwise fun ⦃a b : α⦄ => r a b → p a b) :
     s.Pairwise p :=
-fun _a ha _b hb hab => hrp ha hb hab h ha hb hab
-
-/--
-theorem `Pairwise.imp` / 定理 `Pairwise.imp`
-
-English:
-theorem Pairwise.imp
-  given: (h : s.Pairwise r) (hpq : forall ⦃a b : α⦄, r a b -> p a b)
-  statement: s.Pairwise p
-  proof: h.imp_on pairwise_of_forall s _ hpq
-
-中文:
-定理 两两.imp
-  条件: (h : s.两两 r) (hpq : 对任意 ⦃a b : α⦄, r a b -> p a b)
-  结论: s.两两 p
-  证明: h.imp_on pairwise_of_forall s _ hpq
-
-Depends on / 依赖: h.imp_on, imp_on, pairwise_of_forall
+  fun _a ha _b hb hab => hrp ha hb hab <| h ha hb hab
+/-
+**Set.Pairwise.imp** 是 Mathlib 中的一个定理，位于命名空间 `Set.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r p : α → α → Prop} {s : Set α}, s.Pairwise r → (∀ ⦃a b 
+: α⦄, r a b → p a b) → s.Pairwise p
+参数：∀ ⦃a b : α⦄, r a b → p a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.imp_on`：∀ {α : Type u_1} {r p : α → α → Prop} {s : Set α}, 
+s.Pairwise r → (s.Pairwise fun ⦃a b⦄ => r a b → p a b) → s.Pairwise p
+· 使用定理 `Set.pairwise_of_forall`：pairwise_of_forall (s : Set α) (r : α -> α -> Pr
+op) (h : forall a b, r a b) : s.Pairwise r
 -/
-theorem Pairwise.imp (h : s.Pairwise r) (hpq : forall ⦃a b : α⦄, r a b -> p a b) : s.Pairwise p :=
-h.imp_on pairwise_of_forall s _ hpq
-
-/--
-theorem `Pairwise.eq` / 定理 `Pairwise.eq`
-
-English:
-theorem Pairwise.eq
-  given: (hs : s.Pairwise r) (ha : a in s) (hb : b in s) (h : ¬r a b)
-  statement: a = b
-  proof: of_not_not fun hab => h hs ha hb hab
-
-中文:
-定理 两两.eq
-  条件: (hs : s.两两 r) (ha : a in s) (hb : b in s) (h : ¬r a b)
-  结论: a = b
-  证明: of_not_not fun hab => h hs ha hb hab
+theorem Pairwise.imp (h : s.Pairwise r) (hpq : ∀ ⦃a b : α⦄, r a b → p a b) : s.Pairwise p :=
+  h.imp_on <| pairwise_of_forall s _ hpq
+/-
+**Set.Pairwise.eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} {a b : α}, s.Pairwise r → 
+a ∈ s → b ∈ s → ¬r a b → a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_not_not`：of_not_not {a : Prop} : ¬¬a -> a
 -/
-protected theorem Pairwise.eq (hs : s.Pairwise r) (ha : a in s) (hb : b in s) (h : ¬r a b) : a = b :=
-of_not_not fun hab => h hs ha hb hab
-
-/--
-theorem `_root_.Std.Refl.set_pairwise_iff` / 定理 `_root_.Std.Refl.set_pairwise_iff`
-
-English:
-theorem _root_.Std.Refl.set_pairwise_iff
-  given: [Std.Refl r]
-  proof: forall₄_congr fun a _ _ _ => or_iff_not_imp_left.symm.trans or_iff_right_of_imp Eq.ndrec
-    refl a
-
-@[deprecated (since := "2026-03-27")]
-alias _root_.Reflexive.set_pairwise_iff := Std.Refl.set_pairwise_iff
-
-中文:
-定理 _root_.Std.Refl.set_pairwise_iff
-  条件: [Std.Refl r]
-  证明: forall₄_congr fun a _ _ _ => or_iff_not_imp_left.symm.trans or_iff_right_of_imp Eq.ndrec
-    refl a
-
-@[deprecated (since := "2026-03-27")]
-alias _root_.Reflexive.set_pairwise_iff := Std.Refl.set_pairwise_iff
-
-Depends on / 依赖: Eq.ndrec, or_iff_not_imp_left, or_iff_not_imp_left.symm.trans, or_iff_right_of_imp
+protected theorem Pairwise.eq (hs : s.Pairwise r) (ha : a ∈ s) (hb : b ∈ s) (h : ¬r a b) : a = b :=
+  of_not_not fun hab => h <| hs ha hb hab
+/-
+**Set._root_.Std.Refl.set_pairwise_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Std.Refl.set_pairwise_iff [Std.Refl r] :
-    s.Pairwise r ↔ forall ⦃a⦄, a in s -> forall ⦃b⦄, b in s -> r a b :=
-forall₄_congr fun a _ _ _ => or_iff_not_imp_left.symm.trans or_iff_right_of_imp Eq.ndrec
+    s.Pairwise r ↔ ∀ ⦃a⦄, a ∈ s → ∀ ⦃b⦄, b ∈ s → r a b :=
+  forall₄_congr fun a _ _ _ => or_iff_not_imp_left.symm.trans <| or_iff_right_of_imp <| Eq.ndrec <|
     refl a
 
 @[deprecated (since := "2026-03-27")]
 alias _root_.Reflexive.set_pairwise_iff := Std.Refl.set_pairwise_iff
-
-/--
-theorem `Pairwise.on_injective` / 定理 `Pairwise.on_injective`
-
-English:
-theorem Pairwise.on_injective
-  given: (hs : s.Pairwise r) (hf : Function.Injective f) (hfs : forall x, f x in s)
-  proof: fun i j hij => hs (hfs i) (hfs j) (hf.ne hij)
-
-中文:
-定理 两两.on_injective
-  条件: (hs : s.两两 r) (hf : 函数.单射 f) (hfs : 对任意 x, f x in s)
-  证明: fun i j hij => hs (hfs i) (hfs j) (hf.ne hij)
-
-Depends on / 依赖: hf.ne
+/-
+**Set.Pairwise.on_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_3} {r : α → α → Prop} {f : ι → α} {s : Set α}
+,   s.Pairwise r → Function.Injective f → (∀ (x : ι), f x ∈ s) → Pairwise (Funct
+ion.onFun r f)
+参数：∀ (x : ι), f x ∈ s；Function.onFun r f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
 -/
-theorem Pairwise.on_injective (hs : s.Pairwise r) (hf : Function.Injective f) (hfs : forall x, f x in s) :
+theorem Pairwise.on_injective (hs : s.Pairwise r) (hf : Function.Injective f) (hfs : ∀ x, f x ∈ s) :
     Pairwise (r on f) := fun i j hij => hs (hfs i) (hfs j) (hf.ne hij)
 
 end Set
 
-/--
-theorem `Pairwise.set_pairwise` / 定理 `Pairwise.set_pairwise`
-
-English:
-theorem Pairwise.set_pairwise
-  given: (h : Pairwise r) (s : Set α)
-  statement: s.Pairwise r
-  proof: fun _ _ _ _ w => h w
-
-中文:
-定理 两两.set_pairwise
-  条件: (h : 两两 r) (s : 集合 α)
-  结论: s.两两 r
-  证明: fun _ _ _ _ w => h w
+/-
+**Pairwise.set_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：Pairwise.set_pairwise (hl : Pairwise R l) [Std.Symm R] : { x | x in l }.Pa
+irwise R
+参数：hl : Pairwise R l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Pairwise.set_pairwise (h : Pairwise r) (s : Set α) : s.Pairwise r := fun _ _ _ _ w => h w
 
 end Pairwise
+

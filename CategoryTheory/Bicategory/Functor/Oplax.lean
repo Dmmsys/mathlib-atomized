@@ -42,36 +42,47 @@ section
 variable {B : Type u₁} [Bicategory.{w₁, v₁} B] {C : Type u₂} [Bicategory.{w₂, v₂} C]
 variable {D : Type u₃} [Bicategory.{w₃, v₃} D]
 
-/--
-Definition of `OplaxFunctor` / `OplaxFunctor` 的定义
+/-- An oplax functor `F` between bicategories `B` and `C` consists of a function between objects
+`F.obj`, a function between 1-morphisms `F.map`, and a function between 2-morphisms `F.map₂`.
 
-English:
-structure OplaxFunctor
-  parameters: (B : Type u₁) [Bicategory.{w₁, v₁} B] (C : Type u₂)
-  extends: PrelaxFunctor B C
-  axioms and operations (7):
-    - mapId((a : B)) : map (𝟙 a) ⟶ 𝟙 (obj a)
-    - mapComp({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : map (f ≫ g) ⟶ map f ≫ map g
-    - mapComp_naturality_left : forall {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c), map₂ (η ▷ g) ≫ mapComp f' g = mapComp f g ≫ map₂ η ▷ map g  [default: by cat_disch]
-    - mapComp_naturality_right : forall {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'), map₂ (f ◁ η) ≫ mapComp f g' = mapComp f g ≫ map f ◁ map₂ η  [default: by cat_disch]
-    - map₂_associator : forall {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d), map₂ (α_ f g h).hom ≫ mapComp f (g ≫ h) ≫ map f ◁ mapComp g h = mapComp (f ≫ g) h ≫ mapComp f g ▷ map h ≫ (α_ (map f) (map g) (map h)).hom  [default: by cat_disch]
-    - map₂_leftUnitor : forall {a b : B} (f : a ⟶ b), map₂ (fun_ f).hom = mapComp (𝟙 a) f ≫ mapId a ▷ map f ≫ (fun_ (map f)).hom  [default: by cat_disch]
-    - map₂_rightUnitor : forall {a b : B} (f : a ⟶ b), map₂ (ρ_ f).hom = mapComp f (𝟙 b) ≫ map f ◁ mapId b ≫ (ρ_ (map f)).hom  [default: by cat_disch]
+Unlike functors between categories, `F.map` does not need to strictly commute with composition,
+and does not need to strictly preserve the identity. Instead, there are specified 2-morphisms
+`F.map (𝟙 a) ⟶ 𝟙 (F.obj a)` and `F.map (f ≫ g) ⟶ F.map f ≫ F.map g`.
 
-中文:
-结构 Oplax函子
-  参数: (B : 类型u₁) [双范畴.{w₁, v₁} B] (C : 类型u₂)
-  继承: 预松弛函子 B C
-  公理与运算 (7 个):
-    - mapId((a : B)) : map (𝟙 a) ⟶ 𝟙 (obj a)
-    - mapComp({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : map (f ≫ g) ⟶ map f ≫ map g
-    - mapComp_naturality_left : 对任意 {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c), map₂ (η ▷ g) ≫ mapComp f' g = mapComp f g ≫ map₂ η ▷ map g  [默认: by cat_disch]
-    - mapComp_naturality_right : 对任意 {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'), map₂ (f ◁ η) ≫ mapComp f g' = mapComp f g ≫ map f ◁ map₂ η  [默认: by cat_disch]
-    - map₂_associator : 对任意 {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d), map₂ (α_ f g h).hom ≫ mapComp f (g ≫ h) ≫ map f ◁ mapComp g h = mapComp (f ≫ g) h ≫ mapComp f g ▷ map h ≫ (α_ (map f) (map g) (map h)).hom  [默认: by cat_disch]
-    - map₂_leftUnitor : 对任意 {a b : B} (f : a ⟶ b), map₂ (fun_ f).hom = mapComp (𝟙 a) f ≫ mapId a ▷ map f ≫ (fun_ (map f)).hom  [默认: by cat_disch]
-    - map₂_rightUnitor : 对任意 {a b : B} (f : a ⟶ b), map₂ (ρ_ f).hom = mapComp f (𝟙 b) ≫ map f ◁ mapId b ≫ (ρ_ (map f)).hom  [默认: by cat_disch]
+`F.map₂` strictly commutes with compositions and preserves the identity. It also preserves the
+associator, the left unitor, and the right unitor modulo some adjustments of domains and codomains
+of 2-morphisms.
+-/
+/-
+**CategoryTheory.OplaxFunctor** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：OplaxFunctor (B : Type u₁) [Bicategory.{w₁, v₁} B] (C : Type u₂) [Bicatego
+ry.{w₂, v₂} C] extends PrelaxFunctor B C where /-- The 2-morphism underlying the
+ oplax unity constraint. -/ mapId (a : B) : map (𝟙 a) ⟶ 𝟙 (obj a) /-- The 2-morp
+hism underlying the oplax functoriality constraint. -/ mapComp {a b c : B} (f : 
+a ⟶ b) (g : b ⟶ c) : map (f ≫ g) ⟶ map f ≫ map g /-- Naturality of the oplax fun
+ctoriality constraint, on the left. -/ mapComp_naturality_left : forall {a b c :
+ B} {f f' : a ⟶ b} (η : f 
+参数：B : Type u₁；C : Type u₂；a : B。
+继承自：PrelaxFunctor B C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+An oplax functor `F` between bicategories `B` and `C` consists of a function bet
+ween objects
+`F.obj`, a function between 1-morphisms `F.map`, and a function between 2-morphi
+sms `F.map₂`.
+
+Unlike functors between categories, `F.map` does not need to strictly commute wi
+th composition,
+and does not need to strictly preserve the identity. Instead, there are specifie
+d 2-morphisms
+`F.map (𝟙 a) ⟶ 𝟙 (F.obj a)` and `F.map (f ≫ g) ⟶ F.map f ≫ F.map g`.
+
+`F.map₂` strictly commutes with compositions and preserves the identity. It also
+ preserves the
+associator, the left unitor, and the right unitor modulo some adjustments of dom
+ains and codomains
+of 2-morphisms.
 -/
 structure OplaxFunctor (B : Type u₁) [Bicategory.{w₁, v₁} B] (C : Type u₂)
   [Bicategory.{w₂, v₂} C] extends PrelaxFunctor B C where
@@ -81,28 +92,28 @@ structure OplaxFunctor (B : Type u₁) [Bicategory.{w₁, v₁} B] (C : Type u�
   mapComp {a b c : B} (f : a ⟶ b) (g : b ⟶ c) : map (f ≫ g) ⟶ map f ≫ map g
   /-- Naturality of the oplax functoriality constraint, on the left. -/
   mapComp_naturality_left :
-    forall {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c),
+    ∀ {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c),
       map₂ (η ▷ g) ≫ mapComp f' g = mapComp f g ≫ map₂ η ▷ map g := by
     cat_disch
   /-- Naturality of the oplax functoriality constraint, on the right. -/
   mapComp_naturality_right :
-    forall {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'),
+    ∀ {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'),
       map₂ (f ◁ η) ≫ mapComp f g' = mapComp f g ≫ map f ◁ map₂ η := by
     cat_disch
   /-- Oplax associativity. -/
   map₂_associator :
-    forall {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d),
+    ∀ {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d),
       map₂ (α_ f g h).hom ≫ mapComp f (g ≫ h) ≫ map f ◁ mapComp g h =
       mapComp (f ≫ g) h ≫ mapComp f g ▷ map h ≫ (α_ (map f) (map g) (map h)).hom := by
     cat_disch
   /-- Oplax left unity. -/
   map₂_leftUnitor :
-    forall {a b : B} (f : a ⟶ b),
-      map₂ (fun_ f).hom = mapComp (𝟙 a) f ≫ mapId a ▷ map f ≫ (fun_ (map f)).hom := by
+    ∀ {a b : B} (f : a ⟶ b),
+      map₂ (λ_ f).hom = mapComp (𝟙 a) f ≫ mapId a ▷ map f ≫ (λ_ (map f)).hom := by
     cat_disch
   /-- Oplax right unity. -/
   map₂_rightUnitor :
-    forall {a b : B} (f : a ⟶ b),
+    ∀ {a b : B} (f : a ⟶ b),
       map₂ (ρ_ f).hom = mapComp f (𝟙 b) ≫ map f ◁ mapId b ≫ (ρ_ (map f)).hom := by
     cat_disch
 
@@ -129,55 +140,70 @@ add_decl_doc OplaxFunctor.toPrelaxFunctor
 variable (F : B ⥤ᵒᵖᴸ C)
 
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_assoc_right` / 引理 `mapComp_assoc_right`
-
-English:
-lemma mapComp_assoc_right
-  given: {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  proof: by
-  rw [← F.map₂_associator]; rw [← F.map₂_comp_assoc]
-  simp
-
-@[to_app (attr := reassoc)]
-
-中文:
-引理 mapComp_assoc_right
-  条件: {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  证明: by
-  rw [← F.map₂_associator]; rw [← F.map₂_comp_assoc]
-  simp
-
-@[to_app (attr := reassoc)]
-
-Depends on / 依赖: F.map
+/-
+**CategoryTheory.OplaxFunctor.mapComp_assoc_right** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.OplaxFunctor`。
+形式化陈述：mapComp_assoc_right {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : F.
+mapComp f (g ≫ h) ≫ F.map f ◁ F.mapComp g h = F.map₂ (α_ f g h).inv ≫ F.mapComp 
+(f ≫ g) h ≫ F.mapComp f g ▷ F.map h ≫ (α_ (F.map f) (F.map g) (F.map h)).hom
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.OplaxFunctor.map₂_associator`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]  
+ (self : CategoryTheory.OplaxFunc…
+· 使用定理 `CategoryTheory.PrelaxFunctor.map₂_comp_assoc`：∀ {B : Type u₁} [inst : Ca
+tegoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C] 
+  (self : CategoryTheory.PrelaxFun…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.PrelaxFunctor.map₂_id`：∀ {B : Type u₁} [inst : CategoryTh
+eory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]   (self 
+: CategoryTheory.PrelaxFun…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapComp_assoc_right {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
     F.mapComp f (g ≫ h) ≫ F.map f ◁ F.mapComp g h = F.map₂ (α_ f g h).inv ≫
     F.mapComp (f ≫ g) h ≫ F.mapComp f g ▷ F.map h ≫
     (α_ (F.map f) (F.map g) (F.map h)).hom := by
-  rw [← F.map₂_associator]; rw [← F.map₂_comp_assoc]
+  rw [← F.map₂_associator, ← F.map₂_comp_assoc]
   simp
 
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_assoc_left` / 引理 `mapComp_assoc_left`
-
-English:
-lemma mapComp_assoc_left
-  given: {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  proof: by
-  simp
-
-@[reassoc]
-
-中文:
-引理 mapComp_assoc_left
-  条件: {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  证明: by
-  simp
-
-@[reassoc]
+/-
+**CategoryTheory.OplaxFunctor.mapComp_assoc_left** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.OplaxFunctor`。
+形式化陈述：mapComp_assoc_left {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : F.m
+apComp (f ≫ g) h ≫ F.mapComp f g ▷ F.map h = F.map₂ (α_ f g h).hom ≫ F.mapComp f
+ (g ≫ h) ≫ F.map f ◁ F.mapComp g h ≫ (α_ (F.map f) (F.map g) (F.map h)).inv
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.OplaxFunctor.map₂_associator_assoc`：∀ {B : Type u₁} [inst
+ : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategor
+y C]   (self : CategoryTheory.OplaxFunc…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapComp_assoc_left {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
     F.mapComp (f ≫ g) h ≫ F.mapComp f g ▷ F.map h =
@@ -186,58 +212,56 @@ lemma mapComp_assoc_left {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
   simp
 
 @[reassoc]
-/--
-theorem `mapComp_id_left` / 定理 `mapComp_id_left`
-
-English:
-theorem mapComp_id_left
-  given: {a b : B} (f : a ⟶ b)
-  proof: by
-  rw [Iso.eq_comp_inv]
-  simp only [Category.assoc]
-  rw [← F.map₂_leftUnitor]
-
-@[reassoc]
-
-中文:
-定理 mapComp_id_left
-  条件: {a b : B} (f : a ⟶ b)
-  证明: by
-  rw [Iso.eq_comp_inv]
-  simp only [Category.assoc]
-  rw [← F.map₂_leftUnitor]
-
-@[reassoc]
-
-Depends on / 依赖: Category, Category.assoc, F.map, Iso.eq_comp_inv, eq_comp_inv
+/-
+**CategoryTheory.OplaxFunctor.mapComp_id_left** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.OplaxFunctor`。
+形式化陈述：mapComp_id_left {a b : B} (f : a ⟶ b) : F.mapComp (𝟙 a) f ≫ F.mapId a ▷ F.
+map f = F.map₂ (fun_ f).hom ≫ (fun_ (F.map f)).inv
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.OplaxFunctor.map₂_leftUnitor`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]  
+ (self : CategoryTheory.OplaxFunc…
 -/
 theorem mapComp_id_left {a b : B} (f : a ⟶ b) :
-    F.mapComp (𝟙 a) f ≫ F.mapId a ▷ F.map f = F.map₂ (fun_ f).hom ≫ (fun_ (F.map f)).inv := by
+    F.mapComp (𝟙 a) f ≫ F.mapId a ▷ F.map f = F.map₂ (λ_ f).hom ≫ (λ_ (F.map f)).inv := by
   rw [Iso.eq_comp_inv]
   simp only [Category.assoc]
   rw [← F.map₂_leftUnitor]
 
 @[reassoc]
-/--
-theorem `mapComp_id_right` / 定理 `mapComp_id_right`
-
-English:
-theorem mapComp_id_right
-  given: {a b : B} (f : a ⟶ b)
-  proof: by
-  rw [Iso.eq_comp_inv]
-  simp only [Category.assoc]
-  rw [← F.map₂_rightUnitor]
-
-中文:
-定理 mapComp_id_right
-  条件: {a b : B} (f : a ⟶ b)
-  证明: by
-  rw [Iso.eq_comp_inv]
-  simp only [Category.assoc]
-  rw [← F.map₂_rightUnitor]
-
-Depends on / 依赖: Category, Category.assoc, F.map, Iso.eq_comp_inv, eq_comp_inv
+/-
+**CategoryTheory.OplaxFunctor.mapComp_id_right** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.OplaxFunctor`。
+形式化陈述：mapComp_id_right {a b : B} (f : a ⟶ b) : F.mapComp f (𝟙 b) ≫ F.map f ◁ F.m
+apId b = F.map₂ (ρ_ f).hom ≫ (ρ_ (F.map f)).inv
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.OplaxFunctor.map₂_rightUnitor`：∀ {B : Type u₁} [inst : Ca
+tegoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C] 
+  (self : CategoryTheory.OplaxFunc…
 -/
 theorem mapComp_id_right {a b : B} (f : a ⟶ b) :
     F.mapComp f (𝟙 b) ≫ F.map f ◁ F.mapId b = F.map₂ (ρ_ f).hom ≫ (ρ_ (F.map f)).inv := by
@@ -249,118 +273,112 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The identity oplax functor. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.OplaxFunctor.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Oplax
+Functor`。
+形式化陈述：id (B : Type u₁) [Bicategory.{w₁, v₁} B] : B ⥤ᵒᵖᴸ B where toPrelaxFunctor
+参数：B : Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (B : Type u₁) [Bicategory.{w₁, v₁} B]
-  body: PrelaxFunctor.id B
-  mapId := fun a => 𝟙 (𝟙 a)
-  mapComp := fun f g => 𝟙 (f ≫ g)
-
-中文:
-定义 id
-  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B]
-  定义体: PrelaxFunctor.id B
-  mapId := fun a => 𝟙 (𝟙 a)
-  mapComp := fun f g => 𝟙 (f ≫ g)
-
-Depends on / 依赖: PrelaxFunctor, PrelaxFunctor.id
+--- 原说明 ---
+The identity oplax functor.
 -/
 def id (B : Type u₁) [Bicategory.{w₁, v₁} B] : B ⥤ᵒᵖᴸ B where
   toPrelaxFunctor := PrelaxFunctor.id B
   mapId := fun a => 𝟙 (𝟙 a)
   mapComp := fun f g => 𝟙 (f ≫ g)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (B ⥤ᵒᵖᴸ B)
-  body: ⟨id B⟩
-
-中文:
-实例 :
-  签名: 可居 (B ⥤ᵒᵖᴸ B)
-  定义体: ⟨id B⟩
+/-
+**CategoryTheory.OplaxFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.OplaxFu
+nctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (B ⥤ᵒᵖᴸ B) :=
   ⟨id B⟩
 
-/--
-Definition of `mapId'` / `mapId'` 的定义
+/-- More flexible variant of `mapId`. (See the file `Bicategory.Functor.Strict`
+for applications to strict bicategories.) -/
+/-
+**CategoryTheory.OplaxFunctor.mapId'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.O
+plaxFunctor`。
+形式化陈述：mapId' {b : B} (f : b ⟶ b) (hf : f = 𝟙 b
+参数：f : b ⟶ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapId'
-  signature: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  body: F.map₂ (eqToHom (by rw [hf])) ≫ F.mapId _
-
-中文:
-定义 mapId'
-  签名: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  定义体: F.map₂ (eqToHom (by rw [hf])) ≫ F.mapId _
-
-Depends on / 依赖: F.map, F.mapId, F.obj, cat_disch, eqToHom
+--- 原说明 ---
+More flexible variant of `mapId`. (See the file `Bicategory.Functor.Strict`
+for applications to strict bicategories.)
 -/
 def mapId' {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch) :
     F.map f ⟶ 𝟙 (F.obj b) :=
   F.map₂ (eqToHom (by rw [hf])) ≫ F.mapId _
-
-/--
-lemma `mapId'_eq_mapId` / 引理 `mapId'_eq_mapId`
-
-English:
-lemma mapId'_eq_mapId
-  given: (b : B)
-  proof: by
-  simp [mapId']
-
-中文:
-引理 mapId'_eq_mapId
-  条件: (b : B)
-  证明: by
-  simp [mapId']
+/-
+**CategoryTheory.OplaxFunctor.mapId'_eq_mapId** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.OplaxFunctor`。
+形式化陈述：∀ {B : Type u₁} [inst : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1
+ : CategoryTheory.Bicategory C]   (F : CategoryTheory.OplaxFunctor B C) (b : B),
+ F.mapId' (CategoryTheory.CategoryStruct.id b) ⋯ = F.mapId b
+参数：F : CategoryTheory.OplaxFunctor B C；b : B；CategoryTheory.CategoryStruct.id b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.PrelaxFunctor.map₂_id`：∀ {B : Type u₁} [inst : CategoryTh
+eory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]   (self 
+: CategoryTheory.PrelaxFun…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapId'_eq_mapId (b : B) :
     F.mapId' (𝟙 b) rfl = F.mapId b := by
   simp [mapId']
 
-/--
-Definition of `mapComp'` / `mapComp'` 的定义
+/-- More flexible variant of `mapComp`. (See `Bicategory.Functor.Strict`
+for applications to strict bicategories.) -/
+/-
+**CategoryTheory.OplaxFunctor.mapComp'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.OplaxFunctor`。
+形式化陈述：mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂) (h : f 
+≫ g = fg
+参数：f : b₀ ⟶ b₁；g : b₁ ⟶ b₂；fg : b₀ ⟶ b₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapComp'
-  signature: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  body: F.map₂ (eqToHom (by rw [h])) ≫ F.mapComp f g
-
-中文:
-定义 mapComp'
-  签名: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  定义体: F.map₂ (eqToHom (by rw [h])) ≫ F.mapComp f g
-
-Depends on / 依赖: F.map, F.mapComp, cat_disch, eqToHom, mapComp
+--- 原说明 ---
+More flexible variant of `mapComp`. (See `Bicategory.Functor.Strict`
+for applications to strict bicategories.)
 -/
 def mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
     (h : f ≫ g = fg := by cat_disch) :
     F.map fg ⟶ F.map f ≫ F.map g :=
   F.map₂ (eqToHom (by rw [h])) ≫ F.mapComp f g
-
-/--
-lemma `mapComp'_eq_mapComp` / 引理 `mapComp'_eq_mapComp`
-
-English:
-lemma mapComp'_eq_mapComp
-  given: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂)
-  proof: by
-  simp [mapComp']
-
-中文:
-引理 mapComp'_eq_mapComp
-  条件: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂)
-  证明: by
-  simp [mapComp']
+/-
+**CategoryTheory.OplaxFunctor.mapComp'_eq_mapComp** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.OplaxFunctor`。
+形式化陈述：∀ {B : Type u₁} [inst : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1
+ : CategoryTheory.Bicategory C]   (F : CategoryTheory.OplaxFunctor B C) {b₀ b₁ b
+₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂),   F.mapComp' f g (CategoryTheory.CategoryStr
+uct.comp f g) ⋯ = F.mapComp f g
+参数：F : CategoryTheory.OplaxFunctor B C；f : b₀ ⟶ b₁；g : b₁ ⟶ b₂；CategoryTheory.Ca
+tegoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.PrelaxFunctor.map₂_id`：∀ {B : Type u₁} [inst : CategoryTh
+eory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]   (self 
+: CategoryTheory.PrelaxFun…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapComp'_eq_mapComp {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) :
     F.mapComp' f g _ rfl = F.mapComp f g := by
@@ -368,67 +386,15 @@ lemma mapComp'_eq_mapComp {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
+/-- Composition of oplax functors. -/
 --@[simps]
-/--
-Definition of `comp` / `comp` 的定义
-
-English:
-definition comp
-  signature: (F : B ⥤ᵒᵖᴸ C) (G : C ⥤ᵒᵖᴸ D)
-  body: F.toPrelaxFunctor.comp G.toPrelaxFunctor
-  mapId := fun a => (G.mapFunctor _ _).map (F.mapId a) ≫ G.mapId (F.obj a)
-  mapComp := fun f g => (G.mapFunctor _ _).map (F.mapComp f g) ≫ G.mapComp (F.map f) (F.map g)
-  mapComp_naturality_left := fun η g => by
-    dsimp
-    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [assoc]
-  mapComp_naturality_right := fun η => by
-    dsimp
-    intros
-    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [assoc]
-  map₂_associator := fun f g h => by
-    dsimp
-    simp only [map₂_associator, ← PrelaxFunctor.map₂_comp_assoc, ← mapComp_naturality_right_assoc,
-      whiskerLeft_comp, assoc]
-    simp only [map₂_associator, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
-      comp_whiskerRight, assoc]
-  map₂_leftUnitor := fun f => by
-    dsimp
-    simp only [map₂_leftUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
-      comp_whiskerRight, assoc]
-  map₂_rightUnitor := fun f => by
-    dsimp
-    simp only [map₂_rightUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_right_assoc,
-      whiskerLeft_comp, assoc]
-
-中文:
-定义 comp
-  签名: (F : B ⥤ᵒᵖᴸ C) (G : C ⥤ᵒᵖᴸ D)
-  定义体: F.toPrelaxFunctor.comp G.toPrelaxFunctor
-  mapId := fun a => (G.mapFunctor _ _).map (F.mapId a) ≫ G.mapId (F.obj a)
-  mapComp := fun f g => (G.mapFunctor _ _).map (F.mapComp f g) ≫ G.mapComp (F.map f) (F.map g)
-  mapComp_naturality_left := fun η g => by
-    dsimp
-    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [assoc]
-  mapComp_naturality_right := fun η => by
-    dsimp
-    intros
-    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [assoc]
-  map₂_associator := fun f g h => by
-    dsimp
-    simp only [map₂_associator, ← PrelaxFunctor.map₂_comp_assoc, ← mapComp_naturality_right_assoc,
-      whiskerLeft_comp, assoc]
-    simp only [map₂_associator, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
-      comp_whiskerRight, assoc]
-  map₂_leftUnitor := fun f => by
-    dsimp
-    simp only [map₂_leftUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
-      comp_whiskerRight, assoc]
-  map₂_rightUnitor := fun f => by
-    dsimp
-    simp only [map₂_rightUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_right_assoc,
-      whiskerLeft_comp, assoc]
-
-Depends on / 依赖: F.toPrelaxFunctor.comp, G.toPrelaxFunctor, toPrelaxFunctor
+/-
+**CategoryTheory.OplaxFunctor.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Opl
+axFunctor`。
+形式化陈述：comp (F : B ⥤ᵒᵖᴸ C) (G : C ⥤ᵒᵖᴸ D) : B ⥤ᵒᵖᴸ D where toPrelaxFunctor
+参数：F : B ⥤ᵒᵖᴸ C；G : C ⥤ᵒᵖᴸ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def comp (F : B ⥤ᵒᵖᴸ C) (G : C ⥤ᵒᵖᴸ D) : B ⥤ᵒᵖᴸ D where
   toPrelaxFunctor := F.toPrelaxFunctor.comp G.toPrelaxFunctor
@@ -436,11 +402,13 @@ def comp (F : B ⥤ᵒᵖᴸ C) (G : C ⥤ᵒᵖᴸ D) : B ⥤ᵒᵖᴸ D where
   mapComp := fun f g => (G.mapFunctor _ _).map (F.mapComp f g) ≫ G.mapComp (F.map f) (F.map g)
   mapComp_naturality_left := fun η g => by
     dsimp
-    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [assoc]
+    rw [← G.map₂_comp_assoc, mapComp_naturality_left, G.map₂_comp_assoc, mapComp_naturality_left,
+      assoc]
   mapComp_naturality_right := fun η => by
     dsimp
     intros
-    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [assoc]
+    rw [← G.map₂_comp_assoc, mapComp_naturality_right, G.map₂_comp_assoc,
+      mapComp_naturality_right, assoc]
   map₂_associator := fun f g h => by
     dsimp
     simp only [map₂_associator, ← PrelaxFunctor.map₂_comp_assoc, ← mapComp_naturality_right_assoc,
@@ -456,28 +424,26 @@ def comp (F : B ⥤ᵒᵖᴸ C) (G : C ⥤ᵒᵖᴸ D) : B ⥤ᵒᵖᴸ D where
     simp only [map₂_rightUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_right_assoc,
       whiskerLeft_comp, assoc]
 
-/--
-Definition of `PseudoCore` / `PseudoCore` 的定义
+/-- A structure on an oplax functor that promotes an oplax functor to a pseudofunctor.
 
-English:
-structure PseudoCore
-  parameters: (F : B ⥤ᵒᵖᴸ C)
-  axioms and operations (4):
-    - mapIdIso((a : B)) : F.map (𝟙 a) ≅ 𝟙 (F.obj a)
-    - mapCompIso({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : F.map (f ≫ g) ≅ F.map f ≫ F.map g
-    - mapIdIso_hom : forall {a : B}, (mapIdIso a).hom = F.mapId a  [default: by cat_disch]
-    - mapCompIso_hom : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), (mapCompIso f g).hom = F.mapComp f g  [default: by cat_disch]
+See `Pseudofunctor.mkOfOplax`. -/
+/-
+**CategoryTheory.OplaxFunctor.PseudoCore** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheo
+ry.OplaxFunctor`。
+形式化陈述：PseudoCore (F : B ⥤ᵒᵖᴸ C) where /-- The isomorphism giving rise to the opl
+ax unity constraint -/ mapIdIso (a : B) : F.map (𝟙 a) ≅ 𝟙 (F.obj a) /-- The isom
+orphism giving rise to the oplax functoriality constraint -/ mapCompIso {a b c :
+ B} (f : a ⟶ b) (g : b ⟶ c) : F.map (f ≫ g) ≅ F.map f ≫ F.map g /-- `mapIdIso` g
+ives rise to the oplax unity constraint -/ mapIdIso_hom : forall {a : B}, (mapId
+Iso a).hom = F.mapId a
+参数：F : B ⥤ᵒᵖᴸ C；a : B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 PseudoCore
-  参数: (F : B ⥤ᵒᵖᴸ C)
-  公理与运算 (4 个):
-    - mapIdIso((a : B)) : F.map (𝟙 a) ≅ 𝟙 (F.obj a)
-    - mapCompIso({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : F.map (f ≫ g) ≅ F.map f ≫ F.map g
-    - mapIdIso_hom : 对任意 {a : B}, (mapIdIso a).hom = F.mapId a  [默认: by cat_disch]
-    - mapCompIso_hom : 对任意 {a b c : B} (f : a ⟶ b) (g : b ⟶ c), (mapCompIso f g).hom = F.mapComp f g  [默认: by cat_disch]
+--- 原说明 ---
+A structure on an oplax functor that promotes an oplax functor to a pseudofuncto
+r.
 
-Depends on / 依赖: cat_disch
+See `Pseudofunctor.mkOfOplax`.
 -/
 structure PseudoCore (F : B ⥤ᵒᵖᴸ C) where
   /-- The isomorphism giving rise to the oplax unity constraint -/
@@ -485,10 +451,10 @@ structure PseudoCore (F : B ⥤ᵒᵖᴸ C) where
   /-- The isomorphism giving rise to the oplax functoriality constraint -/
   mapCompIso {a b c : B} (f : a ⟶ b) (g : b ⟶ c) : F.map (f ≫ g) ≅ F.map f ≫ F.map g
   /-- `mapIdIso` gives rise to the oplax unity constraint -/
-  mapIdIso_hom : forall {a : B}, (mapIdIso a).hom = F.mapId a := by cat_disch
+  mapIdIso_hom : ∀ {a : B}, (mapIdIso a).hom = F.mapId a := by cat_disch
   /-- `mapCompIso` gives rise to the oplax functoriality constraint -/
   mapCompIso_hom :
-    forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), (mapCompIso f g).hom = F.mapComp f g := by cat_disch
+    ∀ {a b c : B} (f : a ⟶ b) (g : b ⟶ c), (mapCompIso f g).hom = F.mapComp f g := by cat_disch
 
 attribute [simp] PseudoCore.mapIdIso_hom PseudoCore.mapCompIso_hom
 
@@ -499,3 +465,4 @@ end OplaxFunctor
 end
 
 end CategoryTheory
+

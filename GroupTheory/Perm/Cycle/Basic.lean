@@ -47,539 +47,456 @@ namespace Equiv.Perm
 
 section SameCycle
 
-variable {f g : Perm α} {p : α -> Prop} {x y z : α}
+variable {f g : Perm α} {p : α → Prop} {x y z : α}
 
-/--
-Definition of `SameCycle` / `SameCycle` 的定义
+/-- The equivalence relation indicating that two points are in the same cycle of a permutation. -/
+/-
+**Equiv.Perm.SameCycle** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：SameCycle (f : Perm α) (x y : α) : Prop
+参数：f : Perm α；x y : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SameCycle
-  signature: (f : Perm α) (x y : α)
-  body: exists i : Int, (f ^ i) x = y
-
-@[refl]
-
-中文:
-定义 SameCycle
-  签名: (f : 置换 α) (x y : α)
-  定义体: exists i : Int, (f ^ i) x = y
-
-@[refl]
+--- 原说明 ---
+The equivalence relation indicating that two points are in the same cycle of a p
+ermutation.
 -/
 def SameCycle (f : Perm α) (x y : α) : Prop :=
-  exists i : Int, (f ^ i) x = y
+  ∃ i : ℤ, (f ^ i) x = y
 
 @[refl]
-/--
-theorem `SameCycle.refl` / 定理 `SameCycle.refl`
-
-English:
-theorem SameCycle.refl
-  given: (f : Perm α) (x : α)
-  statement: SameCycle f x x
-  proof: ⟨0, rfl⟩
-
-中文:
-定理 SameCycle.refl
-  条件: (f : 置换 α) (x : α)
-  结论: SameCycle f x x
-  证明: ⟨0, rfl⟩
+/-
+**Equiv.Perm.SameCycle.refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：∀ {α : Type u_2} (f : Equiv.Perm α) (x : α), f.SameCycle x x
+参数：f : Equiv.Perm α；x : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem SameCycle.refl (f : Perm α) (x : α) : SameCycle f x x :=
   ⟨0, rfl⟩
-
-/--
-theorem `SameCycle.rfl` / 定理 `SameCycle.rfl`
-
-English:
-theorem SameCycle.rfl
-  statement: SameCycle f x x
-  proof: SameCycle.refl _ _
-
-中文:
-定理 SameCycle.rfl
-  结论: SameCycle f x x
-  证明: SameCycle.refl _ _
-
-Depends on / 依赖: SameCycle, SameCycle.refl
+/-
+**Equiv.Perm.SameCycle.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x : α}, f.SameCycle x x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.refl`：∀ {α : Type u_2} (f : Equiv.Perm α) (x : α), 
+f.SameCycle x x
 -/
 theorem SameCycle.rfl : SameCycle f x x :=
   SameCycle.refl _ _
-
-/--
-theorem `_root_.Eq.sameCycle` / 定理 `_root_.Eq.sameCycle`
-
-English:
-theorem _root_.Eq.sameCycle
-  given: (h : x = y) (f : Perm α)
-  statement: f.SameCycle x y
-  proof: by rw [h]
-
-@[symm]
-
-中文:
-定理 _root_.相等.sameCycle
-  条件: (h : x = y) (f : 置换 α)
-  结论: f.SameCycle x y
-  证明: by rw [h]
-
-@[symm]
+/-
+**Equiv.Perm._root_.Eq.sameCycle** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem _root_.Eq.sameCycle (h : x = y) (f : Perm α) : f.SameCycle x y := by rw [h]
 
 @[symm]
-/--
-theorem `SameCycle.symm` / 定理 `SameCycle.symm`
-
-English:
-theorem SameCycle.symm
-  statement: SameCycle f x y -> SameCycle f y x
-  proof: fun ⟨i, hi⟩ =>
-  ⟨-i, by simp [zpow_neg, ← hi]⟩
-
-中文:
-定理 SameCycle.symm
-  结论: SameCycle f x y -> SameCycle f y x
-  证明: fun ⟨i, hi⟩ =>
-  ⟨-i, by simp [zpow_neg, ← hi]⟩
+/-
+**Equiv.Perm.SameCycle.symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}, f.SameCycle x y → f.SameCyc
+le y x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem SameCycle.symm : SameCycle f x y -> SameCycle f y x := fun ⟨i, hi⟩ =>
+theorem SameCycle.symm : SameCycle f x y → SameCycle f y x := fun ⟨i, hi⟩ =>
   ⟨-i, by simp [zpow_neg, ← hi]⟩
-
-/--
-theorem `sameCycle_comm` / 定理 `sameCycle_comm`
-
-English:
-theorem sameCycle_comm
-  statement: SameCycle f x y ↔ SameCycle f y x
-  proof: ⟨SameCycle.symm, SameCycle.symm⟩
-
-@[trans]
-
-中文:
-定理 sameCycle_comm
-  结论: SameCycle f x y ↔ SameCycle f y x
-  证明: ⟨SameCycle.symm, SameCycle.symm⟩
-
-@[trans]
-
-Depends on / 依赖: SameCycle, SameCycle.symm
+/-
+**Equiv.Perm.sameCycle_comm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_comm : SameCycle f x y ↔ SameCycle f y x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.symm`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}
+, f.SameCycle x y → f.SameCycle y x
 -/
 theorem sameCycle_comm : SameCycle f x y ↔ SameCycle f y x :=
   ⟨SameCycle.symm, SameCycle.symm⟩
 
 @[trans]
-/--
-theorem `SameCycle.trans` / 定理 `SameCycle.trans`
-
-English:
-theorem SameCycle.trans
-  statement: SameCycle f x y -> SameCycle f y z -> SameCycle f x z
-  proof: fun ⟨i, hi⟩ ⟨j, hj⟩ => ⟨j + i, by rw [zpow_add, mul_apply, hi, hj]⟩
-
-中文:
-定理 SameCycle.trans
-  结论: SameCycle f x y -> SameCycle f y z -> SameCycle f x z
-  证明: fun ⟨i, hi⟩ ⟨j, hj⟩ => ⟨j + i, by rw [zpow_add, mul_apply, hi, hj]⟩
-
-Depends on / 依赖: mul_apply, zpow_add
+/-
+**Equiv.Perm.SameCycle.trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y z : α}, f.SameCycle x y → f.SameC
+ycle y z → f.SameCycle x z
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `Equiv.Perm.mul_apply`：mul_apply (f g : Perm α) (x) : (f * g) x = f (g x)
 -/
-theorem SameCycle.trans : SameCycle f x y -> SameCycle f y z -> SameCycle f x z :=
+theorem SameCycle.trans : SameCycle f x y → SameCycle f y z → SameCycle f x z :=
   fun ⟨i, hi⟩ ⟨j, hj⟩ => ⟨j + i, by rw [zpow_add, mul_apply, hi, hj]⟩
 
 variable (f) in
-/--
-theorem `SameCycle.equivalence` / 定理 `SameCycle.equivalence`
-
-English:
-theorem SameCycle.equivalence
-  statement: Equivalence (SameCycle f)
-  proof: ⟨SameCycle.refl f, SameCycle.symm, SameCycle.trans⟩
-
-中文:
-定理 SameCycle.equivalence
-  结论: 等价 (SameCycle f)
-  证明: ⟨SameCycle.refl f, SameCycle.symm, SameCycle.trans⟩
-
-Depends on / 依赖: SameCycle, SameCycle.refl, SameCycle.symm, SameCycle.trans
+/-
+**Equiv.Perm.SameCycle.equivalence** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCyc
+le`。
+形式化陈述：∀ {α : Type u_2} (f : Equiv.Perm α), Equivalence f.SameCycle
+参数：f : Equiv.Perm α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.refl`：∀ {α : Type u_2} (f : Equiv.Perm α) (x : α), 
+f.SameCycle x x
+· 使用定理 `Equiv.Perm.SameCycle.symm`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}
+, f.SameCycle x y → f.SameCycle y x
+· 使用定理 `Equiv.Perm.SameCycle.trans`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y z :
+ α}, f.SameCycle x y → f.SameCycle y z → f.SameCycle x z
 -/
 theorem SameCycle.equivalence : Equivalence (SameCycle f) :=
   ⟨SameCycle.refl f, SameCycle.symm, SameCycle.trans⟩
 
 /-- The setoid defined by the `SameCycle` relation. -/
 @[instance_reducible]
-/--
-Definition of `SameCycle.setoid` / `SameCycle.setoid` 的定义
+/-
+**Equiv.Perm.SameCycle.setoid** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：{α : Type u_2} → Equiv.Perm α → Setoid α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.equivalence`：∀ {α : Type u_2} (f : Equiv.Perm α), E
+quivalence f.SameCycle
 
-English:
-definition SameCycle.setoid
-  signature: (f : Perm α)
-  body: f.SameCycle
-  iseqv := SameCycle.equivalence f
-
-@[simp]
-
-中文:
-定义 SameCycle.setoid
-  签名: (f : 置换 α)
-  定义体: f.SameCycle
-  iseqv := SameCycle.equivalence f
-
-@[simp]
-
-Depends on / 依赖: SameCycle, f.SameCycle
+--- 原说明 ---
+The setoid defined by the `SameCycle` relation.
 -/
 def SameCycle.setoid (f : Perm α) : Setoid α where
   r := f.SameCycle
   iseqv := SameCycle.equivalence f
 
 @[simp]
-/--
-theorem `sameCycle_one` / 定理 `sameCycle_one`
-
-English:
-theorem sameCycle_one
-  statement: SameCycle 1 x y ↔ x = y
-  proof: by simp [SameCycle]
-
-@[simp]
-
-中文:
-定理 sameCycle_one
-  结论: SameCycle 1 x y ↔ x = y
-  证明: by simp [SameCycle]
-
-@[simp]
-
-Depends on / 依赖: SameCycle
+/-
+**Equiv.Perm.sameCycle_one** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_one : SameCycle 1 x y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `one_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (n : ℤ), 1 ^ n = 1
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sameCycle_one : SameCycle 1 x y ↔ x = y := by simp [SameCycle]
 
 @[simp]
-/--
-theorem `sameCycle_inv` / 定理 `sameCycle_inv`
-
-English:
-theorem sameCycle_inv
-  statement: SameCycle f⁻¹ x y ↔ SameCycle f x y
-  proof: (Equiv.neg _).exists_congr_left.trans by simp [SameCycle]
-
-alias ⟨SameCycle.of_inv, SameCycle.inv⟩ := sameCycle_inv
-
-@[simp]
-
-中文:
-定理 sameCycle_inv
-  结论: SameCycle f⁻¹ x y ↔ SameCycle f x y
-  证明: (Equiv.neg _).exists_congr_left.trans by simp [SameCycle]
-
-alias ⟨SameCycle.of_inv, SameCycle.inv⟩ := sameCycle_inv
-
-@[simp]
-
-Depends on / 依赖: Equiv.neg, SameCycle, exists_congr_left, exists_congr_left.trans
+/-
+**Equiv.Perm.sameCycle_inv** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_inv : SameCycle f⁻¹ x y ↔ SameCycle f x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.neg_apply`：∀ (G : Type u_14) [inst : InvolutiveNeg G], ⇑(Equiv.neg
+ G) = Neg.neg
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用引理 `inv_zpow'`：inv_zpow' (a : α) (n : Int) : a⁻¹ ^ n = a ^ (-n)
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sameCycle_inv : SameCycle f⁻¹ x y ↔ SameCycle f x y :=
-(Equiv.neg _).exists_congr_left.trans by simp [SameCycle]
+  (Equiv.neg _).exists_congr_left.trans <| by simp [SameCycle]
 
 alias ⟨SameCycle.of_inv, SameCycle.inv⟩ := sameCycle_inv
 
 @[simp]
-/--
-theorem `sameCycle_conj` / 定理 `sameCycle_conj`
-
-English:
-theorem sameCycle_conj
-  statement: SameCycle (g * f * g⁻¹) x y ↔ SameCycle f (g⁻¹ x) (g⁻¹ y)
-  proof: exists_congr fun i => by simp [conj_zpow, eq_symm_apply]
-
-中文:
-定理 sameCycle_conj
-  结论: SameCycle (g * f * g⁻¹) x y ↔ SameCycle f (g⁻¹ x) (g⁻¹ y)
-  证明: exists_congr fun i => by simp [conj_zpow, eq_symm_apply]
-
-Depends on / 依赖: conj_zpow, eq_symm_apply, exists_congr
+/-
+**Equiv.Perm.sameCycle_conj** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_conj : SameCycle (g * f * g⁻¹) x y ↔ SameCycle f (g⁻¹ x) (g⁻¹ y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `conj_zpow`：conj_zpow {i : Int} {a b : α} : (a * b * a⁻¹) ^ i = a * b ^ i
+ * a⁻¹
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sameCycle_conj : SameCycle (g * f * g⁻¹) x y ↔ SameCycle f (g⁻¹ x) (g⁻¹ y) :=
   exists_congr fun i => by simp [conj_zpow, eq_symm_apply]
-
-/--
-theorem `SameCycle.conj` / 定理 `SameCycle.conj`
-
-English:
-theorem SameCycle.conj
-  statement: SameCycle f x y -> SameCycle (g * f * g⁻¹) (g x) (g y)
-  proof: by
-  simp [sameCycle_conj]
-
-中文:
-定理 SameCycle.conj
-  结论: SameCycle f x y -> SameCycle (g * f * g⁻¹) (g x) (g y)
-  证明: by
-  simp [sameCycle_conj]
-
-Depends on / 依赖: sameCycle_conj
+/-
+**Equiv.Perm.SameCycle.conj** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：∀ {α : Type u_2} {f g : Equiv.Perm α} {x y : α}, f.SameCycle x y → (g * f 
+* g⁻¹).SameCycle (g x) (g y)
+参数：g * f * g⁻¹；g x；g y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-theorem SameCycle.conj : SameCycle f x y -> SameCycle (g * f * g⁻¹) (g x) (g y) := by
+theorem SameCycle.conj : SameCycle f x y → SameCycle (g * f * g⁻¹) (g x) (g y) := by
   simp [sameCycle_conj]
-
-/--
-theorem `SameCycle.apply_eq_self_iff` / 定理 `SameCycle.apply_eq_self_iff`
-
-English:
-theorem SameCycle.apply_eq_self_iff
-  statement: SameCycle f x y -> (f x = x ↔ f y = y)
-  proof: fun ⟨i, hi⟩ => by
-  rw [← hi]; rw [← mul_apply]; rw [← zpow_one_add]; rw [add_comm]; rw [zpow_add_one]; rw [mul_apply]; rw [(f ^ i).injective.eq_iff]
-
-中文:
-定理 SameCycle.apply_eq_self_iff
-  结论: SameCycle f x y -> (f x = x ↔ f y = y)
-  证明: fun ⟨i, hi⟩ => by
-  rw [← hi]; rw [← mul_apply]; rw [← zpow_one_add]; rw [add_comm]; rw [zpow_add_one]; rw [mul_apply]; rw [(f ^ i).injective.eq_iff]
-
-Depends on / 依赖: add_comm, eq_iff, injective, injective.eq_iff, mul_apply, zpow_add_one, zpow_one_add
+/-
+**Equiv.Perm.SameCycle.apply_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.S
+ameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}, f.SameCycle x y → (f x = x 
+↔ f y = y)
+参数：f x = x ↔ f y = y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.mul_apply`：mul_apply (f g : Perm α) (x) : (f * g) x = f (g x)
+· 使用引理 `zpow_one_add`：zpow_one_add (a : G) (n : Int) : a ^ (1 + n) = a * a ^ n
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `zpow_add_one`：∀ {G : Type u_3} [inst : Group G] (a : G) (n : ℤ), a ^ (n 
++ 1) = a ^ n * a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem SameCycle.apply_eq_self_iff : SameCycle f x y -> (f x = x ↔ f y = y) := fun ⟨i, hi⟩ => by
-  rw [← hi]; rw [← mul_apply]; rw [← zpow_one_add]; rw [add_comm]; rw [zpow_add_one]; rw [mul_apply]; rw [(f ^ i).injective.eq_iff]
-
-/--
-theorem `SameCycle.eq_of_left` / 定理 `SameCycle.eq_of_left`
-
-English:
-theorem SameCycle.eq_of_left
-  given: (h : SameCycle f x y) (hx : IsFixedPt f x)
-  statement: x = y
-  proof: let ⟨_, hn⟩ := h
-  (hx.perm_zpow _).eq.symm.trans hn
-
-中文:
-定理 SameCycle.eq_of_left
-  条件: (h : SameCycle f x y) (hx : IsFixedPt f x)
-  结论: x = y
-  证明: let ⟨_, hn⟩ := h
-  (hx.perm_zpow _).eq.symm.trans hn
-
-Depends on / 依赖: eq.symm.trans, hx.perm_zpow, perm_zpow
+theorem SameCycle.apply_eq_self_iff : SameCycle f x y → (f x = x ↔ f y = y) := fun ⟨i, hi⟩ => by
+  rw [← hi, ← mul_apply, ← zpow_one_add, add_comm, zpow_add_one, mul_apply,
+    (f ^ i).injective.eq_iff]
+/-
+**Equiv.Perm.SameCycle.eq_of_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycl
+e`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}, f.SameCycle x y → Function.
+IsFixedPt (⇑f) x → x = y
+参数：⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.IsFixedPt.eq`：∀ {α : Type u₁} {f : α → α} {x : α}, Function.IsF
+ixedPt f x → f x = x
+· 使用定理 `Function.IsFixedPt.perm_zpow`：∀ {α : Type u_1} {x : α} {e : Equiv.Perm α
+}, Function.IsFixedPt (⇑e) x → ∀ (n : ℤ), Function.IsFixedPt (⇑(e ^ n)) x
 -/
 theorem SameCycle.eq_of_left (h : SameCycle f x y) (hx : IsFixedPt f x) : x = y :=
   let ⟨_, hn⟩ := h
   (hx.perm_zpow _).eq.symm.trans hn
-
-/--
-theorem `SameCycle.eq_of_right` / 定理 `SameCycle.eq_of_right`
-
-English:
-theorem SameCycle.eq_of_right
-  given: (h : SameCycle f x y) (hy : IsFixedPt f y)
-  statement: x = y
-  proof: h.eq_of_left h.apply_eq_self_iff.2 hy
-
-@[simp]
-
-中文:
-定理 SameCycle.eq_of_right
-  条件: (h : SameCycle f x y) (hy : IsFixedPt f y)
-  结论: x = y
-  证明: h.eq_of_left h.apply_eq_self_iff.2 hy
-
-@[simp]
-
-Depends on / 依赖: apply_eq_self_iff, eq_of_left, h.apply_eq_self_iff, h.eq_of_left
+/-
+**Equiv.Perm.SameCycle.eq_of_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCyc
+le`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}, f.SameCycle x y → Function.
+IsFixedPt (⇑f) y → x = y
+参数：⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.eq_of_left`：∀ {α : Type u_2} {f : Equiv.Perm α} {x 
+y : α}, f.SameCycle x y → Function.IsFixedPt (⇑f) x → x = y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.SameCycle.apply_eq_self_iff`：∀ {α : Type u_2} {f : Equiv.Perm
+ α} {x y : α}, f.SameCycle x y → (f x = x ↔ f y = y)
 -/
 theorem SameCycle.eq_of_right (h : SameCycle f x y) (hy : IsFixedPt f y) : x = y :=
-h.eq_of_left h.apply_eq_self_iff.2 hy
+  h.eq_of_left <| h.apply_eq_self_iff.2 hy
 
 @[simp]
-/--
-theorem `sameCycle_apply_left` / 定理 `sameCycle_apply_left`
-
-English:
-theorem sameCycle_apply_left
-  statement: SameCycle f (f x) y ↔ SameCycle f x y
-  proof: (Equiv.addRight 1).exists_congr_left.trans by
-    simp [zpow_sub, SameCycle, Int.add_neg_one, Function.comp]
-
-@[simp]
-
-中文:
-定理 sameCycle_apply_left
-  结论: SameCycle f (f x) y ↔ SameCycle f x y
-  证明: (Equiv.addRight 1).exists_congr_left.trans by
-    simp [zpow_sub, SameCycle, Int.add_neg_one, Function.comp]
-
-@[simp]
-
-Depends on / 依赖: Equiv.addRight, Function, Function.comp, Int.add_neg_one, SameCycle, addRight, add_neg_one, exists_congr_left, exists_congr_left.trans, zpow_sub
+/-
+**Equiv.Perm.sameCycle_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_apply_left : SameCycle f (f x) y ↔ SameCycle f x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.addRight_symm`：∀ {G : Type u_5} [inst : AddGroup G] (a : G), Equiv
+.symm (Equiv.addRight a) = Equiv.addRight (-a)
+· 使用定理 `zpow_sub`：∀ {G : Type u_3} [inst : Group G] (a : G) (m n : ℤ), a ^ (m - 
+n) = a ^ m * (a ^ n)⁻¹
+· 使用引理 `zpow_ofNat`：zpow_ofNat (a : G) (n : Nat) : a ^ (ofNat(n) : Int) = a ^ Of
+Nat.ofNat n
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sameCycle_apply_left : SameCycle f (f x) y ↔ SameCycle f x y :=
-(Equiv.addRight 1).exists_congr_left.trans by
+  (Equiv.addRight 1).exists_congr_left.trans <| by
     simp [zpow_sub, SameCycle, Int.add_neg_one, Function.comp]
 
 @[simp]
-/--
-theorem `sameCycle_apply_right` / 定理 `sameCycle_apply_right`
-
-English:
-theorem sameCycle_apply_right
-  statement: SameCycle f x (f y) ↔ SameCycle f x y
-  proof: by
-  rw [sameCycle_comm]; rw [sameCycle_apply_left]; rw [sameCycle_comm]
-
-@[simp]
-
-中文:
-定理 sameCycle_apply_right
-  结论: SameCycle f x (f y) ↔ SameCycle f x y
-  证明: by
-  rw [sameCycle_comm]; rw [sameCycle_apply_left]; rw [sameCycle_comm]
-
-@[simp]
-
-Depends on / 依赖: sameCycle_apply_left, sameCycle_comm
+/-
+**Equiv.Perm.sameCycle_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_apply_right : SameCycle f x (f y) ↔ SameCycle f x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.sameCycle_comm`：sameCycle_comm : SameCycle f x y ↔ SameCycle 
+f y x
+· 使用定理 `Equiv.Perm.sameCycle_apply_left`：sameCycle_apply_left : SameCycle f (f x
+) y ↔ SameCycle f x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sameCycle_apply_right : SameCycle f x (f y) ↔ SameCycle f x y := by
-  rw [sameCycle_comm]; rw [sameCycle_apply_left]; rw [sameCycle_comm]
+  rw [sameCycle_comm, sameCycle_apply_left, sameCycle_comm]
 
 @[simp]
-/--
-theorem `sameCycle_symm_apply_left` / 定理 `sameCycle_symm_apply_left`
-
-English:
-theorem sameCycle_symm_apply_left
-  statement: SameCycle f (f.symm x) y ↔ SameCycle f x y
-  proof: by
-  rw [← sameCycle_apply_left]; rw [apply_symm_apply]
-
-@[simp]
-
-中文:
-定理 sameCycle_symm_apply_left
-  结论: SameCycle f (f.symm x) y ↔ SameCycle f x y
-  证明: by
-  rw [← sameCycle_apply_left]; rw [apply_symm_apply]
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, sameCycle_apply_left
+/-
+**Equiv.Perm.sameCycle_symm_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_symm_apply_left : SameCycle f (f.symm x) y ↔ SameCycle f x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.sameCycle_apply_left`：sameCycle_apply_left : SameCycle f (f x
+) y ↔ SameCycle f x y
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sameCycle_symm_apply_left : SameCycle f (f.symm x) y ↔ SameCycle f x y := by
-  rw [← sameCycle_apply_left]; rw [apply_symm_apply]
+  rw [← sameCycle_apply_left, apply_symm_apply]
 
 @[simp]
-/--
-theorem `sameCycle_symm_apply_right` / 定理 `sameCycle_symm_apply_right`
-
-English:
-theorem sameCycle_symm_apply_right
-  statement: SameCycle f x (f.symm y) ↔ SameCycle f x y
-  proof: by
-  rw [← sameCycle_apply_right]; rw [apply_symm_apply]
-
-@[simp]
-
-中文:
-定理 sameCycle_symm_apply_right
-  结论: SameCycle f x (f.symm y) ↔ SameCycle f x y
-  证明: by
-  rw [← sameCycle_apply_right]; rw [apply_symm_apply]
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, sameCycle_apply_right
+/-
+**Equiv.Perm.sameCycle_symm_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_symm_apply_right : SameCycle f x (f.symm y) ↔ SameCycle f x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.sameCycle_apply_right`：sameCycle_apply_right : SameCycle f x 
+(f y) ↔ SameCycle f x y
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sameCycle_symm_apply_right : SameCycle f x (f.symm y) ↔ SameCycle f x y := by
-  rw [← sameCycle_apply_right]; rw [apply_symm_apply]
+  rw [← sameCycle_apply_right, apply_symm_apply]
 
 @[simp]
-/--
-theorem `sameCycle_zpow_left` / 定理 `sameCycle_zpow_left`
-
-English:
-theorem sameCycle_zpow_left
-  given: {n : Int}
-  statement: SameCycle f ((f ^ n) x) y ↔ SameCycle f x y
-  proof: (Equiv.addRight (n : Int)).exists_congr_left.trans by simp [SameCycle, zpow_add]
-
-@[simp]
-
-中文:
-定理 sameCycle_zpow_left
-  条件: {n : 整数}
-  结论: SameCycle f ((f ^ n) x) y ↔ SameCycle f x y
-  证明: (Equiv.addRight (n : Int)).exists_congr_left.trans by simp [SameCycle, zpow_add]
-
-@[simp]
-
-Depends on / 依赖: Equiv.addRight, SameCycle, addRight, exists_congr_left, exists_congr_left.trans, zpow_add
+/-
+**Equiv.Perm.sameCycle_zpow_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_zpow_left {n : Int} : SameCycle f ((f ^ n) x) y ↔ SameCycle f x 
+y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.addRight_symm`：∀ {G : Type u_5} [inst : AddGroup G] (a : G), Equiv
+.symm (Equiv.addRight a) = Equiv.addRight (-a)
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem sameCycle_zpow_left {n : Int} : SameCycle f ((f ^ n) x) y ↔ SameCycle f x y :=
-(Equiv.addRight (n : Int)).exists_congr_left.trans by simp [SameCycle, zpow_add]
+theorem sameCycle_zpow_left {n : ℤ} : SameCycle f ((f ^ n) x) y ↔ SameCycle f x y :=
+  (Equiv.addRight (n : ℤ)).exists_congr_left.trans <| by simp [SameCycle, zpow_add]
 
 @[simp]
-/--
-theorem `sameCycle_zpow_right` / 定理 `sameCycle_zpow_right`
-
-English:
-theorem sameCycle_zpow_right
-  given: {n : Int}
-  statement: SameCycle f x ((f ^ n) y) ↔ SameCycle f x y
-  proof: by
-  rw [sameCycle_comm]; rw [sameCycle_zpow_left]; rw [sameCycle_comm]
-
-@[simp]
-
-中文:
-定理 sameCycle_zpow_right
-  条件: {n : 整数}
-  结论: SameCycle f x ((f ^ n) y) ↔ SameCycle f x y
-  证明: by
-  rw [sameCycle_comm]; rw [sameCycle_zpow_left]; rw [sameCycle_comm]
-
-@[simp]
-
-Depends on / 依赖: sameCycle_comm, sameCycle_zpow_left
+/-
+**Equiv.Perm.sameCycle_zpow_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_zpow_right {n : Int} : SameCycle f x ((f ^ n) y) ↔ SameCycle f x
+ y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.sameCycle_comm`：sameCycle_comm : SameCycle f x y ↔ SameCycle 
+f y x
+· 使用定理 `Equiv.Perm.sameCycle_zpow_left`：sameCycle_zpow_left {n : Int} : SameCycl
+e f ((f ^ n) x) y ↔ SameCycle f x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sameCycle_zpow_right {n : Int} : SameCycle f x ((f ^ n) y) ↔ SameCycle f x y := by
-  rw [sameCycle_comm]; rw [sameCycle_zpow_left]; rw [sameCycle_comm]
+theorem sameCycle_zpow_right {n : ℤ} : SameCycle f x ((f ^ n) y) ↔ SameCycle f x y := by
+  rw [sameCycle_comm, sameCycle_zpow_left, sameCycle_comm]
 
 @[simp]
-/--
-theorem `sameCycle_pow_left` / 定理 `sameCycle_pow_left`
-
-English:
-theorem sameCycle_pow_left
-  given: {n : Nat}
-  statement: SameCycle f ((f ^ n) x) y ↔ SameCycle f x y
-  proof: by
-  rw [← zpow_natCast]; rw [sameCycle_zpow_left]
-
-@[simp]
-
-中文:
-定理 sameCycle_pow_left
-  条件: {n : 自然数}
-  结论: SameCycle f ((f ^ n) x) y ↔ SameCycle f x y
-  证明: by
-  rw [← zpow_natCast]; rw [sameCycle_zpow_left]
-
-@[simp]
-
-Depends on / 依赖: sameCycle_zpow_left, zpow_natCast
+/-
+**Equiv.Perm.sameCycle_pow_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_pow_left {n : Nat} : SameCycle f ((f ^ n) x) y ↔ SameCycle f x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Equiv.Perm.sameCycle_zpow_left`：sameCycle_zpow_left {n : Int} : SameCycl
+e f ((f ^ n) x) y ↔ SameCycle f x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sameCycle_pow_left {n : Nat} : SameCycle f ((f ^ n) x) y ↔ SameCycle f x y := by
-  rw [← zpow_natCast]; rw [sameCycle_zpow_left]
+theorem sameCycle_pow_left {n : ℕ} : SameCycle f ((f ^ n) x) y ↔ SameCycle f x y := by
+  rw [← zpow_natCast, sameCycle_zpow_left]
 
 @[simp]
-/--
-theorem `sameCycle_pow_right` / 定理 `sameCycle_pow_right`
-
-English:
-theorem sameCycle_pow_right
-  given: {n : Nat}
-  statement: SameCycle f x ((f ^ n) y) ↔ SameCycle f x y
-  proof: by
-  rw [← zpow_natCast]; rw [sameCycle_zpow_right]
+/-
+**Equiv.Perm.sameCycle_pow_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_pow_right {n : Nat} : SameCycle f x ((f ^ n) y) ↔ SameCycle f x 
+y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Equiv.Perm.sameCycle_zpow_right`：sameCycle_zpow_right {n : Int} : SameCy
+cle f x ((f ^ n) y) ↔ SameCycle f x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem sameCycle_pow_right {n : ℕ} : SameCycle f x ((f ^ n) y) ↔ SameCycle f x y := by
+  rw [← zpow_natCast, sameCycle_zpow_right]
 
 alias ⟨SameCycle.of_apply_left, SameCycle.apply_left⟩ := sameCycle_apply_left
 
@@ -596,118 +513,71 @@ alias ⟨SameCycle.of_pow_right, SameCycle.pow_right⟩ := sameCycle_pow_right
 alias ⟨SameCycle.of_zpow_left, SameCycle.zpow_left⟩ := sameCycle_zpow_left
 
 alias ⟨SameCycle.of_zpow_right, SameCycle.zpow_right⟩ := sameCycle_zpow_right
-
-中文:
-定理 sameCycle_pow_right
-  条件: {n : 自然数}
-  结论: SameCycle f x ((f ^ n) y) ↔ SameCycle f x y
-  证明: by
-  rw [← zpow_natCast]; rw [sameCycle_zpow_right]
-
-alias ⟨SameCycle.of_apply_left, SameCycle.apply_left⟩ := sameCycle_apply_left
-
-alias ⟨SameCycle.of_apply_right, SameCycle.apply_right⟩ := sameCycle_apply_right
-
-alias ⟨SameCycle.of_symm_apply_left, SameCycle.symm_apply_left⟩ := sameCycle_symm_apply_left
-
-alias ⟨SameCycle.of_symm_apply_right, SameCycle.symm_apply_right⟩ := sameCycle_symm_apply_right
-
-alias ⟨SameCycle.of_pow_left, SameCycle.pow_left⟩ := sameCycle_pow_left
-
-alias ⟨SameCycle.of_pow_right, SameCycle.pow_right⟩ := sameCycle_pow_right
-
-alias ⟨SameCycle.of_zpow_left, SameCycle.zpow_left⟩ := sameCycle_zpow_left
-
-alias ⟨SameCycle.of_zpow_right, SameCycle.zpow_right⟩ := sameCycle_zpow_right
-
-Depends on / 依赖: sameCycle_zpow_right, zpow_natCast
+/-
+**Equiv.Perm.SameCycle.of_pow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α} {n : ℕ}, (f ^ n).SameCycle x
+ y → f.SameCycle x y
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_mul`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (m n : ℤ), 
+a ^ (m * n) = (a ^ m) ^ n
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sameCycle_pow_right {n : Nat} : SameCycle f x ((f ^ n) y) ↔ SameCycle f x y := by
-  rw [← zpow_natCast]; rw [sameCycle_zpow_right]
-
-alias ⟨SameCycle.of_apply_left, SameCycle.apply_left⟩ := sameCycle_apply_left
-
-alias ⟨SameCycle.of_apply_right, SameCycle.apply_right⟩ := sameCycle_apply_right
-
-alias ⟨SameCycle.of_symm_apply_left, SameCycle.symm_apply_left⟩ := sameCycle_symm_apply_left
-
-alias ⟨SameCycle.of_symm_apply_right, SameCycle.symm_apply_right⟩ := sameCycle_symm_apply_right
-
-alias ⟨SameCycle.of_pow_left, SameCycle.pow_left⟩ := sameCycle_pow_left
-
-alias ⟨SameCycle.of_pow_right, SameCycle.pow_right⟩ := sameCycle_pow_right
-
-alias ⟨SameCycle.of_zpow_left, SameCycle.zpow_left⟩ := sameCycle_zpow_left
-
-alias ⟨SameCycle.of_zpow_right, SameCycle.zpow_right⟩ := sameCycle_zpow_right
-
-/--
-theorem `SameCycle.of_pow` / 定理 `SameCycle.of_pow`
-
-English:
-theorem SameCycle.of_pow
-  given: {n : Nat}
-  statement: SameCycle (f ^ n) x y -> SameCycle f x y
-  proof: fun ⟨m, h⟩ =>
+theorem SameCycle.of_pow {n : ℕ} : SameCycle (f ^ n) x y → SameCycle f x y := fun ⟨m, h⟩ =>
   ⟨n * m, by simp [zpow_mul, h]⟩
-
-中文:
-定理 SameCycle.of_pow
-  条件: {n : 自然数}
-  结论: SameCycle (f ^ n) x y -> SameCycle f x y
-  证明: fun ⟨m, h⟩ =>
-  ⟨n * m, by simp [zpow_mul, h]⟩
+/-
+**Equiv.Perm.SameCycle.of_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.SameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α} {n : ℤ}, (f ^ n).SameCycle x
+ y → f.SameCycle x y
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_mul`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (m n : ℤ), 
+a ^ (m * n) = (a ^ m) ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem SameCycle.of_pow {n : Nat} : SameCycle (f ^ n) x y -> SameCycle f x y := fun ⟨m, h⟩ =>
-  ⟨n * m, by simp [zpow_mul, h]⟩
-
-/--
-theorem `SameCycle.of_zpow` / 定理 `SameCycle.of_zpow`
-
-English:
-theorem SameCycle.of_zpow
-  given: {n : Int}
-  statement: SameCycle (f ^ n) x y -> SameCycle f x y
-  proof: fun ⟨m, h⟩ =>
+theorem SameCycle.of_zpow {n : ℤ} : SameCycle (f ^ n) x y → SameCycle f x y := fun ⟨m, h⟩ =>
   ⟨n * m, by simp [zpow_mul, h]⟩
 
 @[simp]
-
-中文:
-定理 SameCycle.of_zpow
-  条件: {n : 整数}
-  结论: SameCycle (f ^ n) x y -> SameCycle f x y
-  证明: fun ⟨m, h⟩ =>
-  ⟨n * m, by simp [zpow_mul, h]⟩
-
-@[simp]
--/
-theorem SameCycle.of_zpow {n : Int} : SameCycle (f ^ n) x y -> SameCycle f x y := fun ⟨m, h⟩ =>
-  ⟨n * m, by simp [zpow_mul, h]⟩
-
-@[simp]
-/--
-theorem `sameCycle_subtypePerm` / 定理 `sameCycle_subtypePerm`
-
-English:
-theorem sameCycle_subtypePerm
-  given: {h} {x y : { x // p x }}
-  proof: exists_congr fun n => by simp [Subtype.ext_iff]
-
-alias ⟨_, SameCycle.subtypePerm⟩ := sameCycle_subtypePerm
-
-@[simp]
-
-中文:
-定理 sameCycle_subtypePerm
-  条件: {h} {x y : { x // p x }}
-  证明: exists_congr fun n => by simp [Subtype.ext_iff]
-
-alias ⟨_, SameCycle.subtypePerm⟩ := sameCycle_subtypePerm
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, exists_congr, ext_iff
+/-
+**Equiv.Perm.sameCycle_subtypePerm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_subtypePerm {h} {x y : { x // p x }} : (f.subtypePerm h).SameCyc
+le x y ↔ f.SameCycle x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Algebra.Group.End.0.Equiv.Perm.zpow_aux`：∀ {α : Type u_
+4} {p : α → Prop} {f : Equiv.Perm α}, (∀ (x : α), p (f x) ↔ p x) → ∀ {n : ℤ} (x 
+: α), p ((f ^ n) x) ↔ p x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Equiv.Perm.subtypePerm_zpow`：subtypePerm_zpow (f : Perm α) (n : Int) (hf
+) : (f.subtypePerm hf ^ n : Perm { x // p x }) = (f ^ n).subtypePerm (zpow_aux h
+f)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sameCycle_subtypePerm {h} {x y : { x // p x }} :
     (f.subtypePerm h).SameCycle x y ↔ f.SameCycle x y :=
@@ -716,159 +586,131 @@ theorem sameCycle_subtypePerm {h} {x y : { x // p x }} :
 alias ⟨_, SameCycle.subtypePerm⟩ := sameCycle_subtypePerm
 
 @[simp]
-/--
-theorem `sameCycle_extendDomain` / 定理 `sameCycle_extendDomain`
-
-English:
-theorem sameCycle_extendDomain
-  given: {p : β -> Prop} [DecidablePred p] {f : α ≃ Subtype p}
-  proof: exists_congr fun n => by
-    rw [← extendDomain_zpow]; rw [extendDomain_apply_image]; rw [Subtype.coe_inj]; rw [f.injective.eq_iff]
-
-alias ⟨_, SameCycle.extendDomain⟩ := sameCycle_extendDomain
-
-中文:
-定理 sameCycle_extendDomain
-  条件: {p : β -> 命题} [DecidablePred p] {f : α ≃ 子类型 p}
-  证明: exists_congr fun n => by
-    rw [← extendDomain_zpow]; rw [extendDomain_apply_image]; rw [Subtype.coe_inj]; rw [f.injective.eq_iff]
-
-alias ⟨_, SameCycle.extendDomain⟩ := sameCycle_extendDomain
-
-Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj, eq_iff, exists_congr, extendDomain_apply_image, extendDomain_zpow, f.injective.eq_iff, injective
+/-
+**Equiv.Perm.sameCycle_extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：sameCycle_extendDomain {p : β -> Prop} [DecidablePred p] {f : α ≃ Subtype 
+p} : SameCycle (g.extendDomain f) (f x) (f y) ↔ g.SameCycle x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Equiv.Perm.extendDomain_zpow`：extendDomain_zpow (n : Int) : (e ^ n).exte
+ndDomain f = e.extendDomain f ^ n
+· 使用定理 `Equiv.Perm.extendDomain_apply_image`：∀ {α' : Type u_9} {β' : Type u_10} 
+(e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype p
+)   (a : α'), (e.extendDo…
+· 使用定理 `Subtype.coe_inj`：coe_inj {a b : Subtype p} : (a : α) = b ↔ a = b
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sameCycle_extendDomain {p : β -> Prop} [DecidablePred p] {f : α ≃ Subtype p} :
+theorem sameCycle_extendDomain {p : β → Prop} [DecidablePred p] {f : α ≃ Subtype p} :
     SameCycle (g.extendDomain f) (f x) (f y) ↔ g.SameCycle x y :=
   exists_congr fun n => by
-    rw [← extendDomain_zpow]; rw [extendDomain_apply_image]; rw [Subtype.coe_inj]; rw [f.injective.eq_iff]
+    rw [← extendDomain_zpow, extendDomain_apply_image, Subtype.coe_inj, f.injective.eq_iff]
 
 alias ⟨_, SameCycle.extendDomain⟩ := sameCycle_extendDomain
-
-/--
-theorem `SameCycle.exists_pow_eq'` / 定理 `SameCycle.exists_pow_eq'`
-
-English:
-theorem SameCycle.exists_pow_eq'
-  given: [Finite α]
-  statement: SameCycle f x y -> exists i < orderOf f, (f ^ i) x = y
-  proof: by
-  rintro ⟨k, rfl⟩
-  use (k % orderOf f).natAbs
-  have h₀ := Int.natCast_pos.mpr (orderOf_pos f)
-  have h₁ := Int.emod_nonneg k h₀.ne'
-  rw [← zpow_natCast]; rw [Int.natAbs_of_nonneg h₁]; rw [zpow_mod_orderOf]
-  refine ⟨?_, by rfl⟩
-  rw [← Int.ofNat_lt]; rw [Int.natAbs_of_nonneg h₁]
-  exact Int.emod_lt_of_pos _ h₀
-
-中文:
-定理 SameCycle.存在_pow_eq'
-  条件: [有限 α]
-  结论: SameCycle f x y -> 存在 i < orderOf f, (f ^ i) x = y
-  证明: by
-  rintro ⟨k, rfl⟩
-  use (k % orderOf f).natAbs
-  have h₀ := Int.natCast_pos.mpr (orderOf_pos f)
-  have h₁ := Int.emod_nonneg k h₀.ne'
-  rw [← zpow_natCast]; rw [Int.natAbs_of_nonneg h₁]; rw [zpow_mod_orderOf]
-  refine ⟨?_, by rfl⟩
-  rw [← Int.ofNat_lt]; rw [Int.natAbs_of_nonneg h₁]
-  exact Int.emod_lt_of_pos _ h₀
-
-Depends on / 依赖: Int.emod_lt_of_pos, Int.emod_nonneg, Int.natAbs_of_nonneg, Int.natCast_pos.mpr, Int.ofNat_lt, emod_lt_of_pos, emod_nonneg, natAbs, natAbs_of_nonneg, natCast_pos, ofNat_lt, orderOf, orderOf_pos, zpow_mod_orderOf, zpow_natCast
+/-
+**Equiv.Perm.SameCycle.exists_pow_eq'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.Same
+Cycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α} [Finite α], f.SameCycle x y 
+→ ∃ i < orderOf f, (f ^ i) x = y
+参数：f ^ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natCast_pos`：∀ {n : ℕ}, 0 < ↑n ↔ 0 < n
+· 使用引理 `orderOf_pos`：orderOf_pos (x : G) : 0 < orderOf x
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Int.natAbs_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.natAbs = a
+· 使用引理 `zpow_mod_orderOf`：zpow_mod_orderOf (x : G) (z : Int) : x ^ (z % (orderOf
+ x : Int)) = x ^ z
+· 使用定理 `Int.ofNat_lt`：∀ {n m : ℕ}, ↑n < ↑m ↔ n < m
+· 使用定理 `Int.emod_lt_of_pos`：∀ (a : ℤ) {b : ℤ}, 0 < b → a % b < b
 -/
-theorem SameCycle.exists_pow_eq' [Finite α] : SameCycle f x y -> exists i < orderOf f, (f ^ i) x = y := by
+theorem SameCycle.exists_pow_eq' [Finite α] : SameCycle f x y → ∃ i < orderOf f, (f ^ i) x = y := by
   rintro ⟨k, rfl⟩
   use (k % orderOf f).natAbs
   have h₀ := Int.natCast_pos.mpr (orderOf_pos f)
   have h₁ := Int.emod_nonneg k h₀.ne'
-  rw [← zpow_natCast]; rw [Int.natAbs_of_nonneg h₁]; rw [zpow_mod_orderOf]
+  rw [← zpow_natCast, Int.natAbs_of_nonneg h₁, zpow_mod_orderOf]
   refine ⟨?_, by rfl⟩
-  rw [← Int.ofNat_lt]; rw [Int.natAbs_of_nonneg h₁]
+  rw [← Int.ofNat_lt, Int.natAbs_of_nonneg h₁]
   exact Int.emod_lt_of_pos _ h₀
-
-/--
-theorem `SameCycle.exists_pow_eq''` / 定理 `SameCycle.exists_pow_eq''`
-
-English:
-theorem SameCycle.exists_pow_eq''
-  given: [Finite α] (h : SameCycle f x y)
-  proof: by
-  obtain ⟨_ | i, hi, rfl⟩ := h.exists_pow_eq'
-  · refine ⟨orderOf f, orderOf_pos f, le_rfl, ?_⟩
-    rw [pow_orderOf_eq_one]; rw [pow_zero]
-  · exact ⟨i.succ, i.zero_lt_succ, hi.le, by rfl⟩
-
-中文:
-定理 SameCycle.存在_pow_eq''
-  条件: [有限 α] (h : SameCycle f x y)
-  证明: by
-  obtain ⟨_ | i, hi, rfl⟩ := h.exists_pow_eq'
-  · refine ⟨orderOf f, orderOf_pos f, le_rfl, ?_⟩
-    rw [pow_orderOf_eq_one]; rw [pow_zero]
-  · exact ⟨i.succ, i.zero_lt_succ, hi.le, by rfl⟩
-
-Depends on / 依赖: exists_pow_eq, h.exists_pow_eq, hi.le, i.succ, i.zero_lt_succ, le_rfl, orderOf, orderOf_pos, pow_orderOf_eq_one, pow_zero, zero_lt_succ
+/-
+**Equiv.Perm.SameCycle.exists_pow_eq''** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.Sam
+eCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α} [Finite α], f.SameCycle x y 
+→ ∃ i, 0 < i ∧ i ≤ orderOf f ∧ (f ^ i) x = y
+参数：f ^ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.exists_pow_eq'`：∀ {α : Type u_2} {f : Equiv.Perm α}
+ {x y : α} [Finite α], f.SameCycle x y → ∃ i < orderOf f, (f ^ i) x = y
+· 使用引理 `orderOf_pos`：orderOf_pos (x : G) : 0 < orderOf x
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_orderOf_eq_one`：pow_orderOf_eq_one (x : G) : x ^ orderOf x = 1
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.zero_lt_succ`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem SameCycle.exists_pow_eq'' [Finite α] (h : SameCycle f x y) :
-    exists i : Nat, 0 < i ∧ i <= orderOf f ∧ (f ^ i) x = y := by
+    ∃ i : ℕ, 0 < i ∧ i ≤ orderOf f ∧ (f ^ i) x = y := by
   obtain ⟨_ | i, hi, rfl⟩ := h.exists_pow_eq'
   · refine ⟨orderOf f, orderOf_pos f, le_rfl, ?_⟩
-    rw [pow_orderOf_eq_one]; rw [pow_zero]
+    rw [pow_orderOf_eq_one, pow_zero]
   · exact ⟨i.succ, i.zero_lt_succ, hi.le, by rfl⟩
-
-/--
-theorem `SameCycle.exists_fin_pow_eq` / 定理 `SameCycle.exists_fin_pow_eq`
-
-English:
-theorem SameCycle.exists_fin_pow_eq
-  given: [Finite α] (h : SameCycle f x y)
-  proof: by
-  obtain ⟨i, hi, hx⟩ := SameCycle.exists_pow_eq' h
-  exact ⟨⟨i, hi⟩, hx⟩
-
-中文:
-定理 SameCycle.存在_fin_pow_eq
-  条件: [有限 α] (h : SameCycle f x y)
-  证明: by
-  obtain ⟨i, hi, hx⟩ := SameCycle.exists_pow_eq' h
-  exact ⟨⟨i, hi⟩, hx⟩
-
-Depends on / 依赖: SameCycle, SameCycle.exists_pow_eq, exists_pow_eq
+/-
+**Equiv.Perm.SameCycle.exists_fin_pow_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.S
+ameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α} [Finite α], f.SameCycle x y 
+→ ∃ i, (f ^ ↑i) x = y
+参数：f ^ ↑i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.exists_pow_eq'`：∀ {α : Type u_2} {f : Equiv.Perm α}
+ {x y : α} [Finite α], f.SameCycle x y → ∃ i < orderOf f, (f ^ i) x = y
 -/
 theorem SameCycle.exists_fin_pow_eq [Finite α] (h : SameCycle f x y) :
-    exists i : Fin (orderOf f), (f ^ (i : Nat)) x = y := by
+    ∃ i : Fin (orderOf f), (f ^ (i : ℕ)) x = y := by
   obtain ⟨i, hi, hx⟩ := SameCycle.exists_pow_eq' h
   exact ⟨⟨i, hi⟩, hx⟩
-
-/--
-theorem `SameCycle.exists_nat_pow_eq` / 定理 `SameCycle.exists_nat_pow_eq`
-
-English:
-theorem SameCycle.exists_nat_pow_eq
-  given: [Finite α] (h : SameCycle f x y)
-  proof: by
-  obtain ⟨i, _, hi⟩ := h.exists_pow_eq'
-  exact ⟨i, hi⟩
-
-中文:
-定理 SameCycle.存在_nat_pow_eq
-  条件: [有限 α] (h : SameCycle f x y)
-  证明: by
-  obtain ⟨i, _, hi⟩ := h.exists_pow_eq'
-  exact ⟨i, hi⟩
-
-Depends on / 依赖: exists_pow_eq, h.exists_pow_eq
+/-
+**Equiv.Perm.SameCycle.exists_nat_pow_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.S
+ameCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α} [Finite α], f.SameCycle x y 
+→ ∃ i, (f ^ i) x = y
+参数：f ^ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.exists_pow_eq'`：∀ {α : Type u_2} {f : Equiv.Perm α}
+ {x y : α} [Finite α], f.SameCycle x y → ∃ i < orderOf f, (f ^ i) x = y
 -/
 theorem SameCycle.exists_nat_pow_eq [Finite α] (h : SameCycle f x y) :
-    exists i : Nat, (f ^ i) x = y := by
+    ∃ i : ℕ, (f ^ i) x = y := by
   obtain ⟨i, _, hi⟩ := h.exists_pow_eq'
   exact ⟨i, hi⟩
-
+/-
+**Equiv.Perm.** 是 Mathlib 中的一个实例，位于命名空间 `Equiv.Perm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : Perm α) [DecidableRel (SameCycle f)] :
     DecidableRel (SameCycle f⁻¹) := fun x y =>
   decidable_of_iff (f.SameCycle x y) sameCycle_inv.symm
-
+/-
+**Equiv.Perm.** 是 Mathlib 中的一个实例，位于命名空间 `Equiv.Perm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [DecidableEq α] : DecidableRel (SameCycle (1 : Perm α)) := fun x y =>
   decidable_of_iff (x = y) sameCycle_one.symm
 
@@ -882,259 +724,221 @@ section IsCycle
 
 variable {f g : Perm α} {x y : α}
 
-/--
-Definition of `IsCycle` / `IsCycle` 的定义
+/-- A cycle is a non-identity permutation where any two nonfixed points of the permutation are
+related by repeated application of the permutation. -/
+/-
+**Equiv.Perm.IsCycle** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：IsCycle (f : Perm α) : Prop
+参数：f : Perm α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsCycle
-  signature: (f : Perm α)
-  body: exists x, f x != x ∧ forall ⦃y⦄, f y != y -> SameCycle f x y
-
-中文:
-定义 是环
-  签名: (f : 置换 α)
-  定义体: exists x, f x != x ∧ forall ⦃y⦄, f y != y -> SameCycle f x y
-
-Depends on / 依赖: SameCycle
+--- 原说明 ---
+A cycle is a non-identity permutation where any two nonfixed points of the permu
+tation are
+related by repeated application of the permutation.
 -/
 def IsCycle (f : Perm α) : Prop :=
-  exists x, f x != x ∧ forall ⦃y⦄, f y != y -> SameCycle f x y
-
-/--
-theorem `IsCycle.ne_one` / 定理 `IsCycle.ne_one`
-
-English:
-theorem IsCycle.ne_one
-  given: (h : IsCycle f)
-  statement: f != 1
-  proof: fun hf => by simp [hf, IsCycle] at h
-
-@[simp]
-
-中文:
-定理 是环.ne_one
-  条件: (h : 是环 f)
-  结论: f != 1
-  证明: fun hf => by simp [hf, IsCycle] at h
-
-@[simp]
-
-Depends on / 依赖: IsCycle
+  ∃ x, f x ≠ x ∧ ∀ ⦃y⦄, f y ≠ y → SameCycle f x y
+/-
+**Equiv.Perm.IsCycle.ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycle → f ≠ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem IsCycle.ne_one (h : IsCycle f) : f != 1 := fun hf => by simp [hf, IsCycle] at h
+theorem IsCycle.ne_one (h : IsCycle f) : f ≠ 1 := fun hf => by simp [hf, IsCycle] at h
 
 @[simp]
-/--
-theorem `not_isCycle_one` / 定理 `not_isCycle_one`
-
-English:
-theorem not_isCycle_one
-  statement: ¬(1 : Perm α).IsCycle
-  proof: fun H => H.ne_one rfl
-
-中文:
-定理 not_isCycle_one
-  结论: ¬(1 : 置换 α).是环
-  证明: fun H => H.ne_one rfl
-
-Depends on / 依赖: H.ne_one, ne_one
+/-
+**Equiv.Perm.not_isCycle_one** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：not_isCycle_one : ¬(1 : Perm α).IsCycle
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.ne_one`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycl
+e → f ≠ 1
 -/
 theorem not_isCycle_one : ¬(1 : Perm α).IsCycle := fun H => H.ne_one rfl
-
-/--
-theorem `IsCycle.sameCycle` / 定理 `IsCycle.sameCycle`
-
-English:
-theorem IsCycle.sameCycle
-  given: (hf : IsCycle f) (hx : f x != x) (hy : f y != y)
-  proof: let ⟨g, hg⟩ := hf
-  let ⟨a, ha⟩ := hg.2 hx
-  let ⟨b, hb⟩ := hg.2 hy
-  ⟨b - a, by rw [← ha, ← mul_apply, ← zpow_add, sub_add_cancel, hb]⟩
-
-中文:
-定理 是环.sameCycle
-  条件: (hf : 是环 f) (hx : f x != x) (hy : f y != y)
-  证明: let ⟨g, hg⟩ := hf
-  let ⟨a, ha⟩ := hg.2 hx
-  let ⟨b, hb⟩ := hg.2 hy
-  ⟨b - a, by rw [← ha, ← mul_apply, ← zpow_add, sub_add_cancel, hb]⟩
+/-
+**Equiv.Perm.IsCycle.sameCycle** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}, f.IsCycle → f x ≠ x → f y ≠
+ y → f.SameCycle x y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.mul_apply`：mul_apply (f g : Perm α) (x) : (f * g) x = f (g x)
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
-protected theorem IsCycle.sameCycle (hf : IsCycle f) (hx : f x != x) (hy : f y != y) :
+protected theorem IsCycle.sameCycle (hf : IsCycle f) (hx : f x ≠ x) (hy : f y ≠ y) :
     SameCycle f x y :=
   let ⟨g, hg⟩ := hf
   let ⟨a, ha⟩ := hg.2 hx
   let ⟨b, hb⟩ := hg.2 hy
   ⟨b - a, by rw [← ha, ← mul_apply, ← zpow_add, sub_add_cancel, hb]⟩
-
-/--
-theorem `IsCycle.exists_zpow_eq` / 定理 `IsCycle.exists_zpow_eq`
-
-English:
-theorem IsCycle.exists_zpow_eq
-  statement: IsCycle f -> f x != x -> f y != y -> exists i : Int, (f ^ i) x = y
-  proof: IsCycle.sameCycle
-
-中文:
-定理 是环.存在_zpow_eq
-  结论: 是环 f -> f x != x -> f y != y -> 存在 i : 整数, (f ^ i) x = y
-  证明: IsCycle.sameCycle
-
-Depends on / 依赖: IsCycle, IsCycle.sameCycle, sameCycle
+/-
+**Equiv.Perm.IsCycle.exists_zpow_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycl
+e`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α}, f.IsCycle → f x ≠ x → f y ≠
+ y → ∃ i, (f ^ i) x = y
+参数：f ^ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.sameCycle`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y :
+ α}, f.IsCycle → f x ≠ x → f y ≠ y → f.SameCycle x y
 -/
-theorem IsCycle.exists_zpow_eq : IsCycle f -> f x != x -> f y != y -> exists i : Int, (f ^ i) x = y :=
+theorem IsCycle.exists_zpow_eq : IsCycle f → f x ≠ x → f y ≠ y → ∃ i : ℤ, (f ^ i) x = y :=
   IsCycle.sameCycle
-
-/--
-theorem `IsCycle.inv` / 定理 `IsCycle.inv`
-
-English:
-theorem IsCycle.inv
-  given: (hf : IsCycle f)
-  statement: IsCycle f⁻¹
-  proof: hf.imp fun _ ⟨hx, h⟩ =>
-    ⟨inv_eq_iff_eq.not.2 hx.symm, fun _ hy => (h <| inv_eq_iff_eq.not.2 hy.symm).inv⟩
-
-@[simp]
-
-中文:
-定理 是环.inv
-  条件: (hf : 是环 f)
-  结论: 是环 f⁻¹
-  证明: hf.imp fun _ ⟨hx, h⟩ =>
-    ⟨inv_eq_iff_eq.not.2 hx.symm, fun _ hy => (h <| inv_eq_iff_eq.not.2 hy.symm).inv⟩
-
-@[simp]
-
-Depends on / 依赖: hf.imp, hx.symm, hy.symm, inv_eq_iff_eq, inv_eq_iff_eq.not
+/-
+**Equiv.Perm.IsCycle.inv** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycle → f⁻¹.IsCycle
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Equiv.Perm.inv_eq_iff_eq`：inv_eq_iff_eq {f : Perm α} {x y : α} : f⁻¹ x =
+ y ↔ x = f y
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Equiv.Perm.SameCycle.inv`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α},
+ f.SameCycle x y → f⁻¹.SameCycle x y
 -/
 theorem IsCycle.inv (hf : IsCycle f) : IsCycle f⁻¹ :=
   hf.imp fun _ ⟨hx, h⟩ =>
     ⟨inv_eq_iff_eq.not.2 hx.symm, fun _ hy => (h <| inv_eq_iff_eq.not.2 hy.symm).inv⟩
 
 @[simp]
-/--
-theorem `isCycle_inv` / 定理 `isCycle_inv`
-
-English:
-theorem isCycle_inv
-  statement: IsCycle f⁻¹ ↔ IsCycle f
-  proof: ⟨fun h => h.inv, IsCycle.inv⟩
-
-中文:
-定理 isCycle_inv
-  结论: 是环 f⁻¹ ↔ 是环 f
-  证明: ⟨fun h => h.inv, IsCycle.inv⟩
-
-Depends on / 依赖: IsCycle, IsCycle.inv, h.inv
+/-
+**Equiv.Perm.isCycle_inv** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycle_inv : IsCycle f⁻¹ ↔ IsCycle f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.inv`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycle →
+ f⁻¹.IsCycle
 -/
 theorem isCycle_inv : IsCycle f⁻¹ ↔ IsCycle f :=
   ⟨fun h => h.inv, IsCycle.inv⟩
-
-/--
-theorem `IsCycle.conj` / 定理 `IsCycle.conj`
-
-English:
-theorem IsCycle.conj
-  statement: IsCycle f -> IsCycle (g * f * g⁻¹)
-  proof: by
-  rintro ⟨x, hx, h⟩
-  refine ⟨g x, by simp [coe_mul, hx], fun y hy => ?_⟩
-  simpa using (h <| eq_inv_iff_eq.not.2 hy).conj (g := g)
-
-中文:
-定理 是环.conj
-  结论: 是环 f -> 是环 (g * f * g⁻¹)
-  证明: by
-  rintro ⟨x, hx, h⟩
-  refine ⟨g x, by simp [coe_mul, hx], fun y hy => ?_⟩
-  simpa using (h <| eq_inv_iff_eq.not.2 hy).conj (g := g)
-
-Depends on / 依赖: coe_mul, eq_inv_iff_eq, eq_inv_iff_eq.not
+/-
+**Equiv.Perm.IsCycle.conj** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f g : Equiv.Perm α}, f.IsCycle → (g * f * g⁻¹).IsCycle
+参数：g * f * g⁻¹。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Equiv.Perm.SameCycle.conj`：∀ {α : Type u_2} {f g : Equiv.Perm α} {x y : 
+α}, f.SameCycle x y → (g * f * g⁻¹).SameCycle (g x) (g y)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Equiv.Perm.eq_inv_iff_eq`：eq_inv_iff_eq {f : Perm α} {x y : α} : x = f⁻¹
+ y ↔ f x = y
 -/
-theorem IsCycle.conj : IsCycle f -> IsCycle (g * f * g⁻¹) := by
+theorem IsCycle.conj : IsCycle f → IsCycle (g * f * g⁻¹) := by
   rintro ⟨x, hx, h⟩
   refine ⟨g x, by simp [coe_mul, hx], fun y hy => ?_⟩
   simpa using (h <| eq_inv_iff_eq.not.2 hy).conj (g := g)
-
-/--
-theorem `IsCycle.extendDomain` / 定理 `IsCycle.extendDomain`
-
-English:
-theorem IsCycle.extendDomain
-  given: {p : β -> Prop} [DecidablePred p] (f : α ≃ Subtype p)
-  proof: by
+/-
+**Equiv.Perm.IsCycle.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`
+。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {g : Equiv.Perm α} {p : β → Prop} [inst : 
+DecidablePred p] (f : α ≃ Subtype p),   g.IsCycle → (g.extendDomain f).IsCycle
+参数：f : α ≃ Subtype p；g.extendDomain f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.extendDomain_apply_image`：∀ {α' : Type u_9} {β' : Type u_10} 
+(e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype p
+)   (a : α'), (e.extendDo…
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_not_not`：of_not_not {a : Prop} : ¬¬a -> a
+· 使用定理 `Equiv.Perm.extendDomain_apply_not_subtype`：∀ {α' : Type u_9} {β' : Type 
+u_10} (e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Sub
+type p)   {b : β'}, ¬p b → (e.e…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `Equiv.Perm.SameCycle.extendDomain`：∀ {α : Type u_2} {β : Type u_3} {g : 
+Equiv.Perm α} {x y : α} {p : β → Prop} [inst : DecidablePred p]   {f : α ≃ Subty
+pe p}, g.SameCycle x y …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+-/
+protected theorem IsCycle.extendDomain {p : β → Prop} [DecidablePred p] (f : α ≃ Subtype p) :
+    IsCycle g → IsCycle (g.extendDomain f) := by
   rintro ⟨a, ha, ha'⟩
   refine ⟨f a, ?_, fun b hb => ?_⟩
   · rw [extendDomain_apply_image]
     exact Subtype.coe_injective.ne (f.injective.ne ha)
   have h : b = f (f.symm ⟨b, of_not_not <| hb ∘ extendDomain_apply_not_subtype _ _⟩) := by
-    rw [apply_symm_apply]; rw [Subtype.coe_mk]
+    rw [apply_symm_apply, Subtype.coe_mk]
   rw [h] at hb ⊢
   simp only [extendDomain_apply_image, Subtype.coe_injective.ne_iff, f.injective.ne_iff] at hb
   exact (ha' hb).extendDomain
-
-中文:
-定理 是环.extendDomain
-  条件: {p : β -> 命题} [DecidablePred p] (f : α ≃ 子类型 p)
-  证明: by
-  rintro ⟨a, ha, ha'⟩
-  refine ⟨f a, ?_, fun b hb => ?_⟩
-  · rw [extendDomain_apply_image]
-    exact Subtype.coe_injective.ne (f.injective.ne ha)
-  have h : b = f (f.symm ⟨b, of_not_not <| hb ∘ extendDomain_apply_not_subtype _ _⟩) := by
-    rw [apply_symm_apply]; rw [Subtype.coe_mk]
-  rw [h] at hb ⊢
-  simp only [extendDomain_apply_image, Subtype.coe_injective.ne_iff, f.injective.ne_iff] at hb
-  exact (ha' hb).extendDomain
+/-
+**Equiv.Perm.isCycle_iff_sameCycle** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycle_iff_sameCycle (hx : f x != x) : IsCycle f ↔ forall {y}, SameCycle 
+f x y ↔ f y != y
+参数：hx : f x != x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.zpow_apply_eq_self_of_apply_eq_self`：∀ {α : Type u_1} {f : Eq
+uiv.Perm α} {x : α}, f x = x → ∀ (n : ℤ), (f ^ n) x = x
+· 使用定理 `Equiv.Perm.IsCycle.exists_zpow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {
+x y : α}, f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-protected theorem IsCycle.extendDomain {p : β -> Prop} [DecidablePred p] (f : α ≃ Subtype p) :
-    IsCycle g -> IsCycle (g.extendDomain f) := by
-  rintro ⟨a, ha, ha'⟩
-  refine ⟨f a, ?_, fun b hb => ?_⟩
-  · rw [extendDomain_apply_image]
-    exact Subtype.coe_injective.ne (f.injective.ne ha)
-  have h : b = f (f.symm ⟨b, of_not_not <| hb ∘ extendDomain_apply_not_subtype _ _⟩) := by
-    rw [apply_symm_apply]; rw [Subtype.coe_mk]
-  rw [h] at hb ⊢
-  simp only [extendDomain_apply_image, Subtype.coe_injective.ne_iff, f.injective.ne_iff] at hb
-  exact (ha' hb).extendDomain
-
-/--
-theorem `isCycle_iff_sameCycle` / 定理 `isCycle_iff_sameCycle`
-
-English:
-theorem isCycle_iff_sameCycle
-  given: (hx : f x != x)
-  statement: IsCycle f ↔ forall {y}, SameCycle f x y ↔ f y != y
-  proof: ⟨fun hf y =>
-    ⟨fun ⟨i, hi⟩ hy =>
-hx by
-        rw [← zpow_apply_eq_self_of_apply_eq_self hy i]; rw [(f ^ i).injective.eq_iff] at hi
-        rw [hi]; rw [hy],
-      hf.exists_zpow_eq hx⟩,
-    fun h => ⟨x, hx, fun _ hy => h.2 hy⟩⟩
-
-中文:
-定理 isCycle_iff_sameCycle
-  条件: (hx : f x != x)
-  结论: 是环 f ↔ 对任意 {y}, SameCycle f x y ↔ f y != y
-  证明: ⟨fun hf y =>
-    ⟨fun ⟨i, hi⟩ hy =>
-hx by
-        rw [← zpow_apply_eq_self_of_apply_eq_self hy i]; rw [(f ^ i).injective.eq_iff] at hi
-        rw [hi]; rw [hy],
-      hf.exists_zpow_eq hx⟩,
-    fun h => ⟨x, hx, fun _ hy => h.2 hy⟩⟩
-
-Depends on / 依赖: eq_iff, exists_zpow_eq, hf.exists_zpow_eq, injective, injective.eq_iff, zpow_apply_eq_self_of_apply_eq_self
--/
-theorem isCycle_iff_sameCycle (hx : f x != x) : IsCycle f ↔ forall {y}, SameCycle f x y ↔ f y != y :=
+theorem isCycle_iff_sameCycle (hx : f x ≠ x) : IsCycle f ↔ ∀ {y}, SameCycle f x y ↔ f y ≠ y :=
   ⟨fun hf y =>
     ⟨fun ⟨i, hi⟩ hy =>
-hx by
-        rw [← zpow_apply_eq_self_of_apply_eq_self hy i]; rw [(f ^ i).injective.eq_iff] at hi
-        rw [hi]; rw [hy],
+      hx <| by
+        rw [← zpow_apply_eq_self_of_apply_eq_self hy i, (f ^ i).injective.eq_iff] at hi
+        rw [hi, hy],
       hf.exists_zpow_eq hx⟩,
     fun h => ⟨x, hx, fun _ hy => h.2 hy⟩⟩
 
@@ -1142,33 +946,32 @@ section Finite
 
 variable [Finite α]
 
-/--
-theorem `IsCycle.exists_pow_eq` / 定理 `IsCycle.exists_pow_eq`
-
-English:
-theorem IsCycle.exists_pow_eq
-  given: (hf : IsCycle f) (hx : f x != x) (hy : f y != y)
-  proof: by
-  let ⟨n, hn⟩ := hf.exists_zpow_eq hx hy
-  exact
-      ⟨(n % orderOf f).toNat, by
-        {have := n.emod_nonneg (Int.natCast_ne_zero.mpr (ne_of_gt (orderOf_pos f)))
-         rwa [← zpow_natCast, Int.toNat_of_nonneg this, zpow_mod_orderOf]}⟩
-
-中文:
-定理 是环.存在_pow_eq
-  条件: (hf : 是环 f) (hx : f x != x) (hy : f y != y)
-  证明: by
-  let ⟨n, hn⟩ := hf.exists_zpow_eq hx hy
-  exact
-      ⟨(n % orderOf f).toNat, by
-        {have := n.emod_nonneg (Int.natCast_ne_zero.mpr (ne_of_gt (orderOf_pos f)))
-         rwa [← zpow_natCast, Int.toNat_of_nonneg this, zpow_mod_orderOf]}⟩
-
-Depends on / 依赖: Int.natCast_ne_zero.mpr, Int.toNat_of_nonneg, emod_nonneg, exists_zpow_eq, hf.exists_zpow_eq, n.emod_nonneg, natCast_ne_zero, ne_of_gt, orderOf, orderOf_pos, toNat_of_nonneg, zpow_mod_orderOf, zpow_natCast
+/-
+**Equiv.Perm.IsCycle.exists_pow_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle
+`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : α} [Finite α], f.IsCycle → f x 
+≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+参数：f ^ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.exists_zpow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {
+x y : α}, f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natCast_ne_zero`：∀ {n : ℕ}, ↑n ≠ 0 ↔ n ≠ 0
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用引理 `orderOf_pos`：orderOf_pos (x : G) : 0 < orderOf x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Int.toNat_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.toNat = a
+· 使用引理 `zpow_mod_orderOf`：zpow_mod_orderOf (x : G) (z : Int) : x ^ (z % (orderOf
+ x : Int)) = x ^ z
 -/
-theorem IsCycle.exists_pow_eq (hf : IsCycle f) (hx : f x != x) (hy : f y != y) :
-    exists i : Nat, (f ^ i) x = y := by
+theorem IsCycle.exists_pow_eq (hf : IsCycle f) (hx : f x ≠ x) (hy : f y ≠ y) :
+    ∃ i : ℕ, (f ^ i) x = y := by
   let ⟨n, hn⟩ := hf.exists_zpow_eq hx hy
   exact
       ⟨(n % orderOf f).toNat, by
@@ -1179,89 +982,63 @@ end Finite
 
 variable [DecidableEq α]
 
-/--
-theorem `isCycle_swap` / 定理 `isCycle_swap`
-
-English:
-theorem isCycle_swap
-  given: (hxy : x != y)
-  statement: IsCycle (swap x y)
-  proof: ⟨y, by rwa [swap_apply_right], fun a (ha : ite (a = x) y (ite (a = y) x a) != a) =>
-    if hya : y = a then ⟨0, hya⟩
-    else
-      ⟨1, by
-        rw [zpow_one]; rw [swap_apply_def]
-        split_ifs at * <;> tauto⟩⟩
-
-中文:
-定理 isCycle_swap
-  条件: (hxy : x != y)
-  结论: 是环 (swap x y)
-  证明: ⟨y, by rwa [swap_apply_right], fun a (ha : ite (a = x) y (ite (a = y) x a) != a) =>
-    if hya : y = a then ⟨0, hya⟩
-    else
-      ⟨1, by
-        rw [zpow_one]; rw [swap_apply_def]
-        split_ifs at * <;> tauto⟩⟩
-
-Depends on / 依赖: split_ifs, swap_apply_def, swap_apply_right, zpow_one
+/-
+**Equiv.Perm.isCycle_swap** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycle_swap (hxy : x != y) : IsCycle (swap x y)
+参数：hxy : x != y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.swap_apply_right`：swap_apply_right (a b : α) : swap a b b = a
+· 使用引理 `zpow_one`：zpow_one (a : G) : a ^ (1 : Int) = a
+· 使用定理 `Equiv.swap_apply_def`：swap_apply_def (a b x : α) : swap a b x = if x = a
+ then b else if x = b then a else x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem isCycle_swap (hxy : x != y) : IsCycle (swap x y) :=
-  ⟨y, by rwa [swap_apply_right], fun a (ha : ite (a = x) y (ite (a = y) x a) != a) =>
+theorem isCycle_swap (hxy : x ≠ y) : IsCycle (swap x y) :=
+  ⟨y, by rwa [swap_apply_right], fun a (ha : ite (a = x) y (ite (a = y) x a) ≠ a) =>
     if hya : y = a then ⟨0, hya⟩
     else
       ⟨1, by
-        rw [zpow_one]; rw [swap_apply_def]
+        rw [zpow_one, swap_apply_def]
         split_ifs at * <;> tauto⟩⟩
-
-/--
-theorem `IsSwap.isCycle` / 定理 `IsSwap.isCycle`
-
-English:
-theorem IsSwap.isCycle
-  statement: IsSwap f -> IsCycle f
-  proof: by
-  rintro ⟨x, y, hxy, rfl⟩
-  exact isCycle_swap hxy
-
-中文:
-定理 IsSwap.isCycle
-  结论: IsSwap f -> 是环 f
-  证明: by
-  rintro ⟨x, y, hxy, rfl⟩
-  exact isCycle_swap hxy
+/-
+**Equiv.Perm.IsSwap.isCycle** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsSwap`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : DecidableEq α], f.IsSwap → f.I
+sCycle
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.isCycle_swap`：isCycle_swap (hxy : x != y) : IsCycle (swap x y
+)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-protected theorem IsSwap.isCycle : IsSwap f -> IsCycle f := by
+protected theorem IsSwap.isCycle : IsSwap f → IsCycle f := by
   rintro ⟨x, y, hxy, rfl⟩
   exact isCycle_swap hxy
-
-/--
-theorem `swap_isSwap_iff` / 定理 `swap_isSwap_iff`
-
-English:
-theorem swap_isSwap_iff
-  given: {a b : α}
-  proof: by
-  constructor
-  · intro h hab
-    apply h.isCycle.ne_one
-    aesop
-  · intro h; use a, b
-
-中文:
-定理 swap_isSwap_iff
-  条件: {a b : α}
-  证明: by
-  constructor
-  · intro h hab
-    apply h.isCycle.ne_one
-    aesop
-  · intro h; use a, b
-
-Depends on / 依赖: h.isCycle.ne_one, isCycle, ne_one
+/-
+**Equiv.Perm.swap_isSwap_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：swap_isSwap_iff {a b : α} : (swap a b).IsSwap ↔ a != b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.ne_one`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycl
+e → f ≠ 1
+· 使用定理 `Equiv.Perm.IsSwap.isCycle`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : D
+ecidableEq α], f.IsSwap → f.IsCycle
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.swap_self`：swap_self (a : α) : swap a a = Equiv.refl _
 -/
 theorem swap_isSwap_iff {a b : α} :
-    (swap a b).IsSwap ↔ a != b := by
+    (swap a b).IsSwap ↔ a ≠ b := by
   constructor
   · intro h hab
     apply h.isCycle.ne_one
@@ -1269,82 +1046,32 @@ theorem swap_isSwap_iff {a b : α} :
   · intro h; use a, b
 
 variable [Fintype α]
-
-/--
-theorem `IsCycle.two_le_card_support` / 定理 `IsCycle.two_le_card_support`
-
-English:
-theorem IsCycle.two_le_card_support
-  given: (h : IsCycle f)
-  statement: 2 <= #f.support
-  proof: two_le_card_support_of_ne_one h.ne_one
-
-中文:
-定理 是环.two_le_card_support
-  条件: (h : 是环 f)
-  结论: 2 <= #f.support
-  证明: two_le_card_support_of_ne_one h.ne_one
-
-Depends on / 依赖: h.ne_one, ne_one, two_le_card_support_of_ne_one
+/-
+**Equiv.Perm.IsCycle.two_le_card_support** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.I
+sCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : DecidableEq α] [inst_1 : Finty
+pe α], f.IsCycle → 2 ≤ f.support.card
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.two_le_card_support_of_ne_one`：two_le_card_support_of_ne_one 
+{f : Perm α} (h : f != 1) : 2 <= #f.support
+· 使用定理 `Equiv.Perm.IsCycle.ne_one`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycl
+e → f ≠ 1
 -/
-theorem IsCycle.two_le_card_support (h : IsCycle f) : 2 <= #f.support :=
+theorem IsCycle.two_le_card_support (h : IsCycle f) : 2 ≤ #f.support :=
   two_le_card_support_of_ne_one h.ne_one
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `IsCycle.zpowersEquivSupport` / `IsCycle.zpowersEquivSupport` 的定义
+/-- The subgroup generated by a cycle is in bijection with its support -/
+/-
+**Equiv.Perm.IsCycle.zpowersEquivSupport** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm.I
+sCycle`。
+形式化陈述：{α : Type u_2} →   [inst : DecidableEq α] → [inst_1 : Fintype α] → {σ : Eq
+uiv.Perm α} → σ.IsCycle → ↥(Subgroup.zpowers σ) ≃ ↥σ.support
+参数：Subgroup.zpowers σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsCycle.zpowersEquivSupport
-  signature: {σ : Perm α} (hσ : IsCycle σ)
-  body: Equiv.ofBijective
-    (fun (τ : ↥((Subgroup.zpowers σ) : Set (Perm α))) =>
-      ⟨(τ : Perm α) (Classical.choose hσ), by
-        obtain ⟨τ, n, rfl⟩ := τ
-        rw [Subtype.coe_mk]; rw [zpow_apply_mem_support]; rw [mem_support]
-        exact (Classical.choose_spec hσ).1⟩)
-    (by
-      constructor
-      · rintro ⟨a, m, rfl⟩ ⟨b, n, rfl⟩ h
-        ext y
-        by_cases hy : σ y = y
-        · simp_rw [zpow_apply_eq_self_of_apply_eq_self hy]
-        · obtain ⟨i, rfl⟩ := (Classical.choose_spec hσ).2 hy
-          rw [Subtype.coe_mk]; rw [Subtype.coe_mk]; rw [zpow_apply_comm σ m i]; rw [zpow_apply_comm σ n i]
-          exact congr_arg _ (Subtype.ext_iff.mp h)
-      · rintro ⟨y, hy⟩
-        rw [mem_support] at hy
-        obtain ⟨n, rfl⟩ := (Classical.choose_spec hσ).2 hy
-        exact ⟨⟨σ ^ n, n, rfl⟩, rfl⟩)
-
-@[simp]
-
-中文:
-定义 是环.zpowersEquivSupport
-  签名: {σ : 置换 α} (hσ : 是环 σ)
-  定义体: Equiv.ofBijective
-    (fun (τ : ↥((Subgroup.zpowers σ) : Set (Perm α))) =>
-      ⟨(τ : Perm α) (Classical.choose hσ), by
-        obtain ⟨τ, n, rfl⟩ := τ
-        rw [Subtype.coe_mk]; rw [zpow_apply_mem_support]; rw [mem_support]
-        exact (Classical.choose_spec hσ).1⟩)
-    (by
-      constructor
-      · rintro ⟨a, m, rfl⟩ ⟨b, n, rfl⟩ h
-        ext y
-        by_cases hy : σ y = y
-        · simp_rw [zpow_apply_eq_self_of_apply_eq_self hy]
-        · obtain ⟨i, rfl⟩ := (Classical.choose_spec hσ).2 hy
-          rw [Subtype.coe_mk]; rw [Subtype.coe_mk]; rw [zpow_apply_comm σ m i]; rw [zpow_apply_comm σ n i]
-          exact congr_arg _ (Subtype.ext_iff.mp h)
-      · rintro ⟨y, hy⟩
-        rw [mem_support] at hy
-        obtain ⟨n, rfl⟩ := (Classical.choose_spec hσ).2 hy
-        exact ⟨⟨σ ^ n, n, rfl⟩, rfl⟩)
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Equiv.ofBijective, Subgroup, Subgroup.zpowers, Subtype, Subtype.coe_mk, choose_spec, coe_mk, mem_support, ofBijective, simp_rw, zpow_apply_comm, zpow_apply_eq_self_of_apply_eq_self, zpow_apply_mem_support, zpowers
+--- 原说明 ---
+The subgroup generated by a cycle is in bijection with its support
 -/
 noncomputable def IsCycle.zpowersEquivSupport {σ : Perm α} (hσ : IsCycle σ) :
     (Subgroup.zpowers σ) ≃ σ.support :=
@@ -1352,7 +1079,7 @@ noncomputable def IsCycle.zpowersEquivSupport {σ : Perm α} (hσ : IsCycle σ) 
     (fun (τ : ↥((Subgroup.zpowers σ) : Set (Perm α))) =>
       ⟨(τ : Perm α) (Classical.choose hσ), by
         obtain ⟨τ, n, rfl⟩ := τ
-        rw [Subtype.coe_mk]; rw [zpow_apply_mem_support]; rw [mem_support]
+        rw [Subtype.coe_mk, zpow_apply_mem_support, mem_support]
         exact (Classical.choose_spec hσ).1⟩)
     (by
       constructor
@@ -1361,7 +1088,7 @@ noncomputable def IsCycle.zpowersEquivSupport {σ : Perm α} (hσ : IsCycle σ) 
         by_cases hy : σ y = y
         · simp_rw [zpow_apply_eq_self_of_apply_eq_self hy]
         · obtain ⟨i, rfl⟩ := (Classical.choose_spec hσ).2 hy
-          rw [Subtype.coe_mk]; rw [Subtype.coe_mk]; rw [zpow_apply_comm σ m i]; rw [zpow_apply_comm σ n i]
+          rw [Subtype.coe_mk, Subtype.coe_mk, zpow_apply_comm σ m i, zpow_apply_comm σ n i]
           exact congr_arg _ (Subtype.ext_iff.mp h)
       · rintro ⟨y, hy⟩
         rw [mem_support] at hy
@@ -1369,121 +1096,75 @@ noncomputable def IsCycle.zpowersEquivSupport {σ : Perm α} (hσ : IsCycle σ) 
         exact ⟨⟨σ ^ n, n, rfl⟩, rfl⟩)
 
 @[simp]
-/--
-theorem `IsCycle.zpowersEquivSupport_apply` / 定理 `IsCycle.zpowersEquivSupport_apply`
-
-English:
-theorem IsCycle.zpowersEquivSupport_apply
-  given: {σ : Perm α} (hσ : IsCycle σ) {n : Nat}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 是环.zpowersEquivSupport_apply
-  条件: {σ : 置换 α} (hσ : 是环 σ) {n : 自然数}
-  证明: rfl
-
-@[simp]
+/-
+**Equiv.Perm.IsCycle.zpowersEquivSupport_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.
+Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} [inst : DecidableEq α] [inst_1 : Fintype α] {σ : Equiv.Pe
+rm α} (hσ : σ.IsCycle) {n : ℕ},   hσ.zpowersEquivSupport ⟨σ ^ n, ⋯⟩ = ⟨(σ ^ n) (
+Classical.choose hσ), ⋯⟩
+参数：hσ : σ.IsCycle；σ ^ n；Classical.choose hσ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsCycle.zpowersEquivSupport_apply {σ : Perm α} (hσ : IsCycle σ) {n : Nat} :
+theorem IsCycle.zpowersEquivSupport_apply {σ : Perm α} (hσ : IsCycle σ) {n : ℕ} :
     hσ.zpowersEquivSupport ⟨σ ^ n, n, rfl⟩ =
       ⟨(σ ^ n) (Classical.choose hσ),
         pow_apply_mem_support.2 (mem_support.2 (Classical.choose_spec hσ).1)⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `IsCycle.zpowersEquivSupport_symm_apply` / 定理 `IsCycle.zpowersEquivSupport_symm_apply`
-
-English:
-theorem IsCycle.zpowersEquivSupport_symm_apply
-  given: {σ : Perm α} (hσ : IsCycle σ) (n : Nat)
-  proof: (Equiv.symm_apply_eq _).2 hσ.zpowersEquivSupport_apply
-
-中文:
-定理 是环.zpowersEquivSupport_symm_apply
-  条件: {σ : 置换 α} (hσ : 是环 σ) (n : 自然数)
-  证明: (Equiv.symm_apply_eq _).2 hσ.zpowersEquivSupport_apply
-
-Depends on / 依赖: Equiv.symm_apply_eq, symm_apply_eq, zpowersEquivSupport_apply
+/-
+**Equiv.Perm.IsCycle.zpowersEquivSupport_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `E
+quiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} [inst : DecidableEq α] [inst_1 : Fintype α] {σ : Equiv.Pe
+rm α} (hσ : σ.IsCycle) (n : ℕ),   hσ.zpowersEquivSupport.symm ⟨(σ ^ n) (Classica
+l.choose hσ), ⋯⟩ = ⟨σ ^ n, ⋯⟩
+参数：hσ : σ.IsCycle；n : ℕ；σ ^ n；Classical.choose hσ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.Perm.pow_apply_mem_support`：pow_apply_mem_support {n : Nat} {x : α
+} : (f ^ n) x in f.support ↔ x in f.support
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
+· 使用定理 `Equiv.Perm.IsCycle.zpowersEquivSupport_apply`：∀ {α : Type u_2} [inst : D
+ecidableEq α] [inst_1 : Fintype α] {σ : Equiv.Perm α} (hσ : σ.IsCycle) {n : ℕ}, 
+  hσ.zpowersEquivSupport ⟨σ ^ n, ⋯…
 -/
-theorem IsCycle.zpowersEquivSupport_symm_apply {σ : Perm α} (hσ : IsCycle σ) (n : Nat) :
+theorem IsCycle.zpowersEquivSupport_symm_apply {σ : Perm α} (hσ : IsCycle σ) (n : ℕ) :
     hσ.zpowersEquivSupport.symm
         ⟨(σ ^ n) (Classical.choose hσ),
           pow_apply_mem_support.2 (mem_support.2 (Classical.choose_spec hσ).1)⟩ =
       ⟨σ ^ n, n, rfl⟩ :=
   (Equiv.symm_apply_eq _).2 hσ.zpowersEquivSupport_apply
-
-/--
-theorem `IsCycle.orderOf` / 定理 `IsCycle.orderOf`
-
-English:
-theorem IsCycle.orderOf
-  given: (hf : IsCycle f)
-  statement: orderOf f = #f.support
-  proof: by
-  rw [← Fintype.card_zpowers]; rw [← Fintype.card_coe]
-  convert! Fintype.card_congr (IsCycle.zpowersEquivSupport hf)
-
-中文:
-定理 是环.orderOf
-  条件: (hf : 是环 f)
-  结论: orderOf f = #f.support
-  证明: by
-  rw [← Fintype.card_zpowers]; rw [← Fintype.card_coe]
-  convert! Fintype.card_congr (IsCycle.zpowersEquivSupport hf)
+/-
+**Equiv.Perm.IsCycle.orderOf** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : DecidableEq α] [inst_1 : Finty
+pe α], f.IsCycle → orderOf f = f.support.card
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fintype.card_zpowers`：Fintype.card_zpowers : Fintype.card (zpowers x) = 
+orderOf x
+· 使用定理 `Fintype.card_coe`：Fintype.card_coe (s : Finset α) [Fintype s] : Fintype.
+card s = #s
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
 -/
 protected theorem IsCycle.orderOf (hf : IsCycle f) : orderOf f = #f.support := by
-  rw [← Fintype.card_zpowers]; rw [← Fintype.card_coe]
+  rw [← Fintype.card_zpowers, ← Fintype.card_coe]
   convert! Fintype.card_congr (IsCycle.zpowersEquivSupport hf)
-
-/--
-theorem `isCycle_swap_mul_aux₁` / 定理 `isCycle_swap_mul_aux₁`
-
-English:
-theorem isCycle_swap_mul_aux₁
-  given: {α : Type*} [DecidableEq α]
-  proof: by
-  intro n
-  induction n with
-  | zero => exact fun _ h => ⟨0, h⟩
-  | succ n hn =>
-    intro b x f hb h
-    obtain hfbx | hfbx := eq_or_ne (f x) b
-    · exact ⟨0, hfbx⟩
-    have : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    have hb' : (swap x (f x) * f) (f.symm b) != f.symm b := by
-      simpa [swap_apply_of_ne_of_ne this.2 hfbx.symm, eq_symm_apply, f.injective.eq_iff]
-        using this.1
-obtain ⟨i, hi⟩ := hn hb' f.injective by simpa [pow_succ'] using h
-    refine ⟨i + 1, ?_⟩
-    rw [add_comm]; rw [zpow_add]; rw [mul_apply]; rw [hi]; rw [zpow_one]; rw [mul_apply]; rw [apply_symm_apply]; rw [swap_apply_of_ne_of_ne (ne_and_ne_of_swap_mul_apply_ne_self hb).2 hfbx.symm]
-
-中文:
-定理 isCycle_swap_mul_aux₁
-  条件: {α : 类型} [DecidableEq α]
-  证明: by
-  intro n
-  induction n with
-  | zero => exact fun _ h => ⟨0, h⟩
-  | succ n hn =>
-    intro b x f hb h
-    obtain hfbx | hfbx := eq_or_ne (f x) b
-    · exact ⟨0, hfbx⟩
-    have : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    have hb' : (swap x (f x) * f) (f.symm b) != f.symm b := by
-      simpa [swap_apply_of_ne_of_ne this.2 hfbx.symm, eq_symm_apply, f.injective.eq_iff]
-        using this.1
-obtain ⟨i, hi⟩ := hn hb' f.injective by simpa [pow_succ'] using h
-    refine ⟨i + 1, ?_⟩
-    rw [add_comm]; rw [zpow_add]; rw [mul_apply]; rw [hi]; rw [zpow_one]; rw [mul_apply]; rw [apply_symm_apply]; rw [swap_apply_of_ne_of_ne (ne_and_ne_of_swap_mul_apply_ne_self hb).2 hfbx.symm]
-
-Depends on / 依赖: AddCommGroup, AddCon, AddCon.Quotient, Quotient, add_comm, eq_iff, eq_or_ne, eq_symm_apply, f.injective, f.injective.eq_iff, f.symm, hfbx.symm, injective, mul_appl, ne_and_ne_of_swap_mul_apply_ne_self, pow_succ, swap_apply_of_ne_of_ne, zpow_add
+/-
+**Equiv.Perm.isCycle_swap_mul_aux** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isCycle_swap_mul_aux₁ {α : Type*} [DecidableEq α] :
-    forall (n : Nat) {b x : α} {f : Perm α} (_ : (swap x (f x) * f) b != b) (_ : (f ^ n) (f x) = b),
-      exists i : Int, ((swap x (f x) * f) ^ i) (f x) = b := by
+    ∀ (n : ℕ) {b x : α} {f : Perm α} (_ : (swap x (f x) * f) b ≠ b) (_ : (f ^ n) (f x) = b),
+      ∃ i : ℤ, ((swap x (f x) * f) ^ i) (f x) = b := by
   intro n
   induction n with
   | zero => exact fun _ h => ⟨0, h⟩
@@ -1491,72 +1172,31 @@ theorem isCycle_swap_mul_aux₁ {α : Type*} [DecidableEq α] :
     intro b x f hb h
     obtain hfbx | hfbx := eq_or_ne (f x) b
     · exact ⟨0, hfbx⟩
-    have : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    have hb' : (swap x (f x) * f) (f.symm b) != f.symm b := by
+    have : f b ≠ b ∧ b ≠ x := ne_and_ne_of_swap_mul_apply_ne_self hb
+    have hb' : (swap x (f x) * f) (f.symm b) ≠ f.symm b := by
       simpa [swap_apply_of_ne_of_ne this.2 hfbx.symm, eq_symm_apply, f.injective.eq_iff]
         using this.1
-obtain ⟨i, hi⟩ := hn hb' f.injective by simpa [pow_succ'] using h
+    obtain ⟨i, hi⟩ := hn hb' <| f.injective <| by simpa [pow_succ'] using h
     refine ⟨i + 1, ?_⟩
-    rw [add_comm]; rw [zpow_add]; rw [mul_apply]; rw [hi]; rw [zpow_one]; rw [mul_apply]; rw [apply_symm_apply]; rw [swap_apply_of_ne_of_ne (ne_and_ne_of_swap_mul_apply_ne_self hb).2 hfbx.symm]
-
-/--
-theorem `isCycle_swap_mul_aux₂` / 定理 `isCycle_swap_mul_aux₂`
-
-English:
-theorem isCycle_swap_mul_aux₂
-  given: {α : Type*} [DecidableEq α]
-  proof: eq_or_ne (f x) b
-    · exact ⟨0, hfxb⟩
-    obtain ⟨hfb, hbx⟩ : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    replace hb : (swap x (f.symm x) * f⁻¹) (f.symm b) != f.symm b := by
-      rw [mul_apply]; rw [swap_apply_def]
-      split_ifs <;> simp [symm_apply_eq, eq_symm_apply] at * <;> tauto
-obtain ⟨i, hi⟩ := isCycle_swap_mul_aux₁ n hb by
-      rw [← mul_apply]; rw [← pow_succ]; simpa [pow_succ', eq_symm_apply] using! h
-    refine ⟨-i, (swap x (f⁻¹ x) * f⁻¹).injective ?_⟩
-    convert! hi using 1
-    · rw [zpow_neg, ← inv_zpow, ← mul_apply, mul_inv_rev, swap_inv, mul_swap_eq_swap_mul]
-      simp [swap_comm _ x, ← mul_apply, -coe_mul, ← inv_def, -coe_inv, ← inv_def, mul_assoc _ f⁻¹,
-        ← mul_zpow_mul, mul_assoc _ _ f]
-      simp
-    · exact swap_apply_of_ne_of_ne (by simpa [eq_comm, eq_symm_apply, symm_apply_eq] using! hfxb)
-        (by simpa [eq_comm, eq_symm_apply, symm_apply_eq])
-
-中文:
-定理 isCycle_swap_mul_aux₂
-  条件: {α : 类型} [DecidableEq α]
-  证明: eq_or_ne (f x) b
-    · exact ⟨0, hfxb⟩
-    obtain ⟨hfb, hbx⟩ : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    replace hb : (swap x (f.symm x) * f⁻¹) (f.symm b) != f.symm b := by
-      rw [mul_apply]; rw [swap_apply_def]
-      split_ifs <;> simp [symm_apply_eq, eq_symm_apply] at * <;> tauto
-obtain ⟨i, hi⟩ := isCycle_swap_mul_aux₁ n hb by
-      rw [← mul_apply]; rw [← pow_succ]; simpa [pow_succ', eq_symm_apply] using! h
-    refine ⟨-i, (swap x (f⁻¹ x) * f⁻¹).injective ?_⟩
-    convert! hi using 1
-    · rw [zpow_neg, ← inv_zpow, ← mul_apply, mul_inv_rev, swap_inv, mul_swap_eq_swap_mul]
-      simp [swap_comm _ x, ← mul_apply, -coe_mul, ← inv_def, -coe_inv, ← inv_def, mul_assoc _ f⁻¹,
-        ← mul_zpow_mul, mul_assoc _ _ f]
-      simp
-    · exact swap_apply_of_ne_of_ne (by simpa [eq_comm, eq_symm_apply, symm_apply_eq] using! hfxb)
-        (by simpa [eq_comm, eq_symm_apply, symm_apply_eq])
-
-Depends on / 依赖: eq_or_ne
+    rw [add_comm, zpow_add, mul_apply, hi, zpow_one, mul_apply, apply_symm_apply,
+      swap_apply_of_ne_of_ne (ne_and_ne_of_swap_mul_apply_ne_self hb).2 hfbx.symm]
+/-
+**Equiv.Perm.isCycle_swap_mul_aux** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isCycle_swap_mul_aux₂ {α : Type*} [DecidableEq α] :
-    forall (n : Int) {b x : α} {f : Perm α}, (swap x (f x) * f) b != b -> (f ^ n) (f x) = b ->
-      exists i : Int, ((swap x (f x) * f) ^ i) (f x) = b
-  | (n : Nat), _, _, _, hb, h => isCycle_swap_mul_aux₁ n hb h
+    ∀ (n : ℤ) {b x : α} {f : Perm α}, (swap x (f x) * f) b ≠ b → (f ^ n) (f x) = b →
+      ∃ i : ℤ, ((swap x (f x) * f) ^ i) (f x) = b
+  | (n : ℕ), _, _, _, hb, h => isCycle_swap_mul_aux₁ n hb h
   | .negSucc n, b, x, f, hb, h => by
     obtain hfxb | hfxb := eq_or_ne (f x) b
     · exact ⟨0, hfxb⟩
-    obtain ⟨hfb, hbx⟩ : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    replace hb : (swap x (f.symm x) * f⁻¹) (f.symm b) != f.symm b := by
-      rw [mul_apply]; rw [swap_apply_def]
+    obtain ⟨hfb, hbx⟩ : f b ≠ b ∧ b ≠ x := ne_and_ne_of_swap_mul_apply_ne_self hb
+    replace hb : (swap x (f.symm x) * f⁻¹) (f.symm b) ≠ f.symm b := by
+      rw [mul_apply, swap_apply_def]
       split_ifs <;> simp [symm_apply_eq, eq_symm_apply] at * <;> tauto
-obtain ⟨i, hi⟩ := isCycle_swap_mul_aux₁ n hb by
-      rw [← mul_apply]; rw [← pow_succ]; simpa [pow_succ', eq_symm_apply] using! h
+    obtain ⟨i, hi⟩ := isCycle_swap_mul_aux₁ n hb <| by
+      rw [← mul_apply, ← pow_succ]; simpa [pow_succ', eq_symm_apply] using! h
     refine ⟨-i, (swap x (f⁻¹ x) * f⁻¹).injective ?_⟩
     convert! hi using 1
     · rw [zpow_neg, ← inv_zpow, ← mul_apply, mul_inv_rev, swap_inv, mul_swap_eq_swap_mul]
@@ -1565,54 +1205,38 @@ obtain ⟨i, hi⟩ := isCycle_swap_mul_aux₁ n hb by
       simp
     · exact swap_apply_of_ne_of_ne (by simpa [eq_comm, eq_symm_apply, symm_apply_eq] using! hfxb)
         (by simpa [eq_comm, eq_symm_apply, symm_apply_eq])
-
-/--
-theorem `IsCycle.eq_swap_of_apply_apply_eq_self` / 定理 `IsCycle.eq_swap_of_apply_apply_eq_self`
-
-English:
-theorem IsCycle.eq_swap_of_apply_apply_eq_self
-  statement: {α : Type*} [DecidableEq α] {f : Perm α}
-  proof: Equiv.ext fun y =>
-    let ⟨z, hz⟩ := hf
-    let ⟨i, hi⟩ := hz.2 hfx
-    if hyx : y = x then by simp [hyx]
-    else
-      if hfyx : y = f x then by simp [hfyx, hffx]
-      else by
-        rw [swap_apply_of_ne_of_ne hyx hfyx]
-        refine by_contradiction fun hy => ?_
-        obtain ⟨j, hj⟩ := hz.2 hy
-        rw [← sub_add_cancel j i]; rw [zpow_add]; rw [mul_apply]; rw [hi] at hj
-        rcases zpow_apply_eq_of_apply_apply_eq_self hffx (j - i) with hji | hji
-        · rw [← hj, hji] at hyx
-          tauto
-        · rw [← hj, hji] at hfyx
-          tauto
-
-中文:
-定理 是环.eq_swap_of_apply_apply_eq_self
-  结论: {α : 类型} [DecidableEq α] {f : 置换 α}
-  证明: Equiv.ext fun y =>
-    let ⟨z, hz⟩ := hf
-    let ⟨i, hi⟩ := hz.2 hfx
-    if hyx : y = x then by simp [hyx]
-    else
-      if hfyx : y = f x then by simp [hfyx, hffx]
-      else by
-        rw [swap_apply_of_ne_of_ne hyx hfyx]
-        refine by_contradiction fun hy => ?_
-        obtain ⟨j, hj⟩ := hz.2 hy
-        rw [← sub_add_cancel j i]; rw [zpow_add]; rw [mul_apply]; rw [hi] at hj
-        rcases zpow_apply_eq_of_apply_apply_eq_self hffx (j - i) with hji | hji
-        · rw [← hj, hji] at hyx
-          tauto
-        · rw [← hj, hji] at hfyx
-          tauto
-
-Depends on / 依赖: Equiv.ext, by_contradiction, mul_apply, sub_add_cancel, swap_apply_of_ne_of_ne, zpow_add, zpow_apply_eq_of_apply_apply_eq_self
+/-
+**Equiv.Perm.IsCycle.eq_swap_of_apply_apply_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `E
+quiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_4} [inst : DecidableEq α] {f : Equiv.Perm α},   f.IsCycle → 
+∀ {x : α}, f x ≠ x → f (f x) = x → f = Equiv.swap x (f x)
+参数：f x；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.swap_apply_right`：swap_apply_right (a b : α) : swap a b b = a
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `by_contradiction`：by_contradiction {p : Prop} : (¬p -> False) -> p
+· 使用定理 `Equiv.Perm.zpow_apply_eq_of_apply_apply_eq_self`：∀ {α : Type u_1} {f : E
+quiv.Perm α} {x : α}, f (f x) = x → ∀ (i : ℤ), (f ^ i) x = x ∨ (f ^ i) x = f x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.mul_apply`：mul_apply (f g : Perm α) (x) : (f * g) x = f (g x)
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem IsCycle.eq_swap_of_apply_apply_eq_self {α : Type*} [DecidableEq α] {f : Perm α}
-    (hf : IsCycle f) {x : α} (hfx : f x != x) (hffx : f (f x) = x) : f = swap x (f x) :=
+    (hf : IsCycle f) {x : α} (hfx : f x ≠ x) (hffx : f (f x) = x) : f = swap x (f x) :=
   Equiv.ext fun y =>
     let ⟨z, hz⟩ := hf
     let ⟨i, hi⟩ := hz.2 hfx
@@ -1623,89 +1247,64 @@ theorem IsCycle.eq_swap_of_apply_apply_eq_self {α : Type*} [DecidableEq α] {f 
         rw [swap_apply_of_ne_of_ne hyx hfyx]
         refine by_contradiction fun hy => ?_
         obtain ⟨j, hj⟩ := hz.2 hy
-        rw [← sub_add_cancel j i]; rw [zpow_add]; rw [mul_apply]; rw [hi] at hj
+        rw [← sub_add_cancel j i, zpow_add, mul_apply, hi] at hj
         rcases zpow_apply_eq_of_apply_apply_eq_self hffx (j - i) with hji | hji
         · rw [← hj, hji] at hyx
           tauto
         · rw [← hj, hji] at hfyx
           tauto
-
-/--
-theorem `IsCycle.swap_mul` / 定理 `IsCycle.swap_mul`
-
-English:
-theorem IsCycle.swap_mul
-  statement: {α : Type*} [DecidableEq α] {f : Perm α} (hf : IsCycle f) {x : α}
-  proof: by
-  refine ⟨f x, ?_, fun y hy => ?_⟩
-  · simp [swap_apply_def, mul_apply, if_neg hffx, f.injective.eq_iff, hx]
-  obtain ⟨i, rfl⟩ := hf.exists_zpow_eq hx (ne_and_ne_of_swap_mul_apply_ne_self hy).1
-  exact isCycle_swap_mul_aux₂ (i - 1) hy (by simp [← mul_apply, -coe_mul, ← zpow_add_one])
-
-中文:
-定理 是环.swap_mul
-  结论: {α : 类型} [DecidableEq α] {f : 置换 α} (hf : 是环 f) {x : α}
-  证明: by
-  refine ⟨f x, ?_, fun y hy => ?_⟩
-  · simp [swap_apply_def, mul_apply, if_neg hffx, f.injective.eq_iff, hx]
-  obtain ⟨i, rfl⟩ := hf.exists_zpow_eq hx (ne_and_ne_of_swap_mul_apply_ne_self hy).1
-  exact isCycle_swap_mul_aux₂ (i - 1) hy (by simp [← mul_apply, -coe_mul, ← zpow_add_one])
-
-Depends on / 依赖: coe_mul, eq_iff, exists_zpow_eq, f.injective.eq_iff, hf.exists_zpow_eq, if_neg, injective, mul_apply, ne_and_ne_of_swap_mul_apply_ne_self, swap_apply_def, zpow_add_one
+/-
+**Equiv.Perm.IsCycle.swap_mul** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_4} [inst : DecidableEq α] {f : Equiv.Perm α},   f.IsCycle → 
+∀ {x : α}, f x ≠ x → f (f x) ≠ x → (Equiv.swap x (f x) * f).IsCycle
+参数：f x；Equiv.swap x (f x) * f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Equiv.Perm.IsCycle.exists_zpow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {
+x y : α}, f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Equiv.Perm.ne_and_ne_of_swap_mul_apply_ne_self`：ne_and_ne_of_swap_mul_ap
+ply_ne_self {f : Perm α} {x y : α} (hy : (swap x (f x) * f) y != y) : f y != y ∧
+ y != x
+· 使用定理 `Equiv.Perm.isCycle_swap_mul_aux₂`：isCycle_swap_mul_aux₂ {α : Type*} [Dec
+idableEq α] : forall (n : Int) {b x : α} {f : Perm α}, (swap x (f x) * f) b != b
+ -> (f ^ n) (f x) = b …
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsCycle.swap_mul {α : Type*} [DecidableEq α] {f : Perm α} (hf : IsCycle f) {x : α}
-    (hx : f x != x) (hffx : f (f x) != x) : IsCycle (swap x (f x) * f) := by
-  refine ⟨f x, ?_, fun y hy => ?_⟩
+    (hx : f x ≠ x) (hffx : f (f x) ≠ x) : IsCycle (swap x (f x) * f) := by
+  refine ⟨f x, ?_, fun y hy ↦ ?_⟩
   · simp [swap_apply_def, mul_apply, if_neg hffx, f.injective.eq_iff, hx]
   obtain ⟨i, rfl⟩ := hf.exists_zpow_eq hx (ne_and_ne_of_swap_mul_apply_ne_self hy).1
   exact isCycle_swap_mul_aux₂ (i - 1) hy (by simp [← mul_apply, -coe_mul, ← zpow_add_one])
-
-/--
-theorem `IsCycle.sign` / 定理 `IsCycle.sign`
-
-English:
-theorem IsCycle.sign
-  given: {f : Perm α} (hf : IsCycle f)
-  statement: sign f = -(-1) ^ #f.support
-  proof: let ⟨x, hx⟩ := hf
-  calc
-    Perm.sign f = Perm.sign (swap x (f x) * (swap x (f x) * f)) := by simp
-    _ = -(-1) ^ #f.support :=
-      if h1 : f (f x) = x then by
-        have h : swap x (f x) * f = 1 := by
-          simp only [mul_def, one_def]
-          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [swap_apply_left]; rw [swap_swap]
-        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [h]; rw [sign_one]; rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [card_support_swap hx.1.symm]
-        rfl
-      else by
-        have h : #(swap x (f x) * f).support + 1 = #f.support := by
-          rw [← insert_erase (mem_support.2 hx.1)]; rw [support_swap_mul_eq _ _ h1]; rw [card_insert_of_notMem (notMem_erase _ _)]; rw [sdiff_singleton_eq_erase]
-        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [(hf.swap_mul hx.1 h1).sign]; rw [← h]
-        simp only [mul_neg, neg_mul, one_mul, neg_neg, pow_add, pow_one, mul_one]
-termination_by #f.support
-
-中文:
-定理 是环.sign
-  条件: {f : 置换 α} (hf : 是环 f)
-  结论: sign f = -(-1) ^ #f.support
-  证明: let ⟨x, hx⟩ := hf
-  calc
-    Perm.sign f = Perm.sign (swap x (f x) * (swap x (f x) * f)) := by simp
-    _ = -(-1) ^ #f.support :=
-      if h1 : f (f x) = x then by
-        have h : swap x (f x) * f = 1 := by
-          simp only [mul_def, one_def]
-          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [swap_apply_left]; rw [swap_swap]
-        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [h]; rw [sign_one]; rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [card_support_swap hx.1.symm]
-        rfl
-      else by
-        have h : #(swap x (f x) * f).support + 1 = #f.support := by
-          rw [← insert_erase (mem_support.2 hx.1)]; rw [support_swap_mul_eq _ _ h1]; rw [card_insert_of_notMem (notMem_erase _ _)]; rw [sdiff_singleton_eq_erase]
-        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [(hf.swap_mul hx.1 h1).sign]; rw [← h]
-        simp only [mul_neg, neg_mul, one_mul, neg_neg, pow_add, pow_one, mul_one]
-termination_by #f.support
-
-Depends on / 依赖: Perm.sign, card_support_swap, eq_swap_of_apply_apply_eq_self, f.support, hf.eq_swap_of_apply_apply_eq_self, mul_def, one_def, sign_mul, sign_one, sign_swap, support, swap_apply_left, swap_swap
+/-
+**Equiv.Perm.IsCycle.sign** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} [inst : DecidableEq α] [inst_1 : Fintype α] {f : Equiv.Pe
+rm α},   f.IsCycle → Equiv.Perm.sign f = -(-1) ^ f.support.card
+参数：-1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.sign._unary`：∀ {α : Type u_2} [inst : DecidableEq α] 
+[inst_1 : Fintype α] (_x : (f : Equiv.Perm α) ×' f.IsCycle),   Equiv.Perm.sign _
+x.1 = -(-1) ^ _x.1.s…
 -/
 theorem IsCycle.sign {f : Perm α} (hf : IsCycle f) : sign f = -(-1) ^ #f.support :=
   let ⟨x, hx⟩ := hf
@@ -1715,48 +1314,41 @@ theorem IsCycle.sign {f : Perm α} (hf : IsCycle f) : sign f = -(-1) ^ #f.suppor
       if h1 : f (f x) = x then by
         have h : swap x (f x) * f = 1 := by
           simp only [mul_def, one_def]
-          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [swap_apply_left]; rw [swap_swap]
-        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [h]; rw [sign_one]; rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [card_support_swap hx.1.symm]
+          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1, swap_apply_left, swap_swap]
+        rw [sign_mul, sign_swap hx.1.symm, h, sign_one,
+          hf.eq_swap_of_apply_apply_eq_self hx.1 h1, card_support_swap hx.1.symm]
         rfl
       else by
         have h : #(swap x (f x) * f).support + 1 = #f.support := by
-          rw [← insert_erase (mem_support.2 hx.1)]; rw [support_swap_mul_eq _ _ h1]; rw [card_insert_of_notMem (notMem_erase _ _)]; rw [sdiff_singleton_eq_erase]
-        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [(hf.swap_mul hx.1 h1).sign]; rw [← h]
+          rw [← insert_erase (mem_support.2 hx.1), support_swap_mul_eq _ _ h1,
+            card_insert_of_notMem (notMem_erase _ _), sdiff_singleton_eq_erase]
+        rw [sign_mul, sign_swap hx.1.symm, (hf.swap_mul hx.1 h1).sign, ← h]
         simp only [mul_neg, neg_mul, one_mul, neg_neg, pow_add, pow_one, mul_one]
 termination_by #f.support
-
-/--
-theorem `IsCycle.of_pow` / 定理 `IsCycle.of_pow`
-
-English:
-theorem IsCycle.of_pow
-  given: {n : Nat} (h1 : IsCycle (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
-  proof: by
-  have key : forall x : α, (f ^ n) x != x ↔ f x != x := by
-    simp_rw [← mem_support, ← Finset.ext_iff]
-    exact (support_pow_le _ n).antisymm h2
-  obtain ⟨x, hx1, hx2⟩ := h1
-  refine ⟨x, (key x).mp hx1, fun y hy => ?_⟩
-  obtain ⟨i, _⟩ := hx2 ((key y).mpr hy)
-  exact ⟨n * i, by rwa [zpow_mul]⟩
-
-中文:
-定理 是环.of_pow
-  条件: {n : 自然数} (h1 : 是环 (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
-  证明: by
-  have key : forall x : α, (f ^ n) x != x ↔ f x != x := by
-    simp_rw [← mem_support, ← Finset.ext_iff]
-    exact (support_pow_le _ n).antisymm h2
-  obtain ⟨x, hx1, hx2⟩ := h1
-  refine ⟨x, (key x).mp hx1, fun y hy => ?_⟩
-  obtain ⟨i, _⟩ := hx2 ((key y).mpr hy)
-  exact ⟨n * i, by rwa [zpow_mul]⟩
-
-Depends on / 依赖: Finset, Finset.ext_iff, antisymm, ext_iff, mem_support, simp_rw, support_pow_le, zpow_mul
+/-
+**Equiv.Perm.IsCycle.of_pow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : DecidableEq α] [inst_1 : Finty
+pe α] {n : ℕ},   (f ^ n).IsCycle → f.support ⊆ (f ^ n).support → f.IsCycle
+参数：f ^ n；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Equiv.Perm.support_pow_le`：support_pow_le (σ : Perm α) (n : Nat) : (σ ^ 
+n).support <= σ.support
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `zpow_mul`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (m n : ℤ), 
+a ^ (m * n) = (a ^ m) ^ n
 -/
-theorem IsCycle.of_pow {n : Nat} (h1 : IsCycle (f ^ n)) (h2 : f.support subseteq (f ^ n).support) :
+theorem IsCycle.of_pow {n : ℕ} (h1 : IsCycle (f ^ n)) (h2 : f.support ⊆ (f ^ n).support) :
     IsCycle f := by
-  have key : forall x : α, (f ^ n) x != x ↔ f x != x := by
+  have key : ∀ x : α, (f ^ n) x ≠ x ↔ f x ≠ x := by
     simp_rw [← mem_support, ← Finset.ext_iff]
     exact (support_pow_le _ n).antisymm h2
   obtain ⟨x, hx1, hx2⟩ := h1
@@ -1766,109 +1358,102 @@ theorem IsCycle.of_pow {n : Nat} (h1 : IsCycle (f ^ n)) (h2 : f.support subseteq
 
 -- The lemma `support_zpow_le` is relevant. It means that `h2` is equivalent to
 -- `σ.support = (σ ^ n).support`, as well as to `#σ.support ≤ #(σ ^ n).support`.
-/--
-theorem `IsCycle.of_zpow` / 定理 `IsCycle.of_zpow`
-
-English:
-theorem IsCycle.of_zpow
-  given: {n : Int} (h1 : IsCycle (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
-  proof: by
-  cases n
-  · exact h1.of_pow h2
-  · simp only [zpow_negSucc, Perm.support_inv] at h1 h2
-    exact (inv_inv (f ^ _) ▸ h1.inv).of_pow h2
-
-中文:
-定理 是环.of_zpow
-  条件: {n : 整数} (h1 : 是环 (f ^ n)) (h2 : f.support subseteq (f ^ n).support)
-  证明: by
-  cases n
-  · exact h1.of_pow h2
-  · simp only [zpow_negSucc, Perm.support_inv] at h1 h2
-    exact (inv_inv (f ^ _) ▸ h1.inv).of_pow h2
-
-Depends on / 依赖: Perm.support_inv, h1.inv, h1.of_pow, inv_inv, of_pow, support_inv, zpow_negSucc
+/-
+**Equiv.Perm.IsCycle.of_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : DecidableEq α] [inst_1 : Finty
+pe α] {n : ℤ},   (f ^ n).IsCycle → f.support ⊆ (f ^ n).support → f.IsCycle
+参数：f ^ n；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.of_pow`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : D
+ecidableEq α] [inst_1 : Fintype α] {n : ℕ},   (f ^ n).IsCycle → f.support ⊆ (f ^
+ n).support → f…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.IsCycle.inv`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycle →
+ f⁻¹.IsCycle
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.Perm.support_inv`：support_inv (σ : Perm α) : support σ⁻¹ = σ.suppo
+rt
 -/
-theorem IsCycle.of_zpow {n : Int} (h1 : IsCycle (f ^ n)) (h2 : f.support subseteq (f ^ n).support) :
+theorem IsCycle.of_zpow {n : ℤ} (h1 : IsCycle (f ^ n)) (h2 : f.support ⊆ (f ^ n).support) :
     IsCycle f := by
   cases n
   · exact h1.of_pow h2
   · simp only [zpow_negSucc, Perm.support_inv] at h1 h2
     exact (inv_inv (f ^ _) ▸ h1.inv).of_pow h2
-
-/--
-theorem `nodup_of_pairwise_disjoint_cycles` / 定理 `nodup_of_pairwise_disjoint_cycles`
-
-English:
-theorem nodup_of_pairwise_disjoint_cycles
-  statement: {l : List (Perm β)} (h1 : forall f in l, IsCycle f)
-  proof: nodup_of_pairwise_disjoint (fun h => (h1 1 h).ne_one rfl) h2
-
-中文:
-定理 nodup_of_pairwise_disjoint_cycles
-  结论: {l : 列表 (置换 β)} (h1 : 对任意 f in l, 是环 f)
-  证明: nodup_of_pairwise_disjoint (fun h => (h1 1 h).ne_one rfl) h2
-
-Depends on / 依赖: ne_one, nodup_of_pairwise_disjoint
+/-
+**Equiv.Perm.nodup_of_pairwise_disjoint_cycles** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.
+Perm`。
+形式化陈述：nodup_of_pairwise_disjoint_cycles {l : List (Perm β)} (h1 : forall f in l,
+ IsCycle f) (h2 : l.Pairwise Disjoint) : l.Nodup
+参数：Perm β；h1 : forall f in l, IsCycle f；h2 : l.Pairwise Disjoint。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.nodup_of_pairwise_disjoint`：nodup_of_pairwise_disjoint {l : L
+ist (Perm α)} (h1 : (1 : Perm α) ∉ l) (h2 : l.Pairwise Disjoint) : l.Nodup
+· 使用定理 `Equiv.Perm.IsCycle.ne_one`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycl
+e → f ≠ 1
 -/
-theorem nodup_of_pairwise_disjoint_cycles {l : List (Perm β)} (h1 : forall f in l, IsCycle f)
+theorem nodup_of_pairwise_disjoint_cycles {l : List (Perm β)} (h1 : ∀ f ∈ l, IsCycle f)
     (h2 : l.Pairwise Disjoint) : l.Nodup :=
   nodup_of_pairwise_disjoint (fun h => (h1 1 h).ne_one rfl) h2
 
-/--
-theorem `IsCycle.support_congr` / 定理 `IsCycle.support_congr`
+/-- Unlike `support_congr`, which assumes that `∀ (x ∈ g.support), f x = g x)`, here
+we have the weaker assumption that `∀ (x ∈ f.support), f x = g x`. -/
+/-
+**Equiv.Perm.IsCycle.support_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle
+`。
+形式化陈述：∀ {α : Type u_2} {f g : Equiv.Perm α} [inst : DecidableEq α] [inst_1 : Fin
+type α],   f.IsCycle → g.IsCycle → f.support ⊆ g.support → (∀ x ∈ f.support, f x
+ = g x) → f = g
+参数：∀ x ∈ f.support, f x = g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `Equiv.Perm.IsCycle.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {x
+ y : α} [Finite α], f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_of_mem_inter_left`：mem_of_mem_inter_left {a : α} {s₁ s₂ : Fin
+set α} (h : a in s₁ inter s₂) : a in s₁
+· 使用定理 `Equiv.Perm.pow_eq_on_of_mem_support`：pow_eq_on_of_mem_support (h : foral
+l x in f.support inter g.support, f x = g x) (k : Nat) : forall x in f.support i
+nter g.support, (f ^ k) x…
+· 使用定理 `Finset.mem_inter_of_mem`：mem_inter_of_mem {a : α} {s₁ s₂ : Finset α} : a
+ in s₁ -> a in s₂ -> a in s₁ inter s₂
+· 使用定理 `Equiv.Perm.pow_apply_mem_support`：pow_apply_mem_support {n : Nat} {x : α
+} : (f ^ n) x in f.support ↔ x in f.support
+· 使用定理 `Equiv.Perm.support_congr`：support_congr (h : f.support subseteq g.suppor
+t) (h' : forall x in g.support, f x = g x) : f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 
-English:
-theorem IsCycle.support_congr
-  statement: (hf : IsCycle f) (hg : IsCycle g) (h : f.support subseteq g.support)
-  proof: by
-  have : f.support = g.support := by
-    refine le_antisymm h ?_
-    intro z hz
-    obtain ⟨x, hx, _⟩ := id hf
-    have hx' : g x != x := by rwa [← h' x (mem_support.mpr hx)]
-    obtain ⟨m, hm⟩ := hg.exists_pow_eq hx' (mem_support.mp hz)
-    have h'' : forall x in f.support inter g.support, f x = g x := by
-      intro x hx
-      exact h' x (mem_of_mem_inter_left hx)
-    rwa [← hm, ←
-      pow_eq_on_of_mem_support h'' _ x
-        (mem_inter_of_mem (mem_support.mpr hx) (mem_support.mpr hx')),
-      pow_apply_mem_support, mem_support]
-  refine Equiv.Perm.support_congr h ?_
-  simpa [← this] using h'
-
-中文:
-定理 是环.support_congr
-  结论: (hf : 是环 f) (hg : 是环 g) (h : f.support subseteq g.support)
-  证明: by
-  have : f.support = g.support := by
-    refine le_antisymm h ?_
-    intro z hz
-    obtain ⟨x, hx, _⟩ := id hf
-    have hx' : g x != x := by rwa [← h' x (mem_support.mpr hx)]
-    obtain ⟨m, hm⟩ := hg.exists_pow_eq hx' (mem_support.mp hz)
-    have h'' : forall x in f.support inter g.support, f x = g x := by
-      intro x hx
-      exact h' x (mem_of_mem_inter_left hx)
-    rwa [← hm, ←
-      pow_eq_on_of_mem_support h'' _ x
-        (mem_inter_of_mem (mem_support.mpr hx) (mem_support.mpr hx')),
-      pow_apply_mem_support, mem_support]
-  refine Equiv.Perm.support_congr h ?_
-  simpa [← this] using h'
-
-Depends on / 依赖: Equiv.Perm.sup, exists_pow_eq, f.support, g.support, hg.exists_pow_eq, le_antisymm, mem_inter_of_mem, mem_of_mem_inter_left, mem_support, mem_support.mp, mem_support.mpr, pow_apply_mem_support, pow_eq_on_of_mem_support, support
+--- 原说明 ---
+Unlike `support_congr`, which assumes that `∀ (x ∈ g.support), f x = g x)`, here
+we have the weaker assumption that `∀ (x ∈ f.support), f x = g x`.
 -/
-theorem IsCycle.support_congr (hf : IsCycle f) (hg : IsCycle g) (h : f.support subseteq g.support)
-    (h' : forall x in f.support, f x = g x) : f = g := by
+theorem IsCycle.support_congr (hf : IsCycle f) (hg : IsCycle g) (h : f.support ⊆ g.support)
+    (h' : ∀ x ∈ f.support, f x = g x) : f = g := by
   have : f.support = g.support := by
     refine le_antisymm h ?_
     intro z hz
     obtain ⟨x, hx, _⟩ := id hf
-    have hx' : g x != x := by rwa [← h' x (mem_support.mpr hx)]
+    have hx' : g x ≠ x := by rwa [← h' x (mem_support.mpr hx)]
     obtain ⟨m, hm⟩ := hg.exists_pow_eq hx' (mem_support.mp hz)
-    have h'' : forall x in f.support inter g.support, f x = g x := by
+    have h'' : ∀ x ∈ f.support ∩ g.support, f x = g x := by
       intro x hx
       exact h' x (mem_of_mem_inter_left hx)
     rwa [← hm, ←
@@ -1878,100 +1463,101 @@ theorem IsCycle.support_congr (hf : IsCycle f) (hg : IsCycle g) (h : f.support s
   refine Equiv.Perm.support_congr h ?_
   simpa [← this] using h'
 
-/--
-theorem `IsCycle.eq_on_support_inter_nonempty_congr` / 定理 `IsCycle.eq_on_support_inter_nonempty_congr`
+/-- If two cyclic permutations agree on all terms in their intersection,
+and that intersection is not empty, then the two cyclic permutations must be equal. -/
+/-
+**Equiv.Perm.IsCycle.eq_on_support_inter_nonempty_congr** 是 Mathlib 中的一个定理，位于命名空
+间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f g : Equiv.Perm α} {x : α} [inst : DecidableEq α] [inst
+_1 : Fintype α],   f.IsCycle → g.IsCycle → (∀ x ∈ f.support ∩ g.support, f x = g
+ x) → f x = g x → x ∈ f.support → f = g
+参数：∀ x ∈ f.support ∩ g.support, f x = g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.IsCycle.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {x
+ y : α} [Finite α], f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.pow_eq_on_of_mem_support`：pow_eq_on_of_mem_support (h : foral
+l x in f.support inter g.support, f x = g x) (k : Nat) : forall x in f.support i
+nter g.support, (f ^ k) x…
+· 使用定理 `Finset.mem_inter_of_mem`：mem_inter_of_mem {a : α} {s₁ s₂ : Finset α} : a
+ in s₁ -> a in s₂ -> a in s₁ inter s₂
+· 使用定理 `Equiv.Perm.pow_apply_mem_support`：pow_apply_mem_support {n : Nat} {x : α
+} : (f ^ n) x in f.support ↔ x in f.support
+· 使用定理 `Equiv.Perm.IsCycle.support_congr`：∀ {α : Type u_2} {f g : Equiv.Perm α} 
+[inst : DecidableEq α] [inst_1 : Fintype α],   f.IsCycle → g.IsCycle → f.support
+ ⊆ g.support → (∀ x ∈ …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.inter_eq_left`：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Fin
+set α}, s ∩ t = s ↔ s ⊆ t
 
-English:
-theorem IsCycle.eq_on_support_inter_nonempty_congr
-  statement: (hf : IsCycle f) (hg : IsCycle g)
-  proof: by
-  have hx'' : x in g.support := by rwa [mem_support, ← hx, ← mem_support]
-  have : f.support subseteq g.support := by
-    intro y hy
-    obtain ⟨k, rfl⟩ := hf.exists_pow_eq (mem_support.mp hx') (mem_support.mp hy)
-    rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_support]
-  rw [inter_eq_left.mpr this] at h
-  exact hf.support_congr hg this h
-
-中文:
-定理 是环.eq_on_support_inter_nonempty_congr
-  结论: (hf : 是环 f) (hg : 是环 g)
-  证明: by
-  have hx'' : x in g.support := by rwa [mem_support, ← hx, ← mem_support]
-  have : f.support subseteq g.support := by
-    intro y hy
-    obtain ⟨k, rfl⟩ := hf.exists_pow_eq (mem_support.mp hx') (mem_support.mp hy)
-    rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_support]
-  rw [inter_eq_left.mpr this] at h
-  exact hf.support_congr hg this h
-
-Depends on / 依赖: exists_pow_eq, f.support, g.support, hf.exists_pow_eq, hf.support_congr, inter_eq_left, inter_eq_left.mpr, mem_inter_of_mem, mem_support, mem_support.mp, pow_apply_mem_support, pow_eq_on_of_mem_support, subseteq, support, support_congr
+--- 原说明 ---
+If two cyclic permutations agree on all terms in their intersection,
+and that intersection is not empty, then the two cyclic permutations must be equ
+al.
 -/
 theorem IsCycle.eq_on_support_inter_nonempty_congr (hf : IsCycle f) (hg : IsCycle g)
-    (h : forall x in f.support inter g.support, f x = g x)
-    (hx : f x = g x) (hx' : x in f.support) : f = g := by
-  have hx'' : x in g.support := by rwa [mem_support, ← hx, ← mem_support]
-  have : f.support subseteq g.support := by
+    (h : ∀ x ∈ f.support ∩ g.support, f x = g x)
+    (hx : f x = g x) (hx' : x ∈ f.support) : f = g := by
+  have hx'' : x ∈ g.support := by rwa [mem_support, ← hx, ← mem_support]
+  have : f.support ⊆ g.support := by
     intro y hy
     obtain ⟨k, rfl⟩ := hf.exists_pow_eq (mem_support.mp hx') (mem_support.mp hy)
     rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_support]
   rw [inter_eq_left.mpr this] at h
   exact hf.support_congr hg this h
-
-/--
-theorem `IsCycle.support_pow_eq_iff` / 定理 `IsCycle.support_pow_eq_iff`
-
-English:
-theorem IsCycle.support_pow_eq_iff
-  given: (hf : IsCycle f) {n : Nat}
-  proof: by
-  rw [orderOf_dvd_iff_pow_eq_one]
-  constructor
-  · intro h H
-    refine hf.ne_one ?_
-    rw [← support_eq_empty_iff]; rw [← h]; rw [H]; rw [support_one]
-  · intro H
-    apply le_antisymm (support_pow_le _ n) _
-    intro x hx
-    contrapose H
-    ext z
-    by_cases hz : f z = z
-    · rw [pow_apply_eq_self_of_apply_eq_self hz, one_apply]
-    · obtain ⟨k, rfl⟩ := hf.exists_pow_eq hz (mem_support.mp hx)
-      apply (f ^ k).injective
-      rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]; rw [mul_apply]
-      simpa using H
-
-中文:
-定理 是环.support_pow_eq_iff
-  条件: (hf : 是环 f) {n : 自然数}
-  证明: by
-  rw [orderOf_dvd_iff_pow_eq_one]
-  constructor
-  · intro h H
-    refine hf.ne_one ?_
-    rw [← support_eq_empty_iff]; rw [← h]; rw [H]; rw [support_one]
-  · intro H
-    apply le_antisymm (support_pow_le _ n) _
-    intro x hx
-    contrapose H
-    ext z
-    by_cases hz : f z = z
-    · rw [pow_apply_eq_self_of_apply_eq_self hz, one_apply]
-    · obtain ⟨k, rfl⟩ := hf.exists_pow_eq hz (mem_support.mp hx)
-      apply (f ^ k).injective
-      rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]; rw [mul_apply]
-      simpa using H
-
-Depends on / 依赖: Commute, Commute.pow_pow_self, contrapose, exists_pow_eq, hf.exists_pow_eq, hf.ne_one, injective, le_antisymm, mem_support, mem_support.mp, mul_apply, ne_one, one_apply, orderOf_dvd_iff_pow_eq_one, pow_apply_eq_self_of_apply_eq_self, pow_pow_self, support_eq_empty_iff, support_one, support_pow_le
+/-
+**Equiv.Perm.IsCycle.support_pow_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.Is
+Cycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : DecidableEq α] [inst_1 : Finty
+pe α],   f.IsCycle → ∀ {n : ℕ}, (f ^ n).support = f.support ↔ ¬orderOf f ∣ n
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `orderOf_dvd_iff_pow_eq_one`：orderOf_dvd_iff_pow_eq_one {n : Nat} : order
+Of x ∣ n ↔ x ^ n = 1
+· 使用定理 `Equiv.Perm.IsCycle.ne_one`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycl
+e → f ≠ 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.support_eq_empty_iff`：support_eq_empty_iff {σ : Perm α} : σ.s
+upport = ∅ ↔ σ = 1
+· 使用定理 `Equiv.Perm.support_one`：support_one : (1 : Perm α).support = ∅
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Equiv.Perm.support_pow_le`：support_pow_le (σ : Perm α) (n : Nat) : (σ ^ 
+n).support <= σ.support
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Equiv.Perm.pow_apply_eq_self_of_apply_eq_self`：∀ {α : Type u_1} {f : Equ
+iv.Perm α} {x : α}, f x = x → ∀ (n : ℕ), (f ^ n) x = x
+· 使用定理 `Equiv.Perm.one_apply`：one_apply (x) : (1 : Perm α) x = x
+· 使用定理 `Equiv.Perm.IsCycle.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {x
+ y : α} [Finite α], f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.Perm.mul_apply`：mul_apply (f g : Perm α) (x) : (f * g) x = f (g x)
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `Commute.pow_pow_self`：pow_pow_self (a : M) (m n : Nat) : Commute (a ^ m)
+ (a ^ n)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem IsCycle.support_pow_eq_iff (hf : IsCycle f) {n : Nat} :
+theorem IsCycle.support_pow_eq_iff (hf : IsCycle f) {n : ℕ} :
     support (f ^ n) = support f ↔ ¬orderOf f ∣ n := by
   rw [orderOf_dvd_iff_pow_eq_one]
   constructor
   · intro h H
     refine hf.ne_one ?_
-    rw [← support_eq_empty_iff]; rw [← h]; rw [H]; rw [support_one]
+    rw [← support_eq_empty_iff, ← h, H, support_one]
   · intro H
     apply le_antisymm (support_pow_le _ n) _
     intro x hx
@@ -1981,84 +1567,68 @@ theorem IsCycle.support_pow_eq_iff (hf : IsCycle f) {n : Nat} :
     · rw [pow_apply_eq_self_of_apply_eq_self hz, one_apply]
     · obtain ⟨k, rfl⟩ := hf.exists_pow_eq hz (mem_support.mp hx)
       apply (f ^ k).injective
-      rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]; rw [mul_apply]
+      rw [← mul_apply, (Commute.pow_pow_self _ _ _).eq, mul_apply]
       simpa using H
-
-/--
-theorem `IsCycle.support_pow_of_pos_of_lt_orderOf` / 定理 `IsCycle.support_pow_of_pos_of_lt_orderOf`
-
-English:
-theorem IsCycle.support_pow_of_pos_of_lt_orderOf
-  statement: (hf : IsCycle f) {n : Nat} (npos : 0 < n)
-  proof: hf.support_pow_eq_iff.2 Nat.not_dvd_of_pos_of_lt npos hn
-
-中文:
-定理 是环.support_pow_of_pos_of_lt_orderOf
-  结论: (hf : 是环 f) {n : 自然数} (npos : 0 < n)
-  证明: hf.support_pow_eq_iff.2 Nat.not_dvd_of_pos_of_lt npos hn
-
-Depends on / 依赖: Nat.not_dvd_of_pos_of_lt, hf.support_pow_eq_iff, not_dvd_of_pos_of_lt, support_pow_eq_iff
+/-
+**Equiv.Perm.IsCycle.support_pow_of_pos_of_lt_orderOf** 是 Mathlib 中的一个定理，位于命名空间 
+`Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : DecidableEq α] [inst_1 : Finty
+pe α],   f.IsCycle → ∀ {n : ℕ}, 0 < n → n < orderOf f → (f ^ n).support = f.supp
+ort
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.IsCycle.support_pow_eq_iff`：∀ {α : Type u_2} {f : Equiv.Perm 
+α} [inst : DecidableEq α] [inst_1 : Fintype α],   f.IsCycle → ∀ {n : ℕ}, (f ^ n)
+.support = f.support ↔ ¬ord…
+· 使用定理 `Nat.not_dvd_of_pos_of_lt`：∀ {n m : ℕ}, 0 < n → n < m → ¬m ∣ n
 -/
-theorem IsCycle.support_pow_of_pos_of_lt_orderOf (hf : IsCycle f) {n : Nat} (npos : 0 < n)
+theorem IsCycle.support_pow_of_pos_of_lt_orderOf (hf : IsCycle f) {n : ℕ} (npos : 0 < n)
     (hn : n < orderOf f) : (f ^ n).support = f.support :=
-hf.support_pow_eq_iff.2 Nat.not_dvd_of_pos_of_lt npos hn
-
-/--
-theorem `IsCycle.pow_iff` / 定理 `IsCycle.pow_iff`
-
-English:
-theorem IsCycle.pow_iff
-  given: [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat}
-  proof: by
-  classical
-    cases nonempty_fintype β
-    constructor
-    · intro h
-      have hr : support (f ^ n) = support f := by
-        rw [hf.support_pow_eq_iff]
-        rintro ⟨k, rfl⟩
-        refine h.ne_one ?_
-        simp [pow_mul, pow_orderOf_eq_one]
-      have : orderOf (f ^ n) = orderOf f := by rw [h.orderOf, hr, hf.orderOf]
-      rw [orderOf_pow]; rw [Nat.div_eq_self] at this
-      rcases this with h | _
-      · exact absurd h (orderOf_pos _).ne'
-      · rwa [Nat.coprime_iff_gcd_eq_one, Nat.gcd_comm]
-    · intro h
-      obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h
-      have hf' : IsCycle ((f ^ n) ^ m) := by rwa [hm]
-      refine hf'.of_pow fun x hx => ?_
-      rw [hm]
-      exact support_pow_le _ n hx
-
-中文:
-定理 是环.pow_iff
-  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数}
-  证明: by
-  classical
-    cases nonempty_fintype β
-    constructor
-    · intro h
-      have hr : support (f ^ n) = support f := by
-        rw [hf.support_pow_eq_iff]
-        rintro ⟨k, rfl⟩
-        refine h.ne_one ?_
-        simp [pow_mul, pow_orderOf_eq_one]
-      have : orderOf (f ^ n) = orderOf f := by rw [h.orderOf, hr, hf.orderOf]
-      rw [orderOf_pow]; rw [Nat.div_eq_self] at this
-      rcases this with h | _
-      · exact absurd h (orderOf_pos _).ne'
-      · rwa [Nat.coprime_iff_gcd_eq_one, Nat.gcd_comm]
-    · intro h
-      obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h
-      have hf' : IsCycle ((f ^ n) ^ m) := by rwa [hm]
-      refine hf'.of_pow fun x hx => ?_
-      rw [hm]
-      exact support_pow_le _ n hx
-
-Depends on / 依赖: Nat.coprime_iff_gcd_eq_one, Nat.div_eq_self, Nat.gcd_comm, absurd, classical, coprime_iff_gcd_eq_one, div_eq_self, exists_pow_eq_self_of_coprime, gcd_comm, h.ne_one, h.orderOf, hf.orderOf, hf.support_pow_eq_iff, ne_one, nonempty_fintype, orderOf, orderOf_pos, orderOf_pow, pow_mul, pow_orderOf_eq_one
+  hf.support_pow_eq_iff.2 <| Nat.not_dvd_of_pos_of_lt npos hn
+/-
+**Equiv.Perm.IsCycle.pow_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {β : Type u_3} [Finite β] {f : Equiv.Perm β}, f.IsCycle → ∀ {n : ℕ}, (f 
+^ n).IsCycle ↔ n.Coprime (orderOf f)
+参数：f ^ n；orderOf f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.IsCycle.support_pow_eq_iff`：∀ {α : Type u_2} {f : Equiv.Perm 
+α} [inst : DecidableEq α] [inst_1 : Fintype α],   f.IsCycle → ∀ {n : ℕ}, (f ^ n)
+.support = f.support ↔ ¬ord…
+· 使用定理 `Equiv.Perm.IsCycle.ne_one`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycl
+e → f ≠ 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `pow_orderOf_eq_one`：pow_orderOf_eq_one (x : G) : x ^ orderOf x = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.IsCycle.orderOf`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : 
+DecidableEq α] [inst_1 : Fintype α], f.IsCycle → orderOf f = f.support.card
+· 使用定理 `Nat.div_eq_self`：∀ {m n : ℕ}, m / n = m ↔ m = 0 ∨ n = 1
+· 使用定理 `orderOf_pow`：orderOf_pow (x : G) : orderOf (x ^ n) = orderOf x / Nat.gcd
+ (orderOf x) n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用引理 `orderOf_pos`：orderOf_pos (x : G) : 0 < orderOf x
+· 使用定理 `Nat.coprime_iff_gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n ↔ m.gcd n = 1
+· 使用定理 `Nat.gcd_comm`：∀ (m n : ℕ), m.gcd n = n.gcd m
+· 使用定理 `exists_pow_eq_self_of_coprime`：exists_pow_eq_self_of_coprime (h : n.Copr
+ime (orderOf x)) : exists m : Nat, (x ^ n) ^ m = x
+· 使用定理 `Equiv.Perm.IsCycle.of_pow`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : D
+ecidableEq α] [inst_1 : Fintype α] {n : ℕ},   (f ^ n).IsCycle → f.support ⊆ (f ^
+ n).support → f…
+· 使用定理 `Equiv.Perm.support_pow_le`：support_pow_le (σ : Perm α) (n : Nat) : (σ ^ 
+n).support <= σ.support
 -/
-theorem IsCycle.pow_iff [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat} :
+theorem IsCycle.pow_iff [Finite β] {f : Perm β} (hf : IsCycle f) {n : ℕ} :
     IsCycle (f ^ n) ↔ n.Coprime (orderOf f) := by
   classical
     cases nonempty_fintype β
@@ -2070,7 +1640,7 @@ theorem IsCycle.pow_iff [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat} :
         refine h.ne_one ?_
         simp [pow_mul, pow_orderOf_eq_one]
       have : orderOf (f ^ n) = orderOf f := by rw [h.orderOf, hr, hf.orderOf]
-      rw [orderOf_pow]; rw [Nat.div_eq_self] at this
+      rw [orderOf_pow, Nat.div_eq_self] at this
       rcases this with h | _
       · exact absurd h (orderOf_pos _).ne'
       · rwa [Nat.coprime_iff_gcd_eq_one, Nat.gcd_comm]
@@ -2082,49 +1652,35 @@ theorem IsCycle.pow_iff [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat} :
       exact support_pow_le _ n hx
 
 -- TODO: Define a `Set`-valued support to get rid of the `Finite β` assumption
-/--
-theorem `IsCycle.pow_eq_one_iff` / 定理 `IsCycle.pow_eq_one_iff`
-
-English:
-theorem IsCycle.pow_eq_one_iff
-  given: [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat}
-  proof: by
-  classical
-    cases nonempty_fintype β
-    constructor
-    · intro h
-      obtain ⟨x, hx, -⟩ := id hf
-      exact ⟨x, hx, by simp [h]⟩
-    · rintro ⟨x, hx, hx'⟩
-      by_cases h : support (f ^ n) = support f
-      · rw [← mem_support, ← h, mem_support] at hx
-        contradiction
-      · rw [hf.support_pow_eq_iff, Classical.not_not] at h
-        obtain ⟨k, rfl⟩ := h
-        rw [pow_mul]; rw [pow_orderOf_eq_one]; rw [one_pow]
-
-中文:
-定理 是环.pow_eq_one_iff
-  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数}
-  证明: by
-  classical
-    cases nonempty_fintype β
-    constructor
-    · intro h
-      obtain ⟨x, hx, -⟩ := id hf
-      exact ⟨x, hx, by simp [h]⟩
-    · rintro ⟨x, hx, hx'⟩
-      by_cases h : support (f ^ n) = support f
-      · rw [← mem_support, ← h, mem_support] at hx
-        contradiction
-      · rw [hf.support_pow_eq_iff, Classical.not_not] at h
-        obtain ⟨k, rfl⟩ := h
-        rw [pow_mul]; rw [pow_orderOf_eq_one]; rw [one_pow]
-
-Depends on / 依赖: Classical, Classical.not_not, classical, hf.support_pow_eq_iff, mem_support, nonempty_fintype, not_not, one_pow, pow_mul, pow_orderOf_eq_one, support, support_pow_eq_iff
+/-
+**Equiv.Perm.IsCycle.pow_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycl
+e`。
+形式化陈述：∀ {β : Type u_3} [Finite β] {f : Equiv.Perm β}, f.IsCycle → ∀ {n : ℕ}, f ^
+ n = 1 ↔ ∃ x, f x ≠ x ∧ (f ^ n) x = x
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `Equiv.Perm.IsCycle.support_pow_eq_iff`：∀ {α : Type u_2} {f : Equiv.Perm 
+α} [inst : DecidableEq α] [inst_1 : Fintype α],   f.IsCycle → ∀ {n : ℕ}, (f ^ n)
+.support = f.support ↔ ¬ord…
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `pow_orderOf_eq_one`：pow_orderOf_eq_one (x : G) : x ^ orderOf x = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
 -/
-theorem IsCycle.pow_eq_one_iff [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat} :
-    f ^ n = 1 ↔ exists x, f x != x ∧ (f ^ n) x = x := by
+theorem IsCycle.pow_eq_one_iff [Finite β] {f : Perm β} (hf : IsCycle f) {n : ℕ} :
+    f ^ n = 1 ↔ ∃ x, f x ≠ x ∧ (f ^ n) x = x := by
   classical
     cases nonempty_fintype β
     constructor
@@ -2137,112 +1693,93 @@ theorem IsCycle.pow_eq_one_iff [Finite β] {f : Perm β} (hf : IsCycle f) {n : N
         contradiction
       · rw [hf.support_pow_eq_iff, Classical.not_not] at h
         obtain ⟨k, rfl⟩ := h
-        rw [pow_mul]; rw [pow_orderOf_eq_one]; rw [one_pow]
+        rw [pow_mul, pow_orderOf_eq_one, one_pow]
 
 -- TODO: Define a `Set`-valued support to get rid of the `Finite β` assumption
-/--
-theorem `IsCycle.pow_eq_one_iff'` / 定理 `IsCycle.pow_eq_one_iff'`
-
-English:
-theorem IsCycle.pow_eq_one_iff'
-  statement: [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat} {x : β}
-  proof: ⟨fun h => DFunLike.congr_fun h x, fun h => hf.pow_eq_one_iff.2 ⟨x, hx, h⟩⟩
-
-中文:
-定理 是环.pow_eq_one_iff'
-  结论: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数} {x : β}
-  证明: ⟨fun h => DFunLike.congr_fun h x, fun h => hf.pow_eq_one_iff.2 ⟨x, hx, h⟩⟩
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, hf.pow_eq_one_iff, pow_eq_one_iff
+/-
+**Equiv.Perm.IsCycle.pow_eq_one_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCyc
+le`。
+形式化陈述：∀ {β : Type u_3} [Finite β] {f : Equiv.Perm β}, f.IsCycle → ∀ {n : ℕ} {x :
+ β}, f x ≠ x → (f ^ n = 1 ↔ (f ^ n) x = x)
+参数：f ^ n = 1 ↔ (f ^ n) x = x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.IsCycle.pow_eq_one_iff`：∀ {β : Type u_3} [Finite β] {f : Equi
+v.Perm β}, f.IsCycle → ∀ {n : ℕ}, f ^ n = 1 ↔ ∃ x, f x ≠ x ∧ (f ^ n) x = x
 -/
-theorem IsCycle.pow_eq_one_iff' [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat} {x : β}
-    (hx : f x != x) : f ^ n = 1 ↔ (f ^ n) x = x :=
+theorem IsCycle.pow_eq_one_iff' [Finite β] {f : Perm β} (hf : IsCycle f) {n : ℕ} {x : β}
+    (hx : f x ≠ x) : f ^ n = 1 ↔ (f ^ n) x = x :=
   ⟨fun h => DFunLike.congr_fun h x, fun h => hf.pow_eq_one_iff.2 ⟨x, hx, h⟩⟩
 
 -- TODO: Define a `Set`-valued support to get rid of the `Finite β` assumption
-/--
-theorem `IsCycle.pow_eq_one_iff''` / 定理 `IsCycle.pow_eq_one_iff''`
-
-English:
-theorem IsCycle.pow_eq_one_iff''
-  given: [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat}
-  proof: ⟨fun h _ hx => (hf.pow_eq_one_iff' hx).1 h, fun h =>
-    let ⟨_, hx, _⟩ := id hf
-    (hf.pow_eq_one_iff' hx).2 (h _ hx)⟩
-
-中文:
-定理 是环.pow_eq_one_iff''
-  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {n : 自然数}
-  证明: ⟨fun h _ hx => (hf.pow_eq_one_iff' hx).1 h, fun h =>
-    let ⟨_, hx, _⟩ := id hf
-    (hf.pow_eq_one_iff' hx).2 (h _ hx)⟩
-
-Depends on / 依赖: hf.pow_eq_one_iff, pow_eq_one_iff
+/-
+**Equiv.Perm.IsCycle.pow_eq_one_iff''** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCy
+cle`。
+形式化陈述：∀ {β : Type u_3} [Finite β] {f : Equiv.Perm β}, f.IsCycle → ∀ {n : ℕ}, f ^
+ n = 1 ↔ ∀ (x : β), f x ≠ x → (f ^ n) x = x
+参数：x : β；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.IsCycle.pow_eq_one_iff'`：∀ {β : Type u_3} [Finite β] {f : Equ
+iv.Perm β}, f.IsCycle → ∀ {n : ℕ} {x : β}, f x ≠ x → (f ^ n = 1 ↔ (f ^ n) x = x)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem IsCycle.pow_eq_one_iff'' [Finite β] {f : Perm β} (hf : IsCycle f) {n : Nat} :
-    f ^ n = 1 ↔ forall x, f x != x -> (f ^ n) x = x :=
+theorem IsCycle.pow_eq_one_iff'' [Finite β] {f : Perm β} (hf : IsCycle f) {n : ℕ} :
+    f ^ n = 1 ↔ ∀ x, f x ≠ x → (f ^ n) x = x :=
   ⟨fun h _ hx => (hf.pow_eq_one_iff' hx).1 h, fun h =>
     let ⟨_, hx, _⟩ := id hf
     (hf.pow_eq_one_iff' hx).2 (h _ hx)⟩
 
 -- TODO: Define a `Set`-valued support to get rid of the `Finite β` assumption
-/--
-theorem `IsCycle.pow_eq_pow_iff` / 定理 `IsCycle.pow_eq_pow_iff`
-
-English:
-theorem IsCycle.pow_eq_pow_iff
-  given: [Finite β] {f : Perm β} (hf : IsCycle f) {a b : Nat}
-  proof: by
-  classical
-    cases nonempty_fintype β
-    constructor
-    · intro h
-      obtain ⟨x, hx, -⟩ := id hf
-      exact ⟨x, hx, by simp [h]⟩
-    · rintro ⟨x, hx, hx'⟩
-      wlog hab : a <= b generalizing a b
-      · exact (this hx'.symm (le_of_not_ge hab)).symm
-      suffices f ^ (b - a) = 1 by
-        rw [pow_sub _ hab]; rw [mul_inv_eq_one] at this
-        rw [this]
-      rw [hf.pow_eq_one_iff]
-      by_cases hfa : (f ^ a) x in f.support
-      · refine ⟨(f ^ a) x, mem_support.mp hfa, ?_⟩
-        simp [pow_sub _ hab, ← hx']
-      · have h := @Equiv.Perm.zpow_apply_comm _ f 1 a x
-        simp only [zpow_one, zpow_natCast] at h
-        rw [notMem_support]; rw [h]; rw [Function.Injective.eq_iff (f ^ a).injective] at hfa
-        contradiction
-
-中文:
-定理 是环.pow_eq_pow_iff
-  条件: [有限 β] {f : 置换 β} (hf : 是环 f) {a b : 自然数}
-  证明: by
-  classical
-    cases nonempty_fintype β
-    constructor
-    · intro h
-      obtain ⟨x, hx, -⟩ := id hf
-      exact ⟨x, hx, by simp [h]⟩
-    · rintro ⟨x, hx, hx'⟩
-      wlog hab : a <= b generalizing a b
-      · exact (this hx'.symm (le_of_not_ge hab)).symm
-      suffices f ^ (b - a) = 1 by
-        rw [pow_sub _ hab]; rw [mul_inv_eq_one] at this
-        rw [this]
-      rw [hf.pow_eq_one_iff]
-      by_cases hfa : (f ^ a) x in f.support
-      · refine ⟨(f ^ a) x, mem_support.mp hfa, ?_⟩
-        simp [pow_sub _ hab, ← hx']
-      · have h := @Equiv.Perm.zpow_apply_comm _ f 1 a x
-        simp only [zpow_one, zpow_natCast] at h
-        rw [notMem_support]; rw [h]; rw [Function.Injective.eq_iff (f ^ a).injective] at hfa
-        contradiction
-
-Depends on / 依赖: Equiv.Perm.zpow_apply_comm, classical, f.support, generalizing, hf.pow_eq_one_iff, le_of_not_ge, mem_support, mem_support.mp, mul_inv_eq_one, nonempty_fintype, pow_eq_one_iff, pow_sub, support, zpow_apply_comm
+/-
+**Equiv.Perm.IsCycle.pow_eq_pow_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycl
+e`。
+形式化陈述：∀ {β : Type u_3} [Finite β] {f : Equiv.Perm β},   f.IsCycle → ∀ {a b : ℕ},
+ f ^ a = f ^ b ↔ ∃ x, f x ≠ x ∧ (f ^ a) x = (f ^ b) x
+参数：f ^ a；f ^ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Equiv.Perm.IsCycle.pow_eq_one_iff`：∀ {β : Type u_3} [Finite β] {f : Equi
+v.Perm β}, f.IsCycle → ∀ {n : ℕ}, f ^ n = 1 ↔ ∃ x, f x ≠ x ∧ (f ^ n) x = x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用引理 `pow_sub`：pow_sub (a : G) {m n : Nat} (h : n <= m) : a ^ (m - n) = a ^ m 
+* (a ^ n)⁻¹
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.zpow_apply_comm`：zpow_apply_comm {α : Type*} (σ : Perm α) (m 
+n : Int) {x : α} : (σ ^ m) ((σ ^ n) x) = (σ ^ n) ((σ ^ m) x)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `zpow_one`：zpow_one (a : G) : a ^ (1 : Int) = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Equiv.Perm.notMem_support`：notMem_support {x : α} : x ∉ f.support ↔ f x 
+= x
+· 使用定理 `mul_inv_eq_one`：mul_inv_eq_one : a * b⁻¹ = 1 ↔ a = b
+· 使用定理 `le_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b 
+→ b ≤ a
 -/
-theorem IsCycle.pow_eq_pow_iff [Finite β] {f : Perm β} (hf : IsCycle f) {a b : Nat} :
-    f ^ a = f ^ b ↔ exists x, f x != x ∧ (f ^ a) x = (f ^ b) x := by
+theorem IsCycle.pow_eq_pow_iff [Finite β] {f : Perm β} (hf : IsCycle f) {a b : ℕ} :
+    f ^ a = f ^ b ↔ ∃ x, f x ≠ x ∧ (f ^ a) x = (f ^ b) x := by
   classical
     cases nonempty_fintype β
     constructor
@@ -2250,49 +1787,40 @@ theorem IsCycle.pow_eq_pow_iff [Finite β] {f : Perm β} (hf : IsCycle f) {a b :
       obtain ⟨x, hx, -⟩ := id hf
       exact ⟨x, hx, by simp [h]⟩
     · rintro ⟨x, hx, hx'⟩
-      wlog hab : a <= b generalizing a b
+      wlog hab : a ≤ b generalizing a b
       · exact (this hx'.symm (le_of_not_ge hab)).symm
       suffices f ^ (b - a) = 1 by
-        rw [pow_sub _ hab]; rw [mul_inv_eq_one] at this
+        rw [pow_sub _ hab, mul_inv_eq_one] at this
         rw [this]
       rw [hf.pow_eq_one_iff]
-      by_cases hfa : (f ^ a) x in f.support
+      by_cases hfa : (f ^ a) x ∈ f.support
       · refine ⟨(f ^ a) x, mem_support.mp hfa, ?_⟩
         simp [pow_sub _ hab, ← hx']
       · have h := @Equiv.Perm.zpow_apply_comm _ f 1 a x
         simp only [zpow_one, zpow_natCast] at h
-        rw [notMem_support]; rw [h]; rw [Function.Injective.eq_iff (f ^ a).injective] at hfa
+        rw [notMem_support, h, Function.Injective.eq_iff (f ^ a).injective] at hfa
         contradiction
-
-/--
-theorem `IsCycle.isCycle_pow_pos_of_lt_prime_order` / 定理 `IsCycle.isCycle_pow_pos_of_lt_prime_order`
-
-English:
-theorem IsCycle.isCycle_pow_pos_of_lt_prime_order
-  statement: [Finite β] {f : Perm β} (hf : IsCycle f)
-  proof: by
-  cases nonempty_fintype β
-  have : n.Coprime (orderOf f) := by
-    refine Nat.Coprime.symm ?_
-    rw [Nat.Prime.coprime_iff_not_dvd hf']
-    exact Nat.not_dvd_of_pos_of_lt hn hn'
-  exact (pow_iff hf).mpr this
-
-中文:
-定理 是环.isCycle_pow_pos_of_lt_prime_order
-  结论: [有限 β] {f : 置换 β} (hf : 是环 f)
-  证明: by
-  cases nonempty_fintype β
-  have : n.Coprime (orderOf f) := by
-    refine Nat.Coprime.symm ?_
-    rw [Nat.Prime.coprime_iff_not_dvd hf']
-    exact Nat.not_dvd_of_pos_of_lt hn hn'
-  exact (pow_iff hf).mpr this
-
-Depends on / 依赖: Coprime, Nat.Coprime.symm, Nat.Prime.coprime_iff_not_dvd, Nat.not_dvd_of_pos_of_lt, coprime_iff_not_dvd, n.Coprime, nonempty_fintype, not_dvd_of_pos_of_lt, orderOf, pow_iff
+/-
+**Equiv.Perm.IsCycle.isCycle_pow_pos_of_lt_prime_order** 是 Mathlib 中的一个定理，位于命名空间
+ `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {β : Type u_3} [Finite β] {f : Equiv.Perm β},   f.IsCycle → Nat.Prime (o
+rderOf f) → ∀ (n : ℕ), 0 < n → n < orderOf f → (f ^ n).IsCycle
+参数：orderOf f；n : ℕ；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Nat.Coprime.symm`：∀ {n m : ℕ}, n.Coprime m → m.Coprime n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.Prime.coprime_iff_not_dvd`：∀ {p n : ℕ}, Nat.Prime p → (p.Coprime n ↔
+ ¬p ∣ n)
+· 使用定理 `Nat.not_dvd_of_pos_of_lt`：∀ {n m : ℕ}, 0 < n → n < m → ¬m ∣ n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.IsCycle.pow_iff`：∀ {β : Type u_3} [Finite β] {f : Equiv.Perm 
+β}, f.IsCycle → ∀ {n : ℕ}, (f ^ n).IsCycle ↔ n.Coprime (orderOf f)
 -/
 theorem IsCycle.isCycle_pow_pos_of_lt_prime_order [Finite β] {f : Perm β} (hf : IsCycle f)
-    (hf' : (orderOf f).Prime) (n : Nat) (hn : 0 < n) (hn' : n < orderOf f) : IsCycle (f ^ n) := by
+    (hf' : (orderOf f).Prime) (n : ℕ) (hn : 0 < n) (hn' : n < orderOf f) : IsCycle (f ^ n) := by
   cases nonempty_fintype β
   have : n.Coprime (orderOf f) := by
     refine Nat.Coprime.symm ?_
@@ -2304,78 +1832,71 @@ end IsCycle
 
 open Equiv
 
-/--
-theorem `_root_.Int.addLeft_one_isCycle` / 定理 `_root_.Int.addLeft_one_isCycle`
-
-English:
-theorem _root_.Int.addLeft_one_isCycle
-  statement: (Equiv.addLeft 1 : Perm Int).IsCycle
-  proof: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
-
-中文:
-定理 _root_.整数.addLeft_one_isCycle
-  结论: (等价.addLeft 1 : 置换 整数).是环
-  证明: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
-
-Depends on / 依赖: one_ne_zero
+/-
+**Equiv.Perm._root_.Int.addLeft_one_isCycle** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Per
+m`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Int.addLeft_one_isCycle : (Equiv.addLeft 1 : Perm Int).IsCycle :=
+theorem _root_.Int.addLeft_one_isCycle : (Equiv.addLeft 1 : Perm ℤ).IsCycle :=
   ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
-
-/--
-theorem `_root_.Int.addRight_one_isCycle` / 定理 `_root_.Int.addRight_one_isCycle`
-
-English:
-theorem _root_.Int.addRight_one_isCycle
-  statement: (Equiv.addRight 1 : Perm Int).IsCycle
-  proof: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
-
-中文:
-定理 _root_.整数.addRight_one_isCycle
-  结论: (等价.addRight 1 : 置换 整数).是环
-  证明: ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
-
-Depends on / 依赖: one_ne_zero
+/-
+**Equiv.Perm._root_.Int.addRight_one_isCycle** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Pe
+rm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Int.addRight_one_isCycle : (Equiv.addRight 1 : Perm Int).IsCycle :=
+theorem _root_.Int.addRight_one_isCycle : (Equiv.addRight 1 : Perm ℤ).IsCycle :=
   ⟨0, one_ne_zero, fun n _ => ⟨n, by simp⟩⟩
 
 section Conjugation
 
 variable [Fintype α] [DecidableEq α] {σ τ : Perm α}
 
-/--
-theorem `IsCycle.isConj` / 定理 `IsCycle.isConj`
-
-English:
-theorem IsCycle.isConj
-  given: (hσ : IsCycle σ) (hτ : IsCycle τ) (h : #σ.support = #τ.support)
-  proof: by
-  refine
-    isConj_of_support_equiv
-      (hσ.zpowersEquivSupport.symm.trans <|
-        (zpowersEquivZPowers <| by rw [hσ.orderOf, h, hτ.orderOf]).trans hτ.zpowersEquivSupport)
-      ?_
-  intro x hx
-  simp only [Equiv.trans_apply]
-  obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).1 (mem_support.1 hx)
-  simp [← Perm.mul_apply, ← pow_succ']
-
-中文:
-定理 是环.isConj
-  条件: (hσ : 是环 σ) (hτ : 是环 τ) (h : #σ.support = #τ.support)
-  证明: by
-  refine
-    isConj_of_support_equiv
-      (hσ.zpowersEquivSupport.symm.trans <|
-        (zpowersEquivZPowers <| by rw [hσ.orderOf, h, hτ.orderOf]).trans hτ.zpowersEquivSupport)
-      ?_
-  intro x hx
-  simp only [Equiv.trans_apply]
-  obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).1 (mem_support.1 hx)
-  simp [← Perm.mul_apply, ← pow_succ']
-
-Depends on / 依赖: Classical, Classical.choose_spec, Equiv.trans_apply, Perm.mul_apply, choose_spec, exists_pow_eq, isConj_of_support_equiv, mem_support, mul_apply, orderOf, pow_succ, trans_apply, zpowersEquivSupport, zpowersEquivSupport.symm.trans, zpowersEquivZPowers
+/-
+**Equiv.Perm.IsCycle.isConj** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} [inst : Fintype α] [inst_1 : DecidableEq α] {σ τ : Equiv.
+Perm α},   σ.IsCycle → τ.IsCycle → σ.support.card = τ.support.card → IsConj σ τ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.isConj_of_support_equiv`：isConj_of_support_equiv (f : { x // 
+x in (σ.support : Set α) } ≃ { x // x in (τ.support : Set α) }) (hf : forall (x 
+: α) (hx : x in (σ.suppo…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.IsCycle.orderOf`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : 
+DecidableEq α] [inst_1 : Fintype α], f.IsCycle → orderOf f = f.support.card
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.apply_mem_support`：apply_mem_support {x : α} : f x in f.suppo
+rt ↔ x in f.support
+· 使用定理 `Equiv.Perm.IsCycle.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {x
+ y : α} [Finite α], f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.Perm.pow_apply_mem_support`：pow_apply_mem_support {n : Nat} {x : α
+} : (f ^ n) x in f.support ↔ x in f.support
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Equiv.Perm.IsCycle.zpowersEquivSupport_symm_apply`：∀ {α : Type u_2} [ins
+t : DecidableEq α] [inst_1 : Fintype α] {σ : Equiv.Perm α} (hσ : σ.IsCycle) (n :
+ ℕ),   hσ.zpowersEquivSupport.symm ⟨(σ …
+· 使用定理 `zpowersEquivZPowers_apply`：zpowersEquivZPowers_apply (h : orderOf x = or
+derOf y) (n : Nat) : zpowersEquivZPowers h ⟨x ^ n, n, zpow_natCast x n⟩ = ⟨y ^ n
+, n, zpow_natCa…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsCycle.isConj (hσ : IsCycle σ) (hτ : IsCycle τ) (h : #σ.support = #τ.support) :
     IsConj σ τ := by
@@ -2388,27 +1909,22 @@ theorem IsCycle.isConj (hσ : IsCycle σ) (hτ : IsCycle τ) (h : #σ.support = 
   simp only [Equiv.trans_apply]
   obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).1 (mem_support.1 hx)
   simp [← Perm.mul_apply, ← pow_succ']
-
-/--
-theorem `IsCycle.isConj_iff` / 定理 `IsCycle.isConj_iff`
-
-English:
-theorem IsCycle.isConj_iff
-  given: (hσ : IsCycle σ) (hτ : IsCycle τ)
-  proof: by
-    obtain ⟨π, rfl⟩ := (_root_.isConj_iff).1 h
-    exact card_support_conj.symm
-  mpr := hσ.isConj hτ
-
-中文:
-定理 是环.isConj_iff
-  条件: (hσ : 是环 σ) (hτ : 是环 τ)
-  证明: by
-    obtain ⟨π, rfl⟩ := (_root_.isConj_iff).1 h
-    exact card_support_conj.symm
-  mpr := hσ.isConj hτ
-
-Depends on / 依赖: _root_, _root_.isConj_iff, card_support_conj, card_support_conj.symm, isConj, isConj_iff
+/-
+**Equiv.Perm.IsCycle.isConj_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} [inst : Fintype α] [inst_1 : DecidableEq α] {σ τ : Equiv.
+Perm α},   σ.IsCycle → τ.IsCycle → (IsConj σ τ ↔ σ.support.card = τ.support.card
+)
+参数：IsConj σ τ ↔ σ.support.card = τ.support.card。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isConj_iff`：isConj_iff {a b : α} : IsConj a b ↔ exists c : α, c * a * c⁻
+¹ = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.card_support_conj`：card_support_conj : #(σ * τ * σ⁻¹).support
+ = #τ.support
+· 使用定理 `Equiv.Perm.IsCycle.isConj`：∀ {α : Type u_2} [inst : Fintype α] [inst_1 :
+ DecidableEq α] {σ τ : Equiv.Perm α},   σ.IsCycle → τ.IsCycle → σ.support.card =
+ τ.support.card…
 -/
 theorem IsCycle.isConj_iff (hσ : IsCycle σ) (hτ : IsCycle τ) :
     IsConj σ τ ↔ #σ.support = #τ.support where
@@ -2425,75 +1941,67 @@ section IsCycleOn
 
 variable {f g : Perm α} {s t : Set α} {a b x y : α}
 
-/--
-Definition of `IsCycleOn` / `IsCycleOn` 的定义
+/-- A permutation is a cycle on `s` when any two points of `s` are related by repeated application
+of the permutation. Note that this means the identity is a cycle of subsingleton sets. -/
+/-
+**Equiv.Perm.IsCycleOn** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：IsCycleOn (f : Perm α) (s : Set α) : Prop
+参数：f : Perm α；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsCycleOn
-  signature: (f : Perm α) (s : Set α)
-  body: Set.BijOn f s s ∧ forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> f.SameCycle x y
-
-@[simp]
-
-中文:
-定义 IsCycleOn
-  签名: (f : 置换 α) (s : 集合 α)
-  定义体: Set.BijOn f s s ∧ forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> f.SameCycle x y
-
-@[simp]
-
-Depends on / 依赖: SameCycle, Set.BijOn, f.SameCycle
+--- 原说明 ---
+A permutation is a cycle on `s` when any two points of `s` are related by repeat
+ed application
+of the permutation. Note that this means the identity is a cycle of subsingleton
+ sets.
 -/
 def IsCycleOn (f : Perm α) (s : Set α) : Prop :=
-  Set.BijOn f s s ∧ forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> f.SameCycle x y
+  Set.BijOn f s s ∧ ∀ ⦃x⦄, x ∈ s → ∀ ⦃y⦄, y ∈ s → f.SameCycle x y
 
 @[simp]
-/--
-theorem `isCycleOn_empty` / 定理 `isCycleOn_empty`
-
-English:
-theorem isCycleOn_empty
-  statement: f.IsCycleOn ∅
-  proof: by simp [IsCycleOn]
-
-@[simp]
-
-中文:
-定理 isCycleOn_empty
-  结论: f.IsCycleOn ∅
-  证明: by simp [IsCycleOn]
-
-@[simp]
-
-Depends on / 依赖: IsCycleOn
+/-
+**Equiv.Perm.isCycleOn_empty** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycleOn_empty : f.IsCycleOn ∅
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem isCycleOn_empty : f.IsCycleOn ∅ := by simp [IsCycleOn]
 
 @[simp]
-/--
-theorem `isCycleOn_one` / 定理 `isCycleOn_one`
-
-English:
-theorem isCycleOn_one
-  statement: (1 : Perm α).IsCycleOn s ↔ s.Subsingleton
-  proof: by
-  simp [IsCycleOn, Set.bijOn_id, Set.Subsingleton]
-
-alias ⟨IsCycleOn.subsingleton, _root_.Set.Subsingleton.isCycleOn_one⟩ := isCycleOn_one
-
-@[simp]
-
-中文:
-定理 isCycleOn_one
-  结论: (1 : 置换 α).IsCycleOn s ↔ s.子单例
-  证明: by
-  simp [IsCycleOn, Set.bijOn_id, Set.Subsingleton]
-
-alias ⟨IsCycleOn.subsingleton, _root_.Set.Subsingleton.isCycleOn_one⟩ := isCycleOn_one
-
-@[simp]
-
-Depends on / 依赖: IsCycleOn, Set.Subsingleton, Set.bijOn_id, Subsingleton, bijOn_id
+/-
+**Equiv.Perm.isCycleOn_one** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycleOn_one : (1 : Perm α).IsCycleOn s ↔ s.Subsingleton
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isCycleOn_one : (1 : Perm α).IsCycleOn s ↔ s.Subsingleton := by
   simp [IsCycleOn, Set.bijOn_id, Set.Subsingleton]
@@ -2501,292 +2009,292 @@ theorem isCycleOn_one : (1 : Perm α).IsCycleOn s ↔ s.Subsingleton := by
 alias ⟨IsCycleOn.subsingleton, _root_.Set.Subsingleton.isCycleOn_one⟩ := isCycleOn_one
 
 @[simp]
-/--
-theorem `isCycleOn_singleton` / 定理 `isCycleOn_singleton`
-
-English:
-theorem isCycleOn_singleton
-  statement: f.IsCycleOn {a} ↔ f a = a
-  proof: by simp [IsCycleOn, SameCycle.rfl]
-
-中文:
-定理 isCycleOn_singleton
-  结论: f.IsCycleOn {a} ↔ f a = a
-  证明: by simp [IsCycleOn, SameCycle.rfl]
-
-Depends on / 依赖: IsCycleOn, SameCycle, SameCycle.rfl
+/-
+**Equiv.Perm.isCycleOn_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycleOn_singleton : f.IsCycleOn {a} ↔ f a = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isCycleOn_singleton : f.IsCycleOn {a} ↔ f a = a := by simp [IsCycleOn, SameCycle.rfl]
-
-/--
-theorem `isCycleOn_of_subsingleton` / 定理 `isCycleOn_of_subsingleton`
-
-English:
-theorem isCycleOn_of_subsingleton
-  given: [Subsingleton α] (f : Perm α) (s : Set α)
-  statement: f.IsCycleOn s
-  proof: ⟨s.bijOn_of_subsingleton _, fun x _ y _ => (Subsingleton.elim x y).sameCycle _⟩
-
-@[simp]
-
-中文:
-定理 isCycleOn_of_subsingleton
-  条件: [子单例 α] (f : 置换 α) (s : 集合 α)
-  结论: f.IsCycleOn s
-  证明: ⟨s.bijOn_of_subsingleton _, fun x _ y _ => (Subsingleton.elim x y).sameCycle _⟩
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, bijOn_of_subsingleton, s.bijOn_of_subsingleton, sameCycle
+/-
+**Equiv.Perm.isCycleOn_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycleOn_of_subsingleton [Subsingleton α] (f : Perm α) (s : Set α) : f.Is
+CycleOn s
+参数：f : Perm α；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.bijOn_of_subsingleton`：bijOn_of_subsingleton [Subsingleton α] (f : α
+ -> α) (s : Set α) : BijOn f s s
+· 使用定理 `Eq.sameCycle`：∀ {α : Type u_2} {x y : α}, x = y → ∀ (f : Equiv.Perm α), 
+f.SameCycle x y
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 theorem isCycleOn_of_subsingleton [Subsingleton α] (f : Perm α) (s : Set α) : f.IsCycleOn s :=
   ⟨s.bijOn_of_subsingleton _, fun x _ y _ => (Subsingleton.elim x y).sameCycle _⟩
 
 @[simp]
-/--
-theorem `isCycleOn_inv` / 定理 `isCycleOn_inv`
-
-English:
-theorem isCycleOn_inv
-  statement: f⁻¹.IsCycleOn s ↔ f.IsCycleOn s
-  proof: by
-  simp only [IsCycleOn, sameCycle_inv, and_congr_left_iff]
-  exact fun _ => ⟨fun h => Set.BijOn.perm_inv h, fun h => Set.BijOn.perm_inv h⟩
-
-alias ⟨IsCycleOn.of_inv, IsCycleOn.inv⟩ := isCycleOn_inv
-
-中文:
-定理 isCycleOn_inv
-  结论: f⁻¹.IsCycleOn s ↔ f.IsCycleOn s
-  证明: by
-  simp only [IsCycleOn, sameCycle_inv, and_congr_left_iff]
-  exact fun _ => ⟨fun h => Set.BijOn.perm_inv h, fun h => Set.BijOn.perm_inv h⟩
-
-alias ⟨IsCycleOn.of_inv, IsCycleOn.inv⟩ := isCycleOn_inv
-
-Depends on / 依赖: IsCycleOn, Set.BijOn.perm_inv, and_congr_left_iff, perm_inv, sameCycle_inv
+/-
+**Equiv.Perm.isCycleOn_inv** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycleOn_inv : f⁻¹.IsCycleOn s ↔ f.IsCycleOn s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Set.BijOn.perm_inv`：∀ {α : Type u_1} {f : Equiv.Perm α} {s : Set α}, Set
+.BijOn (⇑f) s s → Set.BijOn (⇑f⁻¹) s s
 -/
 theorem isCycleOn_inv : f⁻¹.IsCycleOn s ↔ f.IsCycleOn s := by
   simp only [IsCycleOn, sameCycle_inv, and_congr_left_iff]
-  exact fun _ => ⟨fun h => Set.BijOn.perm_inv h, fun h => Set.BijOn.perm_inv h⟩
+  exact fun _ ↦ ⟨fun h ↦ Set.BijOn.perm_inv h, fun h ↦ Set.BijOn.perm_inv h⟩
 
 alias ⟨IsCycleOn.of_inv, IsCycleOn.inv⟩ := isCycleOn_inv
-
-/--
-theorem `IsCycleOn.conj` / 定理 `IsCycleOn.conj`
-
-English:
-theorem IsCycleOn.conj
-  given: (h : f.IsCycleOn s)
-  statement: (g * f * g⁻¹).IsCycleOn ((g : Perm α) '' s)
-  proof: ⟨(g.bijOn_image.comp h.1).comp g.bijOn_symm_image, fun x hx y hy => by
-    rw [Equiv.image_eq_preimage_symm] at hx hy
-    convert! Equiv.Perm.SameCycle.conj (h.2 hx hy) (g := g) <;> simp⟩
-
-中文:
-定理 IsCycleOn.conj
-  条件: (h : f.IsCycleOn s)
-  结论: (g * f * g⁻¹).IsCycleOn ((g : 置换 α) '' s)
-  证明: ⟨(g.bijOn_image.comp h.1).comp g.bijOn_symm_image, fun x hx y hy => by
-    rw [Equiv.image_eq_preimage_symm] at hx hy
-    convert! Equiv.Perm.SameCycle.conj (h.2 hx hy) (g := g) <;> simp⟩
-
-Depends on / 依赖: Equiv.Perm.SameCycle.conj, Equiv.image_eq_preimage_symm, SameCycle, bijOn_image, bijOn_symm_image, convert, g.bijOn_image.comp, g.bijOn_symm_image, image_eq_preimage_symm
+/-
+**Equiv.Perm.IsCycleOn.conj** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycleOn`。
+形式化陈述：∀ {α : Type u_2} {f g : Equiv.Perm α} {s : Set α}, f.IsCycleOn s → (g * f 
+* g⁻¹).IsCycleOn (⇑g '' s)
+参数：g * f * g⁻¹；⇑g '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : Set 
+α} {t : Set β} {p : Set γ} {f : α → β} {g : β → γ},   Set.BijOn g t p → Set.BijO
+n f …
+· 使用引理 `Equiv.bijOn_image`：bijOn_image : BijOn e s (e '' s)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `Equiv.bijOn_symm_image`：bijOn_symm_image : BijOn e.symm (e '' s) s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.Perm.SameCycle.conj`：∀ {α : Type u_2} {f g : Equiv.Perm α} {x y : 
+α}, f.SameCycle x y → (g * f * g⁻¹).SameCycle (g x) (g y)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 theorem IsCycleOn.conj (h : f.IsCycleOn s) : (g * f * g⁻¹).IsCycleOn ((g : Perm α) '' s) :=
   ⟨(g.bijOn_image.comp h.1).comp g.bijOn_symm_image, fun x hx y hy => by
     rw [Equiv.image_eq_preimage_symm] at hx hy
     convert! Equiv.Perm.SameCycle.conj (h.2 hx hy) (g := g) <;> simp⟩
-
-/--
-theorem `isCycleOn_swap` / 定理 `isCycleOn_swap`
-
-English:
-theorem isCycleOn_swap
-  given: [DecidableEq α] (hab : a != b)
-  statement: (swap a b).IsCycleOn {a, b}
-  proof: ⟨bijOn_swap (by simp) (by simp), fun x hx y hy => by
-    rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff] at hx hy
-    obtain rfl | rfl := hx <;> obtain rfl | rfl := hy
-    · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩
-    · exact ⟨1, by rw [zpow_one, swap_apply_left]⟩
-    · exact ⟨1, by rw [zpow_one, swap_apply_right]⟩
-    · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩⟩
-
-中文:
-定理 isCycleOn_swap
-  条件: [DecidableEq α] (hab : a != b)
-  结论: (swap a b).IsCycleOn {a, b}
-  证明: ⟨bijOn_swap (by simp) (by simp), fun x hx y hy => by
-    rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff] at hx hy
-    obtain rfl | rfl := hx <;> obtain rfl | rfl := hy
-    · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩
-    · exact ⟨1, by rw [zpow_one, swap_apply_left]⟩
-    · exact ⟨1, by rw [zpow_one, swap_apply_right]⟩
-    · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩⟩
-
-Depends on / 依赖: Set.mem_insert_iff, Set.mem_singleton_iff, bijOn_swap, coe_one, mem_insert_iff, mem_singleton_iff, swap_apply_left, swap_apply_right, zpow_one, zpow_zero
+/-
+**Equiv.Perm.isCycleOn_swap** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCycleOn_swap [DecidableEq α] (hab : a != b) : (swap a b).IsCycleOn {a, b
+}
+参数：hab : a != b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.bijOn_swap`：bijOn_swap (ha : a in s) (hb : b in s) : BijOn (swap a
+ b) s s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Set.mem_insert_iff`：mem_insert_iff {x a : α} {s : Set α} : x in insert a
+ s ↔ x = a ∨ x in s
+· 使用定理 `zpow_zero`：∀ {G : Type u_1} [inst : DivInvMonoid G] (a : G), a ^ 0 = 1
+· 使用定理 `Equiv.Perm.coe_one`：∀ {α : Type u_4}, ⇑1 = id
+· 使用定理 `id.eq_1`：∀ {α : Sort u} (a : α), id a = a
+· 使用引理 `zpow_one`：zpow_one (a : G) : a ^ (1 : Int) = a
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `Equiv.swap_apply_right`：swap_apply_right (a b : α) : swap a b b = a
 -/
-theorem isCycleOn_swap [DecidableEq α] (hab : a != b) : (swap a b).IsCycleOn {a, b} :=
+theorem isCycleOn_swap [DecidableEq α] (hab : a ≠ b) : (swap a b).IsCycleOn {a, b} :=
   ⟨bijOn_swap (by simp) (by simp), fun x hx y hy => by
-    rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff] at hx hy
+    rw [Set.mem_insert_iff, Set.mem_singleton_iff] at hx hy
     obtain rfl | rfl := hx <;> obtain rfl | rfl := hy
     · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩
     · exact ⟨1, by rw [zpow_one, swap_apply_left]⟩
     · exact ⟨1, by rw [zpow_one, swap_apply_right]⟩
     · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩⟩
-
-/--
-theorem `IsCycleOn.apply_ne` / 定理 `IsCycleOn.apply_ne`
-
-English:
-theorem IsCycleOn.apply_ne
-  given: (hf : f.IsCycleOn s) (hs : s.Nontrivial) (ha : a in s)
-  proof: by
-  obtain ⟨b, hb, hba⟩ := hs.exists_ne a
-  obtain ⟨n, rfl⟩ := hf.2 ha hb
-  exact fun h => hba (IsFixedPt.perm_zpow h n)
-
-中文:
-定理 IsCycleOn.apply_ne
-  条件: (hf : f.IsCycleOn s) (hs : s.非平凡) (ha : a in s)
-  证明: by
-  obtain ⟨b, hb, hba⟩ := hs.exists_ne a
-  obtain ⟨n, rfl⟩ := hf.2 ha hb
-  exact fun h => hba (IsFixedPt.perm_zpow h n)
+/-
+**Equiv.Perm.IsCycleOn.apply_ne** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycleOn`
+。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} {a : α}, f.IsCycleOn s → s
+.Nontrivial → a ∈ s → f a ≠ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nontrivial.exists_ne`：∀ {α : Type u} {s : Set α}, s.Nontrivial → ∀ (
+z : α), ∃ x ∈ s, x ≠ z
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Function.IsFixedPt.perm_zpow`：∀ {α : Type u_1} {x : α} {e : Equiv.Perm α
+}, Function.IsFixedPt (⇑e) x → ∀ (n : ℤ), Function.IsFixedPt (⇑(e ^ n)) x
 -/
-protected theorem IsCycleOn.apply_ne (hf : f.IsCycleOn s) (hs : s.Nontrivial) (ha : a in s) :
-    f a != a := by
+protected theorem IsCycleOn.apply_ne (hf : f.IsCycleOn s) (hs : s.Nontrivial) (ha : a ∈ s) :
+    f a ≠ a := by
   obtain ⟨b, hb, hba⟩ := hs.exists_ne a
   obtain ⟨n, rfl⟩ := hf.2 ha hb
   exact fun h => hba (IsFixedPt.perm_zpow h n)
-
-/--
-theorem `IsCycle.isCycleOn` / 定理 `IsCycle.isCycleOn`
-
-English:
-theorem IsCycle.isCycleOn
-  given: (hf : f.IsCycle)
-  statement: f.IsCycleOn { x | f x != x }
-  proof: ⟨f.bijOn fun _ => f.apply_eq_iff_eq.not, fun _ ha _ => hf.sameCycle ha⟩
-
-中文:
-定理 是环.isCycleOn
-  条件: (hf : f.是环)
-  结论: f.IsCycleOn { x | f x != x }
-  证明: ⟨f.bijOn fun _ => f.apply_eq_iff_eq.not, fun _ ha _ => hf.sameCycle ha⟩
+/-
+**Equiv.Perm.IsCycle.isCycleOn** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycle → f.IsCycleOn {x | f x ≠ x}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijOn`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) {s : Set α} {t 
+: Set β}, (∀ (a : α), e a ∈ t ↔ a ∈ s) → Set.BijOn (⇑e) s t
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Equiv.apply_eq_iff_eq`：apply_eq_iff_eq (f : α ≃ β) {x y : α} : f x = f y
+ ↔ x = y
+· 使用定理 `Equiv.Perm.IsCycle.sameCycle`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y :
+ α}, f.IsCycle → f x ≠ x → f y ≠ y → f.SameCycle x y
 -/
-protected theorem IsCycle.isCycleOn (hf : f.IsCycle) : f.IsCycleOn { x | f x != x } :=
+protected theorem IsCycle.isCycleOn (hf : f.IsCycle) : f.IsCycleOn { x | f x ≠ x } :=
   ⟨f.bijOn fun _ => f.apply_eq_iff_eq.not, fun _ ha _ => hf.sameCycle ha⟩
 
-/--
-theorem `isCycle_iff_exists_isCycleOn` / 定理 `isCycle_iff_exists_isCycleOn`
+/-- This lemma demonstrates the relation between `Equiv.Perm.IsCycle` and `Equiv.Perm.IsCycleOn`
+in non-degenerate cases. -/
+/-
+**Equiv.Perm.isCycle_iff_exists_isCycleOn** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`
+。
+形式化陈述：isCycle_iff_exists_isCycleOn : f.IsCycle ↔ exists s : Set α, s.Nontrivial 
+∧ f.IsCycleOn s ∧ forall ⦃x⦄, ¬IsFixedPt f x -> x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Equiv.Perm.IsCycle.isCycleOn`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsC
+ycle → f.IsCycleOn {x | f x ≠ x}
+· 使用定理 `Set.Nontrivial.nonempty`：∀ {α : Type u} {s : Set α}, s.Nontrivial → s.No
+nempty
+· 使用定理 `Equiv.Perm.IsCycleOn.apply_ne`：∀ {α : Type u_2} {f : Equiv.Perm α} {s : 
+Set α} {a : α}, f.IsCycleOn s → s.Nontrivial → a ∈ s → f a ≠ a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem isCycle_iff_exists_isCycleOn
-  proof: by
-  refine ⟨fun hf => ⟨{ x | f x != x }, ?_, hf.isCycleOn, fun _ => id⟩, ?_⟩
-  · obtain ⟨a, ha⟩ := hf
-    exact ⟨f a, f.injective.ne ha.1, a, ha.1, ha.1⟩
-  · rintro ⟨s, hs, hf, hsf⟩
-    obtain ⟨a, ha⟩ := hs.nonempty
-exact ⟨a, hf.apply_ne hs ha, fun b hb => hf.2 ha hsf hb⟩
-
-中文:
-定理 isCycle_iff_存在_isCycleOn
-  证明: by
-  refine ⟨fun hf => ⟨{ x | f x != x }, ?_, hf.isCycleOn, fun _ => id⟩, ?_⟩
-  · obtain ⟨a, ha⟩ := hf
-    exact ⟨f a, f.injective.ne ha.1, a, ha.1, ha.1⟩
-  · rintro ⟨s, hs, hf, hsf⟩
-    obtain ⟨a, ha⟩ := hs.nonempty
-exact ⟨a, hf.apply_ne hs ha, fun b hb => hf.2 ha hsf hb⟩
-
-Depends on / 依赖: apply_ne, f.injective.ne, hf.apply_ne, hf.isCycleOn, hs.nonempty, injective, isCycleOn, nonempty
+--- 原说明 ---
+This lemma demonstrates the relation between `Equiv.Perm.IsCycle` and `Equiv.Per
+m.IsCycleOn`
+in non-degenerate cases.
 -/
 theorem isCycle_iff_exists_isCycleOn :
-    f.IsCycle ↔ exists s : Set α, s.Nontrivial ∧ f.IsCycleOn s ∧ forall ⦃x⦄, ¬IsFixedPt f x -> x in s := by
-  refine ⟨fun hf => ⟨{ x | f x != x }, ?_, hf.isCycleOn, fun _ => id⟩, ?_⟩
+    f.IsCycle ↔ ∃ s : Set α, s.Nontrivial ∧ f.IsCycleOn s ∧ ∀ ⦃x⦄, ¬IsFixedPt f x → x ∈ s := by
+  refine ⟨fun hf => ⟨{ x | f x ≠ x }, ?_, hf.isCycleOn, fun _ => id⟩, ?_⟩
   · obtain ⟨a, ha⟩ := hf
     exact ⟨f a, f.injective.ne ha.1, a, ha.1, ha.1⟩
   · rintro ⟨s, hs, hf, hsf⟩
     obtain ⟨a, ha⟩ := hs.nonempty
-exact ⟨a, hf.apply_ne hs ha, fun b hb => hf.2 ha hsf hb⟩
-
-/--
-theorem `IsCycleOn.apply_mem_iff` / 定理 `IsCycleOn.apply_mem_iff`
-
-English:
-theorem IsCycleOn.apply_mem_iff
-  given: (hf : f.IsCycleOn s)
-  statement: f x in s ↔ x in s
-  proof: ⟨fun hx => by simpa using hf.1.perm_inv.1 hx, fun hx => hf.1.mapsTo hx⟩
-
-中文:
-定理 IsCycleOn.apply_mem_iff
-  条件: (hf : f.IsCycleOn s)
-  结论: f x in s ↔ x in s
-  证明: ⟨fun hx => by simpa using hf.1.perm_inv.1 hx, fun hx => hf.1.mapsTo hx⟩
-
-Depends on / 依赖: mapsTo, perm_inv
+    exact ⟨a, hf.apply_ne hs ha, fun b hb => hf.2 ha <| hsf hb⟩
+/-
+**Equiv.Perm.IsCycleOn.apply_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCyc
+leOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} {x : α}, f.IsCycleOn s → (
+f x ∈ s ↔ x ∈ s)
+参数：f x ∈ s ↔ x ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.BijOn.perm_inv`：∀ {α : Type u_1} {f : Equiv.Perm α} {s : Set α}, Set
+.BijOn (⇑f) s s → Set.BijOn (⇑f⁻¹) s s
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
 -/
-theorem IsCycleOn.apply_mem_iff (hf : f.IsCycleOn s) : f x in s ↔ x in s :=
+theorem IsCycleOn.apply_mem_iff (hf : f.IsCycleOn s) : f x ∈ s ↔ x ∈ s :=
   ⟨fun hx => by simpa using hf.1.perm_inv.1 hx, fun hx => hf.1.mapsTo hx⟩
 
-/--
-theorem `IsCycleOn.isCycle_subtypePerm` / 定理 `IsCycleOn.isCycle_subtypePerm`
+/-- Note that the identity satisfies `IsCycleOn` for any subsingleton set, but not `IsCycle`. -/
+/-
+**Equiv.Perm.IsCycleOn.isCycle_subtypePerm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm
+.IsCycleOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} (hf : f.IsCycleOn s), s.No
+ntrivial → (f.subtypePerm ⋯).IsCycle
+参数：hf : f.IsCycleOn s；f.subtypePerm ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycleOn.apply_mem_iff`：∀ {α : Type u_2} {f : Equiv.Perm α} 
+{s : Set α} {x : α}, f.IsCycleOn s → (f x ∈ s ↔ x ∈ s)
+· 使用定理 `Set.Nontrivial.nonempty`：∀ {α : Type u} {s : Set α}, s.Nontrivial → s.No
+nempty
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `Equiv.Perm.IsCycleOn.apply_ne`：∀ {α : Type u_2} {f : Equiv.Perm α} {s : 
+Set α} {a : α}, f.IsCycleOn s → s.Nontrivial → a ∈ s → f a ≠ a
+· 使用定理 `Equiv.Perm.SameCycle.subtypePerm`：∀ {α : Type u_2} {f : Equiv.Perm α} {p
+ : α → Prop} {h : ∀ (x : α), p (f x) ↔ p x} {x y : { x // p x }},   f.SameCycle 
+↑x ↑y → (f.subtypePerm…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem IsCycleOn.isCycle_subtypePerm
-  given: (hf : f.IsCycleOn s) (hs : s.Nontrivial)
-  proof: by
-  obtain ⟨a, ha⟩ := hs.nonempty
-  exact
-    ⟨⟨a, ha⟩, ne_of_apply_ne ((↑) : s -> α) (hf.apply_ne hs ha), fun b _ =>
-      (hf.2 (⟨a, ha⟩ : s).2 b.2).subtypePerm⟩
-
-中文:
-定理 IsCycleOn.isCycle_subtypePerm
-  条件: (hf : f.IsCycleOn s) (hs : s.非平凡)
-  证明: by
-  obtain ⟨a, ha⟩ := hs.nonempty
-  exact
-    ⟨⟨a, ha⟩, ne_of_apply_ne ((↑) : s -> α) (hf.apply_ne hs ha), fun b _ =>
-      (hf.2 (⟨a, ha⟩ : s).2 b.2).subtypePerm⟩
-
-Depends on / 依赖: apply_ne, hf.apply_ne, hs.nonempty, ne_of_apply_ne, nonempty, subtypePerm
+--- 原说明 ---
+Note that the identity satisfies `IsCycleOn` for any subsingleton set, but not `
+IsCycle`.
 -/
 theorem IsCycleOn.isCycle_subtypePerm (hf : f.IsCycleOn s) (hs : s.Nontrivial) :
     (f.subtypePerm fun _ => hf.apply_mem_iff : Perm s).IsCycle := by
   obtain ⟨a, ha⟩ := hs.nonempty
   exact
-    ⟨⟨a, ha⟩, ne_of_apply_ne ((↑) : s -> α) (hf.apply_ne hs ha), fun b _ =>
+    ⟨⟨a, ha⟩, ne_of_apply_ne ((↑) : s → α) (hf.apply_ne hs ha), fun b _ =>
       (hf.2 (⟨a, ha⟩ : s).2 b.2).subtypePerm⟩
 
-/--
-theorem `IsCycleOn.subtypePerm` / 定理 `IsCycleOn.subtypePerm`
+/-- Note that the identity is a cycle on any subsingleton set, but not a cycle. -/
+/-
+**Equiv.Perm.IsCycleOn.subtypePerm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle
+On`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} (hf : f.IsCycleOn s), (f.s
+ubtypePerm ⋯).IsCycleOn Set.univ
+参数：hf : f.IsCycleOn s；f.subtypePerm ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycleOn.apply_mem_iff`：∀ {α : Type u_2} {f : Equiv.Perm α} 
+{s : Set α} {x : α}, f.IsCycleOn s → (f x ∈ s ↔ x ∈ s)
+· 使用定理 `Set.subsingleton_or_nontrivial`：∀ {α : Type u} (s : Set α), s.Subsinglet
+on ∨ s.Nontrivial
+· 使用定理 `Set.Subsingleton.coe_sort`：∀ {α : Type u} {s : Set α}, s.Subsingleton → 
+Subsingleton ↑s
+· 使用定理 `Equiv.Perm.isCycleOn_of_subsingleton`：isCycleOn_of_subsingleton [Subsing
+leton α] (f : Perm α) (s : Set α) : f.IsCycleOn s
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `Equiv.Perm.IsCycleOn.apply_ne`：∀ {α : Type u_2} {f : Equiv.Perm α} {s : 
+Set α} {a : α}, f.IsCycleOn s → s.Nontrivial → a ∈ s → f a ≠ a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Equiv.Perm.IsCycle.isCycleOn`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsC
+ycle → f.IsCycleOn {x | f x ≠ x}
+· 使用定理 `Equiv.Perm.IsCycleOn.isCycle_subtypePerm`：∀ {α : Type u_2} {f : Equiv.Pe
+rm α} {s : Set α} (hf : f.IsCycleOn s), s.Nontrivial → (f.subtypePerm ⋯).IsCycle
 
-English:
-theorem IsCycleOn.subtypePerm
-  given: (hf : f.IsCycleOn s)
-  proof: by
-  obtain hs | hs := s.subsingleton_or_nontrivial
-  · have := hs.coe_sort
-    exact isCycleOn_of_subsingleton _ _
-  convert! (hf.isCycle_subtypePerm hs).isCycleOn
-  rw [eq_comm]; rw [Set.eq_univ_iff_forall]
-  exact fun x => ne_of_apply_ne ((↑) : s -> α) (hf.apply_ne hs x.2)
-
-中文:
-定理 IsCycleOn.subtypePerm
-  条件: (hf : f.IsCycleOn s)
-  证明: by
-  obtain hs | hs := s.subsingleton_or_nontrivial
-  · have := hs.coe_sort
-    exact isCycleOn_of_subsingleton _ _
-  convert! (hf.isCycle_subtypePerm hs).isCycleOn
-  rw [eq_comm]; rw [Set.eq_univ_iff_forall]
-  exact fun x => ne_of_apply_ne ((↑) : s -> α) (hf.apply_ne hs x.2)
+--- 原说明 ---
+Note that the identity is a cycle on any subsingleton set, but not a cycle.
 -/
 protected theorem IsCycleOn.subtypePerm (hf : f.IsCycleOn s) :
     (f.subtypePerm fun _ => hf.apply_mem_iff : Perm s).IsCycleOn _root_.Set.univ := by
@@ -2794,48 +2302,70 @@ protected theorem IsCycleOn.subtypePerm (hf : f.IsCycleOn s) :
   · have := hs.coe_sort
     exact isCycleOn_of_subsingleton _ _
   convert! (hf.isCycle_subtypePerm hs).isCycleOn
-  rw [eq_comm]; rw [Set.eq_univ_iff_forall]
-  exact fun x => ne_of_apply_ne ((↑) : s -> α) (hf.apply_ne hs x.2)
+  rw [eq_comm, Set.eq_univ_iff_forall]
+  exact fun x => ne_of_apply_ne ((↑) : s → α) (hf.apply_ne hs x.2)
 
 -- TODO: Theory of order of an element under an action
-/--
-theorem `IsCycleOn.pow_apply_eq` / 定理 `IsCycleOn.pow_apply_eq`
-
-English:
-theorem IsCycleOn.pow_apply_eq
-  given: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) {n : Nat}
-  proof: by
-  obtain rfl | hs := Finset.eq_singleton_or_nontrivial ha
-  · rw [coe_singleton, isCycleOn_singleton] at hf
-    simpa using! IsFixedPt.iterate hf n
-  classical
-    have h (x : s) : ¬f x = x := hf.apply_ne hs x.2
-    have := (hf.isCycle_subtypePerm hs).orderOf
-    simp only [coe_sort_coe, support_subtypePerm, ne_eq, h, not_false_eq_true, univ_eq_attach,
-      mem_attach, imp_self, implies_true, filter_true_of_mem, card_attach] at this
-    rw [← this]; rw [orderOf_dvd_iff_pow_eq_one]; rw [(hf.isCycle_subtypePerm hs).pow_eq_one_iff'
-        (ne_of_apply_ne ((↑) : s -> α) <| hf.apply_ne hs (⟨a]; rw [ha⟩ : s).2)]
-    simp [-SetLike.coe_sort_coe]
-
-中文:
-定理 IsCycleOn.pow_apply_eq
-  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s) {n : 自然数}
-  证明: by
-  obtain rfl | hs := Finset.eq_singleton_or_nontrivial ha
-  · rw [coe_singleton, isCycleOn_singleton] at hf
-    simpa using! IsFixedPt.iterate hf n
-  classical
-    have h (x : s) : ¬f x = x := hf.apply_ne hs x.2
-    have := (hf.isCycle_subtypePerm hs).orderOf
-    simp only [coe_sort_coe, support_subtypePerm, ne_eq, h, not_false_eq_true, univ_eq_attach,
-      mem_attach, imp_self, implies_true, filter_true_of_mem, card_attach] at this
-    rw [← this]; rw [orderOf_dvd_iff_pow_eq_one]; rw [(hf.isCycle_subtypePerm hs).pow_eq_one_iff'
-        (ne_of_apply_ne ((↑) : s -> α) <| hf.apply_ne hs (⟨a]; rw [ha⟩ : s).2)]
-    simp [-SetLike.coe_sort_coe]
-
-Depends on / 依赖: Finset, Finset.eq_singleton_or_nontrivial, IsFixedPt, IsFixedPt.iterate, apply_ne, card_attach, classical, coe_singleton, coe_sort_coe, eq_singleton_or_nontrivial, filter_true_of_mem, hf.apply_ne, hf.isCycle_subtypePerm, imp_self, implies_true, isCycleOn_singleton, isCycle_subtypePerm, iterate, mem_attach, ne_eq
+/-
+**Equiv.Perm.IsCycleOn.pow_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycl
+eOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {a : α} {s : Finset α},   f.IsCycleOn 
+↑s → a ∈ s → ∀ {n : ℕ}, (f ^ n) a = a ↔ s.card ∣ n
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_singleton_or_nontrivial`：eq_singleton_or_nontrivial (ha : a in
+ s) : s = {a} ∨ s.Nontrivial
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `Function.IsFixedPt.iterate`：∀ {α : Type u_1} {f : α → α} {x : α}, Functi
+on.IsFixedPt f x → ∀ (n : ℕ), Function.IsFixedPt f^[n] x
+· 使用定理 `Equiv.Perm.isCycleOn_singleton`：isCycleOn_singleton : f.IsCycleOn {a} ↔ 
+f a = a
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.IsCycleOn.apply_ne`：∀ {α : Type u_2} {f : Equiv.Perm α} {s : 
+Set α} {a : α}, f.IsCycleOn s → s.Nontrivial → a ∈ s → f a ≠ a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Equiv.Perm.IsCycleOn.apply_mem_iff`：∀ {α : Type u_2} {f : Equiv.Perm α} 
+{s : Set α} {x : α}, f.IsCycleOn s → (f x ∈ s ↔ x ∈ s)
+· 使用定理 `Equiv.Perm.IsCycle.orderOf`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : 
+DecidableEq α] [inst_1 : Fintype α], f.IsCycle → orderOf f = f.support.card
+· 使用定理 `Equiv.Perm.IsCycleOn.isCycle_subtypePerm`：∀ {α : Type u_2} {f : Equiv.Pe
+rm α} {s : Set α} (hf : f.IsCycleOn s), s.Nontrivial → (f.subtypePerm ⋯).IsCycle
+· 使用定理 `Equiv.Perm.support_subtypePerm`：support_subtypePerm [DecidableEq α] {s :
+ Finset α} (f : Perm α) (h) : (f.subtypePerm h : Perm s).support = ({x | f x != 
+x} : Finset s)
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.filter_true_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Decid
+ablePred p] {s : Finset α}, (∀ x ∈ s, p x) → Finset.filter p s = s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finset.card_attach`：card_attach : #s.attach = #s
+· 使用定理 `orderOf_dvd_iff_pow_eq_one`：orderOf_dvd_iff_pow_eq_one {n : Nat} : order
+Of x ∣ n ↔ x ^ n = 1
+· 使用定理 `Equiv.Perm.IsCycle.pow_eq_one_iff'`：∀ {β : Type u_3} [Finite β] {f : Equ
+iv.Perm β}, f.IsCycle → ∀ {n : ℕ} {x : β}, f x ≠ x → (f ^ n = 1 ↔ (f ^ n) x = x)
+（共 37 条，此处仅展示前 30 条）
 -/
-theorem IsCycleOn.pow_apply_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) {n : Nat} :
+theorem IsCycleOn.pow_apply_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a ∈ s) {n : ℕ} :
     (f ^ n) a = a ↔ #s ∣ n := by
   obtain rfl | hs := Finset.eq_singleton_or_nontrivial ha
   · rw [coe_singleton, isCycleOn_singleton] at hf
@@ -2845,291 +2375,307 @@ theorem IsCycleOn.pow_apply_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s
     have := (hf.isCycle_subtypePerm hs).orderOf
     simp only [coe_sort_coe, support_subtypePerm, ne_eq, h, not_false_eq_true, univ_eq_attach,
       mem_attach, imp_self, implies_true, filter_true_of_mem, card_attach] at this
-    rw [← this]; rw [orderOf_dvd_iff_pow_eq_one]; rw [(hf.isCycle_subtypePerm hs).pow_eq_one_iff'
-        (ne_of_apply_ne ((↑) : s -> α) <| hf.apply_ne hs (⟨a]; rw [ha⟩ : s).2)]
+    rw [← this, orderOf_dvd_iff_pow_eq_one,
+      (hf.isCycle_subtypePerm hs).pow_eq_one_iff'
+        (ne_of_apply_ne ((↑) : s → α) <| hf.apply_ne hs (⟨a, ha⟩ : s).2)]
     simp [-SetLike.coe_sort_coe]
-
-/--
-theorem `IsCycleOn.zpow_apply_eq` / 定理 `IsCycleOn.zpow_apply_eq`
-
-English:
-theorem IsCycleOn.zpow_apply_eq
-  given: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
-
-中文:
-定理 IsCycleOn.zpow_apply_eq
-  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
+/-
+**Equiv.Perm.IsCycleOn.zpow_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCyc
+leOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {a : α} {s : Finset α},   f.IsCycleOn 
+↑s → a ∈ s → ∀ {n : ℤ}, (f ^ n) a = a ↔ ↑s.card ∣ n
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.Perm.IsCycleOn.pow_apply_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {
+a : α} {s : Finset α},   f.IsCycleOn ↑s → a ∈ s → ∀ {n : ℕ}, (f ^ n) a = a ↔ s.c
+ard ∣ n
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `Equiv.Perm.IsCycleOn.inv`：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α
+}, f.IsCycleOn s → f⁻¹.IsCycleOn s
+· 使用定理 `dvd_neg`：dvd_neg : a ∣ -b ↔ a ∣ b
 -/
-theorem IsCycleOn.zpow_apply_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) :
-    forall {n : Int}, (f ^ n) a = a ↔ (#s : Int) ∣ n
+theorem IsCycleOn.zpow_apply_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a ∈ s) :
+    ∀ {n : ℤ}, (f ^ n) a = a ↔ (#s : ℤ) ∣ n
   | Int.ofNat _ => (hf.pow_apply_eq ha).trans Int.natCast_dvd_natCast.symm
   | Int.negSucc n => by
-    rw [zpow_negSucc]; rw [← inv_pow]
+    rw [zpow_negSucc, ← inv_pow]
     exact (hf.inv.pow_apply_eq ha).trans (dvd_neg.trans Int.natCast_dvd_natCast).symm
-
-/--
-theorem `IsCycleOn.pow_apply_eq_pow_apply` / 定理 `IsCycleOn.pow_apply_eq_pow_apply`
-
-English:
-theorem IsCycleOn.pow_apply_eq_pow_apply
-  statement: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
-  proof: by
-  rw [Nat.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
-  simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
-
-中文:
-定理 IsCycleOn.pow_apply_eq_pow_apply
-  结论: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
-  证明: by
-  rw [Nat.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
-  simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
-
-Depends on / 依赖: Nat.modEq_iff_dvd, eq_comm, eq_symm_apply, hf.zpow_apply_eq, modEq_iff_dvd, sub_eq_neg_add, zpow_add, zpow_apply_eq
+/-
+**Equiv.Perm.IsCycleOn.pow_apply_eq_pow_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.P
+erm.IsCycleOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {a : α} {s : Finset α},   f.IsCycleOn 
+↑s → a ∈ s → ∀ {m n : ℕ}, (f ^ m) a = (f ^ n) a ↔ m ≡ n [MOD s.card]
+参数：f ^ m；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [MOD n] ↔ (n : Int) ∣ b - a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.IsCycleOn.zpow_apply_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} 
+{a : α} {s : Finset α},   f.IsCycleOn ↑s → a ∈ s → ∀ {n : ℤ}, (f ^ n) a = a ↔ ↑s
+.card ∣ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem IsCycleOn.pow_apply_eq_pow_apply {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
-    {m n : Nat} : (f ^ m) a = (f ^ n) a ↔ m ≡ n [MOD #s] := by
-  rw [Nat.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
+theorem IsCycleOn.pow_apply_eq_pow_apply {s : Finset α} (hf : f.IsCycleOn s) (ha : a ∈ s)
+    {m n : ℕ} : (f ^ m) a = (f ^ n) a ↔ m ≡ n [MOD #s] := by
+  rw [Nat.modEq_iff_dvd, ← hf.zpow_apply_eq ha]
   simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
-
-/--
-theorem `IsCycleOn.zpow_apply_eq_zpow_apply` / 定理 `IsCycleOn.zpow_apply_eq_zpow_apply`
-
-English:
-theorem IsCycleOn.zpow_apply_eq_zpow_apply
-  statement: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
-  proof: by
-  rw [Int.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
-  simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
-
-中文:
-定理 IsCycleOn.zpow_apply_eq_zpow_apply
-  结论: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
-  证明: by
-  rw [Int.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
-  simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
-
-Depends on / 依赖: Int.modEq_iff_dvd, eq_comm, eq_symm_apply, hf.zpow_apply_eq, modEq_iff_dvd, sub_eq_neg_add, zpow_add, zpow_apply_eq
+/-
+**Equiv.Perm.IsCycleOn.zpow_apply_eq_zpow_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv
+.Perm.IsCycleOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {a : α} {s : Finset α},   f.IsCycleOn 
+↑s → a ∈ s → ∀ {m n : ℤ}, (f ^ m) a = (f ^ n) a ↔ m ≡ n [ZMOD ↑s.card]
+参数：f ^ m；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.modEq_iff_dvd`：modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.IsCycleOn.zpow_apply_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} 
+{a : α} {s : Finset α},   f.IsCycleOn ↑s → a ∈ s → ∀ {n : ℤ}, (f ^ n) a = a ↔ ↑s
+.card ∣ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem IsCycleOn.zpow_apply_eq_zpow_apply {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
-    {m n : Int} : (f ^ m) a = (f ^ n) a ↔ m ≡ n [ZMOD #s] := by
-  rw [Int.modEq_iff_dvd]; rw [← hf.zpow_apply_eq ha]
+theorem IsCycleOn.zpow_apply_eq_zpow_apply {s : Finset α} (hf : f.IsCycleOn s) (ha : a ∈ s)
+    {m n : ℤ} : (f ^ m) a = (f ^ n) a ↔ m ≡ n [ZMOD #s] := by
+  rw [Int.modEq_iff_dvd, ← hf.zpow_apply_eq ha]
   simp [sub_eq_neg_add, zpow_add, eq_symm_apply, eq_comm]
-
-/--
-theorem `IsCycleOn.pow_card_apply` / 定理 `IsCycleOn.pow_card_apply`
-
-English:
-theorem IsCycleOn.pow_card_apply
-  given: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s)
-  proof: (hf.pow_apply_eq ha).2 dvd_rfl
-
-中文:
-定理 IsCycleOn.pow_card_apply
-  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s)
-  证明: (hf.pow_apply_eq ha).2 dvd_rfl
-
-Depends on / 依赖: dvd_rfl, hf.pow_apply_eq, pow_apply_eq
+/-
+**Equiv.Perm.IsCycleOn.pow_card_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCy
+cleOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {a : α} {s : Finset α}, f.IsCycleOn ↑s
+ → a ∈ s → (f ^ s.card) a = a
+参数：f ^ s.card。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.IsCycleOn.pow_apply_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {
+a : α} {s : Finset α},   f.IsCycleOn ↑s → a ∈ s → ∀ {n : ℕ}, (f ^ n) a = a ↔ s.c
+ard ∣ n
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
 -/
-theorem IsCycleOn.pow_card_apply {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) :
+theorem IsCycleOn.pow_card_apply {s : Finset α} (hf : f.IsCycleOn s) (ha : a ∈ s) :
     (f ^ #s) a = a :=
   (hf.pow_apply_eq ha).2 dvd_rfl
-
-/--
-theorem `IsCycleOn.exists_pow_eq` / 定理 `IsCycleOn.exists_pow_eq`
-
-English:
-theorem IsCycleOn.exists_pow_eq
-  given: {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
-  proof: by
+/-
+**Equiv.Perm.IsCycleOn.exists_pow_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCyc
+leOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {a b : α} {s : Finset α},   f.IsCycleO
+n ↑s → a ∈ s → b ∈ s → ∃ n < s.card, (f ^ n) a = b
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Int.ModEq.dvd`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → n ∣ b - a
+· 使用定理 `Int.ModEq.symm`：∀ {n a b : ℤ}, a ≡ b [ZMOD n] → b ≡ a [ZMOD n]
+· 使用定理 `Int.mod_modEq`：mod_modEq (a n) : a % n ≡ a [ZMOD n]
+· 使用引理 `Int.natMod_lt`：natMod_lt {n : Nat} (hn : n != 0) : m.natMod n < n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Int.natMod.eq_1`：∀ (m n : ℤ), m.natMod n = (m % n).toNat
+· 使用定理 `Int.toNat_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.toNat = a
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_eq_iff_eq_add'`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}
+, a - b = c ↔ a = b + c
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `zpow_mul`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (m n : ℤ), 
+a ^ (m * n) = (a ^ m) ^ n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Function.IsFixedPt.perm_zpow`：∀ {α : Type u_1} {x : α} {e : Equiv.Perm α
+}, Function.IsFixedPt (⇑e) x → ∀ (n : ℤ), Function.IsFixedPt (⇑(e ^ n)) x
+· 使用定理 `Equiv.Perm.IsCycleOn.pow_card_apply`：∀ {α : Type u_2} {f : Equiv.Perm α}
+ {a : α} {s : Finset α}, f.IsCycleOn ↑s → a ∈ s → (f ^ s.card) a = a
+-/
+theorem IsCycleOn.exists_pow_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a ∈ s) (hb : b ∈ s) :
+    ∃ n < #s, (f ^ n) a = b := by
   obtain ⟨n, rfl⟩ := hf.2 ha hb
   obtain ⟨k, hk⟩ := (Int.mod_modEq n #s).symm.dvd
   refine ⟨n.natMod #s, Int.natMod_lt (Nonempty.card_pos ⟨a, ha⟩).ne', ?_⟩
-  rw [← zpow_natCast]; rw [Int.natMod]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ <| Nat.cast_ne_zero.2
-      (Nonempty.card_pos ⟨a]; rw [ha⟩).ne')]; rw [sub_eq_iff_eq_add'.1 hk]; rw [zpow_add]; rw [zpow_mul]
+  rw [← zpow_natCast, Int.natMod,
+    Int.toNat_of_nonneg (Int.emod_nonneg _ <| Nat.cast_ne_zero.2
+      (Nonempty.card_pos ⟨a, ha⟩).ne'), sub_eq_iff_eq_add'.1 hk, zpow_add, zpow_mul]
   simp only [zpow_natCast, coe_mul, comp_apply, EmbeddingLike.apply_eq_iff_eq]
   exact IsFixedPt.perm_zpow (hf.pow_card_apply ha) _
-
-中文:
-定理 IsCycleOn.存在_pow_eq
-  条件: {s : 有限集 α} (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
-  证明: by
-  obtain ⟨n, rfl⟩ := hf.2 ha hb
-  obtain ⟨k, hk⟩ := (Int.mod_modEq n #s).symm.dvd
-  refine ⟨n.natMod #s, Int.natMod_lt (Nonempty.card_pos ⟨a, ha⟩).ne', ?_⟩
-  rw [← zpow_natCast]; rw [Int.natMod]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ <| Nat.cast_ne_zero.2
-      (Nonempty.card_pos ⟨a]; rw [ha⟩).ne')]; rw [sub_eq_iff_eq_add'.1 hk]; rw [zpow_add]; rw [zpow_mul]
-  simp only [zpow_natCast, coe_mul, comp_apply, EmbeddingLike.apply_eq_iff_eq]
-  exact IsFixedPt.perm_zpow (hf.pow_card_apply ha) _
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Int.emod_nonneg, Int.mod_modEq, Int.natMod, Int.natMod_lt, Int.toNat_of_nonneg, IsFixedPt, IsFixedPt.perm_zpow, Nat.cast_ne_zero, Nonempty, Nonempty.card_pos, apply_eq_iff_eq, card_pos, cast_ne_zero, coe_mul, comp_apply, emod_nonneg, hf.pow_card_apply, mod_modEq
+/-
+**Equiv.Perm.IsCycleOn.exists_pow_eq'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCy
+cleOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} {a b : α}, s.Finite → f.Is
+CycleOn s → a ∈ s → b ∈ s → ∃ n, (f ^ n) a = b
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Set.instCanLiftFinsetCoeFinite`：∀ {α : Type u}, CanLift (Set α) (Finset 
+α) SetLike.coe Set.Finite
+· 使用定理 `Equiv.Perm.IsCycleOn.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} 
+{a b : α} {s : Finset α},   f.IsCycleOn ↑s → a ∈ s → b ∈ s → ∃ n < s.card, (f ^ 
+n) a = b
 -/
-theorem IsCycleOn.exists_pow_eq {s : Finset α} (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s) :
-    exists n < #s, (f ^ n) a = b := by
-  obtain ⟨n, rfl⟩ := hf.2 ha hb
-  obtain ⟨k, hk⟩ := (Int.mod_modEq n #s).symm.dvd
-  refine ⟨n.natMod #s, Int.natMod_lt (Nonempty.card_pos ⟨a, ha⟩).ne', ?_⟩
-  rw [← zpow_natCast]; rw [Int.natMod]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ <| Nat.cast_ne_zero.2
-      (Nonempty.card_pos ⟨a]; rw [ha⟩).ne')]; rw [sub_eq_iff_eq_add'.1 hk]; rw [zpow_add]; rw [zpow_mul]
-  simp only [zpow_natCast, coe_mul, comp_apply, EmbeddingLike.apply_eq_iff_eq]
-  exact IsFixedPt.perm_zpow (hf.pow_card_apply ha) _
-
-/--
-theorem `IsCycleOn.exists_pow_eq'` / 定理 `IsCycleOn.exists_pow_eq'`
-
-English:
-theorem IsCycleOn.exists_pow_eq'
-  given: (hs : s.Finite) (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
-  proof: by
+theorem IsCycleOn.exists_pow_eq' (hs : s.Finite) (hf : f.IsCycleOn s) (ha : a ∈ s) (hb : b ∈ s) :
+    ∃ n : ℕ, (f ^ n) a = b := by
   lift s to Finset α using hs
   obtain ⟨n, -, hn⟩ := hf.exists_pow_eq ha hb
   exact ⟨n, hn⟩
-
-中文:
-定理 IsCycleOn.存在_pow_eq'
-  条件: (hs : s.有限) (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s)
-  证明: by
-  lift s to Finset α using hs
-  obtain ⟨n, -, hn⟩ := hf.exists_pow_eq ha hb
-  exact ⟨n, hn⟩
-
-Depends on / 依赖: Finset, exists_pow_eq, hf.exists_pow_eq
+/-
+**Equiv.Perm.IsCycleOn.range_pow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycleOn
+`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} {a : α},   s.Finite → f.Is
+CycleOn s → a ∈ s → (Set.range fun n => (f ^ n) a) = s
+参数：Set.range fun n => (f ^ n) a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Set.MapsTo.perm_pow`：∀ {α : Type u_1} {f : Equiv.Perm α} {s : Set α}, Se
+t.MapsTo (⇑f) s s → ∀ (n : ℕ), Set.MapsTo (⇑(f ^ n)) s s
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Equiv.Perm.IsCycleOn.exists_pow_eq'`：∀ {α : Type u_2} {f : Equiv.Perm α}
+ {s : Set α} {a b : α}, s.Finite → f.IsCycleOn s → a ∈ s → b ∈ s → ∃ n, (f ^ n) 
+a = b
 -/
-theorem IsCycleOn.exists_pow_eq' (hs : s.Finite) (hf : f.IsCycleOn s) (ha : a in s) (hb : b in s) :
-    exists n : Nat, (f ^ n) a = b := by
-  lift s to Finset α using hs
-  obtain ⟨n, -, hn⟩ := hf.exists_pow_eq ha hb
-  exact ⟨n, hn⟩
-
-/--
-theorem `IsCycleOn.range_pow` / 定理 `IsCycleOn.range_pow`
-
-English:
-theorem IsCycleOn.range_pow
-  given: (hs : s.Finite) (h : f.IsCycleOn s) (ha : a in s)
-  proof: Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => h.1.mapsTo.perm_pow _ ha) fun _ =>
-    h.exists_pow_eq' hs ha
-
-中文:
-定理 IsCycleOn.range_pow
-  条件: (hs : s.有限) (h : f.IsCycleOn s) (ha : a in s)
-  证明: Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => h.1.mapsTo.perm_pow _ ha) fun _ =>
-    h.exists_pow_eq' hs ha
-
-Depends on / 依赖: Set.Subset.antisymm, Set.range_subset_iff, Subset, antisymm, exists_pow_eq, h.exists_pow_eq, mapsTo, mapsTo.perm_pow, perm_pow, range_subset_iff
--/
-theorem IsCycleOn.range_pow (hs : s.Finite) (h : f.IsCycleOn s) (ha : a in s) :
-    Set.range (fun n => (f ^ n) a : Nat -> α) = s :=
+theorem IsCycleOn.range_pow (hs : s.Finite) (h : f.IsCycleOn s) (ha : a ∈ s) :
+    Set.range (fun n => (f ^ n) a : ℕ → α) = s :=
   Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => h.1.mapsTo.perm_pow _ ha) fun _ =>
     h.exists_pow_eq' hs ha
-
-/--
-theorem `IsCycleOn.range_zpow` / 定理 `IsCycleOn.range_zpow`
-
-English:
-theorem IsCycleOn.range_zpow
-  given: (h : f.IsCycleOn s) (ha : a in s)
-  proof: Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => (h.1.perm_zpow _).mapsTo ha) h.2 ha
-
-中文:
-定理 IsCycleOn.range_zpow
-  条件: (h : f.IsCycleOn s) (ha : a in s)
-  证明: Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => (h.1.perm_zpow _).mapsTo ha) h.2 ha
-
-Depends on / 依赖: Set.Subset.antisymm, Set.range_subset_iff, Subset, antisymm, mapsTo, perm_zpow, range_subset_iff
+/-
+**Equiv.Perm.IsCycleOn.range_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycleO
+n`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} {a : α}, f.IsCycleOn s → a
+ ∈ s → (Set.range fun n => (f ^ n) a) = s
+参数：Set.range fun n => (f ^ n) a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.BijOn.perm_zpow`：∀ {α : Type u_1} {f : Equiv.Perm α} {s : Set α}, Se
+t.BijOn (⇑f) s s → ∀ (n : ℤ), Set.BijOn (⇑(f ^ n)) s s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsCycleOn.range_zpow (h : f.IsCycleOn s) (ha : a in s) :
-    Set.range (fun n => (f ^ n) a : Int -> α) = s :=
-Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => (h.1.perm_zpow _).mapsTo ha) h.2 ha
-
-/--
-theorem `IsCycleOn.of_pow` / 定理 `IsCycleOn.of_pow`
-
-English:
-theorem IsCycleOn.of_pow
-  given: {n : Nat} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s)
-  statement: f.IsCycleOn s
-  proof: ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_pow⟩
-
-中文:
-定理 IsCycleOn.of_pow
-  条件: {n : 自然数} (hf : (f ^ n).IsCycleOn s) (h : 集合.双射限制 f s s)
-  结论: f.IsCycleOn s
-  证明: ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_pow⟩
-
-Depends on / 依赖: of_pow
+theorem IsCycleOn.range_zpow (h : f.IsCycleOn s) (ha : a ∈ s) :
+    Set.range (fun n => (f ^ n) a : ℤ → α) = s :=
+  Set.Subset.antisymm (Set.range_subset_iff.2 fun _ => (h.1.perm_zpow _).mapsTo ha) <| h.2 ha
+/-
+**Equiv.Perm.IsCycleOn.of_pow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycleOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} {n : ℕ}, (f ^ n).IsCycleOn
+ s → Set.BijOn (⇑f) s s → f.IsCycleOn s
+参数：f ^ n；⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.of_pow`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y : 
+α} {n : ℕ}, (f ^ n).SameCycle x y → f.SameCycle x y
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsCycleOn.of_pow {n : Nat} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s) : f.IsCycleOn s :=
+theorem IsCycleOn.of_pow {n : ℕ} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s) : f.IsCycleOn s :=
   ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_pow⟩
-
-/--
-theorem `IsCycleOn.of_zpow` / 定理 `IsCycleOn.of_zpow`
-
-English:
-theorem IsCycleOn.of_zpow
-  given: {n : Int} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s)
-  proof: ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_zpow⟩
-
-中文:
-定理 IsCycleOn.of_zpow
-  条件: {n : 整数} (hf : (f ^ n).IsCycleOn s) (h : 集合.双射限制 f s s)
-  证明: ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_zpow⟩
-
-Depends on / 依赖: of_zpow
+/-
+**Equiv.Perm.IsCycleOn.of_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycleOn`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α} {n : ℤ}, (f ^ n).IsCycleOn
+ s → Set.BijOn (⇑f) s s → f.IsCycleOn s
+参数：f ^ n；⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.SameCycle.of_zpow`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y :
+ α} {n : ℤ}, (f ^ n).SameCycle x y → f.SameCycle x y
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsCycleOn.of_zpow {n : Int} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s) :
+theorem IsCycleOn.of_zpow {n : ℤ} (hf : (f ^ n).IsCycleOn s) (h : Set.BijOn f s s) :
     f.IsCycleOn s :=
   ⟨h, fun _ hx _ hy => (hf.2 hx hy).of_zpow⟩
-
-/--
-theorem `IsCycleOn.extendDomain` / 定理 `IsCycleOn.extendDomain`
-
-English:
-theorem IsCycleOn.extendDomain
-  statement: {p : β -> Prop} [DecidablePred p] (f : α ≃ Subtype p)
-  proof: ⟨h.1.extendDomain, by
-    rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩
-    exact (h.2 ha hb).extendDomain⟩
-
-中文:
-定理 IsCycleOn.extendDomain
-  结论: {p : β -> 命题} [DecidablePred p] (f : α ≃ 子类型 p)
-  证明: ⟨h.1.extendDomain, by
-    rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩
-    exact (h.2 ha hb).extendDomain⟩
-
-Depends on / 依赖: extendDomain
+/-
+**Equiv.Perm.IsCycleOn.extendDomain** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycl
+eOn`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {g : Equiv.Perm α} {s : Set α} {p : β → Pr
+op} [inst : DecidablePred p]   (f : α ≃ Subtype p), g.IsCycleOn s → (g.extendDom
+ain f).IsCycleOn (Subtype.val ∘ ⇑f '' s)
+参数：f : α ≃ Subtype p；g.extendDomain f；Subtype.val ∘ ⇑f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.BijOn.extendDomain`：∀ {α : Type u_1} {β : Type u_2} {p : β → Prop} [
+inst : DecidablePred p] {f : α ≃ Subtype p} {g : Equiv.Perm α}   {s t : Set α}, 
+Set.BijOn (⇑…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Equiv.Perm.SameCycle.extendDomain`：∀ {α : Type u_2} {β : Type u_3} {g : 
+Equiv.Perm α} {x y : α} {p : β → Prop} [inst : DecidablePred p]   {f : α ≃ Subty
+pe p}, g.SameCycle x y …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsCycleOn.extendDomain {p : β -> Prop} [DecidablePred p] (f : α ≃ Subtype p)
+theorem IsCycleOn.extendDomain {p : β → Prop} [DecidablePred p] (f : α ≃ Subtype p)
     (h : g.IsCycleOn s) : (g.extendDomain f).IsCycleOn ((↑) ∘ f '' s) :=
   ⟨h.1.extendDomain, by
     rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩
     exact (h.2 ha hb).extendDomain⟩
-
-/--
-theorem `IsCycleOn.countable` / 定理 `IsCycleOn.countable`
-
-English:
-theorem IsCycleOn.countable
-  given: (hs : f.IsCycleOn s)
-  statement: s.Countable
-  proof: by
-  obtain rfl | ⟨a, ha⟩ := s.eq_empty_or_nonempty
-  · exact Set.countable_empty
-  · exact (Set.countable_range fun n : Int => (⇑(f ^ n) : α -> α) a).mono (hs.2 ha)
-
-中文:
-定理 IsCycleOn.countable
-  条件: (hs : f.IsCycleOn s)
-  结论: s.可数
-  证明: by
-  obtain rfl | ⟨a, ha⟩ := s.eq_empty_or_nonempty
-  · exact Set.countable_empty
-  · exact (Set.countable_range fun n : Int => (⇑(f ^ n) : α -> α) a).mono (hs.2 ha)
+/-
+**Equiv.Perm.IsCycleOn.countable** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycleOn
+`。
+形式化陈述：∀ {α : Type u_2} {f : Equiv.Perm α} {s : Set α}, f.IsCycleOn s → s.Countab
+le
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Set.countable_empty`：∀ {α : Type u}, ∅.Countable
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `instCountableInt`：Countable ℤ
 -/
 protected theorem IsCycleOn.countable (hs : f.IsCycleOn s) : s.Countable := by
   obtain rfl | ⟨a, ha⟩ := s.eq_empty_or_nonempty
   · exact Set.countable_empty
-  · exact (Set.countable_range fun n : Int => (⇑(f ^ n) : α -> α) a).mono (hs.2 ha)
+  · exact (Set.countable_range fun n : ℤ => (⇑(f ^ n) : α → α) a).mono (hs.2 ha)
 
 
 end IsCycleOn
@@ -3142,40 +2688,53 @@ section
 
 variable [DecidableEq α] {l : List α}
 
-/--
-theorem `Nodup.isCycleOn_formPerm` / 定理 `Nodup.isCycleOn_formPerm`
-
-English:
-theorem Nodup.isCycleOn_formPerm
-  given: (h : l.Nodup)
-  proof: by
-  refine ⟨l.formPerm.bijOn fun _ => List.formPerm_mem_iff_mem, fun a ha b hb => ?_⟩
-  rw [Set.mem_ofPred]; rw [← List.idxOf_lt_length_iff] at ha hb
-  rw [← List.getElem_idxOf ha]; rw [← List.getElem_idxOf hb]
-  refine ⟨l.idxOf b - l.idxOf a, ?_⟩
-  simp only [sub_eq_neg_add, zpow_add, zpow_neg, Equiv.Perm.inv_eq_iff_eq, zpow_natCast,
-    Equiv.Perm.coe_mul, List.formPerm_pow_apply_getElem _ h, Function.comp]
-  rw [add_comm]
-
-中文:
-定理 Nodup.isCycleOn_formPerm
-  条件: (h : l.Nodup)
-  证明: by
-  refine ⟨l.formPerm.bijOn fun _ => List.formPerm_mem_iff_mem, fun a ha b hb => ?_⟩
-  rw [Set.mem_ofPred]; rw [← List.idxOf_lt_length_iff] at ha hb
-  rw [← List.getElem_idxOf ha]; rw [← List.getElem_idxOf hb]
-  refine ⟨l.idxOf b - l.idxOf a, ?_⟩
-  simp only [sub_eq_neg_add, zpow_add, zpow_neg, Equiv.Perm.inv_eq_iff_eq, zpow_natCast,
-    Equiv.Perm.coe_mul, List.formPerm_pow_apply_getElem _ h, Function.comp]
-  rw [add_comm]
-
-Depends on / 依赖: Equiv.Perm.coe_mul, Equiv.Perm.inv_eq_iff_eq, Function, Function.comp, List.formPerm_mem_iff_mem, List.formPerm_pow_apply_getElem, List.getElem_idxOf, List.idxOf_lt_length_iff, Set.mem_ofPred, add_comm, coe_mul, formPerm, formPerm_mem_iff_mem, formPerm_pow_apply_getElem, getElem_idxOf, idxOf_lt_length_iff, inv_eq_iff_eq, l.formPerm.bijOn, l.idxOf, mem_ofPred
+/-
+**List.Nodup.isCycleOn_formPerm** 是 Mathlib 中的一个定理，位于命名空间 `List.Nodup`。
+形式化陈述：∀ {α : Type u_2} [inst : DecidableEq α] {l : List α}, l.Nodup → l.formPerm
+.IsCycleOn {a | a ∈ l}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijOn`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) {s : Set α} {t 
+: Set β}, (∀ (a : α), e a ∈ t ↔ a ∈ s) → Set.BijOn (⇑e) s t
+· 使用定理 `List.formPerm_mem_iff_mem`：formPerm_mem_iff_mem : l.formPerm x in l ↔ x 
+in l
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.idxOf_lt_length_iff`：∀ {α : Type u_1} [inst : BEq α] [LawfulBEq α] 
+{l : List α} {a : α}, List.idxOf a l < l.length ↔ a ∈ l
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `List.getElem_idxOf`：∀ {α : Type u_1} [inst : BEq α] [LawfulBEq α] {x : α
+} {xs : List α} (h : List.idxOf x xs < xs.length),   xs[List.idxOf x xs] = x
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `List.formPerm_pow_apply_getElem`：formPerm_pow_apply_getElem (l : List α)
+ (w : Nodup l) (n : Nat) (i : Nat) (h : i < l.length) : (formPerm l ^ n) l[i] = 
+l[(i + n) % l.length]…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 theorem Nodup.isCycleOn_formPerm (h : l.Nodup) :
-    l.formPerm.IsCycleOn { a | a in l } := by
+    l.formPerm.IsCycleOn { a | a ∈ l } := by
   refine ⟨l.formPerm.bijOn fun _ => List.formPerm_mem_iff_mem, fun a ha b hb => ?_⟩
-  rw [Set.mem_ofPred]; rw [← List.idxOf_lt_length_iff] at ha hb
-  rw [← List.getElem_idxOf ha]; rw [← List.getElem_idxOf hb]
+  rw [Set.mem_ofPred, ← List.idxOf_lt_length_iff] at ha hb
+  rw [← List.getElem_idxOf ha, ← List.getElem_idxOf hb]
   refine ⟨l.idxOf b - l.idxOf a, ?_⟩
   simp only [sub_eq_neg_add, zpow_add, zpow_neg, Equiv.Perm.inv_eq_iff_eq, zpow_natCast,
     Equiv.Perm.coe_mul, List.formPerm_pow_apply_getElem _ h, Function.comp]
@@ -3189,31 +2748,32 @@ namespace Finset
 
 variable [DecidableEq α] [Fintype α]
 
-/--
-theorem `exists_cycleOn` / 定理 `exists_cycleOn`
-
-English:
-theorem exists_cycleOn
-  given: (s : Finset α)
-  proof: by
-  refine ⟨s.toList.formPerm, ?_, fun x hx => by
-    simpa using List.mem_of_formPerm_apply_ne (Perm.mem_support.1 hx)⟩
-  convert! s.nodup_toList.isCycleOn_formPerm
-  simp
-
-中文:
-定理 存在_cycleOn
-  条件: (s : 有限集 α)
-  证明: by
-  refine ⟨s.toList.formPerm, ?_, fun x hx => by
-    simpa using List.mem_of_formPerm_apply_ne (Perm.mem_support.1 hx)⟩
-  convert! s.nodup_toList.isCycleOn_formPerm
-  simp
-
-Depends on / 依赖: List.mem_of_formPerm_apply_ne, Perm.mem_support, convert, formPerm, isCycleOn_formPerm, mem_of_formPerm_apply_ne, mem_support, nodup_toList, s.nodup_toList.isCycleOn_formPerm, s.toList.formPerm, toList
+/-
+**Finset.exists_cycleOn** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：exists_cycleOn (s : Finset α) : exists f : Perm α, f.IsCycleOn s ∧ f.suppo
+rt subseteq s
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.Nodup.isCycleOn_formPerm`：∀ {α : Type u_2} [inst : DecidableEq α] {
+l : List α}, l.Nodup → l.formPerm.IsCycleOn {a | a ∈ l}
+· 使用定理 `Finset.nodup_toList`：nodup_toList (s : Finset α) : s.toList.Nodup
+· 使用定理 `List.mem_of_formPerm_apply_ne`：mem_of_formPerm_apply_ne (h : l.formPerm 
+x != x) : x in l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
 -/
 theorem exists_cycleOn (s : Finset α) :
-    exists f : Perm α, f.IsCycleOn s ∧ f.support subseteq s := by
+    ∃ f : Perm α, f.IsCycleOn s ∧ f.support ⊆ s := by
   refine ⟨s.toList.formPerm, ?_, fun x hx => by
     simpa using List.mem_of_formPerm_apply_ne (Perm.mem_support.1 hx)⟩
   convert! s.nodup_toList.isCycleOn_formPerm
@@ -3225,53 +2785,61 @@ namespace Set
 
 variable {f : Perm α} {s : Set α}
 
-/--
-theorem `Countable.exists_cycleOn` / 定理 `Countable.exists_cycleOn`
-
-English:
-theorem Countable.exists_cycleOn
-  given: (hs : s.Countable)
-  proof: by
-  classical
-  obtain hs' | hs' := s.finite_or_infinite
-  · refine ⟨hs'.toFinset.toList.formPerm, ?_, fun x hx => by
-      simpa using List.mem_of_formPerm_apply_ne hx⟩
-    convert! hs'.toFinset.nodup_toList.isCycleOn_formPerm
-    simp
-  · have := hs.to_subtype
-    have := hs'.to_subtype
-    obtain ⟨f⟩ : Nonempty (Int ≃ s) := inferInstance
-    refine ⟨(Equiv.addRight 1).extendDomain f, ?_, fun x hx =>
-of_not_not fun h => hx Perm.extendDomain_apply_not_subtype _ _ h⟩
-    convert! Int.addRight_one_isCycle.isCycleOn.extendDomain f
-    rw [Set.image_comp]; rw [Equiv.image_eq_preimage_symm]
-    ext
-    simp
-
-中文:
-定理 可数.存在_cycleOn
-  条件: (hs : s.可数)
-  证明: by
-  classical
-  obtain hs' | hs' := s.finite_or_infinite
-  · refine ⟨hs'.toFinset.toList.formPerm, ?_, fun x hx => by
-      simpa using List.mem_of_formPerm_apply_ne hx⟩
-    convert! hs'.toFinset.nodup_toList.isCycleOn_formPerm
-    simp
-  · have := hs.to_subtype
-    have := hs'.to_subtype
-    obtain ⟨f⟩ : Nonempty (Int ≃ s) := inferInstance
-    refine ⟨(Equiv.addRight 1).extendDomain f, ?_, fun x hx =>
-of_not_not fun h => hx Perm.extendDomain_apply_not_subtype _ _ h⟩
-    convert! Int.addRight_one_isCycle.isCycleOn.extendDomain f
-    rw [Set.image_comp]; rw [Equiv.image_eq_preimage_symm]
-    ext
-    simp
-
-Depends on / 依赖: Equiv.addRight, Int.addRight_one_isCycle.isCycleOn.extendDomain, List.mem_of_formPerm_apply_ne, Nonempty, Perm.extendDomain_apply_not_subtype, addRight, addRight_one_isCycle, classical, convert, extendDomain, extendDomain_apply_not_subtype, finite_or_infinite, formPerm, hs.to_subtype, isCycleOn, isCycleOn_formPerm, mem_of_formPerm_apply_ne, nodup_toList, of_not_not, s.finite_or_infinite
+/-
+**Set.Countable.exists_cycleOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u_2} {s : Set α}, s.Countable → ∃ f, f.IsCycleOn s ∧ {x | f x 
+≠ x} ⊆ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.Nodup.isCycleOn_formPerm`：∀ {α : Type u_2} [inst : DecidableEq α] {
+l : List α}, l.Nodup → l.formPerm.IsCycleOn {a | a ∈ l}
+· 使用定理 `Finset.nodup_toList`：nodup_toList (s : Finset α) : s.toList.Nodup
+· 使用定理 `List.mem_of_formPerm_apply_ne`：mem_of_formPerm_apply_ne (h : l.formPerm 
+x != x) : x in l
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Set.Infinite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Infinite → Infini
+te ↑s
+· 使用定理 `instCountableInt`：Countable ℤ
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Equiv.Perm.IsCycleOn.extendDomain`：∀ {α : Type u_2} {β : Type u_3} {g : 
+Equiv.Perm α} {s : Set α} {p : β → Prop} [inst : DecidablePred p]   (f : α ≃ Sub
+type p), g.IsCycleOn s …
+· 使用定理 `Equiv.Perm.IsCycle.isCycleOn`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsC
+ycle → f.IsCycleOn {x | f x ≠ x}
+· 使用定理 `Int.addRight_one_isCycle`：(Equiv.addRight 1).IsCycle
+（共 32 条，此处仅展示前 30 条）
 -/
 theorem Countable.exists_cycleOn (hs : s.Countable) :
-    exists f : Perm α, f.IsCycleOn s ∧ { x | f x != x } subseteq s := by
+    ∃ f : Perm α, f.IsCycleOn s ∧ { x | f x ≠ x } ⊆ s := by
   classical
   obtain hs' | hs' := s.finite_or_infinite
   · refine ⟨hs'.toFinset.toList.formPerm, ?_, fun x hx => by
@@ -3280,45 +2848,39 @@ theorem Countable.exists_cycleOn (hs : s.Countable) :
     simp
   · have := hs.to_subtype
     have := hs'.to_subtype
-    obtain ⟨f⟩ : Nonempty (Int ≃ s) := inferInstance
+    obtain ⟨f⟩ : Nonempty (ℤ ≃ s) := inferInstance
     refine ⟨(Equiv.addRight 1).extendDomain f, ?_, fun x hx =>
-of_not_not fun h => hx Perm.extendDomain_apply_not_subtype _ _ h⟩
+      of_not_not fun h => hx <| Perm.extendDomain_apply_not_subtype _ _ h⟩
     convert! Int.addRight_one_isCycle.isCycleOn.extendDomain f
-    rw [Set.image_comp]; rw [Equiv.image_eq_preimage_symm]
+    rw [Set.image_comp, Equiv.image_eq_preimage_symm]
     ext
     simp
-
-/--
-theorem `prod_self_eq_iUnion_perm` / 定理 `prod_self_eq_iUnion_perm`
-
-English:
-theorem prod_self_eq_iUnion_perm
-  given: (hf : f.IsCycleOn s)
-  proof: by
-  ext ⟨a, b⟩
-  simp only [Set.mem_prod, Set.mem_iUnion, Set.mem_image]
-  refine ⟨fun hx => ?_, ?_⟩
-  · obtain ⟨n, rfl⟩ := hf.2 hx.1 hx.2
-    exact ⟨_, _, hx.1, rfl⟩
-  · rintro ⟨n, a, ha, ⟨⟩⟩
-    exact ⟨ha, (hf.1.perm_zpow _).mapsTo ha⟩
-
-中文:
-定理 prod_self_eq_iUnion_perm
-  条件: (hf : f.IsCycleOn s)
-  证明: by
-  ext ⟨a, b⟩
-  simp only [Set.mem_prod, Set.mem_iUnion, Set.mem_image]
-  refine ⟨fun hx => ?_, ?_⟩
-  · obtain ⟨n, rfl⟩ := hf.2 hx.1 hx.2
-    exact ⟨_, _, hx.1, rfl⟩
-  · rintro ⟨n, a, ha, ⟨⟩⟩
-    exact ⟨ha, (hf.1.perm_zpow _).mapsTo ha⟩
-
-Depends on / 依赖: Set.mem_iUnion, Set.mem_image, Set.mem_prod, mapsTo, mem_iUnion, mem_image, mem_prod, perm_zpow
+/-
+**Set.prod_self_eq_iUnion_perm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：prod_self_eq_iUnion_perm (hf : f.IsCycleOn s) : s ×ˢ s = ⋃ n : Int, (fun a
+ => (a, (f ^ n) a)) '' s
+参数：hf : f.IsCycleOn s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.BijOn.perm_zpow`：∀ {α : Type u_1} {f : Equiv.Perm α} {s : Set α}, Se
+t.BijOn (⇑f) s s → ∀ (n : ℤ), Set.BijOn (⇑(f ^ n)) s s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem prod_self_eq_iUnion_perm (hf : f.IsCycleOn s) :
-    s ×ˢ s = ⋃ n : Int, (fun a => (a, (f ^ n) a)) '' s := by
+    s ×ˢ s = ⋃ n : ℤ, (fun a => (a, (f ^ n) a)) '' s := by
   ext ⟨a, b⟩
   simp only [Set.mem_prod, Set.mem_iUnion, Set.mem_image]
   refine ⟨fun hx => ?_, ?_⟩
@@ -3334,47 +2896,40 @@ namespace Finset
 variable {f : Perm α} {s : Finset α}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `product_self_eq_disjiUnion_perm_aux` / 定理 `product_self_eq_disjiUnion_perm_aux`
-
-English:
-theorem product_self_eq_disjiUnion_perm_aux
-  given: (hf : f.IsCycleOn s)
-  proof: by
-  obtain hs | _ := (s : Set α).subsingleton_or_nontrivial
-  · refine Set.Subsingleton.pairwise ?_ _
-    simp_rw [Set.Subsingleton, mem_coe, ← card_le_one] at hs ⊢
-    rwa [card_range]
-  classical
-    rintro m hm n hn hmn
-    simp only [disjoint_left, Function.onFun, mem_map, Function.Embedding.coeFn_mk,
-      not_exists, not_and, forall_exists_index, and_imp, Prod.forall, Prod.mk_inj]
-    rintro _ _ _ - rfl rfl a ha rfl h
-    rw [hf.pow_apply_eq_pow_apply ha] at h
-    rw [mem_coe]; rw [mem_range] at hm hn
-    exact hmn.symm (h.eq_of_lt_of_lt hn hm)
-
-中文:
-定理 product_self_eq_disjiUnion_perm_aux
-  条件: (hf : f.IsCycleOn s)
-  证明: by
-  obtain hs | _ := (s : Set α).subsingleton_or_nontrivial
-  · refine Set.Subsingleton.pairwise ?_ _
-    simp_rw [Set.Subsingleton, mem_coe, ← card_le_one] at hs ⊢
-    rwa [card_range]
-  classical
-    rintro m hm n hn hmn
-    simp only [disjoint_left, Function.onFun, mem_map, Function.Embedding.coeFn_mk,
-      not_exists, not_and, forall_exists_index, and_imp, Prod.forall, Prod.mk_inj]
-    rintro _ _ _ - rfl rfl a ha rfl h
-    rw [hf.pow_apply_eq_pow_apply ha] at h
-    rw [mem_coe]; rw [mem_range] at hm hn
-    exact hmn.symm (h.eq_of_lt_of_lt hn hm)
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, Function.onFun, Prod.forall, Prod.mk_inj, Set.Subsingleton, Set.Subsingleton.pairwise, Subsingleton, and_imp, card_le_one, card_range, classical, coeFn_mk, disjoint_left, eq_of_lt, forall_exists_index, h.eq_of_lt, hf.pow_apply_eq_pow_apply, hmn.symm
+/-
+**Finset.product_self_eq_disjiUnion_perm_aux** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_self_eq_disjiUnion_perm_aux (hf : f.IsCycleOn s) : (range #s : Set
+ Nat).PairwiseDisjoint fun k => s.map ⟨fun i => (i, (f ^ k) i), fun _ _ => congr
+_arg Prod.fst⟩
+参数：hf : f.IsCycleOn s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.subsingleton_or_nontrivial`：∀ {α : Type u} (s : Set α), s.Subsinglet
+on ∨ s.Nontrivial
+· 使用定理 `Set.Subsingleton.pairwise`：∀ {α : Type u_1} {s : Set α}, s.Subsingleton 
+→ ∀ (r : α → α → Prop), s.Pairwise r
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_range`：card_range (n : Nat) : #(range n) = n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用引理 `Nat.ModEq.eq_of_lt_of_lt`：eq_of_lt_of_lt (h : a ≡ b [MOD m]) (ha : a < m
+) (hb : b < m) : a = b
+· 使用定理 `Equiv.Perm.IsCycleOn.pow_apply_eq_pow_apply`：∀ {α : Type u_2} {f : Equiv
+.Perm α} {a : α} {s : Finset α},   f.IsCycleOn ↑s → a ∈ s → ∀ {m n : ℕ}, (f ^ m)
+ a = (f ^ n) a ↔ m ≡ n [MOD s.car…
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `Finset.mem_coe`：mem_coe {a : α} {s : Finset α} : a in (s : Set α) ↔ a in
+ (s : Finset α)
 -/
 theorem product_self_eq_disjiUnion_perm_aux (hf : f.IsCycleOn s) :
-    (range #s : Set Nat).PairwiseDisjoint fun k =>
+    (range #s : Set ℕ).PairwiseDisjoint fun k =>
       s.map ⟨fun i => (i, (f ^ k) i), fun _ _ => congr_arg Prod.fst⟩ := by
   obtain hs | _ := (s : Set α).subsingleton_or_nontrivial
   · refine Set.Subsingleton.pairwise ?_ _
@@ -3386,39 +2941,65 @@ theorem product_self_eq_disjiUnion_perm_aux (hf : f.IsCycleOn s) :
       not_exists, not_and, forall_exists_index, and_imp, Prod.forall, Prod.mk_inj]
     rintro _ _ _ - rfl rfl a ha rfl h
     rw [hf.pow_apply_eq_pow_apply ha] at h
-    rw [mem_coe]; rw [mem_range] at hm hn
+    rw [mem_coe, mem_range] at hm hn
     exact hmn.symm (h.eq_of_lt_of_lt hn hm)
 
-/--
-theorem `product_self_eq_disjiUnion_perm` / 定理 `product_self_eq_disjiUnion_perm`
+/-- We can partition the square `s ×ˢ s` into shifted diagonals as such:
+```
+01234
+40123
+34012
+23401
+12340
+```
 
-English:
-theorem product_self_eq_disjiUnion_perm
-  given: (hf : f.IsCycleOn s)
-  proof: by
-  ext ⟨a, b⟩
-  simp only [mem_product, Equiv.Perm.coe_pow, mem_disjiUnion, mem_range, mem_map,
-    Function.Embedding.coeFn_mk, Prod.mk_inj]
-  refine ⟨fun hx => ?_, ?_⟩
-  · obtain ⟨n, hn, rfl⟩ := hf.exists_pow_eq hx.1 hx.2
-    exact ⟨n, hn, a, hx.1, rfl, by rw [f.iterate_eq_pow]⟩
-  · rintro ⟨n, -, a, ha, rfl, rfl⟩
-    exact ⟨ha, (hf.1.iterate _).mapsTo ha⟩
+The diagonals are given by the cycle `f`.
+-/
+/-
+**Finset.product_self_eq_disjiUnion_perm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：product_self_eq_disjiUnion_perm (hf : f.IsCycleOn s) : s ×ˢ s = (range #s)
+.disjiUnion (fun k => s.map ⟨fun i => (i, (f ^ k) i), fun _ _ => congr_arg Prod.
+fst⟩) (product_self_eq_disjiUnion_perm_aux hf)
+参数：hf : f.IsCycleOn s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Finset.product_self_eq_disjiUnion_perm_aux`：product_self_eq_disjiUnion_p
+erm_aux (hf : f.IsCycleOn s) : (range #s : Set Nat).PairwiseDisjoint fun k => s.
+map ⟨fun i => (i, (f ^ k) i), fu…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.Perm.IsCycleOn.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} 
+{a b : α} {s : Finset α},   f.IsCycleOn ↑s → a ∈ s → b ∈ s → ∃ n < s.card, (f ^ 
+n) a = b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Equiv.Perm.iterate_eq_pow`：iterate_eq_pow (f : Perm α) (n : Nat) : f^[n]
+ = ⇑(f ^ n)
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.BijOn.iterate`：∀ {α : Type u_1} {f : α → α} {s : Set α}, Set.BijOn f
+ s s → ∀ (n : ℕ), Set.BijOn f^[n] s s
 
-中文:
-定理 product_self_eq_disjiUnion_perm
-  条件: (hf : f.IsCycleOn s)
-  证明: by
-  ext ⟨a, b⟩
-  simp only [mem_product, Equiv.Perm.coe_pow, mem_disjiUnion, mem_range, mem_map,
-    Function.Embedding.coeFn_mk, Prod.mk_inj]
-  refine ⟨fun hx => ?_, ?_⟩
-  · obtain ⟨n, hn, rfl⟩ := hf.exists_pow_eq hx.1 hx.2
-    exact ⟨n, hn, a, hx.1, rfl, by rw [f.iterate_eq_pow]⟩
-  · rintro ⟨n, -, a, ha, rfl, rfl⟩
-    exact ⟨ha, (hf.1.iterate _).mapsTo ha⟩
+--- 原说明 ---
+We can partition the square `s ×ˢ s` into shifted diagonals as such:
+```
+01234
+40123
+34012
+23401
+12340
+```
 
-Depends on / 依赖: Embedding, Equiv.Perm.coe_pow, Function, Function.Embedding.coeFn_mk, Prod.mk_inj, coeFn_mk, coe_pow, exists_pow_eq, f.iterate_eq_pow, hf.exists_pow_eq, iterate, iterate_eq_pow, mapsTo, mem_disjiUnion, mem_map, mem_product, mem_range, mk_inj
+The diagonals are given by the cycle `f`.
 -/
 theorem product_self_eq_disjiUnion_perm (hf : f.IsCycleOn s) :
     s ×ˢ s =
@@ -3441,239 +3022,254 @@ namespace Finset
 variable [Semiring α] [AddCommMonoid β] [Module α β] {s : Finset ι} {σ : Perm ι}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `sum_smul_sum_eq_sum_perm` / 定理 `sum_smul_sum_eq_sum_perm`
-
-English:
-theorem sum_smul_sum_eq_sum_perm
-  given: (hσ : σ.IsCycleOn s) (f : ι -> α) (g : ι -> β)
-  proof: by
-  rw [sum_smul_sum]; rw [← sum_product']
-  simp_rw [product_self_eq_disjiUnion_perm hσ, sum_disjiUnion, sum_map, Embedding.coeFn_mk]
-
-中文:
-定理 sum_smul_sum_eq_sum_perm
-  条件: (hσ : σ.IsCycleOn s) (f : ι -> α) (g : ι -> β)
-  证明: by
-  rw [sum_smul_sum]; rw [← sum_product']
-  simp_rw [product_self_eq_disjiUnion_perm hσ, sum_disjiUnion, sum_map, Embedding.coeFn_mk]
-
-Depends on / 依赖: Embedding, Embedding.coeFn_mk, coeFn_mk, product_self_eq_disjiUnion_perm, simp_rw, sum_disjiUnion, sum_map, sum_product, sum_smul_sum
+/-
+**Finset.sum_smul_sum_eq_sum_perm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_smul_sum_eq_sum_perm (hσ : σ.IsCycleOn s) (f : ι -> α) (g : ι -> β) : 
+(∑ i in s, f i) • ∑ i in s, g i = ∑ k in range #s, ∑ i in s, f i • g ((σ ^ k) i)
+参数：hσ : σ.IsCycleOn s；f : ι -> α；g : ι -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.sum_smul_sum`：Finset.sum_smul_sum (s : Finset α) (t : Finset β) {
+f : α -> R} {g : β -> M} : (∑ i in s, f i) • ∑ j in t, g j = ∑ i in s, ∑ j in t,
+ f i • g …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_product'`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [ins
+t : AddCommMonoid β] (s : Finset γ) (t : Finset α) (f : γ → α → β),   ∑ x ∈ s ×ˢ
+ t, f x.1…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Finset.product_self_eq_disjiUnion_perm_aux`：product_self_eq_disjiUnion_p
+erm_aux (hf : f.IsCycleOn s) : (range #s : Set Nat).PairwiseDisjoint fun k => s.
+map ⟨fun i => (i, (f ^ k) i), fu…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.product_self_eq_disjiUnion_perm`：product_self_eq_disjiUnion_perm 
+(hf : f.IsCycleOn s) : s ×ˢ s = (range #s).disjiUnion (fun k => s.map ⟨fun i => 
+(i, (f ^ k) i), fun _ _ => c…
+· 使用定理 `Finset.sum_disjiUnion`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_4} [i
+nst : AddCommMonoid M] {f : ι → M} (s : Finset κ) (t : κ → Finset ι)   (h : (↑s)
+.PairwiseDi…
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_smul_sum_eq_sum_perm (hσ : σ.IsCycleOn s) (f : ι -> α) (g : ι -> β) :
-    (∑ i in s, f i) • ∑ i in s, g i = ∑ k in range #s, ∑ i in s, f i • g ((σ ^ k) i) := by
-  rw [sum_smul_sum]; rw [← sum_product']
+theorem sum_smul_sum_eq_sum_perm (hσ : σ.IsCycleOn s) (f : ι → α) (g : ι → β) :
+    (∑ i ∈ s, f i) • ∑ i ∈ s, g i = ∑ k ∈ range #s, ∑ i ∈ s, f i • g ((σ ^ k) i) := by
+  rw [sum_smul_sum, ← sum_product']
   simp_rw [product_self_eq_disjiUnion_perm hσ, sum_disjiUnion, sum_map, Embedding.coeFn_mk]
-
-/--
-theorem `sum_mul_sum_eq_sum_perm` / 定理 `sum_mul_sum_eq_sum_perm`
-
-English:
-theorem sum_mul_sum_eq_sum_perm
-  given: (hσ : σ.IsCycleOn s) (f g : ι -> α)
-  proof: sum_smul_sum_eq_sum_perm hσ f g
-
-中文:
-定理 sum_mul_sum_eq_sum_perm
-  条件: (hσ : σ.IsCycleOn s) (f g : ι -> α)
-  证明: sum_smul_sum_eq_sum_perm hσ f g
-
-Depends on / 依赖: sum_smul_sum_eq_sum_perm
+/-
+**Finset.sum_mul_sum_eq_sum_perm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_mul_sum_eq_sum_perm (hσ : σ.IsCycleOn s) (f g : ι -> α) : ((∑ i in s, 
+f i) * ∑ i in s, g i) = ∑ k in range #s, ∑ i in s, f i * g ((σ ^ k) i)
+参数：hσ : σ.IsCycleOn s；f g : ι -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_smul_sum_eq_sum_perm`：sum_smul_sum_eq_sum_perm (hσ : σ.IsCycl
+eOn s) (f : ι -> α) (g : ι -> β) : (∑ i in s, f i) • ∑ i in s, g i = ∑ k in rang
+e #s, ∑ i in s, f i •…
 -/
-theorem sum_mul_sum_eq_sum_perm (hσ : σ.IsCycleOn s) (f g : ι -> α) :
-    ((∑ i in s, f i) * ∑ i in s, g i) = ∑ k in range #s, ∑ i in s, f i * g ((σ ^ k) i) :=
+theorem sum_mul_sum_eq_sum_perm (hσ : σ.IsCycleOn s) (f g : ι → α) :
+    ((∑ i ∈ s, f i) * ∑ i ∈ s, g i) = ∑ k ∈ range #s, ∑ i ∈ s, f i * g ((σ ^ k) i) :=
   sum_smul_sum_eq_sum_perm hσ f g
 
 end Finset
 
 namespace Equiv.Perm
 
-/--
-theorem `subtypePerm_apply_pow_of_mem` / 定理 `subtypePerm_apply_pow_of_mem`
-
-English:
-theorem subtypePerm_apply_pow_of_mem
-  statement: {g : Perm α} {s : Finset α}
-  proof: by
-  simp only [subtypePerm_pow, subtypePerm_apply]
-
-中文:
-定理 subtypePerm_apply_pow_of_mem
-  结论: {g : 置换 α} {s : 有限集 α}
-  证明: by
-  simp only [subtypePerm_pow, subtypePerm_apply]
-
-Depends on / 依赖: subtypePerm_apply, subtypePerm_pow
+/-
+**Equiv.Perm.subtypePerm_apply_pow_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`
+。
+形式化陈述：subtypePerm_apply_pow_of_mem {g : Perm α} {s : Finset α} (hs : forall x : 
+α, g x in s ↔ x in s) {n : Nat} {x : α} (hx : x in s) : ((g.subtypePerm hs ^ n) 
+(⟨x, hx⟩ : s) : α) = (g ^ n) x
+参数：hs : forall x : α, g x in s ↔ x in s；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Algebra.Group.End.0.Equiv.Perm.pow_aux`：∀ {α : Type u_4
+} {p : α → Prop} {f : Equiv.Perm α}, (∀ (x : α), p (f x) ↔ p x) → ∀ {n : ℕ} (x :
+ α), p ((f ^ n) x) ↔ p x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Equiv.Perm.subtypePerm_pow`：subtypePerm_pow (f : Perm α) (n : Nat) (hf) 
+: (f.subtypePerm hf : Perm { x // p x }) ^ n = (f ^ n).subtypePerm (pow_aux hf)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem subtypePerm_apply_pow_of_mem {g : Perm α} {s : Finset α}
-    (hs : forall x : α, g x in s ↔ x in s) {n : Nat} {x : α} (hx : x in s) :
+    (hs : ∀ x : α, g x ∈ s ↔ x ∈ s) {n : ℕ} {x : α} (hx : x ∈ s) :
     ((g.subtypePerm hs ^ n) (⟨x, hx⟩ : s) : α) = (g ^ n) x := by
   simp only [subtypePerm_pow, subtypePerm_apply]
-
-/--
-theorem `subtypePerm_apply_zpow_of_mem` / 定理 `subtypePerm_apply_zpow_of_mem`
-
-English:
-theorem subtypePerm_apply_zpow_of_mem
-  statement: {g : Perm α} {s : Finset α}
-  proof: by
-  simp only [subtypePerm_zpow, subtypePerm_apply]
-
-中文:
-定理 subtypePerm_apply_zpow_of_mem
-  结论: {g : 置换 α} {s : 有限集 α}
-  证明: by
-  simp only [subtypePerm_zpow, subtypePerm_apply]
-
-Depends on / 依赖: liftAux, liftAux.smul, subtypePerm_apply, subtypePerm_zpow
+/-
+**Equiv.Perm.subtypePerm_apply_zpow_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm
+`。
+形式化陈述：subtypePerm_apply_zpow_of_mem {g : Perm α} {s : Finset α} (hs : forall x :
+ α, g x in s ↔ x in s) {i : Int} {x : α} (hx : x in s) : ((g.subtypePerm hs ^ i)
+ (⟨x, hx⟩ : s) : α) = (g ^ i) x
+参数：hs : forall x : α, g x in s ↔ x in s；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Algebra.Group.End.0.Equiv.Perm.zpow_aux`：∀ {α : Type u_
+4} {p : α → Prop} {f : Equiv.Perm α}, (∀ (x : α), p (f x) ↔ p x) → ∀ {n : ℤ} (x 
+: α), p ((f ^ n) x) ↔ p x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Equiv.Perm.subtypePerm_zpow`：subtypePerm_zpow (f : Perm α) (n : Int) (hf
+) : (f.subtypePerm hf ^ n : Perm { x // p x }) = (f ^ n).subtypePerm (zpow_aux h
+f)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem subtypePerm_apply_zpow_of_mem {g : Perm α} {s : Finset α}
-    (hs : forall x : α, g x in s ↔ x in s) {i : Int} {x : α} (hx : x in s) :
+    (hs : ∀ x : α, g x ∈ s ↔ x ∈ s) {i : ℤ} {x : α} (hx : x ∈ s) :
     ((g.subtypePerm hs ^ i) (⟨x, hx⟩ : s) : α) = (g ^ i) x := by
   simp only [subtypePerm_zpow, subtypePerm_apply]
 
 variable [Fintype α] [DecidableEq α]
 
-/--
-Definition of `subtypePermOfSupport` / `subtypePermOfSupport` 的定义
+/-- Restrict a permutation to its support -/
+/-
+**Equiv.Perm.subtypePermOfSupport** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：subtypePermOfSupport (c : Perm α) : Perm c.support
+参数：c : Perm α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.apply_mem_support`：apply_mem_support {x : α} : f x in f.suppo
+rt ↔ x in f.support
 
-English:
-definition subtypePermOfSupport
-  signature: (c : Perm α)
-  body: subtypePerm c fun _ : α => apply_mem_support
-
-中文:
-定义 subtypePermOfSupport
-  签名: (c : 置换 α)
-  定义体: subtypePerm c fun _ : α => apply_mem_support
-
-Depends on / 依赖: apply_mem_support, subtypePerm
+--- 原说明 ---
+Restrict a permutation to its support
 -/
 def subtypePermOfSupport (c : Perm α) : Perm c.support :=
   subtypePerm c fun _ : α => apply_mem_support
 
-/--
-Definition of `subtypePerm_of_support_le` / `subtypePerm_of_support_le` 的定义
+/-- Restrict a permutation to a Finset containing its support -/
+/-
+**Equiv.Perm.subtypePerm_of_support_le** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：subtypePerm_of_support_le (c : Perm α) {s : Finset α} (hcs : c.support sub
+seteq s) : Equiv.Perm s
+参数：c : Perm α；hcs : c.support subseteq s。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.isInvariant_of_support_le`：isInvariant_of_support_le {c : Per
+m α} {s : Finset α} (hcs : c.support <= s) (x : α) : c x in s ↔ x in s
 
-English:
-definition subtypePerm_of_support_le
-  signature: (c : Perm α) {s : Finset α}
-  body: subtypePerm c (isInvariant_of_support_le hcs)
-
-中文:
-定义 subtypePerm_of_support_le
-  签名: (c : 置换 α) {s : 有限集 α}
-  定义体: subtypePerm c (isInvariant_of_support_le hcs)
-
-Depends on / 依赖: isInvariant_of_support_le, subtypePerm
+--- 原说明 ---
+Restrict a permutation to a Finset containing its support
 -/
 def subtypePerm_of_support_le (c : Perm α) {s : Finset α}
-    (hcs : c.support subseteq s) : Equiv.Perm s :=
+    (hcs : c.support ⊆ s) : Equiv.Perm s :=
   subtypePerm c (isInvariant_of_support_le hcs)
 
-/--
-theorem `IsCycle.nonempty_support` / 定理 `IsCycle.nonempty_support`
+/-- Support of a cycle is nonempty -/
+/-
+**Equiv.Perm.IsCycle.nonempty_support** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCy
+cle`。
+形式化陈述：∀ {α : Type u_2} [inst : Fintype α] [inst_1 : DecidableEq α] {g : Equiv.Pe
+rm α}, g.IsCycle → g.support.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Equiv.Perm.support_eq_empty_iff`：support_eq_empty_iff {σ : Perm α} : σ.s
+upport = ∅ ↔ σ = 1
+· 使用定理 `Equiv.Perm.IsCycle.ne_one`：∀ {α : Type u_2} {f : Equiv.Perm α}, f.IsCycl
+e → f ≠ 1
 
-English:
-theorem IsCycle.nonempty_support
-  given: {g : Perm α} (hg : g.IsCycle)
-  proof: by
-  rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty_iff]
-  exact IsCycle.ne_one hg
-
-中文:
-定理 是环.nonempty_support
-  条件: {g : 置换 α} (hg : g.是环)
-  证明: by
-  rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty_iff]
-  exact IsCycle.ne_one hg
-
-Depends on / 依赖: Finset, Finset.nonempty_iff_ne_empty, IsCycle, IsCycle.ne_one, ne_eq, ne_one, nonempty_iff_ne_empty, support_eq_empty_iff
+--- 原说明 ---
+Support of a cycle is nonempty
 -/
 theorem IsCycle.nonempty_support {g : Perm α} (hg : g.IsCycle) :
     g.support.Nonempty := by
-  rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty_iff]
+  rw [Finset.nonempty_iff_ne_empty, ne_eq, support_eq_empty_iff]
   exact IsCycle.ne_one hg
 
-/--
-theorem `IsCycle.commute_iff'` / 定理 `IsCycle.commute_iff'`
+/-- Centralizer of a cycle is a power of that cycle on the cycle -/
+/-
+**Equiv.Perm.IsCycle.commute_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`
+。
+形式化陈述：∀ {α : Type u_2} [inst : Fintype α] [inst_1 : DecidableEq α] {g c : Equiv.
+Perm α},   c.IsCycle →     (Commute g c ↔       ∃ (hc' : ∀ (x : α), g x ∈ c.supp
+ort ↔ x ∈ c.support), g.subtypePerm hc' ∈ Subgroup.zpowers c.subtypePermOfSuppor
+t)
+参数：Commute g c ↔       ∃ (hc' : ∀ (x : α), g x ∈ c.support ↔ x ∈ c.support), g.s
+ubtypePerm hc' ∈ Subgroup.zpowers c.subtypePermOfSupport。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.mem_support_iff_of_commute`：mem_support_iff_of_commute {g c :
+ Perm α} (hgc : Commute g c) (x : α) : g x in c.support ↔ x in c.support
+· 使用定理 `Equiv.Perm.IsCycle.nonempty_support`：∀ {α : Type u_2} [inst : Fintype α]
+ [inst_1 : DecidableEq α] {g : Equiv.Perm α}, g.IsCycle → g.support.Nonempty
+· 使用定理 `Equiv.Perm.IsCycle.sameCycle`：∀ {α : Type u_2} {f : Equiv.Perm α} {x y :
+ α}, f.IsCycle → f x ≠ x → f y ≠ y → f.SameCycle x y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Equiv.Perm.apply_mem_support`：apply_mem_support {x : α} : f x in f.suppo
+rt ↔ x in f.support
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.subtypePerm_apply_zpow_of_mem`：subtypePerm_apply_zpow_of_mem 
+{g : Perm α} {s : Finset α} (hs : forall x : α, g x in s ↔ x in s) {i : Int} {x 
+: α} (hx : x in s) : ((g.subty…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用引理 `Commute.zpow_right`：zpow_right (h : Commute a b) (m : Int) : Commute a (
+b ^ m)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Equiv.Perm.congr_fun`：∀ {α : Sort u} {f g : Equiv.Perm α}, f = g → ∀ (x 
+: α), f x = g x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.Perm.notMem_support`：notMem_support {x : α} : x ∉ f.support ↔ f x 
+= x
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
 
-English:
-theorem IsCycle.commute_iff'
-  given: {g c : Perm α} (hc : c.IsCycle)
-  proof: by
-  constructor
-  · intro hgc
-    have hgc' := mem_support_iff_of_commute hgc
-    use hgc'
-    obtain ⟨a, ha⟩ := IsCycle.nonempty_support hc
-    obtain ⟨i, hi⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp ((hgc' a).mpr ha))
-    use i
-    ext ⟨x, hx⟩
-    simp only [subtypePermOfSupport, Subtype.coe_mk, subtypePerm_apply]
-    rw [subtypePerm_apply_zpow_of_mem]
-    obtain ⟨j, rfl⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp hx)
-    simp only [← mul_apply, Commute.eq (Commute.zpow_right hgc j)]
-    rw [← zpow_add]; rw [add_comm i j]; rw [zpow_add]
-    simp only [mul_apply, EmbeddingLike.apply_eq_iff_eq]
-    exact hi
-  · rintro ⟨hc', ⟨i, hi⟩⟩
-    ext x
-    simp only [coe_mul, Function.comp_apply]
-    by_cases hx : x in c.support
-    · suffices hi' : forall x in c.support, g x = (c ^ i) x by
-        rw [hi' x hx]; rw [hi' (c x) (apply_mem_support.mpr hx)]
-        simp only [← mul_apply, ← zpow_add_one, ← zpow_one_add, add_comm]
-      intro x hx
-      have hix := Perm.congr_fun hi ⟨x, hx⟩
-      simp only [← Subtype.coe_inj, subtypePermOfSupport, subtypePerm_apply,
-        subtypePerm_apply_zpow_of_mem] at hix
-      exact hix.symm
-    · rw [notMem_support.mp hx, eq_comm, ← notMem_support]
-      contrapose hx
-      exact (hc' x).mp hx
-
-中文:
-定理 是环.commute_iff'
-  条件: {g c : 置换 α} (hc : c.是环)
-  证明: by
-  constructor
-  · intro hgc
-    have hgc' := mem_support_iff_of_commute hgc
-    use hgc'
-    obtain ⟨a, ha⟩ := IsCycle.nonempty_support hc
-    obtain ⟨i, hi⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp ((hgc' a).mpr ha))
-    use i
-    ext ⟨x, hx⟩
-    simp only [subtypePermOfSupport, Subtype.coe_mk, subtypePerm_apply]
-    rw [subtypePerm_apply_zpow_of_mem]
-    obtain ⟨j, rfl⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp hx)
-    simp only [← mul_apply, Commute.eq (Commute.zpow_right hgc j)]
-    rw [← zpow_add]; rw [add_comm i j]; rw [zpow_add]
-    simp only [mul_apply, EmbeddingLike.apply_eq_iff_eq]
-    exact hi
-  · rintro ⟨hc', ⟨i, hi⟩⟩
-    ext x
-    simp only [coe_mul, Function.comp_apply]
-    by_cases hx : x in c.support
-    · suffices hi' : forall x in c.support, g x = (c ^ i) x by
-        rw [hi' x hx]; rw [hi' (c x) (apply_mem_support.mpr hx)]
-        simp only [← mul_apply, ← zpow_add_one, ← zpow_one_add, add_comm]
-      intro x hx
-      have hix := Perm.congr_fun hi ⟨x, hx⟩
-      simp only [← Subtype.coe_inj, subtypePermOfSupport, subtypePerm_apply,
-        subtypePerm_apply_zpow_of_mem] at hix
-      exact hix.symm
-    · rw [notMem_support.mp hx, eq_comm, ← notMem_support]
-      contrapose hx
-      exact (hc' x).mp hx
-
-Depends on / 依赖: Commute, Commute.eq, Commute.zpow_right, IsCycle, IsCycle.nonempty_support, Subtype, Subtype.coe_mk, add_comm, coe_mk, hc.sameCycle, mem_support, mem_support.mp, mem_support_iff_of_commute, mul_apply, nonempty_support, sameCycle, subtypePermOfSupport, subtypePerm_apply, subtypePerm_apply_zpow_of_mem, zpow_add
+--- 原说明 ---
+Centralizer of a cycle is a power of that cycle on the cycle
 -/
 theorem IsCycle.commute_iff' {g c : Perm α} (hc : c.IsCycle) :
     Commute g c ↔
-      exists hc' : forall x : α, g x in c.support ↔ x in c.support,
-        subtypePerm g hc' in Subgroup.zpowers c.subtypePermOfSupport := by
+      ∃ hc' : ∀ x : α, g x ∈ c.support ↔ x ∈ c.support,
+        subtypePerm g hc' ∈ Subgroup.zpowers c.subtypePermOfSupport := by
   constructor
   · intro hgc
     have hgc' := mem_support_iff_of_commute hgc
@@ -3686,15 +3282,15 @@ theorem IsCycle.commute_iff' {g c : Perm α} (hc : c.IsCycle) :
     rw [subtypePerm_apply_zpow_of_mem]
     obtain ⟨j, rfl⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp hx)
     simp only [← mul_apply, Commute.eq (Commute.zpow_right hgc j)]
-    rw [← zpow_add]; rw [add_comm i j]; rw [zpow_add]
+    rw [← zpow_add, add_comm i j, zpow_add]
     simp only [mul_apply, EmbeddingLike.apply_eq_iff_eq]
     exact hi
   · rintro ⟨hc', ⟨i, hi⟩⟩
     ext x
     simp only [coe_mul, Function.comp_apply]
-    by_cases hx : x in c.support
-    · suffices hi' : forall x in c.support, g x = (c ^ i) x by
-        rw [hi' x hx]; rw [hi' (c x) (apply_mem_support.mpr hx)]
+    by_cases hx : x ∈ c.support
+    · suffices hi' : ∀ x ∈ c.support, g x = (c ^ i) x by
+        rw [hi' x hx, hi' (c x) (apply_mem_support.mpr hx)]
         simp only [← mul_apply, ← zpow_add_one, ← zpow_one_add, add_comm]
       intro x hx
       have hix := Perm.congr_fun hi ⟨x, hx⟩
@@ -3705,99 +3301,140 @@ theorem IsCycle.commute_iff' {g c : Perm α} (hc : c.IsCycle) :
       contrapose hx
       exact (hc' x).mp hx
 
-/--
-theorem `IsCycle.commute_iff` / 定理 `IsCycle.commute_iff`
+/-- A permutation `g` commutes with a cycle `c` if and only if
+  `c.support` is invariant under `g`, and `g` acts on it as a power of `c`. -/
+/-
+**Equiv.Perm.IsCycle.commute_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.IsCycle`。
+形式化陈述：∀ {α : Type u_2} [inst : Fintype α] [inst_1 : DecidableEq α] {g c : Equiv.
+Perm α},   c.IsCycle →     (Commute g c ↔       ∃ (hc' : ∀ (x : α), g x ∈ c.supp
+ort ↔ x ∈ c.support),         Equiv.Perm.ofSubtype (g.subtypePerm hc') ∈ Subgrou
+p.zpowers c)
+参数：Commute g c ↔       ∃ (hc' : ∀ (x : α), g x ∈ c.support ↔ x ∈ c.support),    
+     Equiv.Perm.ofSubtype (g.subtypePerm hc') ∈ Subgroup.zpowers c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.IsCycle.commute_iff'`：∀ {α : Type u_2} [inst : Fintype α] [in
+st_1 : DecidableEq α] {g c : Equiv.Perm α},   c.IsCycle →     (Commute g c ↔    
+   ∃ (hc' : ∀ (x : α)…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `Equiv.Perm.apply_mem_support`：apply_mem_support {x : α} : f x in f.suppo
+rt ↔ x in f.support
+· 使用定理 `Equiv.Perm.subtypePermOfSupport.eq_1`：∀ {α : Type u_2} [inst : Fintype α
+] [inst_1 : DecidableEq α] (c : Equiv.Perm α),   c.subtypePermOfSupport = c.subt
+ypePerm ⋯
+· 使用定理 `_private.Mathlib.Algebra.Group.End.0.Equiv.Perm.zpow_aux`：∀ {α : Type u_
+4} {p : α → Prop} {f : Equiv.Perm α}, (∀ (x : α), p (f x) ↔ p x) → ∀ {n : ℤ} (x 
+: α), p ((f ^ n) x) ↔ p x
+· 使用定理 `Equiv.Perm.subtypePerm_zpow`：subtypePerm_zpow (f : Perm α) (n : Int) (hf
+) : (f.subtypePerm hf ^ n : Perm { x // p x }) = (f ^ n).subtypePerm (zpow_aux h
+f)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `imp_iff_right`：∀ {b a : Prop}, a → (a → b ↔ b)
+· 使用定理 `Equiv.Perm.ofSubtype_subtypePerm_of_mem`：ofSubtype_subtypePerm_of_mem {p
+ : α -> Prop} [DecidablePred p] {g : Perm α} (hg : forall (x : α), p (g x) ↔ p x
+) {a : α} (ha : p a) : (ofSub…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `iff_true_left`：∀ {a b : Prop}, a → ((a ↔ b) ↔ b)
+· 使用定理 `Equiv.Perm.ofSubtype_apply_of_not_mem`：ofSubtype_apply_of_not_mem (f : P
+erm (Subtype p)) (ha : ¬p a) : ofSubtype f a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.notMem_support`：notMem_support {x : α} : x ∉ f.support ↔ f x 
+= x
+· 使用定理 `Finset.notMem_mono`：notMem_mono {s t : Finset α} (h : s subseteq t) {a :
+ α} : a ∉ t -> a ∉ s
+· 使用定理 `Equiv.Perm.support_zpow_le`：support_zpow_le (σ : Perm α) (n : Int) : (σ 
+^ n).support <= σ.support
 
-English:
-theorem IsCycle.commute_iff
-  given: {g c : Perm α} (hc : c.IsCycle)
-  proof: by
-  simp_rw [hc.commute_iff', Subgroup.mem_zpowers_iff]
-  refine exists_congr fun hc' => exists_congr fun k => ?_
-  rw [subtypePermOfSupport]; rw [subtypePerm_zpow c k]
-  simp only [Perm.ext_iff, subtypePerm_apply, Subtype.mk.injEq, Subtype.forall]
-  apply forall_congr'
-  intro a
-  by_cases ha : a in c.support
-  · rw [imp_iff_right ha, ofSubtype_subtypePerm_of_mem hc' ha]
-  · rw [iff_true_left (fun b => (ha b).elim), ofSubtype_apply_of_not_mem, ← notMem_support]
-    · exact Finset.notMem_mono (support_zpow_le c k) ha
-    · exact ha
-
-中文:
-定理 是环.commute_iff
-  条件: {g c : 置换 α} (hc : c.是环)
-  证明: by
-  simp_rw [hc.commute_iff', Subgroup.mem_zpowers_iff]
-  refine exists_congr fun hc' => exists_congr fun k => ?_
-  rw [subtypePermOfSupport]; rw [subtypePerm_zpow c k]
-  simp only [Perm.ext_iff, subtypePerm_apply, Subtype.mk.injEq, Subtype.forall]
-  apply forall_congr'
-  intro a
-  by_cases ha : a in c.support
-  · rw [imp_iff_right ha, ofSubtype_subtypePerm_of_mem hc' ha]
-  · rw [iff_true_left (fun b => (ha b).elim), ofSubtype_apply_of_not_mem, ← notMem_support]
-    · exact Finset.notMem_mono (support_zpow_le c k) ha
-    · exact ha
-
-Depends on / 依赖: Finset, Finset.notMem_mono, Perm.ext_iff, Subgroup, Subgroup.mem_zpowers_iff, Subtype, Subtype.forall, Subtype.mk.injEq, c.support, commute_iff, exists_congr, ext_iff, forall_congr, hc.commute_iff, iff_true_left, imp_iff_right, lift.tmul, mem_zpowers_iff, notMem_mono, notMem_support
+--- 原说明 ---
+A permutation `g` commutes with a cycle `c` if and only if
+  `c.support` is invariant under `g`, and `g` acts on it as a power of `c`.
 -/
 theorem IsCycle.commute_iff {g c : Perm α} (hc : c.IsCycle) :
     Commute g c ↔
-      exists hc' : forall x : α, g x in c.support ↔ x in c.support,
-        ofSubtype (subtypePerm g hc') in Subgroup.zpowers c := by
+      ∃ hc' : ∀ x : α, g x ∈ c.support ↔ x ∈ c.support,
+        ofSubtype (subtypePerm g hc') ∈ Subgroup.zpowers c := by
   simp_rw [hc.commute_iff', Subgroup.mem_zpowers_iff]
   refine exists_congr fun hc' => exists_congr fun k => ?_
-  rw [subtypePermOfSupport]; rw [subtypePerm_zpow c k]
+  rw [subtypePermOfSupport, subtypePerm_zpow c k]
   simp only [Perm.ext_iff, subtypePerm_apply, Subtype.mk.injEq, Subtype.forall]
   apply forall_congr'
   intro a
-  by_cases ha : a in c.support
+  by_cases ha : a ∈ c.support
   · rw [imp_iff_right ha, ofSubtype_subtypePerm_of_mem hc' ha]
-  · rw [iff_true_left (fun b => (ha b).elim), ofSubtype_apply_of_not_mem, ← notMem_support]
+  · rw [iff_true_left (fun b ↦ (ha b).elim), ofSubtype_apply_of_not_mem, ← notMem_support]
     · exact Finset.notMem_mono (support_zpow_le c k) ha
     · exact ha
-
-/--
-theorem `zpow_eq_ofSubtype_subtypePerm_iff` / 定理 `zpow_eq_ofSubtype_subtypePerm_iff`
-
-English:
-theorem zpow_eq_ofSubtype_subtypePerm_iff
-  proof: by
-  constructor
-  · intro h
-    ext ⟨x, hx⟩
-    simpa [Perm.congr_fun h _] using ofSubtype_subtypePerm_of_mem _ hx
-  · intro h; ext x
-    rw [← h]
-    by_cases hx : x in s
-    · rw [ofSubtype_apply_of_mem (subtypePerm c _ ^ n) hx,
-        subtypePerm_zpow, subtypePerm_apply]
-    · rw [ofSubtype_apply_of_not_mem (subtypePerm c _ ^ n) hx,
-        ← notMem_support]
-      exact fun hx' => hx (hc (support_zpow_le _ _ hx'))
-
-中文:
-定理 zpow_eq_ofSubtype_subtypePerm_iff
-  证明: by
-  constructor
-  · intro h
-    ext ⟨x, hx⟩
-    simpa [Perm.congr_fun h _] using ofSubtype_subtypePerm_of_mem _ hx
-  · intro h; ext x
-    rw [← h]
-    by_cases hx : x in s
-    · rw [ofSubtype_apply_of_mem (subtypePerm c _ ^ n) hx,
-        subtypePerm_zpow, subtypePerm_apply]
-    · rw [ofSubtype_apply_of_not_mem (subtypePerm c _ ^ n) hx,
-        ← notMem_support]
-      exact fun hx' => hx (hc (support_zpow_le _ _ hx'))
-
-Depends on / 依赖: Perm.congr_fun, congr_fun, notMem_support, ofSubtype_apply_of_mem, ofSubtype_apply_of_not_mem, ofSubtype_subtypePerm_of_mem, subtypePerm, subtypePerm_apply, subtypePerm_zpow, support_zpow_le
+/-
+**Equiv.Perm.zpow_eq_ofSubtype_subtypePerm_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.
+Perm`。
+形式化陈述：zpow_eq_ofSubtype_subtypePerm_iff {g c : Equiv.Perm α} {s : Finset α} (hg 
+: forall x, g x in s ↔ x in s) (hc : c.support subseteq s) (n : Int) : c ^ n = o
+fSubtype (g.subtypePerm hg) ↔ c.subtypePerm (isInvariant_of_support_le hc) ^ n =
+ g.subtypePerm hg
+参数：hg : forall x, g x in s ↔ x in s；hc : c.support subseteq s；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.isInvariant_of_support_le`：isInvariant_of_support_le {c : Per
+m α} {s : Finset α} (hcs : c.support <= s) (x : α) : c x in s ↔ x in s
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Algebra.Group.End.0.Equiv.Perm.zpow_aux`：∀ {α : Type u_
+4} {p : α → Prop} {f : Equiv.Perm α}, (∀ (x : α), p (f x) ↔ p x) → ∀ {n : ℤ} (x 
+: α), p ((f ^ n) x) ↔ p x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Equiv.Perm.congr_fun`：∀ {α : Sort u} {f g : Equiv.Perm α}, f = g → ∀ (x 
+: α), f x = g x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.Perm.subtypePerm_zpow`：subtypePerm_zpow (f : Perm α) (n : Int) (hf
+) : (f.subtypePerm hf ^ n : Perm { x // p x }) = (f ^ n).subtypePerm (zpow_aux h
+f)
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Equiv.Perm.ofSubtype_subtypePerm_of_mem`：ofSubtype_subtypePerm_of_mem {p
+ : α -> Prop} [DecidablePred p] {g : Perm α} (hg : forall (x : α), p (g x) ↔ p x
+) {a : α} (ha : p a) : (ofSub…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.ofSubtype_apply_of_mem`：ofSubtype_apply_of_mem (f : Perm (Sub
+type p)) (ha : p a) : ofSubtype f a = f ⟨a, ha⟩
+· 使用定理 `Equiv.Perm.subtypePerm_apply`：subtypePerm_apply (f : Perm α) (h : forall
+ x, p (f x) ↔ p x) (x : { x // p x }) : subtypePerm f h x = ⟨f x, (h _).2 x.2⟩
+· 使用定理 `Equiv.Perm.ofSubtype_apply_of_not_mem`：ofSubtype_apply_of_not_mem (f : P
+erm (Subtype p)) (ha : ¬p a) : ofSubtype f a = a
+· 使用定理 `Equiv.Perm.notMem_support`：notMem_support {x : α} : x ∉ f.support ↔ f x 
+= x
+· 使用定理 `Equiv.Perm.support_zpow_le`：support_zpow_le (σ : Perm α) (n : Int) : (σ 
+^ n).support <= σ.support
 -/
 theorem zpow_eq_ofSubtype_subtypePerm_iff
     {g c : Equiv.Perm α} {s : Finset α}
-    (hg : forall x, g x in s ↔ x in s) (hc : c.support subseteq s) (n : Int) :
+    (hg : ∀ x, g x ∈ s ↔ x ∈ s) (hc : c.support ⊆ s) (n : ℤ) :
     c ^ n = ofSubtype (g.subtypePerm hg) ↔
       c.subtypePerm (isInvariant_of_support_le hc) ^ n = g.subtypePerm hg := by
   constructor
@@ -3806,84 +3443,69 @@ theorem zpow_eq_ofSubtype_subtypePerm_iff
     simpa [Perm.congr_fun h _] using ofSubtype_subtypePerm_of_mem _ hx
   · intro h; ext x
     rw [← h]
-    by_cases hx : x in s
+    by_cases hx : x ∈ s
     · rw [ofSubtype_apply_of_mem (subtypePerm c _ ^ n) hx,
         subtypePerm_zpow, subtypePerm_apply]
     · rw [ofSubtype_apply_of_not_mem (subtypePerm c _ ^ n) hx,
         ← notMem_support]
-      exact fun hx' => hx (hc (support_zpow_le _ _ hx'))
-
-/--
-theorem `cycle_zpow_mem_support_iff` / 定理 `cycle_zpow_mem_support_iff`
-
-English:
-theorem cycle_zpow_mem_support_iff
-  statement: {g : Perm α}
-  proof: by
-  set q := n / #g.support
-  set r := n % #g.support
-  have div_euc : r + #g.support * q = n ∧ 0 <= r ∧ r < #g.support := by
-    rw [← Int.ediv_emod_unique _]
-    · exact ⟨rfl, rfl⟩
-    simp only [Int.natCast_pos]
-    apply lt_of_lt_of_le _ (IsCycle.two_le_card_support hg); simp
-  simp only [← hg.orderOf] at div_euc
-  obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le div_euc.2.1
-  simp only [hm, Nat.cast_nonneg, Nat.cast_lt, true_and] at div_euc
-  rw [← div_euc.1]; rw [zpow_add g]
-  simp only [hm, Nat.cast_eq_zero, zpow_natCast, coe_mul, comp_apply, zpow_mul,
-    pow_orderOf_eq_one, one_zpow, coe_one, id_eq]
-  have : (g ^ m) x = x ↔ g ^ m = 1 := by
-    constructor
-    · intro hgm
-      simp only [IsCycle.pow_eq_one_iff hg]
-      use x
-    · intro hgm
-      simp only [hgm, coe_one, id_eq]
-  rw [this]
-  by_cases hm0 : m = 0
-  · simp only [hm0, pow_zero]
-  · simp only [hm0, iff_false]
-    exact pow_ne_one_of_lt_orderOf hm0 div_euc.2
-
-中文:
-定理 cycle_zpow_mem_support_iff
-  结论: {g : 置换 α}
-  证明: by
-  set q := n / #g.support
-  set r := n % #g.support
-  have div_euc : r + #g.support * q = n ∧ 0 <= r ∧ r < #g.support := by
-    rw [← Int.ediv_emod_unique _]
-    · exact ⟨rfl, rfl⟩
-    simp only [Int.natCast_pos]
-    apply lt_of_lt_of_le _ (IsCycle.two_le_card_support hg); simp
-  simp only [← hg.orderOf] at div_euc
-  obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le div_euc.2.1
-  simp only [hm, Nat.cast_nonneg, Nat.cast_lt, true_and] at div_euc
-  rw [← div_euc.1]; rw [zpow_add g]
-  simp only [hm, Nat.cast_eq_zero, zpow_natCast, coe_mul, comp_apply, zpow_mul,
-    pow_orderOf_eq_one, one_zpow, coe_one, id_eq]
-  have : (g ^ m) x = x ↔ g ^ m = 1 := by
-    constructor
-    · intro hgm
-      simp only [IsCycle.pow_eq_one_iff hg]
-      use x
-    · intro hgm
-      simp only [hgm, coe_one, id_eq]
-  rw [this]
-  by_cases hm0 : m = 0
-  · simp only [hm0, pow_zero]
-  · simp only [hm0, iff_false]
-    exact pow_ne_one_of_lt_orderOf hm0 div_euc.2
-
-Depends on / 依赖: Int.ediv_emod_unique, Int.eq_ofNat_of_zero_le, Int.natCast_pos, IsCycle, IsCycle.two_le_card_support, Nat.cast_eq_zero, Nat.cast_lt, Nat.cast_nonneg, cast_eq_zero, cast_lt, cast_nonneg, div_euc, ediv_emod_unique, eq_ofNat_of_zero_le, g.support, hg.orderOf, lt_of_lt_of_le, natCast_pos, orderOf, support
+      exact fun hx' ↦ hx (hc (support_zpow_le _ _ hx'))
+/-
+**Equiv.Perm.cycle_zpow_mem_support_iff** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：cycle_zpow_mem_support_iff {g : Perm α} (hg : g.IsCycle) {n : Int} {x : α}
+ (hx : g x != x) : (g ^ n) x = x ↔ n % #g.support = 0
+参数：hg : g.IsCycle；hx : g x != x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.ediv_emod_unique`：∀ {a b r q : ℤ}, 0 < b → (a / b = q ∧ a % b = r ↔ 
+r + b * q = a ∧ 0 ≤ r ∧ r < b)
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Equiv.Perm.IsCycle.two_le_card_support`：∀ {α : Type u_2} {f : Equiv.Perm
+ α} [inst : DecidableEq α] [inst_1 : Fintype α], f.IsCycle → 2 ≤ f.support.card
+· 使用定理 `Int.eq_ofNat_of_zero_le`：∀ {a : ℤ}, 0 ≤ a → ∃ n, a = ↑n
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.Perm.IsCycle.orderOf`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : 
+DecidableEq α] [inst_1 : Fintype α], f.IsCycle → orderOf f = f.support.card
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `zpow_mul`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (m n : ℤ), 
+a ^ (m * n) = (a ^ m) ^ n
+· 使用定理 `pow_orderOf_eq_one`：pow_orderOf_eq_one (x : G) : x ^ orderOf x = 1
+· 使用定理 `one_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (n : ℤ), 1 ^ n = 1
+· 使用定理 `Equiv.Perm.IsCycle.pow_eq_one_iff`：∀ {β : Type u_3} [Finite β] {f : Equi
+v.Perm β}, f.IsCycle → ∀ {n : ℕ}, f ^ n = 1 ↔ ∃ x, f x ≠ x ∧ (f ^ n) x = x
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+（共 31 条，此处仅展示前 30 条）
 -/
 theorem cycle_zpow_mem_support_iff {g : Perm α}
-    (hg : g.IsCycle) {n : Int} {x : α} (hx : g x != x) :
+    (hg : g.IsCycle) {n : ℤ} {x : α} (hx : g x ≠ x) :
     (g ^ n) x = x ↔ n % #g.support = 0 := by
   set q := n / #g.support
   set r := n % #g.support
-  have div_euc : r + #g.support * q = n ∧ 0 <= r ∧ r < #g.support := by
+  have div_euc : r + #g.support * q = n ∧ 0 ≤ r ∧ r < #g.support := by
     rw [← Int.ediv_emod_unique _]
     · exact ⟨rfl, rfl⟩
     simp only [Int.natCast_pos]
@@ -3891,7 +3513,7 @@ theorem cycle_zpow_mem_support_iff {g : Perm α}
   simp only [← hg.orderOf] at div_euc
   obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le div_euc.2.1
   simp only [hm, Nat.cast_nonneg, Nat.cast_lt, true_and] at div_euc
-  rw [← div_euc.1]; rw [zpow_add g]
+  rw [← div_euc.1, zpow_add g]
   simp only [hm, Nat.cast_eq_zero, zpow_natCast, coe_mul, comp_apply, zpow_mul,
     pow_orderOf_eq_one, one_zpow, coe_one, id_eq]
   have : (g ^ m) x = x ↔ g ^ m = 1 := by
@@ -3910,3 +3532,4 @@ theorem cycle_zpow_mem_support_iff {g : Perm α}
 end Perm
 
 end Equiv
+

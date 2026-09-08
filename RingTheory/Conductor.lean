@@ -27,223 +27,179 @@ open Ideal Polynomial DoubleQuot Module UniqueFactorizationMonoid Algebra RingHo
 
 local notation:max R "<" x:max ">" => adjoin R ({x} : Set S)
 
-/--
-Definition of `conductor` / `conductor` 的定义
+/-- Let `S / R` be a ring extension and `x : S`, then the conductor of `R<x>` is the
+biggest ideal of `S` contained in `R<x>`. -/
+/-
+**conductor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：conductor (x : S) : Ideal S where carrier
+参数：x : S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conductor
-  signature: (x : S)
-  body: {a | forall b : S, a * b in R<x>}
-  zero_mem' b := by simp only [zero_mul, zero_mem]
-  add_mem' ha hb c := by simpa only [add_mul] using Subalgebra.add_mem _ (ha c) (hb c)
-  smul_mem' c a ha b := by simpa only [smul_eq_mul, mul_left_comm, mul_assoc] using ha (c * b)
-
-中文:
-定义 conductor
-  签名: (x : S)
-  定义体: {a | forall b : S, a * b in R<x>}
-  zero_mem' b := by simp only [zero_mul, zero_mem]
-  add_mem' ha hb c := by simpa only [add_mul] using Subalgebra.add_mem _ (ha c) (hb c)
-  smul_mem' c a ha b := by simpa only [smul_eq_mul, mul_left_comm, mul_assoc] using ha (c * b)
+--- 原说明 ---
+Let `S / R` be a ring extension and `x : S`, then the conductor of `R<x>` is the
+biggest ideal of `S` contained in `R<x>`.
 -/
 def conductor (x : S) : Ideal S where
-  carrier := {a | forall b : S, a * b in R<x>}
+  carrier := {a | ∀ b : S, a * b ∈ R<x>}
   zero_mem' b := by simp only [zero_mul, zero_mem]
   add_mem' ha hb c := by simpa only [add_mul] using Subalgebra.add_mem _ (ha c) (hb c)
   smul_mem' c a ha b := by simpa only [smul_eq_mul, mul_left_comm, mul_assoc] using ha (c * b)
 
 variable {R} {x : S}
-
-/--
-theorem `conductor_eq_of_eq` / 定理 `conductor_eq_of_eq`
-
-English:
-theorem conductor_eq_of_eq
-  given: {y : S} (h : (R<x> : Set S) = R<y>)
-  statement: conductor R x = conductor R y
-  proof: Ideal.ext fun _ => forall_congr' fun _ => Set.ext_iff.mp h _
-
-中文:
-定理 conductor_eq_of_eq
-  条件: {y : S} (h : (R<x> : 集合 S) = R<y>)
-  结论: conductor R x = conductor R y
-  证明: Ideal.ext fun _ => forall_congr' fun _ => Set.ext_iff.mp h _
-
-Depends on / 依赖: Ideal.ext, Set.ext_iff.mp, ext_iff, forall_congr
+/-
+**conductor_eq_of_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：conductor_eq_of_eq {y : S} (h : (R<x> : Set S) = R<y>) : conductor R x = c
+onductor R y
+参数：h : (R<x> : Set S) = R<y>。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
 -/
 theorem conductor_eq_of_eq {y : S} (h : (R<x> : Set S) = R<y>) : conductor R x = conductor R y :=
   Ideal.ext fun _ => forall_congr' fun _ => Set.ext_iff.mp h _
-
-/--
-theorem `conductor_subset_adjoin` / 定理 `conductor_subset_adjoin`
-
-English:
-theorem conductor_subset_adjoin
-  statement: (conductor R x : Set S) subseteq R<x>
-  proof: fun y hy => by
-  simpa only [mul_one] using! hy 1
-
-中文:
-定理 conductor_subset_adjoin
-  结论: (conductor R x : 集合 S) subseteq R<x>
-  证明: fun y hy => by
-  simpa only [mul_one] using! hy 1
-
-Depends on / 依赖: mul_one
+/-
+**conductor_subset_adjoin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：conductor_subset_adjoin : (conductor R x : Set S) subseteq R<x>
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem conductor_subset_adjoin : (conductor R x : Set S) subseteq R<x> := fun y hy => by
+theorem conductor_subset_adjoin : (conductor R x : Set S) ⊆ R<x> := fun y hy => by
   simpa only [mul_one] using! hy 1
-
-/--
-theorem `mem_conductor_iff` / 定理 `mem_conductor_iff`
-
-English:
-theorem mem_conductor_iff
-  given: {y : S}
-  statement: y in conductor R x ↔ forall b : S, y * b in R<x>
-  proof: ⟨fun h => h, fun h => h⟩
-
-中文:
-定理 mem_conductor_iff
-  条件: {y : S}
-  结论: y in conductor R x ↔ 对任意 b : S, y * b in R<x>
-  证明: ⟨fun h => h, fun h => h⟩
+/-
+**mem_conductor_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_conductor_iff {y : S} : y in conductor R x ↔ forall b : S, y * b in R<
+x>
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_conductor_iff {y : S} : y in conductor R x ↔ forall b : S, y * b in R<x> :=
+theorem mem_conductor_iff {y : S} : y ∈ conductor R x ↔ ∀ b : S, y * b ∈ R<x> :=
   ⟨fun h => h, fun h => h⟩
-
-/--
-theorem `conductor_eq_top_of_adjoin_eq_top` / 定理 `conductor_eq_top_of_adjoin_eq_top`
-
-English:
-theorem conductor_eq_top_of_adjoin_eq_top
-  given: (h : R<x> = ⊤)
-  statement: conductor R x = ⊤
-  proof: by
-  simp only [Ideal.eq_top_iff_one, mem_conductor_iff, h, mem_top, forall_const]
-
-中文:
-定理 conductor_eq_top_of_adjoin_eq_top
-  条件: (h : R<x> = ⊤)
-  结论: conductor R x = ⊤
-  证明: by
-  simp only [Ideal.eq_top_iff_one, mem_conductor_iff, h, mem_top, forall_const]
-
-Depends on / 依赖: Ideal.eq_top_iff_one, eq_top_iff_one, forall_const, mem_conductor_iff, mem_top
+/-
+**conductor_eq_top_of_adjoin_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：conductor_eq_top_of_adjoin_eq_top (h : R<x> = ⊤) : conductor R x = ⊤
+参数：h : R<x> = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
 -/
 theorem conductor_eq_top_of_adjoin_eq_top (h : R<x> = ⊤) : conductor R x = ⊤ := by
   simp only [Ideal.eq_top_iff_one, mem_conductor_iff, h, mem_top, forall_const]
-
-/--
-theorem `conductor_eq_top_of_powerBasis` / 定理 `conductor_eq_top_of_powerBasis`
-
-English:
-theorem conductor_eq_top_of_powerBasis
-  given: (pb : PowerBasis R S)
-  statement: conductor R pb.gen = ⊤
-  proof: conductor_eq_top_of_adjoin_eq_top pb.adjoin_gen_eq_top
-
-中文:
-定理 conductor_eq_top_of_powerBasis
-  条件: (pb : PowerBasis R S)
-  结论: conductor R pb.gen = ⊤
-  证明: conductor_eq_top_of_adjoin_eq_top pb.adjoin_gen_eq_top
-
-Depends on / 依赖: adjoin_gen_eq_top, conductor_eq_top_of_adjoin_eq_top, pb.adjoin_gen_eq_top
+/-
+**conductor_eq_top_of_powerBasis** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：conductor_eq_top_of_powerBasis (pb : PowerBasis R S) : conductor R pb.gen 
+= ⊤
+参数：pb : PowerBasis R S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `conductor_eq_top_of_adjoin_eq_top`：conductor_eq_top_of_adjoin_eq_top (h 
+: R<x> = ⊤) : conductor R x = ⊤
+· 使用定理 `PowerBasis.adjoin_gen_eq_top`：adjoin_gen_eq_top (B : PowerBasis R S) : a
+djoin R ({B.gen} : Set S) = ⊤
 -/
 theorem conductor_eq_top_of_powerBasis (pb : PowerBasis R S) : conductor R pb.gen = ⊤ :=
   conductor_eq_top_of_adjoin_eq_top pb.adjoin_gen_eq_top
-
-/--
-theorem `adjoin_eq_top_of_conductor_eq_top` / 定理 `adjoin_eq_top_of_conductor_eq_top`
-
-English:
-theorem adjoin_eq_top_of_conductor_eq_top
-  given: {x : S} (h : conductor R x = ⊤)
-  proof: eq_top_iff.mpr fun y =>
-    one_mul y ▸ mem_conductor_iff.mp ((Ideal.eq_top_iff_one (conductor R x)).mp h) y
-
-中文:
-定理 adjoin_eq_top_of_conductor_eq_top
-  条件: {x : S} (h : conductor R x = ⊤)
-  证明: eq_top_iff.mpr fun y =>
-    one_mul y ▸ mem_conductor_iff.mp ((Ideal.eq_top_iff_one (conductor R x)).mp h) y
-
-Depends on / 依赖: Ideal.eq_top_iff_one, conductor, eq_top_iff, eq_top_iff.mpr, eq_top_iff_one, mem_conductor_iff, mem_conductor_iff.mp, one_mul
+/-
+**adjoin_eq_top_of_conductor_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：adjoin_eq_top_of_conductor_eq_top {x : S} (h : conductor R x = ⊤) : R[x] =
+ ⊤
+参数：h : conductor R x = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.eq_top_iff`：eq_top_iff {S : Subalgebra R A} : S = ⊤ ↔ forall x :
+ A, x in S
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_conductor_iff`：mem_conductor_iff {y : S} : y in conductor R x ↔ fora
+ll b : S, y * b in R<x>
+· 使用定理 `Ideal.eq_top_iff_one`：eq_top_iff_one : I = ⊤ ↔ (1 : α) in I
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem adjoin_eq_top_of_conductor_eq_top {x : S} (h : conductor R x = ⊤) :
     R[x] = ⊤ :=
-  eq_top_iff.mpr fun y =>
+  eq_top_iff.mpr fun y ↦
     one_mul y ▸ mem_conductor_iff.mp ((Ideal.eq_top_iff_one (conductor R x)).mp h) y
-
-/--
-theorem `conductor_eq_top_iff_adjoin_eq_top` / 定理 `conductor_eq_top_iff_adjoin_eq_top`
-
-English:
-theorem conductor_eq_top_iff_adjoin_eq_top
-  given: {x : S}
-  proof: ⟨fun h => adjoin_eq_top_of_conductor_eq_top h, fun h => conductor_eq_top_of_adjoin_eq_top h⟩
-
-中文:
-定理 conductor_eq_top_iff_adjoin_eq_top
-  条件: {x : S}
-  证明: ⟨fun h => adjoin_eq_top_of_conductor_eq_top h, fun h => conductor_eq_top_of_adjoin_eq_top h⟩
-
-Depends on / 依赖: adjoin_eq_top_of_conductor_eq_top, conductor_eq_top_of_adjoin_eq_top
+/-
+**conductor_eq_top_iff_adjoin_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：conductor_eq_top_iff_adjoin_eq_top {x : S} : conductor R x = ⊤ ↔ R[x] = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `adjoin_eq_top_of_conductor_eq_top`：adjoin_eq_top_of_conductor_eq_top {x 
+: S} (h : conductor R x = ⊤) : R[x] = ⊤
+· 使用定理 `conductor_eq_top_of_adjoin_eq_top`：conductor_eq_top_of_adjoin_eq_top (h 
+: R<x> = ⊤) : conductor R x = ⊤
 -/
 theorem conductor_eq_top_iff_adjoin_eq_top {x : S} :
     conductor R x = ⊤ ↔ R[x] = ⊤ :=
-  ⟨fun h => adjoin_eq_top_of_conductor_eq_top h, fun h => conductor_eq_top_of_adjoin_eq_top h⟩
+  ⟨fun h ↦ adjoin_eq_top_of_conductor_eq_top h, fun h ↦ conductor_eq_top_of_adjoin_eq_top h⟩
 
 open IsLocalization in
-/--
-lemma `mem_coeSubmodule_conductor` / 引理 `mem_coeSubmodule_conductor`
-
-English:
-lemma mem_coeSubmodule_conductor
-  statement: {L} [CommRing L] [Algebra S L] [Algebra R L]
-  proof: by
-  trans forall z, y * (algebraMap S L) z in (R[x]).map (IsScalarTower.toAlgHom R S L)
-  · simp only [coeSubmodule, Submodule.mem_map, linearMap_apply, Subalgebra.mem_map,
-      IsScalarTower.coe_toAlgHom']
-    constructor
-    · rintro ⟨y, hy, rfl⟩ z
-      exact ⟨_, hy z, map_mul _ _ _⟩
-    · intro H
-      obtain ⟨y, _, e⟩ := H 1
-      rw [map_one]; rw [mul_one] at e
-      subst e
-      simp only [← map_mul, (FaithfulSMul.algebraMap_injective S L).eq_iff,
-        exists_eq_right] at H
-      exact ⟨_, H, rfl⟩
-  · rw [AlgHom.map_adjoin, Set.image_singleton]; rfl
-
-中文:
-引理 mem_coeSubmodule_conductor
-  结论: {L} [交换环 L] [代数 S L] [代数 R L]
-  证明: by
-  trans forall z, y * (algebraMap S L) z in (R[x]).map (IsScalarTower.toAlgHom R S L)
-  · simp only [coeSubmodule, Submodule.mem_map, linearMap_apply, Subalgebra.mem_map,
-      IsScalarTower.coe_toAlgHom']
-    constructor
-    · rintro ⟨y, hy, rfl⟩ z
-      exact ⟨_, hy z, map_mul _ _ _⟩
-    · intro H
-      obtain ⟨y, _, e⟩ := H 1
-      rw [map_one]; rw [mul_one] at e
-      subst e
-      simp only [← map_mul, (FaithfulSMul.algebraMap_injective S L).eq_iff,
-        exists_eq_right] at H
-      exact ⟨_, H, rfl⟩
-  · rw [AlgHom.map_adjoin, Set.image_singleton]; rfl
-
-Depends on / 依赖: AlgHom, AlgHom.map_adjoin, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.toAlgHom, Set.image_singleton, Subalgebra, Subalgebra.mem_map, Submodule, Submodule.mem_map, algebraMap, algebraMap_injective, coeSubmodule, coe_toAlgHom, eq_iff, exists_eq_right, image_singleton, linearMap_apply
+/-
+**mem_coeSubmodule_conductor** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_coeSubmodule_conductor {L} [CommRing L] [Algebra S L] [Algebra R L] [I
+sScalarTower R S L] [FaithfulSMul S L] {x : S} {y : L} : y in coeSubmodule L (co
+nductor R x) ↔ forall z : S, y * (algebraMap S L) z in R[algebraMap S L x]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHom.map_adjoin`：map_adjoin (φ : A ->ₐ[R] B) (s : Set A) : (adjoin R s
+).map φ = adjoin R (φ '' s)
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_coeSubmodule_conductor {L} [CommRing L] [Algebra S L] [Algebra R L]
     [IsScalarTower R S L] [FaithfulSMul S L] {x : S} {y : L} :
-    y in coeSubmodule L (conductor R x) ↔ forall z : S,
-      y * (algebraMap S L) z in R[algebraMap S L x] := by
-  trans forall z, y * (algebraMap S L) z in (R[x]).map (IsScalarTower.toAlgHom R S L)
+    y ∈ coeSubmodule L (conductor R x) ↔ ∀ z : S,
+      y * (algebraMap S L) z ∈ R[algebraMap S L x] := by
+  trans ∀ z, y * (algebraMap S L) z ∈ (R[x]).map (IsScalarTower.toAlgHom R S L)
   · simp only [coeSubmodule, Submodule.mem_map, linearMap_apply, Subalgebra.mem_map,
       IsScalarTower.coe_toAlgHom']
     constructor
@@ -251,7 +207,7 @@ lemma mem_coeSubmodule_conductor {L} [CommRing L] [Algebra S L] [Algebra R L]
       exact ⟨_, hy z, map_mul _ _ _⟩
     · intro H
       obtain ⟨y, _, e⟩ := H 1
-      rw [map_one]; rw [mul_one] at e
+      rw [map_one, mul_one] at e
       subst e
       simp only [← map_mul, (FaithfulSMul.algebraMap_injective S L).eq_iff,
         exists_eq_right] at H
@@ -260,89 +216,100 @@ lemma mem_coeSubmodule_conductor {L} [CommRing L] [Algebra S L] [Algebra R L]
 
 variable {I : Ideal R}
 
-/--
-theorem `prod_mem_ideal_map_of_mem_conductor` / 定理 `prod_mem_ideal_map_of_mem_conductor`
+/-- This technical lemma tells us that if `C` is the conductor of `R<x>` and `I` is an ideal of `R`
+  then `p * (I * S) ⊆ I * R<x>` for any `p` in `C ∩ R` -/
+/-
+**prod_mem_ideal_map_of_mem_conductor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：prod_mem_ideal_map_of_mem_conductor {p : R} {z : S} (hp : p in Ideal.comap
+ (algebraMap R S) (conductor R x)) (hz' : z in I.map (algebraMap R S)) : algebra
+Map R S p * z in algebraMap R<x> S '' ↑(I.map (algebraMap R R<x>))
+参数：hp : p in Ideal.comap (algebraMap R S) (conductor R x)；hz' : z in I.map (alge
+braMap R S)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.mem_span_image_iff_linearCombination`：mem_span_image_iff_linearC
+ombination {s : Set α} {x : M} : x in span R (v '' s) ↔ exists l in supported R 
+R s, linearCombination R v l = x
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `Ideal.map.eq_1`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semir
+ing R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   (I : Ideal R), I
+deal…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Finsupp.sum_mul`：Finsupp.sum_mul (b : S) (s : α ->₀ R) {f : α -> R -> S}
+ : s.sum f * b = s.sum fun a c => f a c * b
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_conductor_iff`：mem_conductor_iff {y : S} : y in conductor R x ↔ fora
+ll b : S, y * b in R<x>
+· 使用定理 `Ideal.mem_comap`：mem_comap [RingHomClass F R S] {x} : x in comap f K ↔ f
+ x in K
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `Ideal.mem_map_of_mem`：mem_map_of_mem (f : F) {I : Ideal R} {x : R} (h : 
+x in I) : f x in map f I
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `Finset.sum_induction`：∀ {ι : Type u_1} {s : Finset ι} {M : Type u_7} [in
+st : AddCommMonoid M] (f : ι → M) (p : M → Prop),   (∀ (a b : M), p a → p b → p 
+(a + b)) →…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `Ideal.add_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α) {a b : α
+}, a ∈ I → b ∈ I → a + b ∈ I
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Ty
+pe u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringC
+lass S R], AddSubmonoidCla…
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+（共 35 条，此处仅展示前 30 条）
 
-English:
-theorem prod_mem_ideal_map_of_mem_conductor
-  statement: {p : R} {z : S}
-  proof: by
-  rw [Ideal.map]; rw [Ideal.span]; rw [Finsupp.mem_span_image_iff_linearCombination] at hz'
-  obtain ⟨l, H, H'⟩ := hz'
-  rw [Finsupp.linearCombination_apply] at H'
-  rw [← H']; rw [mul_comm]; rw [Finsupp.sum_mul]
-  have lem : forall {a : R}, a in I -> l a • algebraMap R S a * algebraMap R S p in
-      algebraMap R<x> S '' I.map (algebraMap R R<x>) := by
-    intro a ha
-    rw [smul_eq_mul]; rw [mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [Set.mem_image]
-    refine Exists.intro
-        (algebraMap R R<x> a * ⟨l a * algebraMap R S p,
-          show l a * algebraMap R S p in R<x> from ?h⟩) ?_
-    case h =>
-      rw [mul_comm]
-      exact mem_conductor_iff.mp (Ideal.mem_comap.mp hp) _
-    · refine ⟨?_, ?_⟩
-      · rw [mul_comm]
-        apply Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ ha)
-      · simp only [map_mul, mul_comm (algebraMap R S p) (l a)]
-        rfl
-  refine Finset.sum_induction _ (fun u => u in algebraMap R<x> S '' I.map (algebraMap R R<x>))
-      (fun a b => ?_) ?_ ?_
-  · rintro ⟨z, hz, rfl⟩ ⟨y, hy, rfl⟩
-    rw [← map_add]
-    exact ⟨z + y, Ideal.add_mem _ (SetLike.mem_coe.mp hz) hy, rfl⟩
-· exact ⟨0, SetLike.mem_coe.mpr Ideal.zero_mem _, map_zero _⟩
-  · intro y hy
-    exact lem ((Finsupp.mem_supported _ l).mp H hy)
-
-中文:
-定理 prod_mem_ideal_map_of_mem_conductor
-  结论: {p : R} {z : S}
-  证明: by
-  rw [Ideal.map]; rw [Ideal.span]; rw [Finsupp.mem_span_image_iff_linearCombination] at hz'
-  obtain ⟨l, H, H'⟩ := hz'
-  rw [Finsupp.linearCombination_apply] at H'
-  rw [← H']; rw [mul_comm]; rw [Finsupp.sum_mul]
-  have lem : forall {a : R}, a in I -> l a • algebraMap R S a * algebraMap R S p in
-      algebraMap R<x> S '' I.map (algebraMap R R<x>) := by
-    intro a ha
-    rw [smul_eq_mul]; rw [mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [Set.mem_image]
-    refine Exists.intro
-        (algebraMap R R<x> a * ⟨l a * algebraMap R S p,
-          show l a * algebraMap R S p in R<x> from ?h⟩) ?_
-    case h =>
-      rw [mul_comm]
-      exact mem_conductor_iff.mp (Ideal.mem_comap.mp hp) _
-    · refine ⟨?_, ?_⟩
-      · rw [mul_comm]
-        apply Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ ha)
-      · simp only [map_mul, mul_comm (algebraMap R S p) (l a)]
-        rfl
-  refine Finset.sum_induction _ (fun u => u in algebraMap R<x> S '' I.map (algebraMap R R<x>))
-      (fun a b => ?_) ?_ ?_
-  · rintro ⟨z, hz, rfl⟩ ⟨y, hy, rfl⟩
-    rw [← map_add]
-    exact ⟨z + y, Ideal.add_mem _ (SetLike.mem_coe.mp hz) hy, rfl⟩
-· exact ⟨0, SetLike.mem_coe.mpr Ideal.zero_mem _, map_zero _⟩
-  · intro y hy
-    exact lem ((Finsupp.mem_supported _ l).mp H hy)
-
-Depends on / 依赖: Exists, Exists.intro, Finsupp, Finsupp.linearCombination_apply, Finsupp.mem_span_image_iff_linearCombination, Finsupp.sum_mul, I.map, Ideal.map, Ideal.span, Set.mem_image, algebraMap, linearCombination_apply, mem_image, mem_span_image_iff_linearCombination, mul_assoc, mul_comm, smul_eq_mul, sum_mul
+--- 原说明 ---
+This technical lemma tells us that if `C` is the conductor of `R<x>` and `I` is 
+an ideal of `R`
+  then `p * (I * S) ⊆ I * R<x>` for any `p` in `C ∩ R`
 -/
 theorem prod_mem_ideal_map_of_mem_conductor {p : R} {z : S}
-    (hp : p in Ideal.comap (algebraMap R S) (conductor R x)) (hz' : z in I.map (algebraMap R S)) :
-    algebraMap R S p * z in algebraMap R<x> S '' ↑(I.map (algebraMap R R<x>)) := by
-  rw [Ideal.map]; rw [Ideal.span]; rw [Finsupp.mem_span_image_iff_linearCombination] at hz'
+    (hp : p ∈ Ideal.comap (algebraMap R S) (conductor R x)) (hz' : z ∈ I.map (algebraMap R S)) :
+    algebraMap R S p * z ∈ algebraMap R<x> S '' ↑(I.map (algebraMap R R<x>)) := by
+  rw [Ideal.map, Ideal.span, Finsupp.mem_span_image_iff_linearCombination] at hz'
   obtain ⟨l, H, H'⟩ := hz'
   rw [Finsupp.linearCombination_apply] at H'
-  rw [← H']; rw [mul_comm]; rw [Finsupp.sum_mul]
-  have lem : forall {a : R}, a in I -> l a • algebraMap R S a * algebraMap R S p in
+  rw [← H', mul_comm, Finsupp.sum_mul]
+  have lem : ∀ {a : R}, a ∈ I → l a • algebraMap R S a * algebraMap R S p ∈
       algebraMap R<x> S '' I.map (algebraMap R R<x>) := by
     intro a ha
-    rw [smul_eq_mul]; rw [mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [Set.mem_image]
+    rw [smul_eq_mul, mul_assoc, mul_comm, mul_assoc, Set.mem_image]
     refine Exists.intro
         (algebraMap R R<x> a * ⟨l a * algebraMap R S p,
-          show l a * algebraMap R S p in R<x> from ?h⟩) ?_
+          show l a * algebraMap R S p ∈ R<x> from ?h⟩) ?_
     case h =>
       rw [mul_comm]
       exact mem_conductor_iff.mp (Ideal.mem_comap.mp hp) _
@@ -351,87 +318,83 @@ theorem prod_mem_ideal_map_of_mem_conductor {p : R} {z : S}
         apply Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ ha)
       · simp only [map_mul, mul_comm (algebraMap R S p) (l a)]
         rfl
-  refine Finset.sum_induction _ (fun u => u in algebraMap R<x> S '' I.map (algebraMap R R<x>))
+  refine Finset.sum_induction _ (fun u => u ∈ algebraMap R<x> S '' I.map (algebraMap R R<x>))
       (fun a b => ?_) ?_ ?_
   · rintro ⟨z, hz, rfl⟩ ⟨y, hy, rfl⟩
     rw [← map_add]
     exact ⟨z + y, Ideal.add_mem _ (SetLike.mem_coe.mp hz) hy, rfl⟩
-· exact ⟨0, SetLike.mem_coe.mpr Ideal.zero_mem _, map_zero _⟩
+  · exact ⟨0, SetLike.mem_coe.mpr <| Ideal.zero_mem _, map_zero _⟩
   · intro y hy
     exact lem ((Finsupp.mem_supported _ l).mp H hy)
 
-/--
-theorem `comap_map_eq_map_adjoin_of_coprime_conductor` / 定理 `comap_map_eq_map_adjoin_of_coprime_conductor`
+/-- A technical result telling us that `(I * S) ∩ R<x> = I * R<x>` for any ideal `I` of `R`. -/
+/-
+**comap_map_eq_map_adjoin_of_coprime_conductor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comap_map_eq_map_adjoin_of_coprime_conductor (hx : (conductor R x).comap (
+algebraMap R S) ⊔ I = ⊤) (h_alg : Function.Injective (algebraMap R<x> S)) : (I.m
+ap (algebraMap R S)).comap (algebraMap R<x> S) = I.map (algebraMap R R<x>)
+参数：hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤；h_alg : Function.Injectiv
+e (algebraMap R<x> S)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_sup`：mem_sup : x in p ⊔ p' ↔ exists y in p, exists z in p'
+, y + z = x
+· 使用定理 `Ideal.eq_top_iff_one`：eq_top_iff_one : I = ⊤ ↔ (1 : α) in I
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用引理 `Submonoid.mk_smul`：mk_smul (g : M') (hg : g in S) (a : α) : (⟨g, hg⟩ : S
+) • a = g • a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `prod_mem_ideal_map_of_mem_conductor`：prod_mem_ideal_map_of_mem_conductor
+ {p : R} {z : S} (hp : p in Ideal.comap (algebraMap R S) (conductor R x)) (hz' :
+ z in I.map (algebraMap R…
+· 使用定理 `Ideal.mem_comap`：mem_comap [RingHomClass F R S] {x} : x in comap f K ↔ f
+ x in K
+· 使用定理 `Ideal.add_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α) {a b : α
+}, a ∈ I → b ∈ I → a + b ∈ I
+（共 43 条，此处仅展示前 30 条）
 
-English:
-theorem comap_map_eq_map_adjoin_of_coprime_conductor
-  proof: by
-  apply le_antisymm
-  · -- This is adapted from [Neukirch1992]. Let `C = (conductor R x)`. The idea of the proof
-    -- is that since `I` and `C ∩ R` are coprime, we have
-    -- `(I * S) ∩ R<x> ⊆ (I + C) * ((I * S) ∩ R<x>) ⊆ I * R<x> + I * C * S ⊆ I * R<x>`.
-    intro y hy
-    obtain ⟨z, hz⟩ := y
-    obtain ⟨p, hp, q, hq, hpq⟩ := Submodule.mem_sup.mp ((Ideal.eq_top_iff_one _).mp hx)
-    have temp : algebraMap R S p * z + algebraMap R S q * z = z := by
-      simp only [← add_mul, ← map_add (algebraMap R S), hpq, map_one, one_mul]
-    suffices z in algebraMap R<x> S '' I.map (algebraMap R R<x>) ↔
-        (⟨z, hz⟩ : R<x>) in I.map (algebraMap R R<x>) by
-      rw [← this]; rw [← temp]
-      obtain ⟨a, ha⟩ := (Set.mem_image _ _ _).mp (prod_mem_ideal_map_of_mem_conductor hp
-          (show z in I.map (algebraMap R S) by rwa [Ideal.mem_comap] at hy))
-      use a + algebraMap R R<x> q * ⟨z, hz⟩
-      refine ⟨Ideal.add_mem (I.map (algebraMap R R<x>)) ha.left ?_, by
-          simp only [ha.right, map_add, map_mul, add_right_inj]; rfl⟩
-      rw [mul_comm]
-      exact Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ hq)
-    refine ⟨fun h => ?_,
-      fun h => (Set.mem_image _ _ _).mpr (Exists.intro ⟨z, hz⟩ ⟨by simp [h], rfl⟩)⟩
-    obtain ⟨x₁, hx₁, hx₂⟩ := (Set.mem_image _ _ _).mp h
-    have : x₁ = ⟨z, hz⟩ := by
-      apply h_alg
-      simp only [hx₂, algebraMap_eq_smul_one]
-      rw [Submonoid.mk_smul]; rw [smul_eq_mul]; rw [mul_one]
-    rwa [← this]
-  · -- The converse inclusion is trivial
-    rw [IsScalarTower.algebraMap_eq R R<x> S]; rw [← Ideal.map_map]
-    apply Ideal.le_comap_map
-
-中文:
-定理 comap_map_eq_map_adjoin_of_coprime_conductor
-  证明: by
-  apply le_antisymm
-  · -- This is adapted from [Neukirch1992]. Let `C = (conductor R x)`. The idea of the proof
-    -- is that since `I` and `C ∩ R` are coprime, we have
-    -- `(I * S) ∩ R<x> ⊆ (I + C) * ((I * S) ∩ R<x>) ⊆ I * R<x> + I * C * S ⊆ I * R<x>`.
-    intro y hy
-    obtain ⟨z, hz⟩ := y
-    obtain ⟨p, hp, q, hq, hpq⟩ := Submodule.mem_sup.mp ((Ideal.eq_top_iff_one _).mp hx)
-    have temp : algebraMap R S p * z + algebraMap R S q * z = z := by
-      simp only [← add_mul, ← map_add (algebraMap R S), hpq, map_one, one_mul]
-    suffices z in algebraMap R<x> S '' I.map (algebraMap R R<x>) ↔
-        (⟨z, hz⟩ : R<x>) in I.map (algebraMap R R<x>) by
-      rw [← this]; rw [← temp]
-      obtain ⟨a, ha⟩ := (Set.mem_image _ _ _).mp (prod_mem_ideal_map_of_mem_conductor hp
-          (show z in I.map (algebraMap R S) by rwa [Ideal.mem_comap] at hy))
-      use a + algebraMap R R<x> q * ⟨z, hz⟩
-      refine ⟨Ideal.add_mem (I.map (algebraMap R R<x>)) ha.left ?_, by
-          simp only [ha.right, map_add, map_mul, add_right_inj]; rfl⟩
-      rw [mul_comm]
-      exact Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ hq)
-    refine ⟨fun h => ?_,
-      fun h => (Set.mem_image _ _ _).mpr (Exists.intro ⟨z, hz⟩ ⟨by simp [h], rfl⟩)⟩
-    obtain ⟨x₁, hx₁, hx₂⟩ := (Set.mem_image _ _ _).mp h
-    have : x₁ = ⟨z, hz⟩ := by
-      apply h_alg
-      simp only [hx₂, algebraMap_eq_smul_one]
-      rw [Submonoid.mk_smul]; rw [smul_eq_mul]; rw [mul_one]
-    rwa [← this]
-  · -- The converse inclusion is trivial
-    rw [IsScalarTower.algebraMap_eq R R<x> S]; rw [← Ideal.map_map]
-    apply Ideal.le_comap_map
-
-Depends on / 依赖: Neukirch1992, adapted, conductor, le_antisymm
+--- 原说明 ---
+A technical result telling us that `(I * S) ∩ R<x> = I * R<x>` for any ideal `I`
+ of `R`.
 -/
 theorem comap_map_eq_map_adjoin_of_coprime_conductor
     (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
@@ -446,11 +409,11 @@ theorem comap_map_eq_map_adjoin_of_coprime_conductor
     obtain ⟨p, hp, q, hq, hpq⟩ := Submodule.mem_sup.mp ((Ideal.eq_top_iff_one _).mp hx)
     have temp : algebraMap R S p * z + algebraMap R S q * z = z := by
       simp only [← add_mul, ← map_add (algebraMap R S), hpq, map_one, one_mul]
-    suffices z in algebraMap R<x> S '' I.map (algebraMap R R<x>) ↔
-        (⟨z, hz⟩ : R<x>) in I.map (algebraMap R R<x>) by
-      rw [← this]; rw [← temp]
+    suffices z ∈ algebraMap R<x> S '' I.map (algebraMap R R<x>) ↔
+        (⟨z, hz⟩ : R<x>) ∈ I.map (algebraMap R R<x>) by
+      rw [← this, ← temp]
       obtain ⟨a, ha⟩ := (Set.mem_image _ _ _).mp (prod_mem_ideal_map_of_mem_conductor hp
-          (show z in I.map (algebraMap R S) by rwa [Ideal.mem_comap] at hy))
+          (show z ∈ I.map (algebraMap R S) by rwa [Ideal.mem_comap] at hy))
       use a + algebraMap R R<x> q * ⟨z, hz⟩
       refine ⟨Ideal.add_mem (I.map (algebraMap R R<x>)) ha.left ?_, by
           simp only [ha.right, map_add, map_mul, add_right_inj]; rfl⟩
@@ -462,101 +425,37 @@ theorem comap_map_eq_map_adjoin_of_coprime_conductor
     have : x₁ = ⟨z, hz⟩ := by
       apply h_alg
       simp only [hx₂, algebraMap_eq_smul_one]
-      rw [Submonoid.mk_smul]; rw [smul_eq_mul]; rw [mul_one]
+      rw [Submonoid.mk_smul, smul_eq_mul, mul_one]
     rwa [← this]
   · -- The converse inclusion is trivial
-    rw [IsScalarTower.algebraMap_eq R R<x> S]; rw [← Ideal.map_map]
+    rw [IsScalarTower.algebraMap_eq R R<x> S, ← Ideal.map_map]
     apply Ideal.le_comap_map
 
-/--
-Definition of `quotAdjoinEquivQuotMap` / `quotAdjoinEquivQuotMap` 的定义
+/-- The canonical morphism of rings from `R<x> ⧸ (I*R<x>)` to `S ⧸ (I*S)` is an isomorphism
+when `I` and `(conductor R x) ∩ R` are coprime. -/
+/-
+**quotAdjoinEquivQuotMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：quotAdjoinEquivQuotMap (hx : (conductor R x).comap (algebraMap R S) ⊔ I = 
+⊤) (h_alg : Function.Injective (algebraMap R<x> S)) : R<x> ⧸ I.map (algebraMap R
+ R<x>) ≃+* S ⧸ I.map (algebraMap R S)
+参数：hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤；h_alg : Function.Injectiv
+e (algebraMap R<x> S)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotAdjoinEquivQuotMap
-  signature: (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
-  body: by
-  let f : R<x> ⧸ I.map (algebraMap R R<x>) ->+* S ⧸ I.map (algebraMap R S) :=
-    (Ideal.Quotient.lift (I.map (algebraMap R R<x>))
-      ((Ideal.Quotient.mk (I.map (algebraMap R S))).comp (algebraMap R<x> S)) (fun r hr => by
-      have : algebraMap R S = (algebraMap R<x> S).comp (algebraMap R R<x>) := by ext; rfl
-      rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [this]; rw [← Ideal.map_map]
-      exact Ideal.mem_map_of_mem _ hr))
-  refine RingEquiv.ofBijective f ⟨?_, ?_⟩
-  · --the kernel of the map is clearly `(I * S) ∩ R<x>`. To get injectivity, we need to show that
-    --this is contained in `I * R<x>`, which is the content of the previous lemma.
-    refine RingHom.lift_injective_of_ker_le_ideal _ _ fun u hu => ?_
-    rwa [RingHom.mem_ker, RingHom.comp_apply, Ideal.Quotient.eq_zero_iff_mem, ← Ideal.mem_comap,
-      comap_map_eq_map_adjoin_of_coprime_conductor hx h_alg] at hu
-  · -- Surjectivity follows from the surjectivity of the canonical map `R<x> → S ⧸ (I * S)`,
-    -- which in turn follows from the fact that `I * S + (conductor R x) = S`.
-    refine Ideal.Quotient.lift_surjective_of_surjective _ _ fun y => ?_
-    obtain ⟨z, hz⟩ := Ideal.Quotient.mk_surjective y
-    have : z in conductor R x ⊔ I.map (algebraMap R S) := by
-      suffices conductor R x ⊔ I.map (algebraMap R S) = ⊤ by simp only [this, Submodule.mem_top]
-      rw [Ideal.eq_top_iff_one] at hx ⊢
-      replace hx := Ideal.mem_map_of_mem (algebraMap R S) hx
-      rw [Ideal.map_sup]; rw [map_one] at hx
-      exact (sup_le_sup
-        (show ((conductor R x).comap (algebraMap R S)).map (algebraMap R S) <= conductor R x
-          from Ideal.map_comap_le)
-          (le_refl (I.map (algebraMap R S)))) hx
-    rw [← Ideal.mem_quotient_iff_mem_sup]; rw [hz]; rw [Ideal.mem_map_iff_of_surjective] at this
-    · obtain ⟨u, hu, hu'⟩ := this
-      use ⟨u, conductor_subset_adjoin hu⟩
-      simp only [← hu']
-      rfl
-    · exact Ideal.Quotient.mk_surjective
-
-@[simp]
-
-中文:
-定义 quotAdjoinEquivQuotMap
-  签名: (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
-  定义体: by
-  let f : R<x> ⧸ I.map (algebraMap R R<x>) ->+* S ⧸ I.map (algebraMap R S) :=
-    (Ideal.Quotient.lift (I.map (algebraMap R R<x>))
-      ((Ideal.Quotient.mk (I.map (algebraMap R S))).comp (algebraMap R<x> S)) (fun r hr => by
-      have : algebraMap R S = (algebraMap R<x> S).comp (algebraMap R R<x>) := by ext; rfl
-      rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [this]; rw [← Ideal.map_map]
-      exact Ideal.mem_map_of_mem _ hr))
-  refine RingEquiv.ofBijective f ⟨?_, ?_⟩
-  · --the kernel of the map is clearly `(I * S) ∩ R<x>`. To get injectivity, we need to show that
-    --this is contained in `I * R<x>`, which is the content of the previous lemma.
-    refine RingHom.lift_injective_of_ker_le_ideal _ _ fun u hu => ?_
-    rwa [RingHom.mem_ker, RingHom.comp_apply, Ideal.Quotient.eq_zero_iff_mem, ← Ideal.mem_comap,
-      comap_map_eq_map_adjoin_of_coprime_conductor hx h_alg] at hu
-  · -- Surjectivity follows from the surjectivity of the canonical map `R<x> → S ⧸ (I * S)`,
-    -- which in turn follows from the fact that `I * S + (conductor R x) = S`.
-    refine Ideal.Quotient.lift_surjective_of_surjective _ _ fun y => ?_
-    obtain ⟨z, hz⟩ := Ideal.Quotient.mk_surjective y
-    have : z in conductor R x ⊔ I.map (algebraMap R S) := by
-      suffices conductor R x ⊔ I.map (algebraMap R S) = ⊤ by simp only [this, Submodule.mem_top]
-      rw [Ideal.eq_top_iff_one] at hx ⊢
-      replace hx := Ideal.mem_map_of_mem (algebraMap R S) hx
-      rw [Ideal.map_sup]; rw [map_one] at hx
-      exact (sup_le_sup
-        (show ((conductor R x).comap (algebraMap R S)).map (algebraMap R S) <= conductor R x
-          from Ideal.map_comap_le)
-          (le_refl (I.map (algebraMap R S)))) hx
-    rw [← Ideal.mem_quotient_iff_mem_sup]; rw [hz]; rw [Ideal.mem_map_iff_of_surjective] at this
-    · obtain ⟨u, hu, hu'⟩ := this
-      use ⟨u, conductor_subset_adjoin hu⟩
-      simp only [← hu']
-      rfl
-    · exact Ideal.Quotient.mk_surjective
-
-@[simp]
-
-Depends on / 依赖: I.map, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.lift, Ideal.Quotient.mk, Ideal.map_map, Ideal.mem_map_of_mem, Quotient, RingEquiv, RingEquiv.ofBijective, RingHom, RingHom.comp_apply, algebraMap, comp_apply, eq_zero_iff_mem, kernel, map_map, mem_map_of_mem, ofBijective
+--- 原说明 ---
+The canonical morphism of rings from `R<x> ⧸ (I*R<x>)` to `S ⧸ (I*S)` is an isom
+orphism
+when `I` and `(conductor R x) ∩ R` are coprime.
 -/
 noncomputable def quotAdjoinEquivQuotMap (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
     (h_alg : Function.Injective (algebraMap R<x> S)) :
     R<x> ⧸ I.map (algebraMap R R<x>) ≃+* S ⧸ I.map (algebraMap R S) := by
-  let f : R<x> ⧸ I.map (algebraMap R R<x>) ->+* S ⧸ I.map (algebraMap R S) :=
+  let f : R<x> ⧸ I.map (algebraMap R R<x>) →+* S ⧸ I.map (algebraMap R S) :=
     (Ideal.Quotient.lift (I.map (algebraMap R R<x>))
       ((Ideal.Quotient.mk (I.map (algebraMap R S))).comp (algebraMap R<x> S)) (fun r hr => by
       have : algebraMap R S = (algebraMap R<x> S).comp (algebraMap R R<x>) := by ext; rfl
-      rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [this]; rw [← Ideal.map_map]
+      rw [RingHom.comp_apply, Ideal.Quotient.eq_zero_iff_mem, this, ← Ideal.map_map]
       exact Ideal.mem_map_of_mem _ hr))
   refine RingEquiv.ofBijective f ⟨?_, ?_⟩
   · --the kernel of the map is clearly `(I * S) ∩ R<x>`. To get injectivity, we need to show that
@@ -568,16 +467,16 @@ noncomputable def quotAdjoinEquivQuotMap (hx : (conductor R x).comap (algebraMap
     -- which in turn follows from the fact that `I * S + (conductor R x) = S`.
     refine Ideal.Quotient.lift_surjective_of_surjective _ _ fun y => ?_
     obtain ⟨z, hz⟩ := Ideal.Quotient.mk_surjective y
-    have : z in conductor R x ⊔ I.map (algebraMap R S) := by
+    have : z ∈ conductor R x ⊔ I.map (algebraMap R S) := by
       suffices conductor R x ⊔ I.map (algebraMap R S) = ⊤ by simp only [this, Submodule.mem_top]
       rw [Ideal.eq_top_iff_one] at hx ⊢
       replace hx := Ideal.mem_map_of_mem (algebraMap R S) hx
-      rw [Ideal.map_sup]; rw [map_one] at hx
+      rw [Ideal.map_sup, map_one] at hx
       exact (sup_le_sup
-        (show ((conductor R x).comap (algebraMap R S)).map (algebraMap R S) <= conductor R x
+        (show ((conductor R x).comap (algebraMap R S)).map (algebraMap R S) ≤ conductor R x
           from Ideal.map_comap_le)
           (le_refl (I.map (algebraMap R S)))) hx
-    rw [← Ideal.mem_quotient_iff_mem_sup]; rw [hz]; rw [Ideal.mem_map_iff_of_surjective] at this
+    rw [← Ideal.mem_quotient_iff_mem_sup, hz, Ideal.mem_map_iff_of_surjective] at this
     · obtain ⟨u, hu, hu'⟩ := this
       use ⟨u, conductor_subset_adjoin hu⟩
       simp only [← hu']
@@ -585,50 +484,54 @@ noncomputable def quotAdjoinEquivQuotMap (hx : (conductor R x).comap (algebraMap
     · exact Ideal.Quotient.mk_surjective
 
 @[simp]
-/--
-theorem `quotAdjoinEquivQuotMap_apply_mk` / 定理 `quotAdjoinEquivQuotMap_apply_mk`
-
-English:
-theorem quotAdjoinEquivQuotMap_apply_mk
-  statement: (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
-  proof: rfl
-
-中文:
-定理 quotAdjoinEquivQuotMap_apply_mk
-  结论: (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
-  证明: rfl
+/-
+**quotAdjoinEquivQuotMap_apply_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：quotAdjoinEquivQuotMap_apply_mk (hx : (conductor R x).comap (algebraMap R 
+S) ⊔ I = ⊤) (h_alg : Function.Injective (algebraMap R<x> S)) (a : R<x>) : quotAd
+joinEquivQuotMap hx h_alg (Ideal.Quotient.mk (I.map (algebraMap R R<x>)) a) = Id
+eal.Quotient.mk (I.map (algebraMap R S)) ↑a
+参数：hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤；h_alg : Function.Injectiv
+e (algebraMap R<x> S)；a : R<x>。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 -/
 theorem quotAdjoinEquivQuotMap_apply_mk (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
     (h_alg : Function.Injective (algebraMap R<x> S)) (a : R<x>) :
     quotAdjoinEquivQuotMap hx h_alg (Ideal.Quotient.mk (I.map (algebraMap R R<x>)) a) =
       Ideal.Quotient.mk (I.map (algebraMap R S)) ↑a := rfl
-
-/--
-lemma `Localization.localRingHom_bijective_of_not_conductor_le` / 引理 `Localization.localRingHom_bijective_of_not_conductor_le`
-
-English:
-lemma Localization.localRingHom_bijective_of_not_conductor_le
-  proof: by
-  obtain ⟨a, ha, haP⟩ := SetLike.not_le_iff_exists.mp hx
-  replace ha (b : _) : a * b in s := by simpa [hs] using ha b
-  exact Localization.localRingHom_bijective_of_saturated_inf_eq_top _
-    (top_le_iff.mp fun y _ => ⟨a, ⟨haP, by simpa using ha 1⟩, ha _⟩) _
-
-中文:
-引理 Localization.localRingHom_bijective_of_not_conductor_le
-  证明: by
-  obtain ⟨a, ha, haP⟩ := SetLike.not_le_iff_exists.mp hx
-  replace ha (b : _) : a * b in s := by simpa [hs] using ha b
-  exact Localization.localRingHom_bijective_of_saturated_inf_eq_top _
-    (top_le_iff.mp fun y _ => ⟨a, ⟨haP, by simpa using ha 1⟩, ha _⟩) _
-
-Depends on / 依赖: Localization, Localization.localRingHom_bijective_of_saturated_inf_eq_top, SetLike, SetLike.not_le_iff_exists.mp, localRingHom_bijective_of_saturated_inf_eq_top, not_le_iff_exists, replace, top_le_iff, top_le_iff.mp
+/-
+**Localization.localRingHom_bijective_of_not_conductor_le** 是 Mathlib 中的一个引理，位于命
+名空间 ``。
+形式化陈述：Localization.localRingHom_bijective_of_not_conductor_le {P : Ideal S} [P.I
+sPrime] (hx : ¬ conductor R x <= P) {s : Subalgebra R S} (hs : s = R<x>) (p : Id
+eal s) [p.IsPrime] [P.LiesOver p] : Function.Bijective (Localization.localRingHo
+m _ _ _ (P.over_def p))
+参数：hx : ¬ conductor R x <= P；hs : s = R<x>；p : Ideal s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.over_def`：over_def [P.LiesOver p] : p = P.under A
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.not_le_iff_exists`：not_le_iff_exists : ¬p <= q ↔ exists x in p, 
+x ∉ q
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Localization.localRingHom_bijective_of_saturated_inf_eq_top`：localRingHo
+m_bijective_of_saturated_inf_eq_top {P : Ideal S} [P.IsPrime] {s : Subalgebra R 
+S} (H : s.saturation (P.primeCompl ⊓ s.toSubmonoi…
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 lemma Localization.localRingHom_bijective_of_not_conductor_le
-    {P : Ideal S} [P.IsPrime] (hx : ¬ conductor R x <= P) {s : Subalgebra R S}
+    {P : Ideal S} [P.IsPrime] (hx : ¬ conductor R x ≤ P) {s : Subalgebra R S}
     (hs : s = R<x>) (p : Ideal s) [p.IsPrime] [P.LiesOver p] :
     Function.Bijective (Localization.localRingHom _ _ _ (P.over_def p)) := by
   obtain ⟨a, ha, haP⟩ := SetLike.not_le_iff_exists.mp hx
-  replace ha (b : _) : a * b in s := by simpa [hs] using ha b
+  replace ha (b : _) : a * b ∈ s := by simpa [hs] using ha b
   exact Localization.localRingHom_bijective_of_saturated_inf_eq_top _
-    (top_le_iff.mp fun y _ => ⟨a, ⟨haP, by simpa using ha 1⟩, ha _⟩) _
+    (top_le_iff.mp fun y _ ↦ ⟨a, ⟨haP, by simpa using ha 1⟩, ha _⟩) _

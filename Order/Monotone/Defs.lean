@@ -52,185 +52,145 @@ open Function
 
 universe u v w
 
-variable {ι : Type*} {α : Type u} {β : Type v} {γ : Type w} {δ : Type*} {π : ι -> Type*}
+variable {ι : Type*} {α : Type u} {β : Type v} {γ : Type w} {δ : Type*} {π : ι → Type*}
 
 section MonotoneDef
 
 variable [Preorder α] [Preorder β]
 
-/--
-Definition of `Monotone` / `Monotone` 的定义
+/-- A function `f` is monotone if `a ≤ b` implies `f a ≤ f b`. -/
+/-
+**Monotone** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Monotone (f : α -> β) : Prop
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Monotone
-  signature: (f : α -> β)
-  body: forall ⦃a b⦄, a <= b -> f a <= f b
+--- 原说明 ---
+A function `f` is monotone if `a ≤ b` implies `f a ≤ f b`.
+-/
+def Monotone (f : α → β) : Prop :=
+  ∀ ⦃a b⦄, a ≤ b → f a ≤ f b
 
 to_dual_insert_cast Monotone := forall_comm.eq
 
-中文:
-定义 递增
-  签名: (f : α -> β)
-  定义体: forall ⦃a b⦄, a <= b -> f a <= f b
+/-- A function `f` is antitone if `a ≤ b` implies `f b ≤ f a`. -/
+/-
+**Antitone** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Antitone (f : α -> β) : Prop
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-to_dual_insert_cast Monotone := forall_comm.eq
+--- 原说明 ---
+A function `f` is antitone if `a ≤ b` implies `f b ≤ f a`.
 -/
-def Monotone (f : α -> β) : Prop :=
-  forall ⦃a b⦄, a <= b -> f a <= f b
-
-to_dual_insert_cast Monotone := forall_comm.eq
-
-/--
-Definition of `Antitone` / `Antitone` 的定义
-
-English:
-definition Antitone
-  signature: (f : α -> β)
-  body: forall ⦃a b⦄, a <= b -> f b <= f a
+def Antitone (f : α → β) : Prop :=
+  ∀ ⦃a b⦄, a ≤ b → f b ≤ f a
 
 to_dual_insert_cast Antitone := forall_comm.eq
 
-中文:
-定义 递减
-  签名: (f : α -> β)
-  定义体: forall ⦃a b⦄, a <= b -> f b <= f a
+/-- A function `f` is monotone on `s` if, for all `a, b ∈ s`, `a ≤ b` implies `f a ≤ f b`. -/
+/-
+**MonotoneOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonotoneOn (f : α -> β) (s : Set α) : Prop
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-to_dual_insert_cast Antitone := forall_comm.eq
+--- 原说明 ---
+A function `f` is monotone on `s` if, for all `a, b ∈ s`, `a ≤ b` implies `f a ≤
+ f b`.
 -/
-def Antitone (f : α -> β) : Prop :=
-  forall ⦃a b⦄, a <= b -> f b <= f a
-
-to_dual_insert_cast Antitone := forall_comm.eq
-
-/--
-Definition of `MonotoneOn` / `MonotoneOn` 的定义
-
-English:
-definition MonotoneOn
-  signature: (f : α -> β) (s : Set α)
-  body: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f a <= f b
+def MonotoneOn (f : α → β) (s : Set α) : Prop :=
+  ∀ ⦃a⦄ (_ : a ∈ s) ⦃b⦄ (_ : b ∈ s), a ≤ b → f a ≤ f b
 
 to_dual_insert_cast MonotoneOn := by grind only
 
-中文:
-定义 MonotoneOn
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f a <= f b
+/-- A function `f` is antitone on `s` if, for all `a, b ∈ s`, `a ≤ b` implies `f b ≤ f a`. -/
+/-
+**AntitoneOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AntitoneOn (f : α -> β) (s : Set α) : Prop
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-to_dual_insert_cast MonotoneOn := by grind only
+--- 原说明 ---
+A function `f` is antitone on `s` if, for all `a, b ∈ s`, `a ≤ b` implies `f b ≤
+ f a`.
 -/
-def MonotoneOn (f : α -> β) (s : Set α) : Prop :=
-  forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f a <= f b
-
-to_dual_insert_cast MonotoneOn := by grind only
-
-/--
-Definition of `AntitoneOn` / `AntitoneOn` 的定义
-
-English:
-definition AntitoneOn
-  signature: (f : α -> β) (s : Set α)
-  body: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f b <= f a
+def AntitoneOn (f : α → β) (s : Set α) : Prop :=
+  ∀ ⦃a⦄ (_ : a ∈ s) ⦃b⦄ (_ : b ∈ s), a ≤ b → f b ≤ f a
 
 to_dual_insert_cast AntitoneOn := by grind only
 
-中文:
-定义 AntitoneOn
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f b <= f a
+/-- A function `f` is strictly monotone if `a < b` implies `f a < f b`. -/
+/-
+**StrictMono** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：StrictMono (f : α -> β) : Prop
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-to_dual_insert_cast AntitoneOn := by grind only
+--- 原说明 ---
+A function `f` is strictly monotone if `a < b` implies `f a < f b`.
 -/
-def AntitoneOn (f : α -> β) (s : Set α) : Prop :=
-  forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f b <= f a
-
-to_dual_insert_cast AntitoneOn := by grind only
-
-/--
-Definition of `StrictMono` / `StrictMono` 的定义
-
-English:
-definition StrictMono
-  signature: (f : α -> β)
-  body: forall ⦃a b⦄, a < b -> f a < f b
+def StrictMono (f : α → β) : Prop :=
+  ∀ ⦃a b⦄, a < b → f a < f b
 
 to_dual_insert_cast StrictMono := forall_comm.eq
 
-中文:
-定义 严格递增
-  签名: (f : α -> β)
-  定义体: forall ⦃a b⦄, a < b -> f a < f b
+/-- A function `f` is strictly antitone if `a < b` implies `f b < f a`. -/
+/-
+**StrictAnti** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：StrictAnti (f : α -> β) : Prop
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-to_dual_insert_cast StrictMono := forall_comm.eq
+--- 原说明 ---
+A function `f` is strictly antitone if `a < b` implies `f b < f a`.
 -/
-def StrictMono (f : α -> β) : Prop :=
-  forall ⦃a b⦄, a < b -> f a < f b
-
-to_dual_insert_cast StrictMono := forall_comm.eq
-
-/--
-Definition of `StrictAnti` / `StrictAnti` 的定义
-
-English:
-definition StrictAnti
-  signature: (f : α -> β)
-  body: forall ⦃a b⦄, a < b -> f b < f a
+def StrictAnti (f : α → β) : Prop :=
+  ∀ ⦃a b⦄, a < b → f b < f a
 
 to_dual_insert_cast StrictAnti := forall_comm.eq
 
-中文:
-定义 严格递减
-  签名: (f : α -> β)
-  定义体: forall ⦃a b⦄, a < b -> f b < f a
+/-- A function `f` is strictly monotone on `s` if, for all `a, b ∈ s`, `a < b` implies
+`f a < f b`. -/
+/-
+**StrictMonoOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：StrictMonoOn (f : α -> β) (s : Set α) : Prop
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-to_dual_insert_cast StrictAnti := forall_comm.eq
+--- 原说明 ---
+A function `f` is strictly monotone on `s` if, for all `a, b ∈ s`, `a < b` impli
+es
+`f a < f b`.
 -/
-def StrictAnti (f : α -> β) : Prop :=
-  forall ⦃a b⦄, a < b -> f b < f a
-
-to_dual_insert_cast StrictAnti := forall_comm.eq
-
-/--
-Definition of `StrictMonoOn` / `StrictMonoOn` 的定义
-
-English:
-definition StrictMonoOn
-  signature: (f : α -> β) (s : Set α)
-  body: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a < f b
+def StrictMonoOn (f : α → β) (s : Set α) : Prop :=
+  ∀ ⦃a⦄ (_ : a ∈ s) ⦃b⦄ (_ : b ∈ s), a < b → f a < f b
 
 to_dual_insert_cast StrictMonoOn := by grind only
 
-中文:
-定义 StrictMonoOn
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a < f b
+/-- A function `f` is strictly antitone on `s` if, for all `a, b ∈ s`, `a < b` implies
+`f b < f a`. -/
+/-
+**StrictAntiOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：StrictAntiOn (f : α -> β) (s : Set α) : Prop
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-to_dual_insert_cast StrictMonoOn := by grind only
+--- 原说明 ---
+A function `f` is strictly antitone on `s` if, for all `a, b ∈ s`, `a < b` impli
+es
+`f b < f a`.
 -/
-def StrictMonoOn (f : α -> β) (s : Set α) : Prop :=
-  forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a < f b
-
-to_dual_insert_cast StrictMonoOn := by grind only
-
-/--
-Definition of `StrictAntiOn` / `StrictAntiOn` 的定义
-
-English:
-definition StrictAntiOn
-  signature: (f : α -> β) (s : Set α)
-  body: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b < f a
-
-to_dual_insert_cast StrictAntiOn := by grind only
-
-中文:
-定义 StrictAntiOn
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b < f a
-
-to_dual_insert_cast StrictAntiOn := by grind only
--/
-def StrictAntiOn (f : α -> β) (s : Set α) : Prop :=
-  forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b < f a
+def StrictAntiOn (f : α → β) (s : Set α) : Prop :=
+  ∀ ⦃a⦄ (_ : a ∈ s) ⦃b⦄ (_ : b ∈ s), a < b → f b < f a
 
 to_dual_insert_cast StrictAntiOn := by grind only
 
@@ -238,128 +198,51 @@ end MonotoneDef
 
 section Decidable
 
-variable [Preorder α] [Preorder β] {f : α -> β} {s : Set α}
+variable [Preorder α] [Preorder β] {f : α → β} {s : Set α}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a b, a <= b -> f a <= f b)] : Decidable (Monotone f)
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a b, a <= b -> f a <= f b)] : 可判定 (递增 f)
-  定义体: i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a b, a <= b -> f a <= f b)] : Decidable (Monotone f) := i
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a b, a <= b -> f b <= f a)] : Decidable (Antitone f)
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a b, a <= b -> f b <= f a)] : 可判定 (递减 f)
-  定义体: i
+instance [i : Decidable (∀ a b, a ≤ b → f a ≤ f b)] : Decidable (Monotone f) := i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a b, a <= b -> f b <= f a)] : Decidable (Antitone f) := i
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a in s, forall b in s, a <= b -> f a <= f b)] :
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a in s, 对任意 b in s, a <= b -> f a <= f b)] :
-  定义体: i
+instance [i : Decidable (∀ a b, a ≤ b → f b ≤ f a)] : Decidable (Antitone f) := i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a in s, forall b in s, a <= b -> f a <= f b)] :
+instance [i : Decidable (∀ a ∈ s, ∀ b ∈ s, a ≤ b → f a ≤ f b)] :
     Decidable (MonotoneOn f s) := i
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a in s, forall b in s, a <= b -> f b <= f a)] :
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a in s, 对任意 b in s, a <= b -> f b <= f a)] :
-  定义体: i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a in s, forall b in s, a <= b -> f b <= f a)] :
+instance [i : Decidable (∀ a ∈ s, ∀ b ∈ s, a ≤ b → f b ≤ f a)] :
     Decidable (AntitoneOn f s) := i
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a b, a < b -> f a < f b)] : Decidable (StrictMono f)
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a b, a < b -> f a < f b)] : 可判定 (严格递增 f)
-  定义体: i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a b, a < b -> f a < f b)] : Decidable (StrictMono f) := i
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a b, a < b -> f b < f a)] : Decidable (StrictAnti f)
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a b, a < b -> f b < f a)] : 可判定 (严格递减 f)
-  定义体: i
+instance [i : Decidable (∀ a b, a < b → f a < f b)] : Decidable (StrictMono f) := i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a b, a < b -> f b < f a)] : Decidable (StrictAnti f) := i
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a in s, forall b in s, a < b -> f a < f b)] :
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a in s, 对任意 b in s, a < b -> f a < f b)] :
-  定义体: i
+instance [i : Decidable (∀ a b, a < b → f b < f a)] : Decidable (StrictAnti f) := i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a in s, forall b in s, a < b -> f a < f b)] :
+instance [i : Decidable (∀ a ∈ s, ∀ b ∈ s, a < b → f a < f b)] :
     Decidable (StrictMonoOn f s) := i
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [i
-  signature: : Decidable (forall a in s, forall b in s, a < b -> f b < f a)] :
-  body: i
-
-中文:
-实例 [i
-  签名: : 可判定 (对任意 a in s, 对任意 b in s, a < b -> f b < f a)] :
-  定义体: i
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [i : Decidable (forall a in s, forall b in s, a < b -> f b < f a)] :
+instance [i : Decidable (∀ a ∈ s, ∀ b ∈ s, a < b → f b < f a)] :
     Decidable (StrictAntiOn f s) := i
 
 end Decidable
@@ -372,115 +255,73 @@ section Preorder
 variable [Preorder α]
 
 @[to_dual self]
-/--
-theorem `Monotone.comp_le_comp_left` / 定理 `Monotone.comp_le_comp_left`
-
-English:
-theorem Monotone.comp_le_comp_left
-  proof: fun x => hf (le_gh x)
-
-中文:
-定理 递增.comp_le_comp_left
-  证明: fun x => hf (le_gh x)
-
-Depends on / 依赖: le_gh
+/-
+**Monotone.comp_le_comp_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.comp_le_comp_left [Preorder β] {f : β -> α} {g h : γ -> β} (hf : 
+Monotone f) (le_gh : g <= h) : LE.le.{max w u} (f ∘ g) (f ∘ h)
+参数：hf : Monotone f；le_gh : g <= h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Monotone.comp_le_comp_left
-    [Preorder β] {f : β -> α} {g h : γ -> β} (hf : Monotone f) (le_gh : g <= h) :
+    [Preorder β] {f : β → α} {g h : γ → β} (hf : Monotone f) (le_gh : g ≤ h) :
     LE.le.{max w u} (f ∘ g) (f ∘ h) :=
-  fun x => hf (le_gh x)
+  fun x ↦ hf (le_gh x)
 
 variable [Preorder γ]
-
-/--
-theorem `monotone_lam` / 定理 `monotone_lam`
-
-English:
-theorem monotone_lam
-  given: {f : α -> β -> γ} (hf : forall b, Monotone fun a => f a b)
-  statement: Monotone f
-  proof: fun _ _ h b => hf b h
-
-中文:
-定理 monotone_lam
-  条件: {f : α -> β -> γ} (hf : 对任意 b, 递增 fun a => f a b)
-  结论: 递增 f
-  证明: fun _ _ h b => hf b h
+/-
+**monotone_lam** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_lam {f : α -> β -> γ} (hf : forall b, Monotone fun a => f a b) : 
+Monotone f
+参数：hf : forall b, Monotone fun a => f a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem monotone_lam {f : α -> β -> γ} (hf : forall b, Monotone fun a => f a b) : Monotone f :=
-  fun _ _ h b => hf b h
-
-/--
-theorem `monotone_app` / 定理 `monotone_app`
-
-English:
-theorem monotone_app
-  given: (f : β -> α -> γ) (b : β) (hf : Monotone fun a b => f b a)
-  statement: Monotone (f b)
-  proof: fun _ _ h => hf h b
-
-中文:
-定理 monotone_app
-  条件: (f : β -> α -> γ) (b : β) (hf : 递增 fun a b => f b a)
-  结论: 递增 (f b)
-  证明: fun _ _ h => hf h b
+theorem monotone_lam {f : α → β → γ} (hf : ∀ b, Monotone fun a ↦ f a b) : Monotone f :=
+  fun _ _ h b ↦ hf b h
+/-
+**monotone_app** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_app (f : β -> α -> γ) (b : β) (hf : Monotone fun a b => f b a) : 
+Monotone (f b)
+参数：f : β -> α -> γ；b : β；hf : Monotone fun a b => f b a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem monotone_app (f : β -> α -> γ) (b : β) (hf : Monotone fun a b => f b a) : Monotone (f b) :=
-  fun _ _ h => hf h b
-
-/--
-theorem `antitone_lam` / 定理 `antitone_lam`
-
-English:
-theorem antitone_lam
-  given: {f : α -> β -> γ} (hf : forall b, Antitone fun a => f a b)
-  statement: Antitone f
-  proof: fun _ _ h b => hf b h
-
-中文:
-定理 antitone_lam
-  条件: {f : α -> β -> γ} (hf : 对任意 b, 递减 fun a => f a b)
-  结论: 递减 f
-  证明: fun _ _ h b => hf b h
+theorem monotone_app (f : β → α → γ) (b : β) (hf : Monotone fun a b ↦ f b a) : Monotone (f b) :=
+  fun _ _ h ↦ hf h b
+/-
+**antitone_lam** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antitone_lam {f : α -> β -> γ} (hf : forall b, Antitone fun a => f a b) : 
+Antitone f
+参数：hf : forall b, Antitone fun a => f a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem antitone_lam {f : α -> β -> γ} (hf : forall b, Antitone fun a => f a b) : Antitone f :=
-  fun _ _ h b => hf b h
-
-/--
-theorem `antitone_app` / 定理 `antitone_app`
-
-English:
-theorem antitone_app
-  given: (f : β -> α -> γ) (b : β) (hf : Antitone fun a b => f b a)
-  statement: Antitone (f b)
-  proof: fun _ _ h => hf h b
-
-中文:
-定理 antitone_app
-  条件: (f : β -> α -> γ) (b : β) (hf : 递减 fun a b => f b a)
-  结论: 递减 (f b)
-  证明: fun _ _ h => hf h b
+theorem antitone_lam {f : α → β → γ} (hf : ∀ b, Antitone fun a ↦ f a b) : Antitone f :=
+  fun _ _ h b ↦ hf b h
+/-
+**antitone_app** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antitone_app (f : β -> α -> γ) (b : β) (hf : Antitone fun a b => f b a) : 
+Antitone (f b)
+参数：f : β -> α -> γ；b : β；hf : Antitone fun a b => f b a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem antitone_app (f : β -> α -> γ) (b : β) (hf : Antitone fun a b => f b a) : Antitone (f b) :=
-  fun _ _ h => hf h b
+theorem antitone_app (f : β → α → γ) (b : β) (hf : Antitone fun a b ↦ f b a) : Antitone (f b) :=
+  fun _ _ h ↦ hf h b
 
 end Preorder
 
-/--
-theorem `Function.monotone_eval` / 定理 `Function.monotone_eval`
-
-English:
-theorem Function.monotone_eval
-  given: {ι : Type u} {α : ι -> Type v} [forall i, Preorder (α i)] (i : ι)
-  proof: fun _ _ H => H i
-
-中文:
-定理 函数.monotone_eval
-  条件: {ι : 类型u} {α : ι -> 类型v} [对任意 i, 预序 (α i)] (i : ι)
-  证明: fun _ _ H => H i
+/-
+**Function.monotone_eval** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.monotone_eval {ι : Type u} {α : ι -> Type v} [forall i, Preorder 
+(α i)] (i : ι) : Monotone (Function.eval i : (forall i, α i) -> α i)
+参数：α i；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Function.monotone_eval {ι : Type u} {α : ι -> Type v} [forall i, Preorder (α i)] (i : ι) :
-    Monotone (Function.eval i : (forall i, α i) -> α i) := fun _ _ H => H i
+theorem Function.monotone_eval {ι : Type u} {α : ι → Type v} [∀ i, Preorder (α i)] (i : ι) :
+    Monotone (Function.eval i : (∀ i, α i) → α i) := fun _ _ H ↦ H i
 
 /-! ### Monotonicity hierarchy -/
 
@@ -491,7 +332,7 @@ variable [Preorder α]
 
 section Preorder
 
-variable [Preorder β] {f : α -> β} {a b : α}
+variable [Preorder β] {f : α → β} {a b : α}
 
 /-!
 These four lemmas are there to strip off the semi-implicit arguments `⦃a b : α⦄`. This is useful
@@ -500,274 +341,180 @@ However if you find yourself writing `hf.imp h`, then you should have written `h
 -/
 
 @[to_dual self]
-/--
-theorem `Monotone.imp` / 定理 `Monotone.imp`
+/-
+**Monotone.imp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.imp (hf : Monotone f) (h : a <= b) : f a <= f b
+参数：hf : Monotone f；h : a <= b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Monotone.imp
-  given: (hf : Monotone f) (h : a <= b)
-  statement: f a <= f b
-  proof: hf h
-
-@[to_dual self]
-
-中文:
-定理 递增.imp
-  条件: (hf : 递增 f) (h : a <= b)
-  结论: f a <= f b
-  证明: hf h
-
-@[to_dual self]
+--- 原说明 ---
+These four lemmas are there to strip off the semi-implicit arguments `⦃a b : α⦄`
+. This is useful
+when you do not want to apply a `Monotone` assumption (i.e. your goal is `a ≤ b 
+→ f a ≤ f b`).
+However if you find yourself writing `hf.imp h`, then you should have written `h
+f h` instead.
 -/
-theorem Monotone.imp (hf : Monotone f) (h : a <= b) : f a <= f b :=
+theorem Monotone.imp (hf : Monotone f) (h : a ≤ b) : f a ≤ f b :=
   hf h
 
 @[to_dual self]
-/--
-theorem `Antitone.imp` / 定理 `Antitone.imp`
-
-English:
-theorem Antitone.imp
-  given: (hf : Antitone f) (h : a <= b)
-  statement: f b <= f a
-  proof: hf h
-
-@[to_dual self]
-
-中文:
-定理 递减.imp
-  条件: (hf : 递减 f) (h : a <= b)
-  结论: f b <= f a
-  证明: hf h
-
-@[to_dual self]
+/-
+**Antitone.imp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.imp (hf : Antitone f) (h : a <= b) : f b <= f a
+参数：hf : Antitone f；h : a <= b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Antitone.imp (hf : Antitone f) (h : a <= b) : f b <= f a :=
+theorem Antitone.imp (hf : Antitone f) (h : a ≤ b) : f b ≤ f a :=
   hf h
 
 @[to_dual self]
-/--
-theorem `StrictMono.imp` / 定理 `StrictMono.imp`
-
-English:
-theorem StrictMono.imp
-  given: (hf : StrictMono f) (h : a < b)
-  statement: f a < f b
-  proof: hf h
-
-@[to_dual self]
-
-中文:
-定理 严格递增.imp
-  条件: (hf : 严格递增 f) (h : a < b)
-  结论: f a < f b
-  证明: hf h
-
-@[to_dual self]
+/-
+**StrictMono.imp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.imp (hf : StrictMono f) (h : a < b) : f a < f b
+参数：hf : StrictMono f；h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem StrictMono.imp (hf : StrictMono f) (h : a < b) : f a < f b :=
   hf h
 
 @[to_dual self]
-/--
-theorem `StrictAnti.imp` / 定理 `StrictAnti.imp`
-
-English:
-theorem StrictAnti.imp
-  given: (hf : StrictAnti f) (h : a < b)
-  statement: f b < f a
-  proof: hf h
-
-中文:
-定理 严格递减.imp
-  条件: (hf : 严格递减 f) (h : a < b)
-  结论: f b < f a
-  证明: hf h
+/-
+**StrictAnti.imp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictAnti.imp (hf : StrictAnti f) (h : a < b) : f b < f a
+参数：hf : StrictAnti f；h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem StrictAnti.imp (hf : StrictAnti f) (h : a < b) : f b < f a :=
   hf h
-
-/--
-theorem `Monotone.monotoneOn` / 定理 `Monotone.monotoneOn`
-
-English:
-theorem Monotone.monotoneOn
-  given: (hf : Monotone f) (s : Set α)
-  statement: MonotoneOn f s
-  proof: fun _ _ _ _ => hf.imp
-
-中文:
-定理 递增.monotoneOn
-  条件: (hf : 递增 f) (s : 集合 α)
-  结论: MonotoneOn f s
-  证明: fun _ _ _ _ => hf.imp
+/-
+**Monotone.monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 `Monotone`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β},   Monotone f → ∀ (s : Set α), MonotoneOn f s
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.imp`：Monotone.imp (hf : Monotone f) (h : a <= b) : f a <= f b
 -/
 protected theorem Monotone.monotoneOn (hf : Monotone f) (s : Set α) : MonotoneOn f s :=
-  fun _ _ _ _ => hf.imp
-
-/--
-theorem `Antitone.antitoneOn` / 定理 `Antitone.antitoneOn`
-
-English:
-theorem Antitone.antitoneOn
-  given: (hf : Antitone f) (s : Set α)
-  statement: AntitoneOn f s
-  proof: fun _ _ _ _ => hf.imp
-
-中文:
-定理 递减.antitoneOn
-  条件: (hf : 递减 f) (s : 集合 α)
-  结论: AntitoneOn f s
-  证明: fun _ _ _ _ => hf.imp
+  fun _ _ _ _ ↦ hf.imp
+/-
+**Antitone.antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 `Antitone`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β},   Antitone f → ∀ (s : Set α), AntitoneOn f s
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Antitone.imp`：Antitone.imp (hf : Antitone f) (h : a <= b) : f b <= f a
 -/
 protected theorem Antitone.antitoneOn (hf : Antitone f) (s : Set α) : AntitoneOn f s :=
-  fun _ _ _ _ => hf.imp
-
-/--
-theorem `monotoneOn_univ` / 定理 `monotoneOn_univ`
-
-English:
-theorem monotoneOn_univ
-  statement: MonotoneOn f Set.univ ↔ Monotone f
-  proof: ⟨fun h _ _ => h trivial trivial, fun h => h.monotoneOn _⟩
-
-中文:
-定理 monotoneOn_univ
-  结论: MonotoneOn f 集合.univ ↔ 递增 f
-  证明: ⟨fun h _ _ => h trivial trivial, fun h => h.monotoneOn _⟩
+  fun _ _ _ _ ↦ hf.imp
+/-
+**monotoneOn_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β}, MonotoneOn f Set.univ ↔ Monotone f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `Monotone.monotoneOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Monotone f → ∀ (s : Set α), MonotoneOn f s
 -/
 @[simp] theorem monotoneOn_univ : MonotoneOn f Set.univ ↔ Monotone f :=
-  ⟨fun h _ _ => h trivial trivial, fun h => h.monotoneOn _⟩
-
-/--
-theorem `antitoneOn_univ` / 定理 `antitoneOn_univ`
-
-English:
-theorem antitoneOn_univ
-  statement: AntitoneOn f Set.univ ↔ Antitone f
-  proof: ⟨fun h _ _ => h trivial trivial, fun h => h.antitoneOn _⟩
-
-中文:
-定理 antitoneOn_univ
-  结论: AntitoneOn f 集合.univ ↔ 递减 f
-  证明: ⟨fun h _ _ => h trivial trivial, fun h => h.antitoneOn _⟩
+  ⟨fun h _ _ ↦ h trivial trivial, fun h ↦ h.monotoneOn _⟩
+/-
+**antitoneOn_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β}, AntitoneOn f Set.univ ↔ Antitone f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `Antitone.antitoneOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Antitone f → ∀ (s : Set α), AntitoneOn f s
 -/
 @[simp] theorem antitoneOn_univ : AntitoneOn f Set.univ ↔ Antitone f :=
-  ⟨fun h _ _ => h trivial trivial, fun h => h.antitoneOn _⟩
-
-/--
-theorem `StrictMono.strictMonoOn` / 定理 `StrictMono.strictMonoOn`
-
-English:
-theorem StrictMono.strictMonoOn
-  given: (hf : StrictMono f) (s : Set α)
-  statement: StrictMonoOn f s
-  proof: fun _ _ _ _ => hf.imp
-
-中文:
-定理 严格递增.strictMonoOn
-  条件: (hf : 严格递增 f) (s : 集合 α)
-  结论: StrictMonoOn f s
-  证明: fun _ _ _ _ => hf.imp
+  ⟨fun h _ _ ↦ h trivial trivial, fun h ↦ h.antitoneOn _⟩
+/-
+**StrictMono.strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β},   StrictMono f → ∀ (s : Set α), StrictMonoOn f s
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.imp`：StrictMono.imp (hf : StrictMono f) (h : a < b) : f a < f
+ b
 -/
 protected theorem StrictMono.strictMonoOn (hf : StrictMono f) (s : Set α) : StrictMonoOn f s :=
-  fun _ _ _ _ => hf.imp
-
-/--
-theorem `StrictAnti.strictAntiOn` / 定理 `StrictAnti.strictAntiOn`
-
-English:
-theorem StrictAnti.strictAntiOn
-  given: (hf : StrictAnti f) (s : Set α)
-  statement: StrictAntiOn f s
-  proof: fun _ _ _ _ => hf.imp
-
-中文:
-定理 严格递减.strictAntiOn
-  条件: (hf : 严格递减 f) (s : 集合 α)
-  结论: StrictAntiOn f s
-  证明: fun _ _ _ _ => hf.imp
+  fun _ _ _ _ ↦ hf.imp
+/-
+**StrictAnti.strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β},   StrictAnti f → ∀ (s : Set α), StrictAntiOn f s
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictAnti.imp`：StrictAnti.imp (hf : StrictAnti f) (h : a < b) : f b < f
+ a
 -/
 protected theorem StrictAnti.strictAntiOn (hf : StrictAnti f) (s : Set α) : StrictAntiOn f s :=
-  fun _ _ _ _ => hf.imp
-
-/--
-theorem `strictMonoOn_univ` / 定理 `strictMonoOn_univ`
-
-English:
-theorem strictMonoOn_univ
-  statement: StrictMonoOn f Set.univ ↔ StrictMono f
-  proof: ⟨fun h _ _ => h trivial trivial, fun h => h.strictMonoOn _⟩
-
-中文:
-定理 strictMonoOn_univ
-  结论: StrictMonoOn f 集合.univ ↔ 严格递增 f
-  证明: ⟨fun h _ _ => h trivial trivial, fun h => h.strictMonoOn _⟩
+  fun _ _ _ _ ↦ hf.imp
+/-
+**strictMonoOn_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β},   StrictMonoOn f Set.univ ↔ StrictMono f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `StrictMono.strictMonoOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] {f : α → β},   StrictMono f → ∀ (s : Set α), StrictMonoOn
+ f s
 -/
 @[simp] theorem strictMonoOn_univ : StrictMonoOn f Set.univ ↔ StrictMono f :=
-  ⟨fun h _ _ => h trivial trivial, fun h => h.strictMonoOn _⟩
-
-/--
-theorem `strictAntiOn_univ` / 定理 `strictAntiOn_univ`
-
-English:
-theorem strictAntiOn_univ
-  statement: StrictAntiOn f Set.univ ↔ StrictAnti f
-  proof: ⟨fun h _ _ => h trivial trivial, fun h => h.strictAntiOn _⟩
-
-中文:
-定理 strictAntiOn_univ
-  结论: StrictAntiOn f 集合.univ ↔ 严格递减 f
-  证明: ⟨fun h _ _ => h trivial trivial, fun h => h.strictAntiOn _⟩
+  ⟨fun h _ _ ↦ h trivial trivial, fun h ↦ h.strictMonoOn _⟩
+/-
+**strictAntiOn_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] {f :
+ α → β},   StrictAntiOn f Set.univ ↔ StrictAnti f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `StrictAnti.strictAntiOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] {f : α → β},   StrictAnti f → ∀ (s : Set α), StrictAntiOn
+ f s
 -/
 @[simp] theorem strictAntiOn_univ : StrictAntiOn f Set.univ ↔ StrictAnti f :=
-  ⟨fun h _ _ => h trivial trivial, fun h => h.strictAntiOn _⟩
+  ⟨fun h _ _ ↦ h trivial trivial, fun h ↦ h.strictAntiOn _⟩
 
 end Preorder
 
 section PartialOrder
 
-variable [PartialOrder β] {f : α -> β}
+variable [PartialOrder β] {f : α → β}
 
-/--
-theorem `Monotone.strictMono_of_injective` / 定理 `Monotone.strictMono_of_injective`
-
-English:
-theorem Monotone.strictMono_of_injective
-  given: (h₁ : Monotone f) (h₂ : Injective f)
-  statement: StrictMono f
-  proof: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H
-
-中文:
-定理 递增.strictMono_of_injective
-  条件: (h₁ : 递增 f) (h₂ : 单射 f)
-  结论: 严格递增 f
-  证明: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H
-
-Depends on / 依赖: h.le, h.ne, lt_of_ne
+/-
+**Monotone.strictMono_of_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.strictMono_of_injective (h₁ : Monotone f) (h₂ : Injective f) : St
+rictMono f
+参数：h₁ : Monotone f；h₂ : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
 -/
 theorem Monotone.strictMono_of_injective (h₁ : Monotone f) (h₂ : Injective f) : StrictMono f :=
-fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H
-
-/--
-theorem `Antitone.strictAnti_of_injective` / 定理 `Antitone.strictAnti_of_injective`
-
-English:
-theorem Antitone.strictAnti_of_injective
-  given: (h₁ : Antitone f) (h₂ : Injective f)
-  statement: StrictAnti f
-  proof: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H.symm
-
-中文:
-定理 递减.strictAnti_of_injective
-  条件: (h₁ : 递减 f) (h₂ : 单射 f)
-  结论: 严格递减 f
-  证明: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H.symm
-
-Depends on / 依赖: H.symm, h.le, h.ne, lt_of_ne
+  fun _ _ h ↦ (h₁ h.le).lt_of_ne fun H ↦ h.ne <| h₂ H
+/-
+**Antitone.strictAnti_of_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.strictAnti_of_injective (h₁ : Antitone f) (h₂ : Injective f) : St
+rictAnti f
+参数：h₁ : Antitone f；h₂ : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Antitone.strictAnti_of_injective (h₁ : Antitone f) (h₂ : Injective f) : StrictAnti f :=
-fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H.symm
+  fun _ _ h ↦ (h₁ h.le).lt_of_ne fun H ↦ h.ne <| h₂ H.symm
 
 end PartialOrder
 
@@ -775,179 +522,140 @@ end Preorder
 
 section PartialOrder
 
-variable [PartialOrder α] [Preorder β] {f : α -> β} {s : Set α}
+variable [PartialOrder α] [Preorder β] {f : α → β} {s : Set α}
 
 @[to_dual none]
-/--
-theorem `monotone_iff_forall_lt` / 定理 `monotone_iff_forall_lt`
-
-English:
-theorem monotone_iff_forall_lt
-  statement: Monotone f ↔ forall ⦃a b⦄, a < b -> f a <= f b
-  proof: forall₂_congr fun _ _ =>
-    ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) hf⟩
-
-@[to_dual none]
-
-中文:
-定理 monotone_iff_对任意_lt
-  结论: 递增 f ↔ 对任意 ⦃a b⦄, a < b -> f a <= f b
-  证明: forall₂_congr fun _ _ =>
-    ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) hf⟩
-
-@[to_dual none]
-
-Depends on / 依赖: congr_arg, eq_or_lt, h.eq_or_lt.elim, h.le
+/-
+**monotone_iff_forall_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_iff_forall_lt : Monotone f ↔ forall ⦃a b⦄, a < b -> f a <= f b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem monotone_iff_forall_lt : Monotone f ↔ forall ⦃a b⦄, a < b -> f a <= f b :=
-  forall₂_congr fun _ _ =>
-    ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) hf⟩
+theorem monotone_iff_forall_lt : Monotone f ↔ ∀ ⦃a b⦄, a < b → f a ≤ f b :=
+  forall₂_congr fun _ _ ↦
+    ⟨fun hf h ↦ hf h.le, fun hf h ↦ h.eq_or_lt.elim (fun H ↦ (congr_arg _ H).le) hf⟩
 
 @[to_dual none]
-/--
-theorem `antitone_iff_forall_lt` / 定理 `antitone_iff_forall_lt`
-
-English:
-theorem antitone_iff_forall_lt
-  statement: Antitone f ↔ forall ⦃a b⦄, a < b -> f b <= f a
-  proof: forall₂_congr fun _ _ =>
-    ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) hf⟩
-
-@[to_dual none]
-
-中文:
-定理 antitone_iff_对任意_lt
-  结论: 递减 f ↔ 对任意 ⦃a b⦄, a < b -> f b <= f a
-  证明: forall₂_congr fun _ _ =>
-    ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) hf⟩
-
-@[to_dual none]
-
-Depends on / 依赖: congr_arg, eq_or_lt, h.eq_or_lt.elim, h.le
+/-
+**antitone_iff_forall_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antitone_iff_forall_lt : Antitone f ↔ forall ⦃a b⦄, a < b -> f b <= f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem antitone_iff_forall_lt : Antitone f ↔ forall ⦃a b⦄, a < b -> f b <= f a :=
-  forall₂_congr fun _ _ =>
-    ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) hf⟩
+theorem antitone_iff_forall_lt : Antitone f ↔ ∀ ⦃a b⦄, a < b → f b ≤ f a :=
+  forall₂_congr fun _ _ ↦
+    ⟨fun hf h ↦ hf h.le, fun hf h ↦ h.eq_or_lt.elim (fun H ↦ (congr_arg _ H).ge) hf⟩
 
 @[to_dual none]
-/--
-theorem `monotoneOn_iff_forall_lt` / 定理 `monotoneOn_iff_forall_lt`
-
-English:
-theorem monotoneOn_iff_forall_lt
-  proof: ⟨fun hf _ ha _ hb h => hf ha hb h.le,
-   fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) (hf ha hb)⟩
-
-@[to_dual none]
-
-中文:
-定理 monotoneOn_iff_对任意_lt
-  证明: ⟨fun hf _ ha _ hb h => hf ha hb h.le,
-   fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) (hf ha hb)⟩
-
-@[to_dual none]
-
-Depends on / 依赖: congr_arg, eq_or_lt, h.eq_or_lt.elim, h.le
+/-
+**monotoneOn_iff_forall_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotoneOn_iff_forall_lt : MonotoneOn f s ↔ forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_
+ : b in s), a < b -> f a <= f b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem monotoneOn_iff_forall_lt :
-    MonotoneOn f s ↔ forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a <= f b :=
-  ⟨fun hf _ ha _ hb h => hf ha hb h.le,
-   fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) (hf ha hb)⟩
+    MonotoneOn f s ↔ ∀ ⦃a⦄ (_ : a ∈ s) ⦃b⦄ (_ : b ∈ s), a < b → f a ≤ f b :=
+  ⟨fun hf _ ha _ hb h ↦ hf ha hb h.le,
+   fun hf _ ha _ hb h ↦ h.eq_or_lt.elim (fun H ↦ (congr_arg _ H).le) (hf ha hb)⟩
 
 @[to_dual none]
-/--
-theorem `antitoneOn_iff_forall_lt` / 定理 `antitoneOn_iff_forall_lt`
-
-English:
-theorem antitoneOn_iff_forall_lt
-  proof: ⟨fun hf _ ha _ hb h => hf ha hb h.le,
-   fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) (hf ha hb)⟩
-
-中文:
-定理 antitoneOn_iff_对任意_lt
-  证明: ⟨fun hf _ ha _ hb h => hf ha hb h.le,
-   fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) (hf ha hb)⟩
-
-Depends on / 依赖: congr_arg, eq_or_lt, h.eq_or_lt.elim, h.le
+/-
+**antitoneOn_iff_forall_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antitoneOn_iff_forall_lt : AntitoneOn f s ↔ forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_
+ : b in s), a < b -> f b <= f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem antitoneOn_iff_forall_lt :
-    AntitoneOn f s ↔ forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b <= f a :=
-  ⟨fun hf _ ha _ hb h => hf ha hb h.le,
-   fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) (hf ha hb)⟩
+    AntitoneOn f s ↔ ∀ ⦃a⦄ (_ : a ∈ s) ⦃b⦄ (_ : b ∈ s), a < b → f b ≤ f a :=
+  ⟨fun hf _ ha _ hb h ↦ hf ha hb h.le,
+   fun hf _ ha _ hb h ↦ h.eq_or_lt.elim (fun H ↦ (congr_arg _ H).ge) (hf ha hb)⟩
 
 -- `Preorder α` isn't strong enough: if the preorder on `α` is an equivalence relation,
 -- then `StrictMono f` is vacuously true.
-/--
-theorem `StrictMonoOn.monotoneOn` / 定理 `StrictMonoOn.monotoneOn`
-
-English:
-theorem StrictMonoOn.monotoneOn
-  given: (hf : StrictMonoOn f s)
-  statement: MonotoneOn f s
-  proof: monotoneOn_iff_forall_lt.2 fun _ ha _ hb h => (hf ha hb h).le
-
-中文:
-定理 StrictMonoOn.monotoneOn
-  条件: (hf : StrictMonoOn f s)
-  结论: MonotoneOn f s
-  证明: monotoneOn_iff_forall_lt.2 fun _ ha _ hb h => (hf ha hb h).le
+/-
+**StrictMonoOn.monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 `StrictMonoOn`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : PartialOrder α] [inst_1 : Preorder β] 
+{f : α → β} {s : Set α},   StrictMonoOn f s → MonotoneOn f s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotoneOn_iff_forall_lt`：monotoneOn_iff_forall_lt : MonotoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a <= f b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 protected theorem StrictMonoOn.monotoneOn (hf : StrictMonoOn f s) : MonotoneOn f s :=
-  monotoneOn_iff_forall_lt.2 fun _ ha _ hb h => (hf ha hb h).le
-
-/--
-theorem `StrictAntiOn.antitoneOn` / 定理 `StrictAntiOn.antitoneOn`
-
-English:
-theorem StrictAntiOn.antitoneOn
-  given: (hf : StrictAntiOn f s)
-  statement: AntitoneOn f s
-  proof: antitoneOn_iff_forall_lt.2 fun _ ha _ hb h => (hf ha hb h).le
-
-中文:
-定理 StrictAntiOn.antitoneOn
-  条件: (hf : StrictAntiOn f s)
-  结论: AntitoneOn f s
-  证明: antitoneOn_iff_forall_lt.2 fun _ ha _ hb h => (hf ha hb h).le
+  monotoneOn_iff_forall_lt.2 fun _ ha _ hb h ↦ (hf ha hb h).le
+/-
+**StrictAntiOn.antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 `StrictAntiOn`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : PartialOrder α] [inst_1 : Preorder β] 
+{f : α → β} {s : Set α},   StrictAntiOn f s → AntitoneOn f s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `antitoneOn_iff_forall_lt`：antitoneOn_iff_forall_lt : AntitoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b <= f a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 protected theorem StrictAntiOn.antitoneOn (hf : StrictAntiOn f s) : AntitoneOn f s :=
-  antitoneOn_iff_forall_lt.2 fun _ ha _ hb h => (hf ha hb h).le
-
-/--
-theorem `StrictMono.monotone` / 定理 `StrictMono.monotone`
-
-English:
-theorem StrictMono.monotone
-  given: (hf : StrictMono f)
-  statement: Monotone f
-  proof: monotone_iff_forall_lt.2 fun _ _ h => (hf h).le
-
-中文:
-定理 严格递增.monotone
-  条件: (hf : 严格递增 f)
-  结论: 递增 f
-  证明: monotone_iff_forall_lt.2 fun _ _ h => (hf h).le
+  antitoneOn_iff_forall_lt.2 fun _ ha _ hb h ↦ (hf ha hb h).le
+/-
+**StrictMono.monotone** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : PartialOrder α] [inst_1 : Preorder β] 
+{f : α → β}, StrictMono f → Monotone f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotone_iff_forall_lt`：monotone_iff_forall_lt : Monotone f ↔ forall ⦃a 
+b⦄, a < b -> f a <= f b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 protected theorem StrictMono.monotone (hf : StrictMono f) : Monotone f :=
-  monotone_iff_forall_lt.2 fun _ _ h => (hf h).le
-
-/--
-theorem `StrictAnti.antitone` / 定理 `StrictAnti.antitone`
-
-English:
-theorem StrictAnti.antitone
-  given: (hf : StrictAnti f)
-  statement: Antitone f
-  proof: antitone_iff_forall_lt.2 fun _ _ h => (hf h).le
-
-中文:
-定理 严格递减.antitone
-  条件: (hf : 严格递减 f)
-  结论: 递减 f
-  证明: antitone_iff_forall_lt.2 fun _ _ h => (hf h).le
+  monotone_iff_forall_lt.2 fun _ _ h ↦ (hf h).le
+/-
+**StrictAnti.antitone** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : PartialOrder α] [inst_1 : Preorder β] 
+{f : α → β}, StrictAnti f → Antitone f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `antitone_iff_forall_lt`：antitone_iff_forall_lt : Antitone f ↔ forall ⦃a 
+b⦄, a < b -> f b <= f a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 protected theorem StrictAnti.antitone (hf : StrictAnti f) : Antitone f :=
-  antitone_iff_forall_lt.2 fun _ _ h => (hf h).le
+  antitone_iff_forall_lt.2 fun _ _ h ↦ (hf h).le
 
 end PartialOrder
 
@@ -958,830 +666,500 @@ namespace Subsingleton
 
 variable [Preorder α] [Preorder β]
 
-/--
-theorem `monotone` / 定理 `monotone`
-
-English:
-theorem monotone
-  given: [Subsingleton α] (f : α -> β)
-  statement: Monotone f
-  proof: fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
-
-中文:
-定理 monotone
-  条件: [子单例 α] (f : α -> β)
-  结论: 递增 f
-  证明: fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
+/-
+**Subsingleton.monotone** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] [Sub
+singleton α] (f : α → β), Monotone f
+参数：f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem monotone [Subsingleton α] (f : α -> β) : Monotone f :=
-  fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
-
-/--
-theorem `antitone` / 定理 `antitone`
-
-English:
-theorem antitone
-  given: [Subsingleton α] (f : α -> β)
-  statement: Antitone f
-  proof: fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
-
-中文:
-定理 antitone
-  条件: [子单例 α] (f : α -> β)
-  结论: 递减 f
-  证明: fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
+protected theorem monotone [Subsingleton α] (f : α → β) : Monotone f :=
+  fun _ _ _ ↦ (congr_arg _ <| Subsingleton.elim _ _).le
+/-
+**Subsingleton.antitone** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] [Sub
+singleton α] (f : α → β), Antitone f
+参数：f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem antitone [Subsingleton α] (f : α -> β) : Antitone f :=
-  fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
-
-/--
-theorem `monotone'` / 定理 `monotone'`
-
-English:
-theorem monotone'
-  given: [Subsingleton β] (f : α -> β)
-  statement: Monotone f
-  proof: fun _ _ _ => (Subsingleton.elim _ _).le
-
-中文:
-定理 monotone'
-  条件: [子单例 β] (f : α -> β)
-  结论: 递增 f
-  证明: fun _ _ _ => (Subsingleton.elim _ _).le
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+protected theorem antitone [Subsingleton α] (f : α → β) : Antitone f :=
+  fun _ _ _ ↦ (congr_arg _ <| Subsingleton.elim _ _).le
+/-
+**Subsingleton.monotone'** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：monotone' [Subsingleton β] (f : α -> β) : Monotone f
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem monotone' [Subsingleton β] (f : α -> β) : Monotone f :=
-  fun _ _ _ => (Subsingleton.elim _ _).le
-
-/--
-theorem `antitone'` / 定理 `antitone'`
-
-English:
-theorem antitone'
-  given: [Subsingleton β] (f : α -> β)
-  statement: Antitone f
-  proof: fun _ _ _ => (Subsingleton.elim _ _).le
-
-中文:
-定理 antitone'
-  条件: [子单例 β] (f : α -> β)
-  结论: 递减 f
-  证明: fun _ _ _ => (Subsingleton.elim _ _).le
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+theorem monotone' [Subsingleton β] (f : α → β) : Monotone f :=
+  fun _ _ _ ↦ (Subsingleton.elim _ _).le
+/-
+**Subsingleton.antitone'** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：antitone' [Subsingleton β] (f : α -> β) : Antitone f
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem antitone' [Subsingleton β] (f : α -> β) : Antitone f :=
-  fun _ _ _ => (Subsingleton.elim _ _).le
-
-/--
-theorem `strictMono` / 定理 `strictMono`
-
-English:
-theorem strictMono
-  given: [Subsingleton α] (f : α -> β)
-  statement: StrictMono f
-  proof: fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
-
-中文:
-定理 strictMono
-  条件: [子单例 α] (f : α -> β)
-  结论: 严格递增 f
-  证明: fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
+theorem antitone' [Subsingleton β] (f : α → β) : Antitone f :=
+  fun _ _ _ ↦ (Subsingleton.elim _ _).le
+/-
+**Subsingleton.strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] [Sub
+singleton α] (f : α → β), StrictMono f
+参数：f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem strictMono [Subsingleton α] (f : α -> β) : StrictMono f :=
-  fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
-
-/--
-theorem `strictAnti` / 定理 `strictAnti`
-
-English:
-theorem strictAnti
-  given: [Subsingleton α] (f : α -> β)
-  statement: StrictAnti f
-  proof: fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
-
-中文:
-定理 strictAnti
-  条件: [子单例 α] (f : α -> β)
-  结论: 严格递减 f
-  证明: fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
+protected theorem strictMono [Subsingleton α] (f : α → β) : StrictMono f :=
+  fun _ _ h ↦ (h.ne <| Subsingleton.elim _ _).elim
+/-
+**Subsingleton.strictAnti** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : Preorder β] [Sub
+singleton α] (f : α → β), StrictAnti f
+参数：f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem strictAnti [Subsingleton α] (f : α -> β) : StrictAnti f :=
-  fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
+protected theorem strictAnti [Subsingleton α] (f : α → β) : StrictAnti f :=
+  fun _ _ h ↦ (h.ne <| Subsingleton.elim _ _).elim
 
 end Subsingleton
 
+/-! ### Miscellaneous monotonicity results -/
 
 
-/--
-theorem `monotone_id` / 定理 `monotone_id`
+/-
+**monotone_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_id [Preorder α] : Monotone (id : α -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem monotone_id
-  given: [Preorder α]
-  statement: Monotone (id : α -> α)
-  proof: fun _ _ => id
-
-中文:
-定理 monotone_id
-  条件: [预序 α]
-  结论: 递增 (id : α -> α)
-  证明: fun _ _ => id
+--- 原说明 ---
+### Miscellaneous monotonicity results
 -/
-theorem monotone_id [Preorder α] : Monotone (id : α -> α) := fun _ _ => id
-
-/--
-theorem `monotoneOn_id` / 定理 `monotoneOn_id`
-
-English:
-theorem monotoneOn_id
-  given: [Preorder α] {s : Set α}
-  statement: MonotoneOn id s
-  proof: fun _ _ _ _ => id
-
-中文:
-定理 monotoneOn_id
-  条件: [预序 α] {s : 集合 α}
-  结论: MonotoneOn id s
-  证明: fun _ _ _ _ => id
+theorem monotone_id [Preorder α] : Monotone (id : α → α) := fun _ _ ↦ id
+/-
+**monotoneOn_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotoneOn_id [Preorder α] {s : Set α} : MonotoneOn id s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem monotoneOn_id [Preorder α] {s : Set α} : MonotoneOn id s := fun _ _ _ _ => id
-
-/--
-theorem `strictMono_id` / 定理 `strictMono_id`
-
-English:
-theorem strictMono_id
-  given: [Preorder α]
-  statement: StrictMono (id : α -> α)
-  proof: fun _ _ => id
-
-中文:
-定理 strictMono_id
-  条件: [预序 α]
-  结论: 严格递增 (id : α -> α)
-  证明: fun _ _ => id
+theorem monotoneOn_id [Preorder α] {s : Set α} : MonotoneOn id s := fun _ _ _ _ ↦ id
+/-
+**strictMono_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：strictMono_id [Preorder α] : StrictMono (id : α -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem strictMono_id [Preorder α] : StrictMono (id : α -> α) := fun _ _ => id
-
-/--
-theorem `strictMonoOn_id` / 定理 `strictMonoOn_id`
-
-English:
-theorem strictMonoOn_id
-  given: [Preorder α] {s : Set α}
-  statement: StrictMonoOn id s
-  proof: fun _ _ _ _ => id
-
-中文:
-定理 strictMonoOn_id
-  条件: [预序 α] {s : 集合 α}
-  结论: StrictMonoOn id s
-  证明: fun _ _ _ _ => id
+theorem strictMono_id [Preorder α] : StrictMono (id : α → α) := fun _ _ ↦ id
+/-
+**strictMonoOn_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：strictMonoOn_id [Preorder α] {s : Set α} : StrictMonoOn id s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem strictMonoOn_id [Preorder α] {s : Set α} : StrictMonoOn id s := fun _ _ _ _ => id
-
-/--
-theorem `monotone_const` / 定理 `monotone_const`
-
-English:
-theorem monotone_const
-  given: [Preorder α] [Preorder β] {c : β}
-  statement: Monotone fun _ : α => c
-  proof: fun _ _ _ => le_rfl
-
-中文:
-定理 monotone_const
-  条件: [预序 α] [预序 β] {c : β}
-  结论: 递增 fun _ : α => c
-  证明: fun _ _ _ => le_rfl
-
-Depends on / 依赖: le_rfl
+theorem strictMonoOn_id [Preorder α] {s : Set α} : StrictMonoOn id s := fun _ _ _ _ ↦ id
+/-
+**monotone_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_const [Preorder α] [Preorder β] {c : β} : Monotone fun _ : α => c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem monotone_const [Preorder α] [Preorder β] {c : β} : Monotone fun _ : α => c :=
-  fun _ _ _ => le_rfl
-
-/--
-theorem `monotoneOn_const` / 定理 `monotoneOn_const`
-
-English:
-theorem monotoneOn_const
-  given: [Preorder α] [Preorder β] {c : β} {s : Set α}
-  proof: fun _ _ _ _ _ => le_rfl
-
-中文:
-定理 monotoneOn_const
-  条件: [预序 α] [预序 β] {c : β} {s : 集合 α}
-  证明: fun _ _ _ _ _ => le_rfl
-
-Depends on / 依赖: le_rfl
+theorem monotone_const [Preorder α] [Preorder β] {c : β} : Monotone fun _ : α ↦ c :=
+  fun _ _ _ ↦ le_rfl
+/-
+**monotoneOn_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotoneOn_const [Preorder α] [Preorder β] {c : β} {s : Set α} : MonotoneO
+n (fun _ : α => c) s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem monotoneOn_const [Preorder α] [Preorder β] {c : β} {s : Set α} :
-    MonotoneOn (fun _ : α => c) s :=
-  fun _ _ _ _ _ => le_rfl
-
-/--
-theorem `antitone_const` / 定理 `antitone_const`
-
-English:
-theorem antitone_const
-  given: [Preorder α] [Preorder β] {c : β}
-  statement: Antitone fun _ : α => c
-  proof: fun _ _ _ => le_refl c
-
-中文:
-定理 antitone_const
-  条件: [预序 α] [预序 β] {c : β}
-  结论: 递减 fun _ : α => c
-  证明: fun _ _ _ => le_refl c
-
-Depends on / 依赖: le_refl
+    MonotoneOn (fun _ : α ↦ c) s :=
+  fun _ _ _ _ _ ↦ le_rfl
+/-
+**antitone_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antitone_const [Preorder α] [Preorder β] {c : β} : Antitone fun _ : α => c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem antitone_const [Preorder α] [Preorder β] {c : β} : Antitone fun _ : α => c :=
-  fun _ _ _ => le_refl c
-
-/--
-theorem `antitoneOn_const` / 定理 `antitoneOn_const`
-
-English:
-theorem antitoneOn_const
-  given: [Preorder α] [Preorder β] {c : β} {s : Set α}
-  proof: fun _ _ _ _ _ => le_rfl
-
-@[to_dual self]
-
-中文:
-定理 antitoneOn_const
-  条件: [预序 α] [预序 β] {c : β} {s : 集合 α}
-  证明: fun _ _ _ _ _ => le_rfl
-
-@[to_dual self]
-
-Depends on / 依赖: le_rfl
+theorem antitone_const [Preorder α] [Preorder β] {c : β} : Antitone fun _ : α ↦ c :=
+  fun _ _ _ ↦ le_refl c
+/-
+**antitoneOn_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antitoneOn_const [Preorder α] [Preorder β] {c : β} {s : Set α} : AntitoneO
+n (fun _ : α => c) s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem antitoneOn_const [Preorder α] [Preorder β] {c : β} {s : Set α} :
-    AntitoneOn (fun _ : α => c) s :=
-  fun _ _ _ _ _ => le_rfl
+    AntitoneOn (fun _ : α ↦ c) s :=
+  fun _ _ _ _ _ ↦ le_rfl
 
 @[to_dual self]
-/--
-theorem `strictMono_of_le_iff_le` / 定理 `strictMono_of_le_iff_le`
-
-English:
-theorem strictMono_of_le_iff_le
-  statement: [Preorder α] [Preorder β] {f : α -> β}
-  proof: fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
-
-中文:
-定理 strictMono_of_le_iff_le
-  结论: [预序 α] [预序 β] {f : α -> β}
-  证明: fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
-
-Depends on / 依赖: lt_iff_lt_of_le_iff_le
+/-
+**strictMono_of_le_iff_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：strictMono_of_le_iff_le [Preorder α] [Preorder β] {f : α -> β} (h : forall
+ x y, x <= y ↔ f x <= f y) : StrictMono f
+参数：h : forall x y, x <= y ↔ f x <= f y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `lt_iff_lt_of_le_iff_le'`：lt_iff_lt_of_le_iff_le' {β} [Preorder α] [Preor
+der β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) (H' : b <= a ↔ d <= c) : b < a 
+↔ d < c
 -/
-theorem strictMono_of_le_iff_le [Preorder α] [Preorder β] {f : α -> β}
-    (h : forall x y, x <= y ↔ f x <= f y) : StrictMono f :=
-  fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
-
-/--
-theorem `strictAnti_of_le_iff_le` / 定理 `strictAnti_of_le_iff_le`
-
-English:
-theorem strictAnti_of_le_iff_le
-  statement: [Preorder α] [Preorder β] {f : α -> β}
-  proof: fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
+theorem strictMono_of_le_iff_le [Preorder α] [Preorder β] {f : α → β}
+    (h : ∀ x y, x ≤ y ↔ f x ≤ f y) : StrictMono f :=
+  fun _ _ ↦ (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
+/-
+**strictAnti_of_le_iff_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：strictAnti_of_le_iff_le [Preorder α] [Preorder β] {f : α -> β} (h : forall
+ x y, x <= y ↔ f y <= f x) : StrictAnti f
+参数：h : forall x y, x <= y ↔ f y <= f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `lt_iff_lt_of_le_iff_le'`：lt_iff_lt_of_le_iff_le' {β} [Preorder α] [Preor
+der β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) (H' : b <= a ↔ d <= c) : b < a 
+↔ d < c
+-/
+theorem strictAnti_of_le_iff_le [Preorder α] [Preorder β] {f : α → β}
+    (h : ∀ x y, x ≤ y ↔ f y ≤ f x) : StrictAnti f :=
+  fun _ _ ↦ (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
 
 @[to_dual none]
-
-中文:
-定理 strictAnti_of_le_iff_le
-  结论: [预序 α] [预序 β] {f : α -> β}
-  证明: fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
-
-@[to_dual none]
-
-Depends on / 依赖: lt_iff_lt_of_le_iff_le
+/-
+**Function.Injective.of_lt_imp_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.of_lt_imp_ne [LinearOrder α] {f : α -> β} (h : forall x
+ y, x < y -> f x != f y) : Injective f
+参数：h : forall x y, x < y -> f x != f y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem strictAnti_of_le_iff_le [Preorder α] [Preorder β] {f : α -> β}
-    (h : forall x y, x <= y ↔ f y <= f x) : StrictAnti f :=
-  fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
-
-@[to_dual none]
-/--
-theorem `Function.Injective.of_lt_imp_ne` / 定理 `Function.Injective.of_lt_imp_ne`
-
-English:
-theorem Function.Injective.of_lt_imp_ne
-  given: [LinearOrder α] {f : α -> β} (h : forall x y, x < y -> f x != f y)
-  proof: by
-  grind [Injective]
-
-中文:
-定理 函数.单射.of_lt_imp_ne
-  条件: [线性序 α] {f : α -> β} (h : 对任意 x y, x < y -> f x != f y)
-  证明: by
-  grind [Injective]
-
-Depends on / 依赖: Injective
--/
-theorem Function.Injective.of_lt_imp_ne [LinearOrder α] {f : α -> β} (h : forall x y, x < y -> f x != f y) :
+theorem Function.Injective.of_lt_imp_ne [LinearOrder α] {f : α → β} (h : ∀ x y, x < y → f x ≠ f y) :
     Injective f := by
   grind [Injective]
-
-/--
-theorem `Function.Injective.of_eq_imp_le` / 定理 `Function.Injective.of_eq_imp_le`
-
-English:
-theorem Function.Injective.of_eq_imp_le
-  statement: [PartialOrder α] {f : α -> β}
-  proof: .antisymm h hxy.symm fun _ _ hxy => h hxy
-
-中文:
-定理 函数.单射.of_eq_imp_le
-  结论: [偏序 α] {f : α -> β}
-  证明: .antisymm h hxy.symm fun _ _ hxy => h hxy
-
-Depends on / 依赖: antisymm, hxy.symm
+/-
+**Function.Injective.of_eq_imp_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.of_eq_imp_le [PartialOrder α] {f : α -> β} (h : forall 
+{x y}, f x = f y -> x <= y) : f.Injective
+参数：h : forall {x y}, f x = f y -> x <= y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem Function.Injective.of_eq_imp_le [PartialOrder α] {f : α -> β}
-    (h : forall {x y}, f x = f y -> x <= y) : f.Injective :=
-.antisymm h hxy.symm fun _ _ hxy => h hxy
+theorem Function.Injective.of_eq_imp_le [PartialOrder α] {f : α → β}
+    (h : ∀ {x y}, f x = f y → x ≤ y) : f.Injective :=
+  fun _ _ hxy ↦ h hxy |>.antisymm <| h hxy.symm
 
 /-! ### Monotonicity under composition -/
 
 
 section Composition
 
-variable [Preorder α] [Preorder β] [Preorder γ] {g : β -> γ} {f : α -> β} {s : Set α} {t : Set β}
+variable [Preorder α] [Preorder β] [Preorder γ] {g : β → γ} {f : α → β} {s : Set α} {t : Set β}
 
-/--
-theorem `Monotone.comp` / 定理 `Monotone.comp`
-
-English:
-theorem Monotone.comp
-  given: (hg : Monotone g) (hf : Monotone f)
-  statement: Monotone (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 递增.comp
-  条件: (hg : 递增 g) (hf : 递增 f)
-  结论: 递增 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
+/-
+**Monotone.comp** 是 Mathlib 中的一个定理，位于命名空间 `Monotone`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monotone g → Monotone 
+f → Monotone (g ∘ f)
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Monotone.comp (hg : Monotone g) (hf : Monotone f) : Monotone (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `Monotone.comp_antitone` / 定理 `Monotone.comp_antitone`
-
-English:
-theorem Monotone.comp_antitone
-  given: (hg : Monotone g) (hf : Antitone f)
-  statement: Antitone (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 递增.comp_antitone
-  条件: (hg : 递增 g) (hf : 递减 f)
-  结论: 递减 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
+  fun _ _ h ↦ hg (hf h)
+/-
+**Monotone.comp_antitone** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.comp_antitone (hg : Monotone g) (hf : Antitone f) : Antitone (g ∘
+ f)
+参数：hg : Monotone g；hf : Antitone f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Monotone.comp_antitone (hg : Monotone g) (hf : Antitone f) : Antitone (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `Antitone.comp` / 定理 `Antitone.comp`
-
-English:
-theorem Antitone.comp
-  given: (hg : Antitone g) (hf : Antitone f)
-  statement: Monotone (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 递减.comp
-  条件: (hg : 递减 g) (hf : 递减 f)
-  结论: 递增 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
+  fun _ _ h ↦ hg (hf h)
+/-
+**Antitone.comp** 是 Mathlib 中的一个定理，位于命名空间 `Antitone`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Antitone g → Antitone 
+f → Monotone (g ∘ f)
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Antitone.comp (hg : Antitone g) (hf : Antitone f) : Monotone (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `Antitone.comp_monotone` / 定理 `Antitone.comp_monotone`
-
-English:
-theorem Antitone.comp_monotone
-  given: (hg : Antitone g) (hf : Monotone f)
-  statement: Antitone (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 递减.comp_monotone
-  条件: (hg : 递减 g) (hf : 递增 f)
-  结论: 递减 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
+  fun _ _ h ↦ hg (hf h)
+/-
+**Antitone.comp_monotone** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.comp_monotone (hg : Antitone g) (hf : Monotone f) : Antitone (g ∘
+ f)
+参数：hg : Antitone g；hf : Monotone f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Antitone.comp_monotone (hg : Antitone g) (hf : Monotone f) : Antitone (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `Monotone.iterate` / 定理 `Monotone.iterate`
-
-English:
-theorem Monotone.iterate
-  given: {f : α -> α} (hf : Monotone f) (n : Nat)
-  statement: Monotone f^[n]
-  proof: Nat.recOn n monotone_id fun _ h => h.comp hf
-
-中文:
-定理 递增.iterate
-  条件: {f : α -> α} (hf : 递增 f) (n : 自然数)
-  结论: 递增 f^[n]
-  证明: Nat.recOn n monotone_id fun _ h => h.comp hf
+  fun _ _ h ↦ hg (hf h)
+/-
+**Monotone.iterate** 是 Mathlib 中的一个定理，位于命名空间 `Monotone`。
+形式化陈述：∀ {α : Type u} [inst : Preorder α] {f : α → α}, Monotone f → ∀ (n : ℕ), Mo
+notone f^[n]
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
+· 使用定理 `Monotone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monot
+one…
 -/
-protected theorem Monotone.iterate {f : α -> α} (hf : Monotone f) (n : Nat) : Monotone f^[n] :=
-  Nat.recOn n monotone_id fun _ h => h.comp hf
-
-/--
-theorem `Monotone.comp_monotoneOn` / 定理 `Monotone.comp_monotoneOn`
-
-English:
-theorem Monotone.comp_monotoneOn
-  given: (hg : Monotone g) (hf : MonotoneOn f s)
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 递增.comp_monotoneOn
-  条件: (hg : 递增 g) (hf : MonotoneOn f s)
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+protected theorem Monotone.iterate {f : α → α} (hf : Monotone f) (n : ℕ) : Monotone f^[n] :=
+  Nat.recOn n monotone_id fun _ h ↦ h.comp hf
+/-
+**Monotone.comp_monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 `Monotone`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β} {s : Set α}, Monotone g
+ → MonotoneOn f s → MonotoneOn (g ∘ f) s
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Monotone.comp_monotoneOn (hg : Monotone g) (hf : MonotoneOn f s) :
     MonotoneOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-theorem `Monotone.comp_antitoneOn` / 定理 `Monotone.comp_antitoneOn`
-
-English:
-theorem Monotone.comp_antitoneOn
-  given: (hg : Monotone g) (hf : AntitoneOn f s)
-  statement: AntitoneOn (g ∘ f) s
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 递增.comp_antitoneOn
-  条件: (hg : 递增 g) (hf : AntitoneOn f s)
-  结论: AntitoneOn (g ∘ f) s
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**Monotone.comp_antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.comp_antitoneOn (hg : Monotone g) (hf : AntitoneOn f s) : Antiton
+eOn (g ∘ f) s
+参数：hg : Monotone g；hf : AntitoneOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Monotone.comp_antitoneOn (hg : Monotone g) (hf : AntitoneOn f s) : AntitoneOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-theorem `Antitone.comp_antitoneOn` / 定理 `Antitone.comp_antitoneOn`
-
-English:
-theorem Antitone.comp_antitoneOn
-  given: (hg : Antitone g) (hf : AntitoneOn f s)
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 递减.comp_antitoneOn
-  条件: (hg : 递减 g) (hf : AntitoneOn f s)
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**Antitone.comp_antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 `Antitone`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β} {s : Set α}, Antitone g
+ → AntitoneOn f s → MonotoneOn (g ∘ f) s
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Antitone.comp_antitoneOn (hg : Antitone g) (hf : AntitoneOn f s) :
     MonotoneOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-theorem `Antitone.comp_monotoneOn` / 定理 `Antitone.comp_monotoneOn`
-
-English:
-theorem Antitone.comp_monotoneOn
-  given: (hg : Antitone g) (hf : MonotoneOn f s)
-  statement: AntitoneOn (g ∘ f) s
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 递减.comp_monotoneOn
-  条件: (hg : 递减 g) (hf : MonotoneOn f s)
-  结论: AntitoneOn (g ∘ f) s
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**Antitone.comp_monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.comp_monotoneOn (hg : Antitone g) (hf : MonotoneOn f s) : Antiton
+eOn (g ∘ f) s
+参数：hg : Antitone g；hf : MonotoneOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Antitone.comp_monotoneOn (hg : Antitone g) (hf : MonotoneOn f s) : AntitoneOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-theorem `StrictMono.comp` / 定理 `StrictMono.comp`
-
-English:
-theorem StrictMono.comp
-  given: (hg : StrictMono g) (hf : StrictMono f)
-  statement: StrictMono (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 严格递增.comp
-  条件: (hg : 严格递增 g) (hf : 严格递增 f)
-  结论: 严格递增 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**StrictMono.comp** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, StrictMono g → StrictM
+ono f → StrictMono (g ∘ f)
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem StrictMono.comp (hg : StrictMono g) (hf : StrictMono f) : StrictMono (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `StrictMono.comp_strictAnti` / 定理 `StrictMono.comp_strictAnti`
-
-English:
-theorem StrictMono.comp_strictAnti
-  given: (hg : StrictMono g) (hf : StrictAnti f)
-  statement: StrictAnti (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 严格递增.comp_strictAnti
-  条件: (hg : 严格递增 g) (hf : 严格递减 f)
-  结论: 严格递减 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
+  fun _ _ h ↦ hg (hf h)
+/-
+**StrictMono.comp_strictAnti** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.comp_strictAnti (hg : StrictMono g) (hf : StrictAnti f) : Stric
+tAnti (g ∘ f)
+参数：hg : StrictMono g；hf : StrictAnti f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem StrictMono.comp_strictAnti (hg : StrictMono g) (hf : StrictAnti f) : StrictAnti (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `StrictAnti.comp` / 定理 `StrictAnti.comp`
-
-English:
-theorem StrictAnti.comp
-  given: (hg : StrictAnti g) (hf : StrictAnti f)
-  statement: StrictMono (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 严格递减.comp
-  条件: (hg : 严格递减 g) (hf : 严格递减 f)
-  结论: 严格递增 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
+  fun _ _ h ↦ hg (hf h)
+/-
+**StrictAnti.comp** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, StrictAnti g → StrictA
+nti f → StrictMono (g ∘ f)
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem StrictAnti.comp (hg : StrictAnti g) (hf : StrictAnti f) : StrictMono (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `StrictAnti.comp_strictMono` / 定理 `StrictAnti.comp_strictMono`
-
-English:
-theorem StrictAnti.comp_strictMono
-  given: (hg : StrictAnti g) (hf : StrictMono f)
-  statement: StrictAnti (g ∘ f)
-  proof: fun _ _ h => hg (hf h)
-
-中文:
-定理 严格递减.comp_strictMono
-  条件: (hg : 严格递减 g) (hf : 严格递增 f)
-  结论: 严格递减 (g ∘ f)
-  证明: fun _ _ h => hg (hf h)
-
-Depends on / 依赖: DecidablePred, Irreducible
+  fun _ _ h ↦ hg (hf h)
+/-
+**StrictAnti.comp_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictAnti.comp_strictMono (hg : StrictAnti g) (hf : StrictMono f) : Stric
+tAnti (g ∘ f)
+参数：hg : StrictAnti g；hf : StrictMono f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem StrictAnti.comp_strictMono (hg : StrictAnti g) (hf : StrictMono f) : StrictAnti (g ∘ f) :=
-  fun _ _ h => hg (hf h)
-
-/--
-theorem `StrictMono.iterate` / 定理 `StrictMono.iterate`
-
-English:
-theorem StrictMono.iterate
-  given: {f : α -> α} (hf : StrictMono f) (n : Nat)
-  statement: StrictMono f^[n]
-  proof: Nat.recOn n strictMono_id fun _ h => h.comp hf
-
-中文:
-定理 严格递增.iterate
-  条件: {f : α -> α} (hf : 严格递增 f) (n : 自然数)
-  结论: 严格递增 f^[n]
-  证明: Nat.recOn n strictMono_id fun _ h => h.comp hf
+  fun _ _ h ↦ hg (hf h)
+/-
+**StrictMono.iterate** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：∀ {α : Type u} [inst : Preorder α] {f : α → α}, StrictMono f → ∀ (n : ℕ), 
+StrictMono f^[n]
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `strictMono_id`：strictMono_id [Preorder α] : StrictMono (id : α -> α)
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
 -/
-protected theorem StrictMono.iterate {f : α -> α} (hf : StrictMono f) (n : Nat) : StrictMono f^[n] :=
-  Nat.recOn n strictMono_id fun _ h => h.comp hf
-
-/--
-theorem `StrictMono.comp_strictMonoOn` / 定理 `StrictMono.comp_strictMonoOn`
-
-English:
-theorem StrictMono.comp_strictMonoOn
-  given: (hg : StrictMono g) (hf : StrictMonoOn f s)
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 严格递增.comp_strictMonoOn
-  条件: (hg : 严格递增 g) (hf : StrictMonoOn f s)
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+protected theorem StrictMono.iterate {f : α → α} (hf : StrictMono f) (n : ℕ) : StrictMono f^[n] :=
+  Nat.recOn n strictMono_id fun _ h ↦ h.comp hf
+/-
+**StrictMono.comp_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β} {s : Set α}, StrictMono
+ g → StrictMonoOn f s → StrictMonoOn (g ∘ f) s
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem StrictMono.comp_strictMonoOn (hg : StrictMono g) (hf : StrictMonoOn f s) :
     StrictMonoOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-theorem `StrictMono.comp_strictAntiOn` / 定理 `StrictMono.comp_strictAntiOn`
-
-English:
-theorem StrictMono.comp_strictAntiOn
-  given: (hg : StrictMono g) (hf : StrictAntiOn f s)
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 严格递增.comp_strictAntiOn
-  条件: (hg : 严格递增 g) (hf : StrictAntiOn f s)
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**StrictMono.comp_strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.comp_strictAntiOn (hg : StrictMono g) (hf : StrictAntiOn f s) :
+ StrictAntiOn (g ∘ f) s
+参数：hg : StrictMono g；hf : StrictAntiOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem StrictMono.comp_strictAntiOn (hg : StrictMono g) (hf : StrictAntiOn f s) :
     StrictAntiOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-theorem `StrictAnti.comp_strictAntiOn` / 定理 `StrictAnti.comp_strictAntiOn`
-
-English:
-theorem StrictAnti.comp_strictAntiOn
-  given: (hg : StrictAnti g) (hf : StrictAntiOn f s)
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 严格递减.comp_strictAntiOn
-  条件: (hg : 严格递减 g) (hf : StrictAntiOn f s)
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**StrictAnti.comp_strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder α] [inst_1 : Pre
+order β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β} {s : Set α}, StrictAnti
+ g → StrictAntiOn f s → StrictMonoOn (g ∘ f) s
+参数：g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem StrictAnti.comp_strictAntiOn (hg : StrictAnti g) (hf : StrictAntiOn f s) :
     StrictMonoOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-theorem `StrictAnti.comp_strictMonoOn` / 定理 `StrictAnti.comp_strictMonoOn`
-
-English:
-theorem StrictAnti.comp_strictMonoOn
-  given: (hg : StrictAnti g) (hf : StrictMonoOn f s)
-  proof: fun _ ha _ hb h => hg (hf ha hb h)
-
-中文:
-定理 严格递减.comp_strictMonoOn
-  条件: (hg : 严格递减 g) (hf : StrictMonoOn f s)
-  证明: fun _ ha _ hb h => hg (hf ha hb h)
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**StrictAnti.comp_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictAnti.comp_strictMonoOn (hg : StrictAnti g) (hf : StrictMonoOn f s) :
+ StrictAntiOn (g ∘ f) s
+参数：hg : StrictAnti g；hf : StrictMonoOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem StrictAnti.comp_strictMonoOn (hg : StrictAnti g) (hf : StrictMonoOn f s) :
     StrictAntiOn (g ∘ f) s :=
-  fun _ ha _ hb h => hg (hf ha hb h)
-
-/--
-lemma `MonotoneOn.comp` / 引理 `MonotoneOn.comp`
-
-English:
-lemma MonotoneOn.comp
-  given: (hg : MonotoneOn g t) (hf : MonotoneOn f s) (hs : Set.MapsTo f s t)
-  proof: fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
-
-中文:
-引理 MonotoneOn.comp
-  条件: (hg : MonotoneOn g t) (hf : MonotoneOn f s) (hs : 集合.映射到 f s t)
-  证明: fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
+  fun _ ha _ hb h ↦ hg (hf ha hb h)
+/-
+**MonotoneOn.comp** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MonotoneOn.comp (hg : MonotoneOn g t) (hf : MonotoneOn f s) (hs : Set.Maps
+To f s t) : MonotoneOn (g ∘ f) s
+参数：hg : MonotoneOn g t；hf : MonotoneOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma MonotoneOn.comp (hg : MonotoneOn g t) (hf : MonotoneOn f s) (hs : Set.MapsTo f s t) :
-MonotoneOn (g ∘ f) s := fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
-
-/--
-lemma `MonotoneOn.comp_AntitoneOn` / 引理 `MonotoneOn.comp_AntitoneOn`
-
-English:
-lemma MonotoneOn.comp_AntitoneOn
-  statement: (hg : MonotoneOn g t) (hf : AntitoneOn f s)
-  proof: fun _x hx _y hy hxy =>
-hg (hs hy) (hs hx) hf hx hy hxy
-
-中文:
-引理 MonotoneOn.comp_AntitoneOn
-  结论: (hg : MonotoneOn g t) (hf : AntitoneOn f s)
-  证明: fun _x hx _y hy hxy =>
-hg (hs hy) (hs hx) hf hx hy hxy
+    MonotoneOn (g ∘ f) s := fun _x hx _y hy hxy ↦ hg (hs hx) (hs hy) <| hf hx hy hxy
+/-
+**MonotoneOn.comp_AntitoneOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MonotoneOn.comp_AntitoneOn (hg : MonotoneOn g t) (hf : AntitoneOn f s) (hs
+ : Set.MapsTo f s t) : AntitoneOn (g ∘ f) s
+参数：hg : MonotoneOn g t；hf : AntitoneOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma MonotoneOn.comp_AntitoneOn (hg : MonotoneOn g t) (hf : AntitoneOn f s)
-    (hs : Set.MapsTo f s t) : AntitoneOn (g ∘ f) s := fun _x hx _y hy hxy =>
-hg (hs hy) (hs hx) hf hx hy hxy
-
-/--
-lemma `AntitoneOn.comp` / 引理 `AntitoneOn.comp`
-
-English:
-lemma AntitoneOn.comp
-  given: (hg : AntitoneOn g t) (hf : AntitoneOn f s) (hs : Set.MapsTo f s t)
-  proof: fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
-
-中文:
-引理 AntitoneOn.comp
-  条件: (hg : AntitoneOn g t) (hf : AntitoneOn f s) (hs : 集合.映射到 f s t)
-  证明: fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
+    (hs : Set.MapsTo f s t) : AntitoneOn (g ∘ f) s := fun _x hx _y hy hxy ↦
+  hg (hs hy) (hs hx) <| hf hx hy hxy
+/-
+**AntitoneOn.comp** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AntitoneOn.comp (hg : AntitoneOn g t) (hf : AntitoneOn f s) (hs : Set.Maps
+To f s t) : MonotoneOn (g ∘ f) s
+参数：hg : AntitoneOn g t；hf : AntitoneOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma AntitoneOn.comp (hg : AntitoneOn g t) (hf : AntitoneOn f s) (hs : Set.MapsTo f s t) :
-MonotoneOn (g ∘ f) s := fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
-
-/--
-lemma `AntitoneOn.comp_MonotoneOn` / 引理 `AntitoneOn.comp_MonotoneOn`
-
-English:
-lemma AntitoneOn.comp_MonotoneOn
-  statement: (hg : AntitoneOn g t) (hf : MonotoneOn f s)
-  proof: fun _x hx _y hy hxy =>
-hg (hs hx) (hs hy) hf hx hy hxy
-
-中文:
-引理 AntitoneOn.comp_MonotoneOn
-  结论: (hg : AntitoneOn g t) (hf : MonotoneOn f s)
-  证明: fun _x hx _y hy hxy =>
-hg (hs hx) (hs hy) hf hx hy hxy
+    MonotoneOn (g ∘ f) s := fun _x hx _y hy hxy ↦ hg (hs hy) (hs hx) <| hf hx hy hxy
+/-
+**AntitoneOn.comp_MonotoneOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AntitoneOn.comp_MonotoneOn (hg : AntitoneOn g t) (hf : MonotoneOn f s) (hs
+ : Set.MapsTo f s t) : AntitoneOn (g ∘ f) s
+参数：hg : AntitoneOn g t；hf : MonotoneOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma AntitoneOn.comp_MonotoneOn (hg : AntitoneOn g t) (hf : MonotoneOn f s)
-    (hs : Set.MapsTo f s t) : AntitoneOn (g ∘ f) s := fun _x hx _y hy hxy =>
-hg (hs hx) (hs hy) hf hx hy hxy
-
-/--
-lemma `StrictMonoOn.comp` / 引理 `StrictMonoOn.comp`
-
-English:
-lemma StrictMonoOn.comp
-  given: (hg : StrictMonoOn g t) (hf : StrictMonoOn f s) (hs : Set.MapsTo f s t)
-  proof: fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
-
-中文:
-引理 StrictMonoOn.comp
-  条件: (hg : StrictMonoOn g t) (hf : StrictMonoOn f s) (hs : 集合.映射到 f s t)
-  证明: fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
+    (hs : Set.MapsTo f s t) : AntitoneOn (g ∘ f) s := fun _x hx _y hy hxy ↦
+  hg (hs hx) (hs hy) <| hf hx hy hxy
+/-
+**StrictMonoOn.comp** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.comp (hg : StrictMonoOn g t) (hf : StrictMonoOn f s) (hs : Se
+t.MapsTo f s t) : StrictMonoOn (g ∘ f) s
+参数：hg : StrictMonoOn g t；hf : StrictMonoOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma StrictMonoOn.comp (hg : StrictMonoOn g t) (hf : StrictMonoOn f s) (hs : Set.MapsTo f s t) :
-StrictMonoOn (g ∘ f) s := fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
-
-/--
-lemma `StrictMonoOn.comp_strictAntiOn` / 引理 `StrictMonoOn.comp_strictAntiOn`
-
-English:
-lemma StrictMonoOn.comp_strictAntiOn
-  statement: (hg : StrictMonoOn g t) (hf : StrictAntiOn f s)
-  proof: fun _x hx _y hy hxy =>
-hg (hs hy) (hs hx) hf hx hy hxy
-
-中文:
-引理 StrictMonoOn.comp_strictAntiOn
-  结论: (hg : StrictMonoOn g t) (hf : StrictAntiOn f s)
-  证明: fun _x hx _y hy hxy =>
-hg (hs hy) (hs hx) hf hx hy hxy
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.algebraMap_injective, algebraMap_injective
+    StrictMonoOn (g ∘ f) s := fun _x hx _y hy hxy ↦ hg (hs hx) (hs hy) <| hf hx hy hxy
+/-
+**StrictMonoOn.comp_strictAntiOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.comp_strictAntiOn (hg : StrictMonoOn g t) (hf : StrictAntiOn 
+f s) (hs : Set.MapsTo f s t) : StrictAntiOn (g ∘ f) s
+参数：hg : StrictMonoOn g t；hf : StrictAntiOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma StrictMonoOn.comp_strictAntiOn (hg : StrictMonoOn g t) (hf : StrictAntiOn f s)
-    (hs : Set.MapsTo f s t) : StrictAntiOn (g ∘ f) s := fun _x hx _y hy hxy =>
-hg (hs hy) (hs hx) hf hx hy hxy
-
-/--
-lemma `StrictAntiOn.comp` / 引理 `StrictAntiOn.comp`
-
-English:
-lemma StrictAntiOn.comp
-  given: (hg : StrictAntiOn g t) (hf : StrictAntiOn f s) (hs : Set.MapsTo f s t)
-  proof: fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
-
-中文:
-引理 StrictAntiOn.comp
-  条件: (hg : StrictAntiOn g t) (hf : StrictAntiOn f s) (hs : 集合.映射到 f s t)
-  证明: fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.equiv, Subalgebra, Subalgebra.algebraMap_eq, algebraMap_eq, galRestrict, injective, integralClosure, symm.injective
+    (hs : Set.MapsTo f s t) : StrictAntiOn (g ∘ f) s := fun _x hx _y hy hxy ↦
+  hg (hs hy) (hs hx) <| hf hx hy hxy
+/-
+**StrictAntiOn.comp** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictAntiOn.comp (hg : StrictAntiOn g t) (hf : StrictAntiOn f s) (hs : Se
+t.MapsTo f s t) : StrictMonoOn (g ∘ f) s
+参数：hg : StrictAntiOn g t；hf : StrictAntiOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma StrictAntiOn.comp (hg : StrictAntiOn g t) (hf : StrictAntiOn f s) (hs : Set.MapsTo f s t) :
-StrictMonoOn (g ∘ f) s := fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
-
-/--
-lemma `StrictAntiOn.comp_strictMonoOn` / 引理 `StrictAntiOn.comp_strictMonoOn`
-
-English:
-lemma StrictAntiOn.comp_strictMonoOn
-  statement: (hg : StrictAntiOn g t) (hf : StrictMonoOn f s)
-  proof: fun _x hx _y hy hxy =>
-hg (hs hx) (hs hy) hf hx hy hxy
-
-中文:
-引理 StrictAntiOn.comp_strictMonoOn
-  结论: (hg : StrictAntiOn g t) (hf : StrictMonoOn f s)
-  证明: fun _x hx _y hy hxy =>
-hg (hs hx) (hs hy) hf hx hy hxy
+    StrictMonoOn (g ∘ f) s := fun _x hx _y hy hxy ↦ hg (hs hy) (hs hx) <| hf hx hy hxy
+/-
+**StrictAntiOn.comp_strictMonoOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictAntiOn.comp_strictMonoOn (hg : StrictAntiOn g t) (hf : StrictMonoOn 
+f s) (hs : Set.MapsTo f s t) : StrictAntiOn (g ∘ f) s
+参数：hg : StrictAntiOn g t；hf : StrictMonoOn f s；hs : Set.MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma StrictAntiOn.comp_strictMonoOn (hg : StrictAntiOn g t) (hf : StrictMonoOn f s)
-    (hs : Set.MapsTo f s t) : StrictAntiOn (g ∘ f) s := fun _x hx _y hy hxy =>
-hg (hs hx) (hs hy) hf hx hy hxy
+    (hs : Set.MapsTo f s t) : StrictAntiOn (g ∘ f) s := fun _x hx _y hy hxy ↦
+  hg (hs hx) (hs hy) <| hf hx hy hxy
 
 end Composition
 
-/-! ### Monotonicity in linear orders -/
+/-! ### Monotonicity in linear orders  -/
 
 
 section LinearOrder
@@ -1790,305 +1168,222 @@ variable [LinearOrder α]
 
 section Preorder
 
-variable [Preorder β] {f : α -> β} {s : Set α}
+variable [Preorder β] {f : α → β} {s : Set α}
 
 open Ordering
 
 @[to_dual self]
-/--
-theorem `Monotone.reflect_lt` / 定理 `Monotone.reflect_lt`
-
-English:
-theorem Monotone.reflect_lt
-  given: (hf : Monotone f) {a b : α} (h : f a < f b)
-  statement: a < b
-  proof: lt_of_not_ge fun h' => h.not_ge (hf h')
-
-@[to_dual self]
-
-中文:
-定理 递增.reflect_lt
-  条件: (hf : 递增 f) {a b : α} (h : f a < f b)
-  结论: a < b
-  证明: lt_of_not_ge fun h' => h.not_ge (hf h')
-
-@[to_dual self]
-
-Depends on / 依赖: h.not_ge, lt_of_not_ge, not_ge
+/-
+**Monotone.reflect_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.reflect_lt (hf : Monotone f) {a b : α} (h : f a < f b) : a < b
+参数：hf : Monotone f；h : f a < f b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
 theorem Monotone.reflect_lt (hf : Monotone f) {a b : α} (h : f a < f b) : a < b :=
-  lt_of_not_ge fun h' => h.not_ge (hf h')
+  lt_of_not_ge fun h' ↦ h.not_ge (hf h')
 
 @[to_dual self]
-/--
-theorem `Antitone.reflect_lt` / 定理 `Antitone.reflect_lt`
-
-English:
-theorem Antitone.reflect_lt
-  given: (hf : Antitone f) {a b : α} (h : f a < f b)
-  statement: b < a
-  proof: lt_of_not_ge fun h' => h.not_ge (hf h')
-
-@[to_dual self (reorder := a b, ha hb)]
-
-中文:
-定理 递减.reflect_lt
-  条件: (hf : 递减 f) {a b : α} (h : f a < f b)
-  结论: b < a
-  证明: lt_of_not_ge fun h' => h.not_ge (hf h')
-
-@[to_dual self (reorder := a b, ha hb)]
-
-Depends on / 依赖: h.not_ge, lt_of_not_ge, not_ge
+/-
+**Antitone.reflect_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.reflect_lt (hf : Antitone f) {a b : α} (h : f a < f b) : b < a
+参数：hf : Antitone f；h : f a < f b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
 theorem Antitone.reflect_lt (hf : Antitone f) {a b : α} (h : f a < f b) : b < a :=
-  lt_of_not_ge fun h' => h.not_ge (hf h')
+  lt_of_not_ge fun h' ↦ h.not_ge (hf h')
 
 @[to_dual self (reorder := a b, ha hb)]
-/--
-theorem `MonotoneOn.reflect_lt` / 定理 `MonotoneOn.reflect_lt`
-
-English:
-theorem MonotoneOn.reflect_lt
-  statement: (hf : MonotoneOn f s) {a b : α} (ha : a in s) (hb : b in s)
-  proof: lt_of_not_ge fun h' => h.not_ge hf hb ha h'
-
-@[to_dual self (reorder := a b, ha hb)]
-
-中文:
-定理 MonotoneOn.reflect_lt
-  结论: (hf : MonotoneOn f s) {a b : α} (ha : a in s) (hb : b in s)
-  证明: lt_of_not_ge fun h' => h.not_ge hf hb ha h'
-
-@[to_dual self (reorder := a b, ha hb)]
-
-Depends on / 依赖: h.not_ge, lt_of_not_ge, not_ge
+/-
+**MonotoneOn.reflect_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonotoneOn.reflect_lt (hf : MonotoneOn f s) {a b : α} (ha : a in s) (hb : 
+b in s) (h : f a < f b) : a < b
+参数：hf : MonotoneOn f s；ha : a in s；hb : b in s；h : f a < f b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
-theorem MonotoneOn.reflect_lt (hf : MonotoneOn f s) {a b : α} (ha : a in s) (hb : b in s)
+theorem MonotoneOn.reflect_lt (hf : MonotoneOn f s) {a b : α} (ha : a ∈ s) (hb : b ∈ s)
     (h : f a < f b) : a < b :=
-lt_of_not_ge fun h' => h.not_ge hf hb ha h'
+  lt_of_not_ge fun h' ↦ h.not_ge <| hf hb ha h'
 
 @[to_dual self (reorder := a b, ha hb)]
-/--
-theorem `AntitoneOn.reflect_lt` / 定理 `AntitoneOn.reflect_lt`
-
-English:
-theorem AntitoneOn.reflect_lt
-  statement: (hf : AntitoneOn f s) {a b : α} (ha : a in s) (hb : b in s)
-  proof: lt_of_not_ge fun h' => h.not_ge hf ha hb h'
-
-中文:
-定理 AntitoneOn.reflect_lt
-  结论: (hf : AntitoneOn f s) {a b : α} (ha : a in s) (hb : b in s)
-  证明: lt_of_not_ge fun h' => h.not_ge hf ha hb h'
-
-Depends on / 依赖: h.not_ge, lt_of_not_ge, not_ge
+/-
+**AntitoneOn.reflect_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntitoneOn.reflect_lt (hf : AntitoneOn f s) {a b : α} (ha : a in s) (hb : 
+b in s) (h : f a < f b) : b < a
+参数：hf : AntitoneOn f s；ha : a in s；hb : b in s；h : f a < f b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
-theorem AntitoneOn.reflect_lt (hf : AntitoneOn f s) {a b : α} (ha : a in s) (hb : b in s)
+theorem AntitoneOn.reflect_lt (hf : AntitoneOn f s) {a b : α} (ha : a ∈ s) (hb : b ∈ s)
     (h : f a < f b) : b < a :=
-lt_of_not_ge fun h' => h.not_ge hf ha hb h'
+  lt_of_not_ge fun h' ↦ h.not_ge <| hf ha hb h'
 
 end Preorder
 
 end LinearOrder
 
-/--
-theorem `Subtype.mono_coe` / 定理 `Subtype.mono_coe`
-
-English:
-theorem Subtype.mono_coe
-  given: [Preorder α] (p : α -> Prop)
-  statement: Monotone ((↑) : Subtype p -> α)
-  proof: fun _ _ => id
-
-中文:
-定理 子类型.mono_coe
-  条件: [预序 α] (p : α -> 命题)
-  结论: 递增 ((↑) : 子类型 p -> α)
-  证明: fun _ _ => id
-
-Depends on / 依赖: AlgHom, AlgHom.ext, IsFractionRing, IsFractionRing.injective, IsIntegralClosure, IsIntegralClosure.algebraMap_injective, IsIntegralClosure.isLocalization, algebraMap_injective, injective, isDomain, isLocalization
+/-
+**Subtype.mono_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subtype.mono_coe [Preorder α] (p : α -> Prop) : Monotone ((↑) : Subtype p 
+-> α)
+参数：p : α -> Prop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subtype.mono_coe [Preorder α] (p : α -> Prop) : Monotone ((↑) : Subtype p -> α) :=
-  fun _ _ => id
-
-/--
-theorem `Subtype.strictMono_coe` / 定理 `Subtype.strictMono_coe`
-
-English:
-theorem Subtype.strictMono_coe
-  given: [Preorder α] (p : α -> Prop)
-  proof: fun _ _ => id
-
-中文:
-定理 子类型.strictMono_coe
-  条件: [预序 α] (p : α -> 命题)
-  证明: fun _ _ => id
+theorem Subtype.mono_coe [Preorder α] (p : α → Prop) : Monotone ((↑) : Subtype p → α) :=
+  fun _ _ ↦ id
+/-
+**Subtype.strictMono_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subtype.strictMono_coe [Preorder α] (p : α -> Prop) : StrictMono ((↑) : Su
+btype p -> α)
+参数：p : α -> Prop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subtype.strictMono_coe [Preorder α] (p : α -> Prop) :
-    StrictMono ((↑) : Subtype p -> α) :=
-  fun _ _ => id
+theorem Subtype.strictMono_coe [Preorder α] (p : α → Prop) :
+    StrictMono ((↑) : Subtype p → α) :=
+  fun _ _ ↦ id
 
 section Preorder
 
-variable [Preorder α] [Preorder β] [Preorder γ] [Preorder δ] {f : α -> γ} {g : β -> δ}
+variable [Preorder α] [Preorder β] [Preorder γ] [Preorder δ] {f : α → γ} {g : β → δ}
 
-/--
-theorem `monotone_fst` / 定理 `monotone_fst`
-
-English:
-theorem monotone_fst
-  statement: Monotone (@Prod.fst α β)
-  proof: fun _ _ => And.left
-
-中文:
-定理 monotone_fst
-  结论: 递增 (@积类型.fst α β)
-  证明: fun _ _ => And.left
-
-Depends on / 依赖: And.left
+/-
+**monotone_fst** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_fst : Monotone (@Prod.fst α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem monotone_fst : Monotone (@Prod.fst α β) := fun _ _ => And.left
-
-/--
-theorem `monotone_snd` / 定理 `monotone_snd`
-
-English:
-theorem monotone_snd
-  statement: Monotone (@Prod.snd α β)
-  proof: fun _ _ => And.right
-
-中文:
-定理 monotone_snd
-  结论: 递增 (@积类型.snd α β)
-  证明: fun _ _ => And.right
-
-Depends on / 依赖: And.right
+theorem monotone_fst : Monotone (@Prod.fst α β) := fun _ _ ↦ And.left
+/-
+**monotone_snd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_snd : Monotone (@Prod.snd α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem monotone_snd : Monotone (@Prod.snd α β) := fun _ _ => And.right
-
-/--
-theorem `monotone_prodMk_iff` / 定理 `monotone_prodMk_iff`
-
-English:
-theorem monotone_prodMk_iff
-  given: {f : γ -> α} {g : γ -> β}
-  proof: by
-  simp_rw [Monotone, Prod.mk_le_mk, forall_and]
-
-中文:
-定理 monotone_prodMk_iff
-  条件: {f : γ -> α} {g : γ -> β}
-  证明: by
-  simp_rw [Monotone, Prod.mk_le_mk, forall_and]
-
-Depends on / 依赖: Monotone, Prod.mk_le_mk, forall_and, mk_le_mk, simp_rw
+theorem monotone_snd : Monotone (@Prod.snd α β) := fun _ _ ↦ And.right
+/-
+**monotone_prodMk_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monotone_prodMk_iff {f : γ -> α} {g : γ -> β} : Monotone (fun x => (f x, g
+ x)) ↔ Monotone f ∧ Monotone g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem monotone_prodMk_iff {f : γ -> α} {g : γ -> β} :
+theorem monotone_prodMk_iff {f : γ → α} {g : γ → β} :
     Monotone (fun x => (f x, g x)) ↔ Monotone f ∧ Monotone g := by
   simp_rw [Monotone, Prod.mk_le_mk, forall_and]
-
-/--
-theorem `Monotone.prodMk` / 定理 `Monotone.prodMk`
-
-English:
-theorem Monotone.prodMk
-  given: {f : γ -> α} {g : γ -> β} (hf : Monotone f) (hg : Monotone g)
-  proof: monotone_prodMk_iff.2 ⟨hf, hg⟩
-
-中文:
-定理 递增.prodMk
-  条件: {f : γ -> α} {g : γ -> β} (hf : 递增 f) (hg : 递增 g)
-  证明: monotone_prodMk_iff.2 ⟨hf, hg⟩
-
-Depends on / 依赖: monotone_prodMk_iff
+/-
+**Monotone.prodMk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.prodMk {f : γ -> α} {g : γ -> β} (hf : Monotone f) (hg : Monotone
+ g) : Monotone (fun x => (f x, g x))
+参数：hf : Monotone f；hg : Monotone g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotone_prodMk_iff`：monotone_prodMk_iff {f : γ -> α} {g : γ -> β} : Mon
+otone (fun x => (f x, g x)) ↔ Monotone f ∧ Monotone g
 -/
-theorem Monotone.prodMk {f : γ -> α} {g : γ -> β} (hf : Monotone f) (hg : Monotone g) :
+theorem Monotone.prodMk {f : γ → α} {g : γ → β} (hf : Monotone f) (hg : Monotone g) :
     Monotone (fun x => (f x, g x)) :=
   monotone_prodMk_iff.2 ⟨hf, hg⟩
-
-/--
-theorem `Monotone.prodMap` / 定理 `Monotone.prodMap`
-
-English:
-theorem Monotone.prodMap
-  given: (hf : Monotone f) (hg : Monotone g)
-  statement: Monotone (Prod.map f g)
-  proof: fun _ _ h => ⟨hf h.1, hg h.2⟩
-
-中文:
-定理 递增.prodMap
-  条件: (hf : 递增 f) (hg : 递增 g)
-  结论: 递增 (积类型.map f g)
-  证明: fun _ _ h => ⟨hf h.1, hg h.2⟩
+/-
+**Monotone.prodMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.prodMap (hf : Monotone f) (hg : Monotone g) : Monotone (Prod.map 
+f g)
+参数：hf : Monotone f；hg : Monotone g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem Monotone.prodMap (hf : Monotone f) (hg : Monotone g) : Monotone (Prod.map f g) :=
-  fun _ _ h => ⟨hf h.1, hg h.2⟩
-
-/--
-theorem `Antitone.prodMap` / 定理 `Antitone.prodMap`
-
-English:
-theorem Antitone.prodMap
-  given: (hf : Antitone f) (hg : Antitone g)
-  statement: Antitone (Prod.map f g)
-  proof: fun _ _ h => ⟨hf h.1, hg h.2⟩
-
-中文:
-定理 递减.prodMap
-  条件: (hf : 递减 f) (hg : 递减 g)
-  结论: 递减 (积类型.map f g)
-  证明: fun _ _ h => ⟨hf h.1, hg h.2⟩
+  fun _ _ h ↦ ⟨hf h.1, hg h.2⟩
+/-
+**Antitone.prodMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.prodMap (hf : Antitone f) (hg : Antitone g) : Antitone (Prod.map 
+f g)
+参数：hf : Antitone f；hg : Antitone g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem Antitone.prodMap (hf : Antitone f) (hg : Antitone g) : Antitone (Prod.map f g) :=
-  fun _ _ h => ⟨hf h.1, hg h.2⟩
-
-/--
-lemma `monotone_prod_iff` / 引理 `monotone_prod_iff`
-
-English:
-lemma monotone_prod_iff
-  given: {h : α × β -> γ}
-  proof: ⟨fun _ _ _ hab => h (Prod.mk_le_mk_iff_right.mpr hab),
-    fun _ _ _ hab => h (Prod.mk_le_mk_iff_left.mpr hab)⟩
-  mpr h _ _ hab := le_trans (h.1 _ (Prod.mk_le_mk.mp hab).2) (h.2 _ (Prod.mk_le_mk.mp hab).1)
-
-中文:
-引理 monotone_prod_iff
-  条件: {h : α × β -> γ}
-  证明: ⟨fun _ _ _ hab => h (Prod.mk_le_mk_iff_right.mpr hab),
-    fun _ _ _ hab => h (Prod.mk_le_mk_iff_left.mpr hab)⟩
-  mpr h _ _ hab := le_trans (h.1 _ (Prod.mk_le_mk.mp hab).2) (h.2 _ (Prod.mk_le_mk.mp hab).1)
-
-Depends on / 依赖: Prod.mk_le_mk_iff_right.mpr, mk_le_mk_iff_right
+  fun _ _ h ↦ ⟨hf h.1, hg h.2⟩
+/-
+**monotone_prod_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：monotone_prod_iff {h : α × β -> γ} : Monotone h ↔ (forall a, Monotone (fun
+ b => h (a, b))) ∧ (forall b, Monotone (fun a => h (a, b))) where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Prod.mk_le_mk_iff_right`：mk_le_mk_iff_right : (a, b₁) <= (a, b₂) ↔ b₁ <=
+ b₂
+· 使用定理 `Prod.mk_le_mk_iff_left`：mk_le_mk_iff_left : (a₁, b) <= (a₂, b) ↔ a₁ <= a
+₂
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.mk_le_mk`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α] [inst_1 : L
+E β] {a₁ a₂ : α} {b₁ b₂ : β},   (a₁, b₁) ≤ (a₂, b₂) ↔ a₁ ≤ a₂ ∧ b₁ ≤ b₂
 -/
-lemma monotone_prod_iff {h : α × β -> γ} :
-    Monotone h ↔ (forall a, Monotone (fun b => h (a, b))) ∧ (forall b, Monotone (fun a => h (a, b))) where
+lemma monotone_prod_iff {h : α × β → γ} :
+    Monotone h ↔ (∀ a, Monotone (fun b => h (a, b))) ∧ (∀ b, Monotone (fun a => h (a, b))) where
   mp h := ⟨fun _ _ _ hab => h (Prod.mk_le_mk_iff_right.mpr hab),
     fun _ _ _ hab => h (Prod.mk_le_mk_iff_left.mpr hab)⟩
   mpr h _ _ hab := le_trans (h.1 _ (Prod.mk_le_mk.mp hab).2) (h.2 _ (Prod.mk_le_mk.mp hab).1)
-
-/--
-lemma `antitone_prod_iff` / 引理 `antitone_prod_iff`
-
-English:
-lemma antitone_prod_iff
-  given: {h : α × β -> γ}
-  proof: ⟨fun _ _ _ hab => h (Prod.mk_le_mk_iff_right.mpr hab),
-    fun _ _ _ hab => h (Prod.mk_le_mk_iff_left.mpr hab)⟩
-  mpr h _ _ hab := le_trans (h.1 _ (Prod.mk_le_mk.mp hab).2) (h.2 _ (Prod.mk_le_mk.mp hab).1)
-
-中文:
-引理 antitone_prod_iff
-  条件: {h : α × β -> γ}
-  证明: ⟨fun _ _ _ hab => h (Prod.mk_le_mk_iff_right.mpr hab),
-    fun _ _ _ hab => h (Prod.mk_le_mk_iff_left.mpr hab)⟩
-  mpr h _ _ hab := le_trans (h.1 _ (Prod.mk_le_mk.mp hab).2) (h.2 _ (Prod.mk_le_mk.mp hab).1)
-
-Depends on / 依赖: Prod.mk_le_mk_iff_right.mpr, mk_le_mk_iff_right
+/-
+**antitone_prod_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：antitone_prod_iff {h : α × β -> γ} : Antitone h ↔ (forall a, Antitone (fun
+ b => h (a, b))) ∧ (forall b, Antitone (fun a => h (a, b))) where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Prod.mk_le_mk_iff_right`：mk_le_mk_iff_right : (a, b₁) <= (a, b₂) ↔ b₁ <=
+ b₂
+· 使用定理 `Prod.mk_le_mk_iff_left`：mk_le_mk_iff_left : (a₁, b) <= (a₂, b) ↔ a₁ <= a
+₂
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.mk_le_mk`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α] [inst_1 : L
+E β] {a₁ a₂ : α} {b₁ b₂ : β},   (a₁, b₁) ≤ (a₂, b₂) ↔ a₁ ≤ a₂ ∧ b₁ ≤ b₂
 -/
-lemma antitone_prod_iff {h : α × β -> γ} :
-    Antitone h ↔ (forall a, Antitone (fun b => h (a, b))) ∧ (forall b, Antitone (fun a => h (a, b))) where
+lemma antitone_prod_iff {h : α × β → γ} :
+    Antitone h ↔ (∀ a, Antitone (fun b => h (a, b))) ∧ (∀ b, Antitone (fun a => h (a, b))) where
   mp h := ⟨fun _ _ _ hab => h (Prod.mk_le_mk_iff_right.mpr hab),
     fun _ _ _ hab => h (Prod.mk_le_mk_iff_left.mpr hab)⟩
   mpr h _ _ hab := le_trans (h.1 _ (Prod.mk_le_mk.mp hab).2) (h.2 _ (Prod.mk_le_mk.mp hab).1)
@@ -2097,57 +1392,48 @@ end Preorder
 
 section PartialOrder
 
-variable [PartialOrder α] [PartialOrder β] [Preorder γ] [Preorder δ] {f : α -> γ} {g : β -> δ}
+variable [PartialOrder α] [PartialOrder β] [Preorder γ] [Preorder δ] {f : α → γ} {g : β → δ}
 
-/--
-theorem `StrictMono.prodMap` / 定理 `StrictMono.prodMap`
-
-English:
-theorem StrictMono.prodMap
-  given: (hf : StrictMono f) (hg : StrictMono g)
-  statement: StrictMono (Prod.map f g)
-  proof: fun a b => by
-  simp only [Prod.lt_iff]
-  exact Or.imp (And.imp hf.imp hg.monotone.imp) (And.imp hf.monotone.imp hg.imp)
-
-中文:
-定理 严格递增.prodMap
-  条件: (hf : 严格递增 f) (hg : 严格递增 g)
-  结论: 严格递增 (积类型.map f g)
-  证明: fun a b => by
-  simp only [Prod.lt_iff]
-  exact Or.imp (And.imp hf.imp hg.monotone.imp) (And.imp hf.monotone.imp hg.imp)
-
-Depends on / 依赖: And.imp, Or.imp, Prod.lt_iff, hf.imp, hf.monotone.imp, hg.imp, hg.monotone.imp, lt_iff, monotone
+/-
+**StrictMono.prodMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictMono.prodMap (hf : StrictMono f) (hg : StrictMono g) : StrictMono (P
+rod.map f g)
+参数：hf : StrictMono f；hg : StrictMono g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `StrictMono.imp`：StrictMono.imp (hf : StrictMono f) (h : a < b) : f a < f
+ b
+· 使用定理 `Monotone.imp`：Monotone.imp (hf : Monotone f) (h : a <= b) : f a <= f b
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
 -/
 theorem StrictMono.prodMap (hf : StrictMono f) (hg : StrictMono g) : StrictMono (Prod.map f g) :=
-  fun a b => by
+  fun a b ↦ by
   simp only [Prod.lt_iff]
   exact Or.imp (And.imp hf.imp hg.monotone.imp) (And.imp hf.monotone.imp hg.imp)
-
-/--
-theorem `StrictAnti.prodMap` / 定理 `StrictAnti.prodMap`
-
-English:
-theorem StrictAnti.prodMap
-  given: (hf : StrictAnti f) (hg : StrictAnti g)
-  statement: StrictAnti (Prod.map f g)
-  proof: fun a b => by
-  simp only [Prod.lt_iff]
-  exact Or.imp (And.imp hf.imp hg.antitone.imp) (And.imp hf.antitone.imp hg.imp)
-
-中文:
-定理 严格递减.prodMap
-  条件: (hf : 严格递减 f) (hg : 严格递减 g)
-  结论: 严格递减 (积类型.map f g)
-  证明: fun a b => by
-  simp only [Prod.lt_iff]
-  exact Or.imp (And.imp hf.imp hg.antitone.imp) (And.imp hf.antitone.imp hg.imp)
-
-Depends on / 依赖: And.imp, Or.imp, Prod.lt_iff, antitone, hf.antitone.imp, hf.imp, hg.antitone.imp, hg.imp, lt_iff
+/-
+**StrictAnti.prodMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StrictAnti.prodMap (hf : StrictAnti f) (hg : StrictAnti g) : StrictAnti (P
+rod.map f g)
+参数：hf : StrictAnti f；hg : StrictAnti g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `StrictAnti.imp`：StrictAnti.imp (hf : StrictAnti f) (h : a < b) : f b < f
+ a
+· 使用定理 `Antitone.imp`：Antitone.imp (hf : Antitone f) (h : a <= b) : f b <= f a
+· 使用定理 `StrictAnti.antitone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictAnti f → Antitone f
 -/
 theorem StrictAnti.prodMap (hf : StrictAnti f) (hg : StrictAnti g) : StrictAnti (Prod.map f g) :=
-  fun a b => by
+  fun a b ↦ by
   simp only [Prod.lt_iff]
   exact Or.imp (And.imp hf.imp hg.antitone.imp) (And.imp hf.antitone.imp hg.imp)
 
@@ -2157,130 +1443,67 @@ end PartialOrder
 
 namespace Function
 
-variable [Preorder α] [DecidableEq ι] [forall i, Preorder (π i)] {f : forall i, π i} {i : ι}
+variable [Preorder α] [DecidableEq ι] [∀ i, Preorder (π i)] {f : ∀ i, π i} {i : ι}
 
 -- Porting note: Dot notation breaks in `f.update i`
-/--
-theorem `update_mono` / 定理 `update_mono`
-
-English:
-theorem update_mono
-  statement: Monotone (update f i)
-  proof: fun _ _ => update_le_update_iff'.2
-
-中文:
-定理 update_mono
-  结论: 递增 (update f i)
-  证明: fun _ _ => update_le_update_iff'.2
-
-Depends on / 依赖: IsDomain, IsIntegrallyClosed, update_le_update_iff
+/-
+**Function.update_mono** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：update_mono : Monotone (update f i)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `update_le_update_iff'`：update_le_update_iff' : update x i a <= update x 
+i b ↔ a <= b
 -/
 theorem update_mono : Monotone (update f i) := fun _ _ => update_le_update_iff'.2
-
-/--
-theorem `update_strictMono` / 定理 `update_strictMono`
-
-English:
-theorem update_strictMono
-  statement: StrictMono (update f i)
-  proof: fun _ _ => update_lt_update_iff.2
-
-中文:
-定理 update_strictMono
-  结论: 严格递增 (update f i)
-  证明: fun _ _ => update_lt_update_iff.2
-
-Depends on / 依赖: update_lt_update_iff
+/-
+**Function.update_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：update_strictMono : StrictMono (update f i)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `update_lt_update_iff`：update_lt_update_iff : update x i a < update x i b
+ ↔ a < b
 -/
 theorem update_strictMono : StrictMono (update f i) := fun _ _ => update_lt_update_iff.2
-
-/--
-theorem `const_mono` / 定理 `const_mono`
-
-English:
-theorem const_mono
-  statement: Monotone (const β : α -> β -> α)
-  proof: fun _ _ h _ => h
-
-中文:
-定理 const_mono
-  结论: 递增 (const β : α -> β -> α)
-  证明: fun _ _ h _ => h
+/-
+**Function.const_mono** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：const_mono : Monotone (const β : α -> β -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem const_mono : Monotone (const β : α -> β -> α) := fun _ _ h _ => h
-
-/--
-theorem `const_strictMono` / 定理 `const_strictMono`
-
-English:
-theorem const_strictMono
-  given: [Nonempty β]
-  statement: StrictMono (const β : α -> β -> α)
-  proof: fun _ _ => const_lt_const.2
-
-中文:
-定理 const_strictMono
-  条件: [非空 β]
-  结论: 严格递增 (const β : α -> β -> α)
-  证明: fun _ _ => const_lt_const.2
-
-Depends on / 依赖: const_lt_const
+theorem const_mono : Monotone (const β : α → β → α) := fun _ _ h _ ↦ h
+/-
+**Function.const_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：const_strictMono [Nonempty β] : StrictMono (const β : α -> β -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.const_lt_const`：const_lt_const : const β a < const β b ↔ a < b
 -/
-theorem const_strictMono [Nonempty β] : StrictMono (const β : α -> β -> α) :=
-  fun _ _ => const_lt_const.2
+theorem const_strictMono [Nonempty β] : StrictMono (const β : α → β → α) :=
+  fun _ _ ↦ const_lt_const.2
 
 end Function
 
 section apply
-variable {β : ι -> Type*} [forall i, Preorder (β i)] [Preorder α] {f : α -> forall i, β i}
+variable {β : ι → Type*} [∀ i, Preorder (β i)] [Preorder α] {f : α → ∀ i, β i}
 
-/--
-lemma `monotone_iff_apply₂` / 引理 `monotone_iff_apply₂`
-
-English:
-lemma monotone_iff_apply₂
-  statement: Monotone f ↔ forall i, Monotone (f · i)
-  proof: by
-  simp [Monotone, Pi.le_def, @forall_comm ι]
-
-中文:
-引理 monotone_iff_apply₂
-  结论: 递增 f ↔ 对任意 i, 递增 (f · i)
-  证明: by
-  simp [Monotone, Pi.le_def, @forall_comm ι]
-
-Depends on / 依赖: Monotone, Pi.le_def, forall_comm, le_def
+/-
+**monotone_iff_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monotone_iff_apply₂ : Monotone f ↔ forall i, Monotone (f · i) := by
+lemma monotone_iff_apply₂ : Monotone f ↔ ∀ i, Monotone (f · i) := by
   simp [Monotone, Pi.le_def, @forall_comm ι]
-
-/--
-lemma `antitone_iff_apply₂` / 引理 `antitone_iff_apply₂`
-
-English:
-lemma antitone_iff_apply₂
-  statement: Antitone f ↔ forall i, Antitone (f · i)
-  proof: by
-  simp [Antitone, Pi.le_def, @forall_comm ι]
-
-alias ⟨Monotone.apply₂, Monotone.of_apply₂⟩ := monotone_iff_apply₂
-alias ⟨Antitone.apply₂, Antitone.of_apply₂⟩ := antitone_iff_apply₂
-
-中文:
-引理 antitone_iff_apply₂
-  结论: 递减 f ↔ 对任意 i, 递减 (f · i)
-  证明: by
-  simp [Antitone, Pi.le_def, @forall_comm ι]
-
-alias ⟨Monotone.apply₂, Monotone.of_apply₂⟩ := monotone_iff_apply₂
-alias ⟨Antitone.apply₂, Antitone.of_apply₂⟩ := antitone_iff_apply₂
-
-Depends on / 依赖: Antitone, Pi.le_def, forall_comm, le_def
+/-
+**antitone_iff_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma antitone_iff_apply₂ : Antitone f ↔ forall i, Antitone (f · i) := by
+lemma antitone_iff_apply₂ : Antitone f ↔ ∀ i, Antitone (f · i) := by
   simp [Antitone, Pi.le_def, @forall_comm ι]
 
 alias ⟨Monotone.apply₂, Monotone.of_apply₂⟩ := monotone_iff_apply₂
 alias ⟨Antitone.apply₂, Antitone.of_apply₂⟩ := antitone_iff_apply₂
 
 end apply
+

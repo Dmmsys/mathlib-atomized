@@ -18,145 +18,91 @@ public section
 
 open Metric Set Topology
 
-variable {E : Type*} [i : SeminormedAddCommGroup E] {r : Real}
+variable {E : Type*} [i : SeminormedAddCommGroup E] {r : ℝ}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- We equip the sphere, in a seminormed group, with a formal operation of negation, namely the
+antipodal map. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: InvolutiveNeg (sphere (0 : E) r)
-  body: Subtype.map Neg.neg fun w => by simp
-neg_neg x := Subtype.ext neg_neg x.1
-
-@[simp]
-
-中文:
-实例 :
-  签名: InvolutiveNeg (sphere (0 : E) r)
-  定义体: Subtype.map Neg.neg fun w => by simp
-neg_neg x := Subtype.ext neg_neg x.1
-
-@[simp]
-
-Depends on / 依赖: Neg.neg, Subtype, Subtype.map
+--- 原说明 ---
+We equip the sphere, in a seminormed group, with a formal operation of negation,
+ namely the
+antipodal map.
 -/
 instance : InvolutiveNeg (sphere (0 : E) r) where
   neg := Subtype.map Neg.neg fun w => by simp
-neg_neg x := Subtype.ext neg_neg x.1
+  neg_neg x := Subtype.ext <| neg_neg x.1
 
 @[simp]
-/--
-theorem `coe_neg_sphere` / 定理 `coe_neg_sphere`
-
-English:
-theorem coe_neg_sphere
-  given: {r : Real} (v : sphere (0 : E) r)
-  statement: ↑(-v) = (-v : E)
-  proof: rfl
-
-中文:
-定理 coe_neg_sphere
-  条件: {r : 实数} (v : sphere (0 : E) r)
-  结论: ↑(-v) = (-v : E)
-  证明: rfl
+/-
+**coe_neg_sphere** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_neg_sphere {r : Real} (v : sphere (0 : E) r) : ↑(-v) = (-v : E)
+参数：v : sphere (0 : E) r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_neg_sphere {r : Real} (v : sphere (0 : E) r) : ↑(-v) = (-v : E) :=
+theorem coe_neg_sphere {r : ℝ} (v : sphere (0 : E) r) : ↑(-v) = (-v : E) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousNeg (sphere (0 : E) r)
-  body: IsInducing.subtypeVal.continuousNeg fun _ => rfl
-
-中文:
-实例 :
-  签名: 连续取负 (sphere (0 : E) r)
-  定义体: IsInducing.subtypeVal.continuousNeg fun _ => rfl
-
-Depends on / 依赖: IsInducing, IsInducing.subtypeVal.continuousNeg, continuousNeg, subtypeVal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ContinuousNeg (sphere (0 : E) r) := IsInducing.subtypeVal.continuousNeg fun _ => rfl
 
 /-- We equip the ball, in a seminormed group, with a formal operation of negation, namely the
 antipodal map. -/
-instance {r : Real} : InvolutiveNeg (ball (0 : E) r) where
-  neg := Subtype.map Neg.neg fun w => by simp
-neg_neg x := Subtype.ext neg_neg x.1
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-theorem `coe_neg_ball` / 定理 `coe_neg_ball`
-
-English:
-theorem coe_neg_ball
-  given: {r : Real} (v : ball (0 : E) r)
-  statement: ↑(-v) = (-v : E)
-  proof: rfl
-
-中文:
-定理 coe_neg_ball
-  条件: {r : 实数} (v : ball (0 : E) r)
-  结论: ↑(-v) = (-v : E)
-  证明: rfl
+--- 原说明 ---
+We equip the ball, in a seminormed group, with a formal operation of negation, n
+amely the
+antipodal map.
 -/
-@[simp] theorem coe_neg_ball {r : Real} (v : ball (0 : E) r) : ↑(-v) = (-v : E) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousNeg (ball (0 : E) r)
-  body: IsInducing.subtypeVal.continuousNeg fun _ => rfl
-
-中文:
-实例 :
-  签名: 连续取负 (ball (0 : E) r)
-  定义体: IsInducing.subtypeVal.continuousNeg fun _ => rfl
-
-Depends on / 依赖: IsInducing, IsInducing.subtypeVal.continuousNeg, continuousNeg, subtypeVal
+instance {r : ℝ} : InvolutiveNeg (ball (0 : E) r) where
+  neg := Subtype.map Neg.neg fun w => by simp
+  neg_neg x := Subtype.ext <| neg_neg x.1
+/-
+**coe_neg_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_1} [i : SeminormedAddCommGroup E] {r : ℝ} (v : ↑(Metric.ball
+ 0 r)), ↑(-v) = -↑v
+参数：v : ↑(Metric.ball 0 r)；-v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp] theorem coe_neg_ball {r : ℝ} (v : ball (0 : E) r) : ↑(-v) = (-v : E) := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ContinuousNeg (ball (0 : E) r) := IsInducing.subtypeVal.continuousNeg fun _ => rfl
 
 /-- We equip the closed ball, in a seminormed group, with a formal operation of negation, namely the
 antipodal map. -/
-instance {r : Real} : InvolutiveNeg (closedBall (0 : E) r) where
-  neg := Subtype.map Neg.neg fun w => by simp
-neg_neg x := Subtype.ext neg_neg x.1
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-theorem `coe_neg_closedBall` / 定理 `coe_neg_closedBall`
-
-English:
-theorem coe_neg_closedBall
-  given: {r : Real} (v : closedBall (0 : E) r)
-  statement: ↑(-v) = (-v : E)
-  proof: rfl
-
-中文:
-定理 coe_neg_closedBall
-  条件: {r : 实数} (v : closedBall (0 : E) r)
-  结论: ↑(-v) = (-v : E)
-  证明: rfl
+--- 原说明 ---
+We equip the closed ball, in a seminormed group, with a formal operation of nega
+tion, namely the
+antipodal map.
 -/
-@[simp] theorem coe_neg_closedBall {r : Real} (v : closedBall (0 : E) r) : ↑(-v) = (-v : E) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousNeg (closedBall (0 : E) r)
-  body: IsInducing.subtypeVal.continuousNeg fun _ => rfl
-
-中文:
-实例 :
-  签名: 连续取负 (closedBall (0 : E) r)
-  定义体: IsInducing.subtypeVal.continuousNeg fun _ => rfl
-
-Depends on / 依赖: IsInducing, IsInducing.subtypeVal.continuousNeg, continuousNeg, subtypeVal
+instance {r : ℝ} : InvolutiveNeg (closedBall (0 : E) r) where
+  neg := Subtype.map Neg.neg fun w => by simp
+  neg_neg x := Subtype.ext <| neg_neg x.1
+/-
+**coe_neg_closedBall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_1} [i : SeminormedAddCommGroup E] {r : ℝ} (v : ↑(Metric.clos
+edBall 0 r)), ↑(-v) = -↑v
+参数：v : ↑(Metric.closedBall 0 r)；-v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp] theorem coe_neg_closedBall {r : ℝ} (v : closedBall (0 : E) r) : ↑(-v) = (-v : E) := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ContinuousNeg (closedBall (0 : E) r) := IsInducing.subtypeVal.continuousNeg fun _ => rfl

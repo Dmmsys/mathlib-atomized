@@ -17,67 +17,35 @@ public section
 
 namespace PUnit
 
-/--
-Instance `canonicallyOrderedAdd` / 实例 `canonicallyOrderedAdd`
-
-English:
-instance canonicallyOrderedAdd
-  signature: : CanonicallyOrderedAdd PUnit where
-  body: ⟨unit, by subsingleton⟩
-  le_add_self _ _ := trivial
-  le_self_add _ _ := trivial
-
-中文:
-实例 canonicallyOrderedAdd
-  签名: : 典范有序加法 命题单元 where
-  定义体: ⟨unit, by subsingleton⟩
-  le_add_self _ _ := trivial
-  le_self_add _ _ := trivial
-
-Depends on / 依赖: subsingleton
+/-
+**PUnit.canonicallyOrderedAdd** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：canonicallyOrderedAdd : CanonicallyOrderedAdd PUnit where exists_add_of_le
+ {_ _} _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `instSubsingletonPUnit`：Subsingleton PUnit.{u_1}
+· 使用定理 `trivial`：True
 -/
 instance canonicallyOrderedAdd : CanonicallyOrderedAdd PUnit where
   exists_add_of_le {_ _} _ := ⟨unit, by subsingleton⟩
   le_add_self _ _ := trivial
   le_self_add _ _ := trivial
-
-/--
-Instance `isOrderedCancelAddMonoid` / 实例 `isOrderedCancelAddMonoid`
-
-English:
-instance isOrderedCancelAddMonoid
-  signature: : IsOrderedCancelAddMonoid PUnit where
-  body: trivial
-  add_le_add_left := by intros; rfl
-
-中文:
-实例 isOrderedCancelAddMonoid
-  签名: : 是OrderedCancelAdd幺半群 命题单元 where
-  定义体: trivial
-  add_le_add_left := by intros; rfl
+/-
+**PUnit.isOrderedCancelAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：isOrderedCancelAddMonoid : IsOrderedCancelAddMonoid PUnit where le_of_add_
+le_add_left _ _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `trivial`：True
 -/
 instance isOrderedCancelAddMonoid : IsOrderedCancelAddMonoid PUnit where
   le_of_add_le_add_left _ _ _ _ := trivial
   add_le_add_left := by intros; rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LinearOrderedAddCommMonoidWithTop PUnit
-  body: ()
-  le_top _ := le_rfl
-  top_add' _ := rfl
-  isAddLeftRegular_of_ne_top := by simp
-
-中文:
-实例 :
-  签名: LinearOrderedAddComm幺半群带顶 命题单元
-  定义体: ()
-  le_top _ := le_rfl
-  top_add' _ := rfl
-  isAddLeftRegular_of_ne_top := by simp
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LinearOrderedAddCommMonoidWithTop PUnit where
   top := ()
@@ -86,3 +54,4 @@ instance : LinearOrderedAddCommMonoidWithTop PUnit where
   isAddLeftRegular_of_ne_top := by simp
 
 end PUnit
+

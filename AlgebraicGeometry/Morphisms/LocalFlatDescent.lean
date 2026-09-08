@@ -32,94 +32,36 @@ universe u
 
 namespace AlgebraicGeometry
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DescendsAlong @LocallyOfFiniteType (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
-  body: HasRingHomProperty.descendsAlong_flat RingHom.FiniteType.codescendsAlong_faithfullyFlat
-
-中文:
-实例 :
-  签名: DescendsAlong @局部有限型 (@满射 ⊓ @平坦 ⊓ @拟紧)
-  定义体: HasRingHomProperty.descendsAlong_flat RingHom.FiniteType.codescendsAlong_faithfullyFlat
-
-Depends on / 依赖: FiniteType, HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.FiniteType.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DescendsAlong @LocallyOfFiniteType (@Surjective ⊓ @Flat ⊓ @QuasiCompact) :=
   HasRingHomProperty.descendsAlong_flat RingHom.FiniteType.codescendsAlong_faithfullyFlat
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DescendsAlong @LocallyOfFinitePresentation (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
-  body: HasRingHomProperty.descendsAlong_flat RingHom.FinitePresentation.codescendsAlong_faithfullyFlat
-
-中文:
-实例 :
-  签名: DescendsAlong @局部有限呈现 (@满射 ⊓ @平坦 ⊓ @拟紧)
-  定义体: HasRingHomProperty.descendsAlong_flat RingHom.FinitePresentation.codescendsAlong_faithfullyFlat
-
-Depends on / 依赖: FinitePresentation, HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.FinitePresentation.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DescendsAlong @LocallyOfFinitePresentation (@Surjective ⊓ @Flat ⊓ @QuasiCompact) :=
   HasRingHomProperty.descendsAlong_flat RingHom.FinitePresentation.codescendsAlong_faithfullyFlat
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DescendsAlong @Smooth (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
-  body: HasRingHomProperty.descendsAlong_flat RingHom.Smooth.codescendsAlong_faithfullyFlat
-
-中文:
-实例 :
-  签名: DescendsAlong @光滑 (@满射 ⊓ @平坦 ⊓ @拟紧)
-  定义体: HasRingHomProperty.descendsAlong_flat RingHom.Smooth.codescendsAlong_faithfullyFlat
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.Smooth.codescendsAlong_faithfullyFlat, Smooth, codescendsAlong_faithfullyFlat, descendsAlong_flat
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DescendsAlong @Smooth (@Surjective ⊓ @Flat ⊓ @QuasiCompact) :=
   HasRingHomProperty.descendsAlong_flat RingHom.Smooth.codescendsAlong_faithfullyFlat
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DescendsAlong @FormallyUnramified (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
-  body: HasRingHomProperty.descendsAlong_flat RingHom.FormallyUnramified.codescendsAlong_faithfullyFlat
-
-中文:
-实例 :
-  签名: DescendsAlong @形式非分歧 (@满射 ⊓ @平坦 ⊓ @拟紧)
-  定义体: HasRingHomProperty.descendsAlong_flat RingHom.FormallyUnramified.codescendsAlong_faithfullyFlat
-
-Depends on / 依赖: FormallyUnramified, HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.FormallyUnramified.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DescendsAlong @FormallyUnramified (@Surjective ⊓ @Flat ⊓ @QuasiCompact) :=
   HasRingHomProperty.descendsAlong_flat RingHom.FormallyUnramified.codescendsAlong_faithfullyFlat
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DescendsAlong @Etale (@Surjective ⊓ @Flat ⊓ @QuasiCompact)
-  body: HasRingHomProperty.descendsAlong_flat RingHom.Etale.codescendsAlong_faithfullyFlat
-
-中文:
-实例 :
-  签名: DescendsAlong @平展 (@满射 ⊓ @平坦 ⊓ @拟紧)
-  定义体: HasRingHomProperty.descendsAlong_flat RingHom.Etale.codescendsAlong_faithfullyFlat
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.descendsAlong_flat, RingHom, RingHom.Etale.codescendsAlong_faithfullyFlat, codescendsAlong_faithfullyFlat, descendsAlong_flat
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DescendsAlong @Etale (@Surjective ⊓ @Flat ⊓ @QuasiCompact) :=
   HasRingHomProperty.descendsAlong_flat RingHom.Etale.codescendsAlong_faithfullyFlat
 
 end AlgebraicGeometry
+

@@ -40,97 +40,54 @@ open Set TopologicalSpace StructureGroupoid StructureGroupoid.LocalInvariantProp
 universe u
 
 variable {H : Type*} [TopologicalSpace H] {H' : Type*} [TopologicalSpace H']
-  {G : StructureGroupoid H} {G' : StructureGroupoid H'} {P : (H -> H') -> Set H -> H -> Prop}
+  {G : StructureGroupoid H} {G' : StructureGroupoid H'} {P : (H → H') → Set H → H → Prop}
   (M : Type u) [TopologicalSpace M] [ChartedSpace H M] (M' : Type u) [TopologicalSpace M']
   [ChartedSpace H' M']
 
-/--
-Instance `TopCat.of.chartedSpace` / 实例 `TopCat.of.chartedSpace`
-
-English:
-instance TopCat.of.chartedSpace
-  signature: : ChartedSpace H (TopCat.of M)
-  body: inferInstanceAs ChartedSpace H M
-
-中文:
-实例 顶元素范畴.of.chartedSpace
-  签名: : Charted空间 H (顶元素范畴.of M)
-  定义体: inferInstanceAs ChartedSpace H M
-
-Depends on / 依赖: ChartedSpace
+/-
+**TopCat.of.chartedSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：TopCat.of.chartedSpace : ChartedSpace H (TopCat.of M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance TopCat.of.chartedSpace : ChartedSpace H (TopCat.of M) :=
-inferInstanceAs ChartedSpace H M
-
-/--
-Instance `TopCat.of.hasGroupoid` / 实例 `TopCat.of.hasGroupoid`
-
-English:
-instance TopCat.of.hasGroupoid
-  signature: [HasGroupoid M G]
-  body: inferInstanceAs HasGroupoid M G
-
-中文:
-实例 顶元素范畴.of.hasGroupoid
-  签名: [有群胚 M G]
-  定义体: inferInstanceAs HasGroupoid M G
-
-Depends on / 依赖: HasGroupoid
+  inferInstanceAs <| ChartedSpace H M
+/-
+**TopCat.of.hasGroupoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：TopCat.of.hasGroupoid [HasGroupoid M G] : HasGroupoid (TopCat.of M) G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance TopCat.of.hasGroupoid [HasGroupoid M G] : HasGroupoid (TopCat.of M) G :=
-inferInstanceAs HasGroupoid M G
+  inferInstanceAs <| HasGroupoid M G
 
-/--
-Definition of `StructureGroupoid.LocalInvariantProp.localPredicate` / `StructureGroupoid.LocalInvariantProp.localPredicate` 的定义
+/-- Let `P` be a `LocalInvariantProp` for functions between spaces with the groupoids `G`, `G'`
+and let `M`, `M'` be charted spaces modelled on the model spaces of those groupoids.  Then there is
+an induced `LocalPredicate` on the functions from `M` to `M'`, given by `LiftProp P`. -/
+/-
+**StructureGroupoid.LocalInvariantProp.localPredicate** 是 Mathlib 中的一个定义，位于命名空间 
+``。
+形式化陈述：StructureGroupoid.LocalInvariantProp.localPredicate (hG : LocalInvariantPr
+op G G' P) : TopCat.LocalPredicate fun _ : TopCat.of M => M' where pred {U : Ope
+ns (TopCat.of M)}
+参数：hG : LocalInvariantProp G G' P。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StructureGroupoid.LocalInvariantProp.localPredicate
-  signature: (hG : LocalInvariantProp G G' P)
-  body: fun f : U -> M' => ChartedSpace.LiftProp P f
-  res := by
-    intro U V i f h x
-    have hUV : U <= V := CategoryTheory.leOfHom i
-    change ChartedSpace.LiftPropAt P (f ∘ Opens.inclusion hUV) x
-    rw [← hG.liftPropAt_iff_comp_inclusion hUV]
-    apply h
-  locality := by
-    intro V f h x
-    obtain ⟨U, hxU, i, hU : ChartedSpace.LiftProp P (f ∘ _)⟩ := h x
-    let x' : U := ⟨x, hxU⟩
-    have hUV : U <= V := CategoryTheory.leOfHom i
-    have : ChartedSpace.LiftPropAt P f (Opens.inclusion hUV x') := by
-      rw [hG.liftPropAt_iff_comp_inclusion hUV]
-      exact hU x'
-    convert! this
-
-中文:
-定义 StructureGroupoid.LocalInvariantProp.localPredicate
-  签名: (hG : LocalInvariantProp G G' P)
-  定义体: fun f : U -> M' => ChartedSpace.LiftProp P f
-  res := by
-    intro U V i f h x
-    have hUV : U <= V := CategoryTheory.leOfHom i
-    change ChartedSpace.LiftPropAt P (f ∘ Opens.inclusion hUV) x
-    rw [← hG.liftPropAt_iff_comp_inclusion hUV]
-    apply h
-  locality := by
-    intro V f h x
-    obtain ⟨U, hxU, i, hU : ChartedSpace.LiftProp P (f ∘ _)⟩ := h x
-    let x' : U := ⟨x, hxU⟩
-    have hUV : U <= V := CategoryTheory.leOfHom i
-    have : ChartedSpace.LiftPropAt P f (Opens.inclusion hUV x') := by
-      rw [hG.liftPropAt_iff_comp_inclusion hUV]
-      exact hU x'
-    convert! this
-
-Depends on / 依赖: ChartedSpace, ChartedSpace.LiftProp, LiftProp
+--- 原说明 ---
+Let `P` be a `LocalInvariantProp` for functions between spaces with the groupoid
+s `G`, `G'`
+and let `M`, `M'` be charted spaces modelled on the model spaces of those groupo
+ids.  Then there is
+an induced `LocalPredicate` on the functions from `M` to `M'`, given by `LiftPro
+p P`.
 -/
 def StructureGroupoid.LocalInvariantProp.localPredicate (hG : LocalInvariantProp G G' P) :
     TopCat.LocalPredicate fun _ : TopCat.of M => M' where
-  pred {U : Opens (TopCat.of M)} := fun f : U -> M' => ChartedSpace.LiftProp P f
+  pred {U : Opens (TopCat.of M)} := fun f : U → M' => ChartedSpace.LiftProp P f
   res := by
     intro U V i f h x
-    have hUV : U <= V := CategoryTheory.leOfHom i
+    have hUV : U ≤ V := CategoryTheory.leOfHom i
     change ChartedSpace.LiftPropAt P (f ∘ Opens.inclusion hUV) x
     rw [← hG.liftPropAt_iff_comp_inclusion hUV]
     apply h
@@ -138,60 +95,61 @@ def StructureGroupoid.LocalInvariantProp.localPredicate (hG : LocalInvariantProp
     intro V f h x
     obtain ⟨U, hxU, i, hU : ChartedSpace.LiftProp P (f ∘ _)⟩ := h x
     let x' : U := ⟨x, hxU⟩
-    have hUV : U <= V := CategoryTheory.leOfHom i
+    have hUV : U ≤ V := CategoryTheory.leOfHom i
     have : ChartedSpace.LiftPropAt P f (Opens.inclusion hUV x') := by
       rw [hG.liftPropAt_iff_comp_inclusion hUV]
       exact hU x'
     convert! this
 
-/--
-Definition of `StructureGroupoid.LocalInvariantProp.sheaf` / `StructureGroupoid.LocalInvariantProp.sheaf` 的定义
+/-- Let `P` be a `LocalInvariantProp` for functions between spaces with the groupoids `G`, `G'`
+and let `M`, `M'` be charted spaces modelled on the model spaces of those groupoids.  Then there is
+a sheaf of types on `M` which, to each open set `U` in `M`, associates the type of bundled
+functions from `U` to `M'` satisfying the lift of `P`. -/
+/-
+**StructureGroupoid.LocalInvariantProp.sheaf** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：StructureGroupoid.LocalInvariantProp.sheaf (hG : LocalInvariantProp G G' P
+) : TopCat.Sheaf (Type u) (TopCat.of M)
+参数：hG : LocalInvariantProp G G' P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StructureGroupoid.LocalInvariantProp.sheaf
-  signature: (hG : LocalInvariantProp G G' P)
-  body: TopCat.subsheafToTypes (hG.localPredicate M M')
-
-中文:
-定义 StructureGroupoid.LocalInvariantProp.sheaf
-  签名: (hG : LocalInvariantProp G G' P)
-  定义体: TopCat.subsheafToTypes (hG.localPredicate M M')
-
-Depends on / 依赖: TopCat, TopCat.subsheafToTypes, hG.localPredicate, localPredicate, subsheafToTypes
+--- 原说明 ---
+Let `P` be a `LocalInvariantProp` for functions between spaces with the groupoid
+s `G`, `G'`
+and let `M`, `M'` be charted spaces modelled on the model spaces of those groupo
+ids.  Then there is
+a sheaf of types on `M` which, to each open set `U` in `M`, associates the type 
+of bundled
+functions from `U` to `M'` satisfying the lift of `P`.
 -/
 def StructureGroupoid.LocalInvariantProp.sheaf (hG : LocalInvariantProp G G' P) :
     TopCat.Sheaf (Type u) (TopCat.of M) :=
   TopCat.subsheafToTypes (hG.localPredicate M M')
-
-/--
-Instance `StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun` / 实例 `StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun`
-
-English:
-instance StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun
-  signature: (hG : LocalInvariantProp G G' P)
-  body: a.1
-
-中文:
-实例 StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun
-  签名: (hG : LocalInvariantProp G G' P)
-  定义体: a.1
+/-
+**StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun** 是 Mathlib 中的一个实例，位于命名空
+间 ``。
+形式化陈述：StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun (hG : LocalInvariant
+Prop G G' P) (U : (Opens (TopCat.of M))ᵒᵖ) : CoeFun ((hG.sheaf M M').obj.obj U) 
+fun _ => ↑(unop U) -> M' where coe a
+参数：hG : LocalInvariantProp G G' P；U : (Opens (TopCat.of M))ᵒᵖ。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance StructureGroupoid.LocalInvariantProp.sheafHasCoeToFun (hG : LocalInvariantProp G G' P)
-    (U : (Opens (TopCat.of M))ᵒᵖ) : CoeFun ((hG.sheaf M M').obj.obj U) fun _ => ↑(unop U) -> M' where
+    (U : (Opens (TopCat.of M))ᵒᵖ) : CoeFun ((hG.sheaf M M').obj.obj U) fun _ => ↑(unop U) → M' where
   coe a := a.1
-
-/--
-theorem `StructureGroupoid.LocalInvariantProp.section_spec` / 定理 `StructureGroupoid.LocalInvariantProp.section_spec`
-
-English:
-theorem StructureGroupoid.LocalInvariantProp.section_spec
-  statement: (hG : LocalInvariantProp G G' P)
-  proof: f.2
-
-中文:
-定理 StructureGroupoid.LocalInvariantProp.section_spec
-  结论: (hG : LocalInvariantProp G G' P)
-  证明: f.2
+/-
+**StructureGroupoid.LocalInvariantProp.section_spec** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：StructureGroupoid.LocalInvariantProp.section_spec (hG : LocalInvariantProp
+ G G' P) (U : (Opens (TopCat.of M))ᵒᵖ) (f : (hG.sheaf M M').obj.obj U) : Charted
+Space.LiftProp P f
+参数：hG : LocalInvariantProp G G' P；U : (Opens (TopCat.of M))ᵒᵖ；f : (hG.sheaf M M'
+).obj.obj U。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem StructureGroupoid.LocalInvariantProp.section_spec (hG : LocalInvariantProp G G' P)
     (U : (Opens (TopCat.of M))ᵒᵖ) (f : (hG.sheaf M M').obj.obj U) : ChartedSpace.LiftProp P f :=

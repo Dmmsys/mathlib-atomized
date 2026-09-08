@@ -42,20 +42,15 @@ variable (C : Type w) [Category.{u + 1} C] [HasWeakSheafify (coherentTopology Co
 The discrete condensed object associated to an object of `C` is the constant sheaf at that object.
 -/
 @[simps!]
-/--
-Definition of `discrete` / `discrete` 的定义
+/-
+**Condensed.discrete** 是 Mathlib 中的一个定义，位于命名空间 `Condensed`。
+形式化陈述：discrete : C ⥤ Condensed.{u} C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition discrete
-  signature: : C ⥤ Condensed.{u} C
-  body: constantSheaf _ C
-
-中文:
-定义 discrete
-  签名: : C ⥤ Condensed.{u} C
-  定义体: constantSheaf _ C
-
-Depends on / 依赖: constantSheaf
+--- 原说明 ---
+The discrete condensed object associated to an object of `C` is the constant she
+af at that object.
 -/
 noncomputable def discrete : C ⥤ Condensed.{u} C := constantSheaf _ C
 
@@ -64,38 +59,40 @@ The underlying object of a condensed object in `C` is the condensed object evalu
 This can be viewed as a sort of forgetful functor from `Condensed C` to `C`
 -/
 @[simps!]
-/--
-Definition of `underlying` / `underlying` 的定义
+/-
+**Condensed.underlying** 是 Mathlib 中的一个定义，位于命名空间 `Condensed`。
+形式化陈述：underlying : Condensed.{u} C ⥤ C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition underlying
-  signature: : Condensed.{u} C ⥤ C
-  body: (sheafSections _ _).obj ⟨CompHaus.of PUnit.{u + 1}⟩
-
-中文:
-定义 underlying
-  签名: : Condensed.{u} C ⥤ C
-  定义体: (sheafSections _ _).obj ⟨CompHaus.of PUnit.{u + 1}⟩
-
-Depends on / 依赖: CompHaus, CompHaus.of, sheafSections
+--- 原说明 ---
+The underlying object of a condensed object in `C` is the condensed object evalu
+ated at a point.
+This can be viewed as a sort of forgetful functor from `Condensed C` to `C`
 -/
 noncomputable def underlying : Condensed.{u} C ⥤ C :=
   (sheafSections _ _).obj ⟨CompHaus.of PUnit.{u + 1}⟩
 
 /--
-Definition of `discreteUnderlyingAdj` / `discreteUnderlyingAdj` 的定义
+Discreteness is left adjoint to the forgetful functor. When `C` is `Type*`, this is analogous to
+`TopCat.adj₁ : TopCat.discrete ⊣ forget TopCat`.
+-/
+/-
+**Condensed.discreteUnderlyingAdj** 是 Mathlib 中的一个定义，位于命名空间 `Condensed`。
+形式化陈述：discreteUnderlyingAdj : discrete C ⊣ underlying C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition discreteUnderlyingAdj
-  signature: : discrete C ⊣ underlying C
-  body: constantSheafAdj _ _ CompHaus.isTerminalPUnit
-
-中文:
-定义 discreteUnderlyingAdj
-  签名: : discrete C ⊣ underlying C
-  定义体: constantSheafAdj _ _ CompHaus.isTerminalPUnit
-
-Depends on / 依赖: CompHaus, CompHaus.isTerminalPUnit, constantSheafAdj, isTerminalPUnit
+--- 原说明 ---
+Discreteness is left adjoint to the forgetful functor. When `C` is `Type*`, this
+ is analogous to
+`TopCat.adj₁ : TopCat.discrete ⊣ forget TopCat`.
 -/
 noncomputable def discreteUnderlyingAdj : discrete C ⊣ underlying C :=
   constantSheafAdj _ _ CompHaus.isTerminalPUnit
@@ -111,20 +108,16 @@ The discrete light condensed object associated to an object of `C` is the consta
 object.
 -/
 @[simps!]
-/--
-Definition of `discrete` / `discrete` 的定义
+/-
+**LightCondensed.discrete** 是 Mathlib 中的一个定义，位于命名空间 `LightCondensed`。
+形式化陈述：discrete : C ⥤ LightCondensed.{u} C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition discrete
-  signature: : C ⥤ LightCondensed.{u} C
-  body: constantSheaf _ C
-
-中文:
-定义 discrete
-  签名: : C ⥤ LightCondensed.{u} C
-  定义体: constantSheaf _ C
-
-Depends on / 依赖: constantSheaf
+--- 原说明 ---
+The discrete light condensed object associated to an object of `C` is the consta
+nt sheaf at that
+object.
 -/
 noncomputable def discrete : C ⥤ LightCondensed.{u} C := constantSheaf _ C
 
@@ -133,88 +126,83 @@ The underlying object of a condensed object in `C` is the light condensed object
 point. This can be viewed as a sort of forgetful functor from `LightCondensed C` to `C`
 -/
 @[simps!]
-/--
-Definition of `underlying` / `underlying` 的定义
+/-
+**LightCondensed.underlying** 是 Mathlib 中的一个定义，位于命名空间 `LightCondensed`。
+形式化陈述：underlying : LightCondensed.{u} C ⥤ C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition underlying
-  signature: : LightCondensed.{u} C ⥤ C
-  body: (sheafSections _ _).obj (op (LightProfinite.of PUnit))
-
-中文:
-定义 underlying
-  签名: : LightCondensed.{u} C ⥤ C
-  定义体: (sheafSections _ _).obj (op (LightProfinite.of PUnit))
-
-Depends on / 依赖: LightProfinite, LightProfinite.of, sheafSections
+--- 原说明 ---
+The underlying object of a condensed object in `C` is the light condensed object
+ evaluated at a
+point. This can be viewed as a sort of forgetful functor from `LightCondensed C`
+ to `C`
 -/
 noncomputable def underlying : LightCondensed.{u} C ⥤ C :=
   (sheafSections _ _).obj (op (LightProfinite.of PUnit))
 
 /--
-Definition of `discreteUnderlyingAdj` / `discreteUnderlyingAdj` 的定义
+Discreteness is left adjoint to the forgetful functor. When `C` is `Type*`, this is analogous to
+`TopCat.adj₁ : TopCat.discrete ⊣ forget TopCat`.
+-/
+/-
+**LightCondensed.discreteUnderlyingAdj** 是 Mathlib 中的一个定义，位于命名空间 `LightCondensed
+`。
+形式化陈述：discreteUnderlyingAdj : discrete C ⊣ underlying C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `LightProfinite.instHasPropAndTotallyDisconnectedSpaceCarrierSecondCounta
+bleTopology`：∀ (X : Type u_1) [inst : TopologicalSpace X] [TotallyDisconnectedSp
+ace X] [SecondCountableTopology X],   CompHausLike.HasProp (fun Y => Tota…
 
-English:
-definition discreteUnderlyingAdj
-  signature: : discrete C ⊣ underlying C
-  body: constantSheafAdj _ _ CompHausLike.isTerminalPUnit
-
-中文:
-定义 discreteUnderlyingAdj
-  签名: : discrete C ⊣ underlying C
-  定义体: constantSheafAdj _ _ CompHausLike.isTerminalPUnit
-
-Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit, constantSheafAdj, isTerminalPUnit
+--- 原说明 ---
+Discreteness is left adjoint to the forgetful functor. When `C` is `Type*`, this
+ is analogous to
+`TopCat.adj₁ : TopCat.discrete ⊣ forget TopCat`.
 -/
 noncomputable def discreteUnderlyingAdj : discrete C ⊣ underlying C :=
   constantSheafAdj _ _ CompHausLike.isTerminalPUnit
 
 end LightCondensed
 
-/--
-Definition of `LightCondSet.discrete` / `LightCondSet.discrete` 的定义
+/-- A version of `LightCondensed.discrete` in the `LightCondSet` namespace -/
+/-
+**LightCondSet.discrete** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightCondSet.discrete
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LightCondSet.discrete
-  body: LightCondensed.discrete Type u
-
-中文:
-缩写 LightCondSet.discrete
-  定义体: LightCondensed.discrete Type u
-
-Depends on / 依赖: LightCondensed, LightCondensed.discrete, discrete
+--- 原说明 ---
+A version of `LightCondensed.discrete` in the `LightCondSet` namespace
 -/
-noncomputable abbrev LightCondSet.discrete := LightCondensed.discrete Type u
+noncomputable abbrev LightCondSet.discrete := LightCondensed.discrete <| Type u
 
-/--
-Definition of `LightCondSet.underlying` / `LightCondSet.underlying` 的定义
+/-- A version of `LightCondensed.underlying` in the `LightCondSet` namespace -/
+/-
+**LightCondSet.underlying** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightCondSet.underlying
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LightCondSet.underlying
-  body: LightCondensed.underlying Type u
-
-中文:
-缩写 LightCondSet.underlying
-  定义体: LightCondensed.underlying Type u
-
-Depends on / 依赖: LightCondensed, LightCondensed.underlying, underlying
+--- 原说明 ---
+A version of `LightCondensed.underlying` in the `LightCondSet` namespace
 -/
-noncomputable abbrev LightCondSet.underlying := LightCondensed.underlying Type u
+noncomputable abbrev LightCondSet.underlying := LightCondensed.underlying <| Type u
 
-/--
-Definition of `LightCondSet.discreteUnderlyingAdj` / `LightCondSet.discreteUnderlyingAdj` 的定义
+/-- A version of `LightCondensed.discrete_underlying_adj` in the `LightCondSet` namespace -/
+/-
+**LightCondSet.discreteUnderlyingAdj** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightCondSet.discreteUnderlyingAdj : discrete ⊣ underlying
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LightCondSet.discreteUnderlyingAdj
-  signature: : discrete ⊣ underlying
-  body: LightCondensed.discreteUnderlyingAdj _
-
-中文:
-缩写 LightCondSet.discreteUnderlyingAdj
-  签名: : discrete ⊣ underlying
-  定义体: LightCondensed.discreteUnderlyingAdj _
-
-Depends on / 依赖: LightCondensed, LightCondensed.discreteUnderlyingAdj, discreteUnderlyingAdj
+--- 原说明 ---
+A version of `LightCondensed.discrete_underlying_adj` in the `LightCondSet` name
+space
 -/
 noncomputable abbrev LightCondSet.discreteUnderlyingAdj : discrete ⊣ underlying :=
   LightCondensed.discreteUnderlyingAdj _

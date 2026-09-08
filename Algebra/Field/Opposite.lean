@@ -21,226 +21,98 @@ variable {α : Type*}
 
 namespace MulOpposite
 
-/--
-Instance `instNNRatCast` / 实例 `instNNRatCast`
-
-English:
-instance instNNRatCast
-  signature: [NNRatCast α]
-  body: ⟨fun q => op q⟩
-
-中文:
-实例 instNNRatCast
-  签名: [非负有理数嵌入 α]
-  定义体: ⟨fun q => op q⟩
+/-
+**MulOpposite.instNNRatCast** 是 Mathlib 中的一个定义，位于命名空间 `MulOpposite`。
+形式化陈述：{α : Type u_1} → [NNRatCast α] → NNRatCast αᵐᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance instNNRatCast [NNRatCast α] : NNRatCast αᵐᵒᵖ := ⟨fun q => op q⟩
-/--
-Instance `instRatCast` / 实例 `instRatCast`
-
-English:
-instance instRatCast
-  signature: [RatCast α]
-  body: ⟨fun q => op q⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instRatCast
-  签名: [有理数嵌入 α]
-  定义体: ⟨fun q => op q⟩
-
-@[to_additive (attr := simp, norm_cast)]
+@[to_additive] instance instNNRatCast [NNRatCast α] : NNRatCast αᵐᵒᵖ := ⟨fun q ↦ op q⟩
+/-
+**MulOpposite.instRatCast** 是 Mathlib 中的一个定义，位于命名空间 `MulOpposite`。
+形式化陈述：{α : Type u_1} → [RatCast α] → RatCast αᵐᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance instRatCast [RatCast α] : RatCast αᵐᵒᵖ := ⟨fun q => op q⟩
+@[to_additive] instance instRatCast [RatCast α] : RatCast αᵐᵒᵖ := ⟨fun q ↦ op q⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-lemma `op_nnratCast` / 引理 `op_nnratCast`
-
-English:
-lemma op_nnratCast
-  given: [NNRatCast α] (q : Rat>=0)
-  statement: op (q : α) = q
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-引理 op_nnratCast
-  条件: [非负有理数嵌入 α] (q : 有理数>=0)
-  结论: op (q : α) = q
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**MulOpposite.op_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：op_nnratCast [NNRatCast α] (q : Rat>=0) : op (q : α) = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma op_nnratCast [NNRatCast α] (q : Rat>=0) : op (q : α) = q := rfl
+lemma op_nnratCast [NNRatCast α] (q : ℚ≥0) : op (q : α) = q := rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-lemma `unop_nnratCast` / 引理 `unop_nnratCast`
-
-English:
-lemma unop_nnratCast
-  given: [NNRatCast α] (q : Rat>=0)
-  statement: unop (q : αᵐᵒᵖ) = q
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-引理 unop_nnratCast
-  条件: [非负有理数嵌入 α] (q : 有理数>=0)
-  结论: unop (q : αᵐᵒᵖ) = q
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**MulOpposite.unop_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：unop_nnratCast [NNRatCast α] (q : Rat>=0) : unop (q : αᵐᵒᵖ) = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma unop_nnratCast [NNRatCast α] (q : Rat>=0) : unop (q : αᵐᵒᵖ) = q := rfl
+lemma unop_nnratCast [NNRatCast α] (q : ℚ≥0) : unop (q : αᵐᵒᵖ) = q := rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-lemma `op_ratCast` / 引理 `op_ratCast`
-
-English:
-lemma op_ratCast
-  given: [RatCast α] (q : Rat)
-  statement: op (q : α) = q
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-引理 op_ratCast
-  条件: [有理数嵌入 α] (q : 有理数)
-  结论: op (q : α) = q
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**MulOpposite.op_ratCast** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：op_ratCast [RatCast α] (q : Rat) : op (q : α) = q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma op_ratCast [RatCast α] (q : Rat) : op (q : α) = q := rfl
+lemma op_ratCast [RatCast α] (q : ℚ) : op (q : α) = q := rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-lemma `unop_ratCast` / 引理 `unop_ratCast`
-
-English:
-lemma unop_ratCast
-  given: [RatCast α] (q : Rat)
-  statement: unop (q : αᵐᵒᵖ) = q
-  proof: rfl
-
-中文:
-引理 unop_ratCast
-  条件: [有理数嵌入 α] (q : 有理数)
-  结论: unop (q : αᵐᵒᵖ) = q
-  证明: rfl
+/-
+**MulOpposite.unop_ratCast** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：unop_ratCast [RatCast α] (q : Rat) : unop (q : αᵐᵒᵖ) = q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma unop_ratCast [RatCast α] (q : Rat) : unop (q : αᵐᵒᵖ) = q := rfl
-
-/--
-Instance `instDivisionSemiring` / 实例 `instDivisionSemiring`
-
-English:
-instance instDivisionSemiring
-  signature: [DivisionSemiring α]
-  body: instSemiring
-  __ := instGroupWithZero
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
-    NNRat.cast_def, div_eq_mul_inv, Nat.cast_comm]
-
-中文:
-实例 instDivisionSemiring
-  签名: [除半环 α]
-  定义体: instSemiring
-  __ := instGroupWithZero
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
-    NNRat.cast_def, div_eq_mul_inv, Nat.cast_comm]
-
-Depends on / 依赖: instSemiring
+lemma unop_ratCast [RatCast α] (q : ℚ) : unop (q : αᵐᵒᵖ) = q := rfl
+/-
+**MulOpposite.instDivisionSemiring** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instDivisionSemiring [DivisionSemiring α] : DivisionSemiring αᵐᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivisionSemiring [DivisionSemiring α] : DivisionSemiring αᵐᵒᵖ where
   __ := instSemiring
   __ := instGroupWithZero
   nnqsmul := _
   nnqsmul_def := fun _ _ => rfl
-nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
+  nnratCast_def q := unop_injective <| by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
     NNRat.cast_def, div_eq_mul_inv, Nat.cast_comm]
-
-/--
-Instance `instDivisionRing` / 实例 `instDivisionRing`
-
-English:
-instance instDivisionRing
-  signature: [DivisionRing α]
-  body: instRing
-  __ := instDivisionSemiring
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div,
-    unop_natCast, unop_intCast, Int.commute_cast, div_eq_mul_inv]
-
-中文:
-实例 instDivisionRing
-  签名: [除环 α]
-  定义体: instRing
-  __ := instDivisionSemiring
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div,
-    unop_natCast, unop_intCast, Int.commute_cast, div_eq_mul_inv]
-
-Depends on / 依赖: instRing
+/-
+**MulOpposite.instDivisionRing** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instDivisionRing [DivisionRing α] : DivisionRing αᵐᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivisionRing [DivisionRing α] : DivisionRing αᵐᵒᵖ where
   __ := instRing
   __ := instDivisionSemiring
   qsmul := _
   qsmul_def := fun _ _ => rfl
-ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div,
+  ratCast_def q := unop_injective <| by rw [unop_ratCast, Rat.cast_def, unop_div,
     unop_natCast, unop_intCast, Int.commute_cast, div_eq_mul_inv]
-
-/--
-Instance `instSemifield` / 实例 `instSemifield`
-
-English:
-instance instSemifield
-  signature: [Semifield α]
-  body: instCommSemiring
-  __ := instDivisionSemiring
-
-中文:
-实例 instSemifield
-  签名: [半域 α]
-  定义体: instCommSemiring
-  __ := instDivisionSemiring
-
-Depends on / 依赖: instCommSemiring
+/-
+**MulOpposite.instSemifield** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instSemifield [Semifield α] : Semifield αᵐᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemifield [Semifield α] : Semifield αᵐᵒᵖ where
   __ := instCommSemiring
   __ := instDivisionSemiring
-
-/--
-Instance `instField` / 实例 `instField`
-
-English:
-instance instField
-  signature: [Field α]
-  body: instCommRing
-  __ := instDivisionRing
-
-中文:
-实例 instField
-  签名: [域 α]
-  定义体: instCommRing
-  __ := instDivisionRing
-
-Depends on / 依赖: instCommRing
+/-
+**MulOpposite.instField** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instField [Field α] : Field αᵐᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instField [Field α] : Field αᵐᵒᵖ where
   __ := instCommRing
@@ -250,112 +122,50 @@ end MulOpposite
 
 namespace AddOpposite
 
-/--
-Instance `instDivisionSemiring` / 实例 `instDivisionSemiring`
-
-English:
-instance instDivisionSemiring
-  signature: [DivisionSemiring α]
-  body: instSemiring
-  __ := instGroupWithZero
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
-    NNRat.cast_def, div_eq_mul_inv]
-
-中文:
-实例 instDivisionSemiring
-  签名: [除半环 α]
-  定义体: instSemiring
-  __ := instGroupWithZero
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
-    NNRat.cast_def, div_eq_mul_inv]
-
-Depends on / 依赖: instSemiring
+/-
+**AddOpposite.instDivisionSemiring** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instDivisionSemiring [DivisionSemiring α] : DivisionSemiring αᵃᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivisionSemiring [DivisionSemiring α] : DivisionSemiring αᵃᵒᵖ where
   __ := instSemiring
   __ := instGroupWithZero
   nnqsmul := _
   nnqsmul_def := fun _ _ => rfl
-nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
+  nnratCast_def q := unop_injective <| by rw [unop_nnratCast, unop_div, unop_natCast, unop_natCast,
     NNRat.cast_def, div_eq_mul_inv]
-
-/--
-Instance `instDivisionRing` / 实例 `instDivisionRing`
-
-English:
-instance instDivisionRing
-  signature: [DivisionRing α]
-  body: instRing
-  __ := instDivisionSemiring
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div, unop_natCast,
-    unop_intCast, div_eq_mul_inv]
-
-中文:
-实例 instDivisionRing
-  签名: [除环 α]
-  定义体: instRing
-  __ := instDivisionSemiring
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div, unop_natCast,
-    unop_intCast, div_eq_mul_inv]
-
-Depends on / 依赖: instRing
+/-
+**AddOpposite.instDivisionRing** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instDivisionRing [DivisionRing α] : DivisionRing αᵃᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivisionRing [DivisionRing α] : DivisionRing αᵃᵒᵖ where
   __ := instRing
   __ := instDivisionSemiring
   qsmul := _
   qsmul_def := fun _ _ => rfl
-ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div, unop_natCast,
+  ratCast_def q := unop_injective <| by rw [unop_ratCast, Rat.cast_def, unop_div, unop_natCast,
     unop_intCast, div_eq_mul_inv]
-
-/--
-Instance `instSemifield` / 实例 `instSemifield`
-
-English:
-instance instSemifield
-  signature: [Semifield α]
-  body: instCommSemiring
-  __ := instDivisionSemiring
-
-中文:
-实例 instSemifield
-  签名: [半域 α]
-  定义体: instCommSemiring
-  __ := instDivisionSemiring
-
-Depends on / 依赖: instCommSemiring
+/-
+**AddOpposite.instSemifield** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instSemifield [Semifield α] : Semifield αᵃᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemifield [Semifield α] : Semifield αᵃᵒᵖ where
   __ := instCommSemiring
   __ := instDivisionSemiring
-
-/--
-Instance `instField` / 实例 `instField`
-
-English:
-instance instField
-  signature: [Field α]
-  body: instCommRing
-  __ := instDivisionRing
-
-中文:
-实例 instField
-  签名: [域 α]
-  定义体: instCommRing
-  __ := instDivisionRing
-
-Depends on / 依赖: instCommRing
+/-
+**AddOpposite.instField** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instField [Field α] : Field αᵃᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instField [Field α] : Field αᵃᵒᵖ where
   __ := instCommRing
   __ := instDivisionRing
 
 end AddOpposite
+

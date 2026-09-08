@@ -30,56 +30,32 @@ open Lean Elab Meta Tactic Command
 namespace Mathlib.Tactic
 
 open Command PrettyPrinter Delaborator in
-/--
-Definition of `checkCoreAux` / `checkCoreAux` 的定义
+/-- Like `checkCore`, but logs different messages depending on whether `showImplicit` is
+true. Note that this differs from `checkCore` only in that it modifies the constructed message,
+lowers to `TermElabM`, and always takes `ignoreStuckTC := true` (as `#check` ultimately does).
 
-English:
-definition checkCoreAux
-  signature: (tk : Syntax) (term : Term) (showImplicit : Bool)
-  body: Term.withDeclName `_check do
-  -- show signature for `#check id`/`#check @id`
-  if let `($id:ident) := term then
-    try
-      for c in (← realizeGlobalConstWithInfos term) do
-addCompletionInfo .id term id.getId (danglingDot := false) {} none
-logInfoAt tk ← do if showImplicit then pure .signature c else
-pure m!"{.ofConstName c}{delabSignatureWithoutImplicit (← getConstInfo c).type}"
-        return
-    catch _ => pure () -- identifier might not be a constant but constant + projection
-  -- TODO: handle expressions in `#check'`. Currently it behaves the same as `#check` here.
-  let e ← Term.elabTerm term none
-  Term.synthesizeSyntheticMVarsNoPostponing (ignoreStuckTC := true)
-  -- Users might be testing out buggy elaborators. Let's typecheck before proceeding:
-withRef tk Meta.check e
-  let e ← Term.levelMVarToParam (← instantiateMVars e)
-  if e.isSyntheticSorry then
-    return
-  let type ← inferType e
-  logInfoAt tk m!"{e} : {type}"
+This declaration may realize constants, and so should be run without modifying the environment.
 
-中文:
-定义 checkCoreAux
-  签名: (tk : Syntax) (term : 项) (showImplicit : 布尔值)
-  定义体: Term.withDeclName `_check do
-  -- show signature for `#check id`/`#check @id`
-  if let `($id:ident) := term then
-    try
-      for c in (← realizeGlobalConstWithInfos term) do
-addCompletionInfo .id term id.getId (danglingDot := false) {} none
-logInfoAt tk ← do if showImplicit then pure .signature c else
-pure m!"{.ofConstName c}{delabSignatureWithoutImplicit (← getConstInfo c).type}"
-        return
-    catch _ => pure () -- identifier might not be a constant but constant + projection
-  -- TODO: handle expressions in `#check'`. Currently it behaves the same as `#check` here.
-  let e ← Term.elabTerm term none
-  Term.synthesizeSyntheticMVarsNoPostponing (ignoreStuckTC := true)
-  -- Users might be testing out buggy elaborators. Let's typecheck before proceeding:
-withRef tk Meta.check e
-  let e ← Term.levelMVarToParam (← instantiateMVars e)
-  if e.isSyntheticSorry then
-    return
-  let type ← inferType e
-  logInfoAt tk m!"{e} : {type}"
+Info messages are placed at `tk`. If there are several resolved names for `term`, shows
+information only for the first of them instead of failing. -/
+/-
+**Mathlib.Tactic.checkCoreAux** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Like `checkCore`, but logs different messages depending on whether `showImplicit
+` is
+true. Note that this differs from `checkCore` only in that it modifies the const
+ructed message,
+lowers to `TermElabM`, and always takes `ignoreStuckTC := true` (as `#check` ult
+imately does).
+
+This declaration may realize constants, and so should be run without modifying t
+he environment.
+
+Info messages are placed at `tk`. If there are several resolved names for `term`
+, shows
+information only for the first of them instead of failing.
 -/
 partial def checkCoreAux (tk : Syntax) (term : Term) (showImplicit : Bool) : TermElabM Unit :=
   Term.withDeclName `_check do
@@ -87,16 +63,16 @@ partial def checkCoreAux (tk : Syntax) (term : Term) (showImplicit : Bool) : Ter
   if let `($id:ident) := term then
     try
       for c in (← realizeGlobalConstWithInfos term) do
-addCompletionInfo .id term id.getId (danglingDot := false) {} none
-logInfoAt tk ← do if showImplicit then pure .signature c else
-pure m!"{.ofConstName c}{delabSignatureWithoutImplicit (← getConstInfo c).type}"
+        addCompletionInfo <| .id term id.getId (danglingDot := false) {} none
+        logInfoAt tk <|← do if showImplicit then pure <| .signature c else
+          pure <| m!"{.ofConstName c}{delabSignatureWithoutImplicit (← getConstInfo c).type}"
         return
-    catch _ => pure () -- identifier might not be a constant but constant + projection
+    catch _ => pure ()  -- identifier might not be a constant but constant + projection
   -- TODO: handle expressions in `#check'`. Currently it behaves the same as `#check` here.
   let e ← Term.elabTerm term none
   Term.synthesizeSyntheticMVarsNoPostponing (ignoreStuckTC := true)
   -- Users might be testing out buggy elaborators. Let's typecheck before proceeding:
-withRef tk Meta.check e
+  withRef tk <| Meta.check e
   let e ← Term.levelMVarToParam (← instantiateMVars e)
   if e.isSyntheticSorry then
     return
@@ -111,7 +87,7 @@ where
       let binders := binders.filter (·.raw.isOfKind ``Parser.Term.explicitBinder)
       -- `delabForallParamsWithSignature` may "stop early" if e.g. a binder is unnamed.
       match type with
-      | `(forall $binders'*, $type) =>
+      | `(∀ $binders'*, $type) =>
         let binders' := binders'.filter (·.raw.isOfKind ``Parser.Term.explicitBinder)
         -- Note: this is a "dangerous" use of `TSyntax.mk`. See also `delabConstWithSignature`.
         return ⟨← `(declSig| $binders* $binders'* : $type)⟩
@@ -121,7 +97,7 @@ where
 
 /-- The `#check'` command is like `#check`, but only prints explicit arguments in the signature
 (i.e., omitting implicit and typeclass arguments). -/
-elab tk:"#check' " t:term : command => withoutModifyingEnv runTermElabM fun _ => do
+elab tk:"#check' " t:term : command => withoutModifyingEnv <| runTermElabM fun _ => do
   checkCoreAux tk t (showImplicit := false)
 
 /--
@@ -137,7 +113,7 @@ These become metavariables in the output.
 To display only explicit arguments in the type signature, see `#check'`.
 -/
 elab tk:"#check " colGt term:term : tactic => do
-withoutModifyingStateWithInfoAndMessages withMainContext
+  withoutModifyingStateWithInfoAndMessages <| withMainContext <|
     checkCoreAux tk term (showImplicit := true)
 
 /--
@@ -153,7 +129,8 @@ Like other `#check` commands, the `#check'` tactic allows stuck typeclass instan
 These become metavariables in the output.
 -/
 elab tk:"#check' " colGt term:term : tactic => do
-withoutModifyingStateWithInfoAndMessages withMainContext
+  withoutModifyingStateWithInfoAndMessages <| withMainContext <|
     checkCoreAux tk term (showImplicit := false)
 
 end Mathlib.Tactic
+

@@ -17,38 +17,17 @@ public section
 namespace Submodule.Quotient
 variable {R M : Type*} [Ring R] [AddCommGroup M] [Module R M] {p : Submodule R M}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MeasurableSpace
-  signature: M] : MeasurableSpace (M ⧸ p)
-  body: Quotient.instMeasurableSpace
-
-中文:
-实例 [可测空间
-  签名: M] : 可测空间 (M ⧸ p)
-  定义体: Quotient.instMeasurableSpace
-
-Depends on / 依赖: Quotient, Quotient.instMeasurableSpace, instMeasurableSpace
+/-
+**Submodule.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MeasurableSpace M] : MeasurableSpace (M ⧸ p) := Quotient.instMeasurableSpace
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MeasurableSpace
-  signature: M] [DiscreteMeasurableSpace M] : DiscreteMeasurableSpace (M ⧸ p)
-  body: Quotient.instDiscreteMeasurableSpace
-
-中文:
-实例 [可测空间
-  签名: M] [DiscreteMeasurable空间 M] : DiscreteMeasurable空间 (M ⧸ p)
-  定义体: Quotient.instDiscreteMeasurableSpace
-
-Depends on / 依赖: Quotient, Quotient.instDiscreteMeasurableSpace, instDiscreteMeasurableSpace
+/-
+**Submodule.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MeasurableSpace M] [DiscreteMeasurableSpace M] : DiscreteMeasurableSpace (M ⧸ p) :=
   Quotient.instDiscreteMeasurableSpace
 
 end Submodule.Quotient
+

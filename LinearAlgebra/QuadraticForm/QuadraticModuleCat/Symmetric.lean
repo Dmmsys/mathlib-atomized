@@ -32,56 +32,32 @@ namespace QuadraticModuleCat
 
 open QuadraticForm
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BraidedCategory (QuadraticModuleCat.{u} R)
-  body: .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
-fun X Y => ofIso tensorComm X.form Y.form
-
-中文:
-实例 :
-  签名: 辫范畴 (二次模范畴.{u} R)
-  定义体: .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
-fun X Y => ofIso tensorComm X.form Y.form
-
-Depends on / 依赖: ModuleCat, QuadraticModuleCat, X.form, Y.form, ofFaithful, tensorComm
+/-
+**QuadraticModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BraidedCategory (QuadraticModuleCat.{u} R) :=
   .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
-fun X Y => ofIso tensorComm X.form Y.form
+    fun X Y ↦ ofIso <| tensorComm X.form Y.form
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `forget₂ (QuadraticModuleCat R) (ModuleCat R)` is a braided functor. -/
+/-
+**QuadraticModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (forget₂ (QuadraticModuleCat R) (ModuleCat R)).Braided
-
-中文:
-实例 :
-  签名: (forget₂ (二次模范畴 R) (模范畴 R)).辫
+--- 原说明 ---
+`forget₂ (QuadraticModuleCat R) (ModuleCat R)` is a braided functor.
 -/
 instance : (forget₂ (QuadraticModuleCat R) (ModuleCat R)).Braided where
-
-/--
-Instance `instSymmetricCategory` / 实例 `instSymmetricCategory`
-
-English:
-instance instSymmetricCategory
-  signature: : SymmetricCategory (QuadraticModuleCat.{u} R)
-  body: .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
-
-中文:
-实例 instSymmetricCategory
-  签名: : 对称范畴 (二次模范畴.{u} R)
-  定义体: .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
-
-Depends on / 依赖: ModuleCat, QuadraticModuleCat, ofFaithful
+/-
+**QuadraticModuleCat.instSymmetricCategory** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticM
+oduleCat`。
+形式化陈述：instSymmetricCategory : SymmetricCategory (QuadraticModuleCat.{u} R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSymmetricCategory : SymmetricCategory (QuadraticModuleCat.{u} R) :=
   .ofFaithful (forget₂ (QuadraticModuleCat R) (ModuleCat R))
 
 end QuadraticModuleCat
+

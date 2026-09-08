@@ -40,67 +40,68 @@ namespace MeasureTheory.VectorMeasure
 
 variable {V : Type*} [TopologicalSpace V] [ENormedAddCommMonoid V] [T2Space V]
 
-/--
-lemma `isSigmaSubadditiveSetFun_enorm` / 引理 `isSigmaSubadditiveSetFun_enorm`
+/-- The norm of a vector measure is σ-subadditive on measurable sets. -/
+/-
+**MeasureTheory.VectorMeasure.isSigmaSubadditiveSetFun_enorm** 是 Mathlib 中的一个引理，
+位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：isSigmaSubadditiveSetFun_enorm (μ : VectorMeasure X V) : IsSigmaSubadditiv
+eSetFun (‖μ ·‖ₑ)
+参数：μ : VectorMeasure X V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `enorm_tsum_le_tsum_enorm`：enorm_tsum_le_tsum_enorm {f : ι -> ε} : ‖∑' i,
+ f i‖ₑ <= ∑' i, ‖f i‖ₑ
 
-English:
-lemma isSigmaSubadditiveSetFun_enorm
-  given: (μ : VectorMeasure X V)
-  proof: by
-  intro s hs
-  have hmeas : forall i, MeasurableSet (s i).val := fun i => (s i).prop
-  simpa [VectorMeasure.of_disjoint_iUnion hmeas hs] using enorm_tsum_le_tsum_enorm
-
-中文:
-引理 isSigmaSubadditiveSetFun_enorm
-  条件: (μ : 向量测度 X V)
-  证明: by
-  intro s hs
-  have hmeas : forall i, MeasurableSet (s i).val := fun i => (s i).prop
-  simpa [VectorMeasure.of_disjoint_iUnion hmeas hs] using enorm_tsum_le_tsum_enorm
-
-Depends on / 依赖: MeasurableSet, VectorMeasure, VectorMeasure.of_disjoint_iUnion, enorm_tsum_le_tsum_enorm, of_disjoint_iUnion
+--- 原说明 ---
+The norm of a vector measure is σ-subadditive on measurable sets.
 -/
 lemma isSigmaSubadditiveSetFun_enorm (μ : VectorMeasure X V) :
     IsSigmaSubadditiveSetFun (‖μ ·‖ₑ) := by
   intro s hs
-  have hmeas : forall i, MeasurableSet (s i).val := fun i => (s i).prop
+  have hmeas : ∀ i, MeasurableSet (s i).val := fun i => (s i).prop
   simpa [VectorMeasure.of_disjoint_iUnion hmeas hs] using enorm_tsum_le_tsum_enorm
 
-/--
-Definition of `variation` / `variation` 的定义
+/-- The variation of a `VectorMeasure` as a `Measure`. -/
+/-
+**MeasureTheory.VectorMeasure.variation** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory
+.VectorMeasure`。
+形式化陈述：variation (μ : VectorMeasure X V) : Measure X
+参数：μ : VectorMeasure X V。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.VectorMeasure.isSigmaSubadditiveSetFun_enorm`：isSigmaSubad
+ditiveSetFun_enorm (μ : VectorMeasure X V) : IsSigmaSubadditiveSetFun (‖μ ·‖ₑ)
 
-English:
-definition variation
-  signature: (μ : VectorMeasure X V)
-  body: preVariation (‖μ ·‖ₑ) (isSigmaSubadditiveSetFun_enorm μ) (by simp)
-
-中文:
-定义 variation
-  签名: (μ : 向量测度 X V)
-  定义体: preVariation (‖μ ·‖ₑ) (isSigmaSubadditiveSetFun_enorm μ) (by simp)
-
-Depends on / 依赖: isSigmaSubadditiveSetFun_enorm, preVariation
+--- 原说明 ---
+The variation of a `VectorMeasure` as a `Measure`.
 -/
 noncomputable def variation (μ : VectorMeasure X V) : Measure X :=
   preVariation (‖μ ·‖ₑ) (isSigmaSubadditiveSetFun_enorm μ) (by simp)
 
-/--
-Definition of `ennrealVariation` / `ennrealVariation` 的定义
+/-- The variation of a `VectorMeasure` as an `ℝ≥0∞`-valued `VectorMeasure`. -/
+/-
+**MeasureTheory.VectorMeasure.ennrealVariation** 是 Mathlib 中的一个定义，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：ennrealVariation (μ : VectorMeasure X V) : VectorMeasure X Real>=0∞
+参数：μ : VectorMeasure X V。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ennrealVariation
-  signature: (μ : VectorMeasure X V)
-  body: μ.variation.toENNRealVectorMeasure
-
-中文:
-定义 ennrealVariation
-  签名: (μ : 向量测度 X V)
-  定义体: μ.variation.toENNRealVectorMeasure
-
-Depends on / 依赖: toENNRealVectorMeasure, variation, variation.toENNRealVectorMeasure
+--- 原说明 ---
+The variation of a `VectorMeasure` as an `ℝ≥0∞`-valued `VectorMeasure`.
 -/
-noncomputable def ennrealVariation (μ : VectorMeasure X V) : VectorMeasure X Real>=0∞ :=
+noncomputable def ennrealVariation (μ : VectorMeasure X V) : VectorMeasure X ℝ≥0∞ :=
   μ.variation.toENNRealVectorMeasure
 
 end MeasureTheory.VectorMeasure
+

@@ -17,82 +17,55 @@ open Nat
 
 namespace NeZero
 
-/--
-theorem `one_le` / 定理 `one_le`
-
-English:
-theorem one_le
-  given: {n : Nat} [NeZero n]
-  statement: 1 <= n
-  proof: by have := NeZero.ne n; lia
-
-中文:
-定理 one_le
-  条件: {n : 自然数} [NeZero n]
-  结论: 1 <= n
-  证明: by have := NeZero.ne n; lia
-
-Depends on / 依赖: NeZero, NeZero.ne
+/-
+**NeZero.one_le** 是 Mathlib 中的一个定理，位于命名空间 `NeZero`。
+形式化陈述：one_le {n : Nat} [NeZero n] : 1 <= n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
 -/
-theorem one_le {n : Nat} [NeZero n] : 1 <= n := by have := NeZero.ne n; lia
-
-/--
-lemma `natCast_ne` / 引理 `natCast_ne`
-
-English:
-lemma natCast_ne
-  given: (n : Nat) (R) [AddMonoidWithOne R] [h : NeZero (n : R)]
-  statement: (n : R) != 0
-  proof: h.out
-
-中文:
-引理 natCast_ne
-  条件: (n : 自然数) (R) [加法带幺幺半群 R] [h : NeZero (n : R)]
-  结论: (n : R) != 0
-  证明: h.out
-
-Depends on / 依赖: h.out
+theorem one_le {n : ℕ} [NeZero n] : 1 ≤ n := by have := NeZero.ne n; lia
+/-
+**NeZero.natCast_ne** 是 Mathlib 中的一个引理，位于命名空间 `NeZero`。
+形式化陈述：natCast_ne (n : Nat) (R) [AddMonoidWithOne R] [h : NeZero (n : R)] : (n : 
+R) != 0
+参数：n : Nat；R；n : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
 -/
-lemma natCast_ne (n : Nat) (R) [AddMonoidWithOne R] [h : NeZero (n : R)] : (n : R) != 0 := h.out
-
-/--
-lemma `of_neZero_natCast` / 引理 `of_neZero_natCast`
-
-English:
-lemma of_neZero_natCast
-  given: (R) [AddMonoidWithOne R] {n : Nat} [h : NeZero (n : R)]
-  statement: NeZero n
-  proof: ⟨by rintro rfl; exact h.out Nat.cast_zero⟩
-
-中文:
-引理 of_neZero_natCast
-  条件: (R) [加法带幺幺半群 R] {n : 自然数} [h : NeZero (n : R)]
-  结论: NeZero n
-  证明: ⟨by rintro rfl; exact h.out Nat.cast_zero⟩
-
-Depends on / 依赖: Nat.cast_zero, cast_zero, h.out
+lemma natCast_ne (n : ℕ) (R) [AddMonoidWithOne R] [h : NeZero (n : R)] : (n : R) ≠ 0 := h.out
+/-
+**NeZero.of_neZero_natCast** 是 Mathlib 中的一个引理，位于命名空间 `NeZero`。
+形式化陈述：of_neZero_natCast (R) [AddMonoidWithOne R] {n : Nat} [h : NeZero (n : R)] 
+: NeZero n
+参数：R；n : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma of_neZero_natCast (R) [AddMonoidWithOne R] {n : Nat} [h : NeZero (n : R)] : NeZero n :=
+lemma of_neZero_natCast (R) [AddMonoidWithOne R] {n : ℕ} [h : NeZero (n : R)] : NeZero n :=
   ⟨by rintro rfl; exact h.out Nat.cast_zero⟩
-
-/--
-lemma `pos_of_neZero_natCast` / 引理 `pos_of_neZero_natCast`
-
-English:
-lemma pos_of_neZero_natCast
-  given: (R) [AddMonoidWithOne R] {n : Nat} [NeZero (n : R)]
-  statement: 0 < n
-  proof: Nat.pos_of_ne_zero (of_neZero_natCast R).out
-
-中文:
-引理 pos_of_neZero_natCast
-  条件: (R) [加法带幺幺半群 R] {n : 自然数} [NeZero (n : R)]
-  结论: 0 < n
-  证明: Nat.pos_of_ne_zero (of_neZero_natCast R).out
-
-Depends on / 依赖: Nat.pos_of_ne_zero, of_neZero_natCast, pos_of_ne_zero
+/-
+**NeZero.pos_of_neZero_natCast** 是 Mathlib 中的一个引理，位于命名空间 `NeZero`。
+形式化陈述：pos_of_neZero_natCast (R) [AddMonoidWithOne R] {n : Nat} [NeZero (n : R)] 
+: 0 < n
+参数：R；n : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用引理 `NeZero.of_neZero_natCast`：of_neZero_natCast (R) [AddMonoidWithOne R] {n 
+: Nat} [h : NeZero (n : R)] : NeZero n
 -/
-lemma pos_of_neZero_natCast (R) [AddMonoidWithOne R] {n : Nat} [NeZero (n : R)] : 0 < n :=
+lemma pos_of_neZero_natCast (R) [AddMonoidWithOne R] {n : ℕ} [NeZero (n : R)] : 0 < n :=
   Nat.pos_of_ne_zero (of_neZero_natCast R).out
 
 end NeZero
+

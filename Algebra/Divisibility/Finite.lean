@@ -16,20 +16,9 @@ public section
 
 variable {M : Type*} [Semigroup M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: M] [DecidableEq M] (a b
-  body: decidable_of_iff (exists c, b = a * c) dvd_def
-
-中文:
-实例 [有限类型
-  签名: M] [DecidableEq M] (a b
-  定义体: decidable_of_iff (exists c, b = a * c) dvd_def
-
-Depends on / 依赖: decidable_of_iff, dvd_def
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fintype M] [DecidableEq M] (a b : M) : Decidable (a ∣ b) :=
-  decidable_of_iff (exists c, b = a * c) dvd_def
+  decidable_of_iff (∃ c, b = a * c) dvd_def

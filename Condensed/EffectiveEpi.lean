@@ -8,7 +8,7 @@ module
 public import Mathlib.CategoryTheory.Sites.RegularEpi
 public import Mathlib.Condensed.Epi
 public import Mathlib.Condensed.Functors
-public import Mathlib.Condensed.Limits -- shake: keep (compHausToCondensed.PreservesEffectiveEpis), cf. lean#13417
+public import Mathlib.Condensed.Limits  -- shake: keep (compHausToCondensed.PreservesEffectiveEpis), cf. lean#13417
 
 /-!
 
@@ -21,65 +21,27 @@ open CategoryTheory CompHausLike
 
 universe u
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: compHausToCondensed.PreservesEpimorphisms
-  body: by
-    rw [CondensedSet.epi_iff_locallySurjective_on_compHaus]
-    intro S g
-    refine ⟨pullback f g.down, pullback.snd _ _, fun y => ?_, ⟨pullback.fst _ _⟩,
-ULift.ext _ _ pullback.condition _ _⟩
-    rw [CompHaus.epi_iff_surjective] at hf
-    obtain ⟨x, hx⟩ := hf (g.down.hom y)
-    exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
-
-中文:
-实例 :
-  签名: compHausToCondensed.保持Epimorphisms
-  定义体: by
-    rw [CondensedSet.epi_iff_locallySurjective_on_compHaus]
-    intro S g
-    refine ⟨pullback f g.down, pullback.snd _ _, fun y => ?_, ⟨pullback.fst _ _⟩,
-ULift.ext _ _ pullback.condition _ _⟩
-    rw [CompHaus.epi_iff_surjective] at hf
-    obtain ⟨x, hx⟩ := hf (g.down.hom y)
-    exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
-
-Depends on / 依赖: CompHaus, CompHaus.epi_iff_surjective, CondensedSet, CondensedSet.epi_iff_locallySurjective_on_compHaus, ULift.ext, condition, epi_iff_locallySurjective_on_compHaus, epi_iff_surjective, g.down, g.down.hom, pullback, pullback.condition, pullback.fst, pullback.snd
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : compHausToCondensed.PreservesEpimorphisms where
   preserves f hf := by
     rw [CondensedSet.epi_iff_locallySurjective_on_compHaus]
     intro S g
-    refine ⟨pullback f g.down, pullback.snd _ _, fun y => ?_, ⟨pullback.fst _ _⟩,
-ULift.ext _ _ pullback.condition _ _⟩
+    refine ⟨pullback f g.down, pullback.snd _ _, fun y ↦ ?_, ⟨pullback.fst _ _⟩,
+      ULift.ext _ _ <| pullback.condition _ _⟩
     rw [CompHaus.epi_iff_surjective] at hf
     obtain ⟨x, hx⟩ := hf (g.down.hom y)
     exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsRegularEpiCategory CondensedSet.{u}
-  body: inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
-
-example : compHausToCondensed.PreservesEffectiveEpis := inferInstance
-
-中文:
-实例 :
-  签名: 是正则满态射范畴 CondensedSet.{u}
-  定义体: inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
-
-example : compHausToCondensed.PreservesEffectiveEpis := inferInstance
-
-Depends on / 依赖: IsRegularEpiCategory
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsRegularEpiCategory CondensedSet.{u} :=
-inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
-
+  inferInstanceAs <| IsRegularEpiCategory (Sheaf _ _)
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : compHausToCondensed.PreservesEffectiveEpis := inferInstance

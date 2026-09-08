@@ -40,7 +40,7 @@ open Category Pretriangulated ZeroObject
 /-
 We work in a preadditive category `C` equipped with an additive shift.
 -/
-variable (C : Type u) [Category.{v} C] [HasZeroObject C] [HasShift C Int] [Preadditive C]
+variable (C : Type u) [Category.{v} C] [HasZeroObject C] [HasShift C ℤ] [Preadditive C]
 
 /-- A preadditive category `C` with an additive shift, and a class of "distinguished triangles"
 relative to that shift is called pretriangulated if the following hold:
@@ -50,173 +50,171 @@ relative to that shift is called pretriangulated if the following hold:
 * The triangle `(X,Y,Z,f,g,h)` is distinguished if and only if `(Y,Z,X⟦1⟧,g,h,-f⟦1⟧)` is.
 * Given a diagram:
   ```
-        f g h
-    X ───> Y ───> Z ───> X⟦1⟧
-    │ │ │
-    │a │b │a⟦1⟧'
-    V V V
+        f       g       h
+    X  ───> Y  ───> Z  ───> X⟦1⟧
+    │       │                │
+    │a      │b               │a⟦1⟧'
+    V       V                V
     X' ───> Y' ───> Z' ───> X'⟦1⟧
-        f' g' h'
+        f'      g'      h'
   ```
   where the left square commutes, and whose rows are distinguished triangles,
   there exists a morphism `c : Z ⟶ Z'` such that `(a,b,c)` is a triangle morphism.
 -/
 @[stacks 0145]
-/--
-Definition of `Pretriangulated` / `Pretriangulated` 的定义
+/-
+**CategoryTheory.Pretriangulated** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Limits.HasZeroObject C] →       [inst_2 : CategoryTheory.HasShift C ℤ] → 
+        [inst_3 : CategoryTheory.Preadditive C] →           [∀ (n : ℤ), (Categor
+yTheory.shiftFunctor C n).Additive] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Pretriangulated
-  parameters: [forall n : Int, Functor.Additive (shiftFunctor C n)]
-  axioms and operations (6):
-    - distinguishedTriangles : Set (Triangle C)
-    - isomorphic_distinguished : forall T₁ in distinguishedTriangles, forall (T₂) (_ : T₂ ≅ T₁), T₂ in distinguishedTriangles
-    - contractible_distinguished : forall X : C, contractibleTriangle X in distinguishedTriangles
-    - distinguished_cocone_triangle : forall {X Y : C} (f : X ⟶ Y), exists (Z : C) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : Int)⟧), Triangle.mk f g h in distinguishedTriangles
-    - rotate_distinguished_triangle : forall T : Triangle C, T in distinguishedTriangles ↔ T.rotate in distinguishedTriangles
-    - complete_distinguished_triangle_morphism : forall (T₁ T₂ : Triangle C) (_ : T₁ in distinguishedTriangles) (_ : T₂ in distinguishedTriangles) (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂) (_ : T₁.mor₁ ≫ b = a ≫ T₂.mor₁), exists c : T₁.obj₃ ⟶ T₂.obj₃, T₁.mor₂ ≫ c = b ≫ T₂.mor₂ ∧ T₁.mor₃ ≫ a⟦1⟧' = c ≫ T₂.mor₃
-
-中文:
-类 预三角
-  参数: [对任意 n : 整数, 函子.加性 (shiftFunctor C n)]
-  公理与运算 (6 个):
-    - distinguishedTriangles : 集合 (Triangle C)
-    - isomorphic_distinguished : 对任意 T₁ in distinguishedTriangles, 对任意 (T₂) (_ : T₂ ≅ T₁), T₂ in distinguishedTriangles
-    - contractible_distinguished : 对任意 X : C, contractibleTriangle X in distinguishedTriangles
-    - distinguished_cocone_triangle : 对任意 {X Y : C} (f : X ⟶ Y), 存在 (Z : C) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : 整数)⟧), Triangle.mk f g h in distinguishedTriangles
-    - rotate_distinguished_triangle : 对任意 T : Triangle C, T in distinguishedTriangles ↔ T.rotate in distinguishedTriangles
-    - complete_distinguished_triangle_morphism : 对任意 (T₁ T₂ : Triangle C) (_ : T₁ in distinguishedTriangles) (_ : T₂ in distinguishedTriangles) (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂) (_ : T₁.mor₁ ≫ b = a ≫ T₂.mor₁), 存在 c : T₁.obj₃ ⟶ T₂.obj₃, T₁.mor₂ ≫ c = b ≫ T₂.mor₂ ∧ T₁.mor₃ ≫ a⟦1⟧' = c ≫ T₂.mor₃
+--- 原说明 ---
+A preadditive category `C` with an additive shift, and a class of "distinguished
+ triangles"
+relative to that shift is called pretriangulated if the following hold:
+* Any triangle that is isomorphic to a distinguished triangle is also distinguis
+hed.
+* Any triangle of the form `(X,X,0,id,0,0)` is distinguished.
+* For any morphism `f : X ⟶ Y` there exists a distinguished triangle of the form
+ `(X,Y,Z,f,g,h)`.
+* The triangle `(X,Y,Z,f,g,h)` is distinguished if and only if `(Y,Z,X⟦1⟧,g,h,-f
+⟦1⟧)` is.
+* Given a diagram:
+  ```
+        f       g       h
+    X  ───> Y  ───> Z  ───> X⟦1⟧
+    │       │                │
+    │a      │b               │a⟦1⟧'
+    V       V                V
+    X' ───> Y' ───> Z' ───> X'⟦1⟧
+        f'      g'      h'
+  ```
+  where the left square commutes, and whose rows are distinguished triangles,
+  there exists a morphism `c : Z ⟶ Z'` such that `(a,b,c)` is a triangle morphis
+m.
 -/
-class Pretriangulated [forall n : Int, Functor.Additive (shiftFunctor C n)] where
+class Pretriangulated [∀ n : ℤ, Functor.Additive (shiftFunctor C n)] where
   /-- a class of triangle which are called `distinguished` -/
   distinguishedTriangles : Set (Triangle C)
   /-- a triangle that is isomorphic to a distinguished triangle is distinguished -/
   isomorphic_distinguished :
-    forall T₁ in distinguishedTriangles, forall (T₂) (_ : T₂ ≅ T₁), T₂ in distinguishedTriangles
+    ∀ T₁ ∈ distinguishedTriangles, ∀ (T₂) (_ : T₂ ≅ T₁), T₂ ∈ distinguishedTriangles
   /-- obvious triangles `X ⟶ X ⟶ 0 ⟶ X⟦1⟧` are distinguished -/
-  contractible_distinguished : forall X : C, contractibleTriangle X in distinguishedTriangles
+  contractible_distinguished : ∀ X : C, contractibleTriangle X ∈ distinguishedTriangles
   /-- any morphism `X ⟶ Y` is part of a distinguished triangle `X ⟶ Y ⟶ Z ⟶ X⟦1⟧` -/
   distinguished_cocone_triangle :
-    forall {X Y : C} (f : X ⟶ Y),
-      exists (Z : C) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : Int)⟧), Triangle.mk f g h in distinguishedTriangles
+    ∀ {X Y : C} (f : X ⟶ Y),
+      ∃ (Z : C) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : ℤ)⟧), Triangle.mk f g h ∈ distinguishedTriangles
   /-- a triangle is distinguished iff it is so after rotating it -/
   rotate_distinguished_triangle :
-    forall T : Triangle C, T in distinguishedTriangles ↔ T.rotate in distinguishedTriangles
+    ∀ T : Triangle C, T ∈ distinguishedTriangles ↔ T.rotate ∈ distinguishedTriangles
   /-- given two distinguished triangle, a commutative square
   can be extended as morphism of triangles -/
   complete_distinguished_triangle_morphism :
-    forall (T₁ T₂ : Triangle C) (_ : T₁ in distinguishedTriangles) (_ : T₂ in distinguishedTriangles)
+    ∀ (T₁ T₂ : Triangle C) (_ : T₁ ∈ distinguishedTriangles) (_ : T₂ ∈ distinguishedTriangles)
       (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂) (_ : T₁.mor₁ ≫ b = a ≫ T₂.mor₁),
-      exists c : T₁.obj₃ ⟶ T₂.obj₃, T₁.mor₂ ≫ c = b ≫ T₂.mor₂ ∧ T₁.mor₃ ≫ a⟦1⟧' = c ≫ T₂.mor₃
+      ∃ c : T₁.obj₃ ⟶ T₂.obj₃, T₁.mor₂ ≫ c = b ≫ T₂.mor₂ ∧ T₁.mor₃ ≫ a⟦1⟧' = c ≫ T₂.mor₃
 
 
 namespace Pretriangulated
 
-variable [forall n : Int, Functor.Additive (CategoryTheory.shiftFunctor C n)] [hC : Pretriangulated C]
+variable [∀ n : ℤ, Functor.Additive (CategoryTheory.shiftFunctor C n)] [hC : Pretriangulated C]
 
 /-- distinguished triangles in a pretriangulated category -/
 notation:60 "distTriang " C:60 => @distinguishedTriangles C _ _ _ _ _ _
 
 variable {C}
 
-/--
-lemma `distinguished_iff_of_iso` / 引理 `distinguished_iff_of_iso`
-
-English:
-lemma distinguished_iff_of_iso
-  given: {T₁ T₂ : Triangle C} (e : T₁ ≅ T₂)
-  proof: ⟨fun hT₁ => isomorphic_distinguished _ hT₁ _ e.symm,
-    fun hT₂ => isomorphic_distinguished _ hT₂ _ e⟩
-
-中文:
-引理 distinguished_iff_of_iso
-  条件: {T₁ T₂ : Triangle C} (e : T₁ ≅ T₂)
-  证明: ⟨fun hT₁ => isomorphic_distinguished _ hT₁ _ e.symm,
-    fun hT₂ => isomorphic_distinguished _ hT₂ _ e⟩
-
-Depends on / 依赖: e.symm, isomorphic_distinguished
+/-
+**CategoryTheory.Pretriangulated.distinguished_iff_of_iso** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：distinguished_iff_of_iso {T₁ T₂ : Triangle C} (e : T₁ ≅ T₂) : T₁ in distTr
+iang C ↔ T₂ in distTriang C
+参数：e : T₁ ≅ T₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
 -/
 lemma distinguished_iff_of_iso {T₁ T₂ : Triangle C} (e : T₁ ≅ T₂) :
-    T₁ in distTriang C ↔ T₂ in distTriang C :=
+    T₁ ∈ distTriang C ↔ T₂ ∈ distTriang C :=
   ⟨fun hT₁ => isomorphic_distinguished _ hT₁ _ e.symm,
     fun hT₂ => isomorphic_distinguished _ hT₂ _ e⟩
 
-/--
-theorem `rot_of_distTriang` / 定理 `rot_of_distTriang`
-
-English:
-theorem rot_of_distTriang
-  given: (T : Triangle C) (H : T in distTriang C)
-  statement: T.rotate in distTriang C
-  proof: (rotate_distinguished_triangle T).mp H
-
-中文:
-定理 rot_of_distTriang
-  条件: (T : Triangle C) (H : T in distTriang C)
-  结论: T.rotate in distTriang C
-  证明: (rotate_distinguished_triangle T).mp H
-
-Depends on / 依赖: rotate_distinguished_triangle
+/-- Given any distinguished triangle `T`, then we know `T.rotate` is also distinguished.
 -/
-theorem rot_of_distTriang (T : Triangle C) (H : T in distTriang C) : T.rotate in distTriang C :=
+/-
+**CategoryTheory.Pretriangulated.rot_of_distTriang** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Pretriangulated`。
+形式化陈述：rot_of_distTriang (T : Triangle C) (H : T in distTriang C) : T.rotate in d
+istTriang C
+参数：T : Triangle C；H : T in distTriang C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.Pretriangulated.rotate_distinguished_triangle`：∀ {C : Typ
+e u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.H
+asZeroObject C}   {inst_2 : CategoryTheory.HasShif…
+
+--- 原说明 ---
+Given any distinguished triangle `T`, then we know `T.rotate` is also distinguis
+hed.
+-/
+theorem rot_of_distTriang (T : Triangle C) (H : T ∈ distTriang C) : T.rotate ∈ distTriang C :=
   (rotate_distinguished_triangle T).mp H
 
-/--
-theorem `inv_rot_of_distTriang` / 定理 `inv_rot_of_distTriang`
-
-English:
-theorem inv_rot_of_distTriang
-  given: (T : Triangle C) (H : T in distTriang C)
-  proof: (rotate_distinguished_triangle T.invRotate).mpr
-    (isomorphic_distinguished T H T.invRotate.rotate (invRotCompRot.app T))
-
-中文:
-定理 inv_rot_of_distTriang
-  条件: (T : Triangle C) (H : T in distTriang C)
-  证明: (rotate_distinguished_triangle T.invRotate).mpr
-    (isomorphic_distinguished T H T.invRotate.rotate (invRotCompRot.app T))
-
-Depends on / 依赖: T.invRotate, T.invRotate.rotate, invRotCompRot, invRotCompRot.app, invRotate, isomorphic_distinguished, rotate, rotate_distinguished_triangle
+/-- Given any distinguished triangle `T`, then we know `T.inv_rotate` is also distinguished.
 -/
-theorem inv_rot_of_distTriang (T : Triangle C) (H : T in distTriang C) :
-    T.invRotate in distTriang C :=
+/-
+**CategoryTheory.Pretriangulated.inv_rot_of_distTriang** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Pretriangulated`。
+形式化陈述：inv_rot_of_distTriang (T : Triangle C) (H : T in distTriang C) : T.invRota
+te in distTriang C
+参数：T : Triangle C；H : T in distTriang C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.Pretriangulated.rotate_distinguished_triangle`：∀ {C : Typ
+e u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.H
+asZeroObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+
+--- 原说明 ---
+Given any distinguished triangle `T`, then we know `T.inv_rotate` is also distin
+guished.
+-/
+theorem inv_rot_of_distTriang (T : Triangle C) (H : T ∈ distTriang C) :
+    T.invRotate ∈ distTriang C :=
   (rotate_distinguished_triangle T.invRotate).mpr
     (isomorphic_distinguished T H T.invRotate.rotate (invRotCompRot.app T))
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Given any distinguished triangle
 ```
-      f g h
-  X ───> Y ───> Z ───> X⟦1⟧
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
 ```
 the composition `f ≫ g = 0`. -/
 @[reassoc, stacks 0146]
-/--
-theorem `comp_distTriang_mor_zero₁₂` / 定理 `comp_distTriang_mor_zero₁₂`
+/-
+**CategoryTheory.Pretriangulated.comp_distTriang_mor_zero** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem comp_distTriang_mor_zero₁₂
-  given: (T) (H : T in distTriang C)
-  statement: T.mor₁ ≫ T.mor₂ = 0
-  proof: by
-  obtain ⟨c, hc⟩ :=
-    complete_distinguished_triangle_morphism _ _ (contractible_distinguished T.obj₁) H (𝟙 T.obj₁)
-      T.mor₁ rfl
-  simpa only [contractibleTriangle_mor₂, zero_comp] using hc.left.symm
-
-中文:
-定理 comp_distTriang_mor_zero₁₂
-  条件: (T) (H : T in distTriang C)
-  结论: T.mor₁ ≫ T.mor₂ = 0
-  证明: by
-  obtain ⟨c, hc⟩ :=
-    complete_distinguished_triangle_morphism _ _ (contractible_distinguished T.obj₁) H (𝟙 T.obj₁)
-      T.mor₁ rfl
-  simpa only [contractibleTriangle_mor₂, zero_comp] using hc.left.symm
-
-Depends on / 依赖: T.mor, T.obj, complete_distinguished_triangle_morphism, contractible_distinguished, hc.left.symm, zero_comp
+--- 原说明 ---
+Given any distinguished triangle
+```
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
+```
+the composition `f ≫ g = 0`.
 -/
-theorem comp_distTriang_mor_zero₁₂ (T) (H : T in distTriang C) : T.mor₁ ≫ T.mor₂ = 0 := by
+theorem comp_distTriang_mor_zero₁₂ (T) (H : T ∈ distTriang C) : T.mor₁ ≫ T.mor₂ = 0 := by
   obtain ⟨c, hc⟩ :=
     complete_distinguished_triangle_morphism _ _ (contractible_distinguished T.obj₁) H (𝟙 T.obj₁)
       T.mor₁ rfl
@@ -224,293 +222,251 @@ theorem comp_distTriang_mor_zero₁₂ (T) (H : T in distTriang C) : T.mor₁ �
 
 /-- Given any distinguished triangle
 ```
-      f g h
-  X ───> Y ───> Z ───> X⟦1⟧
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
 ```
 the composition `g ≫ h = 0`. -/
 @[reassoc, stacks 0146]
-/--
-theorem `comp_distTriang_mor_zero₂₃` / 定理 `comp_distTriang_mor_zero₂₃`
+/-
+**CategoryTheory.Pretriangulated.comp_distTriang_mor_zero** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem comp_distTriang_mor_zero₂₃
-  given: (T : Triangle C) (H : T in distTriang C)
-  proof: comp_distTriang_mor_zero₁₂ T.rotate (rot_of_distTriang T H)
-
-中文:
-定理 comp_distTriang_mor_zero₂₃
-  条件: (T : Triangle C) (H : T in distTriang C)
-  证明: comp_distTriang_mor_zero₁₂ T.rotate (rot_of_distTriang T H)
-
-Depends on / 依赖: T.rotate, rot_of_distTriang, rotate
+--- 原说明 ---
+Given any distinguished triangle
+```
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
+```
+the composition `g ≫ h = 0`.
 -/
-theorem comp_distTriang_mor_zero₂₃ (T : Triangle C) (H : T in distTriang C) :
+theorem comp_distTriang_mor_zero₂₃ (T : Triangle C) (H : T ∈ distTriang C) :
     T.mor₂ ≫ T.mor₃ = 0 :=
   comp_distTriang_mor_zero₁₂ T.rotate (rot_of_distTriang T H)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Given any distinguished triangle
 ```
-      f g h
-  X ───> Y ───> Z ───> X⟦1⟧
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
 ```
 the composition `h ≫ f⟦1⟧ = 0`. -/
 @[reassoc, stacks 0146]
-/--
-theorem `comp_distTriang_mor_zero₃₁` / 定理 `comp_distTriang_mor_zero₃₁`
+/-
+**CategoryTheory.Pretriangulated.comp_distTriang_mor_zero** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem comp_distTriang_mor_zero₃₁
-  given: (T : Triangle C) (H : T in distTriang C)
-  proof: by
-  have H₂ := rot_of_distTriang T.rotate (rot_of_distTriang T H)
-  simpa using comp_distTriang_mor_zero₁₂ T.rotate.rotate H₂
-
-中文:
-定理 comp_distTriang_mor_zero₃₁
-  条件: (T : Triangle C) (H : T in distTriang C)
-  证明: by
-  have H₂ := rot_of_distTriang T.rotate (rot_of_distTriang T H)
-  simpa using comp_distTriang_mor_zero₁₂ T.rotate.rotate H₂
-
-Depends on / 依赖: T.rotate, T.rotate.rotate, rot_of_distTriang, rotate
+--- 原说明 ---
+Given any distinguished triangle
+```
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
+```
+the composition `h ≫ f⟦1⟧ = 0`.
 -/
-theorem comp_distTriang_mor_zero₃₁ (T : Triangle C) (H : T in distTriang C) :
+theorem comp_distTriang_mor_zero₃₁ (T : Triangle C) (H : T ∈ distTriang C) :
     T.mor₃ ≫ T.mor₁⟦1⟧' = 0 := by
   have H₂ := rot_of_distTriang T.rotate (rot_of_distTriang T H)
   simpa using comp_distTriang_mor_zero₁₂ T.rotate.rotate H₂
 
 /-- The short complex `T.obj₁ ⟶ T.obj₂ ⟶ T.obj₃` attached to a distinguished triangle. -/
 @[simps]
-/--
-Definition of `shortComplexOfDistTriangle` / `shortComplexOfDistTriangle` 的定义
+/-
+**CategoryTheory.Pretriangulated.shortComplexOfDistTriangle** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：shortComplexOfDistTriangle (T : Triangle C) (hT : T in distTriang C) : Sho
+rtComplex C
+参数：T : Triangle C；hT : T in distTriang C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.comp_distTriang_mor_zero₁₂`：comp_distTria
+ng_mor_zero₁₂ (T) (H : T in distTriang C) : T.mor₁ ≫ T.mor₂ = 0
 
-English:
-definition shortComplexOfDistTriangle
-  signature: (T : Triangle C) (hT : T in distTriang C)
-  body: ShortComplex.mk T.mor₁ T.mor₂ (comp_distTriang_mor_zero₁₂ _ hT)
-
-中文:
-定义 shortComplexOfDistTriangle
-  签名: (T : Triangle C) (hT : T in distTriang C)
-  定义体: ShortComplex.mk T.mor₁ T.mor₂ (comp_distTriang_mor_zero₁₂ _ hT)
-
-Depends on / 依赖: ShortComplex, ShortComplex.mk, T.mor
+--- 原说明 ---
+The short complex `T.obj₁ ⟶ T.obj₂ ⟶ T.obj₃` attached to a distinguished triangl
+e.
 -/
-def shortComplexOfDistTriangle (T : Triangle C) (hT : T in distTriang C) : ShortComplex C :=
+def shortComplexOfDistTriangle (T : Triangle C) (hT : T ∈ distTriang C) : ShortComplex C :=
   ShortComplex.mk T.mor₁ T.mor₂ (comp_distTriang_mor_zero₁₂ _ hT)
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The isomorphism between the short complex attached to
 two isomorphic distinguished triangles. -/
 @[simps!]
-/--
-Definition of `shortComplexOfDistTriangleIsoOfIso` / `shortComplexOfDistTriangleIsoOfIso` 的定义
+/-
+**CategoryTheory.Pretriangulated.shortComplexOfDistTriangleIsoOfIso** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：shortComplexOfDistTriangleIsoOfIso {T T' : Triangle C} (e : T ≅ T') (hT : 
+T in distTriang C) : shortComplexOfDistTriangle T hT ≅ shortComplexOfDistTriangl
+e T' (isomorphic_distinguished _ hT _ e.symm)
+参数：e : T ≅ T'；hT : T in distTriang C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shortComplexOfDistTriangleIsoOfIso
-  signature: {T T' : Triangle C} (e : T ≅ T') (hT : T in distTriang C)
-  body: ShortComplex.isoMk (Triangle.π₁.mapIso e) (Triangle.π₂.mapIso e) (Triangle.π₃.mapIso e)
-
-中文:
-定义 shortComplexOfDistTriangleIsoOfIso
-  签名: {T T' : Triangle C} (e : T ≅ T') (hT : T in distTriang C)
-  定义体: ShortComplex.isoMk (Triangle.π₁.mapIso e) (Triangle.π₂.mapIso e) (Triangle.π₃.mapIso e)
-
-Depends on / 依赖: ShortComplex, ShortComplex.isoMk, Triangle, mapIso
+--- 原说明 ---
+The isomorphism between the short complex attached to
+two isomorphic distinguished triangles.
 -/
-def shortComplexOfDistTriangleIsoOfIso {T T' : Triangle C} (e : T ≅ T') (hT : T in distTriang C) :
+def shortComplexOfDistTriangleIsoOfIso {T T' : Triangle C} (e : T ≅ T') (hT : T ∈ distTriang C) :
     shortComplexOfDistTriangle T hT ≅ shortComplexOfDistTriangle T'
       (isomorphic_distinguished _ hT _ e.symm) :=
   ShortComplex.isoMk (Triangle.π₁.mapIso e) (Triangle.π₂.mapIso e) (Triangle.π₃.mapIso e)
 
-/--
-lemma `distinguished_cocone_triangle₁` / 引理 `distinguished_cocone_triangle₁`
+/-- Any morphism `Y ⟶ Z` is part of a distinguished triangle `X ⟶ Y ⟶ Z ⟶ X⟦1⟧` -/
+/-
+**CategoryTheory.Pretriangulated.distinguished_cocone_triangle** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : Categor
+yTheory.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShift C ℤ} {inst_3
+ : CategoryTheory.Preadditive C}   {inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFun
+ctor C n).Additive} [self : CategoryTheory.Pretriangulated C] {X Y : C}   (f : X
+ ⟶ Y),   ∃ Z g h, CategoryTheory.Pretriangulated.Triangle.mk f g h ∈ CategoryThe
+ory.Pretriangulated.distinguishedTriangles
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma distinguished_cocone_triangle₁
-  given: {Y Z : C} (g : Y ⟶ Z)
-  proof: by
-  obtain ⟨X', f', g', mem⟩ := distinguished_cocone_triangle g
-  exact ⟨_, _, _, inv_rot_of_distTriang _ mem⟩
-
-中文:
-引理 distinguished_cocone_triangle₁
-  条件: {Y Z : C} (g : Y ⟶ Z)
-  证明: by
-  obtain ⟨X', f', g', mem⟩ := distinguished_cocone_triangle g
-  exact ⟨_, _, _, inv_rot_of_distTriang _ mem⟩
-
-Depends on / 依赖: distinguished_cocone_triangle, inv_rot_of_distTriang
+--- 原说明 ---
+Any morphism `Y ⟶ Z` is part of a distinguished triangle `X ⟶ Y ⟶ Z ⟶ X⟦1⟧`
 -/
 lemma distinguished_cocone_triangle₁ {Y Z : C} (g : Y ⟶ Z) :
-    exists (X : C) (f : X ⟶ Y) (h : Z ⟶ X⟦(1 : Int)⟧), Triangle.mk f g h in distTriang C := by
+    ∃ (X : C) (f : X ⟶ Y) (h : Z ⟶ X⟦(1 : ℤ)⟧), Triangle.mk f g h ∈ distTriang C := by
   obtain ⟨X', f', g', mem⟩ := distinguished_cocone_triangle g
   exact ⟨_, _, _, inv_rot_of_distTriang _ mem⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `distinguished_cocone_triangle₂` / 引理 `distinguished_cocone_triangle₂`
+/-- Any morphism `Z ⟶ X⟦1⟧` is part of a distinguished triangle `X ⟶ Y ⟶ Z ⟶ X⟦1⟧` -/
+/-
+**CategoryTheory.Pretriangulated.distinguished_cocone_triangle** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : Categor
+yTheory.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShift C ℤ} {inst_3
+ : CategoryTheory.Preadditive C}   {inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFun
+ctor C n).Additive} [self : CategoryTheory.Pretriangulated C] {X Y : C}   (f : X
+ ⟶ Y),   ∃ Z g h, CategoryTheory.Pretriangulated.Triangle.mk f g h ∈ CategoryThe
+ory.Pretriangulated.distinguishedTriangles
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma distinguished_cocone_triangle₂
-  given: {Z X : C} (h : Z ⟶ X⟦(1 : Int)⟧)
-  proof: by
-  obtain ⟨Y', f', g', mem⟩ := distinguished_cocone_triangle h
-  let T' := (Triangle.mk h f' g').invRotate.invRotate
-  refine ⟨T'.obj₂, ((shiftEquiv C (1 : Int)).unitIso.app X).hom ≫ T'.mor₁, T'.mor₂,
-    isomorphic_distinguished _ (inv_rot_of_distTriang _ (inv_rot_of_distTriang _ mem)) _ ?_⟩
-  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : Int)).unitIso.app X) (Iso.refl _) (Iso.refl _)
-    (by cat_disch) (by cat_disch)
-    (by dsimp; simp only [shift_shiftFunctorCompIsoId_inv_app, id_comp])
-
-中文:
-引理 distinguished_cocone_triangle₂
-  条件: {Z X : C} (h : Z ⟶ X⟦(1 : 整数)⟧)
-  证明: by
-  obtain ⟨Y', f', g', mem⟩ := distinguished_cocone_triangle h
-  let T' := (Triangle.mk h f' g').invRotate.invRotate
-  refine ⟨T'.obj₂, ((shiftEquiv C (1 : Int)).unitIso.app X).hom ≫ T'.mor₁, T'.mor₂,
-    isomorphic_distinguished _ (inv_rot_of_distTriang _ (inv_rot_of_distTriang _ mem)) _ ?_⟩
-  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : Int)).unitIso.app X) (Iso.refl _) (Iso.refl _)
-    (by cat_disch) (by cat_disch)
-    (by dsimp; simp only [shift_shiftFunctorCompIsoId_inv_app, id_comp])
-
-Depends on / 依赖: Iso.refl, Triangle, Triangle.isoMk, Triangle.mk, cat_disch, distinguished_cocone_triangle, id_comp, invRotate, invRotate.invRotate, inv_rot_of_distTriang, isomorphic_distinguished, shiftEquiv, shift_shiftFunctorCompIsoId_inv_app, unitIso, unitIso.app
+--- 原说明 ---
+Any morphism `Z ⟶ X⟦1⟧` is part of a distinguished triangle `X ⟶ Y ⟶ Z ⟶ X⟦1⟧`
 -/
-lemma distinguished_cocone_triangle₂ {Z X : C} (h : Z ⟶ X⟦(1 : Int)⟧) :
-    exists (Y : C) (f : X ⟶ Y) (g : Y ⟶ Z), Triangle.mk f g h in distTriang C := by
+lemma distinguished_cocone_triangle₂ {Z X : C} (h : Z ⟶ X⟦(1 : ℤ)⟧) :
+    ∃ (Y : C) (f : X ⟶ Y) (g : Y ⟶ Z), Triangle.mk f g h ∈ distTriang C := by
   obtain ⟨Y', f', g', mem⟩ := distinguished_cocone_triangle h
   let T' := (Triangle.mk h f' g').invRotate.invRotate
-  refine ⟨T'.obj₂, ((shiftEquiv C (1 : Int)).unitIso.app X).hom ≫ T'.mor₁, T'.mor₂,
+  refine ⟨T'.obj₂, ((shiftEquiv C (1 : ℤ)).unitIso.app X).hom ≫ T'.mor₁, T'.mor₂,
     isomorphic_distinguished _ (inv_rot_of_distTriang _ (inv_rot_of_distTriang _ mem)) _ ?_⟩
-  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : Int)).unitIso.app X) (Iso.refl _) (Iso.refl _)
+  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : ℤ)).unitIso.app X) (Iso.refl _) (Iso.refl _)
     (by cat_disch) (by cat_disch)
     (by dsimp; simp only [shift_shiftFunctorCompIsoId_inv_app, id_comp])
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `complete_distinguished_triangle_morphism₁` / 引理 `complete_distinguished_triangle_morphism₁`
+/-- A commutative square involving the morphisms `mor₂` of two distinguished triangles
+can be extended as morphism of triangles -/
+/-
+**CategoryTheory.Pretriangulated.complete_distinguished_triangle_morphism** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : Categor
+yTheory.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShift C ℤ} {inst_3
+ : CategoryTheory.Preadditive C}   {inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFun
+ctor C n).Additive} [self : CategoryTheory.Pretriangulated C]   (T₁ T₂ : Categor
+yTheory.Pretriangulated.Triangle C),   T₁ ∈ CategoryTheory.Pretriangulated.disti
+nguishedTriangles →     T₂ ∈ CategoryTheory.Pretriangulated.distinguishedTriangl
+es →       ∀ (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂),         CategoryTh
+eory.CategoryStruct.comp T₁.mor₁ b = CategoryTheory.CategoryStruct.comp a T₂.mor
+₁ →           ∃ c,             CategoryTheory.CategoryStruct.comp T₁.mor₂ c = Ca
+tegoryTheory.CategoryStruct.comp b T₂.mor₂ ∧               CategoryTheory.Catego
+ryStruct.comp T₁.mor₃ ((CategoryTheory.shiftFunctor C 1).map a) =               
+  CategoryTheory.CategoryStruct.comp c T₂.mor₃
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；T₁ T₂ : CategoryTheory.Pretriangulated.
+Triangle C；a : T₁.obj₁ ⟶ T₂.obj₁；b : T₁.obj₂ ⟶ T₂.obj₂；(CategoryTheory.shiftFunc
+tor C 1).map a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma complete_distinguished_triangle_morphism₁
-  statement: (T₁ T₂ : Triangle C)
-  proof: by
-  obtain ⟨a, ⟨ha₁, ha₂⟩⟩ := complete_distinguished_triangle_morphism _ _
-    (rot_of_distTriang _ hT₁) (rot_of_distTriang _ hT₂) b c comm
-  refine ⟨(shiftFunctor C (1 : Int)).preimage a, ⟨?_, ?_⟩⟩
-  · apply (shiftFunctor C (1 : Int)).map_injective
-    dsimp at ha₂
-    rw [neg_comp]; rw [comp_neg]; rw [neg_inj] at ha₂
-    simpa only [Functor.map_comp, Functor.map_preimage] using! ha₂
-  · simpa only [Functor.map_preimage] using! ha₁
-
-中文:
-引理 complete_distinguished_triangle_morphism₁
-  结论: (T₁ T₂ : Triangle C)
-  证明: by
-  obtain ⟨a, ⟨ha₁, ha₂⟩⟩ := complete_distinguished_triangle_morphism _ _
-    (rot_of_distTriang _ hT₁) (rot_of_distTriang _ hT₂) b c comm
-  refine ⟨(shiftFunctor C (1 : Int)).preimage a, ⟨?_, ?_⟩⟩
-  · apply (shiftFunctor C (1 : Int)).map_injective
-    dsimp at ha₂
-    rw [neg_comp]; rw [comp_neg]; rw [neg_inj] at ha₂
-    simpa only [Functor.map_comp, Functor.map_preimage] using! ha₂
-  · simpa only [Functor.map_preimage] using! ha₁
-
-Depends on / 依赖: Functor, Functor.map_comp, Functor.map_preimage, comp_neg, complete_distinguished_triangle_morphism, map_comp, map_injective, map_preimage, neg_comp, neg_inj, preimage, rot_of_distTriang, shiftFunctor
+--- 原说明 ---
+A commutative square involving the morphisms `mor₂` of two distinguished triangl
+es
+can be extended as morphism of triangles
 -/
 lemma complete_distinguished_triangle_morphism₁ (T₁ T₂ : Triangle C)
-    (hT₁ : T₁ in distTriang C) (hT₂ : T₂ in distTriang C) (b : T₁.obj₂ ⟶ T₂.obj₂)
+    (hT₁ : T₁ ∈ distTriang C) (hT₂ : T₂ ∈ distTriang C) (b : T₁.obj₂ ⟶ T₂.obj₂)
     (c : T₁.obj₃ ⟶ T₂.obj₃) (comm : T₁.mor₂ ≫ c = b ≫ T₂.mor₂) :
-    exists (a : T₁.obj₁ ⟶ T₂.obj₁), T₁.mor₁ ≫ b = a ≫ T₂.mor₁ ∧
-      T₁.mor₃ ≫ a⟦(1 : Int)⟧' = c ≫ T₂.mor₃ := by
+    ∃ (a : T₁.obj₁ ⟶ T₂.obj₁), T₁.mor₁ ≫ b = a ≫ T₂.mor₁ ∧
+      T₁.mor₃ ≫ a⟦(1 : ℤ)⟧' = c ≫ T₂.mor₃ := by
   obtain ⟨a, ⟨ha₁, ha₂⟩⟩ := complete_distinguished_triangle_morphism _ _
     (rot_of_distTriang _ hT₁) (rot_of_distTriang _ hT₂) b c comm
-  refine ⟨(shiftFunctor C (1 : Int)).preimage a, ⟨?_, ?_⟩⟩
-  · apply (shiftFunctor C (1 : Int)).map_injective
+  refine ⟨(shiftFunctor C (1 : ℤ)).preimage a, ⟨?_, ?_⟩⟩
+  · apply (shiftFunctor C (1 : ℤ)).map_injective
     dsimp at ha₂
-    rw [neg_comp]; rw [comp_neg]; rw [neg_inj] at ha₂
+    rw [neg_comp, comp_neg, neg_inj] at ha₂
     simpa only [Functor.map_comp, Functor.map_preimage] using! ha₂
   · simpa only [Functor.map_preimage] using! ha₁
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `complete_distinguished_triangle_morphism₂` / 引理 `complete_distinguished_triangle_morphism₂`
+/-- A commutative square involving the morphisms `mor₃` of two distinguished triangles
+can be extended as morphism of triangles -/
+/-
+**CategoryTheory.Pretriangulated.complete_distinguished_triangle_morphism** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : Categor
+yTheory.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShift C ℤ} {inst_3
+ : CategoryTheory.Preadditive C}   {inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFun
+ctor C n).Additive} [self : CategoryTheory.Pretriangulated C]   (T₁ T₂ : Categor
+yTheory.Pretriangulated.Triangle C),   T₁ ∈ CategoryTheory.Pretriangulated.disti
+nguishedTriangles →     T₂ ∈ CategoryTheory.Pretriangulated.distinguishedTriangl
+es →       ∀ (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂),         CategoryTh
+eory.CategoryStruct.comp T₁.mor₁ b = CategoryTheory.CategoryStruct.comp a T₂.mor
+₁ →           ∃ c,             CategoryTheory.CategoryStruct.comp T₁.mor₂ c = Ca
+tegoryTheory.CategoryStruct.comp b T₂.mor₂ ∧               CategoryTheory.Catego
+ryStruct.comp T₁.mor₃ ((CategoryTheory.shiftFunctor C 1).map a) =               
+  CategoryTheory.CategoryStruct.comp c T₂.mor₃
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；T₁ T₂ : CategoryTheory.Pretriangulated.
+Triangle C；a : T₁.obj₁ ⟶ T₂.obj₁；b : T₁.obj₂ ⟶ T₂.obj₂；(CategoryTheory.shiftFunc
+tor C 1).map a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma complete_distinguished_triangle_morphism₂
-  statement: (T₁ T₂ : Triangle C)
-  proof: by
-  obtain ⟨a, ⟨ha₁, ha₂⟩⟩ := complete_distinguished_triangle_morphism _ _
-    (inv_rot_of_distTriang _ hT₁) (inv_rot_of_distTriang _ hT₂) (c⟦(-1 : Int)⟧') a (by
-    dsimp
-    simp only [neg_comp, comp_neg, ← Functor.map_comp_assoc, ← comm,
-      Functor.map_comp, shift_shift_neg', Functor.id_obj, assoc, Iso.inv_hom_id_app, comp_id])
-  refine ⟨a, ⟨ha₁, ?_⟩⟩
-  dsimp only [Triangle.invRotate, Triangle.mk] at ha₂
-  rw [← cancel_mono ((shiftEquiv C (1 : Int)).counitIso.inv.app T₂.obj₃)]; rw [assoc]; rw [assoc]; rw [← ha₂]
-  simp only [shiftEquiv'_counitIso, shift_neg_shift', assoc, Iso.inv_hom_id_app_assoc]
-
-中文:
-引理 complete_distinguished_triangle_morphism₂
-  结论: (T₁ T₂ : Triangle C)
-  证明: by
-  obtain ⟨a, ⟨ha₁, ha₂⟩⟩ := complete_distinguished_triangle_morphism _ _
-    (inv_rot_of_distTriang _ hT₁) (inv_rot_of_distTriang _ hT₂) (c⟦(-1 : Int)⟧') a (by
-    dsimp
-    simp only [neg_comp, comp_neg, ← Functor.map_comp_assoc, ← comm,
-      Functor.map_comp, shift_shift_neg', Functor.id_obj, assoc, Iso.inv_hom_id_app, comp_id])
-  refine ⟨a, ⟨ha₁, ?_⟩⟩
-  dsimp only [Triangle.invRotate, Triangle.mk] at ha₂
-  rw [← cancel_mono ((shiftEquiv C (1 : Int)).counitIso.inv.app T₂.obj₃)]; rw [assoc]; rw [assoc]; rw [← ha₂]
-  simp only [shiftEquiv'_counitIso, shift_neg_shift', assoc, Iso.inv_hom_id_app_assoc]
-
-Depends on / 依赖: Functor, Functor.id_obj, Functor.map_comp, Functor.map_comp_assoc, Iso.inv_hom_id_app, Triangle, Triangle.invRotate, Triangle.mk, cancel_mono, comp_id, comp_neg, complete_distinguished_triangle_morphism, counitIso, counitIso.inv.app, id_obj, invRotate, inv_hom_id_app, inv_rot_of_distTriang, map_comp, map_comp_assoc
+--- 原说明 ---
+A commutative square involving the morphisms `mor₃` of two distinguished triangl
+es
+can be extended as morphism of triangles
 -/
 lemma complete_distinguished_triangle_morphism₂ (T₁ T₂ : Triangle C)
-    (hT₁ : T₁ in distTriang C) (hT₂ : T₂ in distTriang C) (a : T₁.obj₁ ⟶ T₂.obj₁)
-    (c : T₁.obj₃ ⟶ T₂.obj₃) (comm : T₁.mor₃ ≫ a⟦(1 : Int)⟧' = c ≫ T₂.mor₃) :
-    exists (b : T₁.obj₂ ⟶ T₂.obj₂), T₁.mor₁ ≫ b = a ≫ T₂.mor₁ ∧ T₁.mor₂ ≫ c = b ≫ T₂.mor₂ := by
+    (hT₁ : T₁ ∈ distTriang C) (hT₂ : T₂ ∈ distTriang C) (a : T₁.obj₁ ⟶ T₂.obj₁)
+    (c : T₁.obj₃ ⟶ T₂.obj₃) (comm : T₁.mor₃ ≫ a⟦(1 : ℤ)⟧' = c ≫ T₂.mor₃) :
+    ∃ (b : T₁.obj₂ ⟶ T₂.obj₂), T₁.mor₁ ≫ b = a ≫ T₂.mor₁ ∧ T₁.mor₂ ≫ c = b ≫ T₂.mor₂ := by
   obtain ⟨a, ⟨ha₁, ha₂⟩⟩ := complete_distinguished_triangle_morphism _ _
-    (inv_rot_of_distTriang _ hT₁) (inv_rot_of_distTriang _ hT₂) (c⟦(-1 : Int)⟧') a (by
+    (inv_rot_of_distTriang _ hT₁) (inv_rot_of_distTriang _ hT₂) (c⟦(-1 : ℤ)⟧') a (by
     dsimp
     simp only [neg_comp, comp_neg, ← Functor.map_comp_assoc, ← comm,
       Functor.map_comp, shift_shift_neg', Functor.id_obj, assoc, Iso.inv_hom_id_app, comp_id])
   refine ⟨a, ⟨ha₁, ?_⟩⟩
   dsimp only [Triangle.invRotate, Triangle.mk] at ha₂
-  rw [← cancel_mono ((shiftEquiv C (1 : Int)).counitIso.inv.app T₂.obj₃)]; rw [assoc]; rw [assoc]; rw [← ha₂]
+  rw [← cancel_mono ((shiftEquiv C (1 : ℤ)).counitIso.inv.app T₂.obj₃), assoc, assoc, ← ha₂]
   simp only [shiftEquiv'_counitIso, shift_neg_shift', assoc, Iso.inv_hom_id_app_assoc]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `contractible_distinguished₁` / 引理 `contractible_distinguished₁`
+/-- Obvious triangles `0 ⟶ X ⟶ X ⟶ 0⟦1⟧` are distinguished -/
+/-
+**CategoryTheory.Pretriangulated.contractible_distinguished** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : Categor
+yTheory.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShift C ℤ} {inst_3
+ : CategoryTheory.Preadditive C}   {inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFun
+ctor C n).Additive} [self : CategoryTheory.Pretriangulated C] (X : C),   Categor
+yTheory.Pretriangulated.contractibleTriangle X ∈ CategoryTheory.Pretriangulated.
+distinguishedTriangles
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma contractible_distinguished₁
-  given: (X : C)
-  proof: by
-  refine isomorphic_distinguished _
-    (inv_rot_of_distTriang _ (contractible_distinguished X)) _ ?_
-  exact Triangle.isoMk _ _ (Functor.mapZeroObject _).symm (Iso.refl _) (Iso.refl _)
-    (by simp) (by simp) (by simp)
-
-中文:
-引理 contractible_distinguished₁
-  条件: (X : C)
-  证明: by
-  refine isomorphic_distinguished _
-    (inv_rot_of_distTriang _ (contractible_distinguished X)) _ ?_
-  exact Triangle.isoMk _ _ (Functor.mapZeroObject _).symm (Iso.refl _) (Iso.refl _)
-    (by simp) (by simp) (by simp)
-
-Depends on / 依赖: Functor, Functor.mapZeroObject, Iso.refl, Triangle, Triangle.isoMk, contractible_distinguished, inv_rot_of_distTriang, isomorphic_distinguished, mapZeroObject
+--- 原说明 ---
+Obvious triangles `0 ⟶ X ⟶ X ⟶ 0⟦1⟧` are distinguished
 -/
 lemma contractible_distinguished₁ (X : C) :
-    Triangle.mk (0 : 0 ⟶ X) (𝟙 X) 0 in distTriang C := by
+    Triangle.mk (0 : 0 ⟶ X) (𝟙 X) 0 ∈ distTriang C := by
   refine isomorphic_distinguished _
     (inv_rot_of_distTriang _ (contractible_distinguished X)) _ ?_
   exact Triangle.isoMk _ _ (Functor.mapZeroObject _).symm (Iso.refl _) (Iso.refl _)
@@ -518,190 +474,90 @@ lemma contractible_distinguished₁ (X : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `contractible_distinguished₂` / 引理 `contractible_distinguished₂`
+/-- Obvious triangles `X ⟶ 0 ⟶ X⟦1⟧ ⟶ X⟦1⟧` are distinguished -/
+/-
+**CategoryTheory.Pretriangulated.contractible_distinguished** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : Categor
+yTheory.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShift C ℤ} {inst_3
+ : CategoryTheory.Preadditive C}   {inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFun
+ctor C n).Additive} [self : CategoryTheory.Pretriangulated C] (X : C),   Categor
+yTheory.Pretriangulated.contractibleTriangle X ∈ CategoryTheory.Pretriangulated.
+distinguishedTriangles
+参数：n : ℤ；CategoryTheory.shiftFunctor C n；X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma contractible_distinguished₂
-  given: (X : C)
-  proof: by
-  refine isomorphic_distinguished _
-    (inv_rot_of_distTriang _ (contractible_distinguished₁ (X⟦(1 : Int)⟧))) _ ?_
-  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : Int)).unitIso.app X) (Iso.refl _) (Iso.refl _)
-    (by simp) (by simp)
-    (by dsimp; simp only [shift_shiftFunctorCompIsoId_inv_app, id_comp])
-
-中文:
-引理 contractible_distinguished₂
-  条件: (X : C)
-  证明: by
-  refine isomorphic_distinguished _
-    (inv_rot_of_distTriang _ (contractible_distinguished₁ (X⟦(1 : Int)⟧))) _ ?_
-  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : Int)).unitIso.app X) (Iso.refl _) (Iso.refl _)
-    (by simp) (by simp)
-    (by dsimp; simp only [shift_shiftFunctorCompIsoId_inv_app, id_comp])
-
-Depends on / 依赖: Iso.refl, Triangle, Triangle.isoMk, id_comp, inv_rot_of_distTriang, isomorphic_distinguished, shiftEquiv, shift_shiftFunctorCompIsoId_inv_app, unitIso, unitIso.app
+--- 原说明 ---
+Obvious triangles `X ⟶ 0 ⟶ X⟦1⟧ ⟶ X⟦1⟧` are distinguished
 -/
 lemma contractible_distinguished₂ (X : C) :
-    Triangle.mk (0 : X ⟶ 0) 0 (𝟙 (X⟦1⟧)) in distTriang C := by
+    Triangle.mk (0 : X ⟶ 0) 0 (𝟙 (X⟦1⟧)) ∈ distTriang C := by
   refine isomorphic_distinguished _
-    (inv_rot_of_distTriang _ (contractible_distinguished₁ (X⟦(1 : Int)⟧))) _ ?_
-  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : Int)).unitIso.app X) (Iso.refl _) (Iso.refl _)
+    (inv_rot_of_distTriang _ (contractible_distinguished₁ (X⟦(1 : ℤ)⟧))) _ ?_
+  exact Triangle.isoMk _ _ ((shiftEquiv C (1 : ℤ)).unitIso.app X) (Iso.refl _) (Iso.refl _)
     (by simp) (by simp)
     (by dsimp; simp only [shift_shiftFunctorCompIsoId_inv_app, id_comp])
 
 namespace Triangle
 
-variable (T : Triangle C) (hT : T in distTriang C)
+variable (T : Triangle C) (hT : T ∈ distTriang C)
 include hT
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `yoneda_exact₂` / 引理 `yoneda_exact₂`
-
-English:
-lemma yoneda_exact₂
-  given: {X : C} (f : T.obj₂ ⟶ X) (hf : T.mor₁ ≫ f = 0)
-  proof: by
-  obtain ⟨g, ⟨hg₁, _⟩⟩ := complete_distinguished_triangle_morphism T _ hT
-    (contractible_distinguished₁ X) 0 f (by cat_disch)
-  exact ⟨g, by simpa using hg₁.symm⟩
-
-中文:
-引理 yoneda_exact₂
-  条件: {X : C} (f : T.obj₂ ⟶ X) (hf : T.mor₁ ≫ f = 0)
-  证明: by
-  obtain ⟨g, ⟨hg₁, _⟩⟩ := complete_distinguished_triangle_morphism T _ hT
-    (contractible_distinguished₁ X) 0 f (by cat_disch)
-  exact ⟨g, by simpa using hg₁.symm⟩
-
-Depends on / 依赖: cat_disch, complete_distinguished_triangle_morphism
+/-
+**CategoryTheory.Pretriangulated.Triangle.yoneda_exact** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma yoneda_exact₂ {X : C} (f : T.obj₂ ⟶ X) (hf : T.mor₁ ≫ f = 0) :
-    exists (g : T.obj₃ ⟶ X), f = T.mor₂ ≫ g := by
+    ∃ (g : T.obj₃ ⟶ X), f = T.mor₂ ≫ g := by
   obtain ⟨g, ⟨hg₁, _⟩⟩ := complete_distinguished_triangle_morphism T _ hT
     (contractible_distinguished₁ X) 0 f (by cat_disch)
   exact ⟨g, by simpa using hg₁.symm⟩
-
-/--
-lemma `yoneda_exact₃` / 引理 `yoneda_exact₃`
-
-English:
-lemma yoneda_exact₃
-  given: {X : C} (f : T.obj₃ ⟶ X) (hf : T.mor₂ ≫ f = 0)
-  proof: yoneda_exact₂ _ (rot_of_distTriang _ hT) f hf
-
-中文:
-引理 yoneda_exact₃
-  条件: {X : C} (f : T.obj₃ ⟶ X) (hf : T.mor₂ ≫ f = 0)
-  证明: yoneda_exact₂ _ (rot_of_distTriang _ hT) f hf
-
-Depends on / 依赖: rot_of_distTriang
+/-
+**CategoryTheory.Pretriangulated.Triangle.yoneda_exact** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma yoneda_exact₃ {X : C} (f : T.obj₃ ⟶ X) (hf : T.mor₂ ≫ f = 0) :
-    exists (g : T.obj₁⟦(1 : Int)⟧ ⟶ X), f = T.mor₃ ≫ g :=
+    ∃ (g : T.obj₁⟦(1 : ℤ)⟧ ⟶ X), f = T.mor₃ ≫ g :=
   yoneda_exact₂ _ (rot_of_distTriang _ hT) f hf
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `coyoneda_exact₂` / 引理 `coyoneda_exact₂`
-
-English:
-lemma coyoneda_exact₂
-  given: {X : C} (f : X ⟶ T.obj₂) (hf : f ≫ T.mor₂ = 0)
-  proof: by
-  obtain ⟨a, ⟨ha₁, _⟩⟩ := complete_distinguished_triangle_morphism₁ _ T
-    (contractible_distinguished X) hT f 0 (by cat_disch)
-  exact ⟨a, by simpa using ha₁⟩
-
-中文:
-引理 coyoneda_exact₂
-  条件: {X : C} (f : X ⟶ T.obj₂) (hf : f ≫ T.mor₂ = 0)
-  证明: by
-  obtain ⟨a, ⟨ha₁, _⟩⟩ := complete_distinguished_triangle_morphism₁ _ T
-    (contractible_distinguished X) hT f 0 (by cat_disch)
-  exact ⟨a, by simpa using ha₁⟩
-
-Depends on / 依赖: cat_disch, contractible_distinguished
+/-
+**CategoryTheory.Pretriangulated.Triangle.coyoneda_exact** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coyoneda_exact₂ {X : C} (f : X ⟶ T.obj₂) (hf : f ≫ T.mor₂ = 0) :
-    exists (g : X ⟶ T.obj₁), f = g ≫ T.mor₁ := by
+    ∃ (g : X ⟶ T.obj₁), f = g ≫ T.mor₁ := by
   obtain ⟨a, ⟨ha₁, _⟩⟩ := complete_distinguished_triangle_morphism₁ _ T
     (contractible_distinguished X) hT f 0 (by cat_disch)
   exact ⟨a, by simpa using ha₁⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `coyoneda_exact₁` / 引理 `coyoneda_exact₁`
-
-English:
-lemma coyoneda_exact₁
-  given: {X : C} (f : X ⟶ T.obj₁⟦(1 : Int)⟧) (hf : f ≫ T.mor₁⟦1⟧' = 0)
-  proof: coyoneda_exact₂ _ (rot_of_distTriang _ (rot_of_distTriang _ hT)) f (by cat_disch)
-
-中文:
-引理 coyoneda_exact₁
-  条件: {X : C} (f : X ⟶ T.obj₁⟦(1 : 整数)⟧) (hf : f ≫ T.mor₁⟦1⟧' = 0)
-  证明: coyoneda_exact₂ _ (rot_of_distTriang _ (rot_of_distTriang _ hT)) f (by cat_disch)
-
-Depends on / 依赖: cat_disch, rot_of_distTriang
+/-
+**CategoryTheory.Pretriangulated.Triangle.coyoneda_exact** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coyoneda_exact₁ {X : C} (f : X ⟶ T.obj₁⟦(1 : Int)⟧) (hf : f ≫ T.mor₁⟦1⟧' = 0) :
-    exists (g : X ⟶ T.obj₃), f = g ≫ T.mor₃ :=
+lemma coyoneda_exact₁ {X : C} (f : X ⟶ T.obj₁⟦(1 : ℤ)⟧) (hf : f ≫ T.mor₁⟦1⟧' = 0) :
+    ∃ (g : X ⟶ T.obj₃), f = g ≫ T.mor₃ :=
   coyoneda_exact₂ _ (rot_of_distTriang _ (rot_of_distTriang _ hT)) f (by cat_disch)
-
-/--
-lemma `coyoneda_exact₃` / 引理 `coyoneda_exact₃`
-
-English:
-lemma coyoneda_exact₃
-  given: {X : C} (f : X ⟶ T.obj₃) (hf : f ≫ T.mor₃ = 0)
-  proof: coyoneda_exact₂ _ (rot_of_distTriang _ hT) f hf
-
-中文:
-引理 coyoneda_exact₃
-  条件: {X : C} (f : X ⟶ T.obj₃) (hf : f ≫ T.mor₃ = 0)
-  证明: coyoneda_exact₂ _ (rot_of_distTriang _ hT) f hf
-
-Depends on / 依赖: rot_of_distTriang
+/-
+**CategoryTheory.Pretriangulated.Triangle.coyoneda_exact** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coyoneda_exact₃ {X : C} (f : X ⟶ T.obj₃) (hf : f ≫ T.mor₃ = 0) :
-    exists (g : X ⟶ T.obj₂), f = g ≫ T.mor₂ :=
+    ∃ (g : X ⟶ T.obj₂), f = g ≫ T.mor₂ :=
   coyoneda_exact₂ _ (rot_of_distTriang _ hT) f hf
-
-/--
-lemma `mor₃_eq_zero_iff_epi₂` / 引理 `mor₃_eq_zero_iff_epi₂`
-
-English:
-lemma mor₃_eq_zero_iff_epi₂
-  statement: T.mor₃ = 0 ↔ Epi T.mor₂
-  proof: by
-  constructor
-  · intro h
-    rw [epi_iff_cancel_zero]
-    intro X g hg
-    obtain ⟨f, rfl⟩ := yoneda_exact₃ T hT g hg
-    rw [h]; rw [zero_comp]
-  · intro
-    rw [← cancel_epi T.mor₂]; rw [comp_distTriang_mor_zero₂₃ _ hT]; rw [comp_zero]
-
-中文:
-引理 mor₃_eq_zero_iff_epi₂
-  结论: T.mor₃ = 0 ↔ 满态射 T.mor₂
-  证明: by
-  constructor
-  · intro h
-    rw [epi_iff_cancel_zero]
-    intro X g hg
-    obtain ⟨f, rfl⟩ := yoneda_exact₃ T hT g hg
-    rw [h]; rw [zero_comp]
-  · intro
-    rw [← cancel_epi T.mor₂]; rw [comp_distTriang_mor_zero₂₃ _ hT]; rw [comp_zero]
-
-Depends on / 依赖: T.mor, cancel_epi, comp_zero, epi_iff_cancel_zero, zero_comp
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₃_eq_zero_iff_epi₂ : T.mor₃ = 0 ↔ Epi T.mor₂ := by
   constructor
@@ -709,209 +565,74 @@ lemma mor₃_eq_zero_iff_epi₂ : T.mor₃ = 0 ↔ Epi T.mor₂ := by
     rw [epi_iff_cancel_zero]
     intro X g hg
     obtain ⟨f, rfl⟩ := yoneda_exact₃ T hT g hg
-    rw [h]; rw [zero_comp]
+    rw [h, zero_comp]
   · intro
-    rw [← cancel_epi T.mor₂]; rw [comp_distTriang_mor_zero₂₃ _ hT]; rw [comp_zero]
+    rw [← cancel_epi T.mor₂, comp_distTriang_mor_zero₂₃ _ hT, comp_zero]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mor₂_eq_zero_iff_epi₁` / 引理 `mor₂_eq_zero_iff_epi₁`
-
-English:
-lemma mor₂_eq_zero_iff_epi₁
-  statement: T.mor₂ = 0 ↔ Epi T.mor₁
-  proof: by
-  have h := mor₃_eq_zero_iff_epi₂ _ (inv_rot_of_distTriang _ hT)
-  dsimp at h
-  rw [← h]; rw [IsIso.comp_right_eq_zero]
-
-中文:
-引理 mor₂_eq_zero_iff_epi₁
-  结论: T.mor₂ = 0 ↔ 满态射 T.mor₁
-  证明: by
-  have h := mor₃_eq_zero_iff_epi₂ _ (inv_rot_of_distTriang _ hT)
-  dsimp at h
-  rw [← h]; rw [IsIso.comp_right_eq_zero]
-
-Depends on / 依赖: IsIso.comp_right_eq_zero, comp_right_eq_zero, inv_rot_of_distTriang
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₂_eq_zero_iff_epi₁ : T.mor₂ = 0 ↔ Epi T.mor₁ := by
   have h := mor₃_eq_zero_iff_epi₂ _ (inv_rot_of_distTriang _ hT)
   dsimp at h
-  rw [← h]; rw [IsIso.comp_right_eq_zero]
+  rw [← h, IsIso.comp_right_eq_zero]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mor₁_eq_zero_iff_epi₃` / 引理 `mor₁_eq_zero_iff_epi₃`
-
-English:
-lemma mor₁_eq_zero_iff_epi₃
-  statement: T.mor₁ = 0 ↔ Epi T.mor₃
-  proof: by
-  have h := mor₃_eq_zero_iff_epi₂ _ (rot_of_distTriang _ hT)
-  dsimp at h
-  rw [← h]; rw [neg_eq_zero]
-  exact (Functor.map_eq_zero_iff (CategoryTheory.shiftFunctor C 1)).symm
-
-中文:
-引理 mor₁_eq_zero_iff_epi₃
-  结论: T.mor₁ = 0 ↔ 满态射 T.mor₃
-  证明: by
-  have h := mor₃_eq_zero_iff_epi₂ _ (rot_of_distTriang _ hT)
-  dsimp at h
-  rw [← h]; rw [neg_eq_zero]
-  exact (Functor.map_eq_zero_iff (CategoryTheory.shiftFunctor C 1)).symm
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.shiftFunctor, Functor, Functor.map_eq_zero_iff, map_eq_zero_iff, neg_eq_zero, rot_of_distTriang, shiftFunctor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₁_eq_zero_iff_epi₃ : T.mor₁ = 0 ↔ Epi T.mor₃ := by
   have h := mor₃_eq_zero_iff_epi₂ _ (rot_of_distTriang _ hT)
   dsimp at h
-  rw [← h]; rw [neg_eq_zero]
+  rw [← h, neg_eq_zero]
   exact (Functor.map_eq_zero_iff (CategoryTheory.shiftFunctor C 1)).symm
-
-/--
-lemma `mor₃_eq_zero_of_epi₂` / 引理 `mor₃_eq_zero_of_epi₂`
-
-English:
-lemma mor₃_eq_zero_of_epi₂
-  given: (h : Epi T.mor₂)
-  statement: T.mor₃ = 0
-  proof: (T.mor₃_eq_zero_iff_epi₂ hT).2 h
-
-中文:
-引理 mor₃_eq_zero_of_epi₂
-  条件: (h : 满态射 T.mor₂)
-  结论: T.mor₃ = 0
-  证明: (T.mor₃_eq_zero_iff_epi₂ hT).2 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₃_eq_zero_of_epi₂ (h : Epi T.mor₂) : T.mor₃ = 0 := (T.mor₃_eq_zero_iff_epi₂ hT).2 h
-/--
-lemma `mor₂_eq_zero_of_epi₁` / 引理 `mor₂_eq_zero_of_epi₁`
-
-English:
-lemma mor₂_eq_zero_of_epi₁
-  given: (h : Epi T.mor₁)
-  statement: T.mor₂ = 0
-  proof: (T.mor₂_eq_zero_iff_epi₁ hT).2 h
-
-中文:
-引理 mor₂_eq_zero_of_epi₁
-  条件: (h : 满态射 T.mor₁)
-  结论: T.mor₂ = 0
-  证明: (T.mor₂_eq_zero_iff_epi₁ hT).2 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₂_eq_zero_of_epi₁ (h : Epi T.mor₁) : T.mor₂ = 0 := (T.mor₂_eq_zero_iff_epi₁ hT).2 h
-/--
-lemma `mor₁_eq_zero_of_epi₃` / 引理 `mor₁_eq_zero_of_epi₃`
-
-English:
-lemma mor₁_eq_zero_of_epi₃
-  given: (h : Epi T.mor₃)
-  statement: T.mor₁ = 0
-  proof: (T.mor₁_eq_zero_iff_epi₃ hT).2 h
-
-中文:
-引理 mor₁_eq_zero_of_epi₃
-  条件: (h : 满态射 T.mor₃)
-  结论: T.mor₁ = 0
-  证明: (T.mor₁_eq_zero_iff_epi₃ hT).2 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₁_eq_zero_of_epi₃ (h : Epi T.mor₃) : T.mor₁ = 0 := (T.mor₁_eq_zero_iff_epi₃ hT).2 h
-
-/--
-lemma `epi₂` / 引理 `epi₂`
-
-English:
-lemma epi₂
-  given: (h : T.mor₃ = 0)
-  statement: Epi T.mor₂
-  proof: (T.mor₃_eq_zero_iff_epi₂ hT).1 h
-
-中文:
-引理 epi₂
-  条件: (h : T.mor₃ = 0)
-  结论: 满态射 T.mor₂
-  证明: (T.mor₃_eq_zero_iff_epi₂ hT).1 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.epi** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma epi₂ (h : T.mor₃ = 0) : Epi T.mor₂ := (T.mor₃_eq_zero_iff_epi₂ hT).1 h
-/--
-lemma `epi₁` / 引理 `epi₁`
-
-English:
-lemma epi₁
-  given: (h : T.mor₂ = 0)
-  statement: Epi T.mor₁
-  proof: (T.mor₂_eq_zero_iff_epi₁ hT).1 h
-
-中文:
-引理 epi₁
-  条件: (h : T.mor₂ = 0)
-  结论: 满态射 T.mor₁
-  证明: (T.mor₂_eq_zero_iff_epi₁ hT).1 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.epi** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma epi₁ (h : T.mor₂ = 0) : Epi T.mor₁ := (T.mor₂_eq_zero_iff_epi₁ hT).1 h
-/--
-lemma `epi₃` / 引理 `epi₃`
-
-English:
-lemma epi₃
-  given: (h : T.mor₁ = 0)
-  statement: Epi T.mor₃
-  proof: (T.mor₁_eq_zero_iff_epi₃ hT).1 h
-
-中文:
-引理 epi₃
-  条件: (h : T.mor₁ = 0)
-  结论: 满态射 T.mor₃
-  证明: (T.mor₁_eq_zero_iff_epi₃ hT).1 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.epi** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma epi₃ (h : T.mor₁ = 0) : Epi T.mor₃ := (T.mor₁_eq_zero_iff_epi₃ hT).1 h
-
-/--
-lemma `mor₁_eq_zero_iff_mono₂` / 引理 `mor₁_eq_zero_iff_mono₂`
-
-English:
-lemma mor₁_eq_zero_iff_mono₂
-  statement: T.mor₁ = 0 ↔ Mono T.mor₂
-  proof: by
-  constructor
-  · intro h
-    rw [mono_iff_cancel_zero]
-    intro X g hg
-    obtain ⟨f, rfl⟩ := coyoneda_exact₂ T hT g hg
-    rw [h]; rw [comp_zero]
-  · intro
-    rw [← cancel_mono T.mor₂]; rw [comp_distTriang_mor_zero₁₂ _ hT]; rw [zero_comp]
-
-中文:
-引理 mor₁_eq_zero_iff_mono₂
-  结论: T.mor₁ = 0 ↔ 单态射 T.mor₂
-  证明: by
-  constructor
-  · intro h
-    rw [mono_iff_cancel_zero]
-    intro X g hg
-    obtain ⟨f, rfl⟩ := coyoneda_exact₂ T hT g hg
-    rw [h]; rw [comp_zero]
-  · intro
-    rw [← cancel_mono T.mor₂]; rw [comp_distTriang_mor_zero₁₂ _ hT]; rw [zero_comp]
-
-Depends on / 依赖: T.mor, cancel_mono, comp_zero, mono_iff_cancel_zero, zero_comp
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₁_eq_zero_iff_mono₂ : T.mor₁ = 0 ↔ Mono T.mor₂ := by
   constructor
@@ -919,195 +640,69 @@ lemma mor₁_eq_zero_iff_mono₂ : T.mor₁ = 0 ↔ Mono T.mor₂ := by
     rw [mono_iff_cancel_zero]
     intro X g hg
     obtain ⟨f, rfl⟩ := coyoneda_exact₂ T hT g hg
-    rw [h]; rw [comp_zero]
+    rw [h, comp_zero]
   · intro
-    rw [← cancel_mono T.mor₂]; rw [comp_distTriang_mor_zero₁₂ _ hT]; rw [zero_comp]
-
-/--
-lemma `mor₂_eq_zero_iff_mono₃` / 引理 `mor₂_eq_zero_iff_mono₃`
-
-English:
-lemma mor₂_eq_zero_iff_mono₃
-  statement: T.mor₂ = 0 ↔ Mono T.mor₃
-  proof: mor₁_eq_zero_iff_mono₂ _ (rot_of_distTriang _ hT)
-
-中文:
-引理 mor₂_eq_zero_iff_mono₃
-  结论: T.mor₂ = 0 ↔ 单态射 T.mor₃
-  证明: mor₁_eq_zero_iff_mono₂ _ (rot_of_distTriang _ hT)
-
-Depends on / 依赖: rot_of_distTriang
+    rw [← cancel_mono T.mor₂, comp_distTriang_mor_zero₁₂ _ hT, zero_comp]
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₂_eq_zero_iff_mono₃ : T.mor₂ = 0 ↔ Mono T.mor₃ :=
   mor₁_eq_zero_iff_mono₂ _ (rot_of_distTriang _ hT)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mor₃_eq_zero_iff_mono₁` / 引理 `mor₃_eq_zero_iff_mono₁`
-
-English:
-lemma mor₃_eq_zero_iff_mono₁
-  statement: T.mor₃ = 0 ↔ Mono T.mor₁
-  proof: by
-  have h := mor₁_eq_zero_iff_mono₂ _ (inv_rot_of_distTriang _ hT)
-  dsimp at h
-  rw [← h]; rw [neg_eq_zero]; rw [IsIso.comp_right_eq_zero]
-  exact (Functor.map_eq_zero_iff (CategoryTheory.shiftFunctor C (-1))).symm
-
-中文:
-引理 mor₃_eq_zero_iff_mono₁
-  结论: T.mor₃ = 0 ↔ 单态射 T.mor₁
-  证明: by
-  have h := mor₁_eq_zero_iff_mono₂ _ (inv_rot_of_distTriang _ hT)
-  dsimp at h
-  rw [← h]; rw [neg_eq_zero]; rw [IsIso.comp_right_eq_zero]
-  exact (Functor.map_eq_zero_iff (CategoryTheory.shiftFunctor C (-1))).symm
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.shiftFunctor, Functor, Functor.map_eq_zero_iff, IsIso.comp_right_eq_zero, comp_right_eq_zero, inv_rot_of_distTriang, map_eq_zero_iff, neg_eq_zero, shiftFunctor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₃_eq_zero_iff_mono₁ : T.mor₃ = 0 ↔ Mono T.mor₁ := by
   have h := mor₁_eq_zero_iff_mono₂ _ (inv_rot_of_distTriang _ hT)
   dsimp at h
-  rw [← h]; rw [neg_eq_zero]; rw [IsIso.comp_right_eq_zero]
+  rw [← h, neg_eq_zero, IsIso.comp_right_eq_zero]
   exact (Functor.map_eq_zero_iff (CategoryTheory.shiftFunctor C (-1))).symm
-
-/--
-lemma `mor₁_eq_zero_of_mono₂` / 引理 `mor₁_eq_zero_of_mono₂`
-
-English:
-lemma mor₁_eq_zero_of_mono₂
-  given: (h : Mono T.mor₂)
-  statement: T.mor₁ = 0
-  proof: (T.mor₁_eq_zero_iff_mono₂ hT).2 h
-
-中文:
-引理 mor₁_eq_zero_of_mono₂
-  条件: (h : 单态射 T.mor₂)
-  结论: T.mor₁ = 0
-  证明: (T.mor₁_eq_zero_iff_mono₂ hT).2 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₁_eq_zero_of_mono₂ (h : Mono T.mor₂) : T.mor₁ = 0 := (T.mor₁_eq_zero_iff_mono₂ hT).2 h
-/--
-lemma `mor₂_eq_zero_of_mono₃` / 引理 `mor₂_eq_zero_of_mono₃`
-
-English:
-lemma mor₂_eq_zero_of_mono₃
-  given: (h : Mono T.mor₃)
-  statement: T.mor₂ = 0
-  proof: (T.mor₂_eq_zero_iff_mono₃ hT).2 h
-
-中文:
-引理 mor₂_eq_zero_of_mono₃
-  条件: (h : 单态射 T.mor₃)
-  结论: T.mor₂ = 0
-  证明: (T.mor₂_eq_zero_iff_mono₃ hT).2 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₂_eq_zero_of_mono₃ (h : Mono T.mor₃) : T.mor₂ = 0 := (T.mor₂_eq_zero_iff_mono₃ hT).2 h
-/--
-lemma `mor₃_eq_zero_of_mono₁` / 引理 `mor₃_eq_zero_of_mono₁`
-
-English:
-lemma mor₃_eq_zero_of_mono₁
-  given: (h : Mono T.mor₁)
-  statement: T.mor₃ = 0
-  proof: (T.mor₃_eq_zero_iff_mono₁ hT).2 h
-
-中文:
-引理 mor₃_eq_zero_of_mono₁
-  条件: (h : 单态射 T.mor₁)
-  结论: T.mor₃ = 0
-  证明: (T.mor₃_eq_zero_iff_mono₁ hT).2 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mor₃_eq_zero_of_mono₁ (h : Mono T.mor₁) : T.mor₃ = 0 := (T.mor₃_eq_zero_iff_mono₁ hT).2 h
-
-/--
-lemma `mono₂` / 引理 `mono₂`
-
-English:
-lemma mono₂
-  given: (h : T.mor₁ = 0)
-  statement: Mono T.mor₂
-  proof: (T.mor₁_eq_zero_iff_mono₂ hT).1 h
-
-中文:
-引理 mono₂
-  条件: (h : T.mor₁ = 0)
-  结论: 单态射 T.mor₂
-  证明: (T.mor₁_eq_zero_iff_mono₂ hT).1 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mono** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mono₂ (h : T.mor₁ = 0) : Mono T.mor₂ := (T.mor₁_eq_zero_iff_mono₂ hT).1 h
-/--
-lemma `mono₃` / 引理 `mono₃`
-
-English:
-lemma mono₃
-  given: (h : T.mor₂ = 0)
-  statement: Mono T.mor₃
-  proof: (T.mor₂_eq_zero_iff_mono₃ hT).1 h
-
-中文:
-引理 mono₃
-  条件: (h : T.mor₂ = 0)
-  结论: 单态射 T.mor₃
-  证明: (T.mor₂_eq_zero_iff_mono₃ hT).1 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mono** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mono₃ (h : T.mor₂ = 0) : Mono T.mor₃ := (T.mor₂_eq_zero_iff_mono₃ hT).1 h
-/--
-lemma `mono₁` / 引理 `mono₁`
-
-English:
-lemma mono₁
-  given: (h : T.mor₃ = 0)
-  statement: Mono T.mor₁
-  proof: (T.mor₃_eq_zero_iff_mono₁ hT).1 h
-
-中文:
-引理 mono₁
-  条件: (h : T.mor₃ = 0)
-  结论: 单态射 T.mor₁
-  证明: (T.mor₃_eq_zero_iff_mono₁ hT).1 h
-
-Depends on / 依赖: T.mor
+/-
+**CategoryTheory.Pretriangulated.Triangle.mono** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mono₁ (h : T.mor₃ = 0) : Mono T.mor₁ := (T.mor₃_eq_zero_iff_mono₁ hT).1 h
-
-/--
-lemma `isZero₂_iff` / 引理 `isZero₂_iff`
-
-English:
-lemma isZero₂_iff
-  statement: IsZero T.obj₂ ↔ (T.mor₁ = 0 ∧ T.mor₂ = 0)
-  proof: by
-  constructor
-  · intro h
-    exact ⟨h.eq_of_tgt _ _, h.eq_of_src _ _⟩
-  · intro ⟨h₁, h₂⟩
-    obtain ⟨f, hf⟩ := coyoneda_exact₂ T hT (𝟙 _) (by rw [h₂, comp_zero])
-    rw [IsZero.iff_id_eq_zero]; rw [hf]; rw [h₁]; rw [comp_zero]
-
-中文:
-引理 isZero₂_iff
-  结论: 是零 T.obj₂ ↔ (T.mor₁ = 0 ∧ T.mor₂ = 0)
-  证明: by
-  constructor
-  · intro h
-    exact ⟨h.eq_of_tgt _ _, h.eq_of_src _ _⟩
-  · intro ⟨h₁, h₂⟩
-    obtain ⟨f, hf⟩ := coyoneda_exact₂ T hT (𝟙 _) (by rw [h₂, comp_zero])
-    rw [IsZero.iff_id_eq_zero]; rw [hf]; rw [h₁]; rw [comp_zero]
-
-Depends on / 依赖: IsZero, IsZero.iff_id_eq_zero, comp_zero, eq_of_src, eq_of_tgt, h.eq_of_src, h.eq_of_tgt, iff_id_eq_zero
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₂_iff : IsZero T.obj₂ ↔ (T.mor₁ = 0 ∧ T.mor₂ = 0) := by
   constructor
@@ -1115,172 +710,60 @@ lemma isZero₂_iff : IsZero T.obj₂ ↔ (T.mor₁ = 0 ∧ T.mor₂ = 0) := by
     exact ⟨h.eq_of_tgt _ _, h.eq_of_src _ _⟩
   · intro ⟨h₁, h₂⟩
     obtain ⟨f, hf⟩ := coyoneda_exact₂ T hT (𝟙 _) (by rw [h₂, comp_zero])
-    rw [IsZero.iff_id_eq_zero]; rw [hf]; rw [h₁]; rw [comp_zero]
+    rw [IsZero.iff_id_eq_zero, hf, h₁, comp_zero]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isZero₁_iff` / 引理 `isZero₁_iff`
-
-English:
-lemma isZero₁_iff
-  statement: IsZero T.obj₁ ↔ (T.mor₁ = 0 ∧ T.mor₃ = 0)
-  proof: by
-  refine (isZero₂_iff _ (inv_rot_of_distTriang _ hT)).trans ?_
-  dsimp
-  simp only [neg_eq_zero, IsIso.comp_right_eq_zero, Functor.map_eq_zero_iff]
-  tauto
-
-中文:
-引理 isZero₁_iff
-  结论: 是零 T.obj₁ ↔ (T.mor₁ = 0 ∧ T.mor₃ = 0)
-  证明: by
-  refine (isZero₂_iff _ (inv_rot_of_distTriang _ hT)).trans ?_
-  dsimp
-  simp only [neg_eq_zero, IsIso.comp_right_eq_zero, Functor.map_eq_zero_iff]
-  tauto
-
-Depends on / 依赖: Functor, Functor.map_eq_zero_iff, IsIso.comp_right_eq_zero, comp_right_eq_zero, inv_rot_of_distTriang, map_eq_zero_iff, neg_eq_zero
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₁_iff : IsZero T.obj₁ ↔ (T.mor₁ = 0 ∧ T.mor₃ = 0) := by
   refine (isZero₂_iff _ (inv_rot_of_distTriang _ hT)).trans ?_
   dsimp
   simp only [neg_eq_zero, IsIso.comp_right_eq_zero, Functor.map_eq_zero_iff]
   tauto
-
-/--
-lemma `isZero₃_iff` / 引理 `isZero₃_iff`
-
-English:
-lemma isZero₃_iff
-  statement: IsZero T.obj₃ ↔ (T.mor₂ = 0 ∧ T.mor₃ = 0)
-  proof: by
-  refine (isZero₂_iff _ (rot_of_distTriang _ hT)).trans ?_
-  tauto
-
-中文:
-引理 isZero₃_iff
-  结论: 是零 T.obj₃ ↔ (T.mor₂ = 0 ∧ T.mor₃ = 0)
-  证明: by
-  refine (isZero₂_iff _ (rot_of_distTriang _ hT)).trans ?_
-  tauto
-
-Depends on / 依赖: rot_of_distTriang
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₃_iff : IsZero T.obj₃ ↔ (T.mor₂ = 0 ∧ T.mor₃ = 0) := by
   refine (isZero₂_iff _ (rot_of_distTriang _ hT)).trans ?_
   tauto
-
-/--
-lemma `isZero₁_of_isZero₂₃` / 引理 `isZero₁_of_isZero₂₃`
-
-English:
-lemma isZero₁_of_isZero₂₃
-  given: (h₂ : IsZero T.obj₂) (h₃ : IsZero T.obj₃)
-  statement: IsZero T.obj₁
-  proof: by
-  rw [T.isZero₁_iff hT]
-  exact ⟨h₂.eq_of_tgt _ _, h₃.eq_of_src _ _⟩
-
-中文:
-引理 isZero₁_of_isZero₂₃
-  条件: (h₂ : 是零 T.obj₂) (h₃ : 是零 T.obj₃)
-  结论: 是零 T.obj₁
-  证明: by
-  rw [T.isZero₁_iff hT]
-  exact ⟨h₂.eq_of_tgt _ _, h₃.eq_of_src _ _⟩
-
-Depends on / 依赖: T.isZero, eq_of_src, eq_of_tgt
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₁_of_isZero₂₃ (h₂ : IsZero T.obj₂) (h₃ : IsZero T.obj₃) : IsZero T.obj₁ := by
   rw [T.isZero₁_iff hT]
   exact ⟨h₂.eq_of_tgt _ _, h₃.eq_of_src _ _⟩
-
-/--
-lemma `isZero₂_of_isZero₁₃` / 引理 `isZero₂_of_isZero₁₃`
-
-English:
-lemma isZero₂_of_isZero₁₃
-  given: (h₁ : IsZero T.obj₁) (h₃ : IsZero T.obj₃)
-  statement: IsZero T.obj₂
-  proof: by
-  rw [T.isZero₂_iff hT]
-  exact ⟨h₁.eq_of_src _ _, h₃.eq_of_tgt _ _⟩
-
-中文:
-引理 isZero₂_of_isZero₁₃
-  条件: (h₁ : 是零 T.obj₁) (h₃ : 是零 T.obj₃)
-  结论: 是零 T.obj₂
-  证明: by
-  rw [T.isZero₂_iff hT]
-  exact ⟨h₁.eq_of_src _ _, h₃.eq_of_tgt _ _⟩
-
-Depends on / 依赖: T.isZero, eq_of_src, eq_of_tgt
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₂_of_isZero₁₃ (h₁ : IsZero T.obj₁) (h₃ : IsZero T.obj₃) : IsZero T.obj₂ := by
   rw [T.isZero₂_iff hT]
   exact ⟨h₁.eq_of_src _ _, h₃.eq_of_tgt _ _⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isZero₃_of_isZero₁₂` / 引理 `isZero₃_of_isZero₁₂`
-
-English:
-lemma isZero₃_of_isZero₁₂
-  given: (h₁ : IsZero T.obj₁) (h₂ : IsZero T.obj₂)
-  statement: IsZero T.obj₃
-  proof: isZero₂_of_isZero₁₃ _ (rot_of_distTriang _ hT) h₂ (by
-    dsimp
-    simp only [IsZero.iff_id_eq_zero] at h₁ ⊢
-    rw [← Functor.map_id]; rw [h₁]; rw [Functor.map_zero])
-
-中文:
-引理 isZero₃_of_isZero₁₂
-  条件: (h₁ : 是零 T.obj₁) (h₂ : 是零 T.obj₂)
-  结论: 是零 T.obj₃
-  证明: isZero₂_of_isZero₁₃ _ (rot_of_distTriang _ hT) h₂ (by
-    dsimp
-    simp only [IsZero.iff_id_eq_zero] at h₁ ⊢
-    rw [← Functor.map_id]; rw [h₁]; rw [Functor.map_zero])
-
-Depends on / 依赖: Functor, Functor.map_id, Functor.map_zero, IsZero, IsZero.iff_id_eq_zero, iff_id_eq_zero, map_id, map_zero, rot_of_distTriang
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₃_of_isZero₁₂ (h₁ : IsZero T.obj₁) (h₂ : IsZero T.obj₂) : IsZero T.obj₃ :=
   isZero₂_of_isZero₁₃ _ (rot_of_distTriang _ hT) h₂ (by
     dsimp
     simp only [IsZero.iff_id_eq_zero] at h₁ ⊢
-    rw [← Functor.map_id]; rw [h₁]; rw [Functor.map_zero])
-
-/--
-lemma `isZero₁_iff_isIso₂` / 引理 `isZero₁_iff_isIso₂`
-
-English:
-lemma isZero₁_iff_isIso₂
-  proof: by
-  rw [T.isZero₁_iff hT]
-  constructor
-  · intro ⟨h₁, h₃⟩
-    have := T.epi₂ hT h₃
-    obtain ⟨f, hf⟩ := yoneda_exact₂ T hT (𝟙 _) (by rw [h₁, zero_comp])
-    exact ⟨f, hf.symm, by rw [← cancel_epi T.mor₂, comp_id, ← reassoc_of% hf]⟩
-  · intro
-    rw [T.mor₁_eq_zero_iff_mono₂ hT]; rw [T.mor₃_eq_zero_iff_epi₂ hT]
-    constructor <;> infer_instance
-
-中文:
-引理 isZero₁_iff_isIso₂
-  证明: by
-  rw [T.isZero₁_iff hT]
-  constructor
-  · intro ⟨h₁, h₃⟩
-    have := T.epi₂ hT h₃
-    obtain ⟨f, hf⟩ := yoneda_exact₂ T hT (𝟙 _) (by rw [h₁, zero_comp])
-    exact ⟨f, hf.symm, by rw [← cancel_epi T.mor₂, comp_id, ← reassoc_of% hf]⟩
-  · intro
-    rw [T.mor₁_eq_zero_iff_mono₂ hT]; rw [T.mor₃_eq_zero_iff_epi₂ hT]
-    constructor <;> infer_instance
-
-Depends on / 依赖: T.epi, T.isZero, T.mor, cancel_epi, comp_id, hf.symm, infer_instance, reassoc_of, zero_comp
+    rw [← Functor.map_id, h₁, Functor.map_zero])
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₁_iff_isIso₂ :
     IsZero T.obj₁ ↔ IsIso T.mor₂ := by
@@ -1291,177 +774,68 @@ lemma isZero₁_iff_isIso₂ :
     obtain ⟨f, hf⟩ := yoneda_exact₂ T hT (𝟙 _) (by rw [h₁, zero_comp])
     exact ⟨f, hf.symm, by rw [← cancel_epi T.mor₂, comp_id, ← reassoc_of% hf]⟩
   · intro
-    rw [T.mor₁_eq_zero_iff_mono₂ hT]; rw [T.mor₃_eq_zero_iff_epi₂ hT]
+    rw [T.mor₁_eq_zero_iff_mono₂ hT, T.mor₃_eq_zero_iff_epi₂ hT]
     constructor <;> infer_instance
-
-/--
-lemma `isZero₂_iff_isIso₃` / 引理 `isZero₂_iff_isIso₃`
-
-English:
-lemma isZero₂_iff_isIso₃
-  statement: IsZero T.obj₂ ↔ IsIso T.mor₃
-  proof: isZero₁_iff_isIso₂ _ (rot_of_distTriang _ hT)
-
-中文:
-引理 isZero₂_iff_isIso₃
-  结论: 是零 T.obj₂ ↔ 是同构 T.mor₃
-  证明: isZero₁_iff_isIso₂ _ (rot_of_distTriang _ hT)
-
-Depends on / 依赖: rot_of_distTriang
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₂_iff_isIso₃ : IsZero T.obj₂ ↔ IsIso T.mor₃ :=
   isZero₁_iff_isIso₂ _ (rot_of_distTriang _ hT)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isZero₃_iff_isIso₁` / 引理 `isZero₃_iff_isIso₁`
-
-English:
-lemma isZero₃_iff_isIso₁
-  statement: IsZero T.obj₃ ↔ IsIso T.mor₁
-  proof: by
-  refine Iff.trans ?_ (Triangle.isZero₁_iff_isIso₂ _ (inv_rot_of_distTriang _ hT))
-  dsimp
-  simp only [IsZero.iff_id_eq_zero, ← Functor.map_id, Functor.map_eq_zero_iff]
-
-中文:
-引理 isZero₃_iff_isIso₁
-  结论: 是零 T.obj₃ ↔ 是同构 T.mor₁
-  证明: by
-  refine Iff.trans ?_ (Triangle.isZero₁_iff_isIso₂ _ (inv_rot_of_distTriang _ hT))
-  dsimp
-  simp only [IsZero.iff_id_eq_zero, ← Functor.map_id, Functor.map_eq_zero_iff]
-
-Depends on / 依赖: Functor, Functor.map_eq_zero_iff, Functor.map_id, Iff.trans, IsZero, IsZero.iff_id_eq_zero, Triangle, Triangle.isZero, iff_id_eq_zero, inv_rot_of_distTriang, map_eq_zero_iff, map_id
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₃_iff_isIso₁ : IsZero T.obj₃ ↔ IsIso T.mor₁ := by
   refine Iff.trans ?_ (Triangle.isZero₁_iff_isIso₂ _ (inv_rot_of_distTriang _ hT))
   dsimp
   simp only [IsZero.iff_id_eq_zero, ← Functor.map_id, Functor.map_eq_zero_iff]
-
-/--
-lemma `isZero₁_of_isIso₂` / 引理 `isZero₁_of_isIso₂`
-
-English:
-lemma isZero₁_of_isIso₂
-  given: (h : IsIso T.mor₂)
-  statement: IsZero T.obj₁
-  proof: (T.isZero₁_iff_isIso₂ hT).2 h
-
-中文:
-引理 isZero₁_of_isIso₂
-  条件: (h : 是同构 T.mor₂)
-  结论: 是零 T.obj₁
-  证明: (T.isZero₁_iff_isIso₂ hT).2 h
-
-Depends on / 依赖: T.isZero
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₁_of_isIso₂ (h : IsIso T.mor₂) : IsZero T.obj₁ := (T.isZero₁_iff_isIso₂ hT).2 h
-/--
-lemma `isZero₂_of_isIso₃` / 引理 `isZero₂_of_isIso₃`
-
-English:
-lemma isZero₂_of_isIso₃
-  given: (h : IsIso T.mor₃)
-  statement: IsZero T.obj₂
-  proof: (T.isZero₂_iff_isIso₃ hT).2 h
-
-中文:
-引理 isZero₂_of_isIso₃
-  条件: (h : 是同构 T.mor₃)
-  结论: 是零 T.obj₂
-  证明: (T.isZero₂_iff_isIso₃ hT).2 h
-
-Depends on / 依赖: T.isZero
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₂_of_isIso₃ (h : IsIso T.mor₃) : IsZero T.obj₂ := (T.isZero₂_iff_isIso₃ hT).2 h
-/--
-lemma `isZero₃_of_isIso₁` / 引理 `isZero₃_of_isIso₁`
-
-English:
-lemma isZero₃_of_isIso₁
-  given: (h : IsIso T.mor₁)
-  statement: IsZero T.obj₃
-  proof: (T.isZero₃_iff_isIso₁ hT).2 h
-
-中文:
-引理 isZero₃_of_isIso₁
-  条件: (h : 是同构 T.mor₁)
-  结论: 是零 T.obj₃
-  证明: (T.isZero₃_iff_isIso₁ hT).2 h
-
-Depends on / 依赖: T.isZero
+/-
+**CategoryTheory.Pretriangulated.Triangle.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isZero₃_of_isIso₁ (h : IsIso T.mor₁) : IsZero T.obj₃ := (T.isZero₃_iff_isIso₁ hT).2 h
-
-/--
-lemma `shift_distinguished` / 引理 `shift_distinguished`
-
-English:
-lemma shift_distinguished
-  given: (n : Int)
-  proof: by
-  revert T hT
-  let H : Int -> Prop := fun n => forall (T : Triangle C) (_ : T in distTriang C),
-    (Triangle.shiftFunctor C n).obj T in distTriang C
-  change H n
-  have H_zero : H 0 := fun T hT =>
-    isomorphic_distinguished _ hT _ ((Triangle.shiftFunctorZero C).app T)
-  have H_one : H 1 := fun T hT =>
-    isomorphic_distinguished _ (rot_of_distTriang _
-      (rot_of_distTriang _ (rot_of_distTriang _ hT))) _
-        ((rotateRotateRotateIso C).symm.app T)
-  have H_neg_one : H (-1) := fun T hT =>
-    isomorphic_distinguished _ (inv_rot_of_distTriang _
-      (inv_rot_of_distTriang _ (inv_rot_of_distTriang _ hT))) _
-        ((invRotateInvRotateInvRotateIso C).symm.app T)
-  have H_add : forall {a b c : Int}, H a -> H b -> a + b = c -> H c := fun {a b c} ha hb hc T hT =>
-    isomorphic_distinguished _ (hb _ (ha _ hT)) _
-      ((Triangle.shiftFunctorAdd' C _ _ _ hc).app T)
-  obtain (n | n) := n
-  · induction n with
-    | zero => exact H_zero
-    | succ n hn => exact H_add hn H_one rfl
-  · induction n with
-    | zero => exact H_neg_one
-    | succ n hn => exact H_add hn H_neg_one rfl
-
-中文:
-引理 shift_distinguished
-  条件: (n : 整数)
-  证明: by
-  revert T hT
-  let H : Int -> Prop := fun n => forall (T : Triangle C) (_ : T in distTriang C),
-    (Triangle.shiftFunctor C n).obj T in distTriang C
-  change H n
-  have H_zero : H 0 := fun T hT =>
-    isomorphic_distinguished _ hT _ ((Triangle.shiftFunctorZero C).app T)
-  have H_one : H 1 := fun T hT =>
-    isomorphic_distinguished _ (rot_of_distTriang _
-      (rot_of_distTriang _ (rot_of_distTriang _ hT))) _
-        ((rotateRotateRotateIso C).symm.app T)
-  have H_neg_one : H (-1) := fun T hT =>
-    isomorphic_distinguished _ (inv_rot_of_distTriang _
-      (inv_rot_of_distTriang _ (inv_rot_of_distTriang _ hT))) _
-        ((invRotateInvRotateInvRotateIso C).symm.app T)
-  have H_add : forall {a b c : Int}, H a -> H b -> a + b = c -> H c := fun {a b c} ha hb hc T hT =>
-    isomorphic_distinguished _ (hb _ (ha _ hT)) _
-      ((Triangle.shiftFunctorAdd' C _ _ _ hc).app T)
-  obtain (n | n) := n
-  · induction n with
-    | zero => exact H_zero
-    | succ n hn => exact H_add hn H_one rfl
-  · induction n with
-    | zero => exact H_neg_one
-    | succ n hn => exact H_add hn H_neg_one rfl
-
-Depends on / 依赖: H_neg_one, H_one, H_zero, Triangle, Triangle.shiftFunctor, Triangle.shiftFunctorZero, distTriang, inv_, isomorphic_distinguished, revert, rot_of_distTriang, rotateRotateRotateIso, shiftFunctor, shiftFunctorZero, symm.app
+/-
+**CategoryTheory.Pretriangulated.Triangle.shift_distinguished** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：shift_distinguished (n : Int) : (CategoryTheory.shiftFunctor (Triangle C) 
+n).obj T in distTriang C
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用定理 `CategoryTheory.Pretriangulated.rot_of_distTriang`：rot_of_distTriang (T :
+ Triangle C) (H : T in distTriang C) : T.rotate in distTriang C
+· 使用定理 `CategoryTheory.Pretriangulated.inv_rot_of_distTriang`：inv_rot_of_distTri
+ang (T : Triangle C) (H : T in distTriang C) : T.invRotate in distTriang C
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.shiftFunctorAdd'`：shiftFunctorAd
+d'_eq (a b c : Int) (h : a + b = c) : CategoryTheory.shiftFunctorAdd' (Triangle 
+C) a b c h = Triangle.shiftFunctorAdd' C a b c…
 -/
-lemma shift_distinguished (n : Int) :
-    (CategoryTheory.shiftFunctor (Triangle C) n).obj T in distTriang C := by
+lemma shift_distinguished (n : ℤ) :
+    (CategoryTheory.shiftFunctor (Triangle C) n).obj T ∈ distTriang C := by
   revert T hT
-  let H : Int -> Prop := fun n => forall (T : Triangle C) (_ : T in distTriang C),
-    (Triangle.shiftFunctor C n).obj T in distTriang C
+  let H : ℤ → Prop := fun n => ∀ (T : Triangle C) (_ : T ∈ distTriang C),
+    (Triangle.shiftFunctor C n).obj T ∈ distTriang C
   change H n
   have H_zero : H 0 := fun T hT =>
     isomorphic_distinguished _ hT _ ((Triangle.shiftFunctorZero C).app T)
@@ -1473,7 +847,7 @@ lemma shift_distinguished (n : Int) :
     isomorphic_distinguished _ (inv_rot_of_distTriang _
       (inv_rot_of_distTriang _ (inv_rot_of_distTriang _ hT))) _
         ((invRotateInvRotateInvRotateIso C).symm.app T)
-  have H_add : forall {a b c : Int}, H a -> H b -> a + b = c -> H c := fun {a b c} ha hb hc T hT =>
+  have H_add : ∀ {a b c : ℤ}, H a → H b → a + b = c → H c := fun {a b c} ha hb hc T hT =>
     isomorphic_distinguished _ (hb _ (ha _ hT)) _
       ((Triangle.shiftFunctorAdd' C _ _ _ hc).app T)
   obtain (n | n) := n
@@ -1488,136 +862,71 @@ section
 
 omit hT
 
-/--
-lemma `shift_distinguished_iff` / 引理 `shift_distinguished_iff`
-
-English:
-lemma shift_distinguished_iff
-  given: (n : Int)
-  proof: ⟨fun hT => isomorphic_distinguished _ (shift_distinguished _ hT (-n)) _
-      ((shiftEquiv (Triangle C) n).unitIso.app T),
-    fun hT => shift_distinguished T hT n⟩
-
-中文:
-引理 shift_distinguished_iff
-  条件: (n : 整数)
-  证明: ⟨fun hT => isomorphic_distinguished _ (shift_distinguished _ hT (-n)) _
-      ((shiftEquiv (Triangle C) n).unitIso.app T),
-    fun hT => shift_distinguished T hT n⟩
-
-Depends on / 依赖: Triangle, isomorphic_distinguished, shiftEquiv, shift_distinguished, unitIso, unitIso.app
+/-
+**CategoryTheory.Pretriangulated.Triangle.shift_distinguished_iff** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：shift_distinguished_iff (n : Int) : (CategoryTheory.shiftFunctor (Triangle
+ C) n).obj T in (distTriang C) ↔ T in distTriang C
+参数：n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.shift_distinguished`：shift_disti
+nguished (n : Int) : (CategoryTheory.shiftFunctor (Triangle C) n).obj T in distT
+riang C
 -/
-lemma shift_distinguished_iff (n : Int) :
-    (CategoryTheory.shiftFunctor (Triangle C) n).obj T in (distTriang C) ↔ T in distTriang C :=
-  ⟨fun hT => isomorphic_distinguished _ (shift_distinguished _ hT (-n)) _
+lemma shift_distinguished_iff (n : ℤ) :
+    (CategoryTheory.shiftFunctor (Triangle C) n).obj T ∈ (distTriang C) ↔ T ∈ distTriang C :=
+  ⟨fun hT ↦ isomorphic_distinguished _ (shift_distinguished _ hT (-n)) _
       ((shiftEquiv (Triangle C) n).unitIso.app T),
-    fun hT => shift_distinguished T hT n⟩
+    fun hT ↦ shift_distinguished T hT n⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `distinguished_iff_of_isZero₃` / 引理 `distinguished_iff_of_isZero₃`
-
-English:
-lemma distinguished_iff_of_isZero₃
-  given: (T : Triangle C) (h : IsZero T.obj₃)
-  proof: ⟨fun hT => by rwa [← isZero₃_iff_isIso₁ _ hT],
-    fun _ => isomorphic_distinguished _ (contractible_distinguished T.obj₁) _
-      (isoMk _ _ (Iso.refl _) (asIso T.mor₁).symm h.isoZero (by simp)
-        ((isZero_zero C).eq_of_tgt _ _) (h.eq_of_src _ _))⟩
-
-中文:
-引理 distinguished_iff_of_isZero₃
-  条件: (T : Triangle C) (h : 是零 T.obj₃)
-  证明: ⟨fun hT => by rwa [← isZero₃_iff_isIso₁ _ hT],
-    fun _ => isomorphic_distinguished _ (contractible_distinguished T.obj₁) _
-      (isoMk _ _ (Iso.refl _) (asIso T.mor₁).symm h.isoZero (by simp)
-        ((isZero_zero C).eq_of_tgt _ _) (h.eq_of_src _ _))⟩
-
-Depends on / 依赖: Iso.refl, T.mor, T.obj, contractible_distinguished, eq_of_src, eq_of_tgt, h.eq_of_src, h.isoZero, isZero_zero, isoZero, isomorphic_distinguished
+/-
+**CategoryTheory.Pretriangulated.Triangle.distinguished_iff_of_isZero** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma distinguished_iff_of_isZero₃ (T : Triangle C) (h : IsZero T.obj₃) :
-    T in distTriang _ ↔ IsIso T.mor₁ :=
-  ⟨fun hT => by rwa [← isZero₃_iff_isIso₁ _ hT],
-    fun _ => isomorphic_distinguished _ (contractible_distinguished T.obj₁) _
+    T ∈ distTriang _ ↔ IsIso T.mor₁ :=
+  ⟨fun hT ↦ by rwa [← isZero₃_iff_isIso₁ _ hT],
+    fun _ ↦ isomorphic_distinguished _ (contractible_distinguished T.obj₁) _
       (isoMk _ _ (Iso.refl _) (asIso T.mor₁).symm h.isoZero (by simp)
         ((isZero_zero C).eq_of_tgt _ _) (h.eq_of_src _ _))⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `distinguished_iff_of_isZero₁` / 引理 `distinguished_iff_of_isZero₁`
-
-English:
-lemma distinguished_iff_of_isZero₁
-  given: (T : Triangle C) (h : IsZero T.obj₁)
-  proof: by
-  rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₃ _ (Functor.map_isZero (CategoryTheory.shiftFunctor C 1) h)]
-  simp
-
-中文:
-引理 distinguished_iff_of_isZero₁
-  条件: (T : Triangle C) (h : 是零 T.obj₁)
-  证明: by
-  rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₃ _ (Functor.map_isZero (CategoryTheory.shiftFunctor C 1) h)]
-  simp
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.shiftFunctor, Functor, Functor.map_isZero, map_isZero, rotate_distinguished_triangle, shiftFunctor
+/-
+**CategoryTheory.Pretriangulated.Triangle.distinguished_iff_of_isZero** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma distinguished_iff_of_isZero₁ (T : Triangle C) (h : IsZero T.obj₁) :
-    T in distTriang _ ↔ IsIso T.mor₂ := by
-  rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₃ _ (Functor.map_isZero (CategoryTheory.shiftFunctor C 1) h)]
+    T ∈ distTriang _ ↔ IsIso T.mor₂ := by
+  rw [rotate_distinguished_triangle,
+    distinguished_iff_of_isZero₃ _ (Functor.map_isZero (CategoryTheory.shiftFunctor C 1) h)]
   simp
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `distinguished_iff_of_isZero₂` / 引理 `distinguished_iff_of_isZero₂`
-
-English:
-lemma distinguished_iff_of_isZero₂
-  given: (T : Triangle C) (h : IsZero T.obj₂)
-  proof: by
-  rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₁ _ h]
-  simp
-
-中文:
-引理 distinguished_iff_of_isZero₂
-  条件: (T : Triangle C) (h : 是零 T.obj₂)
-  证明: by
-  rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₁ _ h]
-  simp
-
-Depends on / 依赖: rotate_distinguished_triangle
+/-
+**CategoryTheory.Pretriangulated.Triangle.distinguished_iff_of_isZero** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma distinguished_iff_of_isZero₂ (T : Triangle C) (h : IsZero T.obj₂) :
-    T in distTriang _ ↔ IsIso T.mor₃ := by
-  rw [rotate_distinguished_triangle]; rw [distinguished_iff_of_isZero₁ _ h]
+    T ∈ distTriang _ ↔ IsIso T.mor₃ := by
+  rw [rotate_distinguished_triangle, distinguished_iff_of_isZero₁ _ h]
   simp
 
 end
 
 end Triangle
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SplitEpiCategory C
-  body: by
-    obtain ⟨Z, g, h, hT⟩ := distinguished_cocone_triangle f
-    obtain ⟨r, hr⟩ := Triangle.coyoneda_exact₂ _ hT (𝟙 _)
-      (by rw [Triangle.mor₂_eq_zero_of_epi₁ _ hT hf, comp_zero])
-    exact ⟨r, hr.symm⟩
-
-中文:
-实例 :
-  签名: 分裂满态射范畴 C
-  定义体: by
-    obtain ⟨Z, g, h, hT⟩ := distinguished_cocone_triangle f
-    obtain ⟨r, hr⟩ := Triangle.coyoneda_exact₂ _ hT (𝟙 _)
-      (by rw [Triangle.mor₂_eq_zero_of_epi₁ _ hT hf, comp_zero])
-    exact ⟨r, hr.symm⟩
-
-Depends on / 依赖: Triangle, Triangle.coyoneda_exact, Triangle.mor, comp_zero, distinguished_cocone_triangle, hr.symm
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SplitEpiCategory C where
   isSplitEpi_of_epi f hf := by
@@ -1625,35 +934,16 @@ instance : SplitEpiCategory C where
     obtain ⟨r, hr⟩ := Triangle.coyoneda_exact₂ _ hT (𝟙 _)
       (by rw [Triangle.mor₂_eq_zero_of_epi₁ _ hT hf, comp_zero])
     exact ⟨r, hr.symm⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SplitMonoCategory C
-  body: by
-    obtain ⟨X, g, h, hT⟩ := distinguished_cocone_triangle₁ f
-    obtain ⟨r, hr⟩ := Triangle.yoneda_exact₂ _ hT (𝟙 _) (by
-      rw [Triangle.mor₁_eq_zero_of_mono₂ _ hT hf]; rw [zero_comp])
-    exact ⟨r, hr.symm⟩
-
-中文:
-实例 :
-  签名: 分裂单态射范畴 C
-  定义体: by
-    obtain ⟨X, g, h, hT⟩ := distinguished_cocone_triangle₁ f
-    obtain ⟨r, hr⟩ := Triangle.yoneda_exact₂ _ hT (𝟙 _) (by
-      rw [Triangle.mor₁_eq_zero_of_mono₂ _ hT hf]; rw [zero_comp])
-    exact ⟨r, hr.symm⟩
-
-Depends on / 依赖: Triangle, Triangle.mor, Triangle.yoneda_exact, hr.symm, zero_comp
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SplitMonoCategory C where
   isSplitMono_of_mono f hf := by
     obtain ⟨X, g, h, hT⟩ := distinguished_cocone_triangle₁ f
     obtain ⟨r, hr⟩ := Triangle.yoneda_exact₂ _ hT (𝟙 _) (by
-      rw [Triangle.mor₁_eq_zero_of_mono₂ _ hT hf]; rw [zero_comp])
+      rw [Triangle.mor₁_eq_zero_of_mono₂ _ hT hf, zero_comp])
     exact ⟨r, hr.symm⟩
 
 set_option backward.defeqAttrib.useBackward true in
@@ -1662,81 +952,18 @@ set_option backward.isDefEq.respectTransparency false in
 isomorphisms, the second component is as well. This can be thought of as a
 pretriangulated category theoretical version of the five lemma. -/
 @[stacks 014A]
-/--
-lemma `isIso₂_of_isIso₁₃` / 引理 `isIso₂_of_isIso₁₃`
+/-
+**CategoryTheory.Pretriangulated.isIso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma isIso₂_of_isIso₁₃
-  statement: {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-  proof: by
-  have : Mono φ.hom₂ := by
-    rw [mono_iff_cancel_zero]
-    intro A f hf
-    obtain ⟨g, rfl⟩ := Triangle.coyoneda_exact₂ _ hT f
-      (by rw [← cancel_mono φ.hom₃, assoc, φ.comm₂, reassoc_of% hf, zero_comp, zero_comp])
-    rw [assoc] at hf
-    obtain ⟨h, hh⟩ := Triangle.coyoneda_exact₂ T'.invRotate (inv_rot_of_distTriang _ hT')
-      (g ≫ φ.hom₁) (by dsimp; rw [assoc, ← φ.comm₁, hf])
-    obtain ⟨k, rfl⟩ : exists (k : A ⟶ T.invRotate.obj₁), k ≫ T.invRotate.mor₁ = g := by
-      refine ⟨h ≫ inv (φ.hom₃⟦(-1 : Int)⟧'), ?_⟩
-      have eq := ((invRotate C).map φ).comm₁
-      dsimp only [invRotate] at eq
-      rw [← cancel_mono φ.hom₁]; rw [assoc]; rw [assoc]; rw [eq]; rw [IsIso.inv_hom_id_assoc]; rw [hh]
-    erw [assoc, comp_distTriang_mor_zero₁₂ _ (inv_rot_of_distTriang _ hT), comp_zero]
-  refine isIso_of_yoneda_map_bijective _ (fun A => ⟨?_, ?_⟩)
-  · intro f₁ f₂ h
-    simpa only [← cancel_mono φ.hom₂] using h
-  · intro y₂
-    obtain ⟨x₃, hx₃⟩ : exists (x₃ : A ⟶ T.obj₃), x₃ ≫ φ.hom₃ = y₂ ≫ T'.mor₂ :=
-      ⟨y₂ ≫ T'.mor₂ ≫ inv φ.hom₃, by simp⟩
-    obtain ⟨x₂, hx₂⟩ := Triangle.coyoneda_exact₃ _ hT x₃
-      (by rw [← cancel_mono (φ.hom₁⟦(1 : Int)⟧'), assoc, zero_comp, φ.comm₃, reassoc_of% hx₃,
-        comp_distTriang_mor_zero₂₃ _ hT', comp_zero])
-    obtain ⟨y₁, hy₁⟩ := Triangle.coyoneda_exact₂ _ hT' (y₂ - x₂ ≫ φ.hom₂)
-      (by rw [sub_comp, assoc, ← φ.comm₂, ← reassoc_of% hx₂, hx₃, sub_self])
-    obtain ⟨x₁, hx₁⟩ : exists (x₁ : A ⟶ T.obj₁), x₁ ≫ φ.hom₁ = y₁ := ⟨y₁ ≫ inv φ.hom₁, by simp⟩
-    refine ⟨x₂ + x₁ ≫ T.mor₁, ?_⟩
-    dsimp
-    rw [add_comp]; rw [assoc]; rw [φ.comm₁]; rw [reassoc_of% hx₁]; rw [← hy₁]; rw [add_sub_cancel]
-
-中文:
-引理 isIso₂_of_isIso₁₃
-  结论: {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-  证明: by
-  have : Mono φ.hom₂ := by
-    rw [mono_iff_cancel_zero]
-    intro A f hf
-    obtain ⟨g, rfl⟩ := Triangle.coyoneda_exact₂ _ hT f
-      (by rw [← cancel_mono φ.hom₃, assoc, φ.comm₂, reassoc_of% hf, zero_comp, zero_comp])
-    rw [assoc] at hf
-    obtain ⟨h, hh⟩ := Triangle.coyoneda_exact₂ T'.invRotate (inv_rot_of_distTriang _ hT')
-      (g ≫ φ.hom₁) (by dsimp; rw [assoc, ← φ.comm₁, hf])
-    obtain ⟨k, rfl⟩ : exists (k : A ⟶ T.invRotate.obj₁), k ≫ T.invRotate.mor₁ = g := by
-      refine ⟨h ≫ inv (φ.hom₃⟦(-1 : Int)⟧'), ?_⟩
-      have eq := ((invRotate C).map φ).comm₁
-      dsimp only [invRotate] at eq
-      rw [← cancel_mono φ.hom₁]; rw [assoc]; rw [assoc]; rw [eq]; rw [IsIso.inv_hom_id_assoc]; rw [hh]
-    erw [assoc, comp_distTriang_mor_zero₁₂ _ (inv_rot_of_distTriang _ hT), comp_zero]
-  refine isIso_of_yoneda_map_bijective _ (fun A => ⟨?_, ?_⟩)
-  · intro f₁ f₂ h
-    simpa only [← cancel_mono φ.hom₂] using h
-  · intro y₂
-    obtain ⟨x₃, hx₃⟩ : exists (x₃ : A ⟶ T.obj₃), x₃ ≫ φ.hom₃ = y₂ ≫ T'.mor₂ :=
-      ⟨y₂ ≫ T'.mor₂ ≫ inv φ.hom₃, by simp⟩
-    obtain ⟨x₂, hx₂⟩ := Triangle.coyoneda_exact₃ _ hT x₃
-      (by rw [← cancel_mono (φ.hom₁⟦(1 : Int)⟧'), assoc, zero_comp, φ.comm₃, reassoc_of% hx₃,
-        comp_distTriang_mor_zero₂₃ _ hT', comp_zero])
-    obtain ⟨y₁, hy₁⟩ := Triangle.coyoneda_exact₂ _ hT' (y₂ - x₂ ≫ φ.hom₂)
-      (by rw [sub_comp, assoc, ← φ.comm₂, ← reassoc_of% hx₂, hx₃, sub_self])
-    obtain ⟨x₁, hx₁⟩ : exists (x₁ : A ⟶ T.obj₁), x₁ ≫ φ.hom₁ = y₁ := ⟨y₁ ≫ inv φ.hom₁, by simp⟩
-    refine ⟨x₂ + x₁ ≫ T.mor₁, ?_⟩
-    dsimp
-    rw [add_comp]; rw [assoc]; rw [φ.comm₁]; rw [reassoc_of% hx₁]; rw [← hy₁]; rw [add_sub_cancel]
-
-Depends on / 依赖: T.invRotate.mor, T.invRotate.obj, Triangle, Triangle.coyoneda_exact, cancel_mono, invRotate, inv_rot_of_distTriang, mono_iff_cancel_zero, reassoc_of, zero_comp
+--- 原说明 ---
+If the first and third components of a morphism of distinguished triangles are
+isomorphisms, the second component is as well. This can be thought of as a
+pretriangulated category theoretical version of the five lemma.
 -/
-lemma isIso₂_of_isIso₁₃ {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-    (hT' : T' in distTriang C) (h₁ : IsIso φ.hom₁) (h₃ : IsIso φ.hom₃) : IsIso φ.hom₂ := by
+lemma isIso₂_of_isIso₁₃ {T T' : Triangle C} (φ : T ⟶ T') (hT : T ∈ distTriang C)
+    (hT' : T' ∈ distTriang C) (h₁ : IsIso φ.hom₁) (h₃ : IsIso φ.hom₃) : IsIso φ.hom₂ := by
   have : Mono φ.hom₂ := by
     rw [mono_iff_cancel_zero]
     intro A f hf
@@ -1745,52 +972,45 @@ lemma isIso₂_of_isIso₁₃ {T T' : Triangle C} (φ : T ⟶ T') (hT : T in dis
     rw [assoc] at hf
     obtain ⟨h, hh⟩ := Triangle.coyoneda_exact₂ T'.invRotate (inv_rot_of_distTriang _ hT')
       (g ≫ φ.hom₁) (by dsimp; rw [assoc, ← φ.comm₁, hf])
-    obtain ⟨k, rfl⟩ : exists (k : A ⟶ T.invRotate.obj₁), k ≫ T.invRotate.mor₁ = g := by
-      refine ⟨h ≫ inv (φ.hom₃⟦(-1 : Int)⟧'), ?_⟩
+    obtain ⟨k, rfl⟩ : ∃ (k : A ⟶ T.invRotate.obj₁), k ≫ T.invRotate.mor₁ = g := by
+      refine ⟨h ≫ inv (φ.hom₃⟦(-1 : ℤ)⟧'), ?_⟩
       have eq := ((invRotate C).map φ).comm₁
       dsimp only [invRotate] at eq
-      rw [← cancel_mono φ.hom₁]; rw [assoc]; rw [assoc]; rw [eq]; rw [IsIso.inv_hom_id_assoc]; rw [hh]
+      rw [← cancel_mono φ.hom₁, assoc, assoc, eq, IsIso.inv_hom_id_assoc, hh]
     erw [assoc, comp_distTriang_mor_zero₁₂ _ (inv_rot_of_distTriang _ hT), comp_zero]
   refine isIso_of_yoneda_map_bijective _ (fun A => ⟨?_, ?_⟩)
   · intro f₁ f₂ h
     simpa only [← cancel_mono φ.hom₂] using h
   · intro y₂
-    obtain ⟨x₃, hx₃⟩ : exists (x₃ : A ⟶ T.obj₃), x₃ ≫ φ.hom₃ = y₂ ≫ T'.mor₂ :=
+    obtain ⟨x₃, hx₃⟩ : ∃ (x₃ : A ⟶ T.obj₃), x₃ ≫ φ.hom₃ = y₂ ≫ T'.mor₂ :=
       ⟨y₂ ≫ T'.mor₂ ≫ inv φ.hom₃, by simp⟩
     obtain ⟨x₂, hx₂⟩ := Triangle.coyoneda_exact₃ _ hT x₃
-      (by rw [← cancel_mono (φ.hom₁⟦(1 : Int)⟧'), assoc, zero_comp, φ.comm₃, reassoc_of% hx₃,
+      (by rw [← cancel_mono (φ.hom₁⟦(1 : ℤ)⟧'), assoc, zero_comp, φ.comm₃, reassoc_of% hx₃,
         comp_distTriang_mor_zero₂₃ _ hT', comp_zero])
     obtain ⟨y₁, hy₁⟩ := Triangle.coyoneda_exact₂ _ hT' (y₂ - x₂ ≫ φ.hom₂)
       (by rw [sub_comp, assoc, ← φ.comm₂, ← reassoc_of% hx₂, hx₃, sub_self])
-    obtain ⟨x₁, hx₁⟩ : exists (x₁ : A ⟶ T.obj₁), x₁ ≫ φ.hom₁ = y₁ := ⟨y₁ ≫ inv φ.hom₁, by simp⟩
+    obtain ⟨x₁, hx₁⟩ : ∃ (x₁ : A ⟶ T.obj₁), x₁ ≫ φ.hom₁ = y₁ := ⟨y₁ ≫ inv φ.hom₁, by simp⟩
     refine ⟨x₂ + x₁ ≫ T.mor₁, ?_⟩
     dsimp
-    rw [add_comp]; rw [assoc]; rw [φ.comm₁]; rw [reassoc_of% hx₁]; rw [← hy₁]; rw [add_sub_cancel]
+    rw [add_comp, assoc, φ.comm₁, reassoc_of% hx₁, ← hy₁, add_sub_cancel]
 
 set_option backward.defeqAttrib.useBackward true in
 /-- If the first and second components of a morphism of distinguished triangles are
 isomorphisms, the third component is as well. This can be thought of as a
 pretriangulated category theoretical version of the five lemma. -/
 @[stacks 014A]
-/--
-lemma `isIso₃_of_isIso₁₂` / 引理 `isIso₃_of_isIso₁₂`
+/-
+**CategoryTheory.Pretriangulated.isIso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma isIso₃_of_isIso₁₂
-  statement: {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-  proof: isIso₂_of_isIso₁₃ ((rotate C).map φ) (rot_of_distTriang _ hT)
-    (rot_of_distTriang _ hT') h₂ (by dsimp; infer_instance)
-
-中文:
-引理 isIso₃_of_isIso₁₂
-  结论: {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-  证明: isIso₂_of_isIso₁₃ ((rotate C).map φ) (rot_of_distTriang _ hT)
-    (rot_of_distTriang _ hT') h₂ (by dsimp; infer_instance)
-
-Depends on / 依赖: infer_instance, rot_of_distTriang, rotate
+--- 原说明 ---
+If the first and second components of a morphism of distinguished triangles are
+isomorphisms, the third component is as well. This can be thought of as a
+pretriangulated category theoretical version of the five lemma.
 -/
-lemma isIso₃_of_isIso₁₂ {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-    (hT' : T' in distTriang C) (h₁ : IsIso φ.hom₁) (h₂ : IsIso φ.hom₂) : IsIso φ.hom₃ :=
+lemma isIso₃_of_isIso₁₂ {T T' : Triangle C} (φ : T ⟶ T') (hT : T ∈ distTriang C)
+    (hT' : T' ∈ distTriang C) (h₁ : IsIso φ.hom₁) (h₂ : IsIso φ.hom₂) : IsIso φ.hom₃ :=
   isIso₂_of_isIso₁₃ ((rotate C).map φ) (rot_of_distTriang _ hT)
     (rot_of_distTriang _ hT') h₂ (by dsimp; infer_instance)
 
@@ -1799,25 +1019,18 @@ set_option backward.defeqAttrib.useBackward true in
 isomorphisms, the first component is as well. This can be thought of as a
 pretriangulated category theoretical version of the five lemma. -/
 @[stacks 014A]
-/--
-lemma `isIso₁_of_isIso₂₃` / 引理 `isIso₁_of_isIso₂₃`
+/-
+**CategoryTheory.Pretriangulated.isIso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma isIso₁_of_isIso₂₃
-  statement: {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-  proof: isIso₂_of_isIso₁₃ ((invRotate C).map φ) (inv_rot_of_distTriang _ hT)
-    (inv_rot_of_distTriang _ hT') (by dsimp; infer_instance) (by dsimp; infer_instance)
-
-中文:
-引理 isIso₁_of_isIso₂₃
-  结论: {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-  证明: isIso₂_of_isIso₁₃ ((invRotate C).map φ) (inv_rot_of_distTriang _ hT)
-    (inv_rot_of_distTriang _ hT') (by dsimp; infer_instance) (by dsimp; infer_instance)
-
-Depends on / 依赖: infer_instance, invRotate, inv_rot_of_distTriang
+--- 原说明 ---
+If the second and third components of a morphism of distinguished triangles are
+isomorphisms, the first component is as well. This can be thought of as a
+pretriangulated category theoretical version of the five lemma.
 -/
-lemma isIso₁_of_isIso₂₃ {T T' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C)
-    (hT' : T' in distTriang C) (h₂ : IsIso φ.hom₂) (h₃ : IsIso φ.hom₃) : IsIso φ.hom₁ :=
+lemma isIso₁_of_isIso₂₃ {T T' : Triangle C} (φ : T ⟶ T') (hT : T ∈ distTriang C)
+    (hT' : T' ∈ distTriang C) (h₂ : IsIso φ.hom₂) (h₃ : IsIso φ.hom₃) : IsIso φ.hom₁ :=
   isIso₂_of_isIso₁₃ ((invRotate C).map φ) (inv_rot_of_distTriang _ hT)
     (inv_rot_of_distTriang _ hT') (by dsimp; infer_instance) (by dsimp; infer_instance)
 
@@ -1827,58 +1040,33 @@ is the binary biproduct data expressing that `T.obj₂` identifies to the binary
 biproduct of `T.obj₁` and `T.obj₃`.
 See also `exists_iso_binaryBiproduct_of_distTriang`. -/
 @[simps]
-/--
-Definition of `binaryBiproductData` / `binaryBiproductData` 的定义
+/-
+**CategoryTheory.Pretriangulated.binaryBiproductData** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Pretriangulated`。
+形式化陈述：binaryBiproductData (T : Triangle C) (hT : T in distTriang C) (hT₀ : T.mor
+₃ = 0) (inr : T.obj₃ ⟶ T.obj₂) (inr_snd : inr ≫ T.mor₂ = 𝟙 _) (fst : T.obj₂ ⟶ T.
+obj₁) (total : fst ≫ T.mor₁ + T.mor₂ ≫ inr = 𝟙 T.obj₂) : BinaryBiproductData T.o
+bj₁ T.obj₃
+参数：T : Triangle C；hT : T in distTriang C；hT₀ : T.mor₃ = 0；inr : T.obj₃ ⟶ T.obj₂；
+inr_snd : inr ≫ T.mor₂ = 𝟙 _；fst : T.obj₂ ⟶ T.obj₁；total : fst ≫ T.mor₁ + T.mor₂
+ ≫ inr = 𝟙 T.obj₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.mono₁`：mono₁ (h : T.mor₃ = 0) : 
+Mono T.mor₁
+· 使用定理 `CategoryTheory.Pretriangulated.comp_distTriang_mor_zero₁₂`：comp_distTria
+ng_mor_zero₁₂ (T) (H : T in distTriang C) : T.mor₁ ≫ T.mor₂ = 0
 
-English:
-definition binaryBiproductData
-  signature: (T : Triangle C) (hT : T in distTriang C) (hT₀ : T.mor₃ = 0)
-  body: by
-  have : Mono T.mor₁ := T.mono₁ hT hT₀
-  have eq : fst ≫ T.mor₁ = 𝟙 T.obj₂ - T.mor₂ ≫ inr := by rw [← total, add_sub_cancel_right]
-  exact
-    { bicone :=
-      { pt := T.obj₂
-        fst := fst
-        snd := T.mor₂
-        inl := T.mor₁
-        inr := inr
-        inl_fst := by
-          simp only [← cancel_mono T.mor₁, assoc, id_comp, eq, comp_sub, comp_id,
-            comp_distTriang_mor_zero₁₂_assoc _ hT, zero_comp, sub_zero]
-        inl_snd := comp_distTriang_mor_zero₁₂ _ hT
-        inr_fst := by
-          simp only [← cancel_mono T.mor₁, assoc, eq, comp_sub, reassoc_of% inr_snd,
-            comp_id, sub_self, zero_comp]
-        inr_snd := inr_snd }
-      isBilimit := isBinaryBilimitOfTotal _ total }
-
-中文:
-定义 binaryBiproductData
-  签名: (T : Triangle C) (hT : T in distTriang C) (hT₀ : T.mor₃ = 0)
-  定义体: by
-  have : Mono T.mor₁ := T.mono₁ hT hT₀
-  have eq : fst ≫ T.mor₁ = 𝟙 T.obj₂ - T.mor₂ ≫ inr := by rw [← total, add_sub_cancel_right]
-  exact
-    { bicone :=
-      { pt := T.obj₂
-        fst := fst
-        snd := T.mor₂
-        inl := T.mor₁
-        inr := inr
-        inl_fst := by
-          simp only [← cancel_mono T.mor₁, assoc, id_comp, eq, comp_sub, comp_id,
-            comp_distTriang_mor_zero₁₂_assoc _ hT, zero_comp, sub_zero]
-        inl_snd := comp_distTriang_mor_zero₁₂ _ hT
-        inr_fst := by
-          simp only [← cancel_mono T.mor₁, assoc, eq, comp_sub, reassoc_of% inr_snd,
-            comp_id, sub_self, zero_comp]
-        inr_snd := inr_snd }
-      isBilimit := isBinaryBilimitOfTotal _ total }
-
-Depends on / 依赖: T.mono, T.mor, T.obj, add_sub_cancel_right, bicone, cancel_mono, comp_id, comp_sub, id_comp, inl_fst, inl_snd, inr_fst, inr_snd, reassoc_of, sub_zero, zero_comp
+--- 原说明 ---
+Given a distinguished triangle `T` such that `T.mor₃ = 0` and the datum of morph
+isms
+`inr : T.obj₃ ⟶ T.obj₂` and `fst : T.obj₂ ⟶ T.obj₁` satisfying suitable relation
+s, this
+is the binary biproduct data expressing that `T.obj₂` identifies to the binary
+biproduct of `T.obj₁` and `T.obj₃`.
+See also `exists_iso_binaryBiproduct_of_distTriang`.
 -/
-def binaryBiproductData (T : Triangle C) (hT : T in distTriang C) (hT₀ : T.mor₃ = 0)
+def binaryBiproductData (T : Triangle C) (hT : T ∈ distTriang C) (hT₀ : T.mor₃ = 0)
     (inr : T.obj₃ ⟶ T.obj₂) (inr_snd : inr ≫ T.mor₂ = 𝟙 _) (fst : T.obj₂ ⟶ T.obj₁)
     (total : fst ≫ T.mor₁ + T.mor₂ ≫ inr = 𝟙 T.obj₂) :
     BinaryBiproductData T.obj₁ T.obj₃ := by
@@ -1903,43 +1091,13 @@ def binaryBiproductData (T : Triangle C) (hT : T in distTriang C) (hT₀ : T.mor
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasBinaryBiproducts C
-  body: ⟨fun X₁ X₃ => by
-  obtain ⟨X₂, inl, snd, mem⟩ := distinguished_cocone_triangle₂ (0 : X₃ ⟶ X₁⟦(1 : Int)⟧)
-  obtain ⟨inr : X₃ ⟶ X₂, inr_snd : 𝟙 _ = inr ≫ snd⟩ :=
-    Triangle.coyoneda_exact₃ _ mem (𝟙 X₃) (by simp)
-  obtain ⟨fst : X₂ ⟶ X₁, hfst : 𝟙 X₂ - snd ≫ inr = fst ≫ inl⟩ :=
-    Triangle.coyoneda_exact₂ _ mem (𝟙 X₂ - snd ≫ inr) (by
-      dsimp
-      simp only [sub_comp, assoc, id_comp, ← inr_snd, comp_id, sub_self])
-  refine ⟨⟨binaryBiproductData _ mem rfl inr inr_snd.symm fst ?_⟩⟩
-  dsimp
-  simp only [← hfst, sub_add_cancel]⟩
-
-中文:
-实例 :
-  签名: 有BinaryBiproducts C
-  定义体: ⟨fun X₁ X₃ => by
-  obtain ⟨X₂, inl, snd, mem⟩ := distinguished_cocone_triangle₂ (0 : X₃ ⟶ X₁⟦(1 : Int)⟧)
-  obtain ⟨inr : X₃ ⟶ X₂, inr_snd : 𝟙 _ = inr ≫ snd⟩ :=
-    Triangle.coyoneda_exact₃ _ mem (𝟙 X₃) (by simp)
-  obtain ⟨fst : X₂ ⟶ X₁, hfst : 𝟙 X₂ - snd ≫ inr = fst ≫ inl⟩ :=
-    Triangle.coyoneda_exact₂ _ mem (𝟙 X₂ - snd ≫ inr) (by
-      dsimp
-      simp only [sub_comp, assoc, id_comp, ← inr_snd, comp_id, sub_self])
-  refine ⟨⟨binaryBiproductData _ mem rfl inr inr_snd.symm fst ?_⟩⟩
-  dsimp
-  simp only [← hfst, sub_add_cancel]⟩
-
-Depends on / 依赖: Triangle, Triangle.coyoneda_exact, binaryBiproductData, comp_id, id_comp, inr_snd, inr_snd.symm, sub_add_cancel, sub_comp, sub_self
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasBinaryBiproducts C := ⟨fun X₁ X₃ => by
-  obtain ⟨X₂, inl, snd, mem⟩ := distinguished_cocone_triangle₂ (0 : X₃ ⟶ X₁⟦(1 : Int)⟧)
+  obtain ⟨X₂, inl, snd, mem⟩ := distinguished_cocone_triangle₂ (0 : X₃ ⟶ X₁⟦(1 : ℤ)⟧)
   obtain ⟨inr : X₃ ⟶ X₂, inr_snd : 𝟙 _ = inr ≫ snd⟩ :=
     Triangle.coyoneda_exact₃ _ mem (𝟙 X₃) (by simp)
   obtain ⟨fst : X₂ ⟶ X₁, hfst : 𝟙 X₂ - snd ≫ inr = fst ≫ inl⟩ :=
@@ -1949,93 +1107,97 @@ instance : HasBinaryBiproducts C := ⟨fun X₁ X₃ => by
   refine ⟨⟨binaryBiproductData _ mem rfl inr inr_snd.symm fst ?_⟩⟩
   dsimp
   simp only [← hfst, sub_add_cancel]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteProducts C
-  body: hasFiniteProducts_of_has_binary_and_terminal
-
-中文:
-实例 :
-  签名: 有FiniteProducts C
-  定义体: hasFiniteProducts_of_has_binary_and_terminal
-
-Depends on / 依赖: hasFiniteProducts_of_has_binary_and_terminal
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteProducts C := hasFiniteProducts_of_has_binary_and_terminal
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteCoproducts C
-  body: hasFiniteCoproducts_of_has_binary_and_initial
-
-中文:
-实例 :
-  签名: 有FiniteCoproducts C
-  定义体: hasFiniteCoproducts_of_has_binary_and_initial
-
-Depends on / 依赖: hasFiniteCoproducts_of_has_binary_and_initial
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteCoproducts C := hasFiniteCoproducts_of_has_binary_and_initial
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteBiproducts C
-  body: HasFiniteBiproducts.of_hasFiniteProducts
-
-中文:
-实例 :
-  签名: 有FiniteBiproducts C
-  定义体: HasFiniteBiproducts.of_hasFiniteProducts
-
-Depends on / 依赖: HasFiniteBiproducts, HasFiniteBiproducts.of_hasFiniteProducts, of_hasFiniteProducts
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteBiproducts C := HasFiniteBiproducts.of_hasFiniteProducts
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `exists_iso_binaryBiproduct_of_distTriang` / 引理 `exists_iso_binaryBiproduct_of_distTriang`
-
-English:
-lemma exists_iso_binaryBiproduct_of_distTriang
-  statement: (T : Triangle C) (hT : T in distTriang C)
-  proof: by
-  have := T.epi₂ hT zero
-  have := isSplitEpi_of_epi T.mor₂
-  obtain ⟨fst, hfst⟩ := T.coyoneda_exact₂ hT (𝟙 T.obj₂ - T.mor₂ ≫ section_ T.mor₂) (by simp)
-  let d := binaryBiproductData _ hT zero (section_ T.mor₂) (by simp) fst
-    (by simp only [← hfst, sub_add_cancel])
-  refine ⟨biprod.uniqueUpToIso _ _ d.isBilimit, ⟨?_, by simp [d]⟩⟩
-  ext
-  · simpa [d] using d.bicone.inl_fst
-  · simpa [d] using d.bicone.inl_snd
-
-中文:
-引理 存在_iso_binaryBiproduct_of_distTriang
-  结论: (T : Triangle C) (hT : T in distTriang C)
-  证明: by
-  have := T.epi₂ hT zero
-  have := isSplitEpi_of_epi T.mor₂
-  obtain ⟨fst, hfst⟩ := T.coyoneda_exact₂ hT (𝟙 T.obj₂ - T.mor₂ ≫ section_ T.mor₂) (by simp)
-  let d := binaryBiproductData _ hT zero (section_ T.mor₂) (by simp) fst
-    (by simp only [← hfst, sub_add_cancel])
-  refine ⟨biprod.uniqueUpToIso _ _ d.isBilimit, ⟨?_, by simp [d]⟩⟩
-  ext
-  · simpa [d] using d.bicone.inl_fst
-  · simpa [d] using d.bicone.inl_snd
-
-Depends on / 依赖: T.coyoneda_exact, T.epi, T.mor, T.obj, bicone, binaryBiproductData, biprod, biprod.uniqueUpToIso, d.bicone.inl_fst, d.bicone.inl_snd, d.isBilimit, inl_fst, inl_snd, isBilimit, isSplitEpi_of_epi, section_, sub_add_cancel, uniqueUpToIso
+/-
+**CategoryTheory.Pretriangulated.exists_iso_binaryBiproduct_of_distTriang** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：exists_iso_binaryBiproduct_of_distTriang (T : Triangle C) (hT : T in distT
+riang C) (zero : T.mor₃ = 0) : exists (e : T.obj₂ ≅ T.obj₁ ⊞ T.obj₃), T.mor₁ ≫ e
+.hom = biprod.inl ∧ T.mor₂ = e.hom ≫ biprod.snd
+参数：T : Triangle C；hT : T in distTriang C；zero : T.mor₃ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.epi₂`：epi₂ (h : T.mor₃ = 0) : Ep
+i T.mor₂
+· 使用定理 `CategoryTheory.isSplitEpi_of_epi`：isSplitEpi_of_epi [SplitEpiCategory C]
+ {X Y : C} (f : X ⟶ Y) [Epi f] : IsSplitEpi f
+· 使用定理 `CategoryTheory.Pretriangulated.instSplitEpiCategory`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroObj
+ect C]   [inst_2 : CategoryTheory.HasShif…
+· 使用定理 `CategoryTheory.Limits.HasBinaryBiproducts.has_binary_biproduct`：∀ {C : T
+ype uC} {inst : CategoryTheory.Category.{uC', uC} C} {inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms C}   [self : CategoryTheory.Li…
+· 使用定理 `CategoryTheory.Pretriangulated.instHasBinaryBiproducts`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZero
+Object C]   [inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂`：coyoneda_exact₂
+ {X : C} (f : X ⟶ T.obj₂) (hf : f ≫ T.mor₂ = 0) : exists (g : X ⟶ T.obj₁), f = g
+ ≫ T.mor₁
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Preadditive.sub_comp`：sub_comp : (f - f') ≫ g = f ≫ g - f
+' ≫ g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsSplitEpi.id`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [hf : CategoryTheory.IsSplitEpi f],   Ca
+tegoryTheory.Categ…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `CategoryTheory.Limits.biprod.hom_ext`：∀ {C : Type uC} [inst : CategoryTh
+eory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]  
+ {X Y Z : C} [inst_2 : Cat…
+· 使用定理 `CategoryTheory.Limits.biprod.lift_fst`：∀ {C : Type uC} [inst : CategoryT
+heory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] 
+  {W X Y : C} [inst_2 : Cat…
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inl_fst`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
+· 使用定理 `CategoryTheory.Limits.biprod.lift_snd`：∀ {C : Type uC} [inst : CategoryT
+heory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] 
+  {W X Y : C} [inst_2 : Cat…
+· 使用定理 `CategoryTheory.Limits.BinaryBicone.inl_snd`：∀ {C : Type uC} [inst : Cate
+goryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C]   {P Q : C} (self : Categor…
 -/
-lemma exists_iso_binaryBiproduct_of_distTriang (T : Triangle C) (hT : T in distTriang C)
+lemma exists_iso_binaryBiproduct_of_distTriang (T : Triangle C) (hT : T ∈ distTriang C)
     (zero : T.mor₃ = 0) :
-    exists (e : T.obj₂ ≅ T.obj₁ ⊞ T.obj₃), T.mor₁ ≫ e.hom = biprod.inl ∧
+    ∃ (e : T.obj₂ ≅ T.obj₁ ⊞ T.obj₃), T.mor₁ ≫ e.hom = biprod.inl ∧
       T.mor₂ = e.hom ≫ biprod.snd := by
   have := T.epi₂ hT zero
   have := isSplitEpi_of_epi T.mor₂
@@ -2048,95 +1210,109 @@ lemma exists_iso_binaryBiproduct_of_distTriang (T : Triangle C) (hT : T in distT
   · simpa [d] using d.bicone.inl_snd
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `binaryBiproductTriangle_distinguished` / 引理 `binaryBiproductTriangle_distinguished`
-
-English:
-lemma binaryBiproductTriangle_distinguished
-  given: (X₁ X₂ : C)
-  proof: by
-  obtain ⟨Y, g, h, mem⟩ := distinguished_cocone_triangle₂ (0 : X₂ ⟶ X₁⟦(1 : Int)⟧)
-  obtain ⟨e, ⟨he₁, he₂⟩⟩ := exists_iso_binaryBiproduct_of_distTriang _ mem rfl
-  dsimp at he₁ he₂
-  refine isomorphic_distinguished _ mem _ (Iso.symm ?_)
-  refine Triangle.isoMk _ _ (Iso.refl _) e (Iso.refl _)
-    (by cat_disch) (by cat_disch) (by simp)
-
-中文:
-引理 binaryBiproductTriangle_distinguished
-  条件: (X₁ X₂ : C)
-  证明: by
-  obtain ⟨Y, g, h, mem⟩ := distinguished_cocone_triangle₂ (0 : X₂ ⟶ X₁⟦(1 : Int)⟧)
-  obtain ⟨e, ⟨he₁, he₂⟩⟩ := exists_iso_binaryBiproduct_of_distTriang _ mem rfl
-  dsimp at he₁ he₂
-  refine isomorphic_distinguished _ mem _ (Iso.symm ?_)
-  refine Triangle.isoMk _ _ (Iso.refl _) e (Iso.refl _)
-    (by cat_disch) (by cat_disch) (by simp)
-
-Depends on / 依赖: Iso.refl, Iso.symm, Triangle, Triangle.isoMk, cat_disch, exists_iso_binaryBiproduct_of_distTriang, isomorphic_distinguished
+/-
+**CategoryTheory.Pretriangulated.binaryBiproductTriangle_distinguished** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：binaryBiproductTriangle_distinguished (X₁ X₂ : C) : binaryBiproductTriangl
+e X₁ X₂ in distTriang C
+参数：X₁ X₂ : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasBinaryBiproducts.has_binary_biproduct`：∀ {C : T
+ype uC} {inst : CategoryTheory.Category.{uC', uC} C} {inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms C}   [self : CategoryTheory.Li…
+· 使用定理 `CategoryTheory.Pretriangulated.instHasBinaryBiproducts`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZero
+Object C]   [inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Pretriangulated.distinguished_cocone_triangle₂`：distingui
+shed_cocone_triangle₂ {Z X : C} (h : Z ⟶ X⟦(1 : Int)⟧) : exists (Y : C) (f : X ⟶
+ Y) (g : Y ⟶ Z), Triangle.mk f g h in distTriang C
+· 使用引理 `CategoryTheory.Pretriangulated.exists_iso_binaryBiproduct_of_distTriang`
+：exists_iso_binaryBiproduct_of_distTriang (T : Triangle C) (hT : T in distTriang
+ C) (zero : T.mor₃ = 0) : exists (e : T.obj₂ ≅ T.obj₁ ⊞ T.obj…
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
 -/
 lemma binaryBiproductTriangle_distinguished (X₁ X₂ : C) :
-    binaryBiproductTriangle X₁ X₂ in distTriang C := by
-  obtain ⟨Y, g, h, mem⟩ := distinguished_cocone_triangle₂ (0 : X₂ ⟶ X₁⟦(1 : Int)⟧)
+    binaryBiproductTriangle X₁ X₂ ∈ distTriang C := by
+  obtain ⟨Y, g, h, mem⟩ := distinguished_cocone_triangle₂ (0 : X₂ ⟶ X₁⟦(1 : ℤ)⟧)
   obtain ⟨e, ⟨he₁, he₂⟩⟩ := exists_iso_binaryBiproduct_of_distTriang _ mem rfl
   dsimp at he₁ he₂
   refine isomorphic_distinguished _ mem _ (Iso.symm ?_)
   refine Triangle.isoMk _ _ (Iso.refl _) e (Iso.refl _)
     (by cat_disch) (by cat_disch) (by simp)
-
-/--
-lemma `binaryProductTriangle_distinguished` / 引理 `binaryProductTriangle_distinguished`
-
-English:
-lemma binaryProductTriangle_distinguished
-  given: (X₁ X₂ : C)
-  proof: isomorphic_distinguished _ (binaryBiproductTriangle_distinguished X₁ X₂) _
-    (binaryProductTriangleIsoBinaryBiproductTriangle X₁ X₂)
-
-中文:
-引理 binaryProductTriangle_distinguished
-  条件: (X₁ X₂ : C)
-  证明: isomorphic_distinguished _ (binaryBiproductTriangle_distinguished X₁ X₂) _
-    (binaryProductTriangleIsoBinaryBiproductTriangle X₁ X₂)
-
-Depends on / 依赖: binaryBiproductTriangle_distinguished, binaryProductTriangleIsoBinaryBiproductTriangle, isomorphic_distinguished
+/-
+**CategoryTheory.Pretriangulated.binaryProductTriangle_distinguished** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：binaryProductTriangle_distinguished (X₁ X₂ : C) : binaryProductTriangle X₁
+ X₂ in distTriang C
+参数：X₁ X₂ : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用定理 `CategoryTheory.Limits.HasBinaryBiproducts.has_binary_biproduct`：∀ {C : T
+ype uC} {inst : CategoryTheory.Category.{uC', uC} C} {inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms C}   [self : CategoryTheory.Li…
+· 使用定理 `CategoryTheory.Pretriangulated.instHasBinaryBiproducts`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZero
+Object C]   [inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Pretriangulated.binaryBiproductTriangle_distinguished`：bi
+naryBiproductTriangle_distinguished (X₁ X₂ : C) : binaryBiproductTriangle X₁ X₂ 
+in distTriang C
+· 使用定理 `CategoryTheory.Limits.HasBinaryBiproduct.hasLimit_pair`：∀ {C : Type uC} 
+[inst : CategoryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.Has
+ZeroMorphisms C]   {P Q : C} [CategoryTheory…
 -/
 lemma binaryProductTriangle_distinguished (X₁ X₂ : C) :
-    binaryProductTriangle X₁ X₂ in distTriang C :=
+    binaryProductTriangle X₁ X₂ ∈ distTriang C :=
   isomorphic_distinguished _ (binaryBiproductTriangle_distinguished X₁ X₂) _
     (binaryProductTriangleIsoBinaryBiproductTriangle X₁ X₂)
 
 /-- A chosen extension of a commutative square into a morphism of distinguished triangles. -/
 @[simps hom₁ hom₂]
-/--
-Definition of `completeDistinguishedTriangleMorphism` / `completeDistinguishedTriangleMorphism` 的定义
+/-
+**CategoryTheory.Pretriangulated.completeDistinguishedTriangleMorphism** 是 Mathl
+ib 中的一个定义，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：completeDistinguishedTriangleMorphism (T₁ T₂ : Triangle C) (hT₁ : T₁ in di
+stTriang C) (hT₂ : T₂ in distTriang C) (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂
+.obj₂) (comm : T₁.mor₁ ≫ b = a ≫ T₂.mor₁) : T₁ ⟶ T₂
+参数：T₁ T₂ : Triangle C；hT₁ : T₁ in distTriang C；hT₂ : T₂ in distTriang C；a : T₁.o
+bj₁ ⟶ T₂.obj₁；b : T₁.obj₂ ⟶ T₂.obj₂；comm : T₁.mor₁ ≫ b = a ≫ T₂.mor₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.complete_distinguished_triangle_morphism`
+：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheo
+ry.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.HasShif…
 
-English:
-definition completeDistinguishedTriangleMorphism
-  signature: (T₁ T₂ : Triangle C)
-  body: have h := complete_distinguished_triangle_morphism _ _ hT₁ hT₂ a b comm
-    { hom₁ := a
-      hom₂ := b
-      hom₃ := h.choose
-      comm₁ := comm
-      comm₂ := h.choose_spec.1
-      comm₃ := h.choose_spec.2 }
-
-中文:
-定义 completeDistinguishedTriangleMorphism
-  签名: (T₁ T₂ : Triangle C)
-  定义体: have h := complete_distinguished_triangle_morphism _ _ hT₁ hT₂ a b comm
-    { hom₁ := a
-      hom₂ := b
-      hom₃ := h.choose
-      comm₁ := comm
-      comm₂ := h.choose_spec.1
-      comm₃ := h.choose_spec.2 }
-
-Depends on / 依赖: choose_spec, complete_distinguished_triangle_morphism, h.choose, h.choose_spec
+--- 原说明 ---
+A chosen extension of a commutative square into a morphism of distinguished tria
+ngles.
 -/
 def completeDistinguishedTriangleMorphism (T₁ T₂ : Triangle C)
-    (hT₁ : T₁ in distTriang C) (hT₂ : T₂ in distTriang C)
+    (hT₁ : T₁ ∈ distTriang C) (hT₂ : T₂ ∈ distTriang C)
     (a : T₁.obj₁ ⟶ T₂.obj₁) (b : T₁.obj₂ ⟶ T₂.obj₂) (comm : T₁.mor₁ ≫ b = a ≫ T₂.mor₁) :
     T₁ ⟶ T₂ :=
     have h := complete_distinguished_triangle_morphism _ _ hT₁ hT₂ a b comm
@@ -2149,148 +1325,102 @@ def completeDistinguishedTriangleMorphism (T₁ T₂ : Triangle C)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `productTriangle_distinguished` / 引理 `productTriangle_distinguished`
+/-- A product of distinguished triangles is distinguished -/
+/-
+**CategoryTheory.Pretriangulated.productTriangle_distinguished** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：productTriangle_distinguished {J : Type*} (T : J -> Triangle C) (hT : fora
+ll j, T j in distTriang C) [HasProduct (fun j => (T j).obj₁)] [HasProduct (fun j
+ => (T j).obj₂)] [HasProduct (fun j => (T j).obj₃)] [HasProduct (fun j => (T j).
+obj₁⟦(1 : Int)⟧)] : productTriangle T in distTriang C
+参数：T : J -> Triangle C；hT : forall j, T j in distTriang C；fun j => (T j).obj₁；fu
+n j => (T j).obj₂；fun j => (T j).obj₃；fun j => (T j).obj₁⟦(1 : Int)⟧。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.distinguished_cocone_triangle`：∀ {C : Typ
+e u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.H
+asZeroObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Pi.map_π`：∀ {β : Type w} {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] [inst_2 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.isIso_of_yoneda_map_bijective`：isIso_of_yoneda_map_biject
+ive {X Y : C} (f : X ⟶ Y) (hf : forall (T : C), Function.Bijective (fun (x : T ⟶
+ X) => x ≫ f)) : IsIso f
+· 使用定理 `CategoryTheory.Preadditive.mono_iff_cancel_zero`：mono_iff_cancel_zero {Q
+ R : C} (f : Q ⟶ R) : Mono f ↔ forall (P : C) (g : P ⟶ Q), g ≫ f = 0 -> g = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Functor.map_mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.preservesMonomorphisms_of_isRightAdjoint`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.instIsEquivalenceShiftFunctor`：∀ (C : Type u) {A : Type u
+_1} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : AddGroup A]   [inst_2 : 
+CategoryTheory.HasShift C A] (i : …
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Pretriangulated.TriangleMorphism.comm₃`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.HasShift C ℤ]  
+ {T₁ T₂ : CategoryTheory.Pretriangulated.Tr…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₃`：coyoneda_exact₃
+ {X : C} (f : X ⟶ T.obj₃) (hf : f ≫ T.mor₃ = 0) : exists (g : X ⟶ T.obj₂), f = g
+ ≫ T.mor₂
+· 使用定理 `CategoryTheory.Pretriangulated.TriangleMorphism.comm₂_assoc`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.HasShift 
+C ℤ]   {T₁ T₂ : CategoryTheory.Pretriangulated.Tr…
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂`：coyoneda_exact₂
+ {X : C} (f : X ⟶ T.obj₂) (hf : f ≫ T.mor₂ = 0) : exists (g : X ⟶ T.obj₁), f = g
+ ≫ T.mor₁
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+（共 47 条，此处仅展示前 30 条）
 
-English:
-lemma productTriangle_distinguished
-  statement: {J : Type*} (T : J -> Triangle C)
-  proof: by
-  /- The proof proceeds by constructing a morphism of triangles
-    `φ' : T' ⟶ productTriangle T` with `T'` distinguished, and such that
-    `φ'.hom₁` and `φ'.hom₂` are identities. Then, it suffices to show that
-    `φ'.hom₃` is an isomorphism, which is achieved by using Yoneda's lemma
-    and diagram chases. -/
-  let f₁ := Limits.Pi.map (fun j => (T j).mor₁)
-  obtain ⟨Z, f₂, f₃, hT'⟩ := distinguished_cocone_triangle f₁
-  let T' := Triangle.mk f₁ f₂ f₃
-  change T' in distTriang C at hT'
-  let φ : forall j, T' ⟶ T j := fun j => completeDistinguishedTriangleMorphism _ _
-    hT' (hT j) (Pi.π _ j) (Pi.π _ j) (by simp [f₁, T'])
-  let φ' := productTriangle.lift _ φ
-  have h₁ : φ'.hom₁ = 𝟙 _ := by cat_disch
-  have h₂ : φ'.hom₂ = 𝟙 _ := by cat_disch
-  have : IsIso φ'.hom₁ := by rw [h₁]; infer_instance
-  have : IsIso φ'.hom₂ := by rw [h₂]; infer_instance
-  suffices IsIso φ'.hom₃ by
-    have : IsIso φ' := by
-      apply Triangle.isIso_of_isIsos
-      all_goals infer_instance
-    exact isomorphic_distinguished _ hT' _ (asIso φ').symm
-  refine isIso_of_yoneda_map_bijective _ (fun A => ⟨?_, ?_⟩)
-  /- the proofs by diagram chase start here -/
-  · suffices Mono φ'.hom₃ by
-      intro a₁ a₂ ha
-      simpa only [← cancel_mono φ'.hom₃] using ha
-    rw [mono_iff_cancel_zero]
-    intro A f hf
-    have hf' : f ≫ T'.mor₃ = 0 := by
-      rw [← cancel_mono (φ'.hom₁⟦1⟧')]; rw [zero_comp]; rw [assoc]; rw [φ'.comm₃]; rw [reassoc_of% hf]; rw [zero_comp]
-    obtain ⟨g, hg⟩ := T'.coyoneda_exact₃ hT' f hf'
-    have hg' : forall j, (g ≫ Pi.π _ j) ≫ (T j).mor₂ = 0 := fun j => by
-      have : g ≫ T'.mor₂ ≫ φ'.hom₃ ≫ Pi.π _ j = 0 := by
-        rw [← reassoc_of% hg]; rw [reassoc_of% hf]; rw [zero_comp]
-      rw [φ'.comm₂_assoc]; rw [h₂]; rw [id_comp] at this
-      simpa using this
-    have hg'' := fun j => (T j).coyoneda_exact₂ (hT j) _ (hg' j)
-    let α := fun j => (hg'' j).choose
-    have hα : forall j, _ = α j ≫ _ := fun j => (hg'' j).choose_spec
-    have hg''' : g = Pi.lift α ≫ T'.mor₁ := by dsimp [f₁, T']; ext j; rw [hα]; simp
-    rw [hg]; rw [hg''']; rw [assoc]; rw [comp_distTriang_mor_zero₁₂ _ hT']; rw [comp_zero]
-  · intro a
-    obtain ⟨a', ha'⟩ : exists (a' : A ⟶ Z), a' ≫ T'.mor₃ = a ≫ (productTriangle T).mor₃ := by
-      have zero : ((productTriangle T).mor₃) ≫ (shiftFunctor C 1).map T'.mor₁ = 0 := by
-        rw [← cancel_mono (φ'.hom₂⟦1⟧')]; rw [zero_comp]; rw [assoc]; rw [← Functor.map_comp]; rw [φ'.comm₁]; rw [h₁]; rw [id_comp]; rw [productTriangle.zero₃₁]
-        intro j
-        exact comp_distTriang_mor_zero₃₁ _ (hT j)
-      have ⟨g, hg⟩ := T'.coyoneda_exact₁ hT' (a ≫ (productTriangle T).mor₃) (by
-        rw [assoc]; rw [zero]; rw [comp_zero])
-      exact ⟨g, hg.symm⟩
-    have ha'' := fun (j : J) => (T j).coyoneda_exact₃ (hT j) ((a - a' ≫ φ'.hom₃) ≫ Pi.π _ j) (by
-      simp only [sub_comp, assoc]
-      erw [← (productTriangle.π T j).comm₃]
-      rw [← φ'.comm₃_assoc]
-      rw [reassoc_of% ha']; rw [sub_eq_zero]; rw [h₁]; rw [Functor.map_id]; rw [id_comp])
-    let b := fun j => (ha'' j).choose
-    have hb : forall j, _ = b j ≫ _ := fun j => (ha'' j).choose_spec
-    have hb' : a - a' ≫ φ'.hom₃ = Pi.lift b ≫ (productTriangle T).mor₂ :=
-      Limits.Pi.hom_ext _ _ (fun j => by rw [hb]; simp)
-    have : (a' + (by exact Pi.lift b) ≫ T'.mor₂) ≫ φ'.hom₃ = a := by
-      rw [add_comp]; rw [assoc]; rw [φ'.comm₂]; rw [h₂]; rw [id_comp]; rw [← hb']; rw [add_sub_cancel]
-    exact ⟨_, this⟩
-
-中文:
-引理 productTriangle_distinguished
-  结论: {J : 类型} (T : J -> Triangle C)
-  证明: by
-  /- The proof proceeds by constructing a morphism of triangles
-    `φ' : T' ⟶ productTriangle T` with `T'` distinguished, and such that
-    `φ'.hom₁` and `φ'.hom₂` are identities. Then, it suffices to show that
-    `φ'.hom₃` is an isomorphism, which is achieved by using Yoneda's lemma
-    and diagram chases. -/
-  let f₁ := Limits.Pi.map (fun j => (T j).mor₁)
-  obtain ⟨Z, f₂, f₃, hT'⟩ := distinguished_cocone_triangle f₁
-  let T' := Triangle.mk f₁ f₂ f₃
-  change T' in distTriang C at hT'
-  let φ : forall j, T' ⟶ T j := fun j => completeDistinguishedTriangleMorphism _ _
-    hT' (hT j) (Pi.π _ j) (Pi.π _ j) (by simp [f₁, T'])
-  let φ' := productTriangle.lift _ φ
-  have h₁ : φ'.hom₁ = 𝟙 _ := by cat_disch
-  have h₂ : φ'.hom₂ = 𝟙 _ := by cat_disch
-  have : IsIso φ'.hom₁ := by rw [h₁]; infer_instance
-  have : IsIso φ'.hom₂ := by rw [h₂]; infer_instance
-  suffices IsIso φ'.hom₃ by
-    have : IsIso φ' := by
-      apply Triangle.isIso_of_isIsos
-      all_goals infer_instance
-    exact isomorphic_distinguished _ hT' _ (asIso φ').symm
-  refine isIso_of_yoneda_map_bijective _ (fun A => ⟨?_, ?_⟩)
-  /- the proofs by diagram chase start here -/
-  · suffices Mono φ'.hom₃ by
-      intro a₁ a₂ ha
-      simpa only [← cancel_mono φ'.hom₃] using ha
-    rw [mono_iff_cancel_zero]
-    intro A f hf
-    have hf' : f ≫ T'.mor₃ = 0 := by
-      rw [← cancel_mono (φ'.hom₁⟦1⟧')]; rw [zero_comp]; rw [assoc]; rw [φ'.comm₃]; rw [reassoc_of% hf]; rw [zero_comp]
-    obtain ⟨g, hg⟩ := T'.coyoneda_exact₃ hT' f hf'
-    have hg' : forall j, (g ≫ Pi.π _ j) ≫ (T j).mor₂ = 0 := fun j => by
-      have : g ≫ T'.mor₂ ≫ φ'.hom₃ ≫ Pi.π _ j = 0 := by
-        rw [← reassoc_of% hg]; rw [reassoc_of% hf]; rw [zero_comp]
-      rw [φ'.comm₂_assoc]; rw [h₂]; rw [id_comp] at this
-      simpa using this
-    have hg'' := fun j => (T j).coyoneda_exact₂ (hT j) _ (hg' j)
-    let α := fun j => (hg'' j).choose
-    have hα : forall j, _ = α j ≫ _ := fun j => (hg'' j).choose_spec
-    have hg''' : g = Pi.lift α ≫ T'.mor₁ := by dsimp [f₁, T']; ext j; rw [hα]; simp
-    rw [hg]; rw [hg''']; rw [assoc]; rw [comp_distTriang_mor_zero₁₂ _ hT']; rw [comp_zero]
-  · intro a
-    obtain ⟨a', ha'⟩ : exists (a' : A ⟶ Z), a' ≫ T'.mor₃ = a ≫ (productTriangle T).mor₃ := by
-      have zero : ((productTriangle T).mor₃) ≫ (shiftFunctor C 1).map T'.mor₁ = 0 := by
-        rw [← cancel_mono (φ'.hom₂⟦1⟧')]; rw [zero_comp]; rw [assoc]; rw [← Functor.map_comp]; rw [φ'.comm₁]; rw [h₁]; rw [id_comp]; rw [productTriangle.zero₃₁]
-        intro j
-        exact comp_distTriang_mor_zero₃₁ _ (hT j)
-      have ⟨g, hg⟩ := T'.coyoneda_exact₁ hT' (a ≫ (productTriangle T).mor₃) (by
-        rw [assoc]; rw [zero]; rw [comp_zero])
-      exact ⟨g, hg.symm⟩
-    have ha'' := fun (j : J) => (T j).coyoneda_exact₃ (hT j) ((a - a' ≫ φ'.hom₃) ≫ Pi.π _ j) (by
-      simp only [sub_comp, assoc]
-      erw [← (productTriangle.π T j).comm₃]
-      rw [← φ'.comm₃_assoc]
-      rw [reassoc_of% ha']; rw [sub_eq_zero]; rw [h₁]; rw [Functor.map_id]; rw [id_comp])
-    let b := fun j => (ha'' j).choose
-    have hb : forall j, _ = b j ≫ _ := fun j => (ha'' j).choose_spec
-    have hb' : a - a' ≫ φ'.hom₃ = Pi.lift b ≫ (productTriangle T).mor₂ :=
-      Limits.Pi.hom_ext _ _ (fun j => by rw [hb]; simp)
-    have : (a' + (by exact Pi.lift b) ≫ T'.mor₂) ≫ φ'.hom₃ = a := by
-      rw [add_comp]; rw [assoc]; rw [φ'.comm₂]; rw [h₂]; rw [id_comp]; rw [← hb']; rw [add_sub_cancel]
-    exact ⟨_, this⟩
+--- 原说明 ---
+A product of distinguished triangles is distinguished
 -/
-lemma productTriangle_distinguished {J : Type*} (T : J -> Triangle C)
-    (hT : forall j, T j in distTriang C)
+lemma productTriangle_distinguished {J : Type*} (T : J → Triangle C)
+    (hT : ∀ j, T j ∈ distTriang C)
     [HasProduct (fun j => (T j).obj₁)] [HasProduct (fun j => (T j).obj₂)]
-    [HasProduct (fun j => (T j).obj₃)] [HasProduct (fun j => (T j).obj₁⟦(1 : Int)⟧)] :
-    productTriangle T in distTriang C := by
+    [HasProduct (fun j => (T j).obj₃)] [HasProduct (fun j => (T j).obj₁⟦(1 : ℤ)⟧)] :
+    productTriangle T ∈ distTriang C := by
   /- The proof proceeds by constructing a morphism of triangles
     `φ' : T' ⟶ productTriangle T` with `T'` distinguished, and such that
     `φ'.hom₁` and `φ'.hom₂` are identities. Then, it suffices to show that
@@ -2299,8 +1429,8 @@ lemma productTriangle_distinguished {J : Type*} (T : J -> Triangle C)
   let f₁ := Limits.Pi.map (fun j => (T j).mor₁)
   obtain ⟨Z, f₂, f₃, hT'⟩ := distinguished_cocone_triangle f₁
   let T' := Triangle.mk f₁ f₂ f₃
-  change T' in distTriang C at hT'
-  let φ : forall j, T' ⟶ T j := fun j => completeDistinguishedTriangleMorphism _ _
+  change T' ∈ distTriang C at hT'
+  let φ : ∀ j, T' ⟶ T j := fun j => completeDistinguishedTriangleMorphism _ _
     hT' (hT j) (Pi.π _ j) (Pi.π _ j) (by simp [f₁, T'])
   let φ' := productTriangle.lift _ φ
   have h₁ : φ'.hom₁ = 𝟙 _ := by cat_disch
@@ -2320,76 +1450,74 @@ lemma productTriangle_distinguished {J : Type*} (T : J -> Triangle C)
     rw [mono_iff_cancel_zero]
     intro A f hf
     have hf' : f ≫ T'.mor₃ = 0 := by
-      rw [← cancel_mono (φ'.hom₁⟦1⟧')]; rw [zero_comp]; rw [assoc]; rw [φ'.comm₃]; rw [reassoc_of% hf]; rw [zero_comp]
+      rw [← cancel_mono (φ'.hom₁⟦1⟧'), zero_comp, assoc, φ'.comm₃, reassoc_of% hf, zero_comp]
     obtain ⟨g, hg⟩ := T'.coyoneda_exact₃ hT' f hf'
-    have hg' : forall j, (g ≫ Pi.π _ j) ≫ (T j).mor₂ = 0 := fun j => by
+    have hg' : ∀ j, (g ≫ Pi.π _ j) ≫ (T j).mor₂ = 0 := fun j => by
       have : g ≫ T'.mor₂ ≫ φ'.hom₃ ≫ Pi.π _ j = 0 := by
-        rw [← reassoc_of% hg]; rw [reassoc_of% hf]; rw [zero_comp]
-      rw [φ'.comm₂_assoc]; rw [h₂]; rw [id_comp] at this
+        rw [← reassoc_of% hg, reassoc_of% hf, zero_comp]
+      rw [φ'.comm₂_assoc, h₂, id_comp] at this
       simpa using this
     have hg'' := fun j => (T j).coyoneda_exact₂ (hT j) _ (hg' j)
     let α := fun j => (hg'' j).choose
-    have hα : forall j, _ = α j ≫ _ := fun j => (hg'' j).choose_spec
+    have hα : ∀ j, _ = α j ≫ _ := fun j => (hg'' j).choose_spec
     have hg''' : g = Pi.lift α ≫ T'.mor₁ := by dsimp [f₁, T']; ext j; rw [hα]; simp
-    rw [hg]; rw [hg''']; rw [assoc]; rw [comp_distTriang_mor_zero₁₂ _ hT']; rw [comp_zero]
+    rw [hg, hg''', assoc, comp_distTriang_mor_zero₁₂ _ hT', comp_zero]
   · intro a
-    obtain ⟨a', ha'⟩ : exists (a' : A ⟶ Z), a' ≫ T'.mor₃ = a ≫ (productTriangle T).mor₃ := by
+    obtain ⟨a', ha'⟩ : ∃ (a' : A ⟶ Z), a' ≫ T'.mor₃ = a ≫ (productTriangle T).mor₃ := by
       have zero : ((productTriangle T).mor₃) ≫ (shiftFunctor C 1).map T'.mor₁ = 0 := by
-        rw [← cancel_mono (φ'.hom₂⟦1⟧')]; rw [zero_comp]; rw [assoc]; rw [← Functor.map_comp]; rw [φ'.comm₁]; rw [h₁]; rw [id_comp]; rw [productTriangle.zero₃₁]
+        rw [← cancel_mono (φ'.hom₂⟦1⟧'), zero_comp, assoc, ← Functor.map_comp, φ'.comm₁, h₁,
+          id_comp, productTriangle.zero₃₁]
         intro j
         exact comp_distTriang_mor_zero₃₁ _ (hT j)
       have ⟨g, hg⟩ := T'.coyoneda_exact₁ hT' (a ≫ (productTriangle T).mor₃) (by
-        rw [assoc]; rw [zero]; rw [comp_zero])
+        rw [assoc, zero, comp_zero])
       exact ⟨g, hg.symm⟩
     have ha'' := fun (j : J) => (T j).coyoneda_exact₃ (hT j) ((a - a' ≫ φ'.hom₃) ≫ Pi.π _ j) (by
       simp only [sub_comp, assoc]
       erw [← (productTriangle.π T j).comm₃]
       rw [← φ'.comm₃_assoc]
-      rw [reassoc_of% ha']; rw [sub_eq_zero]; rw [h₁]; rw [Functor.map_id]; rw [id_comp])
+      rw [reassoc_of% ha', sub_eq_zero, h₁, Functor.map_id, id_comp])
     let b := fun j => (ha'' j).choose
-    have hb : forall j, _ = b j ≫ _ := fun j => (ha'' j).choose_spec
+    have hb : ∀ j, _ = b j ≫ _ := fun j => (ha'' j).choose_spec
     have hb' : a - a' ≫ φ'.hom₃ = Pi.lift b ≫ (productTriangle T).mor₂ :=
       Limits.Pi.hom_ext _ _ (fun j => by rw [hb]; simp)
     have : (a' + (by exact Pi.lift b) ≫ T'.mor₂) ≫ φ'.hom₃ = a := by
-      rw [add_comp]; rw [assoc]; rw [φ'.comm₂]; rw [h₂]; rw [id_comp]; rw [← hb']; rw [add_sub_cancel]
+      rw [add_comp, assoc, φ'.comm₂, h₂, id_comp, ← hb', add_sub_cancel]
     exact ⟨_, this⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `exists_iso_of_arrow_iso` / 引理 `exists_iso_of_arrow_iso`
-
-English:
-lemma exists_iso_of_arrow_iso
-  statement: (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-  proof: by
-  let φ := completeDistinguishedTriangleMorphism T₁ T₂ hT₁ hT₂ e.hom.left e.hom.right e.hom.w.symm
-  have : IsIso φ.hom₁ := by dsimp [φ]; infer_instance
-  have : IsIso φ.hom₂ := by dsimp [φ]; infer_instance
-  have : IsIso φ.hom₃ := isIso₃_of_isIso₁₂ φ hT₁ hT₂ inferInstance inferInstance
-  have : IsIso φ := by
-    apply Triangle.isIso_of_isIsos
-    all_goals infer_instance
-  exact ⟨asIso φ, by simp [φ], by simp [φ]⟩
-
-中文:
-引理 存在_iso_of_arrow_iso
-  结论: (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-  证明: by
-  let φ := completeDistinguishedTriangleMorphism T₁ T₂ hT₁ hT₂ e.hom.left e.hom.right e.hom.w.symm
-  have : IsIso φ.hom₁ := by dsimp [φ]; infer_instance
-  have : IsIso φ.hom₂ := by dsimp [φ]; infer_instance
-  have : IsIso φ.hom₃ := isIso₃_of_isIso₁₂ φ hT₁ hT₂ inferInstance inferInstance
-  have : IsIso φ := by
-    apply Triangle.isIso_of_isIsos
-    all_goals infer_instance
-  exact ⟨asIso φ, by simp [φ], by simp [φ]⟩
-
-Depends on / 依赖: Triangle, Triangle.isIso_of_isIsos, all_goals, completeDistinguishedTriangleMorphism, e.hom.left, e.hom.right, e.hom.w.symm, infer_instance, isIso_of_isIsos
+/-
+**CategoryTheory.Pretriangulated.exists_iso_of_arrow_iso** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：exists_iso_of_arrow_iso (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C) (h
+T₂ : T₂ in distTriang C) (e : Arrow.mk T₁.mor₁ ≅ Arrow.mk T₂.mor₁) : exists (e' 
+: T₁ ≅ T₂), e'.hom.hom₁ = e.hom.left ∧ e'.hom.hom₂ = e.hom.right
+参数：T₁ T₂ : Triangle C；hT₁ : T₁ in distTriang C；hT₂ : T₂ in distTriang C；e : Arro
+w.mk T₁.mor₁ ≅ Arrow.mk T₂.mor₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Arrow.Hom.w`：∀ {T : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} T] {f g : CategoryTheory.Arrow T} (sq : f ⟶ g),   CategoryTheory.Categ
+oryStruct.comp (…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Arrow.isIso_right`：∀ {T : Type u} [inst : CategoryTheory.
+Category.{v, u} T] {f g : CategoryTheory.Arrow T} (sq : g ⟶ f)   [CategoryTheory
+.IsIso sq], CategoryTh…
+· 使用引理 `CategoryTheory.Pretriangulated.isIso₃_of_isIso₁₂`：isIso₃_of_isIso₁₂ {T T
+' : Triangle C} (φ : T ⟶ T') (hT : T in distTriang C) (hT' : T' in distTriang C)
+ (h₁ : IsIso φ.hom₁) (h₂ : IsIso φ.hom…
+· 使用定理 `CategoryTheory.Pretriangulated.Triangle.isIso_of_isIsos`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.HasShift C ℤ]
+   {A B : CategoryTheory.Pretriangulated.Tria…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma exists_iso_of_arrow_iso (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-    (hT₂ : T₂ in distTriang C) (e : Arrow.mk T₁.mor₁ ≅ Arrow.mk T₂.mor₁) :
-    exists (e' : T₁ ≅ T₂), e'.hom.hom₁ = e.hom.left ∧ e'.hom.hom₂ = e.hom.right := by
+lemma exists_iso_of_arrow_iso (T₁ T₂ : Triangle C) (hT₁ : T₁ ∈ distTriang C)
+    (hT₂ : T₂ ∈ distTriang C) (e : Arrow.mk T₁.mor₁ ≅ Arrow.mk T₂.mor₁) :
+    ∃ (e' : T₁ ≅ T₂), e'.hom.hom₁ = e.hom.left ∧ e'.hom.hom₂ = e.hom.right := by
   let φ := completeDistinguishedTriangleMorphism T₁ T₂ hT₁ hT₂ e.hom.left e.hom.right e.hom.w.symm
   have : IsIso φ.hom₁ := by dsimp [φ]; infer_instance
   have : IsIso φ.hom₂ := by dsimp [φ]; infer_instance
@@ -2403,39 +1531,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A choice of isomorphism `T₁ ≅ T₂` between two distinguished triangles
 when we are given two isomorphisms `e₁ : T₁.obj₁ ≅ T₂.obj₁` and `e₂ : T₁.obj₂ ≅ T₂.obj₂`. -/
 @[simps! hom_hom₁ hom_hom₂ inv_hom₁ inv_hom₂]
-/--
-Definition of `isoTriangleOfIso₁₂` / `isoTriangleOfIso₁₂` 的定义
+/-
+**CategoryTheory.Pretriangulated.isoTriangleOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoTriangleOfIso₁₂
-  signature: (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-  body: by
-  have h := exists_iso_of_arrow_iso T₁ T₂ hT₁ hT₂ (Arrow.isoMk e₁ e₂ comm.symm)
-  exact Triangle.isoMk _ _ e₁ e₂ (Triangle.π₃.mapIso h.choose) comm (by
-    have eq := h.choose_spec.2
-    dsimp at eq ⊢
-    conv_rhs => rw [← eq, ← TriangleMorphism.comm₂]) (by
-    have eq := h.choose_spec.1
-    dsimp at eq ⊢
-    conv_lhs => rw [← eq, TriangleMorphism.comm₃])
-
-中文:
-定义 isoTriangleOfIso₁₂
-  签名: (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-  定义体: by
-  have h := exists_iso_of_arrow_iso T₁ T₂ hT₁ hT₂ (Arrow.isoMk e₁ e₂ comm.symm)
-  exact Triangle.isoMk _ _ e₁ e₂ (Triangle.π₃.mapIso h.choose) comm (by
-    have eq := h.choose_spec.2
-    dsimp at eq ⊢
-    conv_rhs => rw [← eq, ← TriangleMorphism.comm₂]) (by
-    have eq := h.choose_spec.1
-    dsimp at eq ⊢
-    conv_lhs => rw [← eq, TriangleMorphism.comm₃])
-
-Depends on / 依赖: Arrow.isoMk, Triangle, Triangle.isoMk, TriangleMorphism, TriangleMorphism.comm, choose_spec, comm.symm, conv_lhs, conv_rhs, exists_iso_of_arrow_iso, h.choose, h.choose_spec, mapIso
+--- 原说明 ---
+A choice of isomorphism `T₁ ≅ T₂` between two distinguished triangles
+when we are given two isomorphisms `e₁ : T₁.obj₁ ≅ T₂.obj₁` and `e₂ : T₁.obj₂ ≅ 
+T₂.obj₂`.
 -/
-def isoTriangleOfIso₁₂ (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-    (hT₂ : T₂ in distTriang C) (e₁ : T₁.obj₁ ≅ T₂.obj₁) (e₂ : T₁.obj₂ ≅ T₂.obj₂)
+def isoTriangleOfIso₁₂ (T₁ T₂ : Triangle C) (hT₁ : T₁ ∈ distTriang C)
+    (hT₂ : T₂ ∈ distTriang C) (e₁ : T₁.obj₁ ≅ T₂.obj₁) (e₂ : T₁.obj₂ ≅ T₂.obj₂)
     (comm : T₁.mor₁ ≫ e₂.hom = e₁.hom ≫ T₂.mor₁) : T₁ ≅ T₂ := by
   have h := exists_iso_of_arrow_iso T₁ T₂ hT₁ hT₂ (Arrow.isoMk e₁ e₂ comm.symm)
   exact Triangle.isoMk _ _ e₁ e₂ (Triangle.π₃.mapIso h.choose) comm (by
@@ -2451,63 +1558,24 @@ set_option backward.isDefEq.respectTransparency false in
 /-- A choice of isomorphism `T₁ ≅ T₂` between two distinguished triangles
 when we are given two isomorphisms `e₁ : T₁.obj₁ ≅ T₂.obj₁` and `e₃ : T₁.obj₃ ≅ T₂.obj₃`. -/
 @[simps! hom_hom₁ hom_hom₃ inv_hom₁ inv_hom₃]
-/--
-Definition of `isoTriangleOfIso₁₃` / `isoTriangleOfIso₁₃` 的定义
+/-
+**CategoryTheory.Pretriangulated.isoTriangleOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoTriangleOfIso₁₃
-  signature: (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-  body: by
-  have h := exists_iso_of_arrow_iso _ _ (inv_rot_of_distTriang _ hT₁)
-    (inv_rot_of_distTriang _ hT₂)
-    (Arrow.isoMk ((shiftFunctor C (-1)).mapIso e₃) e₁ (by
-      have := (shiftFunctorCompIsoId C (1 : Int) (-1) (by simp)).hom.naturality e₁.hom
-      dsimp at this ⊢
-      simp only [comp_neg, neg_comp, assoc, neg_inj, ← Functor.map_comp_assoc, ← comm]
-      simp [this]))
-  let e := h.choose
-  have h₁ : e.hom.hom₁ = _ := h.choose_spec.1
-  have h₂ : _ = e.hom.hom₂ := h.choose_spec.2.symm
-  have h₃ := e.hom.comm₃
-  have h₄ := (shiftFunctorCompIsoId C (-1 : Int) 1 (by simp)).inv.naturality e₃.hom
-  dsimp at h₁ h₂ h₃ h₄
-  refine Triangle.isoMk _ _ e₁ (Triangle.π₃.mapIso e) e₃ ?_ ?_ comm
-  · convert! e.hom.comm₂ using 2
-  · simp [← cancel_mono ((shiftFunctorCompIsoId C (-1) 1 (neg_add_cancel 1)).inv.app T₂.obj₃),
-      ← h₃, assoc, h₁, h₄]
-
-中文:
-定义 isoTriangleOfIso₁₃
-  签名: (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-  定义体: by
-  have h := exists_iso_of_arrow_iso _ _ (inv_rot_of_distTriang _ hT₁)
-    (inv_rot_of_distTriang _ hT₂)
-    (Arrow.isoMk ((shiftFunctor C (-1)).mapIso e₃) e₁ (by
-      have := (shiftFunctorCompIsoId C (1 : Int) (-1) (by simp)).hom.naturality e₁.hom
-      dsimp at this ⊢
-      simp only [comp_neg, neg_comp, assoc, neg_inj, ← Functor.map_comp_assoc, ← comm]
-      simp [this]))
-  let e := h.choose
-  have h₁ : e.hom.hom₁ = _ := h.choose_spec.1
-  have h₂ : _ = e.hom.hom₂ := h.choose_spec.2.symm
-  have h₃ := e.hom.comm₃
-  have h₄ := (shiftFunctorCompIsoId C (-1 : Int) 1 (by simp)).inv.naturality e₃.hom
-  dsimp at h₁ h₂ h₃ h₄
-  refine Triangle.isoMk _ _ e₁ (Triangle.π₃.mapIso e) e₃ ?_ ?_ comm
-  · convert! e.hom.comm₂ using 2
-  · simp [← cancel_mono ((shiftFunctorCompIsoId C (-1) 1 (neg_add_cancel 1)).inv.app T₂.obj₃),
-      ← h₃, assoc, h₁, h₄]
-
-Depends on / 依赖: Arrow.isoMk, Functor, Functor.map_comp_assoc, choose_spec, comp_neg, e.hom.comm, e.hom.hom, exists_iso_of_arrow_iso, h.choose, h.choose_spec, hom.naturality, inv_rot_of_distTriang, mapIso, map_comp_assoc, naturality, neg_comp, neg_inj, shiftFu, shiftFunctor, shiftFunctorCompIsoId
+--- 原说明 ---
+A choice of isomorphism `T₁ ≅ T₂` between two distinguished triangles
+when we are given two isomorphisms `e₁ : T₁.obj₁ ≅ T₂.obj₁` and `e₃ : T₁.obj₃ ≅ 
+T₂.obj₃`.
 -/
-def isoTriangleOfIso₁₃ (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang C)
-    (hT₂ : T₂ in distTriang C) (e₁ : T₁.obj₁ ≅ T₂.obj₁) (e₃ : T₁.obj₃ ≅ T₂.obj₃)
+def isoTriangleOfIso₁₃ (T₁ T₂ : Triangle C) (hT₁ : T₁ ∈ distTriang C)
+    (hT₂ : T₂ ∈ distTriang C) (e₁ : T₁.obj₁ ≅ T₂.obj₁) (e₃ : T₁.obj₃ ≅ T₂.obj₃)
     (comm : T₁.mor₃ ≫ (shiftFunctor C 1).map e₁.hom = e₃.hom ≫ T₂.mor₃) :
     T₁ ≅ T₂ := by
   have h := exists_iso_of_arrow_iso _ _ (inv_rot_of_distTriang _ hT₁)
     (inv_rot_of_distTriang _ hT₂)
     (Arrow.isoMk ((shiftFunctor C (-1)).mapIso e₃) e₁ (by
-      have := (shiftFunctorCompIsoId C (1 : Int) (-1) (by simp)).hom.naturality e₁.hom
+      have := (shiftFunctorCompIsoId C (1 : ℤ) (-1) (by simp)).hom.naturality e₁.hom
       dsimp at this ⊢
       simp only [comp_neg, neg_comp, assoc, neg_inj, ← Functor.map_comp_assoc, ← comm]
       simp [this]))
@@ -2515,7 +1583,7 @@ def isoTriangleOfIso₁₃ (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang 
   have h₁ : e.hom.hom₁ = _ := h.choose_spec.1
   have h₂ : _ = e.hom.hom₂ := h.choose_spec.2.symm
   have h₃ := e.hom.comm₃
-  have h₄ := (shiftFunctorCompIsoId C (-1 : Int) 1 (by simp)).inv.naturality e₃.hom
+  have h₄ := (shiftFunctorCompIsoId C (-1 : ℤ) 1 (by simp)).inv.naturality e₃.hom
   dsimp at h₁ h₂ h₃ h₄
   refine Triangle.isoMk _ _ e₁ (Triangle.π₃.mapIso e) e₃ ?_ ?_ comm
   · convert! e.hom.comm₂ using 2
@@ -2525,3 +1593,4 @@ def isoTriangleOfIso₁₃ (T₁ T₂ : Triangle C) (hT₁ : T₁ in distTriang 
 end Pretriangulated
 
 end CategoryTheory
+

@@ -26,135 +26,43 @@ namespace BoundedContinuousFunction
 
 variable {α : Type u} {β : Type v} [TopologicalSpace α] [CompactSpace α] [PseudoMetricSpace β]
 
-/--
-theorem `arzela_ascoli₁` / 定理 `arzela_ascoli₁`
+/-- First version, with pointwise equicontinuity and range in a compact space. -/
+/-
+**BoundedContinuousFunction.arzela_ascoli** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：arzela_ascoli [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β
+)) (in_s : forall (f : α ->ᵇ β) (x : α), f in A -> f x in s) (H : Equicontinuous
+ ((↑) : A -> α -> β)) : IsCompact (closure A)
+参数：s : Set β；hs : IsCompact s；A : Set (α ->ᵇ β)；in_s : forall (f : α ->ᵇ β) (x :
+ α), f in A -> f x in s；H : Equicontinuous ((↑) : A -> α -> β)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.arzela_ascoli₂`：arzela_ascoli₂ (s : Set β) (hs
+ : IsCompact s) (A : Set (α ->ᵇ β)) (closed : IsClosed A) (in_s : forall (f : α 
+->ᵇ β) (x : α), f in A -> f x …
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.mem_of_closed'`：mem_of_closed' {s : Set α} (hs : IsClosed s) {a :
+ α} : a in s ↔ forall ε > 0, exists b in s, dist a b < ε
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.mem_closure_iff`：mem_closure_iff {s : Set α} {a : α} : a in closu
+re s ↔ forall ε > 0, exists b in s, dist a b < ε
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `BoundedContinuousFunction.dist_coe_le_dist`：dist_coe_le_dist (x : α) : d
+ist (f x) (g x) <= dist f g
+· 使用定理 `Equicontinuous.closure'`：Equicontinuous.closure' {A : Set Y} {u : Y -> X
+ -> α} (hA : Equicontinuous (u ∘ (↑) : A -> X -> α)) (hu : Continuous u) : Equic
+ontinuous (u …
+· 使用定理 `BoundedContinuousFunction.continuous_coe`：continuous_coe : Continuous fu
+n (f : α ->ᵇ β) x => f x
 
-English:
-theorem arzela_ascoli₁
-  statement: [CompactSpace β] (A : Set (α ->ᵇ β)) (closed : IsClosed A)
-  proof: by
-  simp_rw [Equicontinuous, Metric.equicontinuousAt_iff_pair] at H
-  refine TotallyBounded.isCompact_of_isClosed ?_ closed
-  refine totallyBounded_of_finite_discretization fun ε ε0 => ?_
-  rcases exists_between ε0 with ⟨ε₁, ε₁0, εε₁⟩
-  let ε₂ := ε₁ / 2 / 2
-  /- We have to find a finite discretization of `u`, i.e., finite information
-    that is sufficient to reconstruct `u` up to `ε`. This information will be
-    provided by the values of `u` on a sufficiently dense set `tα`,
-    slightly translated to fit in a finite `ε₂`-dense set `tβ` in the image. Such
-    sets exist by compactness of the source and range. Then, to check that these
-    data determine the function up to `ε`, one uses the control on the modulus of
-    continuity to extend the closeness on tα to closeness everywhere. -/
-  have ε₂0 : ε₂ > 0 := half_pos (half_pos ε₁0)
-  have : forall x : α, exists U, x in U ∧ IsOpen U ∧
-      forall y in U, forall z in U, forall {f : α ->ᵇ β}, f in A -> dist (f y) (f z) < ε₂ := fun x =>
-    let ⟨U, nhdsU, hU⟩ := H x _ ε₂0
-    let ⟨V, VU, openV, xV⟩ := _root_.mem_nhds_iff.1 nhdsU
-    ⟨V, xV, openV, fun y hy z hz f hf => hU y (VU hy) z (VU hz) ⟨f, hf⟩⟩
-  choose U hU using this
-  /- For all `x`, the set `hU x` is an open set containing `x` on which the elements of `A`
-    fluctuate by at most `ε₂`.
-    We extract finitely many of these sets that cover the whole space, by compactness. -/
-  obtain ⟨tα : Set α, _, hfin, htα : univ subseteq ⋃ x in tα, U x⟩ :=
-    isCompact_univ.elim_finite_subcover_image (fun x _ => (hU x).2.1) fun x _ =>
-      mem_biUnion (mem_univ _) (hU x).1
-  rcases hfin.nonempty_fintype with ⟨_⟩
-  obtain ⟨tβ : Set β, _, hfin, htβ : univ subseteq ⋃ y in tβ, ball y ε₂⟩ :=
-    @finite_cover_balls_of_compact β _ _ isCompact_univ _ ε₂0
-  rcases hfin.nonempty_fintype with ⟨_⟩
-  -- Associate to every point `y` in the space a nearby point `F y` in `tβ`
-  choose F hF using fun y => show exists z in tβ, dist y z < ε₂ by simpa using htβ (mem_univ y)
-  -- `F : β → β`, `hF : ∀ (y : β), F y ∈ tβ ∧ dist y (F y) < ε₂`
-  /- Associate to every function a discrete approximation, mapping each point in `tα`
-    to a point in `tβ` close to its true image by the function. -/
-  classical
-  refine ⟨tα -> tβ, by infer_instance, fun f a => ⟨F (f.1 a), (hF (f.1 a)).1⟩, ?_⟩
-  rintro ⟨f, hf⟩ ⟨g, hg⟩ f_eq_g
-  -- If two functions have the same approximation, then they are within distance `ε`
-  refine lt_of_le_of_lt ((dist_le <| le_of_lt ε₁0).2 fun x => ?_) εε₁
-  obtain ⟨x', x'tα, hx'⟩ := mem_iUnion₂.1 (htα (mem_univ x))
-  calc
-    dist (f x) (g x) <= dist (f x) (f x') + dist (g x) (g x') + dist (f x') (g x') :=
-      dist_triangle4_right _ _ _ _
-    _ <= ε₂ + ε₂ + ε₁ / 2 := by
-      refine le_of_lt (add_lt_add (add_lt_add ?_ ?_) ?_)
-      · exact (hU x').2.2 _ hx' _ (hU x').1 hf
-      · exact (hU x').2.2 _ hx' _ (hU x').1 hg
-      · have F_f_g : F (f x') = F (g x') :=
-          (congr_arg (fun f : tα -> tβ => (f ⟨x', x'tα⟩ : β)) f_eq_g :)
-        calc
-          dist (f x') (g x') <= dist (f x') (F (f x')) + dist (g x') (F (f x')) :=
-            dist_triangle_right _ _ _
-          _ = dist (f x') (F (f x')) + dist (g x') (F (g x')) := by rw [F_f_g]
-          _ < ε₂ + ε₂ := (add_lt_add (hF (f x')).2 (hF (g x')).2)
-          _ = ε₁ / 2 := add_halves _
-    _ = ε₁ := by rw [add_halves, add_halves]
-
-中文:
-定理 arzela_ascoli₁
-  结论: [紧空间 β] (A : 集合 (α ->ᵇ β)) (closed : 是闭集 A)
-  证明: by
-  simp_rw [Equicontinuous, Metric.equicontinuousAt_iff_pair] at H
-  refine TotallyBounded.isCompact_of_isClosed ?_ closed
-  refine totallyBounded_of_finite_discretization fun ε ε0 => ?_
-  rcases exists_between ε0 with ⟨ε₁, ε₁0, εε₁⟩
-  let ε₂ := ε₁ / 2 / 2
-  /- We have to find a finite discretization of `u`, i.e., finite information
-    that is sufficient to reconstruct `u` up to `ε`. This information will be
-    provided by the values of `u` on a sufficiently dense set `tα`,
-    slightly translated to fit in a finite `ε₂`-dense set `tβ` in the image. Such
-    sets exist by compactness of the source and range. Then, to check that these
-    data determine the function up to `ε`, one uses the control on the modulus of
-    continuity to extend the closeness on tα to closeness everywhere. -/
-  have ε₂0 : ε₂ > 0 := half_pos (half_pos ε₁0)
-  have : forall x : α, exists U, x in U ∧ IsOpen U ∧
-      forall y in U, forall z in U, forall {f : α ->ᵇ β}, f in A -> dist (f y) (f z) < ε₂ := fun x =>
-    let ⟨U, nhdsU, hU⟩ := H x _ ε₂0
-    let ⟨V, VU, openV, xV⟩ := _root_.mem_nhds_iff.1 nhdsU
-    ⟨V, xV, openV, fun y hy z hz f hf => hU y (VU hy) z (VU hz) ⟨f, hf⟩⟩
-  choose U hU using this
-  /- For all `x`, the set `hU x` is an open set containing `x` on which the elements of `A`
-    fluctuate by at most `ε₂`.
-    We extract finitely many of these sets that cover the whole space, by compactness. -/
-  obtain ⟨tα : Set α, _, hfin, htα : univ subseteq ⋃ x in tα, U x⟩ :=
-    isCompact_univ.elim_finite_subcover_image (fun x _ => (hU x).2.1) fun x _ =>
-      mem_biUnion (mem_univ _) (hU x).1
-  rcases hfin.nonempty_fintype with ⟨_⟩
-  obtain ⟨tβ : Set β, _, hfin, htβ : univ subseteq ⋃ y in tβ, ball y ε₂⟩ :=
-    @finite_cover_balls_of_compact β _ _ isCompact_univ _ ε₂0
-  rcases hfin.nonempty_fintype with ⟨_⟩
-  -- Associate to every point `y` in the space a nearby point `F y` in `tβ`
-  choose F hF using fun y => show exists z in tβ, dist y z < ε₂ by simpa using htβ (mem_univ y)
-  -- `F : β → β`, `hF : ∀ (y : β), F y ∈ tβ ∧ dist y (F y) < ε₂`
-  /- Associate to every function a discrete approximation, mapping each point in `tα`
-    to a point in `tβ` close to its true image by the function. -/
-  classical
-  refine ⟨tα -> tβ, by infer_instance, fun f a => ⟨F (f.1 a), (hF (f.1 a)).1⟩, ?_⟩
-  rintro ⟨f, hf⟩ ⟨g, hg⟩ f_eq_g
-  -- If two functions have the same approximation, then they are within distance `ε`
-  refine lt_of_le_of_lt ((dist_le <| le_of_lt ε₁0).2 fun x => ?_) εε₁
-  obtain ⟨x', x'tα, hx'⟩ := mem_iUnion₂.1 (htα (mem_univ x))
-  calc
-    dist (f x) (g x) <= dist (f x) (f x') + dist (g x) (g x') + dist (f x') (g x') :=
-      dist_triangle4_right _ _ _ _
-    _ <= ε₂ + ε₂ + ε₁ / 2 := by
-      refine le_of_lt (add_lt_add (add_lt_add ?_ ?_) ?_)
-      · exact (hU x').2.2 _ hx' _ (hU x').1 hf
-      · exact (hU x').2.2 _ hx' _ (hU x').1 hg
-      · have F_f_g : F (f x') = F (g x') :=
-          (congr_arg (fun f : tα -> tβ => (f ⟨x', x'tα⟩ : β)) f_eq_g :)
-        calc
-          dist (f x') (g x') <= dist (f x') (F (f x')) + dist (g x') (F (f x')) :=
-            dist_triangle_right _ _ _
-          _ = dist (f x') (F (f x')) + dist (g x') (F (g x')) := by rw [F_f_g]
-          _ < ε₂ + ε₂ := (add_lt_add (hF (f x')).2 (hF (g x')).2)
-          _ = ε₁ / 2 := add_halves _
-    _ = ε₁ := by rw [add_halves, add_halves]
-
-Depends on / 依赖: Equicontinuous, Metric, Metric.equicontinuousAt_iff_pair, TotallyBounded, TotallyBounded.isCompact_of_isClosed, closed, equicontinuousAt_iff_pair, exists_between, isCompact_of_isClosed, simp_rw, totallyBounded_of_finite_discretization
+--- 原说明 ---
+First version, with pointwise equicontinuity and range in a compact space.
 -/
-theorem arzela_ascoli₁ [CompactSpace β] (A : Set (α ->ᵇ β)) (closed : IsClosed A)
-    (H : Equicontinuous ((↑) : A -> α -> β)) : IsCompact A := by
+theorem arzela_ascoli₁ [CompactSpace β] (A : Set (α →ᵇ β)) (closed : IsClosed A)
+    (H : Equicontinuous ((↑) : A → α → β)) : IsCompact A := by
   simp_rw [Equicontinuous, Metric.equicontinuousAt_iff_pair] at H
   refine TotallyBounded.isCompact_of_isClosed ?_ closed
   refine totallyBounded_of_finite_discretization fun ε ε0 => ?_
@@ -168,8 +76,8 @@ theorem arzela_ascoli₁ [CompactSpace β] (A : Set (α ->ᵇ β)) (closed : IsC
     data determine the function up to `ε`, one uses the control on the modulus of
     continuity to extend the closeness on tα to closeness everywhere. -/
   have ε₂0 : ε₂ > 0 := half_pos (half_pos ε₁0)
-  have : forall x : α, exists U, x in U ∧ IsOpen U ∧
-      forall y in U, forall z in U, forall {f : α ->ᵇ β}, f in A -> dist (f y) (f z) < ε₂ := fun x =>
+  have : ∀ x : α, ∃ U, x ∈ U ∧ IsOpen U ∧
+      ∀ y ∈ U, ∀ z ∈ U, ∀ {f : α →ᵇ β}, f ∈ A → dist (f y) (f z) < ε₂ := fun x =>
     let ⟨U, nhdsU, hU⟩ := H x _ ε₂0
     let ⟨V, VU, openV, xV⟩ := _root_.mem_nhds_iff.1 nhdsU
     ⟨V, xV, openV, fun y hy z hz f hf => hU y (VU hy) z (VU hz) ⟨f, hf⟩⟩
@@ -177,87 +85,83 @@ theorem arzela_ascoli₁ [CompactSpace β] (A : Set (α ->ᵇ β)) (closed : IsC
   /- For all `x`, the set `hU x` is an open set containing `x` on which the elements of `A`
     fluctuate by at most `ε₂`.
     We extract finitely many of these sets that cover the whole space, by compactness. -/
-  obtain ⟨tα : Set α, _, hfin, htα : univ subseteq ⋃ x in tα, U x⟩ :=
+  obtain ⟨tα : Set α, _, hfin, htα : univ ⊆ ⋃ x ∈ tα, U x⟩ :=
     isCompact_univ.elim_finite_subcover_image (fun x _ => (hU x).2.1) fun x _ =>
       mem_biUnion (mem_univ _) (hU x).1
   rcases hfin.nonempty_fintype with ⟨_⟩
-  obtain ⟨tβ : Set β, _, hfin, htβ : univ subseteq ⋃ y in tβ, ball y ε₂⟩ :=
+  obtain ⟨tβ : Set β, _, hfin, htβ : univ ⊆ ⋃ y ∈ tβ, ball y ε₂⟩ :=
     @finite_cover_balls_of_compact β _ _ isCompact_univ _ ε₂0
   rcases hfin.nonempty_fintype with ⟨_⟩
   -- Associate to every point `y` in the space a nearby point `F y` in `tβ`
-  choose F hF using fun y => show exists z in tβ, dist y z < ε₂ by simpa using htβ (mem_univ y)
+  choose F hF using fun y => show ∃ z ∈ tβ, dist y z < ε₂ by simpa using htβ (mem_univ y)
   -- `F : β → β`, `hF : ∀ (y : β), F y ∈ tβ ∧ dist y (F y) < ε₂`
   /- Associate to every function a discrete approximation, mapping each point in `tα`
     to a point in `tβ` close to its true image by the function. -/
   classical
-  refine ⟨tα -> tβ, by infer_instance, fun f a => ⟨F (f.1 a), (hF (f.1 a)).1⟩, ?_⟩
+  refine ⟨tα → tβ, by infer_instance, fun f a => ⟨F (f.1 a), (hF (f.1 a)).1⟩, ?_⟩
   rintro ⟨f, hf⟩ ⟨g, hg⟩ f_eq_g
   -- If two functions have the same approximation, then they are within distance `ε`
   refine lt_of_le_of_lt ((dist_le <| le_of_lt ε₁0).2 fun x => ?_) εε₁
   obtain ⟨x', x'tα, hx'⟩ := mem_iUnion₂.1 (htα (mem_univ x))
   calc
-    dist (f x) (g x) <= dist (f x) (f x') + dist (g x) (g x') + dist (f x') (g x') :=
+    dist (f x) (g x) ≤ dist (f x) (f x') + dist (g x) (g x') + dist (f x') (g x') :=
       dist_triangle4_right _ _ _ _
-    _ <= ε₂ + ε₂ + ε₁ / 2 := by
+    _ ≤ ε₂ + ε₂ + ε₁ / 2 := by
       refine le_of_lt (add_lt_add (add_lt_add ?_ ?_) ?_)
       · exact (hU x').2.2 _ hx' _ (hU x').1 hf
       · exact (hU x').2.2 _ hx' _ (hU x').1 hg
       · have F_f_g : F (f x') = F (g x') :=
-          (congr_arg (fun f : tα -> tβ => (f ⟨x', x'tα⟩ : β)) f_eq_g :)
+          (congr_arg (fun f : tα → tβ => (f ⟨x', x'tα⟩ : β)) f_eq_g :)
         calc
-          dist (f x') (g x') <= dist (f x') (F (f x')) + dist (g x') (F (f x')) :=
+          dist (f x') (g x') ≤ dist (f x') (F (f x')) + dist (g x') (F (f x')) :=
             dist_triangle_right _ _ _
           _ = dist (f x') (F (f x')) + dist (g x') (F (g x')) := by rw [F_f_g]
           _ < ε₂ + ε₂ := (add_lt_add (hF (f x')).2 (hF (g x')).2)
           _ = ε₁ / 2 := add_halves _
     _ = ε₁ := by rw [add_halves, add_halves]
 
-/--
-theorem `arzela_ascoli₂` / 定理 `arzela_ascoli₂`
+/-- Second version, with pointwise equicontinuity and range in a compact subset. -/
+/-
+**BoundedContinuousFunction.arzela_ascoli** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：arzela_ascoli [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β
+)) (in_s : forall (f : α ->ᵇ β) (x : α), f in A -> f x in s) (H : Equicontinuous
+ ((↑) : A -> α -> β)) : IsCompact (closure A)
+参数：s : Set β；hs : IsCompact s；A : Set (α ->ᵇ β)；in_s : forall (f : α ->ᵇ β) (x :
+ α), f in A -> f x in s；H : Equicontinuous ((↑) : A -> α -> β)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.arzela_ascoli₂`：arzela_ascoli₂ (s : Set β) (hs
+ : IsCompact s) (A : Set (α ->ᵇ β)) (closed : IsClosed A) (in_s : forall (f : α 
+->ᵇ β) (x : α), f in A -> f x …
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.mem_of_closed'`：mem_of_closed' {s : Set α} (hs : IsClosed s) {a :
+ α} : a in s ↔ forall ε > 0, exists b in s, dist a b < ε
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.mem_closure_iff`：mem_closure_iff {s : Set α} {a : α} : a in closu
+re s ↔ forall ε > 0, exists b in s, dist a b < ε
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `BoundedContinuousFunction.dist_coe_le_dist`：dist_coe_le_dist (x : α) : d
+ist (f x) (g x) <= dist f g
+· 使用定理 `Equicontinuous.closure'`：Equicontinuous.closure' {A : Set Y} {u : Y -> X
+ -> α} (hA : Equicontinuous (u ∘ (↑) : A -> X -> α)) (hu : Continuous u) : Equic
+ontinuous (u …
+· 使用定理 `BoundedContinuousFunction.continuous_coe`：continuous_coe : Continuous fu
+n (f : α ->ᵇ β) x => f x
 
-English:
-theorem arzela_ascoli₂
-  statement: (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β)) (closed : IsClosed A)
-  proof: by
-  /- This version is deduced from the previous one by restricting to the compact type in the target,
-  using compactness there and then lifting everything to the original space. -/
-  have M : LipschitzWith 1 Subtype.val := LipschitzWith.subtype_val s
-  let F : (α ->ᵇ s) -> α ->ᵇ β := comp (↑) M
-  refine IsCompact.of_isClosed_subset ((?_ : IsCompact (F ⁻¹' A)).image (continuous_comp M)) closed
-      fun f hf => ?_
-  · have : CompactSpace s := isCompact_iff_compactSpace.1 hs
-    refine arzela_ascoli₁ _ (continuous_iff_isClosed.1 (continuous_comp M) _ closed) ?_
-    rw [isUniformEmbedding_subtype_val.isUniformInducing.equicontinuous_iff]
-    exact H.comp (A.restrictPreimage F)
-  · let g := codRestrict s f fun x => in_s f x hf
-    rw [show f = F g by ext; rfl] at hf ⊢
-    exact ⟨g, hf, rfl⟩
-
-中文:
-定理 arzela_ascoli₂
-  结论: (s : 集合 β) (hs : 是紧集 s) (A : 集合 (α ->ᵇ β)) (closed : 是闭集 A)
-  证明: by
-  /- This version is deduced from the previous one by restricting to the compact type in the target,
-  using compactness there and then lifting everything to the original space. -/
-  have M : LipschitzWith 1 Subtype.val := LipschitzWith.subtype_val s
-  let F : (α ->ᵇ s) -> α ->ᵇ β := comp (↑) M
-  refine IsCompact.of_isClosed_subset ((?_ : IsCompact (F ⁻¹' A)).image (continuous_comp M)) closed
-      fun f hf => ?_
-  · have : CompactSpace s := isCompact_iff_compactSpace.1 hs
-    refine arzela_ascoli₁ _ (continuous_iff_isClosed.1 (continuous_comp M) _ closed) ?_
-    rw [isUniformEmbedding_subtype_val.isUniformInducing.equicontinuous_iff]
-    exact H.comp (A.restrictPreimage F)
-  · let g := codRestrict s f fun x => in_s f x hf
-    rw [show f = F g by ext; rfl] at hf ⊢
-    exact ⟨g, hf, rfl⟩
+--- 原说明 ---
+Second version, with pointwise equicontinuity and range in a compact subset.
 -/
-theorem arzela_ascoli₂ (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β)) (closed : IsClosed A)
-    (in_s : forall (f : α ->ᵇ β) (x : α), f in A -> f x in s) (H : Equicontinuous ((↑) : A -> α -> β)) :
+theorem arzela_ascoli₂ (s : Set β) (hs : IsCompact s) (A : Set (α →ᵇ β)) (closed : IsClosed A)
+    (in_s : ∀ (f : α →ᵇ β) (x : α), f ∈ A → f x ∈ s) (H : Equicontinuous ((↑) : A → α → β)) :
     IsCompact A := by
   /- This version is deduced from the previous one by restricting to the compact type in the target,
   using compactness there and then lifting everything to the original space. -/
   have M : LipschitzWith 1 Subtype.val := LipschitzWith.subtype_val s
-  let F : (α ->ᵇ s) -> α ->ᵇ β := comp (↑) M
+  let F : (α →ᵇ s) → α →ᵇ β := comp (↑) M
   refine IsCompact.of_isClosed_subset ((?_ : IsCompact (F ⁻¹' A)).image (continuous_comp M)) closed
       fun f hf => ?_
   · have : CompactSpace s := isCompact_iff_compactSpace.1 hs
@@ -268,35 +172,46 @@ theorem arzela_ascoli₂ (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β))
     rw [show f = F g by ext; rfl] at hf ⊢
     exact ⟨g, hf, rfl⟩
 
-/--
-theorem `arzela_ascoli` / 定理 `arzela_ascoli`
+/-- Third (main) version, with pointwise equicontinuity and range in a compact subset, but
+without closedness. The closure is then compact. -/
+/-
+**BoundedContinuousFunction.arzela_ascoli** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：arzela_ascoli [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β
+)) (in_s : forall (f : α ->ᵇ β) (x : α), f in A -> f x in s) (H : Equicontinuous
+ ((↑) : A -> α -> β)) : IsCompact (closure A)
+参数：s : Set β；hs : IsCompact s；A : Set (α ->ᵇ β)；in_s : forall (f : α ->ᵇ β) (x :
+ α), f in A -> f x in s；H : Equicontinuous ((↑) : A -> α -> β)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.arzela_ascoli₂`：arzela_ascoli₂ (s : Set β) (hs
+ : IsCompact s) (A : Set (α ->ᵇ β)) (closed : IsClosed A) (in_s : forall (f : α 
+->ᵇ β) (x : α), f in A -> f x …
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.mem_of_closed'`：mem_of_closed' {s : Set α} (hs : IsClosed s) {a :
+ α} : a in s ↔ forall ε > 0, exists b in s, dist a b < ε
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.mem_closure_iff`：mem_closure_iff {s : Set α} {a : α} : a in closu
+re s ↔ forall ε > 0, exists b in s, dist a b < ε
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `BoundedContinuousFunction.dist_coe_le_dist`：dist_coe_le_dist (x : α) : d
+ist (f x) (g x) <= dist f g
+· 使用定理 `Equicontinuous.closure'`：Equicontinuous.closure' {A : Set Y} {u : Y -> X
+ -> α} (hA : Equicontinuous (u ∘ (↑) : A -> X -> α)) (hu : Continuous u) : Equic
+ontinuous (u …
+· 使用定理 `BoundedContinuousFunction.continuous_coe`：continuous_coe : Continuous fu
+n (f : α ->ᵇ β) x => f x
 
-English:
-theorem arzela_ascoli
-  statement: [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β))
-  proof: /- This version is deduced from the previous one by checking that the closure of `A`, in
-  addition to being closed, still satisfies the properties of compact range and equicontinuity. -/
-  arzela_ascoli₂ s hs (closure A) isClosed_closure
-    (fun _ x hf =>
-      (mem_of_closed' hs.isClosed).2 fun ε ε0 =>
-        let ⟨g, gA, dist_fg⟩ := Metric.mem_closure_iff.1 hf ε ε0
-        ⟨g x, in_s g x gA, lt_of_le_of_lt (dist_coe_le_dist _) dist_fg⟩)
-    (H.closure' continuous_coe)
-
-中文:
-定理 arzela_ascoli
-  结论: [T2空间 β] (s : 集合 β) (hs : 是紧集 s) (A : 集合 (α ->ᵇ β))
-  证明: /- This version is deduced from the previous one by checking that the closure of `A`, in
-  addition to being closed, still satisfies the properties of compact range and equicontinuity. -/
-  arzela_ascoli₂ s hs (closure A) isClosed_closure
-    (fun _ x hf =>
-      (mem_of_closed' hs.isClosed).2 fun ε ε0 =>
-        let ⟨g, gA, dist_fg⟩ := Metric.mem_closure_iff.1 hf ε ε0
-        ⟨g x, in_s g x gA, lt_of_le_of_lt (dist_coe_le_dist _) dist_fg⟩)
-    (H.closure' continuous_coe)
+--- 原说明 ---
+Third (main) version, with pointwise equicontinuity and range in a compact subse
+t, but
+without closedness. The closure is then compact.
 -/
-theorem arzela_ascoli [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α ->ᵇ β))
-    (in_s : forall (f : α ->ᵇ β) (x : α), f in A -> f x in s) (H : Equicontinuous ((↑) : A -> α -> β)) :
+theorem arzela_ascoli [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α →ᵇ β))
+    (in_s : ∀ (f : α →ᵇ β) (x : α), f ∈ A → f x ∈ s) (H : Equicontinuous ((↑) : A → α → β)) :
     IsCompact (closure A) :=
   /- This version is deduced from the previous one by checking that the closure of `A`, in
   addition to being closed, still satisfies the properties of compact range and equicontinuity. -/
@@ -308,3 +223,4 @@ theorem arzela_ascoli [T2Space β] (s : Set β) (hs : IsCompact s) (A : Set (α 
     (H.closure' continuous_coe)
 
 end BoundedContinuousFunction
+

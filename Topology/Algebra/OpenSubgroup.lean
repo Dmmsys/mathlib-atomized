@@ -38,44 +38,27 @@ Note that this notion is especially relevant in a non-archimedean context, for i
 
 open TopologicalSpace Topology Function
 
-/--
-Definition of `OpenAddSubgroup` / `OpenAddSubgroup` 的定义
+/-- The type of open subgroups of a topological additive group. -/
+/-
+**OpenAddSubgroup** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_1) → [AddGroup G] → [TopologicalSpace G] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OpenAddSubgroup
-  parameters: (G : Type*) [AddGroup G] [TopologicalSpace G]
-  extends: AddSubgroup G
-  axioms and operations (1):
-    - isOpen' : IsOpen carrier
-
-中文:
-结构 OpenAdd子群
-  参数: (G : 类型) [加法群 G] [拓扑空间 G]
-  继承: 加法子群 G
-  公理与运算 (1 个):
-    - isOpen' : 是开集 carrier
+--- 原说明 ---
+The type of open subgroups of a topological additive group.
 -/
 structure OpenAddSubgroup (G : Type*) [AddGroup G] [TopologicalSpace G] extends AddSubgroup G where
   isOpen' : IsOpen carrier
 
 /-- The type of open subgroups of a topological group. -/
 @[to_additive]
-/--
-Definition of `OpenSubgroup` / `OpenSubgroup` 的定义
+/-
+**OpenSubgroup** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_1) → [Group G] → [TopologicalSpace G] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OpenSubgroup
-  parameters: (G : Type*) [Group G] [TopologicalSpace G]
-  extends: Subgroup G
-  axioms and operations (1):
-    - isOpen' : IsOpen carrier
-
-中文:
-结构 开子群
-  参数: (G : 类型) [群 G] [拓扑空间 G]
-  继承: 子群 G
-  公理与运算 (1 个):
-    - isOpen' : 是开集 carrier
+--- 原说明 ---
+The type of open subgroups of a topological group.
 -/
 structure OpenSubgroup (G : Type*) [Group G] [TopologicalSpace G] extends Subgroup G where
   isOpen' : IsOpen carrier
@@ -94,101 +77,43 @@ variable {G : Type*} [Group G] [TopologicalSpace G]
 variable {U V : OpenSubgroup G} {g : G}
 
 @[to_additive]
-/--
-Instance `hasCoeSubgroup` / 实例 `hasCoeSubgroup`
-
-English:
-instance hasCoeSubgroup
-  signature: : CoeTC (OpenSubgroup G) (Subgroup G)
-  body: ⟨toSubgroup⟩
-
-@[to_additive]
-
-中文:
-实例 hasCoeSubgroup
-  签名: : CoeTC (开子群 G) (子群 G)
-  定义体: ⟨toSubgroup⟩
-
-@[to_additive]
-
-Depends on / 依赖: toSubgroup
+/-
+**OpenSubgroup.hasCoeSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+形式化陈述：hasCoeSubgroup : CoeTC (OpenSubgroup G) (Subgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasCoeSubgroup : CoeTC (OpenSubgroup G) (Subgroup G) :=
   ⟨toSubgroup⟩
 
 @[to_additive]
-/--
-theorem `toSubgroup_injective` / 定理 `toSubgroup_injective`
-
-English:
-theorem toSubgroup_injective
-  statement: Injective ((↑) : OpenSubgroup G -> Subgroup G)
-
-中文:
-定理 toSubgroup_injective
-  结论: 单射 ((↑) : 开子群 G -> 子群 G)
+/-
+**OpenSubgroup.toSubgroup_injective** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] [inst_1 : TopologicalSpace G], Function.
+Injective OpenSubgroup.toSubgroup
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toSubgroup_injective : Injective ((↑) : OpenSubgroup G -> Subgroup G)
+theorem toSubgroup_injective : Injective ((↑) : OpenSubgroup G → Subgroup G)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (OpenSubgroup G) G
-  body: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-中文:
-实例 :
-  签名: 集合状 (开子群 G) G
-  定义体: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (OpenSubgroup G) G where
   coe U := U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (OpenSubgroup G)
-  body: .ofSetLike (OpenSubgroup G) G
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 偏序 (开子群 G)
-  定义体: .ofSetLike (OpenSubgroup G) G
-
-@[to_additive]
+  coe_injective _ _ h := toSubgroup_injective <| SetLike.ext' h
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : PartialOrder (OpenSubgroup G) := .ofSetLike (OpenSubgroup G) G
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SubgroupClass (OpenSubgroup G) G
-  body: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-中文:
-实例 :
-  签名: 子群类 (开子群 G) G
-  定义体: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-Depends on / 依赖: Subsemigroup, Subsemigroup.mul_mem, mul_mem
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SubgroupClass (OpenSubgroup G) G where
   mul_mem := Subsemigroup.mul_mem' _
@@ -197,372 +122,204 @@ instance : SubgroupClass (OpenSubgroup G) G where
 
 /-- Coercion from `OpenSubgroup G` to `Opens G`. -/
 @[to_additive (attr := coe) /-- Coercion from `OpenAddSubgroup G` to `Opens G`. -/]
-/--
-Definition of `toOpens` / `toOpens` 的定义
+/-
+**OpenSubgroup.toOpens** 是 Mathlib 中的一个定义，位于命名空间 `OpenSubgroup`。
+形式化陈述：toOpens (U : OpenSubgroup G) : Opens G
+参数：U : OpenSubgroup G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenSubgroup.isOpen'`：∀ {G : Type u_1} [inst : Group G] [inst_1 : Topolo
+gicalSpace G] (self : OpenSubgroup G), IsOpen (↑self).carrier
 
-English:
-definition toOpens
-  signature: (U : OpenSubgroup G)
-  body: ⟨U, U.isOpen'⟩
-
-@[to_additive]
-
-中文:
-定义 toOpens
-  签名: (U : 开子群 G)
-  定义体: ⟨U, U.isOpen'⟩
-
-@[to_additive]
-
-Depends on / 依赖: U.isOpen, isOpen
+--- 原说明 ---
+Coercion from `OpenSubgroup G` to `Opens G`.
 -/
 def toOpens (U : OpenSubgroup G) : Opens G := ⟨U, U.isOpen'⟩
 
 @[to_additive]
-/--
-Instance `hasCoeOpens` / 实例 `hasCoeOpens`
-
-English:
-instance hasCoeOpens
-  signature: : CoeTC (OpenSubgroup G) (Opens G)
-  body: ⟨toOpens⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 hasCoeOpens
-  签名: : CoeTC (开子群 G) (Opens G)
-  定义体: ⟨toOpens⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: toOpens
+/-
+**OpenSubgroup.hasCoeOpens** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+形式化陈述：hasCoeOpens : CoeTC (OpenSubgroup G) (Opens G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasCoeOpens : CoeTC (OpenSubgroup G) (Opens G) := ⟨toOpens⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_toOpens` / 定理 `coe_toOpens`
-
-English:
-theorem coe_toOpens
-  statement: ((U : Opens G) : Set G) = U
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_toOpens
-  结论: ((U : Opens G) : 集合 G) = U
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.coe_toOpens** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：coe_toOpens : ((U : Opens G) : Set G) = U
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toOpens : ((U : Opens G) : Set G) = U :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_toSubgroup` / 定理 `coe_toSubgroup`
-
-English:
-theorem coe_toSubgroup
-  statement: ((U : Subgroup G) : Set G) = U
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_toSubgroup
-  结论: ((U : 子群 G) : 集合 G) = U
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.coe_toSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：coe_toSubgroup : ((U : Subgroup G) : Set G) = U
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toSubgroup : ((U : Subgroup G) : Set G) = U := rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `mem_toOpens` / 定理 `mem_toOpens`
-
-English:
-theorem mem_toOpens
-  statement: g in (U : Opens G) ↔ g in U
-  proof: Iff.rfl
+/-
+**OpenSubgroup.mem_toOpens** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：mem_toOpens : g in (U : Opens G) ↔ g in U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem mem_toOpens : g ∈ (U : Opens G) ↔ g ∈ U := Iff.rfl
 
 @[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 mem_toOpens
-  结论: g in (U : Opens G) ↔ g in U
-  证明: Iff.rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**OpenSubgroup.mem_toSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：mem_toSubgroup : g in (U : Subgroup G) ↔ g in U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toOpens : g in (U : Opens G) ↔ g in U := Iff.rfl
-
-@[to_additive (attr := simp, norm_cast)]
-/--
-theorem `mem_toSubgroup` / 定理 `mem_toSubgroup`
-
-English:
-theorem mem_toSubgroup
-  statement: g in (U : Subgroup G) ↔ g in U
-  proof: Iff.rfl
+theorem mem_toSubgroup : g ∈ (U : Subgroup G) ↔ g ∈ U := Iff.rfl
 
 @[to_additive (attr := ext)]
-
-中文:
-定理 mem_toSubgroup
-  结论: g in (U : 子群 G) ↔ g in U
-  证明: Iff.rfl
-
-@[to_additive (attr := ext)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**OpenSubgroup.ext** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：ext (h : forall x, x in U ↔ x in V) : U = V
+参数：h : forall x, x in U ↔ x in V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
 -/
-theorem mem_toSubgroup : g in (U : Subgroup G) ↔ g in U := Iff.rfl
-
-@[to_additive (attr := ext)]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (h : forall x, x in U ↔ x in V)
-  statement: U = V
-  proof: SetLike.ext h
-
-中文:
-定理 ext
-  条件: (h : 对任意 x, x in U ↔ x in V)
-  结论: U = V
-  证明: SetLike.ext h
-
-Depends on / 依赖: SetLike, SetLike.ext
--/
-theorem ext (h : forall x, x in U ↔ x in V) : U = V :=
+theorem ext (h : ∀ x, x ∈ U ↔ x ∈ V) : U = V :=
   SetLike.ext h
 
 variable (U)
 
 @[to_additive]
-/--
-theorem `isOpen` / 定理 `isOpen`
-
-English:
-theorem isOpen
-  statement: IsOpen (U : Set G)
-  proof: U.isOpen'
-
-@[to_additive]
-
-中文:
-定理 isOpen
-  结论: 是开集 (U : 集合 G)
-  证明: U.isOpen'
-
-@[to_additive]
+/-
+**OpenSubgroup.isOpen** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] [inst_1 : TopologicalSpace G] (U : OpenS
+ubgroup G), IsOpen ↑U
+参数：U : OpenSubgroup G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenSubgroup.isOpen'`：∀ {G : Type u_1} [inst : Group G] [inst_1 : Topolo
+gicalSpace G] (self : OpenSubgroup G), IsOpen (↑self).carrier
 -/
 protected theorem isOpen : IsOpen (U : Set G) :=
   U.isOpen'
 
 @[to_additive]
-/--
-theorem `mem_nhds_one` / 定理 `mem_nhds_one`
-
-English:
-theorem mem_nhds_one
-  statement: (U : Set G) in 𝓝 (1 : G)
-  proof: U.isOpen.mem_nhds U.one_mem
-
-中文:
-定理 mem_nhds_one
-  结论: (U : 集合 G) in 𝓝 (1 : G)
-  证明: U.isOpen.mem_nhds U.one_mem
-
-Depends on / 依赖: U.isOpen.mem_nhds, U.one_mem, isOpen, mem_nhds, one_mem
+/-
+**OpenSubgroup.mem_nhds_one** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：mem_nhds_one : (U : Set G) in 𝓝 (1 : G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `OpenSubgroup.isOpen`：∀ {G : Type u_1} [inst : Group G] [inst_1 : Topolog
+icalSpace G] (U : OpenSubgroup G), IsOpen ↑U
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
 -/
-theorem mem_nhds_one : (U : Set G) in 𝓝 (1 : G) :=
+theorem mem_nhds_one : (U : Set G) ∈ 𝓝 (1 : G) :=
   U.isOpen.mem_nhds U.one_mem
 
 variable {U}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (OpenSubgroup G)
-  body: ⟨⟨⊤, isOpen_univ⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 顶元素 (开子群 G)
-  定义体: ⟨⟨⊤, isOpen_univ⟩⟩
-
-@[to_additive (attr := simp)]
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : Top (OpenSubgroup G) := ⟨⟨⊤, isOpen_univ⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_top` / 定理 `mem_top`
-
-English:
-theorem mem_top
-  given: (x : G)
-  statement: x in (⊤ : OpenSubgroup G)
-  proof: trivial
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 mem_top
-  条件: (x : G)
-  结论: x in (⊤ : 开子群 G)
-  证明: trivial
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.mem_top** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：mem_top (x : G) : x in (⊤ : OpenSubgroup G)
+参数：x : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-theorem mem_top (x : G) : x in (⊤ : OpenSubgroup G) :=
+theorem mem_top (x : G) : x ∈ (⊤ : OpenSubgroup G) :=
   trivial
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: ((⊤ : OpenSubgroup G) : Set G) = Set.univ
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_top
-  结论: ((⊤ : 开子群 G) : 集合 G) = 集合.univ
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：coe_top : ((⊤ : OpenSubgroup G) : Set G) = Set.univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : ((⊤ : OpenSubgroup G) : Set G) = Set.univ :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `toSubgroup_top` / 定理 `toSubgroup_top`
-
-English:
-theorem toSubgroup_top
-  statement: ((⊤ : OpenSubgroup G) : Subgroup G) = ⊤
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 toSubgroup_top
-  结论: ((⊤ : 开子群 G) : 子群 G) = ⊤
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.toSubgroup_top** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toSubgroup_top : ((⊤ : OpenSubgroup G) : Subgroup G) = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubgroup_top : ((⊤ : OpenSubgroup G) : Subgroup G) = ⊤ :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `toOpens_top` / 定理 `toOpens_top`
-
-English:
-theorem toOpens_top
-  statement: ((⊤ : OpenSubgroup G) : Opens G) = ⊤
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toOpens_top
-  结论: ((⊤ : 开子群 G) : Opens G) = ⊤
-  证明: rfl
-
-@[to_additive]
+/-
+**OpenSubgroup.toOpens_top** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toOpens_top : ((⊤ : OpenSubgroup G) : Opens G) = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toOpens_top : ((⊤ : OpenSubgroup G) : Opens G) = ⊤ :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (OpenSubgroup G)
-  body: ⟨⊤⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 (开子群 G)
-  定义体: ⟨⊤⟩
-
-@[to_additive]
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (OpenSubgroup G) :=
   ⟨⊤⟩
 
 @[to_additive]
-/--
-theorem `isClosed` / 定理 `isClosed`
-
-English:
-theorem isClosed
-  given: [SeparatelyContinuousMul G] (U : OpenSubgroup G)
-  statement: IsClosed (U : Set G)
-  proof: by
-  have := QuotientGroup.discreteTopology U.isOpen
-  exact QuotientGroup.t1Space_iff.mp inferInstance
-
-@[to_additive]
-
-中文:
-定理 isClosed
-  条件: [SeparatelyContinuousMul G] (U : 开子群 G)
-  结论: 是闭集 (U : 集合 G)
-  证明: by
-  have := QuotientGroup.discreteTopology U.isOpen
-  exact QuotientGroup.t1Space_iff.mp inferInstance
-
-@[to_additive]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.discreteTopology, QuotientGroup.t1Space_iff.mp, U.isOpen, discreteTopology, isOpen, t1Space_iff
+/-
+**OpenSubgroup.isClosed** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：isClosed [SeparatelyContinuousMul G] (U : OpenSubgroup G) : IsClosed (U : 
+Set G)
+参数：U : OpenSubgroup G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.discreteTopology`：discreteTopology (hN : IsOpen (N : Set G
+)) : DiscreteTopology (G ⧸ N)
+· 使用定理 `OpenSubgroup.isOpen`：∀ {G : Type u_1} [inst : Group G] [inst_1 : Topolog
+icalSpace G] (U : OpenSubgroup G), IsOpen ↑U
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `QuotientGroup.t1Space_iff`：t1Space_iff : T1Space (G ⧸ N) ↔ IsClosed (N :
+ Set G)
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `DiscreteTopology.toT2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X]
+ [DiscreteTopology X], T2Space X
 -/
 theorem isClosed [SeparatelyContinuousMul G] (U : OpenSubgroup G) : IsClosed (U : Set G) := by
   have := QuotientGroup.discreteTopology U.isOpen
   exact QuotientGroup.t1Space_iff.mp inferInstance
 
 @[to_additive]
-/--
-theorem `isClopen` / 定理 `isClopen`
-
-English:
-theorem isClopen
-  given: [SeparatelyContinuousMul G] (U : OpenSubgroup G)
-  statement: IsClopen (U : Set G)
-  proof: ⟨U.isClosed, U.isOpen⟩
-
-中文:
-定理 isClopen
-  条件: [SeparatelyContinuousMul G] (U : 开子群 G)
-  结论: IsClopen (U : 集合 G)
-  证明: ⟨U.isClosed, U.isOpen⟩
-
-Depends on / 依赖: U.isClosed, U.isOpen, isClosed, isOpen
+/-
+**OpenSubgroup.isClopen** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：isClopen [SeparatelyContinuousMul G] (U : OpenSubgroup G) : IsClopen (U : 
+Set G)
+参数：U : OpenSubgroup G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenSubgroup.isClosed`：isClosed [SeparatelyContinuousMul G] (U : OpenSub
+group G) : IsClosed (U : Set G)
+· 使用定理 `OpenSubgroup.isOpen`：∀ {G : Type u_1} [inst : Group G] [inst_1 : Topolog
+icalSpace G] (U : OpenSubgroup G), IsOpen ↑U
 -/
 theorem isClopen [SeparatelyContinuousMul G] (U : OpenSubgroup G) : IsClopen (U : Set G) :=
   ⟨U.isClosed, U.isOpen⟩
@@ -574,63 +331,37 @@ variable {H : Type*} [Group H] [TopologicalSpace H]
 /-- The product of two open subgroups as an open subgroup of the product group. -/
 @[to_additive prod
 /-- The product of two open subgroups as an open subgroup of the product group. -/]
-/--
-Definition of `prod` / `prod` 的定义
-
-English:
-definition prod
-  signature: (U : OpenSubgroup G) (V : OpenSubgroup H)
-  body: ⟨.prod U V, U.isOpen.prod V.isOpen⟩
-
-@[to_additive (attr := simp, norm_cast) coe_prod]
-
-中文:
-定义 乘积
-  签名: (U : 开子群 G) (V : 开子群 H)
-  定义体: ⟨.prod U V, U.isOpen.prod V.isOpen⟩
-
-@[to_additive (attr := simp, norm_cast) coe_prod]
-
-Depends on / 依赖: U.isOpen.prod, V.isOpen, isOpen
+/-
+**OpenSubgroup.prod** 是 Mathlib 中的一个定义，位于命名空间 `OpenSubgroup`。
+形式化陈述：prod (U : OpenSubgroup G) (V : OpenSubgroup H) : OpenSubgroup (G × H)
+参数：U : OpenSubgroup G；V : OpenSubgroup H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def prod (U : OpenSubgroup G) (V : OpenSubgroup H) : OpenSubgroup (G × H) :=
   ⟨.prod U V, U.isOpen.prod V.isOpen⟩
 
 @[to_additive (attr := simp, norm_cast) coe_prod]
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (U : OpenSubgroup G) (V : OpenSubgroup H)
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast) toAddSubgroup_prod]
-
-中文:
-定理 coe_prod
-  条件: (U : 开子群 G) (V : 开子群 H)
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast) toAddSubgroup_prod]
+/-
+**OpenSubgroup.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：coe_prod (U : OpenSubgroup G) (V : OpenSubgroup H) : (U.prod V : Set (G × 
+H)) = (U : Set G) ×ˢ (V : Set H)
+参数：U : OpenSubgroup G；V : OpenSubgroup H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prod (U : OpenSubgroup G) (V : OpenSubgroup H) :
     (U.prod V : Set (G × H)) = (U : Set G) ×ˢ (V : Set H) :=
   rfl
 
 @[to_additive (attr := simp, norm_cast) toAddSubgroup_prod]
-/--
-theorem `toSubgroup_prod` / 定理 `toSubgroup_prod`
-
-English:
-theorem toSubgroup_prod
-  given: (U : OpenSubgroup G) (V : OpenSubgroup H)
-  proof: rfl
-
-中文:
-定理 toSubgroup_prod
-  条件: (U : 开子群 G) (V : 开子群 H)
-  证明: rfl
+/-
+**OpenSubgroup.toSubgroup_prod** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toSubgroup_prod (U : OpenSubgroup G) (V : OpenSubgroup H) : (U.prod V : Su
+bgroup (G × H)) = (U : Subgroup G).prod V
+参数：U : OpenSubgroup G；V : OpenSubgroup H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubgroup_prod (U : OpenSubgroup G) (V : OpenSubgroup H) :
     (U.prod V : Subgroup (G × H)) = (U : Subgroup G).prod V :=
@@ -639,196 +370,95 @@ theorem toSubgroup_prod (U : OpenSubgroup G) (V : OpenSubgroup H) :
 end
 
 @[to_additive]
-/--
-Instance `instInfOpenSubgroup` / 实例 `instInfOpenSubgroup`
-
-English:
-instance instInfOpenSubgroup
-  signature: : Min (OpenSubgroup G)
-  body: ⟨fun U V => ⟨U ⊓ V, U.isOpen.inter V.isOpen⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instInfOpenSubgroup
-  签名: : 最小值 (开子群 G)
-  定义体: ⟨fun U V => ⟨U ⊓ V, U.isOpen.inter V.isOpen⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: U.isOpen.inter, V.isOpen, isOpen
+/-
+**OpenSubgroup.instInfOpenSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+形式化陈述：instInfOpenSubgroup : Min (OpenSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInfOpenSubgroup : Min (OpenSubgroup G) :=
-  ⟨fun U V => ⟨U ⊓ V, U.isOpen.inter V.isOpen⟩⟩
+  ⟨fun U V ↦ ⟨U ⊓ V, U.isOpen.inter V.isOpen⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  statement: (↑(U ⊓ V) : Set G) = (U : Set G) inter V
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_inf
-  结论: (↑(U ⊓ V) : 集合 G) = (U : 集合 G) inter V
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：coe_inf : (↑(U ⊓ V) : Set G) = (U : Set G) inter V
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf : (↑(U ⊓ V) : Set G) = (U : Set G) inter V :=
+theorem coe_inf : (↑(U ⊓ V) : Set G) = (U : Set G) ∩ V :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `toSubgroup_inf` / 定理 `toSubgroup_inf`
-
-English:
-theorem toSubgroup_inf
-  statement: (↑(U ⊓ V) : Subgroup G) = ↑U ⊓ ↑V
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 toSubgroup_inf
-  结论: (↑(U ⊓ V) : 子群 G) = ↑U ⊓ ↑V
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.toSubgroup_inf** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toSubgroup_inf : (↑(U ⊓ V) : Subgroup G) = ↑U ⊓ ↑V
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubgroup_inf : (↑(U ⊓ V) : Subgroup G) = ↑U ⊓ ↑V :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `toOpens_inf` / 定理 `toOpens_inf`
-
-English:
-theorem toOpens_inf
-  statement: (↑(U ⊓ V) : Opens G) = ↑U ⊓ ↑V
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toOpens_inf
-  结论: (↑(U ⊓ V) : Opens G) = ↑U ⊓ ↑V
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OpenSubgroup.toOpens_inf** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toOpens_inf : (↑(U ⊓ V) : Opens G) = ↑U ⊓ ↑V
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toOpens_inf : (↑(U ⊓ V) : Opens G) = ↑U ⊓ ↑V :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_inf` / 定理 `mem_inf`
-
-English:
-theorem mem_inf
-  given: {x}
-  statement: x in U ⊓ V ↔ x in U ∧ x in V
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_inf
-  条件: {x}
-  结论: x in U ⊓ V ↔ x in U ∧ x in V
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**OpenSubgroup.mem_inf** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：mem_inf {x} : x in U ⊓ V ↔ x in U ∧ x in V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inf {x} : x in U ⊓ V ↔ x in U ∧ x in V :=
+theorem mem_inf {x} : x ∈ U ⊓ V ↔ x ∈ U ∧ x ∈ V :=
   Iff.rfl
 
 @[to_additive]
-/--
-Instance `instPartialOrderOpenSubgroup` / 实例 `instPartialOrderOpenSubgroup`
-
-English:
-instance instPartialOrderOpenSubgroup
-  signature: : PartialOrder (OpenSubgroup G)
-  body: inferInstance
-
-中文:
-实例 instPartialOrderOpenSubgroup
-  签名: : 偏序 (开子群 G)
-  定义体: inferInstance
+/-
+**OpenSubgroup.instPartialOrderOpenSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgr
+oup`。
+形式化陈述：instPartialOrderOpenSubgroup : PartialOrder (OpenSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPartialOrderOpenSubgroup : PartialOrder (OpenSubgroup G) := inferInstance
 
 -- We override `toPartialorder` to get better `le`
 @[to_additive]
-/--
-Instance `instSemilatticeInfOpenSubgroup` / 实例 `instSemilatticeInfOpenSubgroup`
-
-English:
-instance instSemilatticeInfOpenSubgroup
-  signature: : SemilatticeInf (OpenSubgroup G)
-  body: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 instSemilatticeInfOpenSubgroup
-  签名: : SemilatticeInf (开子群 G)
-  定义体: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.semilatticeInf, coe_injective, semilatticeInf
+/-
+**OpenSubgroup.instSemilatticeInfOpenSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `OpenSub
+group`。
+形式化陈述：instSemilatticeInfOpenSubgroup : SemilatticeInf (OpenSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemilatticeInfOpenSubgroup : SemilatticeInf (OpenSubgroup G) :=
-  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
+  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ ↦ rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderTop (OpenSubgroup G)
-  body: Set.subset_univ _
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 有顶序 (开子群 G)
-  定义体: Set.subset_univ _
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Set.subset_univ, subset_univ
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderTop (OpenSubgroup G) where
   le_top _ := Set.subset_univ _
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `toSubgroup_le` / 定理 `toSubgroup_le`
-
-English:
-theorem toSubgroup_le
-  statement: (U : Subgroup G) <= (V : Subgroup G) ↔ U <= V
-  proof: Iff.rfl
-
-中文:
-定理 toSubgroup_le
-  结论: (U : 子群 G) <= (V : 子群 G) ↔ U <= V
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**OpenSubgroup.toSubgroup_le** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toSubgroup_le : (U : Subgroup G) <= (V : Subgroup G) ↔ U <= V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toSubgroup_le : (U : Subgroup G) <= (V : Subgroup G) ↔ U <= V :=
+theorem toSubgroup_le : (U : Subgroup G) ≤ (V : Subgroup G) ↔ U ≤ V :=
   Iff.rfl
 
 variable {N : Type*} [Group N] [TopologicalSpace N]
@@ -837,112 +467,69 @@ variable {N : Type*} [Group N] [TopologicalSpace N]
   is an `OpenSubgroup`. -/
 @[to_additive /-- The preimage of an `OpenAddSubgroup` along a continuous `AddMonoid` homomorphism
 is an `OpenAddSubgroup`. -/]
-/--
-Definition of `comap` / `comap` 的定义
-
-English:
-definition comap
-  signature: (f : G ->* N) (hf : Continuous f) (H : OpenSubgroup N)
-  body: ⟨.comap f H, H.isOpen.preimage hf⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定义 comap
-  签名: (f : G ->* N) (hf : 连续 f) (H : 开子群 N)
-  定义体: ⟨.comap f H, H.isOpen.preimage hf⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: H.isOpen.preimage, isOpen, preimage
+/-
+**OpenSubgroup.comap** 是 Mathlib 中的一个定义，位于命名空间 `OpenSubgroup`。
+形式化陈述：comap (f : G ->* N) (hf : Continuous f) (H : OpenSubgroup N) : OpenSubgrou
+p G
+参数：f : G ->* N；hf : Continuous f；H : OpenSubgroup N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def comap (f : G ->* N) (hf : Continuous f) (H : OpenSubgroup N) : OpenSubgroup G :=
+def comap (f : G →* N) (hf : Continuous f) (H : OpenSubgroup N) : OpenSubgroup G :=
   ⟨.comap f H, H.isOpen.preimage hf⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_comap` / 定理 `coe_comap`
-
-English:
-theorem coe_comap
-  given: (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f)
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_comap
-  条件: (H : 开子群 N) (f : G ->* N) (hf : 连续 f)
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**OpenSubgroup.coe_comap** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：coe_comap (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f) : (H.coma
+p f hf : Set G) = f ⁻¹' H
+参数：H : OpenSubgroup N；f : G ->* N；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comap (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f) :
+theorem coe_comap (H : OpenSubgroup N) (f : G →* N) (hf : Continuous f) :
     (H.comap f hf : Set G) = f ⁻¹' H :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `toSubgroup_comap` / 定理 `toSubgroup_comap`
-
-English:
-theorem toSubgroup_comap
-  given: (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toSubgroup_comap
-  条件: (H : 开子群 N) (f : G ->* N) (hf : 连续 f)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OpenSubgroup.toSubgroup_comap** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toSubgroup_comap (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f) : 
+(H.comap f hf : Subgroup G) = (H : Subgroup N).comap f
+参数：H : OpenSubgroup N；f : G ->* N；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toSubgroup_comap (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f) :
+theorem toSubgroup_comap (H : OpenSubgroup N) (f : G →* N) (hf : Continuous f) :
     (H.comap f hf : Subgroup G) = (H : Subgroup N).comap f :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_comap` / 定理 `mem_comap`
-
-English:
-theorem mem_comap
-  given: {H : OpenSubgroup N} {f : G ->* N} {hf : Continuous f} {x : G}
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_comap
-  条件: {H : 开子群 N} {f : G ->* N} {hf : 连续 f} {x : G}
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**OpenSubgroup.mem_comap** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：mem_comap {H : OpenSubgroup N} {f : G ->* N} {hf : Continuous f} {x : G} :
+ x in H.comap f hf ↔ f x in H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_comap {H : OpenSubgroup N} {f : G ->* N} {hf : Continuous f} {x : G} :
-    x in H.comap f hf ↔ f x in H :=
+theorem mem_comap {H : OpenSubgroup N} {f : G →* N} {hf : Continuous f} {x : G} :
+    x ∈ H.comap f hf ↔ f x ∈ H :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `comap_comap` / 定理 `comap_comap`
-
-English:
-theorem comap_comap
-  statement: {P : Type*} [Group P] [TopologicalSpace P] (K : OpenSubgroup P) (f₂ : N ->* P)
-  proof: rfl
-
-中文:
-定理 comap_comap
-  结论: {P : 类型} [群 P] [拓扑空间 P] (K : 开子群 P) (f₂ : N ->* P)
-  证明: rfl
+/-
+**OpenSubgroup.comap_comap** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：comap_comap {P : Type*} [Group P] [TopologicalSpace P] (K : OpenSubgroup P
+) (f₂ : N ->* P) (hf₂ : Continuous f₂) (f₁ : G ->* N) (hf₁ : Continuous f₁) : (K
+.comap f₂ hf₂).comap f₁ hf₁ = K.comap (f₂.comp f₁) (hf₂.comp hf₁)
+参数：K : OpenSubgroup P；f₂ : N ->* P；hf₂ : Continuous f₂；f₁ : G ->* N；hf₁ : Contin
+uous f₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comap_comap {P : Type*} [Group P] [TopologicalSpace P] (K : OpenSubgroup P) (f₂ : N ->* P)
-    (hf₂ : Continuous f₂) (f₁ : G ->* N) (hf₁ : Continuous f₁) :
+theorem comap_comap {P : Type*} [Group P] [TopologicalSpace P] (K : OpenSubgroup P) (f₂ : N →* P)
+    (hf₂ : Continuous f₂) (f₁ : G →* N) (hf₁ : Continuous f₁) :
     (K.comap f₂ hf₂).comap f₁ hf₁ = K.comap (f₂.comp f₁) (hf₂.comp hf₁) :=
   rfl
 
@@ -952,207 +539,170 @@ namespace Subgroup
 variable {G : Type*} [Group G] [TopologicalSpace G]
 
 @[to_additive]
-/--
-theorem `isOpen_of_mem_nhds` / 定理 `isOpen_of_mem_nhds`
-
-English:
-theorem isOpen_of_mem_nhds
-  statement: [SeparatelyContinuousMul G] (H : Subgroup G) {g : G}
-  proof: by
-  refine isOpen_iff_mem_nhds.2 fun x hx => ?_
-  have hg' : g in H := SetLike.mem_coe.1 (mem_of_mem_nhds hg)
-  have : Filter.Tendsto (fun y => y * (x⁻¹ * g)) (𝓝 x) (𝓝 g) :=
-    (continuous_id.mul_const _).tendsto' _ _ (mul_inv_cancel_left _ _)
-  simpa only [SetLike.mem_coe, Filter.mem_map',
-    H.mul_mem_cancel_right (H.mul_mem (H.inv_mem hx) hg')] using! this hg
-
-@[to_additive]
-
-中文:
-定理 isOpen_of_mem_nhds
-  结论: [SeparatelyContinuousMul G] (H : 子群 G) {g : G}
-  证明: by
-  refine isOpen_iff_mem_nhds.2 fun x hx => ?_
-  have hg' : g in H := SetLike.mem_coe.1 (mem_of_mem_nhds hg)
-  have : Filter.Tendsto (fun y => y * (x⁻¹ * g)) (𝓝 x) (𝓝 g) :=
-    (continuous_id.mul_const _).tendsto' _ _ (mul_inv_cancel_left _ _)
-  simpa only [SetLike.mem_coe, Filter.mem_map',
-    H.mul_mem_cancel_right (H.mul_mem (H.inv_mem hx) hg')] using! this hg
-
-@[to_additive]
-
-Depends on / 依赖: Filter, Filter.Tendsto, Filter.mem_map, H.inv_mem, H.mul_mem, H.mul_mem_cancel_right, SetLike, SetLike.mem_coe, Tendsto, continuous_id, continuous_id.mul_const, inv_mem, isOpen_iff_mem_nhds, mem_coe, mem_map, mem_of_mem_nhds, mul_const, mul_inv_cancel_left, mul_mem, mul_mem_cancel_right
+/-
+**Subgroup.isOpen_of_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：isOpen_of_mem_nhds [SeparatelyContinuousMul G] (H : Subgroup G) {g : G} (h
+g : (H : Set G) in 𝓝 g) : IsOpen (H : Set G)
+参数：H : Subgroup G；hg : (H : Set G) in 𝓝 g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isOpen_iff_mem_nhds`：isOpen_iff_mem_nhds : IsOpen s ↔ forall x in s, s i
+n 𝓝 x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+· 使用定理 `Continuous.tendsto'`：Continuous.tendsto' (hf : Continuous f) (x : X) (y 
+: Y) (h : f x = y) : Tendsto f (𝓝 x) (𝓝 y)
+· 使用定理 `Continuous.mul_const`：Continuous.mul_const (hf : Continuous f) (b : M) :
+ Continuous (f · * b)
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subgroup.mul_mem_cancel_right`：∀ {G : Type u_1} [inst : Group G] (H : Su
+bgroup G) {x y : G}, x ∈ H → (y * x ∈ H ↔ y ∈ H)
+· 使用定理 `Subgroup.mul_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+y : G}, x ∈ H → y ∈ H → x * y ∈ H
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
 -/
 theorem isOpen_of_mem_nhds [SeparatelyContinuousMul G] (H : Subgroup G) {g : G}
-    (hg : (H : Set G) in 𝓝 g) : IsOpen (H : Set G) := by
-  refine isOpen_iff_mem_nhds.2 fun x hx => ?_
-  have hg' : g in H := SetLike.mem_coe.1 (mem_of_mem_nhds hg)
-  have : Filter.Tendsto (fun y => y * (x⁻¹ * g)) (𝓝 x) (𝓝 g) :=
+    (hg : (H : Set G) ∈ 𝓝 g) : IsOpen (H : Set G) := by
+  refine isOpen_iff_mem_nhds.2 fun x hx ↦ ?_
+  have hg' : g ∈ H := SetLike.mem_coe.1 (mem_of_mem_nhds hg)
+  have : Filter.Tendsto (fun y ↦ y * (x⁻¹ * g)) (𝓝 x) (𝓝 g) :=
     (continuous_id.mul_const _).tendsto' _ _ (mul_inv_cancel_left _ _)
   simpa only [SetLike.mem_coe, Filter.mem_map',
     H.mul_mem_cancel_right (H.mul_mem (H.inv_mem hx) hg')] using! this hg
 
 @[to_additive]
-/--
-theorem `isOpen_mono` / 定理 `isOpen_mono`
-
-English:
-theorem isOpen_mono
-  statement: [SeparatelyContinuousMul G] {H₁ H₂ : Subgroup G} (h : H₁ <= H₂)
-  proof: isOpen_of_mem_nhds _ Filter.mem_of_superset (h₁.mem_nhds <| one_mem H₁) h
-
-@[to_additive]
-
-中文:
-定理 isOpen_mono
-  结论: [SeparatelyContinuousMul G] {H₁ H₂ : 子群 G} (h : H₁ <= H₂)
-  证明: isOpen_of_mem_nhds _ Filter.mem_of_superset (h₁.mem_nhds <| one_mem H₁) h
-
-@[to_additive]
-
-Depends on / 依赖: Filter, Filter.mem_of_superset, isOpen_of_mem_nhds, mem_nhds, mem_of_superset, one_mem
+/-
+**Subgroup.isOpen_mono** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：isOpen_mono [SeparatelyContinuousMul G] {H₁ H₂ : Subgroup G} (h : H₁ <= H₂
+) (h₁ : IsOpen (H₁ : Set G)) : IsOpen (H₂ : Set G)
+参数：h : H₁ <= H₂；h₁ : IsOpen (H₁ : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.isOpen_of_mem_nhds`：isOpen_of_mem_nhds [SeparatelyContinuousMul
+ G] (H : Subgroup G) {g : G} (hg : (H : Set G) in 𝓝 g) : IsOpen (H : Set G)
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
 -/
-theorem isOpen_mono [SeparatelyContinuousMul G] {H₁ H₂ : Subgroup G} (h : H₁ <= H₂)
+theorem isOpen_mono [SeparatelyContinuousMul G] {H₁ H₂ : Subgroup G} (h : H₁ ≤ H₂)
     (h₁ : IsOpen (H₁ : Set G)) : IsOpen (H₂ : Set G) :=
-isOpen_of_mem_nhds _ Filter.mem_of_superset (h₁.mem_nhds <| one_mem H₁) h
+  isOpen_of_mem_nhds _ <| Filter.mem_of_superset (h₁.mem_nhds <| one_mem H₁) h
 
 @[to_additive]
-/--
-theorem `isOpen_of_openSubgroup` / 定理 `isOpen_of_openSubgroup`
-
-English:
-theorem isOpen_of_openSubgroup
-  proof: isOpen_mono h U.isOpen
-
-中文:
-定理 isOpen_of_openSubgroup
-  证明: isOpen_mono h U.isOpen
-
-Depends on / 依赖: U.isOpen, isOpen, isOpen_mono
+/-
+**Subgroup.isOpen_of_openSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：isOpen_of_openSubgroup [SeparatelyContinuousMul G] (H : Subgroup G) {U : O
+penSubgroup G} (h : ↑U <= H) : IsOpen (H : Set G)
+参数：H : Subgroup G；h : ↑U <= H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.isOpen_mono`：isOpen_mono [SeparatelyContinuousMul G] {H₁ H₂ : S
+ubgroup G} (h : H₁ <= H₂) (h₁ : IsOpen (H₁ : Set G)) : IsOpen (H₂ : Set G)
+· 使用定理 `OpenSubgroup.isOpen`：∀ {G : Type u_1} [inst : Group G] [inst_1 : Topolog
+icalSpace G] (U : OpenSubgroup G), IsOpen ↑U
 -/
 theorem isOpen_of_openSubgroup
-    [SeparatelyContinuousMul G] (H : Subgroup G) {U : OpenSubgroup G} (h : ↑U <= H) :
+    [SeparatelyContinuousMul G] (H : Subgroup G) {U : OpenSubgroup G} (h : ↑U ≤ H) :
     IsOpen (H : Set G) :=
   isOpen_mono h U.isOpen
 
 /-- If a subgroup of a topological group has `1` in its interior, then it is open. -/
 @[to_additive /-- If a subgroup of an additive topological group has `0` in its interior, then it is
 open. -/]
-/--
-theorem `isOpen_of_one_mem_interior` / 定理 `isOpen_of_one_mem_interior`
-
-English:
-theorem isOpen_of_one_mem_interior
-  statement: [SeparatelyContinuousMul G] (H : Subgroup G)
-  proof: isOpen_of_mem_nhds H mem_interior_iff_mem_nhds.1 h_1_int
-
-@[to_additive]
-
-中文:
-定理 isOpen_of_one_mem_interior
-  结论: [SeparatelyContinuousMul G] (H : 子群 G)
-  证明: isOpen_of_mem_nhds H mem_interior_iff_mem_nhds.1 h_1_int
-
-@[to_additive]
-
-Depends on / 依赖: h_1_int, isOpen_of_mem_nhds, mem_interior_iff_mem_nhds
+/-
+**Subgroup.isOpen_of_one_mem_interior** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：isOpen_of_one_mem_interior [SeparatelyContinuousMul G] (H : Subgroup G) (h
+_1_int : (1 : G) in interior (H : Set G)) : IsOpen (H : Set G)
+参数：H : Subgroup G；h_1_int : (1 : G) in interior (H : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.isOpen_of_mem_nhds`：isOpen_of_mem_nhds [SeparatelyContinuousMul
+ G] (H : Subgroup G) {g : G} (hg : (H : Set G) in 𝓝 g) : IsOpen (H : Set G)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_interior_iff_mem_nhds`：mem_interior_iff_mem_nhds : x in interior s ↔
+ s in 𝓝 x
 -/
 theorem isOpen_of_one_mem_interior [SeparatelyContinuousMul G] (H : Subgroup G)
-    (h_1_int : (1 : G) in interior (H : Set G)) : IsOpen (H : Set G) :=
-isOpen_of_mem_nhds H mem_interior_iff_mem_nhds.1 h_1_int
+    (h_1_int : (1 : G) ∈ interior (H : Set G)) : IsOpen (H : Set G) :=
+  isOpen_of_mem_nhds H <| mem_interior_iff_mem_nhds.1 h_1_int
 
 @[to_additive]
-/--
-lemma `isClosed_of_isOpen` / 引理 `isClosed_of_isOpen`
-
-English:
-lemma isClosed_of_isOpen
-  given: [SeparatelyContinuousMul G] (U : Subgroup G) (h : IsOpen (U : Set G))
-  proof: OpenSubgroup.isClosed ⟨U, h⟩
-
-@[to_additive]
-
-中文:
-引理 isClosed_of_isOpen
-  条件: [SeparatelyContinuousMul G] (U : 子群 G) (h : 是开集 (U : 集合 G))
-  证明: OpenSubgroup.isClosed ⟨U, h⟩
-
-@[to_additive]
-
-Depends on / 依赖: OpenSubgroup, OpenSubgroup.isClosed, isClosed
+/-
+**Subgroup.isClosed_of_isOpen** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：isClosed_of_isOpen [SeparatelyContinuousMul G] (U : Subgroup G) (h : IsOpe
+n (U : Set G)) : IsClosed (U : Set G)
+参数：U : Subgroup G；h : IsOpen (U : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenSubgroup.isClosed`：isClosed [SeparatelyContinuousMul G] (U : OpenSub
+group G) : IsClosed (U : Set G)
 -/
 lemma isClosed_of_isOpen [SeparatelyContinuousMul G] (U : Subgroup G) (h : IsOpen (U : Set G)) :
     IsClosed (U : Set G) :=
   OpenSubgroup.isClosed ⟨U, h⟩
 
 @[to_additive]
-/--
-lemma `subgroupOf_isOpen` / 引理 `subgroupOf_isOpen`
-
-English:
-lemma subgroupOf_isOpen
-  given: (U K : Subgroup G) (h : IsOpen (K : Set G))
-  proof: Continuous.isOpen_preimage (continuous_iff_le_induced.mpr fun _ => id) _ h
-
-@[to_additive]
-
-中文:
-引理 subgroupOf_isOpen
-  条件: (U K : 子群 G) (h : 是开集 (K : 集合 G))
-  证明: Continuous.isOpen_preimage (continuous_iff_le_induced.mpr fun _ => id) _ h
-
-@[to_additive]
-
-Depends on / 依赖: Continuous, Continuous.isOpen_preimage, continuous_iff_le_induced, continuous_iff_le_induced.mpr, isOpen_preimage
+/-
+**Subgroup.subgroupOf_isOpen** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：subgroupOf_isOpen (U K : Subgroup G) (h : IsOpen (K : Set G)) : IsOpen (K.
+subgroupOf U : Set U)
+参数：U K : Subgroup G；h : IsOpen (K : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_iff_le_induced`：continuous_iff_le_induced {t₁ : TopologicalSp
+ace α} {t₂ : TopologicalSpace β} : Continuous[t₁, t₂] f ↔ t₁ <= induced f t₂
 -/
 lemma subgroupOf_isOpen (U K : Subgroup G) (h : IsOpen (K : Set G)) :
     IsOpen (K.subgroupOf U : Set U) :=
-  Continuous.isOpen_preimage (continuous_iff_le_induced.mpr fun _ => id) _ h
+  Continuous.isOpen_preimage (continuous_iff_le_induced.mpr fun _ ↦ id) _ h
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SeparatelyContinuousMul
-  signature: G] (U
-  body: QuotientGroup.discreteTopology U.isOpen
-
-@[to_additive]
-
-中文:
-实例 [SeparatelyContinuousMul
-  签名: G] (U
-  定义体: QuotientGroup.discreteTopology U.isOpen
-
-@[to_additive]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.discreteTopology, U.isOpen, discreteTopology, isOpen
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SeparatelyContinuousMul G] (U : OpenSubgroup G) : DiscreteTopology (G ⧸ U.toSubgroup) :=
   QuotientGroup.discreteTopology U.isOpen
 
 @[to_additive]
-/--
-lemma `quotient_finite_of_isOpen` / 引理 `quotient_finite_of_isOpen`
-
-English:
-lemma quotient_finite_of_isOpen
-  statement: [SeparatelyContinuousMul G] [CompactSpace G] (U : Subgroup G)
-  proof: have : DiscreteTopology (G ⧸ U) := QuotientGroup.discreteTopology h
-  finite_of_compact_of_discrete
-
-@[to_additive]
-
-中文:
-引理 quotient_finite_of_isOpen
-  结论: [SeparatelyContinuousMul G] [紧空间 G] (U : 子群 G)
-  证明: have : DiscreteTopology (G ⧸ U) := QuotientGroup.discreteTopology h
-  finite_of_compact_of_discrete
-
-@[to_additive]
-
-Depends on / 依赖: DiscreteTopology, QuotientGroup, QuotientGroup.discreteTopology, discreteTopology, finite_of_compact_of_discrete
+/-
+**Subgroup.quotient_finite_of_isOpen** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：quotient_finite_of_isOpen [SeparatelyContinuousMul G] [CompactSpace G] (U 
+: Subgroup G) (h : IsOpen (U : Set G)) : Finite (G ⧸ U)
+参数：U : Subgroup G；h : IsOpen (U : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.discreteTopology`：discreteTopology (hN : IsOpen (N : Set G
+)) : DiscreteTopology (G ⧸ N)
+· 使用定理 `finite_of_compact_of_discrete`：finite_of_compact_of_discrete [CompactSpa
+ce X] [DiscreteTopology X] : Finite X
+· 使用定理 `QuotientGroup.instCompactSpaceQuotientSubgroup`：∀ {G : Type u_1} [inst :
+ TopologicalSpace G] [inst_1 : Group G] [CompactSpace G] (N : Subgroup G), Compa
+ctSpace (G ⧸ N)
 -/
 lemma quotient_finite_of_isOpen [SeparatelyContinuousMul G] [CompactSpace G] (U : Subgroup G)
     (h : IsOpen (U : Set G)) : Finite (G ⧸ U) :=
@@ -1160,75 +710,53 @@ lemma quotient_finite_of_isOpen [SeparatelyContinuousMul G] [CompactSpace G] (U 
   finite_of_compact_of_discrete
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SeparatelyContinuousMul
-  signature: G] [CompactSpace G] (U
-  body: quotient_finite_of_isOpen U.toSubgroup U.isOpen
-
-@[to_additive]
-
-中文:
-实例 [SeparatelyContinuousMul
-  签名: G] [紧空间 G] (U
-  定义体: quotient_finite_of_isOpen U.toSubgroup U.isOpen
-
-@[to_additive]
-
-Depends on / 依赖: U.isOpen, U.toSubgroup, isOpen, quotient_finite_of_isOpen, toSubgroup
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SeparatelyContinuousMul G] [CompactSpace G] (U : OpenSubgroup G) :
     Finite (G ⧸ U.toSubgroup) :=
   quotient_finite_of_isOpen U.toSubgroup U.isOpen
 
 @[to_additive]
-/--
-lemma `quotient_finite_of_isOpen'` / 引理 `quotient_finite_of_isOpen'`
-
-English:
-lemma quotient_finite_of_isOpen'
-  statement: [IsTopologicalGroup G] [CompactSpace G] (U : Subgroup G)
-  proof: have : CompactSpace U := isCompact_iff_compactSpace.mp IsClosed.isCompact
-    U.isClosed_of_isOpen hUopen
-  K.quotient_finite_of_isOpen hKopen
-
-@[to_additive]
-
-中文:
-引理 quotient_finite_of_isOpen'
-  结论: [是拓扑群 G] [紧空间 G] (U : 子群 G)
-  证明: have : CompactSpace U := isCompact_iff_compactSpace.mp IsClosed.isCompact
-    U.isClosed_of_isOpen hUopen
-  K.quotient_finite_of_isOpen hKopen
-
-@[to_additive]
-
-Depends on / 依赖: CompactSpace, IsClosed, IsClosed.isCompact, K.quotient_finite_of_isOpen, U.isClosed_of_isOpen, hKopen, hUopen, isClosed_of_isOpen, isCompact, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, quotient_finite_of_isOpen
+/-
+**Subgroup.quotient_finite_of_isOpen'** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：quotient_finite_of_isOpen' [IsTopologicalGroup G] [CompactSpace G] (U : Su
+bgroup G) (K : Subgroup U) (hUopen : IsOpen (U : Set G)) (hKopen : IsOpen (K : S
+et U)) : Finite (U ⧸ K)
+参数：U : Subgroup G；K : Subgroup U；hUopen : IsOpen (U : Set G)；hKopen : IsOpen (K 
+: Set U)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCompact_iff_compactSpace`：isCompact_iff_compactSpace : IsCompact s ↔ C
+ompactSpace s
+· 使用定理 `IsClosed.isCompact`：IsClosed.isCompact [CompactSpace X] (h : IsClosed s)
+ : IsCompact s
+· 使用引理 `Subgroup.isClosed_of_isOpen`：isClosed_of_isOpen [SeparatelyContinuousMul
+ G] (U : Subgroup G) (h : IsOpen (U : Set G)) : IsClosed (U : Set G)
+· 使用定理 `instSeparatelyContinuousMulOfContinuousMul`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Mul M] [ContinuousMul M], SeparatelyContinuousMul M
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
+· 使用引理 `Subgroup.quotient_finite_of_isOpen`：quotient_finite_of_isOpen [Separatel
+yContinuousMul G] [CompactSpace G] (U : Subgroup G) (h : IsOpen (U : Set G)) : F
+inite (G ⧸ U)
+· 使用定理 `Subgroup.instIsTopologicalGroupSubtypeMem`：∀ {G : Type w} [inst : Topolo
+gicalSpace G] [inst_1 : Group G] [IsTopologicalGroup G] (S : Subgroup G),   IsTo
+pologicalGroup ↥S
 -/
 lemma quotient_finite_of_isOpen' [IsTopologicalGroup G] [CompactSpace G] (U : Subgroup G)
     (K : Subgroup U) (hUopen : IsOpen (U : Set G)) (hKopen : IsOpen (K : Set U)) :
     Finite (U ⧸ K) :=
-have : CompactSpace U := isCompact_iff_compactSpace.mp IsClosed.isCompact
+  have : CompactSpace U := isCompact_iff_compactSpace.mp <| IsClosed.isCompact <|
     U.isClosed_of_isOpen hUopen
   K.quotient_finite_of_isOpen hKopen
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsTopologicalGroup
-  signature: G] [CompactSpace G] (U
-  body: quotient_finite_of_isOpen' U.toSubgroup K.toSubgroup U.isOpen K.isOpen
-
-中文:
-实例 [是拓扑群
-  签名: G] [紧空间 G] (U
-  定义体: quotient_finite_of_isOpen' U.toSubgroup K.toSubgroup U.isOpen K.isOpen
-
-Depends on / 依赖: K.isOpen, K.toSubgroup, U.isOpen, U.toSubgroup, isOpen, quotient_finite_of_isOpen, toSubgroup
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsTopologicalGroup G] [CompactSpace G] (U : OpenSubgroup G) (K : OpenSubgroup U) :
     Finite (U ⧸ K.toSubgroup) :=
@@ -1241,70 +769,30 @@ namespace OpenSubgroup
 variable {G : Type*} [Group G] [TopologicalSpace G] [SeparatelyContinuousMul G]
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (OpenSubgroup G)
-  body: ⟨fun U V => ⟨U ⊔ V, Subgroup.isOpen_mono (le_sup_left : U.1 <= U.1 ⊔ V.1) U.isOpen⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 最大值 (开子群 G)
-  定义体: ⟨fun U V => ⟨U ⊔ V, Subgroup.isOpen_mono (le_sup_left : U.1 <= U.1 ⊔ V.1) U.isOpen⟩⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Subgroup, Subgroup.isOpen_mono, U.isOpen, isOpen, isOpen_mono, le_sup_left
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (OpenSubgroup G) :=
-  ⟨fun U V => ⟨U ⊔ V, Subgroup.isOpen_mono (le_sup_left : U.1 <= U.1 ⊔ V.1) U.isOpen⟩⟩
+  ⟨fun U V ↦ ⟨U ⊔ V, Subgroup.isOpen_mono (le_sup_left : U.1 ≤ U.1 ⊔ V.1) U.isOpen⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `toSubgroup_sup` / 定理 `toSubgroup_sup`
-
-English:
-theorem toSubgroup_sup
-  given: (U V : OpenSubgroup G)
-  statement: (↑(U ⊔ V) : Subgroup G) = ↑U ⊔ ↑V
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toSubgroup_sup
-  条件: (U V : 开子群 G)
-  结论: (↑(U ⊔ V) : 子群 G) = ↑U ⊔ ↑V
-  证明: rfl
-
-@[to_additive]
+/-
+**OpenSubgroup.toSubgroup_sup** 是 Mathlib 中的一个定理，位于命名空间 `OpenSubgroup`。
+形式化陈述：toSubgroup_sup (U V : OpenSubgroup G) : (↑(U ⊔ V) : Subgroup G) = ↑U ⊔ ↑V
+参数：U V : OpenSubgroup G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubgroup_sup (U V : OpenSubgroup G) : (↑(U ⊔ V) : Subgroup G) = ↑U ⊔ ↑V := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Lattice (OpenSubgroup G)
-  body: toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-  __ := instSemilatticeInfOpenSubgroup
-
-中文:
-实例 :
-  签名: 格 (开子群 G)
-  定义体: toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-  __ := instSemilatticeInfOpenSubgroup
-
-Depends on / 依赖: semilatticeSup, toSubgroup_injective, toSubgroup_injective.semilatticeSup
+/-
+**OpenSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Lattice (OpenSubgroup G) where
-  __ := toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
+  __ := toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ ↦ rfl
   __ := instSemilatticeInfOpenSubgroup
 
 end OpenSubgroup
@@ -1316,22 +804,23 @@ open OpenAddSubgroup
 variable {R : Type*} {M : Type*} [CommRing R]
 variable [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M] [Module R M]
 
-/--
-theorem `isOpen_mono` / 定理 `isOpen_mono`
-
-English:
-theorem isOpen_mono
-  given: {U P : Submodule R M} (h : U <= P) (hU : IsOpen (U : Set M))
-  proof: @AddSubgroup.isOpen_mono M _ _ _ U.toAddSubgroup P.toAddSubgroup h hU
-
-中文:
-定理 isOpen_mono
-  条件: {U P : 子模 R M} (h : U <= P) (hU : 是开集 (U : 集合 M))
-  证明: @AddSubgroup.isOpen_mono M _ _ _ U.toAddSubgroup P.toAddSubgroup h hU
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.isOpen_mono, P.toAddSubgroup, U.toAddSubgroup, isOpen_mono, toAddSubgroup
+/-
+**Submodule.isOpen_mono** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOpen_mono {U P : Submodule R M} (h : U <= P) (hU : IsOpen (U : Set M)) :
+ IsOpen (P : Set M)
+参数：h : U <= P；hU : IsOpen (U : Set M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.isOpen_mono`：∀ {G : Type u_1} [inst : AddGroup G] [inst_1 : 
+TopologicalSpace G] [SeparatelyContinuousAdd G] {H₁ H₂ : AddSubgroup G},   H₁ ≤ 
+H₂ → IsOpen ↑…
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
-theorem isOpen_mono {U P : Submodule R M} (h : U <= P) (hU : IsOpen (U : Set M)) :
+theorem isOpen_mono {U P : Submodule R M} (h : U ≤ P) (hU : IsOpen (U : Set M)) :
     IsOpen (P : Set M) :=
   @AddSubgroup.isOpen_mono M _ _ _ U.toAddSubgroup P.toAddSubgroup h hU
 
@@ -1342,22 +831,23 @@ namespace Ideal
 variable {R : Type*} [CommRing R]
 variable [TopologicalSpace R] [IsTopologicalRing R]
 
-/--
-theorem `isOpen_of_isOpen_subideal` / 定理 `isOpen_of_isOpen_subideal`
-
-English:
-theorem isOpen_of_isOpen_subideal
-  given: {U I : Ideal R} (h : U <= I) (hU : IsOpen (U : Set R))
-  proof: @Submodule.isOpen_mono R R _ _ _ _ Semiring.toModule _ _ h hU
-
-中文:
-定理 isOpen_of_isOpen_subideal
-  条件: {U I : 理想 R} (h : U <= I) (hU : 是开集 (U : 集合 R))
-  证明: @Submodule.isOpen_mono R R _ _ _ _ Semiring.toModule _ _ h hU
-
-Depends on / 依赖: Semiring, Semiring.toModule, Submodule, Submodule.isOpen_mono, isOpen_mono, toModule
+/-
+**Ideal.isOpen_of_isOpen_subideal** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：isOpen_of_isOpen_subideal {U I : Ideal R} (h : U <= I) (hU : IsOpen (U : S
+et R)) : IsOpen (I : Set R)
+参数：h : U <= I；hU : IsOpen (U : Set R)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.isOpen_mono`：isOpen_mono {U P : Submodule R M} (h : U <= P) (h
+U : IsOpen (U : Set M)) : IsOpen (P : Set M)
+· 使用定理 `IsSemitopologicalRing.toIsTopologicalAddGroup`：∀ {R : Type u_1} [inst : 
+NonUnitalNonAssocRing R] [inst_1 : TopologicalSpace R] [IsSemitopologicalRing R]
+,   IsTopologicalAddGroup R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
 -/
-theorem isOpen_of_isOpen_subideal {U I : Ideal R} (h : U <= I) (hU : IsOpen (U : Set R)) :
+theorem isOpen_of_isOpen_subideal {U I : Ideal R} (h : U ≤ I) (hU : IsOpen (U : Set R)) :
     IsOpen (I : Set R) :=
   @Submodule.isOpen_mono R R _ _ _ _ Semiring.toModule _ _ h hU
 
@@ -1377,24 +867,16 @@ universe u
 
 /-- The type of open normal subgroups of a topological group. -/
 @[ext]
-/--
-Definition of `OpenNormalSubgroup` / `OpenNormalSubgroup` 的定义
+/-
+**OpenNormalSubgroup** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：OpenNormalSubgroup (G : Type u) [Group G] [TopologicalSpace G] extends Ope
+nSubgroup G where isNormal' : toSubgroup.Normal
+参数：G : Type u。
+继承自：OpenSubgroup G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OpenNormalSubgroup
-  parameters: (G : Type u) [Group G] [TopologicalSpace G]
-  extends: OpenSubgroup G
-  axioms and operations (1):
-    - isNormal' : toSubgroup.Normal  [default: by infer_instance]
-
-中文:
-结构 OpenNormal子群
-  参数: (G : 类型u) [群 G] [拓扑空间 G]
-  继承: 开子群 G
-  公理与运算 (1 个):
-    - isNormal' : toSubgroup.正规  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+The type of open normal subgroups of a topological group.
 -/
 structure OpenNormalSubgroup (G : Type u) [Group G] [TopologicalSpace G]
   extends OpenSubgroup G where
@@ -1402,24 +884,16 @@ structure OpenNormalSubgroup (G : Type u) [Group G] [TopologicalSpace G]
 
 /-- The type of open normal subgroups of a topological additive group. -/
 @[ext]
-/--
-Definition of `OpenNormalAddSubgroup` / `OpenNormalAddSubgroup` 的定义
+/-
+**OpenNormalAddSubgroup** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：OpenNormalAddSubgroup (G : Type u) [AddGroup G] [TopologicalSpace G] exten
+ds OpenAddSubgroup G where isNormal' : toAddSubgroup.Normal
+参数：G : Type u。
+继承自：OpenAddSubgroup G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OpenNormalAddSubgroup
-  parameters: (G : Type u) [AddGroup G] [TopologicalSpace G]
-  extends: OpenAddSubgroup G
-  axioms and operations (1):
-    - isNormal' : toAddSubgroup.Normal  [default: by infer_instance]
-
-中文:
-结构 OpenNormalAdd子群
-  参数: (G : 类型u) [加法群 G] [拓扑空间 G]
-  继承: OpenAdd子群 G
-  公理与运算 (1 个):
-    - isNormal' : toAddSubgroup.正规  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+The type of open normal subgroups of a topological additive group.
 -/
 structure OpenNormalAddSubgroup (G : Type u) [AddGroup G] [TopologicalSpace G]
   extends OpenAddSubgroup G where
@@ -1432,101 +906,53 @@ namespace OpenNormalSubgroup
 variable {G : Type u} [Group G] [TopologicalSpace G]
 
 @[to_additive]
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (H : OpenNormalSubgroup G) : H.toSubgroup.Normal := H.isNormal'
 
 @[to_additive]
-/--
-theorem `toSubgroup_injective` / 定理 `toSubgroup_injective`
-
-English:
-theorem toSubgroup_injective
-  statement: Function.Injective
-  proof: fun A B h => by
-  ext
-  dsimp at h
-  rw [h]
-
-@[to_additive]
-
-中文:
-定理 toSubgroup_injective
-  结论: 函数.单射
-  证明: fun A B h => by
-  ext
-  dsimp at h
-  rw [h]
-
-@[to_additive]
+/-
+**OpenNormalSubgroup.toSubgroup_injective** 是 Mathlib 中的一个定理，位于命名空间 `OpenNormalS
+ubgroup`。
+形式化陈述：toSubgroup_injective : Function.Injective (fun H => H.toOpenSubgroup.toSub
+group : OpenNormalSubgroup G -> Subgroup G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenNormalSubgroup.ext`：∀ {G : Type u} {inst : Group G} {inst_1 : Topolo
+gicalSpace G} {x y : OpenNormalSubgroup G},   (↑x.toOpenSubgroup).carrier = (↑y.
+toOpenSubgro…
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toSubgroup_injective : Function.Injective
-    (fun H => H.toOpenSubgroup.toSubgroup : OpenNormalSubgroup G -> Subgroup G) :=
-  fun A B h => by
+    (fun H ↦ H.toOpenSubgroup.toSubgroup : OpenNormalSubgroup G → Subgroup G) :=
+  fun A B h ↦ by
   ext
   dsimp at h
   rw [h]
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (OpenNormalSubgroup G) G
-  body: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-中文:
-实例 :
-  签名: 集合状 (OpenNormal子群 G) G
-  定义体: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (OpenNormalSubgroup G) G where
   coe U := U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (OpenNormalSubgroup G)
-  body: .ofSetLike (OpenNormalSubgroup G) G
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 偏序 (OpenNormal子群 G)
-  定义体: .ofSetLike (OpenNormalSubgroup G) G
-
-@[to_additive]
+  coe_injective _ _ h := toSubgroup_injective <| SetLike.ext' h
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : PartialOrder (OpenNormalSubgroup G) := .ofSetLike (OpenNormalSubgroup G) G
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SubgroupClass (OpenNormalSubgroup G) G
-  body: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 子群类 (OpenNormal子群 G) G
-  定义体: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-@[to_additive]
-
-Depends on / 依赖: Subsemigroup, Subsemigroup.mul_mem, mul_mem
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SubgroupClass (OpenNormalSubgroup G) G where
   mul_mem := Subsemigroup.mul_mem' _
@@ -1534,158 +960,76 @@ instance : SubgroupClass (OpenNormalSubgroup G) G where
   inv_mem := Subgroup.inv_mem' _
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (OpenNormalSubgroup G) (Subgroup G)
-  body: H.toOpenSubgroup.toSubgroup
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: Coe (OpenNormal子群 G) (子群 G)
-  定义体: H.toOpenSubgroup.toSubgroup
-
-@[to_additive]
-
-Depends on / 依赖: H.toOpenSubgroup.toSubgroup, toOpenSubgroup, toSubgroup
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe (OpenNormalSubgroup G) (Subgroup G) where
   coe H := H.toOpenSubgroup.toSubgroup
 
 @[to_additive]
-/--
-Instance `instPartialOrderOpenNormalSubgroup` / 实例 `instPartialOrderOpenNormalSubgroup`
-
-English:
-instance instPartialOrderOpenNormalSubgroup
-  signature: : PartialOrder (OpenNormalSubgroup G)
-  body: inferInstance
-
-@[to_additive]
-
-中文:
-实例 instPartialOrderOpenNormalSubgroup
-  签名: : 偏序 (OpenNormal子群 G)
-  定义体: inferInstance
-
-@[to_additive]
+/-
+**OpenNormalSubgroup.instPartialOrderOpenNormalSubgroup** 是 Mathlib 中的一个实例，位于命名空
+间 `OpenNormalSubgroup`。
+形式化陈述：instPartialOrderOpenNormalSubgroup : PartialOrder (OpenNormalSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPartialOrderOpenNormalSubgroup : PartialOrder (OpenNormalSubgroup G) := inferInstance
 
 @[to_additive]
-/--
-Instance `instInfOpenNormalSubgroup` / 实例 `instInfOpenNormalSubgroup`
-
-English:
-instance instInfOpenNormalSubgroup
-  signature: : Min (OpenNormalSubgroup G)
-  body: ⟨fun U V => ⟨U.toOpenSubgroup ⊓ V.toOpenSubgroup,
-    Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup⟩⟩
-
-@[to_additive]
-
-中文:
-实例 instInfOpenNormalSubgroup
-  签名: : 最小值 (OpenNormal子群 G)
-  定义体: ⟨fun U V => ⟨U.toOpenSubgroup ⊓ V.toOpenSubgroup,
-    Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.normal_inf_normal, U.toOpenSubgroup, U.toSubgroup, V.toOpenSubgroup, V.toSubgroup, normal_inf_normal, toOpenSubgroup, toSubgroup
+/-
+**OpenNormalSubgroup.instInfOpenNormalSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `OpenNo
+rmalSubgroup`。
+形式化陈述：instInfOpenNormalSubgroup : Min (OpenNormalSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInfOpenNormalSubgroup : Min (OpenNormalSubgroup G) :=
-  ⟨fun U V => ⟨U.toOpenSubgroup ⊓ V.toOpenSubgroup,
+  ⟨fun U V ↦ ⟨U.toOpenSubgroup ⊓ V.toOpenSubgroup,
     Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup⟩⟩
 
 @[to_additive]
-/--
-Instance `instSemilatticeInfOpenNormalSubgroup` / 实例 `instSemilatticeInfOpenNormalSubgroup`
-
-English:
-instance instSemilatticeInfOpenNormalSubgroup
-  signature: : SemilatticeInf (OpenNormalSubgroup G)
-  body: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 instSemilatticeInfOpenNormalSubgroup
-  签名: : SemilatticeInf (OpenNormal子群 G)
-  定义体: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.semilatticeInf, coe_injective, semilatticeInf
+/-
+**OpenNormalSubgroup.instSemilatticeInfOpenNormalSubgroup** 是 Mathlib 中的一个实例，位于命
+名空间 `OpenNormalSubgroup`。
+形式化陈述：instSemilatticeInfOpenNormalSubgroup : SemilatticeInf (OpenNormalSubgroup 
+G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemilatticeInfOpenNormalSubgroup : SemilatticeInf (OpenNormalSubgroup G) :=
-  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
+  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ ↦ rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SeparatelyContinuousMul
-  signature: G] : Max (OpenNormalSubgroup G)
-  body: ⟨fun U V => ⟨U.toOpenSubgroup ⊔ V.toOpenSubgroup,
-    Subgroup.sup_normal U.toOpenSubgroup.1 V.toOpenSubgroup.1⟩⟩
-
-@[to_additive]
-
-中文:
-实例 [SeparatelyContinuousMul
-  签名: G] : 最大值 (OpenNormal子群 G)
-  定义体: ⟨fun U V => ⟨U.toOpenSubgroup ⊔ V.toOpenSubgroup,
-    Subgroup.sup_normal U.toOpenSubgroup.1 V.toOpenSubgroup.1⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.sup_normal, U.toOpenSubgroup, V.toOpenSubgroup, sup_normal, toOpenSubgroup
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SeparatelyContinuousMul G] : Max (OpenNormalSubgroup G) :=
-  ⟨fun U V => ⟨U.toOpenSubgroup ⊔ V.toOpenSubgroup,
+  ⟨fun U V ↦ ⟨U.toOpenSubgroup ⊔ V.toOpenSubgroup,
     Subgroup.sup_normal U.toOpenSubgroup.1 V.toOpenSubgroup.1⟩⟩
 
 @[to_additive]
-/--
-Instance `instSemilatticeSupOpenNormalSubgroup` / 实例 `instSemilatticeSupOpenNormalSubgroup`
-
-English:
-instance instSemilatticeSupOpenNormalSubgroup
-  signature: [SeparatelyContinuousMul G]
-  body: toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 instSemilatticeSupOpenNormalSubgroup
-  签名: [SeparatelyContinuousMul G]
-  定义体: toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: semilatticeSup, toSubgroup_injective, toSubgroup_injective.semilatticeSup
+/-
+**OpenNormalSubgroup.instSemilatticeSupOpenNormalSubgroup** 是 Mathlib 中的一个实例，位于命
+名空间 `OpenNormalSubgroup`。
+形式化陈述：instSemilatticeSupOpenNormalSubgroup [SeparatelyContinuousMul G] : Semilat
+ticeSup (OpenNormalSubgroup G)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenNormalSubgroup.toSubgroup_injective`：toSubgroup_injective : Function
+.Injective (fun H => H.toOpenSubgroup.toSubgroup : OpenNormalSubgroup G -> Subgr
+oup G)
 -/
 instance instSemilatticeSupOpenNormalSubgroup [SeparatelyContinuousMul G] :
     SemilatticeSup (OpenNormalSubgroup G) :=
-  toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
+  toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ ↦ rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SeparatelyContinuousMul
-  signature: G] : Lattice (OpenNormalSubgroup G) where
-
-中文:
-实例 [SeparatelyContinuousMul
-  签名: G] : 格 (OpenNormal子群 G) where
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SeparatelyContinuousMul G] : Lattice (OpenNormalSubgroup G) where
 
@@ -1705,62 +1049,45 @@ open scoped Pointwise
 
 variable {G : Type*} [TopologicalSpace G]
 
-/--
-Definition of `IsTopologicalAddGroup.addNegClosureNhd` / `IsTopologicalAddGroup.addNegClosureNhd` 的定义
+/-- For a set `W`, `T` is a neighborhood of `0` which is open, stable under negation and satisfies
+`T + W ⊆ W`. -/
+/-
+**IsTopologicalAddGroup.addNegClosureNhd** 是 Mathlib 中的一个归纳类型，位于命名空间 `IsTopologi
+calAddGroup`。
+形式化陈述：{G : Type u_1} → [TopologicalSpace G] → Set G → Set G → [AddGroup G] → Pro
+p
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsTopologicalAddGroup.addNegClosureNhd
-  parameters: (T W : Set G) [AddGroup G]
-  axioms and operations (4):
-    - nhds : T in 𝓝 0
-    - neg : -T = T
-    - isOpen : IsOpen T
-    - add : W + T subseteq W
-
-中文:
-结构 是拓扑加群.addNegClosureNhd
-  参数: (T W : 集合 G) [加法群 G]
-  公理与运算 (4 个):
-    - nhds : T in 𝓝 0
-    - neg : -T = T
-    - isOpen : 是开集 T
-    - add : W + T subseteq W
+--- 原说明 ---
+For a set `W`, `T` is a neighborhood of `0` which is open, stable under negation
+ and satisfies
+`T + W ⊆ W`.
 -/
 structure IsTopologicalAddGroup.addNegClosureNhd (T W : Set G) [AddGroup G] : Prop where
-  nhds : T in 𝓝 0
+  nhds : T ∈ 𝓝 0
   neg : -T = T
   isOpen : IsOpen T
-  add : W + T subseteq W
+  add : W + T ⊆ W
 
 /-- For a set `W`, `T` is a neighborhood of `1` which is open, stable under inverse and satisfies
 `T * W ⊆ W`. -/
 @[to_additive]
-/--
-Definition of `IsTopologicalGroup.mulInvClosureNhd` / `IsTopologicalGroup.mulInvClosureNhd` 的定义
+/-
+**IsTopologicalGroup.mulInvClosureNhd** 是 Mathlib 中的一个归纳类型，位于命名空间 `IsTopological
+Group`。
+形式化陈述：{G : Type u_1} → [TopologicalSpace G] → Set G → Set G → [Group G] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsTopologicalGroup.mulInvClosureNhd
-  parameters: (T W : Set G) [Group G]
-  axioms and operations (4):
-    - nhds : T in 𝓝 1
-    - inv : T⁻¹ = T
-    - isOpen : IsOpen T
-    - mul : W * T subseteq W
-
-中文:
-结构 是拓扑群.mulInvClosureNhd
-  参数: (T W : 集合 G) [群 G]
-  公理与运算 (4 个):
-    - nhds : T in 𝓝 1
-    - inv : T⁻¹ = T
-    - isOpen : 是开集 T
-    - mul : W * T subseteq W
+--- 原说明 ---
+For a set `W`, `T` is a neighborhood of `1` which is open, stable under inverse 
+and satisfies
+`T * W ⊆ W`.
 -/
 structure IsTopologicalGroup.mulInvClosureNhd (T W : Set G) [Group G] : Prop where
-  nhds : T in 𝓝 1
+  nhds : T ∈ 𝓝 1
   inv : T⁻¹ = T
   isOpen : IsOpen T
-  mul : W * T subseteq W
+  mul : W * T ⊆ W
 
 namespace IsTopologicalGroup
 
@@ -1769,247 +1096,235 @@ variable [Group G] [IsTopologicalGroup G] [CompactSpace G]
 open Set Filter
 
 @[to_additive]
-/--
-lemma `exist_mul_closure_nhds` / 引理 `exist_mul_closure_nhds`
-
-English:
-lemma exist_mul_closure_nhds
-  given: {W : Set G} (WClopen : IsClopen W)
-  statement: exists T in 𝓝 (1 : G), W * T subseteq W
-  proof: by
-  apply WClopen.isClosed.isCompact.induction_on (p := fun S => exists T in 𝓝 (1 : G), S * T subseteq W)
-    ⟨Set.univ, by simp only [univ_mem, empty_mul, empty_subset, and_self]⟩
-    (fun _ _ huv ⟨T, hT, mem⟩ => ⟨T, hT, (mul_subset_mul_right huv).trans mem⟩)
-    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, mem2⟩ => ⟨T₁ inter T₂, inter_mem hT₁ hT₂, by
-      rw [union_mul]
-      exact union_subset (mul_subset_mul_left inter_subset_left |>.trans mem1)
-        (mul_subset_mul_left inter_subset_right |>.trans mem2) ⟩
-  intro x memW
-  have : (x, 1) in (fun p => p.1 * p.2) ⁻¹' W := by simp [memW]
-  rcases isOpen_prod_iff.mp (continuous_mul.isOpen_preimage W <| WClopen.2) x 1 this with
-    ⟨U, V, Uopen, Vopen, xmemU, onememV, prodsub⟩
-  have h6 : U * V subseteq W := mul_subset_iff.mpr (fun _ hx _ hy => prodsub (mk_mem_prod hx hy))
-  exact ⟨U inter W, ⟨U, Uopen.mem_nhds xmemU, W, fun _ a => a, rfl⟩,
-    V, IsOpen.mem_nhds Vopen onememV, fun _ a => h6 ((mul_subset_mul_right inter_subset_left) a)⟩
-
-@[to_additive]
-
-中文:
-引理 exist_mul_closure_nhds
-  条件: {W : 集合 G} (WClopen : IsClopen W)
-  结论: 存在 T in 𝓝 (1 : G), W * T subseteq W
-  证明: by
-  apply WClopen.isClosed.isCompact.induction_on (p := fun S => exists T in 𝓝 (1 : G), S * T subseteq W)
-    ⟨Set.univ, by simp only [univ_mem, empty_mul, empty_subset, and_self]⟩
-    (fun _ _ huv ⟨T, hT, mem⟩ => ⟨T, hT, (mul_subset_mul_right huv).trans mem⟩)
-    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, mem2⟩ => ⟨T₁ inter T₂, inter_mem hT₁ hT₂, by
-      rw [union_mul]
-      exact union_subset (mul_subset_mul_left inter_subset_left |>.trans mem1)
-        (mul_subset_mul_left inter_subset_right |>.trans mem2) ⟩
-  intro x memW
-  have : (x, 1) in (fun p => p.1 * p.2) ⁻¹' W := by simp [memW]
-  rcases isOpen_prod_iff.mp (continuous_mul.isOpen_preimage W <| WClopen.2) x 1 this with
-    ⟨U, V, Uopen, Vopen, xmemU, onememV, prodsub⟩
-  have h6 : U * V subseteq W := mul_subset_iff.mpr (fun _ hx _ hy => prodsub (mk_mem_prod hx hy))
-  exact ⟨U inter W, ⟨U, Uopen.mem_nhds xmemU, W, fun _ a => a, rfl⟩,
-    V, IsOpen.mem_nhds Vopen onememV, fun _ a => h6 ((mul_subset_mul_right inter_subset_left) a)⟩
-
-@[to_additive]
-
-Depends on / 依赖: Set.univ, WClopen, WClopen.isClosed.isCompact.induction_on, and_self, empty_mul, empty_subset, induction_on, inter_mem, inter_subset_left, inter_subset_right, isClosed, isCompact, mul_subset_mul_left, mul_subset_mul_right, subseteq, union_mul, union_subset, univ_mem
+/-
+**IsTopologicalGroup.exist_mul_closure_nhds** 是 Mathlib 中的一个引理，位于命名空间 `IsTopolog
+icalGroup`。
+形式化陈述：exist_mul_closure_nhds {W : Set G} (WClopen : IsClopen W) : exists T in 𝓝 
+(1 : G), W * T subseteq W
+参数：WClopen : IsClopen W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.induction_on`：IsCompact.induction_on (hs : IsCompact s) {p : S
+et X -> Prop} (he : p ∅) (hmono : forall ⦃s t⦄, s subseteq t -> p t -> p s) (hun
+ion : forall…
+· 使用定理 `IsClosed.isCompact`：IsClosed.isCompact [CompactSpace X] (h : IsClosed s)
+ : IsCompact s
+· 使用定理 `IsClopen.isClosed`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X
+}, IsClopen s → IsClosed s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.empty_mul`：empty_mul : ∅ * s = ∅
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.mul_subset_mul_right`：mul_subset_mul_right : s₁ subseteq s₂ -> s₁ * 
+t subseteq s₂ * t
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `Set.union_mul`：union_mul : (s₁ union s₂) * t = s₁ * t union s₂ * t
+· 使用定理 `Set.union_subset`：union_subset {s t r : Set α} (sr : s subseteq r) (tr :
+ t subseteq r) : s union t subseteq r
+· 使用定理 `Set.mul_subset_mul_left`：mul_subset_mul_left : t₁ subseteq t₂ -> s * t₁ 
+subseteq s * t₂
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isOpen_prod_iff`：isOpen_prod_iff {s : Set (X × Y)} : IsOpen s ↔ forall a
+ b, (a, b) in s -> exists u v, IsOpen u ∧ IsOpen v ∧ a in u ∧ b in v ∧ u ×ˢ v su
+bsete…
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mul_subset_iff`：mul_subset_iff : s * t subseteq u ↔ forall x in s, f
+orall y in t, x * y in u
+· 使用定理 `Set.mk_mem_prod`：mk_mem_prod (ha : a in s) (hb : b in t) : (a, b) in s ×
+ˢ t
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 -/
-lemma exist_mul_closure_nhds {W : Set G} (WClopen : IsClopen W) : exists T in 𝓝 (1 : G), W * T subseteq W := by
-  apply WClopen.isClosed.isCompact.induction_on (p := fun S => exists T in 𝓝 (1 : G), S * T subseteq W)
+lemma exist_mul_closure_nhds {W : Set G} (WClopen : IsClopen W) : ∃ T ∈ 𝓝 (1 : G), W * T ⊆ W := by
+  apply WClopen.isClosed.isCompact.induction_on (p := fun S ↦ ∃ T ∈ 𝓝 (1 : G), S * T ⊆ W)
     ⟨Set.univ, by simp only [univ_mem, empty_mul, empty_subset, and_self]⟩
-    (fun _ _ huv ⟨T, hT, mem⟩ => ⟨T, hT, (mul_subset_mul_right huv).trans mem⟩)
-    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, mem2⟩ => ⟨T₁ inter T₂, inter_mem hT₁ hT₂, by
+    (fun _ _ huv ⟨T, hT, mem⟩ ↦ ⟨T, hT, (mul_subset_mul_right huv).trans mem⟩)
+    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, mem2⟩ ↦ ⟨T₁ ∩ T₂, inter_mem hT₁ hT₂, by
       rw [union_mul]
       exact union_subset (mul_subset_mul_left inter_subset_left |>.trans mem1)
         (mul_subset_mul_left inter_subset_right |>.trans mem2) ⟩
   intro x memW
-  have : (x, 1) in (fun p => p.1 * p.2) ⁻¹' W := by simp [memW]
+  have : (x, 1) ∈ (fun p ↦ p.1 * p.2) ⁻¹' W := by simp [memW]
   rcases isOpen_prod_iff.mp (continuous_mul.isOpen_preimage W <| WClopen.2) x 1 this with
     ⟨U, V, Uopen, Vopen, xmemU, onememV, prodsub⟩
-  have h6 : U * V subseteq W := mul_subset_iff.mpr (fun _ hx _ hy => prodsub (mk_mem_prod hx hy))
-  exact ⟨U inter W, ⟨U, Uopen.mem_nhds xmemU, W, fun _ a => a, rfl⟩,
-    V, IsOpen.mem_nhds Vopen onememV, fun _ a => h6 ((mul_subset_mul_right inter_subset_left) a)⟩
+  have h6 : U * V ⊆ W := mul_subset_iff.mpr (fun _ hx _ hy ↦ prodsub (mk_mem_prod hx hy))
+  exact ⟨U ∩ W, ⟨U, Uopen.mem_nhds xmemU, W, fun _ a ↦ a, rfl⟩,
+    V, IsOpen.mem_nhds Vopen onememV, fun _ a ↦ h6 ((mul_subset_mul_right inter_subset_left) a)⟩
 
 @[to_additive]
-/--
-lemma `exists_mulInvClosureNhd` / 引理 `exists_mulInvClosureNhd`
-
-English:
-lemma exists_mulInvClosureNhd
-  given: {W : Set G} (WClopen : IsClopen W)
-  proof: by
-  rcases exist_mul_closure_nhds WClopen with ⟨S, Smemnhds, mulclose⟩
-  rcases mem_nhds_iff.mp Smemnhds with ⟨U, UsubS, Uopen, onememU⟩
-  use U inter U⁻¹
-  constructor
-  · simp [Uopen.mem_nhds onememU, inv_mem_nhds_one]
-  · simp [inter_comm]
-  · exact Uopen.inter Uopen.inv
-  · exact fun a ha => mulclose (mul_subset_mul_left UsubS (mul_subset_mul_left inter_subset_left ha))
-
-@[to_additive]
-
-中文:
-引理 存在_mulInvClosureNhd
-  条件: {W : 集合 G} (WClopen : IsClopen W)
-  证明: by
-  rcases exist_mul_closure_nhds WClopen with ⟨S, Smemnhds, mulclose⟩
-  rcases mem_nhds_iff.mp Smemnhds with ⟨U, UsubS, Uopen, onememU⟩
-  use U inter U⁻¹
-  constructor
-  · simp [Uopen.mem_nhds onememU, inv_mem_nhds_one]
-  · simp [inter_comm]
-  · exact Uopen.inter Uopen.inv
-  · exact fun a ha => mulclose (mul_subset_mul_left UsubS (mul_subset_mul_left inter_subset_left ha))
-
-@[to_additive]
-
-Depends on / 依赖: Smemnhds, Uopen.inter, Uopen.inv, Uopen.mem_nhds, WClopen, exist_mul_closure_nhds, inter_comm, inter_subset_left, inv_mem_nhds_one, mem_nhds, mem_nhds_iff, mem_nhds_iff.mp, mul_subset_mul_left, mulclose, onememU
+/-
+**IsTopologicalGroup.exists_mulInvClosureNhd** 是 Mathlib 中的一个引理，位于命名空间 `IsTopolo
+gicalGroup`。
+形式化陈述：exists_mulInvClosureNhd {W : Set G} (WClopen : IsClopen W) : exists T, mul
+InvClosureNhd T W
+参数：WClopen : IsClopen W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsTopologicalGroup.exist_mul_closure_nhds`：exist_mul_closure_nhds {W : S
+et G} (WClopen : IsClopen W) : exists T in 𝓝 (1 : G), W * T subseteq W
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhds_iff`：mem_nhds_iff : s in 𝓝 x ↔ exists t subseteq s, IsOpen t ∧ 
+x in t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.inter_inv`：inter_inv : (s inter t)⁻¹ = s⁻¹ inter t⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用定理 `IsOpen.inv`：IsOpen.inv (hs : IsOpen s) : IsOpen s⁻¹
+· 使用定理 `IsTopologicalGroup.toContinuousInv`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousInv G
+· 使用定理 `Set.mul_subset_mul_left`：mul_subset_mul_left : t₁ subseteq t₂ -> s * t₁ 
+subseteq s * t₂
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
 lemma exists_mulInvClosureNhd {W : Set G} (WClopen : IsClopen W) :
-    exists T, mulInvClosureNhd T W := by
+    ∃ T, mulInvClosureNhd T W := by
   rcases exist_mul_closure_nhds WClopen with ⟨S, Smemnhds, mulclose⟩
   rcases mem_nhds_iff.mp Smemnhds with ⟨U, UsubS, Uopen, onememU⟩
-  use U inter U⁻¹
+  use U ∩ U⁻¹
   constructor
   · simp [Uopen.mem_nhds onememU, inv_mem_nhds_one]
   · simp [inter_comm]
   · exact Uopen.inter Uopen.inv
-  · exact fun a ha => mulclose (mul_subset_mul_left UsubS (mul_subset_mul_left inter_subset_left ha))
+  · exact fun a ha ↦ mulclose (mul_subset_mul_left UsubS (mul_subset_mul_left inter_subset_left ha))
 
 @[to_additive]
-/--
-theorem `exist_openSubgroup_sub_clopen_nhds_of_one` / 定理 `exist_openSubgroup_sub_clopen_nhds_of_one`
-
-English:
-theorem exist_openSubgroup_sub_clopen_nhds_of_one
-  statement: {G : Type*} [Group G] [TopologicalSpace G]
-  proof: by
-  rcases exists_mulInvClosureNhd WClopen with ⟨V, hV⟩
-  let S : Subgroup G := {
-    carrier := ⋃ n, V ^ (n + 1)
-    mul_mem' := fun ha hb => by
-      rcases mem_iUnion.mp ha with ⟨k, hk⟩
-      rcases mem_iUnion.mp hb with ⟨l, hl⟩
-      apply mem_iUnion.mpr
-      use k + 1 + l
-      rw [add_assoc]; rw [pow_add]
-      exact Set.mul_mem_mul hk hl
-    one_mem' := by
-      apply mem_iUnion.mpr
-      use 0
-      simp [mem_of_mem_nhds hV.nhds]
-    inv_mem' := fun ha => by
-      rcases mem_iUnion.mp ha with ⟨k, hk⟩
-      apply mem_iUnion.mpr
-      use k
-      rw [← hV.inv]
-      simpa only [inv_pow, Set.mem_inv, inv_inv] using hk }
-  have : IsOpen (⋃ n, V ^ (n + 1)) := by
-    refine isOpen_iUnion (fun n => ?_)
-    rw [pow_succ]
-    exact hV.isOpen.mul_left
-  use ⟨S, this⟩
-  have mulVpow (n : Nat) : W * V ^ (n + 1) subseteq W := by
-    induction n with
-    | zero => simp [hV.mul]
-    | succ n ih =>
-      rw [pow_succ]; rw [← mul_assoc]
-      exact (Set.mul_subset_mul_right ih).trans hV.mul
-  have (n : Nat) : V ^ (n + 1) subseteq W * V ^ (n + 1) := by
-    intro x xin
-    rw [Set.mem_mul]
-    use 1, einW, x, xin
-    rw [one_mul]
-  apply iUnion_subset fun i _ a => mulVpow i (this i a)
-
-中文:
-定理 exist_openSubgroup_sub_clopen_nhds_of_one
-  结论: {G : 类型} [群 G] [拓扑空间 G]
-  证明: by
-  rcases exists_mulInvClosureNhd WClopen with ⟨V, hV⟩
-  let S : Subgroup G := {
-    carrier := ⋃ n, V ^ (n + 1)
-    mul_mem' := fun ha hb => by
-      rcases mem_iUnion.mp ha with ⟨k, hk⟩
-      rcases mem_iUnion.mp hb with ⟨l, hl⟩
-      apply mem_iUnion.mpr
-      use k + 1 + l
-      rw [add_assoc]; rw [pow_add]
-      exact Set.mul_mem_mul hk hl
-    one_mem' := by
-      apply mem_iUnion.mpr
-      use 0
-      simp [mem_of_mem_nhds hV.nhds]
-    inv_mem' := fun ha => by
-      rcases mem_iUnion.mp ha with ⟨k, hk⟩
-      apply mem_iUnion.mpr
-      use k
-      rw [← hV.inv]
-      simpa only [inv_pow, Set.mem_inv, inv_inv] using hk }
-  have : IsOpen (⋃ n, V ^ (n + 1)) := by
-    refine isOpen_iUnion (fun n => ?_)
-    rw [pow_succ]
-    exact hV.isOpen.mul_left
-  use ⟨S, this⟩
-  have mulVpow (n : Nat) : W * V ^ (n + 1) subseteq W := by
-    induction n with
-    | zero => simp [hV.mul]
-    | succ n ih =>
-      rw [pow_succ]; rw [← mul_assoc]
-      exact (Set.mul_subset_mul_right ih).trans hV.mul
-  have (n : Nat) : V ^ (n + 1) subseteq W * V ^ (n + 1) := by
-    intro x xin
-    rw [Set.mem_mul]
-    use 1, einW, x, xin
-    rw [one_mul]
-  apply iUnion_subset fun i _ a => mulVpow i (this i a)
-
-Depends on / 依赖: Set.mul_mem_mul, Subgroup, WClopen, add_assoc, carrier, exists_mulInvClosureNhd, hV.inv, hV.nhds, inv_mem, inv_pow, mem_iUnion, mem_iUnion.mp, mem_iUnion.mpr, mem_of_mem_nhds, mul_mem, mul_mem_mul, one_mem, pow_add
+/-
+**IsTopologicalGroup.exist_openSubgroup_sub_clopen_nhds_of_one** 是 Mathlib 中的一个定
+理，位于命名空间 `IsTopologicalGroup`。
+形式化陈述：exist_openSubgroup_sub_clopen_nhds_of_one {G : Type*} [Group G] [Topologic
+alSpace G] [IsTopologicalGroup G] [CompactSpace G] {W : Set G} (WClopen : IsClop
+en W) (einW : 1 in W) : exists H : OpenSubgroup G, (H : Set G) subseteq W
+参数：WClopen : IsClopen W；einW : 1 in W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsTopologicalGroup.exists_mulInvClosureNhd`：exists_mulInvClosureNhd {W :
+ Set G} (WClopen : IsClopen W) : exists T, mulInvClosureNhd T W
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Set.mul_mem_mul`：mul_mem_mul : a in s -> b in t -> a * b in s * t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+· 使用定理 `IsTopologicalGroup.mulInvClosureNhd.nhds`：∀ {G : Type u_1} [inst : Topol
+ogicalSpace G] {T W : Set G} [inst_1 : Group G],   IsTopologicalGroup.mulInvClos
+ureNhd T W → T ∈ nhds 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsTopologicalGroup.mulInvClosureNhd.inv`：∀ {G : Type u_1} [inst : Topolo
+gicalSpace G] {T W : Set G} [inst_1 : Group G],   IsTopologicalGroup.mulInvClosu
+reNhd T W → T⁻¹ = T
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `IsOpen.mul_left`：IsOpen.mul_left : IsOpen t -> IsOpen (s * t)
+· 使用定理 `instSeparatelyContinuousMulOfContinuousMul`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Mul M] [ContinuousMul M], SeparatelyContinuousMul M
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
+· 使用定理 `IsTopologicalGroup.mulInvClosureNhd.isOpen`：∀ {G : Type u_1} [inst : Top
+ologicalSpace G] {T W : Set G} [inst_1 : Group G],   IsTopologicalGroup.mulInvCl
+osureNhd T W → IsOpen T
+· 使用定理 `IsTopologicalGroup.mulInvClosureNhd.mul`：∀ {G : Type u_1} [inst : Topolo
+gicalSpace G] {T W : Set G} [inst_1 : Group G],   IsTopologicalGroup.mulInvClosu
+reNhd T W → W * T ⊆ W
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.mul_subset_mul_right`：mul_subset_mul_right : s₁ subseteq s₂ -> s₁ * 
+t subseteq s₂ * t
+（共 33 条，此处仅展示前 30 条）
 -/
 theorem exist_openSubgroup_sub_clopen_nhds_of_one {G : Type*} [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] [CompactSpace G] {W : Set G} (WClopen : IsClopen W) (einW : 1 in W) :
-    exists H : OpenSubgroup G, (H : Set G) subseteq W := by
+    [IsTopologicalGroup G] [CompactSpace G] {W : Set G} (WClopen : IsClopen W) (einW : 1 ∈ W) :
+    ∃ H : OpenSubgroup G, (H : Set G) ⊆ W := by
   rcases exists_mulInvClosureNhd WClopen with ⟨V, hV⟩
   let S : Subgroup G := {
     carrier := ⋃ n, V ^ (n + 1)
-    mul_mem' := fun ha hb => by
+    mul_mem' := fun ha hb ↦ by
       rcases mem_iUnion.mp ha with ⟨k, hk⟩
       rcases mem_iUnion.mp hb with ⟨l, hl⟩
       apply mem_iUnion.mpr
       use k + 1 + l
-      rw [add_assoc]; rw [pow_add]
+      rw [add_assoc, pow_add]
       exact Set.mul_mem_mul hk hl
     one_mem' := by
       apply mem_iUnion.mpr
       use 0
       simp [mem_of_mem_nhds hV.nhds]
-    inv_mem' := fun ha => by
+    inv_mem' := fun ha ↦ by
       rcases mem_iUnion.mp ha with ⟨k, hk⟩
       apply mem_iUnion.mpr
       use k
       rw [← hV.inv]
       simpa only [inv_pow, Set.mem_inv, inv_inv] using hk }
   have : IsOpen (⋃ n, V ^ (n + 1)) := by
-    refine isOpen_iUnion (fun n => ?_)
+    refine isOpen_iUnion (fun n ↦ ?_)
     rw [pow_succ]
     exact hV.isOpen.mul_left
   use ⟨S, this⟩
-  have mulVpow (n : Nat) : W * V ^ (n + 1) subseteq W := by
+  have mulVpow (n : ℕ) : W * V ^ (n + 1) ⊆ W := by
     induction n with
     | zero => simp [hV.mul]
     | succ n ih =>
-      rw [pow_succ]; rw [← mul_assoc]
+      rw [pow_succ, ← mul_assoc]
       exact (Set.mul_subset_mul_right ih).trans hV.mul
-  have (n : Nat) : V ^ (n + 1) subseteq W * V ^ (n + 1) := by
+  have (n : ℕ) : V ^ (n + 1) ⊆ W * V ^ (n + 1) := by
     intro x xin
     rw [Set.mem_mul]
     use 1, einW, x, xin
     rw [one_mul]
-  apply iUnion_subset fun i _ a => mulVpow i (this i a)
+  apply iUnion_subset fun i _ a ↦ mulVpow i (this i a)
 
 end IsTopologicalGroup
+

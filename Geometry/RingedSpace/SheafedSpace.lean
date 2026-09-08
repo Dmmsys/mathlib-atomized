@@ -36,22 +36,17 @@ variable (C : Type u) [Category.{v} C]
 
 namespace AlgebraicGeometry
 
-/--
-Definition of `SheafedSpace` / `SheafedSpace` 的定义
+/-- A `SheafedSpace C` is a topological space equipped with a sheaf of `C`s. -/
+/-
+**AlgebraicGeometry.SheafedSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 `AlgebraicGeometry`
+。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Type (max (max u (u_1 
++ 1)) v)
+参数：max u (u_1 + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SheafedSpace
-  parameters: extends PresheafedSpace C
-  extends: PresheafedSpace C
-  axioms and operations (1):
-    - IsSheaf : presheaf.IsSheaf
-
-中文:
-结构 Sheafed空间
-  参数: extends Presheafed空间 C
-  继承: Presheafed空间 C
-  公理与运算 (1 个):
-    - IsSheaf : presheaf.是层
+--- 原说明 ---
+A `SheafedSpace C` is a topological space equipped with a sheaf of `C`s.
 -/
 structure SheafedSpace extends PresheafedSpace C where
   /-- A sheafed space is a presheafed space which happens to be a sheaf. -/
@@ -61,154 +56,111 @@ variable {C}
 
 namespace SheafedSpace
 
-/--
-Instance `coeCarrier` / 实例 `coeCarrier`
-
-English:
-instance coeCarrier
-  signature: : CoeOut (SheafedSpace C) TopCat where coe X
-  body: X.carrier
-
-中文:
-实例 coeCarrier
-  签名: : CoeOut (Sheafed空间 C) 顶元素范畴 where coe X
-  定义体: X.carrier
-
-Depends on / 依赖: X.carrier, carrier
+/-
+**AlgebraicGeometry.SheafedSpace.coeCarrier** 是 Mathlib 中的一个实例，位于命名空间 `Algebraic
+Geometry.SheafedSpace`。
+形式化陈述：coeCarrier : CoeOut (SheafedSpace C) TopCat where coe X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance coeCarrier : CoeOut (SheafedSpace C) TopCat where coe X := X.carrier
-
-/--
-Instance `coeSort` / 实例 `coeSort`
-
-English:
-instance coeSort
-  signature: : CoeSort (SheafedSpace C) Type* where
-  body: X.1
-
-中文:
-实例 coeSort
-  签名: : CoeSort (Sheafed空间 C) 类型 where
-  定义体: X.1
+/-
+**AlgebraicGeometry.SheafedSpace.coeSort** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeo
+metry.SheafedSpace`。
+形式化陈述：coeSort : CoeSort (SheafedSpace C) Type* where coe X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance coeSort : CoeSort (SheafedSpace C) Type* where
   coe X := X.1
 
-/--
-Definition of `sheaf` / `sheaf` 的定义
+/-- Extract the `sheaf C (X : Top)` from a `SheafedSpace C`. -/
+/-
+**AlgebraicGeometry.SheafedSpace.sheaf** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeome
+try.SheafedSpace`。
+形式化陈述：sheaf (X : SheafedSpace C) : Sheaf C (X : TopCat)
+参数：X : SheafedSpace C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.SheafedSpace.IsSheaf`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] (self : AlgebraicGeometry.SheafedSpace C),   self.presh
+eaf.IsSheaf
 
-English:
-definition sheaf
-  signature: (X : SheafedSpace C)
-  body: ⟨X.presheaf, X.IsSheaf⟩
-
-中文:
-定义 sheaf
-  签名: (X : Sheafed空间 C)
-  定义体: ⟨X.presheaf, X.IsSheaf⟩
-
-Depends on / 依赖: IsSheaf, X.IsSheaf, X.presheaf, presheaf
+--- 原说明 ---
+Extract the `sheaf C (X : Top)` from a `SheafedSpace C`.
 -/
 def sheaf (X : SheafedSpace C) : Sheaf C (X : TopCat) :=
   ⟨X.presheaf, X.IsSheaf⟩
 
-/--
-theorem `mk_coe` / 定理 `mk_coe`
+/-- Not `@[simp]` since it already reduces to `carrier = carrier`. -/
+/-
+**AlgebraicGeometry.SheafedSpace.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.SheafedSpace`。
+形式化陈述：mk_coe (carrier) (presheaf) (h) : (({ carrier presheaf IsSheaf
+参数：carrier；presheaf；h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mk_coe
-  given: (carrier) (presheaf) (h)
-  proof: rfl
-
-中文:
-定理 mk_coe
-  条件: (carrier) (presheaf) (h)
-  证明: rfl
-
-Depends on / 依赖: SheafedSpace, TopCat, carrier
+--- 原说明 ---
+Not `@[simp]` since it already reduces to `carrier = carrier`.
 -/
 theorem mk_coe (carrier) (presheaf) (h) :
     (({ carrier
         presheaf
         IsSheaf := h } : SheafedSpace C) : TopCat) = carrier :=
   rfl
-
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : SheafedSpace C) : TopologicalSpace X :=
   X.carrier.str
 
-/--
-Definition of `unit` / `unit` 的定义
+/-- The trivial `unit`-valued sheaf on any topological space. -/
+/-
+**AlgebraicGeometry.SheafedSpace.unit** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeomet
+ry.SheafedSpace`。
+形式化陈述：unit (X : TopCat) : SheafedSpace (Discrete Unit)
+参数：X : TopCat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unit
-  signature: (X : TopCat)
-  body: { @PresheafedSpace.const (Discrete Unit) _ X ⟨⟨⟩⟩ with IsSheaf := Presheaf.isSheaf_unit _ }
-
-中文:
-定义 unit
-  签名: (X : 顶元素范畴)
-  定义体: { @PresheafedSpace.const (Discrete Unit) _ X ⟨⟨⟩⟩ with IsSheaf := Presheaf.isSheaf_unit _ }
-
-Depends on / 依赖: Discrete, IsSheaf, Presheaf, Presheaf.isSheaf_unit, PresheafedSpace, PresheafedSpace.const, isSheaf_unit
+--- 原说明 ---
+The trivial `unit`-valued sheaf on any topological space.
 -/
 def unit (X : TopCat) : SheafedSpace (Discrete Unit) :=
   { @PresheafedSpace.const (Discrete Unit) _ X ⟨⟨⟩⟩ with IsSheaf := Presheaf.isSheaf_unit _ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (SheafedSpace (Discrete Unit))
-  body: ⟨unit (TopCat.of PEmpty)⟩
-
-中文:
-实例 :
-  签名: 可居 (Sheafed空间 (离散 单元))
-  定义体: ⟨unit (TopCat.of PEmpty)⟩
-
-Depends on / 依赖: PEmpty, TopCat, TopCat.of
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (SheafedSpace (Discrete Unit)) :=
   ⟨unit (TopCat.of PEmpty)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (SheafedSpace C)
-  body: inferInstanceAs Category (InducedCategory (PresheafedSpace C) SheafedSpace.toPresheafedSpace)
-
-@[ext (iff := false)]
-
-中文:
-实例 :
-  签名: 范畴 (Sheafed空间 C)
-  定义体: inferInstanceAs Category (InducedCategory (PresheafedSpace C) SheafedSpace.toPresheafedSpace)
-
-@[ext (iff := false)]
-
-Depends on / 依赖: Category, InducedCategory, PresheafedSpace, SheafedSpace, SheafedSpace.toPresheafedSpace, toPresheafedSpace
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (SheafedSpace C) :=
-inferInstanceAs Category (InducedCategory (PresheafedSpace C) SheafedSpace.toPresheafedSpace)
+  inferInstanceAs <| Category (InducedCategory (PresheafedSpace C) SheafedSpace.toPresheafedSpace)
 
 @[ext (iff := false)]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: {X Y : SheafedSpace C} (α β : X ⟶ Y) (w : α.hom.base = β.hom.base)
-  proof: InducedCategory.hom_ext (PresheafedSpace.ext _ _ w h)
-
-中文:
-定理 ext
-  结论: {X Y : Sheafed空间 C} (α β : X ⟶ Y) (w : α.hom.base = β.hom.base)
-  证明: InducedCategory.hom_ext (PresheafedSpace.ext _ _ w h)
-
-Depends on / 依赖: InducedCategory, InducedCategory.hom_ext, PresheafedSpace, PresheafedSpace.ext, hom_ext
+/-
+**AlgebraicGeometry.SheafedSpace.ext** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.SheafedSpace`。
+形式化陈述：ext {X Y : SheafedSpace C} (α β : X ⟶ Y) (w : α.hom.base = β.hom.base) (h 
+: α.hom.c ≫ whiskerRight (eqToHom (by rw [w])) _ = β.hom.c) : α = β
+参数：α β : X ⟶ Y；w : α.hom.base = β.hom.base；h : α.hom.c ≫ whiskerRight (eqToHom (
+by rw [w])) _ = β.hom.c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.ext`：ext {X Y : PresheafedSpace C} (α 
+β : X ⟶ Y) (w : α.base = β.base) (h : α.c ≫ whiskerRight (eqToHom (by rw [w])) _
+ = β.c) : α = β
 -/
 theorem ext {X Y : SheafedSpace C} (α β : X ⟶ Y) (w : α.hom.base = β.hom.base)
     (h : α.hom.c ≫ whiskerRight (eqToHom (by rw [w])) _ = β.hom.c) : α = β :=
@@ -216,26 +168,17 @@ theorem ext {X Y : SheafedSpace C} (α β : X ⟶ Y) (w : α.hom.base = β.hom.b
 
 /-- Constructor for isomorphisms in the category `SheafedSpace C`. -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**AlgebraicGeometry.SheafedSpace.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeome
+try.SheafedSpace`。
+形式化陈述：isoMk {X Y : SheafedSpace C} (e : X.toPresheafedSpace ≅ Y.toPresheafedSpac
+e) : X ≅ Y where hom
+参数：e : X.toPresheafedSpace ≅ Y.toPresheafedSpace。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {X Y : SheafedSpace C} (e : X.toPresheafedSpace ≅ Y.toPresheafedSpace)
-  body: InducedCategory.homMk e.hom
-  inv := InducedCategory.homMk e.inv
-  hom_inv_id := InducedCategory.hom_ext e.hom_inv_id
-  inv_hom_id := InducedCategory.hom_ext e.inv_hom_id
-
-中文:
-定义 isoMk
-  签名: {X Y : Sheafed空间 C} (e : X.toPresheafedSpace ≅ Y.toPresheafedSpace)
-  定义体: InducedCategory.homMk e.hom
-  inv := InducedCategory.homMk e.inv
-  hom_inv_id := InducedCategory.hom_ext e.hom_inv_id
-  inv_hom_id := InducedCategory.hom_ext e.inv_hom_id
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk, e.hom
+--- 原说明 ---
+Constructor for isomorphisms in the category `SheafedSpace C`.
 -/
 def isoMk {X Y : SheafedSpace C} (e : X.toPresheafedSpace ≅ Y.toPresheafedSpace) : X ≅ Y where
   hom := InducedCategory.homMk e.hom
@@ -245,115 +188,83 @@ def isoMk {X Y : SheafedSpace C} (e : X.toPresheafedSpace ≅ Y.toPresheafedSpac
 
 /-- Forgetting the sheaf condition is a functor from `SheafedSpace C` to `PresheafedSpace C`. -/
 @[simps! obj map]
-/--
-Definition of `forgetToPresheafedSpace` / `forgetToPresheafedSpace` 的定义
+/-
+**AlgebraicGeometry.SheafedSpace.forgetToPresheafedSpace** 是 Mathlib 中的一个定义，位于命名
+空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：forgetToPresheafedSpace : SheafedSpace C ⥤ PresheafedSpace C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetToPresheafedSpace
-  signature: : SheafedSpace C ⥤ PresheafedSpace C
-  body: inducedFunctor _
-
-中文:
-定义 forgetToPresheafedSpace
-  签名: : Sheafed空间 C ⥤ Presheafed空间 C
-  定义体: inducedFunctor _
-
-Depends on / 依赖: inducedFunctor
+--- 原说明 ---
+Forgetting the sheaf condition is a functor from `SheafedSpace C` to `Presheafed
+Space C`.
 -/
 def forgetToPresheafedSpace : SheafedSpace C ⥤ PresheafedSpace C :=
   inducedFunctor _
 -- The `Full, Faithful` instances should be constructed by a deriving handler.
 -- https://github.com/leanprover-community/mathlib4/issues/380
 
-/--
-Definition of `fullyFaithfulForgetToPresheafedSpace` / `fullyFaithfulForgetToPresheafedSpace` 的定义
+/-- The functor `forgetToPresheafedSpace : SheafedSpace C ⥤ PresheafedSpace C`
+is fully faithful. -/
+/-
+**AlgebraicGeometry.SheafedSpace.fullyFaithfulForgetToPresheafedSpace** 是 Mathli
+b 中的一个定义，位于命名空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：fullyFaithfulForgetToPresheafedSpace : (forgetToPresheafedSpace (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForgetToPresheafedSpace
-  signature: :
-  body: InducedCategory.homMk f
-
-@[simp]
-
-中文:
-定义 fullyFaithfulForgetToPresheafedSpace
-  签名: :
-  定义体: InducedCategory.homMk f
-
-@[simp]
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+The functor `forgetToPresheafedSpace : SheafedSpace C ⥤ PresheafedSpace C`
+is fully faithful.
 -/
 def fullyFaithfulForgetToPresheafedSpace :
     (forgetToPresheafedSpace (C := C)).FullyFaithful where
   preimage f := InducedCategory.homMk f
 
 @[simp]
-/--
-lemma `fullyFaithfulForgetToPresheafedSpace_preimage_hom` / 引理 `fullyFaithfulForgetToPresheafedSpace_preimage_hom`
-
-English:
-lemma fullyFaithfulForgetToPresheafedSpace_preimage_hom
-  statement: {X Y : SheafedSpace C}
-  proof: rfl
-
-中文:
-引理 fullyFaithfulForgetToPresheafedSpace_preimage_hom
-  结论: {X Y : Sheafed空间 C}
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.fullyFaithfulForgetToPresheafedSpace_preimage_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：fullyFaithfulForgetToPresheafedSpace_preimage_hom {X Y : SheafedSpace C} (
+f : forgetToPresheafedSpace.obj X ⟶ forgetToPresheafedSpace.obj Y) : (fullyFaith
+fulForgetToPresheafedSpace.preimage f).hom = f
+参数：f : forgetToPresheafedSpace.obj X ⟶ forgetToPresheafedSpace.obj Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fullyFaithfulForgetToPresheafedSpace_preimage_hom {X Y : SheafedSpace C}
     (f : forgetToPresheafedSpace.obj X ⟶ forgetToPresheafedSpace.obj Y) :
     (fullyFaithfulForgetToPresheafedSpace.preimage f).hom = f := rfl
-
-/--
-Instance `forgetToPresheafedSpace_full` / 实例 `forgetToPresheafedSpace_full`
-
-English:
-instance forgetToPresheafedSpace_full
-  signature: : (forgetToPresheafedSpace (C := C)).Full
-  body: fullyFaithfulForgetToPresheafedSpace.full
-
-中文:
-实例 forgetToPresheafedSpace_full
-  签名: : (forgetToPresheafedSpace (C := C)).满
-  定义体: fullyFaithfulForgetToPresheafedSpace.full
+/-
+**AlgebraicGeometry.SheafedSpace.forgetToPresheafedSpace_full** 是 Mathlib 中的一个实例
+，位于命名空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：forgetToPresheafedSpace_full : (forgetToPresheafedSpace (C
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 instance forgetToPresheafedSpace_full : (forgetToPresheafedSpace (C := C)).Full :=
   fullyFaithfulForgetToPresheafedSpace.full
-
-/--
-Instance `forgetToPresheafedSpace_faithful` / 实例 `forgetToPresheafedSpace_faithful`
-
-English:
-instance forgetToPresheafedSpace_faithful
-  signature: : (forgetToPresheafedSpace (C := C)).Faithful
-  body: fullyFaithfulForgetToPresheafedSpace.faithful
-
-中文:
-实例 forgetToPresheafedSpace_faithful
-  签名: : (forgetToPresheafedSpace (C := C)).忠实
-  定义体: fullyFaithfulForgetToPresheafedSpace.faithful
-
-Depends on / 依赖: Faithful
+/-
+**AlgebraicGeometry.SheafedSpace.forgetToPresheafedSpace_faithful** 是 Mathlib 中的
+一个实例，位于命名空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：forgetToPresheafedSpace_faithful : (forgetToPresheafedSpace (C
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 -/
 instance forgetToPresheafedSpace_faithful : (forgetToPresheafedSpace (C := C)).Faithful :=
   fullyFaithfulForgetToPresheafedSpace.faithful
-
-/--
-Instance `is_presheafedSpace_iso` / 实例 `is_presheafedSpace_iso`
-
-English:
-instance is_presheafedSpace_iso
-  signature: {X Y : SheafedSpace C} (f : X ⟶ Y) [IsIso f]
-  body: SheafedSpace.forgetToPresheafedSpace.map_isIso f
-
-中文:
-实例 is_presheafedSpace_iso
-  签名: {X Y : Sheafed空间 C} (f : X ⟶ Y) [是同构 f]
-  定义体: SheafedSpace.forgetToPresheafedSpace.map_isIso f
-
-Depends on / 依赖: SheafedSpace, SheafedSpace.forgetToPresheafedSpace.map_isIso, forgetToPresheafedSpace, map_isIso
+/-
+**AlgebraicGeometry.SheafedSpace.is_presheafedSpace_iso** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：is_presheafedSpace_iso {X Y : SheafedSpace C} (f : X ⟶ Y) [IsIso f] : IsIs
+o f.hom
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance is_presheafedSpace_iso {X Y : SheafedSpace C} (f : X ⟶ Y) [IsIso f] :
     IsIso f.hom :=
@@ -364,157 +275,107 @@ section
 attribute [local simp] id comp
 
 @[simp]
-/--
-theorem `id_hom` / 定理 `id_hom`
-
-English:
-theorem id_hom
-  given: (X : SheafedSpace C)
-  statement: (𝟙 X : X ⟶ X).hom = 𝟙 X.toPresheafedSpace
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_hom
-  条件: (X : Sheafed空间 C)
-  结论: (𝟙 X : X ⟶ X).hom = 𝟙 X.toPresheafedSpace
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.SheafedSpace.id_hom** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.SheafedSpace`。
+形式化陈述：id_hom (X : SheafedSpace C) : (𝟙 X : X ⟶ X).hom = 𝟙 X.toPresheafedSpace
+参数：X : SheafedSpace C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom (X : SheafedSpace C) : (𝟙 X : X ⟶ X).hom = 𝟙 X.toPresheafedSpace :=
   rfl
 
 @[simp]
-/--
-theorem `id_hom_base` / 定理 `id_hom_base`
-
-English:
-theorem id_hom_base
-  given: (X : SheafedSpace C)
-  statement: (𝟙 X : X ⟶ X).hom.base = 𝟙 (X : TopCat)
-  proof: rfl
-
-中文:
-定理 id_hom_base
-  条件: (X : Sheafed空间 C)
-  结论: (𝟙 X : X ⟶ X).hom.base = 𝟙 (X : 顶元素范畴)
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.id_hom_base** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.SheafedSpace`。
+形式化陈述：id_hom_base (X : SheafedSpace C) : (𝟙 X : X ⟶ X).hom.base = 𝟙 (X : TopCat)
+参数：X : SheafedSpace C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom_base (X : SheafedSpace C) : (𝟙 X : X ⟶ X).hom.base = 𝟙 (X : TopCat) :=
   rfl
-
-/--
-theorem `id_hom_c` / 定理 `id_hom_c`
-
-English:
-theorem id_hom_c
-  given: (X : SheafedSpace C)
-  proof: rfl
-
-中文:
-定理 id_hom_c
-  条件: (X : Sheafed空间 C)
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.id_hom_c** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.SheafedSpace`。
+形式化陈述：id_hom_c (X : SheafedSpace C) : (𝟙 X : X ⟶ X).hom.c = eqToHom (Presheaf.Pu
+shforward.id_eq X.presheaf).symm
+参数：X : SheafedSpace C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom_c (X : SheafedSpace C) :
     (𝟙 X : X ⟶ X).hom.c = eqToHom (Presheaf.Pushforward.id_eq X.presheaf).symm :=
   rfl
-
-/--
-theorem `id_hom_c_app` / 定理 `id_hom_c_app`
-
-English:
-theorem id_hom_c_app
-  given: (X : SheafedSpace C) (U)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_hom_c_app
-  条件: (X : Sheafed空间 C) (U)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.SheafedSpace.id_hom_c_app** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.SheafedSpace`。
+形式化陈述：id_hom_c_app (X : SheafedSpace C) (U) : (𝟙 X : X ⟶ X).hom.c.app U = 𝟙 _
+参数：X : SheafedSpace C；U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom_c_app (X : SheafedSpace C) (U) :
     (𝟙 X : X ⟶ X).hom.c.app U = 𝟙 _ := rfl
 
 @[simp]
-/--
-theorem `comp_hom_base` / 定理 `comp_hom_base`
-
-English:
-theorem comp_hom_base
-  given: {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_hom_base
-  条件: {X Y Z : Sheafed空间 C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.SheafedSpace.comp_hom_base** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.SheafedSpace`。
+形式化陈述：comp_hom_base {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).h
+om.base = f.hom.base ≫ g.hom.base
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom_base {X Y Z : SheafedSpace C} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom.base = f.hom.base ≫ g.hom.base :=
   rfl
 
 @[simp]
-/--
-theorem `comp_hom_c_app` / 定理 `comp_hom_c_app`
-
-English:
-theorem comp_hom_c_app
-  given: {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
-  proof: rfl
-
-中文:
-定理 comp_hom_c_app
-  条件: {X Y Z : Sheafed空间 C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.comp_hom_c_app** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.SheafedSpace`。
+形式化陈述：comp_hom_c_app {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) : (α ≫
+ β).hom.c.app U = β.hom.c.app U ≫ α.hom.c.app (op ((Opens.map β.hom.base).obj (u
+nop U)))
+参数：α : X ⟶ Y；β : Y ⟶ Z；U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom_c_app {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) :
     (α ≫ β).hom.c.app U =
       β.hom.c.app U ≫ α.hom.c.app (op ((Opens.map β.hom.base).obj (unop U))) :=
   rfl
-
-/--
-theorem `comp_hom_c_app'` / 定理 `comp_hom_c_app'`
-
-English:
-theorem comp_hom_c_app'
-  given: {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
-  proof: rfl
-
-中文:
-定理 comp_hom_c_app'
-  条件: {X Y Z : Sheafed空间 C} (α : X ⟶ Y) (β : Y ⟶ Z) (U)
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.comp_hom_c_app'** 是 Mathlib 中的一个定理，位于命名空间 `Alge
+braicGeometry.SheafedSpace`。
+形式化陈述：comp_hom_c_app' {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) : (α 
+≫ β).hom.c.app (op U) = β.hom.c.app (op U) ≫ α.hom.c.app (op ((Opens.map β.hom.b
+ase).obj U))
+参数：α : X ⟶ Y；β : Y ⟶ Z；U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom_c_app' {X Y Z : SheafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) :
     (α ≫ β).hom.c.app (op U) =
       β.hom.c.app (op U) ≫ α.hom.c.app (op ((Opens.map β.hom.base).obj U)) :=
   rfl
-
-/--
-theorem `congr_hom_app` / 定理 `congr_hom_app`
-
-English:
-theorem congr_hom_app
-  given: {X Y : SheafedSpace C} {α β : X ⟶ Y} (h : α = β) (U)
-  proof: (PresheafedSpace.congr_app (by rw [h]) U)
-
-中文:
-定理 congr_hom_app
-  条件: {X Y : Sheafed空间 C} {α β : X ⟶ Y} (h : α = β) (U)
-  证明: (PresheafedSpace.congr_app (by rw [h]) U)
-
-Depends on / 依赖: PresheafedSpace, PresheafedSpace.congr_app, congr_app
+/-
+**AlgebraicGeometry.SheafedSpace.congr_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.SheafedSpace`。
+形式化陈述：congr_hom_app {X Y : SheafedSpace C} {α β : X ⟶ Y} (h : α = β) (U) : α.hom
+.c.app U = β.hom.c.app U ≫ X.presheaf.map (eqToHom (by subst h; rfl))
+参数：h : α = β；U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.congr_app`：congr_app {X Y : Presheafed
+Space C} {α β : X ⟶ Y} (h : α = β) (U) : α.c.app U = β.c.app U ≫ X.presheaf.map 
+(eqToHom (by subst h; rfl))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem congr_hom_app {X Y : SheafedSpace C} {α β : X ⟶ Y} (h : α = β) (U) :
     α.hom.c.app U = β.hom.c.app U ≫ X.presheaf.map (eqToHom (by subst h; rfl)) :=
@@ -522,22 +383,16 @@ theorem congr_hom_app {X Y : SheafedSpace C} {α β : X ⟶ Y} (h : α = β) (U)
 
 variable (C)
 
-/--
-Definition of `forget` / `forget` 的定义
+/-- The forgetful functor from `SheafedSpace` to `Top`. -/
+/-
+**AlgebraicGeometry.SheafedSpace.forget** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.SheafedSpace`。
+形式化陈述：forget : SheafedSpace C ⥤ TopCat where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : SheafedSpace C ⥤ TopCat where
-  body: (X : TopCat)
-  map {_ _} f := f.hom.base
-
-中文:
-定义 forget
-  签名: : Sheafed空间 C ⥤ 顶元素范畴 where
-  定义体: (X : TopCat)
-  map {_ _} f := f.hom.base
-
-Depends on / 依赖: TopCat
+--- 原说明 ---
+The forgetful functor from `SheafedSpace` to `Top`.
 -/
 def forget : SheafedSpace C ⥤ TopCat where
   obj X := (X : TopCat)
@@ -547,20 +402,19 @@ end
 
 open TopCat.Presheaf
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- The restriction of a sheafed space along an open embedding into the space.
+-/
+/-
+**AlgebraicGeometry.SheafedSpace.restrict** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.SheafedSpace`。
+形式化陈述：restrict {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)} (h : IsO
+penEmbedding f) : SheafedSpace C
+参数：X : SheafedSpace C；X : TopCat；h : IsOpenEmbedding f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)} (h : IsOpenEmbedding f)
-  body: { X.toPresheafedSpace.restrict h with IsSheaf := isSheaf_of_isOpenEmbedding h X.IsSheaf }
-
-中文:
-定义 restrict
-  签名: {U : 顶元素范畴} (X : Sheafed空间 C) {f : U ⟶ (X : 顶元素范畴)} (h : 是开嵌入 f)
-  定义体: { X.toPresheafedSpace.restrict h with IsSheaf := isSheaf_of_isOpenEmbedding h X.IsSheaf }
-
-Depends on / 依赖: IsSheaf, X.IsSheaf, X.toPresheafedSpace.restrict, isSheaf_of_isOpenEmbedding, restrict, toPresheafedSpace
+--- 原说明 ---
+The restriction of a sheafed space along an open embedding into the space.
 -/
 def restrict {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)} (h : IsOpenEmbedding f) :
     SheafedSpace C :=
@@ -569,20 +423,17 @@ def restrict {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)} (h : IsO
 /-- The map from the restriction of a presheafed space.
 -/
 @[simps!]
-/--
-Definition of `ofRestrict` / `ofRestrict` 的定义
+/-
+**AlgebraicGeometry.SheafedSpace.ofRestrict** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.SheafedSpace`。
+形式化陈述：ofRestrict {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)} (h : I
+sOpenEmbedding f) : X.restrict h ⟶ X
+参数：X : SheafedSpace C；X : TopCat；h : IsOpenEmbedding f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRestrict
-  signature: {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)}
-  body: InducedCategory.homMk (X.toPresheafedSpace.ofRestrict h)
-
-中文:
-定义 ofRestrict
-  签名: {U : 顶元素范畴} (X : Sheafed空间 C) {f : U ⟶ (X : 顶元素范畴)}
-  定义体: InducedCategory.homMk (X.toPresheafedSpace.ofRestrict h)
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk, X.toPresheafedSpace.ofRestrict, ofRestrict, toPresheafedSpace
+--- 原说明 ---
+The map from the restriction of a presheafed space.
 -/
 def ofRestrict {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)}
     (h : IsOpenEmbedding f) : X.restrict h ⟶ X :=
@@ -591,199 +442,124 @@ def ofRestrict {U : TopCat} (X : SheafedSpace C) {f : U ⟶ (X : TopCat)}
 /-- The restriction of a sheafed space `X` to the top subspace is isomorphic to `X` itself.
 -/
 @[simps! hom inv]
-/--
-Definition of `restrictTopIso` / `restrictTopIso` 的定义
+/-
+**AlgebraicGeometry.SheafedSpace.restrictTopIso** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.SheafedSpace`。
+形式化陈述：restrictTopIso (X : SheafedSpace C) : X.restrict (Opens.isOpenEmbedding ⊤)
+ ≅ X
+参数：X : SheafedSpace C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictTopIso
-  signature: (X : SheafedSpace C)
-  body: isoMk (X.toPresheafedSpace.restrictTopIso)
-
-中文:
-定义 restrictTopIso
-  签名: (X : Sheafed空间 C)
-  定义体: isoMk (X.toPresheafedSpace.restrictTopIso)
-
-Depends on / 依赖: X.toPresheafedSpace.restrictTopIso, restrictTopIso, toPresheafedSpace
+--- 原说明 ---
+The restriction of a sheafed space `X` to the top subspace is isomorphic to `X` 
+itself.
 -/
 def restrictTopIso (X : SheafedSpace C) : X.restrict (Opens.isOpenEmbedding ⊤) ≅ X :=
   isoMk (X.toPresheafedSpace.restrictTopIso)
 
-/--
-Definition of `Γ` / `Γ` 的定义
+/-- The global sections, notated Gamma.
+-/
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Γ
-  signature: : (SheafedSpace C)ᵒᵖ ⥤ C
-  body: forgetToPresheafedSpace.op ⋙ PresheafedSpace.Γ
-
-中文:
-定义 Γ
-  签名: : (Sheafed空间 C)ᵒᵖ ⥤ C
-  定义体: forgetToPresheafedSpace.op ⋙ PresheafedSpace.Γ
-
-Depends on / 依赖: PresheafedSpace, forgetToPresheafedSpace, forgetToPresheafedSpace.op
+--- 原说明 ---
+The global sections, notated Gamma.
 -/
 def Γ : (SheafedSpace C)ᵒᵖ ⥤ C :=
   forgetToPresheafedSpace.op ⋙ PresheafedSpace.Γ
-
-/--
-theorem `Γ_def` / 定理 `Γ_def`
-
-English:
-theorem Γ_def
-  statement: (Γ : _ ⥤ C) = forgetToPresheafedSpace.op ⋙ PresheafedSpace.Γ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 Γ_def
-  结论: (Γ : _ ⥤ C) = forgetToPresheafedSpace.op ⋙ Presheafed空间.Γ
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Γ_def : (Γ : _ ⥤ C) = forgetToPresheafedSpace.op ⋙ PresheafedSpace.Γ :=
   rfl
 
 @[simp]
-/--
-theorem `Γ_obj` / 定理 `Γ_obj`
-
-English:
-theorem Γ_obj
-  given: (X : (SheafedSpace C)ᵒᵖ)
-  statement: Γ.obj X = (unop X).presheaf.obj (op ⊤)
-  proof: rfl
-
-中文:
-定理 Γ_obj
-  条件: (X : (Sheafed空间 C)ᵒᵖ)
-  结论: Γ.obj X = (unop X).presheaf.obj (op ⊤)
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Γ_obj (X : (SheafedSpace C)ᵒᵖ) : Γ.obj X = (unop X).presheaf.obj (op ⊤) :=
   rfl
-
-/--
-theorem `Γ_obj_op` / 定理 `Γ_obj_op`
-
-English:
-theorem Γ_obj_op
-  given: (X : SheafedSpace C)
-  statement: Γ.obj (op X) = X.presheaf.obj (op ⊤)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 Γ_obj_op
-  条件: (X : Sheafed空间 C)
-  结论: Γ.obj (op X) = X.presheaf.obj (op ⊤)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Γ_obj_op (X : SheafedSpace C) : Γ.obj (op X) = X.presheaf.obj (op ⊤) :=
   rfl
 
 @[simp]
-/--
-theorem `Γ_map` / 定理 `Γ_map`
-
-English:
-theorem Γ_map
-  given: {X Y : (SheafedSpace C)ᵒᵖ} (f : X ⟶ Y)
-  statement: Γ.map f = f.unop.hom.c.app (op ⊤)
-  proof: rfl
-
-中文:
-定理 Γ_map
-  条件: {X Y : (Sheafed空间 C)ᵒᵖ} (f : X ⟶ Y)
-  结论: Γ.map f = f.unop.hom.c.app (op ⊤)
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Γ_map {X Y : (SheafedSpace C)ᵒᵖ} (f : X ⟶ Y) : Γ.map f = f.unop.hom.c.app (op ⊤) :=
   rfl
-
-/--
-theorem `Γ_map_op` / 定理 `Γ_map_op`
-
-English:
-theorem Γ_map_op
-  given: {X Y : SheafedSpace C} (f : X ⟶ Y)
-  statement: Γ.map f.op = f.hom.c.app (op ⊤)
-  proof: rfl
-
-中文:
-定理 Γ_map_op
-  条件: {X Y : Sheafed空间 C} (f : X ⟶ Y)
-  结论: Γ.map f.op = f.hom.c.app (op ⊤)
-  证明: rfl
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Γ_map_op {X Y : SheafedSpace C} (f : X ⟶ Y) : Γ.map f.op = f.hom.c.app (op ⊤) :=
   rfl
-
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (J : Type w) [Category.{w'} J] [Small.{v} J] [HasLimitsOfShape Jᵒᵖ C] :
     CreatesColimitsOfShape J (forgetToPresheafedSpace : SheafedSpace.{_, _, v} C ⥤ _) :=
   ⟨fun {K} =>
     createsColimitOfFullyFaithfulOfIso
       ⟨(PresheafedSpace.colimitCocone (K ⋙ forgetToPresheafedSpace)).pt,
-        limit_isSheaf _ fun j => Sheaf.pushforward_sheaf_of_sheaf _ (K.obj (unop j)).2⟩
+        limit_isSheaf _ fun j ↦ Sheaf.pushforward_sheaf_of_sheaf _ (K.obj (unop j)).2⟩
       (colimit.isoColimitCocone ⟨_, PresheafedSpace.colimitCoconeIsColimit _⟩).symm⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimits
-  signature: C] :
-
-中文:
-实例 [有极限
-  签名: C] :
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [HasLimits C] :
     CreatesColimits (forgetToPresheafedSpace : SheafedSpace C ⥤ _) where
-
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (J : Type w) [Category.{w'} J] [Small.{v} J] [HasLimitsOfShape Jᵒᵖ C] :
     HasColimitsOfShape J (SheafedSpace.{_, _, v} C) :=
   hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape forgetToPresheafedSpace
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimits
-  signature: C] : HasColimits.{v} (SheafedSpace C) where
-
-中文:
-实例 [有极限
-  签名: C] : 有余极限.{v} (Sheafed空间 C) where
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasLimits C] : HasColimits.{v} (SheafedSpace C) where
-
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (J : Type w) [Category.{w'} J] [Small.{v} J] [HasLimitsOfShape Jᵒᵖ C] :
     PreservesColimitsOfShape J (forget.{_, _, v} C) :=
   Limits.comp_preservesColimitsOfShape forgetToPresheafedSpace (PresheafedSpace.forget C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimits
-  signature: C] : PreservesColimits (forget.{_, _, v} C) where
-
-中文:
-实例 [有极限
-  签名: C] : PreservesColimits (forget.{_, _, v} C) where
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [HasLimits C] : PreservesColimits (forget.{_, _, v} C) where
 
 section ConcreteCategory
 
-variable {FC : C -> C -> Type*} {CC : C -> Type v} [forall X Y, FunLike (FC X Y) (CC X) (CC Y)]
+variable {FC : C → C → Type*} {CC : C → Type v} [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)]
 variable [instCC : ConcreteCategory.{v} C FC] [HasColimits C] [HasLimits C]
 variable [PreservesLimits (CategoryTheory.forget C)]
 variable [PreservesFilteredColimits (CategoryTheory.forget C)]
@@ -792,141 +568,163 @@ variable [(CategoryTheory.forget C).ReflectsIsomorphisms]
 set_option backward.isDefEq.respectTransparency.types false in
 attribute [local ext] DFunLike.ext in
 include instCC in
-/--
-lemma `hom_stalk_ext` / 引理 `hom_stalk_ext`
-
-English:
-lemma hom_stalk_ext
-  statement: {X Y : SheafedSpace C} (f g : X ⟶ Y) (h : f.hom.base = g.hom.base)
-  proof: by
-  obtain ⟨f, fc⟩ := f
-  obtain ⟨g, gc⟩ := g
-  obtain rfl : f = g := h
-  congr
-  ext U s
-  refine section_ext X.sheaf _ _ _ fun x hx =>
-    show X.presheaf.germ _ x _ _ = X.presheaf.germ _ x _ _ from ?_
-  erw [← PresheafedSpace.stalkMap_germ_apply ⟨f, fc⟩, ← PresheafedSpace.stalkMap_germ_apply ⟨f, gc⟩]
-  simp [h']
-
-中文:
-引理 hom_stalk_ext
-  结论: {X Y : Sheafed空间 C} (f g : X ⟶ Y) (h : f.hom.base = g.hom.base)
-  证明: by
-  obtain ⟨f, fc⟩ := f
-  obtain ⟨g, gc⟩ := g
-  obtain rfl : f = g := h
-  congr
-  ext U s
-  refine section_ext X.sheaf _ _ _ fun x hx =>
-    show X.presheaf.germ _ x _ _ = X.presheaf.germ _ x _ _ from ?_
-  erw [← PresheafedSpace.stalkMap_germ_apply ⟨f, fc⟩, ← PresheafedSpace.stalkMap_germ_apply ⟨f, gc⟩]
-  simp [h']
-
-Depends on / 依赖: PresheafedSpace, PresheafedSpace.stalkMap_germ_apply, X.presheaf.germ, X.sheaf, presheaf, section_ext, stalkMap_germ_apply
+/-
+**AlgebraicGeometry.SheafedSpace.hom_stalk_ext** 是 Mathlib 中的一个引理，位于命名空间 `Algebr
+aicGeometry.SheafedSpace`。
+形式化陈述：hom_stalk_ext {X Y : SheafedSpace C} (f g : X ⟶ Y) (h : f.hom.base = g.hom
+.base) (h' : forall x, f.hom.stalkMap x = (Y.presheaf.stalkCongr (h ▸ rfl)).hom 
+≫ g.hom.stalkMap x) : f = g
+参数：f g : X ⟶ Y；h : f.hom.base = g.hom.base；h' : forall x, f.hom.stalkMap x = (Y.
+presheaf.stalkCongr (h ▸ rfl)).hom ≫ g.hom.stalkMap x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TopCat.Presheaf.ext`：ext {X : TopCat.{w}} {P Q : Presheaf C X} {f g : P 
+⟶ Q} (w : forall U : Opens X, f.app (op U) = g.app (op U)) : f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `TopCat.Presheaf.section_ext`：section_ext (F : Sheaf C X) (U : Opens X) (
+s t : ToType (F.1.obj (op U))) (h : forall (x : X) (hx : x in U), F.presheaf.ger
+m U x hx s = F.pr…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap_germ_apply`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColim
+its C]   {X Y : AlgebraicGeometry.Presheafe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TopCat.Presheaf.stalkCongr_hom`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X : TopCat}   (
+F : TopCat.Presheaf …
+· 使用定理 `TopCat.Presheaf.stalkSpecializes_refl`：stalkSpecializes_refl (F : X.Pres
+heaf C) (x : X) : F.stalkSpecializes (specializes_refl x) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_stalk_ext {X Y : SheafedSpace C} (f g : X ⟶ Y) (h : f.hom.base = g.hom.base)
-    (h' : forall x, f.hom.stalkMap x = (Y.presheaf.stalkCongr (h ▸ rfl)).hom ≫ g.hom.stalkMap x) :
+    (h' : ∀ x, f.hom.stalkMap x = (Y.presheaf.stalkCongr (h ▸ rfl)).hom ≫ g.hom.stalkMap x) :
     f = g := by
   obtain ⟨f, fc⟩ := f
   obtain ⟨g, gc⟩ := g
   obtain rfl : f = g := h
   congr
   ext U s
-  refine section_ext X.sheaf _ _ _ fun x hx =>
+  refine section_ext X.sheaf _ _ _ fun x hx ↦
     show X.presheaf.germ _ x _ _ = X.presheaf.germ _ x _ _ from ?_
   erw [← PresheafedSpace.stalkMap_germ_apply ⟨f, fc⟩, ← PresheafedSpace.stalkMap_germ_apply ⟨f, gc⟩]
   simp [h']
 
 attribute [local ext] DFunLike.ext in
 include instCC in
-/--
-lemma `mono_of_base_injective_of_stalk_epi` / 引理 `mono_of_base_injective_of_stalk_epi`
-
-English:
-lemma mono_of_base_injective_of_stalk_epi
-  statement: {X Y : SheafedSpace C} (f : X ⟶ Y)
-  proof: by
-  constructor
-  intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
-  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun x => h₁ congr(($e).hom.base x)
-  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun x => ?_
-  rw [← cancel_epi (f.hom.stalkMap (g x))]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [gc⟩ f.hom]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [hc⟩ f.hom]
-  replace e := congr_arg InducedCategory.Hom.hom e
-  congr 1
-
-中文:
-引理 mono_of_base_injective_of_stalk_epi
-  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y)
-  证明: by
-  constructor
-  intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
-  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun x => h₁ congr(($e).hom.base x)
-  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun x => ?_
-  rw [← cancel_epi (f.hom.stalkMap (g x))]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [gc⟩ f.hom]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [hc⟩ f.hom]
-  replace e := congr_arg InducedCategory.Hom.hom e
-  congr 1
-
-Depends on / 依赖: Category, Category.id_comp, ConcreteCategory, ConcreteCategory.hom_ext, InducedCategory, InducedCategory.Hom.hom, PresheafedSpace, PresheafedSpace.stalkMap.comp, SheafedSpace, SheafedSpace.hom_stalk_ext, cancel_epi, congr_arg, f.hom, f.hom.stalkMap, hom.base, hom_ext, hom_stalk_ext, id_comp, replace, stalkCongr_hom
+/-
+**AlgebraicGeometry.SheafedSpace.mono_of_base_injective_of_stalk_epi** 是 Mathlib
+ 中的一个引理，位于命名空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：mono_of_base_injective_of_stalk_epi {X Y : SheafedSpace C} (f : X ⟶ Y) (h₁
+ : Function.Injective f.hom.base) (h₂ : forall x, Epi (f.hom.stalkMap x)) : Mono
+ f
+参数：f : X ⟶ Y；h₁ : Function.Injective f.hom.base；h₂ : forall x, Epi (f.hom.stalkM
+ap x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.SheafedSpace.hom_stalk_ext`：hom_stalk_ext {X Y : Sheaf
+edSpace C} (f g : X ⟶ Y) (h : f.hom.base = g.hom.base) (h' : forall x, f.hom.sta
+lkMap x = (Y.presheaf.stalkCongr (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `TopCat.Presheaf.stalkCongr_hom`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X : TopCat}   (
+F : TopCat.Presheaf …
+· 使用定理 `specializes_refl`：specializes_refl (x : X) : x ⤳ x
+· 使用定理 `TopCat.Presheaf.stalkSpecializes_refl`：stalkSpecializes_refl (F : X.Pres
+heaf C) (x : X) : F.stalkSpecializes (specializes_refl x) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.comp`：comp {X Y Z : Presheafe
+dSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X) : (α ≫ β).stalkMap x = (β.st
+alkMap (α.base x) : Z.presheaf.stalk …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
 lemma mono_of_base_injective_of_stalk_epi {X Y : SheafedSpace C} (f : X ⟶ Y)
     (h₁ : Function.Injective f.hom.base)
-    (h₂ : forall x, Epi (f.hom.stalkMap x)) : Mono f := by
+    (h₂ : ∀ x, Epi (f.hom.stalkMap x)) : Mono f := by
   constructor
   intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
-  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun x => h₁ congr(($e).hom.base x)
-  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun x => ?_
-  rw [← cancel_epi (f.hom.stalkMap (g x))]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [gc⟩ f.hom]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [hc⟩ f.hom]
+  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun x ↦ h₁ congr(($e).hom.base x)
+  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun x ↦ ?_
+  rw [← cancel_epi (f.hom.stalkMap (g x)), stalkCongr_hom, stalkSpecializes_refl, Category.id_comp,
+    ← PresheafedSpace.stalkMap.comp ⟨g, gc⟩ f.hom, ← PresheafedSpace.stalkMap.comp ⟨g, hc⟩ f.hom]
   replace e := congr_arg InducedCategory.Hom.hom e
   congr 1
 
 set_option backward.isDefEq.respectTransparency.types false in
 attribute [local ext] DFunLike.ext in
 include instCC in
-/--
-lemma `epi_of_base_surjective_of_stalk_mono` / 引理 `epi_of_base_surjective_of_stalk_mono`
-
-English:
-lemma epi_of_base_surjective_of_stalk_mono
-  statement: {X Y : SheafedSpace C} (f : X ⟶ Y)
-  proof: by
-  constructor
-  intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
-  apply_fun InducedCategory.Hom.hom at e
-  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun y => by
-    rw [← (h₁ y).choose_spec]
-    simpa using congr(($e).base.hom (h₁ y).choose)
-  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun y => ?_
-  rw [← (h₁ y).choose_spec]; rw [← cancel_mono (f.hom.stalkMap (h₁ y).choose)]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [gc⟩]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [hc⟩]
-  congr 1
-
-中文:
-引理 epi_of_base_surjective_of_stalk_mono
-  结论: {X Y : Sheafed空间 C} (f : X ⟶ Y)
-  证明: by
-  constructor
-  intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
-  apply_fun InducedCategory.Hom.hom at e
-  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun y => by
-    rw [← (h₁ y).choose_spec]
-    simpa using congr(($e).base.hom (h₁ y).choose)
-  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun y => ?_
-  rw [← (h₁ y).choose_spec]; rw [← cancel_mono (f.hom.stalkMap (h₁ y).choose)]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [gc⟩]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [hc⟩]
-  congr 1
-
-Depends on / 依赖: Category, Category.id_comp, ConcreteCategory, ConcreteCategory.hom_ext, InducedCategory, InducedCategory.Hom.hom, PresheafedSpace, PresheafedSpace.stalkMap.comp, SheafedSpace, SheafedSpace.hom_stalk_ext, apply_fun, base.hom, cancel_mono, choose_spec, f.hom, f.hom.stalkMap, hom_ext, hom_stalk_ext, id_comp, stalkCongr_hom
+/-
+**AlgebraicGeometry.SheafedSpace.epi_of_base_surjective_of_stalk_mono** 是 Mathli
+b 中的一个引理，位于命名空间 `AlgebraicGeometry.SheafedSpace`。
+形式化陈述：epi_of_base_surjective_of_stalk_mono {X Y : SheafedSpace C} (f : X ⟶ Y) (h
+₁ : Function.Surjective f.hom.base) (h₂ : forall x, Mono (f.hom.stalkMap x)) : E
+pi f
+参数：f : X ⟶ Y；h₁ : Function.Surjective f.hom.base；h₂ : forall x, Mono (f.hom.stal
+kMap x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.SheafedSpace.hom_stalk_ext`：hom_stalk_ext {X Y : Sheaf
+edSpace C} (f g : X ⟶ Y) (h : f.hom.base = g.hom.base) (h' : forall x, f.hom.sta
+lkMap x = (Y.presheaf.stalkCongr (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `TopCat.Presheaf.stalkCongr_hom`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X : TopCat}   (
+F : TopCat.Presheaf …
+· 使用定理 `specializes_refl`：specializes_refl (x : X) : x ⤳ x
+· 使用定理 `TopCat.Presheaf.stalkSpecializes_refl`：stalkSpecializes_refl (F : X.Pres
+heaf C) (x : X) : F.stalkSpecializes (specializes_refl x) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.comp`：comp {X Y Z : Presheafe
+dSpace.{_, _, v} C} (α : X ⟶ Y) (β : Y ⟶ Z) (x : X) : (α ≫ β).stalkMap x = (β.st
+alkMap (α.base x) : Z.presheaf.stalk …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
 lemma epi_of_base_surjective_of_stalk_mono {X Y : SheafedSpace C} (f : X ⟶ Y)
     (h₁ : Function.Surjective f.hom.base)
-    (h₂ : forall x, Mono (f.hom.stalkMap x)) : Epi f := by
+    (h₂ : ∀ x, Mono (f.hom.stalkMap x)) : Epi f := by
   constructor
   intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
   apply_fun InducedCategory.Hom.hom at e
-  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun y => by
+  obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun y ↦ by
     rw [← (h₁ y).choose_spec]
     simpa using congr(($e).base.hom (h₁ y).choose)
-  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun y => ?_
-  rw [← (h₁ y).choose_spec]; rw [← cancel_mono (f.hom.stalkMap (h₁ y).choose)]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [gc⟩]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [hc⟩]
+  refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun y ↦ ?_
+  rw [← (h₁ y).choose_spec, ← cancel_mono (f.hom.stalkMap (h₁ y).choose), stalkCongr_hom,
+    stalkSpecializes_refl, Category.id_comp, ← PresheafedSpace.stalkMap.comp f.hom ⟨g, gc⟩,
+    ← PresheafedSpace.stalkMap.comp f.hom ⟨g, hc⟩]
   congr 1
 
 end ConcreteCategory
@@ -934,3 +732,4 @@ end ConcreteCategory
 end SheafedSpace
 
 end AlgebraicGeometry
+

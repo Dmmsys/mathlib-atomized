@@ -47,92 +47,42 @@ variable [MonoidalClosed A]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `functorEnrichedHomCoyonedaObjEquiv` / `functorEnrichedHomCoyonedaObjEquiv` 的定义
+/-- Relation between `functorEnrichedHom` and `presheafHom`. -/
+/-
+**CategoryTheory.Presheaf.functorEnrichedHomCoyonedaObjEquiv** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：functorEnrichedHomCoyonedaObjEquiv (M : A) (F G : Cᵒᵖ ⥤ A) [HasFunctorEnri
+chedHom A F G] (X : C) : (functorEnrichedHom A F G ⋙ coyoneda.obj (op M)).obj (o
+p X) ≃ (presheafHom (F otimes (Functor.const _).obj M) G).obj (op X) where toFun
+ f
+参数：M : A；F G : Cᵒᵖ ⥤ A；X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEnrichedHomCoyonedaObjEquiv
-  signature: (M : A) (F G : Cᵒᵖ ⥤ A)
-  body: { app j := MonoidalClosed.uncurry (f ≫ enrichedHomπ A _ _ (Under.mk j.unop.hom.op))
-      naturality j j' φ := by
-        dsimp
-        rw [tensorHom_id]; rw [← uncurry_natural_right]; rw [← uncurry_pre_app]; rw [Category.assoc]; rw [Category.assoc]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
-        congr 2
-        exact (enrichedHom_condition A (Under.forget (op X) ⋙ F) (Under.forget (op X) ⋙ G)
-          (i := Under.mk j.unop.hom.op) (j := Under.mk j'.unop.hom.op)
-            (Under.homMk φ.unop.left.op (Quiver.Hom.unop_inj (by simp)))).symm }
-  invFun g :=
-    end_.lift (fun j => MonoidalClosed.curry (g.app (op (Over.mk j.hom.unop)))) (fun j j' φ => by
-      dsimp
-      rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]; rw [curry_pre_app]; rw [← curry_natural_right]
-      congr 1
-      let α : Over.mk j'.hom.unop ⟶ Over.mk j.hom.unop := Over.homMk φ.right.unop
-        (Quiver.Hom.op_inj (by simp))
-      simpa using! (g.naturality α.op).symm)
-  left_inv f := by
-    dsimp
-    ext j
-    dsimp
-    simp only [curry_uncurry, end_.lift_π]
-    rfl
-  right_inv g := by
-    dsimp
-    ext j
-    dsimp
-    simp only [uncurry_curry, end_.lift_π]
-    rfl
-
-中文:
-定义 functorEnrichedHomCoyonedaObjEquiv
-  签名: (M : A) (F G : Cᵒᵖ ⥤ A)
-  定义体: { app j := MonoidalClosed.uncurry (f ≫ enrichedHomπ A _ _ (Under.mk j.unop.hom.op))
-      naturality j j' φ := by
-        dsimp
-        rw [tensorHom_id]; rw [← uncurry_natural_right]; rw [← uncurry_pre_app]; rw [Category.assoc]; rw [Category.assoc]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
-        congr 2
-        exact (enrichedHom_condition A (Under.forget (op X) ⋙ F) (Under.forget (op X) ⋙ G)
-          (i := Under.mk j.unop.hom.op) (j := Under.mk j'.unop.hom.op)
-            (Under.homMk φ.unop.left.op (Quiver.Hom.unop_inj (by simp)))).symm }
-  invFun g :=
-    end_.lift (fun j => MonoidalClosed.curry (g.app (op (Over.mk j.hom.unop)))) (fun j j' φ => by
-      dsimp
-      rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]; rw [curry_pre_app]; rw [← curry_natural_right]
-      congr 1
-      let α : Over.mk j'.hom.unop ⟶ Over.mk j.hom.unop := Over.homMk φ.right.unop
-        (Quiver.Hom.op_inj (by simp))
-      simpa using! (g.naturality α.op).symm)
-  left_inv f := by
-    dsimp
-    ext j
-    dsimp
-    simp only [curry_uncurry, end_.lift_π]
-    rfl
-  right_inv g := by
-    dsimp
-    ext j
-    dsimp
-    simp only [uncurry_curry, end_.lift_π]
-    rfl
-
-Depends on / 依赖: Category, Category.assoc, MonoidalClosed, MonoidalClosed.uncurry, Under.forget, Under.homMk, Under.mk, enrichedHom_condition, enrichedOrdinaryCategorySelf_eHomWhiskerLeft, enrichedOrdinaryCategorySelf_eHomWhiskerRight, forget, j.unop.hom.op, naturality, tensorHom_id, uncurry, uncurry_natural_right, uncurry_pre_app, unop.hom.op
+--- 原说明 ---
+Relation between `functorEnrichedHom` and `presheafHom`.
 -/
 noncomputable def functorEnrichedHomCoyonedaObjEquiv (M : A) (F G : Cᵒᵖ ⥤ A)
     [HasFunctorEnrichedHom A F G] (X : C) :
     (functorEnrichedHom A F G ⋙ coyoneda.obj (op M)).obj (op X) ≃
-    (presheafHom (F otimes (Functor.const _).obj M) G).obj (op X) where
+    (presheafHom (F ⊗ (Functor.const _).obj M) G).obj (op X) where
   toFun f :=
     { app j := MonoidalClosed.uncurry (f ≫ enrichedHomπ A _ _ (Under.mk j.unop.hom.op))
       naturality j j' φ := by
         dsimp
-        rw [tensorHom_id]; rw [← uncurry_natural_right]; rw [← uncurry_pre_app]; rw [Category.assoc]; rw [Category.assoc]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
+        rw [tensorHom_id, ← uncurry_natural_right, ← uncurry_pre_app, Category.assoc,
+          Category.assoc, ← enrichedOrdinaryCategorySelf_eHomWhiskerRight,
+          ← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
         congr 2
         exact (enrichedHom_condition A (Under.forget (op X) ⋙ F) (Under.forget (op X) ⋙ G)
           (i := Under.mk j.unop.hom.op) (j := Under.mk j'.unop.hom.op)
             (Under.homMk φ.unop.left.op (Quiver.Hom.unop_inj (by simp)))).symm }
   invFun g :=
-    end_.lift (fun j => MonoidalClosed.curry (g.app (op (Over.mk j.hom.unop)))) (fun j j' φ => by
+    end_.lift (fun j ↦ MonoidalClosed.curry (g.app (op (Over.mk j.hom.unop)))) (fun j j' φ ↦ by
       dsimp
-      rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]; rw [curry_pre_app]; rw [← curry_natural_right]
+      rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight,
+        enrichedOrdinaryCategorySelf_eHomWhiskerLeft,
+        curry_pre_app, ← curry_natural_right]
       congr 1
       let α : Over.mk j'.hom.unop ⟶ Over.mk j.hom.unop := Over.homMk φ.right.unop
         (Quiver.Hom.op_inj (by simp))
@@ -152,26 +102,47 @@ noncomputable def functorEnrichedHomCoyonedaObjEquiv (M : A) (F G : Cᵒᵖ ⥤ 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `functorEnrichedHomCoyonedaObjEquiv_naturality` / 引理 `functorEnrichedHomCoyonedaObjEquiv_naturality`
-
-English:
-lemma functorEnrichedHomCoyonedaObjEquiv_naturality
-  proof: by
-  dsimp
-  ext ⟨j⟩
-  simp [functorEnrichedHomCoyonedaObjEquiv, presheafHom]
-  rfl
-
-中文:
-引理 functorEnrichedHomCoyonedaObjEquiv_naturality
-  证明: by
-  dsimp
-  ext ⟨j⟩
-  simp [functorEnrichedHomCoyonedaObjEquiv, presheafHom]
-  rfl
-
-Depends on / 依赖: functorEnrichedHomCoyonedaObjEquiv, presheafHom
+/-
+**CategoryTheory.Presheaf.functorEnrichedHomCoyonedaObjEquiv_naturality** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：functorEnrichedHomCoyonedaObjEquiv_naturality {M : A} {F G : Cᵒᵖ ⥤ A} {X Y
+ : C} (f : X ⟶ Y) [HasFunctorEnrichedHom A F G] (y : (functorEnrichedHom A F G ⋙
+ coyoneda.obj (op M)).obj (op Y)) : functorEnrichedHomCoyonedaObjEquiv M F G X (
+y ≫ precompEnrichedHom' _ (Under.map f.op) (Iso.refl _) (Iso.refl _)) = (preshea
+fHom (F otimes (Functor.const Cᵒᵖ).obj M) G).map f.op (functorEnrichedHomCoyoned
+aObjEquiv M F G Y y)
+参数：f : X ⟶ Y；y : (functorEnrichedHom A F G ⋙ coyoneda.obj (op M)).obj (op Y)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.end_.lift_π`：∀ {J : Type u} [inst : CategoryTheory
+.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C] 
+  {F : CategoryTheory.F…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.eHomWhiskerRight_id`：eHomWhiskerRight_id (X Y : C) : eHom
+WhiskerRight V (𝟙 X) Y = 𝟙 _
+· 使用引理 `CategoryTheory.eHomWhiskerLeft_id`：eHomWhiskerLeft_id (X Y : C) : eHomWh
+iskerLeft V X (𝟙 Y) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.NatTrans.mk.congr_simp`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   {F G : CategoryThe…
 -/
 lemma functorEnrichedHomCoyonedaObjEquiv_naturality
     {M : A} {F G : Cᵒᵖ ⥤ A} {X Y : C} (f : X ⟶ Y)
@@ -179,46 +150,42 @@ lemma functorEnrichedHomCoyonedaObjEquiv_naturality
     (y : (functorEnrichedHom A F G ⋙ coyoneda.obj (op M)).obj (op Y)) :
     functorEnrichedHomCoyonedaObjEquiv M F G X
       (y ≫ precompEnrichedHom' _ (Under.map f.op) (Iso.refl _) (Iso.refl _)) =
-    (presheafHom (F otimes (Functor.const Cᵒᵖ).obj M) G).map f.op
+    (presheafHom (F ⊗ (Functor.const Cᵒᵖ).obj M) G).map f.op
       (functorEnrichedHomCoyonedaObjEquiv M F G Y y) := by
   dsimp
   ext ⟨j⟩
   simp [functorEnrichedHomCoyonedaObjEquiv, presheafHom]
   rfl
-
-/--
-lemma `isSheaf_functorEnrichedHom` / 引理 `isSheaf_functorEnrichedHom`
-
-English:
-lemma isSheaf_functorEnrichedHom
-  statement: (F G : Cᵒᵖ ⥤ A) (hG : Presheaf.IsSheaf J G)
-  proof: fun M => by
-  rw [Presieve.isSheaf_iff_of_nat_equiv
-    (functorEnrichedHomCoyonedaObjEquiv M F G)
-    (fun _ _ _ _ => functorEnrichedHomCoyonedaObjEquiv_naturality _ _)]
-  rw [← isSheaf_iff_isSheaf_of_type]
-  exact Presheaf.IsSheaf.hom (F otimes (Functor.const _).obj M) G hG
-
-中文:
-引理 isSheaf_functorEnrichedHom
-  结论: (F G : Cᵒᵖ ⥤ A) (hG : 预层.是层 J G)
-  证明: fun M => by
-  rw [Presieve.isSheaf_iff_of_nat_equiv
-    (functorEnrichedHomCoyonedaObjEquiv M F G)
-    (fun _ _ _ _ => functorEnrichedHomCoyonedaObjEquiv_naturality _ _)]
-  rw [← isSheaf_iff_isSheaf_of_type]
-  exact Presheaf.IsSheaf.hom (F otimes (Functor.const _).obj M) G hG
-
-Depends on / 依赖: Functor, Functor.const, IsSheaf, Presheaf, Presheaf.IsSheaf.hom, Presieve, Presieve.isSheaf_iff_of_nat_equiv, functorEnrichedHomCoyonedaObjEquiv, functorEnrichedHomCoyonedaObjEquiv_naturality, isSheaf_iff_isSheaf_of_type, isSheaf_iff_of_nat_equiv, otimes
+/-
+**CategoryTheory.Presheaf.isSheaf_functorEnrichedHom** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Presheaf`。
+形式化陈述：isSheaf_functorEnrichedHom (F G : Cᵒᵖ ⥤ A) (hG : Presheaf.IsSheaf J G) [Ha
+sFunctorEnrichedHom A F G] : Presheaf.IsSheaf J (functorEnrichedHom A F G)
+参数：F G : Cᵒᵖ ⥤ A；hG : Presheaf.IsSheaf J G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Presieve.isSheaf_iff_of_nat_equiv`：isSheaf_iff_of_nat_equ
+iv : Presieve.IsSheaf J P₁ ↔ Presieve.IsSheaf J P₂
+· 使用引理 `CategoryTheory.Presheaf.functorEnrichedHomCoyonedaObjEquiv_naturality`：f
+unctorEnrichedHomCoyonedaObjEquiv_naturality {M : A} {F G : Cᵒᵖ ⥤ A} {X Y : C} (
+f : X ⟶ Y) [HasFunctorEnrichedHom A F G] (y : (functorEnric…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.isSheaf_iff_isSheaf_of_type`：isSheaf_iff_isSheaf_of_type 
+(P : Cᵒᵖ ⥤ Type w) : Presheaf.IsSheaf J P ↔ Presieve.IsSheaf J P
+· 使用定理 `CategoryTheory.Presheaf.IsSheaf.hom`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {J : CategoryTheory.GrothendieckTopology C} {A : Type u'} 
+  [inst_1 : CategoryTheor…
 -/
 lemma isSheaf_functorEnrichedHom (F G : Cᵒᵖ ⥤ A) (hG : Presheaf.IsSheaf J G)
     [HasFunctorEnrichedHom A F G] :
-    Presheaf.IsSheaf J (functorEnrichedHom A F G) := fun M => by
+    Presheaf.IsSheaf J (functorEnrichedHom A F G) := fun M ↦ by
   rw [Presieve.isSheaf_iff_of_nat_equiv
     (functorEnrichedHomCoyonedaObjEquiv M F G)
-    (fun _ _ _ _ => functorEnrichedHomCoyonedaObjEquiv_naturality _ _)]
+    (fun _ _ _ _ ↦ functorEnrichedHomCoyonedaObjEquiv_naturality _ _)]
   rw [← isSheaf_iff_isSheaf_of_type]
-  exact Presheaf.IsSheaf.hom (F otimes (Functor.const _).obj M) G hG
+  exact Presheaf.IsSheaf.hom (F ⊗ (Functor.const _).obj M) G hG
 
 end Presheaf
 
@@ -227,24 +194,26 @@ namespace GrothendieckTopology
 namespace W
 
 variable (J A) in
-/--
-lemma `transport_isMonoidal` / 引理 `transport_isMonoidal`
-
-English:
-lemma transport_isMonoidal
-  statement: {D : Type u₂} [Category.{v₂} D] (K : GrothendieckTopology D)
-  proof: by
-  rw [← J.W_inverseImage_whiskeringLeft K G]
-  infer_instance
-
-中文:
-引理 transport_isMonoidal
-  结论: {D : 类型u₂} [范畴.{v₂} D] (K : Grothendieck拓扑 D)
-  证明: by
-  rw [← J.W_inverseImage_whiskeringLeft K G]
-  infer_instance
-
-Depends on / 依赖: IsMonoidal
+/-
+**CategoryTheory.GrothendieckTopology.W.transport_isMonoidal** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.GrothendieckTopology.W`。
+形式化陈述：transport_isMonoidal {D : Type u₂} [Category.{v₂} D] (K : GrothendieckTopo
+logy D) (G : D ⥤ C) [G.IsCoverDense J] [G.Full] [G.IsContinuous K J] [(G.sheafPu
+shforwardContinuous A K J).EssSurj] [(K.W (A
+参数：K : GrothendieckTopology D；G : D ⥤ C；G.sheafPushforwardContinuous A K J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.GrothendieckTopology.W_inverseImage_whiskeringLeft`：W_inv
+erseImage_whiskeringLeft : K.W.inverseImage ((whiskeringLeft Dᵒᵖ Cᵒᵖ A).obj G.op
+) = J.W
+· 使用定理 `CategoryTheory.MorphismProperty.instIsMonoidalInverseImageOfMonoidalOfRe
+spectsIso`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (W : C
+ategoryTheory.MorphismProperty C)   [inst_1 : CategoryTheory.MonoidalCa…
+· 使用定理 `CategoryTheory.ObjectProperty.instRespectsIsoIsLocal`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.ObjectProperty 
+C),   P.isLocal.RespectsIso
 -/
 lemma transport_isMonoidal {D : Type u₂} [Category.{v₂} D] (K : GrothendieckTopology D)
     (G : D ⥤ C) [G.IsCoverDense J] [G.Full] [G.IsContinuous K J]
@@ -254,47 +223,43 @@ lemma transport_isMonoidal {D : Type u₂} [Category.{v₂} D] (K : Grothendieck
   infer_instance
 
 variable [MonoidalClosed A]
-  [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-  [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂]
+  [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+  [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂]
 
 open MonoidalClosed.FunctorCategory
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `whiskerLeft` / 引理 `whiskerLeft`
-
-English:
-lemma whiskerLeft
-  given: {G₁ G₂ : Cᵒᵖ ⥤ A} {g : G₁ ⟶ G₂} (hg : J.W g) (F : Cᵒᵖ ⥤ A)
-  proof: fun H h => by
-  have := hg _ (Presheaf.isSheaf_functorEnrichedHom F H h)
-  rw [← Function.Bijective.of_comp_iff' (f := MonoidalClosed.curry)
-    ((ihom.adjunction _).homEquiv _ _).bijective]
-  rw [← Function.Bijective.of_comp_iff (g := MonoidalClosed.curry) _
-    ((ihom.adjunction _).homEquiv _ _).bijective] at this
-  convert! this using 1
-  ext α : 1
-  dsimp
-  rw [curry_natural_left]
-
-中文:
-引理 whiskerLeft
-  条件: {G₁ G₂ : Cᵒᵖ ⥤ A} {g : G₁ ⟶ G₂} (hg : J.W g) (F : Cᵒᵖ ⥤ A)
-  证明: fun H h => by
-  have := hg _ (Presheaf.isSheaf_functorEnrichedHom F H h)
-  rw [← Function.Bijective.of_comp_iff' (f := MonoidalClosed.curry)
-    ((ihom.adjunction _).homEquiv _ _).bijective]
-  rw [← Function.Bijective.of_comp_iff (g := MonoidalClosed.curry) _
-    ((ihom.adjunction _).homEquiv _ _).bijective] at this
-  convert! this using 1
-  ext α : 1
-  dsimp
-  rw [curry_natural_left]
-
-Depends on / 依赖: Bijective, Function, Function.Bijective.of_comp_iff, MonoidalClosed, MonoidalClosed.curry, Presheaf, Presheaf.isSheaf_functorEnrichedHom, adjunction, bijective, convert, curry_natural_left, homEquiv, ihom.adjunction, isSheaf_functorEnrichedHom, of_comp_iff
+/-
+**CategoryTheory.GrothendieckTopology.W.whiskerLeft** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.GrothendieckTopology.W`。
+形式化陈述：whiskerLeft {G₁ G₂ : Cᵒᵖ ⥤ A} {g : G₁ ⟶ G₂} (hg : J.W g) (F : Cᵒᵖ ⥤ A) : J
+.W (F ◁ g)
+参数：hg : J.W g；F : Cᵒᵖ ⥤ A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Presheaf.isSheaf_functorEnrichedHom`：isSheaf_functorEnric
+hedHom (F G : Cᵒᵖ ⥤ A) (hG : Presheaf.IsSheaf J G) [HasFunctorEnrichedHom A F G]
+ : Presheaf.IsSheaf J (functorEnrichedHo…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Bijective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Bijective 
+(f ∘ g) ↔ Function.Bi…
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_natural_left`：curry_natural_left (f 
+: X ⟶ X') (g : A otimes X' ⟶ Y) : curry (_ ◁ f ≫ g) = f ≫ curry g
+· 使用定理 `Function.Bijective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Bijective (f 
+∘ g) ↔ Function.Bije…
 -/
 lemma whiskerLeft {G₁ G₂ : Cᵒᵖ ⥤ A} {g : G₁ ⟶ G₂} (hg : J.W g) (F : Cᵒᵖ ⥤ A) :
-    J.W (F ◁ g) := fun H h => by
+    J.W (F ◁ g) := fun H h ↦ by
   have := hg _ (Presheaf.isSheaf_functorEnrichedHom F H h)
   rw [← Function.Bijective.of_comp_iff' (f := MonoidalClosed.curry)
     ((ihom.adjunction _).homEquiv _ _).bijective]
@@ -306,42 +271,50 @@ lemma whiskerLeft {G₁ G₂ : Cᵒᵖ ⥤ A} {g : G₁ ⟶ G₂} (hg : J.W g) (
   rw [curry_natural_left]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `whiskerRight` / 引理 `whiskerRight`
-
-English:
-lemma whiskerRight
-  statement: [BraidedCategory A]
-  proof: (J.W.arrow_mk_iso_iff (Arrow.isoMk (β_ F₁ G) (β_ F₂ G))).2 (hf.whiskerLeft G)
-
-中文:
-引理 whiskerRight
-  结论: [辫范畴 A]
-  证明: (J.W.arrow_mk_iso_iff (Arrow.isoMk (β_ F₁ G) (β_ F₂ G))).2 (hf.whiskerLeft G)
-
-Depends on / 依赖: Arrow.isoMk, J.W.arrow_mk_iso_iff, arrow_mk_iso_iff, hf.whiskerLeft, whiskerLeft
+/-
+**CategoryTheory.GrothendieckTopology.W.whiskerRight** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.GrothendieckTopology.W`。
+形式化陈述：whiskerRight [BraidedCategory A] {F₁ F₂ : Cᵒᵖ ⥤ A} {f : F₁ ⟶ F₂} (hf : J.W
+ f) (G : Cᵒᵖ ⥤ A) : J.W (f ▷ G)
+参数：hf : J.W f；G : Cᵒᵖ ⥤ A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `CategoryTheory.ObjectProperty.instRespectsIsoIsLocal`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.ObjectProperty 
+C),   P.isLocal.RespectsIso
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.BraidedCategory.braiding_naturality_left`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.MonoidalCateg
+ory C}   [self : CategoryTheory.BraidedCatego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.GrothendieckTopology.W.whiskerLeft`：whiskerLeft {G₁ G₂ : 
+Cᵒᵖ ⥤ A} {g : G₁ ⟶ G₂} (hg : J.W g) (F : Cᵒᵖ ⥤ A) : J.W (F ◁ g)
 -/
 lemma whiskerRight [BraidedCategory A]
     {F₁ F₂ : Cᵒᵖ ⥤ A} {f : F₁ ⟶ F₂} (hf : J.W f) (G : Cᵒᵖ ⥤ A) :
     J.W (f ▷ G) :=
   (J.W.arrow_mk_iso_iff (Arrow.isoMk (β_ F₁ G) (β_ F₂ G))).2 (hf.whiskerLeft G)
-
-/--
-Instance `monoidal` / 实例 `monoidal`
-
-English:
-instance monoidal
-  signature: [BraidedCategory A]
-  body: hg.whiskerLeft F
-  whiskerRight _ hf G := hf.whiskerRight G
-
-中文:
-实例 monoidal
-  签名: [辫范畴 A]
-  定义体: hg.whiskerLeft F
-  whiskerRight _ hf G := hf.whiskerRight G
-
-Depends on / 依赖: IsMonoidal
+/-
+**CategoryTheory.GrothendieckTopology.W.monoidal** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.GrothendieckTopology.W`。
+形式化陈述：monoidal [BraidedCategory A] : (J.W (A
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.instIsMultiplicativeIsLocal`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.ObjectProp
+erty C),   P.isLocal.IsMultiplicative
+· 使用引理 `CategoryTheory.GrothendieckTopology.W.whiskerLeft`：whiskerLeft {G₁ G₂ : 
+Cᵒᵖ ⥤ A} {g : G₁ ⟶ G₂} (hg : J.W g) (F : Cᵒᵖ ⥤ A) : J.W (F ◁ g)
+· 使用引理 `CategoryTheory.GrothendieckTopology.W.whiskerRight`：whiskerRight [Braide
+dCategory A] {F₁ F₂ : Cᵒᵖ ⥤ A} {f : F₁ ⟶ F₂} (hf : J.W f) (G : Cᵒᵖ ⥤ A) : J.W (f
+ ▷ G)
 -/
 instance monoidal [BraidedCategory A] : (J.W (A := A)).IsMonoidal where
   whiskerLeft F _ _ _ hg := hg.whiskerLeft F
@@ -359,22 +332,16 @@ variable (J A)
 by localization of the monoidal category structure on the category
 of presheaves. -/
 @[instance_reducible]
-/--
-Definition of `monoidalCategory` / `monoidalCategory` 的定义
+/-
+**CategoryTheory.Sheaf.monoidalCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Sheaf`。
+形式化陈述：monoidalCategory [(J.W (A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monoidalCategory
-  signature: [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
-  body: inferInstanceAs (MonoidalCategory
-    (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
-
-中文:
-定义 monoidalCategory
-  签名: [(J.W (A := A)).是幺半群] [HasWeakSheafify J A]
-  定义体: inferInstanceAs (MonoidalCategory
-    (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
-
-Depends on / 依赖: HasWeakSheafify, IsMonoidal
+--- 原说明 ---
+The monoidal category structure on `Sheaf J A` that is obtained
+by localization of the monoidal category structure on the category
+of presheaves.
 -/
 noncomputable def monoidalCategory [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A] :
     MonoidalCategory (Sheaf J A) :=
@@ -386,22 +353,16 @@ attribute [local instance] monoidalCategory
 /-- The monoidal category structure on `Sheaf J A` obtained in `Sheaf.monoidalCategory` is
 braided when `A` is braided. -/
 @[instance_reducible]
-/--
-Definition of `braidedCategory` / `braidedCategory` 的定义
+/-
+**CategoryTheory.Sheaf.braidedCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Sheaf`。
+形式化陈述：braidedCategory [(J.W (A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition braidedCategory
-  signature: [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
-  body: inferInstanceAs (BraidedCategory
-    (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
-
-中文:
-定义 braidedCategory
-  签名: [(J.W (A := A)).是幺半群] [HasWeakSheafify J A]
-  定义体: inferInstanceAs (BraidedCategory
-    (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
-
-Depends on / 依赖: HasWeakSheafify, IsMonoidal
+--- 原说明 ---
+The monoidal category structure on `Sheaf J A` obtained in `Sheaf.monoidalCatego
+ry` is
+braided when `A` is braided.
 -/
 noncomputable def braidedCategory [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
     [BraidedCategory A] : BraidedCategory (Sheaf J A) :=
@@ -411,141 +372,71 @@ noncomputable def braidedCategory [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J
 /-- The monoidal category structure on `Sheaf J A` obtained in `Sheaf.monoidalCategory` is
 symmetric when `A` is symmetric. -/
 @[instance_reducible]
-/--
-Definition of `symmetricCategory` / `symmetricCategory` 的定义
+/-
+**CategoryTheory.Sheaf.symmetricCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Sheaf`。
+形式化陈述：symmetricCategory [(J.W (A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symmetricCategory
-  signature: [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
-  body: inferInstanceAs (SymmetricCategory
-    (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
-
-中文:
-定义 symmetricCategory
-  签名: [(J.W (A := A)).是幺半群] [HasWeakSheafify J A]
-  定义体: inferInstanceAs (SymmetricCategory
-    (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
-
-Depends on / 依赖: HasWeakSheafify, IsMonoidal
+--- 原说明 ---
+The monoidal category structure on `Sheaf J A` obtained in `Sheaf.monoidalCatego
+ry` is
+symmetric when `A` is symmetric.
 -/
 noncomputable def symmetricCategory [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A]
     [SymmetricCategory A] :
     SymmetricCategory (Sheaf J A) :=
   inferInstanceAs (SymmetricCategory
     (LocalizedMonoidal (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(J.W
-  signature: (A := A)).IsMonoidal] [HasWeakSheafify J A] :
-  body: inferInstanceAs (Localization.Monoidal.toMonoidalCategory
-    (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)).Monoidal
-
-中文:
-实例 [(J.W
-  签名: (A := A)).是幺半群] [HasWeakSheafify J A] :
-  定义体: inferInstanceAs (Localization.Monoidal.toMonoidalCategory
-    (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)).Monoidal
-
-Depends on / 依赖: HasWeakSheafify, IsMonoidal
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A] :
     (presheafToSheaf J A).Monoidal :=
   inferInstanceAs (Localization.Monoidal.toMonoidalCategory
     (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)).Monoidal
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(J.W
-  signature: (A := A)).IsMonoidal] [HasWeakSheafify J A] [BraidedCategory A] :
-  body: braidedCategory J A
-    (presheafToSheaf J A).Braided :=
-  inferInstanceAs (Localization.Monoidal.toMonoidalCategory
-    (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)).Braided
-
-noncomputable example
-    [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
-    MonoidalCategory (Sheaf J A) :=
-  monoidalCategory J A
-
-noncomputable example
-    [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
-    BraidedCategory (Sheaf J A) :=
-  braidedCategory J A
-
-noncomputable example
-    [HasWeakSheafify J A] [MonoidalClosed A] [SymmetricCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
-    SymmetricCategory (Sheaf J A) :=
-  symmetricCategory J A
-
-中文:
-实例 [(J.W
-  签名: (A := A)).是幺半群] [HasWeakSheafify J A] [辫范畴 A] :
-  定义体: braidedCategory J A
-    (presheafToSheaf J A).Braided :=
-  inferInstanceAs (Localization.Monoidal.toMonoidalCategory
-    (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)).Braided
-
-noncomputable example
-    [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
-    MonoidalCategory (Sheaf J A) :=
-  monoidalCategory J A
-
-noncomputable example
-    [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
-    BraidedCategory (Sheaf J A) :=
-  braidedCategory J A
-
-noncomputable example
-    [HasWeakSheafify J A] [MonoidalClosed A] [SymmetricCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
-    SymmetricCategory (Sheaf J A) :=
-  symmetricCategory J A
-
-Depends on / 依赖: BraidedCategory, HasWeakSheafify, IsMonoidal
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [(J.W (A := A)).IsMonoidal] [HasWeakSheafify J A] [BraidedCategory A] :
     letI := braidedCategory J A
     (presheafToSheaf J A).Braided :=
   inferInstanceAs (Localization.Monoidal.toMonoidalCategory
     (L := presheafToSheaf J A) (W := J.W) (Iso.refl _)).Braided
-
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example
     [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
     MonoidalCategory (Sheaf J A) :=
   monoidalCategory J A
-
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example
     [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
     BraidedCategory (Sheaf J A) :=
   braidedCategory J A
-
+/-
+**CategoryTheory.Sheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Sheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example
     [HasWeakSheafify J A] [MonoidalClosed A] [SymmetricCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [∀ (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
     SymmetricCategory (Sheaf J A) :=
   symmetricCategory J A
 
 end Sheaf
 
 end CategoryTheory
+

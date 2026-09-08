@@ -42,42 +42,56 @@ We use notation `𝕎 R`, entered `\bbW`, for the Witt vectors over `R`.
 
 noncomputable section
 
-/--
-Definition of `WittVector` / `WittVector` 的定义
+/-- `WittVector p R` is the ring of `p`-typical Witt vectors over the commutative ring `R`,
+where `p` is a prime number.
 
-English:
-structure WittVector
-  parameters: (p : Nat) (R : Type*)
-  (no additional axioms)
+If `p` is invertible in `R`, this ring is isomorphic to `ℕ → R` (the product of `ℕ` copies of `R`).
+If `R` is a ring of characteristic `p`, then `WittVector p R` is a ring of characteristic `0`.
+The canonical example is `WittVector p (ZMod p)`,
+which is isomorphic to the `p`-adic integers `ℤ_[p]`. -/
+/-
+**WittVector** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：ℕ → Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 Witt向量
-  参数: (p : 自然数) (R : 类型)
-  (无附加公理)
+--- 原说明 ---
+`WittVector p R` is the ring of `p`-typical Witt vectors over the commutative ri
+ng `R`,
+where `p` is a prime number.
+
+If `p` is invertible in `R`, this ring is isomorphic to `ℕ → R` (the product of 
+`ℕ` copies of `R`).
+If `R` is a ring of characteristic `p`, then `WittVector p R` is a ring of chara
+cteristic `0`.
+The canonical example is `WittVector p (ZMod p)`,
+which is isomorphic to the `p`-adic integers `ℤ_[p]`.
 -/
-structure WittVector (p : Nat) (R : Type*) where mk' ::
+structure WittVector (p : ℕ) (R : Type*) where mk' ::
   /-- `x.coeff n` is the `n`th coefficient of the Witt vector `x`.
 
   This concept does not have a standard name in the literature.
   -/
-  coeff : Nat -> R
+  coeff : ℕ → R
 
-/--
-Definition of `WittVector.mk` / `WittVector.mk` 的定义
+/-- Construct a Witt vector `mk p x : 𝕎 R` from a sequence `x` of elements of `R`.
 
-English:
-definition WittVector.mk
-  signature: (p : Nat) {R : Type*} (coeff : Nat -> R)
-  body: mk' coeff
-
-中文:
-定义 Witt向量.mk
-  签名: (p : 自然数) {R : 类型} (coeff : 自然数 -> R)
-  定义体: mk' coeff
+This is preferred over `WittVector.mk'` because it has `p` explicit.
 -/
-def WittVector.mk (p : Nat) {R : Type*} (coeff : Nat -> R) : WittVector p R := mk' coeff
+/-
+**WittVector.mk** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WittVector.mk (p : Nat) {R : Type*} (coeff : Nat -> R) : WittVector p R
+参数：p : Nat；coeff : Nat -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-variable {p : Nat}
+--- 原说明 ---
+Construct a Witt vector `mk p x : 𝕎 R` from a sequence `x` of elements of `R`.
+
+This is preferred over `WittVector.mk'` because it has `p` explicit.
+-/
+def WittVector.mk (p : ℕ) {R : Type*} (coeff : ℕ → R) : WittVector p R := mk' coeff
+
+variable {p : ℕ}
 
 /- We cannot make this `localized` notation, because the `p` on the RHS doesn't occur on the left
 Hiding the `p` in the notation is very convenient, so we opt for repeating the `local notation`
@@ -89,112 +103,73 @@ namespace WittVector
 variable {R : Type*}
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n)
-  statement: x = y
-  proof: by
-  cases x
-  cases y
-  simp only at h
-  simp [funext_iff, h]
-
-中文:
-定理 ext
-  条件: {x y : 𝕎 R} (h : 对任意 n, x.coeff n = y.coeff n)
-  结论: x = y
-  证明: by
-  cases x
-  cases y
-  simp only at h
-  simp [funext_iff, h]
-
-Depends on / 依赖: funext_iff
+/-
+**WittVector.ext** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : x = y
+参数：h : forall n, x.coeff n = y.coeff n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `WittVector.mk'.injEq`：∀ {p : ℕ} {R : Type u_1} (coeff coeff_1 : ℕ → R), 
+({ coeff := coeff } = { coeff := coeff_1 }) = (coeff = coeff_1)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : x = y := by
+theorem ext {x y : 𝕎 R} (h : ∀ n, x.coeff n = y.coeff n) : x = y := by
   cases x
   cases y
   simp only at h
   simp [funext_iff, h]
-
-/--
-theorem `coeff_surjective` / 定理 `coeff_surjective`
-
-English:
-theorem coeff_surjective
-  given: (n : Nat)
-  proof: fun x => ⟨(mk p fun _ => x), rfl⟩
-
-中文:
-定理 coeff_surjective
-  条件: (n : 自然数)
-  证明: fun x => ⟨(mk p fun _ => x), rfl⟩
+/-
+**WittVector.coeff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：coeff_surjective (n : Nat) : Function.Surjective (fun (x : 𝕎 R) => x.coeff
+ n)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coeff_surjective (n : Nat) :
-    Function.Surjective (fun (x : 𝕎 R) => x.coeff n) :=
-  fun x => ⟨(mk p fun _ => x), rfl⟩
+theorem coeff_surjective (n : ℕ) :
+    Function.Surjective (fun (x : 𝕎 R) ↦ x.coeff n) :=
+  fun x ↦ ⟨(mk p fun _ ↦ x), rfl⟩
 
 variable (p)
 
 @[simp]
-/--
-theorem `coeff_mk` / 定理 `coeff_mk`
-
-English:
-theorem coeff_mk
-  given: (x : Nat -> R)
-  statement: (mk p x).coeff = x
-  proof: rfl
-
-中文:
-定理 coeff_mk
-  条件: (x : 自然数 -> R)
-  结论: (mk p x).coeff = x
-  证明: rfl
+/-
+**WittVector.coeff_mk** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：coeff_mk (x : Nat -> R) : (mk p x).coeff = x
+参数：x : Nat -> R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coeff_mk (x : Nat -> R) : (mk p x).coeff = x :=
+theorem coeff_mk (x : ℕ → R) : (mk p x).coeff = x :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- These instances are not needed for the rest of the development,
+but it is interesting to establish early on that `WittVector p` is a lawful functor. -/
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Functor (WittVector p)
-  body: mk p (f ∘ v.coeff)
-  mapConst a _ := mk p fun _ => a
-
-中文:
-实例 :
-  签名: 函子 (Witt向量 p)
-  定义体: mk p (f ∘ v.coeff)
-  mapConst a _ := mk p fun _ => a
-
-Depends on / 依赖: v.coeff
+--- 原说明 ---
+These instances are not needed for the rest of the development,
+but it is interesting to establish early on that `WittVector p` is a lawful func
+tor.
 -/
 instance : Functor (WittVector p) where
   map f v := mk p (f ∘ v.coeff)
   mapConst a _ := mk p fun _ => a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulFunctor (WittVector p)
-  body: rfl
-  id_map _ := rfl
-  comp_map _ _ _ := rfl
-
-中文:
-实例 :
-  签名: Lawful函子 (Witt向量 p)
-  定义体: rfl
-  id_map _ := rfl
-  comp_map _ _ _ := rfl
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulFunctor (WittVector p) where
   map_const := rfl
@@ -207,415 +182,262 @@ open MvPolynomial
 
 section RingOperations
 
-/--
-Definition of `wittZero` / `wittZero` 的定义
+/-- The polynomials used for defining the element `0` of the ring of Witt vectors. -/
+/-
+**WittVector.wittZero** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittZero : Nat -> MvPolynomial (Fin 0 × Nat) Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittZero
-  signature: : Nat -> MvPolynomial (Fin 0 × Nat) Int
-  body: wittStructureInt p 0
-
-中文:
-定义 wittZero
-  签名: : 自然数 -> 多元多项式 (有限集 0 × 自然数) 整数
-  定义体: wittStructureInt p 0
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining the element `0` of the ring of Witt vectors.
 -/
-def wittZero : Nat -> MvPolynomial (Fin 0 × Nat) Int :=
+def wittZero : ℕ → MvPolynomial (Fin 0 × ℕ) ℤ :=
   wittStructureInt p 0
 
-/--
-Definition of `wittOne` / `wittOne` 的定义
+/-- The polynomials used for defining the element `1` of the ring of Witt vectors. -/
+/-
+**WittVector.wittOne** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittOne : Nat -> MvPolynomial (Fin 0 × Nat) Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittOne
-  signature: : Nat -> MvPolynomial (Fin 0 × Nat) Int
-  body: wittStructureInt p 1
-
-中文:
-定义 wittOne
-  签名: : 自然数 -> 多元多项式 (有限集 0 × 自然数) 整数
-  定义体: wittStructureInt p 1
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining the element `1` of the ring of Witt vectors.
 -/
-def wittOne : Nat -> MvPolynomial (Fin 0 × Nat) Int :=
+def wittOne : ℕ → MvPolynomial (Fin 0 × ℕ) ℤ :=
   wittStructureInt p 1
 
-/--
-Definition of `wittAdd` / `wittAdd` 的定义
+/-- The polynomials used for defining the addition of the ring of Witt vectors. -/
+/-
+**WittVector.wittAdd** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittAdd : Nat -> MvPolynomial (Fin 2 × Nat) Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittAdd
-  signature: : Nat -> MvPolynomial (Fin 2 × Nat) Int
-  body: wittStructureInt p (X 0 + X 1)
-
-中文:
-定义 wittAdd
-  签名: : 自然数 -> 多元多项式 (有限集 2 × 自然数) 整数
-  定义体: wittStructureInt p (X 0 + X 1)
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining the addition of the ring of Witt vectors.
 -/
-def wittAdd : Nat -> MvPolynomial (Fin 2 × Nat) Int :=
+def wittAdd : ℕ → MvPolynomial (Fin 2 × ℕ) ℤ :=
   wittStructureInt p (X 0 + X 1)
 
-/--
-Definition of `wittNSMul` / `wittNSMul` 的定义
+/-- The polynomials used for defining repeated addition of the ring of Witt vectors. -/
+/-
+**WittVector.wittNSMul** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittNSMul (n : Nat) : Nat -> MvPolynomial (Fin 1 × Nat) Int
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittNSMul
-  signature: (n : Nat)
-  body: wittStructureInt p (n • X (0 : (Fin 1)))
-
-中文:
-定义 wittNSMul
-  签名: (n : 自然数)
-  定义体: wittStructureInt p (n • X (0 : (Fin 1)))
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining repeated addition of the ring of Witt vectors.
 -/
-def wittNSMul (n : Nat) : Nat -> MvPolynomial (Fin 1 × Nat) Int :=
+def wittNSMul (n : ℕ) : ℕ → MvPolynomial (Fin 1 × ℕ) ℤ :=
   wittStructureInt p (n • X (0 : (Fin 1)))
 
-/--
-Definition of `wittZSMul` / `wittZSMul` 的定义
+/-- The polynomials used for defining repeated addition of the ring of Witt vectors. -/
+/-
+**WittVector.wittZSMul** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittZSMul (n : Int) : Nat -> MvPolynomial (Fin 1 × Nat) Int
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittZSMul
-  signature: (n : Int)
-  body: wittStructureInt p (n • X (0 : (Fin 1)))
-
-中文:
-定义 wittZSMul
-  签名: (n : 整数)
-  定义体: wittStructureInt p (n • X (0 : (Fin 1)))
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining repeated addition of the ring of Witt vectors.
 -/
-def wittZSMul (n : Int) : Nat -> MvPolynomial (Fin 1 × Nat) Int :=
+def wittZSMul (n : ℤ) : ℕ → MvPolynomial (Fin 1 × ℕ) ℤ :=
   wittStructureInt p (n • X (0 : (Fin 1)))
 
-/--
-Definition of `wittSub` / `wittSub` 的定义
+/-- The polynomials used for describing the subtraction of the ring of Witt vectors. -/
+/-
+**WittVector.wittSub** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittSub : Nat -> MvPolynomial (Fin 2 × Nat) Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittSub
-  signature: : Nat -> MvPolynomial (Fin 2 × Nat) Int
-  body: wittStructureInt p (X 0 - X 1)
-
-中文:
-定义 wittSub
-  签名: : 自然数 -> 多元多项式 (有限集 2 × 自然数) 整数
-  定义体: wittStructureInt p (X 0 - X 1)
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for describing the subtraction of the ring of Witt vectors.
 -/
-def wittSub : Nat -> MvPolynomial (Fin 2 × Nat) Int :=
+def wittSub : ℕ → MvPolynomial (Fin 2 × ℕ) ℤ :=
   wittStructureInt p (X 0 - X 1)
 
-/--
-Definition of `wittMul` / `wittMul` 的定义
+/-- The polynomials used for defining the multiplication of the ring of Witt vectors. -/
+/-
+**WittVector.wittMul** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittMul : Nat -> MvPolynomial (Fin 2 × Nat) Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittMul
-  signature: : Nat -> MvPolynomial (Fin 2 × Nat) Int
-  body: wittStructureInt p (X 0 * X 1)
-
-中文:
-定义 wittMul
-  签名: : 自然数 -> 多元多项式 (有限集 2 × 自然数) 整数
-  定义体: wittStructureInt p (X 0 * X 1)
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining the multiplication of the ring of Witt vectors
+.
 -/
-def wittMul : Nat -> MvPolynomial (Fin 2 × Nat) Int :=
+def wittMul : ℕ → MvPolynomial (Fin 2 × ℕ) ℤ :=
   wittStructureInt p (X 0 * X 1)
 
-/--
-Definition of `wittNeg` / `wittNeg` 的定义
+/-- The polynomials used for defining the negation of the ring of Witt vectors. -/
+/-
+**WittVector.wittNeg** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittNeg : Nat -> MvPolynomial (Fin 1 × Nat) Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittNeg
-  signature: : Nat -> MvPolynomial (Fin 1 × Nat) Int
-  body: wittStructureInt p (-X 0)
-
-中文:
-定义 wittNeg
-  签名: : 自然数 -> 多元多项式 (有限集 1 × 自然数) 整数
-  定义体: wittStructureInt p (-X 0)
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining the negation of the ring of Witt vectors.
 -/
-def wittNeg : Nat -> MvPolynomial (Fin 1 × Nat) Int :=
+def wittNeg : ℕ → MvPolynomial (Fin 1 × ℕ) ℤ :=
   wittStructureInt p (-X 0)
 
-/--
-Definition of `wittPow` / `wittPow` 的定义
+/-- The polynomials used for defining repeated addition of the ring of Witt vectors. -/
+/-
+**WittVector.wittPow** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：wittPow (n : Nat) : Nat -> MvPolynomial (Fin 1 × Nat) Int
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wittPow
-  signature: (n : Nat)
-  body: wittStructureInt p (X 0 ^ n)
-
-中文:
-定义 wittPow
-  签名: (n : 自然数)
-  定义体: wittStructureInt p (X 0 ^ n)
-
-Depends on / 依赖: wittStructureInt
+--- 原说明 ---
+The polynomials used for defining repeated addition of the ring of Witt vectors.
 -/
-def wittPow (n : Nat) : Nat -> MvPolynomial (Fin 1 × Nat) Int :=
+def wittPow (n : ℕ) : ℕ → MvPolynomial (Fin 1 × ℕ) ℤ :=
   wittStructureInt p (X 0 ^ n)
 
 variable {p}
 
 
-/--
-Definition of `peval` / `peval` 的定义
+/-- An auxiliary definition used in `WittVector.eval`.
+Evaluates a polynomial whose variables come from the disjoint union of `k` copies of `ℕ`,
+with a curried evaluation `x`.
+This can be defined more generally but we use only a specific instance here. -/
+/-
+**WittVector.peval** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：peval {k : Nat} (φ : MvPolynomial (Fin k × Nat) Int) (x : Fin k -> Nat -> 
+R) : R
+参数：φ : MvPolynomial (Fin k × Nat) Int；x : Fin k -> Nat -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition peval
-  signature: {k : Nat} (φ : MvPolynomial (Fin k × Nat) Int) (x : Fin k -> Nat -> R)
-  body: aeval (Function.uncurry x) φ
-
-中文:
-定义 peval
-  签名: {k : 自然数} (φ : 多元多项式 (有限集 k × 自然数) 整数) (x : 有限集 k -> 自然数 -> R)
-  定义体: aeval (Function.uncurry x) φ
-
-Depends on / 依赖: Function, Function.uncurry, uncurry
+--- 原说明 ---
+An auxiliary definition used in `WittVector.eval`.
+Evaluates a polynomial whose variables come from the disjoint union of `k` copie
+s of `ℕ`,
+with a curried evaluation `x`.
+This can be defined more generally but we use only a specific instance here.
 -/
-def peval {k : Nat} (φ : MvPolynomial (Fin k × Nat) Int) (x : Fin k -> Nat -> R) : R :=
+def peval {k : ℕ} (φ : MvPolynomial (Fin k × ℕ) ℤ) (x : Fin k → ℕ → R) : R :=
   aeval (Function.uncurry x) φ
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- Let `φ` be a family of polynomials, indexed by natural numbers, whose variables come from the
+disjoint union of `k` copies of `ℕ`, and let `xᵢ` be a Witt vector for `0 ≤ i < k`.
 
-English:
-definition eval
-  signature: {k : Nat} (φ : Nat -> MvPolynomial (Fin k × Nat) Int) (x : Fin k -> 𝕎 R)
-  body: mk p fun n => peval (φ n) fun i => (x i).coeff
+`eval φ x` evaluates `φ` mapping the variable `X_(i, n)` to the `n`th coefficient of `xᵢ`.
 
-中文:
-定义 eval
-  签名: {k : 自然数} (φ : 自然数 -> 多元多项式 (有限集 k × 自然数) 整数) (x : 有限集 k -> 𝕎 R)
-  定义体: mk p fun n => peval (φ n) fun i => (x i).coeff
+Instantiating `φ` with certain polynomials defined in
+`Mathlib/RingTheory/WittVector/StructurePolynomial.lean` establishes the
+ring operations on `𝕎 R`. For example, `WittVector.wittAdd` is such a `φ` with `k = 2`;
+evaluating this at `(x₀, x₁)` gives us the sum of two Witt vectors `x₀ + x₁`.
 -/
-def eval {k : Nat} (φ : Nat -> MvPolynomial (Fin k × Nat) Int) (x : Fin k -> 𝕎 R) : 𝕎 R :=
+/-
+**WittVector.eval** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：eval {k : Nat} (φ : Nat -> MvPolynomial (Fin k × Nat) Int) (x : Fin k -> 𝕎
+ R) : 𝕎 R
+参数：φ : Nat -> MvPolynomial (Fin k × Nat) Int；x : Fin k -> 𝕎 R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Let `φ` be a family of polynomials, indexed by natural numbers, whose variables 
+come from the
+disjoint union of `k` copies of `ℕ`, and let `xᵢ` be a Witt vector for `0 ≤ i < 
+k`.
+
+`eval φ x` evaluates `φ` mapping the variable `X_(i, n)` to the `n`th coefficien
+t of `xᵢ`.
+
+Instantiating `φ` with certain polynomials defined in
+`Mathlib/RingTheory/WittVector/StructurePolynomial.lean` establishes the
+ring operations on `𝕎 R`. For example, `WittVector.wittAdd` is such a `φ` with `
+k = 2`;
+evaluating this at `(x₀, x₁)` gives us the sum of two Witt vectors `x₀ + x₁`.
+-/
+def eval {k : ℕ} (φ : ℕ → MvPolynomial (Fin k × ℕ) ℤ) (x : Fin k → 𝕎 R) : 𝕎 R :=
   mk p fun n => peval (φ n) fun i => (x i).coeff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (𝕎 R)
-  body: ⟨eval (wittZero p) ![]⟩
-
-中文:
-实例 :
-  签名: 零 (𝕎 R)
-  定义体: ⟨eval (wittZero p) ![]⟩
-
-Depends on / 依赖: wittZero
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (𝕎 R) :=
   ⟨eval (wittZero p) ![]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (𝕎 R)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (𝕎 R)
-  定义体: ⟨0⟩
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (𝕎 R) :=
   ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (𝕎 R)
-  body: ⟨eval (wittOne p) ![]⟩
-
-中文:
-实例 :
-  签名: 幺 (𝕎 R)
-  定义体: ⟨eval (wittOne p) ![]⟩
-
-Depends on / 依赖: wittOne
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (𝕎 R) :=
   ⟨eval (wittOne p) ![]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (𝕎 R)
-  body: ⟨fun x y => eval (wittAdd p) ![x, y]⟩
-
-中文:
-实例 :
-  签名: 加法 (𝕎 R)
-  定义体: ⟨fun x y => eval (wittAdd p) ![x, y]⟩
-
-Depends on / 依赖: wittAdd
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (𝕎 R) :=
   ⟨fun x y => eval (wittAdd p) ![x, y]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (𝕎 R)
-  body: ⟨fun x y => eval (wittSub p) ![x, y]⟩
-
-中文:
-实例 :
-  签名: 减法 (𝕎 R)
-  定义体: ⟨fun x y => eval (wittSub p) ![x, y]⟩
-
-Depends on / 依赖: wittSub
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (𝕎 R) :=
   ⟨fun x y => eval (wittSub p) ![x, y]⟩
-
-/--
-Instance `hasNatScalar` / 实例 `hasNatScalar`
-
-English:
-instance hasNatScalar
-  signature: : SMul Nat (𝕎 R)
-  body: ⟨fun n x => eval (wittNSMul p n) ![x]⟩
-
-中文:
-实例 has自然数Scalar
-  签名: : 标量乘法 自然数 (𝕎 R)
-  定义体: ⟨fun n x => eval (wittNSMul p n) ![x]⟩
-
-Depends on / 依赖: wittNSMul
+/-
+**WittVector.hasNatScalar** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：hasNatScalar : SMul Nat (𝕎 R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance hasNatScalar : SMul Nat (𝕎 R) :=
+instance hasNatScalar : SMul ℕ (𝕎 R) :=
   ⟨fun n x => eval (wittNSMul p n) ![x]⟩
-
-/--
-Instance `hasIntScalar` / 实例 `hasIntScalar`
-
-English:
-instance hasIntScalar
-  signature: : SMul Int (𝕎 R)
-  body: ⟨fun n x => eval (wittZSMul p n) ![x]⟩
-
-中文:
-实例 has整数Scalar
-  签名: : 标量乘法 整数 (𝕎 R)
-  定义体: ⟨fun n x => eval (wittZSMul p n) ![x]⟩
-
-Depends on / 依赖: wittZSMul
+/-
+**WittVector.hasIntScalar** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：hasIntScalar : SMul Int (𝕎 R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance hasIntScalar : SMul Int (𝕎 R) :=
+instance hasIntScalar : SMul ℤ (𝕎 R) :=
   ⟨fun n x => eval (wittZSMul p n) ![x]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (𝕎 R)
-  body: ⟨fun x y => eval (wittMul p) ![x, y]⟩
-
-中文:
-实例 :
-  签名: 乘法 (𝕎 R)
-  定义体: ⟨fun x y => eval (wittMul p) ![x, y]⟩
-
-Depends on / 依赖: wittMul
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (𝕎 R) :=
   ⟨fun x y => eval (wittMul p) ![x, y]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (𝕎 R)
-  body: ⟨fun x => eval (wittNeg p) ![x]⟩
-
-中文:
-实例 :
-  签名: 取负 (𝕎 R)
-  定义体: ⟨fun x => eval (wittNeg p) ![x]⟩
-
-Depends on / 依赖: wittNeg
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (𝕎 R) :=
   ⟨fun x => eval (wittNeg p) ![x]⟩
-
-/--
-Instance `hasNatPow` / 实例 `hasNatPow`
-
-English:
-instance hasNatPow
-  signature: : Pow (𝕎 R) Nat
-  body: ⟨fun x n => eval (wittPow p n) ![x]⟩
-
-中文:
-实例 has自然数Pow
-  签名: : 幂 (𝕎 R) 自然数
-  定义体: ⟨fun x n => eval (wittPow p n) ![x]⟩
-
-Depends on / 依赖: wittPow
+/-
+**WittVector.hasNatPow** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：hasNatPow : Pow (𝕎 R) Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance hasNatPow : Pow (𝕎 R) Nat :=
+instance hasNatPow : Pow (𝕎 R) ℕ :=
   ⟨fun x n => eval (wittPow p n) ![x]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatCast (𝕎 R)
-  body: ⟨Nat.unaryCast⟩
-
-中文:
-实例 :
-  签名: 自然数嵌入 (𝕎 R)
-  定义体: ⟨Nat.unaryCast⟩
-
-Depends on / 依赖: Nat.unaryCast, unaryCast
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatCast (𝕎 R) :=
   ⟨Nat.unaryCast⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IntCast (𝕎 R)
-  body: ⟨Int.castDef⟩
-
-中文:
-实例 :
-  签名: 整数嵌入 (𝕎 R)
-  定义体: ⟨Int.castDef⟩
-
-Depends on / 依赖: Int.castDef, castDef
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IntCast (𝕎 R) :=
   ⟨Int.castDef⟩
@@ -625,432 +447,583 @@ end RingOperations
 section WittStructureSimplifications
 
 @[simp]
-/--
-theorem `wittZero_eq_zero` / 定理 `wittZero_eq_zero`
-
-English:
-theorem wittZero_eq_zero
-  given: (n : Nat)
-  statement: wittZero p n = 0
-  proof: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittZero, wittStructureRat, bind₁, aeval_zero', constantCoeff_xInTermsOfW, map_zero,
-    map_wittStructureInt]
-
-@[simp]
-
-中文:
-定理 wittZero_eq_zero
-  条件: (n : 自然数)
-  结论: wittZero p n = 0
-  证明: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittZero, wittStructureRat, bind₁, aeval_zero', constantCoeff_xInTermsOfW, map_zero,
-    map_wittStructureInt]
-
-@[simp]
-
-Depends on / 依赖: Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, aeval_zero, castRingHom, cast_injective, constantCoeff_xInTermsOfW, map_injective, map_wittStructureInt, map_zero, wittStructureRat, wittZero
+/-
+**WittVector.wittZero_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittZero_eq_zero (n : Nat) : wittZero p n = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_wittStructureInt`：map_wittStructureInt (Φ : MvPolynomial idx Int) (n
+ : Nat) : map (Int.castRingHom Rat) (wittStructureInt p Φ n) = wittStructureRat 
+p (map (In…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `MvPolynomial.aeval_zero'`：aeval_zero' (p : MvPolynomial σ R) : aeval (fu
+n _ => 0 : σ -> S₁) p = algebraMap _ _ (constantCoeff p)
+· 使用定理 `constantCoeff_xInTermsOfW`：constantCoeff_xInTermsOfW [hp : Fact p.Prime]
+ [Invertible (p : R)] (n : Nat) : constantCoeff (xInTermsOfW p R n) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem wittZero_eq_zero (n : Nat) : wittZero p n = 0 := by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+theorem wittZero_eq_zero (n : ℕ) : wittZero p n = 0 := by
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   simp only [wittZero, wittStructureRat, bind₁, aeval_zero', constantCoeff_xInTermsOfW, map_zero,
     map_wittStructureInt]
 
 @[simp]
-/--
-theorem `wittOne_zero_eq_one` / 定理 `wittOne_zero_eq_one`
-
-English:
-theorem wittOne_zero_eq_one
-  statement: wittOne p 0 = 1
-  proof: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittOne, wittStructureRat, xInTermsOfW_zero, map_one, bind₁_X_right,
-    map_wittStructureInt]
-
-@[simp]
-
-中文:
-定理 wittOne_zero_eq_one
-  结论: wittOne p 0 = 1
-  证明: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittOne, wittStructureRat, xInTermsOfW_zero, map_one, bind₁_X_right,
-    map_wittStructureInt]
-
-@[simp]
-
-Depends on / 依赖: Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, castRingHom, cast_injective, map_injective, map_one, map_wittStructureInt, wittOne, wittStructureRat, xInTermsOfW_zero
+/-
+**WittVector.wittOne_zero_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittOne_zero_eq_one : wittOne p 0 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_wittStructureInt`：map_wittStructureInt (Φ : MvPolynomial idx Int) (n
+ : Nat) : map (Int.castRingHom Rat) (wittStructureInt p Φ n) = wittStructureRat 
+p (map (In…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `xInTermsOfW_zero`：xInTermsOfW_zero [Invertible (p : R)] : xInTermsOfW p 
+R 0 = X 0
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wittOne_zero_eq_one : wittOne p 0 = 1 := by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   simp only [wittOne, wittStructureRat, xInTermsOfW_zero, map_one, bind₁_X_right,
     map_wittStructureInt]
 
 @[simp]
-/--
-theorem `wittOne_pos_eq_zero` / 定理 `wittOne_pos_eq_zero`
-
-English:
-theorem wittOne_pos_eq_zero
-  given: (n : Nat) (hn : 0 < n)
-  statement: wittOne p n = 0
-  proof: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittOne, wittStructureRat, map_zero, map_one, map_wittStructureInt]
-  induction n using Nat.strong_induction_on with | h n IH => ?_
-  rw [xInTermsOfW_eq]
-  simp only [map_mul, map_sub, map_sum, map_pow, bind₁_X_right,
-    bind₁_C_right]
-  rw [sub_mul]; rw [one_mul]
-  rw [Finset.sum_eq_single 0]
-  · simp only [one_mul, pow_zero]
-    simp only [one_pow, one_mul, xInTermsOfW_zero, sub_self, bind₁_X_right]
-  · intro i hin hi0
-    rw [Finset.mem_range] at hin
-    rw [IH _ hin (Nat.pos_of_ne_zero hi0)]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]
-  · grind
-
-@[simp]
-
-中文:
-定理 wittOne_pos_eq_zero
-  条件: (n : 自然数) (hn : 0 < n)
-  结论: wittOne p n = 0
-  证明: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittOne, wittStructureRat, map_zero, map_one, map_wittStructureInt]
-  induction n using Nat.strong_induction_on with | h n IH => ?_
-  rw [xInTermsOfW_eq]
-  simp only [map_mul, map_sub, map_sum, map_pow, bind₁_X_right,
-    bind₁_C_right]
-  rw [sub_mul]; rw [one_mul]
-  rw [Finset.sum_eq_single 0]
-  · simp only [one_mul, pow_zero]
-    simp only [one_pow, one_mul, xInTermsOfW_zero, sub_self, bind₁_X_right]
-  · intro i hin hi0
-    rw [Finset.mem_range] at hin
-    rw [IH _ hin (Nat.pos_of_ne_zero hi0)]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]
-  · grind
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, Nat.strong_induction_on, castRingHom, cast_injective, map_injective, map_mul, map_one, map_pow, map_sub, map_sum, map_wittStructureInt, map_zero, one_mul, one_pow, pow_zero
+/-
+**WittVector.wittOne_pos_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittOne_pos_eq_zero (n : Nat) (hn : 0 < n) : wittOne p n = 0
+参数：n : Nat；hn : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_wittStructureInt`：map_wittStructureInt (Φ : MvPolynomial idx Int) (n
+ : Nat) : map (Int.castRingHom Rat) (wittStructureInt p Φ n) = wittStructureRat 
+p (map (In…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `Nat.strong_induction_on`：∀ {p : ℕ → Prop} (n : ℕ), (∀ (n : ℕ), (∀ m < n,
+ p m) → p n) → p n
+· 使用定理 `xInTermsOfW_eq`：xInTermsOfW_eq [Invertible (p : R)] {n : Nat} : xInTerms
+OfW p R n = (X n - ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n 
+- i)…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `MvPolynomial.bind₁_C_right`：bind₁_C_right (f : σ -> MvPolynomial τ R) (x
+) : bind₁ f (C x) = C x
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+（共 47 条，此处仅展示前 30 条）
 -/
-theorem wittOne_pos_eq_zero (n : Nat) (hn : 0 < n) : wittOne p n = 0 := by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+theorem wittOne_pos_eq_zero (n : ℕ) (hn : 0 < n) : wittOne p n = 0 := by
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   simp only [wittOne, wittStructureRat, map_zero, map_one, map_wittStructureInt]
   induction n using Nat.strong_induction_on with | h n IH => ?_
   rw [xInTermsOfW_eq]
   simp only [map_mul, map_sub, map_sum, map_pow, bind₁_X_right,
     bind₁_C_right]
-  rw [sub_mul]; rw [one_mul]
+  rw [sub_mul, one_mul]
   rw [Finset.sum_eq_single 0]
   · simp only [one_mul, pow_zero]
     simp only [one_pow, one_mul, xInTermsOfW_zero, sub_self, bind₁_X_right]
   · intro i hin hi0
     rw [Finset.mem_range] at hin
-    rw [IH _ hin (Nat.pos_of_ne_zero hi0)]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]
+    rw [IH _ hin (Nat.pos_of_ne_zero hi0), zero_pow (pow_ne_zero _ hp.1.ne_zero), mul_zero]
   · grind
 
 @[simp]
-/--
-theorem `wittAdd_zero` / 定理 `wittAdd_zero`
-
-English:
-theorem wittAdd_zero
-  statement: wittAdd p 0 = X (0, 0) + X (1, 0)
-  proof: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittAdd, wittStructureRat, map_add, rename_X, xInTermsOfW_zero, map_X,
-    wittPolynomial_zero, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-中文:
-定理 wittAdd_zero
-  结论: wittAdd p 0 = X (0, 0) + X (1, 0)
-  证明: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittAdd, wittStructureRat, map_add, rename_X, xInTermsOfW_zero, map_X,
-    wittPolynomial_zero, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-Depends on / 依赖: Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, castRingHom, cast_injective, map_X, map_add, map_injective, map_wittStructureInt, rename_X, wittAdd, wittPolynomial_zero, wittStructureRat, xInTermsOfW_zero
+/-
+**WittVector.wittAdd_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittAdd_zero : wittAdd p 0 = X (0, 0) + X (1, 0)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_wittStructureInt`：map_wittStructureInt (Φ : MvPolynomial idx Int) (n
+ : Nat) : map (Int.castRingHom Rat) (wittStructureInt p Φ n) = wittStructureRat 
+p (map (In…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `MvPolynomial.map_X`：map_X (n : σ) : map f (X n : MvPolynomial σ R) = X n
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
+· 使用定理 `xInTermsOfW_zero`：xInTermsOfW_zero [Invertible (p : R)] : xInTermsOfW p 
+R 0 = X 0
+· 使用定理 `wittPolynomial_zero`：wittPolynomial_zero : wittPolynomial p R 0 = X 0
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wittAdd_zero : wittAdd p 0 = X (0, 0) + X (1, 0) := by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   simp only [wittAdd, wittStructureRat, map_add, rename_X, xInTermsOfW_zero, map_X,
     wittPolynomial_zero, bind₁_X_right, map_wittStructureInt]
 
 @[simp]
-/--
-theorem `wittSub_zero` / 定理 `wittSub_zero`
-
-English:
-theorem wittSub_zero
-  statement: wittSub p 0 = X (0, 0) - X (1, 0)
-  proof: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittSub, wittStructureRat, map_sub, rename_X, xInTermsOfW_zero, map_X,
-    wittPolynomial_zero, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-中文:
-定理 wittSub_zero
-  结论: wittSub p 0 = X (0, 0) - X (1, 0)
-  证明: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittSub, wittStructureRat, map_sub, rename_X, xInTermsOfW_zero, map_X,
-    wittPolynomial_zero, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-Depends on / 依赖: Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, castRingHom, cast_injective, map_X, map_injective, map_sub, map_wittStructureInt, rename_X, wittPolynomial_zero, wittStructureRat, wittSub, xInTermsOfW_zero
+/-
+**WittVector.wittSub_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittSub_zero : wittSub p 0 = X (0, 0) - X (1, 0)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_wittStructureInt`：map_wittStructureInt (Φ : MvPolynomial idx Int) (n
+ : Nat) : map (Int.castRingHom Rat) (wittStructureInt p Φ n) = wittStructureRat 
+p (map (In…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `MvPolynomial.map_X`：map_X (n : σ) : map f (X n : MvPolynomial σ R) = X n
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
+· 使用定理 `xInTermsOfW_zero`：xInTermsOfW_zero [Invertible (p : R)] : xInTermsOfW p 
+R 0 = X 0
+· 使用定理 `wittPolynomial_zero`：wittPolynomial_zero : wittPolynomial p R 0 = X 0
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wittSub_zero : wittSub p 0 = X (0, 0) - X (1, 0) := by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   simp only [wittSub, wittStructureRat, map_sub, rename_X, xInTermsOfW_zero, map_X,
     wittPolynomial_zero, bind₁_X_right, map_wittStructureInt]
 
 @[simp]
-/--
-theorem `wittMul_zero` / 定理 `wittMul_zero`
-
-English:
-theorem wittMul_zero
-  statement: wittMul p 0 = X (0, 0) * X (1, 0)
-  proof: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittMul, wittStructureRat, rename_X, xInTermsOfW_zero, map_X, wittPolynomial_zero,
-    map_mul, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-中文:
-定理 wittMul_zero
-  结论: wittMul p 0 = X (0, 0) * X (1, 0)
-  证明: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittMul, wittStructureRat, rename_X, xInTermsOfW_zero, map_X, wittPolynomial_zero,
-    map_mul, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-Depends on / 依赖: Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, castRingHom, cast_injective, map_X, map_injective, map_mul, map_wittStructureInt, rename_X, wittMul, wittPolynomial_zero, wittStructureRat, xInTermsOfW_zero
+/-
+**WittVector.wittMul_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittMul_zero : wittMul p 0 = X (0, 0) * X (1, 0)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_wittStructureInt`：map_wittStructureInt (Φ : MvPolynomial idx Int) (n
+ : Nat) : map (Int.castRingHom Rat) (wittStructureInt p Φ n) = wittStructureRat 
+p (map (In…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `MvPolynomial.map_X`：map_X (n : σ) : map f (X n : MvPolynomial σ R) = X n
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
+· 使用定理 `xInTermsOfW_zero`：xInTermsOfW_zero [Invertible (p : R)] : xInTermsOfW p 
+R 0 = X 0
+· 使用定理 `wittPolynomial_zero`：wittPolynomial_zero : wittPolynomial p R 0 = X 0
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wittMul_zero : wittMul p 0 = X (0, 0) * X (1, 0) := by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   simp only [wittMul, wittStructureRat, rename_X, xInTermsOfW_zero, map_X, wittPolynomial_zero,
     map_mul, bind₁_X_right, map_wittStructureInt]
 
 @[simp]
-/--
-theorem `wittNeg_zero` / 定理 `wittNeg_zero`
-
-English:
-theorem wittNeg_zero
-  statement: wittNeg p 0 = -X (0, 0)
-  proof: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittNeg, wittStructureRat, rename_X, xInTermsOfW_zero, map_X, wittPolynomial_zero,
-    map_neg, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-中文:
-定理 wittNeg_zero
-  结论: wittNeg p 0 = -X (0, 0)
-  证明: by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  simp only [wittNeg, wittStructureRat, rename_X, xInTermsOfW_zero, map_X, wittPolynomial_zero,
-    map_neg, bind₁_X_right, map_wittStructureInt]
-
-@[simp]
-
-Depends on / 依赖: Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, castRingHom, cast_injective, map_X, map_injective, map_neg, map_wittStructureInt, rename_X, wittNeg, wittPolynomial_zero, wittStructureRat, xInTermsOfW_zero
+/-
+**WittVector.wittNeg_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittNeg_zero : wittNeg p 0 = -X (0, 0)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_wittStructureInt`：map_wittStructureInt (Φ : MvPolynomial idx Int) (n
+ : Nat) : map (Int.castRingHom Rat) (wittStructureInt p Φ n) = wittStructureRat 
+p (map (In…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `MvPolynomial.map_X`：map_X (n : σ) : map f (X n : MvPolynomial σ R) = X n
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
+· 使用定理 `xInTermsOfW_zero`：xInTermsOfW_zero [Invertible (p : R)] : xInTermsOfW p 
+R 0 = X 0
+· 使用定理 `wittPolynomial_zero`：wittPolynomial_zero : wittPolynomial p R 0 = X 0
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wittNeg_zero : wittNeg p 0 = -X (0, 0) := by
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   simp only [wittNeg, wittStructureRat, rename_X, xInTermsOfW_zero, map_X, wittPolynomial_zero,
     map_neg, bind₁_X_right, map_wittStructureInt]
 
 @[simp]
-/--
-theorem `constantCoeff_wittAdd` / 定理 `constantCoeff_wittAdd`
-
-English:
-theorem constantCoeff_wittAdd
-  given: (n : Nat)
-  statement: constantCoeff (wittAdd p n) = 0
-  proof: by
+/-
+**WittVector.constantCoeff_wittAdd** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：constantCoeff_wittAdd (n : Nat) : constantCoeff (wittAdd p n) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `constantCoeff_wittStructureInt`：constantCoeff_wittStructureInt (Φ : MvPo
+lynomial idx Int) (h : constantCoeff Φ = 0) (n : Nat) : constantCoeff (wittStruc
+tureInt p Φ n) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem constantCoeff_wittAdd (n : ℕ) : constantCoeff (wittAdd p n) = 0 := by
   apply constantCoeff_wittStructureInt p _ _ n
   simp only [add_zero, map_add, constantCoeff_X]
 
 @[simp]
-
-中文:
-定理 constantCoeff_wittAdd
-  条件: (n : 自然数)
-  结论: constantCoeff (wittAdd p n) = 0
-  证明: by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [add_zero, map_add, constantCoeff_X]
-
-@[simp]
-
-Depends on / 依赖: add_zero, constantCoeff_X, constantCoeff_wittStructureInt, map_add
+/-
+**WittVector.constantCoeff_wittSub** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：constantCoeff_wittSub (n : Nat) : constantCoeff (wittSub p n) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `constantCoeff_wittStructureInt`：constantCoeff_wittStructureInt (Φ : MvPo
+lynomial idx Int) (h : constantCoeff Φ = 0) (n : Nat) : constantCoeff (wittStruc
+tureInt p Φ n) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem constantCoeff_wittAdd (n : Nat) : constantCoeff (wittAdd p n) = 0 := by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [add_zero, map_add, constantCoeff_X]
-
-@[simp]
-/--
-theorem `constantCoeff_wittSub` / 定理 `constantCoeff_wittSub`
-
-English:
-theorem constantCoeff_wittSub
-  given: (n : Nat)
-  statement: constantCoeff (wittSub p n) = 0
-  proof: by
+theorem constantCoeff_wittSub (n : ℕ) : constantCoeff (wittSub p n) = 0 := by
   apply constantCoeff_wittStructureInt p _ _ n
   simp only [sub_zero, map_sub, constantCoeff_X]
 
 @[simp]
-
-中文:
-定理 constantCoeff_wittSub
-  条件: (n : 自然数)
-  结论: constantCoeff (wittSub p n) = 0
-  证明: by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [sub_zero, map_sub, constantCoeff_X]
-
-@[simp]
-
-Depends on / 依赖: constantCoeff_X, constantCoeff_wittStructureInt, map_sub, sub_zero
+/-
+**WittVector.constantCoeff_wittMul** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：constantCoeff_wittMul (n : Nat) : constantCoeff (wittMul p n) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `constantCoeff_wittStructureInt`：constantCoeff_wittStructureInt (Φ : MvPo
+lynomial idx Int) (h : constantCoeff Φ = 0) (n : Nat) : constantCoeff (wittStruc
+tureInt p Φ n) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem constantCoeff_wittSub (n : Nat) : constantCoeff (wittSub p n) = 0 := by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [sub_zero, map_sub, constantCoeff_X]
-
-@[simp]
-/--
-theorem `constantCoeff_wittMul` / 定理 `constantCoeff_wittMul`
-
-English:
-theorem constantCoeff_wittMul
-  given: (n : Nat)
-  statement: constantCoeff (wittMul p n) = 0
-  proof: by
+theorem constantCoeff_wittMul (n : ℕ) : constantCoeff (wittMul p n) = 0 := by
   apply constantCoeff_wittStructureInt p _ _ n
   simp only [mul_zero, map_mul, constantCoeff_X]
 
 @[simp]
-
-中文:
-定理 constantCoeff_wittMul
-  条件: (n : 自然数)
-  结论: constantCoeff (wittMul p n) = 0
-  证明: by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [mul_zero, map_mul, constantCoeff_X]
-
-@[simp]
-
-Depends on / 依赖: constantCoeff_X, constantCoeff_wittStructureInt, map_mul, mul_zero
+/-
+**WittVector.constantCoeff_wittNeg** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：constantCoeff_wittNeg (n : Nat) : constantCoeff (wittNeg p n) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `constantCoeff_wittStructureInt`：constantCoeff_wittStructureInt (Φ : MvPo
+lynomial idx Int) (h : constantCoeff Φ = 0) (n : Nat) : constantCoeff (wittStruc
+tureInt p Φ n) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem constantCoeff_wittMul (n : Nat) : constantCoeff (wittMul p n) = 0 := by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [mul_zero, map_mul, constantCoeff_X]
-
-@[simp]
-/--
-theorem `constantCoeff_wittNeg` / 定理 `constantCoeff_wittNeg`
-
-English:
-theorem constantCoeff_wittNeg
-  given: (n : Nat)
-  statement: constantCoeff (wittNeg p n) = 0
-  proof: by
+theorem constantCoeff_wittNeg (n : ℕ) : constantCoeff (wittNeg p n) = 0 := by
   apply constantCoeff_wittStructureInt p _ _ n
   simp only [neg_zero, map_neg, constantCoeff_X]
 
 @[simp]
-
-中文:
-定理 constantCoeff_wittNeg
-  条件: (n : 自然数)
-  结论: constantCoeff (wittNeg p n) = 0
-  证明: by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [neg_zero, map_neg, constantCoeff_X]
-
-@[simp]
-
-Depends on / 依赖: constantCoeff_X, constantCoeff_wittStructureInt, map_neg, neg_zero
+/-
+**WittVector.constantCoeff_wittNSMul** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：constantCoeff_wittNSMul (m : Nat) (n : Nat) : constantCoeff (wittNSMul p m
+ n) = 0
+参数：m : Nat；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `constantCoeff_wittStructureInt`：constantCoeff_wittStructureInt (Φ : MvPo
+lynomial idx Int) (h : constantCoeff Φ = 0) (n : Nat) : constantCoeff (wittStruc
+tureInt p Φ n) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_nsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddMonoid G] [inst_2 : AddMonoid H]   [AddMonoidHomClass F G…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem constantCoeff_wittNeg (n : Nat) : constantCoeff (wittNeg p n) = 0 := by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [neg_zero, map_neg, constantCoeff_X]
-
-@[simp]
-/--
-theorem `constantCoeff_wittNSMul` / 定理 `constantCoeff_wittNSMul`
-
-English:
-theorem constantCoeff_wittNSMul
-  given: (m : Nat) (n : Nat)
-  statement: constantCoeff (wittNSMul p m n) = 0
-  proof: by
+theorem constantCoeff_wittNSMul (m : ℕ) (n : ℕ) : constantCoeff (wittNSMul p m n) = 0 := by
   apply constantCoeff_wittStructureInt p _ _ n
   simp only [smul_zero, map_nsmul, constantCoeff_X]
 
 @[simp]
-
-中文:
-定理 constantCoeff_wittNSMul
-  条件: (m : 自然数) (n : 自然数)
-  结论: constantCoeff (wittNSMul p m n) = 0
-  证明: by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [smul_zero, map_nsmul, constantCoeff_X]
-
-@[simp]
-
-Depends on / 依赖: constantCoeff_X, constantCoeff_wittStructureInt, map_nsmul, smul_zero
+/-
+**WittVector.constantCoeff_wittZSMul** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：constantCoeff_wittZSMul (z : Int) (n : Nat) : constantCoeff (wittZSMul p z
+ n) = 0
+参数：z : Int；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `constantCoeff_wittStructureInt`：constantCoeff_wittStructureInt (Φ : MvPo
+lynomial idx Int) (h : constantCoeff Φ = 0) (n : Nat) : constantCoeff (wittStruc
+tureInt p Φ n) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem constantCoeff_wittNSMul (m : Nat) (n : Nat) : constantCoeff (wittNSMul p m n) = 0 := by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [smul_zero, map_nsmul, constantCoeff_X]
-
-@[simp]
-/--
-theorem `constantCoeff_wittZSMul` / 定理 `constantCoeff_wittZSMul`
-
-English:
-theorem constantCoeff_wittZSMul
-  given: (z : Int) (n : Nat)
-  statement: constantCoeff (wittZSMul p z n) = 0
-  proof: by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [smul_zero, map_zsmul, constantCoeff_X]
-
-中文:
-定理 constantCoeff_wittZSMul
-  条件: (z : 整数) (n : 自然数)
-  结论: constantCoeff (wittZSMul p z n) = 0
-  证明: by
-  apply constantCoeff_wittStructureInt p _ _ n
-  simp only [smul_zero, map_zsmul, constantCoeff_X]
-
-Depends on / 依赖: constantCoeff_X, constantCoeff_wittStructureInt, map_zsmul, smul_zero
--/
-theorem constantCoeff_wittZSMul (z : Int) (n : Nat) : constantCoeff (wittZSMul p z n) = 0 := by
+theorem constantCoeff_wittZSMul (z : ℤ) (n : ℕ) : constantCoeff (wittZSMul p z n) = 0 := by
   apply constantCoeff_wittStructureInt p _ _ n
   simp only [smul_zero, map_zsmul, constantCoeff_X]
 
@@ -1061,425 +1034,474 @@ section Coeff
 variable (R)
 
 @[simp]
-/--
-theorem `zero_coeff` / 定理 `zero_coeff`
-
-English:
-theorem zero_coeff
-  given: (n : Nat)
-  statement: (0 : 𝕎 R).coeff n = 0
-  proof: show (aeval _ (wittZero p n) : R) = 0 by simp only [wittZero_eq_zero, map_zero]
-
-@[simp]
-
-中文:
-定理 zero_coeff
-  条件: (n : 自然数)
-  结论: (0 : 𝕎 R).coeff n = 0
-  证明: show (aeval _ (wittZero p n) : R) = 0 by simp only [wittZero_eq_zero, map_zero]
-
-@[simp]
-
-Depends on / 依赖: e.toOpenPartialHomeomorph.symm, map_zero, toOpenPartialHomeomorph, wittZero, wittZero_eq_zero
+/-
+**WittVector.zero_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：zero_coeff (n : Nat) : (0 : 𝕎 R).coeff n = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.wittZero_eq_zero`：wittZero_eq_zero (n : Nat) : wittZero p n =
+ 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zero_coeff (n : Nat) : (0 : 𝕎 R).coeff n = 0 :=
+theorem zero_coeff (n : ℕ) : (0 : 𝕎 R).coeff n = 0 :=
   show (aeval _ (wittZero p n) : R) = 0 by simp only [wittZero_eq_zero, map_zero]
 
 @[simp]
-/--
-theorem `one_coeff_zero` / 定理 `one_coeff_zero`
-
-English:
-theorem one_coeff_zero
-  statement: (1 : 𝕎 R).coeff 0 = 1
-  proof: show (aeval _ (wittOne p 0) : R) = 1 by simp only [wittOne_zero_eq_one, map_one]
-
-@[simp]
-
-中文:
-定理 one_coeff_zero
-  结论: (1 : 𝕎 R).coeff 0 = 1
-  证明: show (aeval _ (wittOne p 0) : R) = 1 by simp only [wittOne_zero_eq_one, map_one]
-
-@[simp]
-
-Depends on / 依赖: map_one, wittOne, wittOne_zero_eq_one
+/-
+**WittVector.one_coeff_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：one_coeff_zero : (1 : 𝕎 R).coeff 0 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.wittOne_zero_eq_one`：wittOne_zero_eq_one : wittOne p 0 = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem one_coeff_zero : (1 : 𝕎 R).coeff 0 = 1 :=
   show (aeval _ (wittOne p 0) : R) = 1 by simp only [wittOne_zero_eq_one, map_one]
 
 @[simp]
-/--
-theorem `one_coeff_eq_of_pos` / 定理 `one_coeff_eq_of_pos`
-
-English:
-theorem one_coeff_eq_of_pos
-  given: (n : Nat) (hn : 0 < n)
-  statement: coeff (1 : 𝕎 R) n = 0
-  proof: show (aeval _ (wittOne p n) : R) = 0 by simp only [hn, wittOne_pos_eq_zero, map_zero]
-
-中文:
-定理 one_coeff_eq_of_pos
-  条件: (n : 自然数) (hn : 0 < n)
-  结论: coeff (1 : 𝕎 R) n = 0
-  证明: show (aeval _ (wittOne p n) : R) = 0 by simp only [hn, wittOne_pos_eq_zero, map_zero]
-
-Depends on / 依赖: map_zero, wittOne, wittOne_pos_eq_zero
+/-
+**WittVector.one_coeff_eq_of_pos** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：one_coeff_eq_of_pos (n : Nat) (hn : 0 < n) : coeff (1 : 𝕎 R) n = 0
+参数：n : Nat；hn : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.wittOne_pos_eq_zero`：wittOne_pos_eq_zero (n : Nat) (hn : 0 < 
+n) : wittOne p n = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem one_coeff_eq_of_pos (n : Nat) (hn : 0 < n) : coeff (1 : 𝕎 R) n = 0 :=
+theorem one_coeff_eq_of_pos (n : ℕ) (hn : 0 < n) : coeff (1 : 𝕎 R) n = 0 :=
   show (aeval _ (wittOne p n) : R) = 0 by simp only [hn, wittOne_pos_eq_zero, map_zero]
 
 variable {p R}
 
 @[simp]
-/--
-theorem `v2_coeff` / 定理 `v2_coeff`
-
-English:
-theorem v2_coeff
-  given: {p' R'} (x y : WittVector p' R') (i : Fin 2)
-  proof: by fin_cases i <;> simp
-
-中文:
-定理 v2_coeff
-  条件: {p' R'} (x y : Witt向量 p' R') (i : 有限集 2)
-  证明: by fin_cases i <;> simp
-
-Depends on / 依赖: fin_cases
+/-
+**WittVector.v2_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：v2_coeff {p' R'} (x y : WittVector p' R') (i : Fin 2) : (![x, y] i).coeff 
+= ![x.coeff, y.coeff] i
+参数：x y : WittVector p' R'；i : Fin 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem v2_coeff {p' R'} (x y : WittVector p' R') (i : Fin 2) :
     (![x, y] i).coeff = ![x.coeff, y.coeff] i := by fin_cases i <;> simp
-
-/--
-theorem `add_coeff` / 定理 `add_coeff`
-
-English:
-theorem add_coeff
-  given: (x y : 𝕎 R) (n : Nat)
-  proof: by
-  simp [(· + ·), Add.add, eval]
-
-中文:
-定理 add_coeff
-  条件: (x y : 𝕎 R) (n : 自然数)
-  证明: by
-  simp [(· + ·), Add.add, eval]
-
-Depends on / 依赖: Add.add
+/-
+**WittVector.add_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：add_coeff (x y : 𝕎 R) (n : Nat) : (x + y).coeff n = peval (wittAdd p n) ![
+x.coeff, y.coeff]
+参数：x y : 𝕎 R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `WittVector.v2_coeff`：v2_coeff {p' R'} (x y : WittVector p' R') (i : Fin 
+2) : (![x, y] i).coeff = ![x.coeff, y.coeff] i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem add_coeff (x y : 𝕎 R) (n : Nat) :
+theorem add_coeff (x y : 𝕎 R) (n : ℕ) :
     (x + y).coeff n = peval (wittAdd p n) ![x.coeff, y.coeff] := by
   simp [(· + ·), Add.add, eval]
-
-/--
-theorem `sub_coeff` / 定理 `sub_coeff`
-
-English:
-theorem sub_coeff
-  given: (x y : 𝕎 R) (n : Nat)
-  proof: by
-  simp [(· - ·), Sub.sub, eval]
-
-中文:
-定理 sub_coeff
-  条件: (x y : 𝕎 R) (n : 自然数)
-  证明: by
-  simp [(· - ·), Sub.sub, eval]
-
-Depends on / 依赖: Sub.sub
+/-
+**WittVector.sub_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：sub_coeff (x y : 𝕎 R) (n : Nat) : (x - y).coeff n = peval (wittSub p n) ![
+x.coeff, y.coeff]
+参数：x y : 𝕎 R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `WittVector.v2_coeff`：v2_coeff {p' R'} (x y : WittVector p' R') (i : Fin 
+2) : (![x, y] i).coeff = ![x.coeff, y.coeff] i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sub_coeff (x y : 𝕎 R) (n : Nat) :
+theorem sub_coeff (x y : 𝕎 R) (n : ℕ) :
     (x - y).coeff n = peval (wittSub p n) ![x.coeff, y.coeff] := by
   simp [(· - ·), Sub.sub, eval]
-
-/--
-theorem `mul_coeff` / 定理 `mul_coeff`
-
-English:
-theorem mul_coeff
-  given: (x y : 𝕎 R) (n : Nat)
-  proof: by
-  simp [(· * ·), Mul.mul, eval]
-
-中文:
-定理 mul_coeff
-  条件: (x y : 𝕎 R) (n : 自然数)
-  证明: by
-  simp [(· * ·), Mul.mul, eval]
-
-Depends on / 依赖: Mul.mul
+/-
+**WittVector.mul_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：mul_coeff (x y : 𝕎 R) (n : Nat) : (x * y).coeff n = peval (wittMul p n) ![
+x.coeff, y.coeff]
+参数：x y : 𝕎 R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `WittVector.v2_coeff`：v2_coeff {p' R'} (x y : WittVector p' R') (i : Fin 
+2) : (![x, y] i).coeff = ![x.coeff, y.coeff] i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mul_coeff (x y : 𝕎 R) (n : Nat) :
+theorem mul_coeff (x y : 𝕎 R) (n : ℕ) :
     (x * y).coeff n = peval (wittMul p n) ![x.coeff, y.coeff] := by
   simp [(· * ·), Mul.mul, eval]
-
-/--
-theorem `neg_coeff` / 定理 `neg_coeff`
-
-English:
-theorem neg_coeff
-  given: (x : 𝕎 R) (n : Nat)
-  statement: (-x).coeff n = peval (wittNeg p n) ![x.coeff]
-  proof: by
-  simp [Neg.neg, eval, Matrix.cons_fin_one]
-
-中文:
-定理 neg_coeff
-  条件: (x : 𝕎 R) (n : 自然数)
-  结论: (-x).coeff n = peval (wittNeg p n) ![x.coeff]
-  证明: by
-  simp [Neg.neg, eval, Matrix.cons_fin_one]
-
-Depends on / 依赖: Matrix, Matrix.cons_fin_one, Neg.neg, cons_fin_one
+/-
+**WittVector.neg_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：neg_coeff (x : 𝕎 R) (n : Nat) : (-x).coeff n = peval (wittNeg p n) ![x.coe
+ff]
+参数：x : 𝕎 R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Matrix.cons_fin_one`：cons_fin_one (x : α) (u : Fin 0 -> α) : vecCons x u
+ = fun _ => x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem neg_coeff (x : 𝕎 R) (n : Nat) : (-x).coeff n = peval (wittNeg p n) ![x.coeff] := by
+theorem neg_coeff (x : 𝕎 R) (n : ℕ) : (-x).coeff n = peval (wittNeg p n) ![x.coeff] := by
   simp [Neg.neg, eval, Matrix.cons_fin_one]
-
-/--
-theorem `nsmul_coeff` / 定理 `nsmul_coeff`
-
-English:
-theorem nsmul_coeff
-  given: (m : Nat) (x : 𝕎 R) (n : Nat)
-  proof: by
-  simp [(· • ·), SMul.smul, eval, Matrix.cons_fin_one]
-
-中文:
-定理 nsmul_coeff
-  条件: (m : 自然数) (x : 𝕎 R) (n : 自然数)
-  证明: by
-  simp [(· • ·), SMul.smul, eval, Matrix.cons_fin_one]
-
-Depends on / 依赖: Matrix, Matrix.cons_fin_one, SMul.smul, cons_fin_one
+/-
+**WittVector.nsmul_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：nsmul_coeff (m : Nat) (x : 𝕎 R) (n : Nat) : (m • x).coeff n = peval (wittN
+SMul p m n) ![x.coeff]
+参数：m : Nat；x : 𝕎 R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Matrix.cons_fin_one`：cons_fin_one (x : α) (u : Fin 0 -> α) : vecCons x u
+ = fun _ => x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nsmul_coeff (m : Nat) (x : 𝕎 R) (n : Nat) :
+theorem nsmul_coeff (m : ℕ) (x : 𝕎 R) (n : ℕ) :
     (m • x).coeff n = peval (wittNSMul p m n) ![x.coeff] := by
   simp [(· • ·), SMul.smul, eval, Matrix.cons_fin_one]
-
-/--
-theorem `zsmul_coeff` / 定理 `zsmul_coeff`
-
-English:
-theorem zsmul_coeff
-  given: (m : Int) (x : 𝕎 R) (n : Nat)
-  proof: by
-  simp [(· • ·), SMul.smul, eval, Matrix.cons_fin_one]
-
-中文:
-定理 zsmul_coeff
-  条件: (m : 整数) (x : 𝕎 R) (n : 自然数)
-  证明: by
-  simp [(· • ·), SMul.smul, eval, Matrix.cons_fin_one]
-
-Depends on / 依赖: Matrix, Matrix.cons_fin_one, SMul.smul, cons_fin_one
+/-
+**WittVector.zsmul_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：zsmul_coeff (m : Int) (x : 𝕎 R) (n : Nat) : (m • x).coeff n = peval (wittZ
+SMul p m n) ![x.coeff]
+参数：m : Int；x : 𝕎 R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Matrix.cons_fin_one`：cons_fin_one (x : α) (u : Fin 0 -> α) : vecCons x u
+ = fun _ => x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zsmul_coeff (m : Int) (x : 𝕎 R) (n : Nat) :
+theorem zsmul_coeff (m : ℤ) (x : 𝕎 R) (n : ℕ) :
     (m • x).coeff n = peval (wittZSMul p m n) ![x.coeff] := by
   simp [(· • ·), SMul.smul, eval, Matrix.cons_fin_one]
-
-/--
-theorem `pow_coeff` / 定理 `pow_coeff`
-
-English:
-theorem pow_coeff
-  given: (m : Nat) (x : 𝕎 R) (n : Nat)
-  proof: by
-  simp [(· ^ ·), Pow.pow, eval, Matrix.cons_fin_one]
-
-中文:
-定理 pow_coeff
-  条件: (m : 自然数) (x : 𝕎 R) (n : 自然数)
-  证明: by
-  simp [(· ^ ·), Pow.pow, eval, Matrix.cons_fin_one]
-
-Depends on / 依赖: Matrix, Matrix.cons_fin_one, Pow.pow, cons_fin_one
+/-
+**WittVector.pow_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：pow_coeff (m : Nat) (x : 𝕎 R) (n : Nat) : (x ^ m).coeff n = peval (wittPow
+ p m n) ![x.coeff]
+参数：m : Nat；x : 𝕎 R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Matrix.cons_fin_one`：cons_fin_one (x : α) (u : Fin 0 -> α) : vecCons x u
+ = fun _ => x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem pow_coeff (m : Nat) (x : 𝕎 R) (n : Nat) :
+theorem pow_coeff (m : ℕ) (x : 𝕎 R) (n : ℕ) :
     (x ^ m).coeff n = peval (wittPow p m n) ![x.coeff] := by
   simp [(· ^ ·), Pow.pow, eval, Matrix.cons_fin_one]
-
-/--
-theorem `add_coeff_zero` / 定理 `add_coeff_zero`
-
-English:
-theorem add_coeff_zero
-  given: (x y : 𝕎 R)
-  statement: (x + y).coeff 0 = x.coeff 0 + y.coeff 0
-  proof: by
-  simp [add_coeff, peval, Function.uncurry]
-
-中文:
-定理 add_coeff_zero
-  条件: (x y : 𝕎 R)
-  结论: (x + y).coeff 0 = x.coeff 0 + y.coeff 0
-  证明: by
-  simp [add_coeff, peval, Function.uncurry]
-
-Depends on / 依赖: Function, Function.uncurry, add_coeff, uncurry
+/-
+**WittVector.add_coeff_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：add_coeff_zero (x y : 𝕎 R) : (x + y).coeff 0 = x.coeff 0 + y.coeff 0
+参数：x y : 𝕎 R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.add_coeff`：add_coeff (x y : 𝕎 R) (n : Nat) : (x + y).coeff n 
+= peval (wittAdd p n) ![x.coeff, y.coeff]
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `WittVector.wittAdd_zero`：wittAdd_zero : wittAdd p 0 = X (0, 0) + X (1, 0
+)
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem add_coeff_zero (x y : 𝕎 R) : (x + y).coeff 0 = x.coeff 0 + y.coeff 0 := by
   simp [add_coeff, peval, Function.uncurry]
-
-/--
-theorem `mul_coeff_zero` / 定理 `mul_coeff_zero`
-
-English:
-theorem mul_coeff_zero
-  given: (x y : 𝕎 R)
-  statement: (x * y).coeff 0 = x.coeff 0 * y.coeff 0
-  proof: by
-  simp [mul_coeff, peval, Function.uncurry]
-
-中文:
-定理 mul_coeff_zero
-  条件: (x y : 𝕎 R)
-  结论: (x * y).coeff 0 = x.coeff 0 * y.coeff 0
-  证明: by
-  simp [mul_coeff, peval, Function.uncurry]
-
-Depends on / 依赖: Function, Function.uncurry, mul_coeff, uncurry
+/-
+**WittVector.mul_coeff_zero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：mul_coeff_zero (x y : 𝕎 R) : (x * y).coeff 0 = x.coeff 0 * y.coeff 0
+参数：x y : 𝕎 R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.mul_coeff`：mul_coeff (x y : 𝕎 R) (n : Nat) : (x * y).coeff n 
+= peval (wittMul p n) ![x.coeff, y.coeff]
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `WittVector.wittMul_zero`：wittMul_zero : wittMul p 0 = X (0, 0) * X (1, 0
+)
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_coeff_zero (x y : 𝕎 R) : (x * y).coeff 0 = x.coeff 0 * y.coeff 0 := by
   simp [mul_coeff, peval, Function.uncurry]
 
 end Coeff
 
-/--
-theorem `wittAdd_vars` / 定理 `wittAdd_vars`
-
-English:
-theorem wittAdd_vars
-  given: (n : Nat)
-  statement: (wittAdd p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
-  proof: wittStructureInt_vars _ _ _
-
-中文:
-定理 wittAdd_vars
-  条件: (n : 自然数)
-  结论: (wittAdd p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
-  证明: wittStructureInt_vars _ _ _
-
-Depends on / 依赖: wittStructureInt_vars
+/-
+**WittVector.wittAdd_vars** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittAdd_vars (n : Nat) : (wittAdd p n).vars subseteq Finset.univ ×ˢ Finset
+.range (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `wittStructureInt_vars`：wittStructureInt_vars [Fintype idx] (Φ : MvPolyno
+mial idx Int) (n : Nat) : (wittStructureInt p Φ n).vars subseteq Finset.univ ×ˢ 
+Finset.rang…
 -/
-theorem wittAdd_vars (n : Nat) : (wittAdd p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1) :=
+theorem wittAdd_vars (n : ℕ) : (wittAdd p n).vars ⊆ Finset.univ ×ˢ Finset.range (n + 1) :=
   wittStructureInt_vars _ _ _
-
-/--
-theorem `wittSub_vars` / 定理 `wittSub_vars`
-
-English:
-theorem wittSub_vars
-  given: (n : Nat)
-  statement: (wittSub p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
-  proof: wittStructureInt_vars _ _ _
-
-中文:
-定理 wittSub_vars
-  条件: (n : 自然数)
-  结论: (wittSub p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
-  证明: wittStructureInt_vars _ _ _
-
-Depends on / 依赖: wittStructureInt_vars
+/-
+**WittVector.wittSub_vars** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittSub_vars (n : Nat) : (wittSub p n).vars subseteq Finset.univ ×ˢ Finset
+.range (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `wittStructureInt_vars`：wittStructureInt_vars [Fintype idx] (Φ : MvPolyno
+mial idx Int) (n : Nat) : (wittStructureInt p Φ n).vars subseteq Finset.univ ×ˢ 
+Finset.rang…
 -/
-theorem wittSub_vars (n : Nat) : (wittSub p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1) :=
+theorem wittSub_vars (n : ℕ) : (wittSub p n).vars ⊆ Finset.univ ×ˢ Finset.range (n + 1) :=
   wittStructureInt_vars _ _ _
-
-/--
-theorem `wittMul_vars` / 定理 `wittMul_vars`
-
-English:
-theorem wittMul_vars
-  given: (n : Nat)
-  statement: (wittMul p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
-  proof: wittStructureInt_vars _ _ _
-
-中文:
-定理 wittMul_vars
-  条件: (n : 自然数)
-  结论: (wittMul p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
-  证明: wittStructureInt_vars _ _ _
-
-Depends on / 依赖: wittStructureInt_vars
+/-
+**WittVector.wittMul_vars** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittMul_vars (n : Nat) : (wittMul p n).vars subseteq Finset.univ ×ˢ Finset
+.range (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `wittStructureInt_vars`：wittStructureInt_vars [Fintype idx] (Φ : MvPolyno
+mial idx Int) (n : Nat) : (wittStructureInt p Φ n).vars subseteq Finset.univ ×ˢ 
+Finset.rang…
 -/
-theorem wittMul_vars (n : Nat) : (wittMul p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1) :=
+theorem wittMul_vars (n : ℕ) : (wittMul p n).vars ⊆ Finset.univ ×ˢ Finset.range (n + 1) :=
   wittStructureInt_vars _ _ _
-
-/--
-theorem `wittNeg_vars` / 定理 `wittNeg_vars`
-
-English:
-theorem wittNeg_vars
-  given: (n : Nat)
-  statement: (wittNeg p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
-  proof: wittStructureInt_vars _ _ _
-
-中文:
-定理 wittNeg_vars
-  条件: (n : 自然数)
-  结论: (wittNeg p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
-  证明: wittStructureInt_vars _ _ _
-
-Depends on / 依赖: wittStructureInt_vars
+/-
+**WittVector.wittNeg_vars** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittNeg_vars (n : Nat) : (wittNeg p n).vars subseteq Finset.univ ×ˢ Finset
+.range (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `wittStructureInt_vars`：wittStructureInt_vars [Fintype idx] (Φ : MvPolyno
+mial idx Int) (n : Nat) : (wittStructureInt p Φ n).vars subseteq Finset.univ ×ˢ 
+Finset.rang…
 -/
-theorem wittNeg_vars (n : Nat) : (wittNeg p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1) :=
+theorem wittNeg_vars (n : ℕ) : (wittNeg p n).vars ⊆ Finset.univ ×ˢ Finset.range (n + 1) :=
   wittStructureInt_vars _ _ _
-
-/--
-theorem `wittNSMul_vars` / 定理 `wittNSMul_vars`
-
-English:
-theorem wittNSMul_vars
-  given: (m : Nat) (n : Nat)
-  proof: wittStructureInt_vars _ _ _
-
-中文:
-定理 wittNSMul_vars
-  条件: (m : 自然数) (n : 自然数)
-  证明: wittStructureInt_vars _ _ _
-
-Depends on / 依赖: wittStructureInt_vars
+/-
+**WittVector.wittNSMul_vars** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittNSMul_vars (m : Nat) (n : Nat) : (wittNSMul p m n).vars subseteq Finse
+t.univ ×ˢ Finset.range (n + 1)
+参数：m : Nat；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `wittStructureInt_vars`：wittStructureInt_vars [Fintype idx] (Φ : MvPolyno
+mial idx Int) (n : Nat) : (wittStructureInt p Φ n).vars subseteq Finset.univ ×ˢ 
+Finset.rang…
 -/
-theorem wittNSMul_vars (m : Nat) (n : Nat) :
-    (wittNSMul p m n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1) :=
+theorem wittNSMul_vars (m : ℕ) (n : ℕ) :
+    (wittNSMul p m n).vars ⊆ Finset.univ ×ˢ Finset.range (n + 1) :=
   wittStructureInt_vars _ _ _
-
-/--
-theorem `wittZSMul_vars` / 定理 `wittZSMul_vars`
-
-English:
-theorem wittZSMul_vars
-  given: (m : Int) (n : Nat)
-  proof: wittStructureInt_vars _ _ _
-
-中文:
-定理 wittZSMul_vars
-  条件: (m : 整数) (n : 自然数)
-  证明: wittStructureInt_vars _ _ _
-
-Depends on / 依赖: wittStructureInt_vars
+/-
+**WittVector.wittZSMul_vars** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittZSMul_vars (m : Int) (n : Nat) : (wittZSMul p m n).vars subseteq Finse
+t.univ ×ˢ Finset.range (n + 1)
+参数：m : Int；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `wittStructureInt_vars`：wittStructureInt_vars [Fintype idx] (Φ : MvPolyno
+mial idx Int) (n : Nat) : (wittStructureInt p Φ n).vars subseteq Finset.univ ×ˢ 
+Finset.rang…
 -/
-theorem wittZSMul_vars (m : Int) (n : Nat) :
-    (wittZSMul p m n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1) :=
+theorem wittZSMul_vars (m : ℤ) (n : ℕ) :
+    (wittZSMul p m n).vars ⊆ Finset.univ ×ˢ Finset.range (n + 1) :=
   wittStructureInt_vars _ _ _
-
-/--
-theorem `wittPow_vars` / 定理 `wittPow_vars`
-
-English:
-theorem wittPow_vars
-  given: (m : Nat) (n : Nat)
-  statement: (wittPow p m n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
-  proof: wittStructureInt_vars _ _ _
-
-中文:
-定理 wittPow_vars
-  条件: (m : 自然数) (n : 自然数)
-  结论: (wittPow p m n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
-  证明: wittStructureInt_vars _ _ _
-
-Depends on / 依赖: wittStructureInt_vars
+/-
+**WittVector.wittPow_vars** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：wittPow_vars (m : Nat) (n : Nat) : (wittPow p m n).vars subseteq Finset.un
+iv ×ˢ Finset.range (n + 1)
+参数：m : Nat；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `wittStructureInt_vars`：wittStructureInt_vars [Fintype idx] (Φ : MvPolyno
+mial idx Int) (n : Nat) : (wittStructureInt p Φ n).vars subseteq Finset.univ ×ˢ 
+Finset.rang…
 -/
-theorem wittPow_vars (m : Nat) (n : Nat) : (wittPow p m n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1) :=
+theorem wittPow_vars (m : ℕ) (n : ℕ) : (wittPow p m n).vars ⊆ Finset.univ ×ˢ Finset.range (n + 1) :=
   wittStructureInt_vars _ _ _
 
 end WittVector
+

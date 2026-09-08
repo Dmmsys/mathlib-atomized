@@ -47,40 +47,38 @@ variable {α : Type u}
 
 section MatrixNotation
 
-/--
-Definition of `vecEmpty` / `vecEmpty` 的定义
+/-- `![]` is the vector with no entries. -/
+/-
+**Matrix.vecEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecEmpty : Fin 0 -> α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vecEmpty
-  signature: : Fin 0 -> α
-  body: Fin.elim0
-
-中文:
-定义 vecEmpty
-  签名: : 有限集 0 -> α
-  定义体: Fin.elim0
-
-Depends on / 依赖: Fin.elim0
+--- 原说明 ---
+`![]` is the vector with no entries.
 -/
-def vecEmpty : Fin 0 -> α :=
+def vecEmpty : Fin 0 → α :=
   Fin.elim0
 
-/--
-Definition of `vecCons` / `vecCons` 的定义
+/-- `vecCons h t` prepends an entry `h` to a vector `t`.
 
-English:
-definition vecCons
-  signature: {n : Nat} (h : α) (t : Fin n -> α)
-  body: Fin.cons h t
-
-中文:
-定义 vecCons
-  签名: {n : 自然数} (h : α) (t : 有限集 n -> α)
-  定义体: Fin.cons h t
-
-Depends on / 依赖: Fin.cons
+The inverse functions are `vecHead` and `vecTail`.
+The notation `![a, b, ...]` expands to `vecCons a (vecCons b ...)`.
 -/
-def vecCons {n : Nat} (h : α) (t : Fin n -> α) : Fin n.succ -> α :=
+/-
+**Matrix.vecCons** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecCons {n : Nat} (h : α) (t : Fin n -> α) : Fin n.succ -> α
+参数：h : α；t : Fin n -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`vecCons h t` prepends an entry `h` to a vector `t`.
+
+The inverse functions are `vecHead` and `vecTail`.
+The notation `![a, b, ...]` expands to `vecCons a (vecCons b ...)`.
+-/
+def vecCons {n : ℕ} (h : α) (t : Fin n → α) : Fin n.succ → α :=
   Fin.cons h t
 
 /-- `![...]` notation is used to construct a vector `Fin n → α` using `Matrix.vecEmpty` and
@@ -112,200 +110,143 @@ meta def vecEmptyUnexpander : Lean.PrettyPrinter.Unexpander
   | `($_:ident) => `(![])
   | _ => throw ()
 
-/--
-Definition of `vecHead` / `vecHead` 的定义
+/-- `vecHead v` gives the first entry of the vector `v` -/
+/-
+**Matrix.vecHead** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecHead {n : Nat} (v : Fin n.succ -> α) : α
+参数：v : Fin n.succ -> α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-definition vecHead
-  signature: {n : Nat} (v : Fin n.succ -> α)
-  body: v 0
-
-中文:
-定义 vecHead
-  签名: {n : 自然数} (v : 有限集 n.succ -> α)
-  定义体: v 0
+--- 原说明 ---
+`vecHead v` gives the first entry of the vector `v`
 -/
-def vecHead {n : Nat} (v : Fin n.succ -> α) : α :=
+def vecHead {n : ℕ} (v : Fin n.succ → α) : α :=
   v 0
 
-/--
-Definition of `vecTail` / `vecTail` 的定义
+/-- `vecTail v` gives a vector consisting of all entries of `v` except the first -/
+/-
+**Matrix.vecTail** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecTail {n : Nat} (v : Fin n.succ -> α) : Fin n -> α
+参数：v : Fin n.succ -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vecTail
-  signature: {n : Nat} (v : Fin n.succ -> α)
-  body: v ∘ Fin.succ
-
-中文:
-定义 vecTail
-  签名: {n : 自然数} (v : 有限集 n.succ -> α)
-  定义体: v ∘ Fin.succ
-
-Depends on / 依赖: Fin.succ
+--- 原说明 ---
+`vecTail v` gives a vector consisting of all entries of `v` except the first
 -/
-def vecTail {n : Nat} (v : Fin n.succ -> α) : Fin n -> α :=
+def vecTail {n : ℕ} (v : Fin n.succ → α) : Fin n → α :=
   v ∘ Fin.succ
 
-variable {m n : Nat}
+variable {m n : ℕ}
 
-/--
-Instance `_root_.PiFin.hasRepr` / 实例 `_root_.PiFin.hasRepr`
+/-- Use `![...]` notation for displaying a vector `Fin n → α`, for example:
 
-English:
-instance _root_.PiFin.hasRepr
-  signature: [Repr α]
-  body: Std.Format.bracket "![" (Std.Format.joinSep
-      ((List.finRange n).map fun n => repr (f n)) ("," ++ Std.Format.line)) "]"
-
-中文:
-实例 _root_.PiFin.hasRepr
-  签名: [Repr α]
-  定义体: Std.Format.bracket "![" (Std.Format.joinSep
-      ((List.finRange n).map fun n => repr (f n)) ("," ++ Std.Format.line)) "]"
-
-Depends on / 依赖: Format, List.finRange, Std.Format.bracket, Std.Format.joinSep, Std.Format.line, bracket, finRange, joinSep
+```
+#eval ![1, 2] + ![3, 4] -- ![4, 6]
+```
 -/
-instance _root_.PiFin.hasRepr [Repr α] : Repr (Fin n -> α) where
+/-
+**Matrix._root_.PiFin.hasRepr** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Use `![...]` notation for displaying a vector `Fin n → α`, for example:
+
+```
+#eval ![1, 2] + ![3, 4] -- ![4, 6]
+```
+-/
+instance _root_.PiFin.hasRepr [Repr α] : Repr (Fin n → α) where
   reprPrec f _ :=
     Std.Format.bracket "![" (Std.Format.joinSep
       ((List.finRange n).map fun n => repr (f n)) ("," ++ Std.Format.line)) "]"
 
 end MatrixNotation
 
-variable {m n o : Nat}
+variable {m n o : ℕ}
 
-/--
-theorem `empty_eq` / 定理 `empty_eq`
-
-English:
-theorem empty_eq
-  given: (v : Fin 0 -> α)
-  statement: v = ![]
-  proof: Subsingleton.elim _ _
-
-中文:
-定理 empty_eq
-  条件: (v : 有限集 0 -> α)
-  结论: v = ![]
-  证明: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**Matrix.empty_eq** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_eq (v : Fin 0 -> α) : v = ![]
+参数：v : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem empty_eq (v : Fin 0 -> α) : v = ![] :=
+theorem empty_eq (v : Fin 0 → α) : v = ![] :=
   Subsingleton.elim _ _
 
 section Val
 
 @[simp]
-/--
-theorem `head_fin_const` / 定理 `head_fin_const`
-
-English:
-theorem head_fin_const
-  given: (a : α)
-  statement: (vecHead fun _ : Fin (n + 1) => a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 head_fin_const
-  条件: (a : α)
-  结论: (vecHead fun _ : 有限集 (n + 1) => a) = a
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.head_fin_const** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：head_fin_const (a : α) : (vecHead fun _ : Fin (n + 1) => a) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem head_fin_const (a : α) : (vecHead fun _ : Fin (n + 1) => a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `cons_val_zero` / 定理 `cons_val_zero`
-
-English:
-theorem cons_val_zero
-  given: (x : α) (u : Fin m -> α)
-  statement: vecCons x u 0 = x
-  proof: rfl
-
-中文:
-定理 cons_val_zero
-  条件: (x : α) (u : 有限集 m -> α)
-  结论: vecCons x u 0 = x
-  证明: rfl
+/-
+**Matrix.cons_val_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_zero (x : α) (u : Fin m -> α) : vecCons x u 0 = x
+参数：x : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-theorem cons_val_zero (x : α) (u : Fin m -> α) : vecCons x u 0 = x :=
+theorem cons_val_zero (x : α) (u : Fin m → α) : vecCons x u 0 = x :=
   rfl
-
-/--
-theorem `cons_val_zero'` / 定理 `cons_val_zero'`
-
-English:
-theorem cons_val_zero'
-  given: (h : 0 < m.succ) (x : α) (u : Fin m -> α)
-  statement: vecCons x u ⟨0, h⟩ = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cons_val_zero'
-  条件: (h : 0 < m.succ) (x : α) (u : 有限集 m -> α)
-  结论: vecCons x u ⟨0, h⟩ = x
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.cons_val_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_zero' (h : 0 < m.succ) (x : α) (u : Fin m -> α) : vecCons x u ⟨0,
+ h⟩ = x
+参数：h : 0 < m.succ；x : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cons_val_zero' (h : 0 < m.succ) (x : α) (u : Fin m -> α) : vecCons x u ⟨0, h⟩ = x :=
+theorem cons_val_zero' (h : 0 < m.succ) (x : α) (u : Fin m → α) : vecCons x u ⟨0, h⟩ = x :=
   rfl
 
 @[simp]
-/--
-theorem `cons_val_succ` / 定理 `cons_val_succ`
-
-English:
-theorem cons_val_succ
-  given: (x : α) (u : Fin m -> α) (i : Fin m)
-  statement: vecCons x u i.succ = u i
-  proof: by
-  simp [vecCons]
-
-@[simp]
-
-中文:
-定理 cons_val_succ
-  条件: (x : α) (u : 有限集 m -> α) (i : 有限集 m)
-  结论: vecCons x u i.succ = u i
-  证明: by
-  simp [vecCons]
-
-@[simp]
-
-Depends on / 依赖: vecCons
+/-
+**Matrix.cons_val_succ** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m) : vecCons x u i.succ = 
+u i
+参数：x : α；u : Fin m -> α；i : Fin m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.cons_succ`：cons_succ : cons x p i.succ = p i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m) : vecCons x u i.succ = u i := by
+theorem cons_val_succ (x : α) (u : Fin m → α) (i : Fin m) : vecCons x u i.succ = u i := by
   simp [vecCons]
 
 @[simp]
-/--
-theorem `cons_val_succ'` / 定理 `cons_val_succ'`
-
-English:
-theorem cons_val_succ'
-  given: {i : Nat} (h : i.succ < m.succ) (x : α) (u : Fin m -> α)
-  proof: by
-  simp only [vecCons, Fin.cons, Fin.cases_succ']
-
-中文:
-定理 cons_val_succ'
-  条件: {i : 自然数} (h : i.succ < m.succ) (x : α) (u : 有限集 m -> α)
-  证明: by
-  simp only [vecCons, Fin.cons, Fin.cases_succ']
-
-Depends on / 依赖: Fin.cases_succ, Fin.cons, cases_succ, vecCons
+/-
+**Matrix.cons_val_succ'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_succ' {i : Nat} (h : i.succ < m.succ) (x : α) (u : Fin m -> α) : 
+vecCons x u ⟨i.succ, h⟩ = u ⟨i, Nat.lt_of_succ_lt_succ h⟩
+参数：h : i.succ < m.succ；x : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.lt_of_succ_lt_succ`：∀ {n m : ℕ}, n.succ < m.succ → n < m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_val_succ' {i : Nat} (h : i.succ < m.succ) (x : α) (u : Fin m -> α) :
+theorem cons_val_succ' {i : ℕ} (h : i.succ < m.succ) (x : α) (u : Fin m → α) :
     vecCons x u ⟨i.succ, h⟩ = u ⟨i, Nat.lt_of_succ_lt_succ h⟩ := by
   simp only [vecCons, Fin.cons, Fin.cases_succ']
 
@@ -313,47 +254,34 @@ theorem cons_val_succ' {i : Nat} (h : i.succ < m.succ) (x : α) (u : Fin m -> α
 But in cases that we are already mixing the declarations for dependent tuples and non-dependent
 tuples, we can simplify to the non-dependent tuples. -/
 @[simp]
-/--
-lemma `Fin.cons_vecEmpty` / 引理 `Fin.cons_vecEmpty`
+/-
+**Matrix.Fin.cons_vecEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.Fin`。
+形式化陈述：∀ {α : Type u_1} (x : α), Fin.cons x ![] = ![x]
+参数：x : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Fin.cons_vecEmpty
-  given: {α : Type*} (x : α)
-  statement: Fin.cons x ![] = ![x]
-  proof: by rfl
-
-中文:
-引理 有限集.cons_vecEmpty
-  条件: {α : 类型} (x : α)
-  结论: 有限集.cons x ![] = ![x]
-  证明: by rfl
+--- 原说明 ---
+We don't want to always simplify `Fin.cons` to `vecCons`.
+But in cases that we are already mixing the declarations for dependent tuples an
+d non-dependent
+tuples, we can simplify to the non-dependent tuples.
 -/
 lemma Fin.cons_vecEmpty {α : Type*} (x : α) : Fin.cons x ![] = ![x] := by rfl
 
 /-- Simplify `Fin.snoc` to `vecCons` in this case. -/
 @[simp]
-/--
-lemma `Fin.snoc_vecEmpty` / 引理 `Fin.snoc_vecEmpty`
+/-
+**Matrix.Fin.snoc_vecEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.Fin`。
+形式化陈述：∀ {α : Type u_1} (x : α), Fin.snoc ![] x = ![x]
+参数：x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Fin.fin_one_eq_zero`：∀ (a : Fin 1), a = 0
 
-English:
-lemma Fin.snoc_vecEmpty
-  given: {α : Type*} (x : α)
-  statement: Fin.snoc ![] x = ![x]
-  proof: by
-  ext i
-  cases Fin.fin_one_eq_zero i
-  rfl
-
-中文:
-引理 有限集.snoc_vecEmpty
-  条件: {α : 类型} (x : α)
-  结论: 有限集.snoc ![] x = ![x]
-  证明: by
-  ext i
-  cases Fin.fin_one_eq_zero i
-  rfl
-
-Depends on / 依赖: Fin.fin_one_eq_zero, fin_one_eq_zero
+--- 原说明 ---
+Simplify `Fin.snoc` to `vecCons` in this case.
 -/
 lemma Fin.snoc_vecEmpty {α : Type*} (x : α) : Fin.snoc ![] x = ![x] := by
   ext i
@@ -365,43 +293,44 @@ But in cases that we are already mixing the declarations for dependent tuples an
 tuples, we can simplify to the non-dependent tuples.
 This allows us to simplify `Fin.cons 5 ![1, 3, 7]` to `![5, 1, 3, 7]`. -/
 @[simp]
-/--
-lemma `Fin.cons_vecCons` / 引理 `Fin.cons_vecCons`
+/-
+**Matrix.Fin.cons_vecCons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.Fin`。
+形式化陈述：∀ {n : ℕ} {α : Type u_1} (x y : α) (p : Fin n → α),   Fin.cons x (Matrix.v
+ecCons y p) = Matrix.vecCons x (Matrix.vecCons y p)
+参数：x y : α；p : Fin n → α；Matrix.vecCons y p；Matrix.vecCons y p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Fin.cons_vecCons
-  given: {α : Type*} (x y : α) (p : Fin n -> α)
-  proof: by rfl
-
-中文:
-引理 有限集.cons_vecCons
-  条件: {α : 类型} (x y : α) (p : 有限集 n -> α)
-  证明: by rfl
+--- 原说明 ---
+We don't want to always simplify `Fin.cons` to `vecCons`.
+But in cases that we are already mixing the declarations for dependent tuples an
+d non-dependent
+tuples, we can simplify to the non-dependent tuples.
+This allows us to simplify `Fin.cons 5 ![1, 3, 7]` to `![5, 1, 3, 7]`.
 -/
-lemma Fin.cons_vecCons {α : Type*} (x y : α) (p : Fin n -> α) :
+lemma Fin.cons_vecCons {α : Type*} (x y : α) (p : Fin n → α) :
   Fin.cons x (vecCons y p) = vecCons x (vecCons y p) := by rfl
 
 /-- We push `Fin.snoc` inside `vecCons`. This allows us to simplify e.g.
 `Fin.snoc ![1, 3, 7] 5` to `![1, 3, 7, 5]`. -/
 @[simp]
-/--
-lemma `Fin.snoc_vecCons` / 引理 `Fin.snoc_vecCons`
+/-
+**Matrix.Fin.snoc_vecCons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.Fin`。
+形式化陈述：∀ {n : ℕ} {α : Type u_1} (x y : α) (p : Fin n → α), Fin.snoc (Matrix.vecCo
+ns y p) x = Matrix.vecCons y (Fin.snoc p x)
+参数：x y : α；p : Fin n → α；Matrix.vecCons y p；Fin.snoc p x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.cons_snoc_eq_snoc_cons`：cons_snoc_eq_snoc_cons {β : Sort*} (a : β) (
+q : Fin n -> β) (b : β) : @cons n.succ (fun _ => β) a (snoc q b) = snoc (cons a 
+q) b
 
-English:
-lemma Fin.snoc_vecCons
-  given: {α : Type*} (x y : α) (p : Fin n -> α)
-  proof: .symm Fin.cons_snoc_eq_snoc_cons ..
-
-中文:
-引理 有限集.snoc_vecCons
-  条件: {α : 类型} (x y : α) (p : 有限集 n -> α)
-  证明: .symm Fin.cons_snoc_eq_snoc_cons ..
-
-Depends on / 依赖: Fin.cons_snoc_eq_snoc_cons, cons_snoc_eq_snoc_cons
+--- 原说明 ---
+We push `Fin.snoc` inside `vecCons`. This allows us to simplify e.g.
+`Fin.snoc ![1, 3, 7] 5` to `![1, 3, 7, 5]`.
 -/
-lemma Fin.snoc_vecCons {α : Type*} (x y : α) (p : Fin n -> α) :
+lemma Fin.snoc_vecCons {α : Type*} (x y : α) (p : Fin n → α) :
     Fin.snoc (vecCons y p) x = vecCons y (Fin.snoc p x) :=
-.symm Fin.cons_snoc_eq_snoc_cons ..
+  Fin.cons_snoc_eq_snoc_cons .. |>.symm
 
 section simprocs
 open Lean Qq
@@ -411,7 +340,7 @@ open Lean Qq
 `let ⟨xs, tailn, tail⟩ ← matchVecConsPrefix n e` decomposes `e : Fin n → _` in the form
 `vecCons x₀ <| ... <| vecCons xₙ <| tail` where `tail : Fin tailn → _`. -/
 meta partial def matchVecConsPrefix (n : Q(Nat)) (e : Expr) :
-MetaM List Expr × Q(Nat) × Expr := do
+    MetaM <| List Expr × Q(Nat) × Expr := do
   match_expr ← Meta.whnfR e with
   | Matrix.vecCons _ n x xs => do
     let (elems, n', tail) ← matchVecConsPrefix n xs
@@ -430,10 +359,10 @@ dsimproc cons_val (Matrix.vecCons _ _ _) := fun e => do
   let xs := x :: xs
   -- Determine if the tail is a numeral or only an offset.
   let (tailn, variadic, etailn) ← do
-    let etailn_whnf : Q(Nat) ← Meta.whnfD etailn
+    let etailn_whnf : Q(ℕ) ← Meta.whnfD etailn
     if let Expr.lit (.natVal length) := etailn_whnf then
       pure (length, false, q(OfNat.ofNat $etailn_whnf))
-    else if let some ((base : Q(Nat)), offset) ← (Meta.isOffset? etailn_whnf).run then
+    else if let some ((base : Q(ℕ)), offset) ← (Meta.isOffset? etailn_whnf).run then
       pure (offset, true, q($base + $offset))
     else
       pure (0, true, etailn)
@@ -441,7 +370,7 @@ dsimproc cons_val (Matrix.vecCons _ _ _) := fun e => do
   let wrapped_i ←
     if variadic then
       -- can't wrap as we don't know the length
-      unless 0 <= i ∧ i < xs.length + tailn do return .continue
+      unless 0 ≤ i ∧ i < xs.length + tailn do return .continue
       pure i.toNat
     else
       pure (i % (xs.length + tailn)).toNat
@@ -450,261 +379,182 @@ dsimproc cons_val (Matrix.vecCons _ _ _) := fun e => do
   else
     -- Within the `tail`
     let _ ← synthInstanceQ q(NeZero $etailn)
-    have i_lit : Q(Nat) := mkRawNatLit (wrapped_i - xs.length)
+    have i_lit : Q(ℕ) := mkRawNatLit (wrapped_i - xs.length)
     return .continue (.some <| .app tail q(OfNat.ofNat $i_lit : Fin $etailn))
 
 end simprocs
 
 @[simp]
-/--
-theorem `head_cons` / 定理 `head_cons`
-
-English:
-theorem head_cons
-  given: (x : α) (u : Fin m -> α)
-  statement: vecHead (vecCons x u) = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 head_cons
-  条件: (x : α) (u : 有限集 m -> α)
-  结论: vecHead (vecCons x u) = x
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.head_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：head_cons (x : α) (u : Fin m -> α) : vecHead (vecCons x u) = x
+参数：x : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem head_cons (x : α) (u : Fin m -> α) : vecHead (vecCons x u) = x :=
+theorem head_cons (x : α) (u : Fin m → α) : vecHead (vecCons x u) = x :=
   rfl
 
 @[simp]
-/--
-theorem `tail_cons` / 定理 `tail_cons`
-
-English:
-theorem tail_cons
-  given: (x : α) (u : Fin m -> α)
-  statement: vecTail (vecCons x u) = u
-  proof: by
-  ext
-  simp [vecTail]
-
-@[simp]
-
-中文:
-定理 tail_cons
-  条件: (x : α) (u : 有限集 m -> α)
-  结论: vecTail (vecCons x u) = u
-  证明: by
-  ext
-  simp [vecTail]
-
-@[simp]
-
-Depends on / 依赖: vecTail
+/-
+**Matrix.tail_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons x u) = u
+参数：x : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons x u) = u := by
+theorem tail_cons (x : α) (u : Fin m → α) : vecTail (vecCons x u) = u := by
   ext
   simp [vecTail]
 
 @[simp]
-/--
-theorem `_root_.Fin.tail_vecCons` / 定理 `_root_.Fin.tail_vecCons`
-
-English:
-theorem _root_.Fin.tail_vecCons
-  given: (x : α) (t : Fin n -> α)
-  statement: Fin.tail (Matrix.vecCons x t) = t
-  proof: rfl
-
-中文:
-定理 _root_.有限集.tail_vecCons
-  条件: (x : α) (t : 有限集 n -> α)
-  结论: 有限集.tail (矩阵.vecCons x t) = t
-  证明: rfl
+/-
+**Matrix._root_.Fin.tail_vecCons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Fin.tail_vecCons (x : α) (t : Fin n -> α) : Fin.tail (Matrix.vecCons x t) = t :=
+theorem _root_.Fin.tail_vecCons (x : α) (t : Fin n → α) : Fin.tail (Matrix.vecCons x t) = t :=
   rfl
-
-/--
-theorem `empty_val'` / 定理 `empty_val'`
-
-English:
-theorem empty_val'
-  given: {n' : Type*} (j : n')
-  statement: (fun i => (![] : Fin 0 -> n' -> α) i j) = ![]
-  proof: empty_eq _
-
-@[simp]
-
-中文:
-定理 empty_val'
-  条件: {n' : 类型} (j : n')
-  结论: (fun i => (![] : 有限集 0 -> n' -> α) i j) = ![]
-  证明: empty_eq _
-
-@[simp]
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.empty_val'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_val' {n' : Type*} (j : n') : (fun i => (![] : Fin 0 -> n' -> α) i j)
+ = ![]
+参数：j : n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem empty_val' {n' : Type*} (j : n') : (fun i => (![] : Fin 0 -> n' -> α) i j) = ![] :=
+theorem empty_val' {n' : Type*} (j : n') : (fun i => (![] : Fin 0 → n' → α) i j) = ![] :=
   empty_eq _
 
 @[simp]
-/--
-theorem `cons_head_tail` / 定理 `cons_head_tail`
-
-English:
-theorem cons_head_tail
-  given: (u : Fin m.succ -> α)
-  statement: vecCons (vecHead u) (vecTail u) = u
-  proof: Fin.cons_self_tail _
-
-@[simp]
-
-中文:
-定理 cons_head_tail
-  条件: (u : 有限集 m.succ -> α)
-  结论: vecCons (vecHead u) (vecTail u) = u
-  证明: Fin.cons_self_tail _
-
-@[simp]
-
-Depends on / 依赖: Fin.cons_self_tail, cons_self_tail
+/-
+**Matrix.cons_head_tail** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_head_tail (u : Fin m.succ -> α) : vecCons (vecHead u) (vecTail u) = u
+参数：u : Fin m.succ -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.cons_self_tail`：cons_self_tail : cons (q 0) (tail q) = q
 -/
-theorem cons_head_tail (u : Fin m.succ -> α) : vecCons (vecHead u) (vecTail u) = u :=
+theorem cons_head_tail (u : Fin m.succ → α) : vecCons (vecHead u) (vecTail u) = u :=
   Fin.cons_self_tail _
 
 @[simp]
-/--
-theorem `range_cons` / 定理 `range_cons`
-
-English:
-theorem range_cons
-  given: (x : α) (u : Fin n -> α)
-  statement: Set.range (vecCons x u) = {x} union Set.range u
-  proof: Set.ext fun y => by simp [Fin.exists_fin_succ, eq_comm]
-
-@[simp]
-
-中文:
-定理 range_cons
-  条件: (x : α) (u : 有限集 n -> α)
-  结论: 集合.range (vecCons x u) = {x} union 集合.range u
-  证明: Set.ext fun y => by simp [Fin.exists_fin_succ, eq_comm]
-
-@[simp]
-
-Depends on / 依赖: Fin.exists_fin_succ, Set.ext, eq_comm, exists_fin_succ
+/-
+**Matrix.range_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：range_cons (x : α) (u : Fin n -> α) : Set.range (vecCons x u) = {x} union 
+Set.range u
+参数：x : α；u : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem range_cons (x : α) (u : Fin n -> α) : Set.range (vecCons x u) = {x} union Set.range u :=
+theorem range_cons (x : α) (u : Fin n → α) : Set.range (vecCons x u) = {x} ∪ Set.range u :=
   Set.ext fun y => by simp [Fin.exists_fin_succ, eq_comm]
 
 @[simp]
-/--
-theorem `range_empty` / 定理 `range_empty`
-
-English:
-theorem range_empty
-  given: (u : Fin 0 -> α)
-  statement: Set.range u = ∅
-  proof: Set.range_eq_empty _
-
-中文:
-定理 range_empty
-  条件: (u : 有限集 0 -> α)
-  结论: 集合.range u = ∅
-  证明: Set.range_eq_empty _
-
-Depends on / 依赖: Set.range_eq_empty, range_eq_empty
+/-
+**Matrix.range_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：range_empty (u : Fin 0 -> α) : Set.range u = ∅
+参数：u : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.range_eq_empty`：range_eq_empty [IsEmpty ι] (f : ι -> α) : range f = 
+∅
 -/
-theorem range_empty (u : Fin 0 -> α) : Set.range u = ∅ :=
+theorem range_empty (u : Fin 0 → α) : Set.range u = ∅ :=
   Set.range_eq_empty _
-
-/--
-theorem `range_cons_empty` / 定理 `range_cons_empty`
-
-English:
-theorem range_cons_empty
-  given: (x : α) (u : Fin 0 -> α)
-  statement: Set.range (Matrix.vecCons x u) = {x}
-  proof: by
-  rw [range_cons]; rw [range_empty]; rw [Set.union_empty]
-
-中文:
-定理 range_cons_empty
-  条件: (x : α) (u : 有限集 0 -> α)
-  结论: 集合.range (矩阵.vecCons x u) = {x}
-  证明: by
-  rw [range_cons]; rw [range_empty]; rw [Set.union_empty]
-
-Depends on / 依赖: Set.union_empty, range_cons, range_empty, union_empty
+/-
+**Matrix.range_cons_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：range_cons_empty (x : α) (u : Fin 0 -> α) : Set.range (Matrix.vecCons x u)
+ = {x}
+参数：x : α；u : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.range_cons`：range_cons (x : α) (u : Fin n -> α) : Set.range (vecC
+ons x u) = {x} union Set.range u
+· 使用定理 `Matrix.range_empty`：range_empty (u : Fin 0 -> α) : Set.range u = ∅
+· 使用定理 `Set.union_empty`：union_empty (a : Set α) : a union ∅ = a
 -/
-theorem range_cons_empty (x : α) (u : Fin 0 -> α) : Set.range (Matrix.vecCons x u) = {x} := by
-  rw [range_cons]; rw [range_empty]; rw [Set.union_empty]
+theorem range_cons_empty (x : α) (u : Fin 0 → α) : Set.range (Matrix.vecCons x u) = {x} := by
+  rw [range_cons, range_empty, Set.union_empty]
 
 -- simp can prove this (up to commutativity)
-/--
-theorem `range_cons_cons_empty` / 定理 `range_cons_cons_empty`
-
-English:
-theorem range_cons_cons_empty
-  given: (x y : α) (u : Fin 0 -> α)
-  proof: by
-  rw [range_cons]; rw [range_cons_empty]; rw [Set.singleton_union]
-
-中文:
-定理 range_cons_cons_empty
-  条件: (x y : α) (u : 有限集 0 -> α)
-  证明: by
-  rw [range_cons]; rw [range_cons_empty]; rw [Set.singleton_union]
-
-Depends on / 依赖: Set.singleton_union, range_cons, range_cons_empty, singleton_union
+/-
+**Matrix.range_cons_cons_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：range_cons_cons_empty (x y : α) (u : Fin 0 -> α) : Set.range (vecCons x <|
+ vecCons y u) = {x, y}
+参数：x y : α；u : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.range_cons`：range_cons (x : α) (u : Fin n -> α) : Set.range (vecC
+ons x u) = {x} union Set.range u
+· 使用定理 `Matrix.range_cons_empty`：range_cons_empty (x : α) (u : Fin 0 -> α) : Set
+.range (Matrix.vecCons x u) = {x}
+· 使用定理 `Set.singleton_union`：singleton_union : {a} union s = insert a s
 -/
-theorem range_cons_cons_empty (x y : α) (u : Fin 0 -> α) :
+theorem range_cons_cons_empty (x y : α) (u : Fin 0 → α) :
     Set.range (vecCons x <| vecCons y u) = {x, y} := by
-  rw [range_cons]; rw [range_cons_empty]; rw [Set.singleton_union]
-
-/--
-theorem `vecCons_const` / 定理 `vecCons_const`
-
-English:
-theorem vecCons_const
-  given: (a : α)
-  statement: (vecCons a fun _ : Fin n => a) = fun _ => a
-  proof: funext Fin.forall_iff_succ.2 ⟨rfl, cons_val_succ _ _⟩
-
-中文:
-定理 vecCons_const
-  条件: (a : α)
-  结论: (vecCons a fun _ : 有限集 n => a) = fun _ => a
-  证明: funext Fin.forall_iff_succ.2 ⟨rfl, cons_val_succ _ _⟩
-
-Depends on / 依赖: Fin.forall_iff_succ, cons_val_succ, forall_iff_succ
+  rw [range_cons, range_cons_empty, Set.singleton_union]
+/-
+**Matrix.vecCons_const** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecCons_const (a : α) : (vecCons a fun _ : Fin n => a) = fun _ => a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Fin.forall_iff_succ`：∀ {n : ℕ} {P : Fin (n + 1) → Prop}, (∀ (i : Fin (n 
++ 1)), P i) ↔ P 0 ∧ ∀ (i : Fin n), P i.succ
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
 -/
 theorem vecCons_const (a : α) : (vecCons a fun _ : Fin n => a) = fun _ => a :=
-funext Fin.forall_iff_succ.2 ⟨rfl, cons_val_succ _ _⟩
-
-/--
-theorem `vec_single_eq_const` / 定理 `vec_single_eq_const`
-
-English:
-theorem vec_single_eq_const
-  given: (a : α)
-  statement: ![a] = fun _ => a
-  proof: funext Unique.forall_iff.2 rfl
-
-中文:
-定理 vec_single_eq_const
-  条件: (a : α)
-  结论: ![a] = fun _ => a
-  证明: funext Unique.forall_iff.2 rfl
-
-Depends on / 依赖: Unique, Unique.forall_iff, forall_iff
+  funext <| Fin.forall_iff_succ.2 ⟨rfl, cons_val_succ _ _⟩
+/-
+**Matrix.vec_single_eq_const** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec_single_eq_const (a : α) : ![a] = fun _ => a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Unique.forall_iff`：forall_iff {p : α -> Prop} : (forall a, p a) ↔ p defa
+ult
 -/
 theorem vec_single_eq_const (a : α) : ![a] = fun _ => a :=
-funext Unique.forall_iff.2 rfl
+  funext <| Unique.forall_iff.2 rfl
 
 /-- `![a, b, ...] 1` is equal to `b`.
 
@@ -712,171 +562,121 @@ funext Unique.forall_iff.2 rfl
   `cons_val_succ`, because `1 : Fin 1 = 0 : Fin 1`.
 -/
 @[simp]
-/--
-theorem `cons_val_one` / 定理 `cons_val_one`
+/-
+**Matrix.cons_val_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_one (x : α) (u : Fin m.succ -> α) : vecCons x u 1 = u 0
+参数：x : α；u : Fin m.succ -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-theorem cons_val_one
-  given: (x : α) (u : Fin m.succ -> α)
-  statement: vecCons x u 1 = u 0
-  proof: rfl
+--- 原说明 ---
+`![a, b, ...] 1` is equal to `b`.
 
-中文:
-定理 cons_val_one
-  条件: (x : α) (u : 有限集 m.succ -> α)
-  结论: vecCons x u 1 = u 0
-  证明: rfl
+  The simplifier needs a special lemma for length `≥ 2`, in addition to
+  `cons_val_succ`, because `1 : Fin 1 = 0 : Fin 1`.
 -/
-theorem cons_val_one (x : α) (u : Fin m.succ -> α) : vecCons x u 1 = u 0 :=
+theorem cons_val_one (x : α) (u : Fin m.succ → α) : vecCons x u 1 = u 0 :=
   rfl
-
-/--
-theorem `cons_val_two` / 定理 `cons_val_two`
-
-English:
-theorem cons_val_two
-  given: (x : α) (u : Fin m.succ.succ -> α)
-  statement: vecCons x u 2 = vecHead (vecTail u)
-  proof: rfl
-
-中文:
-定理 cons_val_two
-  条件: (x : α) (u : 有限集 m.succ.succ -> α)
-  结论: vecCons x u 2 = vecHead (vecTail u)
-  证明: rfl
+/-
+**Matrix.cons_val_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_two (x : α) (u : Fin m.succ.succ -> α) : vecCons x u 2 = vecHead 
+(vecTail u)
+参数：x : α；u : Fin m.succ.succ -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-theorem cons_val_two (x : α) (u : Fin m.succ.succ -> α) : vecCons x u 2 = vecHead (vecTail u) := rfl
-
-/--
-lemma `cons_val_three` / 引理 `cons_val_three`
-
-English:
-lemma cons_val_three
-  given: (x : α) (u : Fin m.succ.succ.succ -> α)
-  proof: rfl
-
-中文:
-引理 cons_val_three
-  条件: (x : α) (u : 有限集 m.succ.succ.succ -> α)
-  证明: rfl
+theorem cons_val_two (x : α) (u : Fin m.succ.succ → α) : vecCons x u 2 = vecHead (vecTail u) := rfl
+/-
+**Matrix.cons_val_three** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_three (x : α) (u : Fin m.succ.succ.succ -> α) : vecCons x u 3 = v
+ecHead (vecTail (vecTail u))
+参数：x : α；u : Fin m.succ.succ.succ -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma cons_val_three (x : α) (u : Fin m.succ.succ.succ -> α) :
+lemma cons_val_three (x : α) (u : Fin m.succ.succ.succ → α) :
     vecCons x u 3 = vecHead (vecTail (vecTail u)) :=
   rfl
-
-/--
-lemma `cons_val_four` / 引理 `cons_val_four`
-
-English:
-lemma cons_val_four
-  given: (x : α) (u : Fin m.succ.succ.succ.succ -> α)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 cons_val_four
-  条件: (x : α) (u : 有限集 m.succ.succ.succ.succ -> α)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.cons_val_four** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_four (x : α) (u : Fin m.succ.succ.succ.succ -> α) : vecCons x u 4
+ = vecHead (vecTail (vecTail (vecTail u)))
+参数：x : α；u : Fin m.succ.succ.succ.succ -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma cons_val_four (x : α) (u : Fin m.succ.succ.succ.succ -> α) :
+lemma cons_val_four (x : α) (u : Fin m.succ.succ.succ.succ → α) :
     vecCons x u 4 = vecHead (vecTail (vecTail (vecTail u))) :=
   rfl
 
 @[simp]
-/--
-theorem `cons_val_fin_one` / 定理 `cons_val_fin_one`
-
-English:
-theorem cons_val_fin_one
-  given: (x : α) (u : Fin 0 -> α)
-  statement: forall (i : Fin 1), vecCons x u i = x
-  proof: by
-  rw [Fin.forall_fin_one]
-  rfl
-
-中文:
-定理 cons_val_fin_one
-  条件: (x : α) (u : 有限集 0 -> α)
-  结论: 对任意 (i : 有限集 1), vecCons x u i = x
-  证明: by
-  rw [Fin.forall_fin_one]
-  rfl
-
-Depends on / 依赖: Fin.forall_fin_one, forall_fin_one
+/-
+**Matrix.cons_val_fin_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val_fin_one (x : α) (u : Fin 0 -> α) : forall (i : Fin 1), vecCons x 
+u i = x
+参数：x : α；u : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.forall_fin_one`：∀ {p : Fin 1 → Prop}, (∀ (i : Fin 1), p i) ↔ p 0
 -/
-theorem cons_val_fin_one (x : α) (u : Fin 0 -> α) : forall (i : Fin 1), vecCons x u i = x := by
+theorem cons_val_fin_one (x : α) (u : Fin 0 → α) : ∀ (i : Fin 1), vecCons x u i = x := by
   rw [Fin.forall_fin_one]
   rfl
-
-/--
-theorem `cons_fin_one` / 定理 `cons_fin_one`
-
-English:
-theorem cons_fin_one
-  given: (x : α) (u : Fin 0 -> α)
-  statement: vecCons x u = fun _ => x
-  proof: funext (cons_val_fin_one x u)
-
-@[simp]
-
-中文:
-定理 cons_fin_one
-  条件: (x : α) (u : 有限集 0 -> α)
-  结论: vecCons x u = fun _ => x
-  证明: funext (cons_val_fin_one x u)
-
-@[simp]
-
-Depends on / 依赖: cons_val_fin_one
+/-
+**Matrix.cons_fin_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_fin_one (x : α) (u : Fin 0 -> α) : vecCons x u = fun _ => x
+参数：x : α；u : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
 -/
-theorem cons_fin_one (x : α) (u : Fin 0 -> α) : vecCons x u = fun _ => x :=
+theorem cons_fin_one (x : α) (u : Fin 0 → α) : vecCons x u = fun _ => x :=
   funext (cons_val_fin_one x u)
 
 @[simp]
-/--
-theorem `vecCons_inj` / 定理 `vecCons_inj`
-
-English:
-theorem vecCons_inj
-  given: {x y : α} {u v : Fin n -> α}
-  statement: vecCons x u = vecCons y v ↔ x = y ∧ u = v
-  proof: Fin.cons_inj
-
-中文:
-定理 vecCons_inj
-  条件: {x y : α} {u v : 有限集 n -> α}
-  结论: vecCons x u = vecCons y v ↔ x = y ∧ u = v
-  证明: Fin.cons_inj
-
-Depends on / 依赖: Fin.cons_inj, cons_inj
+/-
+**Matrix.vecCons_inj** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecCons_inj {x y : α} {u v : Fin n -> α} : vecCons x u = vecCons y v ↔ x =
+ y ∧ u = v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.cons_inj`：cons_inj {x₀ y₀ : α 0} {x y : forall i : Fin n, α i.succ} 
+: cons x₀ x = cons y₀ y ↔ x₀ = y₀ ∧ x = y
 -/
-theorem vecCons_inj {x y : α} {u v : Fin n -> α} : vecCons x u = vecCons y v ↔ x = y ∧ u = v :=
+theorem vecCons_inj {x y : α} {u v : Fin n → α} : vecCons x u = vecCons y v ↔ x = y ∧ u = v :=
   Fin.cons_inj
 
 open Lean Qq in
 /-- `mkVecLiteralQ ![x, y, z]` produces the term `q(![$x, $y, $z])`. -/
-meta def _root_.PiFin.mkLiteralQ {u : Level} {α : Q(Type u)} {n : Nat} (elems : Fin n -> Q($α)) :
-    Q(Fin $n -> $α) :=
+meta def _root_.PiFin.mkLiteralQ {u : Level} {α : Q(Type u)} {n : ℕ} (elems : Fin n → Q($α)) :
+    Q(Fin $n → $α) :=
   loop 0 q(vecEmpty)
 where
   /-- The core logic of `loop` is that `loop 0 ![] = ![a 0, a 1, a 2] = loop 1 ![a 2]`, where
   recursion starts from the end. In this example, on the right-hand side, the variable `rest := 1`
   tracks the length of the current generated notation `![a 2]`, and the last used index is
   `n - rest` (`= 3 - 1 = 2`). -/
-  loop (i : Nat) (rest : Q(Fin $i -> $α)) : Q(Fin $n -> $α) :=
+  loop (i : ℕ) (rest : Q(Fin $i → $α)) : Q(Fin $n → $α) :=
     if h : i < n then
       loop (i + 1) q(vecCons $(elems (Fin.rev ⟨i, h⟩)) $rest)
     else
       rest
 
 open Lean Qq in
-protected meta instance _root_.PiFin.toExpr [ToLevel.{u}] [ToExpr α] (n : Nat) : ToExpr (Fin n -> α) :=
+protected meta instance _root_.PiFin.toExpr [ToLevel.{u}] [ToExpr α] (n : ℕ) : ToExpr (Fin n → α) :=
   have lu := toLevel.{u}
   have eα : Q(Type $lu) := toTypeExpr α
-  let toTypeExpr := q(Fin $n -> $eα)
+  let toTypeExpr := q(Fin $n → $eα)
   { toTypeExpr, toExpr v := PiFin.mkLiteralQ fun i => show Q($eα) from toExpr (v i) }
 
 /-! ### `bit0` and `bit1` indices
@@ -889,183 +689,203 @@ addition on `Fin n`).
 -/
 
 
-/--
-Definition of `vecAppend` / `vecAppend` 的定义
+/-- `vecAppend ho u v` appends two vectors of lengths `m` and `n` to produce
+one of length `o = m + n`. This is a variant of `Fin.append` with an additional `ho` argument,
+which provides control of definitional equality for the vector length.
 
-English:
-definition vecAppend
-  signature: {α : Type*} {o : Nat} (ho : o = m + n) (u : Fin m -> α) (v : Fin n -> α)
-  body: Fin.append u v ∘ Fin.cast ho
+This turns out to be helpful when providing simp lemmas to reduce `![a, b, c] n`, and also means
+that `vecAppend ho u v 0` is valid. `Fin.append u v 0` is not valid in this case because there is
+no `Zero (Fin (m + n))` instance. -/
+/-
+**Matrix.vecAppend** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecAppend {α : Type*} {o : Nat} (ho : o = m + n) (u : Fin m -> α) (v : Fin
+ n -> α) : Fin o -> α
+参数：ho : o = m + n；u : Fin m -> α；v : Fin n -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 vecAppend
-  签名: {α : 类型} {o : 自然数} (ho : o = m + n) (u : 有限集 m -> α) (v : 有限集 n -> α)
-  定义体: Fin.append u v ∘ Fin.cast ho
+--- 原说明 ---
+`vecAppend ho u v` appends two vectors of lengths `m` and `n` to produce
+one of length `o = m + n`. This is a variant of `Fin.append` with an additional 
+`ho` argument,
+which provides control of definitional equality for the vector length.
 
-Depends on / 依赖: Fin.append, Fin.cast, append
+This turns out to be helpful when providing simp lemmas to reduce `![a, b, c] n`
+, and also means
+that `vecAppend ho u v 0` is valid. `Fin.append u v 0` is not valid in this case
+ because there is
+no `Zero (Fin (m + n))` instance.
 -/
-def vecAppend {α : Type*} {o : Nat} (ho : o = m + n) (u : Fin m -> α) (v : Fin n -> α) : Fin o -> α :=
+def vecAppend {α : Type*} {o : ℕ} (ho : o = m + n) (u : Fin m → α) (v : Fin n → α) : Fin o → α :=
   Fin.append u v ∘ Fin.cast ho
-
-/--
-theorem `vecAppend_eq_ite` / 定理 `vecAppend_eq_ite`
-
-English:
-theorem vecAppend_eq_ite
-  given: {α : Type*} {o : Nat} (ho : o = m + n) (u : Fin m -> α) (v : Fin n -> α)
-  proof: by
-  ext i
-  rw [vecAppend]; rw [Fin.append]; rw [Function.comp_apply]; rw [Fin.addCases]
-  congr with hi
-  simp only [eq_rec_constant]
-  rfl
-
-@[simp]
-
-中文:
-定理 vecAppend_eq_ite
-  条件: {α : 类型} {o : 自然数} (ho : o = m + n) (u : 有限集 m -> α) (v : 有限集 n -> α)
-  证明: by
-  ext i
-  rw [vecAppend]; rw [Fin.append]; rw [Function.comp_apply]; rw [Fin.addCases]
-  congr with hi
-  simp only [eq_rec_constant]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Fin.addCases, Fin.append, Function, Function.comp_apply, addCases, append, comp_apply, eq_rec_constant, vecAppend
+/-
+**Matrix.vecAppend_eq_ite** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecAppend_eq_ite {α : Type*} {o : Nat} (ho : o = m + n) (u : Fin m -> α) (
+v : Fin n -> α) : vecAppend ho u v = fun i : Fin o => if h : (i : Nat) < m then 
+u ⟨i, h⟩ else v ⟨(i : Nat) - m, by lia⟩
+参数：ho : o = m + n；u : Fin m -> α；v : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecAppend.eq_1`：∀ {m n : ℕ} {α : Type u_1} {o : ℕ} (ho : o = m + 
+n) (u : Fin m → α) (v : Fin n → α),   Matrix.vecAppend ho u v = Fin.append u v ∘
+ Fin.cast h…
+· 使用定理 `Fin.append.eq_1`：∀ {m n : ℕ} {α : Sort u_1} (a : Fin m → α) (b : Fin n →
+ α), Fin.append a b = Fin.addCases a b
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Fin.castAdd_castLT`：∀ {n : ℕ} (m : ℕ) (i : Fin (n + m)) (hi : ↑i < n), F
+in.castAdd m (i.castLT hi) = i
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `Fin.addCases.eq_1`：∀ {m n : ℕ} {motive : Fin (m + n) → Sort u} (left : (
+i : Fin m) → motive (Fin.castAdd n i))   (right : (i : Fin n) → motive (Fin.natA
+dd m i)…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `instSubsingletonDecidable`：∀ (p : Prop), Subsingleton (Decidable p)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_rec_constant`：∀ {α : Sort u_1} {a a' : α} {β : Sort u_2} (y : β) (h :
+ a = a'), h ▸ y = y
 -/
-theorem vecAppend_eq_ite {α : Type*} {o : Nat} (ho : o = m + n) (u : Fin m -> α) (v : Fin n -> α) :
+theorem vecAppend_eq_ite {α : Type*} {o : ℕ} (ho : o = m + n) (u : Fin m → α) (v : Fin n → α) :
     vecAppend ho u v = fun i : Fin o =>
-      if h : (i : Nat) < m then u ⟨i, h⟩ else v ⟨(i : Nat) - m, by lia⟩ := by
+      if h : (i : ℕ) < m then u ⟨i, h⟩ else v ⟨(i : ℕ) - m, by lia⟩ := by
   ext i
-  rw [vecAppend]; rw [Fin.append]; rw [Function.comp_apply]; rw [Fin.addCases]
+  rw [vecAppend, Fin.append, Function.comp_apply, Fin.addCases]
   congr with hi
   simp only [eq_rec_constant]
   rfl
 
 @[simp]
-/--
-theorem `vecAppend_apply_zero` / 定理 `vecAppend_apply_zero`
-
-English:
-theorem vecAppend_apply_zero
-  statement: {α : Type*} {o : Nat} (ho : o + 1 = m + 1 + n) (u : Fin (m + 1) -> α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 vecAppend_apply_zero
-  结论: {α : 类型} {o : 自然数} (ho : o + 1 = m + 1 + n) (u : 有限集 (m + 1) -> α)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.vecAppend_apply_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecAppend_apply_zero {α : Type*} {o : Nat} (ho : o + 1 = m + 1 + n) (u : F
+in (m + 1) -> α) (v : Fin n -> α) : vecAppend ho u v 0 = u 0
+参数：ho : o + 1 = m + 1 + n；u : Fin (m + 1) -> α；v : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-theorem vecAppend_apply_zero {α : Type*} {o : Nat} (ho : o + 1 = m + 1 + n) (u : Fin (m + 1) -> α)
-    (v : Fin n -> α) : vecAppend ho u v 0 = u 0 :=
+theorem vecAppend_apply_zero {α : Type*} {o : ℕ} (ho : o + 1 = m + 1 + n) (u : Fin (m + 1) → α)
+    (v : Fin n → α) : vecAppend ho u v 0 = u 0 :=
   rfl
 
 @[simp]
-/--
-theorem `empty_vecAppend` / 定理 `empty_vecAppend`
-
-English:
-theorem empty_vecAppend
-  given: (v : Fin n -> α)
-  statement: vecAppend n.zero_add.symm ![] v = v
-  proof: by
-  ext
-  simp [vecAppend_eq_ite]
-
-@[simp]
-
-中文:
-定理 empty_vecAppend
-  条件: (v : 有限集 n -> α)
-  结论: vecAppend n.zero_add.symm ![] v = v
-  证明: by
-  ext
-  simp [vecAppend_eq_ite]
-
-@[simp]
-
-Depends on / 依赖: vecAppend_eq_ite
+/-
+**Matrix.empty_vecAppend** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_vecAppend (v : Fin n -> α) : vecAppend n.zero_add.symm ![] v = v
+参数：v : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.vecAppend_eq_ite`：vecAppend_eq_ite {α : Type*} {o : Nat} (ho : o 
+= m + n) (u : Fin m -> α) (v : Fin n -> α) : vecAppend ho u v = fun i : Fin o =>
+ if h : (i : …
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem empty_vecAppend (v : Fin n -> α) : vecAppend n.zero_add.symm ![] v = v := by
+theorem empty_vecAppend (v : Fin n → α) : vecAppend n.zero_add.symm ![] v = v := by
   ext
   simp [vecAppend_eq_ite]
 
 @[simp]
-/--
-theorem `vecAppend_empty` / 定理 `vecAppend_empty`
-
-English:
-theorem vecAppend_empty
-  given: (v : Fin n -> α)
-  statement: vecAppend rfl v ![] = v
-  proof: by
-  ext
-  simp [vecAppend_eq_ite]
-
-@[simp]
-
-中文:
-定理 vecAppend_empty
-  条件: (v : 有限集 n -> α)
-  结论: vecAppend rfl v ![] = v
-  证明: by
-  ext
-  simp [vecAppend_eq_ite]
-
-@[simp]
-
-Depends on / 依赖: vecAppend_eq_ite
+/-
+**Matrix.vecAppend_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecAppend_empty (v : Fin n -> α) : vecAppend rfl v ![] = v
+参数：v : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.vecAppend_eq_ite`：vecAppend_eq_ite {α : Type*} {o : Nat} (ho : o 
+= m + n) (u : Fin m -> α) (v : Fin n -> α) : vecAppend ho u v = fun i : Fin o =>
+ if h : (i : …
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecAppend_empty (v : Fin n -> α) : vecAppend rfl v ![] = v := by
+theorem vecAppend_empty (v : Fin n → α) : vecAppend rfl v ![] = v := by
   ext
   simp [vecAppend_eq_ite]
 
 @[simp]
-/--
-theorem `cons_vecAppend` / 定理 `cons_vecAppend`
-
-English:
-theorem cons_vecAppend
-  given: (ho : o + 1 = m + 1 + n) (x : α) (u : Fin m -> α) (v : Fin n -> α)
-  proof: by
-  ext i
-  simp_rw [vecAppend_eq_ite]
-  split_ifs with h
-  · rcases i with ⟨⟨⟩ | i, hi⟩
-    · simp
-    · simp only [Nat.add_lt_add_iff_right] at h
-      simp [h]
-  · rcases i with ⟨⟨⟩ | i, hi⟩
-    · simp at h
-    · rw [not_lt, Fin.val_mk, Nat.add_le_add_iff_right] at h
-      simp [not_lt.2 h]
-
-中文:
-定理 cons_vecAppend
-  条件: (ho : o + 1 = m + 1 + n) (x : α) (u : 有限集 m -> α) (v : 有限集 n -> α)
-  证明: by
-  ext i
-  simp_rw [vecAppend_eq_ite]
-  split_ifs with h
-  · rcases i with ⟨⟨⟩ | i, hi⟩
-    · simp
-    · simp only [Nat.add_lt_add_iff_right] at h
-      simp [h]
-  · rcases i with ⟨⟨⟩ | i, hi⟩
-    · simp at h
-    · rw [not_lt, Fin.val_mk, Nat.add_le_add_iff_right] at h
-      simp [not_lt.2 h]
-
-Depends on / 依赖: Fin.val_mk, Nat.add_le_add_iff_right, Nat.add_lt_add_iff_right, add_le_add_iff_right, add_lt_add_iff_right, nodup_cons, not_lt, simp_rw, split_ifs, val_mk, vecAppend_eq_ite
+/-
+**Matrix.cons_vecAppend** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vecAppend (ho : o + 1 = m + 1 + n) (x : α) (u : Fin m -> α) (v : Fin 
+n -> α) : vecAppend ho (vecCons x u) v = vecCons x (vecAppend (by lia) u v)
+参数：ho : o + 1 = m + 1 + n；x : α；u : Fin m -> α；v : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.vecAppend_eq_ite`：vecAppend_eq_ite {α : Type*} {o : Nat} (ho : o 
+= m + n) (u : Fin m -> α) (v : Fin n -> α) : vecAppend ho u v = fun i : Fin o =>
+ if h : (i : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.lt_of_succ_lt_succ`：∀ {n m : ℕ}, n.succ < m.succ → n < m
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Matrix.cons_val_succ'`：cons_val_succ' {i : Nat} (h : i.succ < m.succ) (x
+ : α) (u : Fin m -> α) : vecCons x u ⟨i.succ, h⟩ = u ⟨i, Nat.lt_of_succ_lt_succ 
+h⟩
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Nat.Simproc.add_sub_add_le`：∀ (a c : ℕ) {b d : ℕ}, b ≤ d → a + b - (c + 
+d) = a - (c + (d - b))
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Nat.add_le_add_iff_right`：∀ {m k n : ℕ}, m + n ≤ k + n ↔ m ≤ k
+· 使用定理 `Fin.val_mk`：∀ {m n : ℕ} (h : m < n), ↑⟨m, h⟩ = m
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
 -/
-theorem cons_vecAppend (ho : o + 1 = m + 1 + n) (x : α) (u : Fin m -> α) (v : Fin n -> α) :
+theorem cons_vecAppend (ho : o + 1 = m + 1 + n) (x : α) (u : Fin m → α) (v : Fin n → α) :
     vecAppend ho (vecCons x u) v = vecCons x (vecAppend (by lia) u v) := by
   ext i
   simp_rw [vecAppend_eq_ite]
@@ -1079,78 +899,77 @@ theorem cons_vecAppend (ho : o + 1 = m + 1 + n) (x : α) (u : Fin m -> α) (v : 
     · rw [not_lt, Fin.val_mk, Nat.add_le_add_iff_right] at h
       simp [not_lt.2 h]
 
-/--
-Definition of `vecAlt0` / `vecAlt0` 的定义
+/-- `vecAlt0 v` gives a vector with half the length of `v`, with
+only alternate elements (even-numbered). -/
+/-
+**Matrix.vecAlt0** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecAlt0 (hm : m = n + n) (v : Fin m -> α) (k : Fin n) : α
+参数：hm : m = n + n；v : Fin m -> α；k : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vecAlt0
-  signature: (hm : m = n + n) (v : Fin m -> α) (k : Fin n)
-  body: v ⟨(k : Nat) + k, by lia⟩
-
-中文:
-定义 vecAlt0
-  签名: (hm : m = n + n) (v : 有限集 m -> α) (k : 有限集 n)
-  定义体: v ⟨(k : Nat) + k, by lia⟩
-
-Depends on / 依赖: nodup_cons
+--- 原说明 ---
+`vecAlt0 v` gives a vector with half the length of `v`, with
+only alternate elements (even-numbered).
 -/
-def vecAlt0 (hm : m = n + n) (v : Fin m -> α) (k : Fin n) : α := v ⟨(k : Nat) + k, by lia⟩
+def vecAlt0 (hm : m = n + n) (v : Fin m → α) (k : Fin n) : α := v ⟨(k : ℕ) + k, by lia⟩
 
-/--
-Definition of `vecAlt1` / `vecAlt1` 的定义
+/-- `vecAlt1 v` gives a vector with half the length of `v`, with
+only alternate elements (odd-numbered). -/
+/-
+**Matrix.vecAlt1** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecAlt1 (hm : m = n + n) (v : Fin m -> α) (k : Fin n) : α
+参数：hm : m = n + n；v : Fin m -> α；k : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vecAlt1
-  signature: (hm : m = n + n) (v : Fin m -> α) (k : Fin n)
-  body: v ⟨(k : Nat) + k + 1, hm.symm ▸ Nat.add_succ_lt_add k.2 k.2⟩
-
-中文:
-定义 vecAlt1
-  签名: (hm : m = n + n) (v : 有限集 m -> α) (k : 有限集 n)
-  定义体: v ⟨(k : Nat) + k + 1, hm.symm ▸ Nat.add_succ_lt_add k.2 k.2⟩
-
-Depends on / 依赖: Nat.add_succ_lt_add, add_succ_lt_add, hm.symm
+--- 原说明 ---
+`vecAlt1 v` gives a vector with half the length of `v`, with
+only alternate elements (odd-numbered).
 -/
-def vecAlt1 (hm : m = n + n) (v : Fin m -> α) (k : Fin n) : α :=
-  v ⟨(k : Nat) + k + 1, hm.symm ▸ Nat.add_succ_lt_add k.2 k.2⟩
+def vecAlt1 (hm : m = n + n) (v : Fin m → α) (k : Fin n) : α :=
+  v ⟨(k : ℕ) + k + 1, hm.symm ▸ Nat.add_succ_lt_add k.2 k.2⟩
 
 section bits
 
-/--
-theorem `vecAlt0_vecAppend` / 定理 `vecAlt0_vecAppend`
-
-English:
-theorem vecAlt0_vecAppend
-  given: (v : Fin n -> α)
-  proof: by
-  ext i
-  simp_rw [Function.comp, vecAlt0, vecAppend_eq_ite]
-  split_ifs with h <;> congr
-  · rw [Fin.val_mk] at h
-    exact (Nat.mod_eq_of_lt h).symm
-  · rw [Fin.val_mk, not_lt] at h
-    simp only [Nat.mod_eq_sub_mod h]
-    refine (Nat.mod_eq_of_lt ?_).symm
-    lia
-
-中文:
-定理 vecAlt0_vecAppend
-  条件: (v : 有限集 n -> α)
-  证明: by
-  ext i
-  simp_rw [Function.comp, vecAlt0, vecAppend_eq_ite]
-  split_ifs with h <;> congr
-  · rw [Fin.val_mk] at h
-    exact (Nat.mod_eq_of_lt h).symm
-  · rw [Fin.val_mk, not_lt] at h
-    simp only [Nat.mod_eq_sub_mod h]
-    refine (Nat.mod_eq_of_lt ?_).symm
-    lia
-
-Depends on / 依赖: Fin.val_mk, Function, Function.comp, Nat.mod_eq_of_lt, Nat.mod_eq_sub_mod, mod_eq_of_lt, mod_eq_sub_mod, not_lt, simp_rw, split_ifs, val_mk, vecAlt0, vecAppend_eq_ite
+/-
+**Matrix.vecAlt0_vecAppend** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecAlt0_vecAppend (v : Fin n -> α) : vecAlt0 rfl (vecAppend rfl v v) = v ∘
+ (fun n => n + n)
+参数：v : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.vecAppend_eq_ite`：vecAppend_eq_ite {α : Type*} {o : Nat} (ho : o 
+= m + n) (u : Fin m -> α) (v : Fin n -> α) : vecAppend ho u v = fun i : Fin o =>
+ if h : (i : …
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `Fin.val_mk`：∀ {m n : ℕ} (h : m < n), ↑⟨m, h⟩ = m
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Nat.mod_eq_sub_mod`：∀ {a b : ℕ}, a ≥ b → a % b = (a - b) % b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
 -/
-theorem vecAlt0_vecAppend (v : Fin n -> α) :
-    vecAlt0 rfl (vecAppend rfl v v) = v ∘ (fun n => n + n) := by
+theorem vecAlt0_vecAppend (v : Fin n → α) :
+    vecAlt0 rfl (vecAppend rfl v v) = v ∘ (fun n ↦ n + n) := by
   ext i
   simp_rw [Function.comp, vecAlt0, vecAppend_eq_ite]
   split_ifs with h <;> congr
@@ -1160,14 +979,50 @@ theorem vecAlt0_vecAppend (v : Fin n -> α) :
     simp only [Nat.mod_eq_sub_mod h]
     refine (Nat.mod_eq_of_lt ?_).symm
     lia
-
-/--
-theorem `vecAlt1_vecAppend` / 定理 `vecAlt1_vecAppend`
-
-English:
-theorem vecAlt1_vecAppend
-  given: (v : Fin (n + 1) -> α)
-  proof: by
+/-
+**Matrix.vecAlt1_vecAppend** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecAlt1_vecAppend (v : Fin (n + 1) -> α) : vecAlt1 rfl (vecAppend rfl v v)
+ = v ∘ (fun n => (n + n) + 1)
+参数：v : Fin (n + 1) -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.vecAppend_eq_ite`：vecAppend_eq_ite {α : Type*} {o : Nat} (ho : o 
+= m + n) (u : Fin m -> α) (v : Fin n -> α) : vecAppend ho u v = fun i : Fin o =>
+ if h : (i : …
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `Nat.mod_add_mod`：∀ (m n k : ℕ), (m % n + k) % n = (m + k) % n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Nat.mod_eq_sub_mod`：∀ {a b : ℕ}, a ≥ b → a % b = (a - b) % b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `Fin.val_mk`：∀ {m n : ℕ} (h : m < n), ↑⟨m, h⟩ = m
+-/
+theorem vecAlt1_vecAppend (v : Fin (n + 1) → α) :
+    vecAlt1 rfl (vecAppend rfl v v) = v ∘ (fun n ↦ (n + n) + 1) := by
   ext i
   simp_rw [Function.comp, vecAlt1, vecAppend_eq_ite]
   cases n with
@@ -1184,165 +1039,104 @@ theorem vecAlt1_vecAppend
       lia
 
 @[simp]
-
-中文:
-定理 vecAlt1_vecAppend
-  条件: (v : 有限集 (n + 1) -> α)
-  证明: by
-  ext i
-  simp_rw [Function.comp, vecAlt1, vecAppend_eq_ite]
-  cases n with
-  | zero =>
-    obtain ⟨i, hi⟩ := i
-    simp only [Nat.zero_add, Nat.lt_one_iff] at hi; subst i; rfl
-  | succ n =>
-    split_ifs with h <;> congr
-    · simp [Nat.mod_eq_of_lt, h]
-    · rw [Fin.val_mk, not_lt] at h
-      simp only [Nat.mod_add_mod,
-        Nat.mod_eq_sub_mod h, show 1 % (n + 2) = 1 from Nat.mod_eq_of_lt (by lia)]
-      refine (Nat.mod_eq_of_lt ?_).symm
-      lia
-
-@[simp]
-
-Depends on / 依赖: Fin.val_mk, Function, Function.comp, Nat.lt_one_iff, Nat.mod_add_mod, Nat.mod_eq_of_lt, Nat.mod_eq_sub_mod, Nat.zero_add, lt_one_iff, mod_add_mod, mod_eq_of_lt, mod_eq_sub_mod, not_lt, simp_rw, split_ifs, val_mk, vecAlt1, vecAppend_eq_ite, zero_add
+/-
+**Matrix.vecHead_vecAlt0** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecHead_vecAlt0 (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α) : ve
+cHead (vecAlt0 hm v) = v 0
+参数：hm : m + 2 = n + 1 + (n + 1)；v : Fin (m + 2) -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vecAlt1_vecAppend (v : Fin (n + 1) -> α) :
-    vecAlt1 rfl (vecAppend rfl v v) = v ∘ (fun n => (n + n) + 1) := by
-  ext i
-  simp_rw [Function.comp, vecAlt1, vecAppend_eq_ite]
-  cases n with
-  | zero =>
-    obtain ⟨i, hi⟩ := i
-    simp only [Nat.zero_add, Nat.lt_one_iff] at hi; subst i; rfl
-  | succ n =>
-    split_ifs with h <;> congr
-    · simp [Nat.mod_eq_of_lt, h]
-    · rw [Fin.val_mk, not_lt] at h
-      simp only [Nat.mod_add_mod,
-        Nat.mod_eq_sub_mod h, show 1 % (n + 2) = 1 from Nat.mod_eq_of_lt (by lia)]
-      refine (Nat.mod_eq_of_lt ?_).symm
-      lia
-
-@[simp]
-/--
-theorem `vecHead_vecAlt0` / 定理 `vecHead_vecAlt0`
-
-English:
-theorem vecHead_vecAlt0
-  given: (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 vecHead_vecAlt0
-  条件: (hm : m + 2 = n + 1 + (n + 1)) (v : 有限集 (m + 2) -> α)
-  证明: rfl
-
-@[simp]
--/
-theorem vecHead_vecAlt0 (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α) :
+theorem vecHead_vecAlt0 (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) → α) :
     vecHead (vecAlt0 hm v) = v 0 :=
   rfl
 
 @[simp]
-/--
-theorem `vecHead_vecAlt1` / 定理 `vecHead_vecAlt1`
-
-English:
-theorem vecHead_vecAlt1
-  given: (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α)
-  proof: by simp [vecHead, vecAlt1]
-
-中文:
-定理 vecHead_vecAlt1
-  条件: (hm : m + 2 = n + 1 + (n + 1)) (v : 有限集 (m + 2) -> α)
-  证明: by simp [vecHead, vecAlt1]
-
-Depends on / 依赖: vecAlt1, vecHead
+/-
+**Matrix.vecHead_vecAlt1** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecHead_vecAlt1 (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α) : ve
+cHead (vecAlt1 hm v) = v 1
+参数：hm : m + 2 = n + 1 + (n + 1)；v : Fin (m + 2) -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecHead_vecAlt1 (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α) :
+theorem vecHead_vecAlt1 (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) → α) :
     vecHead (vecAlt1 hm v) = v 1 := by simp [vecHead, vecAlt1]
-
-/--
-theorem `cons_vec_bit0_eq_alt0` / 定理 `cons_vec_bit0_eq_alt0`
-
-English:
-theorem cons_vec_bit0_eq_alt0
-  given: (x : α) (u : Fin n -> α) (i : Fin (n + 1))
-  proof: by
-  rw [vecAlt0_vecAppend]; rfl
-
-中文:
-定理 cons_vec_bit0_eq_alt0
-  条件: (x : α) (u : 有限集 n -> α) (i : 有限集 (n + 1))
-  证明: by
-  rw [vecAlt0_vecAppend]; rfl
-
-Depends on / 依赖: vecAlt0_vecAppend
+/-
+**Matrix.cons_vec_bit0_eq_alt0** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vec_bit0_eq_alt0 (x : α) (u : Fin n -> α) (i : Fin (n + 1)) : vecCons
+ x u (i + i) = vecAlt0 rfl (vecAppend rfl (vecCons x u) (vecCons x u)) i
+参数：x : α；u : Fin n -> α；i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecAlt0_vecAppend`：vecAlt0_vecAppend (v : Fin n -> α) : vecAlt0 r
+fl (vecAppend rfl v v) = v ∘ (fun n => n + n)
 -/
-theorem cons_vec_bit0_eq_alt0 (x : α) (u : Fin n -> α) (i : Fin (n + 1)) :
+theorem cons_vec_bit0_eq_alt0 (x : α) (u : Fin n → α) (i : Fin (n + 1)) :
     vecCons x u (i + i) = vecAlt0 rfl (vecAppend rfl (vecCons x u) (vecCons x u)) i := by
   rw [vecAlt0_vecAppend]; rfl
-
-/--
-theorem `cons_vec_bit1_eq_alt1` / 定理 `cons_vec_bit1_eq_alt1`
-
-English:
-theorem cons_vec_bit1_eq_alt1
-  given: (x : α) (u : Fin n -> α) (i : Fin (n + 1))
-  proof: by
-  rw [vecAlt1_vecAppend]; rfl
-
-中文:
-定理 cons_vec_bit1_eq_alt1
-  条件: (x : α) (u : 有限集 n -> α) (i : 有限集 (n + 1))
-  证明: by
-  rw [vecAlt1_vecAppend]; rfl
-
-Depends on / 依赖: vecAlt1_vecAppend
+/-
+**Matrix.cons_vec_bit1_eq_alt1** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vec_bit1_eq_alt1 (x : α) (u : Fin n -> α) (i : Fin (n + 1)) : vecCons
+ x u ((i + i) + 1) = vecAlt1 rfl (vecAppend rfl (vecCons x u) (vecCons x u)) i
+参数：x : α；u : Fin n -> α；i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecAlt1_vecAppend`：vecAlt1_vecAppend (v : Fin (n + 1) -> α) : vec
+Alt1 rfl (vecAppend rfl v v) = v ∘ (fun n => (n + n) + 1)
 -/
-theorem cons_vec_bit1_eq_alt1 (x : α) (u : Fin n -> α) (i : Fin (n + 1)) :
+theorem cons_vec_bit1_eq_alt1 (x : α) (u : Fin n → α) (i : Fin (n + 1)) :
     vecCons x u ((i + i) + 1) = vecAlt1 rfl (vecAppend rfl (vecCons x u) (vecCons x u)) i := by
   rw [vecAlt1_vecAppend]; rfl
 
 end bits
 
 @[simp]
-/--
-theorem `cons_vecAlt0` / 定理 `cons_vecAlt0`
-
-English:
-theorem cons_vecAlt0
-  given: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α)
-  proof: by
-  ext i
-  simp_rw [vecAlt0]
-  rcases i with ⟨⟨⟩ | i, hi⟩
-  · rfl
-  · simp only [← Nat.add_assoc, Nat.add_right_comm, cons_val_succ',
-      vecAlt0]
-
-@[simp]
-
-中文:
-定理 cons_vecAlt0
-  条件: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : 有限集 m -> α)
-  证明: by
-  ext i
-  simp_rw [vecAlt0]
-  rcases i with ⟨⟨⟩ | i, hi⟩
-  · rfl
-  · simp only [← Nat.add_assoc, Nat.add_right_comm, cons_val_succ',
-      vecAlt0]
-
-@[simp]
-
-Depends on / 依赖: Nat.add_assoc, Nat.add_right_comm, add_assoc, add_right_comm, cons_val_succ, simp_rw, vecAlt0
+/-
+**Matrix.cons_vecAlt0** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vecAlt0 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α) 
+: vecAlt0 h (vecCons x (vecCons y u)) = vecCons x (vecAlt0 (by lia) u)
+参数：h : m + 1 + 1 = n + 1 + (n + 1)；x y : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.lt_of_succ_lt_succ`：∀ {n m : ℕ}, n.succ < m.succ → n < m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.add_right_comm`：∀ (n m k : ℕ), n + m + k = n + k + m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Matrix.cons_val_succ'`：cons_val_succ' {i : Nat} (h : i.succ < m.succ) (x
+ : α) (u : Fin m -> α) : vecCons x u ⟨i.succ, h⟩ = u ⟨i, Nat.lt_of_succ_lt_succ 
+h⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_vecAlt0 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α) :
+theorem cons_vecAlt0 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m → α) :
     vecAlt0 h (vecCons x (vecCons y u)) = vecCons x (vecAlt0 (by lia) u) := by
   ext i
   simp_rw [vecAlt0]
@@ -1352,63 +1146,46 @@ theorem cons_vecAlt0 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> 
       vecAlt0]
 
 @[simp]
-/--
-theorem `empty_vecAlt0` / 定理 `empty_vecAlt0`
-
-English:
-theorem empty_vecAlt0
-  given: (α) {h}
-  statement: vecAlt0 h (![] : Fin 0 -> α) = ![]
-  proof: by
-  simp [eq_iff_true_of_subsingleton]
-
-@[simp]
-
-中文:
-定理 empty_vecAlt0
-  条件: (α) {h}
-  结论: vecAlt0 h (![] : 有限集 0 -> α) = ![]
-  证明: by
-  simp [eq_iff_true_of_subsingleton]
-
-@[simp]
-
-Depends on / 依赖: eq_iff_true_of_subsingleton
+/-
+**Matrix.empty_vecAlt0** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_vecAlt0 (α) {h} : vecAlt0 h (![] : Fin 0 -> α) = ![]
+参数：α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem empty_vecAlt0 (α) {h} : vecAlt0 h (![] : Fin 0 -> α) = ![] := by
+theorem empty_vecAlt0 (α) {h} : vecAlt0 h (![] : Fin 0 → α) = ![] := by
   simp [eq_iff_true_of_subsingleton]
 
 @[simp]
-/--
-theorem `cons_vecAlt1` / 定理 `cons_vecAlt1`
-
-English:
-theorem cons_vecAlt1
-  given: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α)
-  proof: by
-  ext i
-  simp_rw [vecAlt1]
-  rcases i with ⟨⟨⟩ | i, hi⟩
-  · rfl
-  · simp [vecAlt1, Nat.add_right_comm, ← Nat.add_assoc]
-
-@[simp]
-
-中文:
-定理 cons_vecAlt1
-  条件: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : 有限集 m -> α)
-  证明: by
-  ext i
-  simp_rw [vecAlt1]
-  rcases i with ⟨⟨⟩ | i, hi⟩
-  · rfl
-  · simp [vecAlt1, Nat.add_right_comm, ← Nat.add_assoc]
-
-@[simp]
-
-Depends on / 依赖: Nat.add_assoc, Nat.add_right_comm, add_assoc, add_right_comm, simp_rw, vecAlt1
+/-
+**Matrix.cons_vecAlt1** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vecAlt1 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α) 
+: vecAlt1 h (vecCons x (vecCons y u)) = vecCons y (vecAlt1 (by lia) u)
+参数：h : m + 1 + 1 = n + 1 + (n + 1)；x y : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.lt_of_succ_lt_succ`：∀ {n m : ℕ}, n.succ < m.succ → n < m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.add_right_comm`：∀ (n m k : ℕ), n + m + k = n + k + m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Matrix.cons_val_succ'`：cons_val_succ' {i : Nat} (h : i.succ < m.succ) (x
+ : α) (u : Fin m -> α) : vecCons x u ⟨i.succ, h⟩ = u ⟨i, Nat.lt_of_succ_lt_succ 
+h⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_vecAlt1 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α) :
+theorem cons_vecAlt1 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m → α) :
     vecAlt1 h (vecCons x (vecCons y u)) = vecCons y (vecAlt1 (by lia) u) := by
   ext i
   simp_rw [vecAlt1]
@@ -1417,46 +1194,29 @@ theorem cons_vecAlt1 (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> 
   · simp [vecAlt1, Nat.add_right_comm, ← Nat.add_assoc]
 
 @[simp]
-/--
-theorem `empty_vecAlt1` / 定理 `empty_vecAlt1`
-
-English:
-theorem empty_vecAlt1
-  given: (α) {h}
-  statement: vecAlt1 h (![] : Fin 0 -> α) = ![]
-  proof: by
-  simp [eq_iff_true_of_subsingleton]
-
-中文:
-定理 empty_vecAlt1
-  条件: (α) {h}
-  结论: vecAlt1 h (![] : 有限集 0 -> α) = ![]
-  证明: by
-  simp [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: eq_iff_true_of_subsingleton
+/-
+**Matrix.empty_vecAlt1** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_vecAlt1 (α) {h} : vecAlt1 h (![] : Fin 0 -> α) = ![]
+参数：α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem empty_vecAlt1 (α) {h} : vecAlt1 h (![] : Fin 0 -> α) = ![] := by
+theorem empty_vecAlt1 (α) {h} : vecAlt1 h (![] : Fin 0 → α) = ![] := by
   simp [eq_iff_true_of_subsingleton]
 
 end Val
 
-/--
-lemma `const_fin1_eq` / 引理 `const_fin1_eq`
-
-English:
-lemma const_fin1_eq
-  given: (x : α)
-  statement: (fun _ : Fin 1 => x) = ![x]
-  proof: (cons_fin_one x _).symm
-
-中文:
-引理 const_fin1_eq
-  条件: (x : α)
-  结论: (fun _ : 有限集 1 => x) = ![x]
-  证明: (cons_fin_one x _).symm
-
-Depends on / 依赖: cons_fin_one
+/-
+**Matrix.const_fin1_eq** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：const_fin1_eq (x : α) : (fun _ : Fin 1 => x) = ![x]
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.cons_fin_one`：cons_fin_one (x : α) (u : Fin 0 -> α) : vecCons x u
+ = fun _ => x
 -/
 lemma const_fin1_eq (x : α) : (fun _ : Fin 1 => x) = ![x] :=
   (cons_fin_one x _).symm
@@ -1468,38 +1228,36 @@ lemma const_fin1_eq (x : α) : (fun _ : Fin 1 => x) = ![x] :=
 section swap
 
 @[simp]
-/--
-lemma `cons_cons_comp_swap_zero_one` / 引理 `cons_cons_comp_swap_zero_one`
-
-English:
-lemma cons_cons_comp_swap_zero_one
-  given: (a b : α) (x : Fin n -> α)
-  proof: by
-  ext j : 1
-  match j with
-  | 0 => simp
-  | 1 => simp
-  | ⟨i + 2, h⟩ =>
-    have h' : (⟨i + 2, h⟩ : Fin n.succ.succ) = Fin.succ (Fin.succ ⟨i, by lia⟩) := by grind
-    simp only [Nat.succ_eq_add_one, h', Function.comp_apply,
-      Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero _) (Fin.succ_succ_ne_one _), cons_val_succ]
-
-中文:
-引理 cons_cons_comp_swap_zero_one
-  条件: (a b : α) (x : 有限集 n -> α)
-  证明: by
-  ext j : 1
-  match j with
-  | 0 => simp
-  | 1 => simp
-  | ⟨i + 2, h⟩ =>
-    have h' : (⟨i + 2, h⟩ : Fin n.succ.succ) = Fin.succ (Fin.succ ⟨i, by lia⟩) := by grind
-    simp only [Nat.succ_eq_add_one, h', Function.comp_apply,
-      Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero _) (Fin.succ_succ_ne_one _), cons_val_succ]
-
-Depends on / 依赖: Equiv.swap_apply_of_ne_of_ne, Fin.succ, Fin.succ_ne_zero, Fin.succ_succ_ne_one, Function, Function.comp_apply, Nat.succ_eq_add_one, comp_apply, cons_val_succ, n.succ.succ, succ_eq_add_one, succ_ne_zero, succ_succ_ne_one, swap_apply_of_ne_of_ne
+/-
+**Matrix.cons_cons_comp_swap_zero_one** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：cons_cons_comp_swap_zero_one (a b : α) (x : Fin n -> α) : vecCons a (vecCo
+ns b x) ∘ (Equiv.swap 0 1) = vecCons b (vecCons a x)
+参数：a b : α；x : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.swap_apply_right`：swap_apply_right (a b : α) : swap a b b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Fin.succ_ne_zero`：∀ {n : ℕ} (k : Fin n), k.succ ≠ 0
+· 使用定理 `Fin.succ_succ_ne_one`：∀ {n : ℕ} (a : Fin n), a.succ.succ ≠ 1
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
 -/
-lemma cons_cons_comp_swap_zero_one (a b : α) (x : Fin n -> α) :
+lemma cons_cons_comp_swap_zero_one (a b : α) (x : Fin n → α) :
     vecCons a (vecCons b x) ∘ (Equiv.swap 0 1) = vecCons b (vecCons a x) := by
   ext j : 1
   match j with
@@ -1509,41 +1267,38 @@ lemma cons_cons_comp_swap_zero_one (a b : α) (x : Fin n -> α) :
     have h' : (⟨i + 2, h⟩ : Fin n.succ.succ) = Fin.succ (Fin.succ ⟨i, by lia⟩) := by grind
     simp only [Nat.succ_eq_add_one, h', Function.comp_apply,
       Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero _) (Fin.succ_succ_ne_one _), cons_val_succ]
-
-/--
-lemma `cons_swap` / 引理 `cons_swap`
-
-English:
-lemma cons_swap
-  given: (a : α) (x : Fin n -> α) (i j : Fin n)
-  proof: by
-  ext k : 1
-  rcases eq_or_ne k 0 with rfl | hk₀
-  · simp [Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero i).symm (Fin.succ_ne_zero j).symm]
-  rcases eq_or_ne k i.succ with rfl | hki
-  · simp
-  rcases eq_or_ne k j.succ with rfl | hkj
-  · simp
-  have hk : k = Fin.succ ⟨k - 1, by lia⟩ := by grind
-  rw [Function.comp_apply]; rw [Equiv.swap_apply_of_ne_of_ne hki hkj]; rw [hk]; rw [cons_val_succ]; rw [Function.comp_apply]; rw [cons_val_succ]; rw [Equiv.swap_apply_of_ne_of_ne (by grind) (by grind)]
-
-中文:
-引理 cons_swap
-  条件: (a : α) (x : 有限集 n -> α) (i j : 有限集 n)
-  证明: by
-  ext k : 1
-  rcases eq_or_ne k 0 with rfl | hk₀
-  · simp [Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero i).symm (Fin.succ_ne_zero j).symm]
-  rcases eq_or_ne k i.succ with rfl | hki
-  · simp
-  rcases eq_or_ne k j.succ with rfl | hkj
-  · simp
-  have hk : k = Fin.succ ⟨k - 1, by lia⟩ := by grind
-  rw [Function.comp_apply]; rw [Equiv.swap_apply_of_ne_of_ne hki hkj]; rw [hk]; rw [cons_val_succ]; rw [Function.comp_apply]; rw [cons_val_succ]; rw [Equiv.swap_apply_of_ne_of_ne (by grind) (by grind)]
-
-Depends on / 依赖: Equiv.swap_apply_of_ne_of_ne, Fin.succ, Fin.succ_ne_zero, Function, Function.comp_apply, comp_apply, cons_val_succ, eq_or_ne, i.succ, j.succ, succ_ne_zero, swap_apply_of_ne_of_ne
+/-
+**Matrix.cons_swap** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：cons_swap (a : α) (x : Fin n -> α) (i j : Fin n) : vecCons a (x ∘ (Equiv.s
+wap i j)) = vecCons a x ∘ (Equiv.swap i.succ j.succ)
+参数：a : α；x : Fin n -> α；i j : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Fin.succ_ne_zero`：∀ {n : ℕ} (k : Fin n), k.succ ≠ 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `Equiv.swap_apply_right`：swap_apply_right (a b : α) : swap a b b = a
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
 -/
-lemma cons_swap (a : α) (x : Fin n -> α) (i j : Fin n) :
+lemma cons_swap (a : α) (x : Fin n → α) (i j : Fin n) :
     vecCons a (x ∘ (Equiv.swap i j)) = vecCons a x ∘ (Equiv.swap i.succ j.succ) := by
   ext k : 1
   rcases eq_or_ne k 0 with rfl | hk₀
@@ -1553,8 +1308,10 @@ lemma cons_swap (a : α) (x : Fin n -> α) (i j : Fin n) :
   rcases eq_or_ne k j.succ with rfl | hkj
   · simp
   have hk : k = Fin.succ ⟨k - 1, by lia⟩ := by grind
-  rw [Function.comp_apply]; rw [Equiv.swap_apply_of_ne_of_ne hki hkj]; rw [hk]; rw [cons_val_succ]; rw [Function.comp_apply]; rw [cons_val_succ]; rw [Equiv.swap_apply_of_ne_of_ne (by grind) (by grind)]
+  rw [Function.comp_apply, Equiv.swap_apply_of_ne_of_ne hki hkj, hk, cons_val_succ,
+    Function.comp_apply, cons_val_succ, Equiv.swap_apply_of_ne_of_ne (by grind) (by grind)]
 
 end swap
 
 end Matrix
+

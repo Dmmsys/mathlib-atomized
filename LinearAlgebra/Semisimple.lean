@@ -50,117 +50,144 @@ section CommRing
 
 variable (f : End R M)
 
-/--
-Definition of `IsSemisimple` / `IsSemisimple` 的定义
+/-- A linear endomorphism of an `R`-module `M` is called *semisimple* if the induced `R[X]`-module
+structure on `M` is semisimple. This is equivalent to saying that every `f`-invariant `R`-submodule
+of `M` has an `f`-invariant complement: see `Module.End.isSemisimple_iff`. -/
+/-
+**Module.End.IsSemisimple** 是 Mathlib 中的一个定义，位于命名空间 `Module.End`。
+形式化陈述：IsSemisimple
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSemisimple
-  body: IsSemisimpleModule R[X] (AEval' f)
-
-中文:
-定义 是半单
-  定义体: IsSemisimpleModule R[X] (AEval' f)
-
-Depends on / 依赖: IsSemisimpleModule
+--- 原说明 ---
+A linear endomorphism of an `R`-module `M` is called *semisimple* if the induced
+ `R[X]`-module
+structure on `M` is semisimple. This is equivalent to saying that every `f`-inva
+riant `R`-submodule
+of `M` has an `f`-invariant complement: see `Module.End.isSemisimple_iff`.
 -/
 def IsSemisimple := IsSemisimpleModule R[X] (AEval' f)
 
-/--
-Definition of `IsFinitelySemisimple` / `IsFinitelySemisimple` 的定义
+/-- A weaker version of semisimplicity that only prescribes behaviour on finitely-generated
+submodules. -/
+/-
+**Module.End.IsFinitelySemisimple** 是 Mathlib 中的一个定义，位于命名空间 `Module.End`。
+形式化陈述：IsFinitelySemisimple : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsFinitelySemisimple
-  signature: : Prop
-  body: forall p (hp : p in invtSubmodule f), Module.Finite R p -> IsSemisimple (LinearMap.restrict f hp)
-
-中文:
-定义 IsFinitelySemisimple
-  签名: : 命题
-  定义体: forall p (hp : p in invtSubmodule f), Module.Finite R p -> IsSemisimple (LinearMap.restrict f hp)
-
-Depends on / 依赖: Finite, IsSemisimple, LinearMap, LinearMap.restrict, Module, Module.Finite, invtSubmodule, restrict
+--- 原说明 ---
+A weaker version of semisimplicity that only prescribes behaviour on finitely-ge
+nerated
+submodules.
 -/
 def IsFinitelySemisimple : Prop :=
-  forall p (hp : p in invtSubmodule f), Module.Finite R p -> IsSemisimple (LinearMap.restrict f hp)
+  ∀ p (hp : p ∈ invtSubmodule f), Module.Finite R p → IsSemisimple (LinearMap.restrict f hp)
 
 variable {f}
 
-/--
-lemma `isSemisimple_iff'` / 引理 `isSemisimple_iff'`
+/-- A linear endomorphism is semisimple if every invariant submodule has in invariant complement.
 
-English:
-lemma isSemisimple_iff'
-  proof: by
-  rw [IsSemisimple]; rw [isSemisimpleModule_iff]; rw [(AEval.mapSubmodule R M f).symm.complementedLattice_iff]; rw [complementedLattice_iff]
-  rfl
+See also `Module.End.isSemisimple_iff`. -/
+/-
+**Module.End.isSemisimple_iff'** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isSemisimple_iff' : f.IsSemisimple ↔ forall p : invtSubmodule f, exists q 
+: invtSubmodule f, IsCompl p q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.IsSemisimple.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst : Co
+mmRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (f : Module.E
+nd R M), f.IsSemis…
+· 使用定理 `isSemisimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) 
+[inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSemisimpleModule R M
+ ↔ Complemen…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `OrderIso.complementedLattice_iff`：OrderIso.complementedLattice_iff (f : 
+α ≃o β) : ComplementedLattice α ↔ ComplementedLattice β
+· 使用引理 `complementedLattice_iff`：complementedLattice_iff (α) [Lattice α] [Bounde
+dOrder α] : ComplementedLattice α ↔ forall a : α, exists b : α, IsCompl a b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-中文:
-引理 isSemisimple_iff'
-  证明: by
-  rw [IsSemisimple]; rw [isSemisimpleModule_iff]; rw [(AEval.mapSubmodule R M f).symm.complementedLattice_iff]; rw [complementedLattice_iff]
-  rfl
+--- 原说明 ---
+A linear endomorphism is semisimple if every invariant submodule has in invarian
+t complement.
 
-Depends on / 依赖: AEval.mapSubmodule, IsSemisimple, complementedLattice_iff, isSemisimpleModule_iff, mapSubmodule, symm.complementedLattice_iff
+See also `Module.End.isSemisimple_iff`.
 -/
 lemma isSemisimple_iff' :
-    f.IsSemisimple ↔ forall p : invtSubmodule f, exists q : invtSubmodule f, IsCompl p q := by
-  rw [IsSemisimple]; rw [isSemisimpleModule_iff]; rw [(AEval.mapSubmodule R M f).symm.complementedLattice_iff]; rw [complementedLattice_iff]
+    f.IsSemisimple ↔ ∀ p : invtSubmodule f, ∃ q : invtSubmodule f, IsCompl p q := by
+  rw [IsSemisimple, isSemisimpleModule_iff, (AEval.mapSubmodule R M f).symm.complementedLattice_iff,
+    complementedLattice_iff]
   rfl
-
-/--
-lemma `isSemisimple_iff` / 引理 `isSemisimple_iff`
-
-English:
-lemma isSemisimple_iff
-  proof: by
-  simp [isSemisimple_iff']
-
-中文:
-引理 isSemisimple_iff
-  证明: by
-  simp [isSemisimple_iff']
-
-Depends on / 依赖: isSemisimple_iff
+/-
+**Module.End.isSemisimple_iff** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isSemisimple_iff : f.IsSemisimple ↔ forall p in invtSubmodule f, exists q 
+in invtSubmodule f, IsCompl p q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isSemisimple_iff :
-    f.IsSemisimple ↔ forall p in invtSubmodule f, exists q in invtSubmodule f, IsCompl p q := by
+    f.IsSemisimple ↔ ∀ p ∈ invtSubmodule f, ∃ q ∈ invtSubmodule f, IsCompl p q := by
   simp [isSemisimple_iff']
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isSemisimple_restrict_iff` / 引理 `isSemisimple_restrict_iff`
-
-English:
-lemma isSemisimple_restrict_iff
-  given: (p) (hp : p in invtSubmodule f)
-  proof: by
-  let e : Submodule R[X] (AEval' (f.restrict hp)) ≃o Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
-    (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
-      (Submodule.mapIic _)
-  simp_rw [IsSemisimple, isSemisimpleModule_iff, e.complementedLattice_iff, disjoint_iff,
-    ← (OrderIso.Iic _ _).complementedLattice_iff, Iic.complementedLattice_iff, Subtype.forall,
-    Subtype.exists, Subtype.mk_le_mk, Sublattice.mk_inf_mk, Sublattice.mk_sup_mk, Subtype.mk.injEq,
-    exists_and_left, exists_and_right, invtSubmodule.mk_eq_bot_iff, exists_prop, and_assoc]
-  rfl
-
-中文:
-引理 isSemisimple_restrict_iff
-  条件: (p) (hp : p in invtSubmodule f)
-  证明: by
-  let e : Submodule R[X] (AEval' (f.restrict hp)) ≃o Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
-    (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
-      (Submodule.mapIic _)
-  simp_rw [IsSemisimple, isSemisimpleModule_iff, e.complementedLattice_iff, disjoint_iff,
-    ← (OrderIso.Iic _ _).complementedLattice_iff, Iic.complementedLattice_iff, Subtype.forall,
-    Subtype.exists, Subtype.mk_le_mk, Sublattice.mk_inf_mk, Sublattice.mk_sup_mk, Subtype.mk.injEq,
-    exists_and_left, exists_and_right, invtSubmodule.mk_eq_bot_iff, exists_prop, and_assoc]
-  rfl
-
-Depends on / 依赖: AEval.mapSubmodule, AEval.restrict_equiv_mapSubmodule, Iic.complementedLattice_iff, IsSemisimple, OrderIso, OrderIso.Iic, Sublattice, Sublattice.mk_inf_mk, Sublattice.mk_sup_mk, Submodule, Submodule.mapIic, Submodule.orderIsoMapComap, Subtype, Subtype.exists, Subtype.forall, Subtype.mk.injEq, Subtype.mk_le_mk, complementedLattice_iff, disjoint_iff, e.complementedLattice_iff
+/-
+**Module.End.isSemisimple_restrict_iff** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isSemisimple_restrict_iff (p) (hp : p in invtSubmodule f) : IsSemisimple (
+LinearMap.restrict f hp) ↔ forall q in f.invtSubmodule, q <= p -> exists r <= p,
+ r in f.invtSubmodule ∧ Disjoint q r ∧ q ⊔ r = p
+参数：p；hp : p in invtSubmodule f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.complementedLattice_iff`：OrderIso.complementedLattice_iff (f : 
+α ≃o β) : ComplementedLattice α ↔ ComplementedLattice β
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Sublattice.infClosed`：∀ {α : Type u_2} [inst : Lattice α] (L : Sublattic
+e α), InfClosed ↑L
+· 使用定理 `Sublattice.supClosed`：∀ {α : Type u_2} [inst : Lattice α] (L : Sublattic
+e α), SupClosed ↑L
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma isSemisimple_restrict_iff (p) (hp : p in invtSubmodule f) :
+lemma isSemisimple_restrict_iff (p) (hp : p ∈ invtSubmodule f) :
     IsSemisimple (LinearMap.restrict f hp) ↔
-    forall q in f.invtSubmodule, q <= p -> exists r <= p, r in f.invtSubmodule ∧ Disjoint q r ∧ q ⊔ r = p := by
+    ∀ q ∈ f.invtSubmodule, q ≤ p → ∃ r ≤ p, r ∈ f.invtSubmodule ∧ Disjoint q r ∧ q ⊔ r = p := by
   let e : Submodule R[X] (AEval' (f.restrict hp)) ≃o Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
     (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
       (Submodule.mapIic _)
@@ -170,245 +197,271 @@ lemma isSemisimple_restrict_iff (p) (hp : p in invtSubmodule f) :
     exists_and_left, exists_and_right, invtSubmodule.mk_eq_bot_iff, exists_prop, and_assoc]
   rfl
 
-/--
-lemma `isFinitelySemisimple_iff'` / 引理 `isFinitelySemisimple_iff'`
+/-- A linear endomorphism is finitely semisimple if it is semisimple on every finitely-generated
+invariant submodule.
 
-English:
-lemma isFinitelySemisimple_iff'
-  proof: Iff.rfl
+See also `Module.End.isFinitelySemisimple_iff`. -/
+/-
+**Module.End.isFinitelySemisimple_iff'** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isFinitelySemisimple_iff' : f.IsFinitelySemisimple ↔ forall p (hp : p in i
+nvtSubmodule f), Module.Finite R p -> IsSemisimple (LinearMap.restrict f hp)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-中文:
-引理 isFinitelySemisimple_iff'
-  证明: Iff.rfl
+--- 原说明 ---
+A linear endomorphism is finitely semisimple if it is semisimple on every finite
+ly-generated
+invariant submodule.
 
-Depends on / 依赖: Iff.rfl
+See also `Module.End.isFinitelySemisimple_iff`.
 -/
 lemma isFinitelySemisimple_iff' :
-    f.IsFinitelySemisimple ↔ forall p (hp : p in invtSubmodule f),
-      Module.Finite R p -> IsSemisimple (LinearMap.restrict f hp) :=
+    f.IsFinitelySemisimple ↔ ∀ p (hp : p ∈ invtSubmodule f),
+      Module.Finite R p → IsSemisimple (LinearMap.restrict f hp) :=
   Iff.rfl
 
-/--
-lemma `isFinitelySemisimple_iff` / 引理 `isFinitelySemisimple_iff`
+/-- A characterisation of `Module.End.IsFinitelySemisimple` using only the lattice of submodules of
+`M` (thus avoiding submodules of submodules). -/
+/-
+**Module.End.isFinitelySemisimple_iff** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isFinitelySemisimple_iff : f.IsFinitelySemisimple ↔ forall p in invtSubmod
+ule f, Module.Finite R p -> forall q in invtSubmodule f, q <= p -> exists r, r <
+= p ∧ r in invtSubmodule f ∧ Disjoint q r ∧ q ⊔ r = p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma isFinitelySemisimple_iff
-  proof: by
-  simp_rw [isFinitelySemisimple_iff', isSemisimple_restrict_iff]
-
-@[simp]
-
-中文:
-引理 isFinitelySemisimple_iff
-  证明: by
-  simp_rw [isFinitelySemisimple_iff', isSemisimple_restrict_iff]
-
-@[simp]
-
-Depends on / 依赖: isFinitelySemisimple_iff, isSemisimple_restrict_iff, simp_rw
+--- 原说明 ---
+A characterisation of `Module.End.IsFinitelySemisimple` using only the lattice o
+f submodules of
+`M` (thus avoiding submodules of submodules).
 -/
 lemma isFinitelySemisimple_iff :
-    f.IsFinitelySemisimple ↔ forall p in invtSubmodule f, Module.Finite R p -> forall q in invtSubmodule f,
-      q <= p -> exists r, r <= p ∧ r in invtSubmodule f ∧ Disjoint q r ∧ q ⊔ r = p := by
+    f.IsFinitelySemisimple ↔ ∀ p ∈ invtSubmodule f, Module.Finite R p → ∀ q ∈ invtSubmodule f,
+      q ≤ p → ∃ r, r ≤ p ∧ r ∈ invtSubmodule f ∧ Disjoint q r ∧ q ⊔ r = p := by
   simp_rw [isFinitelySemisimple_iff', isSemisimple_restrict_iff]
 
 @[simp]
-/--
-lemma `isSemisimple_zero` / 引理 `isSemisimple_zero`
-
-English:
-lemma isSemisimple_zero
-  given: [IsSemisimpleModule R M]
-  statement: IsSemisimple (0 : Module.End R M)
-  proof: by
-  simpa [isSemisimple_iff] using exists_isCompl
-
-@[simp]
-
-中文:
-引理 isSemisimple_zero
-  条件: [是半单模 R M]
-  结论: 是半单 (0 : 模.End R M)
-  证明: by
-  simpa [isSemisimple_iff] using exists_isCompl
-
-@[simp]
-
-Depends on / 依赖: exists_isCompl, isSemisimple_iff
+/-
+**Module.End.isSemisimple_zero** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isSemisimple_zero [IsSemisimpleModule R M] : IsSemisimple (0 : Module.End 
+R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.invtSubmodule.zero`：∀ {R : Type u_1} {M : Type u_2} [inst : S
+emiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   Module.End
+.invtSubmodule 0 = …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 lemma isSemisimple_zero [IsSemisimpleModule R M] : IsSemisimple (0 : Module.End R M) := by
   simpa [isSemisimple_iff] using exists_isCompl
 
 @[simp]
-/--
-lemma `isSemisimple_id` / 引理 `isSemisimple_id`
-
-English:
-lemma isSemisimple_id
-  given: [IsSemisimpleModule R M]
-  statement: IsSemisimple (LinearMap.id : Module.End R M)
-  proof: by
-  simpa [isSemisimple_iff] using exists_isCompl
-
-中文:
-引理 isSemisimple_id
-  条件: [是半单模 R M]
-  结论: 是半单 (线性映射.id : 模.End R M)
-  证明: by
-  simpa [isSemisimple_iff] using exists_isCompl
-
-Depends on / 依赖: exists_isCompl, isSemisimple_iff
+/-
+**Module.End.isSemisimple_id** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isSemisimple_id [IsSemisimpleModule R M] : IsSemisimple (LinearMap.id : Mo
+dule.End R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.invtSubmodule.id`：∀ {R : Type u_1} {M : Type u_2} [inst : Sem
+iring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   Module.End.i
+nvtSubmodule Line…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 lemma isSemisimple_id [IsSemisimpleModule R M] : IsSemisimple (LinearMap.id : Module.End R M) := by
   simpa [isSemisimple_iff] using exists_isCompl
-
-/--
-lemma `isSemisimple_neg` / 引理 `isSemisimple_neg`
-
-English:
-lemma isSemisimple_neg
-  statement: (-f).IsSemisimple ↔ f.IsSemisimple
-  proof: by
-  simp [isSemisimple_iff, mem_invtSubmodule]
-
-中文:
-引理 isSemisimple_neg
-  结论: (-f).是半单 ↔ f.是半单
-  证明: by
-  simp [isSemisimple_iff, mem_invtSubmodule]
+/-
+**Module.End.isSemisimple_neg** 是 Mathlib 中的一个定理，位于命名空间 `Module.End`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {f : Module.End R M}, (-f).IsSemisimple ↔ f.I
+sSemisimple
+参数：-f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `Submodule.comap_neg`：comap_neg {f : M ->ₗ[R] M₂} {p : Submodule R M₂} : 
+p.comap (-f) = p.comap f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma isSemisimple_neg : (-f).IsSemisimple ↔ f.IsSemisimple := by
   simp [isSemisimple_iff, mem_invtSubmodule]
 
 variable (f) in
-/--
-lemma `_root_.LinearEquiv.isSemisimple_iff` / 引理 `_root_.LinearEquiv.isSemisimple_iff`
-
-English:
-lemma _root_.LinearEquiv.isSemisimple_iff
-  statement: {M₂ : Type*} [AddCommGroup M₂] [Module R M₂]
-  proof: by
-  let e : AEval' f ≃ₗ[R[X]] AEval' g := LinearEquiv.ofAEval _ (e.trans (AEval'.of g)) fun x => by
-    simpa [AEval'.X_smul_of] using LinearMap.congr_fun he x
-  simp_rw [IsSemisimple, isSemisimpleModule_iff,
-    (Submodule.orderIsoMapComap e).complementedLattice_iff]
-
-中文:
-引理 _root_.线性等价.isSemisimple_iff
-  结论: {M₂ : 类型} [加法交换群 M₂] [模 R M₂]
-  证明: by
-  let e : AEval' f ≃ₗ[R[X]] AEval' g := LinearEquiv.ofAEval _ (e.trans (AEval'.of g)) fun x => by
-    simpa [AEval'.X_smul_of] using LinearMap.congr_fun he x
-  simp_rw [IsSemisimple, isSemisimpleModule_iff,
-    (Submodule.orderIsoMapComap e).complementedLattice_iff]
+/-
+**Module.End._root_.LinearEquiv.isSemisimple_iff** 是 Mathlib 中的一个引理，位于命名空间 `Modu
+le.End`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma _root_.LinearEquiv.isSemisimple_iff {M₂ : Type*} [AddCommGroup M₂] [Module R M₂]
     (g : End R M₂) (e : M ≃ₗ[R] M₂) (he : e ∘ₗ f = g ∘ₗ e) :
     f.IsSemisimple ↔ g.IsSemisimple := by
-  let e : AEval' f ≃ₗ[R[X]] AEval' g := LinearEquiv.ofAEval _ (e.trans (AEval'.of g)) fun x => by
+  let e : AEval' f ≃ₗ[R[X]] AEval' g := LinearEquiv.ofAEval _ (e.trans (AEval'.of g)) fun x ↦ by
     simpa [AEval'.X_smul_of] using LinearMap.congr_fun he x
   simp_rw [IsSemisimple, isSemisimpleModule_iff,
     (Submodule.orderIsoMapComap e).complementedLattice_iff]
-
-/--
-lemma `eq_zero_of_isNilpotent_isSemisimple` / 引理 `eq_zero_of_isNilpotent_isSemisimple`
-
-English:
-lemma eq_zero_of_isNilpotent_isSemisimple
-  given: (hn : IsNilpotent f) (hs : f.IsSemisimple)
-  statement: f = 0
-  proof: by
-  have ⟨n, h0⟩ := hn
-  rw [← aeval_X (R := R) f]; rw [← aeval_X_pow (R := R) f] at h0
-  rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)] at h0 ⊢
-  exact hs.annihilator_isRadical _ _ ⟨n, h0⟩
-
-中文:
-引理 eq_zero_of_isNilpotent_isSemisimple
-  条件: (hn : 是幂零 f) (hs : f.是半单)
-  结论: f = 0
-  证明: by
-  have ⟨n, h0⟩ := hn
-  rw [← aeval_X (R := R) f]; rw [← aeval_X_pow (R := R) f] at h0
-  rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)] at h0 ⊢
-  exact hs.annihilator_isRadical _ _ ⟨n, h0⟩
-
-Depends on / 依赖: AEval.annihilator_eq_ker_aeval, RingHom, RingHom.mem_ker, aeval_X, aeval_X_pow, annihilator_eq_ker_aeval, annihilator_isRadical, hs.annihilator_isRadical, mem_ker
+/-
+**Module.End.eq_zero_of_isNilpotent_isSemisimple** 是 Mathlib 中的一个引理，位于命名空间 `Modu
+le.End`。
+形式化陈述：eq_zero_of_isNilpotent_isSemisimple (hn : IsNilpotent f) (hs : f.IsSemisim
+ple) : f = 0
+参数：hn : IsNilpotent f；hs : f.IsSemisimple。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用引理 `Module.AEval.annihilator_eq_ker_aeval`：annihilator_eq_ker_aeval [Faithfu
+lSMul A M] : annihilator R[X] (AEval R M a) = RingHom.ker (aeval a)
+· 使用定理 `IsSemisimpleModule.annihilator_isRadical`：annihilator_isRadical (R) [Com
+mRing R] [Module R M] [IsSemisimpleModule R M] : (Module.annihilator R M).IsRadi
+cal
+· 使用定理 `Polynomial.aeval_X_pow`：aeval_X_pow {n : Nat} : aeval x ((X : R[X]) ^ n)
+ = x ^ n
 -/
 lemma eq_zero_of_isNilpotent_isSemisimple (hn : IsNilpotent f) (hs : f.IsSemisimple) : f = 0 := by
   have ⟨n, h0⟩ := hn
   rw [← aeval_X (R := R) f]; rw [← aeval_X_pow (R := R) f] at h0
-  rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)] at h0 ⊢
+  rw [← RingHom.mem_ker, ← AEval.annihilator_eq_ker_aeval (M := M)] at h0 ⊢
   exact hs.annihilator_isRadical _ _ ⟨n, h0⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `eq_zero_of_isNilpotent_of_isFinitelySemisimple` / 引理 `eq_zero_of_isNilpotent_of_isFinitelySemisimple`
-
-English:
-lemma eq_zero_of_isNilpotent_of_isFinitelySemisimple
-  proof: by
-  have (p) (hp₁ : p in f.invtSubmodule) (hp₂ : Module.Finite R p) : f.restrict hp₁ = 0 := by
-    specialize hs p hp₁ hp₂
-    replace hn : IsNilpotent (f.restrict hp₁) := isNilpotent.restrict hp₁ hn
-    exact eq_zero_of_isNilpotent_isSemisimple hn hs
-  ext x
-  obtain ⟨k : Nat, hk : f ^ k = 0⟩ := hn
-  let p := Submodule.span R {(f ^ i) x | (i : Nat) (_ : i <= k)}
-  have hp₁ : p in f.invtSubmodule := by
-    simp only [mem_invtSubmodule, p, Submodule.span_le]
-    rintro - ⟨i, hi, rfl⟩
-    apply Submodule.subset_span
-    rcases lt_or_eq_of_le hi with hik | rfl
-    · exact ⟨i + 1, hik, by simpa [Module.End.pow_apply] using iterate_succ_apply' f i x⟩
-    · exact ⟨i, by simp [hk]⟩
-  have hp₂ : Module.Finite R p := by
-    let g : Nat -> M := fun i => (f ^ i) x
-    have hg : {(f ^ i) x | (i : Nat) (_ : i <= k)} = g '' Iic k := by ext; simp [g]
-exact Module.Finite.span_of_finite _ hg ▸ toFinite (g '' Iic k)
-  simpa [LinearMap.restrict_apply, Subtype.ext_iff] using
-    LinearMap.congr_fun (this p hp₁ hp₂) ⟨x, Submodule.subset_span ⟨0, k.zero_le, rfl⟩⟩
-
-@[simp]
-
-中文:
-引理 eq_zero_of_isNilpotent_of_isFinitelySemisimple
-  证明: by
-  have (p) (hp₁ : p in f.invtSubmodule) (hp₂ : Module.Finite R p) : f.restrict hp₁ = 0 := by
-    specialize hs p hp₁ hp₂
-    replace hn : IsNilpotent (f.restrict hp₁) := isNilpotent.restrict hp₁ hn
-    exact eq_zero_of_isNilpotent_isSemisimple hn hs
-  ext x
-  obtain ⟨k : Nat, hk : f ^ k = 0⟩ := hn
-  let p := Submodule.span R {(f ^ i) x | (i : Nat) (_ : i <= k)}
-  have hp₁ : p in f.invtSubmodule := by
-    simp only [mem_invtSubmodule, p, Submodule.span_le]
-    rintro - ⟨i, hi, rfl⟩
-    apply Submodule.subset_span
-    rcases lt_or_eq_of_le hi with hik | rfl
-    · exact ⟨i + 1, hik, by simpa [Module.End.pow_apply] using iterate_succ_apply' f i x⟩
-    · exact ⟨i, by simp [hk]⟩
-  have hp₂ : Module.Finite R p := by
-    let g : Nat -> M := fun i => (f ^ i) x
-    have hg : {(f ^ i) x | (i : Nat) (_ : i <= k)} = g '' Iic k := by ext; simp [g]
-exact Module.Finite.span_of_finite _ hg ▸ toFinite (g '' Iic k)
-  simpa [LinearMap.restrict_apply, Subtype.ext_iff] using
-    LinearMap.congr_fun (this p hp₁ hp₂) ⟨x, Submodule.subset_span ⟨0, k.zero_le, rfl⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Finite, IsNilpotent, Module, Module.Finite, Submodule, Submodule.span, Submodule.span_le, Submodule.subset_span, eq_zero_of_isNilpotent_isSemisimple, f.invtSubmodule, f.restrict, invtSubmodule, isNilpotent, isNilpotent.restrict, lt_or_, mem_invtSubmodule, replace, restrict, span_le, specialize
+/-
+**Module.End.eq_zero_of_isNilpotent_of_isFinitelySemisimple** 是 Mathlib 中的一个引理，位
+于命名空间 `Module.End`。
+形式化陈述：eq_zero_of_isNilpotent_of_isFinitelySemisimple (hn : IsNilpotent f) (hs : 
+IsFinitelySemisimple f) : f = 0
+参数：hn : IsNilpotent f；hs : IsFinitelySemisimple f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.End.isNilpotent.restrict`：∀ {R : Type u_1} {M : Type u_3} [inst :
+ Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {f : M →ₗ
+[R] M} {p : Submodule…
+· 使用引理 `Module.End.eq_zero_of_isNilpotent_isSemisimple`：eq_zero_of_isNilpotent_i
+sSemisimple (hn : IsNilpotent f) (hs : f.IsSemisimple) : f = 0
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用引理 `lt_or_eq_of_le`：lt_or_eq_of_le : a <= b -> a < b ∨ a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.pow_apply`：pow_apply (f : End R M) (n : Nat) (m : M) : (f ^ n
+) m = f^[n] m
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Module.Finite.span_of_finite`：span_of_finite {A : Set M} (hA : Set.Finit
+e A) : Module.Finite R (span R A)
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+（共 31 条，此处仅展示前 30 条）
 -/
 lemma eq_zero_of_isNilpotent_of_isFinitelySemisimple
     (hn : IsNilpotent f) (hs : IsFinitelySemisimple f) : f = 0 := by
-  have (p) (hp₁ : p in f.invtSubmodule) (hp₂ : Module.Finite R p) : f.restrict hp₁ = 0 := by
+  have (p) (hp₁ : p ∈ f.invtSubmodule) (hp₂ : Module.Finite R p) : f.restrict hp₁ = 0 := by
     specialize hs p hp₁ hp₂
     replace hn : IsNilpotent (f.restrict hp₁) := isNilpotent.restrict hp₁ hn
     exact eq_zero_of_isNilpotent_isSemisimple hn hs
   ext x
-  obtain ⟨k : Nat, hk : f ^ k = 0⟩ := hn
-  let p := Submodule.span R {(f ^ i) x | (i : Nat) (_ : i <= k)}
-  have hp₁ : p in f.invtSubmodule := by
+  obtain ⟨k : ℕ, hk : f ^ k = 0⟩ := hn
+  let p := Submodule.span R {(f ^ i) x | (i : ℕ) (_ : i ≤ k)}
+  have hp₁ : p ∈ f.invtSubmodule := by
     simp only [mem_invtSubmodule, p, Submodule.span_le]
     rintro - ⟨i, hi, rfl⟩
     apply Submodule.subset_span
@@ -416,194 +469,198 @@ lemma eq_zero_of_isNilpotent_of_isFinitelySemisimple
     · exact ⟨i + 1, hik, by simpa [Module.End.pow_apply] using iterate_succ_apply' f i x⟩
     · exact ⟨i, by simp [hk]⟩
   have hp₂ : Module.Finite R p := by
-    let g : Nat -> M := fun i => (f ^ i) x
-    have hg : {(f ^ i) x | (i : Nat) (_ : i <= k)} = g '' Iic k := by ext; simp [g]
-exact Module.Finite.span_of_finite _ hg ▸ toFinite (g '' Iic k)
+    let g : ℕ → M := fun i ↦ (f ^ i) x
+    have hg : {(f ^ i) x | (i : ℕ) (_ : i ≤ k)} = g '' Iic k := by ext; simp [g]
+    exact Module.Finite.span_of_finite _ <| hg ▸ toFinite (g '' Iic k)
   simpa [LinearMap.restrict_apply, Subtype.ext_iff] using
     LinearMap.congr_fun (this p hp₁ hp₂) ⟨x, Submodule.subset_span ⟨0, k.zero_le, rfl⟩⟩
 
 @[simp]
-/--
-lemma `isSemisimple_sub_algebraMap_iff` / 引理 `isSemisimple_sub_algebraMap_iff`
-
-English:
-lemma isSemisimple_sub_algebraMap_iff
-  given: {μ : R}
-  proof: by
-  suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
-    simp [mem_invtSubmodule, isSemisimple_iff, this]
-  refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
-  simpa using p.add_mem (h hx) (p.smul_mem μ hx)
-
-中文:
-引理 isSemisimple_sub_algebraMap_iff
-  条件: {μ : R}
-  证明: by
-  suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
-    simp [mem_invtSubmodule, isSemisimple_iff, this]
-  refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
-  simpa using p.add_mem (h hx) (p.smul_mem μ hx)
-
-Depends on / 依赖: Module, Module.End, Submodule, add_mem, algebraMap, isSemisimple_iff, mem_invtSubmodule, p.add_mem, p.comap, p.smul_mem, p.sub_mem, smul_mem, sub_mem
+/-
+**Module.End.isSemisimple_sub_algebraMap_iff** 是 Mathlib 中的一个引理，位于命名空间 `Module.E
+nd`。
+形式化陈述：isSemisimple_sub_algebraMap_iff {μ : R} : (f - algebraMap R (End R M) μ).I
+sSemisimple ↔ f.IsSemisimple
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Submodule.add_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [inst
+_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M) {x y 
+: M}, x…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.sub_mem`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst_1 :
+ AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x y : M},
+ x ∈ p …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isSemisimple_sub_algebraMap_iff {μ : R} :
     (f - algebraMap R (End R M) μ).IsSemisimple ↔ f.IsSemisimple := by
-  suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
+  suffices ∀ p : Submodule R M, p ≤ p.comap (f - algebraMap R (Module.End R M) μ) ↔ p ≤ p.comap f by
     simp [mem_invtSubmodule, isSemisimple_iff, this]
-  refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
+  refine fun p ↦ ⟨fun h x hx ↦ ?_, fun h x hx ↦ p.sub_mem (h hx) (p.smul_mem μ hx)⟩
   simpa using p.add_mem (h hx) (p.smul_mem μ hx)
-
-/--
-lemma `IsSemisimple.restrict` / 引理 `IsSemisimple.restrict`
-
-English:
-lemma IsSemisimple.restrict
-  given: {p : Submodule R M} (hp : p in f.invtSubmodule) (hf : f.IsSemisimple)
-  proof: by
-  rw [IsSemisimple] at hf ⊢
-  let e : Submodule R[X] (AEval' (LinearMap.restrict f hp)) ≃o
-      Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
-(Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
-      Submodule.mapIic _
-  exact (isSemisimpleModule_iff ..).mpr (e.complementedLattice_iff.mpr inferInstance)
-
-中文:
-引理 是半单.restrict
-  条件: {p : 子模 R M} (hp : p in f.invtSubmodule) (hf : f.是半单)
-  证明: by
-  rw [IsSemisimple] at hf ⊢
-  let e : Submodule R[X] (AEval' (LinearMap.restrict f hp)) ≃o
-      Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
-(Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
-      Submodule.mapIic _
-  exact (isSemisimpleModule_iff ..).mpr (e.complementedLattice_iff.mpr inferInstance)
-
-Depends on / 依赖: AEval.mapSubmodule, AEval.restrict_equiv_mapSubmodule, IsSemisimple, LinearMap, LinearMap.restrict, Submodule, Submodule.mapIic, Submodule.orderIsoMapComap, complementedLattice_iff, e.complementedLattice_iff.mpr, isSemisimpleModule_iff, mapIic, mapSubmodule, orderIsoMapComap, restrict, restrict_equiv_mapSubmodule
+/-
+**Module.End.IsSemisimple.restrict** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.IsSemis
+imple`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {f : Module.End R M} {p : Submodule R M} (hp 
+: p ∈ f.invtSubmodule),   f.IsSemisimple → Module.End.IsSemisimple (LinearMap.re
+strict f hp)
+参数：hp : p ∈ f.invtSubmodule；LinearMap.restrict f hp。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.IsSemisimple.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst : Co
+mmRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (f : Module.E
+nd R M), f.IsSemis…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isSemisimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) 
+[inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSemisimpleModule R M
+ ↔ Complemen…
+· 使用定理 `OrderIso.complementedLattice_iff`：OrderIso.complementedLattice_iff (f : 
+α ≃o β) : ComplementedLattice α ↔ ComplementedLattice β
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
-lemma IsSemisimple.restrict {p : Submodule R M} (hp : p in f.invtSubmodule) (hf : f.IsSemisimple) :
+lemma IsSemisimple.restrict {p : Submodule R M} (hp : p ∈ f.invtSubmodule) (hf : f.IsSemisimple) :
     IsSemisimple (f.restrict hp) := by
   rw [IsSemisimple] at hf ⊢
   let e : Submodule R[X] (AEval' (LinearMap.restrict f hp)) ≃o
       Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
-(Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
+    (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans <|
       Submodule.mapIic _
   exact (isSemisimpleModule_iff ..).mpr (e.complementedLattice_iff.mpr inferInstance)
-
-/--
-lemma `IsSemisimple.isFinitelySemisimple` / 引理 `IsSemisimple.isFinitelySemisimple`
-
-English:
-lemma IsSemisimple.isFinitelySemisimple
-  given: (hf : f.IsSemisimple)
-  proof: isFinitelySemisimple_iff'.mp fun _ _ _ => hf.restrict _
-
-@[simp]
-
-中文:
-引理 是半单.isFinitelySemisimple
-  条件: (hf : f.是半单)
-  证明: isFinitelySemisimple_iff'.mp fun _ _ _ => hf.restrict _
-
-@[simp]
-
-Depends on / 依赖: hf.restrict, isFinitelySemisimple_iff, restrict
+/-
+**Module.End.IsSemisimple.isFinitelySemisimple** 是 Mathlib 中的一个定理，位于命名空间 `Module
+.End.IsSemisimple`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {f : Module.End R M}, f.IsSemisimple → f.IsFi
+nitelySemisimple
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Module.End.isFinitelySemisimple_iff'`：isFinitelySemisimple_iff' : f.IsFi
+nitelySemisimple ↔ forall p (hp : p in invtSubmodule f), Module.Finite R p -> Is
+Semisimple (LinearMap.rest…
+· 使用定理 `Module.End.IsSemisimple.restrict`：∀ {R : Type u_1} {M : Type u_2} [inst 
+: CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {f : Modu
+le.End R M} {p : Submo…
 -/
 lemma IsSemisimple.isFinitelySemisimple (hf : f.IsSemisimple) :
     f.IsFinitelySemisimple :=
-  isFinitelySemisimple_iff'.mp fun _ _ _ => hf.restrict _
+  isFinitelySemisimple_iff'.mp fun _ _ _ ↦ hf.restrict _
 
 @[simp]
-/--
-lemma `isFinitelySemisimple_iff_isSemisimple` / 引理 `isFinitelySemisimple_iff_isSemisimple`
-
-English:
-lemma isFinitelySemisimple_iff_isSemisimple
-  given: [Module.Finite R M]
-  proof: by
-  refine ⟨fun hf => isSemisimple_iff.mpr fun p hp => ?_, IsSemisimple.isFinitelySemisimple⟩
-  obtain ⟨q, -, hq₁, hq₂, hq₃⟩ :=
-    isFinitelySemisimple_iff.mp hf ⊤ (invtSubmodule.top_mem f) inferInstance p hp le_top
-  exact ⟨q, hq₁, hq₂, codisjoint_iff.mpr hq₃⟩
-
-@[simp]
-
-中文:
-引理 isFinitelySemisimple_iff_isSemisimple
-  条件: [模.有限 R M]
-  证明: by
-  refine ⟨fun hf => isSemisimple_iff.mpr fun p hp => ?_, IsSemisimple.isFinitelySemisimple⟩
-  obtain ⟨q, -, hq₁, hq₂, hq₃⟩ :=
-    isFinitelySemisimple_iff.mp hf ⊤ (invtSubmodule.top_mem f) inferInstance p hp le_top
-  exact ⟨q, hq₁, hq₂, codisjoint_iff.mpr hq₃⟩
-
-@[simp]
-
-Depends on / 依赖: IsSemisimple, IsSemisimple.isFinitelySemisimple, codisjoint_iff, codisjoint_iff.mpr, invtSubmodule, invtSubmodule.top_mem, isFinitelySemisimple, isFinitelySemisimple_iff, isFinitelySemisimple_iff.mp, isSemisimple_iff, isSemisimple_iff.mpr, le_top, top_mem
+/-
+**Module.End.isFinitelySemisimple_iff_isSemisimple** 是 Mathlib 中的一个引理，位于命名空间 `Mo
+dule.End`。
+形式化陈述：isFinitelySemisimple_iff_isSemisimple [Module.Finite R M] : f.IsFinitelySe
+misimple ↔ f.IsSemisimple
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Module.End.isSemisimple_iff`：isSemisimple_iff : f.IsSemisimple ↔ forall 
+p in invtSubmodule f, exists q in invtSubmodule f, IsCompl p q
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Module.End.isFinitelySemisimple_iff`：isFinitelySemisimple_iff : f.IsFini
+telySemisimple ↔ forall p in invtSubmodule f, Module.Finite R p -> forall q in i
+nvtSubmodule f, q <= p ->…
+· 使用定理 `Module.End.invtSubmodule.top_mem`：∀ {R : Type u_1} {M : Type u_2} [inst 
+: Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (f : Mod
+ule.End R M), ⊤ ∈ f.in…
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `codisjoint_iff`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : Ord
+erTop α] {a b : α}, Codisjoint a b ↔ a ⊔ b = ⊤
+· 使用定理 `Module.End.IsSemisimple.isFinitelySemisimple`：∀ {R : Type u_1} {M : Type
+ u_2} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]
+   {f : Module.End R M}, f.IsSemis…
 -/
 lemma isFinitelySemisimple_iff_isSemisimple [Module.Finite R M] :
     f.IsFinitelySemisimple ↔ f.IsSemisimple := by
-  refine ⟨fun hf => isSemisimple_iff.mpr fun p hp => ?_, IsSemisimple.isFinitelySemisimple⟩
+  refine ⟨fun hf ↦ isSemisimple_iff.mpr fun p hp ↦ ?_, IsSemisimple.isFinitelySemisimple⟩
   obtain ⟨q, -, hq₁, hq₂, hq₃⟩ :=
     isFinitelySemisimple_iff.mp hf ⊤ (invtSubmodule.top_mem f) inferInstance p hp le_top
   exact ⟨q, hq₁, hq₂, codisjoint_iff.mpr hq₃⟩
 
 @[simp]
-/--
-lemma `isFinitelySemisimple_sub_algebraMap_iff` / 引理 `isFinitelySemisimple_sub_algebraMap_iff`
-
-English:
-lemma isFinitelySemisimple_sub_algebraMap_iff
-  given: {μ : R}
-  proof: by
-  suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
-    simp_rw [isFinitelySemisimple_iff, mem_invtSubmodule, this]
-  refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
-  simpa using p.add_mem (h hx) (p.smul_mem μ hx)
-
-中文:
-引理 isFinitelySemisimple_sub_algebraMap_iff
-  条件: {μ : R}
-  证明: by
-  suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
-    simp_rw [isFinitelySemisimple_iff, mem_invtSubmodule, this]
-  refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
-  simpa using p.add_mem (h hx) (p.smul_mem μ hx)
-
-Depends on / 依赖: Module, Module.End, Submodule, add_mem, algebraMap, isFinitelySemisimple_iff, mem_invtSubmodule, p.add_mem, p.comap, p.smul_mem, p.sub_mem, simp_rw, smul_mem, sub_mem
+/-
+**Module.End.isFinitelySemisimple_sub_algebraMap_iff** 是 Mathlib 中的一个引理，位于命名空间 `
+Module.End`。
+形式化陈述：isFinitelySemisimple_sub_algebraMap_iff {μ : R} : (f - algebraMap R (End R
+ M) μ).IsFinitelySemisimple ↔ f.IsFinitelySemisimple
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Submodule.add_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [inst
+_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M) {x y 
+: M}, x…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.sub_mem`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst_1 :
+ AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x y : M},
+ x ∈ p …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isFinitelySemisimple_sub_algebraMap_iff {μ : R} :
     (f - algebraMap R (End R M) μ).IsFinitelySemisimple ↔ f.IsFinitelySemisimple := by
-  suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
+  suffices ∀ p : Submodule R M, p ≤ p.comap (f - algebraMap R (Module.End R M) μ) ↔ p ≤ p.comap f by
     simp_rw [isFinitelySemisimple_iff, mem_invtSubmodule, this]
-  refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
+  refine fun p ↦ ⟨fun h x hx ↦ ?_, fun h x hx ↦ p.sub_mem (h hx) (p.smul_mem μ hx)⟩
   simpa using p.add_mem (h hx) (p.smul_mem μ hx)
-
-/--
-lemma `IsFinitelySemisimple.restrict` / 引理 `IsFinitelySemisimple.restrict`
-
-English:
-lemma IsFinitelySemisimple.restrict
-  statement: {p : Submodule R M} (hp : p in f.invtSubmodule)
-  proof: by
-  intro q hq₁ hq₂
-  have := invtSubmodule.map_subtype_mem_of_mem_invtSubmodule f hp hq₁
-  let e : q ≃ₗ[R] q.map p.subtype := p.equivSubtypeMap q
-  rw [e.isSemisimple_iff ((LinearMap.restrict f hp).restrict hq₁) (LinearMap.restrict f this) rfl]
-  exact hf _ this (Finite.map q p.subtype)
-
-中文:
-引理 IsFinitelySemisimple.restrict
-  结论: {p : 子模 R M} (hp : p in f.invtSubmodule)
-  证明: by
-  intro q hq₁ hq₂
-  have := invtSubmodule.map_subtype_mem_of_mem_invtSubmodule f hp hq₁
-  let e : q ≃ₗ[R] q.map p.subtype := p.equivSubtypeMap q
-  rw [e.isSemisimple_iff ((LinearMap.restrict f hp).restrict hq₁) (LinearMap.restrict f this) rfl]
-  exact hf _ this (Finite.map q p.subtype)
-
-Depends on / 依赖: Finite, Finite.map, LinearMap, LinearMap.restrict, e.isSemisimple_iff, equivSubtypeMap, invtSubmodule, invtSubmodule.map_subtype_mem_of_mem_invtSubmodule, isSemisimple_iff, map_subtype_mem_of_mem_invtSubmodule, p.equivSubtypeMap, p.subtype, q.map, restrict, subtype
+/-
+**Module.End.IsFinitelySemisimple.restrict** 是 Mathlib 中的一个定理，位于命名空间 `Module.End
+.IsFinitelySemisimple`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {f : Module.End R M} {p : Submodule R M} (hp 
+: p ∈ f.invtSubmodule),   f.IsFinitelySemisimple → Module.End.IsFinitelySemisimp
+le (LinearMap.restrict f hp)
+参数：hp : p ∈ f.invtSubmodule；LinearMap.restrict f hp。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.End.invtSubmodule.map_subtype_mem_of_mem_invtSubmodule`：map_subty
+pe_mem_of_mem_invtSubmodule {p : Submodule R M} (hp : p in f.invtSubmodule) {q :
+ Submodule R p} (hq : q in invtSubmodule (LinearMap…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.isSemisimple_iff`：∀ {R : Type u_1} {M : Type u_2} [inst : Co
+mmRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (f : Module.E
+nd R M) {M₂ : Type…
 -/
-lemma IsFinitelySemisimple.restrict {p : Submodule R M} (hp : p in f.invtSubmodule)
+lemma IsFinitelySemisimple.restrict {p : Submodule R M} (hp : p ∈ f.invtSubmodule)
     (hf : f.IsFinitelySemisimple) :
     IsFinitelySemisimple (f.restrict hp) := by
   intro q hq₁ hq₂
@@ -618,91 +675,136 @@ section field
 
 variable {K : Type*} [Field K] [Module K M] {f g : End K M}
 
-/--
-lemma `IsSemisimple_smul_iff` / 引理 `IsSemisimple_smul_iff`
-
-English:
-lemma IsSemisimple_smul_iff
-  given: {t : K} (ht : t != 0)
-  proof: by
-  simp [isSemisimple_iff, mem_invtSubmodule, Submodule.comap_smul f (h := ht)]
-
-中文:
-引理 IsSemisimple_smul_iff
-  条件: {t : K} (ht : t != 0)
-  证明: by
-  simp [isSemisimple_iff, mem_invtSubmodule, Submodule.comap_smul f (h := ht)]
-
-Depends on / 依赖: Submodule, Submodule.comap_smul, comap_smul, isSemisimple_iff, mem_invtSubmodule
+/-
+**Module.End.IsSemisimple_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：IsSemisimple_smul_iff {t : K} (ht : t != 0) : (t • f).IsSemisimple ↔ f.IsS
+emisimple
+参数：ht : t != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Submodule.comap_smul`：comap_smul (f : V ->ₗ[K] V₂) (p : Submodule K V₂) 
+(a : K) (h : a != 0) : p.comap (a • f) = p.comap f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma IsSemisimple_smul_iff {t : K} (ht : t != 0) :
+lemma IsSemisimple_smul_iff {t : K} (ht : t ≠ 0) :
     (t • f).IsSemisimple ↔ f.IsSemisimple := by
   simp [isSemisimple_iff, mem_invtSubmodule, Submodule.comap_smul f (h := ht)]
-
-/--
-lemma `IsSemisimple_smul` / 引理 `IsSemisimple_smul`
-
-English:
-lemma IsSemisimple_smul
-  given: (t : K) (h : f.IsSemisimple)
-  proof: by
-  wlog ht : t != 0; · simp [not_not.mp ht]
-  rwa [IsSemisimple_smul_iff ht]
-
-中文:
-引理 IsSemisimple_smul
-  条件: (t : K) (h : f.是半单)
-  证明: by
-  wlog ht : t != 0; · simp [not_not.mp ht]
-  rwa [IsSemisimple_smul_iff ht]
-
-Depends on / 依赖: IsSemisimple_smul_iff, not_not, not_not.mp
+/-
+**Module.End.IsSemisimple_smul** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：IsSemisimple_smul (t : K) (h : f.IsSemisimple) : (t • f).IsSemisimple
+参数：t : K；h : f.IsSemisimple。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.End.IsSemisimple_smul_iff`：IsSemisimple_smul_iff {t : K} (ht : t 
+!= 0) : (t • f).IsSemisimple ↔ f.IsSemisimple
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `instIsSemisimpleModuleOfIsSimpleModule`：∀ (R : Type u_2) [inst : Ring R]
+ (M : Type u_4) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimp
+leModule R M], IsSemisimpleM…
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
 -/
 lemma IsSemisimple_smul (t : K) (h : f.IsSemisimple) :
     (t • f).IsSemisimple := by
-  wlog ht : t != 0; · simp [not_not.mp ht]
+  wlog ht : t ≠ 0; · simp [not_not.mp ht]
   rwa [IsSemisimple_smul_iff ht]
-
-/--
-theorem `isSemisimple_of_squarefree_aeval_eq_zero` / 定理 `isSemisimple_of_squarefree_aeval_eq_zero`
-
-English:
-theorem isSemisimple_of_squarefree_aeval_eq_zero
-  statement: {p : K[X]}
-  proof: by
-  rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)]; rw [mem_annihilator]; rw [← IsTorsionBy]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_is_torsion_by_span] at hpf
-  let R := K[X] ⧸ Ideal.span {p}
-  have : IsReduced R :=
-    (Ideal.isRadical_iff_quotient_reduced _).mp (isRadical_iff_span_singleton.mp hp.isRadical)
-  have : FiniteDimensional K R := (AdjoinRoot.powerBasis hp.ne_zero).finite
-  have : IsArtinianRing R := .of_finite K R
-  have : IsSemisimpleRing R := IsArtinianRing.isSemisimpleRing_of_isReduced R
-  let : Module R (AEval' f) := Module.IsTorsionBySet.module hpf
-  let e : AEval' f ->ₛₗ[Ideal.Quotient.mk (Ideal.span {p})] AEval' f :=
-    { AddMonoidHom.id _ with map_smul' := fun _ _ => rfl }
-  exact (e.isSemisimpleModule_iff_of_bijective bijective_id).mpr inferInstance
-
-中文:
-定理 isSemisimple_of_squarefree_aeval_eq_zero
-  结论: {p : K[X]}
-  证明: by
-  rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)]; rw [mem_annihilator]; rw [← IsTorsionBy]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_is_torsion_by_span] at hpf
-  let R := K[X] ⧸ Ideal.span {p}
-  have : IsReduced R :=
-    (Ideal.isRadical_iff_quotient_reduced _).mp (isRadical_iff_span_singleton.mp hp.isRadical)
-  have : FiniteDimensional K R := (AdjoinRoot.powerBasis hp.ne_zero).finite
-  have : IsArtinianRing R := .of_finite K R
-  have : IsSemisimpleRing R := IsArtinianRing.isSemisimpleRing_of_isReduced R
-  let : Module R (AEval' f) := Module.IsTorsionBySet.module hpf
-  let e : AEval' f ->ₛₗ[Ideal.Quotient.mk (Ideal.span {p})] AEval' f :=
-    { AddMonoidHom.id _ with map_smul' := fun _ _ => rfl }
-  exact (e.isSemisimpleModule_iff_of_bijective bijective_id).mpr inferInstance
-
-Depends on / 依赖: AEval.annihilator_eq_ker_aeval, AdjoinRoot, AdjoinRoot.powerBasis, FiniteDimensional, Ideal.isRadical_iff_quotient_reduced, Ideal.span, IsArtin, IsArtinianRing, IsReduced, IsSemisimpleRing, IsTorsionBy, RingHom, RingHom.mem_ker, annihilator_eq_ker_aeval, finite, hp.isRadical, hp.ne_zero, isRadical, isRadical_iff_quotient_reduced, isRadical_iff_span_singleton
+/-
+**Module.End.isSemisimple_of_squarefree_aeval_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 
+`Module.End`。
+形式化陈述：isSemisimple_of_squarefree_aeval_eq_zero {p : K[X]} (hp : Squarefree p) (h
+pf : aeval f p = 0) : f.IsSemisimple
+参数：hp : Squarefree p；hpf : aeval f p = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.isRadical_iff_quotient_reduced`：Ideal.isRadical_iff_quotient_reduc
+ed {R : Type*} [CommRing R] (I : Ideal R) : I.IsRadical ↔ IsReduced (R ⧸ I)
+· 使用定理 `isRadical_iff_span_singleton`：isRadical_iff_span_singleton [CommSemiring
+ R] : IsRadical y ↔ (Ideal.span ({y} : Set R)).IsRadical
+· 使用定理 `Squarefree.isRadical`：Squarefree.isRadical {x : R} (hx : Squarefree x) :
+ IsRadical x
+· 使用定理 `IsArtinianRing.instDecompositionMonoidPolynomial`：∀ (R : Type u_1) [inst
+ : CommRing R] [IsArtinianRing R] [IsReduced R], DecompositionMonoid (Polynomial
+ R)
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `PowerBasis.finite`：finite (pb : PowerBasis R S) : Module.Finite R S
+· 使用定理 `Squarefree.ne_zero`：Squarefree.ne_zero [MonoidWithZero R] [Nontrivial R]
+ {m : R} (hm : Squarefree (m : R)) : m != 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `IsArtinianRing.of_finite`：IsArtinianRing.of_finite (R S) [Ring R] [Ring 
+S] [Module R S] [IsScalarTower R S S] [IsArtinianRing R] [Module.Finite R S] : I
+sArtinianRing …
+· 使用定理 `IsArtinianRing.isSemisimpleRing_of_isReduced`：isSemisimpleRing_of_isRedu
+ced [IsReduced R] : IsSemisimpleRing R
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.isTorsionBySet_iff_is_torsion_by_span`：isTorsionBySet_iff_is_tors
+ion_by_span : IsTorsionBySet R M s ↔ IsTorsionBySet R M (Ideal.span s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.isTorsionBySet_singleton_iff`：isTorsionBySet_singleton_iff : IsTo
+rsionBySet R M {a} ↔ IsTorsionBy R M a
+· 使用定理 `Module.IsTorsionBy.eq_1`：∀ (R : Type u_1) (M : Type u_2) [inst : Semirin
+g R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] (a : R),   Module.I
+sTorsionBy R …
+· 使用定理 `Module.mem_annihilator`：Module.mem_annihilator {r} : r in Module.annihil
+ator R M ↔ forall m : M, r • m = 0
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用引理 `Module.AEval.annihilator_eq_ker_aeval`：annihilator_eq_ker_aeval [Faithfu
+lSMul A M] : annihilator R[X] (AEval R M a) = RingHom.ker (aeval a)
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `AddMonoidHom.map_add'`：∀ {M : Type u_10} {N : Type u_11} [inst : AddZero
+ M] [inst_1 : AddZero N] (self : M →+ N) (x y : M),   (↑self).toFun (x + y) = (↑
+self).toFun…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.isSemisimpleModule_iff_of_bijective`：∀ {R : Type u_2} {S : Typ
+e u_3} [inst : Ring R] [inst_1 : Ring S] {M' : Type u_6} [inst_2 : AddCommGroup 
+M']   [inst_3 : _root_.Module R M']…
+· 使用定理 `Ideal.Quotient.instRingHomSurjectiveQuotientMk`：∀ {R : Type u} [inst : R
+ing R] {I : Ideal R} [inst_1 : I.IsTwoSided], RingHomSurjective (Ideal.Quotient.
+mk I)
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 -/
 theorem isSemisimple_of_squarefree_aeval_eq_zero {p : K[X]}
     (hp : Squarefree p) (hpf : aeval f p = 0) : f.IsSemisimple := by
-  rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)]; rw [mem_annihilator]; rw [← IsTorsionBy]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_is_torsion_by_span] at hpf
+  rw [← RingHom.mem_ker, ← AEval.annihilator_eq_ker_aeval (M := M), mem_annihilator,
+      ← IsTorsionBy, ← isTorsionBySet_singleton_iff, isTorsionBySet_iff_is_torsion_by_span] at hpf
   let R := K[X] ⧸ Ideal.span {p}
   have : IsReduced R :=
     (Ideal.isRadical_iff_quotient_reduced _).mp (isRadical_iff_span_singleton.mp hp.isRadical)
@@ -710,8 +812,8 @@ theorem isSemisimple_of_squarefree_aeval_eq_zero {p : K[X]}
   have : IsArtinianRing R := .of_finite K R
   have : IsSemisimpleRing R := IsArtinianRing.isSemisimpleRing_of_isReduced R
   let : Module R (AEval' f) := Module.IsTorsionBySet.module hpf
-  let e : AEval' f ->ₛₗ[Ideal.Quotient.mk (Ideal.span {p})] AEval' f :=
-    { AddMonoidHom.id _ with map_smul' := fun _ _ => rfl }
+  let e : AEval' f →ₛₗ[Ideal.Quotient.mk (Ideal.span {p})] AEval' f :=
+    { AddMonoidHom.id _ with map_smul' := fun _ _ ↦ rfl }
   exact (e.isSemisimpleModule_iff_of_bijective bijective_id).mpr inferInstance
 
 variable [FiniteDimensional K M]
@@ -723,109 +825,170 @@ open Algebra
 variable (hf : f.IsSemisimple)
 include hf
 
-/--
-theorem `IsSemisimple.minpoly_squarefree` / 定理 `IsSemisimple.minpoly_squarefree`
+/-- The minimal polynomial of a semisimple endomorphism is square free -/
+/-
+**Module.End.IsSemisimple.minpoly_squarefree** 是 Mathlib 中的一个定理，位于命名空间 `Module.E
+nd.IsSemisimple`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f : Module.End K M} [FiniteDimensional K M], f.
+IsSemisimple → Squarefree (minpoly K f)
+参数：minpoly K f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsRadical.squarefree`：IsRadical.squarefree (h0 : x != 0) (h : IsRadical 
+x) : Squarefree x
+· 使用定理 `Polynomial.instIsCancelMulZeroOfIsCancelAdd`：∀ {R : Type u} [inst : Semi
+ring R] [IsCancelAdd R] [IsCancelMulZero R], IsCancelMulZero (Polynomial R)
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `minpoly.ne_zero`：ne_zero [Nontrivial A] (hx : IsIntegral A x) : minpoly 
+A x != 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isRadical_iff_span_singleton`：isRadical_iff_span_singleton [CommSemiring
+ R] : IsRadical y ↔ (Ideal.span ({y} : Set R)).IsRadical
+· 使用定理 `Polynomial.span_minpoly_eq_annihilator`：span_minpoly_eq_annihilator {M} 
+[AddCommGroup M] [Module 𝕜 M] (f : Module.End 𝕜 M) : Ideal.span {minpoly 𝕜 f} = 
+Module.annihilator 𝕜[X] (Mod…
+· 使用定理 `IsSemisimpleModule.annihilator_isRadical`：annihilator_isRadical (R) [Com
+mRing R] [Module R M] [IsSemisimpleModule R M] : (Module.annihilator R M).IsRadi
+cal
 
-English:
-theorem IsSemisimple.minpoly_squarefree
-  statement: Squarefree (minpoly K f)
-  proof: IsRadical.squarefree (minpoly.ne_zero <| IsIntegral.isIntegral _) by
-    rw [isRadical_iff_span_singleton]; rw [span_minpoly_eq_annihilator]; exact hf.annihilator_isRadical
-
-中文:
-定理 是半单.minpoly_squarefree
-  结论: Squarefree (minpoly K f)
-  证明: IsRadical.squarefree (minpoly.ne_zero <| IsIntegral.isIntegral _) by
-    rw [isRadical_iff_span_singleton]; rw [span_minpoly_eq_annihilator]; exact hf.annihilator_isRadical
-
-Depends on / 依赖: IsIntegral, IsIntegral.isIntegral, IsRadical, IsRadical.squarefree, annihilator_isRadical, hf.annihilator_isRadical, isIntegral, isRadical_iff_span_singleton, minpoly, minpoly.ne_zero, ne_zero, span_minpoly_eq_annihilator, squarefree
+--- 原说明 ---
+The minimal polynomial of a semisimple endomorphism is square free
 -/
 theorem IsSemisimple.minpoly_squarefree : Squarefree (minpoly K f) :=
-IsRadical.squarefree (minpoly.ne_zero <| IsIntegral.isIntegral _) by
-    rw [isRadical_iff_span_singleton]; rw [span_minpoly_eq_annihilator]; exact hf.annihilator_isRadical
-
-/--
-theorem `IsSemisimple.aeval` / 定理 `IsSemisimple.aeval`
-
-English:
-theorem IsSemisimple.aeval
-  given: (p : K[X])
-  statement: (aeval f p).IsSemisimple
-  proof: let R := K[X] ⧸ Ideal.span {minpoly K f}
-  have : Module.Finite K R :=
-    (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
-have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
-    span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
-  isSemisimple_of_squarefree_aeval_eq_zero ((minpoly.isRadical K _).squarefree <|
-minpoly.ne_zero .of_finite K Ideal.Quotient.mkₐ K (.span {minpoly K f}) p) <| by
-      rw [← Ideal.Quotient.liftₐ_comp (.span {minpoly K f}) (aeval f)
-        fun a h => by rwa [Ideal.span]; rw [← minpoly.ker_aeval_eq_span_minpoly] at h, aeval_algHom,
-        AlgHom.comp_apply, AlgHom.comp_apply, ← aeval_algHom_apply, minpoly.aeval, map_zero]
-
-中文:
-定理 是半单.aeval
-  条件: (p : K[X])
-  结论: (aeval f p).是半单
-  证明: let R := K[X] ⧸ Ideal.span {minpoly K f}
-  have : Module.Finite K R :=
-    (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
-have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
-    span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
-  isSemisimple_of_squarefree_aeval_eq_zero ((minpoly.isRadical K _).squarefree <|
-minpoly.ne_zero .of_finite K Ideal.Quotient.mkₐ K (.span {minpoly K f}) p) <| by
-      rw [← Ideal.Quotient.liftₐ_comp (.span {minpoly K f}) (aeval f)
-        fun a h => by rwa [Ideal.span]; rw [← minpoly.ker_aeval_eq_span_minpoly] at h, aeval_algHom,
-        AlgHom.comp_apply, AlgHom.comp_apply, ← aeval_algHom_apply, minpoly.aeval, map_zero]
+  IsRadical.squarefree (minpoly.ne_zero <| IsIntegral.isIntegral _) <| by
+    rw [isRadical_iff_span_singleton, span_minpoly_eq_annihilator]; exact hf.annihilator_isRadical
+/-
+**Module.End.IsSemisimple.aeval** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.IsSemisimp
+le`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f : Module.End K M} [FiniteDimensional K M],   
+f.IsSemisimple → ∀ (p : Polynomial K), ((Polynomial.aeval f) p).IsSemisimple
+参数：p : Polynomial K；(Polynomial.aeval f) p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `PowerBasis.finite`：finite (pb : PowerBasis R S) : Module.Finite R S
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.isRadical_iff_quotient_reduced`：Ideal.isRadical_iff_quotient_reduc
+ed {R : Type*} [CommRing R] (I : Ideal R) : I.IsRadical ↔ IsReduced (R ⧸ I)
+· 使用定理 `IsSemisimpleModule.annihilator_isRadical`：annihilator_isRadical (R) [Com
+mRing R] [Module R M] [IsSemisimpleModule R M] : (Module.annihilator R M).IsRadi
+cal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.span_minpoly_eq_annihilator`：span_minpoly_eq_annihilator {M} 
+[AddCommGroup M] [Module 𝕜 M] (f : Module.End 𝕜 M) : Ideal.span {minpoly 𝕜 f} = 
+Module.annihilator 𝕜[X] (Mod…
+· 使用定理 `Module.End.isSemisimple_of_squarefree_aeval_eq_zero`：isSemisimple_of_squ
+arefree_aeval_eq_zero {p : K[X]} (hp : Squarefree p) (hpf : aeval f p = 0) : f.I
+sSemisimple
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsRadical.squarefree`：IsRadical.squarefree (h0 : x != 0) (h : IsRadical 
+x) : Squarefree x
+· 使用定理 `Polynomial.instIsCancelMulZeroOfIsCancelAdd`：∀ {R : Type u} [inst : Semi
+ring R] [IsCancelAdd R] [IsCancelMulZero R], IsCancelMulZero (Polynomial R)
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `minpoly.ne_zero`：ne_zero [Nontrivial A] (hx : IsIntegral A x) : minpoly 
+A x != 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `IsIntegral.of_finite`：IsIntegral.of_finite [Module.Finite R B] (x : B) :
+ IsIntegral R x
+· 使用定理 `minpoly.isRadical`：isRadical [IsReduced B] : IsRadical (minpoly A x)
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `minpoly.ker_aeval_eq_span_minpoly`：ker_aeval_eq_span_minpoly : RingHom.k
+er (Polynomial.aeval x) = A[X] ∙ minpoly A x
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `Ideal.Quotient.liftₐ_comp`：∀ {R₁ : Type u_1} {A : Type u_3} {B : Type u_
+4} [inst : CommSemiring R₁] [inst_1 : Ring A] [inst_2 : Algebra R₁ A]   [inst_3 
+: Semiring B] […
+· 使用定理 `Polynomial.aeval_algHom`：aeval_algHom (f : A ->ₐ[R] B) (x : A) : aeval (
+f x) = f.comp (aeval x)
+· 使用定理 `AlgHom.comp_apply`：comp_apply (φ₁ : B ->ₐ[R] C) (φ₂ : A ->ₐ[R] B) (p : A
+) : φ₁.comp φ₂ p = φ₁ (φ₂ p)
+· 使用定理 `Polynomial.aeval_algHom_apply`：aeval_algHom_apply {F : Type*} [FunLike F
+ A B] [AlgHomClass F R A B] (f : F) (x : A) (p : R[X]) : aeval (f x) p = f (aeva
+l x p)
+· 使用定理 `minpoly.aeval`：aeval : aeval x (minpoly A x) = 0
+（共 33 条，此处仅展示前 30 条）
 -/
 protected theorem IsSemisimple.aeval (p : K[X]) : (aeval f p).IsSemisimple :=
   let R := K[X] ⧸ Ideal.span {minpoly K f}
   have : Module.Finite K R :=
     (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
-have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
+  have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp <|
     span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
   isSemisimple_of_squarefree_aeval_eq_zero ((minpoly.isRadical K _).squarefree <|
-minpoly.ne_zero .of_finite K Ideal.Quotient.mkₐ K (.span {minpoly K f}) p) <| by
+    minpoly.ne_zero <| .of_finite K <| Ideal.Quotient.mkₐ K (.span {minpoly K f}) p) <| by
       rw [← Ideal.Quotient.liftₐ_comp (.span {minpoly K f}) (aeval f)
-        fun a h => by rwa [Ideal.span]; rw [← minpoly.ker_aeval_eq_span_minpoly] at h, aeval_algHom,
+        fun a h ↦ by rwa [Ideal.span, ← minpoly.ker_aeval_eq_span_minpoly] at h, aeval_algHom,
         AlgHom.comp_apply, AlgHom.comp_apply, ← aeval_algHom_apply, minpoly.aeval, map_zero]
-
-/--
-theorem `IsSemisimple.of_mem_adjoin_singleton` / 定理 `IsSemisimple.of_mem_adjoin_singleton`
-
-English:
-theorem IsSemisimple.of_mem_adjoin_singleton
-  statement: {a : End K M}
-  proof: by
-  rw [adjoin_singleton_eq_range_aeval] at ha; obtain ⟨p, rfl⟩ := ha; exact .aeval hf _
-
-中文:
-定理 是半单.of_mem_adjoin_singleton
-  结论: {a : End K M}
-  证明: by
-  rw [adjoin_singleton_eq_range_aeval] at ha; obtain ⟨p, rfl⟩ := ha; exact .aeval hf _
-
-Depends on / 依赖: adjoin_singleton_eq_range_aeval
+/-
+**Module.End.IsSemisimple.of_mem_adjoin_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Mod
+ule.End.IsSemisimple`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f : Module.End K M} [FiniteDimensional K M], f.
+IsSemisimple → ∀ {a : Module.End K M}, a ∈ K[f] → a.IsSemisimple
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.adjoin_singleton_eq_range_aeval`：adjoin_singleton_eq_range_aeval
+ (x : A) : adjoin R {x} = (aeval x).range
+· 使用定理 `Module.End.IsSemisimple.aeval`：∀ {M : Type u_2} [inst : AddCommGroup M] 
+{K : Type u_3} [inst_1 : Field K] [inst_2 : _root_.Module K M]   {f : Module.End
+ K M} [FiniteDimens…
 -/
 theorem IsSemisimple.of_mem_adjoin_singleton {a : End K M}
-    (ha : a in K[f]) : a.IsSemisimple := by
+    (ha : a ∈ K[f]) : a.IsSemisimple := by
   rw [adjoin_singleton_eq_range_aeval] at ha; obtain ⟨p, rfl⟩ := ha; exact .aeval hf _
-
-/--
-theorem `IsSemisimple.pow` / 定理 `IsSemisimple.pow`
-
-English:
-theorem IsSemisimple.pow
-  given: (n : Nat)
-  statement: (f ^ n).IsSemisimple
-  proof: .of_mem_adjoin_singleton hf (pow_mem (self_mem_adjoin_singleton _ _) _)
-
-中文:
-定理 是半单.pow
-  条件: (n : 自然数)
-  结论: (f ^ n).是半单
-  证明: .of_mem_adjoin_singleton hf (pow_mem (self_mem_adjoin_singleton _ _) _)
+/-
+**Module.End.IsSemisimple.pow** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.IsSemisimple
+`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f : Module.End K M} [FiniteDimensional K M], f.
+IsSemisimple → ∀ (n : ℕ), (f ^ n).IsSemisimple
+参数：n : ℕ；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.End.IsSemisimple.of_mem_adjoin_singleton`：∀ {M : Type u_2} [inst 
+: AddCommGroup M] {K : Type u_3} [inst_1 : Field K] [inst_2 : _root_.Module K M]
+   {f : Module.End K M} [FiniteDimens…
+· 使用定理 `pow_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : Set
+Like A M] [SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ …
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
 -/
-protected theorem IsSemisimple.pow (n : Nat) : (f ^ n).IsSemisimple :=
+protected theorem IsSemisimple.pow (n : ℕ) : (f ^ n).IsSemisimple :=
   .of_mem_adjoin_singleton hf (pow_mem (self_mem_adjoin_singleton _ _) _)
 
 end
@@ -839,82 +1002,81 @@ include comm hf hg
 
 set_option backward.isDefEq.respectTransparency false in
 attribute [local simp] Submodule.Quotient.quot_mk_eq_mk in
-/--
-theorem `IsSemisimple.of_mem_adjoin_pair` / 定理 `IsSemisimple.of_mem_adjoin_pair`
-
-English:
-theorem IsSemisimple.of_mem_adjoin_pair
-  given: {a : End K M} (ha : a in K[f, g])
-  proof: by
-  let R := K[X] ⧸ Ideal.span {minpoly K f}
-  let S := AdjoinRoot ((minpoly K g).map <| algebraMap K R)
-  have : Module.Finite K R :=
-    (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
-  have : Module.Finite R S :=
-    (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsIntegral.isIntegral g).map _).finite
-  have : Module.Finite K S := .trans R S
-  have : IsArtinianRing R := .of_finite K R
-have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
-    span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
-  have : IsReduced S := by
-    simp_rw [S, AdjoinRoot, ← Ideal.isRadical_iff_quotient_reduced, ← isRadical_iff_span_singleton]
-    exact (PerfectField.separable_iff_squarefree.mpr hg.minpoly_squarefree).map.squarefree.isRadical
-  let φ : S ->ₐ[K] End K M := Ideal.Quotient.liftₐ _ (eval₂AlgHom (Ideal.Quotient.liftₐ _ (aeval f)
-    fun a => ?_) g ?_) ((Ideal.span_singleton_le_iff_mem _).mpr ?_ : _ <= RingHom.ker _)
-  rotate_left 1
-  · rw [Ideal.span, ← minpoly.ker_aeval_eq_span_minpoly]; exact id
-  · rintro ⟨p⟩; exact p.induction_on (fun k => by simp [R, commute_algebraMap_left])
-      (fun p q hp hq => by simpa [R] using! hp.add_left hq)
-      fun n k => by simpa [R, pow_succ, ← mul_assoc _ _ X] using! (·.mul_left comm)
-  · simpa only [RingHom.mem_ker, eval₂AlgHom_apply, eval₂_map, AlgHom.comp_algebraMap_of_tower]
-      using! minpoly.aeval K g
-  have : K[f, g] <= φ.range := adjoin_le fun x => by
-    rintro (hx | hx) <;> rw [hx]
-    · exact ⟨AdjoinRoot.of _ (AdjoinRoot.root _), (eval₂_C _ _).trans (aeval_X f)⟩
-    · exact ⟨AdjoinRoot.root _, eval₂_X _ _⟩
-  obtain ⟨p, rfl⟩ := (AlgHom.mem_range _).mp (this ha)
-  refine isSemisimple_of_squarefree_aeval_eq_zero
-    ((minpoly.isRadical K p).squarefree <| minpoly.ne_zero <| .of_finite K p) ?_
-  rw [aeval_algHom]; rw [φ.comp_apply]; rw [minpoly.aeval]; rw [map_zero]
-
-中文:
-定理 是半单.of_mem_adjoin_pair
-  条件: {a : End K M} (ha : a in K[f, g])
-  证明: by
-  let R := K[X] ⧸ Ideal.span {minpoly K f}
-  let S := AdjoinRoot ((minpoly K g).map <| algebraMap K R)
-  have : Module.Finite K R :=
-    (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
-  have : Module.Finite R S :=
-    (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsIntegral.isIntegral g).map _).finite
-  have : Module.Finite K S := .trans R S
-  have : IsArtinianRing R := .of_finite K R
-have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
-    span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
-  have : IsReduced S := by
-    simp_rw [S, AdjoinRoot, ← Ideal.isRadical_iff_quotient_reduced, ← isRadical_iff_span_singleton]
-    exact (PerfectField.separable_iff_squarefree.mpr hg.minpoly_squarefree).map.squarefree.isRadical
-  let φ : S ->ₐ[K] End K M := Ideal.Quotient.liftₐ _ (eval₂AlgHom (Ideal.Quotient.liftₐ _ (aeval f)
-    fun a => ?_) g ?_) ((Ideal.span_singleton_le_iff_mem _).mpr ?_ : _ <= RingHom.ker _)
-  rotate_left 1
-  · rw [Ideal.span, ← minpoly.ker_aeval_eq_span_minpoly]; exact id
-  · rintro ⟨p⟩; exact p.induction_on (fun k => by simp [R, commute_algebraMap_left])
-      (fun p q hp hq => by simpa [R] using! hp.add_left hq)
-      fun n k => by simpa [R, pow_succ, ← mul_assoc _ _ X] using! (·.mul_left comm)
-  · simpa only [RingHom.mem_ker, eval₂AlgHom_apply, eval₂_map, AlgHom.comp_algebraMap_of_tower]
-      using! minpoly.aeval K g
-  have : K[f, g] <= φ.range := adjoin_le fun x => by
-    rintro (hx | hx) <;> rw [hx]
-    · exact ⟨AdjoinRoot.of _ (AdjoinRoot.root _), (eval₂_C _ _).trans (aeval_X f)⟩
-    · exact ⟨AdjoinRoot.root _, eval₂_X _ _⟩
-  obtain ⟨p, rfl⟩ := (AlgHom.mem_range _).mp (this ha)
-  refine isSemisimple_of_squarefree_aeval_eq_zero
-    ((minpoly.isRadical K p).squarefree <| minpoly.ne_zero <| .of_finite K p) ?_
-  rw [aeval_algHom]; rw [φ.comp_apply]; rw [minpoly.aeval]; rw [map_zero]
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.powerBasis, Finite, Ideal.isRadical_iff_quotient_reduced, Ideal.span, IsArtinianRing, IsIntegral, IsIntegral.isIntegral, IsReduced, Module, Module.Finite, algebraMap, finite, isIntegral, isRadical_iff_quotient_reduced, minpoly, minpoly.monic, of_finite, powerBasis, span_minpoly_eq_annihilator
+/-
+**Module.End.IsSemisimple.of_mem_adjoin_pair** 是 Mathlib 中的一个定理，位于命名空间 `Module.E
+nd.IsSemisimple`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f g : Module.End K M} [FiniteDimensional K M] [
+PerfectField K],   Commute f g → f.IsSemisimple → g.IsSemisimple → ∀ {a : Module
+.End K M}, a ∈ K[f, g] → a.IsSemisimple
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `PowerBasis.finite`：finite (pb : PowerBasis R S) : Module.Finite R S
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `Polynomial.Monic.map`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   p.Monic → (Polynomial.ma
+p f p).Mon…
+· 使用定理 `Module.Finite.trans`：∀ {R : Type u_6} (A : Type u_7) (M : Type u_8) [ins
+t : Semiring R] [inst_1 : Semiring A] [inst_2 : _root_.Module R A]   [inst_3 : A
+ddCommMon…
+· 使用定理 `AdjoinRoot.instIsScalarTower`：∀ {R : Type u_1} [inst : CommRing R] (R₁ :
+ Type u_6) (R₂ : Type u_7) [inst_1 : SMul R₁ R₂] [inst_2 : DistribSMul R₁ R]   [
+inst_3 : DistribSM…
+· 使用定理 `IsArtinianRing.of_finite`：IsArtinianRing.of_finite (R S) [Ring R] [Ring 
+S] [Module R S] [IsScalarTower R S S] [IsArtinianRing R] [Module.Finite R S] : I
+sArtinianRing …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.isRadical_iff_quotient_reduced`：Ideal.isRadical_iff_quotient_reduc
+ed {R : Type*} [CommRing R] (I : Ideal R) : I.IsRadical ↔ IsReduced (R ⧸ I)
+· 使用定理 `IsSemisimpleModule.annihilator_isRadical`：annihilator_isRadical (R) [Com
+mRing R] [Module R M] [IsSemisimpleModule R M] : (Module.annihilator R M).IsRadi
+cal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.span_minpoly_eq_annihilator`：span_minpoly_eq_annihilator {M} 
+[AddCommGroup M] [Module 𝕜 M] (f : Module.End 𝕜 M) : Ideal.span {minpoly 𝕜 f} = 
+Module.annihilator 𝕜[X] (Mod…
+· 使用定理 `Squarefree.isRadical`：Squarefree.isRadical {x : R} (hx : Squarefree x) :
+ IsRadical x
+· 使用定理 `IsArtinianRing.instDecompositionMonoidPolynomial`：∀ (R : Type u_1) [inst
+ : CommRing R] [IsArtinianRing R] [IsReduced R], DecompositionMonoid (Polynomial
+ R)
+· 使用定理 `Polynomial.Separable.squarefree`：∀ {R : Type u} [inst : CommSemiring R] 
+{p : Polynomial R}, p.Separable → Squarefree p
+· 使用定理 `Polynomial.Separable.map`：∀ {R : Type u} [inst : CommSemiring R] {S : Ty
+pe v} [inst_1 : CommSemiring S] {p : Polynomial R},   p.Separable → ∀ {f : R →+*
+ S}, (Polynomi…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PerfectField.separable_iff_squarefree`：separable_iff_squarefree {g : K[X
+]} : g.Separable ↔ Squarefree g
+· 使用定理 `Module.End.IsSemisimple.minpoly_squarefree`：∀ {M : Type u_2} [inst : Add
+CommGroup M] {K : Type u_3} [inst_1 : Field K] [inst_2 : _root_.Module K M]   {f
+ : Module.End K M} [FiniteDimens…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用引理 `minpoly.ker_aeval_eq_span_minpoly`：ker_aeval_eq_span_minpoly : RingHom.k
+er (Polynomial.aeval x) = A[X] ∙ minpoly A x
+· 使用定理 `Polynomial.induction_on`：∀ {R : Type u} [inst : Semiring R] {motive : Po
+lynomial R → Prop} (p : Polynomial R),   (∀ (a : R), motive (Polynomial.C a)) → 
+    (∀ (p q :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.aeval_C`：aeval_C (r : R) : aeval x (C r) = algebraMap R A r
+（共 72 条，此处仅展示前 30 条）
 -/
-theorem IsSemisimple.of_mem_adjoin_pair {a : End K M} (ha : a in K[f, g]) :
+theorem IsSemisimple.of_mem_adjoin_pair {a : End K M} (ha : a ∈ K[f, g]) :
     a.IsSemisimple := by
   let R := K[X] ⧸ Ideal.span {minpoly K f}
   let S := AdjoinRoot ((minpoly K g).map <| algebraMap K R)
@@ -924,91 +1086,112 @@ theorem IsSemisimple.of_mem_adjoin_pair {a : End K M} (ha : a in K[f, g]) :
     (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsIntegral.isIntegral g).map _).finite
   have : Module.Finite K S := .trans R S
   have : IsArtinianRing R := .of_finite K R
-have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
+  have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp <|
     span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
   have : IsReduced S := by
     simp_rw [S, AdjoinRoot, ← Ideal.isRadical_iff_quotient_reduced, ← isRadical_iff_span_singleton]
     exact (PerfectField.separable_iff_squarefree.mpr hg.minpoly_squarefree).map.squarefree.isRadical
-  let φ : S ->ₐ[K] End K M := Ideal.Quotient.liftₐ _ (eval₂AlgHom (Ideal.Quotient.liftₐ _ (aeval f)
-    fun a => ?_) g ?_) ((Ideal.span_singleton_le_iff_mem _).mpr ?_ : _ <= RingHom.ker _)
+  let φ : S →ₐ[K] End K M := Ideal.Quotient.liftₐ _ (eval₂AlgHom (Ideal.Quotient.liftₐ _ (aeval f)
+    fun a ↦ ?_) g ?_) ((Ideal.span_singleton_le_iff_mem _).mpr ?_ : _ ≤ RingHom.ker _)
   rotate_left 1
   · rw [Ideal.span, ← minpoly.ker_aeval_eq_span_minpoly]; exact id
-  · rintro ⟨p⟩; exact p.induction_on (fun k => by simp [R, commute_algebraMap_left])
-      (fun p q hp hq => by simpa [R] using! hp.add_left hq)
-      fun n k => by simpa [R, pow_succ, ← mul_assoc _ _ X] using! (·.mul_left comm)
+  · rintro ⟨p⟩; exact p.induction_on (fun k ↦ by simp [R, commute_algebraMap_left])
+      (fun p q hp hq ↦ by simpa [R] using! hp.add_left hq)
+      fun n k ↦ by simpa [R, pow_succ, ← mul_assoc _ _ X] using! (·.mul_left comm)
   · simpa only [RingHom.mem_ker, eval₂AlgHom_apply, eval₂_map, AlgHom.comp_algebraMap_of_tower]
       using! minpoly.aeval K g
-  have : K[f, g] <= φ.range := adjoin_le fun x => by
+  have : K[f, g] ≤ φ.range := adjoin_le fun x ↦ by
     rintro (hx | hx) <;> rw [hx]
     · exact ⟨AdjoinRoot.of _ (AdjoinRoot.root _), (eval₂_C _ _).trans (aeval_X f)⟩
     · exact ⟨AdjoinRoot.root _, eval₂_X _ _⟩
   obtain ⟨p, rfl⟩ := (AlgHom.mem_range _).mp (this ha)
   refine isSemisimple_of_squarefree_aeval_eq_zero
     ((minpoly.isRadical K p).squarefree <| minpoly.ne_zero <| .of_finite K p) ?_
-  rw [aeval_algHom]; rw [φ.comp_apply]; rw [minpoly.aeval]; rw [map_zero]
-
-/--
-theorem `IsSemisimple.add_of_commute` / 定理 `IsSemisimple.add_of_commute`
-
-English:
-theorem IsSemisimple.add_of_commute
-  statement: (f + g).IsSemisimple
-  proof: .of_mem_adjoin_pair
-comm hf hg add_mem (Algebra.subset_adjoin <| .inl rfl) (Algebra.subset_adjoin <| .inr rfl)
-
-中文:
-定理 是半单.add_of_commute
-  结论: (f + g).是半单
-  证明: .of_mem_adjoin_pair
-comm hf hg add_mem (Algebra.subset_adjoin <| .inl rfl) (Algebra.subset_adjoin <| .inr rfl)
-
-Depends on / 依赖: of_mem_adjoin_pair
+  rw [aeval_algHom, φ.comp_apply, minpoly.aeval, map_zero]
+/-
+**Module.End.IsSemisimple.add_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.I
+sSemisimple`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f g : Module.End K M} [FiniteDimensional K M] [
+PerfectField K],   Commute f g → f.IsSemisimple → g.IsSemisimple → (f + g).IsSem
+isimple
+参数：f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.End.IsSemisimple.of_mem_adjoin_pair`：∀ {M : Type u_2} [inst : Add
+CommGroup M] {K : Type u_3} [inst_1 : Field K] [inst_2 : _root_.Module K M]   {f
+ g : Module.End K M} [FiniteDime…
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `SubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Ty
+pe u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringC
+lass S R], AddSubmonoidCla…
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
 -/
 theorem IsSemisimple.add_of_commute : (f + g).IsSemisimple := .of_mem_adjoin_pair
-comm hf hg add_mem (Algebra.subset_adjoin <| .inl rfl) (Algebra.subset_adjoin <| .inr rfl)
-
-/--
-theorem `IsSemisimple.sub_of_commute` / 定理 `IsSemisimple.sub_of_commute`
-
-English:
-theorem IsSemisimple.sub_of_commute
-  statement: (f - g).IsSemisimple
-  proof: .of_mem_adjoin_pair
-comm hf hg sub_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
-
-中文:
-定理 是半单.sub_of_commute
-  结论: (f - g).是半单
-  证明: .of_mem_adjoin_pair
-comm hf hg sub_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
-
-Depends on / 依赖: of_mem_adjoin_pair
+  comm hf hg <| add_mem (Algebra.subset_adjoin <| .inl rfl) (Algebra.subset_adjoin <| .inr rfl)
+/-
+**Module.End.IsSemisimple.sub_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.I
+sSemisimple`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f g : Module.End K M} [FiniteDimensional K M] [
+PerfectField K],   Commute f g → f.IsSemisimple → g.IsSemisimple → (f - g).IsSem
+isimple
+参数：f - g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.End.IsSemisimple.of_mem_adjoin_pair`：∀ {M : Type u_2} [inst : Add
+CommGroup M] {K : Type u_3} [inst_1 : Field K] [inst_2 : _root_.Module K M]   {f
+ g : Module.End K M} [FiniteDime…
+· 使用定理 `sub_mem`：∀ {M : Type u_3} {S : Type u_4} [inst : SubNegMonoid M] [inst_1
+ : SetLike S M] [hSM : AddSubgroupClass S M] {H : S}   {x y : M}, x ∈ H → y ∈…
+· 使用定理 `SubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [inst : Set
+Like S R] [inst_1 : NonAssocRing R] [h : SubringClass S R],   AddSubgroupClass S
+ R
+· 使用定理 `Subalgebra.instSubringClass`：∀ {R : Type u_1} {A : Type u_2} [inst : Com
+mRing R] [inst_1 : Ring A] [inst_2 : Algebra R A],   SubringClass (Subalgebra R 
+A) A
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
 -/
 theorem IsSemisimple.sub_of_commute : (f - g).IsSemisimple := .of_mem_adjoin_pair
-comm hf hg sub_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
-
-/--
-theorem `IsSemisimple.mul_of_commute` / 定理 `IsSemisimple.mul_of_commute`
-
-English:
-theorem IsSemisimple.mul_of_commute
-  statement: (f * g).IsSemisimple
-  proof: .of_mem_adjoin_pair
-comm hf hg mul_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
-
-中文:
-定理 是半单.mul_of_commute
-  结论: (f * g).是半单
-  证明: .of_mem_adjoin_pair
-comm hf hg mul_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
-
-Depends on / 依赖: of_mem_adjoin_pair
+  comm hf hg <| sub_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
+/-
+**Module.End.IsSemisimple.mul_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.I
+sSemisimple`。
+形式化陈述：∀ {M : Type u_2} [inst : AddCommGroup M] {K : Type u_3} [inst_1 : Field K]
+ [inst_2 : _root_.Module K M]   {f g : Module.End K M} [FiniteDimensional K M] [
+PerfectField K],   Commute f g → f.IsSemisimple → g.IsSemisimple → (f * g).IsSem
+isimple
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.End.IsSemisimple.of_mem_adjoin_pair`：∀ {M : Type u_2} [inst : Add
+CommGroup M] {K : Type u_3} [inst_1 : Field K] [inst_2 : _root_.Module K M]   {f
+ g : Module.End K M} [FiniteDime…
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
 -/
 theorem IsSemisimple.mul_of_commute : (f * g).IsSemisimple := .of_mem_adjoin_pair
-comm hf hg mul_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
+  comm hf hg <| mul_mem (subset_adjoin <| .inl rfl) (subset_adjoin <| .inr rfl)
 
 end PerfectField
 
 end field
 
 end Module.End
+

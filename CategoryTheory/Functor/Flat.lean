@@ -64,150 +64,149 @@ section RepresentablyFlat
 variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 variable {E : Type u₃} [Category.{v₃} E]
 
-/--
-Definition of `RepresentablyFlat` / `RepresentablyFlat` 的定义
+/-- A functor `F : C ⥤ D` is representably flat if the comma category `(X/F)` is cofiltered for
+each `X : D`.
+-/
+/-
+**CategoryTheory.RepresentablyFlat** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Functor
+ C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RepresentablyFlat
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - cofiltered : forall X : D, IsCofiltered (StructuredArrow X F)
-
-中文:
-类 RepresentablyFlat
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - cofiltered : 对任意 X : D, 是余filtered (结构化箭头 X F)
+--- 原说明 ---
+A functor `F : C ⥤ D` is representably flat if the comma category `(X/F)` is cof
+iltered for
+each `X : D`.
 -/
 class RepresentablyFlat (F : C ⥤ D) : Prop where
-  cofiltered : forall X : D, IsCofiltered (StructuredArrow X F)
+  cofiltered : ∀ X : D, IsCofiltered (StructuredArrow X F)
 
-/--
-Definition of `RepresentablyCoflat` / `RepresentablyCoflat` 的定义
+/-- A functor `F : C ⥤ D` is representably coflat if the comma category `(F/X)` is filtered for
+each `X : D`. -/
+/-
+**CategoryTheory.RepresentablyCoflat** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory
+`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Functor
+ C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RepresentablyCoflat
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - filtered : forall X : D, IsFiltered (CostructuredArrow F X)
-
-中文:
-类 RepresentablyCoflat
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - filtered : 对任意 X : D, 是Filtered (CostructuredArrow F X)
+--- 原说明 ---
+A functor `F : C ⥤ D` is representably coflat if the comma category `(F/X)` is f
+iltered for
+each `X : D`.
 -/
 class RepresentablyCoflat (F : C ⥤ D) : Prop where
-  filtered : forall X : D, IsFiltered (CostructuredArrow F X)
+  filtered : ∀ X : D, IsFiltered (CostructuredArrow F X)
 
 attribute [instance] RepresentablyFlat.cofiltered RepresentablyCoflat.filtered
 
 variable (F : C ⥤ D)
-
-/--
-Instance `RepresentablyFlat.of_isRightAdjoint` / 实例 `RepresentablyFlat.of_isRightAdjoint`
-
-English:
-instance RepresentablyFlat.of_isRightAdjoint
-  signature: [F.IsRightAdjoint]
-  body: IsCofiltered.of_isInitial _ (mkInitialOfLeftAdjoint _ (.ofIsRightAdjoint F) _)
-
-中文:
-实例 RepresentablyFlat.of_isRightAdjoint
-  签名: [F.是右伴随]
-  定义体: IsCofiltered.of_isInitial _ (mkInitialOfLeftAdjoint _ (.ofIsRightAdjoint F) _)
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.of_isInitial, mkInitialOfLeftAdjoint, ofIsRightAdjoint, of_isInitial
+/-
+**CategoryTheory.RepresentablyFlat.of_isRightAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.RepresentablyFlat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [F.IsRightAdjoint], CategoryTheory.RepresentablyFlat F
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_isInitial`：of_isInitial {X : C} (h : IsIn
+itial X) : IsCofiltered C
 -/
 instance RepresentablyFlat.of_isRightAdjoint [F.IsRightAdjoint] : RepresentablyFlat F where
   cofiltered _ := IsCofiltered.of_isInitial _ (mkInitialOfLeftAdjoint _ (.ofIsRightAdjoint F) _)
-
-/--
-Instance `RepresentablyCoflat.of_isLeftAdjoint` / 实例 `RepresentablyCoflat.of_isLeftAdjoint`
-
-English:
-instance RepresentablyCoflat.of_isLeftAdjoint
-  signature: [F.IsLeftAdjoint]
-  body: IsFiltered.of_isTerminal _ (mkTerminalOfRightAdjoint _ (.ofIsLeftAdjoint F) _)
-
-中文:
-实例 RepresentablyCoflat.of_isLeftAdjoint
-  签名: [F.是左伴随]
-  定义体: IsFiltered.of_isTerminal _ (mkTerminalOfRightAdjoint _ (.ofIsLeftAdjoint F) _)
-
-Depends on / 依赖: IsFiltered, IsFiltered.of_isTerminal, mkTerminalOfRightAdjoint, ofIsLeftAdjoint, of_isTerminal
+/-
+**CategoryTheory.RepresentablyCoflat.of_isLeftAdjoint** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.RepresentablyCoflat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [F.IsLeftAdjoint], CategoryTheory.RepresentablyCoflat F
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_isTerminal`：of_isTerminal {X : C} (h : IsTe
+rminal X) : IsFiltered C
 -/
 instance RepresentablyCoflat.of_isLeftAdjoint [F.IsLeftAdjoint] : RepresentablyCoflat F where
   filtered _ := IsFiltered.of_isTerminal _ (mkTerminalOfRightAdjoint _ (.ofIsLeftAdjoint F) _)
-
-/--
-theorem `RepresentablyFlat.id` / 定理 `RepresentablyFlat.id`
-
-English:
-theorem RepresentablyFlat.id
-  statement: RepresentablyFlat (𝟭 C)
-  proof: inferInstance
-
-中文:
-定理 RepresentablyFlat.id
-  结论: RepresentablyFlat (𝟭 C)
-  证明: inferInstance
+/-
+**CategoryTheory.RepresentablyFlat.id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+RepresentablyFlat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C],   CategoryThe
+ory.RepresentablyFlat (CategoryTheory.Functor.id C)
+参数：CategoryTheory.Functor.id C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RepresentablyFlat.of_isRightAdjoint`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
 -/
 theorem RepresentablyFlat.id : RepresentablyFlat (𝟭 C) := inferInstance
-
-/--
-theorem `RepresentablyCoflat.id` / 定理 `RepresentablyCoflat.id`
-
-English:
-theorem RepresentablyCoflat.id
-  statement: RepresentablyCoflat (𝟭 C)
-  proof: inferInstance
-
-中文:
-定理 RepresentablyCoflat.id
-  结论: RepresentablyCoflat (𝟭 C)
-  证明: inferInstance
+/-
+**CategoryTheory.RepresentablyCoflat.id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.RepresentablyCoflat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C],   CategoryThe
+ory.RepresentablyCoflat (CategoryTheory.Functor.id C)
+参数：CategoryTheory.Functor.id C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RepresentablyCoflat.of_isLeftAdjoint`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
 -/
 theorem RepresentablyCoflat.id : RepresentablyCoflat (𝟭 C) := inferInstance
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `RepresentablyFlat.comp` / 实例 `RepresentablyFlat.comp`
-
-English:
-instance RepresentablyFlat.comp
-  signature: (G : D ⥤ E) [RepresentablyFlat F]
-  body: by
-  refine ⟨fun X => IsCofiltered.of_cone_nonempty.{0} _ (fun {J} _ _ H => ?_)⟩
-  obtain ⟨c₁⟩ := IsCofiltered.cone_nonempty (H ⋙ StructuredArrow.pre X F G)
-  let H₂ : J ⥤ StructuredArrow c₁.pt.right F :=
-    { obj := fun j => StructuredArrow.mk (c₁.π.app j).right
-      map := fun {j j'} f =>
-        StructuredArrow.homMk (H.map f).right (congrArg CommaMorphism.right (c₁.w f)) }
-  obtain ⟨c₂⟩ := IsCofiltered.cone_nonempty H₂
-  simp only [H₂] at c₂
-  exact ⟨⟨StructuredArrow.mk (c₁.pt.hom ≫ G.map c₂.pt.hom),
-    ⟨fun j => StructuredArrow.homMk (c₂.π.app j).right (by simp [← G.map_comp]),
-     fun j j' f => by simpa using (c₂.w f).symm⟩⟩⟩
-
-中文:
-实例 RepresentablyFlat.comp
-  签名: (G : D ⥤ E) [RepresentablyFlat F]
-  定义体: by
-  refine ⟨fun X => IsCofiltered.of_cone_nonempty.{0} _ (fun {J} _ _ H => ?_)⟩
-  obtain ⟨c₁⟩ := IsCofiltered.cone_nonempty (H ⋙ StructuredArrow.pre X F G)
-  let H₂ : J ⥤ StructuredArrow c₁.pt.right F :=
-    { obj := fun j => StructuredArrow.mk (c₁.π.app j).right
-      map := fun {j j'} f =>
-        StructuredArrow.homMk (H.map f).right (congrArg CommaMorphism.right (c₁.w f)) }
-  obtain ⟨c₂⟩ := IsCofiltered.cone_nonempty H₂
-  simp only [H₂] at c₂
-  exact ⟨⟨StructuredArrow.mk (c₁.pt.hom ≫ G.map c₂.pt.hom),
-    ⟨fun j => StructuredArrow.homMk (c₂.π.app j).right (by simp [← G.map_comp]),
-     fun j j' f => by simpa using (c₂.w f).symm⟩⟩⟩
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.right, G.map, H.map, IsCofiltered, IsCofiltered.cone_nonempty, IsCofiltered.of_cone_nonempty, Structur, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, StructuredArrow.pre, cone_nonempty, of_cone_nonempty, pt.hom, pt.right
+/-
+**CategoryTheory.RepresentablyFlat.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.RepresentablyFlat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C D)   (G : CategoryTheo
+ry.Functor D E) [CategoryTheory.RepresentablyFlat F] [CategoryTheory.Representab
+lyFlat G],   CategoryTheory.RepresentablyFlat (F.comp G)
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_cone_nonempty`：of_cone_nonempty (h : fora
+ll {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), Nonempty (Cone F)
+) : IsCofiltered C
+· 使用定理 `CategoryTheory.IsCofiltered.cone_nonempty`：cone_nonempty (F : J ⥤ C) : N
+onempty (Cone F)
+· 使用定理 `CategoryTheory.RepresentablyFlat.cofiltered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.StructuredArrow.homMk.congr_simp`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {S : D} {T : Categ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.StructuredArrow.w`：w : X.hom ≫ T.map f.right = Y.hom
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 instance RepresentablyFlat.comp (G : D ⥤ E) [RepresentablyFlat F]
     [RepresentablyFlat G] : RepresentablyFlat (F ⋙ G) := by
@@ -227,39 +226,42 @@ section
 
 variable {F}
 
-/--
-theorem `RepresentablyFlat.of_iso` / 定理 `RepresentablyFlat.of_iso`
+/-- Being a representably flat functor is closed under natural isomorphisms. -/
+/-
+**CategoryTheory.RepresentablyFlat.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.RepresentablyFlat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+ [CategoryTheory.RepresentablyFlat F] {G : CategoryTheory.Functor C D} (α : F ≅ 
+G),   CategoryTheory.RepresentablyFlat G
+参数：α : F ≅ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_equivalence`：of_equivalence (h : C ≌ D) :
+ IsCofiltered D
+· 使用定理 `CategoryTheory.RepresentablyFlat.cofiltered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-theorem RepresentablyFlat.of_iso
-  given: [RepresentablyFlat F] {G : C ⥤ D} (α : F ≅ G)
-  proof: IsCofiltered.of_equivalence (StructuredArrow.mapNatIso α)
-
-中文:
-定理 RepresentablyFlat.of_iso
-  条件: [RepresentablyFlat F] {G : C ⥤ D} (α : F ≅ G)
-  证明: IsCofiltered.of_equivalence (StructuredArrow.mapNatIso α)
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, StructuredArrow, StructuredArrow.mapNatIso, mapNatIso, of_equivalence
+--- 原说明 ---
+Being a representably flat functor is closed under natural isomorphisms.
 -/
 theorem RepresentablyFlat.of_iso [RepresentablyFlat F] {G : C ⥤ D} (α : F ≅ G) :
     RepresentablyFlat G where
   cofiltered _ := IsCofiltered.of_equivalence (StructuredArrow.mapNatIso α)
-
-/--
-theorem `RepresentablyCoflat.of_iso` / 定理 `RepresentablyCoflat.of_iso`
-
-English:
-theorem RepresentablyCoflat.of_iso
-  given: [RepresentablyCoflat F] {G : C ⥤ D} (α : F ≅ G)
-  proof: IsFiltered.of_equivalence (CostructuredArrow.mapNatIso α)
-
-中文:
-定理 RepresentablyCoflat.of_iso
-  条件: [RepresentablyCoflat F] {G : C ⥤ D} (α : F ≅ G)
-  证明: IsFiltered.of_equivalence (CostructuredArrow.mapNatIso α)
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.mapNatIso, IsFiltered, IsFiltered.of_equivalence, mapNatIso, of_equivalence
+/-
+**CategoryTheory.RepresentablyCoflat.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.RepresentablyCoflat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+ [CategoryTheory.RepresentablyCoflat F] {G : CategoryTheory.Functor C D} (α : F 
+≅ G),   CategoryTheory.RepresentablyCoflat G
+参数：α : F ≅ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_equivalence`：of_equivalence (h : C ≌ D) : I
+sFiltered D
+· 使用定理 `CategoryTheory.RepresentablyCoflat.filtered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 theorem RepresentablyCoflat.of_iso [RepresentablyCoflat F] {G : C ⥤ D} (α : F ≅ G) :
     RepresentablyCoflat G where
@@ -267,34 +269,27 @@ theorem RepresentablyCoflat.of_iso [RepresentablyCoflat F] {G : C ⥤ D} (α : F
 
 end
 
-/--
-theorem `representablyCoflat_op_iff` / 定理 `representablyCoflat_op_iff`
-
-English:
-theorem representablyCoflat_op_iff
-  statement: RepresentablyCoflat F.op ↔ RepresentablyFlat F
-  proof: by
-  refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
-  · suffices IsFiltered (StructuredArrow X F)ᵒᵖ from isCofiltered_of_isFiltered_op _
-    apply IsFiltered.of_equivalence (structuredArrowOpEquivalence _ _).symm
-  · suffices IsCofiltered (CostructuredArrow F.op (op X))ᵒᵖ from isFiltered_of_isCofiltered_op _
-    suffices IsCofiltered (StructuredArrow X F)ᵒᵖᵒᵖ from
-      IsCofiltered.of_equivalence (structuredArrowOpEquivalence _ _).op
-    apply IsCofiltered.of_equivalence (opOpEquivalence _)
-
-中文:
-定理 representablyCoflat_op_iff
-  结论: RepresentablyCoflat F.op ↔ RepresentablyFlat F
-  证明: by
-  refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
-  · suffices IsFiltered (StructuredArrow X F)ᵒᵖ from isCofiltered_of_isFiltered_op _
-    apply IsFiltered.of_equivalence (structuredArrowOpEquivalence _ _).symm
-  · suffices IsCofiltered (CostructuredArrow F.op (op X))ᵒᵖ from isFiltered_of_isCofiltered_op _
-    suffices IsCofiltered (StructuredArrow X F)ᵒᵖᵒᵖ from
-      IsCofiltered.of_equivalence (structuredArrowOpEquivalence _ _).op
-    apply IsCofiltered.of_equivalence (opOpEquivalence _)
-
-Depends on / 依赖: CostructuredArrow, F.op, IsCofiltered, IsCofiltered.of_equivalence, IsFiltered, IsFiltered.of_equivalence, StructuredArrow, isCofiltered_of_isFiltered_op, isFiltered_of_isCofiltered_op, of_equivalence, opOpEquivalence, structuredArrowOpEquivalence
+/-
+**CategoryTheory.representablyCoflat_op_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：representablyCoflat_op_iff : RepresentablyCoflat F.op ↔ RepresentablyFlat 
+F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_equivalence`：of_equivalence (h : C ≌ D) : I
+sFiltered D
+· 使用定理 `CategoryTheory.RepresentablyCoflat.filtered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.isCofiltered_of_isFiltered_op`：isCofiltered_of_isFiltered
+_op [IsFiltered Cᵒᵖ] : IsCofiltered C
+· 使用定理 `CategoryTheory.IsCofiltered.of_equivalence`：of_equivalence (h : C ≌ D) :
+ IsCofiltered D
+· 使用定理 `CategoryTheory.RepresentablyFlat.cofiltered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.isFiltered_of_isCofiltered_op`：isFiltered_of_isCofiltered
+_op [IsCofiltered Cᵒᵖ] : IsFiltered C
 -/
 theorem representablyCoflat_op_iff : RepresentablyCoflat F.op ↔ RepresentablyFlat F := by
   refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
@@ -304,35 +299,26 @@ theorem representablyCoflat_op_iff : RepresentablyCoflat F.op ↔ RepresentablyF
     suffices IsCofiltered (StructuredArrow X F)ᵒᵖᵒᵖ from
       IsCofiltered.of_equivalence (structuredArrowOpEquivalence _ _).op
     apply IsCofiltered.of_equivalence (opOpEquivalence _)
-
-/--
-theorem `representablyFlat_op_iff` / 定理 `representablyFlat_op_iff`
-
-English:
-theorem representablyFlat_op_iff
-  statement: RepresentablyFlat F.op ↔ RepresentablyCoflat F
-  proof: by
-  refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
-  · suffices IsCofiltered (CostructuredArrow F X)ᵒᵖ from isFiltered_of_isCofiltered_op _
-    apply IsCofiltered.of_equivalence (costructuredArrowOpEquivalence _ _).symm
-  · suffices IsFiltered (StructuredArrow (op X) F.op)ᵒᵖ from isCofiltered_of_isFiltered_op _
-    suffices IsFiltered (CostructuredArrow F X)ᵒᵖᵒᵖ from
-      IsFiltered.of_equivalence (costructuredArrowOpEquivalence _ _).op
-    apply IsFiltered.of_equivalence (opOpEquivalence _)
-
-中文:
-定理 representablyFlat_op_iff
-  结论: RepresentablyFlat F.op ↔ RepresentablyCoflat F
-  证明: by
-  refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
-  · suffices IsCofiltered (CostructuredArrow F X)ᵒᵖ from isFiltered_of_isCofiltered_op _
-    apply IsCofiltered.of_equivalence (costructuredArrowOpEquivalence _ _).symm
-  · suffices IsFiltered (StructuredArrow (op X) F.op)ᵒᵖ from isCofiltered_of_isFiltered_op _
-    suffices IsFiltered (CostructuredArrow F X)ᵒᵖᵒᵖ from
-      IsFiltered.of_equivalence (costructuredArrowOpEquivalence _ _).op
-    apply IsFiltered.of_equivalence (opOpEquivalence _)
-
-Depends on / 依赖: CostructuredArrow, F.op, IsCofiltered, IsCofiltered.of_equivalence, IsFiltered, IsFiltered.of_equivalence, StructuredArrow, costructuredArrowOpEquivalence, isCofiltered_of_isFiltered_op, isFiltered_of_isCofiltered_op, of_equivalence, opOpEquivalence
+/-
+**CategoryTheory.representablyFlat_op_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：representablyFlat_op_iff : RepresentablyFlat F.op ↔ RepresentablyCoflat F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_equivalence`：of_equivalence (h : C ≌ D) :
+ IsCofiltered D
+· 使用定理 `CategoryTheory.RepresentablyFlat.cofiltered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.isFiltered_of_isCofiltered_op`：isFiltered_of_isCofiltered
+_op [IsCofiltered Cᵒᵖ] : IsFiltered C
+· 使用定理 `CategoryTheory.IsFiltered.of_equivalence`：of_equivalence (h : C ≌ D) : I
+sFiltered D
+· 使用定理 `CategoryTheory.RepresentablyCoflat.filtered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.isCofiltered_of_isFiltered_op`：isCofiltered_of_isFiltered
+_op [IsFiltered Cᵒᵖ] : IsCofiltered C
 -/
 theorem representablyFlat_op_iff : RepresentablyFlat F.op ↔ RepresentablyCoflat F := by
   refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
@@ -342,98 +328,63 @@ theorem representablyFlat_op_iff : RepresentablyFlat F.op ↔ RepresentablyCofla
     suffices IsFiltered (CostructuredArrow F X)ᵒᵖᵒᵖ from
       IsFiltered.of_equivalence (costructuredArrowOpEquivalence _ _).op
     apply IsFiltered.of_equivalence (opOpEquivalence _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [RepresentablyFlat
-  signature: F] : RepresentablyCoflat F.op
-  body: (representablyCoflat_op_iff F).2 inferInstance
-
-中文:
-实例 [RepresentablyFlat
-  签名: F] : RepresentablyCoflat F.op
-  定义体: (representablyCoflat_op_iff F).2 inferInstance
-
-Depends on / 依赖: representablyCoflat_op_iff
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [RepresentablyFlat F] : RepresentablyCoflat F.op :=
   (representablyCoflat_op_iff F).2 inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [RepresentablyCoflat
-  signature: F] : RepresentablyFlat F.op
-  body: (representablyFlat_op_iff F).2 inferInstance
-
-中文:
-实例 [RepresentablyCoflat
-  签名: F] : RepresentablyFlat F.op
-  定义体: (representablyFlat_op_iff F).2 inferInstance
-
-Depends on / 依赖: representablyFlat_op_iff
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [RepresentablyCoflat F] : RepresentablyFlat F.op :=
   (representablyFlat_op_iff F).2 inferInstance
-
-/--
-Instance `RepresentablyCoflat.comp` / 实例 `RepresentablyCoflat.comp`
-
-English:
-instance RepresentablyCoflat.comp
-  signature: (G : D ⥤ E) [RepresentablyCoflat F] [RepresentablyCoflat G]
-  body: (representablyFlat_op_iff _).1 inferInstanceAs RepresentablyFlat (F.op ⋙ G.op)
-
-中文:
-实例 RepresentablyCoflat.comp
-  签名: (G : D ⥤ E) [RepresentablyCoflat F] [RepresentablyCoflat G]
-  定义体: (representablyFlat_op_iff _).1 inferInstanceAs RepresentablyFlat (F.op ⋙ G.op)
-
-Depends on / 依赖: F.op, G.op, RepresentablyFlat, representablyFlat_op_iff
+/-
+**CategoryTheory.RepresentablyCoflat.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.RepresentablyCoflat`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C D)   (G : CategoryTheo
+ry.Functor D E) [CategoryTheory.RepresentablyCoflat F] [CategoryTheory.Represent
+ablyCoflat G],   CategoryTheory.RepresentablyCoflat (F.comp G)
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.representablyFlat_op_iff`：representablyFlat_op_iff : Repr
+esentablyFlat F.op ↔ RepresentablyCoflat F
 -/
 instance RepresentablyCoflat.comp (G : D ⥤ E) [RepresentablyCoflat F] [RepresentablyCoflat G] :
     RepresentablyCoflat (F ⋙ G) :=
-(representablyFlat_op_iff _).1 inferInstanceAs RepresentablyFlat (F.op ⋙ G.op)
-
-/--
-lemma `final_of_representablyFlat` / 引理 `final_of_representablyFlat`
-
-English:
-lemma final_of_representablyFlat
-  given: [h : RepresentablyFlat F]
-  statement: F.Final where
-  proof: IsCofiltered.isConnected _
-
-中文:
-引理 final_of_representablyFlat
-  条件: [h : RepresentablyFlat F]
-  结论: F.终 where
-  证明: IsCofiltered.isConnected _
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.isConnected, isConnected
+  (representablyFlat_op_iff _).1 <| inferInstanceAs <| RepresentablyFlat (F.op ⋙ G.op)
+/-
+**CategoryTheory.final_of_representablyFlat** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：final_of_representablyFlat [h : RepresentablyFlat F] : F.Final where out _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.isConnected`：∀ (C : Type u) [inst : Category
+Theory.Category.{v, u} C] [CategoryTheory.IsCofiltered C], CategoryTheory.IsConn
+ected C
+· 使用定理 `CategoryTheory.RepresentablyFlat.cofiltered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 lemma final_of_representablyFlat [h : RepresentablyFlat F] : F.Final where
   out _ := IsCofiltered.isConnected _
-
-/--
-lemma `initial_of_representablyCoflat` / 引理 `initial_of_representablyCoflat`
-
-English:
-lemma initial_of_representablyCoflat
-  given: [h : RepresentablyCoflat F]
-  statement: F.Initial where
-  proof: IsFiltered.isConnected _
-
-中文:
-引理 initial_of_representablyCoflat
-  条件: [h : RepresentablyCoflat F]
-  结论: F.初始 where
-  证明: IsFiltered.isConnected _
-
-Depends on / 依赖: IsFiltered, IsFiltered.isConnected, isConnected
+/-
+**CategoryTheory.initial_of_representablyCoflat** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：initial_of_representablyCoflat [h : RepresentablyCoflat F] : F.Initial whe
+re out _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.isConnected`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [CategoryTheory.IsFiltered C], CategoryTheory.IsConnecte
+d C
+· 使用定理 `CategoryTheory.RepresentablyCoflat.filtered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 lemma initial_of_representablyCoflat [h : RepresentablyCoflat F] : F.Initial where
   out _ := IsFiltered.isConnected _
@@ -444,28 +395,37 @@ section HasLimit
 
 variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 
-/--
-theorem `flat_of_preservesFiniteLimits` / 定理 `flat_of_preservesFiniteLimits`
-
-English:
-theorem flat_of_preservesFiniteLimits
-  given: [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F]
-  proof: ⟨fun X =>
-    haveI : HasFiniteLimits (StructuredArrow X F) := by
-      apply hasFiniteLimits_of_hasFiniteLimits_of_size.{v₁} (StructuredArrow X F)
-      exact fun _ _ _ => HasLimitsOfShape.mk
-    IsCofiltered.of_hasFiniteLimits _⟩
-
-中文:
-定理 flat_of_preservesFiniteLimits
-  条件: [有有限极限 C] (F : C ⥤ D) [保持FiniteLimits F]
-  证明: ⟨fun X =>
-    haveI : HasFiniteLimits (StructuredArrow X F) := by
-      apply hasFiniteLimits_of_hasFiniteLimits_of_size.{v₁} (StructuredArrow X F)
-      exact fun _ _ _ => HasLimitsOfShape.mk
-    IsCofiltered.of_hasFiniteLimits _⟩
-
-Depends on / 依赖: HasFiniteLimits, HasLimitsOfShape, HasLimitsOfShape.mk, IsCofiltered, IsCofiltered.of_hasFiniteLimits, StructuredArrow, hasFiniteLimits_of_hasFiniteLimits_of_size, of_hasFiniteLimits
+/-
+**CategoryTheory.flat_of_preservesFiniteLimits** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：flat_of_preservesFiniteLimits [HasFiniteLimits C] (F : C ⥤ D) [PreservesFi
+niteLimits F] : RepresentablyFlat F
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCofiltered.of_hasFiniteLimits`：of_hasFiniteLimits [HasF
+initeLimits C] : IsCofiltered C
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasFiniteLimits_of_size`：hasFin
+iteLimits_of_hasFiniteLimits_of_size (h : forall (J : Type w) {𝒥 : SmallCategory
+ J} (_ : @FinCategory J 𝒥), HasLimitsOfShape J C) : Ha…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
+· 使用定理 `CategoryTheory.Limits.preservesLimitsOfShapeOfPreservesFiniteLimits`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.comp_preservesLimitsOfShape`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.preservesFiniteLimits_of_createsFiniteLimits_and_h
+asFiniteLimits`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D :
+ Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 theorem flat_of_preservesFiniteLimits [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F] :
     RepresentablyFlat F :=
@@ -474,23 +434,23 @@ theorem flat_of_preservesFiniteLimits [HasFiniteLimits C] (F : C ⥤ D) [Preserv
       apply hasFiniteLimits_of_hasFiniteLimits_of_size.{v₁} (StructuredArrow X F)
       exact fun _ _ _ => HasLimitsOfShape.mk
     IsCofiltered.of_hasFiniteLimits _⟩
-
-/--
-theorem `coflat_of_preservesFiniteColimits` / 定理 `coflat_of_preservesFiniteColimits`
-
-English:
-theorem coflat_of_preservesFiniteColimits
-  statement: [HasFiniteColimits C] (F : C ⥤ D)
-  proof: let _ := preservesFiniteLimits_op F
-  (representablyFlat_op_iff _).1 (flat_of_preservesFiniteLimits _)
-
-中文:
-定理 coflat_of_preservesFiniteColimits
-  结论: [有有限余极限 C] (F : C ⥤ D)
-  证明: let _ := preservesFiniteLimits_op F
-  (representablyFlat_op_iff _).1 (flat_of_preservesFiniteLimits _)
-
-Depends on / 依赖: flat_of_preservesFiniteLimits, preservesFiniteLimits_op, representablyFlat_op_iff
+/-
+**CategoryTheory.coflat_of_preservesFiniteColimits** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：coflat_of_preservesFiniteColimits [HasFiniteColimits C] (F : C ⥤ D) [Prese
+rvesFiniteColimits F] : RepresentablyCoflat F
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_op`：preservesFiniteLimits_op
+ (F : C ⥤ D) [PreservesFiniteColimits F] : PreservesFiniteLimits F.op where pres
+ervesFiniteLimits J _ _
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.representablyFlat_op_iff`：representablyFlat_op_iff : Repr
+esentablyFlat F.op ↔ RepresentablyCoflat F
+· 使用定理 `CategoryTheory.flat_of_preservesFiniteLimits`：flat_of_preservesFiniteLim
+its [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F] : RepresentablyFla
+t F
 -/
 theorem coflat_of_preservesFiniteColimits [HasFiniteColimits C] (F : C ⥤ D)
     [PreservesFiniteColimits F] : RepresentablyCoflat F :=
@@ -506,40 +466,28 @@ variable (F : C ⥤ D) [RepresentablyFlat F] {c : Cone K} (hc : IsLimit c) (s : 
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `lift` / `lift` 的定义
+/-- (Implementation).
+Given a limit cone `c : cone K` and a cone `s : cone (K ⋙ F)` with `F` representably flat,
+`s` can factor through `F.mapCone c`.
+-/
+/-
+**CategoryTheory.PreservesFiniteLimitsOfFlat.lift** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.PreservesFiniteLimitsOfFlat`。
+形式化陈述：lift : s.pt ⟶ F.obj c.pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : s.pt ⟶ F.obj c.pt
-  body: let s' := IsCofiltered.cone (s.toStructuredArrow ⋙ StructuredArrow.pre _ K F)
-  s'.pt.hom ≫
-    (F.map <|
-hc.lift
-        (Cone.postcompose
-              ({ app := fun _ => 𝟙 _ } :
-                (s.toStructuredArrow ⋙ pre s.pt K F) ⋙ proj s.pt F ⟶ K)).obj <|
-          (StructuredArrow.proj s.pt F).mapCone s')
-
-中文:
-定义 lift
-  签名: : s.pt ⟶ F.obj c.pt
-  定义体: let s' := IsCofiltered.cone (s.toStructuredArrow ⋙ StructuredArrow.pre _ K F)
-  s'.pt.hom ≫
-    (F.map <|
-hc.lift
-        (Cone.postcompose
-              ({ app := fun _ => 𝟙 _ } :
-                (s.toStructuredArrow ⋙ pre s.pt K F) ⋙ proj s.pt F ⟶ K)).obj <|
-          (StructuredArrow.proj s.pt F).mapCone s')
-
-Depends on / 依赖: Cone.postcompose, F.map, IsCofiltered, IsCofiltered.cone, StructuredArrow, StructuredArrow.pre, StructuredArrow.proj, hc.lift, mapCone, postcompose, pt.hom, s.pt, s.toStructuredArrow, toStructuredArrow
+--- 原说明 ---
+(Implementation).
+Given a limit cone `c : cone K` and a cone `s : cone (K ⋙ F)` with `F` represent
+ably flat,
+`s` can factor through `F.mapCone c`.
 -/
 noncomputable def lift : s.pt ⟶ F.obj c.pt :=
   let s' := IsCofiltered.cone (s.toStructuredArrow ⋙ StructuredArrow.pre _ K F)
   s'.pt.hom ≫
     (F.map <|
-hc.lift
+      hc.lift <|
         (Cone.postcompose
               ({ app := fun _ => 𝟙 _ } :
                 (s.toStructuredArrow ⋙ pre s.pt K F) ⋙ proj s.pt F ⟶ K)).obj <|
@@ -547,132 +495,93 @@ hc.lift
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `fac` / 定理 `fac`
-
-English:
-theorem fac
-  given: (x : J)
-  statement: lift F hc s ≫ (F.mapCone c).π.app x = s.π.app x
-  proof: by
-  simp [lift, ← Functor.map_comp]
-
-中文:
-定理 fac
-  条件: (x : J)
-  结论: lift F hc s ≫ (F.mapCone c).π.app x = s.π.app x
-  证明: by
-  simp [lift, ← Functor.map_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp, map_comp
+/-
+**CategoryTheory.PreservesFiniteLimitsOfFlat.fac** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.PreservesFiniteLimitsOfFlat`。
+形式化陈述：fac (x : J) : lift F hc s ≫ (F.mapCone c).π.app x = s.π.app x
+参数：x : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.StructuredArrow.w`：w : X.hom ≫ T.map f.right = Y.hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fac (x : J) : lift F hc s ≫ (F.mapCone c).π.app x = s.π.app x := by
   simp [lift, ← Functor.map_comp]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `uniq` / 定理 `uniq`
-
-English:
-theorem uniq
-  statement: {K : J ⥤ C} {c : Cone K} (hc : IsLimit c) (s : Cone (K ⋙ F))
-  proof: by
-  -- We can make two cones over the diagram of `s` via `f₁` and `f₂`.
-  let α₁ : (F.mapCone c).toStructuredArrow ⋙ map f₁ ⟶ s.toStructuredArrow :=
-    { app := fun X => eqToHom (by simp [← h₁]) }
-  let α₂ : (F.mapCone c).toStructuredArrow ⋙ map f₂ ⟶ s.toStructuredArrow :=
-    { app := fun X => eqToHom (by simp [← h₂]) }
-  let c₁ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
-    (Cone.postcompose (Functor.whiskerRight α₁ (pre s.pt K F) :)).obj
-      (c.toStructuredArrowCone F f₁)
-  let c₂ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
-    (Cone.postcompose (Functor.whiskerRight α₂ (pre s.pt K F) :)).obj
-      (c.toStructuredArrowCone F f₂)
-  -- The two cones can then be combined and we may obtain a cone over the two cones since
-  -- `StructuredArrow s.pt F` is cofiltered.
-  let c₀ := IsCofiltered.cone (biconeMk _ c₁ c₂)
-  let g₁ : c₀.pt ⟶ c₁.pt := c₀.π.app Bicone.left
-  let g₂ : c₀.pt ⟶ c₂.pt := c₀.π.app Bicone.right
-  -- Then `g₁.right` and `g₂.right` are two maps from the same cone into the `c`.
-  have : forall j : J, g₁.right ≫ c.π.app j = g₂.right ≫ c.π.app j := by
-    intro j
-    injection c₀.π.naturality (BiconeHom.left j) with _ e₁
-    injection c₀.π.naturality (BiconeHom.right j) with _ e₂
-    convert! e₁.symm.trans e₂ <;> simp [c₁, c₂]
-  have : c.extend g₁.right = c.extend g₂.right := by
-    unfold Cone.extend
-    congr 1
-    ext x
-    apply this
-  -- And thus they are equal as `c` is the limit.
-  have : g₁.right = g₂.right := calc
-    g₁.right = hc.lift (c.extend g₁.right) := by
-      apply hc.uniq (c.extend _)
-      simp
-    _ = hc.lift (c.extend g₂.right) := by
-      congr
-    _ = g₂.right := by
-      symm
-      apply hc.uniq (c.extend _)
-      simp
-  -- Finally, since `fᵢ` factors through `F(gᵢ)`, the result follows.
-  calc
-    f₁ = c₀.pt.hom ≫ F.map g₁.right := g₁.w.symm
-    _ = c₀.pt.hom ≫ F.map g₂.right := by rw [this]
-    _ = f₂ := g₂.w
-
-中文:
-定理 uniq
-  结论: {K : J ⥤ C} {c : 锥 K} (hc : 是极限 c) (s : 锥 (K ⋙ F))
-  证明: by
-  -- We can make two cones over the diagram of `s` via `f₁` and `f₂`.
-  let α₁ : (F.mapCone c).toStructuredArrow ⋙ map f₁ ⟶ s.toStructuredArrow :=
-    { app := fun X => eqToHom (by simp [← h₁]) }
-  let α₂ : (F.mapCone c).toStructuredArrow ⋙ map f₂ ⟶ s.toStructuredArrow :=
-    { app := fun X => eqToHom (by simp [← h₂]) }
-  let c₁ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
-    (Cone.postcompose (Functor.whiskerRight α₁ (pre s.pt K F) :)).obj
-      (c.toStructuredArrowCone F f₁)
-  let c₂ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
-    (Cone.postcompose (Functor.whiskerRight α₂ (pre s.pt K F) :)).obj
-      (c.toStructuredArrowCone F f₂)
-  -- The two cones can then be combined and we may obtain a cone over the two cones since
-  -- `StructuredArrow s.pt F` is cofiltered.
-  let c₀ := IsCofiltered.cone (biconeMk _ c₁ c₂)
-  let g₁ : c₀.pt ⟶ c₁.pt := c₀.π.app Bicone.left
-  let g₂ : c₀.pt ⟶ c₂.pt := c₀.π.app Bicone.right
-  -- Then `g₁.right` and `g₂.right` are two maps from the same cone into the `c`.
-  have : forall j : J, g₁.right ≫ c.π.app j = g₂.right ≫ c.π.app j := by
-    intro j
-    injection c₀.π.naturality (BiconeHom.left j) with _ e₁
-    injection c₀.π.naturality (BiconeHom.right j) with _ e₂
-    convert! e₁.symm.trans e₂ <;> simp [c₁, c₂]
-  have : c.extend g₁.right = c.extend g₂.right := by
-    unfold Cone.extend
-    congr 1
-    ext x
-    apply this
-  -- And thus they are equal as `c` is the limit.
-  have : g₁.right = g₂.right := calc
-    g₁.right = hc.lift (c.extend g₁.right) := by
-      apply hc.uniq (c.extend _)
-      simp
-    _ = hc.lift (c.extend g₂.right) := by
-      congr
-    _ = g₂.right := by
-      symm
-      apply hc.uniq (c.extend _)
-      simp
-  -- Finally, since `fᵢ` factors through `F(gᵢ)`, the result follows.
-  calc
-    f₁ = c₀.pt.hom ≫ F.map g₁.right := g₁.w.symm
-    _ = c₀.pt.hom ≫ F.map g₂.right := by rw [this]
-    _ = f₂ := g₂.w
+/-
+**CategoryTheory.PreservesFiniteLimitsOfFlat.uniq** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.PreservesFiniteLimitsOfFlat`。
+形式化陈述：uniq {K : J ⥤ C} {c : Cone K} (hc : IsLimit c) (s : Cone (K ⋙ F)) (f₁ f₂ :
+ s.pt ⟶ F.obj c.pt) (h₁ : forall j : J, f₁ ≫ (F.mapCone c).π.app j = s.π.app j) 
+(h₂ : forall j : J, f₂ ≫ (F.mapCone c).π.app j = s.π.app j) : f₁ = f₂
+参数：hc : IsLimit c；s : Cone (K ⋙ F)；f₁ f₂ : s.pt ⟶ F.obj c.pt；h₁ : forall j : J, 
+f₁ ≫ (F.mapCone c).π.app j = s.π.app j；h₂ : forall j : J, f₂ ≫ (F.mapCone c).π.a
+pp j = s.π.app j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.StructuredArrow.eqToHom_right`：eqToHom_right {X Y : Struc
+turedArrow S T} (h : X = Y) : (eqToHom h).right = eqToHom (by rw [h])
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.RepresentablyFlat.cofiltered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.StructuredArrow.Hom.w`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D]   {S : D} {T : Categ…
 -/
 theorem uniq {K : J ⥤ C} {c : Cone K} (hc : IsLimit c) (s : Cone (K ⋙ F))
-    (f₁ f₂ : s.pt ⟶ F.obj c.pt) (h₁ : forall j : J, f₁ ≫ (F.mapCone c).π.app j = s.π.app j)
-    (h₂ : forall j : J, f₂ ≫ (F.mapCone c).π.app j = s.π.app j) : f₁ = f₂ := by
+    (f₁ f₂ : s.pt ⟶ F.obj c.pt) (h₁ : ∀ j : J, f₁ ≫ (F.mapCone c).π.app j = s.π.app j)
+    (h₂ : ∀ j : J, f₂ ≫ (F.mapCone c).π.app j = s.π.app j) : f₁ = f₂ := by
   -- We can make two cones over the diagram of `s` via `f₁` and `f₂`.
   let α₁ : (F.mapCone c).toStructuredArrow ⋙ map f₁ ⟶ s.toStructuredArrow :=
     { app := fun X => eqToHom (by simp [← h₁]) }
@@ -690,7 +599,7 @@ theorem uniq {K : J ⥤ C} {c : Cone K} (hc : IsLimit c) (s : Cone (K ⋙ F))
   let g₁ : c₀.pt ⟶ c₁.pt := c₀.π.app Bicone.left
   let g₂ : c₀.pt ⟶ c₂.pt := c₀.π.app Bicone.right
   -- Then `g₁.right` and `g₂.right` are two maps from the same cone into the `c`.
-  have : forall j : J, g₁.right ≫ c.π.app j = g₂.right ≫ c.π.app j := by
+  have : ∀ j : J, g₁.right ≫ c.π.app j = g₂.right ≫ c.π.app j := by
     intro j
     injection c₀.π.naturality (BiconeHom.left j) with _ e₁
     injection c₀.π.naturality (BiconeHom.right j) with _ e₂
@@ -719,44 +628,26 @@ theorem uniq {K : J ⥤ C} {c : Cone K} (hc : IsLimit c) (s : Cone (K ⋙ F))
 
 end PreservesFiniteLimitsOfFlat
 
-/--
-lemma `preservesFiniteLimits_of_flat` / 引理 `preservesFiniteLimits_of_flat`
+/-- Representably flat functors preserve finite limits. -/
+/-
+**CategoryTheory.preservesFiniteLimits_of_flat** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：preservesFiniteLimits_of_flat (F : C ⥤ D) [RepresentablyFlat F] : Preserve
+sFiniteLimits F
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_preservesFiniteLimitsOfSi
+ze`：preservesFiniteLimits_of_preservesFiniteLimitsOfSize (F : C ⥤ D) (h : forall
+ (J : Type w) {𝒥 : SmallCategory J} (_ : @FinCategory J 𝒥), Pres…
+· 使用定理 `CategoryTheory.PreservesFiniteLimitsOfFlat.fac`：fac (x : J) : lift F hc 
+s ≫ (F.mapCone c).π.app x = s.π.app x
+· 使用定理 `CategoryTheory.PreservesFiniteLimitsOfFlat.uniq`：uniq {K : J ⥤ C} {c : C
+one K} (hc : IsLimit c) (s : Cone (K ⋙ F)) (f₁ f₂ : s.pt ⟶ F.obj c.pt) (h₁ : for
+all j : J, f₁ ≫ (F.mapCone c).π.app j…
 
-English:
-lemma preservesFiniteLimits_of_flat
-  given: (F : C ⥤ D) [RepresentablyFlat F]
-  proof: by
-  apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize
-  intro J _ _; constructor
-  intro K; constructor
-  intro c hc
-  constructor
-  exact
-    { lift := PreservesFiniteLimitsOfFlat.lift F hc
-      fac := PreservesFiniteLimitsOfFlat.fac F hc
-      uniq := fun s m h => by
-        apply PreservesFiniteLimitsOfFlat.uniq F hc
-        · exact h
-        · exact PreservesFiniteLimitsOfFlat.fac F hc s }
-
-中文:
-引理 preservesFiniteLimits_of_flat
-  条件: (F : C ⥤ D) [RepresentablyFlat F]
-  证明: by
-  apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize
-  intro J _ _; constructor
-  intro K; constructor
-  intro c hc
-  constructor
-  exact
-    { lift := PreservesFiniteLimitsOfFlat.lift F hc
-      fac := PreservesFiniteLimitsOfFlat.fac F hc
-      uniq := fun s m h => by
-        apply PreservesFiniteLimitsOfFlat.uniq F hc
-        · exact h
-        · exact PreservesFiniteLimitsOfFlat.fac F hc s }
-
-Depends on / 依赖: PreservesFiniteLimitsOfFlat, PreservesFiniteLimitsOfFlat.fac, PreservesFiniteLimitsOfFlat.lift, PreservesFiniteLimitsOfFlat.uniq, preservesFiniteLimits_of_preservesFiniteLimitsOfSize
+--- 原说明 ---
+Representably flat functors preserve finite limits.
 -/
 lemma preservesFiniteLimits_of_flat (F : C ⥤ D) [RepresentablyFlat F] :
     PreservesFiniteLimits F := by
@@ -773,61 +664,78 @@ lemma preservesFiniteLimits_of_flat (F : C ⥤ D) [RepresentablyFlat F] :
         · exact h
         · exact PreservesFiniteLimitsOfFlat.fac F hc s }
 
-/--
-lemma `preservesFiniteColimits_of_coflat` / 引理 `preservesFiniteColimits_of_coflat`
+/-- Representably coflat functors preserve finite colimits. -/
+/-
+**CategoryTheory.preservesFiniteColimits_of_coflat** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：preservesFiniteColimits_of_coflat (F : C ⥤ D) [RepresentablyCoflat F] : Pr
+eservesFiniteColimits F
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesFiniteColimits_of_op`：preservesFiniteColi
+mits_of_op (F : C ⥤ D) [PreservesFiniteLimits F.op] : PreservesFiniteColimits F 
+where preservesFiniteColimits J _ _
+· 使用引理 `CategoryTheory.preservesFiniteLimits_of_flat`：preservesFiniteLimits_of_f
+lat (F : C ⥤ D) [RepresentablyFlat F] : PreservesFiniteLimits F
+· 使用定理 `CategoryTheory.instRepresentablyFlatOppositeOpOfRepresentablyCoflat`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-lemma preservesFiniteColimits_of_coflat
-  given: (F : C ⥤ D) [RepresentablyCoflat F]
-  proof: letI _ := preservesFiniteLimits_of_flat F.op
-  preservesFiniteColimits_of_op _
-
-中文:
-引理 preservesFiniteColimits_of_coflat
-  条件: (F : C ⥤ D) [RepresentablyCoflat F]
-  证明: letI _ := preservesFiniteLimits_of_flat F.op
-  preservesFiniteColimits_of_op _
-
-Depends on / 依赖: F.op, preservesFiniteColimits_of_op, preservesFiniteLimits_of_flat
+--- 原说明 ---
+Representably coflat functors preserve finite colimits.
 -/
 lemma preservesFiniteColimits_of_coflat (F : C ⥤ D) [RepresentablyCoflat F] :
     PreservesFiniteColimits F :=
   letI _ := preservesFiniteLimits_of_flat F.op
   preservesFiniteColimits_of_op _
 
-/--
-lemma `preservesFiniteLimits_iff_flat` / 引理 `preservesFiniteLimits_iff_flat`
+/-- If `C` is finitely complete, then `F : C ⥤ D` is representably flat iff it preserves
+finite limits.
+-/
+/-
+**CategoryTheory.preservesFiniteLimits_iff_flat** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：preservesFiniteLimits_iff_flat [HasFiniteLimits C] (F : C ⥤ D) : Represent
+ablyFlat F ↔ PreservesFiniteLimits F
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.preservesFiniteLimits_of_flat`：preservesFiniteLimits_of_f
+lat (F : C ⥤ D) [RepresentablyFlat F] : PreservesFiniteLimits F
+· 使用定理 `CategoryTheory.flat_of_preservesFiniteLimits`：flat_of_preservesFiniteLim
+its [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F] : RepresentablyFla
+t F
 
-English:
-lemma preservesFiniteLimits_iff_flat
-  given: [HasFiniteLimits C] (F : C ⥤ D)
-  proof: ⟨fun _ => preservesFiniteLimits_of_flat F, fun _ => flat_of_preservesFiniteLimits F⟩
-
-中文:
-引理 preservesFiniteLimits_iff_flat
-  条件: [有有限极限 C] (F : C ⥤ D)
-  证明: ⟨fun _ => preservesFiniteLimits_of_flat F, fun _ => flat_of_preservesFiniteLimits F⟩
-
-Depends on / 依赖: flat_of_preservesFiniteLimits, preservesFiniteLimits_of_flat
+--- 原说明 ---
+If `C` is finitely complete, then `F : C ⥤ D` is representably flat iff it prese
+rves
+finite limits.
 -/
 lemma preservesFiniteLimits_iff_flat [HasFiniteLimits C] (F : C ⥤ D) :
     RepresentablyFlat F ↔ PreservesFiniteLimits F :=
-  ⟨fun _ => preservesFiniteLimits_of_flat F, fun _ => flat_of_preservesFiniteLimits F⟩
+  ⟨fun _ ↦ preservesFiniteLimits_of_flat F, fun _ ↦ flat_of_preservesFiniteLimits F⟩
 
-/--
-lemma `preservesFiniteColimits_iff_coflat` / 引理 `preservesFiniteColimits_iff_coflat`
+/-- If `C` is finitely cocomplete, then `F : C ⥤ D` is representably coflat iff it preserves
+finite colimits. -/
+/-
+**CategoryTheory.preservesFiniteColimits_iff_coflat** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory`。
+形式化陈述：preservesFiniteColimits_iff_coflat [HasFiniteColimits C] (F : C ⥤ D) : Rep
+resentablyCoflat F ↔ PreservesFiniteColimits F
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.preservesFiniteColimits_of_coflat`：preservesFiniteColimit
+s_of_coflat (F : C ⥤ D) [RepresentablyCoflat F] : PreservesFiniteColimits F
+· 使用定理 `CategoryTheory.coflat_of_preservesFiniteColimits`：coflat_of_preservesFin
+iteColimits [HasFiniteColimits C] (F : C ⥤ D) [PreservesFiniteColimits F] : Repr
+esentablyCoflat F
 
-English:
-lemma preservesFiniteColimits_iff_coflat
-  given: [HasFiniteColimits C] (F : C ⥤ D)
-  proof: ⟨fun _ => preservesFiniteColimits_of_coflat F, fun _ => coflat_of_preservesFiniteColimits F⟩
-
-中文:
-引理 preservesFiniteColimits_iff_coflat
-  条件: [有有限余极限 C] (F : C ⥤ D)
-  证明: ⟨fun _ => preservesFiniteColimits_of_coflat F, fun _ => coflat_of_preservesFiniteColimits F⟩
-
-Depends on / 依赖: coflat_of_preservesFiniteColimits, preservesFiniteColimits_of_coflat
+--- 原说明 ---
+If `C` is finitely cocomplete, then `F : C ⥤ D` is representably coflat iff it p
+reserves
+finite colimits.
 -/
 lemma preservesFiniteColimits_iff_coflat [HasFiniteColimits C] (F : C ⥤ D) :
     RepresentablyCoflat F ↔ PreservesFiniteColimits F :=
@@ -842,49 +750,26 @@ variable {C D : Type u₁} [SmallCategory C] [SmallCategory D] (E : Type u₂) [
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `lanEvaluationIsoColim` / `lanEvaluationIsoColim` 的定义
+/-- (Implementation)
+The evaluation of `F.lan` at `X` is the colimit over the costructured arrows over `X`.
+-/
+/-
+**CategoryTheory.lanEvaluationIsoColim** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：lanEvaluationIsoColim (F : C ⥤ D) (X : D) [forall X : D, HasColimitsOfShap
+e (CostructuredArrow F X) E] : F.lan ⋙ (evaluation D E).obj X ≅ (Functor.whisker
+ingLeft _ _ E).obj (CostructuredArrow.proj F X) ⋙ colim
+参数：F : C ⥤ D；X : D；CostructuredArrow F X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lanEvaluationIsoColim
-  signature: (F : C ⥤ D) (X : D)
-  body: NatIso.ofComponents (fun G =>
-    IsColimit.coconePointUniqueUpToIso
-    (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G X)
-    (colimit.isColimit _)) (fun {G₁ G₂} φ => by
-      apply (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G₁ X).hom_ext
-      intro T
-      have h₁ := fun (G : C ⥤ E) => IsColimit.comp_coconePointUniqueUpToIso_hom
-        (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G X) (colimit.isColimit _) T
-      have h₂ := congr_app (F.lanUnit.naturality φ) T.left
-      dsimp at h₁ h₂ ⊢
-      simp only [Category.assoc] at h₁ ⊢
-      simp only [Functor.lan, Functor.lanUnit] at h₂ ⊢
-      rw [reassoc_of% h₁]; rw [NatTrans.naturality_assoc]; rw [← reassoc_of% h₂]; rw [h₁]; rw [ι_colimMap]; rw [Functor.whiskerLeft_app]
-      rfl)
-
-中文:
-定义 lanEvaluationIsoColim
-  签名: (F : C ⥤ D) (X : D)
-  定义体: NatIso.ofComponents (fun G =>
-    IsColimit.coconePointUniqueUpToIso
-    (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G X)
-    (colimit.isColimit _)) (fun {G₁ G₂} φ => by
-      apply (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G₁ X).hom_ext
-      intro T
-      have h₁ := fun (G : C ⥤ E) => IsColimit.comp_coconePointUniqueUpToIso_hom
-        (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G X) (colimit.isColimit _) T
-      have h₂ := congr_app (F.lanUnit.naturality φ) T.left
-      dsimp at h₁ h₂ ⊢
-      simp only [Category.assoc] at h₁ ⊢
-      simp only [Functor.lan, Functor.lanUnit] at h₂ ⊢
-      rw [reassoc_of% h₁]; rw [NatTrans.naturality_assoc]; rw [← reassoc_of% h₂]; rw [h₁]; rw [ι_colimMap]; rw [Functor.whiskerLeft_app]
-      rfl)
-
-Depends on / 依赖: F.lanUnit.naturality, Functor, Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, NatIso, NatIso.ofComponents, T.left, coconePointUniqueUpToIso, colimit, colimit.isColimit, comp_coconePointUniqueUpToIso_hom, congr_app, hom_ext, isColimit, isPointwiseLeftKanExtensionLeftKanExtensionUnit, lanUnit, naturality, ofComponents
+--- 原说明 ---
+(Implementation)
+The evaluation of `F.lan` at `X` is the colimit over the costructured arrows ove
+r `X`.
 -/
 noncomputable def lanEvaluationIsoColim (F : C ⥤ D) (X : D)
-    [forall X : D, HasColimitsOfShape (CostructuredArrow F X) E] :
+    [∀ X : D, HasColimitsOfShape (CostructuredArrow F X) E] :
     F.lan ⋙ (evaluation D E).obj X ≅
       (Functor.whiskeringLeft _ _ E).obj (CostructuredArrow.proj F X) ⋙ colim :=
   NatIso.ofComponents (fun G =>
@@ -899,42 +784,77 @@ noncomputable def lanEvaluationIsoColim (F : C ⥤ D) (X : D)
       dsimp at h₁ h₂ ⊢
       simp only [Category.assoc] at h₁ ⊢
       simp only [Functor.lan, Functor.lanUnit] at h₂ ⊢
-      rw [reassoc_of% h₁]; rw [NatTrans.naturality_assoc]; rw [← reassoc_of% h₂]; rw [h₁]; rw [ι_colimMap]; rw [Functor.whiskerLeft_app]
+      rw [reassoc_of% h₁, NatTrans.naturality_assoc, ← reassoc_of% h₂, h₁,
+        ι_colimMap, Functor.whiskerLeft_app]
       rfl)
 
-variable {FE : E -> E -> Type*} {CE : E -> Type u₁} [forall X Y, FunLike (FE X Y) (CE X) (CE Y)]
+variable {FE : E → E → Type*} {CE : E → Type u₁} [∀ X Y, FunLike (FE X Y) (CE X) (CE Y)]
     [ConcreteCategory E FE] [HasLimits E] [HasColimits E]
 variable [ReflectsLimits (forget E)] [PreservesFilteredColimits (forget E)]
 variable [PreservesLimits (forget E)]
 
-/--
-Instance `lan_preservesFiniteLimits_of_flat` / 实例 `lan_preservesFiniteLimits_of_flat`
+/-- If `F : C ⥤ D` is a representably flat functor between small categories, then the functor
+`Lan F.op` that takes presheaves over `C` to presheaves over `D` preserves finite limits.
+-/
+/-
+**CategoryTheory.lan_preservesFiniteLimits_of_flat** 是 Mathlib 中的一个实例，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：lan_preservesFiniteLimits_of_flat (F : C ⥤ D) [RepresentablyFlat F] : Pres
+ervesFiniteLimits (F.op.lan : _ ⥤ Dᵒᵖ ⥤ E)
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_preservesFiniteLimitsOfSi
+ze`：preservesFiniteLimits_of_preservesFiniteLimitsOfSize (F : C ⥤ D) (h : forall
+ (J : Type w) {𝒥 : SmallCategory J} (_ : @FinCategory J 𝒥), Pres…
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用引理 `CategoryTheory.Limits.preservesLimitsOfShape_of_evaluation`：preservesLim
+itsOfShape_of_evaluation (F : D ⥤ K ⥤ C) (J : Type*) [Category* J] (_ : forall k
+ : K, PreservesLimitsOfShape J (F ⋙ (evaluation …
+· 使用定理 `CategoryTheory.IsFiltered.of_equivalence`：of_equivalence (h : C ≌ D) : I
+sFiltered D
+· 使用定理 `CategoryTheory.RepresentablyFlat.cofiltered`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesLimitsOfShape_of_natIso`：preservesLimitsO
+fShape_of_natIso {F G : C ⥤ D} (h : F ≅ G) [PreservesLimitsOfShape J F] : Preser
+vesLimitsOfShape J G where preservesLimit {K…
+· 使用定理 `CategoryTheory.Limits.comp_preservesLimitsOfShape`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Limits.reflectsLimitsOfShape_of_reflectsLimits`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   (J : Type w) [inst…
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.preservesLimitsOfShapeOfPreservesFiniteLimits`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesLimits.preservesFiniteLimits`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categor
+yTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-instance lan_preservesFiniteLimits_of_flat
-  signature: (F : C ⥤ D) [RepresentablyFlat F]
-  body: by
-  apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁}
-  intro J _ _
-  apply preservesLimitsOfShape_of_evaluation (F.op.lan : (Cᵒᵖ ⥤ E) ⥤ Dᵒᵖ ⥤ E) J
-  intro K
-  have : IsFiltered (CostructuredArrow F.op K) :=
-    IsFiltered.of_equivalence (structuredArrowOpEquivalence F (unop K))
-  exact preservesLimitsOfShape_of_natIso (lanEvaluationIsoColim _ _ _).symm
-
-中文:
-实例 lan_preservesFiniteLimits_of_flat
-  签名: (F : C ⥤ D) [RepresentablyFlat F]
-  定义体: by
-  apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁}
-  intro J _ _
-  apply preservesLimitsOfShape_of_evaluation (F.op.lan : (Cᵒᵖ ⥤ E) ⥤ Dᵒᵖ ⥤ E) J
-  intro K
-  have : IsFiltered (CostructuredArrow F.op K) :=
-    IsFiltered.of_equivalence (structuredArrowOpEquivalence F (unop K))
-  exact preservesLimitsOfShape_of_natIso (lanEvaluationIsoColim _ _ _).symm
-
-Depends on / 依赖: CostructuredArrow, F.op, F.op.lan, IsFiltered, IsFiltered.of_equivalence, lanEvaluationIsoColim, of_equivalence, preservesFiniteLimits_of_preservesFiniteLimitsOfSize, preservesLimitsOfShape_of_evaluation, preservesLimitsOfShape_of_natIso, structuredArrowOpEquivalence
+--- 原说明 ---
+If `F : C ⥤ D` is a representably flat functor between small categories, then th
+e functor
+`Lan F.op` that takes presheaves over `C` to presheaves over `D` preserves finit
+e limits.
 -/
 noncomputable instance lan_preservesFiniteLimits_of_flat (F : C ⥤ D) [RepresentablyFlat F] :
     PreservesFiniteLimits (F.op.lan : _ ⥤ Dᵒᵖ ⥤ E) := by
@@ -945,76 +865,100 @@ noncomputable instance lan_preservesFiniteLimits_of_flat (F : C ⥤ D) [Represen
   have : IsFiltered (CostructuredArrow F.op K) :=
     IsFiltered.of_equivalence (structuredArrowOpEquivalence F (unop K))
   exact preservesLimitsOfShape_of_natIso (lanEvaluationIsoColim _ _ _).symm
-
-/--
-Instance `lan_flat_of_flat` / 实例 `lan_flat_of_flat`
-
-English:
-instance lan_flat_of_flat
-  signature: (F : C ⥤ D) [RepresentablyFlat F]
-  body: flat_of_preservesFiniteLimits _
-
-中文:
-实例 lan_flat_of_flat
-  签名: (F : C ⥤ D) [RepresentablyFlat F]
-  定义体: flat_of_preservesFiniteLimits _
-
-Depends on / 依赖: flat_of_preservesFiniteLimits
+/-
+**CategoryTheory.lan_flat_of_flat** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：lan_flat_of_flat (F : C ⥤ D) [RepresentablyFlat F] : RepresentablyFlat (F.
+op.lan : _ ⥤ Dᵒᵖ ⥤ E)
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.flat_of_preservesFiniteLimits`：flat_of_preservesFiniteLim
+its [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F] : RepresentablyFla
+t F
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance lan_flat_of_flat (F : C ⥤ D) [RepresentablyFlat F] :
     RepresentablyFlat (F.op.lan : _ ⥤ Dᵒᵖ ⥤ E) :=
   flat_of_preservesFiniteLimits _
 
 variable [HasFiniteLimits C]
-
-/--
-Instance `lan_preservesFiniteLimits_of_preservesFiniteLimits` / 实例 `lan_preservesFiniteLimits_of_preservesFiniteLimits`
-
-English:
-instance lan_preservesFiniteLimits_of_preservesFiniteLimits
-  signature: (F : C ⥤ D)
-  body: by
-  have := flat_of_preservesFiniteLimits F
-  infer_instance
-
-中文:
-实例 lan_preservesFiniteLimits_of_preservesFiniteLimits
-  签名: (F : C ⥤ D)
-  定义体: by
-  have := flat_of_preservesFiniteLimits F
-  infer_instance
-
-Depends on / 依赖: flat_of_preservesFiniteLimits, infer_instance
+/-
+**CategoryTheory.lan_preservesFiniteLimits_of_preservesFiniteLimits** 是 Mathlib 
+中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：lan_preservesFiniteLimits_of_preservesFiniteLimits (F : C ⥤ D) [PreservesF
+initeLimits F] : PreservesFiniteLimits (F.op.lan : _ ⥤ Dᵒᵖ ⥤ E)
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.flat_of_preservesFiniteLimits`：flat_of_preservesFiniteLim
+its [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F] : RepresentablyFla
+t F
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance lan_preservesFiniteLimits_of_preservesFiniteLimits (F : C ⥤ D)
     [PreservesFiniteLimits F] : PreservesFiniteLimits (F.op.lan : _ ⥤ Dᵒᵖ ⥤ E) := by
   have := flat_of_preservesFiniteLimits F
   infer_instance
-
-/--
-theorem `flat_iff_lan_flat` / 定理 `flat_iff_lan_flat`
-
-English:
-theorem flat_iff_lan_flat
-  given: (F : C ⥤ D)
-  proof: ⟨fun _ => inferInstance, fun H => by
-    have := preservesFiniteLimits_of_flat (F.op.lan : _ ⥤ Dᵒᵖ ⥤ Type u₁)
-    have : PreservesFiniteLimits F := by
-      apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁}
-      intros; apply preservesLimit_of_lan_preservesLimit
-    apply flat_of_preservesFiniteLimits⟩
-
-中文:
-定理 flat_iff_lan_flat
-  条件: (F : C ⥤ D)
-  证明: ⟨fun _ => inferInstance, fun H => by
-    have := preservesFiniteLimits_of_flat (F.op.lan : _ ⥤ Dᵒᵖ ⥤ Type u₁)
-    have : PreservesFiniteLimits F := by
-      apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁}
-      intros; apply preservesLimit_of_lan_preservesLimit
-    apply flat_of_preservesFiniteLimits⟩
-
-Depends on / 依赖: F.op.lan, PreservesFiniteLimits, flat_of_preservesFiniteLimits, intros, preservesFiniteLimits_of_flat, preservesFiniteLimits_of_preservesFiniteLimitsOfSize, preservesLimit_of_lan_preservesLimit
+/-
+**CategoryTheory.flat_iff_lan_flat** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：flat_iff_lan_flat (F : C ⥤ D) : RepresentablyFlat F ↔ RepresentablyFlat (F
+.op.lan : _ ⥤ Dᵒᵖ ⥤ Type u₁)
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Limits.Types.hasLimitsOfSize`：∀ [UnivLE.{v, u}], Category
+Theory.Limits.HasLimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `CategoryTheory.Limits.Types.hasColimitsOfSize`：∀ [UnivLE.{v, u}], Catego
+ryTheory.Limits.HasColimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `CategoryTheory.Types.instReflectsLimitsOfSizeForgetTypeFun`：CategoryTheo
+ry.Limits.ReflectsLimitsOfSize.{u_1, u_2, u, u, u + 1, u + 1} (CategoryTheory.fo
+rget (Type u))
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFilteredColimits`：∀ {C 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Types.instPreservesColimitsOfSizeForgetTypeFun`：CategoryT
+heory.Limits.PreservesColimitsOfSize.{u_1, u_2, u, u, u + 1, u + 1} (CategoryThe
+ory.forget (Type u))
+· 使用定理 `CategoryTheory.Types.instPreservesLimitsOfSizeForgetTypeFun`：CategoryThe
+ory.Limits.PreservesLimitsOfSize.{u_1, u_2, u, u, u + 1, u + 1} (CategoryTheory.
+forget (Type u))
+· 使用引理 `CategoryTheory.preservesFiniteLimits_of_flat`：preservesFiniteLimits_of_f
+lat (F : C ⥤ D) [RepresentablyFlat F] : PreservesFiniteLimits F
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_preservesFiniteLimitsOfSi
+ze`：preservesFiniteLimits_of_preservesFiniteLimitsOfSize (F : C ⥤ D) (h : forall
+ (J : Type w) {𝒥 : SmallCategory J} (_ : @FinCategory J 𝒥), Pres…
+· 使用引理 `CategoryTheory.preservesLimit_of_lan_preservesLimit`：preservesLimit_of_l
+an_preservesLimit {C D : Type u} [SmallCategory C] [SmallCategory D] (F : C ⥤ D)
+ (J : Type u) [SmallCategory J] [Preserve…
+· 使用定理 `CategoryTheory.Limits.preservesLimitsOfShapeOfPreservesFiniteLimits`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.flat_of_preservesFiniteLimits`：flat_of_preservesFiniteLim
+its [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F] : RepresentablyFla
+t F
 -/
 theorem flat_iff_lan_flat (F : C ⥤ D) :
     RepresentablyFlat F ↔ RepresentablyFlat (F.op.lan : _ ⥤ Dᵒᵖ ⥤ Type u₁) :=
@@ -1025,30 +969,56 @@ theorem flat_iff_lan_flat (F : C ⥤ D) :
       intros; apply preservesLimit_of_lan_preservesLimit
     apply flat_of_preservesFiniteLimits⟩
 
-/--
-lemma `preservesFiniteLimits_iff_lan_preservesFiniteLimits` / 引理 `preservesFiniteLimits_iff_lan_preservesFiniteLimits`
+/-- If `C` is finitely complete, then `F : C ⥤ D` preserves finite limits iff
+`Lan F.op : (Cᵒᵖ ⥤ Type*) ⥤ (Dᵒᵖ ⥤ Type*)` preserves finite limits.
+-/
+/-
+**CategoryTheory.preservesFiniteLimits_iff_lan_preservesFiniteLimits** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：preservesFiniteLimits_iff_lan_preservesFiniteLimits (F : C ⥤ D) : Preserve
+sFiniteLimits F ↔ PreservesFiniteLimits (F.op.lan : _ ⥤ Dᵒᵖ ⥤ Type u₁)
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Limits.Types.hasLimitsOfSize`：∀ [UnivLE.{v, u}], Category
+Theory.Limits.HasLimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `CategoryTheory.Limits.Types.hasColimitsOfSize`：∀ [UnivLE.{v, u}], Catego
+ryTheory.Limits.HasColimitsOfSize.{w, v, u, u + 1} (Type u)
+· 使用定理 `CategoryTheory.Types.instReflectsLimitsOfSizeForgetTypeFun`：CategoryTheo
+ry.Limits.ReflectsLimitsOfSize.{u_1, u_2, u, u, u + 1, u + 1} (CategoryTheory.fo
+rget (Type u))
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFilteredColimits`：∀ {C 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Types.instPreservesColimitsOfSizeForgetTypeFun`：CategoryT
+heory.Limits.PreservesColimitsOfSize.{u_1, u_2, u, u, u + 1, u + 1} (CategoryThe
+ory.forget (Type u))
+· 使用定理 `CategoryTheory.Types.instPreservesLimitsOfSizeForgetTypeFun`：CategoryThe
+ory.Limits.PreservesLimitsOfSize.{u_1, u_2, u, u, u + 1, u + 1} (CategoryTheory.
+forget (Type u))
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_preservesFiniteLimitsOfSi
+ze`：preservesFiniteLimits_of_preservesFiniteLimitsOfSize (F : C ⥤ D) (h : forall
+ (J : Type w) {𝒥 : SmallCategory J} (_ : @FinCategory J 𝒥), Pres…
+· 使用引理 `CategoryTheory.preservesLimit_of_lan_preservesLimit`：preservesLimit_of_l
+an_preservesLimit {C D : Type u} [SmallCategory C] [SmallCategory D] (F : C ⥤ D)
+ (J : Type u) [SmallCategory J] [Preserve…
+· 使用定理 `CategoryTheory.Limits.preservesLimitsOfShapeOfPreservesFiniteLimits`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-lemma preservesFiniteLimits_iff_lan_preservesFiniteLimits
-  given: (F : C ⥤ D)
-  proof: ⟨fun _ => inferInstance,
-    fun _ => preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁} _
-      (fun _ _ _ => preservesLimit_of_lan_preservesLimit _ _)⟩
-
-中文:
-引理 preservesFiniteLimits_iff_lan_preservesFiniteLimits
-  条件: (F : C ⥤ D)
-  证明: ⟨fun _ => inferInstance,
-    fun _ => preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁} _
-      (fun _ _ _ => preservesLimit_of_lan_preservesLimit _ _)⟩
-
-Depends on / 依赖: preservesFiniteLimits_of_preservesFiniteLimitsOfSize, preservesLimit_of_lan_preservesLimit
+--- 原说明 ---
+If `C` is finitely complete, then `F : C ⥤ D` preserves finite limits iff
+`Lan F.op : (Cᵒᵖ ⥤ Type*) ⥤ (Dᵒᵖ ⥤ Type*)` preserves finite limits.
 -/
 lemma preservesFiniteLimits_iff_lan_preservesFiniteLimits (F : C ⥤ D) :
     PreservesFiniteLimits F ↔ PreservesFiniteLimits (F.op.lan : _ ⥤ Dᵒᵖ ⥤ Type u₁) :=
-  ⟨fun _ => inferInstance,
-    fun _ => preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁} _
-      (fun _ _ _ => preservesLimit_of_lan_preservesLimit _ _)⟩
+  ⟨fun _ ↦ inferInstance,
+    fun _ ↦ preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁} _
+      (fun _ _ _ ↦ preservesLimit_of_lan_preservesLimit _ _)⟩
 
 end SmallCategory
 
@@ -1058,13 +1028,24 @@ variable {C D E : Type*} [Category* C] [Category* D] [Category* E] (F : C ⥤ D)
 
 attribute [local instance] IsCofiltered.isConnected IsFiltered.isConnected
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : E) [RepresentablyFlat F] : (StructuredArrow.pre X F G).Final :=
-  ⟨fun _ => isConnected_of_equivalent (StructuredArrow.preEquivalence _ _).symm⟩
-
+  ⟨fun _ ↦ isConnected_of_equivalent (StructuredArrow.preEquivalence _ _).symm⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : E) [RepresentablyCoflat F] : (CostructuredArrow.pre F G X).Initial :=
-  ⟨fun _ => isConnected_of_equivalent (CostructuredArrow.preEquivalence _ _).symm⟩
+  ⟨fun _ ↦ isConnected_of_equivalent (CostructuredArrow.preEquivalence _ _).symm⟩
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : E) [RepresentablyFlat F] [IsCofiltered (StructuredArrow X G)] :
     IsCofiltered (StructuredArrow X (F ⋙ G)) := by
   let T := StructuredArrow.pre X F G
@@ -1072,11 +1053,11 @@ instance (X : E) [RepresentablyFlat F] [IsCofiltered (StructuredArrow X G)] :
   obtain ⟨A⟩ := IsCofiltered.nonempty (C := StructuredArrow Y.right F)
   have : Nonempty (StructuredArrow X (F ⋙ G)) := ⟨.mk (Y.hom ≫ G.map A.hom)⟩
   suffices IsCofilteredOrEmpty (StructuredArrow X (F ⋙ G)) by constructor
-  refine ⟨fun A B => ?_, fun A B f g => ?_⟩
+  refine ⟨fun A B ↦ ?_, fun A B f g ↦ ?_⟩
   · let U := IsCofiltered.min (T.obj A) (T.obj B)
     let A' : StructuredArrow U.right F := .mk (IsCofiltered.minToLeft (T.obj A) (T.obj B)).right
     let B' : StructuredArrow U.right F := .mk (IsCofiltered.minToRight (T.obj A) (T.obj B)).right
-refine ⟨.mk U.hom ≫ G.map (IsCofiltered.min A' B').hom,
+    refine ⟨.mk <| U.hom ≫ G.map (IsCofiltered.min A' B').hom,
       StructuredArrow.homMk (IsCofiltered.minToLeft A' B').right ?_,
       StructuredArrow.homMk (IsCofiltered.minToRight A' B').right ?_, trivial⟩
     · simp [← Functor.map_comp, A', T]
@@ -1087,18 +1068,24 @@ refine ⟨.mk U.hom ≫ G.map (IsCofiltered.min A' B').hom,
     let f' : A' ⟶ B' := StructuredArrow.homMk f.right rfl
     let g' : A' ⟶ B' := StructuredArrow.homMk g.right
       congr($(IsCofiltered.eq_condition (T.map f) (T.map g)).right).symm
-refine ⟨.mk U.hom ≫ G.map (IsCofiltered.eq f' g').hom,
+    refine ⟨.mk <| U.hom ≫ G.map (IsCofiltered.eq f' g').hom,
       StructuredArrow.homMk (IsCofiltered.eqHom f' g').right ?_, ?_⟩
     · simp [← Functor.map_comp, A', T]
     · ext
       exact congr($(IsCofiltered.eq_condition f' g').right)
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : E) [RepresentablyCoflat F] [h : IsFiltered (CostructuredArrow G X)] :
     IsFiltered (CostructuredArrow (F ⋙ G) X) := by
-  rw [← isCofiltered_op_iff_isFiltered]; rw [IsCofiltered.iff_of_equivalence
+  rw [← isCofiltered_op_iff_isFiltered, IsCofiltered.iff_of_equivalence
     (costructuredArrowOpEquivalence _ _)] at h ⊢
-exact inferInstanceAs IsCofiltered (StructuredArrow (op X) (F.op ⋙ G.op))
-
+  exact inferInstanceAs <| IsCofiltered (StructuredArrow (op X) (F.op ⋙ G.op))
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (G : D ⥤ Type*) [RepresentablyFlat F] [IsCofiltered G.Elements] :
     IsCofiltered (F ⋙ G).Elements := by
   suffices h : IsCofiltered (StructuredArrow PUnit (F ⋙ G)) from
@@ -1110,3 +1097,4 @@ instance (G : D ⥤ Type*) [RepresentablyFlat F] [IsCofiltered G.Elements] :
 end
 
 end CategoryTheory
+

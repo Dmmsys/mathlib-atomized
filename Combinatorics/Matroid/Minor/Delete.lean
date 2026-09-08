@@ -46,404 +46,273 @@ namespace Matroid
 
 section Delete
 
-/--
-Definition of `delete` / `delete` 的定义
+/-- The deletion `M ＼ D` is the restriction of a matroid `M` to `M.E \ D`.
+Its independent sets are the `M`-independent subsets of `M.E \ D`. -/
+/-
+**Matroid.delete** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：delete (M : Matroid α) (D : Set α) : Matroid α
+参数：M : Matroid α；D : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition delete
-  signature: (M : Matroid α) (D : Set α)
-  body: M ↾ (M.E \ D)
-
-中文:
-定义 delete
-  签名: (M : 拟阵 α) (D : 集合 α)
-  定义体: M ↾ (M.E \ D)
+--- 原说明 ---
+The deletion `M ＼ D` is the restriction of a matroid `M` to `M.E \ D`.
+Its independent sets are the `M`-independent subsets of `M.E \ D`.
 -/
 def delete (M : Matroid α) (D : Set α) : Matroid α := M ↾ (M.E \ D)
 
 /-- `M ＼ D` refers to the deletion of a set `D` from the matroid `M`. -/
 scoped infixl:75 " ＼ " => Matroid.delete
 
-/--
-lemma `delete_eq_restrict` / 引理 `delete_eq_restrict`
-
-English:
-lemma delete_eq_restrict
-  given: (M : Matroid α) (D : Set α)
-  statement: M ＼ D = M ↾ (M.E \ D)
-  proof: rfl
-
-中文:
-引理 delete_eq_restrict
-  条件: (M : 拟阵 α) (D : 集合 α)
-  结论: M ＼ D = M ↾ (M.E \ D)
-  证明: rfl
+/-
+**Matroid.delete_eq_restrict** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_eq_restrict (M : Matroid α) (D : Set α) : M ＼ D = M ↾ (M.E \ D)
+参数：M : Matroid α；D : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma delete_eq_restrict (M : Matroid α) (D : Set α) : M ＼ D = M ↾ (M.E \ D) := rfl
-
-/--
-lemma `restrict_compl` / 引理 `restrict_compl`
-
-English:
-lemma restrict_compl
-  given: (M : Matroid α) (D : Set α)
-  statement: M ↾ (M.E \ D) = M ＼ D
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 restrict_compl
-  条件: (M : 拟阵 α) (D : 集合 α)
-  结论: M ↾ (M.E \ D) = M ＼ D
-  证明: rfl
-
-@[simp]
+/-
+**Matroid.restrict_compl** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：restrict_compl (M : Matroid α) (D : Set α) : M ↾ (M.E \ D) = M ＼ D
+参数：M : Matroid α；D : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrict_compl (M : Matroid α) (D : Set α) : M ↾ (M.E \ D) = M ＼ D := rfl
 
 @[simp]
-/--
-lemma `delete_compl` / 引理 `delete_compl`
-
-English:
-lemma delete_compl
-  given: (hR : R subseteq M.E := by aesop_mat)
-  statement: M ＼ (M.E \ R) = M ↾ R
-  proof: by
-  rw [← restrict_compl]; rw [sdiff_sdiff_cancel_left hR]
-
-@[simp]
-
-中文:
-引理 delete_compl
-  条件: (hR : R subseteq M.E := by aesop_mat)
-  结论: M ＼ (M.E \ R) = M ↾ R
-  证明: by
-  rw [← restrict_compl]; rw [sdiff_sdiff_cancel_left hR]
-
-@[simp]
-
-Depends on / 依赖: aesop_mat, restrict_compl, sdiff_sdiff_cancel_left
+/-
+**Matroid.delete_compl** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_compl (hR : R subseteq M.E
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Set.sdiff_sdiff_cancel_left`：sdiff_sdiff_cancel_left {s t : Set α} (h : 
+s subseteq t) : t \ (t \ s) = s
 -/
-lemma delete_compl (hR : R subseteq M.E := by aesop_mat) : M ＼ (M.E \ R) = M ↾ R := by
-  rw [← restrict_compl]; rw [sdiff_sdiff_cancel_left hR]
+lemma delete_compl (hR : R ⊆ M.E := by aesop_mat) : M ＼ (M.E \ R) = M ↾ R := by
+  rw [← restrict_compl, sdiff_sdiff_cancel_left hR]
 
 @[simp]
-/--
-lemma `delete_isRestriction` / 引理 `delete_isRestriction`
-
-English:
-lemma delete_isRestriction
-  given: (M : Matroid α) (D : Set α)
-  statement: M ＼ D <=r M
-  proof: restrict_isRestriction _ _ sdiff_subset
-
-中文:
-引理 delete_isRestriction
-  条件: (M : 拟阵 α) (D : 集合 α)
-  结论: M ＼ D <=r M
-  证明: restrict_isRestriction _ _ sdiff_subset
-
-Depends on / 依赖: restrict_isRestriction, sdiff_subset
+/-
+**Matroid.delete_isRestriction** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_isRestriction (M : Matroid α) (D : Set α) : M ＼ D <=r M
+参数：M : Matroid α；D : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.restrict_isRestriction`：restrict_isRestriction (M : Matroid α) (
+R : Set α) (hR : R subseteq M.E
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
-lemma delete_isRestriction (M : Matroid α) (D : Set α) : M ＼ D <=r M :=
+lemma delete_isRestriction (M : Matroid α) (D : Set α) : M ＼ D ≤r M :=
   restrict_isRestriction _ _ sdiff_subset
-
-/--
-lemma `IsRestriction.exists_eq_delete` / 引理 `IsRestriction.exists_eq_delete`
-
-English:
-lemma IsRestriction.exists_eq_delete
-  given: (hNM : N <=r M)
-  statement: exists D subseteq M.E, N = M ＼ D
-  proof: ⟨M.E \ N.E, sdiff_subset, by obtain ⟨R, hR, rfl⟩ := hNM; rw [delete_compl, restrict_ground_eq]⟩
-
-中文:
-引理 IsRestriction.存在_eq_delete
-  条件: (hNM : N <=r M)
-  结论: 存在 D subseteq M.E, N = M ＼ D
-  证明: ⟨M.E \ N.E, sdiff_subset, by obtain ⟨R, hR, rfl⟩ := hNM; rw [delete_compl, restrict_ground_eq]⟩
-
-Depends on / 依赖: delete_compl, restrict_ground_eq, sdiff_subset
+/-
+**Matroid.IsRestriction.exists_eq_delete** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRe
+striction`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α}, N.IsRestriction M → ∃ D ⊆ M.E, N = M.d
+elete D
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_compl`：delete_compl (hR : R subseteq M.E
+· 使用定理 `Matroid.restrict_ground_eq`：∀ {α : Type u_1} {M : Matroid α} {R : Set α}
+, (M.restrict R).E = R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma IsRestriction.exists_eq_delete (hNM : N <=r M) : exists D subseteq M.E, N = M ＼ D :=
+lemma IsRestriction.exists_eq_delete (hNM : N ≤r M) : ∃ D ⊆ M.E, N = M ＼ D :=
   ⟨M.E \ N.E, sdiff_subset, by obtain ⟨R, hR, rfl⟩ := hNM; rw [delete_compl, restrict_ground_eq]⟩
-
-/--
-lemma `isRestriction_iff_exists_eq_delete` / 引理 `isRestriction_iff_exists_eq_delete`
-
-English:
-lemma isRestriction_iff_exists_eq_delete
-  statement: N <=r M ↔ exists D subseteq M.E, N = M ＼ D
-  proof: ⟨IsRestriction.exists_eq_delete, by rintro ⟨D, -, rfl⟩; apply delete_isRestriction⟩
-
-@[simp]
-
-中文:
-引理 isRestriction_iff_存在_eq_delete
-  结论: N <=r M ↔ 存在 D subseteq M.E, N = M ＼ D
-  证明: ⟨IsRestriction.exists_eq_delete, by rintro ⟨D, -, rfl⟩; apply delete_isRestriction⟩
-
-@[simp]
-
-Depends on / 依赖: IsRestriction, IsRestriction.exists_eq_delete, delete_isRestriction, exists_eq_delete
+/-
+**Matroid.isRestriction_iff_exists_eq_delete** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`
+。
+形式化陈述：isRestriction_iff_exists_eq_delete : N <=r M ↔ exists D subseteq M.E, N = 
+M ＼ D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRestriction.exists_eq_delete`：∀ {α : Type u_1} {M N : Matroid 
+α}, N.IsRestriction M → ∃ D ⊆ M.E, N = M.delete D
+· 使用引理 `Matroid.delete_isRestriction`：delete_isRestriction (M : Matroid α) (D : 
+Set α) : M ＼ D <=r M
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma isRestriction_iff_exists_eq_delete : N <=r M ↔ exists D subseteq M.E, N = M ＼ D :=
+lemma isRestriction_iff_exists_eq_delete : N ≤r M ↔ ∃ D ⊆ M.E, N = M ＼ D :=
   ⟨IsRestriction.exists_eq_delete, by rintro ⟨D, -, rfl⟩; apply delete_isRestriction⟩
 
 @[simp]
-/--
-lemma `delete_ground` / 引理 `delete_ground`
-
-English:
-lemma delete_ground
-  given: (M : Matroid α) (D : Set α)
-  statement: (M ＼ D).E = M.E \ D
-  proof: rfl
-
-@[aesop unsafe 10% (rule_sets := [Matroid])]
-
-中文:
-引理 delete_ground
-  条件: (M : 拟阵 α) (D : 集合 α)
-  结论: (M ＼ D).E = M.E \ D
-  证明: rfl
-
-@[aesop unsafe 10% (rule_sets := [Matroid])]
+/-
+**Matroid.delete_ground** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_ground (M : Matroid α) (D : Set α) : (M ＼ D).E = M.E \ D
+参数：M : Matroid α；D : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma delete_ground (M : Matroid α) (D : Set α) : (M ＼ D).E = M.E \ D := rfl
 
 @[aesop unsafe 10% (rule_sets := [Matroid])]
-/--
-lemma `delete_subset_ground` / 引理 `delete_subset_ground`
-
-English:
-lemma delete_subset_ground
-  given: (M : Matroid α) (D : Set α)
-  statement: (M ＼ D).E subseteq M.E
-  proof: sdiff_subset
-
-@[simp]
-
-中文:
-引理 delete_subset_ground
-  条件: (M : 拟阵 α) (D : 集合 α)
-  结论: (M ＼ D).E subseteq M.E
-  证明: sdiff_subset
-
-@[simp]
-
-Depends on / 依赖: sdiff_subset
+/-
+**Matroid.delete_subset_ground** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_subset_ground (M : Matroid α) (D : Set α) : (M ＼ D).E subseteq M.E
+参数：M : Matroid α；D : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
-lemma delete_subset_ground (M : Matroid α) (D : Set α) : (M ＼ D).E subseteq M.E :=
+lemma delete_subset_ground (M : Matroid α) (D : Set α) : (M ＼ D).E ⊆ M.E :=
   sdiff_subset
 
 @[simp]
-/--
-lemma `delete_eq_self_iff` / 引理 `delete_eq_self_iff`
-
-English:
-lemma delete_eq_self_iff
-  statement: M ＼ D = M ↔ Disjoint D M.E
-  proof: by
-  rw [← restrict_compl]; rw [restrict_eq_self_iff]; rw [sdiff_eq_left]; rw [disjoint_comm]
-
-alias ⟨_, delete_eq_self⟩ := delete_eq_self_iff
-
-中文:
-引理 delete_eq_self_iff
-  结论: M ＼ D = M ↔ Disjoint D M.E
-  证明: by
-  rw [← restrict_compl]; rw [restrict_eq_self_iff]; rw [sdiff_eq_left]; rw [disjoint_comm]
-
-alias ⟨_, delete_eq_self⟩ := delete_eq_self_iff
-
-Depends on / 依赖: disjoint_comm, restrict_compl, restrict_eq_self_iff, sdiff_eq_left
+/-
+**Matroid.delete_eq_self_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_eq_self_iff : M ＼ D = M ↔ Disjoint D M.E
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Matroid.restrict_eq_self_iff`：∀ {α : Type u_1} {M : Matroid α} {R : Set 
+α}, M.restrict R = M ↔ R = M.E
+· 使用定理 `sdiff_eq_left`：∀ {α : Type u} {x y : α} [inst : GeneralizedBooleanAlgebr
+a α], x \ y = x ↔ Disjoint x y
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma delete_eq_self_iff : M ＼ D = M ↔ Disjoint D M.E := by
-  rw [← restrict_compl]; rw [restrict_eq_self_iff]; rw [sdiff_eq_left]; rw [disjoint_comm]
+  rw [← restrict_compl, restrict_eq_self_iff, sdiff_eq_left, disjoint_comm]
 
 alias ⟨_, delete_eq_self⟩ := delete_eq_self_iff
-
-/--
-lemma `deleteElem_eq_self` / 引理 `deleteElem_eq_self`
-
-English:
-lemma deleteElem_eq_self
-  given: (he : e ∉ M.E)
-  statement: M ＼ {e} = M
-  proof: by
-  simpa
-
-@[simp]
-
-中文:
-引理 deleteElem_eq_self
-  条件: (he : e ∉ M.E)
-  结论: M ＼ {e} = M
-  证明: by
-  simpa
-
-@[simp]
+/-
+**Matroid.deleteElem_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：deleteElem_eq_self (he : e ∉ M.E) : M ＼ {e} = M
+参数：he : e ∉ M.E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 lemma deleteElem_eq_self (he : e ∉ M.E) : M ＼ {e} = M := by
   simpa
 
 @[simp]
-/--
-lemma `delete_delete` / 引理 `delete_delete`
-
-English:
-lemma delete_delete
-  given: (M : Matroid α) (D₁ D₂ : Set α)
-  statement: M ＼ D₁ ＼ D₂ = M ＼ (D₁ union D₂)
-  proof: by
-  rw [← restrict_compl]; rw [← restrict_compl]; rw [← restrict_compl]; rw [restrict_restrict_eq]; rw [restrict_ground_eq]; rw [sdiff_sdiff]
-  simp
-
-中文:
-引理 delete_delete
-  条件: (M : 拟阵 α) (D₁ D₂ : 集合 α)
-  结论: M ＼ D₁ ＼ D₂ = M ＼ (D₁ union D₂)
-  证明: by
-  rw [← restrict_compl]; rw [← restrict_compl]; rw [← restrict_compl]; rw [restrict_restrict_eq]; rw [restrict_ground_eq]; rw [sdiff_sdiff]
-  simp
-
-Depends on / 依赖: restrict_compl, restrict_ground_eq, restrict_restrict_eq, sdiff_sdiff
+/-
+**Matroid.delete_delete** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_delete (M : Matroid α) (D₁ D₂ : Set α) : M ＼ D₁ ＼ D₂ = M ＼ (D₁ unio
+n D₂)
+参数：M : Matroid α；D₁ D₂ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Matroid.restrict_restrict_eq`：restrict_restrict_eq {R₁ R₂ : Set α} (M : 
+Matroid α) (hR : R₂ subseteq R₁) : (M ↾ R₁) ↾ R₂ = M ↾ R₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matroid.restrict_ground_eq`：∀ {α : Type u_1} {M : Matroid α} {R : Set α}
+, (M.restrict R).E = R
+· 使用定理 `Set.sdiff_sdiff`：sdiff_sdiff {u : Set α} : (s \ t) \ u = s \ (t union u)
 -/
-lemma delete_delete (M : Matroid α) (D₁ D₂ : Set α) : M ＼ D₁ ＼ D₂ = M ＼ (D₁ union D₂) := by
-  rw [← restrict_compl]; rw [← restrict_compl]; rw [← restrict_compl]; rw [restrict_restrict_eq]; rw [restrict_ground_eq]; rw [sdiff_sdiff]
+lemma delete_delete (M : Matroid α) (D₁ D₂ : Set α) : M ＼ D₁ ＼ D₂ = M ＼ (D₁ ∪ D₂) := by
+  rw [← restrict_compl, ← restrict_compl, ← restrict_compl, restrict_restrict_eq,
+    restrict_ground_eq, sdiff_sdiff]
   simp
-
-/--
-lemma `delete_comm` / 引理 `delete_comm`
-
-English:
-lemma delete_comm
-  given: (M : Matroid α) (D₁ D₂ : Set α)
-  statement: M ＼ D₁ ＼ D₂ = M ＼ D₂ ＼ D₁
-  proof: by
-  rw [delete_delete]; rw [union_comm]; rw [delete_delete]
-
-中文:
-引理 delete_comm
-  条件: (M : 拟阵 α) (D₁ D₂ : 集合 α)
-  结论: M ＼ D₁ ＼ D₂ = M ＼ D₂ ＼ D₁
-  证明: by
-  rw [delete_delete]; rw [union_comm]; rw [delete_delete]
-
-Depends on / 依赖: delete_delete, union_comm
+/-
+**Matroid.delete_comm** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_comm (M : Matroid α) (D₁ D₂ : Set α) : M ＼ D₁ ＼ D₂ = M ＼ D₂ ＼ D₁
+参数：M : Matroid α；D₁ D₂ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_delete`：delete_delete (M : Matroid α) (D₁ D₂ : Set α) : M
+ ＼ D₁ ＼ D₂ = M ＼ (D₁ union D₂)
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
 -/
 lemma delete_comm (M : Matroid α) (D₁ D₂ : Set α) : M ＼ D₁ ＼ D₂ = M ＼ D₂ ＼ D₁ := by
-  rw [delete_delete]; rw [union_comm]; rw [delete_delete]
-
-/--
-lemma `delete_inter_ground_eq` / 引理 `delete_inter_ground_eq`
-
-English:
-lemma delete_inter_ground_eq
-  given: (M : Matroid α) (D : Set α)
-  statement: M ＼ (D inter M.E) = M ＼ D
-  proof: by
-  rw [← restrict_compl]; rw [← restrict_compl]; rw [sdiff_inter_self_eq_sdiff]
-
-中文:
-引理 delete_inter_ground_eq
-  条件: (M : 拟阵 α) (D : 集合 α)
-  结论: M ＼ (D inter M.E) = M ＼ D
-  证明: by
-  rw [← restrict_compl]; rw [← restrict_compl]; rw [sdiff_inter_self_eq_sdiff]
-
-Depends on / 依赖: restrict_compl, sdiff_inter_self_eq_sdiff
+  rw [delete_delete, union_comm, delete_delete]
+/-
+**Matroid.delete_inter_ground_eq** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_inter_ground_eq (M : Matroid α) (D : Set α) : M ＼ (D inter M.E) = M
+ ＼ D
+参数：M : Matroid α；D : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Set.sdiff_inter_self_eq_sdiff`：sdiff_inter_self_eq_sdiff {s t : Set α} :
+ s \ (t inter s) = s \ t
 -/
-lemma delete_inter_ground_eq (M : Matroid α) (D : Set α) : M ＼ (D inter M.E) = M ＼ D := by
-  rw [← restrict_compl]; rw [← restrict_compl]; rw [sdiff_inter_self_eq_sdiff]
-
-/--
-lemma `delete_eq_delete_iff` / 引理 `delete_eq_delete_iff`
-
-English:
-lemma delete_eq_delete_iff
-  given: {D₁ D₂ : Set α}
-  statement: M ＼ D₁ = M ＼ D₂ ↔ D₁ inter M.E = D₂ inter M.E
-  proof: by
-  rw [← delete_inter_ground_eq]; rw [← M.delete_inter_ground_eq D₂]
-  refine ⟨fun h => ?_, fun h => by rw [h]⟩
-  apply_fun (M.E \ Matroid.E ·) at h
-  simp_rw [delete_ground, sdiff_sdiff_cancel_left inter_subset_right] at h
-  assumption
-
-@[simp]
-
-中文:
-引理 delete_eq_delete_iff
-  条件: {D₁ D₂ : 集合 α}
-  结论: M ＼ D₁ = M ＼ D₂ ↔ D₁ inter M.E = D₂ inter M.E
-  证明: by
-  rw [← delete_inter_ground_eq]; rw [← M.delete_inter_ground_eq D₂]
-  refine ⟨fun h => ?_, fun h => by rw [h]⟩
-  apply_fun (M.E \ Matroid.E ·) at h
-  simp_rw [delete_ground, sdiff_sdiff_cancel_left inter_subset_right] at h
-  assumption
-
-@[simp]
-
-Depends on / 依赖: M.delete_inter_ground_eq, Matroid, Matroid.E, apply_fun, delete_ground, delete_inter_ground_eq, inter_subset_right, sdiff_sdiff_cancel_left, simp_rw
+lemma delete_inter_ground_eq (M : Matroid α) (D : Set α) : M ＼ (D ∩ M.E) = M ＼ D := by
+  rw [← restrict_compl, ← restrict_compl, sdiff_inter_self_eq_sdiff]
+/-
+**Matroid.delete_eq_delete_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_eq_delete_iff {D₁ D₂ : Set α} : M ＼ D₁ = M ＼ D₂ ↔ D₁ inter M.E = D₂
+ inter M.E
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.delete_inter_ground_eq`：delete_inter_ground_eq (M : Matroid α) (
+D : Set α) : M ＼ (D inter M.E) = M ＼ D
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.sdiff_sdiff_cancel_left`：sdiff_sdiff_cancel_left {s t : Set α} (h : 
+s subseteq t) : t \ (t \ s) = s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-lemma delete_eq_delete_iff {D₁ D₂ : Set α} : M ＼ D₁ = M ＼ D₂ ↔ D₁ inter M.E = D₂ inter M.E := by
-  rw [← delete_inter_ground_eq]; rw [← M.delete_inter_ground_eq D₂]
-  refine ⟨fun h => ?_, fun h => by rw [h]⟩
+lemma delete_eq_delete_iff {D₁ D₂ : Set α} : M ＼ D₁ = M ＼ D₂ ↔ D₁ ∩ M.E = D₂ ∩ M.E := by
+  rw [← delete_inter_ground_eq, ← M.delete_inter_ground_eq D₂]
+  refine ⟨fun h ↦ ?_, fun h ↦ by rw [h]⟩
   apply_fun (M.E \ Matroid.E ·) at h
   simp_rw [delete_ground, sdiff_sdiff_cancel_left inter_subset_right] at h
   assumption
 
 @[simp]
-/--
-lemma `delete_empty` / 引理 `delete_empty`
-
-English:
-lemma delete_empty
-  given: (M : Matroid α)
-  statement: M ＼ ∅ = M
-  proof: by
-  rw [delete_eq_self_iff]
-  exact empty_disjoint _
-
-中文:
-引理 delete_empty
-  条件: (M : 拟阵 α)
-  结论: M ＼ ∅ = M
-  证明: by
-  rw [delete_eq_self_iff]
-  exact empty_disjoint _
-
-Depends on / 依赖: delete_eq_self_iff, empty_disjoint
+/-
+**Matroid.delete_empty** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_empty (M : Matroid α) : M ＼ ∅ = M
+参数：M : Matroid α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_eq_self_iff`：delete_eq_self_iff : M ＼ D = M ↔ Disjoint D 
+M.E
+· 使用定理 `Set.empty_disjoint`：∀ {α : Type u} (s : Set α), Disjoint ∅ s
 -/
 lemma delete_empty (M : Matroid α) : M ＼ ∅ = M := by
   rw [delete_eq_self_iff]
   exact empty_disjoint _
-
-/--
-lemma `delete_delete_eq_delete_sdiff` / 引理 `delete_delete_eq_delete_sdiff`
-
-English:
-lemma delete_delete_eq_delete_sdiff
-  given: (M : Matroid α) (D₁ D₂ : Set α)
-  proof: by
-  simp
-
-@[deprecated (since := "2026-06-03")]
-alias delete_delete_eq_delete_diff := delete_delete_eq_delete_sdiff
-
-中文:
-引理 delete_delete_eq_delete_sdiff
-  条件: (M : 拟阵 α) (D₁ D₂ : 集合 α)
-  证明: by
-  simp
-
-@[deprecated (since := "2026-06-03")]
-alias delete_delete_eq_delete_diff := delete_delete_eq_delete_sdiff
+/-
+**Matroid.delete_delete_eq_delete_sdiff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_delete_eq_delete_sdiff (M : Matroid α) (D₁ D₂ : Set α) : M ＼ D₁ ＼ D
+₂ = M ＼ D₁ ＼ (D₂ \ D₁)
+参数：M : Matroid α；D₁ D₂ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_delete`：delete_delete (M : Matroid α) (D₁ D₂ : Set α) : M
+ ＼ D₁ ＼ D₂ = M ＼ (D₁ union D₂)
+· 使用定理 `Set.union_sdiff_self`：union_sdiff_self {s t : Set α} : s union t \ s = s
+ union t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma delete_delete_eq_delete_sdiff (M : Matroid α) (D₁ D₂ : Set α) :
     M ＼ D₁ ＼ D₂ = M ＼ D₁ ＼ (D₂ \ D₁) := by
@@ -451,731 +320,641 @@ lemma delete_delete_eq_delete_sdiff (M : Matroid α) (D₁ D₂ : Set α) :
 
 @[deprecated (since := "2026-06-03")]
 alias delete_delete_eq_delete_diff := delete_delete_eq_delete_sdiff
-
-/--
-lemma `IsRestriction.restrict_delete_of_disjoint` / 引理 `IsRestriction.restrict_delete_of_disjoint`
-
-English:
-lemma IsRestriction.restrict_delete_of_disjoint
-  given: (h : N <=r M) (hX : Disjoint X N.E)
-  proof: by
-  obtain ⟨D, hD, rfl⟩ := isRestriction_iff_exists_eq_delete.1 h
-  refine isRestriction_iff_exists_eq_delete.2 ⟨D \ X, sdiff_subset_sdiff_left hD, ?_⟩
-  rwa [delete_delete, union_sdiff_self, union_comm, ← delete_delete, eq_comm,
-    delete_eq_self_iff]
-
-中文:
-引理 IsRestriction.restrict_delete_of_disjoint
-  条件: (h : N <=r M) (hX : Disjoint X N.E)
-  证明: by
-  obtain ⟨D, hD, rfl⟩ := isRestriction_iff_exists_eq_delete.1 h
-  refine isRestriction_iff_exists_eq_delete.2 ⟨D \ X, sdiff_subset_sdiff_left hD, ?_⟩
-  rwa [delete_delete, union_sdiff_self, union_comm, ← delete_delete, eq_comm,
-    delete_eq_self_iff]
-
-Depends on / 依赖: delete_delete, delete_eq_self_iff, eq_comm, isRestriction_iff_exists_eq_delete, sdiff_subset_sdiff_left, union_comm, union_sdiff_self
+/-
+**Matroid.IsRestriction.restrict_delete_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `M
+atroid.IsRestriction`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α} {X : Set α}, N.IsRestriction M → Disjoi
+nt X N.E → N.IsRestriction (M.delete X)
+参数：M.delete X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matroid.isRestriction_iff_exists_eq_delete`：isRestriction_iff_exists_eq_
+delete : N <=r M ↔ exists D subseteq M.E, N = M ＼ D
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.sdiff_subset_sdiff_left`：sdiff_subset_sdiff_left {s₁ s₂ t : Set α} (
+h : s₁ subseteq s₂) : s₁ \ t subseteq s₂ \ t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_delete`：delete_delete (M : Matroid α) (D₁ D₂ : Set α) : M
+ ＼ D₁ ＼ D₂ = M ＼ (D₁ union D₂)
+· 使用定理 `Set.union_sdiff_self`：union_sdiff_self {s t : Set α} : s union t \ s = s
+ union t
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用引理 `Matroid.delete_eq_self_iff`：delete_eq_self_iff : M ＼ D = M ↔ Disjoint D 
+M.E
 -/
-lemma IsRestriction.restrict_delete_of_disjoint (h : N <=r M) (hX : Disjoint X N.E) :
-    N <=r (M ＼ X) := by
+lemma IsRestriction.restrict_delete_of_disjoint (h : N ≤r M) (hX : Disjoint X N.E) :
+    N ≤r (M ＼ X) := by
   obtain ⟨D, hD, rfl⟩ := isRestriction_iff_exists_eq_delete.1 h
   refine isRestriction_iff_exists_eq_delete.2 ⟨D \ X, sdiff_subset_sdiff_left hD, ?_⟩
   rwa [delete_delete, union_sdiff_self, union_comm, ← delete_delete, eq_comm,
     delete_eq_self_iff]
-
-/--
-lemma `IsRestriction.isRestriction_deleteElem` / 引理 `IsRestriction.isRestriction_deleteElem`
-
-English:
-lemma IsRestriction.isRestriction_deleteElem
-  given: (h : N <=r M) (he : e ∉ N.E)
-  statement: N <=r M ＼ {e}
-  proof: h.restrict_delete_of_disjoint (by simpa)
-
-中文:
-引理 IsRestriction.isRestriction_deleteElem
-  条件: (h : N <=r M) (he : e ∉ N.E)
-  结论: N <=r M ＼ {e}
-  证明: h.restrict_delete_of_disjoint (by simpa)
-
-Depends on / 依赖: h.restrict_delete_of_disjoint, restrict_delete_of_disjoint
+/-
+**Matroid.IsRestriction.isRestriction_deleteElem** 是 Mathlib 中的一个定理，位于命名空间 `Matr
+oid.IsRestriction`。
+形式化陈述：∀ {α : Type u_1} {M N : Matroid α} {e : α}, N.IsRestriction M → e ∉ N.E → 
+N.IsRestriction (M.delete {e})
+参数：M.delete {e}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRestriction.restrict_delete_of_disjoint`：∀ {α : Type u_1} {M N
+ : Matroid α} {X : Set α}, N.IsRestriction M → Disjoint X N.E → N.IsRestriction 
+(M.delete X)
 -/
-lemma IsRestriction.isRestriction_deleteElem (h : N <=r M) (he : e ∉ N.E) : N <=r M ＼ {e} :=
+lemma IsRestriction.isRestriction_deleteElem (h : N ≤r M) (he : e ∉ N.E) : N ≤r M ＼ {e} :=
   h.restrict_delete_of_disjoint (by simpa)
 
 /-! ### Independence and Bases -/
 
 @[simp]
-/--
-lemma `delete_indep_iff` / 引理 `delete_indep_iff`
+/-
+**Matroid.delete_indep_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_indep_iff : (M ＼ D).Indep I ↔ M.Indep I ∧ Disjoint I D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Matroid.restrict_indep_iff`：∀ {α : Type u_1} {M : Matroid α} {R I : Set 
+α}, (M.restrict R).Indep I ↔ M.Indep I ∧ I ⊆ R
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用定理 `and_assoc`：∀ {a b c : Prop}, (a ∧ b) ∧ c ↔ a ∧ b ∧ c
+· 使用定理 `and_iff_left_of_imp`：∀ {a b : Prop}, (a → b) → (a ∧ b ↔ a)
+· 使用定理 `Matroid.Indep.subset_ground`：∀ {α : Type u_1} {M : Matroid α} {I : Set α
+}, M.Indep I → I ⊆ M.E
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma delete_indep_iff
-  statement: (M ＼ D).Indep I ↔ M.Indep I ∧ Disjoint I D
-  proof: by
-  rw [← restrict_compl]; rw [restrict_indep_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_iff_left_of_imp Indep.subset_ground]
-
-中文:
-引理 delete_indep_iff
-  结论: (M ＼ D).Indep I ↔ M.Indep I ∧ Disjoint I D
-  证明: by
-  rw [← restrict_compl]; rw [restrict_indep_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_iff_left_of_imp Indep.subset_ground]
-
-Depends on / 依赖: Indep.subset_ground, and_assoc, and_iff_left_of_imp, restrict_compl, restrict_indep_iff, subset_ground, subset_sdiff
+--- 原说明 ---
+### Independence and Bases
 -/
 lemma delete_indep_iff : (M ＼ D).Indep I ↔ M.Indep I ∧ Disjoint I D := by
-  rw [← restrict_compl]; rw [restrict_indep_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_iff_left_of_imp Indep.subset_ground]
-
-/--
-lemma `deleteElem_indep_iff` / 引理 `deleteElem_indep_iff`
-
-English:
-lemma deleteElem_indep_iff
-  statement: (M ＼ {e}).Indep I ↔ M.Indep I ∧ e ∉ I
-  proof: by
-  simp
-
-中文:
-引理 deleteElem_indep_iff
-  结论: (M ＼ {e}).Indep I ↔ M.Indep I ∧ e ∉ I
-  证明: by
-  simp
+  rw [← restrict_compl, restrict_indep_iff, subset_sdiff, ← and_assoc,
+    and_iff_left_of_imp Indep.subset_ground]
+/-
+**Matroid.deleteElem_indep_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：deleteElem_indep_iff : (M ＼ {e}).Indep I ↔ M.Indep I ∧ e ∉ I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma deleteElem_indep_iff : (M ＼ {e}).Indep I ↔ M.Indep I ∧ e ∉ I := by
   simp
-
-/--
-lemma `Indep.of_delete` / 引理 `Indep.of_delete`
-
-English:
-lemma Indep.of_delete
-  given: (h : (M ＼ D).Indep I)
-  statement: M.Indep I
-  proof: (delete_indep_iff.mp h).1
-
-中文:
-引理 Indep.of_delete
-  条件: (h : (M ＼ D).Indep I)
-  结论: M.Indep I
-  证明: (delete_indep_iff.mp h).1
-
-Depends on / 依赖: delete_indep_iff, delete_indep_iff.mp
+/-
+**Matroid.Indep.of_delete** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Indep`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {I D : Set α}, (M.delete D).Indep I → M.I
+ndep I
+参数：M.delete D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matroid.delete_indep_iff`：delete_indep_iff : (M ＼ D).Indep I ↔ M.Indep I
+ ∧ Disjoint I D
 -/
 lemma Indep.of_delete (h : (M ＼ D).Indep I) : M.Indep I :=
   (delete_indep_iff.mp h).1
-
-/--
-lemma `Indep.indep_delete_of_disjoint` / 引理 `Indep.indep_delete_of_disjoint`
-
-English:
-lemma Indep.indep_delete_of_disjoint
-  given: (h : M.Indep I) (hID : Disjoint I D)
-  statement: (M ＼ D).Indep I
-  proof: delete_indep_iff.mpr ⟨h, hID⟩
-
-中文:
-引理 Indep.indep_delete_of_disjoint
-  条件: (h : M.Indep I) (hID : Disjoint I D)
-  结论: (M ＼ D).Indep I
-  证明: delete_indep_iff.mpr ⟨h, hID⟩
-
-Depends on / 依赖: delete_indep_iff, delete_indep_iff.mpr
+/-
+**Matroid.Indep.indep_delete_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Inde
+p`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {I D : Set α}, M.Indep I → Disjoint I D →
+ (M.delete D).Indep I
+参数：M.delete D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Matroid.delete_indep_iff`：delete_indep_iff : (M ＼ D).Indep I ↔ M.Indep I
+ ∧ Disjoint I D
 -/
 lemma Indep.indep_delete_of_disjoint (h : M.Indep I) (hID : Disjoint I D) : (M ＼ D).Indep I :=
   delete_indep_iff.mpr ⟨h, hID⟩
-
-/--
-lemma `indep_iff_delete_of_disjoint` / 引理 `indep_iff_delete_of_disjoint`
-
-English:
-lemma indep_iff_delete_of_disjoint
-  given: (hID : Disjoint I D)
-  statement: M.Indep I ↔ (M ＼ D).Indep I
-  proof: ⟨fun h => h.indep_delete_of_disjoint hID, fun h => h.of_delete⟩
-
-@[simp]
-
-中文:
-引理 indep_iff_delete_of_disjoint
-  条件: (hID : Disjoint I D)
-  结论: M.Indep I ↔ (M ＼ D).Indep I
-  证明: ⟨fun h => h.indep_delete_of_disjoint hID, fun h => h.of_delete⟩
-
-@[simp]
-
-Depends on / 依赖: h.indep_delete_of_disjoint, h.of_delete, indep_delete_of_disjoint, of_delete
+/-
+**Matroid.indep_iff_delete_of_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：indep_iff_delete_of_disjoint (hID : Disjoint I D) : M.Indep I ↔ (M ＼ D).In
+dep I
+参数：hID : Disjoint I D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.Indep.indep_delete_of_disjoint`：∀ {α : Type u_1} {M : Matroid α}
+ {I D : Set α}, M.Indep I → Disjoint I D → (M.delete D).Indep I
+· 使用定理 `Matroid.Indep.of_delete`：∀ {α : Type u_1} {M : Matroid α} {I D : Set α},
+ (M.delete D).Indep I → M.Indep I
 -/
 lemma indep_iff_delete_of_disjoint (hID : Disjoint I D) : M.Indep I ↔ (M ＼ D).Indep I :=
-  ⟨fun h => h.indep_delete_of_disjoint hID, fun h => h.of_delete⟩
+  ⟨fun h ↦ h.indep_delete_of_disjoint hID, fun h ↦ h.of_delete⟩
 
 @[simp]
-/--
-lemma `delete_dep_iff` / 引理 `delete_dep_iff`
-
-English:
-lemma delete_dep_iff
-  statement: (M ＼ D).Dep X ↔ M.Dep X ∧ Disjoint X D
-  proof: by
-  rw [dep_iff]; rw [dep_iff]; rw [delete_indep_iff]; rw [delete_ground]; rw [subset_sdiff]; tauto
-
-@[simp]
-
-中文:
-引理 delete_dep_iff
-  结论: (M ＼ D).Dep X ↔ M.Dep X ∧ Disjoint X D
-  证明: by
-  rw [dep_iff]; rw [dep_iff]; rw [delete_indep_iff]; rw [delete_ground]; rw [subset_sdiff]; tauto
-
-@[simp]
-
-Depends on / 依赖: delete_ground, delete_indep_iff, dep_iff, subset_sdiff
+/-
+**Matroid.delete_dep_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_dep_iff : (M ＼ D).Dep X ↔ M.Dep X ∧ Disjoint X D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matroid.dep_iff`：dep_iff : M.Dep D ↔ ¬M.Indep D ∧ D subseteq M.E
+· 使用引理 `Matroid.delete_indep_iff`：delete_indep_iff : (M ＼ D).Indep I ↔ M.Indep I
+ ∧ Disjoint I D
+· 使用引理 `Matroid.delete_ground`：delete_ground (M : Matroid α) (D : Set α) : (M ＼ 
+D).E = M.E \ D
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Decidable.not_and_iff_not_or_not'`：∀ {b a : Prop} [Decidable b], ¬(a ∧ b
+) ↔ ¬a ∨ ¬b
 -/
 lemma delete_dep_iff : (M ＼ D).Dep X ↔ M.Dep X ∧ Disjoint X D := by
-  rw [dep_iff]; rw [dep_iff]; rw [delete_indep_iff]; rw [delete_ground]; rw [subset_sdiff]; tauto
+  rw [dep_iff, dep_iff, delete_indep_iff, delete_ground, subset_sdiff]; tauto
 
 @[simp]
-/--
-lemma `delete_isBase_iff` / 引理 `delete_isBase_iff`
-
-English:
-lemma delete_isBase_iff
-  statement: (M ＼ D).IsBase B ↔ M.IsBasis B (M.E \ D)
-  proof: by
-  rw [← restrict_compl]; rw [isBase_restrict_iff]
-
-@[simp]
-
-中文:
-引理 delete_isBase_iff
-  结论: (M ＼ D).IsBase B ↔ M.是基 B (M.E \ D)
-  证明: by
-  rw [← restrict_compl]; rw [isBase_restrict_iff]
-
-@[simp]
-
-Depends on / 依赖: isBase_restrict_iff, restrict_compl
+/-
+**Matroid.delete_isBase_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_isBase_iff : (M ＼ D).IsBase B ↔ M.IsBasis B (M.E \ D)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Matroid.isBase_restrict_iff`：∀ {α : Type u_1} {M : Matroid α} {I X : Set
+ α},   autoParam (X ⊆ M.E) Matroid.isBase_restrict_iff._auto_1 → ((M.restrict X)
+.IsBase I ↔ M.IsB…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma delete_isBase_iff : (M ＼ D).IsBase B ↔ M.IsBasis B (M.E \ D) := by
-  rw [← restrict_compl]; rw [isBase_restrict_iff]
+  rw [← restrict_compl, isBase_restrict_iff]
 
 @[simp]
-/--
-lemma `delete_isBasis_iff` / 引理 `delete_isBasis_iff`
-
-English:
-lemma delete_isBasis_iff
-  statement: (M ＼ D).IsBasis I X ↔ M.IsBasis I X ∧ Disjoint X D
-  proof: by
-  rw [← restrict_compl]; rw [isBasis_restrict_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_iff_left_of_imp IsBasis.subset_ground]
-
-@[simp]
-
-中文:
-引理 delete_isBasis_iff
-  结论: (M ＼ D).是基 I X ↔ M.是基 I X ∧ Disjoint X D
-  证明: by
-  rw [← restrict_compl]; rw [isBasis_restrict_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_iff_left_of_imp IsBasis.subset_ground]
-
-@[simp]
-
-Depends on / 依赖: IsBasis, IsBasis.subset_ground, and_assoc, and_iff_left_of_imp, isBasis_restrict_iff, restrict_compl, subset_ground, subset_sdiff
+/-
+**Matroid.delete_isBasis_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_isBasis_iff : (M ＼ D).IsBasis I X ↔ M.IsBasis I X ∧ Disjoint X D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Matroid.isBasis_restrict_iff`：isBasis_restrict_iff (hR : R subseteq M.E
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用定理 `and_assoc`：∀ {a b c : Prop}, (a ∧ b) ∧ c ↔ a ∧ b ∧ c
+· 使用定理 `and_iff_left_of_imp`：∀ {a b : Prop}, (a → b) → (a ∧ b ↔ a)
+· 使用定理 `Matroid.IsBasis.subset_ground`：∀ {α : Type u_1} {M : Matroid α} {I X : S
+et α}, M.IsBasis I X → X ⊆ M.E
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma delete_isBasis_iff : (M ＼ D).IsBasis I X ↔ M.IsBasis I X ∧ Disjoint X D := by
-  rw [← restrict_compl]; rw [isBasis_restrict_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_iff_left_of_imp IsBasis.subset_ground]
+  rw [← restrict_compl, isBasis_restrict_iff, subset_sdiff, ← and_assoc,
+    and_iff_left_of_imp IsBasis.subset_ground]
 
 @[simp]
-/--
-lemma `delete_isBasis'_iff` / 引理 `delete_isBasis'_iff`
-
-English:
-lemma delete_isBasis'_iff
-  statement: (M ＼ D).IsBasis' I X ↔ M.IsBasis' I (X \ D)
-  proof: by
-  rw [isBasis'_iff_isBasis_inter_ground]; rw [delete_isBasis_iff]; rw [delete_ground]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [← isBasis'_iff_isBasis_inter_ground]; rw [and_iff_left_iff_imp]; rw [inter_comm]; rw [← inter_sdiff_assoc]
-  exact fun _ => disjoint_sdiff_left
-
-中文:
-引理 delete_isBasis'_iff
-  结论: (M ＼ D).是基' I X ↔ M.是基' I (X \ D)
-  证明: by
-  rw [isBasis'_iff_isBasis_inter_ground]; rw [delete_isBasis_iff]; rw [delete_ground]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [← isBasis'_iff_isBasis_inter_ground]; rw [and_iff_left_iff_imp]; rw [inter_comm]; rw [← inter_sdiff_assoc]
-  exact fun _ => disjoint_sdiff_left
-
-Depends on / 依赖: _iff_isBasis_inter_ground, and_iff_left_iff_imp, delete_ground, delete_isBasis_iff, disjoint_sdiff_left, inter_assoc, inter_comm, inter_sdiff_assoc, isBasis, sdiff_eq
+/-
+**Matroid.delete_isBasis'_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matroid`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {I D X : Set α}, (M.delete D).IsBasis' I 
+X ↔ M.IsBasis' I (X \ D)
+参数：M.delete D；X \ D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matroid.isBasis'_iff_isBasis_inter_ground`：∀ {α : Type u_1} {M : Matroid
+ α} {I X : Set α}, M.IsBasis' I X ↔ M.IsBasis I (X ∩ M.E)
+· 使用引理 `Matroid.delete_isBasis_iff`：delete_isBasis_iff : (M ＼ D).IsBasis I X ↔ M
+.IsBasis I X ∧ Disjoint X D
+· 使用引理 `Matroid.delete_ground`：delete_ground (M : Matroid α) (D : Set α) : (M ＼ 
+D).E = M.E \ D
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `and_iff_left_iff_imp`：∀ {a b : Prop}, (a ∧ b ↔ a) ↔ a → b
+· 使用引理 `Set.inter_sdiff_assoc`：inter_sdiff_assoc (a b c : Set α) : (a inter b) \
+ c = a inter (b \ c)
+· 使用引理 `Set.disjoint_sdiff_left`：disjoint_sdiff_left : Disjoint (t \ s) s
 -/
 lemma delete_isBasis'_iff : (M ＼ D).IsBasis' I X ↔ M.IsBasis' I (X \ D) := by
-  rw [isBasis'_iff_isBasis_inter_ground]; rw [delete_isBasis_iff]; rw [delete_ground]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [← isBasis'_iff_isBasis_inter_ground]; rw [and_iff_left_iff_imp]; rw [inter_comm]; rw [← inter_sdiff_assoc]
-  exact fun _ => disjoint_sdiff_left
-
-/--
-lemma `IsBasis.of_delete` / 引理 `IsBasis.of_delete`
-
-English:
-lemma IsBasis.of_delete
-  given: (h : (M ＼ D).IsBasis I X)
-  statement: M.IsBasis I X
-  proof: (delete_isBasis_iff.mp h).1
-
-中文:
-引理 是基.of_delete
-  条件: (h : (M ＼ D).是基 I X)
-  结论: M.是基 I X
-  证明: (delete_isBasis_iff.mp h).1
-
-Depends on / 依赖: delete_isBasis_iff, delete_isBasis_iff.mp
+  rw [isBasis'_iff_isBasis_inter_ground, delete_isBasis_iff, delete_ground, sdiff_eq,
+    inter_comm M.E, ← inter_assoc, ← sdiff_eq, ← isBasis'_iff_isBasis_inter_ground,
+    and_iff_left_iff_imp, inter_comm, ← inter_sdiff_assoc]
+  exact fun _ ↦ disjoint_sdiff_left
+/-
+**Matroid.IsBasis.of_delete** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsBasis`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {I D X : Set α}, (M.delete D).IsBasis I X
+ → M.IsBasis I X
+参数：M.delete D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matroid.delete_isBasis_iff`：delete_isBasis_iff : (M ＼ D).IsBasis I X ↔ M
+.IsBasis I X ∧ Disjoint X D
 -/
 lemma IsBasis.of_delete (h : (M ＼ D).IsBasis I X) : M.IsBasis I X :=
   (delete_isBasis_iff.mp h).1
-
-/--
-lemma `IsBasis.delete` / 引理 `IsBasis.delete`
-
-English:
-lemma IsBasis.delete
-  given: (h : M.IsBasis I X) (hX : Disjoint X D)
-  statement: (M ＼ D).IsBasis I X
-  proof: by
-  rw [delete_isBasis_iff]; exact ⟨h, hX⟩
-
-中文:
-引理 是基.delete
-  条件: (h : M.是基 I X) (hX : Disjoint X D)
-  结论: (M ＼ D).是基 I X
-  证明: by
-  rw [delete_isBasis_iff]; exact ⟨h, hX⟩
-
-Depends on / 依赖: delete_isBasis_iff
+/-
+**Matroid.IsBasis.delete** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsBasis`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {I D X : Set α}, M.IsBasis I X → Disjoint
+ X D → (M.delete D).IsBasis I X
+参数：M.delete D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_isBasis_iff`：delete_isBasis_iff : (M ＼ D).IsBasis I X ↔ M
+.IsBasis I X ∧ Disjoint X D
 -/
 lemma IsBasis.delete (h : M.IsBasis I X) (hX : Disjoint X D) : (M ＼ D).IsBasis I X := by
   rw [delete_isBasis_iff]; exact ⟨h, hX⟩
-
-/--
-lemma `Coindep.delete_isBase_iff` / 引理 `Coindep.delete_isBase_iff`
-
-English:
-lemma Coindep.delete_isBase_iff
-  given: (hD : M.Coindep D)
-  proof: by
-  rw [Matroid.delete_isBase_iff]
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · have hss := h.subset
-    rw [subset_sdiff] at hss
-    have hcl := h.isBasis_closure_right
-    rw [hD.closure_compl]; rw [isBasis_ground_iff] at hcl
-    exact ⟨hcl, hss.2⟩
-  exact h.1.isBasis_ground.isBasis_subset (by simp [subset_sdiff, h.1.subset_ground, h.2])
-    sdiff_subset
-
-中文:
-引理 Coindep.delete_isBase_iff
-  条件: (hD : M.Coindep D)
-  证明: by
-  rw [Matroid.delete_isBase_iff]
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · have hss := h.subset
-    rw [subset_sdiff] at hss
-    have hcl := h.isBasis_closure_right
-    rw [hD.closure_compl]; rw [isBasis_ground_iff] at hcl
-    exact ⟨hcl, hss.2⟩
-  exact h.1.isBasis_ground.isBasis_subset (by simp [subset_sdiff, h.1.subset_ground, h.2])
-    sdiff_subset
-
-Depends on / 依赖: Matroid, Matroid.delete_isBase_iff, closure_compl, delete_isBase_iff, h.isBasis_closure_right, h.subset, hD.closure_compl, isBasis_closure_right, isBasis_ground, isBasis_ground.isBasis_subset, isBasis_ground_iff, isBasis_subset, sdiff_subset, subset, subset_ground, subset_sdiff
+/-
+**Matroid.Coindep.delete_isBase_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Coindep`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {B D : Set α}, M.Coindep D → ((M.delete D
+).IsBase B ↔ M.IsBase B ∧ Disjoint B D)
+参数：(M.delete D).IsBase B ↔ M.IsBase B ∧ Disjoint B D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_isBase_iff`：delete_isBase_iff : (M ＼ D).IsBase B ↔ M.IsBa
+sis B (M.E \ D)
+· 使用定理 `Matroid.IsBasis.subset`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α}, 
+M.IsBasis I X → I ⊆ X
+· 使用定理 `Matroid.IsBasis.isBasis_closure_right`：∀ {α : Type u_2} {M : Matroid α} 
+{X I : Set α}, M.IsBasis I X → M.IsBasis I (M.closure X)
+· 使用定理 `Matroid.isBasis_ground_iff`：∀ {α : Type u_1} {M : Matroid α} {B : Set α}
+, M.IsBasis B M.E ↔ M.IsBase B
+· 使用定理 `Matroid.Coindep.closure_compl`：∀ {α : Type u_2} {M : Matroid α} {X : Set
+ α}, M.Coindep X → M.closure (M.E \ X) = M.E
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用定理 `Matroid.IsBasis.isBasis_subset`：∀ {α : Type u_1} {M : Matroid α} {I X Y 
+: Set α}, M.IsBasis I X → I ⊆ Y → Y ⊆ X → M.IsBasis I Y
+· 使用定理 `Matroid.IsBase.isBasis_ground`：∀ {α : Type u_1} {M : Matroid α} {B : Set
+ α}, M.IsBase B → M.IsBasis B M.E
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Matroid.IsBase.subset_ground`：∀ {α : Type u_1} {M : Matroid α} {B : Set 
+α}, M.IsBase B → B ⊆ M.E
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
 lemma Coindep.delete_isBase_iff (hD : M.Coindep D) :
     (M ＼ D).IsBase B ↔ M.IsBase B ∧ Disjoint B D := by
   rw [Matroid.delete_isBase_iff]
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · have hss := h.subset
     rw [subset_sdiff] at hss
     have hcl := h.isBasis_closure_right
-    rw [hD.closure_compl]; rw [isBasis_ground_iff] at hcl
+    rw [hD.closure_compl, isBasis_ground_iff] at hcl
     exact ⟨hcl, hss.2⟩
   exact h.1.isBasis_ground.isBasis_subset (by simp [subset_sdiff, h.1.subset_ground, h.2])
     sdiff_subset
-
-/--
-lemma `Coindep.delete_rankPos` / 引理 `Coindep.delete_rankPos`
-
-English:
-lemma Coindep.delete_rankPos
-  given: [M.RankPos] (hD : M.Coindep D)
-  statement: (M ＼ D).RankPos
-  proof: by
-  rw [rankPos_iff]; rw [hD.delete_isBase_iff]
-  simp [M.empty_not_isBase]
-
-中文:
-引理 Coindep.delete_rankPos
-  条件: [M.RankPos] (hD : M.Coindep D)
-  结论: (M ＼ D).RankPos
-  证明: by
-  rw [rankPos_iff]; rw [hD.delete_isBase_iff]
-  simp [M.empty_not_isBase]
-
-Depends on / 依赖: M.empty_not_isBase, delete_isBase_iff, empty_not_isBase, hD.delete_isBase_iff, rankPos_iff
+/-
+**Matroid.Coindep.delete_rankPos** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Coindep`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {D : Set α} [M.RankPos], M.Coindep D → (M
+.delete D).RankPos
+参数：M.delete D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matroid.rankPos_iff`：∀ {α : Type u_1} (M : Matroid α), M.RankPos ↔ ¬M.Is
+Base ∅
+· 使用定理 `Matroid.Coindep.delete_isBase_iff`：∀ {α : Type u_1} {M : Matroid α} {B D
+ : Set α}, M.Coindep D → ((M.delete D).IsBase B ↔ M.IsBase B ∧ Disjoint B D)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Matroid.empty_not_isBase`：empty_not_isBase [h : RankPos M] : ¬M.IsBase ∅
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma Coindep.delete_rankPos [M.RankPos] (hD : M.Coindep D) : (M ＼ D).RankPos := by
-  rw [rankPos_iff]; rw [hD.delete_isBase_iff]
+  rw [rankPos_iff, hD.delete_isBase_iff]
   simp [M.empty_not_isBase]
-
-/--
-lemma `Coindep.delete_spanning_iff` / 引理 `Coindep.delete_spanning_iff`
-
-English:
-lemma Coindep.delete_spanning_iff
-  given: {S : Set α} (hD : M.Coindep D)
-  proof: by
-  simp only [spanning_iff_exists_isBase_subset', hD.delete_isBase_iff, and_assoc, delete_ground,
-    subset_sdiff, and_congr_left_iff, and_imp]
-  refine fun hSE hSD => ⟨fun ⟨B, hB, hBD, hBS⟩ => ⟨B, hB, hBS⟩, fun ⟨B, hB, hBS⟩ => ⟨B, hB, ?_, hBS⟩⟩
-  exact hSD.mono_left hBS
-
-中文:
-引理 Coindep.delete_spanning_iff
-  条件: {S : 集合 α} (hD : M.Coindep D)
-  证明: by
-  simp only [spanning_iff_exists_isBase_subset', hD.delete_isBase_iff, and_assoc, delete_ground,
-    subset_sdiff, and_congr_left_iff, and_imp]
-  refine fun hSE hSD => ⟨fun ⟨B, hB, hBD, hBS⟩ => ⟨B, hB, hBS⟩, fun ⟨B, hB, hBS⟩ => ⟨B, hB, ?_, hBS⟩⟩
-  exact hSD.mono_left hBS
-
-Depends on / 依赖: and_assoc, and_congr_left_iff, and_imp, delete_ground, delete_isBase_iff, hD.delete_isBase_iff, hSD.mono_left, mono_left, spanning_iff_exists_isBase_subset, subset_sdiff
+/-
+**Matroid.Coindep.delete_spanning_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Coindep
+`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {D S : Set α}, M.Coindep D → ((M.delete D
+).Spanning S ↔ M.Spanning S ∧ Disjoint S D)
+参数：(M.delete D).Spanning S ↔ M.Spanning S ∧ Disjoint S D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matroid.Coindep.delete_isBase_iff`：∀ {α : Type u_1} {M : Matroid α} {B D
+ : Set α}, M.Coindep D → ((M.delete D).IsBase B ↔ M.IsBase B ∧ Disjoint B D)
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
 -/
 lemma Coindep.delete_spanning_iff {S : Set α} (hD : M.Coindep D) :
     (M ＼ D).Spanning S ↔ M.Spanning S ∧ Disjoint S D := by
   simp only [spanning_iff_exists_isBase_subset', hD.delete_isBase_iff, and_assoc, delete_ground,
     subset_sdiff, and_congr_left_iff, and_imp]
-  refine fun hSE hSD => ⟨fun ⟨B, hB, hBD, hBS⟩ => ⟨B, hB, hBS⟩, fun ⟨B, hB, hBS⟩ => ⟨B, hB, ?_, hBS⟩⟩
+  refine fun hSE hSD ↦ ⟨fun ⟨B, hB, hBD, hBS⟩ ↦ ⟨B, hB, hBS⟩, fun ⟨B, hB, hBS⟩ ↦ ⟨B, hB, ?_, hBS⟩⟩
   exact hSD.mono_left hBS
 
 /-! ### Loops, circuits and closure -/
 
 @[simp]
-/--
-lemma `delete_isLoop_iff` / 引理 `delete_isLoop_iff`
+/-
+**Matroid.delete_isLoop_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_isLoop_iff : (M ＼ D).IsLoop e ↔ M.IsLoop e ∧ e ∉ D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.singleton_dep`：singleton_dep : M.Dep {e} ↔ M.IsLoop e
+· 使用引理 `Matroid.delete_dep_iff`：delete_dep_iff : (M ＼ D).Dep X ↔ M.Dep X ∧ Disjo
+int X D
+· 使用引理 `Set.disjoint_singleton_left`：disjoint_singleton_left : Disjoint {a} s ↔ 
+a ∉ s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma delete_isLoop_iff
-  statement: (M ＼ D).IsLoop e ↔ M.IsLoop e ∧ e ∉ D
-  proof: by
-  rw [← singleton_dep]; rw [delete_dep_iff]; rw [disjoint_singleton_left]; rw [singleton_dep]
-
-@[simp]
-
-中文:
-引理 delete_isLoop_iff
-  结论: (M ＼ D).IsLoop e ↔ M.IsLoop e ∧ e ∉ D
-  证明: by
-  rw [← singleton_dep]; rw [delete_dep_iff]; rw [disjoint_singleton_left]; rw [singleton_dep]
-
-@[simp]
-
-Depends on / 依赖: delete_dep_iff, disjoint_singleton_left, singleton_dep
+--- 原说明 ---
+### Loops, circuits and closure
 -/
 lemma delete_isLoop_iff : (M ＼ D).IsLoop e ↔ M.IsLoop e ∧ e ∉ D := by
-  rw [← singleton_dep]; rw [delete_dep_iff]; rw [disjoint_singleton_left]; rw [singleton_dep]
+  rw [← singleton_dep, delete_dep_iff, disjoint_singleton_left, singleton_dep]
 
 @[simp]
-/--
-lemma `delete_isNonloop_iff` / 引理 `delete_isNonloop_iff`
-
-English:
-lemma delete_isNonloop_iff
-  statement: (M ＼ D).IsNonloop e ↔ M.IsNonloop e ∧ e ∉ D
-  proof: by
-  rw [← indep_singleton]; rw [delete_indep_iff]; rw [disjoint_singleton_left]; rw [indep_singleton]
-
-中文:
-引理 delete_isNonloop_iff
-  结论: (M ＼ D).是Nonloop e ↔ M.是Nonloop e ∧ e ∉ D
-  证明: by
-  rw [← indep_singleton]; rw [delete_indep_iff]; rw [disjoint_singleton_left]; rw [indep_singleton]
-
-Depends on / 依赖: delete_indep_iff, disjoint_singleton_left, indep_singleton
+/-
+**Matroid.delete_isNonloop_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_isNonloop_iff : (M ＼ D).IsNonloop e ↔ M.IsNonloop e ∧ e ∉ D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.indep_singleton`：indep_singleton : M.Indep {e} ↔ M.IsNonloop e
+· 使用引理 `Matroid.delete_indep_iff`：delete_indep_iff : (M ＼ D).Indep I ↔ M.Indep I
+ ∧ Disjoint I D
+· 使用引理 `Set.disjoint_singleton_left`：disjoint_singleton_left : Disjoint {a} s ↔ 
+a ∉ s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma delete_isNonloop_iff : (M ＼ D).IsNonloop e ↔ M.IsNonloop e ∧ e ∉ D := by
-  rw [← indep_singleton]; rw [delete_indep_iff]; rw [disjoint_singleton_left]; rw [indep_singleton]
-
-/--
-lemma `IsNonloop.of_delete` / 引理 `IsNonloop.of_delete`
-
-English:
-lemma IsNonloop.of_delete
-  given: (h : (M ＼ D).IsNonloop e)
-  statement: M.IsNonloop e
-  proof: (delete_isNonloop_iff.1 h).1
-
-中文:
-引理 是Nonloop.of_delete
-  条件: (h : (M ＼ D).是Nonloop e)
-  结论: M.是Nonloop e
-  证明: (delete_isNonloop_iff.1 h).1
-
-Depends on / 依赖: delete_isNonloop_iff
+  rw [← indep_singleton, delete_indep_iff, disjoint_singleton_left, indep_singleton]
+/-
+**Matroid.IsNonloop.of_delete** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsNonloop`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {e : α} {D : Set α}, (M.delete D).IsNonlo
+op e → M.IsNonloop e
+参数：M.delete D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matroid.delete_isNonloop_iff`：delete_isNonloop_iff : (M ＼ D).IsNonloop e
+ ↔ M.IsNonloop e ∧ e ∉ D
 -/
 lemma IsNonloop.of_delete (h : (M ＼ D).IsNonloop e) : M.IsNonloop e :=
   (delete_isNonloop_iff.1 h).1
-
-/--
-lemma `isNonloop_iff_delete_of_notMem` / 引理 `isNonloop_iff_delete_of_notMem`
-
-English:
-lemma isNonloop_iff_delete_of_notMem
-  given: (he : e ∉ D)
-  statement: M.IsNonloop e ↔ (M ＼ D).IsNonloop e
-  proof: ⟨fun h => delete_isNonloop_iff.2 ⟨h, he⟩, fun h => h.of_delete⟩
-
-中文:
-引理 isNonloop_iff_delete_of_notMem
-  条件: (he : e ∉ D)
-  结论: M.是Nonloop e ↔ (M ＼ D).是Nonloop e
-  证明: ⟨fun h => delete_isNonloop_iff.2 ⟨h, he⟩, fun h => h.of_delete⟩
-
-Depends on / 依赖: delete_isNonloop_iff, h.of_delete, of_delete
+/-
+**Matroid.isNonloop_iff_delete_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isNonloop_iff_delete_of_notMem (he : e ∉ D) : M.IsNonloop e ↔ (M ＼ D).IsNo
+nloop e
+参数：he : e ∉ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Matroid.delete_isNonloop_iff`：delete_isNonloop_iff : (M ＼ D).IsNonloop e
+ ↔ M.IsNonloop e ∧ e ∉ D
+· 使用定理 `Matroid.IsNonloop.of_delete`：∀ {α : Type u_1} {M : Matroid α} {e : α} {D
+ : Set α}, (M.delete D).IsNonloop e → M.IsNonloop e
 -/
 lemma isNonloop_iff_delete_of_notMem (he : e ∉ D) : M.IsNonloop e ↔ (M ＼ D).IsNonloop e :=
-  ⟨fun h => delete_isNonloop_iff.2 ⟨h, he⟩, fun h => h.of_delete⟩
-
-/--
-lemma `delete_loops_eq_removeLoops` / 引理 `delete_loops_eq_removeLoops`
-
-English:
-lemma delete_loops_eq_removeLoops
-  given: (M : Matroid α)
-  statement: M ＼ M.loops = M.removeLoops
-  proof: by
-  rw [removeLoops]; rw [delete_eq_restrict]; rw [compl_loops_eq]
-
-@[simp]
-
-中文:
-引理 delete_loops_eq_removeLoops
-  条件: (M : 拟阵 α)
-  结论: M ＼ M.loops = M.removeLoops
-  证明: by
-  rw [removeLoops]; rw [delete_eq_restrict]; rw [compl_loops_eq]
-
-@[simp]
-
-Depends on / 依赖: compl_loops_eq, delete_eq_restrict, removeLoops
+  ⟨fun h ↦ delete_isNonloop_iff.2 ⟨h, he⟩, fun h ↦ h.of_delete⟩
+/-
+**Matroid.delete_loops_eq_removeLoops** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_loops_eq_removeLoops (M : Matroid α) : M ＼ M.loops = M.removeLoops
+参数：M : Matroid α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matroid.removeLoops.eq_1`：∀ {α : Type u_1} (M : Matroid α), M.removeLoop
+s = M.restrict {e | M.IsNonloop e}
+· 使用引理 `Matroid.delete_eq_restrict`：delete_eq_restrict (M : Matroid α) (D : Set 
+α) : M ＼ D = M ↾ (M.E \ D)
+· 使用引理 `Matroid.compl_loops_eq`：compl_loops_eq (M : Matroid α) : M.E \ M.loops =
+ {e | M.IsNonloop e}
 -/
 lemma delete_loops_eq_removeLoops (M : Matroid α) : M ＼ M.loops = M.removeLoops := by
-  rw [removeLoops]; rw [delete_eq_restrict]; rw [compl_loops_eq]
+  rw [removeLoops, delete_eq_restrict, compl_loops_eq]
 
 @[simp]
-/--
-lemma `delete_isCircuit_iff` / 引理 `delete_isCircuit_iff`
-
-English:
-lemma delete_isCircuit_iff
-  given: {C : Set α}
-  proof: by
-  rw [delete_eq_restrict]; rw [restrict_isCircuit_iff]; rw [and_congr_right_iff]; rw [subset_sdiff]; rw [and_iff_right_iff_imp]
-  exact fun h _ => h.subset_ground
-
-中文:
-引理 delete_isCircuit_iff
-  条件: {C : 集合 α}
-  证明: by
-  rw [delete_eq_restrict]; rw [restrict_isCircuit_iff]; rw [and_congr_right_iff]; rw [subset_sdiff]; rw [and_iff_right_iff_imp]
-  exact fun h _ => h.subset_ground
-
-Depends on / 依赖: and_congr_right_iff, and_iff_right_iff_imp, delete_eq_restrict, h.subset_ground, restrict_isCircuit_iff, subset_ground, subset_sdiff
+/-
+**Matroid.delete_isCircuit_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_isCircuit_iff {C : Set α} : (M ＼ D).IsCircuit C ↔ M.IsCircuit C ∧ D
+isjoint C D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_eq_restrict`：delete_eq_restrict (M : Matroid α) (D : Set 
+α) : M ＼ D = M ↾ (M.E \ D)
+· 使用引理 `Matroid.restrict_isCircuit_iff`：restrict_isCircuit_iff (hR : R subseteq 
+M.E
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `and_congr_right_iff`：∀ {a b c : Prop}, (a ∧ b ↔ a ∧ c) ↔ a → (b ↔ c)
+· 使用引理 `Set.subset_sdiff`：subset_sdiff : s subseteq t \ u ↔ s subseteq t ∧ Disjo
+int s u
+· 使用定理 `and_iff_right_iff_imp`：∀ {a b : Prop}, (a ∧ b ↔ b) ↔ b → a
+· 使用定理 `Matroid.IsCircuit.subset_ground`：∀ {α : Type u_1} {M : Matroid α} {C : S
+et α}, M.IsCircuit C → C ⊆ M.E
 -/
 lemma delete_isCircuit_iff {C : Set α} :
     (M ＼ D).IsCircuit C ↔ M.IsCircuit C ∧ Disjoint C D := by
-  rw [delete_eq_restrict]; rw [restrict_isCircuit_iff]; rw [and_congr_right_iff]; rw [subset_sdiff]; rw [and_iff_right_iff_imp]
-  exact fun h _ => h.subset_ground
-
-/--
-lemma `IsCircuit.of_delete` / 引理 `IsCircuit.of_delete`
-
-English:
-lemma IsCircuit.of_delete
-  given: {C : Set α} (h : (M ＼ D).IsCircuit C)
-  statement: M.IsCircuit C
-  proof: (delete_isCircuit_iff.1 h).1
-
-中文:
-引理 是Circuit.of_delete
-  条件: {C : 集合 α} (h : (M ＼ D).是Circuit C)
-  结论: M.是Circuit C
-  证明: (delete_isCircuit_iff.1 h).1
-
-Depends on / 依赖: delete_isCircuit_iff
+  rw [delete_eq_restrict, restrict_isCircuit_iff, and_congr_right_iff, subset_sdiff,
+    and_iff_right_iff_imp]
+  exact fun h _ ↦ h.subset_ground
+/-
+**Matroid.IsCircuit.of_delete** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsCircuit`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {D C : Set α}, (M.delete D).IsCircuit C →
+ M.IsCircuit C
+参数：M.delete D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matroid.delete_isCircuit_iff`：delete_isCircuit_iff {C : Set α} : (M ＼ D)
+.IsCircuit C ↔ M.IsCircuit C ∧ Disjoint C D
 -/
 lemma IsCircuit.of_delete {C : Set α} (h : (M ＼ D).IsCircuit C) : M.IsCircuit C :=
   (delete_isCircuit_iff.1 h).1
-
-/--
-lemma `circuit_iff_delete_of_disjoint` / 引理 `circuit_iff_delete_of_disjoint`
-
-English:
-lemma circuit_iff_delete_of_disjoint
-  given: {C : Set α} (hCD : Disjoint C D)
-  proof: ⟨fun h => delete_isCircuit_iff.2 ⟨h, hCD⟩, fun h => h.of_delete⟩
-
-@[simp]
-
-中文:
-引理 circuit_iff_delete_of_disjoint
-  条件: {C : 集合 α} (hCD : Disjoint C D)
-  证明: ⟨fun h => delete_isCircuit_iff.2 ⟨h, hCD⟩, fun h => h.of_delete⟩
-
-@[simp]
-
-Depends on / 依赖: delete_isCircuit_iff, h.of_delete, of_delete
+/-
+**Matroid.circuit_iff_delete_of_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：circuit_iff_delete_of_disjoint {C : Set α} (hCD : Disjoint C D) : M.IsCirc
+uit C ↔ (M ＼ D).IsCircuit C
+参数：hCD : Disjoint C D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Matroid.delete_isCircuit_iff`：delete_isCircuit_iff {C : Set α} : (M ＼ D)
+.IsCircuit C ↔ M.IsCircuit C ∧ Disjoint C D
+· 使用定理 `Matroid.IsCircuit.of_delete`：∀ {α : Type u_1} {M : Matroid α} {D C : Set
+ α}, (M.delete D).IsCircuit C → M.IsCircuit C
 -/
 lemma circuit_iff_delete_of_disjoint {C : Set α} (hCD : Disjoint C D) :
     M.IsCircuit C ↔ (M ＼ D).IsCircuit C :=
-  ⟨fun h => delete_isCircuit_iff.2 ⟨h, hCD⟩, fun h => h.of_delete⟩
+  ⟨fun h ↦ delete_isCircuit_iff.2 ⟨h, hCD⟩, fun h ↦ h.of_delete⟩
 
 @[simp]
-/--
-lemma `delete_closure_eq` / 引理 `delete_closure_eq`
-
-English:
-lemma delete_closure_eq
-  given: (M : Matroid α) (D X : Set α)
-  proof: by
-  rw [← restrict_compl]; rw [restrict_closure_eq']; rw [sdiff_sdiff_self]; rw [bot_eq_empty]; rw [union_empty]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc X]; rw [← sdiff_eq]; rw [closure_inter_ground]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [inter_eq_left]
-  exact sdiff_subset.trans (M.closure_subset_ground _)
-
-中文:
-引理 delete_closure_eq
-  条件: (M : 拟阵 α) (D X : 集合 α)
-  证明: by
-  rw [← restrict_compl]; rw [restrict_closure_eq']; rw [sdiff_sdiff_self]; rw [bot_eq_empty]; rw [union_empty]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc X]; rw [← sdiff_eq]; rw [closure_inter_ground]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [inter_eq_left]
-  exact sdiff_subset.trans (M.closure_subset_ground _)
-
-Depends on / 依赖: M.closure_subset_ground, bot_eq_empty, closure_inter_ground, closure_subset_ground, inter_assoc, inter_comm, inter_eq_left, restrict_closure_eq, restrict_compl, sdiff_eq, sdiff_sdiff_self, sdiff_subset, sdiff_subset.trans, union_empty
+/-
+**Matroid.delete_closure_eq** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_closure_eq (M : Matroid α) (D X : Set α) : (M ＼ D).closure X = M.cl
+osure (X \ D) \ D
+参数：M : Matroid α；D X : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.restrict_compl`：restrict_compl (M : Matroid α) (D : Set α) : M ↾
+ (M.E \ D) = M ＼ D
+· 使用定理 `Matroid.restrict_closure_eq'`：∀ {α : Type u_2} (M : Matroid α) (X R : Se
+t α), (M.restrict R).closure X = M.closure (X ∩ R) ∩ R ∪ R \ M.E
+· 使用定理 `sdiff_sdiff_self`：sdiff_sdiff_self : (a \ b) \ a = ⊥
+· 使用定理 `Set.bot_eq_empty`：bot_eq_empty : (⊥ : Set α) = ∅
+· 使用定理 `Set.union_empty`：union_empty (a : Set α) : a union ∅ = a
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `Matroid.closure_inter_ground`：∀ {α : Type u_2} (M : Matroid α) (X : Set 
+α), M.closure (X ∩ M.E) = M.closure X
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用引理 `Matroid.closure_subset_ground`：closure_subset_ground (M : Matroid α) (X 
+: Set α) : M.closure X subseteq M.E
 -/
 lemma delete_closure_eq (M : Matroid α) (D X : Set α) :
     (M ＼ D).closure X = M.closure (X \ D) \ D := by
-  rw [← restrict_compl]; rw [restrict_closure_eq']; rw [sdiff_sdiff_self]; rw [bot_eq_empty]; rw [union_empty]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc X]; rw [← sdiff_eq]; rw [closure_inter_ground]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [inter_eq_left]
+  rw [← restrict_compl, restrict_closure_eq', sdiff_sdiff_self, bot_eq_empty, union_empty,
+    sdiff_eq, inter_comm M.E, ← inter_assoc X, ← sdiff_eq, closure_inter_ground,
+    ← inter_assoc, ← sdiff_eq, inter_eq_left]
   exact sdiff_subset.trans (M.closure_subset_ground _)
-
-/--
-lemma `delete_closure_eq_of_disjoint` / 引理 `delete_closure_eq_of_disjoint`
-
-English:
-lemma delete_closure_eq_of_disjoint
-  given: (M : Matroid α) {D X : Set α} (hXD : Disjoint X D)
-  proof: by
-  rw [delete_closure_eq]; rw [hXD.sdiff_eq_left]
-
-@[simp]
-
-中文:
-引理 delete_closure_eq_of_disjoint
-  条件: (M : 拟阵 α) {D X : 集合 α} (hXD : Disjoint X D)
-  证明: by
-  rw [delete_closure_eq]; rw [hXD.sdiff_eq_left]
-
-@[simp]
-
-Depends on / 依赖: delete_closure_eq, hXD.sdiff_eq_left, sdiff_eq_left
+/-
+**Matroid.delete_closure_eq_of_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_closure_eq_of_disjoint (M : Matroid α) {D X : Set α} (hXD : Disjoin
+t X D) : (M ＼ D).closure X = M.closure X \ D
+参数：M : Matroid α；hXD : Disjoint X D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_closure_eq`：delete_closure_eq (M : Matroid α) (D X : Set 
+α) : (M ＼ D).closure X = M.closure (X \ D) \ D
+· 使用定理 `Disjoint.sdiff_eq_left`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlg
+ebra α] {a b : α}, Disjoint a b → a \ b = a
 -/
 lemma delete_closure_eq_of_disjoint (M : Matroid α) {D X : Set α} (hXD : Disjoint X D) :
     (M ＼ D).closure X = M.closure X \ D := by
-  rw [delete_closure_eq]; rw [hXD.sdiff_eq_left]
+  rw [delete_closure_eq, hXD.sdiff_eq_left]
 
 @[simp]
-/--
-lemma `delete_loops_eq` / 引理 `delete_loops_eq`
-
-English:
-lemma delete_loops_eq
-  given: (M : Matroid α) (D : Set α)
-  statement: (M ＼ D).loops = M.loops \ D
-  proof: by
-  simp [loops]
-
-中文:
-引理 delete_loops_eq
-  条件: (M : 拟阵 α) (D : 集合 α)
-  结论: (M ＼ D).loops = M.loops \ D
-  证明: by
-  simp [loops]
+/-
+**Matroid.delete_loops_eq** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_loops_eq (M : Matroid α) (D : Set α) : (M ＼ D).loops = M.loops \ D
+参数：M : Matroid α；D : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_closure_eq`：delete_closure_eq (M : Matroid α) (D X : Set 
+α) : (M ＼ D).closure X = M.closure (X \ D) \ D
+· 使用定理 `Set.empty_sdiff`：empty_sdiff (s : Set α) : (∅ \ s : Set α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma delete_loops_eq (M : Matroid α) (D : Set α) : (M ＼ D).loops = M.loops \ D := by
   simp [loops]
-
-/--
-lemma `delete_isColoop_iff` / 引理 `delete_isColoop_iff`
-
-English:
-lemma delete_isColoop_iff
-  given: (M : Matroid α) (D : Set α)
-  proof: by
-  rw [delete_eq_restrict]; rw [restrict_isColoop_iff sdiff_subset]; rw [mem_sdiff]; rw [and_congr_left_iff]
-  simp
-
-中文:
-引理 delete_isColoop_iff
-  条件: (M : 拟阵 α) (D : 集合 α)
-  证明: by
-  rw [delete_eq_restrict]; rw [restrict_isColoop_iff sdiff_subset]; rw [mem_sdiff]; rw [and_congr_left_iff]
-  simp
-
-Depends on / 依赖: and_congr_left_iff, delete_eq_restrict, mem_sdiff, restrict_isColoop_iff, sdiff_subset
+/-
+**Matroid.delete_isColoop_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：delete_isColoop_iff (M : Matroid α) (D : Set α) : (M ＼ D).IsColoop e ↔ e ∉
+ M.closure ((M.E \ D) \ {e}) ∧ e in M.E ∧ e ∉ D
+参数：M : Matroid α；D : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.delete_eq_restrict`：delete_eq_restrict (M : Matroid α) (D : Set 
+α) : M ＼ D = M ↾ (M.E \ D)
+· 使用引理 `Matroid.restrict_isColoop_iff`：restrict_isColoop_iff {R : Set α} (hRE : 
+R subseteq M.E) : (M ↾ R).IsColoop e ↔ e ∉ M.closure (R \ {e}) ∧ e in R
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用定理 `Set.mem_sdiff`：mem_sdiff {s t : Set α} (x : α) : x in s \ t ↔ x in s ∧ x
+ ∉ t
+· 使用定理 `and_congr_left_iff`：∀ {a c b : Prop}, (a ∧ c ↔ b ∧ c) ↔ c → (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma delete_isColoop_iff (M : Matroid α) (D : Set α) :
-    (M ＼ D).IsColoop e ↔ e ∉ M.closure ((M.E \ D) \ {e}) ∧ e in M.E ∧ e ∉ D := by
-  rw [delete_eq_restrict]; rw [restrict_isColoop_iff sdiff_subset]; rw [mem_sdiff]; rw [and_congr_left_iff]
+    (M ＼ D).IsColoop e ↔ e ∉ M.closure ((M.E \ D) \ {e}) ∧ e ∈ M.E ∧ e ∉ D := by
+  rw [delete_eq_restrict, restrict_isColoop_iff sdiff_subset, mem_sdiff, and_congr_left_iff]
   simp
 
+/-! ### Finiteness -/
 
-/--
-Instance `delete_finitary` / 实例 `delete_finitary`
+/-
+**Matroid.delete_finitary** 是 Mathlib 中的一个实例，位于命名空间 `Matroid`。
+形式化陈述：delete_finitary (M : Matroid α) [Finitary M] (D : Set α) : Finitary (M ＼ D
+)
+参数：M : Matroid α；D : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance delete_finitary
-  signature: (M : Matroid α) [Finitary M] (D : Set α)
-  body: inferInstanceAs Finitary (M ↾ (M.E \ D))
-
-中文:
-实例 delete_finitary
-  签名: (M : 拟阵 α) [Finitary M] (D : 集合 α)
-  定义体: inferInstanceAs Finitary (M ↾ (M.E \ D))
-
-Depends on / 依赖: Finitary
+--- 原说明 ---
+### Finiteness
 -/
 instance delete_finitary (M : Matroid α) [Finitary M] (D : Set α) : Finitary (M ＼ D) :=
-inferInstanceAs Finitary (M ↾ (M.E \ D))
-
-/--
-Instance `delete_finite` / 实例 `delete_finite`
-
-English:
-instance delete_finite
-  signature: [M.Finite]
-  body: ⟨M.ground_finite.sdiff⟩
-
-中文:
-实例 delete_finite
-  签名: [M.有限]
-  定义体: ⟨M.ground_finite.sdiff⟩
-
-Depends on / 依赖: M.ground_finite.sdiff, ground_finite
+  inferInstanceAs <| Finitary (M ↾ (M.E \ D))
+/-
+**Matroid.delete_finite** 是 Mathlib 中的一个实例，位于命名空间 `Matroid`。
+形式化陈述：delete_finite [M.Finite] : (M ＼ D).Finite
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.sdiff`：∀ {α : Type u} {s t : Set α}, s.Finite → (s \ t).Finit
+e
+· 使用定理 `Matroid.ground_finite`：ground_finite (M : Matroid α) [M.Finite] : M.E.Fi
+nite
 -/
 instance delete_finite [M.Finite] : (M ＼ D).Finite :=
   ⟨M.ground_finite.sdiff⟩
-
-/--
-Instance `delete_rankFinite` / 实例 `delete_rankFinite`
-
-English:
-instance delete_rankFinite
-  signature: [RankFinite M]
-  body: restrict_rankFinite _
-
-中文:
-实例 delete_rankFinite
-  签名: [RankFinite M]
-  定义体: restrict_rankFinite _
-
-Depends on / 依赖: restrict_rankFinite
+/-
+**Matroid.delete_rankFinite** 是 Mathlib 中的一个实例，位于命名空间 `Matroid`。
+形式化陈述：delete_rankFinite [RankFinite M] : RankFinite (M ＼ D)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance delete_rankFinite [RankFinite M] : RankFinite (M ＼ D) :=
   restrict_rankFinite _
@@ -1183,3 +962,4 @@ instance delete_rankFinite [RankFinite M] : RankFinite (M ＼ D) :=
 end Delete
 
 end Matroid
+

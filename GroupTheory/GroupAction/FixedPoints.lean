@@ -63,297 +63,252 @@ variable (α) in
 /-- In a multiplicative group action, the points fixed by `g` are also fixed by `g⁻¹` -/
 @[to_additive (attr := simp)
   /-- In an additive group action, the points fixed by `g` are also fixed by `g⁻¹` -/]
-/--
-theorem `fixedBy_inv` / 定理 `fixedBy_inv`
-
-English:
-theorem fixedBy_inv
-  given: (g : G)
-  statement: fixedBy α g⁻¹ = fixedBy α g
-  proof: by
-  ext
-  rw [mem_fixedBy]; rw [mem_fixedBy]; rw [inv_smul_eq_iff]; rw [eq_comm]
-
-@[to_additive]
-
-中文:
-定理 fixedBy_inv
-  条件: (g : G)
-  结论: fixedBy α g⁻¹ = fixedBy α g
-  证明: by
-  ext
-  rw [mem_fixedBy]; rw [mem_fixedBy]; rw [inv_smul_eq_iff]; rw [eq_comm]
-
-@[to_additive]
-
-Depends on / 依赖: eq_comm, inv_smul_eq_iff, mem_fixedBy
+/-
+**MulAction.fixedBy_inv** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：fixedBy_inv (g : G) : fixedBy α g⁻¹ = fixedBy α g
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.mem_fixedBy`：mem_fixedBy {m : M} {a : α} : a in fixedBy α m ↔ 
+m • a = a
+· 使用定理 `inv_smul_eq_iff`：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_
+1 : MulAction G α] {g : G} {a b : α}, g⁻¹ • a = b ↔ a = g • b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem fixedBy_inv (g : G) : fixedBy α g⁻¹ = fixedBy α g := by
   ext
-  rw [mem_fixedBy]; rw [mem_fixedBy]; rw [inv_smul_eq_iff]; rw [eq_comm]
+  rw [mem_fixedBy, mem_fixedBy, inv_smul_eq_iff, eq_comm]
 
 @[to_additive]
-/--
-theorem `smul_mem_fixedBy_iff_mem_fixedBy` / 定理 `smul_mem_fixedBy_iff_mem_fixedBy`
-
-English:
-theorem smul_mem_fixedBy_iff_mem_fixedBy
-  given: {a : α} {g : G}
-  proof: by
-  rw [mem_fixedBy]; rw [smul_left_cancel_iff]
-  rfl
-
-@[to_additive]
-
-中文:
-定理 smul_mem_fixedBy_iff_mem_fixedBy
-  条件: {a : α} {g : G}
-  证明: by
-  rw [mem_fixedBy]; rw [smul_left_cancel_iff]
-  rfl
-
-@[to_additive]
-
-Depends on / 依赖: mem_fixedBy, smul_left_cancel_iff
+/-
+**MulAction.smul_mem_fixedBy_iff_mem_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulActio
+n`。
+形式化陈述：smul_mem_fixedBy_iff_mem_fixedBy {a : α} {g : G} : g • a in fixedBy α g ↔ 
+a in fixedBy α g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.mem_fixedBy`：mem_fixedBy {m : M} {a : α} : a in fixedBy α m ↔ 
+m • a = a
+· 使用引理 `smul_left_cancel_iff`：smul_left_cancel_iff (g : α) {x y : β} : g • x = g
+ • y ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem smul_mem_fixedBy_iff_mem_fixedBy {a : α} {g : G} :
-    g • a in fixedBy α g ↔ a in fixedBy α g := by
-  rw [mem_fixedBy]; rw [smul_left_cancel_iff]
+    g • a ∈ fixedBy α g ↔ a ∈ fixedBy α g := by
+  rw [mem_fixedBy, smul_left_cancel_iff]
   rfl
 
 @[to_additive]
-/--
-theorem `smul_inv_mem_fixedBy_iff_mem_fixedBy` / 定理 `smul_inv_mem_fixedBy_iff_mem_fixedBy`
-
-English:
-theorem smul_inv_mem_fixedBy_iff_mem_fixedBy
-  given: {a : α} {g : G}
-  proof: by
-  rw [← fixedBy_inv]; rw [smul_mem_fixedBy_iff_mem_fixedBy]; rw [fixedBy_inv]
-
-@[to_additive minimalPeriod_eq_one_iff_fixedBy]
-
-中文:
-定理 smul_inv_mem_fixedBy_iff_mem_fixedBy
-  条件: {a : α} {g : G}
-  证明: by
-  rw [← fixedBy_inv]; rw [smul_mem_fixedBy_iff_mem_fixedBy]; rw [fixedBy_inv]
-
-@[to_additive minimalPeriod_eq_one_iff_fixedBy]
-
-Depends on / 依赖: fixedBy_inv, smul_mem_fixedBy_iff_mem_fixedBy
+/-
+**MulAction.smul_inv_mem_fixedBy_iff_mem_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulA
+ction`。
+形式化陈述：smul_inv_mem_fixedBy_iff_mem_fixedBy {a : α} {g : G} : g⁻¹ • a in fixedBy 
+α g ↔ a in fixedBy α g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulAction.fixedBy_inv`：fixedBy_inv (g : G) : fixedBy α g⁻¹ = fixedBy α g
+· 使用定理 `MulAction.smul_mem_fixedBy_iff_mem_fixedBy`：smul_mem_fixedBy_iff_mem_fix
+edBy {a : α} {g : G} : g • a in fixedBy α g ↔ a in fixedBy α g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem smul_inv_mem_fixedBy_iff_mem_fixedBy {a : α} {g : G} :
-    g⁻¹ • a in fixedBy α g ↔ a in fixedBy α g := by
-  rw [← fixedBy_inv]; rw [smul_mem_fixedBy_iff_mem_fixedBy]; rw [fixedBy_inv]
+    g⁻¹ • a ∈ fixedBy α g ↔ a ∈ fixedBy α g := by
+  rw [← fixedBy_inv, smul_mem_fixedBy_iff_mem_fixedBy, fixedBy_inv]
 
 @[to_additive minimalPeriod_eq_one_iff_fixedBy]
-/--
-theorem `minimalPeriod_eq_one_iff_fixedBy` / 定理 `minimalPeriod_eq_one_iff_fixedBy`
-
-English:
-theorem minimalPeriod_eq_one_iff_fixedBy
-  given: {a : α} {g : G}
-  proof: Function.minimalPeriod_eq_one_iff_isFixedPt
-
-@[to_additive]
-
-中文:
-定理 minimalPeriod_eq_one_iff_fixedBy
-  条件: {a : α} {g : G}
-  证明: Function.minimalPeriod_eq_one_iff_isFixedPt
-
-@[to_additive]
-
-Depends on / 依赖: Function, Function.minimalPeriod_eq_one_iff_isFixedPt, minimalPeriod_eq_one_iff_isFixedPt
+/-
+**MulAction.minimalPeriod_eq_one_iff_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulActio
+n`。
+形式化陈述：minimalPeriod_eq_one_iff_fixedBy {a : α} {g : G} : Function.minimalPeriod 
+(fun x => g • x) a = 1 ↔ a in fixedBy α g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.minimalPeriod_eq_one_iff_isFixedPt`：minimalPeriod_eq_one_iff_is
+FixedPt : minimalPeriod f x = 1 ↔ IsFixedPt f x
 -/
 theorem minimalPeriod_eq_one_iff_fixedBy {a : α} {g : G} :
-    Function.minimalPeriod (fun x => g • x) a = 1 ↔ a in fixedBy α g :=
+    Function.minimalPeriod (fun x => g • x) a = 1 ↔ a ∈ fixedBy α g :=
   Function.minimalPeriod_eq_one_iff_isFixedPt
 
 @[to_additive]
-/--
-theorem `mem_fixedBy_zpow` / 定理 `mem_fixedBy_zpow`
-
-English:
-theorem mem_fixedBy_zpow
-  given: {g : G} {a : α} (h : a in fixedBy α g) (j : Int)
-  proof: by
-  rw [mem_fixedBy]; rw [zpow_smul_eq_iff_minimalPeriod_dvd]; rw [minimalPeriod_eq_one_iff_fixedBy.mpr h]; rw [Int.natCast_one]
-  exact one_dvd j
-
-@[to_additive]
-
-中文:
-定理 mem_fixedBy_zpow
-  条件: {g : G} {a : α} (h : a in fixedBy α g) (j : 整数)
-  证明: by
-  rw [mem_fixedBy]; rw [zpow_smul_eq_iff_minimalPeriod_dvd]; rw [minimalPeriod_eq_one_iff_fixedBy.mpr h]; rw [Int.natCast_one]
-  exact one_dvd j
-
-@[to_additive]
-
-Depends on / 依赖: Int.natCast_one, mem_fixedBy, minimalPeriod_eq_one_iff_fixedBy, minimalPeriod_eq_one_iff_fixedBy.mpr, natCast_one, one_dvd, zpow_smul_eq_iff_minimalPeriod_dvd
+/-
+**MulAction.mem_fixedBy_zpow** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：mem_fixedBy_zpow {g : G} {a : α} (h : a in fixedBy α g) (j : Int) : a in f
+ixedBy α (g ^ j)
+参数：h : a in fixedBy α g；j : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.mem_fixedBy`：mem_fixedBy {m : M} {a : α} : a in fixedBy α m ↔ 
+m • a = a
+· 使用定理 `MulAction.zpow_smul_eq_iff_minimalPeriod_dvd`：∀ {α : Type v} {G : Type u
+} [inst : Group G] [inst_1 : MulAction G α] {a : G} {b : α} {n : ℤ},   a ^ n • b
+ = b ↔ ↑(Function.minimalPeriod (f…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MulAction.minimalPeriod_eq_one_iff_fixedBy`：minimalPeriod_eq_one_iff_fix
+edBy {a : α} {g : G} : Function.minimalPeriod (fun x => g • x) a = 1 ↔ a in fixe
+dBy α g
+· 使用定理 `Int.natCast_one`：↑1 = 1
+· 使用定理 `one_dvd`：one_dvd (a : α) : 1 ∣ a
 -/
-theorem mem_fixedBy_zpow {g : G} {a : α} (h : a in fixedBy α g) (j : Int) :
-    a in fixedBy α (g ^ j) := by
-  rw [mem_fixedBy]; rw [zpow_smul_eq_iff_minimalPeriod_dvd]; rw [minimalPeriod_eq_one_iff_fixedBy.mpr h]; rw [Int.natCast_one]
+theorem mem_fixedBy_zpow {g : G} {a : α} (h : a ∈ fixedBy α g) (j : ℤ) :
+    a ∈ fixedBy α (g ^ j) := by
+  rw [mem_fixedBy, zpow_smul_eq_iff_minimalPeriod_dvd, minimalPeriod_eq_one_iff_fixedBy.mpr h,
+    Int.natCast_one]
   exact one_dvd j
 
 @[to_additive]
-/--
-theorem `mem_fixedBy_zpowers_iff_mem_fixedBy` / 定理 `mem_fixedBy_zpowers_iff_mem_fixedBy`
-
-English:
-theorem mem_fixedBy_zpowers_iff_mem_fixedBy
-  given: {g : G} {a : α}
-  proof: ⟨fun h => by simpa using h 1, fun h j => mem_fixedBy_zpow h j⟩
-
-中文:
-定理 mem_fixedBy_zpowers_iff_mem_fixedBy
-  条件: {g : G} {a : α}
-  证明: ⟨fun h => by simpa using h 1, fun h j => mem_fixedBy_zpow h j⟩
-
-Depends on / 依赖: mem_fixedBy_zpow
+/-
+**MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulAc
+tion`。
+形式化陈述：mem_fixedBy_zpowers_iff_mem_fixedBy {g : G} {a : α} : (forall j : Int, a i
+n fixedBy α (g ^ j)) ↔ a in fixedBy α g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `zpow_ofNat`：zpow_ofNat (a : G) (n : Nat) : a ^ (ofNat(n) : Int) = a ^ Of
+Nat.ofNat n
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `MulAction.mem_fixedBy_zpow`：mem_fixedBy_zpow {g : G} {a : α} (h : a in f
+ixedBy α g) (j : Int) : a in fixedBy α (g ^ j)
 -/
 theorem mem_fixedBy_zpowers_iff_mem_fixedBy {g : G} {a : α} :
-    (forall j : Int, a in fixedBy α (g ^ j)) ↔ a in fixedBy α g :=
-  ⟨fun h => by simpa using h 1, fun h j => mem_fixedBy_zpow h j⟩
+    (∀ j : ℤ, a ∈ fixedBy α (g ^ j)) ↔ a ∈ fixedBy α g :=
+  ⟨fun h ↦ by simpa using h 1, fun h j ↦ mem_fixedBy_zpow h j⟩
 
 variable (α) in
 @[to_additive]
-/--
-theorem `fixedBy_subset_fixedBy_zpow` / 定理 `fixedBy_subset_fixedBy_zpow`
-
-English:
-theorem fixedBy_subset_fixedBy_zpow
-  given: (g : G) (j : Int)
-  proof: fun _ h => mem_fixedBy_zpow h j
-
-中文:
-定理 fixedBy_subset_fixedBy_zpow
-  条件: (g : G) (j : 整数)
-  证明: fun _ h => mem_fixedBy_zpow h j
-
-Depends on / 依赖: mem_fixedBy_zpow
+/-
+**MulAction.fixedBy_subset_fixedBy_zpow** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：fixedBy_subset_fixedBy_zpow (g : G) (j : Int) : fixedBy α g subseteq fixed
+By α (g ^ j)
+参数：g : G；j : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.mem_fixedBy_zpow`：mem_fixedBy_zpow {g : G} {a : α} (h : a in f
+ixedBy α g) (j : Int) : a in fixedBy α (g ^ j)
 -/
-theorem fixedBy_subset_fixedBy_zpow (g : G) (j : Int) :
-    fixedBy α g subseteq fixedBy α (g ^ j) :=
-  fun _ h => mem_fixedBy_zpow h j
+theorem fixedBy_subset_fixedBy_zpow (g : G) (j : ℤ) :
+    fixedBy α g ⊆ fixedBy α (g ^ j) :=
+  fun _ h ↦ mem_fixedBy_zpow h j
 
 variable (M α) in
 @[to_additive (attr := simp)]
-/--
-theorem `fixedBy_one_eq_univ` / 定理 `fixedBy_one_eq_univ`
-
-English:
-theorem fixedBy_one_eq_univ
-  statement: fixedBy α (1 : M) = Set.univ
-  proof: Set.eq_univ_iff_forall.mpr one_smul M
-
-中文:
-定理 fixedBy_one_eq_univ
-  结论: fixedBy α (1 : M) = 集合.univ
-  证明: Set.eq_univ_iff_forall.mpr one_smul M
-
-Depends on / 依赖: Set.eq_univ_iff_forall.mpr, eq_univ_iff_forall, one_smul
+/-
+**MulAction.fixedBy_one_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：fixedBy_one_eq_univ : fixedBy α (1 : M) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 theorem fixedBy_one_eq_univ : fixedBy α (1 : M) = Set.univ :=
-Set.eq_univ_iff_forall.mpr one_smul M
+  Set.eq_univ_iff_forall.mpr <| one_smul M
 
 variable (α) in
 @[to_additive]
-/--
-theorem `fixedBy_mul` / 定理 `fixedBy_mul`
-
-English:
-theorem fixedBy_mul
-  given: (m₁ m₂ : M)
-  statement: fixedBy α m₁ inter fixedBy α m₂ subseteq fixedBy α (m₁ * m₂)
-  proof: by
-  intro a ⟨h₁, h₂⟩
-  rw [mem_fixedBy]; rw [mul_smul]; rw [h₂]; rw [h₁]
-
-中文:
-定理 fixedBy_mul
-  条件: (m₁ m₂ : M)
-  结论: fixedBy α m₁ inter fixedBy α m₂ subseteq fixedBy α (m₁ * m₂)
-  证明: by
-  intro a ⟨h₁, h₂⟩
-  rw [mem_fixedBy]; rw [mul_smul]; rw [h₂]; rw [h₁]
-
-Depends on / 依赖: mem_fixedBy, mul_smul
+/-
+**MulAction.fixedBy_mul** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：fixedBy_mul (m₁ m₂ : M) : fixedBy α m₁ inter fixedBy α m₂ subseteq fixedBy
+ α (m₁ * m₂)
+参数：m₁ m₂ : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.mem_fixedBy`：mem_fixedBy {m : M} {a : α} : a in fixedBy α m ↔ 
+m • a = a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
 -/
-theorem fixedBy_mul (m₁ m₂ : M) : fixedBy α m₁ inter fixedBy α m₂ subseteq fixedBy α (m₁ * m₂) := by
+theorem fixedBy_mul (m₁ m₂ : M) : fixedBy α m₁ ∩ fixedBy α m₂ ⊆ fixedBy α (m₁ * m₂) := by
   intro a ⟨h₁, h₂⟩
-  rw [mem_fixedBy]; rw [mul_smul]; rw [h₂]; rw [h₁]
+  rw [mem_fixedBy, mul_smul, h₂, h₁]
 
 variable (α) in
 @[to_additive]
-/--
-theorem `smul_fixedBy` / 定理 `smul_fixedBy`
-
-English:
-theorem smul_fixedBy
-  given: (g h : G)
-  proof: by
-  ext a
-  simp_rw [Set.mem_smul_set_iff_inv_smul_mem, mem_fixedBy, mul_smul, smul_eq_iff_eq_inv_smul h]
-
-中文:
-定理 smul_fixedBy
-  条件: (g h : G)
-  证明: by
-  ext a
-  simp_rw [Set.mem_smul_set_iff_inv_smul_mem, mem_fixedBy, mul_smul, smul_eq_iff_eq_inv_smul h]
-
-Depends on / 依赖: Set.mem_smul_set_iff_inv_smul_mem, mem_fixedBy, mem_smul_set_iff_inv_smul_mem, mul_smul, simp_rw, smul_eq_iff_eq_inv_smul
+/-
+**MulAction.smul_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：smul_fixedBy (g h : G) : h • fixedBy α g = fixedBy α (h * g * h⁻¹)
+参数：g h : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `smul_eq_iff_eq_inv_smul`：smul_eq_iff_eq_inv_smul (g : α) {x y : β} : g •
+ x = y ↔ x = g⁻¹ • y
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem smul_fixedBy (g h : G) :
     h • fixedBy α g = fixedBy α (h * g * h⁻¹) := by
   ext a
   simp_rw [Set.mem_smul_set_iff_inv_smul_mem, mem_fixedBy, mul_smul, smul_eq_iff_eq_inv_smul h]
-
-/--
-lemma `fixedBy_mul_eq_empty_iff` / 引理 `fixedBy_mul_eq_empty_iff`
-
-English:
-lemma fixedBy_mul_eq_empty_iff
-  given: [IsRightCancelMul M] {m : M}
-  proof: by
-  simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
-
-中文:
-引理 fixedBy_mul_eq_empty_iff
-  条件: [右乘消去 M] {m : M}
-  证明: by
-  simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
-
-Depends on / 依赖: MulAction, MulAction.fixedBy, Set.eq_empty_iff_forall_notMem, eq_empty_iff_forall_notMem, fixedBy
+/-
+**MulAction.fixedBy_mul_eq_empty_iff** 是 Mathlib 中的一个引理，位于命名空间 `MulAction`。
+形式化陈述：fixedBy_mul_eq_empty_iff [IsRightCancelMul M] {m : M} : fixedBy M m = ∅ ↔ 
+m != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma fixedBy_mul_eq_empty_iff [IsRightCancelMul M] {m : M} :
-    fixedBy M m = ∅ ↔ m != 1 := by
+    fixedBy M m = ∅ ↔ m ≠ 1 := by
   simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
-
-/--
-lemma `fixedBy_mul_op_eq_empty_iff` / 引理 `fixedBy_mul_op_eq_empty_iff`
-
-English:
-lemma fixedBy_mul_op_eq_empty_iff
-  given: [IsLeftCancelMul M] {m : M}
-  proof: by
-  simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
-
-中文:
-引理 fixedBy_mul_op_eq_empty_iff
-  条件: [左乘消去 M] {m : M}
-  证明: by
-  simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
-
-Depends on / 依赖: MulAction, MulAction.fixedBy, Set.eq_empty_iff_forall_notMem, eq_empty_iff_forall_notMem, fixedBy
+/-
+**MulAction.fixedBy_mul_op_eq_empty_iff** 是 Mathlib 中的一个引理，位于命名空间 `MulAction`。
+形式化陈述：fixedBy_mul_op_eq_empty_iff [IsLeftCancelMul M] {m : M} : fixedBy M (MulOp
+posite.op m) = ∅ ↔ m != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma fixedBy_mul_op_eq_empty_iff [IsLeftCancelMul M] {m : M} :
-    fixedBy M (MulOpposite.op m) = ∅ ↔ m != 1 := by
+    fixedBy M (MulOpposite.op m) = ∅ ↔ m ≠ 1 := by
   simp [MulAction.fixedBy, Set.eq_empty_iff_forall_notMem]
 
 end FixedPoints
@@ -373,49 +328,41 @@ moved by `g`.
 -/
 @[to_additive /-- If a set `s : Set α` is in `fixedBy (Set α) g`, then all points of `s` will stay
 in `s` after being moved by `g`. -/]
-/--
-theorem `set_mem_fixedBy_iff` / 定理 `set_mem_fixedBy_iff`
-
-English:
-theorem set_mem_fixedBy_iff
-  given: (s : Set α) (g : G)
-  proof: by
-  simp_rw [mem_fixedBy, ← eq_inv_smul_iff, Set.ext_iff, Set.mem_inv_smul_set_iff, Iff.comm]
-
-@[to_additive]
-
-中文:
-定理 set_mem_fixedBy_iff
-  条件: (s : 集合 α) (g : G)
-  证明: by
-  simp_rw [mem_fixedBy, ← eq_inv_smul_iff, Set.ext_iff, Set.mem_inv_smul_set_iff, Iff.comm]
-
-@[to_additive]
-
-Depends on / 依赖: Iff.comm, Set.ext_iff, Set.mem_inv_smul_set_iff, eq_inv_smul_iff, ext_iff, mem_fixedBy, mem_inv_smul_set_iff, simp_rw
+/-
+**MulAction.set_mem_fixedBy_iff** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：set_mem_fixedBy_iff (s : Set α) (g : G) : s in fixedBy (Set α) g ↔ forall 
+x, g • x in s ↔ x in s
+参数：s : Set α；g : G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem set_mem_fixedBy_iff (s : Set α) (g : G) :
-    s in fixedBy (Set α) g ↔ forall x, g • x in s ↔ x in s := by
+    s ∈ fixedBy (Set α) g ↔ ∀ x, g • x ∈ s ↔ x ∈ s := by
   simp_rw [mem_fixedBy, ← eq_inv_smul_iff, Set.ext_iff, Set.mem_inv_smul_set_iff, Iff.comm]
 
 @[to_additive]
-/--
-theorem `smul_mem_of_set_mem_fixedBy` / 定理 `smul_mem_of_set_mem_fixedBy`
-
-English:
-theorem smul_mem_of_set_mem_fixedBy
-  statement: {s : Set α} {g : G} (s_in_fixedBy : s in fixedBy (Set α) g)
-  proof: (set_mem_fixedBy_iff s g).mp s_in_fixedBy x
-
-中文:
-定理 smul_mem_of_set_mem_fixedBy
-  结论: {s : 集合 α} {g : G} (s_in_fixedBy : s in fixedBy (集合 α) g)
-  证明: (set_mem_fixedBy_iff s g).mp s_in_fixedBy x
-
-Depends on / 依赖: s_in_fixedBy, set_mem_fixedBy_iff
+/-
+**MulAction.smul_mem_of_set_mem_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：smul_mem_of_set_mem_fixedBy {s : Set α} {g : G} (s_in_fixedBy : s in fixed
+By (Set α) g) {x : α} : g • x in s ↔ x in s
+参数：s_in_fixedBy : s in fixedBy (Set α) g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MulAction.set_mem_fixedBy_iff`：set_mem_fixedBy_iff (s : Set α) (g : G) :
+ s in fixedBy (Set α) g ↔ forall x, g • x in s ↔ x in s
 -/
-theorem smul_mem_of_set_mem_fixedBy {s : Set α} {g : G} (s_in_fixedBy : s in fixedBy (Set α) g)
-    {x : α} : g • x in s ↔ x in s := (set_mem_fixedBy_iff s g).mp s_in_fixedBy x
+theorem smul_mem_of_set_mem_fixedBy {s : Set α} {g : G} (s_in_fixedBy : s ∈ fixedBy (Set α) g)
+    {x : α} : g • x ∈ s ↔ x ∈ s := (set_mem_fixedBy_iff s g).mp s_in_fixedBy x
 
 /--
 If `s ⊆ fixedBy α g`, then `g • s = s`, which means that `s ∈ fixedBy (Set α) g`.
@@ -427,59 +374,49 @@ weaker statement (it allows for points `x ∈ s` for which `g • x ≠ x` and `
 
 Note that the reverse implication is in general not true, as `s ∈ fixedBy (Set α) g` is a
 weaker statement (it allows for points `x ∈ s` for which `g +ᵥ x ≠ x` and `g +ᵥ x ∈ s`). -/]
-/--
-theorem `set_mem_fixedBy_of_subset_fixedBy` / 定理 `set_mem_fixedBy_of_subset_fixedBy`
-
-English:
-theorem set_mem_fixedBy_of_subset_fixedBy
-  given: {s : Set α} {g : G} (s_ss_fixedBy : s subseteq fixedBy α g)
-  proof: by
-  rw [← fixedBy_inv]
-  ext x
-  rw [Set.mem_inv_smul_set_iff]
-  refine ⟨fun gxs => ?xs, fun xs => (s_ss_fixedBy xs).symm ▸ xs⟩
-  rw [← fixedBy_inv] at s_ss_fixedBy
-  rwa [← s_ss_fixedBy gxs, inv_smul_smul] at gxs
-
-中文:
-定理 set_mem_fixedBy_of_subset_fixedBy
-  条件: {s : 集合 α} {g : G} (s_ss_fixedBy : s subseteq fixedBy α g)
-  证明: by
-  rw [← fixedBy_inv]
-  ext x
-  rw [Set.mem_inv_smul_set_iff]
-  refine ⟨fun gxs => ?xs, fun xs => (s_ss_fixedBy xs).symm ▸ xs⟩
-  rw [← fixedBy_inv] at s_ss_fixedBy
-  rwa [← s_ss_fixedBy gxs, inv_smul_smul] at gxs
-
-Depends on / 依赖: Set.mem_inv_smul_set_iff, fixedBy_inv, inv_smul_smul, mem_inv_smul_set_iff, s_ss_fixedBy
+/-
+**MulAction.set_mem_fixedBy_of_subset_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulActi
+on`。
+形式化陈述：set_mem_fixedBy_of_subset_fixedBy {s : Set α} {g : G} (s_ss_fixedBy : s su
+bseteq fixedBy α g) : s in fixedBy (Set α) g
+参数：s_ss_fixedBy : s subseteq fixedBy α g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulAction.fixedBy_inv`：fixedBy_inv (g : G) : fixedBy α g⁻¹ = fixedBy α g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.mem_inv_smul_set_iff`：mem_inv_smul_set_iff : x in a⁻¹ • A ↔ a • x in
+ A
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
 -/
-theorem set_mem_fixedBy_of_subset_fixedBy {s : Set α} {g : G} (s_ss_fixedBy : s subseteq fixedBy α g) :
-    s in fixedBy (Set α) g := by
+theorem set_mem_fixedBy_of_subset_fixedBy {s : Set α} {g : G} (s_ss_fixedBy : s ⊆ fixedBy α g) :
+    s ∈ fixedBy (Set α) g := by
   rw [← fixedBy_inv]
   ext x
   rw [Set.mem_inv_smul_set_iff]
   refine ⟨fun gxs => ?xs, fun xs => (s_ss_fixedBy xs).symm ▸ xs⟩
   rw [← fixedBy_inv] at s_ss_fixedBy
   rwa [← s_ss_fixedBy gxs, inv_smul_smul] at gxs
-
-/--
-theorem `smul_subset_of_set_mem_fixedBy` / 定理 `smul_subset_of_set_mem_fixedBy`
-
-English:
-theorem smul_subset_of_set_mem_fixedBy
-  statement: {s t : Set α} {g : G} (t_ss_s : t subseteq s)
-  proof: (Set.smul_set_subset_smul_set_iff.mpr t_ss_s).trans s_in_fixedBy.subset
-
-中文:
-定理 smul_subset_of_set_mem_fixedBy
-  结论: {s t : 集合 α} {g : G} (t_ss_s : t subseteq s)
-  证明: (Set.smul_set_subset_smul_set_iff.mpr t_ss_s).trans s_in_fixedBy.subset
-
-Depends on / 依赖: Set.smul_set_subset_smul_set_iff.mpr, s_in_fixedBy, s_in_fixedBy.subset, smul_set_subset_smul_set_iff, subset, t_ss_s
+/-
+**MulAction.smul_subset_of_set_mem_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`
+。
+形式化陈述：smul_subset_of_set_mem_fixedBy {s t : Set α} {g : G} (t_ss_s : t subseteq 
+s) (s_in_fixedBy : s in fixedBy (Set α) g) : g • t subseteq s
+参数：t_ss_s : t subseteq s；s_in_fixedBy : s in fixedBy (Set α) g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.smul_set_subset_smul_set_iff`：smul_set_subset_smul_set_iff : a • A s
+ubseteq a • B ↔ A subseteq B
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
 -/
-theorem smul_subset_of_set_mem_fixedBy {s t : Set α} {g : G} (t_ss_s : t subseteq s)
-    (s_in_fixedBy : s in fixedBy (Set α) g) : g • t subseteq s :=
+theorem smul_subset_of_set_mem_fixedBy {s t : Set α} {g : G} (t_ss_s : t ⊆ s)
+    (s_in_fixedBy : s ∈ fixedBy (Set α) g) : g • t ⊆ s :=
   (Set.smul_set_subset_smul_set_iff.mpr t_ss_s).trans s_in_fixedBy.subset
 
 /-!
@@ -489,47 +426,35 @@ then no point or subset of `s` can be moved outside of `s` by the group action o
 
 /-- If `(fixedBy α g)ᶜ ⊆ s`, then `g` cannot move a point of `s` outside of `s`. -/
 @[to_additive /-- If `(fixedBy α g)ᶜ ⊆ s`, then `g` cannot move a point of `s` outside of `s`. -/]
-/--
-theorem `set_mem_fixedBy_of_movedBy_subset` / 定理 `set_mem_fixedBy_of_movedBy_subset`
+/-
+**MulAction.set_mem_fixedBy_of_movedBy_subset** 是 Mathlib 中的一个定理，位于命名空间 `MulActi
+on`。
+形式化陈述：set_mem_fixedBy_of_movedBy_subset {s : Set α} {g : G} (s_subset : (fixedBy
+ α g)ᶜ subseteq s) : s in fixedBy (Set α) g
+参数：s_subset : (fixedBy α g)ᶜ subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulAction.fixedBy_inv`：fixedBy_inv (g : G) : fixedBy α g⁻¹ = fixedBy α g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.mem_inv_smul_set_iff`：mem_inv_smul_set_iff : x in a⁻¹ • A ↔ a • x in
+ A
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Set.mem_compl_iff`：mem_compl_iff (s : Set α) (x : α) : x in sᶜ ↔ x ∉ s
+· 使用定理 `MulAction.smul_mem_fixedBy_iff_mem_fixedBy`：smul_mem_fixedBy_iff_mem_fix
+edBy {a : α} {g : G} : g • a in fixedBy α g ↔ a in fixedBy α g
 
-English:
-theorem set_mem_fixedBy_of_movedBy_subset
-  given: {s : Set α} {g : G} (s_subset : (fixedBy α g)ᶜ subseteq s)
-  proof: by
-  rw [← fixedBy_inv]
-  ext a
-  rw [Set.mem_inv_smul_set_iff]
-  by_cases a in fixedBy α g
-  case pos a_fixed =>
-    rw [a_fixed]
-  case neg a_moved =>
-    constructor <;> (intro; apply s_subset)
-    · exact a_moved
-    · rwa [Set.mem_compl_iff, smul_mem_fixedBy_iff_mem_fixedBy]
-
-中文:
-定理 set_mem_fixedBy_of_movedBy_subset
-  条件: {s : 集合 α} {g : G} (s_subset : (fixedBy α g)ᶜ subseteq s)
-  证明: by
-  rw [← fixedBy_inv]
-  ext a
-  rw [Set.mem_inv_smul_set_iff]
-  by_cases a in fixedBy α g
-  case pos a_fixed =>
-    rw [a_fixed]
-  case neg a_moved =>
-    constructor <;> (intro; apply s_subset)
-    · exact a_moved
-    · rwa [Set.mem_compl_iff, smul_mem_fixedBy_iff_mem_fixedBy]
-
-Depends on / 依赖: Set.mem_compl_iff, Set.mem_inv_smul_set_iff, a_fixed, a_moved, fixedBy, fixedBy_inv, mem_compl_iff, mem_inv_smul_set_iff, s_subset, smul_mem_fixedBy_iff_mem_fixedBy
+--- 原说明 ---
+If `(fixedBy α g)ᶜ ⊆ s`, then `g` cannot move a point of `s` outside of `s`.
 -/
-theorem set_mem_fixedBy_of_movedBy_subset {s : Set α} {g : G} (s_subset : (fixedBy α g)ᶜ subseteq s) :
-    s in fixedBy (Set α) g := by
+theorem set_mem_fixedBy_of_movedBy_subset {s : Set α} {g : G} (s_subset : (fixedBy α g)ᶜ ⊆ s) :
+    s ∈ fixedBy (Set α) g := by
   rw [← fixedBy_inv]
   ext a
   rw [Set.mem_inv_smul_set_iff]
-  by_cases a in fixedBy α g
+  by_cases a ∈ fixedBy α g
   case pos a_fixed =>
     rw [a_fixed]
   case neg a_moved =>
@@ -557,50 +482,58 @@ This is equivalent to say that the set `fixedBy α g` is fixed by `h`.
 -/
 @[to_additive /-- If `g` and `h` commute, then `g` fixes `h +ᵥ x` iff `g` fixes `x`.
 This is equivalent to say that the set `fixedBy α g` is fixed by `h`. -/]
-/--
-theorem `fixedBy_mem_fixedBy_of_commute` / 定理 `fixedBy_mem_fixedBy_of_commute`
-
-English:
-theorem fixedBy_mem_fixedBy_of_commute
-  given: {g h : G} (comm : Commute g h)
-  proof: by
-  ext x
-  rw [Set.mem_smul_set_iff_inv_smul_mem]; rw [mem_fixedBy]; rw [← mul_smul]; rw [comm.inv_right]; rw [mul_smul]; rw [smul_left_cancel_iff]; rw [mem_fixedBy]
-
-中文:
-定理 fixedBy_mem_fixedBy_of_commute
-  条件: {g h : G} (comm : Commute g h)
-  证明: by
-  ext x
-  rw [Set.mem_smul_set_iff_inv_smul_mem]; rw [mem_fixedBy]; rw [← mul_smul]; rw [comm.inv_right]; rw [mul_smul]; rw [smul_left_cancel_iff]; rw [mem_fixedBy]
-
-Depends on / 依赖: Set.mem_smul_set_iff_inv_smul_mem, comm.inv_right, inv_right, mem_fixedBy, mem_smul_set_iff_inv_smul_mem, mul_smul, smul_left_cancel_iff
+/-
+**MulAction.fixedBy_mem_fixedBy_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`
+。
+形式化陈述：fixedBy_mem_fixedBy_of_commute {g h : G} (comm : Commute g h) : (fixedBy α
+ g) in fixedBy (Set α) h
+参数：comm : Commute g h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_smul_set_iff_inv_smul_mem`：mem_smul_set_iff_inv_smul_mem : x in 
+a • A ↔ a⁻¹ • x in A
+· 使用定理 `MulAction.mem_fixedBy`：mem_fixedBy {m : M} {a : α} : a in fixedBy α m ↔ 
+m • a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `Commute.inv_right`：∀ {G : Type u_1} [inst : Group G] {a b : G}, Commute 
+a b → Commute a b⁻¹
+· 使用引理 `smul_left_cancel_iff`：smul_left_cancel_iff (g : α) {x y : β} : g • x = g
+ • y ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem fixedBy_mem_fixedBy_of_commute {g h : G} (comm : Commute g h) :
-    (fixedBy α g) in fixedBy (Set α) h := by
+    (fixedBy α g) ∈ fixedBy (Set α) h := by
   ext x
-  rw [Set.mem_smul_set_iff_inv_smul_mem]; rw [mem_fixedBy]; rw [← mul_smul]; rw [comm.inv_right]; rw [mul_smul]; rw [smul_left_cancel_iff]; rw [mem_fixedBy]
+  rw [Set.mem_smul_set_iff_inv_smul_mem, mem_fixedBy, ← mul_smul, comm.inv_right, mul_smul,
+    smul_left_cancel_iff, mem_fixedBy]
 
 /--
 If `g` and `h` commute, then `g` fixes `(h ^ j) • x` iff `g` fixes `x`.
 -/
 @[to_additive /-- If `g` and `h` commute, then `g` fixes `(j • h) +ᵥ x` iff `g` fixes `x`. -/]
-/--
-theorem `smul_zpow_fixedBy_eq_of_commute` / 定理 `smul_zpow_fixedBy_eq_of_commute`
+/-
+**MulAction.smul_zpow_fixedBy_eq_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `MulAction
+`。
+形式化陈述：smul_zpow_fixedBy_eq_of_commute {g h : G} (comm : Commute g h) (j : Int) :
+ h ^ j • fixedBy α g = fixedBy α g
+参数：comm : Commute g h；j : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.fixedBy_subset_fixedBy_zpow`：fixedBy_subset_fixedBy_zpow (g : 
+G) (j : Int) : fixedBy α g subseteq fixedBy α (g ^ j)
+· 使用定理 `MulAction.fixedBy_mem_fixedBy_of_commute`：fixedBy_mem_fixedBy_of_commute
+ {g h : G} (comm : Commute g h) : (fixedBy α g) in fixedBy (Set α) h
 
-English:
-theorem smul_zpow_fixedBy_eq_of_commute
-  given: {g h : G} (comm : Commute g h) (j : Int)
-  proof: fixedBy_subset_fixedBy_zpow (Set α) h j (fixedBy_mem_fixedBy_of_commute comm)
-
-中文:
-定理 smul_zpow_fixedBy_eq_of_commute
-  条件: {g h : G} (comm : Commute g h) (j : 整数)
-  证明: fixedBy_subset_fixedBy_zpow (Set α) h j (fixedBy_mem_fixedBy_of_commute comm)
-
-Depends on / 依赖: fixedBy_mem_fixedBy_of_commute, fixedBy_subset_fixedBy_zpow
+--- 原说明 ---
+If `g` and `h` commute, then `g` fixes `(h ^ j) • x` iff `g` fixes `x`.
 -/
-theorem smul_zpow_fixedBy_eq_of_commute {g h : G} (comm : Commute g h) (j : Int) :
+theorem smul_zpow_fixedBy_eq_of_commute {g h : G} (comm : Commute g h) (j : ℤ) :
     h ^ j • fixedBy α g = fixedBy α g :=
   fixedBy_subset_fixedBy_zpow (Set α) h j (fixedBy_mem_fixedBy_of_commute comm)
 
@@ -610,47 +543,47 @@ This is equivalent to say that the set `(fixedBy α g)ᶜ` is fixed by `h`.
 -/
 @[to_additive /-- If `g` and `h` commute, then `g` moves `h +ᵥ x` iff `g` moves `x`.
 This is equivalent to say that the set `(fixedBy α g)ᶜ` is fixed by `h`. -/]
-/--
-theorem `movedBy_mem_fixedBy_of_commute` / 定理 `movedBy_mem_fixedBy_of_commute`
-
-English:
-theorem movedBy_mem_fixedBy_of_commute
-  given: {g h : G} (comm : Commute g h)
-  proof: by
-  rw [mem_fixedBy]; rw [Set.smul_set_compl]; rw [fixedBy_mem_fixedBy_of_commute comm]
-
-中文:
-定理 movedBy_mem_fixedBy_of_commute
-  条件: {g h : G} (comm : Commute g h)
-  证明: by
-  rw [mem_fixedBy]; rw [Set.smul_set_compl]; rw [fixedBy_mem_fixedBy_of_commute comm]
-
-Depends on / 依赖: Set.smul_set_compl, fixedBy_mem_fixedBy_of_commute, mem_fixedBy, smul_set_compl
+/-
+**MulAction.movedBy_mem_fixedBy_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`
+。
+形式化陈述：movedBy_mem_fixedBy_of_commute {g h : G} (comm : Commute g h) : (fixedBy α
+ g)ᶜ in fixedBy (Set α) h
+参数：comm : Commute g h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.mem_fixedBy`：mem_fixedBy {m : M} {a : α} : a in fixedBy α m ↔ 
+m • a = a
+· 使用定理 `Set.smul_set_compl`：smul_set_compl : a • sᶜ = (a • s)ᶜ
+· 使用定理 `MulAction.fixedBy_mem_fixedBy_of_commute`：fixedBy_mem_fixedBy_of_commute
+ {g h : G} (comm : Commute g h) : (fixedBy α g) in fixedBy (Set α) h
 -/
 theorem movedBy_mem_fixedBy_of_commute {g h : G} (comm : Commute g h) :
-    (fixedBy α g)ᶜ in fixedBy (Set α) h := by
-  rw [mem_fixedBy]; rw [Set.smul_set_compl]; rw [fixedBy_mem_fixedBy_of_commute comm]
+    (fixedBy α g)ᶜ ∈ fixedBy (Set α) h := by
+  rw [mem_fixedBy, Set.smul_set_compl, fixedBy_mem_fixedBy_of_commute comm]
 
 /--
 If `g` and `h` commute, then `g` moves `h ^ j • x` iff `g` moves `x`.
 -/
 @[to_additive /-- If `g` and `h` commute, then `g` moves `(j • h) +ᵥ x` iff `g` moves `x`. -/]
-/--
-theorem `smul_zpow_movedBy_eq_of_commute` / 定理 `smul_zpow_movedBy_eq_of_commute`
+/-
+**MulAction.smul_zpow_movedBy_eq_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `MulAction
+`。
+形式化陈述：smul_zpow_movedBy_eq_of_commute {g h : G} (comm : Commute g h) (j : Int) :
+ h ^ j • (fixedBy α g)ᶜ = (fixedBy α g)ᶜ
+参数：comm : Commute g h；j : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.fixedBy_subset_fixedBy_zpow`：fixedBy_subset_fixedBy_zpow (g : 
+G) (j : Int) : fixedBy α g subseteq fixedBy α (g ^ j)
+· 使用定理 `MulAction.movedBy_mem_fixedBy_of_commute`：movedBy_mem_fixedBy_of_commute
+ {g h : G} (comm : Commute g h) : (fixedBy α g)ᶜ in fixedBy (Set α) h
 
-English:
-theorem smul_zpow_movedBy_eq_of_commute
-  given: {g h : G} (comm : Commute g h) (j : Int)
-  proof: fixedBy_subset_fixedBy_zpow (Set α) h j (movedBy_mem_fixedBy_of_commute comm)
-
-中文:
-定理 smul_zpow_movedBy_eq_of_commute
-  条件: {g h : G} (comm : Commute g h) (j : 整数)
-  证明: fixedBy_subset_fixedBy_zpow (Set α) h j (movedBy_mem_fixedBy_of_commute comm)
-
-Depends on / 依赖: fixedBy_subset_fixedBy_zpow, movedBy_mem_fixedBy_of_commute
+--- 原说明 ---
+If `g` and `h` commute, then `g` moves `h ^ j • x` iff `g` moves `x`.
 -/
-theorem smul_zpow_movedBy_eq_of_commute {g h : G} (comm : Commute g h) (j : Int) :
+theorem smul_zpow_movedBy_eq_of_commute {g h : G} (comm : Commute g h) (j : ℤ) :
     h ^ j • (fixedBy α g)ᶜ = (fixedBy α g)ᶜ :=
   fixedBy_subset_fixedBy_zpow (Set α) h j (movedBy_mem_fixedBy_of_commute comm)
 
@@ -665,29 +598,31 @@ variable [FaithfulSMul M α]
 then `fixedBy α m = Set.univ` implies that `m = 1`. -/
 @[to_additive /-- If the additive action of `M` on `α` is faithful,
 then `fixedBy α m = Set.univ` implies that `m = 1`. -/]
-/--
-theorem `fixedBy_eq_univ_iff_eq_one` / 定理 `fixedBy_eq_univ_iff_eq_one`
-
-English:
-theorem fixedBy_eq_univ_iff_eq_one
-  given: {m : M}
-  statement: fixedBy α m = Set.univ ↔ m = 1
-  proof: by
-  rw [← (smul_left_injective' (M := M) (α := α)).eq_iff]; rw [Set.eq_univ_iff_forall]
-  simp_rw [funext_iff, one_smul, mem_fixedBy]
-
-中文:
-定理 fixedBy_eq_univ_iff_eq_one
-  条件: {m : M}
-  结论: fixedBy α m = 集合.univ ↔ m = 1
-  证明: by
-  rw [← (smul_left_injective' (M := M) (α := α)).eq_iff]; rw [Set.eq_univ_iff_forall]
-  simp_rw [funext_iff, one_smul, mem_fixedBy]
-
-Depends on / 依赖: Set.eq_univ_iff_forall, eq_iff, eq_univ_iff_forall, funext_iff, mem_fixedBy, one_smul, simp_rw, smul_left_injective
+/-
+**MulAction.fixedBy_eq_univ_iff_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `MulAction`。
+形式化陈述：fixedBy_eq_univ_iff_eq_one {m : M} : fixedBy α m = Set.univ ↔ m = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `smul_left_injective'`：smul_left_injective' [SMul M α] [FaithfulSMul M α]
+ : Injective ((· • ·) : M -> α -> α)
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem fixedBy_eq_univ_iff_eq_one {m : M} : fixedBy α m = Set.univ ↔ m = 1 := by
-  rw [← (smul_left_injective' (M := M) (α := α)).eq_iff]; rw [Set.eq_univ_iff_forall]
+  rw [← (smul_left_injective' (M := M) (α := α)).eq_iff, Set.eq_univ_iff_forall]
   simp_rw [funext_iff, one_smul, mem_fixedBy]
 
 /--
@@ -696,28 +631,29 @@ is disjoint from `(fixedBy α g)ᶜ`, then `g` and `h` cannot commute.
 -/
 @[to_additive /-- If the image of the `(fixedBy α g)ᶜ` set by the pointwise action of `h: G`
 is disjoint from `(fixedBy α g)ᶜ`, then `g` and `h` cannot commute. -/]
-/--
-theorem `not_commute_of_disjoint_movedBy_preimage` / 定理 `not_commute_of_disjoint_movedBy_preimage`
-
-English:
-theorem not_commute_of_disjoint_movedBy_preimage
-  statement: {g h : G} (ne_one : g != 1)
-  proof: by
-  contrapose ne_one with comm
-  rwa [movedBy_mem_fixedBy_of_commute comm, disjoint_self, Set.bot_eq_empty, ← Set.compl_univ,
-    compl_inj_iff, fixedBy_eq_univ_iff_eq_one] at disjoint
-
-中文:
-定理 not_commute_of_disjoint_movedBy_preimage
-  结论: {g h : G} (ne_one : g != 1)
-  证明: by
-  contrapose ne_one with comm
-  rwa [movedBy_mem_fixedBy_of_commute comm, disjoint_self, Set.bot_eq_empty, ← Set.compl_univ,
-    compl_inj_iff, fixedBy_eq_univ_iff_eq_one] at disjoint
-
-Depends on / 依赖: Set.bot_eq_empty, Set.compl_univ, bot_eq_empty, compl_inj_iff, compl_univ, contrapose, disjoint, disjoint_self, fixedBy_eq_univ_iff_eq_one, movedBy_mem_fixedBy_of_commute, ne_one
+/-
+**MulAction.not_commute_of_disjoint_movedBy_preimage** 是 Mathlib 中的一个定理，位于命名空间 `
+MulAction`。
+形式化陈述：not_commute_of_disjoint_movedBy_preimage {g h : G} (ne_one : g != 1) (disj
+oint : Disjoint (fixedBy α g)ᶜ (h • (fixedBy α g)ᶜ)) : ¬Commute g h
+参数：ne_one : g != 1；disjoint : Disjoint (fixedBy α g)ᶜ (h • (fixedBy α g)ᶜ)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.fixedBy_eq_univ_iff_eq_one`：fixedBy_eq_univ_iff_eq_one {m : M}
+ : fixedBy α m = Set.univ ↔ m = 1
+· 使用定理 `compl_inj_iff`：compl_inj_iff : xᶜ = yᶜ ↔ x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.compl_univ`：compl_univ : (univ : Set α)ᶜ = ∅
+· 使用定理 `Set.bot_eq_empty`：bot_eq_empty : (⊥ : Set α) = ∅
+· 使用定理 `disjoint_self`：disjoint_self : Disjoint a a ↔ a = ⊥
+· 使用定理 `MulAction.movedBy_mem_fixedBy_of_commute`：movedBy_mem_fixedBy_of_commute
+ {g h : G} (comm : Commute g h) : (fixedBy α g)ᶜ in fixedBy (Set α) h
 -/
-theorem not_commute_of_disjoint_movedBy_preimage {g h : G} (ne_one : g != 1)
+theorem not_commute_of_disjoint_movedBy_preimage {g h : G} (ne_one : g ≠ 1)
     (disjoint : Disjoint (fixedBy α g)ᶜ (h • (fixedBy α g)ᶜ)) : ¬Commute g h := by
   contrapose ne_one with comm
   rwa [movedBy_mem_fixedBy_of_commute comm, disjoint_self, Set.bot_eq_empty, ← Set.compl_univ,
@@ -731,53 +667,64 @@ namespace MulActionHom
 
 /-- `MulActionHom` maps `fixedPoints` to `fixedPoints`. -/
 @[to_additive /-- `AddActionHom` maps `fixedPoints` to `fixedPoints`. -/]
-/--
-lemma `map_mem_fixedPoints` / 引理 `map_mem_fixedPoints`
+/-
+**MulActionHom.map_mem_fixedPoints** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：map_mem_fixedPoints {G A B : Type*} [Monoid G] [MulAction G A] [MulAction 
+G B] (f : A ->[G] B) {H : Submonoid G} {a : A} (ha : a in MulAction.fixedPoints 
+H A) : f a in MulAction.fixedPoints H B
+参数：f : A ->[G] B；ha : a in MulAction.fixedPoints H A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulActionHom.map_smul`：∀ {M' : Type u_1} {X : Type u_5} [inst : SMul M' 
+X] {Y : Type u_6} [inst_1 : SMul M' Y] (f : X →ₑ[id] Y) (m : M')   (x : X), f (m
+ • x) = m •…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma map_mem_fixedPoints
-  statement: {G A B : Type*} [Monoid G] [MulAction G A] [MulAction G B]
-  proof: by
-  intro ⟨h, _⟩
-  simp_all [← f.map_smul h a]
-
-中文:
-引理 map_mem_fixedPoints
-  结论: {G A B : 类型} [幺半群 G] [乘法作用 G A] [乘法作用 G B]
-  证明: by
-  intro ⟨h, _⟩
-  simp_all [← f.map_smul h a]
-
-Depends on / 依赖: f.map_smul, map_smul
+--- 原说明 ---
+`MulActionHom` maps `fixedPoints` to `fixedPoints`.
 -/
 lemma map_mem_fixedPoints {G A B : Type*} [Monoid G] [MulAction G A] [MulAction G B]
-    (f : A ->[G] B) {H : Submonoid G} {a : A} (ha : a in MulAction.fixedPoints H A) :
-    f a in MulAction.fixedPoints H B := by
+    (f : A →[G] B) {H : Submonoid G} {a : A} (ha : a ∈ MulAction.fixedPoints H A) :
+    f a ∈ MulAction.fixedPoints H B := by
   intro ⟨h, _⟩
   simp_all [← f.map_smul h a]
 
 /-- `MulActionHom` maps `fixedBy` to `fixedBy`. -/
 @[to_additive /-- `AddActionHom` maps `fixedBy` to `fixedBy`. -/]
-/--
-lemma `map_mem_fixedBy` / 引理 `map_mem_fixedBy`
+/-
+**MulActionHom.map_mem_fixedBy** 是 Mathlib 中的一个引理，位于命名空间 `MulActionHom`。
+形式化陈述：map_mem_fixedBy {G A B : Type*} [Monoid G] [MulAction G A] [MulAction G B]
+ (f : A ->[G] B) {g : G} {a : A} (ha : a in MulAction.fixedBy A g) : f a in MulA
+ction.fixedBy B g
+参数：f : A ->[G] B；ha : a in MulAction.fixedBy A g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `instMulActionSemiHomClassMulActionHom`：∀ {M : Type u_2} {N : Type u_3} (
+φ : M → N) (X : Type u_5) [inst : SMul M X] (Y : Type u_6) [inst_1 : SMul N Y], 
+  MulActionSemiHomClass (X …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-lemma map_mem_fixedBy
-  statement: {G A B : Type*} [Monoid G] [MulAction G A] [MulAction G B]
-  proof: by
-  simpa using congr_arg f ha
-
-中文:
-引理 map_mem_fixedBy
-  结论: {G A B : 类型} [幺半群 G] [乘法作用 G A] [乘法作用 G B]
-  证明: by
-  simpa using congr_arg f ha
-
-Depends on / 依赖: congr_arg
+--- 原说明 ---
+`MulActionHom` maps `fixedBy` to `fixedBy`.
 -/
 lemma map_mem_fixedBy {G A B : Type*} [Monoid G] [MulAction G A] [MulAction G B]
-    (f : A ->[G] B) {g : G} {a : A} (ha : a in MulAction.fixedBy A g) :
-    f a in MulAction.fixedBy B g := by
+    (f : A →[G] B) {g : G} {a : A} (ha : a ∈ MulAction.fixedBy A g) :
+    f a ∈ MulAction.fixedBy B g := by
   simpa using congr_arg f ha
 
 end MulActionHom
+

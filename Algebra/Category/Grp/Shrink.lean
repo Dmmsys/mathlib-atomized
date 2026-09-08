@@ -23,70 +23,57 @@ open CategoryTheory
 
 variable {C : Type u} [Category.{v} C]
 
-instance (F : C ⥤ GrpCat.{w'}) [forall X, Small.{w} (F.obj X)] :
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (F : C ⥤ GrpCat.{w'}) [∀ X, Small.{w} (F.obj X)] :
     FunctorToTypes.Small.{w} (F ⋙ forget _) :=
-fun X => inferInstanceAs Small.{w} (F.obj X)
+  fun X ↦ inferInstanceAs <| Small.{w} (F.obj X)
 
 /-- A functor `F : C ⥤ GrpCat.{w'}` factors through `GrpCat.{w}` if all the
 monoids are `w`-small. -/
 @[simps, pp_with_univ]
-/--
-Definition of `GrpCat.shrinkFunctor` / `GrpCat.shrinkFunctor` 的定义
+/-
+**GrpCat.shrinkFunctor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：GrpCat.shrinkFunctor (F : C ⥤ GrpCat.{w'}) [forall X, Small.{w} (F.obj X)]
+ : C ⥤ GrpCat.{w} where obj X
+参数：F : C ⥤ GrpCat.{w'}；F.obj X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GrpCat.shrinkFunctor
-  signature: (F : C ⥤ GrpCat.{w'}) [forall X, Small.{w} (F.obj X)]
-  body: GrpCat.of (Shrink.{w} (F.obj X))
-map {X Y} f := GrpCat.ofHom
-    (Shrink.mulEquiv.symm.toMonoidHom.comp (F.map f).hom).comp Shrink.mulEquiv.toMonoidHom
-
-中文:
-定义 群范畴.shrinkFunctor
-  签名: (F : C ⥤ 群范畴.{w'}) [对任意 X, Small.{w} (F.obj X)]
-  定义体: GrpCat.of (Shrink.{w} (F.obj X))
-map {X Y} f := GrpCat.ofHom
-    (Shrink.mulEquiv.symm.toMonoidHom.comp (F.map f).hom).comp Shrink.mulEquiv.toMonoidHom
-
-Depends on / 依赖: F.obj, GrpCat, GrpCat.of, Shrink
+--- 原说明 ---
+A functor `F : C ⥤ GrpCat.{w'}` factors through `GrpCat.{w}` if all the
+monoids are `w`-small.
 -/
-noncomputable def GrpCat.shrinkFunctor (F : C ⥤ GrpCat.{w'}) [forall X, Small.{w} (F.obj X)] :
+noncomputable def GrpCat.shrinkFunctor (F : C ⥤ GrpCat.{w'}) [∀ X, Small.{w} (F.obj X)] :
     C ⥤ GrpCat.{w} where
   obj X := GrpCat.of (Shrink.{w} (F.obj X))
-map {X Y} f := GrpCat.ofHom
+  map {X Y} f := GrpCat.ofHom <|
     (Shrink.mulEquiv.symm.toMonoidHom.comp (F.map f).hom).comp Shrink.mulEquiv.toMonoidHom
 
 /-- The natural transformation `GrpCat.shrinkFunctor.{w} F ⟶ GrpCat.shrinkFunctor.{w} G`
 induces by a natural transformation `τ : F ⟶ G` between `w`-small functors to monoids. -/
 @[simps]
-/--
-Definition of `GrpCat.shrinkFunctorMap` / `GrpCat.shrinkFunctorMap` 的定义
+/-
+**GrpCat.shrinkFunctorMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：GrpCat.shrinkFunctorMap {F G : C ⥤ GrpCat.{w'}} (τ : F ⟶ G) [forall X, Sma
+ll.{w} (F.obj X)] [forall X, Small.{w} (G.obj X)] : GrpCat.shrinkFunctor.{w} F ⟶
+ GrpCat.shrinkFunctor.{w} G where app X
+参数：τ : F ⟶ G；F.obj X；G.obj X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GrpCat.shrinkFunctorMap
-  signature: {F G : C ⥤ GrpCat.{w'}} (τ : F ⟶ G)
-  body: GrpCat.ofHom
-    (Shrink.mulEquiv.symm.toMonoidHom.comp (τ.app X).hom).comp Shrink.mulEquiv.toMonoidHom
-  naturality X Y f := by
-    ext x
-    exact
-      congr($((FunctorToTypes.shrinkMap.{w} (Functor.whiskerRight τ (forget _))).naturality f) x)
-
-中文:
-定义 群范畴.shrinkFunctorMap
-  签名: {F G : C ⥤ 群范畴.{w'}} (τ : F ⟶ G)
-  定义体: GrpCat.ofHom
-    (Shrink.mulEquiv.symm.toMonoidHom.comp (τ.app X).hom).comp Shrink.mulEquiv.toMonoidHom
-  naturality X Y f := by
-    ext x
-    exact
-      congr($((FunctorToTypes.shrinkMap.{w} (Functor.whiskerRight τ (forget _))).naturality f) x)
-
-Depends on / 依赖: GrpCat, GrpCat.ofHom
+--- 原说明 ---
+The natural transformation `GrpCat.shrinkFunctor.{w} F ⟶ GrpCat.shrinkFunctor.{w
+} G`
+induces by a natural transformation `τ : F ⟶ G` between `w`-small functors to mo
+noids.
 -/
 noncomputable def GrpCat.shrinkFunctorMap {F G : C ⥤ GrpCat.{w'}} (τ : F ⟶ G)
-    [forall X, Small.{w} (F.obj X)] [forall X, Small.{w} (G.obj X)] :
+    [∀ X, Small.{w} (F.obj X)] [∀ X, Small.{w} (G.obj X)] :
     GrpCat.shrinkFunctor.{w} F ⟶ GrpCat.shrinkFunctor.{w} G where
-app X := GrpCat.ofHom
+  app X := GrpCat.ofHom <|
     (Shrink.mulEquiv.symm.toMonoidHom.comp (τ.app X).hom).comp Shrink.mulEquiv.toMonoidHom
   naturality X Y f := by
     ext x

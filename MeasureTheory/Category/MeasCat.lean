@@ -39,24 +39,15 @@ open scoped ENNReal
 universe u v
 
 
-/--
-Definition of `MeasCat` / `MeasCat` 的定义
+/-- The category of measurable spaces and measurable functions. -/
+/-
+**MeasCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MeasCat
-  parameters: : Type (u + 1) where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [str : MeasurableSpace carrier]
-
-中文:
-结构 Meas范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [str : 可测空间 carrier]
+--- 原说明 ---
+The category of measurable spaces and measurable functions.
 -/
 structure MeasCat : Type (u + 1) where
   /-- Construct a bundled `MeasCat` from the underlying type and the typeclass. -/
@@ -69,255 +60,154 @@ attribute [instance] MeasCat.str
 
 namespace MeasCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort MeasCat Type*
-  body: ⟨carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort Meas范畴 类型
-  定义体: ⟨carrier⟩
-
-Depends on / 依赖: _root_, _root_.multiplicity, carrier, multiplicity, toInteger
+/-
+**MeasCat.** 是 Mathlib 中的一个实例，位于命名空间 `MeasCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort MeasCat Type* :=
   ⟨carrier⟩
-
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [MeasurableSpace X]
-  statement: (of X : Type u) = X
-  proof: rfl
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [可测空间 X]
-  结论: (of X : 类型u) = X
-  证明: rfl
+/-
+**MeasCat.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `MeasCat`。
+形式化陈述：coe_of (X : Type u) [MeasurableSpace X] : (of X : Type u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [MeasurableSpace X] : (of X : Type u) = X :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LargeCategory MeasCat
-  body: { f : X -> Y // Measurable f }
-  id X := ⟨id, measurable_id⟩
-  comp f g := ⟨g.1 ∘ f.1, g.2.comp f.2⟩
-
-中文:
-实例 :
-  签名: 大范畴 Meas范畴
-  定义体: { f : X -> Y // Measurable f }
-  id X := ⟨id, measurable_id⟩
-  comp f g := ⟨g.1 ∘ f.1, g.2.comp f.2⟩
-
-Depends on / 依赖: Measurable
+/-
+**MeasCat.** 是 Mathlib 中的一个实例，位于命名空间 `MeasCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LargeCategory MeasCat where
-  Hom X Y := { f : X -> Y // Measurable f }
+  Hom X Y := { f : X → Y // Measurable f }
   id X := ⟨id, measurable_id⟩
   comp f g := ⟨g.1 ∘ f.1, g.2.comp f.2⟩
-
-instance (X Y : MeasCat) : FunLike ({ f : X -> Y // Measurable f }) X Y where
+/-
+**MeasCat.** 是 Mathlib 中的一个实例，位于命名空间 `MeasCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X Y : MeasCat) : FunLike ({ f : X → Y // Measurable f }) X Y where
   coe f := f
   coe_injective _ _ := Subtype.ext
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory MeasCat ({ f : · -> · // Measurable f })
-  body: f
-  ofHom f := f
-
-中文:
-实例 :
-  签名: 余ncrete范畴 Meas范畴 ({ f : · -> · // 可测 f })
-  定义体: f
-  ofHom f := f
+/-
+**MeasCat.** 是 Mathlib 中的一个实例，位于命名空间 `MeasCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory MeasCat ({ f : · -> · // Measurable f }) where
+instance : ConcreteCategory MeasCat ({ f : · → · // Measurable f }) where
   hom f := f
   ofHom f := f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited MeasCat
-  body: ⟨MeasCat.of Empty⟩
-
-中文:
-实例 :
-  签名: 可居 Meas范畴
-  定义体: ⟨MeasCat.of Empty⟩
-
-Depends on / 依赖: MeasCat, MeasCat.of
+/-
+**MeasCat.** 是 Mathlib 中的一个实例，位于命名空间 `MeasCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited MeasCat :=
   ⟨MeasCat.of Empty⟩
 
-/--
-Definition of `Measure` / `Measure` 的定义
+/-- `Measure X` is the measurable space of measures over the measurable space `X`. It is the
+weakest measurable space, s.t. `fun μ ↦ μ s` is measurable for all measurable sets `s` in `X`. An
+important purpose is to assign a monadic structure on it, the Giry monad. In the Giry monad,
+the pure values are the Dirac measure, and the bind operation maps to the integral:
+`(μ >>= ν) s = ∫ x. (ν x) s dμ`.
 
-English:
-definition Measure
-  signature: : MeasCat ⥤ MeasCat where
-  body: of (@MeasureTheory.Measure X.1 X.2)
-  map f := ⟨Measure.map (⇑f), Measure.measurable_map f.1 f.2⟩
-map_id X := Subtype.ext funext fun μ => @Measure.map_id X.carrier X.str μ
-map_comp := fun ⟨_, hf⟩ ⟨_, hg⟩ => Subtype.ext funext fun _ => (Measure.map_map hg hf).symm
+In probability theory, the `MeasCat`-morphisms `X → Prob X` are (sub-)Markov kernels (here `Prob` is
+the restriction of `Measure` to (sub-)probability spaces.)
+-/
+/-
+**MeasCat.Measure** 是 Mathlib 中的一个定义，位于命名空间 `MeasCat`。
+形式化陈述：Measure : MeasCat ⥤ MeasCat where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 测度
-  签名: : Meas范畴 ⥤ Meas范畴 where
-  定义体: of (@MeasureTheory.Measure X.1 X.2)
-  map f := ⟨Measure.map (⇑f), Measure.measurable_map f.1 f.2⟩
-map_id X := Subtype.ext funext fun μ => @Measure.map_id X.carrier X.str μ
-map_comp := fun ⟨_, hf⟩ ⟨_, hg⟩ => Subtype.ext funext fun _ => (Measure.map_map hg hf).symm
+--- 原说明 ---
+`Measure X` is the measurable space of measures over the measurable space `X`. I
+t is the
+weakest measurable space, s.t. `fun μ ↦ μ s` is measurable for all measurable se
+ts `s` in `X`. An
+important purpose is to assign a monadic structure on it, the Giry monad. In the
+ Giry monad,
+the pure values are the Dirac measure, and the bind operation maps to the integr
+al:
+`(μ >>= ν) s = ∫ x. (ν x) s dμ`.
 
-Depends on / 依赖: Measure, MeasureTheory, MeasureTheory.Measure
+In probability theory, the `MeasCat`-morphisms `X → Prob X` are (sub-)Markov ker
+nels (here `Prob` is
+the restriction of `Measure` to (sub-)probability spaces.)
 -/
 def Measure : MeasCat ⥤ MeasCat where
   obj X := of (@MeasureTheory.Measure X.1 X.2)
   map f := ⟨Measure.map (⇑f), Measure.measurable_map f.1 f.2⟩
-map_id X := Subtype.ext funext fun μ => @Measure.map_id X.carrier X.str μ
-map_comp := fun ⟨_, hf⟩ ⟨_, hg⟩ => Subtype.ext funext fun _ => (Measure.map_map hg hf).symm
+  map_id X := Subtype.ext <| funext fun μ => @Measure.map_id X.carrier X.str μ
+  map_comp := fun ⟨_, hf⟩ ⟨_, hg⟩ => Subtype.ext <| funext fun _ => (Measure.map_map hg hf).symm
 
-/--
-Definition of `Giry` / `Giry` 的定义
+/-- The Giry monad, i.e. the monadic structure associated with `Measure`. -/
+/-
+**MeasCat.Giry** 是 Mathlib 中的一个定义，位于命名空间 `MeasCat`。
+形式化陈述：Giry : CategoryTheory.Monad MeasCat where toFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Giry
-  signature: : CategoryTheory.Monad MeasCat where
-  body: Measure
-  η :=
-    { app := fun X => ⟨@Measure.dirac X.1 X.2, Measure.measurable_dirac⟩
-      naturality :=
-fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun a => (Measure.map_dirac' hf a).symm }
-  μ :=
-    { app := fun X => ⟨@Measure.join X.1 X.2, Measure.measurable_join⟩
-naturality := fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun μ => Measure.join_map_map hf μ }
-assoc _ := Subtype.ext funext fun _ => Measure.join_map_join _
-left_unit _ := Subtype.ext funext fun _ => Measure.join_dirac _
-right_unit _ := Subtype.ext funext fun _ => Measure.join_map_dirac _
-
-中文:
-定义 Giry
-  签名: : 范畴论.单子 Meas范畴 where
-  定义体: Measure
-  η :=
-    { app := fun X => ⟨@Measure.dirac X.1 X.2, Measure.measurable_dirac⟩
-      naturality :=
-fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun a => (Measure.map_dirac' hf a).symm }
-  μ :=
-    { app := fun X => ⟨@Measure.join X.1 X.2, Measure.measurable_join⟩
-naturality := fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun μ => Measure.join_map_map hf μ }
-assoc _ := Subtype.ext funext fun _ => Measure.join_map_join _
-left_unit _ := Subtype.ext funext fun _ => Measure.join_dirac _
-right_unit _ := Subtype.ext funext fun _ => Measure.join_map_dirac _
-
-Depends on / 依赖: Measure
+--- 原说明 ---
+The Giry monad, i.e. the monadic structure associated with `Measure`.
 -/
 def Giry : CategoryTheory.Monad MeasCat where
   toFunctor := Measure
   η :=
     { app := fun X => ⟨@Measure.dirac X.1 X.2, Measure.measurable_dirac⟩
       naturality :=
-fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun a => (Measure.map_dirac' hf a).symm }
+        fun _ _ ⟨_, hf⟩ => Subtype.ext <| funext fun a => (Measure.map_dirac' hf a).symm }
   μ :=
     { app := fun X => ⟨@Measure.join X.1 X.2, Measure.measurable_join⟩
-naturality := fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun μ => Measure.join_map_map hf μ }
-assoc _ := Subtype.ext funext fun _ => Measure.join_map_join _
-left_unit _ := Subtype.ext funext fun _ => Measure.join_dirac _
-right_unit _ := Subtype.ext funext fun _ => Measure.join_map_dirac _
+      naturality := fun _ _ ⟨_, hf⟩ => Subtype.ext <| funext fun μ => Measure.join_map_map hf μ }
+  assoc _ := Subtype.ext <| funext fun _ => Measure.join_map_join _
+  left_unit _ := Subtype.ext <| funext fun _ => Measure.join_dirac _
+  right_unit _ := Subtype.ext <| funext fun _ => Measure.join_map_dirac _
 
-/--
-Definition of `Integral` / `Integral` 的定义
+/-- An example of an algebra on `Measure`: the nonnegative Lebesgue integral is a hom, behaving
+nicely under the monad operations. -/
+/-
+**MeasCat.Integral** 是 Mathlib 中的一个定义，位于命名空间 `MeasCat`。
+形式化陈述：Integral : Giry.Algebra where A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Integral
-  signature: : Giry.Algebra where
-  body: MeasCat.of Real>=0∞
-  a := ⟨fun m : MeasureTheory.Measure Real>=0∞ => ∫⁻ x, x ∂m, Measure.measurable_lintegral measurable_id⟩
-unit := Subtype.ext funext fun _ : Real>=0∞ => lintegral_dirac' _ measurable_id
-assoc := Subtype.ext funext fun μ : MeasureTheory.Measure (MeasureTheory.Measure Real>=0∞) =>
-    show ∫⁻ x, x ∂μ.join = ∫⁻ x, x ∂Measure.map (fun m => ∫⁻ x, x ∂m) μ by
-      rw [Measure.lintegral_join]; rw [lintegral_map] <;>
-        apply_rules [Measurable.aemeasurable, measurable_id, Measure.measurable_lintegral]
-
-中文:
-定义 积分
-  签名: : Giry.代数 where
-  定义体: MeasCat.of Real>=0∞
-  a := ⟨fun m : MeasureTheory.Measure Real>=0∞ => ∫⁻ x, x ∂m, Measure.measurable_lintegral measurable_id⟩
-unit := Subtype.ext funext fun _ : Real>=0∞ => lintegral_dirac' _ measurable_id
-assoc := Subtype.ext funext fun μ : MeasureTheory.Measure (MeasureTheory.Measure Real>=0∞) =>
-    show ∫⁻ x, x ∂μ.join = ∫⁻ x, x ∂Measure.map (fun m => ∫⁻ x, x ∂m) μ by
-      rw [Measure.lintegral_join]; rw [lintegral_map] <;>
-        apply_rules [Measurable.aemeasurable, measurable_id, Measure.measurable_lintegral]
-
-Depends on / 依赖: MeasCat, MeasCat.of, Solution, lambda_sq_dvd_c, le_multiplicity_of_pow_dvd, multiplicity, multiplicity_lambda_c_finite, multiplicity_lambda_c_finite.le_multiplicity_of_pow_dvd
+--- 原说明 ---
+An example of an algebra on `Measure`: the nonnegative Lebesgue integral is a ho
+m, behaving
+nicely under the monad operations.
 -/
 def Integral : Giry.Algebra where
-  A := MeasCat.of Real>=0∞
-  a := ⟨fun m : MeasureTheory.Measure Real>=0∞ => ∫⁻ x, x ∂m, Measure.measurable_lintegral measurable_id⟩
-unit := Subtype.ext funext fun _ : Real>=0∞ => lintegral_dirac' _ measurable_id
-assoc := Subtype.ext funext fun μ : MeasureTheory.Measure (MeasureTheory.Measure Real>=0∞) =>
+  A := MeasCat.of ℝ≥0∞
+  a := ⟨fun m : MeasureTheory.Measure ℝ≥0∞ ↦ ∫⁻ x, x ∂m, Measure.measurable_lintegral measurable_id⟩
+  unit := Subtype.ext <| funext fun _ : ℝ≥0∞ => lintegral_dirac' _ measurable_id
+  assoc := Subtype.ext <| funext fun μ : MeasureTheory.Measure (MeasureTheory.Measure ℝ≥0∞) ↦
     show ∫⁻ x, x ∂μ.join = ∫⁻ x, x ∂Measure.map (fun m => ∫⁻ x, x ∂m) μ by
-      rw [Measure.lintegral_join]; rw [lintegral_map] <;>
+      rw [Measure.lintegral_join, lintegral_map] <;>
         apply_rules [Measurable.aemeasurable, measurable_id, Measure.measurable_lintegral]
 
 end MeasCat
 
-/--
-Instance `TopCat.hasForgetToMeasCat` / 实例 `TopCat.hasForgetToMeasCat`
-
-English:
-instance TopCat.hasForgetToMeasCat
-  signature: : HasForget₂ TopCat.{u} MeasCat.{u} where
-  body: @MeasCat.of _ (borel X)
-  forget₂.map f := ⟨f.1, f.hom.2.borel_measurable⟩
-
-中文:
-实例 顶元素范畴.hasForgetToMeasCat
-  签名: : 有Forget₂ 顶元素范畴.{u} Meas范畴.{u} where
-  定义体: @MeasCat.of _ (borel X)
-  forget₂.map f := ⟨f.1, f.hom.2.borel_measurable⟩
-
-Depends on / 依赖: MeasCat, MeasCat.of
+/-
+**TopCat.hasForgetToMeasCat** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：TopCat.hasForgetToMeasCat : HasForget₂ TopCat.{u} MeasCat.{u} where forget
+₂.obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance TopCat.hasForgetToMeasCat : HasForget₂ TopCat.{u} MeasCat.{u} where
   forget₂.obj X := @MeasCat.of _ (borel X)
   forget₂.map f := ⟨f.1, f.hom.2.borel_measurable⟩
 
-/--
-Definition of `Borel` / `Borel` 的定义
+/-- The Borel functor, the canonical embedding of topological spaces into measurable spaces. -/
+/-
+**Borel** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Borel : TopCat.{u} ⥤ MeasCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Borel
-  signature: : TopCat.{u} ⥤ MeasCat.{u}
-  body: forget₂ TopCat.{u} MeasCat.{u}
-
-中文:
-缩写 Borel
-  签名: : 顶元素范畴.{u} ⥤ Meas范畴.{u}
-  定义体: forget₂ TopCat.{u} MeasCat.{u}
-
-Depends on / 依赖: MeasCat, TopCat
+--- 原说明 ---
+The Borel functor, the canonical embedding of topological spaces into measurable
+ spaces.
 -/
 abbrev Borel : TopCat.{u} ⥤ MeasCat.{u} :=
   forget₂ TopCat.{u} MeasCat.{u}

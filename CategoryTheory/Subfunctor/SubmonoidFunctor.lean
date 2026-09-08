@@ -38,200 +38,109 @@ variable (M) in
 /-- A submonoid functor consists of a submonoid of `M.obj U` for every `U`,
 compatible with the restriction maps `M.map i`. -/
 @[ext]
-/--
-Definition of `SubmonoidFunctor` / `SubmonoidFunctor` 的定义
+/-
+**CategoryTheory.SubmonoidFunctor** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：SubmonoidFunctor where /-- A submonoid of `M.obj U` for all `U : C`. -/ ob
+j (U : C) : Submonoid (M.obj U) /-- For any `i : U ⟶ V`, `M.map i` maps the subm
+onoid `obj U` into the submonoid `obj V`. -/ map {U V : C} (i : U ⟶ V) : obj U <
+= (obj V).comap (M.map i).hom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SubmonoidFunctor
-  parameters: where
-  axioms and operations (2):
-    - obj((U : C)) : Submonoid (M.obj U)
-    - map({U V : C} (i : U ⟶ V)) : obj U <= (obj V).comap (M.map i).hom  [default: by cat_disch]
-
-中文:
-结构 子幺半群函子
-  参数: where
-  公理与运算 (2 个):
-    - obj((U : C)) : 子幺半群 (M.obj U)
-    - map({U V : C} (i : U ⟶ V)) : obj U <= (obj V).comap (M.map i).hom  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A submonoid functor consists of a submonoid of `M.obj U` for every `U`,
+compatible with the restriction maps `M.map i`.
 -/
 structure SubmonoidFunctor where
   /-- A submonoid of `M.obj U` for all `U : C`. -/
   obj (U : C) : Submonoid (M.obj U)
   /-- For any `i : U ⟶ V`, `M.map i` maps the submonoid `obj U` into the submonoid `obj V`. -/
-  map {U V : C} (i : U ⟶ V) : obj U <= (obj V).comap (M.map i).hom := by cat_disch
+  map {U V : C} (i : U ⟶ V) : obj U ≤ (obj V).comap (M.map i).hom := by cat_disch
 
 namespace SubmonoidFunctor
 
 variable (S : SubmonoidFunctor M)
 
-/--
-lemma `map_le` / 引理 `map_le`
-
-English:
-lemma map_le
-  given: {U V : C} (f : U ⟶ V)
-  statement: (S.obj U).map (M.map f).hom <= S.obj V
-  proof: by
-  grw [Submonoid.map_le_iff_le_comap, S.map f]
-
-中文:
-引理 map_le
-  条件: {U V : C} (f : U ⟶ V)
-  结论: (S.obj U).map (M.map f).hom <= S.obj V
-  证明: by
-  grw [Submonoid.map_le_iff_le_comap, S.map f]
-
-Depends on / 依赖: S.map, Submonoid, Submonoid.map_le_iff_le_comap, map_le_iff_le_comap
+/-
+**CategoryTheory.SubmonoidFunctor.map_le** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.SubmonoidFunctor`。
+形式化陈述：map_le {U V : C} (f : U ⟶ V) : (S.obj U).map (M.map f).hom <= S.obj V
+参数：f : U ⟶ V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submonoid.map_le_iff_le_comap`：map_le_iff_le_comap {f : F} {S : Submonoi
+d M} {T : Submonoid N} : S.map f <= T ↔ S <= T.comap f
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `CategoryTheory.SubmonoidFunctor.map`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {M : CategoryTheory.Functor C MonCat}   (self : CategoryTh
+eory.SubmonoidFunctor M) …
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma map_le {U V : C} (f : U ⟶ V) : (S.obj U).map (M.map f).hom <= S.obj V := by
+lemma map_le {U V : C} (f : U ⟶ V) : (S.obj U).map (M.map f).hom ≤ S.obj V := by
   grw [Submonoid.map_le_iff_le_comap, S.map f]
 
 /-- The functor of monoids associated to a functor of submonoids. -/
 @[simps obj map]
-/--
-Definition of `toFunctor` / `toFunctor` 的定义
+/-
+**CategoryTheory.SubmonoidFunctor.toFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.SubmonoidFunctor`。
+形式化陈述：toFunctor : C ⥤ MonCat.{w} where obj _
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SubmonoidFunctor.map`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {M : CategoryTheory.Functor C MonCat}   (self : CategoryTh
+eory.SubmonoidFunctor M) …
 
-English:
-definition toFunctor
-  signature: : C ⥤ MonCat.{w} where
-  body: MonCat.of (S.obj _)
-  map i :=
-MonCat.ofHom ((M.map i).hom.submonoidComap (S.obj _)).comp Submonoid.inclusion (S.map i)
-
-中文:
-定义 toFunctor
-  签名: : C ⥤ 幺半群范畴.{w} where
-  定义体: MonCat.of (S.obj _)
-  map i :=
-MonCat.ofHom ((M.map i).hom.submonoidComap (S.obj _)).comp Submonoid.inclusion (S.map i)
-
-Depends on / 依赖: MonCat, MonCat.of, S.obj
+--- 原说明 ---
+The functor of monoids associated to a functor of submonoids.
 -/
 def toFunctor : C ⥤ MonCat.{w} where
   obj _ := MonCat.of (S.obj _)
   map i :=
-MonCat.ofHom ((M.map i).hom.submonoidComap (S.obj _)).comp Submonoid.inclusion (S.map i)
+    MonCat.ofHom <| ((M.map i).hom.submonoidComap (S.obj _)).comp <| Submonoid.inclusion (S.map i)
 
 /-- The subfunctor associated to a functor of submonoids. -/
 @[simps obj]
-/--
-Definition of `toSubfunctor` / `toSubfunctor` 的定义
+/-
+**CategoryTheory.SubmonoidFunctor.toSubfunctor** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.SubmonoidFunctor`。
+形式化陈述：toSubfunctor : Subfunctor (M ⋙ forget MonCat) where obj _
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SubmonoidFunctor.map`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {M : CategoryTheory.Functor C MonCat}   (self : CategoryTh
+eory.SubmonoidFunctor M) …
 
-English:
-definition toSubfunctor
-  signature: : Subfunctor (M ⋙ forget MonCat) where
-  body: (S.obj _).carrier
-  map := S.map
-
-中文:
-定义 toSubfunctor
-  签名: : 子函子 (M ⋙ forget 幺半群范畴) where
-  定义体: (S.obj _).carrier
-  map := S.map
-
-Depends on / 依赖: S.obj, carrier
+--- 原说明 ---
+The subfunctor associated to a functor of submonoids.
 -/
 def toSubfunctor : Subfunctor (M ⋙ forget MonCat) where
   obj _ := (S.obj _).carrier
   map := S.map
 
 variable {M M' M'' : C ⥤ MonCat.{w}} (S : SubmonoidFunctor M) (S' : SubmonoidFunctor M')
-
+/-
+**CategoryTheory.SubmonoidFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sub
+monoidFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {U : C} : CoeHead (S.toFunctor.obj U) (M.obj U) where
   coe := Subtype.val
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (SubmonoidFunctor M)
-  body: PartialOrder.lift SubmonoidFunctor.obj fun _ _ => SubmonoidFunctor.ext
-
-@[simps! top_obj bot_obj sup_obj inf_obj sInf_obj sSup_obj]
-
-中文:
-实例 :
-  签名: 偏序 (子幺半群函子 M)
-  定义体: PartialOrder.lift SubmonoidFunctor.obj fun _ _ => SubmonoidFunctor.ext
-
-@[simps! top_obj bot_obj sup_obj inf_obj sInf_obj sSup_obj]
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, SubmonoidFunctor, SubmonoidFunctor.ext, SubmonoidFunctor.obj
+/-
+**CategoryTheory.SubmonoidFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sub
+monoidFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (SubmonoidFunctor M) :=
   PartialOrder.lift SubmonoidFunctor.obj fun _ _ => SubmonoidFunctor.ext
 
 @[simps! top_obj bot_obj sup_obj inf_obj sInf_obj sSup_obj]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (SubmonoidFunctor M)
-  body: { obj _ := F.obj _ ⊔ G.obj _
-      map i := by grw [F.map i, G.map i, (Submonoid.monotone_comap).le_map_sup] }
-  le_sup_left _ _ _ := by simp
-  le_sup_right _ _ _ := by simp
-  sup_le F G H h₁ h₂ U := by simp [h₁ U, h₂ U]
-  inf S T :=
-    { obj _ := S.obj _ ⊓ T.obj _
-      map _ _ h := ⟨S.map _ h.1, T.map _ h.2⟩ }
-  inf_le_left _ _ _ _ h := h.1
-  inf_le_right _ _ _ _ h := h.2
-  le_inf _ _ _ h₁ h₂ _ _ h := ⟨h₁ _ h, h₂ _ h⟩
-  sSup S :=
-    { obj _ := ⨆ F in S, F.obj _
-      map {U V} f := by
-        grw [← Submonoid.monotone_comap.le_map_iSup₂]
-        exact iSup₂_mono fun F _ => F.map f }
-  isLUB_sSup _ := ⟨fun a ha U => le_iSup₂_of_le a ha le_rfl, fun _ _ _ => by aesop⟩
-  sInf S :=
-    { obj _ := ⨅ F in S, F.obj _
-      map f := by
-        rw [(Submonoid.gc_map_comap (M.map f).hom).u_iInf₂]
-        exact iInf₂_mono fun F _ => F.map f }
-  isGLB_sInf _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
-  bot := { obj _ := ⊥ }
-  bot_le _ _ := bot_le
-  top := { obj _ := ⊤ }
-  le_top _ _ := le_top
-
-中文:
-实例 :
-  签名: 完备格 (子幺半群函子 M)
-  定义体: { obj _ := F.obj _ ⊔ G.obj _
-      map i := by grw [F.map i, G.map i, (Submonoid.monotone_comap).le_map_sup] }
-  le_sup_left _ _ _ := by simp
-  le_sup_right _ _ _ := by simp
-  sup_le F G H h₁ h₂ U := by simp [h₁ U, h₂ U]
-  inf S T :=
-    { obj _ := S.obj _ ⊓ T.obj _
-      map _ _ h := ⟨S.map _ h.1, T.map _ h.2⟩ }
-  inf_le_left _ _ _ _ h := h.1
-  inf_le_right _ _ _ _ h := h.2
-  le_inf _ _ _ h₁ h₂ _ _ h := ⟨h₁ _ h, h₂ _ h⟩
-  sSup S :=
-    { obj _ := ⨆ F in S, F.obj _
-      map {U V} f := by
-        grw [← Submonoid.monotone_comap.le_map_iSup₂]
-        exact iSup₂_mono fun F _ => F.map f }
-  isLUB_sSup _ := ⟨fun a ha U => le_iSup₂_of_le a ha le_rfl, fun _ _ _ => by aesop⟩
-  sInf S :=
-    { obj _ := ⨅ F in S, F.obj _
-      map f := by
-        rw [(Submonoid.gc_map_comap (M.map f).hom).u_iInf₂]
-        exact iInf₂_mono fun F _ => F.map f }
-  isGLB_sInf _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
-  bot := { obj _ := ⊥ }
-  bot_le _ _ := bot_le
-  top := { obj _ := ⊤ }
-  le_top _ _ := le_top
-
-Depends on / 依赖: F.map, F.obj, G.map, G.obj, S.map, S.obj, Submonoid, Submonoid.monotone_comap, Submonoid.monotone_comap.le_map_iSup, T.map, T.obj, inf_le_left, inf_le_right, le_inf, le_map_sup, le_sup_left, le_sup_right, monotone_comap, sup_le
+/-
+**CategoryTheory.SubmonoidFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sub
+monoidFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (SubmonoidFunctor M) where
   sup F G :=
@@ -247,17 +156,17 @@ instance : CompleteLattice (SubmonoidFunctor M) where
   inf_le_right _ _ _ _ h := h.2
   le_inf _ _ _ h₁ h₂ _ _ h := ⟨h₁ _ h, h₂ _ h⟩
   sSup S :=
-    { obj _ := ⨆ F in S, F.obj _
+    { obj _ := ⨆ F ∈ S, F.obj _
       map {U V} f := by
         grw [← Submonoid.monotone_comap.le_map_iSup₂]
-        exact iSup₂_mono fun F _ => F.map f }
-  isLUB_sSup _ := ⟨fun a ha U => le_iSup₂_of_le a ha le_rfl, fun _ _ _ => by aesop⟩
+        exact iSup₂_mono fun F _ ↦ F.map f }
+  isLUB_sSup _ := ⟨fun a ha U ↦ le_iSup₂_of_le a ha le_rfl, fun _ _ _ ↦ by aesop⟩
   sInf S :=
-    { obj _ := ⨅ F in S, F.obj _
+    { obj _ := ⨅ F ∈ S, F.obj _
       map f := by
         rw [(Submonoid.gc_map_comap (M.map f).hom).u_iInf₂]
-        exact iInf₂_mono fun F _ => F.map f }
-  isGLB_sInf _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
+        exact iInf₂_mono fun F _ ↦ F.map f }
+  isGLB_sInf _ := ⟨fun _ _ _ _ ↦ by aesop, fun _ _ _ ↦ by aesop⟩
   bot := { obj _ := ⊥ }
   bot_le _ _ := bot_le
   top := { obj _ := ⊤ }
@@ -265,47 +174,23 @@ instance : CompleteLattice (SubmonoidFunctor M) where
 
 /-- The inclusion of a submonoid functor `S` to the original functor of monoids `M`. -/
 @[simps]
-/--
-Definition of `ι` / `ι` 的定义
+/-
+**CategoryTheory.SubmonoidFunctor.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sub
+monoidFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι
-  signature: : S.toFunctor ⟶ M where
-  body: MonCat.ofHom (Submonoid.subtype _)
-
-中文:
-定义 ι
-  签名: : S.toFunctor ⟶ M where
-  定义体: MonCat.ofHom (Submonoid.subtype _)
-
-Depends on / 依赖: MonCat, MonCat.ofHom, Submonoid, Submonoid.subtype, subtype
+--- 原说明 ---
+The inclusion of a submonoid functor `S` to the original functor of monoids `M`.
 -/
 def ι : S.toFunctor ⟶ M where
   app _ := MonCat.ofHom (Submonoid.subtype _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono S.ι
-  body: by
-  suffices forall (X : C), Mono (S.ι.app X) from NatTrans.mono_of_mono_app _
-  intro X
-  exact ConcreteCategory.mono_of_injective _ Subtype.val_injective
-
-中文:
-实例 :
-  签名: 单态射 S.ι
-  定义体: by
-  suffices forall (X : C), Mono (S.ι.app X) from NatTrans.mono_of_mono_app _
-  intro X
-  exact ConcreteCategory.mono_of_injective _ Subtype.val_injective
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, NatTrans, NatTrans.mono_of_mono_app, Subtype, Subtype.val_injective, mono_of_injective, mono_of_mono_app, val_injective
+/-
+**CategoryTheory.SubmonoidFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sub
+monoidFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono S.ι := by
-  suffices forall (X : C), Mono (S.ι.app X) from NatTrans.mono_of_mono_app _
+  suffices ∀ (X : C), Mono (S.ι.app X) from NatTrans.mono_of_mono_app _
   intro X
   exact ConcreteCategory.mono_of_injective _ Subtype.val_injective
 
@@ -315,71 +200,86 @@ variable (p : M ⟶ M')
 
 /-- The submonoid functor defined by the image along a morphism of functors of monoids. -/
 @[simps]
-/--
-Definition of `image` / `image` 的定义
+/-
+**CategoryTheory.SubmonoidFunctor.image** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.SubmonoidFunctor`。
+形式化陈述：image (S : SubmonoidFunctor M) : SubmonoidFunctor M' where obj _
+参数：S : SubmonoidFunctor M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: (S : SubmonoidFunctor M)
-  body: Submonoid.map (MonCat.Hom.hom (p.app _)) (S.obj _)
-  map i := by
-    rw [← Submonoid.map_le_iff_le_comap]; rw [Submonoid.map_map]; rw [← MonCat.hom_comp]; rw [← p.naturality]; rw [MonCat.hom_comp]; rw [← Submonoid.map_map]
-    grw [S.map_le]
-
-中文:
-定义 像
-  签名: (S : 子幺半群函子 M)
-  定义体: Submonoid.map (MonCat.Hom.hom (p.app _)) (S.obj _)
-  map i := by
-    rw [← Submonoid.map_le_iff_le_comap]; rw [Submonoid.map_map]; rw [← MonCat.hom_comp]; rw [← p.naturality]; rw [MonCat.hom_comp]; rw [← Submonoid.map_map]
-    grw [S.map_le]
-
-Depends on / 依赖: MonCat, MonCat.Hom.hom, S.obj, Submonoid, Submonoid.map, p.app
+--- 原说明 ---
+The submonoid functor defined by the image along a morphism of functors of monoi
+ds.
 -/
 def image (S : SubmonoidFunctor M) : SubmonoidFunctor M' where
   obj _ := Submonoid.map (MonCat.Hom.hom (p.app _)) (S.obj _)
   map i := by
-    rw [← Submonoid.map_le_iff_le_comap]; rw [Submonoid.map_map]; rw [← MonCat.hom_comp]; rw [← p.naturality]; rw [MonCat.hom_comp]; rw [← Submonoid.map_map]
+    rw [← Submonoid.map_le_iff_le_comap, Submonoid.map_map, ← MonCat.hom_comp, ← p.naturality,
+      MonCat.hom_comp, ← Submonoid.map_map]
     grw [S.map_le]
 
 variable (M) in
 @[simp]
-/--
-lemma `image_id` / 引理 `image_id`
-
-English:
-lemma image_id
-  statement: image (𝟙 M) ⊤ = ⊤
-  proof: by aesop
-
-@[simp]
-
-中文:
-引理 image_id
-  结论: 像 (𝟙 M) ⊤ = ⊤
-  证明: by aesop
-
-@[simp]
+/-
+**CategoryTheory.SubmonoidFunctor.image_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.SubmonoidFunctor`。
+形式化陈述：image_id : image (𝟙 M) ⊤ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SubmonoidFunctor.ext`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} {M : CategoryTheory.Functor C MonCat}   {x y : CategoryThe
+ory.SubmonoidFunctor M}, …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.SubmonoidFunctor.image_obj`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {M M' : CategoryTheory.Functor C MonCat} (p : M ⟶ M'
+)   (S : CategoryTheory.Submono…
+· 使用定理 `Submonoid.map_id`：map_id (S : Submonoid M) : S.map (MonoidHom.id M) = S
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma image_id : image (𝟙 M) ⊤ = ⊤ := by aesop
 
 @[simp]
-/--
-lemma `image_comp` / 引理 `image_comp`
-
-English:
-lemma image_comp
-  given: (p' : M' ⟶ M'')
-  statement: S.image (p ≫ p') = (S.image p).image p'
-  proof: by cat_disch
-
-中文:
-引理 image_comp
-  条件: (p' : M' ⟶ M'')
-  结论: S.像 (p ≫ p') = (S.像 p).像 p'
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.SubmonoidFunctor.image_comp** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.SubmonoidFunctor`。
+形式化陈述：image_comp (p' : M' ⟶ M'') : S.image (p ≫ p') = (S.image p).image p'
+参数：p' : M' ⟶ M''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SubmonoidFunctor.ext`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} {M : CategoryTheory.Functor C MonCat}   {x y : CategoryThe
+ory.SubmonoidFunctor M}, …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.SubmonoidFunctor.image_obj`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {M M' : CategoryTheory.Functor C MonCat} (p : M ⟶ M'
+)   (S : CategoryTheory.Submono…
+· 使用定理 `Submonoid.map.congr_simp`：∀ {M : Type u_1} {N : Type u_2} [inst : MulOne
+Class M] [inst_1 : MulOneClass N] {F : Type u_4} [inst_2 : FunLike F M N]   [mc 
+: MonoidHomCla…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma image_comp (p' : M' ⟶ M'') : S.image (p ≫ p') = (S.image p).image p' := by cat_disch
 
@@ -391,26 +291,17 @@ variable (p : M ⟶ M') (S'' : SubmonoidFunctor M'')
 
 /-- The submonoid functor defined by the preimage along a morphism of functors of monoids. -/
 @[simps]
-/--
-Definition of `comap` / `comap` 的定义
+/-
+**CategoryTheory.SubmonoidFunctor.comap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.SubmonoidFunctor`。
+形式化陈述：comap (S' : SubmonoidFunctor M') : SubmonoidFunctor M where obj _
+参数：S' : SubmonoidFunctor M'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (S' : SubmonoidFunctor M')
-  body: Submonoid.comap (MonCat.Hom.hom (p.app _)) (S'.obj _)
-  map _ _ h := by
-    simp_rw [Submonoid.mem_comap, NatTrans.naturality_apply]
-    exact Submonoid.mem_comap.mp (Set.mem_of_mem_of_subset h (S'.map _))
-
-中文:
-定义 comap
-  签名: (S' : 子幺半群函子 M')
-  定义体: Submonoid.comap (MonCat.Hom.hom (p.app _)) (S'.obj _)
-  map _ _ h := by
-    simp_rw [Submonoid.mem_comap, NatTrans.naturality_apply]
-    exact Submonoid.mem_comap.mp (Set.mem_of_mem_of_subset h (S'.map _))
-
-Depends on / 依赖: MonCat, MonCat.Hom.hom, Submonoid, Submonoid.comap, p.app
+--- 原说明 ---
+The submonoid functor defined by the preimage along a morphism of functors of mo
+noids.
 -/
 def comap (S' : SubmonoidFunctor M') : SubmonoidFunctor M where
   obj _ := Submonoid.comap (MonCat.Hom.hom (p.app _)) (S'.obj _)
@@ -420,58 +311,33 @@ def comap (S' : SubmonoidFunctor M') : SubmonoidFunctor M where
 
 variable (M) in
 @[simp]
-/--
-lemma `comap_id` / 引理 `comap_id`
-
-English:
-lemma comap_id
-  statement: comap (𝟙 M) ⊤ = ⊤
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 comap_id
-  结论: comap (𝟙 M) ⊤ = ⊤
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.SubmonoidFunctor.comap_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.SubmonoidFunctor`。
+形式化陈述：comap_id : comap (𝟙 M) ⊤ = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comap_id : comap (𝟙 M) ⊤ = ⊤ := rfl
 
 @[simp]
-/--
-lemma `comap_comp` / 引理 `comap_comp`
-
-English:
-lemma comap_comp
-  given: (p' : M' ⟶ M'')
-  statement: S''.comap (p ≫ p') = (S''.comap p').comap p
-  proof: by rfl
-
-中文:
-引理 comap_comp
-  条件: (p' : M' ⟶ M'')
-  结论: S''.comap (p ≫ p') = (S''.comap p').comap p
-  证明: by rfl
+/-
+**CategoryTheory.SubmonoidFunctor.comap_comp** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.SubmonoidFunctor`。
+形式化陈述：comap_comp (p' : M' ⟶ M'') : S''.comap (p ≫ p') = (S''.comap p').comap p
+参数：p' : M' ⟶ M''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comap_comp (p' : M' ⟶ M'') : S''.comap (p ≫ p') = (S''.comap p').comap p := by rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `image_comap_ι` / 引理 `image_comap_ι`
-
-English:
-lemma image_comap_ι
-  statement: image S.ι (comap S.ι S) = S
-  proof: by aesop
-
-中文:
-引理 image_comap_ι
-  结论: 像 S.ι (comap S.ι S) = S
-  证明: by aesop
+/-
+**CategoryTheory.SubmonoidFunctor.image_comap_** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.SubmonoidFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma image_comap_ι : image S.ι (comap S.ι S) = S := by aesop
 
@@ -480,47 +346,31 @@ end comap
 section lift
 
 variable (p : M ⟶ M') (S : SubmonoidFunctor M) (S' : SubmonoidFunctor M')
-  (hp : image p ⊤ <= S')
+  (hp : image p ⊤ ≤ S')
 
 set_option backward.defeqAttrib.useBackward true in
 /-- If the image of morphism `M' ⟶ M` lands in a submonoid functor `S`,
 then the morphism factors through it. -/
 @[simps! app]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.SubmonoidFunctor.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.SubmonoidFunctor`。
+形式化陈述：lift : M ⟶ S'.toFunctor where app U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : M ⟶ S'.toFunctor where
-  body: MonCat.ofHom MonoidHom.codRestrict (p.app U).hom _ fun x => hp _ (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lift
-  签名: : M ⟶ S'.toFunctor where
-  定义体: MonCat.ofHom MonoidHom.codRestrict (p.app U).hom _ fun x => hp _ (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: MonCat, MonCat.ofHom, MonoidHom, MonoidHom.codRestrict, codRestrict, p.app
+--- 原说明 ---
+If the image of morphism `M' ⟶ M` lands in a submonoid functor `S`,
+then the morphism factors through it.
 -/
 def lift : M ⟶ S'.toFunctor where
-app U := MonCat.ofHom MonoidHom.codRestrict (p.app U).hom _ fun x => hp _ (by simp)
+  app U := MonCat.ofHom <| MonoidHom.codRestrict (p.app U).hom _ fun x ↦ hp _ (by simp)
 
 @[reassoc (attr := simp)]
-/--
-theorem `lift_ι` / 定理 `lift_ι`
-
-English:
-theorem lift_ι
-  statement: lift p S' hp ≫ S'.ι = p
-  proof: rfl
-
-中文:
-定理 lift_ι
-  结论: lift p S' hp ≫ S'.ι = p
-  证明: rfl
+/-
+**CategoryTheory.SubmonoidFunctor.lift_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.SubmonoidFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift_ι : lift p S' hp ≫ S'.ι = p := rfl
 
@@ -529,3 +379,4 @@ end lift
 end SubmonoidFunctor
 
 end CategoryTheory
+

@@ -38,98 +38,87 @@ namespace extendToSucc
 variable (X)
 
 set_option backward.privateInPublic true in
-/--
-Definition of `obj` / `obj` 的定义
+/-- `extendToSucc`, on objects: it coincides with `F.obj` for `i ≤ j`, and
+it sends `Order.succ j` to the given object `X`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：obj (i : Set.Iic (Order.succ j)) : C
+参数：i : Set.Iic (Order.succ j)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition obj
-  signature: (i : Set.Iic (Order.succ j))
-  body: if hij : i.1 <= j then F.obj ⟨i.1, hij⟩ else X
-
-中文:
-定义 obj
-  签名: (i : 集合.左无界右闭区间 (Order.succ j))
-  定义体: if hij : i.1 <= j then F.obj ⟨i.1, hij⟩ else X
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+`extendToSucc`, on objects: it coincides with `F.obj` for `i ≤ j`, and
+it sends `Order.succ j` to the given object `X`.
 -/
 def obj (i : Set.Iic (Order.succ j)) : C :=
-  if hij : i.1 <= j then F.obj ⟨i.1, hij⟩ else X
-
-/--
-lemma `obj_eq` / 引理 `obj_eq`
-
-English:
-lemma obj_eq
-  given: (i : Set.Iic j)
-  proof: dif_pos i.2
-
-中文:
-引理 obj_eq
-  条件: (i : 集合.左无界右闭区间 j)
-  证明: dif_pos i.2
-
-Depends on / 依赖: Set.fintypeSubset, dif_pos, fintypeSubset, neighborSet_subset_verts
+  if hij : i.1 ≤ j then F.obj ⟨i.1, hij⟩ else X
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_eq** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：obj_eq (i : Set.Iic j) : obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ = F.obj 
+i
+参数：i : Set.Iic j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
 -/
 lemma obj_eq (i : Set.Iic j) :
     obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ = F.obj i := dif_pos i.2
 
-/--
-Definition of `objIso` / `objIso` 的定义
+/-- The isomorphism `obj F X ⟨i, _⟩ ≅ F.obj i` when `i : Set.Iic j`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.objIso** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：objIso (i : Set.Iic j) : obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ ≅ F.obj 
+i
+参数：i : Set.Iic j。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_eq`：obj_eq (i : S
+et.Iic j) : obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ = F.obj i
 
-English:
-definition objIso
-  signature: (i : Set.Iic j)
-  body: eqToIso (obj_eq _ _ _)
-
-include hj in
-
-中文:
-定义 objIso
-  签名: (i : 集合.左无界右闭区间 j)
-  定义体: eqToIso (obj_eq _ _ _)
-
-include hj in
-
-Depends on / 依赖: eqToIso, obj_eq
+--- 原说明 ---
+The isomorphism `obj F X ⟨i, _⟩ ≅ F.obj i` when `i : Set.Iic j`.
 -/
 def objIso (i : Set.Iic j) :
     obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ ≅ F.obj i :=
   eqToIso (obj_eq _ _ _)
 
 include hj in
-/--
-lemma `obj_succ_eq` / 引理 `obj_succ_eq`
-
-English:
-lemma obj_succ_eq
-  statement: obj F X ⟨Order.succ j, by simp⟩ = X
-  proof: dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj)
-
-中文:
-引理 obj_succ_eq
-  结论: obj F X ⟨Order.succ j, by simp⟩ = X
-  证明: dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj)
-
-Depends on / 依赖: Order.succ_le_iff_isMax, dif_neg, succ_le_iff_isMax
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_succ_eq** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：obj_succ_eq : obj F X ⟨Order.succ j, by simp⟩ = X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma obj_succ_eq : obj F X ⟨Order.succ j, by simp⟩ = X :=
   dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj)
 
-/--
-Definition of `objSuccIso` / `objSuccIso` 的定义
+/-- The isomorphism `obj F X ⟨Order.succ j, _⟩ ≅ X`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.objSuccIso** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：objSuccIso : obj F X ⟨Order.succ j, by simp⟩ ≅ X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_succ_eq`：obj_succ
+_eq : obj F X ⟨Order.succ j, by simp⟩ = X
 
-English:
-definition objSuccIso
-  signature: :
-  body: eqToIso (obj_succ_eq hj _ _)
-
-中文:
-定义 objSuccIso
-  签名: :
-  定义体: eqToIso (obj_succ_eq hj _ _)
-
-Depends on / 依赖: eqToIso, obj_succ_eq
+--- 原说明 ---
+The isomorphism `obj F X ⟨Order.succ j, _⟩ ≅ X`.
 -/
 def objSuccIso :
     obj F X ⟨Order.succ j, by simp⟩ ≅ X :=
@@ -137,49 +126,25 @@ def objSuccIso :
 
 variable {X}
 
-/--
-Definition of `map` / `map` 的定义
+/-- `extendToSucc`, on morphisms. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.map** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= Order.succ j) : obj F X ⟨i₁, 
+hi.trans hi₂⟩ ⟶ obj F X ⟨i₂, hi₂⟩
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ <= Order.succ j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= Order.succ j)
-  body: if h₁ : i₂ <= j then
-    (objIso F X ⟨i₁, hi.trans h₁⟩).hom ≫ F.map (homOfLE hi) ≫ (objIso F X ⟨i₂, h₁⟩).inv
-  else
-    if h₂ : i₁ <= j then
-      (objIso F X ⟨i₁, h₂⟩).hom ≫ F.map (homOfLE h₂) ≫ τ ≫
-        (objSuccIso hj F X).inv ≫ eqToHom (by
-          congr
-          exact le_antisymm (Order.succ_le_of_lt (not_le.1 h₁)) hi₂)
-    else
-      eqToHom (by
-        congr
-        rw [le_antisymm hi₂ (Order.succ_le_of_lt (not_le.1 h₁))]; rw [le_antisymm (hi.trans hi₂) (Order.succ_le_of_lt (not_le.1 h₂))])
-
-中文:
-定义 map
-  签名: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= Order.succ j)
-  定义体: if h₁ : i₂ <= j then
-    (objIso F X ⟨i₁, hi.trans h₁⟩).hom ≫ F.map (homOfLE hi) ≫ (objIso F X ⟨i₂, h₁⟩).inv
-  else
-    if h₂ : i₁ <= j then
-      (objIso F X ⟨i₁, h₂⟩).hom ≫ F.map (homOfLE h₂) ≫ τ ≫
-        (objSuccIso hj F X).inv ≫ eqToHom (by
-          congr
-          exact le_antisymm (Order.succ_le_of_lt (not_le.1 h₁)) hi₂)
-    else
-      eqToHom (by
-        congr
-        rw [le_antisymm hi₂ (Order.succ_le_of_lt (not_le.1 h₁))]; rw [le_antisymm (hi.trans hi₂) (Order.succ_le_of_lt (not_le.1 h₂))])
-
-Depends on / 依赖: F.map, Order.succ_le_of_lt, eqToHom, hi.trans, homOfLE, le_antisymm, not_le, objIso, objSuccIso, succ_le_of_lt
+--- 原说明 ---
+`extendToSucc`, on morphisms.
 -/
-def map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= Order.succ j) :
+def map (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ ≤ Order.succ j) :
     obj F X ⟨i₁, hi.trans hi₂⟩ ⟶ obj F X ⟨i₂, hi₂⟩ :=
-  if h₁ : i₂ <= j then
+  if h₁ : i₂ ≤ j then
     (objIso F X ⟨i₁, hi.trans h₁⟩).hom ≫ F.map (homOfLE hi) ≫ (objIso F X ⟨i₂, h₁⟩).inv
   else
-    if h₂ : i₁ <= j then
+    if h₂ : i₁ ≤ j then
       (objIso F X ⟨i₁, h₂⟩).hom ≫ F.map (homOfLE h₂) ≫ τ ≫
         (objSuccIso hj F X).inv ≫ eqToHom (by
           congr
@@ -187,51 +152,56 @@ def map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= Order.succ j) :
     else
       eqToHom (by
         congr
-        rw [le_antisymm hi₂ (Order.succ_le_of_lt (not_le.1 h₁))]; rw [le_antisymm (hi.trans hi₂) (Order.succ_le_of_lt (not_le.1 h₂))])
-
-/--
-lemma `map_eq` / 引理 `map_eq`
-
-English:
-lemma map_eq
-  given: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  proof: dif_pos hi₂
-
-中文:
-引理 map_eq
-  条件: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  证明: dif_pos hi₂
-
-Depends on / 依赖: dif_pos
+        rw [le_antisymm hi₂ (Order.succ_le_of_lt (not_le.1 h₁)),
+          le_antisymm (hi.trans hi₂) (Order.succ_le_of_lt (not_le.1 h₂))])
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_eq** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：map_eq (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) : map hj F τ i₁ i₂ hi (
+hi₂.trans (Order.le_succ j)) = (objIso F X ⟨i₁, hi.trans hi₂⟩).hom ≫ F.map (homO
+fLE hi) ≫ (objIso F X ⟨i₂, hi₂⟩).inv
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
 -/
-lemma map_eq (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) :
+lemma map_eq (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ ≤ j) :
     map hj F τ i₁ i₂ hi (hi₂.trans (Order.le_succ j)) =
       (objIso F X ⟨i₁, hi.trans hi₂⟩).hom ≫ F.map (homOfLE hi) ≫
         (objIso F X ⟨i₂, hi₂⟩).inv :=
   dif_pos hi₂
-
-/--
-lemma `map_self_succ` / 引理 `map_self_succ`
-
-English:
-lemma map_self_succ
-  proof: by
-  dsimp [map]
-  rw [dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj),
-    dif_pos (by rfl), Functor.map_id, comp_id, id_comp]
-
-@[simp]
-
-中文:
-引理 map_self_succ
-  证明: by
-  dsimp [map]
-  rw [dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj),
-    dif_pos (by rfl), Functor.map_id, comp_id, id_comp]
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.map_id, Order.succ_le_iff_isMax, comp_id, dif_neg, dif_pos, id_comp, map_id, succ_le_iff_isMax
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_self_succ** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：map_self_succ : map hj F τ j (Order.succ j) (Order.le_succ j) (by rfl) = (
+objIso F X ⟨j, by simp⟩).hom ≫ τ ≫ (objSuccIso hj F X).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma map_self_succ :
     map hj F τ j (Order.succ j) (Order.le_succ j) (by rfl) =
@@ -241,83 +211,99 @@ lemma map_self_succ :
     dif_pos (by rfl), Functor.map_id, comp_id, id_comp]
 
 @[simp]
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: (i : J) (hi : i <= Order.succ j)
-  proof: by
-  dsimp [map]
-  by_cases h₁ : i <= j
-  · rw [dif_pos h₁, CategoryTheory.Functor.map_id, id_comp, Iso.hom_inv_id]
-  · obtain rfl : i = Order.succ j := le_antisymm hi (Order.succ_le_of_lt (not_le.1 h₁))
-    rw [dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj),
-      dif_neg h₁]
-
-中文:
-引理 map_id
-  条件: (i : J) (hi : i <= Order.succ j)
-  证明: by
-  dsimp [map]
-  by_cases h₁ : i <= j
-  · rw [dif_pos h₁, CategoryTheory.Functor.map_id, id_comp, Iso.hom_inv_id]
-  · obtain rfl : i = Order.succ j := le_antisymm hi (Order.succ_le_of_lt (not_le.1 h₁))
-    rw [dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj),
-      dif_neg h₁]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, Iso.hom_inv_id, Order.succ, Order.succ_le_iff_isMax, Order.succ_le_of_lt, dif_neg, dif_pos, hom_inv_id, id_comp, le_antisymm, map_id, not_le, succ_le_iff_isMax, succ_le_of_lt
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_id** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：map_id (i : J) (hi : i <= Order.succ j) : map hj F τ i i (by rfl) hi = 𝟙 _
+参数：i : J；hi : i <= Order.succ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Order.succ_le_of_lt`：succ_le_of_lt {a b : α} : a < b -> succ a <= b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
 -/
-lemma map_id (i : J) (hi : i <= Order.succ j) :
+lemma map_id (i : J) (hi : i ≤ Order.succ j) :
     map hj F τ i i (by rfl) hi = 𝟙 _ := by
   dsimp [map]
-  by_cases h₁ : i <= j
+  by_cases h₁ : i ≤ j
   · rw [dif_pos h₁, CategoryTheory.Functor.map_id, id_comp, Iso.hom_inv_id]
   · obtain rfl : i = Order.succ j := le_antisymm hi (Order.succ_le_of_lt (not_le.1 h₁))
     rw [dif_neg (by simpa only [Order.succ_le_iff_isMax] using hj),
       dif_neg h₁]
-
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: (i₁ i₂ i₃ : J) (h₁₂ : i₁ <= i₂) (h₂₃ : i₂ <= i₃) (h : i₃ <= Order.succ j)
-  proof: by
-  by_cases h₁ : i₃ <= j
-  · rw [map_eq hj F τ i₁ i₂ _ (h₂₃.trans h₁), map_eq hj F τ i₂ i₃ _ h₁,
-      map_eq hj F τ i₁ i₃ _ h₁, assoc, assoc, Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc,
-      homOfLE_comp]
-  · obtain rfl : i₃ = Order.succ j := le_antisymm h (Order.succ_le_of_lt (not_le.1 h₁))
-    obtain h₂ | rfl := h₂₃.lt_or_eq
-    · rw [Order.lt_succ_iff_of_not_isMax hj] at h₂
-      rw [map_eq hj F τ i₁ i₂ _ h₂]
-      dsimp [map]
-      rw [dif_neg h₁]; rw [dif_pos (h₁₂.trans h₂)]; rw [dif_neg h₁]; rw [dif_pos h₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [comp_id]; rw [← Functor.map_comp_assoc]; rw [homOfLE_comp]
-    · rw [map_id, comp_id]
-
-中文:
-引理 map_comp
-  条件: (i₁ i₂ i₃ : J) (h₁₂ : i₁ <= i₂) (h₂₃ : i₂ <= i₃) (h : i₃ <= Order.succ j)
-  证明: by
-  by_cases h₁ : i₃ <= j
-  · rw [map_eq hj F τ i₁ i₂ _ (h₂₃.trans h₁), map_eq hj F τ i₂ i₃ _ h₁,
-      map_eq hj F τ i₁ i₃ _ h₁, assoc, assoc, Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc,
-      homOfLE_comp]
-  · obtain rfl : i₃ = Order.succ j := le_antisymm h (Order.succ_le_of_lt (not_le.1 h₁))
-    obtain h₂ | rfl := h₂₃.lt_or_eq
-    · rw [Order.lt_succ_iff_of_not_isMax hj] at h₂
-      rw [map_eq hj F τ i₁ i₂ _ h₂]
-      dsimp [map]
-      rw [dif_neg h₁]; rw [dif_pos (h₁₂.trans h₂)]; rw [dif_neg h₁]; rw [dif_pos h₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [comp_id]; rw [← Functor.map_comp_assoc]; rw [homOfLE_comp]
-    · rw [map_id, comp_id]
-
-Depends on / 依赖: Functor, Functor.map_comp_assoc, Iso.inv_hom_id_assoc, Order.lt_succ_iff_of_not_isMax, Order.succ, Order.succ_le_of_lt, dif_neg, dif_pos, homOfLE_comp, inv_hom_id_assoc, le_antisymm, lt_or_eq, lt_succ_iff_of_not_isMax, map_comp_assoc, map_eq, not_le, succ_le_of_lt
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_comp** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.SmallObject.SuccStruct.extendToSucc`。
+形式化陈述：map_comp (i₁ i₂ i₃ : J) (h₁₂ : i₁ <= i₂) (h₂₃ : i₂ <= i₃) (h : i₃ <= Order
+.succ j) : map hj F τ i₁ i₃ (h₁₂.trans h₂₃) h = map hj F τ i₁ i₂ h₁₂ (h₂₃.trans 
+h) ≫ map hj F τ i₂ i₃ h₂₃ h
+参数：i₁ i₂ i₃ : J；h₁₂ : i₁ <= i₂；h₂₃ : i₂ <= i₃；h : i₃ <= Order.succ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_eq`：map_eq (i₁ i₂
+ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) : map hj F τ i₁ i₂ hi (hi₂.trans (Order.le
+_succ j)) = (objIso F X ⟨i₁, hi.trans hi₂⟩).hom…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.homOfLE_comp`：homOfLE_comp {x y z : X} (h : x <= y) (k : 
+y <= z) : homOfLE h ≫ homOfLE k = homOfLE (h.trans k)
+· 使用定理 `LE.le.lt_or_eq`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a < b ∨ a = b
+· 使用定理 `Order.lt_succ_iff_of_not_isMax`：lt_succ_iff_of_not_isMax (ha : ¬IsMax a)
+ : b < succ a ↔ b <= a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_id`：map_id (i : J
+) (hi : i <= Order.succ j) : map hj F τ i i (by rfl) hi = 𝟙 _
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Order.succ_le_of_lt`：succ_le_of_lt {a b : α} : a < b -> succ a <= b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
 -/
-lemma map_comp (i₁ i₂ i₃ : J) (h₁₂ : i₁ <= i₂) (h₂₃ : i₂ <= i₃) (h : i₃ <= Order.succ j) :
+lemma map_comp (i₁ i₂ i₃ : J) (h₁₂ : i₁ ≤ i₂) (h₂₃ : i₂ ≤ i₃) (h : i₃ ≤ Order.succ j) :
     map hj F τ i₁ i₃ (h₁₂.trans h₂₃) h =
       map hj F τ i₁ i₂ h₁₂ (h₂₃.trans h) ≫ map hj F τ i₂ i₃ h₂₃ h := by
-  by_cases h₁ : i₃ <= j
+  by_cases h₁ : i₃ ≤ j
   · rw [map_eq hj F τ i₁ i₂ _ (h₂₃.trans h₁), map_eq hj F τ i₂ i₃ _ h₁,
       map_eq hj F τ i₁ i₃ _ h₁, assoc, assoc, Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc,
       homOfLE_comp]
@@ -326,207 +312,194 @@ lemma map_comp (i₁ i₂ i₃ : J) (h₁₂ : i₁ <= i₂) (h₂₃ : i₂ <= 
     · rw [Order.lt_succ_iff_of_not_isMax hj] at h₂
       rw [map_eq hj F τ i₁ i₂ _ h₂]
       dsimp [map]
-      rw [dif_neg h₁]; rw [dif_pos (h₁₂.trans h₂)]; rw [dif_neg h₁]; rw [dif_pos h₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [comp_id]; rw [← Functor.map_comp_assoc]; rw [homOfLE_comp]
+      rw [dif_neg h₁, dif_pos (h₁₂.trans h₂), dif_neg h₁, dif_pos h₂, assoc, assoc,
+        Iso.inv_hom_id_assoc, comp_id, ← Functor.map_comp_assoc, homOfLE_comp]
     · rw [map_id, comp_id]
 
 end extendToSucc
 
 open extendToSucc in
 include hj in
-/--
-Definition of `extendToSucc` / `extendToSucc` 的定义
+/-- The extension to `Set.Iic (Order.succ j) ⥤ C` of a functor `F : Set.Iic j ⥤ C`,
+when we specify a morphism `F.obj ⟨j, _⟩ ⟶ X`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSucc : Set.Iic (Order.succ j) ⥤ C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendToSucc
-  signature: : Set.Iic (Order.succ j) ⥤ C where
-  body: obj F X
-  map {i₁ i₂} f := map hj F τ i₁ i₂ (leOfHom f) i₂.2
-  map_id _ := extendToSucc.map_id _ F τ _ _
-  map_comp {i₁ i₂ i₃} f g := extendToSucc.map_comp hj F τ i₁ i₂ i₃ (leOfHom f) (leOfHom g) i₃.2
-
-中文:
-定义 extendToSucc
-  签名: : 集合.左无界右闭区间 (Order.succ j) ⥤ C where
-  定义体: obj F X
-  map {i₁ i₂} f := map hj F τ i₁ i₂ (leOfHom f) i₂.2
-  map_id _ := extendToSucc.map_id _ F τ _ _
-  map_comp {i₁ i₂ i₃} f g := extendToSucc.map_comp hj F τ i₁ i₂ i₃ (leOfHom f) (leOfHom g) i₃.2
+--- 原说明 ---
+The extension to `Set.Iic (Order.succ j) ⥤ C` of a functor `F : Set.Iic j ⥤ C`,
+when we specify a morphism `F.obj ⟨j, _⟩ ⟶ X`.
 -/
 def extendToSucc : Set.Iic (Order.succ j) ⥤ C where
   obj := obj F X
   map {i₁ i₂} f := map hj F τ i₁ i₂ (leOfHom f) i₂.2
   map_id _ := extendToSucc.map_id _ F τ _ _
   map_comp {i₁ i₂ i₃} f g := extendToSucc.map_comp hj F τ i₁ i₂ i₃ (leOfHom f) (leOfHom g) i₃.2
-
-/--
-lemma `extendToSucc_obj_eq` / 引理 `extendToSucc_obj_eq`
-
-English:
-lemma extendToSucc_obj_eq
-  given: (i : J) (hi : i <= j)
-  proof: extendToSucc.obj_eq F X ⟨i, hi⟩
-
-中文:
-引理 extendToSucc_obj_eq
-  条件: (i : J) (hi : i <= j)
-  证明: extendToSucc.obj_eq F X ⟨i, hi⟩
-
-Depends on / 依赖: extendToSucc, extendToSucc.obj_eq, obj_eq
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc_obj_eq** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSucc_obj_eq (i : J) (hi : i <= j) : (extendToSucc hj F τ).obj ⟨i, 
+hi.trans (Order.le_succ j)⟩ = F.obj ⟨i, hi⟩
+参数：i : J；hi : i <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_eq`：obj_eq (i : S
+et.Iic j) : obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ = F.obj i
 -/
-lemma extendToSucc_obj_eq (i : J) (hi : i <= j) :
+lemma extendToSucc_obj_eq (i : J) (hi : i ≤ j) :
     (extendToSucc hj F τ).obj ⟨i, hi.trans (Order.le_succ j)⟩ = F.obj ⟨i, hi⟩ :=
   extendToSucc.obj_eq F X ⟨i, hi⟩
 
-/--
-Definition of `extendToSuccObjIso` / `extendToSuccObjIso` 的定义
+/-- The isomorphism `(extendToSucc hj F τ).obj ⟨i, _⟩ ≅ F.obj i` when `i ≤ j` -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSuccObjIso** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSuccObjIso (i : J) (hi : i <= j) : (extendToSucc hj F τ).obj ⟨i, h
+i.trans (Order.le_succ j)⟩ ≅ F.obj ⟨i, hi⟩
+参数：i : J；hi : i <= j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendToSuccObjIso
-  signature: (i : J) (hi : i <= j)
-  body: extendToSucc.objIso F X ⟨i, hi⟩
-
-中文:
-定义 extendToSuccObjIso
-  签名: (i : J) (hi : i <= j)
-  定义体: extendToSucc.objIso F X ⟨i, hi⟩
-
-Depends on / 依赖: extendToSucc, extendToSucc.objIso, objIso
+--- 原说明 ---
+The isomorphism `(extendToSucc hj F τ).obj ⟨i, _⟩ ≅ F.obj i` when `i ≤ j`
 -/
-def extendToSuccObjIso (i : J) (hi : i <= j) :
+def extendToSuccObjIso (i : J) (hi : i ≤ j) :
     (extendToSucc hj F τ).obj ⟨i, hi.trans (Order.le_succ j)⟩ ≅ F.obj ⟨i, hi⟩ :=
   extendToSucc.objIso F X ⟨i, hi⟩
-
-/--
-lemma `extendToSucc_obj_succ_eq` / 引理 `extendToSucc_obj_succ_eq`
-
-English:
-lemma extendToSucc_obj_succ_eq
-  proof: extendToSucc.obj_succ_eq hj F X
-
-中文:
-引理 extendToSucc_obj_succ_eq
-  证明: extendToSucc.obj_succ_eq hj F X
-
-Depends on / 依赖: extendToSucc, extendToSucc.obj_succ_eq, obj_succ_eq
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc_obj_succ_eq** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSucc_obj_succ_eq : (extendToSucc hj F τ).obj ⟨Order.succ j, by sim
+p⟩ = X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_succ_eq`：obj_succ
+_eq : obj F X ⟨Order.succ j, by simp⟩ = X
 -/
 lemma extendToSucc_obj_succ_eq :
     (extendToSucc hj F τ).obj ⟨Order.succ j, by simp⟩ = X :=
   extendToSucc.obj_succ_eq hj F X
 
-/--
-Definition of `extendToSuccObjSuccIso` / `extendToSuccObjSuccIso` 的定义
+/-- The isomorphism `(extendToSucc hj F τ).obj ⟨Order.succ j, _⟩ ≅ X`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSuccObjSuccIso** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSuccObjSuccIso : (extendToSucc hj F τ).obj ⟨Order.succ j, by simp⟩
+ ≅ X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendToSuccObjSuccIso
-  signature: :
-  body: extendToSucc.objSuccIso hj F X
-
-@[reassoc]
-
-中文:
-定义 extendToSuccObjSuccIso
-  签名: :
-  定义体: extendToSucc.objSuccIso hj F X
-
-@[reassoc]
-
-Depends on / 依赖: extendToSucc, extendToSucc.objSuccIso, objSuccIso
+--- 原说明 ---
+The isomorphism `(extendToSucc hj F τ).obj ⟨Order.succ j, _⟩ ≅ X`.
 -/
 def extendToSuccObjSuccIso :
     (extendToSucc hj F τ).obj ⟨Order.succ j, by simp⟩ ≅ X :=
   extendToSucc.objSuccIso hj F X
 
 @[reassoc]
-/--
-lemma `extendToSuccObjIso_hom_naturality` / 引理 `extendToSuccObjIso_hom_naturality`
-
-English:
-lemma extendToSuccObjIso_hom_naturality
-  given: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  proof: by
-  dsimp [extendToSucc, extendToSuccObjIso]
-  rw [extendToSucc.map_eq _ _ _ _ _ _ hi₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-
-中文:
-引理 extendToSuccObjIso_hom_naturality
-  条件: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  证明: by
-  dsimp [extendToSucc, extendToSuccObjIso]
-  rw [extendToSucc.map_eq _ _ _ _ _ _ hi₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id, comp_id, extendToSucc, extendToSucc.map_eq, extendToSuccObjIso, inv_hom_id, map_eq
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSuccObjIso_hom_naturality** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSuccObjIso_hom_naturality (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <=
+ j) : (extendToSucc hj F τ).map (homOfLE hi : ⟨i₁, hi.trans (hi₂.trans (Order.le
+_succ j))⟩ ⟶ ⟨i₂, hi₂.trans (Order.le_succ j)⟩) ≫ (extendToSuccObjIso hj F τ i₂ 
+hi₂).hom = (extendToSuccObjIso hj F τ i₁ (hi.trans hi₂)).hom ≫ F.map (homOfLE hi
+)
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_eq`：map_eq (i₁ i₂
+ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) : map hj F τ i₁ i₂ hi (hi₂.trans (Order.le
+_succ j)) = (objIso F X ⟨i₁, hi.trans hi₂⟩).hom…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma extendToSuccObjIso_hom_naturality (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) :
+lemma extendToSuccObjIso_hom_naturality (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ ≤ j) :
     (extendToSucc hj F τ).map (homOfLE hi :
       ⟨i₁, hi.trans (hi₂.trans (Order.le_succ j))⟩ ⟶ ⟨i₂, hi₂.trans (Order.le_succ j)⟩) ≫
     (extendToSuccObjIso hj F τ i₂ hi₂).hom =
       (extendToSuccObjIso hj F τ i₁ (hi.trans hi₂)).hom ≫ F.map (homOfLE hi) := by
   dsimp [extendToSucc, extendToSuccObjIso]
-  rw [extendToSucc.map_eq _ _ _ _ _ _ hi₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
+  rw [extendToSucc.map_eq _ _ _ _ _ _ hi₂, assoc, assoc, Iso.inv_hom_id, comp_id]
 
 /-- The isomorphism expressing that `extendToSucc hj F τ` extends `F`. -/
 @[simps!]
-/--
-Definition of `extendToSuccRestrictionLEIso` / `extendToSuccRestrictionLEIso` 的定义
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSuccRestrictionLEIso** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSuccRestrictionLEIso : SmallObject.restrictionLE (extendToSucc hj 
+F τ) (Order.le_succ j) ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendToSuccRestrictionLEIso
-  signature: :
-  body: NatIso.ofComponents (fun i => extendToSuccObjIso hj F τ i.1 i.2) (by
-    rintro ⟨i₁, h₁⟩ ⟨i₂, h₂⟩ f
-    apply extendToSuccObjIso_hom_naturality)
-
-中文:
-定义 extendToSuccRestrictionLEIso
-  签名: :
-  定义体: NatIso.ofComponents (fun i => extendToSuccObjIso hj F τ i.1 i.2) (by
-    rintro ⟨i₁, h₁⟩ ⟨i₂, h₂⟩ f
-    apply extendToSuccObjIso_hom_naturality)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, extendToSuccObjIso, extendToSuccObjIso_hom_naturality, ofComponents
+--- 原说明 ---
+The isomorphism expressing that `extendToSucc hj F τ` extends `F`.
 -/
 def extendToSuccRestrictionLEIso :
     SmallObject.restrictionLE (extendToSucc hj F τ) (Order.le_succ j) ≅ F :=
-  NatIso.ofComponents (fun i => extendToSuccObjIso hj F τ i.1 i.2) (by
+  NatIso.ofComponents (fun i ↦ extendToSuccObjIso hj F τ i.1 i.2) (by
     rintro ⟨i₁, h₁⟩ ⟨i₂, h₂⟩ f
     apply extendToSuccObjIso_hom_naturality)
-
-/--
-lemma `extendToSucc_map` / 引理 `extendToSucc_map`
-
-English:
-lemma extendToSucc_map
-  given: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  proof: by
-  rw [← extendToSuccObjIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]
-
-中文:
-引理 extendToSucc_map
-  条件: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  证明: by
-  rw [← extendToSuccObjIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]
-
-Depends on / 依赖: Iso.hom_inv_id, comp_id, extendToSuccObjIso_hom_naturality_assoc, hom_inv_id
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc_map** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSucc_map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) : (extendToSu
+cc hj F τ).map (homOfLE hi : ⟨i₁, hi.trans (hi₂.trans (Order.le_succ j))⟩ ⟶ ⟨i₂,
+ hi₂.trans (Order.le_succ j)⟩) = (extendToSuccObjIso hj F τ i₁ (hi.trans hi₂)).h
+om ≫ F.map (homOfLE hi) ≫ (extendToSuccObjIso hj F τ i₂ hi₂).inv
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.SmallObject.SuccStruct.extendToSuccObjIso_hom_naturality_
+assoc`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {J : Type 
+u} [inst_1 : LinearOrder J]   [inst_2 : SuccOrder J] {j : J} (hj : …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma extendToSucc_map (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) :
+lemma extendToSucc_map (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ ≤ j) :
     (extendToSucc hj F τ).map (homOfLE hi :
       ⟨i₁, hi.trans (hi₂.trans (Order.le_succ j))⟩ ⟶ ⟨i₂, hi₂.trans (Order.le_succ j)⟩) =
       (extendToSuccObjIso hj F τ i₁ (hi.trans hi₂)).hom ≫ F.map (homOfLE hi) ≫
       (extendToSuccObjIso hj F τ i₂ hi₂).inv := by
-  rw [← extendToSuccObjIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]
-
-/--
-lemma `extendToSucc_map_le_succ` / 引理 `extendToSucc_map_le_succ`
-
-English:
-lemma extendToSucc_map_le_succ
-  proof: extendToSucc.map_self_succ _ _ _
-
-中文:
-引理 extendToSucc_map_le_succ
-  证明: extendToSucc.map_self_succ _ _ _
-
-Depends on / 依赖: extendToSucc, extendToSucc.map_self_succ, map_self_succ
+  rw [← extendToSuccObjIso_hom_naturality_assoc, Iso.hom_inv_id, comp_id]
+/-
+**CategoryTheory.SmallObject.SuccStruct.extendToSucc_map_le_succ** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：extendToSucc_map_le_succ : (extendToSucc hj F τ).map (homOfLE (Order.le_su
+cc j)) = (extendToSuccObjIso hj F τ j (by simp)).hom ≫ τ ≫ (extendToSuccObjSuccI
+so hj F τ).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.map_self_succ`：map_se
+lf_succ : map hj F τ j (Order.succ j) (Order.le_succ j) (by rfl) = (objIso F X ⟨
+j, by simp⟩).hom ≫ τ ≫ (objSuccIso hj F X).inv
 -/
 lemma extendToSucc_map_le_succ :
     (extendToSucc hj F τ).map (homOfLE (Order.le_succ j)) =
@@ -535,48 +508,74 @@ lemma extendToSucc_map_le_succ :
   extendToSucc.map_self_succ _ _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `arrowMap_extendToSucc` / 引理 `arrowMap_extendToSucc`
-
-English:
-lemma arrowMap_extendToSucc
-  given: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  proof: by
-  simp [arrowMap, extendToSucc_map hj F τ i₁ i₂ hi hi₂,
-    extendToSuccObjIso, extendToSucc.objIso]
-
-中文:
-引理 arrowMap_extendToSucc
-  条件: (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j)
-  证明: by
-  simp [arrowMap, extendToSucc_map hj F τ i₁ i₂ hi hi₂,
-    extendToSuccObjIso, extendToSucc.objIso]
-
-Depends on / 依赖: Set.uniqueSingleton, arrowMap, extendToSucc, extendToSucc.objIso, extendToSuccObjIso, extendToSucc_map, objIso, uniqueSingleton
+/-
+**CategoryTheory.SmallObject.SuccStruct.arrowMap_extendToSucc** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：arrowMap_extendToSucc (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) : arrowM
+ap (extendToSucc hj F τ) i₁ i₂ hi (hi₂.trans (Order.le_succ j)) = arrowMap F i₁ 
+i₂ hi hi₂
+参数：i₁ i₂ : J；hi : i₁ <= i₂；hi₂ : i₂ <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_eq`：obj_eq (i : S
+et.Iic j) : obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ = F.obj i
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc_map`：extendToSucc_map
+ (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) : (extendToSucc hj F τ).map (homOfL
+E hi : ⟨i₁, hi.trans (hi₂.trans (Order.le_su…
+· 使用引理 `CategoryTheory.Arrow.arrow_mk_eqToHom_comp`：arrow_mk_eqToHom_comp {X' X 
+Y : T} (f : X ⟶ Y) (h : X' = X) : Arrow.mk (eqToHom h ≫ f) = Arrow.mk f
+· 使用引理 `CategoryTheory.Arrow.arrow_mk_comp_eqToHom`：arrow_mk_comp_eqToHom {X Y Y
+' : T} (f : X ⟶ Y) (h : Y = Y') : Arrow.mk (f ≫ eqToHom h) = Arrow.mk f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma arrowMap_extendToSucc (i₁ i₂ : J) (hi : i₁ <= i₂) (hi₂ : i₂ <= j) :
+lemma arrowMap_extendToSucc (i₁ i₂ : J) (hi : i₁ ≤ i₂) (hi₂ : i₂ ≤ j) :
     arrowMap (extendToSucc hj F τ) i₁ i₂ hi (hi₂.trans (Order.le_succ j)) =
       arrowMap F i₁ i₂ hi hi₂ := by
   simp [arrowMap, extendToSucc_map hj F τ i₁ i₂ hi hi₂,
     extendToSuccObjIso, extendToSucc.objIso]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `arrowSucc_extendToSucc` / 引理 `arrowSucc_extendToSucc`
-
-English:
-lemma arrowSucc_extendToSucc
-  proof: by
-  simp [arrowSucc, arrowMap, extendToSucc_map_le_succ, extendToSuccObjIso,
-    extendToSucc.objIso, extendToSuccObjSuccIso, extendToSucc.objSuccIso]
-
-中文:
-引理 arrowSucc_extendToSucc
-  证明: by
-  simp [arrowSucc, arrowMap, extendToSucc_map_le_succ, extendToSuccObjIso,
-    extendToSucc.objIso, extendToSuccObjSuccIso, extendToSucc.objSuccIso]
-
-Depends on / 依赖: arrowMap, arrowSucc, extendToSucc, extendToSucc.objIso, extendToSucc.objSuccIso, extendToSuccObjIso, extendToSuccObjSuccIso, extendToSucc_map_le_succ, objIso, objSuccIso
+/-
+**CategoryTheory.SmallObject.SuccStruct.arrowSucc_extendToSucc** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：arrowSucc_extendToSucc : arrowSucc (extendToSucc hj F τ) j (Order.lt_succ_
+of_not_isMax hj) = Arrow.mk τ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Order.lt_succ_of_not_isMax`：∀ {α : Type u_1} [inst : Preorder α] [inst_1
+ : SuccOrder α] {a : α}, ¬IsMax a → a < Order.succ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_succ_eq`：obj_succ
+_eq : obj F X ⟨Order.succ j, by simp⟩ = X
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc.obj_eq`：obj_eq (i : S
+et.Iic j) : obj F X ⟨i, i.2.trans (Order.le_succ j)⟩ = F.obj i
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.extendToSucc_map_le_succ`：extendTo
+Succ_map_le_succ : (extendToSucc hj F τ).map (homOfLE (Order.le_succ j)) = (exte
+ndToSuccObjIso hj F τ j (by simp)).hom ≫ τ ≫ (extend…
+· 使用引理 `CategoryTheory.Arrow.arrow_mk_eqToHom_comp`：arrow_mk_eqToHom_comp {X' X 
+Y : T} (f : X ⟶ Y) (h : X' = X) : Arrow.mk (eqToHom h ≫ f) = Arrow.mk f
+· 使用引理 `CategoryTheory.Arrow.arrow_mk_comp_eqToHom`：arrow_mk_comp_eqToHom {X Y Y
+' : T} (f : X ⟶ Y) (h : Y = Y') : Arrow.mk (f ≫ eqToHom h) = Arrow.mk f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma arrowSucc_extendToSucc :
     arrowSucc (extendToSucc hj F τ) j (Order.lt_succ_of_not_isMax hj) =
@@ -589,3 +588,4 @@ end SuccStruct
 end SmallObject
 
 end CategoryTheory
+

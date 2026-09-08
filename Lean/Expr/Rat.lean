@@ -24,40 +24,32 @@ public section
 namespace Lean.Expr
 
 /--
-Definition of `rat?` / `rat?` 的定义
+Check if an expression is a "rational in normal form",
+i.e. either an integer number in normal form,
+or `n / d` where `n` is an integer in normal form, `d` is a natural number in normal form,
+`d ≠ 1`, and `n` and `d` are coprime (in particular, we check that `(mkRat n d).den = d`).
+If so returns the rational number.
+-/
+/-
+**Lean.Expr.rat** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：rat? (e : Expr) : Option Rat
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rat?
-  signature: (e : Expr)
-  body: do
-  if e.isAppOfArity ``Div.div 4 then
-    let d ← e.appArg!.nat?
-    guard (d != 1)
-    let n ← e.appFn!.appArg!.int?
-    let q := mkRat n d
-    guard (q.den = d)
-    pure q
-  else
-    e.int?
-
-中文:
-定义 rat?
-  签名: (e : Expr)
-  定义体: do
-  if e.isAppOfArity ``Div.div 4 then
-    let d ← e.appArg!.nat?
-    guard (d != 1)
-    let n ← e.appFn!.appArg!.int?
-    let q := mkRat n d
-    guard (q.den = d)
-    pure q
-  else
-    e.int?
+--- 原说明 ---
+Check if an expression is a "rational in normal form",
+i.e. either an integer number in normal form,
+or `n / d` where `n` is an integer in normal form, `d` is a natural number in no
+rmal form,
+`d ≠ 1`, and `n` and `d` are coprime (in particular, we check that `(mkRat n d).
+den = d`).
+If so returns the rational number.
 -/
 def rat? (e : Expr) : Option Rat := do
   if e.isAppOfArity ``Div.div 4 then
     let d ← e.appArg!.nat?
-    guard (d != 1)
+    guard (d ≠ 1)
     let n ← e.appFn!.appArg!.int?
     let q := mkRat n d
     guard (q.den = d)
@@ -66,19 +58,39 @@ def rat? (e : Expr) : Option Rat := do
     e.int?
 
 /--
-Definition of `isExplicitNumber` / `isExplicitNumber` 的定义
-
-English:
-definition isExplicitNumber
-  signature: : Expr -> Bool
-
-中文:
-定义 isExplicitNumber
-  签名: : Expr -> 布尔值
+Test if an expression represents an explicit number written in normal form:
+* A "natural number in normal form" is an expression `OfNat.ofNat n`, even if it is not of type `ℕ`,
+  as long as `n` is a literal.
+* An "integer in normal form" is an expression which is either a natural number in number form,
+  or `-n`, where `n` is a natural number in normal form.
+* A "rational in normal form" is an expressions which is either an integer in normal form,
+  or `n / d` where `n` is an integer in normal form, `d` is a natural number in normal form,
+  `d ≠ 1`, and `n` and `d` are coprime (in particular, we check that `(mkRat n d).den = d`).
 -/
-def isExplicitNumber : Expr -> Bool
+/-
+**Lean.Expr.isExplicitNumber** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Test if an expression represents an explicit number written in normal form:
+* A "natural number in normal form" is an expression `OfNat.ofNat n`, even if it
+ is not of type `ℕ`,
+  as long as `n` is a literal.
+* An "integer in normal form" is an expression which is either a natural number 
+in number form,
+  or `-n`, where `n` is a natural number in normal form.
+* A "rational in normal form" is an expressions which is either an integer in no
+rmal form,
+  or `n / d` where `n` is an integer in normal form, `d` is a natural number in 
+normal form,
+  `d ≠ 1`, and `n` and `d` are coprime (in particular, we check that `(mkRat n d
+).den = d`).
+-/
+def isExplicitNumber : Expr → Bool
   | .lit _ => true
   | .mdata _ e => isExplicitNumber e
   | e => e.rat?.isSome
 
 end Lean.Expr
+

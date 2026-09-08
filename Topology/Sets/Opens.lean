@@ -61,22 +61,14 @@ variable {ι α β γ : Type*} [TopologicalSpace α] [TopologicalSpace β] [Topo
 namespace TopologicalSpace
 
 variable (α) in
-/--
-Definition of `Opens` / `Opens` 的定义
+/-- The type of open subsets of a topological space. -/
+/-
+**TopologicalSpace.Opens** 是 Mathlib 中的一个归纳类型，位于命名空间 `TopologicalSpace`。
+形式化陈述：(α : Type u_2) → [TopologicalSpace α] → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Opens
-  parameters: where
-  axioms and operations (2):
-    - carrier : Set α
-    - is_open' : IsOpen carrier
-
-中文:
-结构 Opens
-  参数: where
-  公理与运算 (2 个):
-    - carrier : 集合 α
-    - is_open' : 是开集 carrier
+--- 原说明 ---
+The type of open subsets of a topological space.
 -/
 structure Opens where
   /-- The underlying set of a bundled `TopologicalSpace.Opens` object. -/
@@ -86,1124 +78,707 @@ structure Opens where
 
 namespace Opens
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (Opens α) α
-  body: Opens.carrier
-  coe_injective := fun ⟨_, _⟩ ⟨_, _⟩ _ => by congr
-
-中文:
-实例 :
-  签名: 集合状 (Opens α) α
-  定义体: Opens.carrier
-  coe_injective := fun ⟨_, _⟩ ⟨_, _⟩ _ => by congr
-
-Depends on / 依赖: Opens.carrier, carrier
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (Opens α) α where
   coe := Opens.carrier
   coe_injective := fun ⟨_, _⟩ ⟨_, _⟩ _ => by congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Opens α)
-  body: fast_instance% .ofSetLike (Opens α) α
-
-中文:
-实例 :
-  签名: 偏序 (Opens α)
-  定义体: fast_instance% .ofSetLike (Opens α) α
-
-Depends on / 依赖: fast_instance, ofSetLike
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Opens α) := fast_instance% .ofSetLike (Opens α) α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanLift (Set α) (Opens α) (↑) IsOpen
-  body: ⟨fun s h => ⟨⟨s, h⟩, rfl⟩⟩
-
-中文:
-实例 :
-  签名: CanLift (集合 α) (Opens α) (↑) 是开集
-  定义体: ⟨fun s h => ⟨⟨s, h⟩, rfl⟩⟩
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CanLift (Set α) (Opens α) (↑) IsOpen :=
   ⟨fun s h => ⟨⟨s, h⟩, rfl⟩⟩
-
-/--
-Instance `instSecondCountableOpens` / 实例 `instSecondCountableOpens`
-
-English:
-instance instSecondCountableOpens
-  signature: [SecondCountableTopology α] (U : Opens α)
-  body: inferInstanceAs (SecondCountableTopology U.1)
-
-中文:
-实例 instSecondCountableOpens
-  签名: [第二可数拓扑 α] (U : Opens α)
-  定义体: inferInstanceAs (SecondCountableTopology U.1)
-
-Depends on / 依赖: SecondCountableTopology
+/-
+**TopologicalSpace.Opens.instSecondCountableOpens** 是 Mathlib 中的一个实例，位于命名空间 `Top
+ologicalSpace.Opens`。
+形式化陈述：instSecondCountableOpens [SecondCountableTopology α] (U : Opens α) : Secon
+dCountableTopology U
+参数：U : Opens α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSecondCountableOpens [SecondCountableTopology α] (U : Opens α) :
     SecondCountableTopology U := inferInstanceAs (SecondCountableTopology U.1)
-
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: {p : Opens α -> Prop}
-  statement: (forall U, p U) ↔ forall (U : Set α) (hU : IsOpen U), p ⟨U, hU⟩
-  proof: ⟨fun h _ _ => h _, fun h _ => h _ _⟩
-
-中文:
-定理 «对任意»
-  条件: {p : Opens α -> 命题}
-  结论: (对任意 U, p U) ↔ 对任意 (U : 集合 α) (hU : 是开集 U), p ⟨U, hU⟩
-  证明: ⟨fun h _ _ => h _, fun h _ => h _ _⟩
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem «forall» {p : Opens α -> Prop} : (forall U, p U) ↔ forall (U : Set α) (hU : IsOpen U), p ⟨U, hU⟩ :=
+theorem «forall» {p : Opens α → Prop} : (∀ U, p U) ↔ ∀ (U : Set α) (hU : IsOpen U), p ⟨U, hU⟩ :=
   ⟨fun h _ _ => h _, fun h _ => h _ _⟩
-
-/--
-theorem `carrier_eq_coe` / 定理 `carrier_eq_coe`
-
-English:
-theorem carrier_eq_coe
-  given: (U : Opens α)
-  statement: U.1 = ↑U
-  proof: rfl
-
-中文:
-定理 carrier_eq_coe
-  条件: (U : Opens α)
-  结论: U.1 = ↑U
-  证明: rfl
+/-
+**TopologicalSpace.Opens.carrier_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Opens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (U : TopologicalSpace.Opens α
+), U.carrier = ↑U
+参数：U : TopologicalSpace.Opens α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem carrier_eq_coe (U : Opens α) : U.1 = ↑U := rfl
 
 /-- the coercion `Opens α → Set α` applied to a pair is the same as taking the first component -/
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
+/-
+**TopologicalSpace.Opens.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Open
+s`。
+形式化陈述：coe_mk {U : Set α} {hU : IsOpen U} : ↑(⟨U, hU⟩ : Opens α) = U
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem coe_mk
-  given: {U : Set α} {hU : IsOpen U}
-  statement: ↑(⟨U, hU⟩ : Opens α) = U
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: {U : 集合 α} {hU : 是开集 U}
-  结论: ↑(⟨U, hU⟩ : Opens α) = U
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+the coercion `Opens α → Set α` applied to a pair is the same as taking the first
+ component
 -/
 theorem coe_mk {U : Set α} {hU : IsOpen U} : ↑(⟨U, hU⟩ : Opens α) = U :=
   rfl
 
 @[simp]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: {x : α} {U : Set α} {h : IsOpen U}
-  statement: x in mk U h ↔ x in U
-  proof: Iff.rfl
-
-中文:
-定理 mem_mk
-  条件: {x : α} {U : 集合 α} {h : 是开集 U}
-  结论: x in mk U h ↔ x in U
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**TopologicalSpace.Opens.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Open
+s`。
+形式化陈述：mem_mk {x : α} {U : Set α} {h : IsOpen U} : x in mk U h ↔ x in U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mk {x : α} {U : Set α} {h : IsOpen U} : x in mk U h ↔ x in U := Iff.rfl
-
-/--
-theorem `nonempty_coeSort` / 定理 `nonempty_coeSort`
-
-English:
-theorem nonempty_coeSort
-  given: {U : Opens α}
-  statement: Nonempty U ↔ (U : Set α).Nonempty
-  proof: Set.nonempty_coe_sort
-
-中文:
-定理 nonempty_coeSort
-  条件: {U : Opens α}
-  结论: 非空 U ↔ (U : 集合 α).非空
-  证明: Set.nonempty_coe_sort
+theorem mem_mk {x : α} {U : Set α} {h : IsOpen U} : x ∈ mk U h ↔ x ∈ U := Iff.rfl
+/-
+**TopologicalSpace.Opens.nonempty_coeSort** 是 Mathlib 中的一个定理，位于命名空间 `Topological
+Space.Opens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {U : TopologicalSpace.Opens α
+}, Nonempty ↥U ↔ (↑U).Nonempty
+参数：↑U。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_coe_sort`：nonempty_coe_sort {s : Set α} : Nonempty ↥s ↔ s.N
+onempty
 -/
 protected theorem nonempty_coeSort {U : Opens α} : Nonempty U ↔ (U : Set α).Nonempty :=
   Set.nonempty_coe_sort
 
 -- TODO: should this theorem be proved for a `SetLike`?
-/--
-theorem `nonempty_coe` / 定理 `nonempty_coe`
-
-English:
-theorem nonempty_coe
-  given: {U : Opens α}
-  statement: (U : Set α).Nonempty ↔ exists x, x in U
-  proof: Iff.rfl
-
-@[ext] -- TODO: replace with `∀ x, x ∈ U ↔ x ∈ V`?
-
-中文:
-定理 nonempty_coe
-  条件: {U : Opens α}
-  结论: (U : 集合 α).非空 ↔ 存在 x, x in U
-  证明: Iff.rfl
-
-@[ext] -- TODO: replace with `∀ x, x ∈ U ↔ x ∈ V`?
+/-
+**TopologicalSpace.Opens.nonempty_coe** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpac
+e.Opens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {U : TopologicalSpace.Opens α
+}, (↑U).Nonempty ↔ ∃ x, x ∈ U
+参数：↑U。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected theorem nonempty_coe {U : Opens α} : (U : Set α).Nonempty ↔ exists x, x in U :=
+protected theorem nonempty_coe {U : Opens α} : (U : Set α).Nonempty ↔ ∃ x, x ∈ U :=
   Iff.rfl
 
 @[ext] -- TODO: replace with `∀ x, x ∈ U ↔ x ∈ V`?
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {U V : Opens α} (h : (U : Set α) = V)
-  statement: U = V
-  proof: SetLike.coe_injective h
-
-中文:
-定理 ext
-  条件: {U V : Opens α} (h : (U : 集合 α) = V)
-  结论: U = V
-  证明: SetLike.coe_injective h
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**TopologicalSpace.Opens.ext** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Opens`。
+形式化陈述：ext {U V : Opens α} (h : (U : Set α) = V) : U = V
+参数：h : (U : Set α) = V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem ext {U V : Opens α} (h : (U : Set α) = V) : U = V :=
   SetLike.coe_injective h
-
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {U V : Opens α}
-  statement: (U : Set α) = V ↔ U = V
-  proof: SetLike.ext'_iff.symm
-
-中文:
-定理 coe_inj
-  条件: {U V : Opens α}
-  结论: (U : 集合 α) = V ↔ U = V
-  证明: SetLike.ext'_iff.symm
-
-Depends on / 依赖: SetLike, SetLike.ext, _iff, _iff.symm
+/-
+**TopologicalSpace.Opens.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：coe_inj {U V : Opens α} : (U : Set α) = V ↔ U = V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `SetLike.ext'_iff`：∀ {A : Type u_1} {B : Type u_2} [i : SetLike A B] {p q
+ : A}, p = q ↔ ↑p = ↑q
 -/
 theorem coe_inj {U V : Opens α} : (U : Set α) = V ↔ U = V :=
   SetLike.ext'_iff.symm
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- A version of `Set.inclusion` not requiring definitional abuse -/
+/-
+**TopologicalSpace.Opens.inclusion** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopologicalSpace
+.Opens`。
+形式化陈述：inclusion {U V : Opens α} (h : U <= V) : U -> V
+参数：h : U <= V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation inclusion
-  signature: {U V : Opens α} (h : U <= V)
-  body: Set.inclusion h
-
-中文:
-缩写 inclusion
-  签名: {U V : Opens α} (h : U <= V)
-  定义体: Set.inclusion h
-
-Depends on / 依赖: Set.inclusion, inclusion
+--- 原说明 ---
+A version of `Set.inclusion` not requiring definitional abuse
 -/
-abbrev inclusion {U V : Opens α} (h : U <= V) : U -> V := Set.inclusion h
-
-/--
-theorem `isOpen` / 定理 `isOpen`
-
-English:
-theorem isOpen
-  given: (U : Opens α)
-  statement: IsOpen (U : Set α)
-  proof: U.is_open'
-
-中文:
-定理 isOpen
-  条件: (U : Opens α)
-  结论: 是开集 (U : 集合 α)
-  证明: U.is_open'
+abbrev inclusion {U V : Opens α} (h : U ≤ V) : U → V := Set.inclusion h
+/-
+**TopologicalSpace.Opens.isOpen** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Open
+s`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (U : TopologicalSpace.Opens α
+), IsOpen ↑U
+参数：U : TopologicalSpace.Opens α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
 -/
 protected theorem isOpen (U : Opens α) : IsOpen (U : Set α) :=
   U.is_open'
-
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (U : Opens α)
-  statement: mk (↑U) U.isOpen = U
-  proof: rfl
-
-中文:
-定理 mk_coe
-  条件: (U : Opens α)
-  结论: mk (↑U) U.isOpen = U
-  证明: rfl
+/-
+**TopologicalSpace.Opens.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Open
+s`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (U : TopologicalSpace.Opens α
+), { carrier := ↑U, is_open' := ⋯ } = U
+参数：U : TopologicalSpace.Opens α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
 -/
 @[simp] theorem mk_coe (U : Opens α) : mk (↑U) U.isOpen = U := rfl
 
-/--
-Definition of `Simps.coe` / `Simps.coe` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**TopologicalSpace.Opens.Simps.coe** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.O
+pens.Simps`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Opens α → 
+Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.coe
-  signature: (U : Opens α)
-  body: U
-
-initialize_simps_projections Opens (carrier -> coe, as_prefix coe)
-
-中文:
-定义 Simps.coe
-  签名: (U : Opens α)
-  定义体: U
-
-initialize_simps_projections Opens (carrier -> coe, as_prefix coe)
+--- 原说明 ---
+See Note [custom simps projection].
 -/
 def Simps.coe (U : Opens α) : Set α := U
 
-initialize_simps_projections Opens (carrier -> coe, as_prefix coe)
+initialize_simps_projections Opens (carrier → coe, as_prefix coe)
 
 /-- The interior of a set, as an element of `Opens`. -/
 @[simps]
-/--
-Definition of `interior` / `interior` 的定义
+/-
+**TopologicalSpace.Opens.interior** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → Set α → TopologicalSpace.Op
+ens α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_interior`：isOpen_interior : IsOpen (interior s)
 
-English:
-definition interior
-  signature: (s : Set α)
-  body: ⟨interior s, isOpen_interior⟩
-
-@[simp]
-
-中文:
-定义 interior
-  签名: (s : 集合 α)
-  定义体: ⟨interior s, isOpen_interior⟩
-
-@[simp]
+--- 原说明 ---
+The interior of a set, as an element of `Opens`.
 -/
 protected def interior (s : Set α) : Opens α :=
   ⟨interior s, isOpen_interior⟩
 
 @[simp]
-/--
-theorem `mem_interior` / 定理 `mem_interior`
-
-English:
-theorem mem_interior
-  given: {s : Set α} {x : α}
-  statement: x in Opens.interior s ↔ x in _root_.interior s
-  proof: .rfl
-
-中文:
-定理 mem_interior
-  条件: {s : 集合 α} {x : α}
-  结论: x in Opens.interior s ↔ x in _root_.interior s
-  证明: .rfl
+/-
+**TopologicalSpace.Opens.mem_interior** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpac
+e.Opens`。
+形式化陈述：mem_interior {s : Set α} {x : α} : x in Opens.interior s ↔ x in _root_.int
+erior s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_interior {s : Set α} {x : α} : x in Opens.interior s ↔ x in _root_.interior s := .rfl
-
-/--
-theorem `gc` / 定理 `gc`
-
-English:
-theorem gc
-  statement: GaloisConnection ((↑) : Opens α -> Set α) Opens.interior
-  proof: fun U _ =>
-  ⟨fun h => interior_maximal h U.isOpen, fun h => le_trans h interior_subset⟩
-
-中文:
-定理 gc
-  结论: GaloisConnection ((↑) : Opens α -> 集合 α) Opens.interior
-  证明: fun U _ =>
-  ⟨fun h => interior_maximal h U.isOpen, fun h => le_trans h interior_subset⟩
+theorem mem_interior {s : Set α} {x : α} : x ∈ Opens.interior s ↔ x ∈ _root_.interior s := .rfl
+/-
+**TopologicalSpace.Opens.gc** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Opens`。
+形式化陈述：gc : GaloisConnection ((↑) : Opens α -> Set α) Opens.interior
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `interior_maximal`：interior_maximal (h₁ : t subseteq s) (h₂ : IsOpen t) :
+ t subseteq interior s
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
 -/
-theorem gc : GaloisConnection ((↑) : Opens α -> Set α) Opens.interior := fun U _ =>
+theorem gc : GaloisConnection ((↑) : Opens α → Set α) Opens.interior := fun U _ =>
   ⟨fun h => interior_maximal h U.isOpen, fun h => le_trans h interior_subset⟩
 
-/--
-Definition of `gi` / `gi` 的定义
+/-- The Galois coinsertion between sets and opens. -/
+/-
+**TopologicalSpace.Opens.gi** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Opens`。
+形式化陈述：gi : GaloisCoinsertion (↑) (@Opens.interior α _) where choice s hs
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.gc`：gc : GaloisConnection ((↑) : Opens α -> Set α
+) Opens.interior
 
-English:
-definition gi
-  signature: : GaloisCoinsertion (↑) (@Opens.interior α _) where
-  body: ⟨s, interior_eq_iff_isOpen.mp le_antisymm interior_subset hs⟩
-  gc := gc
-  u_l_le _ := interior_subset
-  choice_eq _s hs := le_antisymm hs interior_subset
-
-中文:
-定义 gi
-  签名: : Galois余嵌入 (↑) (@Opens.interior α _) where
-  定义体: ⟨s, interior_eq_iff_isOpen.mp le_antisymm interior_subset hs⟩
-  gc := gc
-  u_l_le _ := interior_subset
-  choice_eq _s hs := le_antisymm hs interior_subset
-
-Depends on / 依赖: interior_eq_iff_isOpen, interior_eq_iff_isOpen.mp, interior_subset, le_antisymm
+--- 原说明 ---
+The Galois coinsertion between sets and opens.
 -/
 def gi : GaloisCoinsertion (↑) (@Opens.interior α _) where
-choice s hs := ⟨s, interior_eq_iff_isOpen.mp le_antisymm interior_subset hs⟩
+  choice s hs := ⟨s, interior_eq_iff_isOpen.mp <| le_antisymm interior_subset hs⟩
   gc := gc
   u_l_le _ := interior_subset
   choice_eq _s hs := le_antisymm hs interior_subset
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (Opens α)
-  body: fast_instance% CompleteLattice.copy (GaloisCoinsertion.liftCompleteLattice gi)
-    -- le
-    (fun U V => (U : Set α) subseteq V) rfl
-    -- top
-    ⟨univ, isOpen_univ⟩ (ext interior_univ.symm)
-    -- bot
-    ⟨∅, isOpen_empty⟩ rfl
-    -- sup
-    (fun U V => ⟨↑U union ↑V, U.2.union V.2⟩) rfl
-    -- inf
-    (fun U V => ⟨↑U inter ↑V, U.2.inter V.2⟩)
-    (funext₂ fun U V => ext (U.2.inter V.2).interior_eq.symm)
-    -- sSup
-    (fun S => ⟨⋃ s in S, ↑s, isOpen_biUnion fun s _ => s.2⟩)
-    (funext fun _ => ext sSup_image.symm)
-    -- sInf
-    _ rfl
-
-@[simp]
-
-中文:
-实例 :
-  签名: 完备格 (Opens α)
-  定义体: fast_instance% CompleteLattice.copy (GaloisCoinsertion.liftCompleteLattice gi)
-    -- le
-    (fun U V => (U : Set α) subseteq V) rfl
-    -- top
-    ⟨univ, isOpen_univ⟩ (ext interior_univ.symm)
-    -- bot
-    ⟨∅, isOpen_empty⟩ rfl
-    -- sup
-    (fun U V => ⟨↑U union ↑V, U.2.union V.2⟩) rfl
-    -- inf
-    (fun U V => ⟨↑U inter ↑V, U.2.inter V.2⟩)
-    (funext₂ fun U V => ext (U.2.inter V.2).interior_eq.symm)
-    -- sSup
-    (fun S => ⟨⋃ s in S, ↑s, isOpen_biUnion fun s _ => s.2⟩)
-    (funext fun _ => ext sSup_image.symm)
-    -- sInf
-    _ rfl
-
-@[simp]
-
-Depends on / 依赖: CompleteLattice, CompleteLattice.copy, GaloisCoinsertion, GaloisCoinsertion.liftCompleteLattice, fast_instance, liftCompleteLattice
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (Opens α) :=
   fast_instance% CompleteLattice.copy (GaloisCoinsertion.liftCompleteLattice gi)
     -- le
-    (fun U V => (U : Set α) subseteq V) rfl
+    (fun U V => (U : Set α) ⊆ V) rfl
     -- top
     ⟨univ, isOpen_univ⟩ (ext interior_univ.symm)
     -- bot
     ⟨∅, isOpen_empty⟩ rfl
     -- sup
-    (fun U V => ⟨↑U union ↑V, U.2.union V.2⟩) rfl
+    (fun U V => ⟨↑U ∪ ↑V, U.2.union V.2⟩) rfl
     -- inf
-    (fun U V => ⟨↑U inter ↑V, U.2.inter V.2⟩)
+    (fun U V => ⟨↑U ∩ ↑V, U.2.inter V.2⟩)
     (funext₂ fun U V => ext (U.2.inter V.2).interior_eq.symm)
     -- sSup
-    (fun S => ⟨⋃ s in S, ↑s, isOpen_biUnion fun s _ => s.2⟩)
+    (fun S => ⟨⋃ s ∈ S, ↑s, isOpen_biUnion fun s _ => s.2⟩)
     (funext fun _ => ext sSup_image.symm)
     -- sInf
     _ rfl
 
 @[simp]
-/--
-theorem `mk_inf_mk` / 定理 `mk_inf_mk`
-
-English:
-theorem mk_inf_mk
-  given: {U V : Set α} {hU : IsOpen U} {hV : IsOpen V}
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_inf_mk
-  条件: {U V : 集合 α} {hU : 是开集 U} {hV : 是开集 V}
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Opens.mk_inf_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.O
+pens`。
+形式化陈述：mk_inf_mk {U V : Set α} {hU : IsOpen U} {hV : IsOpen V} : (⟨U, hU⟩ ⊓ ⟨V, h
+V⟩ : Opens α) = ⟨U ⊓ V, IsOpen.inter hU hV⟩
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_inf_mk {U V : Set α} {hU : IsOpen U} {hV : IsOpen V} :
     (⟨U, hU⟩ ⊓ ⟨V, hV⟩ : Opens α) = ⟨U ⊓ V, IsOpen.inter hU hV⟩ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  given: (s t : Opens α)
-  statement: (↑(s ⊓ t) : Set α) = ↑s inter ↑t
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_inf
-  条件: (s t : Opens α)
-  结论: (↑(s ⊓ t) : 集合 α) = ↑s inter ↑t
-  证明: rfl
-
-@[simp]
+/-
+**TopologicalSpace.Opens.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：coe_inf (s t : Opens α) : (↑(s ⊓ t) : Set α) = ↑s inter ↑t
+参数：s t : Opens α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf (s t : Opens α) : (↑(s ⊓ t) : Set α) = ↑s inter ↑t :=
+theorem coe_inf (s t : Opens α) : (↑(s ⊓ t) : Set α) = ↑s ∩ ↑t :=
   rfl
 
 @[simp]
-/--
-lemma `mem_inf` / 引理 `mem_inf`
-
-English:
-lemma mem_inf
-  given: {s t : Opens α} {x : α}
-  statement: x in s ⊓ t ↔ x in s ∧ x in t
-  proof: Iff.rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 mem_inf
-  条件: {s t : Opens α} {x : α}
-  结论: x in s ⊓ t ↔ x in s ∧ x in t
-  证明: Iff.rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**TopologicalSpace.Opens.mem_inf** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：mem_inf {s t : Opens α} {x : α} : x in s ⊓ t ↔ x in s ∧ x in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_inf {s t : Opens α} {x : α} : x in s ⊓ t ↔ x in s ∧ x in t := Iff.rfl
+lemma mem_inf {s t : Opens α} {x : α} : x ∈ s ⊓ t ↔ x ∈ s ∧ x ∈ t := Iff.rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_sup` / 定理 `coe_sup`
-
-English:
-theorem coe_sup
-  given: (s t : Opens α)
-  statement: (↑(s ⊔ t) : Set α) = ↑s union ↑t
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sup
-  条件: (s t : Opens α)
-  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
-  证明: rfl
-
-@[simp]
+/-
+**TopologicalSpace.Opens.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：coe_sup (s t : Opens α) : (↑(s ⊔ t) : Set α) = ↑s union ↑t
+参数：s t : Opens α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sup (s t : Opens α) : (↑(s ⊔ t) : Set α) = ↑s union ↑t :=
+theorem coe_sup (s t : Opens α) : (↑(s ⊔ t) : Set α) = ↑s ∪ ↑t :=
   rfl
 
 @[simp]
-/--
-theorem `mem_sup` / 定理 `mem_sup`
-
-English:
-theorem mem_sup
-  given: {s t : Opens α} {x : α}
-  statement: x in (s ⊔ t) ↔ x in s ∨ x in t
-  proof: .rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mem_sup
-  条件: {s t : Opens α} {x : α}
-  结论: x in (s ⊔ t) ↔ x in s ∨ x in t
-  证明: .rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Opens.mem_sup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：mem_sup {s t : Opens α} {x : α} : x in (s ⊔ t) ↔ x in s ∨ x in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sup {s t : Opens α} {x : α} : x in (s ⊔ t) ↔ x in s ∨ x in t :=
+theorem mem_sup {s t : Opens α} {x : α} : x ∈ (s ⊔ t) ↔ x ∈ s ∨ x ∈ t :=
   .rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_bot` / 定理 `coe_bot`
-
-English:
-theorem coe_bot
-  statement: ((⊥ : Opens α) : Set α) = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_bot
-  结论: ((⊥ : Opens α) : 集合 α) = ∅
-  证明: rfl
-
-@[simp]
+/-
+**TopologicalSpace.Opens.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：coe_bot : ((⊥ : Opens α) : Set α) = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bot : ((⊥ : Opens α) : Set α) = ∅ :=
   rfl
 
 @[simp]
-/--
-lemma `mem_bot` / 引理 `mem_bot`
-
-English:
-lemma mem_bot
-  given: {x : α}
-  statement: x in (⊥ : Opens α) ↔ False
-  proof: Iff.rfl
-
-中文:
-引理 mem_bot
-  条件: {x : α}
-  结论: x in (⊥ : Opens α) ↔ 假
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**TopologicalSpace.Opens.mem_bot** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：mem_bot {x : α} : x in (⊥ : Opens α) ↔ False
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_bot {x : α} : x in (⊥ : Opens α) ↔ False := Iff.rfl
-
-/--
-theorem `mk_empty` / 定理 `mk_empty`
-
-English:
-theorem mk_empty
-  statement: (⟨∅, isOpen_empty⟩ : Opens α) = ⊥
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_empty
-  结论: (⟨∅, isOpen_empty⟩ : Opens α) = ⊥
-  证明: rfl
-
-@[simp, norm_cast]
+lemma mem_bot {x : α} : x ∈ (⊥ : Opens α) ↔ False := Iff.rfl
+/-
+**TopologicalSpace.Opens.mk_empty** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α], { carrier := ∅, is_open' := 
+⋯ } = ⊥
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_empty`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen ∅
 -/
 @[simp] theorem mk_empty : (⟨∅, isOpen_empty⟩ : Opens α) = ⊥ := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_empty` / 定理 `coe_eq_empty`
-
-English:
-theorem coe_eq_empty
-  given: {U : Opens α}
-  statement: (U : Set α) = ∅ ↔ U = ⊥
-  proof: SetLike.coe_injective.eq_iff' rfl
-
-@[simp]
-
-中文:
-定理 coe_eq_empty
-  条件: {U : Opens α}
-  结论: (U : 集合 α) = ∅ ↔ U = ⊥
-  证明: SetLike.coe_injective.eq_iff' rfl
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.eq_iff, coe_injective, eq_iff
+/-
+**TopologicalSpace.Opens.coe_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpac
+e.Opens`。
+形式化陈述：coe_eq_empty {U : Opens α} : (U : Set α) = ∅ ↔ U = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem coe_eq_empty {U : Opens α} : (U : Set α) = ∅ ↔ U = ⊥ :=
   SetLike.coe_injective.eq_iff' rfl
 
 @[simp]
-/--
-lemma `mem_top` / 引理 `mem_top`
-
-English:
-lemma mem_top
-  given: (x : α)
-  statement: x in (⊤ : Opens α)
-  proof: trivial
-
-@[simp, norm_cast]
-
-中文:
-引理 mem_top
-  条件: (x : α)
-  结论: x in (⊤ : Opens α)
-  证明: trivial
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Opens.mem_top** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：mem_top (x : α) : x in (⊤ : Opens α)
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-lemma mem_top (x : α) : x in (⊤ : Opens α) := trivial
+lemma mem_top (x : α) : x ∈ (⊤ : Opens α) := trivial
 
 @[simp, norm_cast]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: ((⊤ : Opens α) : Set α) = Set.univ
-  proof: rfl
-
-中文:
-定理 coe_top
-  结论: ((⊤ : Opens α) : 集合 α) = 集合.univ
-  证明: rfl
+/-
+**TopologicalSpace.Opens.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：coe_top : ((⊤ : Opens α) : Set α) = Set.univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : ((⊤ : Opens α) : Set α) = Set.univ :=
   rfl
-
-/--
-theorem `mk_univ` / 定理 `mk_univ`
-
-English:
-theorem mk_univ
-  statement: (⟨univ, isOpen_univ⟩ : Opens α) = ⊤
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_univ
-  结论: (⟨univ, isOpen_univ⟩ : Opens α) = ⊤
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Opens.mk_univ** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α], { carrier := Set.univ, is_op
+en' := ⋯ } = ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
 -/
 @[simp] theorem mk_univ : (⟨univ, isOpen_univ⟩ : Opens α) = ⊤ := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_univ` / 定理 `coe_eq_univ`
-
-English:
-theorem coe_eq_univ
-  given: {U : Opens α}
-  statement: (U : Set α) = univ ↔ U = ⊤
-  proof: SetLike.coe_injective.eq_iff' rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_eq_univ
-  条件: {U : Opens α}
-  结论: (U : 集合 α) = univ ↔ U = ⊤
-  证明: SetLike.coe_injective.eq_iff' rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.eq_iff, coe_injective, eq_iff
+/-
+**TopologicalSpace.Opens.coe_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace
+.Opens`。
+形式化陈述：coe_eq_univ {U : Opens α} : (U : Set α) = univ ↔ U = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem coe_eq_univ {U : Opens α} : (U : Set α) = univ ↔ U = ⊤ :=
   SetLike.coe_injective.eq_iff' rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_sSup` / 定理 `coe_sSup`
-
-English:
-theorem coe_sSup
-  given: {S : Set (Opens α)}
-  statement: (↑(sSup S) : Set α) = ⋃ i in S, ↑i
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_sSup
-  条件: {S : 集合 (Opens α)}
-  结论: (↑(sSup S) : 集合 α) = ⋃ i in S, ↑i
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Opens.coe_sSup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：coe_sSup {S : Set (Opens α)} : (↑(sSup S) : Set α) = ⋃ i in S, ↑i
+参数：Opens α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sSup {S : Set (Opens α)} : (↑(sSup S) : Set α) = ⋃ i in S, ↑i :=
+theorem coe_sSup {S : Set (Opens α)} : (↑(sSup S) : Set α) = ⋃ i ∈ S, ↑i :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_finset_sup` / 定理 `coe_finset_sup`
-
-English:
-theorem coe_finset_sup
-  given: (f : ι -> Opens α) (s : Finset ι)
-  statement: (↑(s.sup f) : Set α) = s.sup ((↑) ∘ f)
-  proof: map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Opens α) (Set α)) _ _
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_finset_sup
-  条件: (f : ι -> Opens α) (s : 有限集 ι)
-  结论: (↑(s.上确界 f) : 集合 α) = s.上确界 ((↑) ∘ f)
-  证明: map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Opens α) (Set α)) _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: SupBotHom, coe_bot, coe_sup, map_finset_sup
+/-
+**TopologicalSpace.Opens.coe_finset_sup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Opens`。
+形式化陈述：coe_finset_sup (f : ι -> Opens α) (s : Finset ι) : (↑(s.sup f) : Set α) = 
+s.sup ((↑) ∘ f)
+参数：f : ι -> Opens α；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finset_sup`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeSup α] [inst_1 : OrderBot α]   [inst_2 : SemilatticeSup
+ β] …
+· 使用定理 `SupBotHom.instSupBotHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : Ma
+x α] [inst_1 : Bot α] [inst_2 : Max β] [inst_3 : Bot β],   SupBotHomClass (SupBo
+tHom α β) α β
+· 使用定理 `TopologicalSpace.Opens.coe_sup`：coe_sup (s t : Opens α) : (↑(s ⊔ t) : Se
+t α) = ↑s union ↑t
+· 使用定理 `TopologicalSpace.Opens.coe_bot`：coe_bot : ((⊥ : Opens α) : Set α) = ∅
 -/
-theorem coe_finset_sup (f : ι -> Opens α) (s : Finset ι) : (↑(s.sup f) : Set α) = s.sup ((↑) ∘ f) :=
+theorem coe_finset_sup (f : ι → Opens α) (s : Finset ι) : (↑(s.sup f) : Set α) = s.sup ((↑) ∘ f) :=
   map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Opens α) (Set α)) _ _
 
 @[simp, norm_cast]
-/--
-theorem `coe_finset_inf` / 定理 `coe_finset_inf`
-
-English:
-theorem coe_finset_inf
-  given: (f : ι -> Opens α) (s : Finset ι)
-  statement: (↑(s.inf f) : Set α) = s.inf ((↑) ∘ f)
-  proof: map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Opens α) (Set α)) _ _
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_finset_inf
-  条件: (f : ι -> Opens α) (s : 有限集 ι)
-  结论: (↑(s.下确界 f) : 集合 α) = s.下确界 ((↑) ∘ f)
-  证明: map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Opens α) (Set α)) _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: InfTopHom, coe_inf, coe_top, map_finset_inf
+/-
+**TopologicalSpace.Opens.coe_finset_inf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Opens`。
+形式化陈述：coe_finset_inf (f : ι -> Opens α) (s : Finset ι) : (↑(s.inf f) : Set α) = 
+s.inf ((↑) ∘ f)
+参数：f : ι -> Opens α；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finset_inf`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeInf α] [inst_1 : OrderTop α]   [inst_2 : SemilatticeInf
+ β] …
+· 使用定理 `InfTopHom.instInfTopHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : Mi
+n α] [inst_1 : Top α] [inst_2 : Min β] [inst_3 : Top β],   InfTopHomClass (InfTo
+pHom α β) α β
+· 使用定理 `TopologicalSpace.Opens.coe_inf`：coe_inf (s t : Opens α) : (↑(s ⊓ t) : Se
+t α) = ↑s inter ↑t
+· 使用定理 `TopologicalSpace.Opens.coe_top`：coe_top : ((⊤ : Opens α) : Set α) = Set.
+univ
 -/
-theorem coe_finset_inf (f : ι -> Opens α) (s : Finset ι) : (↑(s.inf f) : Set α) = s.inf ((↑) ∘ f) :=
+theorem coe_finset_inf (f : ι → Opens α) (s : Finset ι) : (↑(s.inf f) : Set α) = s.inf ((↑) ∘ f) :=
   map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Opens α) (Set α)) _ _
 
 @[simp, norm_cast]
-/--
-lemma `coe_disjoint` / 引理 `coe_disjoint`
-
-English:
-lemma coe_disjoint
-  given: {s t : Opens α}
-  statement: Disjoint (s : Set α) t ↔ Disjoint s t
-  proof: by
-  simp [disjoint_iff, ← SetLike.coe_set_eq]
-
-中文:
-引理 coe_disjoint
-  条件: {s t : Opens α}
-  结论: Disjoint (s : 集合 α) t ↔ Disjoint s t
-  证明: by
-  simp [disjoint_iff, ← SetLike.coe_set_eq]
-
-Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq, disjoint_iff
+/-
+**TopologicalSpace.Opens.coe_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpac
+e.Opens`。
+形式化陈述：coe_disjoint {s t : Opens α} : Disjoint (s : Set α) t ↔ Disjoint s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma coe_disjoint {s t : Opens α} : Disjoint (s : Set α) t ↔ Disjoint s t := by
   simp [disjoint_iff, ← SetLike.coe_set_eq]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Opens α)
-  body: ⟨⊥⟩
-
-中文:
-实例 :
-  签名: 可居 (Opens α)
-  定义体: ⟨⊥⟩
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Opens α) := ⟨⊥⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : Unique (Opens α) where
-  body: ext Subsingleton.elim _ _
-
-中文:
-实例 [是空
-  签名: α] : 唯一 (Opens α) where
-  定义体: ext Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] : Unique (Opens α) where
-uniq _ := ext Subsingleton.elim _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] : Nontrivial (Opens α) where
-  body: ⟨⊥, ⊤, mt coe_inj.2 empty_ne_univ⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 [非空
-  签名: α] : 非平凡 (Opens α) where
-  定义体: ⟨⊥, ⊤, mt coe_inj.2 empty_ne_univ⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coe_inj, empty_ne_univ
+  uniq _ := ext <| Subsingleton.elim _ _
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty α] : Nontrivial (Opens α) where
   exists_pair_ne := ⟨⊥, ⊤, mt coe_inj.2 empty_ne_univ⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_iSup` / 定理 `coe_iSup`
-
-English:
-theorem coe_iSup
-  given: {ι} (s : ι -> Opens α)
-  statement: ((⨆ i, s i : Opens α) : Set α) = ⋃ i, s i
-  proof: by
-  simp [iSup]
-
-中文:
-定理 coe_iSup
-  条件: {ι} (s : ι -> Opens α)
-  结论: ((⨆ i, s i : Opens α) : 集合 α) = ⋃ i, s i
-  证明: by
-  simp [iSup]
+/-
+**TopologicalSpace.Opens.coe_iSup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：coe_iSup {ι} (s : ι -> Opens α) : ((⨆ i, s i : Opens α) : Set α) = ⋃ i, s 
+i
+参数：s : ι -> Opens α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_iUnion_eq'`：iUnion_iUnion_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋃ (x) (y) (_ : f y = x), g x = ⋃ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coe_iSup {ι} (s : ι -> Opens α) : ((⨆ i, s i : Opens α) : Set α) = ⋃ i, s i := by
+theorem coe_iSup {ι} (s : ι → Opens α) : ((⨆ i, s i : Opens α) : Set α) = ⋃ i, s i := by
   simp [iSup]
-
-/--
-lemma `coe_iInf` / 引理 `coe_iInf`
-
-English:
-lemma coe_iInf
-  given: {ι : Type*} [Finite ι] (U : ι -> TopologicalSpace.Opens α)
-  proof: by
-  induction ι using Finite.induction_empty_option with
-  | of_equiv e ih => rw [← e.iInf_comp, ← e.surjective.iInter_comp, ih]
-  | h_empty => simp
-  | h_option ih => rw [iInf_option, Set.iInter_option, Opens.coe_inf, ih]
-
-中文:
-引理 coe_iInf
-  条件: {ι : 类型} [有限 ι] (U : ι -> 拓扑空间.Opens α)
-  证明: by
-  induction ι using Finite.induction_empty_option with
-  | of_equiv e ih => rw [← e.iInf_comp, ← e.surjective.iInter_comp, ih]
-  | h_empty => simp
-  | h_option ih => rw [iInf_option, Set.iInter_option, Opens.coe_inf, ih]
-
-Depends on / 依赖: Finite, Finite.induction_empty_option, Opens.coe_inf, Set.iInter_option, coe_inf, e.iInf_comp, e.surjective.iInter_comp, h_empty, h_option, iInf_comp, iInf_option, iInter_comp, iInter_option, induction_empty_option, of_equiv, surjective
+/-
+**TopologicalSpace.Opens.coe_iInf** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：coe_iInf {ι : Type*} [Finite ι] (U : ι -> TopologicalSpace.Opens α) : (((⨅
+ i, U i) : Opens α) : Set α) = ⋂ i, U i
+参数：U : ι -> TopologicalSpace.Opens α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.induction_empty_option`：Finite.induction_empty_option {P : Type u
+ -> Prop} (of_equiv : forall {α β}, α ≃ β -> P α -> P β) (h_empty : P PEmpty) (h
+_option : forall {α…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.iInf_comp`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort u_5} [inst :
+ InfSet α] {g : ι' → α} (e : ι ≃ ι'), ⨅ x, g (e x) = ⨅ y, g y
+· 使用定理 `Function.Surjective.iInter_comp`：iInter_comp {f : ι -> ι₂} (hf : Surject
+ive f) (g : ι₂ -> Set α) : ⋂ x, g (f x) = ⋂ y, g y
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.iInter_of_empty`：iInter_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋂ i,
+ s i = univ
+· 使用定理 `iInf_option`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] 
+(f : Option β → α), ⨅ o, f o = f none ⊓ ⨅ b, f (some b)
+· 使用定理 `Set.iInter_option`：iInter_option {ι} (s : Option ι -> Set α) : ⋂ o, s o 
+= s none inter ⋂ i, s (some i)
+· 使用定理 `TopologicalSpace.Opens.coe_inf`：coe_inf (s t : Opens α) : (↑(s ⊓ t) : Se
+t α) = ↑s inter ↑t
 -/
-lemma coe_iInf {ι : Type*} [Finite ι] (U : ι -> TopologicalSpace.Opens α) :
+lemma coe_iInf {ι : Type*} [Finite ι] (U : ι → TopologicalSpace.Opens α) :
     (((⨅ i, U i) : Opens α) : Set α) = ⋂ i, U i := by
   induction ι using Finite.induction_empty_option with
   | of_equiv e ih => rw [← e.iInf_comp, ← e.surjective.iInter_comp, ih]
   | h_empty => simp
   | h_option ih => rw [iInf_option, Set.iInter_option, Opens.coe_inf, ih]
-
-/--
-theorem `iSup_def` / 定理 `iSup_def`
-
-English:
-theorem iSup_def
-  given: {ι} (s : ι -> Opens α)
-  statement: ⨆ i, s i = ⟨⋃ i, s i, isOpen_iUnion fun i => (s i).2⟩
-  proof: ext coe_iSup s
-
-@[simp]
-
-中文:
-定理 iSup_def
-  条件: {ι} (s : ι -> Opens α)
-  结论: ⨆ i, s i = ⟨⋃ i, s i, isOpen_iUnion fun i => (s i).2⟩
-  证明: ext coe_iSup s
-
-@[simp]
-
-Depends on / 依赖: coe_iSup
+/-
+**TopologicalSpace.Opens.iSup_def** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：iSup_def {ι} (s : ι -> Opens α) : ⨆ i, s i = ⟨⋃ i, s i, isOpen_iUnion fun 
+i => (s i).2⟩
+参数：s : ι -> Opens α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `TopologicalSpace.Opens.coe_iSup`：coe_iSup {ι} (s : ι -> Opens α) : ((⨆ i
+, s i : Opens α) : Set α) = ⋃ i, s i
 -/
-theorem iSup_def {ι} (s : ι -> Opens α) : ⨆ i, s i = ⟨⋃ i, s i, isOpen_iUnion fun i => (s i).2⟩ :=
-ext coe_iSup s
+theorem iSup_def {ι} (s : ι → Opens α) : ⨆ i, s i = ⟨⋃ i, s i, isOpen_iUnion fun i => (s i).2⟩ :=
+  ext <| coe_iSup s
 
 @[simp]
-/--
-theorem `iSup_mk` / 定理 `iSup_mk`
-
-English:
-theorem iSup_mk
-  given: {ι} (s : ι -> Set α) (h : forall i, IsOpen (s i))
-  proof: iSup_def _
-
-@[simp]
-
-中文:
-定理 iSup_mk
-  条件: {ι} (s : ι -> 集合 α) (h : 对任意 i, 是开集 (s i))
-  证明: iSup_def _
-
-@[simp]
-
-Depends on / 依赖: iSup_def
+/-
+**TopologicalSpace.Opens.iSup_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：iSup_mk {ι} (s : ι -> Set α) (h : forall i, IsOpen (s i)) : (⨆ i, ⟨s i, h 
+i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩
+参数：s : ι -> Set α；h : forall i, IsOpen (s i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.iSup_def`：iSup_def {ι} (s : ι -> Opens α) : ⨆ i, 
+s i = ⟨⋃ i, s i, isOpen_iUnion fun i => (s i).2⟩
 -/
-theorem iSup_mk {ι} (s : ι -> Set α) (h : forall i, IsOpen (s i)) :
+theorem iSup_mk {ι} (s : ι → Set α) (h : ∀ i, IsOpen (s i)) :
     (⨆ i, ⟨s i, h i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩ :=
   iSup_def _
 
 @[simp]
-/--
-theorem `mem_iSup` / 定理 `mem_iSup`
-
-English:
-theorem mem_iSup
-  given: {ι} {x : α} {s : ι -> Opens α}
-  statement: x in iSup s ↔ exists i, x in s i
-  proof: by
-  rw [← SetLike.mem_coe]
-  simp
-
-@[simp]
-
-中文:
-定理 mem_iSup
-  条件: {ι} {x : α} {s : ι -> Opens α}
-  结论: x in iSup s ↔ 存在 i, x in s i
-  证明: by
-  rw [← SetLike.mem_coe]
-  simp
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, mem_coe
+/-
+**TopologicalSpace.Opens.mem_iSup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：mem_iSup {ι} {x : α} {s : ι -> Opens α} : x in iSup s ↔ exists i, x in s i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TopologicalSpace.Opens.coe_iSup`：coe_iSup {ι} (s : ι -> Opens α) : ((⨆ i
+, s i : Opens α) : Set α) = ⋃ i, s i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iSup {ι} {x : α} {s : ι -> Opens α} : x in iSup s ↔ exists i, x in s i := by
+theorem mem_iSup {ι} {x : α} {s : ι → Opens α} : x ∈ iSup s ↔ ∃ i, x ∈ s i := by
   rw [← SetLike.mem_coe]
   simp
 
 @[simp]
-/--
-theorem `mem_sSup` / 定理 `mem_sSup`
-
-English:
-theorem mem_sSup
-  given: {Us : Set (Opens α)} {x : α}
-  statement: x in sSup Us ↔ exists u in Us, x in u
-  proof: by
-  simp_rw [sSup_eq_iSup, mem_iSup, exists_prop]
-
-中文:
-定理 mem_sSup
-  条件: {Us : 集合 (Opens α)} {x : α}
-  结论: x in sSup Us ↔ 存在 u in Us, x in u
-  证明: by
-  simp_rw [sSup_eq_iSup, mem_iSup, exists_prop]
-
-Depends on / 依赖: exists_prop, mem_iSup, sSup_eq_iSup, simp_rw
+/-
+**TopologicalSpace.Opens.mem_sSup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：mem_sSup {Us : Set (Opens α)} {x : α} : x in sSup Us ↔ exists u in Us, x i
+n u
+参数：Opens α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup`：sSup_eq_iSup {s : Set α} : sSup s = ⨆ a in s, a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sSup {Us : Set (Opens α)} {x : α} : x in sSup Us ↔ exists u in Us, x in u := by
+theorem mem_sSup {Us : Set (Opens α)} {x : α} : x ∈ sSup Us ↔ ∃ u ∈ Us, x ∈ u := by
   simp_rw [sSup_eq_iSup, mem_iSup, exists_prop]
-
-/--
-Instance `instFrame` / 实例 `instFrame`
-
-English:
-instance instFrame
-  signature: : Frame (Opens α)
-  body: fast_instance% .ofMinimalAxioms {
-  inf_sSup_le_iSup_inf a s :=
-    (ext <| by simp only [coe_inf, coe_iSup, coe_sSup, Set.inter_iUnion₂]).le }
-
-中文:
-实例 instFrame
-  签名: : 框架 (Opens α)
-  定义体: fast_instance% .ofMinimalAxioms {
-  inf_sSup_le_iSup_inf a s :=
-    (ext <| by simp only [coe_inf, coe_iSup, coe_sSup, Set.inter_iUnion₂]).le }
-
-Depends on / 依赖: fast_instance, ofMinimalAxioms
+/-
+**TopologicalSpace.Opens.instFrame** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.O
+pens`。
+形式化陈述：instFrame : Frame (Opens α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFrame : Frame (Opens α) := fast_instance% .ofMinimalAxioms {
   inf_sSup_le_iSup_inf a s :=
     (ext <| by simp only [coe_inf, coe_iSup, coe_sSup, Set.inter_iUnion₂]).le }
-
-/--
-theorem `mem_himp` / 定理 `mem_himp`
-
-English:
-theorem mem_himp
-  given: {U V : Opens α} {x : α}
-  statement: x in U ⇨ V ↔ exists W : Opens α, W ⊓ U <= V ∧ x in W
-  proof: by
-  simp [himp_eq_sSup]
-
-中文:
-定理 mem_himp
-  条件: {U V : Opens α} {x : α}
-  结论: x in U ⇨ V ↔ 存在 W : Opens α, W ⊓ U <= V ∧ x in W
-  证明: by
-  simp [himp_eq_sSup]
-
-Depends on / 依赖: himp_eq_sSup
+/-
+**TopologicalSpace.Opens.mem_himp** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：mem_himp {U V : Opens α} {x : α} : x in U ⇨ V ↔ exists W : Opens α, W ⊓ U 
+<= V ∧ x in W
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `himp_eq_sSup`：∀ {α : Type u} [inst : Order.Frame α] {a b : α}, a ⇨ b = s
+Sup {w | w ⊓ a ≤ b}
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_himp {U V : Opens α} {x : α} : x in U ⇨ V ↔ exists W : Opens α, W ⊓ U <= V ∧ x in W := by
+theorem mem_himp {U V : Opens α} {x : α} : x ∈ U ⇨ V ↔ ∃ W : Opens α, W ⊓ U ≤ V ∧ x ∈ W := by
   simp [himp_eq_sSup]
-
-/--
-theorem `himp_def` / 定理 `himp_def`
-
-English:
-theorem himp_def
-  given: {U V : Opens α}
-  statement: U ⇨ V = Opens.interior ((U : Set α) ⇨ V)
-  proof: by
-  ext x
-  simp_rw [BooleanAlgebra.himp_eq, sup_eq_union, coe_interior, _root_.mem_interior,
-    SetLike.mem_coe, mem_himp, ← SetLike.coe_subset_coe, coe_inf, inter_subset]
-  exact ⟨fun ⟨⟨W, hW⟩, hsub, hx⟩ => ⟨W, union_comm _ _ ▸ hsub, hW, hx⟩,
-    fun ⟨W, hsub, hW, hx⟩ => ⟨⟨W, hW⟩, union_comm _ _ ▸ hsub, hx⟩⟩
-
-中文:
-定理 himp_def
-  条件: {U V : Opens α}
-  结论: U ⇨ V = Opens.interior ((U : 集合 α) ⇨ V)
-  证明: by
-  ext x
-  simp_rw [BooleanAlgebra.himp_eq, sup_eq_union, coe_interior, _root_.mem_interior,
-    SetLike.mem_coe, mem_himp, ← SetLike.coe_subset_coe, coe_inf, inter_subset]
-  exact ⟨fun ⟨⟨W, hW⟩, hsub, hx⟩ => ⟨W, union_comm _ _ ▸ hsub, hW, hx⟩,
-    fun ⟨W, hsub, hW, hx⟩ => ⟨⟨W, hW⟩, union_comm _ _ ▸ hsub, hx⟩⟩
-
-Depends on / 依赖: BooleanAlgebra, BooleanAlgebra.himp_eq, SetLike, SetLike.coe_subset_coe, SetLike.mem_coe, _root_, _root_.mem_interior, coe_inf, coe_interior, coe_subset_coe, himp_eq, inter_subset, mem_coe, mem_himp, mem_interior, simp_rw, sup_eq_union, union_comm
+/-
+**TopologicalSpace.Opens.himp_def** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：himp_def {U V : Opens α} : U ⇨ V = Opens.interior ((U : Set α) ⇨ V)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `BooleanAlgebra.himp_eq`：∀ {α : Type u} [self : BooleanAlgebra α] (x y : 
+α), x ⇨ y = y ⊔ xᶜ
+· 使用定理 `TopologicalSpace.Opens.coe_interior`：∀ {α : Type u_2} [inst : Topologica
+lSpace α] (s : Set α), ↑(TopologicalSpace.Opens.interior s) = interior s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
 -/
 theorem himp_def {U V : Opens α} : U ⇨ V = Opens.interior ((U : Set α) ⇨ V) := by
   ext x
@@ -1211,317 +786,243 @@ theorem himp_def {U V : Opens α} : U ⇨ V = Opens.interior ((U : Set α) ⇨ V
     SetLike.mem_coe, mem_himp, ← SetLike.coe_subset_coe, coe_inf, inter_subset]
   exact ⟨fun ⟨⟨W, hW⟩, hsub, hx⟩ => ⟨W, union_comm _ _ ▸ hsub, hW, hx⟩,
     fun ⟨W, hsub, hW, hx⟩ => ⟨⟨W, hW⟩, union_comm _ _ ▸ hsub, hx⟩⟩
-
-/--
-theorem `coe_himp` / 定理 `coe_himp`
-
-English:
-theorem coe_himp
-  given: {U V : Opens α}
-  statement: ↑(U ⇨ V) = interior ((U : Set α) ⇨ V)
-  proof: by
-  rw [himp_def]; rw [coe_interior]
-
-中文:
-定理 coe_himp
-  条件: {U V : Opens α}
-  结论: ↑(U ⇨ V) = interior ((U : 集合 α) ⇨ V)
-  证明: by
-  rw [himp_def]; rw [coe_interior]
-
-Depends on / 依赖: coe_interior, himp_def
+/-
+**TopologicalSpace.Opens.coe_himp** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：coe_himp {U V : Opens α} : ↑(U ⇨ V) = interior ((U : Set α) ⇨ V)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopologicalSpace.Opens.himp_def`：himp_def {U V : Opens α} : U ⇨ V = Open
+s.interior ((U : Set α) ⇨ V)
+· 使用定理 `TopologicalSpace.Opens.coe_interior`：∀ {α : Type u_2} [inst : Topologica
+lSpace α] (s : Set α), ↑(TopologicalSpace.Opens.interior s) = interior s
 -/
 theorem coe_himp {U V : Opens α} : ↑(U ⇨ V) = interior ((U : Set α) ⇨ V) := by
-  rw [himp_def]; rw [coe_interior]
-
-/--
-theorem `mem_compl` / 定理 `mem_compl`
-
-English:
-theorem mem_compl
-  given: {U : Opens α} {x : α}
-  statement: x in Uᶜ ↔ exists V : Opens α, Disjoint V U ∧ x in V
-  proof: by
-  simp [compl_eq_sSup_disjoint]
-
-中文:
-定理 mem_compl
-  条件: {U : Opens α} {x : α}
-  结论: x in Uᶜ ↔ 存在 V : Opens α, Disjoint V U ∧ x in V
-  证明: by
-  simp [compl_eq_sSup_disjoint]
-
-Depends on / 依赖: compl_eq_sSup_disjoint
+  rw [himp_def, coe_interior]
+/-
+**TopologicalSpace.Opens.mem_compl** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.O
+pens`。
+形式化陈述：mem_compl {U : Opens α} {x : α} : x in Uᶜ ↔ exists V : Opens α, Disjoint V
+ U ∧ x in V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_eq_sSup_disjoint`：∀ {α : Type u} [inst : Order.Frame α] {a : α}, a
+ᶜ = sSup {w | Disjoint w a}
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_compl {U : Opens α} {x : α} : x in Uᶜ ↔ exists V : Opens α, Disjoint V U ∧ x in V := by
+theorem mem_compl {U : Opens α} {x : α} : x ∈ Uᶜ ↔ ∃ V : Opens α, Disjoint V U ∧ x ∈ V := by
   simp [compl_eq_sSup_disjoint]
-
-/--
-theorem `interior_compl` / 定理 `interior_compl`
-
-English:
-theorem interior_compl
-  given: {U : Opens α}
-  statement: Opens.interior (U : Set α)ᶜ = Uᶜ
-  proof: by
-  simp [← himp_bot, himp_def]
-
-中文:
-定理 interior_compl
-  条件: {U : Opens α}
-  结论: Opens.interior (U : 集合 α)ᶜ = Uᶜ
-  证明: by
-  simp [← himp_bot, himp_def]
-
-Depends on / 依赖: himp_bot, himp_def
+/-
+**TopologicalSpace.Opens.interior_compl** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Opens`。
+形式化陈述：interior_compl {U : Opens α} : Opens.interior (U : Set α)ᶜ = Uᶜ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopologicalSpace.Opens.himp_def`：himp_def {U V : Opens α} : U ⇨ V = Open
+s.interior ((U : Set α) ⇨ V)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem interior_compl {U : Opens α} : Opens.interior (U : Set α)ᶜ = Uᶜ := by
   simp [← himp_bot, himp_def]
-
-/--
-theorem `coe_compl_eq_interior_compl` / 定理 `coe_compl_eq_interior_compl`
-
-English:
-theorem coe_compl_eq_interior_compl
-  given: {U : Opens α}
-  statement: ↑(Uᶜ) = interior (U : Set α)ᶜ
-  proof: by
-  rw [← interior_compl]; rw [coe_interior]
-
-中文:
-定理 coe_compl_eq_interior_compl
-  条件: {U : Opens α}
-  结论: ↑(Uᶜ) = interior (U : 集合 α)ᶜ
-  证明: by
-  rw [← interior_compl]; rw [coe_interior]
-
-Depends on / 依赖: coe_interior, interior_compl
+/-
+**TopologicalSpace.Opens.coe_compl_eq_interior_compl** 是 Mathlib 中的一个定理，位于命名空间 `
+TopologicalSpace.Opens`。
+形式化陈述：coe_compl_eq_interior_compl {U : Opens α} : ↑(Uᶜ) = interior (U : Set α)ᶜ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.Opens.interior_compl`：interior_compl {U : Opens α} : Op
+ens.interior (U : Set α)ᶜ = Uᶜ
+· 使用定理 `TopologicalSpace.Opens.coe_interior`：∀ {α : Type u_2} [inst : Topologica
+lSpace α] (s : Set α), ↑(TopologicalSpace.Opens.interior s) = interior s
 -/
 theorem coe_compl_eq_interior_compl {U : Opens α} : ↑(Uᶜ) = interior (U : Set α)ᶜ := by
-  rw [← interior_compl]; rw [coe_interior]
+  rw [← interior_compl, coe_interior]
 
-/--
-Definition of `frameHom` / `frameHom` 的定义
+/-- The coercion from open sets to sets as a `FrameHom`. -/
+/-
+**TopologicalSpace.Opens.frameHom** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → FrameHom (TopologicalSpace.
+Opens α) (Set α)
+参数：TopologicalSpace.Opens α；Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition frameHom
-  signature: : FrameHom (Opens α) (Set α) where
-  body: (·)
-  map_inf' _ _ := rfl
-  map_top' := rfl
-  map_sSup' _ := by simp
-
-中文:
-定义 frameHom
-  签名: : 框架态射 (Opens α) (集合 α) where
-  定义体: (·)
-  map_inf' _ _ := rfl
-  map_top' := rfl
-  map_sSup' _ := by simp
+--- 原说明 ---
+The coercion from open sets to sets as a `FrameHom`.
 -/
 @[simps] protected def frameHom : FrameHom (Opens α) (Set α) where
   toFun := (·)
   map_inf' _ _ := rfl
   map_top' := rfl
   map_sSup' _ := by simp
-
-/--
-theorem `isOpenEmbedding'` / 定理 `isOpenEmbedding'`
-
-English:
-theorem isOpenEmbedding'
-  given: (U : Opens α)
-  statement: IsOpenEmbedding (Subtype.val : U -> α)
-  proof: U.isOpen.isOpenEmbedding_subtypeVal
-
-中文:
-定理 isOpenEmbedding'
-  条件: (U : Opens α)
-  结论: 是开嵌入 (子类型.val : U -> α)
-  证明: U.isOpen.isOpenEmbedding_subtypeVal
-
-Depends on / 依赖: U.isOpen.isOpenEmbedding_subtypeVal, isOpen, isOpenEmbedding_subtypeVal
+/-
+**TopologicalSpace.Opens.isOpenEmbedding'** 是 Mathlib 中的一个定理，位于命名空间 `Topological
+Space.Opens`。
+形式化陈述：isOpenEmbedding' (U : Opens α) : IsOpenEmbedding (Subtype.val : U -> α)
+参数：U : Opens α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.isOpenEmbedding_subtypeVal`：IsOpen.isOpenEmbedding_subtypeVal {s 
+: Set X} (hs : IsOpen s) : IsOpenEmbedding ((↑) : s -> X)
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
 -/
-theorem isOpenEmbedding' (U : Opens α) : IsOpenEmbedding (Subtype.val : U -> α) :=
+theorem isOpenEmbedding' (U : Opens α) : IsOpenEmbedding (Subtype.val : U → α) :=
   U.isOpen.isOpenEmbedding_subtypeVal
-
-/--
-theorem `isOpenEmbedding_of_le` / 定理 `isOpenEmbedding_of_le`
-
-English:
-theorem isOpenEmbedding_of_le
-  given: {U V : Opens α} (i : U <= V)
-  proof: .inclusion i
-  isOpen_range := by
-    rw [Set.range_inclusion i]
-    exact U.isOpen.preimage continuous_subtype_val
-
-中文:
-定理 isOpenEmbedding_of_le
-  条件: {U V : Opens α} (i : U <= V)
-  证明: .inclusion i
-  isOpen_range := by
-    rw [Set.range_inclusion i]
-    exact U.isOpen.preimage continuous_subtype_val
-
-Depends on / 依赖: inclusion
+/-
+**TopologicalSpace.Opens.isOpenEmbedding_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Topolo
+gicalSpace.Opens`。
+形式化陈述：isOpenEmbedding_of_le {U V : Opens α} (i : U <= V) : IsOpenEmbedding (Set.
+inclusion <| SetLike.coe_subset_coe.2 i) where toIsEmbedding
+参数：i : U <= V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SetLike.coe_subset_coe`：∀ {A : Type u_1} {B : Type u_2} [inst : SetLike 
+A B] [inst_1 : LE A] [IsConcreteLE A B] {S T : A}, ↑S ⊆ ↑T ↔ S ≤ T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `Topology.IsEmbedding.inclusion`：∀ {X : Type u} [inst : TopologicalSpace 
+X] {s t : Set X} (h : s ⊆ t), Topology.IsEmbedding (Set.inclusion h)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_inclusion`：range_inclusion (h : s subseteq t) : range (inclusi
+on h) = { x : t | (x : α) in s }
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
 -/
-theorem isOpenEmbedding_of_le {U V : Opens α} (i : U <= V) :
+theorem isOpenEmbedding_of_le {U V : Opens α} (i : U ≤ V) :
     IsOpenEmbedding (Set.inclusion <| SetLike.coe_subset_coe.2 i) where
   toIsEmbedding := .inclusion i
   isOpen_range := by
     rw [Set.range_inclusion i]
     exact U.isOpen.preimage continuous_subtype_val
-
-/--
-theorem `not_nonempty_iff_eq_bot` / 定理 `not_nonempty_iff_eq_bot`
-
-English:
-theorem not_nonempty_iff_eq_bot
-  given: (U : Opens α)
-  statement: ¬Set.Nonempty (U : Set α) ↔ U = ⊥
-  proof: by
-  rw [← coe_inj]; rw [coe_bot]; rw [← Set.not_nonempty_iff_eq_empty]
-
-中文:
-定理 not_nonempty_iff_eq_bot
-  条件: (U : Opens α)
-  结论: ¬集合.非空 (U : 集合 α) ↔ U = ⊥
-  证明: by
-  rw [← coe_inj]; rw [coe_bot]; rw [← Set.not_nonempty_iff_eq_empty]
-
-Depends on / 依赖: Set.not_nonempty_iff_eq_empty, coe_bot, coe_inj, not_nonempty_iff_eq_empty
+/-
+**TopologicalSpace.Opens.not_nonempty_iff_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Topo
+logicalSpace.Opens`。
+形式化陈述：not_nonempty_iff_eq_bot (U : Opens α) : ¬Set.Nonempty (U : Set α) ↔ U = ⊥
+参数：U : Opens α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.Opens.coe_inj`：coe_inj {U V : Opens α} : (U : Set α) = 
+V ↔ U = V
+· 使用定理 `TopologicalSpace.Opens.coe_bot`：coe_bot : ((⊥ : Opens α) : Set α) = ∅
+· 使用定理 `Set.not_nonempty_iff_eq_empty`：not_nonempty_iff_eq_empty : ¬s.Nonempty ↔
+ s = ∅
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem not_nonempty_iff_eq_bot (U : Opens α) : ¬Set.Nonempty (U : Set α) ↔ U = ⊥ := by
-  rw [← coe_inj]; rw [coe_bot]; rw [← Set.not_nonempty_iff_eq_empty]
-
-/--
-theorem `ne_bot_iff_nonempty` / 定理 `ne_bot_iff_nonempty`
-
-English:
-theorem ne_bot_iff_nonempty
-  given: (U : Opens α)
-  statement: U != ⊥ ↔ Set.Nonempty (U : Set α)
-  proof: by
-  rw [Ne]; rw [← not_nonempty_iff_eq_bot]; rw [not_not]
-
-中文:
-定理 ne_bot_iff_nonempty
-  条件: (U : Opens α)
-  结论: U != ⊥ ↔ 集合.非空 (U : 集合 α)
-  证明: by
-  rw [Ne]; rw [← not_nonempty_iff_eq_bot]; rw [not_not]
-
-Depends on / 依赖: not_nonempty_iff_eq_bot, not_not
+  rw [← coe_inj, coe_bot, ← Set.not_nonempty_iff_eq_empty]
+/-
+**TopologicalSpace.Opens.ne_bot_iff_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Topologi
+calSpace.Opens`。
+形式化陈述：ne_bot_iff_nonempty (U : Opens α) : U != ⊥ ↔ Set.Nonempty (U : Set α)
+参数：U : Opens α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.Opens.not_nonempty_iff_eq_bot`：not_nonempty_iff_eq_bot 
+(U : Opens α) : ¬Set.Nonempty (U : Set α) ↔ U = ⊥
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ne_bot_iff_nonempty (U : Opens α) : U != ⊥ ↔ Set.Nonempty (U : Set α) := by
-  rw [Ne]; rw [← not_nonempty_iff_eq_bot]; rw [not_not]
-
-/--
-theorem `eq_bot_or_top` / 定理 `eq_bot_or_top`
-
-English:
-theorem eq_bot_or_top
-  given: [IndiscreteTopology α] (U : Opens α)
-  proof: by
-  rw [← coe_eq_empty]; rw [← coe_eq_univ]; rw [← IndiscreteTopology.isOpen_iff]
-  exact U.2
-
-中文:
-定理 eq_bot_or_top
-  条件: [Indiscrete拓扑 α] (U : Opens α)
-  证明: by
-  rw [← coe_eq_empty]; rw [← coe_eq_univ]; rw [← IndiscreteTopology.isOpen_iff]
-  exact U.2
-
-Depends on / 依赖: IndiscreteTopology, IndiscreteTopology.isOpen_iff, coe_eq_empty, coe_eq_univ, isOpen_iff
+theorem ne_bot_iff_nonempty (U : Opens α) : U ≠ ⊥ ↔ Set.Nonempty (U : Set α) := by
+  rw [Ne, ← not_nonempty_iff_eq_bot, not_not]
+/-
+**TopologicalSpace.Opens.eq_bot_or_top** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpa
+ce.Opens`。
+形式化陈述：eq_bot_or_top [IndiscreteTopology α] (U : Opens α) : U = ⊥ ∨ U = ⊤
+参数：U : Opens α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.Opens.coe_eq_empty`：coe_eq_empty {U : Opens α} : (U : S
+et α) = ∅ ↔ U = ⊥
+· 使用定理 `TopologicalSpace.Opens.coe_eq_univ`：coe_eq_univ {U : Opens α} : (U : Set
+ α) = univ ↔ U = ⊤
+· 使用定理 `IndiscreteTopology.isOpen_iff`：IndiscreteTopology.isOpen_iff [Indiscrete
+Topology α] (U : Set α) : IsOpen U ↔ U = ∅ ∨ U = univ
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
 -/
 theorem eq_bot_or_top [IndiscreteTopology α] (U : Opens α) :
     U = ⊥ ∨ U = ⊤ := by
-  rw [← coe_eq_empty]; rw [← coe_eq_univ]; rw [← IndiscreteTopology.isOpen_iff]
+  rw [← coe_eq_empty, ← coe_eq_univ, ← IndiscreteTopology.isOpen_iff]
   exact U.2
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] [IndiscreteTopology α] : IsSimpleOrder (Opens α) where
-  body: eq_bot_or_top
-
-中文:
-实例 [非空
-  签名: α] [Indiscrete拓扑 α] : 是单序 (Opens α) where
-  定义体: eq_bot_or_top
-
-Depends on / 依赖: eq_bot_or_top
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty α] [IndiscreteTopology α] : IsSimpleOrder (Opens α) where
   eq_bot_or_eq_top := eq_bot_or_top
 
-/--
-Definition of `IsBasis` / `IsBasis` 的定义
+/-- A set of `opens α` is a basis if the set of corresponding sets is a topological basis. -/
+/-
+**TopologicalSpace.Opens.IsBasis** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Ope
+ns`。
+形式化陈述：IsBasis (B : Set (Opens α)) : Prop
+参数：B : Set (Opens α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsBasis
-  signature: (B : Set (Opens α))
-  body: IsTopologicalBasis (((↑) : _ -> Set α) '' B)
-
-中文:
-定义 是基
-  签名: (B : 集合 (Opens α))
-  定义体: IsTopologicalBasis (((↑) : _ -> Set α) '' B)
-
-Depends on / 依赖: IsTopologicalBasis
+--- 原说明 ---
+A set of `opens α` is a basis if the set of corresponding sets is a topological 
+basis.
 -/
 def IsBasis (B : Set (Opens α)) : Prop :=
-  IsTopologicalBasis (((↑) : _ -> Set α) '' B)
-
-/--
-theorem `isBasis_iff_nbhd` / 定理 `isBasis_iff_nbhd`
-
-English:
-theorem isBasis_iff_nbhd
-  given: {B : Set (Opens α)}
-  proof: by
-  constructor <;> intro h
-  · rintro ⟨sU, hU⟩ x hx
-    rcases h.mem_nhds_iff.mp (IsOpen.mem_nhds hU hx) with ⟨sV, ⟨⟨V, H₁, H₂⟩, hsV⟩⟩
-    refine ⟨V, H₁, ?_⟩
-    cases V
-    dsimp at H₂
-    subst H₂
-    exact hsV
-  · refine isTopologicalBasis_of_isOpen_of_nhds ?_ ?_
-    · rintro sU ⟨U, -, rfl⟩
-      exact U.2
-    · intro x sU hx hsU
-      rcases @h ⟨sU, hsU⟩ x hx with ⟨V, hV, H⟩
-      exact ⟨V, ⟨V, hV, rfl⟩, H⟩
-
-中文:
-定理 isBasis_iff_nbhd
-  条件: {B : 集合 (Opens α)}
-  证明: by
-  constructor <;> intro h
-  · rintro ⟨sU, hU⟩ x hx
-    rcases h.mem_nhds_iff.mp (IsOpen.mem_nhds hU hx) with ⟨sV, ⟨⟨V, H₁, H₂⟩, hsV⟩⟩
-    refine ⟨V, H₁, ?_⟩
-    cases V
-    dsimp at H₂
-    subst H₂
-    exact hsV
-  · refine isTopologicalBasis_of_isOpen_of_nhds ?_ ?_
-    · rintro sU ⟨U, -, rfl⟩
-      exact U.2
-    · intro x sU hx hsU
-      rcases @h ⟨sU, hsU⟩ x hx with ⟨V, hV, H⟩
-      exact ⟨V, ⟨V, hV, rfl⟩, H⟩
-
-Depends on / 依赖: IsOpen, IsOpen.mem_nhds, h.mem_nhds_iff.mp, isTopologicalBasis_of_isOpen_of_nhds, mem_nhds, mem_nhds_iff
+  IsTopologicalBasis (((↑) : _ → Set α) '' B)
+/-
+**TopologicalSpace.Opens.isBasis_iff_nbhd** 是 Mathlib 中的一个定理，位于命名空间 `Topological
+Space.Opens`。
+形式化陈述：isBasis_iff_nbhd {B : Set (Opens α)} : IsBasis B ↔ forall {U : Opens α} {x
+}, x in U -> exists U' in B, x in U' ∧ U' <= U
+参数：Opens α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.mem_nhds_iff`：∀ {α : Type u} [t : To
+pologicalSpace α] {a : α} {s : Set α} {b : Set (Set α)},   TopologicalSpace.IsTo
+pologicalBasis b → (s ∈ nhds a ↔ ∃ t ∈…
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.isTopologicalBasis_of_isOpen_of_nhds`：isTopologicalBasi
+s_of_isOpen_of_nhds {s : Set (Set α)} (h_open : forall u in s, IsOpen u) (h_nhds
+ : forall (a : α) (u : Set α), a in u -> Is…
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
 -/
 theorem isBasis_iff_nbhd {B : Set (Opens α)} :
-    IsBasis B ↔ forall {U : Opens α} {x}, x in U -> exists U' in B, x in U' ∧ U' <= U := by
+    IsBasis B ↔ ∀ {U : Opens α} {x}, x ∈ U → ∃ U' ∈ B, x ∈ U' ∧ U' ≤ U := by
   constructor <;> intro h
   · rintro ⟨sU, hU⟩ x hx
     rcases h.mem_nhds_iff.mp (IsOpen.mem_nhds hU hx) with ⟨sV, ⟨⟨V, H₁, H₂⟩, hsV⟩⟩
@@ -1536,52 +1037,53 @@ theorem isBasis_iff_nbhd {B : Set (Opens α)} :
     · intro x sU hx hsU
       rcases @h ⟨sU, hsU⟩ x hx with ⟨V, hV, H⟩
       exact ⟨V, ⟨V, hV, rfl⟩, H⟩
-
-/--
-theorem `isBasis_iff_cover` / 定理 `isBasis_iff_cover`
-
-English:
-theorem isBasis_iff_cover
-  given: {B : Set (Opens α)}
-  proof: by
-  constructor
-  · intro hB U
-    refine ⟨{ V : Opens α | V in B ∧ V <= U }, fun U hU => hU.left, ext ?_⟩
-    rw [coe_sSup]; rw [hB.open_eq_sUnion' U.isOpen]
-    simp_rw [sUnion_eq_biUnion, iUnion, mem_ofPred_eq, iSup_and, iSup_image]
-    rfl
-  · intro h
-    rw [isBasis_iff_nbhd]
-    intro U x hx
-    rcases h U with ⟨Us, hUs, rfl⟩
-    rcases mem_sSup.1 hx with ⟨U, Us, xU⟩
-    exact ⟨U, hUs Us, xU, le_sSup Us⟩
-
-中文:
-定理 isBasis_iff_cover
-  条件: {B : 集合 (Opens α)}
-  证明: by
-  constructor
-  · intro hB U
-    refine ⟨{ V : Opens α | V in B ∧ V <= U }, fun U hU => hU.left, ext ?_⟩
-    rw [coe_sSup]; rw [hB.open_eq_sUnion' U.isOpen]
-    simp_rw [sUnion_eq_biUnion, iUnion, mem_ofPred_eq, iSup_and, iSup_image]
-    rfl
-  · intro h
-    rw [isBasis_iff_nbhd]
-    intro U x hx
-    rcases h U with ⟨Us, hUs, rfl⟩
-    rcases mem_sSup.1 hx with ⟨U, Us, xU⟩
-    exact ⟨U, hUs Us, xU, le_sSup Us⟩
-
-Depends on / 依赖: U.isOpen, coe_sSup, hB.open_eq_sUnion, hU.left, iSup_and, iSup_image, iUnion, isBasis_iff_nbhd, isOpen, le_sSup, mem_ofPred_eq, mem_sSup, open_eq_sUnion, sUnion_eq_biUnion, simp_rw
+/-
+**TopologicalSpace.Opens.isBasis_iff_cover** 是 Mathlib 中的一个定理，位于命名空间 `Topologica
+lSpace.Opens`。
+形式化陈述：isBasis_iff_cover {B : Set (Opens α)} : IsBasis B ↔ forall U : Opens α, ex
+ists Us, Us subseteq B ∧ U = sSup Us
+参数：Opens α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopologicalSpace.Opens.coe_sSup`：coe_sSup {S : Set (Opens α)} : (↑(sSup 
+S) : Set α) = ⋃ i in S, ↑i
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.open_eq_sUnion'`：∀ {α : Type u} [t :
+ TopologicalSpace α] {B : Set (Set α)},   TopologicalSpace.IsTopologicalBasis B 
+→ ∀ {u : Set α}, IsOpen u → u = ⋃₀ {s | s…
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.sUnion_eq_biUnion`：sUnion_eq_biUnion {s : Set (Set α)} : ⋃₀ s = ⋃ (i
+ : Set α) (_ : i in s), i
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_and`：iSup_and {p q : Prop} {s : p ∧ q -> α} : iSup s = ⨆ (h₁) (h₂),
+ s ⟨h₁, h₂⟩
+· 使用定理 `iSup_image`：iSup_image {γ} {f : β -> γ} {g : γ -> α} {t : Set β} : ⨆ c i
+n f '' t, g c = ⨆ b in t, g (f b)
+· 使用定理 `TopologicalSpace.Opens.isBasis_iff_nbhd`：isBasis_iff_nbhd {B : Set (Open
+s α)} : IsBasis B ↔ forall {U : Opens α} {x}, x in U -> exists U' in B, x in U' 
+∧ U' <= U
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.Opens.mem_sSup`：mem_sSup {Us : Set (Opens α)} {x : α} :
+ x in sSup Us ↔ exists u in Us, x in u
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isBasis_iff_cover {B : Set (Opens α)} :
-    IsBasis B ↔ forall U : Opens α, exists Us, Us subseteq B ∧ U = sSup Us := by
+    IsBasis B ↔ ∀ U : Opens α, ∃ Us, Us ⊆ B ∧ U = sSup Us := by
   constructor
   · intro hB U
-    refine ⟨{ V : Opens α | V in B ∧ V <= U }, fun U hU => hU.left, ext ?_⟩
-    rw [coe_sSup]; rw [hB.open_eq_sUnion' U.isOpen]
+    refine ⟨{ V : Opens α | V ∈ B ∧ V ≤ U }, fun U hU => hU.left, ext ?_⟩
+    rw [coe_sSup, hB.open_eq_sUnion' U.isOpen]
     simp_rw [sUnion_eq_biUnion, iUnion, mem_ofPred_eq, iSup_and, iSup_image]
     rfl
   · intro h
@@ -1590,75 +1092,106 @@ theorem isBasis_iff_cover {B : Set (Opens α)} :
     rcases h U with ⟨Us, hUs, rfl⟩
     rcases mem_sSup.1 hx with ⟨U, Us, xU⟩
     exact ⟨U, hUs Us, xU, le_sSup Us⟩
-
-/--
-lemma `IsBasis.exists_iSup_eq` / 引理 `IsBasis.exists_iSup_eq`
-
-English:
-lemma IsBasis.exists_iSup_eq
-  statement: {X : Type u} [TopologicalSpace X] {ι : Type*}
-  proof: by
-  obtain ⟨Us, hsub, hUs⟩ := Opens.isBasis_iff_cover.mp hU W
-  choose a ha using hsub
-  use Us, fun i => a i.2
-  simp [hUs, ha, sSup_eq_iSup' Us]
-
-中文:
-引理 是基.存在_iSup_eq
-  结论: {X : 类型u} [拓扑空间 X] {ι : 类型}
-  证明: by
-  obtain ⟨Us, hsub, hUs⟩ := Opens.isBasis_iff_cover.mp hU W
-  choose a ha using hsub
-  use Us, fun i => a i.2
-  simp [hUs, ha, sSup_eq_iSup' Us]
-
-Depends on / 依赖: Opens.isBasis_iff_cover.mp, isBasis_iff_cover, sSup_eq_iSup
+/-
+**TopologicalSpace.Opens.IsBasis.exists_iSup_eq** 是 Mathlib 中的一个定理，位于命名空间 `Topol
+ogicalSpace.Opens.IsBasis`。
+形式化陈述：∀ {X : Type u} [inst : TopologicalSpace X] {ι : Type u_5} {U : ι → Topolog
+icalSpace.Opens X},   TopologicalSpace.Opens.IsBasis (Set.range U) → ∀ (W : Topo
+logicalSpace.Opens X), ∃ κ a, W = ⨆ k, U (a k)
+参数：Set.range U；W : TopologicalSpace.Opens X；a k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.Opens.isBasis_iff_cover`：isBasis_iff_cover {B : Set (Op
+ens α)} : IsBasis B ↔ forall U : Opens α, exists Us, Us subseteq B ∧ U = sSup Us
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `Set.iUnion_coe_set`：iUnion_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋃ i, f i = ⋃ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用定理 `TopologicalSpace.Opens.iSup_mk`：iSup_mk {ι} (s : ι -> Set α) (h : forall
+ i, IsOpen (s i)) : (⨆ i, ⟨s i, h i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩
+· 使用定理 `TopologicalSpace.Opens.mk.congr_simp`：∀ {α : Type u_2} [inst : Topologic
+alSpace α] (carrier carrier_1 : Set α) (e_carrier : carrier = carrier_1)   (is_o
+pen' : IsOpen carrier), { …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma IsBasis.exists_iSup_eq {X : Type u} [TopologicalSpace X] {ι : Type*}
-    {U : ι -> TopologicalSpace.Opens X} (hU : TopologicalSpace.Opens.IsBasis (Set.range U))
-    (W : TopologicalSpace.Opens X) : exists (κ : Type u) (a : κ -> ι), W = ⨆ (k : κ), U (a k) := by
+    {U : ι → TopologicalSpace.Opens X} (hU : TopologicalSpace.Opens.IsBasis (Set.range U))
+    (W : TopologicalSpace.Opens X) : ∃ (κ : Type u) (a : κ → ι), W = ⨆ (k : κ), U (a k) := by
   obtain ⟨Us, hsub, hUs⟩ := Opens.isBasis_iff_cover.mp hU W
   choose a ha using hsub
-  use Us, fun i => a i.2
+  use Us, fun i ↦ a i.2
   simp [hUs, ha, sSup_eq_iSup' Us]
-
-/--
-lemma `IsBasis.exists_iSup_eq_of_isCompact` / 引理 `IsBasis.exists_iSup_eq_of_isCompact`
-
-English:
-lemma IsBasis.exists_iSup_eq_of_isCompact
-  statement: {X : Type u} [TopologicalSpace X] {ι : Type*}
-  proof: by
-  obtain ⟨κ, a, heq⟩ := hU.exists_iSup_eq W
-  obtain ⟨s, hs⟩ := hW.elim_finite_subcover _ (fun k : κ => (U (a k)).2) (by simp [heq])
-  use s, s.finite_toSet, a ∘ Subtype.val
-  refine le_antisymm ?_ ?_
-  · simpa [← SetLike.coe_subset_coe, Set.iUnion_subtype]
-  · rw [heq, iSup_le_iff]
-    intro i
-    exact le_iSup_of_le _ le_rfl
-
-中文:
-引理 是基.存在_iSup_eq_of_isCompact
-  结论: {X : 类型u} [拓扑空间 X] {ι : 类型}
-  证明: by
-  obtain ⟨κ, a, heq⟩ := hU.exists_iSup_eq W
-  obtain ⟨s, hs⟩ := hW.elim_finite_subcover _ (fun k : κ => (U (a k)).2) (by simp [heq])
-  use s, s.finite_toSet, a ∘ Subtype.val
-  refine le_antisymm ?_ ?_
-  · simpa [← SetLike.coe_subset_coe, Set.iUnion_subtype]
-  · rw [heq, iSup_le_iff]
-    intro i
-    exact le_iSup_of_le _ le_rfl
-
-Depends on / 依赖: Set.iUnion_subtype, SetLike, SetLike.coe_subset_coe, Subtype, Subtype.val, coe_subset_coe, elim_finite_subcover, exists_iSup_eq, finite_toSet, hU.exists_iSup_eq, hW.elim_finite_subcover, iSup_le_iff, iUnion_subtype, le_antisymm, le_iSup_of_le, le_rfl, s.finite_toSet
+/-
+**TopologicalSpace.Opens.IsBasis.exists_iSup_eq_of_isCompact** 是 Mathlib 中的一个定理，
+位于命名空间 `TopologicalSpace.Opens.IsBasis`。
+形式化陈述：∀ {X : Type u} [inst : TopologicalSpace X] {ι : Type u_5} {U : ι → Topolog
+icalSpace.Opens X},   TopologicalSpace.Opens.IsBasis (Set.range U) →     ∀ (W : 
+TopologicalSpace.Opens X), IsCompact W.carrier → ∃ κ, ∃ (_ : Finite κ), ∃ a, W =
+ ⨆ k, U (a k)
+参数：Set.range U；W : TopologicalSpace.Opens X；_ : Finite κ；a k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.IsBasis.exists_iSup_eq`：∀ {X : Type u} [inst : To
+pologicalSpace X] {ι : Type u_5} {U : ι → TopologicalSpace.Opens X},   Topologic
+alSpace.Opens.IsBasis (Set.range U)…
+· 使用定理 `IsCompact.elim_finite_subcover`：IsCompact.elim_finite_subcover {ι : Type
+ v} (hs : IsCompact s) (U : ι -> Set X) (hUo : forall i, IsOpen (U i)) (hsU : s 
+subseteq ⋃ i, U i) :…
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `TopologicalSpace.Opens.iSup_mk`：iSup_mk {ι} (s : ι -> Set α) (h : forall
+ i, IsOpen (s i)) : (⨆ i, ⟨s i, h i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Set.iUnion_subtype`：iUnion_subtype (p : α -> Prop) (s : { x // p x } -> 
+Set β) : ⋃ x : { x // p x }, s x = ⋃ (x) (hx : p x), s ⟨x, hx⟩
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `TopologicalSpace.Opens.mk.congr_simp`：∀ {α : Type u_2} [inst : Topologic
+alSpace α] (carrier carrier_1 : Set α) (e_carrier : carrier = carrier_1)   (is_o
+pen' : IsOpen carrier), { …
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `iSup_le_iff`：iSup_le_iff : iSup f <= a ↔ forall i, f i <= a
+· 使用定理 `le_iSup_of_le`：le_iSup_of_le (i : ι) (h : a <= f i) : a <= iSup f
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 lemma IsBasis.exists_iSup_eq_of_isCompact {X : Type u} [TopologicalSpace X] {ι : Type*}
-    {U : ι -> TopologicalSpace.Opens X} (hU : TopologicalSpace.Opens.IsBasis (Set.range U))
+    {U : ι → TopologicalSpace.Opens X} (hU : TopologicalSpace.Opens.IsBasis (Set.range U))
     (W : TopologicalSpace.Opens X) (hW : IsCompact W.1) :
-    exists (κ : Type u) (_ : Finite κ) (a : κ -> ι), W = ⨆ (k : κ), U (a k) := by
+    ∃ (κ : Type u) (_ : Finite κ) (a : κ → ι), W = ⨆ (k : κ), U (a k) := by
   obtain ⟨κ, a, heq⟩ := hU.exists_iSup_eq W
-  obtain ⟨s, hs⟩ := hW.elim_finite_subcover _ (fun k : κ => (U (a k)).2) (by simp [heq])
+  obtain ⟨s, hs⟩ := hW.elim_finite_subcover _ (fun k : κ ↦ (U (a k)).2) (by simp [heq])
   use s, s.finite_toSet, a ∘ Subtype.val
   refine le_antisymm ?_ ?_
   · simpa [← SetLike.coe_subset_coe, Set.iUnion_subtype]
@@ -1666,755 +1199,588 @@ lemma IsBasis.exists_iSup_eq_of_isCompact {X : Type u} [TopologicalSpace X] {ι 
     intro i
     exact le_iSup_of_le _ le_rfl
 
-/--
-theorem `IsBasis.isCompact_open_iff_eq_finite_iUnion` / 定理 `IsBasis.isCompact_open_iff_eq_finite_iUnion`
+/-- If `α` has a basis consisting of compact opens, then an open set in `α` is compact open iff
+  it is a finite union of some elements in the basis -/
+/-
+**TopologicalSpace.Opens.IsBasis.isCompact_open_iff_eq_finite_iUnion** 是 Mathlib
+ 中的一个定理，位于命名空间 `TopologicalSpace.Opens.IsBasis`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {ι : Type u_5} (b : ι → Topol
+ogicalSpace.Opens α),   TopologicalSpace.Opens.IsBasis (Set.range b) →     (∀ (i
+ : ι), IsCompact ↑(b i)) → ∀ (U : Set α), IsCompact U ∧ IsOpen U ↔ ∃ s, s.Finite
+ ∧ U = ⋃ i ∈ s, ↑(b i)
+参数：b : ι → TopologicalSpace.Opens α；Set.range b；∀ (i : ι), IsCompact ↑(b i)；U : 
+Set α；b i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis`：isCompact_ope
+n_iff_eq_finite_iUnion_of_isTopologicalBasis (b : ι -> Set X) (hb : IsTopologica
+lBasis (Set.range b)) (hb' : forall i, IsCompac…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem IsBasis.isCompact_open_iff_eq_finite_iUnion
-  statement: {ι : Type*} (b : ι -> Opens α)
-  proof: by
-  apply isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis fun i : ι => (b i).1
-  · convert! (config := { transparency := .default }) hb
-    ext
-    simp
-  · exact hb'
-
-中文:
-定理 是基.isCompact_open_iff_eq_finite_iUnion
-  结论: {ι : 类型} (b : ι -> Opens α)
-  证明: by
-  apply isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis fun i : ι => (b i).1
-  · convert! (config := { transparency := .default }) hb
-    ext
-    simp
-  · exact hb'
-
-Depends on / 依赖: config, convert, isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis, transparency
+--- 原说明 ---
+If `α` has a basis consisting of compact opens, then an open set in `α` is compa
+ct open iff
+  it is a finite union of some elements in the basis
 -/
-theorem IsBasis.isCompact_open_iff_eq_finite_iUnion {ι : Type*} (b : ι -> Opens α)
-    (hb : IsBasis (Set.range b)) (hb' : forall i, IsCompact (b i : Set α)) (U : Set α) :
-    IsCompact U ∧ IsOpen U ↔ exists s : Set ι, s.Finite ∧ U = ⋃ i in s, b i := by
+theorem IsBasis.isCompact_open_iff_eq_finite_iUnion {ι : Type*} (b : ι → Opens α)
+    (hb : IsBasis (Set.range b)) (hb' : ∀ i, IsCompact (b i : Set α)) (U : Set α) :
+    IsCompact U ∧ IsOpen U ↔ ∃ s : Set ι, s.Finite ∧ U = ⋃ i ∈ s, b i := by
   apply isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis fun i : ι => (b i).1
   · convert! (config := { transparency := .default }) hb
     ext
     simp
   · exact hb'
-
-/--
-lemma `IsBasis.exists_finite_of_isCompact` / 引理 `IsBasis.exists_finite_of_isCompact`
-
-English:
-lemma IsBasis.exists_finite_of_isCompact
-  statement: {B : Set (Opens α)} (hB : IsBasis B) {U : Opens α}
-  proof: by
-  classical
-  obtain ⟨Us', hsub, hsup⟩ := isBasis_iff_cover.mp hB U
-  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun s : Us' => s.1) (fun s => s.1.2) (by simp [hsup])
-  refine ⟨Finset.image Subtype.val t, subset_trans (by simp) hsub, Finset.finite_toSet _, ?_⟩
-  exact le_antisymm (subset_trans (a := U.carrier) ht (by simp))
-    (le_trans (sSup_le_sSup (by simp)) hsup.ge)
-
-中文:
-引理 是基.存在_finite_of_isCompact
-  结论: {B : 集合 (Opens α)} (hB : 是基 B) {U : Opens α}
-  证明: by
-  classical
-  obtain ⟨Us', hsub, hsup⟩ := isBasis_iff_cover.mp hB U
-  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun s : Us' => s.1) (fun s => s.1.2) (by simp [hsup])
-  refine ⟨Finset.image Subtype.val t, subset_trans (by simp) hsub, Finset.finite_toSet _, ?_⟩
-  exact le_antisymm (subset_trans (a := U.carrier) ht (by simp))
-    (le_trans (sSup_le_sSup (by simp)) hsup.ge)
-
-Depends on / 依赖: Finset, Finset.finite_toSet, Finset.image, Subtype, Subtype.val, U.carrier, carrier, classical, elim_finite_subcover, finite_toSet, hU.elim_finite_subcover, hsup.ge, isBasis_iff_cover, isBasis_iff_cover.mp, le_antisymm, le_trans, sSup_le_sSup, subset_trans
+/-
+**TopologicalSpace.Opens.IsBasis.exists_finite_of_isCompact** 是 Mathlib 中的一个定理，位
+于命名空间 `TopologicalSpace.Opens.IsBasis`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {B : Set (TopologicalSpace.Op
+ens α)},   TopologicalSpace.Opens.IsBasis B →     ∀ {U : TopologicalSpace.Opens 
+α}, IsCompact U.carrier → ∃ Us ⊆ B, Us.Finite ∧ U = sSup Us
+参数：TopologicalSpace.Opens α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.Opens.isBasis_iff_cover`：isBasis_iff_cover {B : Set (Op
+ens α)} : IsBasis B ↔ forall U : Opens α, exists Us, Us subseteq B ∧ U = sSup Us
+· 使用定理 `IsCompact.elim_finite_subcover`：IsCompact.elim_finite_subcover {ι : Type
+ v} (hs : IsCompact s) (U : ι -> Set X) (hUo : forall i, IsOpen (U i)) (hsU : s 
+subseteq ⋃ i, U i) :…
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.iUnion_coe_set`：iUnion_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋃ i, f i = ⋃ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Subtype.coe_preimage_self`：coe_preimage_self (s : Set α) : ((↑) : s -> α
+) ⁻¹' s = univ
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `sSup_le_sSup`：sSup_le_sSup (h : s subseteq t) : sSup s <= sSup t
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
 -/
 lemma IsBasis.exists_finite_of_isCompact {B : Set (Opens α)} (hB : IsBasis B) {U : Opens α}
-    (hU : IsCompact U.1) : exists Us subseteq B, Us.Finite ∧ U = sSup Us := by
+    (hU : IsCompact U.1) : ∃ Us ⊆ B, Us.Finite ∧ U = sSup Us := by
   classical
   obtain ⟨Us', hsub, hsup⟩ := isBasis_iff_cover.mp hB U
-  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun s : Us' => s.1) (fun s => s.1.2) (by simp [hsup])
+  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun s : Us' ↦ s.1) (fun s ↦ s.1.2) (by simp [hsup])
   refine ⟨Finset.image Subtype.val t, subset_trans (by simp) hsub, Finset.finite_toSet _, ?_⟩
   exact le_antisymm (subset_trans (a := U.carrier) ht (by simp))
     (le_trans (sSup_le_sSup (by simp)) hsup.ge)
-
-/--
-lemma `IsBasis.le_iff` / 引理 `IsBasis.le_iff`
-
-English:
-lemma IsBasis.le_iff
-  statement: {α} {t₁ t₂ : TopologicalSpace α}
-  proof: by
-  conv_lhs => rw [hUs.eq_generateFrom]
-  simp [Set.subset_def, le_generateFrom_iff_subset_isOpen]
-
-中文:
-引理 是基.le_iff
-  结论: {α} {t₁ t₂ : 拓扑空间 α}
-  证明: by
-  conv_lhs => rw [hUs.eq_generateFrom]
-  simp [Set.subset_def, le_generateFrom_iff_subset_isOpen]
-
-Depends on / 依赖: Set.subset_def, conv_lhs, eq_generateFrom, hUs.eq_generateFrom, le_generateFrom_iff_subset_isOpen, subset_def
+/-
+**TopologicalSpace.Opens.IsBasis.le_iff** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Opens.IsBasis`。
+形式化陈述：∀ {α : Type u_5} {t₁ t₂ : TopologicalSpace α} {Us : Set (TopologicalSpace.
+Opens α)},   TopologicalSpace.Opens.IsBasis Us → (t₁ ≤ t₂ ↔ ∀ U ∈ Us, IsOpen ↑U)
+参数：TopologicalSpace.Opens α；t₁ ≤ t₂ ↔ ∀ U ∈ Us, IsOpen ↑U。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.eq_generateFrom`：∀ {α : Type u} [t :
+ TopologicalSpace α] {s : Set (Set α)},   TopologicalSpace.IsTopologicalBasis s 
+→ t = TopologicalSpace.generateFrom s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma IsBasis.le_iff {α} {t₁ t₂ : TopologicalSpace α}
     {Us : Set (Opens α)} (hUs : @IsBasis α t₂ Us) :
-    t₁ <= t₂ ↔ forall U in Us, IsOpen[t₁] U := by
+    t₁ ≤ t₂ ↔ ∀ U ∈ Us, IsOpen[t₁] U := by
   conv_lhs => rw [hUs.eq_generateFrom]
   simp [Set.subset_def, le_generateFrom_iff_subset_isOpen]
-
-/--
-lemma `isBasis_sigma` / 引理 `isBasis_sigma`
-
-English:
-lemma isBasis_sigma
-  statement: {ι : Type*} {α : ι -> Type*} [forall i, TopologicalSpace (α i)]
-  proof: by
-  convert! TopologicalSpace.IsTopologicalBasis.sigma hB
-  simp only [IsBasis, Set.image_iUnion, ← Set.image_comp]
-  simp
-
-中文:
-引理 isBasis_sigma
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 拓扑空间 (α i)]
-  证明: by
-  convert! TopologicalSpace.IsTopologicalBasis.sigma hB
-  simp only [IsBasis, Set.image_iUnion, ← Set.image_comp]
-  simp
-
-Depends on / 依赖: IsBasis, IsTopologicalBasis, Set.image_comp, Set.image_iUnion, TopologicalSpace, TopologicalSpace.IsTopologicalBasis.sigma, convert, image_comp, image_iUnion
+/-
+**TopologicalSpace.Opens.isBasis_sigma** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpa
+ce.Opens`。
+形式化陈述：isBasis_sigma {ι : Type*} {α : ι -> Type*} [forall i, TopologicalSpace (α 
+i)] {B : forall i, Set (Opens (α i))} (hB : forall i, IsBasis (B i)) : IsBasis (
+⋃ i : ι, (fun U => ⟨Sigma.mk i '' U.1, isOpenMap_sigmaMk _ U.2⟩) '' B i)
+参数：α i；Opens (α i)；hB : forall i, IsBasis (B i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpenMap_sigmaMk`：isOpenMap_sigmaMk {i : ι} : IsOpenMap (@Sigma.mk ι σ 
+i)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_iUnion`：image_iUnion {f : α -> β} {s : ι -> Set α} : (f '' ⋃ i
+, s i) = ⋃ i, f '' s i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.sigma`：∀ {ι : Type u_1} {E : ι → Typ
+e u_2} [inst : (i : ι) → TopologicalSpace (E i)] {s : (i : ι) → Set (Set (E i))}
+,   (∀ (i : ι), TopologicalSpac…
 -/
-lemma isBasis_sigma {ι : Type*} {α : ι -> Type*} [forall i, TopologicalSpace (α i)]
-    {B : forall i, Set (Opens (α i))} (hB : forall i, IsBasis (B i)) :
-    IsBasis (⋃ i : ι, (fun U => ⟨Sigma.mk i '' U.1, isOpenMap_sigmaMk _ U.2⟩) '' B i) := by
+lemma isBasis_sigma {ι : Type*} {α : ι → Type*} [∀ i, TopologicalSpace (α i)]
+    {B : ∀ i, Set (Opens (α i))} (hB : ∀ i, IsBasis (B i)) :
+    IsBasis (⋃ i : ι, (fun U ↦ ⟨Sigma.mk i '' U.1, isOpenMap_sigmaMk _ U.2⟩) '' B i) := by
   convert! TopologicalSpace.IsTopologicalBasis.sigma hB
   simp only [IsBasis, Set.image_iUnion, ← Set.image_comp]
   simp
-
-/--
-lemma `IsBasis.of_isInducing` / 引理 `IsBasis.of_isInducing`
-
-English:
-lemma IsBasis.of_isInducing
-  given: {B : Set (Opens β)} (H : IsBasis B) {f : α -> β} (h : IsInducing f)
-  proof: by
-  simp only [IsBasis] at H ⊢
-  convert! H.isInducing h
-  ext; simp
-
-@[simp]
-
-中文:
-引理 是基.of_isInducing
-  条件: {B : 集合 (Opens β)} (H : 是基 B) {f : α -> β} (h : 是Inducing f)
-  证明: by
-  simp only [IsBasis] at H ⊢
-  convert! H.isInducing h
-  ext; simp
-
-@[simp]
-
-Depends on / 依赖: H.isInducing, IsBasis, convert, isInducing
+/-
+**TopologicalSpace.Opens.IsBasis.of_isInducing** 是 Mathlib 中的一个定理，位于命名空间 `Topolo
+gicalSpace.Opens.IsBasis`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Topo
+logicalSpace β]   {B : Set (TopologicalSpace.Opens β)},   TopologicalSpace.Opens
+.IsBasis B →     ∀ {f : α → β} (h : Topology.IsInducing f),       TopologicalSpa
+ce.Opens.IsBasis {x | ∃ U ∈ B, { carrier := f ⁻¹' ↑U, is_open' := ⋯ } = x}
+参数：TopologicalSpace.Opens β；h : Topology.IsInducing f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `Topology.IsInducing.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X →
+ Y} [inst : TopologicalSpace Y] [inst_1 : TopologicalSpace X],   Topology.IsIndu
+cing f → Continuous …
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.isInducing`：∀ {α : Type u} {β : Type
+ u_1} [t : TopologicalSpace α] [inst : TopologicalSpace β] {f : α → β} {T : Set 
+(Set β)},   Topology.IsInducing f → …
 -/
-lemma IsBasis.of_isInducing {B : Set (Opens β)} (H : IsBasis B) {f : α -> β} (h : IsInducing f) :
-    IsBasis { ⟨f ⁻¹' U, U.2.preimage h.continuous⟩ | U in B } := by
+lemma IsBasis.of_isInducing {B : Set (Opens β)} (H : IsBasis B) {f : α → β} (h : IsInducing f) :
+    IsBasis { ⟨f ⁻¹' U, U.2.preimage h.continuous⟩ | U ∈ B } := by
   simp only [IsBasis] at H ⊢
   convert! H.isInducing h
   ext; simp
 
 @[simp]
-/--
-theorem `isCompactElement_iff` / 定理 `isCompactElement_iff`
-
-English:
-theorem isCompactElement_iff
-  given: (s : Opens α)
-  proof: by
-  rw [isCompact_iff_finite_subcover]; rw [CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup]
-  refine ⟨?_, fun H ι U hU => ?_⟩
-  · introv H hU hU'
-    obtain ⟨t, ht⟩ := H ι (fun i => ⟨U i, hU i⟩) (by simpa)
-    refine ⟨t, Set.Subset.trans ht ?_⟩
-    rw [coe_finset_sup]; rw [Finset.sup_eq_iSup]
-    rfl
-  · obtain ⟨t, ht⟩ :=
-      H (fun i => U i) (fun i => (U i).isOpen) (by simpa using show (s : Set α) subseteq ↑(iSup U) from hU)
-    refine ⟨t, Set.Subset.trans ht ?_⟩
-    simp only [Set.iUnion_subset_iff]
-    change forall i in t, U i <= t.sup U
-    exact fun i => Finset.le_sup
-
-中文:
-定理 isCompactElement_iff
-  条件: (s : Opens α)
-  证明: by
-  rw [isCompact_iff_finite_subcover]; rw [CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup]
-  refine ⟨?_, fun H ι U hU => ?_⟩
-  · introv H hU hU'
-    obtain ⟨t, ht⟩ := H ι (fun i => ⟨U i, hU i⟩) (by simpa)
-    refine ⟨t, Set.Subset.trans ht ?_⟩
-    rw [coe_finset_sup]; rw [Finset.sup_eq_iSup]
-    rfl
-  · obtain ⟨t, ht⟩ :=
-      H (fun i => U i) (fun i => (U i).isOpen) (by simpa using show (s : Set α) subseteq ↑(iSup U) from hU)
-    refine ⟨t, Set.Subset.trans ht ?_⟩
-    simp only [Set.iUnion_subset_iff]
-    change forall i in t, U i <= t.sup U
-    exact fun i => Finset.le_sup
-
-Depends on / 依赖: CompleteLattice, CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup, Finset, Finset.sup_eq_iSup, Set.Subset.trans, Set.iUnion_subset_iff, Subset, coe_finset_sup, iUnion_subset_iff, introv, isCompactElement_iff_exists_le_iSup_of_le_iSup, isCompact_iff_finite_subcover, isOpen, subseteq, sup_eq_iSup
+/-
+**TopologicalSpace.Opens.isCompactElement_iff** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+icalSpace.Opens`。
+形式化陈述：isCompactElement_iff (s : Opens α) : IsCompactElement s ↔ IsCompact (s : S
+et α)
+参数：s : Opens α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isCompact_iff_finite_subcover`：isCompact_iff_finite_subcover : IsCompact
+ s ↔ forall {ι : Type u} (U : ι -> Set X), (forall i, IsOpen (U i)) -> (s subset
+eq ⋃ i, U i) -> exi…
+· 使用定理 `CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup`：isCompac
+tElement_iff_exists_le_iSup_of_le_iSup.{u} {α : Type u} [CompleteLattice α] (k :
+ α) : IsCompactElement k ↔ forall (ι : Type u) (s : …
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `TopologicalSpace.Opens.iSup_mk`：iSup_mk {ι} (s : ι -> Set α) (h : forall
+ i, IsOpen (s i)) : (⨆ i, ⟨s i, h i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `TopologicalSpace.Opens.coe_finset_sup`：coe_finset_sup (f : ι -> Opens α)
+ (s : Finset ι) : (↑(s.sup f) : Set α) = s.sup ((↑) ∘ f)
+· 使用定理 `Finset.sup_eq_iSup`：sup_eq_iSup [CompleteLattice β] (s : Finset α) (f : 
+α -> β) : s.sup f = ⨆ a in s, f a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `TopologicalSpace.Opens.coe_iSup`：coe_iSup {ι} (s : ι -> Opens α) : ((⨆ i
+, s i : Opens α) : Set α) = ⋃ i, s i
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
 -/
 theorem isCompactElement_iff (s : Opens α) :
     IsCompactElement s ↔ IsCompact (s : Set α) := by
-  rw [isCompact_iff_finite_subcover]; rw [CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup]
+  rw [isCompact_iff_finite_subcover, CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup]
   refine ⟨?_, fun H ι U hU => ?_⟩
   · introv H hU hU'
     obtain ⟨t, ht⟩ := H ι (fun i => ⟨U i, hU i⟩) (by simpa)
     refine ⟨t, Set.Subset.trans ht ?_⟩
-    rw [coe_finset_sup]; rw [Finset.sup_eq_iSup]
+    rw [coe_finset_sup, Finset.sup_eq_iSup]
     rfl
   · obtain ⟨t, ht⟩ :=
-      H (fun i => U i) (fun i => (U i).isOpen) (by simpa using show (s : Set α) subseteq ↑(iSup U) from hU)
+      H (fun i => U i) (fun i => (U i).isOpen) (by simpa using show (s : Set α) ⊆ ↑(iSup U) from hU)
     refine ⟨t, Set.Subset.trans ht ?_⟩
     simp only [Set.iUnion_subset_iff]
-    change forall i in t, U i <= t.sup U
+    change ∀ i ∈ t, U i ≤ t.sup U
     exact fun i => Finset.le_sup
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- The preimage of an open set, as an open set. -/
+/-
+**TopologicalSpace.Opens.comap** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Opens
+`。
+形式化陈述：comap (f : C(α, β)) : FrameHom (Opens β) (Opens α) where toFun s
+参数：f : C(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (f : C(α, β))
-  body: ⟨f ⁻¹' s, s.2.preimage f.continuous⟩
-map_sSup' s := ext by simp only [coe_sSup, preimage_iUnion, biUnion_image, coe_mk]
-  map_inf' _ _ := rfl
-  map_top' := rfl
-
-@[simp]
-
-中文:
-定义 comap
-  签名: (f : C(α, β))
-  定义体: ⟨f ⁻¹' s, s.2.preimage f.continuous⟩
-map_sSup' s := ext by simp only [coe_sSup, preimage_iUnion, biUnion_image, coe_mk]
-  map_inf' _ _ := rfl
-  map_top' := rfl
-
-@[simp]
-
-Depends on / 依赖: continuous, f.continuous, preimage
+--- 原说明 ---
+The preimage of an open set, as an open set.
 -/
 def comap (f : C(α, β)) : FrameHom (Opens β) (Opens α) where
   toFun s := ⟨f ⁻¹' s, s.2.preimage f.continuous⟩
-map_sSup' s := ext by simp only [coe_sSup, preimage_iUnion, biUnion_image, coe_mk]
+  map_sSup' s := ext <| by simp only [coe_sSup, preimage_iUnion, biUnion_image, coe_mk]
   map_inf' _ _ := rfl
   map_top' := rfl
 
 @[simp]
-/--
-theorem `comap_id` / 定理 `comap_id`
-
-English:
-theorem comap_id
-  statement: comap (ContinuousMap.id α) = FrameHom.id _
-  proof: FrameHom.ext fun _ => ext rfl
-
-@[gcongr]
-
-中文:
-定理 comap_id
-  结论: comap (连续映射.id α) = 框架态射.id _
-  证明: FrameHom.ext fun _ => ext rfl
-
-@[gcongr]
-
-Depends on / 依赖: FrameHom, FrameHom.ext
+/-
+**TopologicalSpace.Opens.comap_id** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+ens`。
+形式化陈述：comap_id : comap (ContinuousMap.id α) = FrameHom.id _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FrameHom.ext`：ext {f g : FrameHom α β} (h : forall a, f a = g a) : f = g
+· 使用定理 `TopologicalSpace.Opens.ext`：ext {U V : Opens α} (h : (U : Set α) = V) : 
+U = V
 -/
 theorem comap_id : comap (ContinuousMap.id α) = FrameHom.id _ :=
   FrameHom.ext fun _ => ext rfl
 
 @[gcongr]
-/--
-theorem `comap_mono` / 定理 `comap_mono`
-
-English:
-theorem comap_mono
-  given: (f : C(α, β)) {s t : Opens β} (h : s <= t)
-  statement: comap f s <= comap f t
-  proof: OrderHomClass.mono (comap f) h
-
-@[simp]
-
-中文:
-定理 comap_mono
-  条件: (f : C(α, β)) {s t : Opens β} (h : s <= t)
-  结论: comap f s <= comap f t
-  证明: OrderHomClass.mono (comap f) h
-
-@[simp]
-
-Depends on / 依赖: OrderHomClass, OrderHomClass.mono
+/-
+**TopologicalSpace.Opens.comap_mono** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Opens`。
+形式化陈述：comap_mono (f : C(α, β)) {s t : Opens β} (h : s <= t) : comap f s <= comap
+ f t
+参数：f : C(α, β)；h : s <= t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderHomClass.mono`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst
+ : Preorder α] [inst_1 : Preorder β] [inst_2 : FunLike F α β]   [OrderHomClass F
+ α β] (f…
+· 使用定理 `BoundedOrderHomClass.toRelHomClass`：∀ {F : Type u_6} {α : Type u_7} {β :
+ Type u_8} {inst : LE α} {inst_1 : LE β} {inst_2 : BoundedOrder α}   {inst_3 : B
+oundedOrder β} {inst_4 :…
+· 使用定理 `BoundedLatticeHomClass.toBoundedOrderHomClass`：∀ {F : Type u_1} {α : Typ
+e u_2} {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Latt
+ice β]   [inst_3 : BoundedOrder α] …
+· 使用定理 `FrameHomClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u_2} 
+{β : Type u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : C
+ompleteLattice β] [FrameHomC…
+· 使用定理 `FrameHom.instFrameHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : Comp
+leteLattice α] [inst_1 : CompleteLattice β],   FrameHomClass (FrameHom α β) α β
 -/
-theorem comap_mono (f : C(α, β)) {s t : Opens β} (h : s <= t) : comap f s <= comap f t :=
+theorem comap_mono (f : C(α, β)) {s t : Opens β} (h : s ≤ t) : comap f s ≤ comap f t :=
   OrderHomClass.mono (comap f) h
 
 @[simp]
-/--
-theorem `coe_comap` / 定理 `coe_comap`
-
-English:
-theorem coe_comap
-  given: (f : C(α, β)) (U : Opens β)
-  statement: ↑(comap f U) = f ⁻¹' U
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comap
-  条件: (f : C(α, β)) (U : Opens β)
-  结论: ↑(comap f U) = f ⁻¹' U
-  证明: rfl
-
-@[simp]
+/-
+**TopologicalSpace.Opens.coe_comap** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.O
+pens`。
+形式化陈述：coe_comap (f : C(α, β)) (U : Opens β) : ↑(comap f U) = f ⁻¹' U
+参数：f : C(α, β)；U : Opens β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comap (f : C(α, β)) (U : Opens β) : ↑(comap f U) = f ⁻¹' U :=
   rfl
 
 @[simp]
-/--
-theorem `mem_comap` / 定理 `mem_comap`
-
-English:
-theorem mem_comap
-  given: {f : C(α, β)} {U : Opens β} {x : α}
-  statement: x in comap f U ↔ f x in U
-  proof: .rfl
-
-中文:
-定理 mem_comap
-  条件: {f : C(α, β)} {U : Opens β} {x : α}
-  结论: x in comap f U ↔ f x in U
-  证明: .rfl
+/-
+**TopologicalSpace.Opens.mem_comap** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.O
+pens`。
+形式化陈述：mem_comap {f : C(α, β)} {U : Opens β} {x : α} : x in comap f U ↔ f x in U
+参数：α, β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_comap {f : C(α, β)} {U : Opens β} {x : α} : x in comap f U ↔ f x in U := .rfl
-
-/--
-theorem `comap_comp` / 定理 `comap_comp`
-
-English:
-theorem comap_comp
-  given: (g : C(β, γ)) (f : C(α, β))
-  proof: rfl
-
-中文:
-定理 comap_comp
-  条件: (g : C(β, γ)) (f : C(α, β))
-  证明: rfl
+theorem mem_comap {f : C(α, β)} {U : Opens β} {x : α} : x ∈ comap f U ↔ f x ∈ U := .rfl
+/-
+**TopologicalSpace.Opens.comap_comp** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Opens`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : TopologicalSpace α]
+ [inst_1 : TopologicalSpace β]   [inst_2 : TopologicalSpace γ] (g : C(β, γ)) (f 
+: C(α, β)),   TopologicalSpace.Opens.comap (g.comp f) = (TopologicalSpace.Opens.
+comap f).comp (TopologicalSpace.Opens.comap g)
+参数：g : C(β, γ)；f : C(α, β)；g.comp f；TopologicalSpace.Opens.comap f；TopologicalSp
+ace.Opens.comap g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem comap_comp (g : C(β, γ)) (f : C(α, β)) :
     comap (g.comp f) = (comap f).comp (comap g) :=
   rfl
-
-/--
-theorem `comap_comap` / 定理 `comap_comap`
-
-English:
-theorem comap_comap
-  given: (g : C(β, γ)) (f : C(α, β)) (U : Opens γ)
-  proof: rfl
-
-中文:
-定理 comap_comap
-  条件: (g : C(β, γ)) (f : C(α, β)) (U : Opens γ)
-  证明: rfl
+/-
+**TopologicalSpace.Opens.comap_comap** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace
+.Opens`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : TopologicalSpace α]
+ [inst_1 : TopologicalSpace β]   [inst_2 : TopologicalSpace γ] (g : C(β, γ)) (f 
+: C(α, β)) (U : TopologicalSpace.Opens γ),   (TopologicalSpace.Opens.comap f) ((
+TopologicalSpace.Opens.comap g) U) = (TopologicalSpace.Opens.comap (g.comp f)) U
+参数：g : C(β, γ)；f : C(α, β)；U : TopologicalSpace.Opens γ；TopologicalSpace.Opens.c
+omap f；(TopologicalSpace.Opens.comap g) U；TopologicalSpace.Opens.comap (g.comp f
+)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem comap_comap (g : C(β, γ)) (f : C(α, β)) (U : Opens γ) :
     comap f (comap g U) = comap (g.comp f) U :=
   rfl
-
-/--
-theorem `comap_injective` / 定理 `comap_injective`
-
-English:
-theorem comap_injective
-  given: [T0Space β]
-  statement: Injective (comap : C(α, β) -> FrameHom (Opens β) (Opens α))
-  proof: fun f g h =>
-  ContinuousMap.ext fun a =>
-Inseparable.eq
-      inseparable_iff_forall_isOpen.2 fun s hs =>
-        have : comap f ⟨s, hs⟩ = comap g ⟨s, hs⟩ := DFunLike.congr_fun h ⟨_, hs⟩
-        show a in f ⁻¹' s ↔ a in g ⁻¹' s from Set.ext_iff.1 (coe_inj.2 this) a
-
-中文:
-定理 comap_injective
-  条件: [T0空间 β]
-  结论: 单射 (comap : C(α, β) -> 框架态射 (Opens β) (Opens α))
-  证明: fun f g h =>
-  ContinuousMap.ext fun a =>
-Inseparable.eq
-      inseparable_iff_forall_isOpen.2 fun s hs =>
-        have : comap f ⟨s, hs⟩ = comap g ⟨s, hs⟩ := DFunLike.congr_fun h ⟨_, hs⟩
-        show a in f ⁻¹' s ↔ a in g ⁻¹' s from Set.ext_iff.1 (coe_inj.2 this) a
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.ext, DFunLike, DFunLike.congr_fun, Inseparable, Inseparable.eq, Set.ext_iff, coe_inj, congr_fun, ext_iff, inseparable_iff_forall_isOpen
+/-
+**TopologicalSpace.Opens.comap_injective** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalS
+pace.Opens`。
+形式化陈述：comap_injective [T0Space β] : Injective (comap : C(α, β) -> FrameHom (Open
+s β) (Opens α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `Inseparable.eq`：Inseparable.eq [T0Space X] {x y : X} (h : Inseparable x 
+y) : x = y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inseparable_iff_forall_isOpen`：inseparable_iff_forall_isOpen : (x ~ᵢ y) 
+↔ forall s : Set X, IsOpen s -> (x in s ↔ y in s)
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
+· 使用定理 `TopologicalSpace.Opens.coe_inj`：coe_inj {U V : Opens α} : (U : Set α) = 
+V ↔ U = V
 -/
-theorem comap_injective [T0Space β] : Injective (comap : C(α, β) -> FrameHom (Opens β) (Opens α)) :=
+theorem comap_injective [T0Space β] : Injective (comap : C(α, β) → FrameHom (Opens β) (Opens α)) :=
   fun f g h =>
   ContinuousMap.ext fun a =>
-Inseparable.eq
+    Inseparable.eq <|
       inseparable_iff_forall_isOpen.2 fun s hs =>
         have : comap f ⟨s, hs⟩ = comap g ⟨s, hs⟩ := DFunLike.congr_fun h ⟨_, hs⟩
-        show a in f ⁻¹' s ↔ a in g ⁻¹' s from Set.ext_iff.1 (coe_inj.2 this) a
+        show a ∈ f ⁻¹' s ↔ a ∈ g ⁻¹' s from Set.ext_iff.1 (coe_inj.2 this) a
 
 /-- A homeomorphism induces an order-preserving equivalence on open sets, by taking comaps. -/
 @[simps -fullyApplied apply]
-/--
-Definition of `_root_.Homeomorph.opensCongr` / `_root_.Homeomorph.opensCongr` 的定义
+/-
+**TopologicalSpace.Opens._root_.Homeomorph.opensCongr** 是 Mathlib 中的一个定义，位于命名空间 
+`TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Homeomorph.opensCongr
-  signature: (f : α ≃ₜ β)
-  body: Opens.comap (f.symm : C(β, α))
-  invFun := Opens.comap (f : C(α, β))
-left_inv _ := ext f.toEquiv.preimage_symm_preimage _
-right_inv _ := ext f.toEquiv.symm_preimage_preimage _
-  map_rel_iff' := by
-    simp only [← SetLike.coe_subset_coe]; exact f.symm.surjective.preimage_subset_preimage_iff
-
-@[simp]
-
-中文:
-定义 _root_.同胚.opensCongr
-  签名: (f : α ≃ₜ β)
-  定义体: Opens.comap (f.symm : C(β, α))
-  invFun := Opens.comap (f : C(α, β))
-left_inv _ := ext f.toEquiv.preimage_symm_preimage _
-right_inv _ := ext f.toEquiv.symm_preimage_preimage _
-  map_rel_iff' := by
-    simp only [← SetLike.coe_subset_coe]; exact f.symm.surjective.preimage_subset_preimage_iff
-
-@[simp]
-
-Depends on / 依赖: Opens.comap, f.symm
+--- 原说明 ---
+A homeomorphism induces an order-preserving equivalence on open sets, by taking 
+comaps.
 -/
 def _root_.Homeomorph.opensCongr (f : α ≃ₜ β) : Opens α ≃o Opens β where
   toFun := Opens.comap (f.symm : C(β, α))
   invFun := Opens.comap (f : C(α, β))
-left_inv _ := ext f.toEquiv.preimage_symm_preimage _
-right_inv _ := ext f.toEquiv.symm_preimage_preimage _
+  left_inv _ := ext <| f.toEquiv.preimage_symm_preimage _
+  right_inv _ := ext <| f.toEquiv.symm_preimage_preimage _
   map_rel_iff' := by
     simp only [← SetLike.coe_subset_coe]; exact f.symm.surjective.preimage_subset_preimage_iff
 
 @[simp]
-/--
-theorem `_root_.Homeomorph.opensCongr_symm` / 定理 `_root_.Homeomorph.opensCongr_symm`
-
-English:
-theorem _root_.Homeomorph.opensCongr_symm
-  given: (f : α ≃ₜ β)
-  statement: f.opensCongr.symm = f.symm.opensCongr
-  proof: rfl
-
-中文:
-定理 _root_.同胚.opensCongr_symm
-  条件: (f : α ≃ₜ β)
-  结论: f.opensCongr.symm = f.symm.opensCongr
-  证明: rfl
+/-
+**TopologicalSpace.Opens._root_.Homeomorph.opensCongr_symm** 是 Mathlib 中的一个定理，位于
+命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Homeomorph.opensCongr_symm (f : α ≃ₜ β) : f.opensCongr.symm = f.symm.opensCongr :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: α] : Finite (Opens α)
-  body: Finite.of_injective _ SetLike.coe_injective
-
-中文:
-实例 [有限
-  签名: α] : 有限 (Opens α)
-  定义体: Finite.of_injective _ SetLike.coe_injective
-
-Depends on / 依赖: Finite, Finite.of_injective, SetLike, SetLike.coe_injective, coe_injective, of_injective
+/-
+**TopologicalSpace.Opens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Opens`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite α] : Finite (Opens α) :=
   Finite.of_injective _ SetLike.coe_injective
 
 end Opens
 
-/--
-Definition of `OpenNhdsOf` / `OpenNhdsOf` 的定义
+/-- The open neighborhoods of a point. See also `Opens` or `nhds`. -/
+/-
+**TopologicalSpace.OpenNhdsOf** 是 Mathlib 中的一个归纳类型，位于命名空间 `TopologicalSpace`。
+形式化陈述：{α : Type u_2} → [TopologicalSpace α] → α → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OpenNhdsOf
-  parameters: (x : α)
-  extends: Opens α
-  axioms and operations (1):
-    - mem' : x in carrier
-
-中文:
-结构 OpenNhdsOf
-  参数: (x : α)
-  继承: Opens α
-  公理与运算 (1 个):
-    - mem' : x in carrier
+--- 原说明 ---
+The open neighborhoods of a point. See also `Opens` or `nhds`.
 -/
 structure OpenNhdsOf (x : α) extends Opens α where
   /-- The point `x` belongs to every `U : TopologicalSpace.OpenNhdsOf x`. -/
-  mem' : x in carrier
+  mem' : x ∈ carrier
 
 namespace OpenNhdsOf
 
 variable {x : α}
 
-/--
-theorem `toOpens_injective` / 定理 `toOpens_injective`
-
-English:
-theorem toOpens_injective
-  statement: Injective (toOpens : OpenNhdsOf x -> Opens α)
-
-中文:
-定理 toOpens_injective
-  结论: 单射 (toOpens : OpenNhdsOf x -> Opens α)
+/-
+**TopologicalSpace.OpenNhdsOf.toOpens_injective** 是 Mathlib 中的一个定理，位于命名空间 `Topol
+ogicalSpace.OpenNhdsOf`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {x : α}, Function.Injective T
+opologicalSpace.OpenNhdsOf.toOpens
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOpens_injective : Injective (toOpens : OpenNhdsOf x -> Opens α)
+theorem toOpens_injective : Injective (toOpens : OpenNhdsOf x → Opens α)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (OpenNhdsOf x) α
-  body: U.1
-  coe_injective := SetLike.coe_injective.comp toOpens_injective
-
-中文:
-实例 :
-  签名: 集合状 (OpenNhdsOf x) α
-  定义体: U.1
-  coe_injective := SetLike.coe_injective.comp toOpens_injective
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (OpenNhdsOf x) α where
   coe U := U.1
   coe_injective := SetLike.coe_injective.comp toOpens_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (OpenNhdsOf x)
-  body: fast_instance% .ofSetLike (OpenNhdsOf x) α
-
-中文:
-实例 :
-  签名: 偏序 (OpenNhdsOf x)
-  定义体: fast_instance% .ofSetLike (OpenNhdsOf x) α
-
-Depends on / 依赖: OpenNhdsOf, fast_instance, ofSetLike
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (OpenNhdsOf x) := fast_instance% .ofSetLike (OpenNhdsOf x) α
-
-/--
-Instance `canLiftSet` / 实例 `canLiftSet`
-
-English:
-instance canLiftSet
-  signature: : CanLift (Set α) (OpenNhdsOf x) (↑) fun s => IsOpen s ∧ x in s
-  body: ⟨fun s hs => ⟨⟨⟨s, hs.1⟩, hs.2⟩, rfl⟩⟩
-
-中文:
-实例 canLiftSet
-  签名: : CanLift (集合 α) (OpenNhdsOf x) (↑) fun s => 是开集 s ∧ x in s
-  定义体: ⟨fun s hs => ⟨⟨⟨s, hs.1⟩, hs.2⟩, rfl⟩⟩
+/-
+**TopologicalSpace.OpenNhdsOf.canLiftSet** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalS
+pace.OpenNhdsOf`。
+形式化陈述：canLiftSet : CanLift (Set α) (OpenNhdsOf x) (↑) fun s => IsOpen s ∧ x in s
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-instance canLiftSet : CanLift (Set α) (OpenNhdsOf x) (↑) fun s => IsOpen s ∧ x in s :=
+instance canLiftSet : CanLift (Set α) (OpenNhdsOf x) (↑) fun s => IsOpen s ∧ x ∈ s :=
   ⟨fun s hs => ⟨⟨⟨s, hs.1⟩, hs.2⟩, rfl⟩⟩
-
-/--
-theorem `mem` / 定理 `mem`
-
-English:
-theorem mem
-  given: (U : OpenNhdsOf x)
-  statement: x in U
-  proof: U.mem'
-
-中文:
-定理 mem
-  条件: (U : OpenNhdsOf x)
-  结论: x in U
-  证明: U.mem'
+/-
+**TopologicalSpace.OpenNhdsOf.mem** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Op
+enNhdsOf`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {x : α} (U : TopologicalSpace
+.OpenNhdsOf x), x ∈ U
+参数：U : TopologicalSpace.OpenNhdsOf x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.OpenNhdsOf.mem'`：∀ {α : Type u_2} [inst : TopologicalSp
+ace α] {x : α} (self : TopologicalSpace.OpenNhdsOf x), x ∈ self.carrier
 -/
-protected theorem mem (U : OpenNhdsOf x) : x in U :=
+protected theorem mem (U : OpenNhdsOf x) : x ∈ U :=
   U.mem'
-
-/--
-theorem `isOpen` / 定理 `isOpen`
-
-English:
-theorem isOpen
-  given: (U : OpenNhdsOf x)
-  statement: IsOpen (U : Set α)
-  proof: U.is_open'
-
-中文:
-定理 isOpen
-  条件: (U : OpenNhdsOf x)
-  结论: 是开集 (U : 集合 α)
-  证明: U.is_open'
+/-
+**TopologicalSpace.OpenNhdsOf.isOpen** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace
+.OpenNhdsOf`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {x : α} (U : TopologicalSpace
+.OpenNhdsOf x), IsOpen ↑U
+参数：U : TopologicalSpace.OpenNhdsOf x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
 -/
 protected theorem isOpen (U : OpenNhdsOf x) : IsOpen (U : Set α) :=
   U.is_open'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderTop (OpenNhdsOf x)
-  body: ⟨⊤, Set.mem_univ _⟩
-  le_top _ := subset_univ _
-
-中文:
-实例 :
-  签名: 有顶序 (OpenNhdsOf x)
-  定义体: ⟨⊤, Set.mem_univ _⟩
-  le_top _ := subset_univ _
-
-Depends on / 依赖: Set.mem_univ, mem_univ
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderTop (OpenNhdsOf x) where
   top := ⟨⊤, Set.mem_univ _⟩
   le_top _ := subset_univ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (OpenNhdsOf x)
-  body: ⟨⊤⟩
-
-中文:
-实例 :
-  签名: 可居 (OpenNhdsOf x)
-  定义体: ⟨⊤⟩
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (OpenNhdsOf x) := ⟨⊤⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (OpenNhdsOf x)
-  body: ⟨fun U V => ⟨U.1 ⊓ V.1, U.2, V.2⟩⟩
-
-中文:
-实例 :
-  签名: 最小值 (OpenNhdsOf x)
-  定义体: ⟨fun U V => ⟨U.1 ⊓ V.1, U.2, V.2⟩⟩
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (OpenNhdsOf x) := ⟨fun U V => ⟨U.1 ⊓ V.1, U.2, V.2⟩⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (OpenNhdsOf x)
-  body: ⟨fun U V => ⟨U.1 ⊔ V.1, Or.inl U.2⟩⟩
-
-中文:
-实例 :
-  签名: 最大值 (OpenNhdsOf x)
-  定义体: ⟨fun U V => ⟨U.1 ⊔ V.1, Or.inl U.2⟩⟩
-
-Depends on / 依赖: Or.inl
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (OpenNhdsOf x) := ⟨fun U V => ⟨U.1 ⊔ V.1, Or.inl U.2⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: α] : Unique (OpenNhdsOf x) where
-  body: SetLike.ext' Subsingleton.eq_univ_of_nonempty ⟨x, U.mem⟩
-
-中文:
-实例 [子单例
-  签名: α] : 唯一 (OpenNhdsOf x) where
-  定义体: SetLike.ext' Subsingleton.eq_univ_of_nonempty ⟨x, U.mem⟩
-
-Depends on / 依赖: SetLike, SetLike.ext, Subsingleton, Subsingleton.eq_univ_of_nonempty, U.mem, eq_univ_of_nonempty
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton α] : Unique (OpenNhdsOf x) where
-uniq U := SetLike.ext' Subsingleton.eq_univ_of_nonempty ⟨x, U.mem⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DistribLattice (OpenNhdsOf x)
-  body: fast_instance%
-  toOpens_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 :
-  签名: Distrib格 (OpenNhdsOf x)
-  定义体: fast_instance%
-  toOpens_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+  uniq U := SetLike.ext' <| Subsingleton.eq_univ_of_nonempty ⟨x, U.mem⟩
+/-
+**TopologicalSpace.OpenNhdsOf.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.OpenN
+hdsOf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DistribLattice (OpenNhdsOf x) := fast_instance%
-  toOpens_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-theorem `basis_nhds` / 定理 `basis_nhds`
-
-English:
-theorem basis_nhds
-  statement: (𝓝 x).HasBasis (fun _ : OpenNhdsOf x => True) (↑)
-  proof: (nhds_basis_opens x).to_hasBasis (fun U hU => ⟨⟨⟨U, hU.2⟩, hU.1⟩, trivial, Subset.rfl⟩) fun U _ =>
-    ⟨U, ⟨⟨U.mem, U.isOpen⟩, Subset.rfl⟩⟩
-
-中文:
-定理 basis_nhds
-  结论: (𝓝 x).有基 (fun _ : OpenNhdsOf x => 真) (↑)
-  证明: (nhds_basis_opens x).to_hasBasis (fun U hU => ⟨⟨⟨U, hU.2⟩, hU.1⟩, trivial, Subset.rfl⟩) fun U _ =>
-    ⟨U, ⟨⟨U.mem, U.isOpen⟩, Subset.rfl⟩⟩
-
-Depends on / 依赖: Subset, Subset.rfl, U.isOpen, U.mem, isOpen, nhds_basis_opens, to_hasBasis
+  toOpens_injective.distribLattice _ .rfl .rfl (fun _ _ ↦ rfl) fun _ _ ↦ rfl
+/-
+**TopologicalSpace.OpenNhdsOf.basis_nhds** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalS
+pace.OpenNhdsOf`。
+形式化陈述：basis_nhds : (𝓝 x).HasBasis (fun _ : OpenNhdsOf x => True) (↑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `nhds_basis_opens`：nhds_basis_opens (x : X) : (𝓝 x).HasBasis (fun s : Set
+ X => x in s ∧ IsOpen s) fun s => s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `trivial`：True
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `TopologicalSpace.OpenNhdsOf.mem`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] {x : α} (U : TopologicalSpace.OpenNhdsOf x), x ∈ U
+· 使用定理 `TopologicalSpace.OpenNhdsOf.isOpen`：∀ {α : Type u_2} [inst : Topological
+Space α] {x : α} (U : TopologicalSpace.OpenNhdsOf x), IsOpen ↑U
 -/
 theorem basis_nhds : (𝓝 x).HasBasis (fun _ : OpenNhdsOf x => True) (↑) :=
   (nhds_basis_opens x).to_hasBasis (fun U hU => ⟨⟨⟨U, hU.2⟩, hU.1⟩, trivial, Subset.rfl⟩) fun U _ =>
     ⟨U, ⟨⟨U.mem, U.isOpen⟩, Subset.rfl⟩⟩
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- Preimage of an open neighborhood of `f x` under a continuous map `f` as a `LatticeHom`. -/
+/-
+**TopologicalSpace.OpenNhdsOf.comap** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.
+OpenNhdsOf`。
+形式化陈述：comap (f : C(α, β)) (x : α) : LatticeHom (OpenNhdsOf (f x)) (OpenNhdsOf x)
+ where toFun U
+参数：f : C(α, β)；x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (f : C(α, β)) (x : α)
-  body: ⟨Opens.comap f U.1, U.mem⟩
-  map_sup' _ _ := rfl
-  map_inf' _ _ := rfl
-
-中文:
-定义 comap
-  签名: (f : C(α, β)) (x : α)
-  定义体: ⟨Opens.comap f U.1, U.mem⟩
-  map_sup' _ _ := rfl
-  map_inf' _ _ := rfl
-
-Depends on / 依赖: Opens.comap, U.mem
+--- 原说明 ---
+Preimage of an open neighborhood of `f x` under a continuous map `f` as a `Latti
+ceHom`.
 -/
 def comap (f : C(α, β)) (x : α) : LatticeHom (OpenNhdsOf (f x)) (OpenNhdsOf x) where
   toFun U := ⟨Opens.comap f U.1, U.mem⟩
@@ -2432,14 +1798,15 @@ end TopologicalSpace
 
 -- /-- Find an `auto_cases_tac` which matches `TopologicalSpace.Opens`. -/
 -- unsafe def opens_find_tac : expr → Option auto_cases_tac
--- | q(TopologicalSpace.Opens _) => tac_cases
--- | _ => none
+--   | q(TopologicalSpace.Opens _) => tac_cases
+--   | _ => none
 
 -- end AutoCases
 
 -- /-- A version of `tactic.auto_cases` that works for `TopologicalSpace.Opens`. -/
 -- @[hint_tactic]
 -- unsafe def auto_cases_opens : tactic String :=
--- auto_cases tactic.auto_cases.opens_find_tac
+--   auto_cases tactic.auto_cases.opens_find_tac
 
 -- end Tactic
+

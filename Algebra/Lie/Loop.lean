@@ -59,119 +59,50 @@ namespace LieAlgebra
 
 variable [CommRing R] [LieRing L] [LieAlgebra R L]
 
-/--
-Definition of `loopAlgebra` / `loopAlgebra` 的定义
+/-- A loop algebra is the base change of a Lie algebra `L` over `R` by `R[z,z⁻¹]`. We make a
+slightly more general definition which coincides with the Laurent polynomial construction when
+`A = ℤ` -/
+/-
+**LieAlgebra.loopAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieAlgebra`。
+形式化陈述：loopAlgebra
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation loopAlgebra
-  body: AddMonoidAlgebra R A otimes[R] L
-
-中文:
-缩写 loopAlgebra
-  定义体: AddMonoidAlgebra R A otimes[R] L
-
-Depends on / 依赖: AddMonoidAlgebra, otimes
+--- 原说明 ---
+A loop algebra is the base change of a Lie algebra `L` over `R` by `R[z,z⁻¹]`. W
+e make a
+slightly more general definition which coincides with the Laurent polynomial con
+struction when
+`A = ℤ`
 -/
-abbrev loopAlgebra := AddMonoidAlgebra R A otimes[R] L
+abbrev loopAlgebra := AddMonoidAlgebra R A ⊗[R] L
 
 open LaurentPolynomial in
-/--
-Definition of `loopAlgebraEquivLaurent` / `loopAlgebraEquivLaurent` 的定义
+/-- An Lie algebra isomorphism between the Loop algebra (with `A = ℤ`) and the tensor product with
+Laurent polynomials. -/
+/-
+**LieAlgebra.loopAlgebraEquivLaurent** 是 Mathlib 中的一个定义，位于命名空间 `LieAlgebra`。
+形式化陈述：loopAlgebraEquivLaurent : loopAlgebra R Int L ≃ₗ⁅R⁆ R[T;T⁻¹] otimes[R] L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition loopAlgebraEquivLaurent
-  signature: :
-  body: LieEquiv.refl
-
-中文:
-定义 loopAlgebraEquivLaurent
-  签名: :
-  定义体: LieEquiv.refl
-
-Depends on / 依赖: LieEquiv, LieEquiv.refl
+--- 原说明 ---
+An Lie algebra isomorphism between the Loop algebra (with `A = ℤ`) and the tenso
+r product with
+Laurent polynomials.
 -/
 def loopAlgebraEquivLaurent :
-    loopAlgebra R Int L ≃ₗ⁅R⁆ R[T;T⁻¹] otimes[R] L :=
+    loopAlgebra R ℤ L ≃ₗ⁅R⁆ R[T;T⁻¹] ⊗[R] L :=
   LieEquiv.refl
 
 namespace LoopAlgebra
 
 open DirectSum in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: A] [AddCommMonoid A] :
-  body: by
-    rw [decomposeTensor_apply] at hi hj ⊢
-    obtain ⟨xi, rfl⟩ := hi
-    obtain ⟨xj, rfl⟩ := hj
-    induction xi using TensorProduct.induction_on with
-    | zero => simp
-    | tmul x y =>
-      simp only [LinearMap.rTensor_tmul, Submodule.subtype_apply]
-      induction xj using TensorProduct.induction_on with
-      | zero => simp
-      | tmul u v =>
-        obtain ⟨x, hx⟩ := x
-        obtain ⟨u, hu⟩ := u
-        use ⟨x * u, SetLike.mul_mem_graded hx hu⟩ otimesₜ ⁅y, v⁆
-        simp
-      | add u v hu hv =>
-        rw [LinearMap.map_add]; rw [lie_add]
-        obtain ⟨u', hu'⟩ := hu
-        obtain ⟨v', hv'⟩ := hv
-        use u' + v'
-        simp [← hu', ← hv']
-    | add x y hx hy =>
-      rw [LinearMap.map_add]; rw [add_lie]
-      obtain ⟨u, hu⟩ := hx
-      obtain ⟨v, hv⟩ := hy
-      use u + v
-      simp [← hu, ← hv]
-  decompose' := (tensorDecomposition (fun a : A => AddMonoidAlgebra.grade R a) L).decompose'
-  left_inv := (tensorDecomposition _ L).left_inv
-  right_inv := (tensorDecomposition _ L).right_inv
-
-中文:
-实例 [DecidableEq
-  签名: A] [加法交换幺半群 A] :
-  定义体: by
-    rw [decomposeTensor_apply] at hi hj ⊢
-    obtain ⟨xi, rfl⟩ := hi
-    obtain ⟨xj, rfl⟩ := hj
-    induction xi using TensorProduct.induction_on with
-    | zero => simp
-    | tmul x y =>
-      simp only [LinearMap.rTensor_tmul, Submodule.subtype_apply]
-      induction xj using TensorProduct.induction_on with
-      | zero => simp
-      | tmul u v =>
-        obtain ⟨x, hx⟩ := x
-        obtain ⟨u, hu⟩ := u
-        use ⟨x * u, SetLike.mul_mem_graded hx hu⟩ otimesₜ ⁅y, v⁆
-        simp
-      | add u v hu hv =>
-        rw [LinearMap.map_add]; rw [lie_add]
-        obtain ⟨u', hu'⟩ := hu
-        obtain ⟨v', hv'⟩ := hv
-        use u' + v'
-        simp [← hu', ← hv']
-    | add x y hx hy =>
-      rw [LinearMap.map_add]; rw [add_lie]
-      obtain ⟨u, hu⟩ := hx
-      obtain ⟨v, hv⟩ := hy
-      use u + v
-      simp [← hu, ← hv]
-  decompose' := (tensorDecomposition (fun a : A => AddMonoidAlgebra.grade R a) L).decompose'
-  left_inv := (tensorDecomposition _ L).left_inv
-  right_inv := (tensorDecomposition _ L).right_inv
-
-Depends on / 依赖: LinearMap, LinearMap.map_add, LinearMap.rTensor_tmul, SetLike, SetLike.mul_mem_graded, Submodule, Submodule.subtype_apply, TensorProduct, TensorProduct.induction_on, decomposeTensor_apply, induction_on, lie_add, map_add, mul_mem_graded, rTensor_tmul, subtype_apply
+/-
+**LieAlgebra.LoopAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra.LoopAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [DecidableEq A] [AddCommMonoid A] :
-    GradedLieAlgebra (fun a : A => (decomposeTensor (AddMonoidAlgebra.grade R) L a)) where
+    GradedLieAlgebra (fun a : A ↦ (decomposeTensor (AddMonoidAlgebra.grade R) L a)) where
   bracket_mem i j xi xj hi hj := by
     rw [decomposeTensor_apply] at hi hj ⊢
     obtain ⟨xi, rfl⟩ := hi
@@ -185,252 +116,186 @@ noncomputable instance [DecidableEq A] [AddCommMonoid A] :
       | tmul u v =>
         obtain ⟨x, hx⟩ := x
         obtain ⟨u, hu⟩ := u
-        use ⟨x * u, SetLike.mul_mem_graded hx hu⟩ otimesₜ ⁅y, v⁆
+        use ⟨x * u, SetLike.mul_mem_graded hx hu⟩ ⊗ₜ ⁅y, v⁆
         simp
       | add u v hu hv =>
-        rw [LinearMap.map_add]; rw [lie_add]
+        rw [LinearMap.map_add, lie_add]
         obtain ⟨u', hu'⟩ := hu
         obtain ⟨v', hv'⟩ := hv
         use u' + v'
         simp [← hu', ← hv']
     | add x y hx hy =>
-      rw [LinearMap.map_add]; rw [add_lie]
+      rw [LinearMap.map_add, add_lie]
       obtain ⟨u, hu⟩ := hx
       obtain ⟨v, hv⟩ := hy
       use u + v
       simp [← hu, ← hv]
-  decompose' := (tensorDecomposition (fun a : A => AddMonoidAlgebra.grade R a) L).decompose'
+  decompose' := (tensorDecomposition (fun a : A ↦ AddMonoidAlgebra.grade R a) L).decompose'
   left_inv := (tensorDecomposition _ L).left_inv
   right_inv := (tensorDecomposition _ L).right_inv
 
 open scoped Classical in
-/--
-Definition of `toFinsupp` / `toFinsupp` 的定义
+/-- A linear isomorphism to finitely supported functions. -/
+/-
+**LieAlgebra.LoopAlgebra.toFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `LieAlgebra.LoopAlg
+ebra`。
+形式化陈述：toFinsupp : loopAlgebra R A L ≃ₗ[R] A ->₀ L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFinsupp
-  signature: : loopAlgebra R A L ≃ₗ[R] A ->₀ L
-  body: TensorProduct.equivFinsuppOfBasisLeft (AddMonoidAlgebra.basis A R)
-
-@[simp]
-
-中文:
-定义 toFinsupp
-  签名: : loopAlgebra R A L ≃ₗ[R] A ->₀ L
-  定义体: TensorProduct.equivFinsuppOfBasisLeft (AddMonoidAlgebra.basis A R)
-
-@[simp]
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.basis, TensorProduct, TensorProduct.equivFinsuppOfBasisLeft, equivFinsuppOfBasisLeft
+--- 原说明 ---
+A linear isomorphism to finitely supported functions.
 -/
-def toFinsupp : loopAlgebra R A L ≃ₗ[R] A ->₀ L :=
+def toFinsupp : loopAlgebra R A L ≃ₗ[R] A →₀ L :=
   TensorProduct.equivFinsuppOfBasisLeft (AddMonoidAlgebra.basis A R)
 
 @[simp]
-/--
-lemma `toFinsupp_symm_single` / 引理 `toFinsupp_symm_single`
-
-English:
-lemma toFinsupp_symm_single
-  given: (c : A) (z : L)
-  proof: by
-  simp [toFinsupp]
-
-@[simp]
-
-中文:
-引理 toFinsupp_symm_single
-  条件: (c : A) (z : L)
-  证明: by
-  simp [toFinsupp]
-
-@[simp]
-
-Depends on / 依赖: toFinsupp
+/-
+**LieAlgebra.LoopAlgebra.toFinsupp_symm_single** 是 Mathlib 中的一个引理，位于命名空间 `LieAlg
+ebra.LoopAlgebra`。
+形式化陈述：toFinsupp_symm_single (c : A) (z : L) : (toFinsupp R A L).symm (Finsupp.si
+ngle c z) = AddMonoidAlgebra.single c 1 otimesₜ[R] z
+参数：c : A；z : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `TensorProduct.equivFinsuppOfBasisLeft_symm_apply`：TensorProduct.equivFin
+suppOfBasisLeft_symm_apply (b : ι ->₀ N) : (TensorProduct.equivFinsuppOfBasisLef
+t ℬ).symm b = b.sum fun i n => ℬ i oti…
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `TensorProduct.tmul_zero`：tmul_zero (m : M) : m otimesₜ[R] (0 : N) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toFinsupp_symm_single (c : A) (z : L) :
-    (toFinsupp R A L).symm (Finsupp.single c z) = AddMonoidAlgebra.single c 1 otimesₜ[R] z := by
+    (toFinsupp R A L).symm (Finsupp.single c z) = AddMonoidAlgebra.single c 1 ⊗ₜ[R] z := by
   simp [toFinsupp]
 
 @[simp]
-/--
-lemma `toFinsupp_single_tmul` / 引理 `toFinsupp_single_tmul`
-
-English:
-lemma toFinsupp_single_tmul
-  given: (c : A) (z : L)
-  proof: by
-  simp [← toFinsupp_symm_single]
-
-中文:
-引理 toFinsupp_single_tmul
-  条件: (c : A) (z : L)
-  证明: by
-  simp [← toFinsupp_symm_single]
-
-Depends on / 依赖: toFinsupp_symm_single
+/-
+**LieAlgebra.LoopAlgebra.toFinsupp_single_tmul** 是 Mathlib 中的一个引理，位于命名空间 `LieAlg
+ebra.LoopAlgebra`。
+形式化陈述：toFinsupp_single_tmul (c : A) (z : L) : (toFinsupp R A L (AddMonoidAlgebra
+.single c 1 otimesₜ[R] z)) = Finsupp.single c z
+参数：c : A；z : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toFinsupp_single_tmul (c : A) (z : L) :
-    (toFinsupp R A L (AddMonoidAlgebra.single c 1 otimesₜ[R] z)) = Finsupp.single c z := by
+    (toFinsupp R A L (AddMonoidAlgebra.single c 1 ⊗ₜ[R] z)) = Finsupp.single c z := by
   simp [← toFinsupp_symm_single]
 
 open Finsupp in
 set_option backward.isDefEq.respectTransparency false in
-/-- The residue pairing on the loop algebra. When `A = ℤ` and the elements are viewed as Laurent
+/-- The residue pairing on the loop algebra.  When `A = ℤ` and the elements are viewed as Laurent
 polynomials with coefficients in `L`, the pairing is interpreted as `(f, g) ↦ Res f dg`. -/
 @[simps]
-/--
-Definition of `residuePairing` / `residuePairing` 的定义
+/-
+**LieAlgebra.LoopAlgebra.residuePairing** 是 Mathlib 中的一个定义，位于命名空间 `LieAlgebra.Lo
+opAlgebra`。
+形式化陈述：residuePairing [AddCommGroup A] [DistribSMul A R] [SMulCommClass A R R] (Φ
+ : LinearMap.BilinForm R L) : LinearMap.BilinForm R (loopAlgebra R A L) where to
+Fun f
+参数：Φ : LinearMap.BilinForm R L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition residuePairing
-  signature: [AddCommGroup A] [DistribSMul A R] [SMulCommClass A R R]
-  body: letI F := toFinsupp R A L
-    { toFun g := (F g).sum fun a v => a • Φ (F f (-a)) v
-      map_add' x y := by
-        classical
-        let u : Finset A := (F x).support union (F y).support
-        have hu₁ : (F x).support subseteq u := Finset.subset_union_left
-        have hu₂ : (F y).support subseteq u := Finset.subset_union_right
-        have hu₃ : (F (x + y)).support subseteq u := fun a ha => by
-          replace ha : F x a + F y a != 0 := by simpa using ha
-          grind
-        rw [sum_of_support_subset _ hu₃ _ (by simp)]; rw [sum_of_support_subset _ hu₁ _ (by simp)]; rw [sum_of_support_subset _ hu₂ _ (by simp)]
-        simp [Finset.sum_add_distrib, u]
-      map_smul' r x := by
-        rw [map_smul]; rw [sum_of_support_subset _ support_smul _ (by simp)]; rw [sum]; rw [Finset.smul_sum]
-        simp [-smul_eq_mul, smul_comm] }
-  map_add' x y := by ext; simp [sum_add]
-  map_smul' r x := by ext; simp [-smul_eq_mul, smul_comm]
-
-中文:
-定义 residuePairing
-  签名: [加法交换群 A] [分配标量乘法 A R] [标量交换类 A R R]
-  定义体: letI F := toFinsupp R A L
-    { toFun g := (F g).sum fun a v => a • Φ (F f (-a)) v
-      map_add' x y := by
-        classical
-        let u : Finset A := (F x).support union (F y).support
-        have hu₁ : (F x).support subseteq u := Finset.subset_union_left
-        have hu₂ : (F y).support subseteq u := Finset.subset_union_right
-        have hu₃ : (F (x + y)).support subseteq u := fun a ha => by
-          replace ha : F x a + F y a != 0 := by simpa using ha
-          grind
-        rw [sum_of_support_subset _ hu₃ _ (by simp)]; rw [sum_of_support_subset _ hu₁ _ (by simp)]; rw [sum_of_support_subset _ hu₂ _ (by simp)]
-        simp [Finset.sum_add_distrib, u]
-      map_smul' r x := by
-        rw [map_smul]; rw [sum_of_support_subset _ support_smul _ (by simp)]; rw [sum]; rw [Finset.smul_sum]
-        simp [-smul_eq_mul, smul_comm] }
-  map_add' x y := by ext; simp [sum_add]
-  map_smul' r x := by ext; simp [-smul_eq_mul, smul_comm]
-
-Depends on / 依赖: Finset, Finset.subset_union_left, Finset.subset_union_right, classical, map_add, replace, subset_union_left, subset_union_right, subseteq, sum_of_support_subset, support, toFinsupp
+--- 原说明 ---
+The residue pairing on the loop algebra.  When `A = ℤ` and the elements are view
+ed as Laurent
+polynomials with coefficients in `L`, the pairing is interpreted as `(f, g) ↦ Re
+s f dg`.
 -/
 def residuePairing [AddCommGroup A] [DistribSMul A R] [SMulCommClass A R R]
     (Φ : LinearMap.BilinForm R L) :
     LinearMap.BilinForm R (loopAlgebra R A L) where
   toFun f :=
     letI F := toFinsupp R A L
-    { toFun g := (F g).sum fun a v => a • Φ (F f (-a)) v
+    { toFun g := (F g).sum fun a v ↦ a • Φ (F f (-a)) v
       map_add' x y := by
         classical
-        let u : Finset A := (F x).support union (F y).support
-        have hu₁ : (F x).support subseteq u := Finset.subset_union_left
-        have hu₂ : (F y).support subseteq u := Finset.subset_union_right
-        have hu₃ : (F (x + y)).support subseteq u := fun a ha => by
-          replace ha : F x a + F y a != 0 := by simpa using ha
+        let u : Finset A := (F x).support ∪ (F y).support
+        have hu₁ : (F x).support ⊆ u := Finset.subset_union_left
+        have hu₂ : (F y).support ⊆ u := Finset.subset_union_right
+        have hu₃ : (F (x + y)).support ⊆ u := fun a ha ↦ by
+          replace ha : F x a + F y a ≠ 0 := by simpa using ha
           grind
-        rw [sum_of_support_subset _ hu₃ _ (by simp)]; rw [sum_of_support_subset _ hu₁ _ (by simp)]; rw [sum_of_support_subset _ hu₂ _ (by simp)]
+        rw [sum_of_support_subset _ hu₃ _ (by simp), sum_of_support_subset _ hu₁ _ (by simp),
+          sum_of_support_subset _ hu₂ _ (by simp)]
         simp [Finset.sum_add_distrib, u]
       map_smul' r x := by
-        rw [map_smul]; rw [sum_of_support_subset _ support_smul _ (by simp)]; rw [sum]; rw [Finset.smul_sum]
+        rw [map_smul, sum_of_support_subset _ support_smul _ (by simp), sum, Finset.smul_sum]
         simp [-smul_eq_mul, smul_comm] }
   map_add' x y := by ext; simp [sum_add]
   map_smul' r x := by ext; simp [-smul_eq_mul, smul_comm]
 
 open LieModule in
-/--
-Definition of `twoCochainOfBilinear` / `twoCochainOfBilinear` 的定义
+/-- A 2-cochain on a loop algebra given by an invariant bilinear form. When `A = ℤ`, the alternating
+condition amounts to the fact that Res f df = 0. -/
+/-
+**LieAlgebra.LoopAlgebra.twoCochainOfBilinear** 是 Mathlib 中的一个定义，位于命名空间 `LieAlge
+bra.LoopAlgebra`。
+形式化陈述：twoCochainOfBilinear [CommRing A] [IsAddTorsionFree R] [Algebra A R] (Φ : 
+LinearMap.BilinForm R L) (hΦ : Φ.IsSymm) : Cohomology.twoCochain R (loopAlgebra 
+R A L) (TrivialLieModule R (loopAlgebra R A L) R) where val
+参数：Φ : LinearMap.BilinForm R L；hΦ : Φ.IsSymm。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition twoCochainOfBilinear
-  signature: [CommRing A] [IsAddTorsionFree R] [Algebra A R]
-  body: (residuePairing R A L Φ).compr₂ (TrivialLieModule.equiv R (loopAlgebra R A L) R).symm
-  property := by
-    refine Cohomology.mem_twoCochain_iff.mpr fun f => ?_
-    let F := toFinsupp R A L
-    suffices ((F f).sum fun a v => a • Φ (F f (-a)) v) = 0 by simpa
-    classical
-    set s := (F f).support union (F f).support.image (Equiv.neg A) with hs
-    have hs' : (F f).support subseteq s := Finset.subset_union_left
-    rw [Finsupp.sum_of_support_subset _ hs' _ (by simp)]
-    refine Function.Odd.finsetSum_eq_zero (fun n => by simp [hΦ.eq]) (Finset.map_eq_of_subset ?_)
-    intro x hx
-    rw [Finset.mem_union]
-    replace hx : -x in (F f).support ∨ -x in (F f).support.image Neg.neg := by simpa [hs] using hx
-    obtain (h | h) := hx
-· exact Or.inr Finset.mem_image.mpr ⟨-x, by simp [h]⟩
-· exact Or.inl by simpa using h
-
-@[simp]
-
-中文:
-定义 twoCochainOfBilinear
-  签名: [交换环 A] [是加法无挠 R] [代数 A R]
-  定义体: (residuePairing R A L Φ).compr₂ (TrivialLieModule.equiv R (loopAlgebra R A L) R).symm
-  property := by
-    refine Cohomology.mem_twoCochain_iff.mpr fun f => ?_
-    let F := toFinsupp R A L
-    suffices ((F f).sum fun a v => a • Φ (F f (-a)) v) = 0 by simpa
-    classical
-    set s := (F f).support union (F f).support.image (Equiv.neg A) with hs
-    have hs' : (F f).support subseteq s := Finset.subset_union_left
-    rw [Finsupp.sum_of_support_subset _ hs' _ (by simp)]
-    refine Function.Odd.finsetSum_eq_zero (fun n => by simp [hΦ.eq]) (Finset.map_eq_of_subset ?_)
-    intro x hx
-    rw [Finset.mem_union]
-    replace hx : -x in (F f).support ∨ -x in (F f).support.image Neg.neg := by simpa [hs] using hx
-    obtain (h | h) := hx
-· exact Or.inr Finset.mem_image.mpr ⟨-x, by simp [h]⟩
-· exact Or.inl by simpa using h
-
-@[simp]
-
-Depends on / 依赖: TrivialLieModule, TrivialLieModule.equiv, loopAlgebra, residuePairing
+--- 原说明 ---
+A 2-cochain on a loop algebra given by an invariant bilinear form. When `A = ℤ`,
+ the alternating
+condition amounts to the fact that Res f df = 0.
 -/
 def twoCochainOfBilinear [CommRing A] [IsAddTorsionFree R] [Algebra A R]
     (Φ : LinearMap.BilinForm R L) (hΦ : Φ.IsSymm) :
     Cohomology.twoCochain R (loopAlgebra R A L) (TrivialLieModule R (loopAlgebra R A L) R) where
   val := (residuePairing R A L Φ).compr₂ (TrivialLieModule.equiv R (loopAlgebra R A L) R).symm
   property := by
-    refine Cohomology.mem_twoCochain_iff.mpr fun f => ?_
+    refine Cohomology.mem_twoCochain_iff.mpr fun f ↦ ?_
     let F := toFinsupp R A L
-    suffices ((F f).sum fun a v => a • Φ (F f (-a)) v) = 0 by simpa
+    suffices ((F f).sum fun a v ↦ a • Φ (F f (-a)) v) = 0 by simpa
     classical
-    set s := (F f).support union (F f).support.image (Equiv.neg A) with hs
-    have hs' : (F f).support subseteq s := Finset.subset_union_left
+    set s := (F f).support ∪ (F f).support.image (Equiv.neg A) with hs
+    have hs' : (F f).support ⊆ s := Finset.subset_union_left
     rw [Finsupp.sum_of_support_subset _ hs' _ (by simp)]
-    refine Function.Odd.finsetSum_eq_zero (fun n => by simp [hΦ.eq]) (Finset.map_eq_of_subset ?_)
+    refine Function.Odd.finsetSum_eq_zero (fun n ↦ by simp [hΦ.eq]) (Finset.map_eq_of_subset ?_)
     intro x hx
     rw [Finset.mem_union]
-    replace hx : -x in (F f).support ∨ -x in (F f).support.image Neg.neg := by simpa [hs] using hx
+    replace hx : -x ∈ (F f).support ∨ -x ∈ (F f).support.image Neg.neg := by simpa [hs] using hx
     obtain (h | h) := hx
-· exact Or.inr Finset.mem_image.mpr ⟨-x, by simp [h]⟩
-· exact Or.inl by simpa using h
+    · exact Or.inr <| Finset.mem_image.mpr ⟨-x, by simp [h]⟩
+    · exact Or.inl <| by simpa using h
 
 @[simp]
-/--
-lemma `twoCochainOfBilinear_apply_apply` / 引理 `twoCochainOfBilinear_apply_apply`
-
-English:
-lemma twoCochainOfBilinear_apply_apply
-  statement: [CommRing A] [IsAddTorsionFree R] [Algebra A R]
-  proof: rfl
-
-中文:
-引理 twoCochainOfBilinear_apply_apply
-  结论: [交换环 A] [是加法无挠 R] [代数 A R]
-  证明: rfl
+/-
+**LieAlgebra.LoopAlgebra.twoCochainOfBilinear_apply_apply** 是 Mathlib 中的一个引理，位于命
+名空间 `LieAlgebra.LoopAlgebra`。
+形式化陈述：twoCochainOfBilinear_apply_apply [CommRing A] [IsAddTorsionFree R] [Algebr
+a A R] (Φ : LinearMap.BilinForm R L) (hΦ : Φ.IsSymm) (x y : loopAlgebra R A L) :
+ twoCochainOfBilinear R A L Φ hΦ x y = (TrivialLieModule.equiv R (loopAlgebra R 
+A L) R).symm (residuePairing R A L Φ x y)
+参数：Φ : LinearMap.BilinForm R L；hΦ : Φ.IsSymm；x y : loopAlgebra R A L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
 lemma twoCochainOfBilinear_apply_apply [CommRing A] [IsAddTorsionFree R] [Algebra A R]
     (Φ : LinearMap.BilinForm R L) (hΦ : Φ.IsSymm) (x y : loopAlgebra R A L) :
@@ -441,54 +306,19 @@ lemma twoCochainOfBilinear_apply_apply [CommRing A] [IsAddTorsionFree R] [Algebr
 open LieModule in
 /-- A 2-cocycle on a loop algebra given by an invariant bilinear form. -/
 @[simps]
-/--
-Definition of `twoCocycleOfBilinear` / `twoCocycleOfBilinear` 的定义
+/-
+**LieAlgebra.LoopAlgebra.twoCocycleOfBilinear** 是 Mathlib 中的一个定义，位于命名空间 `LieAlge
+bra.LoopAlgebra`。
+形式化陈述：twoCocycleOfBilinear [CommRing A] [IsAddTorsionFree R] [Algebra A R] (Φ : 
+LinearMap.BilinForm R L) (hΦ : Φ.lieInvariant L) (hΦs : Φ.IsSymm) : Cohomology.t
+woCocycle R (loopAlgebra R A L) (TrivialLieModule R (loopAlgebra R A L) R) where
+ val
+参数：Φ : LinearMap.BilinForm R L；hΦ : Φ.lieInvariant L；hΦs : Φ.IsSymm。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition twoCocycleOfBilinear
-  signature: [CommRing A] [IsAddTorsionFree R] [Algebra A R]
-  body: twoCochainOfBilinear R A L Φ hΦs
-  property := by
-    apply (LieModule.Cohomology.mem_twoCocycle_iff ..).mpr
-    ext a x b y c z
-    suffices
-        b • Φ (Finsupp.single (a + c) ⁅x, z⁆ (-b)) y =
-        c • Φ (Finsupp.single (a + b) ⁅x, y⁆ (-c)) z +
-        a • Φ (Finsupp.single (b + c) ⁅y, z⁆ (-a)) x by
-      simpa [trivial_lie_zero, sub_eq_zero, neg_add_eq_iff_eq_add, ← LinearEquiv.map_add,
-        -LinearEquiv.map_add]
-    by_cases h0 : a + b + c = 0
-    · suffices b • Φ ⁅x, z⁆ y = c • Φ ⁅x, y⁆ z + a • Φ ⁅y, z⁆ x by
-        simpa only [show a + b = -c by grind, show a + c = -b by grind, show b + c = -a by grind,
-          Finsupp.single_eq_same]
-      rw [hΦ]; rw [hΦs.eq z ⁅x]; rw [y⁆]; rw [hΦ y]; rw [← lie_skew y x]; rw [hΦs.eq z]; rw [Φ.neg_left]; rw [neg_neg]; rw [show b = -(a + c) by grind]; rw [neg_smul]; rw [smul_neg]; rw [neg_neg]; rw [add_smul]; rw [add_comm]
-    · simp [Finsupp.single_eq_of_ne (a := a + c) (a' := -b) (by grind),
-        Finsupp.single_eq_of_ne (a := a + b) (a' := -c) (by grind),
-        Finsupp.single_eq_of_ne (a := b + c) (a' := -a) (by grind)]
-
-中文:
-定义 twoCocycleOfBilinear
-  签名: [交换环 A] [是加法无挠 R] [代数 A R]
-  定义体: twoCochainOfBilinear R A L Φ hΦs
-  property := by
-    apply (LieModule.Cohomology.mem_twoCocycle_iff ..).mpr
-    ext a x b y c z
-    suffices
-        b • Φ (Finsupp.single (a + c) ⁅x, z⁆ (-b)) y =
-        c • Φ (Finsupp.single (a + b) ⁅x, y⁆ (-c)) z +
-        a • Φ (Finsupp.single (b + c) ⁅y, z⁆ (-a)) x by
-      simpa [trivial_lie_zero, sub_eq_zero, neg_add_eq_iff_eq_add, ← LinearEquiv.map_add,
-        -LinearEquiv.map_add]
-    by_cases h0 : a + b + c = 0
-    · suffices b • Φ ⁅x, z⁆ y = c • Φ ⁅x, y⁆ z + a • Φ ⁅y, z⁆ x by
-        simpa only [show a + b = -c by grind, show a + c = -b by grind, show b + c = -a by grind,
-          Finsupp.single_eq_same]
-      rw [hΦ]; rw [hΦs.eq z ⁅x]; rw [y⁆]; rw [hΦ y]; rw [← lie_skew y x]; rw [hΦs.eq z]; rw [Φ.neg_left]; rw [neg_neg]; rw [show b = -(a + c) by grind]; rw [neg_smul]; rw [smul_neg]; rw [neg_neg]; rw [add_smul]; rw [add_comm]
-    · simp [Finsupp.single_eq_of_ne (a := a + c) (a' := -b) (by grind),
-        Finsupp.single_eq_of_ne (a := a + b) (a' := -c) (by grind),
-        Finsupp.single_eq_of_ne (a := b + c) (a' := -a) (by grind)]
-
-Depends on / 依赖: twoCochainOfBilinear
+--- 原说明 ---
+A 2-cocycle on a loop algebra given by an invariant bilinear form.
 -/
 def twoCocycleOfBilinear [CommRing A] [IsAddTorsionFree R] [Algebra A R]
     (Φ : LinearMap.BilinForm R L) (hΦ : Φ.lieInvariant L) (hΦs : Φ.IsSymm) :
@@ -507,7 +337,8 @@ def twoCocycleOfBilinear [CommRing A] [IsAddTorsionFree R] [Algebra A R]
     · suffices b • Φ ⁅x, z⁆ y = c • Φ ⁅x, y⁆ z + a • Φ ⁅y, z⁆ x by
         simpa only [show a + b = -c by grind, show a + c = -b by grind, show b + c = -a by grind,
           Finsupp.single_eq_same]
-      rw [hΦ]; rw [hΦs.eq z ⁅x]; rw [y⁆]; rw [hΦ y]; rw [← lie_skew y x]; rw [hΦs.eq z]; rw [Φ.neg_left]; rw [neg_neg]; rw [show b = -(a + c) by grind]; rw [neg_smul]; rw [smul_neg]; rw [neg_neg]; rw [add_smul]; rw [add_comm]
+      rw [hΦ, hΦs.eq z ⁅x, y⁆, hΦ y, ← lie_skew y x, hΦs.eq z, Φ.neg_left, neg_neg,
+        show b = -(a + c) by grind, neg_smul, smul_neg, neg_neg, add_smul, add_comm]
     · simp [Finsupp.single_eq_of_ne (a := a + c) (a' := -b) (by grind),
         Finsupp.single_eq_of_ne (a := a + b) (a' := -c) (by grind),
         Finsupp.single_eq_of_ne (a := b + c) (a' := -a) (by grind)]
@@ -515,3 +346,4 @@ def twoCocycleOfBilinear [CommRing A] [IsAddTorsionFree R] [Algebra A R]
 end LoopAlgebra
 
 end LieAlgebra
+

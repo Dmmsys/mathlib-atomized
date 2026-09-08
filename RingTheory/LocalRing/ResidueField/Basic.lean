@@ -29,177 +29,126 @@ section
 
 variable [CommRing R] [IsLocalRing R] [CommRing S] [IsLocalRing S] [CommRing T] [IsLocalRing T]
 
-/--
-lemma `residue_def` / 引理 `residue_def`
-
-English:
-lemma residue_def
-  given: (x)
-  statement: residue R x = Ideal.Quotient.mk (maximalIdeal R) x
-  proof: rfl
-
-中文:
-引理 residue_def
-  条件: (x)
-  结论: residue R x = 理想.商.mk (maximalIdeal R) x
-  证明: rfl
+/-
+**IsLocalRing.residue_def** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalRing`。
+形式化陈述：residue_def (x) : residue R x = Ideal.Quotient.mk (maximalIdeal R) x
+参数：x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma residue_def (x) : residue R x = Ideal.Quotient.mk (maximalIdeal R) x := rfl
-
-/--
-lemma `ker_residue` / 引理 `ker_residue`
-
-English:
-lemma ker_residue
-  statement: RingHom.ker (residue R) = maximalIdeal R
-  proof: Ideal.mk_ker
-
-@[simp]
-
-中文:
-引理 ker_residue
-  结论: 环态射.ker (residue R) = maximalIdeal R
-  证明: Ideal.mk_ker
-
-@[simp]
-
-Depends on / 依赖: Ideal.mk_ker, mk_ker
+/-
+**IsLocalRing.ker_residue** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalRing`。
+形式化陈述：ker_residue : RingHom.ker (residue R) = maximalIdeal R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.mk_ker`：mk_ker {I : Ideal R} [I.IsTwoSided] : ker (Quotient.mk I) 
+= I
 -/
 lemma ker_residue : RingHom.ker (residue R) = maximalIdeal R :=
   Ideal.mk_ker
 
 @[simp]
-/--
-lemma `residue_eq_zero_iff` / 引理 `residue_eq_zero_iff`
-
-English:
-lemma residue_eq_zero_iff
-  given: (x : R)
-  statement: residue R x = 0 ↔ x in maximalIdeal R
-  proof: by
-  rw [← RingHom.mem_ker]; rw [ker_residue]
-
-中文:
-引理 residue_eq_zero_iff
-  条件: (x : R)
-  结论: residue R x = 0 ↔ x in maximalIdeal R
-  证明: by
-  rw [← RingHom.mem_ker]; rw [ker_residue]
-
-Depends on / 依赖: RingHom, RingHom.mem_ker, ker_residue, mem_ker
+/-
+**IsLocalRing.residue_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalRing`。
+形式化陈述：residue_eq_zero_iff (x : R) : residue R x = 0 ↔ x in maximalIdeal R
+参数：x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用引理 `IsLocalRing.ker_residue`：ker_residue : RingHom.ker (residue R) = maximal
+Ideal R
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma residue_eq_zero_iff (x : R) : residue R x = 0 ↔ x in maximalIdeal R := by
-  rw [← RingHom.mem_ker]; rw [ker_residue]
-
-/--
-lemma `residue_ne_zero_iff_isUnit` / 引理 `residue_ne_zero_iff_isUnit`
-
-English:
-lemma residue_ne_zero_iff_isUnit
-  given: (x : R)
-  statement: residue R x != 0 ↔ IsUnit x
-  proof: by
-  simp
-
-中文:
-引理 residue_ne_zero_iff_isUnit
-  条件: (x : R)
-  结论: residue R x != 0 ↔ 是单位 x
-  证明: by
-  simp
+lemma residue_eq_zero_iff (x : R) : residue R x = 0 ↔ x ∈ maximalIdeal R := by
+  rw [← RingHom.mem_ker, ker_residue]
+/-
+**IsLocalRing.residue_ne_zero_iff_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalRing`
+。
+形式化陈述：residue_ne_zero_iff_isUnit (x : R) : residue R x != 0 ↔ IsUnit x
+参数：x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma residue_ne_zero_iff_isUnit (x : R) : residue R x != 0 ↔ IsUnit x := by
+lemma residue_ne_zero_iff_isUnit (x : R) : residue R x ≠ 0 ↔ IsUnit x := by
   simp
-
-/--
-lemma `residue_surjective` / 引理 `residue_surjective`
-
-English:
-lemma residue_surjective
-  proof: Ideal.Quotient.mk_surjective
-
-中文:
-引理 residue_surjective
-  证明: Ideal.Quotient.mk_surjective
-
-Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, mk_surjective
+/-
+**IsLocalRing.residue_surjective** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalRing`。
+形式化陈述：residue_surjective : Function.Surjective (IsLocalRing.residue R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
 -/
 lemma residue_surjective :
     Function.Surjective (IsLocalRing.residue R) :=
   Ideal.Quotient.mk_surjective
 
 variable (R)
-
-/--
-Instance `ResidueField.algebra` / 实例 `ResidueField.algebra`
-
-English:
-instance ResidueField.algebra
-  signature: {R₀} [CommRing R₀] [Algebra R₀ R]
-  body: inferInstanceAs Algebra R₀ (_ ⧸ _)
-
-中文:
-实例 ResidueField.algebra
-  签名: {R₀} [交换环 R₀] [代数 R₀ R]
-  定义体: inferInstanceAs Algebra R₀ (_ ⧸ _)
-
-Depends on / 依赖: Algebra
+/-
+**IsLocalRing.ResidueField.algebra** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.Residu
+eField`。
+形式化陈述：(R : Type u_1) →   [inst : CommRing R] →     [inst_1 : IsLocalRing R] →   
+    {R₀ : Type u_4} → [inst_2 : CommRing R₀] → [Algebra R₀ R] → Algebra R₀ (IsLo
+calRing.ResidueField R)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ResidueField.algebra {R₀} [CommRing R₀] [Algebra R₀ R] :
     Algebra R₀ (ResidueField R) :=
-inferInstanceAs Algebra R₀ (_ ⧸ _)
-
+  inferInstanceAs <| Algebra R₀ (_ ⧸ _)
+/-
+**IsLocalRing.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R₁ R₂} [CommRing R₁] [CommRing R₂]
     [Algebra R₁ R₂] [Algebra R₁ R] [Algebra R₂ R] [IsScalarTower R₁ R₂ R] :
     IsScalarTower R₁ R₂ (ResidueField R) :=
-inferInstanceAs IsScalarTower R₁ R₂ (_ ⧸ _)
+  inferInstanceAs <| IsScalarTower R₁ R₂ (_ ⧸ _)
 
 @[simp]
-/--
-theorem `ResidueField.algebraMap_eq` / 定理 `ResidueField.algebraMap_eq`
-
-English:
-theorem ResidueField.algebraMap_eq
-  statement: algebraMap R (ResidueField R) = residue R
-  proof: rfl
-
-中文:
-定理 ResidueField.algebraMap_eq
-  结论: algebraMap R (ResidueField R) = residue R
-  证明: rfl
+/-
+**IsLocalRing.ResidueField.algebraMap_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.
+ResidueField`。
+形式化陈述：∀ (R : Type u_1) [inst : CommRing R] [inst_1 : IsLocalRing R],   algebraMa
+p R (IsLocalRing.ResidueField R) = IsLocalRing.residue R
+参数：R : Type u_1；IsLocalRing.ResidueField R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ResidueField.algebraMap_eq : algebraMap R (ResidueField R) = residue R :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsLocalHom (IsLocalRing.residue R)
-  body: ⟨fun _ ha =>
-    Classical.not_not.mp (Ideal.Quotient.eq_zero_iff_mem.not.mp (isUnit_iff_ne_zero.mp ha))⟩
-
-#adaptation_note /-- Needed after leanprover/lean4#12564 -/
-
-中文:
-实例 :
-  签名: 是Local态射 (是局部环.residue R)
-  定义体: ⟨fun _ ha =>
-    Classical.not_not.mp (Ideal.Quotient.eq_zero_iff_mem.not.mp (isUnit_iff_ne_zero.mp ha))⟩
-
-#adaptation_note /-- Needed after leanprover/lean4#12564 -/
-
-Depends on / 依赖: Classical, Classical.not_not.mp, Ideal.Quotient.eq_zero_iff_mem.not.mp, Quotient, eq_zero_iff_mem, isUnit_iff_ne_zero, isUnit_iff_ne_zero.mp, not_not
+/-
+**IsLocalRing.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsLocalHom (IsLocalRing.residue R) :=
   ⟨fun _ ha =>
     Classical.not_not.mp (Ideal.Quotient.eq_zero_iff_mem.not.mp (isUnit_iff_ne_zero.mp ha))⟩
 
 #adaptation_note /-- Needed after leanprover/lean4#12564 -/
-noncomputable instance {R₀} [CommRing R₀] [Algebra R₀ R] : Module R₀ (ResidueField R) :=
-inferInstanceAs Module R₀ (R ⧸ maximalIdeal R)
+/-
+**IsLocalRing.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
+--- 原说明 ---
+Needed after leanprover/lean4#12564
+-/
+noncomputable instance {R₀} [CommRing R₀] [Algebra R₀ R] : Module R₀ (ResidueField R) :=
+  inferInstanceAs <| Module R₀ (R ⧸ maximalIdeal R)
+/-
+**IsLocalRing.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R₀} [CommRing R₀] [Algebra R₀ R] [Module.Finite R₀ R] :
     Module.Finite R₀ (ResidueField R) :=
   .of_surjective (IsScalarTower.toAlgHom R₀ R _).toLinearMap Ideal.Quotient.mk_surjective
@@ -208,320 +157,270 @@ variable {R}
 
 namespace ResidueField
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- A local ring homomorphism into a field can be descended onto the residue field. -/
+/-
+**IsLocalRing.ResidueField.lift** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.ResidueFi
+eld`。
+形式化陈述：lift {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S) [
+IsLocalHom f] : IsLocalRing.ResidueField R ->+* S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S) [IsLocalHom f]
-  body: Ideal.Quotient.lift _ f fun a ha =>
-    by_contradiction fun h => ha (isUnit_of_map_unit f a (isUnit_iff_ne_zero.mpr h))
-
-中文:
-定义 lift
-  签名: {R S : 类型} [交换环 R] [是局部环 R] [域 S] (f : R ->+* S) [是Local态射 f]
-  定义体: Ideal.Quotient.lift _ f fun a ha =>
-    by_contradiction fun h => ha (isUnit_of_map_unit f a (isUnit_iff_ne_zero.mpr h))
-
-Depends on / 依赖: Ideal.Quotient.lift, Quotient, by_contradiction, isUnit_iff_ne_zero, isUnit_iff_ne_zero.mpr, isUnit_of_map_unit
+--- 原说明 ---
+A local ring homomorphism into a field can be descended onto the residue field.
 -/
-def lift {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S) [IsLocalHom f] :
-    IsLocalRing.ResidueField R ->+* S :=
+def lift {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R →+* S) [IsLocalHom f] :
+    IsLocalRing.ResidueField R →+* S :=
   Ideal.Quotient.lift _ f fun a ha =>
     by_contradiction fun h => ha (isUnit_of_map_unit f a (isUnit_iff_ne_zero.mpr h))
-
-/--
-theorem `lift_comp_residue` / 定理 `lift_comp_residue`
-
-English:
-theorem lift_comp_residue
-  statement: {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S)
-  proof: RingHom.ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 lift_comp_residue
-  结论: {R S : 类型} [交换环 R] [是局部环 R] [域 S] (f : R ->+* S)
-  证明: RingHom.ext fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.ext
+/-
+**IsLocalRing.ResidueField.lift_comp_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalR
+ing.ResidueField`。
+形式化陈述：lift_comp_residue {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f 
+: R ->+* S) [IsLocalHom f] : (lift f).comp (residue R) = f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
 -/
-theorem lift_comp_residue {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S)
+theorem lift_comp_residue {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R →+* S)
     [IsLocalHom f] : (lift f).comp (residue R) = f :=
   RingHom.ext fun _ => rfl
 
 @[simp]
-/--
-theorem `lift_residue_apply` / 定理 `lift_residue_apply`
-
-English:
-theorem lift_residue_apply
-  statement: {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S)
-  proof: rfl
-
-中文:
-定理 lift_residue_apply
-  结论: {R S : 类型} [交换环 R] [是局部环 R] [域 S] (f : R ->+* S)
-  证明: rfl
+/-
+**IsLocalRing.ResidueField.lift_residue_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsLocal
+Ring.ResidueField`。
+形式化陈述：lift_residue_apply {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f
+ : R ->+* S) [IsLocalHom f] (x) : lift f (residue R x) = f x
+参数：f : R ->+* S；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_residue_apply {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R ->+* S)
+theorem lift_residue_apply {R S : Type*} [CommRing R] [IsLocalRing R] [Field S] (f : R →+* S)
     [IsLocalHom f] (x) : lift f (residue R x) = f x :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `map` / `map` 的定义
+/-- The map on residue fields induced by a local homomorphism between local rings -/
+/-
+**IsLocalRing.ResidueField.map** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.ResidueFie
+ld`。
+形式化陈述：map (f : R ->+* S) [IsLocalHom f] : ResidueField R ->+* ResidueField S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : R ->+* S) [IsLocalHom f]
-  body: Ideal.Quotient.lift (maximalIdeal R) ((Ideal.Quotient.mk _).comp f) fun a ha => by
-    unfold ResidueField
-    rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]
-    exact map_nonunit f a ha
-
-中文:
-定义 map
-  签名: (f : R ->+* S) [是Local态射 f]
-  定义体: Ideal.Quotient.lift (maximalIdeal R) ((Ideal.Quotient.mk _).comp f) fun a ha => by
-    unfold ResidueField
-    rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]
-    exact map_nonunit f a ha
-
-Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.lift, Ideal.Quotient.mk, Quotient, ResidueField, RingHom, RingHom.comp_apply, comp_apply, eq_zero_iff_mem, map_nonunit, maximalIdeal
+--- 原说明 ---
+The map on residue fields induced by a local homomorphism between local rings
 -/
-noncomputable def map (f : R ->+* S) [IsLocalHom f] : ResidueField R ->+* ResidueField S :=
+noncomputable def map (f : R →+* S) [IsLocalHom f] : ResidueField R →+* ResidueField S :=
   Ideal.Quotient.lift (maximalIdeal R) ((Ideal.Quotient.mk _).comp f) fun a ha => by
     unfold ResidueField
-    rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]
+    rw [RingHom.comp_apply, Ideal.Quotient.eq_zero_iff_mem]
     exact map_nonunit f a ha
 
 /-- Applying `IsLocalRing.ResidueField.map` to the identity ring homomorphism gives the identity
 ring homomorphism. -/
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
+/-
+**IsLocalRing.ResidueField.map_id** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.Residue
+Field`。
+形式化陈述：map_id : IsLocalRing.ResidueField.map (RingHom.id R) = RingHom.id (IsLocal
+Ring.ResidueField R)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.Quotient.ringHom_ext`：ringHom_ext [NonAssocSemiring S] ⦃f g : R ⧸ 
+I ->+* S⦄ (h : f.comp (mk I) = g.comp (mk I)) : f = g
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `isLocalHom_id`：isLocalHom_id (R : Type*) [Semiring R] : IsLocalHom (Ring
+Hom.id R) where map_nonunit _
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
 
-English:
-theorem map_id
-  proof: Ideal.Quotient.ringHom_ext RingHom.ext fun _ => rfl
-
-中文:
-定理 map_id
-  证明: Ideal.Quotient.ringHom_ext RingHom.ext fun _ => rfl
-
-Depends on / 依赖: Ideal.Quotient.ringHom_ext, Quotient, RingHom, RingHom.ext, ringHom_ext
+--- 原说明 ---
+Applying `IsLocalRing.ResidueField.map` to the identity ring homomorphism gives 
+the identity
+ring homomorphism.
 -/
 theorem map_id :
     IsLocalRing.ResidueField.map (RingHom.id R) = RingHom.id (IsLocalRing.ResidueField R) :=
-Ideal.Quotient.ringHom_ext RingHom.ext fun _ => rfl
+  Ideal.Quotient.ringHom_ext <| RingHom.ext fun _ => rfl
 
-/--
-theorem `map_comp` / 定理 `map_comp`
+/-- The composite of two `IsLocalRing.ResidueField.map`s is the `IsLocalRing.ResidueField.map` of
+the composite. -/
+/-
+**IsLocalRing.ResidueField.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.Resid
+ueField`。
+形式化陈述：map_comp (f : T ->+* R) (g : R ->+* S) [IsLocalHom f] [IsLocalHom g] : IsL
+ocalRing.ResidueField.map (g.comp f) = (IsLocalRing.ResidueField.map g).comp (Is
+LocalRing.ResidueField.map f)
+参数：f : T ->+* R；g : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.Quotient.ringHom_ext`：ringHom_ext [NonAssocSemiring S] ⦃f g : R ⧸ 
+I ->+* S⦄ (h : f.comp (mk I) = g.comp (mk I)) : f = g
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `RingHom.isLocalHom_comp`：RingHom.isLocalHom_comp (g : S ->+* T) (f : R -
+>+* S) [IsLocalHom g] [IsLocalHom f] : IsLocalHom (g.comp f) where map_nonunit a
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
 
-English:
-theorem map_comp
-  given: (f : T ->+* R) (g : R ->+* S) [IsLocalHom f] [IsLocalHom g]
-  proof: Ideal.Quotient.ringHom_ext RingHom.ext fun _ => rfl
-
-中文:
-定理 map_comp
-  条件: (f : T ->+* R) (g : R ->+* S) [是Local态射 f] [是Local态射 g]
-  证明: Ideal.Quotient.ringHom_ext RingHom.ext fun _ => rfl
-
-Depends on / 依赖: Ideal.Quotient.ringHom_ext, Quotient, RingHom, RingHom.ext, ringHom_ext
+--- 原说明 ---
+The composite of two `IsLocalRing.ResidueField.map`s is the `IsLocalRing.Residue
+Field.map` of
+the composite.
 -/
-theorem map_comp (f : T ->+* R) (g : R ->+* S) [IsLocalHom f] [IsLocalHom g] :
+theorem map_comp (f : T →+* R) (g : R →+* S) [IsLocalHom f] [IsLocalHom g] :
     IsLocalRing.ResidueField.map (g.comp f) =
       (IsLocalRing.ResidueField.map g).comp (IsLocalRing.ResidueField.map f) :=
-Ideal.Quotient.ringHom_ext RingHom.ext fun _ => rfl
-
-/--
-theorem `map_comp_residue` / 定理 `map_comp_residue`
-
-English:
-theorem map_comp_residue
-  given: (f : R ->+* S) [IsLocalHom f]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_comp_residue
-  条件: (f : R ->+* S) [是Local态射 f]
-  证明: rfl
-
-@[simp]
+  Ideal.Quotient.ringHom_ext <| RingHom.ext fun _ => rfl
+/-
+**IsLocalRing.ResidueField.map_comp_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRi
+ng.ResidueField`。
+形式化陈述：map_comp_residue (f : R ->+* S) [IsLocalHom f] : (ResidueField.map f).comp
+ (residue R) = (residue S).comp f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_comp_residue (f : R ->+* S) [IsLocalHom f] :
+theorem map_comp_residue (f : R →+* S) [IsLocalHom f] :
     (ResidueField.map f).comp (residue R) = (residue S).comp f :=
   rfl
 
 @[simp]
-/--
-theorem `map_residue` / 定理 `map_residue`
-
-English:
-theorem map_residue
-  given: (f : R ->+* S) [IsLocalHom f] (r : R)
-  proof: rfl
-
-中文:
-定理 map_residue
-  条件: (f : R ->+* S) [是Local态射 f] (r : R)
-  证明: rfl
+/-
+**IsLocalRing.ResidueField.map_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.Re
+sidueField`。
+形式化陈述：map_residue (f : R ->+* S) [IsLocalHom f] (r : R) : ResidueField.map f (re
+sidue R r) = residue S (f r)
+参数：f : R ->+* S；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_residue (f : R ->+* S) [IsLocalHom f] (r : R) :
+theorem map_residue (f : R →+* S) [IsLocalHom f] (r : R) :
     ResidueField.map f (residue R r) = residue S (f r) :=
   rfl
-
-/--
-theorem `map_id_apply` / 定理 `map_id_apply`
-
-English:
-theorem map_id_apply
-  given: (x : ResidueField R)
-  statement: map (RingHom.id R) x = x
-  proof: DFunLike.congr_fun map_id x
-
-@[simp]
-
-中文:
-定理 map_id_apply
-  条件: (x : ResidueField R)
-  结论: map (环态射.id R) x = x
-  证明: DFunLike.congr_fun map_id x
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_id
+/-
+**IsLocalRing.ResidueField.map_id_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.R
+esidueField`。
+形式化陈述：map_id_apply (x : ResidueField R) : map (RingHom.id R) x = x
+参数：x : ResidueField R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `isLocalHom_id`：isLocalHom_id (R : Type*) [Semiring R] : IsLocalHom (Ring
+Hom.id R) where map_nonunit _
+· 使用定理 `IsLocalRing.ResidueField.map_id`：map_id : IsLocalRing.ResidueField.map (
+RingHom.id R) = RingHom.id (IsLocalRing.ResidueField R)
 -/
 theorem map_id_apply (x : ResidueField R) : map (RingHom.id R) x = x :=
   DFunLike.congr_fun map_id x
 
 @[simp]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  statement: (f : R ->+* S) (g : S ->+* T) (x : ResidueField R) [IsLocalHom f]
-  proof: DFunLike.congr_fun (map_comp f g).symm x
-
-中文:
-定理 map_map
-  结论: (f : R ->+* S) (g : S ->+* T) (x : ResidueField R) [是Local态射 f]
-  证明: DFunLike.congr_fun (map_comp f g).symm x
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_comp
+/-
+**IsLocalRing.ResidueField.map_map** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.Residu
+eField`。
+形式化陈述：map_map (f : R ->+* S) (g : S ->+* T) (x : ResidueField R) [IsLocalHom f] 
+[IsLocalHom g] : map g (map f x) = map (g.comp f) x
+参数：f : R ->+* S；g : S ->+* T；x : ResidueField R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `RingHom.isLocalHom_comp`：RingHom.isLocalHom_comp (g : S ->+* T) (f : R -
+>+* S) [IsLocalHom g] [IsLocalHom f] : IsLocalHom (g.comp f) where map_nonunit a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalRing.ResidueField.map_comp`：map_comp (f : T ->+* R) (g : R ->+* S
+) [IsLocalHom f] [IsLocalHom g] : IsLocalRing.ResidueField.map (g.comp f) = (IsL
+ocalRing.ResidueField.m…
 -/
-theorem map_map (f : R ->+* S) (g : S ->+* T) (x : ResidueField R) [IsLocalHom f]
+theorem map_map (f : R →+* S) (g : S →+* T) (x : ResidueField R) [IsLocalHom f]
     [IsLocalHom g] : map g (map f x) = map (g.comp f) x :=
   DFunLike.congr_fun (map_comp f g).symm x
 
 /-- A ring isomorphism defines an isomorphism of residue fields. -/
 @[simps apply]
-/--
-Definition of `mapEquiv` / `mapEquiv` 的定义
+/-
+**IsLocalRing.ResidueField.mapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.Resid
+ueField`。
+形式化陈述：mapEquiv (f : R ≃+* S) : IsLocalRing.ResidueField R ≃+* IsLocalRing.Residu
+eField S where toFun
+参数：f : R ≃+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapEquiv
-  signature: (f : R ≃+* S)
-  body: map (f : R ->+* S)
-  invFun := map (f.symm : S ->+* R)
-  left_inv x := by simp only [map_map, RingEquiv.symm_comp, map_id, RingHom.id_apply]
-  right_inv x := by simp only [map_map, RingEquiv.comp_symm, map_id, RingHom.id_apply]
-  map_mul' := map_mul _
-  map_add' := map_add _
-
-@[simp]
-
-中文:
-定义 mapEquiv
-  签名: (f : R ≃+* S)
-  定义体: map (f : R ->+* S)
-  invFun := map (f.symm : S ->+* R)
-  left_inv x := by simp only [map_map, RingEquiv.symm_comp, map_id, RingHom.id_apply]
-  right_inv x := by simp only [map_map, RingEquiv.comp_symm, map_id, RingHom.id_apply]
-  map_mul' := map_mul _
-  map_add' := map_add _
-
-@[simp]
+--- 原说明 ---
+A ring isomorphism defines an isomorphism of residue fields.
 -/
 noncomputable def mapEquiv (f : R ≃+* S) :
     IsLocalRing.ResidueField R ≃+* IsLocalRing.ResidueField S where
-  toFun := map (f : R ->+* S)
-  invFun := map (f.symm : S ->+* R)
+  toFun := map (f : R →+* S)
+  invFun := map (f.symm : S →+* R)
   left_inv x := by simp only [map_map, RingEquiv.symm_comp, map_id, RingHom.id_apply]
   right_inv x := by simp only [map_map, RingEquiv.comp_symm, map_id, RingHom.id_apply]
   map_mul' := map_mul _
   map_add' := map_add _
 
 @[simp]
-/--
-theorem `mapEquiv.symm` / 定理 `mapEquiv.symm`
-
-English:
-theorem mapEquiv.symm
-  given: (f : R ≃+* S)
-  statement: (mapEquiv f).symm = mapEquiv f.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapEquiv.symm
-  条件: (f : R ≃+* S)
-  结论: (mapEquiv f).symm = mapEquiv f.symm
-  证明: rfl
-
-@[simp]
+/-
+**IsLocalRing.ResidueField.mapEquiv.symm** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.
+ResidueField.mapEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : IsLocalRing 
+R] [inst_2 : CommRing S]   [inst_3 : IsLocalRing S] (f : R ≃+* S),   (IsLocalRin
+g.ResidueField.mapEquiv f).symm = IsLocalRing.ResidueField.mapEquiv f.symm
+参数：f : R ≃+* S；IsLocalRing.ResidueField.mapEquiv f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapEquiv.symm (f : R ≃+* S) : (mapEquiv f).symm = mapEquiv f.symm :=
   rfl
 
 @[simp]
-/--
-theorem `mapEquiv_trans` / 定理 `mapEquiv_trans`
-
-English:
-theorem mapEquiv_trans
-  given: (e₁ : R ≃+* S) (e₂ : S ≃+* T)
-  proof: RingEquiv.toRingHom_injective map_comp (e₁ : R ->+* S) (e₂ : S ->+* T)
-
-@[simp]
-
-中文:
-定理 mapEquiv_trans
-  条件: (e₁ : R ≃+* S) (e₂ : S ≃+* T)
-  证明: RingEquiv.toRingHom_injective map_comp (e₁ : R ->+* S) (e₂ : S ->+* T)
-
-@[simp]
-
-Depends on / 依赖: RingEquiv, RingEquiv.toRingHom_injective, map_comp, toRingHom_injective
+/-
+**IsLocalRing.ResidueField.mapEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing
+.ResidueField`。
+形式化陈述：mapEquiv_trans (e₁ : R ≃+* S) (e₂ : S ≃+* T) : mapEquiv (e₁.trans e₂) = (m
+apEquiv e₁).trans (mapEquiv e₂)
+参数：e₁ : R ≃+* S；e₂ : S ≃+* T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquiv.toRingHom_injective`：toRingHom_injective : Function.Injective 
+(toRingHom : R ≃+* S -> R ->+* S)
+· 使用定理 `IsLocalRing.ResidueField.map_comp`：map_comp (f : T ->+* R) (g : R ->+* S
+) [IsLocalHom f] [IsLocalHom g] : IsLocalRing.ResidueField.map (g.comp f) = (IsL
+ocalRing.ResidueField.m…
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `isLocalHom_toRingHom`：isLocalHom_toRingHom {F : Type*} [FunLike F R S] [
+RingHomClass F R S] (f : F) [IsLocalHom f] : IsLocalHom (f : R ->+* S)
+· 使用定理 `isLocalHom_equiv`：∀ {F : Type u_1} {M : Type u_3} {N : Type u_4} [inst :
+ Monoid M] [inst_1 : Monoid N] [inst_2 : EquivLike F M N]   [MulEquivClass F M N
+] (f :…
+· 使用定理 `RingEquivClass.toMulEquivClass`：∀ {F : Type u_7} {R : Type u_8} {S : Typ
+e u_9} {inst : Mul R} {inst_1 : Add R} {inst_2 : Mul S} {inst_3 : Add S}   {inst
+_4 : EquivLike F R S…
 -/
 theorem mapEquiv_trans (e₁ : R ≃+* S) (e₂ : S ≃+* T) :
     mapEquiv (e₁.trans e₂) = (mapEquiv e₁).trans (mapEquiv e₂) :=
-RingEquiv.toRingHom_injective map_comp (e₁ : R ->+* S) (e₂ : S ->+* T)
+  RingEquiv.toRingHom_injective <| map_comp (e₁ : R →+* S) (e₂ : S →+* T)
 
 @[simp]
-/--
-theorem `mapEquiv_refl` / 定理 `mapEquiv_refl`
-
-English:
-theorem mapEquiv_refl
-  statement: mapEquiv (RingEquiv.refl R) = RingEquiv.refl _
-  proof: RingEquiv.toRingHom_injective map_id
-
-中文:
-定理 mapEquiv_refl
-  结论: mapEquiv (环等价.refl R) = 环等价.refl _
-  证明: RingEquiv.toRingHom_injective map_id
-
-Depends on / 依赖: RingEquiv, RingEquiv.toRingHom_injective, map_id, toRingHom_injective
+/-
+**IsLocalRing.ResidueField.mapEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.
+ResidueField`。
+形式化陈述：mapEquiv_refl : mapEquiv (RingEquiv.refl R) = RingEquiv.refl _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquiv.toRingHom_injective`：toRingHom_injective : Function.Injective 
+(toRingHom : R ≃+* S -> R ->+* S)
+· 使用定理 `IsLocalRing.ResidueField.map_id`：map_id : IsLocalRing.ResidueField.map (
+RingHom.id R) = RingHom.id (IsLocalRing.ResidueField R)
 -/
 theorem mapEquiv_refl : mapEquiv (RingEquiv.refl R) = RingEquiv.refl _ :=
   RingEquiv.toRingHom_injective map_id
@@ -529,26 +428,22 @@ theorem mapEquiv_refl : mapEquiv (RingEquiv.refl R) = RingEquiv.refl _ :=
 /-- The group homomorphism from `RingAut R` to `RingAut k` where `k`
 is the residue field of `R`. -/
 @[simps]
-/--
-Definition of `mapAut` / `mapAut` 的定义
+/-
+**IsLocalRing.ResidueField.mapAut** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.Residue
+Field`。
+形式化陈述：mapAut : RingAut R ->* RingAut (IsLocalRing.ResidueField R) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalRing.ResidueField.mapEquiv_refl`：mapEquiv_refl : mapEquiv (RingEq
+uiv.refl R) = RingEquiv.refl _
+· 使用定理 `IsLocalRing.ResidueField.mapEquiv_trans`：mapEquiv_trans (e₁ : R ≃+* S) (
+e₂ : S ≃+* T) : mapEquiv (e₁.trans e₂) = (mapEquiv e₁).trans (mapEquiv e₂)
 
-English:
-definition mapAut
-  signature: : RingAut R ->* RingAut (IsLocalRing.ResidueField R) where
-  body: mapEquiv
-  map_mul' e₁ e₂ := mapEquiv_trans e₂ e₁
-  map_one' := mapEquiv_refl
-
-中文:
-定义 mapAut
-  签名: : RingAut R ->* RingAut (是局部环.ResidueField R) where
-  定义体: mapEquiv
-  map_mul' e₁ e₂ := mapEquiv_trans e₂ e₁
-  map_one' := mapEquiv_refl
-
-Depends on / 依赖: mapEquiv
+--- 原说明 ---
+The group homomorphism from `RingAut R` to `RingAut k` where `k`
+is the residue field of `R`.
 -/
-noncomputable def mapAut : RingAut R ->* RingAut (IsLocalRing.ResidueField R) where
+noncomputable def mapAut : RingAut R →* RingAut (IsLocalRing.ResidueField R) where
   toFun := mapEquiv
   map_mul' e₁ e₂ := mapEquiv_trans e₂ e₁
   map_one' := mapEquiv_refl
@@ -557,57 +452,129 @@ section MulSemiringAction
 
 variable (G : Type*) [Group G] [MulSemiringAction G R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `G` acts on `R` as a `MulSemiringAction`, then it also acts on `IsLocalRing.ResidueField R`.
+-/
+/-
+**IsLocalRing.ResidueField.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing.ResidueField`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Module (ResidueField R) (ResidueField S)
-  body: inferInstanceAs Module (R ⧸ maximalIdeal R) (S ⧸ maximalIdeal S)
+--- 原说明 ---
+If `G` acts on `R` as a `MulSemiringAction`, then it also acts on `IsLocalRing.R
+esidueField R`.
+-/
+noncomputable instance : MulSemiringAction G (IsLocalRing.ResidueField R) :=
+  MulSemiringAction.compHom _ <| mapAut.comp (MulSemiringAction.toRingAut G R)
 
-中文:
-实例 :
-  签名: 模 (ResidueField R) (ResidueField S)
-  定义体: inferInstanceAs Module (R ⧸ maximalIdeal R) (S ⧸ maximalIdeal S)
+@[simp]
+/-
+**IsLocalRing.ResidueField.residue_smul** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing.R
+esidueField`。
+形式化陈述：residue_smul (g : G) (r : R) : residue R (g • r) = g • residue R r
+参数：g : G；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem residue_smul (g : G) (r : R) : residue R (g • r) = g • residue R r :=
+  rfl
 
-Depends on / 依赖: Module, maximalIdeal
+end MulSemiringAction
+
+section FiniteDimensional
+
+variable [Algebra R S] [IsLocalHom (algebraMap R S)]
+
+/-
+**IsLocalRing.ResidueField.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing.ResidueField`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : (maximalIdeal S).LiesOver (maximalIdeal R) :=
+  ⟨(((local_hom_TFAE (algebraMap R S)).out 0 4 rfl rfl).mp inferInstance).symm⟩
+/-
+**IsLocalRing.ResidueField.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing.ResidueField`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : Algebra (ResidueField R) (ResidueField S) :=
+  Ideal.Quotient.algebraOfLiesOver _ _
+/-
+**IsLocalRing.ResidueField.algebraMap_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLocal
+Ring.ResidueField`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : IsLocalRing 
+R] [inst_2 : CommRing S]   [inst_3 : IsLocalRing S] [inst_4 : Algebra R S] [inst
+_5 : IsLocalHom (algebraMap R S)] (x : R),   (algebraMap (IsLocalRing.ResidueFie
+ld R) (IsLocalRing.ResidueField S)) ((IsLocalRing.residue R) x) =     (IsLocalRi
+ng.residue S) ((algebraMap R S) x)
+参数：algebraMap R S；x : R；algebraMap (IsLocalRing.ResidueField R) (IsLocalRing.Res
+idueField S)；(IsLocalRing.residue R) x；IsLocalRing.residue S；(algebraMap R S) x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp] lemma algebraMap_residue (x : R) :
+    algebraMap (ResidueField R) (ResidueField S) (residue R x) =
+      residue S (algebraMap R S x) := rfl
+/-
+**IsLocalRing.ResidueField.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing.ResidueField`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {R₀ : Type*} [CommRing R₀] [Algebra R₀ R] [Algebra R₀ S] [IsScalarTower R₀ R S] :
+    IsScalarTower R₀ (ResidueField R) (ResidueField S) :=
+  Ideal.Quotient.isScalarTower_of_liesOver ..
+/-
+**IsLocalRing.ResidueField.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing.ResidueField`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {R₀ : Type*} [CommRing R₀] [Algebra R₀ R] [Algebra R₀ S] [IsScalarTower R₀ R S]
+    [IsLocalRing R₀] [IsLocalHom (algebraMap R₀ R)] [IsLocalHom (algebraMap R₀ S)] :
+    IsScalarTower (ResidueField R₀) (ResidueField R) (ResidueField S) := by
+  refine .of_algebraMap_eq fun x ↦ ?_
+  obtain ⟨x, rfl⟩ := residue_surjective x
+  simp [← IsScalarTower.algebraMap_apply]
+
+#adaptation_note /-- Needed after leanprover/lean4#12564 -/
+/-
+**IsLocalRing.ResidueField.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing.ResidueField`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Needed after leanprover/lean4#12564
 -/
 noncomputable instance : Module (ResidueField R) (ResidueField S) :=
-inferInstanceAs Module (R ⧸ maximalIdeal R) (S ⧸ maximalIdeal S)
-
-/--
-Instance `finite_of_module_finite` / 实例 `finite_of_module_finite`
-
-English:
-instance finite_of_module_finite
-  signature: [Module.Finite R S]
-  body: .of_restrictScalars_finite R _ _
-
-中文:
-实例 finite_of_module_finite
-  签名: [模.有限 R S]
-  定义体: .of_restrictScalars_finite R _ _
-
-Depends on / 依赖: of_restrictScalars_finite
+  inferInstanceAs <| Module (R ⧸ maximalIdeal R) (S ⧸ maximalIdeal S)
+/-
+**IsLocalRing.ResidueField.finite_of_module_finite** 是 Mathlib 中的一个实例，位于命名空间 `Is
+LocalRing.ResidueField`。
+形式化陈述：finite_of_module_finite [Module.Finite R S] : Module.Finite (ResidueField 
+R) (ResidueField S)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.of_restrictScalars_finite`：of_restrictScalars_finite (R A 
+M : Type*) [Semiring R] [Semiring A] [AddCommMonoid M] [Module R M] [Module A M]
+ [SMul R A] [IsScalarTower R …
+· 使用定理 `IsLocalRing.ResidueField.instIsScalarTower`：∀ {R : Type u_1} {S : Type u
+_2} [inst : CommRing R] [inst_1 : IsLocalRing R] [inst_2 : CommRing S]   [inst_3
+ : IsLocalRing S] [inst_4 : Alge…
+· 使用定理 `IsLocalRing.instFiniteResidueField`：∀ (R : Type u_1) [inst : CommRing R]
+ [inst_1 : IsLocalRing R] {R₀ : Type u_4} [inst_2 : CommRing R₀]   [inst_3 : Alg
+ebra R₀ R] [Module.Finit…
 -/
 instance finite_of_module_finite [Module.Finite R S] :
     Module.Finite (ResidueField R) (ResidueField S) :=
   .of_restrictScalars_finite R _ _
-
-/--
-lemma `finite_of_finite` / 引理 `finite_of_finite`
-
-English:
-lemma finite_of_finite
-  given: [Module.Finite R S] (hfin : Finite (ResidueField R))
-  proof: Module.finite_of_finite (ResidueField R)
-
-中文:
-引理 finite_of_finite
-  条件: [模.有限 R S] (hfin : 有限 (ResidueField R))
-  证明: Module.finite_of_finite (ResidueField R)
-
-Depends on / 依赖: Module, Module.finite_of_finite, ResidueField, finite_of_finite
+/-
+**IsLocalRing.ResidueField.finite_of_finite** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalRi
+ng.ResidueField`。
+形式化陈述：finite_of_finite [Module.Finite R S] (hfin : Finite (ResidueField R)) : Fi
+nite (ResidueField S)
+参数：hfin : Finite (ResidueField R)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.finite_of_finite`：∀ (R : Type u_1) {M : Type u_2} [inst : Semirin
+g R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] [Finite R]   [Modul
+e.Finite R M]…
 -/
 lemma finite_of_finite [Module.Finite R S] (hfin : Finite (ResidueField R)) :
     Finite (ResidueField S) := Module.finite_of_finite (ResidueField R)
@@ -618,92 +585,75 @@ omit [IsLocalRing R]
 
 variable [Algebra R S] [Algebra R T]
 
-/--
-Definition of `mapAlgHom` / `mapAlgHom` 的定义
+/-- A local algebra homomorphism induces an algebra homomorphism on the residue fields.
 
-English:
-definition mapAlgHom
-  signature: (e : S ->ₐ[R] T) [IsLocalHom e]
-  body: map e
-  commutes' x := by
-    simp [IsScalarTower.algebraMap_apply R S (ResidueField S),
-      IsScalarTower.algebraMap_apply R T (ResidueField T)]
+See `mapAlgHom'` for a variant where the base ring `R` is also quotiented. -/
+/-
+**IsLocalRing.ResidueField.mapAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.Resi
+dueField`。
+形式化陈述：mapAlgHom (e : S ->ₐ[R] T) [IsLocalHom e] : ResidueField S ->ₐ[R] ResidueF
+ield T where __
+参数：e : S ->ₐ[R] T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A local algebra homomorphism induces an algebra homomorphism on the residue fiel
+ds.
 
-中文:
-定义 mapAlgHom
-  签名: (e : S ->ₐ[R] T) [是Local态射 e]
-  定义体: map e
-  commutes' x := by
-    simp [IsScalarTower.algebraMap_apply R S (ResidueField S),
-      IsScalarTower.algebraMap_apply R T (ResidueField T)]
-
-@[simp]
+See `mapAlgHom'` for a variant where the base ring `R` is also quotiented.
 -/
-noncomputable def mapAlgHom (e : S ->ₐ[R] T) [IsLocalHom e] :
-    ResidueField S ->ₐ[R] ResidueField T where
+noncomputable def mapAlgHom (e : S →ₐ[R] T) [IsLocalHom e] :
+    ResidueField S →ₐ[R] ResidueField T where
   __ := map e
   commutes' x := by
     simp [IsScalarTower.algebraMap_apply R S (ResidueField S),
       IsScalarTower.algebraMap_apply R T (ResidueField T)]
 
 @[simp]
-/--
-theorem `mapAlgHom_residue` / 定理 `mapAlgHom_residue`
-
-English:
-theorem mapAlgHom_residue
-  given: (e : S ->ₐ[R] T) [IsLocalHom e] (x : S)
-  proof: rfl
-
-中文:
-定理 mapAlgHom_residue
-  条件: (e : S ->ₐ[R] T) [是Local态射 e] (x : S)
-  证明: rfl
+/-
+**IsLocalRing.ResidueField.mapAlgHom_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalR
+ing.ResidueField`。
+形式化陈述：mapAlgHom_residue (e : S ->ₐ[R] T) [IsLocalHom e] (x : S) : mapAlgHom e (r
+esidue S x) = residue T (e x)
+参数：e : S ->ₐ[R] T；x : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapAlgHom_residue (e : S ->ₐ[R] T) [IsLocalHom e] (x : S) :
+theorem mapAlgHom_residue (e : S →ₐ[R] T) [IsLocalHom e] (x : S) :
     mapAlgHom e (residue S x) = residue T (e x) :=
   rfl
 
-/--
-Definition of `mapAlgEquiv` / `mapAlgEquiv` 的定义
+/-- A local algebra isomorphism induces an algebra isomorphism on the residue fields.
 
-English:
-definition mapAlgEquiv
-  signature: (e : S ≃ₐ[R] T)
-  body: mapAlgHom e.toAlgHom
-  __ := mapEquiv e.toRingEquiv
+See `mapAlgEquiv'` for a variant where the base ring `R` is also quotiented. -/
+/-
+**IsLocalRing.ResidueField.mapAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.Re
+sidueField`。
+形式化陈述：mapAlgEquiv (e : S ≃ₐ[R] T) : ResidueField S ≃ₐ[R] ResidueField T where __
+参数：e : S ≃ₐ[R] T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A local algebra isomorphism induces an algebra isomorphism on the residue fields
+.
 
-中文:
-定义 mapAlgEquiv
-  签名: (e : S ≃ₐ[R] T)
-  定义体: mapAlgHom e.toAlgHom
-  __ := mapEquiv e.toRingEquiv
-
-@[simp]
-
-Depends on / 依赖: e.toAlgHom, mapAlgHom, toAlgHom
+See `mapAlgEquiv'` for a variant where the base ring `R` is also quotiented.
 -/
 noncomputable def mapAlgEquiv (e : S ≃ₐ[R] T) : ResidueField S ≃ₐ[R] ResidueField T where
   __ := mapAlgHom e.toAlgHom
   __ := mapEquiv e.toRingEquiv
 
 @[simp]
-/--
-theorem `mapAlgEquiv_residue` / 定理 `mapAlgEquiv_residue`
-
-English:
-theorem mapAlgEquiv_residue
-  given: (e : S ≃ₐ[R] T) (x : S)
-  proof: rfl
-
-中文:
-定理 mapAlgEquiv_residue
-  条件: (e : S ≃ₐ[R] T) (x : S)
-  证明: rfl
+/-
+**IsLocalRing.ResidueField.mapAlgEquiv_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLoca
+lRing.ResidueField`。
+形式化陈述：mapAlgEquiv_residue (e : S ≃ₐ[R] T) (x : S) : mapAlgEquiv e (residue S x) 
+= residue T (e x)
+参数：e : S ≃ₐ[R] T；x : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapAlgEquiv_residue (e : S ≃ₐ[R] T) (x : S) :
     mapAlgEquiv e (residue S x) = residue T (e x) :=
@@ -711,87 +661,85 @@ theorem mapAlgEquiv_residue (e : S ≃ₐ[R] T) (x : S) :
 
 variable [IsLocalHom (algebraMap R S)] [IsLocalHom (algebraMap R T)]
 
-/--
-Definition of `mapAlgHom'` / `mapAlgHom'` 的定义
+/-- A local algebra homomorphism induces an algebra homomorphism on the residue fields.
 
-English:
-definition mapAlgHom'
-  signature: (e : S ->ₐ[R] T) [IsLocalHom e]
-  body: (mapAlgHom e).extendScalarsOfSurjective residue_surjective
+See `mapAlgHom` for a variant where the base ring `R` is not quotiented. -/
+/-
+**IsLocalRing.ResidueField.mapAlgHom'** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.Res
+idueField`。
+形式化陈述：mapAlgHom' (e : S ->ₐ[R] T) [IsLocalHom e] : ResidueField S ->ₐ[ResidueFie
+ld R] ResidueField T
+参数：e : S ->ₐ[R] T。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalRing.residue_surjective`：residue_surjective : Function.Surjective
+ (IsLocalRing.residue R)
 
-@[simp]
+--- 原说明 ---
+A local algebra homomorphism induces an algebra homomorphism on the residue fiel
+ds.
 
-中文:
-定义 mapAlgHom'
-  签名: (e : S ->ₐ[R] T) [是Local态射 e]
-  定义体: (mapAlgHom e).extendScalarsOfSurjective residue_surjective
-
-@[simp]
-
-Depends on / 依赖: extendScalarsOfSurjective, mapAlgHom, residue_surjective
+See `mapAlgHom` for a variant where the base ring `R` is not quotiented.
 -/
-noncomputable def mapAlgHom' (e : S ->ₐ[R] T) [IsLocalHom e] :
-    ResidueField S ->ₐ[ResidueField R] ResidueField T :=
+noncomputable def mapAlgHom' (e : S →ₐ[R] T) [IsLocalHom e] :
+    ResidueField S →ₐ[ResidueField R] ResidueField T :=
   (mapAlgHom e).extendScalarsOfSurjective residue_surjective
 
 @[simp]
-/--
-theorem `mapAlgHom'_residue` / 定理 `mapAlgHom'_residue`
-
-English:
-theorem mapAlgHom'_residue
-  given: [IsLocalRing R] (e : S ->ₐ[R] T) [IsLocalHom e] (x : S)
-  proof: rfl
-
-中文:
-定理 mapAlgHom'_residue
-  条件: [是局部环 R] (e : S ->ₐ[R] T) [是Local态射 e] (x : S)
-  证明: rfl
-
-Depends on / 依赖: ContinuousConstSMul, TopologicalSpace
+/-
+**IsLocalRing.ResidueField.mapAlgHom'_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLocal
+Ring.ResidueField`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} {T : Type u_3} [inst : CommRing R] [inst_1
+ : CommRing S] [inst_2 : IsLocalRing S]   [inst_3 : CommRing T] [inst_4 : IsLoca
+lRing T] [inst_5 : Algebra R S] [inst_6 : Algebra R T]   [inst_7 : IsLocalHom (a
+lgebraMap R S)] [inst_8 : IsLocalHom (algebraMap R T)] [inst_9 : IsLocalRing R] 
+(e : S →ₐ[R] T)   [inst_10 : IsLocalHom e] (x : S),   (IsLocalRing.ResidueField.
+mapAlgHom' e) ((IsLocalRing.residue S) x) = (IsLocalRing.residue T) (e x)
+参数：algebraMap R S；algebraMap R T；e : S →ₐ[R] T；x : S；IsLocalRing.ResidueField.ma
+pAlgHom' e；(IsLocalRing.residue S) x；IsLocalRing.residue T；e x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapAlgHom'_residue [IsLocalRing R] (e : S ->ₐ[R] T) [IsLocalHom e] (x : S) :
+theorem mapAlgHom'_residue [IsLocalRing R] (e : S →ₐ[R] T) [IsLocalHom e] (x : S) :
     mapAlgHom' e (residue S x) = residue T (e x) :=
   rfl
 
-/--
-Definition of `mapAlgEquiv'` / `mapAlgEquiv'` 的定义
+/-- A local algebra isomorphism induces an algebra isomorphism on the residue fields.
 
-English:
-definition mapAlgEquiv'
-  signature: (e : S ≃ₐ[R] T)
-  body: (mapAlgEquiv e).extendScalarsOfSurjective residue_surjective
+See `mapAlgEquiv` for a variant where the base ring `R` is not quotiented. -/
+/-
+**IsLocalRing.ResidueField.mapAlgEquiv'** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalRing.R
+esidueField`。
+形式化陈述：mapAlgEquiv' (e : S ≃ₐ[R] T) : ResidueField S ≃ₐ[ResidueField R] ResidueFi
+eld T
+参数：e : S ≃ₐ[R] T。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalRing.residue_surjective`：residue_surjective : Function.Surjective
+ (IsLocalRing.residue R)
 
-@[simp]
+--- 原说明 ---
+A local algebra isomorphism induces an algebra isomorphism on the residue fields
+.
 
-中文:
-定义 mapAlgEquiv'
-  签名: (e : S ≃ₐ[R] T)
-  定义体: (mapAlgEquiv e).extendScalarsOfSurjective residue_surjective
-
-@[simp]
-
-Depends on / 依赖: MulAction, TopologicalSpace, extendScalarsOfSurjective, mapAlgEquiv, residue_surjective
+See `mapAlgEquiv` for a variant where the base ring `R` is not quotiented.
 -/
 noncomputable def mapAlgEquiv' (e : S ≃ₐ[R] T) :
     ResidueField S ≃ₐ[ResidueField R] ResidueField T :=
   (mapAlgEquiv e).extendScalarsOfSurjective residue_surjective
 
 @[simp]
-/--
-theorem `mapAlgEquiv'_residue` / 定理 `mapAlgEquiv'_residue`
-
-English:
-theorem mapAlgEquiv'_residue
-  given: [IsLocalRing R] (e : S ≃ₐ[R] T) (x : S)
-  proof: rfl
-
-中文:
-定理 mapAlgEquiv'_residue
-  条件: [是局部环 R] (e : S ≃ₐ[R] T) (x : S)
-  证明: rfl
-
-Depends on / 依赖: isProperMap_smul, prodMap
+/-
+**IsLocalRing.ResidueField.mapAlgEquiv'_residue** 是 Mathlib 中的一个定理，位于命名空间 `IsLoc
+alRing.ResidueField`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} {T : Type u_3} [inst : CommRing R] [inst_1
+ : CommRing S] [inst_2 : IsLocalRing S]   [inst_3 : CommRing T] [inst_4 : IsLoca
+lRing T] [inst_5 : Algebra R S] [inst_6 : Algebra R T]   [inst_7 : IsLocalHom (a
+lgebraMap R S)] [inst_8 : IsLocalHom (algebraMap R T)] [inst_9 : IsLocalRing R] 
+(e : S ≃ₐ[R] T)   (x : S), (IsLocalRing.ResidueField.mapAlgEquiv' e) ((IsLocalRi
+ng.residue S) x) = (IsLocalRing.residue T) (e x)
+参数：algebraMap R S；algebraMap R T；e : S ≃ₐ[R] T；x : S；IsLocalRing.ResidueField.ma
+pAlgEquiv' e；(IsLocalRing.residue S) x；IsLocalRing.residue T；e x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapAlgEquiv'_residue [IsLocalRing R] (e : S ≃ₐ[R] T) (x : S) :
     mapAlgEquiv' e (residue S x) = residue T (e x) :=
@@ -802,3 +750,4 @@ end ResidueField
 end
 
 end IsLocalRing
+

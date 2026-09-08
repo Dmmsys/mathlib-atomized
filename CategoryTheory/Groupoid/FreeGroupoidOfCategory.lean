@@ -51,99 +51,68 @@ universe v u v₁ u₁ v₂ u₂
 variable (C : Type u) [Category.{v} C]
 
 open Quiver in
-/--
-Inductive type `FreeGroupoid.homRel` / 归纳类型 `FreeGroupoid.homRel`
+/-- The relation on the free groupoid on the underlying *quiver* of C that
+promotes the prefunctor `C ⥤q FreeGroupoid C` into a functor
+`C ⥤ Quotient (FreeGroupoid.homRel C)`. -/
+/-
+**CategoryTheory.FreeGroupoid.homRel** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory
+.FreeGroupoid`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → HomRel (Quiver.
+FreeGroupoid C)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive FreeGroupoid.homRel
-  parameters: : HomRel (Quiver.FreeGroupoid C) where
-  constructors (2):
-    - map_id: (X : C) : homRel ((FreeGroupoid.of C).map (𝟙 X)) (𝟙 ((FreeGroupoid.of C).obj X))
-    - map_comp: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : homRel ((FreeGroupoid.of C).map (f ≫ g)) ((FreeGroupoid.of C).map f ≫ (FreeGroupoid.of C).map g)
-
-中文:
-归纳类型 FreeGroupoid.homRel
-  参数: : HomRel (箭图.FreeGroupoid C) where
-  构造子 (2 个):
-    - map_id: (X : C) : homRel ((FreeGroupoid.of C).map (𝟙 X)) (𝟙 ((FreeGroupoid.of C).obj X))
-    - map_comp: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : homRel ((FreeGroupoid.of C).map (f ≫ g)) ((FreeGroupoid.of C).map f ≫ (FreeGroupoid.of C).map g)
+--- 原说明 ---
+The relation on the free groupoid on the underlying *quiver* of C that
+promotes the prefunctor `C ⥤q FreeGroupoid C` into a functor
+`C ⥤ Quotient (FreeGroupoid.homRel C)`.
 -/
 inductive FreeGroupoid.homRel : HomRel (Quiver.FreeGroupoid C) where
 | map_id (X : C) : homRel ((FreeGroupoid.of C).map (𝟙 X)) (𝟙 ((FreeGroupoid.of C).obj X))
 | map_comp {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : homRel ((FreeGroupoid.of C).map (f ≫ g))
   ((FreeGroupoid.of C).map f ≫ (FreeGroupoid.of C).map g)
 
-/--
-Definition of `FreeGroupoid` / `FreeGroupoid` 的定义
+/-- The underlying type of the free groupoid on a category,
+defined by quotienting the free groupoid on the underlying quiver of `C`
+by the relation that promotes the prefunctor `C ⥤q FreeGroupoid C` into a functor
+`C ⥤ Quotient (FreeGroupoid.homRel C)`. -/
+/-
+**CategoryTheory.FreeGroupoid** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：FreeGroupoid
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FreeGroupoid
-  body: Quotient (FreeGroupoid.homRel C)
-
-中文:
-定义 FreeGroupoid
-  定义体: Quotient (FreeGroupoid.homRel C)
-
-Depends on / 依赖: FreeGroupoid, FreeGroupoid.homRel, Quotient, homRel
+--- 原说明 ---
+The underlying type of the free groupoid on a category,
+defined by quotienting the free groupoid on the underlying quiver of `C`
+by the relation that promotes the prefunctor `C ⥤q FreeGroupoid C` into a functo
+r
+`C ⥤ Quotient (FreeGroupoid.homRel C)`.
 -/
 def FreeGroupoid := Quotient (FreeGroupoid.homRel C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: C] : Nonempty (FreeGroupoid C)
-  body: ⟨Quotient.mk (Quotient.mk ((Paths.of _).obj (Classical.arbitrary C)))⟩
-
-中文:
-实例 [非空
-  签名: C] : 非空 (FreeGroupoid C)
-  定义体: ⟨Quotient.mk (Quotient.mk ((Paths.of _).obj (Classical.arbitrary C)))⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, Paths.of, Quotient, Quotient.mk, arbitrary
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty C] : Nonempty (FreeGroupoid C) :=
   ⟨Quotient.mk (Quotient.mk ((Paths.of _).obj (Classical.arbitrary C)))⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Groupoid (FreeGroupoid C)
-  body: Quotient.groupoid (FreeGroupoid.homRel C)
-
-中文:
-实例 :
-  签名: 群胚 (FreeGroupoid C)
-  定义体: Quotient.groupoid (FreeGroupoid.homRel C)
-
-Depends on / 依赖: FreeGroupoid, FreeGroupoid.homRel, Quotient, Quotient.groupoid, groupoid, homRel
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Groupoid (FreeGroupoid C) :=
   Quotient.groupoid (FreeGroupoid.homRel C)
 
 namespace FreeGroupoid
 
-/--
-Definition of `of` / `of` 的定义
+/-- The localization functor from the category `C` to the groupoid `FreeGroupoid C` -/
+/-
+**CategoryTheory.FreeGroupoid.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.FreeG
+roupoid`。
+形式化陈述：of : C ⥤ FreeGroupoid C where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: : C ⥤ FreeGroupoid C where
-  body: Quiver.FreeGroupoid.of C ⋙q (Quotient.functor (FreeGroupoid.homRel C)).toPrefunctor
-  map_id X := Quotient.sound _ (FreeGroupoid.homRel.map_id X)
-  map_comp f g := Quotient.sound _ (FreeGroupoid.homRel.map_comp f g)
-
-中文:
-定义 of
-  签名: : C ⥤ FreeGroupoid C where
-  定义体: Quiver.FreeGroupoid.of C ⋙q (Quotient.functor (FreeGroupoid.homRel C)).toPrefunctor
-  map_id X := Quotient.sound _ (FreeGroupoid.homRel.map_id X)
-  map_comp f g := Quotient.sound _ (FreeGroupoid.homRel.map_comp f g)
-
-Depends on / 依赖: FreeGroupoid, FreeGroupoid.homRel, Quiver, Quiver.FreeGroupoid.of, Quotient, Quotient.functor, functor, homRel, toPrefunctor
+--- 原说明 ---
+The localization functor from the category `C` to the groupoid `FreeGroupoid C`
 -/
 def of : C ⥤ FreeGroupoid C where
   __ := Quiver.FreeGroupoid.of C ⋙q (Quotient.functor (FreeGroupoid.homRel C)).toPrefunctor
@@ -152,69 +121,50 @@ def of : C ⥤ FreeGroupoid C where
 
 variable {C}
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Construct an object in the free groupoid on `C` by providing an object in `C`. -/
+/-
+**CategoryTheory.FreeGroupoid.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Fre
+eGroupoid`。
+形式化陈述：mk (X : C) : FreeGroupoid C
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: (X : C)
-  body: (of C).obj X
-
-中文:
-缩写 mk
-  签名: (X : C)
-  定义体: (of C).obj X
+--- 原说明 ---
+Construct an object in the free groupoid on `C` by providing an object in `C`.
 -/
 abbrev mk (X : C) : FreeGroupoid C := (of C).obj X
 
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- Construct a morphism in the free groupoid on `C` by providing a morphism in `C`. -/
+/-
+**CategoryTheory.FreeGroupoid.homMk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.
+FreeGroupoid`。
+形式化陈述：homMk {X Y : C} (f : X ⟶ Y) : mk X ⟶ mk Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation homMk
-  signature: {X Y : C} (f : X ⟶ Y)
-  body: (of C).map f
-
-中文:
-缩写 homMk
-  签名: {X Y : C} (f : X ⟶ Y)
-  定义体: (of C).map f
+--- 原说明 ---
+Construct a morphism in the free groupoid on `C` by providing a morphism in `C`.
 -/
 abbrev homMk {X Y : C} (f : X ⟶ Y) : mk X ⟶ mk Y := (of C).map f
-
-/--
-lemma `eq_mk` / 引理 `eq_mk`
-
-English:
-lemma eq_mk
-  given: (X : FreeGroupoid C)
-  statement: X = .mk (X.as.as)
-  proof: rfl
-
-中文:
-引理 eq_mk
-  条件: (X : FreeGroupoid C)
-  结论: X = .mk (X.as.as)
-  证明: rfl
+/-
+**CategoryTheory.FreeGroupoid.eq_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Fr
+eeGroupoid`。
+形式化陈述：eq_mk (X : FreeGroupoid C) : X = .mk (X.as.as)
+参数：X : FreeGroupoid C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma eq_mk (X : FreeGroupoid C) : X = .mk (X.as.as) := rfl
-
-/--
-lemma `of_obj_bijective` / 引理 `of_obj_bijective`
-
-English:
-lemma of_obj_bijective
-  statement: Function.Bijective (of C).obj where
-  proof: by cases h; rfl
-  right X := ⟨X.as.as, rfl⟩
-
-中文:
-引理 of_obj_bijective
-  结论: 函数.双射 (of C).obj where
-  证明: by cases h; rfl
-  right X := ⟨X.as.as, rfl⟩
-
-Depends on / 依赖: X.as.as
+/-
+**CategoryTheory.FreeGroupoid.of_obj_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.FreeGroupoid`。
+形式化陈述：of_obj_bijective : Function.Bijective (of C).obj where left _ _ h
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma of_obj_bijective : Function.Bijective (of C).obj where
   left _ _ h := by cases h; rfl
@@ -225,65 +175,48 @@ section UniversalProperty
 variable {G : Type u₁} [Groupoid.{v₁} G]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `lift` / `lift` 的定义
+/-- The lift of a functor from `C` to a groupoid to a functor from
+`FreeGroupoid C` to the groupoid -/
+/-
+**CategoryTheory.FreeGroupoid.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fre
+eGroupoid`。
+形式化陈述：lift (φ : C ⥤ G) : FreeGroupoid C ⥤ G
+参数：φ : C ⥤ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (φ : C ⥤ G)
-  body: Quotient.lift (FreeGroupoid.homRel C) (Quiver.FreeGroupoid.lift φ.toPrefunctor)
-    (fun _ _ f g r => by
-      have {X Y : C} (f : X ⟶ Y) :=
-        Prefunctor.congr_hom (Quiver.FreeGroupoid.lift_spec φ.toPrefunctor) f
-      induction r <;> cat_disch)
-
-中文:
-定义 lift
-  签名: (φ : C ⥤ G)
-  定义体: Quotient.lift (FreeGroupoid.homRel C) (Quiver.FreeGroupoid.lift φ.toPrefunctor)
-    (fun _ _ f g r => by
-      have {X Y : C} (f : X ⟶ Y) :=
-        Prefunctor.congr_hom (Quiver.FreeGroupoid.lift_spec φ.toPrefunctor) f
-      induction r <;> cat_disch)
-
-Depends on / 依赖: FreeGroupoid, FreeGroupoid.homRel, Prefunctor, Prefunctor.congr_hom, Quiver, Quiver.FreeGroupoid.lift, Quiver.FreeGroupoid.lift_spec, Quotient, Quotient.lift, cat_disch, congr_hom, homRel, lift_spec, toPrefunctor
+--- 原说明 ---
+The lift of a functor from `C` to a groupoid to a functor from
+`FreeGroupoid C` to the groupoid
 -/
 def lift (φ : C ⥤ G) : FreeGroupoid C ⥤ G :=
   Quotient.lift (FreeGroupoid.homRel C) (Quiver.FreeGroupoid.lift φ.toPrefunctor)
-    (fun _ _ f g r => by
+    (fun _ _ f g r ↦ by
       have {X Y : C} (f : X ⟶ Y) :=
         Prefunctor.congr_hom (Quiver.FreeGroupoid.lift_spec φ.toPrefunctor) f
       induction r <;> cat_disch)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lift_spec` / 定理 `lift_spec`
-
-English:
-theorem lift_spec
-  given: (φ : C ⥤ G)
-  statement: of C ⋙ lift φ = φ
-  proof: Functor.toPrefunctor_injective (by
-    change Quiver.FreeGroupoid.of C ⋙q
-      (Quotient.functor (FreeGroupoid.homRel C)).toPrefunctor ⋙q
-        (lift φ).toPrefunctor = φ.toPrefunctor
-    simp [lift, Quotient.lift_spec, Quiver.FreeGroupoid.lift_spec])
-
-@[simp]
-
-中文:
-定理 lift_spec
-  条件: (φ : C ⥤ G)
-  结论: of C ⋙ lift φ = φ
-  证明: Functor.toPrefunctor_injective (by
-    change Quiver.FreeGroupoid.of C ⋙q
-      (Quotient.functor (FreeGroupoid.homRel C)).toPrefunctor ⋙q
-        (lift φ).toPrefunctor = φ.toPrefunctor
-    simp [lift, Quotient.lift_spec, Quiver.FreeGroupoid.lift_spec])
-
-@[simp]
-
-Depends on / 依赖: FreeGroupoid, FreeGroupoid.homRel, Functor, Functor.toPrefunctor_injective, Quiver, Quiver.FreeGroupoid.lift_spec, Quiver.FreeGroupoid.of, Quotient, Quotient.functor, Quotient.lift_spec, functor, homRel, lift_spec, toPrefunctor, toPrefunctor_injective
+/-
+**CategoryTheory.FreeGroupoid.lift_spec** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.FreeGroupoid`。
+形式化陈述：lift_spec (φ : C ⥤ G) : of C ⋙ lift φ = φ
+参数：φ : C ⥤ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.toPrefunctor_injective`：toPrefunctor_injective {F
+ G : C ⥤ D} (h : F.toPrefunctor = G.toPrefunctor) : F = G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Quotient.lift_spec`：lift_spec : functor r ⋙ lift r F H = 
+F
+· 使用定理 `Quiver.FreeGroupoid.lift_spec`：lift_spec (φ : V ⥤q V') : of V ⋙q (lift φ
+).toPrefunctor = φ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lift_spec (φ : C ⥤ G) : of C ⋙ lift φ = φ :=
   Functor.toPrefunctor_injective (by
@@ -293,18 +226,14 @@ theorem lift_spec (φ : C ⥤ G) : of C ⋙ lift φ = φ :=
     simp [lift, Quotient.lift_spec, Quiver.FreeGroupoid.lift_spec])
 
 @[simp]
-/--
-lemma `lift_obj_mk` / 引理 `lift_obj_mk`
-
-English:
-lemma lift_obj_mk
-  given: {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) (X : C)
-  proof: rfl
-
-中文:
-引理 lift_obj_mk
-  条件: {E : 类型u₂} [群胚.{v₂} E] (φ : C ⥤ E) (X : C)
-  证明: rfl
+/-
+**CategoryTheory.FreeGroupoid.lift_obj_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.FreeGroupoid`。
+形式化陈述：lift_obj_mk {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) (X : C) : (lift φ)
+.obj (mk X) = φ.obj X
+参数：φ : C ⥤ E；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lift_obj_mk {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) (X : C) :
     (lift φ).obj (mk X) = φ.obj X := rfl
@@ -312,125 +241,120 @@ lemma lift_obj_mk {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) (X : C) :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `lift_map_homMk` / 引理 `lift_map_homMk`
-
-English:
-lemma lift_map_homMk
-  given: {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) {X Y : C} (f : X ⟶ Y)
-  proof: by
-  simpa using Functor.congr_hom (lift_spec φ) f
-
-中文:
-引理 lift_map_homMk
-  条件: {E : 类型u₂} [群胚.{v₂} E] (φ : C ⥤ E) {X Y : C} (f : X ⟶ Y)
-  证明: by
-  simpa using Functor.congr_hom (lift_spec φ) f
-
-Depends on / 依赖: Functor, Functor.congr_hom, congr_hom, lift_spec
+/-
+**CategoryTheory.FreeGroupoid.lift_map_homMk** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.FreeGroupoid`。
+形式化陈述：lift_map_homMk {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) {X Y : C} (f : 
+X ⟶ Y) : (lift φ).map (homMk f) = φ.map f
+参数：φ : C ⥤ E；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_spec`：lift_spec (φ : C ⥤ G) : of C ⋙ li
+ft φ = φ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.congr_hom`：congr_hom {F G : C ⥤ D} (h : F = G) {X
+ Y} (f : X ⟶ Y) : F.map f = eqToHom (congr_obj h X) ≫ G.map f ≫ eqToHom (congr_o
+bj h Y).symm
 -/
 lemma lift_map_homMk {E : Type u₂} [Groupoid.{v₂} E] (φ : C ⥤ E) {X Y : C} (f : X ⟶ Y) :
     (lift φ).map (homMk f) = φ.map f := by
   simpa using Functor.congr_hom (lift_spec φ) f
-
-/--
-theorem `lift_unique` / 定理 `lift_unique`
-
-English:
-theorem lift_unique
-  given: (φ : C ⥤ G) (Φ : FreeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ)
-  proof: by
-  apply Quotient.lift_unique
-  apply Quiver.FreeGroupoid.lift_unique
-  exact congr_arg Functor.toPrefunctor hΦ
-
-中文:
-定理 lift_unique
-  条件: (φ : C ⥤ G) (Φ : FreeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ)
-  证明: by
-  apply Quotient.lift_unique
-  apply Quiver.FreeGroupoid.lift_unique
-  exact congr_arg Functor.toPrefunctor hΦ
-
-Depends on / 依赖: FreeGroupoid, Functor, Functor.toPrefunctor, Quiver, Quiver.FreeGroupoid.lift_unique, Quotient, Quotient.lift_unique, congr_arg, lift_unique, toPrefunctor
+/-
+**CategoryTheory.FreeGroupoid.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.FreeGroupoid`。
+形式化陈述：lift_unique (φ : C ⥤ G) (Φ : FreeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ) : Φ =
+ lift φ
+参数：φ : C ⥤ G；Φ : FreeGroupoid C ⥤ G；hΦ : of C ⋙ Φ = φ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Quotient.lift_unique`：lift_unique (Φ : Quotient r ⥤ D) (h
+Φ : functor r ⋙ Φ = F) : Φ = lift r F H
+· 使用定理 `Quiver.FreeGroupoid.lift_unique`：lift_unique (φ : V ⥤q V') (Φ : Quiver.F
+reeGroupoid V ⥤ V') (hΦ : of V ⋙q Φ.toPrefunctor = φ) : Φ = lift φ
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem lift_unique (φ : C ⥤ G) (Φ : FreeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ) :
     Φ = lift φ := by
   apply Quotient.lift_unique
   apply Quiver.FreeGroupoid.lift_unique
   exact congr_arg Functor.toPrefunctor hΦ
-
-/--
-theorem `lift_id_comp_of` / 定理 `lift_id_comp_of`
-
-English:
-theorem lift_id_comp_of
-  statement: lift (𝟭 G) ⋙ of G = 𝟭 _
-  proof: by
-  rw [lift_unique (of G) (lift (𝟭 G) ⋙ of G) (by rw [← Functor.assoc]; rw [lift_spec]; rw [Functor.id_comp])]
-  symm; apply lift_unique
-  rw [Functor.comp_id]
-
-中文:
-定理 lift_id_comp_of
-  结论: lift (𝟭 G) ⋙ of G = 𝟭 _
-  证明: by
-  rw [lift_unique (of G) (lift (𝟭 G) ⋙ of G) (by rw [← Functor.assoc]; rw [lift_spec]; rw [Functor.id_comp])]
-  symm; apply lift_unique
-  rw [Functor.comp_id]
-
-Depends on / 依赖: Functor, Functor.assoc, Functor.comp_id, Functor.id_comp, comp_id, id_comp, lift_spec, lift_unique
+/-
+**CategoryTheory.FreeGroupoid.lift_id_comp_of** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.FreeGroupoid`。
+形式化陈述：lift_id_comp_of : lift (𝟭 G) ⋙ of G = 𝟭 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_unique`：lift_unique (φ : C ⥤ G) (Φ : Fr
+eeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ) : Φ = lift φ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   
+{E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_spec`：lift_spec (φ : C ⥤ G) : of C ⋙ li
+ft φ = φ
+· 使用定理 `CategoryTheory.Functor.id_comp`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D] 
+  (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.comp_id`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D] 
+  (F : CategoryTheor…
 -/
 theorem lift_id_comp_of : lift (𝟭 G) ⋙ of G = 𝟭 _ := by
-  rw [lift_unique (of G) (lift (𝟭 G) ⋙ of G) (by rw [← Functor.assoc]; rw [lift_spec]; rw [Functor.id_comp])]
+  rw [lift_unique (of G) (lift (𝟭 G) ⋙ of G) (by rw [← Functor.assoc, lift_spec, Functor.id_comp])]
   symm; apply lift_unique
   rw [Functor.comp_id]
-
-/--
-theorem `lift_comp` / 定理 `lift_comp`
-
-English:
-theorem lift_comp
-  given: {H : Type u₂} [Groupoid.{v₂} H] (φ : C ⥤ G) (ψ : G ⥤ H)
-  proof: by
-  symm
-  apply lift_unique
-  rw [← Functor.assoc]; rw [lift_spec]
-
-中文:
-定理 lift_comp
-  条件: {H : 类型u₂} [群胚.{v₂} H] (φ : C ⥤ G) (ψ : G ⥤ H)
-  证明: by
-  symm
-  apply lift_unique
-  rw [← Functor.assoc]; rw [lift_spec]
-
-Depends on / 依赖: Functor, Functor.assoc, lift_spec, lift_unique
+/-
+**CategoryTheory.FreeGroupoid.lift_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.FreeGroupoid`。
+形式化陈述：lift_comp {H : Type u₂} [Groupoid.{v₂} H] (φ : C ⥤ G) (ψ : G ⥤ H) : lift (
+φ ⋙ ψ) = lift φ ⋙ ψ
+参数：φ : C ⥤ G；ψ : G ⥤ H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_unique`：lift_unique (φ : C ⥤ G) (Φ : Fr
+eeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ) : Φ = lift φ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   
+{E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_spec`：lift_spec (φ : C ⥤ G) : of C ⋙ li
+ft φ = φ
 -/
 theorem lift_comp {H : Type u₂} [Groupoid.{v₂} H] (φ : C ⥤ G) (ψ : G ⥤ H) :
     lift (φ ⋙ ψ) = lift φ ⋙ ψ := by
   symm
   apply lift_unique
-  rw [← Functor.assoc]; rw [lift_spec]
+  rw [← Functor.assoc, lift_spec]
 
-/--
-Definition of `strictUniversalPropertyFixedTarget` / `strictUniversalPropertyFixedTarget` 的定义
+/-- The universal property of the free groupoid. -/
+/-
+**CategoryTheory.FreeGroupoid.strictUniversalPropertyFixedTarget** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.FreeGroupoid`。
+形式化陈述：strictUniversalPropertyFixedTarget : Localization.StrictUniversalPropertyF
+ixedTarget (of C) ⊤ G where inverts _
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_spec`：lift_spec (φ : C ⥤ G) : of C ⋙ li
+ft φ = φ
 
-English:
-definition strictUniversalPropertyFixedTarget
-  signature: :
-  body: inferInstance
-  lift F _ := lift F
-  fac _ _ := lift_spec ..
-  uniq F G h := by rw [lift_unique (of C ⋙ G) F h, ← lift_unique (of C ⋙ G) G rfl]
-
-中文:
-定义 strictUniversalPropertyFixedTarget
-  签名: :
-  定义体: inferInstance
-  lift F _ := lift F
-  fac _ _ := lift_spec ..
-  uniq F G h := by rw [lift_unique (of C ⋙ G) F h, ← lift_unique (of C ⋙ G) G rfl]
+--- 原说明 ---
+The universal property of the free groupoid.
 -/
 def strictUniversalPropertyFixedTarget :
     Localization.StrictUniversalPropertyFixedTarget (of C) ⊤ G where
@@ -440,90 +364,106 @@ def strictUniversalPropertyFixedTarget :
   uniq F G h := by rw [lift_unique (of C ⋙ G) F h, ← lift_unique (of C ⋙ G) G rfl]
 
 attribute [local instance] Localization.groupoid
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (of C).IsLocalization ⊤
-  body: .mk' _ _ strictUniversalPropertyFixedTarget strictUniversalPropertyFixedTarget
-
-中文:
-实例 :
-  签名: (of C).是Localization ⊤
-  定义体: .mk' _ _ strictUniversalPropertyFixedTarget strictUniversalPropertyFixedTarget
-
-Depends on / 依赖: strictUniversalPropertyFixedTarget
+/-
+**CategoryTheory.FreeGroupoid.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.FreeGro
+upoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (of C).IsLocalization ⊤ :=
   .mk' _ _ strictUniversalPropertyFixedTarget strictUniversalPropertyFixedTarget
 
-/--
-Definition of `liftNatIso` / `liftNatIso` 的定义
+/-- In order to define a natural isomorphism `F ≅ G` with `F G : FreeGroupoid ⥤ D`,
+it suffices to do so after precomposing with `FreeGroupoid.of C`. -/
+/-
+**CategoryTheory.FreeGroupoid.liftNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.FreeGroupoid`。
+形式化陈述：liftNatIso (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) : F₁ ≅
+ F₂
+参数：F₁ F₂ : FreeGroupoid C ⥤ G；τ : of C ⋙ F₁ ≅ of C ⋙ F₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FreeGroupoid.instIsLocalizationOfTopMorphismProperty`：∀ {
+C : Type u} [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.FreeGroup
+oid.of C).IsLocalization ⊤
 
-English:
-definition liftNatIso
-  signature: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂)
-  body: Localization.liftNatIso (of C) ⊤ (of C ⋙ F₁) (of C ⋙ F₂) _ _ τ
-
-@[simp]
-
-中文:
-定义 lift自然数Iso
-  签名: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂)
-  定义体: Localization.liftNatIso (of C) ⊤ (of C ⋙ F₁) (of C ⋙ F₂) _ _ τ
-
-@[simp]
-
-Depends on / 依赖: Localization, Localization.liftNatIso, liftNatIso
+--- 原说明 ---
+In order to define a natural isomorphism `F ≅ G` with `F G : FreeGroupoid ⥤ D`,
+it suffices to do so after precomposing with `FreeGroupoid.of C`.
 -/
 def liftNatIso (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) : F₁ ≅ F₂ :=
   Localization.liftNatIso (of C) ⊤ (of C ⋙ F₁) (of C ⋙ F₂) _ _ τ
 
 @[simp]
-/--
-lemma `liftNatIso_hom_app` / 引理 `liftNatIso_hom_app`
-
-English:
-lemma liftNatIso_hom_app
-  given: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X)
-  proof: by
-  simp [liftNatIso]
-
-@[simp]
-
-中文:
-引理 lift自然数Iso_hom_app
-  条件: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X)
-  证明: by
-  simp [liftNatIso]
-
-@[simp]
-
-Depends on / 依赖: liftNatIso
+/-
+**CategoryTheory.FreeGroupoid.liftNatIso_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.FreeGroupoid`。
+形式化陈述：liftNatIso_hom_app (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂
+) (X) : (liftNatIso F₁ F₂ τ).hom.app (mk X) = τ.hom.app X
+参数：F₁ F₂ : FreeGroupoid C ⥤ G；τ : of C ⋙ F₁ ≅ of C ⋙ F₂；X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.FreeGroupoid.instIsLocalizationOfTopMorphismProperty`：∀ {
+C : Type u} [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.FreeGroup
+oid.of C).IsLocalization ⊤
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Localization.liftNatIso_hom`：∀ {C : Type u_1} {D : Type u
+_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D] (L : Categor…
+· 使用定理 `CategoryTheory.Localization.liftNatTrans_app`：liftNatTrans_app (F₁ F₂ : 
+C ⥤ E) (F₁' F₂' : D ⥤ E) [Lifting L W F₁ F₁'] [Lifting L W F₂ F₂'] (τ : F₁ ⟶ F₂)
+ (X : C) : (liftNatTrans L W F₁ F₂…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma liftNatIso_hom_app (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) :
     (liftNatIso F₁ F₂ τ).hom.app (mk X) = τ.hom.app X := by
   simp [liftNatIso]
 
 @[simp]
-/--
-lemma `liftNatIso_inv_app` / 引理 `liftNatIso_inv_app`
-
-English:
-lemma liftNatIso_inv_app
-  given: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X)
-  proof: by
-  simp [liftNatIso]
-
-中文:
-引理 lift自然数Iso_inv_app
-  条件: (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X)
-  证明: by
-  simp [liftNatIso]
-
-Depends on / 依赖: liftNatIso
+/-
+**CategoryTheory.FreeGroupoid.liftNatIso_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.FreeGroupoid`。
+形式化陈述：liftNatIso_inv_app (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂
+) (X) : (liftNatIso F₁ F₂ τ).inv.app (mk X) = τ.inv.app X
+参数：F₁ F₂ : FreeGroupoid C ⥤ G；τ : of C ⋙ F₁ ≅ of C ⋙ F₂；X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.FreeGroupoid.instIsLocalizationOfTopMorphismProperty`：∀ {
+C : Type u} [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.FreeGroup
+oid.of C).IsLocalization ⊤
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Localization.liftNatIso_inv`：∀ {C : Type u_1} {D : Type u
+_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D] (L : Categor…
+· 使用定理 `CategoryTheory.Localization.liftNatTrans_app`：liftNatTrans_app (F₁ F₂ : 
+C ⥤ E) (F₁' F₂' : D ⥤ E) [Lifting L W F₁ F₁'] [Lifting L W F₂ F₂'] (τ : F₁ ⟶ F₂)
+ (X : C) : (liftNatTrans L W F₁ F₂…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma liftNatIso_inv_app (F₁ F₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) :
     (liftNatIso F₁ F₂ τ).inv.app (mk X) = τ.inv.app X := by
@@ -535,370 +475,256 @@ section Functoriality
 
 variable {D : Type u₁} [Category.{v₁} D] {E : Type u₂} [Category.{v₂} E]
 
-/--
-Definition of `map` / `map` 的定义
+/-- The functor between free groupoids induced by a functor between categories. -/
+/-
+**CategoryTheory.FreeGroupoid.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Free
+Groupoid`。
+形式化陈述：map (φ : C ⥤ D) : FreeGroupoid C ⥤ FreeGroupoid D
+参数：φ : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (φ : C ⥤ D)
-  body: lift (φ ⋙ of D)
-
-中文:
-定义 map
-  签名: (φ : C ⥤ D)
-  定义体: lift (φ ⋙ of D)
+--- 原说明 ---
+The functor between free groupoids induced by a functor between categories.
 -/
 def map (φ : C ⥤ D) : FreeGroupoid C ⥤ FreeGroupoid D :=
   lift (φ ⋙ of D)
-
-/--
-lemma `of_comp_map` / 引理 `of_comp_map`
-
-English:
-lemma of_comp_map
-  given: (F : C ⥤ D)
-  statement: of C ⋙ map F = F ⋙ of D
-  proof: rfl
-
-中文:
-引理 of_comp_map
-  条件: (F : C ⥤ D)
-  结论: of C ⋙ map F = F ⋙ of D
-  证明: rfl
+/-
+**CategoryTheory.FreeGroupoid.of_comp_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.FreeGroupoid`。
+形式化陈述：of_comp_map (F : C ⥤ D) : of C ⋙ map F = F ⋙ of D
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_comp_map (F : C ⥤ D) : of C ⋙ map F = F ⋙ of D := rfl
 
-/--
-Definition of `ofCompMapIso` / `ofCompMapIso` 的定义
+/-- The operation `of` is natural. -/
+/-
+**CategoryTheory.FreeGroupoid.ofCompMapIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.FreeGroupoid`。
+形式化陈述：ofCompMapIso (F : C ⥤ D) : of C ⋙ map F ≅ F ⋙ of D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCompMapIso
-  signature: (F : C ⥤ D)
-  body: Iso.refl _
-
-中文:
-定义 ofCompMapIso
-  签名: (F : C ⥤ D)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The operation `of` is natural.
 -/
 def ofCompMapIso (F : C ⥤ D) : of C ⋙ map F ≅ F ⋙ of D := Iso.refl _
 
 variable (C) in
-/--
-Definition of `mapId` / `mapId` 的定义
+/-- The functor induced by the identity is the identity. -/
+/-
+**CategoryTheory.FreeGroupoid.mapId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fr
+eeGroupoid`。
+形式化陈述：mapId : map (𝟭 C) ≅ 𝟭 (FreeGroupoid C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapId
-  signature: : map (𝟭 C) ≅ 𝟭 (FreeGroupoid C)
-  body: liftNatIso _ _ (Iso.refl _)
-
-@[simp]
-
-中文:
-定义 mapId
-  签名: : map (𝟭 C) ≅ 𝟭 (FreeGroupoid C)
-  定义体: liftNatIso _ _ (Iso.refl _)
-
-@[simp]
-
-Depends on / 依赖: Iso.refl, liftNatIso
+--- 原说明 ---
+The functor induced by the identity is the identity.
 -/
 def mapId : map (𝟭 C) ≅ 𝟭 (FreeGroupoid C) :=
   liftNatIso _ _ (Iso.refl _)
 
 @[simp]
-/--
-lemma `mapId_hom_app` / 引理 `mapId_hom_app`
-
-English:
-lemma mapId_hom_app
-  given: (X)
-  statement: (mapId C).hom.app X = 𝟙 X
-  proof: liftNatIso_hom_app ..
-
-@[simp]
-
-中文:
-引理 mapId_hom_app
-  条件: (X)
-  结论: (mapId C).hom.app X = 𝟙 X
-  证明: liftNatIso_hom_app ..
-
-@[simp]
-
-Depends on / 依赖: liftNatIso_hom_app
+/-
+**CategoryTheory.FreeGroupoid.mapId_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.FreeGroupoid`。
+形式化陈述：mapId_hom_app (X) : (mapId C).hom.app X = 𝟙 X
+参数：X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.FreeGroupoid.liftNatIso_hom_app`：liftNatIso_hom_app (F₁ F
+₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) : (liftNatIso F₁ F₂ τ).h
+om.app (mk X) = τ.hom.app X
 -/
 lemma mapId_hom_app (X) : (mapId C).hom.app X = 𝟙 X :=
   liftNatIso_hom_app ..
 
 @[simp]
-/--
-lemma `mapId_inv_app` / 引理 `mapId_inv_app`
-
-English:
-lemma mapId_inv_app
-  given: (X)
-  statement: (mapId C).inv.app X = 𝟙 X
-  proof: liftNatIso_inv_app ..
-
-中文:
-引理 mapId_inv_app
-  条件: (X)
-  结论: (mapId C).inv.app X = 𝟙 X
-  证明: liftNatIso_inv_app ..
-
-Depends on / 依赖: liftNatIso_inv_app
+/-
+**CategoryTheory.FreeGroupoid.mapId_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.FreeGroupoid`。
+形式化陈述：mapId_inv_app (X) : (mapId C).inv.app X = 𝟙 X
+参数：X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.FreeGroupoid.liftNatIso_inv_app`：liftNatIso_inv_app (F₁ F
+₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) : (liftNatIso F₁ F₂ τ).i
+nv.app (mk X) = τ.inv.app X
 -/
 lemma mapId_inv_app (X) : (mapId C).inv.app X = 𝟙 X :=
   liftNatIso_inv_app ..
 
 variable (C) in
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: map (𝟭 C) = 𝟭 (FreeGroupoid C)
-  proof: by
-  symm; apply lift_unique; rfl
-
-中文:
-定理 map_id
-  结论: map (𝟭 C) = 𝟭 (FreeGroupoid C)
-  证明: by
-  symm; apply lift_unique; rfl
-
-Depends on / 依赖: lift_unique
+/-
+**CategoryTheory.FreeGroupoid.map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+reeGroupoid`。
+形式化陈述：map_id : map (𝟭 C) = 𝟭 (FreeGroupoid C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_unique`：lift_unique (φ : C ⥤ G) (Φ : Fr
+eeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ) : Φ = lift φ
 -/
 theorem map_id : map (𝟭 C) = 𝟭 (FreeGroupoid C) := by
   symm; apply lift_unique; rfl
 
-/--
-Definition of `mapComp` / `mapComp` 的定义
+/-- The functor induced by a composition is the composition of the functors they induce. -/
+/-
+**CategoryTheory.FreeGroupoid.mapComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+FreeGroupoid`。
+形式化陈述：mapComp (φ : C ⥤ D) (φ' : D ⥤ E) : map (φ ⋙ φ') ≅ map φ ⋙ map φ'
+参数：φ : C ⥤ D；φ' : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapComp
-  signature: (φ : C ⥤ D) (φ' : D ⥤ E)
-  body: liftNatIso _ _ (Iso.refl _)
-
-@[simp]
-
-中文:
-定义 mapComp
-  签名: (φ : C ⥤ D) (φ' : D ⥤ E)
-  定义体: liftNatIso _ _ (Iso.refl _)
-
-@[simp]
-
-Depends on / 依赖: Iso.refl, liftNatIso
+--- 原说明 ---
+The functor induced by a composition is the composition of the functors they ind
+uce.
 -/
 def mapComp (φ : C ⥤ D) (φ' : D ⥤ E) : map (φ ⋙ φ') ≅ map φ ⋙ map φ' :=
   liftNatIso _ _ (Iso.refl _)
 
 @[simp]
-/--
-lemma `mapComp_hom_app` / 引理 `mapComp_hom_app`
-
-English:
-lemma mapComp_hom_app
-  given: (φ : C ⥤ D) (φ' : D ⥤ E) (X)
-  statement: (mapComp φ φ').hom.app X = 𝟙 _
-  proof: liftNatIso_hom_app ..
-
-@[simp]
-
-中文:
-引理 mapComp_hom_app
-  条件: (φ : C ⥤ D) (φ' : D ⥤ E) (X)
-  结论: (mapComp φ φ').hom.app X = 𝟙 _
-  证明: liftNatIso_hom_app ..
-
-@[simp]
-
-Depends on / 依赖: liftNatIso_hom_app
+/-
+**CategoryTheory.FreeGroupoid.mapComp_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.FreeGroupoid`。
+形式化陈述：mapComp_hom_app (φ : C ⥤ D) (φ' : D ⥤ E) (X) : (mapComp φ φ').hom.app X = 
+𝟙 _
+参数：φ : C ⥤ D；φ' : D ⥤ E；X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.FreeGroupoid.liftNatIso_hom_app`：liftNatIso_hom_app (F₁ F
+₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) : (liftNatIso F₁ F₂ τ).h
+om.app (mk X) = τ.hom.app X
 -/
 lemma mapComp_hom_app (φ : C ⥤ D) (φ' : D ⥤ E) (X) : (mapComp φ φ').hom.app X = 𝟙 _ :=
   liftNatIso_hom_app ..
 
 @[simp]
-/--
-lemma `mapComp_inv_app` / 引理 `mapComp_inv_app`
-
-English:
-lemma mapComp_inv_app
-  given: (φ : C ⥤ D) (φ' : D ⥤ E) (X)
-  statement: (mapComp φ φ').inv.app X = 𝟙 _
-  proof: liftNatIso_inv_app ..
-
-中文:
-引理 mapComp_inv_app
-  条件: (φ : C ⥤ D) (φ' : D ⥤ E) (X)
-  结论: (mapComp φ φ').inv.app X = 𝟙 _
-  证明: liftNatIso_inv_app ..
-
-Depends on / 依赖: liftNatIso_inv_app
+/-
+**CategoryTheory.FreeGroupoid.mapComp_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.FreeGroupoid`。
+形式化陈述：mapComp_inv_app (φ : C ⥤ D) (φ' : D ⥤ E) (X) : (mapComp φ φ').inv.app X = 
+𝟙 _
+参数：φ : C ⥤ D；φ' : D ⥤ E；X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.FreeGroupoid.liftNatIso_inv_app`：liftNatIso_inv_app (F₁ F
+₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) : (liftNatIso F₁ F₂ τ).i
+nv.app (mk X) = τ.inv.app X
 -/
 lemma mapComp_inv_app (φ : C ⥤ D) (φ' : D ⥤ E) (X) : (mapComp φ φ').inv.app X = 𝟙 _ :=
   liftNatIso_inv_app ..
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (φ : C ⥤ D) (φ' : D ⥤ E)
-  statement: map (φ ⋙ φ') = map φ ⋙ map φ'
-  proof: by
-  symm; apply lift_unique; rfl
-
-@[simp]
-
-中文:
-定理 map_comp
-  条件: (φ : C ⥤ D) (φ' : D ⥤ E)
-  结论: map (φ ⋙ φ') = map φ ⋙ map φ'
-  证明: by
-  symm; apply lift_unique; rfl
-
-@[simp]
-
-Depends on / 依赖: lift_unique
+/-
+**CategoryTheory.FreeGroupoid.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.FreeGroupoid`。
+形式化陈述：map_comp (φ : C ⥤ D) (φ' : D ⥤ E) : map (φ ⋙ φ') = map φ ⋙ map φ'
+参数：φ : C ⥤ D；φ' : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_unique`：lift_unique (φ : C ⥤ G) (Φ : Fr
+eeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ) : Φ = lift φ
 -/
 theorem map_comp (φ : C ⥤ D) (φ' : D ⥤ E) : map (φ ⋙ φ') = map φ ⋙ map φ' := by
   symm; apply lift_unique; rfl
 
 @[simp]
-/--
-lemma `map_obj_mk` / 引理 `map_obj_mk`
-
-English:
-lemma map_obj_mk
-  given: (φ : C ⥤ D) (X : C)
-  statement: (map φ).obj (mk X) = mk (φ.obj X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_obj_mk
-  条件: (φ : C ⥤ D) (X : C)
-  结论: (map φ).obj (mk X) = mk (φ.obj X)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeGroupoid.map_obj_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.FreeGroupoid`。
+形式化陈述：map_obj_mk (φ : C ⥤ D) (X : C) : (map φ).obj (mk X) = mk (φ.obj X)
+参数：φ : C ⥤ D；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_obj_mk (φ : C ⥤ D) (X : C) : (map φ).obj (mk X) = mk (φ.obj X) := rfl
 
 @[simp]
-/--
-lemma `map_map_homMk` / 引理 `map_map_homMk`
-
-English:
-lemma map_map_homMk
-  given: (φ : C ⥤ D) {X Y : C} (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-引理 map_map_homMk
-  条件: (φ : C ⥤ D) {X Y : C} (f : X ⟶ Y)
-  证明: rfl
+/-
+**CategoryTheory.FreeGroupoid.map_map_homMk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.FreeGroupoid`。
+形式化陈述：map_map_homMk (φ : C ⥤ D) {X Y : C} (f : X ⟶ Y) : (map φ).map (homMk f) = 
+homMk (φ.map f)
+参数：φ : C ⥤ D；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_map_homMk (φ : C ⥤ D) {X Y : C} (f : X ⟶ Y) :
     (map φ).map (homMk f) = homMk (φ.map f) := rfl
 
 variable {E : Type u₂} [Groupoid.{v₂} E]
-
-/--
-lemma `map_comp_lift` / 引理 `map_comp_lift`
-
-English:
-lemma map_comp_lift
-  given: (F : C ⥤ D) (G : D ⥤ E)
-  statement: map F ⋙ lift G = lift (F ⋙ G)
-  proof: by
-  apply lift_unique
-  rw [← Functor.assoc]; rw [of_comp_map]; rw [Functor.assoc]; rw [lift_spec G]
-
-中文:
-引理 map_comp_lift
-  条件: (F : C ⥤ D) (G : D ⥤ E)
-  结论: map F ⋙ lift G = lift (F ⋙ G)
-  证明: by
-  apply lift_unique
-  rw [← Functor.assoc]; rw [of_comp_map]; rw [Functor.assoc]; rw [lift_spec G]
-
-Depends on / 依赖: Functor, Functor.assoc, lift_spec, lift_unique, of_comp_map
+/-
+**CategoryTheory.FreeGroupoid.map_comp_lift** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.FreeGroupoid`。
+形式化陈述：map_comp_lift (F : C ⥤ D) (G : D ⥤ E) : map F ⋙ lift G = lift (F ⋙ G)
+参数：F : C ⥤ D；G : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_unique`：lift_unique (φ : C ⥤ G) (Φ : Fr
+eeGroupoid C ⥤ G) (hΦ : of C ⋙ Φ = φ) : Φ = lift φ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   
+{E : Type u₃} [ins…
+· 使用引理 `CategoryTheory.FreeGroupoid.of_comp_map`：of_comp_map (F : C ⥤ D) : of C 
+⋙ map F = F ⋙ of D
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_spec`：lift_spec (φ : C ⥤ G) : of C ⋙ li
+ft φ = φ
 -/
 lemma map_comp_lift (F : C ⥤ D) (G : D ⥤ E) : map F ⋙ lift G = lift (F ⋙ G) := by
   apply lift_unique
-  rw [← Functor.assoc]; rw [of_comp_map]; rw [Functor.assoc]; rw [lift_spec G]
+  rw [← Functor.assoc, of_comp_map, Functor.assoc, lift_spec G]
 
-/--
-Definition of `mapCompLift` / `mapCompLift` 的定义
+/-- The operation `lift` is natural. -/
+/-
+**CategoryTheory.FreeGroupoid.mapCompLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.FreeGroupoid`。
+形式化陈述：mapCompLift (F : C ⥤ D) (G : D ⥤ E) : map F ⋙ lift G ≅ lift (F ⋙ G)
+参数：F : C ⥤ D；G : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCompLift
-  signature: (F : C ⥤ D) (G : D ⥤ E)
-  body: liftNatIso _ _ (Iso.refl _)
-
-@[simp]
-
-中文:
-定义 mapCompLift
-  签名: (F : C ⥤ D) (G : D ⥤ E)
-  定义体: liftNatIso _ _ (Iso.refl _)
-
-@[simp]
-
-Depends on / 依赖: Iso.refl, liftNatIso
+--- 原说明 ---
+The operation `lift` is natural.
 -/
 def mapCompLift (F : C ⥤ D) (G : D ⥤ E) : map F ⋙ lift G ≅ lift (F ⋙ G) :=
   liftNatIso _ _ (Iso.refl _)
 
 @[simp]
-/--
-lemma `mapCompLift_hom_app` / 引理 `mapCompLift_hom_app`
-
-English:
-lemma mapCompLift_hom_app
-  given: (F : C ⥤ D) (G : D ⥤ E) (X)
-  statement: (mapCompLift F G).hom.app X = 𝟙 _
-  proof: liftNatIso_hom_app ..
-
-@[simp]
-
-中文:
-引理 mapCompLift_hom_app
-  条件: (F : C ⥤ D) (G : D ⥤ E) (X)
-  结论: (mapCompLift F G).hom.app X = 𝟙 _
-  证明: liftNatIso_hom_app ..
-
-@[simp]
-
-Depends on / 依赖: liftNatIso_hom_app
+/-
+**CategoryTheory.FreeGroupoid.mapCompLift_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.FreeGroupoid`。
+形式化陈述：mapCompLift_hom_app (F : C ⥤ D) (G : D ⥤ E) (X) : (mapCompLift F G).hom.ap
+p X = 𝟙 _
+参数：F : C ⥤ D；G : D ⥤ E；X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.FreeGroupoid.liftNatIso_hom_app`：liftNatIso_hom_app (F₁ F
+₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) : (liftNatIso F₁ F₂ τ).h
+om.app (mk X) = τ.hom.app X
 -/
 lemma mapCompLift_hom_app (F : C ⥤ D) (G : D ⥤ E) (X) : (mapCompLift F G).hom.app X = 𝟙 _ :=
   liftNatIso_hom_app ..
 
 @[simp]
-/--
-lemma `mapCompLift_inv_app` / 引理 `mapCompLift_inv_app`
-
-English:
-lemma mapCompLift_inv_app
-  given: (F : C ⥤ D) (G : D ⥤ E) (X)
-  statement: (mapCompLift F G).inv.app X = 𝟙 _
-  proof: liftNatIso_inv_app ..
-
-中文:
-引理 mapCompLift_inv_app
-  条件: (F : C ⥤ D) (G : D ⥤ E) (X)
-  结论: (mapCompLift F G).inv.app X = 𝟙 _
-  证明: liftNatIso_inv_app ..
-
-Depends on / 依赖: liftNatIso_inv_app
+/-
+**CategoryTheory.FreeGroupoid.mapCompLift_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.FreeGroupoid`。
+形式化陈述：mapCompLift_inv_app (F : C ⥤ D) (G : D ⥤ E) (X) : (mapCompLift F G).inv.ap
+p X = 𝟙 _
+参数：F : C ⥤ D；G : D ⥤ E；X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.FreeGroupoid.liftNatIso_inv_app`：liftNatIso_inv_app (F₁ F
+₂ : FreeGroupoid C ⥤ G) (τ : of C ⋙ F₁ ≅ of C ⋙ F₂) (X) : (liftNatIso F₁ F₂ τ).i
+nv.app (mk X) = τ.inv.app X
 -/
 lemma mapCompLift_inv_app (F : C ⥤ D) (G : D ⥤ E) (X) : (mapCompLift F G).inv.app X = 𝟙 _ :=
   liftNatIso_inv_app ..
@@ -907,24 +733,19 @@ end Functoriality
 
 /-- Functors out of the free groupoid biject with functors out of the original category. -/
 @[simps]
-/--
-Definition of `functorEquiv` / `functorEquiv` 的定义
+/-
+**CategoryTheory.FreeGroupoid.functorEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.FreeGroupoid`。
+形式化陈述：functorEquiv {D : Type*} [Groupoid D] : (FreeGroupoid C ⥤ D) ≃ (C ⥤ D) whe
+re toFun G
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FreeGroupoid.lift_spec`：lift_spec (φ : C ⥤ G) : of C ⋙ li
+ft φ = φ
 
-English:
-definition functorEquiv
-  signature: {D : Type*} [Groupoid D]
-  body: of C ⋙ G
-  invFun F := lift F
-  right_inv := lift_spec
-  left_inv _ := (lift_unique _ _ rfl).symm
-
-中文:
-定义 functorEquiv
-  签名: {D : 类型} [群胚 D]
-  定义体: of C ⋙ G
-  invFun F := lift F
-  right_inv := lift_spec
-  left_inv _ := (lift_unique _ _ rfl).symm
+--- 原说明 ---
+Functors out of the free groupoid biject with functors out of the original categ
+ory.
 -/
 def functorEquiv {D : Type*} [Groupoid D] : (FreeGroupoid C ⥤ D) ≃ (C ⥤ D) where
   toFun G := of C ⋙ G
@@ -939,99 +760,56 @@ namespace Grpd
 open FreeGroupoid
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `free` / `free` 的定义
+/-- The free groupoid construction on a category as a functor. -/
+/-
+**CategoryTheory.Grpd.free** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grpd`。
+形式化陈述：free : Cat.{u, u} ⥤ Grpd.{u, u} where obj C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition free
-  signature: : Cat.{u, u} ⥤ Grpd.{u, u} where
-  body: Grpd.of FreeGroupoid C
-  map {C D} F := map F.toFunctor
-  map_id C := by simp [map_id, id_eq_id]
-  map_comp F G := by simp [Grpd.comp_eq_comp, map_comp]
-
-@[simp]
-
-中文:
-定义 free
-  签名: : Cat.{u, u} ⥤ Grpd.{u, u} where
-  定义体: Grpd.of FreeGroupoid C
-  map {C D} F := map F.toFunctor
-  map_id C := by simp [map_id, id_eq_id]
-  map_comp F G := by simp [Grpd.comp_eq_comp, map_comp]
-
-@[simp]
-
-Depends on / 依赖: FreeGroupoid, Grpd.of
+--- 原说明 ---
+The free groupoid construction on a category as a functor.
 -/
 def free : Cat.{u, u} ⥤ Grpd.{u, u} where
-obj C := Grpd.of FreeGroupoid C
+  obj C := Grpd.of <| FreeGroupoid C
   map {C D} F := map F.toFunctor
   map_id C := by simp [map_id, id_eq_id]
   map_comp F G := by simp [Grpd.comp_eq_comp, map_comp]
 
 @[simp]
-/--
-lemma `free_obj` / 引理 `free_obj`
-
-English:
-lemma free_obj
-  given: (C : Cat.{u, u})
-  statement: free.obj C = FreeGroupoid C
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 free_obj
-  条件: (C : Cat.{u, u})
-  结论: free.obj C = FreeGroupoid C
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Grpd.free_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Grpd`。
+形式化陈述：free_obj (C : Cat.{u, u}) : free.obj C = FreeGroupoid C
+参数：C : Cat.{u, u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma free_obj (C : Cat.{u, u}) : free.obj C = FreeGroupoid C :=
   rfl
 
 @[simp]
-/--
-lemma `free_map` / 引理 `free_map`
-
-English:
-lemma free_map
-  given: {C D : Cat.{u, u}} (F : C ⟶ D)
-  statement: free.map F = map F.toFunctor
-  proof: rfl
-
-中文:
-引理 free_map
-  条件: {C D : Cat.{u, u}} (F : C ⟶ D)
-  结论: free.map F = map F.toFunctor
-  证明: rfl
+/-
+**CategoryTheory.Grpd.free_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Grpd`。
+形式化陈述：free_map {C D : Cat.{u, u}} (F : C ⟶ D) : free.map F = map F.toFunctor
+参数：F : C ⟶ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma free_map {C D : Cat.{u, u}} (F : C ⟶ D) : free.map F = map F.toFunctor :=
   rfl
 
-/--
-Definition of `freeForgetAdjunction` / `freeForgetAdjunction` 的定义
+/-- The free-forgetful adjunction between `Grpd` and `Cat`. -/
+/-
+**CategoryTheory.Grpd.freeForgetAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Grpd`。
+形式化陈述：freeForgetAdjunction : free ⊣ Grpd.forgetToCat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition freeForgetAdjunction
-  signature: : free ⊣ Grpd.forgetToCat
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv _ _ := FreeGroupoid.functorEquiv.trans (Functor.equivCatHom _ _)
-      homEquiv_naturality_left_symm _ _ := (FreeGroupoid.map_comp_lift _ _).symm
-      homEquiv_naturality_right _ _ := rfl }
-
-中文:
-定义 freeForgetAdjunction
-  签名: : free ⊣ Grpd.forgetToCat
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv _ _ := FreeGroupoid.functorEquiv.trans (Functor.equivCatHom _ _)
-      homEquiv_naturality_left_symm _ _ := (FreeGroupoid.map_comp_lift _ _).symm
-      homEquiv_naturality_right _ _ := rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, FreeGroupoid, FreeGroupoid.functorEquiv.trans, FreeGroupoid.map_comp_lift, Functor, Functor.equivCatHom, equivCatHom, functorEquiv, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, map_comp_lift, mkOfHomEquiv
+--- 原说明 ---
+The free-forgetful adjunction between `Grpd` and `Cat`.
 -/
 def freeForgetAdjunction : free ⊣ Grpd.forgetToCat :=
   Adjunction.mkOfHomEquiv
@@ -1042,99 +820,62 @@ def freeForgetAdjunction : free ⊣ Grpd.forgetToCat :=
 variable {C : Type u} [Category.{u} C] {D : Type u} [Groupoid.{u} D]
 
 @[simp]
-/--
-lemma `freeForgetAdjunction_homEquiv_apply` / 引理 `freeForgetAdjunction_homEquiv_apply`
-
-English:
-lemma freeForgetAdjunction_homEquiv_apply
-  given: (F : FreeGroupoid C ⥤ D)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 freeForgetAdjunction_homEquiv_apply
-  条件: (F : FreeGroupoid C ⥤ D)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Grpd.freeForgetAdjunction_homEquiv_apply** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Grpd`。
+形式化陈述：freeForgetAdjunction_homEquiv_apply (F : FreeGroupoid C ⥤ D) : (freeForget
+Adjunction.homEquiv (Cat.of C) (Grpd.of D) F).toFunctor = FreeGroupoid.of C ⋙ F
+参数：F : FreeGroupoid C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma freeForgetAdjunction_homEquiv_apply (F : FreeGroupoid C ⥤ D) :
     (freeForgetAdjunction.homEquiv (Cat.of C) (Grpd.of D) F).toFunctor = FreeGroupoid.of C ⋙ F :=
   rfl
 
 @[simp]
-/--
-lemma `freeForgetAdjunction_homEquiv_symm_apply` / 引理 `freeForgetAdjunction_homEquiv_symm_apply`
-
-English:
-lemma freeForgetAdjunction_homEquiv_symm_apply
-  given: (F : C ⥤ D)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 freeForgetAdjunction_homEquiv_symm_apply
-  条件: (F : C ⥤ D)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Grpd.freeForgetAdjunction_homEquiv_symm_apply** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Grpd`。
+形式化陈述：freeForgetAdjunction_homEquiv_symm_apply (F : C ⥤ D) : (freeForgetAdjuncti
+on.homEquiv (Cat.of C) (Grpd.of D)).symm F.toCatHom = map F ⋙ lift (𝟭 D)
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma freeForgetAdjunction_homEquiv_symm_apply (F : C ⥤ D) :
     (freeForgetAdjunction.homEquiv (Cat.of C) (Grpd.of D)).symm F.toCatHom = map F ⋙ lift (𝟭 D) :=
   rfl
 
 @[simp]
-/--
-lemma `freeForgetAdjunction_unit_app` / 引理 `freeForgetAdjunction_unit_app`
-
-English:
-lemma freeForgetAdjunction_unit_app
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 freeForgetAdjunction_unit_app
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Grpd.freeForgetAdjunction_unit_app** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Grpd`。
+形式化陈述：freeForgetAdjunction_unit_app : (freeForgetAdjunction.unit.app (Cat.of C))
+.toFunctor = FreeGroupoid.of C
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma freeForgetAdjunction_unit_app :
     (freeForgetAdjunction.unit.app (Cat.of C)).toFunctor = FreeGroupoid.of C :=
   rfl
 
 @[simp]
-/--
-lemma `freeForgetAdjunction_counit_app` / 引理 `freeForgetAdjunction_counit_app`
-
-English:
-lemma freeForgetAdjunction_counit_app
-  proof: rfl
-
-中文:
-引理 freeForgetAdjunction_counit_app
-  证明: rfl
+/-
+**CategoryTheory.Grpd.freeForgetAdjunction_counit_app** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Grpd`。
+形式化陈述：freeForgetAdjunction_counit_app : freeForgetAdjunction.counit.app (Grpd.of
+ D) = lift (𝟭 D)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma freeForgetAdjunction_counit_app :
     freeForgetAdjunction.counit.app (Grpd.of D) = lift (𝟭 D) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Reflective Grpd.forgetToCat
-  body: free
-  adj := freeForgetAdjunction
-
-中文:
-实例 :
-  签名: 反射 Grpd.forgetToCat
-  定义体: free
-  adj := freeForgetAdjunction
+/-
+**CategoryTheory.Grpd.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Grpd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Reflective Grpd.forgetToCat where
   L := free
@@ -1143,3 +884,4 @@ instance : Reflective Grpd.forgetToCat where
 end Grpd
 end CategoryTheory
 end
+

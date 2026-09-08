@@ -57,109 +57,86 @@ namespace MeasureTheory
 
 variable {α : Type*} {C : Set (Set α)} {s t : Set α}
 
-/--
-Definition of `IsSetSemiring` / `IsSetSemiring` 的定义
+/-- A semi-ring of sets `C` is a family of sets containing `∅`, stable by intersection and such that
+for all `s, t ∈ C`, `s \ t` is equal to a disjoint union of finitely many sets in `C`. -/
+/-
+**MeasureTheory.IsSetSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：{α : Type u_1} → Set (Set α) → Prop
+参数：Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSetSemiring
-  parameters: (C : Set (Set α))
-  axioms and operations (3):
-    - empty_mem : ∅ in C
-    - inter_mem : forall s in C, forall t in C, s inter t in C
-    - sdiff_eq_sUnion' : forall s in C, forall t in C, exists I : Finset (Set α), ↑I subseteq C ∧ PairwiseDisjoint (I : Set (Set α)) id ∧ s \ t = ⋃₀ I
-
-中文:
-结构 是SetSemiring
-  参数: (C : 集合 (集合 α))
-  公理与运算 (3 个):
-    - empty_mem : ∅ in C
-    - inter_mem : 对任意 s in C, 对任意 t in C, s inter t in C
-    - sdiff_eq_sUnion' : 对任意 s in C, 对任意 t in C, 存在 I : 有限集 (集合 α), ↑I subseteq C ∧ PairwiseDisjoint (I : 集合 (集合 α)) id ∧ s \ t = ⋃₀ I
+--- 原说明 ---
+A semi-ring of sets `C` is a family of sets containing `∅`, stable by intersecti
+on and such that
+for all `s, t ∈ C`, `s \ t` is equal to a disjoint union of finitely many sets i
+n `C`.
 -/
 structure IsSetSemiring (C : Set (Set α)) : Prop where
-  empty_mem : ∅ in C
-  inter_mem : forall s in C, forall t in C, s inter t in C
-  sdiff_eq_sUnion' : forall s in C, forall t in C,
-    exists I : Finset (Set α), ↑I subseteq C ∧ PairwiseDisjoint (I : Set (Set α)) id ∧ s \ t = ⋃₀ I
+  empty_mem : ∅ ∈ C
+  inter_mem : ∀ s ∈ C, ∀ t ∈ C, s ∩ t ∈ C
+  sdiff_eq_sUnion' : ∀ s ∈ C, ∀ t ∈ C,
+    ∃ I : Finset (Set α), ↑I ⊆ C ∧ PairwiseDisjoint (I : Set (Set α)) id ∧ s \ t = ⋃₀ I
 
-/--
-Definition of `IsSetRing` / `IsSetRing` 的定义
+/-- A ring of sets `C` is a family of sets containing `∅`, stable by union and set difference.
+It is then also stable by intersection (see `IsSetRing.inter_mem`). -/
+/-
+**MeasureTheory.IsSetRing** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：{α : Type u_1} → Set (Set α) → Prop
+参数：Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSetRing
-  parameters: (C : Set (Set α))
-  axioms and operations (3):
-    - empty_mem : ∅ in C
-    - union_mem(⦃s t) : Set α⦄ : s in C -> t in C -> s union t in C
-    - sdiff_mem(⦃s t) : Set α⦄ : s in C -> t in C -> s \ t in C
-
-中文:
-结构 是集合环
-  参数: (C : 集合 (集合 α))
-  公理与运算 (3 个):
-    - empty_mem : ∅ in C
-    - union_mem(⦃s t) : 集合 α⦄ : s in C -> t in C -> s union t in C
-    - sdiff_mem(⦃s t) : 集合 α⦄ : s in C -> t in C -> s \ t in C
+--- 原说明 ---
+A ring of sets `C` is a family of sets containing `∅`, stable by union and set d
+ifference.
+It is then also stable by intersection (see `IsSetRing.inter_mem`).
 -/
 structure IsSetRing (C : Set (Set α)) : Prop where
-  empty_mem : ∅ in C
-  union_mem ⦃s t : Set α⦄ : s in C -> t in C -> s union t in C
-  sdiff_mem ⦃s t : Set α⦄ : s in C -> t in C -> s \ t in C
+  empty_mem : ∅ ∈ C
+  union_mem ⦃s t : Set α⦄ : s ∈ C → t ∈ C → s ∪ t ∈ C
+  sdiff_mem ⦃s t : Set α⦄ : s ∈ C → t ∈ C → s \ t ∈ C
 
 namespace IsSetRing
 
-/--
-lemma `inter_mem` / 引理 `inter_mem`
-
-English:
-lemma inter_mem
-  given: (hC : IsSetRing C) (hs : s in C) (ht : t in C)
-  statement: s inter t in C
-  proof: by
-  rw [← sdiff_sdiff_right_self]; exact hC.sdiff_mem hs (hC.sdiff_mem hs ht)
-
-中文:
-引理 inter_mem
-  条件: (hC : 是集合环 C) (hs : s in C) (ht : t in C)
-  结论: s inter t in C
-  证明: by
-  rw [← sdiff_sdiff_right_self]; exact hC.sdiff_mem hs (hC.sdiff_mem hs ht)
-
-Depends on / 依赖: hC.sdiff_mem, sdiff_mem, sdiff_sdiff_right_self
+/-
+**MeasureTheory.IsSetRing.inter_mem** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.IsS
+etRing`。
+形式化陈述：inter_mem (hC : IsSetRing C) (hs : s in C) (ht : t in C) : s inter t in C
+参数：hC : IsSetRing C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.sdiff_sdiff_right_self`：sdiff_sdiff_right_self (s t : Set α) : s \ (
+s \ t) = s inter t
+· 使用定理 `MeasureTheory.IsSetRing.sdiff_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∀ ⦃s t : Set α⦄, s ∈ C → t ∈ C → s \ t ∈ C
 -/
-lemma inter_mem (hC : IsSetRing C) (hs : s in C) (ht : t in C) : s inter t in C := by
+lemma inter_mem (hC : IsSetRing C) (hs : s ∈ C) (ht : t ∈ C) : s ∩ t ∈ C := by
   rw [← sdiff_sdiff_right_self]; exact hC.sdiff_mem hs (hC.sdiff_mem hs ht)
-
-/--
-lemma `isSetSemiring` / 引理 `isSetSemiring`
-
-English:
-lemma isSetSemiring
-  given: (hC : IsSetRing C)
-  statement: IsSetSemiring C where
-  proof: hC.empty_mem
-  inter_mem := fun _ hs _ ht => hC.inter_mem hs ht
-  sdiff_eq_sUnion' := by
-    refine fun s hs t ht => ⟨{s \ t}, ?_, ?_, ?_⟩
-    · simp only [coe_singleton, Set.singleton_subset_iff]
-      exact hC.sdiff_mem hs ht
-    · simp only [coe_singleton, pairwiseDisjoint_singleton]
-    · simp only [coe_singleton, sUnion_singleton]
-
-中文:
-引理 isSetSemiring
-  条件: (hC : 是集合环 C)
-  结论: 是SetSemiring C where
-  证明: hC.empty_mem
-  inter_mem := fun _ hs _ ht => hC.inter_mem hs ht
-  sdiff_eq_sUnion' := by
-    refine fun s hs t ht => ⟨{s \ t}, ?_, ?_, ?_⟩
-    · simp only [coe_singleton, Set.singleton_subset_iff]
-      exact hC.sdiff_mem hs ht
-    · simp only [coe_singleton, pairwiseDisjoint_singleton]
-    · simp only [coe_singleton, sUnion_singleton]
-
-Depends on / 依赖: empty_mem, hC.empty_mem
+/-
+**MeasureTheory.IsSetRing.isSetSemiring** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory
+.IsSetRing`。
+形式化陈述：isSetSemiring (hC : IsSetRing C) : IsSetSemiring C where empty_mem
+参数：hC : IsSetRing C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetRing.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∅ ∈ C
+· 使用引理 `MeasureTheory.IsSetRing.inter_mem`：inter_mem (hC : IsSetRing C) (hs : s 
+in C) (ht : t in C) : s inter t in C
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `MeasureTheory.IsSetRing.sdiff_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∀ ⦃s t : Set α⦄, s ∈ C → t ∈ C → s \ t ∈ C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.sUnion_singleton`：sUnion_singleton (s : Set α) : ⋃₀ {s} = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isSetSemiring (hC : IsSetRing C) : IsSetSemiring C where
   empty_mem := hC.empty_mem
@@ -170,54 +147,99 @@ lemma isSetSemiring (hC : IsSetRing C) : IsSetSemiring C where
       exact hC.sdiff_mem hs ht
     · simp only [coe_singleton, pairwiseDisjoint_singleton]
     · simp only [coe_singleton, sUnion_singleton]
-
-/--
-lemma `biUnion_mem` / 引理 `biUnion_mem`
-
-English:
-lemma biUnion_mem
-  statement: {ι : Type*} (hC : IsSetRing C) {s : ι -> Set α}
-  proof: by
-  classical
-  induction S using Finset.induction with
-  | empty => simp [hC.empty_mem]
-  | insert i S _ h =>
-    simp_rw [← Finset.mem_coe, Finset.coe_insert, Set.biUnion_insert]
-    refine hC.union_mem (hs i (mem_insert_self i S)) ?_
-    exact h (fun n hnS => hs n (mem_insert_of_mem hnS))
-
-中文:
-引理 biUnion_mem
-  结论: {ι : 类型} (hC : 是集合环 C) {s : ι -> 集合 α}
-  证明: by
-  classical
-  induction S using Finset.induction with
-  | empty => simp [hC.empty_mem]
-  | insert i S _ h =>
-    simp_rw [← Finset.mem_coe, Finset.coe_insert, Set.biUnion_insert]
-    refine hC.union_mem (hs i (mem_insert_self i S)) ?_
-    exact h (fun n hnS => hs n (mem_insert_of_mem hnS))
-
-Depends on / 依赖: Finset, Finset.coe_insert, Finset.induction, Finset.mem_coe, Set.biUnion_insert, biUnion_insert, classical, coe_insert, empty_mem, hC.empty_mem, hC.union_mem, insert, mem_coe, mem_insert_of_mem, mem_insert_self, simp_rw, union_mem
+/-
+**MeasureTheory.IsSetRing.biUnion_mem** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.I
+sSetRing`。
+形式化陈述：biUnion_mem {ι : Type*} (hC : IsSetRing C) {s : ι -> Set α} (S : Finset ι)
+ (hs : forall n in S, s n in C) : ⋃ i in S, s i in C
+参数：hC : IsSetRing C；S : Finset ι；hs : forall n in S, s n in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MeasureTheory.IsSetRing.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∅ ∈ C
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Set.biUnion_insert`：biUnion_insert (a : α) (s : Set α) (t : α -> Set β) 
+: ⋃ x in insert a s, t x = t a union ⋃ x in s, t x
+· 使用定理 `MeasureTheory.IsSetRing.union_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∀ ⦃s t : Set α⦄, s ∈ C → t ∈ C → s ∪ t ∈ C
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
 -/
-lemma biUnion_mem {ι : Type*} (hC : IsSetRing C) {s : ι -> Set α}
-    (S : Finset ι) (hs : forall n in S, s n in C) :
-    ⋃ i in S, s i in C := by
+lemma biUnion_mem {ι : Type*} (hC : IsSetRing C) {s : ι → Set α}
+    (S : Finset ι) (hs : ∀ n ∈ S, s n ∈ C) :
+    ⋃ i ∈ S, s i ∈ C := by
   classical
   induction S using Finset.induction with
   | empty => simp [hC.empty_mem]
   | insert i S _ h =>
     simp_rw [← Finset.mem_coe, Finset.coe_insert, Set.biUnion_insert]
     refine hC.union_mem (hs i (mem_insert_self i S)) ?_
-    exact h (fun n hnS => hs n (mem_insert_of_mem hnS))
-
-/--
-lemma `biInter_mem` / 引理 `biInter_mem`
-
-English:
-lemma biInter_mem
-  statement: {ι : Type*} (hC : IsSetRing C) {s : ι -> Set α}
-  proof: by
+    exact h (fun n hnS ↦ hs n (mem_insert_of_mem hnS))
+/-
+**MeasureTheory.IsSetRing.biInter_mem** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.I
+sSetRing`。
+形式化陈述：biInter_mem {ι : Type*} (hC : IsSetRing C) {s : ι -> Set α} (S : Finset ι)
+ (hS : S.Nonempty) (hs : forall n in S, s n in C) : ⋂ i in S, s i in C
+参数：hC : IsSetRing C；S : Finset ι；hS : S.Nonempty；hs : forall n in S, s n in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.cons_induction`：∀ {α : Type u_3} {motive : (s : Finset α
+) → s.Nonempty → Prop},   (∀ (a : α), motive {a} ⋯) →     (∀ (a : α) (s : Finset
+ α) (h : a ∉ s) (hs …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_cons`：coe_cons {a s h} : (@cons α a s h : Set α) = insert a (
+s : Set α)
+· 使用定理 `Set.biInter_insert`：biInter_insert (a : α) (s : Set α) (t : α -> Set β) 
+: ⋂ x in insert a s, t x = t a inter ⋂ x in s, t x
+· 使用引理 `MeasureTheory.IsSetRing.inter_mem`：inter_mem (hC : IsSetRing C) (hs : s 
+in C) (ht : t in C) : s inter t in C
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+-/
+lemma biInter_mem {ι : Type*} (hC : IsSetRing C) {s : ι → Set α}
+    (S : Finset ι) (hS : S.Nonempty) (hs : ∀ n ∈ S, s n ∈ C) :
+    ⋂ i ∈ S, s i ∈ C := by
   classical
   induction hS using Finset.Nonempty.cons_induction with
   | singleton => simpa using hs
@@ -225,176 +247,156 @@ lemma biInter_mem
     simp_rw [← Finset.mem_coe, Finset.coe_cons, Set.biInter_insert]
     simp only [cons_eq_insert, Finset.mem_insert, forall_eq_or_imp] at hs
     refine hC.inter_mem hs.1 ?_
-    exact h (fun n hnS => hs.2 n hnS)
-
-中文:
-引理 bi整数er_mem
-  结论: {ι : 类型} (hC : 是集合环 C) {s : ι -> 集合 α}
-  证明: by
-  classical
-  induction hS using Finset.Nonempty.cons_induction with
-  | singleton => simpa using hs
-  | cons i S hiS _ h =>
-    simp_rw [← Finset.mem_coe, Finset.coe_cons, Set.biInter_insert]
-    simp only [cons_eq_insert, Finset.mem_insert, forall_eq_or_imp] at hs
-    refine hC.inter_mem hs.1 ?_
-    exact h (fun n hnS => hs.2 n hnS)
-
-Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.coe_cons, Finset.mem_coe, Finset.mem_insert, Nonempty, Set.biInter_insert, biInter_insert, classical, coe_cons, cons_eq_insert, cons_induction, forall_eq_or_imp, hC.inter_mem, inter_mem, mem_coe, mem_insert, simp_rw, singleton
+    exact h (fun n hnS ↦ hs.2 n hnS)
+/-
+**MeasureTheory.IsSetRing.finsetSup_mem** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory
+.IsSetRing`。
+形式化陈述：finsetSup_mem (hC : IsSetRing C) {ι : Type*} {s : ι -> Set α} {t : Finset 
+ι} (hs : forall i in t, s i in C) : t.sup s in C
+参数：hC : IsSetRing C；hs : forall i in t, s i in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_set_eq_biUnion`：sup_set_eq_biUnion (s : Finset α) (f : α -> S
+et β) : s.sup f = ⋃ x in s, f x
+· 使用引理 `MeasureTheory.IsSetRing.biUnion_mem`：biUnion_mem {ι : Type*} (hC : IsSet
+Ring C) {s : ι -> Set α} (S : Finset ι) (hs : forall n in S, s n in C) : ⋃ i in 
+S, s i in C
 -/
-lemma biInter_mem {ι : Type*} (hC : IsSetRing C) {s : ι -> Set α}
-    (S : Finset ι) (hS : S.Nonempty) (hs : forall n in S, s n in C) :
-    ⋂ i in S, s i in C := by
-  classical
-  induction hS using Finset.Nonempty.cons_induction with
-  | singleton => simpa using hs
-  | cons i S hiS _ h =>
-    simp_rw [← Finset.mem_coe, Finset.coe_cons, Set.biInter_insert]
-    simp only [cons_eq_insert, Finset.mem_insert, forall_eq_or_imp] at hs
-    refine hC.inter_mem hs.1 ?_
-    exact h (fun n hnS => hs.2 n hnS)
-
-/--
-lemma `finsetSup_mem` / 引理 `finsetSup_mem`
-
-English:
-lemma finsetSup_mem
-  statement: (hC : IsSetRing C) {ι : Type*} {s : ι -> Set α} {t : Finset ι}
-  proof: by
+lemma finsetSup_mem (hC : IsSetRing C) {ι : Type*} {s : ι → Set α} {t : Finset ι}
+    (hs : ∀ i ∈ t, s i ∈ C) :
+    t.sup s ∈ C := by
   simpa using biUnion_mem hC _ hs
-
-中文:
-引理 finsetSup_mem
-  结论: (hC : 是集合环 C) {ι : 类型} {s : ι -> 集合 α} {t : 有限集 ι}
-  证明: by
-  simpa using biUnion_mem hC _ hs
-
-Depends on / 依赖: biUnion_mem
--/
-lemma finsetSup_mem (hC : IsSetRing C) {ι : Type*} {s : ι -> Set α} {t : Finset ι}
-    (hs : forall i in t, s i in C) :
-    t.sup s in C := by
-  simpa using biUnion_mem hC _ hs
-
-/--
-lemma `partialSups_mem` / 引理 `partialSups_mem`
-
-English:
-lemma partialSups_mem
-  statement: {ι : Type*} [Preorder ι] [LocallyFiniteOrderBot ι]
-  proof: by
-  simpa only [partialSups_apply, sup'_eq_sup] using hC.finsetSup_mem (fun i hi => hs i)
-
-中文:
-引理 partialSups_mem
-  结论: {ι : 类型} [预序 ι] [LocallyFiniteOrderBot ι]
-  证明: by
-  simpa only [partialSups_apply, sup'_eq_sup] using hC.finsetSup_mem (fun i hi => hs i)
-
-Depends on / 依赖: _eq_sup, finsetSup_mem, hC.finsetSup_mem, partialSups_apply
+/-
+**MeasureTheory.IsSetRing.partialSups_mem** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheo
+ry.IsSetRing`。
+形式化陈述：partialSups_mem {ι : Type*} [Preorder ι] [LocallyFiniteOrderBot ι] (hC : I
+sSetRing C) {s : ι -> Set α} (hs : forall n, s n in C) (n : ι) : partialSups s n
+ in C
+参数：hC : IsSetRing C；hs : forall n, s n in C；n : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup'_eq_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeS
+up α] [inst_1 : OrderBot α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.sup
+' H f = …
+· 使用引理 `Finset.nonempty_Iic`：nonempty_Iic : (Iic a).Nonempty
+· 使用引理 `MeasureTheory.IsSetRing.finsetSup_mem`：finsetSup_mem (hC : IsSetRing C) 
+{ι : Type*} {s : ι -> Set α} {t : Finset ι} (hs : forall i in t, s i in C) : t.s
+up s in C
 -/
 lemma partialSups_mem {ι : Type*} [Preorder ι] [LocallyFiniteOrderBot ι]
-    (hC : IsSetRing C) {s : ι -> Set α} (hs : forall n, s n in C) (n : ι) :
-    partialSups s n in C := by
-  simpa only [partialSups_apply, sup'_eq_sup] using hC.finsetSup_mem (fun i hi => hs i)
-
-/--
-lemma `disjointed_mem` / 引理 `disjointed_mem`
-
-English:
-lemma disjointed_mem
-  statement: {ι : Type*} [Preorder ι] [LocallyFiniteOrderBot ι]
-  proof: disjointedRec (fun _ j ht => hC.sdiff_mem ht <| hs j) (hs i)
-
-中文:
-引理 disjointed_mem
-  结论: {ι : 类型} [预序 ι] [LocallyFiniteOrderBot ι]
-  证明: disjointedRec (fun _ j ht => hC.sdiff_mem ht <| hs j) (hs i)
-
-Depends on / 依赖: disjointedRec, hC.sdiff_mem, sdiff_mem
+    (hC : IsSetRing C) {s : ι → Set α} (hs : ∀ n, s n ∈ C) (n : ι) :
+    partialSups s n ∈ C := by
+  simpa only [partialSups_apply, sup'_eq_sup] using hC.finsetSup_mem (fun i hi ↦ hs i)
+/-
+**MeasureTheory.IsSetRing.disjointed_mem** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheor
+y.IsSetRing`。
+形式化陈述：disjointed_mem {ι : Type*} [Preorder ι] [LocallyFiniteOrderBot ι] (hC : Is
+SetRing C) {s : ι -> Set α} (hs : forall j, s j in C) (i : ι) : disjointed s i i
+n C
+参数：hC : IsSetRing C；hs : forall j, s j in C；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `disjointedRec`：disjointedRec {f : ι -> α} {p : α -> Prop} (hdiff : foral
+l ⦃t i⦄, p t -> p (t \ f i)) : forall ⦃i⦄, p (f i) -> p (disjointed f i)
+· 使用定理 `MeasureTheory.IsSetRing.sdiff_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∀ ⦃s t : Set α⦄, s ∈ C → t ∈ C → s \ t ∈ C
 -/
 lemma disjointed_mem {ι : Type*} [Preorder ι] [LocallyFiniteOrderBot ι]
-    (hC : IsSetRing C) {s : ι -> Set α} (hs : forall j, s j in C) (i : ι) :
-    disjointed s i in C :=
-  disjointedRec (fun _ j ht => hC.sdiff_mem ht <| hs j) (hs i)
-
-/--
-theorem `iUnion_le_mem` / 定理 `iUnion_le_mem`
-
-English:
-theorem iUnion_le_mem
-  given: (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall n, s n in C) (n : Nat)
-  proof: by
+    (hC : IsSetRing C) {s : ι → Set α} (hs : ∀ j, s j ∈ C) (i : ι) :
+    disjointed s i ∈ C :=
+  disjointedRec (fun _ j ht ↦ hC.sdiff_mem ht <| hs j) (hs i)
+/-
+**MeasureTheory.IsSetRing.iUnion_le_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.IsSetRing`。
+形式化陈述：iUnion_le_mem (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall n, s n in
+ C) (n : Nat) : (⋃ i <= n, s i) in C
+参数：hC : IsSetRing C；hs : forall n, s n in C；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Set.iUnion_iUnion_eq_left`：iUnion_iUnion_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋃ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.biUnion_le_succ`：biUnion_le_succ (u : Nat -> Set α) (n : Nat) : ⋃ k 
+<= n + 1, u k = (⋃ k <= n, u k) union u (n + 1)
+· 使用定理 `MeasureTheory.IsSetRing.union_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∀ ⦃s t : Set α⦄, s ∈ C → t ∈ C → s ∪ t ∈ C
+-/
+theorem iUnion_le_mem (hC : IsSetRing C) {s : ℕ → Set α} (hs : ∀ n, s n ∈ C) (n : ℕ) :
+    (⋃ i ≤ n, s i) ∈ C := by
   induction n with
   | zero => simp [hs 0]
   | succ n hn => rw [biUnion_le_succ]; exact hC.union_mem hn (hs _)
-
-中文:
-定理 iUnion_le_mem
-  条件: (hC : 是集合环 C) {s : 自然数 -> 集合 α} (hs : 对任意 n, s n in C) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp [hs 0]
-  | succ n hn => rw [biUnion_le_succ]; exact hC.union_mem hn (hs _)
-
-Depends on / 依赖: biUnion_le_succ, hC.union_mem, union_mem
+/-
+**MeasureTheory.IsSetRing.iInter_le_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.IsSetRing`。
+形式化陈述：iInter_le_mem (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall n, s n in
+ C) (n : Nat) : (⋂ i <= n, s i) in C
+参数：hC : IsSetRing C；hs : forall n, s n in C；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.biInter_le_succ`：biInter_le_succ (u : Nat -> Set α) (n : Nat) : ⋂ k 
+<= n + 1, u k = (⋂ k <= n, u k) inter u (n + 1)
+· 使用引理 `MeasureTheory.IsSetRing.inter_mem`：inter_mem (hC : IsSetRing C) (hs : s 
+in C) (ht : t in C) : s inter t in C
 -/
-theorem iUnion_le_mem (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall n, s n in C) (n : Nat) :
-    (⋃ i <= n, s i) in C := by
-  induction n with
-  | zero => simp [hs 0]
-  | succ n hn => rw [biUnion_le_succ]; exact hC.union_mem hn (hs _)
-
-/--
-theorem `iInter_le_mem` / 定理 `iInter_le_mem`
-
-English:
-theorem iInter_le_mem
-  given: (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall n, s n in C) (n : Nat)
-  proof: by
+theorem iInter_le_mem (hC : IsSetRing C) {s : ℕ → Set α} (hs : ∀ n, s n ∈ C) (n : ℕ) :
+    (⋂ i ≤ n, s i) ∈ C := by
   induction n with
   | zero => simp [hs 0]
   | succ n hn => rw [biInter_le_succ]; exact hC.inter_mem hn (hs _)
-
-中文:
-定理 i整数er_le_mem
-  条件: (hC : 是集合环 C) {s : 自然数 -> 集合 α} (hs : 对任意 n, s n in C) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp [hs 0]
-  | succ n hn => rw [biInter_le_succ]; exact hC.inter_mem hn (hs _)
-
-Depends on / 依赖: biInter_le_succ, hC.inter_mem, inter_mem
+/-
+**MeasureTheory.IsSetRing.accumulate_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.IsSetRing`。
+形式化陈述：accumulate_mem (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall i, s i i
+n C) (n : Nat) : accumulate s n in C
+参数：hC : IsSetRing C；hs : forall i, s i in C；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.accumulate_zero_nat`：accumulate_zero_nat (s : Nat -> Set β) : accumu
+late s 0 = s 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.accumulate_succ`：accumulate_succ (u : Nat -> Set α) (n : Nat) : accu
+mulate u (n + 1) = accumulate u n union u (n + 1)
+· 使用定理 `MeasureTheory.IsSetRing.union_mem`：∀ {α : Type u_1} {C : Set (Set α)}, M
+easureTheory.IsSetRing C → ∀ ⦃s t : Set α⦄, s ∈ C → t ∈ C → s ∪ t ∈ C
 -/
-theorem iInter_le_mem (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall n, s n in C) (n : Nat) :
-    (⋂ i <= n, s i) in C := by
-  induction n with
-  | zero => simp [hs 0]
-  | succ n hn => rw [biInter_le_succ]; exact hC.inter_mem hn (hs _)
-
-/--
-theorem `accumulate_mem` / 定理 `accumulate_mem`
-
-English:
-theorem accumulate_mem
-  given: (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall i, s i in C) (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp [hs 0]
-  | succ n hn => rw [accumulate_succ]; exact hC.union_mem hn (hs _)
-
-中文:
-定理 accumulate_mem
-  条件: (hC : 是集合环 C) {s : 自然数 -> 集合 α} (hs : 对任意 i, s i in C) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp [hs 0]
-  | succ n hn => rw [accumulate_succ]; exact hC.union_mem hn (hs _)
-
-Depends on / 依赖: accumulate_succ, hC.union_mem, union_mem
--/
-theorem accumulate_mem (hC : IsSetRing C) {s : Nat -> Set α} (hs : forall i, s i in C) (n : Nat) :
-    accumulate s n in C := by
+theorem accumulate_mem (hC : IsSetRing C) {s : ℕ → Set α} (hs : ∀ i, s i ∈ C) (n : ℕ) :
+    accumulate s n ∈ C := by
   induction n with
   | zero => simp [hs 0]
   | succ n hn => rw [accumulate_succ]; exact hC.union_mem hn (hs _)
@@ -403,134 +405,124 @@ end IsSetRing
 
 namespace IsSetSemiring
 
-/--
-lemma `isPiSystem` / 引理 `isPiSystem`
-
-English:
-lemma isPiSystem
-  given: (hC : IsSetSemiring C)
-  statement: IsPiSystem C
-  proof: fun s hs t ht _ => hC.inter_mem s hs t ht
-
-中文:
-引理 isPiSystem
-  条件: (hC : 是SetSemiring C)
-  结论: IsPiSystem C
-  证明: fun s hs t ht _ => hC.inter_mem s hs t ht
-
-Depends on / 依赖: hC.inter_mem, inter_mem
+/-
+**MeasureTheory.IsSetSemiring.isPiSystem** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheor
+y.IsSetSemiring`。
+形式化陈述：isPiSystem (hC : IsSetSemiring C) : IsPiSystem C
+参数：hC : IsSetSemiring C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.inter_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∀ s ∈ C, ∀ t ∈ C, s ∩ t ∈ C
 -/
-lemma isPiSystem (hC : IsSetSemiring C) : IsPiSystem C := fun s hs t ht _ => hC.inter_mem s hs t ht
-
-/--
-theorem `exists_finpartition_sdiff` / 定理 `exists_finpartition_sdiff`
-
-English:
-theorem exists_finpartition_sdiff
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: by
-  obtain ⟨I, hIC, hI, hst⟩ := hC.sdiff_eq_sUnion' s hs t ht
-  refine ⟨.ofErase I (supIndep_iff_pairwiseDisjoint.mpr hI) ?_, ?_⟩
-  · rw [sup_id_eq_sSup, sSup_eq_sUnion, hst]
-  · grw [Finpartition.ofErase_parts, Finset.erase_subset, hIC]
-
-@[deprecated (since := "2026-06-03")] alias exists_finpartition_diff := exists_finpartition_sdiff
-
-中文:
-定理 存在_finpartition_sdiff
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: by
-  obtain ⟨I, hIC, hI, hst⟩ := hC.sdiff_eq_sUnion' s hs t ht
-  refine ⟨.ofErase I (supIndep_iff_pairwiseDisjoint.mpr hI) ?_, ?_⟩
-  · rw [sup_id_eq_sSup, sSup_eq_sUnion, hst]
-  · grw [Finpartition.ofErase_parts, Finset.erase_subset, hIC]
-
-@[deprecated (since := "2026-06-03")] alias exists_finpartition_diff := exists_finpartition_sdiff
-
-Depends on / 依赖: Finpartition, Finpartition.ofErase_parts, Finset, Finset.erase_subset, erase_subset, hC.sdiff_eq_sUnion, ofErase, ofErase_parts, sSup_eq_sUnion, sdiff_eq_sUnion, supIndep_iff_pairwiseDisjoint, supIndep_iff_pairwiseDisjoint.mpr, sup_id_eq_sSup
+lemma isPiSystem (hC : IsSetSemiring C) : IsPiSystem C := fun s hs t ht _ ↦ hC.inter_mem s hs t ht
+/-
+**MeasureTheory.IsSetSemiring.exists_finpartition_sdiff** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：exists_finpartition_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in 
+C) : exists P : Finpartition (s \ t), ↑P.parts subseteq C
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.sdiff_eq_sUnion'`：∀ {α : Type u_1} {C : Set 
+(Set α)},   MeasureTheory.IsSetSemiring C → ∀ s ∈ C, ∀ t ∈ C, ∃ I, ↑I ⊆ C ∧ (↑I)
+.PairwiseDisjoint id ∧ s \ t = ⋃₀ …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.supIndep_iff_pairwiseDisjoint`：supIndep_iff_pairwiseDisjoint : s.
+SupIndep f ↔ (s : Set ι).PairwiseDisjoint f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_id_eq_sSup`：sup_id_eq_sSup [CompleteLattice α] (s : Finset α)
+ : s.sup id = sSup s
+· 使用定理 `Set.sSup_eq_sUnion`：sSup_eq_sUnion (S : Set (Set α)) : sSup S = ⋃₀ S
+· 使用定理 `Finpartition.ofErase_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 
+: OrderBot α] [inst_2 : DecidableEq α] {a : α} (parts : Finset α)   (sup_indep :
+ parts.SupIndep …
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Finset.coe_subset._gcongr_2`：∀ {α : Type u_1} {s₁ s₂ : Finset α}, s₁ ⊆ s
+₂ → ↑s₁ ⊆ ↑s₂
+· 使用定理 `Finset.erase_subset`：erase_subset (a : α) (s : Finset α) : erase s a sub
+seteq s
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem exists_finpartition_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
-    exists P : Finpartition (s \ t), ↑P.parts subseteq C := by
+theorem exists_finpartition_sdiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
+    ∃ P : Finpartition (s \ t), ↑P.parts ⊆ C := by
   obtain ⟨I, hIC, hI, hst⟩ := hC.sdiff_eq_sUnion' s hs t ht
   refine ⟨.ofErase I (supIndep_iff_pairwiseDisjoint.mpr hI) ?_, ?_⟩
   · rw [sup_id_eq_sSup, sSup_eq_sUnion, hst]
   · grw [Finpartition.ofErase_parts, Finset.erase_subset, hIC]
 
 @[deprecated (since := "2026-06-03")] alias exists_finpartition_diff := exists_finpartition_sdiff
-
-/--
-theorem `mem_supClosure_iff` / 定理 `mem_supClosure_iff`
-
-English:
-theorem mem_supClosure_iff
-  given: (hC : IsSetSemiring C)
-  proof: by
-    rintro ⟨S, hS, hSC, rfl⟩
-    rw [sup'_eq_sup]
-    clear hS
-    induction S using Finset.induction with
-    | empty =>
-      rw [sup_empty]
-      exact ⟨.empty _, hSC⟩
-    | insert s S _ ih =>
-      rw [coe_insert]; rw [insert_subset_iff] at hSC
-      obtain ⟨hsC, hSC⟩ := hSC
-      obtain ⟨P, hP⟩ := ih hSC
-      rw [sup_insert]; rw [sup_comm]; rw [id]
-      rcases eq_or_ne s ⊥ with rfl | hs
-      · rw [sup_bot_eq]; exact ⟨P, hP⟩
-      choose Q hQ using show forall t in (P.avoid s).parts, exists Q : Finpartition t, ↑Q.parts subseteq C by
-        simp_rw [Finpartition.mem_avoid]
-        rintro _ ⟨t, ht, -, rfl⟩
-        exact hC.exists_finpartition_sdiff (hP ht) hsC
-.extend hs disjoint_sdiff_left (sdiff_sup_self _ _) .bind Q exists P.avoid s
-      rw [Finpartition.extend_parts]; rw [coe_insert]; rw [insert_subset_iff]; rw [Finpartition.bind_parts]; rw [coe_biUnion]; rw [iUnion₂_subset_iff]; rw [Subtype.forall]
-      exact ⟨hsC, fun t ht _ => hQ t ht⟩
-  mpr := by
-    intro ⟨P, hP⟩
-    rw [← P.sup_parts]; rw [sup_id_set_eq_sUnion]
-    exact supClosed_supClosure.sSup_mem
-      (Finset.finite_toSet _)
-      (subset_supClosure hC.empty_mem)
-      (hP.trans subset_supClosure)
-
-中文:
-定理 mem_supClosure_iff
-  条件: (hC : 是SetSemiring C)
-  证明: by
-    rintro ⟨S, hS, hSC, rfl⟩
-    rw [sup'_eq_sup]
-    clear hS
-    induction S using Finset.induction with
-    | empty =>
-      rw [sup_empty]
-      exact ⟨.empty _, hSC⟩
-    | insert s S _ ih =>
-      rw [coe_insert]; rw [insert_subset_iff] at hSC
-      obtain ⟨hsC, hSC⟩ := hSC
-      obtain ⟨P, hP⟩ := ih hSC
-      rw [sup_insert]; rw [sup_comm]; rw [id]
-      rcases eq_or_ne s ⊥ with rfl | hs
-      · rw [sup_bot_eq]; exact ⟨P, hP⟩
-      choose Q hQ using show forall t in (P.avoid s).parts, exists Q : Finpartition t, ↑Q.parts subseteq C by
-        simp_rw [Finpartition.mem_avoid]
-        rintro _ ⟨t, ht, -, rfl⟩
-        exact hC.exists_finpartition_sdiff (hP ht) hsC
-.extend hs disjoint_sdiff_left (sdiff_sup_self _ _) .bind Q exists P.avoid s
-      rw [Finpartition.extend_parts]; rw [coe_insert]; rw [insert_subset_iff]; rw [Finpartition.bind_parts]; rw [coe_biUnion]; rw [iUnion₂_subset_iff]; rw [Subtype.forall]
-      exact ⟨hsC, fun t ht _ => hQ t ht⟩
-  mpr := by
-    intro ⟨P, hP⟩
-    rw [← P.sup_parts]; rw [sup_id_set_eq_sUnion]
-    exact supClosed_supClosure.sSup_mem
-      (Finset.finite_toSet _)
-      (subset_supClosure hC.empty_mem)
-      (hP.trans subset_supClosure)
-
-Depends on / 依赖: Finpartition, Finpartition.mem_avo, Finset, Finset.induction, P.avoid, Q.parts, _eq_sup, coe_insert, eq_or_ne, insert, insert_subset_iff, mem_avo, simp_rw, subseteq, sup_bot_eq, sup_comm, sup_empty, sup_insert
+/-
+**MeasureTheory.IsSetSemiring.mem_supClosure_iff** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.IsSetSemiring`。
+形式化陈述：mem_supClosure_iff (hC : IsSetSemiring C) : s in supClosure C ↔ exists P :
+ Finpartition s, ↑P.parts subseteq C where mp
+参数：hC : IsSetSemiring C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup'_eq_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeS
+up α] [inst_1 : OrderBot α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.sup
+' H f = …
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `Set.insert_subset_iff`：insert_subset_iff : insert a s subseteq t ↔ a in 
+t ∧ s subseteq t
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `id.eq_1`：∀ {α : Sort u} (a : α), id a = a
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `sup_bot_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderBo
+t α] (a : α), a ⊔ ⊥ = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DistribLattice.instIsModularLattice`：∀ {α : Type u_1} [inst : DistribLat
+tice α], IsModularLattice α
+· 使用引理 `Set.disjoint_sdiff_left`：disjoint_sdiff_left : Disjoint (t \ s) s
+· 使用定理 `sdiff_sup_self`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] 
+(a b : α), b \ a ⊔ a = b ⊔ a
+· 使用定理 `Finpartition.extend_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 :
+ OrderBot α] [inst_2 : IsModularLattice α] [inst_3 : DecidableEq α]   {a b c : α
+} (P : Finparti…
+· 使用定理 `Finpartition.bind_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] [inst_2 : IsModularLattice α] [inst_3 : DecidableEq α] {a : α}   (P :
+ Finpartition…
+· 使用引理 `Finset.coe_biUnion`：coe_biUnion : (s.biUnion t : Set β) = ⋃ x in (s : Se
+t α), t x
+· 使用定理 `Set.iUnion₂_subset_iff`：iUnion₂_subset_iff {s : forall i, κ i -> Set α} 
+{t : Set α} : ⋃ (i) (j), s i j subseteq t ↔ forall i j, s i j subseteq t
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用定理 `Finset.sup_id_set_eq_sUnion`：sup_id_set_eq_sUnion (s : Finset (Set α)) :
+ s.sup id = ⋃₀ ↑s
+· 使用引理 `SupClosed.sSup_mem`：SupClosed.sSup_mem (hs : SupClosed s) (ht : t.Finite
+) (hbot : ⊥ in s) (hts : t subseteq s) : sSup t in s
+· 使用引理 `supClosed_supClosure`：supClosed_supClosure : SupClosed (supClosure s)
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+（共 33 条，此处仅展示前 30 条）
 -/
 theorem mem_supClosure_iff (hC : IsSetSemiring C) :
-    s in supClosure C ↔ exists P : Finpartition s, ↑P.parts subseteq C where
+    s ∈ supClosure C ↔ ∃ P : Finpartition s, ↑P.parts ⊆ C where
   mp := by
     rintro ⟨S, hS, hSC, rfl⟩
     rw [sup'_eq_sup]
@@ -540,100 +532,91 @@ theorem mem_supClosure_iff (hC : IsSetSemiring C) :
       rw [sup_empty]
       exact ⟨.empty _, hSC⟩
     | insert s S _ ih =>
-      rw [coe_insert]; rw [insert_subset_iff] at hSC
+      rw [coe_insert, insert_subset_iff] at hSC
       obtain ⟨hsC, hSC⟩ := hSC
       obtain ⟨P, hP⟩ := ih hSC
-      rw [sup_insert]; rw [sup_comm]; rw [id]
+      rw [sup_insert, sup_comm, id]
       rcases eq_or_ne s ⊥ with rfl | hs
       · rw [sup_bot_eq]; exact ⟨P, hP⟩
-      choose Q hQ using show forall t in (P.avoid s).parts, exists Q : Finpartition t, ↑Q.parts subseteq C by
+      choose Q hQ using show ∀ t ∈ (P.avoid s).parts, ∃ Q : Finpartition t, ↑Q.parts ⊆ C by
         simp_rw [Finpartition.mem_avoid]
         rintro _ ⟨t, ht, -, rfl⟩
         exact hC.exists_finpartition_sdiff (hP ht) hsC
-.extend hs disjoint_sdiff_left (sdiff_sup_self _ _) .bind Q exists P.avoid s
-      rw [Finpartition.extend_parts]; rw [coe_insert]; rw [insert_subset_iff]; rw [Finpartition.bind_parts]; rw [coe_biUnion]; rw [iUnion₂_subset_iff]; rw [Subtype.forall]
+      exists P.avoid s |>.bind Q |>.extend hs disjoint_sdiff_left (sdiff_sup_self _ _)
+      rw [Finpartition.extend_parts, coe_insert, insert_subset_iff, Finpartition.bind_parts,
+        coe_biUnion, iUnion₂_subset_iff, Subtype.forall]
       exact ⟨hsC, fun t ht _ => hQ t ht⟩
   mpr := by
     intro ⟨P, hP⟩
-    rw [← P.sup_parts]; rw [sup_id_set_eq_sUnion]
+    rw [← P.sup_parts, sup_id_set_eq_sUnion]
     exact supClosed_supClosure.sSup_mem
       (Finset.finite_toSet _)
       (subset_supClosure hC.empty_mem)
       (hP.trans subset_supClosure)
-
-/--
-theorem `sdiff_mem_supClosure` / 定理 `sdiff_mem_supClosure`
-
-English:
-theorem sdiff_mem_supClosure
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: hC.mem_supClosure_iff.mpr hC.exists_finpartition_sdiff hs ht
-
-@[deprecated (since := "2026-06-03")] alias diff_mem_supClosure := sdiff_mem_supClosure
-
-中文:
-定理 sdiff_mem_supClosure
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: hC.mem_supClosure_iff.mpr hC.exists_finpartition_sdiff hs ht
-
-@[deprecated (since := "2026-06-03")] alias diff_mem_supClosure := sdiff_mem_supClosure
-
-Depends on / 依赖: exists_finpartition_sdiff, hC.exists_finpartition_sdiff, hC.mem_supClosure_iff.mpr, mem_supClosure_iff
+/-
+**MeasureTheory.IsSetSemiring.sdiff_mem_supClosure** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.IsSetSemiring`。
+形式化陈述：sdiff_mem_supClosure (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : 
+s \ t in supClosure C
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.IsSetSemiring.mem_supClosure_iff`：mem_supClosure_iff (hC :
+ IsSetSemiring C) : s in supClosure C ↔ exists P : Finpartition s, ↑P.parts subs
+eteq C where mp
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
 -/
-theorem sdiff_mem_supClosure (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
-    s \ t in supClosure C :=
-hC.mem_supClosure_iff.mpr hC.exists_finpartition_sdiff hs ht
+theorem sdiff_mem_supClosure (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
+    s \ t ∈ supClosure C :=
+  hC.mem_supClosure_iff.mpr <| hC.exists_finpartition_sdiff hs ht
 
 @[deprecated (since := "2026-06-03")] alias diff_mem_supClosure := sdiff_mem_supClosure
-
-/--
-theorem `isSetRing_supClosure` / 定理 `isSetRing_supClosure`
-
-English:
-theorem isSetRing_supClosure
-  given: (hC : IsSetSemiring C)
-  statement: IsSetRing (supClosure C) where
-  proof: subset_supClosure hC.empty_mem
-  union_mem _ _ h₁ h₂ := supClosed_supClosure h₁ h₂
-  sdiff_mem := by
-    rintro s _ hs ⟨T, hT, hTC, rfl⟩
-    rw [sup'_eq_sup]
-    clear hT
-    induction T using Finset.induction generalizing s with
-    | empty => simpa
-    | insert t T _ ih =>
-      simp_rw [sup_insert, id, sup_eq_union, ← sdiff_sdiff]
-      rw [coe_insert]; rw [insert_subset_iff] at hTC
-      obtain ⟨htC, hTC⟩ := hTC
-      refine ih ?_ hTC
-      obtain ⟨S, hS, hSC, rfl⟩ := hs
-      rw [sup'_eq_sup]; rw [← Finset.sup_sdiff_right]
-      refine supClosed_supClosure.finsetSup_mem hS fun s hs => ?_
-      exact hC.sdiff_mem_supClosure (hSC hs) htC
-
-中文:
-定理 isSetRing_supClosure
-  条件: (hC : 是SetSemiring C)
-  结论: 是集合环 (supClosure C) where
-  证明: subset_supClosure hC.empty_mem
-  union_mem _ _ h₁ h₂ := supClosed_supClosure h₁ h₂
-  sdiff_mem := by
-    rintro s _ hs ⟨T, hT, hTC, rfl⟩
-    rw [sup'_eq_sup]
-    clear hT
-    induction T using Finset.induction generalizing s with
-    | empty => simpa
-    | insert t T _ ih =>
-      simp_rw [sup_insert, id, sup_eq_union, ← sdiff_sdiff]
-      rw [coe_insert]; rw [insert_subset_iff] at hTC
-      obtain ⟨htC, hTC⟩ := hTC
-      refine ih ?_ hTC
-      obtain ⟨S, hS, hSC, rfl⟩ := hs
-      rw [sup'_eq_sup]; rw [← Finset.sup_sdiff_right]
-      refine supClosed_supClosure.finsetSup_mem hS fun s hs => ?_
-      exact hC.sdiff_mem_supClosure (hSC hs) htC
-
-Depends on / 依赖: empty_mem, hC.empty_mem, subset_supClosure
+/-
+**MeasureTheory.IsSetSemiring.isSetRing_supClosure** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.IsSetSemiring`。
+形式化陈述：isSetRing_supClosure (hC : IsSetSemiring C) : IsSetRing (supClosure C) whe
+re empty_mem
+参数：hC : IsSetSemiring C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `subset_supClosure`：subset_supClosure {s : Set α} : s subseteq supClosure
+ s
+· 使用定理 `MeasureTheory.IsSetSemiring.empty_mem`：∀ {α : Type u_1} {C : Set (Set α)
+}, MeasureTheory.IsSetSemiring C → ∅ ∈ C
+· 使用引理 `supClosed_supClosure`：supClosed_supClosure : SupClosed (supClosure s)
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup'_eq_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeS
+up α] [inst_1 : OrderBot α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.sup
+' H f = …
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `Set.sdiff_empty`：sdiff_empty {s : Set α} : s \ ∅ = s
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+· 使用定理 `Set.sup_eq_union`：sup_eq_union : ((· ⊔ ·) : Set α -> Set α -> Set α) = (
+· union ·)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.sdiff_sdiff`：sdiff_sdiff {u : Set α} : (s \ t) \ u = s \ (t union u)
+· 使用定理 `Set.insert_subset_iff`：insert_subset_iff : insert a s subseteq t ↔ a in 
+t ∧ s subseteq t
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.sup_sdiff_right`：sup_sdiff_right {α β : Type*} [GeneralizedBoolea
+nAlgebra α] (s : Finset β) (f : β -> α) (a : α) : (s.sup fun b => f b \ a) = s.s
+up f \ a
+· 使用引理 `SupClosed.finsetSup_mem`：SupClosed.finsetSup_mem [OrderBot α] (hs : SupC
+losed s) (ht : t.Nonempty) : (forall i in t, f i in s) -> t.sup f in s
+· 使用定理 `MeasureTheory.IsSetSemiring.sdiff_mem_supClosure`：sdiff_mem_supClosure (
+hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : s \ t in supClosure C
 -/
 theorem isSetRing_supClosure (hC : IsSetSemiring C) : IsSetRing (supClosure C) where
   empty_mem := subset_supClosure hC.empty_mem
@@ -646,217 +629,226 @@ theorem isSetRing_supClosure (hC : IsSetSemiring C) : IsSetRing (supClosure C) w
     | empty => simpa
     | insert t T _ ih =>
       simp_rw [sup_insert, id, sup_eq_union, ← sdiff_sdiff]
-      rw [coe_insert]; rw [insert_subset_iff] at hTC
+      rw [coe_insert, insert_subset_iff] at hTC
       obtain ⟨htC, hTC⟩ := hTC
       refine ih ?_ hTC
       obtain ⟨S, hS, hSC, rfl⟩ := hs
-      rw [sup'_eq_sup]; rw [← Finset.sup_sdiff_right]
+      rw [sup'_eq_sup, ← Finset.sup_sdiff_right]
       refine supClosed_supClosure.finsetSup_mem hS fun s hs => ?_
       exact hC.sdiff_mem_supClosure (hSC hs) htC
 
 section disjointOfDiff
 
-/--
-Definition of `disjointOfDiff` / `disjointOfDiff` 的定义
+/-- In a semi-ring of sets `C`, for all sets `s, t ∈ C`, `s \ t` is equal to a disjoint union of
+finitely many sets in `C`. The finite set of sets in the union is not unique, but this definition
+gives an arbitrary `Finset (Set α)` that satisfies the equality.
 
-English:
-definition disjointOfDiff
-  signature: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  body: (hC.exists_finpartition_sdiff hs ht).choose.parts
+We remove the empty set to ensure that `t ∉ hC.disjointOfDiff hs ht` even if `t = ∅`. -/
+/-
+**MeasureTheory.IsSetSemiring.disjointOfDiff** 是 Mathlib 中的一个定义，位于命名空间 `MeasureT
+heory.IsSetSemiring`。
+形式化陈述：disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : Finset
+ (Set α)
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
 
-中文:
-定义 disjointOfDiff
-  签名: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  定义体: (hC.exists_finpartition_sdiff hs ht).choose.parts
+--- 原说明 ---
+In a semi-ring of sets `C`, for all sets `s, t ∈ C`, `s \ t` is equal to a disjo
+int union of
+finitely many sets in `C`. The finite set of sets in the union is not unique, bu
+t this definition
+gives an arbitrary `Finset (Set α)` that satisfies the equality.
 
-Depends on / 依赖: choose.parts, exists_finpartition_sdiff, hC.exists_finpartition_sdiff
+We remove the empty set to ensure that `t ∉ hC.disjointOfDiff hs ht` even if `t 
+= ∅`.
 -/
-noncomputable def disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+noncomputable def disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
     Finset (Set α) :=
   (hC.exists_finpartition_sdiff hs ht).choose.parts
-
-/--
-lemma `empty_notMem_disjointOfDiff` / 引理 `empty_notMem_disjointOfDiff`
-
-English:
-lemma empty_notMem_disjointOfDiff
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: Finpartition.bot_notMem _
-
-中文:
-引理 empty_notMem_disjointOfDiff
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: Finpartition.bot_notMem _
-
-Depends on / 依赖: Finpartition, Finpartition.bot_notMem, bot_notMem
+/-
+**MeasureTheory.IsSetSemiring.empty_notMem_disjointOfDiff** 是 Mathlib 中的一个引理，位于命
+名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：empty_notMem_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t i
+n C) : ∅ ∉ hC.disjointOfDiff hs ht
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.bot_notMem`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a : α} (self : Finpartition a), ⊥ ∉ self.parts
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
 -/
-lemma empty_notMem_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+lemma empty_notMem_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
     ∅ ∉ hC.disjointOfDiff hs ht :=
   Finpartition.bot_notMem _
-
-/--
-lemma `subset_disjointOfDiff` / 引理 `subset_disjointOfDiff`
-
-English:
-lemma subset_disjointOfDiff
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: (hC.exists_finpartition_sdiff hs ht).choose_spec
-
-中文:
-引理 subset_disjointOfDiff
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: (hC.exists_finpartition_sdiff hs ht).choose_spec
-
-Depends on / 依赖: choose_spec, exists_finpartition_sdiff, hC.exists_finpartition_sdiff
+/-
+**MeasureTheory.IsSetSemiring.subset_disjointOfDiff** 是 Mathlib 中的一个引理，位于命名空间 `M
+easureTheory.IsSetSemiring`。
+形式化陈述：subset_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+ ↑(hC.disjointOfDiff hs ht) subseteq C
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
 -/
-lemma subset_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
-    ↑(hC.disjointOfDiff hs ht) subseteq C :=
+lemma subset_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
+    ↑(hC.disjointOfDiff hs ht) ⊆ C :=
   (hC.exists_finpartition_sdiff hs ht).choose_spec
-
-/--
-lemma `pairwiseDisjoint_disjointOfDiff` / 引理 `pairwiseDisjoint_disjointOfDiff`
-
-English:
-lemma pairwiseDisjoint_disjointOfDiff
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: .pairwiseDisjoint Finpartition.supIndep _
-
-中文:
-引理 pairwiseDisjoint_disjointOfDiff
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: .pairwiseDisjoint Finpartition.supIndep _
-
-Depends on / 依赖: Finpartition, Finpartition.supIndep, pairwiseDisjoint, supIndep
+/-
+**MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfDiff** 是 Mathlib 中的一个引理
+，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：pairwiseDisjoint_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht :
+ t in C) : PairwiseDisjoint (hC.disjointOfDiff hs ht : Set (Set α)) id
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.SupIndep.pairwiseDisjoint`：∀ {α : Type u_1} {ι : Type u_3} [inst 
+: Lattice α] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α},   s.SupIndep f → 
+(↑s).PairwiseDisjoint …
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
+· 使用定理 `Finpartition.supIndep`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (self : Finpartition a), self.parts.SupIndep id
 -/
-lemma pairwiseDisjoint_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+lemma pairwiseDisjoint_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
     PairwiseDisjoint (hC.disjointOfDiff hs ht : Set (Set α)) id :=
-.pairwiseDisjoint Finpartition.supIndep _
-
-/--
-lemma `sUnion_disjointOfDiff` / 引理 `sUnion_disjointOfDiff`
-
-English:
-lemma sUnion_disjointOfDiff
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: (sup_id_eq_sSup _).symm.trans (Finpartition.sup_parts _)
-
-中文:
-引理 sUnion_disjointOfDiff
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: (sup_id_eq_sSup _).symm.trans (Finpartition.sup_parts _)
-
-Depends on / 依赖: Finpartition, Finpartition.sup_parts, sup_id_eq_sSup, sup_parts, symm.trans
+  Finpartition.supIndep _ |>.pairwiseDisjoint
+/-
+**MeasureTheory.IsSetSemiring.sUnion_disjointOfDiff** 是 Mathlib 中的一个引理，位于命名空间 `M
+easureTheory.IsSetSemiring`。
+形式化陈述：sUnion_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+ ⋃₀ hC.disjointOfDiff hs ht = s \ t
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sup_id_eq_sSup`：sup_id_eq_sSup [CompleteLattice α] (s : Finset α)
+ : s.sup id = sSup s
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
 -/
-lemma sUnion_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+lemma sUnion_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
     ⋃₀ hC.disjointOfDiff hs ht = s \ t :=
   (sup_id_eq_sSup _).symm.trans (Finpartition.sup_parts _)
-
-/--
-lemma `notMem_disjointOfDiff` / 引理 `notMem_disjointOfDiff`
-
-English:
-lemma notMem_disjointOfDiff
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: by
-  intro hs_mem
-  cases disjoint_sdiff_self_right.eq_bot_of_le (Finpartition.le _ hs_mem)
-  exact hC.empty_notMem_disjointOfDiff hs ht hs_mem
-
-中文:
-引理 notMem_disjointOfDiff
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: by
-  intro hs_mem
-  cases disjoint_sdiff_self_right.eq_bot_of_le (Finpartition.le _ hs_mem)
-  exact hC.empty_notMem_disjointOfDiff hs ht hs_mem
-
-Depends on / 依赖: Finpartition, Finpartition.le, disjoint_sdiff_self_right, disjoint_sdiff_self_right.eq_bot_of_le, empty_notMem_disjointOfDiff, eq_bot_of_le, hC.empty_notMem_disjointOfDiff, hs_mem
+/-
+**MeasureTheory.IsSetSemiring.notMem_disjointOfDiff** 是 Mathlib 中的一个引理，位于命名空间 `M
+easureTheory.IsSetSemiring`。
+形式化陈述：notMem_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+ t ∉ hC.disjointOfDiff hs ht
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.eq_bot_of_le`：Disjoint.eq_bot_of_le (hab : Disjoint a b) (h : a
+ <= b) : a = ⊥
+· 使用定理 `disjoint_sdiff_self_right`：disjoint_sdiff_self_right : Disjoint x (y \ x
+)
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
+· 使用定理 `MeasureTheory.IsSetSemiring.exists_finpartition_sdiff`：exists_finpartiti
+on_sdiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : exists P : Finpart
+ition (s \ t), ↑P.parts subseteq C
+· 使用引理 `MeasureTheory.IsSetSemiring.empty_notMem_disjointOfDiff`：empty_notMem_di
+sjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : ∅ ∉ hC.disjoin
+tOfDiff hs ht
 -/
-lemma notMem_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+lemma notMem_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
     t ∉ hC.disjointOfDiff hs ht := by
   intro hs_mem
   cases disjoint_sdiff_self_right.eq_bot_of_le (Finpartition.le _ hs_mem)
   exact hC.empty_notMem_disjointOfDiff hs ht hs_mem
-
-/--
-lemma `sUnion_insert_disjointOfDiff` / 引理 `sUnion_insert_disjointOfDiff`
-
-English:
-lemma sUnion_insert_disjointOfDiff
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: by
-  conv_rhs => rw [← union_sdiff_cancel hst, ← hC.sUnion_disjointOfDiff hs ht]
-  simp only [sUnion_insert]
-
-中文:
-引理 sUnion_insert_disjointOfDiff
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: by
-  conv_rhs => rw [← union_sdiff_cancel hst, ← hC.sUnion_disjointOfDiff hs ht]
-  simp only [sUnion_insert]
-
-Depends on / 依赖: conv_rhs, hC.sUnion_disjointOfDiff, sUnion_disjointOfDiff, sUnion_insert, union_sdiff_cancel
+/-
+**MeasureTheory.IsSetSemiring.sUnion_insert_disjointOfDiff** 是 Mathlib 中的一个引理，位于
+命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：sUnion_insert_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t 
+in C) (hst : t subseteq s) : ⋃₀ insert t (hC.disjointOfDiff hs ht) = s
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C；hst : t subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_sdiff_cancel`：union_sdiff_cancel {s t : Set α} (h : s subseteq
+ t) : s union t \ s = t
+· 使用引理 `MeasureTheory.IsSetSemiring.sUnion_disjointOfDiff`：sUnion_disjointOfDiff
+ (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : ⋃₀ hC.disjointOfDiff hs ht
+ = s \ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.sUnion_insert`：sUnion_insert (s : Set α) (T : Set (Set α)) : ⋃₀ inse
+rt s T = s union ⋃₀ T
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma sUnion_insert_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C)
-    (ht : t in C) (hst : t subseteq s) :
+lemma sUnion_insert_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C)
+    (ht : t ∈ C) (hst : t ⊆ s) :
     ⋃₀ insert t (hC.disjointOfDiff hs ht) = s := by
   conv_rhs => rw [← union_sdiff_cancel hst, ← hC.sUnion_disjointOfDiff hs ht]
   simp only [sUnion_insert]
-
-/--
-lemma `disjoint_sUnion_disjointOfDiff` / 引理 `disjoint_sUnion_disjointOfDiff`
-
-English:
-lemma disjoint_sUnion_disjointOfDiff
-  given: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
-  proof: by
-  rw [hC.sUnion_disjointOfDiff]
-  exact disjoint_sdiff_right
-
-中文:
-引理 disjoint_sUnion_disjointOfDiff
-  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
-  证明: by
-  rw [hC.sUnion_disjointOfDiff]
-  exact disjoint_sdiff_right
-
-Depends on / 依赖: disjoint_sdiff_right, hC.sUnion_disjointOfDiff, sUnion_disjointOfDiff
+/-
+**MeasureTheory.IsSetSemiring.disjoint_sUnion_disjointOfDiff** 是 Mathlib 中的一个引理，
+位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：disjoint_sUnion_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : 
+t in C) : Disjoint t (⋃₀ hC.disjointOfDiff hs ht)
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.IsSetSemiring.sUnion_disjointOfDiff`：sUnion_disjointOfDiff
+ (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : ⋃₀ hC.disjointOfDiff hs ht
+ = s \ t
+· 使用引理 `Set.disjoint_sdiff_right`：disjoint_sdiff_right : Disjoint s (t \ s)
 -/
-lemma disjoint_sUnion_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) :
+lemma disjoint_sUnion_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C) (ht : t ∈ C) :
     Disjoint t (⋃₀ hC.disjointOfDiff hs ht) := by
   rw [hC.sUnion_disjointOfDiff]
   exact disjoint_sdiff_right
-
-/--
-lemma `pairwiseDisjoint_insert_disjointOfDiff` / 引理 `pairwiseDisjoint_insert_disjointOfDiff`
-
-English:
-lemma pairwiseDisjoint_insert_disjointOfDiff
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: by
-  have h := hC.pairwiseDisjoint_disjointOfDiff hs ht
-  refine PairwiseDisjoint.insert_of_notMem h (hC.notMem_disjointOfDiff hs ht) fun u hu => ?_
-  simp_rw [id]
-  refine Disjoint.mono_right ?_ (hC.disjoint_sUnion_disjointOfDiff hs ht)
-  exact subset_sUnion_of_mem hu
-
-中文:
-引理 pairwiseDisjoint_insert_disjointOfDiff
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: by
-  have h := hC.pairwiseDisjoint_disjointOfDiff hs ht
-  refine PairwiseDisjoint.insert_of_notMem h (hC.notMem_disjointOfDiff hs ht) fun u hu => ?_
-  simp_rw [id]
-  refine Disjoint.mono_right ?_ (hC.disjoint_sUnion_disjointOfDiff hs ht)
-  exact subset_sUnion_of_mem hu
-
-Depends on / 依赖: Disjoint, Disjoint.mono_right, PairwiseDisjoint, PairwiseDisjoint.insert_of_notMem, disjoint_sUnion_disjointOfDiff, hC.disjoint_sUnion_disjointOfDiff, hC.notMem_disjointOfDiff, hC.pairwiseDisjoint_disjointOfDiff, insert_of_notMem, mono_right, notMem_disjointOfDiff, pairwiseDisjoint_disjointOfDiff, simp_rw, subset_sUnion_of_mem
+/-
+**MeasureTheory.IsSetSemiring.pairwiseDisjoint_insert_disjointOfDiff** 是 Mathlib
+ 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：pairwiseDisjoint_insert_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C
+) (ht : t in C) : PairwiseDisjoint (insert t (hC.disjointOfDiff hs ht) : Set (Se
+t α)) id
+参数：hC : IsSetSemiring C；hs : s in C；ht : t in C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfDiff`：pairwiseDis
+joint_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : Pairwi
+seDisjoint (hC.disjointOfDiff hs ht : Set (Set α)…
+· 使用定理 `Set.PairwiseDisjoint.insert_of_notMem`：∀ {α : Type u_1} {ι : Type u_4} [
+inst : PartialOrder α] [inst_1 : OrderBot α] {s : Set ι} {f : ι → α},   s.Pairwi
+seDisjoint f → ∀ {i : ι}, i…
+· 使用引理 `MeasureTheory.IsSetSemiring.notMem_disjointOfDiff`：notMem_disjointOfDiff
+ (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : t ∉ hC.disjointOfDiff hs h
+t
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
+· 使用定理 `Set.subset_sUnion_of_mem`：subset_sUnion_of_mem {S : Set (Set α)} {t : Se
+t α} (tS : t in S) : t subseteq ⋃₀ S
+· 使用引理 `MeasureTheory.IsSetSemiring.disjoint_sUnion_disjointOfDiff`：disjoint_sUn
+ion_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C) (ht : t in C) : Disjoint
+ t (⋃₀ hC.disjointOfDiff hs ht)
 -/
-lemma pairwiseDisjoint_insert_disjointOfDiff (hC : IsSetSemiring C) (hs : s in C)
-    (ht : t in C) :
+lemma pairwiseDisjoint_insert_disjointOfDiff (hC : IsSetSemiring C) (hs : s ∈ C)
+    (ht : t ∈ C) :
     PairwiseDisjoint (insert t (hC.disjointOfDiff hs ht) : Set (Set α)) id := by
   have h := hC.pairwiseDisjoint_disjointOfDiff hs ht
-  refine PairwiseDisjoint.insert_of_notMem h (hC.notMem_disjointOfDiff hs ht) fun u hu => ?_
+  refine PairwiseDisjoint.insert_of_notMem h (hC.notMem_disjointOfDiff hs ht) fun u hu ↦ ?_
   simp_rw [id]
   refine Disjoint.mono_right ?_ (hC.disjoint_sUnion_disjointOfDiff hs ht)
   exact subset_sUnion_of_mem hu
@@ -867,165 +859,160 @@ section disjointOfDiffUnion
 
 variable {I : Finset (Set α)}
 
-/--
-theorem `exists_finpartition_sdiff_sUnion` / 定理 `exists_finpartition_sdiff_sUnion`
-
-English:
-theorem exists_finpartition_sdiff_sUnion
-  given: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  proof: by
-  rw [← hC.mem_supClosure_iff]; rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]
-  have hC' := hC.isSetRing_supClosure
-exact hC'.sdiff_mem (subset_supClosure hs) hC'.finsetSup_mem hI.trans subset_supClosure
-
-中文:
-定理 存在_finpartition_sdiff_sUnion
-  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  证明: by
-  rw [← hC.mem_supClosure_iff]; rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]
-  have hC' := hC.isSetRing_supClosure
-exact hC'.sdiff_mem (subset_supClosure hs) hC'.finsetSup_mem hI.trans subset_supClosure
+/-
+**MeasureTheory.IsSetSemiring.exists_finpartition_sdiff_sUnion** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem exists_finpartition_sdiff_sUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C) :
-    exists P : Finpartition (s \ ⋃₀ I), ↑P.parts subseteq C := by
-  rw [← hC.mem_supClosure_iff]; rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]
+private theorem exists_finpartition_sdiff_sUnion (hC : IsSetSemiring C) (hs : s ∈ C) (hI : ↑I ⊆ C) :
+    ∃ P : Finpartition (s \ ⋃₀ I), ↑P.parts ⊆ C := by
+  rw [← hC.mem_supClosure_iff, ← sSup_eq_sUnion, ← sup_id_eq_sSup]
   have hC' := hC.isSetRing_supClosure
-exact hC'.sdiff_mem (subset_supClosure hs) hC'.finsetSup_mem hI.trans subset_supClosure
+  exact hC'.sdiff_mem (subset_supClosure hs) <| hC'.finsetSup_mem <| hI.trans subset_supClosure
 
-/--
-Definition of `disjointOfDiffUnion` / `disjointOfDiffUnion` 的定义
+/-- In a semiring of sets `C`, for all set `s ∈ C` and finite set of sets `I ⊆ C`,
+`disjointOfDiffUnion` is a finite set of sets in `C` such that
+`s \ ⋃₀ I = ⋃₀ (hC.disjointOfDiffUnion hs I hI)`.
+`disjointOfDiff` is a special case of `disjointOfDiffUnion` where `I` is a
+singleton. -/
+/-
+**MeasureTheory.IsSetSemiring.disjointOfDiffUnion** 是 Mathlib 中的一个定义，位于命名空间 `Mea
+sureTheory.IsSetSemiring`。
+形式化陈述：disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq
+ C) : Finset (Set α)
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_finpartition_sdiff_sUnion`：∀ {α : Type u_1} {C : Set (Set α)} {s : Set α
+} {I : Finset (Set α)},   MeasureTheory.IsSetSemiring C → s ∈ C → ↑I ⊆ C → ∃ P, 
+↑P.parts ⊆ C
 
-English:
-definition disjointOfDiffUnion
-  signature: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  body: (hC.exists_finpartition_sdiff_sUnion hs hI).choose.parts
-
-中文:
-定义 disjointOfDiffUnion
-  签名: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  定义体: (hC.exists_finpartition_sdiff_sUnion hs hI).choose.parts
-
-Depends on / 依赖: choose.parts, exists_finpartition_sdiff_sUnion, hC.exists_finpartition_sdiff_sUnion
+--- 原说明 ---
+In a semiring of sets `C`, for all set `s ∈ C` and finite set of sets `I ⊆ C`,
+`disjointOfDiffUnion` is a finite set of sets in `C` such that
+`s \ ⋃₀ I = ⋃₀ (hC.disjointOfDiffUnion hs I hI)`.
+`disjointOfDiff` is a special case of `disjointOfDiffUnion` where `I` is a
+singleton.
 -/
-noncomputable def disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C) :
+noncomputable def disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C) (hI : ↑I ⊆ C) :
     Finset (Set α) :=
   (hC.exists_finpartition_sdiff_sUnion hs hI).choose.parts
-
-/--
-lemma `empty_notMem_disjointOfDiffUnion` / 引理 `empty_notMem_disjointOfDiffUnion`
-
-English:
-lemma empty_notMem_disjointOfDiffUnion
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: Finpartition.bot_notMem _
-
-中文:
-引理 empty_notMem_disjointOfDiffUnion
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: Finpartition.bot_notMem _
-
-Depends on / 依赖: Finpartition, Finpartition.bot_notMem, bot_notMem
+/-
+**MeasureTheory.IsSetSemiring.empty_notMem_disjointOfDiffUnion** 是 Mathlib 中的一个引
+理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：empty_notMem_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI 
+: ↑I subseteq C) : ∅ ∉ hC.disjointOfDiffUnion hs hI
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.bot_notMem`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a : α} (self : Finpartition a), ⊥ ∉ self.parts
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_finpartition_sdiff_sUnion`：∀ {α : Type u_1} {C : Set (Set α)} {s : Set α
+} {I : Finset (Set α)},   MeasureTheory.IsSetSemiring C → s ∈ C → ↑I ⊆ C → ∃ P, 
+↑P.parts ⊆ C
 -/
-lemma empty_notMem_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C)
-    (hI : ↑I subseteq C) :
+lemma empty_notMem_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C)
+    (hI : ↑I ⊆ C) :
     ∅ ∉ hC.disjointOfDiffUnion hs hI :=
   Finpartition.bot_notMem _
-
-/--
-lemma `disjointOfDiffUnion_subset` / 引理 `disjointOfDiffUnion_subset`
-
-English:
-lemma disjointOfDiffUnion_subset
-  given: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  proof: (hC.exists_finpartition_sdiff_sUnion hs hI).choose_spec
-
-中文:
-引理 disjointOfDiffUnion_subset
-  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  证明: (hC.exists_finpartition_sdiff_sUnion hs hI).choose_spec
-
-Depends on / 依赖: choose_spec, exists_finpartition_sdiff_sUnion, hC.exists_finpartition_sdiff_sUnion
+/-
+**MeasureTheory.IsSetSemiring.disjointOfDiffUnion_subset** 是 Mathlib 中的一个引理，位于命名
+空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：disjointOfDiffUnion_subset (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I s
+ubseteq C) : ↑(hC.disjointOfDiffUnion hs hI) subseteq C
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_finpartition_sdiff_sUnion`：∀ {α : Type u_1} {C : Set (Set α)} {s : Set α
+} {I : Finset (Set α)},   MeasureTheory.IsSetSemiring C → s ∈ C → ↑I ⊆ C → ∃ P, 
+↑P.parts ⊆ C
 -/
-lemma disjointOfDiffUnion_subset (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C) :
-    ↑(hC.disjointOfDiffUnion hs hI) subseteq C :=
+lemma disjointOfDiffUnion_subset (hC : IsSetSemiring C) (hs : s ∈ C) (hI : ↑I ⊆ C) :
+    ↑(hC.disjointOfDiffUnion hs hI) ⊆ C :=
   (hC.exists_finpartition_sdiff_sUnion hs hI).choose_spec
-
-/--
-lemma `pairwiseDisjoint_disjointOfDiffUnion` / 引理 `pairwiseDisjoint_disjointOfDiffUnion`
-
-English:
-lemma pairwiseDisjoint_disjointOfDiffUnion
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: (Finpartition.supIndep _).pairwiseDisjoint
-
-中文:
-引理 pairwiseDisjoint_disjointOfDiffUnion
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: (Finpartition.supIndep _).pairwiseDisjoint
-
-Depends on / 依赖: Finpartition, Finpartition.supIndep, pairwiseDisjoint, supIndep
+/-
+**MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfDiffUnion** 是 Mathlib 中
+的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：pairwiseDisjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) 
+(hI : ↑I subseteq C) : PairwiseDisjoint (hC.disjointOfDiffUnion hs hI : Set (Set
+ α)) id
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.SupIndep.pairwiseDisjoint`：∀ {α : Type u_1} {ι : Type u_3} [inst 
+: Lattice α] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α},   s.SupIndep f → 
+(↑s).PairwiseDisjoint …
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_finpartition_sdiff_sUnion`：∀ {α : Type u_1} {C : Set (Set α)} {s : Set α
+} {I : Finset (Set α)},   MeasureTheory.IsSetSemiring C → s ∈ C → ↑I ⊆ C → ∃ P, 
+↑P.parts ⊆ C
+· 使用定理 `Finpartition.supIndep`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (self : Finpartition a), self.parts.SupIndep id
 -/
-lemma pairwiseDisjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C)
-    (hI : ↑I subseteq C) : PairwiseDisjoint (hC.disjointOfDiffUnion hs hI : Set (Set α)) id :=
+lemma pairwiseDisjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C)
+    (hI : ↑I ⊆ C) : PairwiseDisjoint (hC.disjointOfDiffUnion hs hI : Set (Set α)) id :=
   (Finpartition.supIndep _).pairwiseDisjoint
-
-/--
-lemma `sdiff_sUnion_eq_sUnion_disjointOfDiffUnion` / 引理 `sdiff_sUnion_eq_sUnion_disjointOfDiffUnion`
-
-English:
-lemma sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: (Finpartition.sup_parts _).symm.trans (sup_id_eq_sSup _)
-
-@[deprecated (since := "2026-06-03")]
-alias diff_sUnion_eq_sUnion_disjointOfDiffUnion := sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
-
-中文:
-引理 sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: (Finpartition.sup_parts _).symm.trans (sup_id_eq_sSup _)
-
-@[deprecated (since := "2026-06-03")]
-alias diff_sUnion_eq_sUnion_disjointOfDiffUnion := sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
-
-Depends on / 依赖: Finpartition, Finpartition.sup_parts, sup_id_eq_sSup, sup_parts, symm.trans
+/-
+**MeasureTheory.IsSetSemiring.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion** 是 Mat
+hlib 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s 
+in C) (hI : ↑I subseteq C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion hs hI
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_finpartition_sdiff_sUnion`：∀ {α : Type u_1} {C : Set (Set α)} {s : Set α
+} {I : Finset (Set α)},   MeasureTheory.IsSetSemiring C → s ∈ C → ↑I ⊆ C → ∃ P, 
+↑P.parts ⊆ C
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用定理 `Finset.sup_id_eq_sSup`：sup_id_eq_sSup [CompleteLattice α] (s : Finset α)
+ : s.sup id = sSup s
 -/
-lemma sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C)
-    (hI : ↑I subseteq C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion hs hI :=
+lemma sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C)
+    (hI : ↑I ⊆ C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion hs hI :=
   (Finpartition.sup_parts _).symm.trans (sup_id_eq_sSup _)
 
 @[deprecated (since := "2026-06-03")]
 alias diff_sUnion_eq_sUnion_disjointOfDiffUnion := sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
 
-/--
-lemma `exists_disjoint_finset_sdiff_eq` / 引理 `exists_disjoint_finset_sdiff_eq`
+/-- In a semiring of sets `C`, for all set `s ∈ C` and finite set of sets `I ⊆ C`, there is a
+finite set of sets in `C` whose union is `s \ ⋃₀ I`.
+See `IsSetSemiring.disjointOfDiffUnion` for a definition that gives such a set. -/
+/-
+**MeasureTheory.IsSetSemiring.exists_disjoint_finset_sdiff_eq** 是 Mathlib 中的一个引理
+，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：exists_disjoint_finset_sdiff_eq (hC : IsSetSemiring C) (hs : s in C) (hI :
+ ↑I subseteq C) : exists J : Finset (Set α), ↑J subseteq C ∧ PairwiseDisjoint (J
+ : Set (Set α)) id ∧ s \ ⋃₀ I = ⋃₀ J
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.IsSetSemiring.disjointOfDiffUnion_subset`：disjointOfDiffUn
+ion_subset (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C) : ↑(hC.disj
+ointOfDiffUnion hs hI) subseteq C
+· 使用引理 `MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfDiffUnion`：pairwi
+seDisjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I sub
+seteq C) : PairwiseDisjoint (hC.disjointOfDiffUnion hs…
+· 使用引理 `MeasureTheory.IsSetSemiring.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion`：
+sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) 
+(hI : ↑I subseteq C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion …
 
-English:
-lemma exists_disjoint_finset_sdiff_eq
-  given: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  proof: ⟨hC.disjointOfDiffUnion hs hI,
-   hC.disjointOfDiffUnion_subset hs hI,
-   hC.pairwiseDisjoint_disjointOfDiffUnion hs hI,
-   hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI⟩
-
-@[deprecated (since := "2026-06-03")]
-alias exists_disjoint_finset_diff_eq := exists_disjoint_finset_sdiff_eq
-
-中文:
-引理 存在_disjoint_finset_sdiff_eq
-  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  证明: ⟨hC.disjointOfDiffUnion hs hI,
-   hC.disjointOfDiffUnion_subset hs hI,
-   hC.pairwiseDisjoint_disjointOfDiffUnion hs hI,
-   hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI⟩
-
-@[deprecated (since := "2026-06-03")]
-alias exists_disjoint_finset_diff_eq := exists_disjoint_finset_sdiff_eq
-
-Depends on / 依赖: disjointOfDiffUnion, disjointOfDiffUnion_subset, hC.disjointOfDiffUnion, hC.disjointOfDiffUnion_subset, hC.pairwiseDisjoint_disjointOfDiffUnion, hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion, pairwiseDisjoint_disjointOfDiffUnion, sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
+--- 原说明 ---
+In a semiring of sets `C`, for all set `s ∈ C` and finite set of sets `I ⊆ C`, t
+here is a
+finite set of sets in `C` whose union is `s \ ⋃₀ I`.
+See `IsSetSemiring.disjointOfDiffUnion` for a definition that gives such a set.
 -/
-lemma exists_disjoint_finset_sdiff_eq (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C) :
-    exists J : Finset (Set α), ↑J subseteq C ∧ PairwiseDisjoint (J : Set (Set α)) id ∧
+lemma exists_disjoint_finset_sdiff_eq (hC : IsSetSemiring C) (hs : s ∈ C) (hI : ↑I ⊆ C) :
+    ∃ J : Finset (Set α), ↑J ⊆ C ∧ PairwiseDisjoint (J : Set (Set α)) id ∧
       s \ ⋃₀ I = ⋃₀ J :=
   ⟨hC.disjointOfDiffUnion hs hI,
    hC.disjointOfDiffUnion_subset hs hI,
@@ -1034,232 +1021,217 @@ lemma exists_disjoint_finset_sdiff_eq (hC : IsSetSemiring C) (hs : s in C) (hI :
 
 @[deprecated (since := "2026-06-03")]
 alias exists_disjoint_finset_diff_eq := exists_disjoint_finset_sdiff_eq
-
-/--
-lemma `sUnion_disjointOfDiffUnion_subset` / 引理 `sUnion_disjointOfDiffUnion_subset`
-
-English:
-lemma sUnion_disjointOfDiffUnion_subset
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: by
-  rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]
-  exact sdiff_subset
-
-中文:
-引理 sUnion_disjointOfDiffUnion_subset
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: by
-  rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]
-  exact sdiff_subset
-
-Depends on / 依赖: hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion, sdiff_sUnion_eq_sUnion_disjointOfDiffUnion, sdiff_subset
+/-
+**MeasureTheory.IsSetSemiring.sUnion_disjointOfDiffUnion_subset** 是 Mathlib 中的一个
+引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：sUnion_disjointOfDiffUnion_subset (hC : IsSetSemiring C) (hs : s in C) (hI
+ : ↑I subseteq C) : ⋃₀ (hC.disjointOfDiffUnion hs hI : Set (Set α)) subseteq s
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.IsSetSemiring.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion`：
+sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) 
+(hI : ↑I subseteq C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion …
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
-lemma sUnion_disjointOfDiffUnion_subset (hC : IsSetSemiring C) (hs : s in C)
-    (hI : ↑I subseteq C) : ⋃₀ (hC.disjointOfDiffUnion hs hI : Set (Set α)) subseteq s := by
+lemma sUnion_disjointOfDiffUnion_subset (hC : IsSetSemiring C) (hs : s ∈ C)
+    (hI : ↑I ⊆ C) : ⋃₀ (hC.disjointOfDiffUnion hs hI : Set (Set α)) ⊆ s := by
   rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]
   exact sdiff_subset
-
-/--
-lemma `subset_of_diffUnion_disjointOfDiffUnion` / 引理 `subset_of_diffUnion_disjointOfDiffUnion`
-
-English:
-lemma subset_of_diffUnion_disjointOfDiffUnion
-  statement: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  proof: by
-  revert t ht
-  rw [← sUnion_subset_iff]; rw [hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
-
-中文:
-引理 subset_of_diffUnion_disjointOfDiffUnion
-  结论: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  证明: by
-  revert t ht
-  rw [← sUnion_subset_iff]; rw [hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
-
-Depends on / 依赖: hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion, revert, sUnion_subset_iff, sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
+/-
+**MeasureTheory.IsSetSemiring.subset_of_diffUnion_disjointOfDiffUnion** 是 Mathli
+b 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：subset_of_diffUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in 
+C) (hI : ↑I subseteq C) (t : Set α) (ht : t in (hC.disjointOfDiffUnion hs hI : S
+et (Set α))) : t subseteq s \ ⋃₀ I
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C；t : Set α；ht : t in (hC.d
+isjointOfDiffUnion hs hI : Set (Set α))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.sUnion_subset_iff`：sUnion_subset_iff {s : Set (Set α)} {t : Set α} :
+ ⋃₀ s subseteq t ↔ forall t' in s, t' subseteq t
+· 使用引理 `MeasureTheory.IsSetSemiring.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion`：
+sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) 
+(hI : ↑I subseteq C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion …
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma subset_of_diffUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-    (t : Set α) (ht : t in (hC.disjointOfDiffUnion hs hI : Set (Set α))) :
-    t subseteq s \ ⋃₀ I := by
+lemma subset_of_diffUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C) (hI : ↑I ⊆ C)
+    (t : Set α) (ht : t ∈ (hC.disjointOfDiffUnion hs hI : Set (Set α))) :
+    t ⊆ s \ ⋃₀ I := by
   revert t ht
-  rw [← sUnion_subset_iff]; rw [hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
-
-/--
-lemma `subset_of_mem_disjointOfDiffUnion` / 引理 `subset_of_mem_disjointOfDiffUnion`
-
-English:
-lemma subset_of_mem_disjointOfDiffUnion
-  statement: (hC : IsSetSemiring C) {I : Finset (Set α)}
-  proof: by
-apply le_trans hC.subset_of_diffUnion_disjointOfDiffUnion hs hI t ht
-  exact sdiff_le (a := s) (b := ⋃₀ I)
-
-中文:
-引理 subset_of_mem_disjointOfDiffUnion
-  结论: (hC : 是SetSemiring C) {I : 有限集 (集合 α)}
-  证明: by
-apply le_trans hC.subset_of_diffUnion_disjointOfDiffUnion hs hI t ht
-  exact sdiff_le (a := s) (b := ⋃₀ I)
-
-Depends on / 依赖: hC.subset_of_diffUnion_disjointOfDiffUnion, le_trans, sdiff_le, subset_of_diffUnion_disjointOfDiffUnion
+  rw [← sUnion_subset_iff, hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
+/-
+**MeasureTheory.IsSetSemiring.subset_of_mem_disjointOfDiffUnion** 是 Mathlib 中的一个
+引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：subset_of_mem_disjointOfDiffUnion (hC : IsSetSemiring C) {I : Finset (Set 
+α)} (hs : s in C) (hI : ↑I subseteq C) (t : Set α) (ht : t in (hC.disjointOfDiff
+Union hs hI : Set (Set α))) : t subseteq s
+参数：hC : IsSetSemiring C；Set α；hs : s in C；hI : ↑I subseteq C；t : Set α；ht : t in
+ (hC.disjointOfDiffUnion hs hI : Set (Set α))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `MeasureTheory.IsSetSemiring.subset_of_diffUnion_disjointOfDiffUnion`：sub
+set_of_diffUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : 
+↑I subseteq C) (t : Set α) (ht : t in (hC.disjointOfDiffU…
+· 使用定理 `sdiff_le`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a b :
+ α}, a \ b ≤ a
 -/
 lemma subset_of_mem_disjointOfDiffUnion (hC : IsSetSemiring C) {I : Finset (Set α)}
-    (hs : s in C) (hI : ↑I subseteq C) (t : Set α)
-    (ht : t in (hC.disjointOfDiffUnion hs hI : Set (Set α))) :
-    t subseteq s := by
-apply le_trans hC.subset_of_diffUnion_disjointOfDiffUnion hs hI t ht
+    (hs : s ∈ C) (hI : ↑I ⊆ C) (t : Set α)
+    (ht : t ∈ (hC.disjointOfDiffUnion hs hI : Set (Set α))) :
+    t ⊆ s := by
+  apply le_trans <| hC.subset_of_diffUnion_disjointOfDiffUnion hs hI t ht
   exact sdiff_le (a := s) (b := ⋃₀ I)
-
-/--
-lemma `disjoint_sUnion_disjointOfDiffUnion` / 引理 `disjoint_sUnion_disjointOfDiffUnion`
-
-English:
-lemma disjoint_sUnion_disjointOfDiffUnion
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: by
-  rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]; exact Set.disjoint_sdiff_right
-
-中文:
-引理 disjoint_sUnion_disjointOfDiffUnion
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: by
-  rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]; exact Set.disjoint_sdiff_right
-
-Depends on / 依赖: Set.disjoint_sdiff_right, disjoint_sdiff_right, hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion, sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
+/-
+**MeasureTheory.IsSetSemiring.disjoint_sUnion_disjointOfDiffUnion** 是 Mathlib 中的
+一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：disjoint_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (
+hI : ↑I subseteq C) : Disjoint (⋃₀ (I : Set (Set α))) (⋃₀ hC.disjointOfDiffUnion
+ hs hI)
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.IsSetSemiring.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion`：
+sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) 
+(hI : ↑I subseteq C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion …
+· 使用引理 `Set.disjoint_sdiff_right`：disjoint_sdiff_right : Disjoint s (t \ s)
 -/
-lemma disjoint_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C)
-    (hI : ↑I subseteq C) :
+lemma disjoint_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C)
+    (hI : ↑I ⊆ C) :
     Disjoint (⋃₀ (I : Set (Set α))) (⋃₀ hC.disjointOfDiffUnion hs hI) := by
   rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]; exact Set.disjoint_sdiff_right
-
-/--
-lemma `disjoint_disjointOfDiffUnion` / 引理 `disjoint_disjointOfDiffUnion`
-
-English:
-lemma disjoint_disjointOfDiffUnion
-  given: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  proof: by
-  by_contra h
-  rw [Finset.not_disjoint_iff] at h
-  obtain ⟨u, huI, hu_disjointOfDiffUnion⟩ := h
-  have h_disj : u <= ⊥ :=
-    hC.disjoint_sUnion_disjointOfDiffUnion hs hI (subset_sUnion_of_mem huI)
-    (subset_sUnion_of_mem hu_disjointOfDiffUnion)
-  simp only [Set.bot_eq_empty, subset_empty_iff] at h_disj
-  refine hC.empty_notMem_disjointOfDiffUnion hs hI ?_
-  rwa [h_disj] at hu_disjointOfDiffUnion
-
-中文:
-引理 disjoint_disjointOfDiffUnion
-  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
-  证明: by
-  by_contra h
-  rw [Finset.not_disjoint_iff] at h
-  obtain ⟨u, huI, hu_disjointOfDiffUnion⟩ := h
-  have h_disj : u <= ⊥ :=
-    hC.disjoint_sUnion_disjointOfDiffUnion hs hI (subset_sUnion_of_mem huI)
-    (subset_sUnion_of_mem hu_disjointOfDiffUnion)
-  simp only [Set.bot_eq_empty, subset_empty_iff] at h_disj
-  refine hC.empty_notMem_disjointOfDiffUnion hs hI ?_
-  rwa [h_disj] at hu_disjointOfDiffUnion
-
-Depends on / 依赖: Finset, Finset.not_disjoint_iff, Set.bot_eq_empty, bot_eq_empty, disjoint_sUnion_disjointOfDiffUnion, empty_notMem_disjointOfDiffUnion, hC.disjoint_sUnion_disjointOfDiffUnion, hC.empty_notMem_disjointOfDiffUnion, h_disj, hu_disjointOfDiffUnion, not_disjoint_iff, subset_empty_iff, subset_sUnion_of_mem
+/-
+**MeasureTheory.IsSetSemiring.disjoint_disjointOfDiffUnion** 是 Mathlib 中的一个引理，位于
+命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：disjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I
+ subseteq C) : Disjoint I (hC.disjointOfDiffUnion hs hI)
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.not_disjoint_iff`：not_disjoint_iff : ¬Disjoint s t ↔ exists a, a 
+in s ∧ a in t
+· 使用引理 `MeasureTheory.IsSetSemiring.disjoint_sUnion_disjointOfDiffUnion`：disjoin
+t_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subse
+teq C) : Disjoint (⋃₀ (I : Set (Set α))) (⋃₀ hC.disjo…
+· 使用定理 `Set.subset_sUnion_of_mem`：subset_sUnion_of_mem {S : Set (Set α)} {t : Se
+t α} (tS : t in S) : t subseteq ⋃₀ S
+· 使用引理 `MeasureTheory.IsSetSemiring.empty_notMem_disjointOfDiffUnion`：empty_notM
+em_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
+ : ∅ ∉ hC.disjointOfDiffUnion hs hI
 -/
-lemma disjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C) :
+lemma disjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C) (hI : ↑I ⊆ C) :
     Disjoint I (hC.disjointOfDiffUnion hs hI) := by
   by_contra h
   rw [Finset.not_disjoint_iff] at h
   obtain ⟨u, huI, hu_disjointOfDiffUnion⟩ := h
-  have h_disj : u <= ⊥ :=
+  have h_disj : u ≤ ⊥ :=
     hC.disjoint_sUnion_disjointOfDiffUnion hs hI (subset_sUnion_of_mem huI)
     (subset_sUnion_of_mem hu_disjointOfDiffUnion)
   simp only [Set.bot_eq_empty, subset_empty_iff] at h_disj
   refine hC.empty_notMem_disjointOfDiffUnion hs hI ?_
   rwa [h_disj] at hu_disjointOfDiffUnion
-
-/--
-lemma `pairwiseDisjoint_union_disjointOfDiffUnion` / 引理 `pairwiseDisjoint_union_disjointOfDiffUnion`
-
-English:
-lemma pairwiseDisjoint_union_disjointOfDiffUnion
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: by
-  rw [pairwiseDisjoint_union]
-  refine ⟨h_dis, hC.pairwiseDisjoint_disjointOfDiffUnion hs hI, fun u hu v hv _ => ?_⟩
-  simp_rw [id]
-  exact disjoint_of_subset (subset_sUnion_of_mem hu) (subset_sUnion_of_mem hv)
-    (hC.disjoint_sUnion_disjointOfDiffUnion hs hI)
-
-中文:
-引理 pairwiseDisjoint_union_disjointOfDiffUnion
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: by
-  rw [pairwiseDisjoint_union]
-  refine ⟨h_dis, hC.pairwiseDisjoint_disjointOfDiffUnion hs hI, fun u hu v hv _ => ?_⟩
-  simp_rw [id]
-  exact disjoint_of_subset (subset_sUnion_of_mem hu) (subset_sUnion_of_mem hv)
-    (hC.disjoint_sUnion_disjointOfDiffUnion hs hI)
-
-Depends on / 依赖: disjoint_of_subset, disjoint_sUnion_disjointOfDiffUnion, hC.disjoint_sUnion_disjointOfDiffUnion, hC.pairwiseDisjoint_disjointOfDiffUnion, h_dis, pairwiseDisjoint_disjointOfDiffUnion, pairwiseDisjoint_union, simp_rw, subset_sUnion_of_mem
+/-
+**MeasureTheory.IsSetSemiring.pairwiseDisjoint_union_disjointOfDiffUnion** 是 Mat
+hlib 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：pairwiseDisjoint_union_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s 
+in C) (hI : ↑I subseteq C) (h_dis : PairwiseDisjoint (I : Set (Set α)) id) : Pai
+rwiseDisjoint (I union hC.disjointOfDiffUnion hs hI : Set (Set α)) id
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C；h_dis : PairwiseDisjoint 
+(I : Set (Set α)) id。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.pairwiseDisjoint_union`：pairwiseDisjoint_union : (s union t).Pairwis
+eDisjoint f ↔ s.PairwiseDisjoint f ∧ t.PairwiseDisjoint f ∧ forall ⦃i⦄, i in s -
+> forall ⦃j⦄, j …
+· 使用引理 `MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfDiffUnion`：pairwi
+seDisjoint_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I sub
+seteq C) : PairwiseDisjoint (hC.disjointOfDiffUnion hs…
+· 使用引理 `Set.disjoint_of_subset`：disjoint_of_subset (hs : s₁ subseteq s₂) (ht : t
+₁ subseteq t₂) (h : Disjoint s₂ t₂) : Disjoint s₁ t₁
+· 使用定理 `Set.subset_sUnion_of_mem`：subset_sUnion_of_mem {S : Set (Set α)} {t : Se
+t α} (tS : t in S) : t subseteq ⋃₀ S
+· 使用引理 `MeasureTheory.IsSetSemiring.disjoint_sUnion_disjointOfDiffUnion`：disjoin
+t_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subse
+teq C) : Disjoint (⋃₀ (I : Set (Set α))) (⋃₀ hC.disjo…
 -/
-lemma pairwiseDisjoint_union_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C)
-    (hI : ↑I subseteq C) (h_dis : PairwiseDisjoint (I : Set (Set α)) id) :
-    PairwiseDisjoint (I union hC.disjointOfDiffUnion hs hI : Set (Set α)) id := by
+lemma pairwiseDisjoint_union_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s ∈ C)
+    (hI : ↑I ⊆ C) (h_dis : PairwiseDisjoint (I : Set (Set α)) id) :
+    PairwiseDisjoint (I ∪ hC.disjointOfDiffUnion hs hI : Set (Set α)) id := by
   rw [pairwiseDisjoint_union]
-  refine ⟨h_dis, hC.pairwiseDisjoint_disjointOfDiffUnion hs hI, fun u hu v hv _ => ?_⟩
+  refine ⟨h_dis, hC.pairwiseDisjoint_disjointOfDiffUnion hs hI, fun u hu v hv _ ↦ ?_⟩
   simp_rw [id]
   exact disjoint_of_subset (subset_sUnion_of_mem hu) (subset_sUnion_of_mem hv)
     (hC.disjoint_sUnion_disjointOfDiffUnion hs hI)
-
-/--
-lemma `sUnion_union_sUnion_disjointOfDiffUnion_of_subset` / 引理 `sUnion_union_sUnion_disjointOfDiffUnion_of_subset`
-
-English:
-lemma sUnion_union_sUnion_disjointOfDiffUnion_of_subset
-  statement: (hC : IsSetSemiring C)
-  proof: by
-  conv_rhs => rw [← union_sdiff_cancel (Set.sUnion_subset hI_ss : ⋃₀ ↑I subseteq s),
-    hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
-
-中文:
-引理 sUnion_union_sUnion_disjointOfDiffUnion_of_subset
-  结论: (hC : 是SetSemiring C)
-  证明: by
-  conv_rhs => rw [← union_sdiff_cancel (Set.sUnion_subset hI_ss : ⋃₀ ↑I subseteq s),
-    hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
-
-Depends on / 依赖: Set.sUnion_subset, conv_rhs, hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion, hI_ss, sUnion_subset, sdiff_sUnion_eq_sUnion_disjointOfDiffUnion, subseteq, union_sdiff_cancel
+/-
+**MeasureTheory.IsSetSemiring.sUnion_union_sUnion_disjointOfDiffUnion_of_subset*
+* 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：sUnion_union_sUnion_disjointOfDiffUnion_of_subset (hC : IsSetSemiring C) (
+hs : s in C) (hI : ↑I subseteq C) (hI_ss : forall t in I, t subseteq s) : ⋃₀ I u
+nion ⋃₀ hC.disjointOfDiffUnion hs hI = s
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C；hI_ss : forall t in I, t 
+subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_sdiff_cancel`：union_sdiff_cancel {s t : Set α} (h : s subseteq
+ t) : s union t \ s = t
+· 使用定理 `Set.sUnion_subset`：sUnion_subset {S : Set (Set α)} {t : Set α} (h : fora
+ll t' in S, t' subseteq t) : ⋃₀ S subseteq t
+· 使用引理 `MeasureTheory.IsSetSemiring.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion`：
+sdiff_sUnion_eq_sUnion_disjointOfDiffUnion (hC : IsSetSemiring C) (hs : s in C) 
+(hI : ↑I subseteq C) : s \ ⋃₀ I = ⋃₀ hC.disjointOfDiffUnion …
 -/
 lemma sUnion_union_sUnion_disjointOfDiffUnion_of_subset (hC : IsSetSemiring C)
-    (hs : s in C) (hI : ↑I subseteq C) (hI_ss : forall t in I, t subseteq s) :
-    ⋃₀ I union ⋃₀ hC.disjointOfDiffUnion hs hI = s := by
-  conv_rhs => rw [← union_sdiff_cancel (Set.sUnion_subset hI_ss : ⋃₀ ↑I subseteq s),
+    (hs : s ∈ C) (hI : ↑I ⊆ C) (hI_ss : ∀ t ∈ I, t ⊆ s) :
+    ⋃₀ I ∪ ⋃₀ hC.disjointOfDiffUnion hs hI = s := by
+  conv_rhs => rw [← union_sdiff_cancel (Set.sUnion_subset hI_ss : ⋃₀ ↑I ⊆ s),
     hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
-
-/--
-lemma `sUnion_union_disjointOfDiffUnion_of_subset` / 引理 `sUnion_union_disjointOfDiffUnion_of_subset`
-
-English:
-lemma sUnion_union_disjointOfDiffUnion_of_subset
-  statement: (hC : IsSetSemiring C) (hs : s in C)
-  proof: by
-  conv_rhs => rw [← sUnion_union_sUnion_disjointOfDiffUnion_of_subset hC hs hI hI_ss]
-  simp_rw [coe_union]
-  rw [sUnion_union]
-
-中文:
-引理 sUnion_union_disjointOfDiffUnion_of_subset
-  结论: (hC : 是SetSemiring C) (hs : s in C)
-  证明: by
-  conv_rhs => rw [← sUnion_union_sUnion_disjointOfDiffUnion_of_subset hC hs hI hI_ss]
-  simp_rw [coe_union]
-  rw [sUnion_union]
-
-Depends on / 依赖: coe_union, conv_rhs, hI_ss, sUnion_union, sUnion_union_sUnion_disjointOfDiffUnion_of_subset, simp_rw
+/-
+**MeasureTheory.IsSetSemiring.sUnion_union_disjointOfDiffUnion_of_subset** 是 Mat
+hlib 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：sUnion_union_disjointOfDiffUnion_of_subset (hC : IsSetSemiring C) (hs : s 
+in C) (hI : ↑I subseteq C) (hI_ss : forall t in I, t subseteq s) : ⋃₀ ↑(I union 
+hC.disjointOfDiffUnion hs hI) = s
+参数：hC : IsSetSemiring C；hs : s in C；hI : ↑I subseteq C；hI_ss : forall t in I, t 
+subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.IsSetSemiring.sUnion_union_sUnion_disjointOfDiffUnion_of_s
+ubset`：sUnion_union_sUnion_disjointOfDiffUnion_of_subset (hC : IsSetSemiring C) 
+(hs : s in C) (hI : ↑I subseteq C) (hI_ss : forall t in I, t subset…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
+· 使用定理 `Set.sUnion_union`：sUnion_union (S T : Set (Set α)) : ⋃₀ (S union T) = ⋃₀
+ S union ⋃₀ T
 -/
-lemma sUnion_union_disjointOfDiffUnion_of_subset (hC : IsSetSemiring C) (hs : s in C)
-    (hI : ↑I subseteq C) (hI_ss : forall t in I, t subseteq s) :
-    ⋃₀ ↑(I union hC.disjointOfDiffUnion hs hI) = s := by
+lemma sUnion_union_disjointOfDiffUnion_of_subset (hC : IsSetSemiring C) (hs : s ∈ C)
+    (hI : ↑I ⊆ C) (hI_ss : ∀ t ∈ I, t ⊆ s) :
+    ⋃₀ ↑(I ∪ hC.disjointOfDiffUnion hs hI) = s := by
   conv_rhs => rw [← sUnion_union_sUnion_disjointOfDiffUnion_of_subset hC hs hI hI_ss]
   simp_rw [coe_union]
   rw [sUnion_union]
@@ -1273,410 +1245,453 @@ variable {j : Set α} {J : Finset (Set α)}
 
 open MeasureTheory Order
 
-/--
-theorem `exists_partition_disjointed` / 定理 `exists_partition_disjointed`
-
-English:
-theorem exists_partition_disjointed
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : J)
-  proof: hC.mem_supClosure_iff.mp
-    hC.isSetRing_supClosure.disjointed_mem (fun _ => subset_supClosure (hJ (Subtype.coe_prop _))) _
-
-中文:
-定理 存在_partition_disjointed
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (j : J)
-  证明: hC.mem_supClosure_iff.mp
-    hC.isSetRing_supClosure.disjointed_mem (fun _ => subset_supClosure (hJ (Subtype.coe_prop _))) _
+/-
+**MeasureTheory.IsSetSemiring.exists_partition_disjointed** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.IsSetSemiring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem exists_partition_disjointed (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : J) :
-    exists P : Finpartition (disjointed (fun i => (J.equivFin.symm i : Set α)) (J.equivFin j)),
-      ↑P.parts subseteq C :=
-hC.mem_supClosure_iff.mp
-    hC.isSetRing_supClosure.disjointed_mem (fun _ => subset_supClosure (hJ (Subtype.coe_prop _))) _
+private theorem exists_partition_disjointed (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (j : J) :
+    ∃ P : Finpartition (disjointed (fun i ↦ (J.equivFin.symm i : Set α)) (J.equivFin j)),
+      ↑P.parts ⊆ C :=
+  hC.mem_supClosure_iff.mp <|
+    hC.isSetRing_supClosure.disjointed_mem (fun _ ↦ subset_supClosure (hJ (Subtype.coe_prop _))) _
 
-/--
-Definition of `disjointOfUnion` / `disjointOfUnion` 的定义
+/-- For some `hJ : J ⊆ C` and `j : Set α`, where `hC : IsSetSemiring C`, this is
+a `Finset (Set α)` such that `K j := hC.disjointOfUnion hJ` are disjoint
+and `⋃₀ K j ⊆ j`, for `j ∈ J`.
+Using these we write `⋃₀ J` as a disjoint union `⋃₀ J = ⋃₀ ⋃ x ∈ J, (K x)`.
+See `MeasureTheory.IsSetSemiring.disjointOfUnion_props`. -/
+/-
+**MeasureTheory.IsSetSemiring.disjointOfUnion** 是 Mathlib 中的一个定义，位于命名空间 `Measure
+Theory.IsSetSemiring`。
+形式化陈述：disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : Set α) : 
+Finset (Set α)
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C；j : Set α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition disjointOfUnion
-  signature: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : Set α)
-  body: if hj : j in J then (hC.exists_partition_disjointed hJ ⟨j, hj⟩).choose.parts else ∅
-
-中文:
-定义 disjointOfUnion
-  签名: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (j : 集合 α)
-  定义体: if hj : j in J then (hC.exists_partition_disjointed hJ ⟨j, hj⟩).choose.parts else ∅
-
-Depends on / 依赖: choose.parts, exists_partition_disjointed, hC.exists_partition_disjointed
+--- 原说明 ---
+For some `hJ : J ⊆ C` and `j : Set α`, where `hC : IsSetSemiring C`, this is
+a `Finset (Set α)` such that `K j := hC.disjointOfUnion hJ` are disjoint
+and `⋃₀ K j ⊆ j`, for `j ∈ J`.
+Using these we write `⋃₀ J` as a disjoint union `⋃₀ J = ⋃₀ ⋃ x ∈ J, (K x)`.
+See `MeasureTheory.IsSetSemiring.disjointOfUnion_props`.
 -/
-noncomputable def disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : Set α) :
+noncomputable def disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (j : Set α) :
     Finset (Set α) :=
-  if hj : j in J then (hC.exists_partition_disjointed hJ ⟨j, hj⟩).choose.parts else ∅
-
-/--
-theorem `disjointOfUnion_coe` / 定理 `disjointOfUnion_coe`
-
-English:
-theorem disjointOfUnion_coe
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : J)
-  proof: by
-  rw [disjointOfUnion]; rw [dif_pos j.2]
-
-中文:
-定理 disjointOfUnion_coe
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (j : J)
-  证明: by
-  rw [disjointOfUnion]; rw [dif_pos j.2]
+  if hj : j ∈ J then (hC.exists_partition_disjointed hJ ⟨j, hj⟩).choose.parts else ∅
+/-
+**MeasureTheory.IsSetSemiring.disjointOfUnion_coe** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.IsSetSemiring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem disjointOfUnion_coe (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : J) :
+private theorem disjointOfUnion_coe (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (j : J) :
     hC.disjointOfUnion hJ j = (hC.exists_partition_disjointed hJ j).choose.parts := by
-  rw [disjointOfUnion]; rw [dif_pos j.2]
-
-/--
-lemma `pairwiseDisjoint_disjointOfUnion` / 引理 `pairwiseDisjoint_disjointOfUnion`
-
-English:
-lemma pairwiseDisjoint_disjointOfUnion
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C)
-  proof: by
-  refine Pairwise.set_of_subtype _ _ fun j k hjk => ?_
-  simp_rw [Function.onFun, hC.disjointOfUnion_coe hJ, Finset.disjoint_iff_ne]
-exact fun s hs t ht => Disjoint.ne (Finpartition.ne_bot _ hs)
-.mono (Finpartition.le _ hs) (Finpartition.le _ ht)
-disjoint_disjointed _ J.equivFin.injective.ne hjk
-
-中文:
-引理 pairwiseDisjoint_disjointOfUnion
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C)
-  证明: by
-  refine Pairwise.set_of_subtype _ _ fun j k hjk => ?_
-  simp_rw [Function.onFun, hC.disjointOfUnion_coe hJ, Finset.disjoint_iff_ne]
-exact fun s hs t ht => Disjoint.ne (Finpartition.ne_bot _ hs)
-.mono (Finpartition.le _ hs) (Finpartition.le _ ht)
-disjoint_disjointed _ J.equivFin.injective.ne hjk
-
-Depends on / 依赖: Disjoint, Disjoint.ne, Finpartition, Finpartition.le, Finpartition.ne_bot, Finset, Finset.disjoint_iff_ne, Function, Function.onFun, J.equivFin.injective.ne, Pairwise, Pairwise.set_of_subtype, disjointOfUnion_coe, disjoint_disjointed, disjoint_iff_ne, equivFin, hC.disjointOfUnion_coe, injective, ne_bot, set_of_subtype
+  rw [disjointOfUnion, dif_pos j.2]
+/-
+**MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfUnion** 是 Mathlib 中的一个引
+理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：pairwiseDisjoint_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq 
+C) : PairwiseDisjoint J (hC.disjointOfUnion hJ)
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pairwise.set_of_subtype`：∀ {α : Type u_1} (s : Set α) (r : α → α → Prop)
+, (Pairwise fun x y => r ↑x ↑y) → s.Pairwise r
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_partition_disjointed`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Se
+t α)},   MeasureTheory.IsSetSemiring C → ↑J ⊆ C → ∀ (j : ↥J), ∃ P, ↑P.parts ⊆ C
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.disjointOfUnion_coe`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Set α)} (h
+C : MeasureTheory.IsSetSemiring C) (hJ : ↑J ⊆ C) (j : ↥J),   hC.disjointOfUnion 
+hJ…
+· 使用定理 `Disjoint.ne`：Disjoint.ne (ha : a != ⊥) (hab : Disjoint a b) : a != b
+· 使用定理 `Finpartition.ne_bot`：ne_bot {b : α} (hb : b in P.parts) : b != ⊥
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `Finpartition.le`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : OrderBot 
+α] {a : α} (P : Finpartition a) {b : α}, b ∈ P.parts → b ≤ a
+· 使用定理 `disjoint_disjointed`：disjoint_disjointed (f : ι -> α) : Pairwise (Disjoi
+nt on disjointed f)
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-lemma pairwiseDisjoint_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) :
+lemma pairwiseDisjoint_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) :
     PairwiseDisjoint J (hC.disjointOfUnion hJ) := by
-  refine Pairwise.set_of_subtype _ _ fun j k hjk => ?_
+  refine Pairwise.set_of_subtype _ _ fun j k hjk ↦ ?_
   simp_rw [Function.onFun, hC.disjointOfUnion_coe hJ, Finset.disjoint_iff_ne]
-exact fun s hs t ht => Disjoint.ne (Finpartition.ne_bot _ hs)
-.mono (Finpartition.le _ hs) (Finpartition.le _ ht)
-disjoint_disjointed _ J.equivFin.injective.ne hjk
-
-/--
-lemma `disjointOfUnion_subset` / 引理 `disjointOfUnion_subset`
-
-English:
-lemma disjointOfUnion_subset
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  proof: by
-  lift j to J using hj
-  rw [hC.disjointOfUnion_coe hJ]
-  exact (hC.exists_partition_disjointed hJ j).choose_spec
-
-中文:
-引理 disjointOfUnion_subset
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  证明: by
-  lift j to J using hj
-  rw [hC.disjointOfUnion_coe hJ]
-  exact (hC.exists_partition_disjointed hJ j).choose_spec
-
-Depends on / 依赖: choose_spec, disjointOfUnion_coe, exists_partition_disjointed, hC.disjointOfUnion_coe, hC.exists_partition_disjointed
+  exact fun s hs t ht ↦ Disjoint.ne (Finpartition.ne_bot _ hs) <|
+    .mono (Finpartition.le _ hs) (Finpartition.le _ ht) <|
+    disjoint_disjointed _ <| J.equivFin.injective.ne hjk
+/-
+**MeasureTheory.IsSetSemiring.disjointOfUnion_subset** 是 Mathlib 中的一个引理，位于命名空间 `
+MeasureTheory.IsSetSemiring`。
+形式化陈述：disjointOfUnion_subset (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j
+ in J) : (disjointOfUnion hC hJ j : Set (Set α)) subseteq C
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C；hj : j in J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Finset.FinsetCoe.canLift`：∀ {α : Type u_1} (s : Finset α), CanLift α (↥s
+) Subtype.val fun a => a ∈ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_partition_disjointed`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Se
+t α)},   MeasureTheory.IsSetSemiring C → ↑J ⊆ C → ∀ (j : ↥J), ∃ P, ↑P.parts ⊆ C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.disjointOfUnion_coe`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Set α)} (h
+C : MeasureTheory.IsSetSemiring C) (hJ : ↑J ⊆ C) (j : ↥J),   hC.disjointOfUnion 
+hJ…
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-lemma disjointOfUnion_subset (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) :
-    (disjointOfUnion hC hJ j : Set (Set α)) subseteq C := by
+lemma disjointOfUnion_subset (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (hj : j ∈ J) :
+    (disjointOfUnion hC hJ j : Set (Set α)) ⊆ C := by
   lift j to J using hj
   rw [hC.disjointOfUnion_coe hJ]
   exact (hC.exists_partition_disjointed hJ j).choose_spec
-
-/--
-lemma `pairwiseDisjoint_disjointOfUnion_of_mem` / 引理 `pairwiseDisjoint_disjointOfUnion_of_mem`
-
-English:
-lemma pairwiseDisjoint_disjointOfUnion_of_mem
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  proof: by
-  lift j to J using hj
-  rw [disjointOfUnion_coe]; rw [← supIndep_iff_pairwiseDisjoint]
-  exact Finpartition.supIndep _
-
-中文:
-引理 pairwiseDisjoint_disjointOfUnion_of_mem
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  证明: by
-  lift j to J using hj
-  rw [disjointOfUnion_coe]; rw [← supIndep_iff_pairwiseDisjoint]
-  exact Finpartition.supIndep _
-
-Depends on / 依赖: Finpartition, Finpartition.supIndep, disjointOfUnion_coe, supIndep, supIndep_iff_pairwiseDisjoint
+/-
+**MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfUnion_of_mem** 是 Mathli
+b 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：pairwiseDisjoint_disjointOfUnion_of_mem (hC : IsSetSemiring C) (hJ : ↑J su
+bseteq C) (hj : j in J) : PairwiseDisjoint (hC.disjointOfUnion hJ j : Set (Set α
+)) id
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C；hj : j in J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Finset.FinsetCoe.canLift`：∀ {α : Type u_1} (s : Finset α), CanLift α (↥s
+) Subtype.val fun a => a ∈ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_partition_disjointed`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Se
+t α)},   MeasureTheory.IsSetSemiring C → ↑J ⊆ C → ∀ (j : ↥J), ∃ P, ↑P.parts ⊆ C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.disjointOfUnion_coe`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Set α)} (h
+C : MeasureTheory.IsSetSemiring C) (hJ : ↑J ⊆ C) (j : ↥J),   hC.disjointOfUnion 
+hJ…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.supIndep_iff_pairwiseDisjoint`：supIndep_iff_pairwiseDisjoint : s.
+SupIndep f ↔ (s : Set ι).PairwiseDisjoint f
+· 使用定理 `Finpartition.supIndep`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Ord
+erBot α] {a : α} (self : Finpartition a), self.parts.SupIndep id
 -/
-lemma pairwiseDisjoint_disjointOfUnion_of_mem (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) :
+lemma pairwiseDisjoint_disjointOfUnion_of_mem (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (hj : j ∈ J) :
     PairwiseDisjoint (hC.disjointOfUnion hJ j : Set (Set α)) id := by
   lift j to J using hj
-  rw [disjointOfUnion_coe]; rw [← supIndep_iff_pairwiseDisjoint]
+  rw [disjointOfUnion_coe, ← supIndep_iff_pairwiseDisjoint]
   exact Finpartition.supIndep _
-
-/--
-lemma `pairwiseDisjoint_biUnion_disjointOfUnion` / 引理 `pairwiseDisjoint_biUnion_disjointOfUnion`
-
-English:
-lemma pairwiseDisjoint_biUnion_disjointOfUnion
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C)
-  proof: by
+/-
+**MeasureTheory.IsSetSemiring.pairwiseDisjoint_biUnion_disjointOfUnion** 是 Mathl
+ib 中的一个引理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：pairwiseDisjoint_biUnion_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J s
+ubseteq C) : PairwiseDisjoint (⋃ x in J, (hC.disjointOfUnion hJ x : Set (Set α))
+) id
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.PairwiseDisjoint.biUnion`：∀ {α : Type u_1} {ι : Type u_2} {ι' : Type
+ u_3} [inst : CompleteLattice α] {s : Set ι'} {g : ι' → Set ι} {f : ι → α},   (s
+.PairwiseDisjoint …
+· 使用定理 `Pairwise.set_of_subtype`：∀ {α : Type u_1} (s : Set α) (r : α → α → Prop)
+, (Pairwise fun x y => r ↑x ↑y) → s.Pairwise r
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_partition_disjointed`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Se
+t α)},   MeasureTheory.IsSetSemiring C → ↑J ⊆ C → ∀ (j : ↥J), ∃ P, ↑P.parts ⊆ C
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.disjointOfUnion_coe`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Set α)} (h
+C : MeasureTheory.IsSetSemiring C) (hJ : ↑J ⊆ C) (j : ↥J),   hC.disjointOfUnion 
+hJ…
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用引理 `Pairwise.comp_of_injective`：Pairwise.comp_of_injective (hr : Pairwise r)
+ {f : β -> α} (hf : Injective f) : Pairwise (r on f)
+· 使用定理 `disjoint_disjointed`：disjoint_disjointed (f : ι -> α) : Pairwise (Disjoi
+nt on disjointed f)
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用引理 `MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfUnion_of_mem`：pai
+rwiseDisjoint_disjointOfUnion_of_mem (hC : IsSetSemiring C) (hJ : ↑J subseteq C)
+ (hj : j in J) : PairwiseDisjoint (hC.disjointOfUnion hJ …
+-/
+lemma pairwiseDisjoint_biUnion_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) :
+    PairwiseDisjoint (⋃ x ∈ J, (hC.disjointOfUnion hJ x : Set (Set α))) id := by
   simp_rw [← SetLike.mem_coe]
   refine Set.PairwiseDisjoint.biUnion
     (Pairwise.set_of_subtype _ _ ?_)
-    (fun _ => hC.pairwiseDisjoint_disjointOfUnion_of_mem hJ)
+    (fun _ ↦ hC.pairwiseDisjoint_disjointOfUnion_of_mem hJ)
   simp_rw [Function.onFun, disjointOfUnion_coe, SetLike.mem_coe, ← Finset.sup_eq_iSup,
     Finpartition.sup_parts]
   exact (disjoint_disjointed _).comp_of_injective J.equivFin.injective
-
-中文:
-引理 pairwiseDisjoint_biUnion_disjointOfUnion
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C)
-  证明: by
-  simp_rw [← SetLike.mem_coe]
-  refine Set.PairwiseDisjoint.biUnion
-    (Pairwise.set_of_subtype _ _ ?_)
-    (fun _ => hC.pairwiseDisjoint_disjointOfUnion_of_mem hJ)
-  simp_rw [Function.onFun, disjointOfUnion_coe, SetLike.mem_coe, ← Finset.sup_eq_iSup,
-    Finpartition.sup_parts]
-  exact (disjoint_disjointed _).comp_of_injective J.equivFin.injective
-
-Depends on / 依赖: Finpartition, Finpartition.sup_parts, Finset, Finset.sup_eq_iSup, Function, Function.onFun, J.equivFin.injective, Pairwise, Pairwise.set_of_subtype, PairwiseDisjoint, Set.PairwiseDisjoint.biUnion, SetLike, SetLike.mem_coe, biUnion, comp_of_injective, disjointOfUnion_coe, disjoint_disjointed, equivFin, hC.pairwiseDisjoint_disjointOfUnion_of_mem, injective
+/-
+**MeasureTheory.IsSetSemiring.disjointOfUnion_subset_of_mem** 是 Mathlib 中的一个引理，位
+于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：disjointOfUnion_subset_of_mem (hC : IsSetSemiring C) (hJ : ↑J subseteq C) 
+(hj : j in J) : ⋃₀ hC.disjointOfUnion hJ j subseteq j
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C；hj : j in J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Finset.FinsetCoe.canLift`：∀ {α : Type u_1} (s : Finset α), CanLift α (↥s
+) Subtype.val fun a => a ∈ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_partition_disjointed`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Se
+t α)},   MeasureTheory.IsSetSemiring C → ↑J ⊆ C → ∀ (j : ↥J), ∃ P, ↑P.parts ⊆ C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.disjointOfUnion_coe`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Set α)} (h
+C : MeasureTheory.IsSetSemiring C) (hJ : ↑J ⊆ C) (j : ↥J),   hC.disjointOfUnion 
+hJ…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sup_id_set_eq_sUnion`：sup_id_set_eq_sUnion (s : Finset (Set α)) :
+ s.sup id = ⋃₀ ↑s
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `disjointed_subset`：disjointed_subset [Preorder ι] [LocallyFiniteOrderBot
+ ι] (f : ι -> Set α) (i : ι) : disjointed f i subseteq f i
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-lemma pairwiseDisjoint_biUnion_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) :
-    PairwiseDisjoint (⋃ x in J, (hC.disjointOfUnion hJ x : Set (Set α))) id := by
-  simp_rw [← SetLike.mem_coe]
-  refine Set.PairwiseDisjoint.biUnion
-    (Pairwise.set_of_subtype _ _ ?_)
-    (fun _ => hC.pairwiseDisjoint_disjointOfUnion_of_mem hJ)
-  simp_rw [Function.onFun, disjointOfUnion_coe, SetLike.mem_coe, ← Finset.sup_eq_iSup,
-    Finpartition.sup_parts]
-  exact (disjoint_disjointed _).comp_of_injective J.equivFin.injective
-
-/--
-lemma `disjointOfUnion_subset_of_mem` / 引理 `disjointOfUnion_subset_of_mem`
-
-English:
-lemma disjointOfUnion_subset_of_mem
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  proof: by
+lemma disjointOfUnion_subset_of_mem (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (hj : j ∈ J) :
+    ⋃₀ hC.disjointOfUnion hJ j ⊆ j := by
   lift j to J using hj
   grw [disjointOfUnion_coe, ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts,
     disjointed_subset, Equiv.symm_apply_apply]
-
-中文:
-引理 disjointOfUnion_subset_of_mem
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  证明: by
-  lift j to J using hj
-  grw [disjointOfUnion_coe, ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts,
-    disjointed_subset, Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.symm_apply_apply, Finpartition, Finpartition.sup_parts, Finset, Finset.sup_id_set_eq_sUnion, disjointOfUnion_coe, disjointed_subset, sup_id_set_eq_sUnion, sup_parts, symm_apply_apply
+/-
+**MeasureTheory.IsSetSemiring.subset_of_mem_disjointOfUnion** 是 Mathlib 中的一个引理，位
+于命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：subset_of_mem_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) 
+(hj : j in J) {x : Set α} (hx : x in (hC.disjointOfUnion hJ) j) : x subseteq j
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C；hj : j in J；hx : x in (hC.disjointOfU
+nion hJ) j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.sUnion_subset_iff`：sUnion_subset_iff {s : Set (Set α)} {t : Set α} :
+ ⋃₀ s subseteq t ↔ forall t' in s, t' subseteq t
+· 使用引理 `MeasureTheory.IsSetSemiring.disjointOfUnion_subset_of_mem`：disjointOfUni
+on_subset_of_mem (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) : ⋃₀ 
+hC.disjointOfUnion hJ j subseteq j
 -/
-lemma disjointOfUnion_subset_of_mem (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) :
-    ⋃₀ hC.disjointOfUnion hJ j subseteq j := by
-  lift j to J using hj
-  grw [disjointOfUnion_coe, ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts,
-    disjointed_subset, Equiv.symm_apply_apply]
-
-/--
-lemma `subset_of_mem_disjointOfUnion` / 引理 `subset_of_mem_disjointOfUnion`
-
-English:
-lemma subset_of_mem_disjointOfUnion
-  statement: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) {x : Set α}
-  proof: sUnion_subset_iff.mp (hC.disjointOfUnion_subset_of_mem hJ hj) x hx
-
-中文:
-引理 subset_of_mem_disjointOfUnion
-  结论: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) {x : 集合 α}
-  证明: sUnion_subset_iff.mp (hC.disjointOfUnion_subset_of_mem hJ hj) x hx
-
-Depends on / 依赖: IsTrans, IsTrans.trans, disjointOfUnion_subset_of_mem, hC.disjointOfUnion_subset_of_mem, sUnion_subset_iff, sUnion_subset_iff.mp
--/
-lemma subset_of_mem_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) {x : Set α}
-    (hx : x in (hC.disjointOfUnion hJ) j) : x subseteq j :=
+lemma subset_of_mem_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (hj : j ∈ J) {x : Set α}
+    (hx : x ∈ (hC.disjointOfUnion hJ) j) : x ⊆ j :=
   sUnion_subset_iff.mp (hC.disjointOfUnion_subset_of_mem hJ hj) x hx
-
-/--
-lemma `empty_notMem_disjointOfUnion` / 引理 `empty_notMem_disjointOfUnion`
-
-English:
-lemma empty_notMem_disjointOfUnion
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  proof: by
-  lift j to J using hj
-  rw [disjointOfUnion_coe]
-  exact Finpartition.bot_notMem _
-
-中文:
-引理 empty_notMem_disjointOfUnion
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
-  证明: by
-  lift j to J using hj
-  rw [disjointOfUnion_coe]
-  exact Finpartition.bot_notMem _
-
-Depends on / 依赖: Finpartition, Finpartition.bot_notMem, IsTrans, bot_notMem, disjointOfUnion_coe
+/-
+**MeasureTheory.IsSetSemiring.empty_notMem_disjointOfUnion** 是 Mathlib 中的一个引理，位于
+命名空间 `MeasureTheory.IsSetSemiring`。
+形式化陈述：empty_notMem_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (
+hj : j in J) : ∅ ∉ hC.disjointOfUnion hJ j
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C；hj : j in J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Finset.FinsetCoe.canLift`：∀ {α : Type u_1} (s : Finset α), CanLift α (↥s
+) Subtype.val fun a => a ∈ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_partition_disjointed`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Se
+t α)},   MeasureTheory.IsSetSemiring C → ↑J ⊆ C → ∀ (j : ↥J), ∃ P, ↑P.parts ⊆ C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.disjointOfUnion_coe`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Set α)} (h
+C : MeasureTheory.IsSetSemiring C) (hJ : ↑J ⊆ C) (j : ↥J),   hC.disjointOfUnion 
+hJ…
+· 使用定理 `Finpartition.bot_notMem`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : O
+rderBot α] {a : α} (self : Finpartition a), ⊥ ∉ self.parts
 -/
-lemma empty_notMem_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) :
+lemma empty_notMem_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) (hj : j ∈ J) :
     ∅ ∉ hC.disjointOfUnion hJ j := by
   lift j to J using hj
   rw [disjointOfUnion_coe]
   exact Finpartition.bot_notMem _
-
-/--
-lemma `sUnion_disjointOfUnion` / 引理 `sUnion_disjointOfUnion`
-
-English:
-lemma sUnion_disjointOfUnion
-  given: (hC : IsSetSemiring C) (hJ : ↑J subseteq C)
-  proof: by
-  simp_rw [sUnion_iUnion, ← iSup_eq_iUnion, iSup_subtype', disjointOfUnion_coe,
-    ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts, J.equivFin.surjective.iSup_comp,
-    iSup_disjointed, J.equivFin.symm.surjective.iSup_comp, iSup_subtype, Finset.sup_eq_iSup, id]
-
-中文:
-引理 sUnion_disjointOfUnion
-  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C)
-  证明: by
-  simp_rw [sUnion_iUnion, ← iSup_eq_iUnion, iSup_subtype', disjointOfUnion_coe,
-    ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts, J.equivFin.surjective.iSup_comp,
-    iSup_disjointed, J.equivFin.symm.surjective.iSup_comp, iSup_subtype, Finset.sup_eq_iSup, id]
-
-Depends on / 依赖: Finpartition, Finpartition.sup_parts, Finset, Finset.sup_eq_iSup, Finset.sup_id_set_eq_sUnion, J.equivFin.surjective.iSup_comp, J.equivFin.symm.surjective.iSup_comp, disjointOfUnion_coe, equivFin, iSup_comp, iSup_disjointed, iSup_eq_iUnion, iSup_subtype, sUnion_iUnion, simp_rw, sup_eq_iSup, sup_id_set_eq_sUnion, sup_parts, surjective
+/-
+**MeasureTheory.IsSetSemiring.sUnion_disjointOfUnion** 是 Mathlib 中的一个引理，位于命名空间 `
+MeasureTheory.IsSetSemiring`。
+形式化陈述：sUnion_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) : ⋃₀ ⋃ 
+x in J, (hC.disjointOfUnion hJ x : Set (Set α)) = ⋃₀ J
+参数：hC : IsSetSemiring C；hJ : ↑J subseteq C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.sUnion_iUnion`：sUnion_iUnion (s : ι -> Set (Set α)) : ⋃₀ ⋃ i, s i = 
+⋃ i, ⋃₀ s i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_subtype'`：iSup_subtype' {p : ι -> Prop} {f : forall i, p i -> α} : 
+⨆ (i) (h), f i h = ⨆ x : Subtype p, f x x.property
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.exists_partition_disjointed`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Se
+t α)},   MeasureTheory.IsSetSemiring C → ↑J ⊆ C → ∀ (j : ↥J), ∃ P, ↑P.parts ⊆ C
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.MeasureTheory.IsSetSemiring
+.disjointOfUnion_coe`：∀ {α : Type u_1} {C : Set (Set α)} {J : Finset (Set α)} (h
+C : MeasureTheory.IsSetSemiring C) (hJ : ↑J ⊆ C) (j : ↥J),   hC.disjointOfUnion 
+hJ…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finpartition.sup_parts`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Or
+derBot α] {a : α} (self : Finpartition a), self.parts.sup id = a
+· 使用定理 `Function.Surjective.iSup_comp`：Function.Surjective.iSup_comp {f : ι -> ι
+'} (hf : Surjective f) (g : ι' -> α) : ⨆ x, g (f x) = ⨆ y, g y
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `iSup_disjointed`：iSup_disjointed [PartialOrder ι] [LocallyFiniteOrderBot
+ ι] (f : ι -> α) : ⨆ i, disjointed f i = ⨆ i, f i
+· 使用定理 `iSup_subtype`：iSup_subtype {p : ι -> Prop} {f : Subtype p -> α} : iSup f
+ = ⨆ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.sup_eq_iSup`：sup_eq_iSup [CompleteLattice β] (s : Finset α) (f : 
+α -> β) : s.sup f = ⨆ a in s, f a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma sUnion_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) :
-    ⋃₀ ⋃ x in J, (hC.disjointOfUnion hJ x : Set (Set α)) = ⋃₀ J := by
+lemma sUnion_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J ⊆ C) :
+    ⋃₀ ⋃ x ∈ J, (hC.disjointOfUnion hJ x : Set (Set α)) = ⋃₀ J := by
   simp_rw [sUnion_iUnion, ← iSup_eq_iUnion, iSup_subtype', disjointOfUnion_coe,
     ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts, J.equivFin.surjective.iSup_comp,
     iSup_disjointed, J.equivFin.symm.surjective.iSup_comp, iSup_subtype, Finset.sup_eq_iSup, id]
-
-/--
-theorem `disjointOfUnion_props` / 定理 `disjointOfUnion_props`
-
-English:
-theorem disjointOfUnion_props
-  given: (hC : IsSetSemiring C) (h1 : ↑J subseteq C)
-  proof: ⟨hC.disjointOfUnion h1,
-   hC.pairwiseDisjoint_disjointOfUnion h1,
-   fun _ => hC.disjointOfUnion_subset h1,
-   hC.pairwiseDisjoint_biUnion_disjointOfUnion h1,
-   fun _ => hC.disjointOfUnion_subset_of_mem h1,
-   fun _ => hC.empty_notMem_disjointOfUnion h1,
-   (hC.sUnion_disjointOfUnion h1).symm⟩
-
-中文:
-定理 disjointOfUnion_props
-  条件: (hC : 是SetSemiring C) (h1 : ↑J subseteq C)
-  证明: ⟨hC.disjointOfUnion h1,
-   hC.pairwiseDisjoint_disjointOfUnion h1,
-   fun _ => hC.disjointOfUnion_subset h1,
-   hC.pairwiseDisjoint_biUnion_disjointOfUnion h1,
-   fun _ => hC.disjointOfUnion_subset_of_mem h1,
-   fun _ => hC.empty_notMem_disjointOfUnion h1,
-   (hC.sUnion_disjointOfUnion h1).symm⟩
-
-Depends on / 依赖: disjointOfUnion, disjointOfUnion_subset, disjointOfUnion_subset_of_mem, empty_notMem_disjointOfUnion, hC.disjointOfUnion, hC.disjointOfUnion_subset, hC.disjointOfUnion_subset_of_mem, hC.empty_notMem_disjointOfUnion, hC.pairwiseDisjoint_biUnion_disjointOfUnion, hC.pairwiseDisjoint_disjointOfUnion, hC.sUnion_disjointOfUnion, pairwiseDisjoint_biUnion_disjointOfUnion, pairwiseDisjoint_disjointOfUnion, sUnion_disjointOfUnion
+/-
+**MeasureTheory.IsSetSemiring.disjointOfUnion_props** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.IsSetSemiring`。
+形式化陈述：disjointOfUnion_props (hC : IsSetSemiring C) (h1 : ↑J subseteq C) : exists
+ K : Set α -> Finset (Set α), PairwiseDisjoint J K ∧ (forall i in J, ↑(K i) subs
+eteq C) ∧ PairwiseDisjoint (⋃ x in J, (K x : Set (Set α))) id ∧ (forall j in J, 
+⋃₀ K j subseteq j) ∧ (forall j in J, ∅ ∉ K j) ∧ ⋃₀ J = ⋃₀ (⋃ x in J, (K x : Set 
+(Set α)))
+参数：hC : IsSetSemiring C；h1 : ↑J subseteq C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.IsSetSemiring.pairwiseDisjoint_disjointOfUnion`：pairwiseDi
+sjoint_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) : PairwiseDis
+joint J (hC.disjointOfUnion hJ)
+· 使用引理 `MeasureTheory.IsSetSemiring.disjointOfUnion_subset`：disjointOfUnion_subs
+et (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) : (disjointOfUnion 
+hC hJ j : Set (Set α)) subseteq C
+· 使用引理 `MeasureTheory.IsSetSemiring.pairwiseDisjoint_biUnion_disjointOfUnion`：pa
+irwiseDisjoint_biUnion_disjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq 
+C) : PairwiseDisjoint (⋃ x in J, (hC.disjointOfUnion hJ x …
+· 使用引理 `MeasureTheory.IsSetSemiring.disjointOfUnion_subset_of_mem`：disjointOfUni
+on_subset_of_mem (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) : ⋃₀ 
+hC.disjointOfUnion hJ j subseteq j
+· 使用引理 `MeasureTheory.IsSetSemiring.empty_notMem_disjointOfUnion`：empty_notMem_d
+isjointOfUnion (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) : ∅ ∉ h
+C.disjointOfUnion hJ j
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.IsSetSemiring.sUnion_disjointOfUnion`：sUnion_disjointOfUni
+on (hC : IsSetSemiring C) (hJ : ↑J subseteq C) : ⋃₀ ⋃ x in J, (hC.disjointOfUnio
+n hJ x : Set (Set α)) = ⋃₀ J
 -/
-theorem disjointOfUnion_props (hC : IsSetSemiring C) (h1 : ↑J subseteq C) :
-    exists K : Set α -> Finset (Set α),
+theorem disjointOfUnion_props (hC : IsSetSemiring C) (h1 : ↑J ⊆ C) :
+    ∃ K : Set α → Finset (Set α),
       PairwiseDisjoint J K
-      ∧ (forall i in J, ↑(K i) subseteq C)
-      ∧ PairwiseDisjoint (⋃ x in J, (K x : Set (Set α))) id
-      ∧ (forall j in J, ⋃₀ K j subseteq j)
-      ∧ (forall j in J, ∅ ∉ K j)
-      ∧ ⋃₀ J = ⋃₀ (⋃ x in J, (K x : Set (Set α))) :=
+      ∧ (∀ i ∈ J, ↑(K i) ⊆ C)
+      ∧ PairwiseDisjoint (⋃ x ∈ J, (K x : Set (Set α))) id
+      ∧ (∀ j ∈ J, ⋃₀ K j ⊆ j)
+      ∧ (∀ j ∈ J, ∅ ∉ K j)
+      ∧ ⋃₀ J = ⋃₀ (⋃ x ∈ J, (K x : Set (Set α))) :=
   ⟨hC.disjointOfUnion h1,
    hC.pairwiseDisjoint_disjointOfUnion h1,
-   fun _ => hC.disjointOfUnion_subset h1,
+   fun _ ↦ hC.disjointOfUnion_subset h1,
    hC.pairwiseDisjoint_biUnion_disjointOfUnion h1,
-   fun _ => hC.disjointOfUnion_subset_of_mem h1,
-   fun _ => hC.empty_notMem_disjointOfUnion h1,
+   fun _ ↦ hC.disjointOfUnion_subset_of_mem h1,
+   fun _ ↦ hC.empty_notMem_disjointOfUnion h1,
    (hC.sUnion_disjointOfUnion h1).symm⟩
 
 end disjointOfUnion
 
-/--
-lemma `_root_.Set.Ioc_mem_ofPred_Ioc_le` / 引理 `_root_.Set.Ioc_mem_ofPred_Ioc_le`
-
-English:
-lemma _root_.Set.Ioc_mem_ofPred_Ioc_le
-  given: [LinearOrder α] (u v : α)
-  proof: ⟨u, max u v, by grind, by grind⟩
-
-中文:
-引理 _root_.集合.Ioc_mem_ofPred_Ioc_le
-  条件: [线性序 α] (u v : α)
-  证明: ⟨u, max u v, by grind, by grind⟩
+/-
+**MeasureTheory.IsSetSemiring._root_.Set.Ioc_mem_ofPred_Ioc_le** 是 Mathlib 中的一个引
+理，位于命名空间 `MeasureTheory.IsSetSemiring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma _root_.Set.Ioc_mem_ofPred_Ioc_le [LinearOrder α] (u v : α) :
-    Set.Ioc u v in {s : Set α | exists u v, u <= v ∧ s = Set.Ioc u v} :=
+    Set.Ioc u v ∈ {s : Set α | ∃ u v, u ≤ v ∧ s = Set.Ioc u v} :=
   ⟨u, max u v, by grind, by grind⟩
 
-/--
-lemma `Ioc` / 引理 `Ioc`
+/-- The set of open-closed intervals is a semi-ring of sets. -/
+/-
+**MeasureTheory.IsSetSemiring.Ioc** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.IsSet
+Semiring`。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [Nonempty α], MeasureTheory.IsSetS
+emiring {s | ∃ u v, u ≤ v ∧ s = Set.Ioc u v}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ioc_eq_empty`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, ¬b < a
+ → Set.Ioc b a = ∅
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.Ioc_inter_Ioc`：∀ {α : Type u_1} [inst : LinearOrder α] {a₁ a₂ b₁ b₂ 
+: α},   Set.Ioc b₁ a₁ ∩ Set.Ioc b₂ a₂ = Set.Ioc (max b₁ b₂) (min a₁ a₂)
+· 使用定理 `_private.Mathlib.MeasureTheory.SetSemiring.0.Set.Ioc_mem_ofPred_Ioc_le`：
+∀ {α : Type u_1} [inst : LinearOrder α] (u v : α), Set.Ioc u v ∈ {s | ∃ u v, u ≤
+ v ∧ s = Set.Ioc u v}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `Set.sUnion_insert`：sUnion_insert (s : Set α) (T : Set (Set α)) : ⋃₀ inse
+rt s T = s union ⋃₀ T
+· 使用定理 `Set.sUnion_singleton`：sUnion_singleton (s : Set α) : ⋃₀ {s} = s
 
-English:
-lemma Ioc
-  given: [LinearOrder α] [Nonempty α]
-  proof: by
-    inhabit α
-    exact ⟨default, default, le_rfl, by simp⟩
-  inter_mem := by
-    rintro s ⟨u, v, huv, rfl⟩ t ⟨u', v', hu'v', rfl⟩
-    rw [Set.Ioc_inter_Ioc]
-    apply Ioc_mem_ofPred_Ioc_le
-  sdiff_eq_sUnion' := by
-    rintro s ⟨u, v, huv, rfl⟩ t ⟨u', v', hu'v', rfl⟩
-    rcases le_or_gt u' u with hu | hu
-    · rcases Ioc_mem_ofPred_Ioc_le (max u v') v with ⟨u'', v'', h'', heq⟩
-      exists {Set.Ioc u'' v''}
-      grind [coe_singleton, pairwiseDisjoint_singleton]
-    rcases le_or_gt v v' with hv | hv
-    · rcases Ioc_mem_ofPred_Ioc_le u (min u' v) with ⟨u'', v'', h'', heq⟩
-      exists {Set.Ioc u'' v''}
-      grind [coe_singleton, pairwiseDisjoint_singleton]
-    rw [show Set.Ioc u v \ Set.Ioc u' v' = Set.Ioc u u' union Set.Ioc v' v by grind]
-    refine ⟨{Set.Ioc u u', Set.Ioc v' v}, by grind, ?_, by simp⟩
-    intro a ha b hb hab
-    simp [Function.onFun]
-    grind
-
-中文:
-引理 左开右闭区间
-  条件: [线性序 α] [非空 α]
-  证明: by
-    inhabit α
-    exact ⟨default, default, le_rfl, by simp⟩
-  inter_mem := by
-    rintro s ⟨u, v, huv, rfl⟩ t ⟨u', v', hu'v', rfl⟩
-    rw [Set.Ioc_inter_Ioc]
-    apply Ioc_mem_ofPred_Ioc_le
-  sdiff_eq_sUnion' := by
-    rintro s ⟨u, v, huv, rfl⟩ t ⟨u', v', hu'v', rfl⟩
-    rcases le_or_gt u' u with hu | hu
-    · rcases Ioc_mem_ofPred_Ioc_le (max u v') v with ⟨u'', v'', h'', heq⟩
-      exists {Set.Ioc u'' v''}
-      grind [coe_singleton, pairwiseDisjoint_singleton]
-    rcases le_or_gt v v' with hv | hv
-    · rcases Ioc_mem_ofPred_Ioc_le u (min u' v) with ⟨u'', v'', h'', heq⟩
-      exists {Set.Ioc u'' v''}
-      grind [coe_singleton, pairwiseDisjoint_singleton]
-    rw [show Set.Ioc u v \ Set.Ioc u' v' = Set.Ioc u u' union Set.Ioc v' v by grind]
-    refine ⟨{Set.Ioc u u', Set.Ioc v' v}, by grind, ?_, by simp⟩
-    intro a ha b hb hab
-    simp [Function.onFun]
-    grind
+--- 原说明 ---
+The set of open-closed intervals is a semi-ring of sets.
 -/
 protected lemma Ioc [LinearOrder α] [Nonempty α] :
-    IsSetSemiring {s : Set α | exists u v, u <= v ∧ s = Set.Ioc u v} where
+    IsSetSemiring {s : Set α | ∃ u v, u ≤ v ∧ s = Set.Ioc u v} where
   empty_mem := by
     inhabit α
     exact ⟨default, default, le_rfl, by simp⟩
@@ -1694,7 +1709,7 @@ protected lemma Ioc [LinearOrder α] [Nonempty α] :
     · rcases Ioc_mem_ofPred_Ioc_le u (min u' v) with ⟨u'', v'', h'', heq⟩
       exists {Set.Ioc u'' v''}
       grind [coe_singleton, pairwiseDisjoint_singleton]
-    rw [show Set.Ioc u v \ Set.Ioc u' v' = Set.Ioc u u' union Set.Ioc v' v by grind]
+    rw [show Set.Ioc u v \ Set.Ioc u' v' = Set.Ioc u u' ∪ Set.Ioc v' v by grind]
     refine ⟨{Set.Ioc u u', Set.Ioc v' v}, by grind, ?_, by simp⟩
     intro a ha b hb hab
     simp [Function.onFun]
@@ -1703,3 +1718,4 @@ protected lemma Ioc [LinearOrder α] [Nonempty α] :
 end IsSetSemiring
 
 end MeasureTheory
+

@@ -28,36 +28,15 @@ open CategoryTheory MonoidalCategory TensorProduct
 
 variable (R : Type u) [CommRing R]
 
-/--
-Instance `instMonoidalCategoryStruct` / 实例 `instMonoidalCategoryStruct`
-
-English:
-instance instMonoidalCategoryStruct
-  signature: :
-  body: of R (X otimes[R] Y)
-  whiskerLeft X _ _ f := ofHom (f.1.lTensor X)
-  whiskerRight f X := ofHom (f.1.rTensor X)
-  tensorHom f g := ofHom (Bialgebra.TensorProduct.map f.1 g.1)
-  tensorUnit := of R R
-  associator X Y Z := (Bialgebra.TensorProduct.assoc R R X Y Z).toHopfAlgIso
-  leftUnitor X := (Bialgebra.TensorProduct.lid R X).toHopfAlgIso
-  rightUnitor X := (Bialgebra.TensorProduct.rid R R X).toHopfAlgIso
-
-中文:
-实例 instMonoidalCategoryStruct
-  签名: :
-  定义体: of R (X otimes[R] Y)
-  whiskerLeft X _ _ f := ofHom (f.1.lTensor X)
-  whiskerRight f X := ofHom (f.1.rTensor X)
-  tensorHom f g := ofHom (Bialgebra.TensorProduct.map f.1 g.1)
-  tensorUnit := of R R
-  associator X Y Z := (Bialgebra.TensorProduct.assoc R R X Y Z).toHopfAlgIso
-  leftUnitor X := (Bialgebra.TensorProduct.lid R X).toHopfAlgIso
-  rightUnitor X := (Bialgebra.TensorProduct.rid R R X).toHopfAlgIso
+/-
+**HopfAlgCat.instMonoidalCategoryStruct** 是 Mathlib 中的一个定义，位于命名空间 `HopfAlgCat`。
+形式化陈述：(R : Type u) → [inst : CommRing R] → CategoryTheory.MonoidalCategoryStruct
+ (HopfAlgCat R)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simps] noncomputable instance instMonoidalCategoryStruct :
     MonoidalCategoryStruct.{u} (HopfAlgCat R) where
-  tensorObj X Y := of R (X otimes[R] Y)
+  tensorObj X Y := of R (X ⊗[R] Y)
   whiskerLeft X _ _ f := ofHom (f.1.lTensor X)
   whiskerRight f X := ofHom (f.1.rTensor X)
   tensorHom f g := ofHom (Bialgebra.TensorProduct.map f.1 g.1)
@@ -69,38 +48,17 @@ instance instMonoidalCategoryStruct
 /-- The data needed to induce a `MonoidalCategory` structure via
 `HopfAlgCat.instMonoidalCategoryStruct` and the forgetful functor to bialgebras. -/
 @[simps]
-/--
-Definition of `MonoidalCategory.inducingFunctorData` / `MonoidalCategory.inducingFunctorData` 的定义
+/-
+**HopfAlgCat.MonoidalCategory.inducingFunctorData** 是 Mathlib 中的一个定义，位于命名空间 `Hop
+fAlgCat.MonoidalCategory`。
+形式化陈述：(R : Type u) →   [inst : CommRing R] → CategoryTheory.Monoidal.InducingFun
+ctorData (CategoryTheory.forget₂ (HopfAlgCat R) (BialgCat R))
+参数：HopfAlgCat R；BialgCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MonoidalCategory.inducingFunctorData
-  signature: :
-  body: Iso.refl _
-  whiskerLeft_eq _ _ _ _ := by ext; rfl
-  whiskerRight_eq _ _ := by ext; rfl
-  tensorHom_eq _ _ := by ext; rfl
-  εIso := Iso.refl _
-associator_eq _ _ _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
-TensorProduct.ext TensorProduct.ext (by ext; rfl)
-leftUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
-    TensorProduct.ext (by ext; rfl)
-rightUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
-    TensorProduct.ext (by ext; rfl)
-
-中文:
-定义 幺半群范畴.inducingFunctorData
-  签名: :
-  定义体: Iso.refl _
-  whiskerLeft_eq _ _ _ _ := by ext; rfl
-  whiskerRight_eq _ _ := by ext; rfl
-  tensorHom_eq _ _ := by ext; rfl
-  εIso := Iso.refl _
-associator_eq _ _ _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
-TensorProduct.ext TensorProduct.ext (by ext; rfl)
-leftUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
-    TensorProduct.ext (by ext; rfl)
-rightUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
-    TensorProduct.ext (by ext; rfl)
+--- 原说明 ---
+The data needed to induce a `MonoidalCategory` structure via
+`HopfAlgCat.instMonoidalCategoryStruct` and the forgetful functor to bialgebras.
 -/
 noncomputable def MonoidalCategory.inducingFunctorData :
     Monoidal.InducingFunctorData (forget₂ (HopfAlgCat R) (BialgCat R)) where
@@ -109,42 +67,30 @@ noncomputable def MonoidalCategory.inducingFunctorData :
   whiskerRight_eq _ _ := by ext; rfl
   tensorHom_eq _ _ := by ext; rfl
   εIso := Iso.refl _
-associator_eq _ _ _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
-TensorProduct.ext TensorProduct.ext (by ext; rfl)
-leftUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
+  associator_eq _ _ _ := BialgCat.Hom.ext <| BialgHom.coe_linearMap_injective <|
+    TensorProduct.ext <| TensorProduct.ext (by ext; rfl)
+  leftUnitor_eq _ := BialgCat.Hom.ext <| BialgHom.coe_linearMap_injective <|
     TensorProduct.ext (by ext; rfl)
-rightUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
+  rightUnitor_eq _ := BialgCat.Hom.ext <| BialgHom.coe_linearMap_injective <|
     TensorProduct.ext (by ext; rfl)
-
-/--
-Instance `instMonoidalCategory` / 实例 `instMonoidalCategory`
-
-English:
-instance instMonoidalCategory
-  signature: : MonoidalCategory (HopfAlgCat R)
-  body: Monoidal.induced (forget₂ _ (BialgCat R)) (MonoidalCategory.inducingFunctorData R)
-
-中文:
-实例 instMonoidalCategory
-  签名: : 幺半群范畴 (HopfAlg范畴 R)
-  定义体: Monoidal.induced (forget₂ _ (BialgCat R)) (MonoidalCategory.inducingFunctorData R)
-
-Depends on / 依赖: BialgCat, Monoidal, Monoidal.induced, MonoidalCategory, MonoidalCategory.inducingFunctorData, induced, inducingFunctorData
+/-
+**HopfAlgCat.instMonoidalCategory** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgCat`。
+形式化陈述：instMonoidalCategory : MonoidalCategory (HopfAlgCat R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instMonoidalCategory : MonoidalCategory (HopfAlgCat R) :=
   Monoidal.induced (forget₂ _ (BialgCat R)) (MonoidalCategory.inducingFunctorData R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `forget₂ (HopfAlgCat R) (BialgCat R)` is a monoidal functor. -/
+/-
+**HopfAlgCat.** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (forget₂ (HopfAlgCat R) (BialgCat R)).Monoidal
-
-中文:
-实例 :
-  签名: (forget₂ (HopfAlg范畴 R) (Bialg范畴 R)).幺半群
+--- 原说明 ---
+`forget₂ (HopfAlgCat R) (BialgCat R)` is a monoidal functor.
 -/
 noncomputable instance : (forget₂ (HopfAlgCat R) (BialgCat R)).Monoidal where
 
 end HopfAlgCat
+

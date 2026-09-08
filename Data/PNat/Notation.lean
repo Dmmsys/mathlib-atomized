@@ -11,81 +11,47 @@ public import Mathlib.Data.Nat.Notation
 
 @[expose] public section
 
-/--
-Definition of `PNat` / `PNat` 的定义
+/-- `ℕ+` is the type of positive natural numbers. It is defined as a subtype,
+  and the VM representation of `ℕ+` is the same as `ℕ` because the proof
+  is not stored. -/
+/-
+**PNat** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PNat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PNat
-  body: { n : Nat // 0 < n } deriving DecidableEq
-
-@[inherit_doc]
-notation "Nat+" => PNat
-
-中文:
-定义 正自然数
-  定义体: { n : Nat // 0 < n } deriving DecidableEq
-
-@[inherit_doc]
-notation "Nat+" => PNat
-
-Depends on / 依赖: DecidableEq, deriving
+--- 原说明 ---
+`ℕ+` is the type of positive natural numbers. It is defined as a subtype,
+  and the VM representation of `ℕ+` is the same as `ℕ` because the proof
+  is not stored.
 -/
-def PNat := { n : Nat // 0 < n } deriving DecidableEq
+def PNat := { n : ℕ // 0 < n } deriving DecidableEq
 
 @[inherit_doc]
-notation "Nat+" => PNat
+notation "ℕ+" => PNat
 
 /-- The underlying natural number -/
 @[coe]
-/--
-Definition of `PNat.val` / `PNat.val` 的定义
+/-
+**PNat.val** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PNat.val : Nat+ -> Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PNat.val
-  signature: : Nat+ -> Nat
-  body: Subtype.val
-
-中文:
-定义 正自然数.val
-  签名: : 自然数+ -> 自然数
-  定义体: Subtype.val
-
-Depends on / 依赖: Subtype, Subtype.val
+--- 原说明 ---
+The underlying natural number
 -/
-def PNat.val : Nat+ -> Nat := Subtype.val
-
-/--
-Instance `coePNatNat` / 实例 `coePNatNat`
-
-English:
-instance coePNatNat
-  signature: : Coe Nat+ Nat
-  body: ⟨PNat.val⟩
-
-中文:
-实例 coeP自然数自然数
-  签名: : Coe 自然数+ 自然数
-  定义体: ⟨PNat.val⟩
-
-Depends on / 依赖: PNat.val
+def PNat.val : ℕ+ → ℕ := Subtype.val
+/-
+**coePNatNat** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：coePNatNat : Coe Nat+ Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance coePNatNat : Coe Nat+ Nat :=
+instance coePNatNat : Coe ℕ+ ℕ :=
   ⟨PNat.val⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Repr Nat+
-  body: ⟨fun n n' => reprPrec n.1 n'⟩
-
-中文:
-实例 :
-  签名: Repr 自然数+
-  定义体: ⟨fun n n' => reprPrec n.1 n'⟩
-
-Depends on / 依赖: reprPrec
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Repr Nat+ :=
+instance : Repr ℕ+ :=
   ⟨fun n n' => reprPrec n.1 n'⟩

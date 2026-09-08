@@ -21,73 +21,22 @@ open Function.Embedding
 
 namespace Equiv
 
-/--
-Definition of `sumEmbeddingEquivProdEmbeddingDisjoint` / `sumEmbeddingEquivProdEmbeddingDisjoint` 的定义
+/-- Embeddings from a sum type are equivalent to two separate embeddings with disjoint ranges. -/
+/-
+**Equiv.sumEmbeddingEquivProdEmbeddingDisjoint** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`
+。
+形式化陈述：sumEmbeddingEquivProdEmbeddingDisjoint {α β γ : Type*} : (α oplus β ↪ γ) ≃
+ { f : (α ↪ γ) × (β ↪ γ) // Disjoint (Set.range f.1) (Set.range f.2) } where toF
+un f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sumEmbeddingEquivProdEmbeddingDisjoint
-  signature: {α β γ : Type*}
-  body: ⟨(inl.trans f, inr.trans f), by
-      rw [Set.disjoint_left]
-      rintro _ ⟨a, h⟩ ⟨b, rfl⟩
-      simp only at h
-      have : Sum.inl a = Sum.inr b := f.injective h
-      simp only [reduceCtorEq] at this⟩
-  invFun := fun ⟨⟨f, g⟩, disj⟩ =>
-    ⟨fun x =>
-      match x with
-      | Sum.inl a => f a
-      | Sum.inr b => g b, by
-      rintro (a₁ | b₁) (a₂ | b₂) f_eq <;>
-        simp only at f_eq
-      · rw [f.injective f_eq]
-      · exfalso
-        exact disj.le_bot ⟨⟨a₁, f_eq⟩, ⟨b₂, by simp⟩⟩
-      · exfalso
-        exact disj.le_bot ⟨⟨a₂, rfl⟩, ⟨b₁, f_eq⟩⟩
-      · rw [g.injective f_eq]⟩
-  left_inv f := by
-    dsimp only
-    ext x
-    cases x <;> simp!
-  right_inv := fun ⟨⟨f, g⟩, _⟩ => by
-    simp only
-    rfl
-
-中文:
-定义 sumEmbeddingEquivProdEmbeddingDisjoint
-  签名: {α β γ : 类型}
-  定义体: ⟨(inl.trans f, inr.trans f), by
-      rw [Set.disjoint_left]
-      rintro _ ⟨a, h⟩ ⟨b, rfl⟩
-      simp only at h
-      have : Sum.inl a = Sum.inr b := f.injective h
-      simp only [reduceCtorEq] at this⟩
-  invFun := fun ⟨⟨f, g⟩, disj⟩ =>
-    ⟨fun x =>
-      match x with
-      | Sum.inl a => f a
-      | Sum.inr b => g b, by
-      rintro (a₁ | b₁) (a₂ | b₂) f_eq <;>
-        simp only at f_eq
-      · rw [f.injective f_eq]
-      · exfalso
-        exact disj.le_bot ⟨⟨a₁, f_eq⟩, ⟨b₂, by simp⟩⟩
-      · exfalso
-        exact disj.le_bot ⟨⟨a₂, rfl⟩, ⟨b₁, f_eq⟩⟩
-      · rw [g.injective f_eq]⟩
-  left_inv f := by
-    dsimp only
-    ext x
-    cases x <;> simp!
-  right_inv := fun ⟨⟨f, g⟩, _⟩ => by
-    simp only
-    rfl
-
-Depends on / 依赖: Set.disjoint_left, Sum.inl, Sum.inr, disj.le_bot, disjoint_left, f.injective, f_eq, g.injective, injective, inl.trans, inr.trans, invFun, le_bot, left_inv, reduceCtorEq
+--- 原说明 ---
+Embeddings from a sum type are equivalent to two separate embeddings with disjoi
+nt ranges.
 -/
 def sumEmbeddingEquivProdEmbeddingDisjoint {α β γ : Type*} :
-    (α oplus β ↪ γ) ≃ { f : (α ↪ γ) × (β ↪ γ) // Disjoint (Set.range f.1) (Set.range f.2) } where
+    (α ⊕ β ↪ γ) ≃ { f : (α ↪ γ) × (β ↪ γ) // Disjoint (Set.range f.1) (Set.range f.2) } where
   toFun f :=
     ⟨(inl.trans f, inr.trans f), by
       rw [Set.disjoint_left]
@@ -116,55 +65,44 @@ def sumEmbeddingEquivProdEmbeddingDisjoint {α β γ : Type*} :
     simp only
     rfl
 
-/--
-Definition of `codRestrict` / `codRestrict` 的定义
+/-- Embeddings whose range lies within a set are equivalent to embeddings to that set.
+This is `Function.Embedding.codRestrict` as an equiv. -/
+/-
+**Equiv.codRestrict** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：codRestrict (α : Type*) {β : Type*} (bs : Set β) : { f : α ↪ β // forall a
+, f a in bs } ≃ (α ↪ bs) where toFun f
+参数：α : Type*；bs : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition codRestrict
-  signature: (α : Type*) {β : Type*} (bs : Set β)
-  body: (f : α ↪ β).codRestrict bs f.prop
-  invFun f := ⟨f.trans (Function.Embedding.subtype _), fun a => (f a).prop⟩
-
-中文:
-定义 codRestrict
-  签名: (α : 类型) {β : 类型} (bs : 集合 β)
-  定义体: (f : α ↪ β).codRestrict bs f.prop
-  invFun f := ⟨f.trans (Function.Embedding.subtype _), fun a => (f a).prop⟩
-
-Depends on / 依赖: codRestrict, f.prop
+--- 原说明 ---
+Embeddings whose range lies within a set are equivalent to embeddings to that se
+t.
+This is `Function.Embedding.codRestrict` as an equiv.
 -/
 def codRestrict (α : Type*) {β : Type*} (bs : Set β) :
-    { f : α ↪ β // forall a, f a in bs } ≃
+    { f : α ↪ β // ∀ a, f a ∈ bs } ≃
       (α ↪ bs) where
   toFun f := (f : α ↪ β).codRestrict bs f.prop
   invFun f := ⟨f.trans (Function.Embedding.subtype _), fun a => (f a).prop⟩
 
-/--
-Definition of `prodEmbeddingDisjointEquivSigmaEmbeddingRestricted` / `prodEmbeddingDisjointEquivSigmaEmbeddingRestricted` 的定义
+/-- Pairs of embeddings with disjoint ranges are equivalent to a dependent sum of embeddings,
+in which the second embedding cannot take values in the range of the first. -/
+/-
+**Equiv.prodEmbeddingDisjointEquivSigmaEmbeddingRestricted** 是 Mathlib 中的一个定义，位于
+命名空间 `Equiv`。
+形式化陈述：prodEmbeddingDisjointEquivSigmaEmbeddingRestricted {α β γ : Type*} : { f :
+ (α ↪ γ) × (β ↪ γ) // Disjoint (Set.range f.1) (Set.range f.2) } ≃ Σ f : α ↪ γ, 
+β ↪ ↥(Set.range f)ᶜ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
-  signature: {α β γ : Type*}
-  body: (subtypeProdEquivSigmaSubtype fun (a : α ↪ γ) (b : β ↪ _) =>
-        Disjoint (Set.range a) (Set.range b)).trans <|
-    Equiv.sigmaCongrRight fun a =>
-      (subtypeEquivProp <| by
-            ext f
-            rw [← Set.range_subset_iff]; rw [Set.subset_compl_iff_disjoint_right]; rw [disjoint_comm]).trans
-        (codRestrict _ _)
-
-中文:
-定义 prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
-  签名: {α β γ : 类型}
-  定义体: (subtypeProdEquivSigmaSubtype fun (a : α ↪ γ) (b : β ↪ _) =>
-        Disjoint (Set.range a) (Set.range b)).trans <|
-    Equiv.sigmaCongrRight fun a =>
-      (subtypeEquivProp <| by
-            ext f
-            rw [← Set.range_subset_iff]; rw [Set.subset_compl_iff_disjoint_right]; rw [disjoint_comm]).trans
-        (codRestrict _ _)
-
-Depends on / 依赖: Disjoint, Equiv.sigmaCongrRight, Set.range, Set.range_subset_iff, Set.subset_compl_iff_disjoint_right, codRestrict, disjoint_comm, range_subset_iff, sigmaCongrRight, subset_compl_iff_disjoint_right, subtypeEquivProp, subtypeProdEquivSigmaSubtype
+--- 原说明 ---
+Pairs of embeddings with disjoint ranges are equivalent to a dependent sum of em
+beddings,
+in which the second embedding cannot take values in the range of the first.
 -/
 def prodEmbeddingDisjointEquivSigmaEmbeddingRestricted {α β γ : Type*} :
     { f : (α ↪ γ) × (β ↪ γ) // Disjoint (Set.range f.1) (Set.range f.2) } ≃
@@ -174,58 +112,47 @@ def prodEmbeddingDisjointEquivSigmaEmbeddingRestricted {α β γ : Type*} :
     Equiv.sigmaCongrRight fun a =>
       (subtypeEquivProp <| by
             ext f
-            rw [← Set.range_subset_iff]; rw [Set.subset_compl_iff_disjoint_right]; rw [disjoint_comm]).trans
+            rw [← Set.range_subset_iff, Set.subset_compl_iff_disjoint_right, disjoint_comm]).trans
         (codRestrict _ _)
 
-/--
-Definition of `sumEmbeddingEquivSigmaEmbeddingRestricted` / `sumEmbeddingEquivSigmaEmbeddingRestricted` 的定义
+/-- A combination of the above results, allowing us to turn one embedding over a sum type
+into two dependent embeddings, the second of which avoids any members of the range
+of the first. This is helpful for constructing larger embeddings out of smaller ones. -/
+/-
+**Equiv.sumEmbeddingEquivSigmaEmbeddingRestricted** 是 Mathlib 中的一个定义，位于命名空间 `Equ
+iv`。
+形式化陈述：sumEmbeddingEquivSigmaEmbeddingRestricted {α β γ : Type*} : (α oplus β ↪ γ
+) ≃ Σ f : α ↪ γ, β ↪ ↥(Set.range f)ᶜ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition sumEmbeddingEquivSigmaEmbeddingRestricted
-  signature: {α β γ : Type*}
-  body: Equiv.trans sumEmbeddingEquivProdEmbeddingDisjoint
-    prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
-
-中文:
-定义 sumEmbeddingEquivSigmaEmbeddingRestricted
-  签名: {α β γ : 类型}
-  定义体: Equiv.trans sumEmbeddingEquivProdEmbeddingDisjoint
-    prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
-
-Depends on / 依赖: Equiv.trans, prodEmbeddingDisjointEquivSigmaEmbeddingRestricted, sumEmbeddingEquivProdEmbeddingDisjoint
+--- 原说明 ---
+A combination of the above results, allowing us to turn one embedding over a sum
+ type
+into two dependent embeddings, the second of which avoids any members of the ran
+ge
+of the first. This is helpful for constructing larger embeddings out of smaller 
+ones.
 -/
 def sumEmbeddingEquivSigmaEmbeddingRestricted {α β γ : Type*} :
-    (α oplus β ↪ γ) ≃ Σ f : α ↪ γ, β ↪ ↥(Set.range f)ᶜ :=
+    (α ⊕ β ↪ γ) ≃ Σ f : α ↪ γ, β ↪ ↥(Set.range f)ᶜ :=
   Equiv.trans sumEmbeddingEquivProdEmbeddingDisjoint
     prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `uniqueEmbeddingEquivResult` / `uniqueEmbeddingEquivResult` 的定义
+/-- Embeddings from a single-member type are equivalent to members of the target type. -/
+/-
+**Equiv.uniqueEmbeddingEquivResult** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：uniqueEmbeddingEquivResult {α β : Type*} [Unique α] : (α ↪ β) ≃ β where to
+Fun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueEmbeddingEquivResult
-  signature: {α β : Type*} [Unique α]
-  body: f default
-  invFun x := ⟨fun _ => x, fun _ _ _ => Subsingleton.elim _ _⟩
-  left_inv _ := by
-    ext x
-    simp_rw [Function.Embedding.coeFn_mk]
-    congr 1
-    exact Subsingleton.elim _ x
-  right_inv _ := by simp
-
-中文:
-定义 uniqueEmbeddingEquivResult
-  签名: {α β : 类型} [唯一 α]
-  定义体: f default
-  invFun x := ⟨fun _ => x, fun _ _ _ => Subsingleton.elim _ _⟩
-  left_inv _ := by
-    ext x
-    simp_rw [Function.Embedding.coeFn_mk]
-    congr 1
-    exact Subsingleton.elim _ x
-  right_inv _ := by simp
+--- 原说明 ---
+Embeddings from a single-member type are equivalent to members of the target typ
+e.
 -/
 def uniqueEmbeddingEquivResult {α β : Type*} [Unique α] :
     (α ↪ β) ≃ β where
@@ -239,3 +166,4 @@ def uniqueEmbeddingEquivResult {α β : Type*} [Unique α] :
   right_inv _ := by simp
 
 end Equiv
+

@@ -63,34 +63,37 @@ variable {C : Type u} [Category.{v} C] {J : GrothendieckTopology C}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff` / 引理 `Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff`
-
-English:
-lemma Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
-  proof: by
-  refine Square.IsPullback.iff_of_equiv _ _
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv) ?_ ?_ ?_ ?_
-  all_goals
-    ext x
-    simp [Adjunction.homEquiv, yonedaEquiv_naturality]
-
-中文:
-引理 层.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
-  证明: by
-  refine Square.IsPullback.iff_of_equiv _ _
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv) ?_ ?_ ?_ ?_
-  all_goals
-    ext x
-    simp [Adjunction.homEquiv, yonedaEquiv_naturality]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv, IsPullback, Square, Square.IsPullback.iff_of_equiv, all_goals, homEquiv, iff_of_equiv, sheafificationAdjunction, yonedaEquiv, yonedaEquiv_naturality
+/-
+**CategoryTheory.Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_if
+f** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Sheaf`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheo
+ry.GrothendieckTopology C}   [inst_1 : CategoryTheory.HasWeakSheafify J (Type v)
+] (F : CategoryTheory.Sheaf J (Type v))   (sq : CategoryTheory.Square C),   (sq.
+op.map         ((CategoryTheory.yoneda.comp (CategoryTheory.presheafToSheaf J (T
+ype v))).op.comp           (CategoryTheory.yoneda.obj F))).IsPullback ↔     (sq.
+op.map F.obj).IsPullback
+参数：Type v；F : CategoryTheory.Sheaf J (Type v)；sq : CategoryTheory.Square C；sq.op
+.map         ((CategoryTheory.yoneda.comp (CategoryTheory.presheafToSheaf J (Typ
+e v))).op.comp           (CategoryTheory.yoneda.obj F))；sq.op.map F.obj。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Square.IsPullback.iff_of_equiv`：∀ (sq₁ : CategoryTheory.S
+quare (Type v)) (sq₂ : CategoryTheory.Square (Type u)) (e₁ : sq₁.X₁ ≃ sq₂.X₁)   
+(e₂ : sq₁.X₂ ≃ sq₂.X₂) (e₃ : sq₁.X₃…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.yonedaEquiv_naturality`：yonedaEquiv_naturality {X Y : C} 
+{F : Cᵒᵖ ⥤ Type v₁} (f : yoneda.obj X ⟶ F) (g : Y ⟶ X) : F.map g.op (yonedaEquiv
+ f) = yonedaEquiv (yoneda.m…
+· 使用定理 `CategoryTheory.toSheafify_naturality_assoc`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D :
+ Type u_1}   [inst_1 : CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
     [HasWeakSheafify J (Type v)]
@@ -110,26 +113,24 @@ namespace GrothendieckTopology
 
 variable (J)
 
-/--
-Definition of `MayerVietorisSquare` / `MayerVietorisSquare` 的定义
+/-- A Mayer-Vietoris square in a category `C` equipped with a Grothendieck
+topology consists of a commutative square `f₁₂ ≫ f₂₄ = f₁₃ ≫ f₃₄` in `C`
+such that `f₁₃` is a monomorphism and that the square becomes a
+pushout square in the category of sheaves of sets. -/
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare** 是 Mathlib 中的一个结构，位于命
+名空间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：MayerVietorisSquare [HasWeakSheafify J (Type v)] extends Square C where mo
+no_f₁₃ : Mono toSquare.f₁₃
+参数：Type v。
+继承自：Square C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MayerVietorisSquare
-  parameters: [HasWeakSheafify J (Type v)]
-  extends: Square C
-  axioms and operations (2):
-    - mono_f₁₃ : Mono toSquare.f₁₃  [default: by infer_instance]
-    - isPushout : (toSquare.map (yoneda ⋙ presheafToSheaf J _)).IsPushout
-
-中文:
-结构 MayerVietorisSquare
-  参数: [HasWeakSheafify J (类型v)]
-  继承: Square C
-  公理与运算 (2 个):
-    - mono_f₁₃ : 单态射 toSquare.f₁₃  [默认: by infer_instance]
-    - isPushout : (toSquare.map (yoneda ⋙ presheafToSheaf J _)).是推出
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A Mayer-Vietoris square in a category `C` equipped with a Grothendieck
+topology consists of a commutative square `f₁₂ ≫ f₂₄ = f₁₃ ≫ f₃₄` in `C`
+such that `f₁₃` is a monomorphism and that the square becomes a
+pushout square in the category of sheaves of sets.
 -/
 structure MayerVietorisSquare [HasWeakSheafify J (Type v)] extends Square C where
   mono_f₁₃ : Mono toSquare.f₁₃ := by infer_instance
@@ -150,29 +151,23 @@ variable [HasWeakSheafify J (Type v)]
 a square `sq` such that `sq.f₁₃` is a mono and that for every
 sheaf of types `F`, the square `sq.op.map F.val` is a pullback square. -/
 @[simps toSquare]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.mk'** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`。
+形式化陈述：mk' (sq : Square C) [Mono sq.f₁₃] (H : forall (F : Sheaf J (Type v)), (sq.
+op.map F.obj).IsPullback) : J.MayerVietorisSquare where toSquare
+参数：sq : Square C；H : forall (F : Sheaf J (Type v)), (sq.op.map F.obj).IsPullback
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: (sq : Square C) [Mono sq.f₁₃]
-  body: sq
-  isPushout := by
-    rw [Square.isPushout_iff_op_map_yoneda_isPullback]
-    intro F
-    exact (F.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff sq).2 (H F)
-
-中文:
-定义 mk'
-  签名: (sq : Square C) [单态射 sq.f₁₃]
-  定义体: sq
-  isPushout := by
-    rw [Square.isPushout_iff_op_map_yoneda_isPullback]
-    intro F
-    exact (F.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff sq).2 (H F)
+--- 原说明 ---
+Constructor for Mayer-Vietoris squares taking as an input
+a square `sq` such that `sq.f₁₃` is a mono and that for every
+sheaf of types `F`, the square `sq.op.map F.val` is a pullback square.
 -/
 noncomputable def mk' (sq : Square C) [Mono sq.f₁₃]
-    (H : forall (F : Sheaf J (Type v)), (sq.op.map F.obj).IsPullback) :
+    (H : ∀ (F : Sheaf J (Type v)), (sq.op.map F.obj).IsPullback) :
     J.MayerVietorisSquare where
   toSquare := sq
   isPushout := by
@@ -185,77 +180,34 @@ set_option backward.isDefEq.respectTransparency false in
 a pullback square `sq` such that `sq.f₂₄` and `sq.f₃₄` are two monomorphisms
 which form a covering of `S.X₄`. -/
 @[simps! toSquare]
-/--
-Definition of `mk_of_isPullback` / `mk_of_isPullback` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.mk_of_isPullback** 是 M
+athlib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`。
+形式化陈述：mk_of_isPullback (sq : Square C) [Mono sq.f₂₄] [Mono sq.f₃₄] (h₁ : sq.IsPu
+llback) (h₂ : Sieve.ofTwoArrows sq.f₂₄ sq.f₃₄ in J sq.X₄) : J.MayerVietorisSquar
+e
+参数：sq : Square C；h₁ : sq.IsPullback；h₂ : Sieve.ofTwoArrows sq.f₂₄ sq.f₃₄ in J sq
+.X₄。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Square.IsPullback.mono_f₁₃`：mono_f₁₃ [Mono sq.f₂₄] : Mono
+ sq.f₁₃
 
-English:
-definition mk_of_isPullback
-  signature: (sq : Square C) [Mono sq.f₂₄] [Mono sq.f₃₄]
-  body: have : Mono sq.f₁₃ := h₁.mono_f₁₃
-  mk' sq (fun F => by
-    apply Square.IsPullback.mk
-    refine PullbackCone.IsLimit.mk _
-      (fun s => F.2.amalgamateOfArrows _ h₂
-        (fun j => WalkingPair.casesOn j s.fst s.snd)
-        (fun W => by
-          rintro (_ | _) (_ | _) a b fac
-          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₂₄] using fac
-            rfl
-          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac
-            simpa using s.condition =≫ F.obj.map φ.op
-          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac.symm
-            simpa using s.condition.symm =≫ F.obj.map φ.op
-          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₃₄] using fac
-            rfl)) (fun _ => ?_) (fun _ => ?_) (fun s m hm₁ hm₂ => ?_)
-    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left
-    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right
-    · apply F.2.hom_ext_ofArrows _ h₂
-      rintro (_ | _)
-      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left]
-        exact hm₁
-      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right]
-        exact hm₂)
-
-中文:
-定义 mk_of_isPullback
-  签名: (sq : Square C) [单态射 sq.f₂₄] [单态射 sq.f₃₄]
-  定义体: have : Mono sq.f₁₃ := h₁.mono_f₁₃
-  mk' sq (fun F => by
-    apply Square.IsPullback.mk
-    refine PullbackCone.IsLimit.mk _
-      (fun s => F.2.amalgamateOfArrows _ h₂
-        (fun j => WalkingPair.casesOn j s.fst s.snd)
-        (fun W => by
-          rintro (_ | _) (_ | _) a b fac
-          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₂₄] using fac
-            rfl
-          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac
-            simpa using s.condition =≫ F.obj.map φ.op
-          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac.symm
-            simpa using s.condition.symm =≫ F.obj.map φ.op
-          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₃₄] using fac
-            rfl)) (fun _ => ?_) (fun _ => ?_) (fun s m hm₁ hm₂ => ?_)
-    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left
-    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right
-    · apply F.2.hom_ext_ofArrows _ h₂
-      rintro (_ | _)
-      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left]
-        exact hm₁
-      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right]
-        exact hm₂)
-
-Depends on / 依赖: F.obj.map, IsLimit, IsPullback, PullbackCone, PullbackCone.IsLimit.lift, PullbackCone.IsLimit.mk, Square, Square.IsPullback.mk, WalkingPair, WalkingPair.casesOn, amalgamateOfArrows, cancel_mono, casesOn, condition, isLimit, s.condition, s.fst, s.snd, sq.f
+--- 原说明 ---
+Constructor for Mayer-Vietoris squares taking as an input
+a pullback square `sq` such that `sq.f₂₄` and `sq.f₃₄` are two monomorphisms
+which form a covering of `S.X₄`.
 -/
 noncomputable def mk_of_isPullback (sq : Square C) [Mono sq.f₂₄] [Mono sq.f₃₄]
-    (h₁ : sq.IsPullback) (h₂ : Sieve.ofTwoArrows sq.f₂₄ sq.f₃₄ in J sq.X₄) :
+    (h₁ : sq.IsPullback) (h₂ : Sieve.ofTwoArrows sq.f₂₄ sq.f₃₄ ∈ J sq.X₄) :
     J.MayerVietorisSquare :=
   have : Mono sq.f₁₃ := h₁.mono_f₁₃
-  mk' sq (fun F => by
+  mk' sq (fun F ↦ by
     apply Square.IsPullback.mk
     refine PullbackCone.IsLimit.mk _
-      (fun s => F.2.amalgamateOfArrows _ h₂
-        (fun j => WalkingPair.casesOn j s.fst s.snd)
-        (fun W => by
+      (fun s ↦ F.2.amalgamateOfArrows _ h₂
+        (fun j ↦ WalkingPair.casesOn j s.fst s.snd)
+        (fun W ↦ by
           rintro (_ | _) (_ | _) a b fac
           · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₂₄] using fac
             rfl
@@ -264,7 +216,7 @@ noncomputable def mk_of_isPullback (sq : Square C) [Mono sq.f₂₄] [Mono sq.f�
           · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac.symm
             simpa using s.condition.symm =≫ F.obj.map φ.op
           · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₃₄] using fac
-            rfl)) (fun _ => ?_) (fun _ => ?_) (fun s m hm₁ hm₂ => ?_)
+            rfl)) (fun _ ↦ ?_) (fun _ ↦ ?_) (fun s m hm₁ hm₂ ↦ ?_)
     · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left
     · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right
     · apply F.2.hom_ext_ofArrows _ h₂
@@ -275,27 +227,37 @@ noncomputable def mk_of_isPullback (sq : Square C) [Mono sq.f₂₄] [Mono sq.f�
         exact hm₂)
 
 variable (S : J.MayerVietorisSquare)
-
-/--
-lemma `isPushoutAddCommGrpFreeSheaf` / 引理 `isPushoutAddCommGrpFreeSheaf`
-
-English:
-lemma isPushoutAddCommGrpFreeSheaf
-  given: [HasWeakSheafify J AddCommGrpCat.{v}]
-  proof: (S.isPushout.map (Sheaf.composeAndSheafify J AddCommGrpCat.free)).of_iso
-    ((Square.mapFunctor.mapIso
-      (presheafToSheafCompComposeAndSheafifyIso J AddCommGrpCat.free)).app
-        (S.map yoneda))
-
-中文:
-引理 isPushoutAddCommGrpFreeSheaf
-  条件: [HasWeakSheafify J 加法交换群范畴.{v}]
-  证明: (S.isPushout.map (Sheaf.composeAndSheafify J AddCommGrpCat.free)).of_iso
-    ((Square.mapFunctor.mapIso
-      (presheafToSheafCompComposeAndSheafifyIso J AddCommGrpCat.free)).app
-        (S.map yoneda))
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.free, S.isPushout.map, S.map, Sheaf.composeAndSheafify, Square, Square.mapFunctor.mapIso, composeAndSheafify, isPushout, mapFunctor, mapIso, of_iso, presheafToSheafCompComposeAndSheafifyIso, yoneda
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.isPushoutAddCommGrpFre
+eSheaf** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVieto
+risSquare`。
+形式化陈述：isPushoutAddCommGrpFreeSheaf [HasWeakSheafify J AddCommGrpCat.{v}] : (S.ma
+p (yoneda ⋙ (Functor.whiskeringRight _ _ _).obj AddCommGrpCat.free ⋙ presheafToS
+heaf J _)).IsPushout
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Square.IsPushout.of_iso`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {sq₁ sq₂ : CategoryTheory.Square C},   sq₁.IsPushout → 
+∀ (e : sq₁ ≅ sq₂), sq₂.IsPus…
+· 使用定理 `CategoryTheory.Square.IsPushout.map`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {D : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} D
+]   {sq : CategoryTheory.…
+· 使用定理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.isPushout`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.Grothend
+ieckTopology C}   [inst_1 : CategoryTheory.HasWeakSheaf…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfShapeOfIsLeftAdjoint`：∀ {J
+ : Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1,
+ u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Sheaf.instIsLeftAdjointComposeAndSheafify`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTo
+pology C) {D : Type u₂}   [inst_1 : CategoryTh…
+· 使用定理 `AddCommGrpCat.instIsLeftAdjointFree`：AddCommGrpCat.free.IsLeftAdjoint
+· 使用定理 `CategoryTheory.Sheaf.instPreservesSheafificationOfIsLeftAdjoint`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.Grothen
+dieckTopology C) {D : Type u₂}   [inst_1 : CategoryTh…
 -/
 lemma isPushoutAddCommGrpFreeSheaf [HasWeakSheafify J AddCommGrpCat.{v}] :
     (S.map (yoneda ⋙ (Functor.whiskeringRight _ _ _).obj AddCommGrpCat.free ⋙
@@ -305,85 +267,78 @@ lemma isPushoutAddCommGrpFreeSheaf [HasWeakSheafify J AddCommGrpCat.{v}] :
       (presheafToSheafCompComposeAndSheafifyIso J AddCommGrpCat.free)).app
         (S.map yoneda))
 
-/--
-Definition of `SheafCondition` / `SheafCondition` 的定义
+/-- The condition that a Mayer-Vietoris square becomes a pullback square
+when we evaluate a presheaf on it. -/
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.SheafCondition** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`。
+形式化陈述：SheafCondition {A : Type u'} [Category.{v'} A] (P : Cᵒᵖ ⥤ A) : Prop
+参数：P : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SheafCondition
-  signature: {A : Type u'} [Category.{v'} A] (P : Cᵒᵖ ⥤ A)
-  body: (S.toSquare.op.map P).IsPullback
-
-中文:
-定义 层条件
-  签名: {A : 类型u'} [范畴.{v'} A] (P : Cᵒᵖ ⥤ A)
-  定义体: (S.toSquare.op.map P).IsPullback
-
-Depends on / 依赖: IsPullback, S.toSquare.op.map, toSquare
+--- 原说明 ---
+The condition that a Mayer-Vietoris square becomes a pullback square
+when we evaluate a presheaf on it.
 -/
 def SheafCondition {A : Type u'} [Category.{v'} A] (P : Cᵒᵖ ⥤ A) : Prop :=
   (S.toSquare.op.map P).IsPullback
-
-/--
-lemma `sheafCondition_iff_comp_coyoneda` / 引理 `sheafCondition_iff_comp_coyoneda`
-
-English:
-lemma sheafCondition_iff_comp_coyoneda
-  given: {A : Type u'} [Category.{v'} A] (P : Cᵒᵖ ⥤ A)
-  proof: Square.isPullback_iff_map_coyoneda_isPullback (S.op.map P)
-
-中文:
-引理 sheafCondition_iff_comp_coyoneda
-  条件: {A : 类型u'} [范畴.{v'} A] (P : Cᵒᵖ ⥤ A)
-  证明: Square.isPullback_iff_map_coyoneda_isPullback (S.op.map P)
-
-Depends on / 依赖: S.op.map, Square, Square.isPullback_iff_map_coyoneda_isPullback, isPullback_iff_map_coyoneda_isPullback
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.sheafCondition_iff_com
+p_coyoneda** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerV
+ietorisSquare`。
+形式化陈述：sheafCondition_iff_comp_coyoneda {A : Type u'} [Category.{v'} A] (P : Cᵒᵖ 
+⥤ A) : S.SheafCondition P ↔ forall (X : Aᵒᵖ), S.SheafCondition (P ⋙ coyoneda.obj
+ X)
+参数：P : Cᵒᵖ ⥤ A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Square.isPullback_iff_map_coyoneda_isPullback`：isPullback
+_iff_map_coyoneda_isPullback : sq.IsPullback ↔ forall (X : Cᵒᵖ), (sq.map (coyone
+da.obj X)).IsPullback
 -/
 lemma sheafCondition_iff_comp_coyoneda {A : Type u'} [Category.{v'} A] (P : Cᵒᵖ ⥤ A) :
-    S.SheafCondition P ↔ forall (X : Aᵒᵖ), S.SheafCondition (P ⋙ coyoneda.obj X) :=
+    S.SheafCondition P ↔ ∀ (X : Aᵒᵖ), S.SheafCondition (P ⋙ coyoneda.obj X) :=
   Square.isPullback_iff_map_coyoneda_isPullback (S.op.map P)
 
-/--
-Definition of `toPullbackObj` / `toPullbackObj` 的定义
+/-- Given a Mayer-Vietoris square `S` and a presheaf of types, this is the
+map from `P.obj (op S.X₄)` to the explicit fibre product of
+`P.map S.f₁₂.op` and `P.map S.f₁₃.op`. -/
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.toPullbackObj** 是 Math
+lib 中的一个缩写定义，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`。
+形式化陈述：toPullbackObj (P : Cᵒᵖ ⥤ Type v') : P.obj (op S.X₄) -> Types.PullbackObj (
+P.map S.f₁₂.op) (P.map S.f₁₃.op)
+参数：P : Cᵒᵖ ⥤ Type v'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toPullbackObj
-  signature: (P : Cᵒᵖ ⥤ Type v')
-  body: (S.toSquare.op.map P).pullbackCone.toPullbackObj
-
-中文:
-缩写 toPullbackObj
-  签名: (P : Cᵒᵖ ⥤ 类型v')
-  定义体: (S.toSquare.op.map P).pullbackCone.toPullbackObj
-
-Depends on / 依赖: S.toSquare.op.map, pullbackCone, pullbackCone.toPullbackObj, toPullbackObj, toSquare
+--- 原说明 ---
+Given a Mayer-Vietoris square `S` and a presheaf of types, this is the
+map from `P.obj (op S.X₄)` to the explicit fibre product of
+`P.map S.f₁₂.op` and `P.map S.f₁₃.op`.
 -/
 abbrev toPullbackObj (P : Cᵒᵖ ⥤ Type v') :
-    P.obj (op S.X₄) -> Types.PullbackObj (P.map S.f₁₂.op) (P.map S.f₁₃.op) :=
+    P.obj (op S.X₄) → Types.PullbackObj (P.map S.f₁₂.op) (P.map S.f₁₃.op) :=
   (S.toSquare.op.map P).pullbackCone.toPullbackObj
-
-/--
-lemma `sheafCondition_iff_bijective_toPullbackObj` / 引理 `sheafCondition_iff_bijective_toPullbackObj`
-
-English:
-lemma sheafCondition_iff_bijective_toPullbackObj
-  given: (P : Cᵒᵖ ⥤ Type v')
-  proof: by
-  have := (S.toSquare.op.map P).pullbackCone.isLimitEquivBijective
-  exact ⟨fun h => this h.isLimit, fun h => Square.IsPullback.mk _ (this.symm h)⟩
-
-中文:
-引理 sheafCondition_iff_bijective_toPullbackObj
-  条件: (P : Cᵒᵖ ⥤ 类型v')
-  证明: by
-  have := (S.toSquare.op.map P).pullbackCone.isLimitEquivBijective
-  exact ⟨fun h => this h.isLimit, fun h => Square.IsPullback.mk _ (this.symm h)⟩
-
-Depends on / 依赖: IsPullback, S.toSquare.op.map, Square, Square.IsPullback.mk, h.isLimit, isLimit, isLimitEquivBijective, pullbackCone, pullbackCone.isLimitEquivBijective, this.symm, toSquare
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.sheafCondition_iff_bij
+ective_toPullbackObj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopol
+ogy.MayerVietorisSquare`。
+形式化陈述：sheafCondition_iff_bijective_toPullbackObj (P : Cᵒᵖ ⥤ Type v') : S.SheafCo
+ndition P ↔ Function.Bijective (S.toPullbackObj P)
+参数：P : Cᵒᵖ ⥤ Type v'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Square.IsPullback.mk`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] (sq : CategoryTheory.Square C)   (h : CategoryTheory.Limit
+s.IsLimit sq.pullbackCone…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma sheafCondition_iff_bijective_toPullbackObj (P : Cᵒᵖ ⥤ Type v') :
     S.SheafCondition P ↔ Function.Bijective (S.toPullbackObj P) := by
   have := (S.toSquare.op.map P).pullbackCone.isLimitEquivBijective
-  exact ⟨fun h => this h.isLimit, fun h => Square.IsPullback.mk _ (this.symm h)⟩
+  exact ⟨fun h ↦ this h.isLimit, fun h ↦ Square.IsPullback.mk _ (this.symm h)⟩
 
 namespace SheafCondition
 
@@ -391,40 +346,41 @@ variable {S}
 variable {P : Cᵒᵖ ⥤ Type v'} (h : S.SheafCondition P)
 include h
 
-/--
-lemma `bijective_toPullbackObj` / 引理 `bijective_toPullbackObj`
-
-English:
-lemma bijective_toPullbackObj
-  statement: Function.Bijective (S.toPullbackObj P)
-  proof: by
-  rwa [← sheafCondition_iff_bijective_toPullbackObj]
-
-中文:
-引理 bijective_toPullbackObj
-  结论: 函数.双射 (S.toPullbackObj P)
-  证明: by
-  rwa [← sheafCondition_iff_bijective_toPullbackObj]
-
-Depends on / 依赖: sheafCondition_iff_bijective_toPullbackObj
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.SheafCondition.bijecti
+ve_toPullbackObj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.
+MayerVietorisSquare.SheafCondition`。
+形式化陈述：bijective_toPullbackObj : Function.Bijective (S.toPullbackObj P)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.sheafCondition_i
+ff_bijective_toPullbackObj`：sheafCondition_iff_bijective_toPullbackObj (P : Cᵒᵖ 
+⥤ Type v') : S.SheafCondition P ↔ Function.Bijective (S.toPullbackObj P)
 -/
 lemma bijective_toPullbackObj : Function.Bijective (S.toPullbackObj P) := by
   rwa [← sheafCondition_iff_bijective_toPullbackObj]
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  statement: {x y : P.obj (op S.X₄)}
-  proof: h.bijective_toPullbackObj.injective (by ext <;> assumption)
-
-中文:
-引理 ext
-  结论: {x y : P.obj (op S.X₄)}
-  证明: h.bijective_toPullbackObj.injective (by ext <;> assumption)
-
-Depends on / 依赖: bijective_toPullbackObj, h.bijective_toPullbackObj.injective, injective
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.SheafCondition.ext** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.
+SheafCondition`。
+形式化陈述：ext {x y : P.obj (op S.X₄)} (h₁ : P.map S.f₂₄.op x = P.map S.f₂₄.op y) (h₂
+ : P.map S.f₃₄.op x = P.map S.f₃₄.op y) : x = y
+参数：op S.X₄；h₁ : P.map S.f₂₄.op x = P.map S.f₂₄.op y；h₂ : P.map S.f₃₄.op x = P.ma
+p S.f₃₄.op y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用引理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.SheafCondition.b
+ijective_toPullbackObj`：bijective_toPullbackObj : Function.Bijective (S.toPullba
+ckObj P)
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
 -/
 lemma ext {x y : P.obj (op S.X₄)}
     (h₁ : P.map S.f₂₄.op x = P.map S.f₂₄.op y)
@@ -434,96 +390,83 @@ lemma ext {x y : P.obj (op S.X₄)}
 variable (u : P.obj (op S.X₂)) (v : P.obj (op S.X₃))
   (huv : P.map S.f₁₂.op u = P.map S.f₁₃.op v)
 
-/--
-Definition of `glue` / `glue` 的定义
+/-- If `S` is a Mayer-Vietoris square, and `P` is a presheaf
+which satisfies the sheaf condition with respect to `S`, then
+elements of `P` over `S.X₂` and `S.X₃` can be glued if the
+coincide over `S.X₁`. -/
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.SheafCondition.glue** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare
+.SheafCondition`。
+形式化陈述：glue : P.obj (op S.X₄)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition glue
-  signature: : P.obj (op S.X₄)
-  body: (PullbackCone.IsLimit.equivPullbackObj h.isLimit).symm ⟨⟨u, v⟩, huv⟩
-
-@[simp]
-
-中文:
-定义 glue
-  签名: : P.obj (op S.X₄)
-  定义体: (PullbackCone.IsLimit.equivPullbackObj h.isLimit).symm ⟨⟨u, v⟩, huv⟩
-
-@[simp]
-
-Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.equivPullbackObj, equivPullbackObj, h.isLimit, isLimit
+--- 原说明 ---
+If `S` is a Mayer-Vietoris square, and `P` is a presheaf
+which satisfies the sheaf condition with respect to `S`, then
+elements of `P` over `S.X₂` and `S.X₃` can be glued if the
+coincide over `S.X₁`.
 -/
 noncomputable def glue : P.obj (op S.X₄) :=
   (PullbackCone.IsLimit.equivPullbackObj h.isLimit).symm ⟨⟨u, v⟩, huv⟩
 
 @[simp]
-/--
-lemma `map_f₂₄_op_glue` / 引理 `map_f₂₄_op_glue`
-
-English:
-lemma map_f₂₄_op_glue
-  statement: P.map S.f₂₄.op (h.glue u v huv) = u
-  proof: PullbackCone.IsLimit.equivPullbackObj_symm_apply_fst h.isLimit _
-
-@[simp]
-
-中文:
-引理 map_f₂₄_op_glue
-  结论: P.map S.f₂₄.op (h.glue u v huv) = u
-  证明: PullbackCone.IsLimit.equivPullbackObj_symm_apply_fst h.isLimit _
-
-@[simp]
-
-Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.equivPullbackObj_symm_apply_fst, equivPullbackObj_symm_apply_fst, h.isLimit, isLimit
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.SheafCondition.map_f**
+ 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquar
+e.SheafCondition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_f₂₄_op_glue : P.map S.f₂₄.op (h.glue u v huv) = u :=
   PullbackCone.IsLimit.equivPullbackObj_symm_apply_fst h.isLimit _
 
 @[simp]
-/--
-lemma `map_f₃₄_op_glue` / 引理 `map_f₃₄_op_glue`
-
-English:
-lemma map_f₃₄_op_glue
-  statement: P.map S.f₃₄.op (h.glue u v huv) = v
-  proof: PullbackCone.IsLimit.equivPullbackObj_symm_apply_snd h.isLimit _
-
-中文:
-引理 map_f₃₄_op_glue
-  结论: P.map S.f₃₄.op (h.glue u v huv) = v
-  证明: PullbackCone.IsLimit.equivPullbackObj_symm_apply_snd h.isLimit _
-
-Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.equivPullbackObj_symm_apply_snd, equivPullbackObj_symm_apply_snd, h.isLimit, isLimit
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.SheafCondition.map_f**
+ 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquar
+e.SheafCondition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_f₃₄_op_glue : P.map S.f₃₄.op (h.glue u v huv) = v :=
   PullbackCone.IsLimit.equivPullbackObj_symm_apply_snd h.isLimit _
 
 end SheafCondition
 
-/--
-lemma `sheafCondition_of_sheaf` / 引理 `sheafCondition_of_sheaf`
-
-English:
-lemma sheafCondition_of_sheaf
-  statement: {A : Type u'} [Category.{v} A]
-  proof: by
-  rw [sheafCondition_iff_comp_coyoneda]
-  intro X
-  exact (Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff _ S.toSquare).1
-    (S.isPushout.op.map
-      (yoneda.obj ⟨_, (isSheaf_iff_isSheaf_of_type _ _).2 (F.property X.unop)⟩))
-
-中文:
-引理 sheafCondition_of_sheaf
-  结论: {A : 类型u'} [范畴.{v} A]
-  证明: by
-  rw [sheafCondition_iff_comp_coyoneda]
-  intro X
-  exact (Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff _ S.toSquare).1
-    (S.isPushout.op.map
-      (yoneda.obj ⟨_, (isSheaf_iff_isSheaf_of_type _ _).2 (F.property X.unop)⟩))
-
-Depends on / 依赖: F.property, S.isPushout.op.map, S.toSquare, Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff, X.unop, isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff, isPushout, isSheaf_iff_isSheaf_of_type, property, sheafCondition_iff_comp_coyoneda, toSquare, yoneda, yoneda.obj
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.sheafCondition_of_shea
+f** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSq
+uare`。
+形式化陈述：sheafCondition_of_sheaf {A : Type u'} [Category.{v} A] (F : Sheaf J A) : S
+.SheafCondition F.obj
+参数：F : Sheaf J A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.sheafCondition_i
+ff_comp_coyoneda`：sheafCondition_iff_comp_coyoneda {A : Type u'} [Category.{v'} 
+A] (P : Cᵒᵖ ⥤ A) : S.SheafCondition P ↔ forall (X : Aᵒᵖ), S.SheafCondition (P …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.isSheaf_iff_isSheaf_of_type`：isSheaf_iff_isSheaf_of_type 
+(P : Cᵒᵖ ⥤ Type w) : Presheaf.IsSheaf J P ↔ Presieve.IsSheaf J P
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `CategoryTheory.Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yon
+eda_iff`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryT
+heory.GrothendieckTopology C}   [inst_1 : CategoryTheory.HasWeakSheaf…
+· 使用定理 `CategoryTheory.Square.IsPullback.map`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {D : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} 
+D]   {sq : CategoryTheory.…
+· 使用定理 `CategoryTheory.Square.IsPushout.op`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {sq : CategoryTheory.Square C}, sq.IsPushout → sq.op.IsPull
+back
+· 使用定理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.isPushout`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.Grothend
+ieckTopology C}   [inst_1 : CategoryTheory.HasWeakSheaf…
 -/
 lemma sheafCondition_of_sheaf {A : Type u'} [Category.{v} A]
     (F : Sheaf J A) : S.SheafCondition F.obj := by
@@ -542,46 +485,20 @@ variable [HasWeakSheafify J (Type v)] [HasSheafify J AddCommGrpCat.{v}]
 `ℤ[S.X₁] ⟶ ℤ[S.X₂] ⊞ ℤ[S.X₃] ⟶ ℤ[S.X₄]`
 where the left map is a difference and the right map a sum. -/
 @[simps]
-/--
-Definition of `shortComplex` / `shortComplex` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.shortComplex** 是 Mathl
+ib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`。
+形式化陈述：shortComplex : ShortComplex (Sheaf J AddCommGrpCat.{v}) where X₁
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
 
-English:
-definition shortComplex
-  signature: :
-  body: (presheafToSheaf J _).obj (yoneda.obj S.X₁ ⋙ AddCommGrpCat.free)
-  X₂ := (presheafToSheaf J _).obj (yoneda.obj S.X₂ ⋙ AddCommGrpCat.free) ⊞
-    (presheafToSheaf J _).obj (yoneda.obj S.X₃ ⋙ AddCommGrpCat.free)
-  X₃ := (presheafToSheaf J _).obj (yoneda.obj S.X₄ ⋙ AddCommGrpCat.free)
-  f :=
-    biprod.lift
-      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₂) _))
-      (-(presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₃) _))
-  g :=
-    biprod.desc
-      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₂₄) _))
-      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₃₄) _))
-  zero := (S.map (yoneda ⋙ (Functor.whiskeringRight _ _ _).obj AddCommGrpCat.free ⋙
-      presheafToSheaf J _)).cokernelCofork.condition
-
-中文:
-定义 shortComplex
-  签名: :
-  定义体: (presheafToSheaf J _).obj (yoneda.obj S.X₁ ⋙ AddCommGrpCat.free)
-  X₂ := (presheafToSheaf J _).obj (yoneda.obj S.X₂ ⋙ AddCommGrpCat.free) ⊞
-    (presheafToSheaf J _).obj (yoneda.obj S.X₃ ⋙ AddCommGrpCat.free)
-  X₃ := (presheafToSheaf J _).obj (yoneda.obj S.X₄ ⋙ AddCommGrpCat.free)
-  f :=
-    biprod.lift
-      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₂) _))
-      (-(presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₃) _))
-  g :=
-    biprod.desc
-      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₂₄) _))
-      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₃₄) _))
-  zero := (S.map (yoneda ⋙ (Functor.whiskeringRight _ _ _).obj AddCommGrpCat.free ⋙
-      presheafToSheaf J _)).cokernelCofork.condition
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.free, presheafToSheaf, yoneda, yoneda.obj
+--- 原说明 ---
+The short complex of abelian sheaves
+`ℤ[S.X₁] ⟶ ℤ[S.X₂] ⊞ ℤ[S.X₃] ⟶ ℤ[S.X₄]`
+where the left map is a difference and the right map a sum.
 -/
 noncomputable def shortComplex :
     ShortComplex (Sheaf J AddCommGrpCat.{v}) where
@@ -602,30 +519,10 @@ noncomputable def shortComplex :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono S.shortComplex.f
-  body: by
-  have : Mono (S.shortComplex.f ≫ biprod.snd) := by
-    dsimp
-    simp only [biprod.lift_snd]
-    infer_instance
-  exact mono_of_mono _ biprod.snd
-
-中文:
-实例 :
-  签名: 单态射 S.shortComplex.f
-  定义体: by
-  have : Mono (S.shortComplex.f ≫ biprod.snd) := by
-    dsimp
-    simp only [biprod.lift_snd]
-    infer_instance
-  exact mono_of_mono _ biprod.snd
-
-Depends on / 依赖: S.shortComplex.f, biprod, biprod.lift_snd, biprod.snd, infer_instance, lift_snd, mono_of_mono, shortComplex
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono S.shortComplex.f := by
   have : Mono (S.shortComplex.f ≫ biprod.snd) := by
@@ -633,63 +530,62 @@ instance : Mono S.shortComplex.f := by
     simp only [biprod.lift_snd]
     infer_instance
   exact mono_of_mono _ biprod.snd
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Epi S.shortComplex.g
-  body: (S.shortComplex.exact_and_epi_g_iff_g_is_cokernel.2
-    ⟨S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork⟩).2
-
-中文:
-实例 :
-  签名: 满态射 S.shortComplex.g
-  定义体: (S.shortComplex.exact_and_epi_g_iff_g_is_cokernel.2
-    ⟨S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork⟩).2
-
-Depends on / 依赖: S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork, S.shortComplex.exact_and_epi_g_iff_g_is_cokernel, exact_and_epi_g_iff_g_is_cokernel, isColimitCokernelCofork, isPushoutAddCommGrpFreeSheaf, shortComplex
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Epi S.shortComplex.g :=
   (S.shortComplex.exact_and_epi_g_iff_g_is_cokernel.2
     ⟨S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork⟩).2
-
-/--
-lemma `shortComplex_exact` / 引理 `shortComplex_exact`
-
-English:
-lemma shortComplex_exact
-  statement: S.shortComplex.Exact
-  proof: ShortComplex.exact_of_g_is_cokernel _
-    S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork
-
-中文:
-引理 shortComplex_exact
-  结论: S.shortComplex.正合
-  证明: ShortComplex.exact_of_g_is_cokernel _
-    S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork
-
-Depends on / 依赖: S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork, ShortComplex, ShortComplex.exact_of_g_is_cokernel, exact_of_g_is_cokernel, isColimitCokernelCofork, isPushoutAddCommGrpFreeSheaf
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.shortComplex_exact** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare`
+。
+形式化陈述：shortComplex_exact : S.shortComplex.Exact
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.exact_of_g_is_cokernel`：exact_of_g_is_cokern
+el (hS : IsColimit (CokernelCofork.ofπ S.g S.zero)) [S.HasHomology] : S.Exact
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.HasBinaryBiproducts.has_binary_biproduct`：∀ {C : T
+ype uC} {inst : CategoryTheory.Category.{uC', uC} C} {inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms C}   [self : CategoryTheory.Li…
+· 使用定理 `CategoryTheory.Abelian.hasBinaryBiproducts`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   CategoryTheo
+ry.Limits.HasBinaryBiproducts C
+· 使用引理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.isPushoutAddComm
+GrpFreeSheaf`：isPushoutAddCommGrpFreeSheaf [HasWeakSheafify J AddCommGrpCat.{v}]
+ : (S.map (yoneda ⋙ (Functor.whiskeringRight _ _ _).obj AddCommGrpCat.free…
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
 -/
 lemma shortComplex_exact : S.shortComplex.Exact :=
   ShortComplex.exact_of_g_is_cokernel _
     S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork
-
-/--
-lemma `shortComplex_shortExact` / 引理 `shortComplex_shortExact`
-
-English:
-lemma shortComplex_shortExact
-  statement: S.shortComplex.ShortExact where
-  proof: S.shortComplex_exact
-
-中文:
-引理 shortComplex_shortExact
-  结论: S.shortComplex.短正合 where
-  证明: S.shortComplex_exact
-
-Depends on / 依赖: S.shortComplex_exact, shortComplex_exact
+/-
+**CategoryTheory.GrothendieckTopology.MayerVietorisSquare.shortComplex_shortExac
+t** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.MayerVietorisSq
+uare`。
+形式化陈述：shortComplex_shortExact : S.shortComplex.ShortExact where exact
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.shortComplex_exa
+ct`：shortComplex_exact : S.shortComplex.Exact
+· 使用定理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.instMonoSheafAdd
+CommGrpCatFShortComplex`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C
+] {J : CategoryTheory.GrothendieckTopology C}   [inst_1 : CategoryTheory.HasWeak
+Sheaf…
+· 使用定理 `CategoryTheory.GrothendieckTopology.MayerVietorisSquare.instEpiSheafAddC
+ommGrpCatGShortComplex`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C]
+ {J : CategoryTheory.GrothendieckTopology C}   [inst_1 : CategoryTheory.HasWeakS
+heaf…
 -/
 lemma shortComplex_shortExact : S.shortComplex.ShortExact where
   exact := S.shortComplex_exact
@@ -699,3 +595,4 @@ end MayerVietorisSquare
 end GrothendieckTopology
 
 end CategoryTheory
+

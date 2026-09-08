@@ -40,45 +40,32 @@ open Set
 universe u v
 variable {α : Type u} {ι : Sort v}
 
-/--
-Definition of `SupSet` / `SupSet` 的定义
+/-- Class for the `sSup` operator -/
+/-
+**SupSet** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SupSet
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - sSup : Set α -> α
-
-中文:
-类 上确界集
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - sSup : 集合 α -> α
+--- 原说明 ---
+Class for the `sSup` operator
 -/
 class SupSet (α : Type*) where
   /-- Supremum of a set -/
-  sSup : Set α -> α
+  sSup : Set α → α
 
 /-- Class for the `sInf` operator -/
 @[to_dual existing]
-/--
-Definition of `InfSet` / `InfSet` 的定义
+/-
+**InfSet** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class InfSet
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - sInf : Set α -> α
-
-中文:
-类 下确界集
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - sInf : 集合 α -> α
+--- 原说明 ---
+Class for the `sInf` operator
 -/
 class InfSet (α : Type*) where
   /-- Infimum of a set -/
-  sInf : Set α -> α
+  sInf : Set α → α
 
 export SupSet (sSup)
 
@@ -86,27 +73,24 @@ export InfSet (sInf)
 
 /-- Indexed supremum -/
 @[to_dual /-- Indexed infimum -/]
-/--
-Definition of `iSup` / `iSup` 的定义
+/-
+**iSup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：iSup [SupSet α] (s : ι -> α) : α
+参数：s : ι -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iSup
-  signature: [SupSet α] (s : ι -> α)
-  body: sSup (range s)
-
-@[to_dual]
-
-中文:
-定义 iSup
-  签名: [上确界集 α] (s : ι -> α)
-  定义体: sSup (range s)
-
-@[to_dual]
+--- 原说明 ---
+Indexed supremum
 -/
-def iSup [SupSet α] (s : ι -> α) : α :=
+def iSup [SupSet α] (s : ι → α) : α :=
   sSup (range s)
 
 @[to_dual]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 50) infSet_to_nonempty (α) [InfSet α] : Nonempty α :=
   ⟨sInf ∅⟩
 
@@ -122,7 +106,7 @@ open Lean Lean.PrettyPrinter.Delaborator
 
 /-- Delaborator for indexed supremum. -/
 @[app_delab iSup]
-meta def iSup_delab : Delab := whenPPOption Lean.getPPNotation withOverApp 4 do
+meta def iSup_delab : Delab := whenPPOption Lean.getPPNotation <| withOverApp 4 do
   let #[_, ι, _, f] := (← SubExpr.getExpr).getAppArgs | failure
   unless f.isLambda do failure
   let prop ← Meta.isProp ι
@@ -142,15 +126,15 @@ meta def iSup_delab : Delab := whenPPOption Lean.getPPNotation withOverApp 4 do
   -- Cute binders
   let stx : Term ←
     match stx with
-    | `(⨆ $x:ident, ⨆ (_ : $y:ident in $s), $body)
-    | `(⨆ ($x:ident : $_), ⨆ (_ : $y:ident in $s), $body) =>
-      if x == y then `(⨆ $x:ident in $s, $body) else pure stx
+    | `(⨆ $x:ident, ⨆ (_ : $y:ident ∈ $s), $body)
+    | `(⨆ ($x:ident : $_), ⨆ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⨆ $x:ident ∈ $s, $body) else pure stx
     | _ => pure stx
   return stx
 
 /-- Delaborator for indexed infimum. -/
 @[app_delab iInf]
-meta def iInf_delab : Delab := whenPPOption Lean.getPPNotation withOverApp 4 do
+meta def iInf_delab : Delab := whenPPOption Lean.getPPNotation <| withOverApp 4 do
   let #[_, ι, _, f] := (← SubExpr.getExpr).getAppArgs | failure
   unless f.isLambda do failure
   let prop ← Meta.isProp ι
@@ -170,59 +154,38 @@ meta def iInf_delab : Delab := whenPPOption Lean.getPPNotation withOverApp 4 do
   -- Cute binders
   let stx : Term ←
     match stx with
-    | `(⨅ $x:ident, ⨅ (_ : $y:ident in $s), $body)
-    | `(⨅ ($x:ident : $_), ⨅ (_ : $y:ident in $s), $body) =>
-      if x == y then `(⨅ $x:ident in $s, $body) else pure stx
+    | `(⨅ $x:ident, ⨅ (_ : $y:ident ∈ $s), $body)
+    | `(⨅ ($x:ident : $_), ⨅ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⨅ $x:ident ∈ $s, $body) else pure stx
     | _ => pure stx
   return stx
 end delaborators
 
 namespace Set
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Set α)
-  body: ⟨fun s => { a | forall t in s, a in t }⟩
-
-中文:
-实例 :
-  签名: 下确界集 (集合 α)
-  定义体: ⟨fun s => { a | forall t in s, a in t }⟩
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (Set α) :=
-  ⟨fun s => { a | forall t in s, a in t }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (Set α)
-  body: ⟨fun s => { a | exists t in s, a in t }⟩
-
-中文:
-实例 :
-  签名: 上确界集 (集合 α)
-  定义体: ⟨fun s => { a | exists t in s, a in t }⟩
+  ⟨fun s => { a | ∀ t ∈ s, a ∈ t }⟩
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (Set α) :=
-  ⟨fun s => { a | exists t in s, a in t }⟩
+  ⟨fun s => { a | ∃ t ∈ s, a ∈ t }⟩
 
-/--
-Definition of `sInter` / `sInter` 的定义
+/-- Intersection of a set of sets. -/
+/-
+**Set.sInter** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：sInter (S : Set (Set α)) : Set α
+参数：S : Set (Set α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sInter
-  signature: (S : Set (Set α))
-  body: sInf S
-
-中文:
-定义 集合交集
-  签名: (S : 集合 (集合 α))
-  定义体: sInf S
+--- 原说明 ---
+Intersection of a set of sets.
 -/
 def sInter (S : Set (Set α)) : Set α :=
   sInf S
@@ -230,18 +193,16 @@ def sInter (S : Set (Set α)) : Set α :=
 /-- Notation for `Set.sInter` Intersection of a set of sets. -/
 prefix:110 "⋂₀ " => sInter
 
-/--
-Definition of `sUnion` / `sUnion` 的定义
+/-- Union of a set of sets. -/
+/-
+**Set.sUnion** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：sUnion (S : Set (Set α)) : Set α
+参数：S : Set (Set α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sUnion
-  signature: (S : Set (Set α))
-  body: sSup S
-
-中文:
-定义 集合并集
-  签名: (S : 集合 (集合 α))
-  定义体: sSup S
+--- 原说明 ---
+Union of a set of sets.
 -/
 def sUnion (S : Set (Set α)) : Set α :=
   sSup S
@@ -250,81 +211,55 @@ def sUnion (S : Set (Set α)) : Set α :=
 prefix:110 "⋃₀ " => sUnion
 
 @[simp, grind =, push]
-/--
-theorem `mem_sInter` / 定理 `mem_sInter`
-
-English:
-theorem mem_sInter
-  given: {x : α} {S : Set (Set α)}
-  statement: x in ⋂₀ S ↔ forall t in S, x in t
-  proof: Iff.rfl
-
-@[simp, grind =, push]
-
-中文:
-定理 mem_s整数er
-  条件: {x : α} {S : 集合 (集合 α)}
-  结论: x in ⋂₀ S ↔ 对任意 t in S, x in t
-  证明: Iff.rfl
-
-@[simp, grind =, push]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_sInter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_sInter {x : α} {S : Set (Set α)} : x in ⋂₀ S ↔ forall t in S, x in t
+参数：Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sInter {x : α} {S : Set (Set α)} : x in ⋂₀ S ↔ forall t in S, x in t :=
+theorem mem_sInter {x : α} {S : Set (Set α)} : x ∈ ⋂₀ S ↔ ∀ t ∈ S, x ∈ t :=
   Iff.rfl
 
 @[simp, grind =, push]
-/--
-theorem `mem_sUnion` / 定理 `mem_sUnion`
-
-English:
-theorem mem_sUnion
-  given: {x : α} {S : Set (Set α)}
-  statement: x in ⋃₀ S ↔ exists t in S, x in t
-  proof: Iff.rfl
-
-中文:
-定理 mem_sUnion
-  条件: {x : α} {S : 集合 (集合 α)}
-  结论: x in ⋃₀ S ↔ 存在 t in S, x in t
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_sUnion {x : α} {S : Set (Set α)} : x in ⋃₀ S ↔ exists t in S, x in t
+参数：Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sUnion {x : α} {S : Set (Set α)} : x in ⋃₀ S ↔ exists t in S, x in t :=
+theorem mem_sUnion {x : α} {S : Set (Set α)} : x ∈ ⋃₀ S ↔ ∃ t ∈ S, x ∈ t :=
   Iff.rfl
 
-/--
-Definition of `iUnion` / `iUnion` 的定义
+/-- Indexed union of a family of sets -/
+/-
+**Set.iUnion** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：iUnion (s : ι -> Set α) : Set α
+参数：s : ι -> Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iUnion
-  signature: (s : ι -> Set α)
-  body: iSup s
-
-中文:
-定义 iUnion
-  签名: (s : ι -> 集合 α)
-  定义体: iSup s
+--- 原说明 ---
+Indexed union of a family of sets
 -/
-def iUnion (s : ι -> Set α) : Set α :=
+def iUnion (s : ι → Set α) : Set α :=
   iSup s
 
-/--
-Definition of `iInter` / `iInter` 的定义
+/-- Indexed intersection of a family of sets -/
+/-
+**Set.iInter** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：iInter (s : ι -> Set α) : Set α
+参数：s : ι -> Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iInter
-  signature: (s : ι -> Set α)
-  body: iInf s
-
-中文:
-定义 i整数er
-  签名: (s : ι -> 集合 α)
-  定义体: iInf s
+--- 原说明 ---
+Indexed intersection of a family of sets
 -/
-def iInter (s : ι -> Set α) : Set α :=
+def iInter (s : ι → Set α) : Set α :=
   iInf s
 
 /-- Notation for `Set.iUnion`. Indexed union of a family of sets -/
@@ -359,9 +294,9 @@ meta def iUnion_delab : Delab := whenPPOption Lean.getPPNotation do
   -- Cute binders
   let stx : Term ←
     match stx with
-    | `(⋃ $x:ident, ⋃ (_ : $y:ident in $s), $body)
-    | `(⋃ ($x:ident : $_), ⋃ (_ : $y:ident in $s), $body) =>
-      if x == y then `(⋃ $x:ident in $s, $body) else pure stx
+    | `(⋃ $x:ident, ⋃ (_ : $y:ident ∈ $s), $body)
+    | `(⋃ ($x:ident : $_), ⋃ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⋃ $x:ident ∈ $s, $body) else pure stx
     | _ => pure stx
   return stx
 
@@ -387,154 +322,80 @@ meta def sInter_delab : Delab := whenPPOption Lean.getPPNotation do
   -- Cute binders
   let stx : Term ←
     match stx with
-    | `(⋂ $x:ident, ⋂ (_ : $y:ident in $s), $body)
-    | `(⋂ ($x:ident : $_), ⋂ (_ : $y:ident in $s), $body) =>
-      if x == y then `(⋂ $x:ident in $s, $body) else pure stx
+    | `(⋂ $x:ident, ⋂ (_ : $y:ident ∈ $s), $body)
+    | `(⋂ ($x:ident : $_), ⋂ (_ : $y:ident ∈ $s), $body) =>
+      if x == y then `(⋂ $x:ident ∈ $s, $body) else pure stx
     | _ => pure stx
   return stx
 
 end delaborators
 
 @[simp, push]
-/--
-theorem `mem_iUnion` / 定理 `mem_iUnion`
-
-English:
-theorem mem_iUnion
-  given: {x : α} {s : ι -> Set α}
-  statement: (x in ⋃ i, s i) ↔ exists i, x in s i
-  proof: ⟨fun ⟨_, ⟨⟨a, (t_eq : s a = _)⟩, (h : x in _)⟩⟩ => ⟨a, t_eq.symm ▸ h⟩, fun ⟨a, h⟩ =>
-    ⟨s a, ⟨⟨a, rfl⟩, h⟩⟩⟩
-
-@[simp, push]
-
-中文:
-定理 mem_iUnion
-  条件: {x : α} {s : ι -> 集合 α}
-  结论: (x in ⋃ i, s i) ↔ 存在 i, x in s i
-  证明: ⟨fun ⟨_, ⟨⟨a, (t_eq : s a = _)⟩, (h : x in _)⟩⟩ => ⟨a, t_eq.symm ▸ h⟩, fun ⟨a, h⟩ =>
-    ⟨s a, ⟨⟨a, rfl⟩, h⟩⟩⟩
-
-@[simp, push]
-
-Depends on / 依赖: t_eq, t_eq.symm
+/-
+**Set.mem_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ exists i, x in s i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ exists i, x in s i :=
-  ⟨fun ⟨_, ⟨⟨a, (t_eq : s a = _)⟩, (h : x in _)⟩⟩ => ⟨a, t_eq.symm ▸ h⟩, fun ⟨a, h⟩ =>
+theorem mem_iUnion {x : α} {s : ι → Set α} : (x ∈ ⋃ i, s i) ↔ ∃ i, x ∈ s i :=
+  ⟨fun ⟨_, ⟨⟨a, (t_eq : s a = _)⟩, (h : x ∈ _)⟩⟩ => ⟨a, t_eq.symm ▸ h⟩, fun ⟨a, h⟩ =>
     ⟨s a, ⟨⟨a, rfl⟩, h⟩⟩⟩
 
 @[simp, push]
-/--
-theorem `mem_iInter` / 定理 `mem_iInter`
-
-English:
-theorem mem_iInter
-  given: {x : α} {s : ι -> Set α}
-  statement: (x in ⋂ i, s i) ↔ forall i, x in s i
-  proof: ⟨fun (h : forall a in { a : Set α | exists i, s i = a }, x in a) a => h (s a) ⟨a, rfl⟩,
-    fun h _ ⟨a, (eq : s a = _)⟩ => eq ▸ h a⟩
-
-@[simp]
-
-中文:
-定理 mem_i整数er
-  条件: {x : α} {s : ι -> 集合 α}
-  结论: (x in ⋂ i, s i) ↔ 对任意 i, x in s i
-  证明: ⟨fun (h : forall a in { a : Set α | exists i, s i = a }, x in a) a => h (s a) ⟨a, rfl⟩,
-    fun h _ ⟨a, (eq : s a = _)⟩ => eq ▸ h a⟩
-
-@[simp]
+/-
+**Set.mem_iInter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_iInter {x : α} {s : ι -> Set α} : (x in ⋂ i, s i) ↔ forall i, x in s i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_iInter {x : α} {s : ι -> Set α} : (x in ⋂ i, s i) ↔ forall i, x in s i :=
-  ⟨fun (h : forall a in { a : Set α | exists i, s i = a }, x in a) a => h (s a) ⟨a, rfl⟩,
+theorem mem_iInter {x : α} {s : ι → Set α} : (x ∈ ⋂ i, s i) ↔ ∀ i, x ∈ s i :=
+  ⟨fun (h : ∀ a ∈ { a : Set α | ∃ i, s i = a }, x ∈ a) a => h (s a) ⟨a, rfl⟩,
     fun h _ ⟨a, (eq : s a = _)⟩ => eq ▸ h a⟩
 
 @[simp]
-/--
-theorem `sSup_eq_sUnion` / 定理 `sSup_eq_sUnion`
-
-English:
-theorem sSup_eq_sUnion
-  given: (S : Set (Set α))
-  statement: sSup S = ⋃₀ S
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sSup_eq_sUnion
-  条件: (S : 集合 (集合 α))
-  结论: sSup S = ⋃₀ S
-  证明: rfl
-
-@[simp]
+/-
+**Set.sSup_eq_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sSup_eq_sUnion (S : Set (Set α)) : sSup S = ⋃₀ S
+参数：S : Set (Set α)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sSup_eq_sUnion (S : Set (Set α)) : sSup S = ⋃₀ S :=
   rfl
 
 @[simp]
-/--
-theorem `sInf_eq_sInter` / 定理 `sInf_eq_sInter`
-
-English:
-theorem sInf_eq_sInter
-  given: (S : Set (Set α))
-  statement: sInf S = ⋂₀ S
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sInf_eq_s整数er
-  条件: (S : 集合 (集合 α))
-  结论: sInf S = ⋂₀ S
-  证明: rfl
-
-@[simp]
+/-
+**Set.sInf_eq_sInter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sInf_eq_sInter (S : Set (Set α)) : sInf S = ⋂₀ S
+参数：S : Set (Set α)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sInf_eq_sInter (S : Set (Set α)) : sInf S = ⋂₀ S :=
   rfl
 
 @[simp]
-/--
-theorem `iSup_eq_iUnion` / 定理 `iSup_eq_iUnion`
-
-English:
-theorem iSup_eq_iUnion
-  given: (s : ι -> Set α)
-  statement: iSup s = iUnion s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 iSup_eq_iUnion
-  条件: (s : ι -> 集合 α)
-  结论: iSup s = iUnion s
-  证明: rfl
-
-@[simp]
+/-
+**Set.iSup_eq_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：iSup_eq_iUnion (s : ι -> Set α) : iSup s = iUnion s
+参数：s : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iSup_eq_iUnion (s : ι -> Set α) : iSup s = iUnion s :=
+theorem iSup_eq_iUnion (s : ι → Set α) : iSup s = iUnion s :=
   rfl
 
 @[simp]
-/--
-theorem `iInf_eq_iInter` / 定理 `iInf_eq_iInter`
-
-English:
-theorem iInf_eq_iInter
-  given: (s : ι -> Set α)
-  statement: iInf s = iInter s
-  proof: rfl
-
-中文:
-定理 iInf_eq_i整数er
-  条件: (s : ι -> 集合 α)
-  结论: iInf s = i整数er s
-  证明: rfl
+/-
+**Set.iInf_eq_iInter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：iInf_eq_iInter (s : ι -> Set α) : iInf s = iInter s
+参数：s : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iInf_eq_iInter (s : ι -> Set α) : iInf s = iInter s :=
+theorem iInf_eq_iInter (s : ι → Set α) : iInf s = iInter s :=
   rfl
 
 end Set
+

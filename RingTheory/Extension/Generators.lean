@@ -26,8 +26,8 @@ public import Mathlib.RingTheory.Extension.Basic
 - `Algebra.Generators.Hom`: Given a commuting square
   ```
   R --→ P = R[X] ---→ S
-  | |
-  ↓ ↓
+  |                   |
+  ↓                   ↓
   R' -→ P' = R'[X'] → S
   ```
   A hom between `P` and `P'` is an assignment `X → P'` such that the arrows commute.
@@ -57,37 +57,32 @@ open TensorProduct MvPolynomial
 
 variable (R : Type u) (S : Type v) (ι : Type w) [CommRing R] [CommRing S] [Algebra R S]
 
-/--
-Definition of `Algebra.Generators` / `Algebra.Generators` 的定义
+/-- A family of generators of an `R`-algebra `S` consists of
+1. `ι`: The type of variables.
+2. `val : ι → S`: The assignment of each variable to a value in `S`.
+3. `σ`: A section of `R[X] → S`. -/
+/-
+**Algebra.Generators** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Algebra.Generators where /-- The assignment of each variable to a value in
+ `S`. -/ val : ι -> S /-- A section of `R[X] → S`. -/ σ' : S -> MvPolynomial ι R
+ aeval_val_σ' : forall s, aeval val (σ' s) = s /-- An `R[X]`-algebra instance on
+ `S`. The default is the one induced by the map `R[X] → S`, but this causes a di
+amond if there is an existing instance. -/ algebra : Algebra (MvPolynomial ι R) 
+S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Algebra.Generators
-  parameters: where
-  axioms and operations (5):
-    - val : ι -> S
-    - σ' : S -> MvPolynomial ι R
-    - aeval_val_σ' : forall s, aeval val (σ' s) = s
-    - algebra : Algebra (MvPolynomial ι R) S  [default: (aeval val).toAlgebra]
-    - algebraMap_eq : algebraMap (MvPolynomial ι R) S = aeval (R := R) val  [default: by rfl]
-
-中文:
-结构 代数.生成元
-  参数: where
-  公理与运算 (5 个):
-    - val : ι -> S
-    - σ' : S -> 多元多项式 ι R
-    - aeval_val_σ' : 对任意 s, aeval val (σ' s) = s
-    - algebra : 代数 (多元多项式 ι R) S  [默认: (aeval val).toAlgebra]
-    - algebraMap_eq : algebraMap (多元多项式 ι R) S = aeval (R := R) val  [默认: by rfl]
-
-Depends on / 依赖: toAlgebra
+--- 原说明 ---
+A family of generators of an `R`-algebra `S` consists of
+1. `ι`: The type of variables.
+2. `val : ι → S`: The assignment of each variable to a value in `S`.
+3. `σ`: A section of `R[X] → S`.
 -/
 structure Algebra.Generators where
   /-- The assignment of each variable to a value in `S`. -/
-  val : ι -> S
+  val : ι → S
   /-- A section of `R[X] → S`. -/
-  σ' : S -> MvPolynomial ι R
-  aeval_val_σ' : forall s, aeval val (σ' s) = s
+  σ' : S → MvPolynomial ι R
+  aeval_val_σ' : ∀ s, aeval val (σ' s) = s
   /-- An `R[X]`-algebra instance on `S`. The default is the one induced by the map `R[X] → S`,
   but this causes a diamond if there is an existing instance. -/
   algebra : Algebra (MvPolynomial ι R) S := (aeval val).toAlgebra
@@ -103,209 +98,124 @@ set_option linter.unusedVariables false in
 /-- The polynomial ring w.r.t. a family of generators. -/
 @[nolint unusedArguments]
 protected
-/--
-Definition of `Ring` / `Ring` 的定义
-
-English:
-abbreviation Ring
-  signature: (P : Generators R S ι)
-  body: MvPolynomial ι R
-
-中文:
-缩写 环
-  签名: (P : 生成元 R S ι)
-  定义体: MvPolynomial ι R
-
-Depends on / 依赖: MvPolynomial
+/-
+**Algebra.Generators.Ring** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：Ring (P : Generators R S ι) : Type (max w u)
+参数：P : Generators R S ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev Ring (P : Generators R S ι) : Type (max w u) := MvPolynomial ι R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra P.Ring S
-  body: P.algebra
-
-中文:
-实例 :
-  签名: 代数 P.环 S
-  定义体: P.algebra
-
-Depends on / 依赖: P.algebra, algebra
+/-
+**Algebra.Generators.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra P.Ring S := P.algebra
 
-/--
-Definition of `σ` / `σ` 的定义
+/-- The designated section w.r.t. a family of generators. -/
+/-
+**Algebra.Generators.** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition σ
-  signature: : S -> P.Ring
-  body: P.σ'
-
-中文:
-定义 σ
-  签名: : S -> P.环
-  定义体: P.σ'
+--- 原说明 ---
+The designated section w.r.t. a family of generators.
 -/
-def σ : S -> P.Ring := P.σ'
+def σ : S → P.Ring := P.σ'
 
-/--
-Definition of `Simps.σ` / `Simps.σ` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**Algebra.Generators.Simps.** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.σ
-  signature: : S -> P.Ring
-  body: P.σ
-
-initialize_simps_projections Algebra.Generators (σ' -> σ)
-
-@[simp]
-
-中文:
-定义 Simps.σ
-  签名: : S -> P.环
-  定义体: P.σ
-
-initialize_simps_projections Algebra.Generators (σ' -> σ)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.σ : S -> P.Ring := P.σ
+def Simps.σ : S → P.Ring := P.σ
 
-initialize_simps_projections Algebra.Generators (σ' -> σ)
+initialize_simps_projections Algebra.Generators (σ' → σ)
 
 @[simp]
-/--
-lemma `aeval_val_σ` / 引理 `aeval_val_σ`
-
-English:
-lemma aeval_val_σ
-  given: (s)
-  statement: aeval P.val (P.σ s) = s
-  proof: P.aeval_val_σ' s
-
-中文:
-引理 aeval_val_σ
-  条件: (s)
-  结论: aeval P.val (P.σ s) = s
-  证明: P.aeval_val_σ' s
-
-Depends on / 依赖: P.aeval_val_
+/-
+**Algebra.Generators.aeval_val_** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma aeval_val_σ (s) : aeval P.val (P.σ s) = s := P.aeval_val_σ' s
-
+/-
+**Algebra.Generators.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance {R₀} [CommRing R₀] [Algebra R₀ R] [Algebra R₀ S] [IsScalarTower R₀ R S] :
-IsScalarTower R₀ P.Ring S := IsScalarTower.of_algebraMap_eq'
+    IsScalarTower R₀ P.Ring S := IsScalarTower.of_algebraMap_eq' <|
   P.algebraMap_eq ▸ ((aeval (R := R) P.val).comp_algebraMap_of_tower R₀).symm
 
 @[simp]
-/--
-lemma `algebraMap_apply` / 引理 `algebraMap_apply`
-
-English:
-lemma algebraMap_apply
-  given: (x)
-  statement: algebraMap P.Ring S x = aeval (R := R) P.val x
-  proof: by
-  simp [algebraMap_eq]
-
-@[simp]
-
-中文:
-引理 algebraMap_apply
-  条件: (x)
-  结论: algebraMap P.环 S x = aeval (R := R) P.val x
-  证明: by
-  simp [algebraMap_eq]
-
-@[simp]
-
-Depends on / 依赖: P.val, algebraMap_eq
+/-
+**Algebra.Generators.algebraMap_apply** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generat
+ors`。
+形式化陈述：algebraMap_apply (x) : algebraMap P.Ring S x = aeval (R
+参数：x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `Algebra.Generators.algebraMap_eq`：∀ {R : Type u} {S : Type v} {ι : Type 
+w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (self : Al
+gebra.Generators R S ι…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma algebraMap_apply (x) : algebraMap P.Ring S x = aeval (R := R) P.val x := by
   simp [algebraMap_eq]
 
 @[simp]
-/--
-lemma `σ_smul` / 引理 `σ_smul`
-
-English:
-lemma σ_smul
-  given: (x y)
-  statement: P.σ x • y = x * y
-  proof: by
-  rw [Algebra.smul_def]; rw [algebraMap_apply]; rw [aeval_val_σ]
-
-中文:
-引理 σ_smul
-  条件: (x y)
-  结论: P.σ x • y = x * y
-  证明: by
-  rw [Algebra.smul_def]; rw [algebraMap_apply]; rw [aeval_val_σ]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, algebraMap_apply, smul_def
+/-
+**Algebra.Generators.** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma σ_smul (x y) : P.σ x • y = x * y := by
-  rw [Algebra.smul_def]; rw [algebraMap_apply]; rw [aeval_val_σ]
-
-/--
-lemma `σ_injective` / 引理 `σ_injective`
-
-English:
-lemma σ_injective
-  statement: P.σ.Injective
-  proof: by
-  intro x y e
-  rw [← P.aeval_val_σ x]; rw [← P.aeval_val_σ y]; rw [e]
-
-中文:
-引理 σ_injective
-  结论: P.σ.单射
-  证明: by
-  intro x y e
-  rw [← P.aeval_val_σ x]; rw [← P.aeval_val_σ y]; rw [e]
-
-Depends on / 依赖: P.aeval_val_
+  rw [Algebra.smul_def, algebraMap_apply, aeval_val_σ]
+/-
+**Algebra.Generators.** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma σ_injective : P.σ.Injective := by
   intro x y e
-  rw [← P.aeval_val_σ x]; rw [← P.aeval_val_σ y]; rw [e]
-
-/--
-lemma `aeval_val_surjective` / 引理 `aeval_val_surjective`
-
-English:
-lemma aeval_val_surjective
-  statement: Function.Surjective (aeval (R := R) P.val)
-  proof: fun x => ⟨P.σ x, by simp⟩
-
-中文:
-引理 aeval_val_surjective
-  结论: 函数.满射 (aeval (R := R) P.val)
-  证明: fun x => ⟨P.σ x, by simp⟩
-
-Depends on / 依赖: P.val
+  rw [← P.aeval_val_σ x, ← P.aeval_val_σ y, e]
+/-
+**Algebra.Generators.aeval_val_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Gen
+erators`。
+形式化陈述：aeval_val_surjective : Function.Surjective (aeval (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Algebra.Generators.aeval_val_σ`：aeval_val_σ (s) : aeval P.val (P.σ s) = 
+s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma aeval_val_surjective : Function.Surjective (aeval (R := R) P.val) :=
-  fun x => ⟨P.σ x, by simp⟩
-
-/--
-lemma `algebraMap_surjective` / 引理 `algebraMap_surjective`
-
-English:
-lemma algebraMap_surjective
-  statement: Function.Surjective (algebraMap P.Ring S)
-  proof: (⟨_, P.algebraMap_apply _ ▸ P.aeval_val_σ ·⟩)
-
-中文:
-引理 algebraMap_surjective
-  结论: 函数.满射 (algebraMap P.环 S)
-  证明: (⟨_, P.algebraMap_apply _ ▸ P.aeval_val_σ ·⟩)
-
-Depends on / 依赖: P.aeval_val_, P.algebraMap_apply, algebraMap_apply
+  fun x ↦ ⟨P.σ x, by simp⟩
+/-
+**Algebra.Generators.algebraMap_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Ge
+nerators`。
+形式化陈述：algebraMap_surjective : Function.Surjective (algebraMap P.Ring S)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Algebra.Generators.aeval_val_σ`：aeval_val_σ (s) : aeval P.val (P.σ s) = 
+s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Algebra.Generators.algebraMap_apply`：algebraMap_apply (x) : algebraMap P
+.Ring S x = aeval (R
 -/
 lemma algebraMap_surjective : Function.Surjective (algebraMap P.Ring S) :=
   (⟨_, P.algebraMap_apply _ ▸ P.aeval_val_σ ·⟩)
@@ -315,74 +225,49 @@ section Construction
 /-- Construct `Generators` from an assignment `I → S` such that `R[X] → S` is surjective. -/
 @[simps val]
 noncomputable
-/--
-Definition of `ofSurjective` / `ofSurjective` 的定义
-
-English:
-definition ofSurjective
-  signature: (val : ι -> S) (h : Function.Surjective (aeval (R := R) val))
-  body: val
-  σ' x := (h x).choose
-  aeval_val_σ' x := (h x).choose_spec
-
-中文:
-定义 ofSurjective
-  签名: (val : ι -> S) (h : 函数.满射 (aeval (R := R) val))
-  定义体: val
-  σ' x := (h x).choose
-  aeval_val_σ' x := (h x).choose_spec
+/-
+**Algebra.Generators.ofSurjective** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`
+。
+形式化陈述：ofSurjective (val : ι -> S) (h : Function.Surjective (aeval (R
+参数：val : ι -> S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ofSurjective (val : ι -> S) (h : Function.Surjective (aeval (R := R) val)) :
+def ofSurjective (val : ι → S) (h : Function.Surjective (aeval (R := R) val)) :
     Generators R S ι where
   val := val
   σ' x := (h x).choose
   aeval_val_σ' x := (h x).choose_spec
 
-/--
-Definition of `ofSurjectiveAlgebraMap` / `ofSurjectiveAlgebraMap` 的定义
+/-- If `algebraMap R S` is surjective, the empty type generates `S`. -/
+/-
+**Algebra.Generators.ofSurjectiveAlgebraMap** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.G
+enerators`。
+形式化陈述：ofSurjectiveAlgebraMap (h : Function.Surjective (algebraMap R S)) : Genera
+tors R S PEmpty.{w + 1}
+参数：h : Function.Surjective (algebraMap R S)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSurjectiveAlgebraMap
-  signature: (h : Function.Surjective (algebraMap R S))
-  body: ofSurjective PEmpty.elim fun s => by
-    use C (h s).choose
-    simp [(h s).choose_spec]
-
-中文:
-定义 ofSurjectiveAlgebraMap
-  签名: (h : 函数.满射 (algebraMap R S))
-  定义体: ofSurjective PEmpty.elim fun s => by
-    use C (h s).choose
-    simp [(h s).choose_spec]
-
-Depends on / 依赖: PEmpty, PEmpty.elim, choose_spec, new_name, ofSurjective, syntax, to_fun
+--- 原说明 ---
+If `algebraMap R S` is surjective, the empty type generates `S`.
 -/
 noncomputable def ofSurjectiveAlgebraMap (h : Function.Surjective (algebraMap R S)) :
     Generators R S PEmpty.{w + 1} :=
-ofSurjective PEmpty.elim fun s => by
+  ofSurjective PEmpty.elim <| fun s ↦ by
     use C (h s).choose
     simp [(h s).choose_spec]
 
-/--
-Definition of `id` / `id` 的定义
+/-- The canonical generators for `R` as an `R`-algebra. -/
+/-
+**Algebra.Generators.id** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：id : Generators R R PEmpty.{w + 1}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : Generators R R PEmpty.{w + 1}
-  body: ofSurjectiveAlgebraMap by
-  rw [algebraMap_self]
-  exact RingHomSurjective.is_surjective
-
-中文:
-定义 id
-  签名: : 生成元 R R 命题空.{w + 1}
-  定义体: ofSurjectiveAlgebraMap by
-  rw [algebraMap_self]
-  exact RingHomSurjective.is_surjective
-
-Depends on / 依赖: RingHomSurjective, RingHomSurjective.is_surjective, algebraMap_self, is_surjective, ofSurjectiveAlgebraMap
+--- 原说明 ---
+The canonical generators for `R` as an `R`-algebra.
 -/
-noncomputable def id : Generators R R PEmpty.{w + 1} := ofSurjectiveAlgebraMap by
+noncomputable def id : Generators R R PEmpty.{w + 1} := ofSurjectiveAlgebraMap <| by
   rw [algebraMap_self]
   exact RingHomSurjective.is_surjective
 
@@ -390,22 +275,16 @@ variable (R ι) in
 /-- The canonical `R`-generators of the polynomial algebra `MvPolynomial ι R`,
 indexed by `ι` via the variables `X`. -/
 @[simps σ, simps -fullyApplied val]
-/--
-Definition of `mvPolynomial` / `mvPolynomial` 的定义
+/-
+**Algebra.Generators.mvPolynomial** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`
+。
+形式化陈述：mvPolynomial : Generators R (MvPolynomial ι R) ι where val
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mvPolynomial
-  signature: : Generators R (MvPolynomial ι R) ι where
-  body: X
-  σ' f := f
-  aeval_val_σ' := aeval_X_left_apply
-
-中文:
-定义 mvPolynomial
-  签名: : 生成元 R (多元多项式 ι R) ι where
-  定义体: X
-  σ' f := f
-  aeval_val_σ' := aeval_X_left_apply
+--- 原说明 ---
+The canonical `R`-generators of the polynomial algebra `MvPolynomial ι R`,
+indexed by `ι` via the variables `X`.
 -/
 noncomputable def mvPolynomial : Generators R (MvPolynomial ι R) ι where
   val := X
@@ -414,75 +293,41 @@ noncomputable def mvPolynomial : Generators R (MvPolynomial ι R) ι where
 
 /-- Construct `Generators` from an assignment `I → S` such that `R[X] → S` is surjective. -/
 noncomputable
-/--
-Definition of `ofAlgHom` / `ofAlgHom` 的定义
-
-English:
-definition ofAlgHom
-  signature: {I : Type*} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Surjective f)
-  body: ofSurjective (f ∘ X) (by rwa [show aeval (f ∘ X) = f by ext; simp])
-
-中文:
-定义 ofAlgHom
-  签名: {I : 类型} (f : 多元多项式 I R ->ₐ[R] S) (h : 函数.满射 f)
-  定义体: ofSurjective (f ∘ X) (by rwa [show aeval (f ∘ X) = f by ext; simp])
-
-Depends on / 依赖: ofSurjective
+/-
+**Algebra.Generators.ofAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：ofAlgHom {I : Type*} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Surject
+ive f) : Generators R S I
+参数：f : MvPolynomial I R ->ₐ[R] S；h : Function.Surjective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ofAlgHom {I : Type*} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Surjective f) :
+def ofAlgHom {I : Type*} (f : MvPolynomial I R →ₐ[R] S) (h : Function.Surjective f) :
     Generators R S I :=
   ofSurjective (f ∘ X) (by rwa [show aeval (f ∘ X) = f by ext; simp])
 
 /-- Construct `Generators` from a family of generators of `S`. -/
 noncomputable
-/--
-Definition of `ofSet` / `ofSet` 的定义
-
-English:
-definition ofSet
-  signature: {s : Set S} (hs : Algebra.adjoin R s = ⊤)
-  body: by
-  refine ofSurjective (Subtype.val : s -> S) ?_
-  rwa [← AlgHom.range_eq_top, ← Algebra.adjoin_range_eq_range_aeval,
-    Subtype.range_coe_subtype, Set.ofPred_mem_eq]
-
-中文:
-定义 ofSet
-  签名: {s : 集合 S} (hs : 代数.adjoin R s = ⊤)
-  定义体: by
-  refine ofSurjective (Subtype.val : s -> S) ?_
-  rwa [← AlgHom.range_eq_top, ← Algebra.adjoin_range_eq_range_aeval,
-    Subtype.range_coe_subtype, Set.ofPred_mem_eq]
-
-Depends on / 依赖: AlgHom, AlgHom.range_eq_top, Algebra, Algebra.adjoin_range_eq_range_aeval, Set.ofPred_mem_eq, Subtype, Subtype.range_coe_subtype, Subtype.val, adjoin_range_eq_range_aeval, ofPred_mem_eq, ofSurjective, range_coe_subtype, range_eq_top
+/-
+**Algebra.Generators.ofSet** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：ofSet {s : Set S} (hs : Algebra.adjoin R s = ⊤) : Generators R S s
+参数：hs : Algebra.adjoin R s = ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofSet {s : Set S} (hs : Algebra.adjoin R s = ⊤) : Generators R S s := by
-  refine ofSurjective (Subtype.val : s -> S) ?_
+  refine ofSurjective (Subtype.val : s → S) ?_
   rwa [← AlgHom.range_eq_top, ← Algebra.adjoin_range_eq_range_aeval,
     Subtype.range_coe_subtype, Set.ofPred_mem_eq]
 
 variable (R S) in
-/-- The `Generators` containing the whole algebra, which induces the canonical map `R[S] → S`. -/
+/-- The `Generators` containing the whole algebra, which induces the canonical map  `R[S] → S`. -/
 @[simps]
 noncomputable
-/--
-Definition of `self` / `self` 的定义
-
-English:
-definition self
-  signature: : Generators R S S where
-  body: _root_.id
-  σ' := X
-  aeval_val_σ' := aeval_X _
-
-中文:
-定义 self
-  签名: : 生成元 R S S where
-  定义体: _root_.id
-  σ' := X
-  aeval_val_σ' := aeval_X _
-
-Depends on / 依赖: _root_, _root_.id
+/-
+**Algebra.Generators.self** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：self : Generators R S S where val
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def self : Generators R S S where
   val := _root_.id
@@ -492,54 +337,28 @@ def self : Generators R S S where
 /-- The extension `R[X₁,...,Xₙ] → S` given a family of generators. -/
 @[simps]
 noncomputable
-/--
-Definition of `toExtension` / `toExtension` 的定义
-
-English:
-definition toExtension
-  signature: : Extension R S where
-  body: P.Ring
-  σ := P.σ
-  algebraMap_σ := by simp
-
-中文:
-定义 toExtension
-  签名: : 扩张 R S where
-  定义体: P.Ring
-  σ := P.σ
-  algebraMap_σ := by simp
-
-Depends on / 依赖: P.Ring
+/-
+**Algebra.Generators.toExtension** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：toExtension : Extension R S where Ring
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def toExtension : Extension R S where
   Ring := P.Ring
   σ := P.σ
   algebraMap_σ := by simp
 
-/--
-Definition of `ofAlgEquiv` / `ofAlgEquiv` 的定义
+/-- Transport generators along an algebra isomorphism. -/
+/-
+**Algebra.Generators.ofAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：ofAlgEquiv (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R T] (
+e : S ≃ₐ[R] T) : Generators R T ι where val
+参数：P : Generators R S ι；e : S ≃ₐ[R] T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAlgEquiv
-  body: e ∘ P.val
-  σ' := P.σ ∘ e.symm
-  aeval_val_σ' t := by
-    rw [Function.comp_def]; rw [← AlgHom.coe_coe e]; rw [← MvPolynomial.comp_aeval_apply]
-    simp
-
-@[simp]
-
-中文:
-定义 ofAlgEquiv
-  定义体: e ∘ P.val
-  σ' := P.σ ∘ e.symm
-  aeval_val_σ' t := by
-    rw [Function.comp_def]; rw [← AlgHom.coe_coe e]; rw [← MvPolynomial.comp_aeval_apply]
-    simp
-
-@[simp]
-
-Depends on / 依赖: P.val
+--- 原说明 ---
+Transport generators along an algebra isomorphism.
 -/
 noncomputable def ofAlgEquiv
     (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T) :
@@ -547,24 +366,18 @@ noncomputable def ofAlgEquiv
   val := e ∘ P.val
   σ' := P.σ ∘ e.symm
   aeval_val_σ' t := by
-    rw [Function.comp_def]; rw [← AlgHom.coe_coe e]; rw [← MvPolynomial.comp_aeval_apply]
+    rw [Function.comp_def, ← AlgHom.coe_coe e, ← MvPolynomial.comp_aeval_apply]
     simp
 
 @[simp]
-/--
-lemma `ofAlgEquiv_val` / 引理 `ofAlgEquiv_val`
-
-English:
-lemma ofAlgEquiv_val
-  given: (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
-  proof: rfl
-
-中文:
-引理 ofAlgEquiv_val
-  条件: (P : 生成元 R S ι) {T : 类型} [交换环 T] [代数 R T] (e : S ≃ₐ[R] T)
-  证明: rfl
-
-Depends on / 依赖: variable
+/-
+**Algebra.Generators.ofAlgEquiv_val** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generator
+s`。
+形式化陈述：ofAlgEquiv_val (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R 
+T] (e : S ≃ₐ[R] T) : (P.ofAlgEquiv e).val = e ∘ P.val
+参数：P : Generators R S ι；e : S ≃ₐ[R] T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofAlgEquiv_val (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T) :
     (P.ofAlgEquiv e).val = e ∘ P.val :=
@@ -579,55 +392,25 @@ variable (S) in
 to the inverse of `r`. -/
 @[simps val, simps -isSimp σ]
 noncomputable
-/--
-Definition of `localizationAway` / `localizationAway` 的定义
-
-English:
-definition localizationAway
-  signature: : Generators R S Unit where
-  body: IsLocalization.Away.invSelf r
-  σ' s :=
-    letI a : R := (IsLocalization.Away.sec r s).1
-    letI n : Nat := (IsLocalization.Away.sec r s).2
-    C a * X () ^ n
-  aeval_val_σ' s := by
-    rw [map_mul]; rw [algHom_C]; rw [map_pow]; rw [aeval_X]
-    simp only [← IsLocalization.Away.sec_spec, map_pow, IsLocalization.Away.invSelf]
-    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [← IsLocalization.mk'_one (M := Submonoid.powers r) S r]
-    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [mul_assoc]; rw [← IsLocalization.mk'_mul]
-    rw [mul_one]; rw [one_mul]; rw [IsLocalization.mk'_pow]
-    simp
-
-中文:
-定义 localizationAway
-  签名: : 生成元 R S 单元 where
-  定义体: IsLocalization.Away.invSelf r
-  σ' s :=
-    letI a : R := (IsLocalization.Away.sec r s).1
-    letI n : Nat := (IsLocalization.Away.sec r s).2
-    C a * X () ^ n
-  aeval_val_σ' s := by
-    rw [map_mul]; rw [algHom_C]; rw [map_pow]; rw [aeval_X]
-    simp only [← IsLocalization.Away.sec_spec, map_pow, IsLocalization.Away.invSelf]
-    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [← IsLocalization.mk'_one (M := Submonoid.powers r) S r]
-    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [mul_assoc]; rw [← IsLocalization.mk'_mul]
-    rw [mul_one]; rw [one_mul]; rw [IsLocalization.mk'_pow]
-    simp
-
-Depends on / 依赖: IsLocalization, IsLocalization.Away.invSelf, invSelf
+/-
+**Algebra.Generators.localizationAway** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generat
+ors`。
+形式化陈述：localizationAway : Generators R S Unit where val _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def localizationAway : Generators R S Unit where
   val _ := IsLocalization.Away.invSelf r
   σ' s :=
     letI a : R := (IsLocalization.Away.sec r s).1
-    letI n : Nat := (IsLocalization.Away.sec r s).2
+    letI n : ℕ := (IsLocalization.Away.sec r s).2
     C a * X () ^ n
   aeval_val_σ' s := by
-    rw [map_mul]; rw [algHom_C]; rw [map_pow]; rw [aeval_X]
+    rw [map_mul, algHom_C, map_pow, aeval_X]
     simp only [← IsLocalization.Away.sec_spec, map_pow, IsLocalization.Away.invSelf]
-    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [← IsLocalization.mk'_one (M := Submonoid.powers r) S r]
-    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [mul_assoc]; rw [← IsLocalization.mk'_mul]
-    rw [mul_one]; rw [one_mul]; rw [IsLocalization.mk'_pow]
+    rw [← IsLocalization.mk'_pow, one_pow, ← IsLocalization.mk'_one (M := Submonoid.powers r) S r]
+    rw [← IsLocalization.mk'_pow, one_pow, mul_assoc, ← IsLocalization.mk'_mul]
+    rw [mul_one, one_mul, IsLocalization.mk'_pow]
     simp
 
 end Localization
@@ -639,45 +422,22 @@ set_option backward.isDefEq.respectTransparency.types false in
 we may construct the family of generators `R[X, Y] → T`. -/
 @[simps val, simps -isSimp σ]
 noncomputable
-/--
-Definition of `comp` / `comp` 的定义
-
-English:
-definition comp
-  signature: [Algebra S T] [IsScalarTower R S T]
-  body: Sum.elim Q.val (algebraMap S T ∘ P.val)
-  σ' x := (AddMonoidAlgebra.coeff <| Q.σ x).sum fun n r =>
-    rename .inr (P.σ r) * monomial (n.mapDomain .inl) 1
-  aeval_val_σ' s := by
-    have (x : P.Ring) : aeval (algebraMap S T ∘ P.val) x = algebraMap S T (aeval P.val x) := by
-      rw [map_aeval]; rw [aeval_def]; rw [coe_eval₂Hom]; rw [← IsScalarTower.algebraMap_eq]; rw [Function.comp_def]
-    conv_rhs => rw [← Q.aeval_val_σ s, (Q.σ s).as_sum]
-    simp [aeval_rename, this, aeval_monomial, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
-      Finsupp.sum, MvPolynomial.finsupp_support_eq_support, MvPolynomial.coeff]
-
-中文:
-定义 comp
-  签名: [代数 S T] [标量塔 R S T]
-  定义体: Sum.elim Q.val (algebraMap S T ∘ P.val)
-  σ' x := (AddMonoidAlgebra.coeff <| Q.σ x).sum fun n r =>
-    rename .inr (P.σ r) * monomial (n.mapDomain .inl) 1
-  aeval_val_σ' s := by
-    have (x : P.Ring) : aeval (algebraMap S T ∘ P.val) x = algebraMap S T (aeval P.val x) := by
-      rw [map_aeval]; rw [aeval_def]; rw [coe_eval₂Hom]; rw [← IsScalarTower.algebraMap_eq]; rw [Function.comp_def]
-    conv_rhs => rw [← Q.aeval_val_σ s, (Q.σ s).as_sum]
-    simp [aeval_rename, this, aeval_monomial, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
-      Finsupp.sum, MvPolynomial.finsupp_support_eq_support, MvPolynomial.coeff]
-
-Depends on / 依赖: P.val, Q.val, Sum.elim, algebraMap
+/-
+**Algebra.Generators.comp** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：comp [Algebra S T] [IsScalarTower R S T] (Q : Generators S T ι') (P : Gene
+rators R S ι) : Generators R T (ι' oplus ι) where val
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def comp [Algebra S T] [IsScalarTower R S T]
-    (Q : Generators S T ι') (P : Generators R S ι) : Generators R T (ι' oplus ι) where
+    (Q : Generators S T ι') (P : Generators R S ι) : Generators R T (ι' ⊕ ι) where
   val := Sum.elim Q.val (algebraMap S T ∘ P.val)
-  σ' x := (AddMonoidAlgebra.coeff <| Q.σ x).sum fun n r =>
+  σ' x := (AddMonoidAlgebra.coeff <| Q.σ x).sum fun n r ↦
     rename .inr (P.σ r) * monomial (n.mapDomain .inl) 1
   aeval_val_σ' s := by
     have (x : P.Ring) : aeval (algebraMap S T ∘ P.val) x = algebraMap S T (aeval P.val x) := by
-      rw [map_aeval]; rw [aeval_def]; rw [coe_eval₂Hom]; rw [← IsScalarTower.algebraMap_eq]; rw [Function.comp_def]
+      rw [map_aeval, aeval_def, coe_eval₂Hom, ← IsScalarTower.algebraMap_eq, Function.comp_def]
     conv_rhs => rw [← Q.aeval_val_σ s, (Q.σ s).as_sum]
     simp [aeval_rename, this, aeval_monomial, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
       Finsupp.sum, MvPolynomial.finsupp_support_eq_support, MvPolynomial.coeff]
@@ -687,24 +447,14 @@ variable (S) in
 gives a family of generators `S[X] → T`. -/
 @[simps val]
 noncomputable
-/--
-Definition of `extendScalars` / `extendScalars` 的定义
-
-English:
-definition extendScalars
-  signature: [Algebra S T] [IsScalarTower R S T] (P : Generators R T ι)
-  body: P.val
-  σ' x := map (algebraMap R S) (P.σ x)
-  aeval_val_σ' s := by simp [@aeval_def S, ← IsScalarTower.algebraMap_eq, ← @aeval_def R]
-
-中文:
-定义 extendScalars
-  签名: [代数 S T] [标量塔 R S T] (P : 生成元 R T ι)
-  定义体: P.val
-  σ' x := map (algebraMap R S) (P.σ x)
-  aeval_val_σ' s := by simp [@aeval_def S, ← IsScalarTower.algebraMap_eq, ← @aeval_def R]
-
-Depends on / 依赖: P.val
+/-
+**Algebra.Generators.extendScalars** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators
+`。
+形式化陈述：extendScalars [Algebra S T] [IsScalarTower R S T] (P : Generators R T ι) :
+ Generators S T ι where val
+参数：P : Generators R T ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def extendScalars [Algebra S T] [IsScalarTower R S T] (P : Generators R T ι) :
     Generators S T ι where
@@ -716,68 +466,17 @@ def extendScalars [Algebra S T] [IsScalarTower R S T] (P : Generators R T ι) :
 obtain a natural family of generators of `T ⊗[R] S` over `T`. -/
 @[simps! val]
 noncomputable
-/--
-Definition of `baseChange` / `baseChange` 的定义
-
-English:
-definition baseChange
-  signature: (T) [CommRing T] [Algebra R T] (P : Generators R S ι)
-  body: by
-  apply Generators.ofSurjective (fun x => 1 otimesₜ[R] P.val x)
-  intro x
-  induction x using TensorProduct.induction_on with
-  | zero => exact ⟨0, map_zero _⟩
-  | tmul a b =>
-    let X := P.σ b
-    use a • MvPolynomial.map (algebraMap R T) X
-    simp only [LinearMapClass.map_smul, X, aeval_map_algebraMap]
-    have : forall y : P.Ring,
-      aeval (fun x => (1 otimesₜ[R] P.val x : T otimes[R] S)) y = 1 otimesₜ aeval (fun x => P.val x) y := by
-      intro y
-      induction y using MvPolynomial.induction_on with
-      | C a =>
-        rw [aeval_C]; rw [aeval_C]; rw [TensorProduct.algebraMap_apply]; rw [algebraMap_eq_smul_one]; rw [smul_tmul]; rw [algebraMap_eq_smul_one]
-      | add p q hp hq => simp [map_add, tmul_add, hp, hq]
-      | mul_X p i hp => simp [hp]
-    rw [this]; rw [P.aeval_val_σ]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
-  | add x y ex ey =>
-    obtain ⟨a, ha⟩ := ex
-    obtain ⟨b, hb⟩ := ey
-    use (a + b)
-    rw [map_add]; rw [ha]; rw [hb]
-
-中文:
-定义 baseChange
-  签名: (T) [交换环 T] [代数 R T] (P : 生成元 R S ι)
-  定义体: by
-  apply Generators.ofSurjective (fun x => 1 otimesₜ[R] P.val x)
-  intro x
-  induction x using TensorProduct.induction_on with
-  | zero => exact ⟨0, map_zero _⟩
-  | tmul a b =>
-    let X := P.σ b
-    use a • MvPolynomial.map (algebraMap R T) X
-    simp only [LinearMapClass.map_smul, X, aeval_map_algebraMap]
-    have : forall y : P.Ring,
-      aeval (fun x => (1 otimesₜ[R] P.val x : T otimes[R] S)) y = 1 otimesₜ aeval (fun x => P.val x) y := by
-      intro y
-      induction y using MvPolynomial.induction_on with
-      | C a =>
-        rw [aeval_C]; rw [aeval_C]; rw [TensorProduct.algebraMap_apply]; rw [algebraMap_eq_smul_one]; rw [smul_tmul]; rw [algebraMap_eq_smul_one]
-      | add p q hp hq => simp [map_add, tmul_add, hp, hq]
-      | mul_X p i hp => simp [hp]
-    rw [this]; rw [P.aeval_val_σ]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
-  | add x y ex ey =>
-    obtain ⟨a, ha⟩ := ex
-    obtain ⟨b, hb⟩ := ey
-    use (a + b)
-    rw [map_add]; rw [ha]; rw [hb]
-
-Depends on / 依赖: Generators, Generators.ofSurjective, LinearMapClass, LinearMapClass.map_smul, MvPolynomial, MvPolynomial.induction_on, MvPolynomial.map, P.Ring, P.val, TensorProduct, TensorProduct.induction_on, aeval_C, aeval_map_algebraMap, algebraMap, induction_on, map_smul, map_zero, ofSurjective, otimes
+/-
+**Algebra.Generators.baseChange** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：baseChange (T) [CommRing T] [Algebra R T] (P : Generators R S ι) : Generat
+ors T (T otimes[R] S) ι
+参数：T；P : Generators R S ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def baseChange (T) [CommRing T] [Algebra R T] (P : Generators R S ι) :
-    Generators T (T otimes[R] S) ι := by
-  apply Generators.ofSurjective (fun x => 1 otimesₜ[R] P.val x)
+    Generators T (T ⊗[R] S) ι := by
+  apply Generators.ofSurjective (fun x ↦ 1 ⊗ₜ[R] P.val x)
   intro x
   induction x using TensorProduct.induction_on with
   | zero => exact ⟨0, map_zero _⟩
@@ -785,66 +484,59 @@ def baseChange (T) [CommRing T] [Algebra R T] (P : Generators R S ι) :
     let X := P.σ b
     use a • MvPolynomial.map (algebraMap R T) X
     simp only [LinearMapClass.map_smul, X, aeval_map_algebraMap]
-    have : forall y : P.Ring,
-      aeval (fun x => (1 otimesₜ[R] P.val x : T otimes[R] S)) y = 1 otimesₜ aeval (fun x => P.val x) y := by
+    have : ∀ y : P.Ring,
+      aeval (fun x ↦ (1 ⊗ₜ[R] P.val x : T ⊗[R] S)) y = 1 ⊗ₜ aeval (fun x ↦ P.val x) y := by
       intro y
       induction y using MvPolynomial.induction_on with
       | C a =>
-        rw [aeval_C]; rw [aeval_C]; rw [TensorProduct.algebraMap_apply]; rw [algebraMap_eq_smul_one]; rw [smul_tmul]; rw [algebraMap_eq_smul_one]
+        rw [aeval_C, aeval_C, TensorProduct.algebraMap_apply, algebraMap_eq_smul_one, smul_tmul,
+          algebraMap_eq_smul_one]
       | add p q hp hq => simp [map_add, tmul_add, hp, hq]
       | mul_X p i hp => simp [hp]
-    rw [this]; rw [P.aeval_val_σ]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
+    rw [this, P.aeval_val_σ, smul_tmul', smul_eq_mul, mul_one]
   | add x y ex ey =>
     obtain ⟨a, ha⟩ := ex
     obtain ⟨b, hb⟩ := ey
     use (a + b)
-    rw [map_add]; rw [ha]; rw [hb]
+    rw [map_add, ha, hb]
 
 set_option backward.defeqAttrib.useBackward true in
 variable (T) in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `baseChangeFromBaseChange` / `baseChangeFromBaseChange` 的定义
+/-- The forwards direction of the canonical isomorphism `T ⊗[R] R[Xᵢ] ≃ₐ[T] T[Xᵢ]` as
+a map of extensions. -/
+/-
+**Algebra.Generators.baseChangeFromBaseChange** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+.Generators`。
+形式化陈述：baseChangeFromBaseChange : (P.toExtension.baseChange (T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition baseChangeFromBaseChange
-  signature: :
-  body: .ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).toAlgHom by
-    dsimp [Extension.baseChange]
-    ext
-    simp [RingHom.algebraMap_toAlgebra]
-
-中文:
-定义 baseChangeFromBaseChange
-  签名: :
-  定义体: .ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).toAlgHom by
-    dsimp [Extension.baseChange]
-    ext
-    simp [RingHom.algebraMap_toAlgebra]
-
-Depends on / 依赖: P.baseChange, baseChange, toExtension
+--- 原说明 ---
+The forwards direction of the canonical isomorphism `T ⊗[R] R[Xᵢ] ≃ₐ[T] T[Xᵢ]` a
+s
+a map of extensions.
 -/
 noncomputable def baseChangeFromBaseChange :
     (P.toExtension.baseChange (T := T)).Hom (P.baseChange (T := T)).toExtension :=
-.ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).toAlgHom by
+  .ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).toAlgHom <| by
     dsimp [Extension.baseChange]
     ext
     simp [RingHom.algebraMap_toAlgebra]
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `baseChangeFromBaseChange_apply` / 引理 `baseChangeFromBaseChange_apply`
-
-English:
-lemma baseChangeFromBaseChange_apply
-  given: (x : P.toExtension.baseChange.Ring)
-  proof: rfl
-
-中文:
-引理 baseChangeFromBaseChange_apply
-  条件: (x : P.toExtension.baseChange.环)
-  证明: rfl
+/-
+**Algebra.Generators.baseChangeFromBaseChange_apply** 是 Mathlib 中的一个引理，位于命名空间 `A
+lgebra.Generators`。
+形式化陈述：baseChangeFromBaseChange_apply (x : P.toExtension.baseChange.Ring) : dsimp
+% (P.baseChangeFromBaseChange T).toRingHom x = MvPolynomial.algebraTensorAlgEqui
+v R T x
+参数：x : P.toExtension.baseChange.Ring。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 lemma baseChangeFromBaseChange_apply (x : P.toExtension.baseChange.Ring) :
     dsimp% (P.baseChangeFromBaseChange T).toRingHom x = MvPolynomial.algebraTensorAlgEquiv R T x :=
@@ -853,144 +545,101 @@ lemma baseChangeFromBaseChange_apply (x : P.toExtension.baseChange.Ring) :
 set_option backward.defeqAttrib.useBackward true in
 variable (T) in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `baseChangeToBaseChange` / `baseChangeToBaseChange` 的定义
+/-- The backwards direction of the canonical isomorphism `T ⊗[R] R[Xᵢ] ≃ₐ[T] T[Xᵢ]` as
+a map of extensions. -/
+/-
+**Algebra.Generators.baseChangeToBaseChange** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.G
+enerators`。
+形式化陈述：baseChangeToBaseChange : (P.baseChange (T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition baseChangeToBaseChange
-  signature: :
-  body: .ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).symm.toAlgHom by
-    dsimp [Extension.baseChange]
-    ext
-    simp [RingHom.algebraMap_toAlgebra]
-
-中文:
-定义 baseChangeToBaseChange
-  签名: :
-  定义体: .ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).symm.toAlgHom by
-    dsimp [Extension.baseChange]
-    ext
-    simp [RingHom.algebraMap_toAlgebra]
-
-Depends on / 依赖: P.toExtension.baseChange, baseChange, toExtension, toExtension.Hom
+--- 原说明 ---
+The backwards direction of the canonical isomorphism `T ⊗[R] R[Xᵢ] ≃ₐ[T] T[Xᵢ]` 
+as
+a map of extensions.
 -/
 noncomputable def baseChangeToBaseChange :
     (P.baseChange (T := T)).toExtension.Hom (P.toExtension.baseChange (T := T)) :=
-.ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).symm.toAlgHom by
+  .ofAlgHom (MvPolynomial.algebraTensorAlgEquiv R T).symm.toAlgHom <| by
     dsimp [Extension.baseChange]
     ext
     simp [RingHom.algebraMap_toAlgebra]
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `baseChangeToBaseChange_apply` / 引理 `baseChangeToBaseChange_apply`
-
-English:
-lemma baseChangeToBaseChange_apply
-  given: (x : (baseChange T P).toExtension.Ring)
-  proof: rfl
-
-中文:
-引理 baseChangeToBaseChange_apply
-  条件: (x : (baseChange T P).toExtension.环)
-  证明: rfl
+/-
+**Algebra.Generators.baseChangeToBaseChange_apply** 是 Mathlib 中的一个引理，位于命名空间 `Alg
+ebra.Generators`。
+形式化陈述：baseChangeToBaseChange_apply (x : (baseChange T P).toExtension.Ring) : dsi
+mp% (P.baseChangeToBaseChange T).toRingHom x = (MvPolynomial.algebraTensorAlgEqu
+iv R T).symm x
+参数：x : (baseChange T P).toExtension.Ring。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 lemma baseChangeToBaseChange_apply (x : (baseChange T P).toExtension.Ring) :
     dsimp% (P.baseChangeToBaseChange T).toRingHom x =
       (MvPolynomial.algebraTensorAlgEquiv R T).symm x :=
   rfl
 
-/--
-Definition of `extend` / `extend` 的定义
+/-- Extend generators by more variables. -/
+/-
+**Algebra.Generators.extend** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：extend (P : Generators R S ι) (b : ι' -> S) : Generators R S (ι oplus ι')
+参数：P : Generators R S ι；b : ι' -> S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extend
-  signature: (P : Generators R S ι) (b : ι' -> S)
-  body: .ofSurjective (Sum.elim P.val b) fun s => by
-    use rename Sum.inl (P.σ s)
-    simp [aeval_rename]
-
-@[simp]
-
-中文:
-定义 extend
-  签名: (P : 生成元 R S ι) (b : ι' -> S)
-  定义体: .ofSurjective (Sum.elim P.val b) fun s => by
-    use rename Sum.inl (P.σ s)
-    simp [aeval_rename]
-
-@[simp]
-
-Depends on / 依赖: P.val, Sum.elim, Sum.inl, aeval_rename, ofSurjective
+--- 原说明 ---
+Extend generators by more variables.
 -/
-noncomputable def extend (P : Generators R S ι) (b : ι' -> S) : Generators R S (ι oplus ι') :=
-  .ofSurjective (Sum.elim P.val b) fun s => by
+noncomputable def extend (P : Generators R S ι) (b : ι' → S) : Generators R S (ι ⊕ ι') :=
+  .ofSurjective (Sum.elim P.val b) fun s ↦ by
     use rename Sum.inl (P.σ s)
     simp [aeval_rename]
 
 @[simp]
-/--
-lemma `extend_val_inl` / 引理 `extend_val_inl`
-
-English:
-lemma extend_val_inl
-  given: (P : Generators R S ι) (b : ι' -> S) (i : ι)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 extend_val_inl
-  条件: (P : 生成元 R S ι) (b : ι' -> S) (i : ι)
-  证明: rfl
-
-@[simp]
+/-
+**Algebra.Generators.extend_val_inl** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generator
+s`。
+形式化陈述：extend_val_inl (P : Generators R S ι) (b : ι' -> S) (i : ι) : (P.extend b)
+.val (.inl i) = P.val i
+参数：P : Generators R S ι；b : ι' -> S；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma extend_val_inl (P : Generators R S ι) (b : ι' -> S) (i : ι) :
+lemma extend_val_inl (P : Generators R S ι) (b : ι' → S) (i : ι) :
     (P.extend b).val (.inl i) = P.val i := rfl
 
 @[simp]
-/--
-lemma `extend_val_inr` / 引理 `extend_val_inr`
-
-English:
-lemma extend_val_inr
-  given: (P : Generators R S ι) (b : ι' -> S) (i : ι')
-  proof: rfl
-
-中文:
-引理 extend_val_inr
-  条件: (P : 生成元 R S ι) (b : ι' -> S) (i : ι')
-  证明: rfl
+/-
+**Algebra.Generators.extend_val_inr** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generator
+s`。
+形式化陈述：extend_val_inr (P : Generators R S ι) (b : ι' -> S) (i : ι') : (P.extend b
+).val (.inr i) = b i
+参数：P : Generators R S ι；b : ι' -> S；i : ι'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma extend_val_inr (P : Generators R S ι) (b : ι' -> S) (i : ι') :
+lemma extend_val_inr (P : Generators R S ι) (b : ι' → S) (i : ι') :
     (P.extend b).val (.inr i) = b i := rfl
 
-/--
-Definition of `reindex` / `reindex` 的定义
+/-- Given generators `P` with variable type `ι'` and an equivalence `ι ≃ ι'`, these
+are the induced generators indexed by `ι`. -/
+/-
+**Algebra.Generators.reindex** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：reindex (P : Generators R S ι') (e : ι ≃ ι') : Generators R S ι where val
+参数：P : Generators R S ι'；e : ι ≃ ι'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition reindex
-  signature: (P : Generators R S ι') (e : ι ≃ ι')
-  body: P.val ∘ e
-  σ' := rename e.symm ∘ P.σ
-  aeval_val_σ' s := by
-    conv_rhs => rw [← P.aeval_val_σ s]
-    rw [← MvPolynomial.aeval_rename]
-    simp
-
-中文:
-定义 reindex
-  签名: (P : 生成元 R S ι') (e : ι ≃ ι')
-  定义体: P.val ∘ e
-  σ' := rename e.symm ∘ P.σ
-  aeval_val_σ' s := by
-    conv_rhs => rw [← P.aeval_val_σ s]
-    rw [← MvPolynomial.aeval_rename]
-    simp
-
-Depends on / 依赖: P.val
+--- 原说明 ---
+Given generators `P` with variable type `ι'` and an equivalence `ι ≃ ι'`, these
+are the induced generators indexed by `ι`.
 -/
 noncomputable def reindex (P : Generators R S ι') (e : ι ≃ ι') :
     Generators R S ι where
@@ -1000,19 +649,13 @@ noncomputable def reindex (P : Generators R S ι') (e : ι ≃ ι') :
     conv_rhs => rw [← P.aeval_val_σ s]
     rw [← MvPolynomial.aeval_rename]
     simp
-
-/--
-lemma `reindex_val` / 引理 `reindex_val`
-
-English:
-lemma reindex_val
-  given: (P : Generators R S ι') (e : ι ≃ ι')
-  proof: rfl
-
-中文:
-引理 reindex_val
-  条件: (P : 生成元 R S ι') (e : ι ≃ ι')
-  证明: rfl
+/-
+**Algebra.Generators.reindex_val** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`。
+形式化陈述：reindex_val (P : Generators R S ι') (e : ι ≃ ι') : (P.reindex e).val = P.v
+al ∘ e
+参数：P : Generators R S ι'；e : ι ≃ ι'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma reindex_val (P : Generators R S ι') (e : ι ≃ ι') :
     (P.reindex e).val = P.val ∘ e :=
@@ -1021,8 +664,8 @@ lemma reindex_val (P : Generators R S ι') (e : ι ≃ ι') :
 section
 
 variable {σ : Type*} {I : Ideal (MvPolynomial σ R)}
-  (s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R)
-  (hs : forall x, Ideal.Quotient.mk _ (s x) = x)
+  (s : MvPolynomial σ R ⧸ I → MvPolynomial σ R)
+  (hs : ∀ x, Ideal.Quotient.mk _ (s x) = x)
 
 /--
 The naive generators for a quotient `R[Xᵢ] ⧸ I`.
@@ -1030,36 +673,14 @@ If the definitional equality of the section matters, it can be explicitly provid
 -/
 @[simps val]
 noncomputable
-/--
-Definition of `naive` / `naive` 的定义
-
-English:
-definition naive
-  signature: (s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R :=
-  body: Ideal.Quotient.mk _ (X i)
-  σ' := s
-  aeval_val_σ' x := by
-    conv_rhs => rw [← hs x, ← Ideal.Quotient.mkₐ_eq_mk R, aeval_unique (Ideal.Quotient.mkₐ _ I)]
-    simp [Function.comp_def]
-  algebra := inferInstance
-  algebraMap_eq := by ext x <;> simp [IsScalarTower.algebraMap_apply R (MvPolynomial σ R)]
-
-中文:
-定义 naive
-  签名: (s : 多元多项式 σ R ⧸ I -> 多元多项式 σ R :=
-  定义体: Ideal.Quotient.mk _ (X i)
-  σ' := s
-  aeval_val_σ' x := by
-    conv_rhs => rw [← hs x, ← Ideal.Quotient.mkₐ_eq_mk R, aeval_unique (Ideal.Quotient.mkₐ _ I)]
-    simp [Function.comp_def]
-  algebra := inferInstance
-  algebraMap_eq := by ext x <;> simp [IsScalarTower.algebraMap_apply R (MvPolynomial σ R)]
-
-Depends on / 依赖: Function, Function.comp_def, Function.surjInv, Function.surjInv_eq, Generators, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.algebraMap_apply, MvPolynomial, Quotient, aeval_unique, algebra, algebraMap_apply, algebraMap_eq, comp_def, conv_rhs, mk_surjective, surjInv, surjInv_eq
+/-
+**Algebra.Generators.naive** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：naive (s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def naive (s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R :=
+def naive (s : MvPolynomial σ R ⧸ I → MvPolynomial σ R :=
       Function.surjInv Ideal.Quotient.mk_surjective)
-    (hs : forall x, Ideal.Quotient.mk _ (s x) = x := by apply Function.surjInv_eq) :
+    (hs : ∀ x, Ideal.Quotient.mk _ (s x) = x := by apply Function.surjInv_eq) :
     Generators R (MvPolynomial σ R ⧸ I) σ where
   val i := Ideal.Quotient.mk _ (X i)
   σ' := s
@@ -1068,68 +689,46 @@ def naive (s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R :=
     simp [Function.comp_def]
   algebra := inferInstance
   algebraMap_eq := by ext x <;> simp [IsScalarTower.algebraMap_apply R (MvPolynomial σ R)]
-
-/--
-lemma `naive_σ` / 引理 `naive_σ`
-
-English:
-lemma naive_σ
-  statement: (Generators.naive s hs).σ = s
-  proof: rfl
-
-中文:
-引理 naive_σ
-  结论: (生成元.naive s hs).σ = s
-  证明: rfl
+/-
+**Algebra.Generators.naive_** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma naive_σ : (Generators.naive s hs).σ = s := rfl
 
 end
 
-/--
-lemma `finiteType` / 引理 `finiteType`
-
-English:
-lemma finiteType
-  given: {α : Type*} [Finite α] (P : Generators R S α)
-  statement: FiniteType R S
-  proof: .of_surjective (IsScalarTower.toAlgHom R P.Ring S) P.algebraMap_surjective
-
-中文:
-引理 finiteType
-  条件: {α : 类型} [有限 α] (P : 生成元 R S α)
-  结论: 有限型 R S
-  证明: .of_surjective (IsScalarTower.toAlgHom R P.Ring S) P.algebraMap_surjective
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, P.Ring, P.algebraMap_surjective, algebraMap_surjective, of_surjective, toAlgHom
+/-
+**Algebra.Generators.finiteType** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`。
+形式化陈述：finiteType {α : Type*} [Finite α] (P : Generators R S α) : FiniteType R S
+参数：P : Generators R S α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FiniteType.of_surjective`：of_surjective [FiniteType R A] (f : A 
+->ₐ[R] B) (hf : Surjective f) : FiniteType R B
+· 使用定理 `Algebra.FiniteType.instMvPolynomialOfFinite`：∀ {R : Type uR} {S : Type u
+S} [inst : CommSemiring R] [inst_1 : CommSemiring S] [inst_2 : Algebra R S] {ι :
+ Type u_1}   [Finite ι] [Algebra.…
+· 使用定理 `Module.Finite.finiteType`：∀ {R : Type u_1} (A : Type u_2) [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [hRA : Module.Finite R 
+A], Algebra.Fi…
+· 使用定理 `Algebra.Generators.instIsScalarTowerRing`：∀ {R : Type u} {S : Type v} {ι
+ : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P
+ : Algebra.Generators R S ι) {…
+· 使用引理 `Algebra.Generators.algebraMap_surjective`：algebraMap_surjective : Functi
+on.Surjective (algebraMap P.Ring S)
 -/
 lemma finiteType {α : Type*} [Finite α] (P : Generators R S α) : FiniteType R S :=
   .of_surjective (IsScalarTower.toAlgHom R P.Ring S) P.algebraMap_surjective
-
-/--
-lemma `_root_.Algebra.FiniteType.iff_exists_generators` / 引理 `_root_.Algebra.FiniteType.iff_exists_generators`
-
-English:
-lemma _root_.Algebra.FiniteType.iff_exists_generators
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨n, ⟨P⟩⟩ => P.finiteType⟩
-  obtain ⟨n, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial''.mp h
-exact ⟨n, ⟨.ofSurjective (fun i => f (X i)) by rwa [aeval_unique f] at hf⟩⟩
-
-中文:
-引理 _root_.代数.有限型.iff_存在_generators
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨n, ⟨P⟩⟩ => P.finiteType⟩
-  obtain ⟨n, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial''.mp h
-exact ⟨n, ⟨.ofSurjective (fun i => f (X i)) by rwa [aeval_unique f] at hf⟩⟩
-
-Depends on / 依赖: Algebra, Algebra.FiniteType.iff_quotient_mvPolynomial, FiniteType, P.finiteType, aeval_unique, finiteType, iff_quotient_mvPolynomial, ofSurjective
+/-
+**Algebra.Generators._root_.Algebra.FiniteType.iff_exists_generators** 是 Mathlib
+ 中的一个引理，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Algebra.FiniteType.iff_exists_generators :
-    FiniteType R S ↔ exists (n : Nat), Nonempty (Generators R S (Fin n)) := by
-  refine ⟨fun h => ?_, fun ⟨n, ⟨P⟩⟩ => P.finiteType⟩
+    FiniteType R S ↔ ∃ (n : ℕ), Nonempty (Generators R S (Fin n)) := by
+  refine ⟨fun h ↦ ?_, fun ⟨n, ⟨P⟩⟩ ↦ P.finiteType⟩
   obtain ⟨n, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial''.mp h
-exact ⟨n, ⟨.ofSurjective (fun i => f (X i)) by rwa [aeval_unique f] at hf⟩⟩
+  exact ⟨n, ⟨.ofSurjective (fun i ↦ f (X i)) <| by rwa [aeval_unique f] at hf⟩⟩
 
 end Construction
 
@@ -1146,34 +745,39 @@ variable [Algebra S S'] [Algebra S' S''] [Algebra S S'']
 
 /-- Given a commuting square
 R --→ P = R[X] ---→ S
-| |
-↓ ↓
+|                   |
+↓                   ↓
 R' -→ P' = R'[X'] → S
 A hom between `P` and `P'` is an assignment `I → P'` such that the arrows commute.
 Also see `Algebra.Generators.Hom.equivAlgHom`.
 -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**Algebra.Generators.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra.Generators`。
+形式化陈述：{R : Type u} →   {S : Type v} →     {ι : Type w} →       [inst : CommRing 
+R] →         [inst_1 : CommRing S] →           [inst_2 : Algebra R S] →         
+    Algebra.Generators R S ι →               {R' : Type u_1} →                 {
+S' : Type u_2} →                   {ι' : Type u_3} →                     [inst :
+ CommRing R'] →                       [inst_3 : CommRing S'] →                  
+       [inst_4 : Algebra R' S'] →                           Algebra.Generators R
+' S' ι' → [Algebra S S'] → Type (max (max u_1 u_3) w)
+参数：max (max u_1 u_3) w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: where
-  axioms and operations (2):
-    - val : ι -> P'.Ring
-    - aeval_val : forall i, aeval P'.val (val i) = algebraMap S S' (P.val i)
-
-中文:
-结构 态射
-  参数: where
-  公理与运算 (2 个):
-    - val : ι -> P'.环
-    - aeval_val : 对任意 i, aeval P'.val (val i) = algebraMap S S' (P.val i)
+--- 原说明 ---
+Given a commuting square
+R --→ P = R[X] ---→ S
+|                   |
+↓                   ↓
+R' -→ P' = R'[X'] → S
+A hom between `P` and `P'` is an assignment `I → P'` such that the arrows commut
+e.
+Also see `Algebra.Generators.Hom.equivAlgHom`.
 -/
 structure Hom where
   /-- The assignment of each variable in `I` to a value in `P' = R'[X']`. -/
-  val : ι -> P'.Ring
-  aeval_val : forall i, aeval P'.val (val i) = algebraMap S S' (P.val i)
+  val : ι → P'.Ring
+  aeval_val : ∀ i, aeval P'.val (val i) = algebraMap S S' (P.val i)
 
 attribute [simp] Hom.aeval_val
 
@@ -1182,51 +786,58 @@ variable {P P'}
 /-- A hom between two families of generators gives
 an algebra homomorphism between the polynomial rings. -/
 noncomputable
-/--
-Definition of `Hom.toAlgHom` / `Hom.toAlgHom` 的定义
-
-English:
-definition Hom.toAlgHom
-  signature: (f : Hom P P')
-  body: MvPolynomial.aeval f.val
-
-中文:
-定义 态射.toAlgHom
-  签名: (f : 态射 P P')
-  定义体: MvPolynomial.aeval f.val
+/-
+**Algebra.Generators.Hom.toAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators.
+Hom`。
+形式化陈述：{R : Type u} →   {S : Type v} →     {ι : Type w} →       [inst : CommRing 
+R] →         [inst_1 : CommRing S] →           [inst_2 : Algebra R S] →         
+    {P : Algebra.Generators R S ι} →               {R' : Type u_1} →            
+     {S' : Type u_2} →                   {ι' : Type u_3} →                     [
+inst_3 : CommRing R'] →                       [inst_4 : CommRing S'] →          
+               [inst_5 : Algebra R' S'] →                           {P' : Algebr
+a.Generators R' S' ι'} →                             [inst_6 : Algebra R R'] → [
+inst_7 : Algebra S S'] → P.Hom P' → P.Ring →ₐ[R] P'.Ring
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Hom.toAlgHom (f : Hom P P') : P.Ring ->ₐ[R] P'.Ring := MvPolynomial.aeval f.val
+def Hom.toAlgHom (f : Hom P P') : P.Ring →ₐ[R] P'.Ring := MvPolynomial.aeval f.val
 
 variable [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S'] in
 @[simp]
-/--
-lemma `Hom.algebraMap_toAlgHom` / 引理 `Hom.algebraMap_toAlgHom`
-
-English:
-lemma Hom.algebraMap_toAlgHom
-  given: (f : Hom P P') (x)
-  statement: MvPolynomial.aeval P'.val (f.toAlgHom x) =
-  proof: by
-  suffices ((MvPolynomial.aeval P'.val).restrictScalars R).comp f.toAlgHom =
-      (IsScalarTower.toAlgHom R S S').comp (MvPolynomial.aeval P.val) from
-    DFunLike.congr_fun this x
-  apply MvPolynomial.algHom_ext
-  intro i
-  simp [Hom.toAlgHom]
-
-中文:
-引理 态射.algebraMap_toAlgHom
-  条件: (f : 态射 P P') (x)
-  结论: 多元多项式.aeval P'.val (f.toAlgHom x) =
-  证明: by
-  suffices ((MvPolynomial.aeval P'.val).restrictScalars R).comp f.toAlgHom =
-      (IsScalarTower.toAlgHom R S S').comp (MvPolynomial.aeval P.val) from
-    DFunLike.congr_fun this x
-  apply MvPolynomial.algHom_ext
-  intro i
-  simp [Hom.toAlgHom]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Hom.toAlgHom, IsScalarTower, IsScalarTower.toAlgHom, MvPolynomial, MvPolynomial.aeval, MvPolynomial.algHom_ext, P.val, algHom_ext, congr_fun, f.toAlgHom, restrictScalars, toAlgHom
+/-
+**Algebra.Generators.Hom.algebraMap_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.
+Generators.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   {P : Algebra.Generators R S ι} {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] {P' : Algebra.Generators R' S' ι'} [inst_6 : Algebra R
+ R']   [inst_7 : Algebra S S'] [inst_8 : Algebra R S'] [IsScalarTower R R' S'] [
+IsScalarTower R S S'] (f : P.Hom P')   (x : P.Ring), (MvPolynomial.aeval P'.val)
+ (f.toAlgHom x) = (algebraMap S S') ((MvPolynomial.aeval P.val) x)
+参数：f : P.Hom P'；x : P.Ring；MvPolynomial.aeval P'.val；f.toAlgHom x；algebraMap S S
+'；(MvPolynomial.aeval P.val) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.isScalarTower`：∀ {R : Type u_1} {M : Type u_4} {N : Typ
+e u_5} {O : Type u_6} [inst : Semiring R] [inst_1 : SMulZeroClass N R]   [inst_2
+ : SMulZeroClass O R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `Algebra.Generators.Hom.aeval_val`：∀ {R : Type u} {S : Type v} {ι : Type 
+w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Algeb
+ra.Generators R S ι} {…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 lemma Hom.algebraMap_toAlgHom (f : Hom P P') (x) : MvPolynomial.aeval P'.val (f.toAlgHom x) =
     algebraMap S S' (MvPolynomial.aeval P.val x) := by
@@ -1237,24 +848,28 @@ lemma Hom.algebraMap_toAlgHom (f : Hom P P') (x) : MvPolynomial.aeval P'.val (f.
   intro i
   simp [Hom.toAlgHom]
 
-/--
-lemma `Hom.algebraMap_toAlgHom'` / 引理 `Hom.algebraMap_toAlgHom'`
+/-- Version of `Hom.algebraMap_toAlgHom` where `S = S'`, sometimes useful for rewriting. -/
+/-
+**Algebra.Generators.Hom.algebraMap_toAlgHom'** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+.Generators.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   {P : Algebra.Generators R S ι} {R' : Type u_1}
+ {ι' : Type u_3} [inst_3 : CommRing R'] [inst_4 : Algebra R R']   [inst_5 : Alge
+bra R' S] [IsScalarTower R R' S] {P' : Algebra.Generators R' S ι'} (f : P.Hom P'
+) (x : P.Ring),   (MvPolynomial.aeval P'.val) (f.toAlgHom x) = (MvPolynomial.aev
+al P.val) x
+参数：f : P.Hom P'；x : P.Ring；MvPolynomial.aeval P'.val；f.toAlgHom x；MvPolynomial.a
+eval P.val。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Generators.Hom.algebraMap_toAlgHom`：∀ {R : Type u} {S : Type v} 
+{ι : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   
+{P : Algebra.Generators R S ι} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-lemma Hom.algebraMap_toAlgHom'
-  statement: [Algebra R' S] [IsScalarTower R R' S]
-  proof: f.algebraMap_toAlgHom _
-
-@[simp]
-
-中文:
-引理 态射.algebraMap_toAlgHom'
-  结论: [代数 R' S] [标量塔 R R' S]
-  证明: f.algebraMap_toAlgHom _
-
-@[simp]
-
-Depends on / 依赖: algebraMap_toAlgHom, f.algebraMap_toAlgHom
+--- 原说明 ---
+Version of `Hom.algebraMap_toAlgHom` where `S = S'`, sometimes useful for rewrit
+ing.
 -/
 lemma Hom.algebraMap_toAlgHom' [Algebra R' S] [IsScalarTower R R' S]
     {P' : Generators R' S ι'} (f : Hom P P') (x : P.Ring) :
@@ -1262,98 +877,99 @@ lemma Hom.algebraMap_toAlgHom' [Algebra R' S] [IsScalarTower R R' S]
   f.algebraMap_toAlgHom _
 
 @[simp]
-/--
-lemma `Hom.toAlgHom_X` / 引理 `Hom.toAlgHom_X`
-
-English:
-lemma Hom.toAlgHom_X
-  given: (f : Hom P P') (i)
-  statement: f.toAlgHom (.X i) = f.val i
-  proof: MvPolynomial.aeval_X f.val i
-
-中文:
-引理 态射.toAlgHom_X
-  条件: (f : 态射 P P') (i)
-  结论: f.toAlgHom (.X i) = f.val i
-  证明: MvPolynomial.aeval_X f.val i
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.aeval_X, aeval_X, f.val
+/-
+**Algebra.Generators.Hom.toAlgHom_X** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Generator
+s.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   {P : Algebra.Generators R S ι} {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] {P' : Algebra.Generators R' S' ι'} [inst_6 : Algebra R
+ R']   [inst_7 : Algebra S S'] (f : P.Hom P') (i : ι), f.toAlgHom (MvPolynomial.
+X i) = f.val i
+参数：f : P.Hom P'；i : ι；MvPolynomial.X i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
 -/
 lemma Hom.toAlgHom_X (f : Hom P P') (i) : f.toAlgHom (.X i) = f.val i :=
   MvPolynomial.aeval_X f.val i
-
-/--
-lemma `Hom.toAlgHom_C` / 引理 `Hom.toAlgHom_C`
-
-English:
-lemma Hom.toAlgHom_C
-  given: (f : Hom P P') (r)
-  statement: f.toAlgHom (.C r) = .C (algebraMap _ _ r)
-  proof: MvPolynomial.aeval_C f.val r
-
-中文:
-引理 态射.toAlgHom_C
-  条件: (f : 态射 P P') (r)
-  结论: f.toAlgHom (.C r) = .C (algebraMap _ _ r)
-  证明: MvPolynomial.aeval_C f.val r
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.aeval_C, aeval_C, f.val
+/-
+**Algebra.Generators.Hom.toAlgHom_C** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Generator
+s.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   {P : Algebra.Generators R S ι} {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] {P' : Algebra.Generators R' S' ι'} [inst_6 : Algebra R
+ R']   [inst_7 : Algebra S S'] (f : P.Hom P') (r : R), f.toAlgHom (MvPolynomial.
+C r) = MvPolynomial.C ((algebraMap R R') r)
+参数：f : P.Hom P'；r : R；MvPolynomial.C r；(algebraMap R R') r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.aeval_C`：aeval_C (r : R) : aeval f (C r) = algebraMap R S₁ 
+r
 -/
 lemma Hom.toAlgHom_C (f : Hom P P') (r) : f.toAlgHom (.C r) = .C (algebraMap _ _ r) :=
   MvPolynomial.aeval_C f.val r
-
-/--
-lemma `Hom.toAlgHom_monomial` / 引理 `Hom.toAlgHom_monomial`
-
-English:
-lemma Hom.toAlgHom_monomial
-  given: (f : Generators.Hom P P') (v r)
-  proof: by
-  rw [toAlgHom]; rw [aeval_monomial]; rw [Algebra.smul_def]
-
-中文:
-引理 态射.toAlgHom_monomial
-  条件: (f : 生成元.态射 P P') (v r)
-  证明: by
-  rw [toAlgHom]; rw [aeval_monomial]; rw [Algebra.smul_def]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, aeval_monomial, smul_def, toAlgHom
+/-
+**Algebra.Generators.Hom.toAlgHom_monomial** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Ge
+nerators.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   {P : Algebra.Generators R S ι} {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] {P' : Algebra.Generators R' S' ι'} [inst_6 : Algebra R
+ R']   [inst_7 : Algebra S S'] (f : P.Hom P') (v : ι →₀ ℕ) (r : R),   f.toAlgHom
+ ((MvPolynomial.monomial v) r) = r • v.prod fun x1 x2 => f.val x1 ^ x2
+参数：f : P.Hom P'；v : ι →₀ ℕ；r : R；(MvPolynomial.monomial v) r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Generators.Hom.toAlgHom.eq_1`：∀ {R : Type u} {S : Type v} {ι : T
+ype w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : A
+lgebra.Generators R S ι} {…
+· 使用定理 `MvPolynomial.aeval_monomial`：aeval_monomial (g : σ -> S₁) (d : σ ->₀ Nat
+) (r : R) : aeval g (monomial d r) = algebraMap _ _ r * d.prod fun i k => g i ^ 
+k
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 -/
 lemma Hom.toAlgHom_monomial (f : Generators.Hom P P') (v r) :
     f.toAlgHom (monomial v r) = r • v.prod (f.val · ^ ·) := by
-  rw [toAlgHom]; rw [aeval_monomial]; rw [Algebra.smul_def]
+  rw [toAlgHom, aeval_monomial, Algebra.smul_def]
 
 variable [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S'] in
 /-- Giving a hom between two families of generators is equivalent to
 giving an algebra homomorphism between the polynomial rings. -/
 @[simps]
 noncomputable
-/--
-Definition of `Hom.equivAlgHom` / `Hom.equivAlgHom` 的定义
-
-English:
-definition Hom.equivAlgHom
-  signature: :
-  body: ⟨f.toAlgHom, f.algebraMap_toAlgHom⟩
-  invFun f := ⟨fun i => f.1 (.X i), fun i => by simp [f.2]⟩
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-中文:
-定义 态射.equivAlgHom
-  签名: :
-  定义体: ⟨f.toAlgHom, f.algebraMap_toAlgHom⟩
-  invFun f := ⟨fun i => f.1 (.X i), fun i => by simp [f.2]⟩
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-Depends on / 依赖: algebraMap_toAlgHom, f.algebraMap_toAlgHom, f.toAlgHom, toAlgHom
+/-
+**Algebra.Generators.Hom.equivAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generato
+rs.Hom`。
+形式化陈述：{R : Type u} →   {S : Type v} →     {ι : Type w} →       [inst : CommRing 
+R] →         [inst_1 : CommRing S] →           [inst_2 : Algebra R S] →         
+    {P : Algebra.Generators R S ι} →               {R' : Type u_1} →            
+     {S' : Type u_2} →                   {ι' : Type u_3} →                     [
+inst_3 : CommRing R'] →                       [inst_4 : CommRing S'] →          
+               [inst_5 : Algebra R' S'] →                           {P' : Algebr
+a.Generators R' S' ι'} →                             [inst_6 : Algebra R R'] →  
+                             [inst_7 : Algebra S S'] →                          
+       [inst_8 : Algebra R S'] →                                   [IsScalarTowe
+r R R' S'] →                                     [IsScalarTower R S S'] →       
+                                P.Hom P' ≃                                      
+   { f //                                           ∀ (x : P.Ring),             
+                                (MvPolynomial.aeval P'.val) (f x) =             
+                                  (algebraMap S S') ((MvPolynomial.aeval P.val) 
+x) }
+参数：x : P.Ring；MvPolynomial.aeval P'.val；f x；algebraMap S S'；(MvPolynomial.aeval 
+P.val) x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Generators.Hom.algebraMap_toAlgHom`：∀ {R : Type u} {S : Type v} 
+{ι : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   
+{P : Algebra.Generators R S ι} {…
 -/
 def Hom.equivAlgHom :
-    Hom P P' ≃ { f : P.Ring ->ₐ[R] P'.Ring //
-      forall x, aeval P'.val (f x) = algebraMap S S' (aeval P.val x) } where
+    Hom P P' ≃ { f : P.Ring →ₐ[R] P'.Ring //
+      ∀ x, aeval P'.val (f x) = algebraMap S S' (aeval P.val x) } where
   toFun f := ⟨f.toAlgHom, f.algebraMap_toAlgHom⟩
-  invFun f := ⟨fun i => f.1 (.X i), fun i => by simp [f.2]⟩
+  invFun f := ⟨fun i ↦ f.1 (.X i), fun i ↦ by simp [f.2]⟩
   left_inv f := by ext; simp
   right_inv f := by ext; simp
 
@@ -1361,74 +977,62 @@ variable (P P')
 
 /-- The hom from `P` to `P'` given by the designated section of `P'`. -/
 @[simps]
-/--
-Definition of `defaultHom` / `defaultHom` 的定义
+/-
+**Algebra.Generators.defaultHom** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：defaultHom : Hom P P'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition defaultHom
-  signature: : Hom P P'
-  body: ⟨P'.σ ∘ algebraMap S S' ∘ P.val, fun x => by simp⟩
-
-中文:
-定义 defaultHom
-  签名: : 态射 P P'
-  定义体: ⟨P'.σ ∘ algebraMap S S' ∘ P.val, fun x => by simp⟩
-
-Depends on / 依赖: P.val, algebraMap
+--- 原说明 ---
+The hom from `P` to `P'` given by the designated section of `P'`.
 -/
-def defaultHom : Hom P P' := ⟨P'.σ ∘ algebraMap S S' ∘ P.val, fun x => by simp⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Hom P P')
-  body: ⟨defaultHom P P'⟩
-
-中文:
-实例 :
-  签名: 可居 (态射 P P')
-  定义体: ⟨defaultHom P P'⟩
-
-Depends on / 依赖: defaultHom
+def defaultHom : Hom P P' := ⟨P'.σ ∘ algebraMap S S' ∘ P.val, fun x ↦ by simp⟩
+/-
+**Algebra.Generators.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Hom P P') := ⟨defaultHom P P'⟩
 
 /-- The identity hom. -/
 @[simps]
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-
+**Algebra.Generators.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators.Hom`。
+形式化陈述：{R : Type u} →   {S : Type v} →     {ι : Type w} →       [inst : CommRing 
+R] → [inst_1 : CommRing S] → [inst_2 : Algebra R S] → (P : Algebra.Generators R 
+S ι) → P.Hom P
+参数：P : Algebra.Generators R S ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def Hom.id
-  body: ⟨X, by simp⟩
-
-@[simp]
-
-中文:
-定义 noncomputable
-  签名: def 态射.id
-  定义体: ⟨X, by simp⟩
-
-@[simp]
+--- 原说明 ---
+The identity hom.
 -/
 protected noncomputable def Hom.id : Hom P P := ⟨X, by simp⟩
 
 @[simp]
-/--
-lemma `Hom.toAlgHom_id` / 引理 `Hom.toAlgHom_id`
-
-English:
-lemma Hom.toAlgHom_id
-  statement: Hom.toAlgHom (.id P) = AlgHom.id _ _
-  proof: by ext1; simp
-
-中文:
-引理 态射.toAlgHom_id
-  结论: 态射.toAlgHom (.id P) = 代数态射.id _ _
-  证明: by ext1; simp
+/-
+**Algebra.Generators.Hom.toAlgHom_id** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Generato
+rs.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   (P : Algebra.Generators R S ι), (Algebra.Gener
+ators.Hom.id P).toAlgHom = AlgHom.id R P.Ring
+参数：P : Algebra.Generators R S ι；Algebra.Generators.Hom.id P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_X`：∀ {R : Type u} {S : Type v} {ι : Type
+ w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Alge
+bra.Generators R S ι} {…
+· 使用定理 `Algebra.Generators.Hom.id_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P : Algebra.
+Generators R S ι) (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Hom.toAlgHom_id : Hom.toAlgHom (.id P) = AlgHom.id _ _ := by ext1; simp
 
@@ -1436,58 +1040,79 @@ variable {P P' P''}
 
 /-- The composition of two homs. -/
 @[simps]
-/--
-Definition of `Hom.comp` / `Hom.comp` 的定义
+/-
+**Algebra.Generators.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators.Hom`
+。
+形式化陈述：{R : Type u} →   {S : Type v} →     {ι : Type w} →       [inst : CommRing 
+R] →         [inst_1 : CommRing S] →           [inst_2 : Algebra R S] →         
+    {P : Algebra.Generators R S ι} →               {R' : Type u_1} →            
+     {S' : Type u_2} →                   {ι' : Type u_3} →                     [
+inst_3 : CommRing R'] →                       [inst_4 : CommRing S'] →          
+               [inst_5 : Algebra R' S'] →                           {P' : Algebr
+a.Generators R' S' ι'} →                             {R'' : Type u_4} →         
+                      {S'' : Type u_5} →                                 {ι'' : 
+Type u_6} →                                   [inst_6 : CommRing R''] →         
+                            [inst_7 : CommRing S''] →                           
+            [inst_8 : Algebra R'' S''] →                                        
+ {P'' : Algebra.Generators R'' S'' ι''} →                                       
+    [inst_9 : Algebra R' R''] →                                             [ins
+t_10 : Algebra R' S''] →                                               [inst_11 
+: Algebra S S'] →                                                 [inst_12 : Alg
+ebra S' S''] →                                                   [inst_13 : Alge
+bra S S''] →                                                     [IsScalarTower 
+R' R'' S''] →                                                       [IsScalarTow
+er R' S' S''] →                                                         [IsScala
+rTower S S' S''] → P'.Hom P'' → P.Hom P' → P.Hom P''
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.comp
-  signature: [IsScalarTower R' R'' S''] [IsScalarTower R' S' S'']
-  body: aeval f.val (g.val x)
-  aeval_val x := by
-    rw [IsScalarTower.algebraMap_apply S S' S'']; rw [← g.aeval_val]
-    induction g.val x using MvPolynomial.induction_on with
-    | C r => simp [← IsScalarTower.algebraMap_apply]
-    | add x y hx hy => simp only [map_add, hx, hy]
-    | mul_X p i hp => simp only [map_mul, hp, aeval_X, aeval_val]
-
-@[simp]
-
-中文:
-定义 态射.comp
-  签名: [标量塔 R' R'' S''] [标量塔 R' S' S'']
-  定义体: aeval f.val (g.val x)
-  aeval_val x := by
-    rw [IsScalarTower.algebraMap_apply S S' S'']; rw [← g.aeval_val]
-    induction g.val x using MvPolynomial.induction_on with
-    | C r => simp [← IsScalarTower.algebraMap_apply]
-    | add x y hx hy => simp only [map_add, hx, hy]
-    | mul_X p i hp => simp only [map_mul, hp, aeval_X, aeval_val]
-
-@[simp]
+--- 原说明 ---
+The composition of two homs.
 -/
 noncomputable def Hom.comp [IsScalarTower R' R'' S''] [IsScalarTower R' S' S'']
     [IsScalarTower S S' S''] (f : Hom P' P'') (g : Hom P P') : Hom P P'' where
   val x := aeval f.val (g.val x)
   aeval_val x := by
-    rw [IsScalarTower.algebraMap_apply S S' S'']; rw [← g.aeval_val]
+    rw [IsScalarTower.algebraMap_apply S S' S'', ← g.aeval_val]
     induction g.val x using MvPolynomial.induction_on with
     | C r => simp [← IsScalarTower.algebraMap_apply]
     | add x y hx hy => simp only [map_add, hx, hy]
     | mul_X p i hp => simp only [map_mul, hp, aeval_X, aeval_val]
 
 @[simp]
-/--
-lemma `Hom.comp_id` / 引理 `Hom.comp_id`
-
-English:
-lemma Hom.comp_id
-  given: [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S'] (f : Hom P P')
-  proof: by ext; simp
-
-中文:
-引理 态射.comp_id
-  条件: [代数 R S'] [标量塔 R R' S'] [标量塔 R S S'] (f : 态射 P P')
-  证明: by ext; simp
+/-
+**Algebra.Generators.Hom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Generators.H
+om`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   {P : Algebra.Generators R S ι} {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] {P' : Algebra.Generators R' S' ι'} [inst_6 : Algebra R
+ R']   [inst_7 : Algebra S S'] [inst_8 : Algebra R S'] [inst_9 : IsScalarTower R
+ R' S'] [inst_10 : IsScalarTower R S S']   (f : P.Hom P'), f.comp (Algebra.Gener
+ators.Hom.id P) = f
+参数：f : P.Hom P'；Algebra.Generators.Hom.id P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Generators.Hom.ext`：∀ {R : Type u} {S : Type v} {ι : Type w} {in
+st : CommRing R} {inst_1 : CommRing S} {inst_2 : Algebra R S}   {P : Algebra.Gen
+erators R S ι} {…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MvPolynomial.ext`：ext (p q : MvPolynomial σ R) : (forall m, coeff m p = 
+coeff m q) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Generators.Hom.comp_val`：∀ {R : Type u} {S : Type v} {ι : Type w
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Algebr
+a.Generators R S ι} {…
+· 使用定理 `Algebra.Generators.Hom.id_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P : Algebra.
+Generators R S ι) (…
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Hom.comp_id [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S'] (f : Hom P P') :
     f.comp (Hom.id P) = f := by ext; simp
@@ -1495,22 +1120,38 @@ lemma Hom.comp_id [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S'] 
 end
 
 @[simp]
-/--
-lemma `Hom.id_comp` / 引理 `Hom.id_comp`
-
-English:
-lemma Hom.id_comp
-  given: [Algebra S S'] (f : Hom P P')
-  statement: (Hom.id P').comp f = f
-  proof: by
-  ext; simp [Hom.id, aeval_X_left]
-
-中文:
-引理 态射.id_comp
-  条件: [代数 S S'] (f : 态射 P P')
-  结论: (态射.id P').comp f = f
-  证明: by
-  ext; simp [Hom.id, aeval_X_left]
+/-
+**Algebra.Generators.Hom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Generators.H
+om`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   (P : Algebra.Generators R S ι) {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] (P' : Algebra.Generators R' S' ι') [inst_6 : Algebra S
+ S']   (f : P.Hom P'), (Algebra.Generators.Hom.id P').comp f = f
+参数：P : Algebra.Generators R S ι；P' : Algebra.Generators R' S' ι'；f : P.Hom P'；Al
+gebra.Generators.Hom.id P'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Generators.Hom.ext`：∀ {R : Type u} {S : Type v} {ι : Type w} {in
+st : CommRing R} {inst_1 : CommRing S} {inst_2 : Algebra R S}   {P : Algebra.Gen
+erators R S ι} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MvPolynomial.ext`：ext (p q : MvPolynomial σ R) : (forall m, coeff m p = 
+coeff m q) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Generators.Hom.comp_val`：∀ {R : Type u} {S : Type v} {ι : Type w
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Algebr
+a.Generators R S ι} {…
+· 使用定理 `MvPolynomial.aeval_X_left`：aeval_X_left : aeval X = AlgHom.id R (MvPolyn
+omial σ R)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Hom.id_comp [Algebra S S'] (f : Hom P P') : (Hom.id P').comp f = f := by
   ext; simp [Hom.id, aeval_X_left]
@@ -1519,26 +1160,65 @@ variable [Algebra R R'] [Algebra R' R''] [Algebra R' S'']
 variable [Algebra S S'] [Algebra S' S''] [Algebra S S'']
 
 @[simp]
-/--
-lemma `Hom.toAlgHom_comp_apply` / 引理 `Hom.toAlgHom_comp_apply`
-
-English:
-lemma Hom.toAlgHom_comp_apply
-  proof: by
-  induction x using MvPolynomial.induction_on with
-  | C r => simp only [← MvPolynomial.algebraMap_eq, AlgHom.map_algebraMap]
-  | add x y hx hy => simp only [map_add, hx, hy]
-  | mul_X p i hp => simp only [map_mul, hp, toAlgHom_X, comp_val]; rfl
-
-中文:
-引理 态射.toAlgHom_comp_apply
-  证明: by
-  induction x using MvPolynomial.induction_on with
-  | C r => simp only [← MvPolynomial.algebraMap_eq, AlgHom.map_algebraMap]
-  | add x y hx hy => simp only [map_add, hx, hy]
-  | mul_X p i hp => simp only [map_mul, hp, toAlgHom_X, comp_val]; rfl
-
-Depends on / 依赖: AlgHom, AlgHom.map_algebraMap, MvPolynomial, MvPolynomial.algebraMap_eq, MvPolynomial.induction_on, algebraMap_eq, comp_val, induction_on, map_add, map_algebraMap, map_mul, mul_X, toAlgHom_X
+/-
+**Algebra.Generators.Hom.toAlgHom_comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.
+Generators.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   (P : Algebra.Generators R S ι) {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] (P' : Algebra.Generators R' S' ι') {R'' : Type u_4} {S
+'' : Type u_5}   {ι'' : Type u_6} [inst_6 : CommRing R''] [inst_7 : CommRing S''
+] [inst_8 : Algebra R'' S'']   (P'' : Algebra.Generators R'' S'' ι'') [inst_9 : 
+Algebra R R'] [inst_10 : Algebra R' R''] [inst_11 : Algebra R' S'']   [inst_12 :
+ Algebra S S'] [inst_13 : Algebra S' S''] [inst_14 : Algebra S S''] [inst_15 : A
+lgebra R R'']   [IsScalarTower R R' R''] [inst_17 : IsScalarTower R' R'' S''] [i
+nst_18 : IsScalarTower R' S' S'']   [inst_19 : IsScalarTower S S' S''] (f : P.Ho
+m P') (g : P'.Hom P'') (x : P.Ring),   (g.comp f).toAlgHom x = g.toAlgHom (f.toA
+lgHom x)
+参数：P : Algebra.Generators R S ι；P' : Algebra.Generators R' S' ι'；P'' : Algebra.G
+enerators R'' S'' ι''；f : P.Hom P'；g : P'.Hom P''；x : P.Ring；g.comp f；f.toAlgHom
+ x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.map_algebraMap`：∀ {R : Type u} {S : Type v} {A : Type w} {B : Typ
+e u₁} [inst : CommSemiring R] [inst_1 : CommSemiring S]   [inst_2 : Semiring A] 
+[inst_3 : S…
+· 使用定理 `AddMonoidAlgebra.isScalarTower`：∀ {R : Type u_1} {M : Type u_4} {N : Typ
+e u_5} {O : Type u_6} [inst : Semiring R] [inst_1 : SMulZeroClass N R]   [inst_2
+ : SMulZeroClass O R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_X`：∀ {R : Type u} {S : Type v} {ι : Type
+ w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Alge
+bra.Generators R S ι} {…
+· 使用定理 `Algebra.Generators.Hom.comp_val`：∀ {R : Type u} {S : Type v} {ι : Type w
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Algebr
+a.Generators R S ι} {…
 -/
 lemma Hom.toAlgHom_comp_apply
     [Algebra R R''] [IsScalarTower R R' R''] [IsScalarTower R' R'' S'']
@@ -1556,39 +1236,28 @@ variable {T : Type*} [CommRing T] [Algebra R T] [Algebra S T] [IsScalarTower R S
 there is a map of generators `R[Y] → R[X, Y]`. -/
 @[simps]
 noncomputable
-/--
-Definition of `toComp` / `toComp` 的定义
-
-English:
-definition toComp
-  signature: (Q : Generators S T ι') (P : Generators R S ι)
-  body: X (.inr i)
-  aeval_val i := by simp
-
-中文:
-定义 toComp
-  签名: (Q : 生成元 S T ι') (P : 生成元 R S ι)
-  定义体: X (.inr i)
-  aeval_val i := by simp
+/-
+**Algebra.Generators.toComp** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：toComp (Q : Generators S T ι') (P : Generators R S ι) : Hom P (Q.comp P) w
+here val i
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def toComp (Q : Generators S T ι') (P : Generators R S ι) : Hom P (Q.comp P) where
   val i := X (.inr i)
   aeval_val i := by simp
-
-/--
-lemma `toComp_toAlgHom` / 引理 `toComp_toAlgHom`
-
-English:
-lemma toComp_toAlgHom
-  given: (Q : Generators S T ι') (P : Generators R S ι)
-  proof: by rw [rename_eq_aeval]; rfl
-
-中文:
-引理 toComp_toAlgHom
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
-  证明: by rw [rename_eq_aeval]; rfl
-
-Depends on / 依赖: rename_eq_aeval
+/-
+**Algebra.Generators.toComp_toAlgHom** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generato
+rs`。
+形式化陈述：toComp_toAlgHom (Q : Generators S T ι') (P : Generators R S ι) : (Q.toComp
+ P).toAlgHom = rename Sum.inr
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.rename_eq_aeval`：rename_eq_aeval (f : σ -> τ) : rename (R
 -/
 lemma toComp_toAlgHom (Q : Generators S T ι') (P : Generators R S ι) :
     (Q.toComp P).toAlgHom = rename Sum.inr := by rw [rename_eq_aeval]; rfl
@@ -1597,94 +1266,120 @@ lemma toComp_toAlgHom (Q : Generators S T ι') (P : Generators R S ι) :
 there is a map of generators `R[X, Y] → S[X]`. -/
 @[simps]
 noncomputable
-/--
-Definition of `ofComp` / `ofComp` 的定义
-
-English:
-definition ofComp
-  signature: (Q : Generators S T ι') (P : Generators R S ι)
-  body: i.elim X (C ∘ P.val)
-  aeval_val i := by cases i <;> simp
-
-中文:
-定义 ofComp
-  签名: (Q : 生成元 S T ι') (P : 生成元 R S ι)
-  定义体: i.elim X (C ∘ P.val)
-  aeval_val i := by cases i <;> simp
-
-Depends on / 依赖: P.val, i.elim
+/-
+**Algebra.Generators.ofComp** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：ofComp (Q : Generators S T ι') (P : Generators R S ι) : Hom (Q.comp P) Q w
+here val i
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofComp (Q : Generators S T ι') (P : Generators R S ι) : Hom (Q.comp P) Q where
   val i := i.elim X (C ∘ P.val)
   aeval_val i := by cases i <;> simp
-
-/--
-lemma `ofComp_toAlgHom_monomial_sumElim` / 引理 `ofComp_toAlgHom_monomial_sumElim`
-
-English:
-lemma ofComp_toAlgHom_monomial_sumElim
-  given: (Q : Generators S T ι') (P : Generators R S ι) (v₁ v₂ a)
-  proof: by
-  rw [Hom.toAlgHom_monomial]; rw [monomial_eq]
-  simp only [ofComp_val, aeval_monomial]
-  rw [Finsupp.prod_sumElim]
-  simp only [Function.comp_def, Sum.elim_inl, Sum.elim_inr, ← map_pow, ← map_finsuppProd,
-    C_mul, Algebra.smul_def, MvPolynomial.algebraMap_apply, mul_assoc]
-  nth_rw 2 [mul_comm]
-
-中文:
-引理 ofComp_toAlgHom_monomial_sumElim
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (v₁ v₂ a)
-  证明: by
-  rw [Hom.toAlgHom_monomial]; rw [monomial_eq]
-  simp only [ofComp_val, aeval_monomial]
-  rw [Finsupp.prod_sumElim]
-  simp only [Function.comp_def, Sum.elim_inl, Sum.elim_inr, ← map_pow, ← map_finsuppProd,
-    C_mul, Algebra.smul_def, MvPolynomial.algebraMap_apply, mul_assoc]
-  nth_rw 2 [mul_comm]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, C_mul, Finsupp, Finsupp.prod_sumElim, Function, Function.comp_def, Hom.toAlgHom_monomial, MvPolynomial, MvPolynomial.algebraMap_apply, Sum.elim_inl, Sum.elim_inr, aeval_monomial, algebraMap_apply, comp_def, elim_inl, elim_inr, map_finsuppProd, map_pow, monomial_eq
+/-
+**Algebra.Generators.ofComp_toAlgHom_monomial_sumElim** 是 Mathlib 中的一个引理，位于命名空间 
+`Algebra.Generators`。
+形式化陈述：ofComp_toAlgHom_monomial_sumElim (Q : Generators S T ι') (P : Generators R
+ S ι) (v₁ v₂ a) : (Q.ofComp P).toAlgHom (monomial (Finsupp.sumElim v₁ v₂) a) = m
+onomial v₁ (aeval P.val (monomial v₂ a))
+参数：Q : Generators S T ι'；P : Generators R S ι；v₁ v₂ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_monomial`：∀ {R : Type u} {S : Type v} {ι
+ : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P
+ : Algebra.Generators R S ι} {…
+· 使用定理 `MvPolynomial.monomial_eq`：monomial_eq : monomial s a = C a * (s.prod fun
+ n e => X n ^ e : MvPolynomial σ R)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Algebra.Generators.ofComp_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {ι' : Type u_
+3} {T : Type u_7} […
+· 使用定理 `MvPolynomial.aeval_monomial`：aeval_monomial (g : σ -> S₁) (d : σ ->₀ Nat
+) (r : R) : aeval g (monomial d r) = algebraMap _ _ r * d.prod fun i k => g i ^ 
+k
+· 使用引理 `Finsupp.prod_sumElim`：prod_sumElim {ι₁ ι₂ α M : Type*} [Zero α] [CommMon
+oid M] (f₁ : ι₁ ->₀ α) (f₂ : ι₂ ->₀ α) (g : ι₁ oplus ι₂ -> α -> M) : (f₁.sumElim
+ f₂).prod …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `MvPolynomial.C_mul`：C_mul : (C (a * a') : MvPolynomial σ R) = C a * C a'
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 lemma ofComp_toAlgHom_monomial_sumElim (Q : Generators S T ι') (P : Generators R S ι) (v₁ v₂ a) :
     (Q.ofComp P).toAlgHom (monomial (Finsupp.sumElim v₁ v₂) a) =
       monomial v₁ (aeval P.val (monomial v₂ a)) := by
-  rw [Hom.toAlgHom_monomial]; rw [monomial_eq]
+  rw [Hom.toAlgHom_monomial, monomial_eq]
   simp only [ofComp_val, aeval_monomial]
   rw [Finsupp.prod_sumElim]
   simp only [Function.comp_def, Sum.elim_inl, Sum.elim_inr, ← map_pow, ← map_finsuppProd,
     C_mul, Algebra.smul_def, MvPolynomial.algebraMap_apply, mul_assoc]
   nth_rw 2 [mul_comm]
-
-/--
-lemma `toComp_toAlgHom_monomial` / 引理 `toComp_toAlgHom_monomial`
-
-English:
-lemma toComp_toAlgHom_monomial
-  given: (Q : Generators S T ι') (P : Generators R S ι) (j a)
-  proof: by
-  convert! rename_monomial _ _ _
-  · ext f (i₁ | i₂)
-    simp [rename_eq_aeval]
-    rfl
-  · ext f (i₁ | i₂) <;>
-      simp [Finsupp.mapDomain_of_notMem_range, Finsupp.mapDomain_apply Sum.inr_injective]
-
-@[simp]
-
-中文:
-引理 toComp_toAlgHom_monomial
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (j a)
-  证明: by
-  convert! rename_monomial _ _ _
-  · ext f (i₁ | i₂)
-    simp [rename_eq_aeval]
-    rfl
-  · ext f (i₁ | i₂) <;>
-      simp [Finsupp.mapDomain_of_notMem_range, Finsupp.mapDomain_apply Sum.inr_injective]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.mapDomain_apply, Finsupp.mapDomain_of_notMem_range, Sum.inr_injective, convert, inr_injective, mapDomain_apply, mapDomain_of_notMem_range, rename_eq_aeval, rename_monomial
+/-
+**Algebra.Generators.toComp_toAlgHom_monomial** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+.Generators`。
+形式化陈述：toComp_toAlgHom_monomial (Q : Generators S T ι') (P : Generators R S ι) (j
+ a) : (Q.toComp P).toAlgHom (monomial j a) = monomial (Finsupp.sumElim 0 j) a
+参数：Q : Generators S T ι'；P : Generators R S ι；j a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `MvPolynomial.ext`：ext (p q : MvPolynomial σ R) : (forall m, coeff m p = 
+coeff m q) -> p = q
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_X`：∀ {R : Type u} {S : Type v} {ι : Type
+ w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Alge
+bra.Generators R S ι} {…
+· 使用定理 `Algebra.Generators.toComp_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {ι' : Type u_
+3} {T : Type u_7} […
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `MvPolynomial.rename_eq_aeval`：rename_eq_aeval (f : σ -> τ) : rename (R
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finsupp.mapDomain_of_notMem_range`：mapDomain_of_notMem_range {f : α -> β
+} (x : α ->₀ M) (a : β) (h : a ∉ Set.range f) : mapDomain f x a = 0
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finsupp.mapDomain_apply`：∀ {α : Type u_1} {β : Type u_2} {M : Type u_5} 
+[inst : AddCommMonoid M] {f : α → β},   Function.Injective f → ∀ (x : α →₀ M) (a
+ : α), (Finsu…
+· 使用定理 `Sum.inr_injective`：inr_injective : Function.Injective (inr : β -> α oplu
+s β)
+· 使用定理 `MvPolynomial.rename_monomial`：rename_monomial (f : σ -> τ) (d : σ ->₀ Na
+t) (r : R) : rename f (monomial d r) = monomial (d.mapDomain f) r
 -/
 lemma toComp_toAlgHom_monomial (Q : Generators S T ι') (P : Generators R S ι) (j a) :
     (Q.toComp P).toAlgHom (monomial j a) =
@@ -1697,24 +1392,48 @@ lemma toComp_toAlgHom_monomial (Q : Generators S T ι') (P : Generators R S ι) 
       simp [Finsupp.mapDomain_of_notMem_range, Finsupp.mapDomain_apply Sum.inr_injective]
 
 @[simp]
-/--
-lemma `toAlgHom_ofComp_rename` / 引理 `toAlgHom_ofComp_rename`
-
-English:
-lemma toAlgHom_ofComp_rename
-  given: (Q : Generators S T ι') (P : Generators R S ι) (p : P.Ring)
-  proof: have : (Q.ofComp P).toAlgHom.comp (rename Sum.inr) =
-    (IsScalarTower.toAlgHom R S Q.Ring).comp (IsScalarTower.toAlgHom R P.Ring S) := by ext; simp
-  DFunLike.congr_fun this p
-
-中文:
-引理 toAlgHom_ofComp_rename
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (p : P.环)
-  证明: have : (Q.ofComp P).toAlgHom.comp (rename Sum.inr) =
-    (IsScalarTower.toAlgHom R S Q.Ring).comp (IsScalarTower.toAlgHom R P.Ring S) := by ext; simp
-  DFunLike.congr_fun this p
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, IsScalarTower, IsScalarTower.toAlgHom, P.Ring, Q.Ring, Q.ofComp, Sum.inr, congr_fun, ofComp, toAlgHom, toAlgHom.comp
+/-
+**Algebra.Generators.toAlgHom_ofComp_rename** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.G
+enerators`。
+形式化陈述：toAlgHom_ofComp_rename (Q : Generators S T ι') (P : Generators R S ι) (p :
+ P.Ring) : (Q.ofComp P).toAlgHom ((rename Sum.inr) p) = C (algebraMap _ _ p)
+参数：Q : Generators S T ι'；P : Generators R S ι；p : P.Ring。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.isScalarTower`：∀ {R : Type u_1} {M : Type u_4} {N : Typ
+e u_5} {O : Type u_6} [inst : Semiring R] [inst_1 : SMulZeroClass N R]   [inst_2
+ : SMulZeroClass O R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.Generators.instIsScalarTowerRing`：∀ {R : Type u} {S : Type v} {ι
+ : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P
+ : Algebra.Generators R S ι) {…
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `MvPolynomial.ext`：ext (p q : MvPolynomial σ R) : (forall m, coeff m p = 
+coeff m q) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_X`：∀ {R : Type u} {S : Type v} {ι : Type
+ w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Alge
+bra.Generators R S ι} {…
+· 使用定理 `Algebra.Generators.ofComp_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {ι' : Type u_
+3} {T : Type u_7} […
+· 使用引理 `Algebra.Generators.algebraMap_apply`：algebraMap_apply (x) : algebraMap P
+.Ring S x = aeval (R
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 lemma toAlgHom_ofComp_rename (Q : Generators S T ι') (P : Generators R S ι) (p : P.Ring) :
     (Q.ofComp P).toAlgHom ((rename Sum.inr) p) = C (algebraMap _ _ p) :=
@@ -1723,56 +1442,51 @@ lemma toAlgHom_ofComp_rename (Q : Generators S T ι') (P : Generators R S ι) (p
   DFunLike.congr_fun this p
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `toAlgHom_ofComp_surjective` / 引理 `toAlgHom_ofComp_surjective`
-
-English:
-lemma toAlgHom_ofComp_surjective
-  given: (Q : Generators S T ι') (P : Generators R S ι)
-  proof: by
-  intro p
-  induction p using MvPolynomial.induction_on with
-  | C a =>
-      use MvPolynomial.rename Sum.inr (P.σ a)
-      simp only [Hom.toAlgHom, ofComp, Generators.comp, MvPolynomial.aeval_rename,
-        Sum.elim_comp_inr]
-      simp_rw [Function.comp_def, ← MvPolynomial.algebraMap_eq, ← IsScalarTower.toAlgHom_apply R,
-        ← MvPolynomial.comp_aeval]
-      simp
-  | add p q hp hq =>
-      obtain ⟨p, rfl⟩ := hp
-      obtain ⟨q, rfl⟩ := hq
-      use p + q
-      simp
-  | mul_X p i hp =>
-      obtain ⟨(p : MvPolynomial (ι' oplus ι) R), rfl⟩ := hp
-      use p * MvPolynomial.X (R := R) (Sum.inl i)
-      simp [Algebra.Generators.ofComp, Algebra.Generators.Hom.toAlgHom]
-
-中文:
-引理 toAlgHom_ofComp_surjective
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
-  证明: by
-  intro p
-  induction p using MvPolynomial.induction_on with
-  | C a =>
-      use MvPolynomial.rename Sum.inr (P.σ a)
-      simp only [Hom.toAlgHom, ofComp, Generators.comp, MvPolynomial.aeval_rename,
-        Sum.elim_comp_inr]
-      simp_rw [Function.comp_def, ← MvPolynomial.algebraMap_eq, ← IsScalarTower.toAlgHom_apply R,
-        ← MvPolynomial.comp_aeval]
-      simp
-  | add p q hp hq =>
-      obtain ⟨p, rfl⟩ := hp
-      obtain ⟨q, rfl⟩ := hq
-      use p + q
-      simp
-  | mul_X p i hp =>
-      obtain ⟨(p : MvPolynomial (ι' oplus ι) R), rfl⟩ := hp
-      use p * MvPolynomial.X (R := R) (Sum.inl i)
-      simp [Algebra.Generators.ofComp, Algebra.Generators.Hom.toAlgHom]
-
-Depends on / 依赖: Function, Function.comp_def, Generators, Generators.comp, Hom.toAlgHom, IsScalarTower, IsScalarTower.toAlgHom_apply, MvPolynomial, MvPolynomial.aeval_rename, MvPolynomial.algebraMap_eq, MvPolynomial.comp_aeval, MvPolynomial.induction_on, MvPolynomial.rename, Sum.elim_comp_inr, Sum.inr, aeval_rename, algebraMap_eq, comp_aeval, comp_def, elim_comp_inr
+/-
+**Algebra.Generators.toAlgHom_ofComp_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+ra.Generators`。
+形式化陈述：toAlgHom_ofComp_surjective (Q : Generators S T ι') (P : Generators R S ι) 
+: Function.Surjective (Q.ofComp P).toAlgHom
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.aeval_rename`：aeval_rename [Algebra R S] : aeval g (rename 
+k p) = aeval (g ∘ k) p
+· 使用定理 `AddMonoidAlgebra.isScalarTower`：∀ {R : Type u_1} {M : Type u_4} {N : Typ
+e u_5} {O : Type u_6} [inst : Semiring R] [inst_1 : SMulZeroClass N R]   [inst_2
+ : SMulZeroClass O R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Algebra.Generators.aeval_val_σ`：aeval_val_σ (s) : aeval P.val (P.σ s) = 
+s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
 -/
 lemma toAlgHom_ofComp_surjective (Q : Generators S T ι') (P : Generators R S ι) :
     Function.Surjective (Q.ofComp P).toAlgHom := by
@@ -1791,27 +1505,21 @@ lemma toAlgHom_ofComp_surjective (Q : Generators S T ι') (P : Generators R S ι
       use p + q
       simp
   | mul_X p i hp =>
-      obtain ⟨(p : MvPolynomial (ι' oplus ι) R), rfl⟩ := hp
+      obtain ⟨(p : MvPolynomial (ι' ⊕ ι) R), rfl⟩ := hp
       use p * MvPolynomial.X (R := R) (Sum.inl i)
       simp [Algebra.Generators.ofComp, Algebra.Generators.Hom.toAlgHom]
 
 /-- Given families of generators `X ⊆ T`, there is a map `R[X] → S[X]`. -/
 @[simps]
 noncomputable
-/--
-Definition of `toExtendScalars` / `toExtendScalars` 的定义
-
-English:
-definition toExtendScalars
-  signature: (P : Generators R T ι)
-  body: X
-  aeval_val i := by simp
-
-中文:
-定义 toExtendScalars
-  签名: (P : 生成元 R T ι)
-  定义体: X
-  aeval_val i := by simp
+/-
+**Algebra.Generators.toExtendScalars** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generato
+rs`。
+形式化陈述：toExtendScalars (P : Generators R T ι) : Hom P (P.extendScalars S) where v
+al
+参数：P : Generators R T ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def toExtendScalars (P : Generators R T ι) : Hom P (P.extendScalars S) where
   val := X
@@ -1823,24 +1531,21 @@ variable {P P'} in
 /-- Reinterpret a hom between generators as a hom between extensions. -/
 @[simps]
 noncomputable
-/--
-Definition of `Hom.toExtensionHom` / `Hom.toExtensionHom` 的定义
-
-English:
-definition Hom.toExtensionHom
-  signature: [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S']
-  body: f.toAlgHom.toRingHom
-  toRingHom_algebraMap x := by simp
-  algebraMap_toRingHom x := by simp
-
-中文:
-定义 态射.toExtensionHom
-  签名: [代数 R S'] [标量塔 R R' S'] [标量塔 R S S']
-  定义体: f.toAlgHom.toRingHom
-  toRingHom_algebraMap x := by simp
-  algebraMap_toRingHom x := by simp
-
-Depends on / 依赖: f.toAlgHom.toRingHom, toAlgHom, toRingHom
+/-
+**Algebra.Generators.Hom.toExtensionHom** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Gener
+ators.Hom`。
+形式化陈述：{R : Type u} →   {S : Type v} →     {ι : Type w} →       [inst : CommRing 
+R] →         [inst_1 : CommRing S] →           [inst_2 : Algebra R S] →         
+    {P : Algebra.Generators R S ι} →               {R' : Type u_1} →            
+     {S' : Type u_2} →                   {ι' : Type u_3} →                     [
+inst_3 : CommRing R'] →                       [inst_4 : CommRing S'] →          
+               [inst_5 : Algebra R' S'] →                           {P' : Algebr
+a.Generators R' S' ι'} →                             [inst_6 : Algebra R R'] →  
+                             [inst_7 : Algebra S S'] →                          
+       [inst_8 : Algebra R S'] →                                   [IsScalarTowe
+r R R' S'] →                                     [IsScalarTower R S S'] → P.Hom 
+P' → P.toExtension.Hom P'.toExtension
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def Hom.toExtensionHom [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S']
     (f : P.Hom P') : P.toExtension.Hom P'.toExtension where
@@ -1851,36 +1556,70 @@ def Hom.toExtensionHom [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `Hom.toExtensionHom_id` / 引理 `Hom.toExtensionHom_id`
-
-English:
-lemma Hom.toExtensionHom_id
-  statement: Hom.toExtensionHom (.id P) = .id _
-  proof: by ext; simp
-
-中文:
-引理 态射.toExtensionHom_id
-  结论: 态射.toExtensionHom (.id P) = .id _
-  证明: by ext; simp
+/-
+**Algebra.Generators.Hom.toExtensionHom_id** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Ge
+nerators.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   (P : Algebra.Generators R S ι), (Algebra.Gener
+ators.Hom.id P).toExtensionHom = Algebra.Extension.Hom.id P.toExtension
+参数：P : Algebra.Generators R S ι；Algebra.Generators.Hom.id P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Extension.Hom.ext`：∀ {R : Type u} {S : Type v} {inst : CommRing 
+R} {inst_1 : CommRing S} {inst_2 : Algebra R S} {P : Algebra.Extension R S}   {R
+' : Type u_1} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_id`：∀ {R : Type u} {S : Type v} {ι : Typ
+e w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P : Alg
+ebra.Generators R S ι), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Hom.toExtensionHom_id : Hom.toExtensionHom (.id P) = .id _ := by ext; simp
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `Hom.toExtensionHom_comp` / 引理 `Hom.toExtensionHom_comp`
-
-English:
-lemma Hom.toExtensionHom_comp
-  statement: [Algebra R S'] [IsScalarTower R S S']
-  proof: by ext; simp
-
-中文:
-引理 态射.toExtensionHom_comp
-  结论: [代数 R S'] [标量塔 R S S']
-  证明: by ext; simp
+/-
+**Algebra.Generators.Hom.toExtensionHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.
+Generators.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   (P : Algebra.Generators R S ι) {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] (P' : Algebra.Generators R' S' ι') {R'' : Type u_4} {S
+'' : Type u_5}   {ι'' : Type u_6} [inst_6 : CommRing R''] [inst_7 : CommRing S''
+] [inst_8 : Algebra R'' S'']   (P'' : Algebra.Generators R'' S'' ι'') [inst_9 : 
+Algebra R R'] [inst_10 : Algebra R' R''] [inst_11 : Algebra R' S'']   [inst_12 :
+ Algebra S S'] [inst_13 : Algebra S' S''] [inst_14 : Algebra S S''] [inst_15 : A
+lgebra R S']   [inst_16 : IsScalarTower R S S'] [inst_17 : Algebra R R''] [inst_
+18 : Algebra R S'']   [inst_19 : IsScalarTower R R'' S''] [inst_20 : IsScalarTow
+er R S S''] [inst_21 : IsScalarTower R' R'' S'']   [inst_22 : IsScalarTower R' S
+' S''] [inst_23 : IsScalarTower S S' S''] [inst_24 : IsScalarTower R R' R'']   [
+inst_25 : IsScalarTower R R' S'] (f : P'.Hom P'') (g : P.Hom P'),   (f.comp g).t
+oExtensionHom = f.toExtensionHom.comp g.toExtensionHom
+参数：P : Algebra.Generators R S ι；P' : Algebra.Generators R' S' ι'；P'' : Algebra.G
+enerators R'' S'' ι''；f : P'.Hom P''；g : P.Hom P'；f.comp g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Extension.Hom.ext`：∀ {R : Type u} {S : Type v} {inst : CommRing 
+R} {inst_1 : CommRing S} {inst_2 : Algebra R S} {P : Algebra.Extension R S}   {R
+' : Type u_1} {…
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_comp_apply`：∀ {R : Type u} {S : Type v} 
+{ι : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   
+(P : Algebra.Generators R S ι) {…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Hom.toExtensionHom_comp [Algebra R S'] [IsScalarTower R S S']
     [Algebra R R''] [Algebra R S''] [IsScalarTower R R'' S'']
@@ -1888,335 +1627,300 @@ lemma Hom.toExtensionHom_comp [Algebra R S'] [IsScalarTower R S S']
     [IsScalarTower S S' S''] [IsScalarTower R R' R''] [IsScalarTower R R' S']
     (f : P'.Hom P'') (g : P.Hom P') :
     toExtensionHom (f.comp g) = f.toExtensionHom.comp g.toExtensionHom := by ext; simp
-
-/--
-lemma `Hom.toExtensionHom_toAlgHom_apply` / 引理 `Hom.toExtensionHom_toAlgHom_apply`
-
-English:
-lemma Hom.toExtensionHom_toAlgHom_apply
-  statement: [Algebra R S'] [IsScalarTower R R' S']
-  proof: rfl
-
-中文:
-引理 态射.toExtensionHom_toAlgHom_apply
-  结论: [代数 R S'] [标量塔 R R' S']
-  证明: rfl
+/-
+**Algebra.Generators.Hom.toExtensionHom_toAlgHom_apply** 是 Mathlib 中的一个定理，位于命名空间
+ `Algebra.Generators.Hom`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} [inst : CommRing R] [inst_1 : Com
+mRing S] [inst_2 : Algebra R S]   (P : Algebra.Generators R S ι) {R' : Type u_1}
+ {S' : Type u_2} {ι' : Type u_3} [inst_3 : CommRing R']   [inst_4 : CommRing S']
+ [inst_5 : Algebra R' S'] (P' : Algebra.Generators R' S' ι') [inst_6 : Algebra R
+ R']   [inst_7 : Algebra S S'] [inst_8 : Algebra R S'] [inst_9 : IsScalarTower R
+ R' S'] [inst_10 : IsScalarTower R S S']   (f : P.Hom P') (x : P.toExtension.Rin
+g), f.toExtensionHom.toAlgHom x = f.toAlgHom x
+参数：P : Algebra.Generators R S ι；P' : Algebra.Generators R' S' ι'；f : P.Hom P'；x 
+: P.toExtension.Ring。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.toExtensionHom_toAlgHom_apply [Algebra R S'] [IsScalarTower R R' S']
     [IsScalarTower R S S'] (f : P.Hom P') (x) :
     f.toExtensionHom.toAlgHom x = f.toAlgHom x := rfl
 
-/--
-Definition of `ker` / `ker` 的定义
+/-- The kernel of a presentation. -/
+/-
+**Algebra.Generators.ker** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra.Generators`。
+形式化陈述：ker : Ideal P.Ring
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ker
-  signature: : Ideal P.Ring
-  body: P.toExtension.ker
-
-中文:
-缩写 ker
-  签名: : 理想 P.环
-  定义体: P.toExtension.ker
-
-Depends on / 依赖: P.toExtension.ker, toExtension
+--- 原说明 ---
+The kernel of a presentation.
 -/
 noncomputable abbrev ker : Ideal P.Ring := P.toExtension.ker
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ker_eq_ker_aeval_val` / 引理 `ker_eq_ker_aeval_val`
-
-English:
-lemma ker_eq_ker_aeval_val
-  statement: P.ker = RingHom.ker (aeval P.val)
-  proof: by
-  simp only [ker, Extension.ker, toExtension_Ring, algebraMap_eq]
-  rfl
-
-中文:
-引理 ker_eq_ker_aeval_val
-  结论: P.ker = 环态射.ker (aeval P.val)
-  证明: by
-  simp only [ker, Extension.ker, toExtension_Ring, algebraMap_eq]
-  rfl
-
-Depends on / 依赖: Extension, Extension.ker, algebraMap_eq, toExtension_Ring
+/-
+**Algebra.Generators.ker_eq_ker_aeval_val** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Gen
+erators`。
+形式化陈述：ker_eq_ker_aeval_val : P.ker = RingHom.ker (aeval P.val)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.ker.congr_simp`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst
+ : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomCl
+ass F R S] (…
+· 使用定理 `Algebra.Generators.algebraMap_eq`：∀ {R : Type u} {S : Type v} {ι : Type 
+w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (self : Al
+gebra.Generators R S ι…
 -/
 lemma ker_eq_ker_aeval_val : P.ker = RingHom.ker (aeval P.val) := by
   simp only [ker, Extension.ker, toExtension_Ring, algebraMap_eq]
   rfl
-
-/--
-lemma `ker_mvPolynomial` / 引理 `ker_mvPolynomial`
-
-English:
-lemma ker_mvPolynomial
-  statement: (mvPolynomial R ι).ker = ⊥
-  proof: by
-  simp [ker_eq_ker_aeval_val, SetLike.ext_iff, aeval_X_left]
-
-中文:
-引理 ker_mvPolynomial
-  结论: (mvPolynomial R ι).ker = ⊥
-  证明: by
-  simp [ker_eq_ker_aeval_val, SetLike.ext_iff, aeval_X_left]
-
-Depends on / 依赖: SetLike, SetLike.ext_iff, aeval_X_left, ext_iff, ker_eq_ker_aeval_val
+/-
+**Algebra.Generators.ker_mvPolynomial** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generat
+ors`。
+形式化陈述：ker_mvPolynomial : (mvPolynomial R ι).ker = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Algebra.Generators.ker_eq_ker_aeval_val`：ker_eq_ker_aeval_val : P.ker = 
+RingHom.ker (aeval P.val)
+· 使用定理 `RingHom.ker.congr_simp`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst
+ : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomCl
+ass F R S] (…
+· 使用定理 `Algebra.Generators.mvPolynomial_val`：∀ (R : Type u) (ι : Type w) [inst :
+ CommRing R], (Algebra.Generators.mvPolynomial R ι).val = MvPolynomial.X
+· 使用定理 `MvPolynomial.aeval_X_left`：aeval_X_left : aeval X = AlgHom.id R (MvPolyn
+omial σ R)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma ker_mvPolynomial : (mvPolynomial R ι).ker = ⊥ := by
   simp [ker_eq_ker_aeval_val, SetLike.ext_iff, aeval_X_left]
 
 variable {P} in
-/--
-lemma `aeval_val_eq_zero` / 引理 `aeval_val_eq_zero`
-
-English:
-lemma aeval_val_eq_zero
-  given: {x} (hx : x in P.ker)
-  statement: aeval P.val x = 0
-  proof: by rwa [← algebraMap_apply]
-
-中文:
-引理 aeval_val_eq_zero
-  条件: {x} (hx : x in P.ker)
-  结论: aeval P.val x = 0
-  证明: by rwa [← algebraMap_apply]
-
-Depends on / 依赖: algebraMap_apply
+/-
+**Algebra.Generators.aeval_val_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Genera
+tors`。
+形式化陈述：aeval_val_eq_zero {x} (hx : x in P.ker) : aeval P.val x = 0
+参数：hx : x in P.ker。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Algebra.Generators.algebraMap_apply`：algebraMap_apply (x) : algebraMap P
+.Ring S x = aeval (R
 -/
-lemma aeval_val_eq_zero {x} (hx : x in P.ker) : aeval P.val x = 0 := by rwa [← algebraMap_apply]
-
-/--
-lemma `ker_naive` / 引理 `ker_naive`
-
-English:
-lemma ker_naive
-  statement: {σ : Type*} {I : Ideal (MvPolynomial σ R)}
-  proof: I.mk_ker
-
-中文:
-引理 ker_naive
-  结论: {σ : 类型} {I : 理想 (多元多项式 σ R)}
-  证明: I.mk_ker
-
-Depends on / 依赖: I.mk_ker, mk_ker
+lemma aeval_val_eq_zero {x} (hx : x ∈ P.ker) : aeval P.val x = 0 := by rwa [← algebraMap_apply]
+/-
+**Algebra.Generators.ker_naive** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`。
+形式化陈述：ker_naive {σ : Type*} {I : Ideal (MvPolynomial σ R)} (s : MvPolynomial σ R
+ ⧸ I -> MvPolynomial σ R) (hs : forall x, Ideal.Quotient.mk _ (s x) = x) : (Gene
+rators.naive s hs).ker = I
+参数：MvPolynomial σ R；s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R；hs : forall x, 
+Ideal.Quotient.mk _ (s x) = x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.mk_ker`：mk_ker {I : Ideal R} [I.IsTwoSided] : ker (Quotient.mk I) 
+= I
 -/
 lemma ker_naive {σ : Type*} {I : Ideal (MvPolynomial σ R)}
-    (s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R) (hs : forall x, Ideal.Quotient.mk _ (s x) = x) :
+    (s : MvPolynomial σ R ⧸ I → MvPolynomial σ R) (hs : ∀ x, Ideal.Quotient.mk _ (s x) = x) :
     (Generators.naive s hs).ker = I :=
   I.mk_ker
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `ker_ofAlgHom` / 引理 `ker_ofAlgHom`
-
-English:
-lemma ker_ofAlgHom
-  given: {I : Type*} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Surjective ⇑f)
-  proof: by
-  change RingHom.ker _ = _
-  congr
-  exact MvPolynomial.ringHom_ext (by simp) (by simp [ofAlgHom])
-
-@[simp]
-
-中文:
-引理 ker_ofAlgHom
-  条件: {I : 类型} (f : 多元多项式 I R ->ₐ[R] S) (h : 函数.满射 ⇑f)
-  证明: by
-  change RingHom.ker _ = _
-  congr
-  exact MvPolynomial.ringHom_ext (by simp) (by simp [ofAlgHom])
-
-@[simp]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.ringHom_ext, RingHom, RingHom.ker, ofAlgHom, ringHom_ext
+/-
+**Algebra.Generators.ker_ofAlgHom** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generators`
+。
+形式化陈述：ker_ofAlgHom {I : Type*} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Sur
+jective ⇑f) : (ofAlgHom f h).ker = RingHom.ker f.toRingHom
+参数：f : MvPolynomial I R ->ₐ[R] S；h : Function.Surjective ⇑f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ringHom_ext`：ringHom_ext {A : Type*} [Semiring A] {f g : Mv
+Polynomial σ R ->+* A} (hC : forall r, f (C r) = g (C r)) (hX : forall i, f (X i
+) = g (X i)) :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Algebra.Generators.algebraMap_apply`：algebraMap_apply (x) : algebraMap P
+.Ring S x = aeval (R
+· 使用定理 `MvPolynomial.algHom_C`：algHom_C {A : Type*} [Semiring A] [Algebra R A] (
+f : MvPolynomial σ R ->ₐ[R] A) (r : R) : f (C r) = algebraMap R A r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
 -/
-lemma ker_ofAlgHom {I : Type*} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Surjective ⇑f) :
+lemma ker_ofAlgHom {I : Type*} (f : MvPolynomial I R →ₐ[R] S) (h : Function.Surjective ⇑f) :
     (ofAlgHom f h).ker = RingHom.ker f.toRingHom := by
   change RingHom.ker _ = _
   congr
   exact MvPolynomial.ringHom_ext (by simp) (by simp [ofAlgHom])
 
 @[simp]
-/--
-lemma `ker_ofAlgEquiv` / 引理 `ker_ofAlgEquiv`
-
-English:
-lemma ker_ofAlgEquiv
-  given: (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
-  proof: by
-  rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq_ker_aeval_val]
-
-中文:
-引理 ker_ofAlgEquiv
-  条件: (P : 生成元 R S ι) {T : 类型} [交换环 T] [代数 R T] (e : S ≃ₐ[R] T)
-  证明: by
-  rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq_ker_aeval_val]
-
-Depends on / 依赖: AlgHom, AlgHom.coe_coe, AlgHom.comap_ker, AlgHom.ker_coe_equiv, AlgHomClass, AlgHomClass.toRingHom_toAlgHom, Function, Function.comp_def, MvPolynomial, MvPolynomial.comp_aeval, RingHom, RingHom.ker_coe_toRingHom, RingHom.ker_eq_comap_bot, coe_coe, comap_ker, comp_aeval, comp_def, ker_coe_equiv, ker_coe_toRingHom, ker_eq_comap_bot
+/-
+**Algebra.Generators.ker_ofAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generator
+s`。
+形式化陈述：ker_ofAlgEquiv (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R 
+T] (e : S ≃ₐ[R] T) : (P.ofAlgEquiv e).ker = P.ker
+参数：P : Generators R S ι；e : S ≃ₐ[R] T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Algebra.Generators.ker_eq_ker_aeval_val`：ker_eq_ker_aeval_val : P.ker = 
+RingHom.ker (aeval P.val)
+· 使用引理 `Algebra.Generators.ofAlgEquiv_val`：ofAlgEquiv_val (P : Generators R S ι)
+ {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T) : (P.ofAlgEquiv e).val =
+ e ∘ P.val
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgHom.coe_coe`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSem
+iring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [i
+nst_…
+· 使用定理 `MvPolynomial.comp_aeval`：comp_aeval {B : Type*} [CommSemiring B] [Algebr
+a R B] (φ : S₁ ->ₐ[R] B) : φ.comp (aeval f) = aeval fun i => φ (f i)
+· 使用引理 `AlgHom.comap_ker`：comap_ker {C : Type*} [Semiring C] [Algebra R C] (f : 
+B ->ₐ[R] C) (g : A ->ₐ[R] B) : (RingHom.ker f).comap g = RingHom.ker (f.comp g)
+· 使用定理 `RingHom.ker_coe_toRingHom`：ker_coe_toRingHom : ker (f : R ->+* S) = ker 
+f
+· 使用引理 `AlgHomClass.toRingHom_toAlgHom`：toRingHom_toAlgHom {R A B : Type*} [Comm
+Semiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] {F : Type*} [F
+unLike F A B] [AlgHo…
+· 使用定理 `AlgHom.ker_coe_equiv`：∀ {R : Type u_2} {A : Type u_3} {B : Type u_4} [in
+st : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Alg
+ebra R A] …
+· 使用定理 `RingHom.ker_eq_comap_bot`：ker_eq_comap_bot (f : F) : ker f = Ideal.comap
+ f ⊥
 -/
 lemma ker_ofAlgEquiv (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T) :
     (P.ofAlgEquiv e).ker = P.ker := by
-  rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq_ker_aeval_val]
+  rw [ker_eq_ker_aeval_val, ofAlgEquiv_val, Function.comp_def, ← AlgHom.coe_coe,
+    ← MvPolynomial.comp_aeval, ← AlgHom.comap_ker, ← RingHom.ker_coe_toRingHom,
+    AlgHomClass.toRingHom_toAlgHom, AlgHom.ker_coe_equiv, ← RingHom.ker_eq_comap_bot,
+    ← ker_eq_ker_aeval_val]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `map_toComp_ker` / 引理 `map_toComp_ker`
-
-English:
-lemma map_toComp_ker
-  given: (Q : Generators S T ι') (P : Generators R S ι)
-  proof: by
-  let : DecidableEq (ι' ->₀ Nat) := Classical.decEq _
-  apply le_antisymm
-  · rw [Ideal.map_le_iff_le_comap]
-    rintro x (hx : algebraMap P.Ring S x = 0)
-    have : (Q.ofComp P).toAlgHom.comp (Q.toComp P).toAlgHom = IsScalarTower.toAlgHom R _ _ := by
-      ext1; simp
-    simp only [Ideal.mem_comap,
-      RingHom.mem_ker, ← AlgHom.comp_apply, this, IsScalarTower.toAlgHom_apply]
-    rw [IsScalarTower.algebraMap_apply P.Ring S]; rw [hx]; rw [map_zero]
-  · rintro x (h₂ : (Q.ofComp P).toAlgHom x = 0)
-    let e : (ι' oplus ι ->₀ Nat) ≃+ (ι' ->₀ Nat) × (ι ->₀ Nat) :=
-      Finsupp.sumFinsuppAddEquivProdFinsupp
-    suffices ∑ v in (support x).map e, (monomial (e.symm v)) (coeff (e.symm v) x) in
-        Ideal.map (Q.toComp P).toAlgHom.toRingHom P.ker by
-      simpa only [AlgHom.toRingHom_eq_coe, Finset.sum_map, Equiv.coe_toEmbedding,
-        EquivLike.coe_coe, AddEquiv.symm_apply_apply, support_sum_monomial_coeff] using! this
-    rw [← Finset.sum_fiberwise_of_maps_to (fun i => Finset.mem_image_of_mem Prod.fst)]
-    refine sum_mem fun i hi => ?_
-    convert_to monomial (e.symm (i, 0)) 1 * (Q.toComp P).toAlgHom.toRingHom
-      (∑ j in (support x).map e.toEmbedding with j.1 = i, monomial j.2 (coeff (e.symm j) x)) in _
-    · rw [map_sum, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun j hj => ?_
-      obtain rfl := (Finset.mem_filter.mp hj).2
-      obtain ⟨i, j⟩ := j
-      clear hj hi
-      have : (Q.toComp P).toAlgHom (monomial j (coeff (e.symm (i, j)) x)) =
-          monomial (e.symm (0, j)) (coeff (e.symm (i, j)) x) :=
-        toComp_toAlgHom_monomial ..
-      simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe,
-          this]
-      rw [monomial_mul]; rw [← map_add]; rw [Prod.mk_add_mk]; rw [add_zero]; rw [zero_add]; rw [one_mul]
-    · apply Ideal.mul_mem_left
-      refine Ideal.mem_map_of_mem _ ?_
-      simp only [ker_eq_ker_aeval_val, AddEquiv.toEquiv_eq_coe, RingHom.mem_ker, map_sum]
-      rw [← coeff_zero i]; rw [← h₂]
-      clear h₂ hi
-      have (x : (Q.comp P).Ring) : (Function.support fun a => if a.1 = i then aeval P.val
-          (monomial a.2 (coeff (e.symm a) x)) else 0) subseteq SetLike.coe ((support x).map e) := by
-        rw [← Set.compl_subset_compl]
-        intro j
-        obtain ⟨j, rfl⟩ := e.surjective j
-        simp_all
-      rw [Finset.sum_filter]; rw [← finsum_eq_sum_of_support_subset _ (this x)]
-      induction x using MvPolynomial.induction_on' with
-      | monomial v a =>
-        rw [finsum_eq_sum_of_support_subset _ (this _)]; rw [← Finset.sum_filter]
-        obtain ⟨v, rfl⟩ := e.symm.surjective v
-        -- Rewrite `e` in the right-hand side only.
-        conv_rhs => simp only [e, Finsupp.sumFinsuppAddEquivProdFinsupp,
-          Finsupp.sumFinsuppEquivProdFinsupp, AddEquiv.symm_mk, AddEquiv.coe_mk,
-          Equiv.coe_fn_symm_mk, ofComp_toAlgHom_monomial_sumElim]
-        classical
-        simp only [coeff_monomial, ← e.injective.eq_iff,
-          map_zero, AddEquiv.apply_symm_apply, apply_ite]
-        rw [← apply_ite]; rw [Finset.sum_ite_eq]
-        simp only [Finset.mem_filter, Finset.mem_map_equiv, AddEquiv.coe_toEquiv_symm,
-          mem_support_iff, coeff_monomial, ↓reduceIte, ne_eq, ite_and, ite_not]
-        split
-        · simp only [*, map_zero, ite_self]
-        · congr
-      | add p q hp hq =>
-        simp only [coeff_add, map_add, ite_add_zero]
-        rw [finsum_add_distrib]; rw [hp]; rw [hq]
-        · refine (((support p).map e).finite_toSet.subset ?_)
-          convert! this p
-        · refine (((support q).map e).finite_toSet.subset ?_)
-          convert! this q
-
-中文:
-引理 map_toComp_ker
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
-  证明: by
-  let : DecidableEq (ι' ->₀ Nat) := Classical.decEq _
-  apply le_antisymm
-  · rw [Ideal.map_le_iff_le_comap]
-    rintro x (hx : algebraMap P.Ring S x = 0)
-    have : (Q.ofComp P).toAlgHom.comp (Q.toComp P).toAlgHom = IsScalarTower.toAlgHom R _ _ := by
-      ext1; simp
-    simp only [Ideal.mem_comap,
-      RingHom.mem_ker, ← AlgHom.comp_apply, this, IsScalarTower.toAlgHom_apply]
-    rw [IsScalarTower.algebraMap_apply P.Ring S]; rw [hx]; rw [map_zero]
-  · rintro x (h₂ : (Q.ofComp P).toAlgHom x = 0)
-    let e : (ι' oplus ι ->₀ Nat) ≃+ (ι' ->₀ Nat) × (ι ->₀ Nat) :=
-      Finsupp.sumFinsuppAddEquivProdFinsupp
-    suffices ∑ v in (support x).map e, (monomial (e.symm v)) (coeff (e.symm v) x) in
-        Ideal.map (Q.toComp P).toAlgHom.toRingHom P.ker by
-      simpa only [AlgHom.toRingHom_eq_coe, Finset.sum_map, Equiv.coe_toEmbedding,
-        EquivLike.coe_coe, AddEquiv.symm_apply_apply, support_sum_monomial_coeff] using! this
-    rw [← Finset.sum_fiberwise_of_maps_to (fun i => Finset.mem_image_of_mem Prod.fst)]
-    refine sum_mem fun i hi => ?_
-    convert_to monomial (e.symm (i, 0)) 1 * (Q.toComp P).toAlgHom.toRingHom
-      (∑ j in (support x).map e.toEmbedding with j.1 = i, monomial j.2 (coeff (e.symm j) x)) in _
-    · rw [map_sum, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun j hj => ?_
-      obtain rfl := (Finset.mem_filter.mp hj).2
-      obtain ⟨i, j⟩ := j
-      clear hj hi
-      have : (Q.toComp P).toAlgHom (monomial j (coeff (e.symm (i, j)) x)) =
-          monomial (e.symm (0, j)) (coeff (e.symm (i, j)) x) :=
-        toComp_toAlgHom_monomial ..
-      simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe,
-          this]
-      rw [monomial_mul]; rw [← map_add]; rw [Prod.mk_add_mk]; rw [add_zero]; rw [zero_add]; rw [one_mul]
-    · apply Ideal.mul_mem_left
-      refine Ideal.mem_map_of_mem _ ?_
-      simp only [ker_eq_ker_aeval_val, AddEquiv.toEquiv_eq_coe, RingHom.mem_ker, map_sum]
-      rw [← coeff_zero i]; rw [← h₂]
-      clear h₂ hi
-      have (x : (Q.comp P).Ring) : (Function.support fun a => if a.1 = i then aeval P.val
-          (monomial a.2 (coeff (e.symm a) x)) else 0) subseteq SetLike.coe ((support x).map e) := by
-        rw [← Set.compl_subset_compl]
-        intro j
-        obtain ⟨j, rfl⟩ := e.surjective j
-        simp_all
-      rw [Finset.sum_filter]; rw [← finsum_eq_sum_of_support_subset _ (this x)]
-      induction x using MvPolynomial.induction_on' with
-      | monomial v a =>
-        rw [finsum_eq_sum_of_support_subset _ (this _)]; rw [← Finset.sum_filter]
-        obtain ⟨v, rfl⟩ := e.symm.surjective v
-        -- Rewrite `e` in the right-hand side only.
-        conv_rhs => simp only [e, Finsupp.sumFinsuppAddEquivProdFinsupp,
-          Finsupp.sumFinsuppEquivProdFinsupp, AddEquiv.symm_mk, AddEquiv.coe_mk,
-          Equiv.coe_fn_symm_mk, ofComp_toAlgHom_monomial_sumElim]
-        classical
-        simp only [coeff_monomial, ← e.injective.eq_iff,
-          map_zero, AddEquiv.apply_symm_apply, apply_ite]
-        rw [← apply_ite]; rw [Finset.sum_ite_eq]
-        simp only [Finset.mem_filter, Finset.mem_map_equiv, AddEquiv.coe_toEquiv_symm,
-          mem_support_iff, coeff_monomial, ↓reduceIte, ne_eq, ite_and, ite_not]
-        split
-        · simp only [*, map_zero, ite_self]
-        · congr
-      | add p q hp hq =>
-        simp only [coeff_add, map_add, ite_add_zero]
-        rw [finsum_add_distrib]; rw [hp]; rw [hq]
-        · refine (((support p).map e).finite_toSet.subset ?_)
-          convert! this p
-        · refine (((support q).map e).finite_toSet.subset ?_)
-          convert! this q
-
-Depends on / 依赖: AlgHom, AlgHom.comp_apply, Classical, Classical.decEq, DecidableEq, Ideal.map_le_iff_le_comap, Ideal.mem_comap, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.toAlgHom, IsScalarTower.toAlgHom_apply, P.Ring, Q.ofComp, Q.toComp, RingHom, RingHom.mem_ker, algebraMap, algebraMap_apply, comp_apply, le_antisymm
+/-
+**Algebra.Generators.map_toComp_ker** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generator
+s`。
+形式化陈述：map_toComp_ker (Q : Generators S T ι') (P : Generators R S ι) : P.ker.map 
+(Q.toComp P).toAlgHom = RingHom.ker (Q.ofComp P).toAlgHom
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.map_le_iff_le_comap`：map_le_iff_le_comap [RingHomClass F R S] : ma
+p f I <= K ↔ I <= comap f K
+· 使用定理 `AddMonoidAlgebra.isScalarTower`：∀ {R : Type u_1} {M : Type u_4} {N : Typ
+e u_5} {O : Type u_6} [inst : Semiring R] [inst_1 : SMulZeroClass N R]   [inst_2
+ : SMulZeroClass O R…
+· 使用定理 `Algebra.Generators.instIsScalarTowerRing`：∀ {R : Type u} {S : Type v} {ι
+ : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P
+ : Algebra.Generators R S ι) {…
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_X`：∀ {R : Type u} {S : Type v} {ι : Type
+ w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Alge
+bra.Generators R S ι} {…
+· 使用定理 `Algebra.Generators.toComp_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {ι' : Type u_
+3} {T : Type u_7} […
+· 使用定理 `Algebra.Generators.ofComp_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {ι' : Type u_
+3} {T : Type u_7} […
+· 使用引理 `Algebra.Generators.algebraMap_apply`：algebraMap_apply (x) : algebraMap P
+.Ring S x = aeval (R
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_fiberwise_of_maps_to`：∀ {ι : Type u_1} {κ : Type u_2} {M : Ty
+pe u_4} [inst : AddCommMonoid M] {s : Finset ι} {t : Finset κ}   [inst_1 : Decid
+ableEq κ] {g : ι → κ}…
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+（共 96 条，此处仅展示前 30 条）
 -/
 lemma map_toComp_ker (Q : Generators S T ι') (P : Generators R S ι) :
     P.ker.map (Q.toComp P).toAlgHom = RingHom.ker (Q.ofComp P).toAlgHom := by
-  let : DecidableEq (ι' ->₀ Nat) := Classical.decEq _
+  let : DecidableEq (ι' →₀ ℕ) := Classical.decEq _
   apply le_antisymm
   · rw [Ideal.map_le_iff_le_comap]
     rintro x (hx : algebraMap P.Ring S x = 0)
@@ -2224,20 +1928,20 @@ lemma map_toComp_ker (Q : Generators S T ι') (P : Generators R S ι) :
       ext1; simp
     simp only [Ideal.mem_comap,
       RingHom.mem_ker, ← AlgHom.comp_apply, this, IsScalarTower.toAlgHom_apply]
-    rw [IsScalarTower.algebraMap_apply P.Ring S]; rw [hx]; rw [map_zero]
+    rw [IsScalarTower.algebraMap_apply P.Ring S, hx, map_zero]
   · rintro x (h₂ : (Q.ofComp P).toAlgHom x = 0)
-    let e : (ι' oplus ι ->₀ Nat) ≃+ (ι' ->₀ Nat) × (ι ->₀ Nat) :=
+    let e : (ι' ⊕ ι →₀ ℕ) ≃+ (ι' →₀ ℕ) × (ι →₀ ℕ) :=
       Finsupp.sumFinsuppAddEquivProdFinsupp
-    suffices ∑ v in (support x).map e, (monomial (e.symm v)) (coeff (e.symm v) x) in
+    suffices ∑ v ∈ (support x).map e, (monomial (e.symm v)) (coeff (e.symm v) x) ∈
         Ideal.map (Q.toComp P).toAlgHom.toRingHom P.ker by
       simpa only [AlgHom.toRingHom_eq_coe, Finset.sum_map, Equiv.coe_toEmbedding,
         EquivLike.coe_coe, AddEquiv.symm_apply_apply, support_sum_monomial_coeff] using! this
-    rw [← Finset.sum_fiberwise_of_maps_to (fun i => Finset.mem_image_of_mem Prod.fst)]
-    refine sum_mem fun i hi => ?_
+    rw [← Finset.sum_fiberwise_of_maps_to (fun i ↦ Finset.mem_image_of_mem Prod.fst)]
+    refine sum_mem fun i hi ↦ ?_
     convert_to monomial (e.symm (i, 0)) 1 * (Q.toComp P).toAlgHom.toRingHom
-      (∑ j in (support x).map e.toEmbedding with j.1 = i, monomial j.2 (coeff (e.symm j) x)) in _
+      (∑ j ∈ (support x).map e.toEmbedding with j.1 = i, monomial j.2 (coeff (e.symm j) x)) ∈ _
     · rw [map_sum, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun j hj => ?_
+      refine Finset.sum_congr rfl fun j hj ↦ ?_
       obtain rfl := (Finset.mem_filter.mp hj).2
       obtain ⟨i, j⟩ := j
       clear hj hi
@@ -2246,22 +1950,22 @@ lemma map_toComp_ker (Q : Generators S T ι') (P : Generators R S ι) :
         toComp_toAlgHom_monomial ..
       simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe,
           this]
-      rw [monomial_mul]; rw [← map_add]; rw [Prod.mk_add_mk]; rw [add_zero]; rw [zero_add]; rw [one_mul]
+      rw [monomial_mul, ← map_add, Prod.mk_add_mk, add_zero, zero_add, one_mul]
     · apply Ideal.mul_mem_left
       refine Ideal.mem_map_of_mem _ ?_
       simp only [ker_eq_ker_aeval_val, AddEquiv.toEquiv_eq_coe, RingHom.mem_ker, map_sum]
-      rw [← coeff_zero i]; rw [← h₂]
+      rw [← coeff_zero i, ← h₂]
       clear h₂ hi
-      have (x : (Q.comp P).Ring) : (Function.support fun a => if a.1 = i then aeval P.val
-          (monomial a.2 (coeff (e.symm a) x)) else 0) subseteq SetLike.coe ((support x).map e) := by
+      have (x : (Q.comp P).Ring) : (Function.support fun a ↦ if a.1 = i then aeval P.val
+          (monomial a.2 (coeff (e.symm a) x)) else 0) ⊆ SetLike.coe ((support x).map e) := by
         rw [← Set.compl_subset_compl]
         intro j
         obtain ⟨j, rfl⟩ := e.surjective j
         simp_all
-      rw [Finset.sum_filter]; rw [← finsum_eq_sum_of_support_subset _ (this x)]
+      rw [Finset.sum_filter, ← finsum_eq_sum_of_support_subset _ (this x)]
       induction x using MvPolynomial.induction_on' with
       | monomial v a =>
-        rw [finsum_eq_sum_of_support_subset _ (this _)]; rw [← Finset.sum_filter]
+        rw [finsum_eq_sum_of_support_subset _ (this _), ← Finset.sum_filter]
         obtain ⟨v, rfl⟩ := e.symm.surjective v
         -- Rewrite `e` in the right-hand side only.
         conv_rhs => simp only [e, Finsupp.sumFinsuppAddEquivProdFinsupp,
@@ -2270,7 +1974,7 @@ lemma map_toComp_ker (Q : Generators S T ι') (P : Generators R S ι) :
         classical
         simp only [coeff_monomial, ← e.injective.eq_iff,
           map_zero, AddEquiv.apply_symm_apply, apply_ite]
-        rw [← apply_ite]; rw [Finset.sum_ite_eq]
+        rw [← apply_ite, Finset.sum_ite_eq]
         simp only [Finset.mem_filter, Finset.mem_map_equiv, AddEquiv.coe_toEquiv_symm,
           mem_support_iff, coeff_monomial, ↓reduceIte, ne_eq, ite_and, ite_not]
         split
@@ -2278,7 +1982,7 @@ lemma map_toComp_ker (Q : Generators S T ι') (P : Generators R S ι) :
         · congr
       | add p q hp hq =>
         simp only [coeff_add, map_add, ite_add_zero]
-        rw [finsum_add_distrib]; rw [hp]; rw [hq]
+        rw [finsum_add_distrib, hp, hq]
         · refine (((support p).map e).finite_toSet.subset ?_)
           convert! this p
         · refine (((support q).map e).finite_toSet.subset ?_)
@@ -2289,50 +1993,18 @@ Given `R[X] → S` and `S[Y] → T`, this is the lift of an element in `ker(S[Y]
 to `ker(R[X][Y] → S[Y] → T)` constructed from `P.σ`.
 -/
 noncomputable
-/--
-Definition of `kerCompPreimage` / `kerCompPreimage` 的定义
-
-English:
-definition kerCompPreimage
-  signature: (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker)
-  body: by
-  refine ⟨(AddMonoidAlgebra.coeff x.1).sum fun n r => ?_, ?_⟩
-  · -- The use of `refine` is intentional to control the elaboration order
-    -- so that the term has type `(Q.comp P).Ring` and not `MvPolynomial (Q.ι ⊕ P.ι) R`
-    refine rename ?_ (P.σ r) * monomial ?_ 1
-    exacts [Sum.inr, n.mapDomain Sum.inl]
-  · simp only [ker_eq_ker_aeval_val, RingHom.mem_ker]
-    conv_rhs => rw [← aeval_val_eq_zero x.2, ← x.1.support_sum_monomial_coeff]
-    simp only [Finsupp.sum, map_sum, map_mul, aeval_rename, Function.comp_def, comp_val,
-      Sum.elim_inr, aeval_monomial, map_one, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
-      Sum.elim_inl, one_mul]
-    congr! with v i
-    simp_rw [← IsScalarTower.toAlgHom_apply R, ← comp_aeval, AlgHom.comp_apply, P.aeval_val_σ,
-      coeff]
-
-中文:
-定义 kerCompPreimage
-  签名: (Q : 生成元 S T ι') (P : 生成元 R S ι) (x : Q.ker)
-  定义体: by
-  refine ⟨(AddMonoidAlgebra.coeff x.1).sum fun n r => ?_, ?_⟩
-  · -- The use of `refine` is intentional to control the elaboration order
-    -- so that the term has type `(Q.comp P).Ring` and not `MvPolynomial (Q.ι ⊕ P.ι) R`
-    refine rename ?_ (P.σ r) * monomial ?_ 1
-    exacts [Sum.inr, n.mapDomain Sum.inl]
-  · simp only [ker_eq_ker_aeval_val, RingHom.mem_ker]
-    conv_rhs => rw [← aeval_val_eq_zero x.2, ← x.1.support_sum_monomial_coeff]
-    simp only [Finsupp.sum, map_sum, map_mul, aeval_rename, Function.comp_def, comp_val,
-      Sum.elim_inr, aeval_monomial, map_one, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
-      Sum.elim_inl, one_mul]
-    congr! with v i
-    simp_rw [← IsScalarTower.toAlgHom_apply R, ← comp_aeval, AlgHom.comp_apply, P.aeval_val_σ,
-      coeff]
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeff, control, elaboration, intentional
+/-
+**Algebra.Generators.kerCompPreimage** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Generato
+rs`。
+形式化陈述：kerCompPreimage (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker)
+ : (Q.comp P).ker
+参数：Q : Generators S T ι'；P : Generators R S ι；x : Q.ker。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def kerCompPreimage (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker) :
     (Q.comp P).ker := by
-  refine ⟨(AddMonoidAlgebra.coeff x.1).sum fun n r => ?_, ?_⟩
+  refine ⟨(AddMonoidAlgebra.coeff x.1).sum fun n r ↦ ?_, ?_⟩
   · -- The use of `refine` is intentional to control the elaboration order
     -- so that the term has type `(Q.comp P).Ring` and not `MvPolynomial (Q.ι ⊕ P.ι) R`
     refine rename ?_ (P.σ r) * monomial ?_ 1
@@ -2347,89 +2019,136 @@ def kerCompPreimage (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker)
       coeff]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `ofComp_kerCompPreimage` / 引理 `ofComp_kerCompPreimage`
-
-English:
-lemma ofComp_kerCompPreimage
-  given: (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker)
-  proof: by
-  conv_rhs => rw [← x.1.support_sum_monomial_coeff]
-  rw [kerCompPreimage]; rw [map_finsuppSum]; rw [Finsupp.sum]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  simp only [map_mul, Hom.toAlgHom_monomial]
-  rw [one_smul]; rw [Finsupp.prod_mapDomain_index_inj Sum.inl_injective]
-  rw [rename_eq_aeval]; rw [← AlgHom.comp_apply]; rw [comp_aeval]
-  simp only [ofComp_val, Sum.elim_inr, Function.comp_apply,
-    Sum.elim_inl, monomial_eq, Hom.toAlgHom_X]
-  congr 1
-  rw [aeval_def]; rw [IsScalarTower.algebraMap_eq R S]; rw [← MvPolynomial.algebraMap_eq]; rw [← coe_eval₂Hom]; rw [← map_aeval]; rw [P.aeval_val_σ]
-  simp [coeff]
-
-中文:
-引理 ofComp_kerCompPreimage
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (x : Q.ker)
-  证明: by
-  conv_rhs => rw [← x.1.support_sum_monomial_coeff]
-  rw [kerCompPreimage]; rw [map_finsuppSum]; rw [Finsupp.sum]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  simp only [map_mul, Hom.toAlgHom_monomial]
-  rw [one_smul]; rw [Finsupp.prod_mapDomain_index_inj Sum.inl_injective]
-  rw [rename_eq_aeval]; rw [← AlgHom.comp_apply]; rw [comp_aeval]
-  simp only [ofComp_val, Sum.elim_inr, Function.comp_apply,
-    Sum.elim_inl, monomial_eq, Hom.toAlgHom_X]
-  congr 1
-  rw [aeval_def]; rw [IsScalarTower.algebraMap_eq R S]; rw [← MvPolynomial.algebraMap_eq]; rw [← coe_eval₂Hom]; rw [← map_aeval]; rw [P.aeval_val_σ]
-  simp [coeff]
-
-Depends on / 依赖: AlgHom, AlgHom.comp_apply, Finset, Finset.sum_congr, Finsupp, Finsupp.prod_mapDomain_index_inj, Finsupp.sum, Function, Function.comp_apply, Hom.toAlgHom_X, Hom.toAlgHom_monomial, IsScalarTower, IsScalarTower.algebraMap_eq, Sum.elim_inl, Sum.elim_inr, Sum.inl_injective, aeval_def, algebraMap_eq, comp_aeval, comp_apply
+/-
+**Algebra.Generators.ofComp_kerCompPreimage** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.G
+enerators`。
+形式化陈述：ofComp_kerCompPreimage (Q : Generators S T ι') (P : Generators R S ι) (x :
+ Q.ker) : (Q.ofComp P).toAlgHom (kerCompPreimage Q P x) = x
+参数：Q : Generators S T ι'；P : Generators R S ι；x : Q.ker。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPolynomial.support_sum_monomial_coeff`：support_sum_monomial_coeff (p :
+ MvPolynomial σ R) : ∑ v in p.support, monomial v (coeff v p) = p
+· 使用定理 `Algebra.Generators.kerCompPreimage.eq_1`：∀ {R : Type u} {S : Type v} {ι 
+: Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {ι'
+ : Type u_3} {T : Type u_7} […
+· 使用定理 `map_finsuppSum`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} {P : Typ
+e u_11} [inst : Zero M] [inst_1 : AddCommMonoid N]   [inst_2 : AddCommMonoid P] 
+{H :…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `Finsupp.sum.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst 
+: Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M) (g : α → M → N),   f.sum g = ∑
+ a ∈ f…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_monomial`：∀ {R : Type u} {S : Type v} {ι
+ : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P
+ : Algebra.Generators R S ι} {…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Finsupp.prod_mapDomain_index_inj`：prod_mapDomain_index_inj [CommMonoid N
+] {f : α -> β} {s : α ->₀ M} {h : β -> M -> N} (hf : Function.Injective f) : (s.
+mapDomain f).prod h = …
+· 使用定理 `Sum.inl_injective`：inl_injective : Function.Injective (inl : α -> α oplu
+s β)
+· 使用引理 `MvPolynomial.rename_eq_aeval`：rename_eq_aeval (f : σ -> τ) : rename (R
+· 使用定理 `AlgHom.comp_apply`：comp_apply (φ₁ : B ->ₐ[R] C) (φ₂ : A ->ₐ[R] B) (p : A
+) : φ₁.comp φ₂ p = φ₁ (φ₂ p)
+· 使用定理 `MvPolynomial.comp_aeval`：comp_aeval {B : Type*} [CommSemiring B] [Algebr
+a R B] (φ : S₁ ->ₐ[R] B) : φ.comp (aeval f) = aeval fun i => φ (f i)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Algebra.Generators.Hom.toAlgHom_X`：∀ {R : Type u} {S : Type v} {ι : Type
+ w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Alge
+bra.Generators R S ι} {…
+· 使用定理 `Algebra.Generators.ofComp_val`：∀ {R : Type u} {S : Type v} {ι : Type w} 
+[inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {ι' : Type u_
+3} {T : Type u_7} […
+· 使用定理 `MvPolynomial.monomial_eq`：monomial_eq : monomial s a = C a * (s.prod fun
+ n e => X n ^ e : MvPolynomial σ R)
+· 使用定理 `MvPolynomial.aeval_def`：aeval_def (p : MvPolynomial σ R) : aeval f p = e
+val₂ (algebraMap R S₁) f p
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
+· 使用定理 `AddMonoidAlgebra.isScalarTower`：∀ {R : Type u_1} {M : Type u_4} {N : Typ
+e u_5} {O : Type u_6} [inst : Semiring R] [inst_1 : SMulZeroClass N R]   [inst_2
+ : SMulZeroClass O R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+（共 36 条，此处仅展示前 30 条）
 -/
 lemma ofComp_kerCompPreimage (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker) :
     (Q.ofComp P).toAlgHom (kerCompPreimage Q P x) = x := by
   conv_rhs => rw [← x.1.support_sum_monomial_coeff]
-  rw [kerCompPreimage]; rw [map_finsuppSum]; rw [Finsupp.sum]
-  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [kerCompPreimage, map_finsuppSum, Finsupp.sum]
+  refine Finset.sum_congr rfl fun j _ ↦ ?_
   simp only [map_mul, Hom.toAlgHom_monomial]
-  rw [one_smul]; rw [Finsupp.prod_mapDomain_index_inj Sum.inl_injective]
-  rw [rename_eq_aeval]; rw [← AlgHom.comp_apply]; rw [comp_aeval]
+  rw [one_smul, Finsupp.prod_mapDomain_index_inj Sum.inl_injective]
+  rw [rename_eq_aeval, ← AlgHom.comp_apply, comp_aeval]
   simp only [ofComp_val, Sum.elim_inr, Function.comp_apply,
     Sum.elim_inl, monomial_eq, Hom.toAlgHom_X]
   congr 1
-  rw [aeval_def]; rw [IsScalarTower.algebraMap_eq R S]; rw [← MvPolynomial.algebraMap_eq]; rw [← coe_eval₂Hom]; rw [← map_aeval]; rw [P.aeval_val_σ]
+  rw [aeval_def, IsScalarTower.algebraMap_eq R S, ← MvPolynomial.algebraMap_eq,
+    ← coe_eval₂Hom, ← map_aeval, P.aeval_val_σ]
   simp [coeff]
-
-/--
-lemma `map_ofComp_ker` / 引理 `map_ofComp_ker`
-
-English:
-lemma map_ofComp_ker
-  given: (Q : Generators S T ι') (P : Generators R S ι)
-  proof: by
-  ext x
-  rw [Ideal.mem_map_iff_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
-  constructor
-  · rintro ⟨x, hx, rfl⟩
-    simp only [ker_eq_ker_aeval_val,
-      RingHom.mem_ker] at hx ⊢
-    rw [← hx]; rw [Hom.algebraMap_toAlgHom]; rw [algebraMap_self_apply]
-  · intro hx
-    exact ⟨_, (kerCompPreimage Q P ⟨x, hx⟩).2, ofComp_kerCompPreimage Q P ⟨x, hx⟩⟩
-
-中文:
-引理 map_ofComp_ker
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
-  证明: by
-  ext x
-  rw [Ideal.mem_map_iff_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
-  constructor
-  · rintro ⟨x, hx, rfl⟩
-    simp only [ker_eq_ker_aeval_val,
-      RingHom.mem_ker] at hx ⊢
-    rw [← hx]; rw [Hom.algebraMap_toAlgHom]; rw [algebraMap_self_apply]
-  · intro hx
-    exact ⟨_, (kerCompPreimage Q P ⟨x, hx⟩).2, ofComp_kerCompPreimage Q P ⟨x, hx⟩⟩
-
-Depends on / 依赖: Hom.algebraMap_toAlgHom, Ideal.mem_map_iff_of_surjective, RingHom, RingHom.mem_ker, algebraMap_self_apply, algebraMap_toAlgHom, kerCompPreimage, ker_eq_ker_aeval_val, mem_ker, mem_map_iff_of_surjective, ofComp_kerCompPreimage, toAlgHom_ofComp_surjective
+/-
+**Algebra.Generators.map_ofComp_ker** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generator
+s`。
+形式化陈述：map_ofComp_ker (Q : Generators S T ι') (P : Generators R S ι) : Ideal.map 
+(Q.ofComp P).toAlgHom (Q.comp P).ker = Q.ker
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mem_map_iff_of_surjective`：mem_map_iff_of_surjective {I : Ideal R}
+ {y} : y in map f I ↔ exists x, x in I ∧ f x = y
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用引理 `Algebra.Generators.toAlgHom_ofComp_surjective`：toAlgHom_ofComp_surjectiv
+e (Q : Generators S T ι') (P : Generators R S ι) : Function.Surjective (Q.ofComp
+ P).toAlgHom
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Algebra.Generators.ker_eq_ker_aeval_val`：ker_eq_ker_aeval_val : P.ker = 
+RingHom.ker (aeval P.val)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.Generators.Hom.algebraMap_toAlgHom`：∀ {R : Type u} {S : Type v} 
+{ι : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   
+{P : Algebra.Generators R S ι} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `Algebra.algebraMap_self_apply`：algebraMap_self_apply (x : R) : algebraMa
+p R R x = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用引理 `Algebra.Generators.ofComp_kerCompPreimage`：ofComp_kerCompPreimage (Q : G
+enerators S T ι') (P : Generators R S ι) (x : Q.ker) : (Q.ofComp P).toAlgHom (ke
+rCompPreimage Q P x) = x
 -/
 lemma map_ofComp_ker (Q : Generators S T ι') (P : Generators R S ι) :
     Ideal.map (Q.ofComp P).toAlgHom (Q.comp P).ker = Q.ker := by
@@ -2439,69 +2158,138 @@ lemma map_ofComp_ker (Q : Generators S T ι') (P : Generators R S ι) :
   · rintro ⟨x, hx, rfl⟩
     simp only [ker_eq_ker_aeval_val,
       RingHom.mem_ker] at hx ⊢
-    rw [← hx]; rw [Hom.algebraMap_toAlgHom]; rw [algebraMap_self_apply]
+    rw [← hx, Hom.algebraMap_toAlgHom, algebraMap_self_apply]
   · intro hx
     exact ⟨_, (kerCompPreimage Q P ⟨x, hx⟩).2, ofComp_kerCompPreimage Q P ⟨x, hx⟩⟩
-
-/--
-lemma `ker_comp_eq_sup` / 引理 `ker_comp_eq_sup`
-
-English:
-lemma ker_comp_eq_sup
-  given: (Q : Generators S T ι') (P : Generators R S ι)
-  proof: by
-  rw [← map_ofComp_ker Q P]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
-  rw [← sup_assoc]; rw [Algebra.Generators.map_toComp_ker]; rw [← RingHom.ker_eq_comap_bot]
-  apply le_antisymm (le_trans le_sup_right le_sup_left)
-  simp only [le_sup_left, sup_of_le_left, sup_le_iff, le_refl, and_true]
-  intro x hx
-  simp only [RingHom.mem_ker] at hx
-  rw [Generators.ker_eq_ker_aeval_val]; rw [RingHom.mem_ker]; rw [← algebraMap_self_apply (MvPolynomial.aeval _ x)]
-  rw [← Generators.Hom.algebraMap_toAlgHom (Q.ofComp P)]; rw [hx]; rw [map_zero]
-
-中文:
-引理 ker_comp_eq_sup
-  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
-  证明: by
-  rw [← map_ofComp_ker Q P]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
-  rw [← sup_assoc]; rw [Algebra.Generators.map_toComp_ker]; rw [← RingHom.ker_eq_comap_bot]
-  apply le_antisymm (le_trans le_sup_right le_sup_left)
-  simp only [le_sup_left, sup_of_le_left, sup_le_iff, le_refl, and_true]
-  intro x hx
-  simp only [RingHom.mem_ker] at hx
-  rw [Generators.ker_eq_ker_aeval_val]; rw [RingHom.mem_ker]; rw [← algebraMap_self_apply (MvPolynomial.aeval _ x)]
-  rw [← Generators.Hom.algebraMap_toAlgHom (Q.ofComp P)]; rw [hx]; rw [map_zero]
-
-Depends on / 依赖: Algebra, Algebra.Generators.map_toComp_ker, Generators, Generators.Hom.algeb, Generators.ker_eq_ker_aeval_val, Ideal.comap_map_of_surjective, MvPolynomial, MvPolynomial.aeval, RingHom, RingHom.ker_eq_comap_bot, RingHom.mem_ker, algebraMap_self_apply, and_true, comap_map_of_surjective, ker_eq_comap_bot, ker_eq_ker_aeval_val, le_antisymm, le_refl, le_sup_left, le_sup_right
+/-
+**Algebra.Generators.ker_comp_eq_sup** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Generato
+rs`。
+形式化陈述：ker_comp_eq_sup (Q : Generators S T ι') (P : Generators R S ι) : (Q.comp P
+).ker = Ideal.map (Q.toComp P).toAlgHom P.ker ⊔ Ideal.comap (Q.ofComp P).toAlgHo
+m Q.ker
+参数：Q : Generators S T ι'；P : Generators R S ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Algebra.Generators.map_ofComp_ker`：map_ofComp_ker (Q : Generators S T ι'
+) (P : Generators R S ι) : Ideal.map (Q.ofComp P).toAlgHom (Q.comp P).ker = Q.ke
+r
+· 使用定理 `Ideal.comap_map_of_surjective`：comap_map_of_surjective (hf : Function.Su
+rjective f) (I : Ideal R) : comap f (map f I) = I ⊔ comap f ⊥
+· 使用引理 `Algebra.Generators.toAlgHom_ofComp_surjective`：toAlgHom_ofComp_surjectiv
+e (Q : Generators S T ι') (P : Generators R S ι) : Function.Surjective (Q.ofComp
+ P).toAlgHom
+· 使用定理 `sup_assoc`：sup_assoc (a b c : α) : a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
+· 使用引理 `Algebra.Generators.map_toComp_ker`：map_toComp_ker (Q : Generators S T ι'
+) (P : Generators R S ι) : P.ker.map (Q.toComp P).toAlgHom = RingHom.ker (Q.ofCo
+mp P).toAlgHom
+· 使用定理 `RingHom.ker_eq_comap_bot`：ker_eq_comap_bot (f : F) : ker f = Ideal.comap
+ f ⊥
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用引理 `Algebra.Generators.ker_eq_ker_aeval_val`：ker_eq_ker_aeval_val : P.ker = 
+RingHom.ker (aeval P.val)
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用引理 `Algebra.algebraMap_self_apply`：algebraMap_self_apply (x : R) : algebraMa
+p R R x = x
+· 使用定理 `Algebra.Generators.Hom.algebraMap_toAlgHom`：∀ {R : Type u} {S : Type v} 
+{ι : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   
+{P : Algebra.Generators R S ι} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 lemma ker_comp_eq_sup (Q : Generators S T ι') (P : Generators R S ι) :
     (Q.comp P).ker =
       Ideal.map (Q.toComp P).toAlgHom P.ker ⊔ Ideal.comap (Q.ofComp P).toAlgHom Q.ker := by
-  rw [← map_ofComp_ker Q P]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
-  rw [← sup_assoc]; rw [Algebra.Generators.map_toComp_ker]; rw [← RingHom.ker_eq_comap_bot]
+  rw [← map_ofComp_ker Q P,
+    Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
+  rw [← sup_assoc, Algebra.Generators.map_toComp_ker, ← RingHom.ker_eq_comap_bot]
   apply le_antisymm (le_trans le_sup_right le_sup_left)
   simp only [le_sup_left, sup_of_le_left, sup_le_iff, le_refl, and_true]
   intro x hx
   simp only [RingHom.mem_ker] at hx
-  rw [Generators.ker_eq_ker_aeval_val]; rw [RingHom.mem_ker]; rw [← algebraMap_self_apply (MvPolynomial.aeval _ x)]
-  rw [← Generators.Hom.algebraMap_toAlgHom (Q.ofComp P)]; rw [hx]; rw [map_zero]
-
-/--
-lemma `toAlgHom_ofComp_localizationAway` / 引理 `toAlgHom_ofComp_localizationAway`
-
-English:
-lemma toAlgHom_ofComp_localizationAway
-  given: (g : S) [IsLocalization.Away g T]
-  proof: by
-  simp [Generators.Hom.toAlgHom, Generators.ofComp, aeval_rename]
-
-中文:
-引理 toAlgHom_ofComp_localizationAway
-  条件: (g : S) [是Localization.Away g T]
-  证明: by
-  simp [Generators.Hom.toAlgHom, Generators.ofComp, aeval_rename]
-
-Depends on / 依赖: Generators, Generators.Hom.toAlgHom, Generators.ofComp, aeval_rename, ofComp, toAlgHom
+  rw [Generators.ker_eq_ker_aeval_val, RingHom.mem_ker,
+    ← algebraMap_self_apply (MvPolynomial.aeval _ x)]
+  rw [← Generators.Hom.algebraMap_toAlgHom (Q.ofComp P), hx, map_zero]
+/-
+**Algebra.Generators.toAlgHom_ofComp_localizationAway** 是 Mathlib 中的一个引理，位于命名空间 
+`Algebra.Generators`。
+形式化陈述：toAlgHom_ofComp_localizationAway (g : S) [IsLocalization.Away g T] : ((loc
+alizationAway T g).ofComp P).toAlgHom (rename Sum.inr (P.σ g) * X (Sum.inl ()) -
+ 1) = C g * X () - 1
+参数：g : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `MvPolynomial.aeval_rename`：aeval_rename [Algebra R S] : aeval g (rename 
+k p) = aeval (g ∘ k) p
+· 使用引理 `MvPolynomial.aeval_C_comp_left`：aeval_C_comp_left {ι : Type*} (f : σ -> 
+A) (p : MvPolynomial σ R) : aeval (C (σ
+· 使用引理 `Algebra.Generators.aeval_val_σ`：aeval_val_σ (s) : aeval P.val (P.σ s) = 
+s
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toAlgHom_ofComp_localizationAway (g : S) [IsLocalization.Away g T] :
     ((localizationAway T g).ofComp P).toAlgHom
@@ -2520,22 +2308,16 @@ set_option backward.defeqAttrib.useBackward true in
 (given by `Generators.self R S`) to any extension `P` defined via the designated section `P.σ`. -/
 @[simps!]
 noncomputable
-/--
-Definition of `defaultHom` / `defaultHom` 的定义
-
-English:
-definition defaultHom
-  signature: (P : Extension.{w} R S)
-  body: .ofAlgHom (MvPolynomial.aeval P.σ) (by dsimp; ext; simp)
-
-中文:
-定义 defaultHom
-  签名: (P : 扩张.{w} R S)
-  定义体: .ofAlgHom (MvPolynomial.aeval P.σ) (by dsimp; ext; simp)
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.aeval, ofAlgHom
+/-
+**Algebra.Extension.defaultHom** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Extension`。
+形式化陈述：defaultHom (P : Extension.{w} R S) : (Generators.self R S).toExtension.Hom
+ P
+参数：P : Extension.{w} R S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def defaultHom (P : Extension.{w} R S) : (Generators.self R S).toExtension.Hom P :=
   .ofAlgHom (MvPolynomial.aeval P.σ) (by dsimp; ext; simp)
 
 end Algebra.Extension
+

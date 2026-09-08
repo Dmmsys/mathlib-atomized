@@ -38,28 +38,20 @@ variable {C : Type u₁} [Category.{v₁} C]
 
 namespace Monad
 
-/--
-Definition of `Algebra` / `Algebra` 的定义
+/-- An Eilenberg-Moore algebra for a monad `T`.
+cf Definition 5.2.3 in [Riehl][riehl2017]. -/
+/-
+**CategoryTheory.Monad.Algebra** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Monad`。
+形式化陈述：Algebra (T : Monad C) : Type max u₁ v₁ where /-- The underlying object ass
+ociated to an algebra. -/ A : C /-- The structure morphism associated to an alge
+bra. -/ a : (T : C ⥤ C).obj A ⟶ A /-- The unit axiom associated to an algebra. -
+/ unit : T.η.app A ≫ a = 𝟙 A
+参数：T : Monad C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Algebra
-  parameters: (T : Monad C)
-  axioms and operations (4):
-    - A : C
-    - a : (T : C ⥤ C).obj A ⟶ A
-    - unit : T.η.app A ≫ a = 𝟙 A  [default: by cat_disch]
-    - assoc : T.μ.app A ≫ a = (T : C ⥤ C).map a ≫ a  [default: by cat_disch]
-
-中文:
-结构 代数
-  参数: (T : 单子 C)
-  公理与运算 (4 个):
-    - A : C
-    - a : (T : C ⥤ C).obj A ⟶ A
-    - unit : T.η.app A ≫ a = 𝟙 A  [默认: by cat_disch]
-    - assoc : T.μ.app A ≫ a = (T : C ⥤ C).map a ≫ a  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+An Eilenberg-Moore algebra for a monad `T`.
+cf Definition 5.2.3 in [Riehl][riehl2017].
 -/
 structure Algebra (T : Monad C) : Type max u₁ v₁ where
   /-- The underlying object associated to an algebra. -/
@@ -79,24 +71,17 @@ variable {T : Monad C}
 
 /-- A morphism of Eilenberg–Moore algebras for the monad `T`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Monad.Algebra.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Mon
+ad.Algebra`。
+形式化陈述：Hom (A B : Algebra T) where /-- The underlying morphism associated to a mo
+rphism of algebras. -/ f : A.A ⟶ B.A /-- Compatibility with the structure morphi
+sm, for a morphism of algebras. -/ h : (T : C ⥤ C).map f ≫ B.a = A.a ≫ f
+参数：A B : Algebra T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (A B : Algebra T)
-  axioms and operations (2):
-    - f : A.A ⟶ B.A
-    - h : (T : C ⥤ C).map f ≫ B.a = A.a ≫ f  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (A B : 代数 T)
-  公理与运算 (2 个):
-    - f : A.A ⟶ B.A
-    - h : (T : C ⥤ C).map f ≫ B.a = A.a ≫ f  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism of Eilenberg–Moore algebras for the monad `T`.
 -/
 structure Hom (A B : Algebra T) where
   /-- The underlying morphism associated to a morphism of algebras. -/
@@ -108,61 +93,47 @@ attribute [reassoc (attr := simp)] Hom.h
 
 namespace Hom
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity homomorphism for an Eilenberg–Moore algebra. -/
+/-
+**CategoryTheory.Monad.Algebra.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Monad.Algebra.Hom`。
+形式化陈述：id (A : Algebra T) : Hom A A where f
+参数：A : Algebra T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (A : Algebra T)
-  body: 𝟙 A.A
-
-中文:
-定义 id
-  签名: (A : 代数 T)
-  定义体: 𝟙 A.A
+--- 原说明 ---
+The identity homomorphism for an Eilenberg–Moore algebra.
 -/
 def id (A : Algebra T) : Hom A A where f := 𝟙 A.A
-
+/-
+**CategoryTheory.Monad.Algebra.Hom.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mo
+nad.Algebra.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : Algebra T) : Inhabited (Hom A A) :=
   ⟨{ f := 𝟙 _ }⟩
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of Eilenberg–Moore algebra homomorphisms. -/
+/-
+**CategoryTheory.Monad.Algebra.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Monad.Algebra.Hom`。
+形式化陈述：comp {P Q R : Algebra T} (f : Hom P Q) (g : Hom Q R) : Hom P R where f
+参数：f : Hom P Q；g : Hom Q R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {P Q R : Algebra T} (f : Hom P Q) (g : Hom Q R)
-  body: f.f ≫ g.f
-
-中文:
-定义 comp
-  签名: {P Q R : 代数 T} (f : 态射 P Q) (g : 态射 Q R)
-  定义体: f.f ≫ g.f
+--- 原说明 ---
+Composition of Eilenberg–Moore algebra homomorphisms.
 -/
 def comp {P Q R : Algebra T} (f : Hom P Q) (g : Hom Q R) : Hom P R where f := f.f ≫ g.f
 
 end Hom
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryStruct (Algebra T)
-  body: Hom
-  id := Hom.id
-  comp := @Hom.comp _ _ _
-
-@[ext]
-
-中文:
-实例 :
-  签名: CategoryStruct (代数 T)
-  定义体: Hom
-  id := Hom.id
-  comp := @Hom.comp _ _ _
-
-@[ext]
+/-
+**CategoryTheory.Monad.Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Monad.
+Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryStruct (Algebra T) where
   Hom := Hom
@@ -170,126 +141,82 @@ instance : CategoryStruct (Algebra T) where
   comp := @Hom.comp _ _ _
 
 @[ext]
-/--
-lemma `Hom.ext'` / 引理 `Hom.ext'`
-
-English:
-lemma Hom.ext'
-  given: (X Y : Algebra T) (f g : X ⟶ Y) (h : f.f = g.f)
-  statement: f = g
-  proof: Hom.ext h
-
-@[simp]
-
-中文:
-引理 态射.ext'
-  条件: (X Y : 代数 T) (f g : X ⟶ Y) (h : f.f = g.f)
-  结论: f = g
-  证明: Hom.ext h
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.Monad.Algebra.Hom.ext'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Monad.Algebra.Hom`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {T : CategoryT
+heory.Monad C} (X Y : T.Algebra)   (f g : X ⟶ Y), f.f = g.f → f = g
+参数：X Y : T.Algebra；f g : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Monad.Algebra.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTh
+eory.Category.{v₁, u₁} C} {T : CategoryTheory.Monad C} {A B : T.Algebra}   {x y 
+: A.Hom B}, x.f = y.f → x …
 -/
 lemma Hom.ext' (X Y : Algebra T) (f g : X ⟶ Y) (h : f.f = g.f) : f = g := Hom.ext h
 
 @[simp]
-/--
-theorem `comp_eq_comp` / 定理 `comp_eq_comp`
-
-English:
-theorem comp_eq_comp
-  given: {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_eq_comp
-  条件: {A A' A'' : 代数 T} (f : A ⟶ A') (g : A' ⟶ A'')
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monad.Algebra.comp_eq_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Monad.Algebra`。
+形式化陈述：comp_eq_comp {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'') : Algebra.
+Hom.comp f g = f ≫ g
+参数：f : A ⟶ A'；g : A' ⟶ A''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_eq_comp {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'') :
     Algebra.Hom.comp f g = f ≫ g :=
   rfl
 
 @[simp]
-/--
-theorem `id_eq_id` / 定理 `id_eq_id`
-
-English:
-theorem id_eq_id
-  given: (A : Algebra T)
-  statement: Algebra.Hom.id A = 𝟙 A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_eq_id
-  条件: (A : 代数 T)
-  结论: 代数.态射.id A = 𝟙 A
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monad.Algebra.id_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Monad.Algebra`。
+形式化陈述：id_eq_id (A : Algebra T) : Algebra.Hom.id A = 𝟙 A
+参数：A : Algebra T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_eq_id (A : Algebra T) : Algebra.Hom.id A = 𝟙 A :=
   rfl
 
 @[simp]
-/--
-theorem `id_f` / 定理 `id_f`
-
-English:
-theorem id_f
-  given: (A : Algebra T)
-  statement: (𝟙 A : A ⟶ A).f = 𝟙 A.A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_f
-  条件: (A : 代数 T)
-  结论: (𝟙 A : A ⟶ A).f = 𝟙 A.A
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monad.Algebra.id_f** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Mo
+nad.Algebra`。
+形式化陈述：id_f (A : Algebra T) : (𝟙 A : A ⟶ A).f = 𝟙 A.A
+参数：A : Algebra T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_f (A : Algebra T) : (𝟙 A : A ⟶ A).f = 𝟙 A.A :=
   rfl
 
 @[simp]
-/--
-theorem `comp_f` / 定理 `comp_f`
-
-English:
-theorem comp_f
-  given: {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'')
-  statement: (f ≫ g).f = f.f ≫ g.f
-  proof: rfl
-
-中文:
-定理 comp_f
-  条件: {A A' A'' : 代数 T} (f : A ⟶ A') (g : A' ⟶ A'')
-  结论: (f ≫ g).f = f.f ≫ g.f
-  证明: rfl
+/-
+**CategoryTheory.Monad.Algebra.comp_f** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Monad.Algebra`。
+形式化陈述：comp_f {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'') : (f ≫ g).f = f.
+f ≫ g.f
+参数：f : A ⟶ A'；g : A' ⟶ A''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_f {A A' A'' : Algebra T} (f : A ⟶ A') (g : A' ⟶ A'') : (f ≫ g).f = f.f ≫ g.f :=
   rfl
 
-/--
-Instance `eilenbergMoore` / 实例 `eilenbergMoore`
+/-- The category of Eilenberg-Moore algebras for a monad.
+cf Definition 5.2.4 in [Riehl][riehl2017]. -/
+/-
+**CategoryTheory.Monad.Algebra.eilenbergMoore** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Monad.Algebra`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {T : C
+ategoryTheory.Monad C} → CategoryTheory.Category.{v₁, max u₁ v₁} T.Algebra
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance eilenbergMoore
-  signature: : Category (Algebra T) where
-
-中文:
-实例 eilenbergMoore
-  签名: : 范畴 (代数 T) where
+--- 原说明 ---
+The category of Eilenberg-Moore algebras for a monad.
+cf Definition 5.2.4 in [Riehl][riehl2017].
 -/
 instance eilenbergMoore : Category (Algebra T) where
 
@@ -298,30 +225,18 @@ To construct an isomorphism of algebras, it suffices to give an isomorphism of t
 commutes with the structure morphisms.
 -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.Monad.Algebra.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.M
+onad.Algebra`。
+形式化陈述：isoMk {A B : Algebra T} (h : A.A ≅ B.A) (w : (T : C ⥤ C).map h.hom ≫ B.a =
+ A.a ≫ h.hom
+参数：h : A.A ≅ B.A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {A B : Algebra T} (h : A.A ≅ B.A)
-  body: { f := h.hom }
-  inv :=
-    { f := h.inv
-      h := by
-        rw [h.eq_comp_inv]; rw [Category.assoc]; rw [← w]; rw [← Functor.map_comp_assoc]
-        simp }
-
-中文:
-定义 isoMk
-  签名: {A B : 代数 T} (h : A.A ≅ B.A)
-  定义体: { f := h.hom }
-  inv :=
-    { f := h.inv
-      h := by
-        rw [h.eq_comp_inv]; rw [Category.assoc]; rw [← w]; rw [← Functor.map_comp_assoc]
-        simp }
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp_assoc, cat_disch, eq_comp_inv, h.eq_comp_inv, h.hom, h.inv, map_comp_assoc
+--- 原说明 ---
+To construct an isomorphism of algebras, it suffices to give an isomorphism of t
+he carriers which
+commutes with the structure morphisms.
 -/
 def isoMk {A B : Algebra T} (h : A.A ≅ B.A)
     (w : (T : C ⥤ C).map h.hom ≫ B.a = A.a ≫ h.hom := by cat_disch) : A ≅ B where
@@ -329,7 +244,7 @@ def isoMk {A B : Algebra T} (h : A.A ≅ B.A)
   inv :=
     { f := h.inv
       h := by
-        rw [h.eq_comp_inv]; rw [Category.assoc]; rw [← w]; rw [← Functor.map_comp_assoc]
+        rw [h.eq_comp_inv, Category.assoc, ← w, ← Functor.map_comp_assoc]
         simp }
 
 end Algebra
@@ -338,20 +253,15 @@ variable (T : Monad C)
 
 /-- The forgetful functor from the Eilenberg-Moore category, forgetting the algebraic structure. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.Monad.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Monad`。
+形式化陈述：forget : Algebra T ⥤ C where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : Algebra T ⥤ C where
-  body: A.A
-  map f := f.f
-
-中文:
-定义 forget
-  签名: : 代数 T ⥤ C where
-  定义体: A.A
-  map f := f.f
+--- 原说明 ---
+The forgetful functor from the Eilenberg-Moore category, forgetting the algebrai
+c structure.
 -/
 def forget : Algebra T ⥤ C where
   obj A := A.A
@@ -359,30 +269,15 @@ def forget : Algebra T ⥤ C where
 
 /-- The free functor from the Eilenberg-Moore category, constructing an algebra for any object. -/
 @[simps]
-/--
-Definition of `free` / `free` 的定义
+/-
+**CategoryTheory.Monad.free** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Monad`。
+形式化陈述：free : C ⥤ Algebra T where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition free
-  signature: : C ⥤ Algebra T where
-  body: { A := T.obj X
-      a := T.μ.app X
-      assoc := (T.assoc _).symm }
-  map f :=
-    { f := T.map f
-      h := T.μ.naturality _ }
-
-中文:
-定义 free
-  签名: : C ⥤ 代数 T where
-  定义体: { A := T.obj X
-      a := T.μ.app X
-      assoc := (T.assoc _).symm }
-  map f :=
-    { f := T.map f
-      h := T.μ.naturality _ }
-
-Depends on / 依赖: T.assoc, T.map, T.obj, naturality
+--- 原说明 ---
+The free functor from the Eilenberg-Moore category, constructing an algebra for 
+any object.
 -/
 def free : C ⥤ Algebra T where
   obj X :=
@@ -392,19 +287,9 @@ def free : C ⥤ Algebra T where
   map f :=
     { f := T.map f
       h := T.μ.naturality _ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: C] : Inhabited (Algebra T)
-  body: ⟨(free T).obj default⟩
-
-中文:
-实例 [可居
-  签名: C] : 可居 (代数 T)
-  定义体: ⟨(free T).obj default⟩
+/-
+**CategoryTheory.Monad.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Monad`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited C] : Inhabited (Algebra T) :=
   ⟨(free T).obj default⟩
@@ -416,44 +301,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The adjunction between the free and forgetful constructions for Eilenberg-Moore algebras for
   a monad. cf Lemma 5.2.8 of [Riehl][riehl2017]. -/
 @[simps! unit counit]
-/--
-Definition of `adj` / `adj` 的定义
+/-
+**CategoryTheory.Monad.adj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Monad`。
+形式化陈述：adj : T.free ⊣ T.forget
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adj
-  signature: : T.free ⊣ T.forget
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => T.η.app X ≫ f.f
-          invFun := fun f =>
-            { f := T.map f ≫ Y.a
-              h := by simp [← Y.assoc, ← T.μ.naturality_assoc] }
-          left_inv := fun f => by
-            ext
-            simp
-          right_inv := fun f => by
-            dsimp only [forget_obj]
-            rw [← T.η.naturality_assoc]; rw [Y.unit]
-            apply Category.comp_id } }
-
-中文:
-定义 adj
-  签名: : T.free ⊣ T.forget
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f => T.η.app X ≫ f.f
-          invFun := fun f =>
-            { f := T.map f ≫ Y.a
-              h := by simp [← Y.assoc, ← T.μ.naturality_assoc] }
-          left_inv := fun f => by
-            ext
-            simp
-          right_inv := fun f => by
-            dsimp only [forget_obj]
-            rw [← T.η.naturality_assoc]; rw [Y.unit]
-            apply Category.comp_id } }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Category, Category.comp_id, T.map, Y.assoc, Y.unit, comp_id, forget_obj, homEquiv, invFun, left_inv, mkOfHomEquiv, naturality_assoc, right_inv
+--- 原说明 ---
+The adjunction between the free and forgetful constructions for Eilenberg-Moore 
+algebras for
+  a monad. cf Lemma 5.2.8 of [Riehl][riehl2017].
 -/
 def adj : T.free ⊣ T.forget :=
   Adjunction.mkOfHomEquiv
@@ -467,114 +324,130 @@ def adj : T.free ⊣ T.forget :=
             simp
           right_inv := fun f => by
             dsimp only [forget_obj]
-            rw [← T.η.naturality_assoc]; rw [Y.unit]
+            rw [← T.η.naturality_assoc, Y.unit]
             apply Category.comp_id } }
 
-/--
-theorem `algebra_iso_of_iso` / 定理 `algebra_iso_of_iso`
+/-- Given an algebra morphism whose carrier part is an isomorphism, we get an algebra isomorphism.
+-/
+/-
+**CategoryTheory.Monad.algebra_iso_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Monad`。
+形式化陈述：algebra_iso_of_iso {A B : Algebra T} (f : A ⟶ B) [IsIso f.f] : IsIso f
+参数：f : A ⟶ B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Monad.Algebra.Hom.h`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {T : CategoryTheory.Monad C} {A B : T.Algebra}   (self :
+ A.Hom B),   CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Monad.Algebra.Hom.ext'`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {T : CategoryTheory.Monad C} (X Y : T.Algebra)   (f g
+ : X ⟶ Y), f.f = g.f → f = …
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
 
-English:
-theorem algebra_iso_of_iso
-  given: {A B : Algebra T} (f : A ⟶ B) [IsIso f.f]
-  statement: IsIso f
-  proof: ⟨⟨{ f := inv f.f, h := by simp }, by cat_disch⟩⟩
-
-中文:
-定理 algebra_iso_of_iso
-  条件: {A B : 代数 T} (f : A ⟶ B) [是同构 f.f]
-  结论: 是同构 f
-  证明: ⟨⟨{ f := inv f.f, h := by simp }, by cat_disch⟩⟩
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Given an algebra morphism whose carrier part is an isomorphism, we get an algebr
+a isomorphism.
 -/
 theorem algebra_iso_of_iso {A B : Algebra T} (f : A ⟶ B) [IsIso f.f] : IsIso f :=
   ⟨⟨{ f := inv f.f, h := by simp }, by cat_disch⟩⟩
-
-/--
-Instance `forget_reflects_iso` / 实例 `forget_reflects_iso`
-
-English:
-instance forget_reflects_iso
-  signature: : T.forget.ReflectsIsomorphisms where
-  body: algebra_iso_of_iso T f
-
-中文:
-实例 forget_reflects_iso
-  签名: : T.forget.反映同构 where
-  定义体: algebra_iso_of_iso T f
-
-Depends on / 依赖: algebra_iso_of_iso
+/-
+**CategoryTheory.Monad.forget_reflects_iso** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Monad`。
+形式化陈述：forget_reflects_iso : T.forget.ReflectsIsomorphisms where reflects {_ _} f
+ [IsIso f.f]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Monad.algebra_iso_of_iso`：algebra_iso_of_iso {A B : Algeb
+ra T} (f : A ⟶ B) [IsIso f.f] : IsIso f
 -/
 instance forget_reflects_iso : T.forget.ReflectsIsomorphisms where
   reflects {_ _} f [IsIso f.f] := algebra_iso_of_iso T f
-
-/--
-Instance `forget_faithful` / 实例 `forget_faithful`
-
-English:
-instance forget_faithful
-  signature: : T.forget.Faithful where
-
-中文:
-实例 forget_faithful
-  签名: : T.forget.忠实 where
+/-
+**CategoryTheory.Monad.forget_faithful** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Monad`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (T : CategoryT
+heory.Monad C), T.forget.Faithful
+参数：T : CategoryTheory.Monad C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Monad.Algebra.Hom.ext'`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {T : CategoryTheory.Monad C} (X Y : T.Algebra)   (f g
+ : X ⟶ Y), f.f = g.f → f = …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance forget_faithful : T.forget.Faithful where
 
-/--
-theorem `algebra_epi_of_epi` / 定理 `algebra_epi_of_epi`
+/-- Given an algebra morphism whose carrier part is an epimorphism, we get an algebra epimorphism.
+-/
+/-
+**CategoryTheory.Monad.algebra_epi_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Monad`。
+形式化陈述：algebra_epi_of_epi {X Y : Algebra T} (f : X ⟶ Y) [h : Epi f.f] : Epi f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.epi_of_epi_map`：epi_of_epi_map (F : C ⥤ D) [Refle
+ctsEpimorphisms F] {X Y : C} {f : X ⟶ Y} (h : Epi (F.map f)) : Epi f
+· 使用定理 `CategoryTheory.Functor.reflectsEpimorphisms_of_faithful`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Monad.forget_faithful`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] (T : CategoryTheory.Monad C), T.forget.Faithful
 
-English:
-theorem algebra_epi_of_epi
-  given: {X Y : Algebra T} (f : X ⟶ Y) [h : Epi f.f]
-  statement: Epi f
-  proof: (forget T).epi_of_epi_map h
-
-中文:
-定理 algebra_epi_of_epi
-  条件: {X Y : 代数 T} (f : X ⟶ Y) [h : 满态射 f.f]
-  结论: 满态射 f
-  证明: (forget T).epi_of_epi_map h
-
-Depends on / 依赖: epi_of_epi_map, forget
+--- 原说明 ---
+Given an algebra morphism whose carrier part is an epimorphism, we get an algebr
+a epimorphism.
 -/
 theorem algebra_epi_of_epi {X Y : Algebra T} (f : X ⟶ Y) [h : Epi f.f] : Epi f :=
   (forget T).epi_of_epi_map h
 
-/--
-theorem `algebra_mono_of_mono` / 定理 `algebra_mono_of_mono`
+/-- Given an algebra morphism whose carrier part is a monomorphism, we get an algebra monomorphism.
+-/
+/-
+**CategoryTheory.Monad.algebra_mono_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Monad`。
+形式化陈述：algebra_mono_of_mono {X Y : Algebra T} (f : X ⟶ Y) [h : Mono f.f] : Mono f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mono_of_mono_map`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Monad.forget_faithful`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] (T : CategoryTheory.Monad C), T.forget.Faithful
 
-English:
-theorem algebra_mono_of_mono
-  given: {X Y : Algebra T} (f : X ⟶ Y) [h : Mono f.f]
-  statement: Mono f
-  proof: (forget T).mono_of_mono_map h
-
-中文:
-定理 algebra_mono_of_mono
-  条件: {X Y : 代数 T} (f : X ⟶ Y) [h : 单态射 f.f]
-  结论: 单态射 f
-  证明: (forget T).mono_of_mono_map h
-
-Depends on / 依赖: forget, mono_of_mono_map
+--- 原说明 ---
+Given an algebra morphism whose carrier part is a monomorphism, we get an algebr
+a monomorphism.
 -/
 theorem algebra_mono_of_mono {X Y : Algebra T} (f : X ⟶ Y) [h : Mono f.f] : Mono f :=
   (forget T).mono_of_mono_map h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T.forget.IsRightAdjoint
-  body: ⟨T.free, ⟨T.adj⟩⟩
-
-中文:
-实例 :
-  签名: T.forget.是右伴随
-  定义体: ⟨T.free, ⟨T.adj⟩⟩
-
-Depends on / 依赖: T.adj, T.free
+/-
+**CategoryTheory.Monad.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Monad`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : T.forget.IsRightAdjoint :=
   ⟨T.free, ⟨T.adj⟩⟩
@@ -584,28 +457,19 @@ Given a monad morphism from `T₂` to `T₁`, we get a functor from the algebras
 `T₂`.
 -/
 @[simps]
-/--
-Definition of `algebraFunctorOfMonadHom` / `algebraFunctorOfMonadHom` 的定义
+/-
+**CategoryTheory.Monad.algebraFunctorOfMonadHom** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Monad`。
+形式化陈述：algebraFunctorOfMonadHom {T₁ T₂ : Monad C} (h : T₂ ⟶ T₁) : Algebra T₁ ⥤ Al
+gebra T₂ where obj A
+参数：h : T₂ ⟶ T₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraFunctorOfMonadHom
-  signature: {T₁ T₂ : Monad C} (h : T₂ ⟶ T₁)
-  body: { A := A.A
-      a := h.app A.A ≫ A.a
-      unit := by simp [A.unit]
-      assoc := by simp [A.assoc] }
-  map f := { f := f.f }
-
-中文:
-定义 algebraFunctorOfMonadHom
-  签名: {T₁ T₂ : 单子 C} (h : T₂ ⟶ T₁)
-  定义体: { A := A.A
-      a := h.app A.A ≫ A.a
-      unit := by simp [A.unit]
-      assoc := by simp [A.assoc] }
-  map f := { f := f.f }
-
-Depends on / 依赖: A.assoc, A.unit, h.app
+--- 原说明 ---
+Given a monad morphism from `T₂` to `T₁`, we get a functor from the algebras of 
+`T₁` to algebras of
+`T₂`.
 -/
 def algebraFunctorOfMonadHom {T₁ T₂ : Monad C} (h : T₂ ⟶ T₁) : Algebra T₁ ⥤ Algebra T₂ where
   obj A :=
@@ -621,20 +485,17 @@ set_option backward.defeqAttrib.useBackward true in
 The identity monad morphism induces the identity functor from the category of algebras to itself.
 -/
 @[simps (rhsMd := .default)]
-/--
-Definition of `algebraFunctorOfMonadHomId` / `algebraFunctorOfMonadHomId` 的定义
+/-
+**CategoryTheory.Monad.algebraFunctorOfMonadHomId** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Monad`。
+形式化陈述：algebraFunctorOfMonadHomId {T₁ : Monad C} : algebraFunctorOfMonadHom (𝟙 T₁
+) ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraFunctorOfMonadHomId
-  signature: {T₁ : Monad C}
-  body: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
-
-中文:
-定义 algebraFunctorOfMonadHomId
-  签名: {T₁ : 单子 C}
-  定义体: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
-
-Depends on / 依赖: Algebra, Algebra.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The identity monad morphism induces the identity functor from the category of al
+gebras to itself.
 -/
 def algebraFunctorOfMonadHomId {T₁ : Monad C} : algebraFunctorOfMonadHom (𝟙 T₁) ≅ 𝟭 _ :=
   NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
@@ -644,20 +505,19 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A composition of monad morphisms gives the composition of corresponding functors.
 -/
 @[simps (rhsMd := .default)]
-/--
-Definition of `algebraFunctorOfMonadHomComp` / `algebraFunctorOfMonadHomComp` 的定义
+/-
+**CategoryTheory.Monad.algebraFunctorOfMonadHomComp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Monad`。
+形式化陈述：algebraFunctorOfMonadHomComp {T₁ T₂ T₃ : Monad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ 
+T₃) : algebraFunctorOfMonadHom (f ≫ g) ≅ algebraFunctorOfMonadHom g ⋙ algebraFun
+ctorOfMonadHom f
+参数：f : T₁ ⟶ T₂；g : T₂ ⟶ T₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraFunctorOfMonadHomComp
-  signature: {T₁ T₂ T₃ : Monad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
-  body: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
-
-中文:
-定义 algebraFunctorOfMonadHomComp
-  签名: {T₁ T₂ T₃ : 单子 C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
-  定义体: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
-
-Depends on / 依赖: Algebra, Algebra.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+A composition of monad morphisms gives the composition of corresponding functors
+.
 -/
 def algebraFunctorOfMonadHomComp {T₁ T₂ T₃ : Monad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃) :
     algebraFunctorOfMonadHom (f ≫ g) ≅ algebraFunctorOfMonadHom g ⋙ algebraFunctorOfMonadHom f :=
@@ -670,20 +530,22 @@ We define it like this as opposed to using `eqToIso` so that the components are 
 lemmas about.
 -/
 @[simps (rhsMd := .default)]
-/--
-Definition of `algebraFunctorOfMonadHomEq` / `algebraFunctorOfMonadHomEq` 的定义
+/-
+**CategoryTheory.Monad.algebraFunctorOfMonadHomEq** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Monad`。
+形式化陈述：algebraFunctorOfMonadHomEq {T₁ T₂ : Monad C} {f g : T₁ ⟶ T₂} (h : f = g) :
+ algebraFunctorOfMonadHom f ≅ algebraFunctorOfMonadHom g
+参数：h : f = g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraFunctorOfMonadHomEq
-  signature: {T₁ T₂ : Monad C} {f g : T₁ ⟶ T₂} (h : f = g)
-  body: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
-
-中文:
-定义 algebraFunctorOfMonadHomEq
-  签名: {T₁ T₂ : 单子 C} {f g : T₁ ⟶ T₂} (h : f = g)
-  定义体: NatIso.ofComponents fun X => Algebra.isoMk (Iso.refl _)
-
-Depends on / 依赖: Algebra, Algebra.isoMk, Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+If `f` and `g` are two equal morphisms of monads, then the functors of algebras 
+induced by them
+are isomorphic.
+We define it like this as opposed to using `eqToIso` so that the components are 
+nicer to prove
+lemmas about.
 -/
 def algebraFunctorOfMonadHomEq {T₁ T₂ : Monad C} {f g : T₁ ⟶ T₂} (h : f = g) :
     algebraFunctorOfMonadHom f ≅ algebraFunctorOfMonadHom g :=
@@ -695,38 +557,20 @@ set_option backward.defeqAttrib.useBackward true in
 categories over `C`, that is, we have `algebraEquivOfIsoMonads h ⋙ forget = forget`.
 -/
 @[simps]
-/--
-Definition of `algebraEquivOfIsoMonads` / `algebraEquivOfIsoMonads` 的定义
+/-
+**CategoryTheory.Monad.algebraEquivOfIsoMonads** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Monad`。
+形式化陈述：algebraEquivOfIsoMonads {T₁ T₂ : Monad C} (h : T₁ ≅ T₂) : Algebra T₁ ≌ Alg
+ebra T₂ where functor
+参数：h : T₁ ≅ T₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraEquivOfIsoMonads
-  signature: {T₁ T₂ : Monad C} (h : T₁ ≅ T₂)
-  body: algebraFunctorOfMonadHom h.inv
-  inverse := algebraFunctorOfMonadHom h.hom
-  unitIso :=
-    algebraFunctorOfMonadHomId.symm ≪≫
-      algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomComp _ _
-  counitIso :=
-    (algebraFunctorOfMonadHomComp _ _).symm ≪≫
-      algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomId
-
-@[simp]
-
-中文:
-定义 algebraEquivOfIsoMonads
-  签名: {T₁ T₂ : 单子 C} (h : T₁ ≅ T₂)
-  定义体: algebraFunctorOfMonadHom h.inv
-  inverse := algebraFunctorOfMonadHom h.hom
-  unitIso :=
-    algebraFunctorOfMonadHomId.symm ≪≫
-      algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomComp _ _
-  counitIso :=
-    (algebraFunctorOfMonadHomComp _ _).symm ≪≫
-      algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomId
-
-@[simp]
-
-Depends on / 依赖: algebraFunctorOfMonadHom, h.inv
+--- 原说明 ---
+Isomorphic monads give equivalent categories of algebras. Furthermore, they are 
+equivalent as
+categories over `C`, that is, we have `algebraEquivOfIsoMonads h ⋙ forget = forg
+et`.
 -/
 def algebraEquivOfIsoMonads {T₁ T₂ : Monad C} (h : T₁ ≅ T₂) : Algebra T₁ ≌ Algebra T₂ where
   functor := algebraFunctorOfMonadHom h.inv
@@ -739,18 +583,14 @@ def algebraEquivOfIsoMonads {T₁ T₂ : Monad C} (h : T₁ ≅ T₂) : Algebra 
       algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomId
 
 @[simp]
-/--
-theorem `algebra_equiv_of_iso_monads_comp_forget` / 定理 `algebra_equiv_of_iso_monads_comp_forget`
-
-English:
-theorem algebra_equiv_of_iso_monads_comp_forget
-  given: {T₁ T₂ : Monad C} (h : T₁ ⟶ T₂)
-  proof: rfl
-
-中文:
-定理 algebra_equiv_of_iso_monads_comp_forget
-  条件: {T₁ T₂ : 单子 C} (h : T₁ ⟶ T₂)
-  证明: rfl
+/-
+**CategoryTheory.Monad.algebra_equiv_of_iso_monads_comp_forget** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Monad`。
+形式化陈述：algebra_equiv_of_iso_monads_comp_forget {T₁ T₂ : Monad C} (h : T₁ ⟶ T₂) : 
+algebraFunctorOfMonadHom h ⋙ forget _ = forget _
+参数：h : T₁ ⟶ T₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebra_equiv_of_iso_monads_comp_forget {T₁ T₂ : Monad C} (h : T₁ ⟶ T₂) :
     algebraFunctorOfMonadHom h ⋙ forget _ = forget _ :=
@@ -760,28 +600,19 @@ end Monad
 
 namespace Comonad
 
-/--
-Definition of `Coalgebra` / `Coalgebra` 的定义
+/-- An Eilenberg-Moore coalgebra for a comonad `T`. -/
+/-
+**CategoryTheory.Comonad.Coalgebra** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Com
+onad`。
+形式化陈述：Coalgebra (G : Comonad C) : Type max u₁ v₁ where /-- The underlying object
+ associated to a coalgebra. -/ A : C /-- The structure morphism associated to a 
+coalgebra. -/ a : A ⟶ (G : C ⥤ C).obj A /-- The counit axiom associated to a coa
+lgebra. -/ counit : a ≫ G.ε.app A = 𝟙 A
+参数：G : Comonad C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Coalgebra
-  parameters: (G : Comonad C)
-  axioms and operations (4):
-    - A : C
-    - a : A ⟶ (G : C ⥤ C).obj A
-    - counit : a ≫ G.ε.app A = 𝟙 A  [default: by cat_disch]
-    - coassoc : a ≫ G.δ.app A = a ≫ G.map a  [default: by cat_disch]
-
-中文:
-结构 余algebra
-  参数: (G : 余单子 C)
-  公理与运算 (4 个):
-    - A : C
-    - a : A ⟶ (G : C ⥤ C).obj A
-    - counit : a ≫ G.ε.app A = 𝟙 A  [默认: by cat_disch]
-    - coassoc : a ≫ G.δ.app A = a ≫ G.map a  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+An Eilenberg-Moore coalgebra for a comonad `T`.
 -/
 structure Coalgebra (G : Comonad C) : Type max u₁ v₁ where
   /-- The underlying object associated to a coalgebra. -/
@@ -802,24 +633,17 @@ variable {G : Comonad C}
 
 /-- A morphism of Eilenberg-Moore coalgebras for the comonad `G`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Comonad.Coalgebra.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory
+.Comonad.Coalgebra`。
+形式化陈述：Hom (A B : Coalgebra G) where /-- The underlying morphism associated to a 
+morphism of coalgebras. -/ f : A.A ⟶ B.A /-- Compatibility with the structure mo
+rphism, for a morphism of coalgebras. -/ h : A.a ≫ (G : C ⥤ C).map f = f ≫ B.a
+参数：A B : Coalgebra G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (A B : Coalgebra G)
-  axioms and operations (2):
-    - f : A.A ⟶ B.A
-    - h : A.a ≫ (G : C ⥤ C).map f = f ≫ B.a  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (A B : 余algebra G)
-  公理与运算 (2 个):
-    - f : A.A ⟶ B.A
-    - h : A.a ≫ (G : C ⥤ C).map f = f ≫ B.a  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism of Eilenberg-Moore coalgebras for the comonad `G`.
 -/
 structure Hom (A B : Coalgebra G) where
   /-- The underlying morphism associated to a morphism of coalgebras. -/
@@ -831,58 +655,44 @@ attribute [reassoc (attr := simp)] Hom.h
 
 namespace Hom
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity homomorphism for an Eilenberg–Moore coalgebra. -/
+/-
+**CategoryTheory.Comonad.Coalgebra.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Comonad.Coalgebra.Hom`。
+形式化陈述：id (A : Coalgebra G) : Hom A A where f
+参数：A : Coalgebra G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (A : Coalgebra G)
-  body: 𝟙 A.A
-
-中文:
-定义 id
-  签名: (A : 余algebra G)
-  定义体: 𝟙 A.A
+--- 原说明 ---
+The identity homomorphism for an Eilenberg–Moore coalgebra.
 -/
 def id (A : Coalgebra G) : Hom A A where f := 𝟙 A.A
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of Eilenberg–Moore coalgebra homomorphisms. -/
+/-
+**CategoryTheory.Comonad.Coalgebra.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Comonad.Coalgebra.Hom`。
+形式化陈述：comp {P Q R : Coalgebra G} (f : Hom P Q) (g : Hom Q R) : Hom P R where f
+参数：f : Hom P Q；g : Hom Q R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {P Q R : Coalgebra G} (f : Hom P Q) (g : Hom Q R)
-  body: f.f ≫ g.f
-
-中文:
-定义 comp
-  签名: {P Q R : 余algebra G} (f : 态射 P Q) (g : 态射 Q R)
-  定义体: f.f ≫ g.f
+--- 原说明 ---
+Composition of Eilenberg–Moore coalgebra homomorphisms.
 -/
 def comp {P Q R : Coalgebra G} (f : Hom P Q) (g : Hom Q R) : Hom P R where f := f.f ≫ g.f
 
 end Hom
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The category of Eilenberg-Moore coalgebras for a comonad. -/
+/-
+**CategoryTheory.Comonad.Coalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+monad.Coalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CategoryStruct (Coalgebra G)
-  body: Hom
-  id := Hom.id
-  comp := @Hom.comp _ _ _
-
-@[ext]
-
-中文:
-实例 :
-  签名: CategoryStruct (余algebra G)
-  定义体: Hom
-  id := Hom.id
-  comp := @Hom.comp _ _ _
-
-@[ext]
+--- 原说明 ---
+The category of Eilenberg-Moore coalgebras for a comonad.
 -/
 instance : CategoryStruct (Coalgebra G) where
   Hom := Hom
@@ -890,124 +700,80 @@ instance : CategoryStruct (Coalgebra G) where
   comp := @Hom.comp _ _ _
 
 @[ext]
-/--
-lemma `Hom.ext'` / 引理 `Hom.ext'`
-
-English:
-lemma Hom.ext'
-  given: (X Y : Coalgebra G) (f g : X ⟶ Y) (h : f.f = g.f)
-  statement: f = g
-  proof: Hom.ext h
-
-@[simp]
-
-中文:
-引理 态射.ext'
-  条件: (X Y : 余algebra G) (f g : X ⟶ Y) (h : f.f = g.f)
-  结论: f = g
-  证明: Hom.ext h
-
-@[simp]
+/-
+**CategoryTheory.Comonad.Coalgebra.Hom.ext'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Comonad.Coalgebra.Hom`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {G : CategoryT
+heory.Comonad C} (X Y : G.Coalgebra)   (f g : X ⟶ Y), f.f = g.f → f = g
+参数：X Y : G.Coalgebra；f g : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Comonad.Coalgebra.Hom.ext`：∀ {C : Type u₁} {inst : Catego
+ryTheory.Category.{v₁, u₁} C} {G : CategoryTheory.Comonad C} {A B : G.Coalgebra}
+   {x y : A.Hom B}, x.f = y.f …
 -/
 lemma Hom.ext' (X Y : Coalgebra G) (f g : X ⟶ Y) (h : f.f = g.f) : f = g := Hom.ext h
 
 @[simp]
-/--
-theorem `comp_eq_comp` / 定理 `comp_eq_comp`
-
-English:
-theorem comp_eq_comp
-  given: {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_eq_comp
-  条件: {A A' A'' : 余algebra G} (f : A ⟶ A') (g : A' ⟶ A'')
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Comonad.Coalgebra.comp_eq_comp** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Comonad.Coalgebra`。
+形式化陈述：comp_eq_comp {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'') : Coalge
+bra.Hom.comp f g = f ≫ g
+参数：f : A ⟶ A'；g : A' ⟶ A''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_eq_comp {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'') :
     Coalgebra.Hom.comp f g = f ≫ g :=
   rfl
 
 @[simp]
-/--
-theorem `id_eq_id` / 定理 `id_eq_id`
-
-English:
-theorem id_eq_id
-  given: (A : Coalgebra G)
-  statement: Coalgebra.Hom.id A = 𝟙 A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_eq_id
-  条件: (A : 余algebra G)
-  结论: 余algebra.态射.id A = 𝟙 A
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Comonad.Coalgebra.id_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Comonad.Coalgebra`。
+形式化陈述：id_eq_id (A : Coalgebra G) : Coalgebra.Hom.id A = 𝟙 A
+参数：A : Coalgebra G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_eq_id (A : Coalgebra G) : Coalgebra.Hom.id A = 𝟙 A :=
   rfl
 
 @[simp]
-/--
-theorem `id_f` / 定理 `id_f`
-
-English:
-theorem id_f
-  given: (A : Coalgebra G)
-  statement: (𝟙 A : A ⟶ A).f = 𝟙 A.A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_f
-  条件: (A : 余algebra G)
-  结论: (𝟙 A : A ⟶ A).f = 𝟙 A.A
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Comonad.Coalgebra.id_f** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Comonad.Coalgebra`。
+形式化陈述：id_f (A : Coalgebra G) : (𝟙 A : A ⟶ A).f = 𝟙 A.A
+参数：A : Coalgebra G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_f (A : Coalgebra G) : (𝟙 A : A ⟶ A).f = 𝟙 A.A :=
   rfl
 
 @[simp]
-/--
-theorem `comp_f` / 定理 `comp_f`
-
-English:
-theorem comp_f
-  given: {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'')
-  statement: (f ≫ g).f = f.f ≫ g.f
-  proof: rfl
-
-中文:
-定理 comp_f
-  条件: {A A' A'' : 余algebra G} (f : A ⟶ A') (g : A' ⟶ A'')
-  结论: (f ≫ g).f = f.f ≫ g.f
-  证明: rfl
+/-
+**CategoryTheory.Comonad.Coalgebra.comp_f** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Comonad.Coalgebra`。
+形式化陈述：comp_f {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'') : (f ≫ g).f = 
+f.f ≫ g.f
+参数：f : A ⟶ A'；g : A' ⟶ A''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_f {A A' A'' : Coalgebra G} (f : A ⟶ A') (g : A' ⟶ A'') : (f ≫ g).f = f.f ≫ g.f :=
   rfl
 
-/--
-Instance `eilenbergMoore` / 实例 `eilenbergMoore`
+/-- The category of Eilenberg-Moore coalgebras for a comonad. -/
+/-
+**CategoryTheory.Comonad.Coalgebra.eilenbergMoore** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Comonad.Coalgebra`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {G : C
+ategoryTheory.Comonad C} → CategoryTheory.Category.{v₁, max u₁ v₁} G.Coalgebra
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance eilenbergMoore
-  signature: : Category (Coalgebra G) where
-
-中文:
-实例 eilenbergMoore
-  签名: : 范畴 (余algebra G) where
+--- 原说明 ---
+The category of Eilenberg-Moore coalgebras for a comonad.
 -/
 instance eilenbergMoore : Category (Coalgebra G) where
 
@@ -1016,30 +782,18 @@ To construct an isomorphism of coalgebras, it suffices to give an isomorphism of
 commutes with the structure morphisms.
 -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.Comonad.Coalgebra.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Comonad.Coalgebra`。
+形式化陈述：isoMk {A B : Coalgebra G} (h : A.A ≅ B.A) (w : A.a ≫ (G : C ⥤ C).map h.hom
+ = h.hom ≫ B.a
+参数：h : A.A ≅ B.A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {A B : Coalgebra G} (h : A.A ≅ B.A)
-  body: { f := h.hom }
-  inv :=
-    { f := h.inv
-      h := by
-        rw [h.eq_inv_comp]; rw [← reassoc_of% w]; rw [← Functor.map_comp]
-        simp }
-
-中文:
-定义 isoMk
-  签名: {A B : 余algebra G} (h : A.A ≅ B.A)
-  定义体: { f := h.hom }
-  inv :=
-    { f := h.inv
-      h := by
-        rw [h.eq_inv_comp]; rw [← reassoc_of% w]; rw [← Functor.map_comp]
-        simp }
-
-Depends on / 依赖: Functor, Functor.map_comp, cat_disch, eq_inv_comp, h.eq_inv_comp, h.hom, h.inv, map_comp, reassoc_of
+--- 原说明 ---
+To construct an isomorphism of coalgebras, it suffices to give an isomorphism of
+ the carriers which
+commutes with the structure morphisms.
 -/
 def isoMk {A B : Coalgebra G} (h : A.A ≅ B.A)
     (w : A.a ≫ (G : C ⥤ C).map h.hom = h.hom ≫ B.a := by cat_disch) : A ≅ B where
@@ -1047,7 +801,7 @@ def isoMk {A B : Coalgebra G} (h : A.A ≅ B.A)
   inv :=
     { f := h.inv
       h := by
-        rw [h.eq_inv_comp]; rw [← reassoc_of% w]; rw [← Functor.map_comp]
+        rw [h.eq_inv_comp, ← reassoc_of% w, ← Functor.map_comp]
         simp }
 
 end Coalgebra
@@ -1057,20 +811,17 @@ variable (G : Comonad C)
 /-- The forgetful functor from the Eilenberg-Moore category, forgetting the coalgebraic
 structure. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.Comonad.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comona
+d`。
+形式化陈述：forget : Coalgebra G ⥤ C where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : Coalgebra G ⥤ C where
-  body: A.A
-  map f := f.f
-
-中文:
-定义 forget
-  签名: : 余algebra G ⥤ C where
-  定义体: A.A
-  map f := f.f
+--- 原说明 ---
+The forgetful functor from the Eilenberg-Moore category, forgetting the coalgebr
+aic
+structure.
 -/
 def forget : Coalgebra G ⥤ C where
   obj A := A.A
@@ -1079,30 +830,17 @@ def forget : Coalgebra G ⥤ C where
 /-- The cofree functor from the Eilenberg-Moore category, constructing a coalgebra for any
 object. -/
 @[simps]
-/--
-Definition of `cofree` / `cofree` 的定义
+/-
+**CategoryTheory.Comonad.cofree** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comona
+d`。
+形式化陈述：cofree : C ⥤ Coalgebra G where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cofree
-  signature: : C ⥤ Coalgebra G where
-  body: { A := G.obj X
-      a := G.δ.app X
-      coassoc := (G.coassoc _).symm }
-  map f :=
-    { f := G.map f
-      h := (G.δ.naturality _).symm }
-
-中文:
-定义 cofree
-  签名: : C ⥤ 余algebra G where
-  定义体: { A := G.obj X
-      a := G.δ.app X
-      coassoc := (G.coassoc _).symm }
-  map f :=
-    { f := G.map f
-      h := (G.δ.naturality _).symm }
-
-Depends on / 依赖: G.coassoc, G.map, G.obj, coassoc, naturality
+--- 原说明 ---
+The cofree functor from the Eilenberg-Moore category, constructing a coalgebra f
+or any
+object.
 -/
 def cofree : C ⥤ Coalgebra G where
   obj X :=
@@ -1120,44 +858,16 @@ set_option backward.isDefEq.respectTransparency false in
 for a comonad.
 -/
 @[simps! unit counit]
-/--
-Definition of `adj` / `adj` 的定义
+/-
+**CategoryTheory.Comonad.adj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Comonad`。
+形式化陈述：adj : G.forget ⊣ G.cofree
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adj
-  signature: : G.forget ⊣ G.cofree
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f =>
-            { f := X.a ≫ G.map f
-              h := by simp [← Coalgebra.coassoc_assoc] }
-          invFun := fun g => g.f ≫ G.ε.app Y
-          left_inv := fun f => by
-            dsimp
-            rw [Category.assoc]; rw [G.ε.naturality]; rw [Functor.id_map]; rw [X.counit_assoc]
-          right_inv := fun g => by
-            ext1; dsimp
-            rw [Functor.map_comp]; rw [g.h_assoc]; rw [cofree_obj_a]; rw [Comonad.right_counit]
-            apply comp_id } }
-
-中文:
-定义 adj
-  签名: : G.forget ⊣ G.cofree
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Y =>
-        { toFun := fun f =>
-            { f := X.a ≫ G.map f
-              h := by simp [← Coalgebra.coassoc_assoc] }
-          invFun := fun g => g.f ≫ G.ε.app Y
-          left_inv := fun f => by
-            dsimp
-            rw [Category.assoc]; rw [G.ε.naturality]; rw [Functor.id_map]; rw [X.counit_assoc]
-          right_inv := fun g => by
-            ext1; dsimp
-            rw [Functor.map_comp]; rw [g.h_assoc]; rw [cofree_obj_a]; rw [Comonad.right_counit]
-            apply comp_id } }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Category, Category.assoc, Coalgebra, Coalgebra.coassoc_assoc, Comonad, Comonad.right_counit, Functor, Functor.id_map, Functor.map_comp, G.map, X.counit_assoc, coassoc_assoc, cofree_obj_a, comp_id, counit_assoc, g.h_assoc, h_assoc, homEquiv
+--- 原说明 ---
+The adjunction between the cofree and forgetful constructions for Eilenberg-Moor
+e coalgebras
+for a comonad.
 -/
 def adj : G.forget ⊣ G.cofree :=
   Adjunction.mkOfHomEquiv
@@ -1168,129 +878,141 @@ def adj : G.forget ⊣ G.cofree :=
           invFun := fun g => g.f ≫ G.ε.app Y
           left_inv := fun f => by
             dsimp
-            rw [Category.assoc]; rw [G.ε.naturality]; rw [Functor.id_map]; rw [X.counit_assoc]
+            rw [Category.assoc, G.ε.naturality, Functor.id_map, X.counit_assoc]
           right_inv := fun g => by
             ext1; dsimp
-            rw [Functor.map_comp]; rw [g.h_assoc]; rw [cofree_obj_a]; rw [Comonad.right_counit]
+            rw [Functor.map_comp, g.h_assoc, cofree_obj_a, Comonad.right_counit]
             apply comp_id } }
 
-/--
-theorem `coalgebra_iso_of_iso` / 定理 `coalgebra_iso_of_iso`
+/-- Given a coalgebra morphism whose carrier part is an isomorphism, we get a coalgebra isomorphism.
+-/
+/-
+**CategoryTheory.Comonad.coalgebra_iso_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Comonad`。
+形式化陈述：coalgebra_iso_of_iso {A B : Coalgebra G} (f : A ⟶ B) [IsIso f.f] : IsIso f
+参数：f : A ⟶ B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.eq_inv_comp`：eq_inv_comp (α : X ⟶ Y) [IsIso α] {f :
+ X ⟶ Z} {g : Y ⟶ Z} : g = inv α ≫ f ↔ α ≫ g = f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Comonad.Coalgebra.Hom.h_assoc`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {G : CategoryTheory.Comonad C} {A B : G.Coalge
+bra}   (self : A.Hom B) {Z : C} (h…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Comonad.Coalgebra.Hom.ext'`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {G : CategoryTheory.Comonad C} (X Y : G.Coalgebra
+)   (f g : X ⟶ Y), f.f = g.f → …
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
 
-English:
-theorem coalgebra_iso_of_iso
-  given: {A B : Coalgebra G} (f : A ⟶ B) [IsIso f.f]
-  statement: IsIso f
-  proof: ⟨⟨{ f := inv f.f
-        h := by
-          rw [IsIso.eq_inv_comp f.f]; rw [← f.h_assoc]
-          simp },
-      by cat_disch⟩⟩
-
-中文:
-定理 coalgebra_iso_of_iso
-  条件: {A B : 余algebra G} (f : A ⟶ B) [是同构 f.f]
-  结论: 是同构 f
-  证明: ⟨⟨{ f := inv f.f
-        h := by
-          rw [IsIso.eq_inv_comp f.f]; rw [← f.h_assoc]
-          simp },
-      by cat_disch⟩⟩
-
-Depends on / 依赖: IsIso.eq_inv_comp, cat_disch, eq_inv_comp, f.h_assoc, h_assoc
+--- 原说明 ---
+Given a coalgebra morphism whose carrier part is an isomorphism, we get a coalge
+bra isomorphism.
 -/
 theorem coalgebra_iso_of_iso {A B : Coalgebra G} (f : A ⟶ B) [IsIso f.f] : IsIso f :=
-  ⟨⟨{ f := inv f.f
+  ⟨⟨{   f := inv f.f
         h := by
-          rw [IsIso.eq_inv_comp f.f]; rw [← f.h_assoc]
+          rw [IsIso.eq_inv_comp f.f, ← f.h_assoc]
           simp },
       by cat_disch⟩⟩
-
-/--
-Instance `forget_reflects_iso` / 实例 `forget_reflects_iso`
-
-English:
-instance forget_reflects_iso
-  signature: : G.forget.ReflectsIsomorphisms where
-  body: coalgebra_iso_of_iso G f
-
-中文:
-实例 forget_reflects_iso
-  签名: : G.forget.反映同构 where
-  定义体: coalgebra_iso_of_iso G f
-
-Depends on / 依赖: coalgebra_iso_of_iso
+/-
+**CategoryTheory.Comonad.forget_reflects_iso** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Comonad`。
+形式化陈述：forget_reflects_iso : G.forget.ReflectsIsomorphisms where reflects {_ _} f
+ [IsIso f.f]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Comonad.coalgebra_iso_of_iso`：coalgebra_iso_of_iso {A B :
+ Coalgebra G} (f : A ⟶ B) [IsIso f.f] : IsIso f
 -/
 instance forget_reflects_iso : G.forget.ReflectsIsomorphisms where
   reflects {_ _} f [IsIso f.f] := coalgebra_iso_of_iso G f
-
-/--
-Instance `forget_faithful` / 实例 `forget_faithful`
-
-English:
-instance forget_faithful
-  signature: : (forget G).Faithful where
-
-中文:
-实例 forget_faithful
-  签名: : (forget G).忠实 where
+/-
+**CategoryTheory.Comonad.forget_faithful** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Comonad`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (G : CategoryT
+heory.Comonad C), G.forget.Faithful
+参数：G : CategoryTheory.Comonad C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Comonad.Coalgebra.Hom.ext'`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {G : CategoryTheory.Comonad C} (X Y : G.Coalgebra
+)   (f g : X ⟶ Y), f.f = g.f → …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance forget_faithful : (forget G).Faithful where
 
-/--
-theorem `algebra_epi_of_epi` / 定理 `algebra_epi_of_epi`
+/-- Given a coalgebra morphism whose carrier part is an epimorphism, we get an algebra epimorphism.
+-/
+/-
+**CategoryTheory.Comonad.algebra_epi_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Comonad`。
+形式化陈述：algebra_epi_of_epi {X Y : Coalgebra G} (f : X ⟶ Y) [h : Epi f.f] : Epi f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.epi_of_epi_map`：epi_of_epi_map (F : C ⥤ D) [Refle
+ctsEpimorphisms F] {X Y : C} {f : X ⟶ Y} (h : Epi (F.map f)) : Epi f
+· 使用定理 `CategoryTheory.Functor.reflectsEpimorphisms_of_faithful`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Comonad.forget_faithful`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] (G : CategoryTheory.Comonad C), G.forget.Faithful
 
-English:
-theorem algebra_epi_of_epi
-  given: {X Y : Coalgebra G} (f : X ⟶ Y) [h : Epi f.f]
-  statement: Epi f
-  proof: (forget G).epi_of_epi_map h
-
-中文:
-定理 algebra_epi_of_epi
-  条件: {X Y : 余algebra G} (f : X ⟶ Y) [h : 满态射 f.f]
-  结论: 满态射 f
-  证明: (forget G).epi_of_epi_map h
-
-Depends on / 依赖: epi_of_epi_map, forget
+--- 原说明 ---
+Given a coalgebra morphism whose carrier part is an epimorphism, we get an algeb
+ra epimorphism.
 -/
 theorem algebra_epi_of_epi {X Y : Coalgebra G} (f : X ⟶ Y) [h : Epi f.f] : Epi f :=
   (forget G).epi_of_epi_map h
 
-/--
-theorem `algebra_mono_of_mono` / 定理 `algebra_mono_of_mono`
+/-- Given a coalgebra morphism whose carrier part is a monomorphism, we get an algebra monomorphism.
+-/
+/-
+**CategoryTheory.Comonad.algebra_mono_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Comonad`。
+形式化陈述：algebra_mono_of_mono {X Y : Coalgebra G} (f : X ⟶ Y) [h : Mono f.f] : Mono
+ f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mono_of_mono_map`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Comonad.forget_faithful`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] (G : CategoryTheory.Comonad C), G.forget.Faithful
 
-English:
-theorem algebra_mono_of_mono
-  given: {X Y : Coalgebra G} (f : X ⟶ Y) [h : Mono f.f]
-  statement: Mono f
-  proof: (forget G).mono_of_mono_map h
-
-中文:
-定理 algebra_mono_of_mono
-  条件: {X Y : 余algebra G} (f : X ⟶ Y) [h : 单态射 f.f]
-  结论: 单态射 f
-  证明: (forget G).mono_of_mono_map h
-
-Depends on / 依赖: forget, mono_of_mono_map
+--- 原说明 ---
+Given a coalgebra morphism whose carrier part is a monomorphism, we get an algeb
+ra monomorphism.
 -/
 theorem algebra_mono_of_mono {X Y : Coalgebra G} (f : X ⟶ Y) [h : Mono f.f] : Mono f :=
   (forget G).mono_of_mono_map h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: G.forget.IsLeftAdjoint
-  body: ⟨_, ⟨G.adj⟩⟩
-
-中文:
-实例 :
-  签名: G.forget.是左伴随
-  定义体: ⟨_, ⟨G.adj⟩⟩
-
-Depends on / 依赖: G.adj
+/-
+**CategoryTheory.Comonad.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Comonad`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : G.forget.IsLeftAdjoint :=
   ⟨_, ⟨G.adj⟩⟩
@@ -1298,3 +1020,4 @@ instance : G.forget.IsLeftAdjoint :=
 end Comonad
 
 end CategoryTheory
+

@@ -25,26 +25,32 @@ variable {C : Type w} [Category.{v} C]
 
 variable (C) in
 /--
-Definition of `equivSmall` / `equivSmall` 的定义
+The equivalence of categories from light condensed objects to sheaves on a small site
+equivalent to light profinite sets.
+-/
+/-
+**LightCondensed.equivSmall** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightCondensed`。
+形式化陈述：equivSmall : LightCondensed.{u} C ≌ Sheaf ((equivSmallModel.{u} LightProfi
+nite.{u}).inverse.inducedTopology (coherentTopology LightProfinite.{u})) C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instEssentiallySmallLightProfinite`：CategoryTheory.EssentiallySmall.{u, 
+u, u + 1} LightProfinite
 
-English:
-abbreviation equivSmall
-  signature: :
-  body: (equivSmallModel LightProfinite).sheafCongr _ _ _
-
-中文:
-缩写 equivSmall
-  签名: :
-  定义体: (equivSmallModel LightProfinite).sheafCongr _ _ _
-
-Depends on / 依赖: LightProfinite, equivSmallModel, sheafCongr
+--- 原说明 ---
+The equivalence of categories from light condensed objects to sheaves on a small
+ site
+equivalent to light profinite sets.
 -/
 noncomputable abbrev equivSmall :
     LightCondensed.{u} C ≌
       Sheaf ((equivSmallModel.{u} LightProfinite.{u}).inverse.inducedTopology
         (coherentTopology LightProfinite.{u})) C :=
   (equivSmallModel LightProfinite).sheafCongr _ _ _
-
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : LightCondensed.{u} C) : Small.{max u v} (X ⟶ Y) where
   equiv_small :=
     ⟨(equivSmall C).functor.obj X ⟶ (equivSmall C).functor.obj Y,
@@ -53,23 +59,29 @@ instance (X Y : LightCondensed.{u} C) : Small.{max u v} (X ⟶ Y) where
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /--
-Definition of `equivSmallSheafificationIso` / `equivSmallSheafificationIso` 的定义
+Sheafifying is preserved under conjugating with the equivalence between light condensed objects
+and sheaves on a small site.
+-/
+/-
+**LightCondensed.equivSmallSheafificationIso** 是 Mathlib 中的一个定义，位于命名空间 `LightCon
+densed`。
+形式化陈述：equivSmallSheafificationIso [HasWeakSheafify (coherentTopology LightProfin
+ite.{u}) C] [HasWeakSheafify ((equivSmallModel.{u} LightProfinite.{u}).inverse.i
+nducedTopology (coherentTopology LightProfinite.{u})) C] : (equivSmallModel Ligh
+tProfinite.{u}).op.congrLeft.inverse ⋙ presheafToSheaf _ _ ⋙ (equivSmall C).func
+tor ≅ presheafToSheaf _ _
+参数：coherentTopology LightProfinite.{u}；(equivSmallModel.{u} LightProfinite.{u}).
+inverse.inducedTopology (coherentTopology LightProfinite.{u})。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instEssentiallySmallLightProfinite`：CategoryTheory.EssentiallySmall.{u, 
+u, u + 1} LightProfinite
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition equivSmallSheafificationIso
-  body: (conjugateIsoEquiv (sheafificationAdjunction _ _)
-    (((equivSmallModel LightProfinite.{u}).op.congrLeft.symm.toAdjunction.comp
-    (sheafificationAdjunction _ _)).comp (equivSmall C).toAdjunction)).symm <|
-  NatIso.ofComponents (fun X => ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm)
-
-中文:
-定义 equivSmallSheafificationIso
-  定义体: (conjugateIsoEquiv (sheafificationAdjunction _ _)
-    (((equivSmallModel LightProfinite.{u}).op.congrLeft.symm.toAdjunction.comp
-    (sheafificationAdjunction _ _)).comp (equivSmall C).toAdjunction)).symm <|
-  NatIso.ofComponents (fun X => ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm)
-
-Depends on / 依赖: LightProfinite, NatIso, NatIso.ofComponents, congrLeft, conjugateIsoEquiv, equivSmall, equivSmallModel, invFunIdAssoc, ofComponents, op.congrLeft.symm.toAdjunction.comp, op.invFunIdAssoc, sheafificationAdjunction, toAdjunction
+--- 原说明 ---
+Sheafifying is preserved under conjugating with the equivalence between light co
+ndensed objects
+and sheaves on a small site.
 -/
 noncomputable def equivSmallSheafificationIso
     [HasWeakSheafify (coherentTopology LightProfinite.{u}) C]
@@ -81,7 +93,7 @@ noncomputable def equivSmallSheafificationIso
   (conjugateIsoEquiv (sheafificationAdjunction _ _)
     (((equivSmallModel LightProfinite.{u}).op.congrLeft.symm.toAdjunction.comp
     (sheafificationAdjunction _ _)).comp (equivSmall C).toAdjunction)).symm <|
-  NatIso.ofComponents (fun X => ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm)
+  NatIso.ofComponents (fun X ↦ ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm)
 
 variable (R : Type u) [CommRing R]
 
@@ -89,31 +101,23 @@ set_option backward.defeqAttrib.useBackward true in
 attribute [local simp] LightCondensed.forget in
 set_option backward.isDefEq.respectTransparency false in
 /--
-Definition of `equivSmallFreeIso` / `equivSmallFreeIso` 的定义
+Taking the free condensed module is preserved under conjugating with the equivalence between
+light condensed objects and sheaves on a small site.
+-/
+/-
+**LightCondensed.equivSmallFreeIso** 是 Mathlib 中的一个定义，位于命名空间 `LightCondensed`。
+形式化陈述：equivSmallFreeIso : (equivSmall (Type u)).inverse ⋙ free R ⋙ (equivSmall (
+ModuleCat R)).functor ≅ Sheaf.composeAndSheafify _ (ModuleCat.free R)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instEssentiallySmallLightProfinite`：CategoryTheory.EssentiallySmall.{u, 
+u, u + 1} LightProfinite
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition equivSmallFreeIso
-  signature: :
-  body: conjugateIsoEquiv (Sheaf.adjunction _ (ModuleCat.adj R))
-    (((equivSmall _).symm.toAdjunction.comp
-      (freeForgetAdjunction R)).comp (equivSmall _).toAdjunction) |>.symm <| by
-  refine NatIso.ofComponents
-    (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
-      (isoWhiskerRight ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm _ ≪≫
-        (Functor.associator _ _ _)))
-
-中文:
-定义 equivSmallFreeIso
-  签名: :
-  定义体: conjugateIsoEquiv (Sheaf.adjunction _ (ModuleCat.adj R))
-    (((equivSmall _).symm.toAdjunction.comp
-      (freeForgetAdjunction R)).comp (equivSmall _).toAdjunction) |>.symm <| by
-  refine NatIso.ofComponents
-    (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
-      (isoWhiskerRight ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm _ ≪≫
-        (Functor.associator _ _ _)))
-
-Depends on / 依赖: Functor, Functor.associator, LightProfinite, ModuleCat, ModuleCat.adj, NatIso, NatIso.ofComponents, Sheaf.adjunction, adjunction, associator, conjugateIsoEquiv, equivSmall, equivSmallModel, freeForgetAdjunction, fullyFaithfulSheafToPresheaf, invFunIdAssoc, isoWhiskerRight, ofComponents, op.invFunIdAssoc, preimageIso
+--- 原说明 ---
+Taking the free condensed module is preserved under conjugating with the equival
+ence between
+light condensed objects and sheaves on a small site.
 -/
 noncomputable def equivSmallFreeIso :
     (equivSmall (Type u)).inverse ⋙ free R ⋙ (equivSmall (ModuleCat R)).functor ≅
@@ -122,8 +126,9 @@ noncomputable def equivSmallFreeIso :
     (((equivSmall _).symm.toAdjunction.comp
       (freeForgetAdjunction R)).comp (equivSmall _).toAdjunction) |>.symm <| by
   refine NatIso.ofComponents
-    (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
+    (fun X ↦ (fullyFaithfulSheafToPresheaf _ _).preimageIso
       (isoWhiskerRight ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm _ ≪≫
         (Functor.associator _ _ _)))
 
 end LightCondensed
+

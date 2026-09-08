@@ -22,212 +22,120 @@ public section
 
 namespace Nat
 
-/--
-Instance `instAddMonoidWithOne` / 实例 `instAddMonoidWithOne`
-
-English:
-instance instAddMonoidWithOne
-  signature: : AddMonoidWithOne Nat where
-  body: n
-  natCast_zero := rfl
-  natCast_succ _ := rfl
-
-中文:
-实例 instAddMonoidWithOne
-  签名: : 加法带幺幺半群 自然数 where
-  定义体: n
-  natCast_zero := rfl
-  natCast_succ _ := rfl
+/-
+**Nat.instAddMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instAddMonoidWithOne : AddMonoidWithOne Nat where natCast n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddMonoidWithOne : AddMonoidWithOne Nat where
+instance instAddMonoidWithOne : AddMonoidWithOne ℕ where
   natCast n := n
   natCast_zero := rfl
   natCast_succ _ := rfl
-
-/--
-Instance `instAddCommMonoidWithOne` / 实例 `instAddCommMonoidWithOne`
-
-English:
-instance instAddCommMonoidWithOne
-  signature: : AddCommMonoidWithOne Nat where
-  body: instAddMonoidWithOne
-  __ := instAddCommMonoid
-
-中文:
-实例 instAddCommMonoidWithOne
-  签名: : 加法交换带幺幺半群 自然数 where
-  定义体: instAddMonoidWithOne
-  __ := instAddCommMonoid
-
-Depends on / 依赖: instAddMonoidWithOne
+/-
+**Nat.instAddCommMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instAddCommMonoidWithOne : AddCommMonoidWithOne Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommMonoid.add_comm`：∀ {M : Type u} [self : AddCommMonoid M] (a b : M
+), a + b = b + a
 -/
-instance instAddCommMonoidWithOne : AddCommMonoidWithOne Nat where
+instance instAddCommMonoidWithOne : AddCommMonoidWithOne ℕ where
   __ := instAddMonoidWithOne
   __ := instAddCommMonoid
-
-/--
-Instance `instDistrib` / 实例 `instDistrib`
-
-English:
-instance instDistrib
-  signature: : Distrib Nat where
-  body: Nat.left_distrib
-  right_distrib := Nat.right_distrib
-
-中文:
-实例 instDistrib
-  签名: : Distrib 自然数 where
-  定义体: Nat.left_distrib
-  right_distrib := Nat.right_distrib
-
-Depends on / 依赖: Nat.left_distrib, left_distrib
+/-
+**Nat.instDistrib** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instDistrib : Distrib Nat where left_distrib
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.left_distrib`：∀ (n m k : ℕ), n * (m + k) = n * m + n * k
+· 使用定理 `Nat.right_distrib`：∀ (n m k : ℕ), (n + m) * k = n * k + m * k
 -/
-instance instDistrib : Distrib Nat where
+instance instDistrib : Distrib ℕ where
   left_distrib := Nat.left_distrib
   right_distrib := Nat.right_distrib
-
-/--
-Instance `instNonUnitalNonAssocSemiring` / 实例 `instNonUnitalNonAssocSemiring`
-
-English:
-instance instNonUnitalNonAssocSemiring
-  signature: : NonUnitalNonAssocSemiring Nat where
-  body: instAddCommMonoid
-  __ := instDistrib
-  __ := instMulZeroClass
-
-中文:
-实例 instNonUnitalNonAssocSemiring
-  签名: : 非幺非结合半环 自然数 where
-  定义体: instAddCommMonoid
-  __ := instDistrib
-  __ := instMulZeroClass
-
-Depends on / 依赖: instAddCommMonoid
+/-
+**Nat.instNonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instNonUnitalNonAssocSemiring : NonUnitalNonAssocSemiring Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Distrib.left_distrib`：∀ {R : Type u_1} [self : Distrib R] (a b c : R), a
+ * (b + c) = a * b + a * c
+· 使用定理 `Distrib.right_distrib`：∀ {R : Type u_1} [self : Distrib R] (a b c : R), 
+(a + b) * c = a * c + b * c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-instance instNonUnitalNonAssocSemiring : NonUnitalNonAssocSemiring Nat where
+instance instNonUnitalNonAssocSemiring : NonUnitalNonAssocSemiring ℕ where
   __ := instAddCommMonoid
   __ := instDistrib
   __ := instMulZeroClass
-
-/--
-Instance `instNonUnitalSemiring` / 实例 `instNonUnitalSemiring`
-
-English:
-instance instNonUnitalSemiring
-  signature: : NonUnitalSemiring Nat where
-  body: instNonUnitalNonAssocSemiring
-  __ := instSemigroupWithZero
-
-中文:
-实例 instNonUnitalSemiring
-  签名: : 非幺半环 自然数 where
-  定义体: instNonUnitalNonAssocSemiring
-  __ := instSemigroupWithZero
-
-Depends on / 依赖: instNonUnitalNonAssocSemiring
+/-
+**Nat.instNonUnitalSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instNonUnitalSemiring : NonUnitalSemiring Nat where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNonUnitalSemiring : NonUnitalSemiring Nat where
+instance instNonUnitalSemiring : NonUnitalSemiring ℕ where
   __ := instNonUnitalNonAssocSemiring
   __ := instSemigroupWithZero
-
-/--
-Instance `instNonAssocSemiring` / 实例 `instNonAssocSemiring`
-
-English:
-instance instNonAssocSemiring
-  signature: : NonAssocSemiring Nat where
-  body: instNonUnitalNonAssocSemiring
-  __ := instMulZeroOneClass
-  __ := instAddCommMonoidWithOne
-
-中文:
-实例 instNonAssocSemiring
-  签名: : 非结合半环 自然数 where
-  定义体: instNonUnitalNonAssocSemiring
-  __ := instMulZeroOneClass
-  __ := instAddCommMonoidWithOne
-
-Depends on / 依赖: instNonUnitalNonAssocSemiring
+/-
+**Nat.instNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instNonAssocSemiring : NonAssocSemiring Nat where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNonAssocSemiring : NonAssocSemiring Nat where
+instance instNonAssocSemiring : NonAssocSemiring ℕ where
   __ := instNonUnitalNonAssocSemiring
   __ := instMulZeroOneClass
   __ := instAddCommMonoidWithOne
-
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: : Semiring Nat where
-  body: instNonUnitalSemiring
-  __ := instNonAssocSemiring
-  __ := instMonoidWithZero
-
-中文:
-实例 instSemiring
-  签名: : 半环 自然数 where
-  定义体: instNonUnitalSemiring
-  __ := instNonAssocSemiring
-  __ := instMonoidWithZero
-
-Depends on / 依赖: instNonUnitalSemiring
+/-
+**Nat.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instSemiring : Semiring Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSemiring.mul_assoc`：∀ {α : Type u} [self : NonUnitalSemiring α]
+ (a b c : α), a * b * c = a * (b * c)
+· 使用定理 `NonAssocSemiring.one_mul`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), 1 * a = a
+· 使用定理 `NonAssocSemiring.mul_one`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), a * 1 = a
+· 使用定理 `NonAssocSemiring.natCast_zero`：∀ {α : Type u} [self : NonAssocSemiring α
+], ↑0 = 0
+· 使用定理 `NonAssocSemiring.natCast_succ`：∀ {α : Type u} [self : NonAssocSemiring α
+] (n : ℕ), ↑(n + 1) = ↑n + 1
 -/
-instance instSemiring : Semiring Nat where
+instance instSemiring : Semiring ℕ where
   __ := instNonUnitalSemiring
   __ := instNonAssocSemiring
   __ := instMonoidWithZero
-
-/--
-Instance `instCommSemiring` / 实例 `instCommSemiring`
-
-English:
-instance instCommSemiring
-  signature: : CommSemiring Nat where
-  body: instSemiring
-  __ := instCommMonoid
-
-中文:
-实例 instCommSemiring
-  签名: : 交换半环 自然数 where
-  定义体: instSemiring
-  __ := instCommMonoid
-
-Depends on / 依赖: instSemiring
+/-
+**Nat.instCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instCommSemiring : CommSemiring Nat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMonoid.mul_comm`：∀ {M : Type u} [self : CommMonoid M] (a b : M), a *
+ b = b * a
 -/
-instance instCommSemiring : CommSemiring Nat where
+instance instCommSemiring : CommSemiring ℕ where
   __ := instSemiring
   __ := instCommMonoid
-
-/--
-Instance `instCharZero` / 实例 `instCharZero`
-
-English:
-instance instCharZero
-  signature: : CharZero Nat where cast_injective
-  body: Function.injective_id
-
-中文:
-实例 instCharZero
-  签名: : 特征零 自然数 where cast_injective
-  定义体: Function.injective_id
-
-Depends on / 依赖: Function, Function.injective_id, injective_id
+/-
+**Nat.instCharZero** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instCharZero : CharZero Nat where cast_injective
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 -/
-instance instCharZero : CharZero Nat where cast_injective := Function.injective_id
-
-/--
-Instance `instIsDomain` / 实例 `instIsDomain`
-
-English:
-instance instIsDomain
-  signature: : IsDomain Nat where
-
-中文:
-实例 instIsDomain
-  签名: : 是整环 自然数 where
+instance instCharZero : CharZero ℕ where cast_injective := Function.injective_id
+/-
+**Nat.instIsDomain** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：IsDomain ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instIsDomain : IsDomain Nat where
+instance instIsDomain : IsDomain ℕ where
 
 end Nat
+

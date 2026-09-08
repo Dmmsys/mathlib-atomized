@@ -19,20 +19,9 @@ public import Lean.Meta.DiscrTree
 
 open Lean Elab.Tactic
 
-/--
-Definition of `Lean.PHashSet.toList.` / `Lean.PHashSet.toList.` 的定义
-
-English:
-definition Lean.PHashSet.toList.{u}
-  signature: {α : Type u} [BEq α] [Hashable α] (s : Lean.PHashSet α)
-  body: s.1.toList.map (·.1)
-
-中文:
-定义 Lean.PHashSet.toList.{u}
-  签名: {α : 类型u} [BEq α] [Hashable α] (s : Lean.PHashSet α)
-  定义体: s.1.toList.map (·.1)
-
-Depends on / 依赖: toList, toList.map
+/-
+**Lean.PHashSet.toList.** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def Lean.PHashSet.toList.{u} {α : Type u} [BEq α] [Hashable α] (s : Lean.PHashSet α) : List α :=
   s.1.toList.map (·.1)
@@ -42,36 +31,9 @@ namespace Lean
 namespace Meta.Simp
 open Elab.Tactic
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToFormat SimpTheorems
-  body: f!"pre:
-{s.pre.values.toList}
-post:
-{s.post.values.toList}
-lemmaNames:
-{s.lemmaNames.toList.map (·.key)}
-toUnfold: {s.toUnfold.toList}
-erased: {s.erased.toList.map (·.key)}
-toUnfoldThms: {s.toUnfoldThms.toList}"
-
-中文:
-实例 :
-  签名: ToFormat SimpTheorems
-  定义体: f!"pre:
-{s.pre.values.toList}
-post:
-{s.post.values.toList}
-lemmaNames:
-{s.lemmaNames.toList.map (·.key)}
-toUnfold: {s.toUnfold.toList}
-erased: {s.erased.toList.map (·.key)}
-toUnfoldThms: {s.toUnfoldThms.toList}"
-
-Depends on / 依赖: erased, lemmaNames, s.erased.toList.map, s.lemmaNames.toList.map, s.post.values.toList, s.pre.values.toList, s.toUnfold.toList, s.toUnfoldThms.toList, toList, toUnfold, toUnfoldThms, values
+/-
+**Lean.Meta.Simp.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta.Simp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToFormat SimpTheorems where
   format s :=
@@ -86,62 +48,37 @@ erased: {s.erased.toList.map (·.key)}
 toUnfoldThms: {s.toUnfoldThms.toList}"
 
 /--
-Definition of `Result.ofTrue` / `Result.ofTrue` 的定义
+Constructs a proof that the original expression is true
+given a simp result which simplifies the target to `True`.
+-/
+/-
+**Lean.Meta.Simp.Result.ofTrue** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Simp.Result`
+。
+形式化陈述：Meta.Simp.Result → MetaM (Option Expr)
+参数：Option Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Result.ofTrue
-  signature: (r : Simp.Result)
-  body: if r.expr.isConstOf ``True then
-some < > match r.proof? with
-    | some proof => mkOfEqTrue proof
-    | none => pure (mkConst ``True.intro)
-  else
-    pure none
-
-中文:
-定义 Result.ofTrue
-  签名: (r : Simp.Result)
-  定义体: if r.expr.isConstOf ``True then
-some < > match r.proof? with
-    | some proof => mkOfEqTrue proof
-    | none => pure (mkConst ``True.intro)
-  else
-    pure none
-
-Depends on / 依赖: True.intro, isConstOf, mkConst, mkOfEqTrue, r.expr.isConstOf, r.proof
+--- 原说明 ---
+Constructs a proof that the original expression is true
+given a simp result which simplifies the target to `True`.
 -/
 def Result.ofTrue (r : Simp.Result) : MetaM (Option Expr) :=
   if r.expr.isConstOf ``True then
-some < > match r.proof? with
+    some <$> match r.proof? with
     | some proof => mkOfEqTrue proof
     | none => pure (mkConst ``True.intro)
   else
     pure none
 
-/--
-Definition of `getPropHyps` / `getPropHyps` 的定义
+/-- Return all propositions in the local context. -/
+/-
+**Lean.Meta.Simp.getPropHyps** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Simp`。
+形式化陈述：getPropHyps : MetaM (Array FVarId)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getPropHyps
-  signature: : MetaM (Array FVarId)
-  body: do
-  let mut result := #[]
-  for localDecl in (← getLCtx) do
-    unless localDecl.isAuxDecl do
-      if (← isProp localDecl.type) then
-        result := result.push localDecl.fvarId
-  return result
-
-中文:
-定义 getPropHyps
-  签名: : MetaM (数组 FVarId)
-  定义体: do
-  let mut result := #[]
-  for localDecl in (← getLCtx) do
-    unless localDecl.isAuxDecl do
-      if (← isProp localDecl.type) then
-        result := result.push localDecl.fvarId
-  return result
+--- 原说明 ---
+Return all propositions in the local context.
 -/
 def getPropHyps : MetaM (Array FVarId) := do
   let mut result := #[]
@@ -153,30 +90,15 @@ def getPropHyps : MetaM (Array FVarId) := do
 
 end Simp
 
-/--
-Definition of `simpTheoremsOfNames` / `simpTheoremsOfNames` 的定义
+/-- Construct a `SimpTheorems` from a list of names. -/
+/-
+**Lean.Meta.simpTheoremsOfNames** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：optParam (List Name) [] → optParam Bool false → MetaM Meta.SimpTheorems
+参数：List Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simpTheoremsOfNames
-  signature: (lemmas : List Name := []) (simpOnly : Bool := false)
-  body: do
-  lemmas.foldlM (·.addConst ·)
-    (← if simpOnly then
-      simpOnlyBuiltins.foldlM (·.addConst ·) {}
-    else
-      getSimpTheorems)
-
-中文:
-定义 simpTheoremsOfNames
-  签名: (lemmas : 列表 Name := []) (simpOnly : 布尔值 := false)
-  定义体: do
-  lemmas.foldlM (·.addConst ·)
-    (← if simpOnly then
-      simpOnlyBuiltins.foldlM (·.addConst ·) {}
-    else
-      getSimpTheorems)
-
-Depends on / 依赖: simpOnly
+--- 原说明 ---
+Construct a `SimpTheorems` from a list of names.
 -/
 def simpTheoremsOfNames (lemmas : List Name := []) (simpOnly : Bool := false) :
     MetaM SimpTheorems := do
@@ -190,26 +112,17 @@ def simpTheoremsOfNames (lemmas : List Name := []) (simpOnly : Bool := false) :
 -- that supports all the bells and whistles in `simp`.
 -- It should generalize this, and another partial implementation in `Tactic.Simps.Basic`.
 
-/--
-Definition of `Simp.Context.ofNames` / `Simp.Context.ofNames` 的定义
+/-- Construct a `Simp.Context` from a list of names. -/
+/-
+**Lean.Meta.Simp.Context.ofNames** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Simp.Conte
+xt`。
+形式化陈述：optParam (List Name) [] → optParam Bool false → optParam Meta.Simp.Config 
+{ } → MetaM Meta.Simp.Context
+参数：List Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simp.Context.ofNames
-  signature: (lemmas : List Name := []) (simpOnly : Bool := false)
-  body: do
-  Simp.mkContext config
-    (simpTheorems := #[← simpTheoremsOfNames lemmas simpOnly])
-    (congrTheorems := ← Lean.Meta.getSimpCongrTheorems)
-
-中文:
-定义 Simp.余ntext.ofNames
-  签名: (lemmas : 列表 Name := []) (simpOnly : 布尔值 := false)
-  定义体: do
-  Simp.mkContext config
-    (simpTheorems := #[← simpTheoremsOfNames lemmas simpOnly])
-    (congrTheorems := ← Lean.Meta.getSimpCongrTheorems)
-
-Depends on / 依赖: simpOnly
+--- 原说明 ---
+Construct a `Simp.Context` from a list of names.
 -/
 def Simp.Context.ofNames (lemmas : List Name := []) (simpOnly : Bool := false)
     (config : Simp.Config := {}) : MetaM Simp.Context := do
@@ -218,32 +131,22 @@ def Simp.Context.ofNames (lemmas : List Name := []) (simpOnly : Bool := false)
     (congrTheorems := ← Lean.Meta.getSimpCongrTheorems)
 
 -- adapted from `Lean.Elab.Tactic.mkSimpContext`
-/--
-Definition of `Simp.Context.ofArgs` / `Simp.Context.ofArgs` 的定义
+/-- Construct a `Simp.Context`, following the same algorithm that would be done in a "simp" run:
+look up all the simp-lemmas in the library, and adjust (add/erase) as specified by the provided
+`simpArgs` list. -/
+/-
+**Lean.Meta.Simp.Context.ofArgs** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Simp.Contex
+t`。
+形式化陈述：TSyntax `Lean.Parser.Tactic.simpArgs → optParam Meta.Simp.Config { } → Ela
+b.Tactic.TacticM Meta.Simp.Context
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simp.Context.ofArgs
-  signature: (args : TSyntax ``Parser.Tactic.simpArgs) (config : Simp.Config := {})
-  body: do
-  let simpTheorems ← Meta.getSimpTheorems
-  let congrTheorems ← Meta.getSimpCongrTheorems
-  let ctx ← Simp.mkContext config
-     (simpTheorems := #[simpTheorems])
-     congrTheorems
-  let r ← elabSimpArgs args (eraseLocal := false) (kind := SimpKind.simp) (simprocs := {}) ctx
-  return r.ctx
-
-中文:
-定义 Simp.余ntext.ofArgs
-  签名: (args : TSyntax ``Parser.Tactic.simpArgs) (config : Simp.余nfig := {})
-  定义体: do
-  let simpTheorems ← Meta.getSimpTheorems
-  let congrTheorems ← Meta.getSimpCongrTheorems
-  let ctx ← Simp.mkContext config
-     (simpTheorems := #[simpTheorems])
-     congrTheorems
-  let r ← elabSimpArgs args (eraseLocal := false) (kind := SimpKind.simp) (simprocs := {}) ctx
-  return r.ctx
+--- 原说明 ---
+Construct a `Simp.Context`, following the same algorithm that would be done in a
+ "simp" run:
+look up all the simp-lemmas in the library, and adjust (add/erase) as specified 
+by the provided
+`simpArgs` list.
 -/
 def Simp.Context.ofArgs (args : TSyntax ``Parser.Tactic.simpArgs) (config : Simp.Config := {}) :
     TacticM Simp.Context := do
@@ -255,49 +158,46 @@ def Simp.Context.ofArgs (args : TSyntax ``Parser.Tactic.simpArgs) (config : Simp
   let r ← elabSimpArgs args (eraseLocal := false) (kind := SimpKind.simp) (simprocs := {}) ctx
   return r.ctx
 
-/--
-Definition of `simpOnlyNames` / `simpOnlyNames` 的定义
+/-- Simplify an expression using only a list of lemmas specified by name. -/
+/-
+**Lean.Meta.simpOnlyNames** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：List Name → Expr → optParam Meta.Simp.Config { } → MetaM Meta.Simp.Result
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simpOnlyNames
-  signature: (lemmas : List Name) (e : Expr) (config : Simp.Config := {})
-  body: do
-(·.1) < > simp e (← Simp.Context.ofNames lemmas true config)
-
-中文:
-定义 simpOnlyNames
-  签名: (lemmas : 列表 Name) (e : Expr) (config : Simp.余nfig := {})
-  定义体: do
-(·.1) < > simp e (← Simp.Context.ofNames lemmas true config)
+--- 原说明 ---
+Simplify an expression using only a list of lemmas specified by name.
 -/
 def simpOnlyNames (lemmas : List Name) (e : Expr) (config : Simp.Config := {}) :
     MetaM Simp.Result := do
-(·.1) < > simp e (← Simp.Context.ofNames lemmas true config)
+  (·.1) <$> simp e (← Simp.Context.ofNames lemmas true config)
 
 /--
-Definition of `simpType` / `simpType` 的定义
+Given a simplifier `S : Expr → MetaM Simp.Result`,
+and an expression `e : Expr`, run `S` on the type of `e`, and then
+convert `e` into that simplified type,
+using a combination of type hints as well as casting if the proof is not definitional `Eq.mp`.
 
-English:
-definition simpType
-  signature: (S : Expr -> MetaM Simp.Result) (e : Expr) (type? : Option Expr := none)
-  body: do
-  let type ← type?.getDM (inferType e)
-  match ← S type with
-  | ⟨ty', none, _⟩ => mkExpectedTypeHint e ty'
-  -- We use `mkExpectedTypeHint` in this branch as well, in order to preserve the binder types.
-  | ⟨ty', some prf, _⟩ => mkExpectedTypeHint (← mkEqMP prf e) ty'
-
-中文:
-定义 simpType
-  签名: (S : Expr -> MetaM Simp.Result) (e : Expr) (type? : 选项类型 Expr := none)
-  定义体: do
-  let type ← type?.getDM (inferType e)
-  match ← S type with
-  | ⟨ty', none, _⟩ => mkExpectedTypeHint e ty'
-  -- We use `mkExpectedTypeHint` in this branch as well, in order to preserve the binder types.
-  | ⟨ty', some prf, _⟩ => mkExpectedTypeHint (← mkEqMP prf e) ty'
+The optional argument `type?`, if present, must be definitionally equal to the type of `e`.
+When it is specified we simplify this type rather than the inferred type of `e`.
 -/
-def simpType (S : Expr -> MetaM Simp.Result) (e : Expr) (type? : Option Expr := none) :
+/-
+**Lean.Meta.simpType** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：(Expr → MetaM Meta.Simp.Result) → Expr → optParam (Option Expr) none → Met
+aM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given a simplifier `S : Expr → MetaM Simp.Result`,
+and an expression `e : Expr`, run `S` on the type of `e`, and then
+convert `e` into that simplified type,
+using a combination of type hints as well as casting if the proof is not definit
+ional `Eq.mp`.
+
+The optional argument `type?`, if present, must be definitionally equal to the t
+ype of `e`.
+When it is specified we simplify this type rather than the inferred type of `e`.
+-/
+def simpType (S : Expr → MetaM Simp.Result) (e : Expr) (type? : Option Expr := none) :
     MetaM Expr := do
   let type ← type?.getDM (inferType e)
   match ← S type with
@@ -305,42 +205,20 @@ def simpType (S : Expr -> MetaM Simp.Result) (e : Expr) (type? : Option Expr := 
   -- We use `mkExpectedTypeHint` in this branch as well, in order to preserve the binder types.
   | ⟨ty', some prf, _⟩ => mkExpectedTypeHint (← mkEqMP prf e) ty'
 
-/--
-Definition of `simpEq` / `simpEq` 的定义
+/-- Independently simplify both the left-hand side and the right-hand side
+of an equality. The equality is allowed to be under binders.
+Returns the simplified equality and a proof of it. -/
+/-
+**Lean.Meta.simpEq** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：(Expr → MetaM Meta.Simp.Result) → Expr → Expr → MetaM (Expr × Expr)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simpEq
-  signature: (S : Expr -> MetaM Simp.Result) (type pf : Expr)
-  body: do
-  forallTelescope type fun fvars type => do
-    let .app (.app (.app (.const `Eq [u]) α) lhs) rhs := type | throwError "simpEq expecting Eq"
-    let ⟨lhs', lhspf?, _⟩ ← S lhs
-    let ⟨rhs', rhspf?, _⟩ ← S rhs
-    let mut pf' := mkAppN pf fvars
-    if let some lhspf := lhspf? then
-      pf' ← mkEqTrans (← mkEqSymm lhspf) pf'
-    if let some rhspf := rhspf? then
-      pf' ← mkEqTrans pf' rhspf
-    let type' := mkApp3 (mkConst ``Eq [u]) α lhs' rhs'
-    return (← mkForallFVars fvars type', ← mkLambdaFVars fvars pf')
-
-中文:
-定义 simpEq
-  签名: (S : Expr -> MetaM Simp.Result) (type pf : Expr)
-  定义体: do
-  forallTelescope type fun fvars type => do
-    let .app (.app (.app (.const `Eq [u]) α) lhs) rhs := type | throwError "simpEq expecting Eq"
-    let ⟨lhs', lhspf?, _⟩ ← S lhs
-    let ⟨rhs', rhspf?, _⟩ ← S rhs
-    let mut pf' := mkAppN pf fvars
-    if let some lhspf := lhspf? then
-      pf' ← mkEqTrans (← mkEqSymm lhspf) pf'
-    if let some rhspf := rhspf? then
-      pf' ← mkEqTrans pf' rhspf
-    let type' := mkApp3 (mkConst ``Eq [u]) α lhs' rhs'
-    return (← mkForallFVars fvars type', ← mkLambdaFVars fvars pf')
+--- 原说明 ---
+Independently simplify both the left-hand side and the right-hand side
+of an equality. The equality is allowed to be under binders.
+Returns the simplified equality and a proof of it.
 -/
-def simpEq (S : Expr -> MetaM Simp.Result) (type pf : Expr) : MetaM (Expr × Expr) := do
+def simpEq (S : Expr → MetaM Simp.Result) (type pf : Expr) : MetaM (Expr × Expr) := do
   forallTelescope type fun fvars type => do
     let .app (.app (.app (.const `Eq [u]) α) lhs) rhs := type | throwError "simpEq expecting Eq"
     let ⟨lhs', lhspf?, _⟩ ← S lhs
@@ -353,67 +231,47 @@ def simpEq (S : Expr -> MetaM Simp.Result) (type pf : Expr) : MetaM (Expr × Exp
     let type' := mkApp3 (mkConst ``Eq [u]) α lhs' rhs'
     return (← mkForallFVars fvars type', ← mkLambdaFVars fvars pf')
 
-/--
-Definition of `SimpTheorems.contains` / `SimpTheorems.contains` 的定义
+/-- Checks whether `declName` is in `SimpTheorems` as either a lemma or definition to unfold. -/
+/-
+**Lean.Meta.SimpTheorems.contains** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.SimpTheor
+ems`。
+形式化陈述：Meta.SimpTheorems → Name → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SimpTheorems.contains
-  signature: (d : SimpTheorems) (declName : Name)
-  body: d.isLemma (.decl declName) || d.isDeclToUnfold declName
-
-中文:
-定义 SimpTheorems.contains
-  签名: (d : SimpTheorems) (declName : Name)
-  定义体: d.isLemma (.decl declName) || d.isDeclToUnfold declName
-
-Depends on / 依赖: d.isDeclToUnfold, d.isLemma, declName, isDeclToUnfold, isLemma
+--- 原说明 ---
+Checks whether `declName` is in `SimpTheorems` as either a lemma or definition t
+o unfold.
 -/
 def SimpTheorems.contains (d : SimpTheorems) (declName : Name) :=
   d.isLemma (.decl declName) || d.isDeclToUnfold declName
 
-/--
-Definition of `isInSimpSet` / `isInSimpSet` 的定义
+/-- Tests whether `decl` has `simp`-attribute `simpAttr`. Returns `false` is `simpAttr` is not a
+valid simp-attribute. -/
+/-
+**Lean.Meta.isInSimpSet** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：Name → Name → CoreM Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isInSimpSet
-  signature: (simpAttr decl : Name)
-  body: do
-  let some simpDecl ← getSimpExtension? simpAttr | return false
-  return (← simpDecl.getTheorems).contains decl
-
-中文:
-定义 isInSimpSet
-  签名: (simpAttr decl : Name)
-  定义体: do
-  let some simpDecl ← getSimpExtension? simpAttr | return false
-  return (← simpDecl.getTheorems).contains decl
+--- 原说明 ---
+Tests whether `decl` has `simp`-attribute `simpAttr`. Returns `false` is `simpAt
+tr` is not a
+valid simp-attribute.
 -/
 def isInSimpSet (simpAttr decl : Name) : CoreM Bool := do
   let some simpDecl ← getSimpExtension? simpAttr | return false
   return (← simpDecl.getTheorems).contains decl
 
-/--
-Definition of `getAllSimpDecls` / `getAllSimpDecls` 的定义
+/-- Returns all declarations with the `simp`-attribute `simpAttr`.
+Note: this also returns many auxiliary declarations. -/
+/-
+**Lean.Meta.getAllSimpDecls** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：Name → CoreM (List Name)
+参数：List Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getAllSimpDecls
-  signature: (simpAttr : Name)
-  body: do
-  let some simpDecl ← getSimpExtension? simpAttr | return []
-  let thms ← simpDecl.getTheorems
-  return thms.toUnfold.toList ++ thms.lemmaNames.toList.filterMap fun
-    | .decl decl => some decl
-    | _ => none
-
-中文:
-定义 getAllSimpDecls
-  签名: (simpAttr : Name)
-  定义体: do
-  let some simpDecl ← getSimpExtension? simpAttr | return []
-  let thms ← simpDecl.getTheorems
-  return thms.toUnfold.toList ++ thms.lemmaNames.toList.filterMap fun
-    | .decl decl => some decl
-    | _ => none
+--- 原说明 ---
+Returns all declarations with the `simp`-attribute `simpAttr`.
+Note: this also returns many auxiliary declarations.
 -/
 def getAllSimpDecls (simpAttr : Name) : CoreM (List Name) := do
   let some simpDecl ← getSimpExtension? simpAttr | return []
@@ -422,28 +280,15 @@ def getAllSimpDecls (simpAttr : Name) : CoreM (List Name) := do
     | .decl decl => some decl
     | _ => none
 
-/--
-Definition of `getAllSimpAttrs` / `getAllSimpAttrs` 的定义
+/-- Gets all simp-attributes given to declaration `decl`. -/
+/-
+**Lean.Meta.getAllSimpAttrs** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：Name → CoreM (Array Name)
+参数：Array Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getAllSimpAttrs
-  signature: (decl : Name)
-  body: do
-  let mut simpAttrs := #[]
-  for (simpAttr, simpDecl) in ← simpExtensionMapRef.get do
-    if (← simpDecl.getTheorems).contains decl then
-      simpAttrs := simpAttrs.push simpAttr
-  return simpAttrs
-
-中文:
-定义 getAllSimpAttrs
-  签名: (decl : Name)
-  定义体: do
-  let mut simpAttrs := #[]
-  for (simpAttr, simpDecl) in ← simpExtensionMapRef.get do
-    if (← simpDecl.getTheorems).contains decl then
-      simpAttrs := simpAttrs.push simpAttr
-  return simpAttrs
+--- 原说明 ---
+Gets all simp-attributes given to declaration `decl`.
 -/
 def getAllSimpAttrs (decl : Name) : CoreM (Array Name) := do
   let mut simpAttrs := #[]
@@ -464,18 +309,19 @@ meta def Simp.withoutTheorems {α} (declNames : Array Name) (e : SimpM α) : Sim
   for name in declNames do
     -- Erase all variants of the theorem, not just the forward post-proc.
     theorems := theorems
-.eraseTheorem (.decl name)
-.eraseTheorem (.decl name (inv := true))
-.eraseTheorem (.decl name (post := false))
-.eraseTheorem (.decl name (inv := true) (post := false))
+      |>.eraseTheorem (.decl name)
+      |>.eraseTheorem (.decl name (inv := true))
+      |>.eraseTheorem (.decl name (post := false))
+      |>.eraseTheorem (.decl name (inv := true) (post := false))
     procs := procs.erase name
   let oldMethods ← getMethods
   let methods := mkMethods #[procs] oldMethods.discharge? oldMethods.wellBehavedDischarge
   -- Preserve the cache, otherwise a deleted theorem might continue firing,
   -- or conversely a failure inside `e` could be propagated outside.
-withPreservedCache withSimpTheorems theorems do
+  withPreservedCache <| withSimpTheorems theorems do
     let (x, s) ← e.run (← getContext) (← get) methods
     set s
     return x
 
 end Lean.Meta
+

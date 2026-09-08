@@ -24,30 +24,9 @@ namespace CategoryTheory.Types
 
 open MorphismProperty Limits
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (epimorphisms (Type u)).IsStableUnderBaseChange
-  body: by
-    simp only [epimorphisms.iff, epi_iff_surjective] at hr ⊢
-    intro x
-    obtain ⟨y, hy⟩ := hr (b x)
-    obtain ⟨z, _, hz⟩ := Types.exists_of_isPullback sq _ _ hy
-    exact ⟨z, hz⟩
-
-中文:
-实例 :
-  签名: (epimorphisms (类型u)).是StableUnderBaseChange
-  定义体: by
-    simp only [epimorphisms.iff, epi_iff_surjective] at hr ⊢
-    intro x
-    obtain ⟨y, hy⟩ := hr (b x)
-    obtain ⟨z, _, hz⟩ := Types.exists_of_isPullback sq _ _ hy
-    exact ⟨z, hz⟩
-
-Depends on / 依赖: Types.exists_of_isPullback, epi_iff_surjective, epimorphisms, epimorphisms.iff, exists_of_isPullback
+/-
+**CategoryTheory.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (epimorphisms (Type u)).IsStableUnderBaseChange where
   of_isPullback {_ _ _ _} b r t l sq hr := by
@@ -58,3 +37,4 @@ instance : (epimorphisms (Type u)).IsStableUnderBaseChange where
     exact ⟨z, hz⟩
 
 end CategoryTheory.Types
+

@@ -26,253 +26,201 @@ namespace ModuleCat
 
 variable {R : Type u} [CommRing R]
 
-/--
-Definition of `exteriorPower` / `exteriorPower` 的定义
+/-- The exterior power of an object in `ModuleCat R`. -/
+/-
+**ModuleCat.exteriorPower** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：exteriorPower (M : ModuleCat.{v} R) (n : Nat) : ModuleCat.{max u v} R
+参数：M : ModuleCat.{v} R；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exteriorPower
-  signature: (M : ModuleCat.{v} R) (n : Nat)
-  body: ModuleCat.of R (⋀[R]^n M)
-
-中文:
-定义 exteriorPower
-  签名: (M : 模范畴.{v} R) (n : 自然数)
-  定义体: ModuleCat.of R (⋀[R]^n M)
-
-Depends on / 依赖: ModuleCat, ModuleCat.of
+--- 原说明 ---
+The exterior power of an object in `ModuleCat R`.
 -/
-def exteriorPower (M : ModuleCat.{v} R) (n : Nat) : ModuleCat.{max u v} R :=
+def exteriorPower (M : ModuleCat.{v} R) (n : ℕ) : ModuleCat.{max u v} R :=
   ModuleCat.of R (⋀[R]^n M)
 
 -- this could be an abbrev, but using a def eases automation
-/--
-Definition of `AlternatingMap` / `AlternatingMap` 的定义
+/-- The type of `n`-alternating maps on `M : ModuleCat R` to `N : ModuleCat R`. -/
+/-
+**ModuleCat.AlternatingMap** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：AlternatingMap (M : ModuleCat.{v} R) (N : ModuleCat.{max u v} R) (n : Nat)
+参数：M : ModuleCat.{v} R；N : ModuleCat.{max u v} R；n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AlternatingMap
-  signature: (M : ModuleCat.{v} R) (N : ModuleCat.{max u v} R) (n : Nat)
-  body: _root_.AlternatingMap R M N (Fin n)
-
-中文:
-定义 交错映射
-  签名: (M : 模范畴.{v} R) (N : 模范畴.{最大值 u v} R) (n : 自然数)
-  定义体: _root_.AlternatingMap R M N (Fin n)
-
-Depends on / 依赖: AlternatingMap, _root_, _root_.AlternatingMap
+--- 原说明 ---
+The type of `n`-alternating maps on `M : ModuleCat R` to `N : ModuleCat R`.
 -/
-def AlternatingMap (M : ModuleCat.{v} R) (N : ModuleCat.{max u v} R) (n : Nat) :=
+def AlternatingMap (M : ModuleCat.{v} R) (N : ModuleCat.{max u v} R) (n : ℕ) :=
   _root_.AlternatingMap R M N (Fin n)
-
-instance (M : ModuleCat.{v} R) (N : ModuleCat.{max u v} R) (n : Nat) :
-    FunLike (M.AlternatingMap N n) (Fin n -> M) N :=
-  inferInstanceAs (FunLike (M [⋀^(Fin n)]->ₗ[R] N) (Fin n -> M) N)
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (M : ModuleCat.{v} R) (N : ModuleCat.{max u v} R) (n : ℕ) :
+    FunLike (M.AlternatingMap N n) (Fin n → M) N :=
+  inferInstanceAs (FunLike (M [⋀^(Fin n)]→ₗ[R] N) (Fin n → M) N)
 
 namespace AlternatingMap
 
-variable {M : ModuleCat.{v} R} {N : ModuleCat.{max u v} R} {n : Nat}
+variable {M : ModuleCat.{v} R} {N : ModuleCat.{max u v} R} {n : ℕ}
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {φ φ' : M.AlternatingMap N n} (h : forall (x : Fin n -> M), φ x = φ' x)
-  proof: _root_.AlternatingMap.ext h
-
-中文:
-引理 ext
-  条件: {φ φ' : M.交错映射 N n} (h : 对任意 (x : 有限集 n -> M), φ x = φ' x)
-  证明: _root_.AlternatingMap.ext h
-
-Depends on / 依赖: AlternatingMap, _root_, _root_.AlternatingMap.ext
+/-
+**ModuleCat.AlternatingMap.ext** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.AlternatingM
+ap`。
+形式化陈述：ext {φ φ' : M.AlternatingMap N n} (h : forall (x : Fin n -> M), φ x = φ' x
+) : φ = φ'
+参数：h : forall (x : Fin n -> M), φ x = φ' x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
 -/
-lemma ext {φ φ' : M.AlternatingMap N n} (h : forall (x : Fin n -> M), φ x = φ' x) :
+lemma ext {φ φ' : M.AlternatingMap N n} (h : ∀ (x : Fin n → M), φ x = φ' x) :
     φ = φ' :=
   _root_.AlternatingMap.ext h
 
 variable (φ : M.AlternatingMap N n) {N' : ModuleCat.{max u v} R} (g : N ⟶ N')
 
-/--
-Definition of `postcomp` / `postcomp` 的定义
+/-- The postcomposition of an alternating map by a linear map. -/
+/-
+**ModuleCat.AlternatingMap.postcomp** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.Alterna
+tingMap`。
+形式化陈述：postcomp : M.AlternatingMap N' n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcomp
-  signature: : M.AlternatingMap N' n
-  body: g.hom.compAlternatingMap φ
-
-@[simp]
-
-中文:
-定义 postcomp
-  签名: : M.交错映射 N' n
-  定义体: g.hom.compAlternatingMap φ
-
-@[simp]
-
-Depends on / 依赖: compAlternatingMap, g.hom.compAlternatingMap
+--- 原说明 ---
+The postcomposition of an alternating map by a linear map.
 -/
 def postcomp : M.AlternatingMap N' n :=
   g.hom.compAlternatingMap φ
 
 @[simp]
-/--
-lemma `postcomp_apply` / 引理 `postcomp_apply`
-
-English:
-lemma postcomp_apply
-  given: (x : Fin n -> M)
-  proof: rfl
-
-中文:
-引理 postcomp_apply
-  条件: (x : 有限集 n -> M)
-  证明: rfl
+/-
+**ModuleCat.AlternatingMap.postcomp_apply** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.A
+lternatingMap`。
+形式化陈述：postcomp_apply (x : Fin n -> M) : φ.postcomp g x = g (φ x)
+参数：x : Fin n -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma postcomp_apply (x : Fin n -> M) :
+lemma postcomp_apply (x : Fin n → M) :
     φ.postcomp g x = g (φ x) := rfl
 
 end AlternatingMap
 
 namespace exteriorPower
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Constructor for elements in `M.exteriorPower n` when `M` is an object of `ModuleCat R`
+and `n : ℕ`. -/
+/-
+**ModuleCat.exteriorPower.mk** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorPower`
+。
+形式化陈述：mk {M : ModuleCat.{v} R} {n : Nat} : M.AlternatingMap (M.exteriorPower n) 
+n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: {M : ModuleCat.{v} R} {n : Nat}
-  body: exteriorPower.ιMulti _ _
-
-@[ext]
-
-中文:
-定义 mk
-  签名: {M : 模范畴.{v} R} {n : 自然数}
-  定义体: exteriorPower.ιMulti _ _
-
-@[ext]
-
-Depends on / 依赖: exteriorPower
+--- 原说明 ---
+Constructor for elements in `M.exteriorPower n` when `M` is an object of `Module
+Cat R`
+and `n : ℕ`.
 -/
-def mk {M : ModuleCat.{v} R} {n : Nat} :
+def mk {M : ModuleCat.{v} R} {n : ℕ} :
     M.AlternatingMap (M.exteriorPower n) n :=
   exteriorPower.ιMulti _ _
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {M : ModuleCat.{v} R} {N : ModuleCat.{max u v} R} {n : Nat}
-  proof: by
-  ext : 1
-  exact exteriorPower.linearMap_ext h
-
-中文:
-引理 hom_ext
-  结论: {M : 模范畴.{v} R} {N : 模范畴.{最大值 u v} R} {n : 自然数}
-  证明: by
-  ext : 1
-  exact exteriorPower.linearMap_ext h
-
-Depends on / 依赖: exteriorPower, exteriorPower.linearMap_ext, linearMap_ext
+/-
+**ModuleCat.exteriorPower.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.exteriorP
+ower`。
+形式化陈述：hom_ext {M : ModuleCat.{v} R} {N : ModuleCat.{max u v} R} {n : Nat} {f g :
+ M.exteriorPower n ⟶ N} (h : mk.postcomp f = mk.postcomp g) : f = g
+参数：h : mk.postcomp f = mk.postcomp g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用引理 `exteriorPower.linearMap_ext`：linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : 
+⋀[R]^n M ->ₗ[R] N} (heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingM
+ap (ιMulti R n)) …
 -/
-lemma hom_ext {M : ModuleCat.{v} R} {N : ModuleCat.{max u v} R} {n : Nat}
+lemma hom_ext {M : ModuleCat.{v} R} {N : ModuleCat.{max u v} R} {n : ℕ}
     {f g : M.exteriorPower n ⟶ N}
     (h : mk.postcomp f = mk.postcomp g) : f = g := by
   ext : 1
   exact exteriorPower.linearMap_ext h
 
-/--
-Definition of `desc` / `desc` 的定义
+/-- The morphism `M.exteriorPower n ⟶ N` induced by an alternating map. -/
+/-
+**ModuleCat.exteriorPower.desc** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorPowe
+r`。
+形式化陈述：desc {M : ModuleCat.{v} R} {n : Nat} {N : ModuleCat.{max u v} R} (φ : M.Al
+ternatingMap N n) : M.exteriorPower n ⟶ N
+参数：φ : M.AlternatingMap N n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition desc
-  signature: {M : ModuleCat.{v} R} {n : Nat} {N : ModuleCat.{max u v} R}
-  body: ofHom (exteriorPower.alternatingMapLinearEquiv φ)
-
-@[simp]
-
-中文:
-定义 desc
-  签名: {M : 模范畴.{v} R} {n : 自然数} {N : 模范畴.{最大值 u v} R}
-  定义体: ofHom (exteriorPower.alternatingMapLinearEquiv φ)
-
-@[simp]
-
-Depends on / 依赖: alternatingMapLinearEquiv, exteriorPower, exteriorPower.alternatingMapLinearEquiv
+--- 原说明 ---
+The morphism `M.exteriorPower n ⟶ N` induced by an alternating map.
 -/
-noncomputable def desc {M : ModuleCat.{v} R} {n : Nat} {N : ModuleCat.{max u v} R}
+noncomputable def desc {M : ModuleCat.{v} R} {n : ℕ} {N : ModuleCat.{max u v} R}
     (φ : M.AlternatingMap N n) : M.exteriorPower n ⟶ N :=
   ofHom (exteriorPower.alternatingMapLinearEquiv φ)
 
 @[simp]
-/--
-lemma `desc_mk` / 引理 `desc_mk`
-
-English:
-lemma desc_mk
-  statement: {M : ModuleCat.{v} R} {n : Nat} {N : ModuleCat.{max u v} R}
-  proof: by
-  apply exteriorPower.alternatingMapLinearEquiv_apply_ιMulti
-
-中文:
-引理 desc_mk
-  结论: {M : 模范畴.{v} R} {n : 自然数} {N : 模范畴.{最大值 u v} R}
-  证明: by
-  apply exteriorPower.alternatingMapLinearEquiv_apply_ιMulti
-
-Depends on / 依赖: exteriorPower, exteriorPower.alternatingMapLinearEquiv_apply_
+/-
+**ModuleCat.exteriorPower.desc_mk** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.exteriorP
+ower`。
+形式化陈述：desc_mk {M : ModuleCat.{v} R} {n : Nat} {N : ModuleCat.{max u v} R} (φ : M
+.AlternatingMap N n) (x : Fin n -> M) : desc φ (mk x) = φ x
+参数：φ : M.AlternatingMap N n；x : Fin n -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exteriorPower.alternatingMapLinearEquiv_apply_ιMulti`：alternatingMapLine
+arEquiv_apply_ιMulti (f : M [⋀^Fin n]->ₗ[R] N) (a : Fin n -> M) : alternatingMap
+LinearEquiv f (ιMulti R n a) = f a
 -/
-lemma desc_mk {M : ModuleCat.{v} R} {n : Nat} {N : ModuleCat.{max u v} R}
-    (φ : M.AlternatingMap N n) (x : Fin n -> M) :
+lemma desc_mk {M : ModuleCat.{v} R} {n : ℕ} {N : ModuleCat.{max u v} R}
+    (φ : M.AlternatingMap N n) (x : Fin n → M) :
     desc φ (mk x) = φ x := by
   apply exteriorPower.alternatingMapLinearEquiv_apply_ιMulti
 
-/--
-Definition of `map` / `map` 的定义
+/-- The morphism `M.exteriorPower n ⟶ N.exteriorPower n` induced by a morphism `M ⟶ N`
+in `ModuleCat R`. -/
+/-
+**ModuleCat.exteriorPower.map** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorPower
+`。
+形式化陈述：map {M N : ModuleCat.{v} R} (f : M ⟶ N) (n : Nat) : M.exteriorPower n ⟶ N.
+exteriorPower n
+参数：f : M ⟶ N；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {M N : ModuleCat.{v} R} (f : M ⟶ N) (n : Nat)
-  body: ofHom (_root_.exteriorPower.map n f.hom)
-
-@[simp]
-
-中文:
-定义 map
-  签名: {M N : 模范畴.{v} R} (f : M ⟶ N) (n : 自然数)
-  定义体: ofHom (_root_.exteriorPower.map n f.hom)
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.exteriorPower.map, exteriorPower, f.hom
+--- 原说明 ---
+The morphism `M.exteriorPower n ⟶ N.exteriorPower n` induced by a morphism `M ⟶ 
+N`
+in `ModuleCat R`.
 -/
-noncomputable def map {M N : ModuleCat.{v} R} (f : M ⟶ N) (n : Nat) :
+noncomputable def map {M N : ModuleCat.{v} R} (f : M ⟶ N) (n : ℕ) :
     M.exteriorPower n ⟶ N.exteriorPower n :=
   ofHom (_root_.exteriorPower.map n f.hom)
 
 @[simp]
-/--
-lemma `map_mk` / 引理 `map_mk`
-
-English:
-lemma map_mk
-  given: {M N : ModuleCat.{v} R} (f : M ⟶ N) {n : Nat} (x : Fin n -> M)
-  proof: by
-  apply exteriorPower.map_apply_ιMulti
-
-中文:
-引理 map_mk
-  条件: {M N : 模范畴.{v} R} (f : M ⟶ N) {n : 自然数} (x : 有限集 n -> M)
-  证明: by
-  apply exteriorPower.map_apply_ιMulti
-
-Depends on / 依赖: exteriorPower, exteriorPower.map_apply_
+/-
+**ModuleCat.exteriorPower.map_mk** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.exteriorPo
+wer`。
+形式化陈述：map_mk {M N : ModuleCat.{v} R} (f : M ⟶ N) {n : Nat} (x : Fin n -> M) : ma
+p f n (mk x) = mk (f ∘ x)
+参数：f : M ⟶ N；x : Fin n -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exteriorPower.map_apply_ιMulti`：map_apply_ιMulti (f : M ->ₗ[R] N) (m : F
+in n -> M) : map n f (ιMulti R n m) = ιMulti R n (f ∘ m)
 -/
-lemma map_mk {M N : ModuleCat.{v} R} (f : M ⟶ N) {n : Nat} (x : Fin n -> M) :
+lemma map_mk {M N : ModuleCat.{v} R} (f : M ⟶ N) {n : ℕ} (x : Fin n → M) :
     map f n (mk x) = mk (f ∘ x) := by
   apply exteriorPower.map_apply_ιMulti
 
@@ -280,154 +228,81 @@ variable (R) in
 /-- The functor `ModuleCat R ⥤ ModuleCat R` which sends a module to its
 `n`th exterior power. -/
 @[simps]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**ModuleCat.exteriorPower.functor** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorP
+ower`。
+形式化陈述：functor (n : Nat) : ModuleCat.{v} R ⥤ ModuleCat.{max u v} R where obj M
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: (n : Nat)
-  body: M.exteriorPower n
-  map f := map f n
-
-中文:
-定义 functor
-  签名: (n : 自然数)
-  定义体: M.exteriorPower n
-  map f := map f n
-
-Depends on / 依赖: M.exteriorPower, exteriorPower
+--- 原说明 ---
+The functor `ModuleCat R ⥤ ModuleCat R` which sends a module to its
+`n`th exterior power.
 -/
-noncomputable def functor (n : Nat) : ModuleCat.{v} R ⥤ ModuleCat.{max u v} R where
+noncomputable def functor (n : ℕ) : ModuleCat.{v} R ⥤ ModuleCat.{max u v} R where
   obj M := M.exteriorPower n
   map f := map f n
 
-/--
-Definition of `iso₀` / `iso₀` 的定义
+/-- The isomorphism `M.exteriorPower 0 ≅ ModuleCat.of R R`. -/
+/-
+**ModuleCat.exteriorPower.iso** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorPower
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iso₀
-  signature: (M : ModuleCat.{u} R)
-  body: (exteriorPower.zeroEquiv R M).toModuleIso
-
-@[simp]
-
-中文:
-定义 iso₀
-  签名: (M : 模范畴.{u} R)
-  定义体: (exteriorPower.zeroEquiv R M).toModuleIso
-
-@[simp]
-
-Depends on / 依赖: exteriorPower, exteriorPower.zeroEquiv, toModuleIso, zeroEquiv
+--- 原说明 ---
+The isomorphism `M.exteriorPower 0 ≅ ModuleCat.of R R`.
 -/
 noncomputable def iso₀ (M : ModuleCat.{u} R) : M.exteriorPower 0 ≅ ModuleCat.of R R :=
   (exteriorPower.zeroEquiv R M).toModuleIso
 
 @[simp]
-/--
-lemma `iso₀_hom_apply` / 引理 `iso₀_hom_apply`
-
-English:
-lemma iso₀_hom_apply
-  given: {M : ModuleCat.{u} R} (f : Fin 0 -> M)
-  proof: exteriorPower.zeroEquiv_ιMulti _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 iso₀_hom_apply
-  条件: {M : 模范畴.{u} R} (f : 有限集 0 -> M)
-  证明: exteriorPower.zeroEquiv_ιMulti _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: exteriorPower, exteriorPower.zeroEquiv_
+/-
+**ModuleCat.exteriorPower.iso** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.exteriorPower
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma iso₀_hom_apply {M : ModuleCat.{u} R} (f : Fin 0 -> M) :
+lemma iso₀_hom_apply {M : ModuleCat.{u} R} (f : Fin 0 → M) :
     (iso₀ M).hom (mk f) = 1 :=
   exteriorPower.zeroEquiv_ιMulti _
 
 @[reassoc (attr := simp)]
-/--
-lemma `iso₀_hom_naturality` / 引理 `iso₀_hom_naturality`
-
-English:
-lemma iso₀_hom_naturality
-  given: {M N : ModuleCat.{u} R} (f : M ⟶ N)
-  proof: ModuleCat.hom_ext (exteriorPower.zeroEquiv_naturality f.hom)
-
-中文:
-引理 iso₀_hom_naturality
-  条件: {M N : 模范畴.{u} R} (f : M ⟶ N)
-  证明: ModuleCat.hom_ext (exteriorPower.zeroEquiv_naturality f.hom)
-
-Depends on / 依赖: ModuleCat, ModuleCat.hom_ext, exteriorPower, exteriorPower.zeroEquiv_naturality, f.hom, hom_ext, zeroEquiv_naturality
+/-
+**ModuleCat.exteriorPower.iso** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.exteriorPower
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma iso₀_hom_naturality {M N : ModuleCat.{u} R} (f : M ⟶ N) :
     map f 0 ≫ (iso₀ N).hom = (iso₀ M).hom :=
   ModuleCat.hom_ext (exteriorPower.zeroEquiv_naturality f.hom)
 
-/--
-Definition of `iso₁` / `iso₁` 的定义
+/-- The isomorphism `M.exteriorPower 1 ≅ M`. -/
+/-
+**ModuleCat.exteriorPower.iso** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorPower
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iso₁
-  signature: (M : ModuleCat.{u} R)
-  body: (exteriorPower.oneEquiv R M).toModuleIso
-
-@[simp]
-
-中文:
-定义 iso₁
-  签名: (M : 模范畴.{u} R)
-  定义体: (exteriorPower.oneEquiv R M).toModuleIso
-
-@[simp]
-
-Depends on / 依赖: exteriorPower, exteriorPower.oneEquiv, oneEquiv, toModuleIso
+--- 原说明 ---
+The isomorphism `M.exteriorPower 1 ≅ M`.
 -/
 noncomputable def iso₁ (M : ModuleCat.{u} R) : M.exteriorPower 1 ≅ M :=
   (exteriorPower.oneEquiv R M).toModuleIso
 
 @[simp]
-/--
-lemma `iso₁_hom_apply` / 引理 `iso₁_hom_apply`
-
-English:
-lemma iso₁_hom_apply
-  given: {M : ModuleCat.{u} R} (f : Fin 1 -> M)
-  proof: exteriorPower.oneEquiv_ιMulti _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 iso₁_hom_apply
-  条件: {M : 模范畴.{u} R} (f : 有限集 1 -> M)
-  证明: exteriorPower.oneEquiv_ιMulti _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: exteriorPower, exteriorPower.oneEquiv_
+/-
+**ModuleCat.exteriorPower.iso** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.exteriorPower
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma iso₁_hom_apply {M : ModuleCat.{u} R} (f : Fin 1 -> M) :
+lemma iso₁_hom_apply {M : ModuleCat.{u} R} (f : Fin 1 → M) :
     (iso₁ M).hom (mk f) = f 0 :=
   exteriorPower.oneEquiv_ιMulti _
 
 @[reassoc (attr := simp)]
-/--
-lemma `iso₁_hom_naturality` / 引理 `iso₁_hom_naturality`
-
-English:
-lemma iso₁_hom_naturality
-  given: {M N : ModuleCat.{u} R} (f : M ⟶ N)
-  proof: ModuleCat.hom_ext (exteriorPower.oneEquiv_naturality f.hom)
-
-中文:
-引理 iso₁_hom_naturality
-  条件: {M N : 模范畴.{u} R} (f : M ⟶ N)
-  证明: ModuleCat.hom_ext (exteriorPower.oneEquiv_naturality f.hom)
-
-Depends on / 依赖: ModuleCat, ModuleCat.hom_ext, exteriorPower, exteriorPower.oneEquiv_naturality, f.hom, hom_ext, oneEquiv_naturality
+/-
+**ModuleCat.exteriorPower.iso** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat.exteriorPower
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma iso₁_hom_naturality {M N : ModuleCat.{u} R} (f : M ⟶ N) :
     map f 1 ≫ (iso₁ N).hom = (iso₁ M).hom ≫ f :=
@@ -436,39 +311,27 @@ lemma iso₁_hom_naturality {M N : ModuleCat.{u} R} (f : M ⟶ N) :
 variable (R)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `natIso₀` / `natIso₀` 的定义
+/-- The natural isomorphism `M.exteriorPower 0 ≅ ModuleCat.of R R`. -/
+/-
+**ModuleCat.exteriorPower.natIso** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorPo
+wer`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natIso₀
-  signature: : functor.{u} R 0 ≅ (Functor.const _).obj (ModuleCat.of R R)
-  body: NatIso.ofComponents iso₀
-
-中文:
-定义 natIso₀
-  签名: : functor.{u} R 0 ≅ (函子.const _).obj (模范畴.of R R)
-  定义体: NatIso.ofComponents iso₀
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The natural isomorphism `M.exteriorPower 0 ≅ ModuleCat.of R R`.
 -/
 noncomputable def natIso₀ : functor.{u} R 0 ≅ (Functor.const _).obj (ModuleCat.of R R) :=
   NatIso.ofComponents iso₀
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `natIso₁` / `natIso₁` 的定义
+/-- The natural isomorphism `M.exteriorPower 1 ≅ M`. -/
+/-
+**ModuleCat.exteriorPower.natIso** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.exteriorPo
+wer`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natIso₁
-  signature: : functor.{u} R 1 ≅ 𝟭 _
-  body: NatIso.ofComponents iso₁
-
-中文:
-定义 natIso₁
-  签名: : functor.{u} R 1 ≅ 𝟭 _
-  定义体: NatIso.ofComponents iso₁
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The natural isomorphism `M.exteriorPower 1 ≅ M`.
 -/
 noncomputable def natIso₁ : functor.{u} R 1 ≅ 𝟭 _ :=
   NatIso.ofComponents iso₁
@@ -476,3 +339,4 @@ noncomputable def natIso₁ : functor.{u} R 1 ≅ 𝟭 _ :=
 end exteriorPower
 
 end ModuleCat
+

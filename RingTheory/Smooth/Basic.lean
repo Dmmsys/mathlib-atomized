@@ -67,22 +67,17 @@ For the infinitesimal lifting definition,
 see `FormallySmooth.lift` and `FormallySmooth.iff_comp_surjective`.
 -/
 @[stacks 00TI "Also see 031J (6) for the equivalence with the definition given here.", mk_iff]
-/--
-Definition of `FormallySmooth` / `FormallySmooth` 的定义
+/-
+**Algebra.FormallySmooth** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra`。
+形式化陈述：(R : Type u) → (A : Type v) → [inst : CommRing R] → [inst_1 : CommRing A] 
+→ [Algebra R A] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FormallySmooth
-  parameters: : Prop where
-  axioms and operations (2):
-    - projective_kaehlerDifferential : Module.Projective A Ω[A⁄R]
-    - subsingleton_h1Cotangent : Subsingleton (H1Cotangent R A)
-
-中文:
-类 形式光滑
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - projective_kaehlerDifferential : 模.投射 A Ω[A⁄R]
-    - subsingleton_h1Cotangent : 子单例 (H1Cotangent R A)
+--- 原说明 ---
+An `R`-algebra `A` is formally smooth if `Ω[A⁄R]` is `A`-projective and `H¹(L_{A
+/R}) = 0`.
+For the infinitesimal lifting definition,
+see `FormallySmooth.lift` and `FormallySmooth.iff_comp_surjective`.
 -/
 class FormallySmooth : Prop where
   projective_kaehlerDifferential : Module.Projective A Ω[A⁄R]
@@ -94,136 +89,147 @@ attribute [instance] FormallySmooth.projective_kaehlerDifferential
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable (R A) in
-/--
-lemma `FormallySmooth.comp_surjective` / 引理 `FormallySmooth.comp_surjective`
-
-English:
-lemma FormallySmooth.comp_surjective
-  given: [FormallySmooth R A] (I : Ideal B) (hI : I ^ 2 = ⊥)
-  proof: by
-  intro f
-  let P : Algebra.Generators R A A := Generators.self R A
-  have hP : Function.Injective P.toExtension.cotangentComplex := by
-    rw [← LinearMap.ker_eq_bot]; rw [← Submodule.subsingleton_iff_eq_bot]
-    exact FormallySmooth.subsingleton_h1Cotangent
-  obtain ⟨l, hl⟩ := ((P.toExtension.exact_cotangentComplex_toKaehler.split_tfae'.out 0 1 rfl rfl).mp
-    ⟨P.toExtension.subsingleton_h1Cotangent.mp FormallySmooth.subsingleton_h1Cotangent,
-      Module.projective_lifting_property _ _ P.toExtension.toKaehler_surjective⟩).2
-  obtain ⟨g, hg⟩ := retractionKerCotangentToTensorEquivSection (R := R) P.algebraMap_surjective
-    ⟨⟨⟨Cotangent.val, by simp⟩, by simpa using! Cotangent.val_smul' (P := P.toExtension)⟩ ∘ₗ
-      l.restrictScalars P.toExtension.Ring, LinearMap.ext fun x => congr($hl x)⟩
-  let σ := Function.surjInv (f := algebraMap B (B ⧸ I)) Ideal.Quotient.mk_surjective
-  have H (x : P.Ring) : ↑(aeval (σ ∘ f) x) = f (algebraMap _ A x) := by
-    rw [← Ideal.Quotient.algebraMap_eq]; rw [← aeval_algebraMap_apply]; rw [P.algebraMap_eq]; rw [AlgHom.coe_toRingHom]; rw [comp_aeval_apply]; rw [← Function.comp_assoc]; rw [Function.comp_surjInv]
-    simp [P]
-  let l : P.Ring ⧸ (RingHom.ker (algebraMap P.Ring A)) ^ 2 ->ₐ[R] B :=
-Ideal.Quotient.liftₐ _ (aeval (σ ∘ f))
-      have : RingHom.ker (algebraMap P.Ring A) <= I.comap (aeval (σ ∘ f)).toRingHom := fun x hx => by
-        simp_all [← Ideal.Quotient.eq_zero_iff_mem (I := I), -map_aeval]
-      show RingHom.ker _ ^ 2 <= RingHom.ker _ from
-        (Ideal.pow_right_mono this 2).trans ((Ideal.le_comap_pow _ _).trans_eq (hI ▸ rfl))
-  have : f.comp (IsScalarTower.toAlgHom R P.Ring A).kerSquareLift =
-      (Ideal.Quotient.mkₐ R _).comp l := by
-    refine Ideal.Quotient.algHom_ext _ (MvPolynomial.algHom_ext fun i => ?_)
-    change f (algebraMap P.Ring A (.X i)) = algebraMap _ _ (MvPolynomial.aeval (σ ∘ f) (.X i))
-    simpa using! (Function.surjInv_eq _ _).symm
-  exact ⟨l.comp g, by rw [← AlgHom.comp_assoc, ← this, AlgHom.comp_assoc, hg, AlgHom.comp_id]⟩
-
-中文:
-引理 形式光滑.comp_surjective
-  条件: [形式光滑 R A] (I : 理想 B) (hI : I ^ 2 = ⊥)
-  证明: by
-  intro f
-  let P : Algebra.Generators R A A := Generators.self R A
-  have hP : Function.Injective P.toExtension.cotangentComplex := by
-    rw [← LinearMap.ker_eq_bot]; rw [← Submodule.subsingleton_iff_eq_bot]
-    exact FormallySmooth.subsingleton_h1Cotangent
-  obtain ⟨l, hl⟩ := ((P.toExtension.exact_cotangentComplex_toKaehler.split_tfae'.out 0 1 rfl rfl).mp
-    ⟨P.toExtension.subsingleton_h1Cotangent.mp FormallySmooth.subsingleton_h1Cotangent,
-      Module.projective_lifting_property _ _ P.toExtension.toKaehler_surjective⟩).2
-  obtain ⟨g, hg⟩ := retractionKerCotangentToTensorEquivSection (R := R) P.algebraMap_surjective
-    ⟨⟨⟨Cotangent.val, by simp⟩, by simpa using! Cotangent.val_smul' (P := P.toExtension)⟩ ∘ₗ
-      l.restrictScalars P.toExtension.Ring, LinearMap.ext fun x => congr($hl x)⟩
-  let σ := Function.surjInv (f := algebraMap B (B ⧸ I)) Ideal.Quotient.mk_surjective
-  have H (x : P.Ring) : ↑(aeval (σ ∘ f) x) = f (algebraMap _ A x) := by
-    rw [← Ideal.Quotient.algebraMap_eq]; rw [← aeval_algebraMap_apply]; rw [P.algebraMap_eq]; rw [AlgHom.coe_toRingHom]; rw [comp_aeval_apply]; rw [← Function.comp_assoc]; rw [Function.comp_surjInv]
-    simp [P]
-  let l : P.Ring ⧸ (RingHom.ker (algebraMap P.Ring A)) ^ 2 ->ₐ[R] B :=
-Ideal.Quotient.liftₐ _ (aeval (σ ∘ f))
-      have : RingHom.ker (algebraMap P.Ring A) <= I.comap (aeval (σ ∘ f)).toRingHom := fun x hx => by
-        simp_all [← Ideal.Quotient.eq_zero_iff_mem (I := I), -map_aeval]
-      show RingHom.ker _ ^ 2 <= RingHom.ker _ from
-        (Ideal.pow_right_mono this 2).trans ((Ideal.le_comap_pow _ _).trans_eq (hI ▸ rfl))
-  have : f.comp (IsScalarTower.toAlgHom R P.Ring A).kerSquareLift =
-      (Ideal.Quotient.mkₐ R _).comp l := by
-    refine Ideal.Quotient.algHom_ext _ (MvPolynomial.algHom_ext fun i => ?_)
-    change f (algebraMap P.Ring A (.X i)) = algebraMap _ _ (MvPolynomial.aeval (σ ∘ f) (.X i))
-    simpa using! (Function.surjInv_eq _ _).symm
-  exact ⟨l.comp g, by rw [← AlgHom.comp_assoc, ← this, AlgHom.comp_assoc, hg, AlgHom.comp_id]⟩
-
-Depends on / 依赖: Algebra, Algebra.Generators, FormallySmooth, FormallySmooth.subsingleton_h1Cotangent, Function, Function.Injective, Generators, Generators.self, Injective, LinearMap, LinearMap.ker_eq_bot, Module, Module.projective_lifting_property, P.toExtension.cotangentComplex, P.toExtension.exact_cotangentComplex_toKaehler.split_tfae, P.toExtension.subsingleton_h1Cotangent.mp, P.toExtension.toKaehler_surje, Submodule, Submodule.subsingleton_iff_eq_bot, cotangentComplex
+/-
+**Algebra.FormallySmooth.comp_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Form
+allySmooth`。
+形式化陈述：∀ (R : Type u) (A : Type v) [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A] {B : Type u_1}   [inst_3 : CommRing B] [inst_4 : Algebra R B]
+ [Algebra.FormallySmooth R A] (I : Ideal B),   I ^ 2 = ⊥ → Function.Surjective (
+Ideal.Quotient.mkₐ R I).comp
+参数：R : Type u；A : Type v；I : Ideal B；Ideal.Quotient.mkₐ R I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `Submodule.subsingleton_iff_eq_bot`：subsingleton_iff_eq_bot : Subsingleto
+n p ↔ p = ⊥
+· 使用定理 `Algebra.FormallySmooth.subsingleton_h1Cotangent`：∀ {R : Type u} {A : Typ
+e v} {inst : CommRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : 
+Algebra.FormallySmooth R A], Subsingl…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `Function.Exact.split_tfae'`：∀ {R : Type u_1} {M : Type u_2} {N : Type u_
+4} {P : Type u_6} [inst : Semiring R] [inst_1 : AddCommGroup M]   [inst_2 : AddC
+ommGroup N] [ins…
+· 使用引理 `Algebra.Extension.exact_cotangentComplex_toKaehler`：exact_cotangentCompl
+ex_toKaehler : Function.Exact P.cotangentComplex P.toKaehler
+· 使用引理 `Algebra.Extension.subsingleton_h1Cotangent`：subsingleton_h1Cotangent (P 
+: Extension R S) : Subsingleton P.H1Cotangent ↔ Function.Injective P.cotangentCo
+mplex
+· 使用定理 `Module.projective_lifting_property`：projective_lifting_property [h : Pro
+jective R P] (f : M ->ₗ[R] N) (g : P ->ₗ[R] N) (hf : Function.Surjective f) : ex
+ists h : P ->ₗ[R] M, f ∘…
+· 使用定理 `Algebra.FormallySmooth.projective_kaehlerDifferential`：∀ {R : Type u} {A
+ : Type v} {inst : CommRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [s
+elf : Algebra.FormallySmooth R A], Module.P…
+· 使用引理 `Algebra.Extension.toKaehler_surjective`：toKaehler_surjective : Function.
+Surjective P.toKaehler
+· 使用定理 `Algebra.Generators.instIsScalarTowerRing`：∀ {R : Type u} {S : Type v} {ι
+ : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P
+ : Algebra.Generators R S ι) {…
+· 使用引理 `Algebra.Generators.algebraMap_surjective`：algebraMap_surjective : Functi
+on.Surjective (algebraMap P.Ring S)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Algebra.Extension.Cotangent.val_smul'`：∀ {R : Type u} {S : Type v} [inst
+ : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.Extensi
+on R S}   (r : P.Ring) (x :…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.Extension.instIsScalarTowerCotangent`：∀ {R : Type u} {S : Type v
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.
+Extension R S}   {R₁ : Type u_1} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+（共 56 条，此处仅展示前 30 条）
 -/
 lemma FormallySmooth.comp_surjective [FormallySmooth R A] (I : Ideal B) (hI : I ^ 2 = ⊥) :
-    Function.Surjective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
+    Function.Surjective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I) := by
   intro f
   let P : Algebra.Generators R A A := Generators.self R A
   have hP : Function.Injective P.toExtension.cotangentComplex := by
-    rw [← LinearMap.ker_eq_bot]; rw [← Submodule.subsingleton_iff_eq_bot]
+    rw [← LinearMap.ker_eq_bot, ← Submodule.subsingleton_iff_eq_bot]
     exact FormallySmooth.subsingleton_h1Cotangent
   obtain ⟨l, hl⟩ := ((P.toExtension.exact_cotangentComplex_toKaehler.split_tfae'.out 0 1 rfl rfl).mp
     ⟨P.toExtension.subsingleton_h1Cotangent.mp FormallySmooth.subsingleton_h1Cotangent,
       Module.projective_lifting_property _ _ P.toExtension.toKaehler_surjective⟩).2
   obtain ⟨g, hg⟩ := retractionKerCotangentToTensorEquivSection (R := R) P.algebraMap_surjective
     ⟨⟨⟨Cotangent.val, by simp⟩, by simpa using! Cotangent.val_smul' (P := P.toExtension)⟩ ∘ₗ
-      l.restrictScalars P.toExtension.Ring, LinearMap.ext fun x => congr($hl x)⟩
+      l.restrictScalars P.toExtension.Ring, LinearMap.ext fun x ↦ congr($hl x)⟩
   let σ := Function.surjInv (f := algebraMap B (B ⧸ I)) Ideal.Quotient.mk_surjective
   have H (x : P.Ring) : ↑(aeval (σ ∘ f) x) = f (algebraMap _ A x) := by
-    rw [← Ideal.Quotient.algebraMap_eq]; rw [← aeval_algebraMap_apply]; rw [P.algebraMap_eq]; rw [AlgHom.coe_toRingHom]; rw [comp_aeval_apply]; rw [← Function.comp_assoc]; rw [Function.comp_surjInv]
+    rw [← Ideal.Quotient.algebraMap_eq, ← aeval_algebraMap_apply, P.algebraMap_eq,
+      AlgHom.coe_toRingHom, comp_aeval_apply, ← Function.comp_assoc, Function.comp_surjInv,]
     simp [P]
-  let l : P.Ring ⧸ (RingHom.ker (algebraMap P.Ring A)) ^ 2 ->ₐ[R] B :=
-Ideal.Quotient.liftₐ _ (aeval (σ ∘ f))
-      have : RingHom.ker (algebraMap P.Ring A) <= I.comap (aeval (σ ∘ f)).toRingHom := fun x hx => by
+  let l : P.Ring ⧸ (RingHom.ker (algebraMap P.Ring A)) ^ 2 →ₐ[R] B :=
+    Ideal.Quotient.liftₐ _ (aeval (σ ∘ f)) <|
+      have : RingHom.ker (algebraMap P.Ring A) ≤ I.comap (aeval (σ ∘ f)).toRingHom := fun x hx ↦ by
         simp_all [← Ideal.Quotient.eq_zero_iff_mem (I := I), -map_aeval]
-      show RingHom.ker _ ^ 2 <= RingHom.ker _ from
+      show RingHom.ker _ ^ 2 ≤ RingHom.ker _ from
         (Ideal.pow_right_mono this 2).trans ((Ideal.le_comap_pow _ _).trans_eq (hI ▸ rfl))
   have : f.comp (IsScalarTower.toAlgHom R P.Ring A).kerSquareLift =
       (Ideal.Quotient.mkₐ R _).comp l := by
-    refine Ideal.Quotient.algHom_ext _ (MvPolynomial.algHom_ext fun i => ?_)
+    refine Ideal.Quotient.algHom_ext _ (MvPolynomial.algHom_ext fun i ↦ ?_)
     change f (algebraMap P.Ring A (.X i)) = algebraMap _ _ (MvPolynomial.aeval (σ ∘ f) (.X i))
     simpa using! (Function.surjInv_eq _ _).symm
   exact ⟨l.comp g, by rw [← AlgHom.comp_assoc, ← this, AlgHom.comp_assoc, hg, AlgHom.comp_id]⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `instFormallySmoothMvPolynomial` / 实例 `instFormallySmoothMvPolynomial`
-
-English:
-instance instFormallySmoothMvPolynomial
-  signature: (σ : Type*)
-  body: by
-  let P := Generators.mvPolynomial R σ
-  have : Subsingleton ↥P.toExtension.ker :=
-    Submodule.subsingleton_iff_eq_bot.mpr Generators.ker_mvPolynomial
-  have : Subsingleton P.toExtension.Cotangent := Cotangent.mk_surjective.subsingleton
-  have := P.toExtension.h1Cotangentι_injective.subsingleton
-  exact ⟨inferInstance, P.equivH1Cotangent.symm.subsingleton⟩
-
-@[deprecated (since := "2026-05-22")] alias mvPolynomial := instFormallySmoothMvPolynomial
-
-中文:
-实例 instFormallySmoothMvPolynomial
-  签名: (σ : 类型)
-  定义体: by
-  let P := Generators.mvPolynomial R σ
-  have : Subsingleton ↥P.toExtension.ker :=
-    Submodule.subsingleton_iff_eq_bot.mpr Generators.ker_mvPolynomial
-  have : Subsingleton P.toExtension.Cotangent := Cotangent.mk_surjective.subsingleton
-  have := P.toExtension.h1Cotangentι_injective.subsingleton
-  exact ⟨inferInstance, P.equivH1Cotangent.symm.subsingleton⟩
-
-@[deprecated (since := "2026-05-22")] alias mvPolynomial := instFormallySmoothMvPolynomial
-
-Depends on / 依赖: Cotangent, Cotangent.mk_surjective.subsingleton, Generators, Generators.ker_mvPolynomial, Generators.mvPolynomial, P.equivH1Cotangent.symm.subsingleton, P.toExtension.Cotangent, P.toExtension.h1Cotangent, P.toExtension.ker, Submodule, Submodule.subsingleton_iff_eq_bot.mpr, Subsingleton, _injective.subsingleton, equivH1Cotangent, ker_mvPolynomial, mk_surjective, mvPolynomial, subsingleton, subsingleton_iff_eq_bot, toExtension
+/-
+**Algebra.instFormallySmoothMvPolynomial** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+形式化陈述：instFormallySmoothMvPolynomial (σ : Type*) : FormallySmooth R (MvPolynomia
+l σ R)
+参数：σ : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.subsingleton_iff_eq_bot`：subsingleton_iff_eq_bot : Subsingleto
+n p ↔ p = ⊥
+· 使用引理 `Algebra.Generators.ker_mvPolynomial`：ker_mvPolynomial : (mvPolynomial R 
+ι).ker = ⊥
+· 使用定理 `Function.Surjective.subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} [Subsingleton α], Function.Surjective f → Subsingleton β
+· 使用定理 `Algebra.Extension.Cotangent.mk_surjective`：∀ {R : Type u} {S : Type v} [
+inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   {P : Algebra.E
+xtension R S}, Function.Surject…
+· 使用定理 `Function.Injective.subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β}, Function.Injective f → ∀ [Subsingleton β], Subsingleton α
+· 使用定理 `Algebra.Extension.instIsScalarTowerCotangent`：∀ {R : Type u} {S : Type v
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.
+Extension R S}   {R₁ : Type u_1} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `Algebra.Extension.h1Cotangentι_injective`：h1Cotangentι_injective : Funct
+ion.Injective P.h1Cotangentι
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `instFreeMvPolynomialKaehlerDifferential`：∀ (R : Type u) [inst : CommRing
+ R] (σ : Type u_1), Module.Free (MvPolynomial σ R) Ω[MvPolynomial σ R⁄R]
+· 使用定理 `Equiv.subsingleton`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) [Subsingleto
+n β], Subsingleton α
 -/
 instance instFormallySmoothMvPolynomial (σ : Type*) : FormallySmooth R (MvPolynomial σ R) := by
   let P := Generators.mvPolynomial R σ
@@ -239,54 +245,47 @@ end
 
 namespace FormallySmooth
 
-/--
-theorem `exists_lift` / 定理 `exists_lift`
-
-English:
-theorem exists_lift
-  proof: by
-  revert g
-  change Function.Surjective (Ideal.Quotient.mkₐ R I).comp
-  revert ‹Algebra R B›
-  apply Ideal.IsNilpotent.induction_on (S := B) I hI
-  · intro B _ I hI _; exact FormallySmooth.comp_surjective R A I hI
-  · intro B _ I J hIJ h₁ h₂ _ g
-    let : ((B ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)) ≃ₐ[R] B ⧸ J :=
-      { (DoubleQuot.quotQuotEquivQuotSup I J).trans
-          (Ideal.quotEquivOfEq (sup_eq_right.mpr hIJ)) with
-        commutes' := fun x => rfl }
-    obtain ⟨g', e⟩ := h₂ (this.symm.toAlgHom.comp g)
-    obtain ⟨g', rfl⟩ := h₁ g'
-    replace e := congr_arg this.toAlgHom.comp e
-    conv_rhs at e =>
-      rw [← AlgHom.comp_assoc]; rw [AlgEquiv.comp_symm]; rw [AlgHom.id_comp]
-    exact ⟨g', e⟩
-
-中文:
-定理 存在_lift
-  证明: by
-  revert g
-  change Function.Surjective (Ideal.Quotient.mkₐ R I).comp
-  revert ‹Algebra R B›
-  apply Ideal.IsNilpotent.induction_on (S := B) I hI
-  · intro B _ I hI _; exact FormallySmooth.comp_surjective R A I hI
-  · intro B _ I J hIJ h₁ h₂ _ g
-    let : ((B ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)) ≃ₐ[R] B ⧸ J :=
-      { (DoubleQuot.quotQuotEquivQuotSup I J).trans
-          (Ideal.quotEquivOfEq (sup_eq_right.mpr hIJ)) with
-        commutes' := fun x => rfl }
-    obtain ⟨g', e⟩ := h₂ (this.symm.toAlgHom.comp g)
-    obtain ⟨g', rfl⟩ := h₁ g'
-    replace e := congr_arg this.toAlgHom.comp e
-    conv_rhs at e =>
-      rw [← AlgHom.comp_assoc]; rw [AlgEquiv.comp_symm]; rw [AlgHom.id_comp]
-    exact ⟨g', e⟩
-
-Depends on / 依赖: Algebra, DoubleQuot, DoubleQuot.quotQuotEquivQuotSup, FormallySmooth, FormallySmooth.comp_surjective, Function, Function.Surjective, Ideal.IsNilpotent.induction_on, Ideal.Quotient.mk, Ideal.quotEquivOfEq, IsNilpotent, J.map, Quotient, Surjective, commutes, comp_surjective, induction_on, quotEquivOfEq, quotQuotEquivQuotSup, revert
+/-
+**Algebra.FormallySmooth.exists_lift** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Formally
+Smooth`。
+形式化陈述：exists_lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I) (g : A
+ ->ₐ[R] B ⧸ I) : exists f : A ->ₐ[R] B, (Ideal.Quotient.mkₐ R I).comp f = g
+参数：I : Ideal B；hI : IsNilpotent I；g : A ->ₐ[R] B ⧸ I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.IsNilpotent.induction_on`：Ideal.IsNilpotent.induction_on (hI : IsN
+ilpotent I) {P : forall ⦃S : Type _⦄ [CommRing S], Ideal S -> Prop} (h₁ : forall
+ ⦃S : Type _⦄ [CommR…
+· 使用定理 `Algebra.FormallySmooth.comp_surjective`：∀ (R : Type u) (A : Type v) [ins
+t : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {B : Type u_1}   [i
+nst_3 : CommRing B] [inst_4 …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
+· 使用定理 `RingEquiv.map_mul'`：∀ {R : Type u_7} {S : Type u_8} [inst : Mul R] [inst
+_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (self : R ≃+* S)   (x y : R), self
+.toFun (…
+· 使用定理 `RingEquiv.map_add'`：∀ {R : Type u_7} {S : Type u_8} [inst : Mul R] [inst
+_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (self : R ≃+* S)   (x y : R), self
+.toFun (…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgHom.comp_assoc`：comp_assoc (φ₁ : C ->ₐ[R] D) (φ₂ : B ->ₐ[R] C) (φ₃ : 
+A ->ₐ[R] B) : (φ₁.comp φ₂).comp φ₃ = φ₁.comp (φ₂.comp φ₃)
+· 使用定理 `AlgEquiv.comp_symm`：comp_symm (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp (e : A₁ ->
+ₐ[R] A₂) ↑e.symm = AlgHom.id R A₂
+· 使用定理 `AlgHom.id_comp`：id_comp : (AlgHom.id R B).comp φ = φ
 -/
 theorem exists_lift
-    [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I) (g : A ->ₐ[R] B ⧸ I) :
-    exists f : A ->ₐ[R] B, (Ideal.Quotient.mkₐ R I).comp f = g := by
+    [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I) (g : A →ₐ[R] B ⧸ I) :
+    ∃ f : A →ₐ[R] B, (Ideal.Quotient.mkₐ R I).comp f = g := by
   revert g
   change Function.Surjective (Ideal.Quotient.mkₐ R I).comp
   revert ‹Algebra R B›
@@ -301,176 +300,190 @@ theorem exists_lift
     obtain ⟨g', rfl⟩ := h₁ g'
     replace e := congr_arg this.toAlgHom.comp e
     conv_rhs at e =>
-      rw [← AlgHom.comp_assoc]; rw [AlgEquiv.comp_symm]; rw [AlgHom.id_comp]
+      rw [← AlgHom.comp_assoc, AlgEquiv.comp_symm, AlgHom.id_comp]
     exact ⟨g', e⟩
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- For a formally smooth `R`-algebra `A` and a map `f : A →ₐ[R] B ⧸ I` with `I` square-zero,
+this is an arbitrary lift `A →ₐ[R] B`. -/
+/-
+**Algebra.FormallySmooth.lift** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.FormallySmooth`
+。
+形式化陈述：lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I) (g : A ->ₐ[R]
+ B ⧸ I) : A ->ₐ[R] B
+参数：I : Ideal B；hI : IsNilpotent I；g : A ->ₐ[R] B ⧸ I。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallySmooth.exists_lift`：exists_lift [FormallySmooth R A] (I 
+: Ideal B) (hI : IsNilpotent I) (g : A ->ₐ[R] B ⧸ I) : exists f : A ->ₐ[R] B, (I
+deal.Quotient.mkₐ R I).c…
 
-English:
-definition lift
-  signature: [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
-  body: (FormallySmooth.exists_lift I hI g).choose
-
-@[simp]
-
-中文:
-定义 lift
-  签名: [形式光滑 R A] (I : 理想 B) (hI : 是幂零 I)
-  定义体: (FormallySmooth.exists_lift I hI g).choose
-
-@[simp]
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.exists_lift, exists_lift
+--- 原说明 ---
+For a formally smooth `R`-algebra `A` and a map `f : A →ₐ[R] B ⧸ I` with `I` squ
+are-zero,
+this is an arbitrary lift `A →ₐ[R] B`.
 -/
 noncomputable def lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
-    (g : A ->ₐ[R] B ⧸ I) : A ->ₐ[R] B :=
+    (g : A →ₐ[R] B ⧸ I) : A →ₐ[R] B :=
   (FormallySmooth.exists_lift I hI g).choose
 
 @[simp]
-/--
-theorem `comp_lift` / 定理 `comp_lift`
-
-English:
-theorem comp_lift
-  statement: [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
-  proof: (FormallySmooth.exists_lift I hI g).choose_spec
-
-@[simp]
-
-中文:
-定理 comp_lift
-  结论: [形式光滑 R A] (I : 理想 B) (hI : 是幂零 I)
-  证明: (FormallySmooth.exists_lift I hI g).choose_spec
-
-@[simp]
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.exists_lift, HereditarilyLindelof, HereditarilyLindelof.to_Lindelof, HereditarilyLindelofSpace, choose_spec, exists_lift, to_Lindelof
+/-
+**Algebra.FormallySmooth.comp_lift** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallySm
+ooth`。
+形式化陈述：comp_lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I) (g : A -
+>ₐ[R] B ⧸ I) : (Ideal.Quotient.mkₐ R I).comp (FormallySmooth.lift I hI g) = g
+参数：I : Ideal B；hI : IsNilpotent I；g : A ->ₐ[R] B ⧸ I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallySmooth.exists_lift`：exists_lift [FormallySmooth R A] (I 
+: Ideal B) (hI : IsNilpotent I) (g : A ->ₐ[R] B ⧸ I) : exists f : A ->ₐ[R] B, (I
+deal.Quotient.mkₐ R I).c…
 -/
 theorem comp_lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
-    (g : A ->ₐ[R] B ⧸ I) : (Ideal.Quotient.mkₐ R I).comp (FormallySmooth.lift I hI g) = g :=
+    (g : A →ₐ[R] B ⧸ I) : (Ideal.Quotient.mkₐ R I).comp (FormallySmooth.lift I hI g) = g :=
   (FormallySmooth.exists_lift I hI g).choose_spec
 
 @[simp]
-/--
-theorem `mk_lift` / 定理 `mk_lift`
-
-English:
-theorem mk_lift
-  statement: [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
-  proof: AlgHom.congr_fun (FormallySmooth.comp_lift I hI g :) x
-
-中文:
-定理 mk_lift
-  结论: [形式光滑 R A] (I : 理想 B) (hI : 是幂零 I)
-  证明: AlgHom.congr_fun (FormallySmooth.comp_lift I hI g :) x
-
-Depends on / 依赖: AlgHom, AlgHom.congr_fun, FormallySmooth, FormallySmooth.comp_lift, comp_lift, congr_fun
+/-
+**Algebra.FormallySmooth.mk_lift** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallySmoo
+th`。
+形式化陈述：mk_lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I) (g : A ->ₐ
+[R] B ⧸ I) (x : A) : Ideal.Quotient.mk I (FormallySmooth.lift I hI g x) = g x
+参数：I : Ideal B；hI : IsNilpotent I；g : A ->ₐ[R] B ⧸ I；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `AlgHom.congr_fun`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallySmooth.comp_lift`：comp_lift [FormallySmooth R A] (I : Id
+eal B) (hI : IsNilpotent I) (g : A ->ₐ[R] B ⧸ I) : (Ideal.Quotient.mkₐ R I).comp
+ (FormallySmooth.lift …
 -/
 theorem mk_lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
-    (g : A ->ₐ[R] B ⧸ I) (x : A) : Ideal.Quotient.mk I (FormallySmooth.lift I hI g x) = g x :=
+    (g : A →ₐ[R] B ⧸ I) (x : A) : Ideal.Quotient.mk I (FormallySmooth.lift I hI g x) = g x :=
   AlgHom.congr_fun (FormallySmooth.comp_lift I hI g :) x
 
 variable {C : Type*} [CommRing C] [Algebra R C]
 
-/--
-Definition of `liftOfSurjective` / `liftOfSurjective` 的定义
+/-- For a formally smooth `R`-algebra `A` and a map `f : A →ₐ[R] B ⧸ I` with `I` nilpotent,
+this is an arbitrary lift `A →ₐ[R] B`. -/
+/-
+**Algebra.FormallySmooth.liftOfSurjective** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.For
+mallySmooth`。
+形式化陈述：liftOfSurjective [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C) (h
+g : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker (g : B ->+* C)) : A
+ ->ₐ[R] B
+参数：f : A ->ₐ[R] C；g : B ->ₐ[R] C；hg : Function.Surjective g；hg' : IsNilpotent <|
+ RingHom.ker (g : B ->+* C)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftOfSurjective
-  signature: [FormallySmooth R A] (f : A ->ₐ[R] C)
-  body: FormallySmooth.lift _ hg' ((Ideal.quotientKerAlgEquivOfSurjective hg).symm.toAlgHom.comp f)
-
-中文:
-定义 liftOfSurjective
-  签名: [形式光滑 R A] (f : A ->ₐ[R] C)
-  定义体: FormallySmooth.lift _ hg' ((Ideal.quotientKerAlgEquivOfSurjective hg).symm.toAlgHom.comp f)
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.lift, Ideal.quotientKerAlgEquivOfSurjective, quotientKerAlgEquivOfSurjective, symm.toAlgHom.comp, toAlgHom
+--- 原说明 ---
+For a formally smooth `R`-algebra `A` and a map `f : A →ₐ[R] B ⧸ I` with `I` nil
+potent,
+this is an arbitrary lift `A →ₐ[R] B`.
 -/
-noncomputable def liftOfSurjective [FormallySmooth R A] (f : A ->ₐ[R] C)
-    (g : B ->ₐ[R] C) (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker (g : B ->+* C)) :
-    A ->ₐ[R] B :=
+noncomputable def liftOfSurjective [FormallySmooth R A] (f : A →ₐ[R] C)
+    (g : B →ₐ[R] C) (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker (g : B →+* C)) :
+    A →ₐ[R] B :=
   FormallySmooth.lift _ hg' ((Ideal.quotientKerAlgEquivOfSurjective hg).symm.toAlgHom.comp f)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `liftOfSurjective_apply` / 定理 `liftOfSurjective_apply`
-
-English:
-theorem liftOfSurjective_apply
-  statement: [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
-  proof: by
-  apply (Ideal.quotientKerAlgEquivOfSurjective hg).symm.injective
-  conv_rhs => rw [← AlgEquiv.coe_toAlgHom, ← AlgHom.comp_apply,
-    ← FormallySmooth.mk_lift (A := A) _ hg']
-  apply (Ideal.quotientKerAlgEquivOfSurjective hg).injective
-  rw [AlgEquiv.apply_symm_apply]; rw [Ideal.quotientKerAlgEquivOfSurjective_apply]
-  simp only [liftOfSurjective, ← RingHom.ker_coe_toRingHom g, RingHom.kerLift_mk, RingHom.coe_coe]
-
-@[simp]
-
-中文:
-定理 liftOfSurjective_apply
-  结论: [形式光滑 R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
-  证明: by
-  apply (Ideal.quotientKerAlgEquivOfSurjective hg).symm.injective
-  conv_rhs => rw [← AlgEquiv.coe_toAlgHom, ← AlgHom.comp_apply,
-    ← FormallySmooth.mk_lift (A := A) _ hg']
-  apply (Ideal.quotientKerAlgEquivOfSurjective hg).injective
-  rw [AlgEquiv.apply_symm_apply]; rw [Ideal.quotientKerAlgEquivOfSurjective_apply]
-  simp only [liftOfSurjective, ← RingHom.ker_coe_toRingHom g, RingHom.kerLift_mk, RingHom.coe_coe]
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.comp_apply, FormallySmooth, FormallySmooth.mk_lift, Ideal.quotientKerAlgEquivOfSurjective, Ideal.quotientKerAlgEquivOfSurjective_apply, RingHom, RingHom.coe_coe, RingHom.kerLift_mk, RingHom.ker_coe_toRingHom, SecondCountableTopology, SecondCountableTopology.toHereditarilyLindelof, apply_symm_apply, coe_coe, coe_toAlgHom, comp_apply, conv_rhs
+/-
+**Algebra.FormallySmooth.liftOfSurjective_apply** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+ra.FormallySmooth`。
+形式化陈述：liftOfSurjective_apply [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R]
+ C) (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker g) (x : A) : 
+g (FormallySmooth.liftOfSurjective f g hg hg' x) = f x
+参数：f : A ->ₐ[R] C；g : B ->ₐ[R] C；hg : Function.Surjective g；hg' : IsNilpotent <|
+ RingHom.ker g；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquiv.injective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [ins
+t : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Al
+gebra R …
+· 使用定理 `RingHom.instIsTwoSidedKer`：∀ {R : Type u} {S : Type v} {F : Type u_1} [i
+nst : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHo
+mClass F R S] (…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgEquiv.coe_toAlgHom`：coe_toAlgHom : DFunLike.coe e.toAlgHom = e
+· 使用定理 `AlgHom.comp_apply`：comp_apply (φ₁ : B ->ₐ[R] C) (φ₂ : A ->ₐ[R] B) (p : A
+) : φ₁.comp φ₂ p = φ₁ (φ₂ p)
+· 使用定理 `Algebra.FormallySmooth.mk_lift`：mk_lift [FormallySmooth R A] (I : Ideal 
+B) (hI : IsNilpotent I) (g : A ->ₐ[R] B ⧸ I) (x : A) : Ideal.Quotient.mk I (Form
+allySmooth.lift I hI…
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `Ideal.quotientKerAlgEquivOfSurjective_apply`：∀ {R₁ : Type u_1} {A : Type
+ u_3} {B : Type u_4} [inst : CommSemiring R₁] [inst_1 : Ring A] [inst_2 : Algebr
+a R₁ A]   [inst_3 : Semiring B] […
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHom.kerLift_mk`：kerLift_mk (r : R) : kerLift f (Ideal.Quotient.mk (k
+er f) r) = f r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem liftOfSurjective_apply [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
+theorem liftOfSurjective_apply [FormallySmooth R A] (f : A →ₐ[R] C) (g : B →ₐ[R] C)
     (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker g) (x : A) :
     g (FormallySmooth.liftOfSurjective f g hg hg' x) = f x := by
   apply (Ideal.quotientKerAlgEquivOfSurjective hg).symm.injective
   conv_rhs => rw [← AlgEquiv.coe_toAlgHom, ← AlgHom.comp_apply,
     ← FormallySmooth.mk_lift (A := A) _ hg']
   apply (Ideal.quotientKerAlgEquivOfSurjective hg).injective
-  rw [AlgEquiv.apply_symm_apply]; rw [Ideal.quotientKerAlgEquivOfSurjective_apply]
+  rw [AlgEquiv.apply_symm_apply, Ideal.quotientKerAlgEquivOfSurjective_apply]
   simp only [liftOfSurjective, ← RingHom.ker_coe_toRingHom g, RingHom.kerLift_mk, RingHom.coe_coe]
 
 @[simp]
-/--
-theorem `comp_liftOfSurjective` / 定理 `comp_liftOfSurjective`
-
-English:
-theorem comp_liftOfSurjective
-  statement: [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
-  proof: AlgHom.ext (FormallySmooth.liftOfSurjective_apply f g hg hg')
-
-中文:
-定理 comp_liftOfSurjective
-  结论: [形式光滑 R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
-  证明: AlgHom.ext (FormallySmooth.liftOfSurjective_apply f g hg hg')
-
-Depends on / 依赖: AlgHom, AlgHom.ext, FormallySmooth, FormallySmooth.liftOfSurjective_apply, liftOfSurjective_apply
+/-
+**Algebra.FormallySmooth.comp_liftOfSurjective** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+a.FormallySmooth`。
+形式化陈述：comp_liftOfSurjective [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] 
+C) (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker (g : B ->+* C)
+) : g.comp (FormallySmooth.liftOfSurjective f g hg hg') = f
+参数：f : A ->ₐ[R] C；g : B ->ₐ[R] C；hg : Function.Surjective g；hg' : IsNilpotent <|
+ RingHom.ker (g : B ->+* C)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `Algebra.FormallySmooth.liftOfSurjective_apply`：liftOfSurjective_apply [F
+ormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C) (hg : Function.Surjective g
+) (hg' : IsNilpotent <| RingHom.ker…
 -/
-theorem comp_liftOfSurjective [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
-    (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker (g : B ->+* C)) :
+theorem comp_liftOfSurjective [FormallySmooth R A] (f : A →ₐ[R] C) (g : B →ₐ[R] C)
+    (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker (g : B →+* C)) :
     g.comp (FormallySmooth.liftOfSurjective f g hg hg') = f :=
   AlgHom.ext (FormallySmooth.liftOfSurjective_apply f g hg hg')
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [EssFiniteType
-  signature: R A] [FormallySmooth R A] : Module.FinitePresentation A Ω[A⁄R]
-  body: Module.finitePresentation_of_projective A Ω[A⁄R]
-
-中文:
-实例 [EssFiniteType
-  签名: R A] [形式光滑 R A] : 模.有限呈现 A Ω[A⁄R]
-  定义体: Module.finitePresentation_of_projective A Ω[A⁄R]
-
-Depends on / 依赖: Module, Module.finitePresentation_of_projective, finitePresentation_of_projective
+/-
+**Algebra.FormallySmooth.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallySmooth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [EssFiniteType R A] [FormallySmooth R A] : Module.FinitePresentation A Ω[A⁄R] :=
   Module.finitePresentation_of_projective A Ω[A⁄R]
@@ -485,75 +498,32 @@ Given extensions `0 → I₁ → P₁ → A → 0` and `0 → I₂ → P₂ → 
 this is an arbitrarily chosen map `P₁/I₁² → P₂/I₂²` of extensions.
 -/
 noncomputable
-/--
-Definition of `homInfinitesimal` / `homInfinitesimal` 的定义
-
-English:
-definition homInfinitesimal
-  signature: (P₁ P₂ : Extension R A) [FormallySmooth R P₁.Ring]
-  body: letI lift : P₁.Ring ->ₐ[R] P₂.infinitesimal.Ring := FormallySmooth.liftOfSurjective
-    (IsScalarTower.toAlgHom R P₁.Ring A)
-    (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A)
-    P₂.infinitesimal.algebraMap_surjective
-    ⟨2, show P₂.infinitesimal.ker ^ 2 = ⊥ by
-      rw [ker_infinitesimal]; exact Ideal.cotangentIdeal_square _⟩
-  { toRingHom := (Ideal.Quotient.liftₐ (P₁.ker ^ 2) lift (by
-        change P₁.ker ^ 2 <= RingHom.ker lift
-        rw [pow_two]; rw [Ideal.mul_le]
-        have : forall r in P₁.ker, lift r in P₂.infinitesimal.ker :=
-          fun r hr => (FormallySmooth.liftOfSurjective_apply _
-            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ r).trans hr
-        intro r hr s hs
-        rw [RingHom.mem_ker]; rw [map_mul]; rw [← Ideal.mem_bot]; rw [← P₂.ker.cotangentIdeal_square]; rw [← ker_infinitesimal]; rw [pow_two]
-        exact Ideal.mul_mem_mul (this r hr) (this s hs))).toRingHom
-    toRingHom_algebraMap := by simp
-    algebraMap_toRingHom x := by
-      obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-      exact FormallySmooth.liftOfSurjective_apply _
-            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ x }
-
-中文:
-定义 homInfinitesimal
-  签名: (P₁ P₂ : 扩张 R A) [形式光滑 R P₁.环]
-  定义体: letI lift : P₁.Ring ->ₐ[R] P₂.infinitesimal.Ring := FormallySmooth.liftOfSurjective
-    (IsScalarTower.toAlgHom R P₁.Ring A)
-    (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A)
-    P₂.infinitesimal.algebraMap_surjective
-    ⟨2, show P₂.infinitesimal.ker ^ 2 = ⊥ by
-      rw [ker_infinitesimal]; exact Ideal.cotangentIdeal_square _⟩
-  { toRingHom := (Ideal.Quotient.liftₐ (P₁.ker ^ 2) lift (by
-        change P₁.ker ^ 2 <= RingHom.ker lift
-        rw [pow_two]; rw [Ideal.mul_le]
-        have : forall r in P₁.ker, lift r in P₂.infinitesimal.ker :=
-          fun r hr => (FormallySmooth.liftOfSurjective_apply _
-            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ r).trans hr
-        intro r hr s hs
-        rw [RingHom.mem_ker]; rw [map_mul]; rw [← Ideal.mem_bot]; rw [← P₂.ker.cotangentIdeal_square]; rw [← ker_infinitesimal]; rw [pow_two]
-        exact Ideal.mul_mem_mul (this r hr) (this s hs))).toRingHom
-    toRingHom_algebraMap := by simp
-    algebraMap_toRingHom x := by
-      obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-      exact FormallySmooth.liftOfSurjective_apply _
-            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ x }
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.liftOfSurjective, Ideal.Quotient.lift, Ideal.cotangentIdeal_square, Ideal.mul_le, IsScalarTower, IsScalarTower.toAlgHom, Quotient, RingHom, RingHom.ker, algebraMap_surjective, cotangentIdeal_square, infinitesimal, infinitesimal.Ring, infinitesimal.algebraMap_surjective, infinitesimal.ker, ker_infinitesimal, liftOfSurjective, mul_le, pow_two
+/-
+**Algebra.Extension.homInfinitesimal** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Extensio
+n`。
+形式化陈述：homInfinitesimal (P₁ P₂ : Extension R A) [FormallySmooth R P₁.Ring] : P₁.i
+nfinitesimal.Hom P₂.infinitesimal
+参数：P₁ P₂ : Extension R A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def homInfinitesimal (P₁ P₂ : Extension R A) [FormallySmooth R P₁.Ring] :
     P₁.infinitesimal.Hom P₂.infinitesimal :=
-  letI lift : P₁.Ring ->ₐ[R] P₂.infinitesimal.Ring := FormallySmooth.liftOfSurjective
+  letI lift : P₁.Ring →ₐ[R] P₂.infinitesimal.Ring := FormallySmooth.liftOfSurjective
     (IsScalarTower.toAlgHom R P₁.Ring A)
     (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A)
     P₂.infinitesimal.algebraMap_surjective
     ⟨2, show P₂.infinitesimal.ker ^ 2 = ⊥ by
       rw [ker_infinitesimal]; exact Ideal.cotangentIdeal_square _⟩
   { toRingHom := (Ideal.Quotient.liftₐ (P₁.ker ^ 2) lift (by
-        change P₁.ker ^ 2 <= RingHom.ker lift
-        rw [pow_two]; rw [Ideal.mul_le]
-        have : forall r in P₁.ker, lift r in P₂.infinitesimal.ker :=
-          fun r hr => (FormallySmooth.liftOfSurjective_apply _
+        change P₁.ker ^ 2 ≤ RingHom.ker lift
+        rw [pow_two, Ideal.mul_le]
+        have : ∀ r ∈ P₁.ker, lift r ∈ P₂.infinitesimal.ker :=
+          fun r hr ↦ (FormallySmooth.liftOfSurjective_apply _
             (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ r).trans hr
         intro r hr s hs
-        rw [RingHom.mem_ker]; rw [map_mul]; rw [← Ideal.mem_bot]; rw [← P₂.ker.cotangentIdeal_square]; rw [← ker_infinitesimal]; rw [pow_two]
+        rw [RingHom.mem_ker, map_mul, ← Ideal.mem_bot, ← P₂.ker.cotangentIdeal_square,
+          ← ker_infinitesimal, pow_two]
         exact Ideal.mul_mem_mul (this r hr) (this s hs))).toRingHom
     toRingHom_algebraMap := by simp
     algebraMap_toRingHom x := by
@@ -563,24 +533,19 @@ def homInfinitesimal (P₁ P₂ : Extension R A) [FormallySmooth R P₁.Ring] :
 
 /-- Formally smooth extensions have isomorphic `H¹(L_P)`. -/
 noncomputable
-/--
-Definition of `H1Cotangent.equivOfFormallySmooth` / `H1Cotangent.equivOfFormallySmooth` 的定义
-
-English:
-definition H1Cotangent.equivOfFormallySmooth
-  signature: (P₁ P₂ : Extension R A)
-  body: .ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₁) ≪≫ₗ
-    H1Cotangent.equiv (Extension.homInfinitesimal _ _) (Extension.homInfinitesimal _ _)
-    ≪≫ₗ .symm (.ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₂))
-
-中文:
-定义 H1Cotangent.equivOfFormallySmooth
-  签名: (P₁ P₂ : 扩张 R A)
-  定义体: .ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₁) ≪≫ₗ
-    H1Cotangent.equiv (Extension.homInfinitesimal _ _) (Extension.homInfinitesimal _ _)
-    ≪≫ₗ .symm (.ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₂))
-
-Depends on / 依赖: Extension, Extension.homInfinitesimal, H1Cotangent, H1Cotangent.equiv, H1Cotangent.map_toInfinitesimal_bijective, homInfinitesimal, map_toInfinitesimal_bijective, ofBijective
+/-
+**Algebra.Extension.H1Cotangent.equivOfFormallySmooth** 是 Mathlib 中的一个定义，位于命名空间 
+`Algebra.Extension.H1Cotangent`。
+形式化陈述：{R : Type u} →   {A : Type v} →     [inst : CommRing R] →       [inst_1 : 
+CommRing A] →         [inst_2 : Algebra R A] →           (P₁ : Algebra.Extension
+ R A) →             (P₂ : Algebra.Extension R A) →               [Algebra.Formal
+lySmooth R P₁.Ring] →                 [Algebra.FormallySmooth R P₂.Ring] → P₁.H1
+Cotangent ≃ₗ[A] P₂.H1Cotangent
+参数：P₁ : Algebra.Extension R A；P₂ : Algebra.Extension R A。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Extension.H1Cotangent.map_toInfinitesimal_bijective`：∀ {R : Type
+ u_1} {S : Type u_3} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra
+ R S]   (P : Algebra.Extension R S), Function.Bij…
 -/
 def H1Cotangent.equivOfFormallySmooth (P₁ P₂ : Extension R A)
     [FormallySmooth R P₁.Ring] [FormallySmooth R P₂.Ring] :
@@ -588,31 +553,43 @@ def H1Cotangent.equivOfFormallySmooth (P₁ P₂ : Extension R A)
   .ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₁) ≪≫ₗ
     H1Cotangent.equiv (Extension.homInfinitesimal _ _) (Extension.homInfinitesimal _ _)
     ≪≫ₗ .symm (.ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₂))
-
-/--
-lemma `H1Cotangent.equivOfFormallySmooth_toLinearMap` / 引理 `H1Cotangent.equivOfFormallySmooth_toLinearMap`
-
-English:
-lemma H1Cotangent.equivOfFormallySmooth_toLinearMap
-  statement: {P₁ P₂ : Extension R A} (f : P₁.Hom P₂)
-  proof: by
-  ext1 x
-  refine (LinearEquiv.symm_apply_eq _).mpr ?_
-  change ((map (P₁.homInfinitesimal P₂)).restrictScalars A ∘ₗ map P₁.toInfinitesimal) x =
-    ((map P₂.toInfinitesimal).restrictScalars A ∘ₗ map f) x
-  rw [← map_comp]; rw [← map_comp]; rw [map_eq]
-
-中文:
-引理 H1Cotangent.equivOfFormallySmooth_toLinearMap
-  结论: {P₁ P₂ : 扩张 R A} (f : P₁.态射 P₂)
-  证明: by
-  ext1 x
-  refine (LinearEquiv.symm_apply_eq _).mpr ?_
-  change ((map (P₁.homInfinitesimal P₂)).restrictScalars A ∘ₗ map P₁.toInfinitesimal) x =
-    ((map P₂.toInfinitesimal).restrictScalars A ∘ₗ map f) x
-  rw [← map_comp]; rw [← map_comp]; rw [map_eq]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_eq, homInfinitesimal, map_comp, map_eq, restrictScalars, symm_apply_eq, toInfinitesimal
+/-
+**Algebra.Extension.H1Cotangent.equivOfFormallySmooth_toLinearMap** 是 Mathlib 中的
+一个定理，位于命名空间 `Algebra.Extension.H1Cotangent`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A]   {P₁ : Algebra.Extension R A} {P₂ : Algebra.Extension R A} (
+f : P₁.Hom P₂) [inst_3 : Algebra.FormallySmooth R P₁.Ring]   [inst_4 : Algebra.F
+ormallySmooth R P₂.Ring],   ↑(Algebra.Extension.H1Cotangent.equivOfFormallySmoot
+h P₁ P₂) = Algebra.Extension.H1Cotangent.map f
+参数：f : P₁.Hom P₂；Algebra.Extension.H1Cotangent.equivOfFormallySmooth P₁ P₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Algebra.Extension.instIsScalarTowerCotangent`：∀ {R : Type u} {S : Type v
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.
+Extension R S}   {R₁ : Type u_1} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.Extension.H1Cotangent.map_toInfinitesimal_bijective`：∀ {R : Type
+ u_1} {S : Type u_3} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra
+ R S]   (P : Algebra.Extension R S), Function.Bij…
+· 使用定理 `LinearEquiv.symm_apply_eq`：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `Algebra.Extension.instIsScalarTowerH1CotangentOfCotangent`：∀ {R : Type u
+} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] 
+{P : Algebra.Extension R S}   {R₁ : Type u_1} {…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.Extension.H1Cotangent.map_comp`：∀ {R : Type u} {S : Type v} [ins
+t : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.Extens
+ion R S}   {R' : Type u'} {S…
+· 使用定理 `Algebra.Extension.H1Cotangent.map_eq`：∀ {R : Type u} {S : Type v} [inst 
+: CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.Extensio
+n R S}   {R' : Type u'} {S…
 -/
 lemma H1Cotangent.equivOfFormallySmooth_toLinearMap {P₁ P₂ : Extension R A} (f : P₁.Hom P₂)
     [FormallySmooth R P₁.Ring] [FormallySmooth R P₂.Ring] :
@@ -621,44 +598,51 @@ lemma H1Cotangent.equivOfFormallySmooth_toLinearMap {P₁ P₂ : Extension R A} 
   refine (LinearEquiv.symm_apply_eq _).mpr ?_
   change ((map (P₁.homInfinitesimal P₂)).restrictScalars A ∘ₗ map P₁.toInfinitesimal) x =
     ((map P₂.toInfinitesimal).restrictScalars A ∘ₗ map f) x
-  rw [← map_comp]; rw [← map_comp]; rw [map_eq]
-
-/--
-lemma `H1Cotangent.equivOfFormallySmooth_apply` / 引理 `H1Cotangent.equivOfFormallySmooth_apply`
-
-English:
-lemma H1Cotangent.equivOfFormallySmooth_apply
-  statement: {P₁ P₂ : Extension R A} (f : P₁.Hom P₂)
-  proof: by
-  rw [← equivOfFormallySmooth_toLinearMap]; rw [LinearEquiv.coe_coe]
-
-中文:
-引理 H1Cotangent.equivOfFormallySmooth_apply
-  结论: {P₁ P₂ : 扩张 R A} (f : P₁.态射 P₂)
-  证明: by
-  rw [← equivOfFormallySmooth_toLinearMap]; rw [LinearEquiv.coe_coe]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, coe_coe, equivOfFormallySmooth_toLinearMap
+  rw [← map_comp, ← map_comp, map_eq]
+/-
+**Algebra.Extension.H1Cotangent.equivOfFormallySmooth_apply** 是 Mathlib 中的一个定理，位
+于命名空间 `Algebra.Extension.H1Cotangent`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A]   {P₁ : Algebra.Extension R A} {P₂ : Algebra.Extension R A} (
+f : P₁.Hom P₂) [inst_3 : Algebra.FormallySmooth R P₁.Ring]   [inst_4 : Algebra.F
+ormallySmooth R P₂.Ring] (x : P₁.H1Cotangent),   (Algebra.Extension.H1Cotangent.
+equivOfFormallySmooth P₁ P₂) x = (Algebra.Extension.H1Cotangent.map f) x
+参数：f : P₁.Hom P₂；x : P₁.H1Cotangent；Algebra.Extension.H1Cotangent.equivOfFormall
+ySmooth P₁ P₂；Algebra.Extension.H1Cotangent.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Extension.instIsScalarTowerCotangent`：∀ {R : Type u} {S : Type v
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.
+Extension R S}   {R₁ : Type u_1} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.Extension.H1Cotangent.equivOfFormallySmooth_toLinearMap`：∀ {R : 
+Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra
+ R A]   {P₁ : Algebra.Extension R A} {P₂ : Algebra.Ex…
+· 使用定理 `LinearEquiv.coe_coe`：coe_coe : ⇑(e : M ->ₛₗ[σ] M₂) = e
 -/
 lemma H1Cotangent.equivOfFormallySmooth_apply {P₁ P₂ : Extension R A} (f : P₁.Hom P₂)
     [FormallySmooth R P₁.Ring] [FormallySmooth R P₂.Ring] (x) :
     H1Cotangent.equivOfFormallySmooth P₁ P₂ x = map f x := by
-  rw [← equivOfFormallySmooth_toLinearMap]; rw [LinearEquiv.coe_coe]
-
-/--
-lemma `H1Cotangent.equivOfFormallySmooth_symm` / 引理 `H1Cotangent.equivOfFormallySmooth_symm`
-
-English:
-lemma H1Cotangent.equivOfFormallySmooth_symm
-  statement: (P₁ P₂ : Extension R A)
-  proof: rfl
-
-中文:
-引理 H1Cotangent.equivOfFormallySmooth_symm
-  结论: (P₁ P₂ : 扩张 R A)
-  证明: rfl
-
-Depends on / 依赖: exists_compact_mem_nhds, isCompact_univ_pi, set_pi_mem_nhds, toFinite, univ.toFinite
+  rw [← equivOfFormallySmooth_toLinearMap, LinearEquiv.coe_coe]
+/-
+**Algebra.Extension.H1Cotangent.equivOfFormallySmooth_symm** 是 Mathlib 中的一个定理，位于
+命名空间 `Algebra.Extension.H1Cotangent`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A]   (P₁ : Algebra.Extension R A) (P₂ : Algebra.Extension R A) [
+inst_3 : Algebra.FormallySmooth R P₁.Ring]   [inst_4 : Algebra.FormallySmooth R 
+P₂.Ring],   (Algebra.Extension.H1Cotangent.equivOfFormallySmooth P₁ P₂).symm =  
+   Algebra.Extension.H1Cotangent.equivOfFormallySmooth P₂ P₁
+参数：P₁ : Algebra.Extension R A；P₂ : Algebra.Extension R A；Algebra.Extension.H1Cot
+angent.equivOfFormallySmooth P₁ P₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.Extension.instIsScalarTowerCotangent`：∀ {R : Type u} {S : Type v
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.
+Extension R S}   {R₁ : Type u_1} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 lemma H1Cotangent.equivOfFormallySmooth_symm (P₁ P₂ : Extension R A)
     [FormallySmooth R P₁.Ring] [FormallySmooth R P₂.Ring] :
@@ -667,50 +651,51 @@ lemma H1Cotangent.equivOfFormallySmooth_symm (P₁ P₂ : Extension R A)
 set_option backward.isDefEq.respectTransparency false in
 /-- Any formally smooth extension can be used to calculate `H¹(L_{A/R})`. -/
 noncomputable
-/--
-Definition of `equivH1CotangentOfFormallySmooth` / `equivH1CotangentOfFormallySmooth` 的定义
-
-English:
-definition equivH1CotangentOfFormallySmooth
-  signature: (P : Extension R A) [FormallySmooth R P.Ring]
-  body: haveI : FormallySmooth R (Generators.self R A).toExtension.Ring :=
-    inferInstanceAs (FormallySmooth R (MvPolynomial _ _))
-  H1Cotangent.equivOfFormallySmooth _ _
-
-中文:
-定义 equivH1CotangentOfFormallySmooth
-  签名: (P : 扩张 R A) [形式光滑 R P.环]
-  定义体: haveI : FormallySmooth R (Generators.self R A).toExtension.Ring :=
-    inferInstanceAs (FormallySmooth R (MvPolynomial _ _))
-  H1Cotangent.equivOfFormallySmooth _ _
-
-Depends on / 依赖: CompactSpace, FormallySmooth, Generators, Generators.self, H1Cotangent, H1Cotangent.equivOfFormallySmooth, MvPolynomial, WeaklyLocallyCompactSpace, equivOfFormallySmooth, toExtension, toExtension.Ring
+/-
+**Algebra.Extension.equivH1CotangentOfFormallySmooth** 是 Mathlib 中的一个定义，位于命名空间 `
+Algebra.Extension`。
+形式化陈述：equivH1CotangentOfFormallySmooth (P : Extension R A) [FormallySmooth R P.R
+ing] : P.H1Cotangent ≃ₗ[A] H1Cotangent R A
+参数：P : Extension R A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def equivH1CotangentOfFormallySmooth (P : Extension R A) [FormallySmooth R P.Ring] :
     P.H1Cotangent ≃ₗ[A] H1Cotangent R A :=
   haveI : FormallySmooth R (Generators.self R A).toExtension.Ring :=
     inferInstanceAs (FormallySmooth R (MvPolynomial _ _))
   H1Cotangent.equivOfFormallySmooth _ _
-
-/--
-lemma `cotangentComplex_injective_iff` / 引理 `cotangentComplex_injective_iff`
-
-English:
-lemma cotangentComplex_injective_iff
-  proof: by
-  rw [← Algebra.Extension.subsingleton_h1Cotangent]; rw [P.equivH1CotangentOfFormallySmooth.subsingleton_congr]
-
-中文:
-引理 cotangentComplex_injective_iff
-  证明: by
-  rw [← Algebra.Extension.subsingleton_h1Cotangent]; rw [P.equivH1CotangentOfFormallySmooth.subsingleton_congr]
-
-Depends on / 依赖: Algebra, Algebra.Extension.subsingleton_h1Cotangent, Extension, P.equivH1CotangentOfFormallySmooth.subsingleton_congr, equivH1CotangentOfFormallySmooth, subsingleton_congr, subsingleton_h1Cotangent
+/-
+**Algebra.Extension.cotangentComplex_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 `Al
+gebra.Extension`。
+形式化陈述：cotangentComplex_injective_iff (P : Extension R A) [FormallySmooth R P.Rin
+g] : Function.Injective P.cotangentComplex ↔ Subsingleton (Algebra.H1Cotangent R
+ A)
+参数：P : Extension R A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Algebra.Extension.subsingleton_h1Cotangent`：subsingleton_h1Cotangent (P 
+: Extension R S) : Subsingleton P.H1Cotangent ↔ Function.Injective P.cotangentCo
+mplex
+· 使用定理 `Equiv.subsingleton_congr`：subsingleton_congr (e : α ≃ β) : Subsingleton 
+α ↔ Subsingleton β
+· 使用定理 `Algebra.Extension.instIsScalarTowerCotangent`：∀ {R : Type u} {S : Type v
+} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] {P : Algebra.
+Extension R S}   {R₁ : Type u_1} {…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma cotangentComplex_injective_iff
     (P : Extension R A) [FormallySmooth R P.Ring] :
     Function.Injective P.cotangentComplex ↔ Subsingleton (Algebra.H1Cotangent R A) := by
-  rw [← Algebra.Extension.subsingleton_h1Cotangent]; rw [P.equivH1CotangentOfFormallySmooth.subsingleton_congr]
+  rw [← Algebra.Extension.subsingleton_h1Cotangent,
+    P.equivH1CotangentOfFormallySmooth.subsingleton_congr]
 
 end Algebra.Extension
 
@@ -720,22 +705,22 @@ section iff_split
 
 variable [Algebra.FormallySmooth R P]
 
-/--
-lemma `kerCotangentToTensor_injective_iff` / 引理 `kerCotangentToTensor_injective_iff`
-
-English:
-lemma kerCotangentToTensor_injective_iff
-  proof: let P' : Algebra.Extension R A := ⟨P, _, Function.surjInv_eq hf⟩
-  have : Algebra.FormallySmooth R P'.Ring := ‹_›
-  P'.cotangentComplex_injective_iff
-
-中文:
-引理 kerCotangentToTensor_injective_iff
-  证明: let P' : Algebra.Extension R A := ⟨P, _, Function.surjInv_eq hf⟩
-  have : Algebra.FormallySmooth R P'.Ring := ‹_›
-  P'.cotangentComplex_injective_iff
-
-Depends on / 依赖: Algebra, Algebra.Extension, Algebra.FormallySmooth, Extension, FormallySmooth, Function, Function.surjInv_eq, cotangentComplex_injective_iff, surjInv_eq
+/-
+**Algebra.FormallySmooth.kerCotangentToTensor_injective_iff** 是 Mathlib 中的一个定理，位
+于命名空间 `Algebra.FormallySmooth`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A] {P : Type u_2}   [inst_3 : CommRing P] [inst_4 : Algebra R P]
+ [Algebra.FormallySmooth R P] [inst_6 : Algebra P A]   [IsScalarTower R P A],   
+Function.Surjective ⇑(algebraMap P A) →     (Function.Injective ⇑(KaehlerDiffere
+ntial.kerCotangentToTensor R P A) ↔ Subsingleton (Algebra.H1Cotangent R A))
+参数：algebraMap P A；Function.Injective ⇑(KaehlerDifferential.kerCotangentToTensor 
+R P A) ↔ Subsingleton (Algebra.H1Cotangent R A)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.surjInv_eq`：surjInv_eq (h : Surjective f) (b) : f (surjInv h b)
+ = b
+· 使用引理 `Algebra.Extension.cotangentComplex_injective_iff`：cotangentComplex_injec
+tive_iff (P : Extension R A) [FormallySmooth R P.Ring] : Function.Injective P.co
+tangentComplex ↔ Subsingleton (Algebra…
 -/
 lemma kerCotangentToTensor_injective_iff
     [Algebra P A] [IsScalarTower R P A] (hf : Function.Surjective (algebraMap P A)) :
@@ -752,42 +737,92 @@ Also see `Algebra.Extension.formallySmooth_iff_split_injection`
 for the version in terms of `Extension`.
 -/
 @[stacks 031I]
-/--
-theorem `iff_split_injection` / 定理 `iff_split_injection`
+/-
+**Algebra.FormallySmooth.iff_split_injection** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.
+FormallySmooth`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A] {P : Type u_2}   [inst_3 : CommRing P] [inst_4 : Algebra R P]
+ [Algebra.FormallySmooth R P] [inst_6 : Algebra P A]   [IsScalarTower R P A],   
+Function.Surjective ⇑(algebraMap P A) →     (Algebra.FormallySmooth R A ↔ ∃ l, l
+ ∘ₗ KaehlerDifferential.kerCotangentToTensor R P A = LinearMap.id)
+参数：algebraMap P A；Algebra.FormallySmooth R A ↔ ∃ l, l ∘ₗ KaehlerDifferential.ker
+CotangentToTensor R P A = LinearMap.id。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.formallySmooth_iff`：∀ (R : Type u) (A : Type v) [inst : CommRing
+ R] [inst_1 : CommRing A] [inst_2 : Algebra R A],   Algebra.FormallySmooth R A ↔
+ Module.Projecti…
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `Module.Projective.iff_split_of_projective`：∀ {R : Type u_1} [inst : Semi
+ring R] {P : Type u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]  
+ {M : Type u_3} [inst_3 : AddCo…
+· 使用定理 `Module.Projective.tensorProduct`：∀ {R : Type u} [inst : Semiring R] {R₀ 
+: Type u_2} {M : Type u_1} {N : Type u_3} [inst_1 : CommSemiring R₀]   [inst_2 :
+ Algebra R₀ R] [inst_…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Algebra.FormallySmooth.projective_kaehlerDifferential`：∀ {R : Type u} {A
+ : Type v} {inst : CommRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [s
+elf : Algebra.FormallySmooth R A], Module.P…
+· 使用引理 `KaehlerDifferential.mapBaseChange_surjective`：KaehlerDifferential.mapBas
+eChange_surjective (h : Function.Surjective (algebraMap A B)) : Function.Surject
+ive (KaehlerDifferential.mapBaseCh…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.FormallySmooth.kerCotangentToTensor_injective_iff`：∀ {R : Type u
+} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] 
+{P : Type u_2}   [inst_3 : CommRing P] [inst_4 …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Equiv.exists_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∃ a, q (e a)) ↔ ∃ b, q b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `Function.Exact.split_tfae'`：∀ {R : Type u_1} {M : Type u_2} {N : Type u_
+4} {P : Type u_6} [inst : Semiring R] [inst_1 : AddCommGroup M]   [inst_2 : AddC
+ommGroup N] [ins…
+· 使用定理 `KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange`：KaehlerDif
+ferential.exact_kerCotangentToTensor_mapBaseChange (h : Function.Surjective (alg
+ebraMap A B)) : Function.Exact (kerCotangentToTens…
 
-English:
-theorem iff_split_injection
-  proof: by
-  rw [formallySmooth_iff]; rw [and_comm]; rw [Module.Projective.iff_split_of_projective (KaehlerDifferential.mapBaseChange R P A)
-      (mapBaseChange_surjective R P A hf)]; rw [← kerCotangentToTensor_injective_iff hf]
-  convert!
-    (((exact_kerCotangentToTensor_mapBaseChange R _ _ hf).split_tfae' (g :=
-          (KaehlerDifferential.mapBaseChange R P A).restrictScalars P)).out
-      0 1) using 2
-  · rw [← (LinearMap.extendScalarsOfSurjectiveEquiv hf).exists_congr_right]
-    simp [LinearMap.ext_iff]
-  · rw [and_iff_right (by exact mapBaseChange_surjective R P A hf)]
-
-中文:
-定理 iff_split_injection
-  证明: by
-  rw [formallySmooth_iff]; rw [and_comm]; rw [Module.Projective.iff_split_of_projective (KaehlerDifferential.mapBaseChange R P A)
-      (mapBaseChange_surjective R P A hf)]; rw [← kerCotangentToTensor_injective_iff hf]
-  convert!
-    (((exact_kerCotangentToTensor_mapBaseChange R _ _ hf).split_tfae' (g :=
-          (KaehlerDifferential.mapBaseChange R P A).restrictScalars P)).out
-      0 1) using 2
-  · rw [← (LinearMap.extendScalarsOfSurjectiveEquiv hf).exists_congr_right]
-    simp [LinearMap.ext_iff]
-  · rw [and_iff_right (by exact mapBaseChange_surjective R P A hf)]
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.mapBaseChange, LinearMap, LinearMap.ext_iff, LinearMap.extendScalarsOfSurjectiveEquiv, Module, Module.Projective.iff_split_of_projective, Projective, and_comm, and_iff_right, convert, exact_kerCotangentToTensor_mapBaseChange, exists_congr_right, ext_iff, extendScalarsOfSurjectiveEquiv, formallySmooth_iff, iff_split_of_projective, kerCotangentToTensor_injective_iff, mapBaseChange, mapBaseChange_surjective
+--- 原说明 ---
+Given a formally smooth `R`-algebra `P` and a surjective algebra homomorphism `f
+ : P →ₐ[R] A`
+with kernel `I` (typically a presentation `R[X] → A`),
+`A` is formally smooth iff the `P`-linear map `I/I² → A ⊗[P] Ω[P⁄R]` is split in
+jective.
+Also see `Algebra.Extension.formallySmooth_iff_split_injection`
+for the version in terms of `Extension`.
 -/
 theorem iff_split_injection
     [Algebra P A] [IsScalarTower R P A] (hf : Function.Surjective (algebraMap P A)) :
-    Algebra.FormallySmooth R A ↔ exists l, l ∘ₗ (kerCotangentToTensor R P A) = LinearMap.id := by
-  rw [formallySmooth_iff]; rw [and_comm]; rw [Module.Projective.iff_split_of_projective (KaehlerDifferential.mapBaseChange R P A)
-      (mapBaseChange_surjective R P A hf)]; rw [← kerCotangentToTensor_injective_iff hf]
+    Algebra.FormallySmooth R A ↔ ∃ l, l ∘ₗ (kerCotangentToTensor R P A) = LinearMap.id := by
+  rw [formallySmooth_iff, and_comm,
+    Module.Projective.iff_split_of_projective (KaehlerDifferential.mapBaseChange R P A)
+      (mapBaseChange_surjective R P A hf), ← kerCotangentToTensor_injective_iff hf]
   convert!
     (((exact_kerCotangentToTensor_mapBaseChange R _ _ hf).split_tfae' (g :=
           (KaehlerDifferential.mapBaseChange R P A).restrictScalars P)).out
@@ -803,42 +838,21 @@ with kernel `I` (typically a presentation `R[X] → S`),
 `S` is formally smooth iff the `P`-linear map `I/I² → S ⊗[P] Ω[P⁄R]` is split injective.
 -/
 @[stacks 031I]
-/--
-theorem `_root_.Algebra.Extension.formallySmooth_iff_split_injection` / 定理 `_root_.Algebra.Extension.formallySmooth_iff_split_injection`
+/-
+**Algebra.FormallySmooth._root_.Algebra.Extension.formallySmooth_iff_split_injec
+tion** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallySmooth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
-  proof: by
-  refine (Algebra.FormallySmooth.iff_split_injection P.algebraMap_surjective).trans ?_
-  let e : P.ker.Cotangent ≃ₗ[P.Ring] P.Cotangent :=
-    { __ := AddEquiv.refl _, map_smul' r m := by ext1; simp; rfl }
-  constructor
-  · intro ⟨l, hl⟩
-    exact ⟨(e.comp l).extendScalarsOfSurjective P.algebraMap_surjective,
-      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
-  · intro ⟨l, hl⟩
-    exact ⟨e.symm.toLinearMap ∘ₗ l.restrictScalars P.Ring,
-      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
-
-中文:
-定理 _root_.代数.扩张.formallySmooth_iff_split_injection
-  证明: by
-  refine (Algebra.FormallySmooth.iff_split_injection P.algebraMap_surjective).trans ?_
-  let e : P.ker.Cotangent ≃ₗ[P.Ring] P.Cotangent :=
-    { __ := AddEquiv.refl _, map_smul' r m := by ext1; simp; rfl }
-  constructor
-  · intro ⟨l, hl⟩
-    exact ⟨(e.comp l).extendScalarsOfSurjective P.algebraMap_surjective,
-      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
-  · intro ⟨l, hl⟩
-    exact ⟨e.symm.toLinearMap ∘ₗ l.restrictScalars P.Ring,
-      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
-
-Depends on / 依赖: AddEquiv, AddEquiv.refl, Algebra, Algebra.FormallySmooth.iff_split_injection, Cotangent, DFunLike, DFunLike.congr_fun, FormallySmooth, LinearMap, LinearMap.ext, P.Cotangent, P.Ring, P.algebraMap_surjective, P.ker.Cotangent, algebraMap_surjective, congr_fun, e.comp, e.symm.toLinearMap, extendScalarsOfSurjective, iff_split_injection
+--- 原说明 ---
+Given a formally smooth `R`-algebra `P` and a surjective algebra homomorphism `f
+ : P →ₐ[R] S`
+with kernel `I` (typically a presentation `R[X] → S`),
+`S` is formally smooth iff the `P`-linear map `I/I² → S ⊗[P] Ω[P⁄R]` is split in
+jective.
 -/
 theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
     (P : Algebra.Extension.{w} R A) [FormallySmooth R P.Ring] :
-    Algebra.FormallySmooth R A ↔ exists l, l ∘ₗ P.cotangentComplex = LinearMap.id := by
+    Algebra.FormallySmooth R A ↔ ∃ l, l ∘ₗ P.cotangentComplex = LinearMap.id := by
   refine (Algebra.FormallySmooth.iff_split_injection P.algebraMap_surjective).trans ?_
   let e : P.ker.Cotangent ≃ₗ[P.Ring] P.Cotangent :=
     { __ := AddEquiv.refl _, map_smul' r m := by ext1; simp; rfl }
@@ -850,108 +864,139 @@ theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
     exact ⟨e.symm.toLinearMap ∘ₗ l.restrictScalars P.Ring,
       LinearMap.ext (DFunLike.congr_fun hl : _)⟩
 
-/--
-theorem `iff_split_surjection` / 定理 `iff_split_surjection`
+/-- Let `P →ₐ[R] A` be a surjection with kernel `J`, and `P` a formally smooth `R`-algebra,
+then `A` is formally smooth over `R` iff the surjection `P ⧸ J ^ 2 →ₐ[R] A` has a section.
 
-English:
-theorem iff_split_surjection
-  given: (f : P ->ₐ[R] A) (hf : Function.Surjective f)
-  proof: by
-  let := f.toAlgebra
-  rw [iff_split_injection hf]; rw [← nonempty_subtype]; rw [← nonempty_subtype]; rw [(retractionKerCotangentToTensorEquivSection hf).nonempty_congr]
-  rfl
+Geometric intuition: we require that a first-order thickening of `Spec A` inside `Spec P` admits
+a retraction. -/
+/-
+**Algebra.FormallySmooth.iff_split_surjection** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+.FormallySmooth`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A] {P : Type u_2}   [inst_3 : CommRing P] [inst_4 : Algebra R P]
+ [Algebra.FormallySmooth R P] (f : P →ₐ[R] A),   Function.Surjective ⇑f → (Algeb
+ra.FormallySmooth R A ↔ ∃ g, f.kerSquareLift.comp g = AlgHom.id R A)
+参数：f : P →ₐ[R] A；Algebra.FormallySmooth R A ↔ ∃ g, f.kerSquareLift.comp g = AlgH
+om.id R A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.FormallySmooth.iff_split_injection`：∀ {R : Type u} {A : Type v} 
+[inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {P : Type u_2} 
+  [inst_3 : CommRing P] [inst_4 …
+· 使用定理 `IsScalarTower.of_algHom`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} 
+[inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : CommSemiring B] [i
+nst_3 : Algeb…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-中文:
-定理 iff_split_surjection
-  条件: (f : P ->ₐ[R] A) (hf : 函数.满射 f)
-  证明: by
-  let := f.toAlgebra
-  rw [iff_split_injection hf]; rw [← nonempty_subtype]; rw [← nonempty_subtype]; rw [(retractionKerCotangentToTensorEquivSection hf).nonempty_congr]
-  rfl
+--- 原说明 ---
+Let `P →ₐ[R] A` be a surjection with kernel `J`, and `P` a formally smooth `R`-a
+lgebra,
+then `A` is formally smooth over `R` iff the surjection `P ⧸ J ^ 2 →ₐ[R] A` has 
+a section.
 
-Depends on / 依赖: f.toAlgebra, iff_split_injection, nonempty_congr, nonempty_subtype, retractionKerCotangentToTensorEquivSection, toAlgebra
+Geometric intuition: we require that a first-order thickening of `Spec A` inside
+ `Spec P` admits
+a retraction.
 -/
-theorem iff_split_surjection (f : P ->ₐ[R] A) (hf : Function.Surjective f) :
-    FormallySmooth R A ↔ exists g, f.kerSquareLift.comp g = AlgHom.id R A := by
+theorem iff_split_surjection (f : P →ₐ[R] A) (hf : Function.Surjective f) :
+    FormallySmooth R A ↔ ∃ g, f.kerSquareLift.comp g = AlgHom.id R A := by
   let := f.toAlgebra
-  rw [iff_split_injection hf]; rw [← nonempty_subtype]; rw [← nonempty_subtype]; rw [(retractionKerCotangentToTensorEquivSection hf).nonempty_congr]
+  rw [iff_split_injection hf, ← nonempty_subtype, ← nonempty_subtype,
+    (retractionKerCotangentToTensorEquivSection hf).nonempty_congr]
   rfl
-
-/--
-theorem `of_split` / 定理 `of_split`
-
-English:
-theorem of_split
-  statement: (f : P ->ₐ[R] A) (g : A ->ₐ[R] P ⧸ RingHom.ker f.toRingHom ^ 2)
-  proof: by
-  refine (iff_split_surjection f fun x => ?_).mpr ⟨g, h⟩
-  obtain ⟨y, hy⟩ := Ideal.Quotient.mk_surjective (g x)
-  exact ⟨y, congr(f.kerSquareLift $hy).trans congr($h x)⟩
-
-中文:
-定理 of_split
-  结论: (f : P ->ₐ[R] A) (g : A ->ₐ[R] P ⧸ 环态射.ker f.toRingHom ^ 2)
-  证明: by
-  refine (iff_split_surjection f fun x => ?_).mpr ⟨g, h⟩
-  obtain ⟨y, hy⟩ := Ideal.Quotient.mk_surjective (g x)
-  exact ⟨y, congr(f.kerSquareLift $hy).trans congr($h x)⟩
-
-Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, f.kerSquareLift, iff_split_surjection, kerSquareLift, mk_surjective
+/-
+**Algebra.FormallySmooth.of_split** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallySmo
+oth`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A] {P : Type u_2}   [inst_3 : CommRing P] [inst_4 : Algebra R P]
+ [Algebra.FormallySmooth R P] (f : P →ₐ[R] A)   (g : A →ₐ[R] P ⧸ RingHom.ker f.t
+oRingHom ^ 2), f.kerSquareLift.comp g = AlgHom.id R A → Algebra.FormallySmooth R
+ A
+参数：f : P →ₐ[R] A；g : A →ₐ[R] P ⧸ RingHom.ker f.toRingHom ^ 2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallySmooth.iff_split_surjection`：∀ {R : Type u} {A : Type v}
+ [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {P : Type u_2}
+   [inst_3 : CommRing P] [inst_4 …
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem of_split (f : P ->ₐ[R] A) (g : A ->ₐ[R] P ⧸ RingHom.ker f.toRingHom ^ 2)
+theorem of_split (f : P →ₐ[R] A) (g : A →ₐ[R] P ⧸ RingHom.ker f.toRingHom ^ 2)
     (h : f.kerSquareLift.comp g = AlgHom.id R A) :
     FormallySmooth R A := by
-  refine (iff_split_surjection f fun x => ?_).mpr ⟨g, h⟩
+  refine (iff_split_surjection f fun x ↦ ?_).mpr ⟨g, h⟩
   obtain ⟨y, hy⟩ := Ideal.Quotient.mk_surjective (g x)
   exact ⟨y, congr(f.kerSquareLift $hy).trans congr($h x)⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `of_comp_surjective` / 定理 `of_comp_surjective`
-
-English:
-theorem of_comp_surjective
-  proof: by
-  let P := Generators.self R A
-  let f := IsScalarTower.toAlgHom R P.Ring A
-  rw [iff_split_surjection f P.algebraMap_surjective]
-  have surj : Function.Surjective f.kerSquareLift :=
-    Ideal.Quotient.lift_surjective_of_surjective _ _ P.algebraMap_surjective
-  have sqz : RingHom.ker f.kerSquareLift.toRingHom ^ 2 = ⊥ := by
-    rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIdeal_square]
-  dsimp only [AlgHom.toRingHom_eq_coe, RingHom.ker_coe_toRingHom] at sqz
-  obtain ⟨g, hg⟩ := H _ sqz (Ideal.quotientKerAlgEquivOfSurjective surj).symm.toAlgHom
-  refine ⟨g, AlgHom.ext fun x => congr(f.kerSquareLift.kerLift ($hg x)).trans ?_⟩
-  obtain ⟨x, rfl⟩ := (Ideal.quotientKerAlgEquivOfSurjective surj).surjective x
-  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-  simp only [AlgHom.toRingHom_eq_coe, AlgEquiv.coe_toAlgHom, AlgEquiv.symm_apply_apply,
-    AlgHom.coe_id, id_eq]
-  simp only [Ideal.quotientKerAlgEquivOfSurjective_apply]
-
-中文:
-定理 of_comp_surjective
-  证明: by
-  let P := Generators.self R A
-  let f := IsScalarTower.toAlgHom R P.Ring A
-  rw [iff_split_surjection f P.algebraMap_surjective]
-  have surj : Function.Surjective f.kerSquareLift :=
-    Ideal.Quotient.lift_surjective_of_surjective _ _ P.algebraMap_surjective
-  have sqz : RingHom.ker f.kerSquareLift.toRingHom ^ 2 = ⊥ := by
-    rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIdeal_square]
-  dsimp only [AlgHom.toRingHom_eq_coe, RingHom.ker_coe_toRingHom] at sqz
-  obtain ⟨g, hg⟩ := H _ sqz (Ideal.quotientKerAlgEquivOfSurjective surj).symm.toAlgHom
-  refine ⟨g, AlgHom.ext fun x => congr(f.kerSquareLift.kerLift ($hg x)).trans ?_⟩
-  obtain ⟨x, rfl⟩ := (Ideal.quotientKerAlgEquivOfSurjective surj).surjective x
-  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-  simp only [AlgHom.toRingHom_eq_coe, AlgEquiv.coe_toAlgHom, AlgEquiv.symm_apply_apply,
-    AlgHom.coe_id, id_eq]
-  simp only [Ideal.quotientKerAlgEquivOfSurjective_apply]
-
-Depends on / 依赖: AlgHom, AlgHom.ker_kerSquareLift, AlgHom.toRingHom_eq_coe, Function, Function.Surjective, Generators, Generators.self, Ideal.Quotient.lift_surjective_of_surjective, Ideal.cotangentIdeal_square, Ideal.quotientKerAlgEqui, IsScalarTower, IsScalarTower.toAlgHom, P.Ring, P.algebraMap_surjective, Quotient, RingHom, RingHom.ker, RingHom.ker_coe_toRingHom, Surjective, algebraMap_surjective
+/-
+**Algebra.FormallySmooth.of_comp_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.F
+ormallySmooth`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A],   (∀ ⦃B : Type (max u v)⦄ [inst_3 : CommRing B] [inst_4 : Al
+gebra R B] (I : Ideal B),       I ^ 2 = ⊥ → Function.Surjective (Ideal.Quotient.
+mkₐ R I).comp) →     Algebra.FormallySmooth R A
+参数：∀ ⦃B : Type (max u v)⦄ [inst_3 : CommRing B] [inst_4 : Algebra R B] (I : Idea
+l B),       I ^ 2 = ⊥ → Function.Surjective (Ideal.Quotient.mkₐ R I).comp。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.Generators.instIsScalarTowerRing`：∀ {R : Type u} {S : Type v} {ι
+ : Type w} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   (P
+ : Algebra.Generators R S ι) {…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.FormallySmooth.iff_split_surjection`：∀ {R : Type u} {A : Type v}
+ [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {P : Type u_2}
+   [inst_3 : CommRing P] [inst_4 …
+· 使用引理 `Algebra.Generators.algebraMap_surjective`：algebraMap_surjective : Functi
+on.Surjective (algebraMap P.Ring S)
+· 使用定理 `Ideal.Quotient.lift_surjective_of_surjective`：lift_surjective_of_surject
+ive {f : R ->+* S} (H : forall a : R, a in I -> f a = 0) (hf : Function.Surjecti
+ve f) : Function.Surjective (Ideal…
+· 使用定理 `AlgHom.ker_kerSquareLift`：∀ {R : Type u} [inst : CommRing R] {A : Type u
+_1} {B : Type u_2} [inst_1 : CommRing A] [inst_2 : CommRing B]   [inst_3 : Algeb
+ra R A] [inst_…
+· 使用定理 `Ideal.cotangentIdeal_square`：cotangentIdeal_square (I : Ideal R) : I.cot
+angentIdeal ^ 2 = ⊥
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `RingHom.instIsTwoSidedKer`：∀ {R : Type u} {S : Type v} {F : Type u_1} [i
+nst : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHo
+mClass F R S] (…
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgEquiv.surjective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [in
+st : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : A
+lgebra R …
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgEquiv.symm_apply_apply`：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e.symm (e x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Ideal.quotientKerAlgEquivOfSurjective_apply`：∀ {R₁ : Type u_1} {A : Type
+ u_3} {B : Type u_4} [inst : CommSemiring R₁] [inst_1 : Ring A] [inst_2 : Algebr
+a R₁ A]   [inst_3 : Semiring B] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem of_comp_surjective
-    (H : forall ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
-        Function.Surjective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I)) :
+    (H : ∀ ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
+        Function.Surjective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I)) :
     FormallySmooth R A := by
   let P := Generators.self R A
   let f := IsScalarTower.toAlgHom R P.Ring A
@@ -959,10 +1004,10 @@ theorem of_comp_surjective
   have surj : Function.Surjective f.kerSquareLift :=
     Ideal.Quotient.lift_surjective_of_surjective _ _ P.algebraMap_surjective
   have sqz : RingHom.ker f.kerSquareLift.toRingHom ^ 2 = ⊥ := by
-    rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIdeal_square]
+    rw [AlgHom.ker_kerSquareLift, Ideal.cotangentIdeal_square]
   dsimp only [AlgHom.toRingHom_eq_coe, RingHom.ker_coe_toRingHom] at sqz
   obtain ⟨g, hg⟩ := H _ sqz (Ideal.quotientKerAlgEquivOfSurjective surj).symm.toAlgHom
-  refine ⟨g, AlgHom.ext fun x => congr(f.kerSquareLift.kerLift ($hg x)).trans ?_⟩
+  refine ⟨g, AlgHom.ext fun x ↦ congr(f.kerSquareLift.kerLift ($hg x)).trans ?_⟩
   obtain ⟨x, rfl⟩ := (Ideal.quotientKerAlgEquivOfSurjective surj).surjective x
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
   simp only [AlgHom.toRingHom_eq_coe, AlgEquiv.coe_toAlgHom, AlgEquiv.symm_apply_apply,
@@ -970,22 +1015,37 @@ theorem of_comp_surjective
   simp only [Ideal.quotientKerAlgEquivOfSurjective_apply]
 
 /--
-theorem `iff_comp_surjective` / 定理 `iff_comp_surjective`
+An `R`-algebra `A` is formally smooth iff "for every `R`-algebra `B`,
+every square-zero ideal `I : Ideal B` and `f : A →ₐ[R] B ⧸ I`, there exists
+at least one lift `A →ₐ[R] B`".
+-/
+/-
+**Algebra.FormallySmooth.iff_comp_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.
+FormallySmooth`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A],   Algebra.FormallySmooth R A ↔     ∀ ⦃B : Type (max u v)⦄ [i
+nst_3 : CommRing B] [inst_4 : Algebra R B] (I : Ideal B),       I ^ 2 = ⊥ → Func
+tion.Surjective (Ideal.Quotient.mkₐ R I).comp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallySmooth.comp_surjective`：∀ (R : Type u) (A : Type v) [ins
+t : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {B : Type u_1}   [i
+nst_3 : CommRing B] [inst_4 …
+· 使用定理 `Algebra.FormallySmooth.of_comp_surjective`：∀ {R : Type u} {A : Type v} [
+inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A],   (∀ ⦃B : Type 
+(max u v)⦄ [inst_3 : CommRing B…
 
-English:
-theorem iff_comp_surjective
-  proof: ⟨fun _ _ => comp_surjective R A, of_comp_surjective⟩
-
-中文:
-定理 iff_comp_surjective
-  证明: ⟨fun _ _ => comp_surjective R A, of_comp_surjective⟩
-
-Depends on / 依赖: comp_surjective, of_comp_surjective
+--- 原说明 ---
+An `R`-algebra `A` is formally smooth iff "for every `R`-algebra `B`,
+every square-zero ideal `I : Ideal B` and `f : A →ₐ[R] B ⧸ I`, there exists
+at least one lift `A →ₐ[R] B`".
 -/
 theorem iff_comp_surjective :
-   FormallySmooth R A ↔ forall ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B), I ^ 2 = ⊥ ->
-      Function.Surjective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) :=
-  ⟨fun _ _ => comp_surjective R A, of_comp_surjective⟩
+   FormallySmooth R A ↔ ∀ ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B), I ^ 2 = ⊥ →
+      Function.Surjective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I) :=
+  ⟨fun _ _ ↦ comp_surjective R A, of_comp_surjective⟩
 
 end iff_split
 
@@ -994,86 +1054,67 @@ section OfEquiv
 variable {R : Type*} [CommRing R]
 variable {A B : Type*} [CommRing A] [Algebra R A] [CommRing B] [Algebra R B]
 
-/--
-theorem `of_equiv` / 定理 `of_equiv`
-
-English:
-theorem of_equiv
-  given: [FormallySmooth R A] (e : A ≃ₐ[R] B)
-  statement: FormallySmooth R B
-  proof: (iff_split_surjection e.toAlgHom e.surjective).mpr
-    ⟨(Ideal.Quotient.mkₐ _ _).comp e.symm, AlgHom.ext e.apply_symm_apply⟩
-
-中文:
-定理 of_equiv
-  条件: [形式光滑 R A] (e : A ≃ₐ[R] B)
-  结论: 形式光滑 R B
-  证明: (iff_split_surjection e.toAlgHom e.surjective).mpr
-    ⟨(Ideal.Quotient.mkₐ _ _).comp e.symm, AlgHom.ext e.apply_symm_apply⟩
-
-Depends on / 依赖: AlgHom, AlgHom.ext, Ideal.Quotient.mk, Quotient, apply_symm_apply, e.apply_symm_apply, e.surjective, e.symm, e.toAlgHom, iff_split_surjection, surjective, toAlgHom
+/-
+**Algebra.FormallySmooth.of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallySmo
+oth`。
+形式化陈述：∀ {R : Type u_4} [inst : CommRing R] {A : Type u_5} {B : Type u_6} [inst_1
+ : CommRing A] [inst_2 : Algebra R A]   [inst_3 : CommRing B] [inst_4 : Algebra 
+R B] [Algebra.FormallySmooth R A] (e : A ≃ₐ[R] B), Algebra.FormallySmooth R B
+参数：e : A ≃ₐ[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallySmooth.iff_split_surjection`：∀ {R : Type u} {A : Type v}
+ [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {P : Type u_2}
+   [inst_3 : CommRing P] [inst_4 …
+· 使用定理 `AlgEquiv.surjective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [in
+st : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : A
+lgebra R …
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
 -/
 theorem of_equiv [FormallySmooth R A] (e : A ≃ₐ[R] B) : FormallySmooth R B :=
   (iff_split_surjection e.toAlgHom e.surjective).mpr
     ⟨(Ideal.Quotient.mkₐ _ _).comp e.symm, AlgHom.ext e.apply_symm_apply⟩
-
-/--
-theorem `iff_of_equiv` / 定理 `iff_of_equiv`
-
-English:
-theorem iff_of_equiv
-  given: (e : A ≃ₐ[R] B)
-  statement: FormallySmooth R A ↔ FormallySmooth R B
-  proof: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
-
-中文:
-定理 iff_of_equiv
-  条件: (e : A ≃ₐ[R] B)
-  结论: 形式光滑 R A ↔ 形式光滑 R B
-  证明: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
-
-Depends on / 依赖: e.symm, of_equiv
+/-
+**Algebra.FormallySmooth.iff_of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Formall
+ySmooth`。
+形式化陈述：∀ {R : Type u_4} [inst : CommRing R] {A : Type u_5} {B : Type u_6} [inst_1
+ : CommRing A] [inst_2 : Algebra R A]   [inst_3 : CommRing B] [inst_4 : Algebra 
+R B] (e : A ≃ₐ[R] B), Algebra.FormallySmooth R A ↔ Algebra.FormallySmooth R B
+参数：e : A ≃ₐ[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_equiv`：∀ {R : Type u_4} [inst : CommRing R] {A
+ : Type u_5} {B : Type u_6} [inst_1 : CommRing A] [inst_2 : Algebra R A]   [inst
+_3 : CommRing B] [ins…
 -/
 theorem iff_of_equiv (e : A ≃ₐ[R] B) : FormallySmooth R A ↔ FormallySmooth R B :=
-  ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
+  ⟨fun _ ↦ of_equiv e, fun _ ↦ of_equiv e.symm⟩
 
 end OfEquiv
 
 section Polynomial
 
 open scoped Polynomial in
-/--
-Instance `polynomial` / 实例 `polynomial`
-
-English:
-instance polynomial
-  signature: (R : Type*) [CommRing R]
-  body: .of_equiv (MvPolynomial.uniqueAlgEquiv.{_, 0} R PUnit)
-
-中文:
-实例 polynomial
-  签名: (R : 类型) [交换环 R]
-  定义体: .of_equiv (MvPolynomial.uniqueAlgEquiv.{_, 0} R PUnit)
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.uniqueAlgEquiv, of_equiv, uniqueAlgEquiv
+/-
+**Algebra.FormallySmooth.polynomial** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallyS
+mooth`。
+形式化陈述：∀ (R : Type u_4) [inst : CommRing R], Algebra.FormallySmooth R (Polynomial
+ R)
+参数：R : Type u_4；Polynomial R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_equiv`：∀ {R : Type u_4} [inst : CommRing R] {A
+ : Type u_5} {B : Type u_6} [inst_1 : CommRing A] [inst_2 : Algebra R A]   [inst
+_3 : CommRing B] [ins…
 -/
 instance polynomial (R : Type*) [CommRing R] :
   FormallySmooth R R[X] := .of_equiv (MvPolynomial.uniqueAlgEquiv.{_, 0} R PUnit)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FormallySmooth R R
-  body: .of_equiv (MvPolynomial.isEmptyAlgEquiv R Empty)
-
-中文:
-实例 :
-  签名: 形式光滑 R R
-  定义体: .of_equiv (MvPolynomial.isEmptyAlgEquiv R Empty)
-
-Depends on / 依赖: LocallyCompactPair, LocallyCompactSpace, MvPolynomial, MvPolynomial.isEmptyAlgEquiv, isEmptyAlgEquiv, of_equiv
+/-
+**Algebra.FormallySmooth.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallySmooth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FormallySmooth R R := .of_equiv (MvPolynomial.isEmptyAlgEquiv R Empty)
 
@@ -1085,83 +1126,90 @@ variable (R : Type*) [CommRing R]
 variable (A : Type*) [CommRing A] [Algebra R A]
 variable (B : Type*) [CommRing B] [Algebra R B] [Algebra A B] [IsScalarTower R A B]
 
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: [FormallySmooth R A] [FormallySmooth A B]
-  statement: FormallySmooth R B
-  proof: by
-  refine .of_comp_surjective fun C _ _ I hI f => ?_
-  obtain ⟨f', e⟩ := FormallySmooth.comp_surjective _ _ I hI (f.comp (IsScalarTower.toAlgHom R A B))
-  let := f'.toRingHom.toAlgebra
-  obtain ⟨f'', e'⟩ := comp_surjective _ _ I hI { f with commutes' := AlgHom.congr_fun e.symm }
-  apply_fun AlgHom.restrictScalars R at e'
-  exact ⟨f''.restrictScalars _, e'.trans (AlgHom.ext fun _ => rfl)⟩
-
-中文:
-定理 comp
-  条件: [形式光滑 R A] [形式光滑 A B]
-  结论: 形式光滑 R B
-  证明: by
-  refine .of_comp_surjective fun C _ _ I hI f => ?_
-  obtain ⟨f', e⟩ := FormallySmooth.comp_surjective _ _ I hI (f.comp (IsScalarTower.toAlgHom R A B))
-  let := f'.toRingHom.toAlgebra
-  obtain ⟨f'', e'⟩ := comp_surjective _ _ I hI { f with commutes' := AlgHom.congr_fun e.symm }
-  apply_fun AlgHom.restrictScalars R at e'
-  exact ⟨f''.restrictScalars _, e'.trans (AlgHom.ext fun _ => rfl)⟩
-
-Depends on / 依赖: AlgHom, AlgHom.congr_fun, AlgHom.ext, AlgHom.restrictScalars, FormallySmooth, FormallySmooth.comp_surjective, IsScalarTower, IsScalarTower.toAlgHom, LocallyCompactSpace, WeaklyLocallyCompactSpace, apply_fun, commutes, comp_surjective, congr_fun, e.symm, f.comp, of_comp_surjective, restrictScalars, toAlgHom, toAlgebra
+/-
+**Algebra.FormallySmooth.comp** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallySmooth`
+。
+形式化陈述：∀ (R : Type u_4) [inst : CommRing R] (A : Type u_5) [inst_1 : CommRing A] 
+[inst_2 : Algebra R A] (B : Type u_6)   [inst_3 : CommRing B] [inst_4 : Algebra 
+R B] [inst_5 : Algebra A B] [IsScalarTower R A B] [Algebra.FormallySmooth R A]  
+ [Algebra.FormallySmooth A B], Algebra.FormallySmooth R B
+参数：R : Type u_4；A : Type u_5；B : Type u_6。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_comp_surjective`：∀ {R : Type u} {A : Type v} [
+inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A],   (∀ ⦃B : Type 
+(max u v)⦄ [inst_3 : CommRing B…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallySmooth.comp_surjective`：∀ (R : Type u) (A : Type v) [ins
+t : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {B : Type u_1}   [i
+nst_3 : CommRing B] [inst_4 …
+· 使用定理 `AlgHom.congr_fun`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.of_algHom`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} 
+[inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : CommSemiring B] [i
+nst_3 : Algeb…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.Quotient.isScalarTower`：∀ (R₁ : Type u_1) (R₂ : Type u_2) {A : Typ
+e u_3} [inst : CommSemiring R₁] [inst_1 : CommSemiring R₂] [inst_2 : Ring A]   [
+inst_3 : Algebra R…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
 -/
 theorem comp [FormallySmooth R A] [FormallySmooth A B] : FormallySmooth R B := by
-  refine .of_comp_surjective fun C _ _ I hI f => ?_
+  refine .of_comp_surjective fun C _ _ I hI f ↦ ?_
   obtain ⟨f', e⟩ := FormallySmooth.comp_surjective _ _ I hI (f.comp (IsScalarTower.toAlgHom R A B))
   let := f'.toRingHom.toAlgebra
   obtain ⟨f'', e'⟩ := comp_surjective _ _ I hI { f with commutes' := AlgHom.congr_fun e.symm }
   apply_fun AlgHom.restrictScalars R at e'
   exact ⟨f''.restrictScalars _, e'.trans (AlgHom.ext fun _ => rfl)⟩
-
-/--
-lemma `of_restrictScalars` / 引理 `of_restrictScalars`
-
-English:
-lemma of_restrictScalars
-  given: [FormallyUnramified R A] [FormallySmooth R B]
-  proof: by
-  refine iff_comp_surjective.mpr fun C _ _ I hI f => ?_
-  algebraize [(algebraMap A C).comp (algebraMap R A)]
-  obtain ⟨g, hg⟩ := Algebra.FormallySmooth.comp_surjective _ _ I hI (f.restrictScalars R)
-  suffices g.comp (IsScalarTower.toAlgHom R A B) = IsScalarTower.toAlgHom R A C from
-    ⟨{ __ := g, commutes' x := congr($this x) }, AlgHom.ext fun x => congr($hg x)⟩
-  apply Algebra.FormallyUnramified.comp_injective _ hI
-  rw [← AlgHom.comp_assoc]; rw [hg]
-  exact AlgHom.ext f.commutes
-
-中文:
-引理 of_restrictScalars
-  条件: [形式非分歧 R A] [形式光滑 R B]
-  证明: by
-  refine iff_comp_surjective.mpr fun C _ _ I hI f => ?_
-  algebraize [(algebraMap A C).comp (algebraMap R A)]
-  obtain ⟨g, hg⟩ := Algebra.FormallySmooth.comp_surjective _ _ I hI (f.restrictScalars R)
-  suffices g.comp (IsScalarTower.toAlgHom R A B) = IsScalarTower.toAlgHom R A C from
-    ⟨{ __ := g, commutes' x := congr($this x) }, AlgHom.ext fun x => congr($hg x)⟩
-  apply Algebra.FormallyUnramified.comp_injective _ hI
-  rw [← AlgHom.comp_assoc]; rw [hg]
-  exact AlgHom.ext f.commutes
-
-Depends on / 依赖: AlgHom, AlgHom.comp_assoc, AlgHom.ext, Algebra, Algebra.FormallySmooth.comp_surjective, Algebra.FormallyUnramified.comp_injective, FormallySmooth, FormallyUnramified, IsScalarTower, IsScalarTower.toAlgHom, algebraMap, algebraize, commutes, comp_assoc, comp_injective, comp_surjective, f.commutes, f.restrictScalars, g.comp, iff_comp_surjective
+/-
+**Algebra.FormallySmooth.of_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.F
+ormallySmooth`。
+形式化陈述：∀ (R : Type u_4) [inst : CommRing R] (A : Type u_5) [inst_1 : CommRing A] 
+[inst_2 : Algebra R A] (B : Type u_6)   [inst_3 : CommRing B] [inst_4 : Algebra 
+R B] [inst_5 : Algebra A B] [IsScalarTower R A B]   [Algebra.FormallyUnramified 
+R A] [Algebra.FormallySmooth R B], Algebra.FormallySmooth A B
+参数：R : Type u_4；A : Type u_5；B : Type u_6。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallySmooth.iff_comp_surjective`：∀ {R : Type u} {A : Type v} 
+[inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A],   Algebra.Form
+allySmooth R A ↔     ∀ ⦃B : Type…
+· 使用定理 `IsScalarTower.of_algebraMap_eq'`：of_algebraMap_eq' [Algebra R A] (h : al
+gebraMap R A = (algebraMap S A).comp (algebraMap R S)) : IsScalarTower R S A
+· 使用定理 `Ideal.Quotient.isScalarTower`：∀ (R₁ : Type u_1) (R₂ : Type u_2) {A : Typ
+e u_3} [inst : CommSemiring R₁] [inst_1 : CommSemiring R₂] [inst_2 : Ring A]   [
+inst_3 : Algebra R…
+· 使用定理 `Algebra.FormallySmooth.comp_surjective`：∀ (R : Type u) (A : Type v) [ins
+t : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {B : Type u_1}   [i
+nst_3 : CommRing B] [inst_4 …
+· 使用定理 `Algebra.FormallyUnramified.comp_injective`：comp_injective [FormallyUnram
+ified R A] (hI : I ^ 2 = ⊥) : Function.Injective ((Ideal.Quotient.mkₐ R I).comp 
+: (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgHom.comp_assoc`：comp_assoc (φ₁ : C ->ₐ[R] D) (φ₂ : B ->ₐ[R] C) (φ₃ : 
+A ->ₐ[R] B) : (φ₁.comp φ₂).comp φ₃ = φ₁.comp (φ₂.comp φ₃)
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
 -/
 lemma of_restrictScalars [FormallyUnramified R A] [FormallySmooth R B] :
     FormallySmooth A B := by
-  refine iff_comp_surjective.mpr fun C _ _ I hI f => ?_
+  refine iff_comp_surjective.mpr fun C _ _ I hI f ↦ ?_
   algebraize [(algebraMap A C).comp (algebraMap R A)]
   obtain ⟨g, hg⟩ := Algebra.FormallySmooth.comp_surjective _ _ I hI (f.restrictScalars R)
   suffices g.comp (IsScalarTower.toAlgHom R A B) = IsScalarTower.toAlgHom R A C from
-    ⟨{ __ := g, commutes' x := congr($this x) }, AlgHom.ext fun x => congr($hg x)⟩
+    ⟨{ __ := g, commutes' x := congr($this x) }, AlgHom.ext fun x ↦ congr($hg x)⟩
   apply Algebra.FormallyUnramified.comp_injective _ hI
-  rw [← AlgHom.comp_assoc]; rw [hg]
+  rw [← AlgHom.comp_assoc, hg]
   exact AlgHom.ext f.commutes
 
 end Comp
@@ -1170,42 +1218,64 @@ section surjective
 
 variable {R : Type*} [CommRing R]
 variable {P A : Type*} [CommRing A] [Algebra R A] [CommRing P] [Algebra R P]
-variable (f : P ->ₐ[R] A)
+variable (f : P →ₐ[R] A)
 
-/--
-lemma `iff_of_surjective` / 引理 `iff_of_surjective`
-
-English:
-lemma iff_of_surjective
-  given: (h : Function.Surjective (algebraMap R A))
-  proof: by
-  rw [Algebra.FormallySmooth.iff_split_surjection (Algebra.ofId R A) h]
-  constructor
-  · intro ⟨g, hg⟩
-    let e : A ≃ₐ[R] R ⧸ RingHom.ker (algebraMap R A) ^ 2 :=
-      .ofAlgHom _ _ (Ideal.Quotient.algHom_ext _ (by ext)) hg
-    rw [IsIdempotentElem]; rw [← pow_two]; rw [← Ideal.mk_ker (I := _ ^ 2)]; rw [← Ideal.Quotient.algebraMap_eq]; rw [← e.toAlgHom.comp_algebraMap]; rw [RingHom.ker_comp_of_injective _ (by exact e.injective)]
-  · intro H
-    let e := (Ideal.quotientEquivAlgOfEq _ ((pow_two _).trans H)).trans
-      (Ideal.quotientKerAlgEquivOfSurjective (f := Algebra.ofId R A) h)
-exact ⟨e.symm.toAlgHom, AlgHom.ext h.forall.mpr fun x => by simp⟩
-
-中文:
-引理 iff_of_surjective
-  条件: (h : 函数.满射 (algebraMap R A))
-  证明: by
-  rw [Algebra.FormallySmooth.iff_split_surjection (Algebra.ofId R A) h]
-  constructor
-  · intro ⟨g, hg⟩
-    let e : A ≃ₐ[R] R ⧸ RingHom.ker (algebraMap R A) ^ 2 :=
-      .ofAlgHom _ _ (Ideal.Quotient.algHom_ext _ (by ext)) hg
-    rw [IsIdempotentElem]; rw [← pow_two]; rw [← Ideal.mk_ker (I := _ ^ 2)]; rw [← Ideal.Quotient.algebraMap_eq]; rw [← e.toAlgHom.comp_algebraMap]; rw [RingHom.ker_comp_of_injective _ (by exact e.injective)]
-  · intro H
-    let e := (Ideal.quotientEquivAlgOfEq _ ((pow_two _).trans H)).trans
-      (Ideal.quotientKerAlgEquivOfSurjective (f := Algebra.ofId R A) h)
-exact ⟨e.symm.toAlgHom, AlgHom.ext h.forall.mpr fun x => by simp⟩
-
-Depends on / 依赖: Algebra, Algebra.FormallySmooth.iff_split_surjection, Algebra.ofId, FormallySmooth, Ideal.Quotient.algHom_ext, Ideal.Quotient.algebraMap_eq, Ideal.mk_ker, Ideal.quotientEquivAlgOfEq, IsIdempotentElem, Quotient, RingHom, RingHom.ker, RingHom.ker_comp_of_injective, algHom_ext, algebraMap, algebraMap_eq, comp_algebraMap, e.injective, e.toAlgHom.comp_algebraMap, iff_split_surjection
+/-
+**Algebra.FormallySmooth.iff_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Fo
+rmallySmooth`。
+形式化陈述：∀ {R : Type u_4} [inst : CommRing R] {A : Type u_6} [inst_1 : CommRing A] 
+[inst_2 : Algebra R A],   Function.Surjective ⇑(algebraMap R A) → (Algebra.Forma
+llySmooth R A ↔ IsIdempotentElem (RingHom.ker (algebraMap R A)))
+参数：algebraMap R A；Algebra.FormallySmooth R A ↔ IsIdempotentElem (RingHom.ker (al
+gebraMap R A))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.FormallySmooth.iff_split_surjection`：∀ {R : Type u} {A : Type v}
+ [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {P : Type u_2}
+   [inst_3 : CommRing P] [inst_4 …
+· 使用定理 `Algebra.FormallySmooth.inst`：∀ {R : Type u} [inst : CommRing R], Algebra
+.FormallySmooth R R
+· 使用定理 `Ideal.Quotient.algHom_ext`：∀ (R₁ : Type u_1) {A : Type u_3} [inst : Comm
+Semiring R₁] [inst_1 : Ring A] [inst_2 : Algebra R₁ A] {I : Ideal A}   [inst_3 :
+ I.IsTwoSided] …
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.ext_id`：ext_id (f g : R ->ₐ[R] A) : f = g
+· 使用定理 `IsIdempotentElem.eq_1`：∀ {M : Type u_1} [inst : Mul M] (a : M), IsIdempo
+tentElem a = (a * a = a)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Ideal.mk_ker`：mk_ker {I : Ideal R} [I.IsTwoSided] : ker (Quotient.mk I) 
+= I
+· 使用定理 `Ideal.Quotient.algebraMap_eq`：∀ {R : Type u_5} [inst : CommRing R] (I : 
+Ideal R), algebraMap R (R ⧸ I) = Ideal.Quotient.mk I
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgHom.comp_algebraMap`：comp_algebraMap : (φ : A ->+* B).comp (algebraMa
+p R A) = algebraMap R B
+· 使用引理 `RingHom.ker_comp_of_injective`：ker_comp_of_injective [Semiring T] (g : T
+ ->+* R) {f : R ->+* S} (hf : Function.Injective f) : ker (f.comp g) = RingHom.k
+er g
+· 使用定理 `AlgEquiv.injective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [ins
+t : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Al
+gebra R …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma iff_of_surjective (h : Function.Surjective (algebraMap R A)) :
     Algebra.FormallySmooth R A ↔ IsIdempotentElem (RingHom.ker (algebraMap R A)) := by
@@ -1214,11 +1284,12 @@ lemma iff_of_surjective (h : Function.Surjective (algebraMap R A)) :
   · intro ⟨g, hg⟩
     let e : A ≃ₐ[R] R ⧸ RingHom.ker (algebraMap R A) ^ 2 :=
       .ofAlgHom _ _ (Ideal.Quotient.algHom_ext _ (by ext)) hg
-    rw [IsIdempotentElem]; rw [← pow_two]; rw [← Ideal.mk_ker (I := _ ^ 2)]; rw [← Ideal.Quotient.algebraMap_eq]; rw [← e.toAlgHom.comp_algebraMap]; rw [RingHom.ker_comp_of_injective _ (by exact e.injective)]
+    rw [IsIdempotentElem, ← pow_two, ← Ideal.mk_ker (I := _ ^ 2), ← Ideal.Quotient.algebraMap_eq,
+      ← e.toAlgHom.comp_algebraMap, RingHom.ker_comp_of_injective _ (by exact e.injective)]
   · intro H
     let e := (Ideal.quotientEquivAlgOfEq _ ((pow_two _).trans H)).trans
       (Ideal.quotientKerAlgEquivOfSurjective (f := Algebra.ofId R A) h)
-exact ⟨e.symm.toAlgHom, AlgHom.ext h.forall.mpr fun x => by simp⟩
+    exact ⟨e.symm.toAlgHom, AlgHom.ext <| h.forall.mpr fun x ↦ by simp⟩
 
 end surjective
 
@@ -1230,43 +1301,12 @@ variable {A : Type*} [CommRing A] [Algebra R A]
 variable (B : Type*) [CommRing B] [Algebra R B]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FormallySmooth
-  signature: R A] : FormallySmooth B (B otimes[R] A)
-  body: by
-  refine .of_comp_surjective fun C _ _ I hI f => ?_
-  let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
-  have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
-  refine ⟨TensorProduct.productLeftAlgHom (Algebra.ofId B C) ?_, ?_⟩
-  · exact FormallySmooth.lift I ⟨2, hI⟩ ((f.restrictScalars R).comp TensorProduct.includeRight)
-  · apply AlgHom.restrictScalars_injective R
-    apply TensorProduct.ext'
-    intro b a
-    suffices algebraMap B _ b * f (1 otimesₜ[R] a) = f (b otimesₜ[R] a) by simpa [Algebra.ofId_apply]
-    rw [← Algebra.smul_def]; rw [← map_smul]; rw [TensorProduct.smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
-
-中文:
-实例 [形式光滑
-  签名: R A] : 形式光滑 B (B otimes[R] A)
-  定义体: by
-  refine .of_comp_surjective fun C _ _ I hI f => ?_
-  let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
-  have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
-  refine ⟨TensorProduct.productLeftAlgHom (Algebra.ofId B C) ?_, ?_⟩
-  · exact FormallySmooth.lift I ⟨2, hI⟩ ((f.restrictScalars R).comp TensorProduct.includeRight)
-  · apply AlgHom.restrictScalars_injective R
-    apply TensorProduct.ext'
-    intro b a
-    suffices algebraMap B _ b * f (1 otimesₜ[R] a) = f (b otimesₜ[R] a) by simpa [Algebra.ofId_apply]
-    rw [← Algebra.smul_def]; rw [← map_smul]; rw [TensorProduct.smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
-
-Depends on / 依赖: AlgHom, AlgHom.restrictScalars_injective, Algebr, Algebra, Algebra.ofId, FormallySmooth, FormallySmooth.lift, IsScalarTower, IsScalarTower.of_algebraMap_eq, TensorProduct, TensorProduct.ext, TensorProduct.includeRight, TensorProduct.productLeftAlgHom, algebraMap, f.restrictScalars, includeRight, of_algebraMap_eq, of_comp_surjective, productLeftAlgHom, restrictScalars
+/-
+**Algebra.FormallySmooth.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallySmooth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [FormallySmooth R A] : FormallySmooth B (B otimes[R] A) := by
-  refine .of_comp_surjective fun C _ _ I hI f => ?_
+instance [FormallySmooth R A] : FormallySmooth B (B ⊗[R] A) := by
+  refine .of_comp_surjective fun C _ _ I hI f ↦ ?_
   let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
   have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
   refine ⟨TensorProduct.productLeftAlgHom (Algebra.ofId B C) ?_, ?_⟩
@@ -1274,8 +1314,8 @@ instance [FormallySmooth R A] : FormallySmooth B (B otimes[R] A) := by
   · apply AlgHom.restrictScalars_injective R
     apply TensorProduct.ext'
     intro b a
-    suffices algebraMap B _ b * f (1 otimesₜ[R] a) = f (b otimesₜ[R] a) by simpa [Algebra.ofId_apply]
-    rw [← Algebra.smul_def]; rw [← map_smul]; rw [TensorProduct.smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
+    suffices algebraMap B _ b * f (1 ⊗ₜ[R] a) = f (b ⊗ₜ[R] a) by simpa [Algebra.ofId_apply]
+    rw [← Algebra.smul_def, ← map_smul, TensorProduct.smul_tmul', smul_eq_mul, mul_one]
 
 end BaseChange
 
@@ -1288,176 +1328,181 @@ variable [IsScalarTower R Rₘ Sₘ] [IsScalarTower R A Sₘ]
 variable [IsLocalization M Rₘ] [IsLocalization (M.map (algebraMap R A)) Sₘ]
 include M
 
-/--
-theorem `of_isLocalization` / 定理 `of_isLocalization`
-
-English:
-theorem of_isLocalization
-  statement: FormallySmooth R Rₘ
-  proof: by
-  refine .of_comp_surjective fun Q _ _ I e f => ?_
-  have : forall x : M, IsUnit (algebraMap R Q x) := by
-    intro x
-    apply (IsNilpotent.isUnit_quotient_mk_iff ⟨2, e⟩).mp
-    convert! (IsLocalization.map_units Rₘ x).map f
-    simp only [Ideal.Quotient.mk_algebraMap, AlgHom.commutes]
-  let : Rₘ ->ₐ[R] Q :=
-    { IsLocalization.lift this with commutes' := IsLocalization.lift_eq this }
-  use this
-  apply AlgHom.coe_ringHom_injective
-  refine IsLocalization.ringHom_ext M ?_
-  ext
-  simp
-
-中文:
-定理 of_isLocalization
-  结论: 形式光滑 R Rₘ
-  证明: by
-  refine .of_comp_surjective fun Q _ _ I e f => ?_
-  have : forall x : M, IsUnit (algebraMap R Q x) := by
-    intro x
-    apply (IsNilpotent.isUnit_quotient_mk_iff ⟨2, e⟩).mp
-    convert! (IsLocalization.map_units Rₘ x).map f
-    simp only [Ideal.Quotient.mk_algebraMap, AlgHom.commutes]
-  let : Rₘ ->ₐ[R] Q :=
-    { IsLocalization.lift this with commutes' := IsLocalization.lift_eq this }
-  use this
-  apply AlgHom.coe_ringHom_injective
-  refine IsLocalization.ringHom_ext M ?_
-  ext
-  simp
-
-Depends on / 依赖: AlgHom, AlgHom.coe_ringHom_injective, AlgHom.commutes, Ideal.Quotient.mk_algebraMap, IsLocalization, IsLocalization.lift, IsLocalization.lift_eq, IsLocalization.map_units, IsLocalization.ringHom_ext, IsNilpotent, IsNilpotent.isUnit_quotient_mk_iff, IsUnit, Quotient, algebraMap, coe_ringHom_injective, commutes, convert, isUnit_quotient_mk_iff, lift_eq, map_units
+/-
+**Algebra.FormallySmooth.of_isLocalization** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Fo
+rmallySmooth`。
+形式化陈述：∀ {R : Type u_4} {Rₘ : Type u_6} [inst : CommRing R] [inst_1 : CommRing Rₘ
+] (M : Submonoid R) [inst_2 : Algebra R Rₘ]   [IsLocalization M Rₘ], Algebra.For
+mallySmooth R Rₘ
+参数：M : Submonoid R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_comp_surjective`：∀ {R : Type u} {A : Type v} [
+inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A],   (∀ ⦃B : Type 
+(max u v)⦄ [inst_3 : CommRing B…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsNilpotent.isUnit_quotient_mk_iff`：IsNilpotent.isUnit_quotient_mk_iff {
+R : Type*} [CommRing R] {I : Ideal R} (hI : IsNilpotent I) {x : R} : IsUnit (Ide
+al.Quotient.mk I x) ↔ Is…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
+· 使用定理 `IsLocalization.lift_eq`：lift_eq (x : R) : lift hg ((algebraMap R S) x) =
+ g x
+· 使用定理 `AlgHom.coe_ringHom_injective`：coe_ringHom_injective : Function.Injective
+ ((↑) : (A ->ₐ[R] B) -> A ->+* B)
+· 使用定理 `IsLocalization.ringHom_ext`：ringHom_ext {P : Type*} [Semiring P] ⦃j k : 
+S ->+* P⦄ (h : j.comp (algebraMap R S) = k.comp (algebraMap R S)) : j = k
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgHom.comp_algebraMap_of_tower`：∀ (R : Type u) {S : Type v} {A : Type w
+} {B : Type u₁} [inst : CommSemiring R] [inst_1 : CommSemiring S]   [inst_2 : Se
+miring A] [inst_3 : S…
+· 使用定理 `Ideal.Quotient.isScalarTower`：∀ (R₁ : Type u_1) (R₂ : Type u_2) {A : Typ
+e u_3} [inst : CommSemiring R₁] [inst_1 : CommSemiring R₂] [inst_2 : Ring A]   [
+inst_3 : Algebra R…
 -/
 theorem of_isLocalization : FormallySmooth R Rₘ := by
-  refine .of_comp_surjective fun Q _ _ I e f => ?_
-  have : forall x : M, IsUnit (algebraMap R Q x) := by
+  refine .of_comp_surjective fun Q _ _ I e f ↦ ?_
+  have : ∀ x : M, IsUnit (algebraMap R Q x) := by
     intro x
     apply (IsNilpotent.isUnit_quotient_mk_iff ⟨2, e⟩).mp
     convert! (IsLocalization.map_units Rₘ x).map f
     simp only [Ideal.Quotient.mk_algebraMap, AlgHom.commutes]
-  let : Rₘ ->ₐ[R] Q :=
+  let : Rₘ →ₐ[R] Q :=
     { IsLocalization.lift this with commutes' := IsLocalization.lift_eq this }
   use this
   apply AlgHom.coe_ringHom_injective
   refine IsLocalization.ringHom_ext M ?_
   ext
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FormallySmooth
-  signature: R A] (M
-  body: have : FormallySmooth A (Localization M) := of_isLocalization M
-  .comp _ A _
-
-中文:
-实例 [形式光滑
-  签名: R A] (M
-  定义体: have : FormallySmooth A (Localization M) := of_isLocalization M
-  .comp _ A _
-
-Depends on / 依赖: FormallySmooth, Localization, of_isLocalization
+/-
+**Algebra.FormallySmooth.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallySmooth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [FormallySmooth R A] (M : Submonoid A) : FormallySmooth R (Localization M) :=
   have : FormallySmooth A (Localization M) := of_isLocalization M
   .comp _ A _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `localization_base` / 定理 `localization_base`
-
-English:
-theorem localization_base
-  given: [FormallySmooth R Sₘ]
-  statement: FormallySmooth Rₘ Sₘ
-  proof: by
-  refine .of_comp_surjective fun Q _ _ I e f => ?_
-  let := ((algebraMap Rₘ Q).comp (algebraMap R Rₘ)).toAlgebra
-  let : IsScalarTower R Rₘ Q := IsScalarTower.of_algebraMap_eq' rfl
-  let f : Sₘ ->ₐ[Rₘ] Q := by
-    refine { FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) with commutes' := ?_ }
-    intro r
-    change
-      (RingHom.comp (FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) : Sₘ ->+* Q)
-            (algebraMap _ _))
-          r =
-        algebraMap _ _ r
-    congr 1
-    refine IsLocalization.ringHom_ext M ?_
-    rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [AlgHom.comp_algebraMap]
-  use f
-  ext
-  simp [f]
-
-中文:
-定理 localization_base
-  条件: [形式光滑 R Sₘ]
-  结论: 形式光滑 Rₘ Sₘ
-  证明: by
-  refine .of_comp_surjective fun Q _ _ I e f => ?_
-  let := ((algebraMap Rₘ Q).comp (algebraMap R Rₘ)).toAlgebra
-  let : IsScalarTower R Rₘ Q := IsScalarTower.of_algebraMap_eq' rfl
-  let f : Sₘ ->ₐ[Rₘ] Q := by
-    refine { FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) with commutes' := ?_ }
-    intro r
-    change
-      (RingHom.comp (FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) : Sₘ ->+* Q)
-            (algebraMap _ _))
-          r =
-        algebraMap _ _ r
-    congr 1
-    refine IsLocalization.ringHom_ext M ?_
-    rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [AlgHom.comp_algebraMap]
-  use f
-  ext
-  simp [f]
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.lift, IsLocalization, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.comp, RingHom.comp_assoc, algebraMap, commutes, comp_assoc, f.restrictScalars, of_algebraMap_eq, of_comp_surjective, restrictScalars, ringHom_ext, toAlgebra
+/-
+**Algebra.FormallySmooth.localization_base** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Fo
+rmallySmooth`。
+形式化陈述：∀ {R : Type u_4} {Rₘ : Type u_6} {Sₘ : Type u_7} [inst : CommRing R] [inst
+_1 : CommRing Rₘ] [inst_2 : CommRing Sₘ]   (M : Submonoid R) [inst_3 : Algebra R
+ Sₘ] [inst_4 : Algebra R Rₘ] [inst_5 : Algebra Rₘ Sₘ] [IsScalarTower R Rₘ Sₘ]   
+[IsLocalization M Rₘ] [Algebra.FormallySmooth R Sₘ], Algebra.FormallySmooth Rₘ S
+ₘ
+参数：M : Submonoid R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_comp_surjective`：∀ {R : Type u} {A : Type v} [
+inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A],   (∀ ⦃B : Type 
+(max u v)⦄ [inst_3 : CommRing B…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsScalarTower.of_algebraMap_eq'`：of_algebraMap_eq' [Algebra R A] (h : al
+gebraMap R A = (algebraMap S A).comp (algebraMap R S)) : IsScalarTower R S A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.Quotient.isScalarTower`：∀ (R₁ : Type u_1) (R₂ : Type u_2) {A : Typ
+e u_3} [inst : CommSemiring R₁] [inst_1 : CommSemiring R₂] [inst_2 : Ring A]   [
+inst_3 : Algebra R…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `IsLocalization.ringHom_ext`：ringHom_ext {P : Type*} [Semiring P] ⦃j k : 
+S ->+* P⦄ (h : j.comp (algebraMap R S) = k.comp (algebraMap R S)) : j = k
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.comp_assoc`：comp_assoc {δ} {_ : NonAssocSemiring δ} (f : α ->+* 
+β) (g : β ->+* γ) (h : γ ->+* δ) : (h.comp g).comp f = h.comp (g.comp f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
+· 使用定理 `AlgHom.comp_algebraMap`：comp_algebraMap : (φ : A ->+* B).comp (algebraMa
+p R A) = algebraMap R B
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Algebra.FormallySmooth.mk_lift`：mk_lift [FormallySmooth R A] (I : Ideal 
+B) (hI : IsNilpotent I) (g : A ->ₐ[R] B ⧸ I) (x : A) : Ideal.Quotient.mk I (Form
+allySmooth.lift I hI…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem localization_base [FormallySmooth R Sₘ] : FormallySmooth Rₘ Sₘ := by
-  refine .of_comp_surjective fun Q _ _ I e f => ?_
+  refine .of_comp_surjective fun Q _ _ I e f ↦ ?_
   let := ((algebraMap Rₘ Q).comp (algebraMap R Rₘ)).toAlgebra
   let : IsScalarTower R Rₘ Q := IsScalarTower.of_algebraMap_eq' rfl
-  let f : Sₘ ->ₐ[Rₘ] Q := by
+  let f : Sₘ →ₐ[Rₘ] Q := by
     refine { FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) with commutes' := ?_ }
     intro r
     change
-      (RingHom.comp (FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) : Sₘ ->+* Q)
+      (RingHom.comp (FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) : Sₘ →+* Q)
             (algebraMap _ _))
           r =
         algebraMap _ _ r
     congr 1
     refine IsLocalization.ringHom_ext M ?_
-    rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [AlgHom.comp_algebraMap]
+    rw [RingHom.comp_assoc, ← IsScalarTower.algebraMap_eq, ← IsScalarTower.algebraMap_eq,
+      AlgHom.comp_algebraMap]
   use f
   ext
   simp [f]
-
-/--
-theorem `localization_map` / 定理 `localization_map`
-
-English:
-theorem localization_map
-  given: [FormallySmooth R A]
-  statement: FormallySmooth Rₘ Sₘ
-  proof: by
-  have : FormallySmooth A Sₘ := FormallySmooth.of_isLocalization (M.map (algebraMap R A))
-  have : FormallySmooth R Sₘ := FormallySmooth.comp R A Sₘ
-  exact FormallySmooth.localization_base M
-
-中文:
-定理 localization_map
-  条件: [形式光滑 R A]
-  结论: 形式光滑 Rₘ Sₘ
-  证明: by
-  have : FormallySmooth A Sₘ := FormallySmooth.of_isLocalization (M.map (algebraMap R A))
-  have : FormallySmooth R Sₘ := FormallySmooth.comp R A Sₘ
-  exact FormallySmooth.localization_base M
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.comp, FormallySmooth.localization_base, FormallySmooth.of_isLocalization, M.map, algebraMap, localization_base, of_isLocalization
+/-
+**Algebra.FormallySmooth.localization_map** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.For
+mallySmooth`。
+形式化陈述：∀ {R : Type u_4} {A : Type u_5} {Rₘ : Type u_6} {Sₘ : Type u_7} [inst : Co
+mmRing R] [inst_1 : CommRing A]   [inst_2 : CommRing Rₘ] [inst_3 : CommRing Sₘ] 
+(M : Submonoid R) [inst_4 : Algebra R A] [inst_5 : Algebra R Sₘ]   [inst_6 : Alg
+ebra A Sₘ] [inst_7 : Algebra R Rₘ] [inst_8 : Algebra Rₘ Sₘ] [IsScalarTower R Rₘ 
+Sₘ]   [IsScalarTower R A Sₘ] [IsLocalization M Rₘ] [IsLocalization (Submonoid.ma
+p (algebraMap R A) M) Sₘ]   [Algebra.FormallySmooth R A], Algebra.FormallySmooth
+ Rₘ Sₘ
+参数：M : Submonoid R；Submonoid.map (algebraMap R A) M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Algebra.FormallySmooth.of_isLocalization`：∀ {R : Type u_4} {Rₘ : Type u_
+6} [inst : CommRing R] [inst_1 : CommRing Rₘ] (M : Submonoid R) [inst_2 : Algebr
+a R Rₘ]   [IsLocalization M Rₘ…
+· 使用定理 `Algebra.FormallySmooth.comp`：∀ (R : Type u_4) [inst : CommRing R] (A : T
+ype u_5) [inst_1 : CommRing A] [inst_2 : Algebra R A] (B : Type u_6)   [inst_3 :
+ CommRing B] [ins…
+· 使用定理 `Algebra.FormallySmooth.localization_base`：∀ {R : Type u_4} {Rₘ : Type u_
+6} {Sₘ : Type u_7} [inst : CommRing R] [inst_1 : CommRing Rₘ] [inst_2 : CommRing
+ Sₘ]   (M : Submonoid R) [inst…
 -/
 theorem localization_map [FormallySmooth R A] : FormallySmooth Rₘ Sₘ := by
   have : FormallySmooth A Sₘ := FormallySmooth.of_isLocalization (M.map (algebraMap R A))
@@ -1477,24 +1522,11 @@ variable (A : Type*) [CommRing A] [Algebra R A]
 @[stacks 00T2 "In the stacks project, the definition of smooth is completely different, and tag
 <https://stacks.math.columbia.edu/tag/00TN> proves that their definition is equivalent to this.",
 mk_iff]
-/--
-Definition of `Smooth` / `Smooth` 的定义
-
-English:
-class Smooth
-  parameters: [CommRing R] (A : Type u) [CommRing A] [Algebra R A]
-  axioms and operations (2):
-    - formallySmooth : FormallySmooth R A  [default: by infer_instance]
-    - finitePresentation : FinitePresentation R A  [default: by infer_instance]
-
-中文:
-类 光滑
-  参数: [交换环 R] (A : 类型u) [交换环 A] [代数 R A]
-  公理与运算 (2 个):
-    - formallySmooth : 形式光滑 R A  [默认: by infer_instance]
-    - finitePresentation : 有限呈现 R A  [默认: by infer_instance]
-
-Depends on / 依赖: FinitePresentation, finitePresentation, infer_instance
+/-
+**Algebra.Smooth** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra`。
+形式化陈述：(R : Type u_4) → [inst : CommRing R] → (A : Type u) → [inst_1 : CommRing A
+] → [Algebra R A] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class Smooth [CommRing R] (A : Type u) [CommRing A] [Algebra R A] : Prop where
   formallySmooth : FormallySmooth R A := by infer_instance
@@ -1509,47 +1541,50 @@ attribute [instance] formallySmooth finitePresentation
 variable {R : Type*} [CommRing R]
 variable {A B : Type*} [CommRing A] [Algebra R A] [CommRing B] [Algebra R B]
 
-/--
-theorem `of_equiv` / 定理 `of_equiv`
+/-- Being smooth is transported via algebra isomorphisms. -/
+/-
+**Algebra.Smooth.of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Smooth`。
+形式化陈述：∀ {R : Type u_4} [inst : CommRing R] {A : Type u_5} {B : Type u_6} [inst_1
+ : CommRing A] [inst_2 : Algebra R A]   [inst_3 : CommRing B] [inst_4 : Algebra 
+R B] [Algebra.Smooth R A] (e : A ≃ₐ[R] B), Algebra.Smooth R B
+参数：e : A ≃ₐ[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_equiv`：∀ {R : Type u_4} [inst : CommRing R] {A
+ : Type u_5} {B : Type u_6} [inst_1 : CommRing A] [inst_2 : Algebra R A]   [inst
+_3 : CommRing B] [ins…
+· 使用定理 `Algebra.Smooth.formallySmooth`：∀ {R : Type u_4} {inst : CommRing R} {A :
+ Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smooth R
+ A], Algebra.Formal…
+· 使用定理 `Algebra.FinitePresentation.equiv`：equiv [FinitePresentation R A] (e : A 
+≃ₐ[R] B) : FinitePresentation R B
+· 使用定理 `Algebra.Smooth.finitePresentation`：∀ {R : Type u_4} {inst : CommRing R} 
+{A : Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smoo
+th R A], Algebra.Finite…
 
-English:
-theorem of_equiv
-  given: [Smooth R A] (e : A ≃ₐ[R] B)
-  statement: Smooth R B where
-  proof: FormallySmooth.of_equiv e
-  finitePresentation := FinitePresentation.equiv e
-
-中文:
-定理 of_equiv
-  条件: [光滑 R A] (e : A ≃ₐ[R] B)
-  结论: 光滑 R B where
-  证明: FormallySmooth.of_equiv e
-  finitePresentation := FinitePresentation.equiv e
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.of_equiv, of_equiv
+--- 原说明 ---
+Being smooth is transported via algebra isomorphisms.
 -/
 theorem of_equiv [Smooth R A] (e : A ≃ₐ[R] B) : Smooth R B where
   formallySmooth := FormallySmooth.of_equiv e
   finitePresentation := FinitePresentation.equiv e
 
-/--
-theorem `of_isLocalization_Away` / 定理 `of_isLocalization_Away`
+/-- Localization at an element is smooth. -/
+/-
+**Algebra.Smooth.of_isLocalization_Away** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Smoot
+h`。
+形式化陈述：∀ {R : Type u_4} [inst : CommRing R] {A : Type u_5} [inst_1 : CommRing A] 
+[inst_2 : Algebra R A] (r : R)   [IsLocalization.Away r A], Algebra.Smooth R A
+参数：r : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.of_isLocalization`：∀ {R : Type u_4} {Rₘ : Type u_
+6} [inst : CommRing R] [inst_1 : CommRing Rₘ] (M : Submonoid R) [inst_2 : Algebr
+a R Rₘ]   [IsLocalization M Rₘ…
+· 使用定理 `IsLocalization.Away.finitePresentation`：IsLocalization.Away.finitePresen
+tation (r : R) {S} [CommRing S] [Algebra R S] [IsLocalization.Away r S] : Algebr
+a.FinitePresentation R S
 
-English:
-theorem of_isLocalization_Away
-  given: (r : R) [IsLocalization.Away r A]
-  statement: Smooth R A where
-  proof: Algebra.FormallySmooth.of_isLocalization (Submonoid.powers r)
-  finitePresentation := IsLocalization.Away.finitePresentation r
-
-中文:
-定理 of_isLocalization_Away
-  条件: (r : R) [是Localization.Away r A]
-  结论: 光滑 R A where
-  证明: Algebra.FormallySmooth.of_isLocalization (Submonoid.powers r)
-  finitePresentation := IsLocalization.Away.finitePresentation r
-
-Depends on / 依赖: Algebra, Algebra.FormallySmooth.of_isLocalization, FormallySmooth, Submonoid, Submonoid.powers, of_isLocalization, powers
+--- 原说明 ---
+Localization at an element is smooth.
 -/
 theorem of_isLocalization_Away (r : R) [IsLocalization.Away r A] : Smooth R A where
   formallySmooth := Algebra.FormallySmooth.of_isLocalization (Submonoid.powers r)
@@ -1559,44 +1594,62 @@ section Comp
 
 variable (R A B)
 
-/--
-theorem `comp` / 定理 `comp`
+/-- Smooth is stable under composition. -/
+/-
+**Algebra.Smooth.comp** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Smooth`。
+形式化陈述：∀ (R : Type u_4) [inst : CommRing R] (A : Type u_5) (B : Type u_6) [inst_1
+ : CommRing A] [inst_2 : Algebra R A]   [inst_3 : CommRing B] [inst_4 : Algebra 
+R B] [inst_5 : Algebra A B] [IsScalarTower R A B] [Algebra.Smooth R A]   [Algebr
+a.Smooth A B], Algebra.Smooth R B
+参数：R : Type u_4；A : Type u_5；B : Type u_6。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallySmooth.comp`：∀ (R : Type u_4) [inst : CommRing R] (A : T
+ype u_5) [inst_1 : CommRing A] [inst_2 : Algebra R A] (B : Type u_6)   [inst_3 :
+ CommRing B] [ins…
+· 使用定理 `Algebra.Smooth.formallySmooth`：∀ {R : Type u_4} {inst : CommRing R} {A :
+ Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smooth R
+ A], Algebra.Formal…
+· 使用定理 `Algebra.FinitePresentation.trans`：trans [Algebra A B] [IsScalarTower R A
+ B] [FinitePresentation R A] [FinitePresentation A B] : FinitePresentation R B
+· 使用定理 `Algebra.Smooth.finitePresentation`：∀ {R : Type u_4} {inst : CommRing R} 
+{A : Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smoo
+th R A], Algebra.Finite…
 
-English:
-theorem comp
-  given: [Algebra A B] [IsScalarTower R A B] [Smooth R A] [Smooth A B]
-  statement: Smooth R B where
-  proof: FormallySmooth.comp R A B
-  finitePresentation := FinitePresentation.trans R A B
-
-中文:
-定理 comp
-  条件: [代数 A B] [标量塔 R A B] [光滑 R A] [光滑 A B]
-  结论: 光滑 R B where
-  证明: FormallySmooth.comp R A B
-  finitePresentation := FinitePresentation.trans R A B
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.comp
+--- 原说明 ---
+Smooth is stable under composition.
 -/
 theorem comp [Algebra A B] [IsScalarTower R A B] [Smooth R A] [Smooth A B] : Smooth R B where
   formallySmooth := FormallySmooth.comp R A B
   finitePresentation := FinitePresentation.trans R A B
 
-/--
-Instance `baseChange` / 实例 `baseChange`
+/-- Smooth is stable under base change. -/
+/-
+**Algebra.Smooth.baseChange** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Smooth`。
+形式化陈述：∀ (R : Type u_4) [inst : CommRing R] (A : Type u_5) (B : Type u_6) [inst_1
+ : CommRing A] [inst_2 : Algebra R A]   [inst_3 : CommRing B] [inst_4 : Algebra 
+R B] [Algebra.Smooth R A], Algebra.Smooth B (TensorProduct R B A)
+参数：R : Type u_4；A : Type u_5；B : Type u_6；TensorProduct R B A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Algebra.FormallySmooth.instTensorProduct`：∀ {R : Type u_4} [inst : CommR
+ing R] {A : Type u_5} [inst_1 : CommRing A] [inst_2 : Algebra R A] (B : Type u_6
+)   [inst_3 : CommRing B] [ins…
+· 使用定理 `Algebra.Smooth.formallySmooth`：∀ {R : Type u_4} {inst : CommRing R} {A :
+ Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smooth R
+ A], Algebra.Formal…
+· 使用定理 `Algebra.Smooth.finitePresentation`：∀ {R : Type u_4} {inst : CommRing R} 
+{A : Type u} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Smoo
+th R A], Algebra.Finite…
 
-English:
-instance baseChange
-  signature: [Smooth R A]
-
-中文:
-实例 baseChange
-  签名: [光滑 R A]
+--- 原说明 ---
+Smooth is stable under base change.
 -/
-instance baseChange [Smooth R A] : Smooth B (B otimes[R] A) where
+instance baseChange [Smooth R A] : Smooth B (B ⊗[R] A) where
 
 end Comp
 
 end Smooth
 
 end Algebra
+

@@ -64,24 +64,21 @@ open Category
 
 variable (C : Type*) [Category* C]
 
-/--
-Definition of `ComposableArrows` / `ComposableArrows` 的定义
+/-- `ComposableArrows C n` is the type of functors `Fin (n + 1) ⥤ C`. -/
+/-
+**CategoryTheory.ComposableArrows** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ComposableArrows (n : Nat)
+参数：n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ComposableArrows
-  signature: (n : Nat)
-  body: Fin (n + 1) ⥤ C
-
-中文:
-缩写 ComposableArrows
-  签名: (n : 自然数)
-  定义体: Fin (n + 1) ⥤ C
+--- 原说明 ---
+`ComposableArrows C n` is the type of functors `Fin (n + 1) ⥤ C`.
 -/
-abbrev ComposableArrows (n : Nat) := Fin (n + 1) ⥤ C
+abbrev ComposableArrows (n : ℕ) := Fin (n + 1) ⥤ C
 
 namespace ComposableArrows
 
-variable {C} {n m : Nat}
+variable {C} {n m : ℕ}
 variable (F G : ComposableArrows C n)
 
 -- We do not yet replace `omega` with `lia` here, as it is measurably slower.
@@ -91,120 +88,107 @@ macro "valid" : tactic =>
 
 /-- The `i`th object (with `i : ℕ` such that `i ≤ n`) of `F : ComposableArrows C n`. -/
 @[simp]
-/--
-Definition of `obj'` / `obj'` 的定义
+/-
+**CategoryTheory.ComposableArrows.obj'** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheo
+ry.ComposableArrows`。
+形式化陈述：obj' (i : Nat) (hi : i <= n
+参数：i : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation obj'
-  signature: (i : Nat) (hi : i <= n := by valid)
-  body: F.obj ⟨i, by lia⟩
-
-中文:
-缩写 obj'
-  签名: (i : 自然数) (hi : i <= n := by valid)
-  定义体: F.obj ⟨i, by lia⟩
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+The `i`th object (with `i : ℕ` such that `i ≤ n`) of `F : ComposableArrows C n`.
 -/
-abbrev obj' (i : Nat) (hi : i <= n := by valid) : C := F.obj ⟨i, by lia⟩
+abbrev obj' (i : ℕ) (hi : i ≤ n := by valid) : C := F.obj ⟨i, by lia⟩
 
 /-- The map `F.obj' i ⟶ F.obj' j` when `F : ComposableArrows C n`, and `i` and `j`
 are natural numbers such that `i ≤ j ≤ n`. -/
 @[simp]
-/--
-Definition of `map'` / `map'` 的定义
+/-
+**CategoryTheory.ComposableArrows.map'** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheo
+ry.ComposableArrows`。
+形式化陈述：map' (i j : Nat) (hij : i <= j
+参数：i j : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation map'
-  signature: (i j : Nat) (hij : i <= j := by valid) (hjn : j <= n := by valid)
-  body: F.map (homOfLE (by simp only [Fin.mk_le_mk]; valid))
-
-中文:
-缩写 map'
-  签名: (i j : 自然数) (hij : i <= j := by valid) (hjn : j <= n := by valid)
-  定义体: F.map (homOfLE (by simp only [Fin.mk_le_mk]; valid))
-
-Depends on / 依赖: F.map, F.obj, Fin.mk_le_mk, homOfLE, mk_le_mk
+--- 原说明 ---
+The map `F.obj' i ⟶ F.obj' j` when `F : ComposableArrows C n`, and `i` and `j`
+are natural numbers such that `i ≤ j ≤ n`.
 -/
-abbrev map' (i j : Nat) (hij : i <= j := by valid) (hjn : j <= n := by valid) :
+abbrev map' (i j : ℕ) (hij : i ≤ j := by valid) (hjn : j ≤ n := by valid) :
     F.obj ⟨i, by lia⟩ ⟶ F.obj ⟨j, by lia⟩ :=
   F.map (homOfLE (by simp only [Fin.mk_le_mk]; valid))
-
-/--
-lemma `map'_self` / 引理 `map'_self`
-
-English:
-lemma map'_self
-  given: (i : Nat) (hi : i <= n := by valid)
-  statement: F.map' i i = 𝟙 _
-  proof: F.map_id _
-
-中文:
-引理 map'_self
-  条件: (i : 自然数) (hi : i <= n := by valid)
-  结论: F.map' i i = 𝟙 _
-  证明: F.map_id _
+/-
+**CategoryTheory.ComposableArrows.map'_self** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.ComposableArrows`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {n : ℕ} (F 
+: CategoryTheory.ComposableArrows C n) (i : ℕ)   (hi : autoParam (i ≤ n) Categor
+yTheory.ComposableArrows.map'_self._auto_1),   F.map' i i ⋯ hi = CategoryTheory.
+CategoryStruct.id (F.obj ⟨i, ⋯⟩)
+参数：F : CategoryTheory.ComposableArrows C n；i : ℕ；hi : autoParam (i ≤ n) Category
+Theory.ComposableArrows.map'_self._auto_1；F.obj ⟨i, ⋯⟩。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 -/
-lemma map'_self (i : Nat) (hi : i <= n := by valid) : F.map' i i = 𝟙 _ := F.map_id _
-
-/--
-lemma `map'_comp` / 引理 `map'_comp`
-
-English:
-lemma map'_comp
-  statement: (i j k : Nat) (hij : i <= j := by valid)
-  proof: F.map_comp _ _
-
-中文:
-引理 map'_comp
-  结论: (i j k : 自然数) (hij : i <= j := by valid)
-  证明: F.map_comp _ _
+lemma map'_self (i : ℕ) (hi : i ≤ n := by valid) : F.map' i i = 𝟙 _ := F.map_id _
+/-
+**CategoryTheory.ComposableArrows.map'_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.ComposableArrows`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {n : ℕ} (F 
+: CategoryTheory.ComposableArrows C n)   (i j k : ℕ) (hij : autoParam (i ≤ j) Ca
+tegoryTheory.ComposableArrows.map'_comp._auto_1)   (hjk : autoParam (j ≤ k) Cate
+goryTheory.ComposableArrows.map'_comp._auto_3)   (hk : autoParam (k ≤ n) Categor
+yTheory.ComposableArrows.map'_comp._auto_5),   F.map' i k ⋯ hk = CategoryTheory.
+CategoryStruct.comp (F.map' i j hij ⋯) (F.map' j k hjk hk)
+参数：F : CategoryTheory.ComposableArrows C n；i j k : ℕ；hij : autoParam (i ≤ j) Cat
+egoryTheory.ComposableArrows.map'_comp._auto_1；hjk : autoParam (j ≤ k) CategoryT
+heory.ComposableArrows.map'_comp._auto_3；hk : autoParam (k ≤ n) CategoryTheory.C
+omposableArrows.map'_comp._auto_5；F.map' i j hij ⋯；F.map' j k hjk hk。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
-lemma map'_comp (i j k : Nat) (hij : i <= j := by valid)
-    (hjk : j <= k := by valid) (hk : k <= n := by valid) :
+lemma map'_comp (i j k : ℕ) (hij : i ≤ j := by valid)
+    (hjk : j ≤ k := by valid) (hk : k ≤ n := by valid) :
     F.map' i k = F.map' i j ≫ F.map' j k :=
   F.map_comp _ _
 
-/--
-Definition of `left` / `left` 的定义
+/-- The leftmost object of `F : ComposableArrows C n`. -/
+/-
+**CategoryTheory.ComposableArrows.left** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheo
+ry.ComposableArrows`。
+形式化陈述：left
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation left
-  body: obj' F 0
-
-中文:
-缩写 left
-  定义体: obj' F 0
-
-Depends on / 依赖: P.hI
+--- 原说明 ---
+The leftmost object of `F : ComposableArrows C n`.
 -/
 abbrev left := obj' F 0
 
-/--
-Definition of `right` / `right` 的定义
+/-- The rightmost object of `F : ComposableArrows C n`. -/
+/-
+**CategoryTheory.ComposableArrows.right** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+形式化陈述：right
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation right
-  body: obj' F n
-
-中文:
-缩写 right
-  定义体: obj' F n
+--- 原说明 ---
+The rightmost object of `F : ComposableArrows C n`.
 -/
 abbrev right := obj' F n
 
-/--
-Definition of `hom` / `hom` 的定义
+/-- The canonical map `F.left ⟶ F.right` for `F : ComposableArrows C n`. -/
+/-
+**CategoryTheory.ComposableArrows.hom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：hom : F.left ⟶ F.right
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation hom
-  signature: : F.left ⟶ F.right
-  body: map' F 0 n
-
-中文:
-缩写 hom
-  签名: : F.left ⟶ F.right
-  定义体: map' F 0 n
+--- 原说明 ---
+The canonical map `F.left ⟶ F.right` for `F : ComposableArrows C n`.
 -/
 abbrev hom : F.left ⟶ F.right := map' F 0 n
 
@@ -213,65 +197,45 @@ variable {F G}
 /-- The map `F.obj' i ⟶ G.obj' i` induced on `i`th objects by a morphism `F ⟶ G`
 in `ComposableArrows C n` when `i` is a natural number such that `i ≤ n`. -/
 @[simp]
-/--
-Definition of `app'` / `app'` 的定义
+/-
+**CategoryTheory.ComposableArrows.app'** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheo
+ry.ComposableArrows`。
+形式化陈述：app' (φ : F ⟶ G) (i : Nat) (hi : i <= n
+参数：φ : F ⟶ G；i : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation app'
-  signature: (φ : F ⟶ G) (i : Nat) (hi : i <= n := by valid)
-  body: φ.app _
-
-@[reassoc]
-
-中文:
-缩写 app'
-  签名: (φ : F ⟶ G) (i : 自然数) (hi : i <= n := by valid)
-  定义体: φ.app _
-
-@[reassoc]
-
-Depends on / 依赖: F.obj, G.obj
+--- 原说明 ---
+The map `F.obj' i ⟶ G.obj' i` induced on `i`th objects by a morphism `F ⟶ G`
+in `ComposableArrows C n` when `i` is a natural number such that `i ≤ n`.
 -/
-abbrev app' (φ : F ⟶ G) (i : Nat) (hi : i <= n := by valid) :
+abbrev app' (φ : F ⟶ G) (i : ℕ) (hi : i ≤ n := by valid) :
     F.obj' i ⟶ G.obj' i := φ.app _
 
 @[reassoc]
-/--
-lemma `naturality'` / 引理 `naturality'`
-
-English:
-lemma naturality'
-  statement: (φ : F ⟶ G) (i j : Nat) (hij : i <= j := by valid)
-  proof: φ.naturality _
-
-中文:
-引理 naturality'
-  结论: (φ : F ⟶ G) (i j : 自然数) (hij : i <= j := by valid)
-  证明: φ.naturality _
-
-Depends on / 依赖: F.map, G.map, naturality
+/-
+**CategoryTheory.ComposableArrows.naturality'** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.ComposableArrows`。
+形式化陈述：naturality' (φ : F ⟶ G) (i j : Nat) (hij : i <= j
+参数：φ : F ⟶ G；i j : Nat。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
-lemma naturality' (φ : F ⟶ G) (i j : Nat) (hij : i <= j := by valid)
-    (hj : j <= n := by valid) :
+lemma naturality' (φ : F ⟶ G) (i j : ℕ) (hij : i ≤ j := by valid)
+    (hj : j ≤ n := by valid) :
     F.map' i j ≫ app' φ j = app' φ i ≫ G.map' i j :=
   φ.naturality _
 
 /-- Constructor for `ComposableArrows C 0`. -/
 @[simps!]
-/--
-Definition of `mk₀` / `mk₀` 的定义
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk₀
-  signature: (X : C)
-  body: (Functor.const (Fin 1)).obj X
-
-中文:
-定义 mk₀
-  签名: (X : C)
-  定义体: (Functor.const (Fin 1)).obj X
-
-Depends on / 依赖: Functor, Functor.const
+--- 原说明 ---
+Constructor for `ComposableArrows C 0`.
 -/
 def mk₀ (X : C) : ComposableArrows C 0 := (Functor.const (Fin 1)).obj X
 
@@ -281,88 +245,78 @@ variable (X₀ X₁ : C)
 
 /-- The map which sends `0 : Fin 2` to `X₀` and `1` to `X₁`. -/
 @[simp]
-/--
-Definition of `obj` / `obj` 的定义
+/-
+**CategoryTheory.ComposableArrows.Mk₁.obj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.ComposableArrows.Mk₁`。
+形式化陈述：{C : Type u_1} → C → C → Fin 2 → C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition obj
-  signature: : Fin 2 -> C
-
-中文:
-定义 obj
-  签名: : 有限集 2 -> C
+--- 原说明 ---
+The map which sends `0 : Fin 2` to `X₀` and `1` to `X₁`.
 -/
-def obj : Fin 2 -> C
+def obj : Fin 2 → C
   | ⟨0, _⟩ => X₀
-  | ⟨1, _⟩ => X₁
+  | ⟨1, _⟩  => X₁
 
 variable {X₀ X₁}
 variable (f : X₀ ⟶ X₁)
 
 /-- The obvious map `obj X₀ X₁ i ⟶ obj X₀ X₁ j` whenever `i j : Fin 2` satisfy `i ≤ j`. -/
 @[simp]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.ComposableArrows.Mk₁.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.ComposableArrows.Mk₁`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {X₀
+ X₁ : C} →       (X₀ ⟶ X₁) →         (i j : Fin 2) →           i ≤ j → (Category
+Theory.ComposableArrows.Mk₁.obj X₀ X₁ i ⟶ CategoryTheory.ComposableArrows.Mk₁.ob
+j X₀ X₁ j)
+参数：X₀ ⟶ X₁；i j : Fin 2；CategoryTheory.ComposableArrows.Mk₁.obj X₀ X₁ i ⟶ Categor
+yTheory.ComposableArrows.Mk₁.obj X₀ X₁ j。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : forall (i j : Fin 2) (_ : i <= j), obj X₀ X₁ i ⟶ obj X₀ X₁ j
-
-中文:
-定义 map
-  签名: : 对任意 (i j : 有限集 2) (_ : i <= j), obj X₀ X₁ i ⟶ obj X₀ X₁ j
+--- 原说明 ---
+The obvious map `obj X₀ X₁ i ⟶ obj X₀ X₁ j` whenever `i j : Fin 2` satisfy `i ≤ 
+j`.
 -/
-def map : forall (i j : Fin 2) (_ : i <= j), obj X₀ X₁ i ⟶ obj X₀ X₁ j
+def map : ∀ (i j : Fin 2) (_ : i ≤ j), obj X₀ X₁ i ⟶ obj X₀ X₁ j
   | ⟨0, _⟩, ⟨0, _⟩, _ => 𝟙 _
   | ⟨0, _⟩, ⟨1, _⟩, _ => f
   | ⟨1, _⟩, ⟨1, _⟩, _ => 𝟙 _
-
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: (i : Fin 2)
-  statement: map f i i (by simp) = 𝟙 _
-  proof: match i with
-    | 0 => rfl
-    | 1 => rfl
-
-中文:
-引理 map_id
-  条件: (i : 有限集 2)
-  结论: map f i i (by simp) = 𝟙 _
-  证明: match i with
-    | 0 => rfl
-    | 1 => rfl
+/-
+**CategoryTheory.ComposableArrows.Mk₁.map_id** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ComposableArrows.Mk₁`。
+形式化陈述：map_id (i : Fin 2) : map f i i (by simp) = 𝟙 _
+参数：i : Fin 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma map_id (i : Fin 2) : map f i i (by simp) = 𝟙 _ :=
   match i with
     | 0 => rfl
     | 1 => rfl
-
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: {i j k : Fin 2} (hij : i <= j) (hjk : j <= k)
-  proof: by
-  obtain rfl | rfl : i = j ∨ j = k := by lia
-  · rw [map_id, id_comp]
-  · rw [map_id, comp_id]
-
-中文:
-引理 map_comp
-  条件: {i j k : 有限集 2} (hij : i <= j) (hjk : j <= k)
-  证明: by
-  obtain rfl | rfl : i = j ∨ j = k := by lia
-  · rw [map_id, id_comp]
-  · rw [map_id, comp_id]
-
-Depends on / 依赖: comp_id, id_comp, map_id
+/-
+**CategoryTheory.ComposableArrows.Mk₁.map_comp** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ComposableArrows.Mk₁`。
+形式化陈述：map_comp {i j k : Fin 2} (hij : i <= j) (hjk : j <= k) : map f i k (hij.tr
+ans hjk) = map f i j hij ≫ map f j k hjk
+参数：hij : i <= j；hjk : j <= k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ComposableArrows.Mk₁.map_id`：map_id (i : Fin 2) : map f i
+ i (by simp) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma map_comp {i j k : Fin 2} (hij : i <= j) (hjk : j <= k) :
+lemma map_comp {i j k : Fin 2} (hij : i ≤ j) (hjk : j ≤ k) :
     map f i k (hij.trans hjk) = map f i j hij ≫ map f j k hjk := by
   obtain rfl | rfl : i = j ∨ j = k := by lia
   · rw [map_id, id_comp]
@@ -372,24 +326,13 @@ end Mk₁
 
 /-- Constructor for `ComposableArrows C 1`. -/
 @[simps]
-/--
-Definition of `mk₁` / `mk₁` 的定义
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk₁
-  signature: {X₀ X₁ : C} (f : X₀ ⟶ X₁)
-  body: Mk₁.obj X₀ X₁
-  map g := Mk₁.map f _ _ (leOfHom g)
-  map_id := Mk₁.map_id f
-  map_comp g g' := Mk₁.map_comp f (leOfHom g) (leOfHom g')
-
-中文:
-定义 mk₁
-  签名: {X₀ X₁ : C} (f : X₀ ⟶ X₁)
-  定义体: Mk₁.obj X₀ X₁
-  map g := Mk₁.map f _ _ (leOfHom g)
-  map_id := Mk₁.map_id f
-  map_comp g g' := Mk₁.map_comp f (leOfHom g) (leOfHom g')
+--- 原说明 ---
+Constructor for `ComposableArrows C 1`.
 -/
 def mk₁ {X₀ X₁ : C} (f : X₀ ⟶ X₁) : ComposableArrows C 1 where
   obj := Mk₁.obj X₀ X₁
@@ -401,61 +344,30 @@ def mk₁ {X₀ X₁ : C} (f : X₀ ⟶ X₁) : ComposableArrows C 1 where
 a family of morphisms `F.obj i ⟶ G.obj i` and the naturality condition only for the
 maps in `Fin (n + 1)` given by inequalities of the form `i ≤ i + 1`. -/
 @[simps]
-/--
-Definition of `homMk` / `homMk` 的定义
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i)
-  body: app
-  naturality := by
-    suffices forall (k i j : Nat) (hj : i + k = j) (hj' : j <= n),
-        F.map' i j ≫ app _ = app _ ≫ G.map' i j by
-      rintro ⟨i, hi⟩ ⟨j, hj⟩ hij
-      have hij' := leOfHom hij
-      simp only [Fin.mk_le_mk] at hij'
-      obtain ⟨k, hk⟩ := Nat.le.dest hij'
-      exact this k i j hk (by valid)
-    intro k
-    induction k with intro i j hj hj'
-    | zero =>
-      simp only [add_zero] at hj
-      obtain rfl := hj
-      rw [F.map'_self i]; rw [G.map'_self i]; rw [id_comp]; rw [comp_id]
-    | succ k hk =>
-      rw [← add_assoc] at hj
-      subst hj
-      rw [F.map'_comp i (i + k) (i + k + 1)]; rw [G.map'_comp i (i + k) (i + k + 1)]; rw [assoc]; rw [w (i + k) (by valid)]; rw [reassoc_of% (hk i (i + k) rfl (by valid))]
-
-中文:
-定义 homMk
-  签名: {F G : ComposableArrows C n} (app : 对任意 i, F.obj i ⟶ G.obj i)
-  定义体: app
-  naturality := by
-    suffices forall (k i j : Nat) (hj : i + k = j) (hj' : j <= n),
-        F.map' i j ≫ app _ = app _ ≫ G.map' i j by
-      rintro ⟨i, hi⟩ ⟨j, hj⟩ hij
-      have hij' := leOfHom hij
-      simp only [Fin.mk_le_mk] at hij'
-      obtain ⟨k, hk⟩ := Nat.le.dest hij'
-      exact this k i j hk (by valid)
-    intro k
-    induction k with intro i j hj hj'
-    | zero =>
-      simp only [add_zero] at hj
-      obtain rfl := hj
-      rw [F.map'_self i]; rw [G.map'_self i]; rw [id_comp]; rw [comp_id]
-    | succ k hk =>
-      rw [← add_assoc] at hj
-      subst hj
-      rw [F.map'_comp i (i + k) (i + k + 1)]; rw [G.map'_comp i (i + k) (i + k + 1)]; rw [assoc]; rw [w (i + k) (by valid)]; rw [reassoc_of% (hk i (i + k) rfl (by valid))]
+--- 原说明 ---
+Constructor for morphisms `F ⟶ G` in `ComposableArrows C n` which takes as input
+s
+a family of morphisms `F.obj i ⟶ G.obj i` and the naturality condition only for 
+the
+maps in `Fin (n + 1)` given by inequalities of the form `i ≤ i + 1`.
 -/
-def homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i)
-    (w : forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)) :
+def homMk {F G : ComposableArrows C n} (app : ∀ i, F.obj i ⟶ G.obj i)
+    (w : ∀ (i : ℕ) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)) :
     F ⟶ G where
   app := app
   naturality := by
-    suffices forall (k i j : Nat) (hj : i + k = j) (hj' : j <= n),
+    suffices ∀ (k i j : ℕ) (hj : i + k = j) (hj' : j ≤ n),
         F.map' i j ≫ app _ = app _ ≫ G.map' i j by
       rintro ⟨i, hi⟩ ⟨j, hj⟩ hij
       have hij' := leOfHom hij
@@ -467,110 +379,104 @@ def homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i)
     | zero =>
       simp only [add_zero] at hj
       obtain rfl := hj
-      rw [F.map'_self i]; rw [G.map'_self i]; rw [id_comp]; rw [comp_id]
+      rw [F.map'_self i, G.map'_self i, id_comp, comp_id]
     | succ k hk =>
       rw [← add_assoc] at hj
       subst hj
-      rw [F.map'_comp i (i + k) (i + k + 1)]; rw [G.map'_comp i (i + k) (i + k + 1)]; rw [assoc]; rw [w (i + k) (by valid)]; rw [reassoc_of% (hk i (i + k) rfl (by valid))]
+      rw [F.map'_comp i (i + k) (i + k + 1), G.map'_comp i (i + k) (i + k + 1), assoc,
+        w (i + k) (by valid), reassoc_of% (hk i (i + k) rfl (by valid))]
 
 /-- Constructor for isomorphisms `F ≅ G` in `ComposableArrows C n` which takes as inputs
 a family of isomorphisms `F.obj i ≅ G.obj i` and the naturality condition only for the
 maps in `Fin (n + 1)` given by inequalities of the form `i ≤ i + 1`. -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ 
+G.map' i (i + 1)) : F ≅ G where hom
+参数：app : forall i, F.obj i ≅ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i)
-  body: homMk (fun i => (app i).hom) w
-  inv := homMk (fun i => (app i).inv) (fun i hi => by
-    rw [← cancel_epi ((app _).hom)]; rw [← reassoc_of% (w i hi)]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc])
-
-中文:
-定义 isoMk
-  签名: {F G : ComposableArrows C n} (app : 对任意 i, F.obj i ≅ G.obj i)
-  定义体: homMk (fun i => (app i).hom) w
-  inv := homMk (fun i => (app i).inv) (fun i hi => by
-    rw [← cancel_epi ((app _).hom)]; rw [← reassoc_of% (w i hi)]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc])
+--- 原说明 ---
+Constructor for isomorphisms `F ≅ G` in `ComposableArrows C n` which takes as in
+puts
+a family of isomorphisms `F.obj i ≅ G.obj i` and the naturality condition only f
+or the
+maps in `Fin (n + 1)` given by inequalities of the form `i ≤ i + 1`.
 -/
-def isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i)
-    (w : forall (i : Nat) (hi : i < n),
+def isoMk {F G : ComposableArrows C n} (app : ∀ i, F.obj i ≅ G.obj i)
+    (w : ∀ (i : ℕ) (hi : i < n),
       F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)) :
     F ≅ G where
   hom := homMk (fun i => (app i).hom) w
   inv := homMk (fun i => (app i).inv) (fun i hi => by
-    rw [← cancel_epi ((app _).hom)]; rw [← reassoc_of% (w i hi)]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc])
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  statement: {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i)
-  proof: Functor.ext_of_iso
-    (isoMk (fun i => eqToIso (h i)) (fun i hi => by simp [w i hi])) h
-
-中文:
-引理 ext
-  结论: {F G : ComposableArrows C n} (h : 对任意 i, F.obj i = G.obj i)
-  证明: Functor.ext_of_iso
-    (isoMk (fun i => eqToIso (h i)) (fun i hi => by simp [w i hi])) h
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, eqToIso, ext_of_iso
+    rw [← cancel_epi ((app _).hom), ← reassoc_of% (w i hi), Iso.hom_inv_id, comp_id,
+      Iso.hom_inv_id_assoc])
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i)
-    (w : forall (i : Nat) (hi : i < n), F.map' i (i + 1) =
+lemma ext {F G : ComposableArrows C n} (h : ∀ i, F.obj i = G.obj i)
+    (w : ∀ (i : ℕ) (hi : i < n), F.map' i (i + 1) =
       eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm) : F = G :=
   Functor.ext_of_iso
     (isoMk (fun i => eqToIso (h i)) (fun i hi => by simp [w i hi])) h
 
 /-- Constructor for morphisms in `ComposableArrows C 0`. -/
 @[simps!]
-/--
-Definition of `homMk₀` / `homMk₀` 的定义
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk₀
-  signature: {F G : ComposableArrows C 0} (f : F.obj' 0 ⟶ G.obj' 0)
-  body: homMk (fun i => match i with
-    | ⟨0, _⟩ => f) (fun i hi => by simp at hi)
-
-@[ext]
-
-中文:
-定义 homMk₀
-  签名: {F G : ComposableArrows C 0} (f : F.obj' 0 ⟶ G.obj' 0)
-  定义体: homMk (fun i => match i with
-    | ⟨0, _⟩ => f) (fun i hi => by simp at hi)
-
-@[ext]
+--- 原说明 ---
+Constructor for morphisms in `ComposableArrows C 0`.
 -/
 def homMk₀ {F G : ComposableArrows C 0} (f : F.obj' 0 ⟶ G.obj' 0) : F ⟶ G :=
   homMk (fun i => match i with
     | ⟨0, _⟩ => f) (fun i hi => by simp at hi)
 
 @[ext]
-/--
-lemma `hom_ext₀` / 引理 `hom_ext₀`
-
-English:
-lemma hom_ext₀
-  statement: {F G : ComposableArrows C 0} {φ φ' : F ⟶ G}
-  proof: by
-  ext i
-  fin_cases i
-  exact h
-
-中文:
-引理 hom_ext₀
-  结论: {F G : ComposableArrows C 0} {φ φ' : F ⟶ G}
-  证明: by
-  ext i
-  fin_cases i
-  exact h
-
-Depends on / 依赖: fin_cases
+/-
+**CategoryTheory.ComposableArrows.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ext₀ {F G : ComposableArrows C 0} {φ φ' : F ⟶ G}
     (h : app' φ 0 = app' φ' 0) :
@@ -581,122 +487,88 @@ lemma hom_ext₀ {F G : ComposableArrows C 0} {φ φ' : F ⟶ G}
 
 /-- Constructor for isomorphisms in `ComposableArrows C 0`. -/
 @[simps!]
-/--
-Definition of `isoMk₀` / `isoMk₀` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ 
+G.map' i (i + 1)) : F ≅ G where hom
+参数：app : forall i, F.obj i ≅ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk₀
-  signature: {F G : ComposableArrows C 0} (e : F.obj' 0 ≅ G.obj' 0)
-  body: homMk₀ e.hom
-  inv := homMk₀ e.inv
-
-中文:
-定义 isoMk₀
-  签名: {F G : ComposableArrows C 0} (e : F.obj' 0 ≅ G.obj' 0)
-  定义体: homMk₀ e.hom
-  inv := homMk₀ e.inv
-
-Depends on / 依赖: e.hom
+--- 原说明 ---
+Constructor for isomorphisms in `ComposableArrows C 0`.
 -/
 def isoMk₀ {F G : ComposableArrows C 0} (e : F.obj' 0 ≅ G.obj' 0) : F ≅ G where
   hom := homMk₀ e.hom
   inv := homMk₀ e.inv
-
-/--
-lemma `isIso_iff₀` / 引理 `isIso_iff₀`
-
-English:
-lemma isIso_iff₀
-  given: {F G : ComposableArrows C 0} (f : F ⟶ G)
-  proof: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => h 0, fun _ i => by fin_cases i; assumption⟩
-
-中文:
-引理 isIso_iff₀
-  条件: {F G : ComposableArrows C 0} (f : F ⟶ G)
-  证明: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => h 0, fun _ i => by fin_cases i; assumption⟩
-
-Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, fin_cases, isIso_iff_isIso_app
+/-
+**CategoryTheory.ComposableArrows.isIso_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_iff₀ {F G : ComposableArrows C 0} (f : F ⟶ G) :
     IsIso f ↔ IsIso (f.app 0) := by
   rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => h 0, fun _ i => by fin_cases i; assumption⟩
-
-/--
-lemma `ext₀` / 引理 `ext₀`
-
-English:
-lemma ext₀
-  given: {F G : ComposableArrows C 0} (h : F.obj' 0 = G.obj 0)
-  statement: F = G
-  proof: ext (fun i => match i with
-    | ⟨0, _⟩ => h) (fun i hi => by simp at hi)
-
-中文:
-引理 ext₀
-  条件: {F G : ComposableArrows C 0} (h : F.obj' 0 = G.obj 0)
-  结论: F = G
-  证明: ext (fun i => match i with
-    | ⟨0, _⟩ => h) (fun i hi => by simp at hi)
+  exact ⟨fun h ↦ h 0, fun _ i ↦ by fin_cases i; assumption⟩
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ext₀ {F G : ComposableArrows C 0} (h : F.obj' 0 = G.obj 0) : F = G :=
   ext (fun i => match i with
     | ⟨0, _⟩ => h) (fun i hi => by simp at hi)
-
-/--
-lemma `mk₀_surjective` / 引理 `mk₀_surjective`
-
-English:
-lemma mk₀_surjective
-  given: (F : ComposableArrows C 0)
-  statement: exists (X : C), F = mk₀ X
-  proof: ⟨F.obj' 0, ext₀ rfl⟩
-
-中文:
-引理 mk₀_surjective
-  条件: (F : ComposableArrows C 0)
-  结论: 存在 (X : C), F = mk₀ X
-  证明: ⟨F.obj' 0, ext₀ rfl⟩
-
-Depends on / 依赖: F.obj
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk₀_surjective (F : ComposableArrows C 0) : exists (X : C), F = mk₀ X :=
+lemma mk₀_surjective (F : ComposableArrows C 0) : ∃ (X : C), F = mk₀ X :=
   ⟨F.obj' 0, ext₀ rfl⟩
 
 /-- Constructor for morphisms in `ComposableArrows C 1`. -/
 @[simps!]
-/--
-Definition of `homMk₁` / `homMk₁` 的定义
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk₁
-  signature: {F G : ComposableArrows C 1}
-  body: homMk (fun i => match i with
-      | ⟨0, _⟩ => left
-      | ⟨1, _⟩ => right) (by
-          intro i hi
-          obtain rfl : i = 0 := by simpa using hi
-          exact w)
-
-@[ext]
-
-中文:
-定义 homMk₁
-  签名: {F G : ComposableArrows C 1}
-  定义体: homMk (fun i => match i with
-      | ⟨0, _⟩ => left
-      | ⟨1, _⟩ => right) (by
-          intro i hi
-          obtain rfl : i = 0 := by simpa using hi
-          exact w)
-
-@[ext]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Constructor for morphisms in `ComposableArrows C 1`.
 -/
 def homMk₁ {F G : ComposableArrows C 1}
     (left : F.obj' 0 ⟶ G.obj' 0) (right : F.obj' 1 ⟶ G.obj' 1)
@@ -710,26 +582,10 @@ def homMk₁ {F G : ComposableArrows C 1}
           exact w)
 
 @[ext]
-/--
-lemma `hom_ext₁` / 引理 `hom_ext₁`
-
-English:
-lemma hom_ext₁
-  statement: {F G : ComposableArrows C 1} {φ φ' : F ⟶ G}
-  proof: by
-  ext i
-  match i with
-    | 0 => exact h₀
-    | 1 => exact h₁
-
-中文:
-引理 hom_ext₁
-  结论: {F G : ComposableArrows C 1} {φ φ' : F ⟶ G}
-  证明: by
-  ext i
-  match i with
-    | 0 => exact h₀
-    | 1 => exact h₁
+/-
+**CategoryTheory.ComposableArrows.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ext₁ {F G : ComposableArrows C 1} {φ φ' : F ⟶ G}
     (h₀ : app' φ 0 = app' φ' 0) (h₁ : app' φ 1 = app' φ' 1) :
@@ -741,26 +597,19 @@ lemma hom_ext₁ {F G : ComposableArrows C 1} {φ φ' : F ⟶ G}
 
 /-- Constructor for isomorphisms in `ComposableArrows C 1`. -/
 @[simps!]
-/--
-Definition of `isoMk₁` / `isoMk₁` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ 
+G.map' i (i + 1)) : F ≅ G where hom
+参数：app : forall i, F.obj i ≅ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk₁
-  signature: {F G : ComposableArrows C 1}
-  body: homMk₁ left.hom right.hom w
-  inv := homMk₁ left.inv right.inv (by
-    rw [← cancel_mono right.hom]; rw [assoc]; rw [assoc]; rw [w]; rw [right.inv_hom_id]; rw [left.inv_hom_id_assoc]
-    apply comp_id)
-
-中文:
-定义 isoMk₁
-  签名: {F G : ComposableArrows C 1}
-  定义体: homMk₁ left.hom right.hom w
-  inv := homMk₁ left.inv right.inv (by
-    rw [← cancel_mono right.hom]; rw [assoc]; rw [assoc]; rw [w]; rw [right.inv_hom_id]; rw [left.inv_hom_id_assoc]
-    apply comp_id)
-
-Depends on / 依赖: cancel_mono, cat_disch, comp_id, inv_hom_id, inv_hom_id_assoc, left.hom, left.inv, left.inv_hom_id_assoc, right.hom, right.inv, right.inv_hom_id
+--- 原说明 ---
+Constructor for isomorphisms in `ComposableArrows C 1`.
 -/
 def isoMk₁ {F G : ComposableArrows C 1}
     (left : F.obj' 0 ≅ G.obj' 0) (right : F.obj' 1 ≅ G.obj' 1)
@@ -768,69 +617,54 @@ def isoMk₁ {F G : ComposableArrows C 1}
     F ≅ G where
   hom := homMk₁ left.hom right.hom w
   inv := homMk₁ left.inv right.inv (by
-    rw [← cancel_mono right.hom]; rw [assoc]; rw [assoc]; rw [w]; rw [right.inv_hom_id]; rw [left.inv_hom_id_assoc]
+    rw [← cancel_mono right.hom, assoc, assoc, w, right.inv_hom_id, left.inv_hom_id_assoc]
     apply comp_id)
-
-/--
-lemma `map'_eq_hom₁` / 引理 `map'_eq_hom₁`
-
-English:
-lemma map'_eq_hom₁
-  given: (F : ComposableArrows C 1)
-  statement: F.map' 0 1 = F.hom
-  proof: rfl
-
-中文:
-引理 map'_eq_hom₁
-  条件: (F : ComposableArrows C 1)
-  结论: F.map' 0 1 = F.hom
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.map'_eq_hom** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map'_eq_hom₁ (F : ComposableArrows C 1) : F.map' 0 1 = F.hom := rfl
-
-/--
-lemma `isIso_iff₁` / 引理 `isIso_iff₁`
-
-English:
-lemma isIso_iff₁
-  given: {F G : ComposableArrows C 1} (f : F ⟶ G)
-  proof: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => ⟨h 0, h 1⟩, fun _ i => by fin_cases i <;> tauto⟩
-
-中文:
-引理 isIso_iff₁
-  条件: {F G : ComposableArrows C 1} (f : F ⟶ G)
-  证明: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => ⟨h 0, h 1⟩, fun _ i => by fin_cases i <;> tauto⟩
-
-Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, fin_cases, isIso_iff_isIso_app
+/-
+**CategoryTheory.ComposableArrows.isIso_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_iff₁ {F G : ComposableArrows C 1} (f : F ⟶ G) :
     IsIso f ↔ IsIso (f.app 0) ∧ IsIso (f.app 1) := by
   rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => ⟨h 0, h 1⟩, fun _ i => by fin_cases i <;> tauto⟩
+  exact ⟨fun h ↦ ⟨h 0, h 1⟩, fun _ i ↦ by fin_cases i <;> tauto⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ext₁` / 引理 `ext₁`
-
-English:
-lemma ext₁
-  statement: {F G : ComposableArrows C 1}
-  proof: Functor.ext_of_iso (isoMk₁ (eqToIso left) (eqToIso right) (by simp [map'_eq_hom₁, w]))
-    (fun i => by fin_cases i <;> assumption)
-    (fun i => by fin_cases i <;> rfl)
-
-中文:
-引理 ext₁
-  结论: {F G : ComposableArrows C 1}
-  证明: Functor.ext_of_iso (isoMk₁ (eqToIso left) (eqToIso right) (by simp [map'_eq_hom₁, w]))
-    (fun i => by fin_cases i <;> assumption)
-    (fun i => by fin_cases i <;> rfl)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, eqToIso, ext_of_iso, fin_cases
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ext₁ {F G : ComposableArrows C 1}
     (left : F.left = G.left) (right : F.right = G.right)
@@ -840,63 +674,25 @@ lemma ext₁ {F G : ComposableArrows C 1}
     (fun i => by fin_cases i <;> rfl)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mk₁_surjective` / 引理 `mk₁_surjective`
-
-English:
-lemma mk₁_surjective
-  given: (X : ComposableArrows C 1)
-  statement: exists (X₀ X₁ : C) (f : X₀ ⟶ X₁), X = mk₁ f
-  proof: ⟨_, _, X.map' 0 1, ext₁ rfl rfl (by simp)⟩
-
-中文:
-引理 mk₁_surjective
-  条件: (X : ComposableArrows C 1)
-  结论: 存在 (X₀ X₁ : C) (f : X₀ ⟶ X₁), X = mk₁ f
-  证明: ⟨_, _, X.map' 0 1, ext₁ rfl rfl (by simp)⟩
-
-Depends on / 依赖: X.map
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk₁_surjective (X : ComposableArrows C 1) : exists (X₀ X₁ : C) (f : X₀ ⟶ X₁), X = mk₁ f :=
+lemma mk₁_surjective (X : ComposableArrows C 1) : ∃ (X₀ X₁ : C) (f : X₀ ⟶ X₁), X = mk₁ f :=
   ⟨_, _, X.map' 0 1, ext₁ rfl rfl (by simp)⟩
-
-/--
-lemma `mk₁_eqToHom_comp` / 引理 `mk₁_eqToHom_comp`
-
-English:
-lemma mk₁_eqToHom_comp
-  given: {X₀' X₀ X₁ : C} (h : X₀' = X₀) (f : X₀ ⟶ X₁)
-  proof: by
-  cat_disch
-
-中文:
-引理 mk₁_eqToHom_comp
-  条件: {X₀' X₀ X₁ : C} (h : X₀' = X₀) (f : X₀ ⟶ X₁)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk₁_eqToHom_comp {X₀' X₀ X₁ : C} (h : X₀' = X₀) (f : X₀ ⟶ X₁) :
     ComposableArrows.mk₁ (eqToHom h ≫ f) = ComposableArrows.mk₁ f := by
   cat_disch
-
-/--
-lemma `mk₁_comp_eqToHom` / 引理 `mk₁_comp_eqToHom`
-
-English:
-lemma mk₁_comp_eqToHom
-  given: {X₀ X₁ X₁' : C} (f : X₀ ⟶ X₁) (h : X₁ = X₁')
-  proof: by
-  cat_disch
-
-中文:
-引理 mk₁_comp_eqToHom
-  条件: {X₀ X₁ X₁' : C} (f : X₀ ⟶ X₁) (h : X₁ = X₁')
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk₁_comp_eqToHom {X₀ X₁ X₁' : C} (f : X₀ ⟶ X₁) (h : X₁ = X₁') :
     ComposableArrows.mk₁ (f ≫ eqToHom h) = ComposableArrows.mk₁ f := by
@@ -904,18 +700,10 @@ lemma mk₁_comp_eqToHom {X₀ X₁ X₁' : C} (f : X₀ ⟶ X₁) (h : X₁ = X
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mk₁_hom` / 引理 `mk₁_hom`
-
-English:
-lemma mk₁_hom
-  given: (X : ComposableArrows C 1)
-  proof: ext₁ rfl rfl (by simp)
-
-中文:
-引理 mk₁_hom
-  条件: (X : ComposableArrows C 1)
-  证明: ext₁ rfl rfl (by simp)
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk₁_hom (X : ComposableArrows C 1) :
     mk₁ X.hom = X :=
@@ -925,26 +713,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The bijection between `ComposableArrows C 1` and `Arrow C`. -/
 @[simps]
-/--
-Definition of `arrowEquiv` / `arrowEquiv` 的定义
+/-
+**CategoryTheory.ComposableArrows.arrowEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.ComposableArrows`。
+形式化陈述：arrowEquiv : ComposableArrows C 1 ≃ Arrow C where toFun F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowEquiv
-  signature: : ComposableArrows C 1 ≃ Arrow C where
-  body: Arrow.mk F.hom
-  invFun f := mk₁ f.hom
-  left_inv F := ComposableArrows.ext₁ rfl rfl (by simp)
-  right_inv _ := rfl
-
-中文:
-定义 arrowEquiv
-  签名: : ComposableArrows C 1 ≃ 箭头 C where
-  定义体: Arrow.mk F.hom
-  invFun f := mk₁ f.hom
-  left_inv F := ComposableArrows.ext₁ rfl rfl (by simp)
-  right_inv _ := rfl
-
-Depends on / 依赖: Arrow.mk, F.hom
+--- 原说明 ---
+The bijection between `ComposableArrows C 1` and `Arrow C`.
 -/
 def arrowEquiv : ComposableArrows C 1 ≃ Arrow C where
   toFun F := Arrow.mk F.hom
@@ -958,319 +735,255 @@ namespace Precomp
 
 variable (X : C)
 
-/--
-Definition of `obj` / `obj` 的定义
+/-- The map `Fin (n + 1 + 1) → C` which "shifts" `F.obj'` to the right and inserts `X` in
+the zeroth position. -/
+/-
+**CategoryTheory.ComposableArrows.Precomp.obj** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ComposableArrows.Precomp`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {n 
+: ℕ} → CategoryTheory.ComposableArrows C n → C → Fin (n + 1 + 1) → C
+参数：n + 1 + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition obj
-  signature: : Fin (n + 1 + 1) -> C
-
-中文:
-定义 obj
-  签名: : 有限集 (n + 1 + 1) -> C
+--- 原说明 ---
+The map `Fin (n + 1 + 1) → C` which "shifts" `F.obj'` to the right and inserts `
+X` in
+the zeroth position.
 -/
-def obj : Fin (n + 1 + 1) -> C
+def obj : Fin (n + 1 + 1) → C
   | ⟨0, _⟩ => X
   | ⟨i + 1, hi⟩ => F.obj' i
 
 @[simp]
-/--
-lemma `obj_zero` / 引理 `obj_zero`
-
-English:
-lemma obj_zero
-  statement: obj F X 0 = X
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 obj_zero
-  结论: obj F X 0 = X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.obj_zero** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ComposableArrows.Precomp`。
+形式化陈述：obj_zero : obj F X 0 = X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma obj_zero : obj F X 0 = X := rfl
 
 @[simp]
-/--
-lemma `obj_one` / 引理 `obj_one`
-
-English:
-lemma obj_one
-  statement: obj F X 1 = F.obj' 0
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 obj_one
-  结论: obj F X 1 = F.obj' 0
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.obj_one** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ComposableArrows.Precomp`。
+形式化陈述：obj_one : obj F X 1 = F.obj' 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma obj_one : obj F X 1 = F.obj' 0 := rfl
 
 @[simp]
-/--
-lemma `obj_succ` / 引理 `obj_succ`
-
-English:
-lemma obj_succ
-  given: (i : Nat) (hi : i + 1 < n + 1 + 1)
-  statement: obj F X ⟨i + 1, hi⟩ = F.obj' i
-  proof: rfl
-
-中文:
-引理 obj_succ
-  条件: (i : 自然数) (hi : i + 1 < n + 1 + 1)
-  结论: obj F X ⟨i + 1, hi⟩ = F.obj' i
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.Precomp.obj_succ** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ComposableArrows.Precomp`。
+形式化陈述：obj_succ (i : Nat) (hi : i + 1 < n + 1 + 1) : obj F X ⟨i + 1, hi⟩ = F.obj'
+ i
+参数：i : Nat；hi : i + 1 < n + 1 + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma obj_succ (i : Nat) (hi : i + 1 < n + 1 + 1) : obj F X ⟨i + 1, hi⟩ = F.obj' i := rfl
+lemma obj_succ (i : ℕ) (hi : i + 1 < n + 1 + 1) : obj F X ⟨i + 1, hi⟩ = F.obj' i := rfl
 
 variable {X} (f : X ⟶ F.left)
 
-/--
-Definition of `map` / `map` 的定义
+/-- Auxiliary definition for the action on maps of the functor `F.precomp f`.
+It sends `0 ≤ 1` to `f` and `i + 1 ≤ j + 1` to `F.map' i j`. -/
+/-
+**CategoryTheory.ComposableArrows.Precomp.map** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ComposableArrows.Precomp`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {n 
+: ℕ} →       (F : CategoryTheory.ComposableArrows C n) →         {X : C} →      
+     (X ⟶ F.left) →             (i j : Fin (n + 1 + 1)) →               i ≤ j → 
+                (CategoryTheory.ComposableArrows.Precomp.obj F X i ⟶ CategoryThe
+ory.ComposableArrows.Precomp.obj F X j)
+参数：F : CategoryTheory.ComposableArrows C n；X ⟶ F.left；i j : Fin (n + 1 + 1)；Cate
+goryTheory.ComposableArrows.Precomp.obj F X i ⟶ CategoryTheory.ComposableArrows.
+Precomp.obj F X j。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : forall (i j : Fin (n + 1 + 1)) (_ : i <= j), obj F X i ⟶ obj F X j
-
-中文:
-定义 map
-  签名: : 对任意 (i j : 有限集 (n + 1 + 1)) (_ : i <= j), obj F X i ⟶ obj F X j
+--- 原说明 ---
+Auxiliary definition for the action on maps of the functor `F.precomp f`.
+It sends `0 ≤ 1` to `f` and `i + 1 ≤ j + 1` to `F.map' i j`.
 -/
-def map : forall (i j : Fin (n + 1 + 1)) (_ : i <= j), obj F X i ⟶ obj F X j
+def map : ∀ (i j : Fin (n + 1 + 1)) (_ : i ≤ j), obj F X i ⟶ obj F X j
   | ⟨0, _⟩, ⟨0, _⟩, _ => 𝟙 X
   | ⟨0, _⟩, ⟨1, _⟩, _ => f
   | ⟨0, _⟩, ⟨j + 2, hj⟩, _ => f ≫ F.map' 0 (j + 1)
   | ⟨i + 1, hi⟩, ⟨j + 1, hj⟩, hij => F.map' i j (by simpa using hij)
 
 @[simp]
-/--
-lemma `map_zero_zero` / 引理 `map_zero_zero`
-
-English:
-lemma map_zero_zero
-  statement: map F f 0 0 (by simp) = 𝟙 X
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_zero_zero
-  结论: map F f 0 0 (by simp) = 𝟙 X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_zero_zero** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_zero_zero : map F f 0 0 (by simp) = 𝟙 X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma map_zero_zero : map F f 0 0 (by simp) = 𝟙 X := rfl
 
 @[simp]
-/--
-lemma `map_one_one` / 引理 `map_one_one`
-
-English:
-lemma map_one_one
-  statement: map F f 1 1 (by simp) = F.map (𝟙 _)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_one_one
-  结论: map F f 1 1 (by simp) = F.map (𝟙 _)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_one_one** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_one_one : map F f 1 1 (by simp) = F.map (𝟙 _)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma map_one_one : map F f 1 1 (by simp) = F.map (𝟙 _) := rfl
 
 @[simp]
-/--
-lemma `map_zero_one` / 引理 `map_zero_one`
-
-English:
-lemma map_zero_one
-  statement: map F f 0 1 (by simp) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_zero_one
-  结论: map F f 0 1 (by simp) = f
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_zero_one** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_zero_one : map F f 0 1 (by simp) = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma map_zero_one : map F f 0 1 (by simp) = f := rfl
 
 @[simp]
-/--
-lemma `map_zero_one'` / 引理 `map_zero_one'`
-
-English:
-lemma map_zero_one'
-  statement: map F f 0 ⟨0 + 1, by simp⟩ (by simp) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_zero_one'
-  结论: map F f 0 ⟨0 + 1, by simp⟩ (by simp) = f
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_zero_one'** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_zero_one' : map F f 0 ⟨0 + 1, by simp⟩ (by simp) = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma map_zero_one' : map F f 0 ⟨0 + 1, by simp⟩ (by simp) = f := rfl
 
 @[simp]
-/--
-lemma `map_zero_succ_succ` / 引理 `map_zero_succ_succ`
-
-English:
-lemma map_zero_succ_succ
-  given: (j : Nat) (hj : j + 2 < n + 1 + 1)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_zero_succ_succ
-  条件: (j : 自然数) (hj : j + 2 < n + 1 + 1)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_zero_succ_succ** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_zero_succ_succ (j : Nat) (hj : j + 2 < n + 1 + 1) : map F f 0 ⟨j + 2, 
+hj⟩ (by simp) = f ≫ F.map' 0 (j + 1)
+参数：j : Nat；hj : j + 2 < n + 1 + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma map_zero_succ_succ (j : Nat) (hj : j + 2 < n + 1 + 1) :
+lemma map_zero_succ_succ (j : ℕ) (hj : j + 2 < n + 1 + 1) :
     map F f 0 ⟨j + 2, hj⟩ (by simp) = f ≫ F.map' 0 (j + 1) := rfl
 
 @[simp]
-/--
-lemma `map_succ_succ` / 引理 `map_succ_succ`
-
-English:
-lemma map_succ_succ
-  statement: (i j : Nat) (hi : i + 1 < n + 1 + 1) (hj : j + 1 < n + 1 + 1)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_succ_succ
-  结论: (i j : 自然数) (hi : i + 1 < n + 1 + 1) (hj : j + 1 < n + 1 + 1)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_succ_succ** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_succ_succ (i j : Nat) (hi : i + 1 < n + 1 + 1) (hj : j + 1 < n + 1 + 1
+) (hij : i + 1 <= j + 1) : map F f ⟨i + 1, hi⟩ ⟨j + 1, hj⟩ hij = F.map' i j
+参数：i j : Nat；hi : i + 1 < n + 1 + 1；hj : j + 1 < n + 1 + 1；hij : i + 1 <= j + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_succ_succ (i j : Nat) (hi : i + 1 < n + 1 + 1) (hj : j + 1 < n + 1 + 1)
-    (hij : i + 1 <= j + 1) :
+lemma map_succ_succ (i j : ℕ) (hi : i + 1 < n + 1 + 1) (hj : j + 1 < n + 1 + 1)
+    (hij : i + 1 ≤ j + 1) :
     map F f ⟨i + 1, hi⟩ ⟨j + 1, hj⟩ hij = F.map' i j := rfl
 
 @[simp]
-/--
-lemma `map_one_succ` / 引理 `map_one_succ`
-
-English:
-lemma map_one_succ
-  given: (j : Nat) (hj : j + 1 < n + 1 + 1)
-  proof: rfl
-
-中文:
-引理 map_one_succ
-  条件: (j : 自然数) (hj : j + 1 < n + 1 + 1)
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_one_succ** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_one_succ (j : Nat) (hj : j + 1 < n + 1 + 1) : map F f 1 ⟨j + 1, hj⟩ (b
+y simp [Fin.le_def]) = F.map' 0 j
+参数：j : Nat；hj : j + 1 < n + 1 + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma map_one_succ (j : Nat) (hj : j + 1 < n + 1 + 1) :
+lemma map_one_succ (j : ℕ) (hj : j + 1 < n + 1 + 1) :
     map F f 1 ⟨j + 1, hj⟩ (by simp [Fin.le_def]) = F.map' 0 j := rfl
-
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: (i : Fin (n + 1 + 1))
-  statement: map F f i i (by simp) = 𝟙 _
-  proof: by
-  obtain ⟨_ | _, hi⟩ := i <;> simp
-
-中文:
-引理 map_id
-  条件: (i : 有限集 (n + 1 + 1))
-  结论: map F f i i (by simp) = 𝟙 _
-  证明: by
-  obtain ⟨_ | _, hi⟩ := i <;> simp
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_id** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_id (i : Fin (n + 1 + 1)) : map F f i i (by simp) = 𝟙 _
+参数：i : Fin (n + 1 + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
 -/
 lemma map_id (i : Fin (n + 1 + 1)) : map F f i i (by simp) = 𝟙 _ := by
   obtain ⟨_ | _, hi⟩ := i <;> simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: {i j k : Fin (n + 1 + 1)} (hij : i <= j) (hjk : j <= k)
-  proof: by
-  obtain ⟨i, hi⟩ := i
-  obtain ⟨j, hj⟩ := j
-  obtain ⟨k, hk⟩ := k
-  cases i
-  · obtain _ | _ | j := j
-    · dsimp
-      rw [id_comp]
-    · obtain _ | _ | k := k
-      · simp at hjk
-      · simp
-      · rfl
-    · obtain _ | _ | k := k
-      · simp [Fin.ext_iff] at hjk
-      · simp [Fin.le_def] at hjk
-      · dsimp
-        rw [assoc]; rw [← F.map_comp]; rw [homOfLE_comp]
-  · obtain _ | j := j
-    · simp [Fin.ext_iff] at hij
-    · obtain _ | k := k
-      · simp [Fin.ext_iff] at hjk
-      · dsimp
-        rw [← F.map_comp]; rw [homOfLE_comp]
-
-中文:
-引理 map_comp
-  条件: {i j k : 有限集 (n + 1 + 1)} (hij : i <= j) (hjk : j <= k)
-  证明: by
-  obtain ⟨i, hi⟩ := i
-  obtain ⟨j, hj⟩ := j
-  obtain ⟨k, hk⟩ := k
-  cases i
-  · obtain _ | _ | j := j
-    · dsimp
-      rw [id_comp]
-    · obtain _ | _ | k := k
-      · simp at hjk
-      · simp
-      · rfl
-    · obtain _ | _ | k := k
-      · simp [Fin.ext_iff] at hjk
-      · simp [Fin.le_def] at hjk
-      · dsimp
-        rw [assoc]; rw [← F.map_comp]; rw [homOfLE_comp]
-  · obtain _ | j := j
-    · simp [Fin.ext_iff] at hij
-    · obtain _ | k := k
-      · simp [Fin.ext_iff] at hjk
-      · dsimp
-        rw [← F.map_comp]; rw [homOfLE_comp]
-
-Depends on / 依赖: F.map_comp, Fin.ext_iff, Fin.le_def, ext_iff, homOfLE_comp, id_comp, le_def, map_comp
+/-
+**CategoryTheory.ComposableArrows.Precomp.map_comp** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ComposableArrows.Precomp`。
+形式化陈述：map_comp {i j k : Fin (n + 1 + 1)} (hij : i <= j) (hjk : j <= k) : map F f
+ i k (hij.trans hjk) = map F f i j hij ≫ map F f j k hjk
+参数：n + 1 + 1；hij : i <= j；hjk : j <= k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Fin.instIsBotZeroClass`：∀ {n : ℕ} [inst : NeZero n], IsBotZeroClass (Fin
+ n)
+· 使用定理 `Fin.instNeZeroHAddNatOfNat_mathlib`：∀ {n m : ℕ} [NeZero n] [inst : NeZer
+o (OfNat.ofNat m)], NeZero (OfNat.ofNat m)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Nat.one_mod`：∀ (n : ℕ), 1 % (n + 2) = 1
+· 使用定理 `Nat.Simproc.add_le_gt`：∀ (a : ℕ) {b c : ℕ}, b > c → (a + b ≤ c) = False
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.homOfLE_comp`：homOfLE_comp {x y z : X} (h : x <= y) (k : 
+y <= z) : homOfLE h ≫ homOfLE k = homOfLE (h.trans k)
 -/
-lemma map_comp {i j k : Fin (n + 1 + 1)} (hij : i <= j) (hjk : j <= k) :
+lemma map_comp {i j k : Fin (n + 1 + 1)} (hij : i ≤ j) (hjk : j ≤ k) :
     map F f i k (hij.trans hjk) = map F f i j hij ≫ map F f j k hjk := by
   obtain ⟨i, hi⟩ := i
   obtain ⟨j, hj⟩ := j
@@ -1287,38 +1000,30 @@ lemma map_comp {i j k : Fin (n + 1 + 1)} (hij : i <= j) (hjk : j <= k) :
       · simp [Fin.ext_iff] at hjk
       · simp [Fin.le_def] at hjk
       · dsimp
-        rw [assoc]; rw [← F.map_comp]; rw [homOfLE_comp]
+        rw [assoc, ← F.map_comp, homOfLE_comp]
   · obtain _ | j := j
     · simp [Fin.ext_iff] at hij
     · obtain _ | k := k
       · simp [Fin.ext_iff] at hjk
       · dsimp
-        rw [← F.map_comp]; rw [homOfLE_comp]
+        rw [← F.map_comp, homOfLE_comp]
 
 end Precomp
 
 /-- "Precomposition" of `F : ComposableArrows C n` by a morphism `f : X ⟶ F.left`. -/
 @[simps]
-/--
-Definition of `precomp` / `precomp` 的定义
+/-
+**CategoryTheory.ComposableArrows.precomp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+形式化陈述：precomp {X : C} (f : X ⟶ F.left) : ComposableArrows C (n + 1) where obj
+参数：f : X ⟶ F.left。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ComposableArrows.Precomp.map_id`：map_id (i : Fin (n + 1 +
+ 1)) : map F f i i (by simp) = 𝟙 _
 
-English:
-definition precomp
-  signature: {X : C} (f : X ⟶ F.left)
-  body: Precomp.obj F X
-  map g := Precomp.map F f _ _ (leOfHom g)
-  map_id := Precomp.map_id F f
-  map_comp g g' := Precomp.map_comp F f (leOfHom g) (leOfHom g')
-
-中文:
-定义 precomp
-  签名: {X : C} (f : X ⟶ F.left)
-  定义体: Precomp.obj F X
-  map g := Precomp.map F f _ _ (leOfHom g)
-  map_id := Precomp.map_id F f
-  map_comp g g' := Precomp.map_comp F f (leOfHom g) (leOfHom g')
-
-Depends on / 依赖: Precomp, Precomp.obj
+--- 原说明 ---
+"Precomposition" of `F : ComposableArrows C n` by a morphism `f : X ⟶ F.left`.
 -/
 def precomp {X : C} (f : X ⟶ F.left) : ComposableArrows C (n + 1) where
   obj := Precomp.obj F X
@@ -1326,75 +1031,51 @@ def precomp {X : C} (f : X ⟶ F.left) : ComposableArrows C (n + 1) where
   map_id := Precomp.map_id F f
   map_comp g g' := Precomp.map_comp F f (leOfHom g) (leOfHom g')
 
-/--
-Definition of `mk₂` / `mk₂` 的定义
+/-- Constructor for `ComposableArrows C 2`. -/
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk₂
-  signature: {X₀ X₁ X₂ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂)
-  body: (mk₁ g).precomp f
-
-中文:
-缩写 mk₂
-  签名: {X₀ X₁ X₂ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂)
-  定义体: (mk₁ g).precomp f
-
-Depends on / 依赖: precomp
+--- 原说明 ---
+Constructor for `ComposableArrows C 2`.
 -/
 abbrev mk₂ {X₀ X₁ X₂ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) : ComposableArrows C 2 :=
   (mk₁ g).precomp f
 
-/--
-Definition of `mk₃` / `mk₃` 的定义
+/-- Constructor for `ComposableArrows C 3`. -/
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk₃
-  signature: {X₀ X₁ X₂ X₃ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃)
-  body: (mk₂ g h).precomp f
-
-中文:
-缩写 mk₃
-  签名: {X₀ X₁ X₂ X₃ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃)
-  定义体: (mk₂ g h).precomp f
-
-Depends on / 依赖: precomp
+--- 原说明 ---
+Constructor for `ComposableArrows C 3`.
 -/
 abbrev mk₃ {X₀ X₁ X₂ X₃ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃) : ComposableArrows C 3 :=
   (mk₂ g h).precomp f
 
-/--
-Definition of `mk₄` / `mk₄` 的定义
+/-- Constructor for `ComposableArrows C 4`. -/
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk₄
-  signature: {X₀ X₁ X₂ X₃ X₄ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃) (i : X₃ ⟶ X₄)
-  body: (mk₃ g h i).precomp f
-
-中文:
-缩写 mk₄
-  签名: {X₀ X₁ X₂ X₃ X₄ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃) (i : X₃ ⟶ X₄)
-  定义体: (mk₃ g h i).precomp f
-
-Depends on / 依赖: precomp
+--- 原说明 ---
+Constructor for `ComposableArrows C 4`.
 -/
 abbrev mk₄ {X₀ X₁ X₂ X₃ X₄ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃) (i : X₃ ⟶ X₄) :
     ComposableArrows C 4 :=
   (mk₃ g h i).precomp f
 
-/--
-Definition of `mk₅` / `mk₅` 的定义
+/-- Constructor for `ComposableArrows C 5`. -/
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk₅
-  signature: {X₀ X₁ X₂ X₃ X₄ X₅ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃)
-  body: (mk₄ g h i j).precomp f
-
-中文:
-缩写 mk₅
-  签名: {X₀ X₁ X₂ X₃ X₄ X₅ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃)
-  定义体: (mk₄ g h i j).precomp f
-
-Depends on / 依赖: precomp
+--- 原说明 ---
+Constructor for `ComposableArrows C 5`.
 -/
 abbrev mk₅ {X₀ X₁ X₂ X₃ X₄ X₅ : C} (f : X₀ ⟶ X₁) (g : X₁ ⟶ X₂) (h : X₂ ⟶ X₃)
     (i : X₃ ⟶ X₄) (j : X₄ ⟶ X₅) :
@@ -1410,33 +1091,107 @@ and that `dsimp` can see through. -/
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+These examples are meant to test the good definitional properties of `precomp`,
+and that `dsimp` can see through.
+-/
 example : map' (mk₂ f g) 0 1 = f := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₂ f g) 1 2 = g := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₂ f g) 0 2 = f ≫ g := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (mk₂ f g).hom = f ≫ g := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₂ f g) 0 0 = 𝟙 _ := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₂ f g) 1 1 = 𝟙 _ := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₂ f g) 2 2 = 𝟙 _ := by dsimp
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₃ f g h) 0 1 = f := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₃ f g h) 1 2 = g := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₃ f g h) 2 3 = h := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₃ f g h) 0 3 = f ≫ g ≫ h := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (mk₃ f g h).hom = f ≫ g ≫ h := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₃ f g h) 0 2 = f ≫ g := by dsimp
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : map' (mk₃ f g h) 1 3 = g ≫ h := by dsimp
 
 end
@@ -1444,18 +1199,19 @@ end
 /-- The map `ComposableArrows C m → ComposableArrows C n` obtained by precomposition with
 a functor `Fin (n + 1) ⥤ Fin (m + 1)`. -/
 @[simps!]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.ComposableArrows.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ComposableArrows`。
+形式化陈述：whiskerLeft (F : ComposableArrows C m) (Φ : Fin (n + 1) ⥤ Fin (m + 1)) : C
+omposableArrows C n
+参数：F : ComposableArrows C m；Φ : Fin (n + 1) ⥤ Fin (m + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: (F : ComposableArrows C m) (Φ : Fin (n + 1) ⥤ Fin (m + 1))
-  body: Φ ⋙ F
-
-中文:
-定义 whiskerLeft
-  签名: (F : ComposableArrows C m) (Φ : 有限集 (n + 1) ⥤ 有限集 (m + 1))
-  定义体: Φ ⋙ F
+--- 原说明 ---
+The map `ComposableArrows C m → ComposableArrows C n` obtained by precomposition
+ with
+a functor `Fin (n + 1) ⥤ Fin (m + 1)`.
 -/
 def whiskerLeft (F : ComposableArrows C m) (Φ : Fin (n + 1) ⥤ Fin (m + 1)) :
     ComposableArrows C n := Φ ⋙ F
@@ -1463,22 +1219,19 @@ def whiskerLeft (F : ComposableArrows C m) (Φ : Fin (n + 1) ⥤ Fin (m + 1)) :
 /-- The functor `ComposableArrows C m ⥤ ComposableArrows C n` obtained by precomposition with
 a functor `Fin (n + 1) ⥤ Fin (m + 1)`. -/
 @[simps!]
-/--
-Definition of `whiskerLeftFunctor` / `whiskerLeftFunctor` 的定义
+/-
+**CategoryTheory.ComposableArrows.whiskerLeftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.ComposableArrows`。
+形式化陈述：whiskerLeftFunctor (Φ : Fin (n + 1) ⥤ Fin (m + 1)) : ComposableArrows C m 
+⥤ ComposableArrows C n where obj F
+参数：Φ : Fin (n + 1) ⥤ Fin (m + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeftFunctor
-  signature: (Φ : Fin (n + 1) ⥤ Fin (m + 1))
-  body: F.whiskerLeft Φ
-  map f := Functor.whiskerLeft Φ f
-
-中文:
-定义 whiskerLeftFunctor
-  签名: (Φ : 有限集 (n + 1) ⥤ 有限集 (m + 1))
-  定义体: F.whiskerLeft Φ
-  map f := Functor.whiskerLeft Φ f
-
-Depends on / 依赖: F.whiskerLeft, whiskerLeft
+--- 原说明 ---
+The functor `ComposableArrows C m ⥤ ComposableArrows C n` obtained by precomposi
+tion with
+a functor `Fin (n + 1) ⥤ Fin (m + 1)`.
 -/
 def whiskerLeftFunctor (Φ : Fin (n + 1) ⥤ Fin (m + 1)) :
     ComposableArrows C m ⥤ ComposableArrows C n where
@@ -1487,226 +1240,146 @@ def whiskerLeftFunctor (Φ : Fin (n + 1) ⥤ Fin (m + 1)) :
 
 /-- The functor `Fin n ⥤ Fin (n + 1)` which sends `i` to `i.succ`. -/
 @[simps]
-/--
-Definition of `_root_.Fin.succFunctor` / `_root_.Fin.succFunctor` 的定义
+/-
+**CategoryTheory.ComposableArrows._root_.Fin.succFunctor** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Fin.succFunctor
-  signature: (n : Nat)
-  body: i.succ
-  map {_ _} hij := homOfLE (Fin.succ_le_succ_iff.2 (leOfHom hij))
-
-中文:
-定义 _root_.有限集.succFunctor
-  签名: (n : 自然数)
-  定义体: i.succ
-  map {_ _} hij := homOfLE (Fin.succ_le_succ_iff.2 (leOfHom hij))
-
-Depends on / 依赖: i.succ
+--- 原说明 ---
+The functor `Fin n ⥤ Fin (n + 1)` which sends `i` to `i.succ`.
 -/
-def _root_.Fin.succFunctor (n : Nat) : Fin n ⥤ Fin (n + 1) where
+def _root_.Fin.succFunctor (n : ℕ) : Fin n ⥤ Fin (n + 1) where
   obj i := i.succ
   map {_ _} hij := homOfLE (Fin.succ_le_succ_iff.2 (leOfHom hij))
 
 /-- The functor `Fin (l + 1) ⥤ Fin (n + 1)` which sends `i` to `k + i` -/
 @[simps!]
-/--
-Definition of `_root_.Fin.natAddLEFunctor` / `_root_.Fin.natAddLEFunctor` 的定义
+/-
+**CategoryTheory.ComposableArrows._root_.Fin.natAddLEFunctor** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Fin.natAddLEFunctor
-  signature: {n k l : Nat} (h : k + l <= n)
-  body: fun ⟨i, _⟩ => ⟨k + i , by lia⟩
-  map {_ _} hij := homOfLE (by rw [Fin.le_iff_val_le_val]; simpa using (leOfHom hij))
-
-中文:
-定义 _root_.有限集.natAddLEFunctor
-  签名: {n k l : 自然数} (h : k + l <= n)
-  定义体: fun ⟨i, _⟩ => ⟨k + i , by lia⟩
-  map {_ _} hij := homOfLE (by rw [Fin.le_iff_val_le_val]; simpa using (leOfHom hij))
+--- 原说明 ---
+The functor `Fin (l + 1) ⥤ Fin (n + 1)` which sends `i` to `k + i`
 -/
-def _root_.Fin.natAddLEFunctor {n k l : Nat} (h : k + l <= n) : Fin (l + 1) ⥤ Fin (n + 1) where
+def _root_.Fin.natAddLEFunctor {n k l : ℕ} (h : k + l ≤ n) : Fin (l + 1) ⥤ Fin (n + 1) where
   obj := fun ⟨i, _⟩ => ⟨k + i , by lia⟩
   map {_ _} hij := homOfLE (by rw [Fin.le_iff_val_le_val]; simpa using (leOfHom hij))
 
 /-- The functor `ComposableArrows C n ⥤ ComposableArrows C l` obtained by precomposition with
 the functor `Fin.natAddLEFunctor`. -/
 @[simps!]
-/--
-Definition of `natAddLEFunctor` / `natAddLEFunctor` 的定义
+/-
+**CategoryTheory.ComposableArrows.natAddLEFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.ComposableArrows`。
+形式化陈述：natAddLEFunctor {n k l : Nat} (h : k + l <= n) : ComposableArrows C n ⥤ Co
+mposableArrows C l
+参数：h : k + l <= n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natAddLEFunctor
-  signature: {n k l : Nat} (h : k + l <= n)
-  body: whiskerLeftFunctor (Fin.natAddLEFunctor h)
-
-中文:
-定义 natAddLEFunctor
-  签名: {n k l : 自然数} (h : k + l <= n)
-  定义体: whiskerLeftFunctor (Fin.natAddLEFunctor h)
-
-Depends on / 依赖: Fin.natAddLEFunctor, natAddLEFunctor, whiskerLeftFunctor
+--- 原说明 ---
+The functor `ComposableArrows C n ⥤ ComposableArrows C l` obtained by precomposi
+tion with
+the functor `Fin.natAddLEFunctor`.
 -/
-def natAddLEFunctor {n k l : Nat} (h : k + l <= n) :
+def natAddLEFunctor {n k l : ℕ} (h : k + l ≤ n) :
     ComposableArrows C n ⥤ ComposableArrows C l :=
   whiskerLeftFunctor (Fin.natAddLEFunctor h)
-
-/--
-lemma `natAddLEFunctor_obj'` / 引理 `natAddLEFunctor_obj'`
-
-English:
-lemma natAddLEFunctor_obj'
-  statement: {n k l i : Nat} (h : k + l <= n) (R : ComposableArrows C n)
-  proof: rfl
-
-中文:
-引理 natAddLEFunctor_obj'
-  结论: {n k l i : 自然数} (h : k + l <= n) (R : ComposableArrows C n)
-  证明: rfl
-
-Depends on / 依赖: R.obj, natAddLEFunctor
+/-
+**CategoryTheory.ComposableArrows.natAddLEFunctor_obj'** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ComposableArrows`。
+形式化陈述：natAddLEFunctor_obj' {n k l i : Nat} (h : k + l <= n) (R : ComposableArrow
+s C n) (_ : i <= l
+参数：h : k + l <= n；R : ComposableArrows C n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natAddLEFunctor_obj' {n k l i : Nat} (h : k + l <= n) (R : ComposableArrows C n)
-    (_ : i <= l := by lia) :
+lemma natAddLEFunctor_obj' {n k l i : ℕ} (h : k + l ≤ n) (R : ComposableArrows C n)
+    (_ : i ≤ l := by lia) :
     ((natAddLEFunctor h).obj R).obj' i = R.obj' (k + i) := rfl
-
-/--
-lemma `natAddLEFunctor_app'` / 引理 `natAddLEFunctor_app'`
-
-English:
-lemma natAddLEFunctor_app'
-  statement: {n k l i : Nat} (h : k + l <= n) {R₁ R₂ : ComposableArrows C n}
-  proof: rfl
-
-中文:
-引理 natAddLEFunctor_app'
-  结论: {n k l i : 自然数} (h : k + l <= n) {R₁ R₂ : ComposableArrows C n}
-  证明: rfl
-
-Depends on / 依赖: natAddLEFunctor
+/-
+**CategoryTheory.ComposableArrows.natAddLEFunctor_app'** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ComposableArrows`。
+形式化陈述：natAddLEFunctor_app' {n k l i : Nat} (h : k + l <= n) {R₁ R₂ : ComposableA
+rrows C n} (φ : R₁ ⟶ R₂) (_ : i <= l
+参数：h : k + l <= n；φ : R₁ ⟶ R₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natAddLEFunctor_app' {n k l i : Nat} (h : k + l <= n) {R₁ R₂ : ComposableArrows C n}
-    (φ : R₁ ⟶ R₂) (_ : i <= l := by lia) :
+lemma natAddLEFunctor_app' {n k l i : ℕ} (h : k + l ≤ n) {R₁ R₂ : ComposableArrows C n}
+    (φ : R₁ ⟶ R₂) (_ : i ≤ l := by lia) :
     app' ((natAddLEFunctor h).map φ) i = app' φ (k + i) := rfl
 
 /-- The functor `ComposableArrows C (n + 1) ⥤ ComposableArrows C n` which forgets
 the first arrow. -/
 @[simps!]
-/--
-Definition of `δ₀Functor` / `δ₀Functor` 的定义
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition δ₀Functor
-  signature: : ComposableArrows C (n + 1) ⥤ ComposableArrows C n
-  body: whiskerLeftFunctor (Fin.succFunctor (n + 1))
-
-中文:
-定义 δ₀Functor
-  签名: : ComposableArrows C (n + 1) ⥤ ComposableArrows C n
-  定义体: whiskerLeftFunctor (Fin.succFunctor (n + 1))
-
-Depends on / 依赖: Fin.succFunctor, succFunctor, whiskerLeftFunctor
+--- 原说明 ---
+The functor `ComposableArrows C (n + 1) ⥤ ComposableArrows C n` which forgets
+the first arrow.
 -/
 def δ₀Functor : ComposableArrows C (n + 1) ⥤ ComposableArrows C n :=
   whiskerLeftFunctor (Fin.succFunctor (n + 1))
 
-/--
-Definition of `δ₀` / `δ₀` 的定义
+/-- The `ComposableArrows C n` obtained by forgetting the first arrow. -/
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation δ₀
-  signature: (F : ComposableArrows C (n + 1))
-  body: δ₀Functor.obj F
-
-@[simp]
-
-中文:
-缩写 δ₀
-  签名: (F : ComposableArrows C (n + 1))
-  定义体: δ₀Functor.obj F
-
-@[simp]
-
-Depends on / 依赖: Functor.obj
+--- 原说明 ---
+The `ComposableArrows C n` obtained by forgetting the first arrow.
 -/
 abbrev δ₀ (F : ComposableArrows C (n + 1)) := δ₀Functor.obj F
 
 @[simp]
-/--
-lemma `precomp_δ₀` / 引理 `precomp_δ₀`
-
-English:
-lemma precomp_δ₀
-  given: {X : C} (f : X ⟶ F.left)
-  statement: (F.precomp f).δ₀ = F
-  proof: rfl
-
-中文:
-引理 precomp_δ₀
-  条件: {X : C} (f : X ⟶ F.left)
-  结论: (F.precomp f).δ₀ = F
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.precomp_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma precomp_δ₀ {X : C} (f : X ⟶ F.left) : (F.precomp f).δ₀ = F := rfl
 
 /-- The functor `Fin n ⥤ Fin (n + 1)` which sends `i` to `i.castSucc`. -/
 @[simps]
-/--
-Definition of `_root_.Fin.castSuccFunctor` / `_root_.Fin.castSuccFunctor` 的定义
+/-
+**CategoryTheory.ComposableArrows._root_.Fin.castSuccFunctor** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Fin.castSuccFunctor
-  signature: (n : Nat)
-  body: i.castSucc
-  map hij := hij
-
-中文:
-定义 _root_.有限集.castSuccFunctor
-  签名: (n : 自然数)
-  定义体: i.castSucc
-  map hij := hij
-
-Depends on / 依赖: castSucc, i.castSucc
+--- 原说明 ---
+The functor `Fin n ⥤ Fin (n + 1)` which sends `i` to `i.castSucc`.
 -/
-def _root_.Fin.castSuccFunctor (n : Nat) : Fin n ⥤ Fin (n + 1) where
+def _root_.Fin.castSuccFunctor (n : ℕ) : Fin n ⥤ Fin (n + 1) where
   obj i := i.castSucc
   map hij := hij
 
 /-- The functor `ComposableArrows C (n + 1) ⥤ ComposableArrows C n` which forgets
 the last arrow. -/
 @[simps!]
-/--
-Definition of `δlastFunctor` / `δlastFunctor` 的定义
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+posableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition δlastFunctor
-  signature: : ComposableArrows C (n + 1) ⥤ ComposableArrows C n
-  body: whiskerLeftFunctor (Fin.castSuccFunctor (n + 1))
-
-中文:
-定义 δlastFunctor
-  签名: : ComposableArrows C (n + 1) ⥤ ComposableArrows C n
-  定义体: whiskerLeftFunctor (Fin.castSuccFunctor (n + 1))
-
-Depends on / 依赖: Fin.castSuccFunctor, castSuccFunctor, whiskerLeftFunctor
+--- 原说明 ---
+The functor `ComposableArrows C (n + 1) ⥤ ComposableArrows C n` which forgets
+the last arrow.
 -/
 def δlastFunctor : ComposableArrows C (n + 1) ⥤ ComposableArrows C n :=
   whiskerLeftFunctor (Fin.castSuccFunctor (n + 1))
 
-/--
-Definition of `δlast` / `δlast` 的定义
+/-- The `ComposableArrows C n` obtained by forgetting the first arrow. -/
+/-
+**CategoryTheory.ComposableArrows.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation δlast
-  signature: (F : ComposableArrows C (n + 1))
-  body: δlastFunctor.obj F
-
-中文:
-缩写 δlast
-  签名: (F : ComposableArrows C (n + 1))
-  定义体: δlastFunctor.obj F
-
-Depends on / 依赖: lastFunctor.obj
+--- 原说明 ---
+The `ComposableArrows C n` obtained by forgetting the first arrow.
 -/
 abbrev δlast (F : ComposableArrows C (n + 1)) := δlastFunctor.obj F
 
@@ -1715,34 +1388,25 @@ section
 variable {F G : ComposableArrows C (n + 1)}
 
 
-/--
-Definition of `homMkSucc` / `homMkSucc` 的定义
+/-- Inductive construction of morphisms in `ComposableArrows C (n + 1)`: in order to construct
+a morphism `F ⟶ G`, it suffices to provide `α : F.obj' 0 ⟶ G.obj' 0` and `β : F.δ₀ ⟶ G.δ₀`
+such that `F.map' 0 1 ≫ app' β 0 = α ≫ G.map' 0 1`. -/
+/-
+**CategoryTheory.ComposableArrows.homMkSucc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.ComposableArrows`。
+形式化陈述：homMkSucc (α : F.obj' 0 ⟶ G.obj' 0) (β : F.δ₀ ⟶ G.δ₀) (w : F.map' 0 1 ≫ ap
+p' β 0 = α ≫ G.map' 0 1) : F ⟶ G
+参数：α : F.obj' 0 ⟶ G.obj' 0；β : F.δ₀ ⟶ G.δ₀；w : F.map' 0 1 ≫ app' β 0 = α ≫ G.map
+' 0 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMkSucc
-  signature: (α : F.obj' 0 ⟶ G.obj' 0) (β : F.δ₀ ⟶ G.δ₀)
-  body: homMk
-    (fun i => match i with
-      | ⟨0, _⟩ => α
-      | ⟨i + 1, hi⟩ => app' β i)
-    (fun i hi => by
-      obtain _ | i := i
-      · exact w
-      · exact naturality' β i (i + 1))
-
-中文:
-定义 homMkSucc
-  签名: (α : F.obj' 0 ⟶ G.obj' 0) (β : F.δ₀ ⟶ G.δ₀)
-  定义体: homMk
-    (fun i => match i with
-      | ⟨0, _⟩ => α
-      | ⟨i + 1, hi⟩ => app' β i)
-    (fun i hi => by
-      obtain _ | i := i
-      · exact w
-      · exact naturality' β i (i + 1))
-
-Depends on / 依赖: naturality
+--- 原说明 ---
+Inductive construction of morphisms in `ComposableArrows C (n + 1)`: in order to
+ construct
+a morphism `F ⟶ G`, it suffices to provide `α : F.obj' 0 ⟶ G.obj' 0` and `β : F.
+δ₀ ⟶ G.δ₀`
+such that `F.map' 0 1 ≫ app' β 0 = α ≫ G.map' 0 1`.
 -/
 def homMkSucc (α : F.obj' 0 ⟶ G.obj' 0) (β : F.δ₀ ⟶ G.δ₀)
     (w : F.map' 0 1 ≫ app' β 0 = α ≫ G.map' 0 1) : F ⟶ G :=
@@ -1760,63 +1424,49 @@ variable (α : F.obj' 0 ⟶ G.obj' 0) (β : F.δ₀ ⟶ G.δ₀)
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMkSucc_app_zero` / 引理 `homMkSucc_app_zero`
-
-English:
-lemma homMkSucc_app_zero
-  statement: (homMkSucc α β w).app 0 = α
-  proof: rfl
-
-中文:
-引理 homMkSucc_app_zero
-  结论: (homMkSucc α β w).app 0 = α
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMkSucc_app_zero** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ComposableArrows`。
+形式化陈述：homMkSucc_app_zero : (homMkSucc α β w).app 0 = α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma homMkSucc_app_zero : (homMkSucc α β w).app 0 = α := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMkSucc_app_succ` / 引理 `homMkSucc_app_succ`
-
-English:
-lemma homMkSucc_app_succ
-  given: (i : Nat) (hi : i + 1 < n + 1 + 1)
-  proof: rfl
-
-中文:
-引理 homMkSucc_app_succ
-  条件: (i : 自然数) (hi : i + 1 < n + 1 + 1)
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMkSucc_app_succ** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ComposableArrows`。
+形式化陈述：homMkSucc_app_succ (i : Nat) (hi : i + 1 < n + 1 + 1) : (homMkSucc α β w).
+app ⟨i + 1, hi⟩ = app' β i
+参数：i : Nat；hi : i + 1 < n + 1 + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma homMkSucc_app_succ (i : Nat) (hi : i + 1 < n + 1 + 1) :
+lemma homMkSucc_app_succ (i : ℕ) (hi : i + 1 < n + 1 + 1) :
     (homMkSucc α β w).app ⟨i + 1, hi⟩ = app' β i := rfl
 
 end
 
-/--
-lemma `hom_ext_succ` / 引理 `hom_ext_succ`
-
-English:
-lemma hom_ext_succ
-  statement: {F G : ComposableArrows C (n + 1)} {f g : F ⟶ G}
-  proof: by
-  ext ⟨i, hi⟩
-  obtain _ | i := i
-  · exact h₀
-  · exact congr_app h₁ ⟨i, by valid⟩
-
-中文:
-引理 hom_ext_succ
-  结论: {F G : ComposableArrows C (n + 1)} {f g : F ⟶ G}
-  证明: by
-  ext ⟨i, hi⟩
-  obtain _ | i := i
-  · exact h₀
-  · exact congr_app h₁ ⟨i, by valid⟩
-
-Depends on / 依赖: congr_app
+/-
+**CategoryTheory.ComposableArrows.hom_ext_succ** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ComposableArrows`。
+形式化陈述：hom_ext_succ {F G : ComposableArrows C (n + 1)} {f g : F ⟶ G} (h₀ : app' f
+ 0 = app' g 0) (h₁ : δ₀Functor.map f = δ₀Functor.map g) : f = g
+参数：n + 1；h₀ : app' f 0 = app' g 0；h₁ : δ₀Functor.map f = δ₀Functor.map g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
 -/
 lemma hom_ext_succ {F G : ComposableArrows C (n + 1)} {f g : F ⟶ G}
     (h₀ : app' f 0 = app' g 0) (h₁ : δ₀Functor.map f = δ₀Functor.map g) : f = g := by
@@ -1830,54 +1480,29 @@ set_option backward.isDefEq.respectTransparency false in
 construct an isomorphism `F ≅ G`, it suffices to provide `α : F.obj' 0 ≅ G.obj' 0` and
 `β : F.δ₀ ≅ G.δ₀` such that `F.map' 0 1 ≫ app' β.hom 0 = α.hom ≫ G.map' 0 1`. -/
 @[simps]
-/--
-Definition of `isoMkSucc` / `isoMkSucc` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMkSucc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.ComposableArrows`。
+形式化陈述：isoMkSucc {F G : ComposableArrows C (n + 1)} (α : F.obj' 0 ≅ G.obj' 0) (β 
+: F.δ₀ ≅ G.δ₀) (w : F.map' 0 1 ≫ app' β.hom 0 = α.hom ≫ G.map' 0 1) : F ≅ G wher
+e hom
+参数：n + 1；α : F.obj' 0 ≅ G.obj' 0；β : F.δ₀ ≅ G.δ₀；w : F.map' 0 1 ≫ app' β.hom 0 =
+ α.hom ≫ G.map' 0 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMkSucc
-  signature: {F G : ComposableArrows C (n + 1)} (α : F.obj' 0 ≅ G.obj' 0)
-  body: homMkSucc α.hom β.hom w
-  inv := homMkSucc α.inv β.inv (by
-    rw [← cancel_epi α.hom]; rw [← reassoc_of% w]; rw [α.hom_inv_id_assoc]; rw [β.hom_inv_id_app]
-    dsimp
-    rw [comp_id])
-  hom_inv_id := by
-    apply hom_ext_succ
-    · simp
-    · ext ⟨i, hi⟩
-      simp
-  inv_hom_id := by
-    apply hom_ext_succ
-    · simp
-    · ext ⟨i, hi⟩
-      simp
-
-中文:
-定义 isoMkSucc
-  签名: {F G : ComposableArrows C (n + 1)} (α : F.obj' 0 ≅ G.obj' 0)
-  定义体: homMkSucc α.hom β.hom w
-  inv := homMkSucc α.inv β.inv (by
-    rw [← cancel_epi α.hom]; rw [← reassoc_of% w]; rw [α.hom_inv_id_assoc]; rw [β.hom_inv_id_app]
-    dsimp
-    rw [comp_id])
-  hom_inv_id := by
-    apply hom_ext_succ
-    · simp
-    · ext ⟨i, hi⟩
-      simp
-  inv_hom_id := by
-    apply hom_ext_succ
-    · simp
-    · ext ⟨i, hi⟩
-      simp
-
-Depends on / 依赖: homMkSucc
+--- 原说明 ---
+Inductive construction of isomorphisms in `ComposableArrows C (n + 1)`: in order
+ to
+construct an isomorphism `F ≅ G`, it suffices to provide `α : F.obj' 0 ≅ G.obj' 
+0` and
+`β : F.δ₀ ≅ G.δ₀` such that `F.map' 0 1 ≫ app' β.hom 0 = α.hom ≫ G.map' 0 1`.
 -/
 def isoMkSucc {F G : ComposableArrows C (n + 1)} (α : F.obj' 0 ≅ G.obj' 0)
     (β : F.δ₀ ≅ G.δ₀) (w : F.map' 0 1 ≫ app' β.hom 0 = α.hom ≫ G.map' 0 1) : F ≅ G where
   hom := homMkSucc α.hom β.hom w
   inv := homMkSucc α.inv β.inv (by
-    rw [← cancel_epi α.hom]; rw [← reassoc_of% w]; rw [α.hom_inv_id_assoc]; rw [β.hom_inv_id_app]
+    rw [← cancel_epi α.hom, ← reassoc_of% w, α.hom_inv_id_assoc, β.hom_inv_id_app]
     dsimp
     rw [comp_id])
   hom_inv_id := by
@@ -1892,45 +1517,51 @@ def isoMkSucc {F G : ComposableArrows C (n + 1)} (α : F.obj' 0 ≅ G.obj' 0)
       simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ext_succ` / 引理 `ext_succ`
-
-English:
-lemma ext_succ
-  statement: {F G : ComposableArrows C (n + 1)} (h₀ : F.obj' 0 = G.obj' 0)
-  proof: by
-  have : forall i, F.obj i = G.obj i := by
-    intro ⟨i, hi⟩
-    rcases i with - | i
-    · exact h₀
-    · exact Functor.congr_obj h ⟨i, by valid⟩
-  exact Functor.ext_of_iso (isoMkSucc (eqToIso h₀) (eqToIso h) (by
-      rw [w]
-      dsimp [app']
-      rw [eqToHom_app]; rw [assoc]; rw [assoc]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [comp_id])) this
-    (by rintro ⟨_ | _, hi⟩ <;> simp)
-
-中文:
-引理 ext_succ
-  结论: {F G : ComposableArrows C (n + 1)} (h₀ : F.obj' 0 = G.obj' 0)
-  证明: by
-  have : forall i, F.obj i = G.obj i := by
-    intro ⟨i, hi⟩
-    rcases i with - | i
-    · exact h₀
-    · exact Functor.congr_obj h ⟨i, by valid⟩
-  exact Functor.ext_of_iso (isoMkSucc (eqToIso h₀) (eqToIso h) (by
-      rw [w]
-      dsimp [app']
-      rw [eqToHom_app]; rw [assoc]; rw [assoc]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [comp_id])) this
-    (by rintro ⟨_ | _, hi⟩ <;> simp)
-
-Depends on / 依赖: F.obj, Functor, Functor.congr_obj, Functor.ext_of_iso, G.obj, comp_id, congr_obj, eqToHom_app, eqToHom_refl, eqToHom_trans, eqToIso, ext_of_iso, isoMkSucc
+/-
+**CategoryTheory.ComposableArrows.ext_succ** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.ComposableArrows`。
+形式化陈述：ext_succ {F G : ComposableArrows C (n + 1)} (h₀ : F.obj' 0 = G.obj' 0) (h 
+: F.δ₀ = G.δ₀) (w : F.map' 0 1 = eqToHom h₀ ≫ G.map' 0 1 ≫ eqToHom (Functor.cong
+r_obj h.symm 0)) : F = G
+参数：n + 1；h₀ : F.obj' 0 = G.obj' 0；h : F.δ₀ = G.δ₀；w : F.map' 0 1 = eqToHom h₀ ≫ 
+G.map' 0 1 ≫ eqToHom (Functor.congr_obj h.symm 0)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.eqToHom_app`：eqToHom_app {F G : C ⥤ D} (h : F = G) (X : C
+) : (eqToHom h : F ⟶ G).app X = eqToHom (Functor.congr_obj h X)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 lemma ext_succ {F G : ComposableArrows C (n + 1)} (h₀ : F.obj' 0 = G.obj' 0)
     (h : F.δ₀ = G.δ₀) (w : F.map' 0 1 = eqToHom h₀ ≫ G.map' 0 1 ≫
       eqToHom (Functor.congr_obj h.symm 0)) : F = G := by
-  have : forall i, F.obj i = G.obj i := by
+  have : ∀ i, F.obj i = G.obj i := by
     intro ⟨i, hi⟩
     rcases i with - | i
     · exact h₀
@@ -1938,27 +1569,42 @@ lemma ext_succ {F G : ComposableArrows C (n + 1)} (h₀ : F.obj' 0 = G.obj' 0)
   exact Functor.ext_of_iso (isoMkSucc (eqToIso h₀) (eqToIso h) (by
       rw [w]
       dsimp [app']
-      rw [eqToHom_app]; rw [assoc]; rw [assoc]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [comp_id])) this
+      rw [eqToHom_app, assoc, assoc, eqToHom_trans, eqToHom_refl, comp_id])) this
     (by rintro ⟨_ | _, hi⟩ <;> simp)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `precomp_surjective` / 引理 `precomp_surjective`
-
-English:
-lemma precomp_surjective
-  given: (F : ComposableArrows C (n + 1))
-  proof: ⟨F.δ₀, _, F.map' 0 1, ext_succ rfl (by simp) (by simp)⟩
-
-中文:
-引理 precomp_surjective
-  条件: (F : ComposableArrows C (n + 1))
-  证明: ⟨F.δ₀, _, F.map' 0 1, ext_succ rfl (by simp) (by simp)⟩
-
-Depends on / 依赖: F.map, ext_succ
+/-
+**CategoryTheory.ComposableArrows.precomp_surjective** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ComposableArrows`。
+形式化陈述：precomp_surjective (F : ComposableArrows C (n + 1)) : exists (F₀ : Composa
+bleArrows C n) (X₀ : C) (f₀ : X₀ ⟶ F₀.left), F = F₀.precomp f₀
+参数：F : ComposableArrows C (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用引理 `CategoryTheory.ComposableArrows.ext_succ`：ext_succ {F G : ComposableArro
+ws C (n + 1)} (h₀ : F.obj' 0 = G.obj' 0) (h : F.δ₀ = G.δ₀) (w : F.map' 0 1 = eqT
+oHom h₀ ≫ G.map' 0 1 ≫ eqToHom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma precomp_surjective (F : ComposableArrows C (n + 1)) :
-    exists (F₀ : ComposableArrows C n) (X₀ : C) (f₀ : X₀ ⟶ F₀.left), F = F₀.precomp f₀ :=
+    ∃ (F₀ : ComposableArrows C n) (X₀ : C) (f₀ : X₀ ⟶ F₀.left), F = F₀.precomp f₀ :=
   ⟨F.δ₀, _, F.map' 0 1, ext_succ rfl (by simp) (by simp)⟩
 
 section
@@ -1970,108 +1616,90 @@ variable
     (w₁ : f.map' 1 2 ≫ app₂ = app₁ ≫ g.map' 1 2 := by cat_disch)
 
 set_option backward.privateInPublic true in
-/--
-Definition of `homMk₂` / `homMk₂` 的定义
+/-- Constructor for morphisms in `ComposableArrows C 2`. -/
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk₂
-  signature: : f ⟶ g
-  body: homMkSucc app₀ (homMk₁ app₁ app₂ w₁) w₀
-
-中文:
-定义 homMk₂
-  签名: : f ⟶ g
-  定义体: homMkSucc app₀ (homMk₁ app₁ app₂ w₁) w₀
-
-Depends on / 依赖: homMkSucc
+--- 原说明 ---
+Constructor for morphisms in `ComposableArrows C 2`.
 -/
 def homMk₂ : f ⟶ g := homMkSucc app₀ (homMk₁ app₁ app₂ w₁) w₀
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₂_app_zero` / 引理 `homMk₂_app_zero`
-
-English:
-lemma homMk₂_app_zero
-  statement: (homMk₂ app₀ app₁ app₂ w₀ w₁).app 0 = app₀
-  proof: rfl
-
-中文:
-引理 homMk₂_app_zero
-  结论: (homMk₂ app₀ app₁ app₂ w₀ w₁).app 0 = app₀
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₂_app_zero : (homMk₂ app₀ app₁ app₂ w₀ w₁).app 0 = app₀ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₂_app_one` / 引理 `homMk₂_app_one`
-
-English:
-lemma homMk₂_app_one
-  statement: (homMk₂ app₀ app₁ app₂ w₀ w₁).app 1 = app₁
-  proof: rfl
-
-中文:
-引理 homMk₂_app_one
-  结论: (homMk₂ app₀ app₁ app₂ w₀ w₁).app 1 = app₁
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₂_app_one : (homMk₂ app₀ app₁ app₂ w₀ w₁).app 1 = app₁ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₂_app_two` / 引理 `homMk₂_app_two`
-
-English:
-lemma homMk₂_app_two
-  statement: (homMk₂ app₀ app₁ app₂ w₀ w₁).app 2 = app₂
-  proof: rfl
-
-中文:
-引理 homMk₂_app_two
-  结论: (homMk₂ app₀ app₁ app₂ w₀ w₁).app 2 = app₂
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₂_app_two : (homMk₂ app₀ app₁ app₂ w₀ w₁).app 2 = app₂ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₂_app_two'` / 引理 `homMk₂_app_two'`
-
-English:
-lemma homMk₂_app_two'
-  statement: (homMk₂ app₀ app₁ app₂ w₀ w₁).app ⟨2, by valid⟩ = app₂
-  proof: rfl
-
-中文:
-引理 homMk₂_app_two'
-  结论: (homMk₂ app₀ app₁ app₂ w₀ w₁).app ⟨2, by valid⟩ = app₂
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₂_app_two' : (homMk₂ app₀ app₁ app₂ w₀ w₁).app ⟨2, by valid⟩ = app₂ := rfl
 
 end
 
 @[ext]
-/--
-lemma `hom_ext₂` / 引理 `hom_ext₂`
-
-English:
-lemma hom_ext₂
-  statement: {f g : ComposableArrows C 2} {φ φ' : f ⟶ g}
-  proof: hom_ext_succ h₀ (hom_ext₁ h₁ h₂)
-
-中文:
-引理 hom_ext₂
-  结论: {f g : ComposableArrows C 2} {φ φ' : f ⟶ g}
-  证明: hom_ext_succ h₀ (hom_ext₁ h₁ h₂)
-
-Depends on / 依赖: hom_ext_succ
+/-
+**CategoryTheory.ComposableArrows.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ext₂ {f g : ComposableArrows C 2} {φ φ' : f ⟶ g}
     (h₀ : app' φ 0 = app' φ' 0) (h₁ : app' φ 1 = app' φ' 1) (h₂ : app' φ 2 = app' φ' 2) :
@@ -2080,30 +1708,19 @@ lemma hom_ext₂ {f g : ComposableArrows C 2} {φ φ' : f ⟶ g}
 
 /-- Constructor for isomorphisms in `ComposableArrows C 2`. -/
 @[simps]
-/--
-Definition of `isoMk₂` / `isoMk₂` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ 
+G.map' i (i + 1)) : F ≅ G where hom
+参数：app : forall i, F.obj i ≅ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk₂
-  signature: {f g : ComposableArrows C 2}
-  body: homMk₂ app₀.hom app₁.hom app₂.hom w₀ w₁
-  inv := homMk₂ app₀.inv app₁.inv app₂.inv
-    (by rw [← cancel_epi app₀.hom, ← reassoc_of% w₀, app₁.hom_inv_id,
-      comp_id, app₀.hom_inv_id_assoc])
-    (by rw [← cancel_epi app₁.hom, ← reassoc_of% w₁, app₂.hom_inv_id,
-      comp_id, app₁.hom_inv_id_assoc])
-
-中文:
-定义 isoMk₂
-  签名: {f g : ComposableArrows C 2}
-  定义体: homMk₂ app₀.hom app₁.hom app₂.hom w₀ w₁
-  inv := homMk₂ app₀.inv app₁.inv app₂.inv
-    (by rw [← cancel_epi app₀.hom, ← reassoc_of% w₀, app₁.hom_inv_id,
-      comp_id, app₀.hom_inv_id_assoc])
-    (by rw [← cancel_epi app₁.hom, ← reassoc_of% w₁, app₂.hom_inv_id,
-      comp_id, app₁.hom_inv_id_assoc])
-
-Depends on / 依赖: cancel_epi, cat_disch, comp_id, f.map, g.map, hom_inv_id, hom_inv_id_assoc, reassoc_of
+--- 原说明 ---
+Constructor for isomorphisms in `ComposableArrows C 2`.
 -/
 def isoMk₂ {f g : ComposableArrows C 2}
     (app₀ : f.obj' 0 ≅ g.obj' 0) (app₁ : f.obj' 1 ≅ g.obj' 1) (app₂ : f.obj' 2 ≅ g.obj' 2)
@@ -2115,45 +1732,44 @@ def isoMk₂ {f g : ComposableArrows C 2}
       comp_id, app₀.hom_inv_id_assoc])
     (by rw [← cancel_epi app₁.hom, ← reassoc_of% w₁, app₂.hom_inv_id,
       comp_id, app₁.hom_inv_id_assoc])
-
-/--
-lemma `isIso_iff₂` / 引理 `isIso_iff₂`
-
-English:
-lemma isIso_iff₂
-  given: {F G : ComposableArrows C 2} (f : F ⟶ G)
-  proof: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => ⟨h 0, h 1, h 2⟩, fun _ i => by fin_cases i <;> tauto⟩
-
-中文:
-引理 isIso_iff₂
-  条件: {F G : ComposableArrows C 2} (f : F ⟶ G)
-  证明: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => ⟨h 0, h 1, h 2⟩, fun _ i => by fin_cases i <;> tauto⟩
-
-Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, fin_cases, isIso_iff_isIso_app
+/-
+**CategoryTheory.ComposableArrows.isIso_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_iff₂ {F G : ComposableArrows C 2} (f : F ⟶ G) :
     IsIso f ↔ IsIso (f.app 0) ∧ IsIso (f.app 1) ∧ IsIso (f.app 2) := by
   rw [NatTrans.isIso_iff_isIso_app]
-  exact ⟨fun h => ⟨h 0, h 1, h 2⟩, fun _ i => by fin_cases i <;> tauto⟩
-
-/--
-lemma `ext₂` / 引理 `ext₂`
-
-English:
-lemma ext₂
-  statement: {f g : ComposableArrows C 2}
-  proof: ext_succ h₀ (ext₁ h₁ h₂ w₁) w₀
-
-中文:
-引理 ext₂
-  结论: {f g : ComposableArrows C 2}
-  证明: ext_succ h₀ (ext₁ h₁ h₂ w₁) w₀
-
-Depends on / 依赖: ext_succ
+  exact ⟨fun h ↦ ⟨h 0, h 1, h 2⟩, fun _ i ↦ by fin_cases i <;> tauto⟩
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ext₂ {f g : ComposableArrows C 2}
     (h₀ : f.obj' 0 = g.obj' 0) (h₁ : f.obj' 1 = g.obj' 1) (h₂ : f.obj' 2 = g.obj' 2)
@@ -2162,55 +1778,43 @@ lemma ext₂ {f g : ComposableArrows C 2}
   ext_succ h₀ (ext₁ h₁ h₂ w₁) w₀
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `mk₂_surjective` / 引理 `mk₂_surjective`
-
-English:
-lemma mk₂_surjective
-  given: (X : ComposableArrows C 2)
-  proof: ⟨_, _, _, X.map' 0 1, X.map' 1 2, ext₂ rfl rfl rfl (by simp) (by simp)⟩
-
-中文:
-引理 mk₂_surjective
-  条件: (X : ComposableArrows C 2)
-  证明: ⟨_, _, _, X.map' 0 1, X.map' 1 2, ext₂ rfl rfl rfl (by simp) (by simp)⟩
-
-Depends on / 依赖: X.map
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk₂_surjective (X : ComposableArrows C 2) :
-    exists (X₀ X₁ X₂ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂), X = mk₂ f₀ f₁ :=
+    ∃ (X₀ X₁ X₂ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂), X = mk₂ f₀ f₁ :=
   ⟨_, _, _, X.map' 0 1, X.map' 1 2, ext₂ rfl rfl rfl (by simp) (by simp)⟩
-
-/--
-lemma `ext₂_of_arrow` / 引理 `ext₂_of_arrow`
-
-English:
-lemma ext₂_of_arrow
-  statement: {f g : ComposableArrows C 2}
-  proof: by
-  obtain ⟨x₀, x₁, x₂, f, f', rfl⟩ := mk₂_surjective f
-  obtain ⟨y₀, y₁, y₂, g, g', rfl⟩ := mk₂_surjective g
-  obtain rfl : x₀ = y₀ := congr_arg Arrow.leftFunc.obj h₀₁
-  obtain rfl : x₁ = y₁ := congr_arg Arrow.rightFunc.obj h₀₁
-  obtain rfl : x₂ = y₂ := congr_arg Arrow.rightFunc.obj h₁₂
-  obtain rfl : f = g := by rwa [← Arrow.mk_inj]
-  obtain rfl : f' = g' := by rwa [← Arrow.mk_inj]
-  rfl
-
-中文:
-引理 ext₂_of_arrow
-  结论: {f g : ComposableArrows C 2}
-  证明: by
-  obtain ⟨x₀, x₁, x₂, f, f', rfl⟩ := mk₂_surjective f
-  obtain ⟨y₀, y₁, y₂, g, g', rfl⟩ := mk₂_surjective g
-  obtain rfl : x₀ = y₀ := congr_arg Arrow.leftFunc.obj h₀₁
-  obtain rfl : x₁ = y₁ := congr_arg Arrow.rightFunc.obj h₀₁
-  obtain rfl : x₂ = y₂ := congr_arg Arrow.rightFunc.obj h₁₂
-  obtain rfl : f = g := by rwa [← Arrow.mk_inj]
-  obtain rfl : f' = g' := by rwa [← Arrow.mk_inj]
-  rfl
-
-Depends on / 依赖: Arrow.leftFunc.obj, Arrow.mk_inj, Arrow.rightFunc.obj, congr_arg, leftFunc, mk_inj, rightFunc
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ext₂_of_arrow {f g : ComposableArrows C 2}
     (h₀₁ : Arrow.mk (f.map' 0 1) = Arrow.mk (g.map' 0 1))
@@ -2235,97 +1839,81 @@ variable
   (w₂ : f.map' 2 3 ≫ app₃ = app₂ ≫ g.map' 2 3 := by cat_disch)
 
 set_option backward.privateInPublic true in
-/--
-Definition of `homMk₃` / `homMk₃` 的定义
+/-- Constructor for morphisms in `ComposableArrows C 3`. -/
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk₃
-  signature: : f ⟶ g
-  body: homMkSucc app₀ (homMk₂ app₁ app₂ app₃ w₁ w₂) w₀
-
-中文:
-定义 homMk₃
-  签名: : f ⟶ g
-  定义体: homMkSucc app₀ (homMk₂ app₁ app₂ app₃ w₁ w₂) w₀
-
-Depends on / 依赖: homMkSucc
+--- 原说明 ---
+Constructor for morphisms in `ComposableArrows C 3`.
 -/
 def homMk₃ : f ⟶ g := homMkSucc app₀ (homMk₂ app₁ app₂ app₃ w₁ w₂) w₀
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₃_app_zero` / 引理 `homMk₃_app_zero`
-
-English:
-lemma homMk₃_app_zero
-  statement: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app 0 = app₀
-  proof: rfl
-
-中文:
-引理 homMk₃_app_zero
-  结论: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app 0 = app₀
-  证明: rfl
-
-Depends on / 依赖: reflectsLimit_of_reflectsLimitsOfShape
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₃_app_zero : (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app 0 = app₀ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₃_app_one` / 引理 `homMk₃_app_one`
-
-English:
-lemma homMk₃_app_one
-  statement: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app 1 = app₁
-  proof: rfl
-
-中文:
-引理 homMk₃_app_one
-  结论: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app 1 = app₁
-  证明: rfl
-
-Depends on / 依赖: reflectsColimit_of_reflectsColimitsOfShape
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₃_app_one : (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app 1 = app₁ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₃_app_two` / 引理 `homMk₃_app_two`
-
-English:
-lemma homMk₃_app_two
-  statement: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app ⟨2, by valid⟩ = app₂
-  proof: rfl
-
-中文:
-引理 homMk₃_app_two
-  结论: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app ⟨2, by valid⟩ = app₂
-  证明: rfl
-
-Depends on / 依赖: Category, reflectsLimitsOfShape_of_reflectsLimits
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₃_app_two : (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app ⟨2, by valid⟩ = app₂ :=
   rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₃_app_three` / 引理 `homMk₃_app_three`
-
-English:
-lemma homMk₃_app_three
-  statement: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app ⟨3, by valid⟩ = app₃
-  proof: rfl
-
-中文:
-引理 homMk₃_app_three
-  结论: (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app ⟨3, by valid⟩ = app₃
-  证明: rfl
-
-Depends on / 依赖: reflectsColimitsOfShape_of_reflectsColimits
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₃_app_three : (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂).app ⟨3, by valid⟩ = app₃ :=
   rfl
@@ -2333,20 +1921,10 @@ lemma homMk₃_app_three : (homMk₃ app₀ app₁ app₂ app₃ w₀ w₁ w₂)
 end
 
 @[ext]
-/--
-lemma `hom_ext₃` / 引理 `hom_ext₃`
-
-English:
-lemma hom_ext₃
-  statement: {f g : ComposableArrows C 3} {φ φ' : f ⟶ g}
-  proof: hom_ext_succ h₀ (hom_ext₂ h₁ h₂ h₃)
-
-中文:
-引理 hom_ext₃
-  结论: {f g : ComposableArrows C 3} {φ φ' : f ⟶ g}
-  证明: hom_ext_succ h₀ (hom_ext₂ h₁ h₂ h₃)
-
-Depends on / 依赖: hom_ext_succ
+/-
+**CategoryTheory.ComposableArrows.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ext₃ {f g : ComposableArrows C 3} {φ φ' : f ⟶ g}
     (h₀ : app' φ 0 = app' φ' 0) (h₁ : app' φ 1 = app' φ' 1) (h₂ : app' φ 2 = app' φ' 2)
@@ -2356,32 +1934,19 @@ lemma hom_ext₃ {f g : ComposableArrows C 3} {φ φ' : f ⟶ g}
 
 /-- Constructor for isomorphisms in `ComposableArrows C 3`. -/
 @[simps]
-/--
-Definition of `isoMk₃` / `isoMk₃` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ 
+G.map' i (i + 1)) : F ≅ G where hom
+参数：app : forall i, F.obj i ≅ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk₃
-  signature: {f g : ComposableArrows C 3}
-  body: homMk₃ app₀.hom app₁.hom app₂.hom app₃.hom w₀ w₁ w₂
-  inv := homMk₃ app₀.inv app₁.inv app₂.inv app₃.inv
-    (by rw [← cancel_epi app₀.hom, ← reassoc_of% w₀, app₁.hom_inv_id,
-      comp_id, app₀.hom_inv_id_assoc])
-    (by rw [← cancel_epi app₁.hom, ← reassoc_of% w₁, app₂.hom_inv_id,
-      comp_id, app₁.hom_inv_id_assoc])
-    (by rw [← cancel_epi app₂.hom, ← reassoc_of% w₂, app₃.hom_inv_id,
-      comp_id, app₂.hom_inv_id_assoc])
-
-中文:
-定义 isoMk₃
-  签名: {f g : ComposableArrows C 3}
-  定义体: homMk₃ app₀.hom app₁.hom app₂.hom app₃.hom w₀ w₁ w₂
-  inv := homMk₃ app₀.inv app₁.inv app₂.inv app₃.inv
-    (by rw [← cancel_epi app₀.hom, ← reassoc_of% w₀, app₁.hom_inv_id,
-      comp_id, app₀.hom_inv_id_assoc])
-    (by rw [← cancel_epi app₁.hom, ← reassoc_of% w₁, app₂.hom_inv_id,
-      comp_id, app₁.hom_inv_id_assoc])
-    (by rw [← cancel_epi app₂.hom, ← reassoc_of% w₂, app₃.hom_inv_id,
-      comp_id, app₂.hom_inv_id_assoc])
+--- 原说明 ---
+Constructor for isomorphisms in `ComposableArrows C 3`.
 -/
 def isoMk₃ {f g : ComposableArrows C 3}
     (app₀ : f.obj' 0 ≅ g.obj' 0) (app₁ : f.obj' 1 ≅ g.obj' 1) (app₂ : f.obj' 2 ≅ g.obj' 2)
@@ -2397,21 +1962,35 @@ def isoMk₃ {f g : ComposableArrows C 3}
       comp_id, app₁.hom_inv_id_assoc])
     (by rw [← cancel_epi app₂.hom, ← reassoc_of% w₂, app₃.hom_inv_id,
       comp_id, app₂.hom_inv_id_assoc])
-
-/--
-lemma `ext₃` / 引理 `ext₃`
-
-English:
-lemma ext₃
-  statement: {f g : ComposableArrows C 3}
-  proof: ext_succ h₀ (ext₂ h₁ h₂ h₃ w₁ w₂) w₀
-
-中文:
-引理 ext₃
-  结论: {f g : ComposableArrows C 3}
-  证明: ext_succ h₀ (ext₂ h₁ h₂ h₃ w₁ w₂) w₀
-
-Depends on / 依赖: ext_succ
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ext₃ {f g : ComposableArrows C 3}
     (h₀ : f.obj' 0 = g.obj' 0) (h₁ : f.obj' 1 = g.obj' 1) (h₂ : f.obj' 2 = g.obj' 2)
@@ -2422,25 +2001,13 @@ lemma ext₃ {f g : ComposableArrows C 3}
   ext_succ h₀ (ext₂ h₁ h₂ h₃ w₁ w₂) w₀
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `mk₃_surjective` / 引理 `mk₃_surjective`
-
-English:
-lemma mk₃_surjective
-  given: (X : ComposableArrows C 3)
-  proof: ⟨_, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3,
-    ext₃ rfl rfl rfl rfl (by simp) (by simp) (by simp)⟩
-
-中文:
-引理 mk₃_surjective
-  条件: (X : ComposableArrows C 3)
-  证明: ⟨_, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3,
-    ext₃ rfl rfl rfl rfl (by simp) (by simp) (by simp)⟩
-
-Depends on / 依赖: X.map
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk₃_surjective (X : ComposableArrows C 3) :
-    exists (X₀ X₁ X₂ X₃ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃), X = mk₃ f₀ f₁ f₂ :=
+    ∃ (X₀ X₁ X₂ X₃ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃), X = mk₃ f₀ f₁ f₂ :=
   ⟨_, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3,
     ext₃ rfl rfl rfl rfl (by simp) (by simp) (by simp)⟩
 
@@ -2456,101 +2023,97 @@ variable
   (w₃ : f.map' 3 4 ≫ app₄ = app₃ ≫ g.map' 3 4 := by cat_disch)
 
 set_option backward.privateInPublic true in
-/--
-Definition of `homMk₄` / `homMk₄` 的定义
+/-- Constructor for morphisms in `ComposableArrows C 4`. -/
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk₄
-  signature: : f ⟶ g
-  body: homMkSucc app₀ (homMk₃ app₁ app₂ app₃ app₄ w₁ w₂ w₃) w₀
-
-中文:
-定义 homMk₄
-  签名: : f ⟶ g
-  定义体: homMkSucc app₀ (homMk₃ app₁ app₂ app₃ app₄ w₁ w₂ w₃) w₀
-
-Depends on / 依赖: homMkSucc
+--- 原说明 ---
+Constructor for morphisms in `ComposableArrows C 4`.
 -/
 def homMk₄ : f ⟶ g := homMkSucc app₀ (homMk₃ app₁ app₂ app₃ app₄ w₁ w₂ w₃) w₀
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₄_app_zero` / 引理 `homMk₄_app_zero`
-
-English:
-lemma homMk₄_app_zero
-  statement: (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app 0 = app₀
-  proof: rfl
-
-中文:
-引理 homMk₄_app_zero
-  结论: (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app 0 = app₀
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₄_app_zero : (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app 0 = app₀ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₄_app_one` / 引理 `homMk₄_app_one`
-
-English:
-lemma homMk₄_app_one
-  statement: (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app 1 = app₁
-  proof: rfl
-
-中文:
-引理 homMk₄_app_one
-  结论: (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app 1 = app₁
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₄_app_one : (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app 1 = app₁ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₄_app_two` / 引理 `homMk₄_app_two`
-
-English:
-lemma homMk₄_app_two
-  proof: rfl
-
-中文:
-引理 homMk₄_app_two
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₄_app_two :
     (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app ⟨2, by valid⟩ = app₂ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₄_app_three` / 引理 `homMk₄_app_three`
-
-English:
-lemma homMk₄_app_three
-  proof: rfl
-
-中文:
-引理 homMk₄_app_three
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₄_app_three :
     (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app ⟨3, by valid⟩ = app₃ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₄_app_four` / 引理 `homMk₄_app_four`
-
-English:
-lemma homMk₄_app_four
-  proof: rfl
-
-中文:
-引理 homMk₄_app_four
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₄_app_four :
     (homMk₄ app₀ app₁ app₂ app₃ app₄ w₀ w₁ w₂ w₃).app ⟨4, by valid⟩ = app₄ := rfl
@@ -2558,72 +2121,80 @@ lemma homMk₄_app_four :
 end
 
 @[ext]
-/--
-lemma `hom_ext₄` / 引理 `hom_ext₄`
-
-English:
-lemma hom_ext₄
-  statement: {f g : ComposableArrows C 4} {φ φ' : f ⟶ g}
-  proof: hom_ext_succ h₀ (hom_ext₃ h₁ h₂ h₃ h₄)
-
-中文:
-引理 hom_ext₄
-  结论: {f g : ComposableArrows C 4} {φ φ' : f ⟶ g}
-  证明: hom_ext_succ h₀ (hom_ext₃ h₁ h₂ h₃ h₄)
-
-Depends on / 依赖: hom_ext_succ
+/-
+**CategoryTheory.ComposableArrows.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ext₄ {f g : ComposableArrows C 4} {φ φ' : f ⟶ g}
     (h₀ : app' φ 0 = app' φ' 0) (h₁ : app' φ 1 = app' φ' 1) (h₂ : app' φ 2 = app' φ' 2)
     (h₃ : app' φ 3 = app' φ' 3) (h₄ : app' φ 4 = app' φ' 4) :
     φ = φ' :=
   hom_ext_succ h₀ (hom_ext₃ h₁ h₂ h₃ h₄)
-
-/--
-lemma `map'_inv_eq_inv_map'` / 引理 `map'_inv_eq_inv_map'`
-
-English:
-lemma map'_inv_eq_inv_map'
-  statement: {n m : Nat} (h : n + 1 <= m) {f g : ComposableArrows C m}
-  proof: by
-  rw [← cancel_epi app.hom]; rw [← reassoc_of% w]; rw [app'.hom_inv_id]; rw [comp_id]; rw [app.hom_inv_id_assoc]
-
-中文:
-引理 map'_inv_eq_inv_map'
-  结论: {n m : 自然数} (h : n + 1 <= m) {f g : ComposableArrows C m}
-  证明: by
-  rw [← cancel_epi app.hom]; rw [← reassoc_of% w]; rw [app'.hom_inv_id]; rw [comp_id]; rw [app.hom_inv_id_assoc]
+/-
+**CategoryTheory.ComposableArrows.map'_inv_eq_inv_map'** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.ComposableArrows`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {n m : ℕ} (
+h : n + 1 ≤ m)   {f g : CategoryTheory.ComposableArrows C m} (app : f.obj' n ⋯ ≅
+ g.obj' n ⋯)   (app' : f.obj' (n + 1) h ≅ g.obj' (n + 1) h),   CategoryTheory.Ca
+tegoryStruct.comp (f.map' n (n + 1) ⋯ h) app'.hom =       CategoryTheory.Categor
+yStruct.comp app.hom (g.map' n (n + 1) ⋯ h) →     CategoryTheory.CategoryStruct.
+comp (g.map' n (n + 1) ⋯ h) app'.inv =       CategoryTheory.CategoryStruct.comp 
+app.inv (f.map' n (n + 1) ⋯ h)
+参数：h : n + 1 ≤ m；app : f.obj' n ⋯ ≅ g.obj' n ⋯；app' : f.obj' (n + 1) h ≅ g.obj' 
+(n + 1) h；f.map' n (n + 1) ⋯ h；g.map' n (n + 1) ⋯ h；g.map' n (n + 1) ⋯ h；f.map' 
+n (n + 1) ⋯ h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
-lemma map'_inv_eq_inv_map' {n m : Nat} (h : n + 1 <= m) {f g : ComposableArrows C m}
+lemma map'_inv_eq_inv_map' {n m : ℕ} (h : n + 1 ≤ m) {f g : ComposableArrows C m}
     (app : f.obj' n ≅ g.obj' n) (app' : f.obj' (n + 1) ≅ g.obj' (n + 1))
     (w : f.map' n (n + 1) ≫ app'.hom = app.hom ≫ g.map' n (n + 1)) :
     map' g n (n + 1) ≫ app'.inv = app.inv ≫ map' f n (n + 1) := by
-  rw [← cancel_epi app.hom]; rw [← reassoc_of% w]; rw [app'.hom_inv_id]; rw [comp_id]; rw [app.hom_inv_id_assoc]
+  rw [← cancel_epi app.hom, ← reassoc_of% w, app'.hom_inv_id, comp_id, app.hom_inv_id_assoc]
 
 /-- Constructor for isomorphisms in `ComposableArrows C 4`. -/
 @[simps]
-/--
-Definition of `isoMk₄` / `isoMk₄` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ 
+G.map' i (i + 1)) : F ≅ G where hom
+参数：app : forall i, F.obj i ≅ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk₄
-  signature: {f g : ComposableArrows C 4}
-  body: homMk₄ app₀.hom app₁.hom app₂.hom app₃.hom app₄.hom w₀ w₁ w₂ w₃
-  inv := homMk₄ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv
-    (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
-
-中文:
-定义 isoMk₄
-  签名: {f g : ComposableArrows C 4}
-  定义体: homMk₄ app₀.hom app₁.hom app₂.hom app₃.hom app₄.hom w₀ w₁ w₂ w₃
-  inv := homMk₄ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv
-    (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
+--- 原说明 ---
+Constructor for isomorphisms in `ComposableArrows C 4`.
 -/
 def isoMk₄ {f g : ComposableArrows C 4}
     (app₀ : f.obj' 0 ≅ g.obj' 0) (app₁ : f.obj' 1 ≅ g.obj' 1) (app₂ : f.obj' 2 ≅ g.obj' 2)
@@ -2639,21 +2210,35 @@ def isoMk₄ {f g : ComposableArrows C 4}
     (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
     (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
     (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
-
-/--
-lemma `ext₄` / 引理 `ext₄`
-
-English:
-lemma ext₄
-  statement: {f g : ComposableArrows C 4}
-  proof: ext_succ h₀ (ext₃ h₁ h₂ h₃ h₄ w₁ w₂ w₃) w₀
-
-中文:
-引理 ext₄
-  结论: {f g : ComposableArrows C 4}
-  证明: ext_succ h₀ (ext₃ h₁ h₂ h₃ h₄ w₁ w₂ w₃) w₀
-
-Depends on / 依赖: ext_succ
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ext₄ {f g : ComposableArrows C 4}
     (h₀ : f.obj' 0 = g.obj' 0) (h₁ : f.obj' 1 = g.obj' 1) (h₂ : f.obj' 2 = g.obj' 2)
@@ -2666,25 +2251,13 @@ lemma ext₄ {f g : ComposableArrows C 4}
   ext_succ h₀ (ext₃ h₁ h₂ h₃ h₄ w₁ w₂ w₃) w₀
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `mk₄_surjective` / 引理 `mk₄_surjective`
-
-English:
-lemma mk₄_surjective
-  given: (X : ComposableArrows C 4)
-  proof: ⟨_, _, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3, X.map' 3 4,
-    ext₄ rfl rfl rfl rfl rfl (by simp) (by simp) (by simp) (by simp)⟩
-
-中文:
-引理 mk₄_surjective
-  条件: (X : ComposableArrows C 4)
-  证明: ⟨_, _, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3, X.map' 3 4,
-    ext₄ rfl rfl rfl rfl rfl (by simp) (by simp) (by simp) (by simp)⟩
-
-Depends on / 依赖: X.map
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk₄_surjective (X : ComposableArrows C 4) :
-    exists (X₀ X₁ X₂ X₃ X₄ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃) (f₃ : X₃ ⟶ X₄),
+    ∃ (X₀ X₁ X₂ X₃ X₄ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃) (f₃ : X₃ ⟶ X₄),
       X = mk₄ f₀ f₁ f₂ f₃ :=
   ⟨_, _, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3, X.map' 3 4,
     ext₄ rfl rfl rfl rfl rfl (by simp) (by simp) (by simp) (by simp)⟩
@@ -2702,117 +2275,113 @@ variable
   (w₄ : f.map' 4 5 ≫ app₅ = app₄ ≫ g.map' 4 5 := by cat_disch)
 
 set_option backward.privateInPublic true in
-/--
-Definition of `homMk₅` / `homMk₅` 的定义
+/-- Constructor for morphisms in `ComposableArrows C 5`. -/
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk₅
-  signature: : f ⟶ g
-  body: homMkSucc app₀ (homMk₄ app₁ app₂ app₃ app₄ app₅ w₁ w₂ w₃ w₄) w₀
-
-中文:
-定义 homMk₅
-  签名: : f ⟶ g
-  定义体: homMkSucc app₀ (homMk₄ app₁ app₂ app₃ app₄ app₅ w₁ w₂ w₃ w₄) w₀
-
-Depends on / 依赖: homMkSucc
+--- 原说明 ---
+Constructor for morphisms in `ComposableArrows C 5`.
 -/
 def homMk₅ : f ⟶ g := homMkSucc app₀ (homMk₄ app₁ app₂ app₃ app₄ app₅ w₁ w₂ w₃ w₄) w₀
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₅_app_zero` / 引理 `homMk₅_app_zero`
-
-English:
-lemma homMk₅_app_zero
-  statement: (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app 0 = app₀
-  proof: rfl
-
-中文:
-引理 homMk₅_app_zero
-  结论: (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app 0 = app₀
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₅_app_zero : (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app 0 = app₀ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₅_app_one` / 引理 `homMk₅_app_one`
-
-English:
-lemma homMk₅_app_one
-  statement: (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app 1 = app₁
-  proof: rfl
-
-中文:
-引理 homMk₅_app_one
-  结论: (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app 1 = app₁
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₅_app_one : (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app 1 = app₁ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₅_app_two` / 引理 `homMk₅_app_two`
-
-English:
-lemma homMk₅_app_two
-  proof: rfl
-
-中文:
-引理 homMk₅_app_two
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₅_app_two :
     (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app ⟨2, by valid⟩ = app₂ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₅_app_three` / 引理 `homMk₅_app_three`
-
-English:
-lemma homMk₅_app_three
-  proof: rfl
-
-中文:
-引理 homMk₅_app_three
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₅_app_three :
     (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app ⟨3, by valid⟩ = app₃ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₅_app_four` / 引理 `homMk₅_app_four`
-
-English:
-lemma homMk₅_app_four
-  proof: rfl
-
-中文:
-引理 homMk₅_app_four
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₅_app_four :
     (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app ⟨4, by valid⟩ = app₄ := rfl
 
 set_option backward.privateInPublic true in
 @[simp]
-/--
-lemma `homMk₅_app_five` / 引理 `homMk₅_app_five`
-
-English:
-lemma homMk₅_app_five
-  proof: rfl
-
-中文:
-引理 homMk₅_app_five
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i 
++ 1)) : F ⟶ G where app
+参数：app : forall i, F.obj i ⟶ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homMk₅_app_five :
     (homMk₅ app₀ app₁ app₂ app₃ app₄ app₅ w₀ w₁ w₂ w₃ w₄).app ⟨5, by valid⟩ = app₅ := rfl
@@ -2820,20 +2389,10 @@ lemma homMk₅_app_five :
 end
 
 @[ext]
-/--
-lemma `hom_ext₅` / 引理 `hom_ext₅`
-
-English:
-lemma hom_ext₅
-  statement: {f g : ComposableArrows C 5} {φ φ' : f ⟶ g}
-  proof: hom_ext_succ h₀ (hom_ext₄ h₁ h₂ h₃ h₄ h₅)
-
-中文:
-引理 hom_ext₅
-  结论: {f g : ComposableArrows C 5} {φ φ' : f ⟶ g}
-  证明: hom_ext_succ h₀ (hom_ext₄ h₁ h₂ h₃ h₄ h₅)
-
-Depends on / 依赖: hom_ext_succ
+/-
+**CategoryTheory.ComposableArrows.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ext₅ {f g : ComposableArrows C 5} {φ φ' : f ⟶ g}
     (h₀ : app' φ 0 = app' φ' 0) (h₁ : app' φ 1 = app' φ' 1) (h₂ : app' φ 2 = app' φ' 2)
@@ -2843,30 +2402,19 @@ lemma hom_ext₅ {f g : ComposableArrows C 5} {φ φ' : f ⟶ g}
 
 /-- Constructor for isomorphisms in `ComposableArrows C 5`. -/
 @[simps]
-/--
-Definition of `isoMk₅` / `isoMk₅` 的定义
+/-
+**CategoryTheory.ComposableArrows.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：isoMk {F G : ComposableArrows C n} (app : forall i, F.obj i ≅ G.obj i) (w 
+: forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ (app _).hom = (app _).hom ≫ 
+G.map' i (i + 1)) : F ≅ G where hom
+参数：app : forall i, F.obj i ≅ G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i
+ (i + 1) ≫ (app _).hom = (app _).hom ≫ G.map' i (i + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk₅
-  signature: {f g : ComposableArrows C 5}
-  body: homMk₅ app₀.hom app₁.hom app₂.hom app₃.hom app₄.hom app₅.hom w₀ w₁ w₂ w₃ w₄
-  inv := homMk₅ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv app₅.inv
-    (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₄ app₅ w₄])
-
-中文:
-定义 isoMk₅
-  签名: {f g : ComposableArrows C 5}
-  定义体: homMk₅ app₀.hom app₁.hom app₂.hom app₃.hom app₄.hom app₅.hom w₀ w₁ w₂ w₃ w₄
-  inv := homMk₅ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv app₅.inv
-    (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₄ app₅ w₄])
+--- 原说明 ---
+Constructor for isomorphisms in `ComposableArrows C 5`.
 -/
 def isoMk₅ {f g : ComposableArrows C 5}
     (app₀ : f.obj' 0 ≅ g.obj' 0) (app₁ : f.obj' 1 ≅ g.obj' 1) (app₂ : f.obj' 2 ≅ g.obj' 2)
@@ -2884,21 +2432,35 @@ def isoMk₅ {f g : ComposableArrows C 5}
     (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
     (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
     (by rw [map'_inv_eq_inv_map' (by valid) app₄ app₅ w₄])
-
-/--
-lemma `ext₅` / 引理 `ext₅`
-
-English:
-lemma ext₅
-  statement: {f g : ComposableArrows C 5}
-  proof: ext_succ h₀ (ext₄ h₁ h₂ h₃ h₄ h₅ w₁ w₂ w₃ w₄) w₀
-
-中文:
-引理 ext₅
-  结论: {f g : ComposableArrows C 5}
-  证明: ext_succ h₀ (ext₄ h₁ h₂ h₃ h₄ h₅ w₁ w₂ w₃ w₄) w₀
-
-Depends on / 依赖: ext_succ
+/-
+**CategoryTheory.ComposableArrows.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+ComposableArrows`。
+形式化陈述：ext {F G : ComposableArrows C n} (h : forall i, F.obj i = G.obj i) (w : fo
+rall (i : Nat) (hi : i < n), F.map' i (i + 1) = eqToHom (h _) ≫ G.map' i (i + 1)
+ ≫ eqToHom (h _).symm) : F = G
+参数：h : forall i, F.obj i = G.obj i；w : forall (i : Nat) (hi : i < n), F.map' i (
+i + 1) = eqToHom (h _) ≫ G.map' i (i + 1) ≫ eqToHom (h _).symm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ext₅ {f g : ComposableArrows C 5}
     (h₀ : f.obj' 0 = g.obj' 0) (h₁ : f.obj' 1 = g.obj' 1) (h₂ : f.obj' 2 = g.obj' 2)
@@ -2912,89 +2474,68 @@ lemma ext₅ {f g : ComposableArrows C 5}
   ext_succ h₀ (ext₄ h₁ h₂ h₃ h₄ h₅ w₁ w₂ w₃ w₄) w₀
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `mk₅_surjective` / 引理 `mk₅_surjective`
-
-English:
-lemma mk₅_surjective
-  given: (X : ComposableArrows C 5)
-  proof: ⟨_, _, _, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3, X.map' 3 4, X.map' 4 5,
-    ext₅ rfl rfl rfl rfl rfl rfl (by simp) (by simp) (by simp) (by simp) (by simp)⟩
-
-中文:
-引理 mk₅_surjective
-  条件: (X : ComposableArrows C 5)
-  证明: ⟨_, _, _, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3, X.map' 3 4, X.map' 4 5,
-    ext₅ rfl rfl rfl rfl rfl rfl (by simp) (by simp) (by simp) (by simp) (by simp)⟩
-
-Depends on / 依赖: X.map
+/-
+**CategoryTheory.ComposableArrows.mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.C
+omposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk₅_surjective (X : ComposableArrows C 5) :
-    exists (X₀ X₁ X₂ X₃ X₄ X₅ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃)
+    ∃ (X₀ X₁ X₂ X₃ X₄ X₅ : C) (f₀ : X₀ ⟶ X₁) (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃)
       (f₃ : X₃ ⟶ X₄) (f₄ : X₄ ⟶ X₅), X = mk₅ f₀ f₁ f₂ f₃ f₄ :=
   ⟨_, _, _, _, _, _, X.map' 0 1, X.map' 1 2, X.map' 2 3, X.map' 3 4, X.map' 4 5,
     ext₅ rfl rfl rfl rfl rfl rfl (by simp) (by simp) (by simp) (by simp) (by simp)⟩
 
-/--
-Definition of `arrow` / `arrow` 的定义
+/-- The `i`th arrow of `F : ComposableArrows C n`. -/
+/-
+**CategoryTheory.ComposableArrows.arrow** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+形式化陈述：arrow (i : Nat) (hi : i < n
+参数：i : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrow
-  signature: (i : Nat) (hi : i < n := by valid)
-  body: mk₁ (F.map' i (i + 1))
-
-中文:
-定义 arrow
-  签名: (i : 自然数) (hi : i < n := by valid)
-  定义体: mk₁ (F.map' i (i + 1))
-
-Depends on / 依赖: ComposableArrows, F.map
+--- 原说明 ---
+The `i`th arrow of `F : ComposableArrows C n`.
 -/
-def arrow (i : Nat) (hi : i < n := by valid) :
+def arrow (i : ℕ) (hi : i < n := by valid) :
     ComposableArrows C 1 := mk₁ (F.map' i (i + 1))
 
 section mkOfObjOfMapSucc
 
-variable (obj : Fin (n + 1) -> C) (mapSucc : forall (i : Fin n), obj i.castSucc ⟶ obj i.succ)
+variable (obj : Fin (n + 1) → C) (mapSucc : ∀ (i : Fin n), obj i.castSucc ⟶ obj i.succ)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mkOfObjOfMapSucc_exists` / 引理 `mkOfObjOfMapSucc_exists`
-
-English:
-lemma mkOfObjOfMapSucc_exists
-  statement: exists (F : ComposableArrows C n) (e : forall i, F.obj i ≅ obj i),
-  proof: by
-  induction n with
-  | zero => exact ⟨mk₀ (obj 0), fun 0 => Iso.refl _, fun i hi => by simp at hi⟩
-  | succ n hn =>
-    obtain ⟨F, e, h⟩ := hn (fun i => obj i.succ) (fun i => mapSucc i.succ)
-    refine ⟨F.precomp (mapSucc 0 ≫ (e 0).inv), fun i => match i with
-      | 0 => Iso.refl _
-      | ⟨i + 1, hi⟩ => e _, fun i hi => ?_⟩
-    obtain _ | i := i
-    · simp
-    · exact h i (by valid)
-
-中文:
-引理 mkOfObjOfMapSucc_存在
-  结论: 存在 (F : ComposableArrows C n) (e : 对任意 i, F.obj i ≅ obj i),
-  证明: by
-  induction n with
-  | zero => exact ⟨mk₀ (obj 0), fun 0 => Iso.refl _, fun i hi => by simp at hi⟩
-  | succ n hn =>
-    obtain ⟨F, e, h⟩ := hn (fun i => obj i.succ) (fun i => mapSucc i.succ)
-    refine ⟨F.precomp (mapSucc 0 ≫ (e 0).inv), fun i => match i with
-      | 0 => Iso.refl _
-      | ⟨i + 1, hi⟩ => e _, fun i hi => ?_⟩
-    obtain _ | i := i
-    · simp
-    · exact h i (by valid)
-
-Depends on / 依赖: F.precomp, Iso.refl, i.succ, mapSucc, precomp
+/-
+**CategoryTheory.ComposableArrows.mkOfObjOfMapSucc_exists** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ComposableArrows`。
+形式化陈述：mkOfObjOfMapSucc_exists : exists (F : ComposableArrows C n) (e : forall i,
+ F.obj i ≅ obj i), forall (i : Nat) (hi : i < n), mapSucc ⟨i, hi⟩ = (e ⟨i, _⟩).i
+nv ≫ F.map' i (i + 1) ≫ (e ⟨i + 1, _⟩).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
 -/
-lemma mkOfObjOfMapSucc_exists : exists (F : ComposableArrows C n) (e : forall i, F.obj i ≅ obj i),
-    forall (i : Nat) (hi : i < n), mapSucc ⟨i, hi⟩ =
+lemma mkOfObjOfMapSucc_exists : ∃ (F : ComposableArrows C n) (e : ∀ i, F.obj i ≅ obj i),
+    ∀ (i : ℕ) (hi : i < n), mapSucc ⟨i, hi⟩ =
       (e ⟨i, _⟩).inv ≫ F.map' i (i + 1) ≫ (e ⟨i + 1, _⟩).hom := by
   induction n with
   | zero => exact ⟨mk₀ (obj 0), fun 0 => Iso.refl _, fun i hi => by simp at hi⟩
@@ -3007,84 +2548,84 @@ lemma mkOfObjOfMapSucc_exists : exists (F : ComposableArrows C n) (e : forall i,
     · simp
     · exact h i (by valid)
 
-/--
-Definition of `mkOfObjOfMapSucc` / `mkOfObjOfMapSucc` 的定义
+/-- Given `obj : Fin (n + 1) → C` and `mapSucc i : obj i.castSucc ⟶ obj i.succ`
+for all `i : Fin n`, this is `F : ComposableArrows C n` such that `F.obj i` is
+definitionally equal to `obj i` and such that `F.map' i (i + 1) = mapSucc ⟨i, hi⟩`. -/
+/-
+**CategoryTheory.ComposableArrows.mkOfObjOfMapSucc** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.ComposableArrows`。
+形式化陈述：mkOfObjOfMapSucc : ComposableArrows C n
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ComposableArrows.mkOfObjOfMapSucc_exists`：mkOfObjOfMapSuc
+c_exists : exists (F : ComposableArrows C n) (e : forall i, F.obj i ≅ obj i), fo
+rall (i : Nat) (hi : i < n), mapSucc ⟨i, hi⟩ …
 
-English:
-definition mkOfObjOfMapSucc
-  signature: : ComposableArrows C n
-  body: (mkOfObjOfMapSucc_exists obj mapSucc).choose.copyObj obj
-    (mkOfObjOfMapSucc_exists obj mapSucc).choose_spec.choose
-
-@[simp]
-
-中文:
-定义 mkOfObjOfMapSucc
-  签名: : ComposableArrows C n
-  定义体: (mkOfObjOfMapSucc_exists obj mapSucc).choose.copyObj obj
-    (mkOfObjOfMapSucc_exists obj mapSucc).choose_spec.choose
-
-@[simp]
-
-Depends on / 依赖: choose.copyObj, choose_spec, choose_spec.choose, copyObj, mapSucc, mkOfObjOfMapSucc_exists
+--- 原说明 ---
+Given `obj : Fin (n + 1) → C` and `mapSucc i : obj i.castSucc ⟶ obj i.succ`
+for all `i : Fin n`, this is `F : ComposableArrows C n` such that `F.obj i` is
+definitionally equal to `obj i` and such that `F.map' i (i + 1) = mapSucc ⟨i, hi
+⟩`.
 -/
 noncomputable def mkOfObjOfMapSucc : ComposableArrows C n :=
   (mkOfObjOfMapSucc_exists obj mapSucc).choose.copyObj obj
     (mkOfObjOfMapSucc_exists obj mapSucc).choose_spec.choose
 
 @[simp]
-/--
-lemma `mkOfObjOfMapSucc_obj` / 引理 `mkOfObjOfMapSucc_obj`
-
-English:
-lemma mkOfObjOfMapSucc_obj
-  given: (i : Fin (n + 1))
-  proof: rfl
-
-中文:
-引理 mkOfObjOfMapSucc_obj
-  条件: (i : 有限集 (n + 1))
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.mkOfObjOfMapSucc_obj** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ComposableArrows`。
+形式化陈述：mkOfObjOfMapSucc_obj (i : Fin (n + 1)) : (mkOfObjOfMapSucc obj mapSucc).ob
+j i = obj i
+参数：i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkOfObjOfMapSucc_obj (i : Fin (n + 1)) :
     (mkOfObjOfMapSucc obj mapSucc).obj i = obj i := rfl
-
-/--
-lemma `mkOfObjOfMapSucc_map_succ` / 引理 `mkOfObjOfMapSucc_map_succ`
-
-English:
-lemma mkOfObjOfMapSucc_map_succ
-  given: (i : Nat) (hi : i < n := by valid)
-  proof: ((mkOfObjOfMapSucc_exists obj mapSucc).choose_spec.choose_spec i hi).symm
-
-中文:
-引理 mkOfObjOfMapSucc_map_succ
-  条件: (i : 自然数) (hi : i < n := by valid)
-  证明: ((mkOfObjOfMapSucc_exists obj mapSucc).choose_spec.choose_spec i hi).symm
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec, mapSucc, mkOfObjOfMapSucc, mkOfObjOfMapSucc_exists
+/-
+**CategoryTheory.ComposableArrows.mkOfObjOfMapSucc_map_succ** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.ComposableArrows`。
+形式化陈述：mkOfObjOfMapSucc_map_succ (i : Nat) (hi : i < n
+参数：i : Nat。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ComposableArrows.mkOfObjOfMapSucc_exists`：mkOfObjOfMapSuc
+c_exists : exists (F : ComposableArrows C n) (e : forall i, F.obj i ≅ obj i), fo
+rall (i : Nat) (hi : i < n), mapSucc ⟨i, hi⟩ …
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-lemma mkOfObjOfMapSucc_map_succ (i : Nat) (hi : i < n := by valid) :
+lemma mkOfObjOfMapSucc_map_succ (i : ℕ) (hi : i < n := by valid) :
     (mkOfObjOfMapSucc obj mapSucc).map' i (i + 1) = mapSucc ⟨i, hi⟩ :=
   ((mkOfObjOfMapSucc_exists obj mapSucc).choose_spec.choose_spec i hi).symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mkOfObjOfMapSucc_arrow` / 引理 `mkOfObjOfMapSucc_arrow`
-
-English:
-lemma mkOfObjOfMapSucc_arrow
-  given: (i : Nat) (hi : i < n := by valid)
-  proof: ext₁ rfl rfl (by simpa using! mkOfObjOfMapSucc_map_succ obj mapSucc i hi)
-
-中文:
-引理 mkOfObjOfMapSucc_arrow
-  条件: (i : 自然数) (hi : i < n := by valid)
-  证明: ext₁ rfl rfl (by simpa using! mkOfObjOfMapSucc_map_succ obj mapSucc i hi)
-
-Depends on / 依赖: mapSucc, mkOfObjOfMapSucc, mkOfObjOfMapSucc_map_succ
+/-
+**CategoryTheory.ComposableArrows.mkOfObjOfMapSucc_arrow** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.ComposableArrows`。
+形式化陈述：mkOfObjOfMapSucc_arrow (i : Nat) (hi : i < n
+参数：i : Nat。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ComposableArrows.ext₁`：ext₁ {F G : ComposableArrows C 1} 
+(left : F.left = G.left) (right : F.right = G.right) (w : F.hom = eqToHom left ≫
+ G.hom ≫ eqToHom right.sym…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.lt_succ_of_lt`：∀ {a b : ℕ}, a < b → a < b.succ
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.ComposableArrows.mkOfObjOfMapSucc_map_succ`：mkOfObjOfMapS
+ucc_map_succ (i : Nat) (hi : i < n
 -/
-lemma mkOfObjOfMapSucc_arrow (i : Nat) (hi : i < n := by valid) :
+lemma mkOfObjOfMapSucc_arrow (i : ℕ) (hi : i < n := by valid) :
     (mkOfObjOfMapSucc obj mapSucc).arrow i = mk₁ (mapSucc ⟨i, hi⟩) :=
   ext₁ rfl rfl (by simpa using! mkOfObjOfMapSucc_map_succ obj mapSucc i hi)
 
@@ -3098,24 +2639,16 @@ variable (C n) in
 /-- The equivalence `(ComposableArrows C n)ᵒᵖ ≌ ComposableArrows Cᵒᵖ n` obtained
 by reversing the arrows. -/
 @[simps!]
-/--
-Definition of `opEquivalence` / `opEquivalence` 的定义
+/-
+**CategoryTheory.ComposableArrows.opEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.ComposableArrows`。
+形式化陈述：opEquivalence : (ComposableArrows C n)ᵒᵖ ≌ ComposableArrows Cᵒᵖ n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opEquivalence
-  signature: : (ComposableArrows C n)ᵒᵖ ≌ ComposableArrows Cᵒᵖ n
-  body: ((orderDualEquivalence (Fin (n + 1))).symm.trans
-      Fin.revOrderIso.equivalence).symm.congrLeft.op.trans
-    (Functor.leftOpRightOpEquiv (Fin (n + 1)) C)
-
-中文:
-定义 opEquivalence
-  签名: : (ComposableArrows C n)ᵒᵖ ≌ ComposableArrows Cᵒᵖ n
-  定义体: ((orderDualEquivalence (Fin (n + 1))).symm.trans
-      Fin.revOrderIso.equivalence).symm.congrLeft.op.trans
-    (Functor.leftOpRightOpEquiv (Fin (n + 1)) C)
-
-Depends on / 依赖: Fin.revOrderIso.equivalence, Functor, Functor.leftOpRightOpEquiv, congrLeft, equivalence, leftOpRightOpEquiv, orderDualEquivalence, revOrderIso, symm.congrLeft.op.trans, symm.trans
+--- 原说明 ---
+The equivalence `(ComposableArrows C n)ᵒᵖ ≌ ComposableArrows Cᵒᵖ n` obtained
+by reversing the arrows.
 -/
 def opEquivalence : (ComposableArrows C n)ᵒᵖ ≌ ComposableArrows Cᵒᵖ n :=
   ((orderDualEquivalence (Fin (n + 1))).symm.trans
@@ -3128,25 +2661,26 @@ section
 
 open ComposableArrows
 
-variable {C} {D : Type*} [Category* D] (G : C ⥤ D) (n : Nat)
+variable {C} {D : Type*} [Category* D] (G : C ⥤ D) (n : ℕ)
 
 /-- The functor `ComposableArrows C n ⥤ ComposableArrows D n` obtained by postcomposition
 with a functor `C ⥤ D`. -/
 @[simps!]
-/--
-Definition of `Functor.mapComposableArrows` / `Functor.mapComposableArrows` 的定义
+/-
+**CategoryTheory.Functor.mapComposableArrows** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {D 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         Ca
+tegoryTheory.Functor C D →           (n : ℕ) → CategoryTheory.Functor (CategoryT
+heory.ComposableArrows C n) (CategoryTheory.ComposableArrows D n)
+参数：n : ℕ；CategoryTheory.ComposableArrows C n；CategoryTheory.ComposableArrows D n
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.mapComposableArrows
-  signature: :
-  body: (whiskeringRight _ _ _).obj G
-
-中文:
-定义 函子.mapComposableArrows
-  签名: :
-  定义体: (whiskeringRight _ _ _).obj G
-
-Depends on / 依赖: whiskeringRight
+--- 原说明 ---
+The functor `ComposableArrows C n ⥤ ComposableArrows D n` obtained by postcompos
+ition
+with a functor `C ⥤ D`.
 -/
 def Functor.mapComposableArrows :
     ComposableArrows C n ⥤ ComposableArrows D n :=
@@ -3155,20 +2689,14 @@ def Functor.mapComposableArrows :
 /-- The isomorphism between `(G.mapComposableArrows 1).obj (.mk₁ f)` and
 `.mk₁ (G.map f)`. -/
 @[simps!]
-/--
-Definition of `Functor.mapComposableArrowsObjMk₁Iso` / `Functor.mapComposableArrowsObjMk₁Iso` 的定义
+/-
+**CategoryTheory.Functor.mapComposableArrowsObjMk** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.mapComposableArrowsObjMk₁Iso
-  signature: {X Y : C} (f : X ⟶ Y)
-  body: isoMk₁ (Iso.refl _) (Iso.refl _)
-
-中文:
-定义 函子.mapComposableArrowsObjMk₁Iso
-  签名: {X Y : C} (f : X ⟶ Y)
-  定义体: isoMk₁ (Iso.refl _) (Iso.refl _)
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The isomorphism between `(G.mapComposableArrows 1).obj (.mk₁ f)` and
+`.mk₁ (G.map f)`.
 -/
 def Functor.mapComposableArrowsObjMk₁Iso {X Y : C} (f : X ⟶ Y) :
     (G.mapComposableArrows 1).obj (.mk₁ f) ≅ .mk₁ (G.map f) :=
@@ -3178,44 +2706,39 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The isomorphism between `(G.mapComposableArrows 2).obj (.mk₂ f g)` and
 `.mk₂ (G.map f) (G.map g)`. -/
 @[simps!]
-/--
-Definition of `Functor.mapComposableArrowsObjMk₂Iso` / `Functor.mapComposableArrowsObjMk₂Iso` 的定义
+/-
+**CategoryTheory.Functor.mapComposableArrowsObjMk** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.mapComposableArrowsObjMk₂Iso
-  signature: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  body: isoMk₂ (Iso.refl _) (Iso.refl _) (Iso.refl _)
-
-suppress_compilation in
-
-中文:
-定义 函子.mapComposableArrowsObjMk₂Iso
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  定义体: isoMk₂ (Iso.refl _) (Iso.refl _) (Iso.refl _)
-
-suppress_compilation in
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The isomorphism between `(G.mapComposableArrows 2).obj (.mk₂ f g)` and
+`.mk₂ (G.map f) (G.map g)`.
 -/
 def Functor.mapComposableArrowsObjMk₂Iso {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (G.mapComposableArrows 2).obj (.mk₂ f g) ≅ .mk₂ (G.map f) (G.map g) :=
   isoMk₂ (Iso.refl _) (Iso.refl _) (Iso.refl _)
 
 suppress_compilation in
-/--
-Definition of `Functor.mapComposableArrowsOpIso` / `Functor.mapComposableArrowsOpIso` 的定义
+/-- The functor `ComposableArrows C n ⥤ ComposableArrows D n` induced by `G : C ⥤ D`
+commutes with `opEquivalence`. -/
+/-
+**CategoryTheory.Functor.mapComposableArrowsOpIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {D 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         (G
+ : CategoryTheory.Functor C D) →           (n : ℕ) →             (G.mapComposabl
+eArrows n).comp (CategoryTheory.ComposableArrows.opEquivalence D n).functor.righ
+tOp ≅               (CategoryTheory.ComposableArrows.opEquivalence C n).functor.
+rightOp.comp (G.op.mapComposableArrows n).op
+参数：G : CategoryTheory.Functor C D；n : ℕ；G.mapComposableArrows n；CategoryTheory.C
+omposableArrows.opEquivalence D n；CategoryTheory.ComposableArrows.opEquivalence 
+C n；G.op.mapComposableArrows n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.mapComposableArrowsOpIso
-  signature: :
-  body: Iso.refl _
-
-中文:
-定义 函子.mapComposableArrowsOpIso
-  签名: :
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The functor `ComposableArrows C n ⥤ ComposableArrows D n` induced by `G : C ⥤ D`
+commutes with `opEquivalence`.
 -/
 def Functor.mapComposableArrowsOpIso :
     G.mapComposableArrows n ⋙ (opEquivalence D n).functor.rightOp ≅
@@ -3225,3 +2748,4 @@ def Functor.mapComposableArrowsOpIso :
 end
 
 end CategoryTheory
+

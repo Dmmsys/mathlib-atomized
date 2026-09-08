@@ -28,443 +28,329 @@ variable {α : Type*}
 open PosNum
 
 @[simp, norm_cast]
-/--
-theorem `cast_zero` / 定理 `cast_zero`
-
-English:
-theorem cast_zero
-  given: [Zero α] [One α] [Add α] [Neg α]
-  statement: ((0 : ZNum) : α) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_zero
-  条件: [零 α] [幺 α] [加法 α] [取负 α]
-  结论: ((0 : ZNum) : α) = 0
-  证明: rfl
-
-@[simp]
+/-
+**ZNum.cast_zero** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_zero [Zero α] [One α] [Add α] [Neg α] : ((0 : ZNum) : α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cast_zero [Zero α] [One α] [Add α] [Neg α] : ((0 : ZNum) : α) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `cast_zero'` / 定理 `cast_zero'`
-
-English:
-theorem cast_zero'
-  given: [Zero α] [One α] [Add α] [Neg α]
-  statement: (ZNum.zero : α) = 0
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_zero'
-  条件: [零 α] [幺 α] [加法 α] [取负 α]
-  结论: (ZNum.zero : α) = 0
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ZNum.cast_zero'** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_zero' [Zero α] [One α] [Add α] [Neg α] : (ZNum.zero : α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cast_zero' [Zero α] [One α] [Add α] [Neg α] : (ZNum.zero : α) = 0 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `cast_one` / 定理 `cast_one`
-
-English:
-theorem cast_one
-  given: [Zero α] [One α] [Add α] [Neg α]
-  statement: ((1 : ZNum) : α) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_one
-  条件: [零 α] [幺 α] [加法 α] [取负 α]
-  结论: ((1 : ZNum) : α) = 1
-  证明: rfl
-
-@[simp]
+/-
+**ZNum.cast_one** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_one [Zero α] [One α] [Add α] [Neg α] : ((1 : ZNum) : α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cast_one [Zero α] [One α] [Add α] [Neg α] : ((1 : ZNum) : α) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `cast_pos` / 定理 `cast_pos`
-
-English:
-theorem cast_pos
-  given: [Zero α] [One α] [Add α] [Neg α] (n : PosNum)
-  statement: (pos n : α) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_pos
-  条件: [零 α] [幺 α] [加法 α] [取负 α] (n : PosNum)
-  结论: (pos n : α) = n
-  证明: rfl
-
-@[simp]
+/-
+**ZNum.cast_pos** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_pos [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : (pos n : α) = n
+参数：n : PosNum。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cast_pos [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : (pos n : α) = n :=
   rfl
 
 @[simp]
-/--
-theorem `cast_neg` / 定理 `cast_neg`
-
-English:
-theorem cast_neg
-  given: [Zero α] [One α] [Add α] [Neg α] (n : PosNum)
-  statement: (neg n : α) = -n
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_neg
-  条件: [零 α] [幺 α] [加法 α] [取负 α] (n : PosNum)
-  结论: (neg n : α) = -n
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ZNum.cast_neg** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_neg [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : (neg n : α) = -n
+参数：n : PosNum。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cast_neg [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : (neg n : α) = -n :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `cast_zneg` / 定理 `cast_zneg`
-
-English:
-theorem cast_zneg
-  given: [SubtractionMonoid α] [One α]
-  statement: forall n, ((-n : ZNum) : α) = -n
-
-中文:
-定理 cast_zneg
-  条件: [Subtraction幺半群 α] [幺 α]
-  结论: 对任意 n, ((-n : ZNum) : α) = -n
+/-
+**ZNum.cast_zneg** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ {α : Type u_1} [inst : SubtractionMonoid α] [inst_1 : One α] (n : ZNum),
+ ↑(-n) = -↑n
+参数：n : ZNum；-n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
-theorem cast_zneg [SubtractionMonoid α] [One α] : forall n, ((-n : ZNum) : α) = -n
+theorem cast_zneg [SubtractionMonoid α] [One α] : ∀ n, ((-n : ZNum) : α) = -n
   | 0 => neg_zero.symm
   | pos _p => rfl
   | neg _p => (neg_neg _).symm
-
-/--
-theorem `neg_zero` / 定理 `neg_zero`
-
-English:
-theorem neg_zero
-  statement: (-0 : ZNum) = 0
-  proof: rfl
-
-中文:
-定理 neg_zero
-  结论: (-0 : ZNum) = 0
-  证明: rfl
+/-
+**ZNum.neg_zero** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：neg_zero : (-0 : ZNum) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_zero : (-0 : ZNum) = 0 :=
   rfl
-
-/--
-theorem `zneg_pos` / 定理 `zneg_pos`
-
-English:
-theorem zneg_pos
-  given: (n : PosNum)
-  statement: -pos n = neg n
-  proof: rfl
-
-中文:
-定理 zneg_pos
-  条件: (n : PosNum)
-  结论: -pos n = neg n
-  证明: rfl
+/-
+**ZNum.zneg_pos** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zneg_pos (n : PosNum) : -pos n = neg n
+参数：n : PosNum。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zneg_pos (n : PosNum) : -pos n = neg n :=
   rfl
-
-/--
-theorem `zneg_neg` / 定理 `zneg_neg`
-
-English:
-theorem zneg_neg
-  given: (n : PosNum)
-  statement: -neg n = pos n
-  proof: rfl
-
-中文:
-定理 zneg_neg
-  条件: (n : PosNum)
-  结论: -neg n = pos n
-  证明: rfl
+/-
+**ZNum.zneg_neg** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zneg_neg (n : PosNum) : -neg n = pos n
+参数：n : PosNum。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zneg_neg (n : PosNum) : -neg n = pos n :=
   rfl
-
-/--
-theorem `zneg_zneg` / 定理 `zneg_zneg`
-
-English:
-theorem zneg_zneg
-  given: (n : ZNum)
-  statement: - -n = n
-  proof: by cases n <;> rfl
-
-中文:
-定理 zneg_zneg
-  条件: (n : ZNum)
-  结论: - -n = n
-  证明: by cases n <;> rfl
+/-
+**ZNum.zneg_zneg** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zneg_zneg (n : ZNum) : - -n = n
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem zneg_zneg (n : ZNum) : - -n = n := by cases n <;> rfl
-
-/--
-theorem `zneg_bit1` / 定理 `zneg_bit1`
-
-English:
-theorem zneg_bit1
-  given: (n : ZNum)
-  statement: -n.bit1 = (-n).bitm1
-  proof: by cases n <;> rfl
-
-中文:
-定理 zneg_bit1
-  条件: (n : ZNum)
-  结论: -n.bit1 = (-n).bitm1
-  证明: by cases n <;> rfl
-
-Depends on / 依赖: Algebra, IsAlgClosure, IsAlgClosure.normal, normal
+/-
+**ZNum.zneg_bit1** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zneg_bit1 (n : ZNum) : -n.bit1 = (-n).bitm1
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem zneg_bit1 (n : ZNum) : -n.bit1 = (-n).bitm1 := by cases n <;> rfl
-
-/--
-theorem `zneg_bitm1` / 定理 `zneg_bitm1`
-
-English:
-theorem zneg_bitm1
-  given: (n : ZNum)
-  statement: -n.bitm1 = (-n).bit1
-  proof: by cases n <;> rfl
-
-中文:
-定理 zneg_bitm1
-  条件: (n : ZNum)
-  结论: -n.bitm1 = (-n).bit1
-  证明: by cases n <;> rfl
-
-Depends on / 依赖: Algebra, IsAlgClosure, IsAlgClosure.separable, separable
+/-
+**ZNum.zneg_bitm1** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zneg_bitm1 (n : ZNum) : -n.bitm1 = (-n).bit1
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem zneg_bitm1 (n : ZNum) : -n.bitm1 = (-n).bit1 := by cases n <;> rfl
-
-/--
-theorem `zneg_succ` / 定理 `zneg_succ`
-
-English:
-theorem zneg_succ
-  given: (n : ZNum)
-  statement: -n.succ = (-n).pred
-  proof: by
-  cases n <;> try { rfl }; rw [succ, Num.zneg_toZNumNeg]; rfl
-
-中文:
-定理 zneg_succ
-  条件: (n : ZNum)
-  结论: -n.succ = (-n).pred
-  证明: by
-  cases n <;> try { rfl }; rw [succ, Num.zneg_toZNumNeg]; rfl
-
-Depends on / 依赖: Num.zneg_toZNumNeg, zneg_toZNumNeg
+/-
+**ZNum.zneg_succ** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zneg_succ (n : ZNum) : -n.succ = (-n).pred
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZNum.succ.eq_3`：∀ (a : PosNum), (ZNum.neg a).succ = a.pred'.toZNumNeg
+· 使用定理 `Num.zneg_toZNumNeg`：zneg_toZNumNeg (n : Num) : -n.toZNumNeg = n.toZNum
 -/
 theorem zneg_succ (n : ZNum) : -n.succ = (-n).pred := by
   cases n <;> try { rfl }; rw [succ, Num.zneg_toZNumNeg]; rfl
-
-/--
-theorem `zneg_pred` / 定理 `zneg_pred`
-
-English:
-theorem zneg_pred
-  given: (n : ZNum)
-  statement: -n.pred = (-n).succ
-  proof: by
-  rw [← zneg_zneg (succ (-n))]; rw [zneg_succ]; rw [zneg_zneg]
-
-@[simp]
-
-中文:
-定理 zneg_pred
-  条件: (n : ZNum)
-  结论: -n.pred = (-n).succ
-  证明: by
-  rw [← zneg_zneg (succ (-n))]; rw [zneg_succ]; rw [zneg_zneg]
-
-@[simp]
-
-Depends on / 依赖: zneg_succ, zneg_zneg
+/-
+**ZNum.zneg_pred** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zneg_pred (n : ZNum) : -n.pred = (-n).succ
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.zneg_zneg`：zneg_zneg (n : ZNum) : - -n = n
+· 使用定理 `ZNum.zneg_succ`：zneg_succ (n : ZNum) : -n.succ = (-n).pred
 -/
 theorem zneg_pred (n : ZNum) : -n.pred = (-n).succ := by
-  rw [← zneg_zneg (succ (-n))]; rw [zneg_succ]; rw [zneg_zneg]
+  rw [← zneg_zneg (succ (-n)), zneg_succ, zneg_zneg]
 
 @[simp]
-/--
-theorem `abs_to_nat` / 定理 `abs_to_nat`
-
-English:
-theorem abs_to_nat
-  statement: forall n, (abs n : Nat) = Int.natAbs n
-
-中文:
-定理 abs_to_nat
-  结论: 对任意 n, (abs n : 自然数) = 整数.natAbs n
+/-
+**ZNum.abs_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ZNum), ↑n.abs = (↑n).natAbs
+参数：n : ZNum；↑n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `PosNum.to_nat_to_int`：to_nat_to_int (n : PosNum) : ((n : Nat) : Int) = n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natAbs_neg`：∀ (a : ℤ), (-a).natAbs = a.natAbs
 -/
-theorem abs_to_nat : forall n, (abs n : Nat) = Int.natAbs n
+theorem abs_to_nat : ∀ n, (abs n : ℕ) = Int.natAbs n
   | 0 => rfl
   | pos p => congr_arg Int.natAbs p.to_nat_to_int
-  | neg p => show Int.natAbs ((p : Nat) : Int) = Int.natAbs (-p) by rw [p.to_nat_to_int, Int.natAbs_neg]
+  | neg p => show Int.natAbs ((p : ℕ) : ℤ) = Int.natAbs (-p) by rw [p.to_nat_to_int, Int.natAbs_neg]
 
 @[simp]
-/--
-theorem `abs_toZNum` / 定理 `abs_toZNum`
-
-English:
-theorem abs_toZNum
-  statement: forall n : Num, abs n.toZNum = n
-
-中文:
-定理 abs_toZNum
-  结论: 对任意 n : Num, abs n.toZNum = n
+/-
+**ZNum.abs_toZNum** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : Num), n.toZNum.abs = n
+参数：n : Num。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem abs_toZNum : forall n : Num, abs n.toZNum = n
+theorem abs_toZNum : ∀ n : Num, abs n.toZNum = n
   | 0 => rfl
   | Num.pos _p => rfl
 
 @[simp, norm_cast]
-/--
-theorem `cast_to_int` / 定理 `cast_to_int`
-
-English:
-theorem cast_to_int
-  given: [AddGroupWithOne α]
-  statement: forall n : ZNum, ((n : Int) : α) = n
-
-中文:
-定理 cast_to_int
-  条件: [加法带幺群 α]
-  结论: 对任意 n : ZNum, ((n : 整数) : α) = n
+/-
+**ZNum.cast_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ZNum), ↑↑n = ↑n
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZNum.cast_zero`：cast_zero [Zero α] [One α] [Add α] [Neg α] : ((0 : ZNum)
+ : α) = 0
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `ZNum.cast_pos`：cast_pos [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(pos n : α) = n
+· 使用定理 `PosNum.cast_to_int`：cast_to_int [AddGroupWithOne α] (n : PosNum) : ((n :
+ Int) : α) = n
+· 使用定理 `ZNum.cast_neg`：cast_neg [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(neg n : α) = -n
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
 -/
-theorem cast_to_int [AddGroupWithOne α] : forall n : ZNum, ((n : Int) : α) = n
+theorem cast_to_int [AddGroupWithOne α] : ∀ n : ZNum, ((n : ℤ) : α) = n
   | 0 => by rw [cast_zero, cast_zero, Int.cast_zero]
   | pos p => by rw [cast_pos, cast_pos, PosNum.cast_to_int]
   | neg p => by rw [cast_neg, cast_neg, Int.cast_neg, PosNum.cast_to_int]
-
-/--
-theorem `bit0_of_bit0` / 定理 `bit0_of_bit0`
-
-English:
-theorem bit0_of_bit0
-  statement: forall n : ZNum, n + n = n.bit0
-
-中文:
-定理 bit0_of_bit0
-  结论: 对任意 n : ZNum, n + n = n.bit0
+/-
+**ZNum.bit0_of_bit0** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ZNum), n + n = n.bit0
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `PosNum.bit0_of_bit0`：∀ (n : PosNum), n + n = n.bit0
 -/
-theorem bit0_of_bit0 : forall n : ZNum, n + n = n.bit0
+theorem bit0_of_bit0 : ∀ n : ZNum, n + n = n.bit0
   | 0 => rfl
   | pos a => congr_arg pos a.bit0_of_bit0
   | neg a => congr_arg neg a.bit0_of_bit0
-
-/--
-theorem `bit1_of_bit1` / 定理 `bit1_of_bit1`
-
-English:
-theorem bit1_of_bit1
-  statement: forall n : ZNum, n + n + 1 = n.bit1
-
-中文:
-定理 bit1_of_bit1
-  结论: 对任意 n : ZNum, n + n + 1 = n.bit1
-
-Depends on / 依赖: p.Prime, perfectRing
+/-
+**ZNum.bit1_of_bit1** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ZNum), n + n + 1 = n.bit1
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `PosNum.bit1_of_bit1`：bit1_of_bit1 (n : PosNum) : (n + n) + 1 = bit1 n
+· 使用定理 `PosNum.sub'`：sub'_one (a : PosNum) : sub' a 1 = (pred' a).toZNum
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PosNum.one_sub'`：one_sub' (a : PosNum) : sub' 1 a = (pred' a).toZNumNeg
+· 使用定理 `PosNum.bit0_of_bit0`：∀ (n : PosNum), n + n = n.bit0
 -/
-theorem bit1_of_bit1 : forall n : ZNum, n + n + 1 = n.bit1
+theorem bit1_of_bit1 : ∀ n : ZNum, n + n + 1 = n.bit1
   | 0 => rfl
   | pos a => congr_arg pos a.bit1_of_bit1
   | neg a => show PosNum.sub' 1 (a + a) = _ by rw [PosNum.one_sub', a.bit0_of_bit0]; rfl
 
 @[simp, norm_cast]
-/--
-theorem `cast_bit0` / 定理 `cast_bit0`
-
-English:
-theorem cast_bit0
-  given: [AddGroupWithOne α]
-  statement: forall n : ZNum, (n.bit0 : α) = (n : α) + n
-
-中文:
-定理 cast_bit0
-  条件: [加法带幺群 α]
-  结论: 对任意 n : ZNum, (n.bit0 : α) = (n : α) + n
-
-Depends on / 依赖: CharP.exists, IsAlgClosed, PerfectField, PerfectRing, PerfectRing.toPerfectField, exacts, ofCharZero, perfectField, toPerfectField
+/-
+**ZNum.cast_bit0** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ZNum), ↑n.bit0 = ↑n + ↑n
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZNum.bit0.eq_2`：∀ (a : PosNum), (ZNum.pos a).bit0 = ZNum.pos a.bit0
+· 使用定理 `ZNum.cast_pos`：cast_pos [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(pos n : α) = n
+· 使用定理 `ZNum.bit0.eq_3`：∀ (a : PosNum), (ZNum.neg a).bit0 = ZNum.neg a.bit0
+· 使用定理 `ZNum.cast_neg`：cast_neg [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(neg n : α) = -n
+· 使用定理 `PosNum.cast_bit0`：cast_bit0 [One α] [Add α] (n : PosNum) : (n.bit0 : α) 
+= (n : α) + n
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
 -/
-theorem cast_bit0 [AddGroupWithOne α] : forall n : ZNum, (n.bit0 : α) = (n : α) + n
+theorem cast_bit0 [AddGroupWithOne α] : ∀ n : ZNum, (n.bit0 : α) = (n : α) + n
   | 0 => (add_zero _).symm
   | pos p => by rw [ZNum.bit0, cast_pos, cast_pos]; rfl
   | neg p => by
-    rw [ZNum.bit0]; rw [cast_neg]; rw [cast_neg]; rw [PosNum.cast_bit0]; rw [neg_add_rev]
+    rw [ZNum.bit0, cast_neg, cast_neg, PosNum.cast_bit0, neg_add_rev]
 
 @[simp, norm_cast]
-/--
-theorem `cast_bit1` / 定理 `cast_bit1`
-
-English:
-theorem cast_bit1
-  given: [AddGroupWithOne α]
-  statement: forall n : ZNum, (n.bit1 : α) = ((n : α) + n) + 1
-  proof: (succ'_pred' p).symm.trans (congr_arg Num.succ' e)
-    · conv at ep => change p = 1
-      subst p
-      simp
-    · dsimp only [Num.succ'] at ep
-      subst p
-      have : (↑(-↑a : Int) : α) = -1 + ↑(-↑a + 1 : Int) := by simp [add_comm (-↑a : Int) 1]
-      simpa using this
-
-@[simp]
-
-中文:
-定理 cast_bit1
-  条件: [加法带幺群 α]
-  结论: 对任意 n : ZNum, (n.bit1 : α) = ((n : α) + n) + 1
-  证明: (succ'_pred' p).symm.trans (congr_arg Num.succ' e)
-    · conv at ep => change p = 1
-      subst p
-      simp
-    · dsimp only [Num.succ'] at ep
-      subst p
-      have : (↑(-↑a : Int) : α) = -1 + ↑(-↑a + 1 : Int) := by simp [add_comm (-↑a : Int) 1]
-      simpa using this
-
-@[simp]
-
-Depends on / 依赖: Fintype, Fintype.card, Fintype.card_le_of_injective, Infinite, Infinite.of_not_fintype, IsAlgClosed, IsAlgClosed.splits_domain, Nat.not_succ_le_self, Num.succ, Separable, _pred, card_le_of_injective, card_rootSet_eq_natDegree, congr_arg, f.rootSet, n.succ, natDegree_X_pow_sub_C, not_succ_le_self, of_not_fintype, one_ne_zero
+/-
+**ZNum.cast_bit1** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_bit1 [AddGroupWithOne α] : forall n : ZNum, (n.bit1 : α) = ((n : α) +
+ n) + 1 | 0 => by simp [ZNum.bit1] | pos p => by rw [ZNum.bit1, cast_pos, cast_p
+os]; rfl | neg p => by rw [ZNum.bit1]; rw [cast_neg]; rw [cast_neg] rcases e : p
+red' p with - | a <;> have ep : p = _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ZNum.bit1.eq_2`：∀ (a : PosNum), (ZNum.pos a).bit1 = ZNum.pos a.bit1
+· 使用定理 `ZNum.cast_pos`：cast_pos [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(pos n : α) = n
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `ZNum.bit1.eq_3`：∀ (a : PosNum), (ZNum.neg a).bit1 = ZNum.neg (Num.casesO
+n a.pred' 1 PosNum.bit1)
+· 使用定理 `ZNum.cast_neg`：cast_neg [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(neg n : α) = -n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PosNum.succ'_pred'`：∀ (n : PosNum), n.pred'.succ' = n
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `PosNum.cast_to_int`：cast_to_int [AddGroupWithOne α] (n : PosNum) : ((n :
+ Int) : α) = n
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `neg_add_cancel_left`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), -a 
++ (a + b) = b
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `PosNum.cast_succ`：cast_succ [AddMonoidWithOne α] (n : PosNum) : (succ n 
+: α) = n + 1
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
-theorem cast_bit1 [AddGroupWithOne α] : forall n : ZNum, (n.bit1 : α) = ((n : α) + n) + 1
+theorem cast_bit1 [AddGroupWithOne α] : ∀ n : ZNum, (n.bit1 : α) = ((n : α) + n) + 1
   | 0 => by simp [ZNum.bit1]
   | pos p => by rw [ZNum.bit1, cast_pos, cast_pos]; rfl
   | neg p => by
-    rw [ZNum.bit1]; rw [cast_neg]; rw [cast_neg]
+    rw [ZNum.bit1, cast_neg, cast_neg]
     rcases e : pred' p with - | a <;>
       have ep : p = _ := (succ'_pred' p).symm.trans (congr_arg Num.succ' e)
     · conv at ep => change p = 1
@@ -472,93 +358,87 @@ theorem cast_bit1 [AddGroupWithOne α] : forall n : ZNum, (n.bit1 : α) = ((n : 
       simp
     · dsimp only [Num.succ'] at ep
       subst p
-      have : (↑(-↑a : Int) : α) = -1 + ↑(-↑a + 1 : Int) := by simp [add_comm (-↑a : Int) 1]
+      have : (↑(-↑a : ℤ) : α) = -1 + ↑(-↑a + 1 : ℤ) := by simp [add_comm (-↑a : ℤ) 1]
       simpa using this
 
 @[simp]
-/--
-theorem `cast_bitm1` / 定理 `cast_bitm1`
-
-English:
-theorem cast_bitm1
-  given: [AddGroupWithOne α] (n : ZNum)
-  statement: (n.bitm1 : α) = (n : α) + n - 1
-  proof: by
-  conv =>
-    lhs
-    rw [← zneg_zneg n]
-  rw [← zneg_bit1]; rw [cast_zneg]; rw [cast_bit1]
-  have : ((-1 + n + n : Int) : α) = (n + n + -1 : Int) := by simp [add_comm]
-  simpa [sub_eq_add_neg] using this
-
-中文:
-定理 cast_bitm1
-  条件: [加法带幺群 α] (n : ZNum)
-  结论: (n.bitm1 : α) = (n : α) + n - 1
-  证明: by
-  conv =>
-    lhs
-    rw [← zneg_zneg n]
-  rw [← zneg_bit1]; rw [cast_zneg]; rw [cast_bit1]
-  have : ((-1 + n + n : Int) : α) = (n + n + -1 : Int) := by simp [add_comm]
-  simpa [sub_eq_add_neg] using this
-
-Depends on / 依赖: add_comm, cast_bit1, cast_zneg, sub_eq_add_neg, zneg_bit1, zneg_zneg
+/-
+**ZNum.cast_bitm1** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_bitm1 [AddGroupWithOne α] (n : ZNum) : (n.bitm1 : α) = (n : α) + n - 
+1
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.zneg_zneg`：zneg_zneg (n : ZNum) : - -n = n
+· 使用定理 `ZNum.zneg_bit1`：zneg_bit1 (n : ZNum) : -n.bit1 = (-n).bitm1
+· 使用定理 `ZNum.cast_zneg`：∀ {α : Type u_1} [inst : SubtractionMonoid α] [inst_1 : 
+One α] (n : ZNum), ↑(-n) = -↑n
+· 使用定理 `ZNum.cast_bit1`：cast_bit1 [AddGroupWithOne α] : forall n : ZNum, (n.bit1
+ : α) = ((n : α) + n) + 1 | 0 => by simp [ZNum.bit1] | pos p => by rw [ZNum.bit1
+, ca…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `ZNum.cast_to_int`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ZNum)
+, ↑↑n = ↑n
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
 theorem cast_bitm1 [AddGroupWithOne α] (n : ZNum) : (n.bitm1 : α) = (n : α) + n - 1 := by
   conv =>
     lhs
     rw [← zneg_zneg n]
-  rw [← zneg_bit1]; rw [cast_zneg]; rw [cast_bit1]
-  have : ((-1 + n + n : Int) : α) = (n + n + -1 : Int) := by simp [add_comm]
+  rw [← zneg_bit1, cast_zneg, cast_bit1]
+  have : ((-1 + n + n : ℤ) : α) = (n + n + -1 : ℤ) := by simp [add_comm]
   simpa [sub_eq_add_neg] using this
-
-/--
-theorem `add_zero` / 定理 `add_zero`
-
-English:
-theorem add_zero
-  given: (n : ZNum)
-  statement: n + 0 = n
-  proof: by cases n <;> rfl
-
-中文:
-定理 add_zero
-  条件: (n : ZNum)
-  结论: n + 0 = n
-  证明: by cases n <;> rfl
+/-
+**ZNum.add_zero** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：add_zero (n : ZNum) : n + 0 = n
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_zero (n : ZNum) : n + 0 = n := by cases n <;> rfl
-
-/--
-theorem `zero_add` / 定理 `zero_add`
-
-English:
-theorem zero_add
-  given: (n : ZNum)
-  statement: 0 + n = n
-  proof: by cases n <;> rfl
-
-中文:
-定理 zero_add
-  条件: (n : ZNum)
-  结论: 0 + n = n
-  证明: by cases n <;> rfl
+/-
+**ZNum.zero_add** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：zero_add (n : ZNum) : 0 + n = n
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem zero_add (n : ZNum) : 0 + n = n := by cases n <;> rfl
-
-/--
-theorem `add_one` / 定理 `add_one`
-
-English:
-theorem add_one
-  statement: forall n : ZNum, n + 1 = succ n
-
-中文:
-定理 add_one
-  结论: 对任意 n : ZNum, n + 1 = succ n
+/-
+**ZNum.add_one** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ZNum), n + 1 = n.succ
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `PosNum.add_one`：add_one (n : PosNum) : n + 1 = succ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem add_one : forall n : ZNum, n + 1 = succ n
+theorem add_one : ∀ n : ZNum, n + 1 = succ n
   | 0 => rfl
   | pos p => congr_arg pos p.add_one
   | neg p => by cases p <;> rfl
@@ -569,30 +449,14 @@ namespace PosNum
 
 variable {α : Type*}
 
-/--
-theorem `cast_to_znum` / 定理 `cast_to_znum`
-
-English:
-theorem cast_to_znum
-  statement: forall n : PosNum, (n : ZNum) = ZNum.pos n
-  proof: congr_arg ZNum.bit0 (cast_to_znum p)
-      rwa [← ZNum.bit0_of_bit0] at this
-  | bit1 p => by
-      have := congr_arg ZNum.bit1 (cast_to_znum p)
-      rwa [← ZNum.bit1_of_bit1] at this
-
-中文:
-定理 cast_to_znum
-  结论: 对任意 n : PosNum, (n : ZNum) = ZNum.pos n
-  证明: congr_arg ZNum.bit0 (cast_to_znum p)
-      rwa [← ZNum.bit0_of_bit0] at this
-  | bit1 p => by
-      have := congr_arg ZNum.bit1 (cast_to_znum p)
-      rwa [← ZNum.bit1_of_bit1] at this
-
-Depends on / 依赖: ZNum.bit0, cast_to_znum, congr_arg
+/-
+**PosNum.cast_to_znum** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：cast_to_znum : forall n : PosNum, (n : ZNum) = ZNum.pos n | 1 => rfl | bit
+0 p => by have
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cast_to_znum : forall n : PosNum, (n : ZNum) = ZNum.pos n
+theorem cast_to_znum : ∀ n : PosNum, (n : ZNum) = ZNum.pos n
   | 1 => rfl
   | bit0 p => by
       have := congr_arg ZNum.bit0 (cast_to_znum p)
@@ -600,123 +464,78 @@ theorem cast_to_znum : forall n : PosNum, (n : ZNum) = ZNum.pos n
   | bit1 p => by
       have := congr_arg ZNum.bit1 (cast_to_znum p)
       rwa [← ZNum.bit1_of_bit1] at this
-
-/--
-theorem `cast_sub'` / 定理 `cast_sub'`
-
-English:
-theorem cast_sub'
-  given: [AddGroupWithOne α]
-  statement: forall m n : PosNum, (sub' m n : α) = m - n
-  proof: by simp [add_left_comm]
-    simpa [sub_eq_add_neg] using this
-  | bit0 a, bit1 b => by
-    rw [sub']; rw [ZNum.cast_bitm1]; rw [cast_sub' a b]
-    have : ((-b + (a + (-b + -1)) : Int) : α) = (a + -1 + (-b + -b) : Int) := by
-      simp [add_comm, add_left_comm]
-    simpa [sub_eq_add_neg] using this
-  | bit1 a, bit0 b => by
-    rw [sub']; rw [ZNum.cast_bit1]; rw [cast_sub' a b]
-    have : ((-b + (a + (-b + 1)) : Int) : α) = (a + 1 + (-b + -b) : Int) := by
-      simp [add_comm, add_left_comm]
-    simpa [sub_eq_add_neg] using this
-  | bit1 a, bit1 b => by
-    rw [sub']; rw [ZNum.cast_bit0]; rw [cast_sub' a b]
-    have : ((-b + (a + -b) : Int) : α) = a + (-b + -b) := by simp [add_left_comm]
-    simpa [sub_eq_add_neg] using this
-
-中文:
-定理 cast_sub'
-  条件: [加法带幺群 α]
-  结论: 对任意 m n : PosNum, (sub' m n : α) = m - n
-  证明: by simp [add_left_comm]
-    simpa [sub_eq_add_neg] using this
-  | bit0 a, bit1 b => by
-    rw [sub']; rw [ZNum.cast_bitm1]; rw [cast_sub' a b]
-    have : ((-b + (a + (-b + -1)) : Int) : α) = (a + -1 + (-b + -b) : Int) := by
-      simp [add_comm, add_left_comm]
-    simpa [sub_eq_add_neg] using this
-  | bit1 a, bit0 b => by
-    rw [sub']; rw [ZNum.cast_bit1]; rw [cast_sub' a b]
-    have : ((-b + (a + (-b + 1)) : Int) : α) = (a + 1 + (-b + -b) : Int) := by
-      simp [add_comm, add_left_comm]
-    simpa [sub_eq_add_neg] using this
-  | bit1 a, bit1 b => by
-    rw [sub']; rw [ZNum.cast_bit0]; rw [cast_sub' a b]
-    have : ((-b + (a + -b) : Int) : α) = a + (-b + -b) := by simp [add_left_comm]
-    simpa [sub_eq_add_neg] using this
-
-Depends on / 依赖: ZNum.cast_bit1, ZNum.cast_bitm1, add_comm, add_left_comm, cast_bit1, cast_bitm1, cast_sub, sub_eq_add_neg
+/-
+**PosNum.cast_sub'** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：cast_sub' [AddGroupWithOne α] : forall m n : PosNum, (sub' m n : α) = m - 
+n | a, 1 => by rw [sub'_one]; rw [Num.cast_toZNum]; rw [← Num.cast_to_nat]; rw [
+pred'_to_nat]; rw [← Nat.sub_one] simp | 1, b => by rw [one_sub']; rw [Num.cast_
+toZNumNeg]; rw [← neg_sub]; rw [neg_inj]; rw [← Num.cast_to_nat]; rw [pred'_to_n
+at]; rw [← Nat.sub_one] simp | bit0 a, bit0 b => by rw [sub']; rw [ZNum.cast_bit
+0]; rw [cast_sub' a b] have : ((a + -b + (a + -b) : Int) : α) = a + a + (-b + -b
+)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.sub'`：sub'_one (a : PosNum) : sub' a 1 = (pred' a).toZNum
 -/
-theorem cast_sub' [AddGroupWithOne α] : forall m n : PosNum, (sub' m n : α) = m - n
+theorem cast_sub' [AddGroupWithOne α] : ∀ m n : PosNum, (sub' m n : α) = m - n
   | a, 1 => by
-    rw [sub'_one]; rw [Num.cast_toZNum]; rw [← Num.cast_to_nat]; rw [pred'_to_nat]; rw [← Nat.sub_one]
+    rw [sub'_one, Num.cast_toZNum, ← Num.cast_to_nat, pred'_to_nat, ← Nat.sub_one]
     simp
   | 1, b => by
-    rw [one_sub']; rw [Num.cast_toZNumNeg]; rw [← neg_sub]; rw [neg_inj]; rw [← Num.cast_to_nat]; rw [pred'_to_nat]; rw [← Nat.sub_one]
+    rw [one_sub', Num.cast_toZNumNeg, ← neg_sub, neg_inj, ← Num.cast_to_nat, pred'_to_nat,
+        ← Nat.sub_one]
     simp
   | bit0 a, bit0 b => by
-    rw [sub']; rw [ZNum.cast_bit0]; rw [cast_sub' a b]
-    have : ((a + -b + (a + -b) : Int) : α) = a + a + (-b + -b) := by simp [add_left_comm]
+    rw [sub', ZNum.cast_bit0, cast_sub' a b]
+    have : ((a + -b + (a + -b) : ℤ) : α) = a + a + (-b + -b) := by simp [add_left_comm]
     simpa [sub_eq_add_neg] using this
   | bit0 a, bit1 b => by
-    rw [sub']; rw [ZNum.cast_bitm1]; rw [cast_sub' a b]
-    have : ((-b + (a + (-b + -1)) : Int) : α) = (a + -1 + (-b + -b) : Int) := by
+    rw [sub', ZNum.cast_bitm1, cast_sub' a b]
+    have : ((-b + (a + (-b + -1)) : ℤ) : α) = (a + -1 + (-b + -b) : ℤ) := by
       simp [add_comm, add_left_comm]
     simpa [sub_eq_add_neg] using this
   | bit1 a, bit0 b => by
-    rw [sub']; rw [ZNum.cast_bit1]; rw [cast_sub' a b]
-    have : ((-b + (a + (-b + 1)) : Int) : α) = (a + 1 + (-b + -b) : Int) := by
+    rw [sub', ZNum.cast_bit1, cast_sub' a b]
+    have : ((-b + (a + (-b + 1)) : ℤ) : α) = (a + 1 + (-b + -b) : ℤ) := by
       simp [add_comm, add_left_comm]
     simpa [sub_eq_add_neg] using this
   | bit1 a, bit1 b => by
-    rw [sub']; rw [ZNum.cast_bit0]; rw [cast_sub' a b]
-    have : ((-b + (a + -b) : Int) : α) = a + (-b + -b) := by simp [add_left_comm]
+    rw [sub', ZNum.cast_bit0, cast_sub' a b]
+    have : ((-b + (a + -b) : ℤ) : α) = a + (-b + -b) := by simp [add_left_comm]
     simpa [sub_eq_add_neg] using this
-
-/--
-theorem `to_nat_eq_succ_pred` / 定理 `to_nat_eq_succ_pred`
-
-English:
-theorem to_nat_eq_succ_pred
-  given: (n : PosNum)
-  statement: (n : Nat) = n.pred' + 1
-  proof: by
-  rw [← Num.succ'_to_nat]; rw [n.succ'_pred']
-
-中文:
-定理 to_nat_eq_succ_pred
-  条件: (n : PosNum)
-  结论: (n : 自然数) = n.pred' + 1
-  证明: by
-  rw [← Num.succ'_to_nat]; rw [n.succ'_pred']
-
-Depends on / 依赖: Num.succ, _pred, _to_nat, n.succ
+/-
+**PosNum.to_nat_eq_succ_pred** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：to_nat_eq_succ_pred (n : PosNum) : (n : Nat) = n.pred' + 1
+参数：n : PosNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Num.succ'_to_nat`：∀ (n : Num), ↑n.succ' = ↑n + 1
+· 使用定理 `PosNum.succ'_pred'`：∀ (n : PosNum), n.pred'.succ' = n
 -/
-theorem to_nat_eq_succ_pred (n : PosNum) : (n : Nat) = n.pred' + 1 := by
-  rw [← Num.succ'_to_nat]; rw [n.succ'_pred']
-
-/--
-theorem `to_int_eq_succ_pred` / 定理 `to_int_eq_succ_pred`
-
-English:
-theorem to_int_eq_succ_pred
-  given: (n : PosNum)
-  statement: (n : Int) = (n.pred' : Nat) + 1
-  proof: by
-  rw [← n.to_nat_to_int]; rw [to_nat_eq_succ_pred]; rfl
-
-中文:
-定理 to_int_eq_succ_pred
-  条件: (n : PosNum)
-  结论: (n : 整数) = (n.pred' : 自然数) + 1
-  证明: by
-  rw [← n.to_nat_to_int]; rw [to_nat_eq_succ_pred]; rfl
-
-Depends on / 依赖: n.to_nat_to_int, to_nat_eq_succ_pred, to_nat_to_int
+theorem to_nat_eq_succ_pred (n : PosNum) : (n : ℕ) = n.pred' + 1 := by
+  rw [← Num.succ'_to_nat, n.succ'_pred']
+/-
+**PosNum.to_int_eq_succ_pred** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：to_int_eq_succ_pred (n : PosNum) : (n : Int) = (n.pred' : Nat) + 1
+参数：n : PosNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PosNum.to_nat_to_int`：to_nat_to_int (n : PosNum) : ((n : Nat) : Int) = n
+· 使用定理 `PosNum.to_nat_eq_succ_pred`：to_nat_eq_succ_pred (n : PosNum) : (n : Nat)
+ = n.pred' + 1
 -/
-theorem to_int_eq_succ_pred (n : PosNum) : (n : Int) = (n.pred' : Nat) + 1 := by
-  rw [← n.to_nat_to_int]; rw [to_nat_eq_succ_pred]; rfl
+theorem to_int_eq_succ_pred (n : PosNum) : (n : ℤ) = (n.pred' : ℕ) + 1 := by
+  rw [← n.to_nat_to_int, to_nat_eq_succ_pred]; rfl
 
 end PosNum
 
@@ -725,217 +544,217 @@ namespace Num
 variable {α : Type*}
 
 @[simp]
-/--
-theorem `cast_sub'` / 定理 `cast_sub'`
-
-English:
-theorem cast_sub'
-  given: [AddGroupWithOne α]
-  statement: forall m n : Num, (sub' m n : α) = m - n
-
-中文:
-定理 cast_sub'
-  条件: [加法带幺群 α]
-  结论: 对任意 m n : Num, (sub' m n : α) = m - n
+/-
+**Num.cast_sub'** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ {α : Type u_1} [inst : AddGroupWithOne α] (m n : Num), ↑(m.sub' n) = ↑m 
+- ↑n
+参数：m n : Num；m.sub' n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `PosNum.cast_sub'`：cast_sub' [AddGroupWithOne α] : forall m n : PosNum, (
+sub' m n : α) = m - n | a, 1 => by rw [sub'_one]; rw [Num.cast_toZNum]; rw [← Nu
+m.cast…
 -/
-theorem cast_sub' [AddGroupWithOne α] : forall m n : Num, (sub' m n : α) = m - n
+theorem cast_sub' [AddGroupWithOne α] : ∀ m n : Num, (sub' m n : α) = m - n
   | 0, 0 => (sub_zero _).symm
   | pos _a, 0 => (sub_zero _).symm
   | 0, pos _b => (zero_sub _).symm
   | pos _a, pos _b => PosNum.cast_sub' _ _
-
-/--
-theorem `toZNum_succ` / 定理 `toZNum_succ`
-
-English:
-theorem toZNum_succ
-  statement: forall n : Num, n.succ.toZNum = n.toZNum.succ
-
-中文:
-定理 toZNum_succ
-  结论: 对任意 n : Num, n.succ.toZNum = n.toZNum.succ
+/-
+**Num.toZNum_succ** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : Num), n.succ.toZNum = n.toZNum.succ
+参数：n : Num。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toZNum_succ : forall n : Num, n.succ.toZNum = n.toZNum.succ
+theorem toZNum_succ : ∀ n : Num, n.succ.toZNum = n.toZNum.succ
   | 0 => rfl
   | pos _n => rfl
-
-/--
-theorem `toZNumNeg_succ` / 定理 `toZNumNeg_succ`
-
-English:
-theorem toZNumNeg_succ
-  statement: forall n : Num, n.succ.toZNumNeg = n.toZNumNeg.pred
-
-中文:
-定理 toZNumNeg_succ
-  结论: 对任意 n : Num, n.succ.toZNumNeg = n.toZNumNeg.pred
+/-
+**Num.toZNumNeg_succ** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : Num), n.succ.toZNumNeg = n.toZNumNeg.pred
+参数：n : Num。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toZNumNeg_succ : forall n : Num, n.succ.toZNumNeg = n.toZNumNeg.pred
+theorem toZNumNeg_succ : ∀ n : Num, n.succ.toZNumNeg = n.toZNumNeg.pred
   | 0 => rfl
   | pos _n => rfl
 
 @[simp]
-/--
-theorem `pred_succ` / 定理 `pred_succ`
-
-English:
-theorem pred_succ
-  statement: forall n : ZNum, n.pred.succ = n
-
-中文:
-定理 pred_succ
-  结论: 对任意 n : ZNum, n.pred.succ = n
+/-
+**Num.pred_succ** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : ZNum), n.pred.succ = n
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PosNum.pred'_succ'`：∀ (n : Num), n.succ'.pred' = n
+· 使用定理 `ZNum.pred.eq_2`：∀ (a : PosNum), (ZNum.pos a).pred = a.pred'.toZNum
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Num.toZNum_succ`：∀ (n : Num), n.succ.toZNum = n.toZNum.succ
+· 使用定理 `Num.succ.eq_1`：∀ (n : Num), n.succ = Num.pos n.succ'
+· 使用定理 `PosNum.succ'_pred'`：∀ (n : PosNum), n.pred'.succ' = n
+· 使用定理 `Num.toZNum.eq_2`：∀ (p : PosNum), (Num.pos p).toZNum = ZNum.pos p
 -/
-theorem pred_succ : forall n : ZNum, n.pred.succ = n
+theorem pred_succ : ∀ n : ZNum, n.pred.succ = n
   | 0 => rfl
   | ZNum.neg p => show toZNumNeg (pos p).succ'.pred' = _ by rw [PosNum.pred'_succ']; rfl
   | ZNum.pos p => by rw [ZNum.pred, ← toZNum_succ, Num.succ, PosNum.succ'_pred', toZNum]
-
-/--
-theorem `succ_ofInt'` / 定理 `succ_ofInt'`
-
-English:
-theorem succ_ofInt'
-  statement: forall n, ZNum.ofInt' (n + 1) = ZNum.ofInt' n + 1
-
-中文:
-定理 succ_of整数'
-  结论: 对任意 n, ZNum.of整数' (n + 1) = ZNum.of整数' n + 1
+/-
+**Num.succ_ofInt'** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : ℤ), ZNum.ofInt' (n + 1) = ZNum.ofInt' n + 1
+参数：n : ℤ；n + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Num.ofNat'_succ`：∀ {n : ℕ}, Num.ofNat' (n + 1) = Num.ofNat' n + 1
+· 使用定理 `Num.add_one`：∀ (n : Num), n + 1 = n.succ
+· 使用定理 `Num.toZNum_succ`：∀ (n : Num), n.succ.toZNum = n.toZNum.succ
+· 使用定理 `ZNum.add_one`：∀ (n : ZNum), n + 1 = n.succ
+· 使用定理 `Num.ofNat'_zero`：Num.ofNat' 0 = 0
+· 使用定理 `Num.toZNumNeg_succ`：∀ (n : Num), n.succ.toZNumNeg = n.toZNumNeg.pred
+· 使用定理 `Num.pred_succ`：∀ (n : ZNum), n.pred.succ = n
 -/
-theorem succ_ofInt' : forall n, ZNum.ofInt' (n + 1) = ZNum.ofInt' n + 1
-  | (n : Nat) => by
-    change ZNum.ofInt' (n + 1 : Nat) = ZNum.ofInt' (n : Nat) + 1
+theorem succ_ofInt' : ∀ n, ZNum.ofInt' (n + 1) = ZNum.ofInt' n + 1
+  | (n : ℕ) => by
+    change ZNum.ofInt' (n + 1 : ℕ) = ZNum.ofInt' (n : ℕ) + 1
     dsimp only [ZNum.ofInt', ZNum.ofInt']
-    rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [toZNum_succ]; rw [ZNum.add_one]
+    rw [Num.ofNat'_succ, Num.add_one, toZNum_succ, ZNum.add_one]
   | -[0+1] => by
     change ZNum.ofInt' 0 = ZNum.ofInt' (-[0+1]) + 1
     dsimp only [ZNum.ofInt', ZNum.ofInt']
-    rw [ofNat'_succ]; rw [ofNat'_zero]; rfl
+    rw [ofNat'_succ, ofNat'_zero]; rfl
   | -[(n + 1)+1] => by
     change ZNum.ofInt' -[n+1] = ZNum.ofInt' -[(n + 1)+1] + 1
     dsimp only [ZNum.ofInt', ZNum.ofInt']
-    rw [@Num.ofNat'_succ (n + 1)]; rw [Num.add_one]; rw [toZNumNeg_succ]; rw [@ofNat'_succ n]; rw [Num.add_one]; rw [ZNum.add_one]; rw [pred_succ]
-
-/--
-theorem `ofInt'_toZNum` / 定理 `ofInt'_toZNum`
-
-English:
-theorem ofInt'_toZNum
-  statement: forall n : Nat, toZNum n = ZNum.ofInt' n
-
-中文:
-定理 of整数'_toZNum
-  结论: 对任意 n : 自然数, toZNum n = ZNum.of整数' n
+    rw [@Num.ofNat'_succ (n + 1), Num.add_one, toZNumNeg_succ,
+      @ofNat'_succ n, Num.add_one, ZNum.add_one, pred_succ]
+/-
+**Num.ofInt'_toZNum** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : ℕ), (↑n).toZNum = ZNum.ofInt' ↑n
+参数：n : ℕ；↑n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofInt'_toZNum : forall n : Nat, toZNum n = ZNum.ofInt' n
+theorem ofInt'_toZNum : ∀ n : ℕ, toZNum n = ZNum.ofInt' n
   | 0 => rfl
   | n + 1 => by
-    rw [Nat.cast_succ]; rw [Num.add_one]; rw [toZNum_succ]; rw [ofInt'_toZNum n]; rw [Nat.cast_succ]; rw [succ_ofInt']; rw [ZNum.add_one]
-
-/--
-theorem `mem_ofZNum'` / 定理 `mem_ofZNum'`
-
-English:
-theorem mem_ofZNum'
-  statement: forall {m : Num} {n : ZNum}, m in ofZNum' n ↔ n = toZNum m
-
-中文:
-定理 mem_ofZNum'
-  结论: 对任意 {m : Num} {n : ZNum}, m in ofZNum' n ↔ n = toZNum m
+    rw [Nat.cast_succ, Num.add_one, toZNum_succ, ofInt'_toZNum n, Nat.cast_succ, succ_ofInt',
+      ZNum.add_one]
+/-
+**Num.mem_ofZNum'** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ {m : Num} {n : ZNum}, m ∈ Num.ofZNum' n ↔ n = m.toZNum
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Option.some_inj`：∀ {α : Type u_1} {a b : α}, some a = some b ↔ a = b
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem mem_ofZNum' : forall {m : Num} {n : ZNum}, m in ofZNum' n ↔ n = toZNum m
+theorem mem_ofZNum' : ∀ {m : Num} {n : ZNum}, m ∈ ofZNum' n ↔ n = toZNum m
   | 0, 0 => ⟨fun _ => rfl, fun _ => rfl⟩
   | pos _, 0 => ⟨nofun, nofun⟩
   | m, ZNum.pos p =>
-Option.some_inj.trans by cases m <;> constructor <;> intro h <;> try cases h <;> rfl
+    Option.some_inj.trans <| by cases m <;> constructor <;> intro h <;> try cases h <;> rfl
   | m, ZNum.neg p => ⟨nofun, fun h => by cases m <;> cases h⟩
-
-/--
-theorem `ofZNum'_toNat` / 定理 `ofZNum'_toNat`
-
-English:
-theorem ofZNum'_toNat
-  statement: forall n : ZNum, (↑) < > ofZNum' n = Int.toNat? n
-
-中文:
-定理 ofZNum'_to自然数
-  结论: 对任意 n : ZNum, (↑) < > ofZNum' n = 整数.to自然数? n
+/-
+**Num.ofZNum'_toNat** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : ZNum), castNum <$> Num.ofZNum' n = (↑n).toNat?
+参数：n : ZNum；↑n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PosNum.to_nat_to_int`：to_nat_to_int (n : PosNum) : ((n : Nat) : Int) = n
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `Num.succ'_to_nat`：∀ (n : Num), ↑n.succ' = ↑n + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PosNum.succ'_pred'`：∀ (n : PosNum), n.pred'.succ' = n
+· 使用定理 `PosNum.cast_to_nat`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] (n : Po
+sNum), ↑↑n = ↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofZNum'_toNat : forall n : ZNum, (↑) < > ofZNum' n = Int.toNat? n
+theorem ofZNum'_toNat : ∀ n : ZNum, (↑) <$> ofZNum' n = Int.toNat? n
   | 0 => rfl
   | ZNum.pos p => show _ = Int.toNat? p by rw [← PosNum.to_nat_to_int p]; rfl
   | ZNum.neg p =>
-(congr_arg fun x => Int.toNat? (-x))
-      show ((p.pred' + 1 : Nat) : Int) = p by rw [← succ'_to_nat]; simp
-
-/--
-theorem `ofZNum_toNat` / 定理 `ofZNum_toNat`
-
-English:
-theorem ofZNum_toNat
-  statement: forall n : ZNum, (ofZNum n : Nat) = Int.toNat n
-
-中文:
-定理 ofZNum_to自然数
-  结论: 对任意 n : ZNum, (ofZNum n : 自然数) = 整数.to自然数 n
+    (congr_arg fun x => Int.toNat? (-x)) <|
+      show ((p.pred' + 1 : ℕ) : ℤ) = p by rw [← succ'_to_nat]; simp
+/-
+**Num.ofZNum_toNat** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : ZNum), ↑(Num.ofZNum n) = (↑n).toNat
+参数：n : ZNum；Num.ofZNum n；↑n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PosNum.to_nat_to_int`：to_nat_to_int (n : PosNum) : ((n : Nat) : Int) = n
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `Num.succ'_to_nat`：∀ (n : Num), ↑n.succ' = ↑n + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PosNum.succ'_pred'`：∀ (n : PosNum), n.pred'.succ' = n
+· 使用定理 `PosNum.cast_to_nat`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] (n : Po
+sNum), ↑↑n = ↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofZNum_toNat : forall n : ZNum, (ofZNum n : Nat) = Int.toNat n
+theorem ofZNum_toNat : ∀ n : ZNum, (ofZNum n : ℕ) = Int.toNat n
   | 0 => rfl
   | ZNum.pos p => show _ = Int.toNat p by rw [← PosNum.to_nat_to_int p]; rfl
   | ZNum.neg p =>
-(congr_arg fun x => Int.toNat (-x))
-      show ((p.pred' + 1 : Nat) : Int) = p by rw [← succ'_to_nat]; simp
+    (congr_arg fun x => Int.toNat (-x)) <|
+      show ((p.pred' + 1 : ℕ) : ℤ) = p by rw [← succ'_to_nat]; simp
 
 @[simp]
-/--
-theorem `cast_ofZNum` / 定理 `cast_ofZNum`
-
-English:
-theorem cast_ofZNum
-  given: [AddMonoidWithOne α] (n : ZNum)
-  statement: (ofZNum n : α) = Int.toNat n
-  proof: by
-  rw [← cast_to_nat]; rw [ofZNum_toNat]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_ofZNum
-  条件: [加法带幺幺半群 α] (n : ZNum)
-  结论: (ofZNum n : α) = 整数.to自然数 n
-  证明: by
-  rw [← cast_to_nat]; rw [ofZNum_toNat]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_to_nat, ofZNum_toNat
+/-
+**Num.cast_ofZNum** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：cast_ofZNum [AddMonoidWithOne α] (n : ZNum) : (ofZNum n : α) = Int.toNat n
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Num.cast_to_nat`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] (n : Num),
+ ↑↑n = ↑n
+· 使用定理 `Num.ofZNum_toNat`：∀ (n : ZNum), ↑(Num.ofZNum n) = (↑n).toNat
 -/
 theorem cast_ofZNum [AddMonoidWithOne α] (n : ZNum) : (ofZNum n : α) = Int.toNat n := by
-  rw [← cast_to_nat]; rw [ofZNum_toNat]
+  rw [← cast_to_nat, ofZNum_toNat]
 
 @[simp, norm_cast]
-/--
-theorem `sub_to_nat` / 定理 `sub_to_nat`
-
-English:
-theorem sub_to_nat
-  given: (m n)
-  statement: ((m - n : Num) : Nat) = m - n
-  proof: show (ofZNum _ : Nat) = _ by
-    rw [ofZNum_toNat]; rw [cast_sub']; rw [← to_nat_to_int]; rw [← to_nat_to_int]; rw [Int.toNat_sub]
-
-中文:
-定理 sub_to_nat
-  条件: (m n)
-  结论: ((m - n : Num) : 自然数) = m - n
-  证明: show (ofZNum _ : Nat) = _ by
-    rw [ofZNum_toNat]; rw [cast_sub']; rw [← to_nat_to_int]; rw [← to_nat_to_int]; rw [Int.toNat_sub]
-
-Depends on / 依赖: Int.toNat_sub, cast_sub, ofZNum, ofZNum_toNat, toNat_sub, to_nat_to_int
+/-
+**Num.sub_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：sub_to_nat (m n) : ((m - n : Num) : Nat) = m - n
+参数：m n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Num.ofZNum_toNat`：∀ (n : ZNum), ↑(Num.ofZNum n) = (↑n).toNat
+· 使用定理 `Num.cast_sub'`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (m n : Num), 
+↑(m.sub' n) = ↑m - ↑n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Num.to_nat_to_int`：to_nat_to_int (n : Num) : ((n : Nat) : Int) = n
+· 使用定理 `Int.toNat_sub`：∀ (m n : ℕ), (↑m - ↑n).toNat = m - n
 -/
-theorem sub_to_nat (m n) : ((m - n : Num) : Nat) = m - n :=
-  show (ofZNum _ : Nat) = _ by
-    rw [ofZNum_toNat]; rw [cast_sub']; rw [← to_nat_to_int]; rw [← to_nat_to_int]; rw [Int.toNat_sub]
+theorem sub_to_nat (m n) : ((m - n : Num) : ℕ) = m - n :=
+  show (ofZNum _ : ℕ) = _ by
+    rw [ofZNum_toNat, cast_sub', ← to_nat_to_int, ← to_nat_to_int, Int.toNat_sub]
 
 end Num
 
@@ -944,209 +763,244 @@ namespace ZNum
 variable {α : Type*}
 
 @[simp, norm_cast]
-/--
-theorem `cast_add` / 定理 `cast_add`
-
-English:
-theorem cast_add
-  given: [AddGroupWithOne α]
-  statement: forall m n, ((m + n : ZNum) : α) = m + n
-  proof: by
-      rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_neg]; rw [← Int.cast_add (-a)]
-      simp [add_comm]
-(PosNum.cast_sub' _ _).trans (sub_eq_add_neg _ _).trans this
-  | neg a, neg b =>
-    show -(↑(a + b) : α) = -a + -b by
-      rw [PosNum.cast_add]; rw [neg_eq_iff_eq_neg]; rw [neg_add_rev]; rw [neg_neg]; rw [neg_neg]; rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_add]; rw [← Int.cast_add]; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 cast_add
-  条件: [加法带幺群 α]
-  结论: 对任意 m n, ((m + n : ZNum) : α) = m + n
-  证明: by
-      rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_neg]; rw [← Int.cast_add (-a)]
-      simp [add_comm]
-(PosNum.cast_sub' _ _).trans (sub_eq_add_neg _ _).trans this
-  | neg a, neg b =>
-    show -(↑(a + b) : α) = -a + -b by
-      rw [PosNum.cast_add]; rw [neg_eq_iff_eq_neg]; rw [neg_add_rev]; rw [neg_neg]; rw [neg_neg]; rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_add]; rw [← Int.cast_add]; rw [add_comm]
-
-@[simp]
+/-
+**ZNum.cast_add** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_add [AddGroupWithOne α] : forall m n, ((m + n : ZNum) : α) = m + n | 
+0, a => by cases a <;> exact (_root_.zero_add _).symm | b, 0 => by cases b <;> e
+xact (_root_.add_zero _).symm | pos _, pos _ => PosNum.cast_add _ _ | pos a, neg
+ b => by simpa only [sub_eq_add_neg] using! PosNum.cast_sub' (α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `PosNum.cast_add`：cast_add [AddMonoidWithOne α] (m n) : ((m + n : PosNum)
+ : α) = m + n
+· 使用定理 `PosNum.sub'`：sub'_one (a : PosNum) : sub' a 1 = (pred' a).toZNum
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `PosNum.cast_sub'`：cast_sub' [AddGroupWithOne α] : forall m n : PosNum, (
+sub' m n : α) = m - n | a, 1 => by rw [sub'_one]; rw [Num.cast_toZNum]; rw [← Nu
+m.cast…
+· 使用定理 `PosNum.cast_to_int`：cast_to_int [AddGroupWithOne α] (n : PosNum) : ((n :
+ Int) : α) = n
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `neg_eq_iff_eq_neg`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, 
+-a = b ↔ a = -b
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
-theorem cast_add [AddGroupWithOne α] : forall m n, ((m + n : ZNum) : α) = m + n
+theorem cast_add [AddGroupWithOne α] : ∀ m n, ((m + n : ZNum) : α) = m + n
   | 0, a => by cases a <;> exact (_root_.zero_add _).symm
   | b, 0 => by cases b <;> exact (_root_.add_zero _).symm
   | pos _, pos _ => PosNum.cast_add _ _
   | pos a, neg b => by simpa only [sub_eq_add_neg] using! PosNum.cast_sub' (α := α) _ _
   | neg a, pos b =>
     have : (↑b + -↑a : α) = -↑a + ↑b := by
-      rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_neg]; rw [← Int.cast_add (-a)]
+      rw [← PosNum.cast_to_int a, ← PosNum.cast_to_int b, ← Int.cast_neg, ← Int.cast_add (-a)]
       simp [add_comm]
-(PosNum.cast_sub' _ _).trans (sub_eq_add_neg _ _).trans this
+    (PosNum.cast_sub' _ _).trans <| (sub_eq_add_neg _ _).trans this
   | neg a, neg b =>
     show -(↑(a + b) : α) = -a + -b by
-      rw [PosNum.cast_add]; rw [neg_eq_iff_eq_neg]; rw [neg_add_rev]; rw [neg_neg]; rw [neg_neg]; rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_add]; rw [← Int.cast_add]; rw [add_comm]
+      rw [PosNum.cast_add, neg_eq_iff_eq_neg, neg_add_rev, neg_neg, neg_neg,
+          ← PosNum.cast_to_int a, ← PosNum.cast_to_int b, ← Int.cast_add, ← Int.cast_add, add_comm]
 
 @[simp]
-/--
-theorem `cast_succ` / 定理 `cast_succ`
-
-English:
-theorem cast_succ
-  given: [AddGroupWithOne α] (n)
-  statement: ((succ n : ZNum) : α) = n + 1
-  proof: by
-  rw [← add_one]; rw [cast_add]; rw [cast_one]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_succ
-  条件: [加法带幺群 α] (n)
-  结论: ((succ n : ZNum) : α) = n + 1
-  证明: by
-  rw [← add_one]; rw [cast_add]; rw [cast_one]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: add_one, cast_add, cast_one
+/-
+**ZNum.cast_succ** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_succ [AddGroupWithOne α] (n) : ((succ n : ZNum) : α) = n + 1
+参数：n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.add_one`：∀ (n : ZNum), n + 1 = n.succ
+· 使用定理 `ZNum.cast_add`：cast_add [AddGroupWithOne α] : forall m n, ((m + n : ZNum
+) : α) = m + n | 0, a => by cases a <;> exact (_root_.zero_add _).symm | b, 0 =>
+ by…
+· 使用定理 `ZNum.cast_one`：cast_one [Zero α] [One α] [Add α] [Neg α] : ((1 : ZNum) :
+ α) = 1
 -/
 theorem cast_succ [AddGroupWithOne α] (n) : ((succ n : ZNum) : α) = n + 1 := by
-  rw [← add_one]; rw [cast_add]; rw [cast_one]
+  rw [← add_one, cast_add, cast_one]
 
 @[simp, norm_cast]
-/--
-theorem `mul_to_int` / 定理 `mul_to_int`
-
-English:
-theorem mul_to_int
-  statement: forall m n, ((m * n : ZNum) : Int) = m * n
-
-中文:
-定理 mul_to_int
-  结论: 对任意 m n, ((m * n : ZNum) : 整数) = m * n
+/-
+**ZNum.mul_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (m n : ZNum), ↑(m * n) = ↑m * ↑n
+参数：m n : ZNum；m * n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `PosNum.cast_mul`：cast_mul [NonAssocSemiring α] (m n) : ((m * n : PosNum)
+ : α) = m * n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_mul_eq_mul_neg`：neg_mul_eq_mul_neg (a b : α) : -(a * b) = a * -b
+· 使用定理 `neg_mul_eq_neg_mul`：neg_mul_eq_neg_mul (a b : α) : -(a * b) = -a * b
+· 使用定理 `neg_mul_neg`：neg_mul_neg (a b : α) : -a * -b = a * b
 -/
-theorem mul_to_int : forall m n, ((m * n : ZNum) : Int) = m * n
+theorem mul_to_int : ∀ m n, ((m * n : ZNum) : ℤ) = m * n
   | 0, a => by cases a <;> exact (zero_mul _).symm
   | b, 0 => by cases b <;> exact (mul_zero _).symm
   | pos a, pos b => PosNum.cast_mul a b
   | pos a, neg b => show -↑(a * b) = ↑a * -↑b by rw [PosNum.cast_mul, neg_mul_eq_mul_neg]
   | neg a, pos b => show -↑(a * b) = -↑a * ↑b by rw [PosNum.cast_mul, neg_mul_eq_neg_mul]
   | neg a, neg b => show ↑(a * b) = -↑a * -↑b by rw [PosNum.cast_mul, neg_mul_neg]
-
-/--
-theorem `cast_mul` / 定理 `cast_mul`
-
-English:
-theorem cast_mul
-  given: [NonAssocRing α] (m n)
-  statement: ((m * n : ZNum) : α) = m * n
-  proof: by
-  rw [← cast_to_int]; rw [mul_to_int]; rw [Int.cast_mul]; rw [cast_to_int]; rw [cast_to_int]
-
-中文:
-定理 cast_mul
-  条件: [非结合环 α] (m n)
-  结论: ((m * n : ZNum) : α) = m * n
-  证明: by
-  rw [← cast_to_int]; rw [mul_to_int]; rw [Int.cast_mul]; rw [cast_to_int]; rw [cast_to_int]
-
-Depends on / 依赖: Int.cast_mul, cast_mul, cast_to_int, mul_to_int
+/-
+**ZNum.cast_mul** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_mul [NonAssocRing α] (m n) : ((m * n : ZNum) : α) = m * n
+参数：m n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.cast_to_int`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ZNum)
+, ↑↑n = ↑n
+· 使用定理 `ZNum.mul_to_int`：∀ (m n : ZNum), ↑(m * n) = ↑m * ↑n
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
 -/
 theorem cast_mul [NonAssocRing α] (m n) : ((m * n : ZNum) : α) = m * n := by
-  rw [← cast_to_int]; rw [mul_to_int]; rw [Int.cast_mul]; rw [cast_to_int]; rw [cast_to_int]
-
-/--
-theorem `ofInt'_neg` / 定理 `ofInt'_neg`
-
-English:
-theorem ofInt'_neg
-  statement: forall n : Int, ofInt' (-n) = -ofInt' n
-
-中文:
-定理 of整数'_neg
-  结论: 对任意 n : 整数, of整数' (-n) = -of整数' n
+  rw [← cast_to_int, mul_to_int, Int.cast_mul, cast_to_int, cast_to_int]
+/-
+**ZNum.ofInt'_neg** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ℤ), ZNum.ofInt' (-n) = -ZNum.ofInt' n
+参数：n : ℤ；-n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Num.zneg_toZNumNeg`：zneg_toZNumNeg (n : Num) : -n.toZNumNeg = n.toZNum
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Num.ofNat'_zero`：Num.ofNat' 0 = 0
+· 使用定理 `Num.zneg_toZNum`：zneg_toZNum (n : Num) : -n.toZNum = n.toZNumNeg
 -/
-theorem ofInt'_neg : forall n : Int, ofInt' (-n) = -ofInt' n
-  | -[n+1] => show ofInt' (n + 1 : Nat) = _ by simp only [ofInt', Num.zneg_toZNumNeg]
+theorem ofInt'_neg : ∀ n : ℤ, ofInt' (-n) = -ofInt' n
+  | -[n+1] => show ofInt' (n + 1 : ℕ) = _ by simp only [ofInt', Num.zneg_toZNumNeg]
   | 0 => show Num.toZNum (Num.ofNat' 0) = -Num.toZNum (Num.ofNat' 0) by rw [Num.ofNat'_zero]; rfl
-  | (n + 1 : Nat) => show Num.toZNumNeg _ = -Num.toZNum _ by rw [Num.zneg_toZNum]
-
-/--
-theorem `of_to_int'` / 定理 `of_to_int'`
-
-English:
-theorem of_to_int'
-  statement: forall n : ZNum, ZNum.ofInt' n = n
-
-中文:
-定理 of_to_int'
-  结论: 对任意 n : ZNum, ZNum.of整数' n = n
+  | (n + 1 : ℕ) => show Num.toZNumNeg _ = -Num.toZNum _ by rw [Num.zneg_toZNum]
+/-
+**ZNum.of_to_int'** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ZNum), ZNum.ofInt' ↑n = n
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Num.ofNat'_zero`：Num.ofNat' 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ZNum.cast_pos`：cast_pos [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(pos n : α) = n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PosNum.cast_to_nat`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] (n : Po
+sNum), ↑↑n = ↑n
+· 使用定理 `Num.ofInt'_toZNum`：∀ (n : ℕ), (↑n).toZNum = ZNum.ofInt' ↑n
+· 使用定理 `PosNum.of_to_nat`：of_to_nat : forall n : PosNum, ((n : Nat) : Num) = Num
+.pos n
+· 使用定理 `ZNum.cast_neg`：cast_neg [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(neg n : α) = -n
+· 使用定理 `ZNum.ofInt'_neg`：∀ (n : ℤ), ZNum.ofInt' (-n) = -ZNum.ofInt' n
 -/
-theorem of_to_int' : forall n : ZNum, ZNum.ofInt' n = n
+theorem of_to_int' : ∀ n : ZNum, ZNum.ofInt' n = n
   | 0 => by
     dsimp [ofInt', cast_zero]
     simp only [Num.ofNat'_zero, Num.toZNum]
   | pos a => by rw [cast_pos, ← PosNum.cast_to_nat, ← Num.ofInt'_toZNum, PosNum.of_to_nat]; rfl
   | neg a => by
-    rw [cast_neg]; rw [ofInt'_neg]; rw [← PosNum.cast_to_nat]; rw [← Num.ofInt'_toZNum]; rw [PosNum.of_to_nat]; rfl
-
-/--
-theorem `to_int_inj` / 定理 `to_int_inj`
-
-English:
-theorem to_int_inj
-  given: {m n : ZNum}
-  statement: (m : Int) = n ↔ m = n
-  proof: ⟨fun h => Function.LeftInverse.injective of_to_int' h, congr_arg _⟩
-
-中文:
-定理 to_int_inj
-  条件: {m n : ZNum}
-  结论: (m : 整数) = n ↔ m = n
-  证明: ⟨fun h => Function.LeftInverse.injective of_to_int' h, congr_arg _⟩
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, congr_arg, injective, of_to_int
+    rw [cast_neg, ofInt'_neg, ← PosNum.cast_to_nat, ← Num.ofInt'_toZNum, PosNum.of_to_nat]; rfl
+/-
+**ZNum.to_int_inj** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：to_int_inj {m n : ZNum} : (m : Int) = n ↔ m = n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `ZNum.of_to_int'`：∀ (n : ZNum), ZNum.ofInt' ↑n = n
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem to_int_inj {m n : ZNum} : (m : Int) = n ↔ m = n :=
+theorem to_int_inj {m n : ZNum} : (m : ℤ) = n ↔ m = n :=
   ⟨fun h => Function.LeftInverse.injective of_to_int' h, congr_arg _⟩
-
-/--
-theorem `cmp_to_int` / 定理 `cmp_to_int`
-
-English:
-theorem cmp_to_int
-  statement: forall m n, (Ordering.casesOn (cmp m n) ((m : Int) < n) (m = n) ((n : Int) < m) : Prop)
-  proof: PosNum.cmp_to_nat b a; revert this; dsimp [cmp]
-    cases PosNum.cmp b a <;> [simp; simp +contextual; simp]
-  | pos _, 0 => PosNum.cast_pos _
-  | pos _, neg _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
-| 0, neg _ => neg_lt_zero.2 PosNum.cast_pos _
-| neg _, 0 => neg_lt_zero.2 PosNum.cast_pos _
-  | neg _, pos _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
-  | 0, pos _ => PosNum.cast_pos _
-
-@[norm_cast]
-
-中文:
-定理 cmp_to_int
-  结论: 对任意 m n, (Ordering.casesOn (cmp m n) ((m : 整数) < n) (m = n) ((n : 整数) < m) : 命题)
-  证明: PosNum.cmp_to_nat b a; revert this; dsimp [cmp]
-    cases PosNum.cmp b a <;> [simp; simp +contextual; simp]
-  | pos _, 0 => PosNum.cast_pos _
-  | pos _, neg _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
-| 0, neg _ => neg_lt_zero.2 PosNum.cast_pos _
-| neg _, 0 => neg_lt_zero.2 PosNum.cast_pos _
-  | neg _, pos _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
-  | 0, pos _ => PosNum.cast_pos _
-
-@[norm_cast]
-
-Depends on / 依赖: PosNum, PosNum.cmp_to_nat, cmp_to_nat, revert
+/-
+**ZNum.cmp_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cmp_to_int : forall m n, (Ordering.casesOn (cmp m n) ((m : Int) < n) (m = 
+n) ((n : Int) < m) : Prop) | 0, 0 => rfl | pos a, pos b => by simpa using! PosNu
+m.cmp_to_nat a b | neg a, neg b => by have
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZNum.pos.injEq`：∀ (a a_1 : PosNum), (ZNum.pos a = ZNum.pos a_1) = (a = a
+_1)
+· 使用定理 `PosNum.cmp_to_nat`：cmp_to_nat : forall m n, (Ordering.casesOn (cmp m n) 
+((m : Nat) < n) (m = n) ((n : Nat) < m) : Prop) | 1, 1 => rfl | bit0 a, 1 => let
+ h : (1…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `PosNum.cast_pos`：cast_pos [Semiring α] [PartialOrder α] [IsStrictOrdered
+Ring α] (n : PosNum) : 0 < (n : α)
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_lt_zero`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddLeft
+StrictMono α] {a : α}, -a < 0 ↔ 0 < a
 -/
-theorem cmp_to_int : forall m n, (Ordering.casesOn (cmp m n) ((m : Int) < n) (m = n) ((n : Int) < m) : Prop)
+theorem cmp_to_int : ∀ m n, (Ordering.casesOn (cmp m n) ((m : ℤ) < n) (m = n) ((n : ℤ) < m) : Prop)
   | 0, 0 => rfl
   | pos a, pos b => by simpa using! PosNum.cmp_to_nat a b
   | neg a, neg b => by
@@ -1154,143 +1008,133 @@ theorem cmp_to_int : forall m n, (Ordering.casesOn (cmp m n) ((m : Int) < n) (m 
     cases PosNum.cmp b a <;> [simp; simp +contextual; simp]
   | pos _, 0 => PosNum.cast_pos _
   | pos _, neg _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
-| 0, neg _ => neg_lt_zero.2 PosNum.cast_pos _
-| neg _, 0 => neg_lt_zero.2 PosNum.cast_pos _
+  | 0, neg _ => neg_lt_zero.2 <| PosNum.cast_pos _
+  | neg _, 0 => neg_lt_zero.2 <| PosNum.cast_pos _
   | neg _, pos _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
   | 0, pos _ => PosNum.cast_pos _
 
 @[norm_cast]
-/--
-theorem `lt_to_int` / 定理 `lt_to_int`
-
-English:
-theorem lt_to_int
-  given: {m n : ZNum}
-  statement: (m : Int) < n ↔ m < n
-  proof: show (m : Int) < n ↔ cmp m n = Ordering.lt from
-    match cmp m n, cmp_to_int m n with
-    | Ordering.lt, h => by simp only at h; simp [h]
-    | Ordering.eq, h => by simp only at h; simp [h]
-    | Ordering.gt, h => by simp [not_lt_of_gt h]
-
-中文:
-定理 lt_to_int
-  条件: {m n : ZNum}
-  结论: (m : 整数) < n ↔ m < n
-  证明: show (m : Int) < n ↔ cmp m n = Ordering.lt from
-    match cmp m n, cmp_to_int m n with
-    | Ordering.lt, h => by simp only at h; simp [h]
-    | Ordering.eq, h => by simp only at h; simp [h]
-    | Ordering.gt, h => by simp [not_lt_of_gt h]
-
-Depends on / 依赖: Ordering, Ordering.eq, Ordering.gt, Ordering.lt, cmp_to_int, not_lt_of_gt
+/-
+**ZNum.lt_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：lt_to_int {m n : ZNum} : (m : Int) < n ↔ m < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZNum.cmp_to_int`：cmp_to_int : forall m n, (Ordering.casesOn (cmp m n) ((
+m : Int) < n) (m = n) ((n : Int) < m) : Prop) | 0, 0 => rfl | pos a, pos b => by
+ simp…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_lt_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ < a
 -/
-theorem lt_to_int {m n : ZNum} : (m : Int) < n ↔ m < n :=
-  show (m : Int) < n ↔ cmp m n = Ordering.lt from
+theorem lt_to_int {m n : ZNum} : (m : ℤ) < n ↔ m < n :=
+  show (m : ℤ) < n ↔ cmp m n = Ordering.lt from
     match cmp m n, cmp_to_int m n with
     | Ordering.lt, h => by simp only at h; simp [h]
     | Ordering.eq, h => by simp only at h; simp [h]
     | Ordering.gt, h => by simp [not_lt_of_gt h]
-
-/--
-theorem `le_to_int` / 定理 `le_to_int`
-
-English:
-theorem le_to_int
-  given: {m n : ZNum}
-  statement: (m : Int) <= n ↔ m <= n
-  proof: by
-  rw [← not_lt]; exact not_congr lt_to_int
-
-@[simp, norm_cast]
-
-中文:
-定理 le_to_int
-  条件: {m n : ZNum}
-  结论: (m : 整数) <= n ↔ m <= n
-  证明: by
-  rw [← not_lt]; exact not_congr lt_to_int
-
-@[simp, norm_cast]
-
-Depends on / 依赖: lt_to_int, not_congr, not_lt
+/-
+**ZNum.le_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：le_to_int {m n : ZNum} : (m : Int) <= n ↔ m <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `ZNum.lt_to_int`：lt_to_int {m n : ZNum} : (m : Int) < n ↔ m < n
 -/
-theorem le_to_int {m n : ZNum} : (m : Int) <= n ↔ m <= n := by
+theorem le_to_int {m n : ZNum} : (m : ℤ) ≤ n ↔ m ≤ n := by
   rw [← not_lt]; exact not_congr lt_to_int
 
 @[simp, norm_cast]
-/--
-theorem `cast_lt` / 定理 `cast_lt`
-
-English:
-theorem cast_lt
-  given: [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum}
-  proof: by
-  rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_lt]; rw [lt_to_int]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_lt
-  条件: [环 α] [偏序 α] [是StrictOrdered环 α] {m n : ZNum}
-  证明: by
-  rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_lt]; rw [lt_to_int]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Int.cast_lt, cast_lt, cast_to_int, lt_to_int
+/-
+**ZNum.cast_lt** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_lt [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum} : (
+m : α) < n ↔ m < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.cast_to_int`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ZNum)
+, ↑↑n = ↑n
+· 使用定理 `Int.cast_lt`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_1 : P
+artialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {m n : ℤ}, ↑m < ↑
+n…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `ZNum.lt_to_int`：lt_to_int {m n : ZNum} : (m : Int) < n ↔ m < n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem cast_lt [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum} :
     (m : α) < n ↔ m < n := by
-  rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_lt]; rw [lt_to_int]
+  rw [← cast_to_int m, ← cast_to_int n, Int.cast_lt, lt_to_int]
 
 @[simp, norm_cast]
-/--
-theorem `cast_le` / 定理 `cast_le`
-
-English:
-theorem cast_le
-  given: [Ring α] [LinearOrder α] [IsStrictOrderedRing α] {m n : ZNum}
-  proof: by
-  rw [← not_lt]; exact not_congr cast_lt
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_le
-  条件: [环 α] [线性序 α] [是StrictOrdered环 α] {m n : ZNum}
-  证明: by
-  rw [← not_lt]; exact not_congr cast_lt
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_lt, not_congr, not_lt
+/-
+**ZNum.cast_le** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_le [Ring α] [LinearOrder α] [IsStrictOrderedRing α] {m n : ZNum} : (m
+ : α) <= n ↔ m <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `ZNum.cast_lt`：cast_lt [Ring α] [PartialOrder α] [IsStrictOrderedRing α] 
+{m n : ZNum} : (m : α) < n ↔ m < n
 -/
 theorem cast_le [Ring α] [LinearOrder α] [IsStrictOrderedRing α] {m n : ZNum} :
-    (m : α) <= n ↔ m <= n := by
+    (m : α) ≤ n ↔ m ≤ n := by
   rw [← not_lt]; exact not_congr cast_lt
 
 @[simp, norm_cast]
-/--
-theorem `cast_inj` / 定理 `cast_inj`
-
-English:
-theorem cast_inj
-  given: [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum}
-  proof: by
-  rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_inj (α := α)]; rw [to_int_inj]
-
-中文:
-定理 cast_inj
-  条件: [环 α] [偏序 α] [是StrictOrdered环 α] {m n : ZNum}
-  证明: by
-  rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_inj (α := α)]; rw [to_int_inj]
-
-Depends on / 依赖: Int.cast_inj, cast_inj, cast_to_int, to_int_inj
+/-
+**ZNum.cast_inj** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_inj [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum} : 
+(m : α) = n ↔ m = n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.cast_to_int`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ZNum)
+, ↑↑n = ↑n
+· 使用引理 `Int.cast_inj`：cast_inj : (m : α) = n ↔ m = n
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `ZNum.to_int_inj`：to_int_inj {m n : ZNum} : (m : Int) = n ↔ m = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem cast_inj [Ring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : ZNum} :
     (m : α) = n ↔ m = n := by
-  rw [← cast_to_int m]; rw [← cast_to_int n]; rw [Int.cast_inj (α := α)]; rw [to_int_inj]
+  rw [← cast_to_int m, ← cast_to_int n, Int.cast_inj (α := α), to_int_inj]
 
 /-- This tactic tries to turn an (in)equality about `ZNum`s to one about `Int`s by rewriting.
 ```lean
@@ -1315,62 +1159,11 @@ example (n : ZNum) (m : ZNum) : n ≤ n + m * m := by
 scoped macro (name := transfer) "transfer" : tactic => `(tactic|
     (intros; transfer_rw; try simp [add_comm, add_left_comm, mul_comm, mul_left_comm]))
 
-/--
-Instance `linearOrder` / 实例 `linearOrder`
-
-English:
-instance linearOrder
-  signature: : LinearOrder ZNum where
-  body: by
-    intro a b
-    transfer_rw
-    apply lt_iff_le_not_ge
-  le_refl := by transfer
-  le_trans := by
-    intro a b c
-    transfer_rw
-    apply le_trans
-  le_antisymm := by
-    intro a b
-    transfer_rw
-    apply le_antisymm
-  le_total := by
-    intro a b
-    transfer_rw
-    apply le_total
-  -- This is relying on an automatically generated instance name, generated in a `deriving` handler.
-  -- See https://github.com/leanprover/lean4/issues/2343
-  toDecidableEq := instDecidableEqZNum
-  toDecidableLE := ZNum.decidableLE
-  toDecidableLT := ZNum.decidableLT
-
-中文:
-实例 linearOrder
-  签名: : 线性序 ZNum where
-  定义体: by
-    intro a b
-    transfer_rw
-    apply lt_iff_le_not_ge
-  le_refl := by transfer
-  le_trans := by
-    intro a b c
-    transfer_rw
-    apply le_trans
-  le_antisymm := by
-    intro a b
-    transfer_rw
-    apply le_antisymm
-  le_total := by
-    intro a b
-    transfer_rw
-    apply le_total
-  -- This is relying on an automatically generated instance name, generated in a `deriving` handler.
-  -- See https://github.com/leanprover/lean4/issues/2343
-  toDecidableEq := instDecidableEqZNum
-  toDecidableLE := ZNum.decidableLE
-  toDecidableLT := ZNum.decidableLT
-
-Depends on / 依赖: le_antisymm, le_refl, le_total, le_trans, lt_iff_le_not_ge, transfer, transfer_rw
+/-
+**ZNum.linearOrder** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：linearOrder : LinearOrder ZNum where lt_iff_le_not_ge
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance linearOrder : LinearOrder ZNum where
   lt_iff_le_not_ge := by
@@ -1395,85 +1188,35 @@ instance linearOrder : LinearOrder ZNum where
   toDecidableEq := instDecidableEqZNum
   toDecidableLE := ZNum.decidableLE
   toDecidableLT := ZNum.decidableLT
-
-/--
-Instance `addMonoid` / 实例 `addMonoid`
-
-English:
-instance addMonoid
-  signature: : AddMonoid ZNum where
-  body: by transfer
-  zero_add := zero_add
-  add_zero := add_zero
-  nsmul := nsmulRec
-
-中文:
-实例 addMonoid
-  签名: : 加法幺半群 ZNum where
-  定义体: by transfer
-  zero_add := zero_add
-  add_zero := add_zero
-  nsmul := nsmulRec
-
-Depends on / 依赖: add_zero, nsmulRec, transfer, zero_add
+/-
+**ZNum.addMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：addMonoid : AddMonoid ZNum where add_assoc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZNum.zero_add`：zero_add (n : ZNum) : 0 + n = n
+· 使用定理 `ZNum.add_zero`：add_zero (n : ZNum) : n + 0 = n
 -/
 instance addMonoid : AddMonoid ZNum where
   add_assoc := by transfer
   zero_add := zero_add
   add_zero := add_zero
   nsmul := nsmulRec
-
-/--
-Instance `addCommGroup` / 实例 `addCommGroup`
-
-English:
-instance addCommGroup
-  signature: : AddCommGroup ZNum
-  body: { ZNum.addMonoid with
-    add_comm := by transfer
-    zsmul := zsmulRec
-    neg_add_cancel := by transfer }
-
-中文:
-实例 addCommGroup
-  签名: : 加法交换群 ZNum
-  定义体: { ZNum.addMonoid with
-    add_comm := by transfer
-    zsmul := zsmulRec
-    neg_add_cancel := by transfer }
-
-Depends on / 依赖: ZNum.addMonoid, addMonoid, add_comm, neg_add_cancel, transfer, zsmulRec
+/-
+**ZNum.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：addCommGroup : AddCommGroup ZNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommGroup : AddCommGroup ZNum :=
   { ZNum.addMonoid with
     add_comm := by transfer
     zsmul := zsmulRec
     neg_add_cancel := by transfer }
-
-/--
-Instance `addMonoidWithOne` / 实例 `addMonoidWithOne`
-
-English:
-instance addMonoidWithOne
-  signature: : AddMonoidWithOne ZNum
-  body: { ZNum.addMonoid with
-    natCast := fun n => ZNum.ofInt' n
-    natCast_zero := show (Num.ofNat' 0).toZNum = 0 by rw [Num.ofNat'_zero]; rfl
-    natCast_succ := fun n =>
-      show (Num.ofNat' (n + 1)).toZNum = (Num.ofNat' n).toZNum + 1 by
-        rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [Num.toZNum_succ]; rw [ZNum.add_one] }
-
-中文:
-实例 addMonoidWithOne
-  签名: : 加法带幺幺半群 ZNum
-  定义体: { ZNum.addMonoid with
-    natCast := fun n => ZNum.ofInt' n
-    natCast_zero := show (Num.ofNat' 0).toZNum = 0 by rw [Num.ofNat'_zero]; rfl
-    natCast_succ := fun n =>
-      show (Num.ofNat' (n + 1)).toZNum = (Num.ofNat' n).toZNum + 1 by
-        rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [Num.toZNum_succ]; rw [ZNum.add_one] }
-
-Depends on / 依赖: Num.add_one, Num.ofNat, Num.toZNum_succ, ZNum.addMonoid, ZNum.add_one, ZNum.ofInt, _succ, _zero, addMonoid, add_one, natCast, natCast_succ, natCast_zero, toZNum, toZNum_succ
+/-
+**ZNum.addMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：addMonoidWithOne : AddMonoidWithOne ZNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addMonoidWithOne : AddMonoidWithOne ZNum :=
   { ZNum.addMonoid with
@@ -1481,66 +1224,32 @@ instance addMonoidWithOne : AddMonoidWithOne ZNum :=
     natCast_zero := show (Num.ofNat' 0).toZNum = 0 by rw [Num.ofNat'_zero]; rfl
     natCast_succ := fun n =>
       show (Num.ofNat' (n + 1)).toZNum = (Num.ofNat' n).toZNum + 1 by
-        rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [Num.toZNum_succ]; rw [ZNum.add_one] }
+        rw [Num.ofNat'_succ, Num.add_one, Num.toZNum_succ, ZNum.add_one] }
 
 -- The next theorems are declared outside of the instance to prevent timeouts.
 
 set_option backward.privateInPublic true in
-/--
-theorem `mul_comm` / 定理 `mul_comm`
-
-English:
-theorem mul_comm
-  statement: forall (a b : ZNum), a * b = b * a
-  proof: by transfer
-
-中文:
-定理 mul_comm
-  结论: 对任意 (a b : ZNum), a * b = b * a
-  证明: by transfer
+/-
+**ZNum.mul_comm** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem mul_comm : forall (a b : ZNum), a * b = b * a := by transfer
+private theorem mul_comm : ∀ (a b : ZNum), a * b = b * a := by transfer
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `commRing` / 实例 `commRing`
-
-English:
-instance commRing
-  signature: : CommRing ZNum
-  body: { ZNum.addCommGroup, ZNum.addMonoidWithOne with
-    mul_assoc a b c := by transfer
-    zero_mul := by transfer
-    mul_zero := by transfer
-    one_mul := by transfer
-    mul_one := by transfer
-    left_distrib := by
-      transfer
-      simp [mul_add]
-    right_distrib := by
-      transfer
-      simp [mul_add, _root_.mul_comm]
-    mul_comm := mul_comm }
-
-中文:
-实例 commRing
-  签名: : 交换环 ZNum
-  定义体: { ZNum.addCommGroup, ZNum.addMonoidWithOne with
-    mul_assoc a b c := by transfer
-    zero_mul := by transfer
-    mul_zero := by transfer
-    one_mul := by transfer
-    mul_one := by transfer
-    left_distrib := by
-      transfer
-      simp [mul_add]
-    right_distrib := by
-      transfer
-      simp [mul_add, _root_.mul_comm]
-    mul_comm := mul_comm }
-
-Depends on / 依赖: ZNum.addCommGroup, ZNum.addMonoidWithOne, _root_, _root_.mul_comm, addCommGroup, addMonoidWithOne, left_distrib, mul_add, mul_assoc, mul_comm, mul_one, mul_zero, one_mul, right_distrib, transfer, zero_mul
+/-
+**ZNum.commRing** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：commRing : CommRing ZNum
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGroup.add_comm`：∀ {G : Type u} [self : AddCommGroup G] (a b : G),
+ a + b = b + a
+· 使用定理 `AddMonoidWithOne.natCast_zero`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R], ↑0 = 0
+· 使用定理 `AddMonoidWithOne.natCast_succ`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R] (n : ℕ), ↑(n + 1) = ↑n + 1
+· 使用定理 `_private.Mathlib.Data.Num.ZNum.0.ZNum.mul_comm`：∀ (a b : ZNum), a * b = 
+b * a
 -/
 instance commRing : CommRing ZNum :=
   { ZNum.addCommGroup, ZNum.addMonoidWithOne with
@@ -1556,456 +1265,426 @@ instance commRing : CommRing ZNum :=
       transfer
       simp [mul_add, _root_.mul_comm]
     mul_comm := mul_comm }
-
-/--
-Instance `nontrivial` / 实例 `nontrivial`
-
-English:
-instance nontrivial
-  signature: : Nontrivial ZNum
-  body: { exists_pair_ne := ⟨0, 1, by decide⟩ }
-
-中文:
-实例 nontrivial
-  签名: : 非平凡 ZNum
-  定义体: { exists_pair_ne := ⟨0, 1, by decide⟩ }
-
-Depends on / 依赖: exists_pair_ne
+/-
+**ZNum.nontrivial** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：nontrivial : Nontrivial ZNum
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
 -/
 instance nontrivial : Nontrivial ZNum :=
   { exists_pair_ne := ⟨0, 1, by decide⟩ }
-
-/--
-Instance `zeroLEOneClass` / 实例 `zeroLEOneClass`
-
-English:
-instance zeroLEOneClass
-  signature: : ZeroLEOneClass ZNum
-  body: { zero_le_one := by decide }
-
-中文:
-实例 zeroLEOneClass
-  签名: : ZeroLEOne类 ZNum
-  定义体: { zero_le_one := by decide }
-
-Depends on / 依赖: zero_le_one
+/-
+**ZNum.zeroLEOneClass** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：zeroLEOneClass : ZeroLEOneClass ZNum
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
 -/
 instance zeroLEOneClass : ZeroLEOneClass ZNum :=
   { zero_le_one := by decide }
-
-/--
-Instance `isOrderedAddMonoid` / 实例 `isOrderedAddMonoid`
-
-English:
-instance isOrderedAddMonoid
-  signature: : IsOrderedAddMonoid ZNum where
-  body: by revert h; transfer_rw; intro h; gcongr
-
-中文:
-实例 isOrderedAddMonoid
-  签名: : 是OrderedAdd幺半群 ZNum where
-  定义体: by revert h; transfer_rw; intro h; gcongr
-
-Depends on / 依赖: revert, transfer_rw
+/-
+**ZNum.isOrderedAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：isOrderedAddMonoid : IsOrderedAddMonoid ZNum where add_le_add_left a b h c
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.le_to_int`：le_to_int {m n : ZNum} : (m : Int) <= n ↔ m <= n
+· 使用定理 `ZNum.cast_add`：cast_add [AddGroupWithOne α] : forall m n, ((m + n : ZNum
+) : α) = m + n | 0, a => by cases a <;> exact (_root_.zero_add _).symm | b, 0 =>
+ by…
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 instance isOrderedAddMonoid : IsOrderedAddMonoid ZNum where
   add_le_add_left a b h c := by revert h; transfer_rw; intro h; gcongr
-
-/--
-Instance `isStrictOrderedRing` / 实例 `isStrictOrderedRing`
-
-English:
-instance isStrictOrderedRing
-  signature: : IsStrictOrderedRing ZNum
-  body: .of_mul_pos fun a b => by
-    transfer_rw
-    apply mul_pos
-
-@[simp, norm_cast]
-
-中文:
-实例 isStrictOrderedRing
-  签名: : 是StrictOrdered环 ZNum
-  定义体: .of_mul_pos fun a b => by
-    transfer_rw
-    apply mul_pos
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mul_pos, of_mul_pos, transfer_rw
+/-
+**ZNum.isStrictOrderedRing** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：isStrictOrderedRing : IsStrictOrderedRing ZNum
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsStrictOrderedRing.of_mul_pos`：IsStrictOrderedRing.of_mul_pos [Ring R] 
+[PartialOrder R] [IsOrderedAddMonoid R] [ZeroLEOneClass R] [Nontrivial R] (mul_p
+os : forall a b : R,…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.lt_to_int`：lt_to_int {m n : ZNum} : (m : Int) < n ↔ m < n
+· 使用定理 `ZNum.mul_to_int`：∀ (m n : ZNum), ↑(m * n) = ↑m * ↑n
+· 使用定理 `ZNum.cast_zero`：cast_zero [Zero α] [One α] [Add α] [Neg α] : ((0 : ZNum)
+ : α) = 0
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 instance isStrictOrderedRing : IsStrictOrderedRing ZNum :=
-  .of_mul_pos fun a b => by
+  .of_mul_pos fun a b ↦ by
     transfer_rw
     apply mul_pos
 
 @[simp, norm_cast]
-/--
-theorem `cast_sub` / 定理 `cast_sub`
-
-English:
-theorem cast_sub
-  given: [AddCommGroupWithOne α] (m n)
-  statement: ((m - n : ZNum) : α) = m - n
-  proof: by
-  simp [sub_eq_neg_add]
-
-@[norm_cast]
-
-中文:
-定理 cast_sub
-  条件: [加法交换带幺群 α] (m n)
-  结论: ((m - n : ZNum) : α) = m - n
-  证明: by
-  simp [sub_eq_neg_add]
-
-@[norm_cast]
-
-Depends on / 依赖: sub_eq_neg_add
+/-
+**ZNum.cast_sub** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：cast_sub [AddCommGroupWithOne α] (m n) : ((m - n : ZNum) : α) = m - n
+参数：m n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用定理 `ZNum.cast_add`：cast_add [AddGroupWithOne α] : forall m n, ((m + n : ZNum
+) : α) = m + n | 0, a => by cases a <;> exact (_root_.zero_add _).symm | b, 0 =>
+ by…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ZNum.cast_zneg`：∀ {α : Type u_1} [inst : SubtractionMonoid α] [inst_1 : 
+One α] (n : ZNum), ↑(-n) = -↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem cast_sub [AddCommGroupWithOne α] (m n) : ((m - n : ZNum) : α) = m - n := by
   simp [sub_eq_neg_add]
 
 @[norm_cast]
-/--
-theorem `neg_of_int` / 定理 `neg_of_int`
-
-English:
-theorem neg_of_int
-  statement: forall n, ((-n : Int) : ZNum) = -n
-
-中文:
-定理 neg_of_int
-  结论: 对任意 n, ((-n : 整数) : ZNum) = -n
+/-
+**ZNum.neg_of_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ℤ), ↑(-n) = -↑n
+参数：n : ℤ；-n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.zneg_zneg`：zneg_zneg (n : ZNum) : - -n = n
 -/
-theorem neg_of_int : forall n, ((-n : Int) : ZNum) = -n
-  | (_ + 1 : Nat) => rfl
+theorem neg_of_int : ∀ n, ((-n : ℤ) : ZNum) = -n
+  | (_ + 1 : ℕ) => rfl
   | 0 => by rw [Int.cast_neg]
   | -[_+1] => (zneg_zneg _).symm
 
 @[simp]
-/--
-theorem `ofInt'_eq` / 定理 `ofInt'_eq`
-
-English:
-theorem ofInt'_eq
-  statement: forall n : Int, ZNum.ofInt' n = n
-
-中文:
-定理 of整数'_eq
-  结论: 对任意 n : 整数, ZNum.of整数' n = n
+/-
+**ZNum.ofInt'_eq** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ℤ), ZNum.ofInt' n = ↑n
+参数：n : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_inj`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, -a = -b ↔ 
+a = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `Num.add_one`：∀ (n : Num), n + 1 = n.succ
+· 使用定理 `Num.zneg_toZNumNeg`：zneg_toZNumNeg (n : Num) : -n.toZNumNeg = n.toZNum
+· 使用定理 `Num.toZNum_succ`：∀ (n : Num), n.succ.toZNum = n.toZNum.succ
+· 使用定理 `ZNum.add_one`：∀ (n : ZNum), n + 1 = n.succ
 -/
-theorem ofInt'_eq : forall n : Int, ZNum.ofInt' n = n
-  | (n : Nat) => rfl
+theorem ofInt'_eq : ∀ n : ℤ, ZNum.ofInt' n = n
+  | (n : ℕ) => rfl
   | -[n+1] => by
-    change Num.toZNumNeg (n + 1 : Nat) = -(n + 1 : Nat)
-    rw [← neg_inj]; rw [neg_neg]; rw [Nat.cast_succ]; rw [Num.add_one]; rw [Num.zneg_toZNumNeg]; rw [Num.toZNum_succ]; rw [Nat.cast_succ]; rw [ZNum.add_one]
+    change Num.toZNumNeg (n + 1 : ℕ) = -(n + 1 : ℕ)
+    rw [← neg_inj, neg_neg, Nat.cast_succ, Num.add_one, Num.zneg_toZNumNeg, Num.toZNum_succ,
+      Nat.cast_succ, ZNum.add_one]
     rfl
 
 @[simp]
-/--
-theorem `of_nat_toZNum` / 定理 `of_nat_toZNum`
-
-English:
-theorem of_nat_toZNum
-  given: (n : Nat)
-  statement: Num.toZNum n = n
-  proof: rfl
-
-中文:
-定理 of_nat_toZNum
-  条件: (n : 自然数)
-  结论: Num.toZNum n = n
-  证明: rfl
+/-
+**ZNum.of_nat_toZNum** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：of_nat_toZNum (n : Nat) : Num.toZNum n = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem of_nat_toZNum (n : Nat) : Num.toZNum n = n :=
+theorem of_nat_toZNum (n : ℕ) : Num.toZNum n = n :=
   rfl
 
 -- The priority should be `high`er than `cast_to_int`.
 @[simp high, norm_cast]
-/--
-theorem `of_to_int` / 定理 `of_to_int`
-
-English:
-theorem of_to_int
-  given: (n : ZNum)
-  statement: ((n : Int) : ZNum) = n
-  proof: by rw [← ofInt'_eq, of_to_int']
-
-中文:
-定理 of_to_int
-  条件: (n : ZNum)
-  结论: ((n : 整数) : ZNum) = n
-  证明: by rw [← ofInt'_eq, of_to_int']
-
-Depends on / 依赖: of_to_int
+/-
+**ZNum.of_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：of_to_int (n : ZNum) : ((n : Int) : ZNum) = n
+参数：n : ZNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.ofInt'_eq`：∀ (n : ℤ), ZNum.ofInt' n = ↑n
+· 使用定理 `ZNum.of_to_int'`：∀ (n : ZNum), ZNum.ofInt' ↑n = n
 -/
-theorem of_to_int (n : ZNum) : ((n : Int) : ZNum) = n := by rw [← ofInt'_eq, of_to_int']
-
-/--
-theorem `to_of_int` / 定理 `to_of_int`
-
-English:
-theorem to_of_int
-  given: (n : Int)
-  statement: ((n : ZNum) : Int) = n
-  proof: Int.inductionOn' n 0 (by simp) (by simp) (by simp)
-
-@[simp]
-
-中文:
-定理 to_of_int
-  条件: (n : 整数)
-  结论: ((n : ZNum) : 整数) = n
-  证明: Int.inductionOn' n 0 (by simp) (by simp) (by simp)
-
-@[simp]
-
-Depends on / 依赖: Int.inductionOn, inductionOn
+theorem of_to_int (n : ZNum) : ((n : ℤ) : ZNum) = n := by rw [← ofInt'_eq, of_to_int']
+/-
+**ZNum.to_of_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：to_of_int (n : Int) : ((n : ZNum) : Int) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `ZNum.cast_add`：cast_add [AddGroupWithOne α] : forall m n, ((m + n : ZNum
+) : α) = m + n | 0, a => by cases a <;> exact (_root_.zero_add _).symm | b, 0 =>
+ by…
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Int.cast_sub`：cast_sub (m n) : ((m - n : Int) : R) = m - n
+· 使用定理 `ZNum.cast_sub`：cast_sub [AddCommGroupWithOne α] (m n) : ((m - n : ZNum) 
+: α) = m - n
 -/
-theorem to_of_int (n : Int) : ((n : ZNum) : Int) = n :=
+theorem to_of_int (n : ℤ) : ((n : ZNum) : ℤ) = n :=
   Int.inductionOn' n 0 (by simp) (by simp) (by simp)
 
 @[simp]
-/--
-theorem `of_nat_toZNumNeg` / 定理 `of_nat_toZNumNeg`
-
-English:
-theorem of_nat_toZNumNeg
-  given: (n : Nat)
-  statement: Num.toZNumNeg n = -n
-  proof: by rw [← of_nat_toZNum, Num.zneg_toZNum]
-
-@[simp, norm_cast]
-
-中文:
-定理 of_nat_toZNumNeg
-  条件: (n : 自然数)
-  结论: Num.toZNumNeg n = -n
-  证明: by rw [← of_nat_toZNum, Num.zneg_toZNum]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Num.zneg_toZNum, of_nat_toZNum, zneg_toZNum
+/-
+**ZNum.of_nat_toZNumNeg** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：of_nat_toZNumNeg (n : Nat) : Num.toZNumNeg n = -n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.of_nat_toZNum`：of_nat_toZNum (n : Nat) : Num.toZNum n = n
+· 使用定理 `Num.zneg_toZNum`：zneg_toZNum (n : Num) : -n.toZNum = n.toZNumNeg
 -/
-theorem of_nat_toZNumNeg (n : Nat) : Num.toZNumNeg n = -n := by rw [← of_nat_toZNum, Num.zneg_toZNum]
+theorem of_nat_toZNumNeg (n : ℕ) : Num.toZNumNeg n = -n := by rw [← of_nat_toZNum, Num.zneg_toZNum]
 
 @[simp, norm_cast]
-/--
-theorem `of_intCast` / 定理 `of_intCast`
-
-English:
-theorem of_intCast
-  given: [AddGroupWithOne α] (n : Int)
-  statement: ((n : ZNum) : α) = n
-  proof: by
-  rw [← cast_to_int]; rw [to_of_int]
-
-@[simp, norm_cast]
-
-中文:
-定理 of_intCast
-  条件: [加法带幺群 α] (n : 整数)
-  结论: ((n : ZNum) : α) = n
-  证明: by
-  rw [← cast_to_int]; rw [to_of_int]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_to_int, to_of_int
+/-
+**ZNum.of_intCast** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：of_intCast [AddGroupWithOne α] (n : Int) : ((n : ZNum) : α) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.cast_to_int`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ZNum)
+, ↑↑n = ↑n
+· 使用定理 `ZNum.to_of_int`：to_of_int (n : Int) : ((n : ZNum) : Int) = n
 -/
-theorem of_intCast [AddGroupWithOne α] (n : Int) : ((n : ZNum) : α) = n := by
-  rw [← cast_to_int]; rw [to_of_int]
+theorem of_intCast [AddGroupWithOne α] (n : ℤ) : ((n : ZNum) : α) = n := by
+  rw [← cast_to_int, to_of_int]
 
 @[simp, norm_cast]
-/--
-theorem `of_natCast` / 定理 `of_natCast`
-
-English:
-theorem of_natCast
-  given: [AddGroupWithOne α] (n : Nat)
-  statement: ((n : ZNum) : α) = n
-  proof: by
-  rw [← Int.cast_natCast]; rw [of_intCast]; rw [Int.cast_natCast]
-
-@[simp, norm_cast]
-
-中文:
-定理 of_natCast
-  条件: [加法带幺群 α] (n : 自然数)
-  结论: ((n : ZNum) : α) = n
-  证明: by
-  rw [← Int.cast_natCast]; rw [of_intCast]; rw [Int.cast_natCast]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Int.cast_natCast, cast_natCast, of_intCast
+/-
+**ZNum.of_natCast** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：of_natCast [AddGroupWithOne α] (n : Nat) : ((n : ZNum) : α) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `ZNum.of_intCast`：of_intCast [AddGroupWithOne α] (n : Int) : ((n : ZNum) 
+: α) = n
 -/
-theorem of_natCast [AddGroupWithOne α] (n : Nat) : ((n : ZNum) : α) = n := by
-  rw [← Int.cast_natCast]; rw [of_intCast]; rw [Int.cast_natCast]
+theorem of_natCast [AddGroupWithOne α] (n : ℕ) : ((n : ZNum) : α) = n := by
+  rw [← Int.cast_natCast, of_intCast, Int.cast_natCast]
 
 @[simp, norm_cast]
-/--
-theorem `dvd_to_int` / 定理 `dvd_to_int`
-
-English:
-theorem dvd_to_int
-  given: (m n : ZNum)
-  statement: (m : Int) ∣ n ↔ m ∣ n
-  proof: ⟨fun ⟨k, e⟩ => ⟨k, by rw [← of_to_int n, e]; simp⟩, fun ⟨k, e⟩ => ⟨k, by simp [e]⟩⟩
-
-中文:
-定理 dvd_to_int
-  条件: (m n : ZNum)
-  结论: (m : 整数) ∣ n ↔ m ∣ n
-  证明: ⟨fun ⟨k, e⟩ => ⟨k, by rw [← of_to_int n, e]; simp⟩, fun ⟨k, e⟩ => ⟨k, by simp [e]⟩⟩
-
-Depends on / 依赖: of_to_int
+/-
+**ZNum.dvd_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：dvd_to_int (m n : ZNum) : (m : Int) ∣ n ↔ m ∣ n
+参数：m n : ZNum。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.of_to_int`：of_to_int (n : ZNum) : ((n : Int) : ZNum) = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ZNum.mul_to_int`：∀ (m n : ZNum), ↑(m * n) = ↑m * ↑n
 -/
-theorem dvd_to_int (m n : ZNum) : (m : Int) ∣ n ↔ m ∣ n :=
+theorem dvd_to_int (m n : ZNum) : (m : ℤ) ∣ n ↔ m ∣ n :=
   ⟨fun ⟨k, e⟩ => ⟨k, by rw [← of_to_int n, e]; simp⟩, fun ⟨k, e⟩ => ⟨k, by simp [e]⟩⟩
 
 end ZNum
 
 namespace PosNum
 
-/--
-theorem `divMod_to_nat_aux` / 定理 `divMod_to_nat_aux`
-
-English:
-theorem divMod_to_nat_aux
-  statement: {n d : PosNum} {q r : Num} (h₁ : (r : Nat) + d * ((q : Nat) + q) = n)
-  proof: by
-  unfold divModAux
-  have : forall {r₂}, Num.ofZNum' (Num.sub' r (Num.pos d)) = some r₂ ↔ (r : Nat) = r₂ + d := by
-    intro r₂
-    apply Num.mem_ofZNum'.trans
-    rw [← ZNum.to_int_inj]; rw [Num.cast_toZNum]; rw [Num.cast_sub']; rw [sub_eq_iff_eq_add]; rw [← Int.natCast_inj]
-    simp
-  rcases e : Num.ofZNum' (Num.sub' r (Num.pos d)) with - | r₂
-  · rw [Num.cast_bit0, two_mul]
-    refine ⟨h₁, lt_of_not_ge fun h => ?_⟩
-    obtain ⟨r₂, e'⟩ := Nat.le.dest h
-    rw [← Num.to_of_nat r₂]; rw [add_comm] at e'
-    cases e.symm.trans (this.2 e'.symm)
-  · have := this.1 e
-    simp only [Num.cast_bit1]
-    constructor
-    · rwa [two_mul, add_comm _ 1, mul_add, mul_one, ← add_assoc, ← this]
-    · rwa [this, two_mul, add_lt_add_iff_right] at h₂
-
-中文:
-定理 divMod_to_nat_aux
-  结论: {n d : PosNum} {q r : Num} (h₁ : (r : 自然数) + d * ((q : 自然数) + q) = n)
-  证明: by
-  unfold divModAux
-  have : forall {r₂}, Num.ofZNum' (Num.sub' r (Num.pos d)) = some r₂ ↔ (r : Nat) = r₂ + d := by
-    intro r₂
-    apply Num.mem_ofZNum'.trans
-    rw [← ZNum.to_int_inj]; rw [Num.cast_toZNum]; rw [Num.cast_sub']; rw [sub_eq_iff_eq_add]; rw [← Int.natCast_inj]
-    simp
-  rcases e : Num.ofZNum' (Num.sub' r (Num.pos d)) with - | r₂
-  · rw [Num.cast_bit0, two_mul]
-    refine ⟨h₁, lt_of_not_ge fun h => ?_⟩
-    obtain ⟨r₂, e'⟩ := Nat.le.dest h
-    rw [← Num.to_of_nat r₂]; rw [add_comm] at e'
-    cases e.symm.trans (this.2 e'.symm)
-  · have := this.1 e
-    simp only [Num.cast_bit1]
-    constructor
-    · rwa [two_mul, add_comm _ 1, mul_add, mul_one, ← add_assoc, ← this]
-    · rwa [this, two_mul, add_lt_add_iff_right] at h₂
-
-Depends on / 依赖: Int.natCast_inj, Nat.le.dest, Num.cast_bit0, Num.cast_sub, Num.cast_toZNum, Num.mem_ofZNum, Num.ofZNum, Num.pos, Num.sub, Num.to_of_nat, ZNum.to_int_inj, add_comm, cast_bit0, cast_sub, cast_toZNum, divModAux, e.symm.trans, lt_of_not_ge, mem_ofZNum, natCast_inj
+/-
+**PosNum.divMod_to_nat_aux** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：divMod_to_nat_aux {n d : PosNum} {q r : Num} (h₁ : (r : Nat) + d * ((q : N
+at) + q) = n) (h₂ : (r : Nat) < 2 * d) : ((divModAux d q r).2 + d * (divModAux d
+ q r).1 : Nat) = ↑n ∧ ((divModAux d q r).2 : Nat) < d
+参数：h₁ : (r : Nat) + d * ((q : Nat) + q) = n；h₂ : (r : Nat) < 2 * d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Num.mem_ofZNum'`：∀ {m : Num} {n : ZNum}, m ∈ Num.ofZNum' n ↔ n = m.toZNu
+m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.to_int_inj`：to_int_inj {m n : ZNum} : (m : Int) = n ↔ m = n
+· 使用定理 `Num.cast_toZNum`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst
+_2 : Add α] [inst_3 : Neg α] (n : Num), ↑n.toZNum = ↑n
+· 使用定理 `Num.cast_sub'`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (m n : Num), 
+↑(m.sub' n) = ↑m - ↑n
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `Int.natCast_inj`：∀ {m n : ℕ}, ↑m = ↑n ↔ m = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Num.cast_to_nat`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] (n : Num),
+ ↑↑n = ↑n
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `PosNum.cast_to_nat`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] (n : Po
+sNum), ↑↑n = ↑n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Num.cast_bit0`：cast_bit0 [NonAssocSemiring α] (n : Num) : (n.bit0 : α) =
+ 2 * (n : α)
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Nat.le.dest`：∀ {n m : ℕ}, n ≤ m → ∃ k, n + k = m
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Num.to_of_nat`：∀ (n : ℕ), ↑↑n = n
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Num.cast_bit1`：cast_bit1 [NonAssocSemiring α] (n : Num) : (n.bit1 : α) =
+ 2 * (n : α) + 1
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+（共 42 条，此处仅展示前 30 条）
 -/
-theorem divMod_to_nat_aux {n d : PosNum} {q r : Num} (h₁ : (r : Nat) + d * ((q : Nat) + q) = n)
-    (h₂ : (r : Nat) < 2 * d) :
-    ((divModAux d q r).2 + d * (divModAux d q r).1 : Nat) = ↑n ∧ ((divModAux d q r).2 : Nat) < d := by
+theorem divMod_to_nat_aux {n d : PosNum} {q r : Num} (h₁ : (r : ℕ) + d * ((q : ℕ) + q) = n)
+    (h₂ : (r : ℕ) < 2 * d) :
+    ((divModAux d q r).2 + d * (divModAux d q r).1 : ℕ) = ↑n ∧ ((divModAux d q r).2 : ℕ) < d := by
   unfold divModAux
-  have : forall {r₂}, Num.ofZNum' (Num.sub' r (Num.pos d)) = some r₂ ↔ (r : Nat) = r₂ + d := by
+  have : ∀ {r₂}, Num.ofZNum' (Num.sub' r (Num.pos d)) = some r₂ ↔ (r : ℕ) = r₂ + d := by
     intro r₂
     apply Num.mem_ofZNum'.trans
-    rw [← ZNum.to_int_inj]; rw [Num.cast_toZNum]; rw [Num.cast_sub']; rw [sub_eq_iff_eq_add]; rw [← Int.natCast_inj]
+    rw [← ZNum.to_int_inj, Num.cast_toZNum, Num.cast_sub', sub_eq_iff_eq_add, ← Int.natCast_inj]
     simp
   rcases e : Num.ofZNum' (Num.sub' r (Num.pos d)) with - | r₂
   · rw [Num.cast_bit0, two_mul]
     refine ⟨h₁, lt_of_not_ge fun h => ?_⟩
     obtain ⟨r₂, e'⟩ := Nat.le.dest h
-    rw [← Num.to_of_nat r₂]; rw [add_comm] at e'
+    rw [← Num.to_of_nat r₂, add_comm] at e'
     cases e.symm.trans (this.2 e'.symm)
   · have := this.1 e
     simp only [Num.cast_bit1]
     constructor
     · rwa [two_mul, add_comm _ 1, mul_add, mul_one, ← add_assoc, ← this]
     · rwa [this, two_mul, add_lt_add_iff_right] at h₂
-
-/--
-theorem `divMod_to_nat` / 定理 `divMod_to_nat`
-
-English:
-theorem divMod_to_nat
-  given: (d n : PosNum)
-  proof: by
-  rw [Nat.div_mod_unique (PosNum.cast_pos _)]
-  induction n with
-  | one =>
-    exact divMod_to_nat_aux (by simp) (Nat.mul_le_mul_left 2 (PosNum.cast_pos d : (0 : Nat) < d))
-  | bit1 n IH =>
-    unfold divMod
-    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
-    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
-    simp only at IH ⊢
-    apply divMod_to_nat_aux <;> simp only [Num.cast_bit1, cast_bit1]
-    · rw [← two_mul, ← two_mul, add_right_comm, mul_left_comm, ← mul_add, IH.1]
-    · lia
-  | bit0 n IH =>
-    unfold divMod
-    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
-    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
-    simp only at IH ⊢
-    apply divMod_to_nat_aux
-    · simp only [Num.cast_bit0, cast_bit0]
-      rw [← two_mul]; rw [← two_mul]; rw [mul_left_comm]; rw [← mul_add]; rw [← IH.1]
-    · simpa using IH.2
-
-@[simp]
-
-中文:
-定理 divMod_to_nat
-  条件: (d n : PosNum)
-  证明: by
-  rw [Nat.div_mod_unique (PosNum.cast_pos _)]
-  induction n with
-  | one =>
-    exact divMod_to_nat_aux (by simp) (Nat.mul_le_mul_left 2 (PosNum.cast_pos d : (0 : Nat) < d))
-  | bit1 n IH =>
-    unfold divMod
-    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
-    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
-    simp only at IH ⊢
-    apply divMod_to_nat_aux <;> simp only [Num.cast_bit1, cast_bit1]
-    · rw [← two_mul, ← two_mul, add_right_comm, mul_left_comm, ← mul_add, IH.1]
-    · lia
-  | bit0 n IH =>
-    unfold divMod
-    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
-    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
-    simp only at IH ⊢
-    apply divMod_to_nat_aux
-    · simp only [Num.cast_bit0, cast_bit0]
-      rw [← two_mul]; rw [← two_mul]; rw [mul_left_comm]; rw [← mul_add]; rw [← IH.1]
-    · simpa using IH.2
-
-@[simp]
-
-Depends on / 依赖: Nat.div_mod_unique, Nat.mul_le_mul_left, PosNum, PosNum.cast_pos, cast_pos, divMod, divMod_to_nat_aux, div_mod_unique, mul_le_mul_left
+/-
+**PosNum.divMod_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：divMod_to_nat (d n : PosNum) : (n / d : Nat) = (divMod d n).1 ∧ (n % d : N
+at) = (divMod d n).2
+参数：d n : PosNum。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.div_mod_unique`：∀ {b a d c : ℕ}, 0 < b → (a / b = d ∧ a % b = c ↔ c 
++ b * d = a ∧ c < b)
+· 使用定理 `PosNum.cast_pos`：cast_pos [Semiring α] [PartialOrder α] [IsStrictOrdered
+Ring α] (n : PosNum) : 0 < (n : α)
+· 使用定理 `PosNum.divMod_to_nat_aux`：divMod_to_nat_aux {n d : PosNum} {q r : Num} (
+h₁ : (r : Nat) + d * ((q : Nat) + q) = n) (h₂ : (r : Nat) < 2 * d) : ((divModAux
+ d q r).2 + d …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.mul_le_mul_left`：∀ {n m : ℕ} (k : ℕ), n ≤ m → k * n ≤ k * m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PosNum.divMod.eq_def`：∀ (d x : PosNum),   d.divMod x =     match x with 
+    | n.bit0 =>       match d.divMod n with       | (q, r₁) => d.divModAux q r₁.
+bit0     |…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Num.cast_bit1`：cast_bit1 [NonAssocSemiring α] (n : Num) : (n.bit1 : α) =
+ 2 * (n : α) + 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Num.cast_bit0`：cast_bit0 [NonAssocSemiring α] (n : Num) : (n.bit0 : α) =
+ 2 * (n : α)
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem divMod_to_nat (d n : PosNum) :
-    (n / d : Nat) = (divMod d n).1 ∧ (n % d : Nat) = (divMod d n).2 := by
+    (n / d : ℕ) = (divMod d n).1 ∧ (n % d : ℕ) = (divMod d n).2 := by
   rw [Nat.div_mod_unique (PosNum.cast_pos _)]
   induction n with
   | one =>
-    exact divMod_to_nat_aux (by simp) (Nat.mul_le_mul_left 2 (PosNum.cast_pos d : (0 : Nat) < d))
+    exact divMod_to_nat_aux (by simp) (Nat.mul_le_mul_left 2 (PosNum.cast_pos d : (0 : ℕ) < d))
   | bit1 n IH =>
     unfold divMod
     -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
@@ -2021,49 +1700,35 @@ theorem divMod_to_nat (d n : PosNum) :
     simp only at IH ⊢
     apply divMod_to_nat_aux
     · simp only [Num.cast_bit0, cast_bit0]
-      rw [← two_mul]; rw [← two_mul]; rw [mul_left_comm]; rw [← mul_add]; rw [← IH.1]
+      rw [← two_mul, ← two_mul, mul_left_comm, ← mul_add, ← IH.1]
     · simpa using IH.2
 
 @[simp]
-/--
-theorem `div'_to_nat` / 定理 `div'_to_nat`
-
-English:
-theorem div'_to_nat
-  given: (n d)
-  statement: (div' n d : Nat) = n / d
-  proof: (divMod_to_nat _ _).1.symm
-
-@[simp]
-
-中文:
-定理 div'_to_nat
-  条件: (n d)
-  结论: (div' n d : 自然数) = n / d
-  证明: (divMod_to_nat _ _).1.symm
-
-@[simp]
+/-
+**PosNum.div'_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (n d : PosNum), ↑(n.div' d) = ↑n / ↑d
+参数：n d : PosNum；n.div' d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `PosNum.divMod_to_nat`：divMod_to_nat (d n : PosNum) : (n / d : Nat) = (di
+vMod d n).1 ∧ (n % d : Nat) = (divMod d n).2
 -/
-theorem div'_to_nat (n d) : (div' n d : Nat) = n / d :=
+theorem div'_to_nat (n d) : (div' n d : ℕ) = n / d :=
   (divMod_to_nat _ _).1.symm
 
 @[simp]
-/--
-theorem `mod'_to_nat` / 定理 `mod'_to_nat`
-
-English:
-theorem mod'_to_nat
-  given: (n d)
-  statement: (mod' n d : Nat) = n % d
-  proof: (divMod_to_nat _ _).2.symm
-
-中文:
-定理 mod'_to_nat
-  条件: (n d)
-  结论: (mod' n d : 自然数) = n % d
-  证明: (divMod_to_nat _ _).2.symm
+/-
+**PosNum.mod'_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：∀ (n d : PosNum), ↑(n.mod' d) = ↑n % ↑d
+参数：n d : PosNum；n.mod' d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `PosNum.divMod_to_nat`：divMod_to_nat (d n : PosNum) : (n / d : Nat) = (di
+vMod d n).1 ∧ (n % d : Nat) = (divMod d n).2
 -/
-theorem mod'_to_nat (n d) : (mod' n d : Nat) = n % d :=
+theorem mod'_to_nat (n d) : (mod' n d : ℕ) = n % d :=
   (divMod_to_nat _ _).2.symm
 
 end PosNum
@@ -2071,30 +1736,14 @@ end PosNum
 namespace Num
 
 @[simp]
-/--
-theorem `div_zero` / 定理 `div_zero`
-
-English:
-theorem div_zero
-  given: (n : Num)
-  statement: n / 0 = 0
-  proof: show n.div 0 = 0 by
-    cases n
-    · rfl
-    · simp [Num.div]
-
-@[simp, norm_cast]
-
-中文:
-定理 div_zero
-  条件: (n : Num)
-  结论: n / 0 = 0
-  证明: show n.div 0 = 0 by
-    cases n
-    · rfl
-    · simp [Num.div]
-
-@[simp, norm_cast]
+/-
+**Num.div_zero** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : Num), n / 0 = 0
+参数：n : Num。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem div_zero (n : Num) : n / 0 = 0 :=
   show n.div 0 = 0 by
@@ -2103,48 +1752,39 @@ protected theorem div_zero (n : Num) : n / 0 = 0 :=
     · simp [Num.div]
 
 @[simp, norm_cast]
-/--
-theorem `div_to_nat` / 定理 `div_to_nat`
-
-English:
-theorem div_to_nat
-  statement: forall n d, ((n / d : Num) : Nat) = n / d
-
-中文:
-定理 div_to_nat
-  结论: 对任意 n d, ((n / d : Num) : 自然数) = n / d
+/-
+**Num.div_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n d : Num), ↑(n / d) = ↑n / ↑d
+参数：n d : Num；n / d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Num.div_zero`：∀ (n : Num), n / 0 = 0
+· 使用定理 `Nat.div_zero`：∀ (n : ℕ), n / 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.zero_div`：∀ (b : ℕ), 0 / b = 0
+· 使用定理 `PosNum.div'_to_nat`：∀ (n d : PosNum), ↑(n.div' d) = ↑n / ↑d
 -/
-theorem div_to_nat : forall n d, ((n / d : Num) : Nat) = n / d
+theorem div_to_nat : ∀ n d, ((n / d : Num) : ℕ) = n / d
   | 0, 0 => by simp
   | 0, pos _ => (Nat.zero_div _).symm
   | pos _, 0 => (Nat.div_zero _).symm
   | pos _, pos _ => PosNum.div'_to_nat _ _
 
 @[simp]
-/--
-theorem `mod_zero` / 定理 `mod_zero`
-
-English:
-theorem mod_zero
-  given: (n : Num)
-  statement: n % 0 = n
-  proof: show n.mod 0 = n by
-    cases n
-    · rfl
-    · simp [Num.mod]
-
-@[simp, norm_cast]
-
-中文:
-定理 mod_zero
-  条件: (n : Num)
-  结论: n % 0 = n
-  证明: show n.mod 0 = n by
-    cases n
-    · rfl
-    · simp [Num.mod]
-
-@[simp, norm_cast]
+/-
+**Num.mod_zero** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n : Num), n % 0 = n
+参数：n : Num。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem mod_zero (n : Num) : n % 0 = n :=
   show n.mod 0 = n by
@@ -2153,97 +1793,104 @@ protected theorem mod_zero (n : Num) : n % 0 = n :=
     · simp [Num.mod]
 
 @[simp, norm_cast]
-/--
-theorem `mod_to_nat` / 定理 `mod_to_nat`
-
-English:
-theorem mod_to_nat
-  statement: forall n d, ((n % d : Num) : Nat) = n % d
-
-中文:
-定理 mod_to_nat
-  结论: 对任意 n d, ((n % d : Num) : 自然数) = n % d
+/-
+**Num.mod_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ (n d : Num), ↑(n % d) = ↑n % ↑d
+参数：n d : Num；n % d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Num.mod_zero`：∀ (n : Num), n % 0 = n
+· 使用定理 `Nat.mod_self`：∀ (n : ℕ), n % n = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.zero_mod`：∀ (b : ℕ), 0 % b = 0
+· 使用定理 `Nat.mod_zero`：∀ (a : ℕ), a % 0 = a
+· 使用定理 `PosNum.mod'_to_nat`：∀ (n d : PosNum), ↑(n.mod' d) = ↑n % ↑d
 -/
-theorem mod_to_nat : forall n d, ((n % d : Num) : Nat) = n % d
+theorem mod_to_nat : ∀ n d, ((n % d : Num) : ℕ) = n % d
   | 0, 0 => by simp
   | 0, pos _ => (Nat.zero_mod _).symm
   | pos _, 0 => (Nat.mod_zero _).symm
   | pos _, pos _ => PosNum.mod'_to_nat _ _
-
-/--
-theorem `gcd_to_nat_aux` / 定理 `gcd_to_nat_aux`
-
-English:
-theorem gcd_to_nat_aux
-
-中文:
-定理 gcd_to_nat_aux
+/-
+**Num.gcd_to_nat_aux** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：∀ {n : ℕ} {a b : Num}, a ≤ b → (a * b).natSize ≤ n → ↑(Num.gcdAux n a b) =
+ (↑a).gcd ↑b
+参数：a * b；Num.gcdAux n a b；↑a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem gcd_to_nat_aux :
-    forall {n} {a b : Num}, a <= b -> (a * b).natSize <= n -> (gcdAux n a b : Nat) = Nat.gcd a b
+    ∀ {n} {a b : Num}, a ≤ b → (a * b).natSize ≤ n → (gcdAux n a b : ℕ) = Nat.gcd a b
   | 0, 0, _, _ab, _h => (Nat.gcd_zero_left _).symm
   | 0, pos _, 0, ab, _h => (not_lt_of_ge ab).elim rfl
-| 0, pos _, pos _, _ab, h => (not_lt_of_ge h).elim PosNum.natSize_pos _
+  | 0, pos _, pos _, _ab, h => (not_lt_of_ge h).elim <| PosNum.natSize_pos _
   | Nat.succ _, 0, _, _ab, _h => (Nat.gcd_zero_left _).symm
   | Nat.succ n, pos a, b, ab, h => by
     simp only [gcdAux, cast_pos]
-    rw [Nat.gcd_rec]; rw [gcd_to_nat_aux]; rw [mod_to_nat]
+    rw [Nat.gcd_rec, gcd_to_nat_aux, mod_to_nat]
     · rfl
     · rw [← le_to_nat, mod_to_nat]
       exact le_of_lt (Nat.mod_lt _ (PosNum.cast_pos _))
-    rw [natSize_to_nat]; rw [mul_to_nat]; rw [Nat.size_le] at h ⊢
-    rw [mod_to_nat]; rw [mul_comm]
-    rw [pow_succ]; rw [← Nat.mod_add_div b (pos a)] at h
+    rw [natSize_to_nat, mul_to_nat, Nat.size_le] at h ⊢
+    rw [mod_to_nat, mul_comm]
+    rw [pow_succ, ← Nat.mod_add_div b (pos a)] at h
     refine lt_of_mul_lt_mul_right (lt_of_le_of_lt ?_ h) (Nat.zero_le 2)
-    rw [mul_two]; rw [mul_add]
+    rw [mul_two, mul_add]
     gcongr _ + _ * ?_
     grw [Nat.mod_lt, ← le_to_nat.2 ab]
     · simp
     · exact PosNum.cast_pos _
 
 @[simp]
-/--
-theorem `gcd_to_nat` / 定理 `gcd_to_nat`
-
-English:
-theorem gcd_to_nat
-  statement: forall a b, (gcd a b : Nat) = Nat.gcd a b
-  proof: by
-  have : forall a b : Num, (a * b).natSize <= a.natSize + b.natSize := by
-    intros
-    simp only [natSize_to_nat, cast_mul]
-    rw [Nat.size_le]; rw [pow_add]
-    exact mul_lt_mul'' (Nat.lt_size_self _) (Nat.lt_size_self _) (Nat.zero_le _) (Nat.zero_le _)
-  intros
-  unfold gcd
-  split_ifs with h
-  · exact gcd_to_nat_aux h (this _ _)
-  · rw [Nat.gcd_comm]
-    exact gcd_to_nat_aux (le_of_not_ge h) (this _ _)
-
-中文:
-定理 gcd_to_nat
-  结论: 对任意 a b, (最大公约数 a b : 自然数) = 自然数.最大公约数 a b
-  证明: by
-  have : forall a b : Num, (a * b).natSize <= a.natSize + b.natSize := by
-    intros
-    simp only [natSize_to_nat, cast_mul]
-    rw [Nat.size_le]; rw [pow_add]
-    exact mul_lt_mul'' (Nat.lt_size_self _) (Nat.lt_size_self _) (Nat.zero_le _) (Nat.zero_le _)
-  intros
-  unfold gcd
-  split_ifs with h
-  · exact gcd_to_nat_aux h (this _ _)
-  · rw [Nat.gcd_comm]
-    exact gcd_to_nat_aux (le_of_not_ge h) (this _ _)
-
-Depends on / 依赖: Nat.gcd_comm, Nat.lt_size_self, Nat.size_le, Nat.zero_le, a.natSize, b.natSize, cast_mul, gcd_comm, gcd_to_nat_aux, intros, le_of_not_ge, lt_size_self, mul_lt_mul, natSize, natSize_to_nat, pow_add, size_le, split_ifs, zero_le
+/-
+**Num.gcd_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：gcd_to_nat : forall a b, (gcd a b : Nat) = Nat.gcd a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Num.natSize_to_nat`：natSize_to_nat (n) : natSize n = Nat.size n
+· 使用定理 `Num.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : Num), 
+↑(m * n) = ↑m * ↑n
+· 使用定理 `Nat.size_le`：size_le {m n : Nat} : size m <= n ↔ m < 2 ^ n
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `mul_lt_mul''`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b c d : α} [in
+st_1 : Preorder α] [PosMulStrictMono α] [MulPosMono α],   a < b → c < d → 0 ≤ a 
+→ …
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.lt_size_self`：lt_size_self (n : Nat) : n < 2 ^ size n
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Num.gcd_to_nat_aux`：∀ {n : ℕ} {a b : Num}, a ≤ b → (a * b).natSize ≤ n →
+ ↑(Num.gcdAux n a b) = (↑a).gcd ↑b
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Nat.gcd_comm`：∀ (m n : ℕ), m.gcd n = n.gcd m
+· 使用定理 `le_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b 
+→ b ≤ a
 -/
-theorem gcd_to_nat : forall a b, (gcd a b : Nat) = Nat.gcd a b := by
-  have : forall a b : Num, (a * b).natSize <= a.natSize + b.natSize := by
+theorem gcd_to_nat : ∀ a b, (gcd a b : ℕ) = Nat.gcd a b := by
+  have : ∀ a b : Num, (a * b).natSize ≤ a.natSize + b.natSize := by
     intros
     simp only [natSize_to_nat, cast_mul]
-    rw [Nat.size_le]; rw [pow_add]
+    rw [Nat.size_le, pow_add]
     exact mul_lt_mul'' (Nat.lt_size_self _) (Nat.lt_size_self _) (Nat.zero_le _) (Nat.zero_le _)
   intros
   unfold gcd
@@ -2251,193 +1898,200 @@ theorem gcd_to_nat : forall a b, (gcd a b : Nat) = Nat.gcd a b := by
   · exact gcd_to_nat_aux h (this _ _)
   · rw [Nat.gcd_comm]
     exact gcd_to_nat_aux (le_of_not_ge h) (this _ _)
-
-/--
-theorem `dvd_iff_mod_eq_zero` / 定理 `dvd_iff_mod_eq_zero`
-
-English:
-theorem dvd_iff_mod_eq_zero
-  given: {m n : Num}
-  statement: m ∣ n ↔ n % m = 0
-  proof: by
-  rw [← dvd_to_nat]; rw [Nat.dvd_iff_mod_eq_zero]; rw [← to_nat_inj]; rw [mod_to_nat]; rfl
-
-中文:
-定理 dvd_iff_mod_eq_zero
-  条件: {m n : Num}
-  结论: m ∣ n ↔ n % m = 0
-  证明: by
-  rw [← dvd_to_nat]; rw [Nat.dvd_iff_mod_eq_zero]; rw [← to_nat_inj]; rw [mod_to_nat]; rfl
-
-Depends on / 依赖: Nat.dvd_iff_mod_eq_zero, dvd_iff_mod_eq_zero, dvd_to_nat, mod_to_nat, to_nat_inj
+/-
+**Num.dvd_iff_mod_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Num`。
+形式化陈述：dvd_iff_mod_eq_zero {m n : Num} : m ∣ n ↔ n % m = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Num.dvd_to_nat`：dvd_to_nat (m n : Num) : (m : Nat) ∣ n ↔ m ∣ n
+· 使用定理 `Nat.dvd_iff_mod_eq_zero`：∀ {m n : ℕ}, m ∣ n ↔ n % m = 0
+· 使用定理 `Num.to_nat_inj`：to_nat_inj {m n : Num} : (m : Nat) = n ↔ m = n
+· 使用定理 `Num.mod_to_nat`：∀ (n d : Num), ↑(n % d) = ↑n % ↑d
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem dvd_iff_mod_eq_zero {m n : Num} : m ∣ n ↔ n % m = 0 := by
-  rw [← dvd_to_nat]; rw [Nat.dvd_iff_mod_eq_zero]; rw [← to_nat_inj]; rw [mod_to_nat]; rfl
-
-/--
-Instance `decidableDvd` / 实例 `decidableDvd`
-
-English:
-instance decidableDvd
-  signature: : DecidableRel ((· ∣ ·) : Num -> Num -> Prop)
-
-中文:
-实例 decidableDvd
-  签名: : DecidableRel ((· ∣ ·) : Num -> Num -> 命题)
+  rw [← dvd_to_nat, Nat.dvd_iff_mod_eq_zero, ← to_nat_inj, mod_to_nat]; rfl
+/-
+**Num.decidableDvd** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：DecidableRel fun x1 x2 => x1 ∣ x2
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Num.dvd_iff_mod_eq_zero`：dvd_iff_mod_eq_zero {m n : Num} : m ∣ n ↔ n % m
+ = 0
 -/
-instance decidableDvd : DecidableRel ((· ∣ ·) : Num -> Num -> Prop)
+instance decidableDvd : DecidableRel ((· ∣ ·) : Num → Num → Prop)
   | _a, _b => decidable_of_iff' _ dvd_iff_mod_eq_zero
 
 end Num
 
-/--
-Instance `PosNum.decidableDvd` / 实例 `PosNum.decidableDvd`
-
-English:
-instance PosNum.decidableDvd
-  signature: : DecidableRel ((· ∣ ·) : PosNum -> PosNum -> Prop)
-
-中文:
-实例 PosNum.decidableDvd
-  签名: : DecidableRel ((· ∣ ·) : PosNum -> PosNum -> 命题)
+/-
+**PosNum.decidableDvd** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：DecidableRel fun x1 x2 => x1 ∣ x2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance PosNum.decidableDvd : DecidableRel ((· ∣ ·) : PosNum -> PosNum -> Prop)
+instance PosNum.decidableDvd : DecidableRel ((· ∣ ·) : PosNum → PosNum → Prop)
   | _a, _b => Num.decidableDvd _ _
 
 namespace ZNum
 
 @[simp]
-/--
-theorem `div_zero` / 定理 `div_zero`
-
-English:
-theorem div_zero
-  given: (n : ZNum)
-  statement: n / 0 = 0
-  proof: show n.div 0 = 0 by cases n <;> rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 div_zero
-  条件: (n : ZNum)
-  结论: n / 0 = 0
-  证明: show n.div 0 = 0 by cases n <;> rfl
-
-@[simp, norm_cast]
+/-
+**ZNum.div_zero** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n : ZNum), n / 0 = 0
+参数：n : ZNum。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 protected theorem div_zero (n : ZNum) : n / 0 = 0 :=
   show n.div 0 = 0 by cases n <;> rfl
 
 @[simp, norm_cast]
-/--
-theorem `div_to_int` / 定理 `div_to_int`
-
-English:
-theorem div_to_int
-  statement: forall n d, ((n / d : ZNum) : Int) = n / d
-
-中文:
-定理 div_to_int
-  结论: 对任意 n d, ((n / d : ZNum) : 整数) = n / d
+/-
+**ZNum.div_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n d : ZNum), ↑(n / d) = ↑n / ↑d
+参数：n d : ZNum；n / d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZNum.div_zero`：∀ (n : ZNum), n / 0 = 0
+· 使用定理 `Int.ediv_zero`：∀ (a : ℤ), a / 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.zero_ediv`：∀ (b : ℤ), 0 / b = 0
+· 使用定理 `Num.cast_toZNum`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst
+_2 : Add α] [inst_3 : Neg α] (n : Num), ↑n.toZNum = ↑n
+· 使用定理 `Num.to_nat_to_int`：to_nat_to_int (n : Num) : ((n : Nat) : Int) = n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PosNum.div'_to_nat`：∀ (n d : PosNum), ↑(n.div' d) = ↑n / ↑d
+· 使用定理 `PosNum.cast_to_nat`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] (n : Po
+sNum), ↑↑n = ↑n
+· 使用定理 `Num.cast_toZNumNeg`：∀ {α : Type u_1} [inst : SubtractionMonoid α] [inst_
+1 : One α] (n : Num), ↑n.toZNumNeg = -↑n
+· 使用定理 `Int.ediv_neg`：∀ (a b : ℤ), a / -b = -(a / b)
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `PosNum.to_int_eq_succ_pred`：to_int_eq_succ_pred (n : PosNum) : (n : Int)
+ = (n.pred' : Nat) + 1
+· 使用定理 `PosNum.to_nat_to_int`：to_nat_to_int (n : PosNum) : ((n : Nat) : Int) = n
+· 使用定理 `Num.succ'_to_nat`：∀ (n : Num), ↑n.succ' = ↑n + 1
+· 使用定理 `Num.div_to_nat`：∀ (n d : Num), ↑(n / d) = ↑n / ↑d
+· 使用定理 `PosNum.to_nat_eq_succ_pred`：to_nat_eq_succ_pred (n : PosNum) : (n : Nat)
+ = n.pred' + 1
 -/
-theorem div_to_int : forall n d, ((n / d : ZNum) : Int) = n / d
+theorem div_to_int : ∀ n d, ((n / d : ZNum) : ℤ) = n / d
   | 0, 0 => by simp [Int.ediv_zero]
   | 0, pos _ => (Int.zero_ediv _).symm
   | 0, neg _ => (Int.zero_ediv _).symm
   | pos _, 0 => (Int.ediv_zero _).symm
   | neg _, 0 => (Int.ediv_zero _).symm
-| pos n, pos d => (Num.cast_toZNum _).trans by rw [← Num.to_nat_to_int]; simp
-| pos n, neg d => (Num.cast_toZNumNeg _).trans by rw [← Num.to_nat_to_int]; simp
+  | pos n, pos d => (Num.cast_toZNum _).trans <| by rw [← Num.to_nat_to_int]; simp
+  | pos n, neg d => (Num.cast_toZNumNeg _).trans <| by rw [← Num.to_nat_to_int]; simp
   | neg n, pos d =>
     show -_ = -_ / ↑d by
-      rw [n.to_int_eq_succ_pred]; rw [d.to_int_eq_succ_pred]; rw [← PosNum.to_nat_to_int]; rw [Num.succ'_to_nat]; rw [Num.div_to_nat]
+      rw [n.to_int_eq_succ_pred, d.to_int_eq_succ_pred, ← PosNum.to_nat_to_int, Num.succ'_to_nat,
+        Num.div_to_nat]
       change -[n.pred' / ↑d+1] = -[n.pred' / (d.pred' + 1)+1]
       rw [d.to_nat_eq_succ_pred]
   | neg n, neg d =>
     show ↑(PosNum.pred' n / Num.pos d).succ' = -_ / -↑d by
-      rw [n.to_int_eq_succ_pred]; rw [d.to_int_eq_succ_pred]; rw [← PosNum.to_nat_to_int]; rw [Num.succ'_to_nat]; rw [Num.div_to_nat]
-      change (Nat.succ (_ / d) : Int) = Nat.succ (n.pred' / (d.pred' + 1))
+      rw [n.to_int_eq_succ_pred, d.to_int_eq_succ_pred, ← PosNum.to_nat_to_int, Num.succ'_to_nat,
+        Num.div_to_nat]
+      change (Nat.succ (_ / d) : ℤ) = Nat.succ (n.pred' / (d.pred' + 1))
       rw [d.to_nat_eq_succ_pred]
 
 @[simp, norm_cast]
-/--
-theorem `mod_to_int` / 定理 `mod_to_int`
-
-English:
-theorem mod_to_int
-  statement: forall n d, ((n % d : ZNum) : Int) = n % d
-
-中文:
-定理 mod_to_int
-  结论: 对任意 n d, ((n % d : ZNum) : 整数) = n % d
+/-
+**ZNum.mod_to_int** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：∀ (n d : ZNum), ↑(n % d) = ↑n % ↑d
+参数：n d : ZNum；n % d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.zero_emod`：∀ (b : ℤ), 0 % b = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Num.cast_toZNum`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst
+_2 : Add α] [inst_3 : Neg α] (n : Num), ↑n.toZNum = ↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Num.to_nat_to_int`：to_nat_to_int (n : Num) : ((n : Nat) : Int) = n
+· 使用定理 `ZNum.cast_pos`：cast_pos [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(pos n : α) = n
+· 使用定理 `Num.mod_to_nat`：∀ (n d : Num), ↑(n % d) = ↑n % ↑d
+· 使用定理 `PosNum.to_nat_to_int`：to_nat_to_int (n : PosNum) : ((n : Nat) : Int) = n
+· 使用定理 `ZNum.abs_to_nat`：∀ (n : ZNum), ↑n.abs = (↑n).natAbs
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
+· 使用定理 `Num.cast_sub'`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (m n : Num), 
+↑(m.sub' n) = ↑m - ↑n
+· 使用定理 `ZNum.cast_neg`：cast_neg [Zero α] [One α] [Add α] [Neg α] (n : PosNum) : 
+(neg n : α) = -n
+· 使用定理 `Num.succ_to_nat`：succ_to_nat (n) : (succ n : Nat) = n + 1
+· 使用定理 `Int.subNatNat_eq_coe`：∀ {m n : ℕ}, Int.subNatNat m n = ↑m - ↑n
+· 使用定理 `PosNum.to_int_eq_succ_pred`：to_int_eq_succ_pred (n : PosNum) : (n : Int)
+ = (n.pred' : Nat) + 1
 -/
-theorem mod_to_int : forall n d, ((n % d : ZNum) : Int) = n % d
+theorem mod_to_int : ∀ n d, ((n % d : ZNum) : ℤ) = n % d
   | 0, _ => (Int.zero_emod _).symm
   | pos n, d =>
-(Num.cast_toZNum _).trans by
-      rw [← Num.to_nat_to_int]; rw [cast_pos]; rw [Num.mod_to_nat]; rw [← PosNum.to_nat_to_int]; rw [abs_to_nat]
+    (Num.cast_toZNum _).trans <| by
+      rw [← Num.to_nat_to_int, cast_pos, Num.mod_to_nat, ← PosNum.to_nat_to_int, abs_to_nat]
       rfl
   | neg n, d =>
-(Num.cast_sub' _ _).trans by
-      rw [← Num.to_nat_to_int]; rw [cast_neg]; rw [← Num.to_nat_to_int]; rw [Num.succ_to_nat]; rw [Num.mod_to_nat]; rw [abs_to_nat]; rw [← Int.subNatNat_eq_coe]; rw [n.to_int_eq_succ_pred]
+    (Num.cast_sub' _ _).trans <| by
+      rw [← Num.to_nat_to_int, cast_neg, ← Num.to_nat_to_int, Num.succ_to_nat, Num.mod_to_nat,
+          abs_to_nat, ← Int.subNatNat_eq_coe, n.to_int_eq_succ_pred]
       rfl
 
 @[simp]
-/--
-theorem `gcd_to_nat` / 定理 `gcd_to_nat`
-
-English:
-theorem gcd_to_nat
-  given: (a b)
-  statement: (gcd a b : Nat) = Int.gcd a b
-  proof: (Num.gcd_to_nat _ _).trans by simp only [abs_to_nat]; rfl
-
-中文:
-定理 gcd_to_nat
-  条件: (a b)
-  结论: (最大公约数 a b : 自然数) = 整数.最大公约数 a b
-  证明: (Num.gcd_to_nat _ _).trans by simp only [abs_to_nat]; rfl
-
-Depends on / 依赖: Num.gcd_to_nat, abs_to_nat, gcd_to_nat
+/-
+**ZNum.gcd_to_nat** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：gcd_to_nat (a b) : (gcd a b : Nat) = Int.gcd a b
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Num.gcd_to_nat`：gcd_to_nat : forall a b, (gcd a b : Nat) = Nat.gcd a b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ZNum.abs_to_nat`：∀ (n : ZNum), ↑n.abs = (↑n).natAbs
 -/
-theorem gcd_to_nat (a b) : (gcd a b : Nat) = Int.gcd a b :=
-(Num.gcd_to_nat _ _).trans by simp only [abs_to_nat]; rfl
-
-/--
-theorem `dvd_iff_mod_eq_zero` / 定理 `dvd_iff_mod_eq_zero`
-
-English:
-theorem dvd_iff_mod_eq_zero
-  given: {m n : ZNum}
-  statement: m ∣ n ↔ n % m = 0
-  proof: by
-  rw [← dvd_to_int]; rw [Int.dvd_iff_emod_eq_zero]; rw [← to_int_inj]; rw [mod_to_int]; rfl
-
-中文:
-定理 dvd_iff_mod_eq_zero
-  条件: {m n : ZNum}
-  结论: m ∣ n ↔ n % m = 0
-  证明: by
-  rw [← dvd_to_int]; rw [Int.dvd_iff_emod_eq_zero]; rw [← to_int_inj]; rw [mod_to_int]; rfl
-
-Depends on / 依赖: Int.dvd_iff_emod_eq_zero, dvd_iff_emod_eq_zero, dvd_to_int, mod_to_int, to_int_inj
+theorem gcd_to_nat (a b) : (gcd a b : ℕ) = Int.gcd a b :=
+  (Num.gcd_to_nat _ _).trans <| by simp only [abs_to_nat]; rfl
+/-
+**ZNum.dvd_iff_mod_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `ZNum`。
+形式化陈述：dvd_iff_mod_eq_zero {m n : ZNum} : m ∣ n ↔ n % m = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZNum.dvd_to_int`：dvd_to_int (m n : ZNum) : (m : Int) ∣ n ↔ m ∣ n
+· 使用定理 `Int.dvd_iff_emod_eq_zero`：∀ {a b : ℤ}, a ∣ b ↔ b % a = 0
+· 使用定理 `ZNum.to_int_inj`：to_int_inj {m n : ZNum} : (m : Int) = n ↔ m = n
+· 使用定理 `ZNum.mod_to_int`：∀ (n d : ZNum), ↑(n % d) = ↑n % ↑d
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem dvd_iff_mod_eq_zero {m n : ZNum} : m ∣ n ↔ n % m = 0 := by
-  rw [← dvd_to_int]; rw [Int.dvd_iff_emod_eq_zero]; rw [← to_int_inj]; rw [mod_to_int]; rfl
-
-/--
-Instance `decidableDvd` / 实例 `decidableDvd`
-
-English:
-instance decidableDvd
-  signature: : DecidableRel ((· ∣ ·) : ZNum -> ZNum -> Prop)
-
-中文:
-实例 decidableDvd
-  签名: : DecidableRel ((· ∣ ·) : ZNum -> ZNum -> 命题)
+  rw [← dvd_to_int, Int.dvd_iff_emod_eq_zero, ← to_int_inj, mod_to_int]; rfl
+/-
+**ZNum.decidableDvd** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：DecidableRel fun x1 x2 => x1 ∣ x2
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ZNum.dvd_iff_mod_eq_zero`：dvd_iff_mod_eq_zero {m n : ZNum} : m ∣ n ↔ n %
+ m = 0
 -/
-instance decidableDvd : DecidableRel ((· ∣ ·) : ZNum -> ZNum -> Prop)
+instance decidableDvd : DecidableRel ((· ∣ ·) : ZNum → ZNum → Prop)
   | _a, _b => decidable_of_iff' _ dvd_iff_mod_eq_zero
 
 end ZNum
+

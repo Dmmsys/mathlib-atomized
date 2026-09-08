@@ -39,38 +39,17 @@ namespace structuredArrowRightwardsOpEquivalence
 
 /-- Auxiliary definition for `structuredArrowRightwardsOpEquivalence`. -/
 @[simps!]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CategoryTheory.TwoSquare.structuredArrowRightwardsOpEquivalence.functor** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.TwoSquare.structuredArrowRightwardsOpEquival
+ence`。
+形式化陈述：functor : (w.op.StructuredArrowRightwards g)ᵒᵖ ⥤ w.CostructuredArrowDownwa
+rds g.unop where obj f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: :
-  body: CostructuredArrowDownwards.mk _ _ f.unop.right.left.unop
-      f.unop.right.hom.unop f.unop.hom.left.unop
-      (Quiver.Hom.op_inj (by simpa using! CostructuredArrow.w f.unop.hom))
-  map {f f'} φ :=
-    CostructuredArrow.homMk
-      (StructuredArrow.homMk (φ.unop.right.left.unop)
-        (Quiver.Hom.op_inj (CostructuredArrow.w φ.unop.right))) (by
-          ext
-          exact Quiver.Hom.op_inj
-            ((CostructuredArrow.proj _ _).congr_map (StructuredArrow.w φ.unop)))
-
-中文:
-定义 functor
-  签名: :
-  定义体: CostructuredArrowDownwards.mk _ _ f.unop.right.left.unop
-      f.unop.right.hom.unop f.unop.hom.left.unop
-      (Quiver.Hom.op_inj (by simpa using! CostructuredArrow.w f.unop.hom))
-  map {f f'} φ :=
-    CostructuredArrow.homMk
-      (StructuredArrow.homMk (φ.unop.right.left.unop)
-        (Quiver.Hom.op_inj (CostructuredArrow.w φ.unop.right))) (by
-          ext
-          exact Quiver.Hom.op_inj
-            ((CostructuredArrow.proj _ _).congr_map (StructuredArrow.w φ.unop)))
-
-Depends on / 依赖: CostructuredArrowDownwards, CostructuredArrowDownwards.mk, f.unop.right.left.unop
+--- 原说明 ---
+Auxiliary definition for `structuredArrowRightwardsOpEquivalence`.
 -/
 def functor :
     (w.op.StructuredArrowRightwards g)ᵒᵖ ⥤
@@ -86,40 +65,18 @@ def functor :
           exact Quiver.Hom.op_inj
             ((CostructuredArrow.proj _ _).congr_map (StructuredArrow.w φ.unop)))
 
-/--
-Definition of `inverse` / `inverse` 的定义
+/-- Auxiliary definition for `structuredArrowRightwardsOpEquivalence`. -/
+/-
+**CategoryTheory.TwoSquare.structuredArrowRightwardsOpEquivalence.inverse** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.TwoSquare.structuredArrowRightwardsOpEquival
+ence`。
+形式化陈述：inverse : w.CostructuredArrowDownwards g.unop ⥤ (w.op.StructuredArrowRight
+wards g)ᵒᵖ where obj f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: :
-  body: Opposite.op
-    (StructuredArrowRightwards.mk _ _ (Opposite.op f.left.right)
-      f.hom.right.op f.left.hom.op (Quiver.Hom.unop_inj (StructuredArrow.w f.hom)))
-  map {f f'} φ :=
-    (StructuredArrow.homMk
-      (CostructuredArrow.homMk (φ.left.right.op)
-        (Quiver.Hom.unop_inj (by exact StructuredArrow.w φ.left)))
-          (by
-            ext
-            exact Quiver.Hom.unop_inj
-              ((StructuredArrow.proj _ _).congr_map (CostructuredArrow.w φ)))).op
-
-中文:
-定义 inverse
-  签名: :
-  定义体: Opposite.op
-    (StructuredArrowRightwards.mk _ _ (Opposite.op f.left.right)
-      f.hom.right.op f.left.hom.op (Quiver.Hom.unop_inj (StructuredArrow.w f.hom)))
-  map {f f'} φ :=
-    (StructuredArrow.homMk
-      (CostructuredArrow.homMk (φ.left.right.op)
-        (Quiver.Hom.unop_inj (by exact StructuredArrow.w φ.left)))
-          (by
-            ext
-            exact Quiver.Hom.unop_inj
-              ((StructuredArrow.proj _ _).congr_map (CostructuredArrow.w φ)))).op
-
-Depends on / 依赖: Opposite, Opposite.op
+--- 原说明 ---
+Auxiliary definition for `structuredArrowRightwardsOpEquivalence`.
 -/
 def inverse :
     w.CostructuredArrowDownwards g.unop ⥤
@@ -143,26 +100,19 @@ set_option backward.isDefEq.respectTransparency false in
 the obvious equivalence of categories between
 `(w.op.StructuredArrowRightwards g)ᵒᵖ` and `w.CostructuredArrowDownwards g.unop`. -/
 @[simps]
-/--
-Definition of `structuredArrowRightwardsOpEquivalence` / `structuredArrowRightwardsOpEquivalence` 的定义
+/-
+**CategoryTheory.TwoSquare.structuredArrowRightwardsOpEquivalence** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.TwoSquare`。
+形式化陈述：structuredArrowRightwardsOpEquivalence : (w.op.StructuredArrowRightwards g
+)ᵒᵖ ≌ w.CostructuredArrowDownwards g.unop where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structuredArrowRightwardsOpEquivalence
-  signature: :
-  body: structuredArrowRightwardsOpEquivalence.functor w g
-  inverse := structuredArrowRightwardsOpEquivalence.inverse w g
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 structuredArrowRightwardsOpEquivalence
-  签名: :
-  定义体: structuredArrowRightwardsOpEquivalence.functor w g
-  inverse := structuredArrowRightwardsOpEquivalence.inverse w g
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: functor, structuredArrowRightwardsOpEquivalence, structuredArrowRightwardsOpEquivalence.functor
+--- 原说明 ---
+If `w : TwoSquare T L R B`, and `g : B.op.obj X₃ ⟶ R.op.obj X₂`, this is
+the obvious equivalence of categories between
+`(w.op.StructuredArrowRightwards g)ᵒᵖ` and `w.CostructuredArrowDownwards g.unop`
+.
 -/
 def structuredArrowRightwardsOpEquivalence :
     (w.op.StructuredArrowRightwards g)ᵒᵖ ≌
@@ -174,69 +124,57 @@ def structuredArrowRightwardsOpEquivalence :
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [w.GuitartExact]
-  signature: : w.op.GuitartExact
-  body: by
-  rw [guitartExact_iff_isConnected_rightwards]
-  intro X₃ X₂ g
-  rw [← isConnected_op_iff_isConnected]; rw [isConnected_iff_of_equivalence (w.structuredArrowRightwardsOpEquivalence g)]
-  infer_instance
-
-中文:
-实例 [w.GuitartExact]
-  签名: : w.op.GuitartExact
-  定义体: by
-  rw [guitartExact_iff_isConnected_rightwards]
-  intro X₃ X₂ g
-  rw [← isConnected_op_iff_isConnected]; rw [isConnected_iff_of_equivalence (w.structuredArrowRightwardsOpEquivalence g)]
-  infer_instance
-
-Depends on / 依赖: guitartExact_iff_isConnected_rightwards, infer_instance, isConnected_iff_of_equivalence, isConnected_op_iff_isConnected, structuredArrowRightwardsOpEquivalence, w.structuredArrowRightwardsOpEquivalence
+/-
+**CategoryTheory.TwoSquare.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.TwoSquare`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [w.GuitartExact] : w.op.GuitartExact := by
   rw [guitartExact_iff_isConnected_rightwards]
   intro X₃ X₂ g
-  rw [← isConnected_op_iff_isConnected]; rw [isConnected_iff_of_equivalence (w.structuredArrowRightwardsOpEquivalence g)]
+  rw [← isConnected_op_iff_isConnected,
+    isConnected_iff_of_equivalence (w.structuredArrowRightwardsOpEquivalence g)]
   infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `guitartExact_op_iff` / 引理 `guitartExact_op_iff`
-
-English:
-lemma guitartExact_op_iff
-  statement: w.op.GuitartExact ↔ w.GuitartExact
-  proof: by
-  constructor
-  · intro
-    let w₁ : TwoSquare T (opOp C₁) (opOp C₂) T.op.op := 𝟙 _
-    let w₂ : TwoSquare B.op.op (unopUnop C₃) (unopUnop C₄) B := 𝟙 _
-    have : w = (w₁ ≫ᵥ w.op.op) ≫ᵥ w₂ := by cat_disch
-    rw [this]
-    infer_instance
-  · intro
-    infer_instance
-
-中文:
-引理 guitartExact_op_iff
-  结论: w.op.GuitartExact ↔ w.GuitartExact
-  证明: by
-  constructor
-  · intro
-    let w₁ : TwoSquare T (opOp C₁) (opOp C₂) T.op.op := 𝟙 _
-    let w₂ : TwoSquare B.op.op (unopUnop C₃) (unopUnop C₄) B := 𝟙 _
-    have : w = (w₁ ≫ᵥ w.op.op) ≫ᵥ w₂ := by cat_disch
-    rw [this]
-    infer_instance
-  · intro
-    infer_instance
-
-Depends on / 依赖: B.op.op, T.op.op, TwoSquare, cat_disch, hasPullback_op_iff_hasPushout, infer_instance, unopUnop, w.op.op
+/-
+**CategoryTheory.TwoSquare.guitartExact_op_iff** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.TwoSquare`。
+形式化陈述：guitartExact_op_iff : w.op.GuitartExact ↔ w.GuitartExact
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.TwoSquare.ext`：ext (w w' : TwoSquare T L R B) (h : forall
+ (X : C₁), w.natTrans.app X = w'.natTrans.app X) : w = w'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.TwoSquare.vComp_app`：∀ {C₁ : Type u₁} {C₂ : Type u₂} {C₃ 
+: Type u₃} {C₄ : Type u₄} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1
+ : CategoryTheory.Catego…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.TwoSquare.guitartExact_of_isEquivalence_of_isIso`：∀ {C₁ :
+ Type u₁} {C₂ : Type u₂} {C₃ : Type u₃} {C₄ : Type u₄} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.instIsEquivalenceOppositeOpOp`：∀ (C : Type u₁) [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C], (CategoryTheory.opOp C).IsEquivalence
+· 使用定理 `CategoryTheory.TwoSquare.instGuitartExactOppositeOp`：∀ {C₁ : Type u₁} {C
+₂ : Type u₂} {C₃ : Type u₃} {C₄ : Type u₄} [inst : CategoryTheory.Category.{v₁, 
+u₁} C₁]   [inst_1 : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.instIsEquivalenceOppositeUnopUnop`：∀ (C : Type u₁) [inst 
+: CategoryTheory.Category.{v₁, u₁} C], (CategoryTheory.unopUnop C).IsEquivalence
 -/
 lemma guitartExact_op_iff : w.op.GuitartExact ↔ w.GuitartExact := by
   constructor
@@ -248,47 +186,45 @@ lemma guitartExact_op_iff : w.op.GuitartExact ↔ w.GuitartExact := by
     infer_instance
   · intro
     infer_instance
-
-/--
-Instance `guitartExact_id'` / 实例 `guitartExact_id'`
-
-English:
-instance guitartExact_id'
-  signature: (F : C₁ ⥤ C₂)
-  body: by
-  rw [← guitartExact_op_iff]
-  apply guitartExact_id
-
-中文:
-实例 guitartExact_id'
-  签名: (F : C₁ ⥤ C₂)
-  定义体: by
-  rw [← guitartExact_op_iff]
-  apply guitartExact_id
-
-Depends on / 依赖: guitartExact_id, guitartExact_op_iff, hasPullback_unop_iff_hasPushout
+/-
+**CategoryTheory.TwoSquare.guitartExact_id'** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.TwoSquare`。
+形式化陈述：guitartExact_id' (F : C₁ ⥤ C₂) : GuitartExact (TwoSquare.mk F (𝟭 C₁) (𝟭 C₂
+) F (𝟙 F))
+参数：F : C₁ ⥤ C₂。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.TwoSquare.guitartExact_op_iff`：guitartExact_op_iff : w.op
+.GuitartExact ↔ w.GuitartExact
 -/
 instance guitartExact_id' (F : C₁ ⥤ C₂) :
     GuitartExact (TwoSquare.mk F (𝟭 C₁) (𝟭 C₂) F (𝟙 F)) := by
   rw [← guitartExact_op_iff]
   apply guitartExact_id
-
-/--
-Instance `guitartExact_of_isEquivalence_of_isIso'` / 实例 `guitartExact_of_isEquivalence_of_isIso'`
-
-English:
-instance guitartExact_of_isEquivalence_of_isIso'
-  body: by
-  rw [← guitartExact_op_iff]
-  infer_instance
-
-中文:
-实例 guitartExact_of_isEquivalence_of_isIso'
-  定义体: by
-  rw [← guitartExact_op_iff]
-  infer_instance
-
-Depends on / 依赖: guitartExact_op_iff, infer_instance
+/-
+**CategoryTheory.TwoSquare.guitartExact_of_isEquivalence_of_isIso'** 是 Mathlib 中
+的一个实例，位于命名空间 `CategoryTheory.TwoSquare`。
+形式化陈述：guitartExact_of_isEquivalence_of_isIso' [T.IsEquivalence] [B.IsEquivalence
+] [IsIso w.natTrans] : GuitartExact w
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.TwoSquare.guitartExact_op_iff`：guitartExact_op_iff : w.op
+.GuitartExact ↔ w.GuitartExact
+· 使用定理 `CategoryTheory.TwoSquare.guitartExact_of_isEquivalence_of_isIso`：∀ {C₁ :
+ Type u₁} {C₂ : Type u₂} {C₃ : Type u₃} {C₄ : Type u₄} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.Functor.instIsEquivalenceOppositeOp`：∀ (C : Type u₁) [ins
+t : CategoryTheory.Category.{v₁, u₁} C] (D : Type u₂) [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.TwoSquare.instIsIsoFunctorOppositeNatTransOp`：∀ {C₁ : Typ
+e u₁} {C₂ : Type u₂} {C₃ : Type u₃} {C₄ : Type u₄} [inst : CategoryTheory.Catego
+ry.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Catego…
 -/
 instance guitartExact_of_isEquivalence_of_isIso'
     [T.IsEquivalence] [B.IsEquivalence] [IsIso w.natTrans] : GuitartExact w := by
@@ -298,3 +234,4 @@ instance guitartExact_of_isEquivalence_of_isIso'
 end TwoSquare
 
 end CategoryTheory
+

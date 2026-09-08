@@ -37,33 +37,33 @@ universe u v
 
 variable {α : Type u} {β : Type v}
 
-/--
-Definition of `Additive` / `Additive` 的定义
+/-- If `α` carries some multiplicative structure, then `Additive α` carries the corresponding
+additive structure. -/
+/-
+**Additive** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Additive (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Additive
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 加性
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+If `α` carries some multiplicative structure, then `Additive α` carries the corr
+esponding
+additive structure.
 -/
 def Additive (α : Type*) := α
 
-/--
-Definition of `Multiplicative` / `Multiplicative` 的定义
+/-- If `α` carries some additive structure, then `Multiplicative α` carries the corresponding
+multiplicative structure. -/
+/-
+**Multiplicative** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Multiplicative (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Multiplicative
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 Multiplicative
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+If `α` carries some additive structure, then `Multiplicative α` carries the corr
+esponding
+multiplicative structure.
 -/
 def Multiplicative (α : Type*) := α
 
@@ -71,162 +71,89 @@ namespace Additive
 
 /-- Reinterpret `x : α` as an element of `Additive α`. -/
 @[implicit_reducible]
-/--
-Definition of `ofMul` / `ofMul` 的定义
+/-
+**Additive.ofMul** 是 Mathlib 中的一个定义，位于命名空间 `Additive`。
+形式化陈述：ofMul : α ≃ Additive α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMul
-  signature: : α ≃ Additive α
-  body: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
-
-中文:
-定义 ofMul
-  签名: : α ≃ 加性 α
-  定义体: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
+--- 原说明 ---
+Reinterpret `x : α` as an element of `Additive α`.
 -/
 def ofMul : α ≃ Additive α :=
   ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
 
 /-- Reinterpret `x : Additive α` as an element of `α`. -/
 @[implicit_reducible]
-/--
-Definition of `toMul` / `toMul` 的定义
+/-
+**Additive.toMul** 是 Mathlib 中的一个定义，位于命名空间 `Additive`。
+形式化陈述：toMul : Additive α ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition toMul
-  signature: : Additive α ≃ α
-  body: ofMul.symm
-
-@[simp]
-
-中文:
-定义 toMul
-  签名: : 加性 α ≃ α
-  定义体: ofMul.symm
-
-@[simp]
-
-Depends on / 依赖: ofMul.symm
+--- 原说明 ---
+Reinterpret `x : Additive α` as an element of `α`.
 -/
 def toMul : Additive α ≃ α := ofMul.symm
 
 @[simp]
-/--
-theorem `ofMul_symm_eq` / 定理 `ofMul_symm_eq`
-
-English:
-theorem ofMul_symm_eq
-  statement: (@ofMul α).symm = toMul
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_symm_eq
-  结论: (@ofMul α).symm = toMul
-  证明: rfl
-
-@[simp]
+/-
+**Additive.ofMul_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Additive`。
+形式化陈述：ofMul_symm_eq : (@ofMul α).symm = toMul
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofMul_symm_eq : (@ofMul α).symm = toMul :=
   rfl
 
 @[simp]
-/--
-theorem `toMul_symm_eq` / 定理 `toMul_symm_eq`
-
-English:
-theorem toMul_symm_eq
-  statement: (@toMul α).symm = ofMul
-  proof: rfl
-
-中文:
-定理 toMul_symm_eq
-  结论: (@toMul α).symm = ofMul
-  证明: rfl
+/-
+**Additive.toMul_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Additive`。
+形式化陈述：toMul_symm_eq : (@toMul α).symm = ofMul
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toMul_symm_eq : (@toMul α).symm = ofMul :=
   rfl
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {a b : Additive α} (hab : a.toMul = b.toMul)
-  statement: a = b
-  proof: hab
-
-@[simp]
-
-中文:
-引理 ext
-  条件: {a b : 加性 α} (hab : a.toMul = b.toMul)
-  结论: a = b
-  证明: hab
-
-@[simp]
+/-
+**Additive.ext** 是 Mathlib 中的一个定理，位于命名空间 `Additive`。
+形式化陈述：∀ {α : Type u} {a b : Additive α}, Additive.toMul a = Additive.toMul b → a
+ = b
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[ext] lemma ext {a b : Additive α} (hab : a.toMul = b.toMul) : a = b := hab
 
 @[simp]
-/--
-lemma `«forall»` / 引理 `«forall»`
-
-English:
-lemma «forall»
-  given: {p : Additive α -> Prop}
-  statement: (forall a, p a) ↔ forall a, p (ofMul a)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-引理 «对任意»
-  条件: {p : 加性 α -> 命题}
-  结论: (对任意 a, p a) ↔ 对任意 a, p (ofMul a)
-  证明: Iff.rfl
-
-@[simp]
+/-
+**Additive.** 是 Mathlib 中的一个引理，位于命名空间 `Additive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected lemma «forall» {p : Additive α -> Prop} : (forall a, p a) ↔ forall a, p (ofMul a) := Iff.rfl
+protected lemma «forall» {p : Additive α → Prop} : (∀ a, p a) ↔ ∀ a, p (ofMul a) := Iff.rfl
 
 @[simp]
-/--
-lemma `«exists»` / 引理 `«exists»`
-
-English:
-lemma «exists»
-  given: {p : Additive α -> Prop}
-  statement: (exists a, p a) ↔ exists a, p (ofMul a)
-  proof: Iff.rfl
-
-中文:
-引理 «存在»
-  条件: {p : 加性 α -> 命题}
-  结论: (存在 a, p a) ↔ 存在 a, p (ofMul a)
-  证明: Iff.rfl
+/-
+**Additive.** 是 Mathlib 中的一个引理，位于命名空间 `Additive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected lemma «exists» {p : Additive α -> Prop} : (exists a, p a) ↔ exists a, p (ofMul a) := Iff.rfl
+protected lemma «exists» {p : Additive α → Prop} : (∃ a, p a) ↔ ∃ a, p (ofMul a) := Iff.rfl
 
 /-- Recursion principle for `Additive`, supported by `cases` and `induction`. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**Additive.rec** 是 Mathlib 中的一个定义，位于命名空间 `Additive`。
+形式化陈述：rec {motive : Additive α -> Sort*} (ofMul : forall a, motive (ofMul a)) : 
+forall a, motive a
+参数：ofMul : forall a, motive (ofMul a)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: {motive : Additive α -> Sort*} (ofMul : forall a, motive (ofMul a))
-  body: fun a => ofMul (a.toMul)
-
-中文:
-定义 rec
-  签名: {motive : 加性 α -> 类型层*} (ofMul : 对任意 a, motive (ofMul a))
-  定义体: fun a => ofMul (a.toMul)
-
-Depends on / 依赖: a.toMul
+--- 原说明 ---
+Recursion principle for `Additive`, supported by `cases` and `induction`.
 -/
-def rec {motive : Additive α -> Sort*} (ofMul : forall a, motive (ofMul a)) : forall a, motive a :=
+def rec {motive : Additive α → Sort*} (ofMul : ∀ a, motive (ofMul a)) : ∀ a, motive a :=
   fun a => ofMul (a.toMul)
 
 end Additive
@@ -235,162 +162,89 @@ namespace Multiplicative
 
 /-- Reinterpret `x : α` as an element of `Multiplicative α`. -/
 @[implicit_reducible]
-/--
-Definition of `ofAdd` / `ofAdd` 的定义
+/-
+**Multiplicative.ofAdd** 是 Mathlib 中的一个定义，位于命名空间 `Multiplicative`。
+形式化陈述：ofAdd : α ≃ Multiplicative α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAdd
-  signature: : α ≃ Multiplicative α
-  body: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
-
-中文:
-定义 ofAdd
-  签名: : α ≃ Multiplicative α
-  定义体: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
+--- 原说明 ---
+Reinterpret `x : α` as an element of `Multiplicative α`.
 -/
 def ofAdd : α ≃ Multiplicative α :=
   ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
 
 /-- Reinterpret `x : Multiplicative α` as an element of `α`. -/
 @[implicit_reducible]
-/--
-Definition of `toAdd` / `toAdd` 的定义
+/-
+**Multiplicative.toAdd** 是 Mathlib 中的一个定义，位于命名空间 `Multiplicative`。
+形式化陈述：toAdd : Multiplicative α ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition toAdd
-  signature: : Multiplicative α ≃ α
-  body: ofAdd.symm
-
-@[simp]
-
-中文:
-定义 toAdd
-  签名: : Multiplicative α ≃ α
-  定义体: ofAdd.symm
-
-@[simp]
-
-Depends on / 依赖: ofAdd.symm
+--- 原说明 ---
+Reinterpret `x : Multiplicative α` as an element of `α`.
 -/
 def toAdd : Multiplicative α ≃ α := ofAdd.symm
 
 @[simp]
-/--
-theorem `ofAdd_symm_eq` / 定理 `ofAdd_symm_eq`
-
-English:
-theorem ofAdd_symm_eq
-  statement: (@ofAdd α).symm = toAdd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_symm_eq
-  结论: (@ofAdd α).symm = toAdd
-  证明: rfl
-
-@[simp]
+/-
+**Multiplicative.ofAdd_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiplicative`。
+形式化陈述：ofAdd_symm_eq : (@ofAdd α).symm = toAdd
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofAdd_symm_eq : (@ofAdd α).symm = toAdd :=
   rfl
 
 @[simp]
-/--
-theorem `toAdd_symm_eq` / 定理 `toAdd_symm_eq`
-
-English:
-theorem toAdd_symm_eq
-  statement: (@toAdd α).symm = ofAdd
-  proof: rfl
-
-中文:
-定理 toAdd_symm_eq
-  结论: (@toAdd α).symm = ofAdd
-  证明: rfl
+/-
+**Multiplicative.toAdd_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiplicative`。
+形式化陈述：toAdd_symm_eq : (@toAdd α).symm = ofAdd
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toAdd_symm_eq : (@toAdd α).symm = ofAdd :=
   rfl
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {a b : Multiplicative α} (hab : a.toAdd = b.toAdd)
-  statement: a = b
-  proof: hab
-
-@[simp]
-
-中文:
-引理 ext
-  条件: {a b : Multiplicative α} (hab : a.toAdd = b.toAdd)
-  结论: a = b
-  证明: hab
-
-@[simp]
+/-
+**Multiplicative.ext** 是 Mathlib 中的一个定理，位于命名空间 `Multiplicative`。
+形式化陈述：∀ {α : Type u} {a b : Multiplicative α}, Multiplicative.toAdd a = Multipli
+cative.toAdd b → a = b
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[ext] lemma ext {a b : Multiplicative α} (hab : a.toAdd = b.toAdd) : a = b := hab
 
 @[simp]
-/--
-lemma `«forall»` / 引理 `«forall»`
-
-English:
-lemma «forall»
-  given: {p : Multiplicative α -> Prop}
-  statement: (forall a, p a) ↔ forall a, p (ofAdd a)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-引理 «对任意»
-  条件: {p : Multiplicative α -> 命题}
-  结论: (对任意 a, p a) ↔ 对任意 a, p (ofAdd a)
-  证明: Iff.rfl
-
-@[simp]
+/-
+**Multiplicative.** 是 Mathlib 中的一个引理，位于命名空间 `Multiplicative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected lemma «forall» {p : Multiplicative α -> Prop} : (forall a, p a) ↔ forall a, p (ofAdd a) := Iff.rfl
+protected lemma «forall» {p : Multiplicative α → Prop} : (∀ a, p a) ↔ ∀ a, p (ofAdd a) := Iff.rfl
 
 @[simp]
-/--
-lemma `«exists»` / 引理 `«exists»`
-
-English:
-lemma «exists»
-  given: {p : Multiplicative α -> Prop}
-  statement: (exists a, p a) ↔ exists a, p (ofAdd a)
-  proof: Iff.rfl
-
-中文:
-引理 «存在»
-  条件: {p : Multiplicative α -> 命题}
-  结论: (存在 a, p a) ↔ 存在 a, p (ofAdd a)
-  证明: Iff.rfl
+/-
+**Multiplicative.** 是 Mathlib 中的一个引理，位于命名空间 `Multiplicative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected lemma «exists» {p : Multiplicative α -> Prop} : (exists a, p a) ↔ exists a, p (ofAdd a) := Iff.rfl
+protected lemma «exists» {p : Multiplicative α → Prop} : (∃ a, p a) ↔ ∃ a, p (ofAdd a) := Iff.rfl
 
 /-- Recursion principle for `Multiplicative`, supported by `cases` and `induction`. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**Multiplicative.rec** 是 Mathlib 中的一个定义，位于命名空间 `Multiplicative`。
+形式化陈述：rec {motive : Multiplicative α -> Sort*} (ofAdd : forall a, motive (ofAdd 
+a)) : forall a, motive a
+参数：ofAdd : forall a, motive (ofAdd a)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: {motive : Multiplicative α -> Sort*} (ofAdd : forall a, motive (ofAdd a))
-  body: fun a => ofAdd (a.toAdd)
-
-中文:
-定义 rec
-  签名: {motive : Multiplicative α -> 类型层*} (ofAdd : 对任意 a, motive (ofAdd a))
-  定义体: fun a => ofAdd (a.toAdd)
-
-Depends on / 依赖: a.toAdd
+--- 原说明 ---
+Recursion principle for `Multiplicative`, supported by `cases` and `induction`.
 -/
-def rec {motive : Multiplicative α -> Sort*} (ofAdd : forall a, motive (ofAdd a)) : forall a, motive a :=
+def rec {motive : Multiplicative α → Sort*} (ofAdd : ∀ a, motive (ofAdd a)) : ∀ a, motive a :=
   fun a => ofAdd (a.toAdd)
 
 end Multiplicative
@@ -399,946 +253,462 @@ open Additive (ofMul toMul)
 open Multiplicative (ofAdd toAdd)
 
 @[simp]
-/--
-theorem `toAdd_ofAdd` / 定理 `toAdd_ofAdd`
-
-English:
-theorem toAdd_ofAdd
-  given: (x : α)
-  statement: (ofAdd x).toAdd = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toAdd_ofAdd
-  条件: (x : α)
-  结论: (ofAdd x).toAdd = x
-  证明: rfl
-
-@[simp]
+/-
+**toAdd_ofAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_ofAdd (x : α) : (ofAdd x).toAdd = x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAdd_ofAdd (x : α) : (ofAdd x).toAdd = x :=
   rfl
 
 @[simp]
-/--
-theorem `ofAdd_toAdd` / 定理 `ofAdd_toAdd`
-
-English:
-theorem ofAdd_toAdd
-  given: (x : Multiplicative α)
-  statement: ofAdd x.toAdd = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_toAdd
-  条件: (x : Multiplicative α)
-  结论: ofAdd x.toAdd = x
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_toAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_toAdd (x : Multiplicative α) : ofAdd x.toAdd = x
+参数：x : Multiplicative α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofAdd_toAdd (x : Multiplicative α) : ofAdd x.toAdd = x :=
   rfl
 
 @[simp]
-/--
-theorem `toMul_ofMul` / 定理 `toMul_ofMul`
-
-English:
-theorem toMul_ofMul
-  given: (x : α)
-  statement: (ofMul x).toMul = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMul_ofMul
-  条件: (x : α)
-  结论: (ofMul x).toMul = x
-  证明: rfl
-
-@[simp]
+/-
+**toMul_ofMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_ofMul (x : α) : (ofMul x).toMul = x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMul_ofMul (x : α) : (ofMul x).toMul = x :=
   rfl
 
 @[simp]
-/--
-theorem `ofMul_toMul` / 定理 `ofMul_toMul`
-
-English:
-theorem ofMul_toMul
-  given: (x : Additive α)
-  statement: ofMul x.toMul = x
-  proof: rfl
-
-中文:
-定理 ofMul_toMul
-  条件: (x : 加性 α)
-  结论: ofMul x.toMul = x
-  证明: rfl
+/-
+**ofMul_toMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_toMul (x : Additive α) : ofMul x.toMul = x
+参数：x : Additive α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMul_toMul (x : Additive α) : ofMul x.toMul = x :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: α] : Subsingleton (Additive α)
-  body: toMul.injective.subsingleton
-
-中文:
-实例 [子单例
-  签名: α] : 子单例 (加性 α)
-  定义体: toMul.injective.subsingleton
-
-Depends on / 依赖: injective, subsingleton, toMul.injective.subsingleton
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton α] : Subsingleton (Additive α) := toMul.injective.subsingleton
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: α] : Subsingleton (Multiplicative α)
-  body: toAdd.injective.subsingleton
-
-中文:
-实例 [子单例
-  签名: α] : 子单例 (Multiplicative α)
-  定义体: toAdd.injective.subsingleton
-
-Depends on / 依赖: injective, subsingleton, toAdd.injective.subsingleton
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton α] : Subsingleton (Multiplicative α) := toAdd.injective.subsingleton
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (Additive α)
-  body: ⟨ofMul default⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 (加性 α)
-  定义体: ⟨ofMul default⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (Additive α) :=
   ⟨ofMul default⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (Multiplicative α)
-  body: ⟨ofAdd default⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 (Multiplicative α)
-  定义体: ⟨ofAdd default⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (Multiplicative α) :=
   ⟨ofAdd default⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: α] : Unique (Additive α)
-  body: toMul.unique
-
-中文:
-实例 [唯一
-  签名: α] : 唯一 (加性 α)
-  定义体: toMul.unique
-
-Depends on / 依赖: toMul.unique, unique
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique α] : Unique (Additive α) := toMul.unique
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: α] : Unique (Multiplicative α)
-  body: toAdd.unique
-
-中文:
-实例 [唯一
-  签名: α] : 唯一 (Multiplicative α)
-  定义体: toAdd.unique
-
-Depends on / 依赖: toAdd.unique, unique
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique α] : Unique (Multiplicative α) := toAdd.unique
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : DecidableEq α] : DecidableEq (Multiplicative α)
-  body: h
-
-中文:
-实例 [h
-  签名: : DecidableEq α] : DecidableEq (Multiplicative α)
-  定义体: h
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : DecidableEq α] : DecidableEq (Multiplicative α) := h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : DecidableEq α] : DecidableEq (Additive α)
-  body: h
-
-中文:
-实例 [h
-  签名: : DecidableEq α] : DecidableEq (加性 α)
-  定义体: h
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : DecidableEq α] : DecidableEq (Additive α) := h
-
-/--
-Instance `Additive.instNontrivial` / 实例 `Additive.instNontrivial`
-
-English:
-instance Additive.instNontrivial
-  signature: [Nontrivial α]
-  body: ofMul.injective.nontrivial
-
-中文:
-实例 加性.instNontrivial
-  签名: [非平凡 α]
-  定义体: ofMul.injective.nontrivial
-
-Depends on / 依赖: injective, nontrivial, ofMul.injective.nontrivial
+/-
+**Additive.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.instNontrivial [Nontrivial α] : Nontrivial (Additive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontrivi
+al α] {f : α → β}, Function.Injective f → Nontrivial β
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 instance Additive.instNontrivial [Nontrivial α] : Nontrivial (Additive α) :=
   ofMul.injective.nontrivial
-
-/--
-Instance `Multiplicative.instNontrivial` / 实例 `Multiplicative.instNontrivial`
-
-English:
-instance Multiplicative.instNontrivial
-  signature: [Nontrivial α]
-  body: ofAdd.injective.nontrivial
-
-中文:
-实例 Multiplicative.instNontrivial
-  签名: [非平凡 α]
-  定义体: ofAdd.injective.nontrivial
-
-Depends on / 依赖: injective, nontrivial, ofAdd.injective.nontrivial
+/-
+**Multiplicative.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.instNontrivial [Nontrivial α] : Nontrivial (Multiplicative 
+α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontrivi
+al α] {f : α → β}, Function.Injective f → Nontrivial β
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 instance Multiplicative.instNontrivial [Nontrivial α] : Nontrivial (Multiplicative α) :=
   ofAdd.injective.nontrivial
-
-/--
-Instance `Additive.add` / 实例 `Additive.add`
-
-English:
-instance Additive.add
-  signature: [Mul α]
-  body: ofMul (x.toMul * y.toMul)
-
-中文:
-实例 加性.add
-  签名: [乘法 α]
-  定义体: ofMul (x.toMul * y.toMul)
-
-Depends on / 依赖: x.toMul, y.toMul
+/-
+**Additive.add** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.add [Mul α] : Add (Additive α) where add x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.add [Mul α] : Add (Additive α) where
   add x y := ofMul (x.toMul * y.toMul)
-
-/--
-Instance `Multiplicative.mul` / 实例 `Multiplicative.mul`
-
-English:
-instance Multiplicative.mul
-  signature: [Add α]
-  body: ofAdd (x.toAdd + y.toAdd)
-
-@[simp]
-
-中文:
-实例 Multiplicative.mul
-  签名: [加法 α]
-  定义体: ofAdd (x.toAdd + y.toAdd)
-
-@[simp]
-
-Depends on / 依赖: x.toAdd, y.toAdd
+/-
+**Multiplicative.mul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.mul [Add α] : Mul (Multiplicative α) where mul x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.mul [Add α] : Mul (Multiplicative α) where
   mul x y := ofAdd (x.toAdd + y.toAdd)
 
 @[simp]
-/--
-theorem `ofAdd_add` / 定理 `ofAdd_add`
-
-English:
-theorem ofAdd_add
-  given: [Add α] (x y : α)
-  statement: ofAdd (x + y) = ofAdd x * ofAdd y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_add
-  条件: [加法 α] (x y : α)
-  结论: ofAdd (x + y) = ofAdd x * ofAdd y
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_add [Add α] (x y : α) : ofAdd (x + y) = ofAdd x * ofAdd y
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofAdd_add [Add α] (x y : α) : ofAdd (x + y) = ofAdd x * ofAdd y := rfl
 
 @[simp]
-/--
-theorem `toAdd_mul` / 定理 `toAdd_mul`
-
-English:
-theorem toAdd_mul
-  given: [Add α] (x y : Multiplicative α)
-  statement: (x * y).toAdd = x.toAdd + y.toAdd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toAdd_mul
-  条件: [加法 α] (x y : Multiplicative α)
-  结论: (x * y).toAdd = x.toAdd + y.toAdd
-  证明: rfl
-
-@[simp]
+/-
+**toAdd_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_mul [Add α] (x y : Multiplicative α) : (x * y).toAdd = x.toAdd + y.t
+oAdd
+参数：x y : Multiplicative α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAdd_mul [Add α] (x y : Multiplicative α) : (x * y).toAdd = x.toAdd + y.toAdd := rfl
 
 @[simp]
-/--
-theorem `ofMul_mul` / 定理 `ofMul_mul`
-
-English:
-theorem ofMul_mul
-  given: [Mul α] (x y : α)
-  statement: ofMul (x * y) = ofMul x + ofMul y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_mul
-  条件: [乘法 α] (x y : α)
-  结论: ofMul (x * y) = ofMul x + ofMul y
-  证明: rfl
-
-@[simp]
+/-
+**ofMul_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_mul [Mul α] (x y : α) : ofMul (x * y) = ofMul x + ofMul y
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMul_mul [Mul α] (x y : α) : ofMul (x * y) = ofMul x + ofMul y := rfl
 
 @[simp]
-/--
-theorem `toMul_add` / 定理 `toMul_add`
-
-English:
-theorem toMul_add
-  given: [Mul α] (x y : Additive α)
-  statement: (x + y).toMul = x.toMul * y.toMul
-  proof: rfl
-
-中文:
-定理 toMul_add
-  条件: [乘法 α] (x y : 加性 α)
-  结论: (x + y).toMul = x.toMul * y.toMul
-  证明: rfl
+/-
+**toMul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_add [Mul α] (x y : Additive α) : (x + y).toMul = x.toMul * y.toMul
+参数：x y : Additive α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMul_add [Mul α] (x y : Additive α) : (x + y).toMul = x.toMul * y.toMul := rfl
-
-/--
-Instance `Additive.addSemigroup` / 实例 `Additive.addSemigroup`
-
-English:
-instance Additive.addSemigroup
-  signature: [Semigroup α]
-  body: { Additive.add with add_assoc := @mul_assoc α _ }
-
-中文:
-实例 加性.addSemigroup
-  签名: [半群 α]
-  定义体: { Additive.add with add_assoc := @mul_assoc α _ }
-
-Depends on / 依赖: Additive, Additive.add, add_assoc, mul_assoc
+/-
+**Additive.addSemigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addSemigroup [Semigroup α] : AddSemigroup (Additive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 instance Additive.addSemigroup [Semigroup α] : AddSemigroup (Additive α) :=
   { Additive.add with add_assoc := @mul_assoc α _ }
-
-/--
-Instance `Multiplicative.semigroup` / 实例 `Multiplicative.semigroup`
-
-English:
-instance Multiplicative.semigroup
-  signature: [AddSemigroup α]
-  body: { Multiplicative.mul with mul_assoc := @add_assoc α _ }
-
-中文:
-实例 Multiplicative.semigroup
-  签名: [加法半群 α]
-  定义体: { Multiplicative.mul with mul_assoc := @add_assoc α _ }
-
-Depends on / 依赖: Multiplicative, Multiplicative.mul, add_assoc, mul_assoc
+/-
+**Multiplicative.semigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.semigroup [AddSemigroup α] : Semigroup (Multiplicative α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
 -/
 instance Multiplicative.semigroup [AddSemigroup α] : Semigroup (Multiplicative α) :=
   { Multiplicative.mul with mul_assoc := @add_assoc α _ }
-
-/--
-Instance `Additive.addCommSemigroup` / 实例 `Additive.addCommSemigroup`
-
-English:
-instance Additive.addCommSemigroup
-  signature: [CommSemigroup α]
-  body: { Additive.addSemigroup with add_comm := @mul_comm α _ }
-
-中文:
-实例 加性.addCommSemigroup
-  签名: [交换半群 α]
-  定义体: { Additive.addSemigroup with add_comm := @mul_comm α _ }
-
-Depends on / 依赖: Additive, Additive.addSemigroup, addSemigroup, add_comm, mul_comm
+/-
+**Additive.addCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addCommSemigroup [CommSemigroup α] : AddCommSemigroup (Additive α
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.addCommSemigroup [CommSemigroup α] : AddCommSemigroup (Additive α) :=
   { Additive.addSemigroup with add_comm := @mul_comm α _ }
-
-/--
-Instance `Multiplicative.commSemigroup` / 实例 `Multiplicative.commSemigroup`
-
-English:
-instance Multiplicative.commSemigroup
-  signature: [AddCommSemigroup α]
-  body: { Multiplicative.semigroup with mul_comm := @add_comm α _ }
-
-中文:
-实例 Multiplicative.commSemigroup
-  签名: [加法交换半群 α]
-  定义体: { Multiplicative.semigroup with mul_comm := @add_comm α _ }
-
-Depends on / 依赖: Multiplicative, Multiplicative.semigroup, add_comm, mul_comm, semigroup
+/-
+**Multiplicative.commSemigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.commSemigroup [AddCommSemigroup α] : CommSemigroup (Multipl
+icative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.commSemigroup [AddCommSemigroup α] : CommSemigroup (Multiplicative α) :=
   { Multiplicative.semigroup with mul_comm := @add_comm α _ }
-
-/--
-Instance `Additive.isLeftCancelAdd` / 实例 `Additive.isLeftCancelAdd`
-
-English:
-instance Additive.isLeftCancelAdd
-  signature: [Mul α] [IsLeftCancelMul α]
-  body: ⟨@mul_left_cancel α _ _⟩
-
-中文:
-实例 加性.isLeftCancelAdd
-  签名: [乘法 α] [左乘消去 α]
-  定义体: ⟨@mul_left_cancel α _ _⟩
-
-Depends on / 依赖: mul_left_cancel
+/-
+**Additive.isLeftCancelAdd** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.isLeftCancelAdd [Mul α] [IsLeftCancelMul α] : IsLeftCancelAdd (Ad
+ditive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_left_cancel`：mul_left_cancel : a * b = a * c -> b = c
 -/
 instance Additive.isLeftCancelAdd [Mul α] [IsLeftCancelMul α] : IsLeftCancelAdd (Additive α) :=
   ⟨@mul_left_cancel α _ _⟩
-
-/--
-Instance `Multiplicative.isLeftCancelMul` / 实例 `Multiplicative.isLeftCancelMul`
-
-English:
-instance Multiplicative.isLeftCancelMul
-  signature: [Add α] [IsLeftCancelAdd α]
-  body: ⟨@add_left_cancel α _ _⟩
-
-中文:
-实例 Multiplicative.isLeftCancelMul
-  签名: [加法 α] [是左消去加法 α]
-  定义体: ⟨@add_left_cancel α _ _⟩
-
-Depends on / 依赖: add_left_cancel
+/-
+**Multiplicative.isLeftCancelMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.isLeftCancelMul [Add α] [IsLeftCancelAdd α] : IsLeftCancelM
+ul (Multiplicative α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_left_cancel`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] {a 
+b c : G}, a + b = a + c → b = c
 -/
 instance Multiplicative.isLeftCancelMul [Add α] [IsLeftCancelAdd α] :
     IsLeftCancelMul (Multiplicative α) :=
   ⟨@add_left_cancel α _ _⟩
-
-/--
-Instance `Additive.isRightCancelAdd` / 实例 `Additive.isRightCancelAdd`
-
-English:
-instance Additive.isRightCancelAdd
-  signature: [Mul α] [IsRightCancelMul α]
-  body: ⟨fun _ _ _ => mul_right_cancel (G := α)⟩
-
-中文:
-实例 加性.isRightCancelAdd
-  签名: [乘法 α] [右乘消去 α]
-  定义体: ⟨fun _ _ _ => mul_right_cancel (G := α)⟩
-
-Depends on / 依赖: mul_right_cancel
+/-
+**Additive.isRightCancelAdd** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.isRightCancelAdd [Mul α] [IsRightCancelMul α] : IsRightCancelAdd 
+(Additive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_right_cancel`：mul_right_cancel : a * b = c * b -> a = c
 -/
 instance Additive.isRightCancelAdd [Mul α] [IsRightCancelMul α] : IsRightCancelAdd (Additive α) :=
-  ⟨fun _ _ _ => mul_right_cancel (G := α)⟩
-
-/--
-Instance `Multiplicative.isRightCancelMul` / 实例 `Multiplicative.isRightCancelMul`
-
-English:
-instance Multiplicative.isRightCancelMul
-  signature: [Add α] [IsRightCancelAdd α]
-  body: ⟨fun _ _ _ => add_right_cancel (G := α)⟩
-
-中文:
-实例 Multiplicative.isRightCancelMul
-  签名: [加法 α] [是右消去加法 α]
-  定义体: ⟨fun _ _ _ => add_right_cancel (G := α)⟩
-
-Depends on / 依赖: add_right_cancel
+  ⟨fun _ _ _ ↦ mul_right_cancel (G := α)⟩
+/-
+**Multiplicative.isRightCancelMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.isRightCancelMul [Add α] [IsRightCancelAdd α] : IsRightCanc
+elMul (Multiplicative α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_right_cancel`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] {
+a b c : G}, a + b = c + b → a = c
 -/
 instance Multiplicative.isRightCancelMul [Add α] [IsRightCancelAdd α] :
     IsRightCancelMul (Multiplicative α) :=
-  ⟨fun _ _ _ => add_right_cancel (G := α)⟩
-
-/--
-Instance `Additive.isCancelAdd` / 实例 `Additive.isCancelAdd`
-
-English:
-instance Additive.isCancelAdd
-  signature: [Mul α] [IsCancelMul α]
-  body: ⟨⟩
-
-中文:
-实例 加性.isCancelAdd
-  签名: [乘法 α] [是消去乘法 α]
-  定义体: ⟨⟩
+  ⟨fun _ _ _ ↦ add_right_cancel (G := α)⟩
+/-
+**Additive.isCancelAdd** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.isCancelAdd [Mul α] [IsCancelMul α] : IsCancelAdd (Additive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCancelMul.toIsLeftCancelMul`：∀ {G : Type u} {inst : Mul G} [self : IsC
+ancelMul G], IsLeftCancelMul G
+· 使用定理 `IsCancelMul.toIsRightCancelMul`：∀ {G : Type u} {inst : Mul G} [self : Is
+CancelMul G], IsRightCancelMul G
 -/
 instance Additive.isCancelAdd [Mul α] [IsCancelMul α] : IsCancelAdd (Additive α) :=
   ⟨⟩
-
-/--
-Instance `Multiplicative.isCancelMul` / 实例 `Multiplicative.isCancelMul`
-
-English:
-instance Multiplicative.isCancelMul
-  signature: [Add α] [IsCancelAdd α]
-  body: ⟨⟩
-
-中文:
-实例 Multiplicative.isCancelMul
-  签名: [加法 α] [是消去加法 α]
-  定义体: ⟨⟩
+/-
+**Multiplicative.isCancelMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.isCancelMul [Add α] [IsCancelAdd α] : IsCancelMul (Multipli
+cative α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsCancelAdd.toIsRightCancelAdd`：∀ {G : Type u} {inst : Add G} [self : Is
+CancelAdd G], IsRightCancelAdd G
 -/
 instance Multiplicative.isCancelMul [Add α] [IsCancelAdd α] : IsCancelMul (Multiplicative α) :=
   ⟨⟩
-
-/--
-Instance `Additive.addLeftCancelSemigroup` / 实例 `Additive.addLeftCancelSemigroup`
-
-English:
-instance Additive.addLeftCancelSemigroup
-  signature: [LeftCancelSemigroup α]
-  body: { Additive.addSemigroup, Additive.isLeftCancelAdd with }
-
-中文:
-实例 加性.addLeftCancelSemigroup
-  签名: [左消去半群 α]
-  定义体: { Additive.addSemigroup, Additive.isLeftCancelAdd with }
-
-Depends on / 依赖: Additive, Additive.addSemigroup, Additive.isLeftCancelAdd, addSemigroup, isLeftCancelAdd
+/-
+**Additive.addLeftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addLeftCancelSemigroup [LeftCancelSemigroup α] : AddLeftCancelSem
+igroup (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.addLeftCancelSemigroup [LeftCancelSemigroup α] :
     AddLeftCancelSemigroup (Additive α) :=
   { Additive.addSemigroup, Additive.isLeftCancelAdd with }
-
-/--
-Instance `Multiplicative.leftCancelSemigroup` / 实例 `Multiplicative.leftCancelSemigroup`
-
-English:
-instance Multiplicative.leftCancelSemigroup
-  signature: [AddLeftCancelSemigroup α]
-  body: { Multiplicative.semigroup, Multiplicative.isLeftCancelMul with }
-
-中文:
-实例 Multiplicative.leftCancelSemigroup
-  签名: [加法左消去半群 α]
-  定义体: { Multiplicative.semigroup, Multiplicative.isLeftCancelMul with }
-
-Depends on / 依赖: Multiplicative, Multiplicative.isLeftCancelMul, Multiplicative.semigroup, isLeftCancelMul, semigroup
+/-
+**Multiplicative.leftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.leftCancelSemigroup [AddLeftCancelSemigroup α] : LeftCancel
+Semigroup (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.leftCancelSemigroup [AddLeftCancelSemigroup α] :
     LeftCancelSemigroup (Multiplicative α) :=
   { Multiplicative.semigroup, Multiplicative.isLeftCancelMul with }
-
-/--
-Instance `Additive.addRightCancelSemigroup` / 实例 `Additive.addRightCancelSemigroup`
-
-English:
-instance Additive.addRightCancelSemigroup
-  signature: [RightCancelSemigroup α]
-  body: { Additive.addSemigroup, Additive.isRightCancelAdd with }
-
-中文:
-实例 加性.addRightCancelSemigroup
-  签名: [右消去半群 α]
-  定义体: { Additive.addSemigroup, Additive.isRightCancelAdd with }
-
-Depends on / 依赖: Additive, Additive.addSemigroup, Additive.isRightCancelAdd, addSemigroup, isRightCancelAdd
+/-
+**Additive.addRightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addRightCancelSemigroup [RightCancelSemigroup α] : AddRightCancel
+Semigroup (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.addRightCancelSemigroup [RightCancelSemigroup α] :
     AddRightCancelSemigroup (Additive α) :=
   { Additive.addSemigroup, Additive.isRightCancelAdd with }
-
-/--
-Instance `Multiplicative.rightCancelSemigroup` / 实例 `Multiplicative.rightCancelSemigroup`
-
-English:
-instance Multiplicative.rightCancelSemigroup
-  signature: [AddRightCancelSemigroup α]
-  body: { Multiplicative.semigroup, Multiplicative.isRightCancelMul with }
-
-中文:
-实例 Multiplicative.rightCancelSemigroup
-  签名: [加法右消去半群 α]
-  定义体: { Multiplicative.semigroup, Multiplicative.isRightCancelMul with }
-
-Depends on / 依赖: Multiplicative, Multiplicative.isRightCancelMul, Multiplicative.semigroup, isRightCancelMul, semigroup
+/-
+**Multiplicative.rightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.rightCancelSemigroup [AddRightCancelSemigroup α] : RightCan
+celSemigroup (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.rightCancelSemigroup [AddRightCancelSemigroup α] :
     RightCancelSemigroup (Multiplicative α) :=
   { Multiplicative.semigroup, Multiplicative.isRightCancelMul with }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: α] : Zero (Additive α)
-  body: ⟨Additive.ofMul 1⟩
-
-@[simp]
-
-中文:
-实例 [幺
-  签名: α] : 零 (加性 α)
-  定义体: ⟨Additive.ofMul 1⟩
-
-@[simp]
-
-Depends on / 依赖: Additive, Additive.ofMul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [One α] : Zero (Additive α) :=
   ⟨Additive.ofMul 1⟩
 
 @[simp]
-/--
-theorem `ofMul_one` / 定理 `ofMul_one`
-
-English:
-theorem ofMul_one
-  given: [One α]
-  statement: @Additive.ofMul α 1 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_one
-  条件: [幺 α]
-  结论: @加性.ofMul α 1 = 0
-  证明: rfl
-
-@[simp]
+/-
+**ofMul_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_one [One α] : @Additive.ofMul α 1 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMul_one [One α] : @Additive.ofMul α 1 = 0 := rfl
 
 @[simp]
-/--
-theorem `ofMul_eq_zero` / 定理 `ofMul_eq_zero`
-
-English:
-theorem ofMul_eq_zero
-  given: {A : Type*} [One A] {x : A}
-  statement: Additive.ofMul x = 0 ↔ x = 1
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 ofMul_eq_zero
-  条件: {A : 类型} [幺 A] {x : A}
-  结论: 加性.ofMul x = 0 ↔ x = 1
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**ofMul_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_eq_zero {A : Type*} [One A] {x : A} : Additive.ofMul x = 0 ↔ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofMul_eq_zero {A : Type*} [One A] {x : A} : Additive.ofMul x = 0 ↔ x = 1 := Iff.rfl
 
 @[simp]
-/--
-theorem `toMul_zero` / 定理 `toMul_zero`
-
-English:
-theorem toMul_zero
-  given: [One α]
-  statement: (0 : Additive α).toMul = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMul_zero
-  条件: [幺 α]
-  结论: (0 : 加性 α).toMul = 1
-  证明: rfl
-
-@[simp]
+/-
+**toMul_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_zero [One α] : (0 : Additive α).toMul = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMul_zero [One α] : (0 : Additive α).toMul = 1 := rfl
 
 @[simp]
-/--
-lemma `toMul_eq_one` / 引理 `toMul_eq_one`
-
-English:
-lemma toMul_eq_one
-  given: {α : Type*} [One α] {x : Additive α}
-  proof: Iff.rfl
-
-中文:
-引理 toMul_eq_one
-  条件: {α : 类型} [幺 α] {x : 加性 α}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**toMul_eq_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：toMul_eq_one {α : Type*} [One α] {x : Additive α} : x.toMul = 1 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma toMul_eq_one {α : Type*} [One α] {x : Additive α} :
     x.toMul = 1 ↔ x = 0 :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: α] : One (Multiplicative α)
-  body: ⟨Multiplicative.ofAdd 0⟩
-
-@[simp]
-
-中文:
-实例 [零
-  签名: α] : 幺 (Multiplicative α)
-  定义体: ⟨Multiplicative.ofAdd 0⟩
-
-@[simp]
-
-Depends on / 依赖: Multiplicative, Multiplicative.ofAdd
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero α] : One (Multiplicative α) :=
   ⟨Multiplicative.ofAdd 0⟩
 
 @[simp]
-/--
-theorem `ofAdd_zero` / 定理 `ofAdd_zero`
-
-English:
-theorem ofAdd_zero
-  given: [Zero α]
-  statement: @Multiplicative.ofAdd α 0 = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_zero
-  条件: [零 α]
-  结论: @Multiplicative.ofAdd α 0 = 1
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_zero [Zero α] : @Multiplicative.ofAdd α 0 = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofAdd_zero [Zero α] : @Multiplicative.ofAdd α 0 = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `ofAdd_eq_one` / 定理 `ofAdd_eq_one`
-
-English:
-theorem ofAdd_eq_one
-  given: {A : Type*} [Zero A] {x : A}
-  statement: Multiplicative.ofAdd x = 1 ↔ x = 0
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_eq_one
-  条件: {A : 类型} [零 A] {x : A}
-  结论: Multiplicative.ofAdd x = 1 ↔ x = 0
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**ofAdd_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_eq_one {A : Type*} [Zero A] {x : A} : Multiplicative.ofAdd x = 1 ↔ x
+ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofAdd_eq_one {A : Type*} [Zero A] {x : A} : Multiplicative.ofAdd x = 1 ↔ x = 0 :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `toAdd_one` / 定理 `toAdd_one`
-
-English:
-theorem toAdd_one
-  given: [Zero α]
-  statement: (1 : Multiplicative α).toAdd = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toAdd_one
-  条件: [零 α]
-  结论: (1 : Multiplicative α).toAdd = 0
-  证明: rfl
-
-@[simp]
+/-
+**toAdd_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_one [Zero α] : (1 : Multiplicative α).toAdd = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAdd_one [Zero α] : (1 : Multiplicative α).toAdd = 0 :=
   rfl
 
 @[simp]
-/--
-lemma `toAdd_eq_zero` / 引理 `toAdd_eq_zero`
-
-English:
-lemma toAdd_eq_zero
-  given: {α : Type*} [Zero α] {x : Multiplicative α}
-  proof: Iff.rfl
-
-中文:
-引理 toAdd_eq_zero
-  条件: {α : 类型} [零 α] {x : Multiplicative α}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**toAdd_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：toAdd_eq_zero {α : Type*} [Zero α] {x : Multiplicative α} : x.toAdd = 0 ↔ 
+x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma toAdd_eq_zero {α : Type*} [Zero α] {x : Multiplicative α} :
     x.toAdd = 0 ↔ x = 1 :=
   Iff.rfl
-
-/--
-Instance `Additive.addZeroClass` / 实例 `Additive.addZeroClass`
-
-English:
-instance Additive.addZeroClass
-  signature: [MulOneClass α]
-  body: @one_mul α _
-  add_zero := @mul_one α _
-
-中文:
-实例 加性.addZeroClass
-  签名: [MulOne类 α]
-  定义体: @one_mul α _
-  add_zero := @mul_one α _
-
-Depends on / 依赖: one_mul
+/-
+**Additive.addZeroClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addZeroClass [MulOneClass α] : AddZeroClass (Additive α) where ze
+ro_add
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 instance Additive.addZeroClass [MulOneClass α] : AddZeroClass (Additive α) where
   zero_add := @one_mul α _
   add_zero := @mul_one α _
-
-/--
-Instance `Multiplicative.mulOneClass` / 实例 `Multiplicative.mulOneClass`
-
-English:
-instance Multiplicative.mulOneClass
-  signature: [AddZeroClass α]
-  body: @zero_add α _
-  mul_one := @add_zero α _
-
-中文:
-实例 Multiplicative.mulOneClass
-  签名: [加法零类 α]
-  定义体: @zero_add α _
-  mul_one := @add_zero α _
-
-Depends on / 依赖: zero_add
+/-
+**Multiplicative.mulOneClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.mulOneClass [AddZeroClass α] : MulOneClass (Multiplicative 
+α) where one_mul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 instance Multiplicative.mulOneClass [AddZeroClass α] : MulOneClass (Multiplicative α) where
   one_mul := @zero_add α _
   mul_one := @add_zero α _
-
-/--
-Instance `Additive.addMonoid` / 实例 `Additive.addMonoid`
-
-English:
-instance Additive.addMonoid
-  signature: [h : Monoid α]
-  body: ofMul (a.toMul ^ n)
-  nsmul_zero := h.npow_zero
-  nsmul_succ := h.npow_succ
-
-中文:
-实例 加性.addMonoid
-  签名: [h : 幺半群 α]
-  定义体: ofMul (a.toMul ^ n)
-  nsmul_zero := h.npow_zero
-  nsmul_succ := h.npow_succ
-
-Depends on / 依赖: a.toMul
+/-
+**Additive.addMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addMonoid [h : Monoid α] : AddMonoid (Additive α) where nsmul n a
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.npow_zero`：∀ {M : Type u} [self : Monoid M] (x : M), x ^ 0 = 1
+· 使用定理 `Monoid.npow_succ`：∀ {M : Type u} [self : Monoid M] (n : ℕ) (x : M), x ^ 
+(n + 1) = x ^ n * x
 -/
 instance Additive.addMonoid [h : Monoid α] : AddMonoid (Additive α) where
   nsmul n a := ofMul (a.toMul ^ n)
   nsmul_zero := h.npow_zero
   nsmul_succ := h.npow_succ
-
-/--
-Instance `Multiplicative.monoid` / 实例 `Multiplicative.monoid`
-
-English:
-instance Multiplicative.monoid
-  signature: [h : AddMonoid α]
-  body: ofAdd (n • a.toAdd)
-  npow_zero := h.nsmul_zero
-  npow_succ := h.nsmul_succ
-
-@[simp]
-
-中文:
-实例 Multiplicative.monoid
-  签名: [h : 加法幺半群 α]
-  定义体: ofAdd (n • a.toAdd)
-  npow_zero := h.nsmul_zero
-  npow_succ := h.nsmul_succ
-
-@[simp]
-
-Depends on / 依赖: a.toAdd
+/-
+**Multiplicative.monoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.monoid [h : AddMonoid α] : Monoid (Multiplicative α) where 
+npow n a
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoid.nsmul_zero`：∀ {M : Type u} [self : AddMonoid M] (x : M), 0 • x
+ = 0
+· 使用定理 `AddMonoid.nsmul_succ`：∀ {M : Type u} [self : AddMonoid M] (n : ℕ) (x : M
+), (n + 1) • x = n • x + x
 -/
 instance Multiplicative.monoid [h : AddMonoid α] : Monoid (Multiplicative α) where
   npow n a := ofAdd (n • a.toAdd)
@@ -1346,217 +716,127 @@ instance Multiplicative.monoid [h : AddMonoid α] : Monoid (Multiplicative α) w
   npow_succ := h.nsmul_succ
 
 @[simp]
-/--
-theorem `ofMul_pow` / 定理 `ofMul_pow`
-
-English:
-theorem ofMul_pow
-  given: [Monoid α] (n : Nat) (a : α)
-  statement: ofMul (a ^ n) = n • ofMul a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_pow
-  条件: [幺半群 α] (n : 自然数) (a : α)
-  结论: ofMul (a ^ n) = n • ofMul a
-  证明: rfl
-
-@[simp]
+/-
+**ofMul_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_pow [Monoid α] (n : Nat) (a : α) : ofMul (a ^ n) = n • ofMul a
+参数：n : Nat；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofMul_pow [Monoid α] (n : Nat) (a : α) : ofMul (a ^ n) = n • ofMul a :=
+theorem ofMul_pow [Monoid α] (n : ℕ) (a : α) : ofMul (a ^ n) = n • ofMul a :=
   rfl
 
 @[simp]
-/--
-theorem `toMul_nsmul` / 定理 `toMul_nsmul`
-
-English:
-theorem toMul_nsmul
-  given: [Monoid α] (n : Nat) (a : Additive α)
-  statement: (n • a).toMul = a.toMul ^ n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMul_nsmul
-  条件: [幺半群 α] (n : 自然数) (a : 加性 α)
-  结论: (n • a).toMul = a.toMul ^ n
-  证明: rfl
-
-@[simp]
+/-
+**toMul_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_nsmul [Monoid α] (n : Nat) (a : Additive α) : (n • a).toMul = a.toMu
+l ^ n
+参数：n : Nat；a : Additive α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toMul_nsmul [Monoid α] (n : Nat) (a : Additive α) : (n • a).toMul = a.toMul ^ n :=
+theorem toMul_nsmul [Monoid α] (n : ℕ) (a : Additive α) : (n • a).toMul = a.toMul ^ n :=
   rfl
 
 @[simp]
-/--
-theorem `ofAdd_nsmul` / 定理 `ofAdd_nsmul`
-
-English:
-theorem ofAdd_nsmul
-  given: [AddMonoid α] (n : Nat) (a : α)
-  statement: ofAdd (n • a) = ofAdd a ^ n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_nsmul
-  条件: [加法幺半群 α] (n : 自然数) (a : α)
-  结论: ofAdd (n • a) = ofAdd a ^ n
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_nsmul [AddMonoid α] (n : Nat) (a : α) : ofAdd (n • a) = ofAdd a ^ n
+参数：n : Nat；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofAdd_nsmul [AddMonoid α] (n : Nat) (a : α) : ofAdd (n • a) = ofAdd a ^ n :=
+theorem ofAdd_nsmul [AddMonoid α] (n : ℕ) (a : α) : ofAdd (n • a) = ofAdd a ^ n :=
   rfl
 
 @[simp]
-/--
-theorem `toAdd_pow` / 定理 `toAdd_pow`
-
-English:
-theorem toAdd_pow
-  given: [AddMonoid α] (a : Multiplicative α) (n : Nat)
-  statement: (a ^ n).toAdd = n • a.toAdd
-  proof: rfl
-
-中文:
-定理 toAdd_pow
-  条件: [加法幺半群 α] (a : Multiplicative α) (n : 自然数)
-  结论: (a ^ n).toAdd = n • a.toAdd
-  证明: rfl
+/-
+**toAdd_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_pow [AddMonoid α] (a : Multiplicative α) (n : Nat) : (a ^ n).toAdd =
+ n • a.toAdd
+参数：a : Multiplicative α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toAdd_pow [AddMonoid α] (a : Multiplicative α) (n : Nat) : (a ^ n).toAdd = n • a.toAdd :=
+theorem toAdd_pow [AddMonoid α] (a : Multiplicative α) (n : ℕ) : (a ^ n).toAdd = n • a.toAdd :=
   rfl
 
 section Monoid
 variable [Monoid α]
 
 @[simp]
-/--
-lemma `isAddLeftRegular_ofMul` / 引理 `isAddLeftRegular_ofMul`
-
-English:
-lemma isAddLeftRegular_ofMul
-  given: {a : α}
-  statement: IsAddLeftRegular (Additive.ofMul a) ↔ IsLeftRegular a
-  proof: .rfl
-
-@[simp]
-
-中文:
-引理 isAddLeftRegular_ofMul
-  条件: {a : α}
-  结论: IsAddLeftRegular (加性.ofMul a) ↔ IsLeftRegular a
-  证明: .rfl
-
-@[simp]
+/-
+**isAddLeftRegular_ofMul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isAddLeftRegular_ofMul {a : α} : IsAddLeftRegular (Additive.ofMul a) ↔ IsL
+eftRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isAddLeftRegular_ofMul {a : α} : IsAddLeftRegular (Additive.ofMul a) ↔ IsLeftRegular a := .rfl
 
 @[simp]
-/--
-lemma `isLeftRegular_toMul` / 引理 `isLeftRegular_toMul`
-
-English:
-lemma isLeftRegular_toMul
-  given: {a : Additive α}
-  statement: IsLeftRegular a.toMul ↔ IsAddLeftRegular a
-  proof: .rfl
-
-@[simp]
-
-中文:
-引理 isLeftRegular_toMul
-  条件: {a : 加性 α}
-  结论: IsLeftRegular a.toMul ↔ IsAddLeftRegular a
-  证明: .rfl
-
-@[simp]
+/-
+**isLeftRegular_toMul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isLeftRegular_toMul {a : Additive α} : IsLeftRegular a.toMul ↔ IsAddLeftRe
+gular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isLeftRegular_toMul {a : Additive α} : IsLeftRegular a.toMul ↔ IsAddLeftRegular a := .rfl
 
 @[simp]
-/--
-lemma `isAddRightRegular_ofMul` / 引理 `isAddRightRegular_ofMul`
-
-English:
-lemma isAddRightRegular_ofMul
-  given: {a : α}
-  statement: IsAddRightRegular (Additive.ofMul a) ↔ IsRightRegular a
-  proof: .rfl
-
-@[simp]
-
-中文:
-引理 isAddRightRegular_ofMul
-  条件: {a : α}
-  结论: IsAddRightRegular (加性.ofMul a) ↔ IsRightRegular a
-  证明: .rfl
-
-@[simp]
+/-
+**isAddRightRegular_ofMul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isAddRightRegular_ofMul {a : α} : IsAddRightRegular (Additive.ofMul a) ↔ I
+sRightRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isAddRightRegular_ofMul {a : α} : IsAddRightRegular (Additive.ofMul a) ↔ IsRightRegular a :=
   .rfl
 
 @[simp]
-/--
-lemma `isRightRegular_toMul` / 引理 `isRightRegular_toMul`
-
-English:
-lemma isRightRegular_toMul
-  given: {a : Additive α}
-  statement: IsRightRegular a.toMul ↔ IsAddRightRegular a
-  proof: .rfl
-
-中文:
-引理 isRightRegular_toMul
-  条件: {a : 加性 α}
-  结论: IsRightRegular a.toMul ↔ IsAddRightRegular a
-  证明: .rfl
+/-
+**isRightRegular_toMul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isRightRegular_toMul {a : Additive α} : IsRightRegular a.toMul ↔ IsAddRigh
+tRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isRightRegular_toMul {a : Additive α} : IsRightRegular a.toMul ↔ IsAddRightRegular a := .rfl
-
-/--
-lemma `isAddRegular_ofMul` / 引理 `isAddRegular_ofMul`
-
-English:
-lemma isAddRegular_ofMul
-  given: {a : α}
-  statement: IsAddRegular (Additive.ofMul a) ↔ IsRegular a
-  proof: by
-  simp [isAddRegular_iff, isRegular_iff]
-
-中文:
-引理 isAddRegular_ofMul
-  条件: {a : α}
-  结论: 是加法正则 (加性.ofMul a) ↔ 是正则 a
-  证明: by
-  simp [isAddRegular_iff, isRegular_iff]
+/-
+**isAddRegular_ofMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : Monoid α] {a : α}, IsAddRegular (Additive.ofMul a) 
+↔ IsRegular a
+参数：Additive.ofMul a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma isAddRegular_ofMul {a : α} : IsAddRegular (Additive.ofMul a) ↔ IsRegular a := by
   simp [isAddRegular_iff, isRegular_iff]
-
-/--
-lemma `isRegular_toMul` / 引理 `isRegular_toMul`
-
-English:
-lemma isRegular_toMul
-  given: {a : Additive α}
-  statement: IsRegular a.toMul ↔ IsAddRegular a
-  proof: by
-  simp [isAddRegular_iff, isRegular_iff]
-
-中文:
-引理 isRegular_toMul
-  条件: {a : 加性 α}
-  结论: 是正则 a.toMul ↔ 是加法正则 a
-  证明: by
-  simp [isAddRegular_iff, isRegular_iff]
+/-
+**isRegular_toMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : Monoid α] {a : Additive α}, IsRegular (Additive.toM
+ul a) ↔ IsAddRegular a
+参数：Additive.toMul a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma isRegular_toMul {a : Additive α} : IsRegular a.toMul ↔ IsAddRegular a := by
   simp [isAddRegular_iff, isRegular_iff]
@@ -1567,578 +847,312 @@ section AddMonoid
 variable [AddMonoid α]
 
 @[simp]
-/--
-lemma `isLeftRegular_ofAdd` / 引理 `isLeftRegular_ofAdd`
-
-English:
-lemma isLeftRegular_ofAdd
-  given: {a : α}
-  statement: IsLeftRegular (Multiplicative.ofAdd a) ↔ IsAddLeftRegular a
-  proof: .rfl
-
-@[simp]
-
-中文:
-引理 isLeftRegular_ofAdd
-  条件: {a : α}
-  结论: IsLeftRegular (Multiplicative.ofAdd a) ↔ IsAddLeftRegular a
-  证明: .rfl
-
-@[simp]
+/-
+**isLeftRegular_ofAdd** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isLeftRegular_ofAdd {a : α} : IsLeftRegular (Multiplicative.ofAdd a) ↔ IsA
+ddLeftRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isLeftRegular_ofAdd {a : α} : IsLeftRegular (Multiplicative.ofAdd a) ↔ IsAddLeftRegular a :=
   .rfl
 
 @[simp]
-/--
-lemma `isAddLeftRegular_toAdd` / 引理 `isAddLeftRegular_toAdd`
-
-English:
-lemma isAddLeftRegular_toAdd
-  given: {a : Multiplicative α}
-  statement: IsAddLeftRegular a.toAdd ↔ IsLeftRegular a
-  proof: .rfl
-
-@[simp]
-
-中文:
-引理 isAddLeftRegular_toAdd
-  条件: {a : Multiplicative α}
-  结论: IsAddLeftRegular a.toAdd ↔ IsLeftRegular a
-  证明: .rfl
-
-@[simp]
+/-
+**isAddLeftRegular_toAdd** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isAddLeftRegular_toAdd {a : Multiplicative α} : IsAddLeftRegular a.toAdd ↔
+ IsLeftRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isAddLeftRegular_toAdd {a : Multiplicative α} : IsAddLeftRegular a.toAdd ↔ IsLeftRegular a :=
   .rfl
 
 @[simp]
-/--
-lemma `isRightRegular_ofAdd` / 引理 `isRightRegular_ofAdd`
-
-English:
-lemma isRightRegular_ofAdd
-  given: {a : α}
-  proof: .rfl
-
-中文:
-引理 isRightRegular_ofAdd
-  条件: {a : α}
-  证明: .rfl
+/-
+**isRightRegular_ofAdd** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isRightRegular_ofAdd {a : α} : IsRightRegular (Multiplicative.ofAdd a) ↔ I
+sAddRightRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isRightRegular_ofAdd {a : α} :
     IsRightRegular (Multiplicative.ofAdd a) ↔ IsAddRightRegular a := .rfl
-
-/--
-lemma `isAddRightRegular_toAdd` / 引理 `isAddRightRegular_toAdd`
-
-English:
-lemma isAddRightRegular_toAdd
-  given: {a : Multiplicative α}
-  proof: .rfl
-
-中文:
-引理 isAddRightRegular_toAdd
-  条件: {a : Multiplicative α}
-  证明: .rfl
+/-
+**isAddRightRegular_toAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : AddMonoid α] {a : Multiplicative α},   IsAddRightRe
+gular (Multiplicative.toAdd a) ↔ IsRightRegular a
+参数：Multiplicative.toAdd a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isAddRightRegular_toAdd {a : Multiplicative α} :
     IsAddRightRegular a.toAdd ↔ IsRightRegular a := .rfl
-
-/--
-lemma `isRegular_ofAdd` / 引理 `isRegular_ofAdd`
-
-English:
-lemma isRegular_ofAdd
-  given: {a : α}
-  statement: IsRegular (Multiplicative.ofAdd a) ↔ IsAddRegular a
-  proof: by
-  simp [isAddRegular_iff, isRegular_iff]
-
-中文:
-引理 isRegular_ofAdd
-  条件: {a : α}
-  结论: 是正则 (Multiplicative.ofAdd a) ↔ 是加法正则 a
-  证明: by
-  simp [isAddRegular_iff, isRegular_iff]
+/-
+**isRegular_ofAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : AddMonoid α] {a : α}, IsRegular (Multiplicative.ofA
+dd a) ↔ IsAddRegular a
+参数：Multiplicative.ofAdd a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma isRegular_ofAdd {a : α} : IsRegular (Multiplicative.ofAdd a) ↔ IsAddRegular a := by
   simp [isAddRegular_iff, isRegular_iff]
-
-/--
-lemma `isAddRegular_toAdd` / 引理 `isAddRegular_toAdd`
-
-English:
-lemma isAddRegular_toAdd
-  given: {a : Multiplicative α}
-  statement: IsAddRegular a.toAdd ↔ IsRegular a
-  proof: by
-  simp [isAddRegular_iff, isRegular_iff]
-
-中文:
-引理 isAddRegular_toAdd
-  条件: {a : Multiplicative α}
-  结论: 是加法正则 a.toAdd ↔ 是正则 a
-  证明: by
-  simp [isAddRegular_iff, isRegular_iff]
+/-
+**isAddRegular_toAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : AddMonoid α] {a : Multiplicative α}, IsAddRegular (
+Multiplicative.toAdd a) ↔ IsRegular a
+参数：Multiplicative.toAdd a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma isAddRegular_toAdd {a : Multiplicative α} : IsAddRegular a.toAdd ↔ IsRegular a := by
   simp [isAddRegular_iff, isRegular_iff]
 
 end AddMonoid
 
-/--
-Instance `Additive.addLeftCancelMonoid` / 实例 `Additive.addLeftCancelMonoid`
-
-English:
-instance Additive.addLeftCancelMonoid
-  signature: [LeftCancelMonoid α]
-  body: { Additive.addMonoid, Additive.addLeftCancelSemigroup with }
-
-中文:
-实例 加性.addLeftCancelMonoid
-  签名: [左消去幺半群 α]
-  定义体: { Additive.addMonoid, Additive.addLeftCancelSemigroup with }
-
-Depends on / 依赖: Additive, Additive.addLeftCancelSemigroup, Additive.addMonoid, addLeftCancelSemigroup, addMonoid
+/-
+**Additive.addLeftCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addLeftCancelMonoid [LeftCancelMonoid α] : AddLeftCancelMonoid (A
+dditive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.addLeftCancelMonoid [LeftCancelMonoid α] : AddLeftCancelMonoid (Additive α) :=
   { Additive.addMonoid, Additive.addLeftCancelSemigroup with }
-
-/--
-Instance `Multiplicative.leftCancelMonoid` / 实例 `Multiplicative.leftCancelMonoid`
-
-English:
-instance Multiplicative.leftCancelMonoid
-  signature: [AddLeftCancelMonoid α]
-  body: { Multiplicative.monoid, Multiplicative.leftCancelSemigroup with }
-
-中文:
-实例 Multiplicative.leftCancelMonoid
-  签名: [加法左消去幺半群 α]
-  定义体: { Multiplicative.monoid, Multiplicative.leftCancelSemigroup with }
-
-Depends on / 依赖: Multiplicative, Multiplicative.leftCancelSemigroup, Multiplicative.monoid, leftCancelSemigroup, monoid
+/-
+**Multiplicative.leftCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.leftCancelMonoid [AddLeftCancelMonoid α] : LeftCancelMonoid
+ (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.leftCancelMonoid [AddLeftCancelMonoid α] :
     LeftCancelMonoid (Multiplicative α) :=
   { Multiplicative.monoid, Multiplicative.leftCancelSemigroup with }
-
-/--
-Instance `Additive.addRightCancelMonoid` / 实例 `Additive.addRightCancelMonoid`
-
-English:
-instance Additive.addRightCancelMonoid
-  signature: [RightCancelMonoid α]
-  body: { Additive.addMonoid, Additive.addRightCancelSemigroup with }
-
-中文:
-实例 加性.addRightCancelMonoid
-  签名: [右消去幺半群 α]
-  定义体: { Additive.addMonoid, Additive.addRightCancelSemigroup with }
-
-Depends on / 依赖: Additive, Additive.addMonoid, Additive.addRightCancelSemigroup, addMonoid, addRightCancelSemigroup
+/-
+**Additive.addRightCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addRightCancelMonoid [RightCancelMonoid α] : AddRightCancelMonoid
+ (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.addRightCancelMonoid [RightCancelMonoid α] : AddRightCancelMonoid (Additive α) :=
   { Additive.addMonoid, Additive.addRightCancelSemigroup with }
-
-/--
-Instance `Multiplicative.rightCancelMonoid` / 实例 `Multiplicative.rightCancelMonoid`
-
-English:
-instance Multiplicative.rightCancelMonoid
-  signature: [AddRightCancelMonoid α]
-  body: { Multiplicative.monoid, Multiplicative.rightCancelSemigroup with }
-
-中文:
-实例 Multiplicative.rightCancelMonoid
-  签名: [加法右消去幺半群 α]
-  定义体: { Multiplicative.monoid, Multiplicative.rightCancelSemigroup with }
-
-Depends on / 依赖: Multiplicative, Multiplicative.monoid, Multiplicative.rightCancelSemigroup, monoid, rightCancelSemigroup
+/-
+**Multiplicative.rightCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.rightCancelMonoid [AddRightCancelMonoid α] : RightCancelMon
+oid (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.rightCancelMonoid [AddRightCancelMonoid α] :
     RightCancelMonoid (Multiplicative α) :=
   { Multiplicative.monoid, Multiplicative.rightCancelSemigroup with }
-
-/--
-Instance `Additive.addCommMonoid` / 实例 `Additive.addCommMonoid`
-
-English:
-instance Additive.addCommMonoid
-  signature: [CommMonoid α]
-  body: { Additive.addMonoid, Additive.addCommSemigroup with }
-
-中文:
-实例 加性.addCommMonoid
-  签名: [交换幺半群 α]
-  定义体: { Additive.addMonoid, Additive.addCommSemigroup with }
-
-Depends on / 依赖: Additive, Additive.addCommSemigroup, Additive.addMonoid, addCommSemigroup, addMonoid
+/-
+**Additive.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addCommMonoid [CommMonoid α] : AddCommMonoid (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.addCommMonoid [CommMonoid α] : AddCommMonoid (Additive α) :=
   { Additive.addMonoid, Additive.addCommSemigroup with }
-
-/--
-Instance `Multiplicative.commMonoid` / 实例 `Multiplicative.commMonoid`
-
-English:
-instance Multiplicative.commMonoid
-  signature: [AddCommMonoid α]
-  body: { Multiplicative.monoid, Multiplicative.commSemigroup with }
-
-中文:
-实例 Multiplicative.commMonoid
-  签名: [加法交换幺半群 α]
-  定义体: { Multiplicative.monoid, Multiplicative.commSemigroup with }
-
-Depends on / 依赖: Multiplicative, Multiplicative.commSemigroup, Multiplicative.monoid, commSemigroup, monoid
+/-
+**Multiplicative.commMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.commMonoid [AddCommMonoid α] : CommMonoid (Multiplicative α
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.commMonoid [AddCommMonoid α] : CommMonoid (Multiplicative α) :=
   { Multiplicative.monoid, Multiplicative.commSemigroup with }
-
-/--
-Instance `Additive.instAddCancelCommMonoid` / 实例 `Additive.instAddCancelCommMonoid`
-
-English:
-instance Additive.instAddCancelCommMonoid
-  signature: [CancelCommMonoid α]
-
-中文:
-实例 加性.instAddCancelCommMonoid
-  签名: [消去交换幺半群 α]
+/-
+**Additive.instAddCancelCommMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Additive`。
+形式化陈述：{α : Type u} → [CancelCommMonoid α] → AddCancelCommMonoid (Additive α)
+参数：Additive α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.instAddCancelCommMonoid [CancelCommMonoid α] :
     AddCancelCommMonoid (Additive α) where
-
-/--
-Instance `Multiplicative.instCancelCommMonoid` / 实例 `Multiplicative.instCancelCommMonoid`
-
-English:
-instance Multiplicative.instCancelCommMonoid
-  signature: [AddCancelCommMonoid α]
-
-中文:
-实例 Multiplicative.instCancelCommMonoid
-  签名: [加法消去交换幺半群 α]
+/-
+**Multiplicative.instCancelCommMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Multiplicative`
+。
+形式化陈述：{α : Type u} → [AddCancelCommMonoid α] → CancelCommMonoid (Multiplicative 
+α)
+参数：Multiplicative α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.instCancelCommMonoid [AddCancelCommMonoid α] :
     CancelCommMonoid (Multiplicative α) where
-
-/--
-Instance `Additive.neg` / 实例 `Additive.neg`
-
-English:
-instance Additive.neg
-  signature: [Inv α]
-  body: ⟨fun x => ofAdd x.toMul⁻¹⟩
-
-@[simp]
-
-中文:
-实例 加性.neg
-  签名: [取逆 α]
-  定义体: ⟨fun x => ofAdd x.toMul⁻¹⟩
-
-@[simp]
-
-Depends on / 依赖: x.toMul
+/-
+**Additive.neg** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.neg [Inv α] : Neg (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.neg [Inv α] : Neg (Additive α) :=
   ⟨fun x => ofAdd x.toMul⁻¹⟩
 
 @[simp]
-/--
-theorem `ofMul_inv` / 定理 `ofMul_inv`
-
-English:
-theorem ofMul_inv
-  given: [Inv α] (x : α)
-  statement: ofMul x⁻¹ = -ofMul x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_inv
-  条件: [取逆 α] (x : α)
-  结论: ofMul x⁻¹ = -ofMul x
-  证明: rfl
-
-@[simp]
+/-
+**ofMul_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_inv [Inv α] (x : α) : ofMul x⁻¹ = -ofMul x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMul_inv [Inv α] (x : α) : ofMul x⁻¹ = -ofMul x :=
   rfl
 
 @[simp]
-/--
-theorem `toMul_neg` / 定理 `toMul_neg`
-
-English:
-theorem toMul_neg
-  given: [Inv α] (x : Additive α)
-  statement: (-x).toMul = x.toMul⁻¹
-  proof: rfl
-
-中文:
-定理 toMul_neg
-  条件: [取逆 α] (x : 加性 α)
-  结论: (-x).toMul = x.toMul⁻¹
-  证明: rfl
+/-
+**toMul_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_neg [Inv α] (x : Additive α) : (-x).toMul = x.toMul⁻¹
+参数：x : Additive α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMul_neg [Inv α] (x : Additive α) : (-x).toMul = x.toMul⁻¹ :=
   rfl
-
-/--
-Instance `Multiplicative.inv` / 实例 `Multiplicative.inv`
-
-English:
-instance Multiplicative.inv
-  signature: [Neg α]
-  body: ⟨fun x => ofMul (-x.toAdd)⟩
-
-@[simp]
-
-中文:
-实例 Multiplicative.inv
-  签名: [取负 α]
-  定义体: ⟨fun x => ofMul (-x.toAdd)⟩
-
-@[simp]
-
-Depends on / 依赖: x.toAdd
+/-
+**Multiplicative.inv** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.inv [Neg α] : Inv (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.inv [Neg α] : Inv (Multiplicative α) :=
   ⟨fun x => ofMul (-x.toAdd)⟩
 
 @[simp]
-/--
-theorem `ofAdd_neg` / 定理 `ofAdd_neg`
-
-English:
-theorem ofAdd_neg
-  given: [Neg α] (x : α)
-  statement: ofAdd (-x) = (ofAdd x)⁻¹
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_neg
-  条件: [取负 α] (x : α)
-  结论: ofAdd (-x) = (ofAdd x)⁻¹
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_neg [Neg α] (x : α) : ofAdd (-x) = (ofAdd x)⁻¹
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofAdd_neg [Neg α] (x : α) : ofAdd (-x) = (ofAdd x)⁻¹ :=
   rfl
 
 @[simp]
-/--
-theorem `toAdd_inv` / 定理 `toAdd_inv`
-
-English:
-theorem toAdd_inv
-  given: [Neg α] (x : Multiplicative α)
-  statement: x⁻¹.toAdd = -x.toAdd
-  proof: rfl
-
-中文:
-定理 toAdd_inv
-  条件: [取负 α] (x : Multiplicative α)
-  结论: x⁻¹.toAdd = -x.toAdd
-  证明: rfl
+/-
+**toAdd_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_inv [Neg α] (x : Multiplicative α) : x⁻¹.toAdd = -x.toAdd
+参数：x : Multiplicative α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAdd_inv [Neg α] (x : Multiplicative α) : x⁻¹.toAdd = -x.toAdd :=
   rfl
-
-/--
-Instance `Additive.sub` / 实例 `Additive.sub`
-
-English:
-instance Additive.sub
-  signature: [Div α]
-  body: ofMul (x.toMul / y.toMul)
-
-中文:
-实例 加性.sub
-  签名: [除法 α]
-  定义体: ofMul (x.toMul / y.toMul)
-
-Depends on / 依赖: x.toMul, y.toMul
+/-
+**Additive.sub** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.sub [Div α] : Sub (Additive α) where sub x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.sub [Div α] : Sub (Additive α) where
   sub x y := ofMul (x.toMul / y.toMul)
-
-/--
-Instance `Multiplicative.div` / 实例 `Multiplicative.div`
-
-English:
-instance Multiplicative.div
-  signature: [Sub α]
-  body: ofAdd (x.toAdd - y.toAdd)
-
-@[simp]
-
-中文:
-实例 Multiplicative.div
-  签名: [减法 α]
-  定义体: ofAdd (x.toAdd - y.toAdd)
-
-@[simp]
-
-Depends on / 依赖: x.toAdd, y.toAdd
+/-
+**Multiplicative.div** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.div [Sub α] : Div (Multiplicative α) where div x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.div [Sub α] : Div (Multiplicative α) where
   div x y := ofAdd (x.toAdd - y.toAdd)
 
 @[simp]
-/--
-theorem `ofAdd_sub` / 定理 `ofAdd_sub`
-
-English:
-theorem ofAdd_sub
-  given: [Sub α] (x y : α)
-  statement: ofAdd (x - y) = ofAdd x / ofAdd y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_sub
-  条件: [减法 α] (x y : α)
-  结论: ofAdd (x - y) = ofAdd x / ofAdd y
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_sub [Sub α] (x y : α) : ofAdd (x - y) = ofAdd x / ofAdd y
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofAdd_sub [Sub α] (x y : α) : ofAdd (x - y) = ofAdd x / ofAdd y :=
   rfl
 
 @[simp]
-/--
-theorem `toAdd_div` / 定理 `toAdd_div`
-
-English:
-theorem toAdd_div
-  given: [Sub α] (x y : Multiplicative α)
-  statement: (x / y).toAdd = x.toAdd - y.toAdd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toAdd_div
-  条件: [减法 α] (x y : Multiplicative α)
-  结论: (x / y).toAdd = x.toAdd - y.toAdd
-  证明: rfl
-
-@[simp]
+/-
+**toAdd_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_div [Sub α] (x y : Multiplicative α) : (x / y).toAdd = x.toAdd - y.t
+oAdd
+参数：x y : Multiplicative α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAdd_div [Sub α] (x y : Multiplicative α) : (x / y).toAdd = x.toAdd - y.toAdd :=
   rfl
 
 @[simp]
-/--
-theorem `ofMul_div` / 定理 `ofMul_div`
-
-English:
-theorem ofMul_div
-  given: [Div α] (x y : α)
-  statement: ofMul (x / y) = ofMul x - ofMul y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_div
-  条件: [除法 α] (x y : α)
-  结论: ofMul (x / y) = ofMul x - ofMul y
-  证明: rfl
-
-@[simp]
+/-
+**ofMul_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_div [Div α] (x y : α) : ofMul (x / y) = ofMul x - ofMul y
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMul_div [Div α] (x y : α) : ofMul (x / y) = ofMul x - ofMul y :=
   rfl
 
 @[simp]
-/--
-theorem `toMul_sub` / 定理 `toMul_sub`
-
-English:
-theorem toMul_sub
-  given: [Div α] (x y : Additive α)
-  statement: (x - y).toMul = x.toMul / y.toMul
-  proof: rfl
-
-中文:
-定理 toMul_sub
-  条件: [除法 α] (x y : 加性 α)
-  结论: (x - y).toMul = x.toMul / y.toMul
-  证明: rfl
+/-
+**toMul_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_sub [Div α] (x y : Additive α) : (x - y).toMul = x.toMul / y.toMul
+参数：x y : Additive α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMul_sub [Div α] (x y : Additive α) : (x - y).toMul = x.toMul / y.toMul :=
   rfl
-
-/--
-Instance `Additive.involutiveNeg` / 实例 `Additive.involutiveNeg`
-
-English:
-instance Additive.involutiveNeg
-  signature: [InvolutiveInv α]
-  body: { Additive.neg with neg_neg := @inv_inv α _ }
-
-中文:
-实例 加性.involutiveNeg
-  签名: [InvolutiveInv α]
-  定义体: { Additive.neg with neg_neg := @inv_inv α _ }
-
-Depends on / 依赖: Additive, Additive.neg, inv_inv, neg_neg
+/-
+**Additive.involutiveNeg** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.involutiveNeg [InvolutiveInv α] : InvolutiveNeg (Additive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 instance Additive.involutiveNeg [InvolutiveInv α] : InvolutiveNeg (Additive α) :=
   { Additive.neg with neg_neg := @inv_inv α _ }
-
-/--
-Instance `Multiplicative.involutiveInv` / 实例 `Multiplicative.involutiveInv`
-
-English:
-instance Multiplicative.involutiveInv
-  signature: [InvolutiveNeg α]
-  body: { Multiplicative.inv with inv_inv := @neg_neg α _ }
-
-中文:
-实例 Multiplicative.involutiveInv
-  签名: [InvolutiveNeg α]
-  定义体: { Multiplicative.inv with inv_inv := @neg_neg α _ }
-
-Depends on / 依赖: Multiplicative, Multiplicative.inv, inv_inv, neg_neg
+/-
+**Multiplicative.involutiveInv** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.involutiveInv [InvolutiveNeg α] : InvolutiveInv (Multiplica
+tive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
 instance Multiplicative.involutiveInv [InvolutiveNeg α] : InvolutiveInv (Multiplicative α) :=
   { Multiplicative.inv with inv_inv := @neg_neg α _ }
-
-/--
-Instance `Additive.subNegMonoid` / 实例 `Additive.subNegMonoid`
-
-English:
-instance Additive.subNegMonoid
-  signature: [h : DivInvMonoid α]
-  body: h.div_eq_mul_inv
-  zsmul n a := ofMul (a.toMul ^ n)
-  zsmul_zero' := h.zpow_zero'
-  zsmul_succ' := h.zpow_succ'
-  zsmul_neg' := h.zpow_neg'
-
-中文:
-实例 加性.subNegMonoid
-  签名: [h : 除逆幺半群 α]
-  定义体: h.div_eq_mul_inv
-  zsmul n a := ofMul (a.toMul ^ n)
-  zsmul_zero' := h.zpow_zero'
-  zsmul_succ' := h.zpow_succ'
-  zsmul_neg' := h.zpow_neg'
-
-Depends on / 依赖: div_eq_mul_inv, h.div_eq_mul_inv
+/-
+**Additive.subNegMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.subNegMonoid [h : DivInvMonoid α] : SubNegMonoid (Additive α) whe
+re sub_eq_add_neg
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `DivInvMonoid.div_eq_mul_inv`：∀ {G : Type u} [self : DivInvMonoid G] (a b
+ : G), a / b = a * b⁻¹
+· 使用定理 `DivInvMonoid.zpow_zero'`：∀ {G : Type u} [self : DivInvMonoid G] (a : G),
+ a ^ 0 = 1
+· 使用定理 `DivInvMonoid.zpow_succ'`：∀ {G : Type u} [self : DivInvMonoid G] (n : ℕ) 
+(a : G), a ^ ↑n.succ = a ^ ↑n * a
+· 使用定理 `DivInvMonoid.zpow_neg'`：∀ {G : Type u} [self : DivInvMonoid G] (n : ℕ) (
+a : G), a ^ Int.negSucc n = (a ^ ↑n.succ)⁻¹
 -/
 instance Additive.subNegMonoid [h : DivInvMonoid α] : SubNegMonoid (Additive α) where
   sub_eq_add_neg := h.div_eq_mul_inv
@@ -2146,33 +1160,20 @@ instance Additive.subNegMonoid [h : DivInvMonoid α] : SubNegMonoid (Additive α
   zsmul_zero' := h.zpow_zero'
   zsmul_succ' := h.zpow_succ'
   zsmul_neg' := h.zpow_neg'
-
-/--
-Instance `Multiplicative.divInvMonoid` / 实例 `Multiplicative.divInvMonoid`
-
-English:
-instance Multiplicative.divInvMonoid
-  signature: [h : SubNegMonoid α]
-  body: h.sub_eq_add_neg
-  zpow n a := ofAdd (n • a.toAdd)
-  zpow_zero' := h.zsmul_zero'
-  zpow_succ' := h.zsmul_succ'
-  zpow_neg' := h.zsmul_neg'
-
-@[simp]
-
-中文:
-实例 Multiplicative.divInvMonoid
-  签名: [h : SubNeg幺半群 α]
-  定义体: h.sub_eq_add_neg
-  zpow n a := ofAdd (n • a.toAdd)
-  zpow_zero' := h.zsmul_zero'
-  zpow_succ' := h.zsmul_succ'
-  zpow_neg' := h.zsmul_neg'
-
-@[simp]
-
-Depends on / 依赖: h.sub_eq_add_neg, sub_eq_add_neg
+/-
+**Multiplicative.divInvMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.divInvMonoid [h : SubNegMonoid α] : DivInvMonoid (Multiplic
+ative α) where div_eq_mul_inv
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubNegMonoid.sub_eq_add_neg`：∀ {G : Type u} [self : SubNegMonoid G] (a b
+ : G), a - b = a + -b
+· 使用定理 `SubNegMonoid.zsmul_zero'`：∀ {G : Type u} [self : SubNegMonoid G] (a : G)
+, 0 • a = 0
+· 使用定理 `SubNegMonoid.zsmul_succ'`：∀ {G : Type u} [self : SubNegMonoid G] (n : ℕ)
+ (a : G), ↑n.succ • a = ↑n • a + a
+· 使用定理 `SubNegMonoid.zsmul_neg'`：∀ {G : Type u} [self : SubNegMonoid G] (n : ℕ) 
+(a : G), Int.negSucc n • a = -(↑n.succ • a)
 -/
 instance Multiplicative.divInvMonoid [h : SubNegMonoid α] : DivInvMonoid (Multiplicative α) where
   div_eq_mul_inv := h.sub_eq_add_neg
@@ -2182,382 +1183,257 @@ instance Multiplicative.divInvMonoid [h : SubNegMonoid α] : DivInvMonoid (Multi
   zpow_neg' := h.zsmul_neg'
 
 @[simp]
-/--
-theorem `ofMul_zpow` / 定理 `ofMul_zpow`
-
-English:
-theorem ofMul_zpow
-  given: [DivInvMonoid α] (z : Int) (a : α)
-  statement: ofMul (a ^ z) = z • ofMul a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMul_zpow
-  条件: [除逆幺半群 α] (z : 整数) (a : α)
-  结论: ofMul (a ^ z) = z • ofMul a
-  证明: rfl
-
-@[simp]
+/-
+**ofMul_zpow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_zpow [DivInvMonoid α] (z : Int) (a : α) : ofMul (a ^ z) = z • ofMul 
+a
+参数：z : Int；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofMul_zpow [DivInvMonoid α] (z : Int) (a : α) : ofMul (a ^ z) = z • ofMul a :=
+theorem ofMul_zpow [DivInvMonoid α] (z : ℤ) (a : α) : ofMul (a ^ z) = z • ofMul a :=
   rfl
 
 @[simp]
-/--
-theorem `toMul_zsmul` / 定理 `toMul_zsmul`
-
-English:
-theorem toMul_zsmul
-  given: [DivInvMonoid α] (z : Int) (a : Additive α)
-  statement: (z • a).toMul = a.toMul ^ z
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMul_zsmul
-  条件: [除逆幺半群 α] (z : 整数) (a : 加性 α)
-  结论: (z • a).toMul = a.toMul ^ z
-  证明: rfl
-
-@[simp]
+/-
+**toMul_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toMul_zsmul [DivInvMonoid α] (z : Int) (a : Additive α) : (z • a).toMul = 
+a.toMul ^ z
+参数：z : Int；a : Additive α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toMul_zsmul [DivInvMonoid α] (z : Int) (a : Additive α) : (z • a).toMul = a.toMul ^ z :=
+theorem toMul_zsmul [DivInvMonoid α] (z : ℤ) (a : Additive α) : (z • a).toMul = a.toMul ^ z :=
   rfl
 
 @[simp]
-/--
-theorem `ofAdd_zsmul` / 定理 `ofAdd_zsmul`
-
-English:
-theorem ofAdd_zsmul
-  given: [SubNegMonoid α] (z : Int) (a : α)
-  statement: ofAdd (z • a) = ofAdd a ^ z
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAdd_zsmul
-  条件: [SubNeg幺半群 α] (z : 整数) (a : α)
-  结论: ofAdd (z • a) = ofAdd a ^ z
-  证明: rfl
-
-@[simp]
+/-
+**ofAdd_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_zsmul [SubNegMonoid α] (z : Int) (a : α) : ofAdd (z • a) = ofAdd a ^
+ z
+参数：z : Int；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofAdd_zsmul [SubNegMonoid α] (z : Int) (a : α) : ofAdd (z • a) = ofAdd a ^ z :=
+theorem ofAdd_zsmul [SubNegMonoid α] (z : ℤ) (a : α) : ofAdd (z • a) = ofAdd a ^ z :=
   rfl
 
 @[simp]
-/--
-theorem `toAdd_zpow` / 定理 `toAdd_zpow`
-
-English:
-theorem toAdd_zpow
-  given: [SubNegMonoid α] (a : Multiplicative α) (z : Int)
-  statement: (a ^ z).toAdd = z • a.toAdd
-  proof: rfl
-
-中文:
-定理 toAdd_zpow
-  条件: [SubNeg幺半群 α] (a : Multiplicative α) (z : 整数)
-  结论: (a ^ z).toAdd = z • a.toAdd
-  证明: rfl
+/-
+**toAdd_zpow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toAdd_zpow [SubNegMonoid α] (a : Multiplicative α) (z : Int) : (a ^ z).toA
+dd = z • a.toAdd
+参数：a : Multiplicative α；z : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toAdd_zpow [SubNegMonoid α] (a : Multiplicative α) (z : Int) : (a ^ z).toAdd = z • a.toAdd :=
+theorem toAdd_zpow [SubNegMonoid α] (a : Multiplicative α) (z : ℤ) : (a ^ z).toAdd = z • a.toAdd :=
   rfl
-
-/--
-Instance `Additive.subtractionMonoid` / 实例 `Additive.subtractionMonoid`
-
-English:
-instance Additive.subtractionMonoid
-  signature: [DivisionMonoid α]
-  body: { Additive.subNegMonoid, Additive.involutiveNeg with
-    neg_add_rev := @mul_inv_rev α _
-    neg_eq_of_add := @inv_eq_of_mul_eq_one_right α _ }
-
-中文:
-实例 加性.subtractionMonoid
-  签名: [Division幺半群 α]
-  定义体: { Additive.subNegMonoid, Additive.involutiveNeg with
-    neg_add_rev := @mul_inv_rev α _
-    neg_eq_of_add := @inv_eq_of_mul_eq_one_right α _ }
-
-Depends on / 依赖: Additive, Additive.involutiveNeg, Additive.subNegMonoid, inv_eq_of_mul_eq_one_right, involutiveNeg, mul_inv_rev, neg_add_rev, neg_eq_of_add, subNegMonoid
+/-
+**Additive.subtractionMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.subtractionMonoid [DivisionMonoid α] : SubtractionMonoid (Additiv
+e α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_eq_of_mul_eq_one_right`：inv_eq_of_mul_eq_one_right : a * b = 1 -> a⁻
+¹ = b
 -/
 instance Additive.subtractionMonoid [DivisionMonoid α] : SubtractionMonoid (Additive α) :=
   { Additive.subNegMonoid, Additive.involutiveNeg with
     neg_add_rev := @mul_inv_rev α _
     neg_eq_of_add := @inv_eq_of_mul_eq_one_right α _ }
-
-/--
-Instance `Multiplicative.divisionMonoid` / 实例 `Multiplicative.divisionMonoid`
-
-English:
-instance Multiplicative.divisionMonoid
-  signature: [SubtractionMonoid α]
-  body: { Multiplicative.divInvMonoid, Multiplicative.involutiveInv with
-    mul_inv_rev := @neg_add_rev α _
-    inv_eq_of_mul := @neg_eq_of_add_eq_zero_right α _ }
-
-中文:
-实例 Multiplicative.divisionMonoid
-  签名: [Subtraction幺半群 α]
-  定义体: { Multiplicative.divInvMonoid, Multiplicative.involutiveInv with
-    mul_inv_rev := @neg_add_rev α _
-    inv_eq_of_mul := @neg_eq_of_add_eq_zero_right α _ }
-
-Depends on / 依赖: Multiplicative, Multiplicative.divInvMonoid, Multiplicative.involutiveInv, divInvMonoid, inv_eq_of_mul, involutiveInv, mul_inv_rev, neg_add_rev, neg_eq_of_add_eq_zero_right
+/-
+**Multiplicative.divisionMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.divisionMonoid [SubtractionMonoid α] : DivisionMonoid (Mult
+iplicative α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `neg_eq_of_add_eq_zero_right`：∀ {G : Type u_1} [inst : SubtractionMonoid 
+G] {a b : G}, a + b = 0 → -a = b
 -/
 instance Multiplicative.divisionMonoid [SubtractionMonoid α] : DivisionMonoid (Multiplicative α) :=
   { Multiplicative.divInvMonoid, Multiplicative.involutiveInv with
     mul_inv_rev := @neg_add_rev α _
     inv_eq_of_mul := @neg_eq_of_add_eq_zero_right α _ }
-
-/--
-Instance `Additive.subtractionCommMonoid` / 实例 `Additive.subtractionCommMonoid`
-
-English:
-instance Additive.subtractionCommMonoid
-  signature: [DivisionCommMonoid α]
-  body: { Additive.subtractionMonoid, Additive.addCommSemigroup with }
-
-中文:
-实例 加性.subtractionCommMonoid
-  签名: [DivisionComm幺半群 α]
-  定义体: { Additive.subtractionMonoid, Additive.addCommSemigroup with }
-
-Depends on / 依赖: Additive, Additive.addCommSemigroup, Additive.subtractionMonoid, addCommSemigroup, subtractionMonoid
+/-
+**Additive.subtractionCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.subtractionCommMonoid [DivisionCommMonoid α] : SubtractionCommMon
+oid (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.subtractionCommMonoid [DivisionCommMonoid α] :
     SubtractionCommMonoid (Additive α) :=
   { Additive.subtractionMonoid, Additive.addCommSemigroup with }
-
-/--
-Instance `Multiplicative.divisionCommMonoid` / 实例 `Multiplicative.divisionCommMonoid`
-
-English:
-instance Multiplicative.divisionCommMonoid
-  signature: [SubtractionCommMonoid α]
-  body: { Multiplicative.divisionMonoid, Multiplicative.commSemigroup with }
-
-中文:
-实例 Multiplicative.divisionCommMonoid
-  签名: [SubtractionComm幺半群 α]
-  定义体: { Multiplicative.divisionMonoid, Multiplicative.commSemigroup with }
-
-Depends on / 依赖: Multiplicative, Multiplicative.commSemigroup, Multiplicative.divisionMonoid, commSemigroup, divisionMonoid
+/-
+**Multiplicative.divisionCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.divisionCommMonoid [SubtractionCommMonoid α] : DivisionComm
+Monoid (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.divisionCommMonoid [SubtractionCommMonoid α] :
     DivisionCommMonoid (Multiplicative α) :=
   { Multiplicative.divisionMonoid, Multiplicative.commSemigroup with }
-
-/--
-Instance `Additive.addGroup` / 实例 `Additive.addGroup`
-
-English:
-instance Additive.addGroup
-  signature: [Group α]
-  body: { Additive.subNegMonoid with neg_add_cancel := @inv_mul_cancel α _ }
-
-中文:
-实例 加性.addGroup
-  签名: [群 α]
-  定义体: { Additive.subNegMonoid with neg_add_cancel := @inv_mul_cancel α _ }
-
-Depends on / 依赖: Additive, Additive.subNegMonoid, inv_mul_cancel, neg_add_cancel, subNegMonoid
+/-
+**Additive.addGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addGroup [Group α] : AddGroup (Additive α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
 -/
 instance Additive.addGroup [Group α] : AddGroup (Additive α) :=
   { Additive.subNegMonoid with neg_add_cancel := @inv_mul_cancel α _ }
-
-/--
-Instance `Multiplicative.group` / 实例 `Multiplicative.group`
-
-English:
-instance Multiplicative.group
-  signature: [AddGroup α]
-  body: { Multiplicative.divInvMonoid with inv_mul_cancel := @neg_add_cancel α _ }
-
-中文:
-实例 Multiplicative.group
-  签名: [加法群 α]
-  定义体: { Multiplicative.divInvMonoid with inv_mul_cancel := @neg_add_cancel α _ }
-
-Depends on / 依赖: Multiplicative, Multiplicative.divInvMonoid, divInvMonoid, inv_mul_cancel, neg_add_cancel
+/-
+**Multiplicative.group** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.group [AddGroup α] : Group (Multiplicative α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
 -/
 instance Multiplicative.group [AddGroup α] : Group (Multiplicative α) :=
   { Multiplicative.divInvMonoid with inv_mul_cancel := @neg_add_cancel α _ }
-
-/--
-Instance `Additive.addCommGroup` / 实例 `Additive.addCommGroup`
-
-English:
-instance Additive.addCommGroup
-  signature: [CommGroup α]
-  body: { Additive.addGroup, Additive.addCommMonoid with }
-
-中文:
-实例 加性.addCommGroup
-  签名: [交换群 α]
-  定义体: { Additive.addGroup, Additive.addCommMonoid with }
-
-Depends on / 依赖: Additive, Additive.addCommMonoid, Additive.addGroup, addCommMonoid, addGroup
+/-
+**Additive.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addCommGroup [CommGroup α] : AddCommGroup (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.addCommGroup [CommGroup α] : AddCommGroup (Additive α) :=
   { Additive.addGroup, Additive.addCommMonoid with }
-
-/--
-Instance `Multiplicative.commGroup` / 实例 `Multiplicative.commGroup`
-
-English:
-instance Multiplicative.commGroup
-  signature: [AddCommGroup α]
-  body: { Multiplicative.group, Multiplicative.commMonoid with }
-
-中文:
-实例 Multiplicative.commGroup
-  签名: [加法交换群 α]
-  定义体: { Multiplicative.group, Multiplicative.commMonoid with }
-
-Depends on / 依赖: Multiplicative, Multiplicative.commMonoid, Multiplicative.group, commMonoid
+/-
+**Multiplicative.commGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.commGroup [AddCommGroup α] : CommGroup (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.commGroup [AddCommGroup α] : CommGroup (Multiplicative α) :=
   { Multiplicative.group, Multiplicative.commMonoid with }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [IsMulTorsionFree α] : IsAddTorsionFree (Additive α) where
-  body: pow_left_injective (M := α)
-
-中文:
-实例 [幺半群
-  签名: α] [是MulTorsionFree α] : 是加法无挠 (加性 α) where
-  定义体: pow_left_injective (M := α)
-
-Depends on / 依赖: pow_left_injective
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [IsMulTorsionFree α] : IsAddTorsionFree (Additive α) where
   nsmul_right_injective _ := pow_left_injective (M := α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: α] [IsAddTorsionFree α] : IsMulTorsionFree (Multiplicative α) where
-  body: nsmul_right_injective (M := α)
-
-中文:
-实例 [加法幺半群
-  签名: α] [是加法无挠 α] : 是MulTorsionFree (Multiplicative α) where
-  定义体: nsmul_right_injective (M := α)
-
-Depends on / 依赖: nsmul_right_injective
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid α] [IsAddTorsionFree α] : IsMulTorsionFree (Multiplicative α) where
   pow_left_injective _ := nsmul_right_injective (M := α)
 
-/--
-Instance `Additive.coeToFun` / 实例 `Additive.coeToFun`
+/-- If `α` has some multiplicative structure and coerces to a function,
+then `Additive α` should also coerce to the same function.
 
-English:
-instance Additive.coeToFun
-  signature: {α : Type*} {β : α -> Sort*} [CoeFun α β]
-  body: ⟨fun a => CoeFun.coe a.toMul⟩
-
-中文:
-实例 加性.coeToFun
-  签名: {α : 类型} {β : α -> 类型层*} [CoeFun α β]
-  定义体: ⟨fun a => CoeFun.coe a.toMul⟩
-
-Depends on / 依赖: CoeFun, CoeFun.coe, a.toMul
+This allows `Additive` to be used on bundled function types with a multiplicative structure, which
+is often used for composition, without affecting the behavior of the function itself.
 -/
-instance Additive.coeToFun {α : Type*} {β : α -> Sort*} [CoeFun α β] :
+/-
+**Additive.coeToFun** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.coeToFun {α : Type*} {β : α -> Sort*} [CoeFun α β] : CoeFun (Addi
+tive α) fun a => β a.toMul
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `α` has some multiplicative structure and coerces to a function,
+then `Additive α` should also coerce to the same function.
+
+This allows `Additive` to be used on bundled function types with a multiplicativ
+e structure, which
+is often used for composition, without affecting the behavior of the function it
+self.
+-/
+instance Additive.coeToFun {α : Type*} {β : α → Sort*} [CoeFun α β] :
     CoeFun (Additive α) fun a => β a.toMul :=
   ⟨fun a => CoeFun.coe a.toMul⟩
 
-/--
-Instance `Multiplicative.coeToFun` / 实例 `Multiplicative.coeToFun`
+/-- If `α` has some additive structure and coerces to a function,
+then `Multiplicative α` should also coerce to the same function.
 
-English:
-instance Multiplicative.coeToFun
-  signature: {α : Type*} {β : α -> Sort*} [CoeFun α β]
-  body: ⟨fun a => CoeFun.coe a.toAdd⟩
-
-中文:
-实例 Multiplicative.coeToFun
-  签名: {α : 类型} {β : α -> 类型层*} [CoeFun α β]
-  定义体: ⟨fun a => CoeFun.coe a.toAdd⟩
-
-Depends on / 依赖: CoeFun, CoeFun.coe, a.toAdd
+This allows `Multiplicative` to be used on bundled function types with an additive structure, which
+is often used for composition, without affecting the behavior of the function itself.
 -/
-instance Multiplicative.coeToFun {α : Type*} {β : α -> Sort*} [CoeFun α β] :
+/-
+**Multiplicative.coeToFun** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.coeToFun {α : Type*} {β : α -> Sort*} [CoeFun α β] : CoeFun
+ (Multiplicative α) fun a => β a.toAdd
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `α` has some additive structure and coerces to a function,
+then `Multiplicative α` should also coerce to the same function.
+
+This allows `Multiplicative` to be used on bundled function types with an additi
+ve structure, which
+is often used for composition, without affecting the behavior of the function it
+self.
+-/
+instance Multiplicative.coeToFun {α : Type*} {β : α → Sort*} [CoeFun α β] :
     CoeFun (Multiplicative α) fun a => β a.toAdd :=
   ⟨fun a => CoeFun.coe a.toAdd⟩
-
-/--
-lemma `Pi.mulSingle_multiplicativeOfAdd_eq` / 引理 `Pi.mulSingle_multiplicativeOfAdd_eq`
-
-English:
-lemma Pi.mulSingle_multiplicativeOfAdd_eq
-  statement: {ι : Type*} [DecidableEq ι] {M : ι -> Type*}
-  proof: by
-  rcases eq_or_ne j i with rfl | h
-  · simp only [mulSingle_eq_same, single_eq_same]
-  · simp only [mulSingle, ne_eq, h, not_false_eq_true, Function.update_of_ne, one_apply, single,
-      zero_apply, ofAdd_zero]
-
-中文:
-引理 依赖函数类型.mulSingle_multiplicativeOfAdd_eq
-  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型}
-  证明: by
-  rcases eq_or_ne j i with rfl | h
-  · simp only [mulSingle_eq_same, single_eq_same]
-  · simp only [mulSingle, ne_eq, h, not_false_eq_true, Function.update_of_ne, one_apply, single,
-      zero_apply, ofAdd_zero]
-
-Depends on / 依赖: Function, Function.update_of_ne, Multiplicative, Pi.single, eq_or_ne, mulSingle, mulSingle_eq_same, ne_eq, not_false_eq_true, ofAdd_zero, one_apply, single, single_eq_same, update_of_ne, zero_apply
+/-
+**Pi.mulSingle_multiplicativeOfAdd_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.mulSingle_multiplicativeOfAdd_eq {ι : Type*} [DecidableEq ι] {M : ι -> 
+Type*} [(i : ι) -> AddMonoid (M i)] (i : ι) (a : M i) (j : ι) : Pi.mulSingle (M
+参数：i : ι；M i；i : ι；a : M i；j : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Pi.mulSingle_eq_same`：mulSingle_eq_same (i : ι) (x : M i) : mulSingle i 
+x i = x
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma Pi.mulSingle_multiplicativeOfAdd_eq {ι : Type*} [DecidableEq ι] {M : ι -> Type*}
-    [(i : ι) -> AddMonoid (M i)] (i : ι) (a : M i) (j : ι) :
-    Pi.mulSingle (M := fun i => Multiplicative (M i)) i (.ofAdd a) j = .ofAdd (Pi.single i a j) := by
+lemma Pi.mulSingle_multiplicativeOfAdd_eq {ι : Type*} [DecidableEq ι] {M : ι → Type*}
+    [(i : ι) → AddMonoid (M i)] (i : ι) (a : M i) (j : ι) :
+    Pi.mulSingle (M := fun i ↦ Multiplicative (M i)) i (.ofAdd a) j = .ofAdd (Pi.single i a j) := by
   rcases eq_or_ne j i with rfl | h
   · simp only [mulSingle_eq_same, single_eq_same]
   · simp only [mulSingle, ne_eq, h, not_false_eq_true, Function.update_of_ne, one_apply, single,
       zero_apply, ofAdd_zero]
-
-/--
-lemma `Pi.single_additiveOfMul_eq` / 引理 `Pi.single_additiveOfMul_eq`
-
-English:
-lemma Pi.single_additiveOfMul_eq
-  statement: {ι : Type*} [DecidableEq ι] {M : ι -> Type*}
-  proof: by
-  rcases eq_or_ne j i with rfl | h
-  · simp only [mulSingle_eq_same, single_eq_same]
-  · simp only [single, ne_eq, h, not_false_eq_true, Function.update_of_ne, zero_apply, mulSingle,
-      one_apply, ofMul_one]
-
-中文:
-引理 依赖函数类型.single_additiveOfMul_eq
-  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型}
-  证明: by
-  rcases eq_or_ne j i with rfl | h
-  · simp only [mulSingle_eq_same, single_eq_same]
-  · simp only [single, ne_eq, h, not_false_eq_true, Function.update_of_ne, zero_apply, mulSingle,
-      one_apply, ofMul_one]
-
-Depends on / 依赖: Additive, Function, Function.update_of_ne, Pi.mulSingle, eq_or_ne, mulSingle, mulSingle_eq_same, ne_eq, not_false_eq_true, ofMul_one, one_apply, single, single_eq_same, update_of_ne, zero_apply
+/-
+**Pi.single_additiveOfMul_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.single_additiveOfMul_eq {ι : Type*} [DecidableEq ι] {M : ι -> Type*} [(
+i : ι) -> Monoid (M i)] (i : ι) (a : M i) (j : ι) : Pi.single (M
+参数：i : ι；M i；i : ι；a : M i；j : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用引理 `Pi.mulSingle_eq_same`：mulSingle_eq_same (i : ι) (x : M i) : mulSingle i 
+x i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma Pi.single_additiveOfMul_eq {ι : Type*} [DecidableEq ι] {M : ι -> Type*}
-    [(i : ι) -> Monoid (M i)] (i : ι) (a : M i) (j : ι) :
-    Pi.single (M := fun i => Additive (M i)) i (.ofMul a) j = .ofMul (Pi.mulSingle i a j) := by
+lemma Pi.single_additiveOfMul_eq {ι : Type*} [DecidableEq ι] {M : ι → Type*}
+    [(i : ι) → Monoid (M i)] (i : ι) (a : M i) (j : ι) :
+    Pi.single (M := fun i ↦ Additive (M i)) i (.ofMul a) j = .ofMul (Pi.mulSingle i a j) := by
   rcases eq_or_ne j i with rfl | h
   · simp only [mulSingle_eq_same, single_eq_same]
   · simp only [single, ne_eq, h, not_false_eq_true, Function.update_of_ne, zero_apply, mulSingle,

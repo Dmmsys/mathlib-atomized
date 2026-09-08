@@ -8,7 +8,7 @@ module
 public meta import Lean.Elab.Command
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # `#parse` -- a command to parse text and log outputs
@@ -19,34 +19,26 @@ public meta section
 namespace Mathlib.GuardExceptions
 
 open Lean Parser Elab Command
-/--
-Definition of `captureException` / `captureException` 的定义
+/-- `captureException env s input` uses the given `Environment` `env` to parse the `String` `input`
+using the `ParserFn` `s`.
 
-English:
-definition captureException
-  signature: (env : Environment) (s : ParserFn) (input : String)
-  body: let ictx := mkInputContext input "<input>"
-  let s := s.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
-  if !s.allErrors.isEmpty then
-    .error (s.toErrorMsg ictx)
-  else if ictx.atEnd s.pos then
-    .ok s.stxStack.back
-  else
-    .error ((s.mkError "end of input").toErrorMsg ictx)
+This is a variation of `Lean.Parser.runParserCategory`.
+-/
+/-
+**Mathlib.GuardExceptions.captureException** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Gu
+ardExceptions`。
+形式化陈述：captureException (env : Environment) (s : ParserFn) (input : String) : Exc
+ept String Syntax
+参数：env : Environment；s : ParserFn；input : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 captureException
-  签名: (env : Environment) (s : ParserFn) (input : String)
-  定义体: let ictx := mkInputContext input "<input>"
-  let s := s.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
-  if !s.allErrors.isEmpty then
-    .error (s.toErrorMsg ictx)
-  else if ictx.atEnd s.pos then
-    .ok s.stxStack.back
-  else
-    .error ((s.mkError "end of input").toErrorMsg ictx)
+--- 原说明 ---
+`captureException env s input` uses the given `Environment` `env` to parse the `
+String` `input`
+using the `ParserFn` `s`.
 
-Depends on / 依赖: allErrors, getTokenTable, ictx.atEnd, isEmpty, mkError, mkInputContext, mkParserState, options, s.allErrors.isEmpty, s.mkError, s.pos, s.run, s.stxStack.back, s.toErrorMsg, stxStack, toErrorMsg
+This is a variation of `Lean.Parser.runParserCategory`.
 -/
 def captureException (env : Environment) (s : ParserFn) (input : String) : Except String Syntax :=
   let ictx := mkInputContext input "<input>"
@@ -58,34 +50,20 @@ def captureException (env : Environment) (s : ParserFn) (input : String) : Excep
   else
     .error ((s.mkError "end of input").toErrorMsg ictx)
 
-/--
-Definition of `parseAsTacticSeq` / `parseAsTacticSeq` 的定义
+/-- Parse a string as a tactic sequence.
 
-English:
-definition parseAsTacticSeq
-  signature: (env : Environment) (input : String) (fileName := "<input>")
-  body: let p := andthenFn whitespace Tactic.tacticSeq.fn
-  let ictx := mkInputContext input fileName
-  let s := p.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
-  if s.hasError then
-    .error (s.toErrorMsg ictx)
-  else if s.pos.atEnd input then
-    .ok ⟨s.stxStack.back⟩
-  else
-    .error ((s.mkError "end of input").toErrorMsg ictx)
+This is a slight modification of `Parser.runParserCategory`. -/
+/-
+**Mathlib.GuardExceptions.parseAsTacticSeq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Gu
+ardExceptions`。
+形式化陈述：parseAsTacticSeq (env : Environment) (input : String) (fileName
+参数：env : Environment；input : String。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 parseAsTacticSeq
-  签名: (env : Environment) (input : String) (fileName := "<input>")
-  定义体: let p := andthenFn whitespace Tactic.tacticSeq.fn
-  let ictx := mkInputContext input fileName
-  let s := p.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
-  if s.hasError then
-    .error (s.toErrorMsg ictx)
-  else if s.pos.atEnd input then
-    .ok ⟨s.stxStack.back⟩
-  else
-    .error ((s.mkError "end of input").toErrorMsg ictx)
+--- 原说明 ---
+Parse a string as a tactic sequence.
+
+This is a slight modification of `Parser.runParserCategory`.
 -/
 def parseAsTacticSeq (env : Environment) (input : String) (fileName := "<input>") :
     Except String (TSyntax ``Lean.Parser.Tactic.tacticSeq) :=
@@ -119,9 +97,10 @@ syntax (name := parseCmd) "#parse " ident " => " str : command
 @[inherit_doc parseCmd]
 elab_rules : command
   | `(command| #parse $parserFnId => $str) => do
-elabCommand ← `(command|
+    elabCommand <| ← `(command|
       run_cmd do
-let exc ← Lean.ofExcept captureException (← getEnv) parserFnId str
-logInfo str)
+        let exc ← Lean.ofExcept <| captureException (← getEnv) $parserFnId $str
+        logInfo $str)
 
 end Mathlib.GuardExceptions
+

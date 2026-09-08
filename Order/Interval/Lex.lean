@@ -8,8 +8,8 @@ module
 public import Mathlib.Order.Interval.Basic
 public import Mathlib.Data.Prod.Lex
 public import Mathlib.Tactic.FastInstance
-meta import Mathlib.Order.Interval.Basic -- shake: keep (for `#eval` testing)
-meta import Mathlib.Order.Lex -- shake: keep (for `#eval` testing)
+meta import Mathlib.Order.Interval.Basic  -- shake: keep (for `#eval` testing)
+meta import Mathlib.Order.Lex  -- shake: keep (for `#eval` testing)
 
 /-!
 # The lexicographic order on intervals
@@ -28,112 +28,51 @@ variable {α}
 section LELT
 variable [LT α] [LE α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (Lex (NonemptyInterval α))
-  body: toLex (ofLex x).toDualProd <= toLex (ofLex y).toDualProd
-
-中文:
-实例 :
-  签名: LE (Lex (Nonempty整数erval α))
-  定义体: toLex (ofLex x).toDualProd <= toLex (ofLex y).toDualProd
-
-Depends on / 依赖: toDualProd
+/-
+**NonemptyInterval.** 是 Mathlib 中的一个实例，位于命名空间 `NonemptyInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE (Lex (NonemptyInterval α)) where
-  le x y := toLex (ofLex x).toDualProd <= toLex (ofLex y).toDualProd
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT (Lex (NonemptyInterval α))
-  body: toLex (ofLex x).toDualProd < toLex (ofLex y).toDualProd
-
-中文:
-实例 :
-  签名: LT (Lex (Nonempty整数erval α))
-  定义体: toLex (ofLex x).toDualProd < toLex (ofLex y).toDualProd
-
-Depends on / 依赖: toDualProd
+  le x y := toLex (ofLex x).toDualProd ≤ toLex (ofLex y).toDualProd
+/-
+**NonemptyInterval.** 是 Mathlib 中的一个实例，位于命名空间 `NonemptyInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LT (Lex (NonemptyInterval α)) where
   lt x y := toLex (ofLex x).toDualProd < toLex (ofLex y).toDualProd
-
-/--
-theorem `toLex_le_toLex` / 定理 `toLex_le_toLex`
-
-English:
-theorem toLex_le_toLex
-  given: {x y : NonemptyInterval α}
-  proof: Prod.lex_def
-
-中文:
-定理 toLex_le_toLex
-  条件: {x y : Nonempty整数erval α}
-  证明: Prod.lex_def
-
-Depends on / 依赖: Prod.lex_def, lex_def
+/-
+**NonemptyInterval.toLex_le_toLex** 是 Mathlib 中的一个定理，位于命名空间 `NonemptyInterval`。
+形式化陈述：toLex_le_toLex {x y : NonemptyInterval α} : toLex x <= toLex y ↔ y.fst < x
+.fst ∨ x.fst = y.fst ∧ x.snd <= y.snd
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.lex_def`：∀ {α : Type u} {β : Type v} {r : α → α → Prop} {s : β → β 
+→ Prop} {p q : α × β},   Prod.Lex r s p q ↔ r p.1 q.1 ∨ p.1 = q.1 ∧ s p.2 q.2
 -/
 theorem toLex_le_toLex {x y : NonemptyInterval α} :
-    toLex x <= toLex y ↔ y.fst < x.fst ∨ x.fst = y.fst ∧ x.snd <= y.snd :=
+    toLex x ≤ toLex y ↔ y.fst < x.fst ∨ x.fst = y.fst ∧ x.snd ≤ y.snd :=
   Prod.lex_def
-
-/--
-theorem `toLex_lt_toLex` / 定理 `toLex_lt_toLex`
-
-English:
-theorem toLex_lt_toLex
-  given: {x y : NonemptyInterval α}
-  proof: Prod.lex_def
-
-中文:
-定理 toLex_lt_toLex
-  条件: {x y : Nonempty整数erval α}
-  证明: Prod.lex_def
-
-Depends on / 依赖: Prod.lex_def, lex_def
+/-
+**NonemptyInterval.toLex_lt_toLex** 是 Mathlib 中的一个定理，位于命名空间 `NonemptyInterval`。
+形式化陈述：toLex_lt_toLex {x y : NonemptyInterval α} : toLex x < toLex y ↔ y.fst < x.
+fst ∨ x.fst = y.fst ∧ x.snd < y.snd
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.lex_def`：∀ {α : Type u} {β : Type v} {r : α → α → Prop} {s : β → β 
+→ Prop} {p q : α × β},   Prod.Lex r s p q ↔ r p.1 q.1 ∨ p.1 = q.1 ∧ s p.2 q.2
 -/
 theorem toLex_lt_toLex {x y : NonemptyInterval α} :
     toLex x < toLex y ↔ y.fst < x.fst ∨ x.fst = y.fst ∧ x.snd < y.snd :=
   Prod.lex_def
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] [DecidableLT α] [DecidableLE α] : DecidableLE (Lex (NonemptyInterval α))
-  body: fun _ _ => decidable_of_iff' _ toLex_le_toLex
-
-中文:
-实例 [DecidableEq
-  签名: α] [DecidableLT α] [DecidableLE α] : DecidableLE (Lex (Nonempty整数erval α))
-  定义体: fun _ _ => decidable_of_iff' _ toLex_le_toLex
-
-Depends on / 依赖: decidable_of_iff, toLex_le_toLex
+/-
+**NonemptyInterval.** 是 Mathlib 中的一个实例，位于命名空间 `NonemptyInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] [DecidableLT α] [DecidableLE α] : DecidableLE (Lex (NonemptyInterval α)) :=
   fun _ _ => decidable_of_iff' _ toLex_le_toLex
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] [DecidableLT α] : DecidableLT (Lex (NonemptyInterval α))
-  body: fun _ _ => decidable_of_iff' _ toLex_lt_toLex
-
-中文:
-实例 [DecidableEq
-  签名: α] [DecidableLT α] : DecidableLT (Lex (Nonempty整数erval α))
-  定义体: fun _ _ => decidable_of_iff' _ toLex_lt_toLex
-
-Depends on / 依赖: decidable_of_iff, toLex_lt_toLex
+/-
+**NonemptyInterval.** 是 Mathlib 中的一个实例，位于命名空间 `NonemptyInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] [DecidableLT α] : DecidableLT (Lex (NonemptyInterval α)) :=
   fun _ _ => decidable_of_iff' _ toLex_lt_toLex
@@ -151,119 +90,60 @@ instance [DecidableEq α] [DecidableLT α] : DecidableLT (Lex (NonemptyInterval 
 
 end LELT
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] : Preorder (Lex (NonemptyInterval α))
-  body: fast_instance%
-  Preorder.lift fun x => toLex (ofLex x).toDualProd
-
-中文:
-实例 [预序
-  签名: α] : 预序 (Lex (Nonempty整数erval α))
-  定义体: fast_instance%
-  Preorder.lift fun x => toLex (ofLex x).toDualProd
-
-Depends on / 依赖: fast_instance
+/-
+**NonemptyInterval.** 是 Mathlib 中的一个实例，位于命名空间 `NonemptyInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] : Preorder (Lex (NonemptyInterval α)) := fast_instance%
   Preorder.lift fun x => toLex (ofLex x).toDualProd
-
-/--
-theorem `toLex_mono` / 定理 `toLex_mono`
-
-English:
-theorem toLex_mono
-  given: [PartialOrder α]
-  statement: Monotone (toLex : NonemptyInterval α -> _)
-  proof: Prod.Lex.toLex_mono.comp toDualProd_mono
-
-中文:
-定理 toLex_mono
-  条件: [偏序 α]
-  结论: 递增 (toLex : Nonempty整数erval α -> _)
-  证明: Prod.Lex.toLex_mono.comp toDualProd_mono
-
-Depends on / 依赖: Prod.Lex.toLex_mono.comp, toDualProd_mono, toLex_mono
+/-
+**NonemptyInterval.toLex_mono** 是 Mathlib 中的一个定理，位于命名空间 `NonemptyInterval`。
+形式化陈述：toLex_mono [PartialOrder α] : Monotone (toLex : NonemptyInterval α -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monot
+one…
+· 使用定理 `Prod.Lex.toLex_mono`：toLex_mono : Monotone (toLex : α × β -> α ×ₗ β)
+· 使用定理 `NonemptyInterval.toDualProd_mono`：toDualProd_mono : Monotone (toDualProd
+ : _ -> αᵒᵈ × α)
 -/
-theorem toLex_mono [PartialOrder α] : Monotone (toLex : NonemptyInterval α -> _) :=
+theorem toLex_mono [PartialOrder α] : Monotone (toLex : NonemptyInterval α → _) :=
   Prod.Lex.toLex_mono.comp toDualProd_mono
-
-/--
-theorem `toLex_strictMono` / 定理 `toLex_strictMono`
-
-English:
-theorem toLex_strictMono
-  given: [PartialOrder α]
-  statement: StrictMono (toLex : NonemptyInterval α -> _)
-  proof: Prod.Lex.toLex_strictMono.comp toDualProd_strictMono
-
-中文:
-定理 toLex_strictMono
-  条件: [偏序 α]
-  结论: 严格递增 (toLex : Nonempty整数erval α -> _)
-  证明: Prod.Lex.toLex_strictMono.comp toDualProd_strictMono
-
-Depends on / 依赖: Prod.Lex.toLex_strictMono.comp, toDualProd_strictMono, toLex_strictMono
+/-
+**NonemptyInterval.toLex_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `NonemptyInterval`
+。
+形式化陈述：toLex_strictMono [PartialOrder α] : StrictMono (toLex : NonemptyInterval α
+ -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `Prod.Lex.toLex_strictMono`：toLex_strictMono : StrictMono (toLex : α × β 
+-> α ×ₗ β)
+· 使用定理 `NonemptyInterval.toDualProd_strictMono`：toDualProd_strictMono : StrictMo
+no (toDualProd : _ -> αᵒᵈ × α)
 -/
-theorem toLex_strictMono [PartialOrder α] : StrictMono (toLex : NonemptyInterval α -> _) :=
+theorem toLex_strictMono [PartialOrder α] : StrictMono (toLex : NonemptyInterval α → _) :=
   Prod.Lex.toLex_strictMono.comp toDualProd_strictMono
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PartialOrder
-  signature: α] : PartialOrder (Lex (NonemptyInterval α))
-  body: fast_instance%
-PartialOrder.lift (fun x => toLex (ofLex x).toDualProd)
-toLex.injective.comp toDualProd_injective.comp ofLex.injective
-
-中文:
-实例 [偏序
-  签名: α] : 偏序 (Lex (Nonempty整数erval α))
-  定义体: fast_instance%
-PartialOrder.lift (fun x => toLex (ofLex x).toDualProd)
-toLex.injective.comp toDualProd_injective.comp ofLex.injective
-
-Depends on / 依赖: fast_instance
+/-
+**NonemptyInterval.** 是 Mathlib 中的一个实例，位于命名空间 `NonemptyInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PartialOrder α] : PartialOrder (Lex (NonemptyInterval α)) := fast_instance%
-PartialOrder.lift (fun x => toLex (ofLex x).toDualProd)
-toLex.injective.comp toDualProd_injective.comp ofLex.injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LinearOrder
-  signature: α] : LinearOrder (Lex (NonemptyInterval α))
-  body: fast_instance%
-  { LinearOrder.lift' (fun x : Lex (NonemptyInterval α) => toLex (ofLex x).toDualProd) <|
-toLex.injective.comp toDualProd_injective.comp ofLex.injective with
-    toDecidableEq := inferInstance
-    toDecidableLT := inferInstance
-    toDecidableLE := inferInstance }
-
-中文:
-实例 [线性序
-  签名: α] : 线性序 (Lex (Nonempty整数erval α))
-  定义体: fast_instance%
-  { LinearOrder.lift' (fun x : Lex (NonemptyInterval α) => toLex (ofLex x).toDualProd) <|
-toLex.injective.comp toDualProd_injective.comp ofLex.injective with
-    toDecidableEq := inferInstance
-    toDecidableLT := inferInstance
-    toDecidableLE := inferInstance }
-
-Depends on / 依赖: fast_instance
+  PartialOrder.lift (fun x => toLex (ofLex x).toDualProd) <|
+    toLex.injective.comp <| toDualProd_injective.comp ofLex.injective
+/-
+**NonemptyInterval.** 是 Mathlib 中的一个实例，位于命名空间 `NonemptyInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LinearOrder α] : LinearOrder (Lex (NonemptyInterval α)) := fast_instance%
   { LinearOrder.lift' (fun x : Lex (NonemptyInterval α) => toLex (ofLex x).toDualProd) <|
-toLex.injective.comp toDualProd_injective.comp ofLex.injective with
+      toLex.injective.comp <| toDualProd_injective.comp ofLex.injective with
     toDecidableEq := inferInstance
     toDecidableLT := inferInstance
     toDecidableLE := inferInstance }
 
 end NonemptyInterval
+

@@ -28,27 +28,13 @@ public section
 
 namespace NNRat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsStrictOrderedRing Rat>=0
-  body: Nonneg.isStrictOrderedRing
-
-deriving instance OrderedSub, CanonicallyOrderedAdd for NNRat
-
-中文:
-实例 :
-  签名: 是StrictOrdered环 有理数>=0
-  定义体: Nonneg.isStrictOrderedRing
-
-deriving instance OrderedSub, CanonicallyOrderedAdd for NNRat
-
-Depends on / 依赖: Nonneg, Nonneg.isStrictOrderedRing, isStrictOrderedRing
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsStrictOrderedRing Rat>=0 := Nonneg.isStrictOrderedRing
+instance : IsStrictOrderedRing ℚ≥0 := Nonneg.isStrictOrderedRing
 
 deriving instance OrderedSub, CanonicallyOrderedAdd for NNRat
 
 end NNRat
+

@@ -30,1013 +30,881 @@ open TopologicalSpace
 
 -- The curly braces are intentional, so this definition works well with simp
 -- when topologies are not those provided by instances.
-/--
-theorem `continuous_def` / 定理 `continuous_def`
-
-English:
-theorem continuous_def
-  given: {_ : TopologicalSpace X} {_ : TopologicalSpace Y} {f : X -> Y}
-  proof: ⟨fun hf => hf.1, fun h => ⟨h⟩⟩
-
-中文:
-定理 continuous_def
-  条件: {_ : 拓扑空间 X} {_ : 拓扑空间 Y} {f : X -> Y}
-  证明: ⟨fun hf => hf.1, fun h => ⟨h⟩⟩
+/-
+**continuous_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_def {_ : TopologicalSpace X} {_ : TopologicalSpace Y} {f : X ->
+ Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
 -/
-theorem continuous_def {_ : TopologicalSpace X} {_ : TopologicalSpace Y} {f : X -> Y} :
-    Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s) :=
+theorem continuous_def {_ : TopologicalSpace X} {_ : TopologicalSpace Y} {f : X → Y} :
+    Continuous f ↔ ∀ s, IsOpen s → IsOpen (f ⁻¹' s) :=
   ⟨fun hf => hf.1, fun h => ⟨h⟩⟩
 
 variable [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
-variable {f : X -> Y} {s : Set X} {x : X} {y : Y}
-
-/--
-theorem `IsOpen.preimage` / 定理 `IsOpen.preimage`
-
-English:
-theorem IsOpen.preimage
-  given: (hf : Continuous f) {t : Set Y} (h : IsOpen t)
-  proof: hf.isOpen_preimage t h
-
-中文:
-定理 是开集.原像
-  条件: (hf : 连续 f) {t : 集合 Y} (h : 是开集 t)
-  证明: hf.isOpen_preimage t h
-
-Depends on / 依赖: hf.isOpen_preimage, isOpen_preimage
+variable {f : X → Y} {s : Set X} {x : X} {y : Y}
+/-
+**IsOpen.preimage** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : IsOpen t) : IsOpen (f
+ ⁻¹' t)
+参数：hf : Continuous f；h : IsOpen t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
 -/
 theorem IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : IsOpen t) :
     IsOpen (f ⁻¹' t) :=
   hf.isOpen_preimage t h
-
-/--
-lemma `Equiv.continuous_symm_iff` / 引理 `Equiv.continuous_symm_iff`
-
-English:
-lemma Equiv.continuous_symm_iff
-  given: (e : X ≃ Y)
-  statement: Continuous e.symm ↔ IsOpenMap e
-  proof: by
-  simp_rw [continuous_def, ← Equiv.image_eq_preimage_symm, IsOpenMap]
-
-中文:
-引理 等价.continuous_symm_iff
-  条件: (e : X ≃ Y)
-  结论: 连续 e.symm ↔ 是开映射 e
-  证明: by
-  simp_rw [continuous_def, ← Equiv.image_eq_preimage_symm, IsOpenMap]
-
-Depends on / 依赖: Equiv.image_eq_preimage_symm, IsOpenMap, continuous_def, image_eq_preimage_symm, simp_rw
+/-
+**Equiv.continuous_symm_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Equiv.continuous_symm_iff (e : X ≃ Y) : Continuous e.symm ↔ IsOpenMap e
+参数：e : X ≃ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma Equiv.continuous_symm_iff (e : X ≃ Y) : Continuous e.symm ↔ IsOpenMap e := by
   simp_rw [continuous_def, ← Equiv.image_eq_preimage_symm, IsOpenMap]
-
-/--
-lemma `Equiv.isOpenMap_symm_iff` / 引理 `Equiv.isOpenMap_symm_iff`
-
-English:
-lemma Equiv.isOpenMap_symm_iff
-  given: (e : X ≃ Y)
-  statement: IsOpenMap e.symm ↔ Continuous e
-  proof: by
-  simp_rw [← Equiv.continuous_symm_iff, Equiv.symm_symm]
-
-中文:
-引理 等价.isOpenMap_symm_iff
-  条件: (e : X ≃ Y)
-  结论: 是开映射 e.symm ↔ 连续 e
-  证明: by
-  simp_rw [← Equiv.continuous_symm_iff, Equiv.symm_symm]
-
-Depends on / 依赖: Equiv.continuous_symm_iff, Equiv.symm_symm, continuous_symm_iff, simp_rw, symm_symm
+/-
+**Equiv.isOpenMap_symm_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Equiv.isOpenMap_symm_iff (e : X ≃ Y) : IsOpenMap e.symm ↔ Continuous e
+参数：e : X ≃ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma Equiv.isOpenMap_symm_iff (e : X ≃ Y) : IsOpenMap e.symm ↔ Continuous e := by
   simp_rw [← Equiv.continuous_symm_iff, Equiv.symm_symm]
-
-/--
-theorem `continuous_congr` / 定理 `continuous_congr`
-
-English:
-theorem continuous_congr
-  given: {g : X -> Y} (h : forall x, f x = g x)
-  proof: .of_eq congrArg _ funext h
-
-中文:
-定理 continuous_congr
-  条件: {g : X -> Y} (h : 对任意 x, f x = g x)
-  证明: .of_eq congrArg _ funext h
-
-Depends on / 依赖: of_eq
+/-
+**continuous_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_congr {g : X -> Y} (h : forall x, f x = g x) : Continuous f ↔ C
+ontinuous g
+参数：h : forall x, f x = g x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem continuous_congr {g : X -> Y} (h : forall x, f x = g x) :
+theorem continuous_congr {g : X → Y} (h : ∀ x, f x = g x) :
     Continuous f ↔ Continuous g :=
-.of_eq congrArg _ funext h
-
-/--
-theorem `Continuous.congr` / 定理 `Continuous.congr`
-
-English:
-theorem Continuous.congr
-  given: {g : X -> Y} (h : Continuous f) (h' : forall x, f x = g x)
-  statement: Continuous g
-  proof: .mp h continuous_congr h'
-
-中文:
-定理 连续.congr
-  条件: {g : X -> Y} (h : 连续 f) (h' : 对任意 x, f x = g x)
-  结论: 连续 g
-  证明: .mp h continuous_congr h'
-
-Depends on / 依赖: continuous_congr
+  .of_eq <| congrArg _ <| funext h
+/-
+**Continuous.congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.congr {g : X -> Y} (h : Continuous f) (h' : forall x, f x = g x
+) : Continuous g
+参数：h : Continuous f；h' : forall x, f x = g x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuous_congr`：continuous_congr {g : X -> Y} (h : forall x, f x = g x
+) : Continuous f ↔ Continuous g
 -/
-theorem Continuous.congr {g : X -> Y} (h : Continuous f) (h' : forall x, f x = g x) : Continuous g :=
-.mp h continuous_congr h'
-
-/--
-theorem `ContinuousAt.tendsto` / 定理 `ContinuousAt.tendsto`
-
-English:
-theorem ContinuousAt.tendsto
-  given: (h : ContinuousAt f x)
-  proof: h
-
-中文:
-定理 ContinuousAt.tendsto
-  条件: (h : ContinuousAt f x)
-  证明: h
+theorem Continuous.congr {g : X → Y} (h : Continuous f) (h' : ∀ x, f x = g x) : Continuous g :=
+  continuous_congr h' |>.mp h
+/-
+**ContinuousAt.tendsto** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.tendsto (h : ContinuousAt f x) : Tendsto f (𝓝 x) (𝓝 (f x))
+参数：h : ContinuousAt f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ContinuousAt.tendsto (h : ContinuousAt f x) :
     Tendsto f (𝓝 x) (𝓝 (f x)) :=
   h
-
-/--
-theorem `continuousAt_def` / 定理 `continuousAt_def`
-
-English:
-theorem continuousAt_def
-  statement: ContinuousAt f x ↔ forall A in 𝓝 (f x), f ⁻¹' A in 𝓝 x
-  proof: Iff.rfl
-
-中文:
-定理 continuousAt_def
-  结论: ContinuousAt f x ↔ 对任意 A in 𝓝 (f x), f ⁻¹' A in 𝓝 x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**continuousAt_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_def : ContinuousAt f x ↔ forall A in 𝓝 (f x), f ⁻¹' A in 𝓝 x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem continuousAt_def : ContinuousAt f x ↔ forall A in 𝓝 (f x), f ⁻¹' A in 𝓝 x :=
+theorem continuousAt_def : ContinuousAt f x ↔ ∀ A ∈ 𝓝 (f x), f ⁻¹' A ∈ 𝓝 x :=
   Iff.rfl
-
-/--
-theorem `continuousAt_congr` / 定理 `continuousAt_congr`
-
-English:
-theorem continuousAt_congr
-  given: {g : X -> Y} (h : f =ᶠ[𝓝 x] g)
-  proof: by
-  simp only [ContinuousAt, tendsto_congr' h, h.eq_of_nhds]
-
-中文:
-定理 continuousAt_congr
-  条件: {g : X -> Y} (h : f =ᶠ[𝓝 x] g)
-  证明: by
-  simp only [ContinuousAt, tendsto_congr' h, h.eq_of_nhds]
-
-Depends on / 依赖: ContinuousAt, eq_of_nhds, h.eq_of_nhds, tendsto_congr
+/-
+**continuousAt_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_congr {g : X -> Y} (h : f =ᶠ[𝓝 x] g) : ContinuousAt f x ↔ Con
+tinuousAt g x
+参数：h : f =ᶠ[𝓝 x] g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.EventuallyEq.eq_of_nhds`：Filter.EventuallyEq.eq_of_nhds {f g : X 
+-> α} (h : f =ᶠ[𝓝 x] g) : f x = g x
+· 使用定理 `Filter.tendsto_congr'`：tendsto_congr' {f₁ f₂ : α -> β} {l₁ : Filter α} {
+l₂ : Filter β} (hl : f₁ =ᶠ[l₁] f₂) : Tendsto f₁ l₁ l₂ ↔ Tendsto f₂ l₁ l₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem continuousAt_congr {g : X -> Y} (h : f =ᶠ[𝓝 x] g) :
+theorem continuousAt_congr {g : X → Y} (h : f =ᶠ[𝓝 x] g) :
     ContinuousAt f x ↔ ContinuousAt g x := by
   simp only [ContinuousAt, tendsto_congr' h, h.eq_of_nhds]
-
-/--
-theorem `ContinuousAt.congr` / 定理 `ContinuousAt.congr`
-
-English:
-theorem ContinuousAt.congr
-  given: {g : X -> Y} (hf : ContinuousAt f x) (h : f =ᶠ[𝓝 x] g)
-  proof: (continuousAt_congr h).1 hf
-
-中文:
-定理 ContinuousAt.congr
-  条件: {g : X -> Y} (hf : ContinuousAt f x) (h : f =ᶠ[𝓝 x] g)
-  证明: (continuousAt_congr h).1 hf
-
-Depends on / 依赖: continuousAt_congr
+/-
+**ContinuousAt.congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.congr {g : X -> Y} (hf : ContinuousAt f x) (h : f =ᶠ[𝓝 x] g) 
+: ContinuousAt g x
+参数：hf : ContinuousAt f x；h : f =ᶠ[𝓝 x] g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuousAt_congr`：continuousAt_congr {g : X -> Y} (h : f =ᶠ[𝓝 x] g) : 
+ContinuousAt f x ↔ ContinuousAt g x
 -/
-theorem ContinuousAt.congr {g : X -> Y} (hf : ContinuousAt f x) (h : f =ᶠ[𝓝 x] g) :
+theorem ContinuousAt.congr {g : X → Y} (hf : ContinuousAt f x) (h : f =ᶠ[𝓝 x] g) :
     ContinuousAt g x :=
   (continuousAt_congr h).1 hf
-
-/--
-theorem `ContinuousAt.preimage_mem_nhds` / 定理 `ContinuousAt.preimage_mem_nhds`
-
-English:
-theorem ContinuousAt.preimage_mem_nhds
-  statement: {t : Set Y} (h : ContinuousAt f x)
-  proof: h ht
-
-中文:
-定理 ContinuousAt.preimage_mem_nhds
-  结论: {t : 集合 Y} (h : ContinuousAt f x)
-  证明: h ht
+/-
+**ContinuousAt.preimage_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.preimage_mem_nhds {t : Set Y} (h : ContinuousAt f x) (ht : t 
+in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x
+参数：h : ContinuousAt f x；ht : t in 𝓝 (f x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ContinuousAt.preimage_mem_nhds {t : Set Y} (h : ContinuousAt f x)
-    (ht : t in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x :=
+    (ht : t ∈ 𝓝 (f x)) : f ⁻¹' t ∈ 𝓝 x :=
   h ht
 
-/--
-theorem `ContinuousAt.eventually_mem` / 定理 `ContinuousAt.eventually_mem`
+/-- If `f x ∈ s ∈ 𝓝 (f x)` for continuous `f`, then `f y ∈ s` near `x`.
 
-English:
-theorem ContinuousAt.eventually_mem
-  statement: {f : X -> Y} {x : X} (hf : ContinuousAt f x) {s : Set Y}
-  proof: hf hs
+This is essentially `Filter.Tendsto.eventually_mem`, but infers in more cases when applied. -/
+/-
+**ContinuousAt.eventually_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.eventually_mem {f : X -> Y} {x : X} (hf : ContinuousAt f x) {
+s : Set Y} (hs : s in 𝓝 (f x)) : forallᶠ y in 𝓝 x, f y in s
+参数：hf : ContinuousAt f x；hs : s in 𝓝 (f x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 ContinuousAt.eventually_mem
-  结论: {f : X -> Y} {x : X} (hf : ContinuousAt f x) {s : 集合 Y}
-  证明: hf hs
+--- 原说明 ---
+If `f x ∈ s ∈ 𝓝 (f x)` for continuous `f`, then `f y ∈ s` near `x`.
+
+This is essentially `Filter.Tendsto.eventually_mem`, but infers in more cases wh
+en applied.
 -/
-theorem ContinuousAt.eventually_mem {f : X -> Y} {x : X} (hf : ContinuousAt f x) {s : Set Y}
-    (hs : s in 𝓝 (f x)) : forallᶠ y in 𝓝 x, f y in s :=
+theorem ContinuousAt.eventually_mem {f : X → Y} {x : X} (hf : ContinuousAt f x) {s : Set Y}
+    (hs : s ∈ 𝓝 (f x)) : ∀ᶠ y in 𝓝 x, f y ∈ s :=
   hf hs
 
-/--
-lemma `not_continuousAt_of_tendsto` / 引理 `not_continuousAt_of_tendsto`
-
-English:
-lemma not_continuousAt_of_tendsto
-  statement: {f : X -> Y} {l₁ : Filter X} {l₂ : Filter Y} {x : X}
-  proof: fun cont =>
-  (cont.mono_left hl₁).not_tendsto hl₂ hf
-
-中文:
-引理 not_continuousAt_of_tendsto
-  结论: {f : X -> Y} {l₁ : 滤子 X} {l₂ : 滤子 Y} {x : X}
-  证明: fun cont =>
-  (cont.mono_left hl₁).not_tendsto hl₂ hf
+/-- If a function `f` tends to somewhere other than `𝓝 (f x)` at `x`,
+then `f` is not continuous at `x`
 -/
-lemma not_continuousAt_of_tendsto {f : X -> Y} {l₁ : Filter X} {l₂ : Filter Y} {x : X}
-    (hf : Tendsto f l₁ l₂) [l₁.NeBot] (hl₁ : l₁ <= 𝓝 x) (hl₂ : Disjoint (𝓝 (f x)) l₂) :
-    ¬ ContinuousAt f x := fun cont =>
+/-
+**not_continuousAt_of_tendsto** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：not_continuousAt_of_tendsto {f : X -> Y} {l₁ : Filter X} {l₂ : Filter Y} {
+x : X} (hf : Tendsto f l₁ l₂) [l₁.NeBot] (hl₁ : l₁ <= 𝓝 x) (hl₂ : Disjoint (𝓝 (f
+ x)) l₂) : ¬ ContinuousAt f x
+参数：hf : Tendsto f l₁ l₂；hl₁ : l₁ <= 𝓝 x；hl₂ : Disjoint (𝓝 (f x)) l₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.not_tendsto`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} 
+{a : Filter α} {b₁ b₂ : Filter β},   Filter.Tendsto f a b₁ → ∀ [a.NeBot], Disjoi
+nt b₁ b₂ → ¬Filt…
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
+
+--- 原说明 ---
+If a function `f` tends to somewhere other than `𝓝 (f x)` at `x`,
+then `f` is not continuous at `x`
+-/
+lemma not_continuousAt_of_tendsto {f : X → Y} {l₁ : Filter X} {l₂ : Filter Y} {x : X}
+    (hf : Tendsto f l₁ l₂) [l₁.NeBot] (hl₁ : l₁ ≤ 𝓝 x) (hl₂ : Disjoint (𝓝 (f x)) l₂) :
+    ¬ ContinuousAt f x := fun cont ↦
   (cont.mono_left hl₁).not_tendsto hl₂ hf
-
-/--
-theorem `ClusterPt.map` / 定理 `ClusterPt.map`
-
-English:
-theorem ClusterPt.map
-  statement: {lx : Filter X} {ly : Filter Y} (H : ClusterPt x lx)
-  proof: (NeBot.map H f).mono hfc.tendsto.inf hf
-
-中文:
-定理 ClusterPt.map
-  结论: {lx : 滤子 X} {ly : 滤子 Y} (H : ClusterPt x lx)
-  证明: (NeBot.map H f).mono hfc.tendsto.inf hf
-
-Depends on / 依赖: NeBot.map, hfc.tendsto.inf, tendsto
+/-
+**ClusterPt.map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ClusterPt.map {lx : Filter X} {ly : Filter Y} (H : ClusterPt x lx) (hfc : 
+ContinuousAt f x) (hf : Tendsto f lx ly) : ClusterPt (f x) ly
+参数：H : ClusterPt x lx；hfc : ContinuousAt f x；hf : Tendsto f lx ly。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.mono`：∀ {α : Type u} {f g : Filter α}, f.NeBot → f ≤ g → g.
+NeBot
+· 使用定理 `Filter.NeBot.map`：∀ {α : Type u_1} {β : Type u_2} {f : Filter α}, f.NeBo
+t → ∀ (m : α → β), (Filter.map m f).NeBot
+· 使用定理 `Filter.Tendsto.inf`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x₁ x₂ :
+ Filter α} {y₁ y₂ : Filter β},   Filter.Tendsto f x₁ y₁ → Filter.Tendsto f x₂ y₂
+ → Filte…
+· 使用定理 `ContinuousAt.tendsto`：ContinuousAt.tendsto (h : ContinuousAt f x) : Tend
+sto f (𝓝 x) (𝓝 (f x))
 -/
 theorem ClusterPt.map {lx : Filter X} {ly : Filter Y} (H : ClusterPt x lx)
     (hfc : ContinuousAt f x) (hf : Tendsto f lx ly) : ClusterPt (f x) ly :=
-(NeBot.map H f).mono hfc.tendsto.inf hf
+  (NeBot.map H f).mono <| hfc.tendsto.inf hf
 
-/--
-theorem `preimage_interior_subset_interior_preimage` / 定理 `preimage_interior_subset_interior_preimage`
+/-- See also `interior_preimage_subset_preimage_interior`. -/
+/-
+**preimage_interior_subset_interior_preimage** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：preimage_interior_subset_interior_preimage {t : Set Y} (hf : Continuous f)
+ : f ⁻¹' interior t subseteq interior (f ⁻¹' t)
+参数：hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `interior_maximal`：interior_maximal (h₁ : t subseteq s) (h₂ : IsOpen t) :
+ t subseteq interior s
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `isOpen_interior`：isOpen_interior : IsOpen (interior s)
 
-English:
-theorem preimage_interior_subset_interior_preimage
-  given: {t : Set Y} (hf : Continuous f)
-  proof: interior_maximal (preimage_mono interior_subset) (isOpen_interior.preimage hf)
-
-中文:
-定理 preimage_interior_subset_interior_preimage
-  条件: {t : 集合 Y} (hf : 连续 f)
-  证明: interior_maximal (preimage_mono interior_subset) (isOpen_interior.preimage hf)
-
-Depends on / 依赖: interior_maximal, interior_subset, isOpen_interior, isOpen_interior.preimage, preimage, preimage_mono
+--- 原说明 ---
+See also `interior_preimage_subset_preimage_interior`.
 -/
 theorem preimage_interior_subset_interior_preimage {t : Set Y} (hf : Continuous f) :
-    f ⁻¹' interior t subseteq interior (f ⁻¹' t) :=
+    f ⁻¹' interior t ⊆ interior (f ⁻¹' t) :=
   interior_maximal (preimage_mono interior_subset) (isOpen_interior.preimage hf)
-
-/--
-theorem `continuous_iff_preimage_interior_subset_interior_preimage` / 定理 `continuous_iff_preimage_interior_subset_interior_preimage`
-
-English:
-theorem continuous_iff_preimage_interior_subset_interior_preimage
-  proof: preimage_interior_subset_interior_preimage h
-mpr h := ⟨fun s hs => subset_interior_iff_isOpen.mp by grw [← h, hs.interior_eq]⟩
-
-@[continuity]
-
-中文:
-定理 continuous_iff_preimage_interior_subset_interior_preimage
-  证明: preimage_interior_subset_interior_preimage h
-mpr h := ⟨fun s hs => subset_interior_iff_isOpen.mp by grw [← h, hs.interior_eq]⟩
-
-@[continuity]
-
-Depends on / 依赖: preimage_interior_subset_interior_preimage
+/-
+**continuous_iff_preimage_interior_subset_interior_preimage** 是 Mathlib 中的一个定理，位
+于命名空间 ``。
+形式化陈述：continuous_iff_preimage_interior_subset_interior_preimage : Continuous f ↔
+ forall s, f ⁻¹' (interior s) subseteq interior (f ⁻¹' s) where mp h s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `preimage_interior_subset_interior_preimage`：preimage_interior_subset_int
+erior_preimage {t : Set Y} (hf : Continuous f) : f ⁻¹' interior t subseteq inter
+ior (f ⁻¹' t)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `subset_interior_iff_isOpen`：subset_interior_iff_isOpen : s subseteq inte
+rior s ↔ IsOpen s
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsOpen.interior_eq`：IsOpen.interior_eq (h : IsOpen s) : interior s = s
 -/
 theorem continuous_iff_preimage_interior_subset_interior_preimage :
-    Continuous f ↔ forall s, f ⁻¹' (interior s) subseteq interior (f ⁻¹' s) where
+    Continuous f ↔ ∀ s, f ⁻¹' (interior s) ⊆ interior (f ⁻¹' s) where
   mp h s := preimage_interior_subset_interior_preimage h
-mpr h := ⟨fun s hs => subset_interior_iff_isOpen.mp by grw [← h, hs.interior_eq]⟩
+  mpr h := ⟨fun s hs ↦ subset_interior_iff_isOpen.mp <| by grw [← h, hs.interior_eq]⟩
 
 @[continuity]
-/--
-theorem `continuous_id` / 定理 `continuous_id`
-
-English:
-theorem continuous_id
-  statement: Continuous (id : X -> X)
-  proof: continuous_def.2 fun _ => id
-
-中文:
-定理 continuous_id
-  结论: 连续 (id : X -> X)
-  证明: continuous_def.2 fun _ => id
+/-
+**continuous_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_id : Continuous (fun x ↦ x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
 -/
-theorem continuous_id : Continuous (id : X -> X) :=
+theorem continuous_id : Continuous (id : X → X) :=
   continuous_def.2 fun _ => id
 
 -- This is needed due to reducibility issues with the `continuity` tactic.
 @[continuity, fun_prop]
-/--
-theorem `continuous_id'` / 定理 `continuous_id'`
-
-English:
-theorem continuous_id'
-  statement: Continuous (fun (x : X) => x)
-  proof: continuous_id
-
-中文:
-定理 continuous_id'
-  结论: 连续 (fun (x : X) => x)
-  证明: continuous_id
-
-Depends on / 依赖: continuous_id
+/-
+**continuous_id'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_id' : Continuous (fun (x : X) => x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
 theorem continuous_id' : Continuous (fun (x : X) => x) := continuous_id
-
-/--
-theorem `Continuous.comp` / 定理 `Continuous.comp`
-
-English:
-theorem Continuous.comp
-  given: {g : Y -> Z} (hg : Continuous g) (hf : Continuous f)
-  proof: continuous_def.2 fun _ h => (h.preimage hg).preimage hf
-
-中文:
-定理 连续.comp
-  条件: {g : Y -> Z} (hg : 连续 g) (hf : 连续 f)
-  证明: continuous_def.2 fun _ h => (h.preimage hg).preimage hf
-
-Depends on / 依赖: continuous_def, h.preimage, preimage
+/-
+**Continuous.comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : Continuous f) : Con
+tinuous (g ∘ f)
+参数：hg : Continuous g；hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
 -/
-theorem Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : Continuous f) :
+theorem Continuous.comp {g : Y → Z} (hg : Continuous g) (hf : Continuous f) :
     Continuous (g ∘ f) :=
   continuous_def.2 fun _ h => (h.preimage hg).preimage hf
 
 -- This is needed due to reducibility issues with the `continuity` tactic.
 @[continuity, fun_prop]
-/--
-theorem `Continuous.comp'` / 定理 `Continuous.comp'`
-
-English:
-theorem Continuous.comp'
-  given: {g : Y -> Z} (hg : Continuous g) (hf : Continuous f)
-  proof: hg.comp hf
-
-@[fun_prop]
-
-中文:
-定理 连续.comp'
-  条件: {g : Y -> Z} (hg : 连续 g) (hf : 连续 f)
-  证明: hg.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: hg.comp
+/-
+**Continuous.comp'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf : Continuous f) : Co
+ntinuous (fun x => g (f x))
+参数：hg : Continuous g；hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
 -/
-theorem Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf : Continuous f) :
+theorem Continuous.comp' {g : Y → Z} (hg : Continuous g) (hf : Continuous f) :
     Continuous (fun x => g (f x)) := hg.comp hf
 
 @[fun_prop]
-/--
-theorem `Continuous.iterate` / 定理 `Continuous.iterate`
-
-English:
-theorem Continuous.iterate
-  given: {f : X -> X} (h : Continuous f) (n : Nat)
-  statement: Continuous f^[n]
-  proof: Nat.recOn n continuous_id fun _ ihn => ihn.comp h
-
-nonrec theorem ContinuousAt.comp {g : Y -> Z} (hg : ContinuousAt g (f x))
-    (hf : ContinuousAt f x) : ContinuousAt (g ∘ f) x :=
-  hg.comp hf
-
-@[fun_prop]
-
-中文:
-定理 连续.iterate
-  条件: {f : X -> X} (h : 连续 f) (n : 自然数)
-  结论: 连续 f^[n]
-  证明: Nat.recOn n continuous_id fun _ ihn => ihn.comp h
-
-nonrec theorem ContinuousAt.comp {g : Y -> Z} (hg : ContinuousAt g (f x))
-    (hf : ContinuousAt f x) : ContinuousAt (g ∘ f) x :=
-  hg.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: Nat.recOn, continuous_id, ihn.comp
+/-
+**Continuous.iterate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.iterate {f : X -> X} (h : Continuous f) (n : Nat) : Continuous 
+f^[n]
+参数：h : Continuous f；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
 -/
-theorem Continuous.iterate {f : X -> X} (h : Continuous f) (n : Nat) : Continuous f^[n] :=
+theorem Continuous.iterate {f : X → X} (h : Continuous f) (n : ℕ) : Continuous f^[n] :=
   Nat.recOn n continuous_id fun _ ihn => ihn.comp h
 
-nonrec theorem ContinuousAt.comp {g : Y -> Z} (hg : ContinuousAt g (f x))
+nonrec theorem ContinuousAt.comp {g : Y → Z} (hg : ContinuousAt g (f x))
     (hf : ContinuousAt f x) : ContinuousAt (g ∘ f) x :=
   hg.comp hf
 
 @[fun_prop]
-/--
-theorem `ContinuousAt.comp'` / 定理 `ContinuousAt.comp'`
-
-English:
-theorem ContinuousAt.comp'
-  statement: {g : Y -> Z} {x : X} (hg : ContinuousAt g (f x))
-  proof: ContinuousAt.comp hg hf
-
-中文:
-定理 ContinuousAt.comp'
-  结论: {g : Y -> Z} {x : X} (hg : ContinuousAt g (f x))
-  证明: ContinuousAt.comp hg hf
-
-Depends on / 依赖: ContinuousAt, ContinuousAt.comp
+/-
+**ContinuousAt.comp'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.comp' {g : Y -> Z} {x : X} (hg : ContinuousAt g (f x)) (hf : 
+ContinuousAt f x) : ContinuousAt (fun x => g (f x)) x
+参数：hg : ContinuousAt g (f x)；hf : ContinuousAt f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2 : TopologicalSpace
+ Z] {f …
 -/
-theorem ContinuousAt.comp' {g : Y -> Z} {x : X} (hg : ContinuousAt g (f x))
+theorem ContinuousAt.comp' {g : Y → Z} {x : X} (hg : ContinuousAt g (f x))
     (hf : ContinuousAt f x) : ContinuousAt (fun x => g (f x)) x := ContinuousAt.comp hg hf
 
-/--
-theorem `ContinuousAt.comp_of_eq` / 定理 `ContinuousAt.comp_of_eq`
+/-- See note [comp_of_eq lemmas] -/
+/-
+**ContinuousAt.comp_of_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.comp_of_eq {g : Y -> Z} (hg : ContinuousAt g y) (hf : Continu
+ousAt f x) (hy : f x = y) : ContinuousAt (g ∘ f) x
+参数：hg : ContinuousAt g y；hf : ContinuousAt f x；hy : f x = y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2 : TopologicalSpace
+ Z] {f …
 
-English:
-theorem ContinuousAt.comp_of_eq
-  statement: {g : Y -> Z} (hg : ContinuousAt g y)
-  proof: by subst hy; exact hg.comp hf
-
-中文:
-定理 ContinuousAt.comp_of_eq
-  结论: {g : Y -> Z} (hg : ContinuousAt g y)
-  证明: by subst hy; exact hg.comp hf
-
-Depends on / 依赖: hg.comp
+--- 原说明 ---
+See note [comp_of_eq lemmas]
 -/
-theorem ContinuousAt.comp_of_eq {g : Y -> Z} (hg : ContinuousAt g y)
+theorem ContinuousAt.comp_of_eq {g : Y → Z} (hg : ContinuousAt g y)
     (hf : ContinuousAt f x) (hy : f x = y) : ContinuousAt (g ∘ f) x := by subst hy; exact hg.comp hf
-
-/--
-theorem `Continuous.tendsto` / 定理 `Continuous.tendsto`
-
-English:
-theorem Continuous.tendsto
-  given: (hf : Continuous f) (x)
-  statement: Tendsto f (𝓝 x) (𝓝 (f x))
-  proof: ((nhds_basis_opens x).tendsto_iff <| nhds_basis_opens <| f x).2 fun t ⟨hxt, ht⟩ =>
-    ⟨f ⁻¹' t, ⟨hxt, ht.preimage hf⟩, Subset.rfl⟩
-
-中文:
-定理 连续.tendsto
-  条件: (hf : 连续 f) (x)
-  结论: 收敛 f (𝓝 x) (𝓝 (f x))
-  证明: ((nhds_basis_opens x).tendsto_iff <| nhds_basis_opens <| f x).2 fun t ⟨hxt, ht⟩ =>
-    ⟨f ⁻¹' t, ⟨hxt, ht.preimage hf⟩, Subset.rfl⟩
-
-Depends on / 依赖: Subset, Subset.rfl, ht.preimage, nhds_basis_opens, preimage, tendsto_iff
+/-
+**Continuous.tendsto** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.tendsto (hf : Continuous f) (x) : Tendsto f (𝓝 x) (𝓝 (f x))
+参数：hf : Continuous f；x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `nhds_basis_opens`：nhds_basis_opens (x : X) : (𝓝 x).HasBasis (fun s : Set
+ X => x in s ∧ IsOpen s) fun s => s
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
 theorem Continuous.tendsto (hf : Continuous f) (x) : Tendsto f (𝓝 x) (𝓝 (f x)) :=
   ((nhds_basis_opens x).tendsto_iff <| nhds_basis_opens <| f x).2 fun t ⟨hxt, ht⟩ =>
     ⟨f ⁻¹' t, ⟨hxt, ht.preimage hf⟩, Subset.rfl⟩
 
-/--
-theorem `Continuous.tendsto'` / 定理 `Continuous.tendsto'`
+/-- A version of `Continuous.tendsto` that allows one to specify a simpler form of the limit.
+E.g., one can write `continuous_exp.tendsto' 0 1 exp_zero`. -/
+/-
+**Continuous.tendsto'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.tendsto' (hf : Continuous f) (x : X) (y : Y) (h : f x = y) : Te
+ndsto f (𝓝 x) (𝓝 y)
+参数：hf : Continuous f；x : X；y : Y；h : f x = y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
 
-English:
-theorem Continuous.tendsto'
-  given: (hf : Continuous f) (x : X) (y : Y) (h : f x = y)
-  proof: h ▸ hf.tendsto x
-
-@[fun_prop]
-
-中文:
-定理 连续.tendsto'
-  条件: (hf : 连续 f) (x : X) (y : Y) (h : f x = y)
-  证明: h ▸ hf.tendsto x
-
-@[fun_prop]
-
-Depends on / 依赖: hf.tendsto, tendsto
+--- 原说明 ---
+A version of `Continuous.tendsto` that allows one to specify a simpler form of t
+he limit.
+E.g., one can write `continuous_exp.tendsto' 0 1 exp_zero`.
 -/
 theorem Continuous.tendsto' (hf : Continuous f) (x : X) (y : Y) (h : f x = y) :
     Tendsto f (𝓝 x) (𝓝 y) :=
   h ▸ hf.tendsto x
 
 @[fun_prop]
-/--
-theorem `Continuous.continuousAt` / 定理 `Continuous.continuousAt`
-
-English:
-theorem Continuous.continuousAt
-  given: (h : Continuous f)
-  statement: ContinuousAt f x
-  proof: h.tendsto x
-
-中文:
-定理 连续.continuousAt
-  条件: (h : 连续 f)
-  结论: ContinuousAt f x
-  证明: h.tendsto x
-
-Depends on / 依赖: h.tendsto, tendsto
+/-
+**Continuous.continuousAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.continuousAt (h : Continuous f) : ContinuousAt f x
+参数：h : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
 -/
 theorem Continuous.continuousAt (h : Continuous f) : ContinuousAt f x :=
   h.tendsto x
-
-/--
-theorem `continuous_iff_continuousAt` / 定理 `continuous_iff_continuousAt`
-
-English:
-theorem continuous_iff_continuousAt
-  statement: Continuous f ↔ forall x, ContinuousAt f x
-  proof: ⟨Continuous.tendsto, fun hf => continuous_def.2 fun _U hU => isOpen_iff_mem_nhds.2 fun x hx =>
-hf x hU.mem_nhds hx⟩
-
-@[fun_prop]
-
-中文:
-定理 continuous_iff_continuousAt
-  结论: 连续 f ↔ 对任意 x, ContinuousAt f x
-  证明: ⟨Continuous.tendsto, fun hf => continuous_def.2 fun _U hU => isOpen_iff_mem_nhds.2 fun x hx =>
-hf x hU.mem_nhds hx⟩
-
-@[fun_prop]
-
-Depends on / 依赖: Continuous, Continuous.tendsto, continuous_def, hU.mem_nhds, isOpen_iff_mem_nhds, mem_nhds, tendsto
+/-
+**continuous_iff_continuousAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_iff_continuousAt : Continuous f ↔ forall x, ContinuousAt f x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+· 使用定理 `isOpen_iff_mem_nhds`：isOpen_iff_mem_nhds : IsOpen s ↔ forall x in s, s i
+n 𝓝 x
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 -/
-theorem continuous_iff_continuousAt : Continuous f ↔ forall x, ContinuousAt f x :=
+theorem continuous_iff_continuousAt : Continuous f ↔ ∀ x, ContinuousAt f x :=
   ⟨Continuous.tendsto, fun hf => continuous_def.2 fun _U hU => isOpen_iff_mem_nhds.2 fun x hx =>
-hf x hU.mem_nhds hx⟩
+    hf x <| hU.mem_nhds hx⟩
 
 @[fun_prop]
-/--
-theorem `continuousAt_const` / 定理 `continuousAt_const`
-
-English:
-theorem continuousAt_const
-  statement: ContinuousAt (fun _ : X => y) x
-  proof: tendsto_const_nhds
-
-@[continuity, fun_prop]
-
-中文:
-定理 continuousAt_const
-  结论: ContinuousAt (fun _ : X => y) x
-  证明: tendsto_const_nhds
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: tendsto_const_nhds
+/-
+**continuousAt_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_const : ContinuousAt (fun _ : X => y) x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
 -/
 theorem continuousAt_const : ContinuousAt (fun _ : X => y) x :=
   tendsto_const_nhds
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_const` / 定理 `continuous_const`
-
-English:
-theorem continuous_const
-  statement: Continuous fun _ : X => y
-  proof: continuous_iff_continuousAt.mpr fun _ => continuousAt_const
-
-中文:
-定理 continuous_const
-  结论: 连续 fun _ : X => y
-  证明: continuous_iff_continuousAt.mpr fun _ => continuousAt_const
+/-
+**continuous_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_const (y : Y) : Continuous (fun x ↦ y)
+参数：y : Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_iff_continuousAt`：continuous_iff_continuousAt : Continuous f 
+↔ forall x, ContinuousAt f x
+· 使用定理 `continuousAt_const`：continuousAt_const : ContinuousAt (fun _ : X => y) x
 -/
 theorem continuous_const : Continuous fun _ : X => y :=
   continuous_iff_continuousAt.mpr fun _ => continuousAt_const
-
-/--
-theorem `Filter.EventuallyEq.continuousAt` / 定理 `Filter.EventuallyEq.continuousAt`
-
-English:
-theorem Filter.EventuallyEq.continuousAt
-  given: (h : f =ᶠ[𝓝 x] fun _ => y)
-  proof: (continuousAt_congr h).2 tendsto_const_nhds
-
-中文:
-定理 滤子.EventuallyEq.continuousAt
-  条件: (h : f =ᶠ[𝓝 x] fun _ => y)
-  证明: (continuousAt_congr h).2 tendsto_const_nhds
-
-Depends on / 依赖: continuousAt_congr, tendsto_const_nhds
+/-
+**Filter.EventuallyEq.continuousAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.continuousAt (h : f =ᶠ[𝓝 x] fun _ => y) : ContinuousAt
+ f x
+参数：h : f =ᶠ[𝓝 x] fun _ => y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousAt_congr`：continuousAt_congr {g : X -> Y} (h : f =ᶠ[𝓝 x] g) : 
+ContinuousAt f x ↔ ContinuousAt g x
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
 -/
 theorem Filter.EventuallyEq.continuousAt (h : f =ᶠ[𝓝 x] fun _ => y) :
     ContinuousAt f x :=
   (continuousAt_congr h).2 tendsto_const_nhds
-
-/--
-theorem `continuous_of_const` / 定理 `continuous_of_const`
-
-English:
-theorem continuous_of_const
-  given: (h : forall x y, f x = f y)
-  statement: Continuous f
-  proof: continuous_iff_continuousAt.mpr fun x =>
-Filter.EventuallyEq.continuousAt Eventually.of_forall fun y => h y x
-
-中文:
-定理 continuous_of_const
-  条件: (h : 对任意 x y, f x = f y)
-  结论: 连续 f
-  证明: continuous_iff_continuousAt.mpr fun x =>
-Filter.EventuallyEq.continuousAt Eventually.of_forall fun y => h y x
-
-Depends on / 依赖: Eventually, Eventually.of_forall, EventuallyEq, Filter, Filter.EventuallyEq.continuousAt, continuousAt, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, of_forall
+/-
+**continuous_of_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_of_const (h : forall x y, f x = f y) : Continuous f
+参数：h : forall x y, f x = f y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_iff_continuousAt`：continuous_iff_continuousAt : Continuous f 
+↔ forall x, ContinuousAt f x
+· 使用定理 `Filter.EventuallyEq.continuousAt`：Filter.EventuallyEq.continuousAt (h : 
+f =ᶠ[𝓝 x] fun _ => y) : ContinuousAt f x
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-theorem continuous_of_const (h : forall x y, f x = f y) : Continuous f :=
+theorem continuous_of_const (h : ∀ x y, f x = f y) : Continuous f :=
   continuous_iff_continuousAt.mpr fun x =>
-Filter.EventuallyEq.continuousAt Eventually.of_forall fun y => h y x
-
-/--
-theorem `continuousAt_id` / 定理 `continuousAt_id`
-
-English:
-theorem continuousAt_id
-  statement: ContinuousAt id x
-  proof: continuous_id.continuousAt
-
-@[fun_prop]
-
-中文:
-定理 continuousAt_id
-  结论: ContinuousAt id x
-  证明: continuous_id.continuousAt
-
-@[fun_prop]
-
-Depends on / 依赖: continuousAt, continuous_id, continuous_id.continuousAt
+    Filter.EventuallyEq.continuousAt <| Eventually.of_forall fun y => h y x
+/-
+**continuousAt_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_id : ContinuousAt id x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
 theorem continuousAt_id : ContinuousAt id x :=
   continuous_id.continuousAt
 
 @[fun_prop]
-/--
-theorem `continuousAt_id'` / 定理 `continuousAt_id'`
-
-English:
-theorem continuousAt_id'
-  given: (y)
-  statement: ContinuousAt (fun x : X => x) y
-  proof: continuousAt_id
-
-中文:
-定理 continuousAt_id'
-  条件: (y)
-  结论: ContinuousAt (fun x : X => x) y
-  证明: continuousAt_id
-
-Depends on / 依赖: continuousAt_id
+/-
+**continuousAt_id'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_id' (y) : ContinuousAt (fun x : X => x) y
+参数：y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousAt_id`：continuousAt_id : ContinuousAt id x
 -/
 theorem continuousAt_id' (y) : ContinuousAt (fun x : X => x) y := continuousAt_id
-
-/--
-theorem `ContinuousAt.iterate` / 定理 `ContinuousAt.iterate`
-
-English:
-theorem ContinuousAt.iterate
-  given: {f : X -> X} (hf : ContinuousAt f x) (hx : f x = x) (n : Nat)
-  proof: Nat.recOn n continuousAt_id fun _n ihn => ihn.comp_of_eq hf hx
-
-中文:
-定理 ContinuousAt.iterate
-  条件: {f : X -> X} (hf : ContinuousAt f x) (hx : f x = x) (n : 自然数)
-  证明: Nat.recOn n continuousAt_id fun _n ihn => ihn.comp_of_eq hf hx
-
-Depends on / 依赖: Nat.recOn, comp_of_eq, continuousAt_id, ihn.comp_of_eq
+/-
+**ContinuousAt.iterate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.iterate {f : X -> X} (hf : ContinuousAt f x) (hx : f x = x) (
+n : Nat) : ContinuousAt f^[n] x
+参数：hf : ContinuousAt f x；hx : f x = x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousAt_id`：continuousAt_id : ContinuousAt id x
+· 使用定理 `ContinuousAt.comp_of_eq`：ContinuousAt.comp_of_eq {g : Y -> Z} (hg : Cont
+inuousAt g y) (hf : ContinuousAt f x) (hy : f x = y) : ContinuousAt (g ∘ f) x
 -/
-theorem ContinuousAt.iterate {f : X -> X} (hf : ContinuousAt f x) (hx : f x = x) (n : Nat) :
+theorem ContinuousAt.iterate {f : X → X} (hf : ContinuousAt f x) (hx : f x = x) (n : ℕ) :
     ContinuousAt f^[n] x :=
-  Nat.recOn n continuousAt_id fun _n ihn => ihn.comp_of_eq hf hx
-
-/--
-theorem `continuous_iff_isClosed` / 定理 `continuous_iff_isClosed`
-
-English:
-theorem continuous_iff_isClosed
-  statement: Continuous f ↔ forall s, IsClosed s -> IsClosed (f ⁻¹' s)
-  proof: continuous_def.trans compl_surjective.forall.trans by
-    simp only [isOpen_compl_iff, preimage_compl]
-
-中文:
-定理 continuous_iff_isClosed
-  结论: 连续 f ↔ 对任意 s, 是闭集 s -> 是闭集 (f ⁻¹' s)
-  证明: continuous_def.trans compl_surjective.forall.trans by
-    simp only [isOpen_compl_iff, preimage_compl]
-
-Depends on / 依赖: compl_surjective, compl_surjective.forall.trans, continuous_def, continuous_def.trans, isOpen_compl_iff, preimage_compl
+  Nat.recOn n continuousAt_id fun _n ihn ↦ ihn.comp_of_eq hf hx
+/-
+**continuous_iff_isClosed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_iff_isClosed : Continuous f ↔ forall s, IsClosed s -> IsClosed 
+(f ⁻¹' s)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `continuous_def`：continuous_def {_ : TopologicalSpace X} {_ : Topological
+Space Y} {f : X -> Y} : Continuous f ↔ forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `compl_surjective`：compl_surjective : Function.Surjective (compl : α -> α
+)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem continuous_iff_isClosed : Continuous f ↔ forall s, IsClosed s -> IsClosed (f ⁻¹' s) :=
-continuous_def.trans compl_surjective.forall.trans by
+theorem continuous_iff_isClosed : Continuous f ↔ ∀ s, IsClosed s → IsClosed (f ⁻¹' s) :=
+  continuous_def.trans <| compl_surjective.forall.trans <| by
     simp only [isOpen_compl_iff, preimage_compl]
-
-/--
-theorem `IsClosed.preimage` / 定理 `IsClosed.preimage`
-
-English:
-theorem IsClosed.preimage
-  given: (hf : Continuous f) {t : Set Y} (h : IsClosed t)
-  proof: continuous_iff_isClosed.mp hf t h
-
-中文:
-定理 是闭集.原像
-  条件: (hf : 连续 f) {t : 集合 Y} (h : 是闭集 t)
-  证明: continuous_iff_isClosed.mp hf t h
-
-Depends on / 依赖: continuous_iff_isClosed, continuous_iff_isClosed.mp
+/-
+**IsClosed.preimage** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h : IsClosed t) : IsClo
+sed (f ⁻¹' t)
+参数：hf : Continuous f；h : IsClosed t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuous_iff_isClosed`：continuous_iff_isClosed : Continuous f ↔ forall
+ s, IsClosed s -> IsClosed (f ⁻¹' s)
 -/
 theorem IsClosed.preimage (hf : Continuous f) {t : Set Y} (h : IsClosed t) :
     IsClosed (f ⁻¹' t) :=
   continuous_iff_isClosed.mp hf t h
-
-/--
-theorem `mem_closure_image` / 定理 `mem_closure_image`
-
-English:
-theorem mem_closure_image
-  statement: (hf : ContinuousAt f x)
-  proof: mem_closure_of_frequently_of_tendsto
-    ((mem_closure_iff_frequently.1 hx).mono fun _ => mem_image_of_mem _) hf
-
-中文:
-定理 mem_closure_image
-  结论: (hf : ContinuousAt f x)
-  证明: mem_closure_of_frequently_of_tendsto
-    ((mem_closure_iff_frequently.1 hx).mono fun _ => mem_image_of_mem _) hf
-
-Depends on / 依赖: mem_closure_iff_frequently, mem_closure_of_frequently_of_tendsto, mem_image_of_mem
+/-
+**mem_closure_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closure_image (hf : ContinuousAt f x) (hx : x in closure s) : f x in c
+losure (f '' s)
+参数：hf : ContinuousAt f x；hx : x in closure s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_closure_of_frequently_of_tendsto`：mem_closure_of_frequently_of_tends
+to {f : α -> X} {b : Filter α} (h : existsᶠ x in b, f x in s) (hf : Tendsto f b 
+(𝓝 x)) : x in closure s
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_closure_iff_frequently`：mem_closure_iff_frequently : x in closure s 
+↔ existsᶠ x in 𝓝 x, x in s
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem mem_closure_image (hf : ContinuousAt f x)
-    (hx : x in closure s) : f x in closure (f '' s) :=
+    (hx : x ∈ closure s) : f x ∈ closure (f '' s) :=
   mem_closure_of_frequently_of_tendsto
     ((mem_closure_iff_frequently.1 hx).mono fun _ => mem_image_of_mem _) hf
-
-/--
-theorem `Continuous.closure_preimage_subset` / 定理 `Continuous.closure_preimage_subset`
-
-English:
-theorem Continuous.closure_preimage_subset
-  given: (hf : Continuous f) (t : Set Y)
-  proof: by
-  rw [← (isClosed_closure.preimage hf).closure_eq]
-  exact closure_mono (preimage_mono subset_closure)
-
-中文:
-定理 连续.closure_preimage_subset
-  条件: (hf : 连续 f) (t : 集合 Y)
-  证明: by
-  rw [← (isClosed_closure.preimage hf).closure_eq]
-  exact closure_mono (preimage_mono subset_closure)
-
-Depends on / 依赖: closure_eq, closure_mono, isClosed_closure, isClosed_closure.preimage, preimage, preimage_mono, subset_closure
+/-
+**Continuous.closure_preimage_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.closure_preimage_subset (hf : Continuous f) (t : Set Y) : closu
+re (f ⁻¹' t) subseteq f ⁻¹' closure t
+参数：hf : Continuous f；t : Set Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `IsClosed.preimage`：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h 
+: IsClosed t) : IsClosed (f ⁻¹' t)
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 -/
 theorem Continuous.closure_preimage_subset (hf : Continuous f) (t : Set Y) :
-    closure (f ⁻¹' t) subseteq f ⁻¹' closure t := by
+    closure (f ⁻¹' t) ⊆ f ⁻¹' closure t := by
   rw [← (isClosed_closure.preimage hf).closure_eq]
   exact closure_mono (preimage_mono subset_closure)
-
-/--
-theorem `Continuous.frontier_preimage_subset` / 定理 `Continuous.frontier_preimage_subset`
-
-English:
-theorem Continuous.frontier_preimage_subset
-  given: (hf : Continuous f) (t : Set Y)
-  proof: sdiff_subset_sdiff (hf.closure_preimage_subset t) (preimage_interior_subset_interior_preimage hf)
-
-中文:
-定理 连续.frontier_preimage_subset
-  条件: (hf : 连续 f) (t : 集合 Y)
-  证明: sdiff_subset_sdiff (hf.closure_preimage_subset t) (preimage_interior_subset_interior_preimage hf)
-
-Depends on / 依赖: closure_preimage_subset, hf.closure_preimage_subset, preimage_interior_subset_interior_preimage, sdiff_subset_sdiff
+/-
+**Continuous.frontier_preimage_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.frontier_preimage_subset (hf : Continuous f) (t : Set Y) : fron
+tier (f ⁻¹' t) subseteq f ⁻¹' frontier t
+参数：hf : Continuous f；t : Set Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.sdiff_subset_sdiff`：sdiff_subset_sdiff {s₁ s₂ t₁ t₂ : Set α} : s₁ su
+bseteq s₂ -> t₂ subseteq t₁ -> s₁ \ t₁ subseteq s₂ \ t₂
+· 使用定理 `Continuous.closure_preimage_subset`：Continuous.closure_preimage_subset (
+hf : Continuous f) (t : Set Y) : closure (f ⁻¹' t) subseteq f ⁻¹' closure t
+· 使用定理 `preimage_interior_subset_interior_preimage`：preimage_interior_subset_int
+erior_preimage {t : Set Y} (hf : Continuous f) : f ⁻¹' interior t subseteq inter
+ior (f ⁻¹' t)
 -/
 theorem Continuous.frontier_preimage_subset (hf : Continuous f) (t : Set Y) :
-    frontier (f ⁻¹' t) subseteq f ⁻¹' frontier t :=
+    frontier (f ⁻¹' t) ⊆ f ⁻¹' frontier t :=
   sdiff_subset_sdiff (hf.closure_preimage_subset t) (preimage_interior_subset_interior_preimage hf)
 
-/--
-theorem `Set.MapsTo.closure` / 定理 `Set.MapsTo.closure`
+/-- If a continuous map `f` maps `s` to `t`, then it maps `closure s` to `closure t`. -/
+/-
+**Set.MapsTo.closure** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y} {s : Set X}   {t : Set Y}, Set.MapsTo f s t → Contin
+uous f → Set.MapsTo f (closure s) (closure t)
+参数：closure s；closure t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ClusterPt.map`：ClusterPt.map {lx : Filter X} {ly : Filter Y} (H : Cluste
+rPt x lx) (hfc : ContinuousAt f x) (hf : Tendsto f lx ly) : ClusterPt (f x) ly
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.tendsto_principal_principal`：tendsto_principal_principal {f : α -
+> β} {s : Set α} {t : Set β} : Tendsto f (𝓟 s) (𝓟 t) ↔ forall a in s, f a in t
 
-English:
-theorem Set.MapsTo.closure
-  statement: {t : Set Y} (h : MapsTo f s t)
-  proof: by
-  simp only [MapsTo, mem_closure_iff_clusterPt]
-  exact fun x hx => hx.map hc.continuousAt (tendsto_principal_principal.2 h)
-
-中文:
-定理 集合.映射到.closure
-  结论: {t : 集合 Y} (h : 映射到 f s t)
-  证明: by
-  simp only [MapsTo, mem_closure_iff_clusterPt]
-  exact fun x hx => hx.map hc.continuousAt (tendsto_principal_principal.2 h)
+--- 原说明 ---
+If a continuous map `f` maps `s` to `t`, then it maps `closure s` to `closure t`
+.
 -/
 protected theorem Set.MapsTo.closure {t : Set Y} (h : MapsTo f s t)
     (hc : Continuous f) : MapsTo f (closure s) (closure t) := by
   simp only [MapsTo, mem_closure_iff_clusterPt]
   exact fun x hx => hx.map hc.continuousAt (tendsto_principal_principal.2 h)
 
-/--
-theorem `image_closure_subset_closure_image` / 定理 `image_closure_subset_closure_image`
+/-- See also `IsClosedMap.closure_image_eq_of_continuous`. -/
+/-
+**image_closure_subset_closure_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：image_closure_subset_closure_image (h : Continuous f) : f '' closure s sub
+seteq closure (f '' s)
+参数：h : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.image_subset`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β}, Set.MapsTo f s t → f '' s ⊆ t
+· 使用定理 `Set.MapsTo.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set X}   {t : Set Y}, Set
+.MapsTo …
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
 
-English:
-theorem image_closure_subset_closure_image
-  given: (h : Continuous f)
-  proof: ((mapsTo_image f s).closure h).image_subset
-
-中文:
-定理 image_closure_subset_closure_image
-  条件: (h : 连续 f)
-  证明: ((mapsTo_image f s).closure h).image_subset
-
-Depends on / 依赖: closure, image_subset, mapsTo_image
+--- 原说明 ---
+See also `IsClosedMap.closure_image_eq_of_continuous`.
 -/
 theorem image_closure_subset_closure_image (h : Continuous f) :
-    f '' closure s subseteq closure (f '' s) :=
+    f '' closure s ⊆ closure (f '' s) :=
   ((mapsTo_image f s).closure h).image_subset
-
-/--
-theorem `closure_image_closure` / 定理 `closure_image_closure`
-
-English:
-theorem closure_image_closure
-  given: (h : Continuous f)
-  proof: Subset.antisymm
-    (closure_minimal (image_closure_subset_closure_image h) isClosed_closure)
-    (closure_mono <| image_mono subset_closure)
-
-中文:
-定理 closure_image_closure
-  条件: (h : 连续 f)
-  证明: Subset.antisymm
-    (closure_minimal (image_closure_subset_closure_image h) isClosed_closure)
-    (closure_mono <| image_mono subset_closure)
-
-Depends on / 依赖: Subset, Subset.antisymm, antisymm, closure_minimal, closure_mono, image_closure_subset_closure_image, image_mono, isClosed_closure, subset_closure
+/-
+**closure_image_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：closure_image_closure (h : Continuous f) : closure (f '' closure s) = clos
+ure (f '' s)
+参数：h : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
+· 使用定理 `image_closure_subset_closure_image`：image_closure_subset_closure_image (
+h : Continuous f) : f '' closure s subseteq closure (f '' s)
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 -/
 theorem closure_image_closure (h : Continuous f) :
     closure (f '' closure s) = closure (f '' s) :=
   Subset.antisymm
     (closure_minimal (image_closure_subset_closure_image h) isClosed_closure)
     (closure_mono <| image_mono subset_closure)
-
-/--
-theorem `closure_subset_preimage_closure_image` / 定理 `closure_subset_preimage_closure_image`
-
-English:
-theorem closure_subset_preimage_closure_image
-  given: (h : Continuous f)
-  proof: (mapsTo_image _ _).closure h
-
-中文:
-定理 closure_subset_preimage_closure_image
-  条件: (h : 连续 f)
-  证明: (mapsTo_image _ _).closure h
-
-Depends on / 依赖: closure, mapsTo_image
+/-
+**closure_subset_preimage_closure_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：closure_subset_preimage_closure_image (h : Continuous f) : closure s subse
+teq f ⁻¹' closure (f '' s)
+参数：h : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set X}   {t : Set Y}, Set
+.MapsTo …
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
 -/
 theorem closure_subset_preimage_closure_image (h : Continuous f) :
-    closure s subseteq f ⁻¹' closure (f '' s) :=
+    closure s ⊆ f ⁻¹' closure (f '' s) :=
   (mapsTo_image _ _).closure h
-
-/--
-lemma `nonempty_preimage_closure_image` / 引理 `nonempty_preimage_closure_image`
-
-English:
-lemma nonempty_preimage_closure_image
-  given: (h : Continuous f) (t : Set X) (ht : t.Nonempty)
-  proof: (Nonempty.mono (closure_subset_preimage_closure_image h (s := t)) (closure_nonempty_iff.mpr ht))
-
-中文:
-引理 nonempty_preimage_closure_image
-  条件: (h : 连续 f) (t : 集合 X) (ht : t.非空)
-  证明: (Nonempty.mono (closure_subset_preimage_closure_image h (s := t)) (closure_nonempty_iff.mpr ht))
-
-Depends on / 依赖: Nonempty, Nonempty.mono, closure_nonempty_iff, closure_nonempty_iff.mpr, closure_subset_preimage_closure_image
+/-
+**nonempty_preimage_closure_image** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nonempty_preimage_closure_image (h : Continuous f) (t : Set X) (ht : t.Non
+empty) : (f ⁻¹' (closure (f '' t))).Nonempty
+参数：h : Continuous f；t : Set X；ht : t.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `closure_subset_preimage_closure_image`：closure_subset_preimage_closure_i
+mage (h : Continuous f) : closure s subseteq f ⁻¹' closure (f '' s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `closure_nonempty_iff`：closure_nonempty_iff : (closure s).Nonempty ↔ s.No
+nempty
 -/
 lemma nonempty_preimage_closure_image (h : Continuous f) (t : Set X) (ht : t.Nonempty) :
     (f ⁻¹' (closure (f '' t))).Nonempty :=
   (Nonempty.mono (closure_subset_preimage_closure_image h (s := t)) (closure_nonempty_iff.mpr ht))
-
-/--
-theorem `continuous_iff_image_closure_subset_closure_image` / 定理 `continuous_iff_image_closure_subset_closure_image`
-
-English:
-theorem continuous_iff_image_closure_subset_closure_image
-  proof: image_closure_subset_closure_image h
-mpr h := continuous_iff_isClosed.mpr fun s hs => isClosed_of_closure_subset by
-    grw [image_subset_iff.mp <| h <| f ⁻¹' s, image_preimage_subset, hs.closure_subset]
-
-中文:
-定理 continuous_iff_image_closure_subset_closure_image
-  证明: image_closure_subset_closure_image h
-mpr h := continuous_iff_isClosed.mpr fun s hs => isClosed_of_closure_subset by
-    grw [image_subset_iff.mp <| h <| f ⁻¹' s, image_preimage_subset, hs.closure_subset]
-
-Depends on / 依赖: image_closure_subset_closure_image
+/-
+**continuous_iff_image_closure_subset_closure_image** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：continuous_iff_image_closure_subset_closure_image : Continuous f ↔ forall 
+s, f '' closure s subseteq closure (f '' s) where mp h s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `image_closure_subset_closure_image`：image_closure_subset_closure_image (
+h : Continuous f) : f '' closure s subseteq closure (f '' s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_iff_isClosed`：continuous_iff_isClosed : Continuous f ↔ forall
+ s, IsClosed s -> IsClosed (f ⁻¹' s)
+· 使用定理 `isClosed_of_closure_subset`：isClosed_of_closure_subset (h : closure s su
+bseteq s) : IsClosed s
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `IsClosed.closure_subset`：IsClosed.closure_subset (hs : IsClosed s) : clo
+sure s subseteq s
 -/
 theorem continuous_iff_image_closure_subset_closure_image :
-    Continuous f ↔ forall s, f '' closure s subseteq closure (f '' s) where
+    Continuous f ↔ ∀ s, f '' closure s ⊆ closure (f '' s) where
   mp h s := image_closure_subset_closure_image h
-mpr h := continuous_iff_isClosed.mpr fun s hs => isClosed_of_closure_subset by
+  mpr h := continuous_iff_isClosed.mpr fun s hs ↦ isClosed_of_closure_subset <| by
     grw [image_subset_iff.mp <| h <| f ⁻¹' s, image_preimage_subset, hs.closure_subset]
-
-/--
-theorem `map_mem_closure` / 定理 `map_mem_closure`
-
-English:
-theorem map_mem_closure
-  statement: {t : Set Y} (hf : Continuous f)
-  proof: ht.closure hf hx
-
-中文:
-定理 map_mem_closure
-  结论: {t : 集合 Y} (hf : 连续 f)
-  证明: ht.closure hf hx
-
-Depends on / 依赖: closure, ht.closure
+/-
+**map_mem_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_mem_closure {t : Set Y} (hf : Continuous f) (hx : x in closure s) (ht 
+: MapsTo f s t) : f x in closure t
+参数：hf : Continuous f；hx : x in closure s；ht : MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set X}   {t : Set Y}, Set
+.MapsTo …
 -/
 theorem map_mem_closure {t : Set Y} (hf : Continuous f)
-    (hx : x in closure s) (ht : MapsTo f s t) : f x in closure t :=
+    (hx : x ∈ closure s) (ht : MapsTo f s t) : f x ∈ closure t :=
   ht.closure hf hx
 
-/--
-theorem `Set.MapsTo.closure_left` / 定理 `Set.MapsTo.closure_left`
+/-- If a continuous map `f` maps `s` to a closed set `t`, then it maps `closure s` to `t`. -/
+/-
+**Set.MapsTo.closure_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.MapsTo.closure_left {t : Set Y} (h : MapsTo f s t) (hc : Continuous f)
+ (ht : IsClosed t) : MapsTo f (closure s) t
+参数：h : MapsTo f s t；hc : Continuous f；ht : IsClosed t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set X}   {t : Set Y}, Set
+.MapsTo …
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
 
-English:
-theorem Set.MapsTo.closure_left
-  statement: {t : Set Y} (h : MapsTo f s t)
-  proof: ht.closure_eq ▸ h.closure hc
-
-中文:
-定理 集合.映射到.closure_left
-  结论: {t : 集合 Y} (h : 映射到 f s t)
-  证明: ht.closure_eq ▸ h.closure hc
-
-Depends on / 依赖: closure, closure_eq, h.closure, ht.closure_eq
+--- 原说明 ---
+If a continuous map `f` maps `s` to a closed set `t`, then it maps `closure s` t
+o `t`.
 -/
 theorem Set.MapsTo.closure_left {t : Set Y} (h : MapsTo f s t)
     (hc : Continuous f) (ht : IsClosed t) : MapsTo f (closure s) t :=
   ht.closure_eq ▸ h.closure hc
-
-/--
-theorem `Filter.Tendsto.lift'_closure` / 定理 `Filter.Tendsto.lift'_closure`
-
-English:
-theorem Filter.Tendsto.lift'_closure
-  given: (hf : Continuous f) {l l'} (h : Tendsto f l l')
-  proof: tendsto_lift'.2 fun s hs => by
-    filter_upwards [mem_lift' (h hs)] using (mapsTo_preimage _ _).closure hf
-
-中文:
-定理 滤子.收敛.lift'_closure
-  条件: (hf : 连续 f) {l l'} (h : 收敛 f l l')
-  证明: tendsto_lift'.2 fun s hs => by
-    filter_upwards [mem_lift' (h hs)] using (mapsTo_preimage _ _).closure hf
-
-Depends on / 依赖: closure, filter_upwards, mapsTo_preimage, mem_lift, tendsto_lift
+/-
+**Filter.Tendsto.lift'_closure** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tendsto`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y},   Continuous f →     ∀ {l : Filter X} {l' : Filter 
+Y}, Filter.Tendsto f l l' → Filter.Tendsto f (l.lift' closure) (l'.lift' closure
+)
+参数：l.lift' closure；l'.lift' closure。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `Filter.tendsto_lift'`：tendsto_lift' {m : γ -> β} {l : Filter γ} : Tendst
+o m l (f.lift' h) ↔ forall s in f, forallᶠ a in l, m a in h s
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.mem_lift'`：mem_lift' {t : Set α} (ht : t in f) : h t in f.lift' h
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Set.MapsTo.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set X}   {t : Set Y}, Set
+.MapsTo …
+· 使用定理 `Set.mapsTo_preimage`：mapsTo_preimage (f : α -> β) (t : Set β) : MapsTo f
+ (f ⁻¹' t) t
 -/
 theorem Filter.Tendsto.lift'_closure (hf : Continuous f) {l l'} (h : Tendsto f l l') :
     Tendsto f (l.lift' closure) (l'.lift' closure) :=
-  tendsto_lift'.2 fun s hs => by
+  tendsto_lift'.2 fun s hs ↦ by
     filter_upwards [mem_lift' (h hs)] using (mapsTo_preimage _ _).closure hf
-
-/--
-theorem `tendsto_lift'_closure_nhds` / 定理 `tendsto_lift'_closure_nhds`
-
-English:
-theorem tendsto_lift'_closure_nhds
-  given: (hf : Continuous f) (x : X)
-  proof: (hf.tendsto x).lift'_closure hf
-
-中文:
-定理 tendsto_lift'_closure_nhds
-  条件: (hf : 连续 f) (x : X)
-  证明: (hf.tendsto x).lift'_closure hf
-
-Depends on / 依赖: _closure, hf.tendsto, tendsto
+/-
+**tendsto_lift'_closure_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y},   Continuous f → ∀ (x : X), Filter.Tendsto f ((nhds
+ x).lift' closure) ((nhds (f x)).lift' closure)
+参数：x : X；(nhds x).lift' closure；(nhds (f x)).lift' closure。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.lift'_closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f →   
+  ∀ {l : Filter X}…
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
 -/
 theorem tendsto_lift'_closure_nhds (hf : Continuous f) (x : X) :
     Tendsto f ((𝓝 x).lift' closure) ((𝓝 (f x)).lift' closure) :=
@@ -1048,322 +916,266 @@ theorem tendsto_lift'_closure_nhds (hf : Continuous f) (x : X) :
 
 section DenseRange
 
-variable {α ι : Type*} (f : α -> X) (g : X -> Y)
-variable {f : α -> X} {s : Set X}
+variable {α ι : Type*} (f : α → X) (g : X → Y)
+variable {f : α → X} {s : Set X}
 
-/--
-theorem `Function.Surjective.denseRange` / 定理 `Function.Surjective.denseRange`
+/-- A surjective map has dense range. -/
+/-
+**Function.Surjective.denseRange** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Surjective.denseRange (hf : Function.Surjective f) : DenseRange f
+参数：hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
 
-English:
-theorem Function.Surjective.denseRange
-  given: (hf : Function.Surjective f)
-  statement: DenseRange f
-  proof: fun x => by
-  simp [hf.range_eq]
-
-中文:
-定理 函数.满射.denseRange
-  条件: (hf : 函数.满射 f)
-  结论: DenseRange f
-  证明: fun x => by
-  simp [hf.range_eq]
-
-Depends on / 依赖: hf.range_eq, range_eq
+--- 原说明 ---
+A surjective map has dense range.
 -/
 theorem Function.Surjective.denseRange (hf : Function.Surjective f) : DenseRange f := fun x => by
   simp [hf.range_eq]
-
-/--
-theorem `denseRange_id` / 定理 `denseRange_id`
-
-English:
-theorem denseRange_id
-  statement: DenseRange (id : X -> X)
-  proof: Function.Surjective.denseRange Function.surjective_id
-
-中文:
-定理 denseRange_id
-  结论: DenseRange (id : X -> X)
-  证明: Function.Surjective.denseRange Function.surjective_id
-
-Depends on / 依赖: Function, Function.Surjective.denseRange, Function.surjective_id, Surjective, denseRange, surjective_id
+/-
+**denseRange_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：denseRange_id : DenseRange (id : X -> X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.denseRange`：Function.Surjective.denseRange (hf : Fun
+ction.Surjective f) : DenseRange f
+· 使用定理 `Function.surjective_id`：∀ {α : Sort u_1}, Function.Surjective id
 -/
-theorem denseRange_id : DenseRange (id : X -> X) :=
+theorem denseRange_id : DenseRange (id : X → X) :=
   Function.Surjective.denseRange Function.surjective_id
-
-/--
-theorem `denseRange_iff_closure_range` / 定理 `denseRange_iff_closure_range`
-
-English:
-theorem denseRange_iff_closure_range
-  statement: DenseRange f ↔ closure (range f) = univ
-  proof: dense_iff_closure_eq
-
-中文:
-定理 denseRange_iff_closure_range
-  结论: DenseRange f ↔ closure (range f) = univ
-  证明: dense_iff_closure_eq
-
-Depends on / 依赖: dense_iff_closure_eq
+/-
+**denseRange_iff_closure_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：denseRange_iff_closure_range : DenseRange f ↔ closure (range f) = univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dense_iff_closure_eq`：dense_iff_closure_eq : Dense s ↔ closure s = univ
 -/
 theorem denseRange_iff_closure_range : DenseRange f ↔ closure (range f) = univ :=
   dense_iff_closure_eq
-
-/--
-theorem `DenseRange.closure_range` / 定理 `DenseRange.closure_range`
-
-English:
-theorem DenseRange.closure_range
-  given: (h : DenseRange f)
-  statement: closure (range f) = univ
-  proof: h.closure_eq
-
-@[simp]
-
-中文:
-定理 DenseRange.closure_range
-  条件: (h : DenseRange f)
-  结论: closure (range f) = univ
-  证明: h.closure_eq
-
-@[simp]
-
-Depends on / 依赖: closure_eq, h.closure_eq
+/-
+**DenseRange.closure_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DenseRange.closure_range (h : DenseRange f) : closure (range f) = univ
+参数：h : DenseRange f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dense.closure_eq`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X}
+, Dense s → closure s = Set.univ
 -/
 theorem DenseRange.closure_range (h : DenseRange f) : closure (range f) = univ :=
   h.closure_eq
 
 @[simp]
-/--
-lemma `denseRange_subtype_val` / 引理 `denseRange_subtype_val`
-
-English:
-lemma denseRange_subtype_val
-  given: {p : X -> Prop}
-  statement: DenseRange (@Subtype.val _ p) ↔ Dense {x | p x}
-  proof: by
-  simp [DenseRange]
-
-中文:
-引理 denseRange_subtype_val
-  条件: {p : X -> 命题}
-  结论: DenseRange (@子类型.val _ p) ↔ 稠密 {x | p x}
-  证明: by
-  simp [DenseRange]
-
-Depends on / 依赖: DenseRange
+/-
+**denseRange_subtype_val** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：denseRange_subtype_val {p : X -> Prop} : DenseRange (@Subtype.val _ p) ↔ D
+ense {x | p x}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma denseRange_subtype_val {p : X -> Prop} : DenseRange (@Subtype.val _ p) ↔ Dense {x | p x} := by
+lemma denseRange_subtype_val {p : X → Prop} : DenseRange (@Subtype.val _ p) ↔ Dense {x | p x} := by
   simp [DenseRange]
-
-/--
-theorem `Dense.denseRange_val` / 定理 `Dense.denseRange_val`
-
-English:
-theorem Dense.denseRange_val
-  given: (h : Dense s)
-  statement: DenseRange ((↑) : s -> X)
-  proof: denseRange_subtype_val.2 h
-
-中文:
-定理 稠密.denseRange_val
-  条件: (h : 稠密 s)
-  结论: DenseRange ((↑) : s -> X)
-  证明: denseRange_subtype_val.2 h
-
-Depends on / 依赖: denseRange_subtype_val
+/-
+**Dense.denseRange_val** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dense.denseRange_val (h : Dense s) : DenseRange ((↑) : s -> X)
+参数：h : Dense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `denseRange_subtype_val`：denseRange_subtype_val {p : X -> Prop} : DenseRa
+nge (@Subtype.val _ p) ↔ Dense {x | p x}
 -/
-theorem Dense.denseRange_val (h : Dense s) : DenseRange ((↑) : s -> X) :=
+theorem Dense.denseRange_val (h : Dense s) : DenseRange ((↑) : s → X) :=
   denseRange_subtype_val.2 h
-
-/--
-theorem `Continuous.range_subset_closure_image_dense` / 定理 `Continuous.range_subset_closure_image_dense`
-
-English:
-theorem Continuous.range_subset_closure_image_dense
-  statement: {f : X -> Y} (hf : Continuous f)
-  proof: by
-  rw [← image_univ]; rw [← hs.closure_eq]
-  exact image_closure_subset_closure_image hf
-
-中文:
-定理 连续.range_subset_closure_image_dense
-  结论: {f : X -> Y} (hf : 连续 f)
-  证明: by
-  rw [← image_univ]; rw [← hs.closure_eq]
-  exact image_closure_subset_closure_image hf
-
-Depends on / 依赖: closure_eq, hs.closure_eq, image_closure_subset_closure_image, image_univ
+/-
+**Continuous.range_subset_closure_image_dense** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.range_subset_closure_image_dense {f : X -> Y} (hf : Continuous 
+f) (hs : Dense s) : range f subseteq closure (f '' s)
+参数：hf : Continuous f；hs : Dense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Dense.closure_eq`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X}
+, Dense s → closure s = Set.univ
+· 使用定理 `image_closure_subset_closure_image`：image_closure_subset_closure_image (
+h : Continuous f) : f '' closure s subseteq closure (f '' s)
 -/
-theorem Continuous.range_subset_closure_image_dense {f : X -> Y} (hf : Continuous f)
-    (hs : Dense s) : range f subseteq closure (f '' s) := by
-  rw [← image_univ]; rw [← hs.closure_eq]
+theorem Continuous.range_subset_closure_image_dense {f : X → Y} (hf : Continuous f)
+    (hs : Dense s) : range f ⊆ closure (f '' s) := by
+  rw [← image_univ, ← hs.closure_eq]
   exact image_closure_subset_closure_image hf
 
-/--
-theorem `DenseRange.dense_image` / 定理 `DenseRange.dense_image`
+/-- The image of a dense set under a continuous map with dense range is a dense set. -/
+/-
+**DenseRange.dense_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DenseRange.dense_image {f : X -> Y} (hf' : DenseRange f) (hf : Continuous 
+f) (hs : Dense s) : Dense (f '' s)
+参数：hf' : DenseRange f；hf : Continuous f；hs : Dense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dense.of_closure`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X}
+, Dense (closure s) → Dense s
+· 使用定理 `Dense.mono`：Dense.mono (h : s₁ subseteq s₂) (hd : Dense s₁) : Dense s₂
+· 使用定理 `Continuous.range_subset_closure_image_dense`：Continuous.range_subset_clo
+sure_image_dense {f : X -> Y} (hf : Continuous f) (hs : Dense s) : range f subse
+teq closure (f '' s)
 
-English:
-theorem DenseRange.dense_image
-  statement: {f : X -> Y} (hf' : DenseRange f) (hf : Continuous f)
-  proof: (hf'.mono <| hf.range_subset_closure_image_dense hs).of_closure
-
-中文:
-定理 DenseRange.dense_image
-  结论: {f : X -> Y} (hf' : DenseRange f) (hf : 连续 f)
-  证明: (hf'.mono <| hf.range_subset_closure_image_dense hs).of_closure
-
-Depends on / 依赖: hf.range_subset_closure_image_dense, of_closure, range_subset_closure_image_dense
+--- 原说明 ---
+The image of a dense set under a continuous map with dense range is a dense set.
 -/
-theorem DenseRange.dense_image {f : X -> Y} (hf' : DenseRange f) (hf : Continuous f)
+theorem DenseRange.dense_image {f : X → Y} (hf' : DenseRange f) (hf : Continuous f)
     (hs : Dense s) : Dense (f '' s) :=
   (hf'.mono <| hf.range_subset_closure_image_dense hs).of_closure
 
-/--
-theorem `DenseRange.subset_closure_image_preimage_of_isOpen` / 定理 `DenseRange.subset_closure_image_preimage_of_isOpen`
+/-- If `f` has dense range and `s` is an open set in the codomain of `f`, then the image of the
+preimage of `s` under `f` is dense in `s`. -/
+/-
+**DenseRange.subset_closure_image_preimage_of_isOpen** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：DenseRange.subset_closure_image_preimage_of_isOpen (hf : DenseRange f) (hs
+ : IsOpen s) : s subseteq closure (f '' f ⁻¹' s)
+参数：hf : DenseRange f；hs : IsOpen s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `Dense.open_subset_closure_inter`：Dense.open_subset_closure_inter (hs : D
+ense s) (ht : IsOpen t) : t subseteq closure (t inter s)
 
-English:
-theorem DenseRange.subset_closure_image_preimage_of_isOpen
-  given: (hf : DenseRange f) (hs : IsOpen s)
-  proof: by
-  rw [image_preimage_eq_inter_range]
-  exact hf.open_subset_closure_inter hs
-
-中文:
-定理 DenseRange.subset_closure_image_preimage_of_isOpen
-  条件: (hf : DenseRange f) (hs : 是开集 s)
-  证明: by
-  rw [image_preimage_eq_inter_range]
-  exact hf.open_subset_closure_inter hs
-
-Depends on / 依赖: hf.open_subset_closure_inter, image_preimage_eq_inter_range, open_subset_closure_inter
+--- 原说明 ---
+If `f` has dense range and `s` is an open set in the codomain of `f`, then the i
+mage of the
+preimage of `s` under `f` is dense in `s`.
 -/
 theorem DenseRange.subset_closure_image_preimage_of_isOpen (hf : DenseRange f) (hs : IsOpen s) :
-    s subseteq closure (f '' f ⁻¹' s) := by
+    s ⊆ closure (f '' f ⁻¹' s) := by
   rw [image_preimage_eq_inter_range]
   exact hf.open_subset_closure_inter hs
 
-/--
-theorem `DenseRange.dense_of_mapsTo` / 定理 `DenseRange.dense_of_mapsTo`
+/-- If a continuous map with dense range maps a dense set to a subset of `t`, then `t` is a dense
+set. -/
+/-
+**DenseRange.dense_of_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DenseRange.dense_of_mapsTo {f : X -> Y} (hf' : DenseRange f) (hf : Continu
+ous f) (hs : Dense s) {t : Set Y} (ht : MapsTo f s t) : Dense t
+参数：hf' : DenseRange f；hf : Continuous f；hs : Dense s；ht : MapsTo f s t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dense.mono`：Dense.mono (h : s₁ subseteq s₂) (hd : Dense s₁) : Dense s₂
+· 使用定理 `Set.MapsTo.image_subset`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β}, Set.MapsTo f s t → f '' s ⊆ t
+· 使用定理 `DenseRange.dense_image`：DenseRange.dense_image {f : X -> Y} (hf' : Dense
+Range f) (hf : Continuous f) (hs : Dense s) : Dense (f '' s)
 
-English:
-theorem DenseRange.dense_of_mapsTo
-  statement: {f : X -> Y} (hf' : DenseRange f) (hf : Continuous f)
-  proof: (hf'.dense_image hf hs).mono ht.image_subset
-
-中文:
-定理 DenseRange.dense_of_mapsTo
-  结论: {f : X -> Y} (hf' : DenseRange f) (hf : 连续 f)
-  证明: (hf'.dense_image hf hs).mono ht.image_subset
-
-Depends on / 依赖: dense_image, ht.image_subset, image_subset
+--- 原说明 ---
+If a continuous map with dense range maps a dense set to a subset of `t`, then `
+t` is a dense
+set.
 -/
-theorem DenseRange.dense_of_mapsTo {f : X -> Y} (hf' : DenseRange f) (hf : Continuous f)
+theorem DenseRange.dense_of_mapsTo {f : X → Y} (hf' : DenseRange f) (hf : Continuous f)
     (hs : Dense s) {t : Set Y} (ht : MapsTo f s t) : Dense t :=
   (hf'.dense_image hf hs).mono ht.image_subset
 
-/--
-theorem `DenseRange.comp` / 定理 `DenseRange.comp`
+/-- Composition of a continuous map with dense range and a function with dense range has dense
+range. -/
+/-
+**DenseRange.comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DenseRange.comp {g : Y -> Z} {f : α -> Y} (hg : DenseRange g) (hf : DenseR
+ange f) (cg : Continuous g) : DenseRange (g ∘ f)
+参数：hg : DenseRange g；hf : DenseRange f；cg : Continuous g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DenseRange.eq_1`：∀ {X : Type u} [inst : TopologicalSpace X] {α : Type u_
+1} (f : α → X), DenseRange f = Dense (Set.range f)
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `DenseRange.dense_image`：DenseRange.dense_image {f : X -> Y} (hf' : Dense
+Range f) (hf : Continuous f) (hs : Dense s) : Dense (f '' s)
 
-English:
-theorem DenseRange.comp
-  statement: {g : Y -> Z} {f : α -> Y} (hg : DenseRange g) (hf : DenseRange f)
-  proof: by
-  rw [DenseRange]; rw [range_comp]
-  exact hg.dense_image cg hf
-
-nonrec theorem DenseRange.nonempty_iff (hf : DenseRange f) : Nonempty α ↔ Nonempty X :=
-  range_nonempty_iff_nonempty.symm.trans hf.nonempty_iff
-
-中文:
-定理 DenseRange.comp
-  结论: {g : Y -> Z} {f : α -> Y} (hg : DenseRange g) (hf : DenseRange f)
-  证明: by
-  rw [DenseRange]; rw [range_comp]
-  exact hg.dense_image cg hf
-
-nonrec theorem DenseRange.nonempty_iff (hf : DenseRange f) : Nonempty α ↔ Nonempty X :=
-  range_nonempty_iff_nonempty.symm.trans hf.nonempty_iff
-
-Depends on / 依赖: DenseRange, dense_image, hg.dense_image, range_comp
+--- 原说明 ---
+Composition of a continuous map with dense range and a function with dense range
+ has dense
+range.
 -/
-theorem DenseRange.comp {g : Y -> Z} {f : α -> Y} (hg : DenseRange g) (hf : DenseRange f)
+theorem DenseRange.comp {g : Y → Z} {f : α → Y} (hg : DenseRange g) (hf : DenseRange f)
     (cg : Continuous g) : DenseRange (g ∘ f) := by
-  rw [DenseRange]; rw [range_comp]
+  rw [DenseRange, range_comp]
   exact hg.dense_image cg hf
 
 nonrec theorem DenseRange.nonempty_iff (hf : DenseRange f) : Nonempty α ↔ Nonempty X :=
   range_nonempty_iff_nonempty.symm.trans hf.nonempty_iff
-
-/--
-theorem `DenseRange.nonempty` / 定理 `DenseRange.nonempty`
-
-English:
-theorem DenseRange.nonempty
-  given: [h : Nonempty X] (hf : DenseRange f)
-  statement: Nonempty α
-  proof: hf.nonempty_iff.mpr h
-
-中文:
-定理 DenseRange.nonempty
-  条件: [h : 非空 X] (hf : DenseRange f)
-  结论: 非空 α
-  证明: hf.nonempty_iff.mpr h
-
-Depends on / 依赖: hf.nonempty_iff.mpr, nonempty_iff
+/-
+**DenseRange.nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DenseRange.nonempty [h : Nonempty X] (hf : DenseRange f) : Nonempty α
+参数：hf : DenseRange f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `DenseRange.nonempty_iff`：∀ {X : Type u_1} [inst : TopologicalSpace X] {α
+ : Type u_4} {f : α → X}, DenseRange f → (Nonempty α ↔ Nonempty X)
 -/
 theorem DenseRange.nonempty [h : Nonempty X] (hf : DenseRange f) : Nonempty α :=
   hf.nonempty_iff.mpr h
 
-/--
-Definition of `DenseRange.some` / `DenseRange.some` 的定义
+/-- Given a function `f : X → Y` with dense range and `y : Y`, returns some `x : X`. -/
+/-
+**DenseRange.some** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DenseRange.some (hf : DenseRange f) (x : X) : α
+参数：hf : DenseRange f；x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DenseRange.some
-  signature: (hf : DenseRange f) (x : X)
-  body: Classical.choice hf.nonempty_iff.mpr ⟨x⟩
-
-nonrec theorem DenseRange.exists_mem_open (hf : DenseRange f) (ho : IsOpen s) (hs : s.Nonempty) :
-    exists a, f a in s :=
-exists_range_iff.1 hf.exists_mem_open ho hs
-
-中文:
-定义 DenseRange.some
-  签名: (hf : DenseRange f) (x : X)
-  定义体: Classical.choice hf.nonempty_iff.mpr ⟨x⟩
-
-nonrec theorem DenseRange.exists_mem_open (hf : DenseRange f) (ho : IsOpen s) (hs : s.Nonempty) :
-    exists a, f a in s :=
-exists_range_iff.1 hf.exists_mem_open ho hs
-
-Depends on / 依赖: Classical, Classical.choice, choice, hf.nonempty_iff.mpr, nonempty_iff
+--- 原说明 ---
+Given a function `f : X → Y` with dense range and `y : Y`, returns some `x : X`.
 -/
 noncomputable def DenseRange.some (hf : DenseRange f) (x : X) : α :=
-Classical.choice hf.nonempty_iff.mpr ⟨x⟩
+  Classical.choice <| hf.nonempty_iff.mpr ⟨x⟩
 
 nonrec theorem DenseRange.exists_mem_open (hf : DenseRange f) (ho : IsOpen s) (hs : s.Nonempty) :
-    exists a, f a in s :=
-exists_range_iff.1 hf.exists_mem_open ho hs
-
-/--
-theorem `DenseRange.mem_nhds` / 定理 `DenseRange.mem_nhds`
-
-English:
-theorem DenseRange.mem_nhds
-  given: (h : DenseRange f) (hs : s in 𝓝 x)
-  proof: let ⟨a, ha⟩ := h.exists_mem_open isOpen_interior ⟨x, mem_interior_iff_mem_nhds.2 hs⟩
-  ⟨a, interior_subset ha⟩
-
-中文:
-定理 DenseRange.mem_nhds
-  条件: (h : DenseRange f) (hs : s in 𝓝 x)
-  证明: let ⟨a, ha⟩ := h.exists_mem_open isOpen_interior ⟨x, mem_interior_iff_mem_nhds.2 hs⟩
-  ⟨a, interior_subset ha⟩
-
-Depends on / 依赖: exists_mem_open, h.exists_mem_open, interior_subset, isOpen_interior, mem_interior_iff_mem_nhds
+    ∃ a, f a ∈ s :=
+  exists_range_iff.1 <| hf.exists_mem_open ho hs
+/-
+**DenseRange.mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DenseRange.mem_nhds (h : DenseRange f) (hs : s in 𝓝 x) : exists a, f a in 
+s
+参数：h : DenseRange f；hs : s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DenseRange.exists_mem_open`：∀ {X : Type u_1} [inst : TopologicalSpace X]
+ {α : Type u_4} {f : α → X} {s : Set X},   DenseRange f → IsOpen s → s.Nonempty 
+→ ∃ a, f a ∈ s
+· 使用定理 `isOpen_interior`：isOpen_interior : IsOpen (interior s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_interior_iff_mem_nhds`：mem_interior_iff_mem_nhds : x in interior s ↔
+ s in 𝓝 x
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
 -/
-theorem DenseRange.mem_nhds (h : DenseRange f) (hs : s in 𝓝 x) :
-    exists a, f a in s :=
+theorem DenseRange.mem_nhds (h : DenseRange f) (hs : s ∈ 𝓝 x) :
+    ∃ a, f a ∈ s :=
   let ⟨a, ha⟩ := h.exists_mem_open isOpen_interior ⟨x, mem_interior_iff_mem_nhds.2 hs⟩
   ⟨a, interior_subset ha⟩
 
@@ -1423,17 +1235,6 @@ For unary functions, the elaborator is not confused when applying the traditiona
 
 As a harder example, consider an operation of the following type:
 ```
-/--
-Definition of `strans` / `strans` 的定义
-
-English:
-definition strans
-  signature: {x : F} (γ γ' : Path x x) (t₀ : I)
-
-中文:
-定义 strans
-  签名: {x : F} (γ γ' : 道路 x x) (t₀ : I)
--/
 def strans {x : F} (γ γ' : Path x x) (t₀ : I) : Path x x
 ```
 The precise definition is not important, only its type.
@@ -1470,25 +1271,6 @@ In this case, you want to add conditions to when a function involving `fract` is
 get something like this: (assumption `hf` could be weakened, but the important thing is the shape
 of the conclusion)
 ```
-/--
-lemma `ContinuousOn.comp_fract` / 引理 `ContinuousOn.comp_fract`
-
-English:
-lemma ContinuousOn.comp_fract
-  statement: {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-  proof: -- hf.comp (continuousAt_id.prod continuousAt_id) -- type mismatch
-  -- hf.comp_of_eq (continuousAt_id.prod continuousAt_id) rfl -- works
-```
--/
-
-中文:
-引理 ContinuousOn.comp_fract
-  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
-  证明: -- hf.comp (continuousAt_id.prod continuousAt_id) -- type mismatch
-  -- hf.comp_of_eq (continuousAt_id.prod continuousAt_id) rfl -- works
-```
--/
--/
 lemma ContinuousOn.comp_fract {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     {f : X → ℝ → Y} {g : X → ℝ} (hf : Continuous ↿f) (hg : Continuous g) (h : ∀ s, f s 0 = f s 1) :
     Continuous (fun x ↦ f x (fract (g x)))
@@ -1524,3 +1306,4 @@ example [TopologicalSpace X] [TopologicalSpace Y] {x₀ : X} (f : X → X → Y)
   -- hf.comp_of_eq (continuousAt_id.prod continuousAt_id) rfl -- works
 ```
 -/
+

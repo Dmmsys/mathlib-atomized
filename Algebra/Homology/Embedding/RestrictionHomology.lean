@@ -41,28 +41,26 @@ set_option backward.defeqAttrib.useBackward true in
 `e` is an embedding of complex shapes, `i'`, `j`, `k`' are the respective
 images of `i`, `j`, `k` by `e.f`, `j` is the previous index of `i`, etc. -/
 @[simps!]
-/--
-Definition of `sc'Iso` / `sc'Iso` 的定义
+/-
+**HomologicalComplex.restriction.sc'Iso** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalCo
+mplex.restriction`。
+形式化陈述：{ι : Type u_1} →   {ι' : Type u_2} →     {c : ComplexShape ι} →       {c' 
+: ComplexShape ι'} →         {C : Type u_3} →           [inst : CategoryTheory.C
+ategory.{v_1, u_3} C] →             [inst_1 : CategoryTheory.Limits.HasZeroMorph
+isms C] →               (K : HomologicalComplex C c') →                 (e : c.E
+mbedding c') →                   [inst_2 : e.IsRelIff] →                     (i 
+j k : ι) →                       {i' j' k' : ι'} →                         e.f i
+ = i' →                           e.f j = j' →                             e.f k
+ = k' →                               c'.prev j' = i' → c'.next j' = k' → ((K.re
+striction e).sc' i j k ≅ K.sc' i' j' k')
+参数：K : HomologicalComplex C c'；e : c.Embedding c'；i j k : ι；(K.restriction e).sc
+' i j k ≅ K.sc' i' j' k'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sc'Iso
-  signature: : (K.restriction e).sc' i j k ≅ K.sc' i' j' k'
-  body: ShortComplex.isoMk (K.restrictionXIso e hi') (K.restrictionXIso e hj') (K.restrictionXIso e hk')
-    (by subst hi' hj'; simp [restrictionXIso])
-    (by subst hj' hk'; simp [restrictionXIso])
-
-include hi hk hi' hj' hk' hi'' hk'' in
-
-中文:
-定义 sc'同构
-  签名: : (K.restriction e).sc' i j k ≅ K.sc' i' j' k'
-  定义体: ShortComplex.isoMk (K.restrictionXIso e hi') (K.restrictionXIso e hj') (K.restrictionXIso e hk')
-    (by subst hi' hj'; simp [restrictionXIso])
-    (by subst hj' hk'; simp [restrictionXIso])
-
-include hi hk hi' hj' hk' hi'' hk'' in
-
-Depends on / 依赖: K.restrictionXIso, ShortComplex, ShortComplex.isoMk, restrictionXIso
+--- 原说明 ---
+The isomorphism `(K.restriction e).sc' i j k ≅ K.sc' i' j' k'` when
+`e` is an embedding of complex shapes, `i'`, `j`, `k`' are the respective
+images of `i`, `j`, `k` by `e.f`, `j` is the previous index of `i`, etc.
 -/
 def sc'Iso : (K.restriction e).sc' i j k ≅ K.sc' i' j' k' :=
   ShortComplex.isoMk (K.restrictionXIso e hi') (K.restrictionXIso e hj') (K.restrictionXIso e hk')
@@ -70,26 +68,14 @@ def sc'Iso : (K.restriction e).sc' i j k ≅ K.sc' i' j' k' :=
     (by subst hj' hk'; simp [restrictionXIso])
 
 include hi hk hi' hj' hk' hi'' hk'' in
-/--
-lemma `hasHomology` / 引理 `hasHomology`
-
-English:
-lemma hasHomology
-  given: [K.HasHomology j']
-  statement: (K.restriction e).HasHomology j
-  proof: ShortComplex.hasHomology_of_iso (K.isoSc' i' j' k' hi'' hk'' ≪≫
-    (sc'Iso K e i j k hi' hj' hk' hi'' hk'').symm ≪≫
-    ((K.restriction e).isoSc' i j k hi hk).symm)
-
-中文:
-引理 hasHomology
-  条件: [K.有同调 j']
-  结论: (K.restriction e).有同调 j
-  证明: ShortComplex.hasHomology_of_iso (K.isoSc' i' j' k' hi'' hk'' ≪≫
-    (sc'Iso K e i j k hi' hj' hk' hi'' hk'').symm ≪≫
-    ((K.restriction e).isoSc' i j k hi hk).symm)
-
-Depends on / 依赖: K.isoSc, K.restriction, ShortComplex, ShortComplex.hasHomology_of_iso, hasHomology_of_iso, restriction
+/-
+**HomologicalComplex.restriction.hasHomology** 是 Mathlib 中的一个引理，位于命名空间 `Homologi
+calComplex.restriction`。
+形式化陈述：hasHomology [K.HasHomology j'] : (K.restriction e).HasHomology j
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.hasHomology_of_iso`：hasHomology_of_iso (e : 
+S₁ ≅ S₂) [HasHomology S₁] : HasHomology S₂
 -/
 lemma hasHomology [K.HasHomology j'] : (K.restriction e).HasHomology j :=
   ShortComplex.hasHomology_of_iso (K.isoSc' i' j' k' hi'' hk'' ≪≫
@@ -103,67 +89,51 @@ variable (i j k : ι) (hi : c.prev j = i) (hk : c.next j = k)
   (hi'' : c'.prev j' = i') (hk'' : c'.next j' = k')
   [K.HasHomology j'] [(K.restriction e).HasHomology j]
 
-/--
-Definition of `restrictionCyclesIso` / `restrictionCyclesIso` 的定义
+/-- The isomorphism `(K.restriction e).cycles j ≅ K.cycles j'` when `e.f j = j'`
+and the successors `k` and `k'` of `j` and `j'` satisfy `e.f k = k'`. -/
+/-
+**HomologicalComplex.restrictionCyclesIso** 是 Mathlib 中的一个定义，位于命名空间 `Homological
+Complex`。
+形式化陈述：restrictionCyclesIso : (K.restriction e).cycles j ≅ K.cycles j' where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictionCyclesIso
-  signature: :
-  body: K.liftCycles ((K.restriction e).iCycles j ≫ (K.restrictionXIso e hj').hom) _ hk'' (by
-      rw [assoc]; rw [← cancel_mono (K.restrictionXIso e hk').inv]; rw [assoc]; rw [assoc]; rw [← restriction_d_eq]; rw [iCycles_d]; rw [zero_comp])
-  inv :=
-    (K.restriction e).liftCycles (K.iCycles j' ≫ (K.restrictionXIso e hj').inv) _ hk (by
-      rw [assoc]; rw [restriction_d_eq _ _ hj' hk']; rw [Iso.inv_hom_id_assoc]; rw [iCycles_d_assoc]; rw [zero_comp])
-  hom_inv_id := by simp [← cancel_mono ((K.restriction e).iCycles j)]
-  inv_hom_id := by simp [← cancel_mono (K.iCycles j')]
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 restrictionCyclesIso
-  签名: :
-  定义体: K.liftCycles ((K.restriction e).iCycles j ≫ (K.restrictionXIso e hj').hom) _ hk'' (by
-      rw [assoc]; rw [← cancel_mono (K.restrictionXIso e hk').inv]; rw [assoc]; rw [assoc]; rw [← restriction_d_eq]; rw [iCycles_d]; rw [zero_comp])
-  inv :=
-    (K.restriction e).liftCycles (K.iCycles j' ≫ (K.restrictionXIso e hj').inv) _ hk (by
-      rw [assoc]; rw [restriction_d_eq _ _ hj' hk']; rw [Iso.inv_hom_id_assoc]; rw [iCycles_d_assoc]; rw [zero_comp])
-  hom_inv_id := by simp [← cancel_mono ((K.restriction e).iCycles j)]
-  inv_hom_id := by simp [← cancel_mono (K.iCycles j')]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, K.iCycles, K.liftCycles, K.restriction, K.restrictionXIso, cancel_mono, hom_inv_id, iCycles, iCycles_d, iCycles_d_assoc, inv_hom_id_assoc, liftCycles, restriction, restrictionXIso, restriction_d_eq, zero_comp
+--- 原说明 ---
+The isomorphism `(K.restriction e).cycles j ≅ K.cycles j'` when `e.f j = j'`
+and the successors `k` and `k'` of `j` and `j'` satisfy `e.f k = k'`.
 -/
 noncomputable def restrictionCyclesIso :
     (K.restriction e).cycles j ≅ K.cycles j' where
   hom :=
     K.liftCycles ((K.restriction e).iCycles j ≫ (K.restrictionXIso e hj').hom) _ hk'' (by
-      rw [assoc]; rw [← cancel_mono (K.restrictionXIso e hk').inv]; rw [assoc]; rw [assoc]; rw [← restriction_d_eq]; rw [iCycles_d]; rw [zero_comp])
+      rw [assoc, ← cancel_mono (K.restrictionXIso e hk').inv, assoc, assoc, ← restriction_d_eq,
+        iCycles_d, zero_comp])
   inv :=
     (K.restriction e).liftCycles (K.iCycles j' ≫ (K.restrictionXIso e hj').inv) _ hk (by
-      rw [assoc]; rw [restriction_d_eq _ _ hj' hk']; rw [Iso.inv_hom_id_assoc]; rw [iCycles_d_assoc]; rw [zero_comp])
+      rw [assoc, restriction_d_eq _ _ hj' hk', Iso.inv_hom_id_assoc,
+        iCycles_d_assoc, zero_comp])
   hom_inv_id := by simp [← cancel_mono ((K.restriction e).iCycles j)]
   inv_hom_id := by simp [← cancel_mono (K.iCycles j')]
 
 @[reassoc (attr := simp)]
-/--
-lemma `restrictionCyclesIso_hom_iCycles` / 引理 `restrictionCyclesIso_hom_iCycles`
-
-English:
-lemma restrictionCyclesIso_hom_iCycles
-  proof: by
-  simp [restrictionCyclesIso]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 restrictionCyclesIso_hom_iCycles
-  证明: by
-  simp [restrictionCyclesIso]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: restrictionCyclesIso
+/-
+**HomologicalComplex.restrictionCyclesIso_hom_iCycles** 是 Mathlib 中的一个引理，位于命名空间 
+`HomologicalComplex`。
+形式化陈述：restrictionCyclesIso_hom_iCycles : (K.restrictionCyclesIso e j k hk hj' hk
+' hk'').hom ≫ K.iCycles j' = (K.restriction e).iCycles j ≫ (K.restrictionXIso e 
+hj').hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.liftCycles_i`：liftCycles_i {A : C} (k : A ⟶ K.X i) (j
+ : ι) (hj : c.next i = j) (hk : k ≫ K.d i j = 0) : K.liftCycles k j hj hk ≫ K.iC
+ycles i = k
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma restrictionCyclesIso_hom_iCycles :
     (K.restrictionCyclesIso e j k hk hj' hk' hk'').hom ≫ K.iCycles j' =
@@ -171,87 +141,76 @@ lemma restrictionCyclesIso_hom_iCycles :
   simp [restrictionCyclesIso]
 
 @[reassoc (attr := simp)]
-/--
-lemma `restrictionCyclesIso_inv_iCycles` / 引理 `restrictionCyclesIso_inv_iCycles`
-
-English:
-lemma restrictionCyclesIso_inv_iCycles
-  proof: by
-  simp [restrictionCyclesIso]
-
-中文:
-引理 restrictionCyclesIso_inv_iCycles
-  证明: by
-  simp [restrictionCyclesIso]
-
-Depends on / 依赖: restrictionCyclesIso
+/-
+**HomologicalComplex.restrictionCyclesIso_inv_iCycles** 是 Mathlib 中的一个引理，位于命名空间 
+`HomologicalComplex`。
+形式化陈述：restrictionCyclesIso_inv_iCycles : (K.restrictionCyclesIso e j k hk hj' hk
+' hk'').inv ≫ (K.restriction e).iCycles j = K.iCycles j' ≫ (K.restrictionXIso e 
+hj').inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.liftCycles_i`：liftCycles_i {A : C} (k : A ⟶ K.X i) (j
+ : ι) (hj : c.next i = j) (hk : k ≫ K.d i j = 0) : K.liftCycles k j hj hk ≫ K.iC
+ycles i = k
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma restrictionCyclesIso_inv_iCycles :
     (K.restrictionCyclesIso e j k hk hj' hk' hk'').inv ≫ (K.restriction e).iCycles j =
       K.iCycles j' ≫ (K.restrictionXIso e hj').inv := by
   simp [restrictionCyclesIso]
 
-/--
-Definition of `restrictionOpcyclesIso` / `restrictionOpcyclesIso` 的定义
+/-- The isomorphism `(K.restriction e).opcycles j ≅ K.opcycles j'` when `e.f j = j'`
+and the predecessors `i` and `i'` of `j` and `j'` satisfy `e.f i = i'`. -/
+/-
+**HomologicalComplex.restrictionOpcyclesIso** 是 Mathlib 中的一个定义，位于命名空间 `Homologic
+alComplex`。
+形式化陈述：restrictionOpcyclesIso : (K.restriction e).opcycles j ≅ K.opcycles j' wher
+e hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictionOpcyclesIso
-  signature: :
-  body: (K.restriction e).descOpcycles ((K.restrictionXIso e hj').hom ≫ K.pOpcycles j') _ hi (by
-      rw [restriction_d_eq _ _ hi' hj']; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [d_pOpcycles]; rw [comp_zero])
-  inv :=
-    K.descOpcycles ((K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcycles j) _ hi'' (by
-      rw [← cancel_epi (K.restrictionXIso e hi').hom]; rw [← restriction_d_eq_assoc]; rw [comp_zero]; rw [d_pOpcycles])
-  hom_inv_id := by simp [← cancel_epi ((K.restriction e).pOpcycles j)]
-  inv_hom_id := by simp [← cancel_epi (K.pOpcycles j')]
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 restrictionOpcyclesIso
-  签名: :
-  定义体: (K.restriction e).descOpcycles ((K.restrictionXIso e hj').hom ≫ K.pOpcycles j') _ hi (by
-      rw [restriction_d_eq _ _ hi' hj']; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [d_pOpcycles]; rw [comp_zero])
-  inv :=
-    K.descOpcycles ((K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcycles j) _ hi'' (by
-      rw [← cancel_epi (K.restrictionXIso e hi').hom]; rw [← restriction_d_eq_assoc]; rw [comp_zero]; rw [d_pOpcycles])
-  hom_inv_id := by simp [← cancel_epi ((K.restriction e).pOpcycles j)]
-  inv_hom_id := by simp [← cancel_epi (K.pOpcycles j')]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, K.descOpcycles, K.pOpcycles, K.restriction, K.restrictionXIso, cancel_epi, comp_zero, d_pOpcycles, descOpcycles, hom_inv_id, inv_hom_id, inv_hom_id_assoc, pOpcycles, restriction, restrictionXIso, restriction_d_eq, restriction_d_eq_assoc
+--- 原说明 ---
+The isomorphism `(K.restriction e).opcycles j ≅ K.opcycles j'` when `e.f j = j'`
+and the predecessors `i` and `i'` of `j` and `j'` satisfy `e.f i = i'`.
 -/
 noncomputable def restrictionOpcyclesIso :
     (K.restriction e).opcycles j ≅ K.opcycles j' where
   hom :=
     (K.restriction e).descOpcycles ((K.restrictionXIso e hj').hom ≫ K.pOpcycles j') _ hi (by
-      rw [restriction_d_eq _ _ hi' hj']; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [d_pOpcycles]; rw [comp_zero])
+      rw [restriction_d_eq _ _ hi' hj', assoc, assoc, Iso.inv_hom_id_assoc,
+        d_pOpcycles, comp_zero])
   inv :=
     K.descOpcycles ((K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcycles j) _ hi'' (by
-      rw [← cancel_epi (K.restrictionXIso e hi').hom]; rw [← restriction_d_eq_assoc]; rw [comp_zero]; rw [d_pOpcycles])
+      rw [← cancel_epi (K.restrictionXIso e hi').hom, ← restriction_d_eq_assoc,
+        comp_zero, d_pOpcycles])
   hom_inv_id := by simp [← cancel_epi ((K.restriction e).pOpcycles j)]
   inv_hom_id := by simp [← cancel_epi (K.pOpcycles j')]
 
 @[reassoc (attr := simp)]
-/--
-lemma `pOpcycles_restrictionOpcyclesIso_hom` / 引理 `pOpcycles_restrictionOpcyclesIso_hom`
-
-English:
-lemma pOpcycles_restrictionOpcyclesIso_hom
-  proof: by
-  simp [restrictionOpcyclesIso]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 pOpcycles_restrictionOpcyclesIso_hom
-  证明: by
-  simp [restrictionOpcyclesIso]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: restrictionOpcyclesIso
+/-
+**HomologicalComplex.pOpcycles_restrictionOpcyclesIso_hom** 是 Mathlib 中的一个引理，位于命
+名空间 `HomologicalComplex`。
+形式化陈述：pOpcycles_restrictionOpcyclesIso_hom : (K.restriction e).pOpcycles j ≫ (K.
+restrictionOpcyclesIso e i j hi hi' hj' hi'').hom = (K.restrictionXIso e hj').ho
+m ≫ K.pOpcycles j'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.p_descOpcycles`：p_descOpcycles {A : C} (k : K.X i ⟶ A
+) (j : ι) (hj : c.prev i = j) (hk : K.d j i ≫ k = 0) : K.pOpcycles i ≫ K.descOpc
+ycles k j hj hk = k
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma pOpcycles_restrictionOpcyclesIso_hom :
     (K.restriction e).pOpcycles j ≫ (K.restrictionOpcyclesIso e i j hi hi' hj' hi'').hom =
@@ -259,48 +218,45 @@ lemma pOpcycles_restrictionOpcyclesIso_hom :
   simp [restrictionOpcyclesIso]
 
 @[reassoc (attr := simp)]
-/--
-lemma `pOpcycles_restrictionOpcyclesIso_inv` / 引理 `pOpcycles_restrictionOpcyclesIso_inv`
-
-English:
-lemma pOpcycles_restrictionOpcyclesIso_inv
-  proof: by
-  simp [restrictionOpcyclesIso]
-
-中文:
-引理 pOpcycles_restrictionOpcyclesIso_inv
-  证明: by
-  simp [restrictionOpcyclesIso]
-
-Depends on / 依赖: restrictionOpcyclesIso
+/-
+**HomologicalComplex.pOpcycles_restrictionOpcyclesIso_inv** 是 Mathlib 中的一个引理，位于命
+名空间 `HomologicalComplex`。
+形式化陈述：pOpcycles_restrictionOpcyclesIso_inv : K.pOpcycles j' ≫ (K.restrictionOpcy
+clesIso e i j hi hi' hj' hi'').inv = (K.restrictionXIso e hj').inv ≫ (K.restrict
+ion e).pOpcycles j
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomologicalComplex.p_descOpcycles`：p_descOpcycles {A : C} (k : K.X i ⟶ A
+) (j : ι) (hj : c.prev i = j) (hk : K.d j i ≫ k = 0) : K.pOpcycles i ≫ K.descOpc
+ycles k j hj hk = k
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma pOpcycles_restrictionOpcyclesIso_inv :
     K.pOpcycles j' ≫ (K.restrictionOpcyclesIso e i j hi hi' hj' hi'').inv =
       (K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcycles j := by
   simp [restrictionOpcyclesIso]
 
-/--
-Definition of `restrictionHomologyIso` / `restrictionHomologyIso` 的定义
+/-- The isomorphism `(K.restriction e).homology j ≅ K.homology j'` when `e.f j = j'`,
+the predecessors `i` and `i'` of `j` and `j'` satisfy `e.f i = i'`,
+and the successors `k` and `k'` of `j` and `j'` satisfy `e.f k = k'` -/
+/-
+**HomologicalComplex.restrictionHomologyIso** 是 Mathlib 中的一个定义，位于命名空间 `Homologic
+alComplex`。
+形式化陈述：restrictionHomologyIso : (K.restriction e).homology j ≅ K.homology j'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictionHomologyIso
-  signature: :
-  body: have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
-  have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
-  (K.restriction e).homologyIsoSc' i j k hi hk ≪≫
-    ShortComplex.homologyMapIso (restriction.sc'Iso K e i j k hi' hj' hk' hi'' hk'') ≪≫
-    (K.homologyIsoSc' i' j' k' hi'' hk'').symm
-
-中文:
-定义 restrictionHomologyIso
-  签名: :
-  定义体: have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
-  have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
-  (K.restriction e).homologyIsoSc' i j k hi hk ≪≫
-    ShortComplex.homologyMapIso (restriction.sc'Iso K e i j k hi' hj' hk' hi'' hk'') ≪≫
-    (K.homologyIsoSc' i' j' k' hi'' hk'').symm
-
-Depends on / 依赖: HasHomology, K.homologyIsoSc, K.restriction, K.sc, ShortComplex, ShortComplex.homologyMapIso, homologyIsoSc, homologyMapIso, restriction, restriction.sc
+--- 原说明 ---
+The isomorphism `(K.restriction e).homology j ≅ K.homology j'` when `e.f j = j'`
+,
+the predecessors `i` and `i'` of `j` and `j'` satisfy `e.f i = i'`,
+and the successors `k` and `k'` of `j` and `j'` satisfy `e.f k = k'`
 -/
 noncomputable def restrictionHomologyIso :
     (K.restriction e).homology j ≅ K.homology j' :=
@@ -313,44 +269,10 @@ noncomputable def restrictionHomologyIso :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp, nolint unusedHavesSuffices)]
-/--
-lemma `homologyπ_restrictionHomologyIso_hom` / 引理 `homologyπ_restrictionHomologyIso_hom`
-
-English:
-lemma homologyπ_restrictionHomologyIso_hom
-  proof: by
-  have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
-  have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
-  dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [← cancel_mono (K.sc j').homologyι]; rw [assoc]; rw [assoc]
-  apply (ShortComplex.π_homologyMap_ι _).trans
-  dsimp
-  rw [comp_id]; rw [id_comp]
-  apply (K.restrictionCyclesIso_hom_iCycles_assoc e j k hk hj' hk' hk'' _).symm.trans
-  congr 1
-  symm
-  apply ShortComplex.homology_π_ι
-
-@[reassoc]
-
-中文:
-引理 homologyπ_restrictionHomologyIso_hom
-  证明: by
-  have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
-  have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
-  dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [← cancel_mono (K.sc j').homologyι]; rw [assoc]; rw [assoc]
-  apply (ShortComplex.π_homologyMap_ι _).trans
-  dsimp
-  rw [comp_id]; rw [id_comp]
-  apply (K.restrictionCyclesIso_hom_iCycles_assoc e j k hk hj' hk' hk'' _).symm.trans
-  congr 1
-  symm
-  apply ShortComplex.homology_π_ι
-
-@[reassoc]
-
-Depends on / 依赖: HasHomology, K.restriction, K.restrictionCyclesIso_hom_iCycles_assoc, K.sc, ShortComplex, ShortComplex.homologyMap_comp, cancel_mono, comp_id, homologyIsoSc, homologyMap_comp, id_comp, restriction, restrictionCyclesIso_hom_iCycles_assoc, restrictionHomologyIso, symm.trans
+/-
+**HomologicalComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：homology
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyπ_restrictionHomologyIso_hom :
     (K.restriction e).homologyπ j ≫
@@ -359,75 +281,36 @@ lemma homologyπ_restrictionHomologyIso_hom :
   have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [← cancel_mono (K.sc j').homologyι]; rw [assoc]; rw [assoc]
+  rw [← ShortComplex.homologyMap_comp, ← ShortComplex.homologyMap_comp,
+    ← cancel_mono (K.sc j').homologyι, assoc, assoc]
   apply (ShortComplex.π_homologyMap_ι _).trans
   dsimp
-  rw [comp_id]; rw [id_comp]
+  rw [comp_id, id_comp]
   apply (K.restrictionCyclesIso_hom_iCycles_assoc e j k hk hj' hk' hk'' _).symm.trans
   congr 1
   symm
   apply ShortComplex.homology_π_ι
 
 @[reassoc]
-/--
-lemma `homologyπ_restrictionHomologyIso_inv` / 引理 `homologyπ_restrictionHomologyIso_inv`
-
-English:
-lemma homologyπ_restrictionHomologyIso_inv
-  proof: by
-  rw [← cancel_mono (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [homologyπ_restrictionHomologyIso_hom]; rw [comp_id]; rw [Iso.inv_hom_id_assoc]
-
-中文:
-引理 homologyπ_restrictionHomologyIso_inv
-  证明: by
-  rw [← cancel_mono (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [homologyπ_restrictionHomologyIso_hom]; rw [comp_id]; rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, K.restrictionHomologyIso, cancel_mono, comp_id, inv_hom_id, inv_hom_id_assoc, restrictionHomologyIso
+/-
+**HomologicalComplex.homology** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：homology
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homologyπ_restrictionHomologyIso_inv :
     K.homologyπ j' ≫ (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').inv =
       (K.restrictionCyclesIso e j k hk hj' hk' hk'').inv ≫ (K.restriction e).homologyπ j := by
-  rw [← cancel_mono (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [homologyπ_restrictionHomologyIso_hom]; rw [comp_id]; rw [Iso.inv_hom_id_assoc]
+  rw [← cancel_mono (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').hom,
+    assoc, assoc, Iso.inv_hom_id, homologyπ_restrictionHomologyIso_hom, comp_id,
+    Iso.inv_hom_id_assoc]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp, nolint unusedHavesSuffices)]
-/--
-lemma `restrictionHomologyIso_inv_homologyι` / 引理 `restrictionHomologyIso_inv_homologyι`
-
-English:
-lemma restrictionHomologyIso_inv_homologyι
-  proof: by
-  have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
-  have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
-  dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [assoc]; rw [← cancel_epi (K.sc j').homologyπ]
-  apply (ShortComplex.π_homologyMap_ι _).trans
-  dsimp
-  rw [comp_id]; rw [id_comp]
-  refine ((ShortComplex.homology_π_ι_assoc _ _).trans ?_).symm
-  congr 1
-  apply pOpcycles_restrictionOpcyclesIso_inv
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 restrictionHomologyIso_inv_homologyι
-  证明: by
-  have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
-  have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
-  dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [assoc]; rw [← cancel_epi (K.sc j').homologyπ]
-  apply (ShortComplex.π_homologyMap_ι _).trans
-  dsimp
-  rw [comp_id]; rw [id_comp]
-  refine ((ShortComplex.homology_π_ι_assoc _ _).trans ?_).symm
-  congr 1
-  apply pOpcycles_restrictionOpcyclesIso_inv
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: HasHomology, K.restriction, K.sc, ShortComplex, ShortComplex.homologyMap_comp, ShortComplex.homology_, cancel_epi, comp_id, homologyIsoSc, homologyMap_comp, id_comp, pOpcycles_restrictionO, restriction, restrictionHomologyIso
+/-
+**HomologicalComplex.restrictionHomologyIso_inv_homology** 是 Mathlib 中的一个引理，位于命名
+空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictionHomologyIso_inv_homologyι :
     (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').inv ≫
@@ -436,33 +319,27 @@ lemma restrictionHomologyIso_inv_homologyι :
   have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [assoc]; rw [← cancel_epi (K.sc j').homologyπ]
+  rw [← ShortComplex.homologyMap_comp, ← ShortComplex.homologyMap_comp, assoc,
+    ← cancel_epi (K.sc j').homologyπ]
   apply (ShortComplex.π_homologyMap_ι _).trans
   dsimp
-  rw [comp_id]; rw [id_comp]
+  rw [comp_id, id_comp]
   refine ((ShortComplex.homology_π_ι_assoc _ _).trans ?_).symm
   congr 1
   apply pOpcycles_restrictionOpcyclesIso_inv
 
 @[reassoc (attr := simp)]
-/--
-lemma `restrictionHomologyIso_hom_homologyι` / 引理 `restrictionHomologyIso_hom_homologyι`
-
-English:
-lemma restrictionHomologyIso_hom_homologyι
-  proof: by
-  rw [← cancel_epi (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').inv]; rw [Iso.inv_hom_id_assoc]; rw [restrictionHomologyIso_inv_homologyι_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-
-中文:
-引理 restrictionHomologyIso_hom_homologyι
-  证明: by
-  rw [← cancel_epi (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').inv]; rw [Iso.inv_hom_id_assoc]; rw [restrictionHomologyIso_inv_homologyι_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, K.restrictionHomologyIso, cancel_epi, comp_id, inv_hom_id, inv_hom_id_assoc, restrictionHomologyIso
+/-
+**HomologicalComplex.restrictionHomologyIso_hom_homology** 是 Mathlib 中的一个引理，位于命名
+空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictionHomologyIso_hom_homologyι :
     (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').hom ≫ K.homologyι j' =
       (K.restriction e).homologyι j ≫ (K.restrictionOpcyclesIso e i j hi hi' hj' hi'').hom := by
-  rw [← cancel_epi (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').inv]; rw [Iso.inv_hom_id_assoc]; rw [restrictionHomologyIso_inv_homologyι_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
+  rw [← cancel_epi (K.restrictionHomologyIso e i j k hi hk hi' hj' hk' hi'' hk'').inv,
+    Iso.inv_hom_id_assoc, restrictionHomologyIso_inv_homologyι_assoc,
+      Iso.inv_hom_id, comp_id]
 
 end HomologicalComplex
+

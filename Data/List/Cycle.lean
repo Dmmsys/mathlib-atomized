@@ -32,151 +32,103 @@ namespace List
 
 variable {α : Type*} [DecidableEq α]
 
-/--
-Definition of `nextOr` / `nextOr` 的定义
+/-- Return the `z` such that `x :: z :: _` appears in `xs`, or `default` if there is no such `z`. -/
+/-
+**List.nextOr** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} → [DecidableEq α] → List α → α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nextOr
-  signature: : forall (_ : List α) (_ _ : α), α
-
-中文:
-定义 nextOr
-  签名: : 对任意 (_ : 列表 α) (_ _ : α), α
+--- 原说明 ---
+Return the `z` such that `x :: z :: _` appears in `xs`, or `default` if there is
+ no such `z`.
 -/
-def nextOr : forall (_ : List α) (_ _ : α), α
+def nextOr : ∀ (_ : List α) (_ _ : α), α
   | [], _, default => default
   | [_], _, default => default
   -- Handles the not-found and the wraparound case
   | y :: z :: xs, x, default => if x = y then z else nextOr (z :: xs) x default
 
 @[simp]
-/--
-theorem `nextOr_nil` / 定理 `nextOr_nil`
-
-English:
-theorem nextOr_nil
-  given: (x d : α)
-  statement: nextOr [] x d = d
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 nextOr_nil
-  条件: (x d : α)
-  结论: nextOr [] x d = d
-  证明: rfl
-
-@[simp]
+/-
+**List.nextOr_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_nil (x d : α) : nextOr [] x d = d
+参数：x d : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nextOr_nil (x d : α) : nextOr [] x d = d :=
   rfl
 
 @[simp]
-/--
-theorem `nextOr_singleton` / 定理 `nextOr_singleton`
-
-English:
-theorem nextOr_singleton
-  given: (x y d : α)
-  statement: nextOr [y] x d = d
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 nextOr_singleton
-  条件: (x y d : α)
-  结论: nextOr [y] x d = d
-  证明: rfl
-
-@[simp]
+/-
+**List.nextOr_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_singleton (x y d : α) : nextOr [y] x d = d
+参数：x y d : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nextOr_singleton (x y d : α) : nextOr [y] x d = d :=
   rfl
 
 @[simp]
-/--
-theorem `nextOr_self_cons_cons` / 定理 `nextOr_self_cons_cons`
-
-English:
-theorem nextOr_self_cons_cons
-  given: (xs : List α) (x y d : α)
-  statement: nextOr (x :: y :: xs) x d = y
-  proof: if_pos rfl
-
-中文:
-定理 nextOr_self_cons_cons
-  条件: (xs : 列表 α) (x y d : α)
-  结论: nextOr (x :: y :: xs) x d = y
-  证明: if_pos rfl
-
-Depends on / 依赖: if_pos
+/-
+**List.nextOr_self_cons_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_self_cons_cons (xs : List α) (x y d : α) : nextOr (x :: y :: xs) x 
+d = y
+参数：xs : List α；x y d : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem nextOr_self_cons_cons (xs : List α) (x y d : α) : nextOr (x :: y :: xs) x d = y :=
   if_pos rfl
-
-/--
-theorem `nextOr_cons_of_ne` / 定理 `nextOr_cons_of_ne`
-
-English:
-theorem nextOr_cons_of_ne
-  given: (xs : List α) (y x d : α) (h : x != y)
-  proof: by
-  rcases xs with - | ⟨z, zs⟩
-  · rfl
-  · exact if_neg h
-
-中文:
-定理 nextOr_cons_of_ne
-  条件: (xs : 列表 α) (y x d : α) (h : x != y)
-  证明: by
-  rcases xs with - | ⟨z, zs⟩
-  · rfl
-  · exact if_neg h
-
-Depends on / 依赖: if_neg
+/-
+**List.nextOr_cons_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_cons_of_ne (xs : List α) (y x d : α) (h : x != y) : nextOr (y :: xs
+) x d = nextOr xs x d
+参数：xs : List α；y x d : α；h : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem nextOr_cons_of_ne (xs : List α) (y x d : α) (h : x != y) :
+theorem nextOr_cons_of_ne (xs : List α) (y x d : α) (h : x ≠ y) :
     nextOr (y :: xs) x d = nextOr xs x d := by
   rcases xs with - | ⟨z, zs⟩
   · rfl
   · exact if_neg h
 
-/--
-theorem `nextOr_eq_nextOr_of_mem_dropLast` / 定理 `nextOr_eq_nextOr_of_mem_dropLast`
+/-- `nextOr` does not depend on the default value, if the next value appears. -/
+/-
+**List.nextOr_eq_nextOr_of_mem_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_eq_nextOr_of_mem_dropLast (xs : List α) (x d d' : α) (x_mem : x in 
+xs.dropLast) : nextOr xs x d = nextOr xs x d'
+参数：xs : List α；x d d' : α；x_mem : x in xs.dropLast。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.dropLast_singleton`：∀ {α : Type u_1} {x : α}, [x].dropLast = []
+· 使用定理 `List.nextOr_self_cons_cons`：nextOr_self_cons_cons (xs : List α) (x y d :
+ α) : nextOr (x :: y :: xs) x d = y
+· 使用定理 `List.nextOr.eq_3`：∀ {α : Type u_1} [inst : DecidableEq α] (x x_1 y z : α
+) (xs : List α),   (y :: z :: xs).nextOr x x_1 = if x = y then z else (z :: xs).
+nextOr…
+· 使用定理 `List.dropLast_cons_cons`：∀ {α : Type u_1} {x y : α} {zs : List α}, (x ::
+ y :: zs).dropLast = x :: (y :: zs).dropLast
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 
-English:
-theorem nextOr_eq_nextOr_of_mem_dropLast
-  given: (xs : List α) (x d d' : α) (x_mem : x in xs.dropLast)
-  proof: by
-  induction xs with
-  | nil => cases x_mem
-  | cons y ys IH => ?_
-  rcases ys with - | ⟨z, zs⟩
-  · simp at x_mem
-  by_cases h : x = y
-  · rw [h, nextOr_self_cons_cons, nextOr_self_cons_cons]
-  · rw [nextOr, nextOr, IH]
-    simpa [h] using x_mem
-
-中文:
-定理 nextOr_eq_nextOr_of_mem_dropLast
-  条件: (xs : 列表 α) (x d d' : α) (x_mem : x in xs.dropLast)
-  证明: by
-  induction xs with
-  | nil => cases x_mem
-  | cons y ys IH => ?_
-  rcases ys with - | ⟨z, zs⟩
-  · simp at x_mem
-  by_cases h : x = y
-  · rw [h, nextOr_self_cons_cons, nextOr_self_cons_cons]
-  · rw [nextOr, nextOr, IH]
-    simpa [h] using x_mem
-
-Depends on / 依赖: nextOr, nextOr_self_cons_cons, x_mem
+--- 原说明 ---
+`nextOr` does not depend on the default value, if the next value appears.
 -/
-theorem nextOr_eq_nextOr_of_mem_dropLast (xs : List α) (x d d' : α) (x_mem : x in xs.dropLast) :
+theorem nextOr_eq_nextOr_of_mem_dropLast (xs : List α) (x d d' : α) (x_mem : x ∈ xs.dropLast) :
     nextOr xs x d = nextOr xs x d' := by
   induction xs with
   | nil => cases x_mem
@@ -187,43 +139,28 @@ theorem nextOr_eq_nextOr_of_mem_dropLast (xs : List α) (x d d' : α) (x_mem : x
   · rw [h, nextOr_self_cons_cons, nextOr_self_cons_cons]
   · rw [nextOr, nextOr, IH]
     simpa [h] using x_mem
-
-/--
-theorem `mem_of_nextOr_ne` / 定理 `mem_of_nextOr_ne`
-
-English:
-theorem mem_of_nextOr_ne
-  given: {xs : List α} {x d : α} (h : nextOr xs x d != d)
-  statement: x in xs
-  proof: by
-  induction xs with
-  | nil => simp at h
-  | cons y ys IH => ?_
-  rcases ys with - | ⟨z, zs⟩
-  · simp at h
-  · by_cases hx : x = y
-    · simp [hx]
-    · rw [nextOr_cons_of_ne _ _ _ _ hx] at h
-      simpa [hx] using IH h
-
-中文:
-定理 mem_of_nextOr_ne
-  条件: {xs : 列表 α} {x d : α} (h : nextOr xs x d != d)
-  结论: x in xs
-  证明: by
-  induction xs with
-  | nil => simp at h
-  | cons y ys IH => ?_
-  rcases ys with - | ⟨z, zs⟩
-  · simp at h
-  · by_cases hx : x = y
-    · simp [hx]
-    · rw [nextOr_cons_of_ne _ _ _ _ hx] at h
-      simpa [hx] using IH h
-
-Depends on / 依赖: nextOr_cons_of_ne
+/-
+**List.mem_of_nextOr_ne** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：mem_of_nextOr_ne {xs : List α} {x d : α} (h : nextOr xs x d != d) : x in x
+s
+参数：h : nextOr xs x d != d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `List.nextOr_cons_of_ne`：nextOr_cons_of_ne (xs : List α) (y x d : α) (h :
+ x != y) : nextOr (y :: xs) x d = nextOr xs x d
 -/
-theorem mem_of_nextOr_ne {xs : List α} {x d : α} (h : nextOr xs x d != d) : x in xs := by
+theorem mem_of_nextOr_ne {xs : List α} {x d : α} (h : nextOr xs x d ≠ d) : x ∈ xs := by
   induction xs with
   | nil => simp at h
   | cons y ys IH => ?_
@@ -233,87 +170,56 @@ theorem mem_of_nextOr_ne {xs : List α} {x d : α} (h : nextOr xs x d != d) : x 
     · simp [hx]
     · rw [nextOr_cons_of_ne _ _ _ _ hx] at h
       simpa [hx] using IH h
-
-/--
-theorem `nextOr_concat` / 定理 `nextOr_concat`
-
-English:
-theorem nextOr_concat
-  given: {xs : List α} {x : α} (d : α) (h : x ∉ xs)
-  statement: nextOr (xs ++ [x]) x d = d
-  proof: by
-  induction xs with
-  | nil => simp
-  | cons z zs IH =>
-    obtain ⟨hz, hzs⟩ := not_or.mp (mt mem_cons.2 h)
-    rw [cons_append]; rw [nextOr_cons_of_ne _ _ _ _ hz]; rw [IH hzs]
-
-中文:
-定理 nextOr_concat
-  条件: {xs : 列表 α} {x : α} (d : α) (h : x ∉ xs)
-  结论: nextOr (xs ++ [x]) x d = d
-  证明: by
-  induction xs with
-  | nil => simp
-  | cons z zs IH =>
-    obtain ⟨hz, hzs⟩ := not_or.mp (mt mem_cons.2 h)
-    rw [cons_append]; rw [nextOr_cons_of_ne _ _ _ _ hz]; rw [IH hzs]
-
-Depends on / 依赖: cons_append, mem_cons, nextOr_cons_of_ne, not_or, not_or.mp
+/-
+**List.nextOr_concat** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_concat {xs : List α} {x : α} (d : α) (h : x ∉ xs) : nextOr (xs ++ [
+x]) x d = d
+参数：d : α；h : x ∉ xs。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.mem_cons`：∀ {α : Type u_1} {b : α} {l : List α} {a : α}, a ∈ b :: l
+ ↔ a = b ∨ a ∈ l
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.cons_append`：∀ {α : Type u} {a : α} {as bs : List α}, a :: as ++ bs
+ = a :: (as ++ bs)
+· 使用定理 `List.nextOr_cons_of_ne`：nextOr_cons_of_ne (xs : List α) (y x d : α) (h :
+ x != y) : nextOr (y :: xs) x d = nextOr xs x d
 -/
 theorem nextOr_concat {xs : List α} {x : α} (d : α) (h : x ∉ xs) : nextOr (xs ++ [x]) x d = d := by
   induction xs with
   | nil => simp
   | cons z zs IH =>
     obtain ⟨hz, hzs⟩ := not_or.mp (mt mem_cons.2 h)
-    rw [cons_append]; rw [nextOr_cons_of_ne _ _ _ _ hz]; rw [IH hzs]
-
-/--
-theorem `nextOr_mem` / 定理 `nextOr_mem`
-
-English:
-theorem nextOr_mem
-  given: {xs : List α} {x d : α} (hd : d in xs)
-  statement: nextOr xs x d in xs
-  proof: by
-  revert hd
-  suffices forall xs' : List α, (forall x in xs, x in xs') -> d in xs' -> nextOr xs x d in xs' by
-    exact this xs fun _ => id
-  intro xs' hxs' hd
-  induction xs with
-  | nil => exact hd
-  | cons y ys ih => ?_
-  rcases ys with - | ⟨z, zs⟩
-  · exact hd
-  rw [nextOr]
-  split_ifs with h
-  · exact hxs' _ (mem_cons_of_mem _ mem_cons_self)
-  · exact ih fun _ h => hxs' _ (mem_cons_of_mem _ h)
-
-中文:
-定理 nextOr_mem
-  条件: {xs : 列表 α} {x d : α} (hd : d in xs)
-  结论: nextOr xs x d in xs
-  证明: by
-  revert hd
-  suffices forall xs' : List α, (forall x in xs, x in xs') -> d in xs' -> nextOr xs x d in xs' by
-    exact this xs fun _ => id
-  intro xs' hxs' hd
-  induction xs with
-  | nil => exact hd
-  | cons y ys ih => ?_
-  rcases ys with - | ⟨z, zs⟩
-  · exact hd
-  rw [nextOr]
-  split_ifs with h
-  · exact hxs' _ (mem_cons_of_mem _ mem_cons_self)
-  · exact ih fun _ h => hxs' _ (mem_cons_of_mem _ h)
-
-Depends on / 依赖: mem_cons_of_mem, mem_cons_self, nextOr, revert, split_ifs
+    rw [cons_append, nextOr_cons_of_ne _ _ _ _ hz, IH hzs]
+/-
+**List.nextOr_mem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_mem {xs : List α} {x d : α} (hd : d in xs) : nextOr xs x d in xs
+参数：hd : d in xs。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.nextOr.eq_3`：∀ {α : Type u_1} [inst : DecidableEq α] (x x_1 y z : α
+) (xs : List α),   (y :: z :: xs).nextOr x x_1 = if x = y then z else (z :: xs).
+nextOr…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem nextOr_mem {xs : List α} {x d : α} (hd : d in xs) : nextOr xs x d in xs := by
+theorem nextOr_mem {xs : List α} {x d : α} (hd : d ∈ xs) : nextOr xs x d ∈ xs := by
   revert hd
-  suffices forall xs' : List α, (forall x in xs, x in xs') -> d in xs' -> nextOr xs x d in xs' by
+  suffices ∀ xs' : List α, (∀ x ∈ xs, x ∈ xs') → d ∈ xs' → nextOr xs x d ∈ xs' by
     exact this xs fun _ => id
   intro xs' hxs' hd
   induction xs with
@@ -326,36 +232,71 @@ theorem nextOr_mem {xs : List α} {x d : α} (hd : d in xs) : nextOr xs x d in x
   · exact hxs' _ (mem_cons_of_mem _ mem_cons_self)
   · exact ih fun _ h => hxs' _ (mem_cons_of_mem _ h)
 
-/--
-Definition of `next` / `next` 的定义
+/-- Given an element `x : α` of `l : List α` such that `x ∈ l`, get the next
+element of `l`. This works from head to tail, (including a check for last element)
+so it will match on first hit, ignoring later duplicates.
 
-English:
-definition next
-  signature: (l : List α) (x : α) (h : x in l)
-  body: nextOr l x (l.get ⟨0, length_pos_of_mem h⟩)
-
-中文:
-定义 next
-  签名: (l : 列表 α) (x : α) (h : x in l)
-  定义体: nextOr l x (l.get ⟨0, length_pos_of_mem h⟩)
-
-Depends on / 依赖: l.get, length_pos_of_mem, nextOr
+For example:
+* `next [1, 2, 3] 2 _ = 3`
+* `next [1, 2, 3] 3 _ = 1`
+* `next [1, 2, 3, 2, 4] 2 _ = 3`
+* `next [1, 2, 3, 2] 2 _ = 3`
+* `next [1, 1, 2, 3, 2] 1 _ = 1`
 -/
-def next (l : List α) (x : α) (h : x in l) : α :=
+/-
+**List.next** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：next (l : List α) (x : α) (h : x in l) : α
+参数：l : List α；x : α；h : x in l。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+
+--- 原说明 ---
+Given an element `x : α` of `l : List α` such that `x ∈ l`, get the next
+element of `l`. This works from head to tail, (including a check for last elemen
+t)
+so it will match on first hit, ignoring later duplicates.
+
+For example:
+* `next [1, 2, 3] 2 _ = 3`
+* `next [1, 2, 3] 3 _ = 1`
+* `next [1, 2, 3, 2, 4] 2 _ = 3`
+* `next [1, 2, 3, 2] 2 _ = 3`
+* `next [1, 1, 2, 3, 2] 1 _ = 1`
+-/
+def next (l : List α) (x : α) (h : x ∈ l) : α :=
   nextOr l x (l.get ⟨0, length_pos_of_mem h⟩)
 
-/--
-Definition of `prev` / `prev` 的定义
+/-- Given an element `x : α` of `l : List α` such that `x ∈ l`, get the previous
+element of `l`. This works from head to tail, (including a check for last element)
+so it will match on first hit, ignoring later duplicates.
 
-English:
-definition prev
-  signature: : forall l : List α, forall x in l, α
-
-中文:
-定义 prev
-  签名: : 对任意 l : 列表 α, 对任意 x in l, α
+* `prev [1, 2, 3] 2 _ = 1`
+* `prev [1, 2, 3] 1 _ = 3`
+* `prev [1, 2, 3, 2, 4] 2 _ = 1`
+* `prev [1, 2, 3, 4, 2] 2 _ = 1`
+* `prev [1, 1, 2] 1 _ = 2`
 -/
-def prev : forall l : List α, forall x in l, α
+/-
+**List.prev** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} → [DecidableEq α] → (l : List α) → (x : α) → x ∈ l → α
+参数：l : List α；x : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given an element `x : α` of `l : List α` such that `x ∈ l`, get the previous
+element of `l`. This works from head to tail, (including a check for last elemen
+t)
+so it will match on first hit, ignoring later duplicates.
+
+* `prev [1, 2, 3] 2 _ = 1`
+* `prev [1, 2, 3] 1 _ = 3`
+* `prev [1, 2, 3, 2, 4] 2 _ = 1`
+* `prev [1, 2, 3, 4, 2] 2 _ = 1`
+* `prev [1, 1, 2] 1 _ = 2`
+-/
+def prev : ∀ l : List α, ∀ x ∈ l, α
   | [], _, h => by simp at h
   | [y], _, _ => y
   | y :: z :: xs, x, h =>
@@ -365,182 +306,178 @@ def prev : forall l : List α, forall x in l, α
 variable (l : List α) (x : α)
 
 @[simp]
-/--
-theorem `next_singleton` / 定理 `next_singleton`
-
-English:
-theorem next_singleton
-  given: (x y : α) (h : x in [y])
-  statement: next [y] x h = y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 next_singleton
-  条件: (x y : α) (h : x in [y])
-  结论: next [y] x h = y
-  证明: rfl
-
-@[simp]
+/-
+**List.next_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_singleton (x y : α) (h : x in [y]) : next [y] x h = y
+参数：x y : α；h : x in [y]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem next_singleton (x y : α) (h : x in [y]) : next [y] x h = y :=
+theorem next_singleton (x y : α) (h : x ∈ [y]) : next [y] x h = y :=
   rfl
 
 @[simp]
-/--
-theorem `prev_singleton` / 定理 `prev_singleton`
-
-English:
-theorem prev_singleton
-  given: (x y : α) (h : x in [y])
-  statement: prev [y] x h = y
-  proof: rfl
-
-中文:
-定理 prev_singleton
-  条件: (x y : α) (h : x in [y])
-  结论: prev [y] x h = y
-  证明: rfl
+/-
+**List.prev_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_singleton (x y : α) (h : x in [y]) : prev [y] x h = y
+参数：x y : α；h : x in [y]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prev_singleton (x y : α) (h : x in [y]) : prev [y] x h = y :=
+theorem prev_singleton (x y : α) (h : x ∈ [y]) : prev [y] x h = y :=
   rfl
-
-/--
-theorem `next_cons_cons_eq'` / 定理 `next_cons_cons_eq'`
-
-English:
-theorem next_cons_cons_eq'
-  given: (y z : α) (h : x in y :: z :: l) (hx : x = y)
-  proof: by rw [next, nextOr, if_pos hx]
-
-@[simp]
-
-中文:
-定理 next_cons_cons_eq'
-  条件: (y z : α) (h : x in y :: z :: l) (hx : x = y)
-  证明: by rw [next, nextOr, if_pos hx]
-
-@[simp]
-
-Depends on / 依赖: if_pos, nextOr
+/-
+**List.next_cons_cons_eq'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_cons_cons_eq' (y z : α) (h : x in y :: z :: l) (hx : x = y) : next (y
+ :: z :: l) x h = z
+参数：y z : α；h : x in y :: z :: l；hx : x = y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.next.eq_1`：∀ {α : Type u_1} [inst : DecidableEq α] (l : List α) (x 
+: α) (h : x ∈ l), l.next x h = l.nextOr x (l.get ⟨0, ⋯⟩)
+· 使用定理 `List.nextOr.eq_3`：∀ {α : Type u_1} [inst : DecidableEq α] (x x_1 y z : α
+) (xs : List α),   (y :: z :: xs).nextOr x x_1 = if x = y then z else (z :: xs).
+nextOr…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-theorem next_cons_cons_eq' (y z : α) (h : x in y :: z :: l) (hx : x = y) :
+theorem next_cons_cons_eq' (y z : α) (h : x ∈ y :: z :: l) (hx : x = y) :
     next (y :: z :: l) x h = z := by rw [next, nextOr, if_pos hx]
 
 @[simp]
-/--
-theorem `next_cons_cons_eq` / 定理 `next_cons_cons_eq`
-
-English:
-theorem next_cons_cons_eq
-  given: (z : α) (h : x in x :: z :: l)
-  statement: next (x :: z :: l) x h = z
-  proof: next_cons_cons_eq' l x x z h rfl
-
-中文:
-定理 next_cons_cons_eq
-  条件: (z : α) (h : x in x :: z :: l)
-  结论: next (x :: z :: l) x h = z
-  证明: next_cons_cons_eq' l x x z h rfl
-
-Depends on / 依赖: next_cons_cons_eq
+/-
+**List.next_cons_cons_eq** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_cons_cons_eq (z : α) (h : x in x :: z :: l) : next (x :: z :: l) x h 
+= z
+参数：z : α；h : x in x :: z :: l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.next_cons_cons_eq'`：next_cons_cons_eq' (y z : α) (h : x in y :: z :
+: l) (hx : x = y) : next (y :: z :: l) x h = z
 -/
-theorem next_cons_cons_eq (z : α) (h : x in x :: z :: l) : next (x :: z :: l) x h = z :=
+theorem next_cons_cons_eq (z : α) (h : x ∈ x :: z :: l) : next (x :: z :: l) x h = z :=
   next_cons_cons_eq' l x x z h rfl
-
-/--
-theorem `next_cons_eq_next_of_mem_dropLast` / 定理 `next_cons_eq_next_of_mem_dropLast`
-
-English:
-theorem next_cons_eq_next_of_mem_dropLast
-  given: (h : x in l.dropLast) (y : α) (hy : x != y)
-  proof: by
-  rwa [next, next, nextOr_cons_of_ne _ _ _ _ hy, nextOr_eq_nextOr_of_mem_dropLast]
-
-中文:
-定理 next_cons_eq_next_of_mem_dropLast
-  条件: (h : x in l.dropLast) (y : α) (hy : x != y)
-  证明: by
-  rwa [next, next, nextOr_cons_of_ne _ _ _ _ hy, nextOr_eq_nextOr_of_mem_dropLast]
-
-Depends on / 依赖: nextOr_cons_of_ne, nextOr_eq_nextOr_of_mem_dropLast
+/-
+**List.next_cons_eq_next_of_mem_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_cons_eq_next_of_mem_dropLast (h : x in l.dropLast) (y : α) (hy : x !=
+ y) : next (y :: l) x (mem_cons_of_mem _ <| mem_of_mem_dropLast h) = next l x (m
+em_of_mem_dropLast h)
+参数：h : x in l.dropLast；y : α；hy : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+· 使用定理 `List.mem_of_mem_dropLast`：mem_of_mem_dropLast (h : a in l.dropLast) : a 
+in l
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.next.eq_1`：∀ {α : Type u_1} [inst : DecidableEq α] (l : List α) (x 
+: α) (h : x ∈ l), l.next x h = l.nextOr x (l.get ⟨0, ⋯⟩)
+· 使用定理 `List.nextOr_cons_of_ne`：nextOr_cons_of_ne (xs : List α) (y x d : α) (h :
+ x != y) : nextOr (y :: xs) x d = nextOr xs x d
+· 使用定理 `List.nextOr_eq_nextOr_of_mem_dropLast`：nextOr_eq_nextOr_of_mem_dropLast 
+(xs : List α) (x d d' : α) (x_mem : x in xs.dropLast) : nextOr xs x d = nextOr x
+s x d'
 -/
-theorem next_cons_eq_next_of_mem_dropLast (h : x in l.dropLast) (y : α) (hy : x != y) :
+theorem next_cons_eq_next_of_mem_dropLast (h : x ∈ l.dropLast) (y : α) (hy : x ≠ y) :
     next (y :: l) x (mem_cons_of_mem _ <| mem_of_mem_dropLast h) =
       next l x (mem_of_mem_dropLast h) := by
   rwa [next, next, nextOr_cons_of_ne _ _ _ _ hy, nextOr_eq_nextOr_of_mem_dropLast]
-
-/--
-theorem `next_cons_concat` / 定理 `next_cons_concat`
-
-English:
-theorem next_cons_concat
-  statement: (y : α) (hy : x != y) (hx : x ∉ l)
-  proof: by
-  rw [next]; rw [nextOr_concat]
-  · simp
-  · simp [hy, hx]
-
-中文:
-定理 next_cons_concat
-  结论: (y : α) (hy : x != y) (hx : x ∉ l)
-  证明: by
-  rw [next]; rw [nextOr_concat]
-  · simp
-  · simp [hy, hx]
-
-Depends on / 依赖: mem_append_right, mem_singleton_self
+/-
+**List.next_cons_concat** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_cons_concat (y : α) (hy : x != y) (hx : x ∉ l) (h : x in y :: l ++ [x
+]
+参数：y : α；hy : x != y；hx : x ∉ l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.next.eq_1`：∀ {α : Type u_1} [inst : DecidableEq α] (l : List α) (x 
+: α) (h : x ∈ l), l.next x h = l.nextOr x (l.get ⟨0, ⋯⟩)
+· 使用定理 `List.nextOr_concat`：nextOr_concat {xs : List α} {x : α} (d : α) (h : x ∉
+ xs) : nextOr (xs ++ [x]) x d = d
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem next_cons_concat (y : α) (hy : x != y) (hx : x ∉ l)
-    (h : x in y :: l ++ [x] := mem_append_right _ (mem_singleton_self x)) :
+theorem next_cons_concat (y : α) (hy : x ≠ y) (hx : x ∉ l)
+    (h : x ∈ y :: l ++ [x] := mem_append_right _ (mem_singleton_self x)) :
     next (y :: l ++ [x]) x h = y := by
-  rw [next]; rw [nextOr_concat]
+  rw [next, nextOr_concat]
   · simp
   · simp [hy, hx]
-
-/--
-theorem `next_getLast_cons` / 定理 `next_getLast_cons`
-
-English:
-theorem next_getLast_cons
-  statement: (h : x in l) (y : α) (h : x in y :: l) (hy : x != y)
-  proof: by
-  rw [next]; rw [get]; rw [← dropLast_append_getLast (cons_ne_nil y l)]; rw [hx]; rw [nextOr_concat]
-  subst hx
-  intro H
-  obtain ⟨_ | k, hk, hk'⟩ := getElem_of_mem H
-  · grind
-  suffices k + 1 = l.length by simp [this] at hk
-  rcases l with - | ⟨hd, tl⟩
-  · simp at hk
-  · rw [nodup_iff_injective_get] at hl
-    rw [length]; rw [Nat.succ_inj]
-exact Fin.val_eq_of_eq @hl ⟨k, Nat.lt_of_succ_lt by simpa using hk⟩
-      ⟨tl.length, by simp⟩ (by grind)
-
-中文:
-定理 next_getLast_cons
-  结论: (h : x in l) (y : α) (h : x in y :: l) (hy : x != y)
-  证明: by
-  rw [next]; rw [get]; rw [← dropLast_append_getLast (cons_ne_nil y l)]; rw [hx]; rw [nextOr_concat]
-  subst hx
-  intro H
-  obtain ⟨_ | k, hk, hk'⟩ := getElem_of_mem H
-  · grind
-  suffices k + 1 = l.length by simp [this] at hk
-  rcases l with - | ⟨hd, tl⟩
-  · simp at hk
-  · rw [nodup_iff_injective_get] at hl
-    rw [length]; rw [Nat.succ_inj]
-exact Fin.val_eq_of_eq @hl ⟨k, Nat.lt_of_succ_lt by simpa using hk⟩
-      ⟨tl.length, by simp⟩ (by grind)
-
-Depends on / 依赖: Fin.val_eq_of_eq, Nat.lt_of_succ_lt, Nat.succ_inj, cons_ne_nil, dropLast_append_getLast, getElem_of_mem, l.length, length, lt_of_succ_lt, nextOr_concat, nodup_iff_injective_get, succ_inj, tl.length, val_eq_of_eq
+/-
+**List.next_getLast_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_getLast_cons (h : x in l) (y : α) (h : x in y :: l) (hy : x != y) (hx
+ : x = getLast (y :: l) (cons_ne_nil _ _)) (hl : Nodup l) : next (y :: l) x h = 
+y
+参数：h : x in l；y : α；h : x in y :: l；hy : x != y；hx : x = getLast (y :: l) (cons_
+ne_nil _ _)；hl : Nodup l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.next.eq_1`：∀ {α : Type u_1} [inst : DecidableEq α] (l : List α) (x 
+: α) (h : x ∈ l), l.next x h = l.nextOr x (l.get ⟨0, ⋯⟩)
+· 使用定理 `List.get.eq_1`：∀ {α : Type u} (a : α) (tail : List α) (isLt : 0 < (a :: 
+tail).length), (a :: tail).get ⟨0, isLt⟩ = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.dropLast_append_getLast`：∀ {α : Type u} {l : List α} (h : l ≠ []), 
+l.dropLast ++ [l.getLast h] = l
+· 使用定理 `List.nextOr_concat`：nextOr_concat {xs : List α} {x : α} (d : α) (h : x ∉
+ xs) : nextOr (xs ++ [x]) x d = d
+· 使用定理 `List.getElem_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → ∃ i,
+ ∃ (h : i < l.length), l[i] = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.dropLast_singleton`：∀ {α : Type u_1} {x : α}, [x].dropLast = []
+· 使用定理 `List.length.eq_2`：∀ {α : Type u_1} (head : α) (tail : List α), (head :: 
+tail).length = tail.length + 1
+· 使用定理 `Nat.succ_inj`：∀ {a b : ℕ}, a.succ = b.succ ↔ a = b
+· 使用定理 `Fin.val_eq_of_eq`：∀ {n : ℕ} {i j : Fin n}, i = j → ↑i = ↑j
+· 使用定理 `Nat.lt_of_succ_lt`：∀ {n m : ℕ}, n.succ < m → n < m
+· 使用定理 `List.dropLast_cons_cons`：∀ {α : Type u_1} {x y : α} {zs : List α}, (x ::
+ y :: zs).dropLast = x :: (y :: zs).dropLast
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.length_dropLast`：∀ {α : Type u_1} {xs : List α}, xs.dropLast.length
+ = xs.length - 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.nodup_iff_injective_get`：nodup_iff_injective_get {l : List α} : Nod
+up l ↔ Function.Injective l.get
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-theorem next_getLast_cons (h : x in l) (y : α) (h : x in y :: l) (hy : x != y)
+theorem next_getLast_cons (h : x ∈ l) (y : α) (h : x ∈ y :: l) (hy : x ≠ y)
     (hx : x = getLast (y :: l) (cons_ne_nil _ _)) (hl : Nodup l) : next (y :: l) x h = y := by
-  rw [next]; rw [get]; rw [← dropLast_append_getLast (cons_ne_nil y l)]; rw [hx]; rw [nextOr_concat]
+  rw [next, get, ← dropLast_append_getLast (cons_ne_nil y l), hx, nextOr_concat]
   subst hx
   intro H
   obtain ⟨_ | k, hk, hk'⟩ := getElem_of_mem H
@@ -549,250 +486,245 @@ theorem next_getLast_cons (h : x in l) (y : α) (h : x in y :: l) (hy : x != y)
   rcases l with - | ⟨hd, tl⟩
   · simp at hk
   · rw [nodup_iff_injective_get] at hl
-    rw [length]; rw [Nat.succ_inj]
-exact Fin.val_eq_of_eq @hl ⟨k, Nat.lt_of_succ_lt by simpa using hk⟩
+    rw [length, Nat.succ_inj]
+    exact Fin.val_eq_of_eq <| @hl ⟨k, Nat.lt_of_succ_lt <| by simpa using hk⟩
       ⟨tl.length, by simp⟩ (by grind)
-
-/--
-theorem `prev_getLast_cons'` / 定理 `prev_getLast_cons'`
-
-English:
-theorem prev_getLast_cons'
-  given: (y : α) (hxy : x in y :: l) (hx : x = y)
-  proof: by cases l <;> simp [prev, hx]
-
-@[simp]
-
-中文:
-定理 prev_getLast_cons'
-  条件: (y : α) (hxy : x in y :: l) (hx : x = y)
-  证明: by cases l <;> simp [prev, hx]
-
-@[simp]
+/-
+**List.prev_getLast_cons'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_getLast_cons' (y : α) (hxy : x in y :: l) (hx : x = y) : prev (y :: l
+) x hxy = getLast (y :: l) (cons_ne_nil _ _)
+参数：y : α；hxy : x in y :: l；hx : x = y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.getLast_cons`：∀ {α : Type u_1} {a : α} {l : List α} (h : l ≠ []), (
+a :: l).getLast ⋯ = l.getLast h
 -/
-theorem prev_getLast_cons' (y : α) (hxy : x in y :: l) (hx : x = y) :
+theorem prev_getLast_cons' (y : α) (hxy : x ∈ y :: l) (hx : x = y) :
     prev (y :: l) x hxy = getLast (y :: l) (cons_ne_nil _ _) := by cases l <;> simp [prev, hx]
 
 @[simp]
-/--
-theorem `prev_getLast_cons` / 定理 `prev_getLast_cons`
-
-English:
-theorem prev_getLast_cons
-  given: (h : x in x :: l)
-  proof: prev_getLast_cons' l x x h rfl
-
-中文:
-定理 prev_getLast_cons
-  条件: (h : x in x :: l)
-  证明: prev_getLast_cons' l x x h rfl
-
-Depends on / 依赖: prev_getLast_cons
+/-
+**List.prev_getLast_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_getLast_cons (h : x in x :: l) : prev (x :: l) x h = getLast (x :: l)
+ (cons_ne_nil _ _)
+参数：h : x in x :: l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.prev_getLast_cons'`：prev_getLast_cons' (y : α) (hxy : x in y :: l) 
+(hx : x = y) : prev (y :: l) x hxy = getLast (y :: l) (cons_ne_nil _ _)
 -/
-theorem prev_getLast_cons (h : x in x :: l) :
+theorem prev_getLast_cons (h : x ∈ x :: l) :
     prev (x :: l) x h = getLast (x :: l) (cons_ne_nil _ _) :=
   prev_getLast_cons' l x x h rfl
-
-/--
-theorem `prev_head_eq_getLast` / 定理 `prev_head_eq_getLast`
-
-English:
-theorem prev_head_eq_getLast
-  given: (hl : l != [])
-  statement: l.prev (l.head hl) (head_mem hl) = l.getLast hl
-  proof: by
-  cases l with
-  | nil => contradiction
-  | cons head tail => apply prev_getLast_cons
-
-中文:
-定理 prev_head_eq_getLast
-  条件: (hl : l != [])
-  结论: l.prev (l.head hl) (head_mem hl) = l.getLast hl
-  证明: by
-  cases l with
-  | nil => contradiction
-  | cons head tail => apply prev_getLast_cons
-
-Depends on / 依赖: prev_getLast_cons
+/-
+**List.prev_head_eq_getLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_head_eq_getLast (hl : l != []) : l.prev (l.head hl) (head_mem hl) = l
+.getLast hl
+参数：hl : l != []。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.head_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head h ∈ l
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.prev_getLast_cons`：prev_getLast_cons (h : x in x :: l) : prev (x ::
+ l) x h = getLast (x :: l) (cons_ne_nil _ _)
 -/
-theorem prev_head_eq_getLast (hl : l != []) : l.prev (l.head hl) (head_mem hl) = l.getLast hl := by
+theorem prev_head_eq_getLast (hl : l ≠ []) : l.prev (l.head hl) (head_mem hl) = l.getLast hl := by
   cases l with
   | nil => contradiction
   | cons head tail => apply prev_getLast_cons
-
-/--
-theorem `prev_cons_cons_eq'` / 定理 `prev_cons_cons_eq'`
-
-English:
-theorem prev_cons_cons_eq'
-  given: (y z : α) (h : x in y :: z :: l) (hx : x = y)
-  proof: by rw [prev, dif_pos hx]
-
-中文:
-定理 prev_cons_cons_eq'
-  条件: (y z : α) (h : x in y :: z :: l) (hx : x = y)
-  证明: by rw [prev, dif_pos hx]
-
-Depends on / 依赖: dif_pos
+/-
+**List.prev_cons_cons_eq'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_cons_cons_eq' (y z : α) (h : x in y :: z :: l) (hx : x = y) : prev (y
+ :: z :: l) x h = getLast (z :: l) (cons_ne_nil _ _)
+参数：y z : α；h : x in y :: z :: l；hx : x = y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.prev.eq_3`：∀ {α : Type u_1} [inst : DecidableEq α] (x y z : α) (xs 
+: List α) (x_1 : x ∈ y :: z :: xs),   (y :: z :: xs).prev x x_1 = if hx : x = y 
+then…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-theorem prev_cons_cons_eq' (y z : α) (h : x in y :: z :: l) (hx : x = y) :
+theorem prev_cons_cons_eq' (y z : α) (h : x ∈ y :: z :: l) (hx : x = y) :
     prev (y :: z :: l) x h = getLast (z :: l) (cons_ne_nil _ _) := by rw [prev, dif_pos hx]
-
-/--
-theorem `prev_cons_cons_eq` / 定理 `prev_cons_cons_eq`
-
-English:
-theorem prev_cons_cons_eq
-  given: (z : α) (h : x in x :: z :: l)
-  proof: prev_cons_cons_eq' l x x z h rfl
-
-中文:
-定理 prev_cons_cons_eq
-  条件: (z : α) (h : x in x :: z :: l)
-  证明: prev_cons_cons_eq' l x x z h rfl
-
-Depends on / 依赖: prev_cons_cons_eq
+/-
+**List.prev_cons_cons_eq** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_cons_cons_eq (z : α) (h : x in x :: z :: l) : prev (x :: z :: l) x h 
+= getLast (z :: l) (cons_ne_nil _ _)
+参数：z : α；h : x in x :: z :: l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.prev_cons_cons_eq'`：prev_cons_cons_eq' (y z : α) (h : x in y :: z :
+: l) (hx : x = y) : prev (y :: z :: l) x h = getLast (z :: l) (cons_ne_nil _ _)
 -/
-theorem prev_cons_cons_eq (z : α) (h : x in x :: z :: l) :
+theorem prev_cons_cons_eq (z : α) (h : x ∈ x :: z :: l) :
     prev (x :: z :: l) x h = getLast (z :: l) (cons_ne_nil _ _) :=
   prev_cons_cons_eq' l x x z h rfl
-
-/--
-theorem `prev_cons_cons_of_ne'` / 定理 `prev_cons_cons_of_ne'`
-
-English:
-theorem prev_cons_cons_of_ne'
-  given: (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz : x = z)
-  proof: by
-  cases l
-  · simp [prev, hz]
-  · rw [prev, dif_neg hy, if_pos hz]
-
-中文:
-定理 prev_cons_cons_of_ne'
-  条件: (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz : x = z)
-  证明: by
-  cases l
-  · simp [prev, hz]
-  · rw [prev, dif_neg hy, if_pos hz]
-
-Depends on / 依赖: dif_neg, if_pos
+/-
+**List.prev_cons_cons_of_ne'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_cons_cons_of_ne' (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz :
+ x = z) : prev (y :: z :: l) x h = y
+参数：y z : α；h : x in y :: z :: l；hy : x != y；hz : x = z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `dite.congr_simp`：∀ {α : Sort u} (c : Prop) {h : Decidable c} [h_1 : Deci
+dable c] (t t_1 : c → α),   t = t_1 → ∀ (e e_1 : ¬c → α), e = e_1 → dite c t e =
+ dite…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.prev.eq_3`：∀ {α : Type u_1} [inst : DecidableEq α] (x y z : α) (xs 
+: List α) (x_1 : x ∈ y :: z :: xs),   (y :: z :: xs).prev x x_1 = if hx : x = y 
+then…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-theorem prev_cons_cons_of_ne' (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz : x = z) :
+theorem prev_cons_cons_of_ne' (y z : α) (h : x ∈ y :: z :: l) (hy : x ≠ y) (hz : x = z) :
     prev (y :: z :: l) x h = y := by
   cases l
   · simp [prev, hz]
   · rw [prev, dif_neg hy, if_pos hz]
-
-/--
-theorem `prev_cons_cons_of_ne` / 定理 `prev_cons_cons_of_ne`
-
-English:
-theorem prev_cons_cons_of_ne
-  given: (y : α) (h : x in y :: x :: l) (hy : x != y)
-  proof: prev_cons_cons_of_ne' _ _ _ _ _ hy rfl
-
-中文:
-定理 prev_cons_cons_of_ne
-  条件: (y : α) (h : x in y :: x :: l) (hy : x != y)
-  证明: prev_cons_cons_of_ne' _ _ _ _ _ hy rfl
-
-Depends on / 依赖: prev_cons_cons_of_ne
+/-
+**List.prev_cons_cons_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_cons_cons_of_ne (y : α) (h : x in y :: x :: l) (hy : x != y) : prev (
+y :: x :: l) x h = y
+参数：y : α；h : x in y :: x :: l；hy : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.prev_cons_cons_of_ne'`：prev_cons_cons_of_ne' (y z : α) (h : x in y 
+:: z :: l) (hy : x != y) (hz : x = z) : prev (y :: z :: l) x h = y
 -/
-theorem prev_cons_cons_of_ne (y : α) (h : x in y :: x :: l) (hy : x != y) :
+theorem prev_cons_cons_of_ne (y : α) (h : x ∈ y :: x :: l) (hy : x ≠ y) :
     prev (y :: x :: l) x h = y :=
   prev_cons_cons_of_ne' _ _ _ _ _ hy rfl
-
-/--
-theorem `prev_ne_cons_cons` / 定理 `prev_ne_cons_cons`
-
-English:
-theorem prev_ne_cons_cons
-  given: (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz : x != z)
-  proof: by
-  cases l
-  · simp [hy, hz] at h
-  · rw [prev, dif_neg hy, if_neg hz]
-
-中文:
-定理 prev_ne_cons_cons
-  条件: (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz : x != z)
-  证明: by
-  cases l
-  · simp [hy, hz] at h
-  · rw [prev, dif_neg hy, if_neg hz]
-
-Depends on / 依赖: dif_neg, if_neg
+/-
+**List.prev_ne_cons_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_ne_cons_cons (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz : x !
+= z) : prev (y :: z :: l) x h = prev (z :: l) x (by simpa [hy] using h)
+参数：y z : α；h : x in y :: z :: l；hy : x != y；hz : x != z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.prev.eq_3`：∀ {α : Type u_1} [inst : DecidableEq α] (x y z : α) (xs 
+: List α) (x_1 : x ∈ y :: z :: xs),   (y :: z :: xs).prev x x_1 = if hx : x = y 
+then…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem prev_ne_cons_cons (y z : α) (h : x in y :: z :: l) (hy : x != y) (hz : x != z) :
+theorem prev_ne_cons_cons (y z : α) (h : x ∈ y :: z :: l) (hy : x ≠ y) (hz : x ≠ z) :
     prev (y :: z :: l) x h = prev (z :: l) x (by simpa [hy] using h) := by
   cases l
   · simp [hy, hz] at h
   · rw [prev, dif_neg hy, if_neg hz]
-
-/--
-theorem `next_mem` / 定理 `next_mem`
-
-English:
-theorem next_mem
-  given: (h : x in l)
-  statement: l.next x h in l
-  proof: nextOr_mem (get_mem _ _)
-
-中文:
-定理 next_mem
-  条件: (h : x in l)
-  结论: l.next x h in l
-  证明: nextOr_mem (get_mem _ _)
-
-Depends on / 依赖: get_mem, nextOr_mem
+/-
+**List.next_mem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_mem (h : x in l) : l.next x h in l
+参数：h : x in l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.nextOr_mem`：nextOr_mem {xs : List α} {x d : α} (hd : d in xs) : nex
+tOr xs x d in xs
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+· 使用定理 `List.get_mem`：∀ {α : Type u_1} (l : List α) (n : Fin l.length), l.get n 
+∈ l
 -/
-theorem next_mem (h : x in l) : l.next x h in l :=
+theorem next_mem (h : x ∈ l) : l.next x h ∈ l :=
   nextOr_mem (get_mem _ _)
-
-/--
-theorem `prev_mem` / 定理 `prev_mem`
-
-English:
-theorem prev_mem
-  given: (h : x in l)
-  statement: l.prev x h in l
-  proof: by
-  rcases l with - | ⟨hd, tl⟩
-  · simp at h
-  induction tl generalizing hd with
-  | nil => simp
-  | cons hd' tl hl =>
-    by_cases hx : x = hd
-    · simp only [hx, prev_cons_cons_eq]
-      exact mem_cons_of_mem _ (getLast_mem _)
-    · rw [prev, dif_neg hx]
-      split_ifs with hm
-      · exact mem_cons_self
-      · exact mem_cons_of_mem _ (hl _ _)
-
-中文:
-定理 prev_mem
-  条件: (h : x in l)
-  结论: l.prev x h in l
-  证明: by
-  rcases l with - | ⟨hd, tl⟩
-  · simp at h
-  induction tl generalizing hd with
-  | nil => simp
-  | cons hd' tl hl =>
-    by_cases hx : x = hd
-    · simp only [hx, prev_cons_cons_eq]
-      exact mem_cons_of_mem _ (getLast_mem _)
-    · rw [prev, dif_neg hx]
-      split_ifs with hm
-      · exact mem_cons_self
-      · exact mem_cons_of_mem _ (hl _ _)
-
-Depends on / 依赖: dif_neg, generalizing, getLast_mem, mem_cons_of_mem, mem_cons_self, prev_cons_cons_eq, split_ifs
+/-
+**List.prev_mem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_mem (h : x in l) : l.prev x h in l
+参数：h : x in l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.prev.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (l l_1 : L
+ist α) (e_l : l = l_1) (x x_1 : α) (e_x : x = x_1) (a : x ∈ l),   l.prev x a = l
+_1.prev x_…
+· 使用定理 `List.prev_cons_cons_eq`：prev_cons_cons_eq (z : α) (h : x in x :: z :: l)
+ : prev (x :: z :: l) x h = getLast (z :: l) (cons_ne_nil _ _)
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+· 使用定理 `List.prev.eq_3`：∀ {α : Type u_1} [inst : DecidableEq α] (x y z : α) (xs 
+: List α) (x_1 : x ∈ y :: z :: xs),   (y :: z :: xs).prev x x_1 = if hx : x = y 
+then…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem prev_mem (h : x in l) : l.prev x h in l := by
+theorem prev_mem (h : x ∈ l) : l.prev x h ∈ l := by
   rcases l with - | ⟨hd, tl⟩
   · simp at h
   induction tl generalizing hd with
@@ -805,139 +737,84 @@ theorem prev_mem (h : x in l) : l.prev x h in l := by
       split_ifs with hm
       · exact mem_cons_self
       · exact mem_cons_of_mem _ (hl _ _)
-
-/--
-theorem `nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast` / 定理 `nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast`
-
-English:
-theorem nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast
-  statement: {l : List α} {a : α} (ha : a in l.dropLast)
-  proof: by
-  match l with
-  | nil => simp at ha
-  | [head] => simp at ha
-  | x :: y :: tail =>
-    rw [getElem?_cons_succ]; rw [nextOr]
-    split_ifs with hx
-    · grind
-    rw [idxOf_cons_ne _ <| Ne.symm hx]; rw [nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast]
-    grind
-
-中文:
-定理 nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast
-  结论: {l : 列表 α} {a : α} (ha : a in l.dropLast)
-  证明: by
-  match l with
-  | nil => simp at ha
-  | [head] => simp at ha
-  | x :: y :: tail =>
-    rw [getElem?_cons_succ]; rw [nextOr]
-    split_ifs with hx
-    · grind
-    rw [idxOf_cons_ne _ <| Ne.symm hx]; rw [nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast]
-    grind
-
-Depends on / 依赖: Ne.symm, _cons_succ, _idxOf_succ_of_mem_dropLast, getElem, idxOf_cons_ne, nextOr, nextOr_eq_getElem, split_ifs
+/-
+**List.nextOr_eq_getElem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast {l : List α} {a : α} (ha : a
+ in l.dropLast) (d : α) : l.nextOr a d = l[l.idxOf a + 1]?
+参数：ha : a in l.dropLast；d : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast {l : List α} {a : α} (ha : a in l.dropLast)
+theorem nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast {l : List α} {a : α} (ha : a ∈ l.dropLast)
     (d : α) : l.nextOr a d = l[l.idxOf a + 1]? := by
   match l with
   | nil => simp at ha
   | [head] => simp at ha
   | x :: y :: tail =>
-    rw [getElem?_cons_succ]; rw [nextOr]
+    rw [getElem?_cons_succ, nextOr]
     split_ifs with hx
     · grind
-    rw [idxOf_cons_ne _ <| Ne.symm hx]; rw [nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast]
+    rw [idxOf_cons_ne _ <| Ne.symm hx, nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast]
     grind
-
-/--
-theorem `nextOr_eq_getElem_idxOf_succ_of_mem_dropLast` / 定理 `nextOr_eq_getElem_idxOf_succ_of_mem_dropLast`
-
-English:
-theorem nextOr_eq_getElem_idxOf_succ_of_mem_dropLast
-  statement: {l : List α} {a : α} (ha : a in l.dropLast)
-  proof: Option.some_injective _ nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast ha d ▸ getElem?_pos ..
-
-中文:
-定理 nextOr_eq_getElem_idxOf_succ_of_mem_dropLast
-  结论: {l : 列表 α} {a : α} (ha : a in l.dropLast)
-  证明: Option.some_injective _ nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast ha d ▸ getElem?_pos ..
-
-Depends on / 依赖: Option.some_injective, _idxOf_succ_of_mem_dropLast, _pos, getElem, nextOr_eq_getElem, some_injective
+/-
+**List.nextOr_eq_getElem_idxOf_succ_of_mem_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `L
+ist`。
+形式化陈述：nextOr_eq_getElem_idxOf_succ_of_mem_dropLast {l : List α} {a : α} (ha : a 
+in l.dropLast) (d : α) : l.nextOr a d = l[l.idxOf a + 1]'(succ_idxOf_lt_length_o
+f_mem_dropLast ha)
+参数：ha : a in l.dropLast；d : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.some_injective`：some_injective (α : Type*) : Function.Injective (
+@some α)
+· 使用定理 `List.succ_idxOf_lt_length_of_mem_dropLast`：succ_idxOf_lt_length_of_mem_d
+ropLast {l : List α} {a : α} (ha : a in l.dropLast) : l.idxOf a + 1 < l.length
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `getElem?_pos`：∀ {cont : Type u_1} {idx : Type u_2} {elem : Type u_3} {do
+m : cont → idx → Prop} [inst : GetElem? cont idx elem dom]   [LawfulGetElem cont
+ i…
+· 使用定理 `List.instLawfulGetElemNatLtLength`：∀ {α : Type u_1}, LawfulGetElem (List
+ α) ℕ α fun as i => i < as.length
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast`：∀ {α : Type u_1} [in
+st : DecidableEq α] {l : List α} {a : α},   a ∈ l.dropLast → ∀ (d : α), some (l.
+nextOr a d) = l[List.idxOf a l + 1]?
 -/
-theorem nextOr_eq_getElem_idxOf_succ_of_mem_dropLast {l : List α} {a : α} (ha : a in l.dropLast)
+theorem nextOr_eq_getElem_idxOf_succ_of_mem_dropLast {l : List α} {a : α} (ha : a ∈ l.dropLast)
     (d : α) : l.nextOr a d = l[l.idxOf a + 1]'(succ_idxOf_lt_length_of_mem_dropLast ha) :=
-Option.some_injective _ nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast ha d ▸ getElem?_pos ..
-
-/--
-theorem `nextOr_infix_of_mem_dropLast` / 定理 `nextOr_infix_of_mem_dropLast`
-
-English:
-theorem nextOr_infix_of_mem_dropLast
-  given: {l : List α} {a : α} (ha : a in l.dropLast) (d : α)
-  proof: by
-  refine infix_iff_getElem?.mpr ⟨l.idxOf a, ?_, fun i hi => ?_⟩
-  · have ⟨_, _⟩ := l.dropLast_prefix
-    grind
-  by_cases hi₁ : i = 1
-  · grind [next, nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast]
-  · grind [getElem?_idxOf, mem_of_mem_dropLast]
-
-中文:
-定理 nextOr_infix_of_mem_dropLast
-  条件: {l : 列表 α} {a : α} (ha : a in l.dropLast) (d : α)
-  证明: by
-  refine infix_iff_getElem?.mpr ⟨l.idxOf a, ?_, fun i hi => ?_⟩
-  · have ⟨_, _⟩ := l.dropLast_prefix
-    grind
-  by_cases hi₁ : i = 1
-  · grind [next, nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast]
-  · grind [getElem?_idxOf, mem_of_mem_dropLast]
-
-Depends on / 依赖: _idxOf, _idxOf_succ_of_mem_dropLast, dropLast_prefix, getElem, infix_iff_getElem, l.dropLast_prefix, l.idxOf, mem_of_mem_dropLast, nextOr_eq_getElem
+  Option.some_injective _ <| nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast ha d ▸ getElem?_pos ..
+/-
+**List.nextOr_infix_of_mem_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_infix_of_mem_dropLast {l : List α} {a : α} (ha : a in l.dropLast) (
+d : α) : [a, l.nextOr a d] <:+: l
+参数：ha : a in l.dropLast；d : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.infix_iff_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α},   l₁ <:+: l₂
+ ↔ ∃ k, l₁.length + k ≤ l₂.length ∧ ∀ (i : ℕ) (h : i < l₁.length), l₂[i + k]? = 
+some l₁[i]
+· 使用定理 `List.dropLast_prefix`：∀ {α : Type u_1} (l : List α), l.dropLast <+: l
 -/
-theorem nextOr_infix_of_mem_dropLast {l : List α} {a : α} (ha : a in l.dropLast) (d : α) :
+theorem nextOr_infix_of_mem_dropLast {l : List α} {a : α} (ha : a ∈ l.dropLast) (d : α) :
     [a, l.nextOr a d] <:+: l := by
-  refine infix_iff_getElem?.mpr ⟨l.idxOf a, ?_, fun i hi => ?_⟩
+  refine infix_iff_getElem?.mpr ⟨l.idxOf a, ?_, fun i hi ↦ ?_⟩
   · have ⟨_, _⟩ := l.dropLast_prefix
     grind
   by_cases hi₁ : i = 1
   · grind [next, nextOr_eq_getElem?_idxOf_succ_of_mem_dropLast]
   · grind [getElem?_idxOf, mem_of_mem_dropLast]
-
-/--
-theorem `nextOr_getLast_of_notMem_dropLast` / 定理 `nextOr_getLast_of_notMem_dropLast`
-
-English:
-theorem nextOr_getLast_of_notMem_dropLast
-  statement: {l : List α} (hl : l != []) (h : l.getLast hl ∉ l.dropLast)
-  proof: by
-  match l with
-  | nil | [_] => simp
-  | x :: y :: tail =>
-    unfold nextOr
-    split_ifs with h'
-    · grind
-    apply nextOr_getLast_of_notMem_dropLast
-    grind
-
-中文:
-定理 nextOr_getLast_of_notMem_dropLast
-  结论: {l : 列表 α} (hl : l != []) (h : l.getLast hl ∉ l.dropLast)
-  证明: by
-  match l with
-  | nil | [_] => simp
-  | x :: y :: tail =>
-    unfold nextOr
-    split_ifs with h'
-    · grind
-    apply nextOr_getLast_of_notMem_dropLast
-    grind
-
-Depends on / 依赖: nextOr, nextOr_getLast_of_notMem_dropLast, split_ifs
+/-
+**List.nextOr_getLast_of_notMem_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：nextOr_getLast_of_notMem_dropLast {l : List α} (hl : l != []) (h : l.getLa
+st hl ∉ l.dropLast) (d : α) : l.nextOr (l.getLast hl) d = d
+参数：hl : l != []；h : l.getLast hl ∉ l.dropLast；d : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
 -/
-theorem nextOr_getLast_of_notMem_dropLast {l : List α} (hl : l != []) (h : l.getLast hl ∉ l.dropLast)
+theorem nextOr_getLast_of_notMem_dropLast {l : List α} (hl : l ≠ []) (h : l.getLast hl ∉ l.dropLast)
     (d : α) : l.nextOr (l.getLast hl) d = d := by
   match l with
   | nil | [_] => simp
@@ -947,201 +824,230 @@ theorem nextOr_getLast_of_notMem_dropLast {l : List α} (hl : l != []) (h : l.ge
     · grind
     apply nextOr_getLast_of_notMem_dropLast
     grind
-
-/--
-theorem `next_getLast_eq_head_of_notMem_dropLast` / 定理 `next_getLast_eq_head_of_notMem_dropLast`
-
-English:
-theorem next_getLast_eq_head_of_notMem_dropLast
-  statement: {l : List α} (hl : l != [])
-  proof: .trans by grind nextOr_getLast_of_notMem_dropLast hl h _
-
-中文:
-定理 next_getLast_eq_head_of_notMem_dropLast
-  结论: {l : 列表 α} (hl : l != [])
-  证明: .trans by grind nextOr_getLast_of_notMem_dropLast hl h _
-
-Depends on / 依赖: nextOr_getLast_of_notMem_dropLast
+/-
+**List.next_getLast_eq_head_of_notMem_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_getLast_eq_head_of_notMem_dropLast {l : List α} (hl : l != []) (h : l
+.getLast hl ∉ l.dropLast) : l.next (l.getLast hl) (getLast_mem hl) = l.head hl
+参数：hl : l != []；h : l.getLast hl ∉ l.dropLast。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.nextOr_getLast_of_notMem_dropLast`：nextOr_getLast_of_notMem_dropLas
+t {l : List α} (hl : l != []) (h : l.getLast hl ∉ l.dropLast) (d : α) : l.nextOr
+ (l.getLast hl) d = d
 -/
-theorem next_getLast_eq_head_of_notMem_dropLast {l : List α} (hl : l != [])
+theorem next_getLast_eq_head_of_notMem_dropLast {l : List α} (hl : l ≠ [])
     (h : l.getLast hl ∉ l.dropLast) : l.next (l.getLast hl) (getLast_mem hl) = l.head hl :=
-.trans by grind nextOr_getLast_of_notMem_dropLast hl h _
-
-/--
-theorem `next_eq_getElem` / 定理 `next_eq_getElem`
-
-English:
-theorem next_eq_getElem
-  given: {l : List α} {a : α} (ha : a in l)
-  proof: by
-  have hl := ne_nil_of_mem ha
-  by_cases ha' : a in l.dropLast
-  · simp [next, nextOr_eq_getElem_idxOf_succ_of_mem_dropLast ha',
-Nat.mod_eq_of_lt succ_idxOf_lt_length_of_mem_dropLast ha']
-  grind [dropLast_append_getLast, next_getLast_eq_head_of_notMem_dropLast, Nat.mod_self]
-
-中文:
-定理 next_eq_getElem
-  条件: {l : 列表 α} {a : α} (ha : a in l)
-  证明: by
-  have hl := ne_nil_of_mem ha
-  by_cases ha' : a in l.dropLast
-  · simp [next, nextOr_eq_getElem_idxOf_succ_of_mem_dropLast ha',
-Nat.mod_eq_of_lt succ_idxOf_lt_length_of_mem_dropLast ha']
-  grind [dropLast_append_getLast, next_getLast_eq_head_of_notMem_dropLast, Nat.mod_self]
-
-Depends on / 依赖: Nat.mod_eq_of_lt, Nat.mod_self, dropLast, dropLast_append_getLast, l.dropLast, mod_eq_of_lt, mod_self, ne_nil_of_mem, nextOr_eq_getElem_idxOf_succ_of_mem_dropLast, next_getLast_eq_head_of_notMem_dropLast, succ_idxOf_lt_length_of_mem_dropLast
+  nextOr_getLast_of_notMem_dropLast hl h _ |>.trans <| by grind
+/-
+**List.next_eq_getElem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_eq_getElem {l : List α} {a : α} (ha : a in l) : l.next a ha = l[(l.id
+xOf a + 1) % l.length]'(Nat.mod_lt _ <| by grind)
+参数：ha : a in l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ne_nil_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → l ≠ [
+]
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.succ_idxOf_lt_length_of_mem_dropLast`：succ_idxOf_lt_length_of_mem_d
+ropLast {l : List α} {a : α} (ha : a in l.dropLast) : l.idxOf a + 1 < l.length
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.nextOr_eq_getElem_idxOf_succ_of_mem_dropLast`：nextOr_eq_getElem_idx
+Of_succ_of_mem_dropLast {l : List α} {a : α} (ha : a in l.dropLast) (d : α) : l.
+nextOr a d = l[l.idxOf a + 1]'(succ_idx…
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `List.length_pos_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → 0
+ < l.length
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem next_eq_getElem {l : List α} {a : α} (ha : a in l) :
+theorem next_eq_getElem {l : List α} {a : α} (ha : a ∈ l) :
     l.next a ha = l[(l.idxOf a + 1) % l.length]'(Nat.mod_lt _ <| by grind) := by
   have hl := ne_nil_of_mem ha
-  by_cases ha' : a in l.dropLast
+  by_cases ha' : a ∈ l.dropLast
   · simp [next, nextOr_eq_getElem_idxOf_succ_of_mem_dropLast ha',
-Nat.mod_eq_of_lt succ_idxOf_lt_length_of_mem_dropLast ha']
+      Nat.mod_eq_of_lt <| succ_idxOf_lt_length_of_mem_dropLast ha']
   grind [dropLast_append_getLast, next_getLast_eq_head_of_notMem_dropLast, Nat.mod_self]
-
-/--
-theorem `next_getElem` / 定理 `next_getElem`
-
-English:
-theorem next_getElem
-  given: (l : List α) (h : Nodup l) (i : Nat) (hi : i < l.length)
-  proof: by
-  grind [next_eq_getElem]
-
-中文:
-定理 next_getElem
-  条件: (l : 列表 α) (h : Nodup l) (i : 自然数) (hi : i < l.length)
-  证明: by
-  grind [next_eq_getElem]
-
-Depends on / 依赖: next_eq_getElem
+/-
+**List.next_getElem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_getElem (l : List α) (h : Nodup l) (i : Nat) (hi : i < l.length) : l.
+next l[i] (get_mem ..) = l[(i + 1) % l.length]'(Nat.mod_lt _ (i.zero_le.trans_lt
+ hi))
+参数：l : List α；h : Nodup l；i : Nat；hi : i < l.length。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem next_getElem (l : List α) (h : Nodup l) (i : Nat) (hi : i < l.length) :
     l.next l[i] (get_mem ..) = l[(i + 1) % l.length]'(Nat.mod_lt _ (i.zero_le.trans_lt hi)) := by
   grind [next_eq_getElem]
-
-/--
-theorem `prev_eq_getElem?_idxOf_pred_of_ne_head` / 定理 `prev_eq_getElem?_idxOf_pred_of_ne_head`
-
-English:
-theorem prev_eq_getElem?_idxOf_pred_of_ne_head
-  statement: {l : List α} {a : α} (ha : a in l)
-  proof: by
-  match l with
-  | nil | [_] => grind
-  | x :: y :: tail =>
-    have ih := (y :: tail).prev_eq_getElem?_idxOf_pred_of_ne_head (a := a)
-    grind [prev]
-
-中文:
-定理 prev_eq_getElem?_idxOf_pred_of_ne_head
-  结论: {l : 列表 α} {a : α} (ha : a in l)
-  证明: by
-  match l with
-  | nil | [_] => grind
-  | x :: y :: tail =>
-    have ih := (y :: tail).prev_eq_getElem?_idxOf_pred_of_ne_head (a := a)
-    grind [prev]
-
-Depends on / 依赖: _idxOf_pred_of_ne_head, prev_eq_getElem
+/-
+**List.prev_eq_getElem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_eq_getElem?_idxOf_pred_of_ne_head {l : List α} {a : α} (ha : a in l) 
+(ha₀ : a != l.head (ne_nil_of_mem ha)) : l.prev a ha = l[l.idxOf a - 1]?
+参数：ha : a in l；ha₀ : a != l.head (ne_nil_of_mem ha)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.idxOf_cons_self`：∀ {α : Type u_1} {a : α} [inst : BEq α] [ReflBEq α
+] {l : List α}, List.idxOf a (a :: l) = 0
+· 使用定理 `EquivBEq.toReflBEq`：∀ {α : Type u_1} {inst : BEq α} [self : EquivBEq α],
+ ReflBEq α
+· 使用定理 `instEquivBEqOfLawfulBEq`：∀ {α : Type u_1} [inst : BEq α] [LawfulBEq α], 
+EquivBEq α
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.mod_succ`：∀ (n : ℕ), n % n.succ = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.prev_getLast_cons`：prev_getLast_cons (h : x in x :: l) : prev (x ::
+ l) x h = getLast (x :: l) (cons_ne_nil _ _)
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `List.prev_eq_getElem_idxOf_pred_of_ne_head`：prev_eq_getElem_idxOf_pred_o
+f_ne_head {l : List α} {a : α} (ha : a in l) (ha₀ : a != l.head (ne_nil_of_mem h
+a)) : l.prev a ha = l[l.idxOf a …
+· 使用定理 `Nat.add_sub_assoc`：∀ {m k : ℕ}, k ≤ m → ∀ (n : ℕ), n + m - k = n + (m - 
+k)
+· 使用定理 `Nat.sub_add_comm`：∀ {n m k : ℕ}, k ≤ n → n + m - k = n - k + m
+· 使用定理 `Nat.add_mod_right`：∀ (x z : ℕ), (x + z) % z = x % z
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
 -/
-theorem prev_eq_getElem?_idxOf_pred_of_ne_head {l : List α} {a : α} (ha : a in l)
-    (ha₀ : a != l.head (ne_nil_of_mem ha)) : l.prev a ha = l[l.idxOf a - 1]? := by
+theorem prev_eq_getElem?_idxOf_pred_of_ne_head {l : List α} {a : α} (ha : a ∈ l)
+    (ha₀ : a ≠ l.head (ne_nil_of_mem ha)) : l.prev a ha = l[l.idxOf a - 1]? := by
   match l with
   | nil | [_] => grind
   | x :: y :: tail =>
     have ih := (y :: tail).prev_eq_getElem?_idxOf_pred_of_ne_head (a := a)
     grind [prev]
-
-/--
-theorem `prev_eq_getElem_idxOf_pred_of_ne_head` / 定理 `prev_eq_getElem_idxOf_pred_of_ne_head`
-
-English:
-theorem prev_eq_getElem_idxOf_pred_of_ne_head
-  statement: {l : List α} {a : α} (ha : a in l)
-  proof: Option.some_injective _ prev_eq_getElem?_idxOf_pred_of_ne_head ha ha₀ ▸ getElem?_pos ..
-
-中文:
-定理 prev_eq_getElem_idxOf_pred_of_ne_head
-  结论: {l : 列表 α} {a : α} (ha : a in l)
-  证明: Option.some_injective _ prev_eq_getElem?_idxOf_pred_of_ne_head ha ha₀ ▸ getElem?_pos ..
-
-Depends on / 依赖: Option.some_injective, _idxOf_pred_of_ne_head, _pos, getElem, prev_eq_getElem, some_injective
+/-
+**List.prev_eq_getElem_idxOf_pred_of_ne_head** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_eq_getElem_idxOf_pred_of_ne_head {l : List α} {a : α} (ha : a in l) (
+ha₀ : a != l.head (ne_nil_of_mem ha)) : l.prev a ha = l[l.idxOf a - 1]'(by grind
+ [idxOf_lt_length_of_mem])
+参数：ha : a in l；ha₀ : a != l.head (ne_nil_of_mem ha)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.ne_nil_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → l ≠ [
+]
+· 使用定理 `Option.some_injective`：some_injective (α : Type*) : Function.Injective (
+@some α)
+· 使用定理 `getElem?_pos`：∀ {cont : Type u_1} {idx : Type u_2} {elem : Type u_3} {do
+m : cont → idx → Prop} [inst : GetElem? cont idx elem dom]   [LawfulGetElem cont
+ i…
+· 使用定理 `List.instLawfulGetElemNatLtLength`：∀ {α : Type u_1}, LawfulGetElem (List
+ α) ℕ α fun as i => i < as.length
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.prev_eq_getElem?_idxOf_pred_of_ne_head`：∀ {α : Type u_1} [inst : De
+cidableEq α] {l : List α} {a : α} (ha : a ∈ l),   a ≠ l.head ⋯ → some (l.prev a 
+ha) = l[List.idxOf a l - 1]?
 -/
-theorem prev_eq_getElem_idxOf_pred_of_ne_head {l : List α} {a : α} (ha : a in l)
-    (ha₀ : a != l.head (ne_nil_of_mem ha)) :
+theorem prev_eq_getElem_idxOf_pred_of_ne_head {l : List α} {a : α} (ha : a ∈ l)
+    (ha₀ : a ≠ l.head (ne_nil_of_mem ha)) :
     l.prev a ha = l[l.idxOf a - 1]'(by grind [idxOf_lt_length_of_mem]) :=
-Option.some_injective _ prev_eq_getElem?_idxOf_pred_of_ne_head ha ha₀ ▸ getElem?_pos ..
-
-/--
-theorem `prev_infix_of_mem_tail` / 定理 `prev_infix_of_mem_tail`
-
-English:
-theorem prev_infix_of_mem_tail
-  statement: {l : List α} {a : α} (ha : a in l)
-  proof: by
-have := cons_head_tail (ne_nil_of_mem ha) ▸ idxOf_cons_ne _ Ne.symm ha₀
-  refine infix_iff_getElem?.mpr ⟨l.idxOf a - 1, by grind, fun i hi => ?_⟩
-  by_cases hi₁ : i = 1
-  · subst hi₁
-    grind
-  grind [prev_eq_getElem?_idxOf_pred_of_ne_head]
-
-中文:
-定理 prev_infix_of_mem_tail
-  结论: {l : 列表 α} {a : α} (ha : a in l)
-  证明: by
-have := cons_head_tail (ne_nil_of_mem ha) ▸ idxOf_cons_ne _ Ne.symm ha₀
-  refine infix_iff_getElem?.mpr ⟨l.idxOf a - 1, by grind, fun i hi => ?_⟩
-  by_cases hi₁ : i = 1
-  · subst hi₁
-    grind
-  grind [prev_eq_getElem?_idxOf_pred_of_ne_head]
-
-Depends on / 依赖: Ne.symm, _idxOf_pred_of_ne_head, cons_head_tail, idxOf_cons_ne, infix_iff_getElem, l.idxOf, ne_nil_of_mem, prev_eq_getElem
+  Option.some_injective _ <| prev_eq_getElem?_idxOf_pred_of_ne_head ha ha₀ ▸ getElem?_pos ..
+/-
+**List.prev_infix_of_mem_tail** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_infix_of_mem_tail {l : List α} {a : α} (ha : a in l) (ha₀ : a != l.he
+ad (ne_nil_of_mem ha)) : [l.prev a ha, a] <:+: l
+参数：ha : a in l；ha₀ : a != l.head (ne_nil_of_mem ha)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `List.ne_nil_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → l ≠ [
+]
+· 使用定理 `List.idxOf_cons_ne`：idxOf_cons_ne {a b : α} (l : List α) (h : b != a) : 
+idxOf a (b :: l) = succ (idxOf a l)
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `List.cons_head_tail`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head 
+h :: l.tail = l
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.infix_iff_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α},   l₁ <:+: l₂
+ ↔ ∃ k, l₁.length + k ≤ l₂.length ∧ ∀ (i : ℕ) (h : i < l₁.length), l₂[i + k]? = 
+some l₁[i]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem prev_infix_of_mem_tail {l : List α} {a : α} (ha : a in l)
-    (ha₀ : a != l.head (ne_nil_of_mem ha)) : [l.prev a ha, a] <:+: l := by
-have := cons_head_tail (ne_nil_of_mem ha) ▸ idxOf_cons_ne _ Ne.symm ha₀
-  refine infix_iff_getElem?.mpr ⟨l.idxOf a - 1, by grind, fun i hi => ?_⟩
+theorem prev_infix_of_mem_tail {l : List α} {a : α} (ha : a ∈ l)
+    (ha₀ : a ≠ l.head (ne_nil_of_mem ha)) : [l.prev a ha, a] <:+: l := by
+  have := cons_head_tail (ne_nil_of_mem ha) ▸ idxOf_cons_ne _ <| Ne.symm ha₀
+  refine infix_iff_getElem?.mpr ⟨l.idxOf a - 1, by grind, fun i hi ↦ ?_⟩
   by_cases hi₁ : i = 1
   · subst hi₁
     grind
   grind [prev_eq_getElem?_idxOf_pred_of_ne_head]
-
-/--
-theorem `prev_eq_getElem` / 定理 `prev_eq_getElem`
-
-English:
-theorem prev_eq_getElem
-  given: {l : List α} {a : α} (ha : a in l)
-  proof: by
-  cases l with | nil => grind | cons head tail =>
-  by_cases ha₀ : a = head
-  · subst ha₀
-    simp
-    grind
-  rw [prev_eq_getElem_idxOf_pred_of_ne_head ha ha₀]
-  congr
-  rw [← Nat.add_sub_assoc]; rw [Nat.sub_add_comm]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt]
-  all_goals grind
-
-中文:
-定理 prev_eq_getElem
-  条件: {l : 列表 α} {a : α} (ha : a in l)
-  证明: by
-  cases l with | nil => grind | cons head tail =>
-  by_cases ha₀ : a = head
-  · subst ha₀
-    simp
-    grind
-  rw [prev_eq_getElem_idxOf_pred_of_ne_head ha ha₀]
-  congr
-  rw [← Nat.add_sub_assoc]; rw [Nat.sub_add_comm]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt]
-  all_goals grind
+/-
+**List.prev_eq_getElem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_eq_getElem?_idxOf_pred_of_ne_head {l : List α} {a : α} (ha : a in l) 
+(ha₀ : a != l.head (ne_nil_of_mem ha)) : l.prev a ha = l[l.idxOf a - 1]?
+参数：ha : a in l；ha₀ : a != l.head (ne_nil_of_mem ha)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.idxOf_cons_self`：∀ {α : Type u_1} {a : α} [inst : BEq α] [ReflBEq α
+] {l : List α}, List.idxOf a (a :: l) = 0
+· 使用定理 `EquivBEq.toReflBEq`：∀ {α : Type u_1} {inst : BEq α} [self : EquivBEq α],
+ ReflBEq α
+· 使用定理 `instEquivBEqOfLawfulBEq`：∀ {α : Type u_1} [inst : BEq α] [LawfulBEq α], 
+EquivBEq α
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.mod_succ`：∀ (n : ℕ), n % n.succ = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.prev_getLast_cons`：prev_getLast_cons (h : x in x :: l) : prev (x ::
+ l) x h = getLast (x :: l) (cons_ne_nil _ _)
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `List.prev_eq_getElem_idxOf_pred_of_ne_head`：prev_eq_getElem_idxOf_pred_o
+f_ne_head {l : List α} {a : α} (ha : a in l) (ha₀ : a != l.head (ne_nil_of_mem h
+a)) : l.prev a ha = l[l.idxOf a …
+· 使用定理 `Nat.add_sub_assoc`：∀ {m k : ℕ}, k ≤ m → ∀ (n : ℕ), n + m - k = n + (m - 
+k)
+· 使用定理 `Nat.sub_add_comm`：∀ {n m k : ℕ}, k ≤ n → n + m - k = n - k + m
+· 使用定理 `Nat.add_mod_right`：∀ (x z : ℕ), (x + z) % z = x % z
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
 -/
-theorem prev_eq_getElem {l : List α} {a : α} (ha : a in l) :
+theorem prev_eq_getElem {l : List α} {a : α} (ha : a ∈ l) :
     l.prev a ha = l[(l.idxOf a + (l.length - 1)) % l.length]'(Nat.mod_lt _ <| by grind) := by
   cases l with | nil => grind | cons head tail =>
   by_cases ha₀ : a = head
@@ -1150,152 +1056,204 @@ theorem prev_eq_getElem {l : List α} {a : α} (ha : a in l) :
     grind
   rw [prev_eq_getElem_idxOf_pred_of_ne_head ha ha₀]
   congr
-  rw [← Nat.add_sub_assoc]; rw [Nat.sub_add_comm]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt]
+  rw [← Nat.add_sub_assoc, Nat.sub_add_comm, Nat.add_mod_right, Nat.mod_eq_of_lt]
   all_goals grind
-
-/--
-theorem `prev_getElem` / 定理 `prev_getElem`
-
-English:
-theorem prev_getElem
-  given: (l : List α) (h : Nodup l) (i : Nat) (hi : i < l.length)
-  proof: by
-  grind [prev_eq_getElem]
-
-@[simp]
-
-中文:
-定理 prev_getElem
-  条件: (l : 列表 α) (h : Nodup l) (i : 自然数) (hi : i < l.length)
-  证明: by
-  grind [prev_eq_getElem]
-
-@[simp]
-
-Depends on / 依赖: prev_eq_getElem
+/-
+**List.prev_getElem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_getElem (l : List α) (h : Nodup l) (i : Nat) (hi : i < l.length) : l.
+prev l[i] (get_mem ..) = l[(i + (l.length - 1)) % l.length]'(Nat.mod_lt _ (by li
+a))
+参数：l : List α；h : Nodup l；i : Nat；hi : i < l.length。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prev_getElem (l : List α) (h : Nodup l) (i : Nat) (hi : i < l.length) :
     l.prev l[i] (get_mem ..) = l[(i + (l.length - 1)) % l.length]'(Nat.mod_lt _ (by lia)) := by
   grind [prev_eq_getElem]
 
 @[simp]
-/--
-theorem `next_getLast_eq_head` / 定理 `next_getLast_eq_head`
-
-English:
-theorem next_getLast_eq_head
-  given: (l : List α) (h : l != []) (hn : l.Nodup)
-  proof: by
-  have h1 : l.length - 1 + 1 = l.length := by grind [length_pos_iff]
-  simp [getLast_eq_getElem h, head_eq_getElem h, next_getElem l hn (l.length - 1) (by grind), h1]
-
-中文:
-定理 next_getLast_eq_head
-  条件: (l : 列表 α) (h : l != []) (hn : l.Nodup)
-  证明: by
-  have h1 : l.length - 1 + 1 = l.length := by grind [length_pos_iff]
-  simp [getLast_eq_getElem h, head_eq_getElem h, next_getElem l hn (l.length - 1) (by grind), h1]
-
-Depends on / 依赖: getLast_eq_getElem, head_eq_getElem, l.length, length, length_pos_iff, next_getElem
+/-
+**List.next_getLast_eq_head** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_getLast_eq_head (l : List α) (h : l != []) (hn : l.Nodup) : l.next (l
+.getLast h) (getLast_mem h) = l.head h
+参数：l : List α；h : l != []；hn : l.Nodup。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.mod_self`：∀ (n : ℕ), n % n = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.length_pos_iff`：∀ {α : Type u_1} {l : List α}, 0 < l.length ↔ l ≠ [
+]
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.getLast_eq_getElem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.g
+etLast h = l[l.length - 1]
+· 使用定理 `List.next.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (l l_1 : L
+ist α) (e_l : l = l_1) (x x_1 : α) (e_x : x = x_1) (h : x ∈ l),   l.next x h = l
+_1.next x_…
+· 使用定理 `List.next_getElem`：next_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.next l[i] (get_mem ..) = l[(i + 1) % l.length]'(Nat.mod_lt 
+_ (i.ze…
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `List.head_eq_getElem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head
+ h = l[0]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem next_getLast_eq_head (l : List α) (h : l != []) (hn : l.Nodup) :
+theorem next_getLast_eq_head (l : List α) (h : l ≠ []) (hn : l.Nodup) :
     l.next (l.getLast h) (getLast_mem h) = l.head h := by
   have h1 : l.length - 1 + 1 = l.length := by grind [length_pos_iff]
   simp [getLast_eq_getElem h, head_eq_getElem h, next_getElem l hn (l.length - 1) (by grind), h1]
-
-/--
-theorem `pmap_next_eq_rotate_one` / 定理 `pmap_next_eq_rotate_one`
-
-English:
-theorem pmap_next_eq_rotate_one
-  given: (h : Nodup l)
-  statement: (l.pmap l.next fun _ h => h) = l.rotate 1
-  proof: by
-  apply List.ext_getElem
-  · simp
-  · intros
-    rw [getElem_pmap]; rw [getElem_rotate]; rw [next_getElem _ h]
-
-中文:
-定理 pmap_next_eq_rotate_one
-  条件: (h : Nodup l)
-  结论: (l.pmap l.next fun _ h => h) = l.rotate 1
-  证明: by
-  apply List.ext_getElem
-  · simp
-  · intros
-    rw [getElem_pmap]; rw [getElem_rotate]; rw [next_getElem _ h]
-
-Depends on / 依赖: List.ext_getElem, ext_getElem, getElem_pmap, getElem_rotate, intros, next_getElem
+/-
+**List.pmap_next_eq_rotate_one** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：pmap_next_eq_rotate_one (h : Nodup l) : (l.pmap l.next fun _ h => h) = l.r
+otate 1
+参数：h : Nodup l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ext_getElem`：ext_getElem?' {l₁ l₂ : List α} (h' : forall n < max l₁
+.length l₂.length, l₁[n]? = l₂[n]?) : l₁ = l₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_pmap`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} {f : (a
+ : α) → p a → β} {l : List α} {H : ∀ a ∈ l, p a},   (List.pmap f l H).length = l
+.lengt…
+· 使用定理 `List.length_rotate`：length_rotate (l : List α) (n : Nat) : (l.rotate n).
+length = l.length
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.getElem_mem`：∀ {α : Type u_1} {l : List α} {n : ℕ} (h : n < l.lengt
+h), l[n] ∈ l
+· 使用定理 `List.getElem_pmap`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} (f : (
+a : α) → p a → β) {l : List α} (h : ∀ a ∈ l, p a) {i : ℕ}   (hn : i < (List.pmap
+ f l h)…
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `List.getElem_rotate`：getElem_rotate (l : List α) (n : Nat) (k : Nat) (h 
+: k < (l.rotate n).length) : (l.rotate n)[k] = l[(k + n) % l.length]'(mod_lt _ (
+length_ro…
+· 使用定理 `List.get_mem`：∀ {α : Type u_1} (l : List α) (n : Fin l.length), l.get n 
+∈ l
+· 使用定理 `List.next_getElem`：next_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.next l[i] (get_mem ..) = l[(i + 1) % l.length]'(Nat.mod_lt 
+_ (i.ze…
 -/
 theorem pmap_next_eq_rotate_one (h : Nodup l) : (l.pmap l.next fun _ h => h) = l.rotate 1 := by
   apply List.ext_getElem
   · simp
   · intros
-    rw [getElem_pmap]; rw [getElem_rotate]; rw [next_getElem _ h]
-
-/--
-theorem `pmap_prev_eq_rotate_length_sub_one` / 定理 `pmap_prev_eq_rotate_length_sub_one`
-
-English:
-theorem pmap_prev_eq_rotate_length_sub_one
-  given: (h : Nodup l)
-  proof: by
-  apply List.ext_getElem
-  · simp
-  · intro n hn hn'
-    rw [getElem_rotate]; rw [getElem_pmap]; rw [prev_getElem _ h]
-
-中文:
-定理 pmap_prev_eq_rotate_length_sub_one
-  条件: (h : Nodup l)
-  证明: by
-  apply List.ext_getElem
-  · simp
-  · intro n hn hn'
-    rw [getElem_rotate]; rw [getElem_pmap]; rw [prev_getElem _ h]
-
-Depends on / 依赖: List.ext_getElem, ext_getElem, getElem_pmap, getElem_rotate, prev_getElem
+    rw [getElem_pmap, getElem_rotate, next_getElem _ h]
+/-
+**List.pmap_prev_eq_rotate_length_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：pmap_prev_eq_rotate_length_sub_one (h : Nodup l) : (l.pmap l.prev fun _ h 
+=> h) = l.rotate (l.length - 1)
+参数：h : Nodup l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ext_getElem`：ext_getElem?' {l₁ l₂ : List α} (h' : forall n < max l₁
+.length l₂.length, l₁[n]? = l₂[n]?) : l₁ = l₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_pmap`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} {f : (a
+ : α) → p a → β} {l : List α} {H : ∀ a ∈ l, p a},   (List.pmap f l H).length = l
+.lengt…
+· 使用定理 `List.length_rotate`：length_rotate (l : List α) (n : Nat) : (l.rotate n).
+length = l.length
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `List.getElem_rotate`：getElem_rotate (l : List α) (n : Nat) (k : Nat) (h 
+: k < (l.rotate n).length) : (l.rotate n)[k] = l[(k + n) % l.length]'(mod_lt _ (
+length_ro…
+· 使用定理 `List.getElem_mem`：∀ {α : Type u_1} {l : List α} {n : ℕ} (h : n < l.lengt
+h), l[n] ∈ l
+· 使用定理 `List.getElem_pmap`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} (f : (
+a : α) → p a → β) {l : List α} (h : ∀ a ∈ l, p a) {i : ℕ}   (hn : i < (List.pmap
+ f l h)…
+· 使用定理 `List.get_mem`：∀ {α : Type u_1} (l : List α) (n : Fin l.length), l.get n 
+∈ l
+· 使用定理 `List.prev_getElem`：prev_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.prev l[i] (get_mem ..) = l[(i + (l.length - 1)) % l.length]
+'(Nat.m…
 -/
 theorem pmap_prev_eq_rotate_length_sub_one (h : Nodup l) :
     (l.pmap l.prev fun _ h => h) = l.rotate (l.length - 1) := by
   apply List.ext_getElem
   · simp
   · intro n hn hn'
-    rw [getElem_rotate]; rw [getElem_pmap]; rw [prev_getElem _ h]
-
-/--
-theorem `prev_next` / 定理 `prev_next`
-
-English:
-theorem prev_next
-  given: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
-  proof: by
-  obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
-  simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
-  rcases l with - | ⟨hd, tl⟩
-  · simp at hn
-  · have : (n + 1 + length tl) % (length tl + 1) = n := by
-      rw [length_cons] at hn
-      rw [add_assoc]; rw [add_comm 1]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
-    simp only [length_cons, Nat.succ_sub_succ_eq_sub, Nat.sub_zero, this]
-
-中文:
-定理 prev_next
-  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
-  证明: by
-  obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
-  simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
-  rcases l with - | ⟨hd, tl⟩
-  · simp at hn
-  · have : (n + 1 + length tl) % (length tl + 1) = n := by
-      rw [length_cons] at hn
-      rw [add_assoc]; rw [add_comm 1]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
-    simp only [length_cons, Nat.succ_sub_succ_eq_sub, Nat.sub_zero, this]
-
-Depends on / 依赖: Nat.add_mod_right, Nat.mod_add_mod, Nat.mod_eq_of_lt, Nat.sub_zero, Nat.succ_sub_succ_eq_sub, add_assoc, add_comm, add_mod_right, getElem_of_mem, length, length_cons, mod_add_mod, mod_eq_of_lt, next_getElem, prev_getElem, sub_zero, succ_sub_succ_eq_sub
+    rw [getElem_rotate, getElem_pmap, prev_getElem _ h]
+/-
+**List.prev_next** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_next (l : List α) (h : Nodup l) (x : α) (hx : x in l) : prev l (next 
+l x hx) (next_mem _ _ _) = x
+参数：l : List α；h : Nodup l；x : α；hx : x in l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.next_mem`：next_mem (h : x in l) : l.next x h in l
+· 使用定理 `List.getElem_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → ∃ i,
+ ∃ (h : i < l.length), l[i] = a
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Nat.mod_add_mod`：∀ (m n k : ℕ), (m % n + k) % n = (m + k) % n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.next_getElem`：next_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.next l[i] (get_mem ..) = l[(i + 1) % l.length]'(Nat.mod_lt 
+_ (i.ze…
+· 使用定理 `List.prev.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (l l_1 : L
+ist α) (e_l : l = l_1) (x x_1 : α) (e_x : x = x_1) (a : x ∈ l),   l.prev x a = l
+_1.prev x_…
+· 使用定理 `List.prev_getElem`：prev_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.prev l[i] (get_mem ..) = l[(i + (l.length - 1)) % l.length]
+'(Nat.m…
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Nat.add_mod_right`：∀ (x z : ℕ), (x + z) % z = x % z
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `List.length_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).length
+ = as.length + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.succ_sub_succ_eq_sub`：∀ (n m : ℕ), n.succ - m.succ = n - m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prev_next (l : List α) (h : Nodup l) (x : α) (hx : x in l) :
+theorem prev_next (l : List α) (h : Nodup l) (x : α) (hx : x ∈ l) :
     prev l (next l x hx) (next_mem _ _ _) = x := by
   obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
   simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
@@ -1303,41 +1261,50 @@ theorem prev_next (l : List α) (h : Nodup l) (x : α) (hx : x in l) :
   · simp at hn
   · have : (n + 1 + length tl) % (length tl + 1) = n := by
       rw [length_cons] at hn
-      rw [add_assoc]; rw [add_comm 1]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
+      rw [add_assoc, add_comm 1, Nat.add_mod_right, Nat.mod_eq_of_lt hn]
     simp only [length_cons, Nat.succ_sub_succ_eq_sub, Nat.sub_zero, this]
-
-/--
-theorem `next_prev` / 定理 `next_prev`
-
-English:
-theorem next_prev
-  given: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
-  proof: by
-  obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
-  simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
-  rcases l with - | ⟨hd, tl⟩
-  · simp at hn
-  · have : (n + length tl + 1) % (length tl + 1) = n := by
-      rw [length_cons] at hn
-      rw [add_assoc]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
-    simp [this]
-
-中文:
-定理 next_prev
-  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
-  证明: by
-  obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
-  simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
-  rcases l with - | ⟨hd, tl⟩
-  · simp at hn
-  · have : (n + length tl + 1) % (length tl + 1) = n := by
-      rw [length_cons] at hn
-      rw [add_assoc]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
-    simp [this]
-
-Depends on / 依赖: Nat.add_mod_right, Nat.mod_add_mod, Nat.mod_eq_of_lt, add_assoc, add_mod_right, getElem_of_mem, length, length_cons, mod_add_mod, mod_eq_of_lt, next_getElem, prev_getElem
+/-
+**List.next_prev** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_prev (l : List α) (h : Nodup l) (x : α) (hx : x in l) : next l (prev 
+l x hx) (prev_mem _ _ _) = x
+参数：l : List α；h : Nodup l；x : α；hx : x in l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.prev_mem`：prev_mem (h : x in l) : l.prev x h in l
+· 使用定理 `List.getElem_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → ∃ i,
+ ∃ (h : i < l.length), l[i] = a
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Nat.mod_add_mod`：∀ (m n k : ℕ), (m % n + k) % n = (m + k) % n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.prev_getElem`：prev_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.prev l[i] (get_mem ..) = l[(i + (l.length - 1)) % l.length]
+'(Nat.m…
+· 使用定理 `List.next.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (l l_1 : L
+ist α) (e_l : l = l_1) (x x_1 : α) (e_x : x = x_1) (h : x ∈ l),   l.next x h = l
+_1.next x_…
+· 使用定理 `List.next_getElem`：next_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.next l[i] (get_mem ..) = l[(i + 1) % l.length]'(Nat.mod_lt 
+_ (i.ze…
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Nat.add_mod_right`：∀ (x z : ℕ), (x + z) % z = x % z
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `List.length_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).length
+ = as.length + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem next_prev (l : List α) (h : Nodup l) (x : α) (hx : x in l) :
+theorem next_prev (l : List α) (h : Nodup l) (x : α) (hx : x ∈ l) :
     next l (prev l x hx) (prev_mem _ _ _) = x := by
   obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
   simp only [next_getElem, prev_getElem, h, Nat.mod_add_mod]
@@ -1345,49 +1312,71 @@ theorem next_prev (l : List α) (h : Nodup l) (x : α) (hx : x in l) :
   · simp at hn
   · have : (n + length tl + 1) % (length tl + 1) = n := by
       rw [length_cons] at hn
-      rw [add_assoc]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
+      rw [add_assoc, Nat.add_mod_right, Nat.mod_eq_of_lt hn]
     simp [this]
-
-/--
-theorem `prev_reverse_eq_next` / 定理 `prev_reverse_eq_next`
-
-English:
-theorem prev_reverse_eq_next
-  given: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
-  proof: by
-  obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
-  have lpos : 0 < l.length := k.zero_le.trans_lt hk
-  have key : l.length - 1 - k < l.length := by lia
-  rw [← getElem_pmap l.next (fun _ h => h) (by simpa using hk)]
-  simp_rw [getElem_eq_getElem_reverse (l := l), pmap_next_eq_rotate_one _ h]
-  rw [← getElem_pmap l.reverse.prev fun _ h => h]
-  · simp_rw [pmap_prev_eq_rotate_length_sub_one _ (nodup_reverse.mpr h), rotate_reverse,
-      length_reverse, Nat.mod_eq_of_lt (Nat.sub_lt lpos Nat.succ_pos'),
-      Nat.sub_sub_self (Nat.succ_le_of_lt lpos)]
-    rw [getElem_eq_getElem_reverse]
-    · simp [Nat.sub_sub_self (Nat.le_sub_one_of_lt hk)]
-  · simpa
-
-中文:
-定理 prev_reverse_eq_next
-  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
-  证明: by
-  obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
-  have lpos : 0 < l.length := k.zero_le.trans_lt hk
-  have key : l.length - 1 - k < l.length := by lia
-  rw [← getElem_pmap l.next (fun _ h => h) (by simpa using hk)]
-  simp_rw [getElem_eq_getElem_reverse (l := l), pmap_next_eq_rotate_one _ h]
-  rw [← getElem_pmap l.reverse.prev fun _ h => h]
-  · simp_rw [pmap_prev_eq_rotate_length_sub_one _ (nodup_reverse.mpr h), rotate_reverse,
-      length_reverse, Nat.mod_eq_of_lt (Nat.sub_lt lpos Nat.succ_pos'),
-      Nat.sub_sub_self (Nat.succ_le_of_lt lpos)]
-    rw [getElem_eq_getElem_reverse]
-    · simp [Nat.sub_sub_self (Nat.le_sub_one_of_lt hk)]
-  · simpa
-
-Depends on / 依赖: Nat.mod_eq_of_lt, Nat.sub_lt, Nat.sub_sub_self, Nat.succ_pos, getElem_eq_getElem_reverse, getElem_of_mem, getElem_pmap, k.zero_le.trans_lt, l.length, l.next, l.reverse.prev, length, length_reverse, mod_eq_of_lt, nodup_reverse, nodup_reverse.mpr, pmap_next_eq_rotate_one, pmap_prev_eq_rotate_length_sub_one, reverse, rotate_reverse
+/-
+**List.prev_reverse_eq_next** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：prev_reverse_eq_next (l : List α) (h : Nodup l) (x : α) (hx : x in l) : pr
+ev l.reverse x (mem_reverse.mpr hx) = next l x hx
+参数：l : List α；h : Nodup l；x : α；hx : x in l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.mem_reverse`：∀ {α : Type u_1} {x : α} {as : List α}, x ∈ as.reverse
+ ↔ x ∈ as
+· 使用定理 `List.getElem_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → ∃ i,
+ ∃ (h : i < l.length), l[i] = a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_pmap`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} {f : (a
+ : α) → p a → β} {l : List α} {H : ∀ a ∈ l, p a},   (List.pmap f l H).length = l
+.lengt…
+· 使用定理 `List.getElem_mem`：∀ {α : Type u_1} {l : List α} {n : ℕ} (h : n < l.lengt
+h), l[n] ∈ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.getElem_pmap`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} (f : (
+a : α) → p a → β) {l : List α} (h : ∀ a ∈ l, p a) {i : ℕ}   (hn : i < (List.pmap
+ f l h)…
+· 使用定理 `List.getElem_eq_getElem_reverse`：∀ {α : Type u_1} {l : List α} {i : ℕ} (
+h : i < l.length), l[i] = l.reverse[l.length - 1 - i]
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.prev.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (l l_1 : L
+ist α) (e_l : l = l_1) (x x_1 : α) (e_x : x = x_1) (a : x ∈ l),   l.prev x a = l
+_1.prev x_…
+· 使用定理 `List.pmap_next_eq_rotate_one`：pmap_next_eq_rotate_one (h : Nodup l) : (l
+.pmap l.next fun _ h => h) = l.rotate 1
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.pmap_reverse`：∀ {α : Type u_1} {β : Type u_2} {P : α → Prop} {f : (
+a : α) → P a → β} {xs : List α} (H : ∀ a ∈ xs.reverse, P a),   List.pmap f xs.re
+verse H…
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
+· 使用定理 `List.pmap_prev_eq_rotate_length_sub_one`：pmap_prev_eq_rotate_length_sub_
+one (h : Nodup l) : (l.pmap l.prev fun _ h => h) = l.rotate (l.length - 1)
+· 使用定理 `List.nodup_reverse`：nodup_reverse {l : List α} : Nodup (reverse l) ↔ Nod
+up l
+· 使用定理 `List.rotate_reverse`：rotate_reverse (l : List α) (n : Nat) : l.reverse.r
+otate n = (l.rotate (l.length - n % l.length)).reverse
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `Nat.sub_lt`：∀ {n m : ℕ}, 0 < n → 0 < m → n - m < n
+· 使用引理 `Nat.succ_pos'`：succ_pos' : 0 < succ n
+· 使用定理 `Nat.sub_sub_self`：∀ {n m : ℕ}, m ≤ n → n - (n - m) = m
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `List.length_rotate`：length_rotate (l : List α) (n : Nat) : (l.rotate n).
+length = l.length
+（共 35 条，此处仅展示前 30 条）
 -/
-theorem prev_reverse_eq_next (l : List α) (h : Nodup l) (x : α) (hx : x in l) :
+theorem prev_reverse_eq_next (l : List α) (h : Nodup l) (x : α) (hx : x ∈ l) :
     prev l.reverse x (mem_reverse.mpr hx) = next l x hx := by
   obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
   have lpos : 0 < l.length := k.zero_le.trans_lt hk
@@ -1401,109 +1390,140 @@ theorem prev_reverse_eq_next (l : List α) (h : Nodup l) (x : α) (hx : x in l) 
     rw [getElem_eq_getElem_reverse]
     · simp [Nat.sub_sub_self (Nat.le_sub_one_of_lt hk)]
   · simpa
-
-/--
-theorem `next_reverse_eq_prev` / 定理 `next_reverse_eq_prev`
-
-English:
-theorem next_reverse_eq_prev
-  given: (l : List α) (h : Nodup l) (x : α) (hx : x in l)
-  proof: by
-  convert! (prev_reverse_eq_next l.reverse (nodup_reverse.mpr h) x (mem_reverse.mpr hx)).symm
-  exact (reverse_reverse l).symm
-
-中文:
-定理 next_reverse_eq_prev
-  条件: (l : 列表 α) (h : Nodup l) (x : α) (hx : x in l)
-  证明: by
-  convert! (prev_reverse_eq_next l.reverse (nodup_reverse.mpr h) x (mem_reverse.mpr hx)).symm
-  exact (reverse_reverse l).symm
-
-Depends on / 依赖: convert, l.reverse, mem_reverse, mem_reverse.mpr, nodup_reverse, nodup_reverse.mpr, prev_reverse_eq_next, reverse, reverse_reverse
+/-
+**List.next_reverse_eq_prev** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：next_reverse_eq_prev (l : List α) (h : Nodup l) (x : α) (hx : x in l) : ne
+xt l.reverse x (mem_reverse.mpr hx) = prev l x hx
+参数：l : List α；h : Nodup l；x : α；hx : x in l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.mem_reverse`：∀ {α : Type u_1} {x : α} {as : List α}, x ∈ as.reverse
+ ↔ x ∈ as
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `List.prev_reverse_eq_next`：prev_reverse_eq_next (l : List α) (h : Nodup 
+l) (x : α) (hx : x in l) : prev l.reverse x (mem_reverse.mpr hx) = next l x hx
+· 使用定理 `List.nodup_reverse`：nodup_reverse {l : List α} : Nodup (reverse l) ↔ Nod
+up l
 -/
-theorem next_reverse_eq_prev (l : List α) (h : Nodup l) (x : α) (hx : x in l) :
+theorem next_reverse_eq_prev (l : List α) (h : Nodup l) (x : α) (hx : x ∈ l) :
     next l.reverse x (mem_reverse.mpr hx) = prev l x hx := by
   convert! (prev_reverse_eq_next l.reverse (nodup_reverse.mpr h) x (mem_reverse.mpr hx)).symm
   exact (reverse_reverse l).symm
-
-/--
-theorem `isRotated_next_eq` / 定理 `isRotated_next_eq`
-
-English:
-theorem isRotated_next_eq
-  given: {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
-  proof: by
-  obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
-  obtain ⟨n, rfl⟩ := id h
-  rw [next_getElem _ hn]
-  simp_rw [getElem_eq_getElem_rotate _ n k]
-  rw [next_getElem _ (h.nodup_iff.mp hn)]; rw [getElem_eq_getElem_rotate _ n]
-  simp [add_assoc]
-
-中文:
-定理 isRotated_next_eq
-  条件: {l l' : 列表 α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
-  证明: by
-  obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
-  obtain ⟨n, rfl⟩ := id h
-  rw [next_getElem _ hn]
-  simp_rw [getElem_eq_getElem_rotate _ n k]
-  rw [next_getElem _ (h.nodup_iff.mp hn)]; rw [getElem_eq_getElem_rotate _ n]
-  simp [add_assoc]
-
-Depends on / 依赖: add_assoc, getElem_eq_getElem_rotate, getElem_of_mem, h.nodup_iff.mp, next_getElem, nodup_iff, simp_rw
+/-
+**List.isRotated_next_eq** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isRotated_next_eq {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx
+ : x in l) : l.next x hx = l'.next x (h.mem_iff.mp hx)
+参数：h : l ~r l'；hn : Nodup l；hx : x in l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.IsRotated.mem_iff`：∀ {α : Type u} {l l' : List α}, l ~r l' → ∀ {a :
+ α}, a ∈ l ↔ a ∈ l'
+· 使用定理 `List.getElem_of_mem`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ l → ∃ i,
+ ∃ (h : i < l.length), l[i] = a
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.get_mem`：∀ {α : Type u_1} (l : List α) (n : Fin l.length), l.get n 
+∈ l
+· 使用定理 `List.next_getElem`：next_getElem (l : List α) (h : Nodup l) (i : Nat) (hi
+ : i < l.length) : l.next l[i] (get_mem ..) = l[(i + 1) % l.length]'(Nat.mod_lt 
+_ (i.ze…
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.length_rotate`：length_rotate (l : List α) (n : Nat) : (l.rotate n).
+length = l.length
+· 使用定理 `List.getElem_eq_getElem_rotate`：getElem_eq_getElem_rotate (l : List α) (
+n : Nat) (k : Nat) (hk : k < l.length) : l[k] = ((l.rotate n)[(l.length - n % l.
+length + k) % l.leng…
+· 使用定理 `List.next.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (l l_1 : L
+ist α) (e_l : l = l_1) (x x_1 : α) (e_x : x = x_1) (h : x ∈ l),   l.next x h = l
+_1.next x_…
+· 使用定理 `List.IsRotated.nodup_iff`：∀ {α : Type u} {l l' : List α}, l ~r l' → (l.N
+odup ↔ l'.Nodup)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.add_mod_mod`：∀ (m n k : ℕ), (m + n % k) % k = (m + n) % k
+· 使用定理 `Nat.mod_add_mod`：∀ (m n k : ℕ), (m % n + k) % n = (m + k) % n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `List.getElem_rotate`：getElem_rotate (l : List α) (n : Nat) (k : Nat) (h 
+: k < (l.rotate n).length) : (l.rotate n)[k] = l[(k + n) % l.length]'(mod_lt _ (
+length_ro…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem isRotated_next_eq {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l) :
+theorem isRotated_next_eq {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x ∈ l) :
     l.next x hx = l'.next x (h.mem_iff.mp hx) := by
   obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
   obtain ⟨n, rfl⟩ := id h
   rw [next_getElem _ hn]
   simp_rw [getElem_eq_getElem_rotate _ n k]
-  rw [next_getElem _ (h.nodup_iff.mp hn)]; rw [getElem_eq_getElem_rotate _ n]
+  rw [next_getElem _ (h.nodup_iff.mp hn), getElem_eq_getElem_rotate _ n]
   simp [add_assoc]
-
-/--
-theorem `isRotated_prev_eq` / 定理 `isRotated_prev_eq`
-
-English:
-theorem isRotated_prev_eq
-  given: {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
-  proof: by
-  rw [← next_reverse_eq_prev _ hn]; rw [← next_reverse_eq_prev _ (h.nodup_iff.mp hn)]
-  exact isRotated_next_eq h.reverse (nodup_reverse.mpr hn) _
-
-中文:
-定理 isRotated_prev_eq
-  条件: {l l' : 列表 α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l)
-  证明: by
-  rw [← next_reverse_eq_prev _ hn]; rw [← next_reverse_eq_prev _ (h.nodup_iff.mp hn)]
-  exact isRotated_next_eq h.reverse (nodup_reverse.mpr hn) _
-
-Depends on / 依赖: h.nodup_iff.mp, h.reverse, isRotated_next_eq, next_reverse_eq_prev, nodup_iff, nodup_reverse, nodup_reverse.mpr, reverse
+/-
+**List.isRotated_prev_eq** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：isRotated_prev_eq {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx
+ : x in l) : l.prev x hx = l'.prev x (h.mem_iff.mp hx)
+参数：h : l ~r l'；hn : Nodup l；hx : x in l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.IsRotated.mem_iff`：∀ {α : Type u} {l l' : List α}, l ~r l' → ∀ {a :
+ α}, a ∈ l ↔ a ∈ l'
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.mem_reverse`：∀ {α : Type u_1} {x : α} {as : List α}, x ∈ as.reverse
+ ↔ x ∈ as
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.next_reverse_eq_prev`：next_reverse_eq_prev (l : List α) (h : Nodup 
+l) (x : α) (hx : x in l) : next l.reverse x (mem_reverse.mpr hx) = prev l x hx
+· 使用定理 `List.IsRotated.nodup_iff`：∀ {α : Type u} {l l' : List α}, l ~r l' → (l.N
+odup ↔ l'.Nodup)
+· 使用定理 `List.isRotated_next_eq`：isRotated_next_eq {l l' : List α} (h : l ~r l') 
+(hn : Nodup l) {x : α} (hx : x in l) : l.next x hx = l'.next x (h.mem_iff.mp hx)
+· 使用定理 `List.IsRotated.reverse`：∀ {α : Type u} {l l' : List α}, l ~r l' → l.reve
+rse ~r l'.reverse
+· 使用定理 `List.nodup_reverse`：nodup_reverse {l : List α} : Nodup (reverse l) ↔ Nod
+up l
 -/
-theorem isRotated_prev_eq {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x in l) :
+theorem isRotated_prev_eq {l l' : List α} (h : l ~r l') (hn : Nodup l) {x : α} (hx : x ∈ l) :
     l.prev x hx = l'.prev x (h.mem_iff.mp hx) := by
-  rw [← next_reverse_eq_prev _ hn]; rw [← next_reverse_eq_prev _ (h.nodup_iff.mp hn)]
+  rw [← next_reverse_eq_prev _ hn, ← next_reverse_eq_prev _ (h.nodup_iff.mp hn)]
   exact isRotated_next_eq h.reverse (nodup_reverse.mpr hn) _
 
 end List
 
 open List
 
-/--
-Definition of `Cycle` / `Cycle` 的定义
+/-- `Cycle α` is the quotient of `List α` by cyclic permutation.
+Duplicates are allowed.
+-/
+/-
+**Cycle** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Cycle (α : Type*) : Type _
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cycle
-  signature: (α : Type*)
-  body: Quotient (IsRotated.setoid α)
-
-中文:
-定义 环
-  签名: (α : 类型)
-  定义体: Quotient (IsRotated.setoid α)
-
-Depends on / 依赖: IsRotated, IsRotated.setoid, Quotient, setoid
+--- 原说明 ---
+`Cycle α` is the quotient of `List α` by cyclic permutation.
+Duplicates are allowed.
 -/
 def Cycle (α : Type*) : Type _ :=
   Quotient (IsRotated.setoid α)
@@ -1512,745 +1532,468 @@ namespace Cycle
 
 variable {α : Type*}
 
-/--
-Definition of `ofList` / `ofList` 的定义
+/-- The coercion from `List α` to `Cycle α` -/
+/-
+**Cycle.ofList** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：{α : Type u_1} → List α → Cycle α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofList
-  signature: : List α -> Cycle α
-  body: Quot.mk _
-
-中文:
-定义 ofList
-  签名: : 列表 α -> 环 α
-  定义体: Quot.mk _
+--- 原说明 ---
+The coercion from `List α` to `Cycle α`
 -/
-@[coe] def ofList : List α -> Cycle α :=
+@[coe] def ofList : List α → Cycle α :=
   Quot.mk _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (List α) (Cycle α)
-  body: ⟨ofList⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: Coe (列表 α) (环 α)
-  定义体: ⟨ofList⟩
-
-@[simp]
-
-Depends on / 依赖: ofList
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe (List α) (Cycle α) :=
   ⟨ofList⟩
 
 @[simp]
-/--
-theorem `coe_eq_coe` / 定理 `coe_eq_coe`
-
-English:
-theorem coe_eq_coe
-  given: {l₁ l₂ : List α}
-  statement: (l₁ : Cycle α) = (l₂ : Cycle α) ↔ l₁ ~r l₂
-  proof: @Quotient.eq _ (IsRotated.setoid _) _ _
-
-@[simp]
-
-中文:
-定理 coe_eq_coe
-  条件: {l₁ l₂ : 列表 α}
-  结论: (l₁ : 环 α) = (l₂ : 环 α) ↔ l₁ ~r l₂
-  证明: @Quotient.eq _ (IsRotated.setoid _) _ _
-
-@[simp]
-
-Depends on / 依赖: IsRotated, IsRotated.setoid, Quotient, Quotient.eq, setoid
+/-
+**Cycle.coe_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：coe_eq_coe {l₁ l₂ : List α} : (l₁ : Cycle α) = (l₂ : Cycle α) ↔ l₁ ~r l₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 theorem coe_eq_coe {l₁ l₂ : List α} : (l₁ : Cycle α) = (l₂ : Cycle α) ↔ l₁ ~r l₂ :=
   @Quotient.eq _ (IsRotated.setoid _) _ _
 
 @[simp]
-/--
-theorem `mk_eq_coe` / 定理 `mk_eq_coe`
-
-English:
-theorem mk_eq_coe
-  given: (l : List α)
-  statement: Quot.mk _ l = (l : Cycle α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_eq_coe
-  条件: (l : 列表 α)
-  结论: 商.mk _ l = (l : 环 α)
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.mk_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：mk_eq_coe (l : List α) : Quot.mk _ l = (l : Cycle α)
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_eq_coe (l : List α) : Quot.mk _ l = (l : Cycle α) :=
   rfl
 
 @[simp]
-/--
-theorem `mk''_eq_coe` / 定理 `mk''_eq_coe`
-
-English:
-theorem mk''_eq_coe
-  given: (l : List α)
-  statement: Quotient.mk'' l = (l : Cycle α)
-  proof: rfl
-
-中文:
-定理 mk''_eq_coe
-  条件: (l : 列表 α)
-  结论: 商.mk'' l = (l : 环 α)
-  证明: rfl
+/-
+**Cycle.mk''_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：∀ {α : Type u_1} (l : List α), Quotient.mk'' l = ↑l
+参数：l : List α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 -/
 theorem mk''_eq_coe (l : List α) : Quotient.mk'' l = (l : Cycle α) :=
   rfl
-
-/--
-theorem `coe_cons_eq_coe_append` / 定理 `coe_cons_eq_coe_append`
-
-English:
-theorem coe_cons_eq_coe_append
-  given: (l : List α) (a : α)
-  proof: Quot.sound ⟨1, by rw [rotate_cons_succ, rotate_zero]⟩
-
-中文:
-定理 coe_cons_eq_coe_append
-  条件: (l : 列表 α) (a : α)
-  证明: Quot.sound ⟨1, by rw [rotate_cons_succ, rotate_zero]⟩
-
-Depends on / 依赖: Quot.sound, rotate_cons_succ, rotate_zero
+/-
+**Cycle.coe_cons_eq_coe_append** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：coe_cons_eq_coe_append (l : List α) (a : α) : (↑(a :: l) : Cycle α) = (↑(l
+ ++ [a]) : Cycle α)
+参数：l : List α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.rotate_cons_succ`：∀ {α : Type u} (l : List α) (a : α) (n : ℕ), (a :
+: l).rotate (n + 1) = (l ++ [a]).rotate n
+· 使用定理 `List.rotate_zero`：rotate_zero (l : List α) : l.rotate 0 = l
 -/
 theorem coe_cons_eq_coe_append (l : List α) (a : α) :
     (↑(a :: l) : Cycle α) = (↑(l ++ [a]) : Cycle α) :=
   Quot.sound ⟨1, by rw [rotate_cons_succ, rotate_zero]⟩
 
-/--
-Definition of `nil` / `nil` 的定义
+/-- The unique empty cycle. -/
+/-
+**Cycle.nil** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：nil : Cycle α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nil
-  signature: : Cycle α
-  body: ([] : List α)
-
-@[simp]
-
-中文:
-定义 nil
-  签名: : 环 α
-  定义体: ([] : List α)
-
-@[simp]
+--- 原说明 ---
+The unique empty cycle.
 -/
 def nil : Cycle α :=
   ([] : List α)
 
 @[simp]
-/--
-theorem `coe_nil` / 定理 `coe_nil`
-
-English:
-theorem coe_nil
-  statement: ↑([] : List α) = @nil α
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_nil
-  结论: ↑([] : 列表 α) = @nil α
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.coe_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：coe_nil : ↑([] : List α) = @nil α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_nil : ↑([] : List α) = @nil α :=
   rfl
 
 @[simp]
-/--
-theorem `coe_eq_nil` / 定理 `coe_eq_nil`
-
-English:
-theorem coe_eq_nil
-  given: (l : List α)
-  statement: (l : Cycle α) = nil ↔ l = []
-  proof: coe_eq_coe.trans isRotated_nil_iff
-
-中文:
-定理 coe_eq_nil
-  条件: (l : 列表 α)
-  结论: (l : 环 α) = nil ↔ l = []
-  证明: coe_eq_coe.trans isRotated_nil_iff
-
-Depends on / 依赖: coe_eq_coe, coe_eq_coe.trans, isRotated_nil_iff
+/-
+**Cycle.coe_eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：coe_eq_nil (l : List α) : (l : Cycle α) = nil ↔ l = []
+参数：l : List α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Cycle.coe_eq_coe`：coe_eq_coe {l₁ l₂ : List α} : (l₁ : Cycle α) = (l₂ : C
+ycle α) ↔ l₁ ~r l₂
+· 使用定理 `List.isRotated_nil_iff`：isRotated_nil_iff : l ~r [] ↔ l = []
 -/
 theorem coe_eq_nil (l : List α) : (l : Cycle α) = nil ↔ l = [] :=
   coe_eq_coe.trans isRotated_nil_iff
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- For consistency with `EmptyCollection (List α)`. -/
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: EmptyCollection (Cycle α)
-  body: ⟨nil⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: EmptyCollection (环 α)
-  定义体: ⟨nil⟩
-
-@[simp]
+--- 原说明 ---
+For consistency with `EmptyCollection (List α)`.
 -/
 instance : EmptyCollection (Cycle α) :=
   ⟨nil⟩
 
 @[simp]
-/--
-theorem `empty_eq` / 定理 `empty_eq`
-
-English:
-theorem empty_eq
-  statement: ∅ = @nil α
-  proof: rfl
-
-中文:
-定理 empty_eq
-  结论: ∅ = @nil α
-  证明: rfl
+/-
+**Cycle.empty_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：empty_eq : ∅ = @nil α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem empty_eq : ∅ = @nil α :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Cycle α)
-  body: ⟨nil⟩
-
-中文:
-实例 :
-  签名: 可居 (环 α)
-  定义体: ⟨nil⟩
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Cycle α) :=
   ⟨nil⟩
 
 /-- An induction principle for `Cycle`. Use as `induction s`. -/
 @[elab_as_elim, induction_eliminator]
-/--
-theorem `induction_on` / 定理 `induction_on`
+/-
+**Cycle.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：induction_on {motive : Cycle α -> Prop} (s : Cycle α) (nil : motive nil) (
+cons : forall (a) (l : List α), motive ↑l -> motive ↑(a :: l)) : motive s
+参数：s : Cycle α；nil : motive nil；cons : forall (a) (l : List α), motive ↑l -> mot
+ive ↑(a :: l)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 
-English:
-theorem induction_on
-  statement: {motive : Cycle α -> Prop} (s : Cycle α) (nil : motive nil)
-  proof: Quotient.inductionOn' s fun l => by
-    refine List.recOn l ?_ ?_ <;> simp only [mk''_eq_coe, coe_nil]
-    assumption'
-
-中文:
-定理 induction_on
-  结论: {motive : 环 α -> 命题} (s : 环 α) (nil : motive nil)
-  证明: Quotient.inductionOn' s fun l => by
-    refine List.recOn l ?_ ?_ <;> simp only [mk''_eq_coe, coe_nil]
-    assumption'
-
-Depends on / 依赖: List.recOn, Quotient, Quotient.inductionOn, _eq_coe, coe_nil, inductionOn
+--- 原说明 ---
+An induction principle for `Cycle`. Use as `induction s`.
 -/
-theorem induction_on {motive : Cycle α -> Prop} (s : Cycle α) (nil : motive nil)
-    (cons : forall (a) (l : List α), motive ↑l -> motive ↑(a :: l)) : motive s :=
+theorem induction_on {motive : Cycle α → Prop} (s : Cycle α) (nil : motive nil)
+    (cons : ∀ (a) (l : List α), motive ↑l → motive ↑(a :: l)) : motive s :=
   Quotient.inductionOn' s fun l => by
     refine List.recOn l ?_ ?_ <;> simp only [mk''_eq_coe, coe_nil]
     assumption'
 
-/--
-Definition of `Mem` / `Mem` 的定义
+/-- For `x : α`, `s : Cycle α`, `x ∈ s` indicates that `x` occurs at least once in `s`. -/
+/-
+**Cycle.Mem** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：Mem (s : Cycle α) (a : α) : Prop
+参数：s : Cycle α；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mem
-  signature: (s : Cycle α) (a : α)
-  body: Quot.liftOn s (fun l => a in l) fun _ _ e => propext e.mem_iff
-
-中文:
-定义 Mem
-  签名: (s : 环 α) (a : α)
-  定义体: Quot.liftOn s (fun l => a in l) fun _ _ e => propext e.mem_iff
-
-Depends on / 依赖: Quot.liftOn, e.mem_iff, liftOn, mem_iff, propext
+--- 原说明 ---
+For `x : α`, `s : Cycle α`, `x ∈ s` indicates that `x` occurs at least once in `
+s`.
 -/
 def Mem (s : Cycle α) (a : α) : Prop :=
-Quot.liftOn s (fun l => a in l) fun _ _ e => propext e.mem_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership α (Cycle α)
-  body: ⟨Mem⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: Membership α (环 α)
-  定义体: ⟨Mem⟩
-
-@[simp]
+  Quot.liftOn s (fun l => a ∈ l) fun _ _ e => propext <| e.mem_iff
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership α (Cycle α) :=
   ⟨Mem⟩
 
 @[simp]
-/--
-theorem `mem_coe_iff` / 定理 `mem_coe_iff`
-
-English:
-theorem mem_coe_iff
-  given: {a : α} {l : List α}
-  statement: a in (↑l : Cycle α) ↔ a in l
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_coe_iff
-  条件: {a : α} {l : 列表 α}
-  结论: a in (↑l : 环 α) ↔ a in l
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Cycle.mem_coe_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：mem_coe_iff {a : α} {l : List α} : a in (↑l : Cycle α) ↔ a in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_coe_iff {a : α} {l : List α} : a in (↑l : Cycle α) ↔ a in l :=
+theorem mem_coe_iff {a : α} {l : List α} : a ∈ (↑l : Cycle α) ↔ a ∈ l :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `notMem_nil` / 定理 `notMem_nil`
-
-English:
-theorem notMem_nil
-  given: (a : α)
-  statement: a ∉ nil
-  proof: List.not_mem_nil
-
-中文:
-定理 notMem_nil
-  条件: (a : α)
-  结论: a ∉ nil
-  证明: List.not_mem_nil
-
-Depends on / 依赖: List.not_mem_nil, not_mem_nil
+/-
+**Cycle.notMem_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：notMem_nil (a : α) : a ∉ nil
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.not_mem_nil`：∀ {α : Type u_1} {a : α}, a ∉ []
 -/
 theorem notMem_nil (a : α) : a ∉ nil :=
   List.not_mem_nil
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] : DecidableEq (Cycle α)
-  body: fun s₁ s₂ =>
-  Quotient.recOnSubsingleton₂' s₁ s₂ fun _ _ => decidable_of_iff' _ Quotient.eq''
-
-中文:
-实例 [DecidableEq
-  签名: α] : DecidableEq (环 α)
-  定义体: fun s₁ s₂ =>
-  Quotient.recOnSubsingleton₂' s₁ s₂ fun _ _ => decidable_of_iff' _ Quotient.eq''
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] : DecidableEq (Cycle α) := fun s₁ s₂ =>
   Quotient.recOnSubsingleton₂' s₁ s₂ fun _ _ => decidable_of_iff' _ Quotient.eq''
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] (x
-  body: Quotient.recOnSubsingleton' s fun l => show Decidable (x in l) from inferInstance
-
-中文:
-实例 [DecidableEq
-  签名: α] (x
-  定义体: Quotient.recOnSubsingleton' s fun l => show Decidable (x in l) from inferInstance
-
-Depends on / 依赖: Decidable, Quotient, Quotient.recOnSubsingleton, recOnSubsingleton
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DecidableEq α] (x : α) (s : Cycle α) : Decidable (x in s) :=
-  Quotient.recOnSubsingleton' s fun l => show Decidable (x in l) from inferInstance
+instance [DecidableEq α] (x : α) (s : Cycle α) : Decidable (x ∈ s) :=
+  Quotient.recOnSubsingleton' s fun l => show Decidable (x ∈ l) from inferInstance
 
 /-- Reverse a `s : Cycle α` by reversing the underlying `List`. -/
 nonrec def reverse (s : Cycle α) : Cycle α :=
   Quot.map reverse (fun _ _ => IsRotated.reverse) s
 
 @[simp]
-/--
-theorem `reverse_coe` / 定理 `reverse_coe`
-
-English:
-theorem reverse_coe
-  given: (l : List α)
-  statement: (l : Cycle α).reverse = l.reverse
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 reverse_coe
-  条件: (l : 列表 α)
-  结论: (l : 环 α).reverse = l.reverse
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.reverse_coe** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：reverse_coe (l : List α) : (l : Cycle α).reverse = l.reverse
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reverse_coe (l : List α) : (l : Cycle α).reverse = l.reverse :=
   rfl
 
 @[simp]
-/--
-theorem `mem_reverse_iff` / 定理 `mem_reverse_iff`
-
-English:
-theorem mem_reverse_iff
-  given: {a : α} {s : Cycle α}
-  statement: a in s.reverse ↔ a in s
-  proof: Quot.inductionOn s fun _ => mem_reverse
-
-@[simp]
-
-中文:
-定理 mem_reverse_iff
-  条件: {a : α} {s : 环 α}
-  结论: a in s.reverse ↔ a in s
-  证明: Quot.inductionOn s fun _ => mem_reverse
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn, mem_reverse
+/-
+**Cycle.mem_reverse_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：mem_reverse_iff {a : α} {s : Cycle α} : a in s.reverse ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.mem_reverse`：∀ {α : Type u_1} {x : α} {as : List α}, x ∈ as.reverse
+ ↔ x ∈ as
 -/
-theorem mem_reverse_iff {a : α} {s : Cycle α} : a in s.reverse ↔ a in s :=
+theorem mem_reverse_iff {a : α} {s : Cycle α} : a ∈ s.reverse ↔ a ∈ s :=
   Quot.inductionOn s fun _ => mem_reverse
 
 @[simp]
-/--
-theorem `reverse_reverse` / 定理 `reverse_reverse`
-
-English:
-theorem reverse_reverse
-  given: (s : Cycle α)
-  statement: s.reverse.reverse = s
-  proof: Quot.inductionOn s fun _ => by simp
-
-@[simp]
-
-中文:
-定理 reverse_reverse
-  条件: (s : 环 α)
-  结论: s.reverse.reverse = s
-  证明: Quot.inductionOn s fun _ => by simp
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn
+/-
+**Cycle.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：reverse_reverse (s : Cycle α) : s.reverse.reverse = s
+参数：s : Cycle α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem reverse_reverse (s : Cycle α) : s.reverse.reverse = s :=
   Quot.inductionOn s fun _ => by simp
 
 @[simp]
-/--
-theorem `reverse_nil` / 定理 `reverse_nil`
-
-English:
-theorem reverse_nil
-  statement: nil.reverse = @nil α
-  proof: rfl
-
-中文:
-定理 reverse_nil
-  结论: nil.reverse = @nil α
-  证明: rfl
+/-
+**Cycle.reverse_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：reverse_nil : nil.reverse = @nil α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reverse_nil : nil.reverse = @nil α :=
   rfl
 
-/--
-Definition of `length` / `length` 的定义
+/-- The length of the `s : Cycle α`, which is the number of elements, counting duplicates. -/
+/-
+**Cycle.length** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：length (s : Cycle α) : Nat
+参数：s : Cycle α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition length
-  signature: (s : Cycle α)
-  body: Quot.liftOn s List.length fun _ _ e => e.perm.length_eq
-
-@[simp]
-
-中文:
-定义 length
-  签名: (s : 环 α)
-  定义体: Quot.liftOn s List.length fun _ _ e => e.perm.length_eq
-
-@[simp]
-
-Depends on / 依赖: List.length, Quot.liftOn, e.perm.length_eq, length, length_eq, liftOn
+--- 原说明 ---
+The length of the `s : Cycle α`, which is the number of elements, counting dupli
+cates.
 -/
-def length (s : Cycle α) : Nat :=
+def length (s : Cycle α) : ℕ :=
   Quot.liftOn s List.length fun _ _ e => e.perm.length_eq
 
 @[simp]
-/--
-theorem `length_coe` / 定理 `length_coe`
-
-English:
-theorem length_coe
-  given: (l : List α)
-  statement: length (l : Cycle α) = l.length
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 length_coe
-  条件: (l : 列表 α)
-  结论: length (l : 环 α) = l.length
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.length_coe** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：length_coe (l : List α) : length (l : Cycle α) = l.length
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem length_coe (l : List α) : length (l : Cycle α) = l.length :=
   rfl
 
 @[simp]
-/--
-theorem `length_nil` / 定理 `length_nil`
-
-English:
-theorem length_nil
-  statement: length (@nil α) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 length_nil
-  结论: length (@nil α) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.length_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：length_nil : length (@nil α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem length_nil : length (@nil α) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `length_reverse` / 定理 `length_reverse`
-
-English:
-theorem length_reverse
-  given: (s : Cycle α)
-  statement: s.reverse.length = s.length
-  proof: Quot.inductionOn s fun _ => List.length_reverse
-
-中文:
-定理 length_reverse
-  条件: (s : 环 α)
-  结论: s.reverse.length = s.length
-  证明: Quot.inductionOn s fun _ => List.length_reverse
-
-Depends on / 依赖: List.length_reverse, Quot.inductionOn, inductionOn, length_reverse
+/-
+**Cycle.length_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：length_reverse (s : Cycle α) : s.reverse.length = s.length
+参数：s : Cycle α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
 -/
 theorem length_reverse (s : Cycle α) : s.reverse.length = s.length :=
   Quot.inductionOn s fun _ => List.length_reverse
 
-/--
-Definition of `Subsingleton` / `Subsingleton` 的定义
+/-- A `s : Cycle α` that is at most one element. -/
+/-
+**Cycle.Subsingleton** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：Subsingleton (s : Cycle α) : Prop
+参数：s : Cycle α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Subsingleton
-  signature: (s : Cycle α)
-  body: s.length <= 1
-
-中文:
-定义 子单例
-  签名: (s : 环 α)
-  定义体: s.length <= 1
-
-Depends on / 依赖: length, s.length
+--- 原说明 ---
+A `s : Cycle α` that is at most one element.
 -/
 def Subsingleton (s : Cycle α) : Prop :=
-  s.length <= 1
-
-/--
-theorem `subsingleton_nil` / 定理 `subsingleton_nil`
-
-English:
-theorem subsingleton_nil
-  statement: Subsingleton (@nil α)
-  proof: Nat.zero_le _
-
-中文:
-定理 subsingleton_nil
-  结论: 子单例 (@nil α)
-  证明: Nat.zero_le _
-
-Depends on / 依赖: Nat.zero_le, zero_le
+  s.length ≤ 1
+/-
+**Cycle.subsingleton_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：subsingleton_nil : Subsingleton (@nil α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 -/
 theorem subsingleton_nil : Subsingleton (@nil α) := Nat.zero_le _
-
-/--
-theorem `length_subsingleton_iff` / 定理 `length_subsingleton_iff`
-
-English:
-theorem length_subsingleton_iff
-  given: {s : Cycle α}
-  statement: Subsingleton s ↔ length s <= 1
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 length_subsingleton_iff
-  条件: {s : 环 α}
-  结论: 子单例 s ↔ length s <= 1
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Cycle.length_subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：length_subsingleton_iff {s : Cycle α} : Subsingleton s ↔ length s <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem length_subsingleton_iff {s : Cycle α} : Subsingleton s ↔ length s <= 1 :=
+theorem length_subsingleton_iff {s : Cycle α} : Subsingleton s ↔ length s ≤ 1 :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `subsingleton_reverse_iff` / 定理 `subsingleton_reverse_iff`
-
-English:
-theorem subsingleton_reverse_iff
-  given: {s : Cycle α}
-  statement: s.reverse.Subsingleton ↔ s.Subsingleton
-  proof: by
-  simp [length_subsingleton_iff]
-
-中文:
-定理 subsingleton_reverse_iff
-  条件: {s : 环 α}
-  结论: s.reverse.子单例 ↔ s.子单例
-  证明: by
-  simp [length_subsingleton_iff]
-
-Depends on / 依赖: length_subsingleton_iff
+/-
+**Cycle.subsingleton_reverse_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：subsingleton_reverse_iff {s : Cycle α} : s.reverse.Subsingleton ↔ s.Subsin
+gleton
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Cycle.length_reverse`：length_reverse (s : Cycle α) : s.reverse.length = 
+s.length
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem subsingleton_reverse_iff {s : Cycle α} : s.reverse.Subsingleton ↔ s.Subsingleton := by
   simp [length_subsingleton_iff]
-
-/--
-theorem `Subsingleton.congr` / 定理 `Subsingleton.congr`
-
-English:
-theorem Subsingleton.congr
-  given: {s : Cycle α} (h : Subsingleton s)
-  proof: by
-  induction s using Quot.inductionOn with | _ l
-  simp only [length_subsingleton_iff, length_coe, mk_eq_coe, le_iff_lt_or_eq, Nat.lt_add_one_iff,
-    length_eq_zero_iff, length_eq_one_iff, Nat.not_lt_zero, false_or] at h
-  rcases h with (rfl | ⟨z, rfl⟩) <;> simp
-
-中文:
-定理 子单例.congr
-  条件: {s : 环 α} (h : 子单例 s)
-  证明: by
-  induction s using Quot.inductionOn with | _ l
-  simp only [length_subsingleton_iff, length_coe, mk_eq_coe, le_iff_lt_or_eq, Nat.lt_add_one_iff,
-    length_eq_zero_iff, length_eq_one_iff, Nat.not_lt_zero, false_or] at h
-  rcases h with (rfl | ⟨z, rfl⟩) <;> simp
-
-Depends on / 依赖: Nat.lt_add_one_iff, Nat.not_lt_zero, Quot.inductionOn, false_or, inductionOn, le_iff_lt_or_eq, length_coe, length_eq_one_iff, length_eq_zero_iff, length_subsingleton_iff, lt_add_one_iff, mk_eq_coe, not_lt_zero
+/-
+**Cycle.Subsingleton.congr** 是 Mathlib 中的一个定理，位于命名空间 `Cycle.Subsingleton`。
+形式化陈述：∀ {α : Type u_1} {s : Cycle α}, s.Subsingleton → ∀ ⦃x : α⦄, x ∈ s → ∀ ⦃y :
+ α⦄, y ∈ s → x = y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
 theorem Subsingleton.congr {s : Cycle α} (h : Subsingleton s) :
-    forall ⦃x⦄ (_hx : x in s) ⦃y⦄ (_hy : y in s), x = y := by
+    ∀ ⦃x⦄ (_hx : x ∈ s) ⦃y⦄ (_hy : y ∈ s), x = y := by
   induction s using Quot.inductionOn with | _ l
   simp only [length_subsingleton_iff, length_coe, mk_eq_coe, le_iff_lt_or_eq, Nat.lt_add_one_iff,
     length_eq_zero_iff, length_eq_one_iff, Nat.not_lt_zero, false_or] at h
   rcases h with (rfl | ⟨z, rfl⟩) <;> simp
 
-/--
-Definition of `Nontrivial` / `Nontrivial` 的定义
+/-- A `s : Cycle α` that is made up of at least two unique elements. -/
+/-
+**Cycle.Nontrivial** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：Nontrivial (s : Cycle α) : Prop
+参数：s : Cycle α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Nontrivial
-  signature: (s : Cycle α)
-  body: exists x y : α, x != y ∧ x in s ∧ y in s
-
-@[simp]
-
-中文:
-定义 非平凡
-  签名: (s : 环 α)
-  定义体: exists x y : α, x != y ∧ x in s ∧ y in s
-
-@[simp]
+--- 原说明 ---
+A `s : Cycle α` that is made up of at least two unique elements.
 -/
 def Nontrivial (s : Cycle α) : Prop :=
-  exists x y : α, x != y ∧ x in s ∧ y in s
+  ∃ x y : α, x ≠ y ∧ x ∈ s ∧ y ∈ s
 
 @[simp]
-/--
-theorem `nontrivial_coe_nodup_iff` / 定理 `nontrivial_coe_nodup_iff`
-
-English:
-theorem nontrivial_coe_nodup_iff
-  given: {l : List α} (hl : l.Nodup)
-  proof: by
-  rw [Nontrivial]
-  rcases l with (_ | ⟨hd, _ | ⟨hd', tl⟩⟩)
-  · simp
-  · simp
-  · simp only [mem_cons, mem_coe_iff, List.length, Ne, Nat.succ_le_succ_iff,
-      Nat.zero_le, iff_true]
-    refine ⟨hd, hd', ?_, by simp⟩
-    simp only [not_or, mem_cons, nodup_cons] at hl
-    exact hl.left.left
-
-@[simp]
-
-中文:
-定理 nontrivial_coe_nodup_iff
-  条件: {l : 列表 α} (hl : l.Nodup)
-  证明: by
-  rw [Nontrivial]
-  rcases l with (_ | ⟨hd, _ | ⟨hd', tl⟩⟩)
-  · simp
-  · simp
-  · simp only [mem_cons, mem_coe_iff, List.length, Ne, Nat.succ_le_succ_iff,
-      Nat.zero_le, iff_true]
-    refine ⟨hd, hd', ?_, by simp⟩
-    simp only [not_or, mem_cons, nodup_cons] at hl
-    exact hl.left.left
-
-@[simp]
-
-Depends on / 依赖: List.length, Nat.succ_le_succ_iff, Nat.zero_le, Nontrivial, hl.left.left, iff_true, length, mem_coe_iff, mem_cons, nodup_cons, not_or, succ_le_succ_iff, zero_le
+/-
+**Cycle.nontrivial_coe_nodup_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：nontrivial_coe_nodup_iff {l : List α} (hl : l.Nodup) : Nontrivial (l : Cyc
+le α) ↔ 2 <= l.length
+参数：hl : l.Nodup。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.Nontrivial.eq_1`：∀ {α : Type u_1} (s : Cycle α), s.Nontrivial = ∃ 
+x y, x ≠ y ∧ x ∈ s ∧ y ∈ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `Nat.le_zero_eq`：∀ (a : ℕ), (a ≤ 0) = (a = 0)
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_false_of_decide`：∀ {p : Prop} {x : Decidable p}, decide p = false → p
+ = False
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
 theorem nontrivial_coe_nodup_iff {l : List α} (hl : l.Nodup) :
-    Nontrivial (l : Cycle α) ↔ 2 <= l.length := by
+    Nontrivial (l : Cycle α) ↔ 2 ≤ l.length := by
   rw [Nontrivial]
   rcases l with (_ | ⟨hd, _ | ⟨hd', tl⟩⟩)
   · simp
@@ -2262,60 +2005,43 @@ theorem nontrivial_coe_nodup_iff {l : List α} (hl : l.Nodup) :
     exact hl.left.left
 
 @[simp]
-/--
-theorem `nontrivial_reverse_iff` / 定理 `nontrivial_reverse_iff`
-
-English:
-theorem nontrivial_reverse_iff
-  given: {s : Cycle α}
-  statement: s.reverse.Nontrivial ↔ s.Nontrivial
-  proof: by
-  simp [Nontrivial]
-
-中文:
-定理 nontrivial_reverse_iff
-  条件: {s : 环 α}
-  结论: s.reverse.非平凡 ↔ s.非平凡
-  证明: by
-  simp [Nontrivial]
-
-Depends on / 依赖: Nontrivial
+/-
+**Cycle.nontrivial_reverse_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：nontrivial_reverse_iff {s : Cycle α} : s.reverse.Nontrivial ↔ s.Nontrivial
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem nontrivial_reverse_iff {s : Cycle α} : s.reverse.Nontrivial ↔ s.Nontrivial := by
   simp [Nontrivial]
-
-/--
-theorem `length_nontrivial` / 定理 `length_nontrivial`
-
-English:
-theorem length_nontrivial
-  given: {s : Cycle α} (h : Nontrivial s)
-  statement: 2 <= length s
-  proof: by
-  obtain ⟨x, y, hxy, hx, hy⟩ := h
-  induction s using Quot.inductionOn with | _ l
-  rcases l with (_ | ⟨hd, _ | ⟨hd', tl⟩⟩)
-  · simp at hx
-  · simp only [mem_coe_iff, mk_eq_coe, mem_singleton] at hx hy
-    simp [hx, hy] at hxy
-  · simp [Nat.succ_le_succ_iff]
-
-中文:
-定理 length_nontrivial
-  条件: {s : 环 α} (h : 非平凡 s)
-  结论: 2 <= length s
-  证明: by
-  obtain ⟨x, y, hxy, hx, hy⟩ := h
-  induction s using Quot.inductionOn with | _ l
-  rcases l with (_ | ⟨hd, _ | ⟨hd', tl⟩⟩)
-  · simp at hx
-  · simp only [mem_coe_iff, mk_eq_coe, mem_singleton] at hx hy
-    simp [hx, hy] at hxy
-  · simp [Nat.succ_le_succ_iff]
-
-Depends on / 依赖: Nat.succ_le_succ_iff, Quot.inductionOn, inductionOn, mem_coe_iff, mem_singleton, mk_eq_coe, succ_le_succ_iff
+/-
+**Cycle.length_nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：length_nontrivial {s : Cycle α} (h : Nontrivial s) : 2 <= length s
+参数：h : Nontrivial s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-theorem length_nontrivial {s : Cycle α} (h : Nontrivial s) : 2 <= length s := by
+theorem length_nontrivial {s : Cycle α} (h : Nontrivial s) : 2 ≤ length s := by
   obtain ⟨x, y, hxy, hx, hy⟩ := h
   induction s using Quot.inductionOn with | _ l
   rcases l with (_ | ⟨hd, _ | ⟨hd', tl⟩⟩)
@@ -2326,84 +2052,51 @@ theorem length_nontrivial {s : Cycle α} (h : Nontrivial s) : 2 <= length s := b
 
 /-- The `s : Cycle α` contains no duplicates. -/
 nonrec def Nodup (s : Cycle α) : Prop :=
-Quot.liftOn s Nodup fun _l₁ _l₂ e => propext e.nodup_iff
+  Quot.liftOn s Nodup fun _l₁ _l₂ e => propext <| e.nodup_iff
 
 @[simp]
 nonrec theorem nodup_nil : Nodup (@nil α) :=
   nodup_nil
 
 @[simp]
-/--
-theorem `nodup_coe_iff` / 定理 `nodup_coe_iff`
-
-English:
-theorem nodup_coe_iff
-  given: {l : List α}
-  statement: Nodup (l : Cycle α) ↔ l.Nodup
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 nodup_coe_iff
-  条件: {l : 列表 α}
-  结论: Nodup (l : 环 α) ↔ l.Nodup
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Cycle.nodup_coe_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：nodup_coe_iff {l : List α} : Nodup (l : Cycle α) ↔ l.Nodup
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem nodup_coe_iff {l : List α} : Nodup (l : Cycle α) ↔ l.Nodup :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `nodup_reverse_iff` / 定理 `nodup_reverse_iff`
-
-English:
-theorem nodup_reverse_iff
-  given: {s : Cycle α}
-  statement: s.reverse.Nodup ↔ s.Nodup
-  proof: Quot.inductionOn s fun _ => nodup_reverse
-
-中文:
-定理 nodup_reverse_iff
-  条件: {s : 环 α}
-  结论: s.reverse.Nodup ↔ s.Nodup
-  证明: Quot.inductionOn s fun _ => nodup_reverse
-
-Depends on / 依赖: Quot.inductionOn, inductionOn, nodup_reverse
+/-
+**Cycle.nodup_reverse_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：nodup_reverse_iff {s : Cycle α} : s.reverse.Nodup ↔ s.Nodup
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.nodup_reverse`：nodup_reverse {l : List α} : Nodup (reverse l) ↔ Nod
+up l
 -/
 theorem nodup_reverse_iff {s : Cycle α} : s.reverse.Nodup ↔ s.Nodup :=
   Quot.inductionOn s fun _ => nodup_reverse
-
-/--
-theorem `Subsingleton.nodup` / 定理 `Subsingleton.nodup`
-
-English:
-theorem Subsingleton.nodup
-  given: {s : Cycle α} (h : Subsingleton s)
-  statement: Nodup s
-  proof: by
-  induction s using Quot.inductionOn with | _ l
-  obtain - | ⟨hd, tl⟩ := l
-  · simp
-  · have : tl = [] := by simpa [Subsingleton, length_eq_zero_iff, Nat.succ_le_succ_iff] using h
-    simp [this]
-
-中文:
-定理 子单例.nodup
-  条件: {s : 环 α} (h : 子单例 s)
-  结论: Nodup s
-  证明: by
-  induction s using Quot.inductionOn with | _ l
-  obtain - | ⟨hd, tl⟩ := l
-  · simp
-  · have : tl = [] := by simpa [Subsingleton, length_eq_zero_iff, Nat.succ_le_succ_iff] using h
-    simp [this]
-
-Depends on / 依赖: Nat.succ_le_succ_iff, Quot.inductionOn, Subsingleton, inductionOn, length_eq_zero_iff, succ_le_succ_iff
+/-
+**Cycle.Subsingleton.nodup** 是 Mathlib 中的一个定理，位于命名空间 `Cycle.Subsingleton`。
+形式化陈述：∀ {α : Type u_1} {s : Cycle α}, s.Subsingleton → s.Nodup
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.le_zero_eq`：∀ (a : ℕ), (a ≤ 0) = (a = 0)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem Subsingleton.nodup {s : Cycle α} (h : Subsingleton s) : Nodup s := by
   induction s using Quot.inductionOn with | _ l
@@ -2411,31 +2104,24 @@ theorem Subsingleton.nodup {s : Cycle α} (h : Subsingleton s) : Nodup s := by
   · simp
   · have : tl = [] := by simpa [Subsingleton, length_eq_zero_iff, Nat.succ_le_succ_iff] using h
     simp [this]
-
-/--
-theorem `Nodup.nontrivial_iff` / 定理 `Nodup.nontrivial_iff`
-
-English:
-theorem Nodup.nontrivial_iff
-  given: {s : Cycle α} (h : Nodup s)
-  statement: Nontrivial s ↔ ¬Subsingleton s
-  proof: by
-  rw [length_subsingleton_iff]
-  induction s using Quotient.inductionOn'
-  simp only [mk''_eq_coe, nodup_coe_iff] at h
-  simp [h, Nat.succ_le_iff]
-
-中文:
-定理 Nodup.nontrivial_iff
-  条件: {s : 环 α} (h : Nodup s)
-  结论: 非平凡 s ↔ ¬子单例 s
-  证明: by
-  rw [length_subsingleton_iff]
-  induction s using Quotient.inductionOn'
-  simp only [mk''_eq_coe, nodup_coe_iff] at h
-  simp [h, Nat.succ_le_iff]
-
-Depends on / 依赖: Nat.succ_le_iff, Quotient, Quotient.inductionOn, _eq_coe, inductionOn, length_subsingleton_iff, nodup_coe_iff, succ_le_iff
+/-
+**Cycle.Nodup.nontrivial_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cycle.Nodup`。
+形式化陈述：∀ {α : Type u_1} {s : Cycle α}, s.Nodup → (s.Nontrivial ↔ ¬s.Subsingleton)
+参数：s.Nontrivial ↔ ¬s.Subsingleton。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.length_subsingleton_iff`：length_subsingleton_iff {s : Cycle α} : S
+ubsingleton s ↔ length s <= 1
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Nodup.nontrivial_iff {s : Cycle α} (h : Nodup s) : Nontrivial s ↔ ¬Subsingleton s := by
   rw [length_subsingleton_iff]
@@ -2443,346 +2129,273 @@ theorem Nodup.nontrivial_iff {s : Cycle α} (h : Nodup s) : Nontrivial s ↔ ¬S
   simp only [mk''_eq_coe, nodup_coe_iff] at h
   simp [h, Nat.succ_le_iff]
 
-/--
-Definition of `toMultiset` / `toMultiset` 的定义
+/-- The `s : Cycle α` as a `Multiset α`.
+-/
+/-
+**Cycle.toMultiset** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：toMultiset (s : Cycle α) : Multiset α
+参数：s : Cycle α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMultiset
-  signature: (s : Cycle α)
-  body: Quotient.liftOn' s (↑) fun _ _ h => Multiset.coe_eq_coe.mpr h.perm
-
-@[simp]
-
-中文:
-定义 toMultiset
-  签名: (s : 环 α)
-  定义体: Quotient.liftOn' s (↑) fun _ _ h => Multiset.coe_eq_coe.mpr h.perm
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.coe_eq_coe.mpr, Quotient, Quotient.liftOn, coe_eq_coe, h.perm, liftOn
+--- 原说明 ---
+The `s : Cycle α` as a `Multiset α`.
 -/
 def toMultiset (s : Cycle α) : Multiset α :=
   Quotient.liftOn' s (↑) fun _ _ h => Multiset.coe_eq_coe.mpr h.perm
 
 @[simp]
-/--
-theorem `coe_toMultiset` / 定理 `coe_toMultiset`
-
-English:
-theorem coe_toMultiset
-  given: (l : List α)
-  statement: (l : Cycle α).toMultiset = l
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toMultiset
-  条件: (l : 列表 α)
-  结论: (l : 环 α).toMultiset = l
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.coe_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：coe_toMultiset (l : List α) : (l : Cycle α).toMultiset = l
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toMultiset (l : List α) : (l : Cycle α).toMultiset = l :=
   rfl
 
 @[simp]
-/--
-theorem `nil_toMultiset` / 定理 `nil_toMultiset`
-
-English:
-theorem nil_toMultiset
-  statement: nil.toMultiset = (0 : Multiset α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 nil_toMultiset
-  结论: nil.toMultiset = (0 : Multiset α)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: insert_nonempty, to_subtype
+/-
+**Cycle.nil_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：nil_toMultiset : nil.toMultiset = (0 : Multiset α)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nil_toMultiset : nil.toMultiset = (0 : Multiset α) :=
   rfl
 
 @[simp]
-/--
-theorem `card_toMultiset` / 定理 `card_toMultiset`
-
-English:
-theorem card_toMultiset
-  given: (s : Cycle α)
-  statement: Multiset.card s.toMultiset = s.length
-  proof: Quotient.inductionOn' s (by simp)
-
-@[simp]
-
-中文:
-定理 card_toMultiset
-  条件: (s : 环 α)
-  结论: Multiset.card s.toMultiset = s.length
-  证明: Quotient.inductionOn' s (by simp)
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Cycle.card_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：card_toMultiset (s : Cycle α) : Multiset.card s.toMultiset = s.length
+参数：s : Cycle α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem card_toMultiset (s : Cycle α) : Multiset.card s.toMultiset = s.length :=
   Quotient.inductionOn' s (by simp)
 
 @[simp]
-/--
-theorem `toMultiset_eq_nil` / 定理 `toMultiset_eq_nil`
-
-English:
-theorem toMultiset_eq_nil
-  given: {s : Cycle α}
-  statement: s.toMultiset = 0 ↔ s = Cycle.nil
-  proof: Quotient.inductionOn' s (by simp)
-
-中文:
-定理 toMultiset_eq_nil
-  条件: {s : 环 α}
-  结论: s.toMultiset = 0 ↔ s = 环.nil
-  证明: Quotient.inductionOn' s (by simp)
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Cycle.toMultiset_eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：toMultiset_eq_nil {s : Cycle α} : s.toMultiset = 0 ↔ s = Cycle.nil
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem toMultiset_eq_nil {s : Cycle α} : s.toMultiset = 0 ↔ s = Cycle.nil :=
   Quotient.inductionOn' s (by simp)
 
-/--
-Definition of `map` / `map` 的定义
+/-- The lift of `list.map`. -/
+/-
+**Cycle.map** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：map {β : Type*} (f : α -> β) : Cycle α -> Cycle β
+参数：f : α -> β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
+· 使用定理 `List.IsRotated.map`：∀ {α : Type u} {β : Type u_1} {l₁ l₂ : List α}, l₁ ~
+r l₂ → ∀ (f : α → β), List.map f l₁ ~r List.map f l₂
 
-English:
-definition map
-  signature: {β : Type*} (f : α -> β)
-  body: Quotient.map' (List.map f) fun _ _ h => h.map _
-
-@[simp]
-
-中文:
-定义 map
-  签名: {β : 类型} (f : α -> β)
-  定义体: Quotient.map' (List.map f) fun _ _ h => h.map _
-
-@[simp]
-
-Depends on / 依赖: List.map, Quotient, Quotient.map, h.map
+--- 原说明 ---
+The lift of `list.map`.
 -/
-def map {β : Type*} (f : α -> β) : Cycle α -> Cycle β :=
+def map {β : Type*} (f : α → β) : Cycle α → Cycle β :=
   Quotient.map' (List.map f) fun _ _ h => h.map _
 
 @[simp]
-/--
-theorem `map_nil` / 定理 `map_nil`
-
-English:
-theorem map_nil
-  given: {β : Type*} (f : α -> β)
-  statement: map f nil = nil
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_nil
-  条件: {β : 类型} (f : α -> β)
-  结论: map f nil = nil
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.map_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：map_nil {β : Type*} (f : α -> β) : map f nil = nil
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_nil {β : Type*} (f : α -> β) : map f nil = nil :=
+theorem map_nil {β : Type*} (f : α → β) : map f nil = nil :=
   rfl
 
 @[simp]
-/--
-theorem `map_coe` / 定理 `map_coe`
-
-English:
-theorem map_coe
-  given: {β : Type*} (f : α -> β) (l : List α)
-  statement: map f ↑l = List.map f l
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_coe
-  条件: {β : 类型} (f : α -> β) (l : 列表 α)
-  结论: map f ↑l = 列表.map f l
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.map_coe** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：map_coe {β : Type*} (f : α -> β) (l : List α) : map f ↑l = List.map f l
+参数：f : α -> β；l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_coe {β : Type*} (f : α -> β) (l : List α) : map f ↑l = List.map f l :=
+theorem map_coe {β : Type*} (f : α → β) (l : List α) : map f ↑l = List.map f l :=
   rfl
 
 @[simp]
-/--
-theorem `map_eq_nil` / 定理 `map_eq_nil`
-
-English:
-theorem map_eq_nil
-  given: {β : Type*} (f : α -> β) (s : Cycle α)
-  statement: map f s = nil ↔ s = nil
-  proof: Quotient.inductionOn' s (by simp)
-
-@[simp]
-
-中文:
-定理 map_eq_nil
-  条件: {β : 类型} (f : α -> β) (s : 环 α)
-  结论: map f s = nil ↔ s = nil
-  证明: Quotient.inductionOn' s (by simp)
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Cycle.map_eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：map_eq_nil {β : Type*} (f : α -> β) (s : Cycle α) : map f s = nil ↔ s = ni
+l
+参数：f : α -> β；s : Cycle α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem map_eq_nil {β : Type*} (f : α -> β) (s : Cycle α) : map f s = nil ↔ s = nil :=
+theorem map_eq_nil {β : Type*} (f : α → β) (s : Cycle α) : map f s = nil ↔ s = nil :=
   Quotient.inductionOn' s (by simp)
 
 @[simp]
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: {β : Type*} {f : α -> β} {b : β} {s : Cycle α}
-  proof: Quotient.inductionOn' s (by simp)
-
-中文:
-定理 mem_map
-  条件: {β : 类型} {f : α -> β} {b : β} {s : 环 α}
-  证明: Quotient.inductionOn' s (by simp)
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Cycle.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：mem_map {β : Type*} {f : α -> β} {b : β} {s : Cycle α} : b in s.map f ↔ ex
+ists a, a in s ∧ f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem mem_map {β : Type*} {f : α -> β} {b : β} {s : Cycle α} :
-    b in s.map f ↔ exists a, a in s ∧ f a = b :=
+theorem mem_map {β : Type*} {f : α → β} {b : β} {s : Cycle α} :
+    b ∈ s.map f ↔ ∃ a, a ∈ s ∧ f a = b :=
   Quotient.inductionOn' s (by simp)
 
-/--
-Definition of `lists` / `lists` 的定义
+/-- The `Multiset` of lists that can make the cycle. -/
+/-
+**Cycle.lists** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：lists (s : Cycle α) : Multiset (List α)
+参数：s : Cycle α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lists
-  signature: (s : Cycle α)
-  body: Quotient.liftOn' s (fun l => (l.cyclicPermutations : Multiset (List α))) fun l₁ l₂ h => by
-    simpa using h.cyclicPermutations.perm
-
-@[simp]
-
-中文:
-定义 lists
-  签名: (s : 环 α)
-  定义体: Quotient.liftOn' s (fun l => (l.cyclicPermutations : Multiset (List α))) fun l₁ l₂ h => by
-    simpa using h.cyclicPermutations.perm
-
-@[simp]
-
-Depends on / 依赖: Multiset, Quotient, Quotient.liftOn, cyclicPermutations, h.cyclicPermutations.perm, l.cyclicPermutations, liftOn
+--- 原说明 ---
+The `Multiset` of lists that can make the cycle.
 -/
 def lists (s : Cycle α) : Multiset (List α) :=
   Quotient.liftOn' s (fun l => (l.cyclicPermutations : Multiset (List α))) fun l₁ l₂ h => by
     simpa using h.cyclicPermutations.perm
 
 @[simp]
-/--
-theorem `lists_coe` / 定理 `lists_coe`
-
-English:
-theorem lists_coe
-  given: (l : List α)
-  statement: lists (l : Cycle α) = ↑l.cyclicPermutations
-  proof: rfl
-
-中文:
-定理 lists_coe
-  条件: (l : 列表 α)
-  结论: lists (l : 环 α) = ↑l.cyclicPermutations
-  证明: rfl
+/-
+**Cycle.lists_coe** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：lists_coe (l : List α) : lists (l : Cycle α) = ↑l.cyclicPermutations
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lists_coe (l : List α) : lists (l : Cycle α) = ↑l.cyclicPermutations :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `mem_lists_iff_coe_eq` / 定理 `mem_lists_iff_coe_eq`
-
-English:
-theorem mem_lists_iff_coe_eq
-  given: {s : Cycle α} {l : List α}
-  statement: l in s.lists ↔ (l : Cycle α) = s
-  proof: Quotient.inductionOn' s fun l => by
-    rw [lists]; rw [Quotient.liftOn'_mk'']
-    simp
-
-@[simp]
-
-中文:
-定理 mem_lists_iff_coe_eq
-  条件: {s : 环 α} {l : 列表 α}
-  结论: l in s.lists ↔ (l : 环 α) = s
-  证明: Quotient.inductionOn' s fun l => by
-    rw [lists]; rw [Quotient.liftOn'_mk'']
-    simp
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.liftOn, inductionOn, liftOn
+/-
+**Cycle.mem_lists_iff_coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：mem_lists_iff_coe_eq {s : Cycle α} {l : List α} : l in s.lists ↔ (l : Cycl
+e α) = s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.lists.eq_1`：∀ {α : Type u_1} (s : Cycle α), s.lists = Quotient.lif
+tOn' s (fun l => ↑l.cyclicPermutations) ⋯
+· 使用定理 `Quotient.liftOn'_mk''`：∀ {α : Sort u_1} {φ : Sort u_4} {s₁ : Setoid α} (
+f : α → φ) (h : ∀ (a b : α), s₁ a b → f a = f b) (x : α),   (Quotient.mk'' x).li
+ftOn' f h =…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_lists_iff_coe_eq {s : Cycle α} {l : List α} : l in s.lists ↔ (l : Cycle α) = s :=
+theorem mem_lists_iff_coe_eq {s : Cycle α} {l : List α} : l ∈ s.lists ↔ (l : Cycle α) = s :=
   Quotient.inductionOn' s fun l => by
-    rw [lists]; rw [Quotient.liftOn'_mk'']
+    rw [lists, Quotient.liftOn'_mk'']
     simp
 
 @[simp]
-/--
-theorem `lists_nil` / 定理 `lists_nil`
-
-English:
-theorem lists_nil
-  statement: lists (@nil α) = {([] : List α)}
-  proof: by
-  rw [nil]; rw [lists_coe]; rw [cyclicPermutations_nil]; rw [Multiset.coe_singleton]
-
-中文:
-定理 lists_nil
-  结论: lists (@nil α) = {([] : 列表 α)}
-  证明: by
-  rw [nil]; rw [lists_coe]; rw [cyclicPermutations_nil]; rw [Multiset.coe_singleton]
-
-Depends on / 依赖: Multiset, Multiset.coe_singleton, coe_singleton, cyclicPermutations_nil, lists_coe
+/-
+**Cycle.lists_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：lists_nil : lists (@nil α) = {([] : List α)}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.nil.eq_1`：∀ {α : Type u_1}, Cycle.nil = ↑[]
+· 使用定理 `Cycle.lists_coe`：lists_coe (l : List α) : lists (l : Cycle α) = ↑l.cycli
+cPermutations
+· 使用定理 `List.cyclicPermutations_nil`：cyclicPermutations_nil : cyclicPermutations
+ ([] : List α) = [[]]
+· 使用定理 `Multiset.coe_singleton`：coe_singleton (a : α) : ([a] : Multiset α) = {a}
 -/
 theorem lists_nil : lists (@nil α) = {([] : List α)} := by
-  rw [nil]; rw [lists_coe]; rw [cyclicPermutations_nil]; rw [Multiset.coe_singleton]
+  rw [nil, lists_coe, cyclicPermutations_nil, Multiset.coe_singleton]
 
 section Decidable
 
 variable [DecidableEq α]
 
-/--
-Definition of `decidableNontrivialCoe` / `decidableNontrivialCoe` 的定义
-
-English:
-definition decidableNontrivialCoe
-  signature: : forall l : List α, Decidable (Nontrivial (l : Cycle α))
-
-中文:
-定义 decidableNontrivialCoe
-  签名: : 对任意 l : 列表 α, 可判定 (非平凡 (l : 环 α))
+/-- Auxiliary decidability algorithm for lists that contain at least two unique elements.
 -/
-def decidableNontrivialCoe : forall l : List α, Decidable (Nontrivial (l : Cycle α))
+/-
+**Cycle.decidableNontrivialCoe** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：{α : Type u_1} → [DecidableEq α] → (l : List α) → Decidable (↑l).Nontrivia
+l
+参数：l : List α；↑l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Auxiliary decidability algorithm for lists that contain at least two unique elem
+ents.
+-/
+def decidableNontrivialCoe : ∀ l : List α, Decidable (Nontrivial (l : Cycle α))
   | [] => isFalse (by simp [Nontrivial])
   | [x] => isFalse (by simp [Nontrivial])
   | x :: y :: l =>
@@ -2790,60 +2403,35 @@ def decidableNontrivialCoe : forall l : List α, Decidable (Nontrivial (l : Cycl
       @decidable_of_iff' _ (Nontrivial (x :: l : Cycle α)) (by simp [h, Nontrivial])
         (decidableNontrivialCoe (x :: l))
     else isTrue ⟨x, y, h, by simp, by simp⟩
-
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : Cycle α} : Decidable (Nontrivial s) :=
   Quot.recOnSubsingleton s decidableNontrivialCoe
-
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : Cycle α} : Decidable (Nodup s) :=
   Quot.recOnSubsingleton s List.nodupDecidable
-
-/--
-Instance `fintypeNodupCycle` / 实例 `fintypeNodupCycle`
-
-English:
-instance fintypeNodupCycle
-  signature: [Fintype α]
-  body: Fintype.ofSurjective (fun l : { l : List α // l.Nodup } => ⟨l.val, by simpa using l.prop⟩)
-    fun ⟨s, hs⟩ => by
-    induction s using Quotient.inductionOn' with | _ hs
-    exact ⟨⟨_, hs⟩, by simp⟩
-
-中文:
-实例 fintypeNodupCycle
-  签名: [有限类型 α]
-  定义体: Fintype.ofSurjective (fun l : { l : List α // l.Nodup } => ⟨l.val, by simpa using l.prop⟩)
-    fun ⟨s, hs⟩ => by
-    induction s using Quotient.inductionOn' with | _ hs
-    exact ⟨⟨_, hs⟩, by simp⟩
-
-Depends on / 依赖: Fintype, Fintype.ofSurjective, Quotient, Quotient.inductionOn, inductionOn, l.Nodup, l.prop, l.val, ofSurjective
+/-
+**Cycle.fintypeNodupCycle** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+形式化陈述：fintypeNodupCycle [Fintype α] : Fintype { s : Cycle α // s.Nodup }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance fintypeNodupCycle [Fintype α] : Fintype { s : Cycle α // s.Nodup } :=
   Fintype.ofSurjective (fun l : { l : List α // l.Nodup } => ⟨l.val, by simpa using l.prop⟩)
     fun ⟨s, hs⟩ => by
     induction s using Quotient.inductionOn' with | _ hs
     exact ⟨⟨_, hs⟩, by simp⟩
-
-/--
-Instance `fintypeNodupNontrivialCycle` / 实例 `fintypeNodupNontrivialCycle`
-
-English:
-instance fintypeNodupNontrivialCycle
-  signature: [Fintype α]
-  body: Fintype.subtype
-    (((Finset.univ : Finset { s : Cycle α // s.Nodup }).map (Function.Embedding.subtype _)).filter
-      Cycle.Nontrivial)
-    (by simp)
-
-中文:
-实例 fintypeNodupNontrivialCycle
-  签名: [有限类型 α]
-  定义体: Fintype.subtype
-    (((Finset.univ : Finset { s : Cycle α // s.Nodup }).map (Function.Embedding.subtype _)).filter
-      Cycle.Nontrivial)
-    (by simp)
-
-Depends on / 依赖: Cycle.Nontrivial, Embedding, Finset, Finset.univ, Fintype, Fintype.subtype, Function, Function.Embedding.subtype, Nontrivial, filter, s.Nodup, subtype
+/-
+**Cycle.fintypeNodupNontrivialCycle** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+形式化陈述：fintypeNodupNontrivialCycle [Fintype α] : Fintype { s : Cycle α // s.Nodup
+ ∧ s.Nontrivial }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance fintypeNodupNontrivialCycle [Fintype α] :
     Fintype { s : Cycle α // s.Nodup ∧ s.Nontrivial } :=
@@ -2852,119 +2440,79 @@ instance fintypeNodupNontrivialCycle [Fintype α] :
       Cycle.Nontrivial)
     (by simp)
 
-/--
-Definition of `toFinset` / `toFinset` 的定义
+/-- The `s : Cycle α` as a `Finset α`. -/
+/-
+**Cycle.toFinset** 是 Mathlib 中的一个定义，位于命名空间 `Cycle`。
+形式化陈述：toFinset (s : Cycle α) : Finset α
+参数：s : Cycle α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFinset
-  signature: (s : Cycle α)
-  body: s.toMultiset.toFinset
-
-@[simp]
-
-中文:
-定义 toFinset
-  签名: (s : 环 α)
-  定义体: s.toMultiset.toFinset
-
-@[simp]
-
-Depends on / 依赖: s.toMultiset.toFinset, toFinset, toMultiset
+--- 原说明 ---
+The `s : Cycle α` as a `Finset α`.
 -/
 def toFinset (s : Cycle α) : Finset α :=
   s.toMultiset.toFinset
 
 @[simp]
-/--
-theorem `toFinset_toMultiset` / 定理 `toFinset_toMultiset`
-
-English:
-theorem toFinset_toMultiset
-  given: (s : Cycle α)
-  statement: s.toMultiset.toFinset = s.toFinset
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFinset_toMultiset
-  条件: (s : 环 α)
-  结论: s.toMultiset.toFinset = s.toFinset
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.toFinset_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：toFinset_toMultiset (s : Cycle α) : s.toMultiset.toFinset = s.toFinset
+参数：s : Cycle α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFinset_toMultiset (s : Cycle α) : s.toMultiset.toFinset = s.toFinset :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toFinset` / 定理 `coe_toFinset`
-
-English:
-theorem coe_toFinset
-  given: (l : List α)
-  statement: (l : Cycle α).toFinset = l.toFinset
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toFinset
-  条件: (l : 列表 α)
-  结论: (l : 环 α).toFinset = l.toFinset
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.coe_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：coe_toFinset (l : List α) : (l : Cycle α).toFinset = l.toFinset
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toFinset (l : List α) : (l : Cycle α).toFinset = l.toFinset :=
   rfl
 
 @[simp]
-/--
-theorem `nil_toFinset` / 定理 `nil_toFinset`
-
-English:
-theorem nil_toFinset
-  statement: (@nil α).toFinset = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 nil_toFinset
-  结论: (@nil α).toFinset = ∅
-  证明: rfl
-
-@[simp]
+/-
+**Cycle.nil_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：nil_toFinset : (@nil α).toFinset = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nil_toFinset : (@nil α).toFinset = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `toFinset_eq_nil` / 定理 `toFinset_eq_nil`
-
-English:
-theorem toFinset_eq_nil
-  given: {s : Cycle α}
-  statement: s.toFinset = ∅ ↔ s = Cycle.nil
-  proof: Quotient.inductionOn' s (by simp)
-
-中文:
-定理 toFinset_eq_nil
-  条件: {s : 环 α}
-  结论: s.toFinset = ∅ ↔ s = 环.nil
-  证明: Quotient.inductionOn' s (by simp)
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Cycle.toFinset_eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：toFinset_eq_nil {s : Cycle α} : s.toFinset = ∅ ↔ s = Cycle.nil
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem toFinset_eq_nil {s : Cycle α} : s.toFinset = ∅ ↔ s = Cycle.nil :=
   Quotient.inductionOn' s (by simp)
 
 /-- Given a `s : Cycle α` such that `Nodup s`, retrieve the next element after `x ∈ s`. -/
-nonrec def next : forall (s : Cycle α) (_hs : Nodup s) (x : α) (_hx : x in s), α := fun s =>
-  Quot.hrecOn (motive := fun (s : Cycle α) => forall (_hs : Cycle.Nodup s) (x : α) (_hx : x in s), α) s
+nonrec def next : ∀ (s : Cycle α) (_hs : Nodup s) (x : α) (_hx : x ∈ s), α := fun s =>
+  Quot.hrecOn (motive := fun (s : Cycle α) => ∀ (_hs : Cycle.Nodup s) (x : α) (_hx : x ∈ s), α) s
   (fun l _hn x hx => next l x hx) fun l₁ l₂ h =>
     Function.hfunext (propext h.nodup_iff) fun h₁ h₂ _he =>
       Function.hfunext rfl fun x y hxy =>
@@ -2973,8 +2521,8 @@ nonrec def next : forall (s : Cycle α) (_hs : Nodup s) (x : α) (_hx : x in s),
     (by rw [heq_iff_eq] at hxy; subst x; simpa using isRotated_next_eq h h₁ _)
 
 /-- Given a `s : Cycle α` such that `Nodup s`, retrieve the previous element before `x ∈ s`. -/
-nonrec def prev : forall (s : Cycle α) (_hs : Nodup s) (x : α) (_hx : x in s), α := fun s =>
-  Quot.hrecOn (motive := fun (s : Cycle α) => forall (_hs : Cycle.Nodup s) (x : α) (_hx : x in s), α) s
+nonrec def prev : ∀ (s : Cycle α) (_hs : Nodup s) (x : α) (_hx : x ∈ s), α := fun s =>
+  Quot.hrecOn (motive := fun (s : Cycle α) => ∀ (_hs : Cycle.Nodup s) (x : α) (_hx : x ∈ s), α) s
   (fun l _hn x hx => prev l x hx) fun l₁ l₂ h =>
     Function.hfunext (propext h.nodup_iff) fun h₁ h₂ _he =>
       Function.hfunext rfl fun x y hxy =>
@@ -2983,131 +2531,115 @@ nonrec def prev : forall (s : Cycle α) (_hs : Nodup s) (x : α) (_hx : x in s),
     (by rw [heq_iff_eq] at hxy; subst x; simpa using isRotated_prev_eq h h₁ _)
 
 -- `simp` cannot infer the proofs: see `prev_reverse_eq_next'` for `@[simp]` lemma.
-nonrec theorem prev_reverse_eq_next (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
+nonrec theorem prev_reverse_eq_next (s : Cycle α) : ∀ (hs : Nodup s) (x : α) (hx : x ∈ s),
     s.reverse.prev (nodup_reverse_iff.mpr hs) x (mem_reverse_iff.mpr hx) = s.next hs x hx :=
   Quotient.inductionOn' s prev_reverse_eq_next
 
 @[simp]
 nonrec theorem prev_reverse_eq_next' (s : Cycle α) (hs : Nodup s.reverse) (x : α)
-    (hx : x in s.reverse) :
+    (hx : x ∈ s.reverse) :
     s.reverse.prev hs x hx = s.next (nodup_reverse_iff.mp hs) x (mem_reverse_iff.mp hx) :=
   prev_reverse_eq_next s (nodup_reverse_iff.mp hs) x (mem_reverse_iff.mp hx)
 
 -- `simp` cannot infer the proofs: see `next_reverse_eq_prev'` for `@[simp]` lemma.
-/--
-theorem `next_reverse_eq_prev` / 定理 `next_reverse_eq_prev`
-
-English:
-theorem next_reverse_eq_prev
-  given: (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s)
-  proof: by
-  simp [← prev_reverse_eq_next]
-
-@[simp]
-
-中文:
-定理 next_reverse_eq_prev
-  条件: (s : 环 α) (hs : Nodup s) (x : α) (hx : x in s)
-  证明: by
-  simp [← prev_reverse_eq_next]
-
-@[simp]
-
-Depends on / 依赖: prev_reverse_eq_next
+/-
+**Cycle.next_reverse_eq_prev** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：next_reverse_eq_prev (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) : 
+s.reverse.next (nodup_reverse_iff.mpr hs) x (mem_reverse_iff.mpr hx) = s.prev hs
+ x hx
+参数：s : Cycle α；hs : Nodup s；x : α；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cycle.nodup_reverse_iff`：nodup_reverse_iff {s : Cycle α} : s.reverse.Nod
+up ↔ s.Nodup
+· 使用定理 `Cycle.mem_reverse_iff`：mem_reverse_iff {a : α} {s : Cycle α} : a in s.re
+verse ↔ a in s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cycle.reverse_reverse`：reverse_reverse (s : Cycle α) : s.reverse.reverse
+ = s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.prev.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (s s_1 : 
+Cycle α) (e_s : s = s_1) (_hs : s.Nodup) (x x_1 : α) (e_x : x = x_1)   (_hx : x 
+∈ s), s.pre…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem next_reverse_eq_prev (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) :
+theorem next_reverse_eq_prev (s : Cycle α) (hs : Nodup s) (x : α) (hx : x ∈ s) :
     s.reverse.next (nodup_reverse_iff.mpr hs) x (mem_reverse_iff.mpr hx) = s.prev hs x hx := by
   simp [← prev_reverse_eq_next]
 
 @[simp]
-/--
-theorem `next_reverse_eq_prev'` / 定理 `next_reverse_eq_prev'`
-
-English:
-theorem next_reverse_eq_prev'
-  given: (s : Cycle α) (hs : Nodup s.reverse) (x : α) (hx : x in s.reverse)
-  proof: by
-  simp [← prev_reverse_eq_next]
-
-@[simp]
-nonrec theorem next_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) : s.next hs x hx in s := by
-  induction s using Quot.inductionOn
-  apply next_mem; assumption
-
-中文:
-定理 next_reverse_eq_prev'
-  条件: (s : 环 α) (hs : Nodup s.reverse) (x : α) (hx : x in s.reverse)
-  证明: by
-  simp [← prev_reverse_eq_next]
-
-@[simp]
-nonrec theorem next_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) : s.next hs x hx in s := by
-  induction s using Quot.inductionOn
-  apply next_mem; assumption
-
-Depends on / 依赖: prev_reverse_eq_next
+/-
+**Cycle.next_reverse_eq_prev'** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：next_reverse_eq_prev' (s : Cycle α) (hs : Nodup s.reverse) (x : α) (hx : x
+ in s.reverse) : s.reverse.next hs x hx = s.prev (nodup_reverse_iff.mp hs) x (me
+m_reverse_iff.mp hx)
+参数：s : Cycle α；hs : Nodup s.reverse；x : α；hx : x in s.reverse。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cycle.nodup_reverse_iff`：nodup_reverse_iff {s : Cycle α} : s.reverse.Nod
+up ↔ s.Nodup
+· 使用定理 `Cycle.mem_reverse_iff`：mem_reverse_iff {a : α} {s : Cycle α} : a in s.re
+verse ↔ a in s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cycle.reverse_reverse`：reverse_reverse (s : Cycle α) : s.reverse.reverse
+ = s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.prev.congr_simp`：∀ {α : Type u_1} [inst : DecidableEq α] (s s_1 : 
+Cycle α) (e_s : s = s_1) (_hs : s.Nodup) (x x_1 : α) (e_x : x = x_1)   (_hx : x 
+∈ s), s.pre…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem next_reverse_eq_prev' (s : Cycle α) (hs : Nodup s.reverse) (x : α) (hx : x in s.reverse) :
+theorem next_reverse_eq_prev' (s : Cycle α) (hs : Nodup s.reverse) (x : α) (hx : x ∈ s.reverse) :
     s.reverse.next hs x hx = s.prev (nodup_reverse_iff.mp hs) x (mem_reverse_iff.mp hx) := by
   simp [← prev_reverse_eq_next]
 
 @[simp]
-nonrec theorem next_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) : s.next hs x hx in s := by
+nonrec theorem next_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x ∈ s) : s.next hs x hx ∈ s := by
   induction s using Quot.inductionOn
   apply next_mem; assumption
-
-/--
-theorem `prev_mem` / 定理 `prev_mem`
-
-English:
-theorem prev_mem
-  given: (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s)
-  statement: s.prev hs x hx in s
-  proof: by
-  rw [← next_reverse_eq_prev]; rw [← mem_reverse_iff]
-  apply next_mem
-
-@[simp]
-nonrec theorem prev_next (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
-    s.prev hs (s.next hs x hx) (next_mem s hs x hx) = x :=
-  Quotient.inductionOn' s prev_next
-
-@[simp]
-nonrec theorem next_prev (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
-    s.next hs (s.prev hs x hx) (prev_mem s hs x hx) = x :=
-  Quotient.inductionOn' s next_prev
-
-中文:
-定理 prev_mem
-  条件: (s : 环 α) (hs : Nodup s) (x : α) (hx : x in s)
-  结论: s.prev hs x hx in s
-  证明: by
-  rw [← next_reverse_eq_prev]; rw [← mem_reverse_iff]
-  apply next_mem
-
-@[simp]
-nonrec theorem prev_next (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
-    s.prev hs (s.next hs x hx) (next_mem s hs x hx) = x :=
-  Quotient.inductionOn' s prev_next
-
-@[simp]
-nonrec theorem next_prev (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
-    s.next hs (s.prev hs x hx) (prev_mem s hs x hx) = x :=
-  Quotient.inductionOn' s next_prev
-
-Depends on / 依赖: mem_reverse_iff, next_mem, next_reverse_eq_prev
+/-
+**Cycle.prev_mem** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：prev_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) : s.prev hs x 
+hx in s
+参数：s : Cycle α；hs : Nodup s；x : α；hx : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cycle.nodup_reverse_iff`：nodup_reverse_iff {s : Cycle α} : s.reverse.Nod
+up ↔ s.Nodup
+· 使用定理 `Cycle.mem_reverse_iff`：mem_reverse_iff {a : α} {s : Cycle α} : a in s.re
+verse ↔ a in s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cycle.next_reverse_eq_prev`：next_reverse_eq_prev (s : Cycle α) (hs : Nod
+up s) (x : α) (hx : x in s) : s.reverse.next (nodup_reverse_iff.mpr hs) x (mem_r
+everse_iff.mpr h…
+· 使用定理 `Cycle.next_mem`：∀ {α : Type u_1} [inst : DecidableEq α] (s : Cycle α) (h
+s : s.Nodup) (x : α) (hx : x ∈ s), s.next hs x hx ∈ s
 -/
-theorem prev_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x in s) : s.prev hs x hx in s := by
-  rw [← next_reverse_eq_prev]; rw [← mem_reverse_iff]
+theorem prev_mem (s : Cycle α) (hs : Nodup s) (x : α) (hx : x ∈ s) : s.prev hs x hx ∈ s := by
+  rw [← next_reverse_eq_prev, ← mem_reverse_iff]
   apply next_mem
 
 @[simp]
-nonrec theorem prev_next (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
+nonrec theorem prev_next (s : Cycle α) : ∀ (hs : Nodup s) (x : α) (hx : x ∈ s),
     s.prev hs (s.next hs x hx) (next_mem s hs x hx) = x :=
   Quotient.inductionOn' s prev_next
 
 @[simp]
-nonrec theorem next_prev (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
+nonrec theorem next_prev (s : Cycle α) : ∀ (hs : Nodup s) (x : α) (hx : x ∈ s),
     s.next hs (s.prev hs x hx) (prev_mem s hs x hx) = x :=
   Quotient.inductionOn' s next_prev
 
@@ -3118,20 +2650,33 @@ via `#eval`, when over representable types. For example, the cycle `(2 1 4 3)` w
 as `c[2, 1, 4, 3]`. Two equal cycles may be printed differently if their internal representation
 is different.
 -/
+/-
+**Cycle.** 是 Mathlib 中的一个实例，位于命名空间 `Cycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We define a representation of concrete cycles, available when viewing them in a 
+goal state or
+via `#eval`, when over representable types. For example, the cycle `(2 1 4 3)` w
+ill be shown
+as `c[2, 1, 4, 3]`. Two equal cycles may be printed differently if their interna
+l representation
+is different.
+-/
 unsafe instance [Repr α] : Repr (Cycle α) :=
   ⟨fun s _ => "c[" ++ Std.Format.joinSep (s.map repr).lists.unquot.head! ", " ++ "]"⟩
 
 /-- `chain R s` means that `R` holds between adjacent elements of `s`.
 
 `chain R ([a, b, c] : Cycle α) ↔ R a b ∧ R b c ∧ R c a` -/
-nonrec def Chain (r : α -> α -> Prop) (c : Cycle α) : Prop :=
+nonrec def Chain (r : α → α → Prop) (c : Cycle α) : Prop :=
   Quotient.liftOn' c
     (fun l =>
       match l with
       | [] => True
       | a :: m => IsChain r (a :: m ++ [a]))
     fun a b hab =>
-propext by
+    propext <| by
       rcases a with - | ⟨a, l⟩ <;> rcases b with - | ⟨b, m⟩
       · rfl
       · have := isRotated_nil_iff'.1 hab
@@ -3143,216 +2688,215 @@ propext by
         induction n generalizing a b l m with
         | zero =>
           simp only [rotate_zero, cons.injEq] at hn
-          rw [hn.1]; rw [hn.2]
+          rw [hn.1, hn.2]
         | succ d hd =>
           rcases l with - | ⟨c, s⟩
           · simp only [rotate_cons_succ, nil_append, rotate_singleton, cons.injEq] at hn
-            rw [hn.1]; rw [hn.2]
+            rw [hn.1, hn.2]
           · rw [Nat.add_comm, ← rotate_rotate, rotate_cons_succ, rotate_zero, cons_append] at hn
             rw [← hd c _ _ _ hn]
             simp [and_comm]
 
 @[simp]
-/--
-theorem `Chain.nil` / 定理 `Chain.nil`
-
-English:
-theorem Chain.nil
-  given: (r : α -> α -> Prop)
-  statement: Cycle.Chain r (@nil α)
-  proof: by trivial
-
-@[simp]
-
-中文:
-定理 链.nil
-  条件: (r : α -> α -> 命题)
-  结论: 环.链 r (@nil α)
-  证明: by trivial
-
-@[simp]
+/-
+**Cycle.Chain.nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle.Chain`。
+形式化陈述：∀ {α : Type u_1} (r : α → α → Prop), Cycle.Chain r Cycle.nil
+参数：r : α → α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Chain.nil (r : α -> α -> Prop) : Cycle.Chain r (@nil α) := by trivial
+theorem Chain.nil (r : α → α → Prop) : Cycle.Chain r (@nil α) := by trivial
 
 @[simp]
-/--
-theorem `chain_coe_cons` / 定理 `chain_coe_cons`
-
-English:
-theorem chain_coe_cons
-  given: (r : α -> α -> Prop) (a : α) (l : List α)
-  proof: Iff.rfl
-
-中文:
-定理 chain_coe_cons
-  条件: (r : α -> α -> 命题) (a : α) (l : 列表 α)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Cycle.chain_coe_cons** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_coe_cons (r : α -> α -> Prop) (a : α) (l : List α) : Chain r (a :: l
+) ↔ List.IsChain r (a :: (l ++ [a]))
+参数：r : α -> α -> Prop；a : α；l : List α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem chain_coe_cons (r : α -> α -> Prop) (a : α) (l : List α) :
+theorem chain_coe_cons (r : α → α → Prop) (a : α) (l : List α) :
     Chain r (a :: l) ↔ List.IsChain r (a :: (l ++ [a])) :=
   Iff.rfl
-
-/--
-theorem `chain_singleton` / 定理 `chain_singleton`
-
-English:
-theorem chain_singleton
-  given: (r : α -> α -> Prop) (a : α)
-  statement: Chain r [a] ↔ r a a
-  proof: by
-  rw [chain_coe_cons]; rw [nil_append]; rw [List.isChain_pair]
-
-中文:
-定理 chain_singleton
-  条件: (r : α -> α -> 命题) (a : α)
-  结论: 链 r [a] ↔ r a a
-  证明: by
-  rw [chain_coe_cons]; rw [nil_append]; rw [List.isChain_pair]
-
-Depends on / 依赖: List.isChain_pair, chain_coe_cons, isChain_pair, nil_append
+/-
+**Cycle.chain_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_singleton (r : α -> α -> Prop) (a : α) : Chain r [a] ↔ r a a
+参数：r : α -> α -> Prop；a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.chain_coe_cons`：chain_coe_cons (r : α -> α -> Prop) (a : α) (l : L
+ist α) : Chain r (a :: l) ↔ List.IsChain r (a :: (l ++ [a]))
+· 使用定理 `List.nil_append`：∀ {α : Type u} (as : List α), [] ++ as = as
+· 使用定理 `List.isChain_pair`：isChain_pair {x y} : IsChain R [x, y] ↔ R x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem chain_singleton (r : α -> α -> Prop) (a : α) : Chain r [a] ↔ r a a := by
-  rw [chain_coe_cons]; rw [nil_append]; rw [List.isChain_pair]
-
-/--
-theorem `chain_ne_nil` / 定理 `chain_ne_nil`
-
-English:
-theorem chain_ne_nil
-  given: (r : α -> α -> Prop) {l : List α}
-  proof: l.reverseRecOn (fun hm => hm.irrefl.elim) (by
-    intro m a _H _
-    rw [← coe_cons_eq_coe_append]; rw [chain_coe_cons]; rw [getLast_append_singleton])
-
-中文:
-定理 chain_ne_nil
-  条件: (r : α -> α -> 命题) {l : 列表 α}
-  证明: l.reverseRecOn (fun hm => hm.irrefl.elim) (by
-    intro m a _H _
-    rw [← coe_cons_eq_coe_append]; rw [chain_coe_cons]; rw [getLast_append_singleton])
-
-Depends on / 依赖: chain_coe_cons, coe_cons_eq_coe_append, getLast_append_singleton, hm.irrefl.elim, irrefl, l.reverseRecOn, reverseRecOn
+theorem chain_singleton (r : α → α → Prop) (a : α) : Chain r [a] ↔ r a a := by
+  rw [chain_coe_cons, nil_append, List.isChain_pair]
+/-
+**Cycle.chain_ne_nil** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_ne_nil (r : α -> α -> Prop) {l : List α} : forall hl : l != [], Chai
+n r l ↔ List.IsChain r (getLast l hl :: l)
+参数：r : α -> α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Ne.irrefl`：∀ {α : Sort u} {a : α}, a ≠ a → False
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cycle.coe_cons_eq_coe_append`：coe_cons_eq_coe_append (l : List α) (a : α
+) : (↑(a :: l) : Cycle α) = (↑(l ++ [a]) : Cycle α)
+· 使用定理 `Cycle.chain_coe_cons`：chain_coe_cons (r : α -> α -> Prop) (a : α) (l : L
+ist α) : Chain r (a :: l) ↔ List.IsChain r (a :: (l ++ [a]))
+· 使用定理 `List.append_ne_nil_of_right_ne_nil`：∀ {α : Type u_1} {t : List α} (s : L
+ist α), t ≠ [] → s ++ t ≠ []
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.getLast_append_singleton`：getLast_append_singleton {a : α} (l : Lis
+t α) : getLast (l ++ [a]) (append_ne_nil_of_right_ne_nil l (cons_ne_nil a _)) = 
+a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem chain_ne_nil (r : α -> α -> Prop) {l : List α} :
-    forall hl : l != [], Chain r l ↔ List.IsChain r (getLast l hl :: l) :=
+theorem chain_ne_nil (r : α → α → Prop) {l : List α} :
+    ∀ hl : l ≠ [], Chain r l ↔ List.IsChain r (getLast l hl :: l) :=
   l.reverseRecOn (fun hm => hm.irrefl.elim) (by
     intro m a _H _
-    rw [← coe_cons_eq_coe_append]; rw [chain_coe_cons]; rw [getLast_append_singleton])
-
-/--
-theorem `chain_map` / 定理 `chain_map`
-
-English:
-theorem chain_map
-  given: {β : Type*} {r : α -> α -> Prop} (f : β -> α) {s : Cycle β}
-  proof: Quotient.inductionOn s fun l => by
-    rcases l with - | ⟨a, l⟩
-    · rfl
-    · simp [← concat_eq_append, ← map_concat, List.isChain_cons_map f]
-
-中文:
-定理 chain_map
-  条件: {β : 类型} {r : α -> α -> 命题} (f : β -> α) {s : 环 β}
-  证明: Quotient.inductionOn s fun l => by
-    rcases l with - | ⟨a, l⟩
-    · rfl
-    · simp [← concat_eq_append, ← map_concat, List.isChain_cons_map f]
-
-Depends on / 依赖: List.isChain_cons_map, Quotient, Quotient.inductionOn, concat_eq_append, inductionOn, isChain_cons_map, map_concat
+    rw [← coe_cons_eq_coe_append, chain_coe_cons, getLast_append_singleton])
+/-
+**Cycle.chain_map** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_map {β : Type*} {r : α -> α -> Prop} (f : β -> α) {s : Cycle β} : Ch
+ain r (s.map f) ↔ Chain (fun a b => r (f a) (f b)) s
+参数：f : β -> α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `List.isChain_cons_map`：isChain_cons_map (f : β -> α) {l : List β} {b : β
+} : IsChain R (f b :: map f l) ↔ IsChain (fun a b : β => R (f a) (f b)) (b :: l)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem chain_map {β : Type*} {r : α -> α -> Prop} (f : β -> α) {s : Cycle β} :
+theorem chain_map {β : Type*} {r : α → α → Prop} (f : β → α) {s : Cycle β} :
     Chain r (s.map f) ↔ Chain (fun a b => r (f a) (f b)) s :=
   Quotient.inductionOn s fun l => by
     rcases l with - | ⟨a, l⟩
     · rfl
     · simp [← concat_eq_append, ← map_concat, List.isChain_cons_map f]
-
-/--
-theorem `chain_range_succ` / 定理 `chain_range_succ`
-
-English:
-theorem chain_range_succ
-  given: (r : Nat -> Nat -> Prop) (n : Nat)
-  proof: by
-  rw [range_succ]; rw [← coe_cons_eq_coe_append]; rw [chain_coe_cons]; rw [← range_succ]; rw [isChain_cons_range_succ]
-
-中文:
-定理 chain_range_succ
-  条件: (r : 自然数 -> 自然数 -> 命题) (n : 自然数)
-  证明: by
-  rw [range_succ]; rw [← coe_cons_eq_coe_append]; rw [chain_coe_cons]; rw [← range_succ]; rw [isChain_cons_range_succ]
-
-Depends on / 依赖: chain_coe_cons, coe_cons_eq_coe_append, isChain_cons_range_succ, range_succ
+/-
+**Cycle.chain_range_succ** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_range_succ (r : Nat -> Nat -> Prop) (n : Nat) : Chain r (List.range 
+n.succ) ↔ r n 0 ∧ forall m < n, r m m.succ
+参数：r : Nat -> Nat -> Prop；n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.range_succ`：∀ {n : ℕ}, List.range n.succ = List.range n ++ [n]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cycle.coe_cons_eq_coe_append`：coe_cons_eq_coe_append (l : List α) (a : α
+) : (↑(a :: l) : Cycle α) = (↑(l ++ [a]) : Cycle α)
+· 使用定理 `Cycle.chain_coe_cons`：chain_coe_cons (r : α -> α -> Prop) (a : α) (l : L
+ist α) : Chain r (a :: l) ↔ List.IsChain r (a :: (l ++ [a]))
+· 使用定理 `List.isChain_cons_range_succ`：isChain_cons_range_succ (r : Nat -> Nat ->
+ Prop) (n a : Nat) : IsChain r (a :: range n.succ) ↔ r a 0 ∧ forall m < n, r m m
+.succ
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem chain_range_succ (r : Nat -> Nat -> Prop) (n : Nat) :
-    Chain r (List.range n.succ) ↔ r n 0 ∧ forall m < n, r m m.succ := by
-  rw [range_succ]; rw [← coe_cons_eq_coe_append]; rw [chain_coe_cons]; rw [← range_succ]; rw [isChain_cons_range_succ]
+theorem chain_range_succ (r : ℕ → ℕ → Prop) (n : ℕ) :
+    Chain r (List.range n.succ) ↔ r n 0 ∧ ∀ m < n, r m m.succ := by
+  rw [range_succ, ← coe_cons_eq_coe_append, chain_coe_cons, ← range_succ, isChain_cons_range_succ]
 
-variable {r : α -> α -> Prop} {s : Cycle α}
-
-/--
-theorem `Chain.imp` / 定理 `Chain.imp`
-
-English:
-theorem Chain.imp
-  given: {r₁ r₂ : α -> α -> Prop} (H : forall a b, r₁ a b -> r₂ a b) (p : Chain r₁ s)
-  proof: by
-  induction s
-  · trivial
-  · rw [chain_coe_cons] at p ⊢
-    exact p.imp H
-
-中文:
-定理 链.imp
-  条件: {r₁ r₂ : α -> α -> 命题} (H : 对任意 a b, r₁ a b -> r₂ a b) (p : 链 r₁ s)
-  证明: by
-  induction s
-  · trivial
-  · rw [chain_coe_cons] at p ⊢
-    exact p.imp H
-
-Depends on / 依赖: chain_coe_cons, p.imp
+variable {r : α → α → Prop} {s : Cycle α}
+/-
+**Cycle.Chain.imp** 是 Mathlib 中的一个定理，位于命名空间 `Cycle.Chain`。
+形式化陈述：∀ {α : Type u_1} {s : Cycle α} {r₁ r₂ : α → α → Prop},   (∀ (a b : α), r₁ 
+a b → r₂ a b) → Cycle.Chain r₁ s → Cycle.Chain r₂ s
+参数：∀ (a b : α), r₁ a b → r₂ a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cycle.induction_on`：induction_on {motive : Cycle α -> Prop} (s : Cycle α
+) (nil : motive nil) (cons : forall (a) (l : List α), motive ↑l -> motive ↑(a ::
+ l)) : m…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.chain_coe_cons`：chain_coe_cons (r : α -> α -> Prop) (a : α) (l : L
+ist α) : Chain r (a :: l) ↔ List.IsChain r (a :: (l ++ [a]))
+· 使用定理 `List.IsChain.imp`：∀ {α : Type u_1} {R S : α → α → Prop} {l : List α}, (∀
+ ⦃a b : α⦄, R a b → S a b) → List.IsChain R l → List.IsChain S l
 -/
-theorem Chain.imp {r₁ r₂ : α -> α -> Prop} (H : forall a b, r₁ a b -> r₂ a b) (p : Chain r₁ s) :
+theorem Chain.imp {r₁ r₂ : α → α → Prop} (H : ∀ a b, r₁ a b → r₂ a b) (p : Chain r₁ s) :
     Chain r₂ s := by
   induction s
   · trivial
   · rw [chain_coe_cons] at p ⊢
     exact p.imp H
 
-/--
-theorem `chain_mono` / 定理 `chain_mono`
+/-- As a function from a relation to a predicate, `chain` is monotonic. -/
+/-
+**Cycle.chain_mono** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_mono : Monotone (Chain : (α -> α -> Prop) -> Cycle α -> Prop)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cycle.Chain.imp`：∀ {α : Type u_1} {s : Cycle α} {r₁ r₂ : α → α → Prop}, 
+  (∀ (a b : α), r₁ a b → r₂ a b) → Cycle.Chain r₁ s → Cycle.Chain r₂ s
 
-English:
-theorem chain_mono
-  statement: Monotone (Chain : (α -> α -> Prop) -> Cycle α -> Prop)
-  proof: fun _a _b hab _s =>
-  Chain.imp hab
-
-中文:
-定理 chain_mono
-  结论: 递增 (链 : (α -> α -> 命题) -> 环 α -> 命题)
-  证明: fun _a _b hab _s =>
-  Chain.imp hab
+--- 原说明 ---
+As a function from a relation to a predicate, `chain` is monotonic.
 -/
-theorem chain_mono : Monotone (Chain : (α -> α -> Prop) -> Cycle α -> Prop) := fun _a _b hab _s =>
+theorem chain_mono : Monotone (Chain : (α → α → Prop) → Cycle α → Prop) := fun _a _b hab _s =>
   Chain.imp hab
-
-/--
-theorem `chain_of_pairwise` / 定理 `chain_of_pairwise`
-
-English:
-theorem chain_of_pairwise
-  statement: (forall a in s, forall b in s, r a b) -> Chain r s
-  proof: by
+/-
+**Cycle.chain_of_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_of_pairwise : (forall a in s, forall b in s, r a b) -> Chain r s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cycle.induction_on`：induction_on {motive : Cycle α -> Prop} (s : Cycle α
+) (nil : motive nil) (cons : forall (a) (l : List α), motive ↑l -> motive ↑(a ::
+ l)) : m…
+· 使用定理 `Cycle.Chain.nil`：∀ {α : Type u_1} (r : α → α → Prop), Cycle.Chain r Cycl
+e.nil
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Cycle.chain_coe_cons`：chain_coe_cons (r : α -> α -> Prop) (a : α) (l : L
+ist α) : Chain r (a :: l) ↔ List.IsChain r (a :: (l ++ [a]))
+· 使用定理 `List.Pairwise.isChain`：∀ {α : Type u_1} {R : α → α → Prop} {l : List α},
+ List.Pairwise R l → List.IsChain R l
+· 使用定理 `List.pairwise_cons`：∀ {α : Type u} {R : α → α → Prop} {a : α} {l : List 
+α},   List.Pairwise R (a :: l) ↔ (∀ a' ∈ l, R a a') ∧ List.Pairwise R l
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.pairwise_append`：∀ {α : Type u_1} {R : α → α → Prop} {l₁ l₂ : List 
+α},   List.Pairwise R (l₁ ++ l₂) ↔ List.Pairwise R l₁ ∧ List.Pairwise R l₂ ∧ ∀ a
+ ∈ l₁, ∀ b…
+· 使用定理 `List.pairwise_of_forall_mem_list`：∀ {α : Type u_1} {l : List α} {r : α →
+ α → Prop}, (∀ a ∈ l, ∀ b ∈ l, r a b) → List.Pairwise r l
+· 使用定理 `List.pairwise_singleton`：∀ {α : Type u_1} (R : α → α → Prop) (a : α), Li
+st.Pairwise R [a]
+-/
+theorem chain_of_pairwise : (∀ a ∈ s, ∀ b ∈ s, r a b) → Chain r s := by
   induction s with
-  | nil => exact fun _ => Cycle.Chain.nil r
+  | nil => exact fun _ ↦ Cycle.Chain.nil r
   | cons a l => ?_
   intro hs
-  have Ha : a in (a :: l : Cycle α) := by simp
-  have Hl : forall {b} (_hb : b in l), b in (a :: l : Cycle α) := @fun b hb => by simp [hb]
+  have Ha : a ∈ (a :: l : Cycle α) := by simp
+  have Hl : ∀ {b} (_hb : b ∈ l), b ∈ (a :: l : Cycle α) := @fun b hb => by simp [hb]
   rw [Cycle.chain_coe_cons]
   apply Pairwise.isChain
   rw [pairwise_cons]
@@ -3361,94 +2905,44 @@ theorem chain_of_pairwise
       pairwise_append.2
         ⟨pairwise_of_forall_mem_list fun b hb c hc => hs b (Hl hb) c (Hl hc),
           pairwise_singleton r a, fun b hb c hc => by grind⟩⟩
-
-中文:
-定理 chain_of_pairwise
-  结论: (对任意 a in s, 对任意 b in s, r a b) -> 链 r s
-  证明: by
-  induction s with
-  | nil => exact fun _ => Cycle.Chain.nil r
-  | cons a l => ?_
-  intro hs
-  have Ha : a in (a :: l : Cycle α) := by simp
-  have Hl : forall {b} (_hb : b in l), b in (a :: l : Cycle α) := @fun b hb => by simp [hb]
-  rw [Cycle.chain_coe_cons]
-  apply Pairwise.isChain
-  rw [pairwise_cons]
-  exact
-    ⟨fun b hb => by grind,
-      pairwise_append.2
-        ⟨pairwise_of_forall_mem_list fun b hb c hc => hs b (Hl hb) c (Hl hc),
-          pairwise_singleton r a, fun b hb c hc => by grind⟩⟩
-
-Depends on / 依赖: Cycle.Chain.nil, Cycle.chain_coe_cons, Pairwise, Pairwise.isChain, chain_coe_cons, isChain, pairwise_append, pairwise_cons, pairwise_of_forall_mem_list, pairwise_singleton
+/-
+**Cycle.chain_iff_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：chain_iff_pairwise [IsTrans α r] : Chain r s ↔ forall a in s, forall b in 
+s, r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cycle.induction_on`：induction_on {motive : Cycle α -> Prop} (s : Cycle α
+) (nil : motive nil) (cons : forall (a) (l : List α), motive ↑l -> motive ↑(a ::
+ l)) : m…
+· 使用定理 `Cycle.notMem_nil`：notMem_nil (a : α) : a ∉ nil
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
+· 使用定理 `Cycle.chain_coe_cons`：chain_coe_cons (r : α -> α -> Prop) (a : α) (l : L
+ist α) : Chain r (a :: l) ↔ List.IsChain r (a :: (l ++ [a]))
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `Cycle.chain_of_pairwise`：chain_of_pairwise : (forall a in s, forall b in
+ s, r a b) -> Chain r s
 -/
-theorem chain_of_pairwise : (forall a in s, forall b in s, r a b) -> Chain r s := by
-  induction s with
-  | nil => exact fun _ => Cycle.Chain.nil r
-  | cons a l => ?_
-  intro hs
-  have Ha : a in (a :: l : Cycle α) := by simp
-  have Hl : forall {b} (_hb : b in l), b in (a :: l : Cycle α) := @fun b hb => by simp [hb]
-  rw [Cycle.chain_coe_cons]
-  apply Pairwise.isChain
-  rw [pairwise_cons]
-  exact
-    ⟨fun b hb => by grind,
-      pairwise_append.2
-        ⟨pairwise_of_forall_mem_list fun b hb c hc => hs b (Hl hb) c (Hl hc),
-          pairwise_singleton r a, fun b hb c hc => by grind⟩⟩
-
-/--
-theorem `chain_iff_pairwise` / 定理 `chain_iff_pairwise`
-
-English:
-theorem chain_iff_pairwise
-  given: [IsTrans α r]
-  statement: Chain r s ↔ forall a in s, forall b in s, r a b
-  proof: ⟨by
-    induction s with
-    | nil => exact fun _ b hb => (notMem_nil _ hb).elim
-    | cons a l => ?_
-    intro hs b hb c hc
-    rw [Cycle.chain_coe_cons]; rw [List.isChain_iff_pairwise] at hs
-    simp only [pairwise_append, pairwise_cons, mem_append, mem_singleton, List.not_mem_nil,
-      IsEmpty.forall_iff, imp_true_iff, Pairwise.nil, forall_eq, true_and] at hs
-    simp only [mem_coe_iff, mem_cons] at hb hc
-    rcases hb with (rfl | hb) <;> rcases hc with (rfl | hc)
-    · exact hs.1 c (Or.inr rfl)
-    · exact hs.1 c (Or.inl hc)
-    · exact hs.2.2 b hb
-    · exact _root_.trans (hs.2.2 b hb) (hs.1 c (Or.inl hc)), Cycle.chain_of_pairwise⟩
-
-中文:
-定理 chain_iff_pairwise
-  条件: [是Trans α r]
-  结论: 链 r s ↔ 对任意 a in s, 对任意 b in s, r a b
-  证明: ⟨by
-    induction s with
-    | nil => exact fun _ b hb => (notMem_nil _ hb).elim
-    | cons a l => ?_
-    intro hs b hb c hc
-    rw [Cycle.chain_coe_cons]; rw [List.isChain_iff_pairwise] at hs
-    simp only [pairwise_append, pairwise_cons, mem_append, mem_singleton, List.not_mem_nil,
-      IsEmpty.forall_iff, imp_true_iff, Pairwise.nil, forall_eq, true_and] at hs
-    simp only [mem_coe_iff, mem_cons] at hb hc
-    rcases hb with (rfl | hb) <;> rcases hc with (rfl | hc)
-    · exact hs.1 c (Or.inr rfl)
-    · exact hs.1 c (Or.inl hc)
-    · exact hs.2.2 b hb
-    · exact _root_.trans (hs.2.2 b hb) (hs.1 c (Or.inl hc)), Cycle.chain_of_pairwise⟩
-
-Depends on / 依赖: Cycle.chain_coe_cons, IsEmpty, IsEmpty.forall_iff, List.isChain_iff_pairwise, List.not_mem_nil, Or.inl, Or.inr, Pairwise, Pairwise.nil, chain_coe_cons, forall_eq, forall_iff, imp_true_iff, isChain_iff_pairwise, mem_append, mem_coe_iff, mem_cons, mem_singleton, notMem_nil, not_mem_nil
--/
-theorem chain_iff_pairwise [IsTrans α r] : Chain r s ↔ forall a in s, forall b in s, r a b :=
+theorem chain_iff_pairwise [IsTrans α r] : Chain r s ↔ ∀ a ∈ s, ∀ b ∈ s, r a b :=
   ⟨by
     induction s with
-    | nil => exact fun _ b hb => (notMem_nil _ hb).elim
+    | nil => exact fun _ b hb ↦ (notMem_nil _ hb).elim
     | cons a l => ?_
     intro hs b hb c hc
-    rw [Cycle.chain_coe_cons]; rw [List.isChain_iff_pairwise] at hs
+    rw [Cycle.chain_coe_cons, List.isChain_iff_pairwise] at hs
     simp only [pairwise_append, pairwise_cons, mem_append, mem_singleton, List.not_mem_nil,
       IsEmpty.forall_iff, imp_true_iff, Pairwise.nil, forall_eq, true_and] at hs
     simp only [mem_coe_iff, mem_cons] at hb hc
@@ -3457,83 +2951,64 @@ theorem chain_iff_pairwise [IsTrans α r] : Chain r s ↔ forall a in s, forall 
     · exact hs.1 c (Or.inl hc)
     · exact hs.2.2 b hb
     · exact _root_.trans (hs.2.2 b hb) (hs.1 c (Or.inl hc)), Cycle.chain_of_pairwise⟩
-
-/--
-theorem `Chain.eq_nil_of_irrefl` / 定理 `Chain.eq_nil_of_irrefl`
-
-English:
-theorem Chain.eq_nil_of_irrefl
-  given: [IsTrans α r] [Std.Irrefl r] (h : Chain r s)
-  statement: s = Cycle.nil
-  proof: by
-  induction s with
-  | nil => rfl
-  | cons a l h =>
-    have ha : a in a :: l := mem_cons_self
-    exact (irrefl_of r a <| chain_iff_pairwise.1 h a ha a ha).elim
-
-中文:
-定理 链.eq_nil_of_irrefl
-  条件: [是Trans α r] [Std.Irrefl r] (h : 链 r s)
-  结论: s = 环.nil
-  证明: by
-  induction s with
-  | nil => rfl
-  | cons a l h =>
-    have ha : a in a :: l := mem_cons_self
-    exact (irrefl_of r a <| chain_iff_pairwise.1 h a ha a ha).elim
-
-Depends on / 依赖: chain_iff_pairwise, irrefl_of, mem_cons_self
+/-
+**Cycle.Chain.eq_nil_of_irrefl** 是 Mathlib 中的一个定理，位于命名空间 `Cycle.Chain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s : Cycle α} [IsTrans α r] [Std.Irref
+l r], Cycle.Chain r s → s = Cycle.nil
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cycle.induction_on`：induction_on {motive : Cycle α -> Prop} (s : Cycle α
+) (nil : motive nil) (cons : forall (a) (l : List α), motive ↑l -> motive ↑(a ::
+ l)) : m…
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `irrefl_of`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Irrefl r] (a : α), ¬
+r a a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cycle.chain_iff_pairwise`：chain_iff_pairwise [IsTrans α r] : Chain r s ↔
+ forall a in s, forall b in s, r a b
 -/
 theorem Chain.eq_nil_of_irrefl [IsTrans α r] [Std.Irrefl r] (h : Chain r s) : s = Cycle.nil := by
   induction s with
   | nil => rfl
   | cons a l h =>
-    have ha : a in a :: l := mem_cons_self
+    have ha : a ∈ a :: l := mem_cons_self
     exact (irrefl_of r a <| chain_iff_pairwise.1 h a ha a ha).elim
-
-/--
-theorem `Chain.eq_nil_of_well_founded` / 定理 `Chain.eq_nil_of_well_founded`
-
-English:
-theorem Chain.eq_nil_of_well_founded
-  given: [IsWellFounded α r] (h : Chain r s)
-  statement: s = Cycle.nil
-  proof: Chain.eq_nil_of_irrefl h.imp fun _ _ => Relation.TransGen.single
-
-中文:
-定理 链.eq_nil_of_well_founded
-  条件: [是良基 α r] (h : 链 r s)
-  结论: s = 环.nil
-  证明: Chain.eq_nil_of_irrefl h.imp fun _ _ => Relation.TransGen.single
-
-Depends on / 依赖: Chain.eq_nil_of_irrefl, Relation, Relation.TransGen.single, TransGen, eq_nil_of_irrefl, h.imp, single
+/-
+**Cycle.Chain.eq_nil_of_well_founded** 是 Mathlib 中的一个定理，位于命名空间 `Cycle.Chain`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s : Cycle α} [IsWellFounded α r], Cyc
+le.Chain r s → s = Cycle.nil
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cycle.Chain.eq_nil_of_irrefl`：∀ {α : Type u_1} {r : α → α → Prop} {s : C
+ycle α} [IsTrans α r] [Std.Irrefl r], Cycle.Chain r s → s = Cycle.nil
+· 使用定理 `Relation.TransGen.instIsTrans`：∀ {α : Type u_1} {r : α → α → Prop}, IsTr
+ans α (Relation.TransGen r)
+· 使用定理 `Std.instIrreflOfAsymm`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Asymm r]
+, Std.Irrefl r
+· 使用定理 `instAsymmOfIsWellFounded`：∀ {α : Type u} (r : α → α → Prop) [IsWellFound
+ed α r], Std.Asymm r
+· 使用定理 `instIsWellFoundedTransGen`：∀ {α : Type u} (r : α → α → Prop) [i : IsWell
+Founded α r], IsWellFounded α (Relation.TransGen r)
+· 使用定理 `Cycle.Chain.imp`：∀ {α : Type u_1} {s : Cycle α} {r₁ r₂ : α → α → Prop}, 
+  (∀ (a b : α), r₁ a b → r₂ a b) → Cycle.Chain r₁ s → Cycle.Chain r₂ s
 -/
 theorem Chain.eq_nil_of_well_founded [IsWellFounded α r] (h : Chain r s) : s = Cycle.nil :=
-Chain.eq_nil_of_irrefl h.imp fun _ _ => Relation.TransGen.single
-
-/--
-theorem `forall_eq_of_chain` / 定理 `forall_eq_of_chain`
-
-English:
-theorem forall_eq_of_chain
-  statement: [IsTrans α r] [Std.Antisymm r] (hs : Chain r s) {a b : α} (ha : a in s)
-  proof: by
-  rw [chain_iff_pairwise] at hs
-  exact antisymm (hs a ha b hb) (hs b hb a ha)
-
-中文:
-定理 对任意_eq_of_chain
-  结论: [是Trans α r] [Std.反对称 r] (hs : 链 r s) {a b : α} (ha : a in s)
-  证明: by
-  rw [chain_iff_pairwise] at hs
-  exact antisymm (hs a ha b hb) (hs b hb a ha)
-
-Depends on / 依赖: antisymm, chain_iff_pairwise
+  Chain.eq_nil_of_irrefl <| h.imp fun _ _ => Relation.TransGen.single
+/-
+**Cycle.forall_eq_of_chain** 是 Mathlib 中的一个定理，位于命名空间 `Cycle`。
+形式化陈述：forall_eq_of_chain [IsTrans α r] [Std.Antisymm r] (hs : Chain r s) {a b : 
+α} (ha : a in s) (hb : b in s) : a = b
+参数：hs : Chain r s；ha : a in s；hb : b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `antisymm`：antisymm [Std.Antisymm r] : a ≺ b -> b ≺ a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cycle.chain_iff_pairwise`：chain_iff_pairwise [IsTrans α r] : Chain r s ↔
+ forall a in s, forall b in s, r a b
 -/
-theorem forall_eq_of_chain [IsTrans α r] [Std.Antisymm r] (hs : Chain r s) {a b : α} (ha : a in s)
-    (hb : b in s) : a = b := by
+theorem forall_eq_of_chain [IsTrans α r] [Std.Antisymm r] (hs : Chain r s) {a b : α} (ha : a ∈ s)
+    (hb : b ∈ s) : a = b := by
   rw [chain_iff_pairwise] at hs
   exact antisymm (hs a ha b hb) (hs b hb a ha)
 
 end Cycle
+

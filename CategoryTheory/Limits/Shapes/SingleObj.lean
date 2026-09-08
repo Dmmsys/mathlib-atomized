@@ -41,6 +41,14 @@ namespace SingleObj
 variable {M G : Type v} [Monoid M] [Group G]
 
 /-- The induced `G`-action on the target of `J : SingleObj G ⥤ Type u`. -/
+/-
+**CategoryTheory.Limits.SingleObj.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lim
+its.SingleObj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The induced `G`-action on the target of `J : SingleObj G ⥤ Type u`.
+-/
 instance (J : SingleObj M ⥤ Type u) : MulAction M (J.obj (SingleObj.star M)) where
   smul g x := J.map g x
   one_smul x := by
@@ -59,45 +67,44 @@ variable (J : SingleObj M ⥤ Type u)
 /-- The equivalence between sections of `J : SingleObj M ⥤ Type u` and fixed points of the
 induced action on `J.obj (SingleObj.star M)`. -/
 @[simps]
-/--
-Definition of `Types.sections.equivFixedPoints` / `Types.sections.equivFixedPoints` 的定义
+/-
+**CategoryTheory.Limits.SingleObj.Types.sections.equivFixedPoints** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Limits.SingleObj.Types.sections`。
+形式化陈述：{M : Type v} →   [inst : Monoid M] →     (J : CategoryTheory.Functor (Cate
+goryTheory.SingleObj M) (Type u)) →       ↑J.sections ≃ ↑(MulAction.fixedPoints 
+M (J.obj (CategoryTheory.SingleObj.star M)))
+参数：J : CategoryTheory.Functor (CategoryTheory.SingleObj M) (Type u)；MulAction.fi
+xedPoints M (J.obj (CategoryTheory.SingleObj.star M))。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Types.sections.equivFixedPoints
-  signature: :
-  body: ⟨s.val _, s.property⟩
-  invFun p := ⟨fun _ => p.val, p.property⟩
-
-中文:
-定义 Types.sections.equivFixedPoints
-  签名: :
-  定义体: ⟨s.val _, s.property⟩
-  invFun p := ⟨fun _ => p.val, p.property⟩
-
-Depends on / 依赖: property, s.property, s.val
+--- 原说明 ---
+The equivalence between sections of `J : SingleObj M ⥤ Type u` and fixed points 
+of the
+induced action on `J.obj (SingleObj.star M)`.
 -/
 def Types.sections.equivFixedPoints :
     J.sections ≃ MulAction.fixedPoints M (J.obj (SingleObj.star M)) where
   toFun s := ⟨s.val _, s.property⟩
-  invFun p := ⟨fun _ => p.val, p.property⟩
+  invFun p := ⟨fun _ ↦ p.val, p.property⟩
 
 /-- The limit of `J : SingleObj M ⥤ Type u` is equivalent to the fixed points of the
 induced action on `J.obj (SingleObj.star M)`. -/
 @[simps!]
-/--
-Definition of `Types.limitEquivFixedPoints` / `Types.limitEquivFixedPoints` 的定义
+/-
+**CategoryTheory.Limits.SingleObj.Types.limitEquivFixedPoints** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Limits.SingleObj.Types`。
+形式化陈述：{M : Type v} →   [inst : Monoid M] →     (J : CategoryTheory.Functor (Cate
+goryTheory.SingleObj M) (Type u)) →       CategoryTheory.Limits.limit J ≃ ↑(MulA
+ction.fixedPoints M (J.obj (CategoryTheory.SingleObj.star M)))
+参数：J : CategoryTheory.Functor (CategoryTheory.SingleObj M) (Type u)；MulAction.fi
+xedPoints M (J.obj (CategoryTheory.SingleObj.star M))。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition Types.limitEquivFixedPoints
-  signature: :
-  body: (Types.limitEquivSections J).trans (Types.sections.equivFixedPoints J)
-
-中文:
-定义 Types.limitEquivFixedPoints
-  签名: :
-  定义体: (Types.limitEquivSections J).trans (Types.sections.equivFixedPoints J)
-
-Depends on / 依赖: Types.limitEquivSections, Types.sections.equivFixedPoints, equivFixedPoints, limitEquivSections, sections
+--- 原说明 ---
+The limit of `J : SingleObj M ⥤ Type u` is equivalent to the fixed points of the
+induced action on `J.obj (SingleObj.star M)`.
 -/
 noncomputable def Types.limitEquivFixedPoints :
     limit J ≃ MulAction.fixedPoints M (J.obj (SingleObj.star M)) :=
@@ -109,74 +116,59 @@ section Colimits
 
 variable {G : Type v} [Group G] (J : SingleObj G ⥤ Type u)
 
-/--
-lemma `colimitTypeRel_iff_orbitRel` / 引理 `colimitTypeRel_iff_orbitRel`
+/-- The relation used to construct colimits in types for `J : SingleObj G ⥤ Type u` is
+equivalent to the `MulAction.orbitRel` equivalence relation on `J.obj (SingleObj.star G)`. -/
+/-
+**CategoryTheory.Limits.SingleObj.colimitTypeRel_iff_orbitRel** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Limits.SingleObj`。
+形式化陈述：colimitTypeRel_iff_orbitRel (x y : J.obj (SingleObj.star G)) : J.ColimitTy
+peRel ⟨SingleObj.star G, x⟩ ⟨SingleObj.star G, y⟩ ↔ MulAction.orbitRel G (J.obj 
+(SingleObj.star G)) x y
+参数：x y : J.obj (SingleObj.star G)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Setoid.comm'`：comm' (s : Setoid α) {x y} : s x y ↔ s y x
 
-English:
-lemma colimitTypeRel_iff_orbitRel
-  given: (x y : J.obj (SingleObj.star G))
-  proof: by
-  conv => rhs; rw [Setoid.comm']
-  change (exists g : G, y = g • x) ↔ (exists g : G, g • x = y)
-  grind
-
-中文:
-引理 colimitTypeRel_iff_orbitRel
-  条件: (x y : J.obj (SingleObj.star G))
-  证明: by
-  conv => rhs; rw [Setoid.comm']
-  change (exists g : G, y = g • x) ↔ (exists g : G, g • x = y)
-  grind
-
-Depends on / 依赖: Setoid, Setoid.comm
+--- 原说明 ---
+The relation used to construct colimits in types for `J : SingleObj G ⥤ Type u` 
+is
+equivalent to the `MulAction.orbitRel` equivalence relation on `J.obj (SingleObj
+.star G)`.
 -/
 lemma colimitTypeRel_iff_orbitRel (x y : J.obj (SingleObj.star G)) :
     J.ColimitTypeRel ⟨SingleObj.star G, x⟩ ⟨SingleObj.star G, y⟩ ↔
       MulAction.orbitRel G (J.obj (SingleObj.star G)) x y := by
   conv => rhs; rw [Setoid.comm']
-  change (exists g : G, y = g • x) ↔ (exists g : G, g • x = y)
+  change (∃ g : G, y = g • x) ↔ (∃ g : G, g • x = y)
   grind
 
 /-- The explicit quotient construction of the colimit of `J : SingleObj G ⥤ Type u` is
 equivalent to the quotient of `J.obj (SingleObj.star G)` by the induced action. -/
 @[simps]
-/--
-Definition of `colimitTypeRelEquivOrbitRelQuotient` / `colimitTypeRelEquivOrbitRelQuotient` 的定义
+/-
+**CategoryTheory.Limits.SingleObj.colimitTypeRelEquivOrbitRelQuotient** 是 Mathli
+b 中的一个定义，位于命名空间 `CategoryTheory.Limits.SingleObj`。
+形式化陈述：colimitTypeRelEquivOrbitRelQuotient : J.ColimitType ≃ MulAction.orbitRel.Q
+uotient G (J.obj (SingleObj.star G)) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitTypeRelEquivOrbitRelQuotient
-  signature: :
-  body: Quot.lift (fun p => ⟦p.2⟧) fun a b h => Quotient.sound
-    (colimitTypeRel_iff_orbitRel J a.2 b.2).mp h
-invFun := Quot.lift (fun x => Quot.mk _ ⟨SingleObj.star G, x⟩) fun a b h =>
-Quot.sound (colimitTypeRel_iff_orbitRel J a b).mpr h
-  left_inv := fun x => Quot.inductionOn x (fun _ => rfl)
-  right_inv := fun x => Quot.inductionOn x (fun _ => rfl)
-
-#adaptation_note
-
-中文:
-定义 colimitTypeRelEquivOrbitRelQuotient
-  签名: :
-  定义体: Quot.lift (fun p => ⟦p.2⟧) fun a b h => Quotient.sound
-    (colimitTypeRel_iff_orbitRel J a.2 b.2).mp h
-invFun := Quot.lift (fun x => Quot.mk _ ⟨SingleObj.star G, x⟩) fun a b h =>
-Quot.sound (colimitTypeRel_iff_orbitRel J a b).mpr h
-  left_inv := fun x => Quot.inductionOn x (fun _ => rfl)
-  right_inv := fun x => Quot.inductionOn x (fun _ => rfl)
-
-#adaptation_note
-
-Depends on / 依赖: Quot.lift, Quotient, Quotient.sound
+--- 原说明 ---
+The explicit quotient construction of the colimit of `J : SingleObj G ⥤ Type u` 
+is
+equivalent to the quotient of `J.obj (SingleObj.star G)` by the induced action.
 -/
 def colimitTypeRelEquivOrbitRelQuotient :
     J.ColimitType ≃ MulAction.orbitRel.Quotient G (J.obj (SingleObj.star G)) where
-toFun := Quot.lift (fun p => ⟦p.2⟧) fun a b h => Quotient.sound
+  toFun := Quot.lift (fun p => ⟦p.2⟧) <| fun a b h => Quotient.sound <|
     (colimitTypeRel_iff_orbitRel J a.2 b.2).mp h
-invFun := Quot.lift (fun x => Quot.mk _ ⟨SingleObj.star G, x⟩) fun a b h =>
-Quot.sound (colimitTypeRel_iff_orbitRel J a b).mpr h
-  left_inv := fun x => Quot.inductionOn x (fun _ => rfl)
-  right_inv := fun x => Quot.inductionOn x (fun _ => rfl)
+  invFun := Quot.lift (fun x => Quot.mk _ ⟨SingleObj.star G, x⟩) <| fun a b h =>
+    Quot.sound <| (colimitTypeRel_iff_orbitRel J a b).mpr h
+  left_inv := fun x => Quot.inductionOn x (fun _ ↦ rfl)
+  right_inv := fun x => Quot.inductionOn x (fun _ ↦ rfl)
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
@@ -184,20 +176,21 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The colimit of `J : SingleObj G ⥤ Type u` is equivalent to the quotient of
 `J.obj (SingleObj.star G)` by the induced action. -/
 @[simps!]
-/--
-Definition of `Types.colimitEquivQuotient` / `Types.colimitEquivQuotient` 的定义
+/-
+**CategoryTheory.Limits.SingleObj.Types.colimitEquivQuotient** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Limits.SingleObj.Types`。
+形式化陈述：{G : Type v} →   [inst : Group G] →     (J : CategoryTheory.Functor (Categ
+oryTheory.SingleObj G) (Type u)) →       CategoryTheory.Limits.colimit J ≃ MulAc
+tion.orbitRel.Quotient G (J.obj (CategoryTheory.SingleObj.star G))
+参数：J : CategoryTheory.Functor (CategoryTheory.SingleObj G) (Type u)；J.obj (Categ
+oryTheory.SingleObj.star G)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition Types.colimitEquivQuotient
-  signature: :
-  body: (Types.colimitEquivColimitType J).trans (colimitTypeRelEquivOrbitRelQuotient J)
-
-中文:
-定义 Types.colimitEquivQuotient
-  签名: :
-  定义体: (Types.colimitEquivColimitType J).trans (colimitTypeRelEquivOrbitRelQuotient J)
-
-Depends on / 依赖: Types.colimitEquivColimitType, colimitEquivColimitType, colimitTypeRelEquivOrbitRelQuotient
+--- 原说明 ---
+The colimit of `J : SingleObj G ⥤ Type u` is equivalent to the quotient of
+`J.obj (SingleObj.star G)` by the induced action.
 -/
 noncomputable def Types.colimitEquivQuotient :
     colimit J ≃ MulAction.orbitRel.Quotient G (J.obj (SingleObj.star G)) :=
@@ -210,3 +203,4 @@ end SingleObj
 end Limits
 
 end CategoryTheory
+

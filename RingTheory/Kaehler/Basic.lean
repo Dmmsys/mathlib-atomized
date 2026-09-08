@@ -60,133 +60,153 @@ universe u v
 
 variable (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S]
 
-/--
-Definition of `KaehlerDifferential.ideal` / `KaehlerDifferential.ideal` 的定义
+/-- The kernel of the multiplication map `S ⊗[R] S →ₐ[R] S`. -/
+/-
+**KaehlerDifferential.ideal** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.ideal : Ideal (S otimes[R] S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation KaehlerDifferential.ideal
-  signature: : Ideal (S otimes[R] S)
-  body: RingHom.ker (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S)
-
-中文:
-缩写 KaehlerDifferential.ideal
-  签名: : 理想 (S otimes[R] S)
-  定义体: RingHom.ker (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S)
-
-Depends on / 依赖: RingHom, RingHom.ker, TensorProduct, TensorProduct.lmul, otimes
+--- 原说明 ---
+The kernel of the multiplication map `S ⊗[R] S →ₐ[R] S`.
 -/
-abbrev KaehlerDifferential.ideal : Ideal (S otimes[R] S) :=
-  RingHom.ker (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S)
+abbrev KaehlerDifferential.ideal : Ideal (S ⊗[R] S) :=
+  RingHom.ker (TensorProduct.lmul' R : S ⊗[R] S →ₐ[R] S)
 
 variable {S}
-
-/--
-theorem `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal` / 定理 `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal`
-
-English:
-theorem KaehlerDifferential.one_smul_sub_smul_one_mem_ideal
-  given: (a : S)
-  proof: by simp [RingHom.mem_ker]
-
-中文:
-定理 KaehlerDifferential.one_smul_sub_smul_one_mem_ideal
-  条件: (a : S)
-  证明: by simp [RingHom.mem_ker]
-
-Depends on / 依赖: RingHom, RingHom.mem_ker, mem_ker
+/-
+**KaehlerDifferential.one_smul_sub_smul_one_mem_ideal** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：KaehlerDifferential.one_smul_sub_smul_one_mem_ideal (a : S) : (1 : S) otim
+esₜ[R] a - a otimesₜ[R] (1 : S) in KaehlerDifferential.ideal R S
+参数：a : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem KaehlerDifferential.one_smul_sub_smul_one_mem_ideal (a : S) :
-    (1 : S) otimesₜ[R] a - a otimesₜ[R] (1 : S) in KaehlerDifferential.ideal R S := by simp [RingHom.mem_ker]
+    (1 : S) ⊗ₜ[R] a - a ⊗ₜ[R] (1 : S) ∈ KaehlerDifferential.ideal R S := by simp [RingHom.mem_ker]
 
 variable {R}
 variable {M : Type*} [AddCommGroup M] [Module R M] [Module S M] [IsScalarTower R S M]
 
-/--
-Definition of `Derivation.tensorProductTo` / `Derivation.tensorProductTo` 的定义
+/-- For an `R`-derivation `S → M`, this is the map `S ⊗[R] S →ₗ[S] M` sending `s ⊗ₜ t ↦ s • D t`. -/
+/-
+**Derivation.tensorProductTo** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Derivation.tensorProductTo (D : Derivation R S M) : S otimes[R] S ->ₗ[S] M
+参数：D : Derivation R S M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Derivation.tensorProductTo
-  signature: (D : Derivation R S M)
-  body: TensorProduct.AlgebraTensorModule.lift ((LinearMap.lsmul S (S ->ₗ[R] M)).flip D.toLinearMap)
-
-中文:
-定义 导子.tensorProductTo
-  签名: (D : 导子 R S M)
-  定义体: TensorProduct.AlgebraTensorModule.lift ((LinearMap.lsmul S (S ->ₗ[R] M)).flip D.toLinearMap)
-
-Depends on / 依赖: AlgebraTensorModule, D.toLinearMap, LinearMap, LinearMap.lsmul, TensorProduct, TensorProduct.AlgebraTensorModule.lift, toLinearMap
+--- 原说明 ---
+For an `R`-derivation `S → M`, this is the map `S ⊗[R] S →ₗ[S] M` sending `s ⊗ₜ 
+t ↦ s • D t`.
 -/
-def Derivation.tensorProductTo (D : Derivation R S M) : S otimes[R] S ->ₗ[S] M :=
-  TensorProduct.AlgebraTensorModule.lift ((LinearMap.lsmul S (S ->ₗ[R] M)).flip D.toLinearMap)
-
-/--
-theorem `Derivation.tensorProductTo_tmul` / 定理 `Derivation.tensorProductTo_tmul`
-
-English:
-theorem Derivation.tensorProductTo_tmul
-  given: (D : Derivation R S M) (s t : S)
-  proof: rfl
-
-中文:
-定理 导子.tensorProductTo_tmul
-  条件: (D : 导子 R S M) (s t : S)
-  证明: rfl
+def Derivation.tensorProductTo (D : Derivation R S M) : S ⊗[R] S →ₗ[S] M :=
+  TensorProduct.AlgebraTensorModule.lift ((LinearMap.lsmul S (S →ₗ[R] M)).flip D.toLinearMap)
+/-
+**Derivation.tensorProductTo_tmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Derivation.tensorProductTo_tmul (D : Derivation R S M) (s t : S) : D.tenso
+rProductTo (s otimesₜ t) = s • D t
+参数：D : Derivation R S M；s t : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem Derivation.tensorProductTo_tmul (D : Derivation R S M) (s t : S) :
-    D.tensorProductTo (s otimesₜ t) = s • D t := rfl
-
-/--
-theorem `Derivation.tensorProductTo_mul` / 定理 `Derivation.tensorProductTo_mul`
-
-English:
-theorem Derivation.tensorProductTo_mul
-  given: (D : Derivation R S M) (x y : S otimes[R] S)
-  proof: by
-  refine TensorProduct.induction_on x ?_ ?_ ?_
-  · rw [zero_mul, map_zero, map_zero, zero_smul, smul_zero, add_zero]
-  swap
-  · intro x₁ y₁ h₁ h₂
-    rw [add_mul]; rw [map_add]; rw [map_add]; rw [map_add]; rw [add_smul]; rw [smul_add]; rw [h₁]; rw [h₂]; rw [add_add_add_comm]
-  intro x₁ x₂
-  refine TensorProduct.induction_on y ?_ ?_ ?_
-  · rw [mul_zero, map_zero, map_zero, zero_smul, smul_zero, add_zero]
-  swap
-  · intro x₁ y₁ h₁ h₂
-    rw [mul_add]; rw [map_add]; rw [map_add]; rw [map_add]; rw [add_smul]; rw [smul_add]; rw [h₁]; rw [h₂]; rw [add_add_add_comm]
-  intro x y
-  simp only [TensorProduct.tmul_mul_tmul, Derivation.tensorProductTo,
-    TensorProduct.AlgebraTensorModule.lift_apply,
-    TensorProduct.lmul'_apply_tmul]
-  dsimp
-  rw [D.leibniz]
-  simp only [smul_smul, smul_add, mul_comm (x * y) x₁, mul_right_comm x₁ x₂, ← mul_assoc]
-
-中文:
-定理 导子.tensorProductTo_mul
-  条件: (D : 导子 R S M) (x y : S otimes[R] S)
-  证明: by
-  refine TensorProduct.induction_on x ?_ ?_ ?_
-  · rw [zero_mul, map_zero, map_zero, zero_smul, smul_zero, add_zero]
-  swap
-  · intro x₁ y₁ h₁ h₂
-    rw [add_mul]; rw [map_add]; rw [map_add]; rw [map_add]; rw [add_smul]; rw [smul_add]; rw [h₁]; rw [h₂]; rw [add_add_add_comm]
-  intro x₁ x₂
-  refine TensorProduct.induction_on y ?_ ?_ ?_
-  · rw [mul_zero, map_zero, map_zero, zero_smul, smul_zero, add_zero]
-  swap
-  · intro x₁ y₁ h₁ h₂
-    rw [mul_add]; rw [map_add]; rw [map_add]; rw [map_add]; rw [add_smul]; rw [smul_add]; rw [h₁]; rw [h₂]; rw [add_add_add_comm]
-  intro x y
-  simp only [TensorProduct.tmul_mul_tmul, Derivation.tensorProductTo,
-    TensorProduct.AlgebraTensorModule.lift_apply,
-    TensorProduct.lmul'_apply_tmul]
-  dsimp
-  rw [D.leibniz]
-  simp only [smul_smul, smul_add, mul_comm (x * y) x₁, mul_right_comm x₁ x₂, ← mul_assoc]
-
-Depends on / 依赖: D.tensorProductTo, tensorProductTo
+    D.tensorProductTo (s ⊗ₜ t) = s • D t := rfl
+/-
+**Derivation.tensorProductTo_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Derivation.tensorProductTo_mul (D : Derivation R S M) (x y : S otimes[R] S
+) : D.tensorProductTo (x * y) = TensorProduct.lmul' (S
+参数：D : Derivation R S M；x y : S otimes[R] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `LinearMap.instIsScalarTower`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+（共 39 条，此处仅展示前 30 条）
 -/
-theorem Derivation.tensorProductTo_mul (D : Derivation R S M) (x y : S otimes[R] S) :
+theorem Derivation.tensorProductTo_mul (D : Derivation R S M) (x y : S ⊗[R] S) :
     D.tensorProductTo (x * y) =
       TensorProduct.lmul' (S := S) R x • D.tensorProductTo y +
         TensorProduct.lmul' (S := S) R y • D.tensorProductTo x := by
@@ -194,13 +214,13 @@ theorem Derivation.tensorProductTo_mul (D : Derivation R S M) (x y : S otimes[R]
   · rw [zero_mul, map_zero, map_zero, zero_smul, smul_zero, add_zero]
   swap
   · intro x₁ y₁ h₁ h₂
-    rw [add_mul]; rw [map_add]; rw [map_add]; rw [map_add]; rw [add_smul]; rw [smul_add]; rw [h₁]; rw [h₂]; rw [add_add_add_comm]
+    rw [add_mul, map_add, map_add, map_add, add_smul, smul_add, h₁, h₂, add_add_add_comm]
   intro x₁ x₂
   refine TensorProduct.induction_on y ?_ ?_ ?_
   · rw [mul_zero, map_zero, map_zero, zero_smul, smul_zero, add_zero]
   swap
   · intro x₁ y₁ h₁ h₂
-    rw [mul_add]; rw [map_add]; rw [map_add]; rw [map_add]; rw [add_smul]; rw [smul_add]; rw [h₁]; rw [h₂]; rw [add_add_add_comm]
+    rw [mul_add, map_add, map_add, map_add, add_smul, smul_add, h₁, h₂, add_add_add_comm]
   intro x y
   simp only [TensorProduct.tmul_mul_tmul, Derivation.tensorProductTo,
     TensorProduct.AlgebraTensorModule.lift_apply,
@@ -211,143 +231,169 @@ theorem Derivation.tensorProductTo_mul (D : Derivation R S M) (x y : S otimes[R]
 
 variable (R S)
 
-/--
-theorem `KaehlerDifferential.submodule_span_range_eq_ideal` / 定理 `KaehlerDifferential.submodule_span_range_eq_ideal`
+/-- The kernel of `S ⊗[R] S →ₐ[R] S` is generated by `1 ⊗ s - s ⊗ 1` as an `S`-module. -/
+/-
+**KaehlerDifferential.submodule_span_range_eq_ideal** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：KaehlerDifferential.submodule_span_range_eq_ideal : Submodule.span S (Set.
+range fun s : S => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S)) = (KaehlerDiffer
+ential.ideal R S).restrictScalars S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal`：KaehlerDifferential
+.one_smul_sub_smul_one_mem_ideal (a : S) : (1 : S) otimesₜ[R] a - a otimesₜ[R] (
+1 : S) in KaehlerDifferential.ideal R S
+· 使用定理 `TensorProduct.zero_tmul`：zero_tmul (n : N) : (0 : M) otimesₜ[R] n = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Algebra.TensorProduct.lmul'_apply_tmul`：∀ {R : Type uR} {S : Type uS} [i
+nst : CommSemiring R] [inst_1 : CommSemiring S] [inst_2 : Algebra R S] (a b : S)
+,   (Algebra.TensorProduct.l…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem KaehlerDifferential.submodule_span_range_eq_ideal
-  proof: by
-  apply le_antisymm
-  · rw [Submodule.span_le]
-    rintro _ ⟨s, rfl⟩
-    exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal _ _
-  · rintro x (hx : _ = _)
-    have : x - TensorProduct.lmul' (S := S) R x otimesₜ[R] (1 : S) = x := by
-      rw [hx]; rw [TensorProduct.zero_tmul]; rw [sub_zero]
-    rw [← this]
-    clear this hx
-    refine TensorProduct.induction_on x ?_ ?_ ?_
-    · rw [map_zero, TensorProduct.zero_tmul, sub_zero]; exact zero_mem _
-    · intro x y
-      have : x otimesₜ[R] y - (x * y) otimesₜ[R] (1 : S) = x • ((1 : S) otimesₜ y - y otimesₜ (1 : S)) := by
-        simp_rw [smul_sub, TensorProduct.smul_tmul', smul_eq_mul, mul_one]
-      rw [TensorProduct.lmul'_apply_tmul]; rw [this]
-      refine Submodule.smul_mem _ x ?_
-      apply Submodule.subset_span
-      exact Set.mem_range_self y
-    · intro x y hx hy
-      rw [map_add]; rw [TensorProduct.add_tmul]; rw [← sub_add_sub_comm]
-      exact add_mem hx hy
-
-中文:
-定理 KaehlerDifferential.submodule_span_range_eq_ideal
-  证明: by
-  apply le_antisymm
-  · rw [Submodule.span_le]
-    rintro _ ⟨s, rfl⟩
-    exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal _ _
-  · rintro x (hx : _ = _)
-    have : x - TensorProduct.lmul' (S := S) R x otimesₜ[R] (1 : S) = x := by
-      rw [hx]; rw [TensorProduct.zero_tmul]; rw [sub_zero]
-    rw [← this]
-    clear this hx
-    refine TensorProduct.induction_on x ?_ ?_ ?_
-    · rw [map_zero, TensorProduct.zero_tmul, sub_zero]; exact zero_mem _
-    · intro x y
-      have : x otimesₜ[R] y - (x * y) otimesₜ[R] (1 : S) = x • ((1 : S) otimesₜ y - y otimesₜ (1 : S)) := by
-        simp_rw [smul_sub, TensorProduct.smul_tmul', smul_eq_mul, mul_one]
-      rw [TensorProduct.lmul'_apply_tmul]; rw [this]
-      refine Submodule.smul_mem _ x ?_
-      apply Submodule.subset_span
-      exact Set.mem_range_self y
-    · intro x y hx hy
-      rw [map_add]; rw [TensorProduct.add_tmul]; rw [← sub_add_sub_comm]
-      exact add_mem hx hy
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal, Submodule, Submodule.span_le, TensorProduct, TensorProduct.induction_on, TensorProduct.lmul, TensorProduct.zero_tmul, induction_on, le_antisymm, map_zero, one_smul_sub_smul_one_mem_ideal, otimes, span_le, sub_zero, zero_mem, zero_tmul
+--- 原说明 ---
+The kernel of `S ⊗[R] S →ₐ[R] S` is generated by `1 ⊗ s - s ⊗ 1` as an `S`-modul
+e.
 -/
 theorem KaehlerDifferential.submodule_span_range_eq_ideal :
-    Submodule.span S (Set.range fun s : S => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S)) =
+    Submodule.span S (Set.range fun s : S => (1 : S) ⊗ₜ[R] s - s ⊗ₜ[R] (1 : S)) =
       (KaehlerDifferential.ideal R S).restrictScalars S := by
   apply le_antisymm
   · rw [Submodule.span_le]
     rintro _ ⟨s, rfl⟩
     exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal _ _
   · rintro x (hx : _ = _)
-    have : x - TensorProduct.lmul' (S := S) R x otimesₜ[R] (1 : S) = x := by
-      rw [hx]; rw [TensorProduct.zero_tmul]; rw [sub_zero]
+    have : x - TensorProduct.lmul' (S := S) R x ⊗ₜ[R] (1 : S) = x := by
+      rw [hx, TensorProduct.zero_tmul, sub_zero]
     rw [← this]
     clear this hx
     refine TensorProduct.induction_on x ?_ ?_ ?_
     · rw [map_zero, TensorProduct.zero_tmul, sub_zero]; exact zero_mem _
     · intro x y
-      have : x otimesₜ[R] y - (x * y) otimesₜ[R] (1 : S) = x • ((1 : S) otimesₜ y - y otimesₜ (1 : S)) := by
+      have : x ⊗ₜ[R] y - (x * y) ⊗ₜ[R] (1 : S) = x • ((1 : S) ⊗ₜ y - y ⊗ₜ (1 : S)) := by
         simp_rw [smul_sub, TensorProduct.smul_tmul', smul_eq_mul, mul_one]
-      rw [TensorProduct.lmul'_apply_tmul]; rw [this]
+      rw [TensorProduct.lmul'_apply_tmul, this]
       refine Submodule.smul_mem _ x ?_
       apply Submodule.subset_span
       exact Set.mem_range_self y
     · intro x y hx hy
-      rw [map_add]; rw [TensorProduct.add_tmul]; rw [← sub_add_sub_comm]
+      rw [map_add, TensorProduct.add_tmul, ← sub_add_sub_comm]
       exact add_mem hx hy
-
-/--
-theorem `KaehlerDifferential.span_range_eq_ideal` / 定理 `KaehlerDifferential.span_range_eq_ideal`
-
-English:
-theorem KaehlerDifferential.span_range_eq_ideal
-  proof: by
-  apply le_antisymm
-  · rw [Ideal.span_le]
-    rintro _ ⟨s, rfl⟩
-    exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal _ _
-  · change (KaehlerDifferential.ideal R S).restrictScalars S <= (Ideal.span _).restrictScalars S
-    rw [← KaehlerDifferential.submodule_span_range_eq_ideal]; rw [Ideal.span]
-    conv_rhs => rw [← Submodule.span_span_of_tower S]
-    exact Submodule.subset_span
-
-中文:
-定理 KaehlerDifferential.span_range_eq_ideal
-  证明: by
-  apply le_antisymm
-  · rw [Ideal.span_le]
-    rintro _ ⟨s, rfl⟩
-    exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal _ _
-  · change (KaehlerDifferential.ideal R S).restrictScalars S <= (Ideal.span _).restrictScalars S
-    rw [← KaehlerDifferential.submodule_span_range_eq_ideal]; rw [Ideal.span]
-    conv_rhs => rw [← Submodule.span_span_of_tower S]
-    exact Submodule.subset_span
-
-Depends on / 依赖: Ideal.span, Ideal.span_le, KaehlerDifferential, KaehlerDifferential.ideal, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal, KaehlerDifferential.submodule_span_range_eq_ideal, Submodule, Submodule.span_span_of_tower, Submodule.subset_span, conv_rhs, le_antisymm, one_smul_sub_smul_one_mem_ideal, restrictScalars, span_le, span_span_of_tower, submodule_span_range_eq_ideal, subset_span
+/-
+**KaehlerDifferential.span_range_eq_ideal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.span_range_eq_ideal : Ideal.span (Set.range fun s : S 
+=> (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S)) = KaehlerDifferential.ideal R S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal`：KaehlerDifferential
+.one_smul_sub_smul_one_mem_ideal (a : S) : (1 : S) otimesₜ[R] a - a otimesₜ[R] (
+1 : S) in KaehlerDifferential.ideal R S
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.submodule_span_range_eq_ideal`：KaehlerDifferential.s
+ubmodule_span_range_eq_ideal : Submodule.span S (Set.range fun s : S => (1 : S) 
+otimesₜ[R] s - s otimesₜ[R] (1 : S)) = …
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.span_span_of_tower`：span_span_of_tower : span S (span R s : Se
+t M) = span S s
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 -/
 theorem KaehlerDifferential.span_range_eq_ideal :
-    Ideal.span (Set.range fun s : S => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S)) =
+    Ideal.span (Set.range fun s : S => (1 : S) ⊗ₜ[R] s - s ⊗ₜ[R] (1 : S)) =
       KaehlerDifferential.ideal R S := by
   apply le_antisymm
   · rw [Ideal.span_le]
     rintro _ ⟨s, rfl⟩
     exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal _ _
-  · change (KaehlerDifferential.ideal R S).restrictScalars S <= (Ideal.span _).restrictScalars S
-    rw [← KaehlerDifferential.submodule_span_range_eq_ideal]; rw [Ideal.span]
+  · change (KaehlerDifferential.ideal R S).restrictScalars S ≤ (Ideal.span _).restrictScalars S
+    rw [← KaehlerDifferential.submodule_span_range_eq_ideal, Ideal.span]
     conv_rhs => rw [← Submodule.span_span_of_tower S]
     exact Submodule.subset_span
 
-/--
-Definition of `KaehlerDifferential` / `KaehlerDifferential` 的定义
+/-- The module of Kähler differentials (Kahler differentials, Kaehler differentials).
+This is implemented as `I / I ^ 2` with `I` the kernel of the multiplication map `S ⊗[R] S →ₐ[R] S`.
+To view elements as a linear combination of the form `s • D s'`, use
+`KaehlerDifferential.tensorProductTo_surjective` and `Derivation.tensorProductTo_tmul`.
 
-English:
-definition KaehlerDifferential
-  signature: : Type v
-  body: (KaehlerDifferential.ideal R S).Cotangent
-deriving Inhabited
+We also provide the notation `Ω[S⁄R]` for `KaehlerDifferential R S`.
+Note that the slash is `\textfractionsolidus`.
+-/
+/-
+**KaehlerDifferential** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential : Type v
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 KaehlerDifferential
-  签名: : 类型v
-  定义体: (KaehlerDifferential.ideal R S).Cotangent
-deriving Inhabited
+--- 原说明 ---
+The module of Kähler differentials (Kahler differentials, Kaehler differentials)
+.
+This is implemented as `I / I ^ 2` with `I` the kernel of the multiplication map
+ `S ⊗[R] S →ₐ[R] S`.
+To view elements as a linear combination of the form `s • D s'`, use
+`KaehlerDifferential.tensorProductTo_surjective` and `Derivation.tensorProductTo
+_tmul`.
 
-Depends on / 依赖: Cotangent, KaehlerDifferential, KaehlerDifferential.ideal
+We also provide the notation `Ω[S⁄R]` for `KaehlerDifferential R S`.
+Note that the slash is `\textfractionsolidus`.
 -/
 def KaehlerDifferential : Type v :=
   (KaehlerDifferential.ideal R S).Cotangent
@@ -355,184 +401,110 @@ deriving Inhabited
 
 -- The `SMul R'` instance exists to avoid a zsmul diamond.
 variable {R' : Type*} [CommRing R'] [Algebra R' S] [SMulCommClass R R' S] in
-deriving instance SMul R', AddCommGroup, Module R', Module (S otimes[R] S), IsScalarTower S (S otimes[R] S)
+deriving instance SMul R', AddCommGroup, Module R', Module (S ⊗[R] S), IsScalarTower S (S ⊗[R] S)
   for KaehlerDifferential R S
 
 @[inherit_doc KaehlerDifferential]
 notation "Ω[" S "⁄" R "]" => KaehlerDifferential R S
-
-/--
-Instance `KaehlerDifferential.isScalarTower_of_tower` / 实例 `KaehlerDifferential.isScalarTower_of_tower`
-
-English:
-instance KaehlerDifferential.isScalarTower_of_tower
-  signature: {R₁ R₂ : Type*} [CommRing R₁] [CommRing R₂]
-  body: Submodule.Quotient.isScalarTower _ _
-
-中文:
-实例 KaehlerDifferential.isScalarTower_of_tower
-  签名: {R₁ R₂ : 类型} [交换环 R₁] [交换环 R₂]
-  定义体: Submodule.Quotient.isScalarTower _ _
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.isScalarTower, isScalarTower
+/-
+**KaehlerDifferential.isScalarTower_of_tower** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.isScalarTower_of_tower {R₁ R₂ : Type*} [CommRing R₁] [
+CommRing R₂] [Algebra R₁ S] [Algebra R₂ S] [SMul R₁ R₂] [SMulCommClass R R₁ S] [
+SMulCommClass R R₂ S] [IsScalarTower R₁ R₂ S] : IsScalarTower R₁ R₂ Ω[S⁄R]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 instance KaehlerDifferential.isScalarTower_of_tower {R₁ R₂ : Type*} [CommRing R₁] [CommRing R₂]
     [Algebra R₁ S] [Algebra R₂ S] [SMul R₁ R₂]
     [SMulCommClass R R₁ S] [SMulCommClass R R₂ S] [IsScalarTower R₁ R₂ S] :
     IsScalarTower R₁ R₂ Ω[S⁄R] :=
   Submodule.Quotient.isScalarTower _ _
-
-/--
-Instance `KaehlerDifferential.isScalarTower'` / 实例 `KaehlerDifferential.isScalarTower'`
-
-English:
-instance KaehlerDifferential.isScalarTower'
-  signature: : IsScalarTower R (S otimes[R] S) Ω[S⁄R]
-  body: Submodule.Quotient.isScalarTower _ _
-
-中文:
-实例 KaehlerDifferential.isScalarTower'
-  签名: : 标量塔 R (S otimes[R] S) Ω[S⁄R]
-  定义体: Submodule.Quotient.isScalarTower _ _
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.isScalarTower, isScalarTower
+/-
+**KaehlerDifferential.isScalarTower'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.isScalarTower' : IsScalarTower R (S otimes[R] S) Ω[S⁄R
+]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-instance KaehlerDifferential.isScalarTower' : IsScalarTower R (S otimes[R] S) Ω[S⁄R] :=
+instance KaehlerDifferential.isScalarTower' : IsScalarTower R (S ⊗[R] S) Ω[S⁄R] :=
   Submodule.Quotient.isScalarTower _ _
 
-/--
-Definition of `KaehlerDifferential.fromIdeal` / `KaehlerDifferential.fromIdeal` 的定义
+/-- The quotient map `I → Ω[S⁄R]` with `I` being the kernel of `S ⊗[R] S → S`. -/
+/-
+**KaehlerDifferential.fromIdeal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.fromIdeal : KaehlerDifferential.ideal R S ->ₗ[S otimes
+[R] S] Ω[S⁄R]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.fromIdeal
-  signature: : KaehlerDifferential.ideal R S ->ₗ[S otimes[R] S] Ω[S⁄R]
-  body: (KaehlerDifferential.ideal R S).toCotangent
-
-中文:
-定义 KaehlerDifferential.fromIdeal
-  签名: : KaehlerDifferential.ideal R S ->ₗ[S otimes[R] S] Ω[S⁄R]
-  定义体: (KaehlerDifferential.ideal R S).toCotangent
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.ideal, toCotangent
+--- 原说明 ---
+The quotient map `I → Ω[S⁄R]` with `I` being the kernel of `S ⊗[R] S → S`.
 -/
-def KaehlerDifferential.fromIdeal : KaehlerDifferential.ideal R S ->ₗ[S otimes[R] S] Ω[S⁄R] :=
+def KaehlerDifferential.fromIdeal : KaehlerDifferential.ideal R S →ₗ[S ⊗[R] S] Ω[S⁄R] :=
   (KaehlerDifferential.ideal R S).toCotangent
-
-/--
-theorem `KaehlerDifferential.fromIdeal_surjective` / 定理 `KaehlerDifferential.fromIdeal_surjective`
-
-English:
-theorem KaehlerDifferential.fromIdeal_surjective
-  statement: Function.Surjective (fromIdeal R S)
-  proof: Ideal.toCotangent_surjective _
-
-中文:
-定理 KaehlerDifferential.fromIdeal_surjective
-  结论: 函数.满射 (fromIdeal R S)
-  证明: Ideal.toCotangent_surjective _
-
-Depends on / 依赖: Ideal.toCotangent_surjective, toCotangent_surjective
+/-
+**KaehlerDifferential.fromIdeal_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.fromIdeal_surjective : Function.Surjective (fromIdeal 
+R S)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.toCotangent_surjective`：toCotangent_surjective : Function.Surjecti
+ve I.toCotangent
 -/
 theorem KaehlerDifferential.fromIdeal_surjective : Function.Surjective (fromIdeal R S) :=
   Ideal.toCotangent_surjective _
 
-/--
-Definition of `KaehlerDifferential.DLinearMap` / `KaehlerDifferential.DLinearMap` 的定义
+/-- (Implementation) The underlying linear map of the derivation into `Ω[S⁄R]`. -/
+/-
+**KaehlerDifferential.DLinearMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.DLinearMap : S ->ₗ[R] Ω[S⁄R]
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal`：KaehlerDifferential
+.one_smul_sub_smul_one_mem_ideal (a : S) : (1 : S) otimesₜ[R] a - a otimesₜ[R] (
+1 : S) in KaehlerDifferential.ideal R S
 
-English:
-definition KaehlerDifferential.DLinearMap
-  signature: : S ->ₗ[R] Ω[S⁄R]
-  body: ((KaehlerDifferential.fromIdeal R S).restrictScalars R).comp
-    ((TensorProduct.includeRight.toLinearMap - TensorProduct.includeLeft.toLinearMap :
-            S ->ₗ[R] S otimes[R] S).codRestrict
-        ((KaehlerDifferential.ideal R S).restrictScalars R)
-        (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R) :
-      _ ->ₗ[R] _)
-
-中文:
-定义 KaehlerDifferential.DLinearMap
-  签名: : S ->ₗ[R] Ω[S⁄R]
-  定义体: ((KaehlerDifferential.fromIdeal R S).restrictScalars R).comp
-    ((TensorProduct.includeRight.toLinearMap - TensorProduct.includeLeft.toLinearMap :
-            S ->ₗ[R] S otimes[R] S).codRestrict
-        ((KaehlerDifferential.ideal R S).restrictScalars R)
-        (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R) :
-      _ ->ₗ[R] _)
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.fromIdeal, KaehlerDifferential.ideal, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal, TensorProduct, TensorProduct.includeLeft.toLinearMap, TensorProduct.includeRight.toLinearMap, codRestrict, fromIdeal, includeLeft, includeRight, one_smul_sub_smul_one_mem_ideal, otimes, restrictScalars, toLinearMap
+--- 原说明 ---
+(Implementation) The underlying linear map of the derivation into `Ω[S⁄R]`.
 -/
-def KaehlerDifferential.DLinearMap : S ->ₗ[R] Ω[S⁄R] :=
+def KaehlerDifferential.DLinearMap : S →ₗ[R] Ω[S⁄R] :=
   ((KaehlerDifferential.fromIdeal R S).restrictScalars R).comp
     ((TensorProduct.includeRight.toLinearMap - TensorProduct.includeLeft.toLinearMap :
-            S ->ₗ[R] S otimes[R] S).codRestrict
+            S →ₗ[R] S ⊗[R] S).codRestrict
         ((KaehlerDifferential.ideal R S).restrictScalars R)
         (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R) :
-      _ ->ₗ[R] _)
-
-/--
-theorem `KaehlerDifferential.DLinearMap_apply` / 定理 `KaehlerDifferential.DLinearMap_apply`
-
-English:
-theorem KaehlerDifferential.DLinearMap_apply
-  given: (s : S)
-  proof: rfl
-
-中文:
-定理 KaehlerDifferential.DLinearMap_apply
-  条件: (s : S)
-  证明: rfl
+      _ →ₗ[R] _)
+/-
+**KaehlerDifferential.DLinearMap_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.DLinearMap_apply (s : S) : KaehlerDifferential.DLinear
+Map R S s = (KaehlerDifferential.ideal R S).toCotangent ⟨1 otimesₜ s - s otimesₜ
+ 1, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R s⟩
+参数：s : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem KaehlerDifferential.DLinearMap_apply (s : S) :
     KaehlerDifferential.DLinearMap R S s =
       (KaehlerDifferential.ideal R S).toCotangent
-        ⟨1 otimesₜ s - s otimesₜ 1, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R s⟩ := rfl
+        ⟨1 ⊗ₜ s - s ⊗ₜ 1, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R s⟩ := rfl
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `KaehlerDifferential.D` / `KaehlerDifferential.D` 的定义
+/-- The universal derivation into `Ω[S⁄R]`. -/
+/-
+**KaehlerDifferential.D** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.D : Derivation R S Ω[S⁄R]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.D
-  signature: : Derivation R S Ω[S⁄R]
-  body: { toLinearMap := KaehlerDifferential.DLinearMap R S
-    map_one_eq_zero' := by
-      dsimp [KaehlerDifferential.DLinearMap_apply, Ideal.toCotangent_apply]
-      congr
-      rw [sub_self]
-    leibniz' := fun a b => by
-      have : LinearMap.CompatibleSMul { x // x in ideal R S } Ω[S⁄R] S (S otimes[R] S) := inferInstance
-      dsimp [KaehlerDifferential.DLinearMap_apply]
-      rw [← LinearMap.map_smul_of_tower (ideal R S).toCotangent]; rw [← LinearMap.map_smul_of_tower (ideal R S).toCotangent]; rw [← map_add (ideal R S).toCotangent]; rw [Ideal.toCotangent_eq]; rw [pow_two]
-      convert!
-        Submodule.mul_mem_mul (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R a :)
-          (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R b :) using 1
-      simp only [Submodule.coe_add,
-        TensorProduct.tmul_mul_tmul, mul_sub, sub_mul, mul_comm b, Submodule.coe_smul_of_tower,
-        smul_sub, TensorProduct.smul_tmul', smul_eq_mul, mul_one]
-      ring_nf }
-
-中文:
-定义 KaehlerDifferential.D
-  签名: : 导子 R S Ω[S⁄R]
-  定义体: { toLinearMap := KaehlerDifferential.DLinearMap R S
-    map_one_eq_zero' := by
-      dsimp [KaehlerDifferential.DLinearMap_apply, Ideal.toCotangent_apply]
-      congr
-      rw [sub_self]
-    leibniz' := fun a b => by
-      have : LinearMap.CompatibleSMul { x // x in ideal R S } Ω[S⁄R] S (S otimes[R] S) := inferInstance
-      dsimp [KaehlerDifferential.DLinearMap_apply]
-      rw [← LinearMap.map_smul_of_tower (ideal R S).toCotangent]; rw [← LinearMap.map_smul_of_tower (ideal R S).toCotangent]; rw [← map_add (ideal R S).toCotangent]; rw [Ideal.toCotangent_eq]; rw [pow_two]
-      convert!
-        Submodule.mul_mem_mul (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R a :)
-          (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R b :) using 1
-      simp only [Submodule.coe_add,
-        TensorProduct.tmul_mul_tmul, mul_sub, sub_mul, mul_comm b, Submodule.coe_smul_of_tower,
-        smul_sub, TensorProduct.smul_tmul', smul_eq_mul, mul_one]
-      ring_nf }
-
-Depends on / 依赖: CompatibleSMul, DLinearMap, DLinearMap_apply, Ideal.toCotangent_apply, KaehlerDifferential, KaehlerDifferential.DLinearMap, KaehlerDifferential.DLinearMap_apply, LinearMap, LinearMap.CompatibleSMul, LinearMap.map_smul_of_tower, leibniz, map_add, map_one_eq_zero, map_smul_of_tower, otimes, sub_self, toCotangent, toCotangent_apply, toLinearMap
+--- 原说明 ---
+The universal derivation into `Ω[S⁄R]`.
 -/
 def KaehlerDifferential.D : Derivation R S Ω[S⁄R] :=
   { toLinearMap := KaehlerDifferential.DLinearMap R S
@@ -541,9 +513,11 @@ def KaehlerDifferential.D : Derivation R S Ω[S⁄R] :=
       congr
       rw [sub_self]
     leibniz' := fun a b => by
-      have : LinearMap.CompatibleSMul { x // x in ideal R S } Ω[S⁄R] S (S otimes[R] S) := inferInstance
+      have : LinearMap.CompatibleSMul { x // x ∈ ideal R S } Ω[S⁄R] S (S ⊗[R] S) := inferInstance
       dsimp [KaehlerDifferential.DLinearMap_apply]
-      rw [← LinearMap.map_smul_of_tower (ideal R S).toCotangent]; rw [← LinearMap.map_smul_of_tower (ideal R S).toCotangent]; rw [← map_add (ideal R S).toCotangent]; rw [Ideal.toCotangent_eq]; rw [pow_two]
+      rw [← LinearMap.map_smul_of_tower (ideal R S).toCotangent,
+        ← LinearMap.map_smul_of_tower (ideal R S).toCotangent,
+        ← map_add (ideal R S).toCotangent, Ideal.toCotangent_eq, pow_two]
       convert!
         Submodule.mul_mem_mul (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R a :)
           (KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R b :) using 1
@@ -551,84 +525,80 @@ def KaehlerDifferential.D : Derivation R S Ω[S⁄R] :=
         TensorProduct.tmul_mul_tmul, mul_sub, sub_mul, mul_comm b, Submodule.coe_smul_of_tower,
         smul_sub, TensorProduct.smul_tmul', smul_eq_mul, mul_one]
       ring_nf }
-
-/--
-theorem `KaehlerDifferential.D_apply` / 定理 `KaehlerDifferential.D_apply`
-
-English:
-theorem KaehlerDifferential.D_apply
-  given: (s : S)
-  proof: rfl
-
-中文:
-定理 KaehlerDifferential.D_apply
-  条件: (s : S)
-  证明: rfl
+/-
+**KaehlerDifferential.D_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.D_apply (s : S) : KaehlerDifferential.D R S s = (Kaehl
+erDifferential.ideal R S).toCotangent ⟨1 otimesₜ s - s otimesₜ 1, KaehlerDiffere
+ntial.one_smul_sub_smul_one_mem_ideal R s⟩
+参数：s : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem KaehlerDifferential.D_apply (s : S) :
     KaehlerDifferential.D R S s =
       (KaehlerDifferential.ideal R S).toCotangent
-        ⟨1 otimesₜ s - s otimesₜ 1, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R s⟩ := rfl
-
-/--
-theorem `KaehlerDifferential.span_range_derivation` / 定理 `KaehlerDifferential.span_range_derivation`
-
-English:
-theorem KaehlerDifferential.span_range_derivation
-  proof: by
-  rw [_root_.eq_top_iff]
-  rintro x -
-  obtain ⟨⟨x, hx⟩, rfl⟩ := fromIdeal_surjective R S x
-  rw [← Submodule.restrictScalars_mem S]; rw [← KaehlerDifferential.submodule_span_range_eq_ideal] at hx
-  suffices exists hx,
-      fromIdeal R S ⟨x, hx⟩ in Submodule.span S (Set.range <| KaehlerDifferential.D R S) from
-    this.snd
-  -- TODO: this proof looks like we're reinventing `Submodule.span_le`.
-  -- I'm not sure what's the RHS here though.
-  refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
-  · rintro _ ⟨x, rfl⟩
-    refine ⟨KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R x, ?_⟩
-    apply Submodule.subset_span
-    exact ⟨x, KaehlerDifferential.DLinearMap_apply R S x⟩
-  · exact ⟨zero_mem _, Submodule.zero_mem _⟩
-  · rintro x y - - ⟨hx₁, hx₂⟩ ⟨hy₁, hy₂⟩; exact ⟨add_mem hx₁ hy₁, Submodule.add_mem _ hx₂ hy₂⟩
-  · rintro r x - ⟨hx₁, hx₂⟩
-    exact ⟨((KaehlerDifferential.ideal R S).restrictScalars S).smul_mem r hx₁,
-      Submodule.smul_mem _ r hx₂⟩
-
-中文:
-定理 KaehlerDifferential.span_range_derivation
-  证明: by
-  rw [_root_.eq_top_iff]
-  rintro x -
-  obtain ⟨⟨x, hx⟩, rfl⟩ := fromIdeal_surjective R S x
-  rw [← Submodule.restrictScalars_mem S]; rw [← KaehlerDifferential.submodule_span_range_eq_ideal] at hx
-  suffices exists hx,
-      fromIdeal R S ⟨x, hx⟩ in Submodule.span S (Set.range <| KaehlerDifferential.D R S) from
-    this.snd
-  -- TODO: this proof looks like we're reinventing `Submodule.span_le`.
-  -- I'm not sure what's the RHS here though.
-  refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
-  · rintro _ ⟨x, rfl⟩
-    refine ⟨KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R x, ?_⟩
-    apply Submodule.subset_span
-    exact ⟨x, KaehlerDifferential.DLinearMap_apply R S x⟩
-  · exact ⟨zero_mem _, Submodule.zero_mem _⟩
-  · rintro x y - - ⟨hx₁, hx₂⟩ ⟨hy₁, hy₂⟩; exact ⟨add_mem hx₁ hy₁, Submodule.add_mem _ hx₂ hy₂⟩
-  · rintro r x - ⟨hx₁, hx₂⟩
-    exact ⟨((KaehlerDifferential.ideal R S).restrictScalars S).smul_mem r hx₁,
-      Submodule.smul_mem _ r hx₂⟩
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.D, KaehlerDifferential.submodule_span_range_eq_ideal, Set.range, Submodule, Submodule.restrictScalars_mem, Submodule.span, _root_, _root_.eq_top_iff, eq_top_iff, fromIdeal, fromIdeal_surjective, restrictScalars_mem, submodule_span_range_eq_ideal, this.snd
+        ⟨1 ⊗ₜ s - s ⊗ₜ 1, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R s⟩ := rfl
+/-
+**KaehlerDifferential.span_range_derivation** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.span_range_derivation : Submodule.span S (Set.range <|
+ KaehlerDifferential.D R S) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `KaehlerDifferential.fromIdeal_surjective`：KaehlerDifferential.fromIdeal_
+surjective : Function.Surjective (fromIdeal R S)
+· 使用定理 `Submodule.span_induction`：span_induction {p : (x : M) -> x in span R s -
+> Prop} (mem : forall (x) (h : x in s), p x (subset_span h)) (zero : p 0 (Submod
+ule.zero_mem _…
+· 使用定理 `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal`：KaehlerDifferential
+.one_smul_sub_smul_one_mem_ideal (a : S) : (1 : S) otimesₜ[R] a - a otimesₜ[R] (
+1 : S) in KaehlerDifferential.ideal R S
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `KaehlerDifferential.DLinearMap_apply`：KaehlerDifferential.DLinearMap_app
+ly (s : S) : KaehlerDifferential.DLinearMap R S s = (KaehlerDifferential.ideal R
+ S).toCotangent ⟨1 otimesₜ…
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `Submodule.zero_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [ins
+t_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M), 0 ∈
+ p
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `Submodule.add_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [inst
+_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M) {x y 
+: M}, x…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.submodule_span_range_eq_ideal`：KaehlerDifferential.s
+ubmodule_span_range_eq_ideal : Submodule.span S (Set.range fun s : S => (1 : S) 
+otimesₜ[R] s - s otimesₜ[R] (1 : S)) = …
+· 使用定理 `Submodule.restrictScalars_mem`：restrictScalars_mem (V : Submodule R M) (
+m : M) : m in V.restrictScalars S ↔ m in V
+· 使用定理 `Exists.snd`：∀ {b : Prop} {p : b → Prop} (h : Exists p), p ⋯
 -/
 theorem KaehlerDifferential.span_range_derivation :
     Submodule.span S (Set.range <| KaehlerDifferential.D R S) = ⊤ := by
   rw [_root_.eq_top_iff]
   rintro x -
   obtain ⟨⟨x, hx⟩, rfl⟩ := fromIdeal_surjective R S x
-  rw [← Submodule.restrictScalars_mem S]; rw [← KaehlerDifferential.submodule_span_range_eq_ideal] at hx
-  suffices exists hx,
-      fromIdeal R S ⟨x, hx⟩ in Submodule.span S (Set.range <| KaehlerDifferential.D R S) from
+  rw [← Submodule.restrictScalars_mem S, ← KaehlerDifferential.submodule_span_range_eq_ideal] at hx
+  suffices ∃ hx,
+      fromIdeal R S ⟨x, hx⟩ ∈ Submodule.span S (Set.range <| KaehlerDifferential.D R S) from
     this.snd
   -- TODO: this proof looks like we're reinventing `Submodule.span_le`.
   -- I'm not sure what's the RHS here though.
@@ -643,80 +613,60 @@ theorem KaehlerDifferential.span_range_derivation :
     exact ⟨((KaehlerDifferential.ideal R S).restrictScalars S).smul_mem r hx₁,
       Submodule.smul_mem _ r hx₂⟩
 
-/--
-lemma `KaehlerDifferential.subsingleton_of_surjective` / 引理 `KaehlerDifferential.subsingleton_of_surjective`
+/-- `Ω[S⁄R]` is trivial if `R → S` is surjective.
+Also see `Algebra.FormallyUnramified.iff_subsingleton_kaehlerDifferential`. -/
+/-
+**KaehlerDifferential.subsingleton_of_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.subsingleton_of_surjective (h : Function.Surjective (a
+lgebraMap R S)) : Subsingleton Ω[S⁄R]
+参数：h : Function.Surjective (algebraMap R S)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.span_range_derivation`：KaehlerDifferential.span_rang
+e_derivation : Submodule.span S (Set.range <| KaehlerDifferential.D R S) = ⊤
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Derivation.map_algebraMap`：map_algebraMap : D (algebraMap R A r) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `subsingleton_iff_forall_eq`：∀ {α : Sort u_1} (x : α), Subsingleton α ↔ ∀
+ (y : α), y = x
+· 使用定理 `trivial`：True
 
-English:
-lemma KaehlerDifferential.subsingleton_of_surjective
-  given: (h : Function.Surjective (algebraMap R S))
-  proof: by
-  suffices (⊤ : Submodule S Ω[S⁄R]) <= ⊥ from
-    (subsingleton_iff_forall_eq 0).mpr fun y => this trivial
-  rw [← KaehlerDifferential.span_range_derivation]; rw [Submodule.span_le]
-  rintro _ ⟨x, rfl⟩; obtain ⟨x, rfl⟩ := h x; simp
-
-中文:
-引理 KaehlerDifferential.subsingleton_of_surjective
-  条件: (h : 函数.满射 (algebraMap R S))
-  证明: by
-  suffices (⊤ : Submodule S Ω[S⁄R]) <= ⊥ from
-    (subsingleton_iff_forall_eq 0).mpr fun y => this trivial
-  rw [← KaehlerDifferential.span_range_derivation]; rw [Submodule.span_le]
-  rintro _ ⟨x, rfl⟩; obtain ⟨x, rfl⟩ := h x; simp
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.span_range_derivation, Submodule, Submodule.span_le, span_le, span_range_derivation, subsingleton_iff_forall_eq
+--- 原说明 ---
+`Ω[S⁄R]` is trivial if `R → S` is surjective.
+Also see `Algebra.FormallyUnramified.iff_subsingleton_kaehlerDifferential`.
 -/
 lemma KaehlerDifferential.subsingleton_of_surjective (h : Function.Surjective (algebraMap R S)) :
     Subsingleton Ω[S⁄R] := by
-  suffices (⊤ : Submodule S Ω[S⁄R]) <= ⊥ from
-    (subsingleton_iff_forall_eq 0).mpr fun y => this trivial
-  rw [← KaehlerDifferential.span_range_derivation]; rw [Submodule.span_le]
+  suffices (⊤ : Submodule S Ω[S⁄R]) ≤ ⊥ from
+    (subsingleton_iff_forall_eq 0).mpr fun y ↦ this trivial
+  rw [← KaehlerDifferential.span_range_derivation, Submodule.span_le]
   rintro _ ⟨x, rfl⟩; obtain ⟨x, rfl⟩ := h x; simp
 
 variable {R S}
 
-/--
-Definition of `Derivation.liftKaehlerDifferential` / `Derivation.liftKaehlerDifferential` 的定义
+/-- The linear map from `Ω[S⁄R]`, associated with a derivation. -/
+/-
+**Derivation.liftKaehlerDifferential** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Derivation.liftKaehlerDifferential (D : Derivation R S M) : Ω[S⁄R] ->ₗ[S] 
+M
+参数：D : Derivation R S M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Derivation.liftKaehlerDifferential
-  signature: (D : Derivation R S M)
-  body: by
-  refine LinearMap.comp ((((KaehlerDifferential.ideal R S) •
-    (⊤ : Submodule (S otimes[R] S) (KaehlerDifferential.ideal R S))).restrictScalars S).liftQ ?_ ?_)
-    (Submodule.Quotient.restrictScalarsEquiv S _).symm.toLinearMap
-  · exact D.tensorProductTo.comp ((KaehlerDifferential.ideal R S).subtype.restrictScalars S)
-  · intro x hx
-    rw [LinearMap.mem_ker]
-    refine Submodule.smul_induction_on ((Submodule.restrictScalars_mem _ _ _).mp hx) ?_ ?_
-    · rintro x hx y -
-      rw [RingHom.mem_ker] at hx
-      dsimp
-      rw [Derivation.tensorProductTo_mul]; rw [hx]; rw [y.prop]; rw [zero_smul]; rw [zero_smul]; rw [zero_add]
-    · intro x y ex ey; rw [map_add, ex, ey, zero_add]
-
-中文:
-定义 导子.liftKaehlerDifferential
-  签名: (D : 导子 R S M)
-  定义体: by
-  refine LinearMap.comp ((((KaehlerDifferential.ideal R S) •
-    (⊤ : Submodule (S otimes[R] S) (KaehlerDifferential.ideal R S))).restrictScalars S).liftQ ?_ ?_)
-    (Submodule.Quotient.restrictScalarsEquiv S _).symm.toLinearMap
-  · exact D.tensorProductTo.comp ((KaehlerDifferential.ideal R S).subtype.restrictScalars S)
-  · intro x hx
-    rw [LinearMap.mem_ker]
-    refine Submodule.smul_induction_on ((Submodule.restrictScalars_mem _ _ _).mp hx) ?_ ?_
-    · rintro x hx y -
-      rw [RingHom.mem_ker] at hx
-      dsimp
-      rw [Derivation.tensorProductTo_mul]; rw [hx]; rw [y.prop]; rw [zero_smul]; rw [zero_smul]; rw [zero_add]
-    · intro x y ex ey; rw [map_add, ex, ey, zero_add]
-
-Depends on / 依赖: D.tensorProductTo.comp, Derivatio, KaehlerDifferential, KaehlerDifferential.ideal, LinearMap, LinearMap.comp, LinearMap.mem_ker, Quotient, RingHom, RingHom.mem_ker, Submodule, Submodule.Quotient.restrictScalarsEquiv, Submodule.restrictScalars_mem, Submodule.smul_induction_on, mem_ker, otimes, restrictScalars, restrictScalarsEquiv, restrictScalars_mem, smul_induction_on
+--- 原说明 ---
+The linear map from `Ω[S⁄R]`, associated with a derivation.
 -/
-def Derivation.liftKaehlerDifferential (D : Derivation R S M) : Ω[S⁄R] ->ₗ[S] M := by
+def Derivation.liftKaehlerDifferential (D : Derivation R S M) : Ω[S⁄R] →ₗ[S] M := by
   refine LinearMap.comp ((((KaehlerDifferential.ideal R S) •
-    (⊤ : Submodule (S otimes[R] S) (KaehlerDifferential.ideal R S))).restrictScalars S).liftQ ?_ ?_)
+    (⊤ : Submodule (S ⊗[R] S) (KaehlerDifferential.ideal R S))).restrictScalars S).liftQ ?_ ?_)
     (Submodule.Quotient.restrictScalarsEquiv S _).symm.toLinearMap
   · exact D.tensorProductTo.comp ((KaehlerDifferential.ideal R S).subtype.restrictScalars S)
   · intro x hx
@@ -725,124 +675,156 @@ def Derivation.liftKaehlerDifferential (D : Derivation R S M) : Ω[S⁄R] ->ₗ[
     · rintro x hx y -
       rw [RingHom.mem_ker] at hx
       dsimp
-      rw [Derivation.tensorProductTo_mul]; rw [hx]; rw [y.prop]; rw [zero_smul]; rw [zero_smul]; rw [zero_add]
+      rw [Derivation.tensorProductTo_mul, hx, y.prop, zero_smul, zero_smul, zero_add]
     · intro x y ex ey; rw [map_add, ex, ey, zero_add]
-
-/--
-theorem `Derivation.liftKaehlerDifferential_apply` / 定理 `Derivation.liftKaehlerDifferential_apply`
-
-English:
-theorem Derivation.liftKaehlerDifferential_apply
-  given: (D : Derivation R S M) (x)
-  proof: rfl
-
-中文:
-定理 导子.liftKaehlerDifferential_apply
-  条件: (D : 导子 R S M) (x)
-  证明: rfl
+/-
+**Derivation.liftKaehlerDifferential_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Derivation.liftKaehlerDifferential_apply (D : Derivation R S M) (x) : D.li
+ftKaehlerDifferential ((KaehlerDifferential.ideal R S).toCotangent x) = D.tensor
+ProductTo x
+参数：D : Derivation R S M；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem Derivation.liftKaehlerDifferential_apply (D : Derivation R S M) (x) :
     D.liftKaehlerDifferential ((KaehlerDifferential.ideal R S).toCotangent x) =
       D.tensorProductTo x := rfl
-
-/--
-theorem `Derivation.liftKaehlerDifferential_comp` / 定理 `Derivation.liftKaehlerDifferential_comp`
-
-English:
-theorem Derivation.liftKaehlerDifferential_comp
-  given: (D : Derivation R S M)
-  proof: by
-  ext a
-  dsimp [KaehlerDifferential.D_apply]
-  refine (D.liftKaehlerDifferential_apply _).trans ?_
-  rw [Subtype.coe_mk]; rw [map_sub]; rw [Derivation.tensorProductTo_tmul]; rw [Derivation.tensorProductTo_tmul]; rw [one_smul]; rw [D.map_one_eq_zero]; rw [smul_zero]; rw [sub_zero]
-
-@[simp]
-
-中文:
-定理 导子.liftKaehlerDifferential_comp
-  条件: (D : 导子 R S M)
-  证明: by
-  ext a
-  dsimp [KaehlerDifferential.D_apply]
-  refine (D.liftKaehlerDifferential_apply _).trans ?_
-  rw [Subtype.coe_mk]; rw [map_sub]; rw [Derivation.tensorProductTo_tmul]; rw [Derivation.tensorProductTo_tmul]; rw [one_smul]; rw [D.map_one_eq_zero]; rw [smul_zero]; rw [sub_zero]
-
-@[simp]
-
-Depends on / 依赖: D.liftKaehlerDifferential_apply, D.map_one_eq_zero, D_apply, Derivation, Derivation.tensorProductTo_tmul, KaehlerDifferential, KaehlerDifferential.D_apply, Subtype, Subtype.coe_mk, coe_mk, liftKaehlerDifferential_apply, map_one_eq_zero, map_sub, one_smul, smul_zero, sub_zero, tensorProductTo_tmul
+/-
+**Derivation.liftKaehlerDifferential_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Derivation.liftKaehlerDifferential_comp (D : Derivation R S M) : D.liftKae
+hlerDifferential.compDer (KaehlerDifferential.D R S) = D
+参数：D : Derivation R S M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal`：KaehlerDifferential
+.one_smul_sub_smul_one_mem_ideal (a : S) : (1 : S) otimesₜ[R] a - a otimesₜ[R] (
+1 : S) in KaehlerDifferential.ideal R S
+· 使用定理 `Derivation.liftKaehlerDifferential_apply`：Derivation.liftKaehlerDifferen
+tial_apply (D : Derivation R S M) (x) : D.liftKaehlerDifferential ((KaehlerDiffe
+rential.ideal R S).toCotangent…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Derivation.tensorProductTo_tmul`：Derivation.tensorProductTo_tmul (D : De
+rivation R S M) (s t : S) : D.tensorProductTo (s otimesₜ t) = s • D t
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
 theorem Derivation.liftKaehlerDifferential_comp (D : Derivation R S M) :
     D.liftKaehlerDifferential.compDer (KaehlerDifferential.D R S) = D := by
   ext a
   dsimp [KaehlerDifferential.D_apply]
   refine (D.liftKaehlerDifferential_apply _).trans ?_
-  rw [Subtype.coe_mk]; rw [map_sub]; rw [Derivation.tensorProductTo_tmul]; rw [Derivation.tensorProductTo_tmul]; rw [one_smul]; rw [D.map_one_eq_zero]; rw [smul_zero]; rw [sub_zero]
+  rw [Subtype.coe_mk, map_sub, Derivation.tensorProductTo_tmul, Derivation.tensorProductTo_tmul,
+    one_smul, D.map_one_eq_zero, smul_zero, sub_zero]
 
 @[simp]
-/--
-theorem `Derivation.liftKaehlerDifferential_comp_D` / 定理 `Derivation.liftKaehlerDifferential_comp_D`
-
-English:
-theorem Derivation.liftKaehlerDifferential_comp_D
-  given: (D' : Derivation R S M) (x : S)
-  proof: Derivation.congr_fun D'.liftKaehlerDifferential_comp x
-
-@[ext]
-
-中文:
-定理 导子.liftKaehlerDifferential_comp_D
-  条件: (D' : 导子 R S M) (x : S)
-  证明: Derivation.congr_fun D'.liftKaehlerDifferential_comp x
-
-@[ext]
-
-Depends on / 依赖: Derivation, Derivation.congr_fun, congr_fun, liftKaehlerDifferential_comp
+/-
+**Derivation.liftKaehlerDifferential_comp_D** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Derivation.liftKaehlerDifferential_comp_D (D' : Derivation R S M) (x : S) 
+: D'.liftKaehlerDifferential (KaehlerDifferential.D R S x) = D' x
+参数：D' : Derivation R S M；x : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.congr_fun`：congr_fun (h : D1 = D2) (a : A) : D1 a = D2 a
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Derivation.liftKaehlerDifferential_comp`：Derivation.liftKaehlerDifferent
+ial_comp (D : Derivation R S M) : D.liftKaehlerDifferential.compDer (KaehlerDiff
+erential.D R S) = D
 -/
 theorem Derivation.liftKaehlerDifferential_comp_D (D' : Derivation R S M) (x : S) :
     D'.liftKaehlerDifferential (KaehlerDifferential.D R S x) = D' x :=
   Derivation.congr_fun D'.liftKaehlerDifferential_comp x
 
 @[ext]
-/--
-theorem `Derivation.liftKaehlerDifferential_unique` / 定理 `Derivation.liftKaehlerDifferential_unique`
-
-English:
-theorem Derivation.liftKaehlerDifferential_unique
-  statement: (f f' : Ω[S⁄R] ->ₗ[S] M)
-  proof: by
-  apply LinearMap.ext
-  intro x
-  have : x in Submodule.span S (Set.range <| KaehlerDifferential.D R S) := by
-    rw [KaehlerDifferential.span_range_derivation]; trivial
-  refine Submodule.span_induction ?_ ?_ ?_ ?_ this
-  · rintro _ ⟨x, rfl⟩; exact congr_arg (fun D : Derivation R S M => D x) hf
-  · rw [map_zero, map_zero]
-  · intro x y _ _ hx hy; rw [map_add, map_add, hx, hy]
-  · intro a x _ e; simp [e]
-
-中文:
-定理 导子.liftKaehlerDifferential_unique
-  结论: (f f' : Ω[S⁄R] ->ₗ[S] M)
-  证明: by
-  apply LinearMap.ext
-  intro x
-  have : x in Submodule.span S (Set.range <| KaehlerDifferential.D R S) := by
-    rw [KaehlerDifferential.span_range_derivation]; trivial
-  refine Submodule.span_induction ?_ ?_ ?_ ?_ this
-  · rintro _ ⟨x, rfl⟩; exact congr_arg (fun D : Derivation R S M => D x) hf
-  · rw [map_zero, map_zero]
-  · intro x y _ _ hx hy; rw [map_add, map_add, hx, hy]
-  · intro a x _ e; simp [e]
-
-Depends on / 依赖: Derivation, KaehlerDifferential, KaehlerDifferential.D, KaehlerDifferential.span_range_derivation, LinearMap, LinearMap.ext, Set.range, Submodule, Submodule.span, Submodule.span_induction, congr_arg, map_add, map_zero, span_induction, span_range_derivation
+/-
+**Derivation.liftKaehlerDifferential_unique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Derivation.liftKaehlerDifferential_unique (f f' : Ω[S⁄R] ->ₗ[S] M) (hf : f
+.compDer (KaehlerDifferential.D R S) = f'.compDer (KaehlerDifferential.D R S)) :
+ f = f'
+参数：f f' : Ω[S⁄R] ->ₗ[S] M；hf : f.compDer (KaehlerDifferential.D R S) = f'.compDe
+r (KaehlerDifferential.D R S)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `KaehlerDifferential.span_range_derivation`：KaehlerDifferential.span_rang
+e_derivation : Submodule.span S (Set.range <| KaehlerDifferential.D R S) = ⊤
+· 使用定理 `Submodule.span_induction`：span_induction {p : (x : M) -> x in span R s -
+> Prop} (mem : forall (x) (h : x in s), p x (subset_span h)) (zero : p 0 (Submod
+ule.zero_mem _…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Derivation.liftKaehlerDifferential_unique (f f' : Ω[S⁄R] ->ₗ[S] M)
+theorem Derivation.liftKaehlerDifferential_unique (f f' : Ω[S⁄R] →ₗ[S] M)
     (hf : f.compDer (KaehlerDifferential.D R S) = f'.compDer (KaehlerDifferential.D R S)) :
     f = f' := by
   apply LinearMap.ext
   intro x
-  have : x in Submodule.span S (Set.range <| KaehlerDifferential.D R S) := by
+  have : x ∈ Submodule.span S (Set.range <| KaehlerDifferential.D R S) := by
     rw [KaehlerDifferential.span_range_derivation]; trivial
   refine Submodule.span_induction ?_ ?_ ?_ ?_ this
   · rintro _ ⟨x, rfl⟩; exact congr_arg (fun D : Derivation R S M => D x) hf
@@ -851,21 +833,22 @@ theorem Derivation.liftKaehlerDifferential_unique (f f' : Ω[S⁄R] ->ₗ[S] M)
   · intro a x _ e; simp [e]
 
 variable (R S)
-
-/--
-theorem `Derivation.liftKaehlerDifferential_D` / 定理 `Derivation.liftKaehlerDifferential_D`
-
-English:
-theorem Derivation.liftKaehlerDifferential_D
-  proof: Derivation.liftKaehlerDifferential_unique _ _
-    (KaehlerDifferential.D R S).liftKaehlerDifferential_comp
-
-中文:
-定理 导子.liftKaehlerDifferential_D
-  证明: Derivation.liftKaehlerDifferential_unique _ _
-    (KaehlerDifferential.D R S).liftKaehlerDifferential_comp
-
-Depends on / 依赖: Derivation, Derivation.liftKaehlerDifferential_unique, KaehlerDifferential, KaehlerDifferential.D, liftKaehlerDifferential_comp, liftKaehlerDifferential_unique
+/-
+**Derivation.liftKaehlerDifferential_D** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Derivation.liftKaehlerDifferential_D : (KaehlerDifferential.D R S).liftKae
+hlerDifferential = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.liftKaehlerDifferential_unique`：Derivation.liftKaehlerDiffere
+ntial_unique (f f' : Ω[S⁄R] ->ₗ[S] M) (hf : f.compDer (KaehlerDifferential.D R S
+) = f'.compDer (KaehlerDifferen…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Derivation.liftKaehlerDifferential_comp`：Derivation.liftKaehlerDifferent
+ial_comp (D : Derivation R S M) : D.liftKaehlerDifferential.compDer (KaehlerDiff
+erential.D R S) = D
 -/
 theorem Derivation.liftKaehlerDifferential_D :
     (KaehlerDifferential.D R S).liftKaehlerDifferential = LinearMap.id :=
@@ -873,50 +856,49 @@ theorem Derivation.liftKaehlerDifferential_D :
     (KaehlerDifferential.D R S).liftKaehlerDifferential_comp
 
 variable {R S}
-
-/--
-theorem `KaehlerDifferential.D_tensorProductTo` / 定理 `KaehlerDifferential.D_tensorProductTo`
-
-English:
-theorem KaehlerDifferential.D_tensorProductTo
-  given: (x : KaehlerDifferential.ideal R S)
-  proof: by
-  rw [← Derivation.liftKaehlerDifferential_apply]; rw [Derivation.liftKaehlerDifferential_D]
-  rfl
-
-中文:
-定理 KaehlerDifferential.D_tensorProductTo
-  条件: (x : KaehlerDifferential.ideal R S)
-  证明: by
-  rw [← Derivation.liftKaehlerDifferential_apply]; rw [Derivation.liftKaehlerDifferential_D]
-  rfl
-
-Depends on / 依赖: Derivation, Derivation.liftKaehlerDifferential_D, Derivation.liftKaehlerDifferential_apply, liftKaehlerDifferential_D, liftKaehlerDifferential_apply
+/-
+**KaehlerDifferential.D_tensorProductTo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.D_tensorProductTo (x : KaehlerDifferential.ideal R S) 
+: (KaehlerDifferential.D R S).tensorProductTo x = (KaehlerDifferential.ideal R S
+).toCotangent x
+参数：x : KaehlerDifferential.ideal R S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Derivation.liftKaehlerDifferential_apply`：Derivation.liftKaehlerDifferen
+tial_apply (D : Derivation R S M) (x) : D.liftKaehlerDifferential ((KaehlerDiffe
+rential.ideal R S).toCotangent…
+· 使用定理 `Derivation.liftKaehlerDifferential_D`：Derivation.liftKaehlerDifferential
+_D : (KaehlerDifferential.D R S).liftKaehlerDifferential = LinearMap.id
 -/
 theorem KaehlerDifferential.D_tensorProductTo (x : KaehlerDifferential.ideal R S) :
     (KaehlerDifferential.D R S).tensorProductTo x =
       (KaehlerDifferential.ideal R S).toCotangent x := by
-  rw [← Derivation.liftKaehlerDifferential_apply]; rw [Derivation.liftKaehlerDifferential_D]
+  rw [← Derivation.liftKaehlerDifferential_apply, Derivation.liftKaehlerDifferential_D]
   rfl
 
 variable (R S)
-
-/--
-theorem `KaehlerDifferential.tensorProductTo_surjective` / 定理 `KaehlerDifferential.tensorProductTo_surjective`
-
-English:
-theorem KaehlerDifferential.tensorProductTo_surjective
-  proof: by
-  intro x; obtain ⟨x, rfl⟩ := (KaehlerDifferential.ideal R S).toCotangent_surjective x
-  exact ⟨x, KaehlerDifferential.D_tensorProductTo x⟩
-
-中文:
-定理 KaehlerDifferential.tensorProductTo_surjective
-  证明: by
-  intro x; obtain ⟨x, rfl⟩ := (KaehlerDifferential.ideal R S).toCotangent_surjective x
-  exact ⟨x, KaehlerDifferential.D_tensorProductTo x⟩
-
-Depends on / 依赖: D_tensorProductTo, KaehlerDifferential, KaehlerDifferential.D_tensorProductTo, KaehlerDifferential.ideal, toCotangent_surjective
+/-
+**KaehlerDifferential.tensorProductTo_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.tensorProductTo_surjective : Function.Surjective (Kaeh
+lerDifferential.D R S).tensorProductTo
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.toCotangent_surjective`：toCotangent_surjective : Function.Surjecti
+ve I.toCotangent
+· 使用定理 `KaehlerDifferential.D_tensorProductTo`：KaehlerDifferential.D_tensorProdu
+ctTo (x : KaehlerDifferential.ideal R S) : (KaehlerDifferential.D R S).tensorPro
+ductTo x = (KaehlerDifferen…
 -/
 theorem KaehlerDifferential.tensorProductTo_surjective :
     Function.Surjective (KaehlerDifferential.D R S).tensorProductTo := by
@@ -926,154 +908,113 @@ theorem KaehlerDifferential.tensorProductTo_surjective :
 /-- The `S`-linear maps from `Ω[S⁄R]` to `M` are (`S`-linearly) equivalent to `R`-derivations
 from `S` to `M`. -/
 @[simps! symm_apply apply_apply]
-/--
-Definition of `KaehlerDifferential.linearMapEquivDerivation` / `KaehlerDifferential.linearMapEquivDerivation` 的定义
+/-
+**KaehlerDifferential.linearMapEquivDerivation** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.linearMapEquivDerivation : (Ω[S⁄R] ->ₗ[S] M) ≃ₗ[S] Der
+ivation R S M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.liftKaehlerDifferential_comp`：Derivation.liftKaehlerDifferent
+ial_comp (D : Derivation R S M) : D.liftKaehlerDifferential.compDer (KaehlerDiff
+erential.D R S) = D
 
-English:
-definition KaehlerDifferential.linearMapEquivDerivation
-  signature: : (Ω[S⁄R] ->ₗ[S] M) ≃ₗ[S] Derivation R S M
-  body: { Derivation.llcomp.flip <| KaehlerDifferential.D R S with
-    invFun := Derivation.liftKaehlerDifferential
-    left_inv := fun _ =>
-      Derivation.liftKaehlerDifferential_unique _ _ (Derivation.liftKaehlerDifferential_comp _)
-    right_inv := Derivation.liftKaehlerDifferential_comp }
-
-中文:
-定义 KaehlerDifferential.linearMapEquivDerivation
-  签名: : (Ω[S⁄R] ->ₗ[S] M) ≃ₗ[S] 导子 R S M
-  定义体: { Derivation.llcomp.flip <| KaehlerDifferential.D R S with
-    invFun := Derivation.liftKaehlerDifferential
-    left_inv := fun _ =>
-      Derivation.liftKaehlerDifferential_unique _ _ (Derivation.liftKaehlerDifferential_comp _)
-    right_inv := Derivation.liftKaehlerDifferential_comp }
-
-Depends on / 依赖: Derivation, Derivation.liftKaehlerDifferential, Derivation.liftKaehlerDifferential_comp, Derivation.liftKaehlerDifferential_unique, Derivation.llcomp.flip, KaehlerDifferential, KaehlerDifferential.D, invFun, left_inv, liftKaehlerDifferential, liftKaehlerDifferential_comp, liftKaehlerDifferential_unique, llcomp, right_inv
+--- 原说明 ---
+The `S`-linear maps from `Ω[S⁄R]` to `M` are (`S`-linearly) equivalent to `R`-de
+rivations
+from `S` to `M`.
 -/
-def KaehlerDifferential.linearMapEquivDerivation : (Ω[S⁄R] ->ₗ[S] M) ≃ₗ[S] Derivation R S M :=
+def KaehlerDifferential.linearMapEquivDerivation : (Ω[S⁄R] →ₗ[S] M) ≃ₗ[S] Derivation R S M :=
   { Derivation.llcomp.flip <| KaehlerDifferential.D R S with
     invFun := Derivation.liftKaehlerDifferential
     left_inv := fun _ =>
       Derivation.liftKaehlerDifferential_unique _ _ (Derivation.liftKaehlerDifferential_comp _)
     right_inv := Derivation.liftKaehlerDifferential_comp }
 
-/--
-Definition of `KaehlerDifferential.quotientCotangentIdealRingEquiv` / `KaehlerDifferential.quotientCotangentIdealRingEquiv` 的定义
+/-- The quotient ring of `S ⊗ S ⧸ J ^ 2` by `Ω[S⁄R]` is isomorphic to `S`. -/
+/-
+**KaehlerDifferential.quotientCotangentIdealRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+``。
+形式化陈述：KaehlerDifferential.quotientCotangentIdealRingEquiv : (S otimes S ⧸ Kaehle
+rDifferential.ideal R S ^ 2) ⧸ (KaehlerDifferential.ideal R S).cotangentIdeal ≃+
+* S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.quotientCotangentIdealRingEquiv
-  signature: :
-  body: by
-  have : Function.RightInverse (TensorProduct.includeLeft (R := R) (S := R) (A := S) (B := S))
-      (↑(TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S) : S otimes[R] S ->+* S) := by
-    intro x; rw [AlgHom.coe_toRingHom, ← AlgHom.comp_apply, TensorProduct.lmul'_comp_includeLeft]
-    rfl
-  refine (Ideal.quotCotangent _).trans ?_
-  refine (Ideal.quotEquivOfEq ?_).trans (RingHom.quotientKerEquivOfRightInverse this)
-  ext; rfl
-
-中文:
-定义 KaehlerDifferential.quotientCotangentIdealRingEquiv
-  签名: :
-  定义体: by
-  have : Function.RightInverse (TensorProduct.includeLeft (R := R) (S := R) (A := S) (B := S))
-      (↑(TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S) : S otimes[R] S ->+* S) := by
-    intro x; rw [AlgHom.coe_toRingHom, ← AlgHom.comp_apply, TensorProduct.lmul'_comp_includeLeft]
-    rfl
-  refine (Ideal.quotCotangent _).trans ?_
-  refine (Ideal.quotEquivOfEq ?_).trans (RingHom.quotientKerEquivOfRightInverse this)
-  ext; rfl
-
-Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, AlgHom.comp_apply, Function, Function.RightInverse, Ideal.quotCotangent, Ideal.quotEquivOfEq, RightInverse, RingHom, RingHom.quotientKerEquivOfRightInverse, TensorProduct, TensorProduct.includeLeft, TensorProduct.lmul, _comp_includeLeft, coe_toRingHom, comp_apply, includeLeft, otimes, quotCotangent, quotEquivOfEq
+--- 原说明 ---
+The quotient ring of `S ⊗ S ⧸ J ^ 2` by `Ω[S⁄R]` is isomorphic to `S`.
 -/
 def KaehlerDifferential.quotientCotangentIdealRingEquiv :
-    (S otimes S ⧸ KaehlerDifferential.ideal R S ^ 2) ⧸ (KaehlerDifferential.ideal R S).cotangentIdeal ≃+*
+    (S ⊗ S ⧸ KaehlerDifferential.ideal R S ^ 2) ⧸ (KaehlerDifferential.ideal R S).cotangentIdeal ≃+*
       S := by
   have : Function.RightInverse (TensorProduct.includeLeft (R := R) (S := R) (A := S) (B := S))
-      (↑(TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S) : S otimes[R] S ->+* S) := by
+      (↑(TensorProduct.lmul' R : S ⊗[R] S →ₐ[R] S) : S ⊗[R] S →+* S) := by
     intro x; rw [AlgHom.coe_toRingHom, ← AlgHom.comp_apply, TensorProduct.lmul'_comp_includeLeft]
     rfl
   refine (Ideal.quotCotangent _).trans ?_
   refine (Ideal.quotEquivOfEq ?_).trans (RingHom.quotientKerEquivOfRightInverse this)
   ext; rfl
 
-/--
-Definition of `KaehlerDifferential.quotientCotangentIdeal` / `KaehlerDifferential.quotientCotangentIdeal` 的定义
+/-- The quotient ring of `S ⊗ S ⧸ J ^ 2` by `Ω[S⁄R]` is isomorphic to `S` as an `S`-algebra. -/
+/-
+**KaehlerDifferential.quotientCotangentIdeal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.quotientCotangentIdeal : ((S otimes S ⧸ KaehlerDiffere
+ntial.ideal R S ^ 2) ⧸ (KaehlerDifferential.ideal R S).cotangentIdeal) ≃ₐ[S] S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.quotientCotangentIdeal
-  signature: :
-  body: { KaehlerDifferential.quotientCotangentIdealRingEquiv R S with
-    commutes' := (KaehlerDifferential.quotientCotangentIdealRingEquiv R S).apply_symm_apply }
-
-中文:
-定义 KaehlerDifferential.quotientCotangentIdeal
-  签名: :
-  定义体: { KaehlerDifferential.quotientCotangentIdealRingEquiv R S with
-    commutes' := (KaehlerDifferential.quotientCotangentIdealRingEquiv R S).apply_symm_apply }
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.quotientCotangentIdealRingEquiv, apply_symm_apply, commutes, quotientCotangentIdealRingEquiv
+--- 原说明 ---
+The quotient ring of `S ⊗ S ⧸ J ^ 2` by `Ω[S⁄R]` is isomorphic to `S` as an `S`-
+algebra.
 -/
 def KaehlerDifferential.quotientCotangentIdeal :
-    ((S otimes S ⧸ KaehlerDifferential.ideal R S ^ 2) ⧸
+    ((S ⊗ S ⧸ KaehlerDifferential.ideal R S ^ 2) ⧸
         (KaehlerDifferential.ideal R S).cotangentIdeal) ≃ₐ[S] S :=
   { KaehlerDifferential.quotientCotangentIdealRingEquiv R S with
     commutes' := (KaehlerDifferential.quotientCotangentIdealRingEquiv R S).apply_symm_apply }
-
-/--
-theorem `KaehlerDifferential.End_equiv_aux` / 定理 `KaehlerDifferential.End_equiv_aux`
-
-English:
-theorem KaehlerDifferential.End_equiv_aux
-  given: (f : S ->ₐ[R] S otimes S ⧸ KaehlerDifferential.ideal R S ^ 2)
-  proof: by
-  rw [AlgHom.ext_iff]; rw [AlgHom.ext_iff]
-  apply forall_congr'
-  intro x
-  have e₁ : (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift (f x) =
-      KaehlerDifferential.quotientCotangentIdealRingEquiv R S
-        (Ideal.Quotient.mk (KaehlerDifferential.ideal R S).cotangentIdeal <| f x) := by
-    generalize f x = y; obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y; rfl
-  have e₂ :
-    x = KaehlerDifferential.quotientCotangentIdealRingEquiv R S (IsScalarTower.toAlgHom R S _ x) :=
-    (mul_one x).symm
-  constructor
-  · intro e
-    exact (e₁.trans (@RingEquiv.congr_arg _ _ _ _ _ _
-      (KaehlerDifferential.quotientCotangentIdealRingEquiv R S) _ _ e)).trans e₂.symm
-  · intro e; apply (KaehlerDifferential.quotientCotangentIdealRingEquiv R S).injective
-    exact e₁.symm.trans (e.trans e₂)
-
-中文:
-定理 KaehlerDifferential.End_equiv_aux
-  条件: (f : S ->ₐ[R] S otimes S ⧸ KaehlerDifferential.ideal R S ^ 2)
-  证明: by
-  rw [AlgHom.ext_iff]; rw [AlgHom.ext_iff]
-  apply forall_congr'
-  intro x
-  have e₁ : (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift (f x) =
-      KaehlerDifferential.quotientCotangentIdealRingEquiv R S
-        (Ideal.Quotient.mk (KaehlerDifferential.ideal R S).cotangentIdeal <| f x) := by
-    generalize f x = y; obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y; rfl
-  have e₂ :
-    x = KaehlerDifferential.quotientCotangentIdealRingEquiv R S (IsScalarTower.toAlgHom R S _ x) :=
-    (mul_one x).symm
-  constructor
-  · intro e
-    exact (e₁.trans (@RingEquiv.congr_arg _ _ _ _ _ _
-      (KaehlerDifferential.quotientCotangentIdealRingEquiv R S) _ _ e)).trans e₂.symm
-  · intro e; apply (KaehlerDifferential.quotientCotangentIdealRingEquiv R S).injective
-    exact e₁.symm.trans (e.trans e₂)
-
-Depends on / 依赖: AlgHom, AlgHom.ext_iff, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.toAlgHom, KaehlerDifferential, KaehlerDifferential.ideal, KaehlerDifferential.quotientCotangentIdealRingEquiv, Quotient, TensorProduct, TensorProduct.lmul, cotangentIdeal, ext_iff, forall_congr, generalize, kerSquareLift, mk_surjective, mul_one, otimes
+/-
+**KaehlerDifferential.End_equiv_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.End_equiv_aux (f : S ->ₐ[R] S otimes S ⧸ KaehlerDiffer
+ential.ideal R S ^ 2) : (Ideal.Quotient.mkₐ R (KaehlerDifferential.ideal R S).co
+tangentIdeal).comp f = IsScalarTower.toAlgHom R S _ ↔ (TensorProduct.lmul' R : S
+ otimes[R] S ->ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S
+参数：f : S ->ₐ[R] S otimes S ⧸ KaehlerDifferential.ideal R S ^ 2。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Ideal.Quotient.isScalarTower`：∀ (R₁ : Type u_1) (R₂ : Type u_2) {A : Typ
+e u_3} [inst : CommSemiring R₁] [inst_1 : CommSemiring R₂] [inst_2 : Ring A]   [
+inst_3 : Algebra R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.ext_iff`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSem
+iring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [i
+nst_…
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RingEquiv.congr_arg`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] {f : R ≃+* S}   {x x' : R}, x = x
+' → f x =…
+· 使用定理 `RingEquiv.injective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Injecti
+ve ⇑e
 -/
-theorem KaehlerDifferential.End_equiv_aux (f : S ->ₐ[R] S otimes S ⧸ KaehlerDifferential.ideal R S ^ 2) :
+theorem KaehlerDifferential.End_equiv_aux (f : S →ₐ[R] S ⊗ S ⧸ KaehlerDifferential.ideal R S ^ 2) :
     (Ideal.Quotient.mkₐ R (KaehlerDifferential.ideal R S).cotangentIdeal).comp f =
         IsScalarTower.toAlgHom R S _ ↔
-      (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S := by
-  rw [AlgHom.ext_iff]; rw [AlgHom.ext_iff]
+      (TensorProduct.lmul' R : S ⊗[R] S →ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S := by
+  rw [AlgHom.ext_iff, AlgHom.ext_iff]
   apply forall_congr'
   intro x
-  have e₁ : (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift (f x) =
+  have e₁ : (TensorProduct.lmul' R : S ⊗[R] S →ₐ[R] S).kerSquareLift (f x) =
       KaehlerDifferential.quotientCotangentIdealRingEquiv R S
         (Ideal.Quotient.mk (KaehlerDifferential.ideal R S).cotangentIdeal <| f x) := by
     generalize f x = y; obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y; rfl
@@ -1091,155 +1032,131 @@ theorem KaehlerDifferential.End_equiv_aux (f : S ->ₐ[R] S otimes S ⧸ Kaehler
 local instance instR : Module R (KaehlerDifferential.ideal R S).cotangentIdeal :=
   Submodule.module' _
 
-/--
-Definition of `KaehlerDifferential.endEquivDerivation'` / `KaehlerDifferential.endEquivDerivation'` 的定义
+/-- Derivations into `Ω[S⁄R]` is equivalent to derivations
+into `(KaehlerDifferential.ideal R S).cotangentIdeal`. -/
+/-
+**KaehlerDifferential.endEquivDerivation'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.endEquivDerivation' : Derivation R S Ω[S⁄R] ≃ₗ[S] Deri
+vation R S (ideal R S).cotangentIdeal
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.endEquivDerivation'
-  signature: :
-  body: LinearEquiv.compDer ((KaehlerDifferential.ideal R S).cotangentEquivIdeal.restrictScalars S)
-
-中文:
-定义 KaehlerDifferential.endEquivDerivation'
-  签名: :
-  定义体: LinearEquiv.compDer ((KaehlerDifferential.ideal R S).cotangentEquivIdeal.restrictScalars S)
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.ideal, LinearEquiv, LinearEquiv.compDer, compDer, cotangentEquivIdeal, cotangentEquivIdeal.restrictScalars, restrictScalars
+--- 原说明 ---
+Derivations into `Ω[S⁄R]` is equivalent to derivations
+into `(KaehlerDifferential.ideal R S).cotangentIdeal`.
 -/
 noncomputable def KaehlerDifferential.endEquivDerivation' :
     Derivation R S Ω[S⁄R] ≃ₗ[S] Derivation R S (ideal R S).cotangentIdeal :=
   LinearEquiv.compDer ((KaehlerDifferential.ideal R S).cotangentEquivIdeal.restrictScalars S)
 
-/--
-Definition of `KaehlerDifferential.endEquivAuxEquiv` / `KaehlerDifferential.endEquivAuxEquiv` 的定义
+/-- (Implementation) An `Equiv` version of `KaehlerDifferential.End_equiv_aux`.
+Used in `KaehlerDifferential.endEquiv`. -/
+/-
+**KaehlerDifferential.endEquivAuxEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.endEquivAuxEquiv : { f // (Ideal.Quotient.mkₐ R (Kaehl
+erDifferential.ideal R S).cotangentIdeal).comp f = IsScalarTower.toAlgHom R S _ 
+} ≃ { f // (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift.comp f
+ = AlgHom.id R S }
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `KaehlerDifferential.End_equiv_aux`：KaehlerDifferential.End_equiv_aux (f 
+: S ->ₐ[R] S otimes S ⧸ KaehlerDifferential.ideal R S ^ 2) : (Ideal.Quotient.mkₐ
+ R (KaehlerDifferential…
 
-English:
-definition KaehlerDifferential.endEquivAuxEquiv
-  signature: :
-  body: (Equiv.refl _).subtypeEquiv (KaehlerDifferential.End_equiv_aux R S)
-
-中文:
-定义 KaehlerDifferential.endEquivAuxEquiv
-  签名: :
-  定义体: (Equiv.refl _).subtypeEquiv (KaehlerDifferential.End_equiv_aux R S)
-
-Depends on / 依赖: End_equiv_aux, Equiv.refl, KaehlerDifferential, KaehlerDifferential.End_equiv_aux, subtypeEquiv
+--- 原说明 ---
+(Implementation) An `Equiv` version of `KaehlerDifferential.End_equiv_aux`.
+Used in `KaehlerDifferential.endEquiv`.
 -/
 def KaehlerDifferential.endEquivAuxEquiv :
     { f //
         (Ideal.Quotient.mkₐ R (KaehlerDifferential.ideal R S).cotangentIdeal).comp f =
           IsScalarTower.toAlgHom R S _ } ≃
-      { f // (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S } :=
+      { f // (TensorProduct.lmul' R : S ⊗[R] S →ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S } :=
   (Equiv.refl _).subtypeEquiv (KaehlerDifferential.End_equiv_aux R S)
 
 /--
-Definition of `KaehlerDifferential.endEquiv` / `KaehlerDifferential.endEquiv` 的定义
+The endomorphisms of `Ω[S⁄R]` corresponds to sections of the surjection `S ⊗[R] S ⧸ J ^ 2 →ₐ[R] S`,
+with `J` being the kernel of the multiplication map `S ⊗[R] S →ₐ[R] S`.
+-/
+/-
+**KaehlerDifferential.endEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.endEquiv : Module.End S Ω[S⁄R] ≃ { f // (TensorProduct
+.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S }
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition KaehlerDifferential.endEquiv
-  signature: :
-  body: (KaehlerDifferential.linearMapEquivDerivation R S).toEquiv.trans
-(KaehlerDifferential.endEquivDerivation' R S).toEquiv.trans
-      (derivationToSquareZeroEquivLift (KaehlerDifferential.ideal R S).cotangentIdeal
-            (KaehlerDifferential.ideal R S).cotangentIdeal_square).trans <|
-        KaehlerDifferential.endEquivAuxEquiv R S
-
-中文:
-定义 KaehlerDifferential.endEquiv
-  签名: :
-  定义体: (KaehlerDifferential.linearMapEquivDerivation R S).toEquiv.trans
-(KaehlerDifferential.endEquivDerivation' R S).toEquiv.trans
-      (derivationToSquareZeroEquivLift (KaehlerDifferential.ideal R S).cotangentIdeal
-            (KaehlerDifferential.ideal R S).cotangentIdeal_square).trans <|
-        KaehlerDifferential.endEquivAuxEquiv R S
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.endEquivAuxEquiv, KaehlerDifferential.endEquivDerivation, KaehlerDifferential.ideal, KaehlerDifferential.linearMapEquivDerivation, cotangentIdeal, cotangentIdeal_square, derivationToSquareZeroEquivLift, endEquivAuxEquiv, endEquivDerivation, linearMapEquivDerivation, toEquiv, toEquiv.trans
+--- 原说明 ---
+The endomorphisms of `Ω[S⁄R]` corresponds to sections of the surjection `S ⊗[R] 
+S ⧸ J ^ 2 →ₐ[R] S`,
+with `J` being the kernel of the multiplication map `S ⊗[R] S →ₐ[R] S`.
 -/
 noncomputable def KaehlerDifferential.endEquiv :
     Module.End S Ω[S⁄R] ≃
-      { f // (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S } :=
-(KaehlerDifferential.linearMapEquivDerivation R S).toEquiv.trans
-(KaehlerDifferential.endEquivDerivation' R S).toEquiv.trans
+      { f // (TensorProduct.lmul' R : S ⊗[R] S →ₐ[R] S).kerSquareLift.comp f = AlgHom.id R S } :=
+  (KaehlerDifferential.linearMapEquivDerivation R S).toEquiv.trans <|
+    (KaehlerDifferential.endEquivDerivation' R S).toEquiv.trans <|
       (derivationToSquareZeroEquivLift (KaehlerDifferential.ideal R S).cotangentIdeal
             (KaehlerDifferential.ideal R S).cotangentIdeal_square).trans <|
         KaehlerDifferential.endEquivAuxEquiv R S
 
 section Finiteness
 
-/--
-theorem `KaehlerDifferential.ideal_fg` / 定理 `KaehlerDifferential.ideal_fg`
-
-English:
-theorem KaehlerDifferential.ideal_fg
-  given: [EssFiniteType R S]
-  proof: by
-  classical
-  use (EssFiniteType.finset R S).image (fun s => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S))
-  apply le_antisymm
-  · rw [Finset.coe_image, Ideal.span_le]
-    rintro _ ⟨x, _, rfl⟩
-    exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R x
-  · rw [← KaehlerDifferential.span_range_eq_ideal, Ideal.span_le]
-    rintro _ ⟨x, rfl⟩
-    let I : Ideal (S otimes[R] S) := Ideal.span
-      ((EssFiniteType.finset R S).image (fun s => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S)))
-    change _ - _ in I
-    have : (IsScalarTower.toAlgHom R (S otimes[R] S) (S otimes[R] S ⧸ I)).comp TensorProduct.includeRight =
-        (IsScalarTower.toAlgHom R (S otimes[R] S) (S otimes[R] S ⧸ I)).comp TensorProduct.includeLeft := by
-      apply EssFiniteType.algHom_ext
-      intro a ha
-      simp only [AlgHom.coe_comp, IsScalarTower.coe_toAlgHom', Ideal.Quotient.algebraMap_eq,
-        Function.comp_apply, TensorProduct.includeLeft_apply, TensorProduct.includeRight_apply,
-        Ideal.Quotient.mk_eq_mk_iff_sub_mem]
-      refine Ideal.subset_span ?_
-      simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe]
-      exact ⟨a, ha, rfl⟩
-    simpa [Ideal.Quotient.mk_eq_mk_iff_sub_mem] using AlgHom.congr_fun this x
-
-中文:
-定理 KaehlerDifferential.ideal_fg
-  条件: [EssFiniteType R S]
-  证明: by
-  classical
-  use (EssFiniteType.finset R S).image (fun s => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S))
-  apply le_antisymm
-  · rw [Finset.coe_image, Ideal.span_le]
-    rintro _ ⟨x, _, rfl⟩
-    exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R x
-  · rw [← KaehlerDifferential.span_range_eq_ideal, Ideal.span_le]
-    rintro _ ⟨x, rfl⟩
-    let I : Ideal (S otimes[R] S) := Ideal.span
-      ((EssFiniteType.finset R S).image (fun s => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S)))
-    change _ - _ in I
-    have : (IsScalarTower.toAlgHom R (S otimes[R] S) (S otimes[R] S ⧸ I)).comp TensorProduct.includeRight =
-        (IsScalarTower.toAlgHom R (S otimes[R] S) (S otimes[R] S ⧸ I)).comp TensorProduct.includeLeft := by
-      apply EssFiniteType.algHom_ext
-      intro a ha
-      simp only [AlgHom.coe_comp, IsScalarTower.coe_toAlgHom', Ideal.Quotient.algebraMap_eq,
-        Function.comp_apply, TensorProduct.includeLeft_apply, TensorProduct.includeRight_apply,
-        Ideal.Quotient.mk_eq_mk_iff_sub_mem]
-      refine Ideal.subset_span ?_
-      simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe]
-      exact ⟨a, ha, rfl⟩
-    simpa [Ideal.Quotient.mk_eq_mk_iff_sub_mem] using AlgHom.congr_fun this x
-
-Depends on / 依赖: EssFiniteType, EssFiniteType.finset, Finset, Finset.coe_image, Ideal.span, Ideal.span_le, IsScalarTower, KaehlerDifferential, KaehlerDifferential.one_smul_sub_smul_one_mem_ideal, KaehlerDifferential.span_range_eq_ideal, classical, coe_image, finset, le_antisymm, one_smul_sub_smul_one_mem_ideal, otimes, span_le, span_range_eq_ideal
+/-
+**KaehlerDifferential.ideal_fg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.ideal_fg [EssFiniteType R S] : (KaehlerDifferential.id
+eal R S).FG
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `KaehlerDifferential.one_smul_sub_smul_one_mem_ideal`：KaehlerDifferential
+.one_smul_sub_smul_one_mem_ideal (a : S) : (1 : S) otimesₜ[R] a - a otimesₜ[R] (
+1 : S) in KaehlerDifferential.ideal R S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.span_range_eq_ideal`：KaehlerDifferential.span_range_
+eq_ideal : Ideal.span (Set.range fun s : S => (1 : S) otimesₜ[R] s - s otimesₜ[R
+] (1 : S)) = KaehlerDifferent…
+· 使用定理 `Ideal.Quotient.isScalarTower`：∀ (R₁ : Type u_1) (R₂ : Type u_2) {A : Typ
+e u_3} [inst : CommSemiring R₁] [inst_1 : CommSemiring R₂] [inst_2 : Ring A]   [
+inst_3 : Algebra R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.EssFiniteType.algHom_ext`：∀ {R : Type u_1} {S : Type u_2} (T : T
+ype u_3) [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : CommRing T]   [inst
+_3 : Algebra R S] [ins…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AlgHom.congr_fun`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
 -/
 theorem KaehlerDifferential.ideal_fg [EssFiniteType R S] :
     (KaehlerDifferential.ideal R S).FG := by
   classical
-  use (EssFiniteType.finset R S).image (fun s => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S))
+  use (EssFiniteType.finset R S).image (fun s ↦ (1 : S) ⊗ₜ[R] s - s ⊗ₜ[R] (1 : S))
   apply le_antisymm
   · rw [Finset.coe_image, Ideal.span_le]
     rintro _ ⟨x, _, rfl⟩
     exact KaehlerDifferential.one_smul_sub_smul_one_mem_ideal R x
   · rw [← KaehlerDifferential.span_range_eq_ideal, Ideal.span_le]
     rintro _ ⟨x, rfl⟩
-    let I : Ideal (S otimes[R] S) := Ideal.span
-      ((EssFiniteType.finset R S).image (fun s => (1 : S) otimesₜ[R] s - s otimesₜ[R] (1 : S)))
-    change _ - _ in I
-    have : (IsScalarTower.toAlgHom R (S otimes[R] S) (S otimes[R] S ⧸ I)).comp TensorProduct.includeRight =
-        (IsScalarTower.toAlgHom R (S otimes[R] S) (S otimes[R] S ⧸ I)).comp TensorProduct.includeLeft := by
+    let I : Ideal (S ⊗[R] S) := Ideal.span
+      ((EssFiniteType.finset R S).image (fun s ↦ (1 : S) ⊗ₜ[R] s - s ⊗ₜ[R] (1 : S)))
+    change _ - _ ∈ I
+    have : (IsScalarTower.toAlgHom R (S ⊗[R] S) (S ⊗[R] S ⧸ I)).comp TensorProduct.includeRight =
+        (IsScalarTower.toAlgHom R (S ⊗[R] S) (S ⊗[R] S ⧸ I)).comp TensorProduct.includeLeft := by
       apply EssFiniteType.algHom_ext
       intro a ha
       simp only [AlgHom.coe_comp, IsScalarTower.coe_toAlgHom', Ideal.Quotient.algebraMap_eq,
@@ -1249,83 +1166,90 @@ theorem KaehlerDifferential.ideal_fg [EssFiniteType R S] :
       simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe]
       exact ⟨a, ha, rfl⟩
     simpa [Ideal.Quotient.mk_eq_mk_iff_sub_mem] using AlgHom.congr_fun this x
-
-/--
-Instance `KaehlerDifferential.finite` / 实例 `KaehlerDifferential.finite`
-
-English:
-instance KaehlerDifferential.finite
-  signature: [EssFiniteType R S]
-  body: by
-  classical
-  let s := (EssFiniteType.finset R S).image (fun s => D R S s)
-  refine ⟨⟨s, top_le_iff.mp ?_⟩⟩
-  rw [← span_range_derivation]; rw [Submodule.span_le]
-  rintro _ ⟨x, rfl⟩
-  have : forall x in adjoin R (EssFiniteType.finset R S : Set S),
-      .D _ _ x in Submodule.span S (s : Set Ω[S⁄R]) := by
-    intro x hx
-    refine adjoin_induction ?_ ?_ ?_ ?_ hx
-    · exact fun x hx => Submodule.subset_span (Finset.mem_image_of_mem _ hx)
-    · simp
-    · exact fun x y _ _ hx hy => (D R S).map_add x y ▸ add_mem hx hy
-    · intro x y _ _ hx hy
-      simp only [Derivation.leibniz]
-      exact add_mem (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hx)
-  obtain ⟨t, ht, ht', hxt⟩ := (essFiniteType_cond_iff R S (EssFiniteType.finset R S)).mp
-    EssFiniteType.cond.choose_spec x
-  rw [show D R S x =
-    ht'.unit⁻¹ • (D R S (x * t) - x • D R S t) by simp [smul_smul]; rw [Units.smul_def]]
-  exact Submodule.smul_mem _ _ (sub_mem (this _ hxt) (Submodule.smul_mem _ _ (this _ ht)))
-
-中文:
-实例 KaehlerDifferential.finite
-  签名: [EssFiniteType R S]
-  定义体: by
-  classical
-  let s := (EssFiniteType.finset R S).image (fun s => D R S s)
-  refine ⟨⟨s, top_le_iff.mp ?_⟩⟩
-  rw [← span_range_derivation]; rw [Submodule.span_le]
-  rintro _ ⟨x, rfl⟩
-  have : forall x in adjoin R (EssFiniteType.finset R S : Set S),
-      .D _ _ x in Submodule.span S (s : Set Ω[S⁄R]) := by
-    intro x hx
-    refine adjoin_induction ?_ ?_ ?_ ?_ hx
-    · exact fun x hx => Submodule.subset_span (Finset.mem_image_of_mem _ hx)
-    · simp
-    · exact fun x y _ _ hx hy => (D R S).map_add x y ▸ add_mem hx hy
-    · intro x y _ _ hx hy
-      simp only [Derivation.leibniz]
-      exact add_mem (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hx)
-  obtain ⟨t, ht, ht', hxt⟩ := (essFiniteType_cond_iff R S (EssFiniteType.finset R S)).mp
-    EssFiniteType.cond.choose_spec x
-  rw [show D R S x =
-    ht'.unit⁻¹ • (D R S (x * t) - x • D R S t) by simp [smul_smul]; rw [Units.smul_def]]
-  exact Submodule.smul_mem _ _ (sub_mem (this _ hxt) (Submodule.smul_mem _ _ (this _ ht)))
-
-Depends on / 依赖: EssFiniteType, EssFiniteType.finset, Finset, Finset.mem_image_of_mem, Submodule, Submodule.span, Submodule.span_le, Submodule.subset_span, add_mem, adjoin, adjoin_induction, classical, finset, map_add, mem_image_of_mem, span_le, span_range_derivation, subset_span, top_le_iff, top_le_iff.mp
+/-
+**KaehlerDifferential.finite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.finite [EssFiniteType R S] : Module.Finite S Ω[S⁄R]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.span_range_derivation`：KaehlerDifferential.span_rang
+e_derivation : Submodule.span S (Set.range <| KaehlerDifferential.D R S) = ⊤
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `Algebra.adjoin_induction`：adjoin_induction {p : (x : A) -> x in adjoin R
+ s -> Prop} (mem : forall (x) (hx : x in s), p x (subset_adjoin hx)) (algebraMap
+ : forall r, p…
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Derivation.map_algebraMap`：map_algebraMap : D (algebraMap R A r) = 0
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `Derivation.map_add`：∀ {R : Type u_1} {A : Type u_2} {M : Type u_4} [inst
+ : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMonoid M] [inst_
+3 : Alge…
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `Algebra.essFiniteType_cond_iff`：essFiniteType_cond_iff (σ : Finset S) : 
+IsLocalization ((IsUnit.submonoid S).comap (algebraMap (adjoin R (σ : Set S)) S)
+) S ↔ (forall s : S,…
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Algebra.EssFiniteType.cond`：∀ {R : Type u_1} {S : Type u_2} {inst : Comm
+Ring R} {inst_1 : CommRing S} {inst_2 : Algebra R S}   [self : Algebra.EssFinite
+Type R S],   ∃ s…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `IsUnit.val_inv_mul`：val_inv_mul (h : IsUnit a) : ↑h.unit⁻¹ * a = 1
+（共 33 条，此处仅展示前 30 条）
 -/
 instance KaehlerDifferential.finite [EssFiniteType R S] :
     Module.Finite S Ω[S⁄R] := by
   classical
-  let s := (EssFiniteType.finset R S).image (fun s => D R S s)
+  let s := (EssFiniteType.finset R S).image (fun s ↦ D R S s)
   refine ⟨⟨s, top_le_iff.mp ?_⟩⟩
-  rw [← span_range_derivation]; rw [Submodule.span_le]
+  rw [← span_range_derivation, Submodule.span_le]
   rintro _ ⟨x, rfl⟩
-  have : forall x in adjoin R (EssFiniteType.finset R S : Set S),
-      .D _ _ x in Submodule.span S (s : Set Ω[S⁄R]) := by
+  have : ∀ x ∈ adjoin R (EssFiniteType.finset R S : Set S),
+      .D _ _ x ∈ Submodule.span S (s : Set Ω[S⁄R]) := by
     intro x hx
     refine adjoin_induction ?_ ?_ ?_ ?_ hx
-    · exact fun x hx => Submodule.subset_span (Finset.mem_image_of_mem _ hx)
+    · exact fun x hx ↦ Submodule.subset_span (Finset.mem_image_of_mem _ hx)
     · simp
-    · exact fun x y _ _ hx hy => (D R S).map_add x y ▸ add_mem hx hy
+    · exact fun x y _ _ hx hy ↦ (D R S).map_add x y ▸ add_mem hx hy
     · intro x y _ _ hx hy
       simp only [Derivation.leibniz]
       exact add_mem (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hx)
   obtain ⟨t, ht, ht', hxt⟩ := (essFiniteType_cond_iff R S (EssFiniteType.finset R S)).mp
     EssFiniteType.cond.choose_spec x
   rw [show D R S x =
-    ht'.unit⁻¹ • (D R S (x * t) - x • D R S t) by simp [smul_smul]; rw [Units.smul_def]]
+    ht'.unit⁻¹ • (D R S (x * t) - x • D R S t) by simp [smul_smul, Units.smul_def]]
   exact Submodule.smul_mem _ _ (sub_mem (this _ hxt) (Submodule.smul_mem _ _ (this _ ht)))
 
 end Finiteness
@@ -1336,200 +1260,222 @@ open KaehlerDifferential (D)
 
 open Finsupp (single)
 
-/--
-Definition of `KaehlerDifferential.kerTotal` / `KaehlerDifferential.kerTotal` 的定义
+/-- The `S`-submodule of `S →₀ S` (the direct sum of copies of `S` indexed by `S`) generated by
+the relations:
+1. `dx + dy = d(x + y)`
+2. `x dy + y dx = d(x * y)`
+3. `dr = 0` for `r ∈ R`
 
-English:
-definition KaehlerDifferential.kerTotal
-  signature: : Submodule S (S ->₀ S)
-  body: Submodule.span S
-    (((Set.range fun x : S × S => single x.1 1 + single x.2 1 - single (x.1 + x.2) 1) union
-        Set.range fun x : S × S => single x.2 x.1 + single x.1 x.2 - single (x.1 * x.2) 1) union
-      Set.range fun x : R => single (algebraMap R S x) 1)
+where `db` is the unit in the copy of `S` with index `b`.
 
-unsuppress_compilation in
-local notation3 x "𝖣" y => (KaehlerDifferential.kerTotal R S).mkQ (single y x)
-
-中文:
-定义 KaehlerDifferential.kerTotal
-  签名: : 子模 S (S ->₀ S)
-  定义体: Submodule.span S
-    (((Set.range fun x : S × S => single x.1 1 + single x.2 1 - single (x.1 + x.2) 1) union
-        Set.range fun x : S × S => single x.2 x.1 + single x.1 x.2 - single (x.1 * x.2) 1) union
-      Set.range fun x : R => single (algebraMap R S x) 1)
-
-unsuppress_compilation in
-local notation3 x "𝖣" y => (KaehlerDifferential.kerTotal R S).mkQ (single y x)
-
-Depends on / 依赖: Set.range, Submodule, Submodule.span, Subset, Subset.trans, algebraMap, single
+This is the kernel of the surjection
+`Finsupp.linearCombination S Ω[S⁄R] S (KaehlerDifferential.D R S)`.
+See `KaehlerDifferential.kerTotal_eq` and `KaehlerDifferential.linearCombination_surjective`.
 -/
-noncomputable def KaehlerDifferential.kerTotal : Submodule S (S ->₀ S) :=
+/-
+**KaehlerDifferential.kerTotal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal : Submodule S (S ->₀ S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The `S`-submodule of `S →₀ S` (the direct sum of copies of `S` indexed by `S`) g
+enerated by
+the relations:
+1. `dx + dy = d(x + y)`
+2. `x dy + y dx = d(x * y)`
+3. `dr = 0` for `r ∈ R`
+
+where `db` is the unit in the copy of `S` with index `b`.
+
+This is the kernel of the surjection
+`Finsupp.linearCombination S Ω[S⁄R] S (KaehlerDifferential.D R S)`.
+See `KaehlerDifferential.kerTotal_eq` and `KaehlerDifferential.linearCombination
+_surjective`.
+-/
+noncomputable def KaehlerDifferential.kerTotal : Submodule S (S →₀ S) :=
   Submodule.span S
-    (((Set.range fun x : S × S => single x.1 1 + single x.2 1 - single (x.1 + x.2) 1) union
-        Set.range fun x : S × S => single x.2 x.1 + single x.1 x.2 - single (x.1 * x.2) 1) union
+    (((Set.range fun x : S × S => single x.1 1 + single x.2 1 - single (x.1 + x.2) 1) ∪
+        Set.range fun x : S × S => single x.2 x.1 + single x.1 x.2 - single (x.1 * x.2) 1) ∪
       Set.range fun x : R => single (algebraMap R S x) 1)
 
 unsuppress_compilation in
 local notation3 x "𝖣" y => (KaehlerDifferential.kerTotal R S).mkQ (single y x)
-
-/--
-theorem `KaehlerDifferential.kerTotal_mkQ_single_add` / 定理 `KaehlerDifferential.kerTotal_mkQ_single_add`
-
-English:
-theorem KaehlerDifferential.kerTotal_mkQ_single_add
-  given: (x y z)
-  statement: (z𝖣x + y) = (z𝖣x) + z𝖣y
-  proof: by
-  rw [← map_add]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub (Submodule.mkQ (kerTotal R S))]; rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]
-  simp_rw [← Finsupp.smul_single_one _ z, ← smul_add, ← smul_sub]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inl <| Or.inl <| ⟨⟨_, _⟩, rfl⟩))
-
-中文:
-定理 KaehlerDifferential.kerTotal_mkQ_single_add
-  条件: (x y z)
-  结论: (z𝖣x + y) = (z𝖣x) + z𝖣y
-  证明: by
-  rw [← map_add]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub (Submodule.mkQ (kerTotal R S))]; rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]
-  simp_rw [← Finsupp.smul_single_one _ z, ← smul_add, ← smul_sub]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inl <| Or.inl <| ⟨⟨_, _⟩, rfl⟩))
-
-Depends on / 依赖: Finsupp, Finsupp.smul_single_one, Or.inl, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.mkQ, Submodule.mkQ_apply, Submodule.smul_mem, Submodule.subset_span, eq_comm, kerTotal, map_add, map_sub, mkQ_apply, mk_eq_zero, simp_rw, smul_add, smul_mem, smul_single_one
+/-
+**KaehlerDifferential.kerTotal_mkQ_single_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal_mkQ_single_add (x y z) : (z𝖣x + y) = (z𝖣x) + 
+z𝖣y
+参数：x y z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Submodule.mkQ_apply`：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.smul_single_one`：smul_single_one [MulZeroOneClass R] (a : α) (b 
+: R) : b • single a (1 : R) = single a b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 -/
 theorem KaehlerDifferential.kerTotal_mkQ_single_add (x y z) : (z𝖣x + y) = (z𝖣x) + z𝖣y := by
-  rw [← map_add]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub (Submodule.mkQ (kerTotal R S))]; rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]
+  rw [← map_add, eq_comm, ← sub_eq_zero, ← map_sub (Submodule.mkQ (kerTotal R S)),
+    Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
   simp_rw [← Finsupp.smul_single_one _ z, ← smul_add, ← smul_sub]
   exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inl <| Or.inl <| ⟨⟨_, _⟩, rfl⟩))
-
-/--
-theorem `KaehlerDifferential.kerTotal_mkQ_single_mul` / 定理 `KaehlerDifferential.kerTotal_mkQ_single_mul`
-
-English:
-theorem KaehlerDifferential.kerTotal_mkQ_single_mul
-  given: (x y z)
-  proof: by
-  rw [← map_add]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub (Submodule.mkQ (kerTotal R S))]; rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]
-  simp_rw [← Finsupp.smul_single_one _ z, ← @smul_eq_mul _ _ z, ← Finsupp.smul_single, ← smul_add,
-    ← smul_sub]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inl <| Or.inr <| ⟨⟨_, _⟩, rfl⟩))
-
-中文:
-定理 KaehlerDifferential.kerTotal_mkQ_single_mul
-  条件: (x y z)
-  证明: by
-  rw [← map_add]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub (Submodule.mkQ (kerTotal R S))]; rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]
-  simp_rw [← Finsupp.smul_single_one _ z, ← @smul_eq_mul _ _ z, ← Finsupp.smul_single, ← smul_add,
-    ← smul_sub]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inl <| Or.inr <| ⟨⟨_, _⟩, rfl⟩))
-
-Depends on / 依赖: Finsupp, Finsupp.smul_single, Finsupp.smul_single_one, Or.inl, Or.inr, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.mkQ, Submodule.mkQ_apply, Submodule.smul_mem, Submodule.subset_span, eq_comm, kerTotal, map_add, map_sub, mkQ_apply, mk_eq_zero, simp_rw, smul_add
+/-
+**KaehlerDifferential.kerTotal_mkQ_single_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal_mkQ_single_mul (x y z) : (z𝖣x * y) = ((z * x)
+𝖣y) + (z * y)𝖣x
+参数：x y z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Submodule.mkQ_apply`：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `Finsupp.smul_single_one`：smul_single_one [MulZeroOneClass R] (a : α) (b 
+: R) : b • single a (1 : R) = single a b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 -/
 theorem KaehlerDifferential.kerTotal_mkQ_single_mul (x y z) :
     (z𝖣x * y) = ((z * x)𝖣y) + (z * y)𝖣x := by
-  rw [← map_add]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub (Submodule.mkQ (kerTotal R S))]; rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]
+  rw [← map_add, eq_comm, ← sub_eq_zero, ← map_sub (Submodule.mkQ (kerTotal R S)),
+    Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
   simp_rw [← Finsupp.smul_single_one _ z, ← @smul_eq_mul _ _ z, ← Finsupp.smul_single, ← smul_add,
     ← smul_sub]
   exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inl <| Or.inr <| ⟨⟨_, _⟩, rfl⟩))
-
-/--
-theorem `KaehlerDifferential.kerTotal_mkQ_single_algebraMap` / 定理 `KaehlerDifferential.kerTotal_mkQ_single_algebraMap`
-
-English:
-theorem KaehlerDifferential.kerTotal_mkQ_single_algebraMap
-  given: (x y)
-  statement: (y𝖣algebraMap R S x) = 0
-  proof: by
-  rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]; rw [← Finsupp.smul_single_one _ y]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inr <| ⟨_, rfl⟩))
-
-中文:
-定理 KaehlerDifferential.kerTotal_mkQ_single_algebraMap
-  条件: (x y)
-  结论: (y𝖣algebraMap R S x) = 0
-  证明: by
-  rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]; rw [← Finsupp.smul_single_one _ y]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inr <| ⟨_, rfl⟩))
-
-Depends on / 依赖: Finsupp, Finsupp.smul_single_one, Or.inr, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.mkQ_apply, Submodule.smul_mem, Submodule.subset_span, mkQ_apply, mk_eq_zero, smul_mem, smul_single_one, subset_span
+/-
+**KaehlerDifferential.kerTotal_mkQ_single_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：KaehlerDifferential.kerTotal_mkQ_single_algebraMap (x y) : (y𝖣algebraMap R
+ S x) = 0
+参数：x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mkQ_apply`：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.smul_single_one`：smul_single_one [MulZeroOneClass R] (a : α) (b 
+: R) : b • single a (1 : R) = single a b
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 -/
 theorem KaehlerDifferential.kerTotal_mkQ_single_algebraMap (x y) : (y𝖣algebraMap R S x) = 0 := by
-  rw [Submodule.mkQ_apply]; rw [Submodule.Quotient.mk_eq_zero]; rw [← Finsupp.smul_single_one _ y]
+  rw [Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero, ← Finsupp.smul_single_one _ y]
   exact Submodule.smul_mem _ _ (Submodule.subset_span (Or.inr <| ⟨_, rfl⟩))
-
-/--
-theorem `KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one` / 定理 `KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one`
-
-English:
-theorem KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one
-  given: (x)
-  statement: (x𝖣1) = 0
-  proof: by
-  rw [← (algebraMap R S).map_one]; rw [KaehlerDifferential.kerTotal_mkQ_single_algebraMap]
-
-中文:
-定理 KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one
-  条件: (x)
-  结论: (x𝖣1) = 0
-  证明: by
-  rw [← (algebraMap R S).map_one]; rw [KaehlerDifferential.kerTotal_mkQ_single_algebraMap]
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.kerTotal_mkQ_single_algebraMap, algebraMap, kerTotal_mkQ_single_algebraMap, map_one
+/-
+**KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one (x) : (x𝖣1) = 0
+参数：x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.map_one`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} (f : α →+* β), f 1 = 1
+· 使用定理 `KaehlerDifferential.kerTotal_mkQ_single_algebraMap`：KaehlerDifferential.
+kerTotal_mkQ_single_algebraMap (x y) : (y𝖣algebraMap R S x) = 0
 -/
 theorem KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one (x) : (x𝖣1) = 0 := by
-  rw [← (algebraMap R S).map_one]; rw [KaehlerDifferential.kerTotal_mkQ_single_algebraMap]
-
-/--
-theorem `KaehlerDifferential.kerTotal_mkQ_single_smul` / 定理 `KaehlerDifferential.kerTotal_mkQ_single_smul`
-
-English:
-theorem KaehlerDifferential.kerTotal_mkQ_single_smul
-  given: (r : R) (x y)
-  statement: (y𝖣r • x) = r • y𝖣x
-  proof: by
-  let : SMulZeroClass R S := inferInstance
-  rw [Algebra.smul_def]; rw [KaehlerDifferential.kerTotal_mkQ_single_mul]; rw [KaehlerDifferential.kerTotal_mkQ_single_algebraMap]; rw [add_zero]; rw [← LinearMap.map_smul_of_tower]; rw [Finsupp.smul_single]; rw [mul_comm]; rw [Algebra.smul_def]
-
-中文:
-定理 KaehlerDifferential.kerTotal_mkQ_single_smul
-  条件: (r : R) (x y)
-  结论: (y𝖣r • x) = r • y𝖣x
-  证明: by
-  let : SMulZeroClass R S := inferInstance
-  rw [Algebra.smul_def]; rw [KaehlerDifferential.kerTotal_mkQ_single_mul]; rw [KaehlerDifferential.kerTotal_mkQ_single_algebraMap]; rw [add_zero]; rw [← LinearMap.map_smul_of_tower]; rw [Finsupp.smul_single]; rw [mul_comm]; rw [Algebra.smul_def]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, Finsupp, Finsupp.smul_single, KaehlerDifferential, KaehlerDifferential.kerTotal_mkQ_single_algebraMap, KaehlerDifferential.kerTotal_mkQ_single_mul, LinearMap, LinearMap.map_smul_of_tower, SMulZeroClass, add_zero, kerTotal_mkQ_single_algebraMap, kerTotal_mkQ_single_mul, map_smul_of_tower, mul_comm, smul_def, smul_single
+  rw [← (algebraMap R S).map_one, KaehlerDifferential.kerTotal_mkQ_single_algebraMap]
+/-
+**KaehlerDifferential.kerTotal_mkQ_single_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal_mkQ_single_smul (r : R) (x y) : (y𝖣r • x) = r
+ • y𝖣x
+参数：r : R；x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `KaehlerDifferential.kerTotal_mkQ_single_mul`：KaehlerDifferential.kerTota
+l_mkQ_single_mul (x y z) : (z𝖣x * y) = ((z * x)𝖣y) + (z * y)𝖣x
+· 使用定理 `KaehlerDifferential.kerTotal_mkQ_single_algebraMap`：KaehlerDifferential.
+kerTotal_mkQ_single_algebraMap (x y) : (y𝖣algebraMap R S x) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.map_smul_of_tower`：map_smul_of_tower [CompatibleSMul M M₂ R S]
+ (fₗ : M ->ₗ[S] M₂) (c : R) (x : M) : fₗ (c • x) = c • fₗ x
+· 使用定理 `LinearMap.CompatibleSMul.finsupp_dom`：∀ (R : Type u_9) (S : Type u_10) (
+M : Type u_11) (N : Type u_12) (ι : Type u_13) [inst : Semiring S]   [inst_1 : A
+ddCommMonoid M] [inst_2 : …
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul'`：∀ {M : Type u_8} [inst : AddCom
+mMonoid M] {R : Type u_14} {S : Type u_15} [inst_1 : Semiring S] [inst_2 : SMul 
+R M]   [inst_3 : _root_.Modul…
+· 使用定理 `Finsupp.smul_single`：smul_single [Zero M] [SMulZeroClass R M] (c : R) (a
+ : α) (b : M) : c • Finsupp.single a b = Finsupp.single a (c • b)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem KaehlerDifferential.kerTotal_mkQ_single_smul (r : R) (x y) : (y𝖣r • x) = r • y𝖣x := by
   let : SMulZeroClass R S := inferInstance
-  rw [Algebra.smul_def]; rw [KaehlerDifferential.kerTotal_mkQ_single_mul]; rw [KaehlerDifferential.kerTotal_mkQ_single_algebraMap]; rw [add_zero]; rw [← LinearMap.map_smul_of_tower]; rw [Finsupp.smul_single]; rw [mul_comm]; rw [Algebra.smul_def]
+  rw [Algebra.smul_def, KaehlerDifferential.kerTotal_mkQ_single_mul,
+    KaehlerDifferential.kerTotal_mkQ_single_algebraMap, add_zero, ← LinearMap.map_smul_of_tower,
+    Finsupp.smul_single, mul_comm, Algebra.smul_def]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `KaehlerDifferential.derivationQuotKerTotal` / `KaehlerDifferential.derivationQuotKerTotal` 的定义
+/-- The (universal) derivation into `(S →₀ S) ⧸ KaehlerDifferential.kerTotal R S`. -/
+/-
+**KaehlerDifferential.derivationQuotKerTotal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.derivationQuotKerTotal : Derivation R S ((S ->₀ S) ⧸ K
+aehlerDifferential.kerTotal R S) where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.derivationQuotKerTotal
-  signature: :
-  body: 1𝖣x
-  map_add' _ _ := KaehlerDifferential.kerTotal_mkQ_single_add _ _ _ _ _
-  map_smul' _ _ := KaehlerDifferential.kerTotal_mkQ_single_smul _ _ _ _ _
-  map_one_eq_zero' := KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one _ _ _
-  leibniz' a b :=
-    (KaehlerDifferential.kerTotal_mkQ_single_mul _ _ _ _ _).trans
-      (by simp_rw [← Finsupp.smul_single_one _ (1 * _ : S)]; dsimp; simp)
-
-中文:
-定义 KaehlerDifferential.derivationQuotKerTotal
-  签名: :
-  定义体: 1𝖣x
-  map_add' _ _ := KaehlerDifferential.kerTotal_mkQ_single_add _ _ _ _ _
-  map_smul' _ _ := KaehlerDifferential.kerTotal_mkQ_single_smul _ _ _ _ _
-  map_one_eq_zero' := KaehlerDifferential.kerTotal_mkQ_single_algebraMap_one _ _ _
-  leibniz' a b :=
-    (KaehlerDifferential.kerTotal_mkQ_single_mul _ _ _ _ _).trans
-      (by simp_rw [← Finsupp.smul_single_one _ (1 * _ : S)]; dsimp; simp)
+--- 原说明 ---
+The (universal) derivation into `(S →₀ S) ⧸ KaehlerDifferential.kerTotal R S`.
 -/
 noncomputable def KaehlerDifferential.derivationQuotKerTotal :
-    Derivation R S ((S ->₀ S) ⧸ KaehlerDifferential.kerTotal R S) where
+    Derivation R S ((S →₀ S) ⧸ KaehlerDifferential.kerTotal R S) where
   toFun x := 1𝖣x
   map_add' _ _ := KaehlerDifferential.kerTotal_mkQ_single_add _ _ _ _ _
   map_smul' _ _ := KaehlerDifferential.kerTotal_mkQ_single_smul _ _ _ _ _
@@ -1537,44 +1483,53 @@ noncomputable def KaehlerDifferential.derivationQuotKerTotal :
   leibniz' a b :=
     (KaehlerDifferential.kerTotal_mkQ_single_mul _ _ _ _ _).trans
       (by simp_rw [← Finsupp.smul_single_one _ (1 * _ : S)]; dsimp; simp)
-
-/--
-theorem `KaehlerDifferential.derivationQuotKerTotal_apply` / 定理 `KaehlerDifferential.derivationQuotKerTotal_apply`
-
-English:
-theorem KaehlerDifferential.derivationQuotKerTotal_apply
-  given: (x)
-  proof: rfl
-
-中文:
-定理 KaehlerDifferential.derivationQuotKerTotal_apply
-  条件: (x)
-  证明: rfl
+/-
+**KaehlerDifferential.derivationQuotKerTotal_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.derivationQuotKerTotal_apply (x) : KaehlerDifferential
+.derivationQuotKerTotal R S x = 1𝖣x
+参数：x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 theorem KaehlerDifferential.derivationQuotKerTotal_apply (x) :
     KaehlerDifferential.derivationQuotKerTotal R S x = 1𝖣x :=
   rfl
-
-/--
-theorem `KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination` / 定理 `KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination`
-
-English:
-theorem KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination
-  proof: by
-  apply Finsupp.lhom_ext
-  intro a b
-  conv_rhs => rw [← Finsupp.smul_single_one a b, map_smul]
-  simp [KaehlerDifferential.derivationQuotKerTotal_apply]
-
-中文:
-定理 KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination
-  证明: by
-  apply Finsupp.lhom_ext
-  intro a b
-  conv_rhs => rw [← Finsupp.smul_single_one a b, map_smul]
-  simp [KaehlerDifferential.derivationQuotKerTotal_apply]
-
-Depends on / 依赖: Finsupp, Finsupp.lhom_ext, Finsupp.smul_single_one, KaehlerDifferential, KaehlerDifferential.derivationQuotKerTotal_apply, conv_rhs, derivationQuotKerTotal_apply, lhom_ext, map_smul, smul_single_one
+/-
+**KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination** 是 Mat
+hlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination : (
+KaehlerDifferential.derivationQuotKerTotal R S).liftKaehlerDifferential.comp (Fi
+nsupp.linearCombination S (KaehlerDifferential.D R S)) = Submodule.mkQ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext`：lhom_ext ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a b
+, φ (single a b) = ψ (single a b)) : φ = ψ
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.smul_single_one`：smul_single_one [MulZeroOneClass R] (a : α) (b 
+: R) : b • single a (1 : R) = single a b
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用定理 `Derivation.liftKaehlerDifferential_comp_D`：Derivation.liftKaehlerDiffere
+ntial_comp_D (D' : Derivation R S M) (x : S) : D'.liftKaehlerDifferential (Kaehl
+erDifferential.D R S x) = D' x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination :
     (KaehlerDifferential.derivationQuotKerTotal R S).liftKaehlerDifferential.comp
@@ -1584,31 +1539,64 @@ theorem KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination :
   intro a b
   conv_rhs => rw [← Finsupp.smul_single_one a b, map_smul]
   simp [KaehlerDifferential.derivationQuotKerTotal_apply]
-
-/--
-theorem `KaehlerDifferential.kerTotal_eq` / 定理 `KaehlerDifferential.kerTotal_eq`
-
-English:
-theorem KaehlerDifferential.kerTotal_eq
-  proof: by
-  apply le_antisymm
-  · conv_rhs => rw [← (KaehlerDifferential.kerTotal R S).ker_mkQ]
-    rw [← KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination]
-    exact LinearMap.ker_le_ker_comp _ _
-  · rw [KaehlerDifferential.kerTotal, Submodule.span_le]
-    rintro _ ((⟨⟨x, y⟩, rfl⟩ | ⟨⟨x, y⟩, rfl⟩) | ⟨x, rfl⟩) <;> simp [LinearMap.mem_ker]
-
-中文:
-定理 KaehlerDifferential.kerTotal_eq
-  证明: by
-  apply le_antisymm
-  · conv_rhs => rw [← (KaehlerDifferential.kerTotal R S).ker_mkQ]
-    rw [← KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination]
-    exact LinearMap.ker_le_ker_comp _ _
-  · rw [KaehlerDifferential.kerTotal, Submodule.span_le]
-    rintro _ ((⟨⟨x, y⟩, rfl⟩ | ⟨⟨x, y⟩, rfl⟩) | ⟨x, rfl⟩) <;> simp [LinearMap.mem_ker]
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination, KaehlerDifferential.kerTotal, LinearMap, LinearMap.ker_le_ker_comp, LinearMap.mem_ker, Submodule, Submodule.span_le, conv_rhs, derivationQuotKerTotal_lift_comp_linearCombination, kerTotal, ker_le_ker_comp, ker_mkQ, le_antisymm, mem_ker, span_le
+/-
+**KaehlerDifferential.kerTotal_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal_eq : LinearMap.ker (Finsupp.linearCombination
+ S (KaehlerDifferential.D R S)) = KaehlerDifferential.kerTotal R S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination`：
+KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination : (Kaehle
+rDifferential.derivationQuotKerTotal R S).liftKaehlerDiffere…
+· 使用定理 `LinearMap.ker_le_ker_comp`：ker_le_ker_comp (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ 
+->ₛₗ[τ₂₃] M₃) : ker f <= ker (g.comp f : M ->ₛₗ[τ₁₃] M₃)
+· 使用定理 `KaehlerDifferential.kerTotal.eq_1`：∀ (R : Type u) (S : Type v) [inst : C
+ommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S],   KaehlerDifferential.k
+erTotal R S =     Submo…
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `Derivation.map_algebraMap`：map_algebraMap : D (algebraMap R A r) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem KaehlerDifferential.kerTotal_eq :
     LinearMap.ker (Finsupp.linearCombination S (KaehlerDifferential.D R S)) =
@@ -1619,79 +1607,43 @@ theorem KaehlerDifferential.kerTotal_eq :
     exact LinearMap.ker_le_ker_comp _ _
   · rw [KaehlerDifferential.kerTotal, Submodule.span_le]
     rintro _ ((⟨⟨x, y⟩, rfl⟩ | ⟨⟨x, y⟩, rfl⟩) | ⟨x, rfl⟩) <;> simp [LinearMap.mem_ker]
-
-/--
-theorem `KaehlerDifferential.linearCombination_surjective` / 定理 `KaehlerDifferential.linearCombination_surjective`
-
-English:
-theorem KaehlerDifferential.linearCombination_surjective
-  proof: by
-  rw [← LinearMap.range_eq_top]; rw [range_linearCombination]; rw [span_range_derivation]
-
-中文:
-定理 KaehlerDifferential.linearCombination_surjective
-  证明: by
-  rw [← LinearMap.range_eq_top]; rw [range_linearCombination]; rw [span_range_derivation]
-
-Depends on / 依赖: LinearMap, LinearMap.range_eq_top, range_eq_top, range_linearCombination, span_range_derivation
+/-
+**KaehlerDifferential.linearCombination_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.linearCombination_surjective : Function.Surjective (Fi
+nsupp.linearCombination S (KaehlerDifferential.D R S))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `Finsupp.range_linearCombination`：range_linearCombination : LinearMap.ran
+ge (linearCombination R v) = span R (range v)
+· 使用定理 `KaehlerDifferential.span_range_derivation`：KaehlerDifferential.span_rang
+e_derivation : Submodule.span S (Set.range <| KaehlerDifferential.D R S) = ⊤
 -/
 theorem KaehlerDifferential.linearCombination_surjective :
     Function.Surjective (Finsupp.linearCombination S (KaehlerDifferential.D R S)) := by
-  rw [← LinearMap.range_eq_top]; rw [range_linearCombination]; rw [span_range_derivation]
+  rw [← LinearMap.range_eq_top, range_linearCombination, span_range_derivation]
 
 /-- `Ω[S⁄R]` is isomorphic to `S` copies of `S` with kernel `KaehlerDifferential.kerTotal`. -/
 @[simps!]
-/--
-Definition of `KaehlerDifferential.quotKerTotalEquiv` / `KaehlerDifferential.quotKerTotalEquiv` 的定义
+/-
+**KaehlerDifferential.quotKerTotalEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.quotKerTotalEquiv : ((S ->₀ S) ⧸ KaehlerDifferential.k
+erTotal R S) ≃ₗ[S] Ω[S⁄R]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.quotKerTotalEquiv
-  signature: :
-  body: { (KaehlerDifferential.kerTotal R S).liftQ
-      (Finsupp.linearCombination S (KaehlerDifferential.D R S))
-      (KaehlerDifferential.kerTotal_eq R S).ge with
-    invFun := (KaehlerDifferential.derivationQuotKerTotal R S).liftKaehlerDifferential
-    left_inv := by
-      intro x
-      obtain ⟨x, rfl⟩ := Submodule.mkQ_surjective _ x
-      exact
-        LinearMap.congr_fun
-          (KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination R S :) x
-    right_inv := by
-      intro x
-      obtain ⟨x, rfl⟩ := KaehlerDifferential.linearCombination_surjective R S x
-      have := LinearMap.congr_fun
-        (KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination R S) x
-      rw [LinearMap.comp_apply] at this
-      rw [this]
-      rfl }
-
-中文:
-定义 KaehlerDifferential.quotKerTotalEquiv
-  签名: :
-  定义体: { (KaehlerDifferential.kerTotal R S).liftQ
-      (Finsupp.linearCombination S (KaehlerDifferential.D R S))
-      (KaehlerDifferential.kerTotal_eq R S).ge with
-    invFun := (KaehlerDifferential.derivationQuotKerTotal R S).liftKaehlerDifferential
-    left_inv := by
-      intro x
-      obtain ⟨x, rfl⟩ := Submodule.mkQ_surjective _ x
-      exact
-        LinearMap.congr_fun
-          (KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination R S :) x
-    right_inv := by
-      intro x
-      obtain ⟨x, rfl⟩ := KaehlerDifferential.linearCombination_surjective R S x
-      have := LinearMap.congr_fun
-        (KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination R S) x
-      rw [LinearMap.comp_apply] at this
-      rw [this]
-      rfl }
-
-Depends on / 依赖: Finsupp, Finsupp.linearCombination, KaehlerDifferential, KaehlerDifferential.D, KaehlerDifferential.derivationQuotKerTotal, KaehlerDifferential.derivationQuotKerTotal_lift_comp_linearCombination, KaehlerDifferential.kerTotal, KaehlerDifferential.kerTotal_eq, KaehlerDifferential.linearCombination_surjective, LinearMap, LinearMap.congr_fun, Submodule, Submodule.mkQ_surjective, congr_fun, derivationQuotKerTotal, derivationQuotKerTotal_lift_comp_linearCombination, invFun, kerTotal, kerTotal_eq, left_inv
+--- 原说明 ---
+`Ω[S⁄R]` is isomorphic to `S` copies of `S` with kernel `KaehlerDifferential.ker
+Total`.
 -/
 noncomputable def KaehlerDifferential.quotKerTotalEquiv :
-    ((S ->₀ S) ⧸ KaehlerDifferential.kerTotal R S) ≃ₗ[S] Ω[S⁄R] :=
+    ((S →₀ S) ⧸ KaehlerDifferential.kerTotal R S) ≃ₗ[S] Ω[S⁄R] :=
   { (KaehlerDifferential.kerTotal R S).liftQ
       (Finsupp.linearCombination S (KaehlerDifferential.D R S))
       (KaehlerDifferential.kerTotal_eq R S).ge with
@@ -1710,21 +1662,27 @@ noncomputable def KaehlerDifferential.quotKerTotalEquiv :
       rw [LinearMap.comp_apply] at this
       rw [this]
       rfl }
-
-/--
-theorem `KaehlerDifferential.quotKerTotalEquiv_symm_comp_D` / 定理 `KaehlerDifferential.quotKerTotalEquiv_symm_comp_D`
-
-English:
-theorem KaehlerDifferential.quotKerTotalEquiv_symm_comp_D
-  proof: by
-  convert! (KaehlerDifferential.derivationQuotKerTotal R S).liftKaehlerDifferential_comp
-
-中文:
-定理 KaehlerDifferential.quotKerTotalEquiv_symm_comp_D
-  证明: by
-  convert! (KaehlerDifferential.derivationQuotKerTotal R S).liftKaehlerDifferential_comp
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.derivationQuotKerTotal, convert, derivationQuotKerTotal, liftKaehlerDifferential_comp
+/-
+**KaehlerDifferential.quotKerTotalEquiv_symm_comp_D** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：KaehlerDifferential.quotKerTotalEquiv_symm_comp_D : (KaehlerDifferential.q
+uotKerTotalEquiv R S).symm.toLinearMap.compDer (KaehlerDifferential.D R S) = Kae
+hlerDifferential.derivationQuotKerTotal R S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Derivation.liftKaehlerDifferential_comp`：Derivation.liftKaehlerDifferent
+ial_comp (D : Derivation R S M) : D.liftKaehlerDifferential.compDer (KaehlerDiff
+erential.D R S) = D
 -/
 theorem KaehlerDifferential.quotKerTotalEquiv_symm_comp_D :
     (KaehlerDifferential.quotKerTotalEquiv R S).symm.toLinearMap.compDer
@@ -1739,8 +1697,8 @@ section ExactSequence
 /- We have the commutative diagram
 ```
 A --→ B
-↑ ↑
-| |
+↑     ↑
+|     |
 R --→ S
 ```
 -/
@@ -1754,52 +1712,118 @@ local macro "finsupp_map" : term =>
     (Finsupp.lmapDomain A A (algebraMap A B)))
 
 /--
-theorem `KaehlerDifferential.kerTotal_map` / 定理 `KaehlerDifferential.kerTotal_map`
+Given the commutative diagram
+```
+A --→ B
+↑     ↑
+|     |
+R --→ S
+```
+The kernel of the presentation `⊕ₓ B dx ↠ Ω_{B/S}` is spanned by the image of the
+kernel of `⊕ₓ A dx ↠ Ω_{A/R}` and all `ds` with `s : S`.
+See `kerTotal_map'` for the special case where `R = S`.
+-/
+/-
+**KaehlerDifferential.kerTotal_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal_map [Algebra R B] [IsScalarTower R A B] [IsSc
+alarTower R S B] (h : Function.Surjective (algebraMap A B)) : (KaehlerDifferenti
+al.kerTotal R A).map finsupp_map ⊔ Submodule.span A (Set.range fun x : S => .sin
+gle (algebraMap S B x) (1 : B)) = (KaehlerDifferential.kerTotal S B).restrictSca
+lars _
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `KaehlerDifferential.kerTotal.eq_1`：∀ (R : Type u) (S : Type v) [inst : C
+ommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S],   KaehlerDifferential.k
+erTotal R S =     Submo…
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Submodule.restrictScalars_span`：restrictScalars_span (hsur : Function.Su
+rjective (algebraMap R A)) (X : Set M) : restrictScalars R (span A X) = span R X
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.span_union`：span_union (s t : Set M) : span R (s union t) = sp
+an R s ⊔ span R t
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
+· 使用定理 `Finsupp.mapDomain_single`：mapDomain_single {f : α -> β} {a : α} {b : M} 
+: mapDomain f (single a b) = single (f a) b
+· 使用定理 `Finsupp.mapRange.linearMap_apply`：∀ {α : Type u_1} {M : Type u_2} {N : T
+ype u_3} {R : Type u_5} {R₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R
+₂]   [inst_2 : AddComm…
+· 使用定理 `Finsupp.mapRange_single`：mapRange_single {f : M -> N} {hf : f 0 = 0} {a 
+: α} {b : M} : mapRange f hf (single a b) = single a (f b)
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+（共 40 条，此处仅展示前 30 条）
 
-English:
-theorem KaehlerDifferential.kerTotal_map
-  statement: [Algebra R B] [IsScalarTower R A B] [IsScalarTower R S B]
-  proof: by
-  rw [KaehlerDifferential.kerTotal]; rw [Submodule.map_span]; rw [KaehlerDifferential.kerTotal]; rw [Submodule.restrictScalars_span _ _ h]
-  simp_rw [Set.image_union, Submodule.span_union, ← Set.image_univ, Set.image_image, Set.image_univ,
-    map_sub, map_add]
-  simp only [LinearMap.comp_apply, Finsupp.lmapDomain_apply, Finsupp.mapDomain_single,
-    Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, Algebra.linearMap_apply,
-    map_one, map_add, map_mul]
-  simp_rw [sup_assoc, ← (h.prodMap h).range_comp]
-  congr!
-  rw [sup_eq_right]
-  apply Submodule.span_mono
-  simp_rw [← IsScalarTower.algebraMap_apply R A B, IsScalarTower.algebraMap_apply R S B]
-  exact Set.range_comp_subset_range (algebraMap R S)
-    fun x => Finsupp.single (algebraMap S B x) (1 : B)
-
-中文:
-定理 KaehlerDifferential.kerTotal_map
-  结论: [代数 R B] [标量塔 R A B] [标量塔 R S B]
-  证明: by
-  rw [KaehlerDifferential.kerTotal]; rw [Submodule.map_span]; rw [KaehlerDifferential.kerTotal]; rw [Submodule.restrictScalars_span _ _ h]
-  simp_rw [Set.image_union, Submodule.span_union, ← Set.image_univ, Set.image_image, Set.image_univ,
-    map_sub, map_add]
-  simp only [LinearMap.comp_apply, Finsupp.lmapDomain_apply, Finsupp.mapDomain_single,
-    Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, Algebra.linearMap_apply,
-    map_one, map_add, map_mul]
-  simp_rw [sup_assoc, ← (h.prodMap h).range_comp]
-  congr!
-  rw [sup_eq_right]
-  apply Submodule.span_mono
-  simp_rw [← IsScalarTower.algebraMap_apply R A B, IsScalarTower.algebraMap_apply R S B]
-  exact Set.range_comp_subset_range (algebraMap R S)
-    fun x => Finsupp.single (algebraMap S B x) (1 : B)
-
-Depends on / 依赖: Algebra, Algebra.linearMap_apply, Finsupp, Finsupp.lmapDomain_apply, Finsupp.mapDomain_single, Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, KaehlerDifferential, KaehlerDifferential.kerTotal, LinearMap, LinearMap.comp_apply, Set.image_image, Set.image_union, Set.image_univ, Submodule, Submodule.map_span, Submodule.restrictScalars_span, Submodule.span_union, comp_apply, h.prodMap
+--- 原说明 ---
+Given the commutative diagram
+```
+A --→ B
+↑     ↑
+|     |
+R --→ S
+```
+The kernel of the presentation `⊕ₓ B dx ↠ Ω_{B/S}` is spanned by the image of th
+e
+kernel of `⊕ₓ A dx ↠ Ω_{A/R}` and all `ds` with `s : S`.
+See `kerTotal_map'` for the special case where `R = S`.
 -/
 theorem KaehlerDifferential.kerTotal_map [Algebra R B] [IsScalarTower R A B] [IsScalarTower R S B]
     (h : Function.Surjective (algebraMap A B)) :
     (KaehlerDifferential.kerTotal R A).map finsupp_map ⊔
         Submodule.span A (Set.range fun x : S => .single (algebraMap S B x) (1 : B)) =
       (KaehlerDifferential.kerTotal S B).restrictScalars _ := by
-  rw [KaehlerDifferential.kerTotal]; rw [Submodule.map_span]; rw [KaehlerDifferential.kerTotal]; rw [Submodule.restrictScalars_span _ _ h]
+  rw [KaehlerDifferential.kerTotal, Submodule.map_span, KaehlerDifferential.kerTotal,
+    Submodule.restrictScalars_span _ _ h]
   simp_rw [Set.image_union, Submodule.span_union, ← Set.image_univ, Set.image_image, Set.image_univ,
     map_sub, map_add]
   simp only [LinearMap.comp_apply, Finsupp.lmapDomain_apply, Finsupp.mapDomain_single,
@@ -1814,75 +1838,123 @@ theorem KaehlerDifferential.kerTotal_map [Algebra R B] [IsScalarTower R A B] [Is
     fun x => Finsupp.single (algebraMap S B x) (1 : B)
 
 /--
-theorem `KaehlerDifferential.kerTotal_map'` / 定理 `KaehlerDifferential.kerTotal_map'`
+This is a special case of `kerTotal_map` where `R = S`.
+The kernel of the presentation `⊕ₓ B dx ↠ Ω_{B/R}` is spanned by the image of the
+kernel of `⊕ₓ A dx ↠ Ω_{A/R}` and all `da` with `a : A`.
+-/
+/-
+**KaehlerDifferential.kerTotal_map'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerTotal_map' [Algebra R B] [IsScalarTower R A B] (h :
+ Function.Surjective (algebraMap A B)) : (KaehlerDifferential.kerTotal R A ⊔ Sub
+module.span A (Set.range fun x => .single (algebraMap R A x) 1)).map finsupp_map
+ = (KaehlerDifferential.kerTotal R B).restrictScalars _
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_sup`：map_sup (f : M ->ₛₗ[σ₁₂] M₂) : map f (p ⊔ p') = map f
+ p ⊔ map f p'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.kerTotal_map`：KaehlerDifferential.kerTotal_map [Alge
+bra R B] [IsScalarTower R A B] [IsScalarTower R S B] (h : Function.Surjective (a
+lgebraMap A B)) : (Kae…
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
+· 使用定理 `Finsupp.mapDomain_single`：mapDomain_single {f : α -> β} {a : α} {b : M} 
+: mapDomain f (single a b) = single (f a) b
+· 使用定理 `Finsupp.mapRange.linearMap_apply`：∀ {α : Type u_1} {M : Type u_2} {N : T
+ype u_3} {R : Type u_5} {R₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R
+₂]   [inst_2 : AddComm…
+· 使用定理 `Finsupp.mapRange_single`：mapRange_single {f : M -> N} {hf : f 0 = 0} {a 
+: α} {b : M} : mapRange f hf (single a b) = single a (f b)
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem KaehlerDifferential.kerTotal_map'
-  statement: [Algebra R B]
-  proof: by
-  rw [Submodule.map_sup]; rw [← kerTotal_map R R A B h]; rw [Submodule.map_span]; rw [← Set.range_comp]
-  congr
-  ext; simp [IsScalarTower.algebraMap_eq R A B]
-
-中文:
-定理 KaehlerDifferential.kerTotal_map'
-  结论: [代数 R B]
-  证明: by
-  rw [Submodule.map_sup]; rw [← kerTotal_map R R A B h]; rw [Submodule.map_span]; rw [← Set.range_comp]
-  congr
-  ext; simp [IsScalarTower.algebraMap_eq R A B]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, Set.range_comp, Submodule, Submodule.map_span, Submodule.map_sup, algebraMap_eq, kerTotal_map, map_span, map_sup, range_comp
+--- 原说明 ---
+This is a special case of `kerTotal_map` where `R = S`.
+The kernel of the presentation `⊕ₓ B dx ↠ Ω_{B/R}` is spanned by the image of th
+e
+kernel of `⊕ₓ A dx ↠ Ω_{A/R}` and all `da` with `a : A`.
 -/
 theorem KaehlerDifferential.kerTotal_map' [Algebra R B]
     [IsScalarTower R A B] (h : Function.Surjective (algebraMap A B)) :
     (KaehlerDifferential.kerTotal R A ⊔
-      Submodule.span A (Set.range fun x => .single (algebraMap R A x) 1)).map finsupp_map =
+      Submodule.span A (Set.range fun x ↦ .single (algebraMap R A x) 1)).map finsupp_map =
       (KaehlerDifferential.kerTotal R B).restrictScalars _ := by
-  rw [Submodule.map_sup]; rw [← kerTotal_map R R A B h]; rw [Submodule.map_span]; rw [← Set.range_comp]
+  rw [Submodule.map_sup, ← kerTotal_map R R A B h, Submodule.map_span, ← Set.range_comp]
   congr
   ext; simp [IsScalarTower.algebraMap_eq R A B]
 
 section
 variable [Algebra R B] [IsScalarTower R A B] [IsScalarTower R S B] [SMulCommClass S A B]
 
-/--
-Definition of `KaehlerDifferential.map` / `KaehlerDifferential.map` 的定义
-
-English:
-definition KaehlerDifferential.map
-  signature: : Ω[A⁄R] ->ₗ[A] Ω[B⁄S]
-  body: Derivation.liftKaehlerDifferential
-    (((KaehlerDifferential.D S B).restrictScalars R).compAlgebraMap A)
-
-中文:
-定义 KaehlerDifferential.map
-  签名: : Ω[A⁄R] ->ₗ[A] Ω[B⁄S]
-  定义体: Derivation.liftKaehlerDifferential
-    (((KaehlerDifferential.D S B).restrictScalars R).compAlgebraMap A)
-
-Depends on / 依赖: Derivation, Derivation.liftKaehlerDifferential, KaehlerDifferential, KaehlerDifferential.D, compAlgebraMap, liftKaehlerDifferential, restrictScalars
+/-- The map `Ω[A⁄R] →ₗ[A] Ω[B⁄S]` given a square
+```
+A --→ B
+↑     ↑
+|     |
+R --→ S
+```
 -/
-def KaehlerDifferential.map : Ω[A⁄R] ->ₗ[A] Ω[B⁄S] :=
+/-
+**KaehlerDifferential.map** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.map : Ω[A⁄R] ->ₗ[A] Ω[B⁄S]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The map `Ω[A⁄R] →ₗ[A] Ω[B⁄S]` given a square
+```
+A --→ B
+↑     ↑
+|     |
+R --→ S
+```
+-/
+def KaehlerDifferential.map : Ω[A⁄R] →ₗ[A] Ω[B⁄S] :=
   Derivation.liftKaehlerDifferential
     (((KaehlerDifferential.D S B).restrictScalars R).compAlgebraMap A)
-
-/--
-theorem `KaehlerDifferential.map_compDer` / 定理 `KaehlerDifferential.map_compDer`
-
-English:
-theorem KaehlerDifferential.map_compDer
-  proof: Derivation.liftKaehlerDifferential_comp _
-
-@[simp]
-
-中文:
-定理 KaehlerDifferential.map_compDer
-  证明: Derivation.liftKaehlerDifferential_comp _
-
-@[simp]
-
-Depends on / 依赖: Derivation, Derivation.liftKaehlerDifferential_comp, liftKaehlerDifferential_comp
+/-
+**KaehlerDifferential.map_compDer** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.map_compDer : (KaehlerDifferential.map R S A B).compDe
+r (KaehlerDifferential.D R A) = ((KaehlerDifferential.D S B).restrictScalars R).
+compAlgebraMap A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.liftKaehlerDifferential_comp`：Derivation.liftKaehlerDifferent
+ial_comp (D : Derivation R S M) : D.liftKaehlerDifferential.compDer (KaehlerDiff
+erential.D R S) = D
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
 theorem KaehlerDifferential.map_compDer :
     (KaehlerDifferential.map R S A B).compDer (KaehlerDifferential.D R A) =
@@ -1890,62 +1962,106 @@ theorem KaehlerDifferential.map_compDer :
   Derivation.liftKaehlerDifferential_comp _
 
 @[simp]
-/--
-theorem `KaehlerDifferential.map_D` / 定理 `KaehlerDifferential.map_D`
-
-English:
-theorem KaehlerDifferential.map_D
-  given: (x : A)
-  proof: Derivation.congr_fun (KaehlerDifferential.map_compDer R S A B) x
-
-中文:
-定理 KaehlerDifferential.map_D
-  条件: (x : A)
-  证明: Derivation.congr_fun (KaehlerDifferential.map_compDer R S A B) x
-
-Depends on / 依赖: Derivation, Derivation.congr_fun, KaehlerDifferential, KaehlerDifferential.map_compDer, congr_fun, map_compDer
+/-
+**KaehlerDifferential.map_D** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.map_D (x : A) : KaehlerDifferential.map R S A B (Kaehl
+erDifferential.D R A x) = KaehlerDifferential.D S B (algebraMap A B x)
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.congr_fun`：congr_fun (h : D1 = D2) (a : A) : D1 a = D2 a
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `KaehlerDifferential.map_compDer`：KaehlerDifferential.map_compDer : (Kaeh
+lerDifferential.map R S A B).compDer (KaehlerDifferential.D R A) = ((KaehlerDiff
+erential.D S B).restr…
 -/
 theorem KaehlerDifferential.map_D (x : A) :
     KaehlerDifferential.map R S A B (KaehlerDifferential.D R A x) =
       KaehlerDifferential.D S B (algebraMap A B x) :=
   Derivation.congr_fun (KaehlerDifferential.map_compDer R S A B) x
-
-/--
-theorem `KaehlerDifferential.ker_map` / 定理 `KaehlerDifferential.ker_map`
-
-English:
-theorem KaehlerDifferential.ker_map
-  proof: by
-  rw [← Submodule.map_comap_eq_of_surjective (linearCombination_surjective R A) (LinearMap.ker _)]
-  congr 1
-  ext x
-  simp only [Submodule.mem_comap, LinearMap.mem_ker, Finsupp.apply_linearCombination, ← kerTotal_eq,
-    Submodule.restrictScalars_mem]
-  simp only [linearCombination_apply, Function.comp_apply, LinearMap.coe_comp, lmapDomain_apply,
-    Finsupp.mapRange.linearMap_apply]
-  rw [Finsupp.sum_mapRange_index]; rw [Finsupp.sum_mapDomain_index]
-  · simp
-  · simp
-  · simp [add_smul]
-  · simp
-
-中文:
-定理 KaehlerDifferential.ker_map
-  证明: by
-  rw [← Submodule.map_comap_eq_of_surjective (linearCombination_surjective R A) (LinearMap.ker _)]
-  congr 1
-  ext x
-  simp only [Submodule.mem_comap, LinearMap.mem_ker, Finsupp.apply_linearCombination, ← kerTotal_eq,
-    Submodule.restrictScalars_mem]
-  simp only [linearCombination_apply, Function.comp_apply, LinearMap.coe_comp, lmapDomain_apply,
-    Finsupp.mapRange.linearMap_apply]
-  rw [Finsupp.sum_mapRange_index]; rw [Finsupp.sum_mapDomain_index]
-  · simp
-  · simp
-  · simp [add_smul]
-  · simp
-
-Depends on / 依赖: Finsupp, Finsupp.apply_linearCombination, Finsupp.mapRange.linearMap_apply, Finsupp.sum_mapDomain_index, Finsupp.sum_mapRange_index, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.ker, LinearMap.mem_ker, Submodule, Submodule.map_comap_eq_of_surjective, Submodule.mem_comap, Submodule.restrictScalars_mem, add_smul, apply_linearCombination, coe_comp, comp_apply, kerTotal_eq
+/-
+**KaehlerDifferential.ker_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.ker_map : LinearMap.ker (KaehlerDifferential.map R S A
+ B) = (((kerTotal S B).restrictScalars A).comap finsupp_map).map (Finsupp.linear
+Combination (M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.map_comap_eq_of_surjective`：map_comap_eq_of_surjective (p : Su
+bmodule R₂ M₂) : (p.comap f).map f = p
+· 使用定理 `KaehlerDifferential.linearCombination_surjective`：KaehlerDifferential.li
+nearCombination_surjective : Function.Surjective (Finsupp.linearCombination S (K
+aehlerDifferential.D R S))
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.apply_linearCombination`：apply_linearCombination (f : M ->ₗ[R] M
+') (v) (l : α ->₀ R) : f (linearCombination R v l) = linearCombination R (f ∘ v)
+ l
+· 使用定理 `Submodule.restrictScalars.congr_simp`：∀ (S : Type u_1) {R : Type u_2} {M
+ : Type u_3} [inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : Semiring S
+]   [inst_3 : _root_.Modul…
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
+· 使用定理 `Finsupp.mapRange.linearMap_apply`：∀ {α : Type u_1} {M : Type u_2} {N : T
+ype u_3} {R : Type u_5} {R₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R
+₂]   [inst_2 : AddComm…
+· 使用定理 `Finsupp.sum_mapRange_index`：∀ {α : Type u_1} {M : Type u_8} {M' : Type u
+_9} {N : Type u_10} [inst : Zero M] [inst_1 : Zero M']   [inst_2 : AddCommMonoid
+ N] {f : M → M'}…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finsupp.sum_mapDomain_index`：∀ {α : Type u_1} {β : Type u_2} {M : Type u
+_5} {N : Type u_6} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid N]   {f : α 
+→ β} {s : α →₀ M}…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `algebraMap_smul`：algebraMap_smul (r : R) (m : M) : (algebraMap R A) r • 
+m = r • m
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+（共 32 条，此处仅展示前 30 条）
 -/
 theorem KaehlerDifferential.ker_map :
     LinearMap.ker (KaehlerDifferential.map R S A B) =
@@ -1958,197 +2074,267 @@ theorem KaehlerDifferential.ker_map :
     Submodule.restrictScalars_mem]
   simp only [linearCombination_apply, Function.comp_apply, LinearMap.coe_comp, lmapDomain_apply,
     Finsupp.mapRange.linearMap_apply]
-  rw [Finsupp.sum_mapRange_index]; rw [Finsupp.sum_mapDomain_index]
+  rw [Finsupp.sum_mapRange_index, Finsupp.sum_mapDomain_index]
   · simp
   · simp
   · simp [add_smul]
   · simp
-
-/--
-lemma `KaehlerDifferential.ker_map_of_surjective` / 引理 `KaehlerDifferential.ker_map_of_surjective`
-
-English:
-lemma KaehlerDifferential.ker_map_of_surjective
-  given: (h : Function.Surjective (algebraMap A B))
-  proof: by
-  rw [ker_map]; rw [← kerTotal_map' R A B h]; rw [Submodule.comap_map_eq]; rw [Submodule.map_sup]; rw [Submodule.map_sup]; rw [← kerTotal_eq]; rw [← Submodule.comap_bot]; rw [Submodule.map_comap_eq_of_surjective (linearCombination_surjective _ _)]; rw [bot_sup_eq]; rw [Submodule.map_span]; rw [← Set.range_comp]
-  convert! bot_sup_eq _
-  rw [Submodule.span_eq_bot]; simp
-
-中文:
-引理 KaehlerDifferential.ker_map_of_surjective
-  条件: (h : 函数.满射 (algebraMap A B))
-  证明: by
-  rw [ker_map]; rw [← kerTotal_map' R A B h]; rw [Submodule.comap_map_eq]; rw [Submodule.map_sup]; rw [Submodule.map_sup]; rw [← kerTotal_eq]; rw [← Submodule.comap_bot]; rw [Submodule.map_comap_eq_of_surjective (linearCombination_surjective _ _)]; rw [bot_sup_eq]; rw [Submodule.map_span]; rw [← Set.range_comp]
-  convert! bot_sup_eq _
-  rw [Submodule.span_eq_bot]; simp
-
-Depends on / 依赖: Set.range_comp, Submodule, Submodule.comap_bot, Submodule.comap_map_eq, Submodule.map_comap_eq_of_surjective, Submodule.map_span, Submodule.map_sup, Submodule.span_eq_bot, bot_sup_eq, comap_bot, comap_map_eq, convert, kerTotal_eq, kerTotal_map, ker_map, linearCombination_surjective, map_comap_eq_of_surjective, map_span, map_sup, range_comp
+/-
+**KaehlerDifferential.ker_map_of_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.ker_map_of_surjective (h : Function.Surjective (algebr
+aMap A B)) : LinearMap.ker (map R R A B) = (LinearMap.ker finsupp_map).map (Fins
+upp.linearCombination A (D R A))
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `KaehlerDifferential.ker_map`：KaehlerDifferential.ker_map : LinearMap.ker
+ (KaehlerDifferential.map R S A B) = (((kerTotal S B).restrictScalars A).comap f
+insupp_map).map (…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.kerTotal_map'`：KaehlerDifferential.kerTotal_map' [Al
+gebra R B] [IsScalarTower R A B] (h : Function.Surjective (algebraMap A B)) : (K
+aehlerDifferential.kerT…
+· 使用定理 `Submodule.comap_map_eq`：comap_map_eq (f : M ->ₛₗ[τ₁₂] M₂) (p : Submodule
+ R M) : comap f (map f p) = p ⊔ LinearMap.ker f
+· 使用定理 `Submodule.map_sup`：map_sup (f : M ->ₛₗ[σ₁₂] M₂) : map f (p ⊔ p') = map f
+ p ⊔ map f p'
+· 使用定理 `KaehlerDifferential.kerTotal_eq`：KaehlerDifferential.kerTotal_eq : Linea
+rMap.ker (Finsupp.linearCombination S (KaehlerDifferential.D R S)) = KaehlerDiff
+erential.kerTotal R S
+· 使用定理 `Submodule.comap_bot`：comap_bot (f : M ->ₛₗ[τ₁₂] M₂) : comap f ⊥ = ker f
+· 使用定理 `Submodule.map_comap_eq_of_surjective`：map_comap_eq_of_surjective (p : Su
+bmodule R₂ M₂) : (p.comap f).map f = p
+· 使用定理 `KaehlerDifferential.linearCombination_surjective`：KaehlerDifferential.li
+nearCombination_surjective : Function.Surjective (Finsupp.linearCombination S (K
+aehlerDifferential.D R S))
+· 使用定理 `bot_sup_eq`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : OrderBo
+t α] (a : α), ⊥ ⊔ a = a
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Submodule.span_eq_bot`：span_eq_bot : span R (s : Set M) = ⊥ ↔ forall x i
+n s, (x : M) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用定理 `Derivation.map_algebraMap`：map_algebraMap : D (algebraMap R A r) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma KaehlerDifferential.ker_map_of_surjective (h : Function.Surjective (algebraMap A B)) :
     LinearMap.ker (map R R A B) =
       (LinearMap.ker finsupp_map).map (Finsupp.linearCombination A (D R A)) := by
-  rw [ker_map]; rw [← kerTotal_map' R A B h]; rw [Submodule.comap_map_eq]; rw [Submodule.map_sup]; rw [Submodule.map_sup]; rw [← kerTotal_eq]; rw [← Submodule.comap_bot]; rw [Submodule.map_comap_eq_of_surjective (linearCombination_surjective _ _)]; rw [bot_sup_eq]; rw [Submodule.map_span]; rw [← Set.range_comp]
+  rw [ker_map, ← kerTotal_map' R A B h, Submodule.comap_map_eq, Submodule.map_sup,
+    Submodule.map_sup, ← kerTotal_eq, ← Submodule.comap_bot,
+    Submodule.map_comap_eq_of_surjective (linearCombination_surjective _ _),
+    bot_sup_eq, Submodule.map_span, ← Set.range_comp]
   convert! bot_sup_eq _
   rw [Submodule.span_eq_bot]; simp
 
 open IsScalarTower (toAlgHom)
-
-/--
-theorem `KaehlerDifferential.map_surjective_of_surjective` / 定理 `KaehlerDifferential.map_surjective_of_surjective`
-
-English:
-theorem KaehlerDifferential.map_surjective_of_surjective
-  proof: by
-  rw [← LinearMap.range_eq_top]; rw [_root_.eq_top_iff]; rw [← @Submodule.restrictScalars_top A B]; rw [← span_range_derivation]; rw [Submodule.restrictScalars_span _ _ h]; rw [Submodule.span_le]
-  rintro _ ⟨x, rfl⟩
-  obtain ⟨y, rfl⟩ := h x
-  rw [← KaehlerDifferential.map_D R S A B]
-  exact ⟨_, rfl⟩
-
-中文:
-定理 KaehlerDifferential.map_surjective_of_surjective
-  证明: by
-  rw [← LinearMap.range_eq_top]; rw [_root_.eq_top_iff]; rw [← @Submodule.restrictScalars_top A B]; rw [← span_range_derivation]; rw [Submodule.restrictScalars_span _ _ h]; rw [Submodule.span_le]
-  rintro _ ⟨x, rfl⟩
-  obtain ⟨y, rfl⟩ := h x
-  rw [← KaehlerDifferential.map_D R S A B]
-  exact ⟨_, rfl⟩
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.map_D, LinearMap, LinearMap.range_eq_top, Submodule, Submodule.restrictScalars_span, Submodule.restrictScalars_top, Submodule.span_le, _root_, _root_.eq_top_iff, eq_top_iff, map_D, range_eq_top, restrictScalars_span, restrictScalars_top, span_le, span_range_derivation
+/-
+**KaehlerDifferential.map_surjective_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.map_surjective_of_surjective (h : Function.Surjective 
+(algebraMap A B)) : Function.Surjective (KaehlerDifferential.map R S A B)
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Submodule.restrictScalars_top`：restrictScalars_top : restrictScalars S (
+⊤ : Submodule R M) = ⊤
+· 使用定理 `KaehlerDifferential.span_range_derivation`：KaehlerDifferential.span_rang
+e_derivation : Submodule.span S (Set.range <| KaehlerDifferential.D R S) = ⊤
+· 使用定理 `Submodule.restrictScalars_span`：restrictScalars_span (hsur : Function.Su
+rjective (algebraMap R A)) (X : Set M) : restrictScalars R (span A X) = span R X
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `KaehlerDifferential.map_D`：KaehlerDifferential.map_D (x : A) : KaehlerDi
+fferential.map R S A B (KaehlerDifferential.D R A x) = KaehlerDifferential.D S B
+ (algebraMap A …
 -/
 theorem KaehlerDifferential.map_surjective_of_surjective
     (h : Function.Surjective (algebraMap A B)) :
     Function.Surjective (KaehlerDifferential.map R S A B) := by
-  rw [← LinearMap.range_eq_top]; rw [_root_.eq_top_iff]; rw [← @Submodule.restrictScalars_top A B]; rw [← span_range_derivation]; rw [Submodule.restrictScalars_span _ _ h]; rw [Submodule.span_le]
+  rw [← LinearMap.range_eq_top, _root_.eq_top_iff,
+    ← @Submodule.restrictScalars_top A B, ← span_range_derivation,
+    Submodule.restrictScalars_span _ _ h, Submodule.span_le]
   rintro _ ⟨x, rfl⟩
   obtain ⟨y, rfl⟩ := h x
   rw [← KaehlerDifferential.map_D R S A B]
   exact ⟨_, rfl⟩
-
-/--
-theorem `KaehlerDifferential.map_surjective` / 定理 `KaehlerDifferential.map_surjective`
-
-English:
-theorem KaehlerDifferential.map_surjective
-  proof: map_surjective_of_surjective R S B B Function.surjective_id
-
-中文:
-定理 KaehlerDifferential.map_surjective
-  证明: map_surjective_of_surjective R S B B Function.surjective_id
-
-Depends on / 依赖: Function, Function.surjective_id, map_surjective_of_surjective, surjective_id
+/-
+**KaehlerDifferential.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.map_surjective : Function.Surjective (KaehlerDifferent
+ial.map R S B B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `KaehlerDifferential.map_surjective_of_surjective`：KaehlerDifferential.ma
+p_surjective_of_surjective (h : Function.Surjective (algebraMap A B)) : Function
+.Surjective (KaehlerDifferential.map R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Function.surjective_id`：∀ {α : Sort u_1}, Function.Surjective id
 -/
 theorem KaehlerDifferential.map_surjective :
     Function.Surjective (KaehlerDifferential.map R S B B) :=
   map_surjective_of_surjective R S B B Function.surjective_id
 
-/--
-Definition of `KaehlerDifferential.mapBaseChange` / `KaehlerDifferential.mapBaseChange` 的定义
+/-- The lift of the map `Ω[A⁄R] →ₗ[A] Ω[B⁄R]` to the base change along `A → B`.
+This is the first map in the exact sequence `B ⊗[A] Ω[A⁄R] → Ω[B⁄R] → Ω[B⁄A] → 0`. -/
+/-
+**KaehlerDifferential.mapBaseChange** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.mapBaseChange : B otimes[A] Ω[A⁄R] ->ₗ[B] Ω[B⁄R]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KaehlerDifferential.mapBaseChange
-  signature: : B otimes[A] Ω[A⁄R] ->ₗ[B] Ω[B⁄R]
-  body: (TensorProduct.isBaseChange A Ω[A⁄R] B).lift (KaehlerDifferential.map R R A B)
-
-@[simp]
-
-中文:
-定义 KaehlerDifferential.mapBaseChange
-  签名: : B otimes[A] Ω[A⁄R] ->ₗ[B] Ω[B⁄R]
-  定义体: (TensorProduct.isBaseChange A Ω[A⁄R] B).lift (KaehlerDifferential.map R R A B)
-
-@[simp]
-
-Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.map, TensorProduct, TensorProduct.isBaseChange, isBaseChange
+--- 原说明 ---
+The lift of the map `Ω[A⁄R] →ₗ[A] Ω[B⁄R]` to the base change along `A → B`.
+This is the first map in the exact sequence `B ⊗[A] Ω[A⁄R] → Ω[B⁄R] → Ω[B⁄A] → 0
+`.
 -/
-noncomputable def KaehlerDifferential.mapBaseChange : B otimes[A] Ω[A⁄R] ->ₗ[B] Ω[B⁄R] :=
+noncomputable def KaehlerDifferential.mapBaseChange : B ⊗[A] Ω[A⁄R] →ₗ[B] Ω[B⁄R] :=
   (TensorProduct.isBaseChange A Ω[A⁄R] B).lift (KaehlerDifferential.map R R A B)
 
 @[simp]
-/--
-theorem `KaehlerDifferential.mapBaseChange_tmul` / 定理 `KaehlerDifferential.mapBaseChange_tmul`
-
-English:
-theorem KaehlerDifferential.mapBaseChange_tmul
-  given: (x : B) (y : Ω[A⁄R])
-  proof: by
-  conv_lhs => rw [← mul_one x, ← smul_eq_mul, ← TensorProduct.smul_tmul', map_smul]
-  congr 1
-  exact IsBaseChange.lift_eq _ _ _
-
-中文:
-定理 KaehlerDifferential.mapBaseChange_tmul
-  条件: (x : B) (y : Ω[A⁄R])
-  证明: by
-  conv_lhs => rw [← mul_one x, ← smul_eq_mul, ← TensorProduct.smul_tmul', map_smul]
-  congr 1
-  exact IsBaseChange.lift_eq _ _ _
-
-Depends on / 依赖: IsBaseChange, IsBaseChange.lift_eq, TensorProduct, TensorProduct.smul_tmul, conv_lhs, lift_eq, map_smul, mul_one, smul_eq_mul, smul_tmul
+/-
+**KaehlerDifferential.mapBaseChange_tmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.mapBaseChange_tmul (x : B) (y : Ω[A⁄R]) : KaehlerDiffe
+rential.mapBaseChange R A B (x otimesₜ y) = x • KaehlerDifferential.map R R A B 
+y
+参数：x : B；y : Ω[A⁄R]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `TensorProduct.smul_tmul'`：smul_tmul' (r : R') (m : M) (n : N) : r • m ot
+imesₜ[R] n = (r • m) otimesₜ n
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `IsBaseChange.lift_eq`：∀ {R : Type u_1} {M : Type v₁} {N : Type v₂} {S : 
+Type v₃} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : CommSem
+iring R] […
 -/
 theorem KaehlerDifferential.mapBaseChange_tmul (x : B) (y : Ω[A⁄R]) :
-    KaehlerDifferential.mapBaseChange R A B (x otimesₜ y) = x • KaehlerDifferential.map R R A B y := by
+    KaehlerDifferential.mapBaseChange R A B (x ⊗ₜ y) = x • KaehlerDifferential.map R R A B y := by
   conv_lhs => rw [← mul_one x, ← smul_eq_mul, ← TensorProduct.smul_tmul', map_smul]
   congr 1
   exact IsBaseChange.lift_eq _ _ _
-
-/--
-lemma `KaehlerDifferential.range_mapBaseChange` / 引理 `KaehlerDifferential.range_mapBaseChange`
-
-English:
-lemma KaehlerDifferential.range_mapBaseChange
-  proof: by
-  apply le_antisymm
-  · rintro _ ⟨x, rfl⟩
-    induction x with
-    | zero => simp
-    | tmul r s =>
-      obtain ⟨x, rfl⟩ := linearCombination_surjective _ _ s
-      simp only [mapBaseChange_tmul, LinearMap.mem_ker, map_smul]
-      induction x using Finsupp.induction_linear
-      · simp
-      · simp [smul_add, *]
-      · simp
-    | add => rw [map_add]; exact add_mem ‹_› ‹_›
-  · convert_to (kerTotal A B).map (Finsupp.linearCombination B (D R B)) <= _
-    · rw [KaehlerDifferential.ker_map]
-      congr 1
-      convert! Submodule.comap_id _
-      · ext; simp
-    rw [Submodule.map_le_iff_le_comap]; rw [kerTotal]; rw [Submodule.span_le]
-    rintro f ((⟨⟨x, y⟩, rfl⟩ | ⟨⟨x, y⟩, rfl⟩) | ⟨x, rfl⟩)
-    · use 0; simp
-    · use 0; simp
-    · use 1 otimesₜ D _ _ x; simp
-
-中文:
-引理 KaehlerDifferential.range_mapBaseChange
-  证明: by
-  apply le_antisymm
-  · rintro _ ⟨x, rfl⟩
-    induction x with
-    | zero => simp
-    | tmul r s =>
-      obtain ⟨x, rfl⟩ := linearCombination_surjective _ _ s
-      simp only [mapBaseChange_tmul, LinearMap.mem_ker, map_smul]
-      induction x using Finsupp.induction_linear
-      · simp
-      · simp [smul_add, *]
-      · simp
-    | add => rw [map_add]; exact add_mem ‹_› ‹_›
-  · convert_to (kerTotal A B).map (Finsupp.linearCombination B (D R B)) <= _
-    · rw [KaehlerDifferential.ker_map]
-      congr 1
-      convert! Submodule.comap_id _
-      · ext; simp
-    rw [Submodule.map_le_iff_le_comap]; rw [kerTotal]; rw [Submodule.span_le]
-    rintro f ((⟨⟨x, y⟩, rfl⟩ | ⟨⟨x, y⟩, rfl⟩) | ⟨x, rfl⟩)
-    · use 0; simp
-    · use 0; simp
-    · use 1 otimesₜ D _ _ x; simp
-
-Depends on / 依赖: Finsupp, Finsupp.induction_linear, Finsupp.linearCombination, KaehlerDifferential, KaehlerDifferential.ker_map, LinearMap, LinearMap.mem_ker, Submodule, Submodule.comap_id, Submodule.ma, add_mem, comap_id, convert, convert_to, induction_linear, kerTotal, ker_map, le_antisymm, linearCombination, linearCombination_surjective
+/-
+**KaehlerDifferential.range_mapBaseChange** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.range_mapBaseChange : LinearMap.range (mapBaseChange R
+ A B) = LinearMap.ker (map R A B B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `KaehlerDifferential.linearCombination_surjective`：KaehlerDifferential.li
+nearCombination_surjective : Function.Surjective (Finsupp.linearCombination S (K
+aehlerDifferential.D R S))
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `KaehlerDifferential.mapBaseChange_tmul`：KaehlerDifferential.mapBaseChang
+e_tmul (x : B) (y : Ω[A⁄R]) : KaehlerDifferential.mapBaseChange R A B (x otimesₜ
+ y) = x • KaehlerDifferentia…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用引理 `Finsupp.induction_linear`：induction_linear {motive : (ι ->₀ M) -> Prop} 
+(f : ι ->₀ M) (zero : motive 0) (add : forall f g : ι ->₀ M, motive f -> motive 
+g -> motive (f…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用定理 `KaehlerDifferential.map_D`：KaehlerDifferential.map_D (x : A) : KaehlerDi
+fferential.map R S A B (KaehlerDifferential.D R A x) = KaehlerDifferential.D S B
+ (algebraMap A …
+· 使用定理 `LinearMap.map_smul_of_tower`：map_smul_of_tower [CompatibleSMul M M₂ R S]
+ (fₗ : M ->ₗ[S] M₂) (c : R) (x : M) : fₗ (c • x) = c • fₗ x
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+（共 53 条，此处仅展示前 30 条）
 -/
 lemma KaehlerDifferential.range_mapBaseChange :
     LinearMap.range (mapBaseChange R A B) = LinearMap.ker (map R A B B) := by
@@ -2164,29 +2350,38 @@ lemma KaehlerDifferential.range_mapBaseChange :
       · simp [smul_add, *]
       · simp
     | add => rw [map_add]; exact add_mem ‹_› ‹_›
-  · convert_to (kerTotal A B).map (Finsupp.linearCombination B (D R B)) <= _
+  · convert_to (kerTotal A B).map (Finsupp.linearCombination B (D R B)) ≤ _
     · rw [KaehlerDifferential.ker_map]
       congr 1
       convert! Submodule.comap_id _
       · ext; simp
-    rw [Submodule.map_le_iff_le_comap]; rw [kerTotal]; rw [Submodule.span_le]
+    rw [Submodule.map_le_iff_le_comap, kerTotal, Submodule.span_le]
     rintro f ((⟨⟨x, y⟩, rfl⟩ | ⟨⟨x, y⟩, rfl⟩) | ⟨x, rfl⟩)
     · use 0; simp
     · use 0; simp
-    · use 1 otimesₜ D _ _ x; simp
+    · use 1 ⊗ₜ D _ _ x; simp
 
-/--
-lemma `KaehlerDifferential.exact_mapBaseChange_map` / 引理 `KaehlerDifferential.exact_mapBaseChange_map`
+/-- The sequence `B ⊗[A] Ω[A⁄R] → Ω[B⁄R] → Ω[B⁄A] → 0` is exact.
+Also see `KaehlerDifferential.map_surjective`. -/
+/-
+**KaehlerDifferential.exact_mapBaseChange_map** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.exact_mapBaseChange_map : Function.Exact (mapBaseChang
+e R A B) (map R A B B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `KaehlerDifferential.range_mapBaseChange`：KaehlerDifferential.range_mapBa
+seChange : LinearMap.range (mapBaseChange R A B) = LinearMap.ker (map R A B B)
 
-English:
-lemma KaehlerDifferential.exact_mapBaseChange_map
-  proof: SetLike.ext_iff.mp (range_mapBaseChange R A B).symm
-
-中文:
-引理 KaehlerDifferential.exact_mapBaseChange_map
-  证明: SetLike.ext_iff.mp (range_mapBaseChange R A B).symm
-
-Depends on / 依赖: SetLike, SetLike.ext_iff.mp, ext_iff, range_mapBaseChange
+--- 原说明 ---
+The sequence `B ⊗[A] Ω[A⁄R] → Ω[B⁄R] → Ω[B⁄A] → 0` is exact.
+Also see `KaehlerDifferential.map_surjective`.
 -/
 lemma KaehlerDifferential.exact_mapBaseChange_map :
     Function.Exact (mapBaseChange R A B) (map R A B B) :=
@@ -2197,32 +2392,16 @@ end
 /-- The map `I → B ⊗[A] Ω[A⁄R]` where `I = ker(A → B)`. -/
 @[simps]
 noncomputable
-/--
-Definition of `KaehlerDifferential.kerToTensor` / `KaehlerDifferential.kerToTensor` 的定义
-
-English:
-definition KaehlerDifferential.kerToTensor
-  signature: :
-  body: 1 otimesₜ D R A x
-  map_add' x y := by simp only [Submodule.coe_add, map_add, TensorProduct.tmul_add]
-  map_smul' r x := by simp only [SetLike.val_smul, smul_eq_mul, Derivation.leibniz,
-    TensorProduct.tmul_add, TensorProduct.tmul_smul, TensorProduct.smul_tmul', ←
-    algebraMap_eq_smul_one, RingHom.mem_ker.mp x.prop, TensorProduct.zero_tmul, add_zero,
-    RingHom.id_apply]
-
-中文:
-定义 KaehlerDifferential.kerToTensor
-  签名: :
-  定义体: 1 otimesₜ D R A x
-  map_add' x y := by simp only [Submodule.coe_add, map_add, TensorProduct.tmul_add]
-  map_smul' r x := by simp only [SetLike.val_smul, smul_eq_mul, Derivation.leibniz,
-    TensorProduct.tmul_add, TensorProduct.tmul_smul, TensorProduct.smul_tmul', ←
-    algebraMap_eq_smul_one, RingHom.mem_ker.mp x.prop, TensorProduct.zero_tmul, add_zero,
-    RingHom.id_apply]
+/-
+**KaehlerDifferential.kerToTensor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerToTensor : RingHom.ker (algebraMap A B) ->ₗ[A] B ot
+imes[A] Ω[A⁄R] where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def KaehlerDifferential.kerToTensor :
-    RingHom.ker (algebraMap A B) ->ₗ[A] B otimes[A] Ω[A⁄R] where
-  toFun x := 1 otimesₜ D R A x
+    RingHom.ker (algebraMap A B) →ₗ[A] B ⊗[A] Ω[A⁄R] where
+  toFun x := 1 ⊗ₜ D R A x
   map_add' x y := by simp only [Submodule.coe_add, map_add, TensorProduct.tmul_add]
   map_smul' r x := by simp only [SetLike.val_smul, smul_eq_mul, Derivation.leibniz,
     TensorProduct.tmul_add, TensorProduct.tmul_smul, TensorProduct.smul_tmul', ←
@@ -2231,42 +2410,16 @@ def KaehlerDifferential.kerToTensor :
 
 /-- The map `I/I² → B ⊗[A] Ω[A⁄R]` where `I = ker(A → B)`. -/
 noncomputable
-/--
-Definition of `KaehlerDifferential.kerCotangentToTensor` / `KaehlerDifferential.kerCotangentToTensor` 的定义
-
-English:
-definition KaehlerDifferential.kerCotangentToTensor
-  signature: :
-  body: Submodule.liftQ _ (kerToTensor R A B) by
-    rw [Submodule.smul_eq_map₂]
-    apply iSup_le_iff.mpr
-    simp only [Submodule.map_le_iff_le_comap, Subtype.forall]
-    rintro x hx y -
-    simp only [Submodule.mem_comap, LinearMap.lsmul_apply, LinearMap.mem_ker, map_smul,
-      kerToTensor_apply, TensorProduct.smul_tmul', ← algebraMap_eq_smul_one,
-      RingHom.mem_ker.mp hx, TensorProduct.zero_tmul]
-
-@[simp]
-
-中文:
-定义 KaehlerDifferential.kerCotangentToTensor
-  签名: :
-  定义体: Submodule.liftQ _ (kerToTensor R A B) by
-    rw [Submodule.smul_eq_map₂]
-    apply iSup_le_iff.mpr
-    simp only [Submodule.map_le_iff_le_comap, Subtype.forall]
-    rintro x hx y -
-    simp only [Submodule.mem_comap, LinearMap.lsmul_apply, LinearMap.mem_ker, map_smul,
-      kerToTensor_apply, TensorProduct.smul_tmul', ← algebraMap_eq_smul_one,
-      RingHom.mem_ker.mp hx, TensorProduct.zero_tmul]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.lsmul_apply, LinearMap.mem_ker, RingHom, RingHom.mem_ker.mp, Submodule, Submodule.liftQ, Submodule.map_le_iff_le_comap, Submodule.mem_comap, Submodule.smul_eq_map, Subtype, Subtype.forall, TensorProduct, TensorProduct.smul_tmul, TensorProduct.zero_tmul, algebraMap_eq_smul_one, iSup_le_iff, iSup_le_iff.mpr, kerToTensor, kerToTensor_apply
+/-
+**KaehlerDifferential.kerCotangentToTensor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.kerCotangentToTensor : (RingHom.ker (algebraMap A B)).
+Cotangent ->ₗ[A] B otimes[A] Ω[A⁄R]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def KaehlerDifferential.kerCotangentToTensor :
-    (RingHom.ker (algebraMap A B)).Cotangent ->ₗ[A] B otimes[A] Ω[A⁄R] :=
-Submodule.liftQ _ (kerToTensor R A B) by
+    (RingHom.ker (algebraMap A B)).Cotangent →ₗ[A] B ⊗[A] Ω[A⁄R] :=
+  Submodule.liftQ _ (kerToTensor R A B) <| by
     rw [Submodule.smul_eq_map₂]
     apply iSup_le_iff.mpr
     simp only [Submodule.map_le_iff_le_comap, Subtype.forall]
@@ -2276,116 +2429,93 @@ Submodule.liftQ _ (kerToTensor R A B) by
       RingHom.mem_ker.mp hx, TensorProduct.zero_tmul]
 
 @[simp]
-/--
-lemma `KaehlerDifferential.kerCotangentToTensor_toCotangent` / 引理 `KaehlerDifferential.kerCotangentToTensor_toCotangent`
-
-English:
-lemma KaehlerDifferential.kerCotangentToTensor_toCotangent
-  given: (x)
-  proof: rfl
-
-中文:
-引理 KaehlerDifferential.kerCotangentToTensor_toCotangent
-  条件: (x)
-  证明: rfl
+/-
+**KaehlerDifferential.kerCotangentToTensor_toCotangent** 是 Mathlib 中的一个引理，位于命名空间
+ ``。
+形式化陈述：KaehlerDifferential.kerCotangentToTensor_toCotangent (x) : kerCotangentToT
+ensor R A B (Ideal.toCotangent _ x) = 1 otimesₜ D _ _ x.1
+参数：x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 lemma KaehlerDifferential.kerCotangentToTensor_toCotangent (x) :
-    kerCotangentToTensor R A B (Ideal.toCotangent _ x) = 1 otimesₜ D _ _ x.1 := rfl
+    kerCotangentToTensor R A B (Ideal.toCotangent _ x) = 1 ⊗ₜ D _ _ x.1 := rfl
 
 variable [Algebra R B] [IsScalarTower R A B]
-
-/--
-theorem `KaehlerDifferential.range_kerCotangentToTensor` / 定理 `KaehlerDifferential.range_kerCotangentToTensor`
-
-English:
-theorem KaehlerDifferential.range_kerCotangentToTensor
-  proof: by
-  classical
-  ext x
-  constructor
-  · rintro ⟨x, rfl⟩
-    obtain ⟨x, rfl⟩ := Ideal.toCotangent_surjective _ x
-    simp only [kerCotangentToTensor_toCotangent, Submodule.restrictScalars_mem, LinearMap.mem_ker,
-      mapBaseChange_tmul, map_D, RingHom.mem_ker.mp x.2, map_zero, smul_zero]
-  · intro hx
-    obtain ⟨x, rfl⟩ := LinearMap.rTensor_surjective Ω[A⁄R] (g := Algebra.linearMap A B) h x
-    obtain ⟨x, rfl⟩ := (TensorProduct.lid _ _).symm.surjective x
-    replace hx : x in LinearMap.ker (KaehlerDifferential.map R R A B) := by simpa using hx
-    rw [KaehlerDifferential.ker_map_of_surjective R A B h] at hx
-    obtain ⟨x, hx, rfl⟩ := hx
-    simp only [TensorProduct.lid_symm_apply, LinearMap.rTensor_tmul,
-      Algebra.linearMap_apply, map_one]
-    rw [← Finsupp.sum_single x]; rw [Finsupp.sum]; rw [← Finset.sum_fiberwise_of_maps_to
-      (fun _ => Finset.mem_image_of_mem (algebraMap A B))]
-    simp only [map_sum (s := x.support.image (algebraMap A B)),
-      TensorProduct.tmul_sum]
-    apply sum_mem
-    intro c _
-    simp only [LinearMap.mem_range]
-    simp only [map_sum, Finsupp.linearCombination_single]
-    have : ∑ i in x.support with algebraMap A B i = c, x i in RingHom.ker (algebraMap A B) := by
-      simpa [Finsupp.mapDomain, Finsupp.sum, Finsupp.finsetSum_apply, RingHom.mem_ker,
-        Finsupp.single_apply, ← Finset.sum_filter] using DFunLike.congr_fun hx c
-    obtain ⟨a, ha⟩ := h c
-    use ∑ i in {i in x.support | algebraMap A B i = c}.attach, x i • Ideal.toCotangent _ ⟨i - a, ?_⟩
-    · simp only [map_sum, LinearMapClass.map_smul, kerCotangentToTensor_toCotangent, map_sub]
-      simp_rw [← TensorProduct.tmul_smul]
-      -- TODO: was `simp [kerCotangentToTensor_toCotangent, RingHom.mem_ker.mp x.2]` and very slow
-      -- (https://github.com/leanprover-community/mathlib4/issues/19751)
-      simp only [smul_sub, TensorProduct.tmul_sub, Finset.sum_sub_distrib, ← TensorProduct.tmul_sum,
-        ← Finset.sum_smul, Finset.sum_attach, sub_eq_self,
-        Finset.sum_attach (f := fun i => x i • KaehlerDifferential.D R A i)]
-      rw [← TensorProduct.smul_tmul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [RingHom.mem_ker.mp this]; rw [TensorProduct.zero_tmul]
-    · have : x i != 0 ∧ algebraMap A B i = c := by
-        convert! i.prop
-        simp_rw [Finset.mem_filter, Finsupp.mem_support_iff]
-      simp [RingHom.mem_ker, ha, this.2]
-
-中文:
-定理 KaehlerDifferential.range_kerCotangentToTensor
-  证明: by
-  classical
-  ext x
-  constructor
-  · rintro ⟨x, rfl⟩
-    obtain ⟨x, rfl⟩ := Ideal.toCotangent_surjective _ x
-    simp only [kerCotangentToTensor_toCotangent, Submodule.restrictScalars_mem, LinearMap.mem_ker,
-      mapBaseChange_tmul, map_D, RingHom.mem_ker.mp x.2, map_zero, smul_zero]
-  · intro hx
-    obtain ⟨x, rfl⟩ := LinearMap.rTensor_surjective Ω[A⁄R] (g := Algebra.linearMap A B) h x
-    obtain ⟨x, rfl⟩ := (TensorProduct.lid _ _).symm.surjective x
-    replace hx : x in LinearMap.ker (KaehlerDifferential.map R R A B) := by simpa using hx
-    rw [KaehlerDifferential.ker_map_of_surjective R A B h] at hx
-    obtain ⟨x, hx, rfl⟩ := hx
-    simp only [TensorProduct.lid_symm_apply, LinearMap.rTensor_tmul,
-      Algebra.linearMap_apply, map_one]
-    rw [← Finsupp.sum_single x]; rw [Finsupp.sum]; rw [← Finset.sum_fiberwise_of_maps_to
-      (fun _ => Finset.mem_image_of_mem (algebraMap A B))]
-    simp only [map_sum (s := x.support.image (algebraMap A B)),
-      TensorProduct.tmul_sum]
-    apply sum_mem
-    intro c _
-    simp only [LinearMap.mem_range]
-    simp only [map_sum, Finsupp.linearCombination_single]
-    have : ∑ i in x.support with algebraMap A B i = c, x i in RingHom.ker (algebraMap A B) := by
-      simpa [Finsupp.mapDomain, Finsupp.sum, Finsupp.finsetSum_apply, RingHom.mem_ker,
-        Finsupp.single_apply, ← Finset.sum_filter] using DFunLike.congr_fun hx c
-    obtain ⟨a, ha⟩ := h c
-    use ∑ i in {i in x.support | algebraMap A B i = c}.attach, x i • Ideal.toCotangent _ ⟨i - a, ?_⟩
-    · simp only [map_sum, LinearMapClass.map_smul, kerCotangentToTensor_toCotangent, map_sub]
-      simp_rw [← TensorProduct.tmul_smul]
-      -- TODO: was `simp [kerCotangentToTensor_toCotangent, RingHom.mem_ker.mp x.2]` and very slow
-      -- (https://github.com/leanprover-community/mathlib4/issues/19751)
-      simp only [smul_sub, TensorProduct.tmul_sub, Finset.sum_sub_distrib, ← TensorProduct.tmul_sum,
-        ← Finset.sum_smul, Finset.sum_attach, sub_eq_self,
-        Finset.sum_attach (f := fun i => x i • KaehlerDifferential.D R A i)]
-      rw [← TensorProduct.smul_tmul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [RingHom.mem_ker.mp this]; rw [TensorProduct.zero_tmul]
-    · have : x i != 0 ∧ algebraMap A B i = c := by
-        convert! i.prop
-        simp_rw [Finset.mem_filter, Finsupp.mem_support_iff]
-      simp [RingHom.mem_ker, ha, this.2]
-
-Depends on / 依赖: Algebra, Algebra.linearMap, Ideal.toCotangent_surjective, KaehlerDifferential, KaehlerDifferential.map, LinearMap, LinearMap.ker, LinearMap.mem_ker, LinearMap.rTensor_surjective, RingHom, RingHom.mem_ker.mp, Submodule, Submodule.restrictScalars_mem, TensorProduct, TensorProduct.lid, classical, kerCotangentToTensor_toCotangent, linearMap, mapBaseChange_tmul, map_D
+/-
+**KaehlerDifferential.range_kerCotangentToTensor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.range_kerCotangentToTensor (h : Function.Surjective (a
+lgebraMap A B)) : LinearMap.range (kerCotangentToTensor R A B) = (LinearMap.ker 
+(KaehlerDifferential.mapBaseChange R A B)).restrictScalars A
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.toCotangent_surjective`：toCotangent_surjective : Function.Surjecti
+ve I.toCotangent
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `KaehlerDifferential.mapBaseChange_tmul`：KaehlerDifferential.mapBaseChang
+e_tmul (x : B) (y : Ω[A⁄R]) : KaehlerDifferential.mapBaseChange R A B (x otimesₜ
+ y) = x • KaehlerDifferentia…
+· 使用定理 `KaehlerDifferential.map_D`：KaehlerDifferential.map_D (x : A) : KaehlerDi
+fferential.map R S A B (KaehlerDifferential.D R A x) = KaehlerDifferential.D S B
+ (algebraMap A …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearMap.rTensor_surjective`：LinearMap.rTensor_surjective (hg : Functio
+n.Surjective g) : Function.Surjective (rTensor Q g)
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用引理 `KaehlerDifferential.ker_map_of_surjective`：KaehlerDifferential.ker_map_o
+f_surjective (h : Function.Surjective (algebraMap A B)) : LinearMap.ker (map R R
+ A B) = (LinearMap.ker finsupp_…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.sum_single`：sum_single [AddCommMonoid M] (f : α ->₀ M) : f.sum s
+ingle = f
+· 使用定理 `Finsupp.sum.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst 
+: Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M) (g : α → M → N),   f.sum g = ∑
+ a ∈ f…
+（共 62 条，此处仅展示前 30 条）
 -/
 theorem KaehlerDifferential.range_kerCotangentToTensor
     (h : Function.Surjective (algebraMap A B)) :
@@ -2401,81 +2531,93 @@ theorem KaehlerDifferential.range_kerCotangentToTensor
   · intro hx
     obtain ⟨x, rfl⟩ := LinearMap.rTensor_surjective Ω[A⁄R] (g := Algebra.linearMap A B) h x
     obtain ⟨x, rfl⟩ := (TensorProduct.lid _ _).symm.surjective x
-    replace hx : x in LinearMap.ker (KaehlerDifferential.map R R A B) := by simpa using hx
+    replace hx : x ∈ LinearMap.ker (KaehlerDifferential.map R R A B) := by simpa using hx
     rw [KaehlerDifferential.ker_map_of_surjective R A B h] at hx
     obtain ⟨x, hx, rfl⟩ := hx
     simp only [TensorProduct.lid_symm_apply, LinearMap.rTensor_tmul,
       Algebra.linearMap_apply, map_one]
-    rw [← Finsupp.sum_single x]; rw [Finsupp.sum]; rw [← Finset.sum_fiberwise_of_maps_to
-      (fun _ => Finset.mem_image_of_mem (algebraMap A B))]
+    rw [← Finsupp.sum_single x, Finsupp.sum, ← Finset.sum_fiberwise_of_maps_to
+      (fun _ ↦ Finset.mem_image_of_mem (algebraMap A B))]
     simp only [map_sum (s := x.support.image (algebraMap A B)),
       TensorProduct.tmul_sum]
     apply sum_mem
     intro c _
     simp only [LinearMap.mem_range]
     simp only [map_sum, Finsupp.linearCombination_single]
-    have : ∑ i in x.support with algebraMap A B i = c, x i in RingHom.ker (algebraMap A B) := by
+    have : ∑ i ∈ x.support with algebraMap A B i = c, x i ∈ RingHom.ker (algebraMap A B) := by
       simpa [Finsupp.mapDomain, Finsupp.sum, Finsupp.finsetSum_apply, RingHom.mem_ker,
         Finsupp.single_apply, ← Finset.sum_filter] using DFunLike.congr_fun hx c
     obtain ⟨a, ha⟩ := h c
-    use ∑ i in {i in x.support | algebraMap A B i = c}.attach, x i • Ideal.toCotangent _ ⟨i - a, ?_⟩
+    use ∑ i ∈ {i ∈ x.support | algebraMap A B i = c}.attach, x i • Ideal.toCotangent _ ⟨i - a, ?_⟩
     · simp only [map_sum, LinearMapClass.map_smul, kerCotangentToTensor_toCotangent, map_sub]
       simp_rw [← TensorProduct.tmul_smul]
       -- TODO: was `simp [kerCotangentToTensor_toCotangent, RingHom.mem_ker.mp x.2]` and very slow
       -- (https://github.com/leanprover-community/mathlib4/issues/19751)
       simp only [smul_sub, TensorProduct.tmul_sub, Finset.sum_sub_distrib, ← TensorProduct.tmul_sum,
         ← Finset.sum_smul, Finset.sum_attach, sub_eq_self,
-        Finset.sum_attach (f := fun i => x i • KaehlerDifferential.D R A i)]
-      rw [← TensorProduct.smul_tmul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [RingHom.mem_ker.mp this]; rw [TensorProduct.zero_tmul]
-    · have : x i != 0 ∧ algebraMap A B i = c := by
+        Finset.sum_attach (f := fun i ↦ x i • KaehlerDifferential.D R A i)]
+      rw [← TensorProduct.smul_tmul, ← Algebra.algebraMap_eq_smul_one, RingHom.mem_ker.mp this,
+        TensorProduct.zero_tmul]
+    · have : x i ≠ 0 ∧ algebraMap A B i = c := by
         convert! i.prop
         simp_rw [Finset.mem_filter, Finsupp.mem_support_iff]
       simp [RingHom.mem_ker, ha, this.2]
-
-/--
-theorem `KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange` / 定理 `KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange`
-
-English:
-theorem KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange
-  proof: SetLike.ext_iff.mp (range_kerCotangentToTensor R A B h).symm
-
-中文:
-定理 KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange
-  证明: SetLike.ext_iff.mp (range_kerCotangentToTensor R A B h).symm
-
-Depends on / 依赖: SetLike, SetLike.ext_iff.mp, ext_iff, range_kerCotangentToTensor
+/-
+**KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange** 是 Mathlib 中的一个定
+理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange (h : Function
+.Surjective (algebraMap A B)) : Function.Exact (kerCotangentToTensor R A B) (Kae
+hlerDifferential.mapBaseChange R A B)
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `KaehlerDifferential.range_kerCotangentToTensor`：KaehlerDifferential.rang
+e_kerCotangentToTensor (h : Function.Surjective (algebraMap A B)) : LinearMap.ra
+nge (kerCotangentToTensor R A B) = (…
 -/
 theorem KaehlerDifferential.exact_kerCotangentToTensor_mapBaseChange
     (h : Function.Surjective (algebraMap A B)) :
     Function.Exact (kerCotangentToTensor R A B) (KaehlerDifferential.mapBaseChange R A B) :=
   SetLike.ext_iff.mp (range_kerCotangentToTensor R A B h).symm
-
-/--
-lemma `KaehlerDifferential.mapBaseChange_surjective` / 引理 `KaehlerDifferential.mapBaseChange_surjective`
-
-English:
-lemma KaehlerDifferential.mapBaseChange_surjective
-  proof: by
-  have := subsingleton_of_surjective A B h
-  rw [← LinearMap.range_eq_top]; rw [range_mapBaseChange]; rw [← top_le_iff]
-  exact fun x _ => Subsingleton.elim _ _
-
-中文:
-引理 KaehlerDifferential.mapBaseChange_surjective
-  证明: by
-  have := subsingleton_of_surjective A B h
-  rw [← LinearMap.range_eq_top]; rw [range_mapBaseChange]; rw [← top_le_iff]
-  exact fun x _ => Subsingleton.elim _ _
-
-Depends on / 依赖: LinearMap, LinearMap.range_eq_top, Subsingleton, Subsingleton.elim, range_eq_top, range_mapBaseChange, subsingleton_of_surjective, top_le_iff
+/-
+**KaehlerDifferential.mapBaseChange_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：KaehlerDifferential.mapBaseChange_surjective (h : Function.Surjective (alg
+ebraMap A B)) : Function.Surjective (KaehlerDifferential.mapBaseChange R A B)
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `KaehlerDifferential.subsingleton_of_surjective`：KaehlerDifferential.subs
+ingleton_of_surjective (h : Function.Surjective (algebraMap R S)) : Subsingleton
+ Ω[S⁄R]
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `KaehlerDifferential.range_mapBaseChange`：KaehlerDifferential.range_mapBa
+seChange : LinearMap.range (mapBaseChange R A B) = LinearMap.ker (map R A B B)
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 lemma KaehlerDifferential.mapBaseChange_surjective
     (h : Function.Surjective (algebraMap A B)) :
     Function.Surjective (KaehlerDifferential.mapBaseChange R A B) := by
   have := subsingleton_of_surjective A B h
-  rw [← LinearMap.range_eq_top]; rw [range_mapBaseChange]; rw [← top_le_iff]
-  exact fun x _ => Subsingleton.elim _ _
+  rw [← LinearMap.range_eq_top, range_mapBaseChange, ← top_le_iff]
+  exact fun x _ ↦ Subsingleton.elim _ _
 
 end ExactSequence
 
 end KaehlerDifferential
+

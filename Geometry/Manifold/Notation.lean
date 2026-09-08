@@ -23,25 +23,25 @@ All of these elaborators are scoped to the `Manifold` namespace.
 We provide compact notation for differentiability and continuous differentiability on manifolds,
 including inference of the model with corners.
 
-| Notation | Elaborates to |
+| Notation                 | Elaborates to                       |
 |--------------------------|-------------------------------------|
-| `MDiff f` | `MDifferentiable I J f` |
-| `MDiffAt f x` | `MDifferentiableAt I J f x` |
-| `MDiff[u] f` | `MDifferentiableOn I J f u` |
-| `MDiffAt[u] f x` | `MDifferentiableWithinAt I J f u x` |
-| `CMDiff n f` | `ContMDiff I J n f` |
-| `CMDiffAt n f x` | `ContMDiffAt I J n f x` |
-| `CMDiff[u] n f` | `ContMDiffOn I J n f u` |
-| `CMDiffAt[u] n f x` | `ContMDiffWithinAt I J n f u x` |
-| `mfderiv[u] f x` | `mfderivWithin I J f u x` |
-| `mfderiv% f x` | `mfderiv I J f x` |
-| `HasMFDerivAt[s] f x f'` | `HasMFDerivWithinAt I J f s x f'` |
-| `HasMFDerivAt% f x f'` | `HasMFDerivAt I J f x f'` |
-| `TangentSpace% x` | `TangentSpace I x` |
-| `tangentMap[s] f` | `tangentMapWithin I J f s` |
-| `tangentMap% f` | `tangentMap I J f` |
-| `UniqueMDiff[s]` | `UniqueMDiffOn I s` |
-| `UniqueMDiffAt[s] x` | `UniqueMDiffWithinAt I s x` |
+| `MDiff f`                | `MDifferentiable I J f`             |
+| `MDiffAt f x`            | `MDifferentiableAt I J f x`         |
+| `MDiff[u] f`             | `MDifferentiableOn I J f u`         |
+| `MDiffAt[u] f x`         | `MDifferentiableWithinAt I J f u x` |
+| `CMDiff n f`             | `ContMDiff I J n f`                 |
+| `CMDiffAt n f x`         | `ContMDiffAt I J n f x`             |
+| `CMDiff[u] n f`          | `ContMDiffOn I J n f u`             |
+| `CMDiffAt[u] n f x`      | `ContMDiffWithinAt I J n f u x`     |
+| `mfderiv[u] f x`         | `mfderivWithin I J f u x`           |
+| `mfderiv% f x`           | `mfderiv I J f x`                   |
+| `HasMFDerivAt[s] f x f'` | `HasMFDerivWithinAt I J f s x f'`   |
+| `HasMFDerivAt% f x f'`   | `HasMFDerivAt I J f x f'`           |
+| `TangentSpace% x`        | `TangentSpace I x`                  |
+| `tangentMap[s] f`        | `tangentMapWithin I J f s`          |
+| `tangentMap% f`          | `tangentMap I J f`                  |
+| `UniqueMDiff[s]`         | `UniqueMDiffOn I s`                 |
+| `UniqueMDiffAt[s] x`     | `UniqueMDiffWithinAt I s x`         |
 
 In each of these cases, the models with corners are inferred from the domain and codomain of `f`.
 The search for models with corners uses the local context and is (almost) only based on expression
@@ -106,136 +106,73 @@ namespace Manifold.Elab
 /- Note: these functions are convenient in this file, and may be convenient elsewhere, but their
 precise behavior should be considered before adding them to the meta API. -/
 
-/--
-Definition of `findSomeLocalInstanceOf?` / `findSomeLocalInstanceOf?` 的定义
+/-- Finds the first local instance of class `c` for which `p inst type` produces `some a`.
+Instantiates mvars in and runs `whnfR` on `type` before passing it to `p`. (Does not validate that
+`c` resolves to a class.) -/
+/-
+**Manifold.Elab.findSomeLocalInstanceOf** 是 Mathlib 中的一个定义，位于命名空间 `Manifold.Elab
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findSomeLocalInstanceOf?
-  signature: (c : Name) {α} (p : Expr -> Expr -> MetaM (Option α))
-  body: do
-  (← getLocalInstances).findSomeM? fun inst => do
-    if inst.className == c then
-let type ← whnfR ← instantiateMVars ← inferType inst.fvar
-      p inst.fvar type
-    else return none
-
-中文:
-定义 findSomeLocalInstanceOf?
-  签名: (c : Name) {α} (p : Expr -> Expr -> MetaM (选项类型 α))
-  定义体: do
-  (← getLocalInstances).findSomeM? fun inst => do
-    if inst.className == c then
-let type ← whnfR ← instantiateMVars ← inferType inst.fvar
-      p inst.fvar type
-    else return none
+--- 原说明 ---
+Finds the first local instance of class `c` for which `p inst type` produces `so
+me a`.
+Instantiates mvars in and runs `whnfR` on `type` before passing it to `p`. (Does
+ not validate that
+`c` resolves to a class.)
 -/
-private def findSomeLocalInstanceOf? (c : Name) {α} (p : Expr -> Expr -> MetaM (Option α)) :
+private def findSomeLocalInstanceOf? (c : Name) {α} (p : Expr → Expr → MetaM (Option α)) :
     MetaM (Option α) := do
-  (← getLocalInstances).findSomeM? fun inst => do
+  (← getLocalInstances).findSomeM? fun inst ↦ do
     if inst.className == c then
-let type ← whnfR ← instantiateMVars ← inferType inst.fvar
+      let type ← whnfR <| ← instantiateMVars <| ← inferType inst.fvar
       p inst.fvar type
     else return none
 
-/--
-Definition of `findSomeLocalHyp?` / `findSomeLocalHyp?` 的定义
+/-- Finds the most recent local declaration for which `p fvar type` produces `some a`.
+Skips implementation details; instantiates mvars in and runs `whnfR` on `type` before providing it
+to `p`. -/
+/-
+**Manifold.Elab.findSomeLocalHyp** 是 Mathlib 中的一个定义，位于命名空间 `Manifold.Elab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findSomeLocalHyp?
-  signature: {α} (p : Expr -> Expr -> MetaM (Option α))
-  body: do
-  (← getLCtx).findDeclRevM? fun decl => do
-    if decl.isImplementationDetail then return none
-let type ← whnfR ← instantiateMVars decl.type
-    p decl.toExpr type
-
-中文:
-定义 findSomeLocalHyp?
-  签名: {α} (p : Expr -> Expr -> MetaM (选项类型 α))
-  定义体: do
-  (← getLCtx).findDeclRevM? fun decl => do
-    if decl.isImplementationDetail then return none
-let type ← whnfR ← instantiateMVars decl.type
-    p decl.toExpr type
+--- 原说明 ---
+Finds the most recent local declaration for which `p fvar type` produces `some a
+`.
+Skips implementation details; instantiates mvars in and runs `whnfR` on `type` b
+efore providing it
+to `p`.
 -/
-private def findSomeLocalHyp? {α} (p : Expr -> Expr -> MetaM (Option α)) : MetaM (Option α) := do
-  (← getLCtx).findDeclRevM? fun decl => do
+private def findSomeLocalHyp? {α} (p : Expr → Expr → MetaM (Option α)) : MetaM (Option α) := do
+  (← getLCtx).findDeclRevM? fun decl ↦ do
     if decl.isImplementationDetail then return none
-let type ← whnfR ← instantiateMVars decl.type
+    let type ← whnfR <| ← instantiateMVars decl.type
     p decl.toExpr type
 
-/--
-Definition of `findModelFiber?` / `findModelFiber?` 的定义
+/-- Given `V : Expr` representing `E : B → Type*`, try to find a model fiber for `E`
+by searching in local context for either a `FiberBundle F E` or
+`TopologicalSpace (TotalSpace F E)` instance.
 
-English:
-definition findModelFiber?
-  signature: (V : Expr)
-  body: do
-  withTraceNode `Elab.DiffGeo.TotalSpaceMk
-    (fun _ => do return m!"Searching for a model fiber for {← ppExpr V}") do
-  trace[Elab.DiffGeo.TotalSpaceMk] "Searching for relevant `FiberBundle` instance in context"
-  let f? ← findSomeLocalInstanceOf? `FiberBundle fun _ declType => do
-    /- Note: we do not use `match_expr` here since that would require importing
-    `Mathlib.Topology.FiberBundle.Basic` to resolve `FiberBundle`. -/
-    match declType with
-    | mkApp7 (.const `FiberBundle _) _ F _ _ E _ _ => do
-      if ← withReducible (pureIsDefEq E V) then
-        trace[Elab.DiffGeo.TotalSpaceMk] "found `FiberBundle` instance for model fiber {← ppExpr F}"
-        return some F
-      else return none
-    | _ => return none
-  if f?.isSome then
-    return f?
-  else
-    trace[Elab.DiffGeo.TotalSpaceMk] "Could not find a relevant `FiberBundle` instance in context"
-    trace[Elab.DiffGeo.TotalSpaceMk] "Searching for a relevant \
-      `TopologicalSpace (Bundle.TotalSpace _ _)` instance in context"
-    return ← findSomeLocalInstanceOf? `TopologicalSpace fun _ declType => do
-      match declType with
-      | mkApp (.const `TopologicalSpace _) (mkApp3 (.const `Bundle.TotalSpace _) _ F E) => do
-        if ← withReducible (pureIsDefEq E V) then
-          trace[Elab.DiffGeo.TotalSpaceMk] "It worked! model fiber is {← ppExpr F}"
-          return some F
-        else return none
-      | _ => return none
+We could try a more systematic search of `TotalSpace F E` anywhere in the local context,
+but the current heuristic is faster and sufficient so far. -/
+/-
+**Manifold.Elab.findModelFiber** 是 Mathlib 中的一个定义，位于命名空间 `Manifold.Elab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findModelFiber?
-  签名: (V : Expr)
-  定义体: do
-  withTraceNode `Elab.DiffGeo.TotalSpaceMk
-    (fun _ => do return m!"Searching for a model fiber for {← ppExpr V}") do
-  trace[Elab.DiffGeo.TotalSpaceMk] "Searching for relevant `FiberBundle` instance in context"
-  let f? ← findSomeLocalInstanceOf? `FiberBundle fun _ declType => do
-    /- Note: we do not use `match_expr` here since that would require importing
-    `Mathlib.Topology.FiberBundle.Basic` to resolve `FiberBundle`. -/
-    match declType with
-    | mkApp7 (.const `FiberBundle _) _ F _ _ E _ _ => do
-      if ← withReducible (pureIsDefEq E V) then
-        trace[Elab.DiffGeo.TotalSpaceMk] "found `FiberBundle` instance for model fiber {← ppExpr F}"
-        return some F
-      else return none
-    | _ => return none
-  if f?.isSome then
-    return f?
-  else
-    trace[Elab.DiffGeo.TotalSpaceMk] "Could not find a relevant `FiberBundle` instance in context"
-    trace[Elab.DiffGeo.TotalSpaceMk] "Searching for a relevant \
-      `TopologicalSpace (Bundle.TotalSpace _ _)` instance in context"
-    return ← findSomeLocalInstanceOf? `TopologicalSpace fun _ declType => do
-      match declType with
-      | mkApp (.const `TopologicalSpace _) (mkApp3 (.const `Bundle.TotalSpace _) _ F E) => do
-        if ← withReducible (pureIsDefEq E V) then
-          trace[Elab.DiffGeo.TotalSpaceMk] "It worked! model fiber is {← ppExpr F}"
-          return some F
-        else return none
-      | _ => return none
+--- 原说明 ---
+Given `V : Expr` representing `E : B → Type*`, try to find a model fiber for `E`
+by searching in local context for either a `FiberBundle F E` or
+`TopologicalSpace (TotalSpace F E)` instance.
+
+We could try a more systematic search of `TotalSpace F E` anywhere in the local 
+context,
+but the current heuristic is faster and sufficient so far.
 -/
 private def findModelFiber? (V : Expr) : MetaM (Option Expr) := do
   withTraceNode `Elab.DiffGeo.TotalSpaceMk
-    (fun _ => do return m!"Searching for a model fiber for {← ppExpr V}") do
+    (fun _ ↦ do return m!"Searching for a model fiber for {← ppExpr V}") do
   trace[Elab.DiffGeo.TotalSpaceMk] "Searching for relevant `FiberBundle` instance in context"
-  let f? ← findSomeLocalInstanceOf? `FiberBundle fun _ declType => do
+  let f? ← findSomeLocalInstanceOf? `FiberBundle fun _ declType ↦ do
     /- Note: we do not use `match_expr` here since that would require importing
     `Mathlib.Topology.FiberBundle.Basic` to resolve `FiberBundle`. -/
     match declType with
@@ -251,7 +188,7 @@ private def findModelFiber? (V : Expr) : MetaM (Option Expr) := do
     trace[Elab.DiffGeo.TotalSpaceMk] "Could not find a relevant `FiberBundle` instance in context"
     trace[Elab.DiffGeo.TotalSpaceMk] "Searching for a relevant \
       `TopologicalSpace (Bundle.TotalSpace _ _)` instance in context"
-    return ← findSomeLocalInstanceOf? `TopologicalSpace fun _ declType => do
+    return ← findSomeLocalInstanceOf? `TopologicalSpace fun _ declType ↦ do
       match declType with
       | mkApp (.const `TopologicalSpace _) (mkApp3 (.const `Bundle.TotalSpace _) _ F E) => do
         if ← withReducible (pureIsDefEq E V) then
@@ -259,112 +196,36 @@ private def findModelFiber? (V : Expr) : MetaM (Option Expr) := do
           return some F
         else return none
       | _ => return none
--- TODO: document how this elaborator works, any gotchas, etc.
 /--
-Definition of `totalSpaceMk` / `totalSpaceMk` 的定义
+Utility for sections in a fibre bundle: if an expression `e` is a section
+`s : Π x : M, V x` as a dependent function, convert it to a non-dependent function into the total
+space. This handles the cases of
+- sections of a trivial bundle
+- vector fields on a manifold (i.e., sections of the tangent bundle)
+- sections of an explicit fibre bundle
+- turning a bare function `E → E'` into a section of the trivial bundle `Bundle.Trivial E E'`
 
-English:
-definition totalSpaceMk
-  signature: (e : Expr)
-  body: do
-let etype ← whnf ← instantiateMVars ← inferType e
-  match etype with
-  | .forallE x base tgt _ => withLocalDeclD x base fun x => do
-    let tgtHasLooseBVars := tgt.hasLooseBVars
-    let tgt := tgt.instantiate1 x
-    -- Note: we do not run `whnfR` on `tgt` because `Bundle.Trivial` is reducible.
-    match_expr tgt with
-    | Bundle.Trivial E E' _ =>
-      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a section of `Bundle.Trivial {E} {E'}`"
-      -- Note: we allow `isDefEq` here because any mvar assignments should persist.
-      if ← withReducible (isDefEq E base) then
-        let body ← mkAppM ``Bundle.TotalSpace.mk' #[E', x, (e.app x).headBeta]
-        mkLambdaFVars #[x] body
-      else return e
-    | TangentSpace _k _ E _ _ _H _ _I M _ _ _x =>
-      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a vector field on `{M}`"
-      let body ← mkAppM ``Bundle.TotalSpace.mk' #[E, x, (e.app x).headBeta]
-      mkLambdaFVars #[x] body
-    | _ => match (← instantiateMVars tgt).cleanupAnnotations with
-      | .app V _ =>
-        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a bundle as a dependent function"
-        match ← findModelFiber? V with
-        | some F =>
-              let body ← mkAppM ``Bundle.TotalSpace.mk' #[F, x, (e.app x).headBeta]
-              return (← mkLambdaFVars #[x] body).headBeta
-        | none =>
-          -- future: special-case `Bundle.TotalSpace` for V;
-          -- if so, say "there is no need to apply T% twice"
-          throwError "could not find a `FiberBundle` instance on `{V}`:\n\
-          `{e}` is a function into `{V}`\n\n\
-          hint: you may be missing suitable typeclass assumptions"
-      | tgt =>
-        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a trivial bundle as a non-dependent function"
-        -- TODO: can `tgt` depend on `x` in a way that is not a function application?
-        -- Check that `x` is not a bound variable in `tgt`!
-        if tgtHasLooseBVars then
-          throwError "Attempted to fall back to creating a section of the trivial bundle out of \
-            (`{e}` : `{etype}`) as a non-dependent function, but return type `{tgt}` depends on the
-            bound variable (`{x}` : `{base}`).\n\
-            Hint: applying the `T%` elaborator twice makes no sense."
-        let trivBundle ← mkAppOptM ``Bundle.Trivial #[base, tgt]
-        let body ← mkAppOptM ``Bundle.TotalSpace.mk' #[base, trivBundle, tgt, x, (e.app x).headBeta]
-        mkLambdaFVars #[x] body
-  | _ => return e.headBeta
+This searches the local context for suitable hypotheses for the above cases by matching
+on the expression structure, avoiding `isDefEq`. Therefore, it should be fast enough to always run.
+This process can be traced with `set_option Elab.DiffGeo.TotalSpaceMk true`.
 
-中文:
-定义 totalSpaceMk
-  签名: (e : Expr)
-  定义体: do
-let etype ← whnf ← instantiateMVars ← inferType e
-  match etype with
-  | .forallE x base tgt _ => withLocalDeclD x base fun x => do
-    let tgtHasLooseBVars := tgt.hasLooseBVars
-    let tgt := tgt.instantiate1 x
-    -- Note: we do not run `whnfR` on `tgt` because `Bundle.Trivial` is reducible.
-    match_expr tgt with
-    | Bundle.Trivial E E' _ =>
-      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a section of `Bundle.Trivial {E} {E'}`"
-      -- Note: we allow `isDefEq` here because any mvar assignments should persist.
-      if ← withReducible (isDefEq E base) then
-        let body ← mkAppM ``Bundle.TotalSpace.mk' #[E', x, (e.app x).headBeta]
-        mkLambdaFVars #[x] body
-      else return e
-    | TangentSpace _k _ E _ _ _H _ _I M _ _ _x =>
-      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a vector field on `{M}`"
-      let body ← mkAppM ``Bundle.TotalSpace.mk' #[E, x, (e.app x).headBeta]
-      mkLambdaFVars #[x] body
-    | _ => match (← instantiateMVars tgt).cleanupAnnotations with
-      | .app V _ =>
-        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a bundle as a dependent function"
-        match ← findModelFiber? V with
-        | some F =>
-              let body ← mkAppM ``Bundle.TotalSpace.mk' #[F, x, (e.app x).headBeta]
-              return (← mkLambdaFVars #[x] body).headBeta
-        | none =>
-          -- future: special-case `Bundle.TotalSpace` for V;
-          -- if so, say "there is no need to apply T% twice"
-          throwError "could not find a `FiberBundle` instance on `{V}`:\n\
-          `{e}` is a function into `{V}`\n\n\
-          hint: you may be missing suitable typeclass assumptions"
-      | tgt =>
-        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a trivial bundle as a non-dependent function"
-        -- TODO: can `tgt` depend on `x` in a way that is not a function application?
-        -- Check that `x` is not a bound variable in `tgt`!
-        if tgtHasLooseBVars then
-          throwError "Attempted to fall back to creating a section of the trivial bundle out of \
-            (`{e}` : `{etype}`) as a non-dependent function, but return type `{tgt}` depends on the
-            bound variable (`{x}` : `{base}`).\n\
-            Hint: applying the `T%` elaborator twice makes no sense."
-        let trivBundle ← mkAppOptM ``Bundle.Trivial #[base, tgt]
-        let body ← mkAppOptM ``Bundle.TotalSpace.mk' #[base, trivBundle, tgt, x, (e.app x).headBeta]
-        mkLambdaFVars #[x] body
-  | _ => return e.headBeta
+All applications of `e` in the resulting expression are beta-reduced.
+If none of the handled cases apply, we simply return `e` (after beta-reducing).
+
+This function is used for implementing the `T%` elaborator.
+-/
+-- TODO: document how this elaborator works, any gotchas, etc.
+/-
+**Manifold.Elab.totalSpaceMk** 是 Mathlib 中的一个定义，位于命名空间 `Manifold.Elab`。
+形式化陈述：totalSpaceMk (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def totalSpaceMk (e : Expr) : MetaM Expr := do
-let etype ← whnf ← instantiateMVars ← inferType e
+  let etype ← whnf <| ← instantiateMVars <| ← inferType e
   match etype with
-  | .forallE x base tgt _ => withLocalDeclD x base fun x => do
+  | .forallE x base tgt _ => withLocalDeclD x base fun x ↦ do
     let tgtHasLooseBVars := tgt.hasLooseBVars
     let tgt := tgt.instantiate1 x
     -- Note: we do not run `whnfR` on `tgt` because `Bundle.Trivial` is reducible.
@@ -427,44 +288,31 @@ scoped elab:max "T% " t:term:arg : term => do
 
 namespace Elab
 
-/--
-Definition of `isCLMReduciblyDefeqCoefficients` / `isCLMReduciblyDefeqCoefficients` 的定义
+/-- Check if an expression `e` is a `ContinuousLinearMap` over an identity ring homomorphism where
+the coefficient rings of the domain and codomain are reducibly definitionally equal. If so, we
+return `(k, E, F)`, where `k` is the coefficient ring, `E` is the domain, and `F` is the codomain
+of the continuous linear maps. Otherwise, we error.
+Assumes that `e` is already in `whnf` and has had metavariables instantiated. -/
+/-
+**Manifold.Elab.isCLMReduciblyDefeqCoefficients** 是 Mathlib 中的一个定义，位于命名空间 `Manif
+old.Elab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isCLMReduciblyDefeqCoefficients
-  signature: (e : Expr)
-  body: do
-  match_expr e with
-  | ContinuousLinearMap k S _ _ σ E _ _ F _ _ _ _ =>
-    trace[Elab.DiffGeo.MDiff] "`{e}` is a space of continuous (semi-)linear maps"
-unless ← withReducible pureIsDefEq k S do
-      throwError "Coefficients `{k}` and `{S}` of `{e}` are not reducibly definitionally equal"
-    match_expr ← whnfR σ with
-    | RingHom.id _ _ => return (k, E, F)
-    | _ => throwError "`{e}` is a space of continuous (semi-)linear maps over `{σ}`, \
-      which is not the identity"
-  | _ => throwError "`{e}` is not a space of continuous linear maps"
-
-中文:
-定义 isCLMReduciblyDefeqCoefficients
-  签名: (e : Expr)
-  定义体: do
-  match_expr e with
-  | ContinuousLinearMap k S _ _ σ E _ _ F _ _ _ _ =>
-    trace[Elab.DiffGeo.MDiff] "`{e}` is a space of continuous (semi-)linear maps"
-unless ← withReducible pureIsDefEq k S do
-      throwError "Coefficients `{k}` and `{S}` of `{e}` are not reducibly definitionally equal"
-    match_expr ← whnfR σ with
-    | RingHom.id _ _ => return (k, E, F)
-    | _ => throwError "`{e}` is a space of continuous (semi-)linear maps over `{σ}`, \
-      which is not the identity"
-  | _ => throwError "`{e}` is not a space of continuous linear maps"
+--- 原说明 ---
+Check if an expression `e` is a `ContinuousLinearMap` over an identity ring homo
+morphism where
+the coefficient rings of the domain and codomain are reducibly definitionally eq
+ual. If so, we
+return `(k, E, F)`, where `k` is the coefficient ring, `E` is the domain, and `F
+` is the codomain
+of the continuous linear maps. Otherwise, we error.
+Assumes that `e` is already in `whnf` and has had metavariables instantiated.
 -/
-private def isCLMReduciblyDefeqCoefficients (e : Expr) : TermElabM Expr × Expr × Expr := do
+private def isCLMReduciblyDefeqCoefficients (e : Expr) : TermElabM <| Expr × Expr × Expr := do
   match_expr e with
   | ContinuousLinearMap k S _ _ σ E _ _ F _ _ _ _ =>
     trace[Elab.DiffGeo.MDiff] "`{e}` is a space of continuous (semi-)linear maps"
-unless ← withReducible pureIsDefEq k S do
+    unless ← withReducible <| pureIsDefEq k S do
       throwError "Coefficients `{k}` and `{S}` of `{e}` are not reducibly definitionally equal"
     match_expr ← whnfR σ with
     | RingHom.id _ _ => return (k, E, F)
@@ -473,45 +321,59 @@ unless ← withReducible pureIsDefEq k S do
   | _ => throwError "`{e}` is not a space of continuous linear maps"
 
 /--
-Definition of `NormedSpaceInfo` / `NormedSpaceInfo` 的定义
+Captures information when a model with corners is the trivial model on a normed space
+(or on an inner product space, which is also a normed space):
+contains the expressions describing the normed space and its base field.
 
-English:
-structure NormedSpaceInfo
-  parameters: where
-  axioms and operations (2):
-    - normedSpace : Expr
-    - baseField : Expr
+Searching for a model with corners will return an `Option NormedSpaceInfo`,
+which is `some` if and only if the trivial model on a normed space was found.
+-/
+/-
+**Manifold.Elab.NormedSpaceInfo** 是 Mathlib 中的一个归纳类型，位于命名空间 `Manifold.Elab`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 NormedSpaceInfo
-  参数: where
-  公理与运算 (2 个):
-    - normedSpace : Expr
-    - baseField : Expr
+--- 原说明 ---
+Captures information when a model with corners is the trivial model on a normed 
+space
+(or on an inner product space, which is also a normed space):
+contains the expressions describing the normed space and its base field.
+
+Searching for a model with corners will return an `Option NormedSpaceInfo`,
+which is `some` if and only if the trivial model on a normed space was found.
 -/
 structure NormedSpaceInfo where
   /-- The expression for the normed space itself. -/
   normedSpace : Expr
   /-- The expression for the normed space's base field. -/
-  baseField : Expr
+  baseField   : Expr
 deriving Inhabited
 
 /--
-Definition of `FindModelResult` / `FindModelResult` 的定义
+Information about a model with corners found through `findModelInner`.
+It includes the model with corners found, and, if this model is the trivial model with corners on a
+normed space, information about that normed space. (Knowing this is important for forming products
+of models.)
 
-English:
-structure FindModelResult
-  parameters: where
-  axioms and operations (2):
-    - model : Expr
-    - normedSpaceInfo? : Option NormedSpaceInfo  [default: none]
+Most search results are not a model with corners for a normed space, so an `Expr` representing the
+model with corners may be coerced directly to this type.
+-/
+/-
+**Manifold.Elab.FindModelResult** 是 Mathlib 中的一个归纳类型，位于命名空间 `Manifold.Elab`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 FindModelResult
-  参数: where
-  公理与运算 (2 个):
-    - model : Expr
-    - normedSpaceInfo? : 选项类型 NormedSpaceInfo  [默认: none]
+--- 原说明 ---
+Information about a model with corners found through `findModelInner`.
+It includes the model with corners found, and, if this model is the trivial mode
+l with corners on a
+normed space, information about that normed space. (Knowing this is important fo
+r forming products
+of models.)
+
+Most search results are not a model with corners for a normed space, so an `Expr
+` representing the
+model with corners may be coerced directly to this type.
 -/
 structure FindModelResult where
   /-- Expression describing the model with corners found. -/
@@ -520,77 +382,42 @@ structure FindModelResult where
   if this model is the trivial model with corners on a normed space. -/
   normedSpaceInfo? : Option NormedSpaceInfo := none
 deriving Inhabited
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe Expr FindModelResult
-  body: { model }
-
-中文:
-实例 :
-  签名: Coe Expr FindModelResult
-  定义体: { model }
+/-
+**Manifold.Elab.** 是 Mathlib 中的一个实例，位于命名空间 `Manifold.Elab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe Expr FindModelResult where
   coe model := { model }
 
-/--
-Definition of `tryStrategy` / `tryStrategy` 的定义
+/-- Try a strategy `x : TermElabM` which either successfully finds a `ModelWithCorners` or fails.
+On failure in `x`, exceptions are caught, traced (`trace.Elab.DiffGeo.MDiff`), and `none` is
+successfully returned.
 
-English:
-definition tryStrategy
-  signature: (strategyDescr : MessageData) (x : TermElabM FindModelResult)
-  body: do
-  let s ← saveState
-  try
-    withTraceNode `Elab.DiffGeo.MDiff (fun _ => pure m!"{strategyDescr}") do
-      let e ←
-        try
-Term.withoutErrToSorry Term.withSynthesize x
-        /- Catch the exception so that we can trace it, then throw it again to inform
-        `withTraceNode` of the result. -/
-        catch ex =>
-          trace[Elab.DiffGeo.MDiff] "Failed with error:\n{ex.toMessageData}"
-          throw ex
-      trace[Elab.DiffGeo.MDiff] "Found model: `{e.model}`"
-      if let some { normedSpace, baseField } := e.normedSpaceInfo? then
-        trace[Elab.DiffGeo.MDiff] "This is the trivial model with corners for the normed space \
-          `{normedSpace}` over the base field `{baseField}`."
-      return e
-  catch _ =>
-    -- Restore infotrees to prevent any stale hovers, code actions, etc.
-    -- Note that this does not break tracing, which saves each trace message's context.
-    s.restore true
-    return none
+We run `x` with `errToSorry == false` to convert elaboration errors into
+exceptions, and under `withSynthesize` in order to force typeclass synthesis errors to appear and
+be caught.
 
-中文:
-定义 tryStrategy
-  签名: (strategyDescr : MessageData) (x : TermElabM FindModelResult)
-  定义体: do
-  let s ← saveState
-  try
-    withTraceNode `Elab.DiffGeo.MDiff (fun _ => pure m!"{strategyDescr}") do
-      let e ←
-        try
-Term.withoutErrToSorry Term.withSynthesize x
-        /- Catch the exception so that we can trace it, then throw it again to inform
-        `withTraceNode` of the result. -/
-        catch ex =>
-          trace[Elab.DiffGeo.MDiff] "Failed with error:\n{ex.toMessageData}"
-          throw ex
-      trace[Elab.DiffGeo.MDiff] "Found model: `{e.model}`"
-      if let some { normedSpace, baseField } := e.normedSpaceInfo? then
-        trace[Elab.DiffGeo.MDiff] "This is the trivial model with corners for the normed space \
-          `{normedSpace}` over the base field `{baseField}`."
-      return e
-  catch _ =>
-    -- Restore infotrees to prevent any stale hovers, code actions, etc.
-    -- Note that this does not break tracing, which saves each trace message's context.
-    s.restore true
-    return none
+Trace messages produced during the execution of `x` are wrapped in a collapsible trace node titled
+with `strategyDescr` and an indicator of success. -/
+/-
+**Manifold.Elab.tryStrategy** 是 Mathlib 中的一个定义，位于命名空间 `Manifold.Elab`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Try a strategy `x : TermElabM` which either successfully finds a `ModelWithCorne
+rs` or fails.
+On failure in `x`, exceptions are caught, traced (`trace.Elab.DiffGeo.MDiff`), a
+nd `none` is
+successfully returned.
+
+We run `x` with `errToSorry == false` to convert elaboration errors into
+exceptions, and under `withSynthesize` in order to force typeclass synthesis err
+ors to appear and
+be caught.
+
+Trace messages produced during the execution of `x` are wrapped in a collapsible
+ trace node titled
+with `strategyDescr` and an indicator of success.
 -/
 private def tryStrategy (strategyDescr : MessageData) (x : TermElabM FindModelResult) :
     TermElabM (Option FindModelResult) := do
@@ -599,7 +426,7 @@ private def tryStrategy (strategyDescr : MessageData) (x : TermElabM FindModelRe
     withTraceNode `Elab.DiffGeo.MDiff (fun _ => pure m!"{strategyDescr}") do
       let e ←
         try
-Term.withoutErrToSorry Term.withSynthesize x
+          Term.withoutErrToSorry <| Term.withSynthesize x
         /- Catch the exception so that we can trace it, then throw it again to inform
         `withTraceNode` of the result. -/
         catch ex =>
@@ -616,40 +443,24 @@ Term.withoutErrToSorry Term.withSynthesize x
     s.restore true
     return none
 
-/--
-Definition of `guessBaseFieldForNormedSpace` / `guessBaseFieldForNormedSpace` 的定义
+/-- Given an `Expr`ession `e`, try to find a `NormedSpace` instance on `e` and return the
+underlying base field. Search local instances, before recursing into product and bundled
+continuous linear maps. -/
+/-
+**Manifold.Elab.guessBaseFieldForNormedSpace** 是 Mathlib 中的一个不透明定义，位于命名空间 `Manif
+old.Elab`。
+形式化陈述：Expr → Elab.TermElabM (Option Expr)
+参数：Option Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition guessBaseFieldForNormedSpace
-  signature: (e : Expr)
-  body: do
-  if let some k ← findFromLocalInstance e then return k
-  match_expr e with
-  | Prod E _F =>
-    guessBaseFieldForNormedSpace E
-  | _ =>
-    try
-      let (_k, E, _F) ← isCLMReduciblyDefeqCoefficients e
-      guessBaseFieldForNormedSpace E
-    catch _e =>
-      findFromLocalInstance e
-
-中文:
-定义 guessBaseFieldForNormedSpace
-  签名: (e : Expr)
-  定义体: do
-  if let some k ← findFromLocalInstance e then return k
-  match_expr e with
-  | Prod E _F =>
-    guessBaseFieldForNormedSpace E
-  | _ =>
-    try
-      let (_k, E, _F) ← isCLMReduciblyDefeqCoefficients e
-      guessBaseFieldForNormedSpace E
-    catch _e =>
-      findFromLocalInstance e
+--- 原说明 ---
+Given an `Expr`ession `e`, try to find a `NormedSpace` instance on `e` and retur
+n the
+underlying base field. Search local instances, before recursing into product and
+ bundled
+continuous linear maps.
 -/
-partial def guessBaseFieldForNormedSpace (e : Expr) : TermElabM Option Expr := do
+partial def guessBaseFieldForNormedSpace (e : Expr) : TermElabM <| Option Expr := do
   if let some k ← findFromLocalInstance e then return k
   match_expr e with
   | Prod E _F =>
@@ -660,8 +471,8 @@ partial def guessBaseFieldForNormedSpace (e : Expr) : TermElabM Option Expr := d
       guessBaseFieldForNormedSpace E
     catch _e =>
       findFromLocalInstance e
-where findFromLocalInstance (e : Expr) : TermElabM Option Expr := do
-  findSomeLocalInstanceOf? ``NormedSpace fun _ type => do
+where findFromLocalInstance (e : Expr) : TermElabM <| Option Expr := do
+  findSomeLocalInstanceOf? ``NormedSpace fun _ type ↦ do
     match_expr type with
     | NormedSpace K E _ _ =>
       if ← withReducible (pureIsDefEq E e) then
@@ -669,66 +480,56 @@ where findFromLocalInstance (e : Expr) : TermElabM Option Expr := do
       else return none
     | _ => pure none
 
+/-- Try to find a `ModelWithCorners` instance on a type (represented by an expression `e`),
+using the local context to infer the appropriate instance. This supports the following cases:
+- the model with corners on the total space of a vector bundle
+- the model with corners on the tangent space of a manifold
+- a model with corners on a manifold, or on its underlying model space
+- a closed interval of real numbers (including the unit interval)
+- Euclidean space, Euclidean half-space and Euclidean quadrants
+- a metric sphere in a real or complex inner product space
+- the units of a normed algebra
+- the complex upper half plane
+- a space of continuous k-linear maps
+- the trivial model `𝓘(𝕜, E)` on a normed space
+- if the above are not found, try to find a `NontriviallyNormedField` instance on the type of `e`,
+  and if successful, return `𝓘(𝕜)`.
+
+Further cases can be added as necessary.
+This method intentionally handles **neither** sums (disjoint unions) nor products of spaces,
+nor an open subset of an existing manifold. These are handled in `findModel`.
+
+Return an expression describing the found model with corners, together with information about
+whether the model is the trivial model with corners on a normed space. (This is important for
+forming products of models.)
+
+Note that the matching on `e` does not see through reducibility (e.g. we distinguish the `abbrev`
+`TangentBundle` from its definition), so `whnfR` should not be run on `e` prior to calling
+`findModel` on it.
+
+This implementation is not maximally robust yet.
+-/
 -- TODO: better error messages when all strategies fail
 -- TODO: consider lowering monad to `MetaM`
-/--
-Definition of `findModelInner` / `findModelInner` 的定义
-
-English:
-definition findModelInner
-  signature: (e : Expr)
-  body: do
-  if let some m ← tryStrategy "TotalSpace" fromTotalSpace then return some m
-  if let some m ← tryStrategy "TangentBundle" fromTangentBundle then return some m
-  if let some m ← tryStrategy "NormedSpace" fromNormedSpace then return some m
-  if let some m ← tryStrategy "Manifold" fromManifold then return some m
-  if let some m ← tryStrategy "ContinuousLinearMap" fromCLM then return some m
-  if let some m ← tryStrategy "RealInterval" fromRealInterval then return some m
-  if let some m ← tryStrategy "EuclideanSpace" fromEuclideanSpace then return some m
-  if let some m ← tryStrategy "UpperHalfPlane" fromUpperHalfPlane then return some m
-  if let some m ← tryStrategy "Units of algebra" fromUnitsOfAlgebra then return some m
-  if let some m ← tryStrategy "Complex unit circle" fromCircle then return some m
-  if let some m ← tryStrategy "Sphere" fromSphere then return some m
-  if let some m ← tryStrategy "NormedField" fromNormedField then return some m
-  -- We run this strategy last, as it is the least likely to succeed.
-  -- More commonly, we have a normed space on the nose, and `fromNormedSpace` should succeed.
-  if let some m ← tryStrategy "InnerProductSpace" fromInnerProductSpace then return some m
-  return none
-
-中文:
-定义 findModelInner
-  签名: (e : Expr)
-  定义体: do
-  if let some m ← tryStrategy "TotalSpace" fromTotalSpace then return some m
-  if let some m ← tryStrategy "TangentBundle" fromTangentBundle then return some m
-  if let some m ← tryStrategy "NormedSpace" fromNormedSpace then return some m
-  if let some m ← tryStrategy "Manifold" fromManifold then return some m
-  if let some m ← tryStrategy "ContinuousLinearMap" fromCLM then return some m
-  if let some m ← tryStrategy "RealInterval" fromRealInterval then return some m
-  if let some m ← tryStrategy "EuclideanSpace" fromEuclideanSpace then return some m
-  if let some m ← tryStrategy "UpperHalfPlane" fromUpperHalfPlane then return some m
-  if let some m ← tryStrategy "Units of algebra" fromUnitsOfAlgebra then return some m
-  if let some m ← tryStrategy "Complex unit circle" fromCircle then return some m
-  if let some m ← tryStrategy "Sphere" fromSphere then return some m
-  if let some m ← tryStrategy "NormedField" fromNormedField then return some m
-  -- We run this strategy last, as it is the least likely to succeed.
-  -- More commonly, we have a normed space on the nose, and `fromNormedSpace` should succeed.
-  if let some m ← tryStrategy "InnerProductSpace" fromInnerProductSpace then return some m
-  return none
+/-
+**Manifold.Elab.findModelInner** 是 Mathlib 中的一个不透明定义，位于命名空间 `Manifold.Elab`。
+形式化陈述：Expr → Elab.TermElabM (Option Manifold.Elab.FindModelResult)
+参数：Option Manifold.Elab.FindModelResult。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 partial def findModelInner (e : Expr) : TermElabM (Option FindModelResult) := do
-  if let some m ← tryStrategy "TotalSpace" fromTotalSpace then return some m
-  if let some m ← tryStrategy "TangentBundle" fromTangentBundle then return some m
-  if let some m ← tryStrategy "NormedSpace" fromNormedSpace then return some m
-  if let some m ← tryStrategy "Manifold" fromManifold then return some m
-  if let some m ← tryStrategy "ContinuousLinearMap" fromCLM then return some m
-  if let some m ← tryStrategy "RealInterval" fromRealInterval then return some m
-  if let some m ← tryStrategy "EuclideanSpace" fromEuclideanSpace then return some m
-  if let some m ← tryStrategy "UpperHalfPlane" fromUpperHalfPlane then return some m
-  if let some m ← tryStrategy "Units of algebra" fromUnitsOfAlgebra then return some m
-  if let some m ← tryStrategy "Complex unit circle" fromCircle then return some m
-  if let some m ← tryStrategy "Sphere" fromSphere then return some m
-  if let some m ← tryStrategy "NormedField" fromNormedField then return some m
+  if let some m ← tryStrategy "TotalSpace"          fromTotalSpace      then return some m
+  if let some m ← tryStrategy "TangentBundle"       fromTangentBundle   then return some m
+  if let some m ← tryStrategy "NormedSpace"         fromNormedSpace     then return some m
+  if let some m ← tryStrategy "Manifold"            fromManifold        then return some m
+  if let some m ← tryStrategy "ContinuousLinearMap" fromCLM             then return some m
+  if let some m ← tryStrategy "RealInterval"        fromRealInterval    then return some m
+  if let some m ← tryStrategy "EuclideanSpace"      fromEuclideanSpace  then return some m
+  if let some m ← tryStrategy "UpperHalfPlane"      fromUpperHalfPlane  then return some m
+  if let some m ← tryStrategy "Units of algebra"    fromUnitsOfAlgebra  then return some m
+  if let some m ← tryStrategy "Complex unit circle" fromCircle          then return some m
+  if let some m ← tryStrategy "Sphere"              fromSphere          then return some m
+  if let some m ← tryStrategy "NormedField"         fromNormedField     then return some m
   -- We run this strategy last, as it is the least likely to succeed.
   -- More commonly, we have a normed space on the nose, and `fromNormedSpace` should succeed.
   if let some m ← tryStrategy "InnerProductSpace" fromInnerProductSpace then return some m
@@ -747,12 +548,12 @@ where
       -- `V` should be of type `B → Type*`, where `B` is the base of the vector bundle.
       -- Then, the desired model with corners is `I.prod (𝓘(𝕜, F))`, where `I` is the model on `B`
       -- and `𝕜` is the base field for `F`.
-let vtype ← whnf ← instantiateMVars ← inferType V
+      let vtype ← whnf <| ← instantiateMVars <| ← inferType V
       trace[Elab.DiffGeo.MDiff] "`{V}` has type `{vtype}`"
       match vtype with
       | .forallE _x base _tgt _ =>
         let baseModel ← withTraceNode `Elab.DiffGeo.MDiff
-            (fun _ => pure m!"searching for a model with corners on the base `{base}`") do
+            (fun _ ↦ pure m!"searching for a model with corners on the base `{base}`") do
           let some baseI ← findModelInner base
             | throwError m!"found no model with corners on the base {base} of `TotalSpace {F} {V}`"
           return baseI.model
@@ -782,7 +583,7 @@ let vtype ← whnf ← instantiateMVars ← inferType V
     | _ => throwError "`{e}` is not a `TangentBundle`"
   /-- Attempt to find the trivial model on a normed space. -/
   fromNormedSpace : TermElabM FindModelResult := do
-    let some (inst, K) ← findSomeLocalInstanceOf? ``NormedSpace fun inst type => do
+    let some (inst, K) ← findSomeLocalInstanceOf? ``NormedSpace fun inst type ↦ do
         match_expr type with
         | NormedSpace K E _ _ =>
           if ← withReducible (pureIsDefEq E e) then return some (inst, K)
@@ -796,7 +597,7 @@ let vtype ← whnf ← instantiateMVars ← inferType V
     }
   /-- Attempt to find the trivial model on an inner product space. -/
   fromInnerProductSpace : TermElabM FindModelResult := do
-    let some (inst, K) ← findSomeLocalInstanceOf? `InnerProductSpace fun inst type => do
+    let some (inst, K) ← findSomeLocalInstanceOf? `InnerProductSpace fun inst type ↦ do
       -- We don't use `match_expr` here to avoid importing `InnerProductSpace`.
       match (← instantiateMVars type).cleanupAnnotations with
         | mkApp4 (.const `InnerProductSpace _) k E _ _ =>
@@ -815,7 +616,7 @@ let vtype ← whnf ← instantiateMVars ← inferType V
   fromManifold : TermElabM Expr := do
     -- Return an expression for a type `H` (if any) such that `e` is a ChartedSpace over `H`,
     -- or `e` is `H` itself.
-    let some H ← findSomeLocalInstanceOf? ``ChartedSpace fun inst type => do
+    let some H ← findSomeLocalInstanceOf? ``ChartedSpace fun inst type ↦ do
         trace[Elab.DiffGeo.MDiff] "considering instance of type `{type}`"
         match_expr type with
         | ChartedSpace H _ M _ =>
@@ -828,7 +629,7 @@ let vtype ← whnf ← instantiateMVars ← inferType V
         | _ => return none
       | throwError "Couldn't find a `ChartedSpace` structure on `{e}` among local instances, \
           and `{e}` is not the charted space of some type in the local context either."
-    let some m ← findSomeLocalHyp? fun fvar type => do
+    let some m ← findSomeLocalHyp? fun fvar type ↦ do
         match_expr type with
         | ModelWithCorners _ _ _ _ _ H' _ => do
           if ← withReducible (pureIsDefEq H' H) then return some fvar else return none
@@ -836,7 +637,7 @@ let vtype ← whnf ← instantiateMVars ← inferType V
       | trace[Elab.DiffGeo.MDiff]
           "Couldn't find a `ModelWithCorners` with model space `{H}` in the local context."
         -- Try a normed space, and a normed field as last alternatives.
-        let a ← findSomeLocalInstanceOf? ``NormedSpace fun inst type => do
+        let a ← findSomeLocalInstanceOf? ``NormedSpace fun inst type ↦ do
           match_expr type with
           | NormedSpace K E _ _ =>
             if ← withReducible (pureIsDefEq E H) then return some (inst, K)
@@ -883,18 +684,18 @@ let vtype ← whnf ← instantiateMVars ← inferType V
     match e with
     | Expr.const ``unitInterval [] =>
       trace[Elab.DiffGeo.MDiff] "`{e}` is the real unit interval"
-      mkAppOptM `modelWithCornersEuclideanHalfSpace #[q(1 : Nat), none]
+      mkAppOptM `modelWithCornersEuclideanHalfSpace #[q(1 : ℕ), none]
     | mkApp4 (.const `Set.Icc _) α _ _x _y =>
       -- If `S` were a copy of `k` with a non-standard topology or smooth structure
       -- (such as, imposed deliberately through a type synonym), we do not want to infer
       -- the standard model with corners.
       -- Therefore, we only check definitional equality at reducible transparency.
-if ← withReducible isDefEq α q(Real) then
+      if ← withReducible <| isDefEq α q(ℝ) then
         -- We need not check if `x < y` is a fact in the local context: Lean will verify this
         -- itself when trying to synthesize a ChartedSpace instance.
-        mkAppOptM `modelWithCornersEuclideanHalfSpace #[q(1 : Nat), none]
+        mkAppOptM `modelWithCornersEuclideanHalfSpace #[q(1 : ℕ), none]
       else throwError "`{e}` is a closed interval of type `{α}`, \
-        which is not reducibly definitionally equal to Real"
+        which is not reducibly definitionally equal to ℝ"
     | _ => throwError "`{e}` is not a closed real interval"
   /-- Attempt to find a model with corners on the upper half plane in complex space -/
   fromUpperHalfPlane : TermElabM Expr := do
@@ -914,7 +715,7 @@ if ← withReducible isDefEq α q(Real) then
       -- Note: this is somewhat brittle, and will need to be updated if other instance are made.
       -- A more robust solution would involve running typeclass inference,
       -- hence could potentially be slow.
-      let searchNormedAlgebra ← findSomeLocalInstanceOf? ``NormedAlgebra fun inst type => do
+      let searchNormedAlgebra ← findSomeLocalInstanceOf? ``NormedAlgebra fun inst type ↦ do
           trace[Elab.DiffGeo.MDiff] "considering instance of type `{type}`"
           match_expr type with
           | NormedAlgebra k R _ _ =>
@@ -937,9 +738,9 @@ if ← withReducible isDefEq α q(Real) then
         let (k, V, W) ← isCLMReduciblyDefeqCoefficients α
         -- If `V` and `W` are not reducibly def-eq, the normed algebra instance should not fire:
         -- so it suffices to check at reducible transparency.
-if ← withReducible isDefEq V W then
+        if ← withReducible <| isDefEq V W then
           trace[Elab.DiffGeo.MDiff] "`{α}` is a space of continuous `{k}`-linear maps on `{V}`"
-          let normedSpace? ← findSomeLocalInstanceOf? ``NormedSpace fun inst type => do
+          let normedSpace? ← findSomeLocalInstanceOf? ``NormedSpace fun inst type ↦ do
             trace[Elab.DiffGeo.MDiff] "considering instances of type `{type}`"
             match_expr type with
             | NormedSpace k R _ _ =>
@@ -954,7 +755,7 @@ if ← withReducible isDefEq V W then
           | some (k, _R) =>
             trace[Elab.DiffGeo.MDiff] "found a normed space: `{V}` is a normed space over `{k}`"
             mkAppOptM ``modelWithCornersSelf #[k, none, α, none, none]
-          | _ => throwError "Found no `NormedSpace` structure on `{V}` among local instances"
+          | _ => throwError  "Found no `NormedSpace` structure on `{V}` among local instances"
         else
           -- NB. If further instances of `NormedAlgebra` arise in practice, adding another check
           -- here is a good thing to do.
@@ -969,8 +770,8 @@ if ← withReducible isDefEq V W then
     -- We don't use `match_expr` to avoid importing `Circle`.
     if (← instantiateMVars e).cleanupAnnotations.isConstOf `Circle then
       -- We have not imported `EuclideanSpace` yet, so build an expression by hand.
-      let r ← Term.exprToSyntax q(Real)
-let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin 1)]
+      let r ← Term.exprToSyntax q(ℝ)
+      let eE ← Term.exprToSyntax <| ← mkAppM `EuclideanSpace #[q(ℝ), q(Fin 1)]
       Term.elabTerm (← ``(𝓘($r, $eE))) none
     else throwError "`{e}` is not the complex unit circle"
   /-- Attempt to find a model with corners on a metric sphere in a real normed space -/
@@ -981,7 +782,7 @@ let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin 1)]
     | Metric.sphere α _ _x _r =>
       trace[Elab.DiffGeo.MDiff] "`{e}` is a metric sphere in `{α}`"
       -- Attempt to find a real or complex inner product space instance on `α`.
-      let searchIPSpace := findSomeLocalInstanceOf? `InnerProductSpace fun inst type => do
+      let searchIPSpace := findSomeLocalInstanceOf? `InnerProductSpace fun inst type ↦ do
           trace[Elab.DiffGeo.MDiff] "considering instance of type `{type}`"
           -- We don't use `match_expr` here to avoid importing `InnerProductSpace`.
           match type with
@@ -996,7 +797,7 @@ let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin 1)]
                 is not reducibly definitionally equal to `{α}`: continue the search"
               return none
           | _ => return none
-      let factFinder (E : Expr) := findSomeLocalInstanceOf? ``Fact fun _inst type => do
+      let factFinder (E : Expr) := findSomeLocalInstanceOf? ``Fact fun _inst type ↦ do
         trace[Elab.DiffGeo.MDiff] "considering instance of type `{type}`"
         match_expr type with
         | Fact a =>
@@ -1007,23 +808,23 @@ let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin 1)]
             | Module.finrank R F _ _ _ =>
               -- We use reducible transparency to allow using a type synonym: this should not
               -- be unfolded.
-              if ← withReducible (pureIsDefEq R q(Real) <&&> pureIsDefEq E F) then
-                trace[Elab.DiffGeo.MDiff] "found a fact about `finrank Real E` via `{_inst}`"
+              if ← withReducible (pureIsDefEq R q(ℝ) <&&> pureIsDefEq E F) then
+                trace[Elab.DiffGeo.MDiff] "found a fact about `finrank ℝ E` via `{_inst}`"
                 -- Try to unify the rhs with an expression m + 1, for a natural number m.
                 -- If we find one, that's the dimension of our model with corners.
                 -- Always returning the finrank - 1 would be undesirable, for instance since natural
                 -- number subtraction is badly behaved.
-                have rhs : Q(Nat) := rhs
+                have rhs : Q(ℕ) := rhs
                 match rhs with
                 | ~q($n + 1) =>
                   trace[Elab.DiffGeo.MDiff] "rhs `{rhs}` is `{n}` + 1"
                   return some n
                 | _ =>
-                  throwError "found a fact about `finrank Real E`, but the right hand \
+                  throwError "found a fact about `finrank ℝ E`, but the right hand \
                     side `{rhs}` is not of the form `m + 1` for some `m`"
               else
                 trace[Elab.DiffGeo.MDiff] "found a fact about finrank, \
-                  but not about `finrank Real E`: continue the search"
+                  but not about `finrank ℝ E`: continue the search"
                 return none
             | _ => return none
           | _ => return none
@@ -1033,10 +834,10 @@ let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin 1)]
         -- search for a `Fact (finrank ℝ E) = m + 1`,
         -- then the sphere is `m`-dimensional, and `modelEuclideanSpace m` is our model.
         let some nE ← factFinder E
-          | throwError "Found no fact `finrank Real {E} = n + 1` in the local context"
+          | throwError "Found no fact `finrank ℝ {E} = n + 1` in the local context"
         -- We have not imported `EuclideanSpace` yet, so build an expression by hand.
-        let r ← Term.exprToSyntax q(Real)
-let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin $nE)]
+        let r ← Term.exprToSyntax q(ℝ)
+        let eE ← Term.exprToSyntax <| ← mkAppM `EuclideanSpace #[q(ℝ), q(Fin $nE)]
         Term.elabTerm (← ``(𝓘($r, $eE))) none
       else throwError "found no real normed space instance on `{α}`"
     | _ => throwError "`{e}` is not a sphere in a real normed space"
@@ -1044,6 +845,19 @@ let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin $nE)]
   We attempt to find a global instance here. -/
   fromNormedField : TermElabM Expr := mkAppOptM ``modelWithCornersSelf #[e, none, e, none, none]
 
+/-- Try to find a `ModelWithCorners` instance on a type (represented by an expression `e`),
+using the local context to infer the appropriate instance.
+This supports all `ModelWithCorners` instances that are currently defined in mathlib.
+Further cases can be added as necessary.
+
+Return an expression describing the found model with corners.
+
+Note that the matching on `e` does not see through reducibility (e.g. we distinguish the `abbrev`
+`TangentBundle` from its definition), so `whnfR` should not be run on `e` prior to calling
+`findModel` on it.
+
+This implementation is not maximally robust yet.
+-/
 -- TODO: better error messages when all strategies fail
 -- TODO: consider lowering monad to `MetaM`
 
@@ -1051,42 +865,10 @@ let eE ← Term.exprToSyntax ← mkAppM `EuclideanSpace #[q(Real), q(Fin $nE)]
 -- This should not be an issue in practice.
 -- FIXME: can one prove this terminates w.r.t. a suitable measure? This is only recursing into
 -- subexpressions (at least, after match_expr), right?
-/--
-Definition of `findModel` / `findModel` 的定义
-
-English:
-definition findModel
-  signature: (e : Expr)
-  body: do
-  trace[Elab.DiffGeo.MDiff] "Finding a model with corners for: `{e}`"
-  if let some { model .. } ← go e then
-    return model
-  else
-    let tracing := (← isTracingEnabledFor `Elab.DiffGeo.MDiff)
-    let hint : MessageData := if e.hasExprMVar then
-      .hint' "the expected type contains metavariables, \
-        maybe you need to provide an implicit argument"
-      else if tracing then m!""
-      else .hint' "failures to find a model with corners can be debugged with the \
-          command `set_option trace.Elab.DiffGeo.MDiff true`."
-    throwError "Could not find a model with corners for `{e}`.{hint}"
-
-中文:
-定义 findModel
-  签名: (e : Expr)
-  定义体: do
-  trace[Elab.DiffGeo.MDiff] "Finding a model with corners for: `{e}`"
-  if let some { model .. } ← go e then
-    return model
-  else
-    let tracing := (← isTracingEnabledFor `Elab.DiffGeo.MDiff)
-    let hint : MessageData := if e.hasExprMVar then
-      .hint' "the expected type contains metavariables, \
-        maybe you need to provide an implicit argument"
-      else if tracing then m!""
-      else .hint' "failures to find a model with corners can be debugged with the \
-          command `set_option trace.Elab.DiffGeo.MDiff true`."
-    throwError "Could not find a model with corners for `{e}`.{hint}"
+/-
+**Manifold.Elab.findModel** 是 Mathlib 中的一个定义，位于命名空间 `Manifold.Elab`。
+形式化陈述：Expr → Elab.TermElabM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 partial def findModel (e : Expr) : TermElabM Expr := do
   trace[Elab.DiffGeo.MDiff] "Finding a model with corners for: `{e}`"
@@ -1102,7 +884,7 @@ partial def findModel (e : Expr) : TermElabM Expr := do
           command `set_option trace.Elab.DiffGeo.MDiff true`."
     throwError "Could not find a model with corners for `{e}`.{hint}"
 where
-  go (e : Expr) : TermElabM (Option FindModelResult) := do
+  go (e : Expr)  : TermElabM (Option FindModelResult) := do
     -- At first, try finding a model with corners on the space itself.
     if let some m ← findModelInner e then return some m
     -- Otherwise, we recurse into the expression,
@@ -1148,59 +930,30 @@ where
       go E
     | _ => return none
 
-/--
-Definition of `findModels` / `findModels` 的定义
+/-- If the type of `e` is a non-dependent function between spaces `src` and `tgt`, try to find a
+model with corners on both `src` and `tgt`. If successful, return both models.
 
-English:
-definition findModels
-  signature: (e : Expr) (es : Option Expr)
-  body: do
-let etype ← whnf ← instantiateMVars ← inferType e
-  match etype with
-  | .forallE _ src tgt _ =>
-    if tgt.hasLooseBVars then
-      -- TODO: try `T%` here, and if it works, add an interactive suggestion to use it
-      throwError "Term `{e}` is a dependent function, of type `{etype}`\nHint: you can use \
-        the `T%` elaborator to convert a dependent function to a non-dependent one"
-    let srcI ← findModel src
-    if let some es := es then
-      let estype ← inferType es
-      /- Note: we use `isDefEq` here since persistent metavariable assignments in `src` and
-      `estype` are acceptable.
-      TODO: consider attempting to coerce `es` to a `Set`. -/
-      if !(← isDefEq estype <| ← mkAppM ``Set #[src]) then
-        throwError "The domain `{src}` of `{e}` is not definitionally equal to the carrier type of \
-          the set `{es}` : `{estype}`"
-    let tgtI ← findModel tgt
-    return (srcI, tgtI)
-  | _ => throwError "Expected{indentD e}\nof type{indentD etype}\nto be a function"
+We pass `e` instead of just its type for better diagnostics.
 
-中文:
-定义 findModels
-  签名: (e : Expr) (es : 选项类型 Expr)
-  定义体: do
-let etype ← whnf ← instantiateMVars ← inferType e
-  match etype with
-  | .forallE _ src tgt _ =>
-    if tgt.hasLooseBVars then
-      -- TODO: try `T%` here, and if it works, add an interactive suggestion to use it
-      throwError "Term `{e}` is a dependent function, of type `{etype}`\nHint: you can use \
-        the `T%` elaborator to convert a dependent function to a non-dependent one"
-    let srcI ← findModel src
-    if let some es := es then
-      let estype ← inferType es
-      /- Note: we use `isDefEq` here since persistent metavariable assignments in `src` and
-      `estype` are acceptable.
-      TODO: consider attempting to coerce `es` to a `Set`. -/
-      if !(← isDefEq estype <| ← mkAppM ``Set #[src]) then
-        throwError "The domain `{src}` of `{e}` is not definitionally equal to the carrier type of \
-          the set `{es}` : `{estype}`"
-    let tgtI ← findModel tgt
-    return (srcI, tgtI)
-  | _ => throwError "Expected{indentD e}\nof type{indentD etype}\nto be a function"
+If `es` is `some`, we verify that `src` and the type of `es` are definitionally equal. -/
+/-
+**Manifold.Elab.findModels** 是 Mathlib 中的一个定义，位于命名空间 `Manifold.Elab`。
+形式化陈述：Expr → Option Expr → Elab.TermElabM (Expr × Expr)
+参数：Expr × Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If the type of `e` is a non-dependent function between spaces `src` and `tgt`, t
+ry to find a
+model with corners on both `src` and `tgt`. If successful, return both models.
+
+We pass `e` instead of just its type for better diagnostics.
+
+If `es` is `some`, we verify that `src` and the type of `es` are definitionally 
+equal.
 -/
 def findModels (e : Expr) (es : Option Expr) : TermElabM (Expr × Expr) := do
-let etype ← whnf ← instantiateMVars ← inferType e
+  let etype ← whnf <| ← instantiateMVars <| ← inferType e
   match etype with
   | .forallE _ src tgt _ =>
     if tgt.hasLooseBVars then
@@ -1229,7 +982,7 @@ trying to determine `I` and `J` from the local context.
 The argument `x` can be omitted. -/
 scoped elab:max "MDiffAt[" s:term "]" ppSpace f:term:arg : term => do
   let es ← Term.elabTerm s none
-let ef ← ensureIsFunction ← Term.elabTerm f none
+  let ef ← ensureIsFunction <| ← Term.elabTerm f none
   let (srcI, tgtI) ← findModels ef es
   mkAppM ``MDifferentiableWithinAt #[srcI, tgtI, ef, es]
 
@@ -1237,7 +990,7 @@ let ef ← ensureIsFunction ← Term.elabTerm f none
 trying to determine `I` and `J` from the local context.
 The argument `x` can be omitted. -/
 scoped elab:max "MDiffAt" ppSpace t:term:arg : term => do
-let e ← ensureIsFunction ← Term.elabTerm t none
+  let e ← ensureIsFunction <| ← Term.elabTerm t none
   let (srcI, tgtI) ← findModels e none
   mkAppM ``MDifferentiableAt #[srcI, tgtI, e]
 
@@ -1246,32 +999,32 @@ let e ← ensureIsFunction ← Term.elabTerm t none
 -- trying to determine `I` and `J` from the local context.
 -- The argument `x` can be omitted. -/
 -- scoped elab:max "MDiffAt2" ppSpace t:term:arg : term => do
--- let e ← Term.elabTerm t none
--- let etype ← whnfR <| ← instantiateMVars <| ← inferType e
--- forallBoundedTelescope etype (some 1) fun src tgt ↦ do
--- if let some src := src[0]? then
--- let srcI ← findModel (← inferType src)
--- if Lean.Expr.occurs src tgt then
--- throwErrorAt t "Term `{e}` is a dependent function, of type `{etype}`\n\
--- Hint: you can use the `T%` elaborator to convert a dependent function \
--- to a non-dependent one"
--- let tgtI ← findModel tgt (src, srcI)
--- mkAppM ``MDifferentiableAt #[srcI, tgtI, e]
--- else
--- throwErrorAt t "Expected{indentD e}\nof type{indentD etype}\nto be a function"
+--   let e ← Term.elabTerm t none
+--   let etype ← whnfR <| ← instantiateMVars <| ← inferType e
+--   forallBoundedTelescope etype (some 1) fun src tgt ↦ do
+--     if let some src := src[0]? then
+--       let srcI ← findModel (← inferType src)
+--       if Lean.Expr.occurs src tgt then
+--         throwErrorAt t "Term `{e}` is a dependent function, of type `{etype}`\n\
+--         Hint: you can use the `T%` elaborator to convert a dependent function \
+--         to a non-dependent one"
+--       let tgtI ← findModel tgt (src, srcI)
+--       mkAppM ``MDifferentiableAt #[srcI, tgtI, e]
+--     else
+--       throwErrorAt t "Expected{indentD e}\nof type{indentD etype}\nto be a function"
 
 /-- `MDiff[s] f` elaborates to `MDifferentiableOn I J f s`,
 trying to determine `I` and `J` from the local context. -/
 scoped elab:max "MDiff[" s:term "]" ppSpace t:term:arg : term => do
   let es ← Term.elabTerm s none
-let et ← ensureIsFunction ← Term.elabTerm t none
+  let et ← ensureIsFunction <| ← Term.elabTerm t none
   let (srcI, tgtI) ← findModels et es
   mkAppM ``MDifferentiableOn #[srcI, tgtI, et, es]
 
 /-- `MDiff f` elaborates to `MDifferentiable I J f`,
 trying to determine `I` and `J` from the local context. -/
 scoped elab:max "MDiff" ppSpace t:term:arg : term => do
-let e ← ensureIsFunction ← Term.elabTerm t none
+  let e ← ensureIsFunction <| ← Term.elabTerm t none
   let (srcI, tgtI) ← findModels e none
   mkAppM ``MDifferentiable #[srcI, tgtI, e]
 
@@ -1286,8 +1039,8 @@ trying to determine `I` and `J` from the local context.
 The argument `x` can be omitted. -/
 scoped elab:max "CMDiffAt[" s:term "]" ppSpace nt:term:arg ppSpace f:term:arg : term => do
   let es ← Term.elabTerm s none
-  let ne ← Term.elabTermEnsuringType nt q(WithTop Nat∞)
-let ef ← ensureIsFunction ← Term.elabTerm f none
+  let ne ← Term.elabTermEnsuringType nt q(WithTop ℕ∞)
+  let ef ← ensureIsFunction <| ← Term.elabTerm f none
   let (srcI, tgtI) ← findModels ef es
   mkAppM ``ContMDiffWithinAt #[srcI, tgtI, ne, ef, es]
 
@@ -1296,8 +1049,8 @@ trying to determine `I` and `J` from the local context.
 `n` is coerced to `WithTop ℕ∞` if necessary (so passing a `ℕ`, `∞` or `ω` are all supported).
 The argument `x` can be omitted. -/
 scoped elab:max "CMDiffAt" ppSpace nt:term:arg ppSpace t:term:arg : term => do
-let e ← ensureIsFunction ← Term.elabTerm t none
-  let ne ← Term.elabTermEnsuringType nt q(WithTop Nat∞)
+  let e ← ensureIsFunction <| ← Term.elabTerm t none
+  let ne ← Term.elabTermEnsuringType nt q(WithTop ℕ∞)
   let (srcI, tgtI) ← findModels e none
   mkAppM ``ContMDiffAt #[srcI, tgtI, ne, e]
 
@@ -1306,8 +1059,8 @@ trying to determine `I` and `J` from the local context.
 `n` is coerced to `WithTop ℕ∞` if necessary (so passing a `ℕ`, `∞` or `ω` are all supported). -/
 scoped elab:max "CMDiff[" s:term "]" ppSpace nt:term:arg ppSpace f:term:arg : term => do
   let es ← Term.elabTerm s none
-  let ne ← Term.elabTermEnsuringType nt q(WithTop Nat∞)
-let ef ← ensureIsFunction ← Term.elabTerm f none
+  let ne ← Term.elabTermEnsuringType nt q(WithTop ℕ∞)
+  let ef ← ensureIsFunction <| ← Term.elabTerm f none
   let (srcI, tgtI) ← findModels ef es
   mkAppM ``ContMDiffOn #[srcI, tgtI, ne, ef, es]
 
@@ -1315,8 +1068,8 @@ let ef ← ensureIsFunction ← Term.elabTerm f none
 trying to determine `I` and `J` from the local context.
 `n` is coerced to `WithTop ℕ∞` if necessary (so passing a `ℕ`, `∞` or `ω` are all supported). -/
 scoped elab:max "CMDiff" ppSpace nt:term:arg ppSpace f:term:arg : term => do
-  let ne ← Term.elabTermEnsuringType nt q(WithTop Nat∞)
-let e ← ensureIsFunction ← Term.elabTerm f none
+  let ne ← Term.elabTermEnsuringType nt q(WithTop ℕ∞)
+  let e ← ensureIsFunction <| ← Term.elabTerm f none
   let (srcI, tgtI) ← findModels e none
   mkAppM ``ContMDiff #[srcI, tgtI, ne, e]
 
@@ -1324,14 +1077,14 @@ let e ← ensureIsFunction ← Term.elabTerm f none
 trying to determine `I` and `J` from the local context. -/
 scoped elab:max "mfderiv[" s:term "]" ppSpace t:term:arg : term => do
   let es ← Term.elabTerm s none
-let e ← ensureIsFunction ← Term.elabTerm t none
+  let e ← ensureIsFunction <| ← Term.elabTerm t none
   let (srcI, tgtI) ← findModels e es
   mkAppM ``mfderivWithin #[srcI, tgtI, e, es]
 
 /-- `mfderiv% f x` elaborates to `mfderiv I J f x`,
 trying to determine `I` and `J` from the local context. -/
 scoped elab:max "mfderiv%" ppSpace t:term:arg : term => do
-let e ← ensureIsFunction ← Term.elabTerm t none
+  let e ← ensureIsFunction <| ← Term.elabTerm t none
   let (srcI, tgtI) ← findModels e none
   mkAppM ``mfderiv #[srcI, tgtI, e]
 
@@ -1340,7 +1093,7 @@ trying to determine `I` and `J` from the local context. -/
 scoped elab:max "HasMFDerivAt[" s:term "]" ppSpace
     f:term:arg ppSpace x:term:arg ppSpace f':term:arg : term => do
   let es ← Term.elabTerm s none
-let ef ← ensureIsFunction ← Term.elabTerm f none
+  let ef ← ensureIsFunction <|← Term.elabTerm f none
   let ex ← Term.elabTerm x none
   let ef' ← Term.elabTerm f' none
   let (srcI, tgtI) ← findModels ef es
@@ -1350,7 +1103,7 @@ let ef ← ensureIsFunction ← Term.elabTerm f none
 trying to determine `I` and `J` from the local context. -/
 scoped elab:max "HasMFDerivAt%" ppSpace
     f:term:arg ppSpace x:term:arg ppSpace f':term:arg : term => do
-let ef ← ensureIsFunction ← Term.elabTerm f none
+  let ef ← ensureIsFunction <|← Term.elabTerm f none
   let ex ← Term.elabTerm x none
   let ef' ← Term.elabTerm f' none
   let (srcI, tgtI) ← findModels ef none
@@ -1360,7 +1113,7 @@ let ef ← ensureIsFunction ← Term.elabTerm f none
 trying to determine `I` from the local context. -/
 scoped elab:max "TangentSpace%" ppSpace x:term:arg : term => do
   let ex ← Term.elabTerm x none
-let extype ← instantiateMVars ← inferType ex
+  let extype ← instantiateMVars <| ← inferType ex
   let src ← findModel extype
   mkAppM ``TangentSpace #[src, ex]
 
@@ -1368,14 +1121,14 @@ let extype ← instantiateMVars ← inferType ex
 trying to determine `I` and `J` from the local context. -/
 scoped elab:max "tangentMap[" s:term "]" ppSpace f:term:arg : term => do
   let es ← Term.elabTerm s none
-let ef ← ensureIsFunction ← Term.elabTerm f none
+  let ef ← ensureIsFunction <|← Term.elabTerm f none
   let (srcI, tgtI) ← findModels ef none
   mkAppM ``tangentMapWithin #[srcI, tgtI, ef, es]
 
 /-- `tangentMap% f` elaborates to `tangentMap I J f`,
 trying to determine `I` and `J` from the local context. -/
 scoped elab:max "tangentMap%" ppSpace f:term:arg : term => do
-let ef ← ensureIsFunction ← Term.elabTerm f none
+  let ef ← ensureIsFunction <|← Term.elabTerm f none
   let (srcI, tgtI) ← findModels ef none
   mkAppM ``tangentMap #[srcI, tgtI, ef]
 
@@ -1450,16 +1203,16 @@ open Bundle PrettyPrinter Delaborator SubExpr
 @[app_delab TotalSpace.mk] meta def delabTotalSpaceMk : Delab := do
   whenPPOption getPPNotation do
   withOverApp 5 do
-let bd ← withNaryArg 3 delab
-let vd ← withNaryArg 4 delab
+  let bd ← withNaryArg 3 <| delab
+  let vd ← withNaryArg 4 <| delab
   `(⟨$bd, $vd⟩)
 
 /-- Delaborator for `Bundle.TotalSpace.mk'` using anonymous constructor notation. -/
 @[app_delab Bundle.TotalSpace.mk'] meta def delabTotalSpaceMkPrime : Delab := do
   whenPPOption getPPNotation do
   withOverApp 5 do
-let bd ← withNaryArg 3 delab
-let vd ← withNaryArg 4 delab
+  let bd ← withNaryArg 3 <| delab
+  let vd ← withNaryArg 4 <| delab
   `(⟨$bd, $vd⟩)
 
 /-- Delaborator for `mfderiv` using the custom elaborator, and special-casing
@@ -1470,11 +1223,11 @@ arguments that can use the `T%` elaborator. -/
   try
     let fe := (← getExpr).appArg!
     let .lam n _ b _ := fe | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let σe := b.getAppArgs[4]!.getAppFn
-guard σe.isFVar
+    guard <| σe.isFVar
     let Tσs ← withAppArg do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `(T% $σs) >>= annotateGoToSyntaxDef
     `(mfderiv% ($Tσs)) >>= annotateGoToSyntaxDef
   catch _ =>
@@ -1490,11 +1243,11 @@ arguments that can use the `T%` elaborator. -/
   try
     let fe := (← getExpr).getAppArgs[20]!
     let .lam n _ b _ := fe | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let σe := b.getAppArgs[4]!.getAppFn
-guard σe.isFVar
+    guard <| σe.isFVar
     let Tσs ← withNaryArg 20 do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `(T% $σs) >>= annotateGoToSyntaxDef
     `(mfderiv[$ss] ($Tσs)) >>= annotateGoToSyntaxDef
   catch _ =>
@@ -1509,11 +1262,11 @@ arguments that can use the `T%` elaborator. -/
   try
     let fe := (← getExpr).appArg!
     let .lam n _ b _ := fe | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let σe := b.getAppArgs[4]!.getAppFn
-guard σe.isFVar
+    guard <| σe.isFVar
     let Tσs ← withAppArg do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `((T% $σs)) >>= annotateGoToSyntaxDef
     `(MDiff $Tσs) >>= annotateGoToSyntaxDef
   catch _ =>
@@ -1528,11 +1281,11 @@ arguments that can use the `T%` elaborator. -/
   try
     let fe := (← getExpr).appArg!
     let .lam n _ b _ := fe | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let σe := b.getAppArgs[4]!.getAppFn
-guard σe.isFVar
+    guard <| σe.isFVar
     let Tσs ← withAppArg do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `((T% $σs)) >>= annotateGoToSyntaxDef
     `(MDiffAt $Tσs) >>= annotateGoToSyntaxDef
   catch _ =>
@@ -1548,15 +1301,15 @@ arguments that can use the `T%` elaborator. -/
   try
     let f := (← getExpr).getAppArgs[20]!
     let .lam n _ b _ := f | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let σe := b.getAppArgs[4]!.getAppFn
-guard σe.isFVar
+    guard <| σe.isFVar
     let Tσs ← withNaryArg 20 do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `((T% $σs)) >>= annotateGoToSyntaxDef
     `(MDiff[$ss] $Tσs) >>= annotateGoToSyntaxDef
   catch _ =>
-let fs ← withNaryArg 20 delab
+    let fs ← withNaryArg 20 <| delab
     `(MDiff[$ss] $fs) >>= annotateGoToSyntaxDef
 
 /-- Delaborator for `MDifferentiableWithinAt` using the custom elaborator, and special-casing
@@ -1568,15 +1321,15 @@ arguments that can use the `T%` elaborator. -/
   try
     let f := (← getExpr).getAppArgs[20]!
     let .lam n _ b _ := f | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let s := b.getAppArgs[4]!.getAppFn
-guard s.isFVar
+    guard <| s.isFVar
     let Tσs ← withNaryArg 20 do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `((T% $σs)) >>= annotateGoToSyntaxDef
     `(MDiffAt[$ss] $Tσs) >>= annotateGoToSyntaxDef
   catch _ =>
-let fs ← withNaryArg 20 delab
+    let fs ← withNaryArg 20 <| delab
     `(MDiffAt[$ss] $fs) >>= annotateGoToSyntaxDef
 
 /-- Delaborator for `HasMFDerivWithinAt` using the custom elaborator, and special-casing
@@ -1590,13 +1343,13 @@ arguments that can use the `T%` elaborator. -/
   try
     let f := (← getExpr).getAppArgs[20]!
     let .lam n _ b _ := f | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let s := b.getAppArgs[4]!.getAppFn
-guard s.isFVar
+    guard <| s.isFVar
     let σe := b.getAppArgs[4]!.getAppFn
-guard σe.isFVar
+    guard <| σe.isFVar
     let Tσs ← withNaryArg 20 do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `((T% $σs)) >>= annotateGoToSyntaxDef
     `(HasMFDerivAt[$ss] $Tσs $xs $f') >>= annotateGoToSyntaxDef
   catch _ =>
@@ -1613,13 +1366,13 @@ arguments that can use the `T%` elaborator. -/
   try
     let f := (← getExpr).getAppArgs[20]!
     let .lam n _ b _ := f | failure
-guard b.isAppOf ``Bundle.TotalSpace.mk'
+    guard <| b.isAppOf ``Bundle.TotalSpace.mk'
     let s := b.getAppArgs[4]!.getAppFn
-guard s.isFVar
+    guard <| s.isFVar
     let σe := b.getAppArgs[4]!.getAppFn
-guard σe.isFVar
+    guard <| σe.isFVar
     let Tσs ← withNaryArg 20 do
-let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
+      let σs ← withBindingBody n <| withNaryArg 4 <| withNaryFn delab
       `((T% $σs)) >>= annotateGoToSyntaxDef
     `(HasMFDerivAt% $Tσs $xs $f') >>= annotateGoToSyntaxDef
   catch _ =>
@@ -1648,3 +1401,4 @@ let σs ← withBindingBody n withNaryArg 4 withNaryFn delab
 end Manifold
 
 end delaborators
+

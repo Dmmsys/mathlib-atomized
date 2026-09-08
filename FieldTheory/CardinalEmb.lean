@@ -85,28 +85,17 @@ local notation "ι" => (Module.rank F E).ord.ToType
 
 local notation i "⁺" => succ i -- Note: conflicts with `PosPart` notation
 
-/--
-Definition of `wellOrderedBasis` / `wellOrderedBasis` 的定义
+/-- A basis of E/F indexed by the initial ordinal. -/
+/-
+**Field.Emb.Cardinal.wellOrderedBasis** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardi
+nal`。
+形式化陈述：wellOrderedBasis : Basis ι F E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition wellOrderedBasis
-  signature: : Basis ι F E
-  body: (chooseBasis F E).reindex
-    (Cardinal.eq.mp <| (mk_ord_toType _).trans <| rank_eq_card_chooseBasisIndex F E).some.symm
-
-local notation "b" => wellOrderedBasis F E
-local notation "Ē" => AlgebraicClosure E
-
-中文:
-定义 wellOrderedBasis
-  签名: : 基 ι F E
-  定义体: (chooseBasis F E).reindex
-    (Cardinal.eq.mp <| (mk_ord_toType _).trans <| rank_eq_card_chooseBasisIndex F E).some.symm
-
-local notation "b" => wellOrderedBasis F E
-local notation "Ē" => AlgebraicClosure E
-
-Depends on / 依赖: Cardinal, Cardinal.eq.mp, chooseBasis, mk_ord_toType, rank_eq_card_chooseBasisIndex, reindex, some.symm
+--- 原说明 ---
+A basis of E/F indexed by the initial ordinal.
 -/
 def wellOrderedBasis : Basis ι F E :=
   (chooseBasis F E).reindex
@@ -116,46 +105,45 @@ local notation "b" => wellOrderedBasis F E
 local notation "Ē" => AlgebraicClosure E
 
 variable {F E}
-
-/--
-theorem `adjoin_basis_eq_top` / 定理 `adjoin_basis_eq_top`
-
-English:
-theorem adjoin_basis_eq_top
-  statement: adjoin F (range b) = ⊤
-  proof: toSubalgebra_injective Subalgebra.toSubmodule_injective top_unique
-(Basis.span_eq b).ge.trans (Algebra.span_le_adjoin F _).trans algebra_adjoin_le_adjoin _ _
-
-中文:
-定理 adjoin_basis_eq_top
-  结论: adjoin F (range b) = ⊤
-  证明: toSubalgebra_injective Subalgebra.toSubmodule_injective top_unique
-(Basis.span_eq b).ge.trans (Algebra.span_le_adjoin F _).trans algebra_adjoin_le_adjoin _ _
-
-Depends on / 依赖: Algebra, Algebra.span_le_adjoin, Basis.span_eq, OreLocalization, OreLocalization.ind, OreLocalization.one_def, Subalgebra, Subalgebra.toSubmodule_injective, algebra_adjoin_le_adjoin, ge.trans, mul_smul, one_def, one_smul, smul_assoc, smul_eq_mul, smul_one_oreDiv_one_smul, span_eq, span_le_adjoin, toSubalgebra_injective, toSubmodule_injective
+/-
+**Field.Emb.Cardinal.adjoin_basis_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Ca
+rdinal`。
+形式化陈述：adjoin_basis_eq_top : adjoin F (range b) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntermediateField.toSubalgebra_injective`：toSubalgebra_injective : Funct
+ion.Injective (toSubalgebra : IntermediateField K L -> _)
+· 使用定理 `Subalgebra.toSubmodule_injective`：toSubmodule_injective : Function.Injec
+tive (toSubmodule : Subalgebra R A -> Submodule R A)
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
+· 使用定理 `Algebra.span_le_adjoin`：span_le_adjoin (s : Set A) : span R s <= Subalge
+bra.toSubmodule (adjoin R s)
+· 使用定理 `IntermediateField.algebra_adjoin_le_adjoin`：algebra_adjoin_le_adjoin : A
+lgebra.adjoin F S <= (adjoin F S).toSubalgebra
 -/
 theorem adjoin_basis_eq_top : adjoin F (range b) = ⊤ :=
-toSubalgebra_injective Subalgebra.toSubmodule_injective top_unique
-(Basis.span_eq b).ge.trans (Algebra.span_le_adjoin F _).trans algebra_adjoin_le_adjoin _ _
+  toSubalgebra_injective <| Subalgebra.toSubmodule_injective <| top_unique <|
+    (Basis.span_eq b).ge.trans <| (Algebra.span_le_adjoin F _).trans <| algebra_adjoin_le_adjoin _ _
 
 section Algebraic
 
-variable [rank_inf : Fact (ℵ₀ <= Module.rank F E)]
+variable [rank_inf : Fact (ℵ₀ ≤ Module.rank F E)]
 
-/--
-lemma `noMaxOrder_rank_toType` / 引理 `noMaxOrder_rank_toType`
-
-English:
-lemma noMaxOrder_rank_toType
-  statement: NoMaxOrder ι
-  proof: Cardinal.noMaxOrder Fact.out
-
-中文:
-引理 noMaxOrder_rank_toType
-  结论: NoMax序 ι
-  证明: Cardinal.noMaxOrder Fact.out
-
-Depends on / 依赖: Cardinal, Cardinal.noMaxOrder, Fact.out, noMaxOrder
+/-
+**Field.Emb.Cardinal.noMaxOrder_rank_toType** 是 Mathlib 中的一个引理，位于命名空间 `Field.Emb
+.Cardinal`。
+形式化陈述：noMaxOrder_rank_toType : NoMaxOrder ι
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.noMaxOrder`：noMaxOrder {c} (h : ℵ₀ <= c) : NoMaxOrder c.ord.ToT
+ype
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
 -/
 lemma noMaxOrder_rank_toType : NoMaxOrder ι := Cardinal.noMaxOrder Fact.out
 attribute [local instance] noMaxOrder_rank_toType
@@ -164,83 +152,43 @@ open _root_.Algebra (IsAlgebraic)
 variable [IsAlgebraic F E]
 
 variable (F E) in
-/--
-Definition of `leastExt` / `leastExt` 的定义
+/-- `leastExt i` is defined to be the smallest `k : ι` that generates a nontrivial extension over
+(i.e. does not lie in) the subalgebra (= intermediate field) generated by all previous
+`leastExt j`, `j < i`. For cardinality reasons, such `k` always exist if `ι` is infinite. -/
+/-
+**Field.Emb.Cardinal.leastExt** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：leastExt : ι -> ι
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leastExt
-  signature: : ι -> ι
-  body: wellFounded_lt.fix fun i ih =>
-    let s := range fun j : Iio i => b (ih j j.2)
-wellFounded_lt.min {k | b k ∉ adjoin F s} by
-      rw [← compl_ofPred]; rw [nonempty_compl]; by_contra!
-      simp_rw [eq_univ_iff_forall, mem_ofPred] at this
-      have := adjoin_le_iff.mpr (range_subset_iff.mpr this)
-      rw [adjoin_basis_eq_top]; rw [← eq_top_iff] at this
-      apply_fun Module.rank F at this
-      refine ne_of_lt ?_ this
-      conv_rhs => rw [topEquiv.toLinearEquiv.rank_eq]
-      have := mk_Iio_lt i (by simp)
-      rw [mk_toType]; rw [card_ord] at this
-      obtain eq | lt := rank_inf.out.eq_or_lt
-      · simp_rw [← eq, mk_lt_aleph0_iff] at this
-        have : FiniteDimensional F (adjoin F s) :=
-          finiteDimensional_adjoin fun x _ => (IsAlgebraic.isAlgebraic x).isIntegral
-        exact (Module.rank_lt_aleph0 _ _).trans_eq eq
-      · exact (Subalgebra.equivOfEq _ _ <| adjoin_toSubalgebra_of_isAlgebraic
-          fun x _ => IsAlgebraic.isAlgebraic x) |>.toLinearEquiv.rank_eq.trans_lt <|
-          (Algebra.rank_adjoin_le _).trans_lt (max_lt (mk_range_le.trans_lt this) lt)
-
-local notation "φ" => leastExt F E
-
-中文:
-定义 leastExt
-  签名: : ι -> ι
-  定义体: wellFounded_lt.fix fun i ih =>
-    let s := range fun j : Iio i => b (ih j j.2)
-wellFounded_lt.min {k | b k ∉ adjoin F s} by
-      rw [← compl_ofPred]; rw [nonempty_compl]; by_contra!
-      simp_rw [eq_univ_iff_forall, mem_ofPred] at this
-      have := adjoin_le_iff.mpr (range_subset_iff.mpr this)
-      rw [adjoin_basis_eq_top]; rw [← eq_top_iff] at this
-      apply_fun Module.rank F at this
-      refine ne_of_lt ?_ this
-      conv_rhs => rw [topEquiv.toLinearEquiv.rank_eq]
-      have := mk_Iio_lt i (by simp)
-      rw [mk_toType]; rw [card_ord] at this
-      obtain eq | lt := rank_inf.out.eq_or_lt
-      · simp_rw [← eq, mk_lt_aleph0_iff] at this
-        have : FiniteDimensional F (adjoin F s) :=
-          finiteDimensional_adjoin fun x _ => (IsAlgebraic.isAlgebraic x).isIntegral
-        exact (Module.rank_lt_aleph0 _ _).trans_eq eq
-      · exact (Subalgebra.equivOfEq _ _ <| adjoin_toSubalgebra_of_isAlgebraic
-          fun x _ => IsAlgebraic.isAlgebraic x) |>.toLinearEquiv.rank_eq.trans_lt <|
-          (Algebra.rank_adjoin_le _).trans_lt (max_lt (mk_range_le.trans_lt this) lt)
-
-local notation "φ" => leastExt F E
-
-Depends on / 依赖: Module, Module.rank, adjoin, adjoin_basis_eq_top, adjoin_le_iff, adjoin_le_iff.mpr, apply_fun, card_ord, compl_ofPred, conv_rhs, eq_top_iff, eq_univ_iff_forall, mem_ofPred, mk_Iio_lt, mk_toType, ne_of_lt, nonempty_compl, range_subset_iff, range_subset_iff.mpr, rank_eq
+--- 原说明 ---
+`leastExt i` is defined to be the smallest `k : ι` that generates a nontrivial e
+xtension over
+(i.e. does not lie in) the subalgebra (= intermediate field) generated by all pr
+evious
+`leastExt j`, `j < i`. For cardinality reasons, such `k` always exist if `ι` is 
+infinite.
 -/
-def leastExt : ι -> ι :=
-  wellFounded_lt.fix fun i ih =>
-    let s := range fun j : Iio i => b (ih j j.2)
-wellFounded_lt.min {k | b k ∉ adjoin F s} by
-      rw [← compl_ofPred]; rw [nonempty_compl]; by_contra!
+def leastExt : ι → ι :=
+  wellFounded_lt.fix fun i ih ↦
+    let s := range fun j : Iio i ↦ b (ih j j.2)
+    wellFounded_lt.min {k | b k ∉ adjoin F s} <| by
+      rw [← compl_ofPred, nonempty_compl]; by_contra!
       simp_rw [eq_univ_iff_forall, mem_ofPred] at this
       have := adjoin_le_iff.mpr (range_subset_iff.mpr this)
-      rw [adjoin_basis_eq_top]; rw [← eq_top_iff] at this
+      rw [adjoin_basis_eq_top, ← eq_top_iff] at this
       apply_fun Module.rank F at this
       refine ne_of_lt ?_ this
       conv_rhs => rw [topEquiv.toLinearEquiv.rank_eq]
       have := mk_Iio_lt i (by simp)
-      rw [mk_toType]; rw [card_ord] at this
+      rw [mk_toType, card_ord] at this
       obtain eq | lt := rank_inf.out.eq_or_lt
       · simp_rw [← eq, mk_lt_aleph0_iff] at this
         have : FiniteDimensional F (adjoin F s) :=
-          finiteDimensional_adjoin fun x _ => (IsAlgebraic.isAlgebraic x).isIntegral
+          finiteDimensional_adjoin fun x _ ↦ (IsAlgebraic.isAlgebraic x).isIntegral
         exact (Module.rank_lt_aleph0 _ _).trans_eq eq
       · exact (Subalgebra.equivOfEq _ _ <| adjoin_toSubalgebra_of_isAlgebraic
-          fun x _ => IsAlgebraic.isAlgebraic x) |>.toLinearEquiv.rank_eq.trans_lt <|
+          fun x _ ↦ IsAlgebraic.isAlgebraic x) |>.toLinearEquiv.rank_eq.trans_lt <|
           (Algebra.rank_adjoin_le _).trans_lt (max_lt (mk_range_le.trans_lt this) lt)
 
 local notation "φ" => leastExt F E
@@ -248,330 +196,360 @@ local notation "φ" => leastExt F E
 section
 local notation "E⟮<" i "⟯" => adjoin F (b ∘ φ '' Iio i)
 
-/--
-theorem `isLeast_leastExt` / 定理 `isLeast_leastExt`
-
-English:
-theorem isLeast_leastExt
-  given: (i : ι)
-  statement: IsLeast {k | b k ∉ E⟮<i⟯} (φ i)
-  proof: by
-  rw [image_eq_range]; rw [leastExt]; rw [wellFounded_lt.fix_eq]
-  exact ⟨wellFounded_lt.min_mem _ _, fun _ => (wellFounded_lt.min_le ·)⟩
-
-中文:
-定理 isLeast_leastExt
-  条件: (i : ι)
-  结论: IsLeast {k | b k ∉ E⟮<i⟯} (φ i)
-  证明: by
-  rw [image_eq_range]; rw [leastExt]; rw [wellFounded_lt.fix_eq]
-  exact ⟨wellFounded_lt.min_mem _ _, fun _ => (wellFounded_lt.min_le ·)⟩
-
-Depends on / 依赖: fix_eq, image_eq_range, leastExt, min_le, min_mem, wellFounded_lt, wellFounded_lt.fix_eq, wellFounded_lt.min_le, wellFounded_lt.min_mem
+/-
+**Field.Emb.Cardinal.isLeast_leastExt** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Cardi
+nal`。
+形式化陈述：isLeast_leastExt (i : ι) : IsLeast {k | b k ∉ E⟮<i⟯} (φ i)
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_eq_range`：image_eq_range (f : α -> β) (s : Set α) : f '' s = r
+ange fun x : s => f x
+· 使用定理 `Field.Emb.Cardinal.leastExt.eq_1`：∀ (F : Type u) (E : Type v) [inst : Fi
+eld F] [inst_1 : Field E] [inst_2 : Algebra F E]   [rank_inf : Fact (Cardinal.al
+eph0 ≤ Module.rank F E…
+· 使用引理 `wellFounded_lt`：wellFounded_lt [LT α] [WellFoundedLT α] : @WellFounded α
+ (· < ·)
+· 使用定理 `WellFounded.fix_eq`：∀ {α : Sort u} {C : α → Sort v} {r : α → α → Prop} (
+hwf : WellFounded r) (F : (x : α) → ((y : α) → r y x → C y) → C x)   (x : α), hw
+f.fix F …
+· 使用定理 `WellFounded.min_mem`：min_mem {r : α -> α -> Prop} (H : WellFounded r) (s
+ : Set α) (h : s.Nonempty) : H.min s h in s
+· 使用定理 `WellFounded.min_le`：WellFounded.min_le (h : WellFounded ((· < ·) : β -> 
+β -> Prop)) {x : β} {s : Set β} (hx : x in s) : h.min s ⟨x, hx⟩ <= x
 -/
 theorem isLeast_leastExt (i : ι) : IsLeast {k | b k ∉ E⟮<i⟯} (φ i) := by
-  rw [image_eq_range]; rw [leastExt]; rw [wellFounded_lt.fix_eq]
-  exact ⟨wellFounded_lt.min_mem _ _, fun _ => (wellFounded_lt.min_le ·)⟩
-
-/--
-theorem `strictMono_leastExt` / 定理 `strictMono_leastExt`
-
-English:
-theorem strictMono_leastExt
-  statement: StrictMono φ
-  proof: fun i j h => by
-  have least := isLeast_leastExt (F := F) (E := E)
-  by_contra!
-  obtain eq | lt := this.eq_or_lt
-  · exact (least j).1 (subset_adjoin _ _ ⟨i, h, congr_arg b eq.symm⟩)
-  · refine ((least i).2 <| mt (adjoin.mono _ _ _ (image_mono ?_) ·) (least j).1).not_gt lt
-    exact fun k (hk : k < i) => hk.trans h
-
-中文:
-定理 strictMono_leastExt
-  结论: 严格递增 φ
-  证明: fun i j h => by
-  have least := isLeast_leastExt (F := F) (E := E)
-  by_contra!
-  obtain eq | lt := this.eq_or_lt
-  · exact (least j).1 (subset_adjoin _ _ ⟨i, h, congr_arg b eq.symm⟩)
-  · refine ((least i).2 <| mt (adjoin.mono _ _ _ (image_mono ?_) ·) (least j).1).not_gt lt
-    exact fun k (hk : k < i) => hk.trans h
-
-Depends on / 依赖: adjoin, adjoin.mono, congr_arg, eq.symm, eq_or_lt, hk.trans, image_mono, isLeast_leastExt, not_gt, subset_adjoin, this.eq_or_lt
+  rw [image_eq_range, leastExt, wellFounded_lt.fix_eq]
+  exact ⟨wellFounded_lt.min_mem _ _, fun _ ↦ (wellFounded_lt.min_le ·)⟩
+/-
+**Field.Emb.Cardinal.strictMono_leastExt** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Ca
+rdinal`。
+形式化陈述：strictMono_leastExt : StrictMono φ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Field.Emb.Cardinal.isLeast_leastExt`：isLeast_leastExt (i : ι) : IsLeast 
+{k | b k ∉ E⟮<i⟯} (φ i)
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IntermediateField.subset_adjoin`：subset_adjoin : S subseteq adjoin F S
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `IntermediateField.adjoin.mono`：∀ (F : Type u_1) [inst : Field F] {E : Ty
+pe u_2} [inst_1 : Field E] [inst_2 : Algebra F E] (S T : Set E),   S ⊆ T → Inter
+mediateField.adjoin…
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
 -/
-theorem strictMono_leastExt : StrictMono φ := fun i j h => by
+theorem strictMono_leastExt : StrictMono φ := fun i j h ↦ by
   have least := isLeast_leastExt (F := F) (E := E)
   by_contra!
   obtain eq | lt := this.eq_or_lt
   · exact (least j).1 (subset_adjoin _ _ ⟨i, h, congr_arg b eq.symm⟩)
   · refine ((least i).2 <| mt (adjoin.mono _ _ _ (image_mono ?_) ·) (least j).1).not_gt lt
-    exact fun k (hk : k < i) => hk.trans h
-
-/--
-theorem `adjoin_image_leastExt` / 定理 `adjoin_image_leastExt`
-
-English:
-theorem adjoin_image_leastExt
-  given: (i : ι)
-  statement: E⟮<i⟯ = adjoin F (b '' Iio (φ i))
-  proof: by
-  refine le_antisymm (adjoin.mono _ _ _ ?_) (adjoin_le_iff.mpr ?_)
-  · rw [image_comp]; apply image_mono; rintro _ ⟨j, hj, rfl⟩; exact strictMono_leastExt hj
-  · rintro _ ⟨j, hj, rfl⟩; contrapose hj; exact ((isLeast_leastExt i).2 hj).not_gt
-
-中文:
-定理 adjoin_image_leastExt
-  条件: (i : ι)
-  结论: E⟮<i⟯ = adjoin F (b '' 左无界右开区间 (φ i))
-  证明: by
-  refine le_antisymm (adjoin.mono _ _ _ ?_) (adjoin_le_iff.mpr ?_)
-  · rw [image_comp]; apply image_mono; rintro _ ⟨j, hj, rfl⟩; exact strictMono_leastExt hj
-  · rintro _ ⟨j, hj, rfl⟩; contrapose hj; exact ((isLeast_leastExt i).2 hj).not_gt
-
-Depends on / 依赖: adjoin, adjoin.mono, adjoin_le_iff, adjoin_le_iff.mpr, contrapose, image_comp, image_mono, isLeast_leastExt, le_antisymm, not_gt, strictMono_leastExt
+    exact fun k (hk : k < i) ↦ hk.trans h
+/-
+**Field.Emb.Cardinal.adjoin_image_leastExt** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.
+Cardinal`。
+形式化陈述：adjoin_image_leastExt (i : ι) : E⟮<i⟯ = adjoin F (b '' Iio (φ i))
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IntermediateField.adjoin.mono`：∀ (F : Type u_1) [inst : Field F] {E : Ty
+pe u_2} [inst_1 : Field E] [inst_2 : Algebra F E] (S T : Set E),   S ⊆ T → Inter
+mediateField.adjoin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Field.Emb.Cardinal.strictMono_leastExt`：strictMono_leastExt : StrictMono
+ φ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IntermediateField.adjoin_le_iff`：adjoin_le_iff {S : Set E} {T : Intermed
+iateField F E} : adjoin F S <= T ↔ S subseteq T
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Field.Emb.Cardinal.isLeast_leastExt`：isLeast_leastExt (i : ι) : IsLeast 
+{k | b k ∉ E⟮<i⟯} (φ i)
 -/
 theorem adjoin_image_leastExt (i : ι) : E⟮<i⟯ = adjoin F (b '' Iio (φ i)) := by
   refine le_antisymm (adjoin.mono _ _ _ ?_) (adjoin_le_iff.mpr ?_)
   · rw [image_comp]; apply image_mono; rintro _ ⟨j, hj, rfl⟩; exact strictMono_leastExt hj
   · rintro _ ⟨j, hj, rfl⟩; contrapose hj; exact ((isLeast_leastExt i).2 hj).not_gt
-
-/--
-theorem `iSup_adjoin_eq_top` / 定理 `iSup_adjoin_eq_top`
-
-English:
-theorem iSup_adjoin_eq_top
-  statement: ⨆ i : ι, E⟮<i⟯ = ⊤
-  proof: by
-  simp_rw [adjoin_image_leastExt, eq_top_iff, ← adjoin_basis_eq_top, adjoin_le_iff]
-  rintro _ ⟨i, rfl⟩
-  refine le_iSup (α := IntermediateField F E) _ (i⁺) (subset_adjoin _ _ ⟨i, ?_, rfl⟩)
-  exact (lt_succ i).trans_le strictMono_leastExt.le_apply
-
-中文:
-定理 iSup_adjoin_eq_top
-  结论: ⨆ i : ι, E⟮<i⟯ = ⊤
-  证明: by
-  simp_rw [adjoin_image_leastExt, eq_top_iff, ← adjoin_basis_eq_top, adjoin_le_iff]
-  rintro _ ⟨i, rfl⟩
-  refine le_iSup (α := IntermediateField F E) _ (i⁺) (subset_adjoin _ _ ⟨i, ?_, rfl⟩)
-  exact (lt_succ i).trans_le strictMono_leastExt.le_apply
-
-Depends on / 依赖: IntermediateField, adjoin_basis_eq_top, adjoin_image_leastExt, adjoin_le_iff, eq_top_iff, le_apply, le_iSup, lt_succ, simp_rw, strictMono_leastExt, strictMono_leastExt.le_apply, subset_adjoin, trans_le
+/-
+**Field.Emb.Cardinal.iSup_adjoin_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Car
+dinal`。
+形式化陈述：iSup_adjoin_eq_top : ⨆ i : ι, E⟮<i⟯ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Field.Emb.Cardinal.adjoin_image_leastExt`：adjoin_image_leastExt (i : ι) 
+: E⟮<i⟯ = adjoin F (b '' Iio (φ i))
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `IntermediateField.subset_adjoin`：subset_adjoin : S subseteq adjoin F S
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用引理 `Field.Emb.Cardinal.noMaxOrder_rank_toType`：noMaxOrder_rank_toType : NoMa
+xOrder ι
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
+· 使用定理 `Field.Emb.Cardinal.strictMono_leastExt`：strictMono_leastExt : StrictMono
+ φ
 -/
 theorem iSup_adjoin_eq_top : ⨆ i : ι, E⟮<i⟯ = ⊤ := by
   simp_rw [adjoin_image_leastExt, eq_top_iff, ← adjoin_basis_eq_top, adjoin_le_iff]
   rintro _ ⟨i, rfl⟩
   refine le_iSup (α := IntermediateField F E) _ (i⁺) (subset_adjoin _ _ ⟨i, ?_, rfl⟩)
   exact (lt_succ i).trans_le strictMono_leastExt.le_apply
-
-/--
-theorem `strictMono_filtration` / 定理 `strictMono_filtration`
-
-English:
-theorem strictMono_filtration
-  statement: StrictMono (E⟮<·⟯)
-  proof: fun i _ h => ⟨adjoin.mono _ _ _ (image_mono <| Iio_subset_Iio h.le),
-    fun incl => (isLeast_leastExt i).1 (incl <| subset_adjoin _ _ ⟨i, h, rfl⟩)⟩
-
-中文:
-定理 strictMono_filtration
-  结论: 严格递增 (E⟮<·⟯)
-  证明: fun i _ h => ⟨adjoin.mono _ _ _ (image_mono <| Iio_subset_Iio h.le),
-    fun incl => (isLeast_leastExt i).1 (incl <| subset_adjoin _ _ ⟨i, h, rfl⟩)⟩
-
-Depends on / 依赖: Iio_subset_Iio, adjoin, adjoin.mono, h.le, image_mono, isLeast_leastExt, subset_adjoin
+/-
+**Field.Emb.Cardinal.strictMono_filtration** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.
+Cardinal`。
+形式化陈述：strictMono_filtration : StrictMono (E⟮<·⟯)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntermediateField.adjoin.mono`：∀ (F : Type u_1) [inst : Field F] {E : Ty
+pe u_2} [inst_1 : Field E] [inst_2 : Algebra F E] (S T : Set E),   S ⊆ T → Inter
+mediateField.adjoin…
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Set.Iio_subset_Iio`：Iio_subset_Iio (h : a <= b) : Iio a subseteq Iio b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Field.Emb.Cardinal.isLeast_leastExt`：isLeast_leastExt (i : ι) : IsLeast 
+{k | b k ∉ E⟮<i⟯} (φ i)
+· 使用定理 `IntermediateField.subset_adjoin`：subset_adjoin : S subseteq adjoin F S
 -/
 theorem strictMono_filtration : StrictMono (E⟮<·⟯) :=
-  fun i _ h => ⟨adjoin.mono _ _ _ (image_mono <| Iio_subset_Iio h.le),
-    fun incl => (isLeast_leastExt i).1 (incl <| subset_adjoin _ _ ⟨i, h, rfl⟩)⟩
-
-/--
-theorem `filtration_succ` / 定理 `filtration_succ`
-
-English:
-theorem filtration_succ
-  given: (i : ι)
-  statement: E⟮<i⁺⟯ = E⟮<i⟯⟮b (φ i)⟯.restrictScalars F
-  proof: by
-  rw [Iio_succ]; rw [← Iio_insert]; rw [image_insert_eq]; rw [← union_singleton]; rw [adjoin_adjoin_left]; rfl
-
-local notation "X" i => Field.Emb (E⟮<i⟯) E⟮<i⟯⟮b (φ i)⟯
-
-中文:
-定理 filtration_succ
-  条件: (i : ι)
-  结论: E⟮<i⁺⟯ = E⟮<i⟯⟮b (φ i)⟯.restrictScalars F
-  证明: by
-  rw [Iio_succ]; rw [← Iio_insert]; rw [image_insert_eq]; rw [← union_singleton]; rw [adjoin_adjoin_left]; rfl
-
-local notation "X" i => Field.Emb (E⟮<i⟯) E⟮<i⟯⟮b (φ i)⟯
-
-Depends on / 依赖: Iio_insert, Iio_succ, adjoin_adjoin_left, image_insert_eq, union_singleton
+  fun i _ h ↦ ⟨adjoin.mono _ _ _ (image_mono <| Iio_subset_Iio h.le),
+    fun incl ↦ (isLeast_leastExt i).1 (incl <| subset_adjoin _ _ ⟨i, h, rfl⟩)⟩
+/-
+**Field.Emb.Cardinal.filtration_succ** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Cardin
+al`。
+形式化陈述：filtration_succ (i : ι) : E⟮<i⁺⟯ = E⟮<i⟯⟮b (φ i)⟯.restrictScalars F
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.Iio_succ`：Iio_succ (a : α) : Iio (succ a) = Iic a
+· 使用引理 `Field.Emb.Cardinal.noMaxOrder_rank_toType`：noMaxOrder_rank_toType : NoMa
+xOrder ι
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Iio_insert`：Iio_insert : insert a (Iio a) = Iic a
+· 使用定理 `Set.image_insert_eq`：image_insert_eq {f : α -> β} {a : α} {s : Set α} : 
+f '' insert a s = insert (f a) (f '' s)
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `IntermediateField.adjoin_adjoin_left`：adjoin_adjoin_left (T : Set E) : (
+adjoin (adjoin F S) T).restrictScalars _ = adjoin F (S union T)
 -/
 theorem filtration_succ (i : ι) : E⟮<i⁺⟯ = E⟮<i⟯⟮b (φ i)⟯.restrictScalars F := by
-  rw [Iio_succ]; rw [← Iio_insert]; rw [image_insert_eq]; rw [← union_singleton]; rw [adjoin_adjoin_left]; rfl
+  rw [Iio_succ, ← Iio_insert, image_insert_eq, ← union_singleton, adjoin_adjoin_left]; rfl
 
-local notation "X" i => Field.Emb (E⟮<i⟯) E⟮<i⟯⟮b (φ i)⟯
+local notation "X" i => Field.Emb (E⟮<i⟯) <| E⟮<i⟯⟮b (φ i)⟯
 
-/--
-Definition of `succEquiv` / `succEquiv` 的定义
+/-- Each embedding of `E⟮<i⟯` into `Ē` extend to `#(X i)` embeddings of `E⟮<i⁺⟯`. -/
+/-
+**Field.Emb.Cardinal.succEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：succEquiv (i : ι) : (E⟮<i⁺⟯ ->ₐ[F] Ē) ≃ (E⟮<i⟯ ->ₐ[F] Ē) × X i
+参数：i : ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Field.Emb.Cardinal.filtration_succ`：filtration_succ (i : ι) : E⟮<i⁺⟯ = E
+⟮<i⟯⟮b (φ i)⟯.restrictScalars F
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition succEquiv
-  signature: (i : ι)
-  body: (((show _ ≃ₐ[F] E⟮<i⟯⟮b (φ i)⟯ from equivOfEq (filtration_succ i))).arrowCongr .refl).trans
-algHomEquivSigma (B := E⟮<i⟯).trans .sigmaEquivProdOfEquiv fun _ =>
-      (@Field.embEquivOfIsAlgClosed _ _ _ _ _ _ _ (_) <|
-        (Algebra.IsAlgebraic.tower_top (K := F) _).of_injective (val _) Subtype.val_injective).symm
-
-中文:
-定义 succEquiv
-  签名: (i : ι)
-  定义体: (((show _ ≃ₐ[F] E⟮<i⟯⟮b (φ i)⟯ from equivOfEq (filtration_succ i))).arrowCongr .refl).trans
-algHomEquivSigma (B := E⟮<i⟯).trans .sigmaEquivProdOfEquiv fun _ =>
-      (@Field.embEquivOfIsAlgClosed _ _ _ _ _ _ _ (_) <|
-        (Algebra.IsAlgebraic.tower_top (K := F) _).of_injective (val _) Subtype.val_injective).symm
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic.tower_top, Field.embEquivOfIsAlgClosed, IsAlgebraic, Subtype, Subtype.val_injective, algHomEquivSigma, arrowCongr, embEquivOfIsAlgClosed, equivOfEq, filtration_succ, of_injective, sigmaEquivProdOfEquiv, tower_top, val_injective
+--- 原说明 ---
+Each embedding of `E⟮<i⟯` into `Ē` extend to `#(X i)` embeddings of `E⟮<i⁺⟯`.
 -/
-def succEquiv (i : ι) : (E⟮<i⁺⟯ ->ₐ[F] Ē) ≃ (E⟮<i⟯ ->ₐ[F] Ē) × X i :=
-(((show _ ≃ₐ[F] E⟮<i⟯⟮b (φ i)⟯ from equivOfEq (filtration_succ i))).arrowCongr .refl).trans
-algHomEquivSigma (B := E⟮<i⟯).trans .sigmaEquivProdOfEquiv fun _ =>
+def succEquiv (i : ι) : (E⟮<i⁺⟯ →ₐ[F] Ē) ≃ (E⟮<i⟯ →ₐ[F] Ē) × X i :=
+  (((show _ ≃ₐ[F] E⟮<i⟯⟮b (φ i)⟯ from equivOfEq (filtration_succ i))).arrowCongr .refl).trans <|
+    algHomEquivSigma (B := E⟮<i⟯).trans <| .sigmaEquivProdOfEquiv fun _ ↦
       (@Field.embEquivOfIsAlgClosed _ _ _ _ _ _ _ (_) <|
         (Algebra.IsAlgebraic.tower_top (K := F) _).of_injective (val _) Subtype.val_injective).symm
-
-/--
-theorem `succEquiv_coherence` / 定理 `succEquiv_coherence`
-
-English:
-theorem succEquiv_coherence
-  given: (i : ι) (f)
-  statement: (succEquiv i f).1 =
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 succEquiv_coherence
-  条件: (i : ι) (f)
-  结论: (succEquiv i f).1 =
-  证明: by
-  ext
-  rfl
+/-
+**Field.Emb.Cardinal.succEquiv_coherence** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Ca
+rdinal`。
+形式化陈述：succEquiv_coherence (i : ι) (f) : (succEquiv i f).1 = f.comp (Subalgebra.i
+nclusion <| strictMono_filtration.monotone <| le_succ i)
+参数：i : ι；f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `Field.Emb.Cardinal.strictMono_filtration`：strictMono_filtration : Strict
+Mono (E⟮<·⟯)
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
 -/
 theorem succEquiv_coherence (i : ι) (f) : (succEquiv i f).1 =
     f.comp (Subalgebra.inclusion <| strictMono_filtration.monotone <| le_succ i) := by
   ext
   rfl
-
+/-
+**Field.Emb.Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Field.Emb.Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : ι) : FiniteDimensional (E⟮<i⟯) (E⟮<i⟯⟮b (φ i)⟯) :=
   adjoin.finiteDimensional ((Algebra.IsAlgebraic.tower_top (K := F) _).isAlgebraic _).isIntegral
-
-/--
-theorem `deg_lt_aleph0` / 定理 `deg_lt_aleph0`
-
-English:
-theorem deg_lt_aleph0
-  given: (i : ι)
-  statement: #(X i) < ℵ₀
-  proof: lt_aleph0_of_finite _
-
-中文:
-定理 deg_lt_aleph0
-  条件: (i : ι)
-  结论: #(X i) < ℵ₀
-  证明: lt_aleph0_of_finite _
-
-Depends on / 依赖: lt_aleph0_of_finite
+/-
+**Field.Emb.Cardinal.deg_lt_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Cardinal
+`。
+形式化陈述：deg_lt_aleph0 (i : ι) : #(X i) < ℵ₀
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.lt_aleph0_of_finite`：lt_aleph0_of_finite (α : Type u) [Finite α
+] : #α < ℵ₀
+· 使用定理 `instFiniteAlgHomOfFinite`：∀ (R : Type u_1) [inst : CommSemiring R] (K : 
+Type u_2) [inst_1 : Field K] [inst_2 : Algebra R K] (S : Type u_3)   [inst_3 : S
+emiring S] [in…
+· 使用定理 `Field.Emb.Cardinal.instFiniteDimensionalSubtypeMemIntermediateFieldAdjoi
+nImageToTypeOrdRankCompCoeBasisWellOrderedBasisLeastExtIioSingletonSet`：∀ {F : T
+ype u} {E : Type v} [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E]  
+ [rank_inf : Fact (Cardinal.aleph0 ≤ Module.rank F E…
 -/
 theorem deg_lt_aleph0 (i : ι) : #(X i) < ℵ₀ :=
   lt_aleph0_of_finite _
 
 open WithTop in
-/--
-Definition of `filtration` / `filtration` 的定义
+/-- Extend the family `E⟮<i⟯, i : ι` by adjoining a top element. -/
+/-
+**Field.Emb.Cardinal.filtration** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：{F : Type u} →   {E : Type v} →     [inst : Field F] →       [inst_1 : Fie
+ld E] →         [inst_2 : Algebra F E] →           [rank_inf : Fact (Cardinal.al
+eph0 ≤ Module.rank F E)] →             [Algebra.IsAlgebraic F E] → WithTop (Modu
+le.rank F E).ord.ToType ↪o IntermediateField F E
+参数：Cardinal.aleph0 ≤ Module.rank F E；Module.rank F E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition filtration
-  signature: : WithTop ι ↪o IntermediateField F E
-  body: .ofStrictMono (fun i => i.recTopCoe ⊤ (E⟮<·⟯)) fun i j h => by
-    cases j
-    · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp h.ne
-      exact ⟨le_top, fun incl => (isLeast_leastExt i).1 (incl trivial)⟩
-    · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp (h.trans <| coe_lt_top _).ne
-      exact strictMono_filtration (coe_lt_coe.mp h)
-
-中文:
-定义 filtration
-  签名: : WithTop ι ↪o 中间域 F E
-  定义体: .ofStrictMono (fun i => i.recTopCoe ⊤ (E⟮<·⟯)) fun i j h => by
-    cases j
-    · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp h.ne
-      exact ⟨le_top, fun incl => (isLeast_leastExt i).1 (incl trivial)⟩
-    · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp (h.trans <| coe_lt_top _).ne
-      exact strictMono_filtration (coe_lt_coe.mp h)
+--- 原说明 ---
+Extend the family `E⟮<i⟯, i : ι` by adjoining a top element.
 -/
 @[simps!] def filtration : WithTop ι ↪o IntermediateField F E :=
-  .ofStrictMono (fun i => i.recTopCoe ⊤ (E⟮<·⟯)) fun i j h => by
+  .ofStrictMono (fun i ↦ i.recTopCoe ⊤ (E⟮<·⟯)) fun i j h ↦ by
     cases j
     · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp h.ne
-      exact ⟨le_top, fun incl => (isLeast_leastExt i).1 (incl trivial)⟩
+      exact ⟨le_top, fun incl ↦ (isLeast_leastExt i).1 (incl trivial)⟩
     · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp (h.trans <| coe_lt_top _).ne
       exact strictMono_filtration (coe_lt_coe.mp h)
 
-/--
-Definition of `factor` / `factor` 的定义
+/-- Extend the family `X i := E⟮<i⟯ →ₐ[F] Ē` from `ι` to `WithTop ι`. -/
+/-
+**Field.Emb.Cardinal.factor** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：factor (i : WithTop ι) : Type _
+参数：i : WithTop ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition factor
-  signature: (i : WithTop ι)
-  body: i.recTopCoe PUnit (X ·)
-
-中文:
-定义 factor
-  签名: (i : WithTop ι)
-  定义体: i.recTopCoe PUnit (X ·)
-
-Depends on / 依赖: i.recTopCoe, recTopCoe
+--- 原说明 ---
+Extend the family `X i := E⟮<i⟯ →ₐ[F] Ē` from `ι` to `WithTop ι`.
 -/
 def factor (i : WithTop ι) : Type _ := i.recTopCoe PUnit (X ·)
 
 variable [Algebra.IsSeparable F E]
-
+/-
+**Field.Emb.Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Field.Emb.Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : ι) : Algebra.IsSeparable (E⟮<i⟯) (E⟮<i⟯⟮b (φ i)⟯) :=
   Algebra.isSeparable_tower_bot_of_isSeparable _ _ E
 
 open Field in
-/--
-theorem `two_le_deg` / 定理 `two_le_deg`
-
-English:
-theorem two_le_deg
-  given: (i : ι)
-  statement: 2 <= #(X i)
-  proof: by
-  rw [← Nat.cast_ofNat]; rw [← toNat_le_iff_le_of_lt_aleph0 natCast_lt_aleph0 (deg_lt_aleph0 i)]; rw [toNat_natCast]; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]; rw [Nat.succ_le_iff]
-  by_contra!
-  obtain ⟨x, hx⟩ := finrank_adjoin_simple_eq_one_iff.mp (this.antisymm Module.finrank_pos)
-  refine (isLeast_leastExt i).1 (hx ▸ ?_)
-  exact x.2
-
-中文:
-定理 two_le_deg
-  条件: (i : ι)
-  结论: 2 <= #(X i)
-  证明: by
-  rw [← Nat.cast_ofNat]; rw [← toNat_le_iff_le_of_lt_aleph0 natCast_lt_aleph0 (deg_lt_aleph0 i)]; rw [toNat_natCast]; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]; rw [Nat.succ_le_iff]
-  by_contra!
-  obtain ⟨x, hx⟩ := finrank_adjoin_simple_eq_one_iff.mp (this.antisymm Module.finrank_pos)
-  refine (isLeast_leastExt i).1 (hx ▸ ?_)
-  exact x.2
-
-Depends on / 依赖: Module, Module.finrank_pos, Nat.card, Nat.cast_ofNat, Nat.succ_le_iff, antisymm, cast_ofNat, deg_lt_aleph0, finSepDegree, finSepDegree_eq_finrank_of_isSeparable, finrank_adjoin_simple_eq_one_iff, finrank_adjoin_simple_eq_one_iff.mp, finrank_pos, isLeast_leastExt, natCast_lt_aleph0, succ_le_iff, this.antisymm, toNat_le_iff_le_of_lt_aleph0, toNat_natCast
+/-
+**Field.Emb.Cardinal.two_le_deg** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：two_le_deg (i : ι) : 2 <= #(X i)
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_ofNat`：∀ {R : Type u_1} {n : ℕ} [inst : NatCast R] [inst_1 : n.
+AtLeastTwo], ↑(OfNat.ofNat n) = OfNat.ofNat n
+· 使用定理 `Cardinal.toNat_le_iff_le_of_lt_aleph0`：toNat_le_iff_le_of_lt_aleph0 (hc 
+: c < ℵ₀) (hd : d < ℵ₀) : toNat c <= toNat d ↔ c <= d
+· 使用定理 `Cardinal.natCast_lt_aleph0`：∀ {n : ℕ}, ↑n < Cardinal.aleph0
+· 使用定理 `Field.Emb.Cardinal.deg_lt_aleph0`：deg_lt_aleph0 (i : ι) : #(X i) < ℵ₀
+· 使用定理 `Cardinal.toNat_natCast`：∀ (n : ℕ), Cardinal.toNat ↑n = n
+· 使用定理 `Nat.card.eq_1`：∀ (α : Type u_3), Nat.card α = Cardinal.toNat (Cardinal.m
+k α)
+· 使用定理 `Field.finSepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] [i
+nst_1 : Field E] [inst_2 : Algebra F E],   Field.finSepDegree F E = Nat.card (Fi
+eld.Emb F E)
+· 使用定理 `Field.finSepDegree_eq_finrank_of_isSeparable`：finSepDegree_eq_finrank_of
+_isSeparable [Algebra.IsSeparable F E] : finSepDegree F E = finrank F E
+· 使用定理 `Field.Emb.Cardinal.instIsSeparableSubtypeMemIntermediateFieldAdjoinImage
+ToTypeOrdRankCompCoeBasisWellOrderedBasisLeastExtIioSingletonSet`：∀ {F : Type u}
+ {E : Type v} [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E]   [rank
+_inf : Fact (Cardinal.aleph0 ≤ Module.rank F E…
+· 使用定理 `Nat.succ_le_iff`：∀ {m n : ℕ}, m.succ ≤ n ↔ m < n
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IntermediateField.finrank_adjoin_simple_eq_one_iff`：finrank_adjoin_simpl
+e_eq_one_iff : finrank F F⟮α⟯ = 1 ↔ α in (⊥ : IntermediateField F E)
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Module.finrank_pos`：Module.finrank_pos [IsDomain R] [IsTorsionFree R M] 
+[h : Nontrivial M] : 0 < finrank R M
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Field.Emb.Cardinal.instFiniteDimensionalSubtypeMemIntermediateFieldAdjoi
+nImageToTypeOrdRankCompCoeBasisWellOrderedBasisLeastExtIioSingletonSet`：∀ {F : T
+ype u} {E : Type v} [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E]  
+ [rank_inf : Fact (Cardinal.aleph0 ≤ Module.rank F E…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Field.Emb.Cardinal.isLeast_leastExt`：isLeast_leastExt (i : ι) : IsLeast 
+{k | b k ∉ E⟮<i⟯} (φ i)
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem two_le_deg (i : ι) : 2 <= #(X i) := by
-  rw [← Nat.cast_ofNat]; rw [← toNat_le_iff_le_of_lt_aleph0 natCast_lt_aleph0 (deg_lt_aleph0 i)]; rw [toNat_natCast]; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]; rw [Nat.succ_le_iff]
+theorem two_le_deg (i : ι) : 2 ≤ #(X i) := by
+  rw [← Nat.cast_ofNat, ← toNat_le_iff_le_of_lt_aleph0 natCast_lt_aleph0 (deg_lt_aleph0 i),
+    toNat_natCast, ← Nat.card, ← finSepDegree, finSepDegree_eq_finrank_of_isSeparable,
+    Nat.succ_le_iff]
   by_contra!
   obtain ⟨x, hx⟩ := finrank_adjoin_simple_eq_one_iff.mp (this.antisymm Module.finrank_pos)
   refine (isLeast_leastExt i).1 (hx ▸ ?_)
@@ -582,38 +560,22 @@ end
 local notation "E⟮<" i "⟯" => filtration i
 
 variable (F E) in
-/--
-Definition of `embFunctor` / `embFunctor` 的定义
+/-- The functor on `WithTop ι` given by embeddings of `E⟮<i⟯` into `Ē` -/
+/-
+**Field.Emb.Cardinal.embFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：embFunctor ⦃i j : WithTop ι⦄ (h : i <= j) (f : E⟮<j⟯ ->ₐ[F] Ē) : E⟮<i⟯ ->ₐ
+[F] Ē
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embFunctor
-  signature: ⦃i j
-  body: f.comp (Subalgebra.inclusion <| filtration.monotone h)
-
-中文:
-定义 embFunctor
-  签名: ⦃i j
-  定义体: f.comp (Subalgebra.inclusion <| filtration.monotone h)
-
-Depends on / 依赖: Subalgebra, Subalgebra.inclusion, f.comp, filtration, filtration.monotone, inclusion, monotone
+--- 原说明 ---
+The functor on `WithTop ι` given by embeddings of `E⟮<i⟯` into `Ē`
 -/
-def embFunctor ⦃i j : WithTop ι⦄ (h : i <= j) (f : E⟮<j⟯ ->ₐ[F] Ē) : E⟮<i⟯ ->ₐ[F] Ē :=
+def embFunctor ⦃i j : WithTop ι⦄ (h : i ≤ j) (f : E⟮<j⟯ →ₐ[F] Ē) : E⟮<i⟯ →ₐ[F] Ē :=
   f.comp (Subalgebra.inclusion <| filtration.monotone h)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InverseSystem (embFunctor F E)
-  body: rfl
-  map_map _ _ _ _ _ _ := rfl
-
-中文:
-实例 :
-  签名: InverseSystem (embFunctor F E)
-  定义体: rfl
-  map_map _ _ _ _ _ _ := rfl
+/-
+**Field.Emb.Cardinal.** 是 Mathlib 中的一个实例，位于命名空间 `Field.Emb.Cardinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InverseSystem (embFunctor F E) where
   map_self _ _ := rfl
@@ -622,45 +584,37 @@ instance : InverseSystem (embFunctor F E) where
 set_option backward.privateInPublic true in
 private local instance (i : ι) : Decidable (succ i = i) := .isFalse (lt_succ i).ne'
 
-/--
-Definition of `equivSucc` / `equivSucc` 的定义
+/-- Extend `succEquiv` from `ι` to `WithTop ι`. -/
+/-
+**Field.Emb.Cardinal.equivSucc** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：equivSucc (i : WithTop ι) : (E⟮<i⁺⟯ ->ₐ[F] Ē) ≃ (E⟮<i⟯ ->ₐ[F] Ē) × factor 
+i
+参数：i : WithTop ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition equivSucc
-  signature: (i : WithTop ι)
-  body: i.recTopCoe (((equivOfEq <| by rw [succ_top]).arrowCongr .refl).trans <| .symm <| .prodPUnit _)
-    (succEquiv ·)
-
-中文:
-定义 equivSucc
-  签名: (i : WithTop ι)
-  定义体: i.recTopCoe (((equivOfEq <| by rw [succ_top]).arrowCongr .refl).trans <| .symm <| .prodPUnit _)
-    (succEquiv ·)
-
-Depends on / 依赖: CommMonoid, OreSet, Submonoid, arrowCongr, equivOfEq, i.recTopCoe, oreSetComm, prodPUnit, recTopCoe, succEquiv, succ_top
+--- 原说明 ---
+Extend `succEquiv` from `ι` to `WithTop ι`.
 -/
-def equivSucc (i : WithTop ι) : (E⟮<i⁺⟯ ->ₐ[F] Ē) ≃ (E⟮<i⟯ ->ₐ[F] Ē) × factor i :=
+def equivSucc (i : WithTop ι) : (E⟮<i⁺⟯ →ₐ[F] Ē) ≃ (E⟮<i⟯ →ₐ[F] Ē) × factor i :=
   i.recTopCoe (((equivOfEq <| by rw [succ_top]).arrowCongr .refl).trans <| .symm <| .prodPUnit _)
     (succEquiv ·)
-
-/--
-theorem `equivSucc_coherence` / 定理 `equivSucc_coherence`
-
-English:
-theorem equivSucc_coherence
-  given: (i f)
-  statement: (equivSucc i f).1 = embFunctor F E (le_succ i) f
-  proof: by
-  cases i; exacts [rfl, succEquiv_coherence _ f]
-
-中文:
-定理 equivSucc_coherence
-  条件: (i f)
-  结论: (equivSucc i f).1 = embFunctor F E (le_succ i) f
-  证明: by
-  cases i; exacts [rfl, succEquiv_coherence _ f]
-
-Depends on / 依赖: exacts, succEquiv_coherence
+/-
+**Field.Emb.Cardinal.equivSucc_coherence** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Ca
+rdinal`。
+形式化陈述：equivSucc_coherence (i f) : (equivSucc i f).1 = embFunctor F E (le_succ i)
+ f
+参数：i f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Field.Emb.Cardinal.succEquiv_coherence`：succEquiv_coherence (i : ι) (f) 
+: (succEquiv i f).1 = f.comp (Subalgebra.inclusion <| strictMono_filtration.mono
+tone <| le_succ i)
 -/
 theorem equivSucc_coherence (i f) : (equivSucc i f).1 = embFunctor F E (le_succ i) f := by
   cases i; exacts [rfl, succEquiv_coherence _ f]
@@ -669,211 +623,199 @@ section Lim
 
 variable {i : WithTop (Module.rank F E).ord.ToType} -- WithTop ι doesn't work
 
-/--
-theorem `directed_filtration` / 定理 `directed_filtration`
-
-English:
-theorem directed_filtration
-  statement: Directed (· <= ·) fun j : Iio i => filtration j.1
-  proof: (filtration.monotone.comp <| Subtype.mono_coe _).directed_le
-
-中文:
-定理 directed_filtration
-  结论: Directed (· <= ·) fun j : 左无界右开区间 i => filtration j.1
-  证明: (filtration.monotone.comp <| Subtype.mono_coe _).directed_le
-
-Depends on / 依赖: Subtype, Subtype.mono_coe, directed_le, filtration, filtration.monotone.comp, mono_coe, monotone
+/-
+**Field.Emb.Cardinal.directed_filtration** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Ca
+rdinal`。
+形式化陈述：directed_filtration : Directed (· <= ·) fun j : Iio i => filtration j.1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.directed_le`：Monotone.directed_le [Preorder α] [IsDirectedOrder
+ α] [Preorder β] {f : α -> β} : Monotone f -> Directed (· <= ·) f
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `Monotone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monot
+one…
+· 使用定理 `OrderEmbedding.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorde
+r α] [inst_1 : Preorder β] (f : α ↪o β), Monotone ⇑f
+· 使用定理 `Subtype.mono_coe`：Subtype.mono_coe [Preorder α] (p : α -> Prop) : Monoto
+ne ((↑) : Subtype p -> α)
 -/
-theorem directed_filtration : Directed (· <= ·) fun j : Iio i => filtration j.1 :=
+theorem directed_filtration : Directed (· ≤ ·) fun j : Iio i ↦ filtration j.1 :=
   (filtration.monotone.comp <| Subtype.mono_coe _).directed_le
 
 variable (hi : IsSuccPrelimit i)
 include hi
 
 open WithTop in
-/--
-theorem `iSup_filtration` / 定理 `iSup_filtration`
-
-English:
-theorem iSup_filtration
-  statement: ⨆ j : Iio i, filtration j = filtration i
-  proof: by
-  cases i
-  · rw [← range_coe, iSup_range']; exact iSup_adjoin_eq_top
-  refine (iSup_le fun j => filtration.monotone (mem_Iio.1 j.2).le).antisymm (adjoin_le_iff.2 ?_)
-  rintro _ ⟨j, hj, rfl⟩
-  refine le_iSup (α := IntermediateField F E) _ ⟨j⁺, ?_⟩ (subset_adjoin F _ ?_)
-  exacts [⟨j, lt_succ j, rfl⟩, hi.succ_lt (coe_lt_coe.mpr hj)]
-
-中文:
-定理 iSup_filtration
-  结论: ⨆ j : 左无界右开区间 i, filtration j = filtration i
-  证明: by
-  cases i
-  · rw [← range_coe, iSup_range']; exact iSup_adjoin_eq_top
-  refine (iSup_le fun j => filtration.monotone (mem_Iio.1 j.2).le).antisymm (adjoin_le_iff.2 ?_)
-  rintro _ ⟨j, hj, rfl⟩
-  refine le_iSup (α := IntermediateField F E) _ ⟨j⁺, ?_⟩ (subset_adjoin F _ ?_)
-  exacts [⟨j, lt_succ j, rfl⟩, hi.succ_lt (coe_lt_coe.mpr hj)]
-
-Depends on / 依赖: IntermediateField, adjoin_le_iff, antisymm, coe_lt_coe, coe_lt_coe.mpr, exacts, filtration, filtration.monotone, hi.succ_lt, iSup_adjoin_eq_top, iSup_le, iSup_range, le_iSup, lt_succ, mem_Iio, monotone, range_coe, subset_adjoin, succ_lt
+/-
+**Field.Emb.Cardinal.iSup_filtration** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Cardin
+al`。
+形式化陈述：iSup_filtration : ⨆ j : Iio i, filtration j = filtration i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithTop.range_coe`：range_coe : range (some : α -> WithTop α) = Iio ⊤
+· 使用定理 `iSup_range'`：iSup_range' (g : β -> α) (f : ι -> β) : ⨆ b : range f, g b 
+= ⨆ i, g (f i)
+· 使用定理 `Field.Emb.Cardinal.iSup_adjoin_eq_top`：iSup_adjoin_eq_top : ⨆ i : ι, E⟮<
+i⟯ = ⊤
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `OrderEmbedding.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorde
+r α] [inst_1 : Preorder β] (f : α ↪o β), Monotone ⇑f
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Iio`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Iio
+ b ↔ x < b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IntermediateField.adjoin_le_iff`：adjoin_le_iff {S : Set E} {T : Intermed
+iateField F E} : adjoin F S <= T ↔ S subseteq T
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `Order.IsSuccPrelimit.succ_lt`：∀ {α : Type u_1} {a b : α} [inst : Partial
+Order α] [inst_1 : SuccOrder α],   Order.IsSuccPrelimit b → a < b → Order.succ a
+ < b
+· 使用定理 `WithTop.coe_lt_coe`：∀ {α : Type u_1} {a b : α} [inst : LT α], ↑b < ↑a ↔ 
+b < a
+· 使用定理 `IntermediateField.subset_adjoin`：subset_adjoin : S subseteq adjoin F S
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用引理 `Field.Emb.Cardinal.noMaxOrder_rank_toType`：noMaxOrder_rank_toType : NoMa
+xOrder ι
 -/
 theorem iSup_filtration : ⨆ j : Iio i, filtration j = filtration i := by
   cases i
   · rw [← range_coe, iSup_range']; exact iSup_adjoin_eq_top
-  refine (iSup_le fun j => filtration.monotone (mem_Iio.1 j.2).le).antisymm (adjoin_le_iff.2 ?_)
+  refine (iSup_le fun j ↦ filtration.monotone (mem_Iio.1 j.2).le).antisymm (adjoin_le_iff.2 ?_)
   rintro _ ⟨j, hj, rfl⟩
   refine le_iSup (α := IntermediateField F E) _ ⟨j⁺, ?_⟩ (subset_adjoin F _ ?_)
   exacts [⟨j, lt_succ j, rfl⟩, hi.succ_lt (coe_lt_coe.mpr hj)]
 
 open WithTop
-
-/--
-lemma `eq_bot_of_not_nonempty` / 引理 `eq_bot_of_not_nonempty`
-
-English:
-lemma eq_bot_of_not_nonempty
-  given: (hi : ¬ Nonempty (Iio i))
-  statement: filtration i = ⊥
-  proof: by
-  cases i
-  · have := mk_ne_zero_iff.mp (rank_pos.trans_eq (mk_ord_toType <| Module.rank F E).symm).ne'
-    rw [← range_coe] at hi; exact (hi inferInstance).elim
-· exact bot_unique adjoin_le_iff.mpr fun _ ⟨j, hj, _⟩ => (hi ⟨j, coe_lt_coe.mpr hj⟩).elim
-
-中文:
-引理 eq_bot_of_not_nonempty
-  条件: (hi : ¬ 非空 (左无界右开区间 i))
-  结论: filtration i = ⊥
-  证明: by
-  cases i
-  · have := mk_ne_zero_iff.mp (rank_pos.trans_eq (mk_ord_toType <| Module.rank F E).symm).ne'
-    rw [← range_coe] at hi; exact (hi inferInstance).elim
-· exact bot_unique adjoin_le_iff.mpr fun _ ⟨j, hj, _⟩ => (hi ⟨j, coe_lt_coe.mpr hj⟩).elim
-
-Depends on / 依赖: Module, Module.rank, adjoin_le_iff, adjoin_le_iff.mpr, bot_unique, coe_lt_coe, coe_lt_coe.mpr, mk_ne_zero_iff, mk_ne_zero_iff.mp, mk_ord_toType, range_coe, rank_pos, rank_pos.trans_eq, trans_eq
+/-
+**Field.Emb.Cardinal.eq_bot_of_not_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `Field.Emb
+.Cardinal`。
+形式化陈述：eq_bot_of_not_nonempty (hi : ¬ Nonempty (Iio i)) : filtration i = ⊥
+参数：hi : ¬ Nonempty (Iio i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.mk_ne_zero_iff`：mk_ne_zero_iff {α : Type u} : #α != 0 ↔ Nonempt
+y α
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `rank_pos`：rank_pos [Nontrivial M] : 0 < Module.rank R M
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_ord_toType`：mk_ord_toType (c : Cardinal) : #c.ord.ToType = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithTop.range_coe`：range_coe : range (some : α -> WithTop α) = Iio ⊤
+· 使用定理 `bot_unique`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ → a = ⊥
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IntermediateField.adjoin_le_iff`：adjoin_le_iff {S : Set E} {T : Intermed
+iateField F E} : adjoin F S <= T ↔ S subseteq T
+· 使用定理 `WithTop.coe_lt_coe`：∀ {α : Type u_1} {a b : α} [inst : LT α], ↑b < ↑a ↔ 
+b < a
 -/
 lemma eq_bot_of_not_nonempty (hi : ¬ Nonempty (Iio i)) : filtration i = ⊥ := by
   cases i
   · have := mk_ne_zero_iff.mp (rank_pos.trans_eq (mk_ord_toType <| Module.rank F E).symm).ne'
     rw [← range_coe] at hi; exact (hi inferInstance).elim
-· exact bot_unique adjoin_le_iff.mpr fun _ ⟨j, hj, _⟩ => (hi ⟨j, coe_lt_coe.mpr hj⟩).elim
+  · exact bot_unique <| adjoin_le_iff.mpr fun _ ⟨j, hj, _⟩ ↦ (hi ⟨j, coe_lt_coe.mpr hj⟩).elim
 
 set_option backward.isDefEq.respectTransparency.types false in
 open scoped Classical in
-/--
-Definition of `equivLim` / `equivLim` 的定义
+/-- If `i` is a limit, the type of embeddings of `E⟮<i⟯` into `Ē` is
+the limit of the types of embeddings of `E⟮<j⟯` for `j < i`. -/
+/-
+**Field.Emb.Cardinal.equivLim** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：equivLim : (E⟮<i⟯ ->ₐ[F] Ē) ≃ limit (embFunctor F E) i where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Field.Emb.Cardinal.directed_filtration`：directed_filtration : Directed (
+· <= ·) fun j : Iio i => filtration j.1
+· 使用引理 `Field.Emb.Cardinal.eq_bot_of_not_nonempty`：eq_bot_of_not_nonempty (hi : 
+¬ Nonempty (Iio i)) : filtration i = ⊥
 
-English:
-definition equivLim
-  signature: : (E⟮<i⟯ ->ₐ[F] Ē) ≃ limit (embFunctor F E) i where
-  body: ⟨fun j => embFunctor _ _ (id j.2 : j < i).le f, fun _ _ _ => rfl⟩
-  invFun f := if h : Nonempty (Iio i) then
-    Subalgebra.iSupLift _ directed_filtration f.1
-(fun _ _ h => (f.2 <| filtration.map_rel_iff.mp h).symm) _ by
-        rw [← iSup_filtration hi]; rw [toSubalgebra_iSup_of_directed directed_filtration]
-    else (Algebra.ofId F Ē).comp ((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E)
-  left_inv f := by
-    split_ifs with h
-    · ext ⟨x, hx⟩
-      rw [← iSup_filtration hi]; rw [mem_toSubalgebra]; rw [← SetLike.mem_coe]; rw [coe_iSup_of_directed directed_filtration]; rw [mem_iUnion] at hx
-      rw [Subalgebra.iSupLift_of_mem _ _ (by exact hx.choose_spec)]; rfl
-    · apply AlgHom.ext
-      rw [((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E).forall_congr_left]
-      simp
-right_inv f := Subtype.ext funext fun j => by
-    have := Nonempty.intro j
-    simp_rw [dif_pos this]
-    apply Subalgebra.iSupLift_comp_inclusion
-
-中文:
-定义 equivLim
-  签名: : (E⟮<i⟯ ->ₐ[F] Ē) ≃ limit (embFunctor F E) i where
-  定义体: ⟨fun j => embFunctor _ _ (id j.2 : j < i).le f, fun _ _ _ => rfl⟩
-  invFun f := if h : Nonempty (Iio i) then
-    Subalgebra.iSupLift _ directed_filtration f.1
-(fun _ _ h => (f.2 <| filtration.map_rel_iff.mp h).symm) _ by
-        rw [← iSup_filtration hi]; rw [toSubalgebra_iSup_of_directed directed_filtration]
-    else (Algebra.ofId F Ē).comp ((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E)
-  left_inv f := by
-    split_ifs with h
-    · ext ⟨x, hx⟩
-      rw [← iSup_filtration hi]; rw [mem_toSubalgebra]; rw [← SetLike.mem_coe]; rw [coe_iSup_of_directed directed_filtration]; rw [mem_iUnion] at hx
-      rw [Subalgebra.iSupLift_of_mem _ _ (by exact hx.choose_spec)]; rfl
-    · apply AlgHom.ext
-      rw [((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E).forall_congr_left]
-      simp
-right_inv f := Subtype.ext funext fun j => by
-    have := Nonempty.intro j
-    simp_rw [dif_pos this]
-    apply Subalgebra.iSupLift_comp_inclusion
-
-Depends on / 依赖: embFunctor
+--- 原说明 ---
+If `i` is a limit, the type of embeddings of `E⟮<i⟯` into `Ē` is
+the limit of the types of embeddings of `E⟮<j⟯` for `j < i`.
 -/
-def equivLim : (E⟮<i⟯ ->ₐ[F] Ē) ≃ limit (embFunctor F E) i where
-  toFun f := ⟨fun j => embFunctor _ _ (id j.2 : j < i).le f, fun _ _ _ => rfl⟩
+def equivLim : (E⟮<i⟯ →ₐ[F] Ē) ≃ limit (embFunctor F E) i where
+  toFun f := ⟨fun j ↦ embFunctor _ _ (id j.2 : j < i).le f, fun _ _ _ ↦ rfl⟩
   invFun f := if h : Nonempty (Iio i) then
     Subalgebra.iSupLift _ directed_filtration f.1
-(fun _ _ h => (f.2 <| filtration.map_rel_iff.mp h).symm) _ by
-        rw [← iSup_filtration hi]; rw [toSubalgebra_iSup_of_directed directed_filtration]
+      (fun _ _ h ↦ (f.2 <| filtration.map_rel_iff.mp h).symm) _ <| by
+        rw [← iSup_filtration hi, toSubalgebra_iSup_of_directed directed_filtration]
     else (Algebra.ofId F Ē).comp ((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E)
   left_inv f := by
     split_ifs with h
     · ext ⟨x, hx⟩
-      rw [← iSup_filtration hi]; rw [mem_toSubalgebra]; rw [← SetLike.mem_coe]; rw [coe_iSup_of_directed directed_filtration]; rw [mem_iUnion] at hx
+      rw [← iSup_filtration hi, mem_toSubalgebra, ← SetLike.mem_coe,
+          coe_iSup_of_directed directed_filtration, mem_iUnion] at hx
       rw [Subalgebra.iSupLift_of_mem _ _ (by exact hx.choose_spec)]; rfl
     · apply AlgHom.ext
       rw [((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E).forall_congr_left]
       simp
-right_inv f := Subtype.ext funext fun j => by
+  right_inv f := Subtype.ext <| funext fun j ↦ by
     have := Nonempty.intro j
     simp_rw [dif_pos this]
     apply Subalgebra.iSupLift_comp_inclusion
-
-/--
-theorem `equivLim_coherence` / 定理 `equivLim_coherence`
-
-English:
-theorem equivLim_coherence
-  given: (x l)
-  statement: (equivLim hi x).1 l = embFunctor F E (mem_Iio.mp l.2).le x
-  proof: rfl
-
-中文:
-定理 equivLim_coherence
-  条件: (x l)
-  结论: (equivLim hi x).1 l = embFunctor F E (mem_Iio.mp l.2).le x
-  证明: rfl
+/-
+**Field.Emb.Cardinal.equivLim_coherence** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb.Car
+dinal`。
+形式化陈述：equivLim_coherence (x l) : (equivLim hi x).1 l = embFunctor F E (mem_Iio.m
+p l.2).le x
+参数：x l。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivLim_coherence (x l) : (equivLim hi x).1 l = embFunctor F E (mem_Iio.mp l.2).le x :=
   rfl
 
 end Lim
 
-/--
-Definition of `embEquivPi` / `embEquivPi` 的定义
+/-- A bijection between `E →ₐ[F] Ē` and the product of `E⟮<i⁺⟯ →ₐ[E⟮<i⟯] Ē` over all `i : ι`. -/
+/-
+**Field.Emb.Cardinal.embEquivPi** 是 Mathlib 中的一个定义，位于命名空间 `Field.Emb.Cardinal`。
+形式化陈述：embEquivPi : Field.Emb F E ≃ forall i : ι, factor (F
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Field.Emb.Cardinal.instInverseSystemWithTopToTypeOrdRankAlgHomSubtypeMem
+IntermediateFieldCoeOrderEmbeddingFiltrationAlgebraicClosureEmbFunctor`：∀ {F : T
+ype u} {E : Type v} [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E]  
+ [rank_inf : Fact (Cardinal.aleph0 ≤ Module.rank F E…
+· 使用定理 `Field.Emb.Cardinal.equivSucc_coherence`：equivSucc_coherence (i f) : (equ
+ivSucc i f).1 = embFunctor F E (le_succ i) f
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition embEquivPi
-  signature: : Field.Emb F E ≃ forall i : ι, factor (F := F) (E := E) i
-  body: let e := globalEquiv
-    (fun i _ => ⟨_, equivSucc_coherence i⟩) (fun _ hi => ⟨equivLim hi, fun _ _ => rfl⟩) ⊤
-(topEquiv.arrowCongr .refl).symm.trans e.trans .trans (.piCongrSet WithTop.range_coe.symm)
- .symm .piCongr (.ofInjective _ WithTop.coe_injective) fun _ => .refl _
-
-中文:
-定义 embEquivPi
-  签名: : 域.Emb F E ≃ 对任意 i : ι, factor (F := F) (E := E) i
-  定义体: let e := globalEquiv
-    (fun i _ => ⟨_, equivSucc_coherence i⟩) (fun _ hi => ⟨equivLim hi, fun _ _ => rfl⟩) ⊤
-(topEquiv.arrowCongr .refl).symm.trans e.trans .trans (.piCongrSet WithTop.range_coe.symm)
- .symm .piCongr (.ofInjective _ WithTop.coe_injective) fun _ => .refl _
+--- 原说明 ---
+A bijection between `E →ₐ[F] Ē` and the product of `E⟮<i⁺⟯ →ₐ[E⟮<i⟯] Ē` over all
+ `i : ι`.
 -/
-def embEquivPi : Field.Emb F E ≃ forall i : ι, factor (F := F) (E := E) i :=
+def embEquivPi : Field.Emb F E ≃ ∀ i : ι, factor (F := F) (E := E) i :=
   let e := globalEquiv
-    (fun i _ => ⟨_, equivSucc_coherence i⟩) (fun _ hi => ⟨equivLim hi, fun _ _ => rfl⟩) ⊤
-(topEquiv.arrowCongr .refl).symm.trans e.trans .trans (.piCongrSet WithTop.range_coe.symm)
- .symm .piCongr (.ofInjective _ WithTop.coe_injective) fun _ => .refl _
+    (fun i _ ↦ ⟨_, equivSucc_coherence i⟩) (fun _ hi ↦ ⟨equivLim hi, fun _ _ ↦ rfl⟩) ⊤
+  (topEquiv.arrowCongr .refl).symm.trans <| e.trans <| .trans (.piCongrSet WithTop.range_coe.symm)
+    <| .symm <| .piCongr (.ofInjective _ WithTop.coe_injective) fun _ ↦ .refl _
 
 end Algebraic
 
@@ -883,121 +825,150 @@ end Cardinal
 
 variable {F E}
 
-/--
-theorem `cardinal_eq_two_pow_rank` / 定理 `cardinal_eq_two_pow_rank`
-
-English:
-theorem cardinal_eq_two_pow_rank
-  statement: [Algebra.IsSeparable F E]
-  proof: by
-  have := Fact.mk rank_inf
-  rw [Emb.Cardinal.embEquivPi.cardinal_eq]; rw [mk_pi]
-  apply le_antisymm
-  · rw [← power_eq_two_power rank_inf natCast_le_aleph0 rank_inf]
-    conv_rhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
-    exact prod_le_prod _ _ fun i => (Emb.Cardinal.deg_lt_aleph0 _).le
-  · conv_lhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
-    exact prod_le_prod _ _ Emb.Cardinal.two_le_deg
-
-中文:
-定理 cardinal_eq_two_pow_rank
-  结论: [代数.是可分 F E]
-  证明: by
-  have := Fact.mk rank_inf
-  rw [Emb.Cardinal.embEquivPi.cardinal_eq]; rw [mk_pi]
-  apply le_antisymm
-  · rw [← power_eq_two_power rank_inf natCast_le_aleph0 rank_inf]
-    conv_rhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
-    exact prod_le_prod _ _ fun i => (Emb.Cardinal.deg_lt_aleph0 _).le
-  · conv_lhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
-    exact prod_le_prod _ _ Emb.Cardinal.two_le_deg
-
-Depends on / 依赖: Cardinal, Emb.Cardinal.deg_lt_aleph0, Emb.Cardinal.embEquivPi.cardinal_eq, Emb.Cardinal.two_le_deg, Fact.mk, Module, Module.rank, cardinal_eq, conv_lhs, conv_rhs, deg_lt_aleph0, embEquivPi, le_antisymm, mk_ord_toType, mk_pi, natCast_le_aleph0, power_eq_two_power, prod_const, prod_le_prod, rank_inf
+/-
+**Field.Emb.cardinal_eq_two_pow_rank** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb`。
+形式化陈述：cardinal_eq_two_pow_rank [Algebra.IsSeparable F E] (rank_inf : ℵ₀ <= Modul
+e.rank F E) : #(Field.Emb F E) = 2 ^ Module.rank F E
+参数：rank_inf : ℵ₀ <= Module.rank F E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
+· 使用定理 `Cardinal.mk_pi`：mk_pi {ι : Type u} (α : ι -> Type v) : #(Π i, α i) = pro
+d fun i => #(α i)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.power_eq_two_power`：power_eq_two_power {c₁ c₂ : Cardinal} (h₁ :
+ ℵ₀ <= c₁) (h₂ : 2 <= c₂) (h₂' : c₂ <= c₁) : c₂ ^ c₁ = 2 ^ c₁
+· 使用定理 `Cardinal.natCast_le_aleph0`：∀ {n : ℕ}, ↑n ≤ Cardinal.aleph0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.mk_ord_toType`：mk_ord_toType (c : Cardinal) : #c.ord.ToType = c
+· 使用定理 `Cardinal.prod_const'`：prod_const' (ι : Type u) (a : Cardinal.{u}) : (pro
+d fun _ : ι => a) = a ^ #ι
+· 使用定理 `Cardinal.prod_le_prod`：prod_le_prod {ι} (f g : ι -> Cardinal) (H : foral
+l i, f i <= g i) : prod f <= prod g
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Field.Emb.Cardinal.deg_lt_aleph0`：deg_lt_aleph0 (i : ι) : #(X i) < ℵ₀
+· 使用定理 `Field.Emb.Cardinal.two_le_deg`：two_le_deg (i : ι) : 2 <= #(X i)
 -/
 theorem cardinal_eq_two_pow_rank [Algebra.IsSeparable F E]
-    (rank_inf : ℵ₀ <= Module.rank F E) : #(Field.Emb F E) = 2 ^ Module.rank F E := by
+    (rank_inf : ℵ₀ ≤ Module.rank F E) : #(Field.Emb F E) = 2 ^ Module.rank F E := by
   have := Fact.mk rank_inf
-  rw [Emb.Cardinal.embEquivPi.cardinal_eq]; rw [mk_pi]
+  rw [Emb.Cardinal.embEquivPi.cardinal_eq, mk_pi]
   apply le_antisymm
   · rw [← power_eq_two_power rank_inf natCast_le_aleph0 rank_inf]
     conv_rhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
-    exact prod_le_prod _ _ fun i => (Emb.Cardinal.deg_lt_aleph0 _).le
+    exact prod_le_prod _ _ fun i ↦ (Emb.Cardinal.deg_lt_aleph0 _).le
   · conv_lhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
     exact prod_le_prod _ _ Emb.Cardinal.two_le_deg
-
-/--
-theorem `cardinal_eq_of_isSeparable` / 定理 `cardinal_eq_of_isSeparable`
-
-English:
-theorem cardinal_eq_of_isSeparable
-  given: [Algebra.IsSeparable F E]
-  proof: by
-  dsimp only; split_ifs with h
-  · exact cardinal_eq_two_pow_rank h
-  rw [not_le]; rw [← IsNoetherian.iff_rank_lt_aleph0] at h
-  rw [← Module.finrank_eq_rank]; rw [← toNat_eq_iff Module.finrank_pos.ne']; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]
-
-中文:
-定理 cardinal_eq_of_isSeparable
-  条件: [代数.是可分 F E]
-  证明: by
-  dsimp only; split_ifs with h
-  · exact cardinal_eq_two_pow_rank h
-  rw [not_le]; rw [← IsNoetherian.iff_rank_lt_aleph0] at h
-  rw [← Module.finrank_eq_rank]; rw [← toNat_eq_iff Module.finrank_pos.ne']; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]
-
-Depends on / 依赖: IsNoetherian, IsNoetherian.iff_rank_lt_aleph0, Module, Module.finrank_eq_rank, Module.finrank_pos.ne, Nat.card, cardinal_eq_two_pow_rank, finSepDegree, finSepDegree_eq_finrank_of_isSeparable, finrank_eq_rank, finrank_pos, iff_rank_lt_aleph0, not_le, split_ifs, toNat_eq_iff
+/-
+**Field.Emb.cardinal_eq_of_isSeparable** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb`。
+形式化陈述：cardinal_eq_of_isSeparable [Algebra.IsSeparable F E] : #(Field.Emb F E) = 
+(fun c => if ℵ₀ <= c then 2 ^ c else c) (Module.rank F E)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Field.Emb.cardinal_eq_two_pow_rank`：cardinal_eq_two_pow_rank [Algebra.Is
+Separable F E] (rank_inf : ℵ₀ <= Module.rank F E) : #(Field.Emb F E) = 2 ^ Modul
+e.rank F E
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.finrank_eq_rank`：finrank_eq_rank [Module.Finite R M] : ↑(finrank 
+R M) = Module.rank R M
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Module.IsNoetherian.finite`：∀ (R : Type u_1) (M : Type u_3) [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [IsNoetherian 
+R M], Module.Fin…
+· 使用定理 `IsNoetherian.iff_rank_lt_aleph0`：iff_rank_lt_aleph0 : IsNoetherian K V ↔
+ Module.rank K V < ℵ₀
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Cardinal.toNat_eq_iff`：toNat_eq_iff {n : Nat} (hn : n != 0) : toNat c = 
+n ↔ c = n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Module.finrank_pos`：Module.finrank_pos [IsDomain R] [IsTorsionFree R M] 
+[h : Nontrivial M] : 0 < finrank R M
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `Nat.card.eq_1`：∀ (α : Type u_3), Nat.card α = Cardinal.toNat (Cardinal.m
+k α)
+· 使用定理 `Field.finSepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] [i
+nst_1 : Field E] [inst_2 : Algebra F E],   Field.finSepDegree F E = Nat.card (Fi
+eld.Emb F E)
+· 使用定理 `Field.finSepDegree_eq_finrank_of_isSeparable`：finSepDegree_eq_finrank_of
+_isSeparable [Algebra.IsSeparable F E] : finSepDegree F E = finrank F E
 -/
 theorem cardinal_eq_of_isSeparable [Algebra.IsSeparable F E] :
-    #(Field.Emb F E) = (fun c => if ℵ₀ <= c then 2 ^ c else c) (Module.rank F E) := by
+    #(Field.Emb F E) = (fun c ↦ if ℵ₀ ≤ c then 2 ^ c else c) (Module.rank F E) := by
   dsimp only; split_ifs with h
   · exact cardinal_eq_two_pow_rank h
-  rw [not_le]; rw [← IsNoetherian.iff_rank_lt_aleph0] at h
-  rw [← Module.finrank_eq_rank]; rw [← toNat_eq_iff Module.finrank_pos.ne']; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]
-
-/--
-theorem `cardinal_eq_two_pow_sepDegree` / 定理 `cardinal_eq_two_pow_sepDegree`
-
-English:
-theorem cardinal_eq_two_pow_sepDegree
-  statement: [Algebra.IsAlgebraic F E]
-  proof: by
-  rw [← cardinal_separableClosure]; rw [cardinal_eq_two_pow_rank rank_inf]
-  rfl
-
-中文:
-定理 cardinal_eq_two_pow_sepDegree
-  结论: [代数.是代数 F E]
-  证明: by
-  rw [← cardinal_separableClosure]; rw [cardinal_eq_two_pow_rank rank_inf]
-  rfl
-
-Depends on / 依赖: cardinal_eq_two_pow_rank, cardinal_separableClosure, rank_inf
+  rw [not_le, ← IsNoetherian.iff_rank_lt_aleph0] at h
+  rw [← Module.finrank_eq_rank, ← toNat_eq_iff Module.finrank_pos.ne',
+    ← Nat.card, ← finSepDegree, finSepDegree_eq_finrank_of_isSeparable]
+/-
+**Field.Emb.cardinal_eq_two_pow_sepDegree** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb`。
+形式化陈述：cardinal_eq_two_pow_sepDegree [Algebra.IsAlgebraic F E] (rank_inf : ℵ₀ <= 
+sepDegree F E) : #(Field.Emb F E) = 2 ^ sepDegree F E
+参数：rank_inf : ℵ₀ <= sepDegree F E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Field.Emb.cardinal_separableClosure`：Field.Emb.cardinal_separableClosure
+ [Algebra.IsAlgebraic F E] : #(Field.Emb F <| separableClosure F E) = #(Field.Em
+b F E)
+· 使用定理 `Field.Emb.cardinal_eq_two_pow_rank`：cardinal_eq_two_pow_rank [Algebra.Is
+Separable F E] (rank_inf : ℵ₀ <= Module.rank F E) : #(Field.Emb F E) = 2 ^ Modul
+e.rank F E
 -/
 theorem cardinal_eq_two_pow_sepDegree [Algebra.IsAlgebraic F E]
-    (rank_inf : ℵ₀ <= sepDegree F E) : #(Field.Emb F E) = 2 ^ sepDegree F E := by
-  rw [← cardinal_separableClosure]; rw [cardinal_eq_two_pow_rank rank_inf]
+    (rank_inf : ℵ₀ ≤ sepDegree F E) : #(Field.Emb F E) = 2 ^ sepDegree F E := by
+  rw [← cardinal_separableClosure, cardinal_eq_two_pow_rank rank_inf]
   rfl
-
-/--
-theorem `cardinal_eq` / 定理 `cardinal_eq`
-
-English:
-theorem cardinal_eq
-  given: [Algebra.IsAlgebraic F E]
-  proof: by
-  rw [← cardinal_separableClosure]; rw [cardinal_eq_of_isSeparable]; rfl
-
-中文:
-定理 cardinal_eq
-  条件: [代数.是代数 F E]
-  证明: by
-  rw [← cardinal_separableClosure]; rw [cardinal_eq_of_isSeparable]; rfl
-
-Depends on / 依赖: cardinal_eq_of_isSeparable, cardinal_separableClosure
+/-
+**Field.Emb.cardinal_eq** 是 Mathlib 中的一个定理，位于命名空间 `Field.Emb`。
+形式化陈述：cardinal_eq [Algebra.IsAlgebraic F E] : #(Field.Emb F E) = (fun c => if ℵ₀
+ <= c then 2 ^ c else c) (sepDegree F E)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Field.Emb.cardinal_separableClosure`：Field.Emb.cardinal_separableClosure
+ [Algebra.IsAlgebraic F E] : #(Field.Emb F <| separableClosure F E) = #(Field.Em
+b F E)
+· 使用定理 `Field.Emb.cardinal_eq_of_isSeparable`：cardinal_eq_of_isSeparable [Algebr
+a.IsSeparable F E] : #(Field.Emb F E) = (fun c => if ℵ₀ <= c then 2 ^ c else c) 
+(Module.rank F E)
 -/
 theorem cardinal_eq [Algebra.IsAlgebraic F E] :
-    #(Field.Emb F E) = (fun c => if ℵ₀ <= c then 2 ^ c else c) (sepDegree F E) := by
-  rw [← cardinal_separableClosure]; rw [cardinal_eq_of_isSeparable]; rfl
+    #(Field.Emb F E) = (fun c ↦ if ℵ₀ ≤ c then 2 ^ c else c) (sepDegree F E) := by
+  rw [← cardinal_separableClosure, cardinal_eq_of_isSeparable]; rfl
 
 end Field.Emb
+

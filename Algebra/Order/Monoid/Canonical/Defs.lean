@@ -22,30 +22,39 @@ universe u
 
 variable {α : Type u}
 
-/--
-Definition of `CanonicallyOrderedAdd` / `CanonicallyOrderedAdd` 的定义
+/-- An ordered additive monoid is `CanonicallyOrderedAdd`
+if the ordering coincides with the subtractibility relation,
+which is to say, `a ≤ b` iff there exists `c` with `b = a + c`.
+This is satisfied by the natural numbers, for example, but not
+the integers or other nontrivial ordered groups.
 
-English:
-class CanonicallyOrderedAdd
-  parameters: (α : Type*) [Add α] [LE α]
-  extends: ExistsAddOfLE α
-  axioms and operations (2):
-    - le_add_self : forall a b : α, a <= b + a
-    - le_self_add : forall a b : α, a <= a + b
+We have `a ≤ b + a` and `a ≤ a + b` as separate fields. In the commutative case the second field
+is redundant, but in the noncommutative case (satisfied most relevantly by the ordinals), this
+extra field allows us to prove more things without the extra commutativity assumption. -/
+/-
+**CanonicallyOrderedAdd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Add α] → [LE α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 典范有序加法
-  参数: (α : 类型) [加法 α] [LE α]
-  继承: ExistsAddOfLE α
-  公理与运算 (2 个):
-    - le_add_self : 对任意 a b : α, a <= b + a
-    - le_self_add : 对任意 a b : α, a <= a + b
+--- 原说明 ---
+An ordered additive monoid is `CanonicallyOrderedAdd`
+if the ordering coincides with the subtractibility relation,
+which is to say, `a ≤ b` iff there exists `c` with `b = a + c`.
+This is satisfied by the natural numbers, for example, but not
+the integers or other nontrivial ordered groups.
+
+We have `a ≤ b + a` and `a ≤ a + b` as separate fields. In the commutative case 
+the second field
+is redundant, but in the noncommutative case (satisfied most relevantly by the o
+rdinals), this
+extra field allows us to prove more things without the extra commutativity assum
+ption.
 -/
 class CanonicallyOrderedAdd (α : Type*) [Add α] [LE α] : Prop
     extends ExistsAddOfLE α where
   /-- For any `a` and `b`, `a ≤ a + b` -/
-  protected le_add_self : forall a b : α, a <= b + a
-  protected le_self_add : forall a b : α, a <= a + b
+  protected le_add_self : ∀ a b : α, a ≤ b + a
+  protected le_self_add : ∀ a b : α, a ≤ a + b
 
 attribute [instance 50] CanonicallyOrderedAdd.toExistsAddOfLE
 
@@ -58,30 +67,26 @@ attribute [instance 50] CanonicallyOrderedAdd.toExistsAddOfLE
   Dedekind domain satisfy this; collections of all things ≤ 1 seem to
   be more natural that collections of all things ≥ 1). -/
 @[to_additive]
-/--
-Definition of `CanonicallyOrderedMul` / `CanonicallyOrderedMul` 的定义
+/-
+**CanonicallyOrderedMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [LE α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CanonicallyOrderedMul
-  parameters: (α : Type*) [Mul α] [LE α]
-  extends: ExistsMulOfLE α
-  axioms and operations (2):
-    - le_mul_self : forall a b : α, a <= b * a
-    - le_self_mul : forall a b : α, a <= a * b
-
-中文:
-类 典范有序乘法
-  参数: (α : 类型) [乘法 α] [LE α]
-  继承: ExistsMulOfLE α
-  公理与运算 (2 个):
-    - le_mul_self : 对任意 a b : α, a <= b * a
-    - le_self_mul : 对任意 a b : α, a <= a * b
+--- 原说明 ---
+An ordered monoid is `CanonicallyOrderedMul`
+  if the ordering coincides with the divisibility relation,
+  which is to say, `a ≤ b` iff there exists `c` with `b = a * c`.
+  Examples seem rare; it seems more likely that the `OrderDual`
+  of a naturally-occurring lattice satisfies this than the lattice
+  itself (for example, dual of the lattice of ideals of a PID or
+  Dedekind domain satisfy this; collections of all things ≤ 1 seem to
+  be more natural that collections of all things ≥ 1).
 -/
 class CanonicallyOrderedMul (α : Type*) [Mul α] [LE α] : Prop
     extends ExistsMulOfLE α where
   /-- For any `a` and `b`, `a ≤ a * b` -/
-  protected le_mul_self : forall a b : α, a <= b * a
-  protected le_self_mul : forall a b : α, a <= a * b
+  protected le_mul_self : ∀ a b : α, a ≤ b * a
+  protected le_self_mul : ∀ a b : α, a ≤ a * b
 
 attribute [instance 50] CanonicallyOrderedMul.toExistsMulOfLE
 
@@ -92,122 +97,67 @@ section LE
 variable [LE α] [CanonicallyOrderedMul α] {a b c : α}
 
 @[to_additive]
-/--
-theorem `le_mul_self` / 定理 `le_mul_self`
-
-English:
-theorem le_mul_self
-  statement: a <= b * a
-  proof: CanonicallyOrderedMul.le_mul_self _ _
-
-@[to_additive]
-
-中文:
-定理 le_mul_self
-  结论: a <= b * a
-  证明: CanonicallyOrderedMul.le_mul_self _ _
-
-@[to_additive]
-
-Depends on / 依赖: CanonicallyOrderedMul, CanonicallyOrderedMul.le_mul_self, le_mul_self
+/-
+**le_mul_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_mul_self : a <= b * a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanonicallyOrderedMul.le_mul_self`：∀ {α : Type u_1} {inst : Mul α} {inst
+_1 : LE α} [self : CanonicallyOrderedMul α] (a b : α), a ≤ b * a
 -/
-theorem le_mul_self : a <= b * a :=
+theorem le_mul_self : a ≤ b * a :=
   CanonicallyOrderedMul.le_mul_self _ _
 
 @[to_additive]
-/--
-theorem `le_self_mul` / 定理 `le_self_mul`
-
-English:
-theorem le_self_mul
-  statement: a <= a * b
-  proof: CanonicallyOrderedMul.le_self_mul _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 le_self_mul
-  结论: a <= a * b
-  证明: CanonicallyOrderedMul.le_self_mul _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: CanonicallyOrderedMul, CanonicallyOrderedMul.le_self_mul, le_self_mul
+/-
+**le_self_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_self_mul : a <= a * b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanonicallyOrderedMul.le_self_mul`：∀ {α : Type u_1} {inst : Mul α} {inst
+_1 : LE α} [self : CanonicallyOrderedMul α] (a b : α), a ≤ a * b
 -/
-theorem le_self_mul : a <= a * b :=
+theorem le_self_mul : a ≤ a * b :=
   CanonicallyOrderedMul.le_self_mul _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `self_le_mul_left` / 定理 `self_le_mul_left`
-
-English:
-theorem self_le_mul_left
-  given: (a b : α)
-  statement: a <= b * a
-  proof: le_mul_self
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 self_le_mul_left
-  条件: (a b : α)
-  结论: a <= b * a
-  证明: le_mul_self
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: le_mul_self
+/-
+**self_le_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_le_mul_left (a b : α) : a <= b * a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_mul_self`：le_mul_self : a <= b * a
 -/
-theorem self_le_mul_left (a b : α) : a <= b * a :=
+theorem self_le_mul_left (a b : α) : a ≤ b * a :=
   le_mul_self
 
 @[to_additive (attr := simp)]
-/--
-theorem `self_le_mul_right` / 定理 `self_le_mul_right`
-
-English:
-theorem self_le_mul_right
-  given: (a b : α)
-  statement: a <= a * b
-  proof: le_self_mul
-
-@[to_additive]
-
-中文:
-定理 self_le_mul_right
-  条件: (a b : α)
-  结论: a <= a * b
-  证明: le_self_mul
-
-@[to_additive]
-
-Depends on / 依赖: le_self_mul
+/-
+**self_le_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_le_mul_right (a b : α) : a <= a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_self_mul`：le_self_mul : a <= a * b
 -/
-theorem self_le_mul_right (a b : α) : a <= a * b :=
+theorem self_le_mul_right (a b : α) : a ≤ a * b :=
   le_self_mul
 
 @[to_additive]
-/--
-theorem `le_iff_exists_mul` / 定理 `le_iff_exists_mul`
-
-English:
-theorem le_iff_exists_mul
-  statement: a <= b ↔ exists c, b = a * c
-  proof: ⟨exists_mul_of_le, by
-    rintro ⟨c, rfl⟩
-    exact le_self_mul⟩
-
-中文:
-定理 le_iff_存在_mul
-  结论: a <= b ↔ 存在 c, b = a * c
-  证明: ⟨exists_mul_of_le, by
-    rintro ⟨c, rfl⟩
-    exact le_self_mul⟩
-
-Depends on / 依赖: exists_mul_of_le, le_self_mul
+/-
+**le_iff_exists_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_iff_exists_mul : a <= b ↔ exists c, b = a * c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ExistsMulOfLE.exists_mul_of_le`：∀ {α : Type u} {inst : Mul α} {inst_1 : 
+LE α} [self : ExistsMulOfLE α] {a b : α}, a ≤ b → ∃ c, b = a * c
+· 使用定理 `CanonicallyOrderedMul.toExistsMulOfLE`：∀ {α : Type u_1} {inst : Mul α} {
+inst_1 : LE α} [self : CanonicallyOrderedMul α], ExistsMulOfLE α
+· 使用定理 `le_self_mul`：le_self_mul : a <= a * b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem le_iff_exists_mul : a <= b ↔ exists c, b = a * c :=
+theorem le_iff_exists_mul : a ≤ b ↔ ∃ c, b = a * c :=
   ⟨exists_mul_of_le, by
     rintro ⟨c, rfl⟩
     exact le_self_mul⟩
@@ -218,97 +168,55 @@ section Preorder
 variable [Preorder α] [CanonicallyOrderedMul α] {a b c : α}
 
 @[to_additive]
-/--
-theorem `le_of_mul_le_left` / 定理 `le_of_mul_le_left`
-
-English:
-theorem le_of_mul_le_left
-  statement: a * b <= c -> a <= c
-  proof: le_self_mul.trans
-
-@[to_additive]
-
-中文:
-定理 le_of_mul_le_left
-  结论: a * b <= c -> a <= c
-  证明: le_self_mul.trans
-
-@[to_additive]
-
-Depends on / 依赖: le_self_mul, le_self_mul.trans
+/-
+**le_of_mul_le_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_of_mul_le_left : a * b <= c -> a <= c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_self_mul`：le_self_mul : a <= a * b
 -/
-theorem le_of_mul_le_left : a * b <= c -> a <= c :=
+theorem le_of_mul_le_left : a * b ≤ c → a ≤ c :=
   le_self_mul.trans
 
 @[to_additive]
-/--
-theorem `le_mul_of_le_left` / 定理 `le_mul_of_le_left`
-
-English:
-theorem le_mul_of_le_left
-  statement: a <= b -> a <= b * c
-  proof: le_self_mul.trans'
-
-@[to_additive]
-
-中文:
-定理 le_mul_of_le_left
-  结论: a <= b -> a <= b * c
-  证明: le_self_mul.trans'
-
-@[to_additive]
-
-Depends on / 依赖: le_self_mul, le_self_mul.trans
+/-
+**le_mul_of_le_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_mul_of_le_left : a <= b -> a <= b * c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用定理 `le_self_mul`：le_self_mul : a <= a * b
 -/
-theorem le_mul_of_le_left : a <= b -> a <= b * c :=
+theorem le_mul_of_le_left : a ≤ b → a ≤ b * c :=
   le_self_mul.trans'
 
 @[to_additive]
-/--
-theorem `le_of_mul_le_right` / 定理 `le_of_mul_le_right`
-
-English:
-theorem le_of_mul_le_right
-  statement: a * b <= c -> b <= c
-  proof: le_mul_self.trans
-
-@[to_additive]
-
-中文:
-定理 le_of_mul_le_right
-  结论: a * b <= c -> b <= c
-  证明: le_mul_self.trans
-
-@[to_additive]
-
-Depends on / 依赖: le_mul_self, le_mul_self.trans
+/-
+**le_of_mul_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_of_mul_le_right : a * b <= c -> b <= c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_mul_self`：le_mul_self : a <= b * a
 -/
-theorem le_of_mul_le_right : a * b <= c -> b <= c :=
+theorem le_of_mul_le_right : a * b ≤ c → b ≤ c :=
   le_mul_self.trans
 
 @[to_additive]
-/--
-theorem `le_mul_of_le_right` / 定理 `le_mul_of_le_right`
-
-English:
-theorem le_mul_of_le_right
-  statement: a <= c -> a <= b * c
-  proof: le_mul_self.trans'
-
-@[to_additive] alias le_mul_left := le_mul_of_le_right
-@[to_additive] alias le_mul_right := le_mul_of_le_left
-
-中文:
-定理 le_mul_of_le_right
-  结论: a <= c -> a <= b * c
-  证明: le_mul_self.trans'
-
-@[to_additive] alias le_mul_left := le_mul_of_le_right
-@[to_additive] alias le_mul_right := le_mul_of_le_left
-
-Depends on / 依赖: le_mul_self, le_mul_self.trans
+/-
+**le_mul_of_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_mul_of_le_right : a <= c -> a <= b * c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用定理 `le_mul_self`：le_mul_self : a <= b * a
 -/
-theorem le_mul_of_le_right : a <= c -> a <= b * c :=
+theorem le_mul_of_le_right : a ≤ c → a ≤ b * c :=
   le_mul_self.trans'
 
 @[to_additive] alias le_mul_left := le_mul_of_le_right
@@ -322,24 +230,23 @@ section CommMagma
 variable [CommMagma α] [Preorder α] [CanonicallyOrderedMul α] {a b c : α}
 
 @[to_additive]
-/--
-theorem `le_iff_exists_mul'` / 定理 `le_iff_exists_mul'`
-
-English:
-theorem le_iff_exists_mul'
-  statement: a <= b ↔ exists c, b = c * a
-  proof: by
-  simp only [mul_comm _ a, le_iff_exists_mul]
-
-中文:
-定理 le_iff_存在_mul'
-  结论: a <= b ↔ 存在 c, b = c * a
-  证明: by
-  simp only [mul_comm _ a, le_iff_exists_mul]
-
-Depends on / 依赖: le_iff_exists_mul, mul_comm
+/-
+**le_iff_exists_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_iff_exists_mul' : a <= b ↔ exists c, b = c * a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem le_iff_exists_mul' : a <= b ↔ exists c, b = c * a := by
+theorem le_iff_exists_mul' : a ≤ b ↔ ∃ c, b = c * a := by
   simp only [mul_comm _ a, le_iff_exists_mul]
 
 end CommMagma
@@ -351,20 +258,9 @@ section LE
 variable [LE α] [CanonicallyOrderedMul α] {a b : α}
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsBotOneClass α
-  body: le_self_mul.trans_eq (one_mul _)
-
-中文:
-实例 :
-  签名: 是BotOne类 α
-  定义体: le_self_mul.trans_eq (one_mul _)
-
-Depends on / 依赖: le_self_mul, le_self_mul.trans_eq, one_mul, trans_eq
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsBotOneClass α where
   isBot_one _ := le_self_mul.trans_eq (one_mul _)
@@ -375,88 +271,65 @@ section PartialOrder
 variable [PartialOrder α] [CanonicallyOrderedMul α] {a b c : α}
 
 @[to_additive]
-/--
-theorem `exists_one_lt_mul_of_lt` / 定理 `exists_one_lt_mul_of_lt`
-
-English:
-theorem exists_one_lt_mul_of_lt
-  given: (h : a < b)
-  statement: exists (c : _) (_ : 1 < c), a * c = b
-  proof: by
-  obtain ⟨c, hc⟩ := le_iff_exists_mul.1 h.le
-  refine ⟨c, one_lt_iff_ne_one.2 ?_, hc.symm⟩
-  rintro rfl
-  simp [hc] at h
-
-@[to_additive]
-
-中文:
-定理 存在_one_lt_mul_of_lt
-  条件: (h : a < b)
-  结论: 存在 (c : _) (_ : 1 < c), a * c = b
-  证明: by
-  obtain ⟨c, hc⟩ := le_iff_exists_mul.1 h.le
-  refine ⟨c, one_lt_iff_ne_one.2 ?_, hc.symm⟩
-  rintro rfl
-  simp [hc] at h
-
-@[to_additive]
-
-Depends on / 依赖: h.le, hc.symm, le_iff_exists_mul, one_lt_iff_ne_one
+/-
+**exists_one_lt_mul_of_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_one_lt_mul_of_lt (h : a < b) : exists (c : _) (_ : 1 < c), a * c = 
+b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_iff_exists_mul`：le_iff_exists_mul : a <= b ↔ exists c, b = a * c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `one_lt_iff_ne_one`：one_lt_iff_ne_one : 1 < a ↔ a != 1
+· 使用定理 `instIsBotOneClass`：∀ {α : Type u} [inst : MulOneClass α] [inst_1 : LE α]
+ [CanonicallyOrderedMul α], IsBotOneClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem exists_one_lt_mul_of_lt (h : a < b) : exists (c : _) (_ : 1 < c), a * c = b := by
+theorem exists_one_lt_mul_of_lt (h : a < b) : ∃ (c : _) (_ : 1 < c), a * c = b := by
   obtain ⟨c, hc⟩ := le_iff_exists_mul.1 h.le
   refine ⟨c, one_lt_iff_ne_one.2 ?_, hc.symm⟩
   rintro rfl
   simp [hc] at h
 
 @[to_additive]
-/--
-theorem `lt_iff_exists_mul` / 定理 `lt_iff_exists_mul`
-
-English:
-theorem lt_iff_exists_mul
-  given: [MulLeftStrictMono α]
-  statement: a < b ↔ exists c > 1, b = a * c
-  proof: by
-  rw [lt_iff_le_and_ne]; rw [le_iff_exists_mul]; rw [← exists_and_right]
-  apply exists_congr
-  intro c
-  rw [and_comm]; rw [and_congr_left_iff]; rw [gt_iff_lt]
-  rintro rfl
-  constructor
-  · rw [one_lt_iff_ne_one]
-    apply mt
-    rintro rfl
-    rw [mul_one]
-  · rw [← (self_le_mul_right a c).lt_iff_ne]
-    apply lt_mul_of_one_lt_right'
-
-中文:
-定理 lt_iff_存在_mul
-  条件: [MulLeftStrictMono α]
-  结论: a < b ↔ 存在 c > 1, b = a * c
-  证明: by
-  rw [lt_iff_le_and_ne]; rw [le_iff_exists_mul]; rw [← exists_and_right]
-  apply exists_congr
-  intro c
-  rw [and_comm]; rw [and_congr_left_iff]; rw [gt_iff_lt]
-  rintro rfl
-  constructor
-  · rw [one_lt_iff_ne_one]
-    apply mt
-    rintro rfl
-    rw [mul_one]
-  · rw [← (self_le_mul_right a c).lt_iff_ne]
-    apply lt_mul_of_one_lt_right'
-
-Depends on / 依赖: and_comm, and_congr_left_iff, exists_and_right, exists_congr, gt_iff_lt, le_iff_exists_mul, lt_iff_le_and_ne, lt_iff_ne, lt_mul_of_one_lt_right, mul_one, one_lt_iff_ne_one, self_le_mul_right
+/-
+**lt_iff_exists_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_iff_exists_mul [MulLeftStrictMono α] : a < b ↔ exists c > 1, b = a * c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
+· 使用定理 `le_iff_exists_mul`：le_iff_exists_mul : a <= b ↔ exists c, b = a * c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `exists_and_right`：∀ {α : Sort u_1} {p : α → Prop} {b : Prop}, (∃ x, p x 
+∧ b) ↔ (∃ x, p x) ∧ b
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `and_congr_left_iff`：∀ {a c b : Prop}, (a ∧ c ↔ b ∧ c) ↔ c → (a ↔ b)
+· 使用定理 `gt_iff_lt`：∀ {α : Type u_1} [inst : LT α] {x y : α}, x > y ↔ y < x
+· 使用定理 `one_lt_iff_ne_one`：one_lt_iff_ne_one : 1 < a ↔ a != 1
+· 使用定理 `instIsBotOneClass`：∀ {α : Type u} [inst : MulOneClass α] [inst_1 : LE α]
+ [CanonicallyOrderedMul α], IsBotOneClass α
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `LE.le.lt_iff_ne`：lt_iff_ne (h : a <= b) : a < b ↔ a != b
+· 使用定理 `self_le_mul_right`：self_le_mul_right (a b : α) : a <= a * b
+· 使用定理 `lt_mul_of_one_lt_right'`：lt_mul_of_one_lt_right' [MulLeftStrictMono α] (
+a : α) {b : α} (h : 1 < b) : a < a * b
 -/
-theorem lt_iff_exists_mul [MulLeftStrictMono α] : a < b ↔ exists c > 1, b = a * c := by
-  rw [lt_iff_le_and_ne]; rw [le_iff_exists_mul]; rw [← exists_and_right]
+theorem lt_iff_exists_mul [MulLeftStrictMono α] : a < b ↔ ∃ c > 1, b = a * c := by
+  rw [lt_iff_le_and_ne, le_iff_exists_mul, ← exists_and_right]
   apply exists_congr
   intro c
-  rw [and_comm]; rw [and_congr_left_iff]; rw [gt_iff_lt]
+  rw [and_comm, and_congr_left_iff, gt_iff_lt]
   rintro rfl
   constructor
   · rw [one_lt_iff_ne_one]
@@ -478,6 +351,10 @@ variable [LE α] [CanonicallyOrderedMul α]
 
 -- see Note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 10) CanonicallyOrderedMul.toMulLeftMono :
     MulLeftMono α where
   elim a b c hbc := by
@@ -491,18 +368,16 @@ end Semigroup
 
 -- TODO: make it an instance
 @[to_additive]
-/--
-lemma `CanonicallyOrderedMul.toIsOrderedMonoid` / 引理 `CanonicallyOrderedMul.toIsOrderedMonoid`
-
-English:
-lemma CanonicallyOrderedMul.toIsOrderedMonoid
-  proof: mul_le_mul_left
-
-中文:
-引理 典范有序乘法.toIsOrderedMonoid
-  证明: mul_le_mul_left
-
-Depends on / 依赖: mul_le_mul_left
+/-
+**CanonicallyOrderedMul.toIsOrderedMonoid** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：CanonicallyOrderedMul.toIsOrderedMonoid [CommMonoid α] [Preorder α] [Canon
+icallyOrderedMul α] : IsOrderedMonoid α where mul_le_mul_left _ _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul_left`：mul_le_mul_left [i : MulRightMono α] {b c : α} (bc : b 
+<= c) (a : α) : b * a <= c * a
+· 使用定理 `CanonicallyOrderedMul.toMulLeftMono`：∀ {α : Type u} [inst : Semigroup α]
+ [inst_1 : LE α] [CanonicallyOrderedMul α], MulLeftMono α
 -/
 lemma CanonicallyOrderedMul.toIsOrderedMonoid
     [CommMonoid α] [Preorder α] [CanonicallyOrderedMul α] : IsOrderedMonoid α where
@@ -514,21 +389,15 @@ variable [Monoid α]
 section PartialOrder
 variable [PartialOrder α] [CanonicallyOrderedMul α] {a b c : α}
 
-/--
-Instance `CanonicallyOrderedCommMonoid.toUniqueUnits` / 实例 `CanonicallyOrderedCommMonoid.toUniqueUnits`
-
-English:
-instance CanonicallyOrderedCommMonoid.toUniqueUnits
-  signature: : Unique αˣ where
-  body: Units.ext le_one_iff_eq_one.mp (le_of_mul_le_left a.mul_inv.le)
-
-中文:
-实例 CanonicallyOrderedCommMonoid.toUniqueUnits
-  签名: : 唯一 αˣ where
-  定义体: Units.ext le_one_iff_eq_one.mp (le_of_mul_le_left a.mul_inv.le)
+/-
+**CanonicallyOrderedCommMonoid.toUniqueUnits** 是 Mathlib 中的一个定义，位于命名空间 `Canonica
+llyOrderedCommMonoid`。
+形式化陈述：{α : Type u} → [inst : Monoid α] → [inst_1 : PartialOrder α] → [Canonicall
+yOrderedMul α] → Unique αˣ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance CanonicallyOrderedCommMonoid.toUniqueUnits : Unique αˣ where
-uniq a := Units.ext le_one_iff_eq_one.mp (le_of_mul_le_left a.mul_inv.le)
+  uniq a := Units.ext <| le_one_iff_eq_one.mp (le_of_mul_le_left a.mul_inv.le)
 
 end PartialOrder
 
@@ -541,22 +410,21 @@ section PartialOrder
 variable [PartialOrder α] [CanonicallyOrderedMul α] {a b c : α}
 
 @[to_additive (attr := simp) add_pos_iff]
-/--
-theorem `one_lt_mul_iff` / 定理 `one_lt_mul_iff`
-
-English:
-theorem one_lt_mul_iff
-  statement: 1 < a * b ↔ 1 < a ∨ 1 < b
-  proof: by
-  simp only [one_lt_iff_ne_one, Ne, mul_eq_one, not_and_or]
-
-中文:
-定理 one_lt_mul_iff
-  结论: 1 < a * b ↔ 1 < a ∨ 1 < b
-  证明: by
-  simp only [one_lt_iff_ne_one, Ne, mul_eq_one, not_and_or]
-
-Depends on / 依赖: mul_eq_one, not_and_or, one_lt_iff_ne_one
+/-
+**one_lt_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_lt_mul_iff : 1 < a * b ↔ 1 < a ∨ 1 < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsBotOneClass`：∀ {α : Type u} [inst : MulOneClass α] [inst_1 : LE α]
+ [CanonicallyOrderedMul α], IsBotOneClass α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem one_lt_mul_iff : 1 < a * b ↔ 1 < a ∨ 1 < b := by
   simp only [one_lt_iff_ne_one, Ne, mul_eq_one, not_and_or]
@@ -570,36 +438,27 @@ section CanonicallyLinearOrderedMonoid
 variable [Monoid α] [LinearOrder α] [CanonicallyOrderedMul α]
 
 @[to_additive]
-/--
-theorem `min_mul_distrib` / 定理 `min_mul_distrib`
-
-English:
-theorem min_mul_distrib
-  given: (a b c : α)
-  statement: min a (b * c) = min a (min a b * min a c)
-  proof: by
-  rcases le_total a b with hb | hb
-  · simp [hb, le_mul_right]
-  · rcases le_total a c with hc | hc
-    · simp [hc, le_mul_left]
-    · simp [hb, hc]
-
-@[to_additive]
-
-中文:
-定理 min_mul_distrib
-  条件: (a b c : α)
-  结论: 最小值 a (b * c) = 最小值 a (最小值 a b * 最小值 a c)
-  证明: by
-  rcases le_total a b with hb | hb
-  · simp [hb, le_mul_right]
-  · rcases le_total a c with hc | hc
-    · simp [hc, le_mul_left]
-    · simp [hb, hc]
-
-@[to_additive]
-
-Depends on / 依赖: le_mul_left, le_mul_right, le_total
+/-
+**min_mul_distrib** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_mul_distrib (a b c : α) : min a (b * c) = min a (min a b * min a c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_of_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ≤ 
+b → a ⊓ b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
 -/
 theorem min_mul_distrib (a b c : α) : min a (b * c) = min a (min a b * min a c) := by
   rcases le_total a b with hb | hb
@@ -609,24 +468,22 @@ theorem min_mul_distrib (a b c : α) : min a (b * c) = min a (min a b * min a c)
     · simp [hb, hc]
 
 @[to_additive]
-/--
-theorem `min_mul_distrib'` / 定理 `min_mul_distrib'`
-
-English:
-theorem min_mul_distrib'
-  given: (a b c : α)
-  statement: min (a * b) c = min (min a c * min b c) c
-  proof: by
-  simpa [min_comm _ c] using min_mul_distrib c a b
-
-中文:
-定理 min_mul_distrib'
-  条件: (a b c : α)
-  结论: 最小值 (a * b) c = 最小值 (最小值 a c * 最小值 b c) c
-  证明: by
-  simpa [min_comm _ c] using min_mul_distrib c a b
-
-Depends on / 依赖: min_comm, min_mul_distrib
+/-
+**min_mul_distrib'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_mul_distrib' (a b c : α) : min (a * b) c = min (min a c * min b c) c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `min_comm`：min_comm (a b : α) : min a b = min b a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `min_mul_distrib`：min_mul_distrib (a b c : α) : min a (b * c) = min a (mi
+n a b * min a c)
 -/
 theorem min_mul_distrib' (a b c : α) : min (a * b) c = min (min a c * min b c) c := by
   simpa [min_comm _ c] using min_mul_distrib c a b
@@ -634,24 +491,17 @@ theorem min_mul_distrib' (a b c : α) : min (a * b) c = min (min a c * min b c) 
 /-- In a linearly ordered monoid, we are happy for `bot_eq_one` to be a `@[simp]` lemma. -/
 @[to_additive (attr := simp)
 /-- In a linearly ordered monoid, we are happy for `bot_eq_zero` to be a `@[simp]` lemma -/]
-/--
-theorem `bot_eq_one'` / 定理 `bot_eq_one'`
-
-English:
-theorem bot_eq_one'
-  given: [OrderBot α]
-  statement: (⊥ : α) = 1
-  proof: bot_eq_one
-
-中文:
-定理 bot_eq_one'
-  条件: [有底序 α]
-  结论: (⊥ : α) = 1
-  证明: bot_eq_one
-
-Depends on / 依赖: bot_eq_one
+/-
+**bot_eq_one'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bot_eq_one' [OrderBot α] : (⊥ : α) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_eq_one`：bot_eq_one [OrderBot α] : (⊥ : α) = 1
+· 使用定理 `instIsBotOneClass`：∀ {α : Type u} [inst : MulOneClass α] [inst_1 : LE α]
+ [CanonicallyOrderedMul α], IsBotOneClass α
 -/
 theorem bot_eq_one' [OrderBot α] : (⊥ : α) = 1 :=
   bot_eq_one
 
 end CanonicallyLinearOrderedMonoid
+

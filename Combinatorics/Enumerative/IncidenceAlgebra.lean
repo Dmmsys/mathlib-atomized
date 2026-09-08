@@ -75,265 +75,164 @@ open Finset OrderDual
 
 variable {F 𝕜 𝕝 𝕞 α β : Type*}
 
-/--
-Definition of `IncidenceAlgebra` / `IncidenceAlgebra` 的定义
+/-- The `𝕜`-incidence algebra over `α`. -/
+/-
+**IncidenceAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(𝕜 : Type u_7) → (α : Type u_8) → [Zero 𝕜] → [LE α] → Type (max u_7 u_8)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IncidenceAlgebra
-  parameters: (𝕜 α : Type*) [Zero 𝕜] [LE α]
-  axioms and operations (2):
-    - toFun : α -> α -> 𝕜
-    - eq_zero_of_not_le'(⦃a b) : α⦄ : ¬a <= b -> toFun a b = 0
-
-中文:
-结构 Incidence代数
-  参数: (𝕜 α : 类型) [零 𝕜] [LE α]
-  公理与运算 (2 个):
-    - toFun : α -> α -> 𝕜
-    - eq_zero_of_not_le'(⦃a b) : α⦄ : ¬a <= b -> toFun a b = 0
+--- 原说明 ---
+The `𝕜`-incidence algebra over `α`.
 -/
 structure IncidenceAlgebra (𝕜 α : Type*) [Zero 𝕜] [LE α] where
   /-- The underlying function of an element of the incidence algebra.
 
   Do not use this function directly. Instead use the coercion coming from the `FunLike`
   instance. -/
-  toFun : α -> α -> 𝕜
-  eq_zero_of_not_le' ⦃a b : α⦄ : ¬a <= b -> toFun a b = 0
+  toFun : α → α → 𝕜
+  eq_zero_of_not_le' ⦃a b : α⦄ : ¬a ≤ b → toFun a b = 0
 
 namespace IncidenceAlgebra
 section Zero
 variable [Zero 𝕜] [LE α] {a b : α}
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (IncidenceAlgebra 𝕜 α) α (α -> 𝕜) where
-  body: toFun
-  coe_injective f g h := by cases f; cases g; congr
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (Incidence代数 𝕜 α) α (α -> 𝕜) where
-  定义体: toFun
-  coe_injective f g h := by cases f; cases g; congr
+/-
+**IncidenceAlgebra.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instFunLike : FunLike (IncidenceAlgebra 𝕜 α) α (α -> 𝕜) where coe
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instFunLike : FunLike (IncidenceAlgebra 𝕜 α) α (α -> 𝕜) where
+instance instFunLike : FunLike (IncidenceAlgebra 𝕜 α) α (α → 𝕜) where
   coe := toFun
   coe_injective f g h := by cases f; cases g; congr
-
-/--
-lemma `apply_eq_zero_of_not_le` / 引理 `apply_eq_zero_of_not_le`
-
-English:
-lemma apply_eq_zero_of_not_le
-  given: (h : ¬a <= b) (f : IncidenceAlgebra 𝕜 α)
-  statement: f a b = 0
-  proof: eq_zero_of_not_le' _ h
-
-中文:
-引理 apply_eq_zero_of_not_le
-  条件: (h : ¬a <= b) (f : Incidence代数 𝕜 α)
-  结论: f a b = 0
-  证明: eq_zero_of_not_le' _ h
-
-Depends on / 依赖: Faithful, IsIso.comp_isIso, LightCondSet, LightCondSet.Loc, LightCondensed, LightCondensed.forget, LightProfinite, Sheaf.isConstant_iff_isIso_counit_app, coherentTopology, comp_isIso, constantSheaf, constantSheafAdj_counit_w, discrete, discreteUnderlyingAdj, eq_zero_of_not_le, essImage, essImage_eq_of_natIso, forget, isConstant_iff_isIso_counit_app
+/-
+**IncidenceAlgebra.apply_eq_zero_of_not_le** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceA
+lgebra`。
+形式化陈述：apply_eq_zero_of_not_le (h : ¬a <= b) (f : IncidenceAlgebra 𝕜 α) : f a b =
+ 0
+参数：h : ¬a <= b；f : IncidenceAlgebra 𝕜 α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncidenceAlgebra.eq_zero_of_not_le'`：∀ {𝕜 : Type u_7} {α : Type u_8} [in
+st : Zero 𝕜] [inst_1 : LE α] (self : IncidenceAlgebra 𝕜 α) ⦃a b : α⦄,   ¬a ≤ b →
+ self.toFun a b = 0
 -/
-lemma apply_eq_zero_of_not_le (h : ¬a <= b) (f : IncidenceAlgebra 𝕜 α) : f a b = 0 :=
+lemma apply_eq_zero_of_not_le (h : ¬a ≤ b) (f : IncidenceAlgebra 𝕜 α) : f a b = 0 :=
   eq_zero_of_not_le' _ h
-
-/--
-lemma `le_of_ne_zero` / 引理 `le_of_ne_zero`
-
-English:
-lemma le_of_ne_zero
-  given: {f : IncidenceAlgebra 𝕜 α}
-  statement: f a b != 0 -> a <= b
-  proof: not_imp_comm.1 fun h => apply_eq_zero_of_not_le h _
-
-中文:
-引理 le_of_ne_zero
-  条件: {f : Incidence代数 𝕜 α}
-  结论: f a b != 0 -> a <= b
-  证明: not_imp_comm.1 fun h => apply_eq_zero_of_not_le h _
-
-Depends on / 依赖: apply_eq_zero_of_not_le, not_imp_comm
+/-
+**IncidenceAlgebra.le_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：le_of_ne_zero {f : IncidenceAlgebra 𝕜 α} : f a b != 0 -> a <= b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_imp_comm`：not_imp_comm : ¬a -> b ↔ ¬b -> a
+· 使用引理 `IncidenceAlgebra.apply_eq_zero_of_not_le`：apply_eq_zero_of_not_le (h : ¬
+a <= b) (f : IncidenceAlgebra 𝕜 α) : f a b = 0
 -/
-lemma le_of_ne_zero {f : IncidenceAlgebra 𝕜 α} : f a b != 0 -> a <= b :=
-  not_imp_comm.1 fun h => apply_eq_zero_of_not_le h _
+lemma le_of_ne_zero {f : IncidenceAlgebra 𝕜 α} : f a b ≠ 0 → a ≤ b :=
+  not_imp_comm.1 fun h ↦ apply_eq_zero_of_not_le h _
 
 section Coes
 
 -- this must come after the `FunLike` instance
-initialize_simps_projections IncidenceAlgebra (toFun -> apply)
+initialize_simps_projections IncidenceAlgebra (toFun → apply)
 
-/--
-lemma `toFun_eq_coe` / 引理 `toFun_eq_coe`
-
-English:
-lemma toFun_eq_coe
-  given: (f : IncidenceAlgebra 𝕜 α)
-  statement: f.toFun = f
-  proof: rfl
-
-中文:
-引理 toFun_eq_coe
-  条件: (f : Incidence代数 𝕜 α)
-  结论: f.toFun = f
-  证明: rfl
+/-
+**IncidenceAlgebra.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zero 𝕜] [inst_1 : LE α] (f : Incid
+enceAlgebra 𝕜 α), f.toFun = ⇑f
+参数：f : IncidenceAlgebra 𝕜 α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toFun_eq_coe (f : IncidenceAlgebra 𝕜 α) : f.toFun = f := rfl
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (f : α -> α -> 𝕜) (h)
-  statement: (mk f h : α -> α -> 𝕜) = f
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (f : α -> α -> 𝕜) (h)
-  结论: (mk f h : α -> α -> 𝕜) = f
-  证明: rfl
+/-
+**IncidenceAlgebra.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zero 𝕜] [inst_1 : LE α] (f : α → α
+ → 𝕜) (h : ∀ ⦃a b : α⦄, ¬a ≤ b → f a b = 0),   ⇑{ toFun := f, eq_zero_of_not_le'
+ := h } = f
+参数：f : α → α → 𝕜；h : ∀ ⦃a b : α⦄, ¬a ≤ b → f a b = 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_mk (f : α -> α -> 𝕜) (h) : (mk f h : α -> α -> 𝕜) = f := rfl
-
-/--
-lemma `coe_inj` / 引理 `coe_inj`
-
-English:
-lemma coe_inj
-  given: {f g : IncidenceAlgebra 𝕜 α}
-  statement: (f : α -> α -> 𝕜) = g ↔ f = g
-  proof: DFunLike.coe_injective.eq_iff
-
-@[ext]
-
-中文:
-引理 coe_inj
-  条件: {f g : Incidence代数 𝕜 α}
-  结论: (f : α -> α -> 𝕜) = g ↔ f = g
-  证明: DFunLike.coe_injective.eq_iff
-
-@[ext]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.eq_iff, coe_injective, eq_iff
+@[simp, norm_cast] lemma coe_mk (f : α → α → 𝕜) (h) : (mk f h : α → α → 𝕜) = f := rfl
+/-
+**IncidenceAlgebra.coe_inj** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：coe_inj {f g : IncidenceAlgebra 𝕜 α} : (f : α -> α -> 𝕜) = g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-lemma coe_inj {f g : IncidenceAlgebra 𝕜 α} : (f : α -> α -> 𝕜) = g ↔ f = g :=
+lemma coe_inj {f g : IncidenceAlgebra 𝕜 α} : (f : α → α → 𝕜) = g ↔ f = g :=
   DFunLike.coe_injective.eq_iff
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: ⦃f g
-  statement: IncidenceAlgebra 𝕜 α⦄ (h : forall a b, a <= b -> f a b = g a b) : f = g
-  proof: by
-  refine DFunLike.coe_injective (funext₂ fun a b => ?_)
-  by_cases hab : a <= b
-  · exact h _ _ hab
-  · rw [apply_eq_zero_of_not_le hab, apply_eq_zero_of_not_le hab]
-
-中文:
-引理 ext
-  条件: ⦃f g
-  结论: Incidence代数 𝕜 α⦄ (h : 对任意 a b, a <= b -> f a b = g a b) : f = g
-  证明: by
-  refine DFunLike.coe_injective (funext₂ fun a b => ?_)
-  by_cases hab : a <= b
-  · exact h _ _ hab
-  · rw [apply_eq_zero_of_not_le hab, apply_eq_zero_of_not_le hab]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, apply_eq_zero_of_not_le, coe_injective
+/-
+**IncidenceAlgebra.ext** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, a <= b -> f a b = g a b)
+ : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `funext₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort u
+_3} {f g : (a : α) → (b : β a) → γ a b},   (∀ (a : α) (b : β a), f a b = g a …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IncidenceAlgebra.apply_eq_zero_of_not_le`：apply_eq_zero_of_not_le (h : ¬
+a <= b) (f : IncidenceAlgebra 𝕜 α) : f a b = 0
 -/
-lemma ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, a <= b -> f a b = g a b) : f = g := by
-  refine DFunLike.coe_injective (funext₂ fun a b => ?_)
-  by_cases hab : a <= b
+lemma ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : ∀ a b, a ≤ b → f a b = g a b) : f = g := by
+  refine DFunLike.coe_injective (funext₂ fun a b ↦ ?_)
+  by_cases hab : a ≤ b
   · exact h _ _ hab
   · rw [apply_eq_zero_of_not_le hab, apply_eq_zero_of_not_le hab]
-
-/--
-lemma `mk_coe` / 引理 `mk_coe`
-
-English:
-lemma mk_coe
-  given: (f : IncidenceAlgebra 𝕜 α) (h)
-  statement: mk f h = f
-  proof: rfl
-
-中文:
-引理 mk_coe
-  条件: (f : Incidence代数 𝕜 α) (h)
-  结论: mk f h = f
-  证明: rfl
+/-
+**IncidenceAlgebra.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zero 𝕜] [inst_1 : LE α] (f : Incid
+enceAlgebra 𝕜 α)   (h : ∀ ⦃a b : α⦄, ¬a ≤ b → f a b = 0), { toFun := ⇑f, eq_zero
+_of_not_le' := h } = f
+参数：f : IncidenceAlgebra 𝕜 α；h : ∀ ⦃a b : α⦄, ¬a ≤ b → f a b = 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_coe (f : IncidenceAlgebra 𝕜 α) (h) : mk f h = f := rfl
 
 end Coes
 
+/-! ### Additive and multiplicative structure -/
 
-/--
-Instance `instZero` / 实例 `instZero`
+/-
+**IncidenceAlgebra.instZero** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instZero : Zero (IncidenceAlgebra 𝕜 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instZero
-  signature: : Zero (IncidenceAlgebra 𝕜 α)
-  body: ⟨⟨fun _ _ => 0, fun _ _ _ => rfl⟩⟩
-
-中文:
-实例 instZero
-  签名: : 零 (Incidence代数 𝕜 α)
-  定义体: ⟨⟨fun _ _ => 0, fun _ _ _ => rfl⟩⟩
+--- 原说明 ---
+### Additive and multiplicative structure
 -/
-instance instZero : Zero (IncidenceAlgebra 𝕜 α) := ⟨⟨fun _ _ => 0, fun _ _ _ => rfl⟩⟩
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: : Inhabited (IncidenceAlgebra 𝕜 α)
-  body: ⟨0⟩
-
-中文:
-实例 instInhabited
-  签名: : 可居 (Incidence代数 𝕜 α)
-  定义体: ⟨0⟩
+instance instZero : Zero (IncidenceAlgebra 𝕜 α) := ⟨⟨fun _ _ ↦ 0, fun _ _ _ ↦ rfl⟩⟩
+/-
+**IncidenceAlgebra.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instInhabited : Inhabited (IncidenceAlgebra 𝕜 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited : Inhabited (IncidenceAlgebra 𝕜 α) := ⟨0⟩
-
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  statement: ⇑(0 : IncidenceAlgebra 𝕜 α) = 0
-  proof: rfl
-
-中文:
-引理 coe_zero
-  结论: ⇑(0 : Incidence代数 𝕜 α) = 0
-  证明: rfl
+/-
+**IncidenceAlgebra.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zero 𝕜] [inst_1 : LE α], ⇑0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_zero : ⇑(0 : IncidenceAlgebra 𝕜 α) = 0 := rfl
-/--
-lemma `zero_apply` / 引理 `zero_apply`
-
-English:
-lemma zero_apply
-  given: (a b : α)
-  statement: (0 : IncidenceAlgebra 𝕜 α) a b = 0
-  proof: rfl
-
-中文:
-引理 zero_apply
-  条件: (a b : α)
-  结论: (0 : Incidence代数 𝕜 α) a b = 0
-  证明: rfl
+/-
+**IncidenceAlgebra.zero_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zero_apply (a b : α) : (0 : IncidenceAlgebra 𝕜 α) a b = 0
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma zero_apply (a b : α) : (0 : IncidenceAlgebra 𝕜 α) a b = 0 := rfl
 
@@ -342,54 +241,29 @@ end Zero
 section Add
 variable [AddZeroClass 𝕜] [LE α]
 
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: : Add (IncidenceAlgebra 𝕜 α) where
-  body: ⟨f + g, fun a b h => by simp_rw [Pi.add_apply, apply_eq_zero_of_not_le h, zero_add]⟩
-
-中文:
-实例 instAdd
-  签名: : 加法 (Incidence代数 𝕜 α) where
-  定义体: ⟨f + g, fun a b h => by simp_rw [Pi.add_apply, apply_eq_zero_of_not_le h, zero_add]⟩
-
-Depends on / 依赖: Pi.add_apply, add_apply, apply_eq_zero_of_not_le, simp_rw, zero_add
+/-
+**IncidenceAlgebra.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instAdd : Add (IncidenceAlgebra 𝕜 α) where add f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAdd : Add (IncidenceAlgebra 𝕜 α) where
-  add f g := ⟨f + g, fun a b h => by simp_rw [Pi.add_apply, apply_eq_zero_of_not_le h, zero_add]⟩
-
-/--
-lemma `coe_add` / 引理 `coe_add`
-
-English:
-lemma coe_add
-  given: (f g : IncidenceAlgebra 𝕜 α)
-  statement: ⇑(f + g) = f + g
-  proof: rfl
-
-中文:
-引理 coe_add
-  条件: (f g : Incidence代数 𝕜 α)
-  结论: ⇑(f + g) = f + g
-  证明: rfl
+  add f g := ⟨f + g, fun a b h ↦ by simp_rw [Pi.add_apply, apply_eq_zero_of_not_le h, zero_add]⟩
+/-
+**IncidenceAlgebra.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddZeroClass 𝕜] [inst_1 : LE α] (f
+ g : IncidenceAlgebra 𝕜 α), ⇑(f + g) = ⇑f + ⇑g
+参数：f g : IncidenceAlgebra 𝕜 α；f + g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_add (f g : IncidenceAlgebra 𝕜 α) : ⇑(f + g) = f + g := rfl
-/--
-lemma `add_apply` / 引理 `add_apply`
-
-English:
-lemma add_apply
-  given: (f g : IncidenceAlgebra 𝕜 α) (a b : α)
-  statement: (f + g) a b = f a b + g a b
-  proof: rfl
-
-中文:
-引理 add_apply
-  条件: (f g : Incidence代数 𝕜 α) (a b : α)
-  结论: (f + g) a b = f a b + g a b
-  证明: rfl
+/-
+**IncidenceAlgebra.add_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：add_apply (f g : IncidenceAlgebra 𝕜 α) (a b : α) : (f + g) a b = f a b + g
+ a b
+参数：f g : IncidenceAlgebra 𝕜 α；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma add_apply (f g : IncidenceAlgebra 𝕜 α) (a b : α) : (f + g) a b = f a b + g a b := rfl
 
@@ -398,280 +272,162 @@ end Add
 section Smul
 variable {M : Type*} [Zero 𝕜] [LE α] [SMulZeroClass M 𝕜]
 
-/--
-Instance `instSmulZeroClassRight` / 实例 `instSmulZeroClassRight`
-
-English:
-instance instSmulZeroClassRight
-  signature: : SMulZeroClass M (IncidenceAlgebra 𝕜 α) where
-  body: ⟨c • ⇑f, fun a b hab => by simp_rw [Pi.smul_apply, apply_eq_zero_of_not_le hab, smul_zero]⟩
-  smul_zero c := by ext; exact smul_zero _
-
-中文:
-实例 instSmulZeroClassRight
-  签名: : SMulZero类 M (Incidence代数 𝕜 α) where
-  定义体: ⟨c • ⇑f, fun a b hab => by simp_rw [Pi.smul_apply, apply_eq_zero_of_not_le hab, smul_zero]⟩
-  smul_zero c := by ext; exact smul_zero _
-
-Depends on / 依赖: Pi.smul_apply, apply_eq_zero_of_not_le, simp_rw, smul_apply, smul_zero
+/-
+**IncidenceAlgebra.instSmulZeroClassRight** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAl
+gebra`。
+形式化陈述：instSmulZeroClassRight : SMulZeroClass M (IncidenceAlgebra 𝕜 α) where smul
+ c f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSmulZeroClassRight : SMulZeroClass M (IncidenceAlgebra 𝕜 α) where
   smul c f :=
-    ⟨c • ⇑f, fun a b hab => by simp_rw [Pi.smul_apply, apply_eq_zero_of_not_le hab, smul_zero]⟩
+    ⟨c • ⇑f, fun a b hab ↦ by simp_rw [Pi.smul_apply, apply_eq_zero_of_not_le hab, smul_zero]⟩
   smul_zero c := by ext; exact smul_zero _
-
-/--
-lemma `coe_constSMul` / 引理 `coe_constSMul`
-
-English:
-lemma coe_constSMul
-  given: (c : M) (f : IncidenceAlgebra 𝕜 α)
-  statement: ⇑(c • f) = c • ⇑f
-  proof: rfl
-
-中文:
-引理 coe_constSMul
-  条件: (c : M) (f : Incidence代数 𝕜 α)
-  结论: ⇑(c • f) = c • ⇑f
-  证明: rfl
+/-
+**IncidenceAlgebra.coe_constSMul** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} {M : Type u_7} [inst : Zero 𝕜] [inst_1 : L
+E α] [inst_2 : SMulZeroClass M 𝕜] (c : M)   (f : IncidenceAlgebra 𝕜 α), ⇑(c • f)
+ = c • ⇑f
+参数：c : M；f : IncidenceAlgebra 𝕜 α；c • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_constSMul (c : M) (f : IncidenceAlgebra 𝕜 α) : ⇑(c • f) = c • ⇑f := rfl
-
-/--
-lemma `constSMul_apply` / 引理 `constSMul_apply`
-
-English:
-lemma constSMul_apply
-  given: (c : M) (f : IncidenceAlgebra 𝕜 α) (a b : α)
-  statement: (c • f) a b = c • f a b
-  proof: rfl
-
-中文:
-引理 constSMul_apply
-  条件: (c : M) (f : Incidence代数 𝕜 α) (a b : α)
-  结论: (c • f) a b = c • f a b
-  证明: rfl
+/-
+**IncidenceAlgebra.constSMul_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：constSMul_apply (c : M) (f : IncidenceAlgebra 𝕜 α) (a b : α) : (c • f) a b
+ = c • f a b
+参数：c : M；f : IncidenceAlgebra 𝕜 α；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma constSMul_apply (c : M) (f : IncidenceAlgebra 𝕜 α) (a b : α) : (c • f) a b = c • f a b := rfl
 
 end Smul
 
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: [AddMonoid 𝕜] [LE α]
-  body: DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-中文:
-实例 instAddMonoid
-  签名: [加法幺半群 𝕜] [LE α]
-  定义体: DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addMonoid, addMonoid, coe_add, coe_injective, coe_zero
+/-
+**IncidenceAlgebra.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instAddMonoid [AddMonoid 𝕜] [LE α] : AddMonoid (IncidenceAlgebra 𝕜 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddMonoid [AddMonoid 𝕜] [LE α] : AddMonoid (IncidenceAlgebra 𝕜 α) :=
-  DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: [AddCommMonoid 𝕜] [LE α]
-  body: DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-中文:
-实例 instAddCommMonoid
-  签名: [加法交换幺半群 𝕜] [LE α]
-  定义体: DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommMonoid, addCommMonoid, coe_add, coe_injective, coe_zero
+  DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ ↦ rfl
+/-
+**IncidenceAlgebra.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra
+`。
+形式化陈述：instAddCommMonoid [AddCommMonoid 𝕜] [LE α] : AddCommMonoid (IncidenceAlgeb
+ra 𝕜 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommMonoid [AddCommMonoid 𝕜] [LE α] : AddCommMonoid (IncidenceAlgebra 𝕜 α) :=
-  DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
+  DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ ↦ rfl
 
 section AddGroup
 variable [AddGroup 𝕜] [LE α]
 
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: : Neg (IncidenceAlgebra 𝕜 α) where
-  body: ⟨-f, fun a b h => by simp_rw [Pi.neg_apply, apply_eq_zero_of_not_le h, neg_zero]⟩
-
-中文:
-实例 instNeg
-  签名: : 取负 (Incidence代数 𝕜 α) where
-  定义体: ⟨-f, fun a b h => by simp_rw [Pi.neg_apply, apply_eq_zero_of_not_le h, neg_zero]⟩
-
-Depends on / 依赖: Pi.neg_apply, apply_eq_zero_of_not_le, neg_apply, neg_zero, simp_rw
+/-
+**IncidenceAlgebra.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instNeg : Neg (IncidenceAlgebra 𝕜 α) where neg f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNeg : Neg (IncidenceAlgebra 𝕜 α) where
-  neg f := ⟨-f, fun a b h => by simp_rw [Pi.neg_apply, apply_eq_zero_of_not_le h, neg_zero]⟩
-
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: : Sub (IncidenceAlgebra 𝕜 α) where
-  body: ⟨f - g, fun a b h => by simp_rw [Pi.sub_apply, apply_eq_zero_of_not_le h, sub_zero]⟩
-
-中文:
-实例 instSub
-  签名: : 减法 (Incidence代数 𝕜 α) where
-  定义体: ⟨f - g, fun a b h => by simp_rw [Pi.sub_apply, apply_eq_zero_of_not_le h, sub_zero]⟩
-
-Depends on / 依赖: Pi.sub_apply, apply_eq_zero_of_not_le, simp_rw, sub_apply, sub_zero
+  neg f := ⟨-f, fun a b h ↦ by simp_rw [Pi.neg_apply, apply_eq_zero_of_not_le h, neg_zero]⟩
+/-
+**IncidenceAlgebra.instSub** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instSub : Sub (IncidenceAlgebra 𝕜 α) where sub f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSub : Sub (IncidenceAlgebra 𝕜 α) where
-  sub f g := ⟨f - g, fun a b h => by simp_rw [Pi.sub_apply, apply_eq_zero_of_not_le h, sub_zero]⟩
-
-/--
-lemma `coe_neg` / 引理 `coe_neg`
-
-English:
-lemma coe_neg
-  given: (f : IncidenceAlgebra 𝕜 α)
-  statement: ⇑(-f) = -f
-  proof: rfl
-
-中文:
-引理 coe_neg
-  条件: (f : Incidence代数 𝕜 α)
-  结论: ⇑(-f) = -f
-  证明: rfl
+  sub f g := ⟨f - g, fun a b h ↦ by simp_rw [Pi.sub_apply, apply_eq_zero_of_not_le h, sub_zero]⟩
+/-
+**IncidenceAlgebra.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddGroup 𝕜] [inst_1 : LE α] (f : I
+ncidenceAlgebra 𝕜 α), ⇑(-f) = -⇑f
+参数：f : IncidenceAlgebra 𝕜 α；-f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_neg (f : IncidenceAlgebra 𝕜 α) : ⇑(-f) = -f := rfl
-/--
-lemma `coe_sub` / 引理 `coe_sub`
-
-English:
-lemma coe_sub
-  given: (f g : IncidenceAlgebra 𝕜 α)
-  statement: ⇑(f - g) = f - g
-  proof: rfl
-
-中文:
-引理 coe_sub
-  条件: (f g : Incidence代数 𝕜 α)
-  结论: ⇑(f - g) = f - g
-  证明: rfl
+/-
+**IncidenceAlgebra.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddGroup 𝕜] [inst_1 : LE α] (f g :
+ IncidenceAlgebra 𝕜 α), ⇑(f - g) = ⇑f - ⇑g
+参数：f g : IncidenceAlgebra 𝕜 α；f - g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_sub (f g : IncidenceAlgebra 𝕜 α) : ⇑(f - g) = f - g := rfl
-/--
-lemma `neg_apply` / 引理 `neg_apply`
-
-English:
-lemma neg_apply
-  given: (f : IncidenceAlgebra 𝕜 α) (a b : α)
-  statement: (-f) a b = -f a b
-  proof: rfl
-
-中文:
-引理 neg_apply
-  条件: (f : Incidence代数 𝕜 α) (a b : α)
-  结论: (-f) a b = -f a b
-  证明: rfl
+/-
+**IncidenceAlgebra.neg_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：neg_apply (f : IncidenceAlgebra 𝕜 α) (a b : α) : (-f) a b = -f a b
+参数：f : IncidenceAlgebra 𝕜 α；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma neg_apply (f : IncidenceAlgebra 𝕜 α) (a b : α) : (-f) a b = -f a b := rfl
-/--
-lemma `sub_apply` / 引理 `sub_apply`
-
-English:
-lemma sub_apply
-  given: (f g : IncidenceAlgebra 𝕜 α) (a b : α)
-  statement: (f - g) a b = f a b - g a b
-  proof: rfl
-
-中文:
-引理 sub_apply
-  条件: (f g : Incidence代数 𝕜 α) (a b : α)
-  结论: (f - g) a b = f a b - g a b
-  证明: rfl
+/-
+**IncidenceAlgebra.sub_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：sub_apply (f g : IncidenceAlgebra 𝕜 α) (a b : α) : (f - g) a b = f a b - g
+ a b
+参数：f g : IncidenceAlgebra 𝕜 α；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sub_apply (f g : IncidenceAlgebra 𝕜 α) (a b : α) : (f - g) a b = f a b - g a b := rfl
-
-/--
-Instance `instAddGroup` / 实例 `instAddGroup`
-
-English:
-instance instAddGroup
-  signature: : AddGroup (IncidenceAlgebra 𝕜 α)
-  body: DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddGroup
-  签名: : 加法群 (Incidence代数 𝕜 α)
-  定义体: DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addGroup, addGroup, coe_add, coe_injective, coe_neg, coe_sub, coe_zero
+/-
+**IncidenceAlgebra.instAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instAddGroup : AddGroup (IncidenceAlgebra 𝕜 α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncidenceAlgebra.coe_neg`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddGro
+up 𝕜] [inst_1 : LE α] (f : IncidenceAlgebra 𝕜 α), ⇑(-f) = -⇑f
+· 使用定理 `IncidenceAlgebra.coe_sub`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddGro
+up 𝕜] [inst_1 : LE α] (f g : IncidenceAlgebra 𝕜 α), ⇑(f - g) = ⇑f - ⇑g
 -/
 instance instAddGroup : AddGroup (IncidenceAlgebra 𝕜 α) :=
-  DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
+  DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ ↦ rfl) fun _ _ ↦ rfl
 
 end AddGroup
 
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup 𝕜] [LE α]
-  body: DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl)
-    fun _ _ => rfl
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 𝕜] [LE α]
-  定义体: DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl)
-    fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommGroup, addCommGroup, coe_add, coe_injective, coe_neg, coe_sub, coe_zero
+/-
+**IncidenceAlgebra.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`
+。
+形式化陈述：instAddCommGroup [AddCommGroup 𝕜] [LE α] : AddCommGroup (IncidenceAlgebra 
+𝕜 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup [AddCommGroup 𝕜] [LE α] : AddCommGroup (IncidenceAlgebra 𝕜 α) :=
-  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl)
-    fun _ _ => rfl
+  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ ↦ rfl)
+    fun _ _ ↦ rfl
 
 section One
 variable [Preorder α] [DecidableEq α] [Zero 𝕜] [One 𝕜]
 
-/--
-Instance `instOne` / 实例 `instOne`
+/-- The unit incidence algebra is the delta function, whose entries are `0` except on the diagonal
+where they are `1`. -/
+/-
+**IncidenceAlgebra.instOne** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instOne : One (IncidenceAlgebra 𝕜 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instOne
-  signature: : One (IncidenceAlgebra 𝕜 α)
-  body: ⟨⟨fun a b => if a = b then 1 else 0, fun _a _b h => ite_eq_right_iff.2 fun H => (h H.le).elim⟩⟩
-
-中文:
-实例 instOne
-  签名: : 幺 (Incidence代数 𝕜 α)
-  定义体: ⟨⟨fun a b => if a = b then 1 else 0, fun _a _b h => ite_eq_right_iff.2 fun H => (h H.le).elim⟩⟩
-
-Depends on / 依赖: H.le, ite_eq_right_iff
+--- 原说明 ---
+The unit incidence algebra is the delta function, whose entries are `0` except o
+n the diagonal
+where they are `1`.
 -/
 instance instOne : One (IncidenceAlgebra 𝕜 α) :=
-  ⟨⟨fun a b => if a = b then 1 else 0, fun _a _b h => ite_eq_right_iff.2 fun H => (h H.le).elim⟩⟩
-
-/--
-lemma `one_apply` / 引理 `one_apply`
-
-English:
-lemma one_apply
-  given: (a b : α)
-  statement: (1 : IncidenceAlgebra 𝕜 α) a b = if a = b then 1 else 0
-  proof: rfl
-
-中文:
-引理 one_apply
-  条件: (a b : α)
-  结论: (1 : Incidence代数 𝕜 α) a b = if a = b then 1 else 0
-  证明: rfl
+  ⟨⟨fun a b ↦ if a = b then 1 else 0, fun _a _b h ↦ ite_eq_right_iff.2 fun H ↦ (h H.le).elim⟩⟩
+/-
+**IncidenceAlgebra.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Preorder α] [inst_1 : DecidableEq 
+α] [inst_2 : Zero 𝕜] [inst_3 : One 𝕜]   (a b : α), 1 a b = if a = b then 1 else 
+0
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma one_apply (a b : α) : (1 : IncidenceAlgebra 𝕜 α) a b = if a = b then 1 else 0 := rfl
 
@@ -681,128 +437,74 @@ section Mul
 variable [Preorder α] [LocallyFiniteOrder α] [AddCommMonoid 𝕜] [Mul 𝕜]
 
 /--
-Instance `instMul` / 实例 `instMul`
+The multiplication operation in incidence algebras is defined on an interval by summing over
+all divisions into two subintervals the product of the values of the original pair of functions.
+-/
+/-
+**IncidenceAlgebra.instMul** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instMul : Mul (IncidenceAlgebra 𝕜 α) where mul f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instMul
-  signature: : Mul (IncidenceAlgebra 𝕜 α) where
-  body: ⟨fun a b => ∑ x in Icc a b, f a x * g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩
-
-中文:
-实例 instMul
-  签名: : 乘法 (Incidence代数 𝕜 α) where
-  定义体: ⟨fun a b => ∑ x in Icc a b, f a x * g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩
-
-Depends on / 依赖: Icc_eq_empty, sum_empty
+--- 原说明 ---
+The multiplication operation in incidence algebras is defined on an interval by 
+summing over
+all divisions into two subintervals the product of the values of the original pa
+ir of functions.
 -/
 instance instMul : Mul (IncidenceAlgebra 𝕜 α) where
   mul f g :=
-    ⟨fun a b => ∑ x in Icc a b, f a x * g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩
-
-/--
-lemma `mul_apply` / 引理 `mul_apply`
-
-English:
-lemma mul_apply
-  given: (f g : IncidenceAlgebra 𝕜 α) (a b : α)
-  proof: rfl
-
-中文:
-引理 mul_apply
-  条件: (f g : Incidence代数 𝕜 α) (a b : α)
-  证明: rfl
+    ⟨fun a b ↦ ∑ x ∈ Icc a b, f a x * g x b, fun a b h ↦ by rw [Icc_eq_empty h, sum_empty]⟩
+/-
+**IncidenceAlgebra.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Preorder α] [inst_1 : LocallyFinit
+eOrder α] [inst_2 : AddCommMonoid 𝕜]   [inst_3 : Mul 𝕜] (f g : IncidenceAlgebra 
+𝕜 α) (a b : α), (f * g) a b = ∑ x ∈ Finset.Icc a b, f a x * g x b
+参数：f g : IncidenceAlgebra 𝕜 α；a b : α；f * g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mul_apply (f g : IncidenceAlgebra 𝕜 α) (a b : α) :
-    (f * g) a b = ∑ x in Icc a b, f a x * g x b := rfl
+    (f * g) a b = ∑ x ∈ Icc a b, f a x * g x b := rfl
 
 end Mul
 
-/--
-Instance `instNonUnitalNonAssocSemiring` / 实例 `instNonUnitalNonAssocSemiring`
-
-English:
-instance instNonUnitalNonAssocSemiring
-  signature: [Preorder α] [LocallyFiniteOrder α]
-  body: instAddCommMonoid
-  zero_mul := fun f => by ext; exact sum_eq_zero fun x _ => zero_mul _
-  mul_zero := fun f => by ext; exact sum_eq_zero fun x _ => mul_zero _
-  left_distrib := fun f g h => by
-    ext; exact Eq.trans (sum_congr rfl fun x _ => left_distrib _ _ _) sum_add_distrib
-  right_distrib := fun f g h => by
-    ext; exact Eq.trans (sum_congr rfl fun x _ => right_distrib _ _ _) sum_add_distrib
-
-中文:
-实例 instNonUnitalNonAssocSemiring
-  签名: [预序 α] [局部有限序 α]
-  定义体: instAddCommMonoid
-  zero_mul := fun f => by ext; exact sum_eq_zero fun x _ => zero_mul _
-  mul_zero := fun f => by ext; exact sum_eq_zero fun x _ => mul_zero _
-  left_distrib := fun f g h => by
-    ext; exact Eq.trans (sum_congr rfl fun x _ => left_distrib _ _ _) sum_add_distrib
-  right_distrib := fun f g h => by
-    ext; exact Eq.trans (sum_congr rfl fun x _ => right_distrib _ _ _) sum_add_distrib
-
-Depends on / 依赖: instAddCommMonoid
+/-
+**IncidenceAlgebra.instNonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Inci
+denceAlgebra`。
+形式化陈述：instNonUnitalNonAssocSemiring [Preorder α] [LocallyFiniteOrder α] [NonUnit
+alNonAssocSemiring 𝕜] : NonUnitalNonAssocSemiring (IncidenceAlgebra 𝕜 α) where _
+_
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalNonAssocSemiring [Preorder α] [LocallyFiniteOrder α]
     [NonUnitalNonAssocSemiring 𝕜] : NonUnitalNonAssocSemiring (IncidenceAlgebra 𝕜 α) where
   __ := instAddCommMonoid
-  zero_mul := fun f => by ext; exact sum_eq_zero fun x _ => zero_mul _
-  mul_zero := fun f => by ext; exact sum_eq_zero fun x _ => mul_zero _
-  left_distrib := fun f g h => by
-    ext; exact Eq.trans (sum_congr rfl fun x _ => left_distrib _ _ _) sum_add_distrib
-  right_distrib := fun f g h => by
-    ext; exact Eq.trans (sum_congr rfl fun x _ => right_distrib _ _ _) sum_add_distrib
-
-/--
-Instance `instNonAssocSemiring` / 实例 `instNonAssocSemiring`
-
-English:
-instance instNonAssocSemiring
-  signature: [Preorder α] [LocallyFiniteOrder α] [DecidableEq α]
-  body: instNonUnitalNonAssocSemiring
-  one_mul := fun f => by ext; simp [*]
-  mul_one := fun f => by ext; simp [*]
-
-中文:
-实例 instNonAssocSemiring
-  签名: [预序 α] [局部有限序 α] [DecidableEq α]
-  定义体: instNonUnitalNonAssocSemiring
-  one_mul := fun f => by ext; simp [*]
-  mul_one := fun f => by ext; simp [*]
-
-Depends on / 依赖: instNonUnitalNonAssocSemiring
+  zero_mul := fun f ↦ by ext; exact sum_eq_zero fun x _ ↦ zero_mul _
+  mul_zero := fun f ↦ by ext; exact sum_eq_zero fun x _ ↦ mul_zero _
+  left_distrib := fun f g h ↦ by
+    ext; exact Eq.trans (sum_congr rfl fun x _ ↦ left_distrib _ _ _) sum_add_distrib
+  right_distrib := fun f g h ↦ by
+    ext; exact Eq.trans (sum_congr rfl fun x _ ↦ right_distrib _ _ _) sum_add_distrib
+/-
+**IncidenceAlgebra.instNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlge
+bra`。
+形式化陈述：instNonAssocSemiring [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [
+NonAssocSemiring 𝕜] : NonAssocSemiring (IncidenceAlgebra 𝕜 α) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocSemiring [Preorder α] [LocallyFiniteOrder α] [DecidableEq α]
     [NonAssocSemiring 𝕜] : NonAssocSemiring (IncidenceAlgebra 𝕜 α) where
   __ := instNonUnitalNonAssocSemiring
-  one_mul := fun f => by ext; simp [*]
-  mul_one := fun f => by ext; simp [*]
-
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Semiring 𝕜]
-  body: instNonAssocSemiring
-  mul_assoc f g h := by
-    ext a b
-    simp only [mul_apply, sum_mul, mul_sum, sum_sigma']
-    apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
-      aesop (add simp mul_assoc) (add unsafe le_trans)
-
-中文:
-实例 instSemiring
-  签名: [预序 α] [局部有限序 α] [DecidableEq α] [半环 𝕜]
-  定义体: instNonAssocSemiring
-  mul_assoc f g h := by
-    ext a b
-    simp only [mul_apply, sum_mul, mul_sum, sum_sigma']
-    apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
-      aesop (add simp mul_assoc) (add unsafe le_trans)
-
-Depends on / 依赖: instNonAssocSemiring
+  one_mul := fun f ↦ by ext; simp [*]
+  mul_one := fun f ↦ by ext; simp [*]
+/-
+**IncidenceAlgebra.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instSemiring [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Semiring
+ 𝕜] : Semiring (IncidenceAlgebra 𝕜 α) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemiring [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Semiring 𝕜] :
     Semiring (IncidenceAlgebra 𝕜 α) where
@@ -810,25 +512,14 @@ instance instSemiring [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Se
   mul_assoc f g h := by
     ext a b
     simp only [mul_apply, sum_mul, mul_sum, sum_sigma']
-    apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
+    apply sum_nbij' (fun ⟨a, b⟩ ↦ ⟨b, a⟩) (fun ⟨a, b⟩ ↦ ⟨b, a⟩) <;>
       aesop (add simp mul_assoc) (add unsafe le_trans)
-
-/--
-Instance `instRing` / 实例 `instRing`
-
-English:
-instance instRing
-  signature: [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Ring 𝕜]
-  body: instSemiring
-  __ := instAddGroup
-
-中文:
-实例 instRing
-  签名: [预序 α] [局部有限序 α] [DecidableEq α] [环 𝕜]
-  定义体: instSemiring
-  __ := instAddGroup
-
-Depends on / 依赖: instSemiring
+/-
+**IncidenceAlgebra.instRing** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instRing [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Ring 𝕜] : Ri
+ng (IncidenceAlgebra 𝕜 α) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRing [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Ring 𝕜] :
     Ring (IncidenceAlgebra 𝕜 α) where
@@ -840,71 +531,73 @@ instance instRing [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Ring �
 section SMul
 variable [Preorder α] [LocallyFiniteOrder α] [AddCommMonoid 𝕜] [AddCommMonoid 𝕝] [SMul 𝕜 𝕝]
 
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: : SMul (IncidenceAlgebra 𝕜 α) (IncidenceAlgebra 𝕝 α)
-  body: ⟨fun f g =>
-    ⟨fun a b => ∑ x in Icc a b, f a x • g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩⟩
-
-@[simp]
-
-中文:
-实例 instSMul
-  签名: : 标量乘法 (Incidence代数 𝕜 α) (Incidence代数 𝕝 α)
-  定义体: ⟨fun f g =>
-    ⟨fun a b => ∑ x in Icc a b, f a x • g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Icc_eq_empty, X.obj, X.property, isSheaf_iff_preservesFiniteProducts_and_equalizerCondition, property, sum_empty
+/-
+**IncidenceAlgebra.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：instSMul : SMul (IncidenceAlgebra 𝕜 α) (IncidenceAlgebra 𝕝 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul : SMul (IncidenceAlgebra 𝕜 α) (IncidenceAlgebra 𝕝 α) :=
-  ⟨fun f g =>
-    ⟨fun a b => ∑ x in Icc a b, f a x • g x b, fun a b h => by rw [Icc_eq_empty h, sum_empty]⟩⟩
+  ⟨fun f g ↦
+    ⟨fun a b ↦ ∑ x ∈ Icc a b, f a x • g x b, fun a b h ↦ by rw [Icc_eq_empty h, sum_empty]⟩⟩
 
 @[simp]
-/--
-lemma `smul_apply` / 引理 `smul_apply`
-
-English:
-lemma smul_apply
-  given: (f : IncidenceAlgebra 𝕜 α) (g : IncidenceAlgebra 𝕝 α) (a b : α)
-  proof: rfl
-
-中文:
-引理 smul_apply
-  条件: (f : Incidence代数 𝕜 α) (g : Incidence代数 𝕝 α) (a b : α)
-  证明: rfl
+/-
+**IncidenceAlgebra.smul_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：smul_apply (f : IncidenceAlgebra 𝕜 α) (g : IncidenceAlgebra 𝕝 α) (a b : α)
+ : (f • g) a b = ∑ x in Icc a b, f a x • g x b
+参数：f : IncidenceAlgebra 𝕜 α；g : IncidenceAlgebra 𝕝 α；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_apply (f : IncidenceAlgebra 𝕜 α) (g : IncidenceAlgebra 𝕝 α) (a b : α) :
-    (f • g) a b = ∑ x in Icc a b, f a x • g x b :=
+    (f • g) a b = ∑ x ∈ Icc a b, f a x • g x b :=
   rfl
 
 end SMul
 
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: [Preorder α] [LocallyFiniteOrder α] [AddCommMonoid 𝕜] [Monoid 𝕜]
-  body: by
-    ext a b
-    simp only [smul_apply, sum_smul, smul_sum, sum_sigma']
-    apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;> aesop (add unsafe le_trans)
-
-中文:
-实例 instIsScalarTower
-  签名: [预序 α] [局部有限序 α] [加法交换幺半群 𝕜] [幺半群 𝕜]
-  定义体: by
-    ext a b
-    simp only [smul_apply, sum_smul, smul_sum, sum_sigma']
-    apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;> aesop (add unsafe le_trans)
-
-Depends on / 依赖: le_trans, smul_apply, smul_sum, sum_nbij, sum_sigma, sum_smul, unsafe
+/-
+**IncidenceAlgebra.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra
+`。
+形式化陈述：instIsScalarTower [Preorder α] [LocallyFiniteOrder α] [AddCommMonoid 𝕜] [M
+onoid 𝕜] [Semiring 𝕝] [AddCommMonoid 𝕞] [SMul 𝕜 𝕝] [Module 𝕝 𝕞] [DistribMulActio
+n 𝕜 𝕞] [IsScalarTower 𝕜 𝕝 𝕞] : IsScalarTower (IncidenceAlgebra 𝕜 α) (IncidenceAl
+gebra 𝕝 α) (IncidenceAlgebra 𝕞 α) where smul_assoc f g h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.ext`：ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, 
+a <= b -> f a b = g a b) : f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_smul`：Finset.sum_smul {f : ι -> R} {s : Finset ι} {x : M} : (
+∑ i in s, f i) • x = ∑ i in s, f i • x
+· 使用定理 `Finset.sum_sigma'`：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommMonoid
+ β] {σ : α → Type u_6} (s : Finset α) (t : (a : α) → Finset (σ a))   (f : (a : α
+) → σ a…
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `Finset.sum_nbij'`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst :
+ AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (i : ι
+ → κ) …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Sigma.eta`：∀ {α : Type u_1} {β : α → Type u_4} (x : (a : α) × β a), ⟨x.f
+st, x.snd⟩ = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance instIsScalarTower [Preorder α] [LocallyFiniteOrder α] [AddCommMonoid 𝕜] [Monoid 𝕜]
     [Semiring 𝕝] [AddCommMonoid 𝕞] [SMul 𝕜 𝕝] [Module 𝕝 𝕞] [DistribMulAction 𝕜 𝕞]
@@ -913,132 +606,51 @@ instance instIsScalarTower [Preorder α] [LocallyFiniteOrder α] [AddCommMonoid 
   smul_assoc f g h := by
     ext a b
     simp only [smul_apply, sum_smul, smul_sum, sum_sigma']
-    apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;> aesop (add unsafe le_trans)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] [LocallyFiniteOrder α] [DecidableEq α] [Semiring 𝕜] [Semiring 𝕝]
-  body: by ext a b hab; simp [ite_smul, hab]
-  mul_smul := smul_assoc
-  smul_add f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => smul_add _ _ _) sum_add_distrib
-  add_smul f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => add_smul _ _ _) sum_add_distrib
-  zero_smul f := by ext; exact sum_eq_zero fun x _ => zero_smul _ _
-  smul_zero f := by ext; exact sum_eq_zero fun x _ => smul_zero _
-
-中文:
-实例 [预序
-  签名: α] [局部有限序 α] [DecidableEq α] [半环 𝕜] [半环 𝕝]
-  定义体: by ext a b hab; simp [ite_smul, hab]
-  mul_smul := smul_assoc
-  smul_add f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => smul_add _ _ _) sum_add_distrib
-  add_smul f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => add_smul _ _ _) sum_add_distrib
-  zero_smul f := by ext; exact sum_eq_zero fun x _ => zero_smul _ _
-  smul_zero f := by ext; exact sum_eq_zero fun x _ => smul_zero _
-
-Depends on / 依赖: Eq.trans, add_smul, ite_smul, mul_smul, smul_add, smul_assoc, smul_zero, sum_add_distrib, sum_congr, sum_eq_zero, zero_smul
+    apply sum_nbij' (fun ⟨a, b⟩ ↦ ⟨b, a⟩) (fun ⟨a, b⟩ ↦ ⟨b, a⟩) <;> aesop (add unsafe le_trans)
+/-
+**IncidenceAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] [LocallyFiniteOrder α] [DecidableEq α] [Semiring 𝕜] [Semiring 𝕝]
     [Module 𝕜 𝕝] : Module (IncidenceAlgebra 𝕜 α) (IncidenceAlgebra 𝕝 α) where
   one_smul f := by ext a b hab; simp [ite_smul, hab]
   mul_smul := smul_assoc
-  smul_add f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => smul_add _ _ _) sum_add_distrib
-  add_smul f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => add_smul _ _ _) sum_add_distrib
-  zero_smul f := by ext; exact sum_eq_zero fun x _ => zero_smul _ _
-  smul_zero f := by ext; exact sum_eq_zero fun x _ => smul_zero _
-
-/--
-Instance `smulWithZeroRight` / 实例 `smulWithZeroRight`
-
-English:
-instance smulWithZeroRight
-  signature: [Zero 𝕜] [Zero 𝕝] [SMulWithZero 𝕜 𝕝] [LE α]
-  body: DFunLike.coe_injective.smulWithZero ⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩
-    coe_constSMul
-
-中文:
-实例 smulWithZeroRight
-  签名: [零 𝕜] [零 𝕝] [带零标量乘法 𝕜 𝕝] [LE α]
-  定义体: DFunLike.coe_injective.smulWithZero ⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩
-    coe_constSMul
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.smulWithZero, IncidenceAlgebra, coe_constSMul, coe_injective, coe_zero, smulWithZero
+  smul_add f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ ↦ smul_add _ _ _) sum_add_distrib
+  add_smul f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ ↦ add_smul _ _ _) sum_add_distrib
+  zero_smul f := by ext; exact sum_eq_zero fun x _ ↦ zero_smul _ _
+  smul_zero f := by ext; exact sum_eq_zero fun x _ ↦ smul_zero _
+/-
+**IncidenceAlgebra.smulWithZeroRight** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra
+`。
+形式化陈述：smulWithZeroRight [Zero 𝕜] [Zero 𝕝] [SMulWithZero 𝕜 𝕝] [LE α] : SMulWithZe
+ro 𝕜 (IncidenceAlgebra 𝕝 α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IncidenceAlgebra.coe_zero`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zero 
+𝕜] [inst_1 : LE α], ⇑0 = 0
 -/
 instance smulWithZeroRight [Zero 𝕜] [Zero 𝕝] [SMulWithZero 𝕜 𝕝] [LE α] :
     SMulWithZero 𝕜 (IncidenceAlgebra 𝕝 α) :=
-  DFunLike.coe_injective.smulWithZero ⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩
+  DFunLike.coe_injective.smulWithZero ⟨((⇑) : IncidenceAlgebra 𝕝 α → α → α → 𝕝), coe_zero⟩
     coe_constSMul
-
-/--
-Instance `moduleRight` / 实例 `moduleRight`
-
-English:
-instance moduleRight
-  signature: [Preorder α] [Semiring 𝕜] [AddCommMonoid 𝕝] [Module 𝕜 𝕝]
-  body: DFunLike.coe_injective.module _ ⟨⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩, coe_add⟩
-    coe_constSMul
-
-中文:
-实例 moduleRight
-  签名: [预序 α] [半环 𝕜] [加法交换幺半群 𝕝] [模 𝕜 𝕝]
-  定义体: DFunLike.coe_injective.module _ ⟨⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩, coe_add⟩
-    coe_constSMul
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.module, IncidenceAlgebra, coe_add, coe_constSMul, coe_injective, coe_zero, module
+/-
+**IncidenceAlgebra.moduleRight** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：moduleRight [Preorder α] [Semiring 𝕜] [AddCommMonoid 𝕝] [Module 𝕜 𝕝] : Mod
+ule 𝕜 (IncidenceAlgebra 𝕝 α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance moduleRight [Preorder α] [Semiring 𝕜] [AddCommMonoid 𝕝] [Module 𝕜 𝕝] :
     Module 𝕜 (IncidenceAlgebra 𝕝 α) :=
-  DFunLike.coe_injective.module _ ⟨⟨((⇑) : IncidenceAlgebra 𝕝 α -> α -> α -> 𝕝), coe_zero⟩, coe_add⟩
+  DFunLike.coe_injective.module _ ⟨⟨((⇑) : IncidenceAlgebra 𝕝 α → α → α → 𝕝), coe_zero⟩, coe_add⟩
     coe_constSMul
-
-/--
-Instance `algebraRight` / 实例 `algebraRight`
-
-English:
-instance algebraRight
-  signature: [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α] [CommSemiring 𝕜]
-  body: { toFun c := algebraMap 𝕜 𝕝 c • (1 : IncidenceAlgebra 𝕝 α)
-    map_one' := by
-      ext; simp only [mul_boole, one_apply, smul_eq_mul, constSMul_apply, map_one]
-    map_mul' c d := by
-        ext a b
-        obtain rfl | h := eq_or_ne a b
-        · simp only [one_apply, smul_eq_mul, mul_apply, constSMul_apply, map_mul,
-            eq_comm, Icc_self]
-          simp
-        · simp only [one_apply, mul_one, smul_eq_mul, mul_apply, zero_mul,
-            constSMul_apply, ← ite_and, ite_mul, mul_ite, map_mul, mul_zero, if_neg h]
-          refine (sum_eq_zero fun x _ => ?_).symm
-exact if_neg fun hx => h hx.2.trans hx.1
-    map_zero' := by rw [map_zero, zero_smul]
-    map_add' c d := by rw [map_add, add_smul] }
-  commutes' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, mul_comm]
-  smul_def' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, Algebra.smul_def]
-
-中文:
-实例 algebraRight
-  签名: [偏序 α] [局部有限序 α] [DecidableEq α] [交换半环 𝕜]
-  定义体: { toFun c := algebraMap 𝕜 𝕝 c • (1 : IncidenceAlgebra 𝕝 α)
-    map_one' := by
-      ext; simp only [mul_boole, one_apply, smul_eq_mul, constSMul_apply, map_one]
-    map_mul' c d := by
-        ext a b
-        obtain rfl | h := eq_or_ne a b
-        · simp only [one_apply, smul_eq_mul, mul_apply, constSMul_apply, map_mul,
-            eq_comm, Icc_self]
-          simp
-        · simp only [one_apply, mul_one, smul_eq_mul, mul_apply, zero_mul,
-            constSMul_apply, ← ite_and, ite_mul, mul_ite, map_mul, mul_zero, if_neg h]
-          refine (sum_eq_zero fun x _ => ?_).symm
-exact if_neg fun hx => h hx.2.trans hx.1
-    map_zero' := by rw [map_zero, zero_smul]
-    map_add' c d := by rw [map_add, add_smul] }
-  commutes' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, mul_comm]
-  smul_def' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, Algebra.smul_def]
-
-Depends on / 依赖: Icc_self, IncidenceAlgebra, algebraMap, constSMul_apply, eq_comm, eq_or_ne, if_ne, if_neg, ite_and, ite_mul, map_mul, map_one, mul_apply, mul_boole, mul_ite, mul_one, mul_zero, one_apply, smul_eq_mul, sum_eq_zero
+/-
+**IncidenceAlgebra.algebraRight** 是 Mathlib 中的一个实例，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：algebraRight [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α] [Comm
+Semiring 𝕜] [CommSemiring 𝕝] [Algebra 𝕜 𝕝] : Algebra 𝕜 (IncidenceAlgebra 𝕝 α) wh
+ere algebraMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance algebraRight [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α] [CommSemiring 𝕜]
     [CommSemiring 𝕝] [Algebra 𝕜 𝕝] : Algebra 𝕜 (IncidenceAlgebra 𝕝 α) where
@@ -1054,8 +666,8 @@ instance algebraRight [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α]
           simp
         · simp only [one_apply, mul_one, smul_eq_mul, mul_apply, zero_mul,
             constSMul_apply, ← ite_and, ite_mul, mul_ite, map_mul, mul_zero, if_neg h]
-          refine (sum_eq_zero fun x _ => ?_).symm
-exact if_neg fun hx => h hx.2.trans hx.1
+          refine (sum_eq_zero fun x _ ↦ ?_).symm
+          exact if_neg fun hx ↦ h <| hx.2.trans hx.1
     map_zero' := by rw [map_zero, zero_smul]
     map_add' c d := by rw [map_add, add_smul] }
   commutes' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, mul_comm]
@@ -1069,23 +681,19 @@ variable (𝕜) [Zero 𝕜] [One 𝕜] [Preorder α] [DecidableRel (α := α) (�
 /-- The lambda function of the incidence algebra is the function that assigns `1` to every nonempty
 interval of cardinality one or two. -/
 @[simps]
-/--
-Definition of `lambda` / `lambda` 的定义
+/-
+**IncidenceAlgebra.lambda** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：lambda : IncidenceAlgebra 𝕜 α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lambda
-  signature: : IncidenceAlgebra 𝕜 α
-  body: ⟨fun a b => if a ⩿ b then 1 else 0, fun _a _b h => if_neg fun hh => h hh.le⟩
-
-中文:
-定义 lambda
-  签名: : Incidence代数 𝕜 α
-  定义体: ⟨fun a b => if a ⩿ b then 1 else 0, fun _a _b h => if_neg fun hh => h hh.le⟩
-
-Depends on / 依赖: hh.le, if_neg
+--- 原说明 ---
+The lambda function of the incidence algebra is the function that assigns `1` to
+ every nonempty
+interval of cardinality one or two.
 -/
 def lambda : IncidenceAlgebra 𝕜 α :=
-  ⟨fun a b => if a ⩿ b then 1 else 0, fun _a _b h => if_neg fun hh => h hh.le⟩
+  ⟨fun a b ↦ if a ⩿ b then 1 else 0, fun _a _b h ↦ if_neg fun hh ↦ h hh.le⟩
 
 end Lambda
 
@@ -1094,176 +702,122 @@ end Lambda
 section Zeta
 variable (𝕜) [Zero 𝕜] [One 𝕜] [LE α] [DecidableLE α] {a b : α}
 
-/--
-Definition of `zeta` / `zeta` 的定义
+/-- The zeta function of the incidence algebra is the function that assigns 1 to every nonempty
+interval, convolution with this function sums functions over intervals. -/
+/-
+**IncidenceAlgebra.zeta** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zeta : IncidenceAlgebra 𝕜 α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeta
-  signature: : IncidenceAlgebra 𝕜 α
-  body: ⟨fun a b => if a <= b then 1 else 0, fun _a _b h => if_neg h⟩
-
-中文:
-定义 zeta
-  签名: : Incidence代数 𝕜 α
-  定义体: ⟨fun a b => if a <= b then 1 else 0, fun _a _b h => if_neg h⟩
-
-Depends on / 依赖: if_neg
+--- 原说明 ---
+The zeta function of the incidence algebra is the function that assigns 1 to eve
+ry nonempty
+interval, convolution with this function sums functions over intervals.
 -/
-def zeta : IncidenceAlgebra 𝕜 α := ⟨fun a b => if a <= b then 1 else 0, fun _a _b h => if_neg h⟩
+def zeta : IncidenceAlgebra 𝕜 α := ⟨fun a b ↦ if a ≤ b then 1 else 0, fun _a _b h ↦ if_neg h⟩
 
 variable {𝕜}
-
-/--
-lemma `zeta_apply` / 引理 `zeta_apply`
-
-English:
-lemma zeta_apply
-  given: (a b : α)
-  statement: zeta 𝕜 a b = if a <= b then 1 else 0
-  proof: rfl
-
-中文:
-引理 zeta_apply
-  条件: (a b : α)
-  结论: zeta 𝕜 a b = if a <= b then 1 else 0
-  证明: rfl
+/-
+**IncidenceAlgebra.zeta_apply** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zero 𝕜] [inst_1 : One 𝕜] [inst_2 :
+ LE α] [inst_3 : DecidableLE α] (a b : α),   (IncidenceAlgebra.zeta 𝕜) a b = if 
+a ≤ b then 1 else 0
+参数：a b : α；IncidenceAlgebra.zeta 𝕜。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma zeta_apply (a b : α) : zeta 𝕜 a b = if a <= b then 1 else 0 := rfl
-
-/--
-lemma `zeta_of_le` / 引理 `zeta_of_le`
-
-English:
-lemma zeta_of_le
-  given: (h : a <= b)
-  statement: zeta 𝕜 a b = 1
-  proof: if_pos h
-
-中文:
-引理 zeta_of_le
-  条件: (h : a <= b)
-  结论: zeta 𝕜 a b = 1
-  证明: if_pos h
-
-Depends on / 依赖: Functor, Functor.IsRightAdjoint, IsRightAdjoint, LightCondSet, LightCondSet.topCatAdjunction.isRightAdjoint, LightProfinite, LightProfinite.toTopCat, PreservesLimitsOfShape, Profinite, Profinite.toTopCat, if_pos, isRightAdjoint, lightProfiniteToLightCondSetIsoTopCatToLightCondSet, lightProfiniteToLightCondSetIsoTopCatToLightCondSet.symm, lightToProfinite, preservesLimitsOfShape_of_natIso, toTopCat, topCatAdjunction, topCatToLightCondSet
+@[simp] lemma zeta_apply (a b : α) : zeta 𝕜 a b = if a ≤ b then 1 else 0 := rfl
+/-
+**IncidenceAlgebra.zeta_of_le** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zeta_of_le (h : a <= b) : zeta 𝕜 a b = 1
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-lemma zeta_of_le (h : a <= b) : zeta 𝕜 a b = 1 := if_pos h
+lemma zeta_of_le (h : a ≤ b) : zeta 𝕜 a b = 1 := if_pos h
 
 end Zeta
 
-/--
-lemma `zeta_mul_zeta` / 引理 `zeta_mul_zeta`
-
-English:
-lemma zeta_mul_zeta
-  statement: [NonAssocSemiring 𝕜] [Preorder α] [LocallyFiniteOrder α] [DecidableLE α]
-  proof: by
-  rw [mul_apply]; rw [card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]
-  refine sum_congr rfl fun x hx => ?_
-  rw [mem_Icc] at hx
-  rw [zeta_of_le hx.1]; rw [zeta_of_le hx.2]; rw [one_mul]
-
-中文:
-引理 zeta_mul_zeta
-  结论: [非结合半环 𝕜] [预序 α] [局部有限序 α] [DecidableLE α]
-  证明: by
-  rw [mul_apply]; rw [card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]
-  refine sum_congr rfl fun x hx => ?_
-  rw [mem_Icc] at hx
-  rw [zeta_of_le hx.1]; rw [zeta_of_le hx.2]; rw [one_mul]
-
-Depends on / 依赖: Nat.cast_one, Nat.cast_sum, card_eq_sum_ones, cast_one, cast_sum, mem_Icc, mul_apply, one_mul, sum_congr, zeta_of_le
+/-
+**IncidenceAlgebra.zeta_mul_zeta** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zeta_mul_zeta [NonAssocSemiring 𝕜] [Preorder α] [LocallyFiniteOrder α] [De
+cidableLE α] (a b : α) : (zeta 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) a b = (Icc a b
+).card
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IncidenceAlgebra.mul_apply`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Preo
+rder α] [inst_1 : LocallyFiniteOrder α] [inst_2 : AddCommMonoid 𝕜]   [inst_3 : M
+ul 𝕜] (f g : Inc…
+· 使用引理 `Finset.card_eq_sum_ones`：card_eq_sum_ones (s : Finset ι) : #s = ∑ _ in s
+, 1
+· 使用引理 `Nat.cast_sum`：cast_sum [AddCommMonoidWithOne R] (s : Finset ι) (f : ι ->
+ Nat) : ↑(∑ x in s, f x : Nat) = ∑ x in s, (f x : R)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `IncidenceAlgebra.zeta_of_le`：zeta_of_le (h : a <= b) : zeta 𝕜 a b = 1
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.mem_Icc`：mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 lemma zeta_mul_zeta [NonAssocSemiring 𝕜] [Preorder α] [LocallyFiniteOrder α] [DecidableLE α]
     (a b : α) : (zeta 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) a b = (Icc a b).card := by
-  rw [mul_apply]; rw [card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]
-  refine sum_congr rfl fun x hx => ?_
+  rw [mul_apply, card_eq_sum_ones, Nat.cast_sum, Nat.cast_one]
+  refine sum_congr rfl fun x hx ↦ ?_
   rw [mem_Icc] at hx
-  rw [zeta_of_le hx.1]; rw [zeta_of_le hx.2]; rw [one_mul]
+  rw [zeta_of_le hx.1, zeta_of_le hx.2, one_mul]
 
 section Mu
 variable (𝕜) [AddCommGroup 𝕜] [One 𝕜] [Preorder α] [LocallyFiniteOrder α] [DecidableEq α]
 
 set_option backward.privateInPublic true in
-/--
-Definition of `muFun` / `muFun` 的定义
+/-- The Möbius function of the incidence algebra as a bare function defined recursively. -/
+/-
+**IncidenceAlgebra.muFun** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition muFun
-  signature: (a : α)
-  body: mem_Ico.1 x.2
-          have : (Icc a x).card < (Icc a b).card :=
-            card_lt_card (Icc_ssubset_Icc_right (h.1.trans h.2.le) le_rfl h.2)
-          muFun a x
-termination_by b => (Icc a b).card
-
-中文:
-定义 muFun
-  签名: (a : α)
-  定义体: mem_Ico.1 x.2
-          have : (Icc a x).card < (Icc a b).card :=
-            card_lt_card (Icc_ssubset_Icc_right (h.1.trans h.2.le) le_rfl h.2)
-          muFun a x
-termination_by b => (Icc a b).card
+--- 原说明 ---
+The Möbius function of the incidence algebra as a bare function defined recursiv
+ely.
 -/
-private def muFun (a : α) : α -> 𝕜
+private def muFun (a : α) : α → 𝕜
   | b =>
     if a = b then 1
     else
-      -∑ x in (Ico a b).attach,
+      -∑ x ∈ (Ico a b).attach,
           let h := mem_Ico.1 x.2
           have : (Icc a x).card < (Icc a b).card :=
             card_lt_card (Icc_ssubset_Icc_right (h.1.trans h.2.le) le_rfl h.2)
           muFun a x
 termination_by b => (Icc a b).card
-
-/--
-lemma `muFun_apply` / 引理 `muFun_apply`
-
-English:
-lemma muFun_apply
-  given: (a b : α)
-  proof: by rw [muFun]
-
-中文:
-引理 muFun_apply
-  条件: (a b : α)
-  证明: by rw [muFun]
+/-
+**IncidenceAlgebra.muFun_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma muFun_apply (a b : α) :
-    muFun 𝕜 a b = if a = b then 1 else -∑ x in (Ico a b).attach, muFun 𝕜 a x := by rw [muFun]
+    muFun 𝕜 a b = if a = b then 1 else -∑ x ∈ (Ico a b).attach, muFun 𝕜 a x := by rw [muFun]
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `mu` / `mu` 的定义
+/-- The Möbius function which inverts `zeta` as an element of the incidence algebra. -/
+/-
+**IncidenceAlgebra.mu** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：mu : IncidenceAlgebra 𝕜 α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mu
-  signature: : IncidenceAlgebra 𝕜 α
-  body: ⟨muFun 𝕜, fun a b => not_imp_comm.1 fun h => by
-    rw [muFun_apply] at h
-    split_ifs at h with hab
-    · exact hab.le
-    · rw [neg_eq_zero] at h
-      obtain ⟨⟨x, hx⟩, -⟩ := exists_ne_zero_of_sum_ne_zero h
-      exact (nonempty_Ico.1 ⟨x, hx⟩).le⟩
-
-中文:
-定义 mu
-  签名: : Incidence代数 𝕜 α
-  定义体: ⟨muFun 𝕜, fun a b => not_imp_comm.1 fun h => by
-    rw [muFun_apply] at h
-    split_ifs at h with hab
-    · exact hab.le
-    · rw [neg_eq_zero] at h
-      obtain ⟨⟨x, hx⟩, -⟩ := exists_ne_zero_of_sum_ne_zero h
-      exact (nonempty_Ico.1 ⟨x, hx⟩).le⟩
-
-Depends on / 依赖: exists_ne_zero_of_sum_ne_zero, hab.le, muFun_apply, neg_eq_zero, nonempty_Ico, not_imp_comm, split_ifs
+--- 原说明 ---
+The Möbius function which inverts `zeta` as an element of the incidence algebra.
 -/
 def mu : IncidenceAlgebra 𝕜 α :=
-  ⟨muFun 𝕜, fun a b => not_imp_comm.1 fun h => by
+  ⟨muFun 𝕜, fun a b ↦ not_imp_comm.1 fun h ↦ by
     rw [muFun_apply] at h
     split_ifs at h with hab
     · exact hab.le
@@ -1272,77 +826,78 @@ def mu : IncidenceAlgebra 𝕜 α :=
       exact (nonempty_Ico.1 ⟨x, hx⟩).le⟩
 
 variable {𝕜} {a b : α}
-
-/--
-lemma `mu_apply` / 引理 `mu_apply`
-
-English:
-lemma mu_apply
-  given: (a b : α)
-  statement: mu 𝕜 a b = if a = b then 1 else -∑ x in Ico a b, mu 𝕜 a x
-  proof: by
-  rw [mu]; rw [coe_mk]; rw [muFun_apply]; rw [sum_attach]
-
-中文:
-引理 mu_apply
-  条件: (a b : α)
-  结论: mu 𝕜 a b = if a = b then 1 else -∑ x in 左闭右开区间 a b, mu 𝕜 a x
-  证明: by
-  rw [mu]; rw [coe_mk]; rw [muFun_apply]; rw [sum_attach]
-
-Depends on / 依赖: coe_mk, muFun_apply, sum_attach
+/-
+**IncidenceAlgebra.mu_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：mu_apply (a b : α) : mu 𝕜 a b = if a = b then 1 else -∑ x in Ico a b, mu 𝕜
+ a x
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IncidenceAlgebra.mu.eq_1`：∀ (𝕜 : Type u_2) {α : Type u_5} [inst : AddCom
+mGroup 𝕜] [inst_1 : One 𝕜] [inst_2 : Preorder α]   [inst_3 : LocallyFiniteOrder 
+α] [inst_4 : D…
+· 使用定理 `IncidenceAlgebra.coe_mk`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zero 𝕜]
+ [inst_1 : LE α] (f : α → α → 𝕜) (h : ∀ ⦃a b : α⦄, ¬a ≤ b → f a b = 0),   ⇑{ toF
+un := f, eq_z…
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.IncidenceAlgebra.0.IncidenceA
+lgebra.muFun_apply`：∀ (𝕜 : Type u_2) {α : Type u_5} [inst : AddCommGroup 𝕜] [ins
+t_1 : One 𝕜] [inst_2 : Preorder α]   [inst_3 : LocallyFiniteOrder α] [inst_4 : D
+…
+· 使用定理 `Finset.sum_attach`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMonoid
+ M] (s : Finset ι) (f : ι → M), ∑ x ∈ s.attach, f ↑x = ∑ x ∈ s, f x
 -/
-lemma mu_apply (a b : α) : mu 𝕜 a b = if a = b then 1 else -∑ x in Ico a b, mu 𝕜 a x := by
-  rw [mu]; rw [coe_mk]; rw [muFun_apply]; rw [sum_attach]
-
-/--
-lemma `mu_self` / 引理 `mu_self`
-
-English:
-lemma mu_self
-  given: (a : α)
-  statement: mu 𝕜 a a = 1
-  proof: by simp [mu_apply]
-
-中文:
-引理 mu_self
-  条件: (a : α)
-  结论: mu 𝕜 a a = 1
-  证明: by simp [mu_apply]
+lemma mu_apply (a b : α) : mu 𝕜 a b = if a = b then 1 else -∑ x ∈ Ico a b, mu 𝕜 a x := by
+  rw [mu, coe_mk, muFun_apply, sum_attach]
+/-
+**IncidenceAlgebra.mu_self** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddCommGroup 𝕜] [inst_1 : One 𝕜] [
+inst_2 : Preorder α]   [inst_3 : LocallyFiniteOrder α] [inst_4 : DecidableEq α] 
+(a : α), (IncidenceAlgebra.mu 𝕜) a a = 1
+参数：a : α；IncidenceAlgebra.mu 𝕜。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IncidenceAlgebra.mu_apply`：mu_apply (a b : α) : mu 𝕜 a b = if a = b then
+ 1 else -∑ x in Ico a b, mu 𝕜 a x
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma mu_self (a : α) : mu 𝕜 a a = 1 := by simp [mu_apply]
-
-/--
-lemma `mu_eq_neg_sum_Ico_of_ne` / 引理 `mu_eq_neg_sum_Ico_of_ne`
-
-English:
-lemma mu_eq_neg_sum_Ico_of_ne
-  given: (hab : a != b)
-  proof: by rw [mu_apply, if_neg hab]
-
-中文:
-引理 mu_eq_neg_sum_Ico_of_ne
-  条件: (hab : a != b)
-  证明: by rw [mu_apply, if_neg hab]
-
-Depends on / 依赖: if_neg, mu_apply
+/-
+**IncidenceAlgebra.mu_eq_neg_sum_Ico_of_ne** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceA
+lgebra`。
+形式化陈述：mu_eq_neg_sum_Ico_of_ne (hab : a != b) : mu 𝕜 a b = -∑ x in Ico a b, mu 𝕜 
+a x
+参数：hab : a != b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IncidenceAlgebra.mu_apply`：mu_apply (a b : α) : mu 𝕜 a b = if a = b then
+ 1 else -∑ x in Ico a b, mu 𝕜 a x
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-lemma mu_eq_neg_sum_Ico_of_ne (hab : a != b) :
-    mu 𝕜 a b = -∑ x in Ico a b, mu 𝕜 a x := by rw [mu_apply, if_neg hab]
+lemma mu_eq_neg_sum_Ico_of_ne (hab : a ≠ b) :
+    mu 𝕜 a b = -∑ x ∈ Ico a b, mu 𝕜 a x := by rw [mu_apply, if_neg hab]
 
 variable (𝕜 α)
-/--
-Definition of `eulerChar` / `eulerChar` 的定义
+/-- The Euler characteristic of a finite bounded order. -/
+/-
+**IncidenceAlgebra.eulerChar** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：eulerChar [BoundedOrder α] : 𝕜
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eulerChar
-  signature: [BoundedOrder α]
-  body: mu 𝕜 (⊥ : α) ⊤
-
-中文:
-定义 eulerChar
-  签名: [有界序 α]
-  定义体: mu 𝕜 (⊥ : α) ⊤
+--- 原说明 ---
+The Euler characteristic of a finite bounded order.
 -/
 def eulerChar [BoundedOrder α] : 𝕜 := mu 𝕜 (⊥ : α) ⊤
 
@@ -1351,129 +906,110 @@ end Mu
 section MuSpec
 variable [AddCommGroup 𝕜] [One 𝕜] [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α]
 
-/--
-lemma `sum_Icc_mu_right` / 引理 `sum_Icc_mu_right`
-
-English:
-lemma sum_Icc_mu_right
-  given: (a b : α)
-  statement: ∑ x in Icc a b, mu 𝕜 a x = if a = b then 1 else 0
-  proof: by
-  split_ifs with hab
-  · simp [hab]
-  by_cases hab : a <= b
-  · simp [Icc_eq_cons_Ico hab, mu_eq_neg_sum_Ico_of_ne ‹_›]
-  · exact sum_eq_zero fun x hx => apply_eq_zero_of_not_le
-      (fun hax => hab <| hax.trans (mem_Icc.1 hx).2) _
-
-中文:
-引理 sum_Icc_mu_right
-  条件: (a b : α)
-  结论: ∑ x in 闭区间 a b, mu 𝕜 a x = if a = b then 1 else 0
-  证明: by
-  split_ifs with hab
-  · simp [hab]
-  by_cases hab : a <= b
-  · simp [Icc_eq_cons_Ico hab, mu_eq_neg_sum_Ico_of_ne ‹_›]
-  · exact sum_eq_zero fun x hx => apply_eq_zero_of_not_le
-      (fun hax => hab <| hax.trans (mem_Icc.1 hx).2) _
-
-Depends on / 依赖: Icc_eq_cons_Ico, apply_eq_zero_of_not_le, hax.trans, mem_Icc, mu_eq_neg_sum_Ico_of_ne, split_ifs, sum_eq_zero
+/-
+**IncidenceAlgebra.sum_Icc_mu_right** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`
+。
+形式化陈述：sum_Icc_mu_right (a b : α) : ∑ x in Icc a b, mu 𝕜 a x = if a = b then 1 el
+se 0
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.Icc_self`：Icc_self (a : α) : Icc a a = {a}
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `IncidenceAlgebra.mu_self`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddCom
+mGroup 𝕜] [inst_1 : One 𝕜] [inst_2 : Preorder α]   [inst_3 : LocallyFiniteOrder 
+α] [inst_4 : D…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Finset.right_notMem_Ico`：right_notMem_Ico : b ∉ Ico a b
+· 使用定理 `Finset.Icc_eq_cons_Ico`：Icc_eq_cons_Ico (h : a <= b) : Icc a b = (Ico a 
+b).cons b right_notMem_Ico
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用引理 `IncidenceAlgebra.mu_eq_neg_sum_Ico_of_ne`：mu_eq_neg_sum_Ico_of_ne (hab :
+ a != b) : mu 𝕜 a b = -∑ x in Ico a b, mu 𝕜 a x
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用引理 `IncidenceAlgebra.apply_eq_zero_of_not_le`：apply_eq_zero_of_not_le (h : ¬
+a <= b) (f : IncidenceAlgebra 𝕜 α) : f a b = 0
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_Icc`：mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b
 -/
-lemma sum_Icc_mu_right (a b : α) : ∑ x in Icc a b, mu 𝕜 a x = if a = b then 1 else 0 := by
+lemma sum_Icc_mu_right (a b : α) : ∑ x ∈ Icc a b, mu 𝕜 a x = if a = b then 1 else 0 := by
   split_ifs with hab
   · simp [hab]
-  by_cases hab : a <= b
+  by_cases hab : a ≤ b
   · simp [Icc_eq_cons_Ico hab, mu_eq_neg_sum_Ico_of_ne ‹_›]
-  · exact sum_eq_zero fun x hx => apply_eq_zero_of_not_le
-      (fun hax => hab <| hax.trans (mem_Icc.1 hx).2) _
+  · exact sum_eq_zero fun x hx ↦ apply_eq_zero_of_not_le
+      (fun hax ↦ hab <| hax.trans (mem_Icc.1 hx).2) _
 
 end MuSpec
 
 section Mu'
 variable (𝕜) [AddCommGroup 𝕜] [One 𝕜] [Preorder α] [LocallyFiniteOrder α] [DecidableEq α]
 
-/--
-Definition of `muFun'` / `muFun'` 的定义
+/-- `mu'` as a bare function defined recursively. -/
+/-
+**IncidenceAlgebra.muFun'** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition muFun'
-  signature: (b : α)
-  body: mem_Ioc.1 x.2
-          have : (Icc ↑x b).card < (Icc a b).card :=
-            card_lt_card (Icc_ssubset_Icc_left (h.1.le.trans h.2) h.1 le_rfl)
-          muFun' b x
-termination_by a => (Icc a b).card
-
-中文:
-定义 muFun'
-  签名: (b : α)
-  定义体: mem_Ioc.1 x.2
-          have : (Icc ↑x b).card < (Icc a b).card :=
-            card_lt_card (Icc_ssubset_Icc_left (h.1.le.trans h.2) h.1 le_rfl)
-          muFun' b x
-termination_by a => (Icc a b).card
+--- 原说明 ---
+`mu'` as a bare function defined recursively.
 -/
-private def muFun' (b : α) : α -> 𝕜
+private def muFun' (b : α) : α → 𝕜
   | a =>
     if a = b then 1
     else
-      -∑ x in (Ioc a b).attach,
+      -∑ x ∈ (Ioc a b).attach,
           let h := mem_Ioc.1 x.2
           have : (Icc ↑x b).card < (Icc a b).card :=
             card_lt_card (Icc_ssubset_Icc_left (h.1.le.trans h.2) h.1 le_rfl)
           muFun' b x
 termination_by a => (Icc a b).card
-
-/--
-lemma `muFun'_apply` / 引理 `muFun'_apply`
-
-English:
-lemma muFun'_apply
-  given: (a b : α)
-  proof: by
-  rw [muFun']
-
-中文:
-引理 muFun'_apply
-  条件: (a b : α)
-  证明: by
-  rw [muFun']
+/-
+**IncidenceAlgebra.muFun'_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma muFun'_apply (a b : α) :
-    muFun' 𝕜 b a = if a = b then 1 else -∑ x in (Ioc a b).attach, muFun' 𝕜 b x := by
+    muFun' 𝕜 b a = if a = b then 1 else -∑ x ∈ (Ioc a b).attach, muFun' 𝕜 b x := by
   rw [muFun']
 
-/--
-Definition of `mu'` / `mu'` 的定义
+/-- This is the reversed definition of `mu`, which is equal to `mu` but easiest to prove equal by
+showing that `zeta * mu = 1` and `mu' * zeta = 1`. -/
+/-
+**IncidenceAlgebra.mu'** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mu'
-  signature: : IncidenceAlgebra 𝕜 α
-  body: ⟨fun a b => muFun' 𝕜 b a, fun a b =>
-    not_imp_comm.1 fun h => by
-      rw [muFun'_apply] at h
-      split_ifs at h with hab
-      · exact hab.le
-      · rw [neg_eq_zero] at h
-        obtain ⟨⟨x, hx⟩, -⟩ := exists_ne_zero_of_sum_ne_zero h
-        exact (nonempty_Ioc.1 ⟨x, hx⟩).le⟩
-
-中文:
-定义 mu'
-  签名: : Incidence代数 𝕜 α
-  定义体: ⟨fun a b => muFun' 𝕜 b a, fun a b =>
-    not_imp_comm.1 fun h => by
-      rw [muFun'_apply] at h
-      split_ifs at h with hab
-      · exact hab.le
-      · rw [neg_eq_zero] at h
-        obtain ⟨⟨x, hx⟩, -⟩ := exists_ne_zero_of_sum_ne_zero h
-        exact (nonempty_Ioc.1 ⟨x, hx⟩).le⟩
+--- 原说明 ---
+This is the reversed definition of `mu`, which is equal to `mu` but easiest to p
+rove equal by
+showing that `zeta * mu = 1` and `mu' * zeta = 1`.
 -/
 private def mu' : IncidenceAlgebra 𝕜 α :=
-  ⟨fun a b => muFun' 𝕜 b a, fun a b =>
-    not_imp_comm.1 fun h => by
+  ⟨fun a b ↦ muFun' 𝕜 b a, fun a b ↦
+    not_imp_comm.1 fun h ↦ by
       rw [muFun'_apply] at h
       split_ifs at h with hab
       · exact hab.le
@@ -1482,103 +1018,42 @@ private def mu' : IncidenceAlgebra 𝕜 α :=
         exact (nonempty_Ioc.1 ⟨x, hx⟩).le⟩
 
 variable {𝕜} {a b : α}
-
-/--
-lemma `mu'_apply` / 引理 `mu'_apply`
-
-English:
-lemma mu'_apply
-  given: (a b : α)
-  statement: mu' 𝕜 a b = if a = b then 1 else -∑ x in Ioc a b, mu' 𝕜 x b
-  proof: by
-  rw [mu']; rw [coe_mk]; rw [muFun'_apply]; rw [sum_attach]
-
-中文:
-引理 mu'_apply
-  条件: (a b : α)
-  结论: mu' 𝕜 a b = if a = b then 1 else -∑ x in 左开右闭区间 a b, mu' 𝕜 x b
-  证明: by
-  rw [mu']; rw [coe_mk]; rw [muFun'_apply]; rw [sum_attach]
+/-
+**IncidenceAlgebra.mu'_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma mu'_apply (a b : α) : mu' 𝕜 a b = if a = b then 1 else -∑ x in Ioc a b, mu' 𝕜 x b := by
-  rw [mu']; rw [coe_mk]; rw [muFun'_apply]; rw [sum_attach]
-
-/--
-lemma `mu'_apply_self` / 引理 `mu'_apply_self`
-
-English:
-lemma mu'_apply_self
-  given: (a : α)
-  statement: mu' 𝕜 a a = 1
-  proof: by simp [mu'_apply]
-
-中文:
-引理 mu'_apply_self
-  条件: (a : α)
-  结论: mu' 𝕜 a a = 1
-  证明: by simp [mu'_apply]
+private lemma mu'_apply (a b : α) : mu' 𝕜 a b = if a = b then 1 else -∑ x ∈ Ioc a b, mu' 𝕜 x b := by
+  rw [mu', coe_mk, muFun'_apply, sum_attach]
+/-
+**IncidenceAlgebra.mu'_apply_self** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] private lemma mu'_apply_self (a : α) : mu' 𝕜 a a = 1 := by simp [mu'_apply]
-
-/--
-lemma `mu'_eq_sum_Ioc_of_ne` / 引理 `mu'_eq_sum_Ioc_of_ne`
-
-English:
-lemma mu'_eq_sum_Ioc_of_ne
-  given: (h : a != b)
-  statement: mu' 𝕜 a b = -∑ x in Ioc a b, mu' 𝕜 x b
-  proof: by
-  rw [mu'_apply]; rw [if_neg h]
-
-中文:
-引理 mu'_eq_sum_Ioc_of_ne
-  条件: (h : a != b)
-  结论: mu' 𝕜 a b = -∑ x in 左开右闭区间 a b, mu' 𝕜 x b
-  证明: by
-  rw [mu'_apply]; rw [if_neg h]
+/-
+**IncidenceAlgebra.mu'_eq_sum_Ioc_of_ne** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlge
+bra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma mu'_eq_sum_Ioc_of_ne (h : a != b) : mu' 𝕜 a b = -∑ x in Ioc a b, mu' 𝕜 x b := by
-  rw [mu'_apply]; rw [if_neg h]
+private lemma mu'_eq_sum_Ioc_of_ne (h : a ≠ b) : mu' 𝕜 a b = -∑ x ∈ Ioc a b, mu' 𝕜 x b := by
+  rw [mu'_apply, if_neg h]
 
 end Mu'
 
 section Mu'Spec
 variable [AddCommGroup 𝕜] [One 𝕜] [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α]
 
-/--
-lemma `sum_Icc_mu'_left` / 引理 `sum_Icc_mu'_left`
-
-English:
-lemma sum_Icc_mu'_left
-  given: (a b : α)
-  statement: ∑ x in Icc a b, mu' 𝕜 x b = if a = b then 1 else 0
-  proof: by
-  split_ifs with hab
-  · simp [hab]
-  by_cases hab : a <= b
-  · simp [Icc_eq_cons_Ioc hab, mu'_eq_sum_Ioc_of_ne ‹_›]
-  · exact sum_eq_zero fun x hx => apply_eq_zero_of_not_le
-      (fun hxb => hab <| (mem_Icc.1 hx).1.trans hxb) _
-
-中文:
-引理 sum_Icc_mu'_left
-  条件: (a b : α)
-  结论: ∑ x in 闭区间 a b, mu' 𝕜 x b = if a = b then 1 else 0
-  证明: by
-  split_ifs with hab
-  · simp [hab]
-  by_cases hab : a <= b
-  · simp [Icc_eq_cons_Ioc hab, mu'_eq_sum_Ioc_of_ne ‹_›]
-  · exact sum_eq_zero fun x hx => apply_eq_zero_of_not_le
-      (fun hxb => hab <| (mem_Icc.1 hx).1.trans hxb) _
+/-
+**IncidenceAlgebra.sum_Icc_mu'_left** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma sum_Icc_mu'_left (a b : α) : ∑ x in Icc a b, mu' 𝕜 x b = if a = b then 1 else 0 := by
+private lemma sum_Icc_mu'_left (a b : α) : ∑ x ∈ Icc a b, mu' 𝕜 x b = if a = b then 1 else 0 := by
   split_ifs with hab
   · simp [hab]
-  by_cases hab : a <= b
+  by_cases hab : a ≤ b
   · simp [Icc_eq_cons_Ioc hab, mu'_eq_sum_Ioc_of_ne ‹_›]
-  · exact sum_eq_zero fun x hx => apply_eq_zero_of_not_le
-      (fun hxb => hab <| (mem_Icc.1 hx).1.trans hxb) _
+  · exact sum_eq_zero fun x hx ↦ apply_eq_zero_of_not_le
+      (fun hxb ↦ hab <| (mem_Icc.1 hx).1.trans hxb) _
 
 end Mu'Spec
 
@@ -1586,60 +1061,49 @@ section MuZeta
 variable (𝕜 α) [AddCommGroup 𝕜] [MulOneClass 𝕜] [PartialOrder α] [LocallyFiniteOrder α]
   [DecidableEq α] [DecidableLE α]
 
-/--
-lemma `mu_mul_zeta` / 引理 `mu_mul_zeta`
-
-English:
-lemma mu_mul_zeta
-  statement: (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) = 1
-  proof: by
-  ext a b
-  calc
-    _ = ∑ x in Icc a b, mu 𝕜 a x := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).2]
-    _ = (1 : IncidenceAlgebra 𝕜 α) a b := sum_Icc_mu_right ..
-
-中文:
-引理 mu_mul_zeta
-  结论: (mu 𝕜 * zeta 𝕜 : Incidence代数 𝕜 α) = 1
-  证明: by
-  ext a b
-  calc
-    _ = ∑ x in Icc a b, mu 𝕜 a x := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).2]
-    _ = (1 : IncidenceAlgebra 𝕜 α) a b := sum_Icc_mu_right ..
-
-Depends on / 依赖: IncidenceAlgebra, mem_Icc, mul_apply, sum_Icc_mu_right
+/-
+**IncidenceAlgebra.mu_mul_zeta** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：mu_mul_zeta : (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.ext`：ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, 
+a <= b -> f a b = g a b) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IncidenceAlgebra.mul_apply`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Preo
+rder α] [inst_1 : LocallyFiniteOrder α] [inst_2 : AddCommMonoid 𝕜]   [inst_3 : M
+ul 𝕜] (f g : Inc…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_Icc`：mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `IncidenceAlgebra.sum_Icc_mu_right`：sum_Icc_mu_right (a b : α) : ∑ x in I
+cc a b, mu 𝕜 a x = if a = b then 1 else 0
 -/
 lemma mu_mul_zeta : (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) = 1 := by
   ext a b
   calc
-    _ = ∑ x in Icc a b, mu 𝕜 a x := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).2]
+    _ = ∑ x ∈ Icc a b, mu 𝕜 a x := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).2]
     _ = (1 : IncidenceAlgebra 𝕜 α) a b := sum_Icc_mu_right ..
-
-/--
-lemma `zeta_mul_mu'` / 引理 `zeta_mul_mu'`
-
-English:
-lemma zeta_mul_mu'
-  statement: (zeta 𝕜 * mu' 𝕜 : IncidenceAlgebra 𝕜 α) = 1
-  proof: by
-  ext a b
-  calc
-    _ = ∑ x in Icc a b, mu' 𝕜 x b := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).1]
-    _ = (1 : IncidenceAlgebra 𝕜 α) a b := sum_Icc_mu'_left ..
-
-中文:
-引理 zeta_mul_mu'
-  结论: (zeta 𝕜 * mu' 𝕜 : Incidence代数 𝕜 α) = 1
-  证明: by
-  ext a b
-  calc
-    _ = ∑ x in Icc a b, mu' 𝕜 x b := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).1]
-    _ = (1 : IncidenceAlgebra 𝕜 α) a b := sum_Icc_mu'_left ..
+/-
+**IncidenceAlgebra.zeta_mul_mu'** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma zeta_mul_mu' : (zeta 𝕜 * mu' 𝕜 : IncidenceAlgebra 𝕜 α) = 1 := by
   ext a b
   calc
-    _ = ∑ x in Icc a b, mu' 𝕜 x b := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).1]
+    _ = ∑ x ∈ Icc a b, mu' 𝕜 x b := by rw [mul_apply]; congr! with x hx; simp [(mem_Icc.1 hx).1]
     _ = (1 : IncidenceAlgebra 𝕜 α) a b := sum_Icc_mu'_left ..
 
 end MuZeta
@@ -1647,92 +1111,69 @@ end MuZeta
 section MuEqMu'
 variable [Ring 𝕜] [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α] {a b : α}
 
-/--
-lemma `mu_eq_mu'` / 引理 `mu_eq_mu'`
-
-English:
-lemma mu_eq_mu'
-  statement: (mu 𝕜 : IncidenceAlgebra 𝕜 α) = mu' 𝕜
-  proof: by
-  classical
-  exact left_inv_eq_right_inv (mu_mul_zeta _ _) (zeta_mul_mu' _ _)
-
-中文:
-引理 mu_eq_mu'
-  结论: (mu 𝕜 : Incidence代数 𝕜 α) = mu' 𝕜
-  证明: by
-  classical
-  exact left_inv_eq_right_inv (mu_mul_zeta _ _) (zeta_mul_mu' _ _)
+/-
+**IncidenceAlgebra.mu_eq_mu'** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma mu_eq_mu' : (mu 𝕜 : IncidenceAlgebra 𝕜 α) = mu' 𝕜 := by
   classical
   exact left_inv_eq_right_inv (mu_mul_zeta _ _) (zeta_mul_mu' _ _)
-
-/--
-lemma `mu_eq_neg_sum_Ioc_of_ne` / 引理 `mu_eq_neg_sum_Ioc_of_ne`
-
-English:
-lemma mu_eq_neg_sum_Ioc_of_ne
-  given: (hab : a != b)
-  statement: mu 𝕜 a b = -∑ x in Ioc a b, mu 𝕜 x b
-  proof: by
-  rw [mu_eq_mu']; rw [mu'_eq_sum_Ioc_of_ne hab]
-
-中文:
-引理 mu_eq_neg_sum_Ioc_of_ne
-  条件: (hab : a != b)
-  结论: mu 𝕜 a b = -∑ x in 左开右闭区间 a b, mu 𝕜 x b
-  证明: by
-  rw [mu_eq_mu']; rw [mu'_eq_sum_Ioc_of_ne hab]
-
-Depends on / 依赖: _eq_sum_Ioc_of_ne, mu_eq_mu
+/-
+**IncidenceAlgebra.mu_eq_neg_sum_Ioc_of_ne** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceA
+lgebra`。
+形式化陈述：mu_eq_neg_sum_Ioc_of_ne (hab : a != b) : mu 𝕜 a b = -∑ x in Ioc a b, mu 𝕜 
+x b
+参数：hab : a != b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.IncidenceAlgebra.0.IncidenceA
+lgebra.mu_eq_mu'`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Ring 𝕜] [inst_1 : Part
+ialOrder α] [inst_2 : LocallyFiniteOrder α]   [inst_3 : DecidableEq α], Incide…
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.IncidenceAlgebra.0.IncidenceA
+lgebra.mu'_eq_sum_Ioc_of_ne`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddCommGrou
+p 𝕜] [inst_1 : One 𝕜] [inst_2 : Preorder α]   [inst_3 : LocallyFiniteOrder α] [i
+nst_4 : D…
 -/
-lemma mu_eq_neg_sum_Ioc_of_ne (hab : a != b) : mu 𝕜 a b = -∑ x in Ioc a b, mu 𝕜 x b := by
-  rw [mu_eq_mu']; rw [mu'_eq_sum_Ioc_of_ne hab]
-
-/--
-lemma `zeta_mul_mu` / 引理 `zeta_mul_mu`
-
-English:
-lemma zeta_mul_mu
-  given: [DecidableLE α]
-  statement: (zeta 𝕜 * mu 𝕜 : IncidenceAlgebra 𝕜 α) = 1
-  proof: by
-  rw [mu_eq_mu']; rw [zeta_mul_mu']
-
-中文:
-引理 zeta_mul_mu
-  条件: [DecidableLE α]
-  结论: (zeta 𝕜 * mu 𝕜 : Incidence代数 𝕜 α) = 1
-  证明: by
-  rw [mu_eq_mu']; rw [zeta_mul_mu']
-
-Depends on / 依赖: mu_eq_mu, zeta_mul_mu
+lemma mu_eq_neg_sum_Ioc_of_ne (hab : a ≠ b) : mu 𝕜 a b = -∑ x ∈ Ioc a b, mu 𝕜 x b := by
+  rw [mu_eq_mu', mu'_eq_sum_Ioc_of_ne hab]
+/-
+**IncidenceAlgebra.zeta_mul_mu** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zeta_mul_mu [DecidableLE α] : (zeta 𝕜 * mu 𝕜 : IncidenceAlgebra 𝕜 α) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.IncidenceAlgebra.0.IncidenceA
+lgebra.mu_eq_mu'`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Ring 𝕜] [inst_1 : Part
+ialOrder α] [inst_2 : LocallyFiniteOrder α]   [inst_3 : DecidableEq α], Incide…
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.IncidenceAlgebra.0.IncidenceA
+lgebra.zeta_mul_mu'`：∀ (𝕜 : Type u_2) (α : Type u_5) [inst : AddCommGroup 𝕜] [in
+st_1 : MulOneClass 𝕜] [inst_2 : PartialOrder α]   [inst_3 : LocallyFiniteOrder α
+]…
 -/
 lemma zeta_mul_mu [DecidableLE α] : (zeta 𝕜 * mu 𝕜 : IncidenceAlgebra 𝕜 α) = 1 := by
-  rw [mu_eq_mu']; rw [zeta_mul_mu']
-
-/--
-lemma `sum_Icc_mu_left` / 引理 `sum_Icc_mu_left`
-
-English:
-lemma sum_Icc_mu_left
-  given: (a b : α)
-  statement: ∑ x in Icc a b, mu 𝕜 x b = if a = b then 1 else 0
-  proof: by
-  rw [mu_eq_mu']; rw [sum_Icc_mu'_left]
-
-中文:
-引理 sum_Icc_mu_left
-  条件: (a b : α)
-  结论: ∑ x in 闭区间 a b, mu 𝕜 x b = if a = b then 1 else 0
-  证明: by
-  rw [mu_eq_mu']; rw [sum_Icc_mu'_left]
-
-Depends on / 依赖: _left, mu_eq_mu, sum_Icc_mu
+  rw [mu_eq_mu', zeta_mul_mu']
+/-
+**IncidenceAlgebra.sum_Icc_mu_left** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：sum_Icc_mu_left (a b : α) : ∑ x in Icc a b, mu 𝕜 x b = if a = b then 1 els
+e 0
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.IncidenceAlgebra.0.IncidenceA
+lgebra.mu_eq_mu'`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Ring 𝕜] [inst_1 : Part
+ialOrder α] [inst_2 : LocallyFiniteOrder α]   [inst_3 : DecidableEq α], Incide…
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.IncidenceAlgebra.0.IncidenceA
+lgebra.sum_Icc_mu'_left`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : AddCommGroup 𝕜]
+ [inst_1 : One 𝕜] [inst_2 : PartialOrder α]   [inst_3 : LocallyFiniteOrder α] [i
+nst_4…
 -/
-lemma sum_Icc_mu_left (a b : α) : ∑ x in Icc a b, mu 𝕜 x b = if a = b then 1 else 0 := by
-  rw [mu_eq_mu']; rw [sum_Icc_mu'_left]
+lemma sum_Icc_mu_left (a b : α) : ∑ x ∈ Icc a b, mu 𝕜 x b = if a = b then 1 else 0 := by
+  rw [mu_eq_mu', sum_Icc_mu'_left]
 
 end MuEqMu'
 
@@ -1740,66 +1181,62 @@ section OrderDual
 variable (𝕜) [Ring 𝕜] [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq α]
 
 @[simp]
-/--
-lemma `mu_toDual` / 引理 `mu_toDual`
-
-English:
-lemma mu_toDual
-  given: (a b : α)
-  statement: mu 𝕜 (toDual a) (toDual b) = mu 𝕜 b a
-  proof: by
-  let : DecidableLE α := Classical.decRel _
-  let mud : IncidenceAlgebra 𝕜 αᵒᵈ :=
-    { toFun := fun a b => mu 𝕜 (ofDual b) (ofDual a)
-      eq_zero_of_not_le' := fun a b hab => apply_eq_zero_of_not_le (by exact hab) _ }
-  suffices mu 𝕜 = mud by simp_rw [this, mud, coe_mk, ofDual_toDual]
-  suffices mud * zeta 𝕜 = 1 by
-    rw [← mu_mul_zeta] at this
-    apply_fun (· * mu 𝕜) at this
-    symm
-    simpa [mul_assoc, zeta_mul_mu] using this
-  clear a b
-  ext a b
-  simp only [mul_boole, one_apply, mul_apply, zeta_apply]
-  calc
-    ∑ x in Icc a b, (if x <= b then mud a x else 0) = ∑ x in Icc a b, mud a x := by
-      congr! with x hx; exact if_pos (mem_Icc.1 hx).2
-    _ = ∑ x in Icc (ofDual b) (ofDual a), mu 𝕜 x (ofDual a) := by simp [Icc_orderDual_def, mud]
-    _ = if ofDual b = ofDual a then 1 else 0 := sum_Icc_mu_left ..
-    _ = if a = b then 1 else 0 := by simp [eq_comm]
-
-中文:
-引理 mu_toDual
-  条件: (a b : α)
-  结论: mu 𝕜 (toDual a) (toDual b) = mu 𝕜 b a
-  证明: by
-  let : DecidableLE α := Classical.decRel _
-  let mud : IncidenceAlgebra 𝕜 αᵒᵈ :=
-    { toFun := fun a b => mu 𝕜 (ofDual b) (ofDual a)
-      eq_zero_of_not_le' := fun a b hab => apply_eq_zero_of_not_le (by exact hab) _ }
-  suffices mu 𝕜 = mud by simp_rw [this, mud, coe_mk, ofDual_toDual]
-  suffices mud * zeta 𝕜 = 1 by
-    rw [← mu_mul_zeta] at this
-    apply_fun (· * mu 𝕜) at this
-    symm
-    simpa [mul_assoc, zeta_mul_mu] using this
-  clear a b
-  ext a b
-  simp only [mul_boole, one_apply, mul_apply, zeta_apply]
-  calc
-    ∑ x in Icc a b, (if x <= b then mud a x else 0) = ∑ x in Icc a b, mud a x := by
-      congr! with x hx; exact if_pos (mem_Icc.1 hx).2
-    _ = ∑ x in Icc (ofDual b) (ofDual a), mu 𝕜 x (ofDual a) := by simp [Icc_orderDual_def, mud]
-    _ = if ofDual b = ofDual a then 1 else 0 := sum_Icc_mu_left ..
-    _ = if a = b then 1 else 0 := by simp [eq_comm]
-
-Depends on / 依赖: Classical, Classical.decRel, DecidableLE, IncidenceAlgebra, apply_eq_zero_of_not_le, apply_fun, coe_mk, decRel, eq_zero_of_not_le, mu_mul_zeta, mul_apply, mul_assoc, mul_boole, ofDual, ofDual_toDual, one_apply, simp_rw, zeta_apply, zeta_mul_mu
+/-
+**IncidenceAlgebra.mu_toDual** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：mu_toDual (a b : α) : mu 𝕜 (toDual a) (toDual b) = mu 𝕜 b a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.apply_eq_zero_of_not_le`：apply_eq_zero_of_not_le (h : ¬
+a <= b) (f : IncidenceAlgebra 𝕜 α) : f a b = 0
+· 使用引理 `IncidenceAlgebra.ext`：ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, 
+a <= b -> f a b = g a b) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_boole`：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (a * if P then 1 else 0) = if P then a else 0
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_Icc`：mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.Icc_orderDual_def`：Finset.Icc_orderDual_def (a b : αᵒᵈ) : Icc a b
+ = (Icc (ofDual b) (ofDual a)).map toDual.toEmbedding
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `IncidenceAlgebra.sum_Icc_mu_left`：sum_Icc_mu_left (a b : α) : ∑ x in Icc
+ a b, mu 𝕜 x b = if a = b then 1 else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用引理 `IncidenceAlgebra.zeta_mul_mu`：zeta_mul_mu [DecidableLE α] : (zeta 𝕜 * mu
+ 𝕜 : IncidenceAlgebra 𝕜 α) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用引理 `IncidenceAlgebra.mu_mul_zeta`：mu_mul_zeta : (mu 𝕜 * zeta 𝕜 : IncidenceAl
+gebra 𝕜 α) = 1
 -/
 lemma mu_toDual (a b : α) : mu 𝕜 (toDual a) (toDual b) = mu 𝕜 b a := by
   let : DecidableLE α := Classical.decRel _
   let mud : IncidenceAlgebra 𝕜 αᵒᵈ :=
-    { toFun := fun a b => mu 𝕜 (ofDual b) (ofDual a)
-      eq_zero_of_not_le' := fun a b hab => apply_eq_zero_of_not_le (by exact hab) _ }
+    { toFun := fun a b ↦ mu 𝕜 (ofDual b) (ofDual a)
+      eq_zero_of_not_le' := fun a b hab ↦ apply_eq_zero_of_not_le (by exact hab) _ }
   suffices mu 𝕜 = mud by simp_rw [this, mud, coe_mk, ofDual_toDual]
   suffices mud * zeta 𝕜 = 1 by
     rw [← mu_mul_zeta] at this
@@ -1810,52 +1247,41 @@ lemma mu_toDual (a b : α) : mu 𝕜 (toDual a) (toDual b) = mu 𝕜 b a := by
   ext a b
   simp only [mul_boole, one_apply, mul_apply, zeta_apply]
   calc
-    ∑ x in Icc a b, (if x <= b then mud a x else 0) = ∑ x in Icc a b, mud a x := by
+    ∑ x ∈ Icc a b, (if x ≤ b then mud a x else 0) = ∑ x ∈ Icc a b, mud a x := by
       congr! with x hx; exact if_pos (mem_Icc.1 hx).2
-    _ = ∑ x in Icc (ofDual b) (ofDual a), mu 𝕜 x (ofDual a) := by simp [Icc_orderDual_def, mud]
+    _ = ∑ x ∈ Icc (ofDual b) (ofDual a), mu 𝕜 x (ofDual a) := by simp [Icc_orderDual_def, mud]
     _ = if ofDual b = ofDual a then 1 else 0 := sum_Icc_mu_left ..
     _ = if a = b then 1 else 0 := by simp [eq_comm]
-
-/--
-lemma `mu_ofDual` / 引理 `mu_ofDual`
-
-English:
-lemma mu_ofDual
-  given: (a b : αᵒᵈ)
-  statement: mu 𝕜 (ofDual a) (ofDual b) = mu 𝕜 b a
-  proof: (mu_toDual ..).symm
-
-@[simp]
-
-中文:
-引理 mu_ofDual
-  条件: (a b : αᵒᵈ)
-  结论: mu 𝕜 (ofDual a) (ofDual b) = mu 𝕜 b a
-  证明: (mu_toDual ..).symm
-
-@[simp]
+/-
+**IncidenceAlgebra.mu_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ (𝕜 : Type u_2) {α : Type u_5} [inst : Ring 𝕜] [inst_1 : PartialOrder α] 
+[inst_2 : LocallyFiniteOrder α]   [inst_3 : DecidableEq α] (a b : αᵒᵈ),   (Incid
+enceAlgebra.mu 𝕜) (OrderDual.ofDual a) (OrderDual.ofDual b) = (IncidenceAlgebra.
+mu 𝕜) b a
+参数：𝕜 : Type u_2；a b : αᵒᵈ；IncidenceAlgebra.mu 𝕜；OrderDual.ofDual a；OrderDual.ofD
+ual b；IncidenceAlgebra.mu 𝕜。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `IncidenceAlgebra.mu_toDual`：mu_toDual (a b : α) : mu 𝕜 (toDual a) (toDua
+l b) = mu 𝕜 b a
 -/
 @[simp] lemma mu_ofDual (a b : αᵒᵈ) : mu 𝕜 (ofDual a) (ofDual b) = mu 𝕜 b a := (mu_toDual ..).symm
 
 @[simp]
-/--
-lemma `eulerChar_orderDual` / 引理 `eulerChar_orderDual`
-
-English:
-lemma eulerChar_orderDual
-  given: [BoundedOrder α]
-  statement: eulerChar 𝕜 αᵒᵈ = eulerChar 𝕜 α
-  proof: by
-  simp [eulerChar, ← mu_toDual 𝕜 (α := α)]
-
-中文:
-引理 eulerChar_orderDual
-  条件: [有界序 α]
-  结论: eulerChar 𝕜 αᵒᵈ = eulerChar 𝕜 α
-  证明: by
-  simp [eulerChar, ← mu_toDual 𝕜 (α := α)]
-
-Depends on / 依赖: eulerChar, mu_toDual
+/-
+**IncidenceAlgebra.eulerChar_orderDual** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgeb
+ra`。
+形式化陈述：eulerChar_orderDual [BoundedOrder α] : eulerChar 𝕜 αᵒᵈ = eulerChar 𝕜 α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `IncidenceAlgebra.mu_toDual`：mu_toDual (a b : α) : mu 𝕜 (toDual a) (toDua
+l b) = mu 𝕜 b a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma eulerChar_orderDual [BoundedOrder α] : eulerChar 𝕜 αᵒᵈ = eulerChar 𝕜 α := by
   simp [eulerChar, ← mu_toDual 𝕜 (α := α)]
@@ -1865,98 +1291,102 @@ end OrderDual
 section InversionTop
 variable [Ring 𝕜] [PartialOrder α] [OrderTop α] [LocallyFiniteOrder α] [DecidableEq α] {a b : α}
 
-/--
-lemma `moebius_inversion_top` / 引理 `moebius_inversion_top`
+/-- A general form of Möbius inversion. Based on lemma 2.1.2 of Incidence Algebras by Spiegel and
+O'Donnell. -/
+/-
+**IncidenceAlgebra.moebius_inversion_top** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlg
+ebra`。
+形式化陈述：moebius_inversion_top (f g : α -> 𝕜) (h : forall x, g x = ∑ y in Ici x, f 
+y) (x : α) : f x = ∑ y in Ici x, mu 𝕜 x y * g y
+参数：f g : α -> 𝕜；h : forall x, g x = ∑ y in Ici x, f y；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IncidenceAlgebra.zeta_apply`：∀ {𝕜 : Type u_2} {α : Type u_5} [inst : Zer
+o 𝕜] [inst_1 : One 𝕜] [inst_2 : LE α] [inst_3 : DecidableLE α] (a b : α),   (Inc
+idenceAlgebra.zet…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_Ici`：mem_Ici : x in Ici a ↔ a <= x
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Finset.sum_sigma'`：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommMonoid
+ β] {σ : α → Type u_6} (s : Finset α) (t : (a : α) → Finset (σ a))   (f : (a : α
+) → σ a…
+· 使用定理 `mul_boole`：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (a * if P then 1 else 0) = if P then a else 0
+· 使用定理 `Finset.sum_nbij'`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst :
+ AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (i : ι
+ → κ) …
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Sigma.eta`：∀ {α : Type u_1} {β : α → Type u_4} (x : (a : α) × β a), ⟨x.f
+st, x.snd⟩ = x
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+（共 38 条，此处仅展示前 30 条）
 
-English:
-lemma moebius_inversion_top
-  given: (f g : α -> 𝕜) (h : forall x, g x = ∑ y in Ici x, f y) (x : α)
-  proof: by
-  let : DecidableLE α := Classical.decRel _
-  symm
-  calc
-    ∑ y in Ici x, mu 𝕜 x y * g y = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, f z := by simp_rw [h]
-    _ = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, zeta 𝕜 y z * f z := by
-      congr with y
-      rw [sum_congr rfl fun z hz => ?_]
-      rw [zeta_apply]; rw [if_pos (mem_Ici.mp ‹_›)]; rw [one_mul]
-    _ = ∑ y in Ici x, ∑ z in Ici y, mu 𝕜 x y * zeta 𝕜 y z * f z := by simp [mul_sum]
-    _ = ∑ z in Ici x, ∑ y in Icc x z, mu 𝕜 x y * zeta 𝕜 y z * f z := by
-      rw [sum_sigma' (Ici x) fun y => Ici y]
-      rw [sum_sigma' (Ici x) fun z => Icc x z]
-      simp only [mul_boole, zero_mul, ite_mul, zeta_apply]
-      apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
-        aesop (add simp mul_assoc) (add unsafe le_trans)
-    _ = ∑ z in Ici x, (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) x z * f z := by
-      simp_rw [mul_apply, sum_mul]
-    _ = ∑ y in Ici x, ∑ z in Ici y, (1 : IncidenceAlgebra 𝕜 α) x z * f z := by
-      simp only [mu_mul_zeta 𝕜, one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici, le_refl,
-        ↓reduceIte, ← add_sum_Ioi_eq_sum_Ici, left_eq_add]
-      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
-    _ = f x := by
-      simp only [one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici,
-        ← add_sum_Ioi_eq_sum_Ici, le_refl, ↓reduceIte, add_eq_left]
-      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
-
-中文:
-引理 moebius_inversion_top
-  条件: (f g : α -> 𝕜) (h : 对任意 x, g x = ∑ y in 左闭右无界区间 x, f y) (x : α)
-  证明: by
-  let : DecidableLE α := Classical.decRel _
-  symm
-  calc
-    ∑ y in Ici x, mu 𝕜 x y * g y = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, f z := by simp_rw [h]
-    _ = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, zeta 𝕜 y z * f z := by
-      congr with y
-      rw [sum_congr rfl fun z hz => ?_]
-      rw [zeta_apply]; rw [if_pos (mem_Ici.mp ‹_›)]; rw [one_mul]
-    _ = ∑ y in Ici x, ∑ z in Ici y, mu 𝕜 x y * zeta 𝕜 y z * f z := by simp [mul_sum]
-    _ = ∑ z in Ici x, ∑ y in Icc x z, mu 𝕜 x y * zeta 𝕜 y z * f z := by
-      rw [sum_sigma' (Ici x) fun y => Ici y]
-      rw [sum_sigma' (Ici x) fun z => Icc x z]
-      simp only [mul_boole, zero_mul, ite_mul, zeta_apply]
-      apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
-        aesop (add simp mul_assoc) (add unsafe le_trans)
-    _ = ∑ z in Ici x, (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) x z * f z := by
-      simp_rw [mul_apply, sum_mul]
-    _ = ∑ y in Ici x, ∑ z in Ici y, (1 : IncidenceAlgebra 𝕜 α) x z * f z := by
-      simp only [mu_mul_zeta 𝕜, one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici, le_refl,
-        ↓reduceIte, ← add_sum_Ioi_eq_sum_Ici, left_eq_add]
-      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
-    _ = f x := by
-      simp only [one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici,
-        ← add_sum_Ioi_eq_sum_Ici, le_refl, ↓reduceIte, add_eq_left]
-      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
-
-Depends on / 依赖: Classical, Classical.decRel, DecidableLE, decRel, if_pos, mem_Ici, mem_Ici.mp, mul_sum, one_mul, simp_rw, sum_congr, sum_sigma, zeta_apply
+--- 原说明 ---
+A general form of Möbius inversion. Based on lemma 2.1.2 of Incidence Algebras b
+y Spiegel and
+O'Donnell.
 -/
-lemma moebius_inversion_top (f g : α -> 𝕜) (h : forall x, g x = ∑ y in Ici x, f y) (x : α) :
-    f x = ∑ y in Ici x, mu 𝕜 x y * g y := by
+lemma moebius_inversion_top (f g : α → 𝕜) (h : ∀ x, g x = ∑ y ∈ Ici x, f y) (x : α) :
+    f x = ∑ y ∈ Ici x, mu 𝕜 x y * g y := by
   let : DecidableLE α := Classical.decRel _
   symm
   calc
-    ∑ y in Ici x, mu 𝕜 x y * g y = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, f z := by simp_rw [h]
-    _ = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, zeta 𝕜 y z * f z := by
+    ∑ y ∈ Ici x, mu 𝕜 x y * g y = ∑ y ∈ Ici x, mu 𝕜 x y * ∑ z ∈ Ici y, f z := by simp_rw [h]
+    _ = ∑ y ∈ Ici x, mu 𝕜 x y * ∑ z ∈ Ici y, zeta 𝕜 y z * f z := by
       congr with y
-      rw [sum_congr rfl fun z hz => ?_]
-      rw [zeta_apply]; rw [if_pos (mem_Ici.mp ‹_›)]; rw [one_mul]
-    _ = ∑ y in Ici x, ∑ z in Ici y, mu 𝕜 x y * zeta 𝕜 y z * f z := by simp [mul_sum]
-    _ = ∑ z in Ici x, ∑ y in Icc x z, mu 𝕜 x y * zeta 𝕜 y z * f z := by
-      rw [sum_sigma' (Ici x) fun y => Ici y]
-      rw [sum_sigma' (Ici x) fun z => Icc x z]
+      rw [sum_congr rfl fun z hz ↦ ?_]
+      rw [zeta_apply, if_pos (mem_Ici.mp ‹_›), one_mul]
+    _ = ∑ y ∈ Ici x, ∑ z ∈ Ici y, mu 𝕜 x y * zeta 𝕜 y z * f z := by simp [mul_sum]
+    _ = ∑ z ∈ Ici x, ∑ y ∈ Icc x z, mu 𝕜 x y * zeta 𝕜 y z * f z := by
+      rw [sum_sigma' (Ici x) fun y ↦ Ici y]
+      rw [sum_sigma' (Ici x) fun z ↦ Icc x z]
       simp only [mul_boole, zero_mul, ite_mul, zeta_apply]
-      apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
+      apply sum_nbij' (fun ⟨a, b⟩ ↦ ⟨b, a⟩) (fun ⟨a, b⟩ ↦ ⟨b, a⟩) <;>
         aesop (add simp mul_assoc) (add unsafe le_trans)
-    _ = ∑ z in Ici x, (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) x z * f z := by
+    _ = ∑ z ∈ Ici x, (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) x z * f z := by
       simp_rw [mul_apply, sum_mul]
-    _ = ∑ y in Ici x, ∑ z in Ici y, (1 : IncidenceAlgebra 𝕜 α) x z * f z := by
+    _ = ∑ y ∈ Ici x, ∑ z ∈ Ici y, (1 : IncidenceAlgebra 𝕜 α) x z * f z := by
       simp only [mu_mul_zeta 𝕜, one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici, le_refl,
         ↓reduceIte, ← add_sum_Ioi_eq_sum_Ici, left_eq_add]
-      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
+      exact sum_eq_zero fun y hy ↦ if_neg (mem_Ioi.mp hy).not_ge
     _ = f x := by
       simp only [one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici,
         ← add_sum_Ioi_eq_sum_Ici, le_refl, ↓reduceIte, add_eq_left]
-      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
+      exact sum_eq_zero fun y hy ↦ if_neg (mem_Ioi.mp hy).not_ge
 
 end InversionTop
 
@@ -1964,27 +1394,36 @@ section InversionBot
 variable [Ring 𝕜] [PartialOrder α] [OrderBot α] [LocallyFiniteOrder α] [DecidableEq α]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `moebius_inversion_bot` / 引理 `moebius_inversion_bot`
+/-- A general form of Möbius inversion. Based on lemma 2.1.3 of Incidence Algebras by Spiegel and
+O'Donnell. -/
+/-
+**IncidenceAlgebra.moebius_inversion_bot** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlg
+ebra`。
+形式化陈述：moebius_inversion_bot (f g : α -> 𝕜) (h : forall x, g x = ∑ y in Iic x, f 
+y) (x : α) : f x = ∑ y in Iic x, mu 𝕜 y x * g y
+参数：f g : α -> 𝕜；h : forall x, g x = ∑ y in Iic x, f y；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IncidenceAlgebra.mu_toDual`：mu_toDual (a b : α) : mu 𝕜 (toDual a) (toDua
+l b) = mu 𝕜 b a
+· 使用引理 `IncidenceAlgebra.moebius_inversion_top`：moebius_inversion_top (f g : α -
+> 𝕜) (h : forall x, g x = ∑ y in Ici x, f y) (x : α) : f x = ∑ y in Ici x, mu 𝕜 
+x y * g y
 
-English:
-lemma moebius_inversion_bot
-  given: (f g : α -> 𝕜) (h : forall x, g x = ∑ y in Iic x, f y) (x : α)
-  proof: by
-  convert! moebius_inversion_top (α := αᵒᵈ) f g h x using 3
-  rw [← mu_toDual]; rfl
-
-中文:
-引理 moebius_inversion_bot
-  条件: (f g : α -> 𝕜) (h : 对任意 x, g x = ∑ y in 左无界右闭区间 x, f y) (x : α)
-  证明: by
-  convert! moebius_inversion_top (α := αᵒᵈ) f g h x using 3
-  rw [← mu_toDual]; rfl
-
-Depends on / 依赖: convert, moebius_inversion_top, mu_toDual
+--- 原说明 ---
+A general form of Möbius inversion. Based on lemma 2.1.3 of Incidence Algebras b
+y Spiegel and
+O'Donnell.
 -/
-lemma moebius_inversion_bot (f g : α -> 𝕜) (h : forall x, g x = ∑ y in Iic x, f y) (x : α) :
-    f x = ∑ y in Iic x, mu 𝕜 y x * g y := by
+lemma moebius_inversion_bot (f g : α → 𝕜) (h : ∀ x, g x = ∑ y ∈ Iic x, f y) (x : α) :
+    f x = ∑ y ∈ Iic x, mu 𝕜 y x * g y := by
   convert! moebius_inversion_top (α := αᵒᵈ) f g h x using 3
   rw [← mu_toDual]; rfl
 
@@ -2000,42 +1439,39 @@ variable (𝕜) [Ring 𝕜] [Preorder α] [Preorder β]
 section DecidableLe
 variable [DecidableLE α] [DecidableLE β]
 
-/--
-lemma `zeta_prod_apply` / 引理 `zeta_prod_apply`
-
-English:
-lemma zeta_prod_apply
-  given: (a b : α × β)
-  statement: zeta 𝕜 a b = zeta 𝕜 a.1 b.1 * zeta 𝕜 a.2 b.2
-  proof: by
-  simp [← ite_and, Prod.le_def, and_comm]
-
-中文:
-引理 zeta_prod_apply
-  条件: (a b : α × β)
-  结论: zeta 𝕜 a b = zeta 𝕜 a.1 b.1 * zeta 𝕜 a.2 b.2
-  证明: by
-  simp [← ite_and, Prod.le_def, and_comm]
-
-Depends on / 依赖: Prod.le_def, and_comm, ite_and, le_def
+/-
+**IncidenceAlgebra.zeta_prod_apply** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zeta_prod_apply (a b : α × β) : zeta 𝕜 a b = zeta 𝕜 a.1 b.1 * zeta 𝕜 a.2 b
+.2
+参数：a b : α × β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma zeta_prod_apply (a b : α × β) : zeta 𝕜 a b = zeta 𝕜 a.1 b.1 * zeta 𝕜 a.2 b.2 := by
   simp [← ite_and, Prod.le_def, and_comm]
-
-/--
-lemma `zeta_prod_mk` / 引理 `zeta_prod_mk`
-
-English:
-lemma zeta_prod_mk
-  given: (a₁ a₂ : α) (b₁ b₂ : β)
-  proof: zeta_prod_apply _ _ _
-
-中文:
-引理 zeta_prod_mk
-  条件: (a₁ a₂ : α) (b₁ b₂ : β)
-  证明: zeta_prod_apply _ _ _
-
-Depends on / 依赖: zeta_prod_apply
+/-
+**IncidenceAlgebra.zeta_prod_mk** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zeta_prod_mk (a₁ a₂ : α) (b₁ b₂ : β) : zeta 𝕜 (a₁, b₁) (a₂, b₂) = zeta 𝕜 a
+₁ a₂ * zeta 𝕜 b₁ b₂
+参数：a₁ a₂ : α；b₁ b₂ : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.zeta_prod_apply`：zeta_prod_apply (a b : α × β) : zeta 𝕜
+ a b = zeta 𝕜 a.1 b.1 * zeta 𝕜 a.2 b.2
 -/
 lemma zeta_prod_mk (a₁ a₂ : α) (b₁ b₂ : β) :
     zeta 𝕜 (a₁, b₁) (a₂, b₂) = zeta 𝕜 a₁ a₂ * zeta 𝕜 b₁ b₂ := zeta_prod_apply _ _ _
@@ -2044,132 +1480,134 @@ end DecidableLe
 
 variable {𝕜} (f f₁ f₂ : IncidenceAlgebra 𝕜 α) (g g₁ g₂ : IncidenceAlgebra 𝕜 β)
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- The Cartesian product of two incidence algebras. -/
+/-
+**IncidenceAlgebra.prod** 是 Mathlib 中的一个定义，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：{𝕜 : Type u_2} →   {α : Type u_5} →     {β : Type u_6} →       [inst : Rin
+g 𝕜] →         [inst_1 : Preorder α] →           [inst_2 : Preorder β] → Inciden
+ceAlgebra 𝕜 α → IncidenceAlgebra 𝕜 β → IncidenceAlgebra 𝕜 (α × β)
+参数：α × β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: : IncidenceAlgebra 𝕜 (α × β) where
-  body: f x.1 y.1 * g x.2 y.2
-  eq_zero_of_not_le' x y hxy := by
-    rw [Prod.le_def]; rw [not_and_or] at hxy
-    obtain hxy | hxy := hxy <;> simp [apply_eq_zero_of_not_le hxy]
-
-中文:
-定义 乘积
-  签名: : Incidence代数 𝕜 (α × β) where
-  定义体: f x.1 y.1 * g x.2 y.2
-  eq_zero_of_not_le' x y hxy := by
-    rw [Prod.le_def]; rw [not_and_or] at hxy
-    obtain hxy | hxy := hxy <;> simp [apply_eq_zero_of_not_le hxy]
+--- 原说明 ---
+The Cartesian product of two incidence algebras.
 -/
 protected def prod : IncidenceAlgebra 𝕜 (α × β) where
   toFun x y := f x.1 y.1 * g x.2 y.2
   eq_zero_of_not_le' x y hxy := by
-    rw [Prod.le_def]; rw [not_and_or] at hxy
+    rw [Prod.le_def, not_and_or] at hxy
     obtain hxy | hxy := hxy <;> simp [apply_eq_zero_of_not_le hxy]
-
-/--
-lemma `prod_mk` / 引理 `prod_mk`
-
-English:
-lemma prod_mk
-  given: (a₁ a₂ : α) (b₁ b₂ : β)
-  statement: f.prod g (a₁, b₁) (a₂, b₂) = f a₁ a₂ * g b₁ b₂
-  proof: rfl
-
-中文:
-引理 prod_mk
-  条件: (a₁ a₂ : α) (b₁ b₂ : β)
-  结论: f.乘积 g (a₁, b₁) (a₂, b₂) = f a₁ a₂ * g b₁ b₂
-  证明: rfl
+/-
+**IncidenceAlgebra.prod_mk** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：prod_mk (a₁ a₂ : α) (b₁ b₂ : β) : f.prod g (a₁, b₁) (a₂, b₂) = f a₁ a₂ * g
+ b₁ b₂
+参数：a₁ a₂ : α；b₁ b₂ : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prod_mk (a₁ a₂ : α) (b₁ b₂ : β) : f.prod g (a₁, b₁) (a₂, b₂) = f a₁ a₂ * g b₁ b₂ := rfl
-/--
-lemma `prod_apply` / 引理 `prod_apply`
-
-English:
-lemma prod_apply
-  given: (x y : α × β)
-  statement: f.prod g x y = f x.1 y.1 * g x.2 y.2
-  proof: rfl
-
-中文:
-引理 prod_apply
-  条件: (x y : α × β)
-  结论: f.乘积 g x y = f x.1 y.1 * g x.2 y.2
-  证明: rfl
+/-
+**IncidenceAlgebra.prod_apply** 是 Mathlib 中的一个定理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：∀ {𝕜 : Type u_2} {α : Type u_5} {β : Type u_6} [inst : Ring 𝕜] [inst_1 : P
+reorder α] [inst_2 : Preorder β]   (f : IncidenceAlgebra 𝕜 α) (g : IncidenceAlge
+bra 𝕜 β) (x y : α × β), (f.prod g) x y = f x.1 y.1 * g x.2 y.2
+参数：f : IncidenceAlgebra 𝕜 α；g : IncidenceAlgebra 𝕜 β；x y : α × β；f.prod g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma prod_apply (x y : α × β) : f.prod g x y = f x.1 y.1 * g x.2 y.2 := rfl
 
-/--
-lemma `prod_mul_prod'` / 引理 `prod_mul_prod'`
+/-- This is a version of `IncidenceAlgebra.prod_mul_prod` that works over non-commutative rings. -/
+/-
+**IncidenceAlgebra.prod_mul_prod'** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：prod_mul_prod' [LocallyFiniteOrder α] [LocallyFiniteOrder β] [DecidableLE 
+(α × β)] (h : forall a₁ a₂ a₃ b₁ b₂ b₃, f₁ a₁ a₂ * g₁ b₁ b₂ * (f₂ a₂ a₃ * g₂ b₂ 
+b₃) = f₁ a₁ a₂ * f₂ a₂ a₃ * (g₁ b₁ b₂ * g₂ b₂ b₃)) : f₁.prod g₁ * f₂.prod g₂ = (
+f₁ * f₂).prod (g₁ * g₂)
+参数：α × β；h : forall a₁ a₂ a₃ b₁ b₂ b₃, f₁ a₁ a₂ * g₁ b₁ b₂ * (f₂ a₂ a₃ * g₂ b₂ b
+₃) = f₁ a₁ a₂ * f₂ a₂ a₃ * (g₁ b₁ b₂ * g₂ b₂ b₃)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.ext`：ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, 
+a <= b -> f a b = g a b) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_product`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst
+ : AddCommMonoid β] (s : Finset γ) (t : Finset α) (f : γ × α → β),   ∑ x ∈ s ×ˢ 
+t, f x =…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `Finset.sum_mul_sum`：sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι -> 
+R) (g : κ -> R) : (∑ i in s, f i) * ∑ j in t, g j = ∑ i in s, ∑ j in t, f i * g 
+j
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma prod_mul_prod'
-  statement: [LocallyFiniteOrder α] [LocallyFiniteOrder β] [DecidableLE (α × β)]
-  proof: by
-  ext x y; simp [Icc_prod_def, sum_mul_sum, h, sum_product]
-
-@[simp]
-
-中文:
-引理 prod_mul_prod'
-  结论: [局部有限序 α] [局部有限序 β] [DecidableLE (α × β)]
-  证明: by
-  ext x y; simp [Icc_prod_def, sum_mul_sum, h, sum_product]
-
-@[simp]
-
-Depends on / 依赖: Icc_prod_def, sum_mul_sum, sum_product
+--- 原说明 ---
+This is a version of `IncidenceAlgebra.prod_mul_prod` that works over non-commut
+ative rings.
 -/
 lemma prod_mul_prod' [LocallyFiniteOrder α] [LocallyFiniteOrder β] [DecidableLE (α × β)]
-    (h : forall a₁ a₂ a₃ b₁ b₂ b₃,
+    (h : ∀ a₁ a₂ a₃ b₁ b₂ b₃,
         f₁ a₁ a₂ * g₁ b₁ b₂ * (f₂ a₂ a₃ * g₂ b₂ b₃) = f₁ a₁ a₂ * f₂ a₂ a₃ * (g₁ b₁ b₂ * g₂ b₂ b₃)) :
     f₁.prod g₁ * f₂.prod g₂ = (f₁ * f₂).prod (g₁ * g₂) := by
   ext x y; simp [Icc_prod_def, sum_mul_sum, h, sum_product]
 
 @[simp]
-/--
-lemma `one_prod_one` / 引理 `one_prod_one`
-
-English:
-lemma one_prod_one
-  given: [DecidableEq α] [DecidableEq β]
-  proof: by
-  ext x y; simp [Prod.ext_iff, ← ite_and, and_comm]
-
-@[simp]
-
-中文:
-引理 one_prod_one
-  条件: [DecidableEq α] [DecidableEq β]
-  证明: by
-  ext x y; simp [Prod.ext_iff, ← ite_and, and_comm]
-
-@[simp]
-
-Depends on / 依赖: Prod.ext_iff, and_comm, ext_iff, ite_and
+/-
+**IncidenceAlgebra.one_prod_one** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：one_prod_one [DecidableEq α] [DecidableEq β] : (.prod 1 1 : IncidenceAlgeb
+ra 𝕜 (α × β)) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.ext`：ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, 
+a <= b -> f a b = g a b) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma one_prod_one [DecidableEq α] [DecidableEq β] :
     (.prod 1 1 : IncidenceAlgebra 𝕜 (α × β)) = 1 := by
   ext x y; simp [Prod.ext_iff, ← ite_and, and_comm]
 
 @[simp]
-/--
-lemma `zeta_prod_zeta` / 引理 `zeta_prod_zeta`
-
-English:
-lemma zeta_prod_zeta
-  given: [DecidableLE α] [DecidableLE β]
-  proof: by
-  ext x y hxy; simp [hxy, hxy.1, hxy.2]
-
-中文:
-引理 zeta_prod_zeta
-  条件: [DecidableLE α] [DecidableLE β]
-  证明: by
-  ext x y hxy; simp [hxy, hxy.1, hxy.2]
+/-
+**IncidenceAlgebra.zeta_prod_zeta** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：zeta_prod_zeta [DecidableLE α] [DecidableLE β] : (zeta 𝕜).prod (zeta 𝕜) = 
+(zeta 𝕜 : IncidenceAlgebra 𝕜 (α × β))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.ext`：ext ⦃f g : IncidenceAlgebra 𝕜 α⦄ (h : forall a b, 
+a <= b -> f a b = g a b) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma zeta_prod_zeta [DecidableLE α] [DecidableLE β] :
     (zeta 𝕜).prod (zeta 𝕜) = (zeta 𝕜 : IncidenceAlgebra 𝕜 (α × β)) := by
@@ -2182,23 +1620,19 @@ variable [CommRing 𝕜] [Preorder α] [Preorder β] [LocallyFiniteOrder α] [Lo
   [DecidableLE (α × β)] (f₁ f₂ : IncidenceAlgebra 𝕜 α) (g₁ g₂ : IncidenceAlgebra 𝕜 β)
 
 @[simp]
-/--
-lemma `prod_mul_prod` / 引理 `prod_mul_prod`
-
-English:
-lemma prod_mul_prod
-  statement: f₁.prod g₁ * f₂.prod g₂ = (f₁ * f₂).prod (g₁ * g₂)
-  proof: prod_mul_prod' _ _ _ _ fun _ _ _ _ _ _ => mul_mul_mul_comm ..
-
-中文:
-引理 prod_mul_prod
-  结论: f₁.乘积 g₁ * f₂.乘积 g₂ = (f₁ * f₂).乘积 (g₁ * g₂)
-  证明: prod_mul_prod' _ _ _ _ fun _ _ _ _ _ _ => mul_mul_mul_comm ..
-
-Depends on / 依赖: mul_mul_mul_comm, prod_mul_prod
+/-
+**IncidenceAlgebra.prod_mul_prod** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：prod_mul_prod : f₁.prod g₁ * f₂.prod g₂ = (f₁ * f₂).prod (g₁ * g₂)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IncidenceAlgebra.prod_mul_prod'`：prod_mul_prod' [LocallyFiniteOrder α] [
+LocallyFiniteOrder β] [DecidableLE (α × β)] (h : forall a₁ a₂ a₃ b₁ b₂ b₃, f₁ a₁
+ a₂ * g₁ b₁ b₂ * (f₂ …
+· 使用定理 `mul_mul_mul_comm`：mul_mul_mul_comm (a b c d : G) : a * b * (c * d) = a *
+ c * (b * d)
 -/
 lemma prod_mul_prod : f₁.prod g₁ * f₂.prod g₂ = (f₁ * f₂).prod (g₁ * g₂) :=
-  prod_mul_prod' _ _ _ _ fun _ _ _ _ _ _ => mul_mul_mul_comm ..
+  prod_mul_prod' _ _ _ _ fun _ _ _ _ _ _ ↦ mul_mul_mul_comm ..
 
 end CommRing
 end Preorder
@@ -2210,51 +1644,71 @@ variable (𝕜) [Ring 𝕜] [PartialOrder α] [PartialOrder β] [LocallyFiniteOr
 /-- The Möbius function on a product order. Based on lemma 2.1.13 of Incidence Algebras by Spiegel
 and O'Donnell. -/
 @[simp]
-/--
-lemma `mu_prod_mu` / 引理 `mu_prod_mu`
+/-
+**IncidenceAlgebra.mu_prod_mu** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：mu_prod_mu : (mu 𝕜).prod (mu 𝕜) = (mu 𝕜 : IncidenceAlgebra 𝕜 (α × β))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `left_inv_eq_right_inv`：∀ {M : Type u_2} [inst : Monoid M] {a b c : M}, b
+ * a = 1 → a * c = 1 → b = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `IncidenceAlgebra.zeta_prod_zeta`：zeta_prod_zeta [DecidableLE α] [Decidab
+leLE β] : (zeta 𝕜).prod (zeta 𝕜) = (zeta 𝕜 : IncidenceAlgebra 𝕜 (α × β))
+· 使用引理 `IncidenceAlgebra.prod_mul_prod'`：prod_mul_prod' [LocallyFiniteOrder α] [
+LocallyFiniteOrder β] [DecidableLE (α × β)] (h : forall a₁ a₂ a₃ b₁ b₂ b₃, f₁ a₁
+ a₂ * g₁ b₁ b₂ * (f₂ …
+· 使用定理 `Commute.mul_mul_mul_comm`：∀ {S : Type u_3} [inst : Semigroup S] {b c : S
+}, Commute b c → ∀ (a d : S), a * b * (c * d) = a * c * (b * d)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `IncidenceAlgebra.mu_mul_zeta`：mu_mul_zeta : (mu 𝕜 * zeta 𝕜 : IncidenceAl
+gebra 𝕜 α) = 1
+· 使用引理 `IncidenceAlgebra.one_prod_one`：one_prod_one [DecidableEq α] [DecidableEq
+ β] : (.prod 1 1 : IncidenceAlgebra 𝕜 (α × β)) = 1
+· 使用引理 `IncidenceAlgebra.zeta_mul_mu`：zeta_mul_mu [DecidableLE α] : (zeta 𝕜 * mu
+ 𝕜 : IncidenceAlgebra 𝕜 α) = 1
 
-English:
-lemma mu_prod_mu
-  statement: (mu 𝕜).prod (mu 𝕜) = (mu 𝕜 : IncidenceAlgebra 𝕜 (α × β))
-  proof: by
-  refine left_inv_eq_right_inv ?_ zeta_mul_mu
-  rw [← zeta_prod_zeta]; rw [prod_mul_prod']; rw [mu_mul_zeta]; rw [mu_mul_zeta]; rw [one_prod_one]
-  exact fun _ _ _ _ _ _ => Commute.mul_mul_mul_comm (by simp : _ = _) _ _
-
-@[simp]
-
-中文:
-引理 mu_prod_mu
-  结论: (mu 𝕜).乘积 (mu 𝕜) = (mu 𝕜 : Incidence代数 𝕜 (α × β))
-  证明: by
-  refine left_inv_eq_right_inv ?_ zeta_mul_mu
-  rw [← zeta_prod_zeta]; rw [prod_mul_prod']; rw [mu_mul_zeta]; rw [mu_mul_zeta]; rw [one_prod_one]
-  exact fun _ _ _ _ _ _ => Commute.mul_mul_mul_comm (by simp : _ = _) _ _
-
-@[simp]
-
-Depends on / 依赖: Commute, Commute.mul_mul_mul_comm, left_inv_eq_right_inv, mu_mul_zeta, mul_mul_mul_comm, one_prod_one, prod_mul_prod, zeta_mul_mu, zeta_prod_zeta
+--- 原说明 ---
+The Möbius function on a product order. Based on lemma 2.1.13 of Incidence Algeb
+ras by Spiegel
+and O'Donnell.
 -/
 lemma mu_prod_mu : (mu 𝕜).prod (mu 𝕜) = (mu 𝕜 : IncidenceAlgebra 𝕜 (α × β)) := by
   refine left_inv_eq_right_inv ?_ zeta_mul_mu
-  rw [← zeta_prod_zeta]; rw [prod_mul_prod']; rw [mu_mul_zeta]; rw [mu_mul_zeta]; rw [one_prod_one]
-  exact fun _ _ _ _ _ _ => Commute.mul_mul_mul_comm (by simp : _ = _) _ _
+  rw [← zeta_prod_zeta, prod_mul_prod', mu_mul_zeta, mu_mul_zeta, one_prod_one]
+  exact fun _ _ _ _ _ _ ↦ Commute.mul_mul_mul_comm (by simp : _ = _) _ _
 
 @[simp]
-/--
-lemma `eulerChar_prod` / 引理 `eulerChar_prod`
-
-English:
-lemma eulerChar_prod
-  given: [BoundedOrder α] [BoundedOrder β]
-  proof: by simp [eulerChar, ← mu_prod_mu]
-
-中文:
-引理 eulerChar_prod
-  条件: [有界序 α] [有界序 β]
-  证明: by simp [eulerChar, ← mu_prod_mu]
-
-Depends on / 依赖: eulerChar, mu_prod_mu
+/-
+**IncidenceAlgebra.eulerChar_prod** 是 Mathlib 中的一个引理，位于命名空间 `IncidenceAlgebra`。
+形式化陈述：eulerChar_prod [BoundedOrder α] [BoundedOrder β] : eulerChar 𝕜 (α × β) = e
+ulerChar 𝕜 α * eulerChar 𝕜 β
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma eulerChar_prod [BoundedOrder α] [BoundedOrder β] :
     eulerChar 𝕜 (α × β) = eulerChar 𝕜 α * eulerChar 𝕜 β := by simp [eulerChar, ← mu_prod_mu]
@@ -2262,3 +1716,4 @@ lemma eulerChar_prod [BoundedOrder α] [BoundedOrder β] :
 end PartialOrder
 end Prod
 end IncidenceAlgebra
+

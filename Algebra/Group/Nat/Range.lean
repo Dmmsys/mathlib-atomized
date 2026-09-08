@@ -20,80 +20,82 @@ variable {α β γ : Type*}
 
 namespace Finset
 
-/--
-theorem `disjoint_range_addLeftEmbedding` / 定理 `disjoint_range_addLeftEmbedding`
-
-English:
-theorem disjoint_range_addLeftEmbedding
-  given: (a : Nat) (s : Finset Nat)
-  proof: by
-  simp_rw [disjoint_left, mem_map, mem_range, addLeftEmbedding_apply]
-  rintro _ h ⟨l, -, rfl⟩
-  lia
-
-中文:
-定理 disjoint_range_addLeftEmbedding
-  条件: (a : 自然数) (s : 有限集 自然数)
-  证明: by
-  simp_rw [disjoint_left, mem_map, mem_range, addLeftEmbedding_apply]
-  rintro _ h ⟨l, -, rfl⟩
-  lia
-
-Depends on / 依赖: addLeftEmbedding_apply, disjoint_left, mem_map, mem_range, simp_rw
+/-
+**Finset.disjoint_range_addLeftEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjoint_range_addLeftEmbedding (a : Nat) (s : Finset Nat) : Disjoint (ran
+ge a) (map (addLeftEmbedding a) s)
+参数：a : Nat；s : Finset Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `addLeftEmbedding_apply`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsLeft
+CancelAdd G] (g h : G), (addLeftEmbedding g) h = g + h
 -/
-theorem disjoint_range_addLeftEmbedding (a : Nat) (s : Finset Nat) :
+theorem disjoint_range_addLeftEmbedding (a : ℕ) (s : Finset ℕ) :
     Disjoint (range a) (map (addLeftEmbedding a) s) := by
   simp_rw [disjoint_left, mem_map, mem_range, addLeftEmbedding_apply]
   rintro _ h ⟨l, -, rfl⟩
   lia
-
-/--
-theorem `disjoint_range_addRightEmbedding` / 定理 `disjoint_range_addRightEmbedding`
-
-English:
-theorem disjoint_range_addRightEmbedding
-  given: (a : Nat) (s : Finset Nat)
-  proof: by
-  rw [← addLeftEmbedding_eq_addRightEmbedding]
-  apply disjoint_range_addLeftEmbedding
-
-中文:
-定理 disjoint_range_addRightEmbedding
-  条件: (a : 自然数) (s : 有限集 自然数)
-  证明: by
-  rw [← addLeftEmbedding_eq_addRightEmbedding]
-  apply disjoint_range_addLeftEmbedding
-
-Depends on / 依赖: addLeftEmbedding_eq_addRightEmbedding, disjoint_range_addLeftEmbedding
+/-
+**Finset.disjoint_range_addRightEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjoint_range_addRightEmbedding (a : Nat) (s : Finset Nat) : Disjoint (ra
+nge a) (map (addRightEmbedding a) s)
+参数：a : Nat；s : Finset Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCancelAdd.toIsRightCancelAdd`：∀ {G : Type u} {inst : Add G} [self : Is
+CancelAdd G], IsRightCancelAdd G
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `addLeftEmbedding_eq_addRightEmbedding`：∀ {G : Type u_1} [inst : AddCommM
+agma G] [inst_1 : IsCancelAdd G] (g : G), addLeftEmbedding g = addRightEmbedding
+ g
+· 使用定理 `Finset.disjoint_range_addLeftEmbedding`：disjoint_range_addLeftEmbedding 
+(a : Nat) (s : Finset Nat) : Disjoint (range a) (map (addLeftEmbedding a) s)
 -/
-theorem disjoint_range_addRightEmbedding (a : Nat) (s : Finset Nat) :
+theorem disjoint_range_addRightEmbedding (a : ℕ) (s : Finset ℕ) :
     Disjoint (range a) (map (addRightEmbedding a) s) := by
   rw [← addLeftEmbedding_eq_addRightEmbedding]
   apply disjoint_range_addLeftEmbedding
-
-/--
-theorem `range_add` / 定理 `range_add`
-
-English:
-theorem range_add
-  given: (a b : Nat)
-  statement: range (a + b) = range a union (range b).map (addLeftEmbedding a)
-  proof: by
-  rw [← val_inj]; rw [union_val]
-  exact Multiset.range_add_eq_union a b
-
-中文:
-定理 range_add
-  条件: (a b : 自然数)
-  结论: range (a + b) = range a union (range b).map (addLeftEmbedding a)
-  证明: by
-  rw [← val_inj]; rw [union_val]
-  exact Multiset.range_add_eq_union a b
-
-Depends on / 依赖: Multiset, Multiset.range_add_eq_union, range_add_eq_union, union_val, val_inj
+/-
+**Finset.range_add** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：range_add (a b : Nat) : range (a + b) = range a union (range b).map (addLe
+ftEmbedding a)
+参数：a b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.val_inj`：val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t
+· 使用定理 `Finset.union_val`：union_val (s t : Finset α) : (s union t).1 = s.1 union
+ t.1
+· 使用定理 `Multiset.range_add_eq_union`：range_add_eq_union (a b : Nat) : range (a +
+ b) = range a union (range b).map (a + ·)
 -/
-theorem range_add (a b : Nat) : range (a + b) = range a union (range b).map (addLeftEmbedding a) := by
-  rw [← val_inj]; rw [union_val]
+theorem range_add (a b : ℕ) : range (a + b) = range a ∪ (range b).map (addLeftEmbedding a) := by
+  rw [← val_inj, union_val]
   exact Multiset.range_add_eq_union a b
 
 end Finset
+

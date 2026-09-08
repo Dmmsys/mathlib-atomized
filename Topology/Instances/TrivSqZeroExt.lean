@@ -41,634 +41,422 @@ section Topology
 
 variable [TopologicalSpace R] [TopologicalSpace M]
 
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
-
-English:
-instance instTopologicalSpace
-  signature: : TopologicalSpace (tsze R M)
-  body: TopologicalSpace.induced fst ‹_› ⊓ TopologicalSpace.induced snd ‹_›
-
-中文:
-实例 instTopologicalSpace
-  签名: : 拓扑空间 (tsze R M)
-  定义体: TopologicalSpace.induced fst ‹_› ⊓ TopologicalSpace.induced snd ‹_›
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.induced, induced
+/-
+**TrivSqZeroExt.instTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：instTopologicalSpace : TopologicalSpace (tsze R M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instTopologicalSpace : TopologicalSpace (tsze R M) :=
   TopologicalSpace.induced fst ‹_› ⊓ TopologicalSpace.induced snd ‹_›
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T2Space
-  signature: R] [T2Space M] : T2Space (tsze R M)
-  body: Prod.t2Space
-
-中文:
-实例 [T2空间
-  签名: R] [T2空间 M] : T2空间 (tsze R M)
-  定义体: Prod.t2Space
-
-Depends on / 依赖: Prod.t2Space, t2Space
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T2Space R] [T2Space M] : T2Space (tsze R M) :=
   Prod.t2Space
-
-/--
-theorem `nhds_def` / 定理 `nhds_def`
-
-English:
-theorem nhds_def
-  given: (x : tsze R M)
-  statement: 𝓝 x = 𝓝 x.fst ×ˢ 𝓝 x.snd
-  proof: nhds_prod_eq
-
-中文:
-定理 nhds_def
-  条件: (x : tsze R M)
-  结论: 𝓝 x = 𝓝 x.fst ×ˢ 𝓝 x.snd
-  证明: nhds_prod_eq
-
-Depends on / 依赖: nhds_prod_eq
+/-
+**TrivSqZeroExt.nhds_def** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：nhds_def (x : tsze R M) : 𝓝 x = 𝓝 x.fst ×ˢ 𝓝 x.snd
+参数：x : tsze R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nhds_prod_eq`：nhds_prod_eq {x : X} {y : Y} : 𝓝 (x, y) = 𝓝 x ×ˢ 𝓝 y
 -/
 theorem nhds_def (x : tsze R M) : 𝓝 x = 𝓝 x.fst ×ˢ 𝓝 x.snd := nhds_prod_eq
-
-/--
-theorem `nhds_inl` / 定理 `nhds_inl`
-
-English:
-theorem nhds_inl
-  given: [Zero M] (x : R)
-  statement: 𝓝 (inl x : tsze R M) = 𝓝 x ×ˢ 𝓝 0
-  proof: nhds_def _
-
-中文:
-定理 nhds_inl
-  条件: [零 M] (x : R)
-  结论: 𝓝 (inl x : tsze R M) = 𝓝 x ×ˢ 𝓝 0
-  证明: nhds_def _
-
-Depends on / 依赖: nhds_def
+/-
+**TrivSqZeroExt.nhds_inl** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：nhds_inl [Zero M] (x : R) : 𝓝 (inl x : tsze R M) = 𝓝 x ×ˢ 𝓝 0
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TrivSqZeroExt.nhds_def`：nhds_def (x : tsze R M) : 𝓝 x = 𝓝 x.fst ×ˢ 𝓝 x.s
+nd
 -/
 theorem nhds_inl [Zero M] (x : R) : 𝓝 (inl x : tsze R M) = 𝓝 x ×ˢ 𝓝 0 :=
   nhds_def _
-
-/--
-theorem `nhds_inr` / 定理 `nhds_inr`
-
-English:
-theorem nhds_inr
-  given: [Zero R] (m : M)
-  statement: 𝓝 (inr m : tsze R M) = 𝓝 0 ×ˢ 𝓝 m
-  proof: nhds_def _
-
-nonrec theorem continuous_fst : Continuous (fst : tsze R M -> R) :=
-  continuous_fst
-
-nonrec theorem continuous_snd : Continuous (snd : tsze R M -> M) :=
-  continuous_snd
-
-中文:
-定理 nhds_inr
-  条件: [零 R] (m : M)
-  结论: 𝓝 (inr m : tsze R M) = 𝓝 0 ×ˢ 𝓝 m
-  证明: nhds_def _
-
-nonrec theorem continuous_fst : Continuous (fst : tsze R M -> R) :=
-  continuous_fst
-
-nonrec theorem continuous_snd : Continuous (snd : tsze R M -> M) :=
-  continuous_snd
-
-Depends on / 依赖: nhds_def
+/-
+**TrivSqZeroExt.nhds_inr** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：nhds_inr [Zero R] (m : M) : 𝓝 (inr m : tsze R M) = 𝓝 0 ×ˢ 𝓝 m
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TrivSqZeroExt.nhds_def`：nhds_def (x : tsze R M) : 𝓝 x = 𝓝 x.fst ×ˢ 𝓝 x.s
+nd
 -/
 theorem nhds_inr [Zero R] (m : M) : 𝓝 (inr m : tsze R M) = 𝓝 0 ×ˢ 𝓝 m :=
   nhds_def _
 
-nonrec theorem continuous_fst : Continuous (fst : tsze R M -> R) :=
+nonrec theorem continuous_fst : Continuous (fst : tsze R M → R) :=
   continuous_fst
 
-nonrec theorem continuous_snd : Continuous (snd : tsze R M -> M) :=
+nonrec theorem continuous_snd : Continuous (snd : tsze R M → M) :=
   continuous_snd
-
-/--
-theorem `continuous_inl` / 定理 `continuous_inl`
-
-English:
-theorem continuous_inl
-  given: [Zero M]
-  statement: Continuous (inl : R -> tsze R M)
-  proof: continuous_id.prodMk continuous_const
-
-中文:
-定理 continuous_inl
-  条件: [零 M]
-  结论: 连续 (inl : R -> tsze R M)
-  证明: continuous_id.prodMk continuous_const
-
-Depends on / 依赖: continuous_const, continuous_id, continuous_id.prodMk, prodMk
+/-
+**TrivSqZeroExt.continuous_inl** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：continuous_inl [Zero M] : Continuous (inl : R -> tsze R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.prodMk`：Continuous.prodMk {f : Z -> X} {g : Z -> Y} (hf : Con
+tinuous f) (hg : Continuous g) : Continuous fun x => (f x, g x)
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 -/
-theorem continuous_inl [Zero M] : Continuous (inl : R -> tsze R M) :=
+theorem continuous_inl [Zero M] : Continuous (inl : R → tsze R M) :=
   continuous_id.prodMk continuous_const
-
-/--
-theorem `continuous_inr` / 定理 `continuous_inr`
-
-English:
-theorem continuous_inr
-  given: [Zero R]
-  statement: Continuous (inr : M -> tsze R M)
-  proof: continuous_const.prodMk continuous_id
-
-中文:
-定理 continuous_inr
-  条件: [零 R]
-  结论: 连续 (inr : M -> tsze R M)
-  证明: continuous_const.prodMk continuous_id
-
-Depends on / 依赖: continuous_const, continuous_const.prodMk, continuous_id, prodMk
+/-
+**TrivSqZeroExt.continuous_inr** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：continuous_inr [Zero R] : Continuous (inr : M -> tsze R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.prodMk`：Continuous.prodMk {f : Z -> X} {g : Z -> Y} (hf : Con
+tinuous f) (hg : Continuous g) : Continuous fun x => (f x, g x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
-theorem continuous_inr [Zero R] : Continuous (inr : M -> tsze R M) :=
+theorem continuous_inr [Zero R] : Continuous (inr : M → tsze R M) :=
   continuous_const.prodMk continuous_id
-
-/--
-theorem `IsEmbedding.inl` / 定理 `IsEmbedding.inl`
-
-English:
-theorem IsEmbedding.inl
-  given: [Zero M]
-  statement: IsEmbedding (inl : R -> tsze R M)
-  proof: .of_comp continuous_inl continuous_fst .id
-
-中文:
-定理 是嵌入.inl
-  条件: [零 M]
-  结论: 是嵌入 (inl : R -> tsze R M)
-  证明: .of_comp continuous_inl continuous_fst .id
-
-Depends on / 依赖: continuous_fst, continuous_inl, of_comp
+/-
+**TrivSqZeroExt.IsEmbedding.inl** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt.IsEmbed
+ding`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} [inst : TopologicalSpace R] [inst_1 : Topo
+logicalSpace M] [inst_2 : Zero M],   Topology.IsEmbedding TrivSqZeroExt.inl
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.of_comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type 
+u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topological
+Space Y] [inst_2 :…
+· 使用定理 `TrivSqZeroExt.continuous_inl`：continuous_inl [Zero M] : Continuous (inl 
+: R -> tsze R M)
+· 使用定理 `TrivSqZeroExt.continuous_fst`：∀ {R : Type u_3} {M : Type u_4} [inst : To
+pologicalSpace R] [inst_1 : TopologicalSpace M], Continuous TrivSqZeroExt.fst
+· 使用定理 `Topology.IsEmbedding.id`：∀ {X : Type u_1} [inst : TopologicalSpace X], T
+opology.IsEmbedding id
 -/
-theorem IsEmbedding.inl [Zero M] : IsEmbedding (inl : R -> tsze R M) :=
+theorem IsEmbedding.inl [Zero M] : IsEmbedding (inl : R → tsze R M) :=
   .of_comp continuous_inl continuous_fst .id
-
-/--
-theorem `IsEmbedding.inr` / 定理 `IsEmbedding.inr`
-
-English:
-theorem IsEmbedding.inr
-  given: [Zero R]
-  statement: IsEmbedding (inr : M -> tsze R M)
-  proof: .of_comp continuous_inr continuous_snd .id
-
-中文:
-定理 是嵌入.inr
-  条件: [零 R]
-  结论: 是嵌入 (inr : M -> tsze R M)
-  证明: .of_comp continuous_inr continuous_snd .id
-
-Depends on / 依赖: continuous_inr, continuous_snd, of_comp
+/-
+**TrivSqZeroExt.IsEmbedding.inr** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt.IsEmbed
+ding`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} [inst : TopologicalSpace R] [inst_1 : Topo
+logicalSpace M] [inst_2 : Zero R],   Topology.IsEmbedding TrivSqZeroExt.inr
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.of_comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type 
+u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topological
+Space Y] [inst_2 :…
+· 使用定理 `TrivSqZeroExt.continuous_inr`：continuous_inr [Zero R] : Continuous (inr 
+: M -> tsze R M)
+· 使用定理 `TrivSqZeroExt.continuous_snd`：∀ {R : Type u_3} {M : Type u_4} [inst : To
+pologicalSpace R] [inst_1 : TopologicalSpace M], Continuous TrivSqZeroExt.snd
+· 使用定理 `Topology.IsEmbedding.id`：∀ {X : Type u_1} [inst : TopologicalSpace X], T
+opology.IsEmbedding id
 -/
-theorem IsEmbedding.inr [Zero R] : IsEmbedding (inr : M -> tsze R M) :=
+theorem IsEmbedding.inr [Zero R] : IsEmbedding (inr : M → tsze R M) :=
   .of_comp continuous_inr continuous_snd .id
 
 variable (R M)
 
 /-- `TrivSqZeroExt.fst` as a continuous linear map. -/
 @[simps]
-/--
-Definition of `fstCLM` / `fstCLM` 的定义
+/-
+**TrivSqZeroExt.fstCLM** 是 Mathlib 中的一个定义，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：fstCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : StrongDual R (tsz
+e R M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fstCLM
-  signature: [CommSemiring R] [AddCommMonoid M] [Module R M]
-  body: { ContinuousLinearMap.fst R R M with toFun := fst }
-
-中文:
-定义 fstCLM
-  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: { ContinuousLinearMap.fst R R M with toFun := fst }
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.fst
+--- 原说明 ---
+`TrivSqZeroExt.fst` as a continuous linear map.
 -/
 def fstCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : StrongDual R (tsze R M) :=
   { ContinuousLinearMap.fst R R M with toFun := fst }
 
 /-- `TrivSqZeroExt.snd` as a continuous linear map. -/
 @[simps]
-/--
-Definition of `sndCLM` / `sndCLM` 的定义
+/-
+**TrivSqZeroExt.sndCLM** 是 Mathlib 中的一个定义，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：sndCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : tsze R M ->L[R] M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sndCLM
-  signature: [CommSemiring R] [AddCommMonoid M] [Module R M]
-  body: { ContinuousLinearMap.snd R R M with toFun := snd }
-
-中文:
-定义 sndCLM
-  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: { ContinuousLinearMap.snd R R M with toFun := snd }
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.snd
+--- 原说明 ---
+`TrivSqZeroExt.snd` as a continuous linear map.
 -/
-def sndCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : tsze R M ->L[R] M :=
+def sndCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : tsze R M →L[R] M :=
   { ContinuousLinearMap.snd R R M with toFun := snd }
 
 /-- `TrivSqZeroExt.inl` as a continuous linear map. -/
 @[simps]
-/--
-Definition of `inlCLM` / `inlCLM` 的定义
+/-
+**TrivSqZeroExt.inlCLM** 是 Mathlib 中的一个定义，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：inlCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : R ->L[R] tsze R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inlCLM
-  signature: [CommSemiring R] [AddCommMonoid M] [Module R M]
-  body: { ContinuousLinearMap.inl R R M with toFun := inl }
-
-中文:
-定义 inlCLM
-  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: { ContinuousLinearMap.inl R R M with toFun := inl }
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.inl
+--- 原说明 ---
+`TrivSqZeroExt.inl` as a continuous linear map.
 -/
-def inlCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : R ->L[R] tsze R M :=
+def inlCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : R →L[R] tsze R M :=
   { ContinuousLinearMap.inl R R M with toFun := inl }
 
 /-- `TrivSqZeroExt.inr` as a continuous linear map. -/
 @[simps]
-/--
-Definition of `inrCLM` / `inrCLM` 的定义
+/-
+**TrivSqZeroExt.inrCLM** 是 Mathlib 中的一个定义，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：inrCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : M ->L[R] tsze R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inrCLM
-  signature: [CommSemiring R] [AddCommMonoid M] [Module R M]
-  body: { ContinuousLinearMap.inr R R M with toFun := inr }
-
-中文:
-定义 inrCLM
-  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: { ContinuousLinearMap.inr R R M with toFun := inr }
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.inr
+--- 原说明 ---
+`TrivSqZeroExt.inr` as a continuous linear map.
 -/
-def inrCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : M ->L[R] tsze R M :=
+def inrCLM [CommSemiring R] [AddCommMonoid M] [Module R M] : M →L[R] tsze R M :=
   { ContinuousLinearMap.inr R R M with toFun := inr }
 
 variable {R M}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: R] [Add M] [ContinuousAdd R] [ContinuousAdd M] : ContinuousAdd (tsze R M)
-  body: Prod.continuousAdd
-
-中文:
-实例 [加法
-  签名: R] [加法 M] [连续加法 R] [连续加法 M] : 连续加法 (tsze R M)
-  定义体: Prod.continuousAdd
-
-Depends on / 依赖: Prod.continuousAdd, continuousAdd
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add R] [Add M] [ContinuousAdd R] [ContinuousAdd M] : ContinuousAdd (tsze R M) :=
   Prod.continuousAdd
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [Add M] [SMul R M] [SMul Rᵐᵒᵖ M] [ContinuousMul R] [ContinuousSMul R M]
-  body: ⟨((continuous_fst.comp continuous_fst).mul (continuous_fst.comp continuous_snd)).prodMk
-      ((continuous_fst.comp continuous_fst).smul (continuous_snd.comp continuous_snd)).add
-        ((MulOpposite.continuous_op.comp <| continuous_fst.comp <| continuous_snd).smul
-          (continuous_snd.comp continuous_fst))⟩
-
-中文:
-实例 [乘法
-  签名: R] [加法 M] [标量乘法 R M] [标量乘法 Rᵐᵒᵖ M] [连续乘法 R] [连续标量乘法 R M]
-  定义体: ⟨((continuous_fst.comp continuous_fst).mul (continuous_fst.comp continuous_snd)).prodMk
-      ((continuous_fst.comp continuous_fst).smul (continuous_snd.comp continuous_snd)).add
-        ((MulOpposite.continuous_op.comp <| continuous_fst.comp <| continuous_snd).smul
-          (continuous_snd.comp continuous_fst))⟩
-
-Depends on / 依赖: MulOpposite, MulOpposite.continuous_op.comp, continuous_fst, continuous_fst.comp, continuous_op, continuous_snd, continuous_snd.comp, prodMk
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul R] [Add M] [SMul R M] [SMul Rᵐᵒᵖ M] [ContinuousMul R] [ContinuousSMul R M]
     [ContinuousSMul Rᵐᵒᵖ M] [ContinuousAdd M] : ContinuousMul (tsze R M) :=
-⟨((continuous_fst.comp continuous_fst).mul (continuous_fst.comp continuous_snd)).prodMk
+  ⟨((continuous_fst.comp continuous_fst).mul (continuous_fst.comp continuous_snd)).prodMk <|
       ((continuous_fst.comp continuous_fst).smul (continuous_snd.comp continuous_snd)).add
         ((MulOpposite.continuous_op.comp <| continuous_fst.comp <| continuous_snd).smul
           (continuous_snd.comp continuous_fst))⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Neg
-  signature: R] [Neg M] [ContinuousNeg R] [ContinuousNeg M] : ContinuousNeg (tsze R M)
-  body: Prod.continuousNeg
-
-中文:
-实例 [取负
-  签名: R] [取负 M] [连续取负 R] [连续取负 M] : 连续取负 (tsze R M)
-  定义体: Prod.continuousNeg
-
-Depends on / 依赖: Prod.continuousNeg, continuousNeg
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Neg R] [Neg M] [ContinuousNeg R] [ContinuousNeg M] : ContinuousNeg (tsze R M) :=
   Prod.continuousNeg
 
-/--
-theorem `topologicalSemiring` / 定理 `topologicalSemiring`
+/-- This is not an instance due to complaints by the `fails_quickly` linter. At any rate, we only
+really care about the `IsTopologicalRing` instance below. -/
+/-
+**TrivSqZeroExt.topologicalSemiring** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：topologicalSemiring [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐ
+ᵒᵖ M] [IsTopologicalSemiring R] [ContinuousAdd M] [ContinuousSMul R M] [Continuo
+usSMul Rᵐᵒᵖ M] : IsTopologicalSemiring (tsze R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TrivSqZeroExt.instContinuousAdd`：∀ {R : Type u_3} {M : Type u_4} [inst :
+ TopologicalSpace R] [inst_1 : TopologicalSpace M] [inst_2 : Add R]   [inst_3 : 
+Add M] [ContinuousAdd…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `TrivSqZeroExt.instContinuousMulOfContinuousSMulMulOppositeOfContinuousAd
+d`：∀ {R : Type u_3} {M : Type u_4} [inst : TopologicalSpace R] [inst_1 : Topolog
+icalSpace M] [inst_2 : Mul R]   [inst_3 : Add M] [inst_4 : SMul…
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
 
-English:
-theorem topologicalSemiring
-  statement: [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
-  proof: { }
-
-中文:
-定理 topologicalSemiring
-  结论: [半环 R] [加法交换幺半群 M] [模 R M] [模 Rᵐᵒᵖ M]
-  证明: { }
+--- 原说明 ---
+This is not an instance due to complaints by the `fails_quickly` linter. At any 
+rate, we only
+really care about the `IsTopologicalRing` instance below.
 -/
 theorem topologicalSemiring [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
     [IsTopologicalSemiring R] [ContinuousAdd M] [ContinuousSMul R M] [ContinuousSMul Rᵐᵒᵖ M] :
     IsTopologicalSemiring (tsze R M) := { }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [IsTopologicalRing R]
-
-中文:
-实例 [环
-  签名: R] [加法交换群 M] [模 R M] [模 Rᵐᵒᵖ M] [是拓扑环 R]
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [IsTopologicalRing R]
     [IsTopologicalAddGroup M] [ContinuousSMul R M] [ContinuousSMul Rᵐᵒᵖ M] :
     IsTopologicalRing (tsze R M) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S R] [SMul S M] [ContinuousConstSMul S R] [ContinuousConstSMul S M] :
-  body: Prod.continuousConstSMul
-
-中文:
-实例 [标量乘法
-  签名: S R] [标量乘法 S M] [连续常数标量乘法 S R] [连续常数标量乘法 S M] :
-  定义体: Prod.continuousConstSMul
-
-Depends on / 依赖: Prod.continuousConstSMul, continuousConstSMul
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S R] [SMul S M] [ContinuousConstSMul S R] [ContinuousConstSMul S M] :
     ContinuousConstSMul S (tsze R M) :=
   Prod.continuousConstSMul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TopologicalSpace
-  signature: S] [SMul S R] [SMul S M] [ContinuousSMul S R] [ContinuousSMul S M] :
-  body: Prod.continuousSMul
-
-中文:
-实例 [拓扑空间
-  签名: S] [标量乘法 S R] [标量乘法 S M] [连续标量乘法 S R] [连续标量乘法 S M] :
-  定义体: Prod.continuousSMul
-
-Depends on / 依赖: Prod.continuousSMul, continuousSMul
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TopologicalSpace S] [SMul S R] [SMul S M] [ContinuousSMul S R] [ContinuousSMul S M] :
     ContinuousSMul S (tsze R M) :=
   Prod.continuousSMul
 
 variable (M)
-
-/--
-theorem `hasSum_inl` / 定理 `hasSum_inl`
-
-English:
-theorem hasSum_inl
-  given: [AddCommMonoid R] [AddCommMonoid M] {f : α -> R} {a : R} (h : HasSum f a)
-  proof: h.map (⟨⟨inl, inl_zero _⟩, inl_add _⟩ : R ->+ tsze R M) continuous_inl
-
-中文:
-定理 hasSum_inl
-  条件: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> R} {a : R} (h : HasSum f a)
-  证明: h.map (⟨⟨inl, inl_zero _⟩, inl_add _⟩ : R ->+ tsze R M) continuous_inl
-
-Depends on / 依赖: continuous_inl, h.map, inl_add, inl_zero
+/-
+**TrivSqZeroExt.hasSum_inl** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：hasSum_inl [AddCommMonoid R] [AddCommMonoid M] {f : α -> R} {a : R} (h : H
+asSum f a) : HasSum (fun x => inl (f x)) (inl a : tsze R M)
+参数：h : HasSum f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasSum.map`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : AddCo
+mmMonoid α] [inst_1 : TopologicalSpace α] {f : β → α}   {a : α} {L : SummationFi
+…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `TrivSqZeroExt.inl_zero`：inl_zero [Zero R] [Zero M] : (inl 0 : tsze R M) 
+= 0
+· 使用定理 `TrivSqZeroExt.inl_add`：inl_add [Add R] [AddZeroClass M] (r₁ r₂ : R) : (i
+nl (r₁ + r₂) : tsze R M) = inl r₁ + inl r₂
+· 使用定理 `TrivSqZeroExt.continuous_inl`：continuous_inl [Zero M] : Continuous (inl 
+: R -> tsze R M)
 -/
-theorem hasSum_inl [AddCommMonoid R] [AddCommMonoid M] {f : α -> R} {a : R} (h : HasSum f a) :
-    HasSum (fun x => inl (f x)) (inl a : tsze R M) :=
-  h.map (⟨⟨inl, inl_zero _⟩, inl_add _⟩ : R ->+ tsze R M) continuous_inl
-
-/--
-theorem `hasSum_inr` / 定理 `hasSum_inr`
-
-English:
-theorem hasSum_inr
-  given: [AddCommMonoid R] [AddCommMonoid M] {f : α -> M} {a : M} (h : HasSum f a)
-  proof: h.map (⟨⟨inr, inr_zero _⟩, inr_add _⟩ : M ->+ tsze R M) continuous_inr
-
-中文:
-定理 hasSum_inr
-  条件: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> M} {a : M} (h : HasSum f a)
-  证明: h.map (⟨⟨inr, inr_zero _⟩, inr_add _⟩ : M ->+ tsze R M) continuous_inr
-
-Depends on / 依赖: continuous_inr, h.map, inr_add, inr_zero
+theorem hasSum_inl [AddCommMonoid R] [AddCommMonoid M] {f : α → R} {a : R} (h : HasSum f a) :
+    HasSum (fun x ↦ inl (f x)) (inl a : tsze R M) :=
+  h.map (⟨⟨inl, inl_zero _⟩, inl_add _⟩ : R →+ tsze R M) continuous_inl
+/-
+**TrivSqZeroExt.hasSum_inr** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：hasSum_inr [AddCommMonoid R] [AddCommMonoid M] {f : α -> M} {a : M} (h : H
+asSum f a) : HasSum (fun x => inr (f x)) (inr a : tsze R M)
+参数：h : HasSum f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasSum.map`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : AddCo
+mmMonoid α] [inst_1 : TopologicalSpace α] {f : β → α}   {a : α} {L : SummationFi
+…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `TrivSqZeroExt.inr_zero`：inr_zero [Zero R] [Zero M] : (inr 0 : tsze R M) 
+= 0
+· 使用定理 `TrivSqZeroExt.inr_add`：inr_add [AddZeroClass R] [Add M] (m₁ m₂ : M) : (i
+nr (m₁ + m₂) : tsze R M) = inr m₁ + inr m₂
+· 使用定理 `TrivSqZeroExt.continuous_inr`：continuous_inr [Zero R] : Continuous (inr 
+: M -> tsze R M)
 -/
-theorem hasSum_inr [AddCommMonoid R] [AddCommMonoid M] {f : α -> M} {a : M} (h : HasSum f a) :
-    HasSum (fun x => inr (f x)) (inr a : tsze R M) :=
-  h.map (⟨⟨inr, inr_zero _⟩, inr_add _⟩ : M ->+ tsze R M) continuous_inr
-
-/--
-theorem `hasSum_fst` / 定理 `hasSum_fst`
-
-English:
-theorem hasSum_fst
-  statement: [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : tsze R M}
-  proof: h.map (⟨⟨fst, fst_zero⟩, fst_add⟩ : tsze R M ->+ R) continuous_fst
-
-中文:
-定理 hasSum_fst
-  结论: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> tsze R M} {a : tsze R M}
-  证明: h.map (⟨⟨fst, fst_zero⟩, fst_add⟩ : tsze R M ->+ R) continuous_fst
-
-Depends on / 依赖: continuous_fst, fst_add, fst_zero, h.map
+theorem hasSum_inr [AddCommMonoid R] [AddCommMonoid M] {f : α → M} {a : M} (h : HasSum f a) :
+    HasSum (fun x ↦ inr (f x)) (inr a : tsze R M) :=
+  h.map (⟨⟨inr, inr_zero _⟩, inr_add _⟩ : M →+ tsze R M) continuous_inr
+/-
+**TrivSqZeroExt.hasSum_fst** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：hasSum_fst [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : ts
+ze R M} (h : HasSum f a) : HasSum (fun x => fst (f x)) (fst a)
+参数：h : HasSum f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasSum.map`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : AddCo
+mmMonoid α] [inst_1 : TopologicalSpace α] {f : β → α}   {a : α} {L : SummationFi
+…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `TrivSqZeroExt.fst_zero`：fst_zero [Zero R] [Zero M] : (0 : tsze R M).fst 
+= 0
+· 使用定理 `TrivSqZeroExt.fst_add`：fst_add [Add R] [Add M] (x₁ x₂ : tsze R M) : (x₁ 
++ x₂).fst = x₁.fst + x₂.fst
+· 使用定理 `TrivSqZeroExt.continuous_fst`：∀ {R : Type u_3} {M : Type u_4} [inst : To
+pologicalSpace R] [inst_1 : TopologicalSpace M], Continuous TrivSqZeroExt.fst
 -/
-theorem hasSum_fst [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : tsze R M}
-    (h : HasSum f a) : HasSum (fun x => fst (f x)) (fst a) :=
-  h.map (⟨⟨fst, fst_zero⟩, fst_add⟩ : tsze R M ->+ R) continuous_fst
-
-/--
-theorem `hasSum_snd` / 定理 `hasSum_snd`
-
-English:
-theorem hasSum_snd
-  statement: [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : tsze R M}
-  proof: h.map (⟨⟨snd, snd_zero⟩, snd_add⟩ : tsze R M ->+ M) continuous_snd
-
-中文:
-定理 hasSum_snd
-  结论: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> tsze R M} {a : tsze R M}
-  证明: h.map (⟨⟨snd, snd_zero⟩, snd_add⟩ : tsze R M ->+ M) continuous_snd
-
-Depends on / 依赖: continuous_snd, h.map, snd_add, snd_zero
+theorem hasSum_fst [AddCommMonoid R] [AddCommMonoid M] {f : α → tsze R M} {a : tsze R M}
+    (h : HasSum f a) : HasSum (fun x ↦ fst (f x)) (fst a) :=
+  h.map (⟨⟨fst, fst_zero⟩, fst_add⟩ : tsze R M →+ R) continuous_fst
+/-
+**TrivSqZeroExt.hasSum_snd** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：hasSum_snd [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : ts
+ze R M} (h : HasSum f a) : HasSum (fun x => snd (f x)) (snd a)
+参数：h : HasSum f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasSum.map`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : AddCo
+mmMonoid α] [inst_1 : TopologicalSpace α] {f : β → α}   {a : α} {L : SummationFi
+…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `TrivSqZeroExt.snd_zero`：snd_zero [Zero R] [Zero M] : (0 : tsze R M).snd 
+= 0
+· 使用定理 `TrivSqZeroExt.snd_add`：snd_add [Add R] [Add M] (x₁ x₂ : tsze R M) : (x₁ 
++ x₂).snd = x₁.snd + x₂.snd
+· 使用定理 `TrivSqZeroExt.continuous_snd`：∀ {R : Type u_3} {M : Type u_4} [inst : To
+pologicalSpace R] [inst_1 : TopologicalSpace M], Continuous TrivSqZeroExt.snd
 -/
-theorem hasSum_snd [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : tsze R M}
-    (h : HasSum f a) : HasSum (fun x => snd (f x)) (snd a) :=
-  h.map (⟨⟨snd, snd_zero⟩, snd_add⟩ : tsze R M ->+ M) continuous_snd
+theorem hasSum_snd [AddCommMonoid R] [AddCommMonoid M] {f : α → tsze R M} {a : tsze R M}
+    (h : HasSum f a) : HasSum (fun x ↦ snd (f x)) (snd a) :=
+  h.map (⟨⟨snd, snd_zero⟩, snd_add⟩ : tsze R M →+ M) continuous_snd
 
 end Topology
 
 section Uniformity
 variable [UniformSpace R] [UniformSpace M]
 
-/--
-Instance `instUniformSpace` / 实例 `instUniformSpace`
-
-English:
-instance instUniformSpace
-  signature: : UniformSpace (tsze R M) where
-  body: instTopologicalSpace
-  __ := instUniformSpaceProd
-
-中文:
-实例 instUniformSpace
-  签名: : 一致空间 (tsze R M) where
-  定义体: instTopologicalSpace
-  __ := instUniformSpaceProd
-
-Depends on / 依赖: instTopologicalSpace
+/-
+**TrivSqZeroExt.instUniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：instUniformSpace : UniformSpace (tsze R M) where toTopologicalSpace
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instUniformSpace : UniformSpace (tsze R M) where
   toTopologicalSpace := instTopologicalSpace
   __ := instUniformSpaceProd
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CompleteSpace
-  signature: R] [CompleteSpace M] : CompleteSpace (tsze R M)
-  body: inferInstanceAs CompleteSpace (R × M)
-
-中文:
-实例 [完备空间
-  签名: R] [完备空间 M] : 完备空间 (tsze R M)
-  定义体: inferInstanceAs CompleteSpace (R × M)
-
-Depends on / 依赖: CompleteSpace
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CompleteSpace R] [CompleteSpace M] : CompleteSpace (tsze R M) :=
-inferInstanceAs CompleteSpace (R × M)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddGroup
-  signature: R] [AddGroup M] [IsUniformAddGroup R] [IsUniformAddGroup M] :
-  body: inferInstanceAs IsUniformAddGroup (R × M)
-
-中文:
-实例 [加法群
-  签名: R] [加法群 M] [是UniformAdd群 R] [是UniformAdd群 M] :
-  定义体: inferInstanceAs IsUniformAddGroup (R × M)
-
-Depends on / 依赖: IsUniformAddGroup
+  inferInstanceAs <| CompleteSpace (R × M)
+/-
+**TrivSqZeroExt.** 是 Mathlib 中的一个实例，位于命名空间 `TrivSqZeroExt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddGroup R] [AddGroup M] [IsUniformAddGroup R] [IsUniformAddGroup M] :
     IsUniformAddGroup (tsze R M) :=
-inferInstanceAs IsUniformAddGroup (R × M)
+  inferInstanceAs <| IsUniformAddGroup (R × M)
 
 open Uniformity
-
-/--
-theorem `uniformity_def` / 定理 `uniformity_def`
-
-English:
-theorem uniformity_def
-  proof: rfl
-
-nonrec theorem uniformContinuous_fst : UniformContinuous (fst : tsze R M -> R) :=
-  uniformContinuous_fst
-
-nonrec theorem uniformContinuous_snd : UniformContinuous (snd : tsze R M -> M) :=
-  uniformContinuous_snd
-
-中文:
-定理 uniformity_def
-  证明: rfl
-
-nonrec theorem uniformContinuous_fst : UniformContinuous (fst : tsze R M -> R) :=
-  uniformContinuous_fst
-
-nonrec theorem uniformContinuous_snd : UniformContinuous (snd : tsze R M -> M) :=
-  uniformContinuous_snd
+/-
+**TrivSqZeroExt.uniformity_def** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：uniformity_def : 𝓤 (tsze R M) = ((𝓤 R).comap fun p => (p.1.fst, p.2.fst)) 
+⊓ ((𝓤 M).comap fun p => (p.1.snd, p.2.snd))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uniformity_def :
     𝓤 (tsze R M) =
       ((𝓤 R).comap fun p => (p.1.fst, p.2.fst)) ⊓ ((𝓤 M).comap fun p => (p.1.snd, p.2.snd)) :=
   rfl
 
-nonrec theorem uniformContinuous_fst : UniformContinuous (fst : tsze R M -> R) :=
+nonrec theorem uniformContinuous_fst : UniformContinuous (fst : tsze R M → R) :=
   uniformContinuous_fst
 
-nonrec theorem uniformContinuous_snd : UniformContinuous (snd : tsze R M -> M) :=
+nonrec theorem uniformContinuous_snd : UniformContinuous (snd : tsze R M → M) :=
   uniformContinuous_snd
-
-/--
-theorem `uniformContinuous_inl` / 定理 `uniformContinuous_inl`
-
-English:
-theorem uniformContinuous_inl
-  given: [Zero M]
-  statement: UniformContinuous (inl : R -> tsze R M)
-  proof: uniformContinuous_id.prodMk uniformContinuous_const
-
-中文:
-定理 uniformContinuous_inl
-  条件: [零 M]
-  结论: 一致连续 (inl : R -> tsze R M)
-  证明: uniformContinuous_id.prodMk uniformContinuous_const
-
-Depends on / 依赖: prodMk, uniformContinuous_const, uniformContinuous_id, uniformContinuous_id.prodMk
+/-
+**TrivSqZeroExt.uniformContinuous_inl** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：uniformContinuous_inl [Zero M] : UniformContinuous (inl : R -> tsze R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.prodMk`：UniformContinuous.prodMk {f₁ : α -> β} {f₂ : α
+ -> γ} (h₁ : UniformContinuous f₁) (h₂ : UniformContinuous f₂) : UniformContinuo
+us fun a => (f…
+· 使用定理 `uniformContinuous_id`：uniformContinuous_id : UniformContinuous (@id α)
+· 使用定理 `uniformContinuous_const`：uniformContinuous_const {b : β} : UniformContin
+uous fun _ : α => b
 -/
-theorem uniformContinuous_inl [Zero M] : UniformContinuous (inl : R -> tsze R M) :=
+theorem uniformContinuous_inl [Zero M] : UniformContinuous (inl : R → tsze R M) :=
   uniformContinuous_id.prodMk uniformContinuous_const
-
-/--
-theorem `uniformContinuous_inr` / 定理 `uniformContinuous_inr`
-
-English:
-theorem uniformContinuous_inr
-  given: [Zero R]
-  statement: UniformContinuous (inr : M -> tsze R M)
-  proof: uniformContinuous_const.prodMk uniformContinuous_id
-
-中文:
-定理 uniformContinuous_inr
-  条件: [零 R]
-  结论: 一致连续 (inr : M -> tsze R M)
-  证明: uniformContinuous_const.prodMk uniformContinuous_id
-
-Depends on / 依赖: prodMk, uniformContinuous_const, uniformContinuous_const.prodMk, uniformContinuous_id
+/-
+**TrivSqZeroExt.uniformContinuous_inr** 是 Mathlib 中的一个定理，位于命名空间 `TrivSqZeroExt`。
+形式化陈述：uniformContinuous_inr [Zero R] : UniformContinuous (inr : M -> tsze R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.prodMk`：UniformContinuous.prodMk {f₁ : α -> β} {f₂ : α
+ -> γ} (h₁ : UniformContinuous f₁) (h₂ : UniformContinuous f₂) : UniformContinuo
+us fun a => (f…
+· 使用定理 `uniformContinuous_const`：uniformContinuous_const {b : β} : UniformContin
+uous fun _ : α => b
+· 使用定理 `uniformContinuous_id`：uniformContinuous_id : UniformContinuous (@id α)
 -/
-theorem uniformContinuous_inr [Zero R] : UniformContinuous (inr : M -> tsze R M) :=
+theorem uniformContinuous_inr [Zero R] : UniformContinuous (inr : M → tsze R M) :=
   uniformContinuous_const.prodMk uniformContinuous_id
 
 end Uniformity
 
 end TrivSqZeroExt
+

@@ -33,22 +33,20 @@ variable {C : Type*} [Category* C] [MonoidalCategory C] [BraidedCategory C]
 the bifunctor `curriedTensor` and two morphism `f₁` and `f₂`, one may
 obtain a similar structure for `f₂` and `f₁`. -/
 @[simps!]
-/--
-Definition of `flipTensor` / `flipTensor` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.flipTensor** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.PushoutObjObj`。
+形式化陈述：flipTensor : (curriedTensor C).PushoutObjObj f₂ f₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipTensor
-  signature: : (curriedTensor C).PushoutObjObj f₂ f₁
-  body: sq.flip.ofNatIso (BraidedCategory.curriedBraidingNatIso _).symm
-
-中文:
-定义 flipTensor
-  签名: : (curriedTensor C).PushoutObjObj f₂ f₁
-  定义体: sq.flip.ofNatIso (BraidedCategory.curriedBraidingNatIso _).symm
-
-Depends on / 依赖: BraidedCategory, BraidedCategory.curriedBraidingNatIso, curriedBraidingNatIso, ofNatIso, sq.flip.ofNatIso
+--- 原说明 ---
+In a braided monoidal category, from a `Functor.PushoutObjObj` structure for
+the bifunctor `curriedTensor` and two morphism `f₁` and `f₂`, one may
+obtain a similar structure for `f₂` and `f₁`.
 -/
 def flipTensor : (curriedTensor C).PushoutObjObj f₂ f₁ :=
   sq.flip.ofNatIso (BraidedCategory.curriedBraidingNatIso _).symm
 
 end CategoryTheory.Functor.PushoutObjObj
+

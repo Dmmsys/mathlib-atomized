@@ -53,7 +53,7 @@ namespace ProbabilityTheory
 
 variable {α β Ω F : Type*} [MeasurableSpace Ω] [StandardBorelSpace Ω]
   [Nonempty Ω] [NormedAddCommGroup F] {mα : MeasurableSpace α} {μ : Measure α} [IsFiniteMeasure μ]
-  {X : α -> β} {Y : α -> Ω}
+  {X : α → β} {Y : α → Ω}
 
 /-- **Regular conditional probability distribution**: kernel associated with the conditional
 expectation of `Y` given `X`.
@@ -61,309 +61,292 @@ For almost all `a`, `condDistrib Y X μ` evaluated at `X a` and a measurable set
 the conditional expectation `μ⟦Y ⁻¹' s | mβ.comap X⟧ a`. It also satisfies the equality
 `μ[(fun a => f (X a, Y a)) | mβ.comap X] =ᵐ[μ] fun a => ∫ y, f (X a, y) ∂(condDistrib Y X μ (X a))`
 for all integrable functions `f`. -/
-noncomputable irreducible_def condDistrib {_ : MeasurableSpace α} [MeasurableSpace β] (Y : α -> Ω)
-    (X : α -> β) (μ : Measure α) [IsFiniteMeasure μ] : Kernel β Ω :=
+noncomputable irreducible_def condDistrib {_ : MeasurableSpace α} [MeasurableSpace β] (Y : α → Ω)
+    (X : α → β) (μ : Measure α) [IsFiniteMeasure μ] : Kernel β Ω :=
   (μ.map fun a => (X a, Y a)).condKernel
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MeasurableSpace
-  signature: β] : IsMarkovKernel (condDistrib Y X μ)
-  body: by
-  rw [condDistrib]; infer_instance
-
-中文:
-实例 [可测空间
-  签名: β] : 是MarkovKernel (condDistrib Y X μ)
-  定义体: by
-  rw [condDistrib]; infer_instance
-
-Depends on / 依赖: condDistrib, infer_instance
+/-
+**ProbabilityTheory.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MeasurableSpace β] : IsMarkovKernel (condDistrib Y X μ) := by
   rw [condDistrib]; infer_instance
 
-variable {mβ : MeasurableSpace β} {s : Set Ω} {t : Set β} {f : β × Ω -> F}
+variable {mβ : MeasurableSpace β} {s : Set Ω} {t : Set β} {f : β × Ω → F}
 
-/--
-lemma `condDistrib_apply_of_ne_zero` / 引理 `condDistrib_apply_of_ne_zero`
+/-- If the singleton `{x}` has non-zero mass for `μ.map X`, then for all `s : Set Ω`,
+`condDistrib Y X μ x s = (μ.map X {x})⁻¹ * μ.map (fun a => (X a, Y a)) ({x} ×ˢ s)` . -/
+/-
+**ProbabilityTheory.condDistrib_apply_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Prob
+abilityTheory`。
+形式化陈述：condDistrib_apply_of_ne_zero [MeasurableSingletonClass β] (hY : Measurable
+ Y) (x : β) (hX : μ.map X {x} != 0) (s : Set Ω) : condDistrib Y X μ x s = (μ.map
+ X {x})⁻¹ * μ.map (fun a => (X a, Y a)) ({x} ×ˢ s)
+参数：hY : Measurable Y；x : β；hX : μ.map X {x} != 0；s : Set Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.condDistrib_def`：∀ {α : Type u_5} {β : Type u_6} {Ω : 
+Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [inst_2 :
+ Nonempty Ω] {x : Measu…
+· 使用定理 `MeasureTheory.Measure.condKernel_apply_of_ne_zero`：∀ {α : Type u_1} {Ω :
+ Type u_4} {mα : MeasurableSpace α} {mΩ : MeasurableSpace Ω} [inst : StandardBor
+elSpace Ω]   [inst_1 : Nonempty Ω] {ρ :…
+· 使用定理 `MeasureTheory.Measure.fst_map_prodMk`：fst_map_prodMk {X : α -> β} {Y : α
+ -> γ} {μ : Measure α} (hY : Measurable Y) : (μ.map fun a => (X a, Y a)).fst = μ
+.map X
 
-English:
-lemma condDistrib_apply_of_ne_zero
-  statement: [MeasurableSingletonClass β]
-  proof: by
-  rw [condDistrib]; rw [Measure.condKernel_apply_of_ne_zero _ s]
-  · rw [Measure.fst_map_prodMk hY]
-  · rwa [Measure.fst_map_prodMk hY]
-
-中文:
-引理 condDistrib_apply_of_ne_zero
-  结论: [MeasurableSingleton类 β]
-  证明: by
-  rw [condDistrib]; rw [Measure.condKernel_apply_of_ne_zero _ s]
-  · rw [Measure.fst_map_prodMk hY]
-  · rwa [Measure.fst_map_prodMk hY]
-
-Depends on / 依赖: Measure, Measure.condKernel_apply_of_ne_zero, Measure.fst_map_prodMk, condDistrib, condKernel_apply_of_ne_zero, fst_map_prodMk
+--- 原说明 ---
+If the singleton `{x}` has non-zero mass for `μ.map X`, then for all `s : Set Ω`
+,
+`condDistrib Y X μ x s = (μ.map X {x})⁻¹ * μ.map (fun a => (X a, Y a)) ({x} ×ˢ s
+)` .
 -/
 lemma condDistrib_apply_of_ne_zero [MeasurableSingletonClass β]
-    (hY : Measurable Y) (x : β) (hX : μ.map X {x} != 0) (s : Set Ω) :
+    (hY : Measurable Y) (x : β) (hX : μ.map X {x} ≠ 0) (s : Set Ω) :
     condDistrib Y X μ x s = (μ.map X {x})⁻¹ * μ.map (fun a => (X a, Y a)) ({x} ×ˢ s) := by
-  rw [condDistrib]; rw [Measure.condKernel_apply_of_ne_zero _ s]
+  rw [condDistrib, Measure.condKernel_apply_of_ne_zero _ s]
   · rw [Measure.fst_map_prodMk hY]
   · rwa [Measure.fst_map_prodMk hY]
-
-/--
-lemma `compProd_map_condDistrib` / 引理 `compProd_map_condDistrib`
-
-English:
-lemma compProd_map_condDistrib
-  given: (hY : AEMeasurable Y μ)
-  proof: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.disintegrate]
-
-中文:
-引理 compProd_map_condDistrib
-  条件: (hY : 几乎处处可测 Y μ)
-  证明: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.disintegrate]
-
-Depends on / 依赖: Measure, Measure.disintegrate, Measure.fst_map_prodMk, condDistrib, disintegrate
+/-
+**ProbabilityTheory.compProd_map_condDistrib** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory`。
+形式化陈述：compProd_map_condDistrib (hY : AEMeasurable Y μ) : (μ.map X) otimesₘ condD
+istrib Y X μ = μ.map fun a => (X a, Y a)
+参数：hY : AEMeasurable Y μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.condDistrib_def`：∀ {α : Type u_5} {β : Type u_6} {Ω : 
+Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [inst_2 :
+ Nonempty Ω] {x : Measu…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.fst_map_prodMk₀`：fst_map_prodMk₀ {X : α -> β} {Y :
+ α -> γ} {μ : Measure α} (hY : AEMeasurable Y μ) : (μ.map fun a => (X a, Y a)).f
+st = μ.map X
+· 使用引理 `MeasureTheory.Measure.disintegrate`：disintegrate : ρ.fst otimesₘ ρCond =
+ ρ
+· 使用定理 `MeasureTheory.Measure.condKernel.instIsCondKernel`：∀ {α : Type u_1} {Ω :
+ Type u_4} {mα : MeasurableSpace α} {mΩ : MeasurableSpace Ω} [inst : StandardBor
+elSpace Ω]   [inst_1 : Nonempty Ω] (ρ :…
 -/
 lemma compProd_map_condDistrib (hY : AEMeasurable Y μ) :
-    (μ.map X) otimesₘ condDistrib Y X μ = μ.map fun a => (X a, Y a) := by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.disintegrate]
-
-/--
-lemma `condDistrib_comp_map` / 引理 `condDistrib_comp_map`
-
-English:
-lemma condDistrib_comp_map
-  given: (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ)
-  proof: by
-  rw [← Measure.snd_compProd]; rw [compProd_map_condDistrib hY]; rw [Measure.snd_map_prodMk₀ hX]
-
-中文:
-引理 condDistrib_comp_map
-  条件: (hX : 几乎处处可测 X μ) (hY : 几乎处处可测 Y μ)
-  证明: by
-  rw [← Measure.snd_compProd]; rw [compProd_map_condDistrib hY]; rw [Measure.snd_map_prodMk₀ hX]
-
-Depends on / 依赖: Measure, Measure.snd_compProd, Measure.snd_map_prodMk, compProd_map_condDistrib, snd_compProd
+    (μ.map X) ⊗ₘ condDistrib Y X μ = μ.map fun a ↦ (X a, Y a) := by
+  rw [condDistrib, ← Measure.fst_map_prodMk₀ hY, Measure.disintegrate]
+/-
+**ProbabilityTheory.condDistrib_comp_map** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：condDistrib_comp_map (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ) : con
+dDistrib Y X μ ∘ₘ (μ.map X) = μ.map Y
+参数：hX : AEMeasurable X μ；hY : AEMeasurable Y μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.Measure.snd_compProd`：snd_compProd (μ : Measure α) [SFinit
+e μ] (κ : Kernel α β) [IsSFiniteKernel κ] : (μ otimesₘ κ).snd = κ ∘ₘ μ
+· 使用定理 `MeasureTheory.Measure.instSFiniteMap`：∀ {α : Type u_2} {β : Type u_3} {m
+0 : MeasurableSpace α} [inst : MeasurableSpace β] (μ : MeasureTheory.Measure α) 
+  (f : α → β) [MeasureTheo…
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.isSFiniteKernel`：∀ {α : Type u_1
+} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabil
+ityTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.isFiniteKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.instIsMarkovKernelCondDistrib`：∀ {α : Type u_1} {β : T
+ype u_2} {Ω : Type u_3} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace 
+Ω]   [inst_2 : Nonempty Ω] {mα : Meas…
+· 使用引理 `ProbabilityTheory.compProd_map_condDistrib`：compProd_map_condDistrib (hY
+ : AEMeasurable Y μ) : (μ.map X) otimesₘ condDistrib Y X μ = μ.map fun a => (X a
+, Y a)
+· 使用定理 `MeasureTheory.Measure.snd_map_prodMk₀`：snd_map_prodMk₀ {X : α -> β} {Y :
+ α -> γ} {μ : Measure α} (hX : AEMeasurable X μ) : (μ.map fun a => (X a, Y a)).s
+nd = μ.map Y
 -/
 lemma condDistrib_comp_map (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ) :
     condDistrib Y X μ ∘ₘ (μ.map X) = μ.map Y := by
-  rw [← Measure.snd_compProd]; rw [compProd_map_condDistrib hY]; rw [Measure.snd_map_prodMk₀ hX]
-
-/--
-lemma `condDistrib_congr` / 引理 `condDistrib_congr`
-
-English:
-lemma condDistrib_congr
-  given: {X' : α -> β} {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ[μ] X')
-  proof: by
-  rw [condDistrib]; rw [condDistrib]
-  congr 1
-  rw [Measure.map_congr]
-  filter_upwards [hX, hY] with a ha hb using by rw [ha, hb]
-
-中文:
-引理 condDistrib_congr
-  条件: {X' : α -> β} {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ[μ] X')
-  证明: by
-  rw [condDistrib]; rw [condDistrib]
-  congr 1
-  rw [Measure.map_congr]
-  filter_upwards [hX, hY] with a ha hb using by rw [ha, hb]
-
-Depends on / 依赖: Measure, Measure.map_congr, condDistrib, filter_upwards, map_congr
+  rw [← Measure.snd_compProd, compProd_map_condDistrib hY, Measure.snd_map_prodMk₀ hX]
+/-
+**ProbabilityTheory.condDistrib_congr** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheo
+ry`。
+形式化陈述：condDistrib_congr {X' : α -> β} {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ
+[μ] X') : condDistrib Y X μ = condDistrib Y' X' μ
+参数：hY : Y =ᵐ[μ] Y'；hX : X =ᵐ[μ] X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.condDistrib_def`：∀ {α : Type u_5} {β : Type u_6} {Ω : 
+Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [inst_2 :
+ Nonempty Ω] {x : Measu…
+· 使用定理 `MeasureTheory.Measure.map_congr`：map_congr {f g : α -> β} (h : f =ᵐ[μ] g
+) : Measure.map f μ = Measure.map g μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
 -/
-lemma condDistrib_congr {X' : α -> β} {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ[μ] X') :
+lemma condDistrib_congr {X' : α → β} {Y' : α → Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ[μ] X') :
     condDistrib Y X μ = condDistrib Y' X' μ := by
-  rw [condDistrib]; rw [condDistrib]
+  rw [condDistrib, condDistrib]
   congr 1
   rw [Measure.map_congr]
   filter_upwards [hX, hY] with a ha hb using by rw [ha, hb]
-
-/--
-lemma `condDistrib_congr_right` / 引理 `condDistrib_congr_right`
-
-English:
-lemma condDistrib_congr_right
-  given: {X' : α -> β} (hX : X =ᵐ[μ] X')
-  proof: condDistrib_congr (by rfl) hX
-
-中文:
-引理 condDistrib_congr_right
-  条件: {X' : α -> β} (hX : X =ᵐ[μ] X')
-  证明: condDistrib_congr (by rfl) hX
-
-Depends on / 依赖: condDistrib_congr
+/-
+**ProbabilityTheory.condDistrib_congr_right** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory`。
+形式化陈述：condDistrib_congr_right {X' : α -> β} (hX : X =ᵐ[μ] X') : condDistrib Y X 
+μ = condDistrib Y X' μ
+参数：hX : X =ᵐ[μ] X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.condDistrib_congr`：condDistrib_congr {X' : α -> β} {Y'
+ : α -> Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ[μ] X') : condDistrib Y X μ = condDistrib
+ Y' X' μ
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
 -/
-lemma condDistrib_congr_right {X' : α -> β} (hX : X =ᵐ[μ] X') :
+lemma condDistrib_congr_right {X' : α → β} (hX : X =ᵐ[μ] X') :
     condDistrib Y X μ = condDistrib Y X' μ :=
   condDistrib_congr (by rfl) hX
-
-/--
-lemma `condDistrib_congr_left` / 引理 `condDistrib_congr_left`
-
-English:
-lemma condDistrib_congr_left
-  given: {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y')
-  proof: condDistrib_congr hY (by rfl)
-
-中文:
-引理 condDistrib_congr_left
-  条件: {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y')
-  证明: condDistrib_congr hY (by rfl)
-
-Depends on / 依赖: condDistrib_congr
+/-
+**ProbabilityTheory.condDistrib_congr_left** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：condDistrib_congr_left {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y') : condDistrib Y X μ
+ = condDistrib Y' X μ
+参数：hY : Y =ᵐ[μ] Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.condDistrib_congr`：condDistrib_congr {X' : α -> β} {Y'
+ : α -> Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ[μ] X') : condDistrib Y X μ = condDistrib
+ Y' X' μ
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
 -/
-lemma condDistrib_congr_left {Y' : α -> Ω} (hY : Y =ᵐ[μ] Y') :
+lemma condDistrib_congr_left {Y' : α → Ω} (hY : Y =ᵐ[μ] Y') :
     condDistrib Y X μ = condDistrib Y' X μ :=
   condDistrib_congr hY (by rfl)
 
 section Measurability
 
-/--
-theorem `measurable_condDistrib` / 定理 `measurable_condDistrib`
-
-English:
-theorem measurable_condDistrib
-  given: (hs : MeasurableSet s)
-  proof: (Kernel.measurable_coe _ hs).comp (Measurable.of_comap_le le_rfl)
-
-中文:
-定理 measurable_condDistrib
-  条件: (hs : 可测集 s)
-  证明: (Kernel.measurable_coe _ hs).comp (Measurable.of_comap_le le_rfl)
-
-Depends on / 依赖: Kernel, Kernel.measurable_coe, Measurable, Measurable.of_comap_le, le_rfl, measurable_coe, of_comap_le
+/-
+**ProbabilityTheory.measurable_condDistrib** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：measurable_condDistrib (hs : MeasurableSet s) : Measurable[mβ.comap X] fun
+ a => condDistrib Y X μ (X a) s
+参数：hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `ProbabilityTheory.Kernel.measurable_coe`：∀ {α : Type u_1} {β : Type u_2}
+ {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (κ : ProbabilityTheory.Kernel
+ α β)   {s : Set β}, Measurab…
+· 使用定理 `Measurable.of_comap_le`：∀ {α : Type u_1} {β : Type u_2} {m₁ : Measurable
+Space α} {m₂ : MeasurableSpace β} {f : α → β},   MeasurableSpace.comap f m₂ ≤ m₁
+ → Measurabl…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem measurable_condDistrib (hs : MeasurableSet s) :
     Measurable[mβ.comap X] fun a => condDistrib Y X μ (X a) s :=
   (Kernel.measurable_coe _ hs).comp (Measurable.of_comap_le le_rfl)
-
-/--
-theorem `_root_.MeasureTheory.AEStronglyMeasurable.ae_integrable_condDistrib_map_iff` / 定理 `_root_.MeasureTheory.AEStronglyMeasurable.ae_integrable_condDistrib_map_iff`
-
-English:
-theorem _root_.MeasureTheory.AEStronglyMeasurable.ae_integrable_condDistrib_map_iff
-  proof: by
-  rw [condDistrib]; rw [← hf.ae_integrable_condKernel_iff]; rw [Measure.fst_map_prodMk₀ hY]
-
-中文:
-定理 _root_.测度论.AEStronglyMeasurable.ae_integrable_condDistrib_map_iff
-  证明: by
-  rw [condDistrib]; rw [← hf.ae_integrable_condKernel_iff]; rw [Measure.fst_map_prodMk₀ hY]
-
-Depends on / 依赖: Measure, Measure.fst_map_prodMk, ae_integrable_condKernel_iff, condDistrib, hf.ae_integrable_condKernel_iff
+/-
+**ProbabilityTheory._root_.MeasureTheory.AEStronglyMeasurable.ae_integrable_cond
+Distrib_map_iff** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.AEStronglyMeasurable.ae_integrable_condDistrib_map_iff
     (hY : AEMeasurable Y μ) (hf : AEStronglyMeasurable f (μ.map fun a => (X a, Y a))) :
-    (forallᵐ a ∂μ.map X, Integrable (fun ω => f (a, ω)) (condDistrib Y X μ a)) ∧
+    (∀ᵐ a ∂μ.map X, Integrable (fun ω => f (a, ω)) (condDistrib Y X μ a)) ∧
       Integrable (fun a => ∫ ω, ‖f (a, ω)‖ ∂condDistrib Y X μ a) (μ.map X) ↔
     Integrable f (μ.map fun a => (X a, Y a)) := by
-  rw [condDistrib]; rw [← hf.ae_integrable_condKernel_iff]; rw [Measure.fst_map_prodMk₀ hY]
+  rw [condDistrib, ← hf.ae_integrable_condKernel_iff, Measure.fst_map_prodMk₀ hY]
 
-variable [NormedSpace Real F]
-
-/--
-theorem `_root_.MeasureTheory.StronglyMeasurable.integral_condDistrib` / 定理 `_root_.MeasureTheory.StronglyMeasurable.integral_condDistrib`
-
-English:
-theorem _root_.MeasureTheory.StronglyMeasurable.integral_condDistrib
-  given: (hf : StronglyMeasurable f)
-  proof: by
-  rw [condDistrib]; exact hf.integral_kernel_prod_right'
-
-中文:
-定理 _root_.测度论.StronglyMeasurable.integral_condDistrib
-  条件: (hf : StronglyMeasurable f)
-  证明: by
-  rw [condDistrib]; exact hf.integral_kernel_prod_right'
-
-Depends on / 依赖: condDistrib, hf.integral_kernel_prod_right, integral_kernel_prod_right
+variable [NormedSpace ℝ F]
+/-
+**ProbabilityTheory._root_.MeasureTheory.StronglyMeasurable.integral_condDistrib
+** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.StronglyMeasurable.integral_condDistrib (hf : StronglyMeasurable f) :
-    StronglyMeasurable (fun x => ∫ y, f (x, y) ∂condDistrib Y X μ x) := by
+    StronglyMeasurable (fun x ↦ ∫ y, f (x, y) ∂condDistrib Y X μ x) := by
   rw [condDistrib]; exact hf.integral_kernel_prod_right'
-
-/--
-theorem `_root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map` / 定理 `_root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map`
-
-English:
-theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map
-  proof: by
-  rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; exact hf.integral_condKernel
-
-中文:
-定理 _root_.测度论.AEStronglyMeasurable.integral_condDistrib_map
-  证明: by
-  rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; exact hf.integral_condKernel
-
-Depends on / 依赖: Measure, Measure.fst_map_prodMk, condDistrib, hf.integral_condKernel, integral_condKernel
+/-
+**ProbabilityTheory._root_.MeasureTheory.AEStronglyMeasurable.integral_condDistr
+ib_map** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map
     (hY : AEMeasurable Y μ) (hf : AEStronglyMeasurable f (μ.map fun a => (X a, Y a))) :
     AEStronglyMeasurable (fun x => ∫ y, f (x, y) ∂condDistrib Y X μ x) (μ.map X) := by
-  rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; exact hf.integral_condKernel
-
-/--
-theorem `_root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib` / 定理 `_root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib`
-
-English:
-theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib
-  statement: (hX : AEMeasurable X μ)
-  proof: (hf.integral_condDistrib_map hY).comp_aemeasurable hX
-
-中文:
-定理 _root_.测度论.AEStronglyMeasurable.integral_condDistrib
-  结论: (hX : 几乎处处可测 X μ)
-  证明: (hf.integral_condDistrib_map hY).comp_aemeasurable hX
-
-Depends on / 依赖: comp_aemeasurable, hf.integral_condDistrib_map, integral_condDistrib_map
+  rw [← Measure.fst_map_prodMk₀ hY, condDistrib]; exact hf.integral_condKernel
+/-
+**ProbabilityTheory._root_.MeasureTheory.AEStronglyMeasurable.integral_condDistr
+ib** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib (hX : AEMeasurable X μ)
     (hY : AEMeasurable Y μ) (hf : AEStronglyMeasurable f (μ.map fun a => (X a, Y a))) :
     AEStronglyMeasurable (fun a => ∫ y, f (X a, y) ∂condDistrib Y X μ (X a)) μ :=
   (hf.integral_condDistrib_map hY).comp_aemeasurable hX
-
-/--
-theorem `stronglyMeasurable_integral_condDistrib` / 定理 `stronglyMeasurable_integral_condDistrib`
-
-English:
-theorem stronglyMeasurable_integral_condDistrib
-  given: (hf : StronglyMeasurable f)
-  proof: (hf.integral_condDistrib).comp_measurable Measurable.of_comap_le le_rfl
-
-中文:
-定理 stronglyMeasurable_integral_condDistrib
-  条件: (hf : StronglyMeasurable f)
-  证明: (hf.integral_condDistrib).comp_measurable Measurable.of_comap_le le_rfl
-
-Depends on / 依赖: Measurable, Measurable.of_comap_le, comp_measurable, hf.integral_condDistrib, integral_condDistrib, le_rfl, of_comap_le
+/-
+**ProbabilityTheory.stronglyMeasurable_integral_condDistrib** 是 Mathlib 中的一个定理，位
+于命名空间 `ProbabilityTheory`。
+形式化陈述：stronglyMeasurable_integral_condDistrib (hf : StronglyMeasurable f) : Stro
+nglyMeasurable[mβ.comap X] (fun a => ∫ y, f (X a, y) ∂condDistrib Y X μ (X a))
+参数：hf : StronglyMeasurable f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.StronglyMeasurable.comp_measurable`：comp_measurable [Topol
+ogicalSpace β] {_ : MeasurableSpace α} {_ : MeasurableSpace γ} {f : α -> β} {g :
+ γ -> α} (hf : StronglyMeasurable f) (…
+· 使用定理 `MeasureTheory.StronglyMeasurable.integral_condDistrib`：∀ {α : Type u_1} 
+{β : Type u_2} {Ω : Type u_3} {F : Type u_4} [inst : MeasurableSpace Ω] [inst_1 
+: StandardBorelSpace Ω]   [inst_2 : Nonempt…
+· 使用定理 `Measurable.of_comap_le`：∀ {α : Type u_1} {β : Type u_2} {m₁ : Measurable
+Space α} {m₂ : MeasurableSpace β} {f : α → β},   MeasurableSpace.comap f m₂ ≤ m₁
+ → Measurabl…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem stronglyMeasurable_integral_condDistrib (hf : StronglyMeasurable f) :
-    StronglyMeasurable[mβ.comap X] (fun a => ∫ y, f (X a, y) ∂condDistrib Y X μ (X a)) :=
-(hf.integral_condDistrib).comp_measurable Measurable.of_comap_le le_rfl
-
-/--
-theorem `aestronglyMeasurable_integral_condDistrib` / 定理 `aestronglyMeasurable_integral_condDistrib`
-
-English:
-theorem aestronglyMeasurable_integral_condDistrib
-  statement: (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ)
-  proof: (hf.integral_condDistrib_map hY).comp_ae_measurable' hX
-
-中文:
-定理 aestronglyMeasurable_integral_condDistrib
-  结论: (hX : 几乎处处可测 X μ) (hY : 几乎处处可测 Y μ)
-  证明: (hf.integral_condDistrib_map hY).comp_ae_measurable' hX
-
-Depends on / 依赖: comp_ae_measurable, hf.integral_condDistrib_map, integral_condDistrib_map
+    StronglyMeasurable[mβ.comap X] (fun a ↦ ∫ y, f (X a, y) ∂condDistrib Y X μ (X a)) :=
+  (hf.integral_condDistrib).comp_measurable <| Measurable.of_comap_le le_rfl
+/-
+**ProbabilityTheory.aestronglyMeasurable_integral_condDistrib** 是 Mathlib 中的一个定理
+，位于命名空间 `ProbabilityTheory`。
+形式化陈述：aestronglyMeasurable_integral_condDistrib (hX : AEMeasurable X μ) (hY : AE
+Measurable Y μ) (hf : AEStronglyMeasurable f (μ.map fun a => (X a, Y a))) : AESt
+ronglyMeasurable[mβ.comap X] (fun a => ∫ y, f (X a, y) ∂condDistrib Y X μ (X a))
+ μ
+参数：hX : AEMeasurable X μ；hY : AEMeasurable Y μ；hf : AEStronglyMeasurable f (μ.ma
+p fun a => (X a, Y a))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.comp_ae_measurable'`：∀ {α : Type u_1}
+ {β : Type u_2} {γ : Type u_3} [inst : TopologicalSpace β] {mα : MeasurableSpace
+ α}   {x : MeasurableSpace γ} {f : α → β} {μ…
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map`：∀ {α : Type
+ u_1} {β : Type u_2} {Ω : Type u_3} {F : Type u_4} [inst : MeasurableSpace Ω] [i
+nst_1 : StandardBorelSpace Ω]   [inst_2 : Nonempt…
 -/
 theorem aestronglyMeasurable_integral_condDistrib (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ)
     (hf : AEStronglyMeasurable f (μ.map fun a => (X a, Y a))) :
@@ -372,85 +355,110 @@ theorem aestronglyMeasurable_integral_condDistrib (hX : AEMeasurable X μ) (hY :
 
 end Measurability
 
-/--
-theorem `condDistrib_ae_eq_of_measure_eq_compProd_of_measurable` / 定理 `condDistrib_ae_eq_of_measure_eq_compProd_of_measurable`
+/-- `condDistrib` is a.e. uniquely defined as the kernel satisfying the defining property of
+`condKernel`. -/
+/-
+**ProbabilityTheory.condDistrib_ae_eq_of_measure_eq_compProd_of_measurable** 是 M
+athlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：condDistrib_ae_eq_of_measure_eq_compProd_of_measurable (hX : Measurable X)
+ (hY : Measurable Y) {κ : Kernel β Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (
+X x, Y x)) = μ.map X otimesₘ κ) : condDistrib Y X μ =ᵐ[μ.map X] κ
+参数：hX : Measurable X；hY : Measurable Y；hκ : μ.map (fun x => (X x, Y x)) = μ.map 
+X otimesₘ κ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasureTheory.Measure.fst_apply`：fst_apply {s : Set α} (hs : MeasurableS
+et s) : ρ.fst s = ρ (Prod.fst ⁻¹' s)
+· 使用定理 `Measurable.prod`：Measurable.prod {f : α -> β × γ} (hf₁ : Measurable fun 
+a => (f a).1) (hf₂ : Measurable fun a => (f a).2) : Measurable f
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `ProbabilityTheory.condDistrib_def`：∀ {α : Type u_5} {β : Type u_6} {Ω : 
+Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [inst_2 :
+ Nonempty Ω] {x : Measu…
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `ProbabilityTheory.eq_condKernel_of_measure_eq_compProd`：eq_condKernel_of
+_measure_eq_compProd (κ : Kernel α Ω) [IsFiniteKernel κ] (hκ : ρ = ρ.fst otimesₘ
+ κ) : forallᵐ x ∂ρ.fst, κ x = ρ.condKernel x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem condDistrib_ae_eq_of_measure_eq_compProd_of_measurable
-  proof: by
-  have heq : μ.map X = (μ.map (fun x => (X x, Y x))).fst := by
-    ext s hs
-    rw [Measure.map_apply hX hs]; rw [Measure.fst_apply hs]; rw [Measure.map_apply]
-    exacts [rfl, Measurable.prod hX hY, measurable_fst hs]
-  rw [heq]; rw [condDistrib]
-  symm
-  refine eq_condKernel_of_measure_eq_compProd _ ?_
-  convert! hκ
-  exact heq.symm
-
-中文:
-定理 condDistrib_ae_eq_of_measure_eq_compProd_of_measurable
-  证明: by
-  have heq : μ.map X = (μ.map (fun x => (X x, Y x))).fst := by
-    ext s hs
-    rw [Measure.map_apply hX hs]; rw [Measure.fst_apply hs]; rw [Measure.map_apply]
-    exacts [rfl, Measurable.prod hX hY, measurable_fst hs]
-  rw [heq]; rw [condDistrib]
-  symm
-  refine eq_condKernel_of_measure_eq_compProd _ ?_
-  convert! hκ
-  exact heq.symm
-
-Depends on / 依赖: Measurable, Measurable.prod, Measure, Measure.fst_apply, Measure.map_apply, condDistrib, convert, eq_condKernel_of_measure_eq_compProd, exacts, fst_apply, heq.symm, map_apply, measurable_fst
+--- 原说明 ---
+`condDistrib` is a.e. uniquely defined as the kernel satisfying the defining pro
+perty of
+`condKernel`.
 -/
 theorem condDistrib_ae_eq_of_measure_eq_compProd_of_measurable
     (hX : Measurable X) (hY : Measurable Y)
-    {κ : Kernel β Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (X x, Y x)) = μ.map X otimesₘ κ) :
+    {κ : Kernel β Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (X x, Y x)) = μ.map X ⊗ₘ κ) :
     condDistrib Y X μ =ᵐ[μ.map X] κ := by
-  have heq : μ.map X = (μ.map (fun x => (X x, Y x))).fst := by
+  have heq : μ.map X = (μ.map (fun x ↦ (X x, Y x))).fst := by
     ext s hs
-    rw [Measure.map_apply hX hs]; rw [Measure.fst_apply hs]; rw [Measure.map_apply]
+    rw [Measure.map_apply hX hs, Measure.fst_apply hs, Measure.map_apply]
     exacts [rfl, Measurable.prod hX hY, measurable_fst hs]
-  rw [heq]; rw [condDistrib]
+  rw [heq, condDistrib]
   symm
   refine eq_condKernel_of_measure_eq_compProd _ ?_
   convert! hκ
   exact heq.symm
 
-/--
-lemma `condDistrib_ae_eq_of_measure_eq_compProd` / 引理 `condDistrib_ae_eq_of_measure_eq_compProd`
+/-- `condDistrib` is a.e. uniquely defined as the kernel satisfying the defining property of
+`condKernel`. -/
+/-
+**ProbabilityTheory.condDistrib_ae_eq_of_measure_eq_compProd** 是 Mathlib 中的一个引理，
+位于命名空间 `ProbabilityTheory`。
+形式化陈述：condDistrib_ae_eq_of_measure_eq_compProd (X : α -> β) (hY : AEMeasurable Y
+ μ) {κ : Kernel β Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (X x, Y x)) = μ.ma
+p X otimesₘ κ) : condDistrib Y X μ =ᵐ[μ.map X] κ
+参数：X : α -> β；hY : AEMeasurable Y μ；hκ : μ.map (fun x => (X x, Y x)) = μ.map X o
+timesₘ κ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `ProbabilityTheory.condDistrib_ae_eq_of_measure_eq_compProd_of_measurable
+`：condDistrib_ae_eq_of_measure_eq_compProd_of_measurable (hX : Measurable X) (hY
+ : Measurable Y) {κ : Kernel β Ω} [IsFiniteKernel κ] (hκ : μ.m…
+· 使用定理 `AEMeasurable.measurable_mk`：measurable_mk (h : AEMeasurable f μ) : Measu
+rable (h.mk f)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.Measure.map_congr`：map_congr {f g : α -> β} (h : f =ᵐ[μ] g
+) : Measure.map f μ = Measure.map g μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `AEMeasurable.ae_eq_mk`：ae_eq_mk (h : AEMeasurable f μ) : f =ᵐ[μ] h.mk f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.condDistrib_congr`：condDistrib_congr {X' : α -> β} {Y'
+ : α -> Ω} (hY : Y =ᵐ[μ] Y') (hX : X =ᵐ[μ] X') : condDistrib Y X μ = condDistrib
+ Y' X' μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.ae.congr_simp`：∀ {α : Type u_1} {F : Type u_3} [inst : Fun
+Like F (Set α) ENNReal] [inst_1 : MeasureTheory.OuterMeasureClass F α]   (μ μ_1 
+: F), μ = μ_1 → M…
+· 使用定理 `MeasureTheory.Measure.map_of_not_aemeasurable`：map_of_not_aemeasurable {
+f : α -> β} {μ : Measure α} (hf : ¬AEMeasurable f μ) : μ.map f = 0
+· 使用定理 `MeasureTheory.ae_zero`：ae_zero {_m0 : MeasurableSpace α} : ae (0 : Measu
+re α) = ⊥
 
-English:
-lemma condDistrib_ae_eq_of_measure_eq_compProd
-  proof: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  suffices condDistrib (hY.mk Y) (hX.mk X) μ =ᵐ[μ.map (hX.mk X)] κ by
-    rwa [Measure.map_congr hX.ae_eq_mk, condDistrib_congr hY.ae_eq_mk hX.ae_eq_mk]
-  refine condDistrib_ae_eq_of_measure_eq_compProd_of_measurable (μ := μ)
-    hX.measurable_mk hY.measurable_mk ((Eq.trans ?_ hκ).trans ?_)
-  · refine Measure.map_congr ?_
-    filter_upwards [hX.ae_eq_mk, hY.ae_eq_mk] with a haX haY using by rw [haX, haY]
-  · rw [Measure.map_congr hX.ae_eq_mk]
-
-中文:
-引理 condDistrib_ae_eq_of_measure_eq_compProd
-  证明: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  suffices condDistrib (hY.mk Y) (hX.mk X) μ =ᵐ[μ.map (hX.mk X)] κ by
-    rwa [Measure.map_congr hX.ae_eq_mk, condDistrib_congr hY.ae_eq_mk hX.ae_eq_mk]
-  refine condDistrib_ae_eq_of_measure_eq_compProd_of_measurable (μ := μ)
-    hX.measurable_mk hY.measurable_mk ((Eq.trans ?_ hκ).trans ?_)
-  · refine Measure.map_congr ?_
-    filter_upwards [hX.ae_eq_mk, hY.ae_eq_mk] with a haX haY using by rw [haX, haY]
-  · rw [Measure.map_congr hX.ae_eq_mk]
-
-Depends on / 依赖: AEMeasurable, Eq.trans, EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.map_congr, Measure.map_of_not_aemeasurable, ae_eq_mk, condDistrib, condDistrib_ae_eq_of_measure_eq_compProd_of_measurable, condDistrib_congr, filter_upwards, hX.ae_eq_mk, hX.measurable_mk, hX.mk, hY.ae_eq_mk, hY.measurable_mk, hY.mk, map_congr
+--- 原说明 ---
+`condDistrib` is a.e. uniquely defined as the kernel satisfying the defining pro
+perty of
+`condKernel`.
 -/
 lemma condDistrib_ae_eq_of_measure_eq_compProd
-    (X : α -> β) (hY : AEMeasurable Y μ) {κ : Kernel β Ω} [IsFiniteKernel κ]
-    (hκ : μ.map (fun x => (X x, Y x)) = μ.map X otimesₘ κ) :
+    (X : α → β) (hY : AEMeasurable Y μ) {κ : Kernel β Ω} [IsFiniteKernel κ]
+    (hκ : μ.map (fun x => (X x, Y x)) = μ.map X ⊗ₘ κ) :
     condDistrib Y X μ =ᵐ[μ.map X] κ := by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
@@ -461,228 +469,374 @@ lemma condDistrib_ae_eq_of_measure_eq_compProd
   · refine Measure.map_congr ?_
     filter_upwards [hX.ae_eq_mk, hY.ae_eq_mk] with a haX haY using by rw [haX, haY]
   · rw [Measure.map_congr hX.ae_eq_mk]
-
-/--
-lemma `condDistrib_ae_eq_iff_measure_eq_compProd` / 引理 `condDistrib_ae_eq_iff_measure_eq_compProd`
-
-English:
-lemma condDistrib_ae_eq_iff_measure_eq_compProd
-  proof: by
-  refine ⟨fun h => ?_, condDistrib_ae_eq_of_measure_eq_compProd X hY⟩
-  rw [Measure.compProd_congr h.symm]; rw [compProd_map_condDistrib hY]
-
-中文:
-引理 condDistrib_ae_eq_iff_measure_eq_compProd
-  证明: by
-  refine ⟨fun h => ?_, condDistrib_ae_eq_of_measure_eq_compProd X hY⟩
-  rw [Measure.compProd_congr h.symm]; rw [compProd_map_condDistrib hY]
-
-Depends on / 依赖: Measure, Measure.compProd_congr, compProd_congr, compProd_map_condDistrib, condDistrib_ae_eq_of_measure_eq_compProd, h.symm
+/-
+**ProbabilityTheory.condDistrib_ae_eq_iff_measure_eq_compProd** 是 Mathlib 中的一个引理
+，位于命名空间 `ProbabilityTheory`。
+形式化陈述：condDistrib_ae_eq_iff_measure_eq_compProd (X : α -> β) (hY : AEMeasurable 
+Y μ) (κ : Kernel β Ω) [IsFiniteKernel κ] : (condDistrib Y X μ =ᵐ[μ.map X] κ) ↔ μ
+.map (fun x => (X x, Y x)) = μ.map X otimesₘ κ
+参数：X : α -> β；hY : AEMeasurable Y μ；κ : Kernel β Ω。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Measure.compProd_congr`：compProd_congr [IsSFiniteKernel κ]
+ [IsSFiniteKernel η] (h : κ =ᵐ[μ] η) : μ otimesₘ κ = μ otimesₘ η
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.isSFiniteKernel`：∀ {α : Type u_1
+} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabil
+ityTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.isFiniteKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.instIsMarkovKernelCondDistrib`：∀ {α : Type u_1} {β : T
+ype u_2} {Ω : Type u_3} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace 
+Ω]   [inst_2 : Nonempty Ω] {mα : Meas…
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用引理 `ProbabilityTheory.compProd_map_condDistrib`：compProd_map_condDistrib (hY
+ : AEMeasurable Y μ) : (μ.map X) otimesₘ condDistrib Y X μ = μ.map fun a => (X a
+, Y a)
+· 使用引理 `ProbabilityTheory.condDistrib_ae_eq_of_measure_eq_compProd`：condDistrib_
+ae_eq_of_measure_eq_compProd (X : α -> β) (hY : AEMeasurable Y μ) {κ : Kernel β 
+Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (X x…
 -/
 lemma condDistrib_ae_eq_iff_measure_eq_compProd
-    (X : α -> β) (hY : AEMeasurable Y μ) (κ : Kernel β Ω) [IsFiniteKernel κ] :
-    (condDistrib Y X μ =ᵐ[μ.map X] κ) ↔ μ.map (fun x => (X x, Y x)) = μ.map X otimesₘ κ := by
-  refine ⟨fun h => ?_, condDistrib_ae_eq_of_measure_eq_compProd X hY⟩
-  rw [Measure.compProd_congr h.symm]; rw [compProd_map_condDistrib hY]
-
-/--
-lemma `condDistrib_comp` / 引理 `condDistrib_comp`
-
-English:
-lemma condDistrib_comp
-  statement: {Ω' : Type*} {mΩ' : MeasurableSpace Ω'} [StandardBorelSpace Ω']
-  proof: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
-  calc μ.map (fun x => (X x, (f ∘ Y) x))
-  _ = (μ.map (fun x => (X x, Y x))).map (Prod.map id f) := by
-    rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
-    simp [Function.comp_def]
-  _ = (μ.map X otimesₘ condDistrib Y X μ).map (Prod.map id f) := by rw [compProd_map_condDistrib hY]
-  _ = μ.map X otimesₘ (condDistrib Y X μ).map f := by rw [Measure.compProd_map hf]
-
-中文:
-引理 condDistrib_comp
-  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} [StandardBorel空间 Ω']
-  证明: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
-  calc μ.map (fun x => (X x, (f ∘ Y) x))
-  _ = (μ.map (fun x => (X x, Y x))).map (Prod.map id f) := by
-    rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
-    simp [Function.comp_def]
-  _ = (μ.map X otimesₘ condDistrib Y X μ).map (Prod.map id f) := by rw [compProd_map_condDistrib hY]
-  _ = μ.map X otimesₘ (condDistrib Y X μ).map f := by rw [Measure.compProd_map hf]
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Function, Function.comp_def, Measure, Measure.map_of_not_aemeasurable, Prod.map, compProd_map_condDistrib, comp_def, condDistrib, condDistrib_ae_eq_of_measure_eq_compProd, fun_prop, map_map_of_aemeasurable, map_of_not_aemeasurable
+    (X : α → β) (hY : AEMeasurable Y μ) (κ : Kernel β Ω) [IsFiniteKernel κ] :
+    (condDistrib Y X μ =ᵐ[μ.map X] κ) ↔ μ.map (fun x => (X x, Y x)) = μ.map X ⊗ₘ κ := by
+  refine ⟨fun h ↦ ?_, condDistrib_ae_eq_of_measure_eq_compProd X hY⟩
+  rw [Measure.compProd_congr h.symm, compProd_map_condDistrib hY]
+/-
+**ProbabilityTheory.condDistrib_comp** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheor
+y`。
+形式化陈述：condDistrib_comp {Ω' : Type*} {mΩ' : MeasurableSpace Ω'} [StandardBorelSpa
+ce Ω'] [Nonempty Ω'] (X : α -> β) (hY : AEMeasurable Y μ) {f : Ω -> Ω'} (hf : Me
+asurable f) : condDistrib (f ∘ Y) X μ =ᵐ[μ.map X] (condDistrib Y X μ).map f
+参数：X : α -> β；hY : AEMeasurable Y μ；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.condDistrib_ae_eq_of_measure_eq_compProd`：condDistrib_
+ae_eq_of_measure_eq_compProd (X : α -> β) (hY : AEMeasurable Y μ) {κ : Kernel β 
+Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (X x…
+· 使用定理 `Measurable.comp_aemeasurable'`：Measurable.comp_aemeasurable' [Measurable
+Space δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) :
+ AEMeasurable (fun …
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} (κ : Probability…
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.isFiniteKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.instIsMarkovKernelCondDistrib`：∀ {α : Type u_1} {β : T
+ype u_2} {Ω : Type u_3} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace 
+Ω]   [inst_2 : Nonempty Ω] {mα : Meas…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Measurable.prodMap`：Measurable.prodMap [MeasurableSpace δ] {f : α -> β} 
+{g : γ -> δ} (hf : Measurable f) (hg : Measurable g) : Measurable (Prod.map f g)
+· 使用定理 `measurable_id'`：measurable_id' {_ : MeasurableSpace α} : Measurable fun 
+a : α => a
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `ProbabilityTheory.compProd_map_condDistrib`：compProd_map_condDistrib (hY
+ : AEMeasurable Y μ) : (μ.map X) otimesₘ condDistrib Y X μ = μ.map fun a => (X a
+, Y a)
+· 使用引理 `MeasureTheory.Measure.compProd_map`：compProd_map [SFinite μ] [IsSFiniteK
+ernel κ] {f : β -> γ} (hf : Measurable f) : μ otimesₘ (κ.map f) = (μ otimesₘ κ).
+map (Prod.map id f)
+· 使用定理 `MeasureTheory.Measure.instSFiniteMap`：∀ {α : Type u_2} {β : Type u_3} {m
+0 : MeasurableSpace α} [inst : MeasurableSpace β] (μ : MeasureTheory.Measure α) 
+  (f : α → β) [MeasureTheo…
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.isSFiniteKernel`：∀ {α : Type u_1
+} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabil
+ityTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.ae.congr_simp`：∀ {α : Type u_1} {F : Type u_3} [inst : Fun
+Like F (Set α) ENNReal] [inst_1 : MeasureTheory.OuterMeasureClass F α]   (μ μ_1 
+: F), μ = μ_1 → M…
+· 使用定理 `MeasureTheory.Measure.map_of_not_aemeasurable`：map_of_not_aemeasurable {
+f : α -> β} {μ : Measure α} (hf : ¬AEMeasurable f μ) : μ.map f = 0
+· 使用定理 `MeasureTheory.ae_zero`：ae_zero {_m0 : MeasurableSpace α} : ae (0 : Measu
+re α) = ⊥
 -/
 lemma condDistrib_comp {Ω' : Type*} {mΩ' : MeasurableSpace Ω'} [StandardBorelSpace Ω']
-    [Nonempty Ω'] (X : α -> β) (hY : AEMeasurable Y μ) {f : Ω -> Ω'} (hf : Measurable f) :
+    [Nonempty Ω'] (X : α → β) (hY : AEMeasurable Y μ) {f : Ω → Ω'} (hf : Measurable f) :
     condDistrib (f ∘ Y) X μ =ᵐ[μ.map X] (condDistrib Y X μ).map f := by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
-  calc μ.map (fun x => (X x, (f ∘ Y) x))
-  _ = (μ.map (fun x => (X x, Y x))).map (Prod.map id f) := by
+  calc μ.map (fun x ↦ (X x, (f ∘ Y) x))
+  _ = (μ.map (fun x ↦ (X x, Y x))).map (Prod.map id f) := by
     rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
     simp [Function.comp_def]
-  _ = (μ.map X otimesₘ condDistrib Y X μ).map (Prod.map id f) := by rw [compProd_map_condDistrib hY]
-  _ = μ.map X otimesₘ (condDistrib Y X μ).map f := by rw [Measure.compProd_map hf]
-
-/--
-lemma `condDistrib_comp_self` / 引理 `condDistrib_comp_self`
-
-English:
-lemma condDistrib_comp_self
-  given: (X : α -> β) {f : β -> Ω} (hf : Measurable f)
-  proof: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
-  rw [Measure.compProd_deterministic]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]
-  simp [Function.comp_def]
-
-中文:
-引理 condDistrib_comp_self
-  条件: (X : α -> β) {f : β -> Ω} (hf : 可测 f)
-  证明: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
-  rw [Measure.compProd_deterministic]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]
-  simp [Function.comp_def]
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Function, Function.comp_def, Measure, Measure.compProd_deterministic, Measure.map_of_not_aemeasurable, compProd_deterministic, comp_def, condDistrib_ae_eq_of_measure_eq_compProd, fun_prop, map_map_of_aemeasurable, map_of_not_aemeasurable
+  _ = (μ.map X ⊗ₘ condDistrib Y X μ).map (Prod.map id f) := by rw [compProd_map_condDistrib hY]
+  _ = μ.map X ⊗ₘ (condDistrib Y X μ).map f := by rw [Measure.compProd_map hf]
+/-
+**ProbabilityTheory.condDistrib_comp_self** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory`。
+形式化陈述：condDistrib_comp_self (X : α -> β) {f : β -> Ω} (hf : Measurable f) : cond
+Distrib (f ∘ X) X μ =ᵐ[μ.map X] Kernel.deterministic f hf
+参数：X : α -> β；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.condDistrib_ae_eq_of_measure_eq_compProd`：condDistrib_
+ae_eq_of_measure_eq_compProd (X : α -> β) (hY : AEMeasurable Y μ) {κ : Kernel β 
+Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (X x…
+· 使用定理 `Measurable.comp_aemeasurable'`：Measurable.comp_aemeasurable' [Measurable
+Space δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) :
+ AEMeasurable (fun …
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.isFiniteKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Measure.compProd_deterministic`：compProd_deterministic [SF
+inite μ] {f : α -> β} (hf : Measurable f) : μ otimesₘ Kernel.deterministic f hf 
+= μ.map (fun a => (a, f a))
+· 使用定理 `MeasureTheory.Measure.instSFiniteMap`：∀ {α : Type u_2} {β : Type u_3} {m
+0 : MeasurableSpace α} [inst : MeasurableSpace β] (μ : MeasureTheory.Measure α) 
+  (f : α → β) [MeasureTheo…
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `aemeasurable_id`：aemeasurable_id : AEMeasurable id μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.ae.congr_simp`：∀ {α : Type u_1} {F : Type u_3} [inst : Fun
+Like F (Set α) ENNReal] [inst_1 : MeasureTheory.OuterMeasureClass F α]   (μ μ_1 
+: F), μ = μ_1 → M…
+· 使用定理 `MeasureTheory.Measure.map_of_not_aemeasurable`：map_of_not_aemeasurable {
+f : α -> β} {μ : Measure α} (hf : ¬AEMeasurable f μ) : μ.map f = 0
+· 使用定理 `MeasureTheory.ae_zero`：ae_zero {_m0 : MeasurableSpace α} : ae (0 : Measu
+re α) = ⊥
 -/
-lemma condDistrib_comp_self (X : α -> β) {f : β -> Ω} (hf : Measurable f) :
+lemma condDistrib_comp_self (X : α → β) {f : β → Ω} (hf : Measurable f) :
     condDistrib (f ∘ X) X μ =ᵐ[μ.map X] Kernel.deterministic f hf := by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
-  rw [Measure.compProd_deterministic]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]
+  rw [Measure.compProd_deterministic, AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]
   simp [Function.comp_def]
-
-/--
-lemma `condDistrib_self` / 引理 `condDistrib_self`
-
-English:
-lemma condDistrib_self
-  given: (Y : α -> Ω)
-  statement: condDistrib Y Y μ =ᵐ[μ.map Y] Kernel.id
-  proof: by
-  simpa using! condDistrib_comp_self Y measurable_id
-
-中文:
-引理 condDistrib_self
-  条件: (Y : α -> Ω)
-  结论: condDistrib Y Y μ =ᵐ[μ.map Y] 核.id
-  证明: by
-  simpa using! condDistrib_comp_self Y measurable_id
-
-Depends on / 依赖: condDistrib_comp_self, measurable_id
+/-
+**ProbabilityTheory.condDistrib_self** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheor
+y`。
+形式化陈述：condDistrib_self (Y : α -> Ω) : condDistrib Y Y μ =ᵐ[μ.map Y] Kernel.id
+参数：Y : α -> Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.condDistrib.congr_simp`：∀ {α : Type u_5} {β : Type u_6
+} {Ω : Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [i
+nst_2 : Nonempty Ω] {x : Measu…
+· 使用定理 `CompTriple.comp_eq`：∀ {M : Type u_1} {N : Type u_2} {P : Type u_3} {φ : 
+M → N} {ψ : N → P} {χ : outParam (M → P)} [self : CompTriple φ ψ χ],   ψ ∘ φ = χ
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
+· 使用引理 `ProbabilityTheory.condDistrib_comp_self`：condDistrib_comp_self (X : α ->
+ β) {f : β -> Ω} (hf : Measurable f) : condDistrib (f ∘ X) X μ =ᵐ[μ.map X] Kerne
+l.deterministic f hf
 -/
-lemma condDistrib_self (Y : α -> Ω) : condDistrib Y Y μ =ᵐ[μ.map Y] Kernel.id := by
+lemma condDistrib_self (Y : α → Ω) : condDistrib Y Y μ =ᵐ[μ.map Y] Kernel.id := by
   simpa using! condDistrib_comp_self Y measurable_id
-
-/--
-lemma `condDistrib_const` / 引理 `condDistrib_const`
-
-English:
-lemma condDistrib_const
-  given: (X : α -> β) (c : Ω)
-  proof: by
-  have : (fun _ : α => c) = (fun _ : β => c) ∘ X := rfl
-  rw [this]
-  filter_upwards [condDistrib_comp_self X (measurable_const (a := c))] with b hb
-  rw [hb]
-
-中文:
-引理 condDistrib_const
-  条件: (X : α -> β) (c : Ω)
-  证明: by
-  have : (fun _ : α => c) = (fun _ : β => c) ∘ X := rfl
-  rw [this]
-  filter_upwards [condDistrib_comp_self X (measurable_const (a := c))] with b hb
-  rw [hb]
-
-Depends on / 依赖: condDistrib_comp_self, filter_upwards, fun_prop, measurable_const
+/-
+**ProbabilityTheory.condDistrib_const** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheo
+ry`。
+形式化陈述：condDistrib_const (X : α -> β) (c : Ω) : condDistrib (fun _ => c) X μ =ᵐ[μ
+.map X] Kernel.deterministic (mα
+参数：X : α -> β；c : Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用引理 `ProbabilityTheory.condDistrib_comp_self`：condDistrib_comp_self (X : α ->
+ β) {f : β -> Ω} (hf : Measurable f) : condDistrib (f ∘ X) X μ =ᵐ[μ.map X] Kerne
+l.deterministic f hf
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
 -/
-lemma condDistrib_const (X : α -> β) (c : Ω) :
-    condDistrib (fun _ => c) X μ =ᵐ[μ.map X]
-      Kernel.deterministic (mα := mβ) (fun _ => c) (by fun_prop) := by
-  have : (fun _ : α => c) = (fun _ : β => c) ∘ X := rfl
+lemma condDistrib_const (X : α → β) (c : Ω) :
+    condDistrib (fun _ ↦ c) X μ =ᵐ[μ.map X]
+      Kernel.deterministic (mα := mβ) (fun _ ↦ c) (by fun_prop) := by
+  have : (fun _ : α ↦ c) = (fun _ : β ↦ c) ∘ X := rfl
   rw [this]
   filter_upwards [condDistrib_comp_self X (measurable_const (a := c))] with b hb
   rw [hb]
-
-/--
-lemma `condDistrib_map` / 引理 `condDistrib_map`
-
-English:
-lemma condDistrib_map
-  statement: {γ : Type*} {mγ : MeasurableSpace γ}
-  proof: by
-  rw [← AEMeasurable.map_map_of_aemeasurable hX hf]
-  refine condDistrib_ae_eq_of_measure_eq_compProd (μ := ν.map f) X hY ?_
-  rw [AEMeasurable.map_map_of_aemeasurable hX hf]; rw [compProd_map_condDistrib (by fun_prop)]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hf]
-  simp [Function.comp_def]
-
-中文:
-引理 condDistrib_map
-  结论: {γ : 类型} {mγ : 可测空间 γ}
-  证明: by
-  rw [← AEMeasurable.map_map_of_aemeasurable hX hf]
-  refine condDistrib_ae_eq_of_measure_eq_compProd (μ := ν.map f) X hY ?_
-  rw [AEMeasurable.map_map_of_aemeasurable hX hf]; rw [compProd_map_condDistrib (by fun_prop)]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hf]
-  simp [Function.comp_def]
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, Function, Function.comp_def, compProd_map_condDistrib, comp_def, condDistrib_ae_eq_of_measure_eq_compProd, fun_prop, map_map_of_aemeasurable
+/-
+**ProbabilityTheory.condDistrib_map** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory
+`。
+形式化陈述：condDistrib_map {γ : Type*} {mγ : MeasurableSpace γ} {ν : Measure γ} [IsFi
+niteMeasure ν] {f : γ -> α} (hX : AEMeasurable X (ν.map f)) (hY : AEMeasurable Y
+ (ν.map f)) (hf : AEMeasurable f ν) : condDistrib Y X (ν.map f) =ᵐ[ν.map (X ∘ f)
+] condDistrib (Y ∘ f) (X ∘ f) ν
+参数：hX : AEMeasurable X (ν.map f)；hY : AEMeasurable Y (ν.map f)；hf : AEMeasurable
+ f ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.isFiniteMeasure_map`：∀ {α : Type u_1} {β : Type u_
+2} [mβ : MeasurableSpace β] {m : MeasurableSpace α} (μ : MeasureTheory.Measure α
+)   [MeasureTheory.IsFiniteMeas…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用引理 `ProbabilityTheory.condDistrib_ae_eq_of_measure_eq_compProd`：condDistrib_
+ae_eq_of_measure_eq_compProd (X : α -> β) (hY : AEMeasurable Y μ) {κ : Kernel β 
+Ω} [IsFiniteKernel κ] (hκ : μ.map (fun x => (X x…
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.isFiniteKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.instIsMarkovKernelCondDistrib`：∀ {α : Type u_1} {β : T
+ype u_2} {Ω : Type u_3} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace 
+Ω]   [inst_2 : Nonempty Ω] {mα : Meas…
+· 使用引理 `ProbabilityTheory.compProd_map_condDistrib`：compProd_map_condDistrib (hY
+ : AEMeasurable Y μ) : (μ.map X) otimesₘ condDistrib Y X μ = μ.map fun a => (X a
+, Y a)
+· 使用定理 `AEMeasurable.comp_aemeasurable'`：comp_aemeasurable' {f : α -> δ} {g : δ 
+-> β} (hg : AEMeasurable g (μ.map f)) (hf : AEMeasurable f μ) : AEMeasurable (fu
+n x => g (f x)) μ
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma condDistrib_map {γ : Type*} {mγ : MeasurableSpace γ}
-    {ν : Measure γ} [IsFiniteMeasure ν] {f : γ -> α}
+    {ν : Measure γ} [IsFiniteMeasure ν] {f : γ → α}
     (hX : AEMeasurable X (ν.map f)) (hY : AEMeasurable Y (ν.map f)) (hf : AEMeasurable f ν) :
     condDistrib Y X (ν.map f) =ᵐ[ν.map (X ∘ f)] condDistrib (Y ∘ f) (X ∘ f) ν := by
   rw [← AEMeasurable.map_map_of_aemeasurable hX hf]
   refine condDistrib_ae_eq_of_measure_eq_compProd (μ := ν.map f) X hY ?_
-  rw [AEMeasurable.map_map_of_aemeasurable hX hf]; rw [compProd_map_condDistrib (by fun_prop)]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hf]
+  rw [AEMeasurable.map_map_of_aemeasurable hX hf, compProd_map_condDistrib (by fun_prop),
+    AEMeasurable.map_map_of_aemeasurable (by fun_prop) hf]
   simp [Function.comp_def]
-
-/--
-lemma `condDistrib_fst_prod` / 引理 `condDistrib_fst_prod`
-
-English:
-lemma condDistrib_fst_prod
-  statement: {γ : Type*} {mγ : MeasurableSpace γ}
-  proof: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.fst (α := α) (β := γ))
-      (ν := μ.prod ν) (mα := inferInstance) (mβ := inferInstance)
-      (by simpa) (by simpa) (by fun_prop)
-  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
-  simp only [Measure.map_fst_prod, measure_univ, one_smul] at h_map
-  exact h_map.symm
-
-中文:
-引理 condDistrib_fst_prod
-  结论: {γ : 类型} {mγ : 可测空间 γ}
-  证明: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.fst (α := α) (β := γ))
-      (ν := μ.prod ν) (mα := inferInstance) (mβ := inferInstance)
-      (by simpa) (by simpa) (by fun_prop)
-  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
-  simp only [Measure.map_fst_prod, measure_univ, one_smul] at h_map
-  exact h_map.symm
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.map_fst_prod, Measure.map_of_not_aemeasurable, Prod.fst, condDistrib_map, fun_prop, h_map, h_map.symm, map_fst_prod, map_map_of_aemeasurable, map_of_not_aemeasurable, measure_univ, one_smul
+/-
+**ProbabilityTheory.condDistrib_fst_prod** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：condDistrib_fst_prod {γ : Type*} {mγ : MeasurableSpace γ} (X : α -> β) (hY
+ : AEMeasurable Y μ) (ν : Measure γ) [IsProbabilityMeasure ν] : condDistrib (fun
+ ω => Y ω.1) (fun ω => X ω.1) (μ.prod ν) =ᵐ[μ.map X] condDistrib Y X μ
+参数：X : α -> β；hY : AEMeasurable Y μ；ν : Measure γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.prod.instIsFiniteMeasure`：∀ {α : Type u_4} {β : Ty
+pe u_5} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (μ : MeasureTheory.Mea
+sure α)   (ν : MeasureTheory.Measure…
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `MeasureTheory.Measure.isFiniteMeasure_map`：∀ {α : Type u_1} {β : Type u_
+2} [mβ : MeasurableSpace β] {m : MeasurableSpace α} (μ : MeasureTheory.Measure α
+)   [MeasureTheory.IsFiniteMeas…
+· 使用引理 `ProbabilityTheory.condDistrib_map`：condDistrib_map {γ : Type*} {mγ : Mea
+surableSpace γ} {ν : Measure γ} [IsFiniteMeasure ν] {f : γ -> α} (hX : AEMeasura
+ble X (ν.map f)) (hY : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.Measure.map_fst_prod`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μ : MeasureTheory.Measure α
+}   {ν : MeasureTheory.M…
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `AEMeasurable.fst`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} {m0 : M
+easurableSpace α} [inst : MeasurableSpace β]   [inst_1 : MeasurableSpace γ] {μ :
+ Measu…
+· 使用定理 `aemeasurable_id`：aemeasurable_id : AEMeasurable id μ
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.ae.congr_simp`：∀ {α : Type u_1} {F : Type u_3} [inst : Fun
+Like F (Set α) ENNReal] [inst_1 : MeasureTheory.OuterMeasureClass F α]   (μ μ_1 
+: F), μ = μ_1 → M…
+· 使用定理 `ProbabilityTheory.condDistrib.congr_simp`：∀ {α : Type u_5} {β : Type u_6
+} {Ω : Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [i
+nst_2 : Nonempty Ω] {x : Measu…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.Measure.map_of_not_aemeasurable`：map_of_not_aemeasurable {
+f : α -> β} {μ : Measure α} (hf : ¬AEMeasurable f μ) : μ.map f = 0
+· 使用定理 `MeasureTheory.ae_zero`：ae_zero {_m0 : MeasurableSpace α} : ae (0 : Measu
+re α) = ⊥
 -/
 lemma condDistrib_fst_prod {γ : Type*} {mγ : MeasurableSpace γ}
-    (X : α -> β) (hY : AEMeasurable Y μ) (ν : Measure γ) [IsProbabilityMeasure ν] :
-    condDistrib (fun ω => Y ω.1) (fun ω => X ω.1) (μ.prod ν) =ᵐ[μ.map X] condDistrib Y X μ := by
+    (X : α → β) (hY : AEMeasurable Y μ) (ν : Measure γ) [IsProbabilityMeasure ν] :
+    condDistrib (fun ω ↦ Y ω.1) (fun ω ↦ X ω.1) (μ.prod ν) =ᵐ[μ.map X] condDistrib Y X μ := by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.fst (α := α) (β := γ))
@@ -691,41 +845,79 @@ lemma condDistrib_fst_prod {γ : Type*} {mγ : MeasurableSpace γ}
   rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
   simp only [Measure.map_fst_prod, measure_univ, one_smul] at h_map
   exact h_map.symm
-
-/--
-lemma `condDistrib_snd_prod` / 引理 `condDistrib_snd_prod`
-
-English:
-lemma condDistrib_snd_prod
-  statement: {γ : Type*} {mγ : MeasurableSpace γ}
-  proof: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.snd (β := α) (α := γ))
-      (ν := ν.prod μ) (mα := inferInstance) (mβ := inferInstance)
-      (by simpa) (by simpa) (by fun_prop)
-  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
-  simp only [Measure.map_snd_prod, measure_univ, one_smul] at h_map
-  exact h_map.symm
-
-中文:
-引理 condDistrib_snd_prod
-  结论: {γ : 类型} {mγ : 可测空间 γ}
-  证明: by
-  by_cases hX : AEMeasurable X μ
-  swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
-  have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.snd (β := α) (α := γ))
-      (ν := ν.prod μ) (mα := inferInstance) (mβ := inferInstance)
-      (by simpa) (by simpa) (by fun_prop)
-  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
-  simp only [Measure.map_snd_prod, measure_univ, one_smul] at h_map
-  exact h_map.symm
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.map_of_not_aemeasurable, Measure.map_snd_prod, Prod.snd, condDistrib_map, fun_prop, h_map, h_map.symm, map_map_of_aemeasurable, map_of_not_aemeasurable, map_snd_prod, measure_univ, one_smul
+/-
+**ProbabilityTheory.condDistrib_snd_prod** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：condDistrib_snd_prod {γ : Type*} {mγ : MeasurableSpace γ} (X : α -> β) (hY
+ : AEMeasurable Y μ) (ν : Measure γ) [IsProbabilityMeasure ν] : condDistrib (fun
+ ω => Y ω.2) (fun ω => X ω.2) (ν.prod μ) =ᵐ[μ.map X] condDistrib Y X μ
+参数：X : α -> β；hY : AEMeasurable Y μ；ν : Measure γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.prod.instIsFiniteMeasure`：∀ {α : Type u_4} {β : Ty
+pe u_5} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (μ : MeasureTheory.Mea
+sure α)   (ν : MeasureTheory.Measure…
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `MeasureTheory.Measure.isFiniteMeasure_map`：∀ {α : Type u_1} {β : Type u_
+2} [mβ : MeasurableSpace β] {m : MeasurableSpace α} (μ : MeasureTheory.Measure α
+)   [MeasureTheory.IsFiniteMeas…
+· 使用引理 `ProbabilityTheory.condDistrib_map`：condDistrib_map {γ : Type*} {mγ : Mea
+surableSpace γ} {ν : Measure γ} [IsFiniteMeasure ν] {f : γ -> α} (hX : AEMeasura
+ble X (ν.map f)) (hY : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.Measure.map_snd_prod`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μ : MeasureTheory.Measure α
+}   {ν : MeasureTheory.M…
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `AEMeasurable.snd`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} {m0 : M
+easurableSpace α} [inst : MeasurableSpace β]   [inst_1 : MeasurableSpace γ] {μ :
+ Measu…
+· 使用定理 `aemeasurable_id`：aemeasurable_id : AEMeasurable id μ
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.ae.congr_simp`：∀ {α : Type u_1} {F : Type u_3} [inst : Fun
+Like F (Set α) ENNReal] [inst_1 : MeasureTheory.OuterMeasureClass F α]   (μ μ_1 
+: F), μ = μ_1 → M…
+· 使用定理 `ProbabilityTheory.condDistrib.congr_simp`：∀ {α : Type u_5} {β : Type u_6
+} {Ω : Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [i
+nst_2 : Nonempty Ω] {x : Measu…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.Measure.map_of_not_aemeasurable`：map_of_not_aemeasurable {
+f : α -> β} {μ : Measure α} (hf : ¬AEMeasurable f μ) : μ.map f = 0
+· 使用定理 `MeasureTheory.ae_zero`：ae_zero {_m0 : MeasurableSpace α} : ae (0 : Measu
+re α) = ⊥
 -/
 lemma condDistrib_snd_prod {γ : Type*} {mγ : MeasurableSpace γ}
-    (X : α -> β) (hY : AEMeasurable Y μ) (ν : Measure γ) [IsProbabilityMeasure ν] :
-    condDistrib (fun ω => Y ω.2) (fun ω => X ω.2) (ν.prod μ) =ᵐ[μ.map X] condDistrib Y X μ := by
+    (X : α → β) (hY : AEMeasurable Y μ) (ν : Measure γ) [IsProbabilityMeasure ν] :
+    condDistrib (fun ω ↦ Y ω.2) (fun ω ↦ X ω.2) (ν.prod μ) =ᵐ[μ.map X] condDistrib Y X μ := by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.snd (β := α) (α := γ))
@@ -737,34 +929,41 @@ lemma condDistrib_snd_prod {γ : Type*} {mγ : MeasurableSpace γ}
 
 section Integrability
 
-/--
-theorem `integrable_toReal_condDistrib` / 定理 `integrable_toReal_condDistrib`
-
-English:
-theorem integrable_toReal_condDistrib
-  given: (hX : AEMeasurable X μ) (hs : MeasurableSet s)
-  proof: by
-  refine integrable_toReal_of_lintegral_ne_top ?_ ?_
-  · exact Measurable.comp_aemeasurable (Kernel.measurable_coe _ hs) hX
-  · refine ne_of_lt ?_
-    calc
-      ∫⁻ a, condDistrib Y X μ (X a) s ∂μ <= ∫⁻ _, 1 ∂μ := lintegral_mono fun a => prob_le_one
-      _ = μ univ := lintegral_one
-      _ < ∞ := measure_lt_top _ _
-
-中文:
-定理 integrable_to实数_condDistrib
-  条件: (hX : 几乎处处可测 X μ) (hs : 可测集 s)
-  证明: by
-  refine integrable_toReal_of_lintegral_ne_top ?_ ?_
-  · exact Measurable.comp_aemeasurable (Kernel.measurable_coe _ hs) hX
-  · refine ne_of_lt ?_
-    calc
-      ∫⁻ a, condDistrib Y X μ (X a) s ∂μ <= ∫⁻ _, 1 ∂μ := lintegral_mono fun a => prob_le_one
-      _ = μ univ := lintegral_one
-      _ < ∞ := measure_lt_top _ _
-
-Depends on / 依赖: Kernel, Kernel.measurable_coe, Measurable, Measurable.comp_aemeasurable, comp_aemeasurable, condDistrib, integrable_toReal_of_lintegral_ne_top, lintegral_mono, lintegral_one, measurable_coe, measure_lt_top, ne_of_lt, prob_le_one
+/-
+**ProbabilityTheory.integrable_toReal_condDistrib** 是 Mathlib 中的一个定理，位于命名空间 `Pro
+babilityTheory`。
+形式化陈述：integrable_toReal_condDistrib (hX : AEMeasurable X μ) (hs : MeasurableSet 
+s) : Integrable (fun a => (condDistrib Y X μ (X a)).real s) μ
+参数：hX : AEMeasurable X μ；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.integrable_toReal_of_lintegral_ne_top`：integrable_toReal_o
+f_lintegral_ne_top {f : α -> Real>=0∞} (hfm : AEMeasurable f μ) (hfi : ∫⁻ x, f x
+ ∂μ != ∞) : Integrable (fun x => (f x).to…
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `ProbabilityTheory.Kernel.measurable_coe`：∀ {α : Type u_1} {β : Type u_2}
+ {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (κ : ProbabilityTheory.Kernel
+ α β)   {s : Set β}, Measurab…
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
+· 使用定理 `MeasureTheory.lintegral_mono`：lintegral_mono ⦃f g : α -> Real>=0∞⦄ (hfg 
+: f <= g) : ∫⁻ a, f a ∂μ <= ∫⁻ a, g a ∂μ
+· 使用引理 `MeasureTheory.prob_le_one`：prob_le_one {μ : Measure α} [IsZeroOrProbabil
+ityMeasure μ] {s : Set α} : μ s <= 1
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.isZeroOrProbabilityMeasure`：∀ {α 
+: Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ 
+: ProbabilityTheory.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.instIsMarkovKernelCondDistrib`：∀ {α : Type u_1} {β : T
+ype u_2} {Ω : Type u_3} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace 
+Ω]   [inst_2 : Nonempty Ω] {mα : Meas…
+· 使用定理 `MeasureTheory.lintegral_one`：lintegral_one : ∫⁻ _, (1 : Real>=0∞) ∂μ = μ
+ univ
+· 使用定理 `MeasureTheory.measure_lt_top`：measure_lt_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s < ∞
 -/
 theorem integrable_toReal_condDistrib (hX : AEMeasurable X μ) (hs : MeasurableSet s) :
     Integrable (fun a => (condDistrib Y X μ (X a)).real s) μ := by
@@ -772,167 +971,79 @@ theorem integrable_toReal_condDistrib (hX : AEMeasurable X μ) (hs : MeasurableS
   · exact Measurable.comp_aemeasurable (Kernel.measurable_coe _ hs) hX
   · refine ne_of_lt ?_
     calc
-      ∫⁻ a, condDistrib Y X μ (X a) s ∂μ <= ∫⁻ _, 1 ∂μ := lintegral_mono fun a => prob_le_one
+      ∫⁻ a, condDistrib Y X μ (X a) s ∂μ ≤ ∫⁻ _, 1 ∂μ := lintegral_mono fun a => prob_le_one
       _ = μ univ := lintegral_one
       _ < ∞ := measure_lt_top _ _
-
-/--
-theorem `_root_.MeasureTheory.Integrable.condDistrib_ae_map` / 定理 `_root_.MeasureTheory.Integrable.condDistrib_ae_map`
-
-English:
-theorem _root_.MeasureTheory.Integrable.condDistrib_ae_map
-  proof: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.condKernel_ae
-
-中文:
-定理 _root_.测度论.可积.condDistrib_ae_map
-  证明: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.condKernel_ae
-
-Depends on / 依赖: Measure, Measure.fst_map_prodMk, condDistrib, condKernel_ae, hf_int, hf_int.condKernel_ae
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.condDistrib_ae_map** 是 Mathl
+ib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.condDistrib_ae_map
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
-    forallᵐ b ∂μ.map X, Integrable (fun ω => f (b, ω)) (condDistrib Y X μ b) := by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.condKernel_ae
-
-/--
-theorem `_root_.MeasureTheory.Integrable.condDistrib_ae` / 定理 `_root_.MeasureTheory.Integrable.condDistrib_ae`
-
-English:
-theorem _root_.MeasureTheory.Integrable.condDistrib_ae
-  statement: (hX : AEMeasurable X μ)
-  proof: ae_of_ae_map hX (hf_int.condDistrib_ae_map hY)
-
-中文:
-定理 _root_.测度论.可积.condDistrib_ae
-  结论: (hX : 几乎处处可测 X μ)
-  证明: ae_of_ae_map hX (hf_int.condDistrib_ae_map hY)
-
-Depends on / 依赖: ae_of_ae_map, condDistrib_ae_map, hf_int, hf_int.condDistrib_ae_map
+    ∀ᵐ b ∂μ.map X, Integrable (fun ω => f (b, ω)) (condDistrib Y X μ b) := by
+  rw [condDistrib, ← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.condKernel_ae
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.condDistrib_ae** 是 Mathlib 中
+的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.condDistrib_ae (hX : AEMeasurable X μ)
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
-    forallᵐ a ∂μ, Integrable (fun ω => f (X a, ω)) (condDistrib Y X μ (X a)) :=
+    ∀ᵐ a ∂μ, Integrable (fun ω => f (X a, ω)) (condDistrib Y X μ (X a)) :=
   ae_of_ae_map hX (hf_int.condDistrib_ae_map hY)
-
-/--
-theorem `_root_.MeasureTheory.Integrable.integral_norm_condDistrib_map` / 定理 `_root_.MeasureTheory.Integrable.integral_norm_condDistrib_map`
-
-English:
-theorem _root_.MeasureTheory.Integrable.integral_norm_condDistrib_map
-  proof: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.integral_norm_condKernel
-
-中文:
-定理 _root_.测度论.可积.integral_norm_condDistrib_map
-  证明: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.integral_norm_condKernel
-
-Depends on / 依赖: Measure, Measure.fst_map_prodMk, condDistrib, hf_int, hf_int.integral_norm_condKernel, integral_norm_condKernel
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.integral_norm_condDistrib_ma
+p** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.integral_norm_condDistrib_map
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
     Integrable (fun x => ∫ y, ‖f (x, y)‖ ∂condDistrib Y X μ x) (μ.map X) := by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.integral_norm_condKernel
-
-/--
-theorem `_root_.MeasureTheory.Integrable.integral_norm_condDistrib` / 定理 `_root_.MeasureTheory.Integrable.integral_norm_condDistrib`
-
-English:
-theorem _root_.MeasureTheory.Integrable.integral_norm_condDistrib
-  statement: (hX : AEMeasurable X μ)
-  proof: (hf_int.integral_norm_condDistrib_map hY).comp_aemeasurable hX
-
-中文:
-定理 _root_.测度论.可积.integral_norm_condDistrib
-  结论: (hX : 几乎处处可测 X μ)
-  证明: (hf_int.integral_norm_condDistrib_map hY).comp_aemeasurable hX
-
-Depends on / 依赖: comp_aemeasurable, hf_int, hf_int.integral_norm_condDistrib_map, integral_norm_condDistrib_map
+  rw [condDistrib, ← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.integral_norm_condKernel
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.integral_norm_condDistrib** 
+是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.integral_norm_condDistrib (hX : AEMeasurable X μ)
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
     Integrable (fun a => ∫ y, ‖f (X a, y)‖ ∂condDistrib Y X μ (X a)) μ :=
   (hf_int.integral_norm_condDistrib_map hY).comp_aemeasurable hX
 
-variable [NormedSpace Real F]
-
-/--
-theorem `_root_.MeasureTheory.Integrable.norm_integral_condDistrib_map` / 定理 `_root_.MeasureTheory.Integrable.norm_integral_condDistrib_map`
-
-English:
-theorem _root_.MeasureTheory.Integrable.norm_integral_condDistrib_map
-  proof: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.norm_integral_condKernel
-
-中文:
-定理 _root_.测度论.可积.norm_integral_condDistrib_map
-  证明: by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.norm_integral_condKernel
-
-Depends on / 依赖: Measure, Measure.fst_map_prodMk, condDistrib, hf_int, hf_int.norm_integral_condKernel, norm_integral_condKernel
+variable [NormedSpace ℝ F]
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.norm_integral_condDistrib_ma
+p** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.norm_integral_condDistrib_map
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
     Integrable (fun x => ‖∫ y, f (x, y) ∂condDistrib Y X μ x‖) (μ.map X) := by
-  rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.norm_integral_condKernel
-
-/--
-theorem `_root_.MeasureTheory.Integrable.norm_integral_condDistrib` / 定理 `_root_.MeasureTheory.Integrable.norm_integral_condDistrib`
-
-English:
-theorem _root_.MeasureTheory.Integrable.norm_integral_condDistrib
-  statement: (hX : AEMeasurable X μ)
-  proof: (hf_int.norm_integral_condDistrib_map hY).comp_aemeasurable hX
-
-中文:
-定理 _root_.测度论.可积.norm_integral_condDistrib
-  结论: (hX : 几乎处处可测 X μ)
-  证明: (hf_int.norm_integral_condDistrib_map hY).comp_aemeasurable hX
-
-Depends on / 依赖: comp_aemeasurable, hf_int, hf_int.norm_integral_condDistrib_map, norm_integral_condDistrib_map
+  rw [condDistrib, ← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.norm_integral_condKernel
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.norm_integral_condDistrib** 
+是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.norm_integral_condDistrib (hX : AEMeasurable X μ)
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
     Integrable (fun a => ‖∫ y, f (X a, y) ∂condDistrib Y X μ (X a)‖) μ :=
   (hf_int.norm_integral_condDistrib_map hY).comp_aemeasurable hX
-
-/--
-theorem `_root_.MeasureTheory.Integrable.integral_condDistrib_map` / 定理 `_root_.MeasureTheory.Integrable.integral_condDistrib_map`
-
-English:
-theorem _root_.MeasureTheory.Integrable.integral_condDistrib_map
-  proof: (integrable_norm_iff (hf_int.1.integral_condDistrib_map hY)).mp
-    (hf_int.norm_integral_condDistrib_map hY)
-
-中文:
-定理 _root_.测度论.可积.integral_condDistrib_map
-  证明: (integrable_norm_iff (hf_int.1.integral_condDistrib_map hY)).mp
-    (hf_int.norm_integral_condDistrib_map hY)
-
-Depends on / 依赖: hf_int, hf_int.norm_integral_condDistrib_map, integrable_norm_iff, integral_condDistrib_map, norm_integral_condDistrib_map
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.integral_condDistrib_map** 是
+ Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.integral_condDistrib_map
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
     Integrable (fun x => ∫ y, f (x, y) ∂condDistrib Y X μ x) (μ.map X) :=
   (integrable_norm_iff (hf_int.1.integral_condDistrib_map hY)).mp
     (hf_int.norm_integral_condDistrib_map hY)
-
-/--
-theorem `_root_.MeasureTheory.Integrable.integral_condDistrib` / 定理 `_root_.MeasureTheory.Integrable.integral_condDistrib`
-
-English:
-theorem _root_.MeasureTheory.Integrable.integral_condDistrib
-  statement: (hX : AEMeasurable X μ)
-  proof: (hf_int.integral_condDistrib_map hY).comp_aemeasurable hX
-
-中文:
-定理 _root_.测度论.可积.integral_condDistrib
-  结论: (hX : 几乎处处可测 X μ)
-  证明: (hf_int.integral_condDistrib_map hY).comp_aemeasurable hX
-
-Depends on / 依赖: comp_aemeasurable, hf_int, hf_int.integral_condDistrib_map, integral_condDistrib_map
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.integral_condDistrib** 是 Mat
+hlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.integral_condDistrib (hX : AEMeasurable X μ)
     (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
@@ -941,83 +1052,165 @@ theorem _root_.MeasureTheory.Integrable.integral_condDistrib (hX : AEMeasurable 
 
 end Integrability
 
-/--
-theorem `setLIntegral_preimage_condDistrib` / 定理 `setLIntegral_preimage_condDistrib`
-
-English:
-theorem setLIntegral_preimage_condDistrib
-  statement: (hX : Measurable X) (hY : AEMeasurable Y μ)
-  proof: by
-  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preimage_prod]
-
-中文:
-定理 setL整数egral_preimage_condDistrib
-  结论: (hX : 可测 X) (hY : 几乎处处可测 Y μ)
-  证明: by
-  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preimage_prod]
-
-Depends on / 依赖: Kernel, Kernel.measurable_coe, Measure, Measure.fst_map_prodMk, Measure.map_apply_of_aemeasurable, Measure.restrict_map, Measure.setLIntegral_condKernel_eq_measure_prod, aemeasurable, condDistrib, hX.aemeasurable.prodMk, ht.prod, lintegral_map, map_apply_of_aemeasurable, measurable_coe, mk_preimage_prod, prodMk, restrict_map, setLIntegral_condKernel_eq_measure_prod
+/-
+**ProbabilityTheory.setLIntegral_preimage_condDistrib** 是 Mathlib 中的一个定理，位于命名空间 
+`ProbabilityTheory`。
+形式化陈述：setLIntegral_preimage_condDistrib (hX : Measurable X) (hY : AEMeasurable Y
+ μ) (hs : MeasurableSet s) (ht : MeasurableSet t) : ∫⁻ a in X ⁻¹' t, condDistrib
+ Y X μ (X a) s ∂μ = μ (X ⁻¹' t inter Y ⁻¹' s)
+参数：hX : Measurable X；hY : AEMeasurable Y μ；hs : MeasurableSet s；ht : MeasurableS
+et t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.lintegral_map`：lintegral_map {f : β -> Real>=0∞} {g : α ->
+ β} (hf : Measurable f) (hg : Measurable g) : ∫⁻ a, f a ∂map g μ = ∫⁻ a, f (g a)
+ ∂μ
+· 使用定理 `ProbabilityTheory.Kernel.measurable_coe`：∀ {α : Type u_1} {β : Type u_2}
+ {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (κ : ProbabilityTheory.Kernel
+ α β)   {s : Set β}, Measurab…
+· 使用定理 `ProbabilityTheory.condDistrib_def`：∀ {α : Type u_5} {β : Type u_6} {Ω : 
+Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [inst_2 :
+ Nonempty Ω] {x : Measu…
+· 使用定理 `MeasureTheory.Measure.restrict_map`：restrict_map {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : (μ.map f).restrict s = (μ.restric
+t <| f ⁻¹' s).map f
+· 使用定理 `MeasureTheory.Measure.fst_map_prodMk₀`：fst_map_prodMk₀ {X : α -> β} {Y :
+ α -> γ} {μ : Measure α} (hY : AEMeasurable Y μ) : (μ.map fun a => (X a, Y a)).f
+st = μ.map X
+· 使用引理 `MeasureTheory.Measure.setLIntegral_condKernel_eq_measure_prod`：setLInteg
+ral_condKernel_eq_measure_prod {s : Set β} (hs : MeasurableSet s) {t : Set Ω} (h
+t : MeasurableSet t) : ∫⁻ b in s, ρ.condKernel b t …
+· 使用定理 `MeasureTheory.Measure.map_apply_of_aemeasurable`：map_apply_of_aemeasurab
+le (hf : AEMeasurable f μ) {s : Set β} (hs : MeasurableSet s) : μ.map f s = μ (f
+ ⁻¹' s)
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `MeasurableSet.prod`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSpace
+ α} {mβ : MeasurableSpace β} {s : Set α} {t : Set β},   MeasurableSet s → Measur
+ableSet …
+· 使用定理 `Set.mk_preimage_prod`：mk_preimage_prod (f : γ -> α) (g : γ -> β) : (fun 
+x => (f x, g x)) ⁻¹' s ×ˢ t = f ⁻¹' s inter g ⁻¹' t
 -/
 theorem setLIntegral_preimage_condDistrib (hX : Measurable X) (hY : AEMeasurable Y μ)
     (hs : MeasurableSet s) (ht : MeasurableSet t) :
-    ∫⁻ a in X ⁻¹' t, condDistrib Y X μ (X a) s ∂μ = μ (X ⁻¹' t inter Y ⁻¹' s) := by
-  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preimage_prod]
-
-/--
-theorem `setLIntegral_condDistrib_of_measurableSet` / 定理 `setLIntegral_condDistrib_of_measurableSet`
-
-English:
-theorem setLIntegral_condDistrib_of_measurableSet
-  statement: (hX : Measurable X) (hY : AEMeasurable Y μ)
-  proof: by
-  obtain ⟨t', ht', rfl⟩ := ht
-  rw [setLIntegral_preimage_condDistrib hX hY hs ht']
-
-中文:
-定理 setL整数egral_condDistrib_of_measurableSet
-  结论: (hX : 可测 X) (hY : 几乎处处可测 Y μ)
-  证明: by
-  obtain ⟨t', ht', rfl⟩ := ht
-  rw [setLIntegral_preimage_condDistrib hX hY hs ht']
-
-Depends on / 依赖: setLIntegral_preimage_condDistrib
+    ∫⁻ a in X ⁻¹' t, condDistrib Y X μ (X a) s ∂μ = μ (X ⁻¹' t ∩ Y ⁻¹' s) := by
+  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX, condDistrib, ← Measure.restrict_map hX ht,
+    ← Measure.fst_map_prodMk₀ hY, Measure.setLIntegral_condKernel_eq_measure_prod ht hs,
+    Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs), mk_preimage_prod]
+/-
+**ProbabilityTheory.setLIntegral_condDistrib_of_measurableSet** 是 Mathlib 中的一个定理
+，位于命名空间 `ProbabilityTheory`。
+形式化陈述：setLIntegral_condDistrib_of_measurableSet (hX : Measurable X) (hY : AEMeas
+urable Y μ) (hs : MeasurableSet s) {t : Set α} (ht : MeasurableSet[mβ.comap X] t
+) : ∫⁻ a in t, condDistrib Y X μ (X a) s ∂μ = μ (t inter Y ⁻¹' s)
+参数：hX : Measurable X；hY : AEMeasurable Y μ；hs : MeasurableSet s；ht : MeasurableS
+et[mβ.comap X] t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.setLIntegral_preimage_condDistrib`：setLIntegral_preima
+ge_condDistrib (hX : Measurable X) (hY : AEMeasurable Y μ) (hs : MeasurableSet s
+) (ht : MeasurableSet t) : ∫⁻ a in X ⁻¹' …
 -/
 theorem setLIntegral_condDistrib_of_measurableSet (hX : Measurable X) (hY : AEMeasurable Y μ)
     (hs : MeasurableSet s) {t : Set α} (ht : MeasurableSet[mβ.comap X] t) :
-    ∫⁻ a in t, condDistrib Y X μ (X a) s ∂μ = μ (t inter Y ⁻¹' s) := by
+    ∫⁻ a in t, condDistrib Y X μ (X a) s ∂μ = μ (t ∩ Y ⁻¹' s) := by
   obtain ⟨t', ht', rfl⟩ := ht
   rw [setLIntegral_preimage_condDistrib hX hY hs ht']
 
-/--
-theorem `condDistrib_ae_eq_condExp` / 定理 `condDistrib_ae_eq_condExp`
+/-- For almost every `a : α`, the `condDistrib Y X μ` kernel applied to `X a` and a measurable set
+`s` is equal to the conditional expectation of the indicator of `Y ⁻¹' s`. -/
+/-
+**ProbabilityTheory.condDistrib_ae_eq_condExp** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory`。
+形式化陈述：condDistrib_ae_eq_condExp (hX : Measurable X) (hY : Measurable Y) (hs : Me
+asurableSet s) : (fun a => (condDistrib Y X μ (X a)).real s) =ᵐ[μ] μ⟦Y ⁻¹' s | m
+β.comap X⟧
+参数：hX : Measurable X；hY : Measurable Y；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.ae_eq_condExp_of_forall_setIntegral_eq`：ae_eq_condExp_of_f
+orall_setIntegral_eq (hm : m <= m₀) [SigmaFinite (μ.trim hm)] {f g : α -> E} (hf
+ : Integrable f μ) (hg_int_finite : forall…
+· 使用定理 `Measurable.comap_le`：∀ {α : Type u_1} {β : Type u_2} {m₁ : MeasurableSpa
+ce α} {m₂ : MeasurableSpace β} {f : α → β},   Measurable f → MeasurableSpace.com
+ap f m₂ ≤…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.Integrable.indicator`：∀ {α : Type u_1} {ε' : Type u_4} {mα
+ : MeasurableSpace α} {s : Set α} {μ : MeasureTheory.Measure α}   [inst : Topolo
+gicalSpace ε'] [inst_1 :…
+· 使用定理 `MeasureTheory.integrable_const`：integrable_const [IsFiniteMeasure μ] (c 
+: β) : Integrable (fun _ : α => c) μ
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用定理 `ProbabilityTheory.integrable_toReal_condDistrib`：integrable_toReal_condD
+istrib (hX : AEMeasurable X μ) (hs : MeasurableSet s) : Integrable (fun a => (co
+ndDistrib Y X μ (X a)).real s) μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_toReal`：integral_toReal {f : α -> Real>=0∞} (hfm 
+: AEMeasurable f μ) (hf : forallᵐ x ∂μ, f x < ∞) : ∫ a, (f a).toReal ∂μ = (∫⁻ a,
+ f a ∂μ).toReal
+· 使用定理 `Measurable.mono`：Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : 
+MeasurableSpace β} {f : α -> β} (hf : @Measurable α β ma mb f) (ha : ma <= ma') 
+(hb :…
+· 使用定理 `ProbabilityTheory.measurable_condDistrib`：measurable_condDistrib (hs : M
+easurableSet s) : Measurable[mβ.comap X] fun a => condDistrib Y X μ (X a) s
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.measure_lt_top`：measure_lt_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s < ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.isFiniteKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.instIsMarkovKernelCondDistrib`：∀ {α : Type u_1} {β : T
+ype u_2} {Ω : Type u_3} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace 
+Ω]   [inst_2 : Nonempty Ω] {mα : Meas…
+· 使用定理 `MeasureTheory.integral_indicator_const`：integral_indicator_const [Comple
+teSpace E] (e : E) ⦃s : Set X⦄ (s_meas : MeasurableSet s) : ∫ x : X, s.indicator
+ (fun _ : X => e) x ∂μ = μ.r…
+· 使用定理 `MeasureTheory.measureReal_restrict_apply`：measureReal_restrict_apply (ht
+ : MeasurableSet t) : (μ.restrict s).real t = μ.real (t inter s)
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `ProbabilityTheory.setLIntegral_condDistrib_of_measurableSet`：setLIntegra
+l_condDistrib_of_measurableSet (hX : Measurable X) (hY : AEMeasurable Y μ) (hs :
+ MeasurableSet s) {t : Set α} (ht : MeasurableSet…
+· 使用定理 `MeasureTheory.measureReal_def`：measureReal_def {α : Type*} {m : Measurab
+leSpace α} (μ : Measure α) (s : Set α) : μ.real s = (μ s).toReal
+· 使用定理 `Measurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 :…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+（共 32 条，此处仅展示前 30 条）
 
-English:
-theorem condDistrib_ae_eq_condExp
-  given: (hX : Measurable X) (hY : Measurable Y) (hs : MeasurableSet s)
-  proof: by
-  refine ae_eq_condExp_of_forall_setIntegral_eq hX.comap_le ?_ ?_ ?_ ?_
-  · exact (integrable_const _).indicator (hY hs)
-  · exact fun t _ _ => (integrable_toReal_condDistrib hX.aemeasurable hs).integrableOn
-  · intro t ht _
-    simp_rw [measureReal_def]
-    rw [integral_toReal ((measurable_condDistrib hs).mono hX.comap_le le_rfl).aemeasurable
-      (Eventually.of_forall fun ω => measure_lt_top (condDistrib Y X μ (X ω)) _)]; rw [integral_indicator_const _ (hY hs)]; rw [measureReal_restrict_apply (hY hs)]; rw [smul_eq_mul]; rw [mul_one]; rw [inter_comm]; rw [setLIntegral_condDistrib_of_measurableSet hX hY.aemeasurable hs ht]; rw [measureReal_def]
-  · exact (measurable_condDistrib hs).ennreal_toReal.aestronglyMeasurable
-
-中文:
-定理 condDistrib_ae_eq_condExp
-  条件: (hX : 可测 X) (hY : 可测 Y) (hs : 可测集 s)
-  证明: by
-  refine ae_eq_condExp_of_forall_setIntegral_eq hX.comap_le ?_ ?_ ?_ ?_
-  · exact (integrable_const _).indicator (hY hs)
-  · exact fun t _ _ => (integrable_toReal_condDistrib hX.aemeasurable hs).integrableOn
-  · intro t ht _
-    simp_rw [measureReal_def]
-    rw [integral_toReal ((measurable_condDistrib hs).mono hX.comap_le le_rfl).aemeasurable
-      (Eventually.of_forall fun ω => measure_lt_top (condDistrib Y X μ (X ω)) _)]; rw [integral_indicator_const _ (hY hs)]; rw [measureReal_restrict_apply (hY hs)]; rw [smul_eq_mul]; rw [mul_one]; rw [inter_comm]; rw [setLIntegral_condDistrib_of_measurableSet hX hY.aemeasurable hs ht]; rw [measureReal_def]
-  · exact (measurable_condDistrib hs).ennreal_toReal.aestronglyMeasurable
-
-Depends on / 依赖: Eventually, Eventually.of_forall, ae_eq_condExp_of_forall_setIntegral_eq, aemeasurable, comap_le, condDistrib, hX.aemeasurable, hX.comap_le, indicator, integrableOn, integrable_const, integrable_toReal_condDistrib, integral_indicator_const, integral_toReal, le_rfl, measurable_condDistrib, measureReal_def, measureReal_restrict_apply, measure_lt_top, of_forall
+--- 原说明 ---
+For almost every `a : α`, the `condDistrib Y X μ` kernel applied to `X a` and a 
+measurable set
+`s` is equal to the conditional expectation of the indicator of `Y ⁻¹' s`.
 -/
 theorem condDistrib_ae_eq_condExp (hX : Measurable X) (hY : Measurable Y) (hs : MeasurableSet s) :
     (fun a => (condDistrib Y X μ (X a)).real s) =ᵐ[μ] μ⟦Y ⁻¹' s | mβ.comap X⟧ := by
@@ -1027,53 +1220,102 @@ theorem condDistrib_ae_eq_condExp (hX : Measurable X) (hY : Measurable Y) (hs : 
   · intro t ht _
     simp_rw [measureReal_def]
     rw [integral_toReal ((measurable_condDistrib hs).mono hX.comap_le le_rfl).aemeasurable
-      (Eventually.of_forall fun ω => measure_lt_top (condDistrib Y X μ (X ω)) _)]; rw [integral_indicator_const _ (hY hs)]; rw [measureReal_restrict_apply (hY hs)]; rw [smul_eq_mul]; rw [mul_one]; rw [inter_comm]; rw [setLIntegral_condDistrib_of_measurableSet hX hY.aemeasurable hs ht]; rw [measureReal_def]
+      (Eventually.of_forall fun ω => measure_lt_top (condDistrib Y X μ (X ω)) _),
+      integral_indicator_const _ (hY hs), measureReal_restrict_apply (hY hs), smul_eq_mul, mul_one,
+      inter_comm, setLIntegral_condDistrib_of_measurableSet hX hY.aemeasurable hs ht,
+      measureReal_def]
   · exact (measurable_condDistrib hs).ennreal_toReal.aestronglyMeasurable
 
-/--
-theorem `condExp_prod_ae_eq_integral_condDistrib'` / 定理 `condExp_prod_ae_eq_integral_condDistrib'`
+/-- The conditional expectation of a function `f` of the product `(X, Y)` is almost everywhere equal
+to the integral of `y ↦ f(X, y)` against the `condDistrib` kernel. -/
+/-
+**ProbabilityTheory.condExp_prod_ae_eq_integral_condDistrib'** 是 Mathlib 中的一个定理，
+位于命名空间 `ProbabilityTheory`。
+形式化陈述：condExp_prod_ae_eq_integral_condDistrib' [NormedSpace Real F] [CompleteSpa
+ce F] (hX : Measurable X) (hY : AEMeasurable Y μ) (hf_int : Integrable f (μ.map 
+fun a => (X a, Y a))) : μ[fun a => f (X a, Y a) | mβ.comap X] =ᵐ[μ] fun a => ∫ y
+, f (X a, y) ∂condDistrib Y X μ (X a)
+参数：hX : Measurable X；hY : AEMeasurable Y μ；hf_int : Integrable f (μ.map fun a =>
+ (X a, Y a))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.integrable_map_measure`：integrable_map_measure {f : α -> α
+'} {g : α' -> ε} (hg : AEStronglyMeasurable g (Measure.map f μ)) (hf : AEMeasura
+ble f μ) : Integrable g (M…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_eq_condExp_of_forall_setIntegral_eq`：ae_eq_condExp_of_f
+orall_setIntegral_eq (hm : m <= m₀) [SigmaFinite (μ.trim hm)] {f g : α -> E} (hf
+ : Integrable f μ) (hg_int_finite : forall…
+· 使用定理 `Measurable.comap_le`：∀ {α : Type u_1} {β : Type u_2} {m₁ : MeasurableSpa
+ce α} {m₂ : MeasurableSpace β} {f : α → β},   Measurable f → MeasurableSpace.com
+ap f m₂ ≤…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用定理 `MeasureTheory.Integrable.integral_condDistrib`：∀ {α : Type u_1} {β : Typ
+e u_2} {Ω : Type u_3} {F : Type u_4} [inst : MeasurableSpace Ω] [inst_1 : Standa
+rdBorelSpace Ω]   [inst_2 : Nonempt…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_map`：integral_map {β} [MeasurableSpace β] {φ : α 
+-> β} (hφ : AEMeasurable φ μ) {f : β -> G} (hfm : AEStronglyMeasurable f (Measur
+e.map φ μ)) : ∫ …
+· 使用定理 `MeasureTheory.Measure.restrict_map`：restrict_map {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : (μ.map f).restrict s = (μ.restric
+t <| f ⁻¹' s).map f
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.restrict`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.M
+easure α}   {f : α → β},   Measur…
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map`：∀ {α : Type
+ u_1} {β : Type u_2} {Ω : Type u_3} {F : Type u_4} [inst : MeasurableSpace Ω] [i
+nst_1 : StandardBorelSpace Ω]   [inst_2 : Nonempt…
+· 使用定理 `MeasureTheory.Measure.fst_map_prodMk₀`：fst_map_prodMk₀ {X : α -> β} {Y :
+ α -> γ} {μ : Measure α} (hY : AEMeasurable Y μ) : (μ.map fun a => (X a, Y a)).f
+st = μ.map X
+· 使用定理 `ProbabilityTheory.condDistrib_def`：∀ {α : Type u_5} {β : Type u_6} {Ω : 
+Type u_7} [inst : MeasurableSpace Ω] [inst_1 : StandardBorelSpace Ω]   [inst_2 :
+ Nonempty Ω] {x : Measu…
+· 使用定理 `MeasureTheory.Measure.isFiniteMeasure_map`：∀ {α : Type u_1} {β : Type u_
+2} [mβ : MeasurableSpace β] {m : MeasurableSpace α} (μ : MeasureTheory.Measure α
+)   [MeasureTheory.IsFiniteMeas…
+· 使用引理 `MeasureTheory.Measure.setIntegral_condKernel_univ_right`：setIntegral_con
+dKernel_univ_right {s : Set β} (hs : MeasurableSet s) (hf : IntegrableOn f (s ×ˢ
+ Set.univ) ρ) : ∫ b in s, ∫ ω, f (b, ω) ∂(ρ.c…
+· 使用定理 `MeasureTheory.setIntegral_map`：setIntegral_map {Y} [MeasurableSpace Y] {
+g : X -> Y} {f : Y -> E} {s : Set Y} (hs : MeasurableSet s) (hf : AEStronglyMeas
+urable f (Measure.m…
+· 使用定理 `MeasurableSet.prod`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSpace
+ α} {mβ : MeasurableSpace β} {s : Set α} {t : Set β},   MeasurableSet s → Measur
+ableSet …
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `Set.mk_preimage_prod`：mk_preimage_prod (f : γ -> α) (g : γ -> β) : (fun 
+x => (f x, g x)) ⁻¹' s ×ˢ t = f ⁻¹' s inter g ⁻¹' t
+· 使用定理 `Set.preimage_univ`：preimage_univ : f ⁻¹' univ = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `ProbabilityTheory.aestronglyMeasurable_integral_condDistrib`：aestronglyM
+easurable_integral_condDistrib (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ) (
+hf : AEStronglyMeasurable f (μ.map fun a => (X a,…
 
-English:
-theorem condExp_prod_ae_eq_integral_condDistrib'
-  statement: [NormedSpace Real F] [CompleteSpace F]
-  proof: by
-  have hf_int' : Integrable (fun a => f (X a, Y a)) μ :=
-    (integrable_map_measure hf_int.1 (hX.aemeasurable.prodMk hY)).mp hf_int
-  refine (ae_eq_condExp_of_forall_setIntegral_eq hX.comap_le hf_int' (fun s _ _ => ?_) ?_ ?_).symm
-  · exact (hf_int.integral_condDistrib hX.aemeasurable hY).integrableOn
-  · rintro s ⟨t, ht, rfl⟩ _
-    change ∫ a in X ⁻¹' t, ((fun x' => ∫ y, f (x', y) ∂(condDistrib Y X μ) x') ∘ X) a ∂μ =
-      ∫ a in X ⁻¹' t, f (X a, Y a) ∂μ
-    simp only [Function.comp_apply]
-    rw [← integral_map hX.aemeasurable (f := fun x' => ∫ y]; rw [f (x']; rw [y) ∂(condDistrib Y X μ) x')]
-    swap
-    · rw [← Measure.restrict_map hX ht]
-      exact (hf_int.1.integral_condDistrib_map hY).restrict
-    rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; rw [Measure.setIntegral_condKernel_univ_right ht hf_int.integrableOn]; rw [setIntegral_map (ht.prod MeasurableSet.univ) hf_int.1 (hX.aemeasurable.prodMk hY)]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [inter_univ]
-  · exact aestronglyMeasurable_integral_condDistrib hX.aemeasurable hY hf_int.1
-
-中文:
-定理 condExp_prod_ae_eq_integral_condDistrib'
-  结论: [赋范空间 实数 F] [完备空间 F]
-  证明: by
-  have hf_int' : Integrable (fun a => f (X a, Y a)) μ :=
-    (integrable_map_measure hf_int.1 (hX.aemeasurable.prodMk hY)).mp hf_int
-  refine (ae_eq_condExp_of_forall_setIntegral_eq hX.comap_le hf_int' (fun s _ _ => ?_) ?_ ?_).symm
-  · exact (hf_int.integral_condDistrib hX.aemeasurable hY).integrableOn
-  · rintro s ⟨t, ht, rfl⟩ _
-    change ∫ a in X ⁻¹' t, ((fun x' => ∫ y, f (x', y) ∂(condDistrib Y X μ) x') ∘ X) a ∂μ =
-      ∫ a in X ⁻¹' t, f (X a, Y a) ∂μ
-    simp only [Function.comp_apply]
-    rw [← integral_map hX.aemeasurable (f := fun x' => ∫ y]; rw [f (x']; rw [y) ∂(condDistrib Y X μ) x')]
-    swap
-    · rw [← Measure.restrict_map hX ht]
-      exact (hf_int.1.integral_condDistrib_map hY).restrict
-    rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; rw [Measure.setIntegral_condKernel_univ_right ht hf_int.integrableOn]; rw [setIntegral_map (ht.prod MeasurableSet.univ) hf_int.1 (hX.aemeasurable.prodMk hY)]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [inter_univ]
-  · exact aestronglyMeasurable_integral_condDistrib hX.aemeasurable hY hf_int.1
-
-Depends on / 依赖: Function, Function.comp_apply, Integrable, ae_eq_condExp_of_forall_setIntegral_eq, aemeasurable, comap_le, comp_apply, condDistrib, hX.aeme, hX.aemeasurable, hX.aemeasurable.prodMk, hX.comap_le, hf_int, hf_int.integral_condDistrib, integrableOn, integrable_map_measure, integral_condDistrib, integral_map, prodMk
+--- 原说明 ---
+The conditional expectation of a function `f` of the product `(X, Y)` is almost 
+everywhere equal
+to the integral of `y ↦ f(X, y)` against the `condDistrib` kernel.
 -/
-theorem condExp_prod_ae_eq_integral_condDistrib' [NormedSpace Real F] [CompleteSpace F]
+theorem condExp_prod_ae_eq_integral_condDistrib' [NormedSpace ℝ F] [CompleteSpace F]
     (hX : Measurable X) (hY : AEMeasurable Y μ)
     (hf_int : Integrable f (μ.map fun a => (X a, Y a))) :
     μ[fun a => f (X a, Y a) | mβ.comap X] =ᵐ[μ]
@@ -1086,33 +1328,51 @@ theorem condExp_prod_ae_eq_integral_condDistrib' [NormedSpace Real F] [CompleteS
     change ∫ a in X ⁻¹' t, ((fun x' => ∫ y, f (x', y) ∂(condDistrib Y X μ) x') ∘ X) a ∂μ =
       ∫ a in X ⁻¹' t, f (X a, Y a) ∂μ
     simp only [Function.comp_apply]
-    rw [← integral_map hX.aemeasurable (f := fun x' => ∫ y]; rw [f (x']; rw [y) ∂(condDistrib Y X μ) x')]
+    rw [← integral_map hX.aemeasurable (f := fun x' => ∫ y, f (x', y) ∂(condDistrib Y X μ) x')]
     swap
     · rw [← Measure.restrict_map hX ht]
       exact (hf_int.1.integral_condDistrib_map hY).restrict
-    rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; rw [Measure.setIntegral_condKernel_univ_right ht hf_int.integrableOn]; rw [setIntegral_map (ht.prod MeasurableSet.univ) hf_int.1 (hX.aemeasurable.prodMk hY)]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [inter_univ]
+    rw [← Measure.restrict_map hX ht, ← Measure.fst_map_prodMk₀ hY, condDistrib,
+      Measure.setIntegral_condKernel_univ_right ht hf_int.integrableOn,
+      setIntegral_map (ht.prod MeasurableSet.univ) hf_int.1 (hX.aemeasurable.prodMk hY),
+      mk_preimage_prod, preimage_univ, inter_univ]
   · exact aestronglyMeasurable_integral_condDistrib hX.aemeasurable hY hf_int.1
 
-/--
-theorem `condExp_prod_ae_eq_integral_condDistrib₀` / 定理 `condExp_prod_ae_eq_integral_condDistrib₀`
+/-- The conditional expectation of a function `f` of the product `(X, Y)` is almost everywhere equal
+to the integral of `y ↦ f(X, y)` against the `condDistrib` kernel. -/
+/-
+**ProbabilityTheory.condExp_prod_ae_eq_integral_condDistrib** 是 Mathlib 中的一个定理，位
+于命名空间 `ProbabilityTheory`。
+形式化陈述：condExp_prod_ae_eq_integral_condDistrib [NormedSpace Real F] [CompleteSpac
+e F] (hX : Measurable X) (hY : AEMeasurable Y μ) (hf : StronglyMeasurable f) (hf
+_int : Integrable (fun a => f (X a, Y a)) μ) : μ[fun a => f (X a, Y a) | mβ.coma
+p X] =ᵐ[μ] fun a => ∫ y, f (X a, y) ∂condDistrib Y X μ (X a)
+参数：hX : Measurable X；hY : AEMeasurable Y μ；hf : StronglyMeasurable f；hf_int : In
+tegrable (fun a => f (X a, Y a)) μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integrable_map_measure`：integrable_map_measure {f : α -> α
+'} {g : α' -> ε} (hg : AEStronglyMeasurable g (Measure.map f μ)) (hf : AEMeasura
+ble f μ) : Integrable g (M…
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `ProbabilityTheory.condExp_prod_ae_eq_integral_condDistrib'`：condExp_prod
+_ae_eq_integral_condDistrib' [NormedSpace Real F] [CompleteSpace F] (hX : Measur
+able X) (hY : AEMeasurable Y μ) (hf_int : Integr…
 
-English:
-theorem condExp_prod_ae_eq_integral_condDistrib₀
-  statement: [NormedSpace Real F] [CompleteSpace F]
-  proof: have hf_int' : Integrable f (μ.map fun a => (X a, Y a)) := by
-    rwa [integrable_map_measure hf (hX.aemeasurable.prodMk hY)]
-  condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
-
-中文:
-定理 condExp_prod_ae_eq_integral_condDistrib₀
-  结论: [赋范空间 实数 F] [完备空间 F]
-  证明: have hf_int' : Integrable f (μ.map fun a => (X a, Y a)) := by
-    rwa [integrable_map_measure hf (hX.aemeasurable.prodMk hY)]
-  condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
-
-Depends on / 依赖: Integrable, aemeasurable, condExp_prod_ae_eq_integral_condDistrib, hX.aemeasurable.prodMk, hf_int, integrable_map_measure, prodMk
+--- 原说明 ---
+The conditional expectation of a function `f` of the product `(X, Y)` is almost 
+everywhere equal
+to the integral of `y ↦ f(X, y)` against the `condDistrib` kernel.
 -/
-theorem condExp_prod_ae_eq_integral_condDistrib₀ [NormedSpace Real F] [CompleteSpace F]
+theorem condExp_prod_ae_eq_integral_condDistrib₀ [NormedSpace ℝ F] [CompleteSpace F]
     (hX : Measurable X) (hY : AEMeasurable Y μ)
     (hf : AEStronglyMeasurable f (μ.map fun a => (X a, Y a)))
     (hf_int : Integrable (fun a => f (X a, Y a)) μ) :
@@ -1121,125 +1381,143 @@ theorem condExp_prod_ae_eq_integral_condDistrib₀ [NormedSpace Real F] [Complet
     rwa [integrable_map_measure hf (hX.aemeasurable.prodMk hY)]
   condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
 
-/--
-theorem `condExp_prod_ae_eq_integral_condDistrib` / 定理 `condExp_prod_ae_eq_integral_condDistrib`
+/-- The conditional expectation of a function `f` of the product `(X, Y)` is almost everywhere equal
+to the integral of `y ↦ f(X, y)` against the `condDistrib` kernel. -/
+/-
+**ProbabilityTheory.condExp_prod_ae_eq_integral_condDistrib** 是 Mathlib 中的一个定理，位
+于命名空间 `ProbabilityTheory`。
+形式化陈述：condExp_prod_ae_eq_integral_condDistrib [NormedSpace Real F] [CompleteSpac
+e F] (hX : Measurable X) (hY : AEMeasurable Y μ) (hf : StronglyMeasurable f) (hf
+_int : Integrable (fun a => f (X a, Y a)) μ) : μ[fun a => f (X a, Y a) | mβ.coma
+p X] =ᵐ[μ] fun a => ∫ y, f (X a, y) ∂condDistrib Y X μ (X a)
+参数：hX : Measurable X；hY : AEMeasurable Y μ；hf : StronglyMeasurable f；hf_int : In
+tegrable (fun a => f (X a, Y a)) μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integrable_map_measure`：integrable_map_measure {f : α -> α
+'} {g : α' -> ε} (hg : AEStronglyMeasurable g (Measure.map f μ)) (hf : AEMeasura
+ble f μ) : Integrable g (M…
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `AEMeasurable.prodMk`：prodMk {f : α -> β} {g : α -> γ} (hf : AEMeasurable
+ f μ) (hg : AEMeasurable g μ) : AEMeasurable (fun x => (f x, g x)) μ
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `ProbabilityTheory.condExp_prod_ae_eq_integral_condDistrib'`：condExp_prod
+_ae_eq_integral_condDistrib' [NormedSpace Real F] [CompleteSpace F] (hX : Measur
+able X) (hY : AEMeasurable Y μ) (hf_int : Integr…
 
-English:
-theorem condExp_prod_ae_eq_integral_condDistrib
-  statement: [NormedSpace Real F] [CompleteSpace F]
-  proof: have hf_int' : Integrable f (μ.map fun a => (X a, Y a)) := by
-    rwa [integrable_map_measure hf.aestronglyMeasurable (hX.aemeasurable.prodMk hY)]
-  condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
-
-中文:
-定理 condExp_prod_ae_eq_integral_condDistrib
-  结论: [赋范空间 实数 F] [完备空间 F]
-  证明: have hf_int' : Integrable f (μ.map fun a => (X a, Y a)) := by
-    rwa [integrable_map_measure hf.aestronglyMeasurable (hX.aemeasurable.prodMk hY)]
-  condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
-
-Depends on / 依赖: Integrable, aemeasurable, aestronglyMeasurable, condExp_prod_ae_eq_integral_condDistrib, hX.aemeasurable.prodMk, hf.aestronglyMeasurable, hf_int, integrable_map_measure, prodMk
+--- 原说明 ---
+The conditional expectation of a function `f` of the product `(X, Y)` is almost 
+everywhere equal
+to the integral of `y ↦ f(X, y)` against the `condDistrib` kernel.
 -/
-theorem condExp_prod_ae_eq_integral_condDistrib [NormedSpace Real F] [CompleteSpace F]
+theorem condExp_prod_ae_eq_integral_condDistrib [NormedSpace ℝ F] [CompleteSpace F]
     (hX : Measurable X) (hY : AEMeasurable Y μ) (hf : StronglyMeasurable f)
     (hf_int : Integrable (fun a => f (X a, Y a)) μ) :
     μ[fun a => f (X a, Y a) | mβ.comap X] =ᵐ[μ] fun a => ∫ y, f (X a, y) ∂condDistrib Y X μ (X a) :=
   have hf_int' : Integrable f (μ.map fun a => (X a, Y a)) := by
     rwa [integrable_map_measure hf.aestronglyMeasurable (hX.aemeasurable.prodMk hY)]
   condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
-
-/--
-theorem `condExp_ae_eq_integral_condDistrib` / 定理 `condExp_ae_eq_integral_condDistrib`
-
-English:
-theorem condExp_ae_eq_integral_condDistrib
-  statement: [NormedSpace Real F] [CompleteSpace F] (hX : Measurable X)
-  proof: condExp_prod_ae_eq_integral_condDistrib hX hY (hf.comp_measurable measurable_snd) hf_int
-
-中文:
-定理 condExp_ae_eq_integral_condDistrib
-  结论: [赋范空间 实数 F] [完备空间 F] (hX : 可测 X)
-  证明: condExp_prod_ae_eq_integral_condDistrib hX hY (hf.comp_measurable measurable_snd) hf_int
-
-Depends on / 依赖: comp_measurable, condExp_prod_ae_eq_integral_condDistrib, hf.comp_measurable, hf_int, measurable_snd
+/-
+**ProbabilityTheory.condExp_ae_eq_integral_condDistrib** 是 Mathlib 中的一个定理，位于命名空间
+ `ProbabilityTheory`。
+形式化陈述：condExp_ae_eq_integral_condDistrib [NormedSpace Real F] [CompleteSpace F] 
+(hX : Measurable X) (hY : AEMeasurable Y μ) {f : Ω -> F} (hf : StronglyMeasurabl
+e f) (hf_int : Integrable (fun a => f (Y a)) μ) : μ[fun a => f (Y a) | mβ.comap 
+X] =ᵐ[μ] fun a => ∫ y, f y ∂condDistrib Y X μ (X a)
+参数：hX : Measurable X；hY : AEMeasurable Y μ；hf : StronglyMeasurable f；hf_int : In
+tegrable (fun a => f (Y a)) μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.condExp_prod_ae_eq_integral_condDistrib`：condExp_prod_
+ae_eq_integral_condDistrib [NormedSpace Real F] [CompleteSpace F] (hX : Measurab
+le X) (hY : AEMeasurable Y μ) (hf : StronglyMea…
+· 使用定理 `MeasureTheory.StronglyMeasurable.comp_measurable`：comp_measurable [Topol
+ogicalSpace β] {_ : MeasurableSpace α} {_ : MeasurableSpace γ} {f : α -> β} {g :
+ γ -> α} (hf : StronglyMeasurable f) (…
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
 -/
-theorem condExp_ae_eq_integral_condDistrib [NormedSpace Real F] [CompleteSpace F] (hX : Measurable X)
-    (hY : AEMeasurable Y μ) {f : Ω -> F} (hf : StronglyMeasurable f)
+theorem condExp_ae_eq_integral_condDistrib [NormedSpace ℝ F] [CompleteSpace F] (hX : Measurable X)
+    (hY : AEMeasurable Y μ) {f : Ω → F} (hf : StronglyMeasurable f)
     (hf_int : Integrable (fun a => f (Y a)) μ) :
     μ[fun a => f (Y a) | mβ.comap X] =ᵐ[μ] fun a => ∫ y, f y ∂condDistrib Y X μ (X a) :=
   condExp_prod_ae_eq_integral_condDistrib hX hY (hf.comp_measurable measurable_snd) hf_int
 
-/--
-theorem `condExp_ae_eq_integral_condDistrib'` / 定理 `condExp_ae_eq_integral_condDistrib'`
+/-- The conditional expectation of `Y` given `X` is almost everywhere equal to the integral
+`∫ y, y ∂(condDistrib Y X μ (X a))`. -/
+/-
+**ProbabilityTheory.condExp_ae_eq_integral_condDistrib'** 是 Mathlib 中的一个定理，位于命名空
+间 `ProbabilityTheory`。
+形式化陈述：condExp_ae_eq_integral_condDistrib' {Ω : Type*} [NormedAddCommGroup Ω] [No
+rmedSpace Real Ω] [CompleteSpace Ω] [MeasurableSpace Ω] [BorelSpace Ω] [SecondCo
+untableTopology Ω] {Y : α -> Ω} (hX : Measurable X) (hY_int : Integrable Y μ) : 
+μ[Y | mβ.comap X] =ᵐ[μ] fun a => ∫ y, y ∂condDistrib Y X μ (X a)
+参数：hX : Measurable X；hY_int : Integrable Y μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.condExp_ae_eq_integral_condDistrib`：condExp_ae_eq_inte
+gral_condDistrib [NormedSpace Real F] [CompleteSpace F] (hX : Measurable X) (hY 
+: AEMeasurable Y μ) {f : Ω -> F} (hf : Str…
+· 使用定理 `standardBorel_of_polish`：∀ {α : Type u_1} [inst : MeasurableSpace α] [τ 
+: TopologicalSpace α] [BorelSpace α] [PolishSpace α],   StandardBorelSpace α
+· 使用定理 `instPolishSpaceOfSeparableSpaceOfIsCompletelyMetrizableSpace`：∀ {α : Typ
+e u_1} [inst : TopologicalSpace α] [TopologicalSpace.SeparableSpace α]   [Topolo
+gicalSpace.IsCompletelyMetrizableSpace α], PolishS…
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.of_completeSpace_metrizable
+`：∀ {X : Type u_1} [inst : UniformSpace X] [CompleteSpace X] [(uniformity X).IsC
+ountablyGenerated] [T0Space X],   TopologicalSpace.IsCompletel…
+· 使用定理 `EMetric.instIsCountablyGeneratedUniformity`：∀ {α : Type u} [inst : Pseud
+oEMetricSpace α], (uniformity α).IsCountablyGenerated
+· 使用定理 `T6Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T6
+Space X], T0Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.aemeasurable`：∀ {α : Type u_1} {m₀ : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} {β : Type u_5} [inst : Measurab
+leSpace β]   [inst_1 : TopologicalSpa…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `stronglyMeasurable_id`：∀ {α : Type u_1} {mα : MeasurableSpace α} [inst :
+ TopologicalSpace α] [TopologicalSpace.PseudoMetrizableSpace α]   [OpensMeasurab
+leSpace α] …
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
 
-English:
-theorem condExp_ae_eq_integral_condDistrib'
-  statement: {Ω : Type*} [NormedAddCommGroup Ω] [NormedSpace Real Ω]
-  proof: condExp_ae_eq_integral_condDistrib hX hY_int.1.aemeasurable stronglyMeasurable_id hY_int
-
-中文:
-定理 condExp_ae_eq_integral_condDistrib'
-  结论: {Ω : 类型} [赋范交换加群 Ω] [赋范空间 实数 Ω]
-  证明: condExp_ae_eq_integral_condDistrib hX hY_int.1.aemeasurable stronglyMeasurable_id hY_int
-
-Depends on / 依赖: aemeasurable, condExp_ae_eq_integral_condDistrib, hY_int, stronglyMeasurable_id
+--- 原说明 ---
+The conditional expectation of `Y` given `X` is almost everywhere equal to the i
+ntegral
+`∫ y, y ∂(condDistrib Y X μ (X a))`.
 -/
-theorem condExp_ae_eq_integral_condDistrib' {Ω : Type*} [NormedAddCommGroup Ω] [NormedSpace Real Ω]
-    [CompleteSpace Ω] [MeasurableSpace Ω] [BorelSpace Ω] [SecondCountableTopology Ω] {Y : α -> Ω}
+theorem condExp_ae_eq_integral_condDistrib' {Ω : Type*} [NormedAddCommGroup Ω] [NormedSpace ℝ Ω]
+    [CompleteSpace Ω] [MeasurableSpace Ω] [BorelSpace Ω] [SecondCountableTopology Ω] {Y : α → Ω}
     (hX : Measurable X) (hY_int : Integrable Y μ) :
     μ[Y | mβ.comap X] =ᵐ[μ] fun a => ∫ y, y ∂condDistrib Y X μ (X a) :=
   condExp_ae_eq_integral_condDistrib hX hY_int.1.aemeasurable stronglyMeasurable_id hY_int
 
 open MeasureTheory
-
-/--
-theorem `_root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk` / 定理 `_root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk`
-
-English:
-theorem _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk
-  statement: {Ω F} {mΩ : MeasurableSpace Ω}
-  proof: by
-  refine ⟨fun x => hf.mk f x.2, hf.stronglyMeasurable_mk.comp_measurable measurable_snd, ?_⟩
-  suffices h : Measure.QuasiMeasurePreserving Prod.snd (μ.map fun ω => (X ω, ω)) μ from
-    Measure.QuasiMeasurePreserving.ae_eq h hf.ae_eq_mk
-  refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun s hs hμs => ?_⟩
-  rw [Measure.map_apply measurable_snd hs]
-  by_cases hX : AEMeasurable X μ
-  · rw [Measure.map_apply_of_aemeasurable]
-    · rw [← univ_prod, mk_preimage_prod, preimage_univ, univ_inter, preimage_id']
-      exact hμs
-    · exact hX.prodMk aemeasurable_id
-    · exact measurable_snd hs
-  · rw [Measure.map_of_not_aemeasurable]
-    · simp
-    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
-
-中文:
-定理 _root_.测度论.AEStronglyMeasurable.comp_snd_map_prodMk
-  结论: {Ω F} {mΩ : 可测空间 Ω}
-  证明: by
-  refine ⟨fun x => hf.mk f x.2, hf.stronglyMeasurable_mk.comp_measurable measurable_snd, ?_⟩
-  suffices h : Measure.QuasiMeasurePreserving Prod.snd (μ.map fun ω => (X ω, ω)) μ from
-    Measure.QuasiMeasurePreserving.ae_eq h hf.ae_eq_mk
-  refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun s hs hμs => ?_⟩
-  rw [Measure.map_apply measurable_snd hs]
-  by_cases hX : AEMeasurable X μ
-  · rw [Measure.map_apply_of_aemeasurable]
-    · rw [← univ_prod, mk_preimage_prod, preimage_univ, univ_inter, preimage_id']
-      exact hμs
-    · exact hX.prodMk aemeasurable_id
-    · exact measurable_snd hs
-  · rw [Measure.map_of_not_aemeasurable]
-    · simp
-    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
-
-Depends on / 依赖: AEMeasurable, AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.mk, Measure.QuasiMeasurePreserving, Measure.QuasiMeasurePreserving.ae_eq, Measure.map_apply, Measure.map_apply_of_aemeasurable, Prod.snd, QuasiMeasurePreserving, ae_eq, ae_eq_mk, comp_measurable, hf.ae_eq_mk, hf.mk, hf.stronglyMeasurable_mk.comp_measurable, map_apply, map_apply_of_aemeasurable, measurable_snd, mk_preimage_prod
+/-
+**ProbabilityTheory._root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodM
+k** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk {Ω F} {mΩ : MeasurableSpace Ω}
-    (X : Ω -> β) {μ : Measure Ω} [TopologicalSpace F] {f : Ω -> F} (hf : AEStronglyMeasurable f μ) :
+    (X : Ω → β) {μ : Measure Ω} [TopologicalSpace F] {f : Ω → F} (hf : AEStronglyMeasurable f μ) :
     AEStronglyMeasurable (fun x : β × Ω => f x.2) (μ.map fun ω => (X ω, ω)) := by
   refine ⟨fun x => hf.mk f x.2, hf.stronglyMeasurable_mk.comp_measurable measurable_snd, ?_⟩
-  suffices h : Measure.QuasiMeasurePreserving Prod.snd (μ.map fun ω => (X ω, ω)) μ from
+  suffices h : Measure.QuasiMeasurePreserving Prod.snd (μ.map fun ω ↦ (X ω, ω)) μ from
     Measure.QuasiMeasurePreserving.ae_eq h hf.ae_eq_mk
   refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun s hs hμs => ?_⟩
   rw [Measure.map_apply measurable_snd hs]
@@ -1252,107 +1530,96 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk {Ω F} {m�
   · rw [Measure.map_of_not_aemeasurable]
     · simp
     · contrapose hX; exact measurable_fst.comp_aemeasurable hX
-
-/--
-theorem `_root_.MeasureTheory.Integrable.comp_snd_map_prodMk` / 定理 `_root_.MeasureTheory.Integrable.comp_snd_map_prodMk`
-
-English:
-theorem _root_.MeasureTheory.Integrable.comp_snd_map_prodMk
-  proof: by
-  by_cases hX : AEMeasurable X μ
-  · have hf := hf_int.1.comp_snd_map_prodMk X (mΩ := mΩ) (mβ := mβ)
-    refine ⟨hf, ?_⟩
-    rw [hasFiniteIntegral_iff_enorm]; rw [lintegral_map' hf.enorm (hX.prodMk aemeasurable_id)]
-    exact hf_int.2
-  · rw [Measure.map_of_not_aemeasurable]
-    · simp
-    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
-
-中文:
-定理 _root_.测度论.可积.comp_snd_map_prodMk
-  证明: by
-  by_cases hX : AEMeasurable X μ
-  · have hf := hf_int.1.comp_snd_map_prodMk X (mΩ := mΩ) (mβ := mβ)
-    refine ⟨hf, ?_⟩
-    rw [hasFiniteIntegral_iff_enorm]; rw [lintegral_map' hf.enorm (hX.prodMk aemeasurable_id)]
-    exact hf_int.2
-  · rw [Measure.map_of_not_aemeasurable]
-    · simp
-    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
-
-Depends on / 依赖: AEMeasurable, Measure, Measure.map_of_not_aemeasurable, aemeasurable_id, comp_aemeasurable, comp_snd_map_prodMk, contrapose, hX.prodMk, hasFiniteIntegral_iff_enorm, hf.enorm, hf_int, lintegral_map, map_of_not_aemeasurable, measurable_fst, measurable_fst.comp_aemeasurable, prodMk
+/-
+**ProbabilityTheory._root_.MeasureTheory.Integrable.comp_snd_map_prodMk** 是 Math
+lib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Integrable.comp_snd_map_prodMk
-    {Ω} {mΩ : MeasurableSpace Ω} (X : Ω -> β) {μ : Measure Ω} {f : Ω -> F} (hf_int : Integrable f μ) :
+    {Ω} {mΩ : MeasurableSpace Ω} (X : Ω → β) {μ : Measure Ω} {f : Ω → F} (hf_int : Integrable f μ) :
     Integrable (fun x : β × Ω => f x.2) (μ.map fun ω => (X ω, ω)) := by
   by_cases hX : AEMeasurable X μ
   · have hf := hf_int.1.comp_snd_map_prodMk X (mΩ := mΩ) (mβ := mβ)
     refine ⟨hf, ?_⟩
-    rw [hasFiniteIntegral_iff_enorm]; rw [lintegral_map' hf.enorm (hX.prodMk aemeasurable_id)]
+    rw [hasFiniteIntegral_iff_enorm, lintegral_map' hf.enorm (hX.prodMk aemeasurable_id)]
     exact hf_int.2
   · rw [Measure.map_of_not_aemeasurable]
     · simp
     · contrapose hX; exact measurable_fst.comp_aemeasurable hX
-
-/--
-theorem `aestronglyMeasurable_comp_snd_map_prodMk_iff` / 定理 `aestronglyMeasurable_comp_snd_map_prodMk_iff`
-
-English:
-theorem aestronglyMeasurable_comp_snd_map_prodMk_iff
-  statement: {Ω F} {_ : MeasurableSpace Ω}
-  proof: ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
-
-中文:
-定理 aestronglyMeasurable_comp_snd_map_prodMk_iff
-  结论: {Ω F} {_ : 可测空间 Ω}
-  证明: ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
-
-Depends on / 依赖: comp_measurable, comp_snd_map_prodMk, h.comp_measurable, h.comp_snd_map_prodMk, hX.prodMk, measurable_id, prodMk
+/-
+**ProbabilityTheory.aestronglyMeasurable_comp_snd_map_prodMk_iff** 是 Mathlib 中的一
+个定理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：aestronglyMeasurable_comp_snd_map_prodMk_iff {Ω F} {_ : MeasurableSpace Ω}
+ [TopologicalSpace F] {X : Ω -> β} {μ : Measure Ω} (hX : Measurable X) {f : Ω ->
+ F} : AEStronglyMeasurable (fun x : β × Ω => f x.2) (μ.map fun ω => (X ω, ω)) ↔ 
+AEStronglyMeasurable f μ
+参数：hX : Measurable X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.comp_measurable`：comp_measurable {γ :
+ Type*} {_ : MeasurableSpace γ} {_ : MeasurableSpace α} {f : γ -> α} {μ : Measur
+e γ} (hg : AEStronglyMeasurable g (Measu…
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk`：∀ {β : Type u_2}
+ {mβ : MeasurableSpace β} {Ω : Type u_5} {F : Type u_6} {mΩ : MeasurableSpace Ω}
+ (X : Ω → β)   {μ : MeasureTheory.Measure Ω}…
 -/
 theorem aestronglyMeasurable_comp_snd_map_prodMk_iff {Ω F} {_ : MeasurableSpace Ω}
-    [TopologicalSpace F] {X : Ω -> β} {μ : Measure Ω} (hX : Measurable X) {f : Ω -> F} :
+    [TopologicalSpace F] {X : Ω → β} {μ : Measure Ω} (hX : Measurable X) {f : Ω → F} :
     AEStronglyMeasurable (fun x : β × Ω => f x.2) (μ.map fun ω => (X ω, ω)) ↔
       AEStronglyMeasurable f μ :=
   ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
-
-/--
-theorem `integrable_comp_snd_map_prodMk_iff` / 定理 `integrable_comp_snd_map_prodMk_iff`
-
-English:
-theorem integrable_comp_snd_map_prodMk_iff
-  statement: {Ω} {_ : MeasurableSpace Ω} {X : Ω -> β} {μ : Measure Ω}
-  proof: ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
-
-中文:
-定理 integrable_comp_snd_map_prodMk_iff
-  结论: {Ω} {_ : 可测空间 Ω} {X : Ω -> β} {μ : 测度 Ω}
-  证明: ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
-
-Depends on / 依赖: comp_measurable, comp_snd_map_prodMk, h.comp_measurable, h.comp_snd_map_prodMk, hX.prodMk, measurable_id, prodMk
+/-
+**ProbabilityTheory.integrable_comp_snd_map_prodMk_iff** 是 Mathlib 中的一个定理，位于命名空间
+ `ProbabilityTheory`。
+形式化陈述：integrable_comp_snd_map_prodMk_iff {Ω} {_ : MeasurableSpace Ω} {X : Ω -> β
+} {μ : Measure Ω} (hX : Measurable X) {f : Ω -> F} : Integrable (fun x : β × Ω =
+> f x.2) (μ.map fun ω => (X ω, ω)) ↔ Integrable f μ
+参数：hX : Measurable X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Integrable.comp_measurable`：∀ {α : Type u_1} {ε : Type u_5
+} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst : TopologicalSpace
+ ε]   [inst_1 : ContinuousENor…
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
+· 使用定理 `MeasureTheory.Integrable.comp_snd_map_prodMk`：∀ {β : Type u_2} {F : Type
+ u_4} [inst : NormedAddCommGroup F] {mβ : MeasurableSpace β} {Ω : Type u_5}   {m
+Ω : MeasurableSpace Ω} (X : Ω → β)…
 -/
-theorem integrable_comp_snd_map_prodMk_iff {Ω} {_ : MeasurableSpace Ω} {X : Ω -> β} {μ : Measure Ω}
-    (hX : Measurable X) {f : Ω -> F} :
+theorem integrable_comp_snd_map_prodMk_iff {Ω} {_ : MeasurableSpace Ω} {X : Ω → β} {μ : Measure Ω}
+    (hX : Measurable X) {f : Ω → F} :
     Integrable (fun x : β × Ω => f x.2) (μ.map fun ω => (X ω, ω)) ↔ Integrable f μ :=
   ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
-
-/--
-theorem `condExp_ae_eq_integral_condDistrib_id` / 定理 `condExp_ae_eq_integral_condDistrib_id`
-
-English:
-theorem condExp_ae_eq_integral_condDistrib_id
-  statement: [NormedSpace Real F] [CompleteSpace F] {X : Ω -> β}
-  proof: condExp_prod_ae_eq_integral_condDistrib' hX aemeasurable_id (hf_int.comp_snd_map_prodMk X)
-
-中文:
-定理 condExp_ae_eq_integral_condDistrib_id
-  结论: [赋范空间 实数 F] [完备空间 F] {X : Ω -> β}
-  证明: condExp_prod_ae_eq_integral_condDistrib' hX aemeasurable_id (hf_int.comp_snd_map_prodMk X)
-
-Depends on / 依赖: aemeasurable_id, comp_snd_map_prodMk, condExp_prod_ae_eq_integral_condDistrib, hf_int, hf_int.comp_snd_map_prodMk
+/-
+**ProbabilityTheory.condExp_ae_eq_integral_condDistrib_id** 是 Mathlib 中的一个定理，位于命
+名空间 `ProbabilityTheory`。
+形式化陈述：condExp_ae_eq_integral_condDistrib_id [NormedSpace Real F] [CompleteSpace 
+F] {X : Ω -> β} {μ : Measure Ω} [IsFiniteMeasure μ] (hX : Measurable X) {f : Ω -
+> F} (hf_int : Integrable f μ) : μ[f | mβ.comap X] =ᵐ[μ] fun a => ∫ y, f y ∂cond
+Distrib id X μ (X a)
+参数：hX : Measurable X；hf_int : Integrable f μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.condExp_prod_ae_eq_integral_condDistrib'`：condExp_prod
+_ae_eq_integral_condDistrib' [NormedSpace Real F] [CompleteSpace F] (hX : Measur
+able X) (hY : AEMeasurable Y μ) (hf_int : Integr…
+· 使用定理 `aemeasurable_id`：aemeasurable_id : AEMeasurable id μ
+· 使用定理 `MeasureTheory.Integrable.comp_snd_map_prodMk`：∀ {β : Type u_2} {F : Type
+ u_4} [inst : NormedAddCommGroup F] {mβ : MeasurableSpace β} {Ω : Type u_5}   {m
+Ω : MeasurableSpace Ω} (X : Ω → β)…
 -/
-theorem condExp_ae_eq_integral_condDistrib_id [NormedSpace Real F] [CompleteSpace F] {X : Ω -> β}
-    {μ : Measure Ω} [IsFiniteMeasure μ] (hX : Measurable X) {f : Ω -> F} (hf_int : Integrable f μ) :
+theorem condExp_ae_eq_integral_condDistrib_id [NormedSpace ℝ F] [CompleteSpace F] {X : Ω → β}
+    {μ : Measure Ω} [IsFiniteMeasure μ] (hX : Measurable X) {f : Ω → F} (hf_int : Integrable f μ) :
     μ[f | mβ.comap X] =ᵐ[μ] fun a => ∫ y, f y ∂condDistrib id X μ (X a) :=
   condExp_prod_ae_eq_integral_condDistrib' hX aemeasurable_id (hf_int.comp_snd_map_prodMk X)
 
 end ProbabilityTheory
+

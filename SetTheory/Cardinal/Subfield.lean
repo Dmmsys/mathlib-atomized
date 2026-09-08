@@ -29,18 +29,11 @@ variable {α : Type u} (s : Set α)
 
 namespace Subfield
 
-/--
-Definition of `Operands` / `Operands` 的定义
-
-English:
-abbreviation Operands
-  signature: : Fin 6 oplus s -> Type
-
-中文:
-缩写 Operands
-  签名: : 有限集 6 oplus s -> 类型
+/-
+**Subfield.Operands** 是 Mathlib 中的一个缩写定义，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private abbrev Operands : Fin 6 oplus s -> Type
+private abbrev Operands : Fin 6 ⊕ s → Type
   | .inl 0 => Bool -- add
   | .inl 1 => Bool -- mul
   | .inl 2 => Unit -- neg
@@ -50,19 +43,11 @@ private abbrev Operands : Fin 6 oplus s -> Type
   | .inr _ => Empty -- s
 
 variable [DivisionRing α]
-
-/--
-Definition of `operate` / `operate` 的定义
-
-English:
-definition operate
-  signature: : (Σ n, Operands s n -> closure s) -> closure s
-
-中文:
-定义 operate
-  签名: : (Σ n, Operands s n -> closure s) -> closure s
+/-
+**Subfield.operate** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def operate : (Σ n, Operands s n -> closure s) -> closure s
+private def operate : (Σ n, Operands s n → closure s) → closure s
   | ⟨.inl 0, f⟩ => f false + f true
   | ⟨.inl 1, f⟩ => f false * f true
   | ⟨.inl 2, f⟩ => -f ()
@@ -70,128 +55,83 @@ private def operate : (Σ n, Operands s n -> closure s) -> closure s
   | ⟨.inl 4, _⟩ => 0
   | ⟨.inl 5, _⟩ => 1
   | ⟨.inr a, _⟩ => ⟨a, subset_closure a.prop⟩
-
-/--
-Definition of `rangeOfWType` / `rangeOfWType` 的定义
-
-English:
-definition rangeOfWType
-  signature: : Subfield (closure s) where
-  body: Set.range (WType.elim _ <| operate s)
-  add_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 0) (Bool.rec x y), by rfl⟩
-  mul_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 1) (Bool.rec x y), by rfl⟩
-  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ => x, rfl⟩
-  inv_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 3) fun _ => x, rfl⟩
-  zero_mem' := ⟨WType.mk (.inl 4) Empty.rec, rfl⟩
-  one_mem' := ⟨WType.mk (.inl 5) Empty.rec, rfl⟩
-
-中文:
-定义 rangeOfWType
-  签名: : 子域 (closure s) where
-  定义体: Set.range (WType.elim _ <| operate s)
-  add_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 0) (Bool.rec x y), by rfl⟩
-  mul_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 1) (Bool.rec x y), by rfl⟩
-  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ => x, rfl⟩
-  inv_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 3) fun _ => x, rfl⟩
-  zero_mem' := ⟨WType.mk (.inl 4) Empty.rec, rfl⟩
-  one_mem' := ⟨WType.mk (.inl 5) Empty.rec, rfl⟩
+/-
+**Subfield.rangeOfWType** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def rangeOfWType : Subfield (closure s) where
   carrier := Set.range (WType.elim _ <| operate s)
   add_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 0) (Bool.rec x y), by rfl⟩
   mul_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 1) (Bool.rec x y), by rfl⟩
-  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ => x, rfl⟩
-  inv_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 3) fun _ => x, rfl⟩
+  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ ↦ x, rfl⟩
+  inv_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 3) fun _ ↦ x, rfl⟩
   zero_mem' := ⟨WType.mk (.inl 4) Empty.rec, rfl⟩
   one_mem' := ⟨WType.mk (.inl 5) Empty.rec, rfl⟩
-
-/--
-lemma `rangeOfWType_eq_top` / 引理 `rangeOfWType_eq_top`
-
-English:
-lemma rangeOfWType_eq_top
-  statement: rangeOfWType s = ⊤
-  proof: top_le_iff.mp fun a _ => by
-  rw [← SetLike.mem_coe]; rw [← Subtype.val_injective.mem_set_image]
-  change ↑a in map (closure s).subtype _
-  refine closure_le.mpr (fun a ha => ?_) a.prop
-  exact ⟨⟨a, subset_closure ha⟩, ⟨WType.mk (.inr ⟨a, ha⟩) Empty.rec, rfl⟩, rfl⟩
-
-中文:
-引理 rangeOfWType_eq_top
-  结论: rangeOfWType s = ⊤
-  证明: top_le_iff.mp fun a _ => by
-  rw [← SetLike.mem_coe]; rw [← Subtype.val_injective.mem_set_image]
-  change ↑a in map (closure s).subtype _
-  refine closure_le.mpr (fun a ha => ?_) a.prop
-  exact ⟨⟨a, subset_closure ha⟩, ⟨WType.mk (.inr ⟨a, ha⟩) Empty.rec, rfl⟩, rfl⟩
+/-
+**Subfield.rangeOfWType_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma rangeOfWType_eq_top : rangeOfWType s = ⊤ := top_le_iff.mp fun a _ => by
-  rw [← SetLike.mem_coe]; rw [← Subtype.val_injective.mem_set_image]
-  change ↑a in map (closure s).subtype _
-  refine closure_le.mpr (fun a ha => ?_) a.prop
+private lemma rangeOfWType_eq_top : rangeOfWType s = ⊤ := top_le_iff.mp fun a _ ↦ by
+  rw [← SetLike.mem_coe, ← Subtype.val_injective.mem_set_image]
+  change ↑a ∈ map (closure s).subtype _
+  refine closure_le.mpr (fun a ha ↦ ?_) a.prop
   exact ⟨⟨a, subset_closure ha⟩, ⟨WType.mk (.inr ⟨a, ha⟩) Empty.rec, rfl⟩, rfl⟩
-
-/--
-lemma `surjective_ofWType` / 引理 `surjective_ofWType`
-
-English:
-lemma surjective_ofWType
-  statement: Function.Surjective (WType.elim _ <| operate s)
-  proof: by
-  rw [← Set.range_eq_univ]
-  exact SetLike.coe_set_eq.mpr (rangeOfWType_eq_top s)
-
-中文:
-引理 surjective_ofWType
-  结论: 函数.满射 (WType.elim _ <| operate s)
-  证明: by
-  rw [← Set.range_eq_univ]
-  exact SetLike.coe_set_eq.mpr (rangeOfWType_eq_top s)
+/-
+**Subfield.surjective_ofWType** 是 Mathlib 中的一个引理，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma surjective_ofWType : Function.Surjective (WType.elim _ <| operate s) := by
   rw [← Set.range_eq_univ]
   exact SetLike.coe_set_eq.mpr (rangeOfWType_eq_top s)
 
 open Cardinal
-
-/--
-lemma `cardinalMk_closure_le_max` / 引理 `cardinalMk_closure_le_max`
-
-English:
-lemma cardinalMk_closure_le_max
-  statement: #(closure s) <= max #s ℵ₀
-  proof: (Cardinal.mk_le_of_surjective <| surjective_ofWType s).trans by
-    convert! WType.cardinalMk_le_max_aleph0_of_finite' using 1
-    · rw [lift_uzero, mk_sum, lift_uzero]
-      have : lift.{u, 0} #(Fin 6) < ℵ₀ := lift_lt_aleph0.mpr (lt_aleph0_of_finite _)
-      obtain h | h := lt_or_ge #s ℵ₀
-      · rw [max_eq_right h.le, max_eq_right]
-        exact (add_lt_aleph0 this h).le
-      · rw [max_eq_left h, add_eq_right h (this.le.trans h), max_eq_left h]
-    rintro (n | _)
-    · fin_cases n <;> (dsimp only [id_eq]; infer_instance)
-    infer_instance
-
-中文:
-引理 cardinalMk_closure_le_max
-  结论: #(closure s) <= 最大值 #s ℵ₀
-  证明: (Cardinal.mk_le_of_surjective <| surjective_ofWType s).trans by
-    convert! WType.cardinalMk_le_max_aleph0_of_finite' using 1
-    · rw [lift_uzero, mk_sum, lift_uzero]
-      have : lift.{u, 0} #(Fin 6) < ℵ₀ := lift_lt_aleph0.mpr (lt_aleph0_of_finite _)
-      obtain h | h := lt_or_ge #s ℵ₀
-      · rw [max_eq_right h.le, max_eq_right]
-        exact (add_lt_aleph0 this h).le
-      · rw [max_eq_left h, add_eq_right h (this.le.trans h), max_eq_left h]
-    rintro (n | _)
-    · fin_cases n <;> (dsimp only [id_eq]; infer_instance)
-    infer_instance
-
-Depends on / 依赖: Cardinal, Cardinal.mk_le_of_surjective, WType.cardinalMk_le_max_aleph0_of_finite, add_eq_right, add_lt_aleph0, cardinalMk_le_max_aleph0_of_finite, convert, fin_cases, h.le, id_eq, infer_instance, lift_lt_aleph0, lift_lt_aleph0.mpr, lift_uzero, lt_aleph0_of_finite, lt_or_ge, max_eq_left, max_eq_right, mk_le_of_surjective, mk_sum
+/-
+**Subfield.cardinalMk_closure_le_max** 是 Mathlib 中的一个引理，位于命名空间 `Subfield`。
+形式化陈述：cardinalMk_closure_le_max : #(closure s) <= max #s ℵ₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Cardinal.mk_le_of_surjective`：mk_le_of_surjective {α β : Type u} {f : α 
+-> β} (hf : Surjective f) : #β <= #α
+· 使用定理 `_private.Mathlib.SetTheory.Cardinal.Subfield.0.Subfield.surjective_ofWTy
+pe`：∀ {α : Type u} (s : Set α) [inst : DivisionRing α],   Function.Surjective (W
+Type.elim (↥(Subfield.closure s)) (Subfield.operate✝ s))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_uzero`：lift_uzero (a : Cardinal.{u}) : lift.{0} a = a
+· 使用定理 `Cardinal.mk_sum`：mk_sum (α : Type u) (β : Type v) : #(α oplus β) = lift.
+{v, u} #α + lift.{u, v} #β
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_lt_aleph0`：lift_lt_aleph0 {c : Cardinal.{u}} : lift.{v} c 
+< ℵ₀ ↔ c < ℵ₀
+· 使用定理 `Cardinal.lt_aleph0_of_finite`：lt_aleph0_of_finite (α : Type u) [Finite α
+] : #α < ℵ₀
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Cardinal.add_lt_aleph0`：add_lt_aleph0 {a b : Cardinal} (ha : a < ℵ₀) (hb
+ : b < ℵ₀) : a + b < ℵ₀
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `Cardinal.add_eq_right`：add_eq_right {a b : Cardinal} (hb : ℵ₀ <= b) (ha 
+: a <= b) : a + b = b
+· 使用定理 `WType.cardinalMk_le_max_aleph0_of_finite'`：cardinalMk_le_max_aleph0_of_f
+inite' [forall a, Finite (β a)] : #(WType β) <= max (lift.{v} #α) ℵ₀
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
-lemma cardinalMk_closure_le_max : #(closure s) <= max #s ℵ₀ :=
-(Cardinal.mk_le_of_surjective <| surjective_ofWType s).trans by
+lemma cardinalMk_closure_le_max : #(closure s) ≤ max #s ℵ₀ :=
+  (Cardinal.mk_le_of_surjective <| surjective_ofWType s).trans <| by
     convert! WType.cardinalMk_le_max_aleph0_of_finite' using 1
     · rw [lift_uzero, mk_sum, lift_uzero]
       have : lift.{u, 0} #(Fin 6) < ℵ₀ := lift_lt_aleph0.mpr (lt_aleph0_of_finite _)
@@ -202,28 +142,28 @@ lemma cardinalMk_closure_le_max : #(closure s) <= max #s ℵ₀ :=
     rintro (n | _)
     · fin_cases n <;> (dsimp only [id_eq]; infer_instance)
     infer_instance
-
-/--
-lemma `cardinalMk_closure` / 引理 `cardinalMk_closure`
-
-English:
-lemma cardinalMk_closure
-  given: [Infinite s]
-  statement: #(closure s) = #s
-  proof: ((cardinalMk_closure_le_max s).trans_eq <| max_eq_left <| aleph0_le_mk s).antisymm
-    (mk_le_mk_of_subset subset_closure)
-
-中文:
-引理 cardinalMk_closure
-  条件: [无限 s]
-  结论: #(closure s) = #s
-  证明: ((cardinalMk_closure_le_max s).trans_eq <| max_eq_left <| aleph0_le_mk s).antisymm
-    (mk_le_mk_of_subset subset_closure)
-
-Depends on / 依赖: aleph0_le_mk, antisymm, cardinalMk_closure_le_max, max_eq_left, mk_le_mk_of_subset, subset_closure, trans_eq
+/-
+**Subfield.cardinalMk_closure** 是 Mathlib 中的一个引理，位于命名空间 `Subfield`。
+形式化陈述：cardinalMk_closure [Infinite s] : #(closure s) = #s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `Subfield.cardinalMk_closure_le_max`：cardinalMk_closure_le_max : #(closur
+e s) <= max #s ℵ₀
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `Cardinal.aleph0_le_mk`：aleph0_le_mk (α : Type u) [Infinite α] : ℵ₀ <= #α
+· 使用定理 `Cardinal.mk_le_mk_of_subset`：mk_le_mk_of_subset {α} {s t : Set α} (h : s
+ subseteq t) : #s <= #t
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
 -/
 lemma cardinalMk_closure [Infinite s] : #(closure s) = #s :=
   ((cardinalMk_closure_le_max s).trans_eq <| max_eq_left <| aleph0_le_mk s).antisymm
     (mk_le_mk_of_subset subset_closure)
 
 end Subfield
+

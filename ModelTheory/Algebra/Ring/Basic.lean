@@ -46,30 +46,19 @@ variable {α : Type*}
 
 namespace FirstOrder
 
-/--
-Inductive type `ringFunc` / 归纳类型 `ringFunc`
+/-- The type of Ring functions, to be used in the definition of the language of rings.
+It contains the operations `(+,*,-,0,1)` -/
+/-
+**FirstOrder.ringFunc** 是 Mathlib 中的一个归纳类型，位于命名空间 `FirstOrder`。
+形式化陈述：ℕ → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive ringFunc
-  parameters: : Nat -> Type
-  constructors (5):
-    - add: ringFunc 2
-    - mul: ringFunc 2
-    - neg: ringFunc 1
-    - zero: ringFunc 0
-    - one: ringFunc 0
-
-中文:
-归纳类型 ringFunc
-  参数: : 自然数 -> 类型
-  构造子 (5 个):
-    - add: ringFunc 2
-    - mul: ringFunc 2
-    - neg: ringFunc 1
-    - zero: ringFunc 0
-    - one: ringFunc 0
+--- 原说明 ---
+The type of Ring functions, to be used in the definition of the language of ring
+s.
+It contains the operations `(+,*,-,0,1)`
 -/
-inductive ringFunc : Nat -> Type
+inductive ringFunc : ℕ → Type
   | add : ringFunc 2
   | mul : ringFunc 2
   | neg : ringFunc 1
@@ -77,24 +66,14 @@ inductive ringFunc : Nat -> Type
   | one : ringFunc 0
   deriving DecidableEq
 
-/--
-Definition of `Language.ring` / `Language.ring` 的定义
+/-- The language of rings contains the operations `(+,*,-,0,1)` -/
+/-
+**FirstOrder.Language.ring** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder.Language`。
+形式化陈述：FirstOrder.Language
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Language.ring
-  signature: : Language
-  body: { Functions := ringFunc
-    Relations := fun _ => Empty }
-  deriving IsAlgebraic
-
-中文:
-定义 Language.ring
-  签名: : Language
-  定义体: { Functions := ringFunc
-    Relations := fun _ => Empty }
-  deriving IsAlgebraic
-
-Depends on / 依赖: Functions, Relations, ringFunc
+--- 原说明 ---
+The language of rings contains the operations `(+,*,-,0,1)`
 -/
 def Language.ring : Language :=
   { Functions := ringFunc
@@ -108,225 +87,178 @@ open ringFunc Language
 set_option backward.isDefEq.respectTransparency false in
 /-- This instance does not get inferred without `instDecidableEqFunctions` in
 `ModelTheory/Basic`. -/
-example (n : Nat) : DecidableEq (Language.ring.Functions n) := inferInstance
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个示例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This instance does not get inferred without `instDecidableEqFunctions` in
+`ModelTheory/Basic`.
+-/
+example (n : ℕ) : DecidableEq (Language.ring.Functions n) := inferInstance
 
 /-- This instance does not get inferred without `instDecidableEqRelations` in
 `ModelTheory/Basic`. -/
-example (n : Nat) : DecidableEq (Language.ring.Relations n) := inferInstance
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个示例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `addFunc` / `addFunc` 的定义
+--- 原说明 ---
+This instance does not get inferred without `instDecidableEqRelations` in
+`ModelTheory/Basic`.
+-/
+example (n : ℕ) : DecidableEq (Language.ring.Relations n) := inferInstance
 
-English:
-abbreviation addFunc
-  signature: : Language.ring.Functions 2
-  body: add
+/-- `RingFunc.add`, but with the defeq type `Language.ring.Functions 2` instead
+of `RingFunc 2` -/
+/-
+**FirstOrder.Ring.addFunc** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：addFunc : Language.ring.Functions 2
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 addFunc
-  签名: : Language.ring.函数 2
-  定义体: add
+--- 原说明 ---
+`RingFunc.add`, but with the defeq type `Language.ring.Functions 2` instead
+of `RingFunc 2`
 -/
 abbrev addFunc : Language.ring.Functions 2 := add
 
-/--
-Definition of `mulFunc` / `mulFunc` 的定义
+/-- `RingFunc.mul`, but with the defeq type `Language.ring.Functions 2` instead
+of `RingFunc 2` -/
+/-
+**FirstOrder.Ring.mulFunc** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：mulFunc : Language.ring.Functions 2
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mulFunc
-  signature: : Language.ring.Functions 2
-  body: mul
-
-中文:
-缩写 mulFunc
-  签名: : Language.ring.函数 2
-  定义体: mul
+--- 原说明 ---
+`RingFunc.mul`, but with the defeq type `Language.ring.Functions 2` instead
+of `RingFunc 2`
 -/
 abbrev mulFunc : Language.ring.Functions 2 := mul
 
-/--
-Definition of `negFunc` / `negFunc` 的定义
+/-- `RingFunc.neg`, but with the defeq type `Language.ring.Functions 1` instead
+of `RingFunc 1` -/
+/-
+**FirstOrder.Ring.negFunc** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：negFunc : Language.ring.Functions 1
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation negFunc
-  signature: : Language.ring.Functions 1
-  body: neg
-
-中文:
-缩写 negFunc
-  签名: : Language.ring.函数 1
-  定义体: neg
+--- 原说明 ---
+`RingFunc.neg`, but with the defeq type `Language.ring.Functions 1` instead
+of `RingFunc 1`
 -/
 abbrev negFunc : Language.ring.Functions 1 := neg
 
-/--
-Definition of `zeroFunc` / `zeroFunc` 的定义
+/-- `RingFunc.zero`, but with the defeq type `Language.ring.Functions 0` instead
+of `RingFunc 0` -/
+/-
+**FirstOrder.Ring.zeroFunc** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：zeroFunc : Language.ring.Functions 0
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation zeroFunc
-  signature: : Language.ring.Functions 0
-  body: zero
-
-中文:
-缩写 zeroFunc
-  签名: : Language.ring.函数 0
-  定义体: zero
+--- 原说明 ---
+`RingFunc.zero`, but with the defeq type `Language.ring.Functions 0` instead
+of `RingFunc 0`
 -/
 abbrev zeroFunc : Language.ring.Functions 0 := zero
 
-/--
-Definition of `oneFunc` / `oneFunc` 的定义
+/-- `RingFunc.one`, but with the defeq type `Language.ring.Functions 0` instead
+of `RingFunc 0` -/
+/-
+**FirstOrder.Ring.oneFunc** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：oneFunc : Language.ring.Functions 0
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation oneFunc
-  signature: : Language.ring.Functions 0
-  body: one
-
-中文:
-缩写 oneFunc
-  签名: : Language.ring.函数 0
-  定义体: one
+--- 原说明 ---
+`RingFunc.one`, but with the defeq type `Language.ring.Functions 0` instead
+of `RingFunc 0`
 -/
 abbrev oneFunc : Language.ring.Functions 0 := one
-
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) : Zero (Language.ring.Term α) :=
 { zero := Constants.term zeroFunc }
-
-/--
-theorem `zero_def` / 定理 `zero_def`
-
-English:
-theorem zero_def
-  given: (α : Type*)
-  statement: (0 : Language.ring.Term α) = Constants.term zeroFunc
-  proof: rfl
-
-中文:
-定理 zero_def
-  条件: (α : 类型)
-  结论: (0 : Language.ring.项 α) = Constants.term zeroFunc
-  证明: rfl
+/-
+**FirstOrder.Ring.zero_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：zero_def (α : Type*) : (0 : Language.ring.Term α) = Constants.term zeroFun
+c
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_def (α : Type*) : (0 : Language.ring.Term α) = Constants.term zeroFunc := rfl
-
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) : One (Language.ring.Term α) :=
 { one := Constants.term oneFunc }
-
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  given: (α : Type*)
-  statement: (1 : Language.ring.Term α) = Constants.term oneFunc
-  proof: rfl
-
-中文:
-定理 one_def
-  条件: (α : 类型)
-  结论: (1 : Language.ring.项 α) = Constants.term oneFunc
-  证明: rfl
+/-
+**FirstOrder.Ring.one_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：one_def (α : Type*) : (1 : Language.ring.Term α) = Constants.term oneFunc
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_def (α : Type*) : (1 : Language.ring.Term α) = Constants.term oneFunc := rfl
-
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) : Add (Language.ring.Term α) :=
 { add := addFunc.apply₂ }
-
-/--
-theorem `add_def` / 定理 `add_def`
-
-English:
-theorem add_def
-  given: (α : Type*) (t₁ t₂ : Language.ring.Term α)
-  proof: rfl
-
-中文:
-定理 add_def
-  条件: (α : 类型) (t₁ t₂ : Language.ring.项 α)
-  证明: rfl
+/-
+**FirstOrder.Ring.add_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：add_def (α : Type*) (t₁ t₂ : Language.ring.Term α) : t₁ + t₂ = addFunc.app
+ly₂ t₁ t₂
+参数：α : Type*；t₁ t₂ : Language.ring.Term α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_def (α : Type*) (t₁ t₂ : Language.ring.Term α) :
     t₁ + t₂ = addFunc.apply₂ t₁ t₂ := rfl
-
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) : Mul (Language.ring.Term α) :=
 { mul := mulFunc.apply₂ }
-
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (α : Type*) (t₁ t₂ : Language.ring.Term α)
-  proof: rfl
-
-中文:
-定理 mul_def
-  条件: (α : 类型) (t₁ t₂ : Language.ring.项 α)
-  证明: rfl
+/-
+**FirstOrder.Ring.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：mul_def (α : Type*) (t₁ t₂ : Language.ring.Term α) : t₁ * t₂ = mulFunc.app
+ly₂ t₁ t₂
+参数：α : Type*；t₁ t₂ : Language.ring.Term α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def (α : Type*) (t₁ t₂ : Language.ring.Term α) :
     t₁ * t₂ = mulFunc.apply₂ t₁ t₂ := rfl
-
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) : Neg (Language.ring.Term α) :=
 { neg := negFunc.apply₁ }
-
-/--
-theorem `neg_def` / 定理 `neg_def`
-
-English:
-theorem neg_def
-  given: (α : Type*) (t : Language.ring.Term α)
-  proof: rfl
-
-中文:
-定理 neg_def
-  条件: (α : 类型) (t : Language.ring.项 α)
-  证明: rfl
+/-
+**FirstOrder.Ring.neg_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：neg_def (α : Type*) (t : Language.ring.Term α) : -t = negFunc.apply₁ t
+参数：α : Type*；t : Language.ring.Term α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_def (α : Type*) (t : Language.ring.Term α) :
     -t = negFunc.apply₁ t := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fintype Language.ring.Symbols
-  body: ⟨⟨Multiset.ofList
-      [Sum.inl ⟨2, .add⟩,
-       Sum.inl ⟨2, .mul⟩,
-       Sum.inl ⟨1, .neg⟩,
-       Sum.inl ⟨0, .zero⟩,
-       Sum.inl ⟨0, .one⟩], by
-    dsimp [Language.Symbols]; decide⟩, by
-    intro x
-    dsimp [Language.Symbols]
-    rcases x with ⟨_, f⟩ | ⟨_, f⟩
-    · cases f <;> decide
-    · cases f ⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 有限类型 Language.ring.Symbols
-  定义体: ⟨⟨Multiset.ofList
-      [Sum.inl ⟨2, .add⟩,
-       Sum.inl ⟨2, .mul⟩,
-       Sum.inl ⟨1, .neg⟩,
-       Sum.inl ⟨0, .zero⟩,
-       Sum.inl ⟨0, .one⟩], by
-    dsimp [Language.Symbols]; decide⟩, by
-    intro x
-    dsimp [Language.Symbols]
-    rcases x with ⟨_, f⟩ | ⟨_, f⟩
-    · cases f <;> decide
-    · cases f ⟩
-
-@[simp]
-
-Depends on / 依赖: Language, Language.Symbols, Multiset, Multiset.ofList, Sum.inl, Symbols, ofList
+/-
+**FirstOrder.Ring.** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Fintype Language.ring.Symbols :=
   ⟨⟨Multiset.ofList
@@ -343,24 +275,22 @@ instance : Fintype Language.ring.Symbols :=
     · cases f ⟩
 
 @[simp]
-/--
-theorem `card_ring` / 定理 `card_ring`
-
-English:
-theorem card_ring
-  statement: card Language.ring = 5
-  proof: by
-  have : Fintype.card Language.ring.Symbols = 5 := rfl
-  simp [Language.card, this]
-
-中文:
-定理 card_ring
-  结论: card Language.ring = 5
-  证明: by
-  have : Fintype.card Language.ring.Symbols = 5 := rfl
-  simp [Language.card, this]
-
-Depends on / 依赖: Fintype, Fintype.card, Language, Language.card, Language.ring.Symbols, Symbols
+/-
+**FirstOrder.Ring.card_ring** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：card_ring : card Language.ring = 5
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_fintype`：mk_fintype (α : Type u) [h : Fintype α] : #α = Fint
+ype.card α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem card_ring : card Language.ring = 5 := by
   have : Fintype.card Language.ring.Symbols = 5 := rfl
@@ -374,48 +304,37 @@ structure is the same as the structure already given on `R` by the classes `Add`
 It is recommended to use this type class as a hypothesis to any theorem whose statement
 requires a type to have be both a `Ring` (or `Field` etc.) and a
 `Language.ring.Structure` -/
-/--
-Definition of `CompatibleRing` / `CompatibleRing` 的定义
+/- This class does not extend `Add` etc, because this way it can be used in
+combination with a `Ring`, or `Field` instance without having multiple different
+`Add` structures on the Type. -/
+/-
+**FirstOrder.Ring.CompatibleRing** 是 Mathlib 中的一个归纳类型，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：(R : Type u_2) → [Add R] → [Mul R] → [Neg R] → [One R] → [Zero R] → Type u
+_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CompatibleRing
-  parameters: (R : Type*) [Add R] [Mul R] [Neg R] [One R] [Zero R]
-  extends: Language.ring.Structure R
-  axioms and operations (5):
-    - funMap_add : forall x, funMap addFunc x = x 0 + x 1
-    - funMap_mul : forall x, funMap mulFunc x = x 0 * x 1
-    - funMap_neg : forall x, funMap negFunc x = -x 0
-    - funMap_zero : forall x, funMap (zeroFunc : Language.ring.Constants) x = 0
-    - funMap_one : forall x, funMap (oneFunc : Language.ring.Constants) x = 1
-
-中文:
-类 余mpatible环
-  参数: (R : 类型) [加法 R] [乘法 R] [取负 R] [幺 R] [零 R]
-  继承: Language.ring.结构 R
-  公理与运算 (5 个):
-    - funMap_add : 对任意 x, funMap addFunc x = x 0 + x 1
-    - funMap_mul : 对任意 x, funMap mulFunc x = x 0 * x 1
-    - funMap_neg : 对任意 x, funMap negFunc x = -x 0
-    - funMap_zero : 对任意 x, funMap (zeroFunc : Language.ring.Constants) x = 0
-    - funMap_one : 对任意 x, funMap (oneFunc : Language.ring.Constants) x = 1
+--- 原说明 ---
+This class does not extend `Add` etc, because this way it can be used in
+combination with a `Ring`, or `Field` instance without having multiple different
+`Add` structures on the Type.
 -/
 class CompatibleRing (R : Type*) [Add R] [Mul R] [Neg R] [One R] [Zero R]
     extends Language.ring.Structure R where
   /-- Addition in the `Language.ring.Structure` is the same as the addition given by the
   `Add` instance -/
-  funMap_add : forall x, funMap addFunc x = x 0 + x 1
+  funMap_add : ∀ x, funMap addFunc x = x 0 + x 1
   /-- Multiplication in the `Language.ring.Structure` is the same as the multiplication given by the
   `Mul` instance -/
-  funMap_mul : forall x, funMap mulFunc x = x 0 * x 1
+  funMap_mul : ∀ x, funMap mulFunc x = x 0 * x 1
   /-- Negation in the `Language.ring.Structure` is the same as the negation given by the
   `Neg` instance -/
-  funMap_neg : forall x, funMap negFunc x = -x 0
+  funMap_neg : ∀ x, funMap negFunc x = -x 0
   /-- The constant `0` in the `Language.ring.Structure` is the same as the constant given by the
   `Zero` instance -/
-  funMap_zero : forall x, funMap (zeroFunc : Language.ring.Constants) x = 0
+  funMap_zero : ∀ x, funMap (zeroFunc : Language.ring.Constants) x = 0
   /-- The constant `1` in the `Language.ring.Structure` is the same as the constant given by the
   `One` instance -/
-  funMap_one : forall x, funMap (oneFunc : Language.ring.Constants) x = 1
+  funMap_one : ∀ x, funMap (oneFunc : Language.ring.Constants) x = 1
 
 open CompatibleRing
 
@@ -426,131 +345,136 @@ section
 variable {R : Type*} [Add R] [Mul R] [Neg R] [One R] [Zero R] [CompatibleRing R]
 
 @[simp]
-/--
-theorem `realize_add` / 定理 `realize_add`
-
-English:
-theorem realize_add
-  given: (x y : ring.Term α) (v : α -> R)
-  proof: by
-  simp [add_def, funMap_add]
-
-@[simp]
-
-中文:
-定理 realize_add
-  条件: (x y : ring.项 α) (v : α -> R)
-  证明: by
-  simp [add_def, funMap_add]
-
-@[simp]
-
-Depends on / 依赖: add_def, funMap_add
+/-
+**FirstOrder.Ring.realize_add** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：realize_add (x y : ring.Term α) (v : α -> R) : Term.realize v (x + y) = Te
+rm.realize v x + Term.realize v y
+参数：x y : ring.Term α；v : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_functions_apply₂`：realize_functions_app
+ly₂ {f : L.Functions 2} {t₁ t₂ : L.Term α} {v : α -> M} : (f.apply₂ t₁ t₂).reali
+ze v = funMap f ![t₁.realize v, t₂.real…
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `FirstOrder.Ring.CompatibleRing.funMap_add`：∀ {R : Type u_2} {inst : Add 
+R} {inst_1 : Mul R} {inst_2 : Neg R} {inst_3 : One R} {inst_4 : Zero R}   [self 
+: FirstOrder.Ring.CompatibleRin…
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_add (x y : ring.Term α) (v : α -> R) :
+theorem realize_add (x y : ring.Term α) (v : α → R) :
     Term.realize v (x + y) = Term.realize v x + Term.realize v y := by
   simp [add_def, funMap_add]
 
 @[simp]
-/--
-theorem `realize_mul` / 定理 `realize_mul`
-
-English:
-theorem realize_mul
-  given: (x y : ring.Term α) (v : α -> R)
-  proof: by
-  simp [mul_def, funMap_mul]
-
-@[simp]
-
-中文:
-定理 realize_mul
-  条件: (x y : ring.项 α) (v : α -> R)
-  证明: by
-  simp [mul_def, funMap_mul]
-
-@[simp]
-
-Depends on / 依赖: funMap_mul, mul_def
+/-
+**FirstOrder.Ring.realize_mul** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：realize_mul (x y : ring.Term α) (v : α -> R) : Term.realize v (x * y) = Te
+rm.realize v x * Term.realize v y
+参数：x y : ring.Term α；v : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_functions_apply₂`：realize_functions_app
+ly₂ {f : L.Functions 2} {t₁ t₂ : L.Term α} {v : α -> M} : (f.apply₂ t₁ t₂).reali
+ze v = funMap f ![t₁.realize v, t₂.real…
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `FirstOrder.Ring.CompatibleRing.funMap_mul`：∀ {R : Type u_2} {inst : Add 
+R} {inst_1 : Mul R} {inst_2 : Neg R} {inst_3 : One R} {inst_4 : Zero R}   [self 
+: FirstOrder.Ring.CompatibleRin…
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_mul (x y : ring.Term α) (v : α -> R) :
+theorem realize_mul (x y : ring.Term α) (v : α → R) :
     Term.realize v (x * y) = Term.realize v x * Term.realize v y := by
   simp [mul_def, funMap_mul]
 
 @[simp]
-/--
-theorem `realize_neg` / 定理 `realize_neg`
-
-English:
-theorem realize_neg
-  given: (x : ring.Term α) (v : α -> R)
-  proof: by
-  simp [neg_def, funMap_neg]
-
-@[simp]
-
-中文:
-定理 realize_neg
-  条件: (x : ring.项 α) (v : α -> R)
-  证明: by
-  simp [neg_def, funMap_neg]
-
-@[simp]
-
-Depends on / 依赖: funMap_neg, neg_def
+/-
+**FirstOrder.Ring.realize_neg** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：realize_neg (x : ring.Term α) (v : α -> R) : Term.realize v (-x) = -Term.r
+ealize v x
+参数：x : ring.Term α；v : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_functions_apply₁`：realize_functions_app
+ly₁ {f : L.Functions 1} {t : L.Term α} {v : α -> M} : (f.apply₁ t).realize v = f
+unMap f ![t.realize v]
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `FirstOrder.Ring.CompatibleRing.funMap_neg`：∀ {R : Type u_2} {inst : Add 
+R} {inst_1 : Mul R} {inst_2 : Neg R} {inst_3 : One R} {inst_4 : Zero R}   [self 
+: FirstOrder.Ring.CompatibleRin…
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_neg (x : ring.Term α) (v : α -> R) :
+theorem realize_neg (x : ring.Term α) (v : α → R) :
     Term.realize v (-x) = -Term.realize v x := by
   simp [neg_def, funMap_neg]
 
 @[simp]
-/--
-theorem `realize_zero` / 定理 `realize_zero`
-
-English:
-theorem realize_zero
-  given: (v : α -> R)
-  statement: Term.realize v (0 : ring.Term α) = 0
-  proof: by
-  simp [zero_def, funMap_zero, constantMap]
-
-@[simp]
-
-中文:
-定理 realize_zero
-  条件: (v : α -> R)
-  结论: 项.realize v (0 : ring.项 α) = 0
-  证明: by
-  simp [zero_def, funMap_zero, constantMap]
-
-@[simp]
-
-Depends on / 依赖: constantMap, funMap_zero, zero_def
+/-
+**FirstOrder.Ring.realize_zero** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：realize_zero (v : α -> R) : Term.realize v (0 : ring.Term α) = 0
+参数：v : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_constants`：realize_constants {c : L.Con
+stants} {v : α -> M} : c.term.realize v = c
+· 使用定理 `FirstOrder.Ring.CompatibleRing.funMap_zero`：∀ {R : Type u_2} {inst : Add
+ R} {inst_1 : Mul R} {inst_2 : Neg R} {inst_3 : One R} {inst_4 : Zero R}   [self
+ : FirstOrder.Ring.CompatibleRin…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_zero (v : α -> R) : Term.realize v (0 : ring.Term α) = 0 := by
+theorem realize_zero (v : α → R) : Term.realize v (0 : ring.Term α) = 0 := by
   simp [zero_def, funMap_zero, constantMap]
 
 @[simp]
-/--
-theorem `realize_one` / 定理 `realize_one`
-
-English:
-theorem realize_one
-  given: (v : α -> R)
-  statement: Term.realize v (1 : ring.Term α) = 1
-  proof: by
-  simp [one_def, funMap_one, constantMap]
-
-中文:
-定理 realize_one
-  条件: (v : α -> R)
-  结论: 项.realize v (1 : ring.项 α) = 1
-  证明: by
-  simp [one_def, funMap_one, constantMap]
-
-Depends on / 依赖: constantMap, funMap_one, one_def
+/-
+**FirstOrder.Ring.realize_one** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Ring`。
+形式化陈述：realize_one (v : α -> R) : Term.realize v (1 : ring.Term α) = 1
+参数：v : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_constants`：realize_constants {c : L.Con
+stants} {v : α -> M} : c.term.realize v = c
+· 使用定理 `FirstOrder.Ring.CompatibleRing.funMap_one`：∀ {R : Type u_2} {inst : Add 
+R} {inst_1 : Mul R} {inst_2 : Neg R} {inst_3 : One R} {inst_4 : Zero R}   [self 
+: FirstOrder.Ring.CompatibleRin…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_one (v : α -> R) : Term.realize v (1 : ring.Term α) = 1 := by
+theorem realize_one (v : α → R) : Term.realize v (1 : ring.Term α) = 1 := by
   simp [one_def, funMap_one, constantMap]
 
 end
@@ -571,42 +495,37 @@ This is a `def` and not an `instance`, because the path
 commute by definition
 -/
 @[instance_reducible]
-/--
-Definition of `compatibleRingOfRing` / `compatibleRingOfRing` 的定义
+/-
+**FirstOrder.Ring.compatibleRingOfRing** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder.Rin
+g`。
+形式化陈述：compatibleRingOfRing (R : Type*) [Add R] [Mul R] [Neg R] [One R] [Zero R] 
+: CompatibleRing R
+参数：R : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.instIsAlgebraicRing`：FirstOrder.Language.ring.IsAlge
+braic
 
-English:
-definition compatibleRingOfRing
-  signature: (R : Type*) [Add R] [Mul R] [Neg R] [One R] [Zero R]
-  body: { funMap := fun {n} f =>
-      match n, f with
-      | _, .add => fun x => x 0 + x 1
-      | _, .mul => fun x => x 0 * x 1
-      | _, .neg => fun x => -x 0
-      | _, .zero => fun _ => 0
-      | _, .one => fun _ => 1
-    funMap_add := fun _ => rfl,
-    funMap_mul := fun _ => rfl,
-    funMap_neg := fun _ => rfl,
-    funMap_zero := fun _ => rfl,
-    funMap_one := fun _ => rfl }
+--- 原说明 ---
+Given a Type `R` with instances for each of the `Ring` operations, make a
+`Language.ring.Structure R` instance, along with a proof that the operations giv
+en
+by the `Language.ring.Structure` are the same as those given by the `Add` or `Mu
+l` etc.
+instances.
 
-中文:
-定义 compatibleRingOfRing
-  签名: (R : 类型) [加法 R] [乘法 R] [取负 R] [幺 R] [零 R]
-  定义体: { funMap := fun {n} f =>
-      match n, f with
-      | _, .add => fun x => x 0 + x 1
-      | _, .mul => fun x => x 0 * x 1
-      | _, .neg => fun x => -x 0
-      | _, .zero => fun _ => 0
-      | _, .one => fun _ => 1
-    funMap_add := fun _ => rfl,
-    funMap_mul := fun _ => rfl,
-    funMap_neg := fun _ => rfl,
-    funMap_zero := fun _ => rfl,
-    funMap_one := fun _ => rfl }
+This definition can be used when applying a theorem about the model theory of ri
+ngs
+to a literal ring `R`, by writing `let _ := compatibleRingOfRing R`. After this,
+ if,
+for example, `R` is a field, then Lean will be able to find the instance for
+`Theory.field.Model R`, and it will be possible to apply theorems about the mode
+l theory
+of fields.
 
-Depends on / 依赖: funMap, funMap_add, funMap_mul, funMap_neg, funMap_one, funMap_zero
+This is a `def` and not an `instance`, because the path
+`Ring` => `Language.ring.Structure` => `Ring` cannot be made to
+commute by definition
 -/
 def compatibleRingOfRing (R : Type*) [Add R] [Mul R] [Neg R] [One R] [Zero R] :
     CompatibleRing R :=
@@ -623,44 +542,17 @@ def compatibleRingOfRing (R : Type*) [Add R] [Mul R] [Neg R] [One R] [Zero R] :
     funMap_zero := fun _ => rfl,
     funMap_one := fun _ => rfl }
 
-/--
-Definition of `languageEquivEquivRingEquiv` / `languageEquivEquivRingEquiv` 的定义
+/-- An isomorphism in the language of rings is a ring isomorphism -/
+/-
+**FirstOrder.Ring.languageEquivEquivRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `FirstOr
+der.Ring`。
+形式化陈述：languageEquivEquivRingEquiv {R S : Type*} [NonAssocRing R] [NonAssocRing S
+] [CompatibleRing R] [CompatibleRing S] : (Language.ring.Equiv R S) ≃ (R ≃+* S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition languageEquivEquivRingEquiv
-  signature: {R S : Type*}
-  body: { toFun f :=
-    { f with
-      map_add' := by
-        intro x y
-        simpa using! f.map_fun addFunc ![x, y]
-      map_mul' := by
-        intro x y
-        simpa using! f.map_fun mulFunc ![x, y] }
-    invFun f :=
-    { f with
-      map_fun' := fun {n} f => by
-        cases f <;> simp
-      map_rel' := fun {n} f => by cases f } }
-
-中文:
-定义 languageEquivEquivRingEquiv
-  签名: {R S : 类型}
-  定义体: { toFun f :=
-    { f with
-      map_add' := by
-        intro x y
-        simpa using! f.map_fun addFunc ![x, y]
-      map_mul' := by
-        intro x y
-        simpa using! f.map_fun mulFunc ![x, y] }
-    invFun f :=
-    { f with
-      map_fun' := fun {n} f => by
-        cases f <;> simp
-      map_rel' := fun {n} f => by cases f } }
-
-Depends on / 依赖: addFunc, f.map_fun, invFun, map_add, map_fun, map_mul, map_rel, mulFunc
+--- 原说明 ---
+An isomorphism in the language of rings is a ring isomorphism
 -/
 def languageEquivEquivRingEquiv {R S : Type*}
     [NonAssocRing R] [NonAssocRing S]
@@ -682,92 +574,107 @@ def languageEquivEquivRingEquiv {R S : Type*}
 
 variable (R : Type*) [Language.ring.Structure R]
 
-/--
-Definition of `addOfRingStructure` / `addOfRingStructure` 的定义
+/-- A def to put an `Add` instance on a type with a `Language.ring.Structure` instance.
 
-English:
-abbreviation addOfRingStructure
-  signature: : Add R
-  body: { add := fun x y => funMap addFunc ![x, y] }
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K` -/
+/-
+**FirstOrder.Ring.addOfRingStructure** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Rin
+g`。
+形式化陈述：addOfRingStructure : Add R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 addOfRingStructure
-  签名: : 加法 R
-  定义体: { add := fun x y => funMap addFunc ![x, y] }
+--- 原说明 ---
+A def to put an `Add` instance on a type with a `Language.ring.Structure` instan
+ce.
 
-Depends on / 依赖: addFunc, funMap
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K`
 -/
 abbrev addOfRingStructure : Add R :=
   { add := fun x y => funMap addFunc ![x, y] }
 
-/--
-Definition of `mulOfRingStructure` / `mulOfRingStructure` 的定义
+/-- A def to put an `Mul` instance on a type with a `Language.ring.Structure` instance.
 
-English:
-abbreviation mulOfRingStructure
-  signature: : Mul R
-  body: { mul := fun x y => funMap mulFunc ![x, y] }
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K` -/
+/-
+**FirstOrder.Ring.mulOfRingStructure** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Rin
+g`。
+形式化陈述：mulOfRingStructure : Mul R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 mulOfRingStructure
-  签名: : 乘法 R
-  定义体: { mul := fun x y => funMap mulFunc ![x, y] }
+--- 原说明 ---
+A def to put an `Mul` instance on a type with a `Language.ring.Structure` instan
+ce.
 
-Depends on / 依赖: funMap, mulFunc
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K`
 -/
 abbrev mulOfRingStructure : Mul R :=
   { mul := fun x y => funMap mulFunc ![x, y] }
 
-/--
-Definition of `negOfRingStructure` / `negOfRingStructure` 的定义
+/-- A def to put an `Neg` instance on a type with a `Language.ring.Structure` instance.
 
-English:
-abbreviation negOfRingStructure
-  signature: : Neg R
-  body: { neg := fun x => funMap negFunc ![x] }
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K` -/
+/-
+**FirstOrder.Ring.negOfRingStructure** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Rin
+g`。
+形式化陈述：negOfRingStructure : Neg R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 negOfRingStructure
-  签名: : 取负 R
-  定义体: { neg := fun x => funMap negFunc ![x] }
+--- 原说明 ---
+A def to put an `Neg` instance on a type with a `Language.ring.Structure` instan
+ce.
 
-Depends on / 依赖: funMap, negFunc
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K`
 -/
 abbrev negOfRingStructure : Neg R :=
   { neg := fun x => funMap negFunc ![x] }
 
-/--
-Definition of `zeroOfRingStructure` / `zeroOfRingStructure` 的定义
+/-- A def to put an `Zero` instance on a type with a `Language.ring.Structure` instance.
 
-English:
-abbreviation zeroOfRingStructure
-  signature: : Zero R
-  body: { zero := funMap zeroFunc ![] }
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K` -/
+/-
+**FirstOrder.Ring.zeroOfRingStructure** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Ri
+ng`。
+形式化陈述：zeroOfRingStructure : Zero R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 zeroOfRingStructure
-  签名: : 零 R
-  定义体: { zero := funMap zeroFunc ![] }
+--- 原说明 ---
+A def to put an `Zero` instance on a type with a `Language.ring.Structure` insta
+nce.
 
-Depends on / 依赖: funMap, zeroFunc
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K`
 -/
 abbrev zeroOfRingStructure : Zero R :=
   { zero := funMap zeroFunc ![] }
 
-/--
-Definition of `oneOfRingStructure` / `oneOfRingStructure` 的定义
+/-- A def to put an `One` instance on a type with a `Language.ring.Structure` instance.
 
-English:
-abbreviation oneOfRingStructure
-  signature: : One R
-  body: { one := funMap oneFunc ![] }
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K` -/
+/-
+**FirstOrder.Ring.oneOfRingStructure** 是 Mathlib 中的一个缩写定义，位于命名空间 `FirstOrder.Rin
+g`。
+形式化陈述：oneOfRingStructure : One R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 oneOfRingStructure
-  签名: : 幺 R
-  定义体: { one := funMap oneFunc ![] }
+--- 原说明 ---
+A def to put an `One` instance on a type with a `Language.ring.Structure` instan
+ce.
 
-Depends on / 依赖: funMap, oneFunc
+To be used sparingly, usually only when defining a more useful definition like,
+`[Language.ring.Structure K] -> [Theory.field.Model K] -> Field K`
 -/
 abbrev oneOfRingStructure : One R :=
   { one := funMap oneFunc ![] }
@@ -776,47 +683,27 @@ attribute [local instance] addOfRingStructure mulOfRingStructure negOfRingStruct
   zeroOfRingStructure oneOfRingStructure
 
 /--
-Definition of `compatibleRingOfRingStructure` / `compatibleRingOfRingStructure` 的定义
+Given a Type `R` with a `Language.ring.Structure R`, the instance given by
+`addOfRingStructure` etc. are compatible with the `Language.ring.Structure` instance on `R`.
 
-English:
-abbreviation compatibleRingOfRingStructure
-  signature: : CompatibleRing R
-  body: { funMap_add := by
-      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
-      intros; rfl
-    funMap_mul := by
-      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
-      intros; rfl
-    funMap_neg := by
-      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
-      intros; rfl
-    funMap_zero := by
-      simp only [Fin.forall_fin_zero_pi]
-      rfl
-    funMap_one := by
-      simp only [Fin.forall_fin_zero_pi]
-      rfl }
+This definition is only to be used when `addOfRingStructure`, `mulOfRingStructure` etc
+are local instances.
+-/
+/-
+**FirstOrder.Ring.compatibleRingOfRingStructure** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fir
+stOrder.Ring`。
+形式化陈述：compatibleRingOfRingStructure : CompatibleRing R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 compatibleRingOfRingStructure
-  签名: : 余mpatible环 R
-  定义体: { funMap_add := by
-      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
-      intros; rfl
-    funMap_mul := by
-      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
-      intros; rfl
-    funMap_neg := by
-      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
-      intros; rfl
-    funMap_zero := by
-      simp only [Fin.forall_fin_zero_pi]
-      rfl
-    funMap_one := by
-      simp only [Fin.forall_fin_zero_pi]
-      rfl }
+--- 原说明 ---
+Given a Type `R` with a `Language.ring.Structure R`, the instance given by
+`addOfRingStructure` etc. are compatible with the `Language.ring.Structure` inst
+ance on `R`.
 
-Depends on / 依赖: Fin.cons_zero, Fin.forall_fin_succ_pi, Fin.forall_fin_zero_pi, cons_zero, forall_fin_succ_pi, forall_fin_zero_pi, funMap_add, funMap_mul, funMap_neg, funMap_one, funMap_zero, intros
+This definition is only to be used when `addOfRingStructure`, `mulOfRingStructur
+e` etc
+are local instances.
 -/
 abbrev compatibleRingOfRingStructure : CompatibleRing R :=
   { funMap_add := by
@@ -838,3 +725,4 @@ abbrev compatibleRingOfRingStructure : CompatibleRing R :=
 end Ring
 
 end FirstOrder
+

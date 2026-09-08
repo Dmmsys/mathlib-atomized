@@ -31,24 +31,17 @@ open CategoryTheory Mathlib.Tactic.BicategoryLike
 
 namespace Mathlib.Tactic.Bicategory
 
-/--
-Definition of `bicategoryNf` / `bicategoryNf` 的定义
+/-- Normalize the both sides of an equality. -/
+/-
+**Mathlib.Tactic.Bicategory.bicategoryNf** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Bicategory`。
+形式化陈述：bicategoryNf (mvarId : MVarId) : MetaM (List MVarId)
+参数：mvarId : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bicategoryNf
-  signature: (mvarId : MVarId)
-  body: do
-  BicategoryLike.normalForm Bicategory.Context `bicategory mvarId
-
-@[inherit_doc bicategoryNf]
-
-中文:
-定义 bicategoryNf
-  签名: (mvarId : MVarId)
-  定义体: do
-  BicategoryLike.normalForm Bicategory.Context `bicategory mvarId
-
-@[inherit_doc bicategoryNf]
+--- 原说明 ---
+Normalize the both sides of an equality.
 -/
 def bicategoryNf (mvarId : MVarId) : MetaM (List MVarId) := do
   BicategoryLike.normalForm Bicategory.Context `bicategory mvarId
@@ -58,29 +51,41 @@ elab "bicategory_nf" : tactic => withMainContext do
   replaceMainGoal (← bicategoryNf (← getMainGoal))
 
 /--
-Definition of `bicategory` / `bicategory` 的定义
+Use the coherence theorem for bicategories to solve equations in a bicategory,
+where the two sides only differ by replacing strings of bicategory structural morphisms
+(that is, associators, unitors, and identities)
+with different strings of structural morphisms with the same source and target.
 
-English:
-definition bicategory
-  signature: (mvarId : MVarId)
-  body: BicategoryLike.main Bicategory.Context `bicategory mvarId
+That is, `bicategory` can handle goals of the form
+`a ≫ f ≫ b ≫ g ≫ c = a' ≫ f ≫ b' ≫ g ≫ c'`
+where `a = a'`, `b = b'`, and `c = c'` can be proved using `bicategory_coherence`.
+-/
+/-
+**Mathlib.Tactic.Bicategory.bicategory** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Bicategory`。
+形式化陈述：bicategory (mvarId : MVarId) : MetaM (List MVarId)
+参数：mvarId : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[inherit_doc bicategory]
+--- 原说明 ---
+Use the coherence theorem for bicategories to solve equations in a bicategory,
+where the two sides only differ by replacing strings of bicategory structural mo
+rphisms
+(that is, associators, unitors, and identities)
+with different strings of structural morphisms with the same source and target.
 
-中文:
-定义 bicategory
-  签名: (mvarId : MVarId)
-  定义体: BicategoryLike.main Bicategory.Context `bicategory mvarId
-
-@[inherit_doc bicategory]
-
-Depends on / 依赖: Bicategory, Bicategory.Context, BicategoryLike, BicategoryLike.main, Context, bicategory, mvarId
+That is, `bicategory` can handle goals of the form
+`a ≫ f ≫ b ≫ g ≫ c = a' ≫ f ≫ b' ≫ g ≫ c'`
+where `a = a'`, `b = b'`, and `c = c'` can be proved using `bicategory_coherence
+`.
 -/
 def bicategory (mvarId : MVarId) : MetaM (List MVarId) :=
-  BicategoryLike.main Bicategory.Context `bicategory mvarId
+  BicategoryLike.main  Bicategory.Context `bicategory mvarId
 
 @[inherit_doc bicategory]
 elab "bicategory" : tactic => withMainContext do
-replaceMainGoal ← bicategory ← getMainGoal
+  replaceMainGoal <| ← bicategory <| ← getMainGoal
 
 end Mathlib.Tactic.Bicategory
+

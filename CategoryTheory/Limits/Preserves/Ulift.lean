@@ -30,19 +30,25 @@ namespace CategoryTheory.Limits.Types
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-Definition of `sectionsEquiv` / `sectionsEquiv` 的定义
+The equivalence between `K.sections` and `(K ⋙ uliftFunctor.{v, u}).sections`. This is used to show
+that `uliftFunctor` preserves limits that are potentially too large to exist in the source
+category.
+-/
+/-
+**CategoryTheory.Limits.Types.sectionsEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.Types`。
+形式化陈述：sectionsEquiv {J : Type*} [Category* J] (K : J ⥤ Type u) : K.sections ≃ (K
+ ⋙ uliftFunctor.{v, u}).sections where toFun
+参数：K : J ⥤ Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectionsEquiv
-  signature: {J : Type*} [Category* J] (K : J ⥤ Type u)
-  body: fun ⟨u, hu⟩ => ⟨fun j => ⟨u j⟩, fun f => by simp [hu f]⟩
-  invFun := fun ⟨u, hu⟩ => ⟨fun j => (u j).down, @fun j j' f => by simp [← hu f]⟩
-
-中文:
-定义 sectionsEquiv
-  签名: {J : 类型} [范畴* J] (K : J ⥤ 类型u)
-  定义体: fun ⟨u, hu⟩ => ⟨fun j => ⟨u j⟩, fun f => by simp [hu f]⟩
-  invFun := fun ⟨u, hu⟩ => ⟨fun j => (u j).down, @fun j j' f => by simp [← hu f]⟩
+--- 原说明 ---
+The equivalence between `K.sections` and `(K ⋙ uliftFunctor.{v, u}).sections`. T
+his is used to show
+that `uliftFunctor` preserves limits that are potentially too large to exist in 
+the source
+category.
 -/
 def sectionsEquiv {J : Type*} [Category* J] (K : J ⥤ Type u) :
     K.sections ≃ (K ⋙ uliftFunctor.{v, u}).sections where
@@ -50,114 +56,79 @@ def sectionsEquiv {J : Type*} [Category* J] (K : J ⥤ Type u) :
   invFun := fun ⟨u, hu⟩ => ⟨fun j => (u j).down, @fun j j' f => by simp [← hu f]⟩
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` preserves limits of arbitrary size.
+-/
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PreservesLimitsOfSize.{w', w} uliftFunctor.{v, u}
-  body: {
-    preservesLimit := fun {K} => {
-      preserves := fun {c} hc => by
-        rw [Types.isLimit_iff ((uliftFunctor.{v]; rw [u}).mapCone c)]
-        intro s hs
-        obtain ⟨x, hx₁, hx₂⟩ := (Types.isLimit_iff c).mp ⟨hc⟩ _ ((sectionsEquiv K).symm ⟨s, hs⟩).2
-        exact ⟨⟨x⟩, fun i => ULift.ext _ _ (hx₁ i),
-          fun y hy => ULift.ext _ _ (hx₂ y.down fun i => ULift.ext_iff.mp (hy i))⟩ } }
-
-中文:
-实例 :
-  签名: 保持LimitsOfSize.{w', w} uliftFunctor.{v, u}
-  定义体: {
-    preservesLimit := fun {K} => {
-      preserves := fun {c} hc => by
-        rw [Types.isLimit_iff ((uliftFunctor.{v]; rw [u}).mapCone c)]
-        intro s hs
-        obtain ⟨x, hx₁, hx₂⟩ := (Types.isLimit_iff c).mp ⟨hc⟩ _ ((sectionsEquiv K).symm ⟨s, hs⟩).2
-        exact ⟨⟨x⟩, fun i => ULift.ext _ _ (hx₁ i),
-          fun y hy => ULift.ext _ _ (hx₂ y.down fun i => ULift.ext_iff.mp (hy i))⟩ } }
+--- 原说明 ---
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` preserves limits of arbitra
+ry size.
 -/
 noncomputable instance : PreservesLimitsOfSize.{w', w} uliftFunctor.{v, u} where
   preservesLimitsOfShape {J} := {
     preservesLimit := fun {K} => {
       preserves := fun {c} hc => by
-        rw [Types.isLimit_iff ((uliftFunctor.{v]; rw [u}).mapCone c)]
+        rw [Types.isLimit_iff ((uliftFunctor.{v, u}).mapCone c)]
         intro s hs
         obtain ⟨x, hx₁, hx₂⟩ := (Types.isLimit_iff c).mp ⟨hc⟩ _ ((sectionsEquiv K).symm ⟨s, hs⟩).2
         exact ⟨⟨x⟩, fun i => ULift.ext _ _ (hx₁ i),
-          fun y hy => ULift.ext _ _ (hx₂ y.down fun i => ULift.ext_iff.mp (hy i))⟩ } }
+          fun y hy => ULift.ext _ _ (hx₂ y.down fun i ↦ ULift.ext_iff.mp (hy i))⟩ } }
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` creates `u`-small limits.
+-/
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u}
-  body: { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
-
-中文:
-实例 :
-  签名: CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u}
-  定义体: { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
-
-Depends on / 依赖: CreatesLimit, createsLimitOfFullyFaithfulOfPreserves
+--- 原说明 ---
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` creates `u`-small limits.
 -/
 noncomputable instance : CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u} where
-  CreatesLimitsOfShape := { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
+  CreatesLimitsOfShape := { CreatesLimit := fun {_} ↦ createsLimitOfFullyFaithfulOfPreserves }
 
 variable {J : Type*} [Category* J] {K : J ⥤ Type u} {c : Cocone K} (hc : IsColimit c)
 variable {lc : Cocone (K ⋙ uliftFunctor.{v, u})}
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` preserves colimits of arbitrary size.
+-/
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PreservesColimitsOfSize.{w', w} uliftFunctor.{v, u}
-  body: { preservesColimit := fun {F} =>
-    { preserves := fun {c} hc => by
-        rw [isColimit_iff_coconeTypesIsColimit]
-        exact (((isColimit_iff_coconeTypesIsColimit _).1 ⟨hc⟩).precompose
-          (G := F ⋙ uliftFunctor.{v}) (fun _ => Equiv.ulift)
-          (fun _ => rfl)).of_equiv Equiv.ulift.symm (fun _ _ => rfl) } }
-
-中文:
-实例 :
-  签名: 保持余limitsOfSize.{w', w} uliftFunctor.{v, u}
-  定义体: { preservesColimit := fun {F} =>
-    { preserves := fun {c} hc => by
-        rw [isColimit_iff_coconeTypesIsColimit]
-        exact (((isColimit_iff_coconeTypesIsColimit _).1 ⟨hc⟩).precompose
-          (G := F ⋙ uliftFunctor.{v}) (fun _ => Equiv.ulift)
-          (fun _ => rfl)).of_equiv Equiv.ulift.symm (fun _ _ => rfl) } }
-
-Depends on / 依赖: Equiv.ulift, Equiv.ulift.symm, isColimit_iff_coconeTypesIsColimit, of_equiv, precompose, preserves, preservesColimit, uliftFunctor
+--- 原说明 ---
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` preserves colimits of arbit
+rary size.
 -/
 noncomputable instance : PreservesColimitsOfSize.{w', w} uliftFunctor.{v, u} where
   preservesColimitsOfShape {J _} :=
-  { preservesColimit := fun {F} =>
-    { preserves := fun {c} hc => by
+  { preservesColimit := fun {F} ↦
+    { preserves := fun {c} hc ↦ by
         rw [isColimit_iff_coconeTypesIsColimit]
         exact (((isColimit_iff_coconeTypesIsColimit _).1 ⟨hc⟩).precompose
-          (G := F ⋙ uliftFunctor.{v}) (fun _ => Equiv.ulift)
-          (fun _ => rfl)).of_equiv Equiv.ulift.symm (fun _ _ => rfl) } }
+          (G := F ⋙ uliftFunctor.{v}) (fun _ ↦ Equiv.ulift)
+          (fun _ ↦ rfl)).of_equiv Equiv.ulift.symm (fun _ _ ↦ rfl) } }
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` creates `u`-small colimits.
+-/
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CreatesColimitsOfSize.{w, u} uliftFunctor.{v, u}
-  body: { CreatesColimit := fun {_} => createsColimitOfReflectsIsomorphismsOfPreserves }
-
-中文:
-实例 :
-  签名: CreatesColimitsOfSize.{w, u} uliftFunctor.{v, u}
-  定义体: { CreatesColimit := fun {_} => createsColimitOfReflectsIsomorphismsOfPreserves }
-
-Depends on / 依赖: CreatesColimit, createsColimitOfReflectsIsomorphismsOfPreserves
+--- 原说明 ---
+The functor `uliftFunctor : Type u ⥤ Type (max u v)` creates `u`-small colimits.
 -/
 noncomputable instance : CreatesColimitsOfSize.{w, u} uliftFunctor.{v, u} where
   CreatesColimitsOfShape :=
-    { CreatesColimit := fun {_} => createsColimitOfReflectsIsomorphismsOfPreserves }
+    { CreatesColimit := fun {_} ↦ createsColimitOfReflectsIsomorphismsOfPreserves }
 
 end CategoryTheory.Limits.Types
+

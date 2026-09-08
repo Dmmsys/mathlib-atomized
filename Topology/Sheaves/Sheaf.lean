@@ -39,7 +39,7 @@ open CategoryTheory CategoryTheory.Limits TopologicalSpace Opposite TopologicalS
 namespace TopCat
 
 variable {C : Type u} [Category.{v} C]
-variable {X : TopCat.{w}} (F : Presheaf C X) {ι : Type v} (U : ι -> Opens X)
+variable {X : TopCat.{w}} (F : Presheaf C X) {ι : Type v} (U : ι → Opens X)
 
 namespace Presheaf
 
@@ -85,62 +85,51 @@ preserve limits. This applies to most "algebraic" categories, e.g. groups, abeli
 nonrec def IsSheaf (F : Presheaf.{w, v, u} C X) : Prop :=
   Presheaf.IsSheaf (Opens.grothendieckTopology X) F
 
-/--
-theorem `isSheaf_unit` / 定理 `isSheaf_unit`
+/-- The presheaf valued in `Unit` over any topological space is a sheaf.
+-/
+/-
+**TopCat.Presheaf.isSheaf_unit** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Presheaf`。
+形式化陈述：isSheaf_unit (F : Presheaf (CategoryTheory.Discrete Unit) X) : F.IsSheaf
+参数：F : Presheaf (CategoryTheory.Discrete Unit) X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.Discrete.instSubsingleton`：∀ {α : Type u₁} [Subsingleton 
+α], Subsingleton (CategoryTheory.Discrete α)
+· 使用定理 `instSubsingletonPUnit`：Subsingleton PUnit.{u_1}
 
-English:
-theorem isSheaf_unit
-  given: (F : Presheaf (CategoryTheory.Discrete Unit) X)
-  statement: F.IsSheaf
-  proof: fun x U S _ x _ => ⟨eqToHom (Subsingleton.elim _ _), by cat_disch, fun _ => by cat_disch⟩
-
-中文:
-定理 isSheaf_unit
-  条件: (F : 预层 (范畴论.离散 单元) X)
-  结论: F.是层
-  证明: fun x U S _ x _ => ⟨eqToHom (Subsingleton.elim _ _), by cat_disch, fun _ => by cat_disch⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, cat_disch, eqToHom
+--- 原说明 ---
+The presheaf valued in `Unit` over any topological space is a sheaf.
 -/
 theorem isSheaf_unit (F : Presheaf (CategoryTheory.Discrete Unit) X) : F.IsSheaf :=
   fun x U S _ x _ => ⟨eqToHom (Subsingleton.elim _ _), by cat_disch, fun _ => by cat_disch⟩
-
-/--
-theorem `isSheaf_iso_iff` / 定理 `isSheaf_iso_iff`
-
-English:
-theorem isSheaf_iso_iff
-  given: {F G : Presheaf C X} (α : F ≅ G)
-  statement: F.IsSheaf ↔ G.IsSheaf
-  proof: Presheaf.isSheaf_of_iso_iff α
-
-中文:
-定理 isSheaf_iso_iff
-  条件: {F G : 预层 C X} (α : F ≅ G)
-  结论: F.是层 ↔ G.是层
-  证明: Presheaf.isSheaf_of_iso_iff α
-
-Depends on / 依赖: Presheaf, Presheaf.isSheaf_of_iso_iff, isSheaf_of_iso_iff
+/-
+**TopCat.Presheaf.isSheaf_iso_iff** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Presheaf`。
+形式化陈述：isSheaf_iso_iff {F G : Presheaf C X} (α : F ≅ G) : F.IsSheaf ↔ G.IsSheaf
+参数：α : F ≅ G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presheaf.isSheaf_of_iso_iff`：isSheaf_of_iso_iff {P P' : C
+ᵒᵖ ⥤ A} (e : P ≅ P') : IsSheaf J P ↔ IsSheaf J P'
 -/
 theorem isSheaf_iso_iff {F G : Presheaf C X} (α : F ≅ G) : F.IsSheaf ↔ G.IsSheaf :=
   Presheaf.isSheaf_of_iso_iff α
 
-/--
-theorem `isSheaf_of_iso` / 定理 `isSheaf_of_iso`
+/-- Transfer the sheaf condition across an isomorphism of presheaves.
+-/
+/-
+**TopCat.Presheaf.isSheaf_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Presheaf`。
+形式化陈述：isSheaf_of_iso {F G : Presheaf C X} (α : F ≅ G) (h : F.IsSheaf) : G.IsShea
+f
+参数：α : F ≅ G；h : F.IsSheaf。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopCat.Presheaf.isSheaf_iso_iff`：isSheaf_iso_iff {F G : Presheaf C X} (α
+ : F ≅ G) : F.IsSheaf ↔ G.IsSheaf
 
-English:
-theorem isSheaf_of_iso
-  given: {F G : Presheaf C X} (α : F ≅ G) (h : F.IsSheaf)
-  statement: G.IsSheaf
-  proof: (isSheaf_iso_iff α).1 h
-
-中文:
-定理 isSheaf_of_iso
-  条件: {F G : 预层 C X} (α : F ≅ G) (h : F.是层)
-  结论: G.是层
-  证明: (isSheaf_iso_iff α).1 h
-
-Depends on / 依赖: isSheaf_iso_iff
+--- 原说明 ---
+Transfer the sheaf condition across an isomorphism of presheaves.
 -/
 theorem isSheaf_of_iso {F G : Presheaf C X} (α : F ≅ G) (h : F.IsSheaf) : G.IsSheaf :=
   (isSheaf_iso_iff α).1 h
@@ -158,18 +147,15 @@ deriving Category
 
 variable {C X}
 
-/--
-Definition of `Sheaf.presheaf` / `Sheaf.presheaf` 的定义
+/-- The underlying presheaf of a sheaf -/
+/-
+**TopCat.Sheaf.presheaf** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X : TopCat} → 
+TopCat.Sheaf C X → TopCat.Presheaf C X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Sheaf.presheaf
-  signature: (F : X.Sheaf C)
-  body: F.1
-
-中文:
-缩写 层.presheaf
-  签名: (F : X.层 C)
-  定义体: F.1
+--- 原说明 ---
+The underlying presheaf of a sheaf
 -/
 abbrev Sheaf.presheaf (F : X.Sheaf C) : TopCat.Presheaf C X :=
   F.1
@@ -177,114 +163,70 @@ abbrev Sheaf.presheaf (F : X.Sheaf C) : TopCat.Presheaf C X :=
 variable (C X)
 
 -- Let's construct a trivial example, to keep the inhabited linter happy.
-/--
-Instance `sheafInhabited` / 实例 `sheafInhabited`
-
-English:
-instance sheafInhabited
-  signature: : Inhabited (Sheaf (CategoryTheory.Discrete PUnit) X)
-  body: ⟨⟨Functor.star _, Presheaf.isSheaf_unit _⟩⟩
-
-中文:
-实例 sheafInhabited
-  签名: : 可居 (层 (范畴论.离散 命题单元) X)
-  定义体: ⟨⟨Functor.star _, Presheaf.isSheaf_unit _⟩⟩
-
-Depends on / 依赖: Functor, Functor.star, Presheaf, Presheaf.isSheaf_unit, isSheaf_unit
+/-
+**TopCat.sheafInhabited** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+形式化陈述：sheafInhabited : Inhabited (Sheaf (CategoryTheory.Discrete PUnit) X)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance sheafInhabited : Inhabited (Sheaf (CategoryTheory.Discrete PUnit) X) :=
   ⟨⟨Functor.star _, Presheaf.isSheaf_unit _⟩⟩
 
 namespace Sheaf
 
-/--
-Definition of `forget` / `forget` 的定义
+/-- The forgetful functor from sheaves to presheaves.
+-/
+/-
+**TopCat.Sheaf.forget** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：forget : TopCat.Sheaf C X ⥤ TopCat.Presheaf C X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : TopCat.Sheaf C X ⥤ TopCat.Presheaf C X
-  body: sheafToPresheaf _ _
-
-中文:
-定义 forget
-  签名: : 顶元素范畴.层 C X ⥤ 顶元素范畴.预层 C X
-  定义体: sheafToPresheaf _ _
-
-Depends on / 依赖: sheafToPresheaf
+--- 原说明 ---
+The forgetful functor from sheaves to presheaves.
 -/
 def forget : TopCat.Sheaf C X ⥤ TopCat.Presheaf C X :=
   sheafToPresheaf _ _
 
 -- The following instances should be constructed by a deriving handler.
 -- https://github.com/leanprover-community/mathlib4/issues/380
-
-/--
-Instance `forget_full` / 实例 `forget_full`
-
-English:
-instance forget_full
-  signature: : (forget C X).Full where
-  body: ⟨ObjectProperty.homMk f, rfl⟩
-
-中文:
-实例 forget_full
-  签名: : (forget C X).满 where
-  定义体: ⟨ObjectProperty.homMk f, rfl⟩
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.homMk
+/-
+**TopCat.Sheaf.forget_full** 是 Mathlib 中的一个实例，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：forget_full : (forget C X).Full where map_surjective f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forget_full : (forget C X).Full where
   map_surjective f := ⟨ObjectProperty.homMk f, rfl⟩
-
-/--
-Instance `forgetFaithful` / 实例 `forgetFaithful`
-
-English:
-instance forgetFaithful
-  signature: : (forget C X).Faithful where
-  body: Sheaf.hom_ext
-
-中文:
-实例 forgetFaithful
-  签名: : (forget C X).忠实 where
-  定义体: Sheaf.hom_ext
-
-Depends on / 依赖: Sheaf.hom_ext, hom_ext
+/-
+**TopCat.Sheaf.forgetFaithful** 是 Mathlib 中的一个实例，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：forgetFaithful : (forget C X).Faithful where map_injective
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sheaf.hom_ext`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {J : CategoryTheory.GrothendieckTopology C} {A : Type u₂}   [i
+nst_1 : CategoryTh…
 -/
 instance forgetFaithful : (forget C X).Faithful where
   map_injective := Sheaf.hom_ext
 
 -- Note: These can be proved by simp.
-/--
-theorem `id_app` / 定理 `id_app`
-
-English:
-theorem id_app
-  given: (F : Sheaf C X) (t)
-  statement: (𝟙 F : F ⟶ F).1.app t = 𝟙 _
-  proof: rfl
-
-中文:
-定理 id_app
-  条件: (F : 层 C X) (t)
-  结论: (𝟙 F : F ⟶ F).1.app t = 𝟙 _
-  证明: rfl
+/-
+**TopCat.Sheaf.id_app** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：id_app (F : Sheaf C X) (t) : (𝟙 F : F ⟶ F).1.app t = 𝟙 _
+参数：F : Sheaf C X；t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_app (F : Sheaf C X) (t) : (𝟙 F : F ⟶ F).1.app t = 𝟙 _ :=
   rfl
-
-/--
-theorem `comp_app` / 定理 `comp_app`
-
-English:
-theorem comp_app
-  given: {F G H : Sheaf C X} (f : F ⟶ G) (g : G ⟶ H) (t)
-  proof: rfl
-
-中文:
-定理 comp_app
-  条件: {F G H : 层 C X} (f : F ⟶ G) (g : G ⟶ H) (t)
-  证明: rfl
+/-
+**TopCat.Sheaf.comp_app** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：comp_app {F G H : Sheaf C X} (f : F ⟶ G) (g : G ⟶ H) (t) : (f ≫ g).1.app t
+ = f.1.app t ≫ g.1.app t
+参数：f : F ⟶ G；g : G ⟶ H；t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_app {F G H : Sheaf C X} (f : F ⟶ G) (g : G ⟶ H) (t) :
     (f ≫ g).1.app t = f.1.app t ≫ g.1.app t :=
@@ -292,47 +234,68 @@ theorem comp_app {F G H : Sheaf C X} (f : F ⟶ G) (g : G ⟶ H) (t) :
 
 end Sheaf
 
-/--
-lemma `Presheaf.IsSheaf.section_ext` / 引理 `Presheaf.IsSheaf.section_ext`
-
-English:
-lemma Presheaf.IsSheaf.section_ext
-  statement: {X : TopCat.{u}}
-  proof: by
-  have := (isSheaf_iff_isSheaf_of_type _ _).mp
-    ((Presheaf.isSheaf_iff_isSheaf_forget (C := Opens X) (A' := A) _ F (forget _)).mp hF)
-  choose V hV hxV H using fun x : U.unop => hst x.1 x.2
-  refine (this.isSheafFor (.ofArrows V fun x => homOfLE (hV x)) ?_).isSeparatedFor.ext ?_
-  · exact fun x hx => ⟨V ⟨x, hx⟩, homOfLE (hV _), Sieve.ofArrows_mk _ _ _, hxV _⟩
-  · rintro _ _ ⟨x⟩; exact H x
-
-中文:
-引理 预层.是层.section_ext
-  结论: {X : 顶元素范畴.{u}}
-  证明: by
-  have := (isSheaf_iff_isSheaf_of_type _ _).mp
-    ((Presheaf.isSheaf_iff_isSheaf_forget (C := Opens X) (A' := A) _ F (forget _)).mp hF)
-  choose V hV hxV H using fun x : U.unop => hst x.1 x.2
-  refine (this.isSheafFor (.ofArrows V fun x => homOfLE (hV x)) ?_).isSeparatedFor.ext ?_
-  · exact fun x hx => ⟨V ⟨x, hx⟩, homOfLE (hV _), Sieve.ofArrows_mk _ _ _, hxV _⟩
-  · rintro _ _ ⟨x⟩; exact H x
-
-Depends on / 依赖: Presheaf, Presheaf.isSheaf_iff_isSheaf_forget, Sieve.ofArrows_mk, U.unop, forget, homOfLE, isSeparatedFor, isSeparatedFor.ext, isSheafFor, isSheaf_iff_isSheaf_forget, isSheaf_iff_isSheaf_of_type, ofArrows, ofArrows_mk, this.isSheafFor
+/-
+**TopCat.Presheaf.IsSheaf.section_ext** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Presheaf
+.IsSheaf`。
+形式化陈述：∀ {X : TopCat} {A : Type u_1} [inst : CategoryTheory.Category.{u, u_1} A] 
+{FC : A → A → Type u_2} {CC : A → Type u}   [inst_1 : (X Y : A) → FunLike (FC X 
+Y) (CC X) (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory A FC]   [CategoryThe
+ory.Limits.HasLimits A] [CategoryTheory.Limits.PreservesLimits (CategoryTheory.f
+orget A)]   [(CategoryTheory.forget A).ReflectsIsomorphisms] {F : TopCat.Preshea
+f A X},   F.IsSheaf →     ∀ {U : (TopologicalSpace.Opens ↑X)ᵒᵖ} {s t : CategoryT
+heory.ToType (F.obj U)},       (∀ x ∈ Opposite.unop U,           ∃ V,           
+  ∃ (hV : V ≤ Opposite.unop U),               x ∈ V ∧                 (CategoryT
+heory.ConcreteCategory.hom (F.map (CategoryTheory.homOfLE hV).op)) s =          
+         (CategoryTheory.ConcreteCategory.hom (F.map (CategoryTheory.homOfLE hV)
+.op)) t) →         s = t
+参数：X Y : A；FC X Y；CC X；CC Y；CategoryTheory.forget A；CategoryTheory.forget A；Topo
+logicalSpace.Opens ↑X；F.obj U；∀ x ∈ Opposite.unop U,           ∃ V,             
+∃ (hV : V ≤ Opposite.unop U),               x ∈ V ∧                 (CategoryThe
+ory.ConcreteCategory.hom (F.map (CategoryTheory.homOfLE hV).op)) s =            
+       (CategoryTheory.ConcreteCategory.hom (F.map (CategoryTheory.homOfLE hV).o
+p)) t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.isSheaf_iff_isSheaf_of_type`：isSheaf_iff_isSheaf_of_type 
+(P : Cᵒᵖ ⥤ Type w) : Presheaf.IsSheaf J P ↔ Presieve.IsSheaf J P
+· 使用定理 `CategoryTheory.Presheaf.isSheaf_iff_isSheaf_forget`：isSheaf_iff_isSheaf_
+forget (s : A' ⥤ Type (max v₁ u₁)) [HasLimits A'] [PreservesLimits s] [s.Reflect
+sIsomorphisms] : IsSheaf J P' ↔ IsSheaf …
+· 使用定理 `CategoryTheory.Presieve.IsSeparatedFor.ext`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.Functor Cᵒᵖ (Type w)} {X : C
+}   {R : CategoryTheory.Presieve…
+· 使用定理 `CategoryTheory.Presieve.IsSheafFor.isSeparatedFor`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.Functor Cᵒᵖ (Type w)}
+ {X : C}   {R : CategoryTheory.Presieve…
+· 使用定理 `CategoryTheory.Presieve.IsSheaf.isSheafFor`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {X : C} {J : CategoryTheory.GrothendieckTopology C}
+   {P : CategoryTheory.Functor C…
+· 使用引理 `CategoryTheory.Sieve.ofArrows_mk`：ofArrows_mk (i : I) : ofArrows Y f (f 
+i)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma Presheaf.IsSheaf.section_ext {X : TopCat.{u}}
-    {A : Type*} [Category.{u} A] {FC : A -> A -> Type*} {CC : A -> Type u}
-    [forall X Y : A, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory.{u} A FC]
+    {A : Type*} [Category.{u} A] {FC : A → A → Type*} {CC : A → Type u}
+    [∀ X Y : A, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory.{u} A FC]
     [HasLimits A] [PreservesLimits (forget A)] [(forget A).ReflectsIsomorphisms]
     {F : TopCat.Presheaf A X} (hF : TopCat.Presheaf.IsSheaf F)
     {U : (Opens X)ᵒᵖ} {s t : ToType (F.obj U)}
-    (hst : forall x in U.unop, exists V, exists hV : V <= U.unop, x in V ∧
+    (hst : ∀ x ∈ U.unop, ∃ V, ∃ hV : V ≤ U.unop, x ∈ V ∧
       F.map (homOfLE hV).op s = F.map (homOfLE hV).op t) :
     s = t := by
   have := (isSheaf_iff_isSheaf_of_type _ _).mp
     ((Presheaf.isSheaf_iff_isSheaf_forget (C := Opens X) (A' := A) _ F (forget _)).mp hF)
-  choose V hV hxV H using fun x : U.unop => hst x.1 x.2
-  refine (this.isSheafFor (.ofArrows V fun x => homOfLE (hV x)) ?_).isSeparatedFor.ext ?_
-  · exact fun x hx => ⟨V ⟨x, hx⟩, homOfLE (hV _), Sieve.ofArrows_mk _ _ _, hxV _⟩
+  choose V hV hxV H using fun x : U.unop ↦ hst x.1 x.2
+  refine (this.isSheafFor (.ofArrows V fun x ↦ homOfLE (hV x)) ?_).isSeparatedFor.ext ?_
+  · exact fun x hx ↦ ⟨V ⟨x, hx⟩, homOfLE (hV _), Sieve.ofArrows_mk _ _ _, hxV _⟩
   · rintro _ _ ⟨x⟩; exact H x
 
 end TopCat
+

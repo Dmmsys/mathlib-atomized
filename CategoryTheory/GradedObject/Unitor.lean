@@ -34,76 +34,67 @@ section LeftUnitor
 variable {C D I J : Type*} [Category* C] [Category* D]
   [Zero I] [DecidableEq I] [HasInitial C]
   (F : C ⥤ D ⥤ D) (X : C) (e : F.obj X ≅ 𝟭 D)
-  [forall (Y : D), PreservesColimit (Functor.empty.{0} C) (F.flip.obj Y)]
-  (p : I × J -> J) (hp : forall (j : J), p ⟨0, j⟩ = j)
+  [∀ (Y : D), PreservesColimit (Functor.empty.{0} C) (F.flip.obj Y)]
+  (p : I × J → J) (hp : ∀ (j : J), p ⟨0, j⟩ = j)
   (Y Y' : GradedObject J D) (φ : Y ⟶ Y')
 
 /-- Given `F : C ⥤ D ⥤ D`, `X : C`, `e : F.obj X ≅ 𝟭 D` and `Y : GradedObject J D`,
 this is the isomorphism `((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y a ≅ Y a.2`
 when `a : I × J` is such that `a.1 = 0`. -/
 @[simps!]
-/--
-Definition of `mapBifunctorObjSingle₀ObjIso` / `mapBifunctorObjSingle₀ObjIso` 的定义
+/-
+**CategoryTheory.GradedObject.mapBifunctorObjSingle** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.GradedObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorObjSingle₀ObjIso
-  signature: (a : I × J) (ha : a.1 = 0)
-  body: (F.mapIso (singleObjApplyIsoOfEq _ X _ ha)).app _ ≪≫ e.app (Y a.2)
-
-中文:
-定义 mapBifunctorObjSingle₀ObjIso
-  签名: (a : I × J) (ha : a.1 = 0)
-  定义体: (F.mapIso (singleObjApplyIsoOfEq _ X _ ha)).app _ ≪≫ e.app (Y a.2)
-
-Depends on / 依赖: F.mapIso, e.app, mapIso, singleObjApplyIsoOfEq
+--- 原说明 ---
+Given `F : C ⥤ D ⥤ D`, `X : C`, `e : F.obj X ≅ 𝟭 D` and `Y : GradedObject J D`,
+this is the isomorphism `((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y a 
+≅ Y a.2`
+when `a : I × J` is such that `a.1 = 0`.
 -/
 noncomputable def mapBifunctorObjSingle₀ObjIso (a : I × J) (ha : a.1 = 0) :
     ((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y a ≅ Y a.2 :=
   (F.mapIso (singleObjApplyIsoOfEq _ X _ ha)).app _ ≪≫ e.app (Y a.2)
 
-/--
-Definition of `mapBifunctorObjSingle₀ObjIsInitial` / `mapBifunctorObjSingle₀ObjIsInitial` 的定义
+/-- Given `F : C ⥤ D ⥤ D`, `X : C` and `Y : GradedObject J D`,
+`((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y a` is an initial object
+when `a : I × J` is such that `a.1 ≠ 0`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorObjSingle** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.GradedObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorObjSingle₀ObjIsInitial
-  signature: (a : I × J) (ha : a.1 != 0)
-  body: IsInitial.isInitialObj (F.flip.obj (Y a.2)) _ (isInitialSingleObjApply _ _ _ ha)
-
-中文:
-定义 mapBifunctorObjSingle₀ObjIsInitial
-  签名: (a : I × J) (ha : a.1 != 0)
-  定义体: IsInitial.isInitialObj (F.flip.obj (Y a.2)) _ (isInitialSingleObjApply _ _ _ ha)
-
-Depends on / 依赖: F.flip.obj, IsInitial, IsInitial.isInitialObj, isInitialObj, isInitialSingleObjApply
+--- 原说明 ---
+Given `F : C ⥤ D ⥤ D`, `X : C` and `Y : GradedObject J D`,
+`((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y a` is an initial object
+when `a : I × J` is such that `a.1 ≠ 0`.
 -/
-noncomputable def mapBifunctorObjSingle₀ObjIsInitial (a : I × J) (ha : a.1 != 0) :
+noncomputable def mapBifunctorObjSingle₀ObjIsInitial (a : I × J) (ha : a.1 ≠ 0) :
     IsInitial (((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y a) :=
   IsInitial.isInitialObj (F.flip.obj (Y a.2)) _ (isInitialSingleObjApply _ _ _ ha)
 
-/--
-Definition of `mapBifunctorLeftUnitorCofan` / `mapBifunctorLeftUnitorCofan` 的定义
+/-- Given `F : C ⥤ D ⥤ D`, `X : C`, `e : F.obj X ≅ 𝟭 D`, `Y : GradedObject J D` and
+`p : I × J → J` such that `p ⟨0, j⟩ = j` for all `j`,
+this is the (colimit) cofan which shall be used to construct the isomorphism
+`mapBifunctorMapObj F p ((single₀ I).obj X) Y ≅ Y`, see `mapBifunctorLeftUnitor`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitorCofan** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitorCofan (hp : forall (j : J), p ⟨0, j⟩ = j) (Y) (j : J
+) : (((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y).CofanMapObjFun p j
+参数：hp : forall (j : J), p ⟨0, j⟩ = j；Y；j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorLeftUnitorCofan
-  signature: (hp : forall (j : J), p ⟨0, j⟩ = j) (Y) (j : J)
-  body: CofanMapObjFun.mk _ _ _ (Y j) (fun a ha =>
-    if ha : a.1 = 0 then
-      (mapBifunctorObjSingle₀ObjIso F X e Y a ha).hom ≫ eqToHom (by aesop)
-    else
-      (mapBifunctorObjSingle₀ObjIsInitial F X Y a ha).to _)
-
-中文:
-定义 mapBifunctorLeftUnitorCofan
-  签名: (hp : 对任意 (j : J), p ⟨0, j⟩ = j) (Y) (j : J)
-  定义体: CofanMapObjFun.mk _ _ _ (Y j) (fun a ha =>
-    if ha : a.1 = 0 then
-      (mapBifunctorObjSingle₀ObjIso F X e Y a ha).hom ≫ eqToHom (by aesop)
-    else
-      (mapBifunctorObjSingle₀ObjIsInitial F X Y a ha).to _)
-
-Depends on / 依赖: CofanMapObjFun, CofanMapObjFun.mk, eqToHom
+--- 原说明 ---
+Given `F : C ⥤ D ⥤ D`, `X : C`, `e : F.obj X ≅ 𝟭 D`, `Y : GradedObject J D` and
+`p : I × J → J` such that `p ⟨0, j⟩ = j` for all `j`,
+this is the (colimit) cofan which shall be used to construct the isomorphism
+`mapBifunctorMapObj F p ((single₀ I).obj X) Y ≅ Y`, see `mapBifunctorLeftUnitor`
+.
 -/
-noncomputable def mapBifunctorLeftUnitorCofan (hp : forall (j : J), p ⟨0, j⟩ = j) (Y) (j : J) :
+noncomputable def mapBifunctorLeftUnitorCofan (hp : ∀ (j : J), p ⟨0, j⟩ = j) (Y) (j : J) :
     (((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y).CofanMapObjFun p j :=
   CofanMapObjFun.mk _ _ _ (Y j) (fun a ha =>
     if ha : a.1 = 0 then
@@ -114,22 +105,29 @@ noncomputable def mapBifunctorLeftUnitorCofan (hp : forall (j : J), p ⟨0, j⟩
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp, reassoc]
-/--
-lemma `mapBifunctorLeftUnitorCofan_inj` / 引理 `mapBifunctorLeftUnitorCofan_inj`
-
-English:
-lemma mapBifunctorLeftUnitorCofan_inj
-  given: (j : J)
-  proof: by
-  simp [mapBifunctorLeftUnitorCofan]
-
-中文:
-引理 mapBifunctorLeftUnitorCofan_inj
-  条件: (j : J)
-  证明: by
-  simp [mapBifunctorLeftUnitorCofan]
-
-Depends on / 依赖: mapBifunctorLeftUnitorCofan
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitorCofan_inj** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitorCofan_inj (j : J) : (mapBifunctorLeftUnitorCofan F X
+ e p hp Y j).inj ⟨⟨0, j⟩, hp j⟩ = (F.map (singleObjApplyIso (0 : I) X).hom).app 
+(Y j) ≫ e.hom.app (Y j)
+参数：j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma mapBifunctorLeftUnitorCofan_inj (j : J) :
     (mapBifunctorLeftUnitorCofan F X e p hp Y j).inj ⟨⟨0, j⟩, hp j⟩ =
@@ -137,48 +135,18 @@ lemma mapBifunctorLeftUnitorCofan_inj (j : J) :
   simp [mapBifunctorLeftUnitorCofan]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `mapBifunctorLeftUnitorCofanIsColimit` / `mapBifunctorLeftUnitorCofanIsColimit` 的定义
+/-- The cofan `mapBifunctorLeftUnitorCofan F X e p hp Y j` is a colimit. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitorCofanIsColimit** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitorCofanIsColimit (j : J) : IsColimit (mapBifunctorLeft
+UnitorCofan F X e p hp Y j)
+参数：j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorLeftUnitorCofanIsColimit
-  signature: (j : J)
-  body: Cofan.IsColimit.mk _
-    (fun s => e.inv.app (Y j) ≫
-      (F.map (singleObjApplyIso (0 : I) X).inv).app (Y j) ≫ s.inj ⟨⟨0, j⟩, hp j⟩)
-    (fun s => by
-      rintro ⟨⟨i, j'⟩, h⟩
-      by_cases hi : i = 0
-      · subst hi
-        simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        subst h
-        simp
-      · apply IsInitial.hom_ext
-        exact mapBifunctorObjSingle₀ObjIsInitial _ _ _ _ hi)
-    (fun s m hm => by simp [← hm ⟨⟨0, j⟩, hp j⟩])
-
-include e hp in
-
-中文:
-定义 mapBifunctorLeftUnitorCofanIsColimit
-  签名: (j : J)
-  定义体: Cofan.IsColimit.mk _
-    (fun s => e.inv.app (Y j) ≫
-      (F.map (singleObjApplyIso (0 : I) X).inv).app (Y j) ≫ s.inj ⟨⟨0, j⟩, hp j⟩)
-    (fun s => by
-      rintro ⟨⟨i, j'⟩, h⟩
-      by_cases hi : i = 0
-      · subst hi
-        simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        subst h
-        simp
-      · apply IsInitial.hom_ext
-        exact mapBifunctorObjSingle₀ObjIsInitial _ _ _ _ hi)
-    (fun s m hm => by simp [← hm ⟨⟨0, j⟩, hp j⟩])
-
-include e hp in
-
-Depends on / 依赖: Cofan.IsColimit.mk, F.map, Hom.id, IsColimit, IsInitial, IsInitial.hom_ext, Set.mem_preimage, Set.mem_singleton_iff, WidePushoutShape, e.inv.app, hom_ext, mem_preimage, mem_singleton_iff, s.inj, singleObjApplyIso
+--- 原说明 ---
+The cofan `mapBifunctorLeftUnitorCofan F X e p hp Y j` is a colimit.
 -/
 noncomputable def mapBifunctorLeftUnitorCofanIsColimit (j : J) :
     IsColimit (mapBifunctorLeftUnitorCofan F X e p hp Y j) :=
@@ -197,18 +165,15 @@ noncomputable def mapBifunctorLeftUnitorCofanIsColimit (j : J) :
     (fun s m hm => by simp [← hm ⟨⟨0, j⟩, hp j⟩])
 
 include e hp in
-/--
-lemma `mapBifunctorLeftUnitor_hasMap` / 引理 `mapBifunctorLeftUnitor_hasMap`
-
-English:
-lemma mapBifunctorLeftUnitor_hasMap
-  proof: CofanMapObjFun.hasMap _ _ _ (mapBifunctorLeftUnitorCofanIsColimit F X e p hp Y)
-
-中文:
-引理 mapBifunctorLeftUnitor_hasMap
-  证明: CofanMapObjFun.hasMap _ _ _ (mapBifunctorLeftUnitorCofanIsColimit F X e p hp Y)
-
-Depends on / 依赖: CofanMapObjFun, CofanMapObjFun.hasMap, hasMap, mapBifunctorLeftUnitorCofanIsColimit
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitor_hasMap** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitor_hasMap : HasMap (((mapBifunctor F I J).obj ((single
+₀ I).obj X)).obj Y) p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GradedObject.CofanMapObjFun.hasMap`：hasMap (c : forall j,
+ CofanMapObjFun X p j) (hc : forall j, IsColimit (c j)) : X.HasMap p
 -/
 lemma mapBifunctorLeftUnitor_hasMap :
     HasMap (((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y) p :=
@@ -217,22 +182,21 @@ lemma mapBifunctorLeftUnitor_hasMap :
 variable [HasMap (((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y) p]
   [HasMap (((mapBifunctor F I J).obj ((single₀ I).obj X)).obj Y') p]
 
-/--
-Definition of `mapBifunctorLeftUnitor` / `mapBifunctorLeftUnitor` 的定义
+/-- Given `F : C ⥤ D ⥤ D`, `X : C`, `e : F.obj X ≅ 𝟭 D`, `Y : GradedObject J D` and
+`p : I × J → J` such that `p ⟨0, j⟩ = j` for all `j`,
+this is the left unitor isomorphism `mapBifunctorMapObj F p ((single₀ I).obj X) Y ≅ Y`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitor** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitor : mapBifunctorMapObj F p ((single₀ I).obj X) Y ≅ Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorLeftUnitor
-  signature: : mapBifunctorMapObj F p ((single₀ I).obj X) Y ≅ Y
-  body: isoMk _ _ (fun j => (CofanMapObjFun.iso
-    (mapBifunctorLeftUnitorCofanIsColimit F X e p hp Y j)).symm)
-
-中文:
-定义 mapBifunctorLeftUnitor
-  签名: : mapBifunctorMapObj F p ((single₀ I).obj X) Y ≅ Y
-  定义体: isoMk _ _ (fun j => (CofanMapObjFun.iso
-    (mapBifunctorLeftUnitorCofanIsColimit F X e p hp Y j)).symm)
-
-Depends on / 依赖: CofanMapObjFun, CofanMapObjFun.iso, mapBifunctorLeftUnitorCofanIsColimit
+--- 原说明 ---
+Given `F : C ⥤ D ⥤ D`, `X : C`, `e : F.obj X ≅ 𝟭 D`, `Y : GradedObject J D` and
+`p : I × J → J` such that `p ⟨0, j⟩ = j` for all `j`,
+this is the left unitor isomorphism `mapBifunctorMapObj F p ((single₀ I).obj X) 
+Y ≅ Y`.
 -/
 noncomputable def mapBifunctorLeftUnitor : mapBifunctorMapObj F p ((single₀ I).obj X) Y ≅ Y :=
   isoMk _ _ (fun j => (CofanMapObjFun.iso
@@ -241,26 +205,10 @@ noncomputable def mapBifunctorLeftUnitor : mapBifunctorMapObj F p ((single₀ I)
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `ι_mapBifunctorLeftUnitor_hom_apply` / 引理 `ι_mapBifunctorLeftUnitor_hom_apply`
-
-English:
-lemma ι_mapBifunctorLeftUnitor_hom_apply
-  given: (j : J)
-  proof: by
-  dsimp [mapBifunctorLeftUnitor]
-  erw [CofanMapObjFun.ιMapObj_iso_inv]
-  rw [mapBifunctorLeftUnitorCofan_inj]
-
-中文:
-引理 ι_mapBifunctorLeftUnitor_hom_apply
-  条件: (j : J)
-  证明: by
-  dsimp [mapBifunctorLeftUnitor]
-  erw [CofanMapObjFun.ιMapObj_iso_inv]
-  rw [mapBifunctorLeftUnitorCofan_inj]
-
-Depends on / 依赖: CofanMapObjFun, mapBifunctorLeftUnitor, mapBifunctorLeftUnitorCofan_inj
+/-
+**CategoryTheory.GradedObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GradedO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_mapBifunctorLeftUnitor_hom_apply (j : J) :
     ιMapBifunctorMapObj F p ((single₀ I).obj X) Y 0 j j (hp j) ≫
@@ -269,19 +217,15 @@ lemma ι_mapBifunctorLeftUnitor_hom_apply (j : J) :
   dsimp [mapBifunctorLeftUnitor]
   erw [CofanMapObjFun.ιMapObj_iso_inv]
   rw [mapBifunctorLeftUnitorCofan_inj]
-
-/--
-lemma `mapBifunctorLeftUnitor_inv_apply` / 引理 `mapBifunctorLeftUnitor_inv_apply`
-
-English:
-lemma mapBifunctorLeftUnitor_inv_apply
-  given: (j : J)
-  proof: rfl
-
-中文:
-引理 mapBifunctorLeftUnitor_inv_apply
-  条件: (j : J)
-  证明: rfl
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitor_inv_apply** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitor_inv_apply (j : J) : (mapBifunctorLeftUnitor F X e p
+ hp Y).inv j = e.inv.app (Y j) ≫ (F.map (singleObjApplyIso (0 : I) X).inv).app (
+Y j) ≫ ιMapBifunctorMapObj F p ((single₀ I).obj X) Y 0 j j (hp j)
+参数：j : J。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapBifunctorLeftUnitor_inv_apply (j : J) :
     (mapBifunctorLeftUnitor F X e p hp Y).inv j =
@@ -291,65 +235,96 @@ lemma mapBifunctorLeftUnitor_inv_apply (j : J) :
 variable {Y Y'}
 
 @[reassoc]
-/--
-lemma `mapBifunctorLeftUnitor_inv_naturality` / 引理 `mapBifunctorLeftUnitor_inv_naturality`
-
-English:
-lemma mapBifunctorLeftUnitor_inv_naturality
-  proof: by
-  ext j
-  dsimp
-  rw [mapBifunctorLeftUnitor_inv_apply]; rw [mapBifunctorLeftUnitor_inv_apply]; rw [assoc]; rw [assoc]; rw [ι_mapBifunctorMapMap]
-  dsimp
-  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← NatTrans.naturality_assoc]; rw [← NatTrans.naturality_assoc]
-  rfl
-
-@[reassoc]
-
-中文:
-引理 mapBifunctorLeftUnitor_inv_naturality
-  证明: by
-  ext j
-  dsimp
-  rw [mapBifunctorLeftUnitor_inv_apply]; rw [mapBifunctorLeftUnitor_inv_apply]; rw [assoc]; rw [assoc]; rw [ι_mapBifunctorMapMap]
-  dsimp
-  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← NatTrans.naturality_assoc]; rw [← NatTrans.naturality_assoc]
-  rfl
-
-@[reassoc]
-
-Depends on / 依赖: Functor, Functor.map_id, NatTrans, NatTrans.id_app, NatTrans.naturality_assoc, id_app, id_comp, mapBifunctorLeftUnitor_inv_apply, map_id, naturality_assoc
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitor_inv_naturality** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitor_inv_naturality : φ ≫ (mapBifunctorLeftUnitor F X e 
+p hp Y').inv = (mapBifunctorLeftUnitor F X e p hp Y).inv ≫ mapBifunctorMapMap F 
+p (𝟙 _) φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GradedObject.hom_ext`：hom_ext {β : Type*} {X Y : GradedOb
+ject β C} (f g : X ⟶ Y) (h : forall x, f x = g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.GradedObject.mapBifunctorLeftUnitor_inv_apply`：mapBifunct
+orLeftUnitor_inv_apply (j : J) : (mapBifunctorLeftUnitor F X e p hp Y).inv j = e
+.inv.app (Y j) ≫ (F.map (singleObjApplyIso (0 : I)…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.GradedObject.ι_mapBifunctorMapMap`：ι_mapBifunctorMapMap {
+X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂) {Y₁ Y₂ : GradedObject J C₂} (g : Y₁ ⟶ Y
+₂) [HasMap (((mapBifunctor F I J).obj …
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.NatTrans.id_app`：id_app (F : C ⥤ D) (X : C) : (𝟙 F : F ⟶ 
+F).app X = 𝟙 (F.obj X)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
 -/
 lemma mapBifunctorLeftUnitor_inv_naturality :
     φ ≫ (mapBifunctorLeftUnitor F X e p hp Y').inv =
       (mapBifunctorLeftUnitor F X e p hp Y).inv ≫ mapBifunctorMapMap F p (𝟙 _) φ := by
   ext j
   dsimp
-  rw [mapBifunctorLeftUnitor_inv_apply]; rw [mapBifunctorLeftUnitor_inv_apply]; rw [assoc]; rw [assoc]; rw [ι_mapBifunctorMapMap]
+  rw [mapBifunctorLeftUnitor_inv_apply, mapBifunctorLeftUnitor_inv_apply, assoc, assoc,
+    ι_mapBifunctorMapMap]
   dsimp
-  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← NatTrans.naturality_assoc]; rw [← NatTrans.naturality_assoc]
+  rw [Functor.map_id, NatTrans.id_app, id_comp, ← NatTrans.naturality_assoc,
+    ← NatTrans.naturality_assoc]
   rfl
 
 @[reassoc]
-/--
-lemma `mapBifunctorLeftUnitor_naturality` / 引理 `mapBifunctorLeftUnitor_naturality`
-
-English:
-lemma mapBifunctorLeftUnitor_naturality
-  proof: by
-  rw [← cancel_mono (mapBifunctorLeftUnitor F X e p hp Y').inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [mapBifunctorLeftUnitor_inv_naturality]; rw [Iso.hom_inv_id_assoc]
-
-中文:
-引理 mapBifunctorLeftUnitor_naturality
-  证明: by
-  rw [← cancel_mono (mapBifunctorLeftUnitor F X e p hp Y').inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [mapBifunctorLeftUnitor_inv_naturality]; rw [Iso.hom_inv_id_assoc]
-
-Depends on / 依赖: Iso.hom_inv_id, Iso.hom_inv_id_assoc, cancel_mono, comp_id, hom_inv_id, hom_inv_id_assoc, mapBifunctorLeftUnitor, mapBifunctorLeftUnitor_inv_naturality
+/-
+**CategoryTheory.GradedObject.mapBifunctorLeftUnitor_naturality** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorLeftUnitor_naturality : mapBifunctorMapMap F p (𝟙 _) φ ≫ (mapB
+ifunctorLeftUnitor F X e p hp Y').hom = (mapBifunctorLeftUnitor F X e p hp Y).ho
+m ≫ φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.GradedObject.mapBifunctorLeftUnitor_inv_naturality`：mapBi
+functorLeftUnitor_inv_naturality : φ ≫ (mapBifunctorLeftUnitor F X e p hp Y').in
+v = (mapBifunctorLeftUnitor F X e p hp Y).inv ≫ mapBifu…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 lemma mapBifunctorLeftUnitor_naturality :
     mapBifunctorMapMap F p (𝟙 _) φ ≫ (mapBifunctorLeftUnitor F X e p hp Y').hom =
       (mapBifunctorLeftUnitor F X e p hp Y).hom ≫ φ := by
-  rw [← cancel_mono (mapBifunctorLeftUnitor F X e p hp Y').inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [mapBifunctorLeftUnitor_inv_naturality]; rw [Iso.hom_inv_id_assoc]
+  rw [← cancel_mono (mapBifunctorLeftUnitor F X e p hp Y').inv, assoc, assoc, Iso.hom_inv_id,
+    comp_id, mapBifunctorLeftUnitor_inv_naturality, Iso.hom_inv_id_assoc]
 
 end LeftUnitor
 
@@ -358,76 +333,70 @@ section RightUnitor
 variable {C D I J : Type*} [Category* C] [Category* D]
   [Zero I] [DecidableEq I] [HasInitial C]
   (F : D ⥤ C ⥤ D) (Y : C) (e : F.flip.obj Y ≅ 𝟭 D)
-  [forall (X : D), PreservesColimit (Functor.empty.{0} C) (F.obj X)]
-  (p : J × I -> J)
-  (hp : forall (j : J), p ⟨j, 0⟩ = j) (X X' : GradedObject J D) (φ : X ⟶ X')
+  [∀ (X : D), PreservesColimit (Functor.empty.{0} C) (F.obj X)]
+  (p : J × I → J)
+  (hp : ∀ (j : J), p ⟨j, 0⟩ = j) (X X' : GradedObject J D) (φ : X ⟶ X')
 
 /-- Given `F : D ⥤ C ⥤ D`, `Y : C`, `e : F.flip.obj X ≅ 𝟭 D` and `X : GradedObject J D`,
 this is the isomorphism `((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y) a ≅ Y a.2`
 when `a : J × I` is such that `a.2 = 0`. -/
 @[simps!]
-/--
-Definition of `mapBifunctorObjObjSingle₀Iso` / `mapBifunctorObjObjSingle₀Iso` 的定义
+/-
+**CategoryTheory.GradedObject.mapBifunctorObjObjSingle** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.GradedObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorObjObjSingle₀Iso
-  signature: (a : J × I) (ha : a.2 = 0)
-  body: Functor.mapIso _ (singleObjApplyIsoOfEq _ Y _ ha) ≪≫ e.app (X a.1)
-
-中文:
-定义 mapBifunctorObjObjSingle₀Iso
-  签名: (a : J × I) (ha : a.2 = 0)
-  定义体: Functor.mapIso _ (singleObjApplyIsoOfEq _ Y _ ha) ≪≫ e.app (X a.1)
-
-Depends on / 依赖: Functor, Functor.mapIso, e.app, mapIso, singleObjApplyIsoOfEq
+--- 原说明 ---
+Given `F : D ⥤ C ⥤ D`, `Y : C`, `e : F.flip.obj X ≅ 𝟭 D` and `X : GradedObject J
+ D`,
+this is the isomorphism `((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y) a 
+≅ Y a.2`
+when `a : J × I` is such that `a.2 = 0`.
 -/
 noncomputable def mapBifunctorObjObjSingle₀Iso (a : J × I) (ha : a.2 = 0) :
     ((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y) a ≅ X a.1 :=
   Functor.mapIso _ (singleObjApplyIsoOfEq _ Y _ ha) ≪≫ e.app (X a.1)
 
-/--
-Definition of `mapBifunctorObjObjSingle₀IsInitial` / `mapBifunctorObjObjSingle₀IsInitial` 的定义
+/-- Given `F : D ⥤ C ⥤ D`, `Y : C` and `X : GradedObject J D`,
+`((mapBifunctor F J I).obj X).obj ((single₀ I).obj X) a` is an initial when `a : J × I`
+is such that `a.2 ≠ 0`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorObjObjSingle** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.GradedObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorObjObjSingle₀IsInitial
-  signature: (a : J × I) (ha : a.2 != 0)
-  body: IsInitial.isInitialObj (F.obj (X a.1)) _ (isInitialSingleObjApply _ _ _ ha)
-
-中文:
-定义 mapBifunctorObjObjSingle₀IsInitial
-  签名: (a : J × I) (ha : a.2 != 0)
-  定义体: IsInitial.isInitialObj (F.obj (X a.1)) _ (isInitialSingleObjApply _ _ _ ha)
-
-Depends on / 依赖: F.obj, IsInitial, IsInitial.isInitialObj, isInitialObj, isInitialSingleObjApply
+--- 原说明 ---
+Given `F : D ⥤ C ⥤ D`, `Y : C` and `X : GradedObject J D`,
+`((mapBifunctor F J I).obj X).obj ((single₀ I).obj X) a` is an initial when `a :
+ J × I`
+is such that `a.2 ≠ 0`.
 -/
-noncomputable def mapBifunctorObjObjSingle₀IsInitial (a : J × I) (ha : a.2 != 0) :
+noncomputable def mapBifunctorObjObjSingle₀IsInitial (a : J × I) (ha : a.2 ≠ 0) :
     IsInitial (((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y) a) :=
   IsInitial.isInitialObj (F.obj (X a.1)) _ (isInitialSingleObjApply _ _ _ ha)
 
-/--
-Definition of `mapBifunctorRightUnitorCofan` / `mapBifunctorRightUnitorCofan` 的定义
+/-- Given `F : D ⥤ C ⥤ D`, `Y : C`, `e : F.flip.obj Y ≅ 𝟭 D`, `X : GradedObject J D` and
+`p : J × I → J` such that `p ⟨j, 0⟩ = j` for all `j`,
+this is the (colimit) cofan which shall be used to construct the isomorphism
+`mapBifunctorMapObj F p X ((single₀ I).obj Y) ≅ X`, see `mapBifunctorRightUnitor`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitorCofan** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitorCofan (hp : forall (j : J), p ⟨j, 0⟩ = j) (X) (j : 
+J) : (((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y)).CofanMapObjFun p j
+参数：hp : forall (j : J), p ⟨j, 0⟩ = j；X；j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorRightUnitorCofan
-  signature: (hp : forall (j : J), p ⟨j, 0⟩ = j) (X) (j : J)
-  body: CofanMapObjFun.mk _ _ _ (X j) (fun a ha =>
-    if ha : a.2 = 0 then
-      (mapBifunctorObjObjSingle₀Iso F Y e X a ha).hom ≫ eqToHom (by aesop)
-    else
-      (mapBifunctorObjObjSingle₀IsInitial F Y X a ha).to _)
-
-中文:
-定义 mapBifunctorRightUnitorCofan
-  签名: (hp : 对任意 (j : J), p ⟨j, 0⟩ = j) (X) (j : J)
-  定义体: CofanMapObjFun.mk _ _ _ (X j) (fun a ha =>
-    if ha : a.2 = 0 then
-      (mapBifunctorObjObjSingle₀Iso F Y e X a ha).hom ≫ eqToHom (by aesop)
-    else
-      (mapBifunctorObjObjSingle₀IsInitial F Y X a ha).to _)
-
-Depends on / 依赖: CofanMapObjFun, CofanMapObjFun.mk, eqToHom
+--- 原说明 ---
+Given `F : D ⥤ C ⥤ D`, `Y : C`, `e : F.flip.obj Y ≅ 𝟭 D`, `X : GradedObject J D`
+ and
+`p : J × I → J` such that `p ⟨j, 0⟩ = j` for all `j`,
+this is the (colimit) cofan which shall be used to construct the isomorphism
+`mapBifunctorMapObj F p X ((single₀ I).obj Y) ≅ X`, see `mapBifunctorRightUnitor
+`.
 -/
-noncomputable def mapBifunctorRightUnitorCofan (hp : forall (j : J), p ⟨j, 0⟩ = j) (X) (j : J) :
+noncomputable def mapBifunctorRightUnitorCofan (hp : ∀ (j : J), p ⟨j, 0⟩ = j) (X) (j : J) :
     (((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y)).CofanMapObjFun p j :=
   CofanMapObjFun.mk _ _ _ (X j) (fun a ha =>
     if ha : a.2 = 0 then
@@ -438,22 +407,29 @@ noncomputable def mapBifunctorRightUnitorCofan (hp : forall (j : J), p ⟨j, 0�
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp, reassoc]
-/--
-lemma `mapBifunctorRightUnitorCofan_inj` / 引理 `mapBifunctorRightUnitorCofan_inj`
-
-English:
-lemma mapBifunctorRightUnitorCofan_inj
-  given: (j : J)
-  proof: by
-  simp [mapBifunctorRightUnitorCofan]
-
-中文:
-引理 mapBifunctorRightUnitorCofan_inj
-  条件: (j : J)
-  证明: by
-  simp [mapBifunctorRightUnitorCofan]
-
-Depends on / 依赖: mapBifunctorRightUnitorCofan
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitorCofan_inj** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitorCofan_inj (j : J) : (mapBifunctorRightUnitorCofan F
+ Y e p hp X j).inj ⟨⟨j, 0⟩, hp j⟩ = (F.obj (X j)).map (singleObjApplyIso (0 : I)
+ Y).hom ≫ e.hom.app (X j)
+参数：j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma mapBifunctorRightUnitorCofan_inj (j : J) :
     (mapBifunctorRightUnitorCofan F Y e p hp X j).inj ⟨⟨j, 0⟩, hp j⟩ =
@@ -461,50 +437,18 @@ lemma mapBifunctorRightUnitorCofan_inj (j : J) :
   simp [mapBifunctorRightUnitorCofan]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `mapBifunctorRightUnitorCofanIsColimit` / `mapBifunctorRightUnitorCofanIsColimit` 的定义
+/-- The cofan `mapBifunctorRightUnitorCofan F Y e p hp X j` is a colimit. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitorCofanIsColimit** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitorCofanIsColimit (j : J) : IsColimit (mapBifunctorRig
+htUnitorCofan F Y e p hp X j)
+参数：j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorRightUnitorCofanIsColimit
-  signature: (j : J)
-  body: Cofan.IsColimit.mk _
-    (fun s => e.inv.app (X j) ≫
-      (F.obj (X j)).map (singleObjApplyIso (0 : I) Y).inv ≫ s.inj ⟨⟨j, 0⟩, hp j⟩)
-    (fun s => by
-      rintro ⟨⟨j', i⟩, h⟩
-      by_cases hi : i = 0
-      · subst hi
-        simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        subst h
-        rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id]; rw [Functor.map_id]; rw [id_comp]
-      · apply IsInitial.hom_ext
-        exact mapBifunctorObjObjSingle₀IsInitial _ _ _ _ hi)
-    (fun s m hm => by
-      rw [← hm ⟨⟨j]; rw [0⟩]; rw [hp j⟩]; rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [id_comp]; rw [Iso.inv_hom_id_app_assoc])
-
-include e hp in
-
-中文:
-定义 mapBifunctorRightUnitorCofanIsColimit
-  签名: (j : J)
-  定义体: Cofan.IsColimit.mk _
-    (fun s => e.inv.app (X j) ≫
-      (F.obj (X j)).map (singleObjApplyIso (0 : I) Y).inv ≫ s.inj ⟨⟨j, 0⟩, hp j⟩)
-    (fun s => by
-      rintro ⟨⟨j', i⟩, h⟩
-      by_cases hi : i = 0
-      · subst hi
-        simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        subst h
-        rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id]; rw [Functor.map_id]; rw [id_comp]
-      · apply IsInitial.hom_ext
-        exact mapBifunctorObjObjSingle₀IsInitial _ _ _ _ hi)
-    (fun s m hm => by
-      rw [← hm ⟨⟨j]; rw [0⟩]; rw [hp j⟩]; rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [id_comp]; rw [Iso.inv_hom_id_app_assoc])
-
-include e hp in
-
-Depends on / 依赖: Cofan.IsColimit.mk, F.obj, Functor, Functor.map_comp_assoc, Functor.map_id, IsColimit, IsInitial, IsInitial.hom_ext, Iso.hom_inv_id, Iso.hom_inv_id_app_assoc, Set.mem_preimage, Set.mem_singleton_iff, e.inv.app, hom_ext, hom_inv_id, hom_inv_id_app_assoc, id_comp, mapBifunctorRightUnitorCofan_inj, map_comp_assoc, map_id
+--- 原说明 ---
+The cofan `mapBifunctorRightUnitorCofan F Y e p hp X j` is a colimit.
 -/
 noncomputable def mapBifunctorRightUnitorCofanIsColimit (j : J) :
     IsColimit (mapBifunctorRightUnitorCofan F Y e p hp X j) :=
@@ -517,25 +461,24 @@ noncomputable def mapBifunctorRightUnitorCofanIsColimit (j : J) :
       · subst hi
         simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
         subst h
-        rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id]; rw [Functor.map_id]; rw [id_comp]
+        rw [mapBifunctorRightUnitorCofan_inj, assoc, Iso.hom_inv_id_app_assoc,
+          ← Functor.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, id_comp]
       · apply IsInitial.hom_ext
         exact mapBifunctorObjObjSingle₀IsInitial _ _ _ _ hi)
     (fun s m hm => by
-      rw [← hm ⟨⟨j]; rw [0⟩]; rw [hp j⟩]; rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [id_comp]; rw [Iso.inv_hom_id_app_assoc])
+      rw [← hm ⟨⟨j, 0⟩, hp j⟩, mapBifunctorRightUnitorCofan_inj, assoc, ← Functor.map_comp_assoc,
+        Iso.inv_hom_id, Functor.map_id, id_comp, Iso.inv_hom_id_app_assoc])
 
 include e hp in
-/--
-lemma `mapBifunctorRightUnitor_hasMap` / 引理 `mapBifunctorRightUnitor_hasMap`
-
-English:
-lemma mapBifunctorRightUnitor_hasMap
-  proof: CofanMapObjFun.hasMap _ _ _ (mapBifunctorRightUnitorCofanIsColimit F Y e p hp X)
-
-中文:
-引理 mapBifunctorRightUnitor_hasMap
-  证明: CofanMapObjFun.hasMap _ _ _ (mapBifunctorRightUnitorCofanIsColimit F Y e p hp X)
-
-Depends on / 依赖: CofanMapObjFun, CofanMapObjFun.hasMap, hasMap, mapBifunctorRightUnitorCofanIsColimit
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitor_hasMap** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitor_hasMap : HasMap (((mapBifunctor F J I).obj X).obj 
+((single₀ I).obj Y)) p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GradedObject.CofanMapObjFun.hasMap`：hasMap (c : forall j,
+ CofanMapObjFun X p j) (hc : forall j, IsColimit (c j)) : X.HasMap p
 -/
 lemma mapBifunctorRightUnitor_hasMap :
     HasMap (((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y)) p :=
@@ -544,22 +487,22 @@ lemma mapBifunctorRightUnitor_hasMap :
 variable [HasMap (((mapBifunctor F J I).obj X).obj ((single₀ I).obj Y)) p]
   [HasMap (((mapBifunctor F J I).obj X').obj ((single₀ I).obj Y)) p]
 
-/--
-Definition of `mapBifunctorRightUnitor` / `mapBifunctorRightUnitor` 的定义
+/-- Given `F : D ⥤ C ⥤ D`, `Y : C`, `e : F.flip.obj Y ≅ 𝟭 D`, `X : GradedObject J D` and
+`p : J × I → J` such that `p ⟨j, 0⟩ = j` for all `j`,
+this is the right unitor isomorphism `mapBifunctorMapObj F p X ((single₀ I).obj Y) ≅ X`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitor** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitor : mapBifunctorMapObj F p X ((single₀ I).obj Y) ≅ X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorRightUnitor
-  signature: : mapBifunctorMapObj F p X ((single₀ I).obj Y) ≅ X
-  body: isoMk _ _ (fun j => (CofanMapObjFun.iso
-    (mapBifunctorRightUnitorCofanIsColimit F Y e p hp X j)).symm)
-
-中文:
-定义 mapBifunctorRightUnitor
-  签名: : mapBifunctorMapObj F p X ((single₀ I).obj Y) ≅ X
-  定义体: isoMk _ _ (fun j => (CofanMapObjFun.iso
-    (mapBifunctorRightUnitorCofanIsColimit F Y e p hp X j)).symm)
-
-Depends on / 依赖: CofanMapObjFun, CofanMapObjFun.iso, mapBifunctorRightUnitorCofanIsColimit
+--- 原说明 ---
+Given `F : D ⥤ C ⥤ D`, `Y : C`, `e : F.flip.obj Y ≅ 𝟭 D`, `X : GradedObject J D`
+ and
+`p : J × I → J` such that `p ⟨j, 0⟩ = j` for all `j`,
+this is the right unitor isomorphism `mapBifunctorMapObj F p X ((single₀ I).obj 
+Y) ≅ X`.
 -/
 noncomputable def mapBifunctorRightUnitor : mapBifunctorMapObj F p X ((single₀ I).obj Y) ≅ X :=
   isoMk _ _ (fun j => (CofanMapObjFun.iso
@@ -568,26 +511,10 @@ noncomputable def mapBifunctorRightUnitor : mapBifunctorMapObj F p X ((single₀
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `ι_mapBifunctorRightUnitor_hom_apply` / 引理 `ι_mapBifunctorRightUnitor_hom_apply`
-
-English:
-lemma ι_mapBifunctorRightUnitor_hom_apply
-  given: (j : J)
-  proof: by
-  dsimp [mapBifunctorRightUnitor]
-  erw [CofanMapObjFun.ιMapObj_iso_inv]
-  rw [mapBifunctorRightUnitorCofan_inj]
-
-中文:
-引理 ι_mapBifunctorRightUnitor_hom_apply
-  条件: (j : J)
-  证明: by
-  dsimp [mapBifunctorRightUnitor]
-  erw [CofanMapObjFun.ιMapObj_iso_inv]
-  rw [mapBifunctorRightUnitorCofan_inj]
-
-Depends on / 依赖: CofanMapObjFun, mapBifunctorRightUnitor, mapBifunctorRightUnitorCofan_inj
+/-
+**CategoryTheory.GradedObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GradedO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_mapBifunctorRightUnitor_hom_apply (j : J) :
     ιMapBifunctorMapObj F p X ((single₀ I).obj Y) j 0 j (hp j) ≫
@@ -596,19 +523,15 @@ lemma ι_mapBifunctorRightUnitor_hom_apply (j : J) :
   dsimp [mapBifunctorRightUnitor]
   erw [CofanMapObjFun.ιMapObj_iso_inv]
   rw [mapBifunctorRightUnitorCofan_inj]
-
-/--
-lemma `mapBifunctorRightUnitor_inv_apply` / 引理 `mapBifunctorRightUnitor_inv_apply`
-
-English:
-lemma mapBifunctorRightUnitor_inv_apply
-  given: (j : J)
-  proof: rfl
-
-中文:
-引理 mapBifunctorRightUnitor_inv_apply
-  条件: (j : J)
-  证明: rfl
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitor_inv_apply** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitor_inv_apply (j : J) : (mapBifunctorRightUnitor F Y e
+ p hp X).inv j = e.inv.app (X j) ≫ (F.obj (X j)).map (singleObjApplyIso (0 : I) 
+Y).inv ≫ ιMapBifunctorMapObj F p X ((single₀ I).obj Y) j 0 j (hp j)
+参数：j : J。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapBifunctorRightUnitor_inv_apply (j : J) :
     (mapBifunctorRightUnitor F Y e p hp X).inv j =
@@ -619,68 +542,94 @@ variable {Y}
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `mapBifunctorRightUnitor_inv_naturality` / 引理 `mapBifunctorRightUnitor_inv_naturality`
-
-English:
-lemma mapBifunctorRightUnitor_inv_naturality
-  proof: by
-  ext j
-  dsimp
-  rw [mapBifunctorRightUnitor_inv_apply]; rw [mapBifunctorRightUnitor_inv_apply]; rw [assoc]; rw [assoc]; rw [ι_mapBifunctorMapMap]
-  dsimp
-  rw [Functor.map_id]; rw [id_comp]; rw [NatTrans.naturality_assoc]
-  erw [← NatTrans.naturality_assoc e.inv]
-  rfl
-
-@[reassoc]
-
-中文:
-引理 mapBifunctorRightUnitor_inv_naturality
-  证明: by
-  ext j
-  dsimp
-  rw [mapBifunctorRightUnitor_inv_apply]; rw [mapBifunctorRightUnitor_inv_apply]; rw [assoc]; rw [assoc]; rw [ι_mapBifunctorMapMap]
-  dsimp
-  rw [Functor.map_id]; rw [id_comp]; rw [NatTrans.naturality_assoc]
-  erw [← NatTrans.naturality_assoc e.inv]
-  rfl
-
-@[reassoc]
-
-Depends on / 依赖: Functor, Functor.map_id, NatTrans, NatTrans.naturality_assoc, e.inv, id_comp, mapBifunctorRightUnitor_inv_apply, map_id, naturality_assoc
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitor_inv_naturality** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitor_inv_naturality : φ ≫ (mapBifunctorRightUnitor F Y 
+e p hp X').inv = (mapBifunctorRightUnitor F Y e p hp X).inv ≫ mapBifunctorMapMap
+ F p φ (𝟙 _)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GradedObject.hom_ext`：hom_ext {β : Type*} {X Y : GradedOb
+ject β C} (f g : X ⟶ Y) (h : forall x, f x = g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.GradedObject.mapBifunctorRightUnitor_inv_apply`：mapBifunc
+torRightUnitor_inv_apply (j : J) : (mapBifunctorRightUnitor F Y e p hp X).inv j 
+= e.inv.app (X j) ≫ (F.obj (X j)).map (singleObjApp…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.GradedObject.ι_mapBifunctorMapMap`：ι_mapBifunctorMapMap {
+X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂) {Y₁ Y₂ : GradedObject J C₂} (g : Y₁ ⟶ Y
+₂) [HasMap (((mapBifunctor F I J).obj …
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma mapBifunctorRightUnitor_inv_naturality :
     φ ≫ (mapBifunctorRightUnitor F Y e p hp X').inv =
       (mapBifunctorRightUnitor F Y e p hp X).inv ≫ mapBifunctorMapMap F p φ (𝟙 _) := by
   ext j
   dsimp
-  rw [mapBifunctorRightUnitor_inv_apply]; rw [mapBifunctorRightUnitor_inv_apply]; rw [assoc]; rw [assoc]; rw [ι_mapBifunctorMapMap]
+  rw [mapBifunctorRightUnitor_inv_apply, mapBifunctorRightUnitor_inv_apply, assoc, assoc,
+    ι_mapBifunctorMapMap]
   dsimp
-  rw [Functor.map_id]; rw [id_comp]; rw [NatTrans.naturality_assoc]
+  rw [Functor.map_id, id_comp, NatTrans.naturality_assoc]
   erw [← NatTrans.naturality_assoc e.inv]
   rfl
 
 @[reassoc]
-/--
-lemma `mapBifunctorRightUnitor_naturality` / 引理 `mapBifunctorRightUnitor_naturality`
-
-English:
-lemma mapBifunctorRightUnitor_naturality
-  proof: by
-  rw [← cancel_mono (mapBifunctorRightUnitor F Y e p hp X').inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [mapBifunctorRightUnitor_inv_naturality]; rw [Iso.hom_inv_id_assoc]
-
-中文:
-引理 mapBifunctorRightUnitor_naturality
-  证明: by
-  rw [← cancel_mono (mapBifunctorRightUnitor F Y e p hp X').inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [mapBifunctorRightUnitor_inv_naturality]; rw [Iso.hom_inv_id_assoc]
-
-Depends on / 依赖: Iso.hom_inv_id, Iso.hom_inv_id_assoc, cancel_mono, comp_id, hom_inv_id, hom_inv_id_assoc, mapBifunctorRightUnitor, mapBifunctorRightUnitor_inv_naturality
+/-
+**CategoryTheory.GradedObject.mapBifunctorRightUnitor_naturality** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorRightUnitor_naturality : mapBifunctorMapMap F p φ (𝟙 _) ≫ (map
+BifunctorRightUnitor F Y e p hp X').hom = (mapBifunctorRightUnitor F Y e p hp X)
+.hom ≫ φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.GradedObject.mapBifunctorRightUnitor_inv_naturality`：mapB
+ifunctorRightUnitor_inv_naturality : φ ≫ (mapBifunctorRightUnitor F Y e p hp X')
+.inv = (mapBifunctorRightUnitor F Y e p hp X).inv ≫ mapB…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 lemma mapBifunctorRightUnitor_naturality :
     mapBifunctorMapMap F p φ (𝟙 _) ≫ (mapBifunctorRightUnitor F Y e p hp X').hom =
       (mapBifunctorRightUnitor F Y e p hp X).hom ≫ φ := by
-  rw [← cancel_mono (mapBifunctorRightUnitor F Y e p hp X').inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [mapBifunctorRightUnitor_inv_naturality]; rw [Iso.hom_inv_id_assoc]
+  rw [← cancel_mono (mapBifunctorRightUnitor F Y e p hp X').inv, assoc, assoc, Iso.hom_inv_id,
+    comp_id, mapBifunctorRightUnitor_inv_naturality, Iso.hom_inv_id_assoc]
 
 end RightUnitor
 
@@ -688,88 +637,70 @@ section
 
 variable {I₁ I₂ I₃ J : Type*} [Zero I₂]
 
-/--
-Definition of `TriangleIndexData` / `TriangleIndexData` 的定义
+/-- Given two maps `r : I₁ × I₂ × I₃ → J` and `π : I₁ × I₃ → J`, this structure is the
+input in the formulation of the triangle equality `mapBifunctor_triangle` which
+relates the left and right unitor and the associator for `GradedObject.mapBifunctor`. -/
+/-
+**CategoryTheory.GradedObject.TriangleIndexData** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cat
+egoryTheory.GradedObject`。
+形式化陈述：{I₁ : Type u_1} →   {I₂ : Type u_2} →     {I₃ : Type u_3} → {J : Type u_4}
+ → [Zero I₂] → (I₁ × I₂ × I₃ → J) → (I₁ × I₃ → J) → Type (max (max u_1 u_2) u_3)
+参数：I₁ × I₂ × I₃ → J；I₁ × I₃ → J；max (max u_1 u_2) u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TriangleIndexData
-  parameters: (r : I₁ × I₂ × I₃ -> J) (π : I₁ × I₃ -> J)
-  axioms and operations (6):
-    - p₁₂ : I₁ × I₂ -> I₁
-    - hp₁₂((i : I₁ × I₂ × I₃)) : π ⟨p₁₂ ⟨i.1, i.2.1⟩, i.2.2⟩ = r i
-    - p₂₃ : I₂ × I₃ -> I₃
-    - hp₂₃((i : I₁ × I₂ × I₃)) : π ⟨i.1, p₂₃ i.2⟩ = r i
-    - h₁((i₁ : I₁)) : p₁₂ (i₁, 0) = i₁
-    - h₃((i₃ : I₃)) : p₂₃ (0, i₃) = i₃
-
-中文:
-结构 TriangleIndexData
-  参数: (r : I₁ × I₂ × I₃ -> J) (π : I₁ × I₃ -> J)
-  公理与运算 (6 个):
-    - p₁₂ : I₁ × I₂ -> I₁
-    - hp₁₂((i : I₁ × I₂ × I₃)) : π ⟨p₁₂ ⟨i.1, i.2.1⟩, i.2.2⟩ = r i
-    - p₂₃ : I₂ × I₃ -> I₃
-    - hp₂₃((i : I₁ × I₂ × I₃)) : π ⟨i.1, p₂₃ i.2⟩ = r i
-    - h₁((i₁ : I₁)) : p₁₂ (i₁, 0) = i₁
-    - h₃((i₃ : I₃)) : p₂₃ (0, i₃) = i₃
+--- 原说明 ---
+Given two maps `r : I₁ × I₂ × I₃ → J` and `π : I₁ × I₃ → J`, this structure is t
+he
+input in the formulation of the triangle equality `mapBifunctor_triangle` which
+relates the left and right unitor and the associator for `GradedObject.mapBifunc
+tor`.
 -/
-structure TriangleIndexData (r : I₁ × I₂ × I₃ -> J) (π : I₁ × I₃ -> J) where
+structure TriangleIndexData (r : I₁ × I₂ × I₃ → J) (π : I₁ × I₃ → J) where
   /-- a map `I₁ × I₂ → I₁` -/
-  p₁₂ : I₁ × I₂ -> I₁
+  p₁₂ : I₁ × I₂ → I₁
   hp₁₂ (i : I₁ × I₂ × I₃) : π ⟨p₁₂ ⟨i.1, i.2.1⟩, i.2.2⟩ = r i
   /-- a map `I₂ × I₃ → I₃` -/
-  p₂₃ : I₂ × I₃ -> I₃
+  p₂₃ : I₂ × I₃ → I₃
   hp₂₃ (i : I₁ × I₂ × I₃) : π ⟨i.1, p₂₃ i.2⟩ = r i
   h₁ (i₁ : I₁) : p₁₂ (i₁, 0) = i₁
   h₃ (i₃ : I₃) : p₂₃ (0, i₃) = i₃
 
-variable {r : I₁ × I₂ × I₃ -> J} {π : I₁ × I₃ -> J} (τ : TriangleIndexData r π)
+variable {r : I₁ × I₂ × I₃ → J} {π : I₁ × I₃ → J} (τ : TriangleIndexData r π)
 include τ
 
 namespace TriangleIndexData
 
 attribute [simp] h₁ h₃
 
-/--
-lemma `r_zero` / 引理 `r_zero`
-
-English:
-lemma r_zero
-  given: (i₁ : I₁) (i₃ : I₃)
-  statement: r ⟨i₁, 0, i₃⟩ = π ⟨i₁, i₃⟩
-  proof: by
-  rw [← τ.hp₂₃]; rw [τ.h₃ i₃]
-
-中文:
-引理 r_zero
-  条件: (i₁ : I₁) (i₃ : I₃)
-  结论: r ⟨i₁, 0, i₃⟩ = π ⟨i₁, i₃⟩
-  证明: by
-  rw [← τ.hp₂₃]; rw [τ.h₃ i₃]
+/-
+**CategoryTheory.GradedObject.TriangleIndexData.r_zero** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.GradedObject.TriangleIndexData`。
+形式化陈述：r_zero (i₁ : I₁) (i₃ : I₃) : r ⟨i₁, 0, i₃⟩ = π ⟨i₁, i₃⟩
+参数：i₁ : I₁；i₃ : I₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.GradedObject.TriangleIndexData.hp₂₃`：∀ {I₁ : Type u_1} {I
+₂ : Type u_2} {I₃ : Type u_3} {J : Type u_4} [inst : Zero I₂] {r : I₁ × I₂ × I₃ 
+→ J}   {π : I₁ × I₃ → J} (self : Categor…
+· 使用定理 `CategoryTheory.GradedObject.TriangleIndexData.h₃`：∀ {I₁ : Type u_1} {I₂ 
+: Type u_2} {I₃ : Type u_3} {J : Type u_4} [inst : Zero I₂] {r : I₁ × I₂ × I₃ → 
+J}   {π : I₁ × I₃ → J} (self : Categor…
 -/
 lemma r_zero (i₁ : I₁) (i₃ : I₃) : r ⟨i₁, 0, i₃⟩ = π ⟨i₁, i₃⟩ := by
-  rw [← τ.hp₂₃]; rw [τ.h₃ i₃]
+  rw [← τ.hp₂₃, τ.h₃ i₃]
 
 /-- The `BifunctorComp₁₂IndexData r` attached to a `TriangleIndexData r π`. -/
 @[reducible]
-/--
-Definition of `ρ₁₂` / `ρ₁₂` 的定义
+/-
+**CategoryTheory.GradedObject.TriangleIndexData.** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.GradedObject.TriangleIndexData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ρ₁₂
-  signature: : BifunctorComp₁₂IndexData r where
-  body: I₁
-  p := τ.p₁₂
-  q := π
-  hpq := τ.hp₁₂
-
-中文:
-定义 ρ₁₂
-  签名: : BifunctorComp₁₂IndexData r where
-  定义体: I₁
-  p := τ.p₁₂
-  q := π
-  hpq := τ.hp₁₂
+--- 原说明 ---
+The `BifunctorComp₁₂IndexData r` attached to a `TriangleIndexData r π`.
 -/
 def ρ₁₂ : BifunctorComp₁₂IndexData r where
   I₁₂ := I₁
@@ -779,24 +710,13 @@ def ρ₁₂ : BifunctorComp₁₂IndexData r where
 
 /-- The `BifunctorComp₂₃IndexData r` attached to a `TriangleIndexData r π`. -/
 @[reducible]
-/--
-Definition of `ρ₂₃` / `ρ₂₃` 的定义
+/-
+**CategoryTheory.GradedObject.TriangleIndexData.** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.GradedObject.TriangleIndexData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ρ₂₃
-  signature: : BifunctorComp₂₃IndexData r where
-  body: I₃
-  p := τ.p₂₃
-  q := π
-  hpq := τ.hp₂₃
-
-中文:
-定义 ρ₂₃
-  签名: : BifunctorComp₂₃IndexData r where
-  定义体: I₃
-  p := τ.p₂₃
-  q := π
-  hpq := τ.hp₂₃
+--- 原说明 ---
+The `BifunctorComp₂₃IndexData r` attached to a `TriangleIndexData r π`.
 -/
 def ρ₂₃ : BifunctorComp₂₃IndexData r where
   I₂₃ := I₃
@@ -815,9 +735,9 @@ variable {C₁ C₂ C₃ D I₁ I₂ I₃ J : Type*} [Category* C₁] [Category*
   {F₁ : C₁ ⥤ C₂ ⥤ C₁} {F₂ : C₂ ⥤ C₃ ⥤ C₃} {G : C₁ ⥤ C₃ ⥤ D}
   (associator : bifunctorComp₁₂ F₁ G ≅ bifunctorComp₂₃ G F₂)
   (X₂ : C₂) (e₁ : F₁.flip.obj X₂ ≅ 𝟭 C₁) (e₂ : F₂.obj X₂ ≅ 𝟭 C₃)
-  [forall (X₁ : C₁), PreservesColimit (Functor.empty.{0} C₂) (F₁.obj X₁)]
-  [forall (X₃ : C₃), PreservesColimit (Functor.empty.{0} C₂) (F₂.flip.obj X₃)]
-  {r : I₁ × I₂ × I₃ -> J} {π : I₁ × I₃ -> J}
+  [∀ (X₁ : C₁), PreservesColimit (Functor.empty.{0} C₂) (F₁.obj X₁)]
+  [∀ (X₃ : C₃), PreservesColimit (Functor.empty.{0} C₂) (F₂.flip.obj X₃)]
+  {r : I₁ × I₂ × I₃ → J} {π : I₁ × I₃ → J}
   (τ : TriangleIndexData r π)
   (X₁ : GradedObject I₁ C₁) (X₃ : GradedObject I₃ C₃)
   [HasMap (((mapBifunctor F₁ I₁ I₂).obj X₁).obj ((single₀ I₂).obj X₂)) τ.p₁₂]
@@ -831,59 +751,96 @@ variable {C₁ C₂ C₃ D I₁ I₂ I₃ J : Type*} [Category* C₁] [Category*
   [HasMap (((mapBifunctor G I₁ I₃).obj X₁).obj X₃) π]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mapBifunctor_triangle` / 引理 `mapBifunctor_triangle`
-
-English:
-lemma mapBifunctor_triangle
-  proof: by
-  rw [← cancel_epi ((mapBifunctorMapMap G π
-    (mapBifunctorRightUnitor F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁).inv (𝟙 X₃)))]
-  ext j i₁ i₃ hj
-  simp only [categoryOfGradedObjects_comp, ι_mapBifunctorMapMap_assoc,
-    mapBifunctorRightUnitor_inv_apply, Functor.id_obj, Functor.map_comp,
-    NatTrans.comp_app, categoryOfGradedObjects_id, Functor.map_id, id_comp, assoc,
-    ι_mapBifunctorMapMap]
-  congr 2
-  rw [← ιMapBifunctor₁₂BifunctorMapObj_eq_assoc F₁ G τ.ρ₁₂ _ _ _ i₁ 0 i₃ j
-    (by rw [τ.r_zero]; rw [hj]) i₁ (by simp), ι_mapBifunctorAssociator_hom_assoc,
-    ιMapBifunctorBifunctor₂₃MapObj_eq_assoc G F₂ τ.ρ₂₃ _ _ _ i₁ 0 i₃ j
-    (by rw [τ.r_zero, hj]) i₃ (by simp), ι_mapBifunctorMapMap]
-  dsimp
-  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← Functor.map_comp_assoc]; rw [← NatTrans.comp_app_assoc]; rw [← Functor.map_comp]; rw [ι_mapBifunctorLeftUnitor_hom_apply F₂ X₂ e₂ τ.p₂₃ τ.h₃ X₃ i₃]; rw [ι_mapBifunctorRightUnitor_hom_apply F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁ i₁]
-  dsimp
-  simp only [Functor.map_comp, NatTrans.comp_app, ← triangle (X₁ i₁) (X₃ i₃), ← assoc]
-  congr 2
-  symm
-  apply NatTrans.naturality_app (associator.hom.app (X₁ i₁))
-
-中文:
-引理 mapBifunctor_triangle
-  证明: by
-  rw [← cancel_epi ((mapBifunctorMapMap G π
-    (mapBifunctorRightUnitor F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁).inv (𝟙 X₃)))]
-  ext j i₁ i₃ hj
-  simp only [categoryOfGradedObjects_comp, ι_mapBifunctorMapMap_assoc,
-    mapBifunctorRightUnitor_inv_apply, Functor.id_obj, Functor.map_comp,
-    NatTrans.comp_app, categoryOfGradedObjects_id, Functor.map_id, id_comp, assoc,
-    ι_mapBifunctorMapMap]
-  congr 2
-  rw [← ιMapBifunctor₁₂BifunctorMapObj_eq_assoc F₁ G τ.ρ₁₂ _ _ _ i₁ 0 i₃ j
-    (by rw [τ.r_zero]; rw [hj]) i₁ (by simp), ι_mapBifunctorAssociator_hom_assoc,
-    ιMapBifunctorBifunctor₂₃MapObj_eq_assoc G F₂ τ.ρ₂₃ _ _ _ i₁ 0 i₃ j
-    (by rw [τ.r_zero, hj]) i₃ (by simp), ι_mapBifunctorMapMap]
-  dsimp
-  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← Functor.map_comp_assoc]; rw [← NatTrans.comp_app_assoc]; rw [← Functor.map_comp]; rw [ι_mapBifunctorLeftUnitor_hom_apply F₂ X₂ e₂ τ.p₂₃ τ.h₃ X₃ i₃]; rw [ι_mapBifunctorRightUnitor_hom_apply F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁ i₁]
-  dsimp
-  simp only [Functor.map_comp, NatTrans.comp_app, ← triangle (X₁ i₁) (X₃ i₃), ← assoc]
-  congr 2
-  symm
-  apply NatTrans.naturality_app (associator.hom.app (X₁ i₁))
-
-Depends on / 依赖: Functor, Functor.id_obj, Functor.map_comp, Functor.map_id, NatTrans, NatTrans.comp_app, cancel_epi, categoryOfGradedObjects_comp, categoryOfGradedObjects_id, comp_app, id_comp, id_obj, mapBifunctorMapMap, mapBifunctorRightUnitor, mapBifunctorRightUnitor_inv_apply, map_comp, map_id, r_zero
+/-
+**CategoryTheory.GradedObject.mapBifunctor_triangle** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.GradedObject`。
+形式化陈述：mapBifunctor_triangle (triangle : forall (X₁ : C₁) (X₃ : C₃), ((associator
+.hom.app X₁).app X₂).app X₃ ≫ (G.obj X₁).map (e₂.hom.app X₃) = (G.map (e₁.hom.ap
+p X₁)).app X₃) : (mapBifunctorAssociator associator τ.ρ₁₂ τ.ρ₂₃ X₁ ((single₀ I₂)
+.obj X₂) X₃).hom ≫ mapBifunctorMapMap G π (𝟙 X₁) (mapBifunctorLeftUnitor F₂ X₂ e
+₂ τ.p₂₃ τ.h₃ X₃).hom = mapBifunctorMapMap G π (mapBifunctorRightUnitor F₁ X₂ e₁ 
+τ.p₁₂ τ.h₁ X₁).hom (𝟙 X₃)
+参数：triangle : forall (X₁ : C₁) (X₃ : C₃), ((associator.hom.app X₁).app X₂).app X
+₃ ≫ (G.obj X₁).map (e₂.hom.app X₃) = (G.map (e₁.hom.app X₁)).app X₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GradedObject.TriangleIndexData.h₃`：∀ {I₁ : Type u_1} {I₂ 
+: Type u_2} {I₃ : Type u_3} {J : Type u_4} [inst : Zero I₂] {r : I₁ × I₂ × I₃ → 
+J}   {π : I₁ × I₃ → J} (self : Categor…
+· 使用定理 `CategoryTheory.GradedObject.TriangleIndexData.h₁`：∀ {I₁ : Type u_1} {I₂ 
+: Type u_2} {I₃ : Type u_3} {J : Type u_4} [inst : Zero I₂] {r : I₁ × I₂ × I₃ → 
+J}   {π : I₁ × I₃ → J} (self : Categor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.GradedObject.instIsIsoMapBifunctorMapMap`：∀ {C₁ : Type u_
+1} {C₂ : Type u_2} {C₃ : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C₁
+]   [inst_1 : CategoryTheory.Category.{v_2, u…
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用引理 `CategoryTheory.GradedObject.hom_ext`：hom_ext {β : Type*} {X Y : GradedOb
+ject β C} (f g : X ⟶ Y) (h : forall x, f x = g x) : f = g
+· 使用引理 `CategoryTheory.GradedObject.mapBifunctorMapObj_ext`：mapBifunctorMapObj_e
+xt {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K} [HasMap (((m
+apBifunctor F I J).obj X).obj Y) p] {f g…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.GradedObject.ι_mapBifunctorMapMap_assoc`：∀ {C₁ : Type u_1
+} {C₂ : Type u_2} {C₃ : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C₁]
+   [inst_1 : CategoryTheory.Category.{v_2, u…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.GradedObject.ι_mapBifunctorMapMap`：ι_mapBifunctorMapMap {
+X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂) {Y₁ Y₂ : GradedObject J C₂} (g : Y₁ ⟶ Y
+₂) [HasMap (((mapBifunctor F I J).obj …
+· 使用引理 `CategoryTheory.GradedObject.TriangleIndexData.r_zero`：r_zero (i₁ : I₁) (
+i₃ : I₃) : r ⟨i₁, 0, i₃⟩ = π ⟨i₁, i₃⟩
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.GradedObject.ιMapBifunctor₁₂BifunctorMapObj_eq_assoc`：∀ {
+C₁ : Type u_1} {C₂ : Type u_2} {C₃ : Type u_3} {C₄ : Type u_4} {C₁₂ : Type u_5} 
+  [inst : CategoryTheory.Category.{v_1, u_1} C₁] [inst_1 …
+· 使用定理 `CategoryTheory.GradedObject.ι_mapBifunctorAssociator_hom_assoc`：∀ {C₁ : 
+Type u_1} {C₂ : Type u_2} {C₁₂ : Type u_3} {C₂₃ : Type u_4} {C₃ : Type u_5} {C₄ 
+: Type u_6}   [inst : CategoryTheory.Category.{v_1, …
+· 使用定理 `CategoryTheory.GradedObject.ιMapBifunctorBifunctor₂₃MapObj_eq_assoc`：∀ {
+C₁ : Type u_1} {C₂ : Type u_2} {C₃ : Type u_3} {C₄ : Type u_4} {C₂₃ : Type u_6} 
+  [inst : CategoryTheory.Category.{v_1, u_1} C₁] [inst_1 …
+· 使用定理 `CategoryTheory.NatTrans.id_app`：id_app (F : C ⥤ D) (X : C) : (𝟙 F : F ⟶ 
+F).app X = 𝟙 (F.obj X)
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.comp_app_assoc`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {F G H : CategoryT…
+（共 33 条，此处仅展示前 30 条）
 -/
 lemma mapBifunctor_triangle
-    (triangle : forall (X₁ : C₁) (X₃ : C₃), ((associator.hom.app X₁).app X₂).app X₃ ≫
+    (triangle : ∀ (X₁ : C₁) (X₃ : C₃), ((associator.hom.app X₁).app X₂).app X₃ ≫
     (G.obj X₁).map (e₂.hom.app X₃) = (G.map (e₁.hom.app X₁)).app X₃) :
     (mapBifunctorAssociator associator τ.ρ₁₂ τ.ρ₂₃ X₁ ((single₀ I₂).obj X₂) X₃).hom ≫
     mapBifunctorMapMap G π (𝟙 X₁) (mapBifunctorLeftUnitor F₂ X₂ e₂ τ.p₂₃ τ.h₃ X₃).hom =
@@ -897,11 +854,14 @@ lemma mapBifunctor_triangle
     ι_mapBifunctorMapMap]
   congr 2
   rw [← ιMapBifunctor₁₂BifunctorMapObj_eq_assoc F₁ G τ.ρ₁₂ _ _ _ i₁ 0 i₃ j
-    (by rw [τ.r_zero]; rw [hj]) i₁ (by simp), ι_mapBifunctorAssociator_hom_assoc,
+    (by rw [τ.r_zero, hj]) i₁ (by simp), ι_mapBifunctorAssociator_hom_assoc,
     ιMapBifunctorBifunctor₂₃MapObj_eq_assoc G F₂ τ.ρ₂₃ _ _ _ i₁ 0 i₃ j
     (by rw [τ.r_zero, hj]) i₃ (by simp), ι_mapBifunctorMapMap]
   dsimp
-  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← Functor.map_comp_assoc]; rw [← NatTrans.comp_app_assoc]; rw [← Functor.map_comp]; rw [ι_mapBifunctorLeftUnitor_hom_apply F₂ X₂ e₂ τ.p₂₃ τ.h₃ X₃ i₃]; rw [ι_mapBifunctorRightUnitor_hom_apply F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁ i₁]
+  rw [Functor.map_id, NatTrans.id_app, id_comp,
+    ← Functor.map_comp_assoc, ← NatTrans.comp_app_assoc, ← Functor.map_comp,
+    ι_mapBifunctorLeftUnitor_hom_apply F₂ X₂ e₂ τ.p₂₃ τ.h₃ X₃ i₃,
+    ι_mapBifunctorRightUnitor_hom_apply F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁ i₁]
   dsimp
   simp only [Functor.map_comp, NatTrans.comp_app, ← triangle (X₁ i₁) (X₃ i₃), ← assoc]
   congr 2
@@ -913,3 +873,4 @@ end Triangle
 end GradedObject
 
 end CategoryTheory
+

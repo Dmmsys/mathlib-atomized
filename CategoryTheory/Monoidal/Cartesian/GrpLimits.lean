@@ -27,117 +27,57 @@ universe w v
 variable {C : Type*} [Category.{v} C] [CartesianMonoidalCategory C]
   {J : Type w} [Category J] [HasLimitsOfShape J C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesLimitsOfShape J (shrinkYonedaMon.{max w v} (C := C))
-  body: have : PreservesLimitsOfShape J (shrinkYonedaMon ⋙ (whiskeringRight _ _ _).obj (forget MonCat)) :=
-    (inferInstance : PreservesLimitsOfShape J (Mon.forget C ⋙ shrinkYoneda.{max w v}))
-  preservesLimitsOfShape_of_reflects_of_preserves _ ((whiskeringRight _ _ _).obj (forget MonCat))
-
-中文:
-实例 :
-  签名: 保持形状极限 J (shrinkYonedaMon.{最大值 w v} (C := C))
-  定义体: have : PreservesLimitsOfShape J (shrinkYonedaMon ⋙ (whiskeringRight _ _ _).obj (forget MonCat)) :=
-    (inferInstance : PreservesLimitsOfShape J (Mon.forget C ⋙ shrinkYoneda.{max w v}))
-  preservesLimitsOfShape_of_reflects_of_preserves _ ((whiskeringRight _ _ _).obj (forget MonCat))
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesLimitsOfShape J (shrinkYonedaMon.{max w v} (C := C)) :=
   have : PreservesLimitsOfShape J (shrinkYonedaMon ⋙ (whiskeringRight _ _ _).obj (forget MonCat)) :=
     (inferInstance : PreservesLimitsOfShape J (Mon.forget C ⋙ shrinkYoneda.{max w v}))
   preservesLimitsOfShape_of_reflects_of_preserves _ ((whiskeringRight _ _ _).obj (forget MonCat))
 
-/--
-Definition of `Grp.limitAux` / `Grp.limitAux` 的定义
+/-- An auxiliary construction in order to prove that `Grp.forget₂Mon` creates limits. -/
+/-
+**CategoryTheory.Grp.limitAux** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Grp`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v, u_1} C] →     [inst
+_1 : CategoryTheory.CartesianMonoidalCategory C] →       {J : Type w} →         
+[inst_2 : CategoryTheory.Category.{u_2, w} J] →           [CategoryTheory.Limits
+.HasLimitsOfShape J C] →             CategoryTheory.Functor J (CategoryTheory.Gr
+p C) → CategoryTheory.Grp C
+参数：CategoryTheory.Grp C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Grp.limitAux
-  signature: (F : J ⥤ Grp C)
-  body: (limit (F ⋙ forget₂Mon C)).X
-  grp := GrpObj.ofInvertible (limit (F ⋙ forget₂Mon C)).X fun X f =>
-letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
-      preservesLimitIso (shrinkYonedaMon ⋙ (evaluation _ _).obj (.op X))
-      (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCat)
-        (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).symm
-    letI := (limit (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).str
-    ((invertibleOfGroup (e f)).map e.symm).copy f (e.symm_apply_apply f).symm
-
-中文:
-定义 群.limitAux
-  签名: (F : J ⥤ 群 C)
-  定义体: (limit (F ⋙ forget₂Mon C)).X
-  grp := GrpObj.ofInvertible (limit (F ⋙ forget₂Mon C)).X fun X f =>
-letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
-      preservesLimitIso (shrinkYonedaMon ⋙ (evaluation _ _).obj (.op X))
-      (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCat)
-        (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).symm
-    letI := (limit (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).str
-    ((invertibleOfGroup (e f)).map e.symm).copy f (e.symm_apply_apply f).symm
+--- 原说明 ---
+An auxiliary construction in order to prove that `Grp.forget₂Mon` creates limits
+.
 -/
 noncomputable def Grp.limitAux (F : J ⥤ Grp C) : Grp C where
   X := (limit (F ⋙ forget₂Mon C)).X
-  grp := GrpObj.ofInvertible (limit (F ⋙ forget₂Mon C)).X fun X f =>
-letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
+  grp := GrpObj.ofInvertible (limit (F ⋙ forget₂Mon C)).X fun X f ↦
+    letI e := Shrink.mulEquiv.symm.trans <| Iso.monCatIsoToMulEquiv <|
       preservesLimitIso (shrinkYonedaMon ⋙ (evaluation _ _).obj (.op X))
       (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCat)
         (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).symm
     letI := (limit (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).str
     ((invertibleOfGroup (e f)).map e.symm).copy f (e.symm_apply_apply f).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimitsOfShape J (forget₂Mon C)
-  body: createsLimitOfFullyFaithfulOfIso (limitAux F) (.refl (limitAux F).toMon)
-
-中文:
-实例 :
-  签名: 创造形状极限 J (forget₂Mon C)
-  定义体: createsLimitOfFullyFaithfulOfIso (limitAux F) (.refl (limitAux F).toMon)
-
-Depends on / 依赖: createsLimitOfFullyFaithfulOfIso, limitAux
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesLimitsOfShape J (forget₂Mon C) where
   CreatesLimit {F} := createsLimitOfFullyFaithfulOfIso (limitAux F) (.refl (limitAux F).toMon)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimitsOfShape J (Grp.forget C)
-  body: inferInstanceAs CreatesLimitsOfShape J (forget₂Mon C ⋙ Mon.forget C)
-
-中文:
-实例 :
-  签名: 创造形状极限 J (群.forget C)
-  定义体: inferInstanceAs CreatesLimitsOfShape J (forget₂Mon C ⋙ Mon.forget C)
-
-Depends on / 依赖: CreatesLimitsOfShape, Mon.forget, forget
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesLimitsOfShape J (Grp.forget C) :=
-inferInstanceAs CreatesLimitsOfShape J (forget₂Mon C ⋙ Mon.forget C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimitsOfShape J (Grp C)
-  body: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Grp.forget C)
-
-中文:
-实例 :
-  签名: 有形状极限 J (群 C)
-  定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Grp.forget C)
-
-Depends on / 依赖: Grp.forget, forget, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
+  inferInstanceAs <| CreatesLimitsOfShape J (forget₂Mon C ⋙ Mon.forget C)
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimitsOfShape J (Grp C) :=
   hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Grp.forget C)
 
 end CategoryTheory
+

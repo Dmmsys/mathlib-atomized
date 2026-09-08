@@ -36,26 +36,15 @@ public meta section
 namespace Mathlib.Tactic.AtomM
 open Lean Meta
 
-/--
-Definition of `Recurse.Config` / `Recurse.Config` 的定义
+/-- Configuration for `AtomM.Recurse`. -/
+/-
+**Mathlib.Tactic.AtomM.Recurse.Config** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tacti
+c.AtomM.Recurse`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Recurse.Config
-  parameters: where
-  axioms and operations (3):
-    - red : = TransparencyMode.reducible
-    - zetaDelta : = false
-    - contextual : = false
-
-中文:
-结构 Recurse.余nfig
-  参数: where
-  公理与运算 (3 个):
-    - red : = TransparencyMode.reducible
-    - zetaDelta : = false
-    - contextual : = false
-
-Depends on / 依赖: TransparencyMode, TransparencyMode.reducible, reducible
+--- 原说明 ---
+Configuration for `AtomM.Recurse`.
 -/
 structure Recurse.Config where
   /-- the reducibility setting to use when comparing atoms for defeq -/
@@ -69,129 +58,130 @@ deriving Inhabited, BEq, Repr
 -- See https://github.com/leanprover/lean4/issues/10295
 attribute [nolint unusedArguments] Mathlib.Tactic.AtomM.Recurse.instReprConfig.repr
 
-/--
-Definition of `Recurse.Context` / `Recurse.Context` 的定义
+/-- The read-only state of the `AtomM.Recurse` monad. -/
+/-
+**Mathlib.Tactic.AtomM.Recurse.Context** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tact
+ic.AtomM.Recurse`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Recurse.Context
-  parameters: where
-  axioms and operations (2):
-    - ctx : Simp.Context
-    - simp : Simp.Result -> MetaM Simp.Result
-
-中文:
-结构 Recurse.余ntext
-  参数: where
-  公理与运算 (2 个):
-    - ctx : Simp.余ntext
-    - simp : Simp.Result -> MetaM Simp.Result
+--- 原说明 ---
+The read-only state of the `AtomM.Recurse` monad.
 -/
 structure Recurse.Context where
   /-- A basically empty simp context, passed to the `simp` traversal in `AtomM.onSubexpressions`.
   -/
   ctx : Simp.Context
   /-- A cleanup routine, which simplifies evaluation results to a more human-friendly format. -/
-  simp : Simp.Result -> MetaM Simp.Result
+  simp : Simp.Result → MetaM Simp.Result
 
-/--
-Definition of `RecurseM` / `RecurseM` 的定义
+/-- The monad for `AtomM.Recurse` contains, in addition to the `AtomM` state,
+a simp context for the main traversal and a cleanup function to simplify evaluation results. -/
+/-
+**Mathlib.Tactic.AtomM.RecurseM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.Atom
+M`。
+形式化陈述：RecurseM
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RecurseM
-  body: ReaderT Recurse.Context AtomM
-
-中文:
-缩写 RecurseM
-  定义体: ReaderT Recurse.Context AtomM
-
-Depends on / 依赖: Context, ReaderT, Recurse, Recurse.Context
+--- 原说明 ---
+The monad for `AtomM.Recurse` contains, in addition to the `AtomM` state,
+a simp context for the main traversal and a cleanup function to simplify evaluat
+ion results.
 -/
 abbrev RecurseM := ReaderT Recurse.Context AtomM
 
 /--
-Definition of `onSubexpressions` / `onSubexpressions` 的定义
+A tactic in the `AtomM.RecurseM` monad which will simplify expression `parent` to a normal form, by
+running a core operation `eval` (in the `AtomM` monad) on the maximal subexpression(s) on which
+`eval` does not fail.
 
-English:
-definition onSubexpressions
-  signature: (eval : Expr -> AtomM Simp.Result) (parent : Expr)
-  body: fun nctx rctx s => do
-    let pre : Simp.Simproc := fun e =>
-      try
-guard root || parent != e-- recursion guard
-        let r' ← eval e rctx s
-        let r ← nctx.simp r'
-if ← withReducible isDefEq r.expr e then return .done { expr := r.expr }
-        pure (.done r)
-catch _ => pure .continue
-    let post := Simp.postDefault #[]
-(·.1) < > Simp.main parent nctx.ctx (methods := { pre, post, wellBehavedDischarge })
+There is also a subsequent clean-up operation, governed by the context from the `AtomM.RecurseM`
+monad.
 
-中文:
-定义 onSubexpressions
-  签名: (eval : Expr -> AtomM Simp.Result) (parent : Expr)
-  定义体: fun nctx rctx s => do
-    let pre : Simp.Simproc := fun e =>
-      try
-guard root || parent != e-- recursion guard
-        let r' ← eval e rctx s
-        let r ← nctx.simp r'
-if ← withReducible isDefEq r.expr e then return .done { expr := r.expr }
-        pure (.done r)
-catch _ => pure .continue
-    let post := Simp.postDefault #[]
-(·.1) < > Simp.main parent nctx.ctx (methods := { pre, post, wellBehavedDischarge })
+* `root`: true if this is a direct call to the function.
+  `AtomM.RecurseM.run` sets this to `false` in recursive mode.
 -/
-def onSubexpressions (eval : Expr -> AtomM Simp.Result) (parent : Expr)
+/-
+**Mathlib.Tactic.AtomM.onSubexpressions** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.AtomM`。
+形式化陈述：onSubexpressions (eval : Expr -> AtomM Simp.Result) (parent : Expr) (wellB
+ehavedDischarge : Bool) (root
+参数：eval : Expr -> AtomM Simp.Result；parent : Expr；wellBehavedDischarge : Bool。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A tactic in the `AtomM.RecurseM` monad which will simplify expression `parent` t
+o a normal form, by
+running a core operation `eval` (in the `AtomM` monad) on the maximal subexpress
+ion(s) on which
+`eval` does not fail.
+
+There is also a subsequent clean-up operation, governed by the context from the 
+`AtomM.RecurseM`
+monad.
+
+* `root`: true if this is a direct call to the function.
+  `AtomM.RecurseM.run` sets this to `false` in recursive mode.
+-/
+def onSubexpressions (eval : Expr → AtomM Simp.Result) (parent : Expr)
     (wellBehavedDischarge : Bool) (root := true) :
     RecurseM Simp.Result :=
-  fun nctx rctx s => do
+  fun nctx rctx s ↦ do
     let pre : Simp.Simproc := fun e =>
       try
-guard root || parent != e-- recursion guard
+        guard <| root || parent != e -- recursion guard
         let r' ← eval e rctx s
         let r ← nctx.simp r'
-if ← withReducible isDefEq r.expr e then return .done { expr := r.expr }
+        if ← withReducible <| isDefEq r.expr e then return .done { expr := r.expr }
         pure (.done r)
-catch _ => pure .continue
+      catch _ => pure <| .continue
     let post := Simp.postDefault #[]
-(·.1) < > Simp.main parent nctx.ctx (methods := { pre, post, wellBehavedDischarge })
+    (·.1) <$> Simp.main parent nctx.ctx (methods := { pre, post, wellBehavedDischarge })
 
 /--
-Definition of `RecurseM.run` / `RecurseM.run` 的定义
+Runs a tactic in the `AtomM.RecurseM` monad, given initial data:
 
-English:
-definition RecurseM.run
-  body: do
-  let ctx ← Simp.mkContext
-    { zetaDelta := cfg.zetaDelta, singlePass := true, contextual := cfg.contextual }
-    (simpTheorems := #[← Elab.Tactic.simpOnlyBuiltins.foldlM (·.addConst ·) {}])
-    (congrTheorems := ← getSimpCongrTheorems)
-  let nctx := { ctx, simp }
-  let rec
-    /-- The recursive context. -/
-    rctx := { red := cfg.red, evalAtom },
-    /-- The atom evaluator calls `AtomM.onSubexpressions` recursively. -/
-    evalAtom e := onSubexpressions eval e wellBehavedDischarge false nctx rctx s
-withConfig ({ · with zetaDelta := cfg.zetaDelta }) x nctx rctx s
+* `s`: a reference to the mutable `AtomM` state, for persisting across calls.
+  This ensures that atom ordering is used consistently.
+* `cfg`: the configuration options
+* `wellBehavedDischarge` : MUST be set to `false` IF `eval` accesses local declarations with
+  index >= `Context.lctxInitIndices`.
+  Reason: it would cause `simp` to cache results too aggressively.
+* `eval`: a normalization operation which will be run recursively, potentially dependent on a known
+  atom ordering
+* `simp`: a cleanup operation which will be used to post-process expressions
+* `x`: the tactic to run
+-/
+/-
+**Mathlib.Tactic.AtomM.RecurseM.run** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.At
+omM.RecurseM`。
+形式化陈述：{α : Type} →   IO.Ref Mathlib.Tactic.AtomM.State →     Mathlib.Tactic.Atom
+M.Recurse.Config →       Bool →         (Expr → Mathlib.Tactic.AtomM Meta.Simp.R
+esult) →           (Meta.Simp.Result → MetaM Meta.Simp.Result) → Mathlib.Tactic.
+AtomM.RecurseM α → MetaM α
+参数：Expr → Mathlib.Tactic.AtomM Meta.Simp.Result；Meta.Simp.Result → MetaM Meta.Si
+mp.Result。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 RecurseM.run
-  定义体: do
-  let ctx ← Simp.mkContext
-    { zetaDelta := cfg.zetaDelta, singlePass := true, contextual := cfg.contextual }
-    (simpTheorems := #[← Elab.Tactic.simpOnlyBuiltins.foldlM (·.addConst ·) {}])
-    (congrTheorems := ← getSimpCongrTheorems)
-  let nctx := { ctx, simp }
-  let rec
-    /-- The recursive context. -/
-    rctx := { red := cfg.red, evalAtom },
-    /-- The atom evaluator calls `AtomM.onSubexpressions` recursively. -/
-    evalAtom e := onSubexpressions eval e wellBehavedDischarge false nctx rctx s
-withConfig ({ · with zetaDelta := cfg.zetaDelta }) x nctx rctx s
+--- 原说明 ---
+Runs a tactic in the `AtomM.RecurseM` monad, given initial data:
+
+* `s`: a reference to the mutable `AtomM` state, for persisting across calls.
+  This ensures that atom ordering is used consistently.
+* `cfg`: the configuration options
+* `wellBehavedDischarge` : MUST be set to `false` IF `eval` accesses local decla
+rations with
+  index >= `Context.lctxInitIndices`.
+  Reason: it would cause `simp` to cache results too aggressively.
+* `eval`: a normalization operation which will be run recursively, potentially d
+ependent on a known
+  atom ordering
+* `simp`: a cleanup operation which will be used to post-process expressions
+* `x`: the tactic to run
 -/
 partial def RecurseM.run
     {α : Type} (s : IO.Ref State) (cfg : Recurse.Config) (wellBehavedDischarge : Bool)
-    (eval : Expr -> AtomM Simp.Result) (simp : Simp.Result -> MetaM Simp.Result) (x : RecurseM α) :
+    (eval : Expr → AtomM Simp.Result) (simp : Simp.Result → MetaM Simp.Result) (x : RecurseM α) :
     MetaM α := do
   let ctx ← Simp.mkContext
     { zetaDelta := cfg.zetaDelta, singlePass := true, contextual := cfg.contextual }
@@ -203,30 +193,54 @@ partial def RecurseM.run
     rctx := { red := cfg.red, evalAtom },
     /-- The atom evaluator calls `AtomM.onSubexpressions` recursively. -/
     evalAtom e := onSubexpressions eval e wellBehavedDischarge false nctx rctx s
-withConfig ({ · with zetaDelta := cfg.zetaDelta }) x nctx rctx s
+  withConfig ({ · with zetaDelta := cfg.zetaDelta }) <| x nctx rctx s
 
 /--
-Definition of `recurse` / `recurse` 的定义
+Normalizes an expression, given initial data:
 
-English:
-definition recurse
-  signature: (s : IO.Ref State) (cfg : Recurse.Config) (wellBehavedDischarge : Bool)
-  body: do
-  RecurseM.run s cfg wellBehavedDischarge eval simp
- onSubexpressions eval tgt wellBehavedDischarge
+* `s`: a reference to the mutable `AtomM` state, for persisting across calls.
+  This ensures that atom ordering is used consistently.
+* `cfg`: the configuration options
+* `wellBehavedDischarge` : MUST be set to `false` IF `eval` accesses local declarations with
+  index >= `Context.lctxInitIndices`.
+  Reason: it would cause `simp` to cache results too aggressively.
+* `eval`: a normalization operation which will be run recursively, potentially dependent on a known
+  atom ordering
+* `simp`: a cleanup operation which will be used to post-process expressions
+* `tgt`: the expression to normalize
+-/
+/-
+**Mathlib.Tactic.AtomM.recurse** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.AtomM`。
+形式化陈述：recurse (s : IO.Ref State) (cfg : Recurse.Config) (wellBehavedDischarge : 
+Bool) (eval : Expr -> AtomM Simp.Result) (simp : Simp.Result -> MetaM Simp.Resul
+t) (tgt : Expr) : MetaM Simp.Result
+参数：s : IO.Ref State；cfg : Recurse.Config；wellBehavedDischarge : Bool；eval : Expr
+ -> AtomM Simp.Result；simp : Simp.Result -> MetaM Simp.Result；tgt : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 recurse
-  签名: (s : IO.Ref State) (cfg : Recurse.余nfig) (wellBehavedDischarge : 布尔值)
-  定义体: do
-  RecurseM.run s cfg wellBehavedDischarge eval simp
- onSubexpressions eval tgt wellBehavedDischarge
+--- 原说明 ---
+Normalizes an expression, given initial data:
+
+* `s`: a reference to the mutable `AtomM` state, for persisting across calls.
+  This ensures that atom ordering is used consistently.
+* `cfg`: the configuration options
+* `wellBehavedDischarge` : MUST be set to `false` IF `eval` accesses local decla
+rations with
+  index >= `Context.lctxInitIndices`.
+  Reason: it would cause `simp` to cache results too aggressively.
+* `eval`: a normalization operation which will be run recursively, potentially d
+ependent on a known
+  atom ordering
+* `simp`: a cleanup operation which will be used to post-process expressions
+* `tgt`: the expression to normalize
 -/
 def recurse (s : IO.Ref State) (cfg : Recurse.Config) (wellBehavedDischarge : Bool)
-    (eval : Expr -> AtomM Simp.Result)
-    (simp : Simp.Result -> MetaM Simp.Result) (tgt : Expr) :
+    (eval : Expr → AtomM Simp.Result)
+    (simp : Simp.Result → MetaM Simp.Result) (tgt : Expr) :
     MetaM Simp.Result := do
   RecurseM.run s cfg wellBehavedDischarge eval simp
- onSubexpressions eval tgt wellBehavedDischarge
+    <| onSubexpressions eval tgt wellBehavedDischarge
 
 end Mathlib.Tactic.AtomM
+

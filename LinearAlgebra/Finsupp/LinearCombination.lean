@@ -47,361 +47,326 @@ variable [AddCommMonoid P] [Module R P]
 section LinearCombination
 
 variable (R)
-variable {α' : Type*} {M' : Type*} [AddCommMonoid M'] [Module R M'] (v : α -> M) {v' : α' -> M'}
+variable {α' : Type*} {M' : Type*} [AddCommMonoid M'] [Module R M'] (v : α → M) {v' : α' → M'}
 
-/--
-Definition of `linearCombination` / `linearCombination` 的定义
+/-- Interprets (l : α →₀ R) as a linear combination of the elements in the family (v : α → M) and
+    evaluates this linear combination. -/
+/-
+**Finsupp.linearCombination** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination : (α ->₀ R) ->ₗ[R] M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearCombination
-  signature: : (α ->₀ R) ->ₗ[R] M
-  body: Finsupp.lsum Nat fun i => LinearMap.id.smulRight (v i)
-
-中文:
-定义 linearCombination
-  签名: : (α ->₀ R) ->ₗ[R] M
-  定义体: Finsupp.lsum Nat fun i => LinearMap.id.smulRight (v i)
-
-Depends on / 依赖: Finsupp, Finsupp.lsum, LinearMap, LinearMap.id.smulRight, smulRight
+--- 原说明 ---
+Interprets (l : α →₀ R) as a linear combination of the elements in the family (v
+ : α → M) and
+    evaluates this linear combination.
 -/
-def linearCombination : (α ->₀ R) ->ₗ[R] M :=
-  Finsupp.lsum Nat fun i => LinearMap.id.smulRight (v i)
+def linearCombination : (α →₀ R) →ₗ[R] M :=
+  Finsupp.lsum ℕ fun i => LinearMap.id.smulRight (v i)
 
 variable {v}
-
-/--
-theorem `linearCombination_apply` / 定理 `linearCombination_apply`
-
-English:
-theorem linearCombination_apply
-  given: (l : α ->₀ R)
-  statement: linearCombination R v l = l.sum fun i a => a • v i
-  proof: rfl
-
-中文:
-定理 linearCombination_apply
-  条件: (l : α ->₀ R)
-  结论: linearCombination R v l = l.求和 fun i a => a • v i
-  证明: rfl
+/-
+**Finsupp.linearCombination_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_apply (l : α ->₀ R) : linearCombination R v l = l.sum fu
+n i a => a • v i
+参数：l : α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem linearCombination_apply (l : α ->₀ R) : linearCombination R v l = l.sum fun i a => a • v i :=
+theorem linearCombination_apply (l : α →₀ R) : linearCombination R v l = l.sum fun i a => a • v i :=
   rfl
-
-/--
-theorem `linearCombination_apply_of_mem_supported` / 定理 `linearCombination_apply_of_mem_supported`
-
-English:
-theorem linearCombination_apply_of_mem_supported
-  statement: {l : α ->₀ R} {s : Finset α}
-  proof: Finset.sum_subset hs fun x _ hxg =>
-    show l x • v x = 0 by rw [notMem_support_iff.1 hxg, zero_smul]
-
-@[simp]
-
-中文:
-定理 linearCombination_apply_of_mem_supported
-  结论: {l : α ->₀ R} {s : 有限集 α}
-  证明: Finset.sum_subset hs fun x _ hxg =>
-    show l x • v x = 0 by rw [notMem_support_iff.1 hxg, zero_smul]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_subset, notMem_support_iff, sum_subset, zero_smul
+/-
+**Finsupp.linearCombination_apply_of_mem_supported** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+nsupp`。
+形式化陈述：linearCombination_apply_of_mem_supported {l : α ->₀ R} {s : Finset α} (hs 
+: l in supported R R (↑s : Set α)) : linearCombination R v l = s.sum fun i => l 
+i • v i
+参数：hs : l in supported R R (↑s : Set α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_subset`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [i
+nst : AddCommMonoid M] {f : ι → M},   s₁ ⊆ s₂ → (∀ x ∈ s₂, x ∉ s₁ → f x = 0) → ∑
+ x ∈ s₁…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.notMem_support_iff`：notMem_support_iff {f : α ->₀ M} {a} : a ∉ f
+.support ↔ f a = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 -/
-theorem linearCombination_apply_of_mem_supported {l : α ->₀ R} {s : Finset α}
-    (hs : l in supported R R (↑s : Set α)) : linearCombination R v l = s.sum fun i => l i • v i :=
+theorem linearCombination_apply_of_mem_supported {l : α →₀ R} {s : Finset α}
+    (hs : l ∈ supported R R (↑s : Set α)) : linearCombination R v l = s.sum fun i => l i • v i :=
   Finset.sum_subset hs fun x _ hxg =>
     show l x • v x = 0 by rw [notMem_support_iff.1 hxg, zero_smul]
 
 @[simp]
-/--
-theorem `linearCombination_single` / 定理 `linearCombination_single`
-
-English:
-theorem linearCombination_single
-  given: (c : R) (a : α)
-  proof: by
-  simp [linearCombination_apply, sum_single_index]
-
-中文:
-定理 linearCombination_single
-  条件: (c : R) (a : α)
-  证明: by
-  simp [linearCombination_apply, sum_single_index]
-
-Depends on / 依赖: MeasurableSpace, linearCombination_apply, sum_single_index
+/-
+**Finsupp.linearCombination_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_single (c : R) (a : α) : linearCombination R v (single a
+ c) = c • v a
+参数：c : R；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem linearCombination_single (c : R) (a : α) :
     linearCombination R v (single a c) = c • v a := by
   simp [linearCombination_apply, sum_single_index]
-
-/--
-theorem `linearCombination_zero_apply` / 定理 `linearCombination_zero_apply`
-
-English:
-theorem linearCombination_zero_apply
-  given: (x : α ->₀ R)
-  statement: (linearCombination R (0 : α -> M)) x = 0
-  proof: by
-  simp [linearCombination_apply]
-
-中文:
-定理 linearCombination_zero_apply
-  条件: (x : α ->₀ R)
-  结论: (linearCombination R (0 : α -> M)) x = 0
-  证明: by
-  simp [linearCombination_apply]
-
-Depends on / 依赖: MeasurableDiv, MeasurableDiv.toMeasurableInv, MeasurableSpace, linearCombination_apply, toMeasurableInv
+/-
+**Finsupp.linearCombination_zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_zero_apply (x : α ->₀ R) : (linearCombination R (0 : α -
+> M)) x = 0
+参数：x : α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Finsupp.sum_fun_zero`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [i
+nst : Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M),   (f.sum fun x x_1 => 0) 
+= 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem linearCombination_zero_apply (x : α ->₀ R) : (linearCombination R (0 : α -> M)) x = 0 := by
+theorem linearCombination_zero_apply (x : α →₀ R) : (linearCombination R (0 : α → M)) x = 0 := by
   simp [linearCombination_apply]
 
 variable (α M)
 
 @[simp]
-/--
-theorem `linearCombination_zero` / 定理 `linearCombination_zero`
-
-English:
-theorem linearCombination_zero
-  statement: linearCombination R (0 : α -> M) = 0
-  proof: LinearMap.ext (linearCombination_zero_apply R)
-
-@[simp]
-
-中文:
-定理 linearCombination_zero
-  结论: linearCombination R (0 : α -> M) = 0
-  证明: LinearMap.ext (linearCombination_zero_apply R)
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.ext, linearCombination_zero_apply
+/-
+**Finsupp.linearCombination_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_zero : linearCombination R (0 : α -> M) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Finsupp.linearCombination_zero_apply`：linearCombination_zero_apply (x : 
+α ->₀ R) : (linearCombination R (0 : α -> M)) x = 0
 -/
-theorem linearCombination_zero : linearCombination R (0 : α -> M) = 0 :=
+theorem linearCombination_zero : linearCombination R (0 : α → M) = 0 :=
   LinearMap.ext (linearCombination_zero_apply R)
 
 @[simp]
-/--
-theorem `linearCombination_single_index` / 定理 `linearCombination_single_index`
-
-English:
-theorem linearCombination_single_index
-  given: (c : M) (a : α) (f : α ->₀ R) [DecidableEq α]
-  proof: by
-  rw [linearCombination_apply]; rw [sum_eq_single a]; rw [Pi.single_eq_same]
-  · exact fun i _ hi => by rw [Pi.single_eq_of_ne hi, smul_zero]
-  · exact fun _ => by simp only [zero_smul]
-
-中文:
-定理 linearCombination_single_index
-  条件: (c : M) (a : α) (f : α ->₀ R) [DecidableEq α]
-  证明: by
-  rw [linearCombination_apply]; rw [sum_eq_single a]; rw [Pi.single_eq_same]
-  · exact fun i _ hi => by rw [Pi.single_eq_of_ne hi, smul_zero]
-  · exact fun _ => by simp only [zero_smul]
-
-Depends on / 依赖: Pi.single_eq_of_ne, Pi.single_eq_same, linearCombination_apply, single_eq_of_ne, single_eq_same, smul_zero, sum_eq_single, zero_smul
+/-
+**Finsupp.linearCombination_single_index** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_single_index (c : M) (a : α) (f : α ->₀ R) [DecidableEq 
+α] : linearCombination R (Pi.single a c) f = f a • c
+参数：c : M；a : α；f : α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `Finsupp.sum_eq_single`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [
+inst : Zero M] [inst_1 : AddCommMonoid N] {f : α →₀ M} (a : α)   {g : α → M → N}
+, (∀ (b : α…
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
 -/
-theorem linearCombination_single_index (c : M) (a : α) (f : α ->₀ R) [DecidableEq α] :
+theorem linearCombination_single_index (c : M) (a : α) (f : α →₀ R) [DecidableEq α] :
     linearCombination R (Pi.single a c) f = f a • c := by
-  rw [linearCombination_apply]; rw [sum_eq_single a]; rw [Pi.single_eq_same]
-  · exact fun i _ hi => by rw [Pi.single_eq_of_ne hi, smul_zero]
-  · exact fun _ => by simp only [zero_smul]
+  rw [linearCombination_apply, sum_eq_single a, Pi.single_eq_same]
+  · exact fun i _ hi ↦ by rw [Pi.single_eq_of_ne hi, smul_zero]
+  · exact fun _ ↦ by simp only [zero_smul]
 
 variable {α M}
-
-/--
-theorem `linearCombination_linear_comp` / 定理 `linearCombination_linear_comp`
-
-English:
-theorem linearCombination_linear_comp
-  given: (f : M ->ₗ[R] M')
-  proof: by
-  ext
-  simp [linearCombination_apply]
-
-中文:
-定理 linearCombination_linear_comp
-  条件: (f : M ->ₗ[R] M')
-  证明: by
-  ext
-  simp [linearCombination_apply]
-
-Depends on / 依赖: linearCombination_apply
+/-
+**Finsupp.linearCombination_linear_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_linear_comp (f : M ->ₗ[R] M') : linearCombination R (f ∘
+ v) = f ∘ₗ linearCombination R v
+参数：f : M ->ₗ[R] M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-theorem linearCombination_linear_comp (f : M ->ₗ[R] M') :
+theorem linearCombination_linear_comp (f : M →ₗ[R] M') :
     linearCombination R (f ∘ v) = f ∘ₗ linearCombination R v := by
   ext
   simp [linearCombination_apply]
-
-/--
-theorem `apply_linearCombination` / 定理 `apply_linearCombination`
-
-English:
-theorem apply_linearCombination
-  given: (f : M ->ₗ[R] M') (v) (l : α ->₀ R)
-  proof: congr($(linearCombination_linear_comp R f) l).symm
-
-中文:
-定理 apply_linearCombination
-  条件: (f : M ->ₗ[R] M') (v) (l : α ->₀ R)
-  证明: congr($(linearCombination_linear_comp R f) l).symm
-
-Depends on / 依赖: linearCombination_linear_comp
+/-
+**Finsupp.apply_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：apply_linearCombination (f : M ->ₗ[R] M') (v) (l : α ->₀ R) : f (linearCom
+bination R v l) = linearCombination R (f ∘ v) l
+参数：f : M ->ₗ[R] M'；v；l : α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_linear_comp`：linearCombination_linear_comp (f 
+: M ->ₗ[R] M') : linearCombination R (f ∘ v) = f ∘ₗ linearCombination R v
 -/
-theorem apply_linearCombination (f : M ->ₗ[R] M') (v) (l : α ->₀ R) :
+theorem apply_linearCombination (f : M →ₗ[R] M') (v) (l : α →₀ R) :
     f (linearCombination R v l) = linearCombination R (f ∘ v) l :=
   congr($(linearCombination_linear_comp R f) l).symm
-
-/--
-theorem `apply_linearCombination_id` / 定理 `apply_linearCombination_id`
-
-English:
-theorem apply_linearCombination_id
-  given: (f : M ->ₗ[R] M') (l : M ->₀ R)
-  proof: apply_linearCombination ..
-
-中文:
-定理 apply_linearCombination_id
-  条件: (f : M ->ₗ[R] M') (l : M ->₀ R)
-  证明: apply_linearCombination ..
-
-Depends on / 依赖: apply_linearCombination
+/-
+**Finsupp.apply_linearCombination_id** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：apply_linearCombination_id (f : M ->ₗ[R] M') (l : M ->₀ R) : f (linearComb
+ination R _root_.id l) = linearCombination R f l
+参数：f : M ->ₗ[R] M'；l : M ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.apply_linearCombination`：apply_linearCombination (f : M ->ₗ[R] M
+') (v) (l : α ->₀ R) : f (linearCombination R v l) = linearCombination R (f ∘ v)
+ l
 -/
-theorem apply_linearCombination_id (f : M ->ₗ[R] M') (l : M ->₀ R) :
+theorem apply_linearCombination_id (f : M →ₗ[R] M') (l : M →₀ R) :
     f (linearCombination R _root_.id l) = linearCombination R f l :=
   apply_linearCombination ..
-
-/--
-theorem `linearCombination_unique` / 定理 `linearCombination_unique`
-
-English:
-theorem linearCombination_unique
-  given: [Unique α] (l : α ->₀ R) (v : α -> M)
-  proof: by
-  rw [← linearCombination_single]; rw [← unique_single l]
-
-中文:
-定理 linearCombination_unique
-  条件: [唯一 α] (l : α ->₀ R) (v : α -> M)
-  证明: by
-  rw [← linearCombination_single]; rw [← unique_single l]
-
-Depends on / 依赖: linearCombination_single, unique_single
+/-
+**Finsupp.linearCombination_unique** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_unique [Unique α] (l : α ->₀ R) (v : α -> M) : linearCom
+bination R v l = l default • v default
+参数：l : α ->₀ R；v : α -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用定理 `Finsupp.unique_single`：unique_single [Unique α] (x : α ->₀ M) : x = sing
+le default (x default)
 -/
-theorem linearCombination_unique [Unique α] (l : α ->₀ R) (v : α -> M) :
+theorem linearCombination_unique [Unique α] (l : α →₀ R) (v : α → M) :
     linearCombination R v l = l default • v default := by
-  rw [← linearCombination_single]; rw [← unique_single l]
-
-/--
-theorem `linearCombination_surjective` / 定理 `linearCombination_surjective`
-
-English:
-theorem linearCombination_surjective
-  given: (h : Function.Surjective v)
-  proof: by
-  intro x
-  obtain ⟨y, hy⟩ := h x
-  exact ⟨single y 1, by simp [hy]⟩
-
-中文:
-定理 linearCombination_surjective
-  条件: (h : 函数.满射 v)
-  证明: by
-  intro x
-  obtain ⟨y, hy⟩ := h x
-  exact ⟨single y 1, by simp [hy]⟩
-
-Depends on / 依赖: single
+  rw [← linearCombination_single, ← unique_single l]
+/-
+**Finsupp.linearCombination_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_surjective (h : Function.Surjective v) : Function.Surjec
+tive (linearCombination R v)
+参数：h : Function.Surjective v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem linearCombination_surjective (h : Function.Surjective v) :
     Function.Surjective (linearCombination R v) := by
   intro x
   obtain ⟨y, hy⟩ := h x
   exact ⟨single y 1, by simp [hy]⟩
-
-/--
-theorem `linearCombination_range` / 定理 `linearCombination_range`
-
-English:
-theorem linearCombination_range
-  given: (h : Function.Surjective v)
-  proof: range_eq_top.2 linearCombination_surjective R h
-
-中文:
-定理 linearCombination_range
-  条件: (h : 函数.满射 v)
-  证明: range_eq_top.2 linearCombination_surjective R h
-
-Depends on / 依赖: linearCombination_surjective, range_eq_top
+/-
+**Finsupp.linearCombination_range** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_range (h : Function.Surjective v) : LinearMap.range (lin
+earCombination R v) = ⊤
+参数：h : Function.Surjective v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `Finsupp.linearCombination_surjective`：linearCombination_surjective (h : 
+Function.Surjective v) : Function.Surjective (linearCombination R v)
 -/
 theorem linearCombination_range (h : Function.Surjective v) :
     LinearMap.range (linearCombination R v) = ⊤ :=
-range_eq_top.2 linearCombination_surjective R h
+  range_eq_top.2 <| linearCombination_surjective R h
 
-/--
-theorem `linearCombination_id_surjective` / 定理 `linearCombination_id_surjective`
+/-- Any module is a quotient of a free module. This is stated as surjectivity of
+`Finsupp.linearCombination R id : (M →₀ R) →ₗ[R] M`. -/
+/-
+**Finsupp.linearCombination_id_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_id_surjective (M) [AddCommMonoid M] [Module R M] : Funct
+ion.Surjective (linearCombination R (id : M -> M))
+参数：M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.linearCombination_surjective`：linearCombination_surjective (h : 
+Function.Surjective v) : Function.Surjective (linearCombination R v)
+· 使用定理 `Function.surjective_id`：∀ {α : Sort u_1}, Function.Surjective id
 
-English:
-theorem linearCombination_id_surjective
-  given: (M) [AddCommMonoid M] [Module R M]
-  proof: linearCombination_surjective R Function.surjective_id
-
-中文:
-定理 linearCombination_id_surjective
-  条件: (M) [加法交换幺半群 M] [模 R M]
-  证明: linearCombination_surjective R Function.surjective_id
-
-Depends on / 依赖: Function, Function.surjective_id, linearCombination_surjective, surjective_id
+--- 原说明 ---
+Any module is a quotient of a free module. This is stated as surjectivity of
+`Finsupp.linearCombination R id : (M →₀ R) →ₗ[R] M`.
 -/
 theorem linearCombination_id_surjective (M) [AddCommMonoid M] [Module R M] :
-    Function.Surjective (linearCombination R (id : M -> M)) :=
+    Function.Surjective (linearCombination R (id : M → M)) :=
   linearCombination_surjective R Function.surjective_id
-
-/--
-theorem `range_linearCombination` / 定理 `range_linearCombination`
-
-English:
-theorem range_linearCombination
-  statement: LinearMap.range (linearCombination R v) = span R (range v)
-  proof: by
-  ext x
-  constructor
-  · intro hx
-    rw [LinearMap.mem_range] at hx
-    rcases hx with ⟨l, hl⟩
-    rw [← hl]
-    rw [linearCombination_apply]
-    exact sum_mem fun i _ => Submodule.smul_mem _ _ (subset_span (mem_range_self i))
-  · apply span_le.2
-    intro x hx
-    rcases hx with ⟨i, hi⟩
-    rw [SetLike.mem_coe]; rw [LinearMap.mem_range]
-    use single i 1
-    simp [hi]
-
-中文:
-定理 range_linearCombination
-  结论: 线性映射.range (linearCombination R v) = span R (range v)
-  证明: by
-  ext x
-  constructor
-  · intro hx
-    rw [LinearMap.mem_range] at hx
-    rcases hx with ⟨l, hl⟩
-    rw [← hl]
-    rw [linearCombination_apply]
-    exact sum_mem fun i _ => Submodule.smul_mem _ _ (subset_span (mem_range_self i))
-  · apply span_le.2
-    intro x hx
-    rcases hx with ⟨i, hi⟩
-    rw [SetLike.mem_coe]; rw [LinearMap.mem_range]
-    use single i 1
-    simp [hi]
-
-Depends on / 依赖: LinearMap, LinearMap.mem_range, SetLike, SetLike.mem_coe, Submodule, Submodule.smul_mem, linearCombination_apply, mem_coe, mem_range, mem_range_self, single, smul_mem, span_le, subset_span, sum_mem
+/-
+**Finsupp.range_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：range_linearCombination : LinearMap.range (linearCombination R v) = span R
+ (range v)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.mem_range`：mem_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] 
+M₂} {x} : x in range f ↔ exists y, f y = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem range_linearCombination : LinearMap.range (linearCombination R v) = span R (range v) := by
   ext x
@@ -415,260 +380,277 @@ theorem range_linearCombination : LinearMap.range (linearCombination R v) = span
   · apply span_le.2
     intro x hx
     rcases hx with ⟨i, hi⟩
-    rw [SetLike.mem_coe]; rw [LinearMap.mem_range]
+    rw [SetLike.mem_coe, LinearMap.mem_range]
     use single i 1
     simp [hi]
-
-/--
-theorem `_root_.span_range_eq_top_iff_surjective_finsuppLinearCombination` / 定理 `_root_.span_range_eq_top_iff_surjective_finsuppLinearCombination`
-
-English:
-theorem _root_.span_range_eq_top_iff_surjective_finsuppLinearCombination
-  proof: by
-  rw [← LinearMap.range_eq_top]; rw [range_linearCombination]
-
-中文:
-定理 _root_.span_range_eq_top_iff_surjective_finsuppLinearCombination
-  证明: by
-  rw [← LinearMap.range_eq_top]; rw [range_linearCombination]
-
-Depends on / 依赖: LinearMap, LinearMap.range_eq_top, range_eq_top, range_linearCombination
+/-
+**Finsupp._root_.span_range_eq_top_iff_surjective_finsuppLinearCombination** 是 M
+athlib 中的一个定理，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.span_range_eq_top_iff_surjective_finsuppLinearCombination :
     Submodule.span R (Set.range v) = ⊤ ↔
       Function.Surjective (Finsupp.linearCombination R v) := by
-  rw [← LinearMap.range_eq_top]; rw [range_linearCombination]
-
-/--
-theorem `lmapDomain_linearCombination` / 定理 `lmapDomain_linearCombination`
-
-English:
-theorem lmapDomain_linearCombination
-  given: (f : α -> α') (g : M ->ₗ[R] M') (h : forall i, g (v i) = v' (f i))
-  proof: by
-  ext l
-  simp [linearCombination_apply, h]
-
-中文:
-定理 lmapDomain_linearCombination
-  条件: (f : α -> α') (g : M ->ₗ[R] M') (h : 对任意 i, g (v i) = v' (f i))
-  证明: by
-  ext l
-  simp [linearCombination_apply, h]
-
-Depends on / 依赖: linearCombination_apply
+  rw [← LinearMap.range_eq_top, range_linearCombination]
+/-
+**Finsupp.lmapDomain_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lmapDomain_linearCombination (f : α -> α') (g : M ->ₗ[R] M') (h : forall i
+, g (v i) = v' (f i)) : (linearCombination R v').comp (lmapDomain R R f) = g.com
+p (linearCombination R v)
+参数：f : α -> α'；g : M ->ₗ[R] M'；h : forall i, g (v i) = v' (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.mapDomain_single`：mapDomain_single {f : α -> β} {a : α} {b : M} 
+: mapDomain f (single a b) = single (f a) b
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-theorem lmapDomain_linearCombination (f : α -> α') (g : M ->ₗ[R] M') (h : forall i, g (v i) = v' (f i)) :
+theorem lmapDomain_linearCombination (f : α → α') (g : M →ₗ[R] M') (h : ∀ i, g (v i) = v' (f i)) :
     (linearCombination R v').comp (lmapDomain R R f) = g.comp (linearCombination R v) := by
   ext l
   simp [linearCombination_apply, h]
-
-/--
-theorem `linearCombination_comp_lmapDomain` / 定理 `linearCombination_comp_lmapDomain`
-
-English:
-theorem linearCombination_comp_lmapDomain
-  given: (f : α -> α')
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 linearCombination_comp_lmapDomain
-  条件: (f : α -> α')
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Finsupp.linearCombination_comp_lmapDomain** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_comp_lmapDomain (f : α -> α') : (linearCombination R v')
+.comp (Finsupp.lmapDomain R R f) = linearCombination R (v' ∘ f)
+参数：f : α -> α'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.mapDomain_single`：mapDomain_single {f : α -> β} {a : α} {b : M} 
+: mapDomain f (single a b) = single (f a) b
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem linearCombination_comp_lmapDomain (f : α -> α') :
+theorem linearCombination_comp_lmapDomain (f : α → α') :
     (linearCombination R v').comp (Finsupp.lmapDomain R R f) = linearCombination R (v' ∘ f) := by
   ext
   simp
 
 @[simp]
-/--
-theorem `linearCombination_embDomain` / 定理 `linearCombination_embDomain`
-
-English:
-theorem linearCombination_embDomain
-  given: (f : α ↪ α') (l : α ->₀ R)
-  proof: by
-  simp [linearCombination_apply, Finsupp.sum, support_embDomain, embDomain_apply]
-
-@[simp]
-
-中文:
-定理 linearCombination_embDomain
-  条件: (f : α ↪ α') (l : α ->₀ R)
-  证明: by
-  simp [linearCombination_apply, Finsupp.sum, support_embDomain, embDomain_apply]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.sum, embDomain_apply, linearCombination_apply, support_embDomain, toMeasurableSMul
+/-
+**Finsupp.linearCombination_embDomain** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_embDomain (f : α ↪ α') (l : α ->₀ R) : (linearCombinatio
+n R v') (embDomain f l) = (linearCombination R (v' ∘ f)) l
+参数：f : α ↪ α'；l : α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.embDomain_apply`：embDomain_apply (f : α ↪ β) (v : α ->₀ M) (b : 
+β) : embDomain f v b = if h : exists a, f a = b then v h.choose else 0
+· 使用定理 `dite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) 
+[inst_1 : Decidable p] (a : α) (b : p → β) (c : ¬p → β),   (if h : p then b h e…
+· 使用定理 `dite.congr_simp`：∀ {α : Sort u} (c : Prop) {h : Decidable c} [h_1 : Deci
+dable c] (t t_1 : c → α),   t = t_1 → ∀ (e e_1 : ¬c → α), e = e_1 → dite c t e =
+ dite…
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Function.instEmbeddingLikeEmbedding`：∀ {α : Sort u} {β : Sort v}, Embedd
+ingLike (α ↪ β) α β
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Exists.choose.congr_simp`：∀ {α : Sort u_1} {p p_1 : α → Prop} (e_p : p =
+ p_1) (P : ∃ a, p a), P.choose = ⋯.choose
+· 使用定理 `Classical.choose_eq`：∀ {α : Sort u_1} (a : α), ⋯.choose = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem linearCombination_embDomain (f : α ↪ α') (l : α ->₀ R) :
+theorem linearCombination_embDomain (f : α ↪ α') (l : α →₀ R) :
     (linearCombination R v') (embDomain f l) = (linearCombination R (v' ∘ f)) l := by
   simp [linearCombination_apply, Finsupp.sum, support_embDomain, embDomain_apply]
 
 @[simp]
-/--
-theorem `linearCombination_mapDomain` / 定理 `linearCombination_mapDomain`
-
-English:
-theorem linearCombination_mapDomain
-  given: (f : α -> α') (l : α ->₀ R)
-  proof: LinearMap.congr_fun (linearCombination_comp_lmapDomain _ _) l
-
-@[simp]
-
-中文:
-定理 linearCombination_mapDomain
-  条件: (f : α -> α') (l : α ->₀ R)
-  证明: LinearMap.congr_fun (linearCombination_comp_lmapDomain _ _) l
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.congr_fun, congr_fun, linearCombination_comp_lmapDomain
+/-
+**Finsupp.linearCombination_mapDomain** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_mapDomain (f : α -> α') (l : α ->₀ R) : (linearCombinati
+on R v') (mapDomain f l) = (linearCombination R (v' ∘ f)) l
+参数：f : α -> α'；l : α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
+· 使用定理 `Finsupp.linearCombination_comp_lmapDomain`：linearCombination_comp_lmapDo
+main (f : α -> α') : (linearCombination R v').comp (Finsupp.lmapDomain R R f) = 
+linearCombination R (v' ∘ f)
 -/
-theorem linearCombination_mapDomain (f : α -> α') (l : α ->₀ R) :
+theorem linearCombination_mapDomain (f : α → α') (l : α →₀ R) :
     (linearCombination R v') (mapDomain f l) = (linearCombination R (v' ∘ f)) l :=
   LinearMap.congr_fun (linearCombination_comp_lmapDomain _ _) l
 
 @[simp]
-/--
-theorem `linearCombination_equivMapDomain` / 定理 `linearCombination_equivMapDomain`
-
-English:
-theorem linearCombination_equivMapDomain
-  given: (f : α ≃ α') (l : α ->₀ R)
-  proof: by
-  rw [equivMapDomain_eq_mapDomain]; rw [linearCombination_mapDomain]
-
-中文:
-定理 linearCombination_equivMapDomain
-  条件: (f : α ≃ α') (l : α ->₀ R)
-  证明: by
-  rw [equivMapDomain_eq_mapDomain]; rw [linearCombination_mapDomain]
-
-Depends on / 依赖: equivMapDomain_eq_mapDomain, linearCombination_mapDomain
+/-
+**Finsupp.linearCombination_equivMapDomain** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_equivMapDomain (f : α ≃ α') (l : α ->₀ R) : (linearCombi
+nation R v') (equivMapDomain f l) = (linearCombination R (v' ∘ f)) l
+参数：f : α ≃ α'；l : α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.equivMapDomain_eq_mapDomain`：equivMapDomain_eq_mapDomain {M} [Ad
+dCommMonoid M] (f : α ≃ β) (l : α ->₀ M) : equivMapDomain f l = mapDomain f l
+· 使用定理 `Finsupp.linearCombination_mapDomain`：linearCombination_mapDomain (f : α 
+-> α') (l : α ->₀ R) : (linearCombination R v') (mapDomain f l) = (linearCombina
+tion R (v' ∘ f)) l
 -/
-theorem linearCombination_equivMapDomain (f : α ≃ α') (l : α ->₀ R) :
+theorem linearCombination_equivMapDomain (f : α ≃ α') (l : α →₀ R) :
     (linearCombination R v') (equivMapDomain f l) = (linearCombination R (v' ∘ f)) l := by
-  rw [equivMapDomain_eq_mapDomain]; rw [linearCombination_mapDomain]
+  rw [equivMapDomain_eq_mapDomain, linearCombination_mapDomain]
 
-/--
-theorem `span_eq_range_linearCombination` / 定理 `span_eq_range_linearCombination`
+/-- A version of `Finsupp.range_linearCombination` which is useful for going in the other
+direction -/
+/-
+**Finsupp.span_eq_range_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：span_eq_range_linearCombination (s : Set M) : span R s = LinearMap.range (
+linearCombination R ((↑) : s -> M))
+参数：s : Set M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.range_linearCombination`：range_linearCombination : LinearMap.ran
+ge (linearCombination R v) = span R (range v)
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `Set.ofPred_mem_eq`：∀ {α : Type u} {s : Set α}, {x | x ∈ s} = s
 
-English:
-theorem span_eq_range_linearCombination
-  given: (s : Set M)
-  proof: by
-  rw [range_linearCombination]; rw [Subtype.range_coe_subtype]; rw [Set.ofPred_mem_eq]
-
-中文:
-定理 span_eq_range_linearCombination
-  条件: (s : 集合 M)
-  证明: by
-  rw [range_linearCombination]; rw [Subtype.range_coe_subtype]; rw [Set.ofPred_mem_eq]
-
-Depends on / 依赖: Set.ofPred_mem_eq, Subtype, Subtype.range_coe_subtype, ofPred_mem_eq, range_coe_subtype, range_linearCombination
+--- 原说明 ---
+A version of `Finsupp.range_linearCombination` which is useful for going in the 
+other
+direction
 -/
 theorem span_eq_range_linearCombination (s : Set M) :
-    span R s = LinearMap.range (linearCombination R ((↑) : s -> M)) := by
-  rw [range_linearCombination]; rw [Subtype.range_coe_subtype]; rw [Set.ofPred_mem_eq]
-
-/--
-theorem `mem_span_iff_linearCombination` / 定理 `mem_span_iff_linearCombination`
-
-English:
-theorem mem_span_iff_linearCombination
-  given: (s : Set M) (x : M)
-  proof: (SetLike.ext_iff.1 <| span_eq_range_linearCombination _ _) x
-
-中文:
-定理 mem_span_iff_linearCombination
-  条件: (s : 集合 M) (x : M)
-  证明: (SetLike.ext_iff.1 <| span_eq_range_linearCombination _ _) x
-
-Depends on / 依赖: SetLike, SetLike.ext_iff, ext_iff, span_eq_range_linearCombination
+    span R s = LinearMap.range (linearCombination R ((↑) : s → M)) := by
+  rw [range_linearCombination, Subtype.range_coe_subtype, Set.ofPred_mem_eq]
+/-
+**Finsupp.mem_span_iff_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mem_span_iff_linearCombination (s : Set M) (x : M) : x in span R s ↔ exist
+s l : s ->₀ R, linearCombination R (↑) l = x
+参数：s : Set M；x : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `Finsupp.span_eq_range_linearCombination`：span_eq_range_linearCombination
+ (s : Set M) : span R s = LinearMap.range (linearCombination R ((↑) : s -> M))
 -/
 theorem mem_span_iff_linearCombination (s : Set M) (x : M) :
-    x in span R s ↔ exists l : s ->₀ R, linearCombination R (↑) l = x :=
+    x ∈ span R s ↔ ∃ l : s →₀ R, linearCombination R (↑) l = x :=
   (SetLike.ext_iff.1 <| span_eq_range_linearCombination _ _) x
 
 variable {R} in
-/--
-theorem `mem_span_range_iff_exists_finsupp` / 定理 `mem_span_range_iff_exists_finsupp`
-
-English:
-theorem mem_span_range_iff_exists_finsupp
-  given: {v : α -> M} {x : M}
-  proof: by
-  simp only [← Finsupp.range_linearCombination, LinearMap.mem_range, linearCombination_apply]
-
-中文:
-定理 mem_span_range_iff_存在_finsupp
-  条件: {v : α -> M} {x : M}
-  证明: by
-  simp only [← Finsupp.range_linearCombination, LinearMap.mem_range, linearCombination_apply]
-
-Depends on / 依赖: Finsupp, Finsupp.range_linearCombination, LinearMap, LinearMap.mem_range, linearCombination_apply, mem_range, range_linearCombination
+/-
+**Finsupp.mem_span_range_iff_exists_finsupp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mem_span_range_iff_exists_finsupp {v : α -> M} {x : M} : x in span R (rang
+e v) ↔ exists c : α ->₀ R, (c.sum fun i a => a • v i) = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_span_range_iff_exists_finsupp {v : α -> M} {x : M} :
-    x in span R (range v) ↔ exists c : α ->₀ R, (c.sum fun i a => a • v i) = x := by
+theorem mem_span_range_iff_exists_finsupp {v : α → M} {x : M} :
+    x ∈ span R (range v) ↔ ∃ c : α →₀ R, (c.sum fun i a => a • v i) = x := by
   simp only [← Finsupp.range_linearCombination, LinearMap.mem_range, linearCombination_apply]
-
-/--
-theorem `span_image_eq_map_linearCombination` / 定理 `span_image_eq_map_linearCombination`
-
-English:
-theorem span_image_eq_map_linearCombination
-  given: (s : Set α)
-  proof: by
-  apply span_eq_of_le
-  · intro x hx
-    rw [Set.mem_image] at hx
-    apply Exists.elim hx
-    intro i hi
-    exact ⟨_, Finsupp.single_mem_supported R 1 hi.1, by simp [hi.2]⟩
-  · refine map_le_iff_le_comap.2 fun z hz => ?_
-    have : forall i, z i • v i in span R (v '' s) := by
-      intro c
-      have := Classical.decPred fun x => x in s
-      by_cases h : c in s
-      · exact smul_mem _ _ (subset_span (Set.mem_image_of_mem _ h))
-      · simp [(Finsupp.mem_supported' R _).1 hz _ h]
-    rw [mem_comap]; rw [linearCombination_apply]
-    refine sum_mem ?_
-    simp [this]
-
-中文:
-定理 span_image_eq_map_linearCombination
-  条件: (s : 集合 α)
-  证明: by
-  apply span_eq_of_le
-  · intro x hx
-    rw [Set.mem_image] at hx
-    apply Exists.elim hx
-    intro i hi
-    exact ⟨_, Finsupp.single_mem_supported R 1 hi.1, by simp [hi.2]⟩
-  · refine map_le_iff_le_comap.2 fun z hz => ?_
-    have : forall i, z i • v i in span R (v '' s) := by
-      intro c
-      have := Classical.decPred fun x => x in s
-      by_cases h : c in s
-      · exact smul_mem _ _ (subset_span (Set.mem_image_of_mem _ h))
-      · simp [(Finsupp.mem_supported' R _).1 hz _ h]
-    rw [mem_comap]; rw [linearCombination_apply]
-    refine sum_mem ?_
-    simp [this]
-
-Depends on / 依赖: Classical, Classical.decPred, Exists, Exists.elim, Finsupp, Finsupp.mem_supported, Finsupp.single_mem_supported, Set.mem_image, Set.mem_image_of_mem, decPred, linearCombination_apply, map_le_iff_le_comap, mem_comap, mem_image, mem_image_of_mem, mem_supported, single_mem_supported, smul_mem, span_eq_of_le, subset_span
+/-
+**Finsupp.span_image_eq_map_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp
+`。
+形式化陈述：span_image_eq_map_linearCombination (s : Set α) : span R (v '' s) = Submod
+ule.map (linearCombination R v) (supported R R s)
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.span_eq_of_le`：span_eq_of_le (h₁ : s subseteq p) (h₂ : p <= sp
+an R s) : span R s = p
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `Finsupp.single_mem_supported`：single_mem_supported {s : Set α} {a : α} (
+b : M) (h : a in s) : single a b in supported M R s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.map_le_iff_le_comap`：map_le_iff_le_comap {f : M ->ₛₗ[σ₁₂] M₂} 
+{p : Submodule R M} {q : Submodule R₂ M₂} : map f p <= q ↔ p <= comap f q
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.mem_supported'`：mem_supported' {s : Set α} (p : α ->₀ M) : p in 
+supported M R s ↔ forall x ∉ s, p x = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `Submodule.mem_comap`：mem_comap {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R₂ M₂
+} : x in comap f p ↔ f x in p
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem span_image_eq_map_linearCombination (s : Set α) :
     span R (v '' s) = Submodule.map (linearCombination R v) (supported R R s) := by
@@ -679,91 +661,112 @@ theorem span_image_eq_map_linearCombination (s : Set α) :
     intro i hi
     exact ⟨_, Finsupp.single_mem_supported R 1 hi.1, by simp [hi.2]⟩
   · refine map_le_iff_le_comap.2 fun z hz => ?_
-    have : forall i, z i • v i in span R (v '' s) := by
+    have : ∀ i, z i • v i ∈ span R (v '' s) := by
       intro c
-      have := Classical.decPred fun x => x in s
-      by_cases h : c in s
+      have := Classical.decPred fun x => x ∈ s
+      by_cases h : c ∈ s
       · exact smul_mem _ _ (subset_span (Set.mem_image_of_mem _ h))
       · simp [(Finsupp.mem_supported' R _).1 hz _ h]
-    rw [mem_comap]; rw [linearCombination_apply]
+    rw [mem_comap, linearCombination_apply]
     refine sum_mem ?_
     simp [this]
-
-/--
-theorem `mem_span_image_iff_linearCombination` / 定理 `mem_span_image_iff_linearCombination`
-
-English:
-theorem mem_span_image_iff_linearCombination
-  given: {s : Set α} {x : M}
-  proof: by
-  rw [span_image_eq_map_linearCombination]
-  simp
-
-中文:
-定理 mem_span_image_iff_linearCombination
-  条件: {s : 集合 α} {x : M}
-  证明: by
-  rw [span_image_eq_map_linearCombination]
-  simp
-
-Depends on / 依赖: span_image_eq_map_linearCombination
+/-
+**Finsupp.mem_span_image_iff_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsup
+p`。
+形式化陈述：mem_span_image_iff_linearCombination {s : Set α} {x : M} : x in span R (v 
+'' s) ↔ exists l in supported R R s, linearCombination R v l = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.span_image_eq_map_linearCombination`：span_image_eq_map_linearCom
+bination (s : Set α) : span R (v '' s) = Submodule.map (linearCombination R v) (
+supported R R s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_span_image_iff_linearCombination {s : Set α} {x : M} :
-    x in span R (v '' s) ↔ exists l in supported R R s, linearCombination R v l = x := by
+    x ∈ span R (v '' s) ↔ ∃ l ∈ supported R R s, linearCombination R v l = x := by
   rw [span_image_eq_map_linearCombination]
   simp
-
-/--
-theorem `linearCombination_option` / 定理 `linearCombination_option`
-
-English:
-theorem linearCombination_option
-  given: (v : Option α -> M) (f : Option α ->₀ R)
-  proof: by
-  rw [linearCombination_apply]; rw [sum_option_index_smul]; rw [linearCombination_apply]; simp
-
-中文:
-定理 linearCombination_option
-  条件: (v : 选项类型 α -> M) (f : 选项类型 α ->₀ R)
-  证明: by
-  rw [linearCombination_apply]; rw [sum_option_index_smul]; rw [linearCombination_apply]; simp
-
-Depends on / 依赖: linearCombination_apply, sum_option_index_smul
+/-
+**Finsupp.linearCombination_option** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_option (v : Option α -> M) (f : Option α ->₀ R) : linear
+Combination R v f = f none • v none + linearCombination R (v ∘ Option.some) f.so
+me
+参数：v : Option α -> M；f : Option α ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `Finsupp.sum_option_index_smul`：sum_option_index_smul [Semiring R] [AddCo
+mmMonoid M] [Module R M] (f : Option α ->₀ R) (b : Option α -> M) : (f.sum fun o
+ r => r • b o) = f …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem linearCombination_option (v : Option α -> M) (f : Option α ->₀ R) :
+theorem linearCombination_option (v : Option α → M) (f : Option α →₀ R) :
     linearCombination R v f =
       f none • v none + linearCombination R (v ∘ Option.some) f.some := by
-  rw [linearCombination_apply]; rw [sum_option_index_smul]; rw [linearCombination_apply]; simp
-
-/--
-theorem `linearCombination_linearCombination` / 定理 `linearCombination_linearCombination`
-
-English:
-theorem linearCombination_linearCombination
-  statement: {α β : Type*} (A : α -> M) (B : β -> α ->₀ R)
-  proof: by
-  classical
-  simp only [linearCombination_apply]
-  induction f using induction_linear with
-  | zero => simp only [sum_zero_index]
-  | add f₁ f₂ h₁ h₂ => simp [sum_add_index, h₁, h₂, add_smul]
-  | single => simp [sum_single_index, sum_smul_index, smul_sum, mul_smul]
-
-中文:
-定理 linearCombination_linearCombination
-  结论: {α β : 类型} (A : α -> M) (B : β -> α ->₀ R)
-  证明: by
-  classical
-  simp only [linearCombination_apply]
-  induction f using induction_linear with
-  | zero => simp only [sum_zero_index]
-  | add f₁ f₂ h₁ h₂ => simp [sum_add_index, h₁, h₂, add_smul]
-  | single => simp [sum_single_index, sum_smul_index, smul_sum, mul_smul]
-
-Depends on / 依赖: add_smul, classical, induction_linear, linearCombination_apply, mul_smul, single, smul_sum, sum_add_index, sum_single_index, sum_smul_index, sum_zero_index
+  rw [linearCombination_apply, sum_option_index_smul, linearCombination_apply]; simp
+/-
+**Finsupp.linearCombination_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp
+`。
+形式化陈述：linearCombination_linearCombination {α β : Type*} (A : α -> M) (B : β -> α
+ ->₀ R) (f : β ->₀ R) : linearCombination R A (linearCombination R B f) = linear
+Combination R (fun b => linearCombination R A (B b)) f
+参数：A : α -> M；B : β -> α ->₀ R；f : β ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.induction_linear`：induction_linear {motive : (ι ->₀ M) -> Prop} 
+(f : ι ->₀ M) (zero : motive 0) (add : forall f g : ι ->₀ M, motive f -> motive 
+g -> motive (f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.sum_add_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [
+inst : DecidableEq α] [inst_1 : AddZeroClass M]   [inst_2 : AddCommMonoid N] {f 
+g : α →₀ M}…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `Finsupp.sum_apply`：sum_apply [Zero M] [AddCommMonoid N] {f : α ->₀ M} {g
+ : α -> M -> β ->₀ N} {a₂ : β} : (f.sum g) a₂ = f.sum fun a₁ b => g a₁ b a₂
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `Finsupp.sum_smul_index`：sum_smul_index [MulZeroClass R] [AddCommMonoid M
+] {g : α ->₀ R} {b : R} {h : α -> R -> M} (h0 : forall i, h i 0 = 0) : (b • g).s
+um h = g.sum…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `Finsupp.smul_sum`：smul_sum [Zero β] [AddCommMonoid M] [DistribSMul R M] 
+{v : α ->₀ β} {c : R} {h : α -> β -> M} : c • v.sum h = v.sum fun a b => c • h a
+ b
+· 使用定理 `Finsupp.sum_fun_zero`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [i
+nst : Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M),   (f.sum fun x x_1 => 0) 
+= 0
 -/
-theorem linearCombination_linearCombination {α β : Type*} (A : α -> M) (B : β -> α ->₀ R)
-    (f : β ->₀ R) : linearCombination R A (linearCombination R B f) =
+theorem linearCombination_linearCombination {α β : Type*} (A : α → M) (B : β → α →₀ R)
+    (f : β →₀ R) : linearCombination R A (linearCombination R B f) =
       linearCombination R (fun b => linearCombination R A (B b)) f := by
   classical
   simp only [linearCombination_apply]
@@ -771,204 +774,240 @@ theorem linearCombination_linearCombination {α β : Type*} (A : α -> M) (B : �
   | zero => simp only [sum_zero_index]
   | add f₁ f₂ h₁ h₂ => simp [sum_add_index, h₁, h₂, add_smul]
   | single => simp [sum_single_index, sum_smul_index, smul_sum, mul_smul]
-
-/--
-theorem `linearCombination_smul` / 定理 `linearCombination_smul`
-
-English:
-theorem linearCombination_smul
-  given: [Module R S] [Module S M] [IsScalarTower R S M] {w : α' -> S}
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-定理 linearCombination_smul
-  条件: [模 R S] [模 S M] [标量塔 R S M] {w : α' -> S}
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**Finsupp.linearCombination_smul** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_smul [Module R S] [Module S M] [IsScalarTower R S M] {w 
+: α' -> S} : linearCombination R (fun i : α × α' => w i.2 • v i.1) = (linearComb
+ination S v).restrictScalars R ∘ₗ mapRange.linearMap (linearCombination R w) ∘ₗ 
+(curryLinearEquiv R).toLinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.CompatibleSMul.finsupp_dom`：∀ (R : Type u_9) (S : Type u_10) (
+M : Type u_11) (N : Type u_12) (ι : Type u_13) [inst : Semiring S]   [inst_1 : A
+ddCommMonoid M] [inst_2 : …
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul'`：∀ {M : Type u_8} [inst : AddCom
+mMonoid M] {R : Type u_14} {S : Type u_15} [inst_1 : Semiring S] [inst_2 : SMul 
+R M]   [inst_3 : _root_.Modul…
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
+· 使用定理 `Finsupp.curryLinearEquiv_apply`：∀ {α : Type u_9} {β : Type u_10} (R : Ty
+pe u_11) {M : Type u_12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_
+2 : _root_.Module R …
+· 使用引理 `Finsupp.curry_single`：curry_single (a : α × β) (m : M) : (single a m).cu
+rry = single a.1 (single a.2 m)
+· 使用定理 `Finsupp.mapRange.linearMap_apply`：∀ {α : Type u_1} {M : Type u_2} {N : T
+ype u_3} {R : Type u_5} {R₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R
+₂]   [inst_2 : AddComm…
+· 使用定理 `Finsupp.mapRange_single`：mapRange_single {f : M -> N} {hf : f 0 = 0} {a 
+: α} {b : M} : mapRange f hf (single a b) = single a (f b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem linearCombination_smul [Module R S] [Module S M] [IsScalarTower R S M] {w : α' -> S} :
-    linearCombination R (fun i : α × α' => w i.2 • v i.1) = (linearCombination S v).restrictScalars R
+theorem linearCombination_smul [Module R S] [Module S M] [IsScalarTower R S M] {w : α' → S} :
+    linearCombination R (fun i : α × α' ↦ w i.2 • v i.1) = (linearCombination S v).restrictScalars R
       ∘ₗ mapRange.linearMap (linearCombination R w) ∘ₗ (curryLinearEquiv R).toLinearMap := by
   ext; simp
 
 @[simp]
-/--
-theorem `linearCombination_fin_zero` / 定理 `linearCombination_fin_zero`
-
-English:
-theorem linearCombination_fin_zero
-  given: (f : Fin 0 -> M)
-  statement: linearCombination R f = 0
-  proof: by
-  ext i
-  apply finZeroElim i
-
-中文:
-定理 linearCombination_fin_zero
-  条件: (f : 有限集 0 -> M)
-  结论: linearCombination R f = 0
-  证明: by
-  ext i
-  apply finZeroElim i
-
-Depends on / 依赖: finZeroElim
+/-
+**Finsupp.linearCombination_fin_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_fin_zero (f : Fin 0 -> M) : linearCombination R f = 0
+参数：f : Fin 0 -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
 -/
-theorem linearCombination_fin_zero (f : Fin 0 -> M) : linearCombination R f = 0 := by
+theorem linearCombination_fin_zero (f : Fin 0 → M) : linearCombination R f = 0 := by
   ext i
   apply finZeroElim i
 
 variable (α) (M) (v)
 
-/--
-Definition of `linearCombinationOn` / `linearCombinationOn` 的定义
+/-- `Finsupp.linearCombinationOn M v s` interprets `p : α →₀ R` as a linear combination of a
+subset of the vectors in `v`, mapping it to the span of those vectors.
 
-English:
-definition linearCombinationOn
-  signature: (s : Set α)
-  body: LinearMap.codRestrict _ ((linearCombination _ v).comp (Submodule.subtype (supported R R s)))
-    fun ⟨l, hl⟩ => (mem_span_image_iff_linearCombination _).2 ⟨l, hl, rfl⟩
-
-中文:
-定义 linearCombinationOn
-  签名: (s : 集合 α)
-  定义体: LinearMap.codRestrict _ ((linearCombination _ v).comp (Submodule.subtype (supported R R s)))
-    fun ⟨l, hl⟩ => (mem_span_image_iff_linearCombination _).2 ⟨l, hl, rfl⟩
-
-Depends on / 依赖: LinearMap, LinearMap.codRestrict, Submodule, Submodule.subtype, codRestrict, linearCombination, mem_span_image_iff_linearCombination, subtype, supported
+The subset is indicated by a set `s : Set α` of indices.
 -/
-def linearCombinationOn (s : Set α) : supported R R s ->ₗ[R] span R (v '' s) :=
+/-
+**Finsupp.linearCombinationOn** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：linearCombinationOn (s : Set α) : supported R R s ->ₗ[R] span R (v '' s)
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Finsupp.linearCombinationOn M v s` interprets `p : α →₀ R` as a linear combinat
+ion of a
+subset of the vectors in `v`, mapping it to the span of those vectors.
+
+The subset is indicated by a set `s : Set α` of indices.
+-/
+def linearCombinationOn (s : Set α) : supported R R s →ₗ[R] span R (v '' s) :=
   LinearMap.codRestrict _ ((linearCombination _ v).comp (Submodule.subtype (supported R R s)))
     fun ⟨l, hl⟩ => (mem_span_image_iff_linearCombination _).2 ⟨l, hl, rfl⟩
 
 variable {α} {M} {v}
-
-/--
-theorem `linearCombinationOn_range` / 定理 `linearCombinationOn_range`
-
-English:
-theorem linearCombinationOn_range
-  given: (s : Set α)
-  proof: by
-  rw [linearCombinationOn]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRestrict]; rw [← LinearMap.range_le_iff_comap]; rw [range_subtype]; rw [Submodule.map_top]; rw [LinearMap.range_comp]; rw [range_subtype]
-  exact (span_image_eq_map_linearCombination _ _).le
-
-中文:
-定理 linearCombinationOn_range
-  条件: (s : 集合 α)
-  证明: by
-  rw [linearCombinationOn]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRestrict]; rw [← LinearMap.range_le_iff_comap]; rw [range_subtype]; rw [Submodule.map_top]; rw [LinearMap.range_comp]; rw [range_subtype]
-  exact (span_image_eq_map_linearCombination _ _).le
-
-Depends on / 依赖: LinearMap, LinearMap.map_codRestrict, LinearMap.range_comp, LinearMap.range_eq_map, LinearMap.range_le_iff_comap, Submodule, Submodule.map_top, linearCombinationOn, map_codRestrict, map_top, range_comp, range_eq_map, range_le_iff_comap, range_subtype, span_image_eq_map_linearCombination
+/-
+**Finsupp.linearCombinationOn_range** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombinationOn_range (s : Set α) : LinearMap.range (linearCombination
+On α M R v s) = ⊤
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombinationOn.eq_1`：∀ (α : Type u_1) (M : Type u_2) (R : T
+ype u_5) [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Modul
+e R M] (v : α → M) (s …
+· 使用定理 `LinearMap.range_eq_map`：range_eq_map [RingHomSurjective τ₁₂] (f : M ->ₛₗ
+[τ₁₂] M₂) : range f = map f ⊤
+· 使用定理 `LinearMap.map_codRestrict`：map_codRestrict [RingHomSurjective σ₂₁] (p : 
+Submodule R M) (f : M₂ ->ₛₗ[σ₂₁] M) (h p') : map (codRestrict p f h) p' = comap 
+p.subtype (p'.m…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_le_iff_comap`：range_le_iff_comap [RingHomSurjective τ₁₂]
+ {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R₂ M₂} : range f <= p ↔ comap f p = ⊤
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Finsupp.span_image_eq_map_linearCombination`：span_image_eq_map_linearCom
+bination (s : Set α) : span R (v '' s) = Submodule.map (linearCombination R v) (
+supported R R s)
 -/
 theorem linearCombinationOn_range (s : Set α) :
     LinearMap.range (linearCombinationOn α M R v s) = ⊤ := by
-  rw [linearCombinationOn]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRestrict]; rw [← LinearMap.range_le_iff_comap]; rw [range_subtype]; rw [Submodule.map_top]; rw [LinearMap.range_comp]; rw [range_subtype]
+  rw [linearCombinationOn, LinearMap.range_eq_map, LinearMap.map_codRestrict,
+    ← LinearMap.range_le_iff_comap, range_subtype, Submodule.map_top, LinearMap.range_comp,
+    range_subtype]
   exact (span_image_eq_map_linearCombination _ _).le
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `linearCombination_restrict` / 定理 `linearCombination_restrict`
-
-English:
-theorem linearCombination_restrict
-  given: (s : Set α)
-  proof: by
-  ext; simp [linearCombinationOn]
-
-中文:
-定理 linearCombination_restrict
-  条件: (s : 集合 α)
-  证明: by
-  ext; simp [linearCombinationOn]
-
-Depends on / 依赖: linearCombinationOn
+/-
+**Finsupp.linearCombination_restrict** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_restrict (s : Set α) : linearCombination R (s.domRestric
+t v) = Submodule.subtype _ ∘ₗ linearCombinationOn α M R v s ∘ₗ (supportedEquivFi
+nsupp s).symm.toLinearMap
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Finsupp.supportedEquivFinsupp_symm_single`：∀ {α : Type u_1} {M : Type u_
+2} {R : Type u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _ro
+ot_.Module R M] (s : Set α) (i …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem linearCombination_restrict (s : Set α) :
     linearCombination R (s.domRestrict v) = Submodule.subtype _ ∘ₗ
       linearCombinationOn α M R v s ∘ₗ (supportedEquivFinsupp s).symm.toLinearMap := by
   ext; simp [linearCombinationOn]
-
-/--
-theorem `linearCombination_comp` / 定理 `linearCombination_comp`
-
-English:
-theorem linearCombination_comp
-  given: (f : α' -> α)
-  proof: by
-  ext
-  simp [linearCombination_apply]
-
-中文:
-定理 linearCombination_comp
-  条件: (f : α' -> α)
-  证明: by
-  ext
-  simp [linearCombination_apply]
-
-Depends on / 依赖: linearCombination_apply
+/-
+**Finsupp.linearCombination_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_comp (f : α' -> α) : linearCombination R (v ∘ f) = (line
+arCombination R v).comp (lmapDomain R R f)
+参数：f : α' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Finsupp.mapDomain_single`：mapDomain_single {f : α -> β} {a : α} {b : M} 
+: mapDomain f (single a b) = single (f a) b
 -/
-theorem linearCombination_comp (f : α' -> α) :
+theorem linearCombination_comp (f : α' → α) :
     linearCombination R (v ∘ f) = (linearCombination R v).comp (lmapDomain R R f) := by
   ext
   simp [linearCombination_apply]
-
-/--
-theorem `linearCombination_comapDomain` / 定理 `linearCombination_comapDomain`
-
-English:
-theorem linearCombination_comapDomain
-  statement: (f : α -> α') (l : α' ->₀ R)
-  proof: by
-  rw [linearCombination_apply]; rfl
-
-中文:
-定理 linearCombination_comapDomain
-  结论: (f : α -> α') (l : α' ->₀ R)
-  证明: by
-  rw [linearCombination_apply]; rfl
-
-Depends on / 依赖: linearCombination_apply
+/-
+**Finsupp.linearCombination_comapDomain** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_comapDomain (f : α -> α') (l : α' ->₀ R) (hf : Set.InjOn
+ f (f ⁻¹' ↑l.support)) : linearCombination R v (Finsupp.comapDomain f l hf) = (l
+.support.preimage f hf).sum fun i => l (f i) • v i
+参数：f : α -> α'；l : α' ->₀ R；hf : Set.InjOn f (f ⁻¹' ↑l.support)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
 -/
-theorem linearCombination_comapDomain (f : α -> α') (l : α' ->₀ R)
+theorem linearCombination_comapDomain (f : α → α') (l : α' →₀ R)
     (hf : Set.InjOn f (f ⁻¹' ↑l.support)) : linearCombination R v (Finsupp.comapDomain f l hf) =
       (l.support.preimage f hf).sum fun i => l (f i) • v i := by
   rw [linearCombination_apply]; rfl
-
-/--
-theorem `linearCombination_onFinset` / 定理 `linearCombination_onFinset`
-
-English:
-theorem linearCombination_onFinset
-  statement: {s : Finset α} {f : α -> R} (g : α -> M)
-  proof: by
-  classical
-  simp only [linearCombination_apply, Finsupp.sum, Finsupp.onFinset_apply, Finsupp.support_onFinset]
-  rw [Finset.sum_filter_of_ne]
-  intro x _ h
-  contrapose h
-  simp [h]
-
-中文:
-定理 linearCombination_onFinset
-  结论: {s : 有限集 α} {f : α -> R} (g : α -> M)
-  证明: by
-  classical
-  simp only [linearCombination_apply, Finsupp.sum, Finsupp.onFinset_apply, Finsupp.support_onFinset]
-  rw [Finset.sum_filter_of_ne]
-  intro x _ h
-  contrapose h
-  simp [h]
-
-Depends on / 依赖: Finset, Finset.sum_filter_of_ne, Finsupp, Finsupp.onFinset_apply, Finsupp.sum, Finsupp.support_onFinset, classical, contrapose, linearCombination_apply, onFinset_apply, sum_filter_of_ne, support_onFinset
+/-
+**Finsupp.linearCombination_onFinset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearCombination_onFinset {s : Finset α} {f : α -> R} (g : α -> M) (hf : 
+forall a, f a != 0 -> a in s) : linearCombination R g (Finsupp.onFinset s f hf) 
+= Finset.sum s fun x : α => f x • g x
+参数：g : α -> M；hf : forall a, f a != 0 -> a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.support_onFinset`：support_onFinset [DecidableEq M] {s : Finset α
+} {f : α -> M} (hf : forall a : α, f a != 0 -> a in s) : (Finsupp.onFinset s f h
+f).support = {…
+· 使用定理 `Finset.sum_filter_of_ne`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} 
+[inst : AddCommMonoid M] {f : ι → M} {p : ι → Prop}   [inst_1 : DecidablePred p]
+, (∀ x ∈ s, f…
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem linearCombination_onFinset {s : Finset α} {f : α -> R} (g : α -> M)
-    (hf : forall a, f a != 0 -> a in s) :
+theorem linearCombination_onFinset {s : Finset α} {f : α → R} (g : α → M)
+    (hf : ∀ a, f a ≠ 0 → a ∈ s) :
     linearCombination R g (Finsupp.onFinset s f hf) = Finset.sum s fun x : α => f x • g x := by
   classical
   simp only [linearCombination_apply, Finsupp.sum, Finsupp.onFinset_apply, Finsupp.support_onFinset]
@@ -980,45 +1019,39 @@ theorem linearCombination_onFinset {s : Finset α} {f : α -> R} (g : α -> M)
 variable [Module S M] [SMulCommClass R S M]
 
 variable (S) in
-/--
-Definition of `bilinearCombination` / `bilinearCombination` 的定义
+/-- `Finsupp.bilinearCombination R S v f` is the linear combination of vectors in `v` with weights
+in `f`, as a bilinear map of `v` and `f`.
+In the absence of `SMulCommClass R S M`, use `Finsupp.linearCombination`.
 
-English:
-definition bilinearCombination
-  signature: : (α -> M) ->ₗ[S] (α ->₀ R) ->ₗ[R] M where
-  body: linearCombination R v
-  map_add' u v := by ext; simp [Pi.add_apply, smul_add]
-  map_smul' r v := by ext; simp [smul_comm]
-
-@[simp]
-
-中文:
-定义 bilinearCombination
-  签名: : (α -> M) ->ₗ[S] (α ->₀ R) ->ₗ[R] M where
-  定义体: linearCombination R v
-  map_add' u v := by ext; simp [Pi.add_apply, smul_add]
-  map_smul' r v := by ext; simp [smul_comm]
-
-@[simp]
-
-Depends on / 依赖: linearCombination
+See note [bundled maps over different rings] for why separate `R` and `S` semirings are used.
 -/
-def bilinearCombination : (α -> M) ->ₗ[S] (α ->₀ R) ->ₗ[R] M where
+/-
+**Finsupp.bilinearCombination** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：bilinearCombination : (α -> M) ->ₗ[S] (α ->₀ R) ->ₗ[R] M where toFun v
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Finsupp.bilinearCombination R S v f` is the linear combination of vectors in `v
+` with weights
+in `f`, as a bilinear map of `v` and `f`.
+In the absence of `SMulCommClass R S M`, use `Finsupp.linearCombination`.
+
+See note [bundled maps over different rings] for why separate `R` and `S` semiri
+ngs are used.
+-/
+def bilinearCombination : (α → M) →ₗ[S] (α →₀ R) →ₗ[R] M where
   toFun v := linearCombination R v
   map_add' u v := by ext; simp [Pi.add_apply, smul_add]
   map_smul' r v := by ext; simp [smul_comm]
 
 @[simp]
-/--
-theorem `bilinearCombination_apply` / 定理 `bilinearCombination_apply`
-
-English:
-theorem bilinearCombination_apply
-  proof: rfl
-
-中文:
-定理 bilinearCombination_apply
-  证明: rfl
+/-
+**Finsupp.bilinearCombination_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：bilinearCombination_apply : bilinearCombination R S v = linearCombination 
+R v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bilinearCombination_apply :
     bilinearCombination R S v = linearCombination R v :=
@@ -1032,103 +1065,103 @@ section Fintype
 
 variable {α M : Type*} (R : Type*) [Fintype α] [Semiring R] [AddCommMonoid M] [Module R M]
 variable (S : Type*) [Semiring S] [Module S M] [SMulCommClass R S M]
-variable (v : α -> M)
+variable (v : α → M)
 
-/--
-Definition of `Fintype.linearCombination` / `Fintype.linearCombination` 的定义
+/-- `Fintype.linearCombination R v f` is the linear combination of vectors in `v` with weights
+in `f`. This variant of `Finsupp.linearCombination` is defined on fintype indexed vectors.
 
-English:
-definition Fintype.linearCombination
-  signature: : (α -> R) ->ₗ[R] M where
-  body: ∑ i, f i • v i
-  map_add' f g := by simp_rw [← Finset.sum_add_distrib, ← add_smul]; rfl
-  map_smul' r f := by simp_rw [Finset.smul_sum, smul_smul]; rfl
-
-中文:
-定义 有限类型.linearCombination
-  签名: : (α -> R) ->ₗ[R] M where
-  定义体: ∑ i, f i • v i
-  map_add' f g := by simp_rw [← Finset.sum_add_distrib, ← add_smul]; rfl
-  map_smul' r f := by simp_rw [Finset.smul_sum, smul_smul]; rfl
+This map is linear in `v` if `R` is commutative, and always linear in `f`.
+See note [bundled maps over different rings] for why separate `R` and `S` semirings are used.
 -/
-protected def Fintype.linearCombination : (α -> R) ->ₗ[R] M where
+/-
+**Fintype.linearCombination** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：{α : Type u_1} →   {M : Type u_2} →     (R : Type u_3) →       [Fintype α]
+ →         [inst : Semiring R] → [inst_1 : AddCommMonoid M] → [inst_2 : _root_.M
+odule R M] → (α → M) → (α → R) →ₗ[R] M
+参数：R : Type u_3；α → M；α → R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Fintype.linearCombination R v f` is the linear combination of vectors in `v` wi
+th weights
+in `f`. This variant of `Finsupp.linearCombination` is defined on fintype indexe
+d vectors.
+
+This map is linear in `v` if `R` is commutative, and always linear in `f`.
+See note [bundled maps over different rings] for why separate `R` and `S` semiri
+ngs are used.
+-/
+protected def Fintype.linearCombination : (α → R) →ₗ[R] M where
   toFun f := ∑ i, f i • v i
   map_add' f g := by simp_rw [← Finset.sum_add_distrib, ← add_smul]; rfl
   map_smul' r f := by simp_rw [Finset.smul_sum, smul_smul]; rfl
-
-/--
-theorem `Fintype.linearCombination_apply` / 定理 `Fintype.linearCombination_apply`
-
-English:
-theorem Fintype.linearCombination_apply
-  given: (f)
-  statement: Fintype.linearCombination R v f = ∑ i, f i • v i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 有限类型.linearCombination_apply
-  条件: (f)
-  结论: 有限类型.linearCombination R v f = ∑ i, f i • v i
-  证明: rfl
-
-@[simp]
+/-
+**Fintype.linearCombination_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.linearCombination_apply (f) : Fintype.linearCombination R v f = ∑ 
+i, f i • v i
+参数：f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Fintype.linearCombination_apply (f) : Fintype.linearCombination R v f = ∑ i, f i • v i :=
   rfl
 
 @[simp]
-/--
-theorem `Fintype.linearCombination_apply_single` / 定理 `Fintype.linearCombination_apply_single`
-
-English:
-theorem Fintype.linearCombination_apply_single
-  given: [DecidableEq α] (i : α) (r : R)
-  proof: by
-  simp_rw [Fintype.linearCombination_apply, Pi.single_apply, ite_smul, zero_smul]
-  rw [Finset.sum_ite_eq']; rw [if_pos (Finset.mem_univ _)]
-
-中文:
-定理 有限类型.linearCombination_apply_single
-  条件: [DecidableEq α] (i : α) (r : R)
-  证明: by
-  simp_rw [Fintype.linearCombination_apply, Pi.single_apply, ite_smul, zero_smul]
-  rw [Finset.sum_ite_eq']; rw [if_pos (Finset.mem_univ _)]
-
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_ite_eq, Fintype, Fintype.linearCombination_apply, Pi.single_apply, if_pos, ite_smul, linearCombination_apply, mem_univ, simp_rw, single_apply, sum_ite_eq, zero_smul
+/-
+**Fintype.linearCombination_apply_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.linearCombination_apply_single [DecidableEq α] (i : α) (r : R) : F
+intype.linearCombination R v (Pi.single i r) = r • v i
+参数：i : α；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Pi.single_apply`：∀ {ι : Type u_1} [inst : DecidableEq ι] {M : Type u_9} 
+[inst_1 : Zero M] (i : ι) (x : M) (i' : ι),   Pi.single i x i' = if i' = i then 
+x els…
+· 使用定理 `ite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) [
+inst_1 : Decidable p] (a : α) (b c : β),   (if p then b else c) • a = if p the…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Finset.sum_ite_eq'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoi
+d M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if
+ x = a t…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
 theorem Fintype.linearCombination_apply_single [DecidableEq α] (i : α) (r : R) :
     Fintype.linearCombination R v (Pi.single i r) = r • v i := by
   simp_rw [Fintype.linearCombination_apply, Pi.single_apply, ite_smul, zero_smul]
-  rw [Finset.sum_ite_eq']; rw [if_pos (Finset.mem_univ _)]
-
-/--
-theorem `Finsupp.linearCombination_eq_fintype_linearCombination_apply` / 定理 `Finsupp.linearCombination_eq_fintype_linearCombination_apply`
-
-English:
-theorem Finsupp.linearCombination_eq_fintype_linearCombination_apply
-  given: (x : α -> R)
-  proof: by
-  apply Finset.sum_subset
-  · exact Finset.subset_univ _
-  · intro x _ hx
-    rw [Finsupp.notMem_support_iff.mp hx]
-    exact zero_smul _ _
-
-中文:
-定理 有限支撑.linearCombination_eq_fintype_linearCombination_apply
-  条件: (x : α -> R)
-  证明: by
-  apply Finset.sum_subset
-  · exact Finset.subset_univ _
-  · intro x _ hx
-    rw [Finsupp.notMem_support_iff.mp hx]
-    exact zero_smul _ _
-
-Depends on / 依赖: Finset, Finset.subset_univ, Finset.sum_subset, Finsupp, Finsupp.notMem_support_iff.mp, notMem_support_iff, subset_univ, sum_subset, zero_smul
+  rw [Finset.sum_ite_eq', if_pos (Finset.mem_univ _)]
+/-
+**Finsupp.linearCombination_eq_fintype_linearCombination_apply** 是 Mathlib 中的一个定
+理，位于命名空间 ``。
+形式化陈述：Finsupp.linearCombination_eq_fintype_linearCombination_apply (x : α -> R) 
+: linearCombination R v ((Finsupp.linearEquivFunOnFinite R R α).symm x) = Fintyp
+e.linearCombination R v x
+参数：x : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_subset`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [i
+nst : AddCommMonoid M] {f : ι → M},   s₁ ⊆ s₂ → (∀ x ∈ s₂, x ∉ s₁ → f x = 0) → ∑
+ x ∈ s₁…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Finset.subset_univ`：subset_univ (s : Finset α) : s subseteq univ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.notMem_support_iff`：notMem_support_iff {f : α ->₀ M} {a} : a ∉ f
+.support ↔ f a = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 -/
-theorem Finsupp.linearCombination_eq_fintype_linearCombination_apply (x : α -> R) :
+theorem Finsupp.linearCombination_eq_fintype_linearCombination_apply (x : α → R) :
     linearCombination R v ((Finsupp.linearEquivFunOnFinite R R α).symm x) =
       Fintype.linearCombination R v x := by
   apply Finset.sum_subset
@@ -1136,89 +1169,106 @@ theorem Finsupp.linearCombination_eq_fintype_linearCombination_apply (x : α -> 
   · intro x _ hx
     rw [Finsupp.notMem_support_iff.mp hx]
     exact zero_smul _ _
-
-/--
-theorem `Finsupp.linearCombination_eq_fintype_linearCombination` / 定理 `Finsupp.linearCombination_eq_fintype_linearCombination`
-
-English:
-theorem Finsupp.linearCombination_eq_fintype_linearCombination
-  proof: LinearMap.ext linearCombination_eq_fintype_linearCombination_apply R v
-
-@[simp]
-
-中文:
-定理 有限支撑.linearCombination_eq_fintype_linearCombination
-  证明: LinearMap.ext linearCombination_eq_fintype_linearCombination_apply R v
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.ext, linearCombination_eq_fintype_linearCombination_apply
+/-
+**Finsupp.linearCombination_eq_fintype_linearCombination** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：Finsupp.linearCombination_eq_fintype_linearCombination : (linearCombinatio
+n R v).comp (Finsupp.linearEquivFunOnFinite R R α).symm.toLinearMap = Fintype.li
+nearCombination R v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Finsupp.linearCombination_eq_fintype_linearCombination_apply`：Finsupp.li
+nearCombination_eq_fintype_linearCombination_apply (x : α -> R) : linearCombinat
+ion R v ((Finsupp.linearEquivFunOnFinite R R α).sy…
 -/
 theorem Finsupp.linearCombination_eq_fintype_linearCombination :
     (linearCombination R v).comp (Finsupp.linearEquivFunOnFinite R R α).symm.toLinearMap =
       Fintype.linearCombination R v :=
-LinearMap.ext linearCombination_eq_fintype_linearCombination_apply R v
+  LinearMap.ext <| linearCombination_eq_fintype_linearCombination_apply R v
 
 @[simp]
-/--
-theorem `Fintype.range_linearCombination` / 定理 `Fintype.range_linearCombination`
-
-English:
-theorem Fintype.range_linearCombination
-  proof: by
-  rw [← Finsupp.linearCombination_eq_fintype_linearCombination]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [Finsupp.range_linearCombination]
-
-中文:
-定理 有限类型.range_linearCombination
-  证明: by
-  rw [← Finsupp.linearCombination_eq_fintype_linearCombination]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [Finsupp.range_linearCombination]
-
-Depends on / 依赖: Finsupp, Finsupp.linearCombination_eq_fintype_linearCombination, Finsupp.range_linearCombination, LinearEquiv, LinearEquiv.range, LinearMap, LinearMap.range_comp, Submodule, Submodule.map_top, linearCombination_eq_fintype_linearCombination, map_top, range_comp, range_linearCombination
+/-
+**Fintype.range_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.range_linearCombination : LinearMap.range (Fintype.linearCombinati
+on R v) = Submodule.span R (Set.range v)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.linearCombination_eq_fintype_linearCombination`：Finsupp.linearCo
+mbination_eq_fintype_linearCombination : (linearCombination R v).comp (Finsupp.l
+inearEquivFunOnFinite R R α).symm.toLinearMa…
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `LinearEquiv.range`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ :
+ Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid 
+M] [ins…
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Finsupp.range_linearCombination`：range_linearCombination : LinearMap.ran
+ge (linearCombination R v) = span R (range v)
 -/
 theorem Fintype.range_linearCombination :
     LinearMap.range (Fintype.linearCombination R v) = Submodule.span R (Set.range v) := by
-  rw [← Finsupp.linearCombination_eq_fintype_linearCombination]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [Finsupp.range_linearCombination]
-
-/--
-theorem `span_range_eq_top_iff_surjective_fintypeLinearCombination` / 定理 `span_range_eq_top_iff_surjective_fintypeLinearCombination`
-
-English:
-theorem span_range_eq_top_iff_surjective_fintypeLinearCombination
-  proof: by
-  rw [← LinearMap.range_eq_top]; rw [Fintype.range_linearCombination]
-
-中文:
-定理 span_range_eq_top_iff_surjective_fintypeLinearCombination
-  证明: by
-  rw [← LinearMap.range_eq_top]; rw [Fintype.range_linearCombination]
-
-Depends on / 依赖: Fintype, Fintype.range_linearCombination, LinearMap, LinearMap.range_eq_top, range_eq_top, range_linearCombination
+  rw [← Finsupp.linearCombination_eq_fintype_linearCombination, LinearMap.range_comp,
+      LinearEquiv.range, Submodule.map_top, Finsupp.range_linearCombination]
+/-
+**span_range_eq_top_iff_surjective_fintypeLinearCombination** 是 Mathlib 中的一个定理，位
+于命名空间 ``。
+形式化陈述：span_range_eq_top_iff_surjective_fintypeLinearCombination : Submodule.span
+ R (Set.range v) = ⊤ ↔ Function.Surjective (Fintype.linearCombination R v)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `Fintype.range_linearCombination`：Fintype.range_linearCombination : Linea
+rMap.range (Fintype.linearCombination R v) = Submodule.span R (Set.range v)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem span_range_eq_top_iff_surjective_fintypeLinearCombination :
     Submodule.span R (Set.range v) = ⊤ ↔
       Function.Surjective (Fintype.linearCombination R v) := by
-  rw [← LinearMap.range_eq_top]; rw [Fintype.range_linearCombination]
+  rw [← LinearMap.range_eq_top, Fintype.range_linearCombination]
 
-/--
-Definition of `Fintype.bilinearCombination` / `Fintype.bilinearCombination` 的定义
+/-- `Fintype.bilinearCombination R S v f` is the linear combination of vectors in `v` with weights
+in `f`. This variant of `Finsupp.linearCombination` is defined on fintype indexed vectors.
 
-English:
-definition Fintype.bilinearCombination
-  signature: : (α -> M) ->ₗ[S] (α -> R) ->ₗ[R] M where
-  body: Fintype.linearCombination R v
-  map_add' u v := by ext; simp [Fintype.linearCombination,
-    Finset.sum_add_distrib, Pi.add_apply, smul_add]
-  map_smul' r v := by ext; simp [Fintype.linearCombination, Finset.smul_sum, smul_comm]
-
-中文:
-定义 有限类型.bilinearCombination
-  签名: : (α -> M) ->ₗ[S] (α -> R) ->ₗ[R] M where
-  定义体: Fintype.linearCombination R v
-  map_add' u v := by ext; simp [Fintype.linearCombination,
-    Finset.sum_add_distrib, Pi.add_apply, smul_add]
-  map_smul' r v := by ext; simp [Fintype.linearCombination, Finset.smul_sum, smul_comm]
+This map is linear in `v` if `R` is commutative, and always linear in `f`.
+See note [bundled maps over different rings] for why separate `R` and `S` semirings are used.
 -/
-protected def Fintype.bilinearCombination : (α -> M) ->ₗ[S] (α -> R) ->ₗ[R] M where
+/-
+**Fintype.bilinearCombination** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：{α : Type u_1} →   {M : Type u_2} →     (R : Type u_3) →       [Fintype α]
+ →         [inst : Semiring R] →           [inst_1 : AddCommMonoid M] →         
+    [inst_2 : _root_.Module R M] →               (S : Type u_4) →               
+  [inst_3 : Semiring S] →                   [inst_4 : _root_.Module S M] → [inst
+_5 : SMulCommClass R S M] → (α → M) →ₗ[S] (α → R) →ₗ[R] M
+参数：R : Type u_3；S : Type u_4；α → M；α → R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Fintype.bilinearCombination R S v f` is the linear combination of vectors in `v
+` with weights
+in `f`. This variant of `Finsupp.linearCombination` is defined on fintype indexe
+d vectors.
+
+This map is linear in `v` if `R` is commutative, and always linear in `f`.
+See note [bundled maps over different rings] for why separate `R` and `S` semiri
+ngs are used.
+-/
+protected def Fintype.bilinearCombination : (α → M) →ₗ[S] (α → R) →ₗ[R] M where
   toFun v := Fintype.linearCombination R v
   map_add' u v := by ext; simp [Fintype.linearCombination,
     Finset.sum_add_distrib, Pi.add_apply, smul_add]
@@ -1227,37 +1277,33 @@ protected def Fintype.bilinearCombination : (α -> M) ->ₗ[S] (α -> R) ->ₗ[R
 variable {S}
 
 @[simp]
-/--
-theorem `Fintype.bilinearCombination_apply` / 定理 `Fintype.bilinearCombination_apply`
-
-English:
-theorem Fintype.bilinearCombination_apply
-  proof: rfl
-
-中文:
-定理 有限类型.bilinearCombination_apply
-  证明: rfl
+/-
+**Fintype.bilinearCombination_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.bilinearCombination_apply : Fintype.bilinearCombination R S v = Fi
+ntype.linearCombination R v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Fintype.bilinearCombination_apply :
     Fintype.bilinearCombination R S v = Fintype.linearCombination R v :=
   rfl
-
-/--
-theorem `Fintype.bilinearCombination_apply_single` / 定理 `Fintype.bilinearCombination_apply_single`
-
-English:
-theorem Fintype.bilinearCombination_apply_single
-  given: [DecidableEq α] (i : α) (r : R)
-  proof: by
-  simp [Fintype.bilinearCombination]
-
-中文:
-定理 有限类型.bilinearCombination_apply_single
-  条件: [DecidableEq α] (i : α) (r : R)
-  证明: by
-  simp [Fintype.bilinearCombination]
-
-Depends on / 依赖: Fintype, Fintype.bilinearCombination, bilinearCombination
+/-
+**Fintype.bilinearCombination_apply_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.bilinearCombination_apply_single [DecidableEq α] (i : α) (r : R) :
+ Fintype.bilinearCombination R S v (Pi.single i r) = r • v i
+参数：i : α；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.linearCombination_apply_single`：Fintype.linearCombination_apply_
+single [DecidableEq α] (i : α) (r : R) : Fintype.linearCombination R v (Pi.singl
+e i r) = r • v i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Fintype.bilinearCombination_apply_single [DecidableEq α] (i : α) (r : R) :
     Fintype.bilinearCombination R S v (Pi.single i r) = r • v i := by
@@ -1267,184 +1313,180 @@ section SpanRange
 
 variable {v} {x : M}
 
-/--
-theorem `Submodule.mem_span_range_iff_exists_fun` / 定理 `Submodule.mem_span_range_iff_exists_fun`
+/-- An element `x` lies in the span of `v` iff it can be written as sum `∑ cᵢ • vᵢ = x`.
+-/
+/-
+**Submodule.mem_span_range_iff_exists_fun** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_range_iff_exists_fun : x in span R (range v) ↔ exists c
+ : α -> R, ∑ i, c i • v i = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Surjective.exists`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Surjective f → ∀ {p : β → Prop}, (∃ y, p y) ↔ ∃ x, p (f x)
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finsupp.equivFunOnFinite_apply`：∀ {α : Type u_1} {M : Type u_4} [inst : 
+Zero M] [inst_1 : Finite α] (a : α →₀ M) (a_1 : α),   Finsupp.equivFunOnFinite a
+ a_1 = a a_1
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `Eq.congr_left`：∀ {α : Sort u_1} {x y z : α}, x = y → (x = z ↔ y = z)
+· 使用定理 `Finsupp.sum_fintype`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [in
+st : Zero M] [inst_1 : AddCommMonoid N] [inst_2 : Fintype α]   (f : α →₀ M) (g :
+ α → M → …
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 
-English:
-theorem Submodule.mem_span_range_iff_exists_fun
-  proof: by
-  rw [Finsupp.equivFunOnFinite.surjective.exists]
-  simp only [Finsupp.mem_span_range_iff_exists_finsupp, Finsupp.equivFunOnFinite_apply]
-exact exists_congr fun c => Eq.congr_left Finsupp.sum_fintype _ _ fun i => zero_smul _ _
-
-中文:
-定理 子模.mem_span_range_iff_存在_fun
-  证明: by
-  rw [Finsupp.equivFunOnFinite.surjective.exists]
-  simp only [Finsupp.mem_span_range_iff_exists_finsupp, Finsupp.equivFunOnFinite_apply]
-exact exists_congr fun c => Eq.congr_left Finsupp.sum_fintype _ _ fun i => zero_smul _ _
-
-Depends on / 依赖: Eq.congr_left, Finsupp, Finsupp.equivFunOnFinite.surjective.exists, Finsupp.equivFunOnFinite_apply, Finsupp.mem_span_range_iff_exists_finsupp, Finsupp.sum_fintype, congr_left, equivFunOnFinite, equivFunOnFinite_apply, exists_congr, mem_span_range_iff_exists_finsupp, sum_fintype, surjective, zero_smul
+--- 原说明 ---
+An element `x` lies in the span of `v` iff it can be written as sum `∑ cᵢ • vᵢ =
+ x`.
 -/
 theorem Submodule.mem_span_range_iff_exists_fun :
-    x in span R (range v) ↔ exists c : α -> R, ∑ i, c i • v i = x := by
+    x ∈ span R (range v) ↔ ∃ c : α → R, ∑ i, c i • v i = x := by
   rw [Finsupp.equivFunOnFinite.surjective.exists]
   simp only [Finsupp.mem_span_range_iff_exists_finsupp, Finsupp.equivFunOnFinite_apply]
-exact exists_congr fun c => Eq.congr_left Finsupp.sum_fintype _ _ fun i => zero_smul _ _
+  exact exists_congr fun c => Eq.congr_left <| Finsupp.sum_fintype _ _ fun i => zero_smul _ _
 
-/--
-theorem `Submodule.top_le_span_range_iff_forall_exists_fun` / 定理 `Submodule.top_le_span_range_iff_forall_exists_fun`
+/-- A family `v : α → V` is generating `V` iff every element `(x : V)`
+can be written as sum `∑ cᵢ • vᵢ = x`.
+-/
+/-
+**Submodule.top_le_span_range_iff_forall_exists_fun** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：Submodule.top_le_span_range_iff_forall_exists_fun : ⊤ <= span R (range v) 
+↔ forall x, exists c : α -> R, ∑ i, c i • v i = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `trivial`：True
 
-English:
-theorem Submodule.top_le_span_range_iff_forall_exists_fun
-  proof: by
-  simp_rw [← mem_span_range_iff_exists_fun]
-  exact ⟨fun h x => h trivial, fun h x _ => h x⟩
-
-omit [Fintype α]
-
-中文:
-定理 子模.top_le_span_range_iff_对任意_存在_fun
-  证明: by
-  simp_rw [← mem_span_range_iff_exists_fun]
-  exact ⟨fun h x => h trivial, fun h x _ => h x⟩
-
-omit [Fintype α]
-
-Depends on / 依赖: mem_span_range_iff_exists_fun, simp_rw
+--- 原说明 ---
+A family `v : α → V` is generating `V` iff every element `(x : V)`
+can be written as sum `∑ cᵢ • vᵢ = x`.
 -/
 theorem Submodule.top_le_span_range_iff_forall_exists_fun :
-    ⊤ <= span R (range v) ↔ forall x, exists c : α -> R, ∑ i, c i • v i = x := by
+    ⊤ ≤ span R (range v) ↔ ∀ x, ∃ c : α → R, ∑ i, c i • v i = x := by
   simp_rw [← mem_span_range_iff_exists_fun]
   exact ⟨fun h x => h trivial, fun h x _ => h x⟩
 
 omit [Fintype α]
-
-/--
-theorem `Submodule.mem_span_image_iff_exists_fun` / 定理 `Submodule.mem_span_image_iff_exists_fun`
-
-English:
-theorem Submodule.mem_span_image_iff_exists_fun
-  given: {s : Set α}
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨t, ht, c, hx⟩ => ?_⟩
-  · obtain ⟨l, hl, hx⟩ := (Finsupp.mem_span_image_iff_linearCombination R).mp h
-    refine ⟨l.support, hl, l ∘ (↑), ?_⟩
-    rw [← hx]
-    exact l.support.sum_coe_sort fun a => l a • v a
-  · rw [← hx]
-exact sum_smul_mem (span R (v '' s)) c fun a _ => subset_span by aesop
-
-中文:
-定理 子模.mem_span_image_iff_存在_fun
-  条件: {s : 集合 α}
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨t, ht, c, hx⟩ => ?_⟩
-  · obtain ⟨l, hl, hx⟩ := (Finsupp.mem_span_image_iff_linearCombination R).mp h
-    refine ⟨l.support, hl, l ∘ (↑), ?_⟩
-    rw [← hx]
-    exact l.support.sum_coe_sort fun a => l a • v a
-  · rw [← hx]
-exact sum_smul_mem (span R (v '' s)) c fun a _ => subset_span by aesop
-
-Depends on / 依赖: Finsupp, Finsupp.mem_span_image_iff_linearCombination, l.support, l.support.sum_coe_sort, mem_span_image_iff_linearCombination, subset_span, sum_coe_sort, sum_smul_mem, support
+/-
+**Submodule.mem_span_image_iff_exists_fun** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_image_iff_exists_fun {s : Set α} : x in span R (v '' s)
+ ↔ exists t : Finset α, ↑t subseteq s ∧ exists c : t -> R, ∑ i, c i • v i = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.mem_span_image_iff_linearCombination`：mem_span_image_iff_linearC
+ombination {s : Set α} {x : M} : x in span R (v '' s) ↔ exists l in supported R 
+R s, linearCombination R v l = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_coe_sort`：∀ {ι : Type u_1} {M : Type u_4} (s : Finset ι) [ins
+t : AddCommMonoid M] (f : ι → M), ∑ i, f ↑i = ∑ i ∈ s, f i
+· 使用定理 `Submodule.sum_smul_mem`：sum_smul_mem {t : Finset ι} {f : ι -> M} (r : ι 
+-> R) (hyp : forall c in t, f c in p) : (∑ i in t, r i • f i) in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem Submodule.mem_span_image_iff_exists_fun {s : Set α} :
-    x in span R (v '' s) ↔ exists t : Finset α, ↑t subseteq s ∧ exists c : t -> R, ∑ i, c i • v i = x := by
-  refine ⟨fun h => ?_, fun ⟨t, ht, c, hx⟩ => ?_⟩
+    x ∈ span R (v '' s) ↔ ∃ t : Finset α, ↑t ⊆ s ∧ ∃ c : t → R, ∑ i, c i • v i = x := by
+  refine ⟨fun h ↦ ?_, fun ⟨t, ht, c, hx⟩ ↦ ?_⟩
   · obtain ⟨l, hl, hx⟩ := (Finsupp.mem_span_image_iff_linearCombination R).mp h
     refine ⟨l.support, hl, l ∘ (↑), ?_⟩
     rw [← hx]
-    exact l.support.sum_coe_sort fun a => l a • v a
+    exact l.support.sum_coe_sort fun a ↦ l a • v a
   · rw [← hx]
-exact sum_smul_mem (span R (v '' s)) c fun a _ => subset_span by aesop
-
-/--
-theorem `Submodule.mem_span_image_finset_iff_exists_fun` / 定理 `Submodule.mem_span_image_finset_iff_exists_fun`
-
-English:
-theorem Submodule.mem_span_image_finset_iff_exists_fun
-  given: {s : Finset α}
-  proof: by
-  rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
-  rfl
-
-中文:
-定理 子模.mem_span_image_finset_iff_存在_fun
-  条件: {s : 有限集 α}
-  证明: by
-  rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
-  rfl
-
-Depends on / 依赖: image_eq_range, mem_span_range_iff_exists_fun
+    exact sum_smul_mem (span R (v '' s)) c fun a _ ↦ subset_span <| by aesop
+/-
+**Submodule.mem_span_image_finset_iff_exists_fun** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_image_finset_iff_exists_fun {s : Finset α} : x in span 
+R (v '' s) ↔ exists c : s -> R, ∑ i, c i • v i = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mem_span_range_iff_exists_fun`：Submodule.mem_span_range_iff_ex
+ists_fun : x in span R (range v) ↔ exists c : α -> R, ∑ i, c i • v i = x
+· 使用定理 `Set.image_eq_range`：image_eq_range (f : α -> β) (s : Set α) : f '' s = r
+ange fun x : s => f x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Submodule.mem_span_image_finset_iff_exists_fun {s : Finset α} :
-    x in span R (v '' s) ↔ exists c : s -> R, ∑ i, c i • v i = x := by
-  rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
+    x ∈ span R (v '' s) ↔ ∃ c : s → R, ∑ i, c i • v i = x := by
+  rw [← mem_span_range_iff_exists_fun, image_eq_range]
   rfl
-
-/--
-theorem `Submodule.mem_span_image_finset_iff_exists_fun'` / 定理 `Submodule.mem_span_image_finset_iff_exists_fun'`
-
-English:
-theorem Submodule.mem_span_image_finset_iff_exists_fun'
-  given: {s : Finset α}
-  proof: by
-  classical
-  rw [Submodule.mem_span_image_finset_iff_exists_fun]
-  refine ⟨fun ⟨c, hc⟩ => ?_, fun ⟨c, hc⟩ => ?_⟩
-  · refine ⟨fun i => if h : i in s then c ⟨i, h⟩ else 0, ?_⟩
-    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
-    simp
-  · refine ⟨fun i => c i, ?_⟩
-    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
-
-中文:
-定理 子模.mem_span_image_finset_iff_存在_fun'
-  条件: {s : 有限集 α}
-  证明: by
-  classical
-  rw [Submodule.mem_span_image_finset_iff_exists_fun]
-  refine ⟨fun ⟨c, hc⟩ => ?_, fun ⟨c, hc⟩ => ?_⟩
-  · refine ⟨fun i => if h : i in s then c ⟨i, h⟩ else 0, ?_⟩
-    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
-    simp
-  · refine ⟨fun i => c i, ?_⟩
-    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
-
-Depends on / 依赖: Finset, Finset.sum_coe_sort, Submodule, Submodule.mem_span_image_finset_iff_exists_fun, classical, mem_span_image_finset_iff_exists_fun, sum_coe_sort
+/-
+**Submodule.mem_span_image_finset_iff_exists_fun'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_image_finset_iff_exists_fun' {s : Finset α} : x in span
+ R (v '' s) ↔ exists c : α -> R, ∑ i in s, c i • v i = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_span_image_finset_iff_exists_fun`：Submodule.mem_span_image
+_finset_iff_exists_fun {s : Finset α} : x in span R (v '' s) ↔ exists c : s -> R
+, ∑ i, c i • v i = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_coe_sort`：∀ {ι : Type u_1} {M : Type u_4} (s : Finset ι) [ins
+t : AddCommMonoid M] (f : ι → M), ∑ i, f ↑i = ∑ i ∈ s, f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Submodule.mem_span_image_finset_iff_exists_fun' {s : Finset α} :
-    x in span R (v '' s) ↔ exists c : α -> R, ∑ i in s, c i • v i = x := by
+    x ∈ span R (v '' s) ↔ ∃ c : α → R, ∑ i ∈ s, c i • v i = x := by
   classical
   rw [Submodule.mem_span_image_finset_iff_exists_fun]
-  refine ⟨fun ⟨c, hc⟩ => ?_, fun ⟨c, hc⟩ => ?_⟩
-  · refine ⟨fun i => if h : i in s then c ⟨i, h⟩ else 0, ?_⟩
-    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
+  refine ⟨fun ⟨c, hc⟩ ↦ ?_, fun ⟨c, hc⟩ ↦ ?_⟩
+  · refine ⟨fun i ↦ if h : i ∈ s then c ⟨i, h⟩ else 0, ?_⟩
+    rw [← hc, ← Finset.sum_coe_sort (s := s)]
     simp
-  · refine ⟨fun i => c i, ?_⟩
-    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
-
-/--
-theorem `Fintype.mem_span_image_iff_exists_fun` / 定理 `Fintype.mem_span_image_iff_exists_fun`
-
-English:
-theorem Fintype.mem_span_image_iff_exists_fun
-  given: {s : Set α} [Fintype s]
-  proof: by
-  rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
-
-中文:
-定理 有限类型.mem_span_image_iff_存在_fun
-  条件: {s : 集合 α} [有限类型 s]
-  证明: by
-  rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
-
-Depends on / 依赖: image_eq_range, mem_span_range_iff_exists_fun
+  · refine ⟨fun i ↦ c i, ?_⟩
+    rw [← hc, ← Finset.sum_coe_sort (s := s)]
+/-
+**Fintype.mem_span_image_iff_exists_fun** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.mem_span_image_iff_exists_fun {s : Set α} [Fintype s] : x in span 
+R (v '' s) ↔ exists c : s -> R, ∑ i, c i • v i = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mem_span_range_iff_exists_fun`：Submodule.mem_span_range_iff_ex
+ists_fun : x in span R (range v) ↔ exists c : α -> R, ∑ i, c i • v i = x
+· 使用定理 `Set.image_eq_range`：image_eq_range (f : α -> β) (s : Set α) : f '' s = r
+ange fun x : s => f x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Fintype.mem_span_image_iff_exists_fun {s : Set α} [Fintype s] :
-    x in span R (v '' s) ↔ exists c : s -> R, ∑ i, c i • v i = x := by
-  rw [← mem_span_range_iff_exists_fun]; rw [image_eq_range]
+    x ∈ span R (v '' s) ↔ ∃ c : s → R, ∑ i, c i • v i = x := by
+  rw [← mem_span_range_iff_exists_fun, image_eq_range]
 
 end SpanRange
 
@@ -1462,336 +1504,357 @@ variable (R)
 /-- Pick some representation of `x : span R w` as a linear combination in `w`,
 `((Finsupp.mem_span_iff_linearCombination _ _ _).mp x.2).choose`
 -/
-irreducible_def Span.repr (w : Set M) (x : span R w) : w ->₀ R :=
+irreducible_def Span.repr (w : Set M) (x : span R w) : w →₀ R :=
   ((Finsupp.mem_span_iff_linearCombination _ _ _).mp x.2).choose
 
 @[simp]
-/--
-theorem `Span.finsupp_linearCombination_repr` / 定理 `Span.finsupp_linearCombination_repr`
-
-English:
-theorem Span.finsupp_linearCombination_repr
-  given: {w : Set M} (x : span R w)
-  proof: by
-  rw [Span.repr_def]
-  exact ((Finsupp.mem_span_iff_linearCombination _ _ _).mp x.2).choose_spec
-
-中文:
-定理 张成.finsupp_linearCombination_repr
-  条件: {w : 集合 M} (x : span R w)
-  证明: by
-  rw [Span.repr_def]
-  exact ((Finsupp.mem_span_iff_linearCombination _ _ _).mp x.2).choose_spec
-
-Depends on / 依赖: DiscreteMeasurableSpace, DiscreteMeasurableSpace.toMeasurableMul, Finsupp, Finsupp.mem_span_iff_linearCombination, Span.repr_def, choose_spec, mem_span_iff_linearCombination, repr_def, toMeasurableMul
+/-
+**Span.finsupp_linearCombination_repr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Span.finsupp_linearCombination_repr {w : Set M} (x : span R w) : Finsupp.l
+inearCombination R ((↑) : w -> M) (Span.repr R w x) = x
+参数：x : span R w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Span.repr_def`：∀ (R : Type u_4) {M : Type u_5} [inst : Semiring R] [inst
+_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] (w : Set M)   (x : ↥(Submodul
+e.s…
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.mem_span_iff_linearCombination`：mem_span_iff_linearCombination (
+s : Set M) (x : M) : x in span R s ↔ exists l : s ->₀ R, linearCombination R (↑)
+ l = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem Span.finsupp_linearCombination_repr {w : Set M} (x : span R w) :
-    Finsupp.linearCombination R ((↑) : w -> M) (Span.repr R w x) = x := by
+    Finsupp.linearCombination R ((↑) : w → M) (Span.repr R w x) = x := by
   rw [Span.repr_def]
   exact ((Finsupp.mem_span_iff_linearCombination _ _ _).mp x.2).choose_spec
 
 end
 
-/--
-theorem `LinearMap.map_finsupp_linearCombination` / 定理 `LinearMap.map_finsupp_linearCombination`
-
-English:
-theorem LinearMap.map_finsupp_linearCombination
-  statement: (f : M ->ₗ[R] N) {ι : Type*} {g : ι -> M}
-  proof: apply_linearCombination _ _ _ _
-
-中文:
-定理 线性映射.map_finsupp_linearCombination
-  结论: (f : M ->ₗ[R] N) {ι : 类型} {g : ι -> M}
-  证明: apply_linearCombination _ _ _ _
-
-Depends on / 依赖: DiscreteMeasurableSpace, DiscreteMeasurableSpace.toMeasurableMul, apply_linearCombination
+/-
+**LinearMap.map_finsupp_linearCombination** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearMap.map_finsupp_linearCombination (f : M ->ₗ[R] N) {ι : Type*} {g : 
+ι -> M} (l : ι ->₀ R) : f (linearCombination R g l) = linearCombination R (f ∘ g
+) l
+参数：f : M ->ₗ[R] N；l : ι ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.apply_linearCombination`：apply_linearCombination (f : M ->ₗ[R] M
+') (v) (l : α ->₀ R) : f (linearCombination R v l) = linearCombination R (f ∘ v)
+ l
 -/
-theorem LinearMap.map_finsupp_linearCombination (f : M ->ₗ[R] N) {ι : Type*} {g : ι -> M}
-    (l : ι ->₀ R) : f (linearCombination R g l) = linearCombination R (f ∘ g) l :=
+theorem LinearMap.map_finsupp_linearCombination (f : M →ₗ[R] N) {ι : Type*} {g : ι → M}
+    (l : ι →₀ R) : f (linearCombination R g l) = linearCombination R (f ∘ g) l :=
   apply_linearCombination _ _ _ _
-
-/--
-lemma `Submodule.mem_span_iff_exists_finset_subset` / 引理 `Submodule.mem_span_iff_exists_finset_subset`
-
-English:
-lemma Submodule.mem_span_iff_exists_finset_subset
-  given: {s : Set M} {x : M}
-  proof: by
-    rw [← s.image_id]; rw [mem_span_image_iff_linearCombination]
-    rintro ⟨l, hl, rfl⟩
-    exact ⟨l, l.support, by simpa [linearCombination, Finsupp.sum] using! hl⟩
-  mpr := by
-rintro ⟨n, t, hts, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hts hx
-
-中文:
-引理 子模.mem_span_iff_存在_finset_subset
-  条件: {s : 集合 M} {x : M}
-  证明: by
-    rw [← s.image_id]; rw [mem_span_image_iff_linearCombination]
-    rintro ⟨l, hl, rfl⟩
-    exact ⟨l, l.support, by simpa [linearCombination, Finsupp.sum] using! hl⟩
-  mpr := by
-rintro ⟨n, t, hts, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hts hx
-
-Depends on / 依赖: DiscreteMeasurableSpace, DiscreteMeasurableSpace.toMeasurableInv, Finsupp, Finsupp.sum, image_id, l.support, linearCombination, mem_span_image_iff_linearCombination, s.image_id, smul_mem, subset_span, sum_mem, support, toMeasurableInv
+/-
+**Submodule.mem_span_iff_exists_finset_subset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_iff_exists_finset_subset {s : Set M} {x : M} : x in spa
+n R s ↔ exists (f : M -> R) (t : Finset M), ↑t subseteq s ∧ f.support subseteq t
+ ∧ ∑ a in t, f a • a = x where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_id`：image_id (s : Set α) : id '' s = s
+· 使用定理 `Finsupp.mem_span_image_iff_linearCombination`：mem_span_image_iff_linearC
+ombination {s : Set α} {x : M} : x in span R (v '' s) ↔ exists l in supported R 
+R s, linearCombination R v l = x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.fun_support_eq`：fun_support_eq (f : α ->₀ M) : Function.support 
+f = f.support
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 -/
 lemma Submodule.mem_span_iff_exists_finset_subset {s : Set M} {x : M} :
-    x in span R s ↔
-      exists (f : M -> R) (t : Finset M), ↑t subseteq s ∧ f.support subseteq t ∧ ∑ a in t, f a • a = x where
+    x ∈ span R s ↔
+      ∃ (f : M → R) (t : Finset M), ↑t ⊆ s ∧ f.support ⊆ t ∧ ∑ a ∈ t, f a • a = x where
   mp := by
-    rw [← s.image_id]; rw [mem_span_image_iff_linearCombination]
+    rw [← s.image_id, mem_span_image_iff_linearCombination]
     rintro ⟨l, hl, rfl⟩
     exact ⟨l, l.support, by simpa [linearCombination, Finsupp.sum] using! hl⟩
   mpr := by
-rintro ⟨n, t, hts, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hts hx
-
-/--
-lemma `Submodule.mem_span_finset` / 引理 `Submodule.mem_span_finset`
-
-English:
-lemma Submodule.mem_span_finset
-  given: {s : Finset M} {x : M}
-  proof: by
-    rw [mem_span_iff_exists_finset_subset]
-    rintro ⟨f, t, hts, hf, rfl⟩
-refine ⟨f, hf.trans hts, .symm Finset.sum_subset hts ?_⟩
-    simp +contextual [Function.support_subset_iff'.1 hf]
-mpr := by rintro ⟨f, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hx
-
-中文:
-引理 子模.mem_span_finset
-  条件: {s : 有限集 M} {x : M}
-  证明: by
-    rw [mem_span_iff_exists_finset_subset]
-    rintro ⟨f, t, hts, hf, rfl⟩
-refine ⟨f, hf.trans hts, .symm Finset.sum_subset hts ?_⟩
-    simp +contextual [Function.support_subset_iff'.1 hf]
-mpr := by rintro ⟨f, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hx
-
-Depends on / 依赖: DiscreteMeasurableSpace, DiscreteMeasurableSpace.toMeasurableDiv, Finset, Finset.sum_subset, Function, Function.support_subset_iff, contextual, hf.trans, mem_span_iff_exists_finset_subset, smul_mem, subset_span, sum_mem, sum_subset, support_subset_iff, toMeasurableDiv
+    rintro ⟨n, t, hts, -, rfl⟩; exact sum_mem fun x hx ↦ smul_mem _ _ <| subset_span <| hts hx
+/-
+**Submodule.mem_span_finset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_finset {s : Finset M} {x : M} : x in span R s ↔ exists 
+f : M -> R, f.support subseteq s ∧ ∑ a in s, f a • a = x where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.mem_span_iff_exists_finset_subset`：Submodule.mem_span_iff_exis
+ts_finset_subset {s : Set M} {x : M} : x in span R s ↔ exists (f : M -> R) (t : 
+Finset M), ↑t subseteq s ∧ f.supp…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_subset`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [i
+nst : AddCommMonoid M] {f : ι → M},   s₁ ⊆ s₂ → (∀ x ∈ s₂, x ∉ s₁ → f x = 0) → ∑
+ x ∈ s₁…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.support_subset_iff'`：∀ {ι : Type u_1} {M : Type u_3} [inst : Ze
+ro M] {f : ι → M} {s : Set ι}, Function.support f ⊆ s ↔ ∀ x ∉ s, f x = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 -/
 lemma Submodule.mem_span_finset {s : Finset M} {x : M} :
-    x in span R s ↔ exists f : M -> R, f.support subseteq s ∧ ∑ a in s, f a • a = x where
+    x ∈ span R s ↔ ∃ f : M → R, f.support ⊆ s ∧ ∑ a ∈ s, f a • a = x where
   mp := by
     rw [mem_span_iff_exists_finset_subset]
     rintro ⟨f, t, hts, hf, rfl⟩
-refine ⟨f, hf.trans hts, .symm Finset.sum_subset hts ?_⟩
+    refine ⟨f, hf.trans hts, .symm <| Finset.sum_subset hts ?_⟩
     simp +contextual [Function.support_subset_iff'.1 hf]
-mpr := by rintro ⟨f, -, rfl⟩; exact sum_mem fun x hx => smul_mem _ _ subset_span hx
-
-/--
-lemma `Submodule.mem_span_iff_of_fintype` / 引理 `Submodule.mem_span_iff_of_fintype`
-
-English:
-lemma Submodule.mem_span_iff_of_fintype
-  given: {s : Set M} [Fintype s] {x : M}
-  proof: by
-  conv_lhs => rw [← Subtype.range_val (s := s)]
-  exact mem_span_range_iff_exists_fun _
-
-中文:
-引理 子模.mem_span_iff_of_fintype
-  条件: {s : 集合 M} [有限类型 s] {x : M}
-  证明: by
-  conv_lhs => rw [← Subtype.range_val (s := s)]
-  exact mem_span_range_iff_exists_fun _
-
-Depends on / 依赖: DiscreteMeasurableSpace, DiscreteMeasurableSpace.toMeasurableDiv, Subtype, Subtype.range_val, conv_lhs, mem_span_range_iff_exists_fun, range_val
+  mpr := by rintro ⟨f, -, rfl⟩; exact sum_mem fun x hx ↦ smul_mem _ _ <| subset_span <| hx
+/-
+**Submodule.mem_span_iff_of_fintype** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_iff_of_fintype {s : Set M} [Fintype s] {x : M} : x in s
+pan R s ↔ exists f : s -> R, ∑ a : s, f a • a.1 = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.range_val`：range_val {s : Set α} : range (Subtype.val : s -> α) 
+= s
+· 使用定理 `Submodule.mem_span_range_iff_exists_fun`：Submodule.mem_span_range_iff_ex
+ists_fun : x in span R (range v) ↔ exists c : α -> R, ∑ i, c i • v i = x
 -/
 lemma Submodule.mem_span_iff_of_fintype {s : Set M} [Fintype s] {x : M} :
-    x in span R s ↔ exists f : s -> R, ∑ a : s, f a • a.1 = x := by
+    x ∈ span R s ↔ ∃ f : s → R, ∑ a : s, f a • a.1 = x := by
   conv_lhs => rw [← Subtype.range_val (s := s)]
   exact mem_span_range_iff_exists_fun _
 
-/--
-lemma `Submodule.mem_span_finset'` / 引理 `Submodule.mem_span_finset'`
+/-- A variant of `Submodule.mem_span_finset` using `s` as the index type. -/
+/-
+**Submodule.mem_span_finset'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_finset' {s : Finset M} {x : M} : x in span R s ↔ exists
+ f : s -> R, ∑ a : s, f a • a.1 = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Submodule.mem_span_iff_of_fintype`：Submodule.mem_span_iff_of_fintype {s 
+: Set M} [Fintype s] {x : M} : x in span R s ↔ exists f : s -> R, ∑ a : s, f a •
+ a.1 = x
 
-English:
-lemma Submodule.mem_span_finset'
-  given: {s : Finset M} {x : M}
-  proof: mem_span_iff_of_fintype
-
-中文:
-引理 子模.mem_span_finset'
-  条件: {s : 有限集 M} {x : M}
-  证明: mem_span_iff_of_fintype
-
-Depends on / 依赖: mem_span_iff_of_fintype
+--- 原说明 ---
+A variant of `Submodule.mem_span_finset` using `s` as the index type.
 -/
 lemma Submodule.mem_span_finset' {s : Finset M} {x : M} :
-    x in span R s ↔ exists f : s -> R, ∑ a : s, f a • a.1 = x :=
+    x ∈ span R s ↔ ∃ f : s → R, ∑ a : s, f a • a.1 = x :=
   mem_span_iff_of_fintype
 
-/--
-theorem `Submodule.mem_span_set` / 定理 `Submodule.mem_span_set`
+/-- An element `m ∈ M` is contained in the `R`-submodule spanned by a set `s ⊆ M`, if and only if
+`m` can be written as a finite `R`-linear combination of elements of `s`.
+The implementation uses `Finsupp.sum`. -/
+/-
+**Submodule.mem_span_set** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_set {m : M} {s : Set M} : m in Submodule.span R s ↔ exi
+sts c : M ->₀ R, (c.support : Set M) subseteq s ∧ (c.sum fun mi r => r • mi) = m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_id`：image_id (s : Set α) : id '' s = s
+· 使用定理 `Finsupp.mem_span_image_iff_linearCombination`：mem_span_image_iff_linearC
+ombination {s : Set α} {x : M} : x in span R (v '' s) ↔ exists l in supported R 
+R s, linearCombination R v l = x
 
-English:
-theorem Submodule.mem_span_set
-  given: {m : M} {s : Set M}
-  proof: by
-  conv_lhs => rw [← Set.image_id s]
-  exact Finsupp.mem_span_image_iff_linearCombination R (v := _root_.id (α := M))
-
-中文:
-定理 子模.mem_span_set
-  条件: {m : M} {s : 集合 M}
-  证明: by
-  conv_lhs => rw [← Set.image_id s]
-  exact Finsupp.mem_span_image_iff_linearCombination R (v := _root_.id (α := M))
-
-Depends on / 依赖: Finsupp, Finsupp.mem_span_image_iff_linearCombination, Set.image_id, _root_, _root_.id, conv_lhs, image_id, mem_span_image_iff_linearCombination
+--- 原说明 ---
+An element `m ∈ M` is contained in the `R`-submodule spanned by a set `s ⊆ M`, i
+f and only if
+`m` can be written as a finite `R`-linear combination of elements of `s`.
+The implementation uses `Finsupp.sum`.
 -/
 theorem Submodule.mem_span_set {m : M} {s : Set M} :
-    m in Submodule.span R s ↔
-      exists c : M ->₀ R, (c.support : Set M) subseteq s ∧ (c.sum fun mi r => r • mi) = m := by
+    m ∈ Submodule.span R s ↔
+      ∃ c : M →₀ R, (c.support : Set M) ⊆ s ∧ (c.sum fun mi r => r • mi) = m := by
   conv_lhs => rw [← Set.image_id s]
   exact Finsupp.mem_span_image_iff_linearCombination R (v := _root_.id (α := M))
 
-/--
-lemma `Submodule.mem_span_set'` / 引理 `Submodule.mem_span_set'`
+/-- An element `m ∈ M` is contained in the `R`-submodule spanned by a set `s ⊆ M`, if and only if
+`m` can be written as a finite `R`-linear combination of elements of `s`.
+The implementation uses a sum indexed by `Fin n` for some `n`. -/
+/-
+**Submodule.mem_span_set'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.mem_span_set' {m : M} {s : Set M} : m in Submodule.span R s ↔ ex
+ists (n : Nat) (f : Fin n -> R) (g : Fin n -> s), ∑ i, f i • (g i : M) = m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_span_set`：Submodule.mem_span_set {m : M} {s : Set M} : m i
+n Submodule.span R s ↔ exists c : M ->₀ R, (c.support : Set M) subseteq s ∧ (c.s
+um fun mi r …
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.sum.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst 
+: Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M) (g : α → M → N),   f.sum g = ∑
+ a ∈ f…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_coe_sort`：∀ {ι : Type u_1} {M : Type u_4} (s : Finset ι) [ins
+t : AddCommMonoid M] (f : ι → M), ∑ i, f ↑i = ∑ i ∈ s, f i
+· 使用定理 `Fintype.sum_equiv`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst 
+: Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (f : 
+ι → M) …
+· 使用定理 `Submodule.sum_mem`：∀ {R : Type u} {M : Type v} {ι : Type w} [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodu
+le R M)…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 
-English:
-lemma Submodule.mem_span_set'
-  given: {m : M} {s : Set M}
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · rcases mem_span_set.1 h with ⟨c, cs, rfl⟩
-    have A : c.support ≃ Fin c.support.card := Finset.equivFin _
-    refine ⟨_, fun i => c (A.symm i), fun i => ⟨A.symm i, cs (A.symm i).2⟩, ?_⟩
-    rw [Finsupp.sum]; rw [← Finset.sum_coe_sort c.support]
-    exact Fintype.sum_equiv A.symm _ (fun j => c j • (j : M)) (fun i => rfl)
-  · rintro ⟨n, f, g, rfl⟩
-    exact Submodule.sum_mem _ (fun i _ => Submodule.smul_mem _ _ (Submodule.subset_span (g i).2))
-
-中文:
-引理 子模.mem_span_set'
-  条件: {m : M} {s : 集合 M}
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · rcases mem_span_set.1 h with ⟨c, cs, rfl⟩
-    have A : c.support ≃ Fin c.support.card := Finset.equivFin _
-    refine ⟨_, fun i => c (A.symm i), fun i => ⟨A.symm i, cs (A.symm i).2⟩, ?_⟩
-    rw [Finsupp.sum]; rw [← Finset.sum_coe_sort c.support]
-    exact Fintype.sum_equiv A.symm _ (fun j => c j • (j : M)) (fun i => rfl)
-  · rintro ⟨n, f, g, rfl⟩
-    exact Submodule.sum_mem _ (fun i _ => Submodule.smul_mem _ _ (Submodule.subset_span (g i).2))
-
-Depends on / 依赖: A.symm, Finset, Finset.equivFin, Finset.sum_coe_sort, Finsupp, Finsupp.sum, Fintype, Fintype.sum_equiv, Submodule, Submodule.smul_mem, Submodule.subset_span, Submodule.sum_mem, c.support, c.support.card, equivFin, mem_span_set, smul_mem, subset_span, sum_coe_sort, sum_equiv
+--- 原说明 ---
+An element `m ∈ M` is contained in the `R`-submodule spanned by a set `s ⊆ M`, i
+f and only if
+`m` can be written as a finite `R`-linear combination of elements of `s`.
+The implementation uses a sum indexed by `Fin n` for some `n`.
 -/
 lemma Submodule.mem_span_set' {m : M} {s : Set M} :
-    m in Submodule.span R s ↔ exists (n : Nat) (f : Fin n -> R) (g : Fin n -> s),
+    m ∈ Submodule.span R s ↔ ∃ (n : ℕ) (f : Fin n → R) (g : Fin n → s),
       ∑ i, f i • (g i : M) = m := by
-  refine ⟨fun h => ?_, ?_⟩
+  refine ⟨fun h ↦ ?_, ?_⟩
   · rcases mem_span_set.1 h with ⟨c, cs, rfl⟩
     have A : c.support ≃ Fin c.support.card := Finset.equivFin _
-    refine ⟨_, fun i => c (A.symm i), fun i => ⟨A.symm i, cs (A.symm i).2⟩, ?_⟩
-    rw [Finsupp.sum]; rw [← Finset.sum_coe_sort c.support]
-    exact Fintype.sum_equiv A.symm _ (fun j => c j • (j : M)) (fun i => rfl)
+    refine ⟨_, fun i ↦ c (A.symm i), fun i ↦ ⟨A.symm i, cs (A.symm i).2⟩, ?_⟩
+    rw [Finsupp.sum, ← Finset.sum_coe_sort c.support]
+    exact Fintype.sum_equiv A.symm _ (fun j ↦ c j • (j : M)) (fun i ↦ rfl)
   · rintro ⟨n, f, g, rfl⟩
-    exact Submodule.sum_mem _ (fun i _ => Submodule.smul_mem _ _ (Submodule.subset_span (g i).2))
+    exact Submodule.sum_mem _ (fun i _ ↦ Submodule.smul_mem _ _ (Submodule.subset_span (g i).2))
 
-/--
-lemma `Submodule.span_eq_iUnion_nat` / 引理 `Submodule.span_eq_iUnion_nat`
+/-- The span of a subset `s` is the union over all `n` of the set of linear combinations of at most
+`n` terms belonging to `s`. -/
+/-
+**Submodule.span_eq_iUnion_nat** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.span_eq_iUnion_nat (s : Set M) : (Submodule.span R s : Set M) = 
+⋃ (n : Nat), (fun (f : Fin n -> (R × M)) => ∑ i, (f i).1 • (f i).2) '' ({f | for
+all i, (f i).2 in s})
+参数：s : Set M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-lemma Submodule.span_eq_iUnion_nat
-  given: (s : Set M)
-  proof: by
-  ext m
-  simp only [SetLike.mem_coe, mem_iUnion, mem_image, mem_ofPred_eq, mem_span_set']
-  refine exists_congr (fun n => ⟨?_, ?_⟩)
-  · rintro ⟨f, g, rfl⟩
-    exact ⟨fun i => (f i, g i), fun i => (g i).2, rfl⟩
-  · rintro ⟨f, hf, rfl⟩
-    exact ⟨fun i => (f i).1, fun i => ⟨(f i).2, (hf i)⟩, rfl⟩
-
-中文:
-引理 子模.span_eq_iUnion_nat
-  条件: (s : 集合 M)
-  证明: by
-  ext m
-  simp only [SetLike.mem_coe, mem_iUnion, mem_image, mem_ofPred_eq, mem_span_set']
-  refine exists_congr (fun n => ⟨?_, ?_⟩)
-  · rintro ⟨f, g, rfl⟩
-    exact ⟨fun i => (f i, g i), fun i => (g i).2, rfl⟩
-  · rintro ⟨f, hf, rfl⟩
-    exact ⟨fun i => (f i).1, fun i => ⟨(f i).2, (hf i)⟩, rfl⟩
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, exists_congr, mem_coe, mem_iUnion, mem_image, mem_ofPred_eq, mem_span_set
+--- 原说明 ---
+The span of a subset `s` is the union over all `n` of the set of linear combinat
+ions of at most
+`n` terms belonging to `s`.
 -/
 lemma Submodule.span_eq_iUnion_nat (s : Set M) :
-    (Submodule.span R s : Set M) = ⋃ (n : Nat),
-      (fun (f : Fin n -> (R × M)) => ∑ i, (f i).1 • (f i).2) '' ({f | forall i, (f i).2 in s}) := by
+    (Submodule.span R s : Set M) = ⋃ (n : ℕ),
+      (fun (f : Fin n → (R × M)) ↦ ∑ i, (f i).1 • (f i).2) '' ({f | ∀ i, (f i).2 ∈ s}) := by
   ext m
   simp only [SetLike.mem_coe, mem_iUnion, mem_image, mem_ofPred_eq, mem_span_set']
-  refine exists_congr (fun n => ⟨?_, ?_⟩)
+  refine exists_congr (fun n ↦ ⟨?_, ?_⟩)
   · rintro ⟨f, g, rfl⟩
-    exact ⟨fun i => (f i, g i), fun i => (g i).2, rfl⟩
+    exact ⟨fun i ↦ (f i, g i), fun i ↦ (g i).2, rfl⟩
   · rintro ⟨f, hf, rfl⟩
-    exact ⟨fun i => (f i).1, fun i => ⟨(f i).2, (hf i)⟩, rfl⟩
+    exact ⟨fun i ↦ (f i).1, fun i ↦ ⟨(f i).2, (hf i)⟩, rfl⟩
 
 section Ring
 
-variable {R M ι : Type*} [Ring R] [AddCommGroup M] [Module R M] (i : ι) (c : ι -> R) (h₀ : c i = 0)
+variable {R M ι : Type*} [Ring R] [AddCommGroup M] [Module R M] (i : ι) (c : ι → R) (h₀ : c i = 0)
 
-/--
-Definition of `Finsupp.addSingleEquiv` / `Finsupp.addSingleEquiv` 的定义
+/-- Given `c : ι → R` and an index `i` such that `c i = 0`, this is the linear isomorphism sending
+the `j`-th standard basis vector to itself plus `c j` multiplied with the `i`-th standard basis
+vector (in particular, the `i`-th standard basis vector is kept invariant). -/
+/-
+**Finsupp.addSingleEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Finsupp.addSingleEquiv : (ι ->₀ R) ≃ₗ[R] (ι ->₀ R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Finsupp.addSingleEquiv
-  signature: : (ι ->₀ R) ≃ₗ[R] (ι ->₀ R)
-  body: by
-  refine .ofLinearMap (linearCombination _ fun j => single j 1 + single i (c j))
-    (linearCombination _ fun j => single j 1 - single i (c j)) ?_ ?_ <;>
-  ext j k <;> obtain rfl | hk := eq_or_ne i k
-  · simp [h₀]
-  · simp [hk]
-  · simp [h₀]
-  · simp [hk]
-
-中文:
-定义 有限支撑.addSingleEquiv
-  签名: : (ι ->₀ R) ≃ₗ[R] (ι ->₀ R)
-  定义体: by
-  refine .ofLinearMap (linearCombination _ fun j => single j 1 + single i (c j))
-    (linearCombination _ fun j => single j 1 - single i (c j)) ?_ ?_ <;>
-  ext j k <;> obtain rfl | hk := eq_or_ne i k
-  · simp [h₀]
-  · simp [hk]
-  · simp [h₀]
-  · simp [hk]
-
-Depends on / 依赖: eq_or_ne, linearCombination, ofLinearMap, single
+--- 原说明 ---
+Given `c : ι → R` and an index `i` such that `c i = 0`, this is the linear isomo
+rphism sending
+the `j`-th standard basis vector to itself plus `c j` multiplied with the `i`-th
+ standard basis
+vector (in particular, the `i`-th standard basis vector is kept invariant).
 -/
-def Finsupp.addSingleEquiv : (ι ->₀ R) ≃ₗ[R] (ι ->₀ R) := by
-  refine .ofLinearMap (linearCombination _ fun j => single j 1 + single i (c j))
-    (linearCombination _ fun j => single j 1 - single i (c j)) ?_ ?_ <;>
+def Finsupp.addSingleEquiv : (ι →₀ R) ≃ₗ[R] (ι →₀ R) := by
+  refine .ofLinearMap (linearCombination _ fun j ↦ single j 1 + single i (c j))
+    (linearCombination _ fun j ↦ single j 1 - single i (c j)) ?_ ?_ <;>
   ext j k <;> obtain rfl | hk := eq_or_ne i k
   · simp [h₀]
   · simp [hk]
   · simp [h₀]
   · simp [hk]
-
-/--
-theorem `Finsupp.linearCombination_comp_addSingleEquiv` / 定理 `Finsupp.linearCombination_comp_addSingleEquiv`
-
-English:
-theorem Finsupp.linearCombination_comp_addSingleEquiv
-  given: (v : ι -> M)
-  proof: by
-  ext; simp [addSingleEquiv]
-
-中文:
-定理 有限支撑.linearCombination_comp_addSingleEquiv
-  条件: (v : ι -> M)
-  证明: by
-  ext; simp [addSingleEquiv]
-
-Depends on / 依赖: addSingleEquiv
+/-
+**Finsupp.linearCombination_comp_addSingleEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.linearCombination_comp_addSingleEquiv (v : ι -> M) : linearCombina
+tion R v ∘ₗ addSingleEquiv i c h₀ = linearCombination R (v + (c · • v i))
+参数：v : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Finsupp.linearCombination_comp_addSingleEquiv (v : ι -> M) :
+theorem Finsupp.linearCombination_comp_addSingleEquiv (v : ι → M) :
     linearCombination R v ∘ₗ addSingleEquiv i c h₀ = linearCombination R (v + (c · • v i)) := by
   ext; simp [addSingleEquiv]
 
 end Ring
+

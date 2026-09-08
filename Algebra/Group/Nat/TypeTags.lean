@@ -20,40 +20,25 @@ open Multiplicative
 
 namespace Nat
 
-/--
-lemma `toAdd_pow` / 引理 `toAdd_pow`
-
-English:
-lemma toAdd_pow
-  given: (a : Multiplicative Nat) (b : Nat)
-  statement: (a ^ b).toAdd = a.toAdd * b
-  proof: mul_comm _ _
-
-中文:
-引理 toAdd_pow
-  条件: (a : Multiplicative 自然数) (b : 自然数)
-  结论: (a ^ b).toAdd = a.toAdd * b
-  证明: mul_comm _ _
-
-Depends on / 依赖: mul_comm
+/-
+**Nat.toAdd_pow** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：toAdd_pow (a : Multiplicative Nat) (b : Nat) : (a ^ b).toAdd = a.toAdd * b
+参数：a : Multiplicative Nat；b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-lemma toAdd_pow (a : Multiplicative Nat) (b : Nat) : (a ^ b).toAdd = a.toAdd * b := mul_comm _ _
-
-/--
-lemma `ofAdd_mul` / 引理 `ofAdd_mul`
-
-English:
-lemma ofAdd_mul
-  given: (a b : Nat)
-  statement: ofAdd (a * b) = ofAdd a ^ b
-  proof: (toAdd_pow _ _).symm
-
-中文:
-引理 ofAdd_mul
-  条件: (a b : 自然数)
-  结论: ofAdd (a * b) = ofAdd a ^ b
-  证明: (toAdd_pow _ _).symm
+lemma toAdd_pow (a : Multiplicative ℕ) (b : ℕ) : (a ^ b).toAdd = a.toAdd * b := mul_comm _ _
+/-
+**Nat.ofAdd_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (a b : ℕ), Multiplicative.ofAdd (a * b) = Multiplicative.ofAdd a ^ b
+参数：a b : ℕ；a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Nat.toAdd_pow`：toAdd_pow (a : Multiplicative Nat) (b : Nat) : (a ^ b).to
+Add = a.toAdd * b
 -/
-@[simp] lemma ofAdd_mul (a b : Nat) : ofAdd (a * b) = ofAdd a ^ b := (toAdd_pow _ _).symm
+@[simp] lemma ofAdd_mul (a b : ℕ) : ofAdd (a * b) = ofAdd a ^ b := (toAdd_pow _ _).symm
 
 end Nat
+

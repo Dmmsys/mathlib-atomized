@@ -32,52 +32,32 @@ namespace CategoryTheory.Limits
 variable {C : Type u₁} [Category.{v₁} C]
 variable {J : Type u₂} [Category.{v₂} J]
 
-/--
-Instance `hasPullbacks_opposite` / 实例 `hasPullbacks_opposite`
-
-English:
-instance hasPullbacks_opposite
-  signature: [HasPushouts C]
-  body: by
-  have : HasColimitsOfShape WalkingCospanᵒᵖ C :=
-    hasColimitsOfShape_of_equivalence walkingCospanOpEquiv.symm
-  apply hasLimitsOfShape_op_of_hasColimitsOfShape
-
-中文:
-实例 hasPullbacks_opposite
-  签名: [有Pushouts C]
-  定义体: by
-  have : HasColimitsOfShape WalkingCospanᵒᵖ C :=
-    hasColimitsOfShape_of_equivalence walkingCospanOpEquiv.symm
-  apply hasLimitsOfShape_op_of_hasColimitsOfShape
-
-Depends on / 依赖: HasColimitsOfShape, hasColimitsOfShape_of_equivalence, hasLimitsOfShape_op_of_hasColimitsOfShape, walkingCospanOpEquiv, walkingCospanOpEquiv.symm
+/-
+**CategoryTheory.Limits.hasPullbacks_opposite** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：hasPullbacks_opposite [HasPushouts C] : HasPullbacks Cᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_op_of_hasColimitsOfShape`：hasLimi
+tsOfShape_op_of_hasColimitsOfShape [HasColimitsOfShape Jᵒᵖ C] : HasLimitsOfShape
+ J Cᵒᵖ
 -/
 instance hasPullbacks_opposite [HasPushouts C] : HasPullbacks Cᵒᵖ := by
   have : HasColimitsOfShape WalkingCospanᵒᵖ C :=
     hasColimitsOfShape_of_equivalence walkingCospanOpEquiv.symm
   apply hasLimitsOfShape_op_of_hasColimitsOfShape
-
-/--
-Instance `hasPushouts_opposite` / 实例 `hasPushouts_opposite`
-
-English:
-instance hasPushouts_opposite
-  signature: [HasPullbacks C]
-  body: by
-  have : HasLimitsOfShape WalkingSpanᵒᵖ C :=
-    hasLimitsOfShape_of_equivalence walkingSpanOpEquiv.symm
-  infer_instance
-
-中文:
-实例 hasPushouts_opposite
-  签名: [有Pullbacks C]
-  定义体: by
-  have : HasLimitsOfShape WalkingSpanᵒᵖ C :=
-    hasLimitsOfShape_of_equivalence walkingSpanOpEquiv.symm
-  infer_instance
-
-Depends on / 依赖: HasLimitsOfShape, hasLimitsOfShape_of_equivalence, infer_instance, walkingSpanOpEquiv, walkingSpanOpEquiv.symm
+/-
+**CategoryTheory.Limits.hasPushouts_opposite** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：hasPushouts_opposite [HasPullbacks C] : HasPushouts Cᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
 -/
 instance hasPushouts_opposite [HasPullbacks C] : HasPushouts Cᵒᵖ := by
   have : HasLimitsOfShape WalkingSpanᵒᵖ C :=
@@ -88,28 +68,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical isomorphism relating `Span f.op g.op` and `(Cospan f g).op` -/
 @[simps!]
-/--
-Definition of `spanOp` / `spanOp` 的定义
+/-
+**CategoryTheory.Limits.spanOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`
+。
+形式化陈述：spanOp {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : span f.op g.op ≅ walkingCospa
+nOpEquiv.inverse ⋙ (cospan f g).op
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanOp
-  signature: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  body: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-中文:
-定义 spanOp
-  签名: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  定义体: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+The canonical isomorphism relating `Span f.op g.op` and `(Cospan f g).op`
 -/
 def spanOp {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) :
     span f.op g.op ≅ walkingCospanOpEquiv.inverse ⋙ (cospan f g).op :=
@@ -123,28 +92,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical isomorphism relating `span f.unop g.unop` and `(cospan f g).leftOp` -/
 @[simps!]
-/--
-Definition of `spanUnop` / `spanUnop` 的定义
+/-
+**CategoryTheory.Limits.spanUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limit
+s`。
+形式化陈述：spanUnop {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) : span f.unop g.unop ≅ walk
+ingCospanOpEquiv.inverse ⋙ (cospan f g).leftOp
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanUnop
-  signature: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z)
-  body: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-中文:
-定义 spanUnop
-  签名: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z)
-  定义体: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+The canonical isomorphism relating `span f.unop g.unop` and `(cospan f g).leftOp
+`
 -/
 def spanUnop {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) :
     span f.unop g.unop ≅ walkingCospanOpEquiv.inverse ⋙ (cospan f g).leftOp :=
@@ -156,32 +115,17 @@ def spanUnop {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) :
 
 /-- The canonical isomorphism relating `(Cospan f g).op` and `Span f.op g.op` -/
 @[simps!]
-/--
-Definition of `opCospan` / `opCospan` 的定义
+/-
+**CategoryTheory.Limits.opCospan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limit
+s`。
+形式化陈述：opCospan {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).op ≅ walkingCo
+spanOpEquiv.functor ⋙ span f.op g.op
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opCospan
-  signature: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  body: calc
-    (cospan f g).op ≅ 𝟭 _ ⋙ (cospan f g).op := .refl _
-    _ ≅ (walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse) ⋙ (cospan f g).op :=
-      isoWhiskerRight walkingCospanOpEquiv.unitIso _
-    _ ≅ walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse ⋙ (cospan f g).op :=
-      Functor.associator _ _ _
-    _ ≅ walkingCospanOpEquiv.functor ⋙ span f.op g.op := isoWhiskerLeft _ (spanOp f g).symm
-
-中文:
-定义 opCospan
-  签名: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  定义体: calc
-    (cospan f g).op ≅ 𝟭 _ ⋙ (cospan f g).op := .refl _
-    _ ≅ (walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse) ⋙ (cospan f g).op :=
-      isoWhiskerRight walkingCospanOpEquiv.unitIso _
-    _ ≅ walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse ⋙ (cospan f g).op :=
-      Functor.associator _ _ _
-    _ ≅ walkingCospanOpEquiv.functor ⋙ span f.op g.op := isoWhiskerLeft _ (spanOp f g).symm
-
-Depends on / 依赖: Functor, Functor.associator, associator, cospan, f.op, functor, g.op, inverse, isoWhiskerLeft, isoWhiskerRight, spanOp, unitIso, walkingCospanOpEquiv, walkingCospanOpEquiv.functor, walkingCospanOpEquiv.inverse, walkingCospanOpEquiv.unitIso
+--- 原说明 ---
+The canonical isomorphism relating `(Cospan f g).op` and `Span f.op g.op`
 -/
 def opCospan {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) :
     (cospan f g).op ≅ walkingCospanOpEquiv.functor ⋙ span f.op g.op :=
@@ -197,28 +141,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical isomorphism relating `Cospan f.op g.op` and `(Span f g).op` -/
 @[simps!]
-/--
-Definition of `cospanOp` / `cospanOp` 的定义
+/-
+**CategoryTheory.Limits.cospanOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limit
+s`。
+形式化陈述：cospanOp {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : cospan f.op g.op ≅ walkingS
+panOpEquiv.inverse ⋙ (span f g).op
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cospanOp
-  signature: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  body: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-中文:
-定义 cospanOp
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  定义体: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+The canonical isomorphism relating `Cospan f.op g.op` and `(Span f g).op`
 -/
 def cospanOp {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) :
     cospan f.op g.op ≅ walkingSpanOpEquiv.inverse ⋙ (span f g).op :=
@@ -232,28 +165,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical isomorphism relating `cospan f.unop g.unop` and `(span f g).leftOp` -/
 @[simps!]
-/--
-Definition of `cospanUnop` / `cospanUnop` 的定义
+/-
+**CategoryTheory.Limits.cospanUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：cospanUnop {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z) : cospan f.unop g.unop ≅ 
+walkingSpanOpEquiv.inverse ⋙ (span f g).leftOp
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cospanUnop
-  signature: {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z)
-  body: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-中文:
-定义 cospanUnop
-  签名: {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z)
-  定义体: NatIso.ofComponents (fun
-    | .none => .refl _
-    | .left => .refl _
-    | .right => .refl _)
-    (by rintro (_ | _ | _) (_ | _ | _) f <;> cases f <;> cat_disch)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+The canonical isomorphism relating `cospan f.unop g.unop` and `(span f g).leftOp
+`
 -/
 def cospanUnop {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z) :
     cospan f.unop g.unop ≅ walkingSpanOpEquiv.inverse ⋙ (span f g).leftOp :=
@@ -265,32 +188,17 @@ def cospanUnop {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z) :
 
 /-- The canonical isomorphism relating `(Span f g).op` and `Cospan f.op g.op` -/
 @[simps!]
-/--
-Definition of `opSpan` / `opSpan` 的定义
+/-
+**CategoryTheory.Limits.opSpan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`
+。
+形式化陈述：opSpan {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).op ≅ walkingSpanOp
+Equiv.functor ⋙ cospan f.op g.op
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opSpan
-  signature: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  body: calc
-    (span f g).op ≅ 𝟭 _ ⋙ (span f g).op := .refl _
-    _ ≅ (walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse) ⋙ (span f g).op :=
-      isoWhiskerRight walkingSpanOpEquiv.unitIso _
-    _ ≅ walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse ⋙ (span f g).op :=
-      Functor.associator _ _ _
-    _ ≅ walkingSpanOpEquiv.functor ⋙ cospan f.op g.op := isoWhiskerLeft _ (cospanOp f g).symm
-
-中文:
-定义 opSpan
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  定义体: calc
-    (span f g).op ≅ 𝟭 _ ⋙ (span f g).op := .refl _
-    _ ≅ (walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse) ⋙ (span f g).op :=
-      isoWhiskerRight walkingSpanOpEquiv.unitIso _
-    _ ≅ walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse ⋙ (span f g).op :=
-      Functor.associator _ _ _
-    _ ≅ walkingSpanOpEquiv.functor ⋙ cospan f.op g.op := isoWhiskerLeft _ (cospanOp f g).symm
-
-Depends on / 依赖: Functor, Functor.associator, associator, cospan, cospanOp, f.op, functor, g.op, inverse, isoWhiskerLeft, isoWhiskerRight, unitIso, walkingSpanOpEquiv, walkingSpanOpEquiv.functor, walkingSpanOpEquiv.inverse, walkingSpanOpEquiv.unitIso
+--- 原说明 ---
+The canonical isomorphism relating `(Span f g).op` and `Cospan f.op g.op`
 -/
 def opSpan {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) :
     (span f g).op ≅ walkingSpanOpEquiv.functor ⋙ cospan f.op g.op :=
@@ -306,22 +214,17 @@ namespace PushoutCocone
 
 /-- The obvious map `PushoutCocone f g → PullbackCone f.unop g.unop` -/
 @[simps!]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**CategoryTheory.Limits.PushoutCocone.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.PushoutCocone`。
+形式化陈述：unop {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : Pullb
+ackCone f.unop g.unop
+参数：c : PushoutCocone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  body: Cocone.unop ((Cocone.precompose (opCospan f.unop g.unop).hom).obj
-    (Cocone.whisker walkingCospanOpEquiv.functor c))
-
-中文:
-定义 unop
-  签名: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  定义体: Cocone.unop ((Cocone.precompose (opCospan f.unop g.unop).hom).obj
-    (Cocone.whisker walkingCospanOpEquiv.functor c))
-
-Depends on / 依赖: Cocone, Cocone.precompose, Cocone.unop, Cocone.whisker, f.unop, functor, g.unop, opCospan, precompose, walkingCospanOpEquiv, walkingCospanOpEquiv.functor, whisker
+--- 原说明 ---
+The obvious map `PushoutCocone f g → PullbackCone f.unop g.unop`
 -/
 def unop {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     PullbackCone f.unop g.unop :=
@@ -329,92 +232,123 @@ def unop {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     (Cocone.whisker walkingCospanOpEquiv.functor c))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `unop_fst` / 定理 `unop_fst`
-
-English:
-theorem unop_fst
-  given: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  proof: by simp
-
-中文:
-定理 unop_fst
-  条件: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PushoutCocone.unop_fst** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits.PushoutCocone`。
+形式化陈述：unop_fst {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : c
+.unop.fst = c.inl.unop
+参数：c : PushoutCocone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.unop_π_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z}   (c :
+ CategoryTheory.Limits.PushoutCocone…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unop_fst {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     c.unop.fst = c.inl.unop := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `unop_snd` / 定理 `unop_snd`
-
-English:
-theorem unop_snd
-  given: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  proof: by simp
-
-中文:
-定理 unop_snd
-  条件: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PushoutCocone.unop_snd** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits.PushoutCocone`。
+形式化陈述：unop_snd {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : c
+.unop.snd = c.inr.unop
+参数：c : PushoutCocone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.unop_π_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z}   (c :
+ CategoryTheory.Limits.PushoutCocone…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unop_snd {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     c.unop.snd = c.inr.unop := by simp
 
 /-- The obvious map `PushoutCocone f.op g.op → PullbackCone f g` -/
 @[simps!]
-/--
-Definition of `op` / `op` 的定义
+/-
+**CategoryTheory.Limits.PushoutCocone.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.PushoutCocone`。
+形式化陈述：op {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : PullbackC
+one f.op g.op
+参数：c : PushoutCocone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  body: (Cone.postcompose (cospanOp f g).symm.hom).obj
-    (Cone.whisker walkingSpanOpEquiv.inverse (Cocone.op c))
-
-中文:
-定义 op
-  签名: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  定义体: (Cone.postcompose (cospanOp f g).symm.hom).obj
-    (Cone.whisker walkingSpanOpEquiv.inverse (Cocone.op c))
-
-Depends on / 依赖: Cocone, Cocone.op, Cone.postcompose, Cone.whisker, cospanOp, inverse, postcompose, symm.hom, walkingSpanOpEquiv, walkingSpanOpEquiv.inverse, whisker
+--- 原说明 ---
+The obvious map `PushoutCocone f.op g.op → PullbackCone f g`
 -/
 def op {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : PullbackCone f.op g.op :=
   (Cone.postcompose (cospanOp f g).symm.hom).obj
     (Cone.whisker walkingSpanOpEquiv.inverse (Cocone.op c))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `op_fst` / 定理 `op_fst`
-
-English:
-theorem op_fst
-  given: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  proof: by simp
-
-中文:
-定理 op_fst
-  条件: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PushoutCocone.op_fst** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.PushoutCocone`。
+形式化陈述：op_fst {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : c.op.
+fst = c.inl.op
+参数：c : PushoutCocone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.op_π_app`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   (c : Cat
+egoryTheory.Limits.PushoutCocone f…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem op_fst {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     c.op.fst = c.inl.op := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `op_snd` / 定理 `op_snd`
-
-English:
-theorem op_snd
-  given: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  proof: by simp
-
-中文:
-定理 op_snd
-  条件: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PushoutCocone.op_snd** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.PushoutCocone`。
+形式化陈述：op_snd {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : c.op.
+snd = c.inr.op
+参数：c : PushoutCocone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.op_π_app`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   (c : Cat
+egoryTheory.Limits.PushoutCocone f…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem op_snd {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     c.op.snd = c.inr.op := by simp
@@ -428,24 +362,17 @@ namespace PullbackCone
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The obvious map `PullbackCone f g → PushoutCocone f.unop g.unop` -/
 @[simps!]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**CategoryTheory.Limits.PullbackCone.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits.PullbackCone`。
+形式化陈述：unop {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : Pushou
+tCocone f.unop g.unop
+参数：c : PullbackCone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  body: Cone.unop
-    ((Cone.postcompose (opSpan f.unop g.unop).symm.hom).obj
-      (Cone.whisker walkingSpanOpEquiv.functor c))
-
-中文:
-定义 unop
-  签名: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  定义体: Cone.unop
-    ((Cone.postcompose (opSpan f.unop g.unop).symm.hom).obj
-      (Cone.whisker walkingSpanOpEquiv.functor c))
-
-Depends on / 依赖: Cone.postcompose, Cone.unop, Cone.whisker, f.unop, functor, g.unop, opSpan, postcompose, symm.hom, walkingSpanOpEquiv, walkingSpanOpEquiv.functor, whisker
+--- 原说明 ---
+The obvious map `PullbackCone f g → PushoutCocone f.unop g.unop`
 -/
 def unop {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
     PushoutCocone f.unop g.unop :=
@@ -454,132 +381,159 @@ def unop {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
       (Cone.whisker walkingSpanOpEquiv.functor c))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `unop_inl` / 定理 `unop_inl`
-
-English:
-theorem unop_inl
-  given: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  proof: by simp
-
-中文:
-定理 unop_inl
-  条件: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PullbackCone.unop_inl** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.PullbackCone`。
+形式化陈述：unop_inl {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c.
+unop.inl = c.fst.unop
+参数：c : PullbackCone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.unop_ι_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : 
+CategoryTheory.Limits.PullbackCone …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unop_inl {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
     c.unop.inl = c.fst.unop := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `unop_inr` / 定理 `unop_inr`
-
-English:
-theorem unop_inr
-  given: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  proof: by simp
-
-中文:
-定理 unop_inr
-  条件: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PullbackCone.unop_inr** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.PullbackCone`。
+形式化陈述：unop_inr {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c.
+unop.inr = c.snd.unop
+参数：c : PullbackCone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.unop_ι_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : 
+CategoryTheory.Limits.PullbackCone …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unop_inr {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
     c.unop.inr = c.snd.unop := by simp
 
 /-- The obvious map `PullbackCone f g → PushoutCocone f.op g.op` -/
 @[simps!]
-/--
-Definition of `op` / `op` 的定义
+/-
+**CategoryTheory.Limits.PullbackCone.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.PullbackCone`。
+形式化陈述：op {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : PushoutCoc
+one f.op g.op
+参数：c : PullbackCone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  body: (Cocone.precompose (spanOp f g).hom).obj
-    (Cocone.whisker walkingCospanOpEquiv.inverse (Cone.op c))
-
-中文:
-定义 op
-  签名: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  定义体: (Cocone.precompose (spanOp f g).hom).obj
-    (Cocone.whisker walkingCospanOpEquiv.inverse (Cone.op c))
-
-Depends on / 依赖: Cocone, Cocone.precompose, Cocone.whisker, Cone.op, inverse, precompose, spanOp, walkingCospanOpEquiv, walkingCospanOpEquiv.inverse, whisker
+--- 原说明 ---
+The obvious map `PullbackCone f g → PushoutCocone f.op g.op`
 -/
 def op {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : PushoutCocone f.op g.op :=
   (Cocone.precompose (spanOp f g).hom).obj
     (Cocone.whisker walkingCospanOpEquiv.inverse (Cone.op c))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `op_inl` / 定理 `op_inl`
-
-English:
-theorem op_inl
-  given: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  proof: by simp
-
-中文:
-定理 op_inl
-  条件: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PullbackCone.op_inl** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.PullbackCone`。
+形式化陈述：op_inl {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c.op.i
+nl = c.fst.op
+参数：c : PullbackCone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.op_ι_app`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : Cate
+goryTheory.Limits.PullbackCone f …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem op_inl {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
     c.op.inl = c.fst.op := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `op_inr` / 定理 `op_inr`
-
-English:
-theorem op_inr
-  given: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  proof: by simp
-
-中文:
-定理 op_inr
-  条件: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  证明: by simp
+/-
+**CategoryTheory.Limits.PullbackCone.op_inr** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.PullbackCone`。
+形式化陈述：op_inr {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c.op.i
+nr = c.snd.op
+参数：c : PullbackCone f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.op_ι_app`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : Cate
+goryTheory.Limits.PullbackCone f …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem op_inr {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
     c.op.inr = c.snd.op := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `opUnopIso` / `opUnopIso` 的定义
+/-- If `c` is a pullback cone, then `c.op.unop` is isomorphic to `c`. -/
+/-
+**CategoryTheory.Limits.PullbackCone.opUnopIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.PullbackCone`。
+形式化陈述：opUnopIso {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c.o
+p.unop ≅ c
+参数：c : PullbackCone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opUnopIso
-  signature: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  body: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 opUnopIso
-  签名: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  定义体: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PullbackCone, PullbackCone.ext
+--- 原说明 ---
+If `c` is a pullback cone, then `c.op.unop` is isomorphic to `c`.
 -/
 def opUnopIso {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c.op.unop ≅ c :=
   PullbackCone.ext (Iso.refl _) (by simp) (by simp)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `unopOpIso` / `unopOpIso` 的定义
+/-- If `c` is a pullback cone in `Cᵒᵖ`, then `c.unop.op` is isomorphic to `c`. -/
+/-
+**CategoryTheory.Limits.PullbackCone.unopOpIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.PullbackCone`。
+形式化陈述：unopOpIso {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c
+.unop.op ≅ c
+参数：c : PullbackCone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unopOpIso
-  signature: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  body: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 unopOpIso
-  签名: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  定义体: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PullbackCone, PullbackCone.ext
+--- 原说明 ---
+If `c` is a pullback cone in `Cᵒᵖ`, then `c.unop.op` is isomorphic to `c`.
 -/
 def unopOpIso {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) : c.unop.op ≅ c :=
   PullbackCone.ext (Iso.refl _) (by simp) (by simp)
@@ -590,40 +544,36 @@ namespace PushoutCocone
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `opUnopIso` / `opUnopIso` 的定义
+/-- If `c` is a pushout cocone, then `c.op.unop` is isomorphic to `c`. -/
+/-
+**CategoryTheory.Limits.PushoutCocone.opUnopIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.PushoutCocone`。
+形式化陈述：opUnopIso {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : c.
+op.unop ≅ c
+参数：c : PushoutCocone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opUnopIso
-  signature: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  body: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 opUnopIso
-  签名: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  定义体: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PushoutCocone, PushoutCocone.ext
+--- 原说明 ---
+If `c` is a pushout cocone, then `c.op.unop` is isomorphic to `c`.
 -/
 def opUnopIso {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : c.op.unop ≅ c :=
   PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `unopOpIso` / `unopOpIso` 的定义
+/-- If `c` is a pushout cocone in `Cᵒᵖ`, then `c.unop.op` is isomorphic to `c`. -/
+/-
+**CategoryTheory.Limits.PushoutCocone.unopOpIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.PushoutCocone`。
+形式化陈述：unopOpIso {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : 
+c.unop.op ≅ c
+参数：c : PushoutCocone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unopOpIso
-  signature: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  body: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 unopOpIso
-  签名: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  定义体: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PushoutCocone, PushoutCocone.ext
+--- 原说明 ---
+If `c` is a pushout cocone in `Cᵒᵖ`, then `c.unop.op` is isomorphic to `c`.
 -/
 def unopOpIso {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) : c.unop.op ≅ c :=
   PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
@@ -631,36 +581,14 @@ def unopOpIso {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f
 /-- A pushout cone is a colimit cocone if and only if the corresponding pullback cone
 in the opposite category is a limit cone. -/
 noncomputable -- just for performance; compilation takes several seconds
-/--
-Definition of `isColimitEquivIsLimitOp` / `isColimitEquivIsLimitOp` 的定义
-
-English:
-definition isColimitEquivIsLimitOp
-  signature: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  body: by
-  apply equivOfSubsingletonOfSubsingleton
-  · intro h
-    exact (IsLimit.postcomposeHomEquiv _ _).invFun
-      ((IsLimit.whiskerEquivalenceEquiv walkingSpanOpEquiv.symm).toFun h.op)
-  · intro h
-    exact (IsColimit.equivIsoColimit c.opUnopIso).toFun
-      (((IsLimit.postcomposeHomEquiv _ _).invFun
-        ((IsLimit.whiskerEquivalenceEquiv _).toFun h)).unop)
-
-中文:
-定义 isColimitEquivIsLimitOp
-  签名: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  定义体: by
-  apply equivOfSubsingletonOfSubsingleton
-  · intro h
-    exact (IsLimit.postcomposeHomEquiv _ _).invFun
-      ((IsLimit.whiskerEquivalenceEquiv walkingSpanOpEquiv.symm).toFun h.op)
-  · intro h
-    exact (IsColimit.equivIsoColimit c.opUnopIso).toFun
-      (((IsLimit.postcomposeHomEquiv _ _).invFun
-        ((IsLimit.whiskerEquivalenceEquiv _).toFun h)).unop)
-
-Depends on / 依赖: IsColimit, IsColimit.equivIsoColimit, IsLimit, IsLimit.postcomposeHomEquiv, IsLimit.whiskerEquivalenceEquiv, c.opUnopIso, equivIsoColimit, equivOfSubsingletonOfSubsingleton, h.op, invFun, opUnopIso, postcomposeHomEquiv, walkingSpanOpEquiv, walkingSpanOpEquiv.symm, whiskerEquivalenceEquiv
+/-
+**CategoryTheory.Limits.PushoutCocone.isColimitEquivIsLimitOp** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Limits.PushoutCocone`。
+形式化陈述：isColimitEquivIsLimitOp {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCo
+cone f g) : IsColimit c ≃ IsLimit c.op
+参数：c : PushoutCocone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def isColimitEquivIsLimitOp {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     IsColimit c ≃ IsLimit c.op := by
@@ -676,36 +604,14 @@ def isColimitEquivIsLimitOp {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} (c : Pushout
 /-- A pushout cone is a colimit cocone in `Cᵒᵖ` if and only if the corresponding pullback cone
 in `C` is a limit cone. -/
 noncomputable -- just for performance; compilation takes several seconds
-/--
-Definition of `isColimitEquivIsLimitUnop` / `isColimitEquivIsLimitUnop` 的定义
-
-English:
-definition isColimitEquivIsLimitUnop
-  signature: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  body: by
-  apply equivOfSubsingletonOfSubsingleton
-  · intro h
-    exact ((IsColimit.precomposeHomEquiv _ _).invFun
-      ((IsColimit.whiskerEquivalenceEquiv _).toFun h)).unop
-  · intro h
-    exact (IsColimit.equivIsoColimit c.unopOpIso).toFun
-      ((IsColimit.precomposeHomEquiv _ _).invFun
-      ((IsColimit.whiskerEquivalenceEquiv walkingCospanOpEquiv.symm).toFun h.op))
-
-中文:
-定义 isColimitEquivIsLimitUnop
-  签名: {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g)
-  定义体: by
-  apply equivOfSubsingletonOfSubsingleton
-  · intro h
-    exact ((IsColimit.precomposeHomEquiv _ _).invFun
-      ((IsColimit.whiskerEquivalenceEquiv _).toFun h)).unop
-  · intro h
-    exact (IsColimit.equivIsoColimit c.unopOpIso).toFun
-      ((IsColimit.precomposeHomEquiv _ _).invFun
-      ((IsColimit.whiskerEquivalenceEquiv walkingCospanOpEquiv.symm).toFun h.op))
-
-Depends on / 依赖: IsColimit, IsColimit.equivIsoColimit, IsColimit.precomposeHomEquiv, IsColimit.whiskerEquivalenceEquiv, c.unopOpIso, equivIsoColimit, equivOfSubsingletonOfSubsingleton, h.op, invFun, precomposeHomEquiv, unopOpIso, walkingCospanOpEquiv, walkingCospanOpEquiv.symm, whiskerEquivalenceEquiv
+/-
+**CategoryTheory.Limits.PushoutCocone.isColimitEquivIsLimitUnop** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.Limits.PushoutCocone`。
+形式化陈述：isColimitEquivIsLimitUnop {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : Pusho
+utCocone f g) : IsColimit c ≃ IsLimit c.unop
+参数：c : PushoutCocone f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def isColimitEquivIsLimitUnop {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z} (c : PushoutCocone f g) :
     IsColimit c ≃ IsLimit c.unop := by
@@ -722,39 +628,46 @@ end PushoutCocone
 
 namespace PullbackCone
 
-/--
-Definition of `isLimitEquivIsColimitOp` / `isLimitEquivIsColimitOp` 的定义
+/-- A pullback cone is a limit cone if and only if the corresponding pushout cocone
+in the opposite category is a colimit cocone. -/
+/-
+**CategoryTheory.Limits.PullbackCone.isLimitEquivIsColimitOp** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Limits.PullbackCone`。
+形式化陈述：isLimitEquivIsColimitOp {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackC
+one f g) : IsLimit c ≃ IsColimit c.op
+参数：c : PullbackCone f g。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isLimitEquivIsColimitOp
-  signature: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  body: (IsLimit.equivIsoLimit c.opUnopIso).symm.trans c.op.isColimitEquivIsLimitUnop.symm
-
-中文:
-定义 isLimitEquivIsColimitOp
-  签名: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  定义体: (IsLimit.equivIsoLimit c.opUnopIso).symm.trans c.op.isColimitEquivIsLimitUnop.symm
-
-Depends on / 依赖: IsLimit, IsLimit.equivIsoLimit, c.op.isColimitEquivIsLimitUnop.symm, c.opUnopIso, equivIsoLimit, isColimitEquivIsLimitUnop, opUnopIso, symm.trans
+--- 原说明 ---
+A pullback cone is a limit cone if and only if the corresponding pushout cocone
+in the opposite category is a colimit cocone.
 -/
 def isLimitEquivIsColimitOp {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
     IsLimit c ≃ IsColimit c.op :=
   (IsLimit.equivIsoLimit c.opUnopIso).symm.trans c.op.isColimitEquivIsLimitUnop.symm
 
-/--
-Definition of `isLimitEquivIsColimitUnop` / `isLimitEquivIsColimitUnop` 的定义
+/-- A pullback cone is a limit cone in `Cᵒᵖ` if and only if the corresponding pushout cocone
+in `C` is a colimit cocone. -/
+/-
+**CategoryTheory.Limits.PullbackCone.isLimitEquivIsColimitUnop** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Limits.PullbackCone`。
+形式化陈述：isLimitEquivIsColimitUnop {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : Pullb
+ackCone f g) : IsLimit c ≃ IsColimit c.unop
+参数：c : PullbackCone f g。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isLimitEquivIsColimitUnop
-  signature: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  body: (IsLimit.equivIsoLimit c.unopOpIso).symm.trans c.unop.isColimitEquivIsLimitOp.symm
-
-中文:
-定义 isLimitEquivIsColimitUnop
-  签名: {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g)
-  定义体: (IsLimit.equivIsoLimit c.unopOpIso).symm.trans c.unop.isColimitEquivIsLimitOp.symm
-
-Depends on / 依赖: IsLimit, IsLimit.equivIsoLimit, c.unop.isColimitEquivIsLimitOp.symm, c.unopOpIso, equivIsoLimit, isColimitEquivIsLimitOp, symm.trans, unopOpIso
+--- 原说明 ---
+A pullback cone is a limit cone in `Cᵒᵖ` if and only if the corresponding pushou
+t cocone
+in `C` is a colimit cocone.
 -/
 def isLimitEquivIsColimitUnop {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z} (c : PullbackCone f g) :
     IsLimit c ≃ IsColimit c.unop :=
@@ -767,75 +680,92 @@ section Pullback
 open Opposite
 
 @[simp]
-/--
-lemma `hasPushout_op_iff_hasPullback` / 引理 `hasPushout_op_iff_hasPullback`
-
-English:
-lemma hasPushout_op_iff_hasPullback
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  proof: by
-  rw [HasPushout]; rw [hasColimit_iff_of_iso (spanOp f g)]; rw [hasColimit_inverse_equivalence_comp_iff]; rw [hasColimit_op_iff_hasLimit]
-
-@[simp]
-
-中文:
-引理 hasPushout_op_iff_hasPullback
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  证明: by
-  rw [HasPushout]; rw [hasColimit_iff_of_iso (spanOp f g)]; rw [hasColimit_inverse_equivalence_comp_iff]; rw [hasColimit_op_iff_hasLimit]
-
-@[simp]
-
-Depends on / 依赖: HasPushout, hasColimit_iff_of_iso, hasColimit_inverse_equivalence_comp_iff, hasColimit_op_iff_hasLimit, spanOp
+/-
+**CategoryTheory.Limits.hasPushout_op_iff_hasPullback** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：hasPushout_op_iff_hasPullback {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : HasPus
+hout f.op g.op ↔ HasPullback f g
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.HasPushout.eq_1`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z),   CategoryTheory.Li
+mits.HasPushout f g = Categ…
+· 使用定理 `CategoryTheory.Limits.hasColimit_iff_of_iso`：∀ {J : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.
+{v, u} C]   {F G : CategoryTheory…
+· 使用引理 `CategoryTheory.Limits.hasColimit_inverse_equivalence_comp_iff`：hasColimi
+t_inverse_equivalence_comp_iff (e : J ≌ K) : HasColimit (e.inverse ⋙ F) ↔ HasCol
+imit F
+· 使用引理 `CategoryTheory.Limits.hasColimit_op_iff_hasLimit`：hasColimit_op_iff_hasL
+imit {F : J ⥤ C} : HasColimit F.op ↔ HasLimit F
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma hasPushout_op_iff_hasPullback {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) :
     HasPushout f.op g.op ↔ HasPullback f g := by
-  rw [HasPushout]; rw [hasColimit_iff_of_iso (spanOp f g)]; rw [hasColimit_inverse_equivalence_comp_iff]; rw [hasColimit_op_iff_hasLimit]
+  rw [HasPushout, hasColimit_iff_of_iso (spanOp f g), hasColimit_inverse_equivalence_comp_iff,
+    hasColimit_op_iff_hasLimit]
 
 @[simp]
-/--
-lemma `hasPushout_unop_iff_hasPullback` / 引理 `hasPushout_unop_iff_hasPullback`
-
-English:
-lemma hasPushout_unop_iff_hasPullback
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z)
-  proof: by
-  rw [HasPushout]; rw [hasColimit_iff_of_iso (spanUnop f g)]; rw [hasColimit_inverse_equivalence_comp_iff]; rw [hasColimit_leftOp_iff_hasLimit]
-
-中文:
-引理 hasPushout_unop_iff_hasPullback
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z)
-  证明: by
-  rw [HasPushout]; rw [hasColimit_iff_of_iso (spanUnop f g)]; rw [hasColimit_inverse_equivalence_comp_iff]; rw [hasColimit_leftOp_iff_hasLimit]
-
-Depends on / 依赖: HasPushout, hasColimit_iff_of_iso, hasColimit_inverse_equivalence_comp_iff, hasColimit_leftOp_iff_hasLimit, spanUnop
+/-
+**CategoryTheory.Limits.hasPushout_unop_iff_hasPullback** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：hasPushout_unop_iff_hasPullback {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) : Ha
+sPushout f.unop g.unop ↔ HasPullback f g
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.HasPushout.eq_1`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z),   CategoryTheory.Li
+mits.HasPushout f g = Categ…
+· 使用定理 `CategoryTheory.Limits.hasColimit_iff_of_iso`：∀ {J : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.
+{v, u} C]   {F G : CategoryTheory…
+· 使用引理 `CategoryTheory.Limits.hasColimit_inverse_equivalence_comp_iff`：hasColimi
+t_inverse_equivalence_comp_iff (e : J ≌ K) : HasColimit (e.inverse ⋙ F) ↔ HasCol
+imit F
+· 使用引理 `CategoryTheory.Limits.hasColimit_leftOp_iff_hasLimit`：hasColimit_leftOp_
+iff_hasLimit {F : J ⥤ Cᵒᵖ} : HasColimit F.leftOp ↔ HasLimit F
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma hasPushout_unop_iff_hasPullback {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) :
     HasPushout f.unop g.unop ↔ HasPullback f g := by
-  rw [HasPushout]; rw [hasColimit_iff_of_iso (spanUnop f g)]; rw [hasColimit_inverse_equivalence_comp_iff]; rw [hasColimit_leftOp_iff_hasLimit]
-
+  rw [HasPushout, hasColimit_iff_of_iso (spanUnop f g), hasColimit_inverse_equivalence_comp_iff,
+    hasColimit_leftOp_iff_hasLimit]
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] : HasPushout f.op g.op := by
   rwa [hasPushout_op_iff_hasPullback]
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] : HasPushout f.unop g.unop := by
   rwa [hasPushout_unop_iff_hasPullback]
 
-/--
-Definition of `pullbackIsoUnopPushout` / `pullbackIsoUnopPushout` 的定义
+/-- The pullback of `f` and `g` in `C` is isomorphic to the pushout of
+`f.op` and `g.op` in `Cᵒᵖ`. -/
+/-
+**CategoryTheory.Limits.pullbackIsoUnopPushout** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：pullbackIsoUnopPushout {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullbac
+k f g] : pullback f g ≅ unop (pushout f.op g.op)
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPushoutOppositeOpOfHasPullback`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Z) (g : Y 
+⟶ Z)   [CategoryTheory.Limits.HasPullback f g], C…
 
-English:
-definition pullbackIsoUnopPushout
-  signature: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullback f g]
-  body: IsLimit.conePointUniqueUpToIso (@limit.isLimit _ _ _ _ _ h)
-    ((PushoutCocone.isColimitEquivIsLimitUnop _) (colimit.isColimit (span f.op g.op)))
-
-中文:
-定义 pullbackIsoUnopPushout
-  签名: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullback f g]
-  定义体: IsLimit.conePointUniqueUpToIso (@limit.isLimit _ _ _ _ _ h)
-    ((PushoutCocone.isColimitEquivIsLimitUnop _) (colimit.isColimit (span f.op g.op)))
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, PushoutCocone, PushoutCocone.isColimitEquivIsLimitUnop, colimit, colimit.isColimit, conePointUniqueUpToIso, f.op, g.op, isColimit, isColimitEquivIsLimitUnop, isLimit, limit.isLimit
+--- 原说明 ---
+The pullback of `f` and `g` in `C` is isomorphic to the pushout of
+`f.op` and `g.op` in `Cᵒᵖ`.
 -/
 noncomputable def pullbackIsoUnopPushout {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullback f g] :
     pullback f g ≅ unop (pushout f.op g.op) :=
@@ -844,20 +774,34 @@ noncomputable def pullbackIsoUnopPushout {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoUnopPushout_inv_fst` / 定理 `pullbackIsoUnopPushout_inv_fst`
-
-English:
-theorem pullbackIsoUnopPushout_inv_fst
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp [unop_id (X := { unop := X })])
-
-中文:
-定理 pullbackIsoUnopPushout_inv_fst
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp [unop_id (X := { unop := X })])
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp, unop_id
+/-
+**CategoryTheory.Limits.pullbackIsoUnopPushout_inv_fst** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pullbackIsoUnopPushout_inv_fst {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : (pullbackIsoUnopPushout f g).inv ≫ pullback.fst f g = (pushout.inl 
+f.op g.op).unop
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPushoutOppositeOpOfHasPullback`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Z) (g : Y 
+⟶ Z)   [CategoryTheory.Limits.HasPullback f g], C…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.unop_π_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z}   (c :
+ CategoryTheory.Limits.PushoutCocone…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoUnopPushout_inv_fst {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     (pullbackIsoUnopPushout f g).inv ≫ pullback.fst f g = (pushout.inl f.op g.op).unop :=
@@ -865,89 +809,116 @@ theorem pullbackIsoUnopPushout_inv_fst {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoUnopPushout_inv_snd` / 定理 `pullbackIsoUnopPushout_inv_snd`
-
-English:
-theorem pullbackIsoUnopPushout_inv_snd
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp [unop_id (X := { unop := Y })])
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackIsoUnopPushout_inv_snd
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp [unop_id (X := { unop := Y })])
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp, unop_id
+/-
+**CategoryTheory.Limits.pullbackIsoUnopPushout_inv_snd** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pullbackIsoUnopPushout_inv_snd {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : (pullbackIsoUnopPushout f g).inv ≫ pullback.snd f g = (pushout.inr 
+f.op g.op).unop
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPushoutOppositeOpOfHasPullback`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Z) (g : Y 
+⟶ Z)   [CategoryTheory.Limits.HasPullback f g], C…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.unop_π_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : X ⟶ Z}   (c :
+ CategoryTheory.Limits.PushoutCocone…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoUnopPushout_inv_snd {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     (pullbackIsoUnopPushout f g).inv ≫ pullback.snd f g = (pushout.inr f.op g.op).unop :=
   (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp [unop_id (X := { unop := Y })])
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoUnopPushout_hom_inl` / 定理 `pullbackIsoUnopPushout_hom_inl`
-
-English:
-theorem pullbackIsoUnopPushout_hom_inl
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: Quiver.Hom.unop_inj by simp [← pullbackIsoUnopPushout_inv_fst]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackIsoUnopPushout_hom_inl
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: Quiver.Hom.unop_inj by simp [← pullbackIsoUnopPushout_inv_fst]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Quiver, Quiver.Hom.unop_inj, pullbackIsoUnopPushout_inv_fst, unop_inj
+/-
+**CategoryTheory.Limits.pullbackIsoUnopPushout_hom_inl** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pullbackIsoUnopPushout_hom_inl {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : pushout.inl f.op g.op ≫ (pullbackIsoUnopPushout f g).hom.op = (pull
+back.fst f g).op
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.unop_inj`：Quiver.Hom.unop_inj {X Y : Cᵒᵖ} : Function.Injectiv
+e (Quiver.Hom.unop : (X ⟶ Y) -> (Opposite.unop Y ⟶ Opposite.unop X))
+· 使用定理 `CategoryTheory.Limits.instHasPushoutOppositeOpOfHasPullback`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Z) (g : Y 
+⟶ Z)   [CategoryTheory.Limits.HasPullback f g], C…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoUnopPushout_hom_inl {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     pushout.inl f.op g.op ≫ (pullbackIsoUnopPushout f g).hom.op = (pullback.fst f g).op :=
-Quiver.Hom.unop_inj by simp [← pullbackIsoUnopPushout_inv_fst]
+  Quiver.Hom.unop_inj <| by simp [← pullbackIsoUnopPushout_inv_fst]
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoUnopPushout_hom_inr` / 定理 `pullbackIsoUnopPushout_hom_inr`
-
-English:
-theorem pullbackIsoUnopPushout_hom_inr
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: Quiver.Hom.unop_inj by simp [← pullbackIsoUnopPushout_inv_snd]
-
-中文:
-定理 pullbackIsoUnopPushout_hom_inr
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: Quiver.Hom.unop_inj by simp [← pullbackIsoUnopPushout_inv_snd]
-
-Depends on / 依赖: Quiver, Quiver.Hom.unop_inj, pullbackIsoUnopPushout_inv_snd, unop_inj
+/-
+**CategoryTheory.Limits.pullbackIsoUnopPushout_hom_inr** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pullbackIsoUnopPushout_hom_inr {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : pushout.inr f.op g.op ≫ (pullbackIsoUnopPushout f g).hom.op = (pull
+back.snd f g).op
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.unop_inj`：Quiver.Hom.unop_inj {X Y : Cᵒᵖ} : Function.Injectiv
+e (Quiver.Hom.unop : (X ⟶ Y) -> (Opposite.unop Y ⟶ Opposite.unop X))
+· 使用定理 `CategoryTheory.Limits.instHasPushoutOppositeOpOfHasPullback`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Z) (g : Y 
+⟶ Z)   [CategoryTheory.Limits.HasPullback f g], C…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoUnopPushout_hom_inr {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     pushout.inr f.op g.op ≫ (pullbackIsoUnopPushout f g).hom.op = (pullback.snd f g).op :=
-Quiver.Hom.unop_inj by simp [← pullbackIsoUnopPushout_inv_snd]
+  Quiver.Hom.unop_inj <| by simp [← pullbackIsoUnopPushout_inv_snd]
 
-/--
-Definition of `pullbackIsoOpPushout` / `pullbackIsoOpPushout` 的定义
+/-- The pullback of `f` and `g` in `Cᵒᵖ` is isomorphic to the pushout of
+`f.unop` and `g.unop` in `C`. -/
+/-
+**CategoryTheory.Limits.pullbackIsoOpPushout** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：pullbackIsoOpPushout {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullbac
+k f g] : pullback f g ≅ op (pushout f.unop g.unop)
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPushoutUnopOfHasPullbackOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g 
+: Y ⟶ Z)   [CategoryTheory.Limits.HasPullback f g],…
 
-English:
-definition pullbackIsoOpPushout
-  signature: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullback f g]
-  body: IsLimit.conePointUniqueUpToIso (@limit.isLimit _ _ _ _ _ h)
-    ((PushoutCocone.isColimitEquivIsLimitOp _) (colimit.isColimit (span f.unop g.unop)))
-
-中文:
-定义 pullbackIsoOpPushout
-  签名: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullback f g]
-  定义体: IsLimit.conePointUniqueUpToIso (@limit.isLimit _ _ _ _ _ h)
-    ((PushoutCocone.isColimitEquivIsLimitOp _) (colimit.isColimit (span f.unop g.unop)))
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, PushoutCocone, PushoutCocone.isColimitEquivIsLimitOp, colimit, colimit.isColimit, conePointUniqueUpToIso, f.unop, g.unop, isColimit, isColimitEquivIsLimitOp, isLimit, limit.isLimit
+--- 原说明 ---
+The pullback of `f` and `g` in `Cᵒᵖ` is isomorphic to the pushout of
+`f.unop` and `g.unop` in `C`.
 -/
 noncomputable def pullbackIsoOpPushout {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [h : HasPullback f g] :
     pullback f g ≅ op (pushout f.unop g.unop) :=
@@ -956,20 +927,34 @@ noncomputable def pullbackIsoOpPushout {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y �
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoOpPushout_inv_fst` / 定理 `pullbackIsoOpPushout_inv_fst`
-
-English:
-theorem pullbackIsoOpPushout_inv_fst
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp)
-
-中文:
-定理 pullbackIsoOpPushout_inv_fst
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp)
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.Limits.pullbackIsoOpPushout_inv_fst** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pullbackIsoOpPushout_inv_fst {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : (pullbackIsoOpPushout f g).inv ≫ pullback.fst f g = (pushout.inl f.
+unop g.unop).op
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPushoutUnopOfHasPullbackOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g 
+: Y ⟶ Z)   [CategoryTheory.Limits.HasPullback f g],…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.op_π_app`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   (c : Cat
+egoryTheory.Limits.PushoutCocone f…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoOpPushout_inv_fst {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     (pullbackIsoOpPushout f g).inv ≫ pullback.fst f g = (pushout.inl f.unop g.unop).op :=
@@ -977,147 +962,186 @@ theorem pullbackIsoOpPushout_inv_fst {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ 
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoOpPushout_inv_snd` / 定理 `pullbackIsoOpPushout_inv_snd`
-
-English:
-theorem pullbackIsoOpPushout_inv_snd
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackIsoOpPushout_inv_snd
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.Limits.pullbackIsoOpPushout_inv_snd** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pullbackIsoOpPushout_inv_snd {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : (pullbackIsoOpPushout f g).inv ≫ pullback.snd f g = (pushout.inr f.
+unop g.unop).op
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPushoutUnopOfHasPullbackOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g 
+: Y ⟶ Z)   [CategoryTheory.Limits.HasPullback f g],…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.op_π_app`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   (c : Cat
+egoryTheory.Limits.PushoutCocone f…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoOpPushout_inv_snd {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     (pullbackIsoOpPushout f g).inv ≫ pullback.snd f g = (pushout.inr f.unop g.unop).op :=
   (IsLimit.conePointUniqueUpToIso_inv_comp _ _ _).trans (by simp)
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoOpPushout_hom_inl` / 定理 `pullbackIsoOpPushout_hom_inl`
-
-English:
-theorem pullbackIsoOpPushout_hom_inl
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: Quiver.Hom.op_inj by simp [← pullbackIsoOpPushout_inv_fst]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackIsoOpPushout_hom_inl
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: Quiver.Hom.op_inj by simp [← pullbackIsoOpPushout_inv_fst]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj, op_inj, pullbackIsoOpPushout_inv_fst
+/-
+**CategoryTheory.Limits.pullbackIsoOpPushout_hom_inl** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pullbackIsoOpPushout_hom_inl {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : pushout.inl _ _ ≫ (pullbackIsoOpPushout f g).hom.unop = (pullback.f
+st f g).unop
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.op_inj`：Quiver.Hom.op_inj {X Y : C} : Function.Injective (Qui
+ver.Hom.op : (X ⟶ Y) -> (Opposite.op Y ⟶ Opposite.op X))
+· 使用定理 `CategoryTheory.Limits.instHasPushoutUnopOfHasPullbackOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g 
+: Y ⟶ Z)   [CategoryTheory.Limits.HasPullback f g],…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoOpPushout_hom_inl {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     pushout.inl _ _ ≫ (pullbackIsoOpPushout f g).hom.unop = (pullback.fst f g).unop :=
-Quiver.Hom.op_inj by simp [← pullbackIsoOpPushout_inv_fst]
+  Quiver.Hom.op_inj <| by simp [← pullbackIsoOpPushout_inv_fst]
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackIsoOpPushout_hom_inr` / 定理 `pullbackIsoOpPushout_hom_inr`
-
-English:
-theorem pullbackIsoOpPushout_hom_inr
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  proof: Quiver.Hom.op_inj by simp [← pullbackIsoOpPushout_inv_snd]
-
-中文:
-定理 pullbackIsoOpPushout_hom_inr
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g]
-  证明: Quiver.Hom.op_inj by simp [← pullbackIsoOpPushout_inv_snd]
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj, op_inj, pullbackIsoOpPushout_inv_snd
+/-
+**CategoryTheory.Limits.pullbackIsoOpPushout_hom_inr** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pullbackIsoOpPushout_hom_inr {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPul
+lback f g] : pushout.inr _ _ ≫ (pullbackIsoOpPushout f g).hom.unop = (pullback.s
+nd f g).unop
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.op_inj`：Quiver.Hom.op_inj {X Y : C} : Function.Injective (Qui
+ver.Hom.op : (X ⟶ Y) -> (Opposite.op Y ⟶ Opposite.op X))
+· 使用定理 `CategoryTheory.Limits.instHasPushoutUnopOfHasPullbackOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g 
+: Y ⟶ Z)   [CategoryTheory.Limits.HasPullback f g],…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackIsoOpPushout_hom_inr {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] :
     pushout.inr _ _ ≫ (pullbackIsoOpPushout f g).hom.unop = (pullback.snd f g).unop :=
-Quiver.Hom.op_inj by simp [← pullbackIsoOpPushout_inv_snd]
+  Quiver.Hom.op_inj <| by simp [← pullbackIsoOpPushout_inv_snd]
 
 end Pullback
 
 section Pushout
 
 @[simp]
-/--
-lemma `hasPullback_op_iff_hasPushout` / 引理 `hasPullback_op_iff_hasPushout`
-
-English:
-lemma hasPullback_op_iff_hasPushout
-  given: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  proof: by
-  rw [HasPullback]; rw [hasLimit_iff_of_iso (cospanOp f g)]; rw [hasLimit_inverse_equivalence_comp_iff]; rw [hasLimit_op_iff_hasColimit]
-
-@[simp]
-
-中文:
-引理 hasPullback_op_iff_hasPushout
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  证明: by
-  rw [HasPullback]; rw [hasLimit_iff_of_iso (cospanOp f g)]; rw [hasLimit_inverse_equivalence_comp_iff]; rw [hasLimit_op_iff_hasColimit]
-
-@[simp]
-
-Depends on / 依赖: HasPullback, cospanOp, hasLimit_iff_of_iso, hasLimit_inverse_equivalence_comp_iff, hasLimit_op_iff_hasColimit
+/-
+**CategoryTheory.Limits.hasPullback_op_iff_hasPushout** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：hasPullback_op_iff_hasPushout {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : HasPul
+lback f.op g.op ↔ HasPushout f g
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.HasPullback.eq_1`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z),   CategoryTheory.L
+imits.HasPullback f g = Cate…
+· 使用定理 `CategoryTheory.Limits.hasLimit_iff_of_iso`：hasLimit_iff_of_iso {F G : J 
+⥤ C} (α : F ≅ G) : HasLimit F ↔ HasLimit G
+· 使用引理 `CategoryTheory.Limits.hasLimit_inverse_equivalence_comp_iff`：hasLimit_in
+verse_equivalence_comp_iff (e : J ≌ K) : HasLimit (e.inverse ⋙ F) ↔ HasLimit F
+· 使用引理 `CategoryTheory.Limits.hasLimit_op_iff_hasColimit`：hasLimit_op_iff_hasCol
+imit {F : J ⥤ C} : HasLimit F.op ↔ HasColimit F
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma hasPullback_op_iff_hasPushout {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) :
     HasPullback f.op g.op ↔ HasPushout f g := by
-  rw [HasPullback]; rw [hasLimit_iff_of_iso (cospanOp f g)]; rw [hasLimit_inverse_equivalence_comp_iff]; rw [hasLimit_op_iff_hasColimit]
+  rw [HasPullback, hasLimit_iff_of_iso (cospanOp f g), hasLimit_inverse_equivalence_comp_iff,
+    hasLimit_op_iff_hasColimit]
 
 @[simp]
-/--
-lemma `hasPullback_unop_iff_hasPushout` / 引理 `hasPullback_unop_iff_hasPushout`
-
-English:
-lemma hasPullback_unop_iff_hasPushout
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z)
-  proof: by
-  rw [HasPullback]; rw [hasLimit_iff_of_iso (cospanUnop f g)]; rw [hasLimit_inverse_equivalence_comp_iff]; rw [hasLimit_leftOp_iff_hasColimit]
-
-中文:
-引理 hasPullback_unop_iff_hasPushout
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z)
-  证明: by
-  rw [HasPullback]; rw [hasLimit_iff_of_iso (cospanUnop f g)]; rw [hasLimit_inverse_equivalence_comp_iff]; rw [hasLimit_leftOp_iff_hasColimit]
-
-Depends on / 依赖: HasPullback, cospanUnop, hasLimit_iff_of_iso, hasLimit_inverse_equivalence_comp_iff, hasLimit_leftOp_iff_hasColimit
+/-
+**CategoryTheory.Limits.hasPullback_unop_iff_hasPushout** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：hasPullback_unop_iff_hasPushout {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z) : Ha
+sPullback f.unop g.unop ↔ HasPushout f g
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.HasPullback.eq_1`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z),   CategoryTheory.L
+imits.HasPullback f g = Cate…
+· 使用定理 `CategoryTheory.Limits.hasLimit_iff_of_iso`：hasLimit_iff_of_iso {F G : J 
+⥤ C} (α : F ≅ G) : HasLimit F ↔ HasLimit G
+· 使用引理 `CategoryTheory.Limits.hasLimit_inverse_equivalence_comp_iff`：hasLimit_in
+verse_equivalence_comp_iff (e : J ≌ K) : HasLimit (e.inverse ⋙ F) ↔ HasLimit F
+· 使用引理 `CategoryTheory.Limits.hasLimit_leftOp_iff_hasColimit`：hasLimit_leftOp_if
+f_hasColimit {F : J ⥤ Cᵒᵖ} : HasLimit F.leftOp ↔ HasColimit F
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma hasPullback_unop_iff_hasPushout {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z) :
     HasPullback f.unop g.unop ↔ HasPushout f g := by
-  rw [HasPullback]; rw [hasLimit_iff_of_iso (cospanUnop f g)]; rw [hasLimit_inverse_equivalence_comp_iff]; rw [hasLimit_leftOp_iff_hasColimit]
-
+  rw [HasPullback, hasLimit_iff_of_iso (cospanUnop f g), hasLimit_inverse_equivalence_comp_iff,
+    hasLimit_leftOp_iff_hasColimit]
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) [HasPushout f g] : HasPullback f.op g.op := by
   rwa [hasPullback_op_iff_hasPushout]
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g : X ⟶ Z) [HasPushout f g] : HasPullback f.unop g.unop := by
   rwa [hasPullback_unop_iff_hasPushout]
 
-/--
-Definition of `pushoutIsoUnopPullback` / `pushoutIsoUnopPullback` 的定义
+/-- The pushout of `f` and `g` in `C` is isomorphic to the pullback of
+`f.op` and `g.op` in `Cᵒᵖ`. -/
+/-
+**CategoryTheory.Limits.pushoutIsoUnopPullback** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：pushoutIsoUnopPullback {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout
+ f g] : pushout f g ≅ unop (pullback f.op g.op)
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPullbackOppositeOpOfHasPushout`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Y) (g : X 
+⟶ Z)   [CategoryTheory.Limits.HasPushout f g], Ca…
 
-English:
-definition pushoutIsoUnopPullback
-  signature: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout f g]
-  body: IsColimit.coconePointUniqueUpToIso (@colimit.isColimit _ _ _ _ _ h)
-    ((PullbackCone.isLimitEquivIsColimitUnop _) (limit.isLimit (cospan f.op g.op)))
-
-中文:
-定义 pushoutIsoUnopPullback
-  签名: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout f g]
-  定义体: IsColimit.coconePointUniqueUpToIso (@colimit.isColimit _ _ _ _ _ h)
-    ((PullbackCone.isLimitEquivIsColimitUnop _) (limit.isLimit (cospan f.op g.op)))
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, PullbackCone, PullbackCone.isLimitEquivIsColimitUnop, coconePointUniqueUpToIso, colimit, colimit.isColimit, cospan, f.op, g.op, isColimit, isLimit, isLimitEquivIsColimitUnop, limit.isLimit
+--- 原说明 ---
+The pushout of `f` and `g` in `C` is isomorphic to the pullback of
+`f.op` and `g.op` in `Cᵒᵖ`.
 -/
 noncomputable def pushoutIsoUnopPullback {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout f g] :
     pushout f g ≅ unop (pullback f.op g.op) :=
@@ -1126,20 +1150,34 @@ noncomputable def pushoutIsoUnopPullback {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pushoutIsoUnopPullback_inl_hom` / 定理 `pushoutIsoUnopPullback_inl_hom`
-
-English:
-theorem pushoutIsoUnopPullback_inl_hom
-  given: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-中文:
-定理 pushoutIsoUnopPullback_inl_hom
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, comp_coconePointUniqueUpToIso_hom
+/-
+**CategoryTheory.Limits.pushoutIsoUnopPullback_inl_hom** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pushoutIsoUnopPullback_inl_hom {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : pushout.inl _ _ ≫ (pushoutIsoUnopPullback f g).hom = (pullback.fst f
+.op g.op).unop
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPullbackOppositeOpOfHasPushout`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Y) (g : X 
+⟶ Z)   [CategoryTheory.Limits.HasPushout f g], Ca…
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.unop_ι_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : 
+CategoryTheory.Limits.PullbackCone …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoUnopPullback_inl_hom {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     pushout.inl _ _ ≫ (pushoutIsoUnopPullback f g).hom = (pullback.fst f.op g.op).unop :=
@@ -1147,89 +1185,128 @@ theorem pushoutIsoUnopPullback_inl_hom {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pushoutIsoUnopPullback_inr_hom` / 定理 `pushoutIsoUnopPullback_inr_hom`
-
-English:
-theorem pushoutIsoUnopPullback_inr_hom
-  given: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-@[simp]
-
-中文:
-定理 pushoutIsoUnopPullback_inr_hom
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-@[simp]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, comp_coconePointUniqueUpToIso_hom
+/-
+**CategoryTheory.Limits.pushoutIsoUnopPullback_inr_hom** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pushoutIsoUnopPullback_inr_hom {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : pushout.inr _ _ ≫ (pushoutIsoUnopPullback f g).hom = (pullback.snd f
+.op g.op).unop
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPullbackOppositeOpOfHasPushout`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Y) (g : X 
+⟶ Z)   [CategoryTheory.Limits.HasPushout f g], Ca…
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.unop_ι_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : 
+CategoryTheory.Limits.PullbackCone …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoUnopPullback_inr_hom {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     pushout.inr _ _ ≫ (pushoutIsoUnopPullback f g).hom = (pullback.snd f.op g.op).unop :=
   (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
 
 @[simp]
-/--
-theorem `pushoutIsoUnopPullback_inv_fst` / 定理 `pushoutIsoUnopPullback_inv_fst`
-
-English:
-theorem pushoutIsoUnopPullback_inv_fst
-  given: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: Quiver.Hom.unop_inj by simp [← pushoutIsoUnopPullback_inl_hom]
-
-@[simp]
-
-中文:
-定理 pushoutIsoUnopPullback_inv_fst
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: Quiver.Hom.unop_inj by simp [← pushoutIsoUnopPullback_inl_hom]
-
-@[simp]
-
-Depends on / 依赖: Quiver, Quiver.Hom.unop_inj, pushoutIsoUnopPullback_inl_hom, unop_inj
+/-
+**CategoryTheory.Limits.pushoutIsoUnopPullback_inv_fst** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pushoutIsoUnopPullback_inv_fst {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : (pushoutIsoUnopPullback f g).inv.op ≫ pullback.fst f.op g.op = (push
+out.inl f g).op
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.unop_inj`：Quiver.Hom.unop_inj {X Y : Cᵒᵖ} : Function.Injectiv
+e (Quiver.Hom.unop : (X ⟶ Y) -> (Opposite.unop Y ⟶ Opposite.unop X))
+· 使用定理 `CategoryTheory.Limits.instHasPullbackOppositeOpOfHasPushout`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Y) (g : X 
+⟶ Z)   [CategoryTheory.Limits.HasPushout f g], Ca…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoUnopPullback_inv_fst {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     (pushoutIsoUnopPullback f g).inv.op ≫ pullback.fst f.op g.op = (pushout.inl f g).op :=
-Quiver.Hom.unop_inj by simp [← pushoutIsoUnopPullback_inl_hom]
+  Quiver.Hom.unop_inj <| by simp [← pushoutIsoUnopPullback_inl_hom]
 
 @[simp]
-/--
-theorem `pushoutIsoUnopPullback_inv_snd` / 定理 `pushoutIsoUnopPullback_inv_snd`
-
-English:
-theorem pushoutIsoUnopPullback_inv_snd
-  given: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: Quiver.Hom.unop_inj by simp [← pushoutIsoUnopPullback_inr_hom]
-
-中文:
-定理 pushoutIsoUnopPullback_inv_snd
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: Quiver.Hom.unop_inj by simp [← pushoutIsoUnopPullback_inr_hom]
-
-Depends on / 依赖: Quiver, Quiver.Hom.unop_inj, pushoutIsoUnopPullback_inr_hom, unop_inj
+/-
+**CategoryTheory.Limits.pushoutIsoUnopPullback_inv_snd** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：pushoutIsoUnopPullback_inv_snd {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : (pushoutIsoUnopPullback f g).inv.op ≫ pullback.snd f.op g.op = (push
+out.inr f g).op
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.unop_inj`：Quiver.Hom.unop_inj {X Y : Cᵒᵖ} : Function.Injectiv
+e (Quiver.Hom.unop : (X ⟶ Y) -> (Opposite.unop Y ⟶ Opposite.unop X))
+· 使用定理 `CategoryTheory.Limits.instHasPullbackOppositeOpOfHasPushout`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Y) (g : X 
+⟶ Z)   [CategoryTheory.Limits.HasPushout f g], Ca…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoUnopPullback_inv_snd {X Y Z : C} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     (pushoutIsoUnopPullback f g).inv.op ≫ pullback.snd f.op g.op = (pushout.inr f g).op :=
-Quiver.Hom.unop_inj by simp [← pushoutIsoUnopPullback_inr_hom]
+  Quiver.Hom.unop_inj <| by simp [← pushoutIsoUnopPullback_inr_hom]
 
-/--
-Definition of `pushoutIsoOpPullback` / `pushoutIsoOpPullback` 的定义
+/-- The pushout of `f` and `g` in `Cᵒᵖ` is isomorphic to the pullback of
+`f.unop` and `g.unop` in `C`. -/
+/-
+**CategoryTheory.Limits.pushoutIsoOpPullback** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：pushoutIsoOpPullback {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout
+ f g] : pushout f g ≅ op (pullback f.unop g.unop)
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPullbackUnopOfHasPushoutOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g 
+: X ⟶ Z)   [CategoryTheory.Limits.HasPushout f g], …
 
-English:
-definition pushoutIsoOpPullback
-  signature: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout f g]
-  body: IsColimit.coconePointUniqueUpToIso (@colimit.isColimit _ _ _ _ _ h)
-    ((PullbackCone.isLimitEquivIsColimitOp _) (limit.isLimit (cospan f.unop g.unop)))
-
-中文:
-定义 pushoutIsoOpPullback
-  签名: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout f g]
-  定义体: IsColimit.coconePointUniqueUpToIso (@colimit.isColimit _ _ _ _ _ h)
-    ((PullbackCone.isLimitEquivIsColimitOp _) (limit.isLimit (cospan f.unop g.unop)))
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, PullbackCone, PullbackCone.isLimitEquivIsColimitOp, coconePointUniqueUpToIso, colimit, colimit.isColimit, cospan, f.unop, g.unop, isColimit, isLimit, isLimitEquivIsColimitOp, limit.isLimit
+--- 原说明 ---
+The pushout of `f` and `g` in `Cᵒᵖ` is isomorphic to the pullback of
+`f.unop` and `g.unop` in `C`.
 -/
 noncomputable def pushoutIsoOpPullback {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [h : HasPushout f g] :
     pushout f g ≅ op (pullback f.unop g.unop) :=
@@ -1238,20 +1315,34 @@ noncomputable def pushoutIsoOpPullback {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X �
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pushoutIsoOpPullback_inl_hom` / 定理 `pushoutIsoOpPullback_inl_hom`
-
-English:
-theorem pushoutIsoOpPullback_inl_hom
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-中文:
-定理 pushoutIsoOpPullback_inl_hom
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, comp_coconePointUniqueUpToIso_hom
+/-
+**CategoryTheory.Limits.pushoutIsoOpPullback_inl_hom** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pushoutIsoOpPullback_inl_hom {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : pushout.inl _ _ ≫ (pushoutIsoOpPullback f g).hom = (pullback.fst f.u
+nop g.unop).op
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPullbackUnopOfHasPushoutOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g 
+: X ⟶ Z)   [CategoryTheory.Limits.HasPushout f g], …
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.op_ι_app`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : Cate
+goryTheory.Limits.PullbackCone f …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoOpPullback_inl_hom {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     pushout.inl _ _ ≫ (pushoutIsoOpPullback f g).hom = (pullback.fst f.unop g.unop).op :=
@@ -1259,96 +1350,176 @@ theorem pushoutIsoOpPullback_inl_hom {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ 
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `pushoutIsoOpPullback_inr_hom` / 定理 `pushoutIsoOpPullback_inr_hom`
-
-English:
-theorem pushoutIsoOpPullback_inr_hom
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-@[simp]
-
-中文:
-定理 pushoutIsoOpPullback_inr_hom
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
-
-@[simp]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, comp_coconePointUniqueUpToIso_hom
+/-
+**CategoryTheory.Limits.pushoutIsoOpPullback_inr_hom** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pushoutIsoOpPullback_inr_hom {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : pushout.inr _ _ ≫ (pushoutIsoOpPullback f g).hom = (pullback.snd f.u
+nop g.unop).op
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasPullbackUnopOfHasPushoutOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g 
+: X ⟶ Z)   [CategoryTheory.Limits.HasPushout f g], …
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.op_ι_app`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   (c : Cate
+goryTheory.Limits.PullbackCone f …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoOpPullback_inr_hom {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     pushout.inr _ _ ≫ (pushoutIsoOpPullback f g).hom = (pullback.snd f.unop g.unop).op :=
   (IsColimit.comp_coconePointUniqueUpToIso_hom _ _ _).trans (by simp)
 
 @[simp]
-/--
-theorem `pushoutIsoOpPullback_inv_fst` / 定理 `pushoutIsoOpPullback_inv_fst`
-
-English:
-theorem pushoutIsoOpPullback_inv_fst
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: Quiver.Hom.op_inj by simp [← pushoutIsoOpPullback_inl_hom]
-
-@[simp]
-
-中文:
-定理 pushoutIsoOpPullback_inv_fst
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: Quiver.Hom.op_inj by simp [← pushoutIsoOpPullback_inl_hom]
-
-@[simp]
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj, op_inj, pushoutIsoOpPullback_inl_hom
+/-
+**CategoryTheory.Limits.pushoutIsoOpPullback_inv_fst** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pushoutIsoOpPullback_inv_fst {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : (pushoutIsoOpPullback f g).inv.unop ≫ pullback.fst f.unop g.unop = (
+pushout.inl f g).unop
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.op_inj`：Quiver.Hom.op_inj {X Y : C} : Function.Injective (Qui
+ver.Hom.op : (X ⟶ Y) -> (Opposite.op Y ⟶ Opposite.op X))
+· 使用定理 `CategoryTheory.Limits.instHasPullbackUnopOfHasPushoutOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g 
+: X ⟶ Z)   [CategoryTheory.Limits.HasPushout f g], …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoOpPullback_inv_fst {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     (pushoutIsoOpPullback f g).inv.unop ≫ pullback.fst f.unop g.unop = (pushout.inl f g).unop :=
-Quiver.Hom.op_inj by simp [← pushoutIsoOpPullback_inl_hom]
+  Quiver.Hom.op_inj <| by simp [← pushoutIsoOpPullback_inl_hom]
 
 @[simp]
-/--
-theorem `pushoutIsoOpPullback_inv_snd` / 定理 `pushoutIsoOpPullback_inv_snd`
-
-English:
-theorem pushoutIsoOpPullback_inv_snd
-  given: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  proof: Quiver.Hom.op_inj by simp [← pushoutIsoOpPullback_inr_hom]
-
-中文:
-定理 pushoutIsoOpPullback_inv_snd
-  条件: {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g]
-  证明: Quiver.Hom.op_inj by simp [← pushoutIsoOpPullback_inr_hom]
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj, op_inj, pushoutIsoOpPullback_inr_hom
+/-
+**CategoryTheory.Limits.pushoutIsoOpPullback_inv_snd** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：pushoutIsoOpPullback_inv_snd {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPus
+hout f g] : (pushoutIsoOpPullback f g).inv.unop ≫ pullback.snd f.unop g.unop = (
+pushout.inr f g).unop
+参数：f : X ⟶ Z；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.Hom.op_inj`：Quiver.Hom.op_inj {X Y : C} : Function.Injective (Qui
+ver.Hom.op : (X ⟶ Y) -> (Opposite.op Y ⟶ Opposite.op X))
+· 使用定理 `CategoryTheory.Limits.instHasPullbackUnopOfHasPushoutOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g 
+: X ⟶ Z)   [CategoryTheory.Limits.HasPushout f g], …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pushoutIsoOpPullback_inv_snd {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] :
     (pushoutIsoOpPullback f g).inv.unop ≫ pullback.snd f.unop g.unop = (pushout.inr f g).unop :=
-Quiver.Hom.op_inj by simp [← pushoutIsoOpPullback_inr_hom]
+  Quiver.Hom.op_inj <| by simp [← pushoutIsoOpPullback_inr_hom]
 
 end Pushout
 
 section Map
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `op_pullbackMap` / 引理 `op_pullbackMap`
-
-English:
-lemma op_pullbackMap
-  statement: {W X Y Z S T : C} (f₁ : W ⟶ S) (f₂ : X ⟶ S) [HasPullback f₁ f₂]
-  proof: by
-  rw [Iso.eq_inv_comp]
-  ext <;> simp [← op_comp]
-
-中文:
-引理 op_pullbackMap
-  结论: {W X Y Z S T : C} (f₁ : W ⟶ S) (f₂ : X ⟶ S) [HasPullback f₁ f₂]
-  证明: by
-  rw [Iso.eq_inv_comp]
-  ext <;> simp [← op_comp]
-
-Depends on / 依赖: Iso.eq_inv_comp, eq_inv_comp, op_comp
+/-
+**CategoryTheory.Limits.op_pullbackMap** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：op_pullbackMap {W X Y Z S T : C} (f₁ : W ⟶ S) (f₂ : X ⟶ S) [HasPullback f₁
+ f₂] (g₁ : Y ⟶ T) (g₂ : Z ⟶ T) [HasPullback g₁ g₂] (i₁ : W ⟶ Y) (i₂ : X ⟶ Z) (i₃
+ : S ⟶ T) (eq₁) (eq₂) : (pullback.map f₁ f₂ g₁ g₂ i₁ i₂ i₃ eq₁ eq₂).op = (pushou
+tIsoOpPullback _ _).inv ≫ pushout.map g₁.op g₂.op f₁.op f₂.op i₁.op i₂.op i₃.op 
+(by simp [eq₁, ← op_comp]) (by simp [eq₂, ← op_comp]) ≫ (pushoutIsoOpPullback _ 
+_).hom
+参数：f₁ : W ⟶ S；f₂ : X ⟶ S；g₁ : Y ⟶ T；g₂ : Z ⟶ T；i₁ : W ⟶ Y；i₂ : X ⟶ Z；i₃ : S ⟶ T；
+eq₁；eq₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPullbackUnopOfHasPushoutOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Y) (g 
+: X ⟶ Z)   [CategoryTheory.Limits.HasPushout f g], …
+· 使用定理 `CategoryTheory.Limits.instHasPushoutOppositeOpOfHasPullback`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Z) (g : Y 
+⟶ Z)   [CategoryTheory.Limits.HasPullback f g], C…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.eq_inv_comp`：eq_inv_comp (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : g = α.inv ≫ f ↔ α.hom ≫ g = f
+· 使用定理 `CategoryTheory.Limits.pushout.hom_ext`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Category
+Theory.Limits.HasPushout f …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.pushoutIsoOpPullback_inl_hom_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶
+ Y)   [inst_1 : CategoryTheory.Limits.HasPusho…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc_assoc`：∀ {J : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{
+v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.mk_ι_app`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} {W : C} (inl 
+: Y ⟶ W)   (inr : Z ⟶ W) (eq : Cat…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pushoutIsoOpPullback_inl_hom`：pushoutIsoOpPullback
+_inl_hom {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] : pushout.inl _ 
+_ ≫ (pushoutIsoOpPullback f g).hom = (pu…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.pushoutIsoOpPullback_inr_hom_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶
+ Y)   [inst_1 : CategoryTheory.Limits.HasPusho…
+· 使用定理 `CategoryTheory.Limits.pushoutIsoOpPullback_inr_hom`：pushoutIsoOpPullback
+_inr_hom {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : X ⟶ Y) [HasPushout f g] : pushout.inr _ 
+_ ≫ (pushoutIsoOpPullback f g).hom = (pu…
 -/
 lemma op_pullbackMap {W X Y Z S T : C} (f₁ : W ⟶ S) (f₂ : X ⟶ S) [HasPullback f₁ f₂]
     (g₁ : Y ⟶ T) (g₂ : Z ⟶ T) [HasPullback g₁ g₂]
@@ -1362,24 +1533,65 @@ lemma op_pullbackMap {W X Y Z S T : C} (f₁ : W ⟶ S) (f₂ : X ⟶ S) [HasPul
   ext <;> simp [← op_comp]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `op_pushoutMap` / 引理 `op_pushoutMap`
-
-English:
-lemma op_pushoutMap
-  statement: {W X Y Z S T : C} (f₁ : S ⟶ W) (f₂ : S ⟶ X) [HasPushout f₁ f₂]
-  proof: by
-  rw [← Category.assoc]; rw [← Iso.comp_inv_eq]
-  ext <;> simp [← op_comp]
-
-中文:
-引理 op_pushoutMap
-  结论: {W X Y Z S T : C} (f₁ : S ⟶ W) (f₂ : S ⟶ X) [HasPushout f₁ f₂]
-  证明: by
-  rw [← Category.assoc]; rw [← Iso.comp_inv_eq]
-  ext <;> simp [← op_comp]
-
-Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, comp_inv_eq, op_comp
+/-
+**CategoryTheory.Limits.op_pushoutMap** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：op_pushoutMap {W X Y Z S T : C} (f₁ : S ⟶ W) (f₂ : S ⟶ X) [HasPushout f₁ f
+₂] (g₁ : T ⟶ Y) (g₂ : T ⟶ Z) [HasPushout g₁ g₂] (i₁ : W ⟶ Y) (i₂ : X ⟶ Z) (i₃ : 
+S ⟶ T) (eq₁ : f₁ ≫ i₁ = i₃ ≫ g₁) (eq₂ : f₂ ≫ i₂ = i₃ ≫ g₂) : (pushout.map f₁ f₂ 
+g₁ g₂ i₁ i₂ i₃ eq₁ eq₂).op = (pullbackIsoOpPushout _ _).inv ≫ pullback.map g₁.op
+ g₂.op f₁.op f₂.op i₁.op i₂.op i₃.op (by simp [eq₁, ← op_comp]) (by simp [eq₂, ←
+ op_comp]) ≫ (pullbackIsoOpPushout _ _).hom
+参数：f₁ : S ⟶ W；f₂ : S ⟶ X；g₁ : T ⟶ Y；g₂ : T ⟶ Z；i₁ : W ⟶ Y；i₂ : X ⟶ Z；i₃ : S ⟶ T；
+eq₁ : f₁ ≫ i₁ = i₃ ≫ g₁；eq₂ : f₂ ≫ i₂ = i₃ ≫ g₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPushoutUnopOfHasPullbackOpposite`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g 
+: Y ⟶ Z)   [CategoryTheory.Limits.HasPullback f g],…
+· 使用定理 `CategoryTheory.Limits.instHasPullbackOppositeOpOfHasPushout`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Y) (g : X 
+⟶ Z)   [CategoryTheory.Limits.HasPushout f g], Ca…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.comp_inv_eq`：comp_inv_eq (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : f ≫ α.inv = g ↔ f = g ≫ α.hom
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.pullbackIsoOpPushout_inv_fst`：pullbackIsoOpPushout
+_inv_fst {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] : (pullbackIsoO
+pPushout f g).inv ≫ pullback.fst f g = (…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.mk_ι_app`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} {W : C} (inl 
+: Y ⟶ W)   (inr : Z ⟶ W) (eq : Cat…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `CategoryTheory.Limits.pullbackIsoOpPushout_inv_fst_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶
+ Z)   [inst_1 : CategoryTheory.Limits.HasPullb…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.pullbackIsoOpPushout_inv_snd`：pullbackIsoOpPushout
+_inv_snd {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g] : (pullbackIsoO
+pPushout f g).inv ≫ pullback.snd f g = (…
+· 使用定理 `CategoryTheory.Limits.pullbackIsoOpPushout_inv_snd_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Cᵒᵖ} (f : X ⟶ Z) (g : Y ⟶
+ Z)   [inst_1 : CategoryTheory.Limits.HasPullb…
 -/
 lemma op_pushoutMap {W X Y Z S T : C} (f₁ : S ⟶ W) (f₂ : S ⟶ X) [HasPushout f₁ f₂]
     (g₁ : T ⟶ Y) (g₂ : T ⟶ Z) [HasPushout g₁ g₂]
@@ -1390,7 +1602,7 @@ lemma op_pushoutMap {W X Y Z S T : C} (f₁ : S ⟶ W) (f₂ : S ⟶ X) [HasPush
         pullback.map g₁.op g₂.op f₁.op f₂.op i₁.op i₂.op i₃.op
         (by simp [eq₁, ← op_comp]) (by simp [eq₂, ← op_comp]) ≫
         (pullbackIsoOpPushout _ _).hom := by
-  rw [← Category.assoc]; rw [← Iso.comp_inv_eq]
+  rw [← Category.assoc, ← Iso.comp_inv_eq]
   ext <;> simp [← op_comp]
 
 end Map
@@ -1404,78 +1616,87 @@ variable {C : Type*} [Category* C]
 variable {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coneOp` / `coneOp` 的定义
+/-- The pushout cocone in the opposite category associated to the cone of
+a commutative square identifies to the cocone of the flipped commutative square in
+the opposite category -/
+/-
+**CategoryTheory.CommSq.coneOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommSq`
+。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {W 
+X Y Z : C} →       {f : W ⟶ X} → {g : W ⟶ Y} → {h : X ⟶ Z} → {i : Y ⟶ Z} → (p : 
+CategoryTheory.CommSq f g h i) → p.cone.op ≅ ⋯.cocone
+参数：p : CategoryTheory.CommSq f g h i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneOp
-  signature: (p : CommSq f g h i)
-  body: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 coneOp
-  签名: (p : 交换Sq f g h i)
-  定义体: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PushoutCocone, PushoutCocone.ext
+--- 原说明 ---
+The pushout cocone in the opposite category associated to the cone of
+a commutative square identifies to the cocone of the flipped commutative square 
+in
+the opposite category
 -/
 def coneOp (p : CommSq f g h i) : p.cone.op ≅ p.flip.op.cocone :=
   PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coconeOp` / `coconeOp` 的定义
+/-- The pullback cone in the opposite category associated to the cocone of
+a commutative square identifies to the cone of the flipped commutative square in
+the opposite category -/
+/-
+**CategoryTheory.CommSq.coconeOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommS
+q`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {W 
+X Y Z : C} →       {f : W ⟶ X} → {g : W ⟶ Y} → {h : X ⟶ Z} → {i : Y ⟶ Z} → (p : 
+CategoryTheory.CommSq f g h i) → p.cocone.op ≅ ⋯.cone
+参数：p : CategoryTheory.CommSq f g h i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeOp
-  signature: (p : CommSq f g h i)
-  body: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 coconeOp
-  签名: (p : 交换Sq f g h i)
-  定义体: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PullbackCone, PullbackCone.ext
+--- 原说明 ---
+The pullback cone in the opposite category associated to the cocone of
+a commutative square identifies to the cone of the flipped commutative square in
+the opposite category
 -/
 def coconeOp (p : CommSq f g h i) : p.cocone.op ≅ p.flip.op.cone :=
   PullbackCone.ext (Iso.refl _) (by simp) (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coneUnop` / `coneUnop` 的定义
+/-- The pushout cocone obtained from the pullback cone associated to a
+commutative square in the opposite category identifies to the cocone associated
+to the flipped square. -/
+/-
+**CategoryTheory.CommSq.coneUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommS
+q`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {W 
+X Y Z : Cᵒᵖ} →       {f : W ⟶ X} →         {g : W ⟶ Y} → {h : X ⟶ Z} → {i : Y ⟶ 
+Z} → (p : CategoryTheory.CommSq f g h i) → p.cone.unop ≅ ⋯.cocone
+参数：p : CategoryTheory.CommSq f g h i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneUnop
-  signature: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i)
-  body: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 coneUnop
-  签名: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : 交换Sq f g h i)
-  定义体: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PushoutCocone, PushoutCocone.ext
+--- 原说明 ---
+The pushout cocone obtained from the pullback cone associated to a
+commutative square in the opposite category identifies to the cocone associated
+to the flipped square.
 -/
 def coneUnop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i) :
     p.cone.unop ≅ p.flip.unop.cocone :=
   PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coconeUnop` / `coconeUnop` 的定义
+/-- The pullback cone obtained from the pushout cone associated to a
+commutative square in the opposite category identifies to the cone associated
+to the flipped square. -/
+/-
+**CategoryTheory.CommSq.coconeUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+mSq`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {W 
+X Y Z : Cᵒᵖ} →       {f : W ⟶ X} →         {g : W ⟶ Y} → {h : X ⟶ Z} → {i : Y ⟶ 
+Z} → (p : CategoryTheory.CommSq f g h i) → p.cocone.unop ≅ ⋯.cone
+参数：p : CategoryTheory.CommSq f g h i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeUnop
-  signature: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
-  body: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 coconeUnop
-  签名: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
-  定义体: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PullbackCone, PullbackCone.ext
+--- 原说明 ---
+The pullback cone obtained from the pushout cone associated to a
+commutative square in the opposite category identifies to the cone associated
+to the flipped square.
 -/
 def coconeUnop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
     (p : CommSq f g h i) : p.cocone.unop ≅ p.flip.unop.cone :=
@@ -1484,3 +1705,4 @@ def coconeUnop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i 
 end CommSq
 
 end CategoryTheory
+

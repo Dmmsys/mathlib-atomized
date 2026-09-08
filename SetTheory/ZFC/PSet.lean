@@ -36,250 +36,158 @@ universe u v
   The ZFC universe is defined as a quotient of this
   to ensure extensionality. -/
 @[pp_with_univ, use_set_notation_for_order]
-/--
-Inductive type `PSet` / 归纳类型 `PSet`
+/-
+**PSet** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive PSet
-  parameters: : Type (u + 1)
-  constructors (1):
-    - mk: (α : Type u) (A : α -> PSet) : PSet
-
-中文:
-归纳类型 命题集合
-  参数: : 类型 (u + 1)
-  构造子 (1 个):
-    - mk: (α : 类型u) (A : α -> 命题集合) : 命题集合
+--- 原说明 ---
+The type of pre-sets in universe `u`. A pre-set
+  is a family of pre-sets indexed by a type in `Type u`.
+  The ZFC universe is defined as a quotient of this
+  to ensure extensionality.
 -/
 inductive PSet : Type (u + 1)
-  | mk (α : Type u) (A : α -> PSet) : PSet
+  | mk (α : Type u) (A : α → PSet) : PSet
 
 namespace PSet
 
-/--
-Definition of `«Type»` / `«Type»` 的定义
+/-- The underlying type of a pre-set -/
+/-
+**PSet.** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition «Type»
-  signature: : PSet -> Type u
-
-中文:
-定义 «类型»
-  签名: : 命题集合 -> 类型u
+--- 原说明 ---
+The underlying type of a pre-set
 -/
-def «Type» : PSet -> Type u
+def «Type» : PSet → Type u
   | ⟨α, _⟩ => α
 
-/--
-Definition of `Func` / `Func` 的定义
+/-- The underlying pre-set family of a pre-set -/
+/-
+**PSet.Func** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：(x : PSet.{u_1}) → x.Type → PSet.{u_1}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Func
-  signature: : forall x : PSet, x.Type -> PSet
-
-中文:
-定义 Func
-  签名: : 对任意 x : 命题集合, x.类型 -> 命题集合
+--- 原说明 ---
+The underlying pre-set family of a pre-set
 -/
-def Func : forall x : PSet, x.Type -> PSet
+def Func : ∀ x : PSet, x.Type → PSet
   | ⟨_, A⟩ => A
 
 @[simp]
-/--
-theorem `mk_type` / 定理 `mk_type`
-
-English:
-theorem mk_type
-  given: (α A)
-  statement: «Type» ⟨α, A⟩ = α
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_type
-  条件: (α A)
-  结论: «类型» ⟨α, A⟩ = α
-  证明: rfl
-
-@[simp]
+/-
+**PSet.mk_type** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mk_type (α A) : «Type» ⟨α, A⟩ = α
+参数：α A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_type (α A) : «Type» ⟨α, A⟩ = α :=
   rfl
 
 @[simp]
-/--
-theorem `mk_func` / 定理 `mk_func`
-
-English:
-theorem mk_func
-  given: (α A)
-  statement: Func ⟨α, A⟩ = A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_func
-  条件: (α A)
-  结论: Func ⟨α, A⟩ = A
-  证明: rfl
-
-@[simp]
+/-
+**PSet.mk_func** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mk_func (α A) : Func ⟨α, A⟩ = A
+参数：α A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_func (α A) : Func ⟨α, A⟩ = A :=
   rfl
 
 @[simp]
-/--
-theorem `eta` / 定理 `eta`
-
-English:
-theorem eta
-  statement: forall x : PSet, mk x.Type x.Func = x
-
-中文:
-定理 eta
-  结论: 对任意 x : 命题集合, mk x.类型 x.Func = x
+/-
+**PSet.eta** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ (x : PSet.{u_1}), PSet.mk x.Type x.Func = x
+参数：x : PSet.{u_1}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eta : forall x : PSet, mk x.Type x.Func = x
+theorem eta : ∀ x : PSet, mk x.Type x.Func = x
   | ⟨_, _⟩ => rfl
 
-/--
-Definition of `Equiv` / `Equiv` 的定义
+/-- Two pre-sets are extensionally equivalent if every element of the first family is extensionally
+equivalent to some element of the second family and vice-versa. -/
+/-
+**PSet.Equiv** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：PSet.{u_1} → PSet.{u_2} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equiv
-  signature: : PSet -> PSet -> Prop
-
-中文:
-定义 等价
-  签名: : 命题集合 -> 命题集合 -> 命题
+--- 原说明 ---
+Two pre-sets are extensionally equivalent if every element of the first family i
+s extensionally
+equivalent to some element of the second family and vice-versa.
 -/
-def Equiv : PSet -> PSet -> Prop
-  | ⟨_, A⟩, ⟨_, B⟩ => (forall a, exists b, Equiv (A a) (B b)) ∧ (forall b, exists a, Equiv (A a) (B b))
-
-/--
-theorem `equiv_iff` / 定理 `equiv_iff`
-
-English:
-theorem equiv_iff
-
-中文:
-定理 equiv_iff
+def Equiv : PSet → PSet → Prop
+  | ⟨_, A⟩, ⟨_, B⟩ => (∀ a, ∃ b, Equiv (A a) (B b)) ∧ (∀ b, ∃ a, Equiv (A a) (B b))
+/-
+**PSet.equiv_iff** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ {x : PSet.{u_1}} {y : PSet.{u_2}},   x.Equiv y ↔ (∀ (i : x.Type), ∃ j, (
+x.Func i).Equiv (y.Func j)) ∧ ∀ (j : y.Type), ∃ i, (x.Func i).Equiv (y.Func j)
+参数：∀ (i : x.Type), ∃ j, (x.Func i).Equiv (y.Func j)；j : y.Type；x.Func i；y.Func j
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem equiv_iff :
-    forall {x y : PSet},
-      Equiv x y ↔ (forall i, exists j, Equiv (x.Func i) (y.Func j)) ∧ forall j, exists i, Equiv (x.Func i) (y.Func j)
+    ∀ {x y : PSet},
+      Equiv x y ↔ (∀ i, ∃ j, Equiv (x.Func i) (y.Func j)) ∧ ∀ j, ∃ i, Equiv (x.Func i) (y.Func j)
   | ⟨_, _⟩, ⟨_, _⟩ => Iff.rfl
-
-/--
-theorem `Equiv.exists_left` / 定理 `Equiv.exists_left`
-
-English:
-theorem Equiv.exists_left
-  given: {x y : PSet} (h : Equiv x y)
-  statement: forall i, exists j, Equiv (x.Func i) (y.Func j)
-  proof: (equiv_iff.1 h).1
-
-中文:
-定理 等价.存在_left
-  条件: {x y : 命题集合} (h : 等价 x y)
-  结论: 对任意 i, 存在 j, 等价 (x.Func i) (y.Func j)
-  证明: (equiv_iff.1 h).1
-
-Depends on / 依赖: equiv_iff
+/-
+**PSet.Equiv.exists_left** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → ∀ (i : x.Type), ∃ j, (x.F
+unc i).Equiv (y.Func j)
+参数：i : x.Type；x.Func i；y.Func j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PSet.equiv_iff`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}},   x.Equiv y ↔ (∀ (i
+ : x.Type), ∃ j, (x.Func i).Equiv (y.Func j)) ∧ ∀ (j : y.Type), ∃ i, (x.Func i).
+Equi…
 -/
-theorem Equiv.exists_left {x y : PSet} (h : Equiv x y) : forall i, exists j, Equiv (x.Func i) (y.Func j) :=
+theorem Equiv.exists_left {x y : PSet} (h : Equiv x y) : ∀ i, ∃ j, Equiv (x.Func i) (y.Func j) :=
   (equiv_iff.1 h).1
-
-/--
-theorem `Equiv.exists_right` / 定理 `Equiv.exists_right`
-
-English:
-theorem Equiv.exists_right
-  given: {x y : PSet} (h : Equiv x y)
-  statement: forall j, exists i, Equiv (x.Func i) (y.Func j)
-  proof: (equiv_iff.1 h).2
-
-@[refl]
-
-中文:
-定理 等价.存在_right
-  条件: {x y : 命题集合} (h : 等价 x y)
-  结论: 对任意 j, 存在 i, 等价 (x.Func i) (y.Func j)
-  证明: (equiv_iff.1 h).2
-
-@[refl]
-
-Depends on / 依赖: equiv_iff
+/-
+**PSet.Equiv.exists_right** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → ∀ (j : y.Type), ∃ i, (x.F
+unc i).Equiv (y.Func j)
+参数：j : y.Type；x.Func i；y.Func j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PSet.equiv_iff`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}},   x.Equiv y ↔ (∀ (i
+ : x.Type), ∃ j, (x.Func i).Equiv (y.Func j)) ∧ ∀ (j : y.Type), ∃ i, (x.Func i).
+Equi…
 -/
-theorem Equiv.exists_right {x y : PSet} (h : Equiv x y) : forall j, exists i, Equiv (x.Func i) (y.Func j) :=
+theorem Equiv.exists_right {x y : PSet} (h : Equiv x y) : ∀ j, ∃ i, Equiv (x.Func i) (y.Func j) :=
   (equiv_iff.1 h).2
 
 @[refl]
-/--
-theorem `Equiv.refl` / 定理 `Equiv.refl`
-
-English:
-theorem Equiv.refl
-  statement: forall x, Equiv x x
-
-中文:
-定理 等价.refl
-  结论: 对任意 x, 等价 x x
+/-
+**PSet.Equiv.refl** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ (x : PSet.{u_1}), x.Equiv x
+参数：x : PSet.{u_1}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem Equiv.refl : forall x, Equiv x x
+protected theorem Equiv.refl : ∀ x, Equiv x x
   | ⟨_, _⟩ => ⟨fun a => ⟨a, Equiv.refl _⟩, fun a => ⟨a, Equiv.refl _⟩⟩
-
-/--
-theorem `Equiv.rfl` / 定理 `Equiv.rfl`
-
-English:
-theorem Equiv.rfl
-  given: {x}
-  statement: Equiv x x
-  proof: Equiv.refl x
-
-中文:
-定理 等价.rfl
-  条件: {x}
-  结论: 等价 x x
-  证明: Equiv.refl x
+/-
+**PSet.Equiv.rfl** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x : PSet.{u_1}}, x.Equiv x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.refl`：∀ (x : PSet.{u_1}), x.Equiv x
 -/
 protected theorem Equiv.rfl {x} : Equiv x x :=
   Equiv.refl x
-
-/--
-theorem `Equiv.euc` / 定理 `Equiv.euc`
-
-English:
-theorem Equiv.euc
-  statement: forall {x y z}, Equiv x y -> Equiv z y -> Equiv x z
-  proof: αβ a
-        let ⟨c, bc⟩ := βγ b
-        ⟨c, Equiv.euc ab bc⟩,
-      fun c =>
-        let ⟨b, cb⟩ := γβ c
-        let ⟨a, ba⟩ := βα b
-        ⟨a, Equiv.euc ba cb⟩ ⟩
-
-@[symm]
-
-中文:
-定理 等价.euc
-  结论: 对任意 {x y z}, 等价 x y -> 等价 z y -> 等价 x z
-  证明: αβ a
-        let ⟨c, bc⟩ := βγ b
-        ⟨c, Equiv.euc ab bc⟩,
-      fun c =>
-        let ⟨b, cb⟩ := γβ c
-        let ⟨a, ba⟩ := βα b
-        ⟨a, Equiv.euc ba cb⟩ ⟩
-
-@[symm]
+/-
+**PSet.Equiv.euc** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, x.Equiv y → z.Equiv 
+y → x.Equiv z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem Equiv.euc : forall {x y z}, Equiv x y -> Equiv z y -> Equiv x z
+protected theorem Equiv.euc : ∀ {x y z}, Equiv x y → Equiv z y → Equiv x z
   | ⟨_, _⟩, ⟨_, _⟩, ⟨_, _⟩, ⟨αβ, βα⟩, ⟨γβ, βγ⟩ =>
     ⟨ fun a =>
         let ⟨b, ab⟩ := αβ a
@@ -291,157 +199,93 @@ protected theorem Equiv.euc : forall {x y z}, Equiv x y -> Equiv z y -> Equiv x 
         ⟨a, Equiv.euc ba cb⟩ ⟩
 
 @[symm]
-/--
-theorem `Equiv.symm` / 定理 `Equiv.symm`
-
-English:
-theorem Equiv.symm
-  given: {x y}
-  statement: Equiv x y -> Equiv y x
-  proof: (Equiv.refl y).euc
-
-中文:
-定理 等价.symm
-  条件: {x y}
-  结论: 等价 x y -> 等价 y x
-  证明: (Equiv.refl y).euc
+/-
+**PSet.Equiv.symm** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equiv x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.euc`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, x.
+Equiv y → z.Equiv y → x.Equiv z
+· 使用定理 `PSet.Equiv.refl`：∀ (x : PSet.{u_1}), x.Equiv x
 -/
-protected theorem Equiv.symm {x y} : Equiv x y -> Equiv y x :=
+protected theorem Equiv.symm {x y} : Equiv x y → Equiv y x :=
   (Equiv.refl y).euc
-
-/--
-theorem `Equiv.comm` / 定理 `Equiv.comm`
-
-English:
-theorem Equiv.comm
-  given: {x y}
-  statement: Equiv x y ↔ Equiv y x
-  proof: ⟨Equiv.symm, Equiv.symm⟩
-
-@[trans]
-
-中文:
-定理 等价.comm
-  条件: {x y}
-  结论: 等价 x y ↔ 等价 y x
-  证明: ⟨Equiv.symm, Equiv.symm⟩
-
-@[trans]
+/-
+**PSet.Equiv.comm** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y ↔ y.Equiv x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
 protected theorem Equiv.comm {x y} : Equiv x y ↔ Equiv y x :=
   ⟨Equiv.symm, Equiv.symm⟩
 
 @[trans]
-/--
-theorem `Equiv.trans` / 定理 `Equiv.trans`
-
-English:
-theorem Equiv.trans
-  given: {x y z} (h1 : Equiv x y) (h2 : Equiv y z)
-  statement: Equiv x z
-  proof: h1.euc h2.symm
-
-中文:
-定理 等价.trans
-  条件: {x y z} (h1 : 等价 x y) (h2 : 等价 y z)
-  结论: 等价 x z
-  证明: h1.euc h2.symm
+/-
+**PSet.Equiv.trans** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, x.Equiv y → y.Equiv 
+z → x.Equiv z
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.euc`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, x.
+Equiv y → z.Equiv y → x.Equiv z
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
 protected theorem Equiv.trans {x y z} (h1 : Equiv x y) (h2 : Equiv y z) : Equiv x z :=
   h1.euc h2.symm
-
-/--
-theorem `equiv_of_isEmpty` / 定理 `equiv_of_isEmpty`
-
-English:
-theorem equiv_of_isEmpty
-  given: (x y : PSet) [IsEmpty x.Type] [IsEmpty y.Type]
-  statement: Equiv x y
-  proof: equiv_iff.2 by simp
-
-中文:
-定理 equiv_of_isEmpty
-  条件: (x y : 命题集合) [是空 x.类型] [是空 y.类型]
-  结论: 等价 x y
-  证明: equiv_iff.2 by simp
+/-
+**PSet.equiv_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ (x : PSet.{u_1}) (y : PSet.{u_2}) [IsEmpty x.Type] [IsEmpty y.Type], x.E
+quiv y
+参数：x : PSet.{u_1}；y : PSet.{u_2}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PSet.equiv_iff`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}},   x.Equiv y ↔ (∀ (i
+ : x.Type), ∃ j, (x.Func i).Equiv (y.Func j)) ∧ ∀ (j : y.Type), ∃ i, (x.Func i).
+Equi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 protected theorem equiv_of_isEmpty (x y : PSet) [IsEmpty x.Type] [IsEmpty y.Type] : Equiv x y :=
-equiv_iff.2 by simp
-
-/--
-Instance `setoid` / 实例 `setoid`
-
-English:
-instance setoid
-  signature: : Setoid PSet
-  body: ⟨PSet.Equiv, Equiv.refl, Equiv.symm, Equiv.trans⟩
-
-中文:
-实例 setoid
-  签名: : 集合等价关系 命题集合
-  定义体: ⟨PSet.Equiv, Equiv.refl, Equiv.symm, Equiv.trans⟩
-
-Depends on / 依赖: Equiv.refl, Equiv.symm, Equiv.trans, PSet.Equiv
+  equiv_iff.2 <| by simp
+/-
+**PSet.setoid** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+形式化陈述：setoid : Setoid PSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance setoid : Setoid PSet :=
   ⟨PSet.Equiv, Equiv.refl, Equiv.symm, Equiv.trans⟩
 
-/--
-Definition of `Subset` / `Subset` 的定义
+/-- A pre-set is a subset of another pre-set if every element of the first family is extensionally
+equivalent to some element of the second family. -/
+/-
+**PSet.Subset** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：PSet.{u_1} → PSet.{u_2} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Subset
-  signature: (x y : PSet)
-  body: forall a, exists b, Equiv (x.Func a) (y.Func b)
-
-中文:
-定义 子集
-  签名: (x y : 命题集合)
-  定义体: forall a, exists b, Equiv (x.Func a) (y.Func b)
+--- 原说明 ---
+A pre-set is a subset of another pre-set if every element of the first family is
+ extensionally
+equivalent to some element of the second family.
 -/
 protected def Subset (x y : PSet) : Prop :=
-  forall a, exists b, Equiv (x.Func a) (y.Func b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE PSet
-  body: ⟨PSet.Subset⟩
-
-中文:
-实例 :
-  签名: LE 命题集合
-  定义体: ⟨PSet.Subset⟩
-
-Depends on / 依赖: PSet.Subset, Subset
+  ∀ a, ∃ b, Equiv (x.Func a) (y.Func b)
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE PSet :=
   ⟨PSet.Subset⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preorder PSet
-  body: ⟨a, Equiv.refl _⟩
-  le_trans x y z hxy hyz a := by
-    obtain ⟨b, hb⟩ := hxy a
-    obtain ⟨c, hc⟩ := hyz b
-    exact ⟨c, hb.trans hc⟩
-
-中文:
-实例 :
-  签名: 预序 命题集合
-  定义体: ⟨a, Equiv.refl _⟩
-  le_trans x y z hxy hyz a := by
-    obtain ⟨b, hb⟩ := hxy a
-    obtain ⟨c, hc⟩ := hyz b
-    exact ⟨c, hb.trans hc⟩
-
-Depends on / 依赖: Equiv.refl
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preorder PSet where
   le_refl _ a := ⟨a, Equiv.refl _⟩
@@ -449,31 +293,15 @@ instance : Preorder PSet where
     obtain ⟨b, hb⟩ := hxy a
     obtain ⟨c, hc⟩ := hyz b
     exact ⟨c, hb.trans hc⟩
-
-/--
-theorem `Equiv.ext` / 定理 `Equiv.ext`
-
-English:
-theorem Equiv.ext
-  statement: forall x y : PSet, Equiv x y ↔ x subseteq y ∧ y subseteq x
-  proof: βα b
-        ⟨a, Equiv.symm h⟩⟩,
-      fun ⟨αβ, βα⟩ =>
-      ⟨αβ, fun b =>
-        let ⟨a, h⟩ := βα b
-        ⟨a, Equiv.symm h⟩⟩⟩
-
-中文:
-定理 等价.ext
-  结论: 对任意 x y : 命题集合, 等价 x y ↔ x subseteq y ∧ y subseteq x
-  证明: βα b
-        ⟨a, Equiv.symm h⟩⟩,
-      fun ⟨αβ, βα⟩ =>
-      ⟨αβ, fun b =>
-        let ⟨a, h⟩ := βα b
-        ⟨a, Equiv.symm h⟩⟩⟩
+/-
+**PSet.Equiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ (x y : PSet.{u_1}), x.Equiv y ↔ x ⊆ y ∧ y ⊆ x
+参数：x y : PSet.{u_1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
-theorem Equiv.ext : forall x y : PSet, Equiv x y ↔ x subseteq y ∧ y subseteq x
+theorem Equiv.ext : ∀ x y : PSet, Equiv x y ↔ x ⊆ y ∧ y ⊆ x
   | ⟨_, _⟩, ⟨_, _⟩ =>
     ⟨fun ⟨αβ, βα⟩ =>
       ⟨αβ, fun b =>
@@ -483,33 +311,17 @@ theorem Equiv.ext : forall x y : PSet, Equiv x y ↔ x subseteq y ∧ y subseteq
       ⟨αβ, fun b =>
         let ⟨a, h⟩ := βα b
         ⟨a, Equiv.symm h⟩⟩⟩
-
-/--
-theorem `Subset.congr_left` / 定理 `Subset.congr_left`
-
-English:
-theorem Subset.congr_left
-  statement: forall {x y z : PSet}, Equiv x y -> (x subseteq z ↔ y subseteq z)
-  proof: βα b
-      let ⟨c, ac⟩ := αγ a
-      ⟨c, (Equiv.symm ba).trans ac⟩,
-      fun βγ a =>
-      let ⟨b, ab⟩ := αβ a
-      let ⟨c, bc⟩ := βγ b
-      ⟨c, Equiv.trans ab bc⟩⟩
-
-中文:
-定理 子集.congr_left
-  结论: 对任意 {x y z : 命题集合}, 等价 x y -> (x subseteq z ↔ y subseteq z)
-  证明: βα b
-      let ⟨c, ac⟩ := αγ a
-      ⟨c, (Equiv.symm ba).trans ac⟩,
-      fun βγ a =>
-      let ⟨b, ab⟩ := αβ a
-      let ⟨c, bc⟩ := βγ b
-      ⟨c, Equiv.trans ab bc⟩⟩
+/-
+**PSet.Subset.congr_left** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Subset`。
+形式化陈述：∀ {x y z : PSet.{u_1}}, x.Equiv y → (x ⊆ z ↔ y ⊆ z)
+参数：x ⊆ z ↔ y ⊆ z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.trans`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, 
+x.Equiv y → y.Equiv z → x.Equiv z
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
-theorem Subset.congr_left : forall {x y z : PSet}, Equiv x y -> (x subseteq z ↔ y subseteq z)
+theorem Subset.congr_left : ∀ {x y z : PSet}, Equiv x y → (x ⊆ z ↔ y ⊆ z)
   | ⟨_, _⟩, ⟨_, _⟩, ⟨_, _⟩, ⟨αβ, βα⟩ =>
     ⟨fun αγ b =>
       let ⟨a, ba⟩ := βα b
@@ -519,37 +331,17 @@ theorem Subset.congr_left : forall {x y z : PSet}, Equiv x y -> (x subseteq z �
       let ⟨b, ab⟩ := αβ a
       let ⟨c, bc⟩ := βγ b
       ⟨c, Equiv.trans ab bc⟩⟩
-
-/--
-theorem `Subset.congr_right` / 定理 `Subset.congr_right`
-
-English:
-theorem Subset.congr_right
-  statement: forall {x y z : PSet}, Equiv x y -> (z subseteq x ↔ z subseteq y)
-  proof: γα c
-      let ⟨b, ab⟩ := αβ a
-      ⟨b, ca.trans ab⟩,
-      fun γβ c =>
-      let ⟨b, cb⟩ := γβ c
-      let ⟨a, ab⟩ := βα b
-      ⟨a, cb.trans (Equiv.symm ab)⟩⟩
-
-@[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
-
-中文:
-定理 子集.congr_right
-  结论: 对任意 {x y z : 命题集合}, 等价 x y -> (z subseteq x ↔ z subseteq y)
-  证明: γα c
-      let ⟨b, ab⟩ := αβ a
-      ⟨b, ca.trans ab⟩,
-      fun γβ c =>
-      let ⟨b, cb⟩ := γβ c
-      let ⟨a, ab⟩ := βα b
-      ⟨a, cb.trans (Equiv.symm ab)⟩⟩
-
-@[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
+/-
+**PSet.Subset.congr_right** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Subset`。
+形式化陈述：∀ {x y z : PSet.{u_1}}, x.Equiv y → (z ⊆ x ↔ z ⊆ y)
+参数：z ⊆ x ↔ z ⊆ y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.trans`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, 
+x.Equiv y → y.Equiv z → x.Equiv z
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
-theorem Subset.congr_right : forall {x y z : PSet}, Equiv x y -> (z subseteq x ↔ z subseteq y)
+theorem Subset.congr_right : ∀ {x y z : PSet}, Equiv x y → (z ⊆ x ↔ z ⊆ y)
   | ⟨_, _⟩, ⟨_, _⟩, ⟨_, _⟩, ⟨αβ, βα⟩ =>
     ⟨fun γα c =>
       let ⟨a, ca⟩ := γα c
@@ -561,189 +353,102 @@ theorem Subset.congr_right : forall {x y z : PSet}, Equiv x y -> (z subseteq x �
       ⟨a, cb.trans (Equiv.symm ab)⟩⟩
 
 @[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: (x y : PSet)
-  statement: x <= y ↔ x subseteq y
-  proof: Iff.rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
-
-中文:
-定理 le_def
-  条件: (x y : 命题集合)
-  结论: x <= y ↔ x subseteq y
-  证明: Iff.rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
-
-Depends on / 依赖: Iff.rfl
+/-
+**PSet.le_def** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：le_def (x y : PSet) : x <= y ↔ x subseteq y
+参数：x y : PSet。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def (x y : PSet) : x <= y ↔ x subseteq y :=
+theorem le_def (x y : PSet) : x ≤ y ↔ x ⊆ y :=
   Iff.rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
-/--
-theorem `lt_def` / 定理 `lt_def`
-
-English:
-theorem lt_def
-  given: (x y : PSet)
-  statement: x < y ↔ x ⊂ y
-  proof: Iff.rfl
-
-中文:
-定理 lt_def
-  条件: (x y : 命题集合)
-  结论: x < y ↔ x ⊂ y
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**PSet.lt_def** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：lt_def (x y : PSet) : x < y ↔ x ⊂ y
+参数：x y : PSet。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_def (x y : PSet) : x < y ↔ x ⊂ y :=
   Iff.rfl
 
-/--
-Definition of `Mem` / `Mem` 的定义
+/-- `x ∈ y` as pre-sets if `x` is extensionally equivalent to a member of the family `y`. -/
+/-
+**PSet.Mem** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：PSet.{u} → PSet.{u} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mem
-  signature: (y x : PSet.{u})
-  body: exists b, Equiv x (y.Func b)
-
-中文:
-定义 Mem
-  签名: (y x : 命题集合.{u})
-  定义体: exists b, Equiv x (y.Func b)
+--- 原说明 ---
+`x ∈ y` as pre-sets if `x` is extensionally equivalent to a member of the family
+ `y`.
 -/
 protected def Mem (y x : PSet.{u}) : Prop :=
-  exists b, Equiv x (y.Func b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership PSet PSet
-  body: ⟨PSet.Mem⟩
-
-中文:
-实例 :
-  签名: Membership 命题集合 命题集合
-  定义体: ⟨PSet.Mem⟩
-
-Depends on / 依赖: PSet.Mem
+  ∃ b, Equiv x (y.Func b)
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership PSet PSet :=
   ⟨PSet.Mem⟩
-
-/--
-theorem `mem_def` / 定理 `mem_def`
-
-English:
-theorem mem_def
-  given: {x y : PSet}
-  statement: x in y ↔ exists b, Equiv x (y.Func b)
-  proof: Iff.rfl
-
-中文:
-定理 mem_def
-  条件: {x y : 命题集合}
-  结论: x in y ↔ 存在 b, 等价 x (y.Func b)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**PSet.mem_def** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_def {x y : PSet} : x in y ↔ exists b, Equiv x (y.Func b)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_def {x y : PSet} : x in y ↔ exists b, Equiv x (y.Func b) :=
+theorem mem_def {x y : PSet} : x ∈ y ↔ ∃ b, Equiv x (y.Func b) :=
   Iff.rfl
-
-/--
-theorem `Mem.mk` / 定理 `Mem.mk`
-
-English:
-theorem Mem.mk
-  given: {α : Type u} (A : α -> PSet) (a : α)
-  statement: A a in mk α A
-  proof: ⟨a, Equiv.refl (A a)⟩
-
-中文:
-定理 Mem.mk
-  条件: {α : 类型u} (A : α -> 命题集合) (a : α)
-  结论: A a in mk α A
-  证明: ⟨a, Equiv.refl (A a)⟩
-
-Depends on / 依赖: Equiv.refl
+/-
+**PSet.Mem.mk** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Mem`。
+形式化陈述：∀ {α : Type u} (A : α → PSet.{u}) (a : α), A a ∈ PSet.mk α A
+参数：A : α → PSet.{u}；a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.refl`：∀ (x : PSet.{u_1}), x.Equiv x
 -/
-theorem Mem.mk {α : Type u} (A : α -> PSet) (a : α) : A a in mk α A :=
+theorem Mem.mk {α : Type u} (A : α → PSet) (a : α) : A a ∈ mk α A :=
   ⟨a, Equiv.refl (A a)⟩
-
-/--
-theorem `func_mem` / 定理 `func_mem`
-
-English:
-theorem func_mem
-  given: (x : PSet) (i : x.Type)
-  statement: x.Func i in x
-  proof: Mem.mk _ _
-
-中文:
-定理 func_mem
-  条件: (x : 命题集合) (i : x.类型)
-  结论: x.Func i in x
-  证明: Mem.mk _ _
-
-Depends on / 依赖: Mem.mk
+/-
+**PSet.func_mem** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：func_mem (x : PSet) (i : x.Type) : x.Func i in x
+参数：x : PSet；i : x.Type。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Mem.mk`：∀ {α : Type u} (A : α → PSet.{u}) (a : α), A a ∈ PSet.mk α 
+A
 -/
-theorem func_mem (x : PSet) (i : x.Type) : x.Func i in x := Mem.mk _ _
-
-/--
-theorem `Mem.ext` / 定理 `Mem.ext`
-
-English:
-theorem Mem.ext
-  statement: forall {x y : PSet.{u}}, (forall w : PSet.{u}, w in x ↔ w in y) -> Equiv x y
-  proof: (h (B b)).2 (Mem.mk B b)
-      ⟨a, ha.symm⟩⟩
-
-中文:
-定理 Mem.ext
-  结论: 对任意 {x y : 命题集合.{u}}, (对任意 w : 命题集合.{u}, w in x ↔ w in y) -> 等价 x y
-  证明: (h (B b)).2 (Mem.mk B b)
-      ⟨a, ha.symm⟩⟩
-
-Depends on / 依赖: Mem.mk
+theorem func_mem (x : PSet) (i : x.Type) : x.Func i ∈ x := Mem.mk _ _
+/-
+**PSet.Mem.ext** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Mem`。
+形式化陈述：∀ {x y : PSet.{u}}, (∀ (w : PSet.{u}), w ∈ x ↔ w ∈ y) → x.Equiv y
+参数：∀ (w : PSet.{u}), w ∈ x ↔ w ∈ y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PSet.Mem.mk`：∀ {α : Type u} (A : α → PSet.{u}) (a : α), A a ∈ PSet.mk α 
+A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
-theorem Mem.ext : forall {x y : PSet.{u}}, (forall w : PSet.{u}, w in x ↔ w in y) -> Equiv x y
+theorem Mem.ext : ∀ {x y : PSet.{u}}, (∀ w : PSet.{u}, w ∈ x ↔ w ∈ y) → Equiv x y
   | ⟨_, A⟩, ⟨_, B⟩, h =>
     ⟨fun a => (h (A a)).1 (Mem.mk A a), fun b =>
       let ⟨a, ha⟩ := (h (B b)).2 (Mem.mk B b)
       ⟨a, ha.symm⟩⟩
-
-/--
-theorem `Mem.congr_right` / 定理 `Mem.congr_right`
-
-English:
-theorem Mem.congr_right
-  statement: forall {x y : PSet.{u}}, Equiv x y -> forall {w : PSet.{u}}, w in x ↔ w in y
-  proof: αβ a
-      ⟨b, ha.trans hb⟩,
-      fun ⟨b, hb⟩ =>
-      let ⟨a, ha⟩ := βα b
-      ⟨a, hb.euc ha⟩⟩
-
-中文:
-定理 Mem.congr_right
-  结论: 对任意 {x y : 命题集合.{u}}, 等价 x y -> 对任意 {w : 命题集合.{u}}, w in x ↔ w in y
-  证明: αβ a
-      ⟨b, ha.trans hb⟩,
-      fun ⟨b, hb⟩ =>
-      let ⟨a, ha⟩ := βα b
-      ⟨a, hb.euc ha⟩⟩
+/-
+**PSet.Mem.congr_right** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Mem`。
+形式化陈述：∀ {x y : PSet.{u}}, x.Equiv y → ∀ {w : PSet.{u}}, w ∈ x ↔ w ∈ y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.trans`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, 
+x.Equiv y → y.Equiv z → x.Equiv z
+· 使用定理 `PSet.Equiv.euc`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, x.
+Equiv y → z.Equiv y → x.Equiv z
 -/
-theorem Mem.congr_right : forall {x y : PSet.{u}}, Equiv x y -> forall {w : PSet.{u}}, w in x ↔ w in y
+theorem Mem.congr_right : ∀ {x y : PSet.{u}}, Equiv x y → ∀ {w : PSet.{u}}, w ∈ x ↔ w ∈ y
   | ⟨_, _⟩, ⟨_, _⟩, ⟨αβ, βα⟩, _ =>
     ⟨fun ⟨a, ha⟩ =>
       let ⟨b, hb⟩ := αβ a
@@ -751,112 +456,66 @@ theorem Mem.congr_right : forall {x y : PSet.{u}}, Equiv x y -> forall {w : PSet
       fun ⟨b, hb⟩ =>
       let ⟨a, ha⟩ := βα b
       ⟨a, hb.euc ha⟩⟩
-
-/--
-theorem `equiv_iff_mem` / 定理 `equiv_iff_mem`
-
-English:
-theorem equiv_iff_mem
-  given: {x y : PSet.{u}}
-  statement: Equiv x y ↔ forall {w : PSet.{u}}, w in x ↔ w in y
-  proof: ⟨Mem.congr_right,
-    match x, y with
-    | ⟨_, A⟩, ⟨_, B⟩ => fun h =>
-      ⟨fun a => h.1 (Mem.mk A a), fun b =>
-        let ⟨a, h⟩ := h.2 (Mem.mk B b)
-        ⟨a, h.symm⟩⟩⟩
-
-中文:
-定理 equiv_iff_mem
-  条件: {x y : 命题集合.{u}}
-  结论: 等价 x y ↔ 对任意 {w : 命题集合.{u}}, w in x ↔ w in y
-  证明: ⟨Mem.congr_right,
-    match x, y with
-    | ⟨_, A⟩, ⟨_, B⟩ => fun h =>
-      ⟨fun a => h.1 (Mem.mk A a), fun b =>
-        let ⟨a, h⟩ := h.2 (Mem.mk B b)
-        ⟨a, h.symm⟩⟩⟩
-
-Depends on / 依赖: Mem.congr_right, Mem.mk, congr_right, h.symm
+/-
+**PSet.equiv_iff_mem** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：equiv_iff_mem {x y : PSet.{u}} : Equiv x y ↔ forall {w : PSet.{u}}, w in x
+ ↔ w in y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Mem.congr_right`：∀ {x y : PSet.{u}}, x.Equiv y → ∀ {w : PSet.{u}}, 
+w ∈ x ↔ w ∈ y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PSet.Mem.mk`：∀ {α : Type u} (A : α → PSet.{u}) (a : α), A a ∈ PSet.mk α 
+A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
-theorem equiv_iff_mem {x y : PSet.{u}} : Equiv x y ↔ forall {w : PSet.{u}}, w in x ↔ w in y :=
+theorem equiv_iff_mem {x y : PSet.{u}} : Equiv x y ↔ ∀ {w : PSet.{u}}, w ∈ x ↔ w ∈ y :=
   ⟨Mem.congr_right,
     match x, y with
     | ⟨_, A⟩, ⟨_, B⟩ => fun h =>
       ⟨fun a => h.1 (Mem.mk A a), fun b =>
         let ⟨a, h⟩ := h.2 (Mem.mk B b)
         ⟨a, h.symm⟩⟩⟩
-
-/--
-theorem `Mem.congr_left` / 定理 `Mem.congr_left`
-
-English:
-theorem Mem.congr_left
-  statement: forall {x y : PSet.{u}}, Equiv x y -> forall {w : PSet.{u}}, x in w ↔ y in w
-
-中文:
-定理 Mem.congr_left
-  结论: 对任意 {x y : 命题集合.{u}}, 等价 x y -> 对任意 {w : 命题集合.{u}}, x in w ↔ y in w
+/-
+**PSet.Mem.congr_left** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Mem`。
+形式化陈述：∀ {x y : PSet.{u}}, x.Equiv y → ∀ {w : PSet.{u}}, x ∈ w ↔ y ∈ w
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.trans`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, 
+x.Equiv y → y.Equiv z → x.Equiv z
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
-theorem Mem.congr_left : forall {x y : PSet.{u}}, Equiv x y -> forall {w : PSet.{u}}, x in w ↔ y in w
+theorem Mem.congr_left : ∀ {x y : PSet.{u}}, Equiv x y → ∀ {w : PSet.{u}}, x ∈ w ↔ y ∈ w
   | _, _, h, ⟨_, _⟩ => ⟨fun ⟨a, ha⟩ => ⟨a, h.symm.trans ha⟩, fun ⟨a, ha⟩ => ⟨a, h.trans ha⟩⟩
-
-/--
-theorem `mem_of_subset` / 定理 `mem_of_subset`
-
-English:
-theorem mem_of_subset
-  given: {x y z : PSet}
-  statement: x subseteq y -> z in x -> z in y
-
-中文:
-定理 mem_of_subset
-  条件: {x y z : 命题集合}
-  结论: x subseteq y -> z in x -> z in y
+/-
+**PSet.mem_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ {x y z : PSet.{u_1}}, x ⊆ y → z ∈ x → z ∈ y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `PSet.Equiv.trans`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, 
+x.Equiv y → y.Equiv z → x.Equiv z
 -/
-theorem mem_of_subset {x y z : PSet} : x subseteq y -> z in x -> z in y
+theorem mem_of_subset {x y z : PSet} : x ⊆ y → z ∈ x → z ∈ y
   | h₁, ⟨a, h₂⟩ => (h₁ a).elim fun b h₃ => ⟨b, h₂.trans h₃⟩
-
-/--
-theorem `subset_iff` / 定理 `subset_iff`
-
-English:
-theorem subset_iff
-  given: {x y : PSet}
-  statement: x subseteq y ↔ forall ⦃z⦄, z in x -> z in y
-  proof: ⟨fun h _ => mem_of_subset h, fun h a => h (Mem.mk _ a)⟩
-
-中文:
-定理 subset_iff
-  条件: {x y : 命题集合}
-  结论: x subseteq y ↔ 对任意 ⦃z⦄, z in x -> z in y
-  证明: ⟨fun h _ => mem_of_subset h, fun h a => h (Mem.mk _ a)⟩
-
-Depends on / 依赖: Mem.mk, mem_of_subset
+/-
+**PSet.subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：subset_iff {x y : PSet} : x subseteq y ↔ forall ⦃z⦄, z in x -> z in y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.mem_of_subset`：∀ {x y z : PSet.{u_1}}, x ⊆ y → z ∈ x → z ∈ y
+· 使用定理 `PSet.Mem.mk`：∀ {α : Type u} (A : α → PSet.{u}) (a : α), A a ∈ PSet.mk α 
+A
 -/
-theorem subset_iff {x y : PSet} : x subseteq y ↔ forall ⦃z⦄, z in x -> z in y :=
+theorem subset_iff {x y : PSet} : x ⊆ y ↔ ∀ ⦃z⦄, z ∈ x → z ∈ y :=
   ⟨fun h _ => mem_of_subset h, fun h a => h (Mem.mk _ a)⟩
-
-/--
-theorem `mem_wf_aux` / 定理 `mem_wf_aux`
-
-English:
-theorem mem_wf_aux
-  statement: forall {x y : PSet.{u}}, Equiv x y -> Acc (· in ·) y
-  proof: H.exists_right b
-      have H := ha.trans hc.symm
-      rw [mk_func] at H
-      exact mem_wf_aux H⟩
-
-中文:
-定理 mem_wf_aux
-  结论: 对任意 {x y : 命题集合.{u}}, 等价 x y -> Acc (· in ·) y
-  证明: H.exists_right b
-      have H := ha.trans hc.symm
-      rw [mk_func] at H
-      exact mem_wf_aux H⟩
+/-
+**PSet.mem_wf_aux** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem mem_wf_aux : forall {x y : PSet.{u}}, Equiv x y -> Acc (· in ·) y
+private theorem mem_wf_aux : ∀ {x y : PSet.{u}}, Equiv x y → Acc (· ∈ ·) y
   | ⟨α, A⟩, ⟨β, B⟩, H =>
     ⟨_, by
       rintro ⟨γ, C⟩ ⟨b, hc⟩
@@ -864,620 +523,354 @@ private theorem mem_wf_aux : forall {x y : PSet.{u}}, Equiv x y -> Acc (· in ·
       have H := ha.trans hc.symm
       rw [mk_func] at H
       exact mem_wf_aux H⟩
-
-/--
-theorem `mem_wf` / 定理 `mem_wf`
-
-English:
-theorem mem_wf
-  statement: @WellFounded PSet (· in ·)
-  proof: ⟨fun x => mem_wf_aux Equiv.refl x⟩
-
-中文:
-定理 mem_wf
-  结论: @良基 命题集合 (· in ·)
-  证明: ⟨fun x => mem_wf_aux Equiv.refl x⟩
-
-Depends on / 依赖: Equiv.refl, PseudoEMetricSpace, PseudoMetricSpace, PseudoMetricSpace.toPseudoEMetricSpace, mem_wf_aux, toPseudoEMetricSpace
+/-
+**PSet.mem_wf** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_wf : @WellFounded PSet (· in ·)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.SetTheory.ZFC.PSet.0.PSet.mem_wf_aux`：∀ {x y : PSet.{u}
+}, x.Equiv y → Acc (fun x1 x2 => x1 ∈ x2) y
+· 使用定理 `PSet.Equiv.refl`：∀ (x : PSet.{u_1}), x.Equiv x
 -/
-theorem mem_wf : @WellFounded PSet (· in ·) :=
-⟨fun x => mem_wf_aux Equiv.refl x⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsWellFounded PSet (· in ·)
-  body: ⟨mem_wf⟩
-
-中文:
-实例 :
-  签名: 是良基 命题集合 (· in ·)
-  定义体: ⟨mem_wf⟩
-
-Depends on / 依赖: mem_wf
+theorem mem_wf : @WellFounded PSet (· ∈ ·) :=
+  ⟨fun x => mem_wf_aux <| Equiv.refl x⟩
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsWellFounded PSet (· in ·) :=
+instance : IsWellFounded PSet (· ∈ ·) :=
   ⟨mem_wf⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WellFoundedRelation PSet
-  body: ⟨_, mem_wf⟩
-
-中文:
-实例 :
-  签名: 良基关系 命题集合
-  定义体: ⟨_, mem_wf⟩
-
-Depends on / 依赖: mem_wf
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WellFoundedRelation PSet :=
   ⟨_, mem_wf⟩
-
-/--
-theorem `mem_asymm` / 定理 `mem_asymm`
-
-English:
-theorem mem_asymm
-  given: {x y : PSet}
-  statement: x in y -> y ∉ x
-  proof: asymm_of (· in ·)
-
-中文:
-定理 mem_asymm
-  条件: {x y : 命题集合}
-  结论: x in y -> y ∉ x
-  证明: asymm_of (· in ·)
-
-Depends on / 依赖: asymm_of
+/-
+**PSet.mem_asymm** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_asymm {x y : PSet} : x in y -> y ∉ x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `asymm_of`：∀ {α : Sort u_1} (r : α → α → Prop) {a b : α} [Std.Asymm r], r
+ a b → ¬r b a
+· 使用定理 `instAsymmOfIsWellFounded`：∀ {α : Type u} (r : α → α → Prop) [IsWellFound
+ed α r], Std.Asymm r
+· 使用定理 `PSet.instIsWellFoundedMem`：IsWellFounded PSet.{u_1} fun x1 x2 => x1 ∈ x2
 -/
-theorem mem_asymm {x y : PSet} : x in y -> y ∉ x :=
-  asymm_of (· in ·)
-
-/--
-theorem `mem_irrefl` / 定理 `mem_irrefl`
-
-English:
-theorem mem_irrefl
-  given: (x : PSet)
-  statement: x ∉ x
-  proof: irrefl_of (· in ·) x
-
-中文:
-定理 mem_irrefl
-  条件: (x : 命题集合)
-  结论: x ∉ x
-  证明: irrefl_of (· in ·) x
-
-Depends on / 依赖: irrefl_of
+theorem mem_asymm {x y : PSet} : x ∈ y → y ∉ x :=
+  asymm_of (· ∈ ·)
+/-
+**PSet.mem_irrefl** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_irrefl (x : PSet) : x ∉ x
+参数：x : PSet。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `irrefl_of`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Irrefl r] (a : α), ¬
+r a a
+· 使用定理 `Function.instIrreflSwapProp`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Ir
+refl r], Std.Irrefl (Function.swap r)
+· 使用定理 `Std.instIrreflOfAsymm`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Asymm r]
+, Std.Irrefl r
+· 使用定理 `Function.instAsymmSwapProp`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Asy
+mm r], Std.Asymm (Function.swap r)
+· 使用定理 `instAsymmOfIsWellFounded`：∀ {α : Type u} (r : α → α → Prop) [IsWellFound
+ed α r], Std.Asymm r
+· 使用定理 `PSet.instIsWellFoundedMem`：IsWellFounded PSet.{u_1} fun x1 x2 => x1 ∈ x2
 -/
 theorem mem_irrefl (x : PSet) : x ∉ x :=
-  irrefl_of (· in ·) x
-
-/--
-theorem `not_subset_of_mem` / 定理 `not_subset_of_mem`
-
-English:
-theorem not_subset_of_mem
-  given: {x y : PSet} (h : x in y)
-  statement: ¬ y subseteq x
-  proof: fun h' => mem_irrefl _ mem_of_subset h' h
-
-中文:
-定理 not_subset_of_mem
-  条件: {x y : 命题集合} (h : x in y)
-  结论: ¬ y subseteq x
-  证明: fun h' => mem_irrefl _ mem_of_subset h' h
-
-Depends on / 依赖: mem_irrefl, mem_of_subset
+  irrefl_of (· ∈ ·) x
+/-
+**PSet.not_subset_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：not_subset_of_mem {x y : PSet} (h : x in y) : ¬ y subseteq x
+参数：h : x in y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.mem_irrefl`：mem_irrefl (x : PSet) : x ∉ x
+· 使用定理 `PSet.mem_of_subset`：∀ {x y z : PSet.{u_1}}, x ⊆ y → z ∈ x → z ∈ y
 -/
-theorem not_subset_of_mem {x y : PSet} (h : x in y) : ¬ y subseteq x :=
-fun h' => mem_irrefl _ mem_of_subset h' h
-
-/--
-theorem `notMem_of_subset` / 定理 `notMem_of_subset`
-
-English:
-theorem notMem_of_subset
-  given: {x y : PSet} (h : x subseteq y)
-  statement: y ∉ x
-  proof: imp_not_comm.2 not_subset_of_mem h
-
-中文:
-定理 notMem_of_subset
-  条件: {x y : 命题集合} (h : x subseteq y)
-  结论: y ∉ x
-  证明: imp_not_comm.2 not_subset_of_mem h
-
-Depends on / 依赖: imp_not_comm, not_subset_of_mem
+theorem not_subset_of_mem {x y : PSet} (h : x ∈ y) : ¬ y ⊆ x :=
+  fun h' ↦ mem_irrefl _ <| mem_of_subset h' h
+/-
+**PSet.notMem_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：notMem_of_subset {x y : PSet} (h : x subseteq y) : y ∉ x
+参数：h : x subseteq y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `imp_not_comm`：∀ {a b : Prop}, a → ¬b ↔ b → ¬a
+· 使用定理 `PSet.not_subset_of_mem`：not_subset_of_mem {x y : PSet} (h : x in y) : ¬ 
+y subseteq x
 -/
-theorem notMem_of_subset {x y : PSet} (h : x subseteq y) : y ∉ x :=
+theorem notMem_of_subset {x y : PSet} (h : x ⊆ y) : y ∉ x :=
   imp_not_comm.2 not_subset_of_mem h
 
-/--
-Definition of `toSet` / `toSet` 的定义
+/-- Convert a pre-set to a `Set` of pre-sets. -/
+/-
+**PSet.toSet** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：toSet (u : PSet.{u}) : Set PSet.{u}
+参数：u : PSet.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSet
-  signature: (u : PSet.{u})
-  body: { x | x in u }
-
-@[simp]
-
-中文:
-定义 toSet
-  签名: (u : 命题集合.{u})
-  定义体: { x | x in u }
-
-@[simp]
+--- 原说明 ---
+Convert a pre-set to a `Set` of pre-sets.
 -/
 def toSet (u : PSet.{u}) : Set PSet.{u} :=
-  { x | x in u }
+  { x | x ∈ u }
 
 @[simp]
-/--
-theorem `mem_toSet` / 定理 `mem_toSet`
-
-English:
-theorem mem_toSet
-  given: (a u : PSet.{u})
-  statement: a in u.toSet ↔ a in u
-  proof: Iff.rfl
-
-中文:
-定理 mem_toSet
-  条件: (a u : 命题集合.{u})
-  结论: a in u.toSet ↔ a in u
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**PSet.mem_toSet** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_toSet (a u : PSet.{u}) : a in u.toSet ↔ a in u
+参数：a u : PSet.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toSet (a u : PSet.{u}) : a in u.toSet ↔ a in u :=
+theorem mem_toSet (a u : PSet.{u}) : a ∈ u.toSet ↔ a ∈ u :=
   Iff.rfl
 
-/--
-Definition of `Nonempty` / `Nonempty` 的定义
+/-- A nonempty set is one that contains some element. -/
+/-
+**PSet.Nonempty** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：PSet.{u_1} → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Nonempty
-  signature: (u : PSet)
-  body: u.toSet.Nonempty
-
-中文:
-定义 非空
-  签名: (u : 命题集合)
-  定义体: u.toSet.Nonempty
+--- 原说明 ---
+A nonempty set is one that contains some element.
 -/
 protected def Nonempty (u : PSet) : Prop :=
   u.toSet.Nonempty
-
-/--
-theorem `nonempty_def` / 定理 `nonempty_def`
-
-English:
-theorem nonempty_def
-  given: (u : PSet)
-  statement: u.Nonempty ↔ exists x, x in u
-  proof: Iff.rfl
-
-中文:
-定理 nonempty_def
-  条件: (u : 命题集合)
-  结论: u.非空 ↔ 存在 x, x in u
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**PSet.nonempty_def** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：nonempty_def (u : PSet) : u.Nonempty ↔ exists x, x in u
+参数：u : PSet。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nonempty_def (u : PSet) : u.Nonempty ↔ exists x, x in u :=
+theorem nonempty_def (u : PSet) : u.Nonempty ↔ ∃ x, x ∈ u :=
   Iff.rfl
-
-/--
-theorem `nonempty_of_mem` / 定理 `nonempty_of_mem`
-
-English:
-theorem nonempty_of_mem
-  given: {x u : PSet} (h : x in u)
-  statement: u.Nonempty
-  proof: ⟨x, h⟩
-
-@[simp]
-
-中文:
-定理 nonempty_of_mem
-  条件: {x u : 命题集合} (h : x in u)
-  结论: u.非空
-  证明: ⟨x, h⟩
-
-@[simp]
+/-
+**PSet.nonempty_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：nonempty_of_mem {x u : PSet} (h : x in u) : u.Nonempty
+参数：h : x in u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonempty_of_mem {x u : PSet} (h : x in u) : u.Nonempty :=
+theorem nonempty_of_mem {x u : PSet} (h : x ∈ u) : u.Nonempty :=
   ⟨x, h⟩
 
 @[simp]
-/--
-theorem `nonempty_toSet_iff` / 定理 `nonempty_toSet_iff`
-
-English:
-theorem nonempty_toSet_iff
-  given: {u : PSet}
-  statement: u.toSet.Nonempty ↔ u.Nonempty
-  proof: Iff.rfl
-
-中文:
-定理 nonempty_toSet_iff
-  条件: {u : 命题集合}
-  结论: u.toSet.非空 ↔ u.非空
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**PSet.nonempty_toSet_iff** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：nonempty_toSet_iff {u : PSet} : u.toSet.Nonempty ↔ u.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem nonempty_toSet_iff {u : PSet} : u.toSet.Nonempty ↔ u.Nonempty :=
   Iff.rfl
-
-/--
-theorem `nonempty_type_iff_nonempty` / 定理 `nonempty_type_iff_nonempty`
-
-English:
-theorem nonempty_type_iff_nonempty
-  given: {x : PSet}
-  statement: Nonempty x.Type ↔ PSet.Nonempty x
-  proof: ⟨fun ⟨i⟩ => ⟨_, func_mem _ i⟩, fun ⟨_, j, _⟩ => ⟨j⟩⟩
-
-中文:
-定理 nonempty_type_iff_nonempty
-  条件: {x : 命题集合}
-  结论: 非空 x.类型 ↔ 命题集合.非空 x
-  证明: ⟨fun ⟨i⟩ => ⟨_, func_mem _ i⟩, fun ⟨_, j, _⟩ => ⟨j⟩⟩
-
-Depends on / 依赖: func_mem
+/-
+**PSet.nonempty_type_iff_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：nonempty_type_iff_nonempty {x : PSet} : Nonempty x.Type ↔ PSet.Nonempty x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.func_mem`：func_mem (x : PSet) (i : x.Type) : x.Func i in x
 -/
 theorem nonempty_type_iff_nonempty {x : PSet} : Nonempty x.Type ↔ PSet.Nonempty x :=
   ⟨fun ⟨i⟩ => ⟨_, func_mem _ i⟩, fun ⟨_, j, _⟩ => ⟨j⟩⟩
-
-/--
-theorem `nonempty_of_nonempty_type` / 定理 `nonempty_of_nonempty_type`
-
-English:
-theorem nonempty_of_nonempty_type
-  given: (x : PSet) [h : Nonempty x.Type]
-  statement: PSet.Nonempty x
-  proof: nonempty_type_iff_nonempty.1 h
-
-中文:
-定理 nonempty_of_nonempty_type
-  条件: (x : 命题集合) [h : 非空 x.类型]
-  结论: 命题集合.非空 x
-  证明: nonempty_type_iff_nonempty.1 h
-
-Depends on / 依赖: nonempty_type_iff_nonempty
+/-
+**PSet.nonempty_of_nonempty_type** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：nonempty_of_nonempty_type (x : PSet) [h : Nonempty x.Type] : PSet.Nonempty
+ x
+参数：x : PSet。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PSet.nonempty_type_iff_nonempty`：nonempty_type_iff_nonempty {x : PSet} :
+ Nonempty x.Type ↔ PSet.Nonempty x
 -/
 theorem nonempty_of_nonempty_type (x : PSet) [h : Nonempty x.Type] : PSet.Nonempty x :=
   nonempty_type_iff_nonempty.1 h
 
-/--
-theorem `Equiv.eq` / 定理 `Equiv.eq`
+/-- Two pre-sets are equivalent iff they have the same members. -/
+/-
+**PSet.Equiv.eq** 是 Mathlib 中的一个定理，位于命名空间 `PSet.Equiv`。
+形式化陈述：∀ {x y : PSet.{u_1}}, x.Equiv y ↔ x.toSet = y.toSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `PSet.equiv_iff_mem`：equiv_iff_mem {x y : PSet.{u}} : Equiv x y ↔ forall 
+{w : PSet.{u}}, w in x ↔ w in y
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
 
-English:
-theorem Equiv.eq
-  given: {x y : PSet}
-  statement: Equiv x y ↔ toSet x = toSet y
-  proof: equiv_iff_mem.trans .symm Set.ext_iff
-
-中文:
-定理 等价.eq
-  条件: {x y : 命题集合}
-  结论: 等价 x y ↔ toSet x = toSet y
-  证明: equiv_iff_mem.trans .symm Set.ext_iff
-
-Depends on / 依赖: Set.ext_iff, equiv_iff_mem, equiv_iff_mem.trans, ext_iff
+--- 原说明 ---
+Two pre-sets are equivalent iff they have the same members.
 -/
 theorem Equiv.eq {x y : PSet} : Equiv x y ↔ toSet x = toSet y :=
-equiv_iff_mem.trans .symm Set.ext_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe PSet (Set PSet)
-  body: ⟨toSet⟩
-
-中文:
-实例 :
-  签名: Coe 命题集合 (集合 命题集合)
-  定义体: ⟨toSet⟩
+  equiv_iff_mem.trans <| .symm Set.ext_iff
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe PSet (Set PSet) :=
   ⟨toSet⟩
 
-/--
-Definition of `empty` / `empty` 的定义
+/-- The empty pre-set -/
+/-
+**PSet.empty** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：PSet.{u_1}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition empty
-  signature: : PSet
-  body: ⟨_, PEmpty.elim⟩
-
-中文:
-定义 empty
-  签名: : 命题集合
-  定义体: ⟨_, PEmpty.elim⟩
+--- 原说明 ---
+The empty pre-set
 -/
 protected def empty : PSet :=
   ⟨_, PEmpty.elim⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EmptyCollection PSet
-  body: ⟨PSet.empty⟩
-
-中文:
-实例 :
-  签名: EmptyCollection 命题集合
-  定义体: ⟨PSet.empty⟩
-
-Depends on / 依赖: PSet.empty
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EmptyCollection PSet :=
   ⟨PSet.empty⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited PSet
-  body: ⟨∅⟩
-
-中文:
-实例 :
-  签名: 可居 命题集合
-  定义体: ⟨∅⟩
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited PSet :=
   ⟨∅⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsEmpty («Type» ∅)
-  body: ⟨PEmpty.elim⟩
-
-中文:
-实例 :
-  签名: 是空 («类型» ∅)
-  定义体: ⟨PEmpty.elim⟩
-
-Depends on / 依赖: PEmpty, PEmpty.elim
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsEmpty («Type» ∅) :=
   ⟨PEmpty.elim⟩
-
-/--
-theorem `empty_def` / 定理 `empty_def`
-
-English:
-theorem empty_def
-  statement: (∅ : PSet) = ⟨_, PEmpty.elim⟩
-  proof: by
-  simp [EmptyCollection.emptyCollection, PSet.empty]
-
-@[simp]
-
-中文:
-定理 empty_def
-  结论: (∅ : 命题集合) = ⟨_, 命题空.elim⟩
-  证明: by
-  simp [EmptyCollection.emptyCollection, PSet.empty]
-
-@[simp]
-
-Depends on / 依赖: EmptyCollection, EmptyCollection.emptyCollection, PSet.empty, emptyCollection
+/-
+**PSet.empty_def** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：empty_def : (∅ : PSet) = ⟨_, PEmpty.elim⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem empty_def : (∅ : PSet) = ⟨_, PEmpty.elim⟩ := by
   simp [EmptyCollection.emptyCollection, PSet.empty]
 
 @[simp]
-/--
-theorem `notMem_empty` / 定理 `notMem_empty`
-
-English:
-theorem notMem_empty
-  given: (x : PSet.{u})
-  statement: x ∉ (∅ : PSet.{u})
-  proof: IsEmpty.exists_iff.1
-
-@[simp]
-
-中文:
-定理 notMem_empty
-  条件: (x : 命题集合.{u})
-  结论: x ∉ (∅ : 命题集合.{u})
-  证明: IsEmpty.exists_iff.1
-
-@[simp]
-
-Depends on / 依赖: IsEmpty, IsEmpty.exists_iff, exists_iff
+/-
+**PSet.notMem_empty** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：notMem_empty (x : PSet.{u}) : x ∉ (∅ : PSet.{u})
+参数：x : PSet.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsEmpty.exists_iff`：exists_iff {p : α -> Prop} : (exists a, p a) ↔ False
+· 使用定理 `PSet.instIsEmptyTypeEmptyCollection`：IsEmpty ∅.Type
 -/
 theorem notMem_empty (x : PSet.{u}) : x ∉ (∅ : PSet.{u}) :=
   IsEmpty.exists_iff.1
 
 @[simp]
-/--
-theorem `toSet_empty` / 定理 `toSet_empty`
-
-English:
-theorem toSet_empty
-  statement: toSet ∅ = ∅
-  proof: by simp [toSet]
-
-@[simp]
-
-中文:
-定理 toSet_empty
-  结论: toSet ∅ = ∅
-  证明: by simp [toSet]
-
-@[simp]
+/-
+**PSet.toSet_empty** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：toSet_empty : toSet ∅ = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toSet_empty : toSet ∅ = ∅ := by simp [toSet]
 
 @[simp]
-/--
-theorem `empty_subset` / 定理 `empty_subset`
-
-English:
-theorem empty_subset
-  given: (x : PSet.{u})
-  statement: (∅ : PSet) subseteq x
-  proof: fun x => x.elim
-
-@[simp]
-
-中文:
-定理 empty_subset
-  条件: (x : 命题集合.{u})
-  结论: (∅ : 命题集合) subseteq x
-  证明: fun x => x.elim
-
-@[simp]
-
-Depends on / 依赖: x.elim
+/-
+**PSet.empty_subset** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：empty_subset (x : PSet.{u}) : (∅ : PSet) subseteq x
+参数：x : PSet.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem empty_subset (x : PSet.{u}) : (∅ : PSet) subseteq x := fun x => x.elim
+theorem empty_subset (x : PSet.{u}) : (∅ : PSet) ⊆ x := fun x => x.elim
 
 @[simp]
-/--
-theorem `not_nonempty_empty` / 定理 `not_nonempty_empty`
-
-English:
-theorem not_nonempty_empty
-  statement: ¬PSet.Nonempty ∅
-  proof: by simp [PSet.Nonempty]
-
-中文:
-定理 not_nonempty_empty
-  结论: ¬命题集合.非空 ∅
-  证明: by simp [PSet.Nonempty]
-
-Depends on / 依赖: Nonempty, PSet.Nonempty
+/-
+**PSet.not_nonempty_empty** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：not_nonempty_empty : ¬PSet.Nonempty ∅
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PSet.toSet_empty`：toSet_empty : toSet ∅ = ∅
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem not_nonempty_empty : ¬PSet.Nonempty ∅ := by simp [PSet.Nonempty]
-
-/--
-theorem `equiv_empty` / 定理 `equiv_empty`
-
-English:
-theorem equiv_empty
-  given: (x : PSet) [IsEmpty x.Type]
-  statement: Equiv x ∅
-  proof: PSet.equiv_of_isEmpty x _
-
-中文:
-定理 equiv_empty
-  条件: (x : 命题集合) [是空 x.类型]
-  结论: 等价 x ∅
-  证明: PSet.equiv_of_isEmpty x _
+/-
+**PSet.equiv_empty** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ (x : PSet.{u_1}) [IsEmpty x.Type], x.Equiv ∅
+参数：x : PSet.{u_1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.equiv_of_isEmpty`：∀ (x : PSet.{u_1}) (y : PSet.{u_2}) [IsEmpty x.Ty
+pe] [IsEmpty y.Type], x.Equiv y
+· 使用定理 `PSet.instIsEmptyTypeEmptyCollection`：IsEmpty ∅.Type
 -/
 protected theorem equiv_empty (x : PSet) [IsEmpty x.Type] : Equiv x ∅ :=
   PSet.equiv_of_isEmpty x _
 
-/--
-Definition of `insert` / `insert` 的定义
+/-- Insert an element into a pre-set -/
+/-
+**PSet.insert** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：PSet.{u_1} → PSet.{u_1} → PSet.{u_1}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition insert
-  signature: (x y : PSet)
-  body: ⟨Option y.Type, fun o => Option.casesOn o x y.Func⟩
-
-中文:
-定义 insert
-  签名: (x y : 命题集合)
-  定义体: ⟨Option y.Type, fun o => Option.casesOn o x y.Func⟩
+--- 原说明 ---
+Insert an element into a pre-set
 -/
 protected def insert (x y : PSet) : PSet :=
   ⟨Option y.Type, fun o => Option.casesOn o x y.Func⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Insert PSet PSet
-  body: ⟨PSet.insert⟩
-
-中文:
-实例 :
-  签名: Insert 命题集合 命题集合
-  定义体: ⟨PSet.insert⟩
-
-Depends on / 依赖: PSet.insert, insert
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Insert PSet PSet :=
   ⟨PSet.insert⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Singleton PSet PSet
-  body: ⟨fun s => insert s ∅⟩
-
-中文:
-实例 :
-  签名: 单例 命题集合 命题集合
-  定义体: ⟨fun s => insert s ∅⟩
-
-Depends on / 依赖: insert
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Singleton PSet PSet :=
   ⟨fun s => insert s ∅⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulSingleton PSet PSet
-  body: ⟨fun _ => rfl⟩
-
-中文:
-实例 :
-  签名: LawfulSingleton 命题集合 命题集合
-  定义体: ⟨fun _ => rfl⟩
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulSingleton PSet PSet :=
   ⟨fun _ => rfl⟩
-
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x y : PSet) : Inhabited (insert x y).Type :=
   inferInstanceAs (Inhabited <| Option y.Type)
 
 @[simp]
-/--
-theorem `mem_insert_iff` / 定理 `mem_insert_iff`
-
-English:
-theorem mem_insert_iff
-  statement: forall {x y z : PSet.{u}}, x in insert y z ↔ Equiv x y ∨ x in z
-
-中文:
-定理 mem_insert_iff
-  结论: 对任意 {x y z : 命题集合.{u}}, x in insert y z ↔ 等价 x y ∨ x in z
+/-
+**PSet.mem_insert_iff** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ {x y z : PSet.{u}}, x ∈ insert y z ↔ x.Equiv y ∨ x ∈ z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_insert_iff : forall {x y z : PSet.{u}}, x in insert y z ↔ Equiv x y ∨ x in z
+theorem mem_insert_iff : ∀ {x y z : PSet.{u}}, x ∈ insert y z ↔ Equiv x y ∨ x ∈ z
   | x, y, ⟨α, A⟩ =>
-    show (x in PSet.mk (Option α) fun o => Option.rec y A o) ↔ Equiv x y ∨ x in PSet.mk α A from
+    show (x ∈ PSet.mk (Option α) fun o => Option.rec y A o) ↔ Equiv x y ∨ x ∈ PSet.mk α A from
       ⟨fun m =>
         match m with
         | ⟨some a, ha⟩ => Or.inr ⟨a, ha⟩
@@ -1486,251 +879,165 @@ theorem mem_insert_iff : forall {x y z : PSet.{u}}, x in insert y z ↔ Equiv x 
         match m with
         | Or.inr ⟨a, ha⟩ => ⟨some a, ha⟩
         | Or.inl h => ⟨none, h⟩⟩
-
-/--
-theorem `mem_insert` / 定理 `mem_insert`
-
-English:
-theorem mem_insert
-  given: (x y : PSet)
-  statement: x in insert x y
-  proof: mem_insert_iff.2 Or.inl Equiv.rfl
-
-中文:
-定理 mem_insert
-  条件: (x y : 命题集合)
-  结论: x in insert x y
-  证明: mem_insert_iff.2 Or.inl Equiv.rfl
-
-Depends on / 依赖: Equiv.rfl, Or.inl, mem_insert_iff
+/-
+**PSet.mem_insert** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_insert (x y : PSet) : x in insert x y
+参数：x y : PSet。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PSet.mem_insert_iff`：∀ {x y z : PSet.{u}}, x ∈ insert y z ↔ x.Equiv y ∨ 
+x ∈ z
+· 使用定理 `PSet.Equiv.rfl`：∀ {x : PSet.{u_1}}, x.Equiv x
 -/
-theorem mem_insert (x y : PSet) : x in insert x y :=
-mem_insert_iff.2 Or.inl Equiv.rfl
-
-/--
-theorem `mem_insert_of_mem` / 定理 `mem_insert_of_mem`
-
-English:
-theorem mem_insert_of_mem
-  given: {y z : PSet} (x) (h : z in y)
-  statement: z in insert x y
-  proof: mem_insert_iff.2 Or.inr h
+theorem mem_insert (x y : PSet) : x ∈ insert x y :=
+  mem_insert_iff.2 <| Or.inl Equiv.rfl
+/-
+**PSet.mem_insert_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_insert_of_mem {y z : PSet} (x) (h : z in y) : z in insert x y
+参数：x；h : z in y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PSet.mem_insert_iff`：∀ {x y z : PSet.{u}}, x ∈ insert y z ↔ x.Equiv y ∨ 
+x ∈ z
+-/
+theorem mem_insert_of_mem {y z : PSet} (x) (h : z ∈ y) : z ∈ insert x y :=
+  mem_insert_iff.2 <| Or.inr h
 
 @[simp]
-
-中文:
-定理 mem_insert_of_mem
-  条件: {y z : 命题集合} (x) (h : z in y)
-  结论: z in insert x y
-  证明: mem_insert_iff.2 Or.inr h
-
-@[simp]
-
-Depends on / 依赖: Or.inr, mem_insert_iff
+/-
+**PSet.mem_singleton** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_singleton {x y : PSet} : x in ({y} : PSet) ↔ Equiv x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `PSet.mem_insert_iff`：∀ {x y z : PSet.{u}}, x ∈ insert y z ↔ x.Equiv y ∨ 
+x ∈ z
+· 使用定理 `PSet.notMem_empty`：notMem_empty (x : PSet.{u}) : x ∉ (∅ : PSet.{u})
 -/
-theorem mem_insert_of_mem {y z : PSet} (x) (h : z in y) : z in insert x y :=
-mem_insert_iff.2 Or.inr h
-
-@[simp]
-/--
-theorem `mem_singleton` / 定理 `mem_singleton`
-
-English:
-theorem mem_singleton
-  given: {x y : PSet}
-  statement: x in ({y} : PSet) ↔ Equiv x y
-  proof: mem_insert_iff.trans
-    ⟨fun o => Or.rec id (fun n => absurd n (notMem_empty _)) o, Or.inl⟩
-
-中文:
-定理 mem_singleton
-  条件: {x y : 命题集合}
-  结论: x in ({y} : 命题集合) ↔ 等价 x y
-  证明: mem_insert_iff.trans
-    ⟨fun o => Or.rec id (fun n => absurd n (notMem_empty _)) o, Or.inl⟩
-
-Depends on / 依赖: Or.inl, Or.rec, absurd, mem_insert_iff, mem_insert_iff.trans, notMem_empty
--/
-theorem mem_singleton {x y : PSet} : x in ({y} : PSet) ↔ Equiv x y :=
+theorem mem_singleton {x y : PSet} : x ∈ ({y} : PSet) ↔ Equiv x y :=
   mem_insert_iff.trans
     ⟨fun o => Or.rec id (fun n => absurd n (notMem_empty _)) o, Or.inl⟩
-
-/--
-theorem `mem_pair` / 定理 `mem_pair`
-
-English:
-theorem mem_pair
-  given: {x y z : PSet}
-  statement: x in ({y, z} : PSet) ↔ Equiv x y ∨ Equiv x z
-  proof: by
-  simp
-
-中文:
-定理 mem_pair
-  条件: {x y z : 命题集合}
-  结论: x in ({y, z} : 命题集合) ↔ 等价 x y ∨ 等价 x z
-  证明: by
-  simp
+/-
+**PSet.mem_pair** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_pair {x y z : PSet} : x in ({y, z} : PSet) ↔ Equiv x y ∨ Equiv x z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_pair {x y z : PSet} : x in ({y, z} : PSet) ↔ Equiv x y ∨ Equiv x z := by
+theorem mem_pair {x y z : PSet} : x ∈ ({y, z} : PSet) ↔ Equiv x y ∨ Equiv x z := by
   simp
 
-/--
-Definition of `ofNat` / `ofNat` 的定义
+/-- The n-th von Neumann ordinal -/
+/-
+**PSet.ofNat** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：ℕ → PSet.{u_1}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNat
-  signature: : Nat -> PSet
-
-中文:
-定义 of自然数
-  签名: : 自然数 -> 命题集合
+--- 原说明 ---
+The n-th von Neumann ordinal
 -/
-def ofNat : Nat -> PSet
+def ofNat : ℕ → PSet
   | 0 => ∅
   | n + 1 => insert (ofNat n) (ofNat n)
 
-/--
-Definition of `omega` / `omega` 的定义
+/-- The von Neumann ordinal ω -/
+/-
+**PSet.omega** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：omega : PSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition omega
-  signature: : PSet
-  body: ⟨ULift Nat, fun n => ofNat n.down⟩
-
-中文:
-定义 omega
-  签名: : 命题集合
-  定义体: ⟨ULift Nat, fun n => ofNat n.down⟩
-
-Depends on / 依赖: n.down
+--- 原说明 ---
+The von Neumann ordinal ω
 -/
 def omega : PSet :=
-  ⟨ULift Nat, fun n => ofNat n.down⟩
+  ⟨ULift ℕ, fun n => ofNat n.down⟩
 
-/--
-Definition of `sep` / `sep` 的定义
+/-- The pre-set separation operation `{x ∈ a | p x}` -/
+/-
+**PSet.sep** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：(PSet.{u_1} → Prop) → PSet.{u_1} → PSet.{u_1}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sep
-  signature: (p : PSet -> Prop) (x : PSet)
-  body: ⟨{ a // p (x.Func a) }, fun y => x.Func y.1⟩
-
-中文:
-定义 sep
-  签名: (p : 命题集合 -> 命题) (x : 命题集合)
-  定义体: ⟨{ a // p (x.Func a) }, fun y => x.Func y.1⟩
+--- 原说明 ---
+The pre-set separation operation `{x ∈ a | p x}`
 -/
-protected def sep (p : PSet -> Prop) (x : PSet) : PSet :=
+protected def sep (p : PSet → Prop) (x : PSet) : PSet :=
   ⟨{ a // p (x.Func a) }, fun y => x.Func y.1⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sep PSet PSet
-  body: ⟨PSet.sep⟩
-
-中文:
-实例 :
-  签名: Sep 命题集合 命题集合
-  定义体: ⟨PSet.sep⟩
-
-Depends on / 依赖: PSet.sep
+/-
+**PSet.** 是 Mathlib 中的一个实例，位于命名空间 `PSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sep PSet PSet :=
   ⟨PSet.sep⟩
-
-/--
-theorem `mem_sep` / 定理 `mem_sep`
-
-English:
-theorem mem_sep
-  given: {p : PSet -> Prop} (H : forall x y, Equiv x y -> p x -> p y)
-
-中文:
-定理 mem_sep
-  条件: {p : 命题集合 -> 命题} (H : 对任意 x y, 等价 x y -> p x -> p y)
+/-
+**PSet.mem_sep** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ {p : PSet.{u_1} → Prop},   (∀ (x y : PSet.{u_1}), x.Equiv y → p x → p y)
+ → ∀ {x y : PSet.{u_1}}, y ∈ PSet.sep p x ↔ y ∈ x ∧ p y
+参数：∀ (x y : PSet.{u_1}), x.Equiv y → p x → p y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.symm`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}}, x.Equiv y → y.Equi
+v x
 -/
-theorem mem_sep {p : PSet -> Prop} (H : forall x y, Equiv x y -> p x -> p y) :
-    forall {x y : PSet}, y in PSet.sep p x ↔ y in x ∧ p y
+theorem mem_sep {p : PSet → Prop} (H : ∀ x y, Equiv x y → p x → p y) :
+    ∀ {x y : PSet}, y ∈ PSet.sep p x ↔ y ∈ x ∧ p y
   | ⟨_, _⟩, _ =>
     ⟨fun ⟨⟨a, pa⟩, h⟩ => ⟨⟨a, h⟩, H _ _ h.symm pa⟩, fun ⟨⟨a, h⟩, pa⟩ =>
       ⟨⟨a, H _ _ h pa⟩, h⟩⟩
 
-/--
-Definition of `powerset` / `powerset` 的定义
+/-- The pre-set powerset operator -/
+/-
+**PSet.powerset** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：powerset (x : PSet) : PSet
+参数：x : PSet。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powerset
-  signature: (x : PSet)
-  body: ⟨Set x.Type, fun p => ⟨p, fun y => x.Func y.1⟩⟩
-
-@[simp]
-
-中文:
-定义 powerset
-  签名: (x : 命题集合)
-  定义体: ⟨Set x.Type, fun p => ⟨p, fun y => x.Func y.1⟩⟩
-
-@[simp]
-
-Depends on / 依赖: x.Func, x.Type
+--- 原说明 ---
+The pre-set powerset operator
 -/
 def powerset (x : PSet) : PSet :=
   ⟨Set x.Type, fun p => ⟨p, fun y => x.Func y.1⟩⟩
 
 @[simp]
-/--
-theorem `mem_powerset` / 定理 `mem_powerset`
-
-English:
-theorem mem_powerset
-  statement: forall {x y : PSet}, y in powerset x ↔ y subseteq x
-  proof: βα b
-        ⟨⟨a, b, ba⟩, ba⟩,
-        fun ⟨_, b, ba⟩ => ⟨b, ba⟩⟩⟩
-
-中文:
-定理 mem_powerset
-  结论: 对任意 {x y : 命题集合}, y in powerset x ↔ y subseteq x
-  证明: βα b
-        ⟨⟨a, b, ba⟩, ba⟩,
-        fun ⟨_, b, ba⟩ => ⟨b, ba⟩⟩⟩
+/-
+**PSet.mem_powerset** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_powerset : forall {x y : PSet}, y in powerset x ↔ y subseteq x | ⟨_, A
+⟩, ⟨_, B⟩ => ⟨fun ⟨_, e⟩ => (Subset.congr_left e).2 fun ⟨a, _⟩ => ⟨a, Equiv.refl
+ (A a)⟩, fun βα => ⟨{ a | exists b, Equiv (B b) (A a) }, fun b => let ⟨a, ba⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PSet.Subset.congr_left`：∀ {x y z : PSet.{u_1}}, x.Equiv y → (x ⊆ z ↔ y ⊆
+ z)
+· 使用定理 `PSet.Equiv.refl`：∀ (x : PSet.{u_1}), x.Equiv x
 -/
-theorem mem_powerset : forall {x y : PSet}, y in powerset x ↔ y subseteq x
+theorem mem_powerset : ∀ {x y : PSet}, y ∈ powerset x ↔ y ⊆ x
   | ⟨_, A⟩, ⟨_, B⟩ =>
     ⟨fun ⟨_, e⟩ => (Subset.congr_left e).2 fun ⟨a, _⟩ => ⟨a, Equiv.refl (A a)⟩, fun βα =>
-      ⟨{ a | exists b, Equiv (B b) (A a) }, fun b =>
+      ⟨{ a | ∃ b, Equiv (B b) (A a) }, fun b =>
         let ⟨a, ba⟩ := βα b
         ⟨⟨a, b, ba⟩, ba⟩,
         fun ⟨_, b, ba⟩ => ⟨b, ba⟩⟩⟩
 
-/--
-Definition of `sUnion` / `sUnion` 的定义
+/-- The pre-set union operator -/
+/-
+**PSet.sUnion** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：sUnion (a : PSet) : PSet
+参数：a : PSet。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sUnion
-  signature: (a : PSet)
-  body: ⟨Σ x, (a.Func x).Type, fun ⟨x, y⟩ => (a.Func x).Func y⟩
-
-@[inherit_doc]
-prefix:110 "⋃₀ " => sUnion
-
-@[simp]
-
-中文:
-定义 集合并集
-  签名: (a : 命题集合)
-  定义体: ⟨Σ x, (a.Func x).Type, fun ⟨x, y⟩ => (a.Func x).Func y⟩
-
-@[inherit_doc]
-prefix:110 "⋃₀ " => sUnion
-
-@[simp]
-
-Depends on / 依赖: a.Func
+--- 原说明 ---
+The pre-set union operator
 -/
 def sUnion (a : PSet) : PSet :=
   ⟨Σ x, (a.Func x).Type, fun ⟨x, y⟩ => (a.Func x).Func y⟩
@@ -1739,43 +1046,29 @@ def sUnion (a : PSet) : PSet :=
 prefix:110 "⋃₀ " => sUnion
 
 @[simp]
-/--
-theorem `mem_sUnion` / 定理 `mem_sUnion`
-
-English:
-theorem mem_sUnion
-  statement: forall {x y : PSet.{u}}, y in ⋃₀ x ↔ exists z in x, y in z
-  proof: Mem.mk (A a).Func c
-      ⟨_, Mem.mk _ _, (Mem.congr_left e).2 (by rwa [eta] at this)⟩,
-      fun ⟨⟨β, B⟩, ⟨a, (e : Equiv (mk β B) (A a))⟩, ⟨b, yb⟩⟩ => by
-      rw [← eta (A a)] at e
-      exact
-        let ⟨βt, _⟩ := e
-        let ⟨c, bc⟩ := βt b
-        ⟨⟨a, c⟩, yb.trans bc⟩⟩
-
-@[simp]
-
-中文:
-定理 mem_sUnion
-  结论: 对任意 {x y : 命题集合.{u}}, y in ⋃₀ x ↔ 存在 z in x, y in z
-  证明: Mem.mk (A a).Func c
-      ⟨_, Mem.mk _ _, (Mem.congr_left e).2 (by rwa [eta] at this)⟩,
-      fun ⟨⟨β, B⟩, ⟨a, (e : Equiv (mk β B) (A a))⟩, ⟨b, yb⟩⟩ => by
-      rw [← eta (A a)] at e
-      exact
-        let ⟨βt, _⟩ := e
-        let ⟨c, bc⟩ := βt b
-        ⟨⟨a, c⟩, yb.trans bc⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Mem.mk
+/-
+**PSet.mem_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：mem_sUnion : forall {x y : PSet.{u}}, y in ⋃₀ x ↔ exists z in x, y in z | 
+⟨α, A⟩, y => ⟨fun ⟨⟨a, c⟩, (e : Equiv y ((A a).Func c))⟩ => have : Func (A a) c 
+in mk (A a).Type (A a).Func
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Mem.mk`：∀ {α : Type u} (A : α → PSet.{u}) (a : α), A a ∈ PSet.mk α 
+A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PSet.Mem.congr_left`：∀ {x y : PSet.{u}}, x.Equiv y → ∀ {w : PSet.{u}}, x
+ ∈ w ↔ y ∈ w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PSet.eta`：∀ (x : PSet.{u_1}), PSet.mk x.Type x.Func = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PSet.Equiv.trans`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, 
+x.Equiv y → y.Equiv z → x.Equiv z
 -/
-theorem mem_sUnion : forall {x y : PSet.{u}}, y in ⋃₀ x ↔ exists z in x, y in z
+theorem mem_sUnion : ∀ {x y : PSet.{u}}, y ∈ ⋃₀ x ↔ ∃ z ∈ x, y ∈ z
   | ⟨α, A⟩, y =>
     ⟨fun ⟨⟨a, c⟩, (e : Equiv y ((A a).Func c))⟩ =>
-      have : Func (A a) c in mk (A a).Type (A a).Func := Mem.mk (A a).Func c
+      have : Func (A a) c ∈ mk (A a).Type (A a).Func := Mem.mk (A a).Func c
       ⟨_, Mem.mk _ _, (Mem.congr_left e).2 (by rwa [eta] at this)⟩,
       fun ⟨⟨β, B⟩, ⟨a, (e : Equiv (mk β B) (A a))⟩, ⟨b, yb⟩⟩ => by
       rw [← eta (A a)] at e
@@ -1785,113 +1078,102 @@ theorem mem_sUnion : forall {x y : PSet.{u}}, y in ⋃₀ x ↔ exists z in x, y
         ⟨⟨a, c⟩, yb.trans bc⟩⟩
 
 @[simp]
-/--
-theorem `toSet_sUnion` / 定理 `toSet_sUnion`
-
-English:
-theorem toSet_sUnion
-  given: (x : PSet.{u})
-  statement: (⋃₀ x).toSet = ⋃₀ (toSet '' x.toSet)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 toSet_sUnion
-  条件: (x : 命题集合.{u})
-  结论: (⋃₀ x).toSet = ⋃₀ (toSet '' x.toSet)
-  证明: by
-  ext
-  simp
+/-
+**PSet.toSet_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：toSet_sUnion (x : PSet.{u}) : (⋃₀ x).toSet = ⋃₀ (toSet '' x.toSet)
+参数：x : PSet.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.sUnion_image`：sUnion_image (f : α -> Set β) (s : Set α) : ⋃₀ (f '' s
+) = ⋃ a in s, f a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toSet_sUnion (x : PSet.{u}) : (⋃₀ x).toSet = ⋃₀ (toSet '' x.toSet) := by
   ext
   simp
 
-/--
-Definition of `image` / `image` 的定义
+/-- The image of a function from pre-sets to pre-sets. -/
+/-
+**PSet.image** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：image (f : PSet.{u} -> PSet.{u}) (x : PSet.{u}) : PSet
+参数：f : PSet.{u} -> PSet.{u}；x : PSet.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: (f : PSet.{u} -> PSet.{u}) (x : PSet.{u})
-  body: ⟨x.Type, f ∘ x.Func⟩
-
-中文:
-定义 像
-  签名: (f : 命题集合.{u} -> 命题集合.{u}) (x : 命题集合.{u})
-  定义体: ⟨x.Type, f ∘ x.Func⟩
-
-Depends on / 依赖: x.Func, x.Type
+--- 原说明 ---
+The image of a function from pre-sets to pre-sets.
 -/
-def image (f : PSet.{u} -> PSet.{u}) (x : PSet.{u}) : PSet :=
+def image (f : PSet.{u} → PSet.{u}) (x : PSet.{u}) : PSet :=
   ⟨x.Type, f ∘ x.Func⟩
-
-/--
-theorem `mem_image` / 定理 `mem_image`
-
-English:
-theorem mem_image
-  given: {f : PSet.{u} -> PSet.{u}} (H : forall x y, Equiv x y -> Equiv (f x) (f y))
-
-中文:
-定理 mem_image
-  条件: {f : 命题集合.{u} -> 命题集合.{u}} (H : 对任意 x y, 等价 x y -> 等价 (f x) (f y))
+/-
+**PSet.mem_image** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：∀ {f : PSet.{u} → PSet.{u}},   (∀ (x y : PSet.{u}), x.Equiv y → (f x).Equi
+v (f y)) → ∀ {x y : PSet.{u}}, y ∈ PSet.image f x ↔ ∃ z ∈ x, y.Equiv (f z)
+参数：∀ (x y : PSet.{u}), x.Equiv y → (f x).Equiv (f y)；f z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Mem.mk`：∀ {α : Type u} (A : α → PSet.{u}) (a : α), A a ∈ PSet.mk α 
+A
+· 使用定理 `PSet.Equiv.trans`：∀ {x : PSet.{u_1}} {y : PSet.{u_2}} {z : PSet.{u_3}}, 
+x.Equiv y → y.Equiv z → x.Equiv z
 -/
-theorem mem_image {f : PSet.{u} -> PSet.{u}} (H : forall x y, Equiv x y -> Equiv (f x) (f y)) :
-    forall {x y : PSet.{u}}, y in image f x ↔ exists z in x, Equiv y (f z)
+theorem mem_image {f : PSet.{u} → PSet.{u}} (H : ∀ x y, Equiv x y → Equiv (f x) (f y)) :
+    ∀ {x y : PSet.{u}}, y ∈ image f x ↔ ∃ z ∈ x, Equiv y (f z)
   | ⟨_, A⟩, _ =>
-⟨fun ⟨a, ya⟩ => ⟨A a, Mem.mk A a, ya⟩, fun ⟨_, ⟨a, za⟩, yz⟩ => ⟨a, yz.trans H _ _ za⟩⟩
+    ⟨fun ⟨a, ya⟩ => ⟨A a, Mem.mk A a, ya⟩, fun ⟨_, ⟨a, za⟩, yz⟩ => ⟨a, yz.trans <| H _ _ za⟩⟩
 
-/--
-Definition of `Lift` / `Lift` 的定义
+/-- Universe lift operation -/
+/-
+**PSet.Lift** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：PSet.{u} → PSet.{max u v}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lift
-  signature: : PSet.{u} -> PSet.{max u v}
-
-中文:
-定义 Lift
-  签名: : 命题集合.{u} -> 命题集合.{最大值 u v}
+--- 原说明 ---
+Universe lift operation
 -/
-protected def Lift : PSet.{u} -> PSet.{max u v}
+protected def Lift : PSet.{u} → PSet.{max u v}
   | ⟨α, A⟩ => ⟨ULift.{v, u} α, fun ⟨x⟩ => PSet.Lift (A x)⟩
 
 -- intended to be used with explicit universe parameters
 set_option linter.checkUnivs false in
-/--
-Definition of `embed` / `embed` 的定义
+/-- Embedding of one universe in another -/
+/-
+**PSet.embed** 是 Mathlib 中的一个定义，位于命名空间 `PSet`。
+形式化陈述：embed : PSet.{max (u + 1) v}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embed
-  signature: : PSet.{max (u + 1) v}
-  body: ⟨ULift.{v, u + 1} PSet, fun ⟨x⟩ => PSet.Lift.{u, max (u + 1) v} x⟩
-
-中文:
-定义 embed
-  签名: : 命题集合.{最大值 (u + 1) v}
-  定义体: ⟨ULift.{v, u + 1} PSet, fun ⟨x⟩ => PSet.Lift.{u, max (u + 1) v} x⟩
-
-Depends on / 依赖: PSet.Lift
+--- 原说明 ---
+Embedding of one universe in another
 -/
 def embed : PSet.{max (u + 1) v} :=
   ⟨ULift.{v, u + 1} PSet, fun ⟨x⟩ => PSet.Lift.{u, max (u + 1) v} x⟩
-
-/--
-theorem `lift_mem_embed` / 定理 `lift_mem_embed`
-
-English:
-theorem lift_mem_embed
-  statement: forall x : PSet.{u}, PSet.Lift.{u, max (u + 1) v} x in embed.{u, v}
-  proof: fun x =>
-  ⟨⟨x⟩, Equiv.rfl⟩
-
-中文:
-定理 lift_mem_embed
-  结论: 对任意 x : 命题集合.{u}, 命题集合.Lift.{u, 最大值 (u + 1) v} x in embed.{u, v}
-  证明: fun x =>
-  ⟨⟨x⟩, Equiv.rfl⟩
+/-
+**PSet.lift_mem_embed** 是 Mathlib 中的一个定理，位于命名空间 `PSet`。
+形式化陈述：lift_mem_embed : forall x : PSet.{u}, PSet.Lift.{u, max (u + 1) v} x in em
+bed.{u, v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSet.Equiv.rfl`：∀ {x : PSet.{u_1}}, x.Equiv x
 -/
-theorem lift_mem_embed : forall x : PSet.{u}, PSet.Lift.{u, max (u + 1) v} x in embed.{u, v} := fun x =>
+theorem lift_mem_embed : ∀ x : PSet.{u}, PSet.Lift.{u, max (u + 1) v} x ∈ embed.{u, v} := fun x =>
   ⟨⟨x⟩, Equiv.rfl⟩
 
 end PSet
+

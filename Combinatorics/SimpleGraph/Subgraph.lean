@@ -55,69 +55,54 @@ universe u v
 namespace SimpleGraph
 
 /-- A subgraph of a `SimpleGraph` is a subset of vertices along with a restriction of the adjacency
-relation that is symmetric and is supported by the vertex subset. They also form a bounded lattice.
+relation that is symmetric and is supported by the vertex subset.  They also form a bounded lattice.
 
 Thinking of `V → V → Prop` as `Set (V × V)`, a set of darts (i.e., half-edges), then
 `Subgraph.adj_sub` is that the darts of a subgraph are a subset of the darts of `G`. -/
 @[ext]
-/--
-Definition of `Subgraph` / `Subgraph` 的定义
+/-
+**SimpleGraph.Subgraph** 是 Mathlib 中的一个结构，位于命名空间 `SimpleGraph`。
+形式化陈述：Subgraph {V : Type u} (G : SimpleGraph V) where /-- Vertices of the subgra
+ph -/ verts : Set V /-- Edges of the subgraph -/ Adj : V -> V -> Prop adj_sub : 
+forall {v w : V}, Adj v w -> G.Adj v w edge_vert : forall {v w : V}, Adj v w -> 
+v in verts symm : Std.Symm Adj
+参数：G : SimpleGraph V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Subgraph
-  parameters: {V : Type u} (G : SimpleGraph V)
-  axioms and operations (5):
-    - verts : Set V
-    - Adj : V -> V -> Prop
-    - adj_sub : forall {v w : V}, Adj v w -> G.Adj v w
-    - edge_vert : forall {v w : V}, Adj v w -> v in verts
-    - symm : Std.Symm Adj  [default: by aesop_graph]
+--- 原说明 ---
+A subgraph of a `SimpleGraph` is a subset of vertices along with a restriction o
+f the adjacency
+relation that is symmetric and is supported by the vertex subset.  They also for
+m a bounded lattice.
 
-中文:
-结构 子图
-  参数: {V : 类型u} (G : 简单图 V)
-  公理与运算 (5 个):
-    - verts : 集合 V
-    - Adj : V -> V -> 命题
-    - adj_sub : 对任意 {v w : V}, 伴随 v w -> G.伴随 v w
-    - edge_vert : 对任意 {v w : V}, 伴随 v w -> v in verts
-    - symm : Std.Symm 伴随  [默认: by aesop_graph]
-
-Depends on / 依赖: aesop_graph
+Thinking of `V → V → Prop` as `Set (V × V)`, a set of darts (i.e., half-edges), 
+then
+`Subgraph.adj_sub` is that the darts of a subgraph are a subset of the darts of 
+`G`.
 -/
 structure Subgraph {V : Type u} (G : SimpleGraph V) where
   /-- Vertices of the subgraph -/
   verts : Set V
   /-- Edges of the subgraph -/
-  Adj : V -> V -> Prop
-  adj_sub : forall {v w : V}, Adj v w -> G.Adj v w
-  edge_vert : forall {v w : V}, Adj v w -> v in verts
+  Adj : V → V → Prop
+  adj_sub : ∀ {v w : V}, Adj v w → G.Adj v w
+  edge_vert : ∀ {v w : V}, Adj v w → v ∈ verts
   symm : Std.Symm Adj := by aesop_graph
 
-initialize_simps_projections SimpleGraph.Subgraph (Adj -> adj)
+initialize_simps_projections SimpleGraph.Subgraph (Adj → adj)
 
 variable {ι : Sort*} {V : Type u} {W : Type v}
 
 /-- The one-vertex subgraph. -/
 @[simps]
-/--
-Definition of `singletonSubgraph` / `singletonSubgraph` 的定义
+/-
+**SimpleGraph.singletonSubgraph** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：{V : Type u} → (G : SimpleGraph V) → V → G.Subgraph
+参数：G : SimpleGraph V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition singletonSubgraph
-  signature: (G : SimpleGraph V) (v : V)
-  body: {v}
-  Adj := ⊥
-  adj_sub := False.elim
-  edge_vert := False.elim
-
-中文:
-定义 singletonSubgraph
-  签名: (G : 简单图 V) (v : V)
-  定义体: {v}
-  Adj := ⊥
-  adj_sub := False.elim
-  edge_vert := False.elim
+--- 原说明 ---
+The one-vertex subgraph.
 -/
 protected def singletonSubgraph (G : SimpleGraph V) (v : V) : G.Subgraph where
   verts := {v}
@@ -127,43 +112,25 @@ protected def singletonSubgraph (G : SimpleGraph V) (v : V) : G.Subgraph where
 
 /-- The one-edge subgraph. -/
 @[simps]
-/--
-Definition of `subgraphOfAdj` / `subgraphOfAdj` 的定义
+/-
+**SimpleGraph.subgraphOfAdj** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：subgraphOfAdj (G : SimpleGraph V) {v w : V} (hvw : G.Adj v w) : G.Subgraph
+ where verts
+参数：G : SimpleGraph V；hvw : G.Adj v w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subgraphOfAdj
-  signature: (G : SimpleGraph V) {v w : V} (hvw : G.Adj v w)
-  body: {v, w}
-  Adj a b := s(v, w) = s(a, b)
-  adj_sub h := by
-    rw [← G.mem_edgeSet]; rw [← h]
-    exact hvw
-  edge_vert {a b} h := by
-    apply_fun fun e => a in e at h
-    simp only [Sym2.mem_iff, true_or, eq_iff_iff, iff_true] at h
-    exact h
-
-中文:
-定义 subgraphOfAdj
-  签名: (G : 简单图 V) {v w : V} (hvw : G.伴随 v w)
-  定义体: {v, w}
-  Adj a b := s(v, w) = s(a, b)
-  adj_sub h := by
-    rw [← G.mem_edgeSet]; rw [← h]
-    exact hvw
-  edge_vert {a b} h := by
-    apply_fun fun e => a in e at h
-    simp only [Sym2.mem_iff, true_or, eq_iff_iff, iff_true] at h
-    exact h
+--- 原说明 ---
+The one-edge subgraph.
 -/
 def subgraphOfAdj (G : SimpleGraph V) {v w : V} (hvw : G.Adj v w) : G.Subgraph where
   verts := {v, w}
   Adj a b := s(v, w) = s(a, b)
   adj_sub h := by
-    rw [← G.mem_edgeSet]; rw [← h]
+    rw [← G.mem_edgeSet, ← h]
     exact hvw
   edge_vert {a b} h := by
-    apply_fun fun e => a in e at h
+    apply_fun fun e ↦ a ∈ e at h
     simp only [Sym2.mem_iff, true_or, eq_iff_iff, iff_true] at h
     exact h
 
@@ -171,186 +138,130 @@ namespace Subgraph
 
 variable {G : SimpleGraph V} {G₁ G₂ : G.Subgraph} {a b : V}
 
-/--
-theorem `loopless` / 定理 `loopless`
-
-English:
-theorem loopless
-  given: (G' : Subgraph G)
-  statement: Std.Irrefl G'.Adj where
-  proof: G.irrefl G'.adj_sub hadj
-
-中文:
-定理 loopless
-  条件: (G' : 子图 G)
-  结论: Std.Irrefl G'.伴随 where
-  证明: G.irrefl G'.adj_sub hadj
+/-
+**SimpleGraph.Subgraph.loopless** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} (G' : G.Subgraph), Std.Irrefl G'.Adj
+参数：G' : G.Subgraph。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.irrefl`：∀ {V : Type u} (G : SimpleGraph V) {v : V}, ¬G.Adj v
+ v
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 protected theorem loopless (G' : Subgraph G) : Std.Irrefl G'.Adj where
-irrefl _ hadj := G.irrefl G'.adj_sub hadj
-
-/--
-theorem `adj_comm` / 定理 `adj_comm`
-
-English:
-theorem adj_comm
-  given: (G' : Subgraph G) (v w : V)
-  statement: G'.Adj v w ↔ G'.Adj w v
-  proof: G'.symm.iff v w
-
-@[symm]
-
-中文:
-定理 adj_comm
-  条件: (G' : 子图 G) (v w : V)
-  结论: G'.伴随 v w ↔ G'.伴随 w v
-  证明: G'.symm.iff v w
-
-@[symm]
-
-Depends on / 依赖: symm.iff
+  irrefl _ hadj := G.irrefl <| G'.adj_sub hadj
+/-
+**SimpleGraph.Subgraph.adj_comm** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：adj_comm (G' : Subgraph G) (v w : V) : G'.Adj v w ↔ G'.Adj w v
+参数：G' : Subgraph G；v w : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.Symm.iff`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Symm r] (x y : α)
+, r x y ↔ r y x
+· 使用定理 `SimpleGraph.Subgraph.symm`：∀ {V : Type u} {G : SimpleGraph V} (self : G.
+Subgraph), Std.Symm self.Adj
 -/
 theorem adj_comm (G' : Subgraph G) (v w : V) : G'.Adj v w ↔ G'.Adj w v :=
   G'.symm.iff v w
 
 @[symm]
-/--
-theorem `adj_symm` / 定理 `adj_symm`
-
-English:
-theorem adj_symm
-  given: (G' : Subgraph G) {u v : V} (h : G'.Adj u v)
-  statement: G'.Adj v u
-  proof: G'.symm.symm u v h
-
-中文:
-定理 adj_symm
-  条件: (G' : 子图 G) {u v : V} (h : G'.伴随 u v)
-  结论: G'.伴随 v u
-  证明: G'.symm.symm u v h
-
-Depends on / 依赖: symm.symm
+/-
+**SimpleGraph.Subgraph.adj_symm** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：adj_symm (G' : Subgraph G) {u v : V} (h : G'.Adj u v) : G'.Adj v u
+参数：G' : Subgraph G；h : G'.Adj u v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.Symm.symm`：∀ {α : Sort u} {r : α → α → Prop} [self : Std.Symm r] (a 
+b : α), r a b → r b a
+· 使用定理 `SimpleGraph.Subgraph.symm`：∀ {V : Type u} {G : SimpleGraph V} (self : G.
+Subgraph), Std.Symm self.Adj
 -/
 theorem adj_symm (G' : Subgraph G) {u v : V} (h : G'.Adj u v) : G'.Adj v u :=
   G'.symm.symm u v h
-
-/--
-theorem `Adj.symm` / 定理 `Adj.symm`
-
-English:
-theorem Adj.symm
-  given: {G' : Subgraph G} {u v : V} (h : G'.Adj u v)
-  statement: G'.Adj v u
-  proof: G'.adj_symm h
-
-@[grind ->]
-
-中文:
-定理 伴随.symm
-  条件: {G' : 子图 G} {u v : V} (h : G'.伴随 u v)
-  结论: G'.伴随 v u
-  证明: G'.adj_symm h
-
-@[grind ->]
+/-
+**SimpleGraph.Subgraph.Adj.symm** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph.
+Adj`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {G' : G.Subgraph} {u v : V}, G'.Adj u v
+ → G'.Adj v u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_symm`：adj_symm (G' : Subgraph G) {u v : V} (h :
+ G'.Adj u v) : G'.Adj v u
 -/
 protected theorem Adj.symm {G' : Subgraph G} {u v : V} (h : G'.Adj u v) : G'.Adj v u :=
   G'.adj_symm h
 
-@[grind ->]
-/--
-theorem `Adj.adj_sub` / 定理 `Adj.adj_sub`
-
-English:
-theorem Adj.adj_sub
-  given: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
-  statement: G.Adj u v
-  proof: H.adj_sub h
-
-中文:
-定理 伴随.adj_sub
-  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
-  结论: G.伴随 u v
-  证明: H.adj_sub h
+@[grind →]
+/-
+**SimpleGraph.Subgraph.Adj.adj_sub** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph.Adj`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {H : G.Subgraph} {u v : V}, H.Adj u v →
+ G.Adj u v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 protected theorem Adj.adj_sub {H : G.Subgraph} {u v : V} (h : H.Adj u v) : G.Adj u v :=
   H.adj_sub h
-
-/--
-theorem `Adj.fst_mem` / 定理 `Adj.fst_mem`
-
-English:
-theorem Adj.fst_mem
-  given: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
-  statement: u in H.verts
-  proof: H.edge_vert h
-
-中文:
-定理 伴随.fst_mem
-  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
-  结论: u in H.verts
-  证明: H.edge_vert h
+/-
+**SimpleGraph.Subgraph.Adj.fst_mem** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph.Adj`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {H : G.Subgraph} {u v : V}, H.Adj u v →
+ u ∈ H.verts
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
 -/
-protected theorem Adj.fst_mem {H : G.Subgraph} {u v : V} (h : H.Adj u v) : u in H.verts :=
+protected theorem Adj.fst_mem {H : G.Subgraph} {u v : V} (h : H.Adj u v) : u ∈ H.verts :=
   H.edge_vert h
-
-/--
-theorem `Adj.snd_mem` / 定理 `Adj.snd_mem`
-
-English:
-theorem Adj.snd_mem
-  given: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
-  statement: v in H.verts
-  proof: h.symm.fst_mem
-
-中文:
-定理 伴随.snd_mem
-  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
-  结论: v in H.verts
-  证明: h.symm.fst_mem
+/-
+**SimpleGraph.Subgraph.Adj.snd_mem** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph.Adj`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {H : G.Subgraph} {u v : V}, H.Adj u v →
+ v ∈ H.verts
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.Adj.fst_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → u ∈ H.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
 -/
-protected theorem Adj.snd_mem {H : G.Subgraph} {u v : V} (h : H.Adj u v) : v in H.verts :=
+protected theorem Adj.snd_mem {H : G.Subgraph} {u v : V} (h : H.Adj u v) : v ∈ H.verts :=
   h.symm.fst_mem
-
-/--
-theorem `Adj.ne` / 定理 `Adj.ne`
-
-English:
-theorem Adj.ne
-  given: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
-  statement: u != v
-  proof: h.adj_sub.ne
-
-中文:
-定理 伴随.ne
-  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
-  结论: u != v
-  证明: h.adj_sub.ne
+/-
+**SimpleGraph.Subgraph.Adj.ne** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph.Ad
+j`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {H : G.Subgraph} {u v : V}, H.Adj u v →
+ u ≠ v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {a b : V}, G.Adj 
+a b → a ≠ b
+· 使用定理 `SimpleGraph.Subgraph.Adj.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → G.Adj u v
 -/
-protected theorem Adj.ne {H : G.Subgraph} {u v : V} (h : H.Adj u v) : u != v :=
+protected theorem Adj.ne {H : G.Subgraph} {u v : V} (h : H.Adj u v) : u ≠ v :=
   h.adj_sub.ne
-
-/--
-theorem `adj_congr_of_sym2` / 定理 `adj_congr_of_sym2`
-
-English:
-theorem adj_congr_of_sym2
-  given: {H : G.Subgraph} {u v w x : V} (h2 : s(u, v) = s(w, x))
-  proof: by
-  simp only [Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk] at h2
-  rcases h2 with hl | hr
-  · rw [hl.1, hl.2]
-  · rw [hr.1, hr.2, Subgraph.adj_comm]
-
-中文:
-定理 adj_congr_of_sym2
-  条件: {H : G.子图} {u v w x : V} (h2 : s(u, v) = s(w, x))
-  证明: by
-  simp only [Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk] at h2
-  rcases h2 with hl | hr
-  · rw [hl.1, hl.2]
-  · rw [hr.1, hr.2, Subgraph.adj_comm]
-
-Depends on / 依赖: Prod.mk.injEq, Prod.swap_prod_mk, Subgraph, Subgraph.adj_comm, Sym2.eq, Sym2.rel_iff, adj_comm, rel_iff, swap_prod_mk
+/-
+**SimpleGraph.Subgraph.adj_congr_of_sym2** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：adj_congr_of_sym2 {H : G.Subgraph} {u v w x : V} (h2 : s(u, v) = s(w, x)) 
+: H.Adj u v ↔ H.Adj w x
+参数：h2 : s(u, v) = s(w, x)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `SimpleGraph.Subgraph.adj_comm`：adj_comm (G' : Subgraph G) (v w : V) : G'
+.Adj v w ↔ G'.Adj w v
 -/
 theorem adj_congr_of_sym2 {H : G.Subgraph} {u v w x : V} (h2 : s(u, v) = s(w, x)) :
     H.Adj u v ↔ H.Adj w x := by
@@ -361,26 +272,15 @@ theorem adj_congr_of_sym2 {H : G.Subgraph} {u v w x : V} (h2 : s(u, v) = s(w, x)
 
 /-- Coercion from `G' : Subgraph G` to a `SimpleGraph G'.verts`. -/
 @[simps]
-/--
-Definition of `coe` / `coe` 的定义
+/-
+**SimpleGraph.Subgraph.coe** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：{V : Type u} → {G : SimpleGraph V} → (G' : G.Subgraph) → SimpleGraph ↑G'.v
+erts
+参数：G' : G.Subgraph。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coe
-  signature: (G' : Subgraph G)
-  body: G'.Adj v w
-  symm := G'.symm.comap Subtype.val
-  loopless.irrefl _ hadj := G.irrefl hadj.adj_sub
-
-@[simp]
-
-中文:
-定义 coe
-  签名: (G' : 子图 G)
-  定义体: G'.Adj v w
-  symm := G'.symm.comap Subtype.val
-  loopless.irrefl _ hadj := G.irrefl hadj.adj_sub
-
-@[simp]
+--- 原说明 ---
+Coercion from `G' : Subgraph G` to a `SimpleGraph G'.verts`.
 -/
 protected def coe (G' : Subgraph G) : SimpleGraph G'.verts where
   Adj v w := G'.Adj v w
@@ -388,128 +288,96 @@ protected def coe (G' : Subgraph G) : SimpleGraph G'.verts where
   loopless.irrefl _ hadj := G.irrefl hadj.adj_sub
 
 @[simp]
-/--
-theorem `Adj.adj_sub'` / 定理 `Adj.adj_sub'`
-
-English:
-theorem Adj.adj_sub'
-  given: (G' : Subgraph G) (u v : G'.verts) (h : G'.Adj u v)
-  statement: G.Adj u v
-  proof: G'.adj_sub h
-
-中文:
-定理 伴随.adj_sub'
-  条件: (G' : 子图 G) (u v : G'.verts) (h : G'.伴随 u v)
-  结论: G.伴随 u v
-  证明: G'.adj_sub h
-
-Depends on / 依赖: adj_sub
+/-
+**SimpleGraph.Subgraph.Adj.adj_sub'** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph.Adj`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} (G' : G.Subgraph) (u v : ↑G'.verts), G'
+.Adj ↑u ↑v → G.Adj ↑u ↑v
+参数：G' : G.Subgraph；u v : ↑G'.verts。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 theorem Adj.adj_sub' (G' : Subgraph G) (u v : G'.verts) (h : G'.Adj u v) : G.Adj u v :=
   G'.adj_sub h
-
-/--
-theorem `coe_adj_sub` / 定理 `coe_adj_sub`
-
-English:
-theorem coe_adj_sub
-  given: (G' : Subgraph G) (u v : G'.verts) (h : G'.coe.Adj u v)
-  statement: G.Adj u v
-  proof: G'.adj_sub h
-
-中文:
-定理 coe_adj_sub
-  条件: (G' : 子图 G) (u v : G'.verts) (h : G'.coe.伴随 u v)
-  结论: G.伴随 u v
-  证明: G'.adj_sub h
-
-Depends on / 依赖: adj_sub
+/-
+**SimpleGraph.Subgraph.coe_adj_sub** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：coe_adj_sub (G' : Subgraph G) (u v : G'.verts) (h : G'.coe.Adj u v) : G.Ad
+j u v
+参数：G' : Subgraph G；u v : G'.verts；h : G'.coe.Adj u v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 theorem coe_adj_sub (G' : Subgraph G) (u v : G'.verts) (h : G'.coe.Adj u v) : G.Adj u v :=
   G'.adj_sub h
 
 -- Given `h : H.Adj u v`, then `h.coe : H.coe.Adj ⟨u, _⟩ ⟨v, _⟩`.
-/--
-theorem `Adj.coe` / 定理 `Adj.coe`
-
-English:
-theorem Adj.coe
-  given: {H : G.Subgraph} {u v : V} (h : H.Adj u v)
-  proof: h
-
-中文:
-定理 伴随.coe
-  条件: {H : G.子图} {u v : V} (h : H.伴随 u v)
-  证明: h
+/-
+**SimpleGraph.Subgraph.Adj.coe** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph.A
+dj`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {H : G.Subgraph} {u v : V} (h : H.Adj u
+ v), H.coe.Adj ⟨u, ⋯⟩ ⟨v, ⋯⟩
+参数：h : H.Adj u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Adj.coe {H : G.Subgraph} {u v : V} (h : H.Adj u v) :
     H.coe.Adj ⟨u, H.edge_vert h⟩ ⟨v, H.edge_vert h.symm⟩ := h
-
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (G : SimpleGraph V) (H : Subgraph G) [DecidableRel H.Adj] : DecidableRel H.coe.Adj :=
-  fun a b => ‹DecidableRel H.Adj› _ _
+  fun a b ↦ ‹DecidableRel H.Adj› _ _
 
-/--
-Definition of `IsSpanning` / `IsSpanning` 的定义
+/-- A subgraph is called a *spanning subgraph* if it contains all the vertices of `G`. -/
+/-
+**SimpleGraph.Subgraph.IsSpanning** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：IsSpanning (G' : Subgraph G) : Prop
+参数：G' : Subgraph G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSpanning
-  signature: (G' : Subgraph G)
-  body: forall v : V, v in G'.verts
-
-中文:
-定义 IsSpanning
-  签名: (G' : 子图 G)
-  定义体: forall v : V, v in G'.verts
+--- 原说明 ---
+A subgraph is called a *spanning subgraph* if it contains all the vertices of `G
+`.
 -/
 def IsSpanning (G' : Subgraph G) : Prop :=
-  forall v : V, v in G'.verts
-
-/--
-theorem `isSpanning_iff` / 定理 `isSpanning_iff`
-
-English:
-theorem isSpanning_iff
-  given: {G' : Subgraph G}
-  statement: G'.IsSpanning ↔ G'.verts = Set.univ
-  proof: Set.eq_univ_iff_forall.symm
-
-protected alias ⟨IsSpanning.verts_eq_univ, _⟩ := isSpanning_iff
-
-中文:
-定理 isSpanning_iff
-  条件: {G' : 子图 G}
-  结论: G'.IsSpanning ↔ G'.verts = 集合.univ
-  证明: Set.eq_univ_iff_forall.symm
-
-protected alias ⟨IsSpanning.verts_eq_univ, _⟩ := isSpanning_iff
-
-Depends on / 依赖: Set.eq_univ_iff_forall.symm, eq_univ_iff_forall
+  ∀ v : V, v ∈ G'.verts
+/-
+**SimpleGraph.Subgraph.isSpanning_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：isSpanning_iff {G' : Subgraph G} : G'.IsSpanning ↔ G'.verts = Set.univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
 -/
 theorem isSpanning_iff {G' : Subgraph G} : G'.IsSpanning ↔ G'.verts = Set.univ :=
   Set.eq_univ_iff_forall.symm
 
 protected alias ⟨IsSpanning.verts_eq_univ, _⟩ := isSpanning_iff
 
-/-- Coercion from `Subgraph G` to `SimpleGraph V`. If `G'` is a spanning
+/-- Coercion from `Subgraph G` to `SimpleGraph V`.  If `G'` is a spanning
 subgraph, then `G'.spanningCoe` yields an isomorphic graph.
 In general, this adds in all vertices from `V` as isolated vertices. -/
 @[simps]
-/--
-Definition of `spanningCoe` / `spanningCoe` 的定义
+/-
+**SimpleGraph.Subgraph.spanningCoe** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：{V : Type u} → {G : SimpleGraph V} → G.Subgraph → SimpleGraph V
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.symm`：∀ {V : Type u} {G : SimpleGraph V} (self : G.
+Subgraph), Std.Symm self.Adj
 
-English:
-definition spanningCoe
-  signature: (G' : Subgraph G)
-  body: G'.Adj
-  symm := G'.symm
-  loopless.irrefl _ hadj := G.irrefl hadj.adj_sub
-
-中文:
-定义 spanningCoe
-  签名: (G' : 子图 G)
-  定义体: G'.Adj
-  symm := G'.symm
-  loopless.irrefl _ hadj := G.irrefl hadj.adj_sub
+--- 原说明 ---
+Coercion from `Subgraph G` to `SimpleGraph V`.  If `G'` is a spanning
+subgraph, then `G'.spanningCoe` yields an isomorphic graph.
+In general, this adds in all vertices from `V` as isolated vertices.
 -/
 protected def spanningCoe (G' : Subgraph G) : SimpleGraph V where
   Adj := G'.Adj
@@ -519,127 +387,134 @@ protected def spanningCoe (G' : Subgraph G) : SimpleGraph V where
 attribute [grind =] Subgraph.spanningCoe_adj
 
 @[simp]
-/--
-lemma `spanningCoe_coe` / 引理 `spanningCoe_coe`
-
-English:
-lemma spanningCoe_coe
-  given: (G' : G.Subgraph)
-  statement: G'.coe.spanningCoe = G'.spanningCoe
-  proof: by
-  ext
-  simp only [map_adj, Function.Embedding.subtype_apply, Subtype.exists]
-  grind [coe_adj, edge_vert, adj_symm]
-
-中文:
-引理 spanningCoe_coe
-  条件: (G' : G.子图)
-  结论: G'.coe.spanningCoe = G'.spanningCoe
-  证明: by
-  ext
-  simp only [map_adj, Function.Embedding.subtype_apply, Subtype.exists]
-  grind [coe_adj, edge_vert, adj_symm]
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.subtype_apply, Subtype, Subtype.exists, adj_symm, coe_adj, edge_vert, map_adj, subtype_apply
+/-
+**SimpleGraph.Subgraph.spanningCoe_coe** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：spanningCoe_coe (G' : G.Subgraph) : G'.coe.spanningCoe = G'.spanningCoe
+参数：G' : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
 -/
 lemma spanningCoe_coe (G' : G.Subgraph) : G'.coe.spanningCoe = G'.spanningCoe := by
   ext
   simp only [map_adj, Function.Embedding.subtype_apply, Subtype.exists]
   grind [coe_adj, edge_vert, adj_symm]
-
-/--
-theorem `Adj.of_spanningCoe` / 定理 `Adj.of_spanningCoe`
-
-English:
-theorem Adj.of_spanningCoe
-  given: {G' : Subgraph G} {u v : G'.verts} (h : G'.spanningCoe.Adj u v)
-  proof: G'.adj_sub h
-
-中文:
-定理 伴随.of_spanningCoe
-  条件: {G' : 子图 G} {u v : G'.verts} (h : G'.spanningCoe.伴随 u v)
-  证明: G'.adj_sub h
-
-Depends on / 依赖: adj_sub
+/-
+**SimpleGraph.Subgraph.Adj.of_spanningCoe** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Subgraph.Adj`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {G' : G.Subgraph} {u v : ↑G'.verts}, G'
+.spanningCoe.Adj ↑u ↑v → G.Adj ↑u ↑v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 theorem Adj.of_spanningCoe {G' : Subgraph G} {u v : G'.verts} (h : G'.spanningCoe.Adj u v) :
     G.Adj u v :=
   G'.adj_sub h
-
-/--
-lemma `spanningCoe_le` / 引理 `spanningCoe_le`
-
-English:
-lemma spanningCoe_le
-  given: (G' : G.Subgraph)
-  statement: G'.spanningCoe <= G
-  proof: fun _ _ => G'.3
-
-中文:
-引理 spanningCoe_le
-  条件: (G' : G.子图)
-  结论: G'.spanningCoe <= G
-  证明: fun _ _ => G'.3
+/-
+**SimpleGraph.Subgraph.spanningCoe_le** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：spanningCoe_le (G' : G.Subgraph) : G'.spanningCoe <= G
+参数：G' : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
-lemma spanningCoe_le (G' : G.Subgraph) : G'.spanningCoe <= G := fun _ _ => G'.3
-
-/--
-theorem `spanningCoe_inj` / 定理 `spanningCoe_inj`
-
-English:
-theorem spanningCoe_inj
-  statement: G₁.spanningCoe = G₂.spanningCoe ↔ G₁.Adj = G₂.Adj
-  proof: by
-  simp [Subgraph.spanningCoe]
-
-中文:
-定理 spanningCoe_inj
-  结论: G₁.spanningCoe = G₂.spanningCoe ↔ G₁.伴随 = G₂.伴随
-  证明: by
-  simp [Subgraph.spanningCoe]
-
-Depends on / 依赖: Subgraph, Subgraph.spanningCoe, spanningCoe
+lemma spanningCoe_le (G' : G.Subgraph) : G'.spanningCoe ≤ G := fun _ _ ↦ G'.3
+/-
+**SimpleGraph.Subgraph.spanningCoe_inj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：spanningCoe_inj : G₁.spanningCoe = G₂.spanningCoe ↔ G₁.Adj = G₂.Adj
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.mk.injEq`：∀ {V : Type u} (Adj : V → V → Prop) (symm : autoPa
+ram (Std.Symm Adj) SimpleGraph.symm._autoParam)   (loopless : autoParam (Std.Irr
+efl Adj) S…
+· 使用定理 `SimpleGraph.Subgraph.symm`：∀ {V : Type u} {G : SimpleGraph V} (self : G.
+Subgraph), Std.Symm self.Adj
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem spanningCoe_inj : G₁.spanningCoe = G₂.spanningCoe ↔ G₁.Adj = G₂.Adj := by
   simp [Subgraph.spanningCoe]
-
-/--
-lemma `mem_of_adj_spanningCoe` / 引理 `mem_of_adj_spanningCoe`
-
-English:
-lemma mem_of_adj_spanningCoe
-  statement: {v w : V} {s : Set V} (G : SimpleGraph s)
-  proof: by aesop
-
-@[simp]
-
-中文:
-引理 mem_of_adj_spanningCoe
-  结论: {v w : V} {s : 集合 V} (G : 简单图 s)
-  证明: by aesop
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.mem_of_adj_spanningCoe** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph.Subgraph`。
+形式化陈述：mem_of_adj_spanningCoe {v w : V} {s : Set V} (G : SimpleGraph s) (hadj : G
+.spanningCoe.Adj v w) : v in s
+参数：G : SimpleGraph s；hadj : G.spanningCoe.Adj v w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
 -/
 lemma mem_of_adj_spanningCoe {v w : V} {s : Set V} (G : SimpleGraph s)
-    (hadj : G.spanningCoe.Adj v w) : v in s := by aesop
+    (hadj : G.spanningCoe.Adj v w) : v ∈ s := by aesop
 
 @[simp]
-/--
-lemma `spanningCoe_subgraphOfAdj` / 引理 `spanningCoe_subgraphOfAdj`
-
-English:
-lemma spanningCoe_subgraphOfAdj
-  given: {v w : V} (hadj : G.Adj v w)
-  proof: by
-  ext v w
-  aesop
-
-中文:
-引理 spanningCoe_subgraphOfAdj
-  条件: {v w : V} (hadj : G.伴随 v w)
-  证明: by
-  ext v w
-  aesop
+/-
+**SimpleGraph.Subgraph.spanningCoe_subgraphOfAdj** 是 Mathlib 中的一个引理，位于命名空间 `Simp
+leGraph.Subgraph`。
+形式化陈述：spanningCoe_subgraphOfAdj {v w : V} (hadj : G.Adj v w) : (G.subgraphOfAdj 
+hadj).spanningCoe = fromEdgeSet {s(v, w)}
+参数：hadj : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
 -/
 lemma spanningCoe_subgraphOfAdj {v w : V} (hadj : G.Adj v w) :
     (G.subgraphOfAdj hadj).spanningCoe = fromEdgeSet {s(v, w)} := by
@@ -648,24 +523,17 @@ lemma spanningCoe_subgraphOfAdj {v w : V} (hadj : G.Adj v w) :
 
 /-- `coe` can be embedded in `spanningCoe`. -/
 @[simps]
-/--
-Definition of `coeEmbeddingSpanningCoe` / `coeEmbeddingSpanningCoe` 的定义
+/-
+**SimpleGraph.Subgraph.coeEmbeddingSpanningCoe** 是 Mathlib 中的一个定义，位于命名空间 `Simple
+Graph.Subgraph`。
+形式化陈述：coeEmbeddingSpanningCoe (G' : Subgraph G) : G'.coe ↪g G'.spanningCoe where
+ toFun
+参数：G' : Subgraph G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeEmbeddingSpanningCoe
-  signature: (G' : Subgraph G)
-  body: Subtype.val
-  inj' := Subtype.val_injective
-  map_rel_iff' := .rfl
-
-中文:
-定义 coeEmbeddingSpanningCoe
-  签名: (G' : 子图 G)
-  定义体: Subtype.val
-  inj' := Subtype.val_injective
-  map_rel_iff' := .rfl
-
-Depends on / 依赖: Subtype, Subtype.val
+--- 原说明 ---
+`coe` can be embedded in `spanningCoe`.
 -/
 def coeEmbeddingSpanningCoe (G' : Subgraph G) : G'.coe ↪g G'.spanningCoe where
   toFun := Subtype.val
@@ -674,22 +542,17 @@ def coeEmbeddingSpanningCoe (G' : Subgraph G) : G'.coe ↪g G'.spanningCoe where
 
 /-- `spanningCoe` is equivalent to `coe` for a subgraph that `IsSpanning`. -/
 @[simps]
-/--
-Definition of `spanningCoeEquivCoeOfSpanning` / `spanningCoeEquivCoeOfSpanning` 的定义
+/-
+**SimpleGraph.Subgraph.spanningCoeEquivCoeOfSpanning** 是 Mathlib 中的一个定义，位于命名空间 `
+SimpleGraph.Subgraph`。
+形式化陈述：spanningCoeEquivCoeOfSpanning (G' : Subgraph G) (h : G'.IsSpanning) : G'.s
+panningCoe ≃g G'.coe where toFun v
+参数：G' : Subgraph G；h : G'.IsSpanning。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanningCoeEquivCoeOfSpanning
-  signature: (G' : Subgraph G) (h : G'.IsSpanning)
-  body: ⟨v, h v⟩
-  invFun v := v
-  map_rel_iff' := Iff.rfl
-
-中文:
-定义 spanningCoeEquivCoeOfSpanning
-  签名: (G' : 子图 G) (h : G'.IsSpanning)
-  定义体: ⟨v, h v⟩
-  invFun v := v
-  map_rel_iff' := Iff.rfl
+--- 原说明 ---
+`spanningCoe` is equivalent to `coe` for a subgraph that `IsSpanning`.
 -/
 def spanningCoeEquivCoeOfSpanning (G' : Subgraph G) (h : G'.IsSpanning) :
     G'.spanningCoe ≃g G'.coe where
@@ -697,565 +560,408 @@ def spanningCoeEquivCoeOfSpanning (G' : Subgraph G) (h : G'.IsSpanning) :
   invFun v := v
   map_rel_iff' := Iff.rfl
 
-/--
-Definition of `IsInduced` / `IsInduced` 的定义
+/-- A subgraph is called an *induced subgraph* if vertices of `G'` are adjacent if
+they are adjacent in `G`. -/
+/-
+**SimpleGraph.Subgraph.IsInduced** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph
+`。
+形式化陈述：IsInduced (G' : Subgraph G) : Prop
+参数：G' : Subgraph G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInduced
-  signature: (G' : Subgraph G)
-  body: forall ⦃v⦄, v in G'.verts -> forall ⦃w⦄, w in G'.verts -> G.Adj v w -> G'.Adj v w
-
-中文:
-定义 是Induced
-  签名: (G' : 子图 G)
-  定义体: forall ⦃v⦄, v in G'.verts -> forall ⦃w⦄, w in G'.verts -> G.Adj v w -> G'.Adj v w
-
-Depends on / 依赖: G.Adj
+--- 原说明 ---
+A subgraph is called an *induced subgraph* if vertices of `G'` are adjacent if
+they are adjacent in `G`.
 -/
 def IsInduced (G' : Subgraph G) : Prop :=
-  forall ⦃v⦄, v in G'.verts -> forall ⦃w⦄, w in G'.verts -> G.Adj v w -> G'.Adj v w
-
-/--
-lemma `IsInduced.adj` / 引理 `IsInduced.adj`
-
-English:
-lemma IsInduced.adj
-  given: {G' : G.Subgraph} (hG' : G'.IsInduced) {a b : G'.verts}
-  proof: ⟨coe_adj_sub _ _ _, hG' a.2 b.2⟩
-
-中文:
-引理 是Induced.adj
-  条件: {G' : G.子图} (hG' : G'.是Induced) {a b : G'.verts}
-  证明: ⟨coe_adj_sub _ _ _, hG' a.2 b.2⟩
+  ∀ ⦃v⦄, v ∈ G'.verts → ∀ ⦃w⦄, w ∈ G'.verts → G.Adj v w → G'.Adj v w
+/-
+**SimpleGraph.Subgraph.IsInduced.adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subg
+raph.IsInduced`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {G' : G.Subgraph}, G'.IsInduced → ∀ {a 
+b : ↑G'.verts}, G'.Adj ↑a ↑b ↔ G.Adj ↑a ↑b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.coe_adj_sub`：coe_adj_sub (G' : Subgraph G) (u v : G
+'.verts) (h : G'.coe.Adj u v) : G.Adj u v
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 @[simp] protected lemma IsInduced.adj {G' : G.Subgraph} (hG' : G'.IsInduced) {a b : G'.verts} :
     G'.Adj a b ↔ G.Adj a b :=
   ⟨coe_adj_sub _ _ _, hG' a.2 b.2⟩
 
-/--
-Definition of `support` / `support` 的定义
+/-- `H.support` is the set of vertices that form edges in the subgraph `H`. -/
+/-
+**SimpleGraph.Subgraph.support** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：support (H : Subgraph G) : Set V
+参数：H : Subgraph G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition support
-  signature: (H : Subgraph G)
-  body: SetRel.dom {(v, w) | H.Adj v w}
-
-中文:
-定义 support
-  签名: (H : 子图 G)
-  定义体: SetRel.dom {(v, w) | H.Adj v w}
-
-Depends on / 依赖: H.Adj, SetRel, SetRel.dom
+--- 原说明 ---
+`H.support` is the set of vertices that form edges in the subgraph `H`.
 -/
 def support (H : Subgraph G) : Set V := SetRel.dom {(v, w) | H.Adj v w}
-
-/--
-theorem `mem_support` / 定理 `mem_support`
-
-English:
-theorem mem_support
-  given: (H : Subgraph G) {v : V}
-  statement: v in H.support ↔ exists w, H.Adj v w
-  proof: Iff.rfl
-
-中文:
-定理 mem_support
-  条件: (H : 子图 G) {v : V}
-  结论: v in H.support ↔ 存在 w, H.伴随 v w
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.mem_support** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：mem_support (H : Subgraph G) {v : V} : v in H.support ↔ exists w, H.Adj v 
+w
+参数：H : Subgraph G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_support (H : Subgraph G) {v : V} : v in H.support ↔ exists w, H.Adj v w := Iff.rfl
-
-/--
-theorem `support_subset_verts` / 定理 `support_subset_verts`
-
-English:
-theorem support_subset_verts
-  given: (H : Subgraph G)
-  statement: H.support subseteq H.verts
-  proof: fun _ ⟨_, h⟩ => H.edge_vert h
-
-中文:
-定理 support_subset_verts
-  条件: (H : 子图 G)
-  结论: H.support subseteq H.verts
-  证明: fun _ ⟨_, h⟩ => H.edge_vert h
-
-Depends on / 依赖: H.edge_vert, edge_vert
+theorem mem_support (H : Subgraph G) {v : V} : v ∈ H.support ↔ ∃ w, H.Adj v w := Iff.rfl
+/-
+**SimpleGraph.Subgraph.support_subset_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：support_subset_verts (H : Subgraph G) : H.support subseteq H.verts
+参数：H : Subgraph G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
 -/
-theorem support_subset_verts (H : Subgraph G) : H.support subseteq H.verts :=
-  fun _ ⟨_, h⟩ => H.edge_vert h
+theorem support_subset_verts (H : Subgraph G) : H.support ⊆ H.verts :=
+  fun _ ⟨_, h⟩ ↦ H.edge_vert h
 
-/--
-Definition of `neighborSet` / `neighborSet` 的定义
+/-- `G'.neighborSet v` is the set of vertices adjacent to `v` in `G'`. -/
+/-
+**SimpleGraph.Subgraph.neighborSet** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：neighborSet (G' : Subgraph G) (v : V) : Set V
+参数：G' : Subgraph G；v : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition neighborSet
-  signature: (G' : Subgraph G) (v : V)
-  body: {w | G'.Adj v w}
-
-中文:
-定义 neighborSet
-  签名: (G' : 子图 G) (v : V)
-  定义体: {w | G'.Adj v w}
+--- 原说明 ---
+`G'.neighborSet v` is the set of vertices adjacent to `v` in `G'`.
 -/
 def neighborSet (G' : Subgraph G) (v : V) : Set V := {w | G'.Adj v w}
-
-/--
-theorem `neighborSet_subset` / 定理 `neighborSet_subset`
-
-English:
-theorem neighborSet_subset
-  given: (G' : Subgraph G) (v : V)
-  statement: G'.neighborSet v subseteq G.neighborSet v
-  proof: fun _ => G'.adj_sub
-
-中文:
-定理 neighborSet_subset
-  条件: (G' : 子图 G) (v : V)
-  结论: G'.neighborSet v subseteq G.neighborSet v
-  证明: fun _ => G'.adj_sub
-
-Depends on / 依赖: adj_sub
+/-
+**SimpleGraph.Subgraph.neighborSet_subset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Subgraph`。
+形式化陈述：neighborSet_subset (G' : Subgraph G) (v : V) : G'.neighborSet v subseteq G
+.neighborSet v
+参数：G' : Subgraph G；v : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
-theorem neighborSet_subset (G' : Subgraph G) (v : V) : G'.neighborSet v subseteq G.neighborSet v :=
-  fun _ => G'.adj_sub
-
-/--
-theorem `neighborSet_subset_verts` / 定理 `neighborSet_subset_verts`
-
-English:
-theorem neighborSet_subset_verts
-  given: (G' : Subgraph G) (v : V)
-  statement: G'.neighborSet v subseteq G'.verts
-  proof: fun _ h => G'.edge_vert (adj_symm G' h)
+theorem neighborSet_subset (G' : Subgraph G) (v : V) : G'.neighborSet v ⊆ G.neighborSet v :=
+  fun _ ↦ G'.adj_sub
+/-
+**SimpleGraph.Subgraph.neighborSet_subset_verts** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph.Subgraph`。
+形式化陈述：neighborSet_subset_verts (G' : Subgraph G) (v : V) : G'.neighborSet v subs
+eteq G'.verts
+参数：G' : Subgraph G；v : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.adj_symm`：adj_symm (G' : Subgraph G) {u v : V} (h :
+ G'.Adj u v) : G'.Adj v u
+-/
+theorem neighborSet_subset_verts (G' : Subgraph G) (v : V) : G'.neighborSet v ⊆ G'.verts :=
+  fun _ h ↦ G'.edge_vert (adj_symm G' h)
 
 @[simp]
-
-中文:
-定理 neighborSet_subset_verts
-  条件: (G' : 子图 G) (v : V)
-  结论: G'.neighborSet v subseteq G'.verts
-  证明: fun _ h => G'.edge_vert (adj_symm G' h)
-
-@[simp]
-
-Depends on / 依赖: adj_symm, edge_vert
+/-
+**SimpleGraph.Subgraph.mem_neighborSet** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：mem_neighborSet (G' : Subgraph G) (v w : V) : w in G'.neighborSet v ↔ G'.A
+dj v w
+参数：G' : Subgraph G；v w : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem neighborSet_subset_verts (G' : Subgraph G) (v : V) : G'.neighborSet v subseteq G'.verts :=
-  fun _ h => G'.edge_vert (adj_symm G' h)
+theorem mem_neighborSet (G' : Subgraph G) (v w : V) : w ∈ G'.neighborSet v ↔ G'.Adj v w := Iff.rfl
 
-@[simp]
-/--
-theorem `mem_neighborSet` / 定理 `mem_neighborSet`
+/-- A subgraph as a graph has equivalent neighbor sets. -/
+/-
+**SimpleGraph.Subgraph.coeNeighborSetEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGrap
+h.Subgraph`。
+形式化陈述：coeNeighborSetEquiv {G' : Subgraph G} (v : G'.verts) : G'.coe.neighborSet 
+v ≃ G'.neighborSet v where toFun w
+参数：v : G'.verts。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mem_neighborSet
-  given: (G' : Subgraph G) (v w : V)
-  statement: w in G'.neighborSet v ↔ G'.Adj v w
-  proof: Iff.rfl
-
-中文:
-定理 mem_neighborSet
-  条件: (G' : 子图 G) (v w : V)
-  结论: w in G'.neighborSet v ↔ G'.伴随 v w
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
--/
-theorem mem_neighborSet (G' : Subgraph G) (v w : V) : w in G'.neighborSet v ↔ G'.Adj v w := Iff.rfl
-
-/--
-Definition of `coeNeighborSetEquiv` / `coeNeighborSetEquiv` 的定义
-
-English:
-definition coeNeighborSetEquiv
-  signature: {G' : Subgraph G} (v : G'.verts)
-  body: ⟨w, w.2⟩
-  invFun w := ⟨⟨w, G'.edge_vert (G'.adj_symm w.2)⟩, w.2⟩
-
-中文:
-定义 coeNeighborSetEquiv
-  签名: {G' : 子图 G} (v : G'.verts)
-  定义体: ⟨w, w.2⟩
-  invFun w := ⟨⟨w, G'.edge_vert (G'.adj_symm w.2)⟩, w.2⟩
+--- 原说明 ---
+A subgraph as a graph has equivalent neighbor sets.
 -/
 def coeNeighborSetEquiv {G' : Subgraph G} (v : G'.verts) :
     G'.coe.neighborSet v ≃ G'.neighborSet v where
   toFun w := ⟨w, w.2⟩
   invFun w := ⟨⟨w, G'.edge_vert (G'.adj_symm w.2)⟩, w.2⟩
 
-/--
-Definition of `edgeSet` / `edgeSet` 的定义
+/-- The edge set of `G'` consists of a subset of edges of `G`. -/
+/-
+**SimpleGraph.Subgraph.edgeSet** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：edgeSet (G' : Subgraph G) : Set (Sym2 V)
+参数：G' : Subgraph G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.symm`：∀ {V : Type u} {G : SimpleGraph V} (self : G.
+Subgraph), Std.Symm self.Adj
 
-English:
-definition edgeSet
-  signature: (G' : Subgraph G)
-  body: Sym2.fromRel G'.symm
-
-中文:
-定义 edgeSet
-  签名: (G' : 子图 G)
-  定义体: Sym2.fromRel G'.symm
-
-Depends on / 依赖: Sym2.fromRel, fromRel
+--- 原说明 ---
+The edge set of `G'` consists of a subset of edges of `G`.
 -/
 def edgeSet (G' : Subgraph G) : Set (Sym2 V) := Sym2.fromRel G'.symm
-
-/--
-theorem `edgeSet_subset` / 定理 `edgeSet_subset`
-
-English:
-theorem edgeSet_subset
-  given: (G' : Subgraph G)
-  statement: G'.edgeSet subseteq G.edgeSet
-  proof: Sym2.ind (fun _ _ => G'.adj_sub)
-
-@[simp]
-
-中文:
-定理 edgeSet_subset
-  条件: (G' : 子图 G)
-  结论: G'.edgeSet subseteq G.edgeSet
-  证明: Sym2.ind (fun _ _ => G'.adj_sub)
-
-@[simp]
-
-Depends on / 依赖: Sym2.ind, adj_sub
+/-
+**SimpleGraph.Subgraph.edgeSet_subset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：edgeSet_subset (G' : Subgraph G) : G'.edgeSet subseteq G.edgeSet
+参数：G' : Subgraph G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
-theorem edgeSet_subset (G' : Subgraph G) : G'.edgeSet subseteq G.edgeSet :=
-  Sym2.ind (fun _ _ => G'.adj_sub)
+theorem edgeSet_subset (G' : Subgraph G) : G'.edgeSet ⊆ G.edgeSet :=
+  Sym2.ind (fun _ _ ↦ G'.adj_sub)
 
 @[simp]
-/--
-lemma `mem_edgeSet` / 引理 `mem_edgeSet`
-
-English:
-lemma mem_edgeSet
-  given: {G' : Subgraph G} {v w : V}
-  statement: s(v, w) in G'.edgeSet ↔ G'.Adj v w
-  proof: .rfl
-
-中文:
-引理 mem_edgeSet
-  条件: {G' : 子图 G} {v w : V}
-  结论: s(v, w) in G'.edgeSet ↔ G'.伴随 v w
-  证明: .rfl
+/-
+**SimpleGraph.Subgraph.mem_edgeSet** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {G' : G.Subgraph} {v w : V}, s(v, w) ∈ 
+G'.edgeSet ↔ G'.Adj v w
+参数：v, w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected lemma mem_edgeSet {G' : Subgraph G} {v w : V} : s(v, w) in G'.edgeSet ↔ G'.Adj v w := .rfl
-
-/--
-lemma `edgeSet_coe` / 引理 `edgeSet_coe`
-
-English:
-lemma edgeSet_coe
-  given: {G' : G.Subgraph}
-  statement: G'.coe.edgeSet = Sym2.map (↑) ⁻¹' G'.edgeSet
-  proof: by
-  ext e; induction e using Sym2.ind; simp
-
-中文:
-引理 edgeSet_coe
-  条件: {G' : G.子图}
-  结论: G'.coe.edgeSet = Sym2.map (↑) ⁻¹' G'.edgeSet
-  证明: by
-  ext e; induction e using Sym2.ind; simp
+protected lemma mem_edgeSet {G' : Subgraph G} {v w : V} : s(v, w) ∈ G'.edgeSet ↔ G'.Adj v w := .rfl
+/-
+**SimpleGraph.Subgraph.edgeSet_coe** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {G' : G.Subgraph}, G'.coe.edgeSet = Sym
+2.map Subtype.val ⁻¹' G'.edgeSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma edgeSet_coe {G' : G.Subgraph} : G'.coe.edgeSet = Sym2.map (↑) ⁻¹' G'.edgeSet := by
   ext e; induction e using Sym2.ind; simp
-
-/--
-lemma `image_coe_edgeSet_coe` / 引理 `image_coe_edgeSet_coe`
-
-English:
-lemma image_coe_edgeSet_coe
-  given: (G' : G.Subgraph)
-  statement: Sym2.map (↑) '' G'.coe.edgeSet = G'.edgeSet
-  proof: by
-  rw [edgeSet_coe]; rw [Set.image_preimage_eq_iff]
-  rintro e he
-  induction e using Sym2.ind with | h a b =>
-  rw [Subgraph.mem_edgeSet] at he
-  exact ⟨s(⟨a, edge_vert _ he⟩, ⟨b, edge_vert _ he.symm⟩), Sym2.map_mk ..⟩
-
-@[simp]
-
-中文:
-引理 image_coe_edgeSet_coe
-  条件: (G' : G.子图)
-  结论: Sym2.map (↑) '' G'.coe.edgeSet = G'.edgeSet
-  证明: by
-  rw [edgeSet_coe]; rw [Set.image_preimage_eq_iff]
-  rintro e he
-  induction e using Sym2.ind with | h a b =>
-  rw [Subgraph.mem_edgeSet] at he
-  exact ⟨s(⟨a, edge_vert _ he⟩, ⟨b, edge_vert _ he.symm⟩), Sym2.map_mk ..⟩
-
-@[simp]
-
-Depends on / 依赖: Set.image_preimage_eq_iff, Subgraph, Subgraph.mem_edgeSet, Sym2.ind, Sym2.map_mk, edgeSet_coe, edge_vert, he.symm, image_preimage_eq_iff, map_mk, mem_edgeSet
+/-
+**SimpleGraph.Subgraph.image_coe_edgeSet_coe** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph.Subgraph`。
+形式化陈述：image_coe_edgeSet_coe (G' : G.Subgraph) : Sym2.map (↑) '' G'.coe.edgeSet =
+ G'.edgeSet
+参数：G' : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_coe`：∀ {V : Type u} {G : SimpleGraph V} {G'
+ : G.Subgraph}, G'.coe.edgeSet = Sym2.map Subtype.val ⁻¹' G'.edgeSet
+· 使用定理 `Set.image_preimage_eq_iff`：image_preimage_eq_iff {f : α -> β} {s : Set β
+} : f '' f ⁻¹' s = s ↔ s subseteq range f
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.mem_edgeSet`：∀ {V : Type u} {G : SimpleGraph V} {G'
+ : G.Subgraph} {v w : V}, s(v, w) ∈ G'.edgeSet ↔ G'.Adj v w
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
+· 使用定理 `Sym2.map_mk`：map_mk (f : α -> β) (a b : α) : map f s(a, b) = s(f a, f b)
 -/
 lemma image_coe_edgeSet_coe (G' : G.Subgraph) : Sym2.map (↑) '' G'.coe.edgeSet = G'.edgeSet := by
-  rw [edgeSet_coe]; rw [Set.image_preimage_eq_iff]
+  rw [edgeSet_coe, Set.image_preimage_eq_iff]
   rintro e he
   induction e using Sym2.ind with | h a b =>
   rw [Subgraph.mem_edgeSet] at he
   exact ⟨s(⟨a, edge_vert _ he⟩, ⟨b, edge_vert _ he.symm⟩), Sym2.map_mk ..⟩
 
 @[simp]
-/--
-lemma `edgeSet_spanningCoe` / 引理 `edgeSet_spanningCoe`
-
-English:
-lemma edgeSet_spanningCoe
-  given: (G' : G.Subgraph)
-  statement: G'.spanningCoe.edgeSet = G'.edgeSet
-  proof: by
-  rfl
-
-中文:
-引理 edgeSet_spanningCoe
-  条件: (G' : G.子图)
-  结论: G'.spanningCoe.edgeSet = G'.edgeSet
-  证明: by
-  rfl
+/-
+**SimpleGraph.Subgraph.edgeSet_spanningCoe** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h.Subgraph`。
+形式化陈述：edgeSet_spanningCoe (G' : G.Subgraph) : G'.spanningCoe.edgeSet = G'.edgeSe
+t
+参数：G' : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma edgeSet_spanningCoe (G' : G.Subgraph) : G'.spanningCoe.edgeSet = G'.edgeSet := by
   rfl
-
-/--
-theorem `mem_verts_of_mem_edge` / 定理 `mem_verts_of_mem_edge`
-
-English:
-theorem mem_verts_of_mem_edge
-  statement: {G' : Subgraph G} {e : Sym2 V} {v : V} (he : e in G'.edgeSet)
-  proof: by
-  induction e
-  rcases Sym2.mem_iff.mp hv with (rfl | rfl)
-  · exact G'.edge_vert he
-· exact G'.edge_vert G'.adj_symm he
-
-中文:
-定理 mem_verts_of_mem_edge
-  结论: {G' : 子图 G} {e : Sym2 V} {v : V} (he : e in G'.edgeSet)
-  证明: by
-  induction e
-  rcases Sym2.mem_iff.mp hv with (rfl | rfl)
-  · exact G'.edge_vert he
-· exact G'.edge_vert G'.adj_symm he
-
-Depends on / 依赖: Sym2.mem_iff.mp, adj_symm, edge_vert, mem_iff
+/-
+**SimpleGraph.Subgraph.mem_verts_of_mem_edge** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.Subgraph`。
+形式化陈述：mem_verts_of_mem_edge {G' : Subgraph G} {e : Sym2 V} {v : V} (he : e in G'
+.edgeSet) (hv : v in e) : v in G'.verts
+参数：he : e in G'.edgeSet；hv : v in e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Sym2.mem_iff`：mem_iff {a b c : α} : a in s(b, c) ↔ a = b ∨ a = c
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.adj_symm`：adj_symm (G' : Subgraph G) {u v : V} (h :
+ G'.Adj u v) : G'.Adj v u
 -/
-theorem mem_verts_of_mem_edge {G' : Subgraph G} {e : Sym2 V} {v : V} (he : e in G'.edgeSet)
-    (hv : v in e) : v in G'.verts := by
+theorem mem_verts_of_mem_edge {G' : Subgraph G} {e : Sym2 V} {v : V} (he : e ∈ G'.edgeSet)
+    (hv : v ∈ e) : v ∈ G'.verts := by
   induction e
   rcases Sym2.mem_iff.mp hv with (rfl | rfl)
   · exact G'.edge_vert he
-· exact G'.edge_vert G'.adj_symm he
+  · exact G'.edge_vert <| G'.adj_symm he
 
-/--
-Definition of `incidenceSet` / `incidenceSet` 的定义
+/-- The `incidenceSet` is the set of edges incident to a given vertex. -/
+/-
+**SimpleGraph.Subgraph.incidenceSet** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：incidenceSet (G' : Subgraph G) (v : V) : Set (Sym2 V)
+参数：G' : Subgraph G；v : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incidenceSet
-  signature: (G' : Subgraph G) (v : V)
-  body: {e in G'.edgeSet | v in e}
-
-中文:
-定义 incidenceSet
-  签名: (G' : 子图 G) (v : V)
-  定义体: {e in G'.edgeSet | v in e}
-
-Depends on / 依赖: edgeSet
+--- 原说明 ---
+The `incidenceSet` is the set of edges incident to a given vertex.
 -/
-def incidenceSet (G' : Subgraph G) (v : V) : Set (Sym2 V) := {e in G'.edgeSet | v in e}
-
-/--
-theorem `incidenceSet_subset_incidenceSet` / 定理 `incidenceSet_subset_incidenceSet`
-
-English:
-theorem incidenceSet_subset_incidenceSet
-  given: (G' : Subgraph G) (v : V)
-  proof: fun _ h => ⟨G'.edgeSet_subset h.1, h.2⟩
-
-中文:
-定理 incidenceSet_subset_incidenceSet
-  条件: (G' : 子图 G) (v : V)
-  证明: fun _ h => ⟨G'.edgeSet_subset h.1, h.2⟩
-
-Depends on / 依赖: edgeSet_subset
+def incidenceSet (G' : Subgraph G) (v : V) : Set (Sym2 V) := {e ∈ G'.edgeSet | v ∈ e}
+/-
+**SimpleGraph.Subgraph.incidenceSet_subset_incidenceSet** 是 Mathlib 中的一个定理，位于命名空
+间 `SimpleGraph.Subgraph`。
+形式化陈述：incidenceSet_subset_incidenceSet (G' : Subgraph G) (v : V) : G'.incidenceS
+et v subseteq G.incidenceSet v
+参数：G' : Subgraph G；v : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_subset`：edgeSet_subset (G' : Subgraph G) : 
+G'.edgeSet subseteq G.edgeSet
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem incidenceSet_subset_incidenceSet (G' : Subgraph G) (v : V) :
-    G'.incidenceSet v subseteq G.incidenceSet v :=
-  fun _ h => ⟨G'.edgeSet_subset h.1, h.2⟩
-
-/--
-theorem `incidenceSet_subset` / 定理 `incidenceSet_subset`
-
-English:
-theorem incidenceSet_subset
-  given: (G' : Subgraph G) (v : V)
-  statement: G'.incidenceSet v subseteq G'.edgeSet
-  proof: fun _ h => h.1
-
-中文:
-定理 incidenceSet_subset
-  条件: (G' : 子图 G) (v : V)
-  结论: G'.incidenceSet v subseteq G'.edgeSet
-  证明: fun _ h => h.1
+    G'.incidenceSet v ⊆ G.incidenceSet v :=
+  fun _ h ↦ ⟨G'.edgeSet_subset h.1, h.2⟩
+/-
+**SimpleGraph.Subgraph.incidenceSet_subset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.Subgraph`。
+形式化陈述：incidenceSet_subset (G' : Subgraph G) (v : V) : G'.incidenceSet v subseteq
+ G'.edgeSet
+参数：G' : Subgraph G；v : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem incidenceSet_subset (G' : Subgraph G) (v : V) : G'.incidenceSet v subseteq G'.edgeSet :=
-  fun _ h => h.1
+theorem incidenceSet_subset (G' : Subgraph G) (v : V) : G'.incidenceSet v ⊆ G'.edgeSet :=
+  fun _ h ↦ h.1
 
-/--
-Definition of `vert` / `vert` 的定义
+/-- Give a vertex as an element of the subgraph's vertex type. -/
+/-
+**SimpleGraph.Subgraph.vert** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：vert (G' : Subgraph G) (v : V) (h : v in G'.verts) : G'.verts
+参数：G' : Subgraph G；v : V；h : v in G'.verts。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation vert
-  signature: (G' : Subgraph G) (v : V) (h : v in G'.verts)
-  body: ⟨v, h⟩
-
-中文:
-缩写 vert
-  签名: (G' : 子图 G) (v : V) (h : v in G'.verts)
-  定义体: ⟨v, h⟩
+--- 原说明 ---
+Give a vertex as an element of the subgraph's vertex type.
 -/
-abbrev vert (G' : Subgraph G) (v : V) (h : v in G'.verts) : G'.verts := ⟨v, h⟩
+abbrev vert (G' : Subgraph G) (v : V) (h : v ∈ G'.verts) : G'.verts := ⟨v, h⟩
 
 /--
-Definition of `copy` / `copy` 的定义
+Create an equal copy of a subgraph (see `copy_eq`) with possibly different definitional equalities.
+See Note [range copy pattern].
+-/
+/-
+**SimpleGraph.Subgraph.copy** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：copy (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts) (adj' : V -> V 
+-> Prop) (hadj : adj' = G'.Adj) : Subgraph G where verts
+参数：G' : Subgraph G；V'' : Set V；hV : V'' = G'.verts；adj' : V -> V -> Prop；hadj : 
+adj' = G'.Adj。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts)
-  body: V''
-  Adj := adj'
-  adj_sub := hadj.symm ▸ G'.adj_sub
-  edge_vert := hV.symm ▸ hadj.symm ▸ G'.edge_vert
-  symm := hadj.symm ▸ G'.symm
-
-中文:
-定义 copy
-  签名: (G' : 子图 G) (V'' : 集合 V) (hV : V'' = G'.verts)
-  定义体: V''
-  Adj := adj'
-  adj_sub := hadj.symm ▸ G'.adj_sub
-  edge_vert := hV.symm ▸ hadj.symm ▸ G'.edge_vert
-  symm := hadj.symm ▸ G'.symm
+--- 原说明 ---
+Create an equal copy of a subgraph (see `copy_eq`) with possibly different defin
+itional equalities.
+See Note [range copy pattern].
 -/
 def copy (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts)
-    (adj' : V -> V -> Prop) (hadj : adj' = G'.Adj) : Subgraph G where
+    (adj' : V → V → Prop) (hadj : adj' = G'.Adj) : Subgraph G where
   verts := V''
   Adj := adj'
   adj_sub := hadj.symm ▸ G'.adj_sub
   edge_vert := hV.symm ▸ hadj.symm ▸ G'.edge_vert
   symm := hadj.symm ▸ G'.symm
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  statement: (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts)
-  proof: Subgraph.ext hV hadj
-
-中文:
-定理 copy_eq
-  结论: (G' : 子图 G) (V'' : 集合 V) (hV : V'' = G'.verts)
-  证明: Subgraph.ext hV hadj
-
-Depends on / 依赖: Subgraph, Subgraph.ext
+/-
+**SimpleGraph.Subgraph.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：copy_eq (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts) (adj' : V ->
+ V -> Prop) (hadj : adj' = G'.Adj) : G'.copy V'' hV adj' hadj = G'
+参数：G' : Subgraph G；V'' : Set V；hV : V'' = G'.verts；adj' : V -> V -> Prop；hadj : 
+adj' = G'.Adj。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
 -/
 theorem copy_eq (G' : Subgraph G) (V'' : Set V) (hV : V'' = G'.verts)
-    (adj' : V -> V -> Prop) (hadj : adj' = G'.Adj) : G'.copy V'' hV adj' hadj = G' :=
+    (adj' : V → V → Prop) (hadj : adj' = G'.Adj) : G'.copy V'' hV adj' hadj = G' :=
   Subgraph.ext hV hadj
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The union of two subgraphs. -/
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Max G.Subgraph
-  body: { verts := G₁.verts union G₂.verts
-      Adj := G₁.Adj ⊔ G₂.Adj
-      adj_sub := fun hab => Or.elim hab (fun h => G₁.adj_sub h) fun h => G₂.adj_sub h
-      edge_vert := Or.imp (fun h => G₁.edge_vert h) fun h => G₂.edge_vert h
-      symm.symm _ _ := Or.imp G₁.adj_symm G₂.adj_symm }
-
-中文:
-实例 :
-  签名: 最大值 G.子图
-  定义体: { verts := G₁.verts union G₂.verts
-      Adj := G₁.Adj ⊔ G₂.Adj
-      adj_sub := fun hab => Or.elim hab (fun h => G₁.adj_sub h) fun h => G₂.adj_sub h
-      edge_vert := Or.imp (fun h => G₁.edge_vert h) fun h => G₂.edge_vert h
-      symm.symm _ _ := Or.imp G₁.adj_symm G₂.adj_symm }
-
-Depends on / 依赖: Or.elim, Or.imp, adj_sub, adj_symm, edge_vert, symm.symm
+--- 原说明 ---
+The union of two subgraphs.
 -/
 instance : Max G.Subgraph where
   max G₁ G₂ :=
-    { verts := G₁.verts union G₂.verts
+    { verts := G₁.verts ∪ G₂.verts
       Adj := G₁.Adj ⊔ G₂.Adj
       adj_sub := fun hab => Or.elim hab (fun h => G₁.adj_sub h) fun h => G₂.adj_sub h
       edge_vert := Or.imp (fun h => G₁.edge_vert h) fun h => G₂.edge_vert h
       symm.symm _ _ := Or.imp G₁.adj_symm G₂.adj_symm }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The intersection of two subgraphs. -/
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min G.Subgraph
-  body: { verts := G₁.verts inter G₂.verts
-      Adj := G₁.Adj ⊓ G₂.Adj
-      adj_sub := fun hab => G₁.adj_sub hab.1
-      edge_vert := And.imp (fun h => G₁.edge_vert h) fun h => G₂.edge_vert h
-      symm.symm _ _ := And.imp G₁.adj_symm G₂.adj_symm }
-
-中文:
-实例 :
-  签名: 最小值 G.子图
-  定义体: { verts := G₁.verts inter G₂.verts
-      Adj := G₁.Adj ⊓ G₂.Adj
-      adj_sub := fun hab => G₁.adj_sub hab.1
-      edge_vert := And.imp (fun h => G₁.edge_vert h) fun h => G₂.edge_vert h
-      symm.symm _ _ := And.imp G₁.adj_symm G₂.adj_symm }
-
-Depends on / 依赖: And.imp, adj_sub, adj_symm, edge_vert, symm.symm
+--- 原说明 ---
+The intersection of two subgraphs.
 -/
 instance : Min G.Subgraph where
   min G₁ G₂ :=
-    { verts := G₁.verts inter G₂.verts
+    { verts := G₁.verts ∩ G₂.verts
       Adj := G₁.Adj ⊓ G₂.Adj
       adj_sub := fun hab => G₁.adj_sub hab.1
       edge_vert := And.imp (fun h => G₁.edge_vert h) fun h => G₂.edge_vert h
       symm.symm _ _ := And.imp G₁.adj_symm G₂.adj_symm }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The `top` subgraph is `G` as a subgraph of itself. -/
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Top G.Subgraph
-  body: Set.univ
-  top.Adj := G.Adj
-  top.adj_sub := id
-  top.edge_vert := @fun v _ _ => Set.mem_univ v
-  top.symm := G.symm
-
-中文:
-实例 :
-  签名: 顶元素 G.子图
-  定义体: Set.univ
-  top.Adj := G.Adj
-  top.adj_sub := id
-  top.edge_vert := @fun v _ _ => Set.mem_univ v
-  top.symm := G.symm
-
-Depends on / 依赖: Set.univ
+--- 原说明 ---
+The `top` subgraph is `G` as a subgraph of itself.
 -/
 instance : Top G.Subgraph where
   top.verts := Set.univ
@@ -1264,66 +970,27 @@ instance : Top G.Subgraph where
   top.edge_vert := @fun v _ _ => Set.mem_univ v
   top.symm := G.symm
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The `bot` subgraph is the subgraph with no vertices or edges. -/
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Bot G.Subgraph
-  body: ∅
-  bot.Adj := ⊥
-  bot.adj_sub := False.elim
-  bot.edge_vert := False.elim
-
-中文:
-实例 :
-  签名: 底元素 G.子图
-  定义体: ∅
-  bot.Adj := ⊥
-  bot.adj_sub := False.elim
-  bot.edge_vert := False.elim
+--- 原说明 ---
+The `bot` subgraph is the subgraph with no vertices or edges.
 -/
 instance : Bot G.Subgraph where
   bot.verts := ∅
   bot.Adj := ⊥
   bot.adj_sub := False.elim
   bot.edge_vert := False.elim
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet G.Subgraph
-  body: { verts := ⋃ G' in s, verts G'
-      Adj := fun a b => exists G' in s, Adj G' a b
-      adj_sub := by
-        rintro a b ⟨G', -, hab⟩
-        exact G'.adj_sub hab
-      edge_vert := by
-        rintro a b ⟨G', hG', hab⟩
-        exact Set.mem_iUnion₂_of_mem hG' (G'.edge_vert hab)
-      symm.symm a b h := by simpa [adj_comm] using h }
-
-中文:
-实例 :
-  签名: 上确界集 G.子图
-  定义体: { verts := ⋃ G' in s, verts G'
-      Adj := fun a b => exists G' in s, Adj G' a b
-      adj_sub := by
-        rintro a b ⟨G', -, hab⟩
-        exact G'.adj_sub hab
-      edge_vert := by
-        rintro a b ⟨G', hG', hab⟩
-        exact Set.mem_iUnion₂_of_mem hG' (G'.edge_vert hab)
-      symm.symm a b h := by simpa [adj_comm] using h }
-
-Depends on / 依赖: Set.mem_iUnion, adj_comm, adj_sub, edge_vert, symm.symm
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet G.Subgraph where
   sSup s :=
-    { verts := ⋃ G' in s, verts G'
-      Adj := fun a b => exists G' in s, Adj G' a b
+    { verts := ⋃ G' ∈ s, verts G'
+      Adj := fun a b => ∃ G' ∈ s, Adj G' a b
       adj_sub := by
         rintro a b ⟨G', -, hab⟩
         exact G'.adj_sub hab
@@ -1331,584 +998,389 @@ instance : SupSet G.Subgraph where
         rintro a b ⟨G', hG', hab⟩
         exact Set.mem_iUnion₂_of_mem hG' (G'.edge_vert hab)
       symm.symm a b h := by simpa [adj_comm] using h }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet G.Subgraph
-  body: { verts := ⋂ G' in s, verts G'
-      Adj := fun a b => (forall ⦃G'⦄, G' in s -> Adj G' a b) ∧ G.Adj a b
-      adj_sub := And.right
-edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert hab.1 hG'
-      symm.symm _ _ := And.imp (forall₂_imp fun _ _ => Adj.symm) G.adj_symm }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 下确界集 G.子图
-  定义体: { verts := ⋂ G' in s, verts G'
-      Adj := fun a b => (forall ⦃G'⦄, G' in s -> Adj G' a b) ∧ G.Adj a b
-      adj_sub := And.right
-edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert hab.1 hG'
-      symm.symm _ _ := And.imp (forall₂_imp fun _ _ => Adj.symm) G.adj_symm }
-
-@[simp]
-
-Depends on / 依赖: Adj.symm, And.imp, And.right, G.Adj, G.adj_symm, Set.mem_iInter, adj_sub, adj_symm, edge_vert, symm.symm
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet G.Subgraph where
   sInf s :=
-    { verts := ⋂ G' in s, verts G'
-      Adj := fun a b => (forall ⦃G'⦄, G' in s -> Adj G' a b) ∧ G.Adj a b
+    { verts := ⋂ G' ∈ s, verts G'
+      Adj := fun a b => (∀ ⦃G'⦄, G' ∈ s → Adj G' a b) ∧ G.Adj a b
       adj_sub := And.right
-edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert hab.1 hG'
-      symm.symm _ _ := And.imp (forall₂_imp fun _ _ => Adj.symm) G.adj_symm }
+      edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert <| hab.1 hG'
+      symm.symm _ _ := And.imp (forall₂_imp fun _ _ ↦ Adj.symm) G.adj_symm }
 
 @[simp]
-/--
-theorem `sup_adj` / 定理 `sup_adj`
-
-English:
-theorem sup_adj
-  statement: (G₁ ⊔ G₂).Adj a b ↔ G₁.Adj a b ∨ G₂.Adj a b
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 sup_adj
-  结论: (G₁ ⊔ G₂).伴随 a b ↔ G₁.伴随 a b ∨ G₂.伴随 a b
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.sup_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：sup_adj : (G₁ ⊔ G₂).Adj a b ↔ G₁.Adj a b ∨ G₂.Adj a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sup_adj : (G₁ ⊔ G₂).Adj a b ↔ G₁.Adj a b ∨ G₂.Adj a b :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `inf_adj` / 定理 `inf_adj`
-
-English:
-theorem inf_adj
-  statement: (G₁ ⊓ G₂).Adj a b ↔ G₁.Adj a b ∧ G₂.Adj a b
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 inf_adj
-  结论: (G₁ ⊓ G₂).伴随 a b ↔ G₁.伴随 a b ∧ G₂.伴随 a b
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.inf_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：inf_adj : (G₁ ⊓ G₂).Adj a b ↔ G₁.Adj a b ∧ G₂.Adj a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem inf_adj : (G₁ ⊓ G₂).Adj a b ↔ G₁.Adj a b ∧ G₂.Adj a b :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `top_adj` / 定理 `top_adj`
-
-English:
-theorem top_adj
-  statement: (⊤ : Subgraph G).Adj a b ↔ G.Adj a b
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 top_adj
-  结论: (⊤ : 子图 G).伴随 a b ↔ G.伴随 a b
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.top_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：top_adj : (⊤ : Subgraph G).Adj a b ↔ G.Adj a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem top_adj : (⊤ : Subgraph G).Adj a b ↔ G.Adj a b :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `not_bot_adj` / 定理 `not_bot_adj`
-
-English:
-theorem not_bot_adj
-  statement: ¬ (⊥ : Subgraph G).Adj a b
-  proof: not_false
-
-@[simp]
-
-中文:
-定理 not_bot_adj
-  结论: ¬ (⊥ : 子图 G).伴随 a b
-  证明: not_false
-
-@[simp]
-
-Depends on / 依赖: not_false
+/-
+**SimpleGraph.Subgraph.not_bot_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：not_bot_adj : ¬ (⊥ : Subgraph G).Adj a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_false`：¬False
 -/
 theorem not_bot_adj : ¬ (⊥ : Subgraph G).Adj a b :=
   not_false
 
 @[simp]
-/--
-theorem `verts_sup` / 定理 `verts_sup`
-
-English:
-theorem verts_sup
-  given: (G₁ G₂ : G.Subgraph)
-  statement: (G₁ ⊔ G₂).verts = G₁.verts union G₂.verts
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 verts_sup
-  条件: (G₁ G₂ : G.子图)
-  结论: (G₁ ⊔ G₂).verts = G₁.verts union G₂.verts
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.verts_sup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph
+`。
+形式化陈述：verts_sup (G₁ G₂ : G.Subgraph) : (G₁ ⊔ G₂).verts = G₁.verts union G₂.verts
+参数：G₁ G₂ : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem verts_sup (G₁ G₂ : G.Subgraph) : (G₁ ⊔ G₂).verts = G₁.verts union G₂.verts :=
+theorem verts_sup (G₁ G₂ : G.Subgraph) : (G₁ ⊔ G₂).verts = G₁.verts ∪ G₂.verts :=
   rfl
 
 @[simp]
-/--
-theorem `verts_inf` / 定理 `verts_inf`
-
-English:
-theorem verts_inf
-  given: (G₁ G₂ : G.Subgraph)
-  statement: (G₁ ⊓ G₂).verts = G₁.verts inter G₂.verts
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 verts_inf
-  条件: (G₁ G₂ : G.子图)
-  结论: (G₁ ⊓ G₂).verts = G₁.verts inter G₂.verts
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.verts_inf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph
+`。
+形式化陈述：verts_inf (G₁ G₂ : G.Subgraph) : (G₁ ⊓ G₂).verts = G₁.verts inter G₂.verts
+参数：G₁ G₂ : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem verts_inf (G₁ G₂ : G.Subgraph) : (G₁ ⊓ G₂).verts = G₁.verts inter G₂.verts :=
+theorem verts_inf (G₁ G₂ : G.Subgraph) : (G₁ ⊓ G₂).verts = G₁.verts ∩ G₂.verts :=
   rfl
 
 @[simp]
-/--
-theorem `verts_top` / 定理 `verts_top`
-
-English:
-theorem verts_top
-  statement: (⊤ : G.Subgraph).verts = Set.univ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 verts_top
-  结论: (⊤ : G.子图).verts = 集合.univ
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.verts_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph
+`。
+形式化陈述：verts_top : (⊤ : G.Subgraph).verts = Set.univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem verts_top : (⊤ : G.Subgraph).verts = Set.univ :=
   rfl
 
 @[simp]
-/--
-theorem `verts_bot` / 定理 `verts_bot`
-
-English:
-theorem verts_bot
-  statement: (⊥ : G.Subgraph).verts = ∅
-  proof: rfl
-
-中文:
-定理 verts_bot
-  结论: (⊥ : G.子图).verts = ∅
-  证明: rfl
+/-
+**SimpleGraph.Subgraph.verts_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph
+`。
+形式化陈述：verts_bot : (⊥ : G.Subgraph).verts = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem verts_bot : (⊥ : G.Subgraph).verts = ∅ :=
   rfl
-
-/--
-theorem `eq_bot_iff_verts_eq_empty` / 定理 `eq_bot_iff_verts_eq_empty`
-
-English:
-theorem eq_bot_iff_verts_eq_empty
-  given: (G' : G.Subgraph)
-  statement: G' = ⊥ ↔ G'.verts = ∅
-  proof: ⟨(· ▸ verts_bot), fun h => Subgraph.ext (h ▸ verts_bot (G := G))
-    funext₂ fun _ _ => propext ⟨fun h' => (h ▸ h'.fst_mem :), False.elim⟩⟩
-
-中文:
-定理 eq_bot_iff_verts_eq_empty
-  条件: (G' : G.子图)
-  结论: G' = ⊥ ↔ G'.verts = ∅
-  证明: ⟨(· ▸ verts_bot), fun h => Subgraph.ext (h ▸ verts_bot (G := G))
-    funext₂ fun _ _ => propext ⟨fun h' => (h ▸ h'.fst_mem :), False.elim⟩⟩
-
-Depends on / 依赖: False.elim, Subgraph, Subgraph.ext, fst_mem, propext, verts_bot
+/-
+**SimpleGraph.Subgraph.eq_bot_iff_verts_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph.Subgraph`。
+形式化陈述：eq_bot_iff_verts_eq_empty (G' : G.Subgraph) : G' = ⊥ ↔ G'.verts = ∅
+参数：G' : G.Subgraph。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.verts_bot`：verts_bot : (⊥ : G.Subgraph).verts = ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `funext₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort u
+_3} {f g : (a : α) → (b : β a) → γ a b},   (∀ (a : α) (b : β a), f a b = g a …
+· 使用定理 `SimpleGraph.Subgraph.Adj.fst_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → u ∈ H.verts
 -/
 theorem eq_bot_iff_verts_eq_empty (G' : G.Subgraph) : G' = ⊥ ↔ G'.verts = ∅ :=
-⟨(· ▸ verts_bot), fun h => Subgraph.ext (h ▸ verts_bot (G := G))
-    funext₂ fun _ _ => propext ⟨fun h' => (h ▸ h'.fst_mem :), False.elim⟩⟩
-
-/--
-theorem `ne_bot_iff_nonempty_verts` / 定理 `ne_bot_iff_nonempty_verts`
-
-English:
-theorem ne_bot_iff_nonempty_verts
-  given: (G' : G.Subgraph)
-  statement: G' != ⊥ ↔ G'.verts.Nonempty
-  proof: G'.eq_bot_iff_verts_eq_empty.not.trans Set.nonempty_iff_ne_empty.symm
-
-@[simp]
-
-中文:
-定理 ne_bot_iff_nonempty_verts
-  条件: (G' : G.子图)
-  结论: G' != ⊥ ↔ G'.verts.非空
-  证明: G'.eq_bot_iff_verts_eq_empty.not.trans Set.nonempty_iff_ne_empty.symm
-
-@[simp]
-
-Depends on / 依赖: Set.nonempty_iff_ne_empty.symm, eq_bot_iff_verts_eq_empty, eq_bot_iff_verts_eq_empty.not.trans, nonempty_iff_ne_empty
+  ⟨(· ▸ verts_bot), fun h ↦ Subgraph.ext (h ▸ verts_bot (G := G)) <|
+    funext₂ fun _ _ ↦ propext ⟨fun h' ↦ (h ▸ h'.fst_mem :), False.elim⟩⟩
+/-
+**SimpleGraph.Subgraph.ne_bot_iff_nonempty_verts** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph.Subgraph`。
+形式化陈述：ne_bot_iff_nonempty_verts (G' : G.Subgraph) : G' != ⊥ ↔ G'.verts.Nonempty
+参数：G' : G.Subgraph。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `SimpleGraph.Subgraph.eq_bot_iff_verts_eq_empty`：eq_bot_iff_verts_eq_empt
+y (G' : G.Subgraph) : G' = ⊥ ↔ G'.verts = ∅
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
 -/
-theorem ne_bot_iff_nonempty_verts (G' : G.Subgraph) : G' != ⊥ ↔ G'.verts.Nonempty :=
-G'.eq_bot_iff_verts_eq_empty.not.trans Set.nonempty_iff_ne_empty.symm
+theorem ne_bot_iff_nonempty_verts (G' : G.Subgraph) : G' ≠ ⊥ ↔ G'.verts.Nonempty :=
+  G'.eq_bot_iff_verts_eq_empty.not.trans <| Set.nonempty_iff_ne_empty.symm
 
 @[simp]
-/--
-theorem `sSup_adj` / 定理 `sSup_adj`
-
-English:
-theorem sSup_adj
-  given: {s : Set G.Subgraph}
-  statement: (sSup s).Adj a b ↔ exists G in s, Adj G a b
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 sSup_adj
-  条件: {s : 集合 G.子图}
-  结论: (sSup s).伴随 a b ↔ 存在 G in s, 伴随 G a b
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.sSup_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：sSup_adj {s : Set G.Subgraph} : (sSup s).Adj a b ↔ exists G in s, Adj G a 
+b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sSup_adj {s : Set G.Subgraph} : (sSup s).Adj a b ↔ exists G in s, Adj G a b :=
+theorem sSup_adj {s : Set G.Subgraph} : (sSup s).Adj a b ↔ ∃ G ∈ s, Adj G a b :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `sInf_adj` / 定理 `sInf_adj`
-
-English:
-theorem sInf_adj
-  given: {s : Set G.Subgraph}
-  statement: (sInf s).Adj a b ↔ (forall G' in s, Adj G' a b) ∧ G.Adj a b
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 sInf_adj
-  条件: {s : 集合 G.子图}
-  结论: (sInf s).伴随 a b ↔ (对任意 G' in s, 伴随 G' a b) ∧ G.伴随 a b
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.sInf_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：sInf_adj {s : Set G.Subgraph} : (sInf s).Adj a b ↔ (forall G' in s, Adj G'
+ a b) ∧ G.Adj a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sInf_adj {s : Set G.Subgraph} : (sInf s).Adj a b ↔ (forall G' in s, Adj G' a b) ∧ G.Adj a b :=
+theorem sInf_adj {s : Set G.Subgraph} : (sInf s).Adj a b ↔ (∀ G' ∈ s, Adj G' a b) ∧ G.Adj a b :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `iSup_adj` / 定理 `iSup_adj`
-
-English:
-theorem iSup_adj
-  given: {f : ι -> G.Subgraph}
-  statement: (⨆ i, f i).Adj a b ↔ exists i, (f i).Adj a b
-  proof: by
-  simp [iSup]
-
-@[simp]
-
-中文:
-定理 iSup_adj
-  条件: {f : ι -> G.子图}
-  结论: (⨆ i, f i).伴随 a b ↔ 存在 i, (f i).伴随 a b
-  证明: by
-  simp [iSup]
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.iSup_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：iSup_adj {f : ι -> G.Subgraph} : (⨆ i, f i).Adj a b ↔ exists i, (f i).Adj 
+a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem iSup_adj {f : ι -> G.Subgraph} : (⨆ i, f i).Adj a b ↔ exists i, (f i).Adj a b := by
+theorem iSup_adj {f : ι → G.Subgraph} : (⨆ i, f i).Adj a b ↔ ∃ i, (f i).Adj a b := by
   simp [iSup]
 
 @[simp]
-/--
-theorem `iInf_adj` / 定理 `iInf_adj`
-
-English:
-theorem iInf_adj
-  given: {f : ι -> G.Subgraph}
-  statement: (⨅ i, f i).Adj a b ↔ (forall i, (f i).Adj a b) ∧ G.Adj a b
-  proof: by
-  simp [iInf]
-
-中文:
-定理 iInf_adj
-  条件: {f : ι -> G.子图}
-  结论: (⨅ i, f i).伴随 a b ↔ (对任意 i, (f i).伴随 a b) ∧ G.伴随 a b
-  证明: by
-  simp [iInf]
-
-Depends on / 依赖: Finset, Finset.min, Function, Function.comp_def, coe_inf, comp_def, id_eq, mem_of_min
+/-
+**SimpleGraph.Subgraph.iInf_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：iInf_adj {f : ι -> G.Subgraph} : (⨅ i, f i).Adj a b ↔ (forall i, (f i).Adj
+ a b) ∧ G.Adj a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem iInf_adj {f : ι -> G.Subgraph} : (⨅ i, f i).Adj a b ↔ (forall i, (f i).Adj a b) ∧ G.Adj a b := by
+theorem iInf_adj {f : ι → G.Subgraph} : (⨅ i, f i).Adj a b ↔ (∀ i, (f i).Adj a b) ∧ G.Adj a b := by
   simp [iInf]
-
-/--
-theorem `sInf_adj_of_nonempty` / 定理 `sInf_adj_of_nonempty`
-
-English:
-theorem sInf_adj_of_nonempty
-  given: {s : Set G.Subgraph} (hs : s.Nonempty)
-  proof: sInf_adj.trans
-and_iff_left_of_imp by
-      obtain ⟨G', hG'⟩ := hs
-      exact fun h => G'.adj_sub (h _ hG')
-
-中文:
-定理 sInf_adj_of_nonempty
-  条件: {s : 集合 G.子图} (hs : s.非空)
-  证明: sInf_adj.trans
-and_iff_left_of_imp by
-      obtain ⟨G', hG'⟩ := hs
-      exact fun h => G'.adj_sub (h _ hG')
-
-Depends on / 依赖: WithTop, WithTop.coe_untop, adj_sub, and_iff_left_of_imp, coe_untop, min_le_of_eq, sInf_adj, sInf_adj.trans
+/-
+**SimpleGraph.Subgraph.sInf_adj_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：sInf_adj_of_nonempty {s : Set G.Subgraph} (hs : s.Nonempty) : (sInf s).Adj
+ a b ↔ forall G' in s, Adj G' a b
+参数：hs : s.Nonempty。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `SimpleGraph.Subgraph.sInf_adj`：sInf_adj {s : Set G.Subgraph} : (sInf s).
+Adj a b ↔ (forall G' in s, Adj G' a b) ∧ G.Adj a b
+· 使用定理 `and_iff_left_of_imp`：∀ {a b : Prop}, (a → b) → (a ∧ b ↔ a)
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 theorem sInf_adj_of_nonempty {s : Set G.Subgraph} (hs : s.Nonempty) :
-    (sInf s).Adj a b ↔ forall G' in s, Adj G' a b :=
-sInf_adj.trans
-and_iff_left_of_imp by
+    (sInf s).Adj a b ↔ ∀ G' ∈ s, Adj G' a b :=
+  sInf_adj.trans <|
+    and_iff_left_of_imp <| by
       obtain ⟨G', hG'⟩ := hs
       exact fun h => G'.adj_sub (h _ hG')
-
-/--
-theorem `iInf_adj_of_nonempty` / 定理 `iInf_adj_of_nonempty`
-
-English:
-theorem iInf_adj_of_nonempty
-  given: [Nonempty ι] {f : ι -> G.Subgraph}
-  proof: by
-  rw [iInf]; rw [sInf_adj_of_nonempty (Set.range_nonempty _)]
-  simp
-
-@[simp]
-
-中文:
-定理 iInf_adj_of_nonempty
-  条件: [非空 ι] {f : ι -> G.子图}
-  证明: by
-  rw [iInf]; rw [sInf_adj_of_nonempty (Set.range_nonempty _)]
-  simp
-
-@[simp]
-
-Depends on / 依赖: Set.range_nonempty, range_nonempty, sInf_adj_of_nonempty
+/-
+**SimpleGraph.Subgraph.iInf_adj_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：iInf_adj_of_nonempty [Nonempty ι] {f : ι -> G.Subgraph} : (⨅ i, f i).Adj a
+ b ↔ forall i, (f i).Adj a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `SimpleGraph.Subgraph.sInf_adj_of_nonempty`：sInf_adj_of_nonempty {s : Set
+ G.Subgraph} (hs : s.Nonempty) : (sInf s).Adj a b ↔ forall G' in s, Adj G' a b
+· 使用定理 `Set.range_nonempty`：range_nonempty [h : Nonempty ι] (f : ι -> α) : (rang
+e f).Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem iInf_adj_of_nonempty [Nonempty ι] {f : ι -> G.Subgraph} :
-    (⨅ i, f i).Adj a b ↔ forall i, (f i).Adj a b := by
-  rw [iInf]; rw [sInf_adj_of_nonempty (Set.range_nonempty _)]
+theorem iInf_adj_of_nonempty [Nonempty ι] {f : ι → G.Subgraph} :
+    (⨅ i, f i).Adj a b ↔ ∀ i, (f i).Adj a b := by
+  rw [iInf, sInf_adj_of_nonempty (Set.range_nonempty _)]
   simp
 
 @[simp]
-/--
-theorem `verts_sSup` / 定理 `verts_sSup`
-
-English:
-theorem verts_sSup
-  given: (s : Set G.Subgraph)
-  statement: (sSup s).verts = ⋃ G' in s, verts G'
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 verts_sSup
-  条件: (s : 集合 G.子图)
-  结论: (sSup s).verts = ⋃ G' in s, verts G'
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.verts_sSup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：verts_sSup (s : Set G.Subgraph) : (sSup s).verts = ⋃ G' in s, verts G'
+参数：s : Set G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem verts_sSup (s : Set G.Subgraph) : (sSup s).verts = ⋃ G' in s, verts G' :=
+theorem verts_sSup (s : Set G.Subgraph) : (sSup s).verts = ⋃ G' ∈ s, verts G' :=
   rfl
 
 @[simp]
-/--
-theorem `verts_sInf` / 定理 `verts_sInf`
-
-English:
-theorem verts_sInf
-  given: (s : Set G.Subgraph)
-  statement: (sInf s).verts = ⋂ G' in s, verts G'
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 verts_sInf
-  条件: (s : 集合 G.子图)
-  结论: (sInf s).verts = ⋂ G' in s, verts G'
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: isLeast_min, le_isGLB_iff
+/-
+**SimpleGraph.Subgraph.verts_sInf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：verts_sInf (s : Set G.Subgraph) : (sInf s).verts = ⋂ G' in s, verts G'
+参数：s : Set G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem verts_sInf (s : Set G.Subgraph) : (sInf s).verts = ⋂ G' in s, verts G' :=
+theorem verts_sInf (s : Set G.Subgraph) : (sInf s).verts = ⋂ G' ∈ s, verts G' :=
   rfl
 
 @[simp]
-/--
-theorem `verts_iSup` / 定理 `verts_iSup`
-
-English:
-theorem verts_iSup
-  given: {f : ι -> G.Subgraph}
-  statement: (⨆ i, f i).verts = ⋃ i, (f i).verts
-  proof: by simp [iSup]
-
-@[simp]
-
-中文:
-定理 verts_iSup
-  条件: {f : ι -> G.子图}
-  结论: (⨆ i, f i).verts = ⋃ i, (f i).verts
-  证明: by simp [iSup]
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.verts_iSup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：verts_iSup {f : ι -> G.Subgraph} : (⨆ i, f i).verts = ⋃ i, (f i).verts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_iUnion_eq'`：iUnion_iUnion_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋃ (x) (y) (_ : f y = x), g x = ⋃ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem verts_iSup {f : ι -> G.Subgraph} : (⨆ i, f i).verts = ⋃ i, (f i).verts := by simp [iSup]
+theorem verts_iSup {f : ι → G.Subgraph} : (⨆ i, f i).verts = ⋃ i, (f i).verts := by simp [iSup]
 
 @[simp]
-/--
-theorem `verts_iInf` / 定理 `verts_iInf`
-
-English:
-theorem verts_iInf
-  given: {f : ι -> G.Subgraph}
-  statement: (⨅ i, f i).verts = ⋂ i, (f i).verts
-  proof: by simp [iInf]
-
-中文:
-定理 verts_iInf
-  条件: {f : ι -> G.子图}
-  结论: (⨅ i, f i).verts = ⋂ i, (f i).verts
-  证明: by simp [iInf]
-
-Depends on / 依赖: Finset, Finset.max, Function, Function.comp_def, coe_sup, comp_def, id_eq, mem_of_max
+/-
+**SimpleGraph.Subgraph.verts_iInf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：verts_iInf {f : ι -> G.Subgraph} : (⨅ i, f i).verts = ⋂ i, (f i).verts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iInter_iInter_eq'`：iInter_iInter_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋂ (x) (y) (_ : f y = x), g x = ⋂ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem verts_iInf {f : ι -> G.Subgraph} : (⨅ i, f i).verts = ⋂ i, (f i).verts := by simp [iInf]
-
-/--
-lemma `coe_bot` / 引理 `coe_bot`
-
-English:
-lemma coe_bot
-  statement: (⊥ : G.Subgraph).coe = ⊥
-  proof: rfl
-
-中文:
-引理 coe_bot
-  结论: (⊥ : G.子图).coe = ⊥
-  证明: rfl
+theorem verts_iInf {f : ι → G.Subgraph} : (⨅ i, f i).verts = ⋂ i, (f i).verts := by simp [iInf]
+/-
+**SimpleGraph.Subgraph.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V}, ⊥.coe = ⊥
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_bot : (⊥ : G.Subgraph).coe = ⊥ := rfl
-
-/--
-lemma `IsInduced.top` / 引理 `IsInduced.top`
-
-English:
-lemma IsInduced.top
-  statement: (⊤ : G.Subgraph).IsInduced
-  proof: fun _ _ _ _ => id
-
-中文:
-引理 是Induced.top
-  结论: (⊤ : G.子图).是Induced
-  证明: fun _ _ _ _ => id
-
-Depends on / 依赖: _mem
+/-
+**SimpleGraph.Subgraph.IsInduced.top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subg
+raph.IsInduced`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V}, ⊤.IsInduced
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma IsInduced.top : (⊤ : G.Subgraph).IsInduced := fun _ _ _ _ => id
+@[simp] lemma IsInduced.top : (⊤ : G.Subgraph).IsInduced := fun _ _ _ _ ↦ id
 
-/--
-Definition of `topIso` / `topIso` 的定义
+/-- The graph isomorphism between the top element of `G.subgraph` and `G`. -/
+/-
+**SimpleGraph.Subgraph.topIso** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：topIso : (⊤ : G.Subgraph).coe ≃g G where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 
-English:
-definition topIso
-  signature: : (⊤ : G.Subgraph).coe ≃g G where
-  body: (↑)
-  invFun a := ⟨a, Set.mem_univ _⟩
-  left_inv _ := Subtype.eta ..
-  map_rel_iff' := .rfl
-
-中文:
-定义 topIso
-  签名: : (⊤ : G.子图).coe ≃g G where
-  定义体: (↑)
-  invFun a := ⟨a, Set.mem_univ _⟩
-  left_inv _ := Subtype.eta ..
-  map_rel_iff' := .rfl
+--- 原说明 ---
+The graph isomorphism between the top element of `G.subgraph` and `G`.
 -/
 def topIso : (⊤ : G.Subgraph).coe ≃g G where
   toFun := (↑)
   invFun a := ⟨a, Set.mem_univ _⟩
   left_inv _ := Subtype.eta ..
   map_rel_iff' := .rfl
-
-/--
-theorem `verts_spanningCoe_injective` / 定理 `verts_spanningCoe_injective`
-
-English:
-theorem verts_spanningCoe_injective
-  proof: by
-  intro G₁ G₂ h
-  rw [Prod.ext_iff] at h
-  exact Subgraph.ext h.1 (spanningCoe_inj.1 h.2)
-
-中文:
-定理 verts_spanningCoe_injective
-  证明: by
-  intro G₁ G₂ h
-  rw [Prod.ext_iff] at h
-  exact Subgraph.ext h.1 (spanningCoe_inj.1 h.2)
-
-Depends on / 依赖: Prod.ext_iff, Subgraph, Subgraph.ext, ext_iff, isGreatest_max, isLUB_le_iff, spanningCoe_inj
+/-
+**SimpleGraph.Subgraph.verts_spanningCoe_injective** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph.Subgraph`。
+形式化陈述：verts_spanningCoe_injective : (fun G' : Subgraph G => (G'.verts, G'.spanni
+ngCoe)).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.ext_iff`：∀ {α : Type u} {β : Type v} {x y : α × β}, x = y ↔ x.1 = y
+.1 ∧ x.2 = y.2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_inj`：spanningCoe_inj : G₁.spanningCoe =
+ G₂.spanningCoe ↔ G₁.Adj = G₂.Adj
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem verts_spanningCoe_injective :
     (fun G' : Subgraph G => (G'.verts, G'.spanningCoe)).Injective := by
@@ -1916,857 +1388,641 @@ theorem verts_spanningCoe_injective :
   rw [Prod.ext_iff] at h
   exact Subgraph.ext h.1 (spanningCoe_inj.1 h.2)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- For subgraphs `G₁`, `G₂`, `G₁ ≤ G₂` iff `G₁.verts ⊆ G₂.verts` and
+`∀ a b, G₁.adj a b → G₂.adj a b`. -/
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PartialOrder G.Subgraph
-  body: PartialOrder.lift _ verts_spanningCoe_injective
-  le x y := x.verts subseteq y.verts ∧ forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
-
-中文:
-实例 :
-  签名: 偏序 G.子图
-  定义体: PartialOrder.lift _ verts_spanningCoe_injective
-  le x y := x.verts subseteq y.verts ∧ forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, _mem, le_max, s.le_max, s.max, trans_lt, verts_spanningCoe_injective
+--- 原说明 ---
+For subgraphs `G₁`, `G₂`, `G₁ ≤ G₂` iff `G₁.verts ⊆ G₂.verts` and
+`∀ a b, G₁.adj a b → G₂.adj a b`.
 -/
 instance : PartialOrder G.Subgraph where
   __ := PartialOrder.lift _ verts_spanningCoe_injective
-  le x y := x.verts subseteq y.verts ∧ forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
-
-/--
-Instance `distribLattice` / 实例 `distribLattice`
-
-English:
-instance distribLattice
-  signature: : DistribLattice G.Subgraph
-  body: verts_spanningCoe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 distribLattice
-  签名: : Distrib格 G.子图
-  定义体: verts_spanningCoe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: distribLattice, verts_spanningCoe_injective, verts_spanningCoe_injective.distribLattice
+  le x y := x.verts ⊆ y.verts ∧ ∀ ⦃v w : V⦄, x.Adj v w → y.Adj v w
+/-
+**SimpleGraph.Subgraph.distribLattice** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：distribLattice : DistribLattice G.Subgraph
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.verts_spanningCoe_injective`：verts_spanningCoe_inje
+ctive : (fun G' : Subgraph G => (G'.verts, G'.spanningCoe)).Injective
 -/
 instance distribLattice : DistribLattice G.Subgraph :=
-  verts_spanningCoe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BoundedOrder (Subgraph G)
-  body: ⟨Set.subset_univ _, fun _ _ => x.adj_sub⟩
-  bot_le _ := ⟨Set.empty_subset _, fun _ _ => False.elim⟩
-
-中文:
-实例 :
-  签名: 有界序 (子图 G)
-  定义体: ⟨Set.subset_univ _, fun _ _ => x.adj_sub⟩
-  bot_le _ := ⟨Set.empty_subset _, fun _ _ => False.elim⟩
-
-Depends on / 依赖: Set.subset_univ, adj_sub, subset_univ, x.adj_sub
+  verts_spanningCoe_injective.distribLattice _ .rfl .rfl (fun _ _ ↦ rfl) fun _ _ ↦ rfl
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BoundedOrder (Subgraph G) where
   le_top x := ⟨Set.subset_univ _, fun _ _ => x.adj_sub⟩
   bot_le _ := ⟨Set.empty_subset _, fun _ _ => False.elim⟩
 
 set_option linter.unusedVariables false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (Subgraph G)
-  body: ⟨fun G' hG' => ⟨Set.subset_biUnion_of_mem hG', fun _ _ hab => ⟨G', hG', hab⟩⟩,
-      fun G' hG' =>
-        ⟨Set.iUnion₂_subset fun _ hH => (hG' hH).1, fun a b ⟨H, hH, hab⟩ => (hG' hH).2 hab⟩⟩
-  isGLB_sInf _ :=
-    ⟨fun G' hG' => ⟨Set.iInter₂_subset G' hG', fun _ _ hab => hab.1 hG'⟩,
-      fun G' hG' =>
-        ⟨Set.subset_iInter₂ fun _ hH => (hG' hH).1, fun _ _ hab =>
-         ⟨fun _ hH => (hG' hH).2 hab, G'.adj_sub hab⟩⟩⟩
-
-中文:
-实例 :
-  签名: 完备格 (子图 G)
-  定义体: ⟨fun G' hG' => ⟨Set.subset_biUnion_of_mem hG', fun _ _ hab => ⟨G', hG', hab⟩⟩,
-      fun G' hG' =>
-        ⟨Set.iUnion₂_subset fun _ hH => (hG' hH).1, fun a b ⟨H, hH, hab⟩ => (hG' hH).2 hab⟩⟩
-  isGLB_sInf _ :=
-    ⟨fun G' hG' => ⟨Set.iInter₂_subset G' hG', fun _ _ hab => hab.1 hG'⟩,
-      fun G' hG' =>
-        ⟨Set.subset_iInter₂ fun _ hH => (hG' hH).1, fun _ _ hab =>
-         ⟨fun _ hH => (hG' hH).2 hab, G'.adj_sub hab⟩⟩⟩
-
-Depends on / 依赖: Set.iInter, Set.iUnion, Set.subset_biUnion_of_mem, Set.subset_iInter, adj_sub, isGLB_sInf, subset_biUnion_of_mem
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (Subgraph G) where
   isLUB_sSup _ :=
-    ⟨fun G' hG' => ⟨Set.subset_biUnion_of_mem hG', fun _ _ hab => ⟨G', hG', hab⟩⟩,
-      fun G' hG' =>
-        ⟨Set.iUnion₂_subset fun _ hH => (hG' hH).1, fun a b ⟨H, hH, hab⟩ => (hG' hH).2 hab⟩⟩
+    ⟨fun G' hG' ↦ ⟨Set.subset_biUnion_of_mem hG', fun _ _ hab => ⟨G', hG', hab⟩⟩,
+      fun G' hG' ↦
+        ⟨Set.iUnion₂_subset fun _ hH => (hG' hH).1, fun a b ⟨H, hH, hab⟩ ↦ (hG' hH).2 hab⟩⟩
   isGLB_sInf _ :=
-    ⟨fun G' hG' => ⟨Set.iInter₂_subset G' hG', fun _ _ hab => hab.1 hG'⟩,
-      fun G' hG' =>
+    ⟨fun G' hG' ↦ ⟨Set.iInter₂_subset G' hG', fun _ _ hab => hab.1 hG'⟩,
+      fun G' hG' ↦
         ⟨Set.subset_iInter₂ fun _ hH => (hG' hH).1, fun _ _ hab =>
          ⟨fun _ hH => (hG' hH).2 hab, G'.adj_sub hab⟩⟩⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Note that subgraphs do not form a Boolean algebra, because of `verts`. -/
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CompletelyDistribLattice G.Subgraph
-  body: fast_instance% .ofMinimalAxioms {
-    iInf_iSup_eq f := Subgraph.ext (by simpa using! iInf_iSup_eq)
-      (by ext; simp [Classical.skolem]) }
-
-中文:
-实例 :
-  签名: 余mpletelyDistrib格 G.子图
-  定义体: fast_instance% .ofMinimalAxioms {
-    iInf_iSup_eq f := Subgraph.ext (by simpa using! iInf_iSup_eq)
-      (by ext; simp [Classical.skolem]) }
-
-Depends on / 依赖: Classical, Classical.skolem, Subgraph, Subgraph.ext, fast_instance, iInf_iSup_eq, ofMinimalAxioms, skolem
+--- 原说明 ---
+Note that subgraphs do not form a Boolean algebra, because of `verts`.
 -/
 instance : CompletelyDistribLattice G.Subgraph :=
   fast_instance% .ofMinimalAxioms {
     iInf_iSup_eq f := Subgraph.ext (by simpa using! iInf_iSup_eq)
       (by ext; simp [Classical.skolem]) }
-
-/--
-lemma `verts_mono` / 引理 `verts_mono`
-
-English:
-lemma verts_mono
-  given: {H H' : G.Subgraph} (h : H <= H')
-  statement: H.verts subseteq H'.verts
-  proof: h.1
-
-中文:
-引理 verts_mono
-  条件: {H H' : G.子图} (h : H <= H')
-  结论: H.verts subseteq H'.verts
-  证明: h.1
-
-Depends on / 依赖: _mem, le_antisymm, le_min
+/-
+**SimpleGraph.Subgraph.verts_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {H H' : G.Subgraph}, H ≤ H' → H.verts ⊆
+ H'.verts
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-@[gcongr] lemma verts_mono {H H' : G.Subgraph} (h : H <= H') : H.verts subseteq H'.verts := h.1
-/--
-lemma `verts_monotone` / 引理 `verts_monotone`
-
-English:
-lemma verts_monotone
-  statement: Monotone (verts : G.Subgraph -> Set V)
-  proof: fun _ _ h => h.1
-
-@[simps]
-
-中文:
-引理 verts_monotone
-  结论: 递增 (verts : G.子图 -> 集合 V)
-  证明: fun _ _ h => h.1
-
-@[simps]
-
-Depends on / 依赖: _mem, le_antisymm, le_max
+@[gcongr] lemma verts_mono {H H' : G.Subgraph} (h : H ≤ H') : H.verts ⊆ H'.verts := h.1
+/-
+**SimpleGraph.Subgraph.verts_monotone** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：verts_monotone : Monotone (verts : G.Subgraph -> Set V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma verts_monotone : Monotone (verts : G.Subgraph -> Set V) := fun _ _ h => h.1
+lemma verts_monotone : Monotone (verts : G.Subgraph → Set V) := fun _ _ h ↦ h.1
 
 @[simps]
-/--
-Instance `subgraphInhabited` / 实例 `subgraphInhabited`
-
-English:
-instance subgraphInhabited
-  signature: : Inhabited (Subgraph G)
-  body: ⟨⊥⟩
-
-@[simp]
-
-中文:
-实例 subgraphInhabited
-  签名: : 可居 (子图 G)
-  定义体: ⟨⊥⟩
-
-@[simp]
-
-Depends on / 依赖: _mem
+/-
+**SimpleGraph.Subgraph.subgraphInhabited** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：subgraphInhabited : Inhabited (Subgraph G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance subgraphInhabited : Inhabited (Subgraph G) := ⟨⊥⟩
 
 @[simp]
-/--
-theorem `neighborSet_sup` / 定理 `neighborSet_sup`
-
-English:
-theorem neighborSet_sup
-  given: {H H' : G.Subgraph} (v : V)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neighborSet_sup
-  条件: {H H' : G.子图} (v : V)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: isGLB_lt_isLUB_of_ne, isGreatest_max, isLeast_min, s.isGreatest_max, s.isLeast_min
+/-
+**SimpleGraph.Subgraph.neighborSet_sup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：neighborSet_sup {H H' : G.Subgraph} (v : V) : (H ⊔ H').neighborSet v = H.n
+eighborSet v union H'.neighborSet v
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neighborSet_sup {H H' : G.Subgraph} (v : V) :
-    (H ⊔ H').neighborSet v = H.neighborSet v union H'.neighborSet v := rfl
+    (H ⊔ H').neighborSet v = H.neighborSet v ∪ H'.neighborSet v := rfl
 
 @[simp]
-/--
-theorem `neighborSet_inf` / 定理 `neighborSet_inf`
-
-English:
-theorem neighborSet_inf
-  given: {H H' : G.Subgraph} (v : V)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neighborSet_inf
-  条件: {H H' : G.子图} (v : V)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: _lt_max, one_lt_card, s.min
+/-
+**SimpleGraph.Subgraph.neighborSet_inf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：neighborSet_inf {H H' : G.Subgraph} (v : V) : (H ⊓ H').neighborSet v = H.n
+eighborSet v inter H'.neighborSet v
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neighborSet_inf {H H' : G.Subgraph} (v : V) :
-    (H ⊓ H').neighborSet v = H.neighborSet v inter H'.neighborSet v := rfl
+    (H ⊓ H').neighborSet v = H.neighborSet v ∩ H'.neighborSet v := rfl
 
 @[simp]
-/--
-theorem `neighborSet_top` / 定理 `neighborSet_top`
-
-English:
-theorem neighborSet_top
-  given: (v : V)
-  statement: (⊤ : G.Subgraph).neighborSet v = G.neighborSet v
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neighborSet_top
-  条件: (v : V)
-  结论: (⊤ : G.子图).neighborSet v = G.neighborSet v
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: _union
+/-
+**SimpleGraph.Subgraph.neighborSet_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：neighborSet_top (v : V) : (⊤ : G.Subgraph).neighborSet v = G.neighborSet v
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neighborSet_top (v : V) : (⊤ : G.Subgraph).neighborSet v = G.neighborSet v := rfl
 
 @[simp]
-/--
-theorem `neighborSet_bot` / 定理 `neighborSet_bot`
-
-English:
-theorem neighborSet_bot
-  given: (v : V)
-  statement: (⊥ : G.Subgraph).neighborSet v = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neighborSet_bot
-  条件: (v : V)
-  结论: (⊥ : G.子图).neighborSet v = ∅
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: _union
+/-
+**SimpleGraph.Subgraph.neighborSet_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：neighborSet_bot (v : V) : (⊥ : G.Subgraph).neighborSet v = ∅
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neighborSet_bot (v : V) : (⊥ : G.Subgraph).neighborSet v = ∅ := rfl
 
 @[simp]
-/--
-theorem `neighborSet_sSup` / 定理 `neighborSet_sSup`
-
-English:
-theorem neighborSet_sSup
-  given: (s : Set G.Subgraph) (v : V)
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 neighborSet_sSup
-  条件: (s : 集合 G.子图) (v : V)
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.neighborSet_sSup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：neighborSet_sSup (s : Set G.Subgraph) (v : V) : (sSup s).neighborSet v = ⋃
+ G' in s, neighborSet G' v
+参数：s : Set G.Subgraph；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem neighborSet_sSup (s : Set G.Subgraph) (v : V) :
-    (sSup s).neighborSet v = ⋃ G' in s, neighborSet G' v := by
+    (sSup s).neighborSet v = ⋃ G' ∈ s, neighborSet G' v := by
   ext
   simp
 
 @[simp]
-/--
-theorem `neighborSet_sInf` / 定理 `neighborSet_sInf`
-
-English:
-theorem neighborSet_sInf
-  given: (s : Set G.Subgraph) (v : V)
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 neighborSet_sInf
-  条件: (s : 集合 G.子图) (v : V)
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.neighborSet_sInf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：neighborSet_sInf (s : Set G.Subgraph) (v : V) : (sInf s).neighborSet v = (
+⋂ G' in s, neighborSet G' v) inter G.neighborSet v
+参数：s : Set G.Subgraph；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem neighborSet_sInf (s : Set G.Subgraph) (v : V) :
-    (sInf s).neighborSet v = (⋂ G' in s, neighborSet G' v) inter G.neighborSet v := by
+    (sInf s).neighborSet v = (⋂ G' ∈ s, neighborSet G' v) ∩ G.neighborSet v := by
   ext
   simp
 
 @[simp]
-/--
-theorem `neighborSet_iSup` / 定理 `neighborSet_iSup`
-
-English:
-theorem neighborSet_iSup
-  given: (f : ι -> G.Subgraph) (v : V)
-  proof: by simp [iSup]
-
-@[simp]
-
-中文:
-定理 neighborSet_iSup
-  条件: (f : ι -> G.子图) (v : V)
-  证明: by simp [iSup]
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.neighborSet_iSup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：neighborSet_iSup (f : ι -> G.Subgraph) (v : V) : (⨆ i, f i).neighborSet v 
+= ⋃ i, (f i).neighborSet v
+参数：f : ι -> G.Subgraph；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_sSup`：neighborSet_sSup (s : Set G.Subgr
+aph) (v : V) : (sSup s).neighborSet v = ⋃ G' in s, neighborSet G' v
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_iUnion_eq'`：iUnion_iUnion_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋃ (x) (y) (_ : f y = x), g x = ⋃ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem neighborSet_iSup (f : ι -> G.Subgraph) (v : V) :
+theorem neighborSet_iSup (f : ι → G.Subgraph) (v : V) :
     (⨆ i, f i).neighborSet v = ⋃ i, (f i).neighborSet v := by simp [iSup]
 
 @[simp]
-/--
-theorem `neighborSet_iInf` / 定理 `neighborSet_iInf`
-
-English:
-theorem neighborSet_iInf
-  given: (f : ι -> G.Subgraph) (v : V)
-  proof: by simp [iInf]
-
-@[simp]
-
-中文:
-定理 neighborSet_iInf
-  条件: (f : ι -> G.子图) (v : V)
-  证明: by simp [iInf]
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.neighborSet_iInf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：neighborSet_iInf (f : ι -> G.Subgraph) (v : V) : (⨅ i, f i).neighborSet v 
+= (⋂ i, (f i).neighborSet v) inter G.neighborSet v
+参数：f : ι -> G.Subgraph；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_sInf`：neighborSet_sInf (s : Set G.Subgr
+aph) (v : V) : (sInf s).neighborSet v = (⋂ G' in s, neighborSet G' v) inter G.ne
+ighborSet v
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iInter_iInter_eq'`：iInter_iInter_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋂ (x) (y) (_ : f y = x), g x = ⋂ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem neighborSet_iInf (f : ι -> G.Subgraph) (v : V) :
-    (⨅ i, f i).neighborSet v = (⋂ i, (f i).neighborSet v) inter G.neighborSet v := by simp [iInf]
+theorem neighborSet_iInf (f : ι → G.Subgraph) (v : V) :
+    (⨅ i, f i).neighborSet v = (⋂ i, (f i).neighborSet v) ∩ G.neighborSet v := by simp [iInf]
 
 @[simp]
-/--
-theorem `edgeSet_top` / 定理 `edgeSet_top`
-
-English:
-theorem edgeSet_top
-  statement: (⊤ : Subgraph G).edgeSet = G.edgeSet
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 edgeSet_top
-  结论: (⊤ : 子图 G).edgeSet = G.edgeSet
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.edgeSet_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：edgeSet_top : (⊤ : Subgraph G).edgeSet = G.edgeSet
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem edgeSet_top : (⊤ : Subgraph G).edgeSet = G.edgeSet := rfl
 
 @[simp]
-/--
-theorem `edgeSet_bot` / 定理 `edgeSet_bot`
-
-English:
-theorem edgeSet_bot
-  statement: (⊥ : Subgraph G).edgeSet = ∅
-  proof: Set.ext Sym2.ind (by simp)
-
-@[simp]
-
-中文:
-定理 edgeSet_bot
-  结论: (⊥ : 子图 G).edgeSet = ∅
-  证明: Set.ext Sym2.ind (by simp)
-
-@[simp]
-
-Depends on / 依赖: Set.ext, Sym2.ind
+/-
+**SimpleGraph.Subgraph.edgeSet_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：edgeSet_bot : (⊥ : Subgraph G).edgeSet = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem edgeSet_bot : (⊥ : Subgraph G).edgeSet = ∅ :=
-Set.ext Sym2.ind (by simp)
+  Set.ext <| Sym2.ind (by simp)
 
 @[simp]
-/--
-theorem `edgeSet_inf` / 定理 `edgeSet_inf`
-
-English:
-theorem edgeSet_inf
-  given: {H₁ H₂ : Subgraph G}
-  statement: (H₁ ⊓ H₂).edgeSet = H₁.edgeSet inter H₂.edgeSet
-  proof: Set.ext Sym2.ind (by simp)
-
-@[simp]
-
-中文:
-定理 edgeSet_inf
-  条件: {H₁ H₂ : 子图 G}
-  结论: (H₁ ⊓ H₂).edgeSet = H₁.edgeSet inter H₂.edgeSet
-  证明: Set.ext Sym2.ind (by simp)
-
-@[simp]
-
-Depends on / 依赖: Set.ext, Sym2.ind
+/-
+**SimpleGraph.Subgraph.edgeSet_inf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：edgeSet_inf {H₁ H₂ : Subgraph G} : (H₁ ⊓ H₂).edgeSet = H₁.edgeSet inter H₂
+.edgeSet
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem edgeSet_inf {H₁ H₂ : Subgraph G} : (H₁ ⊓ H₂).edgeSet = H₁.edgeSet inter H₂.edgeSet :=
-Set.ext Sym2.ind (by simp)
+theorem edgeSet_inf {H₁ H₂ : Subgraph G} : (H₁ ⊓ H₂).edgeSet = H₁.edgeSet ∩ H₂.edgeSet :=
+  Set.ext <| Sym2.ind (by simp)
 
 @[simp]
-/--
-theorem `edgeSet_sup` / 定理 `edgeSet_sup`
-
-English:
-theorem edgeSet_sup
-  given: {H₁ H₂ : Subgraph G}
-  statement: (H₁ ⊔ H₂).edgeSet = H₁.edgeSet union H₂.edgeSet
-  proof: Set.ext Sym2.ind (by simp)
-
-@[simp]
-
-中文:
-定理 edgeSet_sup
-  条件: {H₁ H₂ : 子图 G}
-  结论: (H₁ ⊔ H₂).edgeSet = H₁.edgeSet union H₂.edgeSet
-  证明: Set.ext Sym2.ind (by simp)
-
-@[simp]
-
-Depends on / 依赖: Set.ext, Sym2.ind
+/-
+**SimpleGraph.Subgraph.edgeSet_sup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：edgeSet_sup {H₁ H₂ : Subgraph G} : (H₁ ⊔ H₂).edgeSet = H₁.edgeSet union H₂
+.edgeSet
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem edgeSet_sup {H₁ H₂ : Subgraph G} : (H₁ ⊔ H₂).edgeSet = H₁.edgeSet union H₂.edgeSet :=
-Set.ext Sym2.ind (by simp)
+theorem edgeSet_sup {H₁ H₂ : Subgraph G} : (H₁ ⊔ H₂).edgeSet = H₁.edgeSet ∪ H₂.edgeSet :=
+  Set.ext <| Sym2.ind (by simp)
 
 @[simp]
-/--
-theorem `edgeSet_sSup` / 定理 `edgeSet_sSup`
-
-English:
-theorem edgeSet_sSup
-  given: (s : Set G.Subgraph)
-  statement: (sSup s).edgeSet = ⋃ G' in s, edgeSet G'
-  proof: by
-  ext e
-  induction e
-  simp
-
-@[simp]
-
-中文:
-定理 edgeSet_sSup
-  条件: (s : 集合 G.子图)
-  结论: (sSup s).edgeSet = ⋃ G' in s, edgeSet G'
-  证明: by
-  ext e
-  induction e
-  simp
-
-@[simp]
-
-Depends on / 依赖: _mem, le_max, s.max
+/-
+**SimpleGraph.Subgraph.edgeSet_sSup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：edgeSet_sSup (s : Set G.Subgraph) : (sSup s).edgeSet = ⋃ G' in s, edgeSet 
+G'
+参数：s : Set G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem edgeSet_sSup (s : Set G.Subgraph) : (sSup s).edgeSet = ⋃ G' in s, edgeSet G' := by
+theorem edgeSet_sSup (s : Set G.Subgraph) : (sSup s).edgeSet = ⋃ G' ∈ s, edgeSet G' := by
   ext e
   induction e
   simp
 
 @[simp]
-/--
-theorem `edgeSet_sInf` / 定理 `edgeSet_sInf`
-
-English:
-theorem edgeSet_sInf
-  given: (s : Set G.Subgraph)
-  proof: by
-  ext e
-  induction e
-  simp
-
-@[simp]
-
-中文:
-定理 edgeSet_sInf
-  条件: (s : 集合 G.子图)
-  证明: by
-  ext e
-  induction e
-  simp
-
-@[simp]
-
-Depends on / 依赖: _mem, s.min
+/-
+**SimpleGraph.Subgraph.edgeSet_sInf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：edgeSet_sInf (s : Set G.Subgraph) : (sInf s).edgeSet = (⋂ G' in s, edgeSet
+ G') inter G.edgeSet
+参数：s : Set G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem edgeSet_sInf (s : Set G.Subgraph) :
-    (sInf s).edgeSet = (⋂ G' in s, edgeSet G') inter G.edgeSet := by
+    (sInf s).edgeSet = (⋂ G' ∈ s, edgeSet G') ∩ G.edgeSet := by
   ext e
   induction e
   simp
 
 @[simp]
-/--
-theorem `edgeSet_iSup` / 定理 `edgeSet_iSup`
-
-English:
-theorem edgeSet_iSup
-  given: (f : ι -> G.Subgraph)
-  proof: by simp [iSup]
-
-@[simp]
-
-中文:
-定理 edgeSet_iSup
-  条件: (f : ι -> G.子图)
-  证明: by simp [iSup]
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.edgeSet_iSup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：edgeSet_iSup (f : ι -> G.Subgraph) : (⨆ i, f i).edgeSet = ⋃ i, (f i).edgeS
+et
+参数：f : ι -> G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_sSup`：edgeSet_sSup (s : Set G.Subgraph) : (
+sSup s).edgeSet = ⋃ G' in s, edgeSet G'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_iUnion_eq'`：iUnion_iUnion_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋃ (x) (y) (_ : f y = x), g x = ⋃ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem edgeSet_iSup (f : ι -> G.Subgraph) :
+theorem edgeSet_iSup (f : ι → G.Subgraph) :
     (⨆ i, f i).edgeSet = ⋃ i, (f i).edgeSet := by simp [iSup]
 
 @[simp]
-/--
-theorem `edgeSet_iInf` / 定理 `edgeSet_iInf`
-
-English:
-theorem edgeSet_iInf
-  given: (f : ι -> G.Subgraph)
-  proof: by
-  simp [iInf]
-
-@[simp]
-
-中文:
-定理 edgeSet_iInf
-  条件: (f : ι -> G.子图)
-  证明: by
-  simp [iInf]
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.edgeSet_iInf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：edgeSet_iInf (f : ι -> G.Subgraph) : (⨅ i, f i).edgeSet = (⋂ i, (f i).edge
+Set) inter G.edgeSet
+参数：f : ι -> G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_sInf`：edgeSet_sInf (s : Set G.Subgraph) : (
+sInf s).edgeSet = (⋂ G' in s, edgeSet G') inter G.edgeSet
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iInter_iInter_eq'`：iInter_iInter_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋂ (x) (y) (_ : f y = x), g x = ⋂ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem edgeSet_iInf (f : ι -> G.Subgraph) :
-    (⨅ i, f i).edgeSet = (⋂ i, (f i).edgeSet) inter G.edgeSet := by
+theorem edgeSet_iInf (f : ι → G.Subgraph) :
+    (⨅ i, f i).edgeSet = (⋂ i, (f i).edgeSet) ∩ G.edgeSet := by
   simp [iInf]
 
 @[simp]
-/--
-theorem `spanningCoe_top` / 定理 `spanningCoe_top`
-
-English:
-theorem spanningCoe_top
-  statement: (⊤ : Subgraph G).spanningCoe = G
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanningCoe_top
-  结论: (⊤ : 子图 G).spanningCoe = G
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.spanningCoe_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：spanningCoe_top : (⊤ : Subgraph G).spanningCoe = G
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanningCoe_top : (⊤ : Subgraph G).spanningCoe = G := rfl
 
 @[simp]
-/--
-theorem `spanningCoe_bot` / 定理 `spanningCoe_bot`
-
-English:
-theorem spanningCoe_bot
-  statement: (⊥ : Subgraph G).spanningCoe = ⊥
-  proof: rfl
-
-中文:
-定理 spanningCoe_bot
-  结论: (⊥ : 子图 G).spanningCoe = ⊥
-  证明: rfl
-
-Depends on / 依赖: _of_mem_erase_max, lt_max
+/-
+**SimpleGraph.Subgraph.spanningCoe_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：spanningCoe_bot : (⊥ : Subgraph G).spanningCoe = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanningCoe_bot : (⊥ : Subgraph G).spanningCoe = ⊥ := rfl
 
 /-- Turn a subgraph of a `SimpleGraph` into a member of its subgraph type. -/
 @[simps]
-/--
-Definition of `_root_.SimpleGraph.toSubgraph` / `_root_.SimpleGraph.toSubgraph` 的定义
+/-
+**SimpleGraph.Subgraph._root_.SimpleGraph.toSubgraph** 是 Mathlib 中的一个定义，位于命名空间 `
+SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.SimpleGraph.toSubgraph
-  signature: (H : SimpleGraph V) (h : H <= G)
-  body: Set.univ
-  Adj := H.Adj
-  adj_sub e := h e
-  edge_vert _ := Set.mem_univ _
-  symm := H.symm
-
-中文:
-定义 _root_.简单图.toSubgraph
-  签名: (H : 简单图 V) (h : H <= G)
-  定义体: Set.univ
-  Adj := H.Adj
-  adj_sub e := h e
-  edge_vert _ := Set.mem_univ _
-  symm := H.symm
-
-Depends on / 依赖: Set.univ, _comp, _eq_sup, _image, apply_sup, hf.map_max, map_max
+--- 原说明 ---
+Turn a subgraph of a `SimpleGraph` into a member of its subgraph type.
 -/
-def _root_.SimpleGraph.toSubgraph (H : SimpleGraph V) (h : H <= G) : G.Subgraph where
+def _root_.SimpleGraph.toSubgraph (H : SimpleGraph V) (h : H ≤ G) : G.Subgraph where
   verts := Set.univ
   Adj := H.Adj
   adj_sub e := h e
   edge_vert _ := Set.mem_univ _
   symm := H.symm
-
-/--
-theorem `support_mono` / 定理 `support_mono`
-
-English:
-theorem support_mono
-  given: {H H' : Subgraph G} (h : H <= H')
-  statement: H.support subseteq H'.support
-  proof: SetRel.dom_mono fun _ hvw => h.2 hvw
-
-中文:
-定理 support_mono
-  条件: {H H' : 子图 G} (h : H <= H')
-  结论: H.support subseteq H'.support
-  证明: SetRel.dom_mono fun _ hvw => h.2 hvw
-
-Depends on / 依赖: SetRel, SetRel.dom_mono, dom_mono
+/-
+**SimpleGraph.Subgraph.support_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：support_mono {H H' : Subgraph G} (h : H <= H') : H.support subseteq H'.sup
+port
+参数：h : H <= H'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.dom_mono`：∀ {α : Type u_1} {β : Type u_2} {R₁ R₂ : SetRel α β}, R
+₁ ⊆ R₂ → R₁.dom ⊆ R₂.dom
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem support_mono {H H' : Subgraph G} (h : H <= H') : H.support subseteq H'.support :=
-  SetRel.dom_mono fun _ hvw => h.2 hvw
-
-/--
-theorem `_root_.SimpleGraph.toSubgraph.isSpanning` / 定理 `_root_.SimpleGraph.toSubgraph.isSpanning`
-
-English:
-theorem _root_.SimpleGraph.toSubgraph.isSpanning
-  given: (H : SimpleGraph V) (h : H <= G)
-  proof: Set.mem_univ
-
-中文:
-定理 _root_.简单图.toSubgraph.isSpanning
-  条件: (H : 简单图 V) (h : H <= G)
-  证明: Set.mem_univ
-
-Depends on / 依赖: Set.mem_univ, _comp, _eq_inf, _image, apply_inf, hf.map_min, map_min, mem_univ
+theorem support_mono {H H' : Subgraph G} (h : H ≤ H') : H.support ⊆ H'.support :=
+  SetRel.dom_mono fun _ hvw ↦ h.2 hvw
+/-
+**SimpleGraph.Subgraph._root_.SimpleGraph.toSubgraph.isSpanning** 是 Mathlib 中的一个
+定理，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.SimpleGraph.toSubgraph.isSpanning (H : SimpleGraph V) (h : H <= G) :
+theorem _root_.SimpleGraph.toSubgraph.isSpanning (H : SimpleGraph V) (h : H ≤ G) :
     (toSubgraph H h).IsSpanning :=
   Set.mem_univ
-
-/--
-theorem `spanningCoe_le_of_le` / 定理 `spanningCoe_le_of_le`
-
-English:
-theorem spanningCoe_le_of_le
-  given: {H H' : Subgraph G} (h : H <= H')
-  statement: H.spanningCoe <= H'.spanningCoe
-  proof: h.2
-
-@[simp]
-
-中文:
-定理 spanningCoe_le_of_le
-  条件: {H H' : 子图 G} (h : H <= H')
-  结论: H.spanningCoe <= H'.spanningCoe
-  证明: h.2
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.spanningCoe_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：spanningCoe_le_of_le {H H' : Subgraph G} (h : H <= H') : H.spanningCoe <= 
+H'.spanningCoe
+参数：h : H <= H'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem spanningCoe_le_of_le {H H' : Subgraph G} (h : H <= H') : H.spanningCoe <= H'.spanningCoe :=
+theorem spanningCoe_le_of_le {H H' : Subgraph G} (h : H ≤ H') : H.spanningCoe ≤ H'.spanningCoe :=
   h.2
 
 @[simp]
-/--
-lemma `sup_spanningCoe` / 引理 `sup_spanningCoe`
-
-English:
-lemma sup_spanningCoe
-  given: (H H' : Subgraph G)
-  proof: rfl
-
-中文:
-引理 sup_spanningCoe
-  条件: (H H' : 子图 G)
-  证明: rfl
+/-
+**SimpleGraph.Subgraph.sup_spanningCoe** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：sup_spanningCoe (H H' : Subgraph G) : (H ⊔ H').spanningCoe = H.spanningCoe
+ ⊔ H'.spanningCoe
+参数：H H' : Subgraph G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sup_spanningCoe (H H' : Subgraph G) :
     (H ⊔ H').spanningCoe = H.spanningCoe ⊔ H'.spanningCoe := rfl
 
-/--
-Definition of `botIso` / `botIso` 的定义
+/-- The bottom of the `Subgraph G` lattice is isomorphic to the empty graph on the empty
+vertex type. -/
+/-
+**SimpleGraph.Subgraph.botIso** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：botIso : (⊥ : Subgraph G).coe ≃g emptyGraph Empty where toFun v
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition botIso
-  signature: : (⊥ : Subgraph G).coe ≃g emptyGraph Empty where
-  body: v.property.elim
-  invFun v := v.elim
-  left_inv := fun ⟨_, h⟩ => h.elim
-  right_inv v := v.elim
-  map_rel_iff' := Iff.rfl
-
-中文:
-定义 botIso
-  签名: : (⊥ : 子图 G).coe ≃g emptyGraph 空 where
-  定义体: v.property.elim
-  invFun v := v.elim
-  left_inv := fun ⟨_, h⟩ => h.elim
-  right_inv v := v.elim
-  map_rel_iff' := Iff.rfl
-
-Depends on / 依赖: property, v.property.elim
+--- 原说明 ---
+The bottom of the `Subgraph G` lattice is isomorphic to the empty graph on the e
+mpty
+vertex type.
 -/
 def botIso : (⊥ : Subgraph G).coe ≃g emptyGraph Empty where
   toFun v := v.property.elim
   invFun v := v.elim
-  left_inv := fun ⟨_, h⟩ => h.elim
+  left_inv := fun ⟨_, h⟩ ↦ h.elim
   right_inv v := v.elim
   map_rel_iff' := Iff.rfl
-
-/--
-theorem `edgeSet_mono` / 定理 `edgeSet_mono`
-
-English:
-theorem edgeSet_mono
-  given: {H₁ H₂ : Subgraph G} (h : H₁ <= H₂)
-  statement: H₁.edgeSet <= H₂.edgeSet
-  proof: Sym2.ind h.2
-
-中文:
-定理 edgeSet_mono
-  条件: {H₁ H₂ : 子图 G} (h : H₁ <= H₂)
-  结论: H₁.edgeSet <= H₂.edgeSet
-  证明: Sym2.ind h.2
-
-Depends on / 依赖: Sym2.ind
+/-
+**SimpleGraph.Subgraph.edgeSet_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：edgeSet_mono {H₁ H₂ : Subgraph G} (h : H₁ <= H₂) : H₁.edgeSet <= H₂.edgeSe
+t
+参数：h : H₁ <= H₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem edgeSet_mono {H₁ H₂ : Subgraph G} (h : H₁ <= H₂) : H₁.edgeSet <= H₂.edgeSet :=
+theorem edgeSet_mono {H₁ H₂ : Subgraph G} (h : H₁ ≤ H₂) : H₁.edgeSet ≤ H₂.edgeSet :=
   Sym2.ind h.2
-
-/--
-theorem `edgeSet_monotone` / 定理 `edgeSet_monotone`
-
-English:
-theorem edgeSet_monotone
-  statement: Monotone (edgeSet (G := G))
-  proof: fun _ _ => edgeSet_mono
-
-中文:
-定理 edgeSet_monotone
-  结论: 递增 (edgeSet (G := G))
-  证明: fun _ _ => edgeSet_mono
+/-
+**SimpleGraph.Subgraph.edgeSet_monotone** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：edgeSet_monotone : Monotone (edgeSet (G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_mono`：edgeSet_mono {H₁ H₂ : Subgraph G} (h 
+: H₁ <= H₂) : H₁.edgeSet <= H₂.edgeSet
 -/
 theorem edgeSet_monotone : Monotone (edgeSet (G := G)) :=
-  fun _ _ => edgeSet_mono
-
-/--
-theorem `_root_.Disjoint.edgeSet` / 定理 `_root_.Disjoint.edgeSet`
-
-English:
-theorem _root_.Disjoint.edgeSet
-  given: {H₁ H₂ : Subgraph G} (h : Disjoint H₁ H₂)
-  proof: disjoint_iff_inf_le.mpr by simpa using edgeSet_mono h.le_bot
-
-@[simp]
-
-中文:
-定理 _root_.Disjoint.edgeSet
-  条件: {H₁ H₂ : 子图 G} (h : Disjoint H₁ H₂)
-  证明: disjoint_iff_inf_le.mpr by simpa using edgeSet_mono h.le_bot
-
-@[simp]
-
-Depends on / 依赖: disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, edgeSet_mono, h.le_bot, le_bot
+  fun _ _ ↦ edgeSet_mono
+/-
+**SimpleGraph.Subgraph._root_.Disjoint.edgeSet** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Disjoint.edgeSet {H₁ H₂ : Subgraph G} (h : Disjoint H₁ H₂) :
     Disjoint H₁.edgeSet H₂.edgeSet :=
-disjoint_iff_inf_le.mpr by simpa using edgeSet_mono h.le_bot
+  disjoint_iff_inf_le.mpr <| by simpa using edgeSet_mono h.le_bot
 
 @[simp]
-/--
-lemma `disjoint_verts_iff_disjoint` / 引理 `disjoint_verts_iff_disjoint`
-
-English:
-lemma disjoint_verts_iff_disjoint
-  given: {H H' : Subgraph G}
-  proof: by
-  constructor
-  · rintro hdisj M' ⟨hsub₀, _⟩ ⟨hsub₁, _⟩
-    rw [le_bot_iff]
-    ext
-    · grind [verts_bot]
-    · exact ⟨(hdisj hsub₀ hsub₁ <| M'.edge_vert · :), False.elim⟩
-  · intro hdisj S h₀ h₁ v hvS
-    let M' : Subgraph G := { verts := {v}, Adj := ⊥, adj_sub := by simp, edge_vert := by simp }
-    have hle {M : Subgraph G} (h : v in M.verts) : M' <= M := by constructor <;> simp [h, M']
-.left Set.mem_singleton v exact hdisj (hle <| h₀ hvS) (hle <| h₁ hvS)
-
-中文:
-引理 disjoint_verts_iff_disjoint
-  条件: {H H' : 子图 G}
-  证明: by
-  constructor
-  · rintro hdisj M' ⟨hsub₀, _⟩ ⟨hsub₁, _⟩
-    rw [le_bot_iff]
-    ext
-    · grind [verts_bot]
-    · exact ⟨(hdisj hsub₀ hsub₁ <| M'.edge_vert · :), False.elim⟩
-  · intro hdisj S h₀ h₁ v hvS
-    let M' : Subgraph G := { verts := {v}, Adj := ⊥, adj_sub := by simp, edge_vert := by simp }
-    have hle {M : Subgraph G} (h : v in M.verts) : M' <= M := by constructor <;> simp [h, M']
-.left Set.mem_singleton v exact hdisj (hle <| h₀ hvS) (hle <| h₁ hvS)
-
-Depends on / 依赖: False.elim, M.verts, Set.mem_singleton, Subgraph, adj_sub, edge_vert, le_bot_iff, mem_singleton, verts_bot
+/-
+**SimpleGraph.Subgraph.disjoint_verts_iff_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `Si
+mpleGraph.Subgraph`。
+形式化陈述：disjoint_verts_iff_disjoint {H H' : Subgraph G} : Disjoint H.verts H'.vert
+s ↔ Disjoint H H'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
 lemma disjoint_verts_iff_disjoint {H H' : Subgraph G} :
     Disjoint H.verts H'.verts ↔ Disjoint H H' := by
@@ -2778,50 +2034,24 @@ lemma disjoint_verts_iff_disjoint {H H' : Subgraph G} :
     · exact ⟨(hdisj hsub₀ hsub₁ <| M'.edge_vert · :), False.elim⟩
   · intro hdisj S h₀ h₁ v hvS
     let M' : Subgraph G := { verts := {v}, Adj := ⊥, adj_sub := by simp, edge_vert := by simp }
-    have hle {M : Subgraph G} (h : v in M.verts) : M' <= M := by constructor <;> simp [h, M']
-.left Set.mem_singleton v exact hdisj (hle <| h₀ hvS) (hle <| h₁ hvS)
+    have hle {M : Subgraph G} (h : v ∈ M.verts) : M' ≤ M := by constructor <;> simp [h, M']
+    exact hdisj (hle <| h₀ hvS) (hle <| h₁ hvS) |>.left <| Set.mem_singleton v
 
 section map
-variable {G' : SimpleGraph W} {f : G ->g G'}
+variable {G' : SimpleGraph W} {f : G →g G'}
 
 /-- Graph homomorphisms induce a covariant function on subgraphs. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**SimpleGraph.Subgraph.map** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：{V : Type u} → {W : Type v} → {G : SimpleGraph V} → {G' : SimpleGraph W} →
+ G →g G' → G.Subgraph → G'.Subgraph
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : G ->g G') (H : G.Subgraph)
-  body: f '' H.verts
-  Adj := Relation.Map H.Adj f f
-  adj_sub := by
-    rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact f.map_rel (H.adj_sub h)
-  edge_vert := by
-    rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact Set.mem_image_of_mem _ (H.edge_vert h)
-  symm.symm := by
-    rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact ⟨v, u, h.symm, rfl, rfl⟩
-
-中文:
-定义 map
-  签名: (f : G ->g G') (H : G.子图)
-  定义体: f '' H.verts
-  Adj := Relation.Map H.Adj f f
-  adj_sub := by
-    rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact f.map_rel (H.adj_sub h)
-  edge_vert := by
-    rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact Set.mem_image_of_mem _ (H.edge_vert h)
-  symm.symm := by
-    rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact ⟨v, u, h.symm, rfl, rfl⟩
-
-Depends on / 依赖: _mem, ne_of_mem_erase
+--- 原说明 ---
+Graph homomorphisms induce a covariant function on subgraphs.
 -/
-protected def map (f : G ->g G') (H : G.Subgraph) : G'.Subgraph where
+protected def map (f : G →g G') (H : G.Subgraph) : G'.Subgraph where
   verts := f '' H.verts
   Adj := Relation.Map H.Adj f f
   adj_sub := by
@@ -2833,52 +2063,98 @@ protected def map (f : G ->g G') (H : G.Subgraph) : G'.Subgraph where
   symm.symm := by
     rintro _ _ ⟨u, v, h, rfl, rfl⟩
     exact ⟨v, u, h.symm, rfl, rfl⟩
-
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: (H : G.Subgraph)
-  statement: H.map Hom.id = H
-  proof: by ext <;> simp
-
-中文:
-引理 map_id
-  条件: (H : G.子图)
-  结论: H.map 态射.id = H
-  证明: by ext <;> simp
-
-Depends on / 依赖: _mem, ne_of_mem_erase
+/-
+**SimpleGraph.Subgraph.map_id** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} (H : G.Subgraph), SimpleGraph.Subgraph.
+map SimpleGraph.Hom.id H = H
+参数：H : G.Subgraph。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `RelHom.id_apply`：∀ {α : Type u_1} (r : α → α → Prop) (x : α), (RelHom.id
+ r) x = x
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+· 使用定理 `Relation.map_id_id`：∀ {α : Type u_1} {β : Type u_2} (r : α → β → Prop), 
+Relation.Map r id id = r
 -/
 @[simp] lemma map_id (H : G.Subgraph) : H.map Hom.id = H := by ext <;> simp
-
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: {U : Type*} {G'' : SimpleGraph U} (H : G.Subgraph) (f : G ->g G') (g : G' ->g G'')
-  proof: by ext <;> simp [Subgraph.map]
-
-中文:
-引理 map_comp
-  条件: {U : 类型} {G'' : 简单图 U} (H : G.子图) (f : G ->g G') (g : G' ->g G'')
-  证明: by ext <;> simp [Subgraph.map]
-
-Depends on / 依赖: Subgraph, Subgraph.map
+/-
+**SimpleGraph.Subgraph.map_comp** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：map_comp {U : Type*} {G'' : SimpleGraph U} (H : G.Subgraph) (f : G ->g G')
+ (g : G' ->g G'') : H.map (g.comp f) = (H.map f).map g
+参数：H : G.Subgraph；f : G ->g G'；g : G' ->g G''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `RelHom.comp_apply`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {r : α
+ → α → Prop} {s : β → β → Prop} {t : γ → γ → Prop} (g : s →r t)   (f : r →r s) (
+x : α),…
+· 使用定理 `SimpleGraph.Subgraph.mk.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} (
+verts verts_1 : Set V) (e_verts : verts = verts_1) (Adj Adj_1 : V → V → Prop)   
+(e_Adj : Adj = Adj_1) (a…
+· 使用定理 `Relation.map_map`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Ty
+pe u_4} {ε : Type u_5} {ζ : Type u_6} (r : α → β → Prop)   (f₁ : α → γ) (g₁ : β 
+→ δ) (…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma map_comp {U : Type*} {G'' : SimpleGraph U} (H : G.Subgraph) (f : G ->g G') (g : G' ->g G'') :
+lemma map_comp {U : Type*} {G'' : SimpleGraph U} (H : G.Subgraph) (f : G →g G') (g : G' →g G'') :
     H.map (g.comp f) = (H.map f).map g := by ext <;> simp [Subgraph.map]
-
-/--
-lemma `map_mono` / 引理 `map_mono`
-
-English:
-lemma map_mono
-  given: {H₁ H₂ : G.Subgraph} (hH : H₁ <= H₂)
-  statement: H₁.map f <= H₂.map f
-  proof: by
+/-
+**SimpleGraph.Subgraph.map_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：∀ {V : Type u} {W : Type v} {G : SimpleGraph V} {G' : SimpleGraph W} {f : 
+G →g G'} {H₁ H₂ : G.Subgraph},   H₁ ≤ H₂ → SimpleGraph.Subgraph.map f H₁ ≤ Simpl
+eGraph.Subgraph.map f H₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+-/
+@[gcongr] lemma map_mono {H₁ H₂ : G.Subgraph} (hH : H₁ ≤ H₂) : H₁.map f ≤ H₂.map f := by
   constructor
   · intro
     simp only [map_verts, Set.mem_image, forall_exists_index, and_imp]
@@ -2886,172 +2162,155 @@ lemma map_mono
     exact ⟨_, hH.1 hv, rfl⟩
   · rintro _ _ ⟨u, v, ha, rfl, rfl⟩
     exact ⟨_, _, hH.2 ha, rfl, rfl⟩
-
-中文:
-引理 map_mono
-  条件: {H₁ H₂ : G.子图} (hH : H₁ <= H₂)
-  结论: H₁.map f <= H₂.map f
-  证明: by
-  constructor
-  · intro
-    simp only [map_verts, Set.mem_image, forall_exists_index, and_imp]
-    rintro v hv rfl
-    exact ⟨_, hH.1 hv, rfl⟩
-  · rintro _ _ ⟨u, v, ha, rfl, rfl⟩
-    exact ⟨_, _, hH.2 ha, rfl, rfl⟩
+/-
+**SimpleGraph.Subgraph.map_monotone** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：map_monotone : Monotone (Subgraph.map f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.map_mono`：∀ {V : Type u} {W : Type v} {G : SimpleGr
+aph V} {G' : SimpleGraph W} {f : G →g G'} {H₁ H₂ : G.Subgraph},   H₁ ≤ H₂ → Simp
+leGraph.Subgraph.ma…
 -/
-@[gcongr] lemma map_mono {H₁ H₂ : G.Subgraph} (hH : H₁ <= H₂) : H₁.map f <= H₂.map f := by
-  constructor
-  · intro
-    simp only [map_verts, Set.mem_image, forall_exists_index, and_imp]
-    rintro v hv rfl
-    exact ⟨_, hH.1 hv, rfl⟩
-  · rintro _ _ ⟨u, v, ha, rfl, rfl⟩
-    exact ⟨_, _, hH.2 ha, rfl, rfl⟩
-
-/--
-lemma `map_monotone` / 引理 `map_monotone`
-
-English:
-lemma map_monotone
-  statement: Monotone (Subgraph.map f)
-  proof: fun _ _ => map_mono
-
-中文:
-引理 map_monotone
-  结论: 递增 (子图.map f)
-  证明: fun _ _ => map_mono
-
-Depends on / 依赖: map_mono
+lemma map_monotone : Monotone (Subgraph.map f) := fun _ _ ↦ map_mono
+/-
+**SimpleGraph.Subgraph.map_sup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：map_sup (f : G ->g G') (H₁ H₂ : G.Subgraph) : (H₁ ⊔ H₂).map f = H₁.map f ⊔
+ H₂.map f
+参数：f : G ->g G'；H₁ H₂ : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
 -/
-lemma map_monotone : Monotone (Subgraph.map f) := fun _ _ => map_mono
-
-/--
-theorem `map_sup` / 定理 `map_sup`
-
-English:
-theorem map_sup
-  given: (f : G ->g G') (H₁ H₂ : G.Subgraph)
-  statement: (H₁ ⊔ H₂).map f = H₁.map f ⊔ H₂.map f
-  proof: by
+theorem map_sup (f : G →g G') (H₁ H₂ : G.Subgraph) : (H₁ ⊔ H₂).map f = H₁.map f ⊔ H₂.map f := by
   ext <;> simp [Set.image_union, map_adj, sup_adj, Relation.Map, or_and_right, exists_or]
-
-中文:
-定理 map_sup
-  条件: (f : G ->g G') (H₁ H₂ : G.子图)
-  结论: (H₁ ⊔ H₂).map f = H₁.map f ⊔ H₂.map f
-  证明: by
-  ext <;> simp [Set.image_union, map_adj, sup_adj, Relation.Map, or_and_right, exists_or]
-
-Depends on / 依赖: Relation, Relation.Map, Set.image_union, exists_or, image_union, map_adj, or_and_right, sup_adj
--/
-theorem map_sup (f : G ->g G') (H₁ H₂ : G.Subgraph) : (H₁ ⊔ H₂).map f = H₁.map f ⊔ H₂.map f := by
-  ext <;> simp [Set.image_union, map_adj, sup_adj, Relation.Map, or_and_right, exists_or]
-
-/--
-lemma `map_iso_top` / 引理 `map_iso_top`
-
-English:
-lemma map_iso_top
-  given: {H : SimpleGraph W} (e : G ≃g H)
-  statement: Subgraph.map e.toHom ⊤ = ⊤
-  proof: by
-  ext <;> simp [Relation.Map, ← e.eq_symm_apply, ← e.map_rel_iff]
-
-中文:
-引理 map_iso_top
-  条件: {H : 简单图 W} (e : G ≃g H)
-  结论: 子图.map e.toHom ⊤ = ⊤
-  证明: by
-  ext <;> simp [Relation.Map, ← e.eq_symm_apply, ← e.map_rel_iff]
+/-
+**SimpleGraph.Subgraph.map_iso_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：∀ {V : Type u} {W : Type v} {G : SimpleGraph V} {H : SimpleGraph W} (e : G
+ ≃g H), SimpleGraph.Subgraph.map e.toHom ⊤ = ⊤
+参数：e : G ≃g H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `EquivLike.range_eq_univ`：range_eq_univ {α : Type*} {β : Type*} {E : Type
+*} [EquivLike E α β] (e : E) : range e = univ
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RelIso.map_rel_iff`：map_rel_iff (f : r ≃r s) {a b} : s (f a) (f b) ↔ r a
+ b
+· 使用引理 `RelIso.eq_symm_apply`：eq_symm_apply (e : r ≃r s) {x y} : y = e.symm x ↔ 
+e y = x
+· 使用定理 `RelIso.apply_symm_apply`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Pr
+op} {s : β → β → Prop} (e : r ≃r s) (x : β), e (e.symm x) = x
 -/
 @[simp] lemma map_iso_top {H : SimpleGraph W} (e : G ≃g H) : Subgraph.map e.toHom ⊤ = ⊤ := by
   ext <;> simp [Relation.Map, ← e.eq_symm_apply, ← e.map_rel_iff]
-
-/--
-lemma `edgeSet_map` / 引理 `edgeSet_map`
-
-English:
-lemma edgeSet_map
-  given: (f : G ->g G') (H : G.Subgraph)
-  proof: Sym2.fromRel_relationMap ..
-
-中文:
-引理 edgeSet_map
-  条件: (f : G ->g G') (H : G.子图)
-  证明: Sym2.fromRel_relationMap ..
+/-
+**SimpleGraph.Subgraph.edgeSet_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：∀ {V : Type u} {W : Type v} {G : SimpleGraph V} {G' : SimpleGraph W} (f : 
+G →g G') (H : G.Subgraph),   (SimpleGraph.Subgraph.map f H).edgeSet = Sym2.map ⇑
+f '' H.edgeSet
+参数：f : G →g G'；H : G.Subgraph；SimpleGraph.Subgraph.map f H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Sym2.fromRel_relationMap`：fromRel_relationMap {r : α -> α -> Prop} (hr :
+ Std.Symm r) (f : α -> β) : fromRel (hr.map f) = Sym2.map f '' Sym2.fromRel hr
+· 使用定理 `SimpleGraph.Subgraph.symm`：∀ {V : Type u} {G : SimpleGraph V} (self : G.
+Subgraph), Std.Symm self.Adj
 -/
-@[simp] lemma edgeSet_map (f : G ->g G') (H : G.Subgraph) :
+@[simp] lemma edgeSet_map (f : G →g G') (H : G.Subgraph) :
     (H.map f).edgeSet = Sym2.map f '' H.edgeSet := Sym2.fromRel_relationMap ..
 
 end map
 
 /-- Graph homomorphisms induce a contravariant function on subgraphs. -/
 @[simps]
-/--
-Definition of `comap` / `comap` 的定义
+/-
+**SimpleGraph.Subgraph.comap** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：{V : Type u} → {W : Type v} → {G : SimpleGraph V} → {G' : SimpleGraph W} →
+ G →g G' → G'.Subgraph → G.Subgraph
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: {G' : SimpleGraph W} (f : G ->g G') (H : G'.Subgraph)
-  body: f ⁻¹' H.verts
-  Adj u v := G.Adj u v ∧ H.Adj (f u) (f v)
-  adj_sub h := h.1
-  edge_vert h := Set.mem_preimage.1 (H.edge_vert h.2)
-  symm.symm _ _ h := ⟨h.left.symm, h.right.symm⟩
-
-中文:
-定义 comap
-  签名: {G' : 简单图 W} (f : G ->g G') (H : G'.子图)
-  定义体: f ⁻¹' H.verts
-  Adj u v := G.Adj u v ∧ H.Adj (f u) (f v)
-  adj_sub h := h.1
-  edge_vert h := Set.mem_preimage.1 (H.edge_vert h.2)
-  symm.symm _ _ h := ⟨h.left.symm, h.right.symm⟩
+--- 原说明 ---
+Graph homomorphisms induce a contravariant function on subgraphs.
 -/
-protected def comap {G' : SimpleGraph W} (f : G ->g G') (H : G'.Subgraph) : G.Subgraph where
+protected def comap {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph) : G.Subgraph where
   verts := f ⁻¹' H.verts
   Adj u v := G.Adj u v ∧ H.Adj (f u) (f v)
   adj_sub h := h.1
   edge_vert h := Set.mem_preimage.1 (H.edge_vert h.2)
   symm.symm _ _ h := ⟨h.left.symm, h.right.symm⟩
-
-/--
-theorem `comap_monotone` / 定理 `comap_monotone`
-
-English:
-theorem comap_monotone
-  given: {G' : SimpleGraph W} (f : G ->g G')
-  statement: Monotone (Subgraph.comap f)
-  proof: by
-  intro H H' h
-  constructor
-  · intro
-    simp only [comap_verts, Set.mem_preimage]
-    apply h.1
-  · intro v w
-    simp +contextual only [comap_adj, and_imp, true_and]
-    intro
-    apply h.2
-
-中文:
-定理 comap_monotone
-  条件: {G' : 简单图 W} (f : G ->g G')
-  结论: 递增 (子图.comap f)
-  证明: by
-  intro H H' h
-  constructor
-  · intro
-    simp only [comap_verts, Set.mem_preimage]
-    apply h.1
-  · intro v w
-    simp +contextual only [comap_adj, and_imp, true_and]
-    intro
-    apply h.2
-
-Depends on / 依赖: Set.mem_preimage, and_imp, comap_adj, comap_verts, contextual, mem_preimage, true_and
+/-
+**SimpleGraph.Subgraph.comap_monotone** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：comap_monotone {G' : SimpleGraph W} (f : G ->g G') : Monotone (Subgraph.co
+map f)
+参数：f : G ->g G'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.comap_verts`：∀ {V : Type u} {W : Type v} {G : Simpl
+eGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph),   (SimpleGraph.S
+ubgraph.comap f H).ver…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.comap_adj`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph) (u v : V),   (Simpl
+eGraph.Subgraph.coma…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem comap_monotone {G' : SimpleGraph W} (f : G ->g G') : Monotone (Subgraph.comap f) := by
+theorem comap_monotone {G' : SimpleGraph W} (f : G →g G') : Monotone (Subgraph.comap f) := by
   intro H H' h
   constructor
   · intro
@@ -3061,35 +2320,81 @@ theorem comap_monotone {G' : SimpleGraph W} (f : G ->g G') : Monotone (Subgraph.
     simp +contextual only [comap_adj, and_imp, true_and]
     intro
     apply h.2
-
-/--
-lemma `comap_equiv_top` / 引理 `comap_equiv_top`
-
-English:
-lemma comap_equiv_top
-  given: {H : SimpleGraph W} (f : G ->g H)
-  statement: Subgraph.comap f ⊤ = ⊤
-  proof: by
-  ext <;> simp +contextual [f.map_adj]
-
-中文:
-引理 comap_equiv_top
-  条件: {H : 简单图 W} (f : G ->g H)
-  结论: 子图.comap f ⊤ = ⊤
-  证明: by
-  ext <;> simp +contextual [f.map_adj]
+/-
+**SimpleGraph.Subgraph.comap_equiv_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：∀ {V : Type u} {W : Type v} {G : SimpleGraph V} {H : SimpleGraph W} (f : G
+ →g H), SimpleGraph.Subgraph.comap f ⊤ = ⊤
+参数：f : G →g H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.comap_verts`：∀ {V : Type u} {W : Type v} {G : Simpl
+eGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph),   (SimpleGraph.S
+ubgraph.comap f H).ver…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.comap_adj`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph) (u v : V),   (Simpl
+eGraph.Subgraph.coma…
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-@[simp] lemma comap_equiv_top {H : SimpleGraph W} (f : G ->g H) : Subgraph.comap f ⊤ = ⊤ := by
+@[simp] lemma comap_equiv_top {H : SimpleGraph W} (f : G →g H) : Subgraph.comap f ⊤ = ⊤ := by
   ext <;> simp +contextual [f.map_adj]
-
-/--
-theorem `map_le_iff_le_comap` / 定理 `map_le_iff_le_comap`
-
-English:
-theorem map_le_iff_le_comap
-  given: {G' : SimpleGraph W} (f : G ->g G') (H : G.Subgraph) (H' : G'.Subgraph)
-  proof: by
-  refine ⟨fun h => ⟨fun v hv => ?_, fun v w hvw => ?_⟩, fun h => ⟨fun v => ?_, fun v w => ?_⟩⟩
+/-
+**SimpleGraph.Subgraph.map_le_iff_le_comap** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.Subgraph`。
+形式化陈述：map_le_iff_le_comap {G' : SimpleGraph W} (f : G ->g G') (H : G.Subgraph) (
+H' : G'.Subgraph) : H.map f <= H' ↔ H <= H'.comap f
+参数：f : G ->g G'；H : G.Subgraph；H' : G'.Subgraph。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.comap_verts`：∀ {V : Type u} {W : Type v} {G : Simpl
+eGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph),   (SimpleGraph.S
+ubgraph.comap f H).ver…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `SimpleGraph.Subgraph.comap_adj`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph) (u v : V),   (Simpl
+eGraph.Subgraph.coma…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+-/
+theorem map_le_iff_le_comap {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (H' : G'.Subgraph) :
+    H.map f ≤ H' ↔ H ≤ H'.comap f := by
+  refine ⟨fun h ↦ ⟨fun v hv ↦ ?_, fun v w hvw ↦ ?_⟩, fun h ↦ ⟨fun v ↦ ?_, fun v w ↦ ?_⟩⟩
   · simp only [comap_verts, Set.mem_preimage]
     exact h.1 ⟨v, hv, rfl⟩
   · simp only [H.adj_sub hvw, comap_adj, true_and]
@@ -3100,220 +2405,142 @@ theorem map_le_iff_le_comap
   · simp only [Relation.Map, map_adj, forall_exists_index, and_imp]
     rintro u u' hu rfl rfl
     exact (h.2 hu).2
-
-中文:
-定理 map_le_iff_le_comap
-  条件: {G' : 简单图 W} (f : G ->g G') (H : G.子图) (H' : G'.子图)
-  证明: by
-  refine ⟨fun h => ⟨fun v hv => ?_, fun v w hvw => ?_⟩, fun h => ⟨fun v => ?_, fun v w => ?_⟩⟩
-  · simp only [comap_verts, Set.mem_preimage]
-    exact h.1 ⟨v, hv, rfl⟩
-  · simp only [H.adj_sub hvw, comap_adj, true_and]
-    exact h.2 ⟨v, w, hvw, rfl, rfl⟩
-  · simp only [map_verts, Set.mem_image, forall_exists_index, and_imp]
-    rintro w hw rfl
-    exact h.1 hw
-  · simp only [Relation.Map, map_adj, forall_exists_index, and_imp]
-    rintro u u' hu rfl rfl
-    exact (h.2 hu).2
-
-Depends on / 依赖: H.adj_sub, Relation, Relation.Map, Set.mem_image, Set.mem_preimage, adj_sub, and_imp, comap_adj, comap_verts, forall_exists_index, map_adj, map_verts, mem_image, mem_preimage, true_and
--/
-theorem map_le_iff_le_comap {G' : SimpleGraph W} (f : G ->g G') (H : G.Subgraph) (H' : G'.Subgraph) :
-    H.map f <= H' ↔ H <= H'.comap f := by
-  refine ⟨fun h => ⟨fun v hv => ?_, fun v w hvw => ?_⟩, fun h => ⟨fun v => ?_, fun v w => ?_⟩⟩
-  · simp only [comap_verts, Set.mem_preimage]
-    exact h.1 ⟨v, hv, rfl⟩
-  · simp only [H.adj_sub hvw, comap_adj, true_and]
-    exact h.2 ⟨v, w, hvw, rfl, rfl⟩
-  · simp only [map_verts, Set.mem_image, forall_exists_index, and_imp]
-    rintro w hw rfl
-    exact h.1 hw
-  · simp only [Relation.Map, map_adj, forall_exists_index, and_imp]
-    rintro u u' hu rfl rfl
-    exact (h.2 hu).2
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: V] [Fintype V] [DecidableRel G.Adj] : Fintype G.Subgraph
-  body: by
-  refine .ofBijective
-    (α := {H : Finset V × (V -> V -> Bool) //
-      (forall a b, H.2 a b -> G.Adj a b) ∧ (forall a b, H.2 a b -> a in H.1) ∧ forall a b, H.2 a b = H.2 b a})
-    (fun H => ⟨H.1.1, fun a b => H.1.2 a b, @H.2.1, @H.2.2.1, by simp [symm_def, H.2.2.2]⟩)
-    ⟨?_, fun H => ?_⟩
-  · rintro ⟨⟨_, _⟩, -⟩ ⟨⟨_, _⟩, -⟩
-    simp [funext_iff]
-  · classical
-    exact ⟨⟨(H.verts.toFinset, fun a b => H.Adj a b), fun a b => by simpa using H.adj_sub,
-      fun a b => by simpa using H.edge_vert, by simp [H.adj_comm]⟩, by simp⟩
-
-中文:
-实例 [DecidableEq
-  签名: V] [有限类型 V] [DecidableRel G.伴随] : 有限类型 G.子图
-  定义体: by
-  refine .ofBijective
-    (α := {H : Finset V × (V -> V -> Bool) //
-      (forall a b, H.2 a b -> G.Adj a b) ∧ (forall a b, H.2 a b -> a in H.1) ∧ forall a b, H.2 a b = H.2 b a})
-    (fun H => ⟨H.1.1, fun a b => H.1.2 a b, @H.2.1, @H.2.2.1, by simp [symm_def, H.2.2.2]⟩)
-    ⟨?_, fun H => ?_⟩
-  · rintro ⟨⟨_, _⟩, -⟩ ⟨⟨_, _⟩, -⟩
-    simp [funext_iff]
-  · classical
-    exact ⟨⟨(H.verts.toFinset, fun a b => H.Adj a b), fun a b => by simpa using H.adj_sub,
-      fun a b => by simpa using H.edge_vert, by simp [H.adj_comm]⟩, by simp⟩
-
-Depends on / 依赖: Finset, G.Adj, H.Adj, H.adj_comm, H.adj_sub, H.edge_vert, H.verts.toFinset, adj_comm, adj_sub, classical, edge_vert, funext_iff, ofBijective, symm_def, toFinset
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq V] [Fintype V] [DecidableRel G.Adj] : Fintype G.Subgraph := by
   refine .ofBijective
-    (α := {H : Finset V × (V -> V -> Bool) //
-      (forall a b, H.2 a b -> G.Adj a b) ∧ (forall a b, H.2 a b -> a in H.1) ∧ forall a b, H.2 a b = H.2 b a})
-    (fun H => ⟨H.1.1, fun a b => H.1.2 a b, @H.2.1, @H.2.2.1, by simp [symm_def, H.2.2.2]⟩)
-    ⟨?_, fun H => ?_⟩
+    (α := {H : Finset V × (V → V → Bool) //
+      (∀ a b, H.2 a b → G.Adj a b) ∧ (∀ a b, H.2 a b → a ∈ H.1) ∧ ∀ a b, H.2 a b = H.2 b a})
+    (fun H ↦ ⟨H.1.1, fun a b ↦ H.1.2 a b, @H.2.1, @H.2.2.1, by simp [symm_def, H.2.2.2]⟩)
+    ⟨?_, fun H ↦ ?_⟩
   · rintro ⟨⟨_, _⟩, -⟩ ⟨⟨_, _⟩, -⟩
     simp [funext_iff]
   · classical
-    exact ⟨⟨(H.verts.toFinset, fun a b => H.Adj a b), fun a b => by simpa using H.adj_sub,
-      fun a b => by simpa using H.edge_vert, by simp [H.adj_comm]⟩, by simp⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: V] : Finite G.Subgraph
-  body: by classical cases nonempty_fintype V; infer_instance
-
-中文:
-实例 [有限
-  签名: V] : 有限 G.子图
-  定义体: by classical cases nonempty_fintype V; infer_instance
-
-Depends on / 依赖: classical, infer_instance, nonempty_fintype
+    exact ⟨⟨(H.verts.toFinset, fun a b ↦ H.Adj a b), fun a b ↦ by simpa using H.adj_sub,
+      fun a b ↦ by simpa using H.edge_vert, by simp [H.adj_comm]⟩, by simp⟩
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite V] : Finite G.Subgraph := by classical cases nonempty_fintype V; infer_instance
 
 /-- Given two subgraphs, one a subgraph of the other, there is an induced injective homomorphism of
 the subgraphs as graphs. -/
 @[simps]
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-
+**SimpleGraph.Subgraph.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph
+`。
+形式化陈述：inclusion {x y : Subgraph G} (h : x <= y) : x.coe ->g y.coe where toFun v
+参数：h : x <= y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: {x y : Subgraph G} (h : x <= y)
-  body: ⟨↑v, And.left h v.property⟩
-  map_rel' hvw := h.2 hvw
-
-中文:
-定义 inclusion
-  签名: {x y : 子图 G} (h : x <= y)
-  定义体: ⟨↑v, And.left h v.property⟩
-  map_rel' hvw := h.2 hvw
-
-Depends on / 依赖: And.left, property, v.property
+--- 原说明 ---
+Given two subgraphs, one a subgraph of the other, there is an induced injective 
+homomorphism of
+the subgraphs as graphs.
 -/
-def inclusion {x y : Subgraph G} (h : x <= y) : x.coe ->g y.coe where
+def inclusion {x y : Subgraph G} (h : x ≤ y) : x.coe →g y.coe where
   toFun v := ⟨↑v, And.left h v.property⟩
   map_rel' hvw := h.2 hvw
-
-/--
-theorem `inclusion.injective` / 定理 `inclusion.injective`
-
-English:
-theorem inclusion.injective
-  given: {x y : Subgraph G} (h : x <= y)
-  statement: Function.Injective (inclusion h)
-  proof: fun _ _ h => Subtype.ext congr(Subtype.val $h)
-
-中文:
-定理 inclusion.injective
-  条件: {x y : 子图 G} (h : x <= y)
-  结论: 函数.单射 (inclusion h)
-  证明: fun _ _ h => Subtype.ext congr(Subtype.val $h)
-
-Depends on / 依赖: Subtype, Subtype.ext, Subtype.val
+/-
+**SimpleGraph.Subgraph.inclusion.injective** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.Subgraph.inclusion`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Subgraph} (h : x ≤ y),   Funct
+ion.Injective ⇑(SimpleGraph.Subgraph.inclusion h)
+参数：h : x ≤ y；SimpleGraph.Subgraph.inclusion h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem inclusion.injective {x y : Subgraph G} (h : x <= y) : Function.Injective (inclusion h) :=
-  fun _ _ h => Subtype.ext congr(Subtype.val $h)
+theorem inclusion.injective {x y : Subgraph G} (h : x ≤ y) : Function.Injective (inclusion h) :=
+  fun _ _ h ↦ Subtype.ext congr(Subtype.val $h)
 
 /-- There is an induced injective homomorphism of a subgraph of `G` into `G`. -/
 @[simps]
-/--
-Definition of `hom` / `hom` 的定义
+/-
+**SimpleGraph.Subgraph.hom** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：{V : Type u} → {G : SimpleGraph V} → (x : G.Subgraph) → x.coe →g G
+参数：x : G.Subgraph。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hom
-  signature: (x : Subgraph G)
-  body: v
-  map_rel' := x.adj_sub
-
-中文:
-定义 hom
-  签名: (x : 子图 G)
-  定义体: v
-  map_rel' := x.adj_sub
+--- 原说明 ---
+There is an induced injective homomorphism of a subgraph of `G` into `G`.
 -/
-protected def hom (x : Subgraph G) : x.coe ->g G where
+protected def hom (x : Subgraph G) : x.coe →g G where
   toFun v := v
   map_rel' := x.adj_sub
-
-/--
-lemma `coe_hom` / 引理 `coe_hom`
-
-English:
-lemma coe_hom
-  given: (x : Subgraph G)
-  proof: rfl
-
-中文:
-引理 coe_hom
-  条件: (x : 子图 G)
-  证明: rfl
+/-
+**SimpleGraph.Subgraph.coe_hom** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} (x : G.Subgraph), ⇑x.hom = fun v => ↑v
+参数：x : G.Subgraph。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_hom (x : Subgraph G) :
-    (x.hom : x.verts -> V) = (fun (v : x.verts) => (v : V)) := rfl
-
-/--
-theorem `hom_injective` / 定理 `hom_injective`
-
-English:
-theorem hom_injective
-  given: {x : Subgraph G}
-  statement: Function.Injective x.hom
-  proof: fun _ _ => Subtype.ext
-
-中文:
-定理 hom_injective
-  条件: {x : 子图 G}
-  结论: 函数.单射 x.hom
-  证明: fun _ _ => Subtype.ext
-
-Depends on / 依赖: Subtype, Subtype.ext
+    (x.hom : x.verts → V) = (fun (v : x.verts) => (v : V)) := rfl
+/-
+**SimpleGraph.Subgraph.hom_injective** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subg
+raph`。
+形式化陈述：hom_injective {x : Subgraph G} : Function.Injective x.hom
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
 theorem hom_injective {x : Subgraph G} : Function.Injective x.hom :=
-  fun _ _ => Subtype.ext
-
-/--
-lemma `map_hom_top` / 引理 `map_hom_top`
-
-English:
-lemma map_hom_top
-  given: (G' : G.Subgraph)
-  statement: Subgraph.map G'.hom ⊤ = G'
-  proof: by
-  aesop (add unfold safe Relation.Map, unsafe G'.edge_vert, unsafe Adj.symm)
-
-中文:
-引理 map_hom_top
-  条件: (G' : G.子图)
-  结论: 子图.map G'.hom ⊤ = G'
-  证明: by
-  aesop (add unfold safe Relation.Map, unsafe G'.edge_vert, unsafe Adj.symm)
+  fun _ _ ↦ Subtype.ext
+/-
+**SimpleGraph.Subgraph.map_hom_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} (G' : G.Subgraph), SimpleGraph.Subgraph
+.map G'.hom ⊤ = G'
+参数：G' : G.Subgraph。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `SimpleGraph.Subgraph.hom_apply`：∀ {V : Type u} {G : SimpleGraph V} (x : 
+G.Subgraph) (v : ↑x.verts), x.hom v = ↑v
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
 -/
 @[simp] lemma map_hom_top (G' : G.Subgraph) : Subgraph.map G'.hom ⊤ = G' := by
   aesop (add unfold safe Relation.Map, unsafe G'.edge_vert, unsafe Adj.symm)
@@ -3321,91 +2548,69 @@ lemma map_hom_top
 /-- There is an induced injective homomorphism of a subgraph of `G` as
 a spanning subgraph into `G`. -/
 @[simps]
-/--
-Definition of `spanningHom` / `spanningHom` 的定义
+/-
+**SimpleGraph.Subgraph.spanningHom** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：spanningHom (x : Subgraph G) : x.spanningCoe ->g G where toFun
+参数：x : Subgraph G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 
-English:
-definition spanningHom
-  signature: (x : Subgraph G)
-  body: id
-  map_rel' := x.adj_sub
-
-中文:
-定义 spanningHom
-  签名: (x : 子图 G)
-  定义体: id
-  map_rel' := x.adj_sub
+--- 原说明 ---
+There is an induced injective homomorphism of a subgraph of `G` as
+a spanning subgraph into `G`.
 -/
-def spanningHom (x : Subgraph G) : x.spanningCoe ->g G where
+def spanningHom (x : Subgraph G) : x.spanningCoe →g G where
   toFun := id
   map_rel' := x.adj_sub
-
-/--
-theorem `spanningHom_injective` / 定理 `spanningHom_injective`
-
-English:
-theorem spanningHom_injective
-  given: {x : Subgraph G}
-  statement: Function.Injective x.spanningHom
-  proof: fun _ _ => id
-
-中文:
-定理 spanningHom_injective
-  条件: {x : 子图 G}
-  结论: 函数.单射 x.spanningHom
-  证明: fun _ _ => id
+/-
+**SimpleGraph.Subgraph.spanningHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.Subgraph`。
+形式化陈述：spanningHom_injective {x : Subgraph G} : Function.Injective x.spanningHom
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanningHom_injective {x : Subgraph G} : Function.Injective x.spanningHom :=
-  fun _ _ => id
-
-/--
-theorem `neighborSet_subset_of_subgraph` / 定理 `neighborSet_subset_of_subgraph`
-
-English:
-theorem neighborSet_subset_of_subgraph
-  given: {x y : Subgraph G} (h : x <= y) (v : V)
-  proof: fun _ h' => h.2 h'
-
-中文:
-定理 neighborSet_subset_of_subgraph
-  条件: {x y : 子图 G} (h : x <= y) (v : V)
-  证明: fun _ h' => h.2 h'
+  fun _ _ ↦ id
+/-
+**SimpleGraph.Subgraph.neighborSet_subset_of_subgraph** 是 Mathlib 中的一个定理，位于命名空间 
+`SimpleGraph.Subgraph`。
+形式化陈述：neighborSet_subset_of_subgraph {x y : Subgraph G} (h : x <= y) (v : V) : x
+.neighborSet v subseteq y.neighborSet v
+参数：h : x <= y；v : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem neighborSet_subset_of_subgraph {x y : Subgraph G} (h : x <= y) (v : V) :
-    x.neighborSet v subseteq y.neighborSet v :=
-  fun _ h' => h.2 h'
-
-/--
-Instance `neighborSet.decidablePred` / 实例 `neighborSet.decidablePred`
-
-English:
-instance neighborSet.decidablePred
-  signature: (G' : Subgraph G) [h : DecidableRel G'.Adj] (v : V)
-  body: h v
-
-中文:
-实例 neighborSet.decidablePred
-  签名: (G' : 子图 G) [h : DecidableRel G'.伴随] (v : V)
-  定义体: h v
+theorem neighborSet_subset_of_subgraph {x y : Subgraph G} (h : x ≤ y) (v : V) :
+    x.neighborSet v ⊆ y.neighborSet v :=
+  fun _ h' ↦ h.2 h'
+/-
+**SimpleGraph.Subgraph.neighborSet.decidablePred** 是 Mathlib 中的一个定义，位于命名空间 `Simp
+leGraph.Subgraph.neighborSet`。
+形式化陈述：{V : Type u} →   {G : SimpleGraph V} →     (G' : G.Subgraph) → [h : Decida
+bleRel G'.Adj] → (v : V) → DecidablePred fun x => x ∈ G'.neighborSet v
+参数：G' : G.Subgraph；v : V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance neighborSet.decidablePred (G' : Subgraph G) [h : DecidableRel G'.Adj] (v : V) :
-    DecidablePred (· in G'.neighborSet v) :=
+    DecidablePred (· ∈ G'.neighborSet v) :=
   h v
 
-/--
-Instance `finiteAt` / 实例 `finiteAt`
+/-- If a graph is locally finite at a vertex, then so is a subgraph of that graph. -/
+/-
+**SimpleGraph.Subgraph.finiteAt** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：finiteAt {G' : Subgraph G} (v : G'.verts) [DecidableRel G'.Adj] [Fintype (
+G.neighborSet v)] : Fintype (G'.neighborSet v)
+参数：v : G'.verts；G.neighborSet v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance finiteAt
-  signature: {G' : Subgraph G} (v : G'.verts) [DecidableRel G'.Adj]
-  body: Set.fintypeSubset (G.neighborSet v) (G'.neighborSet_subset v)
-
-中文:
-实例 finiteAt
-  签名: {G' : 子图 G} (v : G'.verts) [DecidableRel G'.伴随]
-  定义体: Set.fintypeSubset (G.neighborSet v) (G'.neighborSet_subset v)
-
-Depends on / 依赖: G.neighborSet, Set.fintypeSubset, fintypeSubset, neighborSet, neighborSet_subset
+--- 原说明 ---
+If a graph is locally finite at a vertex, then so is a subgraph of that graph.
 -/
 instance finiteAt {G' : Subgraph G} (v : G'.verts) [DecidableRel G'.Adj]
     [Fintype (G.neighborSet v)] : Fintype (G'.neighborSet v) :=
@@ -3415,211 +2620,183 @@ instance finiteAt {G' : Subgraph G} (v : G'.verts) [DecidableRel G'.Adj]
 
 This is not an instance because `G''` cannot be inferred. -/
 @[instance_reducible]
-/--
-Definition of `finiteAtOfSubgraph` / `finiteAtOfSubgraph` 的定义
+/-
+**SimpleGraph.Subgraph.finiteAtOfSubgraph** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph
+.Subgraph`。
+形式化陈述：finiteAtOfSubgraph {G' G'' : Subgraph G} [DecidableRel G'.Adj] (h : G' <= 
+G'') (v : G'.verts) [Fintype (G''.neighborSet v)] : Fintype (G'.neighborSet v)
+参数：h : G' <= G''；v : G'.verts；G''.neighborSet v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finiteAtOfSubgraph
-  signature: {G' G'' : Subgraph G} [DecidableRel G'.Adj] (h : G' <= G'') (v : G'.verts)
-  body: Set.fintypeSubset (G''.neighborSet v) (neighborSet_subset_of_subgraph h v)
+--- 原说明 ---
+If a subgraph is locally finite at a vertex, then so are subgraphs of that subgr
+aph.
 
-中文:
-定义 finiteAtOfSubgraph
-  签名: {G' G'' : 子图 G} [DecidableRel G'.伴随] (h : G' <= G'') (v : G'.verts)
-  定义体: Set.fintypeSubset (G''.neighborSet v) (neighborSet_subset_of_subgraph h v)
-
-Depends on / 依赖: Set.fintypeSubset, fintypeSubset, neighborSet, neighborSet_subset_of_subgraph
+This is not an instance because `G''` cannot be inferred.
 -/
-def finiteAtOfSubgraph {G' G'' : Subgraph G} [DecidableRel G'.Adj] (h : G' <= G'') (v : G'.verts)
+def finiteAtOfSubgraph {G' G'' : Subgraph G} [DecidableRel G'.Adj] (h : G' ≤ G'') (v : G'.verts)
     [Fintype (G''.neighborSet v)] : Fintype (G'.neighborSet v) :=
   Set.fintypeSubset (G''.neighborSet v) (neighborSet_subset_of_subgraph h v)
-
-instance (G' : Subgraph G) [Fintype G'.verts] (v : V) [DecidablePred (· in G'.neighborSet v)] :
+/-
+**SimpleGraph.Subgraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (G' : Subgraph G) [Fintype G'.verts] (v : V) [DecidablePred (· ∈ G'.neighborSet v)] :
     Fintype (G'.neighborSet v) :=
   Set.fintypeSubset G'.verts (neighborSet_subset_verts G' v)
-
-/--
-Instance `coeFiniteAt` / 实例 `coeFiniteAt`
-
-English:
-instance coeFiniteAt
-  signature: {G' : Subgraph G} (v : G'.verts) [Fintype (G'.neighborSet v)]
-  body: Fintype.ofEquiv _ (coeNeighborSetEquiv v).symm
-
-中文:
-实例 coeFiniteAt
-  签名: {G' : 子图 G} (v : G'.verts) [有限类型 (G'.neighborSet v)]
-  定义体: Fintype.ofEquiv _ (coeNeighborSetEquiv v).symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, coeNeighborSetEquiv, ofEquiv
+/-
+**SimpleGraph.Subgraph.coeFiniteAt** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：coeFiniteAt {G' : Subgraph G} (v : G'.verts) [Fintype (G'.neighborSet v)] 
+: Fintype (G'.coe.neighborSet v)
+参数：v : G'.verts；G'.neighborSet v。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance coeFiniteAt {G' : Subgraph G} (v : G'.verts) [Fintype (G'.neighborSet v)] :
     Fintype (G'.coe.neighborSet v) :=
   Fintype.ofEquiv _ (coeNeighborSetEquiv v).symm
-
-/--
-theorem `IsSpanning.card_verts` / 定理 `IsSpanning.card_verts`
-
-English:
-theorem IsSpanning.card_verts
-  given: [Fintype V] {G' : Subgraph G} [Fintype G'.verts] (h : G'.IsSpanning)
-  proof: by
-  simp only [isSpanning_iff.1 h, Set.toFinset_univ]
-  congr
-
-中文:
-定理 IsSpanning.card_verts
-  条件: [有限类型 V] {G' : 子图 G} [有限类型 G'.verts] (h : G'.IsSpanning)
-  证明: by
-  simp only [isSpanning_iff.1 h, Set.toFinset_univ]
-  congr
-
-Depends on / 依赖: Set.toFinset_univ, isSpanning_iff, toFinset_univ
+/-
+**SimpleGraph.Subgraph.IsSpanning.card_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.Subgraph.IsSpanning`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} [inst : Fintype V] {G' : G.Subgraph} [i
+nst_1 : Fintype ↑G'.verts],   G'.IsSpanning → G'.verts.toFinset.card = Fintype.c
+ard V
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.Subgraph.isSpanning_iff`：isSpanning_iff {G' : Subgraph G} : 
+G'.IsSpanning ↔ G'.verts = Set.univ
+· 使用定理 `Set.toFinset_univ`：toFinset_univ [Fintype α] [Fintype (Set.univ : Set α)
+] : (Set.univ : Set α).toFinset = Finset.univ
 -/
 theorem IsSpanning.card_verts [Fintype V] {G' : Subgraph G} [Fintype G'.verts] (h : G'.IsSpanning) :
     G'.verts.toFinset.card = Fintype.card V := by
   simp only [isSpanning_iff.1 h, Set.toFinset_univ]
   congr
 
-/--
-Definition of `degree` / `degree` 的定义
+/-- The degree of a vertex in a subgraph. It's zero for vertices outside the subgraph. -/
+/-
+**SimpleGraph.Subgraph.degree** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：degree (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)] : Nat
+参数：G' : Subgraph G；v : V；G'.neighborSet v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition degree
-  signature: (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
-  body: Fintype.card (G'.neighborSet v)
-
-中文:
-定义 degree
-  签名: (G' : 子图 G) (v : V) [有限类型 (G'.neighborSet v)]
-  定义体: Fintype.card (G'.neighborSet v)
-
-Depends on / 依赖: Fintype, Fintype.card, neighborSet
+--- 原说明 ---
+The degree of a vertex in a subgraph. It's zero for vertices outside the subgrap
+h.
 -/
-def degree (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)] : Nat :=
+def degree (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)] : ℕ :=
   Fintype.card (G'.neighborSet v)
-
-/--
-theorem `finset_card_neighborSet_eq_degree` / 定理 `finset_card_neighborSet_eq_degree`
-
-English:
-theorem finset_card_neighborSet_eq_degree
-  given: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
-  proof: by
-  rw [degree]; rw [Set.toFinset_card]
-
-中文:
-定理 finset_card_neighborSet_eq_degree
-  条件: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
-  证明: by
-  rw [degree]; rw [Set.toFinset_card]
-
-Depends on / 依赖: Set.toFinset_card, degree, toFinset_card
+/-
+**SimpleGraph.Subgraph.finset_card_neighborSet_eq_degree** 是 Mathlib 中的一个定理，位于命名
+空间 `SimpleGraph.Subgraph`。
+形式化陈述：finset_card_neighborSet_eq_degree {G' : Subgraph G} {v : V} [Fintype (G'.n
+eighborSet v)] : (G'.neighborSet v).toFinset.card = G'.degree v
+参数：G'.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.degree.eq_1`：∀ {V : Type u} {G : SimpleGraph V} (G'
+ : G.Subgraph) (v : V) [inst : Fintype ↑(G'.neighborSet v)],   G'.degree v = Fin
+type.card ↑(G'.neighbo…
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
 -/
 theorem finset_card_neighborSet_eq_degree {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)] :
     (G'.neighborSet v).toFinset.card = G'.degree v := by
-  rw [degree]; rw [Set.toFinset_card]
-
-/--
-theorem `degree_of_notMem_verts` / 定理 `degree_of_notMem_verts`
-
-English:
-theorem degree_of_notMem_verts
-  statement: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
-  proof: by
-  rw [degree]; rw [Fintype.card_eq_zero_iff]; rw [isEmpty_subtype]
-  intro w
-  by_contra hw
-  exact h hw.fst_mem
-
-中文:
-定理 degree_of_notMem_verts
-  结论: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
-  证明: by
-  rw [degree]; rw [Fintype.card_eq_zero_iff]; rw [isEmpty_subtype]
-  intro w
-  by_contra hw
-  exact h hw.fst_mem
-
-Depends on / 依赖: Fintype, Fintype.card_eq_zero_iff, card_eq_zero_iff, degree, fst_mem, hw.fst_mem, isEmpty_subtype
+  rw [degree, Set.toFinset_card]
+/-
+**SimpleGraph.Subgraph.degree_of_notMem_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleG
+raph.Subgraph`。
+形式化陈述：degree_of_notMem_verts {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet 
+v)] (h : v ∉ G'.verts) : G'.degree v = 0
+参数：G'.neighborSet v；h : v ∉ G'.verts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.degree.eq_1`：∀ {V : Type u} {G : SimpleGraph V} (G'
+ : G.Subgraph) (v : V) [inst : Fintype ↑(G'.neighborSet v)],   G'.degree v = Fin
+type.card ↑(G'.neighbo…
+· 使用定理 `Fintype.card_eq_zero_iff`：card_eq_zero_iff : card α = 0 ↔ IsEmpty α
+· 使用定理 `isEmpty_subtype`：isEmpty_subtype (p : α -> Prop) : IsEmpty (Subtype p) ↔
+ forall x, ¬p x
+· 使用定理 `SimpleGraph.Subgraph.Adj.fst_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → u ∈ H.verts
 -/
 theorem degree_of_notMem_verts {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
     (h : v ∉ G'.verts) : G'.degree v = 0 := by
-  rw [degree]; rw [Fintype.card_eq_zero_iff]; rw [isEmpty_subtype]
+  rw [degree, Fintype.card_eq_zero_iff, isEmpty_subtype]
   intro w
   by_contra hw
   exact h hw.fst_mem
-
-/--
-theorem `degree_le` / 定理 `degree_le`
-
-English:
-theorem degree_le
-  statement: (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
-  proof: by
-  rw [← card_neighborSet_eq_degree]
-  exact Set.card_le_card (G'.neighborSet_subset v)
-
-中文:
-定理 degree_le
-  结论: (G' : 子图 G) (v : V) [有限类型 (G'.neighborSet v)]
-  证明: by
-  rw [← card_neighborSet_eq_degree]
-  exact Set.card_le_card (G'.neighborSet_subset v)
-
-Depends on / 依赖: Set.card_le_card, card_le_card, card_neighborSet_eq_degree, neighborSet_subset
+/-
+**SimpleGraph.Subgraph.degree_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph
+`。
+形式化陈述：degree_le (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)] [Fintype 
+(G.neighborSet v)] : G'.degree v <= G.degree v
+参数：G' : Subgraph G；v : V；G'.neighborSet v；G.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
+· 使用定理 `Set.card_le_card`：card_le_card {s t : Set α} [Fintype s] [Fintype t] (hs
+ub : s subseteq t) : Fintype.card s <= Fintype.card t
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_subset`：neighborSet_subset (G' : Subgra
+ph G) (v : V) : G'.neighborSet v subseteq G.neighborSet v
 -/
 theorem degree_le (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
-    [Fintype (G.neighborSet v)] : G'.degree v <= G.degree v := by
+    [Fintype (G.neighborSet v)] : G'.degree v ≤ G.degree v := by
   rw [← card_neighborSet_eq_degree]
   exact Set.card_le_card (G'.neighborSet_subset v)
-
-/--
-theorem `degree_le'` / 定理 `degree_le'`
-
-English:
-theorem degree_le'
-  statement: (G' G'' : Subgraph G) (h : G' <= G'') (v : V) [Fintype (G'.neighborSet v)]
-  proof: Set.card_le_card (neighborSet_subset_of_subgraph h v)
-
-@[simp]
-
-中文:
-定理 degree_le'
-  结论: (G' G'' : 子图 G) (h : G' <= G'') (v : V) [有限类型 (G'.neighborSet v)]
-  证明: Set.card_le_card (neighborSet_subset_of_subgraph h v)
-
-@[simp]
-
-Depends on / 依赖: Set.card_le_card, card_le_card, neighborSet_subset_of_subgraph
+/-
+**SimpleGraph.Subgraph.degree_le'** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：degree_le' (G' G'' : Subgraph G) (h : G' <= G'') (v : V) [Fintype (G'.neig
+hborSet v)] [Fintype (G''.neighborSet v)] : G'.degree v <= G''.degree v
+参数：G' G'' : Subgraph G；h : G' <= G''；v : V；G'.neighborSet v；G''.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.card_le_card`：card_le_card {s t : Set α} [Fintype s] [Fintype t] (hs
+ub : s subseteq t) : Fintype.card s <= Fintype.card t
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_subset_of_subgraph`：neighborSet_subset_
+of_subgraph {x y : Subgraph G} (h : x <= y) (v : V) : x.neighborSet v subseteq y
+.neighborSet v
 -/
-theorem degree_le' (G' G'' : Subgraph G) (h : G' <= G'') (v : V) [Fintype (G'.neighborSet v)]
-    [Fintype (G''.neighborSet v)] : G'.degree v <= G''.degree v :=
+theorem degree_le' (G' G'' : Subgraph G) (h : G' ≤ G'') (v : V) [Fintype (G'.neighborSet v)]
+    [Fintype (G''.neighborSet v)] : G'.degree v ≤ G''.degree v :=
   Set.card_le_card (neighborSet_subset_of_subgraph h v)
 
 @[simp]
-/--
-theorem `coe_degree` / 定理 `coe_degree`
-
-English:
-theorem coe_degree
-  statement: (G' : Subgraph G) (v : G'.verts) [Fintype (G'.coe.neighborSet v)]
-  proof: by
-  rw [← card_neighborSet_eq_degree]
-  exact Fintype.card_congr (coeNeighborSetEquiv v)
-
-@[simp]
-
-中文:
-定理 coe_degree
-  结论: (G' : 子图 G) (v : G'.verts) [有限类型 (G'.coe.neighborSet v)]
-  证明: by
-  rw [← card_neighborSet_eq_degree]
-  exact Fintype.card_congr (coeNeighborSetEquiv v)
-
-@[simp]
-
-Depends on / 依赖: Fintype, Fintype.card_congr, card_congr, card_neighborSet_eq_degree, coeNeighborSetEquiv
+/-
+**SimpleGraph.Subgraph.coe_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：coe_degree (G' : Subgraph G) (v : G'.verts) [Fintype (G'.coe.neighborSet v
+)] [Fintype (G'.neighborSet v)] : G'.coe.degree v = G'.degree v
+参数：G' : Subgraph G；v : G'.verts；G'.coe.neighborSet v；G'.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
 -/
 theorem coe_degree (G' : Subgraph G) (v : G'.verts) [Fintype (G'.coe.neighborSet v)]
     [Fintype (G'.neighborSet v)] : G'.coe.degree v = G'.degree v := by
@@ -3627,214 +2804,220 @@ theorem coe_degree (G' : Subgraph G) (v : G'.verts) [Fintype (G'.coe.neighborSet
   exact Fintype.card_congr (coeNeighborSetEquiv v)
 
 @[simp]
-/--
-theorem `degree_spanningCoe` / 定理 `degree_spanningCoe`
-
-English:
-theorem degree_spanningCoe
-  statement: {G' : G.Subgraph} (v : V) [Fintype (G'.neighborSet v)]
-  proof: by
-  rw [← card_neighborSet_eq_degree]; rw [Subgraph.degree]
-  congr!
-
-中文:
-定理 degree_spanningCoe
-  结论: {G' : G.子图} (v : V) [有限类型 (G'.neighborSet v)]
-  证明: by
-  rw [← card_neighborSet_eq_degree]; rw [Subgraph.degree]
-  congr!
-
-Depends on / 依赖: Subgraph, Subgraph.degree, card_neighborSet_eq_degree, degree
+/-
+**SimpleGraph.Subgraph.degree_spanningCoe** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Subgraph`。
+形式化陈述：degree_spanningCoe {G' : G.Subgraph} (v : V) [Fintype (G'.neighborSet v)] 
+[Fintype (G'.spanningCoe.neighborSet v)] : G'.spanningCoe.degree v = G'.degree v
+参数：v : V；G'.neighborSet v；G'.spanningCoe.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
+· 使用定理 `SimpleGraph.Subgraph.degree.eq_1`：∀ {V : Type u} {G : SimpleGraph V} (G'
+ : G.Subgraph) (v : V) [inst : Fintype ↑(G'.neighborSet v)],   G'.degree v = Fin
+type.card ↑(G'.neighbo…
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem degree_spanningCoe {G' : G.Subgraph} (v : V) [Fintype (G'.neighborSet v)]
     [Fintype (G'.spanningCoe.neighborSet v)] : G'.spanningCoe.degree v = G'.degree v := by
-  rw [← card_neighborSet_eq_degree]; rw [Subgraph.degree]
+  rw [← card_neighborSet_eq_degree, Subgraph.degree]
   congr!
-
-/--
-theorem `degree_pos_iff_exists_adj` / 定理 `degree_pos_iff_exists_adj`
-
-English:
-theorem degree_pos_iff_exists_adj
-  given: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
-  proof: by
-  simp only [degree, Fintype.card_pos_iff, nonempty_subtype, mem_neighborSet]
-
-中文:
-定理 degree_pos_iff_存在_adj
-  条件: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
-  证明: by
-  simp only [degree, Fintype.card_pos_iff, nonempty_subtype, mem_neighborSet]
-
-Depends on / 依赖: Fintype, Fintype.card_pos_iff, card_pos_iff, degree, mem_neighborSet, nonempty_subtype
+/-
+**SimpleGraph.Subgraph.degree_pos_iff_exists_adj** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph.Subgraph`。
+形式化陈述：degree_pos_iff_exists_adj {G' : Subgraph G} {v : V} [Fintype (G'.neighborS
+et v)] : 0 < G'.degree v ↔ exists w, G'.Adj v w
+参数：G'.neighborSet v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem degree_pos_iff_exists_adj {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)] :
-    0 < G'.degree v ↔ exists w, G'.Adj v w := by
+    0 < G'.degree v ↔ ∃ w, G'.Adj v w := by
   simp only [degree, Fintype.card_pos_iff, nonempty_subtype, mem_neighborSet]
-
-/--
-theorem `degree_eq_zero_of_subsingleton` / 定理 `degree_eq_zero_of_subsingleton`
-
-English:
-theorem degree_eq_zero_of_subsingleton
-  statement: (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
-  proof: by
-  by_cases hv : v in G'.verts
-  · rw [← G'.coe_degree ⟨v, hv⟩]
-    have := (Set.subsingleton_coe _).mpr hG
-    exact G'.coe.degree_eq_zero_of_subsingleton ⟨v, hv⟩
-  · exact degree_of_notMem_verts hv
-
-中文:
-定理 degree_eq_zero_of_subsingleton
-  结论: (G' : 子图 G) (v : V) [有限类型 (G'.neighborSet v)]
-  证明: by
-  by_cases hv : v in G'.verts
-  · rw [← G'.coe_degree ⟨v, hv⟩]
-    have := (Set.subsingleton_coe _).mpr hG
-    exact G'.coe.degree_eq_zero_of_subsingleton ⟨v, hv⟩
-  · exact degree_of_notMem_verts hv
-
-Depends on / 依赖: Set.subsingleton_coe, coe.degree_eq_zero_of_subsingleton, coe_degree, degree_eq_zero_of_subsingleton, degree_of_notMem_verts, subsingleton_coe
+/-
+**SimpleGraph.Subgraph.degree_eq_zero_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 
+`SimpleGraph.Subgraph`。
+形式化陈述：degree_eq_zero_of_subsingleton (G' : Subgraph G) (v : V) [Fintype (G'.neig
+hborSet v)] (hG : G'.verts.Subsingleton) : G'.degree v = 0
+参数：G' : Subgraph G；v : V；G'.neighborSet v；hG : G'.verts.Subsingleton。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Subgraph.coe_degree`：coe_degree (G' : Subgraph G) (v : G'.ve
+rts) [Fintype (G'.coe.neighborSet v)] [Fintype (G'.neighborSet v)] : G'.coe.degr
+ee v = G'.degree v
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.subsingleton_coe`：subsingleton_coe (s : Set α) : Subsingleton s ↔ s.
+Subsingleton
+· 使用定理 `SimpleGraph.degree_eq_zero_of_subsingleton`：degree_eq_zero_of_subsinglet
+on {G : SimpleGraph V} (v : V) [Fintype (G.neighborSet v)] [Subsingleton V] : G.
+degree v = 0
+· 使用定理 `SimpleGraph.Subgraph.degree_of_notMem_verts`：degree_of_notMem_verts {G' 
+: Subgraph G} {v : V} [Fintype (G'.neighborSet v)] (h : v ∉ G'.verts) : G'.degre
+e v = 0
 -/
 theorem degree_eq_zero_of_subsingleton (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)]
     (hG : G'.verts.Subsingleton) : G'.degree v = 0 := by
-  by_cases hv : v in G'.verts
+  by_cases hv : v ∈ G'.verts
   · rw [← G'.coe_degree ⟨v, hv⟩]
     have := (Set.subsingleton_coe _).mpr hG
     exact G'.coe.degree_eq_zero_of_subsingleton ⟨v, hv⟩
   · exact degree_of_notMem_verts hv
-
-/--
-theorem `degree_eq_one_iff_existsUnique_adj` / 定理 `degree_eq_one_iff_existsUnique_adj`
-
-English:
-theorem degree_eq_one_iff_existsUnique_adj
-  given: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
-  proof: by
-  rw [← finset_card_neighborSet_eq_degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
-  simp only [Set.mem_toFinset, mem_neighborSet]
-
-中文:
-定理 degree_eq_one_iff_存在Unique_adj
-  条件: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
-  证明: by
-  rw [← finset_card_neighborSet_eq_degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
-  simp only [Set.mem_toFinset, mem_neighborSet]
-
-Depends on / 依赖: Finset, Finset.card_eq_one, Finset.singleton_iff_unique_mem, Set.mem_toFinset, card_eq_one, finset_card_neighborSet_eq_degree, mem_neighborSet, mem_toFinset, singleton_iff_unique_mem
+/-
+**SimpleGraph.Subgraph.degree_eq_one_iff_existsUnique_adj** 是 Mathlib 中的一个定理，位于命
+名空间 `SimpleGraph.Subgraph`。
+形式化陈述：degree_eq_one_iff_existsUnique_adj {G' : Subgraph G} {v : V} [Fintype (G'.
+neighborSet v)] : G'.degree v = 1 ↔ exists! w : V, G'.Adj v w
+参数：G'.neighborSet v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Subgraph.finset_card_neighborSet_eq_degree`：finset_card_neig
+hborSet_eq_degree {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)] : (G'.n
+eighborSet v).toFinset.card = G'.degree v
+· 使用定理 `Finset.card_eq_one`：card_eq_one : #s = 1 ↔ exists a, s = {a}
+· 使用定理 `Finset.singleton_iff_unique_mem`：singleton_iff_unique_mem (s : Finset α)
+ : (exists a, s = {a}) ↔ exists! a, a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem degree_eq_one_iff_existsUnique_adj {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)] :
-    G'.degree v = 1 ↔ exists! w : V, G'.Adj v w := by
-  rw [← finset_card_neighborSet_eq_degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
+    G'.degree v = 1 ↔ ∃! w : V, G'.Adj v w := by
+  rw [← finset_card_neighborSet_eq_degree, Finset.card_eq_one, Finset.singleton_iff_unique_mem]
   simp only [Set.mem_toFinset, mem_neighborSet]
-
-/--
-theorem `nontrivial_verts_of_degree_ne_zero` / 定理 `nontrivial_verts_of_degree_ne_zero`
-
-English:
-theorem nontrivial_verts_of_degree_ne_zero
-  statement: {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
-  proof: by
-  by_contra
-  simp_all [G'.degree_eq_zero_of_subsingleton v]
-
-中文:
-定理 nontrivial_verts_of_degree_ne_zero
-  结论: {G' : 子图 G} {v : V} [有限类型 (G'.neighborSet v)]
-  证明: by
-  by_contra
-  simp_all [G'.degree_eq_zero_of_subsingleton v]
-
-Depends on / 依赖: degree_eq_zero_of_subsingleton
+/-
+**SimpleGraph.Subgraph.nontrivial_verts_of_degree_ne_zero** 是 Mathlib 中的一个定理，位于命
+名空间 `SimpleGraph.Subgraph`。
+形式化陈述：nontrivial_verts_of_degree_ne_zero {G' : Subgraph G} {v : V} [Fintype (G'.
+neighborSet v)] (h : G'.degree v != 0) : Nontrivial G'.verts
+参数：G'.neighborSet v；h : G'.degree v != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.degree_eq_zero_of_subsingleton`：degree_eq_zero_of_s
+ubsingleton (G' : Subgraph G) (v : V) [Fintype (G'.neighborSet v)] (hG : G'.vert
+s.Subsingleton) : G'.degree v = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
 theorem nontrivial_verts_of_degree_ne_zero {G' : Subgraph G} {v : V} [Fintype (G'.neighborSet v)]
-    (h : G'.degree v != 0) : Nontrivial G'.verts := by
+    (h : G'.degree v ≠ 0) : Nontrivial G'.verts := by
   by_contra
   simp_all [G'.degree_eq_zero_of_subsingleton v]
-
-/--
-lemma `neighborSet_eq_of_equiv` / 引理 `neighborSet_eq_of_equiv`
-
-English:
-lemma neighborSet_eq_of_equiv
-  statement: {v : V} {H : Subgraph G}
-  proof: by
-  lift H.neighborSet v to Finset V using h.set_finite_iff.mp hfin with s hs
-  lift G.neighborSet v to Finset V using hfin with t ht
-refine congrArg _ Finset.eq_of_subset_of_card_le ?_ (Finset.card_eq_of_equiv h).le
-  rw [← Finset.coe_subset]; rw [hs]; rw [ht]
-  exact H.neighborSet_subset _
-
-中文:
-引理 neighborSet_eq_of_equiv
-  结论: {v : V} {H : 子图 G}
-  证明: by
-  lift H.neighborSet v to Finset V using h.set_finite_iff.mp hfin with s hs
-  lift G.neighborSet v to Finset V using hfin with t ht
-refine congrArg _ Finset.eq_of_subset_of_card_le ?_ (Finset.card_eq_of_equiv h).le
-  rw [← Finset.coe_subset]; rw [hs]; rw [ht]
-  exact H.neighborSet_subset _
-
-Depends on / 依赖: Finset, Finset.card_eq_of_equiv, Finset.coe_subset, Finset.eq_of_subset_of_card_le, G.neighborSet, H.neighborSet, H.neighborSet_subset, card_eq_of_equiv, coe_subset, eq_of_subset_of_card_le, h.set_finite_iff.mp, neighborSet, neighborSet_subset, set_finite_iff
+/-
+**SimpleGraph.Subgraph.neighborSet_eq_of_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph.Subgraph`。
+形式化陈述：neighborSet_eq_of_equiv {v : V} {H : Subgraph G} (h : G.neighborSet v ≃ H.
+neighborSet v) (hfin : (G.neighborSet v).Finite) : H.neighborSet v = G.neighborS
+et v
+参数：h : G.neighborSet v ≃ H.neighborSet v；hfin : (G.neighborSet v).Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Set.instCanLiftFinsetCoeFinite`：∀ {α : Type u}, CanLift (Set α) (Finset 
+α) SetLike.coe Set.Finite
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.set_finite_iff`：Equiv.set_finite_iff {s : Set α} {t : Set β} (hst 
+: s ≃ t) : s.Finite ↔ t.Finite
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.eq_of_subset_of_card_le`：eq_of_subset_of_card_le (h : s subseteq 
+t) (h₂ : #t <= #s) : s = t
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_subset`：neighborSet_subset (G' : Subgra
+ph G) (v : V) : G'.neighborSet v subseteq G.neighborSet v
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Finset.card_eq_of_equiv`：Finset.card_eq_of_equiv {s : Finset α} {t : Fin
+set β} (i : s ≃ t) : #s = #t
 -/
 lemma neighborSet_eq_of_equiv {v : V} {H : Subgraph G}
     (h : G.neighborSet v ≃ H.neighborSet v) (hfin : (G.neighborSet v).Finite) :
     H.neighborSet v = G.neighborSet v := by
   lift H.neighborSet v to Finset V using h.set_finite_iff.mp hfin with s hs
   lift G.neighborSet v to Finset V using hfin with t ht
-refine congrArg _ Finset.eq_of_subset_of_card_le ?_ (Finset.card_eq_of_equiv h).le
-  rw [← Finset.coe_subset]; rw [hs]; rw [ht]
+  refine congrArg _ <| Finset.eq_of_subset_of_card_le ?_ (Finset.card_eq_of_equiv h).le
+  rw [← Finset.coe_subset, hs, ht]
   exact H.neighborSet_subset _
-
-/--
-lemma `adj_iff_of_neighborSet_equiv` / 引理 `adj_iff_of_neighborSet_equiv`
-
-English:
-lemma adj_iff_of_neighborSet_equiv
-  statement: {v : V} {H : Subgraph G}
-  proof: Set.ext_iff.mp (neighborSet_eq_of_equiv h hfin) _
-
-中文:
-引理 adj_iff_of_neighborSet_equiv
-  结论: {v : V} {H : 子图 G}
-  证明: Set.ext_iff.mp (neighborSet_eq_of_equiv h hfin) _
-
-Depends on / 依赖: Set.ext_iff.mp, ext_iff, neighborSet_eq_of_equiv
+/-
+**SimpleGraph.Subgraph.adj_iff_of_neighborSet_equiv** 是 Mathlib 中的一个引理，位于命名空间 `S
+impleGraph.Subgraph`。
+形式化陈述：adj_iff_of_neighborSet_equiv {v : V} {H : Subgraph G} (h : G.neighborSet v
+ ≃ H.neighborSet v) (hfin : (G.neighborSet v).Finite) : forall {w}, H.Adj v w ↔ 
+G.Adj v w
+参数：h : G.neighborSet v ≃ H.neighborSet v；hfin : (G.neighborSet v).Finite。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
+· 使用引理 `SimpleGraph.Subgraph.neighborSet_eq_of_equiv`：neighborSet_eq_of_equiv {v
+ : V} {H : Subgraph G} (h : G.neighborSet v ≃ H.neighborSet v) (hfin : (G.neighb
+orSet v).Finite) : H.neighborSet v…
 -/
 lemma adj_iff_of_neighborSet_equiv {v : V} {H : Subgraph G}
     (h : G.neighborSet v ≃ H.neighborSet v) (hfin : (G.neighborSet v).Finite) :
-    forall {w}, H.Adj v w ↔ G.Adj v w :=
+    ∀ {w}, H.Adj v w ↔ G.Adj v w :=
   Set.ext_iff.mp (neighborSet_eq_of_equiv h hfin) _
 
 end Subgraph
 
-/--
-theorem `card_neighborSet_toSubgraph` / 定理 `card_neighborSet_toSubgraph`
-
-English:
-theorem card_neighborSet_toSubgraph
-  statement: (G H : SimpleGraph V) (h : H <= G)
-  proof: by
-  refine (Finset.card_eq_of_equiv_fintype ?_).symm
-  simp only [mem_neighborFinset]
-  rfl
-
-@[simp]
-
-中文:
-定理 card_neighborSet_toSubgraph
-  结论: (G H : 简单图 V) (h : H <= G)
-  证明: by
-  refine (Finset.card_eq_of_equiv_fintype ?_).symm
-  simp only [mem_neighborFinset]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.card_eq_of_equiv_fintype, card_eq_of_equiv_fintype, mem_neighborFinset
+/-
+**SimpleGraph.card_neighborSet_toSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+`。
+形式化陈述：card_neighborSet_toSubgraph (G H : SimpleGraph V) (h : H <= G) (v : V) [Fi
+ntype ↑((toSubgraph H h).neighborSet v)] [Fintype ↑(H.neighborSet v)] : Fintype.
+card ↑((toSubgraph H h).neighborSet v) = H.degree v
+参数：G H : SimpleGraph V；h : H <= G；v : V；(toSubgraph H h).neighborSet v；H.neighbo
+rSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_eq_of_equiv_fintype`：Finset.card_eq_of_equiv_fintype {s : Fi
+nset α} [Fintype β] (i : s ≃ β) : #s = Fintype.card β
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-theorem card_neighborSet_toSubgraph (G H : SimpleGraph V) (h : H <= G)
+theorem card_neighborSet_toSubgraph (G H : SimpleGraph V) (h : H ≤ G)
     (v : V) [Fintype ↑((toSubgraph H h).neighborSet v)] [Fintype ↑(H.neighborSet v)] :
     Fintype.card ↑((toSubgraph H h).neighborSet v) = H.degree v := by
   refine (Finset.card_eq_of_equiv_fintype ?_).symm
@@ -3842,24 +3025,27 @@ theorem card_neighborSet_toSubgraph (G H : SimpleGraph V) (h : H <= G)
   rfl
 
 @[simp]
-/--
-lemma `degree_toSubgraph` / 引理 `degree_toSubgraph`
-
-English:
-lemma degree_toSubgraph
-  statement: (G H : SimpleGraph V) (h : H <= G) {v : V}
-  proof: by
-  simp [Subgraph.degree, card_neighborSet_toSubgraph]
-
-中文:
-引理 degree_toSubgraph
-  结论: (G H : 简单图 V) (h : H <= G) {v : V}
-  证明: by
-  simp [Subgraph.degree, card_neighborSet_toSubgraph]
-
-Depends on / 依赖: Subgraph, Subgraph.degree, card_neighborSet_toSubgraph, degree
+/-
+**SimpleGraph.degree_toSubgraph** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_toSubgraph (G H : SimpleGraph V) (h : H <= G) {v : V} [Fintype ↑((t
+oSubgraph H h).neighborSet v)] [Fintype ↑(H.neighborSet v)] : (toSubgraph H h).d
+egree v = H.degree v
+参数：G H : SimpleGraph V；h : H <= G；(toSubgraph H h).neighborSet v；H.neighborSet v
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.card_neighborSet_toSubgraph`：card_neighborSet_toSubgraph (G 
+H : SimpleGraph V) (h : H <= G) (v : V) [Fintype ↑((toSubgraph H h).neighborSet 
+v)] [Fintype ↑(H.neighborSet …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma degree_toSubgraph (G H : SimpleGraph V) (h : H <= G) {v : V}
+lemma degree_toSubgraph (G H : SimpleGraph V) (h : H ≤ G) {v : V}
     [Fintype ↑((toSubgraph H h).neighborSet v)] [Fintype ↑(H.neighborSet v)] :
     (toSubgraph H h).degree v = H.degree v := by
   simp [Subgraph.degree, card_neighborSet_toSubgraph]
@@ -3871,76 +3057,74 @@ section MkProperties
 
 variable {G : SimpleGraph V} {G' : SimpleGraph W}
 
+/-
+**SimpleGraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (v : V) : Unique (G.singletonSubgraph v).verts :=
   Set.uniqueSingleton _
 
 @[simp]
-/--
-theorem `singletonSubgraph_le_iff` / 定理 `singletonSubgraph_le_iff`
-
-English:
-theorem singletonSubgraph_le_iff
-  given: (v : V) (H : G.Subgraph)
-  proof: by
-  refine ⟨fun h => h.1 (Set.mem_singleton v), ?_⟩
-  intro h
-  constructor
-  · rwa [singletonSubgraph_verts, Set.singleton_subset_iff]
-  · exact fun _ _ => False.elim
-
-@[simp]
-
-中文:
-定理 singletonSubgraph_le_iff
-  条件: (v : V) (H : G.子图)
-  证明: by
-  refine ⟨fun h => h.1 (Set.mem_singleton v), ?_⟩
-  intro h
-  constructor
-  · rwa [singletonSubgraph_verts, Set.singleton_subset_iff]
-  · exact fun _ _ => False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim, Set.mem_singleton, Set.singleton_subset_iff, mem_singleton, singletonSubgraph_verts, singleton_subset_iff
+/-
+**SimpleGraph.singletonSubgraph_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：singletonSubgraph_le_iff (v : V) (H : G.Subgraph) : G.singletonSubgraph v 
+<= H ↔ v in H.verts
+参数：v : V；H : G.Subgraph。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.singletonSubgraph_verts`：∀ {V : Type u} (G : SimpleGraph V) 
+(v : V), (G.singletonSubgraph v).verts = {v}
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
 -/
 theorem singletonSubgraph_le_iff (v : V) (H : G.Subgraph) :
-    G.singletonSubgraph v <= H ↔ v in H.verts := by
-  refine ⟨fun h => h.1 (Set.mem_singleton v), ?_⟩
+    G.singletonSubgraph v ≤ H ↔ v ∈ H.verts := by
+  refine ⟨fun h ↦ h.1 (Set.mem_singleton v), ?_⟩
   intro h
   constructor
   · rwa [singletonSubgraph_verts, Set.singleton_subset_iff]
-  · exact fun _ _ => False.elim
+  · exact fun _ _ ↦ False.elim
 
 @[simp]
-/--
-theorem `map_singletonSubgraph` / 定理 `map_singletonSubgraph`
-
-English:
-theorem map_singletonSubgraph
-  given: (f : G ->g G') {v : V}
-  proof: by
-  ext <;> simp only [Relation.Map, Subgraph.map_adj, singletonSubgraph_adj, Pi.bot_apply,
-    exists_and_left, and_iff_left_iff_imp, Subgraph.map_verts,
-    singletonSubgraph_verts, Set.image_singleton]
-  exact False.elim
-
-@[simp]
-
-中文:
-定理 map_singletonSubgraph
-  条件: (f : G ->g G') {v : V}
-  证明: by
-  ext <;> simp only [Relation.Map, Subgraph.map_adj, singletonSubgraph_adj, Pi.bot_apply,
-    exists_and_left, and_iff_left_iff_imp, Subgraph.map_verts,
-    singletonSubgraph_verts, Set.image_singleton]
-  exact False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim, Pi.bot_apply, Relation, Relation.Map, Set.image_singleton, Subgraph, Subgraph.map_adj, Subgraph.map_verts, and_iff_left_iff_imp, bot_apply, exists_and_left, image_singleton, map_adj, map_verts, singletonSubgraph_adj, singletonSubgraph_verts
+/-
+**SimpleGraph.map_singletonSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：map_singletonSubgraph (f : G ->g G') {v : V} : Subgraph.map f (G.singleton
+Subgraph v) = G'.singletonSubgraph (f v)
+参数：f : G ->g G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `SimpleGraph.singletonSubgraph_verts`：∀ {V : Type u} (G : SimpleGraph V) 
+(v : V), (G.singletonSubgraph v).verts = {v}
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+· 使用定理 `SimpleGraph.singletonSubgraph_adj`：∀ {V : Type u} (G : SimpleGraph V) (v
+ a a_1 : V), (G.singletonSubgraph v).Adj a a_1 = ⊥ a a_1
 -/
-theorem map_singletonSubgraph (f : G ->g G') {v : V} :
+theorem map_singletonSubgraph (f : G →g G') {v : V} :
     Subgraph.map f (G.singletonSubgraph v) = G'.singletonSubgraph (f v) := by
   ext <;> simp only [Relation.Map, Subgraph.map_adj, singletonSubgraph_adj, Pi.bot_apply,
     exists_and_left, and_iff_left_iff_imp, Subgraph.map_verts,
@@ -3948,159 +3132,130 @@ theorem map_singletonSubgraph (f : G ->g G') {v : V} :
   exact False.elim
 
 @[simp]
-/--
-theorem `neighborSet_singletonSubgraph` / 定理 `neighborSet_singletonSubgraph`
-
-English:
-theorem neighborSet_singletonSubgraph
-  given: (v w : V)
-  statement: (G.singletonSubgraph v).neighborSet w = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neighborSet_singletonSubgraph
-  条件: (v w : V)
-  结论: (G.singletonSubgraph v).neighborSet w = ∅
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.neighborSet_singletonSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：neighborSet_singletonSubgraph (v w : V) : (G.singletonSubgraph v).neighbor
+Set w = ∅
+参数：v w : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neighborSet_singletonSubgraph (v w : V) : (G.singletonSubgraph v).neighborSet w = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `edgeSet_singletonSubgraph` / 定理 `edgeSet_singletonSubgraph`
-
-English:
-theorem edgeSet_singletonSubgraph
-  given: (v : V)
-  statement: (G.singletonSubgraph v).edgeSet = ∅
-  proof: Sym2.fromRel_bot
-
-中文:
-定理 edgeSet_singletonSubgraph
-  条件: (v : V)
-  结论: (G.singletonSubgraph v).edgeSet = ∅
-  证明: Sym2.fromRel_bot
-
-Depends on / 依赖: Sym2.fromRel_bot, fromRel_bot
+/-
+**SimpleGraph.edgeSet_singletonSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeSet_singletonSubgraph (v : V) : (G.singletonSubgraph v).edgeSet = ∅
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym2.fromRel_bot`：fromRel_bot : fromRel (α
 -/
 theorem edgeSet_singletonSubgraph (v : V) : (G.singletonSubgraph v).edgeSet = ∅ :=
   Sym2.fromRel_bot
-
-/--
-theorem `eq_singletonSubgraph_iff_verts_eq` / 定理 `eq_singletonSubgraph_iff_verts_eq`
-
-English:
-theorem eq_singletonSubgraph_iff_verts_eq
-  given: (H : G.Subgraph) {v : V}
-  proof: by
-  refine ⟨fun h => by rw [h, singletonSubgraph_verts], fun h => ?_⟩
-  ext
-  · rw [h, singletonSubgraph_verts]
-  · simp only [Prop.bot_eq_false, singletonSubgraph_adj, Pi.bot_apply, iff_false]
-    intro ha
-    have ha1 := ha.fst_mem
-    have ha2 := ha.snd_mem
-    rw [h]; rw [Set.mem_singleton_iff] at ha1 ha2
-    subst_vars
-    exact ha.ne rfl
-
-中文:
-定理 eq_singletonSubgraph_iff_verts_eq
-  条件: (H : G.子图) {v : V}
-  证明: by
-  refine ⟨fun h => by rw [h, singletonSubgraph_verts], fun h => ?_⟩
-  ext
-  · rw [h, singletonSubgraph_verts]
-  · simp only [Prop.bot_eq_false, singletonSubgraph_adj, Pi.bot_apply, iff_false]
-    intro ha
-    have ha1 := ha.fst_mem
-    have ha2 := ha.snd_mem
-    rw [h]; rw [Set.mem_singleton_iff] at ha1 ha2
-    subst_vars
-    exact ha.ne rfl
-
-Depends on / 依赖: Pi.bot_apply, Prop.bot_eq_false, Set.mem_singleton_iff, bot_apply, bot_eq_false, fst_mem, ha.fst_mem, ha.ne, ha.snd_mem, iff_false, mem_singleton_iff, singletonSubgraph_adj, singletonSubgraph_verts, snd_mem
+/-
+**SimpleGraph.eq_singletonSubgraph_iff_verts_eq** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph`。
+形式化陈述：eq_singletonSubgraph_iff_verts_eq (H : G.Subgraph) {v : V} : H = G.singlet
+onSubgraph v ↔ H.verts = {v}
+参数：H : G.Subgraph。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.singletonSubgraph_verts`：∀ {V : Type u} (G : SimpleGraph V) 
+(v : V), (G.singletonSubgraph v).verts = {v}
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.singletonSubgraph_adj`：∀ {V : Type u} (G : SimpleGraph V) (v
+ a a_1 : V), (G.singletonSubgraph v).Adj a a_1 = ⊥ a a_1
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `SimpleGraph.Subgraph.Adj.fst_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → u ∈ H.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.snd_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → v ∈ H.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {H : G.S
+ubgraph} {u v : V}, H.Adj u v → u ≠ v
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
 -/
 theorem eq_singletonSubgraph_iff_verts_eq (H : G.Subgraph) {v : V} :
     H = G.singletonSubgraph v ↔ H.verts = {v} := by
-  refine ⟨fun h => by rw [h, singletonSubgraph_verts], fun h => ?_⟩
+  refine ⟨fun h ↦ by rw [h, singletonSubgraph_verts], fun h ↦ ?_⟩
   ext
   · rw [h, singletonSubgraph_verts]
   · simp only [Prop.bot_eq_false, singletonSubgraph_adj, Pi.bot_apply, iff_false]
     intro ha
     have ha1 := ha.fst_mem
     have ha2 := ha.snd_mem
-    rw [h]; rw [Set.mem_singleton_iff] at ha1 ha2
+    rw [h, Set.mem_singleton_iff] at ha1 ha2
     subst_vars
     exact ha.ne rfl
-
-/--
-Instance `nonempty_subgraphOfAdj_verts` / 实例 `nonempty_subgraphOfAdj_verts`
-
-English:
-instance nonempty_subgraphOfAdj_verts
-  signature: {v w : V} (hvw : G.Adj v w)
-  body: ⟨⟨v, by simp⟩⟩
-
-中文:
-实例 nonempty_subgraphOfAdj_verts
-  签名: {v w : V} (hvw : G.伴随 v w)
-  定义体: ⟨⟨v, by simp⟩⟩
+/-
+**SimpleGraph.nonempty_subgraphOfAdj_verts** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：nonempty_subgraphOfAdj_verts {v w : V} (hvw : G.Adj v w) : Nonempty (G.sub
+graphOfAdj hvw).verts
+参数：hvw : G.Adj v w。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.subgraphOfAdj_verts`：∀ {V : Type u} (G : SimpleGraph V) {v w
+ : V} (hvw : G.Adj v w), (G.subgraphOfAdj hvw).verts = {v, w}
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
 instance nonempty_subgraphOfAdj_verts {v w : V} (hvw : G.Adj v w) :
     Nonempty (G.subgraphOfAdj hvw).verts :=
   ⟨⟨v, by simp⟩⟩
-
-/--
-theorem `subgraphOfAdj_adj_self` / 定理 `subgraphOfAdj_adj_self`
-
-English:
-theorem subgraphOfAdj_adj_self
-  given: {u v : V} (h : G.Adj u v)
-  statement: (G.subgraphOfAdj h).Adj u v
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 subgraphOfAdj_adj_self
-  条件: {u v : V} (h : G.伴随 u v)
-  结论: (G.subgraphOfAdj h).伴随 u v
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.subgraphOfAdj_adj_self** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：subgraphOfAdj_adj_self {u v : V} (h : G.Adj u v) : (G.subgraphOfAdj h).Adj
+ u v
+参数：h : G.Adj u v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem subgraphOfAdj_adj_self {u v : V} (h : G.Adj u v) : (G.subgraphOfAdj h).Adj u v :=
   rfl
 
 @[simp]
-/--
-theorem `edgeSet_subgraphOfAdj` / 定理 `edgeSet_subgraphOfAdj`
-
-English:
-theorem edgeSet_subgraphOfAdj
-  given: {v w : V} (hvw : G.Adj v w)
-  proof: by
-  ext e
-  refine e.ind ?_
-  simp only [eq_comm, Set.mem_singleton_iff, Subgraph.mem_edgeSet, subgraphOfAdj_adj,
-    forall₂_true_iff]
-
-中文:
-定理 edgeSet_subgraphOfAdj
-  条件: {v w : V} (hvw : G.伴随 v w)
-  证明: by
-  ext e
-  refine e.ind ?_
-  simp only [eq_comm, Set.mem_singleton_iff, Subgraph.mem_edgeSet, subgraphOfAdj_adj,
-    forall₂_true_iff]
-
-Depends on / 依赖: Set.mem_singleton_iff, Subgraph, Subgraph.mem_edgeSet, e.ind, eq_comm, mem_edgeSet, mem_singleton_iff, subgraphOfAdj_adj
+/-
+**SimpleGraph.edgeSet_subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeSet_subgraphOfAdj {v w : V} (hvw : G.Adj v w) : (G.subgraphOfAdj hvw).
+edgeSet = {s(v, w)}
+参数：hvw : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem edgeSet_subgraphOfAdj {v w : V} (hvw : G.Adj v w) :
     (G.subgraphOfAdj hvw).edgeSet = {s(v, w)} := by
@@ -4108,156 +3263,141 @@ theorem edgeSet_subgraphOfAdj {v w : V} (hvw : G.Adj v w) :
   refine e.ind ?_
   simp only [eq_comm, Set.mem_singleton_iff, Subgraph.mem_edgeSet, subgraphOfAdj_adj,
     forall₂_true_iff]
-
-/--
-lemma `subgraphOfAdj_le_of_adj` / 引理 `subgraphOfAdj_le_of_adj`
-
-English:
-lemma subgraphOfAdj_le_of_adj
-  given: {v w : V} (H : G.Subgraph) (h : H.Adj v w)
-  proof: by
-  constructor
-  · grind [subgraphOfAdj_verts, h.fst_mem, h.snd_mem]
-  · grind [subgraphOfAdj_adj, h.symm]
-
-@[simp]
-
-中文:
-引理 subgraphOfAdj_le_of_adj
-  条件: {v w : V} (H : G.子图) (h : H.伴随 v w)
-  证明: by
-  constructor
-  · grind [subgraphOfAdj_verts, h.fst_mem, h.snd_mem]
-  · grind [subgraphOfAdj_adj, h.symm]
-
-@[simp]
-
-Depends on / 依赖: fst_mem, h.fst_mem, h.snd_mem, h.symm, snd_mem, subgraphOfAdj_adj, subgraphOfAdj_verts
+/-
+**SimpleGraph.subgraphOfAdj_le_of_adj** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：subgraphOfAdj_le_of_adj {v w : V} (H : G.Subgraph) (h : H.Adj v w) : G.sub
+graphOfAdj (H.adj_sub h) <= H
+参数：H : G.Subgraph；h : H.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 lemma subgraphOfAdj_le_of_adj {v w : V} (H : G.Subgraph) (h : H.Adj v w) :
-    G.subgraphOfAdj (H.adj_sub h) <= H := by
+    G.subgraphOfAdj (H.adj_sub h) ≤ H := by
   constructor
   · grind [subgraphOfAdj_verts, h.fst_mem, h.snd_mem]
   · grind [subgraphOfAdj_adj, h.symm]
 
 @[simp]
-/--
-theorem `subgraphOfAdj_le_iff` / 定理 `subgraphOfAdj_le_iff`
-
-English:
-theorem subgraphOfAdj_le_iff
-  given: {u v : V} (h : G.Adj u v) (H : G.Subgraph)
-  proof: ⟨fun hle => hle.right subgraphOfAdj_adj_self h, subgraphOfAdj_le_of_adj H⟩
-
-中文:
-定理 subgraphOfAdj_le_iff
-  条件: {u v : V} (h : G.伴随 u v) (H : G.子图)
-  证明: ⟨fun hle => hle.right subgraphOfAdj_adj_self h, subgraphOfAdj_le_of_adj H⟩
-
-Depends on / 依赖: hle.right, subgraphOfAdj_adj_self, subgraphOfAdj_le_of_adj
+/-
+**SimpleGraph.subgraphOfAdj_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：subgraphOfAdj_le_iff {u v : V} (h : G.Adj u v) (H : G.Subgraph) : G.subgra
+phOfAdj h <= H ↔ H.Adj u v
+参数：h : G.Adj u v；H : G.Subgraph。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj_self`：subgraphOfAdj_adj_self {u v : V} (h 
+: G.Adj u v) : (G.subgraphOfAdj h).Adj u v
+· 使用引理 `SimpleGraph.subgraphOfAdj_le_of_adj`：subgraphOfAdj_le_of_adj {v w : V} (
+H : G.Subgraph) (h : H.Adj v w) : G.subgraphOfAdj (H.adj_sub h) <= H
 -/
 theorem subgraphOfAdj_le_iff {u v : V} (h : G.Adj u v) (H : G.Subgraph) :
-    G.subgraphOfAdj h <= H ↔ H.Adj u v :=
-⟨fun hle => hle.right subgraphOfAdj_adj_self h, subgraphOfAdj_le_of_adj H⟩
-
-/--
-theorem `subgraphOfAdj_symm` / 定理 `subgraphOfAdj_symm`
-
-English:
-theorem subgraphOfAdj_symm
-  given: {v w : V} (hvw : G.Adj v w)
-  proof: by
-  ext <;> simp [or_comm, and_comm]
-
-@[simp]
-
-中文:
-定理 subgraphOfAdj_symm
-  条件: {v w : V} (hvw : G.伴随 v w)
-  证明: by
-  ext <;> simp [or_comm, and_comm]
-
-@[simp]
-
-Depends on / 依赖: and_comm, or_comm
+    G.subgraphOfAdj h ≤ H ↔ H.Adj u v :=
+  ⟨fun hle ↦ hle.right <| subgraphOfAdj_adj_self h, subgraphOfAdj_le_of_adj H⟩
+/-
+**SimpleGraph.subgraphOfAdj_symm** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：subgraphOfAdj_symm {v w : V} (hvw : G.Adj v w) : G.subgraphOfAdj hvw.symm 
+= G.subgraphOfAdj hvw
+参数：hvw : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.subgraphOfAdj_verts`：∀ {V : Type u} (G : SimpleGraph V) {v w
+ : V} (hvw : G.Adj v w), (G.subgraphOfAdj hvw).verts = {v, w}
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
 -/
 theorem subgraphOfAdj_symm {v w : V} (hvw : G.Adj v w) :
     G.subgraphOfAdj hvw.symm = G.subgraphOfAdj hvw := by
   ext <;> simp [or_comm, and_comm]
 
 @[simp]
-/--
-theorem `map_subgraphOfAdj` / 定理 `map_subgraphOfAdj`
-
-English:
-theorem map_subgraphOfAdj
-  given: (f : G ->g G') {v w : V} (hvw : G.Adj v w)
-  proof: by
-  ext <;> grind [Subgraph.map_verts, subgraphOfAdj_verts, Relation.Map, Subgraph.map_adj,
-    subgraphOfAdj_adj]
-
-中文:
-定理 map_subgraphOfAdj
-  条件: (f : G ->g G') {v w : V} (hvw : G.伴随 v w)
-  证明: by
-  ext <;> grind [Subgraph.map_verts, subgraphOfAdj_verts, Relation.Map, Subgraph.map_adj,
-    subgraphOfAdj_adj]
-
-Depends on / 依赖: Relation, Relation.Map, Subgraph, Subgraph.map_adj, Subgraph.map_verts, map_adj, map_verts, subgraphOfAdj_adj, subgraphOfAdj_verts
+/-
+**SimpleGraph.map_subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：map_subgraphOfAdj (f : G ->g G') {v w : V} (hvw : G.Adj v w) : Subgraph.ma
+p f (G.subgraphOfAdj hvw) = G'.subgraphOfAdj (f.map_adj hvw)
+参数：f : G ->g G'；hvw : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem map_subgraphOfAdj (f : G ->g G') {v w : V} (hvw : G.Adj v w) :
+theorem map_subgraphOfAdj (f : G →g G') {v w : V} (hvw : G.Adj v w) :
     Subgraph.map f (G.subgraphOfAdj hvw) = G'.subgraphOfAdj (f.map_adj hvw) := by
   ext <;> grind [Subgraph.map_verts, subgraphOfAdj_verts, Relation.Map, Subgraph.map_adj,
     subgraphOfAdj_adj]
-
-/--
-theorem `neighborSet_subgraphOfAdj_subset` / 定理 `neighborSet_subgraphOfAdj_subset`
-
-English:
-theorem neighborSet_subgraphOfAdj_subset
-  given: {u v w : V} (hvw : G.Adj v w)
-  proof: (G.subgraphOfAdj hvw).neighborSet_subset_verts _
-
-@[simp]
-
-中文:
-定理 neighborSet_subgraphOfAdj_subset
-  条件: {u v w : V} (hvw : G.伴随 v w)
-  证明: (G.subgraphOfAdj hvw).neighborSet_subset_verts _
-
-@[simp]
-
-Depends on / 依赖: G.subgraphOfAdj, neighborSet_subset_verts, subgraphOfAdj
+/-
+**SimpleGraph.neighborSet_subgraphOfAdj_subset** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph`。
+形式化陈述：neighborSet_subgraphOfAdj_subset {u v w : V} (hvw : G.Adj v w) : (G.subgra
+phOfAdj hvw).neighborSet u subseteq {v, w}
+参数：hvw : G.Adj v w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_subset_verts`：neighborSet_subset_verts 
+(G' : Subgraph G) (v : V) : G'.neighborSet v subseteq G'.verts
 -/
 theorem neighborSet_subgraphOfAdj_subset {u v w : V} (hvw : G.Adj v w) :
-    (G.subgraphOfAdj hvw).neighborSet u subseteq {v, w} :=
+    (G.subgraphOfAdj hvw).neighborSet u ⊆ {v, w} :=
   (G.subgraphOfAdj hvw).neighborSet_subset_verts _
 
 @[simp]
-/--
-theorem `neighborSet_fst_subgraphOfAdj` / 定理 `neighborSet_fst_subgraphOfAdj`
-
-English:
-theorem neighborSet_fst_subgraphOfAdj
-  given: {v w : V} (hvw : G.Adj v w)
-  proof: by
-  ext u
-  suffices w = u ↔ u = w by simpa [hvw.ne.symm] using this
-  rw [eq_comm]
-
-@[simp]
-
-中文:
-定理 neighborSet_fst_subgraphOfAdj
-  条件: {v w : V} (hvw : G.伴随 v w)
-  证明: by
-  ext u
-  suffices w = u ↔ u = w by simpa [hvw.ne.symm] using this
-  rw [eq_comm]
-
-@[simp]
-
-Depends on / 依赖: eq_comm, hvw.ne.symm
+/-
+**SimpleGraph.neighborSet_fst_subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：neighborSet_fst_subgraphOfAdj {v w : V} (hvw : G.Adj v w) : (G.subgraphOfA
+dj hvw).neighborSet v = {w}
+参数：hvw : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `SimpleGraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {a b : V}, G.Adj 
+a b → a ≠ b
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
 theorem neighborSet_fst_subgraphOfAdj {v w : V} (hvw : G.Adj v w) :
     (G.subgraphOfAdj hvw).neighborSet v = {w} := by
@@ -4266,28 +3406,22 @@ theorem neighborSet_fst_subgraphOfAdj {v w : V} (hvw : G.Adj v w) :
   rw [eq_comm]
 
 @[simp]
-/--
-theorem `neighborSet_snd_subgraphOfAdj` / 定理 `neighborSet_snd_subgraphOfAdj`
-
-English:
-theorem neighborSet_snd_subgraphOfAdj
-  given: {v w : V} (hvw : G.Adj v w)
-  proof: by
-  rw [subgraphOfAdj_symm hvw.symm]
-  exact neighborSet_fst_subgraphOfAdj hvw.symm
-
-@[simp]
-
-中文:
-定理 neighborSet_snd_subgraphOfAdj
-  条件: {v w : V} (hvw : G.伴随 v w)
-  证明: by
-  rw [subgraphOfAdj_symm hvw.symm]
-  exact neighborSet_fst_subgraphOfAdj hvw.symm
-
-@[simp]
-
-Depends on / 依赖: hvw.symm, neighborSet_fst_subgraphOfAdj, subgraphOfAdj_symm
+/-
+**SimpleGraph.neighborSet_snd_subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：neighborSet_snd_subgraphOfAdj {v w : V} (hvw : G.Adj v w) : (G.subgraphOfA
+dj hvw).neighborSet w = {v}
+参数：hvw : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.subgraphOfAdj_symm`：subgraphOfAdj_symm {v w : V} (hvw : G.Ad
+j v w) : G.subgraphOfAdj hvw.symm = G.subgraphOfAdj hvw
+· 使用定理 `SimpleGraph.neighborSet_fst_subgraphOfAdj`：neighborSet_fst_subgraphOfAdj
+ {v w : V} (hvw : G.Adj v w) : (G.subgraphOfAdj hvw).neighborSet v = {w}
 -/
 theorem neighborSet_snd_subgraphOfAdj {v w : V} (hvw : G.Adj v w) :
     (G.subgraphOfAdj hvw).neighborSet w = {v} := by
@@ -4295,130 +3429,165 @@ theorem neighborSet_snd_subgraphOfAdj {v w : V} (hvw : G.Adj v w) :
   exact neighborSet_fst_subgraphOfAdj hvw.symm
 
 @[simp]
-/--
-theorem `neighborSet_subgraphOfAdj_of_ne_of_ne` / 定理 `neighborSet_subgraphOfAdj_of_ne_of_ne`
-
-English:
-theorem neighborSet_subgraphOfAdj_of_ne_of_ne
-  statement: {u v w : V} (hvw : G.Adj v w) (hv : u != v)
-  proof: by
-  ext
-  simp [hv.symm, hw.symm]
-
-中文:
-定理 neighborSet_subgraphOfAdj_of_ne_of_ne
-  结论: {u v w : V} (hvw : G.伴随 v w) (hv : u != v)
-  证明: by
-  ext
-  simp [hv.symm, hw.symm]
-
-Depends on / 依赖: hv.symm, hw.symm
+/-
+**SimpleGraph.neighborSet_subgraphOfAdj_of_ne_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `S
+impleGraph`。
+形式化陈述：neighborSet_subgraphOfAdj_of_ne_of_ne {u v w : V} (hvw : G.Adj v w) (hv : 
+u != v) (hw : u != w) : (G.subgraphOfAdj hvw).neighborSet u = ∅
+参数：hvw : G.Adj v w；hv : u != v；hw : u != w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem neighborSet_subgraphOfAdj_of_ne_of_ne {u v w : V} (hvw : G.Adj v w) (hv : u != v)
-    (hw : u != w) : (G.subgraphOfAdj hvw).neighborSet u = ∅ := by
+theorem neighborSet_subgraphOfAdj_of_ne_of_ne {u v w : V} (hvw : G.Adj v w) (hv : u ≠ v)
+    (hw : u ≠ w) : (G.subgraphOfAdj hvw).neighborSet u = ∅ := by
   ext
   simp [hv.symm, hw.symm]
-
-/--
-theorem `neighborSet_subgraphOfAdj` / 定理 `neighborSet_subgraphOfAdj`
-
-English:
-theorem neighborSet_subgraphOfAdj
-  given: [DecidableEq V] {u v w : V} (hvw : G.Adj v w)
-  proof: by
-  split_ifs <;> subst_vars <;> simp [*]
-
-中文:
-定理 neighborSet_subgraphOfAdj
-  条件: [DecidableEq V] {u v w : V} (hvw : G.伴随 v w)
-  证明: by
-  split_ifs <;> subst_vars <;> simp [*]
-
-Depends on / 依赖: split_ifs
+/-
+**SimpleGraph.neighborSet_subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborSet_subgraphOfAdj [DecidableEq V] {u v w : V} (hvw : G.Adj v w) : 
+(G.subgraphOfAdj hvw).neighborSet u = (if u = v then {w} else ∅) union if u = w 
+then {v} else ∅
+参数：hvw : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.neighborSet_fst_subgraphOfAdj`：neighborSet_fst_subgraphOfAdj
+ {v w : V} (hvw : G.Adj v w) : (G.subgraphOfAdj hvw).neighborSet v = {w}
+· 使用定理 `Set.union_self`：union_self (a : Set α) : a union a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Set.union_empty`：union_empty (a : Set α) : a union ∅ = a
+· 使用定理 `SimpleGraph.neighborSet_snd_subgraphOfAdj`：neighborSet_snd_subgraphOfAdj
+ {v w : V} (hvw : G.Adj v w) : (G.subgraphOfAdj hvw).neighborSet w = {v}
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `LawfulSingleton.insert_empty_eq`：∀ {α : Type u} {β : Type v} {inst : Emp
+tyCollection β} {inst_1 : Insert α β} {inst_2 : Singleton α β}   [self : LawfulS
+ingleton α β] (x : α)…
+· 使用定理 `Set.instLawfulSingleton`：∀ {α : Type u_1}, LawfulSingleton α (Set α)
+· 使用定理 `SimpleGraph.neighborSet_subgraphOfAdj_of_ne_of_ne`：neighborSet_subgraphO
+fAdj_of_ne_of_ne {u v w : V} (hvw : G.Adj v w) (hv : u != v) (hw : u != w) : (G.
+subgraphOfAdj hvw).neighborSet u = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem neighborSet_subgraphOfAdj [DecidableEq V] {u v w : V} (hvw : G.Adj v w) :
     (G.subgraphOfAdj hvw).neighborSet u =
-    (if u = v then {w} else ∅) union if u = w then {v} else ∅ := by
+    (if u = v then {w} else ∅) ∪ if u = w then {v} else ∅ := by
   split_ifs <;> subst_vars <;> simp [*]
-
-/--
-theorem `singletonSubgraph_fst_le_subgraphOfAdj` / 定理 `singletonSubgraph_fst_le_subgraphOfAdj`
-
-English:
-theorem singletonSubgraph_fst_le_subgraphOfAdj
-  given: {u v : V} {h : G.Adj u v}
-  proof: by
-  simp
-
-中文:
-定理 singletonSubgraph_fst_le_subgraphOfAdj
-  条件: {u v : V} {h : G.伴随 u v}
-  证明: by
-  simp
+/-
+**SimpleGraph.singletonSubgraph_fst_le_subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `
+SimpleGraph`。
+形式化陈述：singletonSubgraph_fst_le_subgraphOfAdj {u v : V} {h : G.Adj u v} : G.singl
+etonSubgraph u <= G.subgraphOfAdj h
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.subgraphOfAdj_verts`：∀ {V : Type u} (G : SimpleGraph V) {v w
+ : V} (hvw : G.Adj v w), (G.subgraphOfAdj hvw).verts = {v, w}
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
 theorem singletonSubgraph_fst_le_subgraphOfAdj {u v : V} {h : G.Adj u v} :
-    G.singletonSubgraph u <= G.subgraphOfAdj h := by
+    G.singletonSubgraph u ≤ G.subgraphOfAdj h := by
   simp
-
-/--
-theorem `singletonSubgraph_snd_le_subgraphOfAdj` / 定理 `singletonSubgraph_snd_le_subgraphOfAdj`
-
-English:
-theorem singletonSubgraph_snd_le_subgraphOfAdj
-  given: {u v : V} {h : G.Adj u v}
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-定理 singletonSubgraph_snd_le_subgraphOfAdj
-  条件: {u v : V} {h : G.伴随 u v}
-  证明: by
-  simp
-
-@[simp]
+/-
+**SimpleGraph.singletonSubgraph_snd_le_subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `
+SimpleGraph`。
+形式化陈述：singletonSubgraph_snd_le_subgraphOfAdj {u v : V} {h : G.Adj u v} : G.singl
+etonSubgraph v <= G.subgraphOfAdj h
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.subgraphOfAdj_verts`：∀ {V : Type u} (G : SimpleGraph V) {v w
+ : V} (hvw : G.Adj v w), (G.subgraphOfAdj hvw).verts = {v, w}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
 theorem singletonSubgraph_snd_le_subgraphOfAdj {u v : V} {h : G.Adj u v} :
-    G.singletonSubgraph v <= G.subgraphOfAdj h := by
+    G.singletonSubgraph v ≤ G.subgraphOfAdj h := by
   simp
 
 @[simp]
-/--
-lemma `support_subgraphOfAdj` / 引理 `support_subgraphOfAdj`
-
-English:
-lemma support_subgraphOfAdj
-  given: {u v : V} (h : G.Adj u v)
-  proof: by
-  ext
-  rw [Subgraph.mem_support]
-  simp only [subgraphOfAdj_adj, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk]
-  refine ⟨?_, fun h => h.elim (fun hl => ⟨v, .inl ⟨hl.symm, rfl⟩⟩) fun hr => ⟨u, .inr ⟨rfl, hr.symm⟩⟩⟩
-  rintro ⟨_, hw⟩
-  exact hw.elim (fun h1 => .inl h1.1.symm) fun hr => .inr hr.2.symm
-
-中文:
-引理 support_subgraphOfAdj
-  条件: {u v : V} (h : G.伴随 u v)
-  证明: by
-  ext
-  rw [Subgraph.mem_support]
-  simp only [subgraphOfAdj_adj, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk]
-  refine ⟨?_, fun h => h.elim (fun hl => ⟨v, .inl ⟨hl.symm, rfl⟩⟩) fun hr => ⟨u, .inr ⟨rfl, hr.symm⟩⟩⟩
-  rintro ⟨_, hw⟩
-  exact hw.elim (fun h1 => .inl h1.1.symm) fun hr => .inr hr.2.symm
-
-Depends on / 依赖: Prod.mk.injEq, Prod.swap_prod_mk, Subgraph, Subgraph.mem_support, Sym2.eq, Sym2.rel_iff, h.elim, hl.symm, hr.symm, hw.elim, mem_support, rel_iff, subgraphOfAdj_adj, swap_prod_mk
+/-
+**SimpleGraph.support_subgraphOfAdj** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：support_subgraphOfAdj {u v : V} (h : G.Adj u v) : (G.subgraphOfAdj h).supp
+ort = {u, v}
+参数：h : G.Adj u v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.mem_support`：mem_support (H : Subgraph G) {v : V} :
+ v in H.support ↔ exists w, H.Adj v w
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma support_subgraphOfAdj {u v : V} (h : G.Adj u v) :
     (G.subgraphOfAdj h).support = {u, v} := by
   ext
   rw [Subgraph.mem_support]
   simp only [subgraphOfAdj_adj, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk]
-  refine ⟨?_, fun h => h.elim (fun hl => ⟨v, .inl ⟨hl.symm, rfl⟩⟩) fun hr => ⟨u, .inr ⟨rfl, hr.symm⟩⟩⟩
+  refine ⟨?_, fun h ↦ h.elim (fun hl ↦ ⟨v, .inl ⟨hl.symm, rfl⟩⟩) fun hr ↦ ⟨u, .inr ⟨rfl, hr.symm⟩⟩⟩
   rintro ⟨_, hw⟩
-  exact hw.elim (fun h1 => .inl h1.1.symm) fun hr => .inr hr.2.symm
+  exact hw.elim (fun h1 ↦ .inl h1.1.symm) fun hr ↦ .inr hr.2.symm
 
 end MkProperties
 
@@ -4429,121 +3598,145 @@ variable {G : SimpleGraph V}
 /-! ### Subgraphs of subgraphs -/
 
 
-/--
-Definition of `coeSubgraph` / `coeSubgraph` 的定义
+/-- Given a subgraph of a subgraph of `G`, construct a subgraph of `G`. -/
+/-
+**SimpleGraph.Subgraph.coeSubgraph** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：{V : Type u} → {G : SimpleGraph V} → {G' : G.Subgraph} → G'.coe.Subgraph →
+ G.Subgraph
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coeSubgraph
-  signature: {G' : G.Subgraph}
-  body: Subgraph.map G'.hom
-
-中文:
-缩写 coeSubgraph
-  签名: {G' : G.子图}
-  定义体: Subgraph.map G'.hom
+--- 原说明 ---
+Given a subgraph of a subgraph of `G`, construct a subgraph of `G`.
 -/
-protected abbrev coeSubgraph {G' : G.Subgraph} : G'.coe.Subgraph -> G.Subgraph :=
+protected abbrev coeSubgraph {G' : G.Subgraph} : G'.coe.Subgraph → G.Subgraph :=
   Subgraph.map G'.hom
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- Given a subgraph of `G`, restrict it to being a subgraph of another subgraph `G'` by
+taking the portion of `G` that intersects `G'`. -/
+/-
+**SimpleGraph.Subgraph.restrict** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`
+。
+形式化陈述：{V : Type u} → {G : SimpleGraph V} → {G' : G.Subgraph} → G.Subgraph → G'.c
+oe.Subgraph
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation restrict
-  signature: {G' : G.Subgraph}
-  body: Subgraph.comap G'.hom
-
-@[simp]
-
-中文:
-缩写 restrict
-  签名: {G' : G.子图}
-  定义体: Subgraph.comap G'.hom
-
-@[simp]
+--- 原说明 ---
+Given a subgraph of `G`, restrict it to being a subgraph of another subgraph `G'
+` by
+taking the portion of `G` that intersects `G'`.
 -/
-protected abbrev restrict {G' : G.Subgraph} : G.Subgraph -> G'.coe.Subgraph :=
+protected abbrev restrict {G' : G.Subgraph} : G.Subgraph → G'.coe.Subgraph :=
   Subgraph.comap G'.hom
 
 @[simp]
-/--
-lemma `verts_coeSubgraph` / 引理 `verts_coeSubgraph`
-
-English:
-lemma verts_coeSubgraph
-  given: {G' : Subgraph G} (G'' : Subgraph G'.coe)
-  proof: rfl
-
-中文:
-引理 verts_coeSubgraph
-  条件: {G' : 子图 G} (G'' : 子图 G'.coe)
-  证明: rfl
+/-
+**SimpleGraph.Subgraph.verts_coeSubgraph** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：verts_coeSubgraph {G' : Subgraph G} (G'' : Subgraph G'.coe) : (Subgraph.co
+eSubgraph G'').verts = (G''.verts : Set V)
+参数：G'' : Subgraph G'.coe。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma verts_coeSubgraph {G' : Subgraph G} (G'' : Subgraph G'.coe) :
     (Subgraph.coeSubgraph G'').verts = (G''.verts : Set V) := rfl
-
-/--
-lemma `coeSubgraph_adj` / 引理 `coeSubgraph_adj`
-
-English:
-lemma coeSubgraph_adj
-  given: {G' : G.Subgraph} (G'' : G'.coe.Subgraph) (v w : V)
-  proof: by
-  simp [Relation.Map]
-
-中文:
-引理 coeSubgraph_adj
-  条件: {G' : G.子图} (G'' : G'.coe.子图) (v w : V)
-  证明: by
-  simp [Relation.Map]
-
-Depends on / 依赖: Relation, Relation.Map
+/-
+**SimpleGraph.Subgraph.coeSubgraph_adj** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：coeSubgraph_adj {G' : G.Subgraph} (G'' : G'.coe.Subgraph) (v w : V) : (G'.
+coeSubgraph G'').Adj v w ↔ exists (hv : v in G'.verts) (hw : w in G'.verts), G''
+.Adj ⟨v, hv⟩ ⟨w, hw⟩
+参数：G'' : G'.coe.Subgraph；v w : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.Subgraph.hom_apply`：∀ {V : Type u} {G : SimpleGraph V} (x : 
+G.Subgraph) (v : ↑x.verts), x.hom v = ↑v
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma coeSubgraph_adj {G' : G.Subgraph} (G'' : G'.coe.Subgraph) (v w : V) :
     (G'.coeSubgraph G'').Adj v w ↔
-      exists (hv : v in G'.verts) (hw : w in G'.verts), G''.Adj ⟨v, hv⟩ ⟨w, hw⟩ := by
+      ∃ (hv : v ∈ G'.verts) (hw : w ∈ G'.verts), G''.Adj ⟨v, hv⟩ ⟨w, hw⟩ := by
   simp [Relation.Map]
-
-/--
-lemma `restrict_adj` / 引理 `restrict_adj`
-
-English:
-lemma restrict_adj
-  given: {G' G'' : G.Subgraph} (v w : G'.verts)
-  proof: Iff.rfl
-
-中文:
-引理 restrict_adj
-  条件: {G' G'' : G.子图} (v w : G'.verts)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.restrict_adj** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：restrict_adj {G' G'' : G.Subgraph} (v w : G'.verts) : (G'.restrict G'').Ad
+j v w ↔ G'.Adj v w ∧ G''.Adj v w
+参数：v w : G'.verts。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma restrict_adj {G' G'' : G.Subgraph} (v w : G'.verts) :
     (G'.restrict G'').Adj v w ↔ G'.Adj v w ∧ G''.Adj v w := Iff.rfl
-
-/--
-theorem `restrict_coeSubgraph` / 定理 `restrict_coeSubgraph`
-
-English:
-theorem restrict_coeSubgraph
-  given: {G' : G.Subgraph} (G'' : G'.coe.Subgraph)
-  proof: by
-  ext
-  · simp
-  · rw [restrict_adj, coeSubgraph_adj]
-    simpa using G''.adj_sub
-
-中文:
-定理 restrict_coeSubgraph
-  条件: {G' : G.子图} (G'' : G'.coe.子图)
-  证明: by
-  ext
-  · simp
-  · rw [restrict_adj, coeSubgraph_adj]
-    simpa using G''.adj_sub
-
-Depends on / 依赖: adj_sub, coeSubgraph_adj, restrict_adj
+/-
+**SimpleGraph.Subgraph.restrict_coeSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：restrict_coeSubgraph {G' : G.Subgraph} (G'' : G'.coe.Subgraph) : Subgraph.
+restrict (Subgraph.coeSubgraph G'') = G''
+参数：G'' : G'.coe.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.comap_verts`：∀ {V : Type u} {W : Type v} {G : Simpl
+eGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph),   (SimpleGraph.S
+ubgraph.comap f H).ver…
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `SimpleGraph.Subgraph.hom_apply`：∀ {V : Type u} {G : SimpleGraph V} (x : 
+G.Subgraph) (v : ↑x.verts), x.hom v = ↑v
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `SimpleGraph.Subgraph.restrict_adj`：restrict_adj {G' G'' : G.Subgraph} (v
+ w : G'.verts) : (G'.restrict G'').Adj v w ↔ G'.Adj v w ∧ G''.Adj v w
+· 使用引理 `SimpleGraph.Subgraph.coeSubgraph_adj`：coeSubgraph_adj {G' : G.Subgraph} 
+(G'' : G'.coe.Subgraph) (v w : V) : (G'.coeSubgraph G'').Adj v w ↔ exists (hv : 
+v in G'.verts) (hw : w in …
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 theorem restrict_coeSubgraph {G' : G.Subgraph} (G'' : G'.coe.Subgraph) :
     Subgraph.restrict (Subgraph.coeSubgraph G'') = G'' := by
@@ -4551,82 +3744,98 @@ theorem restrict_coeSubgraph {G' : G.Subgraph} (G'' : G'.coe.Subgraph) :
   · simp
   · rw [restrict_adj, coeSubgraph_adj]
     simpa using G''.adj_sub
-
-/--
-theorem `coeSubgraph_injective` / 定理 `coeSubgraph_injective`
-
-English:
-theorem coeSubgraph_injective
-  given: (G' : G.Subgraph)
-  proof: Function.LeftInverse.injective restrict_coeSubgraph
-
-中文:
-定理 coeSubgraph_injective
-  条件: (G' : G.子图)
-  证明: Function.LeftInverse.injective restrict_coeSubgraph
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, restrict_coeSubgraph
+/-
+**SimpleGraph.Subgraph.coeSubgraph_injective** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.Subgraph`。
+形式化陈述：coeSubgraph_injective (G' : G.Subgraph) : Function.Injective (Subgraph.coe
+Subgraph : G'.coe.Subgraph -> G.Subgraph)
+参数：G' : G.Subgraph。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `SimpleGraph.Subgraph.restrict_coeSubgraph`：restrict_coeSubgraph {G' : G.
+Subgraph} (G'' : G'.coe.Subgraph) : Subgraph.restrict (Subgraph.coeSubgraph G'')
+ = G''
 -/
 theorem coeSubgraph_injective (G' : G.Subgraph) :
-    Function.Injective (Subgraph.coeSubgraph : G'.coe.Subgraph -> G.Subgraph) :=
+    Function.Injective (Subgraph.coeSubgraph : G'.coe.Subgraph → G.Subgraph) :=
   Function.LeftInverse.injective restrict_coeSubgraph
-
-/--
-lemma `coeSubgraph_le` / 引理 `coeSubgraph_le`
-
-English:
-lemma coeSubgraph_le
-  given: {H : G.Subgraph} (H' : H.coe.Subgraph)
-  proof: by
-  constructor
-  · simp
-  · rintro v w ⟨_, _, h, rfl, rfl⟩
-    exact H'.adj_sub h
-
-中文:
-引理 coeSubgraph_le
-  条件: {H : G.子图} (H' : H.coe.子图)
-  证明: by
-  constructor
-  · simp
-  · rintro v w ⟨_, _, h, rfl, rfl⟩
-    exact H'.adj_sub h
-
-Depends on / 依赖: adj_sub
+/-
+**SimpleGraph.Subgraph.coeSubgraph_le** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：coeSubgraph_le {H : G.Subgraph} (H' : H.coe.Subgraph) : Subgraph.coeSubgra
+ph H' <= H
+参数：H' : H.coe.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `SimpleGraph.Subgraph.hom_apply`：∀ {V : Type u} {G : SimpleGraph V} (x : 
+G.Subgraph) (v : ↑x.verts), x.hom v = ↑v
+· 使用定理 `Subtype.coe_preimage_self`：coe_preimage_self (s : Set α) : ((↑) : s -> α
+) ⁻¹' s = univ
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
 -/
 lemma coeSubgraph_le {H : G.Subgraph} (H' : H.coe.Subgraph) :
-    Subgraph.coeSubgraph H' <= H := by
+    Subgraph.coeSubgraph H' ≤ H := by
   constructor
   · simp
   · rintro v w ⟨_, _, h, rfl, rfl⟩
     exact H'.adj_sub h
-
-/--
-lemma `coeSubgraph_restrict_eq` / 引理 `coeSubgraph_restrict_eq`
-
-English:
-lemma coeSubgraph_restrict_eq
-  given: {H : G.Subgraph} (H' : G.Subgraph)
-  proof: by
-  ext
-  · simp
-  · simp_rw [coeSubgraph_adj, restrict_adj]
-    simp only [exists_and_left, exists_prop, inf_adj, and_congr_right_iff]
-    intro h
-    simp [H.edge_vert h, H.edge_vert h.symm]
-
-中文:
-引理 coeSubgraph_restrict_eq
-  条件: {H : G.子图} (H' : G.子图)
-  证明: by
-  ext
-  · simp
-  · simp_rw [coeSubgraph_adj, restrict_adj]
-    simp only [exists_and_left, exists_prop, inf_adj, and_congr_right_iff]
-    intro h
-    simp [H.edge_vert h, H.edge_vert h.symm]
-
-Depends on / 依赖: H.edge_vert, and_congr_right_iff, coeSubgraph_adj, edge_vert, exists_and_left, exists_prop, h.symm, inf_adj, restrict_adj, simp_rw
+/-
+**SimpleGraph.Subgraph.coeSubgraph_restrict_eq** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph.Subgraph`。
+形式化陈述：coeSubgraph_restrict_eq {H : G.Subgraph} (H' : G.Subgraph) : Subgraph.coeS
+ubgraph (H.restrict H') = H ⊓ H'
+参数：H' : G.Subgraph。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `SimpleGraph.Subgraph.hom_apply`：∀ {V : Type u} {G : SimpleGraph V} (x : 
+G.Subgraph) (v : ↑x.verts), x.hom v = ↑v
+· 使用定理 `SimpleGraph.Subgraph.comap_verts`：∀ {V : Type u} {W : Type v} {G : Simpl
+eGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph),   (SimpleGraph.S
+ubgraph.comap f H).ver…
+· 使用定理 `Subtype.image_preimage_coe`：image_preimage_coe (s t : Set α) : ((↑) : s 
+-> α) '' ((↑) : s -> α) ⁻¹' t = s inter t
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 lemma coeSubgraph_restrict_eq {H : G.Subgraph} (H' : G.Subgraph) :
     Subgraph.coeSubgraph (H.restrict H') = H ⊓ H' := by
@@ -4640,26 +3849,24 @@ lemma coeSubgraph_restrict_eq {H : G.Subgraph} (H' : G.Subgraph) :
 /-! ### Edge deletion -/
 
 
-/--
-Definition of `deleteEdges` / `deleteEdges` 的定义
+/-- Given a subgraph `G'` and a set of vertex pairs, remove all of the corresponding edges
+from its edge set, if present.
 
-English:
-definition deleteEdges
-  signature: (G' : G.Subgraph) (s : Set (Sym2 V))
-  body: G'.verts
-  Adj := G'.Adj \ Sym2.ToRel s
-  adj_sub h' := G'.adj_sub h'.1
-  edge_vert h' := G'.edge_vert h'.1
-  symm.symm a b := by simp [G'.adj_comm, Sym2.eq_swap]
+See also: `SimpleGraph.deleteEdges`. -/
+/-
+**SimpleGraph.Subgraph.deleteEdges** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：deleteEdges (G' : G.Subgraph) (s : Set (Sym2 V)) : G.Subgraph where verts
+参数：G' : G.Subgraph；s : Set (Sym2 V)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 deleteEdges
-  签名: (G' : G.子图) (s : 集合 (Sym2 V))
-  定义体: G'.verts
-  Adj := G'.Adj \ Sym2.ToRel s
-  adj_sub h' := G'.adj_sub h'.1
-  edge_vert h' := G'.edge_vert h'.1
-  symm.symm a b := by simp [G'.adj_comm, Sym2.eq_swap]
+--- 原说明 ---
+Given a subgraph `G'` and a set of vertex pairs, remove all of the corresponding
+ edges
+from its edge set, if present.
+
+See also: `SimpleGraph.deleteEdges`.
 -/
 def deleteEdges (G' : G.Subgraph) (s : Set (Sym2 V)) : G.Subgraph where
   verts := G'.verts
@@ -4673,115 +3880,106 @@ section DeleteEdges
 variable {G' : G.Subgraph} (s : Set (Sym2 V))
 
 @[simp]
-/--
-theorem `deleteEdges_verts` / 定理 `deleteEdges_verts`
-
-English:
-theorem deleteEdges_verts
-  statement: (G'.deleteEdges s).verts = G'.verts
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 deleteEdges_verts
-  结论: (G'.deleteEdges s).verts = G'.verts
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.deleteEdges_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：deleteEdges_verts : (G'.deleteEdges s).verts = G'.verts
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem deleteEdges_verts : (G'.deleteEdges s).verts = G'.verts :=
   rfl
 
 @[simp]
-/--
-theorem `deleteEdges_adj` / 定理 `deleteEdges_adj`
-
-English:
-theorem deleteEdges_adj
-  given: (v w : V)
-  statement: (G'.deleteEdges s).Adj v w ↔ G'.Adj v w ∧ s(v, w) ∉ s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 deleteEdges_adj
-  条件: (v w : V)
-  结论: (G'.deleteEdges s).伴随 v w ↔ G'.伴随 v w ∧ s(v, w) ∉ s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SimpleGraph.Subgraph.deleteEdges_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：deleteEdges_adj (v w : V) : (G'.deleteEdges s).Adj v w ↔ G'.Adj v w ∧ s(v,
+ w) ∉ s
+参数：v w : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem deleteEdges_adj (v w : V) : (G'.deleteEdges s).Adj v w ↔ G'.Adj v w ∧ s(v, w) ∉ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `deleteEdges_deleteEdges` / 定理 `deleteEdges_deleteEdges`
-
-English:
-theorem deleteEdges_deleteEdges
-  given: (s s' : Set (Sym2 V))
-  proof: by
-  ext <;> simp [and_assoc, not_or]
-
-@[simp]
-
-中文:
-定理 deleteEdges_deleteEdges
-  条件: (s s' : 集合 (Sym2 V))
-  证明: by
-  ext <;> simp [and_assoc, not_or]
-
-@[simp]
-
-Depends on / 依赖: and_assoc, not_or
+/-
+**SimpleGraph.Subgraph.deleteEdges_deleteEdges** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph.Subgraph`。
+形式化陈述：deleteEdges_deleteEdges (s s' : Set (Sym2 V)) : (G'.deleteEdges s).deleteE
+dges s' = G'.deleteEdges (s union s')
+参数：s s' : Set (Sym2 V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 theorem deleteEdges_deleteEdges (s s' : Set (Sym2 V)) :
-    (G'.deleteEdges s).deleteEdges s' = G'.deleteEdges (s union s') := by
+    (G'.deleteEdges s).deleteEdges s' = G'.deleteEdges (s ∪ s') := by
   ext <;> simp [and_assoc, not_or]
 
 @[simp]
-/--
-theorem `deleteEdges_empty_eq` / 定理 `deleteEdges_empty_eq`
-
-English:
-theorem deleteEdges_empty_eq
-  statement: G'.deleteEdges ∅ = G'
-  proof: by
-  ext <;> simp
-
-@[simp]
-
-中文:
-定理 deleteEdges_empty_eq
-  结论: G'.deleteEdges ∅ = G'
-  证明: by
-  ext <;> simp
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.deleteEdges_empty_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：deleteEdges_empty_eq : G'.deleteEdges ∅ = G'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 theorem deleteEdges_empty_eq : G'.deleteEdges ∅ = G' := by
   ext <;> simp
 
 @[simp]
-/--
-theorem `deleteEdges_spanningCoe_eq` / 定理 `deleteEdges_spanningCoe_eq`
-
-English:
-theorem deleteEdges_spanningCoe_eq
-  proof: by
-  ext
-  simp
-
-中文:
-定理 deleteEdges_spanningCoe_eq
-  证明: by
-  ext
-  simp
+/-
+**SimpleGraph.Subgraph.deleteEdges_spanningCoe_eq** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph.Subgraph`。
+形式化陈述：deleteEdges_spanningCoe_eq : G'.spanningCoe.deleteEdges s = (G'.deleteEdge
+s s).spanningCoe
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem deleteEdges_spanningCoe_eq :
     G'.spanningCoe.deleteEdges s = (G'.deleteEdges s).spanningCoe := by
@@ -4789,46 +3987,37 @@ theorem deleteEdges_spanningCoe_eq :
   simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `deleteEdges_coe_eq` / 定理 `deleteEdges_coe_eq`
-
-English:
-theorem deleteEdges_coe_eq
-  given: (s : Set (Sym2 G'.verts))
-  proof: by
-  ext ⟨v, hv⟩ ⟨w, hw⟩
-  simp only [SimpleGraph.deleteEdges_adj, coe_adj, deleteEdges_adj, Set.mem_image, not_exists,
-    not_and, and_congr_right_iff]
-  intro
-  constructor
-  · intro hs
-    refine Sym2.ind ?_
-    rintro ⟨v', hv'⟩ ⟨w', hw'⟩
-    simp only [Sym2.map_mk, Sym2.eq]
-    contrapose
-    rintro (_ | _) <;> simpa only [Sym2.eq_swap]
-  · intro h' hs
-    exact h' _ hs rfl
-
-中文:
-定理 deleteEdges_coe_eq
-  条件: (s : 集合 (Sym2 G'.verts))
-  证明: by
-  ext ⟨v, hv⟩ ⟨w, hw⟩
-  simp only [SimpleGraph.deleteEdges_adj, coe_adj, deleteEdges_adj, Set.mem_image, not_exists,
-    not_and, and_congr_right_iff]
-  intro
-  constructor
-  · intro hs
-    refine Sym2.ind ?_
-    rintro ⟨v', hv'⟩ ⟨w', hw'⟩
-    simp only [Sym2.map_mk, Sym2.eq]
-    contrapose
-    rintro (_ | _) <;> simpa only [Sym2.eq_swap]
-  · intro h' hs
-    exact h' _ hs rfl
-
-Depends on / 依赖: Set.mem_image, SimpleGraph, SimpleGraph.deleteEdges_adj, Sym2.eq, Sym2.eq_swap, Sym2.ind, Sym2.map_mk, and_congr_right_iff, coe_adj, contrapose, deleteEdges_adj, eq_swap, map_mk, mem_image, not_and, not_exists
+/-
+**SimpleGraph.Subgraph.deleteEdges_coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Subgraph`。
+形式化陈述：deleteEdges_coe_eq (s : Set (Sym2 G'.verts)) : G'.coe.deleteEdges s = (G'.
+deleteEdges (Sym2.map (↑) '' s)).coe
+参数：s : Set (Sym2 G'.verts)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Sym2.ind`：∀ {α : Type u_1} {f : Sym2 α → Prop}, (∀ (x y : α), f s(x, y))
+ → ∀ (i : Sym2 α), f i
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₃`：contrapose₃ {p q : Prop} : (q -> 
+¬ p) -> (p -> ¬ q)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Sym2.eq_swap`：eq_swap {a b : α} : s(a, b) = s(b, a)
 -/
 theorem deleteEdges_coe_eq (s : Set (Sym2 G'.verts)) :
     G'.coe.deleteEdges s = (G'.deleteEdges (Sym2.map (↑) '' s)).coe := by
@@ -4847,164 +4036,177 @@ theorem deleteEdges_coe_eq (s : Set (Sym2 G'.verts)) :
     exact h' _ hs rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_deleteEdges_eq` / 定理 `coe_deleteEdges_eq`
-
-English:
-theorem coe_deleteEdges_eq
-  given: (s : Set (Sym2 V))
-  proof: by
-  ext ⟨v, hv⟩ ⟨w, hw⟩
-  simp
-
-中文:
-定理 coe_deleteEdges_eq
-  条件: (s : 集合 (Sym2 V))
-  证明: by
-  ext ⟨v, hv⟩ ⟨w, hw⟩
-  simp
+/-
+**SimpleGraph.Subgraph.coe_deleteEdges_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Subgraph`。
+形式化陈述：coe_deleteEdges_eq (s : Set (Sym2 V)) : (G'.deleteEdges s).coe = G'.coe.de
+leteEdges (Sym2.map (↑) ⁻¹' s)
+参数：s : Set (Sym2 V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem coe_deleteEdges_eq (s : Set (Sym2 V)) :
     (G'.deleteEdges s).coe = G'.coe.deleteEdges (Sym2.map (↑) ⁻¹' s) := by
   ext ⟨v, hv⟩ ⟨w, hw⟩
   simp
-
-/--
-theorem `deleteEdges_le` / 定理 `deleteEdges_le`
-
-English:
-theorem deleteEdges_le
-  statement: G'.deleteEdges s <= G'
-  proof: by
-  constructor <;> simp +contextual
-
-中文:
-定理 deleteEdges_le
-  结论: G'.deleteEdges s <= G'
-  证明: by
-  constructor <;> simp +contextual
-
-Depends on / 依赖: contextual
+/-
+**SimpleGraph.Subgraph.deleteEdges_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：deleteEdges_le : G'.deleteEdges s <= G'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem deleteEdges_le : G'.deleteEdges s <= G' := by
+theorem deleteEdges_le : G'.deleteEdges s ≤ G' := by
   constructor <;> simp +contextual
-
-/--
-theorem `deleteEdges_le_of_le` / 定理 `deleteEdges_le_of_le`
-
-English:
-theorem deleteEdges_le_of_le
-  given: {s s' : Set (Sym2 V)} (h : s subseteq s')
-  proof: by
-  constructor <;> simp +contextual only [deleteEdges_verts, deleteEdges_adj,
-    true_and, and_imp, subset_rfl]
-  exact fun _ _ _ hs' hs => hs' (h hs)
-
-@[simp]
-
-中文:
-定理 deleteEdges_le_of_le
-  条件: {s s' : 集合 (Sym2 V)} (h : s subseteq s')
-  证明: by
-  constructor <;> simp +contextual only [deleteEdges_verts, deleteEdges_adj,
-    true_and, and_imp, subset_rfl]
-  exact fun _ _ _ hs' hs => hs' (h hs)
-
-@[simp]
-
-Depends on / 依赖: and_imp, contextual, deleteEdges_adj, deleteEdges_verts, subset_rfl, true_and
+/-
+**SimpleGraph.Subgraph.deleteEdges_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：deleteEdges_le_of_le {s s' : Set (Sym2 V)} (h : s subseteq s') : G'.delete
+Edges s' <= G'.deleteEdges s
+参数：Sym2 V；h : s subseteq s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
-theorem deleteEdges_le_of_le {s s' : Set (Sym2 V)} (h : s subseteq s') :
-    G'.deleteEdges s' <= G'.deleteEdges s := by
+theorem deleteEdges_le_of_le {s s' : Set (Sym2 V)} (h : s ⊆ s') :
+    G'.deleteEdges s' ≤ G'.deleteEdges s := by
   constructor <;> simp +contextual only [deleteEdges_verts, deleteEdges_adj,
     true_and, and_imp, subset_rfl]
-  exact fun _ _ _ hs' hs => hs' (h hs)
+  exact fun _ _ _ hs' hs ↦ hs' (h hs)
 
 @[simp]
-/--
-theorem `deleteEdges_inter_edgeSet_left_eq` / 定理 `deleteEdges_inter_edgeSet_left_eq`
-
-English:
-theorem deleteEdges_inter_edgeSet_left_eq
-  proof: by
-  ext <;> simp +contextual
-
-@[simp]
-
-中文:
-定理 deleteEdges_inter_edgeSet_left_eq
-  证明: by
-  ext <;> simp +contextual
-
-@[simp]
-
-Depends on / 依赖: contextual
+/-
+**SimpleGraph.Subgraph.deleteEdges_inter_edgeSet_left_eq** 是 Mathlib 中的一个定理，位于命名
+空间 `SimpleGraph.Subgraph`。
+形式化陈述：deleteEdges_inter_edgeSet_left_eq : G'.deleteEdges (G'.edgeSet inter s) = 
+G'.deleteEdges s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem deleteEdges_inter_edgeSet_left_eq :
-    G'.deleteEdges (G'.edgeSet inter s) = G'.deleteEdges s := by
+    G'.deleteEdges (G'.edgeSet ∩ s) = G'.deleteEdges s := by
   ext <;> simp +contextual
 
 @[simp]
-/--
-theorem `deleteEdges_inter_edgeSet_right_eq` / 定理 `deleteEdges_inter_edgeSet_right_eq`
-
-English:
-theorem deleteEdges_inter_edgeSet_right_eq
-  proof: by
-  ext <;> simp +contextual [imp_false]
-
-中文:
-定理 deleteEdges_inter_edgeSet_right_eq
-  证明: by
-  ext <;> simp +contextual [imp_false]
-
-Depends on / 依赖: contextual, imp_false
+/-
+**SimpleGraph.Subgraph.deleteEdges_inter_edgeSet_right_eq** 是 Mathlib 中的一个定理，位于命
+名空间 `SimpleGraph.Subgraph`。
+形式化陈述：deleteEdges_inter_edgeSet_right_eq : G'.deleteEdges (s inter G'.edgeSet) =
+ G'.deleteEdges s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem deleteEdges_inter_edgeSet_right_eq :
-    G'.deleteEdges (s inter G'.edgeSet) = G'.deleteEdges s := by
+    G'.deleteEdges (s ∩ G'.edgeSet) = G'.deleteEdges s := by
   ext <;> simp +contextual [imp_false]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_deleteEdges_le` / 定理 `coe_deleteEdges_le`
-
-English:
-theorem coe_deleteEdges_le
-  statement: (G'.deleteEdges s).coe <= (G'.coe : SimpleGraph G'.verts)
-  proof: by
-  intro v w
-  simp +contextual
-
-中文:
-定理 coe_deleteEdges_le
-  结论: (G'.deleteEdges s).coe <= (G'.coe : 简单图 G'.verts)
-  证明: by
-  intro v w
-  simp +contextual
-
-Depends on / 依赖: contextual
+/-
+**SimpleGraph.Subgraph.coe_deleteEdges_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Subgraph`。
+形式化陈述：coe_deleteEdges_le : (G'.deleteEdges s).coe <= (G'.coe : SimpleGraph G'.ve
+rts)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem coe_deleteEdges_le : (G'.deleteEdges s).coe <= (G'.coe : SimpleGraph G'.verts) := by
+theorem coe_deleteEdges_le : (G'.deleteEdges s).coe ≤ (G'.coe : SimpleGraph G'.verts) := by
   intro v w
   simp +contextual
-
-/--
-theorem `spanningCoe_deleteEdges_le` / 定理 `spanningCoe_deleteEdges_le`
-
-English:
-theorem spanningCoe_deleteEdges_le
-  given: (G' : G.Subgraph) (s : Set (Sym2 V))
-  proof: spanningCoe_le_of_le (deleteEdges_le s)
-
-中文:
-定理 spanningCoe_deleteEdges_le
-  条件: (G' : G.子图) (s : 集合 (Sym2 V))
-  证明: spanningCoe_le_of_le (deleteEdges_le s)
-
-Depends on / 依赖: deleteEdges_le, spanningCoe_le_of_le
+/-
+**SimpleGraph.Subgraph.spanningCoe_deleteEdges_le** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph.Subgraph`。
+形式化陈述：spanningCoe_deleteEdges_le (G' : G.Subgraph) (s : Set (Sym2 V)) : (G'.dele
+teEdges s).spanningCoe <= G'.spanningCoe
+参数：G' : G.Subgraph；s : Set (Sym2 V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_le_of_le`：spanningCoe_le_of_le {H H' : 
+Subgraph G} (h : H <= H') : H.spanningCoe <= H'.spanningCoe
+· 使用定理 `SimpleGraph.Subgraph.deleteEdges_le`：deleteEdges_le : G'.deleteEdges s <
+= G'
 -/
 theorem spanningCoe_deleteEdges_le (G' : G.Subgraph) (s : Set (Sym2 V)) :
-    (G'.deleteEdges s).spanningCoe <= G'.spanningCoe :=
+    (G'.deleteEdges s).spanningCoe ≤ G'.spanningCoe :=
   spanningCoe_le_of_le (deleteEdges_le s)
 
 end DeleteEdges
@@ -5019,85 +4221,41 @@ unlike for subgraphs, results in a graph with a different vertex type. -/
 notion of an induced subgraph, but, in general, `s` is taken to be the new vertex set and edges
 are induced from the subgraph `G'`. -/
 @[simps]
-/--
-Definition of `induce` / `induce` 的定义
+/-
+**SimpleGraph.Subgraph.induce** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：induce (G' : G.Subgraph) (s : Set V) : G.Subgraph where verts
+参数：G' : G.Subgraph；s : Set V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition induce
-  signature: (G' : G.Subgraph) (s : Set V)
-  body: s
-  Adj u v := u in s ∧ v in s ∧ G'.Adj u v
-  adj_sub h := G'.adj_sub h.2.2
-  edge_vert h := h.1
-  symm.symm _ _ h := ⟨h.2.1, h.1, h.2.2.symm⟩
-
-中文:
-定义 induce
-  签名: (G' : G.子图) (s : 集合 V)
-  定义体: s
-  Adj u v := u in s ∧ v in s ∧ G'.Adj u v
-  adj_sub h := G'.adj_sub h.2.2
-  edge_vert h := h.1
-  symm.symm _ _ h := ⟨h.2.1, h.1, h.2.2.symm⟩
+--- 原说明 ---
+The induced subgraph of a subgraph. The expectation is that `s ⊆ G'.verts` for t
+he usual
+notion of an induced subgraph, but, in general, `s` is taken to be the new verte
+x set and edges
+are induced from the subgraph `G'`.
 -/
 def induce (G' : G.Subgraph) (s : Set V) : G.Subgraph where
   verts := s
-  Adj u v := u in s ∧ v in s ∧ G'.Adj u v
+  Adj u v := u ∈ s ∧ v ∈ s ∧ G'.Adj u v
   adj_sub h := G'.adj_sub h.2.2
   edge_vert h := h.1
   symm.symm _ _ h := ⟨h.2.1, h.1, h.2.2.symm⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `_root_.SimpleGraph.induce_eq_coe_induce_top` / 定理 `_root_.SimpleGraph.induce_eq_coe_induce_top`
-
-English:
-theorem _root_.SimpleGraph.induce_eq_coe_induce_top
-  given: (s : Set V)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 _root_.简单图.induce_eq_coe_induce_top
-  条件: (s : 集合 V)
-  证明: by
-  ext
-  simp
+/-
+**SimpleGraph.Subgraph._root_.SimpleGraph.induce_eq_coe_induce_top** 是 Mathlib 中
+的一个定理，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.SimpleGraph.induce_eq_coe_induce_top (s : Set V) :
     G.induce s = ((⊤ : G.Subgraph).induce s).coe := by
   ext
   simp
-
-/--
-lemma `_root_.SimpleGraph.spanningCoe_induce_top` / 引理 `_root_.SimpleGraph.spanningCoe_induce_top`
-
-English:
-lemma _root_.SimpleGraph.spanningCoe_induce_top
-  given: (s : Set V)
-  proof: by
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization would help. The original proof was:
-  `grind [induce_eq_coe_induce_top, Subgraph.spanningCoe_coe]` -/
-  rw [induce_eq_coe_induce_top]
-  exact (Subgraph.spanningCoe_coe _).symm
-
-中文:
-引理 _root_.简单图.spanningCoe_induce_top
-  条件: (s : 集合 V)
-  证明: by
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization would help. The original proof was:
-  `grind [induce_eq_coe_induce_top, Subgraph.spanningCoe_coe]` -/
-  rw [induce_eq_coe_induce_top]
-  exact (Subgraph.spanningCoe_coe _).symm
-
-Depends on / 依赖: Before, Mathlib, Subgraph, Subgraph.spanningCoe_coe, adaptation_note, canonicalizer, closed, directed, github, github.com, induce_eq_coe_induce_top, leanprover, minimization, normalizer, original, problem, replacing, spanningCoe_coe, whether
+/-
+**SimpleGraph.Subgraph._root_.SimpleGraph.spanningCoe_induce_top** 是 Mathlib 中的一
+个引理，位于命名空间 `SimpleGraph.Subgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.SimpleGraph.spanningCoe_induce_top (s : Set V) :
     ((⊤ : G.Subgraph).induce s).spanningCoe = (G.induce s).spanningCoe := by
@@ -5114,93 +4272,74 @@ section Induce
 variable {G' G'' : G.Subgraph} {s s' : Set V}
 
 @[simp]
-/--
-theorem `IsInduced.induce_top_verts` / 定理 `IsInduced.induce_top_verts`
-
-English:
-theorem IsInduced.induce_top_verts
-  given: (h : G'.IsInduced)
-  statement: induce ⊤ G'.verts = G'
-  proof: Subgraph.ext rfl funext₂ fun _ _ => propext
-    ⟨fun ⟨hu, hv, h'⟩ => h hu hv h', fun h => ⟨G'.edge_vert h, G'.edge_vert h.symm, h.adj_sub⟩⟩
-
-中文:
-定理 是Induced.induce_top_verts
-  条件: (h : G'.是Induced)
-  结论: induce ⊤ G'.verts = G'
-  证明: Subgraph.ext rfl funext₂ fun _ _ => propext
-    ⟨fun ⟨hu, hv, h'⟩ => h hu hv h', fun h => ⟨G'.edge_vert h, G'.edge_vert h.symm, h.adj_sub⟩⟩
-
-Depends on / 依赖: Subgraph, Subgraph.ext, adj_sub, edge_vert, h.adj_sub, h.symm, propext
+/-
+**SimpleGraph.Subgraph.IsInduced.induce_top_verts** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph.Subgraph.IsInduced`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {G' : G.Subgraph}, G'.IsInduced → ⊤.ind
+uce G'.verts = G'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `funext₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort u
+_3} {f g : (a : α) → (b : β a) → γ a b},   (∀ (a : α) (b : β a), f a b = g a …
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
+· 使用定理 `SimpleGraph.Subgraph.Adj.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → G.Adj u v
 -/
 theorem IsInduced.induce_top_verts (h : G'.IsInduced) : induce ⊤ G'.verts = G' :=
-Subgraph.ext rfl funext₂ fun _ _ => propext
-    ⟨fun ⟨hu, hv, h'⟩ => h hu hv h', fun h => ⟨G'.edge_vert h, G'.edge_vert h.symm, h.adj_sub⟩⟩
-
-/--
-theorem `isInduced_iff_exists_eq_induce_top` / 定理 `isInduced_iff_exists_eq_induce_top`
-
-English:
-theorem isInduced_iff_exists_eq_induce_top
-  given: (G' : G.Subgraph)
-  proof: by
-  refine ⟨fun h => ⟨G'.verts, h.induce_top_verts.symm⟩, fun ⟨s, h⟩ _ hu _ hv hadj => ?_⟩
-  rw [h]; rw [(h ▸ rfl : s = G'.verts)]
-  exact ⟨hu, hv, hadj⟩
-
-@[gcongr]
-
-中文:
-定理 isInduced_iff_存在_eq_induce_top
-  条件: (G' : G.子图)
-  证明: by
-  refine ⟨fun h => ⟨G'.verts, h.induce_top_verts.symm⟩, fun ⟨s, h⟩ _ hu _ hv hadj => ?_⟩
-  rw [h]; rw [(h ▸ rfl : s = G'.verts)]
-  exact ⟨hu, hv, hadj⟩
-
-@[gcongr]
-
-Depends on / 依赖: h.induce_top_verts.symm, induce_top_verts
+  Subgraph.ext rfl <| funext₂ fun _ _ ↦ propext
+    ⟨fun ⟨hu, hv, h'⟩ ↦ h hu hv h', fun h ↦ ⟨G'.edge_vert h, G'.edge_vert h.symm, h.adj_sub⟩⟩
+/-
+**SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top** 是 Mathlib 中的一个定理，位于命
+名空间 `SimpleGraph.Subgraph`。
+形式化陈述：isInduced_iff_exists_eq_induce_top (G' : G.Subgraph) : G'.IsInduced ↔ exis
+ts s, G' = induce ⊤ s
+参数：G' : G.Subgraph。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Subgraph.IsInduced.induce_top_verts`：∀ {V : Type u} {G : Sim
+pleGraph V} {G' : G.Subgraph}, G'.IsInduced → ⊤.induce G'.verts = G'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem isInduced_iff_exists_eq_induce_top (G' : G.Subgraph) :
-    G'.IsInduced ↔ exists s, G' = induce ⊤ s := by
-  refine ⟨fun h => ⟨G'.verts, h.induce_top_verts.symm⟩, fun ⟨s, h⟩ _ hu _ hv hadj => ?_⟩
-  rw [h]; rw [(h ▸ rfl : s = G'.verts)]
+    G'.IsInduced ↔ ∃ s, G' = induce ⊤ s := by
+  refine ⟨fun h ↦ ⟨G'.verts, h.induce_top_verts.symm⟩, fun ⟨s, h⟩ _ hu _ hv hadj ↦ ?_⟩
+  rw [h, (h ▸ rfl : s = G'.verts)]
   exact ⟨hu, hv, hadj⟩
 
 @[gcongr]
-/--
-theorem `induce_mono` / 定理 `induce_mono`
-
-English:
-theorem induce_mono
-  given: (hg : G' <= G'') (hs : s subseteq s')
-  statement: G'.induce s <= G''.induce s'
-  proof: by
-  constructor
-  · simp [hs]
-  · simp +contextual only [induce_adj, and_imp]
-    intro v w hv hw ha
-    exact ⟨hs hv, hs hw, hg.2 ha⟩
-
-@[gcongr, mono]
-
-中文:
-定理 induce_mono
-  条件: (hg : G' <= G'') (hs : s subseteq s')
-  结论: G'.induce s <= G''.induce s'
-  证明: by
-  constructor
-  · simp [hs]
-  · simp +contextual only [induce_adj, and_imp]
-    intro v w hv hw ha
-    exact ⟨hs hv, hs hw, hg.2 ha⟩
-
-@[gcongr, mono]
-
-Depends on / 依赖: and_imp, contextual, induce_adj
+/-
+**SimpleGraph.Subgraph.induce_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgra
+ph`。
+形式化陈述：induce_mono (hg : G' <= G'') (hs : s subseteq s') : G'.induce s <= G''.ind
+uce s'
+参数：hg : G' <= G''；hs : s subseteq s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem induce_mono (hg : G' <= G'') (hs : s subseteq s') : G'.induce s <= G''.induce s' := by
+theorem induce_mono (hg : G' ≤ G'') (hs : s ⊆ s') : G'.induce s ≤ G''.induce s' := by
   constructor
   · simp [hs]
   · simp +contextual only [induce_adj, and_imp]
@@ -5208,254 +4347,266 @@ theorem induce_mono (hg : G' <= G'') (hs : s subseteq s') : G'.induce s <= G''.i
     exact ⟨hs hv, hs hw, hg.2 ha⟩
 
 @[gcongr, mono]
-/--
-theorem `induce_mono_left` / 定理 `induce_mono_left`
-
-English:
-theorem induce_mono_left
-  given: (hg : G' <= G'')
-  statement: G'.induce s <= G''.induce s
-  proof: induce_mono hg subset_rfl
-
-@[gcongr, mono]
-
-中文:
-定理 induce_mono_left
-  条件: (hg : G' <= G'')
-  结论: G'.induce s <= G''.induce s
-  证明: induce_mono hg subset_rfl
-
-@[gcongr, mono]
-
-Depends on / 依赖: induce_mono, subset_rfl
+/-
+**SimpleGraph.Subgraph.induce_mono_left** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：induce_mono_left (hg : G' <= G'') : G'.induce s <= G''.induce s
+参数：hg : G' <= G''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.induce_mono`：induce_mono (hg : G' <= G'') (hs : s s
+ubseteq s') : G'.induce s <= G''.induce s'
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 -/
-theorem induce_mono_left (hg : G' <= G'') : G'.induce s <= G''.induce s :=
+theorem induce_mono_left (hg : G' ≤ G'') : G'.induce s ≤ G''.induce s :=
   induce_mono hg subset_rfl
 
 @[gcongr, mono]
-/--
-theorem `induce_mono_right` / 定理 `induce_mono_right`
-
-English:
-theorem induce_mono_right
-  given: (hs : s subseteq s')
-  statement: G'.induce s <= G'.induce s'
-  proof: induce_mono le_rfl hs
-
-@[simp]
-
-中文:
-定理 induce_mono_right
-  条件: (hs : s subseteq s')
-  结论: G'.induce s <= G'.induce s'
-  证明: induce_mono le_rfl hs
-
-@[simp]
-
-Depends on / 依赖: induce_mono, le_rfl
+/-
+**SimpleGraph.Subgraph.induce_mono_right** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：induce_mono_right (hs : s subseteq s') : G'.induce s <= G'.induce s'
+参数：hs : s subseteq s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.induce_mono`：induce_mono (hg : G' <= G'') (hs : s s
+ubseteq s') : G'.induce s <= G''.induce s'
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem induce_mono_right (hs : s subseteq s') : G'.induce s <= G'.induce s' :=
+theorem induce_mono_right (hs : s ⊆ s') : G'.induce s ≤ G'.induce s' :=
   induce_mono le_rfl hs
 
 @[simp]
-/--
-theorem `induce_empty` / 定理 `induce_empty`
-
-English:
-theorem induce_empty
-  statement: G'.induce ∅ = ⊥
-  proof: by
-  ext <;> simp
-
-@[simp]
-
-中文:
-定理 induce_empty
-  结论: G'.induce ∅ = ⊥
-  证明: by
-  ext <;> simp
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.induce_empty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：induce_empty : G'.induce ∅ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem induce_empty : G'.induce ∅ = ⊥ := by
   ext <;> simp
 
 @[simp]
-/--
-theorem `induce_self_verts` / 定理 `induce_self_verts`
-
-English:
-theorem induce_self_verts
-  statement: G'.induce G'.verts = G'
-  proof: by
-  ext
-  · simp
-  · constructor <;>
-      simp +contextual only [induce_adj, imp_true_iff, and_true]
-    exact fun ha => ⟨G'.edge_vert ha, G'.edge_vert ha.symm⟩
-
-中文:
-定理 induce_self_verts
-  结论: G'.induce G'.verts = G'
-  证明: by
-  ext
-  · simp
-  · constructor <;>
-      simp +contextual only [induce_adj, imp_true_iff, and_true]
-    exact fun ha => ⟨G'.edge_vert ha, G'.edge_vert ha.symm⟩
-
-Depends on / 依赖: and_true, contextual, edge_vert, ha.symm, imp_true_iff, induce_adj
+/-
+**SimpleGraph.Subgraph.induce_self_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：induce_self_verts : G'.induce G'.verts = G'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
 -/
 theorem induce_self_verts : G'.induce G'.verts = G' := by
   ext
   · simp
   · constructor <;>
       simp +contextual only [induce_adj, imp_true_iff, and_true]
-    exact fun ha => ⟨G'.edge_vert ha, G'.edge_vert ha.symm⟩
-
-/--
-lemma `le_induce_top_verts` / 引理 `le_induce_top_verts`
-
-English:
-lemma le_induce_top_verts
-  statement: G' <= (⊤ : G.Subgraph).induce G'.verts
-  proof: calc G' = G'.induce G'.verts := Subgraph.induce_self_verts.symm
-       _ <= (⊤ : G.Subgraph).induce G'.verts := Subgraph.induce_mono_left le_top
-
-中文:
-引理 le_induce_top_verts
-  结论: G' <= (⊤ : G.子图).induce G'.verts
-  证明: calc G' = G'.induce G'.verts := Subgraph.induce_self_verts.symm
-       _ <= (⊤ : G.Subgraph).induce G'.verts := Subgraph.induce_mono_left le_top
-
-Depends on / 依赖: G.Subgraph, Subgraph, Subgraph.induce_mono_left, Subgraph.induce_self_verts.symm, induce, induce_mono_left, induce_self_verts, le_top
+    exact fun ha ↦ ⟨G'.edge_vert ha, G'.edge_vert ha.symm⟩
+/-
+**SimpleGraph.Subgraph.le_induce_top_verts** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h.Subgraph`。
+形式化陈述：le_induce_top_verts : G' <= (⊤ : G.Subgraph).induce G'.verts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Subgraph.induce_self_verts`：induce_self_verts : G'.induce G'
+.verts = G'
+· 使用定理 `SimpleGraph.Subgraph.induce_mono_left`：induce_mono_left (hg : G' <= G'')
+ : G'.induce s <= G''.induce s
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
-lemma le_induce_top_verts : G' <= (⊤ : G.Subgraph).induce G'.verts :=
+lemma le_induce_top_verts : G' ≤ (⊤ : G.Subgraph).induce G'.verts :=
   calc G' = G'.induce G'.verts := Subgraph.induce_self_verts.symm
-       _ <= (⊤ : G.Subgraph).induce G'.verts := Subgraph.induce_mono_left le_top
-
-/--
-lemma `le_induce_union` / 引理 `le_induce_union`
-
-English:
-lemma le_induce_union
-  statement: G'.induce s ⊔ G'.induce s' <= G'.induce (s union s')
-  proof: by
+       _ ≤ (⊤ : G.Subgraph).induce G'.verts := Subgraph.induce_mono_left le_top
+/-
+**SimpleGraph.Subgraph.le_induce_union** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：le_induce_union : G'.induce s ⊔ G'.induce s' <= G'.induce (s union s')
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+-/
+lemma le_induce_union : G'.induce s ⊔ G'.induce s' ≤ G'.induce (s ∪ s') := by
   constructor
   · simp
   · simp only [sup_adj, induce_adj, Set.mem_union]
     rintro v w (h | h) <;> simp [h]
-
-中文:
-引理 le_induce_union
-  结论: G'.induce s ⊔ G'.induce s' <= G'.induce (s union s')
-  证明: by
-  constructor
-  · simp
-  · simp only [sup_adj, induce_adj, Set.mem_union]
-    rintro v w (h | h) <;> simp [h]
-
-Depends on / 依赖: Set.mem_union, induce_adj, mem_union, sup_adj
+/-
+**SimpleGraph.Subgraph.le_induce_union_left** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph.Subgraph`。
+形式化陈述：le_induce_union_left : G'.induce s <= G'.induce (s union s')
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sup_le_iff`：sup_le_iff : a ⊔ b <= c ↔ a <= c ∧ b <= c
+· 使用引理 `SimpleGraph.Subgraph.le_induce_union`：le_induce_union : G'.induce s ⊔ G'
+.induce s' <= G'.induce (s union s')
 -/
-lemma le_induce_union : G'.induce s ⊔ G'.induce s' <= G'.induce (s union s') := by
-  constructor
-  · simp
-  · simp only [sup_adj, induce_adj, Set.mem_union]
-    rintro v w (h | h) <;> simp [h]
-
-/--
-lemma `le_induce_union_left` / 引理 `le_induce_union_left`
-
-English:
-lemma le_induce_union_left
-  statement: G'.induce s <= G'.induce (s union s')
-  proof: by
+lemma le_induce_union_left : G'.induce s ≤ G'.induce (s ∪ s') := by
   exact (sup_le_iff.mp le_induce_union).1
-
-中文:
-引理 le_induce_union_left
-  结论: G'.induce s <= G'.induce (s union s')
-  证明: by
-  exact (sup_le_iff.mp le_induce_union).1
-
-Depends on / 依赖: le_induce_union, sup_le_iff, sup_le_iff.mp
+/-
+**SimpleGraph.Subgraph.le_induce_union_right** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph.Subgraph`。
+形式化陈述：le_induce_union_right : G'.induce s' <= G'.induce (s union s')
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sup_le_iff`：sup_le_iff : a ⊔ b <= c ↔ a <= c ∧ b <= c
+· 使用引理 `SimpleGraph.Subgraph.le_induce_union`：le_induce_union : G'.induce s ⊔ G'
+.induce s' <= G'.induce (s union s')
 -/
-lemma le_induce_union_left : G'.induce s <= G'.induce (s union s') := by
-  exact (sup_le_iff.mp le_induce_union).1
-
-/--
-lemma `le_induce_union_right` / 引理 `le_induce_union_right`
-
-English:
-lemma le_induce_union_right
-  statement: G'.induce s' <= G'.induce (s union s')
-  proof: by
+lemma le_induce_union_right : G'.induce s' ≤ G'.induce (s ∪ s') := by
   exact (sup_le_iff.mp le_induce_union).2
-
-中文:
-引理 le_induce_union_right
-  结论: G'.induce s' <= G'.induce (s union s')
-  证明: by
-  exact (sup_le_iff.mp le_induce_union).2
-
-Depends on / 依赖: le_induce_union, sup_le_iff, sup_le_iff.mp
--/
-lemma le_induce_union_right : G'.induce s' <= G'.induce (s union s') := by
-  exact (sup_le_iff.mp le_induce_union).2
-
-/--
-theorem `singletonSubgraph_eq_induce` / 定理 `singletonSubgraph_eq_induce`
-
-English:
-theorem singletonSubgraph_eq_induce
-  given: {v : V}
-  proof: by
-  ext <;> simp +contextual [-Set.bot_eq_empty, Prop.bot_eq_false]
-
-中文:
-定理 singletonSubgraph_eq_induce
-  条件: {v : V}
-  证明: by
-  ext <;> simp +contextual [-Set.bot_eq_empty, Prop.bot_eq_false]
-
-Depends on / 依赖: Prop.bot_eq_false, Set.bot_eq_empty, bot_eq_empty, bot_eq_false, contextual
+/-
+**SimpleGraph.Subgraph.singletonSubgraph_eq_induce** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph.Subgraph`。
+形式化陈述：singletonSubgraph_eq_induce {v : V} : G.singletonSubgraph v = (⊤ : G.Subgr
+aph).induce {v}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.singletonSubgraph_verts`：∀ {V : Type u} (G : SimpleGraph V) 
+(v : V), (G.singletonSubgraph v).verts = {v}
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.singletonSubgraph_adj`：∀ {V : Type u} (G : SimpleGraph V) (v
+ a a_1 : V), (G.singletonSubgraph v).Adj a a_1 = ⊥ a a_1
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem singletonSubgraph_eq_induce {v : V} :
     G.singletonSubgraph v = (⊤ : G.Subgraph).induce {v} := by
   ext <;> simp +contextual [-Set.bot_eq_empty, Prop.bot_eq_false]
-
-/--
-theorem `subgraphOfAdj_eq_induce` / 定理 `subgraphOfAdj_eq_induce`
-
-English:
-theorem subgraphOfAdj_eq_induce
-  given: {v w : V} (hvw : G.Adj v w)
-  proof: by
-  ext
-  · simp
-  · constructor
-    · intro h
-      simp only [subgraphOfAdj_adj, Sym2.eq, Sym2.rel_iff] at h
-      obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := h <;> simp [hvw, hvw.symm]
-    · intro h
-      simp only [induce_adj, Set.mem_insert_iff, Set.mem_singleton_iff, top_adj] at h
-      obtain ⟨rfl | rfl, rfl | rfl, ha⟩ := h <;> first | exact (ha.ne rfl).elim | simp
-
-中文:
-定理 subgraphOfAdj_eq_induce
-  条件: {v w : V} (hvw : G.伴随 v w)
-  证明: by
-  ext
-  · simp
-  · constructor
-    · intro h
-      simp only [subgraphOfAdj_adj, Sym2.eq, Sym2.rel_iff] at h
-      obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := h <;> simp [hvw, hvw.symm]
-    · intro h
-      simp only [induce_adj, Set.mem_insert_iff, Set.mem_singleton_iff, top_adj] at h
-      obtain ⟨rfl | rfl, rfl | rfl, ha⟩ := h <;> first | exact (ha.ne rfl).elim | simp
-
-Depends on / 依赖: Set.mem_insert_iff, Set.mem_singleton_iff, Sym2.eq, Sym2.rel_iff, ha.ne, hvw.symm, induce_adj, mem_insert_iff, mem_singleton_iff, rel_iff, subgraphOfAdj_adj, top_adj
+/-
+**SimpleGraph.Subgraph.subgraphOfAdj_eq_induce** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph.Subgraph`。
+形式化陈述：subgraphOfAdj_eq_induce {v w : V} (hvw : G.Adj v w) : G.subgraphOfAdj hvw 
+= (⊤ : G.Subgraph).induce {v, w}
+参数：hvw : G.Adj v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.subgraphOfAdj_verts`：∀ {V : Type u} (G : SimpleGraph V) {v w
+ : V} (hvw : G.Adj v w), (G.subgraphOfAdj hvw).verts = {v, w}
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `SimpleGraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {a b : V}, G.Adj 
+a b → a ≠ b
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
 -/
 theorem subgraphOfAdj_eq_induce {v w : V} (hvw : G.Adj v w) :
     G.subgraphOfAdj hvw = (⊤ : G.Subgraph).induce {v, w} := by
@@ -5468,66 +4619,55 @@ theorem subgraphOfAdj_eq_induce {v w : V} (hvw : G.Adj v w) :
     · intro h
       simp only [induce_adj, Set.mem_insert_iff, Set.mem_singleton_iff, top_adj] at h
       obtain ⟨rfl | rfl, rfl | rfl, ha⟩ := h <;> first | exact (ha.ne rfl).elim | simp
-
-/--
-Instance `instDecidableRel_induce_adj` / 实例 `instDecidableRel_induce_adj`
-
-English:
-instance instDecidableRel_induce_adj
-  signature: (s : Set V) [forall a, Decidable (a in s)] [DecidableRel G'.Adj]
-  body: fun _ _ => instDecidableAnd
-
-中文:
-实例 instDecidableRel_induce_adj
-  签名: (s : 集合 V) [对任意 a, 可判定 (a in s)] [DecidableRel G'.伴随]
-  定义体: fun _ _ => instDecidableAnd
-
-Depends on / 依赖: instDecidableAnd
+/-
+**SimpleGraph.Subgraph.instDecidableRel_induce_adj** 是 Mathlib 中的一个实例，位于命名空间 `Si
+mpleGraph.Subgraph`。
+形式化陈述：instDecidableRel_induce_adj (s : Set V) [forall a, Decidable (a in s)] [De
+cidableRel G'.Adj] : DecidableRel (G'.induce s).Adj
+参数：s : Set V；a in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instDecidableRel_induce_adj (s : Set V) [forall a, Decidable (a in s)] [DecidableRel G'.Adj] :
+instance instDecidableRel_induce_adj (s : Set V) [∀ a, Decidable (a ∈ s)] [DecidableRel G'.Adj] :
     DecidableRel (G'.induce s).Adj :=
-  fun _ _ => instDecidableAnd
+  fun _ _ ↦ instDecidableAnd
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coeInduceIso` / `coeInduceIso` 的定义
+/-- Equivalence between an induced subgraph and its corresponding simple graph. -/
+/-
+**SimpleGraph.Subgraph.coeInduceIso** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgr
+aph`。
+形式化陈述：coeInduceIso (s : Set V) (h : s subseteq G'.verts) : (G'.induce s).coe ≃g 
+G'.coe.induce {v : G'.verts | ↑v in s} where toFun
+参数：s : Set V；h : s subseteq G'.verts。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeInduceIso
-  signature: (s : Set V) (h : s subseteq G'.verts)
-  body: fun ⟨v, hv⟩ => ⟨⟨v, h hv⟩, by simp at hv; aesop⟩
-  invFun := fun ⟨v, hv⟩ => ⟨v, hv⟩
-  map_rel_iff' := by simp
-
-中文:
-定义 coeInduceIso
-  签名: (s : 集合 V) (h : s subseteq G'.verts)
-  定义体: fun ⟨v, hv⟩ => ⟨⟨v, h hv⟩, by simp at hv; aesop⟩
-  invFun := fun ⟨v, hv⟩ => ⟨v, hv⟩
-  map_rel_iff' := by simp
+--- 原说明 ---
+Equivalence between an induced subgraph and its corresponding simple graph.
 -/
-def coeInduceIso (s : Set V) (h : s subseteq G'.verts) :
-    (G'.induce s).coe ≃g G'.coe.induce {v : G'.verts | ↑v in s} where
-  toFun := fun ⟨v, hv⟩ => ⟨⟨v, h hv⟩, by simp at hv; aesop⟩
-  invFun := fun ⟨v, hv⟩ => ⟨v, hv⟩
+def coeInduceIso (s : Set V) (h : s ⊆ G'.verts) :
+    (G'.induce s).coe ≃g G'.coe.induce {v : G'.verts | ↑v ∈ s} where
+  toFun := fun ⟨v, hv⟩ ↦ ⟨⟨v, h hv⟩, by simp at hv; aesop⟩
+  invFun := fun ⟨v, hv⟩ ↦ ⟨v, hv⟩
   map_rel_iff' := by simp
 
 end Induce
 
-/--
-Definition of `deleteVerts` / `deleteVerts` 的定义
+/-- Given a subgraph and a set of vertices, delete all the vertices from the subgraph,
+if present. Any edges incident to the deleted vertices are deleted as well. -/
+/-
+**SimpleGraph.Subgraph.deleteVerts** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Subg
+raph`。
+形式化陈述：deleteVerts (G' : G.Subgraph) (s : Set V) : G.Subgraph
+参数：G' : G.Subgraph；s : Set V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation deleteVerts
-  signature: (G' : G.Subgraph) (s : Set V)
-  body: G'.induce (G'.verts \ s)
-
-中文:
-缩写 deleteVerts
-  签名: (G' : G.子图) (s : 集合 V)
-  定义体: G'.induce (G'.verts \ s)
-
-Depends on / 依赖: induce
+--- 原说明 ---
+Given a subgraph and a set of vertices, delete all the vertices from the subgrap
+h,
+if present. Any edges incident to the deleted vertices are deleted as well.
 -/
 abbrev deleteVerts (G' : G.Subgraph) (s : Set V) : G.Subgraph :=
   G'.induce (G'.verts \ s)
@@ -5536,295 +4676,295 @@ section DeleteVerts
 
 variable {G' : G.Subgraph} {s : Set V}
 
-/--
-theorem `deleteVerts_verts` / 定理 `deleteVerts_verts`
-
-English:
-theorem deleteVerts_verts
-  statement: (G'.deleteVerts s).verts = G'.verts \ s
-  proof: rfl
-
-中文:
-定理 deleteVerts_verts
-  结论: (G'.deleteVerts s).verts = G'.verts \ s
-  证明: rfl
+/-
+**SimpleGraph.Subgraph.deleteVerts_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：deleteVerts_verts : (G'.deleteVerts s).verts = G'.verts \ s
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem deleteVerts_verts : (G'.deleteVerts s).verts = G'.verts \ s :=
   rfl
-
-/--
-theorem `deleteVerts_adj` / 定理 `deleteVerts_adj`
-
-English:
-theorem deleteVerts_adj
-  given: {u v : V}
-  proof: by
-  simp [and_assoc]
-
-@[simp]
-
-中文:
-定理 deleteVerts_adj
-  条件: {u v : V}
-  证明: by
-  simp [and_assoc]
-
-@[simp]
-
-Depends on / 依赖: and_assoc
+/-
+**SimpleGraph.Subgraph.deleteVerts_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：deleteVerts_adj {u v : V} : (G'.deleteVerts s).Adj u v ↔ u in G'.verts ∧ u
+ ∉ s ∧ v in G'.verts ∧ v ∉ s ∧ G'.Adj u v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem deleteVerts_adj {u v : V} :
-    (G'.deleteVerts s).Adj u v ↔ u in G'.verts ∧ u ∉ s ∧ v in G'.verts ∧ v ∉ s ∧ G'.Adj u v := by
+    (G'.deleteVerts s).Adj u v ↔ u ∈ G'.verts ∧ u ∉ s ∧ v ∈ G'.verts ∧ v ∉ s ∧ G'.Adj u v := by
   simp [and_assoc]
 
 @[simp]
-/--
-theorem `deleteVerts_deleteVerts` / 定理 `deleteVerts_deleteVerts`
-
-English:
-theorem deleteVerts_deleteVerts
-  given: (s s' : Set V)
-  proof: by
-  ext <;> simp +contextual [not_or, and_assoc]
-
-@[simp]
-
-中文:
-定理 deleteVerts_deleteVerts
-  条件: (s s' : 集合 V)
-  证明: by
-  ext <;> simp +contextual [not_or, and_assoc]
-
-@[simp]
-
-Depends on / 依赖: and_assoc, contextual, not_or
+/-
+**SimpleGraph.Subgraph.deleteVerts_deleteVerts** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph.Subgraph`。
+形式化陈述：deleteVerts_deleteVerts (s s' : Set V) : (G'.deleteVerts s).deleteVerts s'
+ = G'.deleteVerts (s union s')
+参数：s s' : Set V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem deleteVerts_deleteVerts (s s' : Set V) :
-    (G'.deleteVerts s).deleteVerts s' = G'.deleteVerts (s union s') := by
+    (G'.deleteVerts s).deleteVerts s' = G'.deleteVerts (s ∪ s') := by
   ext <;> simp +contextual [not_or, and_assoc]
 
 @[simp]
-/--
-theorem `deleteVerts_empty` / 定理 `deleteVerts_empty`
-
-English:
-theorem deleteVerts_empty
-  statement: G'.deleteVerts ∅ = G'
-  proof: by
-  simp [deleteVerts]
-
-中文:
-定理 deleteVerts_empty
-  结论: G'.deleteVerts ∅ = G'
-  证明: by
-  simp [deleteVerts]
-
-Depends on / 依赖: deleteVerts
+/-
+**SimpleGraph.Subgraph.deleteVerts_empty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：deleteVerts_empty : G'.deleteVerts ∅ = G'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_empty`：sdiff_empty {s : Set α} : s \ ∅ = s
+· 使用定理 `SimpleGraph.Subgraph.induce_self_verts`：induce_self_verts : G'.induce G'
+.verts = G'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem deleteVerts_empty : G'.deleteVerts ∅ = G' := by
   simp [deleteVerts]
-
-/--
-theorem `deleteVerts_le` / 定理 `deleteVerts_le`
-
-English:
-theorem deleteVerts_le
-  statement: G'.deleteVerts s <= G'
-  proof: by
-  constructor <;> simp
-
-@[gcongr, mono]
-
-中文:
-定理 deleteVerts_le
-  结论: G'.deleteVerts s <= G'
-  证明: by
-  constructor <;> simp
-
-@[gcongr, mono]
+/-
+**SimpleGraph.Subgraph.deleteVerts_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Sub
+graph`。
+形式化陈述：deleteVerts_le : G'.deleteVerts s <= G'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem deleteVerts_le : G'.deleteVerts s <= G' := by
+theorem deleteVerts_le : G'.deleteVerts s ≤ G' := by
   constructor <;> simp
 
 @[gcongr, mono]
-/--
-theorem `deleteVerts_mono` / 定理 `deleteVerts_mono`
-
-English:
-theorem deleteVerts_mono
-  given: {G' G'' : G.Subgraph} (h : G' <= G'')
-  proof: induce_mono h (Set.sdiff_subset_sdiff_left h.1)
-
-中文:
-定理 deleteVerts_mono
-  条件: {G' G'' : G.子图} (h : G' <= G'')
-  证明: induce_mono h (Set.sdiff_subset_sdiff_left h.1)
-
-Depends on / 依赖: Set.sdiff_subset_sdiff_left, induce_mono, sdiff_subset_sdiff_left
+/-
+**SimpleGraph.Subgraph.deleteVerts_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：deleteVerts_mono {G' G'' : G.Subgraph} (h : G' <= G'') : G'.deleteVerts s 
+<= G''.deleteVerts s
+参数：h : G' <= G''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.induce_mono`：induce_mono (hg : G' <= G'') (hs : s s
+ubseteq s') : G'.induce s <= G''.induce s'
+· 使用定理 `Set.sdiff_subset_sdiff_left`：sdiff_subset_sdiff_left {s₁ s₂ t : Set α} (
+h : s₁ subseteq s₂) : s₁ \ t subseteq s₂ \ t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem deleteVerts_mono {G' G'' : G.Subgraph} (h : G' <= G'') :
-    G'.deleteVerts s <= G''.deleteVerts s :=
+theorem deleteVerts_mono {G' G'' : G.Subgraph} (h : G' ≤ G'') :
+    G'.deleteVerts s ≤ G''.deleteVerts s :=
   induce_mono h (Set.sdiff_subset_sdiff_left h.1)
 
 set_option backward.isDefEq.respectTransparency false in
 @[mono]
-/--
-lemma `deleteVerts_mono'` / 引理 `deleteVerts_mono'`
-
-English:
-lemma deleteVerts_mono'
-  given: {G' : SimpleGraph V} (u : Set V) (h : G <= G')
-  proof: by
-  intro v w hvw
-  aesop
-
-@[gcongr, mono]
-
-中文:
-引理 deleteVerts_mono'
-  条件: {G' : 简单图 V} (u : 集合 V) (h : G <= G')
-  证明: by
-  intro v w hvw
-  aesop
-
-@[gcongr, mono]
+/-
+**SimpleGraph.Subgraph.deleteVerts_mono'** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：deleteVerts_mono' {G' : SimpleGraph V} (u : Set V) (h : G <= G') : ((⊤ : S
+ubgraph G).deleteVerts u).coe <= ((⊤ : Subgraph G').deleteVerts u).coe
+参数：u : Set V；h : G <= G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
-lemma deleteVerts_mono' {G' : SimpleGraph V} (u : Set V) (h : G <= G') :
-    ((⊤ : Subgraph G).deleteVerts u).coe <= ((⊤ : Subgraph G').deleteVerts u).coe := by
+lemma deleteVerts_mono' {G' : SimpleGraph V} (u : Set V) (h : G ≤ G') :
+    ((⊤ : Subgraph G).deleteVerts u).coe ≤ ((⊤ : Subgraph G').deleteVerts u).coe := by
   intro v w hvw
   aesop
 
 @[gcongr, mono]
-/--
-theorem `deleteVerts_anti` / 定理 `deleteVerts_anti`
-
-English:
-theorem deleteVerts_anti
-  given: {s s' : Set V} (h : s subseteq s')
-  statement: G'.deleteVerts s' <= G'.deleteVerts s
-  proof: induce_mono (le_refl _) (Set.sdiff_subset_sdiff_right h)
-
-@[simp]
-
-中文:
-定理 deleteVerts_anti
-  条件: {s s' : 集合 V} (h : s subseteq s')
-  结论: G'.deleteVerts s' <= G'.deleteVerts s
-  证明: induce_mono (le_refl _) (Set.sdiff_subset_sdiff_right h)
-
-@[simp]
-
-Depends on / 依赖: Set.sdiff_subset_sdiff_right, induce_mono, le_refl, sdiff_subset_sdiff_right
+/-
+**SimpleGraph.Subgraph.deleteVerts_anti** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.S
+ubgraph`。
+形式化陈述：deleteVerts_anti {s s' : Set V} (h : s subseteq s') : G'.deleteVerts s' <=
+ G'.deleteVerts s
+参数：h : s subseteq s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.induce_mono`：induce_mono (hg : G' <= G'') (hs : s s
+ubseteq s') : G'.induce s <= G''.induce s'
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Set.sdiff_subset_sdiff_right`：sdiff_subset_sdiff_right {s t u : Set α} (
+h : t subseteq u) : s \ u subseteq s \ t
 -/
-theorem deleteVerts_anti {s s' : Set V} (h : s subseteq s') : G'.deleteVerts s' <= G'.deleteVerts s :=
+theorem deleteVerts_anti {s s' : Set V} (h : s ⊆ s') : G'.deleteVerts s' ≤ G'.deleteVerts s :=
   induce_mono (le_refl _) (Set.sdiff_subset_sdiff_right h)
 
 @[simp]
-/--
-theorem `deleteVerts_inter_verts_left_eq` / 定理 `deleteVerts_inter_verts_left_eq`
-
-English:
-theorem deleteVerts_inter_verts_left_eq
-  statement: G'.deleteVerts (G'.verts inter s) = G'.deleteVerts s
-  proof: by
-  ext <;> simp +contextual
-
-@[simp]
-
-中文:
-定理 deleteVerts_inter_verts_left_eq
-  结论: G'.deleteVerts (G'.verts inter s) = G'.deleteVerts s
-  证明: by
-  ext <;> simp +contextual
-
-@[simp]
-
-Depends on / 依赖: _le_iff, contextual
+/-
+**SimpleGraph.Subgraph.deleteVerts_inter_verts_left_eq** 是 Mathlib 中的一个定理，位于命名空间
+ `SimpleGraph.Subgraph`。
+形式化陈述：deleteVerts_inter_verts_left_eq : G'.deleteVerts (G'.verts inter s) = G'.d
+eleteVerts s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `Set.sdiff_self_inter`：sdiff_self_inter {s t : Set α} : s \ (s inter t) =
+ s \ t
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
 -/
-theorem deleteVerts_inter_verts_left_eq : G'.deleteVerts (G'.verts inter s) = G'.deleteVerts s := by
+theorem deleteVerts_inter_verts_left_eq : G'.deleteVerts (G'.verts ∩ s) = G'.deleteVerts s := by
   ext <;> simp +contextual
 
 @[simp]
-/--
-theorem `deleteVerts_inter_verts_set_right_eq` / 定理 `deleteVerts_inter_verts_set_right_eq`
-
-English:
-theorem deleteVerts_inter_verts_set_right_eq
-  proof: by
-  ext <;> simp +contextual
-
-中文:
-定理 deleteVerts_inter_verts_set_right_eq
-  证明: by
-  ext <;> simp +contextual
-
-Depends on / 依赖: _image, _product_left, contextual
+/-
+**SimpleGraph.Subgraph.deleteVerts_inter_verts_set_right_eq** 是 Mathlib 中的一个定理，位
+于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：deleteVerts_inter_verts_set_right_eq : G'.deleteVerts (s inter G'.verts) =
+ G'.deleteVerts s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `Set.sdiff_inter_self_eq_sdiff`：sdiff_inter_self_eq_sdiff {s t : Set α} :
+ s \ (t inter s) = s \ t
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
 -/
 theorem deleteVerts_inter_verts_set_right_eq :
-    G'.deleteVerts (s inter G'.verts) = G'.deleteVerts s := by
+    G'.deleteVerts (s ∩ G'.verts) = G'.deleteVerts s := by
   ext <;> simp +contextual
-
-/--
-Instance `instDecidableRel_deleteVerts_adj` / 实例 `instDecidableRel_deleteVerts_adj`
-
-English:
-instance instDecidableRel_deleteVerts_adj
-  signature: (u : Set V) [r : DecidableRel G.Adj]
-  body: fun x y =>
-    if h : G.Adj x y
-    then
-.isTrue SimpleGraph.Subgraph.Adj.coe Subgraph.deleteVerts_adj.mpr
-        ⟨by trivial, x.2.2, by trivial, y.2.2, h⟩
-    else
-.isFalse fun hadj => h Subgraph.coe_adj_sub _ _ _ hadj
-
-中文:
-实例 instDecidableRel_deleteVerts_adj
-  签名: (u : 集合 V) [r : DecidableRel G.伴随]
-  定义体: fun x y =>
-    if h : G.Adj x y
-    then
-.isTrue SimpleGraph.Subgraph.Adj.coe Subgraph.deleteVerts_adj.mpr
-        ⟨by trivial, x.2.2, by trivial, y.2.2, h⟩
-    else
-.isFalse fun hadj => h Subgraph.coe_adj_sub _ _ _ hadj
-
-Depends on / 依赖: G.Adj, SimpleGraph, SimpleGraph.Subgraph.Adj.coe, Subgraph, Subgraph.coe_adj_sub, Subgraph.deleteVerts_adj.mpr, _image, _product_right, coe_adj_sub, deleteVerts_adj, isFalse, isTrue
+/-
+**SimpleGraph.Subgraph.instDecidableRel_deleteVerts_adj** 是 Mathlib 中的一个实例，位于命名空
+间 `SimpleGraph.Subgraph`。
+形式化陈述：instDecidableRel_deleteVerts_adj (u : Set V) [r : DecidableRel G.Adj] : De
+cidableRel ((⊤ : G.Subgraph).deleteVerts u).coe.Adj
+参数：u : Set V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDecidableRel_deleteVerts_adj (u : Set V) [r : DecidableRel G.Adj] :
     DecidableRel ((⊤ : G.Subgraph).deleteVerts u).coe.Adj :=
   fun x y =>
     if h : G.Adj x y
     then
-.isTrue SimpleGraph.Subgraph.Adj.coe Subgraph.deleteVerts_adj.mpr
+      .isTrue <| SimpleGraph.Subgraph.Adj.coe <| Subgraph.deleteVerts_adj.mpr
         ⟨by trivial, x.2.2, by trivial, y.2.2, h⟩
     else
-.isFalse fun hadj => h Subgraph.coe_adj_sub _ _ _ hadj
+      .isFalse <| fun hadj ↦ h <| Subgraph.coe_adj_sub _ _ _ hadj
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coeDeleteVertsIso` / `coeDeleteVertsIso` 的定义
+/-- Equivalence between a subgraph with deleted vertices and its corresponding simple graph. -/
+/-
+**SimpleGraph.Subgraph.coeDeleteVertsIso** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：coeDeleteVertsIso (s : Set V) : (G'.deleteVerts s).coe ≃g G'.coe.induce {v
+ : G'.verts | ↑v ∉ s} where toFun
+参数：s : Set V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeDeleteVertsIso
-  signature: (s : Set V)
-  body: fun ⟨v, hv⟩ => ⟨⟨v, Set.mem_of_mem_inter_left hv⟩, by aesop⟩
-  invFun := fun ⟨v, hv⟩ => ⟨v, by simp_all⟩
-  map_rel_iff' := by simp
-
-中文:
-定义 coeDeleteVertsIso
-  签名: (s : 集合 V)
-  定义体: fun ⟨v, hv⟩ => ⟨⟨v, Set.mem_of_mem_inter_left hv⟩, by aesop⟩
-  invFun := fun ⟨v, hv⟩ => ⟨v, by simp_all⟩
-  map_rel_iff' := by simp
-
-Depends on / 依赖: Set.mem_of_mem_inter_left, mem_of_mem_inter_left
+--- 原说明 ---
+Equivalence between a subgraph with deleted vertices and its corresponding simpl
+e graph.
 -/
 def coeDeleteVertsIso (s : Set V) :
     (G'.deleteVerts s).coe ≃g G'.coe.induce {v : G'.verts | ↑v ∉ s} where
-  toFun := fun ⟨v, hv⟩ => ⟨⟨v, Set.mem_of_mem_inter_left hv⟩, by aesop⟩
-  invFun := fun ⟨v, hv⟩ => ⟨v, by simp_all⟩
+  toFun := fun ⟨v, hv⟩ ↦ ⟨⟨v, Set.mem_of_mem_inter_left hv⟩, by aesop⟩
+  invFun := fun ⟨v, hv⟩ ↦ ⟨v, by simp_all⟩
   map_rel_iff' := by simp
 
 end DeleteVerts
@@ -5832,3 +4972,4 @@ end DeleteVerts
 end Subgraph
 
 end SimpleGraph
+

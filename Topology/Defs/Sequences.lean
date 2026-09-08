@@ -49,155 +49,146 @@ open scoped Topology
 
 variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
 
-/--
-Definition of `seqClosure` / `seqClosure` 的定义
+/-- The sequential closure of a set `s : Set X` in a topological space `X` is the set of all `a : X`
+which arise as limit of sequences in `s`. Note that the sequential closure of a set is not
+guaranteed to be sequentially closed. -/
+/-
+**seqClosure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：seqClosure (s : Set X) : Set X
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition seqClosure
-  signature: (s : Set X)
-  body: { a | exists x : Nat -> X, (forall n : Nat, x n in s) ∧ Tendsto x atTop (𝓝 a) }
-
-中文:
-定义 seqClosure
-  签名: (s : 集合 X)
-  定义体: { a | exists x : Nat -> X, (forall n : Nat, x n in s) ∧ Tendsto x atTop (𝓝 a) }
-
-Depends on / 依赖: Tendsto
+--- 原说明 ---
+The sequential closure of a set `s : Set X` in a topological space `X` is the se
+t of all `a : X`
+which arise as limit of sequences in `s`. Note that the sequential closure of a 
+set is not
+guaranteed to be sequentially closed.
 -/
 def seqClosure (s : Set X) : Set X :=
-  { a | exists x : Nat -> X, (forall n : Nat, x n in s) ∧ Tendsto x atTop (𝓝 a) }
+  { a | ∃ x : ℕ → X, (∀ n : ℕ, x n ∈ s) ∧ Tendsto x atTop (𝓝 a) }
 
-/--
-Definition of `IsSeqClosed` / `IsSeqClosed` 的定义
+/-- A set `s` is sequentially closed if for any converging sequence `x n` of elements of `s`, the
+limit belongs to `s` as well. Note that the sequential closure of a set is not guaranteed to be
+sequentially closed. -/
+/-
+**IsSeqClosed** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsSeqClosed (s : Set X) : Prop
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSeqClosed
-  signature: (s : Set X)
-  body: forall ⦃x : Nat -> X⦄ ⦃p : X⦄, (forall n, x n in s) -> Tendsto x atTop (𝓝 p) -> p in s
-
-中文:
-定义 IsSeqClosed
-  签名: (s : 集合 X)
-  定义体: forall ⦃x : Nat -> X⦄ ⦃p : X⦄, (forall n, x n in s) -> Tendsto x atTop (𝓝 p) -> p in s
-
-Depends on / 依赖: Tendsto
+--- 原说明 ---
+A set `s` is sequentially closed if for any converging sequence `x n` of element
+s of `s`, the
+limit belongs to `s` as well. Note that the sequential closure of a set is not g
+uaranteed to be
+sequentially closed.
 -/
 def IsSeqClosed (s : Set X) : Prop :=
-  forall ⦃x : Nat -> X⦄ ⦃p : X⦄, (forall n, x n in s) -> Tendsto x atTop (𝓝 p) -> p in s
+  ∀ ⦃x : ℕ → X⦄ ⦃p : X⦄, (∀ n, x n ∈ s) → Tendsto x atTop (𝓝 p) → p ∈ s
 
-/--
-Definition of `SeqContinuous` / `SeqContinuous` 的定义
+/-- A function between topological spaces is sequentially continuous if it commutes with limit of
+convergent sequences. -/
+/-
+**SeqContinuous** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SeqContinuous (f : X -> Y) : Prop
+参数：f : X -> Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SeqContinuous
-  signature: (f : X -> Y)
-  body: forall ⦃x : Nat -> X⦄ ⦃p : X⦄, Tendsto x atTop (𝓝 p) -> Tendsto (f ∘ x) atTop (𝓝 (f p))
-
-中文:
-定义 SeqContinuous
-  签名: (f : X -> Y)
-  定义体: forall ⦃x : Nat -> X⦄ ⦃p : X⦄, Tendsto x atTop (𝓝 p) -> Tendsto (f ∘ x) atTop (𝓝 (f p))
-
-Depends on / 依赖: Tendsto
+--- 原说明 ---
+A function between topological spaces is sequentially continuous if it commutes 
+with limit of
+convergent sequences.
 -/
-def SeqContinuous (f : X -> Y) : Prop :=
-  forall ⦃x : Nat -> X⦄ ⦃p : X⦄, Tendsto x atTop (𝓝 p) -> Tendsto (f ∘ x) atTop (𝓝 (f p))
+def SeqContinuous (f : X → Y) : Prop :=
+  ∀ ⦃x : ℕ → X⦄ ⦃p : X⦄, Tendsto x atTop (𝓝 p) → Tendsto (f ∘ x) atTop (𝓝 (f p))
 
-/--
-Definition of `IsSeqCompact` / `IsSeqCompact` 的定义
+/-- A set `s` is sequentially compact if every sequence taking values in `s` has a
+converging subsequence. -/
+/-
+**IsSeqCompact** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsSeqCompact (s : Set X)
+参数：s : Set X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSeqCompact
-  signature: (s : Set X)
-  body: forall ⦃x : Nat -> X⦄, (forall n, x n in s) -> exists a in s, exists φ : Nat -> Nat, StrictMono φ ∧ Tendsto (x ∘ φ) atTop (𝓝 a)
-
-中文:
-定义 IsSeqCompact
-  签名: (s : 集合 X)
-  定义体: forall ⦃x : Nat -> X⦄, (forall n, x n in s) -> exists a in s, exists φ : Nat -> Nat, StrictMono φ ∧ Tendsto (x ∘ φ) atTop (𝓝 a)
-
-Depends on / 依赖: StrictMono, Tendsto
+--- 原说明 ---
+A set `s` is sequentially compact if every sequence taking values in `s` has a
+converging subsequence.
 -/
 def IsSeqCompact (s : Set X) :=
-  forall ⦃x : Nat -> X⦄, (forall n, x n in s) -> exists a in s, exists φ : Nat -> Nat, StrictMono φ ∧ Tendsto (x ∘ φ) atTop (𝓝 a)
+  ∀ ⦃x : ℕ → X⦄, (∀ n, x n ∈ s) → ∃ a ∈ s, ∃ φ : ℕ → ℕ, StrictMono φ ∧ Tendsto (x ∘ φ) atTop (𝓝 a)
 
 variable (X)
 
 /-- A space `X` is sequentially compact if every sequence in `X` has a
 converging subsequence. -/
 @[mk_iff]
-/--
-Definition of `SeqCompactSpace` / `SeqCompactSpace` 的定义
+/-
+**SeqCompactSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SeqCompactSpace
-  parameters: : Prop where
-  axioms and operations (1):
-    - isSeqCompact_univ : IsSeqCompact (univ : Set X)
-
-中文:
-类 SeqCompact空间
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isSeqCompact_univ : IsSeqCompact (univ : 集合 X)
+--- 原说明 ---
+A space `X` is sequentially compact if every sequence in `X` has a
+converging subsequence.
 -/
 class SeqCompactSpace : Prop where
   isSeqCompact_univ : IsSeqCompact (univ : Set X)
 
 export SeqCompactSpace (isSeqCompact_univ)
 
-/--
-Definition of `FrechetUrysohnSpace` / `FrechetUrysohnSpace` 的定义
+/-- A topological space is called a *Fréchet-Urysohn space*, if the sequential closure of any set
+is equal to its closure. Since one of the inclusions is trivial, we require only the non-trivial one
+in the definition. -/
+/-
+**FrechetUrysohnSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FrechetUrysohnSpace
-  parameters: : Prop where
-  axioms and operations (1):
-    - closure_subset_seqClosure : forall s : Set X, closure s subseteq seqClosure s
-
-中文:
-类 FrechetUrysohn空间
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - closure_subset_seqClosure : 对任意 s : 集合 X, closure s subseteq seqClosure s
+--- 原说明 ---
+A topological space is called a *Fréchet-Urysohn space*, if the sequential closu
+re of any set
+is equal to its closure. Since one of the inclusions is trivial, we require only
+ the non-trivial one
+in the definition.
 -/
 class FrechetUrysohnSpace : Prop where
-  closure_subset_seqClosure : forall s : Set X, closure s subseteq seqClosure s
+  closure_subset_seqClosure : ∀ s : Set X, closure s ⊆ seqClosure s
 
-/--
-Definition of `SequentialSpace` / `SequentialSpace` 的定义
+/-- A topological space is said to be a *sequential space* if any sequentially closed set in this
+space is closed. This condition is weaker than being a Fréchet-Urysohn space. -/
+/-
+**SequentialSpace** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：SequentialSpace : Prop where isClosed_of_seq : forall s : Set X, IsSeqClos
+ed s -> IsClosed s  variable {X}  /-- In a sequential space, a sequentially clos
+ed set is closed. -/ protected theorem IsSeqClosed.isClosed [SequentialSpace X] 
+{s : Set X} (hs : IsSeqClosed s) : IsClosed s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SequentialSpace
-  parameters: : Prop where
-  axioms and operations (1):
-    - isClosed_of_seq : forall s : Set X, IsSeqClosed s -> IsClosed s
-
-中文:
-类 Sequential空间
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isClosed_of_seq : 对任意 s : 集合 X, IsSeqClosed s -> 是闭集 s
-
-Depends on / 依赖: SequentialSpace, SequentialSpace.isClosed_of_seq, isClosed_of_seq
+--- 原说明 ---
+A topological space is said to be a *sequential space* if any sequentially close
+d set in this
+space is closed. This condition is weaker than being a Fréchet-Urysohn space.
 -/
 class SequentialSpace : Prop where
-  isClosed_of_seq : forall s : Set X, IsSeqClosed s -> IsClosed s
+  isClosed_of_seq : ∀ s : Set X, IsSeqClosed s → IsClosed s
 
 variable {X}
 
-/--
-theorem `IsSeqClosed.isClosed` / 定理 `IsSeqClosed.isClosed`
+/-- In a sequential space, a sequentially closed set is closed. -/
+/-
+**IsSeqClosed.isClosed** 是 Mathlib 中的一个定理，位于命名空间 `IsSeqClosed`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] [SequentialSpace X] {s : Set 
+X}, IsSeqClosed s → IsClosed s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SequentialSpace.isClosed_of_seq`：∀ {X : Type u_1} {inst : TopologicalSpa
+ce X} [self : SequentialSpace X] (s : Set X), IsSeqClosed s → IsClosed s
 
-English:
-theorem IsSeqClosed.isClosed
-  given: [SequentialSpace X] {s : Set X} (hs : IsSeqClosed s)
-  proof: SequentialSpace.isClosed_of_seq s hs
-
-中文:
-定理 IsSeqClosed.isClosed
-  条件: [Sequential空间 X] {s : 集合 X} (hs : IsSeqClosed s)
-  证明: SequentialSpace.isClosed_of_seq s hs
+--- 原说明 ---
+In a sequential space, a sequentially closed set is closed.
 -/
 protected theorem IsSeqClosed.isClosed [SequentialSpace X] {s : Set X} (hs : IsSeqClosed s) :
     IsClosed s :=

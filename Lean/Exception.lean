@@ -22,25 +22,20 @@ This file contains two additional methods for working with `Exception`s
 open Lean
 
 /--
-Definition of `successIfFail` / `successIfFail` 的定义
-
-English:
-definition successIfFail
-  signature: {α : Type} {M : Type -> Type} [MonadError M] [Monad M] (m : M α)
-  body: do
-  match ← tryCatch (m *> pure none) (pure ∘ some) with
-  | none => throwError "Expected an exception."
-  | some ex => return ex
-
-中文:
-定义 successIfFail
-  签名: {α : 类型} {M : 类型 -> 类型} [MonadError M] [单子 M] (m : M α)
-  定义体: do
-  match ← tryCatch (m *> pure none) (pure ∘ some) with
-  | none => throwError "Expected an exception."
-  | some ex => return ex
+A generalisation of `fail_if_success` to an arbitrary `MonadError`.
 -/
-def successIfFail {α : Type} {M : Type -> Type} [MonadError M] [Monad M] (m : M α) :
+/-
+**successIfFail** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：successIfFail {α : Type} {M : Type -> Type} [MonadError M] [Monad M] (m : 
+M α) : M Exception
+参数：m : M α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A generalisation of `fail_if_success` to an arbitrary `MonadError`.
+-/
+def successIfFail {α : Type} {M : Type → Type} [MonadError M] [Monad M] (m : M α) :
     M Exception := do
   match ← tryCatch (m *> pure none) (pure ∘ some) with
   | none => throwError "Expected an exception."
@@ -51,23 +46,30 @@ namespace Lean
 namespace Exception
 
 /--
-Definition of `isFailedToSynthesize` / `isFailedToSynthesize` 的定义
+Check if an exception is a "failed to synthesize" exception.
 
-English:
-definition isFailedToSynthesize
-  signature: (e : Exception)
-  body: do
-pure (← e.toMessageData.toString).startsWith "failed to synthesize"
+These exceptions are raised in several different places,
+and the only commonality is the prefix of the string, so that's what we look for.
+-/
+/-
+**Lean.Exception.isFailedToSynthesize** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Exception`
+。
+形式化陈述：isFailedToSynthesize (e : Exception) : IO Bool
+参数：e : Exception。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isFailedToSynthesize
-  签名: (e : Exception)
-  定义体: do
-pure (← e.toMessageData.toString).startsWith "failed to synthesize"
+--- 原说明 ---
+Check if an exception is a "failed to synthesize" exception.
+
+These exceptions are raised in several different places,
+and the only commonality is the prefix of the string, so that's what we look for
+.
 -/
 def isFailedToSynthesize (e : Exception) : IO Bool := do
-pure (← e.toMessageData.toString).startsWith "failed to synthesize"
+  pure <| (← e.toMessageData.toString).startsWith "failed to synthesize"
 
 end Exception
 
 end Lean
+

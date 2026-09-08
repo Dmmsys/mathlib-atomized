@@ -31,107 +31,94 @@ variable {C : Type*} [Category* C]
 
 section ReflectsIso
 
-/--
-Definition of `Functor.ReflectsIsomorphisms` / `Functor.ReflectsIsomorphisms` 的定义
+/-- Define what it means for a functor `F : C ⥤ D` to reflect isomorphisms: for any
+morphism `f : A ⟶ B`, if `F.map f` is an isomorphism then `f` is as well.
+Note that we do not assume or require that `F` is faithful.
+-/
+/-
+**CategoryTheory.Functor.ReflectsIsomorphisms** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {D 
+: Type u_2} → [inst_1 : CategoryTheory.Category.{v_2, u_2} D] → CategoryTheory.F
+unctor C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Functor.ReflectsIsomorphisms
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - reflects : forall {A B : C} (f : A ⟶ B) [IsIso (F.map f)], IsIso f
-
-中文:
-类 函子.反映同构
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - reflects : 对任意 {A B : C} (f : A ⟶ B) [是同构 (F.map f)], 是同构 f
+--- 原说明 ---
+Define what it means for a functor `F : C ⥤ D` to reflect isomorphisms: for any
+morphism `f : A ⟶ B`, if `F.map f` is an isomorphism then `f` is as well.
+Note that we do not assume or require that `F` is faithful.
 -/
 class Functor.ReflectsIsomorphisms (F : C ⥤ D) : Prop where
   /-- For any `f`, if `F.map f` is an iso, then so was `f`. -/
-  reflects : forall {A B : C} (f : A ⟶ B) [IsIso (F.map f)], IsIso f
+  reflects : ∀ {A B : C} (f : A ⟶ B) [IsIso (F.map f)], IsIso f
 
 attribute [to_dual self] Functor.ReflectsIsomorphisms.reflects Functor.ReflectsIsomorphisms.mk
 
-/--
-theorem `isIso_of_reflects_iso` / 定理 `isIso_of_reflects_iso`
+/-- If `F` reflects isos and `F.map f` is an iso, then `f` is an iso. -/
+/-
+**CategoryTheory.isIso_of_reflects_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：isIso_of_reflects_iso {A B : C} (f : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)] 
+[F.ReflectsIsomorphisms] : IsIso f
+参数：f : A ⟶ B；F : C ⥤ D；F.map f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ReflectsIsomorphisms.reflects`：∀ {C : Type u_1} {
+inst : CategoryTheory.Category.{v_1, u_1} C} {D : Type u_2}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} (F : Categor…
 
-English:
-theorem isIso_of_reflects_iso
-  statement: {A B : C} (f : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)]
-  proof: ReflectsIsomorphisms.reflects F f
-
-中文:
-定理 isIso_of_reflects_iso
-  结论: {A B : C} (f : A ⟶ B) (F : C ⥤ D) [是同构 (F.map f)]
-  证明: ReflectsIsomorphisms.reflects F f
-
-Depends on / 依赖: ReflectsIsomorphisms, ReflectsIsomorphisms.reflects, reflects
+--- 原说明 ---
+If `F` reflects isos and `F.map f` is an iso, then `f` is an iso.
 -/
 theorem isIso_of_reflects_iso {A B : C} (f : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)]
     [F.ReflectsIsomorphisms] : IsIso f :=
   ReflectsIsomorphisms.reflects F f
-
-/--
-lemma `isIso_iff_of_reflects_iso` / 引理 `isIso_iff_of_reflects_iso`
-
-English:
-lemma isIso_iff_of_reflects_iso
-  given: {A B : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms]
-  proof: ⟨fun _ => isIso_of_reflects_iso f F, fun _ => inferInstance⟩
-
-中文:
-引理 isIso_iff_of_reflects_iso
-  条件: {A B : C} (f : A ⟶ B) (F : C ⥤ D) [F.反映同构]
-  证明: ⟨fun _ => isIso_of_reflects_iso f F, fun _ => inferInstance⟩
-
-Depends on / 依赖: isIso_of_reflects_iso
+/-
+**CategoryTheory.isIso_iff_of_reflects_iso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：isIso_iff_of_reflects_iso {A B : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIso
+morphisms] : IsIso (F.map f) ↔ IsIso f
+参数：f : A ⟶ B；F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isIso_of_reflects_iso`：isIso_of_reflects_iso {A B : C} (f
+ : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)] [F.ReflectsIsomorphisms] : IsIso f
 -/
 lemma isIso_iff_of_reflects_iso {A B : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] :
     IsIso (F.map f) ↔ IsIso f :=
   ⟨fun _ => isIso_of_reflects_iso f F, fun _ => inferInstance⟩
-
-/--
-lemma `Functor.FullyFaithful.reflectsIsomorphisms` / 引理 `Functor.FullyFaithful.reflectsIsomorphisms`
-
-English:
-lemma Functor.FullyFaithful.reflectsIsomorphisms
-  given: {F : C ⥤ D} (hF : F.FullyFaithful)
-  proof: hF.isIso_of_isIso_map _
-
-中文:
-引理 函子.满忠实.reflectsIsomorphisms
-  条件: {F : C ⥤ D} (hF : F.满忠实)
-  证明: hF.isIso_of_isIso_map _
-
-Depends on / 依赖: hF.isIso_of_isIso_map, isIso_of_isIso_map
+/-
+**CategoryTheory.Functor.FullyFaithful.reflectsIsomorphisms** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] {F : CategoryTheory.Functo
+r C D} (hF : F.FullyFaithful),   F.ReflectsIsomorphisms
+参数：hF : F.FullyFaithful。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.isIso_of_isIso_map`：isIso_of_isIso_
+map {X Y : C} (f : X ⟶ Y) [IsIso (F.map f)] : IsIso f
 -/
 lemma Functor.FullyFaithful.reflectsIsomorphisms {F : C ⥤ D} (hF : F.FullyFaithful) :
     F.ReflectsIsomorphisms where
   reflects _ _ := hF.isIso_of_isIso_map _
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) reflectsIsomorphisms_of_full_and_faithful
     (F : C ⥤ D) [F.Full] [F.Faithful] :
     F.ReflectsIsomorphisms :=
   (Functor.FullyFaithful.ofFullyFaithful F).reflectsIsomorphisms
-
-/--
-Instance `reflectsIsomorphisms_comp` / 实例 `reflectsIsomorphisms_comp`
-
-English:
-instance reflectsIsomorphisms_comp
-  signature: (F : C ⥤ D) (G : D ⥤ E)
-  body: ⟨fun f (hf : IsIso (G.map _)) => by
-    have := isIso_of_reflects_iso (F.map f) G
-    exact isIso_of_reflects_iso f F⟩
-
-中文:
-实例 reflectsIsomorphisms_comp
-  签名: (F : C ⥤ D) (G : D ⥤ E)
-  定义体: ⟨fun f (hf : IsIso (G.map _)) => by
-    have := isIso_of_reflects_iso (F.map f) G
-    exact isIso_of_reflects_iso f F⟩
-
-Depends on / 依赖: F.map, G.map, isIso_of_reflects_iso
+/-
+**CategoryTheory.reflectsIsomorphisms_comp** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：reflectsIsomorphisms_comp (F : C ⥤ D) (G : D ⥤ E) [F.ReflectsIsomorphisms]
+ [G.ReflectsIsomorphisms] : (F ⋙ G).ReflectsIsomorphisms
+参数：F : C ⥤ D；G : D ⥤ E。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isIso_of_reflects_iso`：isIso_of_reflects_iso {A B : C} (f
+ : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)] [F.ReflectsIsomorphisms] : IsIso f
 -/
 instance reflectsIsomorphisms_comp (F : C ⥤ D) (G : D ⥤ E)
     [F.ReflectsIsomorphisms] [G.ReflectsIsomorphisms] :
@@ -141,26 +128,20 @@ instance reflectsIsomorphisms_comp (F : C ⥤ D) (G : D ⥤ E)
     exact isIso_of_reflects_iso f F⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `reflectsIsomorphisms_of_comp` / 引理 `reflectsIsomorphisms_of_comp`
-
-English:
-lemma reflectsIsomorphisms_of_comp
-  statement: (F : C ⥤ D) (G : D ⥤ E)
-  proof: by
-    rw [← isIso_iff_of_reflects_iso _ (F ⋙ G)]
-    dsimp
-    infer_instance
-
-中文:
-引理 reflectsIsomorphisms_of_comp
-  结论: (F : C ⥤ D) (G : D ⥤ E)
-  证明: by
-    rw [← isIso_iff_of_reflects_iso _ (F ⋙ G)]
-    dsimp
-    infer_instance
-
-Depends on / 依赖: infer_instance, isIso_iff_of_reflects_iso
+/-
+**CategoryTheory.reflectsIsomorphisms_of_comp** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：reflectsIsomorphisms_of_comp (F : C ⥤ D) (G : D ⥤ E) [(F ⋙ G).ReflectsIsom
+orphisms] : F.ReflectsIsomorphisms where reflects f _
+参数：F : C ⥤ D；G : D ⥤ E；F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
 -/
 lemma reflectsIsomorphisms_of_comp (F : C ⥤ D) (G : D ⥤ E)
     [(F ⋙ G).ReflectsIsomorphisms] : F.ReflectsIsomorphisms where
@@ -168,7 +149,10 @@ lemma reflectsIsomorphisms_of_comp (F : C ⥤ D) (G : D ⥤ E)
     rw [← isIso_iff_of_reflects_iso _ (F ⋙ G)]
     dsimp
     infer_instance
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : D ⥤ E) [F.ReflectsIsomorphisms] :
     ((whiskeringRight C D E).obj F).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
@@ -177,48 +161,46 @@ instance (F : D ⥤ E) [F.ReflectsIsomorphisms] :
     rw [← isIso_iff_of_reflects_iso _ F]
     change IsIso ((((whiskeringRight C D E).obj F).map f).app Z)
     infer_instance
-
-/--
-lemma `reflectsIsomorphisms_of_iso` / 引理 `reflectsIsomorphisms_of_iso`
-
-English:
-lemma reflectsIsomorphisms_of_iso
-  given: {F G : C ⥤ D} (α : F ≅ G) [F.ReflectsIsomorphisms]
-  proof: by
-    rw [← isIso_iff_of_reflects_iso _ F]; rw [← NatIso.naturality_2 α f]
-    infer_instance
-
-中文:
-引理 reflectsIsomorphisms_of_iso
-  条件: {F G : C ⥤ D} (α : F ≅ G) [F.反映同构]
-  证明: by
-    rw [← isIso_iff_of_reflects_iso _ F]; rw [← NatIso.naturality_2 α f]
-    infer_instance
-
-Depends on / 依赖: NatIso, NatIso.naturality_2, infer_instance, isIso_iff_of_reflects_iso, naturality_2
+/-
+**CategoryTheory.reflectsIsomorphisms_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory`。
+形式化陈述：reflectsIsomorphisms_of_iso {F G : C ⥤ D} (α : F ≅ G) [F.ReflectsIsomorphi
+sms] : G.ReflectsIsomorphisms where reflects f _
+参数：α : F ≅ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
+· 使用定理 `CategoryTheory.NatIso.naturality_2`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
 -/
 lemma reflectsIsomorphisms_of_iso {F G : C ⥤ D} (α : F ≅ G) [F.ReflectsIsomorphisms] :
     G.ReflectsIsomorphisms where
   reflects f _ := by
-    rw [← isIso_iff_of_reflects_iso _ F]; rw [← NatIso.naturality_2 α f]
+    rw [← isIso_iff_of_reflects_iso _ F, ← NatIso.naturality_2 α f]
     infer_instance
-
-/--
-lemma `reflectsIsomorphisms_iso_iff` / 引理 `reflectsIsomorphisms_iso_iff`
-
-English:
-lemma reflectsIsomorphisms_iso_iff
-  given: {F G : C ⥤ D} (α : F ≅ G)
-  proof: ⟨fun _ => reflectsIsomorphisms_of_iso α,
-  fun _ => reflectsIsomorphisms_of_iso α.symm⟩
-
-中文:
-引理 reflectsIsomorphisms_iso_iff
-  条件: {F G : C ⥤ D} (α : F ≅ G)
-  证明: ⟨fun _ => reflectsIsomorphisms_of_iso α,
-  fun _ => reflectsIsomorphisms_of_iso α.symm⟩
-
-Depends on / 依赖: reflectsIsomorphisms_of_iso
+/-
+**CategoryTheory.reflectsIsomorphisms_iso_iff** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：reflectsIsomorphisms_iso_iff {F G : C ⥤ D} (α : F ≅ G) : F.ReflectsIsomorp
+hisms ↔ G.ReflectsIsomorphisms
+参数：α : F ≅ G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.reflectsIsomorphisms_of_iso`：reflectsIsomorphisms_of_iso 
+{F G : C ⥤ D} (α : F ≅ G) [F.ReflectsIsomorphisms] : G.ReflectsIsomorphisms wher
+e reflects f _
 -/
 lemma reflectsIsomorphisms_iso_iff {F G : C ⥤ D} (α : F ≅ G) :
     F.ReflectsIsomorphisms ↔ G.ReflectsIsomorphisms :=
@@ -228,3 +210,4 @@ lemma reflectsIsomorphisms_iso_iff {F G : C ⥤ D} (α : F ≅ G) :
 end ReflectsIso
 
 end CategoryTheory
+

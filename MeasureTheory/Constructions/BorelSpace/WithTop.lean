@@ -32,33 +32,14 @@ namespace WithTop
 
 variable {ι : Type*} [LinearOrder ι] [TopologicalSpace ι] [OrderTopology ι]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MeasurableSpace (WithTop ι)
-  body: borel _
-
-中文:
-实例 :
-  签名: 可测空间 (WithTop ι)
-  定义体: borel _
+/-
+**WithTop.** 是 Mathlib 中的一个实例，位于命名空间 `WithTop`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MeasurableSpace (WithTop ι) := borel _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BorelSpace (WithTop ι)
-  body: ⟨rfl⟩
-
-中文:
-实例 :
-  签名: Borel空间 (WithTop ι)
-  定义体: ⟨rfl⟩
+/-
+**WithTop.** 是 Mathlib 中的一个实例，位于命名空间 `WithTop`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BorelSpace (WithTop ι) := ⟨rfl⟩
 
@@ -66,196 +47,131 @@ variable [MeasurableSpace ι] [BorelSpace ι]
 
 /-- Measurable equivalence between the non-top elements of `WithTop ι` and `ι`. -/
 noncomputable
-/--
-Definition of `MeasurableEquiv.neTopEquiv` / `MeasurableEquiv.neTopEquiv` 的定义
-
-English:
-definition MeasurableEquiv.neTopEquiv
-  signature: : { r : WithTop ι | r != ⊤ } ≃ᵐ ι
-  body: (WithTop.neTopHomeomorph ι).toMeasurableEquiv
-
-中文:
-定义 可测等价.neTopEquiv
-  签名: : { r : WithTop ι | r != ⊤ } ≃ᵐ ι
-  定义体: (WithTop.neTopHomeomorph ι).toMeasurableEquiv
-
-Depends on / 依赖: WithTop, WithTop.neTopHomeomorph, neTopHomeomorph, toMeasurableEquiv
+/-
+**WithTop.MeasurableEquiv.neTopEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithTop.Measurab
+leEquiv`。
+形式化陈述：{ι : Type u_1} →   [inst : LinearOrder ι] →     [inst_1 : TopologicalSpace
+ ι] →       [inst_2 : OrderTopology ι] → [inst_3 : MeasurableSpace ι] → [BorelSp
+ace ι] → ↑{r | r ≠ ⊤} ≃ᵐ ι
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def MeasurableEquiv.neTopEquiv : { r : WithTop ι | r != ⊤ } ≃ᵐ ι :=
+def MeasurableEquiv.neTopEquiv : { r : WithTop ι | r ≠ ⊤ } ≃ᵐ ι :=
   (WithTop.neTopHomeomorph ι).toMeasurableEquiv
-
-/--
-lemma `measurable_of_measurable_comp_coe` / 引理 `measurable_of_measurable_comp_coe`
-
-English:
-lemma measurable_of_measurable_comp_coe
-  statement: {α : Type*} {mα : MeasurableSpace α}
-  proof: measurable_of_measurable_on_compl_singleton ⊤
-    (MeasurableEquiv.neTopEquiv.symm.measurable_comp_iff.1 h)
-
-中文:
-引理 measurable_of_measurable_comp_coe
-  结论: {α : 类型} {mα : 可测空间 α}
-  证明: measurable_of_measurable_on_compl_singleton ⊤
-    (MeasurableEquiv.neTopEquiv.symm.measurable_comp_iff.1 h)
-
-Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.neTopEquiv.symm.measurable_comp_iff, measurable_comp_iff, measurable_of_measurable_on_compl_singleton, neTopEquiv
+/-
+**WithTop.measurable_of_measurable_comp_coe** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+形式化陈述：measurable_of_measurable_comp_coe {α : Type*} {mα : MeasurableSpace α} {f 
+: WithTop ι -> α} (h : Measurable fun p : ι => f p) : Measurable f
+参数：h : Measurable fun p : ι => f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_measurable_on_compl_singleton`：measurable_of_measurable_on
+_compl_singleton [MeasurableSingletonClass α] {f : α -> β} (a : α) (hf : Measura
+ble ({ x | x != a }.domRestrict f…
+· 使用定理 `OpensMeasurableSpace.toMeasurableSingletonClass`：∀ {α : Type u_1} [inst 
+: TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α] [T1S
+pace α],   MeasurableSingletonClass α
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `WithTop.instBorelSpace`：∀ {ι : Type u_1} [inst : LinearOrder ι] [inst_1 
+: TopologicalSpace ι] [inst_2 : OrderTopology ι], BorelSpace (WithTop ι)
+· 使用定理 `T5Space.toT1Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T5
+Space X], T1Space X
+· 使用定理 `OrderTopology.t5Space`：∀ {X : Type u_1} [inst : LinearOrder X] [inst_1 :
+ TopologicalSpace X] [OrderTopology X], T5Space X
+· 使用定理 `TopologicalSpace.instOrderTopologyWithTop`：∀ {ι : Type u_1} [inst : Preo
+rder ι] [inst_1 : TopologicalSpace ι] [inst_2 : OrderTopology ι], OrderTopology 
+(WithTop ι)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasurableEquiv.measurable_comp_iff`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : 
+MeasurableSpace γ] {f : β…
 -/
 lemma measurable_of_measurable_comp_coe {α : Type*} {mα : MeasurableSpace α}
-    {f : WithTop ι -> α} (h : Measurable fun p : ι => f p) :
+    {f : WithTop ι → α} (h : Measurable fun p : ι ↦ f p) :
     Measurable f :=
   measurable_of_measurable_on_compl_singleton ⊤
     (MeasurableEquiv.neTopEquiv.symm.measurable_comp_iff.1 h)
-
-/--
-lemma `measurable_untopD` / 引理 `measurable_untopD`
-
-English:
-lemma measurable_untopD
-  given: (d : ι)
-  statement: Measurable (untopD d)
-  proof: measurable_of_measurable_comp_coe measurable_id
-
-中文:
-引理 measurable_untopD
-  条件: (d : ι)
-  结论: 可测 (untopD d)
-  证明: measurable_of_measurable_comp_coe measurable_id
-
-Depends on / 依赖: measurable_id, measurable_of_measurable_comp_coe
+/-
+**WithTop.measurable_untopD** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+形式化陈述：measurable_untopD (d : ι) : Measurable (untopD d)
+参数：d : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithTop.measurable_of_measurable_comp_coe`：measurable_of_measurable_comp
+_coe {α : Type*} {mα : MeasurableSpace α} {f : WithTop ι -> α} (h : Measurable f
+un p : ι => f p) : Measurable f
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
 lemma measurable_untopD (d : ι) : Measurable (untopD d) :=
   measurable_of_measurable_comp_coe measurable_id
-
-/--
-lemma `measurable_untopA` / 引理 `measurable_untopA`
-
-English:
-lemma measurable_untopA
-  given: [Nonempty ι]
-  statement: Measurable (WithTop.untopA (α := ι))
-  proof: measurable_untopD _
-
-中文:
-引理 measurable_untopA
-  条件: [非空 ι]
-  结论: 可测 (WithTop.untopA (α := ι))
-  证明: measurable_untopD _
+/-
+**WithTop.measurable_untopA** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+形式化陈述：measurable_untopA [Nonempty ι] : Measurable (WithTop.untopA (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithTop.measurable_untopD`：measurable_untopD (d : ι) : Measurable (untop
+D d)
 -/
 lemma measurable_untopA [Nonempty ι] : Measurable (WithTop.untopA (α := ι)) :=
   measurable_untopD _
-
-/--
-lemma `measurable_coe` / 引理 `measurable_coe`
-
-English:
-lemma measurable_coe
-  statement: Measurable (fun x : ι => (x : WithTop ι))
-  proof: continuous_coe.measurable
-
-@[fun_prop]
-
-中文:
-引理 measurable_coe
-  结论: 可测 (fun x : ι => (x : WithTop ι))
-  证明: continuous_coe.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_coe, continuous_coe.measurable, measurable
+/-
+**WithTop.measurable_coe** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+形式化陈述：measurable_coe : Measurable (fun x : ι => (x : WithTop ι))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `WithTop.instBorelSpace`：∀ {ι : Type u_1} [inst : LinearOrder ι] [inst_1 
+: TopologicalSpace ι] [inst_2 : OrderTopology ι], BorelSpace (WithTop ι)
+· 使用引理 `WithTop.continuous_coe`：continuous_coe : Continuous ((↑) : ι -> WithTop 
+ι)
 -/
-lemma measurable_coe : Measurable (fun x : ι => (x : WithTop ι)) := continuous_coe.measurable
+lemma measurable_coe : Measurable (fun x : ι ↦ (x : WithTop ι)) := continuous_coe.measurable
 
 @[fun_prop]
-/--
-lemma `_root_.Measurable.withTop_coe` / 引理 `_root_.Measurable.withTop_coe`
-
-English:
-lemma _root_.Measurable.withTop_coe
-  given: {α} {mα : MeasurableSpace α} {f : α -> ι} (hf : Measurable f)
-  proof: measurable_coe.comp hf
-
-@[fun_prop]
-
-中文:
-引理 _root_.可测.withTop_coe
-  条件: {α} {mα : 可测空间 α} {f : α -> ι} (hf : 可测 f)
-  证明: measurable_coe.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_coe, measurable_coe.comp
+/-
+**WithTop._root_.Measurable.withTop_coe** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Measurable.withTop_coe {α} {mα : MeasurableSpace α} {f : α -> ι} (hf : Measurable f) :
-    Measurable (fun x => (f x : WithTop ι)) :=
+lemma _root_.Measurable.withTop_coe {α} {mα : MeasurableSpace α} {f : α → ι} (hf : Measurable f) :
+    Measurable (fun x ↦ (f x : WithTop ι)) :=
   measurable_coe.comp hf
 
 @[fun_prop]
-/--
-lemma `_root_.Measurable.untopD` / 引理 `_root_.Measurable.untopD`
-
-English:
-lemma _root_.Measurable.untopD
-  statement: {α} {mα : MeasurableSpace α} (d : ι)
-  proof: (measurable_untopD d).comp hf
-
-@[fun_prop]
-
-中文:
-引理 _root_.可测.untopD
-  结论: {α} {mα : 可测空间 α} (d : ι)
-  证明: (measurable_untopD d).comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_untopD
+/-
+**WithTop._root_.Measurable.untopD** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Measurable.untopD {α} {mα : MeasurableSpace α} (d : ι)
-    {f : α -> WithTop ι} (hf : Measurable f) :
-    Measurable (fun x => (f x).untopD d) := (measurable_untopD d).comp hf
+    {f : α → WithTop ι} (hf : Measurable f) :
+    Measurable (fun x ↦ (f x).untopD d) := (measurable_untopD d).comp hf
 
 @[fun_prop]
-/--
-lemma `_root_.Measurable.untopA` / 引理 `_root_.Measurable.untopA`
-
-English:
-lemma _root_.Measurable.untopA
-  statement: {α} {mα : MeasurableSpace α} [Nonempty ι]
-  proof: hf.untopD _
-
-中文:
-引理 _root_.可测.untopA
-  结论: {α} {mα : 可测空间 α} [非空 ι]
-  证明: hf.untopD _
-
-Depends on / 依赖: hf.untopD, untopD
+/-
+**WithTop._root_.Measurable.untopA** 是 Mathlib 中的一个引理，位于命名空间 `WithTop`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Measurable.untopA {α} {mα : MeasurableSpace α} [Nonempty ι]
-    {f : α -> WithTop ι} (hf : Measurable f) :
-    Measurable (fun x => (f x).untopA) := hf.untopD _
+    {f : α → WithTop ι} (hf : Measurable f) :
+    Measurable (fun x ↦ (f x).untopA) := hf.untopD _
 
-/--
-Definition of `measurableEquivSum` / `measurableEquivSum` 的定义
+/-- Measurable equivalence between `WithTop ι` and `ι ⊕ Unit`. -/
+/-
+**WithTop.measurableEquivSum** 是 Mathlib 中的一个定义，位于命名空间 `WithTop`。
+形式化陈述：measurableEquivSum : WithTop ι ≃ᵐ ι oplus Unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition measurableEquivSum
-  signature: : WithTop ι ≃ᵐ ι oplus Unit
-  body: { Equiv.optionEquivSumPUnit ι with
-    measurable_toFun := measurable_of_measurable_comp_coe measurable_inl
-    measurable_invFun := measurable_fun_sum measurable_coe (@measurable_const _ Unit _ _ ⊤) }
-
-中文:
-定义 measurableEquivSum
-  签名: : WithTop ι ≃ᵐ ι oplus 单元
-  定义体: { Equiv.optionEquivSumPUnit ι with
-    measurable_toFun := measurable_of_measurable_comp_coe measurable_inl
-    measurable_invFun := measurable_fun_sum measurable_coe (@measurable_const _ Unit _ _ ⊤) }
-
-Depends on / 依赖: Equiv.optionEquivSumPUnit, measurable_coe, measurable_const, measurable_fun_sum, measurable_inl, measurable_invFun, measurable_of_measurable_comp_coe, measurable_toFun, optionEquivSumPUnit
+--- 原说明 ---
+Measurable equivalence between `WithTop ι` and `ι ⊕ Unit`.
 -/
-def measurableEquivSum : WithTop ι ≃ᵐ ι oplus Unit :=
+def measurableEquivSum : WithTop ι ≃ᵐ ι ⊕ Unit :=
   { Equiv.optionEquivSumPUnit ι with
     measurable_toFun := measurable_of_measurable_comp_coe measurable_inl
     measurable_invFun := measurable_fun_sum measurable_coe (@measurable_const _ Unit _ _ ⊤) }
 
 end WithTop
+

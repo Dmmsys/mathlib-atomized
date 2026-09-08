@@ -43,84 +43,56 @@ variable {L : Language} {M : Type*} [L.Structure M]
 
 namespace Substructure
 
-/--
-Definition of `FG` / `FG` 的定义
+/-- A substructure of `M` is finitely generated if it is the closure of a finite subset of `M`. -/
+/-
+**FirstOrder.Language.Substructure.FG** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder.Lang
+uage.Substructure`。
+形式化陈述：FG (N : L.Substructure M) : Prop
+参数：N : L.Substructure M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FG
-  signature: (N : L.Substructure M)
-  body: exists S : Finset M, closure L S = N
-
-中文:
-定义 FG
-  签名: (N : L.子结构 M)
-  定义体: exists S : Finset M, closure L S = N
-
-Depends on / 依赖: Finset, closure
+--- 原说明 ---
+A substructure of `M` is finitely generated if it is the closure of a finite sub
+set of `M`.
 -/
 def FG (N : L.Substructure M) : Prop :=
-  exists S : Finset M, closure L S = N
-
-/--
-theorem `fg_def` / 定理 `fg_def`
-
-English:
-theorem fg_def
-  given: {N : L.Substructure M}
-  statement: N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N
-  proof: ⟨fun ⟨t, h⟩ => ⟨_, Finset.finite_toSet t, h⟩, by
-    rintro ⟨t', h, rfl⟩
-    rcases Finite.exists_finset_coe h with ⟨t, rfl⟩
-    exact ⟨t, rfl⟩⟩
-
-中文:
-定理 fg_def
-  条件: {N : L.子结构 M}
-  结论: N.FG ↔ 存在 S : 集合 M, S.有限 ∧ closure L S = N
-  证明: ⟨fun ⟨t, h⟩ => ⟨_, Finset.finite_toSet t, h⟩, by
-    rintro ⟨t', h, rfl⟩
-    rcases Finite.exists_finset_coe h with ⟨t, rfl⟩
-    exact ⟨t, rfl⟩⟩
-
-Depends on / 依赖: Finite, Finite.exists_finset_coe, Finset, Finset.finite_toSet, exists_finset_coe, finite_toSet
+  ∃ S : Finset M, closure L S = N
+/-
+**FirstOrder.Language.Substructure.fg_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure`。
+形式化陈述：fg_def {N : L.Substructure M} : N.FG ↔ exists S : Set M, S.Finite ∧ closur
+e L S = N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Set.Finite.exists_finset_coe`：∀ {α : Type u} {s : Set α}, s.Finite → ∃ s
+', ↑s' = s
 -/
-theorem fg_def {N : L.Substructure M} : N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N :=
+theorem fg_def {N : L.Substructure M} : N.FG ↔ ∃ S : Set M, S.Finite ∧ closure L S = N :=
   ⟨fun ⟨t, h⟩ => ⟨_, Finset.finite_toSet t, h⟩, by
     rintro ⟨t', h, rfl⟩
     rcases Finite.exists_finset_coe h with ⟨t, rfl⟩
     exact ⟨t, rfl⟩⟩
-
-/--
-theorem `fg_iff_exists_fin_generating_family` / 定理 `fg_iff_exists_fin_generating_family`
-
-English:
-theorem fg_iff_exists_fin_generating_family
-  given: {N : L.Substructure M}
-  proof: by
-  rw [fg_def]
-  constructor
-  · rintro ⟨S, Sfin, hS⟩
-    obtain ⟨n, f, rfl⟩ := Sfin.fin_embedding
-    exact ⟨n, f, hS⟩
-  · rintro ⟨n, s, hs⟩
-    exact ⟨range s, finite_range s, hs⟩
-
-中文:
-定理 fg_iff_存在_fin_generating_family
-  条件: {N : L.子结构 M}
-  证明: by
-  rw [fg_def]
-  constructor
-  · rintro ⟨S, Sfin, hS⟩
-    obtain ⟨n, f, rfl⟩ := Sfin.fin_embedding
-    exact ⟨n, f, hS⟩
-  · rintro ⟨n, s, hs⟩
-    exact ⟨range s, finite_range s, hs⟩
-
-Depends on / 依赖: Sfin.fin_embedding, fg_def, fin_embedding, finite_range
+/-
+**FirstOrder.Language.Substructure.fg_iff_exists_fin_generating_family** 是 Mathl
+ib 中的一个定理，位于命名空间 `FirstOrder.Language.Substructure`。
+形式化陈述：fg_iff_exists_fin_generating_family {N : L.Substructure M} : N.FG ↔ exists
+ (n : Nat) (s : Fin n -> M), closure L (range s) = N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.fg_def`：fg_def {N : L.Substructure M} :
+ N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N
+· 使用定理 `Set.Finite.fin_embedding`：∀ {α : Type u} {s : Set α}, s.Finite → ∃ n f, 
+Set.range ⇑f = s
+· 使用定理 `Set.finite_range`：finite_range (f : ι -> α) [Finite ι] : (range f).Finit
+e
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 theorem fg_iff_exists_fin_generating_family {N : L.Substructure M} :
-    N.FG ↔ exists (n : Nat) (s : Fin n -> M), closure L (range s) = N := by
+    N.FG ↔ ∃ (n : ℕ) (s : Fin n → M), closure L (range s) = N := by
   rw [fg_def]
   constructor
   · rintro ⟨S, Sfin, hS⟩
@@ -128,164 +100,138 @@ theorem fg_iff_exists_fin_generating_family {N : L.Substructure M} :
     exact ⟨n, f, hS⟩
   · rintro ⟨n, s, hs⟩
     exact ⟨range s, finite_range s, hs⟩
-
-/--
-theorem `fg_bot` / 定理 `fg_bot`
-
-English:
-theorem fg_bot
-  statement: (⊥ : L.Substructure M).FG
-  proof: ⟨∅, by rw [Finset.coe_empty, closure_empty]⟩
-
-中文:
-定理 fg_bot
-  结论: (⊥ : L.子结构 M).FG
-  证明: ⟨∅, by rw [Finset.coe_empty, closure_empty]⟩
-
-Depends on / 依赖: Finset, Finset.coe_empty, closure_empty, coe_empty
+/-
+**FirstOrder.Language.Substructure.fg_bot** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure`。
+形式化陈述：fg_bot : (⊥ : L.Substructure M).FG
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `FirstOrder.Language.Substructure.closure_empty`：closure_empty : closure 
+L (∅ : Set M) = ⊥
 -/
 theorem fg_bot : (⊥ : L.Substructure M).FG :=
   ⟨∅, by rw [Finset.coe_empty, closure_empty]⟩
-
-/--
-Instance `instInhabited_fg` / 实例 `instInhabited_fg`
-
-English:
-instance instInhabited_fg
-  signature: : Inhabited { S : L.Substructure M // S.FG }
-  body: ⟨⊥, fg_bot⟩
-
-中文:
-实例 instInhabited_fg
-  签名: : 可居 { S : L.子结构 M // S.FG }
-  定义体: ⟨⊥, fg_bot⟩
-
-Depends on / 依赖: fg_bot
+/-
+**FirstOrder.Language.Substructure.instInhabited_fg** 是 Mathlib 中的一个实例，位于命名空间 `F
+irstOrder.Language.Substructure`。
+形式化陈述：instInhabited_fg : Inhabited { S : L.Substructure M // S.FG }
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Substructure.fg_bot`：fg_bot : (⊥ : L.Substructure M)
+.FG
 -/
 instance instInhabited_fg : Inhabited { S : L.Substructure M // S.FG } := ⟨⊥, fg_bot⟩
-
-/--
-theorem `fg_closure` / 定理 `fg_closure`
-
-English:
-theorem fg_closure
-  given: {s : Set M} (hs : s.Finite)
-  statement: FG (closure L s)
-  proof: ⟨hs.toFinset, by rw [hs.coe_toFinset]⟩
-
-中文:
-定理 fg_closure
-  条件: {s : 集合 M} (hs : s.有限)
-  结论: FG (closure L s)
-  证明: ⟨hs.toFinset, by rw [hs.coe_toFinset]⟩
-
-Depends on / 依赖: coe_toFinset, hs.coe_toFinset, hs.toFinset, toFinset
+/-
+**FirstOrder.Language.Substructure.fg_closure** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Substructure`。
+形式化陈述：fg_closure {s : Set M} (hs : s.Finite) : FG (closure L s)
+参数：hs : s.Finite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
 -/
 theorem fg_closure {s : Set M} (hs : s.Finite) : FG (closure L s) :=
   ⟨hs.toFinset, by rw [hs.coe_toFinset]⟩
-
-/--
-theorem `fg_closure_singleton` / 定理 `fg_closure_singleton`
-
-English:
-theorem fg_closure_singleton
-  given: (x : M)
-  statement: FG (closure L ({x} : Set M))
-  proof: fg_closure (finite_singleton x)
-
-中文:
-定理 fg_closure_singleton
-  条件: (x : M)
-  结论: FG (closure L ({x} : 集合 M))
-  证明: fg_closure (finite_singleton x)
-
-Depends on / 依赖: fg_closure, finite_singleton
+/-
+**FirstOrder.Language.Substructure.fg_closure_singleton** 是 Mathlib 中的一个定理，位于命名空
+间 `FirstOrder.Language.Substructure`。
+形式化陈述：fg_closure_singleton (x : M) : FG (closure L ({x} : Set M))
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Substructure.fg_closure`：fg_closure {s : Set M} (hs 
+: s.Finite) : FG (closure L s)
+· 使用定理 `Set.finite_singleton`：finite_singleton (a : α) : ({a} : Set α).Finite
 -/
 theorem fg_closure_singleton (x : M) : FG (closure L ({x} : Set M)) :=
   fg_closure (finite_singleton x)
-
-/--
-theorem `FG.sup` / 定理 `FG.sup`
-
-English:
-theorem FG.sup
-  given: {N₁ N₂ : L.Substructure M} (hN₁ : N₁.FG) (hN₂ : N₂.FG)
-  statement: (N₁ ⊔ N₂).FG
-  proof: let ⟨t₁, ht₁⟩ := fg_def.1 hN₁
-  let ⟨t₂, ht₂⟩ := fg_def.1 hN₂
-  fg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
-
-中文:
-定理 FG.上确界
-  条件: {N₁ N₂ : L.子结构 M} (hN₁ : N₁.FG) (hN₂ : N₂.FG)
-  结论: (N₁ ⊔ N₂).FG
-  证明: let ⟨t₁, ht₁⟩ := fg_def.1 hN₁
-  let ⟨t₂, ht₂⟩ := fg_def.1 hN₂
-  fg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
-
-Depends on / 依赖: closure_union, fg_def
+/-
+**FirstOrder.Language.Substructure.FG.sup** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N₁ N₂ :
+ L.Substructure M},   N₁.FG → N₂.FG → (N₁ ⊔ N₂).FG
+参数：N₁ ⊔ N₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Substructure.fg_def`：fg_def {N : L.Substructure M} :
+ N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.closure_union`：closure_union (s t : Set
+ M) : closure L (s union t) = closure L s ⊔ closure L t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem FG.sup {N₁ N₂ : L.Substructure M} (hN₁ : N₁.FG) (hN₂ : N₂.FG) : (N₁ ⊔ N₂).FG :=
   let ⟨t₁, ht₁⟩ := fg_def.1 hN₁
   let ⟨t₂, ht₂⟩ := fg_def.1 hN₂
-  fg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
-
-/--
-theorem `FG.map` / 定理 `FG.map`
-
-English:
-theorem FG.map
-  given: {N : Type*} [L.Structure N] (f : M ->[L] N) {s : L.Substructure M} (hs : s.FG)
-  proof: let ⟨t, ht⟩ := fg_def.1 hs
-  fg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
-
-中文:
-定理 FG.map
-  条件: {N : 类型} [L.结构 N] (f : M ->[L] N) {s : L.子结构 M} (hs : s.FG)
-  证明: let ⟨t, ht⟩ := fg_def.1 hs
-  fg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
-
-Depends on / 依赖: closure_image, fg_def
+  fg_def.2 ⟨t₁ ∪ t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
+/-
+**FirstOrder.Language.Substructure.FG.map** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N]   (f : L.Hom M N) {s : L.Substructure M}, s.FG →
+ (FirstOrder.Language.Substructure.map f s).FG
+参数：f : L.Hom M N；FirstOrder.Language.Substructure.map f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Substructure.fg_def`：fg_def {N : L.Substructure M} :
+ N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Finite.image`：∀ {α : Type u} {β : Type v} {s : Set α} (f : α → β), s
+.Finite → (f '' s).Finite
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.closure_image`：closure_image (f : M ->[
+L] N) : closure L (f '' s) = map f (closure L s)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem FG.map {N : Type*} [L.Structure N] (f : M ->[L] N) {s : L.Substructure M} (hs : s.FG) :
+theorem FG.map {N : Type*} [L.Structure N] (f : M →[L] N) {s : L.Substructure M} (hs : s.FG) :
     (s.map f).FG :=
   let ⟨t, ht⟩ := fg_def.1 hs
   fg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
-
-/--
-theorem `FG.of_map_embedding` / 定理 `FG.of_map_embedding`
-
-English:
-theorem FG.of_map_embedding
-  statement: {N : Type*} [L.Structure N] (f : M ↪[L] N) {s : L.Substructure M}
-  proof: by
-  rcases hs with ⟨t, h⟩
-  rw [fg_def]
-  refine ⟨f ⁻¹' t, t.finite_toSet.preimage f.injective.injOn, ?_⟩
-  have hf : Function.Injective f.toHom := f.injective
-  refine map_injective_of_injective hf ?_
-  rw [← h]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
-  intro x hx
-  have h' := subset_closure (L := L) hx
-  rw [h] at h'
-  exact Hom.map_le_range h'
-
-中文:
-定理 FG.of_map_embedding
-  结论: {N : 类型} [L.结构 N] (f : M ↪[L] N) {s : L.子结构 M}
-  证明: by
-  rcases hs with ⟨t, h⟩
-  rw [fg_def]
-  refine ⟨f ⁻¹' t, t.finite_toSet.preimage f.injective.injOn, ?_⟩
-  have hf : Function.Injective f.toHom := f.injective
-  refine map_injective_of_injective hf ?_
-  rw [← h]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
-  intro x hx
-  have h' := subset_closure (L := L) hx
-  rw [h] at h'
-  exact Hom.map_le_range h'
-
-Depends on / 依赖: Embedding, Embedding.coe_toHom, Function, Function.Injective, Hom.map_le_range, Injective, coe_toHom, f.injective, f.injective.injOn, f.toHom, fg_def, finite_toSet, image_preimage_eq_of_subset, injective, map_closure, map_injective_of_injective, map_le_range, preimage, subset_closure, t.finite_toSet.preimage
+/-
+**FirstOrder.Language.Substructure.FG.of_map_embedding** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.Substructure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N]   (f : L.Embedding M N) {s : L.Substructure M}, 
+(FirstOrder.Language.Substructure.map f.toHom s).FG → s.FG
+参数：f : L.Embedding M N；FirstOrder.Language.Substructure.map f.toHom s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.fg_def`：fg_def {N : L.Substructure M} :
+ N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N
+· 使用定理 `Set.Finite.preimage`：∀ {α : Type u} {β : Type v} {f : α → β} {s : Set β}
+, Set.InjOn f (f ⁻¹' s) → s.Finite → (f ⁻¹' s).Finite
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `FirstOrder.Language.Embedding.injective`：injective (f : M ↪[L] N) : Func
+tion.Injective f
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `FirstOrder.Language.Substructure.map_injective_of_injective`：map_injecti
+ve_of_injective : Function.Injective (map f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Substructure.map_closure`：map_closure (f : M ->[L] N
+) (s : Set M) : (closure L s).map f = closure L (f '' s)
+· 使用定理 `FirstOrder.Language.Embedding.coe_toHom`：coe_toHom {f : M ↪[L] N} : (f.t
+oHom : M -> N) = f
+· 使用定理 `Set.image_preimage_eq_of_subset`：image_preimage_eq_of_subset {f : α -> β
+} {s : Set β} (hs : s subseteq range f) : f '' f ⁻¹' s = s
+· 使用定理 `FirstOrder.Language.Substructure.subset_closure`：subset_closure : s subs
+eteq closure L s
+· 使用定理 `FirstOrder.Language.Hom.map_le_range`：map_le_range {f : M ->[L] N} {p : 
+L.Substructure M} : map f p <= range f
 -/
 theorem FG.of_map_embedding {N : Type*} [L.Structure N] (f : M ↪[L] N) {s : L.Substructure M}
     (hs : (s.map f.toHom).FG) : s.FG := by
@@ -294,200 +240,157 @@ theorem FG.of_map_embedding {N : Type*} [L.Structure N] (f : M ↪[L] N) {s : L.
   refine ⟨f ⁻¹' t, t.finite_toSet.preimage f.injective.injOn, ?_⟩
   have hf : Function.Injective f.toHom := f.injective
   refine map_injective_of_injective hf ?_
-  rw [← h]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
+  rw [← h, map_closure, Embedding.coe_toHom, image_preimage_eq_of_subset]
   intro x hx
   have h' := subset_closure (L := L) hx
   rw [h] at h'
   exact Hom.map_le_range h'
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `FG.of_finite` / 定理 `FG.of_finite`
-
-English:
-theorem FG.of_finite
-  given: {s : L.Substructure M} [h : Finite s]
-  statement: s.FG
-  proof: ⟨Set.Finite.toFinset h, by simp only [Finite.coe_toFinset, closure_eq]⟩
-
-中文:
-定理 FG.of_finite
-  条件: {s : L.子结构 M} [h : 有限 s]
-  结论: s.FG
-  证明: ⟨Set.Finite.toFinset h, by simp only [Finite.coe_toFinset, closure_eq]⟩
-
-Depends on / 依赖: Finite, Finite.coe_toFinset, Set.Finite.toFinset, closure_eq, coe_toFinset, toFinset
+/-
+**FirstOrder.Language.Substructure.FG.of_finite** 是 Mathlib 中的一个定理，位于命名空间 `First
+Order.Language.Substructure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {s : L.S
+ubstructure M} [h : Finite ↥s], s.FG
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `FirstOrder.Language.Substructure.closure_eq`：closure_eq : closure L (S :
+ Set M) = S
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem FG.of_finite {s : L.Substructure M} [h : Finite s] : s.FG :=
   ⟨Set.Finite.toFinset h, by simp only [Finite.coe_toFinset, closure_eq]⟩
-
-/--
-theorem `FG.finite` / 定理 `FG.finite`
-
-English:
-theorem FG.finite
-  given: [L.IsRelational] {S : L.Substructure M} (h : S.FG)
-  statement: Finite S
-  proof: by
-  obtain ⟨s, rfl⟩ := h
-  have hs := s.finite_toSet
-  rw [← closure_eq_of_isRelational L (s : Set M)] at hs
-  exact hs
-
-中文:
-定理 FG.finite
-  条件: [L.IsRelational] {S : L.子结构 M} (h : S.FG)
-  结论: 有限 S
-  证明: by
-  obtain ⟨s, rfl⟩ := h
-  have hs := s.finite_toSet
-  rw [← closure_eq_of_isRelational L (s : Set M)] at hs
-  exact hs
-
-Depends on / 依赖: closure_eq_of_isRelational, finite_toSet, s.finite_toSet
+/-
+**FirstOrder.Language.Substructure.FG.finite** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrd
+er.Language.Substructure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] [L.IsRel
+ational] {S : L.Substructure M},   S.FG → Finite ↥S
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `FirstOrder.Language.Substructure.closure_eq_of_isRelational`：closure_eq_
+of_isRelational [L.IsRelational] (s : Set M) : closure L s = s
 -/
 theorem FG.finite [L.IsRelational] {S : L.Substructure M} (h : S.FG) : Finite S := by
   obtain ⟨s, rfl⟩ := h
   have hs := s.finite_toSet
   rw [← closure_eq_of_isRelational L (s : Set M)] at hs
   exact hs
-
-/--
-theorem `fg_iff_finite` / 定理 `fg_iff_finite`
-
-English:
-theorem fg_iff_finite
-  given: [L.IsRelational] {S : L.Substructure M}
-  statement: S.FG ↔ Finite S
-  proof: ⟨FG.finite, fun _ => FG.of_finite⟩
-
-中文:
-定理 fg_iff_finite
-  条件: [L.IsRelational] {S : L.子结构 M}
-  结论: S.FG ↔ 有限 S
-  证明: ⟨FG.finite, fun _ => FG.of_finite⟩
-
-Depends on / 依赖: FG.finite, FG.of_finite, finite, of_finite
+/-
+**FirstOrder.Language.Substructure.fg_iff_finite** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.Substructure`。
+形式化陈述：fg_iff_finite [L.IsRelational] {S : L.Substructure M} : S.FG ↔ Finite S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Substructure.FG.finite`：∀ {L : FirstOrder.Language} 
+{M : Type u_1} [inst : L.Structure M] [L.IsRelational] {S : L.Substructure M},  
+ S.FG → Finite ↥S
+· 使用定理 `FirstOrder.Language.Substructure.FG.of_finite`：∀ {L : FirstOrder.Languag
+e} {M : Type u_1} [inst : L.Structure M] {s : L.Substructure M} [h : Finite ↥s],
+ s.FG
 -/
 theorem fg_iff_finite [L.IsRelational] {S : L.Substructure M} : S.FG ↔ Finite S :=
   ⟨FG.finite, fun _ => FG.of_finite⟩
 
-/--
-Definition of `CG` / `CG` 的定义
+/-- A substructure of `M` is countably generated if it is the closure of a countable subset of `M`.
+-/
+/-
+**FirstOrder.Language.Substructure.CG** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder.Lang
+uage.Substructure`。
+形式化陈述：CG (N : L.Substructure M) : Prop
+参数：N : L.Substructure M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CG
-  signature: (N : L.Substructure M)
-  body: exists S : Set M, S.Countable ∧ closure L S = N
-
-中文:
-定义 CG
-  签名: (N : L.子结构 M)
-  定义体: exists S : Set M, S.Countable ∧ closure L S = N
-
-Depends on / 依赖: Countable, S.Countable, closure
+--- 原说明 ---
+A substructure of `M` is countably generated if it is the closure of a countable
+ subset of `M`.
 -/
 def CG (N : L.Substructure M) : Prop :=
-  exists S : Set M, S.Countable ∧ closure L S = N
-
-/--
-theorem `cg_def` / 定理 `cg_def`
-
-English:
-theorem cg_def
-  given: {N : L.Substructure M}
-  statement: N.CG ↔ exists S : Set M, S.Countable ∧ closure L S = N
-  proof: Iff.refl _
-
-中文:
-定理 cg_def
-  条件: {N : L.子结构 M}
-  结论: N.CG ↔ 存在 S : 集合 M, S.可数 ∧ closure L S = N
-  证明: Iff.refl _
-
-Depends on / 依赖: Iff.refl
+  ∃ S : Set M, S.Countable ∧ closure L S = N
+/-
+**FirstOrder.Language.Substructure.cg_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure`。
+形式化陈述：cg_def {N : L.Substructure M} : N.CG ↔ exists S : Set M, S.Countable ∧ clo
+sure L S = N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.refl`：∀ (a : Prop), a ↔ a
 -/
-theorem cg_def {N : L.Substructure M} : N.CG ↔ exists S : Set M, S.Countable ∧ closure L S = N :=
+theorem cg_def {N : L.Substructure M} : N.CG ↔ ∃ S : Set M, S.Countable ∧ closure L S = N :=
   Iff.refl _
-
-/--
-theorem `FG.cg` / 定理 `FG.cg`
-
-English:
-theorem FG.cg
-  given: {N : L.Substructure M} (h : N.FG)
-  statement: N.CG
-  proof: by
-  obtain ⟨s, hf, rfl⟩ := fg_def.1 h
-  exact ⟨s, hf.countable, rfl⟩
-
-中文:
-定理 FG.cg
-  条件: {N : L.子结构 M} (h : N.FG)
-  结论: N.CG
-  证明: by
-  obtain ⟨s, hf, rfl⟩ := fg_def.1 h
-  exact ⟨s, hf.countable, rfl⟩
-
-Depends on / 依赖: countable, fg_def, hf.countable
+/-
+**FirstOrder.Language.Substructure.FG.cg** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.L
+anguage.Substructure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : L.S
+ubstructure M}, N.FG → N.CG
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Substructure.fg_def`：fg_def {N : L.Substructure M} :
+ N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
 -/
 theorem FG.cg {N : L.Substructure M} (h : N.FG) : N.CG := by
   obtain ⟨s, hf, rfl⟩ := fg_def.1 h
   exact ⟨s, hf.countable, rfl⟩
-
-/--
-theorem `cg_iff_empty_or_exists_nat_generating_family` / 定理 `cg_iff_empty_or_exists_nat_generating_family`
-
-English:
-theorem cg_iff_empty_or_exists_nat_generating_family
-  given: {N : L.Substructure M}
-  proof: by
-  rw [cg_def]
-  constructor
-  · rintro ⟨S, Scount, hS⟩
-    rcases eq_empty_or_nonempty (N : Set M) with h | h
-    · exact Or.intro_left _ h
-    obtain ⟨f, h'⟩ :=
-      (Scount.union (Set.countable_singleton h.some)).exists_eq_range
-        (singleton_nonempty h.some).inr
-    refine Or.intro_right _ ⟨f, ?_⟩
-    rw [← h']; rw [closure_union]; rw [hS]; rw [sup_eq_left]; rw [closure_le]
-    exact singleton_subset_iff.2 h.some_mem
-  · intro h
-    rcases h with h | h
-    · refine ⟨∅, countable_empty, closure_eq_of_le (empty_subset _) ?_⟩
-      rw [← SetLike.coe_subset_coe]; rw [h]
-      exact empty_subset _
-    · obtain ⟨f, rfl⟩ := h
-      exact ⟨range f, countable_range _, rfl⟩
-
-中文:
-定理 cg_iff_empty_or_存在_nat_generating_family
-  条件: {N : L.子结构 M}
-  证明: by
-  rw [cg_def]
-  constructor
-  · rintro ⟨S, Scount, hS⟩
-    rcases eq_empty_or_nonempty (N : Set M) with h | h
-    · exact Or.intro_left _ h
-    obtain ⟨f, h'⟩ :=
-      (Scount.union (Set.countable_singleton h.some)).exists_eq_range
-        (singleton_nonempty h.some).inr
-    refine Or.intro_right _ ⟨f, ?_⟩
-    rw [← h']; rw [closure_union]; rw [hS]; rw [sup_eq_left]; rw [closure_le]
-    exact singleton_subset_iff.2 h.some_mem
-  · intro h
-    rcases h with h | h
-    · refine ⟨∅, countable_empty, closure_eq_of_le (empty_subset _) ?_⟩
-      rw [← SetLike.coe_subset_coe]; rw [h]
-      exact empty_subset _
-    · obtain ⟨f, rfl⟩ := h
-      exact ⟨range f, countable_range _, rfl⟩
-
-Depends on / 依赖: Or.intro_left, Or.intro_right, Scount, Scount.union, Set.countable_singleton, SetLike, cg_def, closure_eq_of_le, closure_le, closure_union, countable_empty, countable_singleton, empty_subset, eq_empty_or_nonempty, exists_eq_range, h.some, h.some_mem, intro_left, intro_right, singleton_nonempty
+/-
+**FirstOrder.Language.Substructure.cg_iff_empty_or_exists_nat_generating_family*
+* 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.Substructure`。
+形式化陈述：cg_iff_empty_or_exists_nat_generating_family {N : L.Substructure M} : N.CG
+ ↔ N = (∅ : Set M) ∨ exists s : Nat -> M, closure L (range s) = N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.cg_def`：cg_def {N : L.Substructure M} :
+ N.CG ↔ exists S : Set M, S.Countable ∧ closure L S = N
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Or.intro_left`：∀ {a : Prop} (b : Prop), a → a ∨ b
+· 使用定理 `Set.Countable.exists_eq_range`：∀ {α : Type u} {s : Set α}, s.Countable →
+ s.Nonempty → ∃ f, s = Set.range f
+· 使用定理 `Set.Countable.union`：∀ {α : Type u} {s t : Set α}, s.Countable → t.Count
+able → (s ∪ t).Countable
+· 使用定理 `Set.countable_singleton`：∀ {α : Type u} (a : α), {a}.Countable
+· 使用定理 `Set.Nonempty.inr`：∀ {α : Type u} {s t : Set α}, t.Nonempty → (s ∪ t).Non
+empty
+· 使用定理 `Set.singleton_nonempty`：singleton_nonempty (a : α) : ({a} : Set α).Nonem
+pty
+· 使用定理 `Or.intro_right`：∀ {b : Prop} (a : Prop), b → a ∨ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Substructure.closure_union`：closure_union (s t : Set
+ M) : closure L (s union t) = closure L s ⊔ closure L t
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
+· 使用定理 `FirstOrder.Language.Substructure.closure_le`：closure_le : closure L s <=
+ S ↔ s subseteq S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Set.countable_empty`：∀ {α : Type u}, ∅.Countable
+· 使用定理 `FirstOrder.Language.Substructure.closure_eq_of_le`：closure_eq_of_le (h₁ 
+: s subseteq S) (h₂ : S <= closure L s) : closure L s = S
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
+· 使用定理 `SetLike.coe_subset_coe`：∀ {A : Type u_1} {B : Type u_2} [inst : SetLike 
+A B] [inst_1 : LE A] [IsConcreteLE A B] {S T : A}, ↑S ⊆ ↑T ↔ S ≤ T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
 theorem cg_iff_empty_or_exists_nat_generating_family {N : L.Substructure M} :
-    N.CG ↔ N = (∅ : Set M) ∨ exists s : Nat -> M, closure L (range s) = N := by
+    N.CG ↔ N = (∅ : Set M) ∨ ∃ s : ℕ → M, closure L (range s) = N := by
   rw [cg_def]
   constructor
   · rintro ⟨S, Scount, hS⟩
@@ -497,154 +400,130 @@ theorem cg_iff_empty_or_exists_nat_generating_family {N : L.Substructure M} :
       (Scount.union (Set.countable_singleton h.some)).exists_eq_range
         (singleton_nonempty h.some).inr
     refine Or.intro_right _ ⟨f, ?_⟩
-    rw [← h']; rw [closure_union]; rw [hS]; rw [sup_eq_left]; rw [closure_le]
+    rw [← h', closure_union, hS, sup_eq_left, closure_le]
     exact singleton_subset_iff.2 h.some_mem
   · intro h
     rcases h with h | h
     · refine ⟨∅, countable_empty, closure_eq_of_le (empty_subset _) ?_⟩
-      rw [← SetLike.coe_subset_coe]; rw [h]
+      rw [← SetLike.coe_subset_coe, h]
       exact empty_subset _
     · obtain ⟨f, rfl⟩ := h
       exact ⟨range f, countable_range _, rfl⟩
-
-/--
-theorem `cg_bot` / 定理 `cg_bot`
-
-English:
-theorem cg_bot
-  statement: (⊥ : L.Substructure M).CG
-  proof: fg_bot.cg
-
-中文:
-定理 cg_bot
-  结论: (⊥ : L.子结构 M).CG
-  证明: fg_bot.cg
-
-Depends on / 依赖: fg_bot, fg_bot.cg
+/-
+**FirstOrder.Language.Substructure.cg_bot** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure`。
+形式化陈述：cg_bot : (⊥ : L.Substructure M).CG
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Substructure.FG.cg`：∀ {L : FirstOrder.Language} {M :
+ Type u_1} [inst : L.Structure M] {N : L.Substructure M}, N.FG → N.CG
+· 使用定理 `FirstOrder.Language.Substructure.fg_bot`：fg_bot : (⊥ : L.Substructure M)
+.FG
 -/
 theorem cg_bot : (⊥ : L.Substructure M).CG :=
   fg_bot.cg
-
-/--
-theorem `cg_closure` / 定理 `cg_closure`
-
-English:
-theorem cg_closure
-  given: {s : Set M} (hs : s.Countable)
-  statement: CG (closure L s)
-  proof: ⟨s, hs, rfl⟩
-
-中文:
-定理 cg_closure
-  条件: {s : 集合 M} (hs : s.可数)
-  结论: CG (closure L s)
-  证明: ⟨s, hs, rfl⟩
+/-
+**FirstOrder.Language.Substructure.cg_closure** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Substructure`。
+形式化陈述：cg_closure {s : Set M} (hs : s.Countable) : CG (closure L s)
+参数：hs : s.Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cg_closure {s : Set M} (hs : s.Countable) : CG (closure L s) :=
   ⟨s, hs, rfl⟩
-
-/--
-theorem `cg_closure_singleton` / 定理 `cg_closure_singleton`
-
-English:
-theorem cg_closure_singleton
-  given: (x : M)
-  statement: CG (closure L ({x} : Set M))
-  proof: (fg_closure_singleton x).cg
-
-中文:
-定理 cg_closure_singleton
-  条件: (x : M)
-  结论: CG (closure L ({x} : 集合 M))
-  证明: (fg_closure_singleton x).cg
-
-Depends on / 依赖: fg_closure_singleton
+/-
+**FirstOrder.Language.Substructure.cg_closure_singleton** 是 Mathlib 中的一个定理，位于命名空
+间 `FirstOrder.Language.Substructure`。
+形式化陈述：cg_closure_singleton (x : M) : CG (closure L ({x} : Set M))
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Substructure.FG.cg`：∀ {L : FirstOrder.Language} {M :
+ Type u_1} [inst : L.Structure M] {N : L.Substructure M}, N.FG → N.CG
+· 使用定理 `FirstOrder.Language.Substructure.fg_closure_singleton`：fg_closure_single
+ton (x : M) : FG (closure L ({x} : Set M))
 -/
 theorem cg_closure_singleton (x : M) : CG (closure L ({x} : Set M)) :=
   (fg_closure_singleton x).cg
-
-/--
-theorem `CG.sup` / 定理 `CG.sup`
-
-English:
-theorem CG.sup
-  given: {N₁ N₂ : L.Substructure M} (hN₁ : N₁.CG) (hN₂ : N₂.CG)
-  statement: (N₁ ⊔ N₂).CG
-  proof: let ⟨t₁, ht₁⟩ := cg_def.1 hN₁
-  let ⟨t₂, ht₂⟩ := cg_def.1 hN₂
-  cg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
-
-中文:
-定理 CG.上确界
-  条件: {N₁ N₂ : L.子结构 M} (hN₁ : N₁.CG) (hN₂ : N₂.CG)
-  结论: (N₁ ⊔ N₂).CG
-  证明: let ⟨t₁, ht₁⟩ := cg_def.1 hN₁
-  let ⟨t₂, ht₂⟩ := cg_def.1 hN₂
-  cg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
-
-Depends on / 依赖: cg_def, closure_union
+/-
+**FirstOrder.Language.Substructure.CG.sup** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure.CG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N₁ N₂ :
+ L.Substructure M},   N₁.CG → N₂.CG → (N₁ ⊔ N₂).CG
+参数：N₁ ⊔ N₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Substructure.cg_def`：cg_def {N : L.Substructure M} :
+ N.CG ↔ exists S : Set M, S.Countable ∧ closure L S = N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Countable.union`：∀ {α : Type u} {s t : Set α}, s.Countable → t.Count
+able → (s ∪ t).Countable
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.closure_union`：closure_union (s t : Set
+ M) : closure L (s union t) = closure L s ⊔ closure L t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem CG.sup {N₁ N₂ : L.Substructure M} (hN₁ : N₁.CG) (hN₂ : N₂.CG) : (N₁ ⊔ N₂).CG :=
   let ⟨t₁, ht₁⟩ := cg_def.1 hN₁
   let ⟨t₂, ht₂⟩ := cg_def.1 hN₂
-  cg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
-
-/--
-theorem `CG.map` / 定理 `CG.map`
-
-English:
-theorem CG.map
-  given: {N : Type*} [L.Structure N] (f : M ->[L] N) {s : L.Substructure M} (hs : s.CG)
-  proof: let ⟨t, ht⟩ := cg_def.1 hs
-  cg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
-
-中文:
-定理 CG.map
-  条件: {N : 类型} [L.结构 N] (f : M ->[L] N) {s : L.子结构 M} (hs : s.CG)
-  证明: let ⟨t, ht⟩ := cg_def.1 hs
-  cg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
-
-Depends on / 依赖: cg_def, closure_image
+  cg_def.2 ⟨t₁ ∪ t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
+/-
+**FirstOrder.Language.Substructure.CG.map** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Substructure.CG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N]   (f : L.Hom M N) {s : L.Substructure M}, s.CG →
+ (FirstOrder.Language.Substructure.map f s).CG
+参数：f : L.Hom M N；FirstOrder.Language.Substructure.map f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Substructure.cg_def`：cg_def {N : L.Substructure M} :
+ N.CG ↔ exists S : Set M, S.Countable ∧ closure L S = N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.closure_image`：closure_image (f : M ->[
+L] N) : closure L (f '' s) = map f (closure L s)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem CG.map {N : Type*} [L.Structure N] (f : M ->[L] N) {s : L.Substructure M} (hs : s.CG) :
+theorem CG.map {N : Type*} [L.Structure N] (f : M →[L] N) {s : L.Substructure M} (hs : s.CG) :
     (s.map f).CG :=
   let ⟨t, ht⟩ := cg_def.1 hs
   cg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
-
-/--
-theorem `CG.of_map_embedding` / 定理 `CG.of_map_embedding`
-
-English:
-theorem CG.of_map_embedding
-  statement: {N : Type*} [L.Structure N] (f : M ↪[L] N) {s : L.Substructure M}
-  proof: by
-  rcases hs with ⟨t, h1, h2⟩
-  rw [cg_def]
-  refine ⟨f ⁻¹' t, h1.preimage f.injective, ?_⟩
-  have hf : Function.Injective f.toHom := f.injective
-  refine map_injective_of_injective hf ?_
-  rw [← h2]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
-  intro x hx
-  have h' := subset_closure (L := L) hx
-  rw [h2] at h'
-  exact Hom.map_le_range h'
-
-中文:
-定理 CG.of_map_embedding
-  结论: {N : 类型} [L.结构 N] (f : M ↪[L] N) {s : L.子结构 M}
-  证明: by
-  rcases hs with ⟨t, h1, h2⟩
-  rw [cg_def]
-  refine ⟨f ⁻¹' t, h1.preimage f.injective, ?_⟩
-  have hf : Function.Injective f.toHom := f.injective
-  refine map_injective_of_injective hf ?_
-  rw [← h2]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
-  intro x hx
-  have h' := subset_closure (L := L) hx
-  rw [h2] at h'
-  exact Hom.map_le_range h'
-
-Depends on / 依赖: Embedding, Embedding.coe_toHom, Function, Function.Injective, Hom.map_le_range, Injective, cg_def, coe_toHom, f.injective, f.toHom, h1.preimage, image_preimage_eq_of_subset, injective, map_closure, map_injective_of_injective, map_le_range, preimage, subset_closure
+/-
+**FirstOrder.Language.Substructure.CG.of_map_embedding** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.Substructure.CG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N]   (f : L.Embedding M N) {s : L.Substructure M}, 
+(FirstOrder.Language.Substructure.map f.toHom s).CG → s.CG
+参数：f : L.Embedding M N；FirstOrder.Language.Substructure.map f.toHom s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Substructure.cg_def`：cg_def {N : L.Substructure M} :
+ N.CG ↔ exists S : Set M, S.Countable ∧ closure L S = N
+· 使用定理 `Set.Countable.preimage`：∀ {α : Type u} {β : Type v} {s : Set β}, s.Count
+able → ∀ {f : α → β}, Function.Injective f → (f ⁻¹' s).Countable
+· 使用定理 `FirstOrder.Language.Embedding.injective`：injective (f : M ↪[L] N) : Func
+tion.Injective f
+· 使用定理 `FirstOrder.Language.Substructure.map_injective_of_injective`：map_injecti
+ve_of_injective : Function.Injective (map f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Substructure.map_closure`：map_closure (f : M ->[L] N
+) (s : Set M) : (closure L s).map f = closure L (f '' s)
+· 使用定理 `FirstOrder.Language.Embedding.coe_toHom`：coe_toHom {f : M ↪[L] N} : (f.t
+oHom : M -> N) = f
+· 使用定理 `Set.image_preimage_eq_of_subset`：image_preimage_eq_of_subset {f : α -> β
+} {s : Set β} (hs : s subseteq range f) : f '' f ⁻¹' s = s
+· 使用定理 `FirstOrder.Language.Substructure.subset_closure`：subset_closure : s subs
+eteq closure L s
+· 使用定理 `FirstOrder.Language.Hom.map_le_range`：map_le_range {f : M ->[L] N} {p : 
+L.Substructure M} : map f p <= range f
 -/
 theorem CG.of_map_embedding {N : Type*} [L.Structure N] (f : M ↪[L] N) {s : L.Substructure M}
     (hs : (s.map f.toHom).CG) : s.CG := by
@@ -653,55 +532,40 @@ theorem CG.of_map_embedding {N : Type*} [L.Structure N] (f : M ↪[L] N) {s : L.
   refine ⟨f ⁻¹' t, h1.preimage f.injective, ?_⟩
   have hf : Function.Injective f.toHom := f.injective
   refine map_injective_of_injective hf ?_
-  rw [← h2]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
+  rw [← h2, map_closure, Embedding.coe_toHom, image_preimage_eq_of_subset]
   intro x hx
   have h' := subset_closure (L := L) hx
   rw [h2] at h'
   exact Hom.map_le_range h'
-
-/--
-theorem `cg_iff_countable` / 定理 `cg_iff_countable`
-
-English:
-theorem cg_iff_countable
-  given: [Countable (Σ l, L.Functions l)] {s : L.Substructure M}
-  proof: by
-  refine ⟨?_, fun h => ⟨s, h.to_set, s.closure_eq⟩⟩
-  rintro ⟨s, h, rfl⟩
-  exact h.substructure_closure L
-
-中文:
-定理 cg_iff_countable
-  条件: [可数 (Σ l, L.函数 l)] {s : L.子结构 M}
-  证明: by
-  refine ⟨?_, fun h => ⟨s, h.to_set, s.closure_eq⟩⟩
-  rintro ⟨s, h, rfl⟩
-  exact h.substructure_closure L
-
-Depends on / 依赖: closure_eq, h.substructure_closure, h.to_set, s.closure_eq, substructure_closure, to_set
+/-
+**FirstOrder.Language.Substructure.cg_iff_countable** 是 Mathlib 中的一个定理，位于命名空间 `F
+irstOrder.Language.Substructure`。
+形式化陈述：cg_iff_countable [Countable (Σ l, L.Functions l)] {s : L.Substructure M} :
+ s.CG ↔ Countable s
+参数：Σ l, L.Functions l。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.substructure_closure`：∀ (L : FirstOrder.Language) {M : Typ
+e w} [inst : L.Structure M] {s : Set M} [Countable ((l : ℕ) × L.Functions l)],  
+ s.Countable → Countable…
+· 使用定理 `Countable.to_set`：∀ {α : Type u} {s : Set α}, Countable ↑s → s.Countable
+· 使用定理 `FirstOrder.Language.Substructure.closure_eq`：closure_eq : closure L (S :
+ Set M) = S
 -/
 theorem cg_iff_countable [Countable (Σ l, L.Functions l)] {s : L.Substructure M} :
     s.CG ↔ Countable s := by
   refine ⟨?_, fun h => ⟨s, h.to_set, s.closure_eq⟩⟩
   rintro ⟨s, h, rfl⟩
   exact h.substructure_closure L
-
-/--
-theorem `cg_of_countable` / 定理 `cg_of_countable`
-
-English:
-theorem cg_of_countable
-  given: {s : L.Substructure M} [h : Countable s]
-  statement: s.CG
-  proof: ⟨s, h.to_set, s.closure_eq⟩
-
-中文:
-定理 cg_of_countable
-  条件: {s : L.子结构 M} [h : 可数 s]
-  结论: s.CG
-  证明: ⟨s, h.to_set, s.closure_eq⟩
-
-Depends on / 依赖: closure_eq, h.to_set, s.closure_eq, to_set
+/-
+**FirstOrder.Language.Substructure.cg_of_countable** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Substructure`。
+形式化陈述：cg_of_countable {s : L.Substructure M} [h : Countable s] : s.CG
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Countable.to_set`：∀ {α : Type u} {s : Set α}, Countable ↑s → s.Countable
+· 使用定理 `FirstOrder.Language.Substructure.closure_eq`：closure_eq : closure L (S :
+ Set M) = S
 -/
 theorem cg_of_countable {s : L.Substructure M} [h : Countable s] : s.CG :=
   ⟨s, h.to_set, s.closure_eq⟩
@@ -714,172 +578,141 @@ namespace Structure
 
 variable (L) (M)
 
-/--
-Definition of `FG` / `FG` 的定义
+/-- A structure is finitely generated if it is the closure of a finite subset. -/
+/-
+**FirstOrder.Language.Structure.FG** 是 Mathlib 中的一个归纳类型，位于命名空间 `FirstOrder.Langu
+age.Structure`。
+形式化陈述：(L : FirstOrder.Language) → (M : Type u_1) → [L.Structure M] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FG
-  parameters: : Prop where
-  axioms and operations (1):
-    - out : (⊤ : L.Substructure M).FG
-
-中文:
-类 FG
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out : (⊤ : L.子结构 M).FG
+--- 原说明 ---
+A structure is finitely generated if it is the closure of a finite subset.
 -/
 class FG : Prop where
   out : (⊤ : L.Substructure M).FG
 
-/--
-Definition of `CG` / `CG` 的定义
+/-- A structure is countably generated if it is the closure of a countable subset. -/
+/-
+**FirstOrder.Language.Structure.CG** 是 Mathlib 中的一个归纳类型，位于命名空间 `FirstOrder.Langu
+age.Structure`。
+形式化陈述：(L : FirstOrder.Language) → (M : Type u_1) → [L.Structure M] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CG
-  parameters: : Prop where
-  axioms and operations (1):
-    - out : (⊤ : L.Substructure M).CG
-
-中文:
-类 CG
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out : (⊤ : L.子结构 M).CG
+--- 原说明 ---
+A structure is countably generated if it is the closure of a countable subset.
 -/
 class CG : Prop where
   out : (⊤ : L.Substructure M).CG
 
 variable {L M}
-
-/--
-theorem `fg_def` / 定理 `fg_def`
-
-English:
-theorem fg_def
-  statement: FG L M ↔ (⊤ : L.Substructure M).FG
-  proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
-
-中文:
-定理 fg_def
-  结论: FG L M ↔ (⊤ : L.子结构 M).FG
-  证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
+/-
+**FirstOrder.Language.Structure.fg_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lan
+guage.Structure`。
+形式化陈述：fg_def : FG L M ↔ (⊤ : L.Substructure M).FG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Structure.FG.out`：∀ {L : FirstOrder.Language} {M : T
+ype u_1} {inst : L.Structure M} [self : FirstOrder.Language.Structure.FG L M], ⊤
+.FG
 -/
 theorem fg_def : FG L M ↔ (⊤ : L.Substructure M).FG :=
   ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
-/--
-theorem `fg_iff` / 定理 `fg_iff`
+/-- An equivalent expression of `Structure.FG` in terms of `Set.Finite` instead of `Finset`. -/
+/-
+**FirstOrder.Language.Structure.fg_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lan
+guage.Structure`。
+形式化陈述：fg_iff : FG L M ↔ exists S : Set M, S.Finite ∧ closure L S = (⊤ : L.Substr
+ucture M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Structure.fg_def`：fg_def : FG L M ↔ (⊤ : L.Substruct
+ure M).FG
+· 使用定理 `FirstOrder.Language.Substructure.fg_def`：fg_def {N : L.Substructure M} :
+ N.FG ↔ exists S : Set M, S.Finite ∧ closure L S = N
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem fg_iff
-  statement: FG L M ↔ exists S : Set M, S.Finite ∧ closure L S = (⊤ : L.Substructure M)
-  proof: by
-  rw [fg_def]; rw [Substructure.fg_def]
-
-中文:
-定理 fg_iff
-  结论: FG L M ↔ 存在 S : 集合 M, S.有限 ∧ closure L S = (⊤ : L.子结构 M)
-  证明: by
-  rw [fg_def]; rw [Substructure.fg_def]
-
-Depends on / 依赖: Substructure, Substructure.fg_def, fg_def
+--- 原说明 ---
+An equivalent expression of `Structure.FG` in terms of `Set.Finite` instead of `
+Finset`.
 -/
-theorem fg_iff : FG L M ↔ exists S : Set M, S.Finite ∧ closure L S = (⊤ : L.Substructure M) := by
-  rw [fg_def]; rw [Substructure.fg_def]
-
-/--
-theorem `FG.range` / 定理 `FG.range`
-
-English:
-theorem FG.range
-  given: {N : Type*} [L.Structure N] (h : FG L M) (f : M ->[L] N)
-  statement: f.range.FG
-  proof: by
+theorem fg_iff : FG L M ↔ ∃ S : Set M, S.Finite ∧ closure L S = (⊤ : L.Substructure M) := by
+  rw [fg_def, Substructure.fg_def]
+/-
+**FirstOrder.Language.Structure.FG.range** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.L
+anguage.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N],   FirstOrder.Language.Structure.FG L M → ∀ (f :
+ L.Hom M N), f.range.FG
+参数：f : L.Hom M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Hom.range_eq_map`：range_eq_map (f : M ->[L] N) : f.r
+ange = map f ⊤
+· 使用定理 `FirstOrder.Language.Substructure.FG.map`：∀ {L : FirstOrder.Language} {M 
+: Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structure N]   (f 
+: L.Hom M N) {s : L.Substruct…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Structure.fg_def`：fg_def : FG L M ↔ (⊤ : L.Substruct
+ure M).FG
+-/
+theorem FG.range {N : Type*} [L.Structure N] (h : FG L M) (f : M →[L] N) : f.range.FG := by
   rw [Hom.range_eq_map]
   exact (fg_def.1 h).map f
-
-中文:
-定理 FG.range
-  条件: {N : 类型} [L.结构 N] (h : FG L M) (f : M ->[L] N)
-  结论: f.range.FG
-  证明: by
-  rw [Hom.range_eq_map]
-  exact (fg_def.1 h).map f
-
-Depends on / 依赖: Hom.range_eq_map, fg_def, range_eq_map
+/-
+**FirstOrder.Language.Structure.FG.map_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N],   FirstOrder.Language.Structure.FG L M →     ∀ 
+(f : L.Hom M N), Function.Surjective ⇑f → FirstOrder.Language.Structure.FG L N
+参数：f : L.Hom M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Structure.fg_def`：fg_def : FG L M ↔ (⊤ : L.Substruct
+ure M).FG
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Hom.range_eq_top`：range_eq_top {f : M ->[L] N} : ran
+ge f = ⊤ ↔ Function.Surjective f
+· 使用定理 `FirstOrder.Language.Structure.FG.range`：∀ {L : FirstOrder.Language} {M :
+ Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structure N],   Fir
+stOrder.Language.Structure.F…
 -/
-theorem FG.range {N : Type*} [L.Structure N] (h : FG L M) (f : M ->[L] N) : f.range.FG := by
-  rw [Hom.range_eq_map]
-  exact (fg_def.1 h).map f
-
-/--
-theorem `FG.map_of_surjective` / 定理 `FG.map_of_surjective`
-
-English:
-theorem FG.map_of_surjective
-  statement: {N : Type*} [L.Structure N] (h : FG L M) (f : M ->[L] N)
-  proof: by
-  rw [← Hom.range_eq_top] at hs
-  rw [fg_def]; rw [← hs]
-  exact h.range f
-
-中文:
-定理 FG.map_of_surjective
-  结论: {N : 类型} [L.结构 N] (h : FG L M) (f : M ->[L] N)
-  证明: by
-  rw [← Hom.range_eq_top] at hs
-  rw [fg_def]; rw [← hs]
-  exact h.range f
-
-Depends on / 依赖: Hom.range_eq_top, fg_def, h.range, range_eq_top
--/
-theorem FG.map_of_surjective {N : Type*} [L.Structure N] (h : FG L M) (f : M ->[L] N)
+theorem FG.map_of_surjective {N : Type*} [L.Structure N] (h : FG L M) (f : M →[L] N)
     (hs : Function.Surjective f) : FG L N := by
   rw [← Hom.range_eq_top] at hs
-  rw [fg_def]; rw [← hs]
+  rw [fg_def, ← hs]
   exact h.range f
-
-/--
-theorem `FG.countable_hom` / 定理 `FG.countable_hom`
-
-English:
-theorem FG.countable_hom
-  given: (N : Type*) [L.Structure N] [Countable N] (h : FG L M)
-  proof: by
-  let ⟨S, finite_S, closure_S⟩ := fg_iff.1 h
-  let g : (M ->[L] N) -> (S -> N) :=
-    fun f => f ∘ (↑)
-  have g_inj : Function.Injective g := by
-    intro f f' h
-    apply Hom.eq_of_eqOn_dense closure_S
-    intro x x_in_S
-    exact congr_fun h ⟨x, x_in_S⟩
-  have : Finite ↑S := (S.finite_coe_iff).2 finite_S
-  exact Function.Embedding.countable ⟨g, g_inj⟩
-
-中文:
-定理 FG.countable_hom
-  条件: (N : 类型) [L.结构 N] [可数 N] (h : FG L M)
-  证明: by
-  let ⟨S, finite_S, closure_S⟩ := fg_iff.1 h
-  let g : (M ->[L] N) -> (S -> N) :=
-    fun f => f ∘ (↑)
-  have g_inj : Function.Injective g := by
-    intro f f' h
-    apply Hom.eq_of_eqOn_dense closure_S
-    intro x x_in_S
-    exact congr_fun h ⟨x, x_in_S⟩
-  have : Finite ↑S := (S.finite_coe_iff).2 finite_S
-  exact Function.Embedding.countable ⟨g, g_inj⟩
-
-Depends on / 依赖: Embedding, Finite, Function, Function.Embedding.countable, Function.Injective, Hom.eq_of_eqOn_dense, Injective, S.finite_coe_iff, closure_S, congr_fun, countable, eq_of_eqOn_dense, fg_iff, finite_S, finite_coe_iff, g_inj, x_in_S
+/-
+**FirstOrder.Language.Structure.FG.countable_hom** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] (N : Typ
+e u_2) [inst_1 : L.Structure N] [Countable N],   FirstOrder.Language.Structure.F
+G L M → Countable (L.Hom M N)
+参数：N : Type u_2；L.Hom M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Structure.fg_iff`：fg_iff : FG L M ↔ exists S : Set M
+, S.Finite ∧ closure L S = (⊤ : L.Substructure M)
+· 使用定理 `FirstOrder.Language.Hom.eq_of_eqOn_dense`：eq_of_eqOn_dense (hs : closure
+ L s = ⊤) {f g : M ->[L] N} (h : s.EqOn f g) : f = g
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.finite_coe_iff`：finite_coe_iff {s : Set α} : Finite s ↔ s.Finite
+· 使用定理 `Function.Embedding.countable`：∀ {α : Sort u} {β : Sort v} [Countable β] 
+(f : α ↪ β), Countable α
+· 使用定理 `instCountableForallOfFinite`：∀ {α : Sort u} {π : α → Sort w} [Finite α] 
+[∀ (a : α), Countable (π a)], Countable ((a : α) → π a)
 -/
 theorem FG.countable_hom (N : Type*) [L.Structure N] [Countable N] (h : FG L M) :
-    Countable (M ->[L] N) := by
+    Countable (M →[L] N) := by
   let ⟨S, finite_S, closure_S⟩ := fg_iff.1 h
-  let g : (M ->[L] N) -> (S -> N) :=
-    fun f => f ∘ (↑)
+  let g : (M →[L] N) → (S → N) :=
+    fun f ↦ f ∘ (↑)
   have g_inj : Function.Injective g := by
     intro f f' h
     apply Hom.eq_of_eqOn_dense closure_S
@@ -887,329 +720,277 @@ theorem FG.countable_hom (N : Type*) [L.Structure N] [Countable N] (h : FG L M) 
     exact congr_fun h ⟨x, x_in_S⟩
   have : Finite ↑S := (S.finite_coe_iff).2 finite_S
   exact Function.Embedding.countable ⟨g, g_inj⟩
-
-/--
-Instance `FG.instCountable_hom` / 实例 `FG.instCountable_hom`
-
-English:
-instance FG.instCountable_hom
-  signature: (N : Type*) [L.Structure N] [Countable N] [h : FG L M]
-  body: FG.countable_hom N h
-
-中文:
-实例 FG.instCountable_hom
-  签名: (N : 类型) [L.结构 N] [可数 N] [h : FG L M]
-  定义体: FG.countable_hom N h
-
-Depends on / 依赖: FG.countable_hom, countable_hom
+/-
+**FirstOrder.Language.Structure.FG.instCountable_hom** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] (N : Typ
+e u_2) [inst_1 : L.Structure N] [Countable N]   [h : FirstOrder.Language.Structu
+re.FG L M], Countable (L.Hom M N)
+参数：N : Type u_2；L.Hom M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Structure.FG.countable_hom`：∀ {L : FirstOrder.Langua
+ge} {M : Type u_1} [inst : L.Structure M] (N : Type u_2) [inst_1 : L.Structure N
+] [Countable N],   FirstOrder.Langua…
 -/
 instance FG.instCountable_hom (N : Type*) [L.Structure N] [Countable N] [h : FG L M] :
-    Countable (M ->[L] N) :=
+    Countable (M →[L] N) :=
   FG.countable_hom N h
-
-/--
-theorem `FG.countable_embedding` / 定理 `FG.countable_embedding`
-
-English:
-theorem FG.countable_embedding
-  given: (N : Type*) [L.Structure N] [Countable N] (_ : FG L M)
-  proof: Function.Embedding.countable ⟨Embedding.toHom, Embedding.toHom_injective⟩
-
-中文:
-定理 FG.countable_embedding
-  条件: (N : 类型) [L.结构 N] [可数 N] (_ : FG L M)
-  证明: Function.Embedding.countable ⟨Embedding.toHom, Embedding.toHom_injective⟩
-
-Depends on / 依赖: Embedding, Embedding.toHom, Embedding.toHom_injective, Function, Function.Embedding.countable, countable, toHom_injective
+/-
+**FirstOrder.Language.Structure.FG.countable_embedding** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] (N : Typ
+e u_2) [inst_1 : L.Structure N] [Countable N],   FirstOrder.Language.Structure.F
+G L M → Countable (L.Embedding M N)
+参数：N : Type u_2；L.Embedding M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Embedding.countable`：∀ {α : Sort u} {β : Sort v} [Countable β] 
+(f : α ↪ β), Countable α
+· 使用定理 `FirstOrder.Language.Structure.FG.instCountable_hom`：∀ {L : FirstOrder.La
+nguage} {M : Type u_1} [inst : L.Structure M] (N : Type u_2) [inst_1 : L.Structu
+re N] [Countable N]   [h : FirstOrder.La…
+· 使用定理 `FirstOrder.Language.Embedding.toHom_injective`：toHom_injective : @Functi
+on.Injective (M ↪[L] N) (M ->[L] N) (·.toHom)
 -/
 theorem FG.countable_embedding (N : Type*) [L.Structure N] [Countable N] (_ : FG L M) :
     Countable (M ↪[L] N) :=
   Function.Embedding.countable ⟨Embedding.toHom, Embedding.toHom_injective⟩
-
-/--
-Instance `Fg.instCountable_embedding` / 实例 `Fg.instCountable_embedding`
-
-English:
-instance Fg.instCountable_embedding
-  signature: (N : Type*) [L.Structure N]
-  body: FG.countable_embedding N h
-
-中文:
-实例 Fg.instCountable_embedding
-  签名: (N : 类型) [L.结构 N]
-  定义体: FG.countable_embedding N h
-
-Depends on / 依赖: FG.countable_embedding, countable_embedding
+/-
+**FirstOrder.Language.Structure.Fg.instCountable_embedding** 是 Mathlib 中的一个定理，位于
+命名空间 `FirstOrder.Language.Structure.Fg`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] (N : Typ
+e u_2) [inst_1 : L.Structure N] [Countable N]   [h : FirstOrder.Language.Structu
+re.FG L M], Countable (L.Embedding M N)
+参数：N : Type u_2；L.Embedding M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Structure.FG.countable_embedding`：∀ {L : FirstOrder.
+Language} {M : Type u_1} [inst : L.Structure M] (N : Type u_2) [inst_1 : L.Struc
+ture N] [Countable N],   FirstOrder.Langua…
 -/
 instance Fg.instCountable_embedding (N : Type*) [L.Structure N]
     [Countable N] [h : FG L M] : Countable (M ↪[L] N) :=
   FG.countable_embedding N h
-
-/--
-theorem `FG.of_finite` / 定理 `FG.of_finite`
-
-English:
-theorem FG.of_finite
-  given: [Finite M]
-  statement: FG L M
-  proof: by
-  simp only [fg_def, Substructure.FG.of_finite]
-
-中文:
-定理 FG.of_finite
-  条件: [有限 M]
-  结论: FG L M
-  证明: by
-  simp only [fg_def, Substructure.FG.of_finite]
+/-
+**FirstOrder.Language.Structure.FG.of_finite** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrd
+er.Language.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] [Finite 
+M], FirstOrder.Language.Structure.FG L M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem FG.of_finite [Finite M] : FG L M := by
   simp only [fg_def, Substructure.FG.of_finite]
-
-/--
-theorem `FG.finite` / 定理 `FG.finite`
-
-English:
-theorem FG.finite
-  given: [L.IsRelational] (h : FG L M)
-  statement: Finite M
-  proof: Finite.of_finite_univ (Substructure.FG.finite (fg_def.1 h))
-
-中文:
-定理 FG.finite
-  条件: [L.IsRelational] (h : FG L M)
-  结论: 有限 M
-  证明: Finite.of_finite_univ (Substructure.FG.finite (fg_def.1 h))
+/-
+**FirstOrder.Language.Structure.FG.finite** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] [L.IsRel
+ational],   FirstOrder.Language.Structure.FG L M → Finite M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_finite_univ`：∀ {α : Type u}, Set.univ.Finite → Finite α
+· 使用定理 `FirstOrder.Language.Substructure.FG.finite`：∀ {L : FirstOrder.Language} 
+{M : Type u_1} [inst : L.Structure M] [L.IsRelational] {S : L.Substructure M},  
+ S.FG → Finite ↥S
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Structure.fg_def`：fg_def : FG L M ↔ (⊤ : L.Substruct
+ure M).FG
 -/
 theorem FG.finite [L.IsRelational] (h : FG L M) : Finite M :=
   Finite.of_finite_univ (Substructure.FG.finite (fg_def.1 h))
-
-/--
-theorem `fg_iff_finite` / 定理 `fg_iff_finite`
-
-English:
-theorem fg_iff_finite
-  given: [L.IsRelational]
-  statement: FG L M ↔ Finite M
-  proof: ⟨FG.finite, fun _ => FG.of_finite⟩
-
-中文:
-定理 fg_iff_finite
-  条件: [L.IsRelational]
-  结论: FG L M ↔ 有限 M
-  证明: ⟨FG.finite, fun _ => FG.of_finite⟩
-
-Depends on / 依赖: FG.finite, FG.of_finite, finite, of_finite
+/-
+**FirstOrder.Language.Structure.fg_iff_finite** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Structure`。
+形式化陈述：fg_iff_finite [L.IsRelational] : FG L M ↔ Finite M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Structure.FG.finite`：∀ {L : FirstOrder.Language} {M 
+: Type u_1} [inst : L.Structure M] [L.IsRelational],   FirstOrder.Language.Struc
+ture.FG L M → Finite M
+· 使用定理 `FirstOrder.Language.Structure.FG.of_finite`：∀ {L : FirstOrder.Language} 
+{M : Type u_1} [inst : L.Structure M] [Finite M], FirstOrder.Language.Structure.
+FG L M
 -/
 theorem fg_iff_finite [L.IsRelational] : FG L M ↔ Finite M :=
   ⟨FG.finite, fun _ => FG.of_finite⟩
-
-/--
-theorem `cg_def` / 定理 `cg_def`
-
-English:
-theorem cg_def
-  statement: CG L M ↔ (⊤ : L.Substructure M).CG
-  proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
-
-中文:
-定理 cg_def
-  结论: CG L M ↔ (⊤ : L.子结构 M).CG
-  证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
+/-
+**FirstOrder.Language.Structure.cg_def** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lan
+guage.Structure`。
+形式化陈述：cg_def : CG L M ↔ (⊤ : L.Substructure M).CG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Structure.CG.out`：∀ {L : FirstOrder.Language} {M : T
+ype u_1} {inst : L.Structure M} [self : FirstOrder.Language.Structure.CG L M], ⊤
+.CG
 -/
 theorem cg_def : CG L M ↔ (⊤ : L.Substructure M).CG :=
   ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
-/--
-theorem `cg_iff` / 定理 `cg_iff`
+/-- An equivalent expression of `Structure.cg`. -/
+/-
+**FirstOrder.Language.Structure.cg_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lan
+guage.Structure`。
+形式化陈述：cg_iff : CG L M ↔ exists S : Set M, S.Countable ∧ closure L S = (⊤ : L.Sub
+structure M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Structure.cg_def`：cg_def : CG L M ↔ (⊤ : L.Substruct
+ure M).CG
+· 使用定理 `FirstOrder.Language.Substructure.cg_def`：cg_def {N : L.Substructure M} :
+ N.CG ↔ exists S : Set M, S.Countable ∧ closure L S = N
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem cg_iff
-  statement: CG L M ↔ exists S : Set M, S.Countable ∧ closure L S = (⊤ : L.Substructure M)
-  proof: by
-  rw [cg_def]; rw [Substructure.cg_def]
-
-中文:
-定理 cg_iff
-  结论: CG L M ↔ 存在 S : 集合 M, S.可数 ∧ closure L S = (⊤ : L.子结构 M)
-  证明: by
-  rw [cg_def]; rw [Substructure.cg_def]
-
-Depends on / 依赖: Substructure, Substructure.cg_def, cg_def
+--- 原说明 ---
+An equivalent expression of `Structure.cg`.
 -/
-theorem cg_iff : CG L M ↔ exists S : Set M, S.Countable ∧ closure L S = (⊤ : L.Substructure M) := by
-  rw [cg_def]; rw [Substructure.cg_def]
-
-/--
-theorem `CG.range` / 定理 `CG.range`
-
-English:
-theorem CG.range
-  given: {N : Type*} [L.Structure N] (h : CG L M) (f : M ->[L] N)
-  statement: f.range.CG
-  proof: by
+theorem cg_iff : CG L M ↔ ∃ S : Set M, S.Countable ∧ closure L S = (⊤ : L.Substructure M) := by
+  rw [cg_def, Substructure.cg_def]
+/-
+**FirstOrder.Language.Structure.CG.range** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.L
+anguage.Structure.CG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N],   FirstOrder.Language.Structure.CG L M → ∀ (f :
+ L.Hom M N), f.range.CG
+参数：f : L.Hom M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Hom.range_eq_map`：range_eq_map (f : M ->[L] N) : f.r
+ange = map f ⊤
+· 使用定理 `FirstOrder.Language.Substructure.CG.map`：∀ {L : FirstOrder.Language} {M 
+: Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structure N]   (f 
+: L.Hom M N) {s : L.Substruct…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Structure.cg_def`：cg_def : CG L M ↔ (⊤ : L.Substruct
+ure M).CG
+-/
+theorem CG.range {N : Type*} [L.Structure N] (h : CG L M) (f : M →[L] N) : f.range.CG := by
   rw [Hom.range_eq_map]
   exact (cg_def.1 h).map f
-
-中文:
-定理 CG.range
-  条件: {N : 类型} [L.结构 N] (h : CG L M) (f : M ->[L] N)
-  结论: f.range.CG
-  证明: by
-  rw [Hom.range_eq_map]
-  exact (cg_def.1 h).map f
-
-Depends on / 依赖: Hom.range_eq_map, cg_def, range_eq_map
+/-
+**FirstOrder.Language.Structure.CG.map_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.Structure.CG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N],   FirstOrder.Language.Structure.CG L M →     ∀ 
+(f : L.Hom M N), Function.Surjective ⇑f → FirstOrder.Language.Structure.CG L N
+参数：f : L.Hom M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Structure.cg_def`：cg_def : CG L M ↔ (⊤ : L.Substruct
+ure M).CG
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Hom.range_eq_top`：range_eq_top {f : M ->[L] N} : ran
+ge f = ⊤ ↔ Function.Surjective f
+· 使用定理 `FirstOrder.Language.Structure.CG.range`：∀ {L : FirstOrder.Language} {M :
+ Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structure N],   Fir
+stOrder.Language.Structure.C…
 -/
-theorem CG.range {N : Type*} [L.Structure N] (h : CG L M) (f : M ->[L] N) : f.range.CG := by
-  rw [Hom.range_eq_map]
-  exact (cg_def.1 h).map f
-
-/--
-theorem `CG.map_of_surjective` / 定理 `CG.map_of_surjective`
-
-English:
-theorem CG.map_of_surjective
-  statement: {N : Type*} [L.Structure N] (h : CG L M) (f : M ->[L] N)
-  proof: by
-  rw [← Hom.range_eq_top] at hs
-  rw [cg_def]; rw [← hs]
-  exact h.range f
-
-中文:
-定理 CG.map_of_surjective
-  结论: {N : 类型} [L.结构 N] (h : CG L M) (f : M ->[L] N)
-  证明: by
-  rw [← Hom.range_eq_top] at hs
-  rw [cg_def]; rw [← hs]
-  exact h.range f
-
-Depends on / 依赖: Hom.range_eq_top, cg_def, h.range, range_eq_top
--/
-theorem CG.map_of_surjective {N : Type*} [L.Structure N] (h : CG L M) (f : M ->[L] N)
+theorem CG.map_of_surjective {N : Type*} [L.Structure N] (h : CG L M) (f : M →[L] N)
     (hs : Function.Surjective f) : CG L N := by
   rw [← Hom.range_eq_top] at hs
-  rw [cg_def]; rw [← hs]
+  rw [cg_def, ← hs]
   exact h.range f
-
-/--
-theorem `cg_iff_countable` / 定理 `cg_iff_countable`
-
-English:
-theorem cg_iff_countable
-  given: [Countable (Σ l, L.Functions l)]
-  statement: CG L M ↔ Countable M
-  proof: by
-  rw [cg_def]; rw [Substructure.cg_iff_countable]; rw [topEquiv.toEquiv.countable_iff]
-
-中文:
-定理 cg_iff_countable
-  条件: [可数 (Σ l, L.函数 l)]
-  结论: CG L M ↔ 可数 M
-  证明: by
-  rw [cg_def]; rw [Substructure.cg_iff_countable]; rw [topEquiv.toEquiv.countable_iff]
-
-Depends on / 依赖: Substructure, Substructure.cg_iff_countable, cg_def, cg_iff_countable, countable_iff, toEquiv, topEquiv, topEquiv.toEquiv.countable_iff
+/-
+**FirstOrder.Language.Structure.cg_iff_countable** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.Structure`。
+形式化陈述：cg_iff_countable [Countable (Σ l, L.Functions l)] : CG L M ↔ Countable M
+参数：Σ l, L.Functions l。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Structure.cg_def`：cg_def : CG L M ↔ (⊤ : L.Substruct
+ure M).CG
+· 使用定理 `FirstOrder.Language.Substructure.cg_iff_countable`：cg_iff_countable [Cou
+ntable (Σ l, L.Functions l)] {s : L.Substructure M} : s.CG ↔ Countable s
+· 使用定理 `Equiv.countable_iff`：Equiv.countable_iff (e : α ≃ β) : Countable α ↔ Cou
+ntable β
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem cg_iff_countable [Countable (Σ l, L.Functions l)] : CG L M ↔ Countable M := by
-  rw [cg_def]; rw [Substructure.cg_iff_countable]; rw [topEquiv.toEquiv.countable_iff]
-
-/--
-theorem `cg_of_countable` / 定理 `cg_of_countable`
-
-English:
-theorem cg_of_countable
-  given: [Countable M]
-  statement: CG L M
-  proof: by
-  simp only [cg_def, Substructure.cg_of_countable]
-
-中文:
-定理 cg_of_countable
-  条件: [可数 M]
-  结论: CG L M
-  证明: by
-  simp only [cg_def, Substructure.cg_of_countable]
-
-Depends on / 依赖: Substructure, Substructure.cg_of_countable, cg_def, cg_of_countable
+  rw [cg_def, Substructure.cg_iff_countable, topEquiv.toEquiv.countable_iff]
+/-
+**FirstOrder.Language.Structure.cg_of_countable** 是 Mathlib 中的一个定理，位于命名空间 `First
+Order.Language.Structure`。
+形式化陈述：cg_of_countable [Countable M] : CG L M
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.countable`：∀ {α : Sort u} [Countable α] {p : α → Prop}, Countabl
+e { x // p x }
 -/
 theorem cg_of_countable [Countable M] : CG L M := by
   simp only [cg_def, Substructure.cg_of_countable]
-
-/--
-theorem `FG.cg` / 定理 `FG.cg`
-
-English:
-theorem FG.cg
-  given: (h : FG L M)
-  statement: CG L M
-  proof: cg_def.2 (fg_def.1 h).cg
-
-中文:
-定理 FG.cg
-  条件: (h : FG L M)
-  结论: CG L M
-  证明: cg_def.2 (fg_def.1 h).cg
+/-
+**FirstOrder.Language.Structure.FG.cg** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lang
+uage.Structure.FG`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M],   First
+Order.Language.Structure.FG L M → FirstOrder.Language.Structure.CG L M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FirstOrder.Language.Structure.cg_def`：cg_def : CG L M ↔ (⊤ : L.Substruct
+ure M).CG
+· 使用定理 `FirstOrder.Language.Substructure.FG.cg`：∀ {L : FirstOrder.Language} {M :
+ Type u_1} [inst : L.Structure M] {N : L.Substructure M}, N.FG → N.CG
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Structure.fg_def`：fg_def : FG L M ↔ (⊤ : L.Substruct
+ure M).FG
 -/
 theorem FG.cg (h : FG L M) : CG L M :=
   cg_def.2 (fg_def.1 h).cg
-
+/-
+**FirstOrder.Language.Structure.** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Language.
+Structure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) cg_of_fg [h : FG L M] : CG L M :=
   h.cg
 
 end Structure
 
-/--
-theorem `Equiv.fg_iff` / 定理 `Equiv.fg_iff`
-
-English:
-theorem Equiv.fg_iff
-  given: {N : Type*} [L.Structure N] (f : M ≃[L] N)
-  proof: ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
-    h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
-
-中文:
-定理 等价.fg_iff
-  条件: {N : 类型} [L.结构 N] (f : M ≃[L] N)
-  证明: ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
-    h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
-
-Depends on / 依赖: f.symm.toHom, f.toEquiv.surjective, f.toEquiv.symm.surjective, f.toHom, h.map_of_surjective, map_of_surjective, surjective, toEquiv
+/-
+**FirstOrder.Language.Equiv.fg_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Languag
+e.Equiv`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N]   (f : L.Equiv M N), FirstOrder.Language.Structu
+re.FG L M ↔ FirstOrder.Language.Structure.FG L N
+参数：f : L.Equiv M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Structure.FG.map_of_surjective`：∀ {L : FirstOrder.La
+nguage} {M : Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structu
+re N],   FirstOrder.Language.Structure.F…
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem Equiv.fg_iff {N : Type*} [L.Structure N] (f : M ≃[L] N) :
     Structure.FG L M ↔ Structure.FG L N :=
   ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
     h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
-
-/--
-theorem `Substructure.fg_iff_structure_fg` / 定理 `Substructure.fg_iff_structure_fg`
-
-English:
-theorem Substructure.fg_iff_structure_fg
-  given: (S : L.Substructure M)
-  statement: S.FG ↔ Structure.FG L S
-  proof: by
-  rw [Structure.fg_def]
-  refine ⟨fun h => FG.of_map_embedding S.subtype ?_, fun h => ?_⟩
-  · rw [← Hom.range_eq_map, range_subtype]
-    exact h
-  · have h := h.map S.subtype.toHom
-    rw [← Hom.range_eq_map]; rw [range_subtype] at h
-    exact h
-
-中文:
-定理 子结构.fg_iff_structure_fg
-  条件: (S : L.子结构 M)
-  结论: S.FG ↔ 结构.FG L S
-  证明: by
-  rw [Structure.fg_def]
-  refine ⟨fun h => FG.of_map_embedding S.subtype ?_, fun h => ?_⟩
-  · rw [← Hom.range_eq_map, range_subtype]
-    exact h
-  · have h := h.map S.subtype.toHom
-    rw [← Hom.range_eq_map]; rw [range_subtype] at h
-    exact h
-
-Depends on / 依赖: FG.of_map_embedding, Hom.range_eq_map, S.subtype, S.subtype.toHom, Structure, Structure.fg_def, fg_def, h.map, of_map_embedding, range_eq_map, range_subtype, subtype
+/-
+**FirstOrder.Language.Substructure.fg_iff_structure_fg** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.Substructure`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] (S : L.S
+ubstructure M),   S.FG ↔ FirstOrder.Language.Structure.FG L ↥S
+参数：S : L.Substructure M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Structure.fg_def`：fg_def : FG L M ↔ (⊤ : L.Substruct
+ure M).FG
+· 使用定理 `FirstOrder.Language.Substructure.FG.of_map_embedding`：∀ {L : FirstOrder.
+Language} {M : Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Struc
+ture N]   (f : L.Embedding M N) {s : L.Sub…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Hom.range_eq_map`：range_eq_map (f : M ->[L] N) : f.r
+ange = map f ⊤
+· 使用定理 `FirstOrder.Language.Substructure.range_subtype`：range_subtype (S : L.Sub
+structure M) : S.subtype.toHom.range = S
+· 使用定理 `FirstOrder.Language.Substructure.FG.map`：∀ {L : FirstOrder.Language} {M 
+: Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structure N]   (f 
+: L.Hom M N) {s : L.Substruct…
 -/
 theorem Substructure.fg_iff_structure_fg (S : L.Substructure M) : S.FG ↔ Structure.FG L S := by
   rw [Structure.fg_def]
@@ -1217,61 +998,49 @@ theorem Substructure.fg_iff_structure_fg (S : L.Substructure M) : S.FG ↔ Struc
   · rw [← Hom.range_eq_map, range_subtype]
     exact h
   · have h := h.map S.subtype.toHom
-    rw [← Hom.range_eq_map]; rw [range_subtype] at h
+    rw [← Hom.range_eq_map, range_subtype] at h
     exact h
-
-/--
-theorem `Equiv.cg_iff` / 定理 `Equiv.cg_iff`
-
-English:
-theorem Equiv.cg_iff
-  given: {N : Type*} [L.Structure N] (f : M ≃[L] N)
-  proof: ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
-    h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
-
-中文:
-定理 等价.cg_iff
-  条件: {N : 类型} [L.结构 N] (f : M ≃[L] N)
-  证明: ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
-    h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
-
-Depends on / 依赖: f.symm.toHom, f.toEquiv.surjective, f.toEquiv.symm.surjective, f.toHom, h.map_of_surjective, map_of_surjective, surjective, toEquiv
+/-
+**FirstOrder.Language.Equiv.cg_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Languag
+e.Equiv`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] {N : Typ
+e u_2} [inst_1 : L.Structure N]   (f : L.Equiv M N), FirstOrder.Language.Structu
+re.CG L M ↔ FirstOrder.Language.Structure.CG L N
+参数：f : L.Equiv M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Structure.CG.map_of_surjective`：∀ {L : FirstOrder.La
+nguage} {M : Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structu
+re N],   FirstOrder.Language.Structure.C…
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem Equiv.cg_iff {N : Type*} [L.Structure N] (f : M ≃[L] N) :
     Structure.CG L M ↔ Structure.CG L N :=
   ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
     h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
-
-/--
-theorem `Substructure.cg_iff_structure_cg` / 定理 `Substructure.cg_iff_structure_cg`
-
-English:
-theorem Substructure.cg_iff_structure_cg
-  given: (S : L.Substructure M)
-  statement: S.CG ↔ Structure.CG L S
-  proof: by
-  rw [Structure.cg_def]
-  refine ⟨fun h => CG.of_map_embedding S.subtype ?_, fun h => ?_⟩
-  · rw [← Hom.range_eq_map, range_subtype]
-    exact h
-  · have h := h.map S.subtype.toHom
-    rw [← Hom.range_eq_map]; rw [range_subtype] at h
-    exact h
-
-中文:
-定理 子结构.cg_iff_structure_cg
-  条件: (S : L.子结构 M)
-  结论: S.CG ↔ 结构.CG L S
-  证明: by
-  rw [Structure.cg_def]
-  refine ⟨fun h => CG.of_map_embedding S.subtype ?_, fun h => ?_⟩
-  · rw [← Hom.range_eq_map, range_subtype]
-    exact h
-  · have h := h.map S.subtype.toHom
-    rw [← Hom.range_eq_map]; rw [range_subtype] at h
-    exact h
-
-Depends on / 依赖: CG.of_map_embedding, Hom.range_eq_map, S.subtype, S.subtype.toHom, Structure, Structure.cg_def, cg_def, h.map, of_map_embedding, range_eq_map, range_subtype, subtype
+/-
+**FirstOrder.Language.Substructure.cg_iff_structure_cg** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.Substructure`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] (S : L.S
+ubstructure M),   S.CG ↔ FirstOrder.Language.Structure.CG L ↥S
+参数：S : L.Substructure M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Structure.cg_def`：cg_def : CG L M ↔ (⊤ : L.Substruct
+ure M).CG
+· 使用定理 `FirstOrder.Language.Substructure.CG.of_map_embedding`：∀ {L : FirstOrder.
+Language} {M : Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Struc
+ture N]   (f : L.Embedding M N) {s : L.Sub…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Hom.range_eq_map`：range_eq_map (f : M ->[L] N) : f.r
+ange = map f ⊤
+· 使用定理 `FirstOrder.Language.Substructure.range_subtype`：range_subtype (S : L.Sub
+structure M) : S.subtype.toHom.range = S
+· 使用定理 `FirstOrder.Language.Substructure.CG.map`：∀ {L : FirstOrder.Language} {M 
+: Type u_1} [inst : L.Structure M] {N : Type u_2} [inst_1 : L.Structure N]   (f 
+: L.Hom M N) {s : L.Substruct…
 -/
 theorem Substructure.cg_iff_structure_cg (S : L.Substructure M) : S.CG ↔ Structure.CG L S := by
   rw [Structure.cg_def]
@@ -1279,65 +1048,47 @@ theorem Substructure.cg_iff_structure_cg (S : L.Substructure M) : S.CG ↔ Struc
   · rw [← Hom.range_eq_map, range_subtype]
     exact h
   · have h := h.map S.subtype.toHom
-    rw [← Hom.range_eq_map]; rw [range_subtype] at h
+    rw [← Hom.range_eq_map, range_subtype] at h
     exact h
-
-/--
-theorem `Substructure.countable_fg_substructures_of_countable` / 定理 `Substructure.countable_fg_substructures_of_countable`
-
-English:
-theorem Substructure.countable_fg_substructures_of_countable
-  given: [Countable M]
-  proof: by
-  let g : { S : L.Substructure M // S.FG } -> Finset M :=
-    fun S => Exists.choose S.prop
-  have g_inj : Function.Injective g := by
-    intro S S' h
-    apply Subtype.ext
-    rw [(Exists.choose_spec S.prop).symm]; rw [(Exists.choose_spec S'.prop).symm]
-    exact congr_arg (closure L ∘ SetLike.coe) h
-  exact Function.Embedding.countable ⟨g, g_inj⟩
-
-中文:
-定理 子结构.countable_fg_substructures_of_countable
-  条件: [可数 M]
-  证明: by
-  let g : { S : L.Substructure M // S.FG } -> Finset M :=
-    fun S => Exists.choose S.prop
-  have g_inj : Function.Injective g := by
-    intro S S' h
-    apply Subtype.ext
-    rw [(Exists.choose_spec S.prop).symm]; rw [(Exists.choose_spec S'.prop).symm]
-    exact congr_arg (closure L ∘ SetLike.coe) h
-  exact Function.Embedding.countable ⟨g, g_inj⟩
-
-Depends on / 依赖: Embedding, Exists, Exists.choose, Exists.choose_spec, Finset, Function, Function.Embedding.countable, Function.Injective, Injective, L.Substructure, S.FG, S.prop, SetLike, SetLike.coe, Substructure, Subtype, Subtype.ext, choose_spec, closure, congr_arg
+/-
+**FirstOrder.Language.Substructure.countable_fg_substructures_of_countable** 是 M
+athlib 中的一个定理，位于命名空间 `FirstOrder.Language.Substructure`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] [Countab
+le M], Countable { S // S.FG }
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Function.Embedding.countable`：∀ {α : Sort u} {β : Sort v} [Countable β] 
+(f : α ↪ β), Countable α
+· 使用定理 `Finset.countable`：∀ {α : Type u_1} [Countable α], Countable (Finset α)
 -/
 theorem Substructure.countable_fg_substructures_of_countable [Countable M] :
     Countable { S : L.Substructure M // S.FG } := by
-  let g : { S : L.Substructure M // S.FG } -> Finset M :=
-    fun S => Exists.choose S.prop
+  let g : { S : L.Substructure M // S.FG } → Finset M :=
+    fun S ↦ Exists.choose S.prop
   have g_inj : Function.Injective g := by
     intro S S' h
     apply Subtype.ext
-    rw [(Exists.choose_spec S.prop).symm]; rw [(Exists.choose_spec S'.prop).symm]
+    rw [(Exists.choose_spec S.prop).symm, (Exists.choose_spec S'.prop).symm]
     exact congr_arg (closure L ∘ SetLike.coe) h
   exact Function.Embedding.countable ⟨g, g_inj⟩
-
-/--
-Instance `Substructure.instCountable_fg_substructures_of_countable` / 实例 `Substructure.instCountable_fg_substructures_of_countable`
-
-English:
-instance Substructure.instCountable_fg_substructures_of_countable
-  signature: [Countable M]
-  body: countable_fg_substructures_of_countable
-
-中文:
-实例 子结构.instCountable_fg_substructures_of_countable
-  签名: [可数 M]
-  定义体: countable_fg_substructures_of_countable
-
-Depends on / 依赖: countable_fg_substructures_of_countable
+/-
+**FirstOrder.Language.Substructure.instCountable_fg_substructures_of_countable**
+ 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.Substructure`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] [Countab
+le M], Countable { S // S.FG }
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Substructure.countable_fg_substructures_of_countable
+`：∀ {L : FirstOrder.Language} {M : Type u_1} [inst : L.Structure M] [Countable M
+], Countable { S // S.FG }
 -/
 instance Substructure.instCountable_fg_substructures_of_countable [Countable M] :
     Countable { S : L.Substructure M // S.FG } :=
@@ -1346,3 +1097,4 @@ instance Substructure.instCountable_fg_substructures_of_countable [Countable M] 
 end Language
 
 end FirstOrder
+

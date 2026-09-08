@@ -33,143 +33,58 @@ register_option contrapose.negate_iff : Bool := {
 }
 
 -- `contrapose₃`, `contrapose₄` and `contrapose_iff₄` don't depend on any axioms.
-/--
-lemma `contrapose₁` / 引理 `contrapose₁`
-
-English:
-lemma contrapose₁
-  given: {p q : Prop}
-  statement: (¬ q -> ¬ p) -> (p -> q)
-  proof: fun h hp => by_contra fun h' => h h' hp
-
-中文:
-引理 contrapose₁
-  条件: {p q : 命题}
-  结论: (¬ q -> ¬ p) -> (p -> q)
-  证明: fun h hp => by_contra fun h' => h h' hp
+/-
+**Mathlib.Tactic.Contrapose.contrapose** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Contrapose`。
+形式化陈述：ParserDescr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose₁ {p q : Prop} : (¬ q -> ¬ p) -> (p -> q) := fun h hp => by_contra fun h' => h h' hp
-/--
-lemma `contrapose₂` / 引理 `contrapose₂`
-
-English:
-lemma contrapose₂
-  given: {p q : Prop}
-  statement: (¬ q -> p) -> (¬ p -> q)
-  proof: fun h hp => by_contra fun h' => hp (h h')
-
-中文:
-引理 contrapose₂
-  条件: {p q : 命题}
-  结论: (¬ q -> p) -> (¬ p -> q)
-  证明: fun h hp => by_contra fun h' => hp (h h')
+lemma contrapose₁ {p q : Prop} : (¬ q → ¬ p) → (p → q) := fun h hp ↦ by_contra fun h' ↦ h h' hp
+/-
+**Mathlib.Tactic.Contrapose.contrapose** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Contrapose`。
+形式化陈述：ParserDescr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose₂ {p q : Prop} : (¬ q -> p) -> (¬ p -> q) := fun h hp => by_contra fun h' => hp (h h')
-/--
-lemma `contrapose₃` / 引理 `contrapose₃`
-
-English:
-lemma contrapose₃
-  given: {p q : Prop}
-  statement: (q -> ¬ p) -> (p -> ¬ q)
-  proof: Imp.swap.mp
-
-中文:
-引理 contrapose₃
-  条件: {p q : 命题}
-  结论: (q -> ¬ p) -> (p -> ¬ q)
-  证明: Imp.swap.mp
-
-Depends on / 依赖: Imp.swap.mp
+lemma contrapose₂ {p q : Prop} : (¬ q → p) → (¬ p → q) := fun h hp ↦ by_contra fun h' ↦ hp (h h')
+/-
+**Mathlib.Tactic.Contrapose.contrapose** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Contrapose`。
+形式化陈述：ParserDescr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose₃ {p q : Prop} : (q -> ¬ p) -> (p -> ¬ q) := Imp.swap.mp
-/--
-lemma `contrapose₄` / 引理 `contrapose₄`
-
-English:
-lemma contrapose₄
-  given: {p q : Prop}
-  statement: (q -> p) -> (¬ p -> ¬ q)
-  proof: mt
-
-中文:
-引理 contrapose₄
-  条件: {p q : 命题}
-  结论: (q -> p) -> (¬ p -> ¬ q)
-  证明: mt
+lemma contrapose₃ {p q : Prop} : (q → ¬ p) → (p → ¬ q) := Imp.swap.mp
+/-
+**Mathlib.Tactic.Contrapose.contrapose** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Contrapose`。
+形式化陈述：ParserDescr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose₄ {p q : Prop} : (q -> p) -> (¬ p -> ¬ q) := mt
-
-/--
-lemma `contrapose_iff₁` / 引理 `contrapose_iff₁`
-
-English:
-lemma contrapose_iff₁
-  given: {p q : Prop}
-  statement: (¬ p ↔ ¬ q) -> (p ↔ q)
-  proof: not_iff_not.mp
-
-中文:
-引理 contrapose_iff₁
-  条件: {p q : 命题}
-  结论: (¬ p ↔ ¬ q) -> (p ↔ q)
-  证明: not_iff_not.mp
-
-Depends on / 依赖: not_iff_not, not_iff_not.mp
+lemma contrapose₄ {p q : Prop} : (q → p) → (¬ p → ¬ q) := mt
+/-
+**Mathlib.Tactic.Contrapose.contrapose_iff** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Ta
+ctic.Contrapose`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose_iff₁ {p q : Prop} : (¬ p ↔ ¬ q) -> (p ↔ q) := not_iff_not.mp
-/--
-lemma `contrapose_iff₂` / 引理 `contrapose_iff₂`
-
-English:
-lemma contrapose_iff₂
-  given: {p q : Prop}
-  statement: (p ↔ ¬ q) -> (¬ p ↔ q)
-  proof: (iff_not_comm.trans Iff.comm).mp
-
-中文:
-引理 contrapose_iff₂
-  条件: {p q : 命题}
-  结论: (p ↔ ¬ q) -> (¬ p ↔ q)
-  证明: (iff_not_comm.trans Iff.comm).mp
-
-Depends on / 依赖: Iff.comm, iff_not_comm, iff_not_comm.trans
+lemma contrapose_iff₁ {p q : Prop} : (¬ p ↔ ¬ q) → (p ↔ q) := not_iff_not.mp
+/-
+**Mathlib.Tactic.Contrapose.contrapose_iff** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Ta
+ctic.Contrapose`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose_iff₂ {p q : Prop} : (p ↔ ¬ q) -> (¬ p ↔ q) := (iff_not_comm.trans Iff.comm).mp
-/--
-lemma `contrapose_iff₃` / 引理 `contrapose_iff₃`
-
-English:
-lemma contrapose_iff₃
-  given: {p q : Prop}
-  statement: (¬ p ↔ q) -> (p ↔ ¬ q)
-  proof: (not_iff_comm.trans Iff.comm).mp
-
-中文:
-引理 contrapose_iff₃
-  条件: {p q : 命题}
-  结论: (¬ p ↔ q) -> (p ↔ ¬ q)
-  证明: (not_iff_comm.trans Iff.comm).mp
-
-Depends on / 依赖: Iff.comm, not_iff_comm, not_iff_comm.trans
+lemma contrapose_iff₂ {p q : Prop} : (p ↔ ¬ q) → (¬ p ↔ q) := (iff_not_comm.trans Iff.comm).mp
+/-
+**Mathlib.Tactic.Contrapose.contrapose_iff** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Ta
+ctic.Contrapose`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose_iff₃ {p q : Prop} : (¬ p ↔ q) -> (p ↔ ¬ q) := (not_iff_comm.trans Iff.comm).mp
-/--
-lemma `contrapose_iff₄` / 引理 `contrapose_iff₄`
-
-English:
-lemma contrapose_iff₄
-  given: {p q : Prop}
-  statement: (p ↔ q) -> (¬ p ↔ ¬ q)
-  proof: fun ⟨h₁, h₂⟩ => ⟨mt h₂, mt h₁⟩
-
-中文:
-引理 contrapose_iff₄
-  条件: {p q : 命题}
-  结论: (p ↔ q) -> (¬ p ↔ ¬ q)
-  证明: fun ⟨h₁, h₂⟩ => ⟨mt h₂, mt h₁⟩
+lemma contrapose_iff₃ {p q : Prop} : (¬ p ↔ q) → (p ↔ ¬ q) := (not_iff_comm.trans Iff.comm).mp
+/-
+**Mathlib.Tactic.Contrapose.contrapose_iff** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Ta
+ctic.Contrapose`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contrapose_iff₄ {p q : Prop} : (p ↔ q) -> (¬ p ↔ ¬ q) := fun ⟨h₁, h₂⟩ => ⟨mt h₂, mt h₁⟩
+lemma contrapose_iff₄ {p q : Prop} : (p ↔ q) → (¬ p ↔ ¬ q) := fun ⟨h₁, h₂⟩ ↦ ⟨mt h₂, mt h₁⟩
 
 /--
 `contrapose` transforms the main goal into its contrapositive. If the goal has the form `⊢ P → Q`,
@@ -247,7 +162,7 @@ elab_rules : tactic
     | none, some q => g.apply (mkApp2 (.const ``contrapose₃ []) p q)
     | some p, some q => g.apply (mkApp2 (.const ``contrapose₄ []) p q)
   | _ =>
-    throwTacticEx `contrapose g m!"the goal `{target}` is not of the form `_ -> _` or `_ ↔ _`"
+    throwTacticEx `contrapose g m!"the goal `{target}` is not of the form `_ → _` or `_ ↔ _`"
 
 @[tactic_alt contrapose]
 syntax (name := contrapose!)
@@ -265,3 +180,4 @@ macro_rules
     `(tactic| (revert $e:ident; contrapose! $cfg; intro $e':ident))
 
 end Mathlib.Tactic.Contrapose
+

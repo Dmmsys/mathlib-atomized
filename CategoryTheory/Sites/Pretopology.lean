@@ -61,146 +61,69 @@ See: https://ncatlab.org/nlab/show/Grothendieck+pretopology or [MM92] Chapter II
 Section 2, Definition 2. -/
 @[ext, stacks 00VH "Note that Stacks calls a category together with a pretopology a site,
 and [MM92] calls this a basis for a topology."]
-/--
-Definition of `Pretopology` / `Pretopology` 的定义
-
-English:
-structure Pretopology
-  parameters: extends Precoverage C
-  extends: Precoverage C
-  axioms and operations (3):
-    - has_isos : forall ⦃X Y⦄ (f : Y ⟶ X) [IsIso f], Presieve.singleton f in coverings X
-    - pullbacks : forall ⦃X Y⦄ (f : Y ⟶ X) (S), S in coverings X -> pullbackArrows f S in coverings Y
-    - transitive : forall ⦃X : C⦄ (S : Presieve X) (Ti : forall ⦃Y⦄ (f : Y ⟶ X), S f -> Presieve Y), S in coverings X -> (forall ⦃Y⦄ (f) (H : S f), Ti f H in coverings Y) -> S.bind Ti in coverings X
-
-中文:
-结构 Pretopology
-  参数: extends Precoverage C
-  继承: Precoverage C
-  公理与运算 (3 个):
-    - has_isos : 对任意 ⦃X Y⦄ (f : Y ⟶ X) [是同构 f], Presieve.singleton f in coverings X
-    - pullbacks : 对任意 ⦃X Y⦄ (f : Y ⟶ X) (S), S in coverings X -> pullbackArrows f S in coverings Y
-    - transitive : 对任意 ⦃X : C⦄ (S : Presieve X) (Ti : 对任意 ⦃Y⦄ (f : Y ⟶ X), S f -> Presieve Y), S in coverings X -> (对任意 ⦃Y⦄ (f) (H : S f), Ti f H in coverings Y) -> S.bind Ti in coverings X
+/-
+**CategoryTheory.Pretopology** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.Limits.HasPullbacks C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 structure Pretopology extends Precoverage C where
   /-- For all `X : C`, the coverings of `X` (sets of families of morphisms with target `X`) -/
-  has_isos : forall ⦃X Y⦄ (f : Y ⟶ X) [IsIso f], Presieve.singleton f in coverings X
-  pullbacks : forall ⦃X Y⦄ (f : Y ⟶ X) (S), S in coverings X -> pullbackArrows f S in coverings Y
+  has_isos : ∀ ⦃X Y⦄ (f : Y ⟶ X) [IsIso f], Presieve.singleton f ∈ coverings X
+  pullbacks : ∀ ⦃X Y⦄ (f : Y ⟶ X) (S), S ∈ coverings X → pullbackArrows f S ∈ coverings Y
   transitive :
-    forall ⦃X : C⦄ (S : Presieve X) (Ti : forall ⦃Y⦄ (f : Y ⟶ X), S f -> Presieve Y),
-      S in coverings X -> (forall ⦃Y⦄ (f) (H : S f), Ti f H in coverings Y) -> S.bind Ti in coverings X
+    ∀ ⦃X : C⦄ (S : Presieve X) (Ti : ∀ ⦃Y⦄ (f : Y ⟶ X), S f → Presieve Y),
+      S ∈ coverings X → (∀ ⦃Y⦄ (f) (H : S f), Ti f H ∈ coverings Y) → S.bind Ti ∈ coverings X
 
 namespace Pretopology
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeFun (Pretopology C) fun _ => forall X
-  body: ⟨fun J => J.coverings⟩
-
-中文:
-实例 :
-  签名: CoeFun (Pretopology C) fun _ => 对任意 X
-  定义体: ⟨fun J => J.coverings⟩
-
-Depends on / 依赖: J.coverings, coverings
+/-
+**CategoryTheory.Pretopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pretopol
+ogy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeFun (Pretopology C) fun _ => forall X : C, Set (Presieve X) :=
-  ⟨fun J => J.coverings⟩
+instance : CoeFun (Pretopology C) fun _ => ∀ X : C, Set (Presieve X) :=
+  ⟨fun J ↦ J.coverings⟩
 
 variable {C}
-
-/--
-Instance `LE` / 实例 `LE`
-
-English:
-instance LE
-  signature: : LE (Pretopology C) where
-  body: (K₁ : forall X : C, Set (Presieve X)) <= K₂
-
-中文:
-实例 LE
-  签名: : LE (Pretopology C) where
-  定义体: (K₁ : forall X : C, Set (Presieve X)) <= K₂
-
-Depends on / 依赖: Presieve
+/-
+**CategoryTheory.Pretopology.LE** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pretop
+ology`。
+形式化陈述：LE : LE (Pretopology C) where le K₁ K₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance LE : LE (Pretopology C) where
-  le K₁ K₂ := (K₁ : forall X : C, Set (Presieve X)) <= K₂
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: {K₁ K₂ : Pretopology C}
-  statement: K₁ <= K₂ ↔ (K₁ : forall X : C, Set (Presieve X)) <= K₂
-  proof: Iff.rfl
-
-中文:
-定理 le_def
-  条件: {K₁ K₂ : Pretopology C}
-  结论: K₁ <= K₂ ↔ (K₁ : 对任意 X : C, 集合 (Presieve X)) <= K₂
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+  le K₁ K₂ := (K₁ : ∀ X : C, Set (Presieve X)) ≤ K₂
+/-
+**CategoryTheory.Pretopology.le_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Pr
+etopology`。
+形式化陈述：le_def {K₁ K₂ : Pretopology C} : K₁ <= K₂ ↔ (K₁ : forall X : C, Set (Presi
+eve X)) <= K₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def {K₁ K₂ : Pretopology C} : K₁ <= K₂ ↔ (K₁ : forall X : C, Set (Presieve X)) <= K₂ :=
+theorem le_def {K₁ K₂ : Pretopology C} : K₁ ≤ K₂ ↔ (K₁ : ∀ X : C, Set (Presieve X)) ≤ K₂ :=
   Iff.rfl
 
 variable (C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Pretopology C)
-  body: { Pretopology.LE with
-    le_refl := fun _ => le_def.mpr le_rfl
-    le_trans := fun _ _ _ h₁₂ h₂₃ => le_def.mpr (le_trans h₁₂ h₂₃)
-    le_antisymm := fun _ _ h₁₂ h₂₁ => Pretopology.ext (le_antisymm h₁₂ h₂₁) }
-
-中文:
-实例 :
-  签名: 偏序 (Pretopology C)
-  定义体: { Pretopology.LE with
-    le_refl := fun _ => le_def.mpr le_rfl
-    le_trans := fun _ _ _ h₁₂ h₂₃ => le_def.mpr (le_trans h₁₂ h₂₃)
-    le_antisymm := fun _ _ h₁₂ h₂₁ => Pretopology.ext (le_antisymm h₁₂ h₂₁) }
-
-Depends on / 依赖: Pretopology, Pretopology.LE, Pretopology.ext, le_antisymm, le_def, le_def.mpr, le_refl, le_rfl, le_trans
+/-
+**CategoryTheory.Pretopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pretopol
+ogy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Pretopology C) :=
   { Pretopology.LE with
     le_refl := fun _ => le_def.mpr le_rfl
     le_trans := fun _ _ _ h₁₂ h₂₃ => le_def.mpr (le_trans h₁₂ h₂₃)
     le_antisymm := fun _ _ h₁₂ h₂₁ => Pretopology.ext (le_antisymm h₁₂ h₂₁) }
-
-/--
-Instance `orderTop` / 实例 `orderTop`
-
-English:
-instance orderTop
-  signature: : OrderTop (Pretopology C) where
-  body: { coverings := fun _ => Set.univ
-      has_isos := fun _ _ _ _ => Set.mem_univ _
-      pullbacks := fun _ _ _ _ _ => Set.mem_univ _
-      transitive := fun _ _ _ _ _ => Set.mem_univ _ }
-  le_top _ _ _ _ := Set.mem_univ _
-
-中文:
-实例 orderTop
-  签名: : 有顶序 (Pretopology C) where
-  定义体: { coverings := fun _ => Set.univ
-      has_isos := fun _ _ _ _ => Set.mem_univ _
-      pullbacks := fun _ _ _ _ _ => Set.mem_univ _
-      transitive := fun _ _ _ _ _ => Set.mem_univ _ }
-  le_top _ _ _ _ := Set.mem_univ _
-
-Depends on / 依赖: Set.mem_univ, Set.univ, coverings, has_isos, le_top, mem_univ, pullbacks, transitive
+/-
+**CategoryTheory.Pretopology.orderTop** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Pretopology`。
+形式化陈述：orderTop : OrderTop (Pretopology C) where top
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance orderTop : OrderTop (Pretopology C) where
   top :=
@@ -209,19 +132,10 @@ instance orderTop : OrderTop (Pretopology C) where
       pullbacks := fun _ _ _ _ _ => Set.mem_univ _
       transitive := fun _ _ _ _ _ => Set.mem_univ _ }
   le_top _ _ _ _ := Set.mem_univ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Pretopology C)
-  body: ⟨⊤⟩
-
-中文:
-实例 :
-  签名: 可居 (Pretopology C)
-  定义体: ⟨⊤⟩
+/-
+**CategoryTheory.Pretopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pretopol
+ogy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Pretopology C) :=
   ⟨⊤⟩
@@ -234,54 +148,28 @@ variable {C}
 See also [MM92] Chapter III, Section 2, Equation (2).
 -/
 @[stacks 00ZC]
-/--
-Definition of `toGrothendieck` / `toGrothendieck` 的定义
+/-
+**CategoryTheory.Pretopology.toGrothendieck** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Pretopology`。
+形式化陈述：toGrothendieck (K : Pretopology C) : GrothendieckTopology C where sieves X
+参数：K : Pretopology C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toGrothendieck
-  signature: (K : Pretopology C)
-  body: {S | exists R in K X, R <= (S : Presieve _)}
-  top_mem' _ := ⟨Presieve.singleton (𝟙 _), K.has_isos _, fun _ _ _ => ⟨⟩⟩
-  pullback_stable' X Y S g := by
-    rintro ⟨R, hR, RS⟩
-    refine ⟨_, K.pullbacks g _ hR, ?_⟩
-    rw [← Sieve.generate_le_iff]; rw [Sieve.pullbackArrows_comm]
-    apply Sieve.pullback_monotone
-    rwa [Sieve.giGenerate.gc]
-  transitive' := by
-    rintro X S ⟨R', hR', RS⟩ R t
-    choose t₁ t₂ t₃ using t
-    refine ⟨_, K.transitive _ _ hR' fun _ f hf => t₂ (RS _ _ hf), ?_⟩
-    rintro Y _ ⟨Z, g, f, hg, hf, rfl⟩
-    apply t₃ (RS _ _ hg) _ _ hf
+--- 原说明 ---
+A pretopology `K` can be completed to a Grothendieck topology `J` by declaring a
+ sieve to be
+`J`-covering if it contains a family in `K`.
 
-中文:
-定义 toGrothendieck
-  签名: (K : Pretopology C)
-  定义体: {S | exists R in K X, R <= (S : Presieve _)}
-  top_mem' _ := ⟨Presieve.singleton (𝟙 _), K.has_isos _, fun _ _ _ => ⟨⟩⟩
-  pullback_stable' X Y S g := by
-    rintro ⟨R, hR, RS⟩
-    refine ⟨_, K.pullbacks g _ hR, ?_⟩
-    rw [← Sieve.generate_le_iff]; rw [Sieve.pullbackArrows_comm]
-    apply Sieve.pullback_monotone
-    rwa [Sieve.giGenerate.gc]
-  transitive' := by
-    rintro X S ⟨R', hR', RS⟩ R t
-    choose t₁ t₂ t₃ using t
-    refine ⟨_, K.transitive _ _ hR' fun _ f hf => t₂ (RS _ _ hf), ?_⟩
-    rintro Y _ ⟨Z, g, f, hg, hf, rfl⟩
-    apply t₃ (RS _ _ hg) _ _ hf
-
-Depends on / 依赖: Presieve
+See also [MM92] Chapter III, Section 2, Equation (2).
 -/
 def toGrothendieck (K : Pretopology C) : GrothendieckTopology C where
-  sieves X := {S | exists R in K X, R <= (S : Presieve _)}
+  sieves X := {S | ∃ R ∈ K X, R ≤ (S : Presieve _)}
   top_mem' _ := ⟨Presieve.singleton (𝟙 _), K.has_isos _, fun _ _ _ => ⟨⟩⟩
   pullback_stable' X Y S g := by
     rintro ⟨R, hR, RS⟩
     refine ⟨_, K.pullbacks g _ hR, ?_⟩
-    rw [← Sieve.generate_le_iff]; rw [Sieve.pullbackArrows_comm]
+    rw [← Sieve.generate_le_iff, Sieve.pullbackArrows_comm]
     apply Sieve.pullback_monotone
     rwa [Sieve.giGenerate.gc]
   transitive' := by
@@ -290,68 +178,42 @@ def toGrothendieck (K : Pretopology C) : GrothendieckTopology C where
     refine ⟨_, K.transitive _ _ hR' fun _ f hf => t₂ (RS _ _ hf), ?_⟩
     rintro Y _ ⟨Z, g, f, hg, hf, rfl⟩
     apply t₃ (RS _ _ hg) _ _ hf
-
-/--
-theorem `mem_toGrothendieck` / 定理 `mem_toGrothendieck`
-
-English:
-theorem mem_toGrothendieck
-  given: (K : Pretopology C) (X S)
-  proof: Iff.rfl
-
-中文:
-定理 mem_toGrothendieck
-  条件: (K : Pretopology C) (X S)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.Pretopology.mem_toGrothendieck** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Pretopology`。
+形式化陈述：mem_toGrothendieck (K : Pretopology C) (X S) : S in toGrothendieck K X ↔ e
+xists R in K X, R <= (S : Presieve X)
+参数：K : Pretopology C；X S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_toGrothendieck (K : Pretopology C) (X S) :
-    S in toGrothendieck K X ↔ exists R in K X, R <= (S : Presieve X) :=
+    S ∈ toGrothendieck K X ↔ ∃ R ∈ K X, R ≤ (S : Presieve X) :=
   Iff.rfl
 
 end Pretopology
 
 variable {C} in
-/--
-Definition of `GrothendieckTopology.toPretopology` / `GrothendieckTopology.toPretopology` 的定义
+/-- The largest pretopology generating the given Grothendieck topology.
 
-English:
-definition GrothendieckTopology.toPretopology
-  signature: (J : GrothendieckTopology C)
-  body: {R | Sieve.generate R in J X}
-  has_isos X Y f i := J.covering_of_eq_top (by simp)
-  pullbacks X Y f R hR := by simpa [Sieve.pullbackArrows_comm] using J.pullback_stable f hR
-  transitive X S Ti hS hTi := by
-    apply J.transitive hS
-    intro Y f
-    rintro ⟨Z, g, f, hf, rfl⟩
-    rw [Sieve.pullback_comp]
-    apply J.pullback_stable g
-    apply J.superset_covering _ (hTi _ hf)
-    rintro Y g ⟨W, h, g, hg, rfl⟩
-    exact ⟨_, h, _, ⟨_, _, _, hf, hg, rfl⟩, by simp⟩
+See [MM92] Chapter III, Section 2, Equations (3,4).
+-/
+/-
+**CategoryTheory.GrothendieckTopology.toPretopology** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.GrothendieckTopology`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasPullbacks C] →       CategoryTheory.GrothendieckTopolo
+gy C → CategoryTheory.Pretopology C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Grothendieck拓扑.toPretopology
-  签名: (J : Grothendieck拓扑 C)
-  定义体: {R | Sieve.generate R in J X}
-  has_isos X Y f i := J.covering_of_eq_top (by simp)
-  pullbacks X Y f R hR := by simpa [Sieve.pullbackArrows_comm] using J.pullback_stable f hR
-  transitive X S Ti hS hTi := by
-    apply J.transitive hS
-    intro Y f
-    rintro ⟨Z, g, f, hf, rfl⟩
-    rw [Sieve.pullback_comp]
-    apply J.pullback_stable g
-    apply J.superset_covering _ (hTi _ hf)
-    rintro Y g ⟨W, h, g, hg, rfl⟩
-    exact ⟨_, h, _, ⟨_, _, _, hf, hg, rfl⟩, by simp⟩
+--- 原说明 ---
+The largest pretopology generating the given Grothendieck topology.
 
-Depends on / 依赖: Sieve.generate, generate
+See [MM92] Chapter III, Section 2, Equations (3,4).
 -/
 def GrothendieckTopology.toPretopology (J : GrothendieckTopology C) : Pretopology C where
-  coverings X := {R | Sieve.generate R in J X}
+  coverings X := {R | Sieve.generate R ∈ J X}
   has_isos X Y f i := J.covering_of_eq_top (by simp)
   pullbacks X Y f R hR := by simpa [Sieve.pullbackArrows_comm] using J.pullback_stable f hR
   transitive X S Ti hS hTi := by
@@ -364,38 +226,17 @@ def GrothendieckTopology.toPretopology (J : GrothendieckTopology C) : Pretopolog
     rintro Y g ⟨W, h, g, hg, rfl⟩
     exact ⟨_, h, _, ⟨_, _, _, hf, hg, rfl⟩, by simp⟩
 
-/--
-Definition of `Pretopology.gi` / `Pretopology.gi` 的定义
+/-- We have a Galois insertion from pretopologies to Grothendieck topologies. -/
+/-
+**CategoryTheory.Pretopology.gi** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Pretop
+ology`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasPullbacks C] →       GaloisInsertion CategoryTheory.Pr
+etopology.toGrothendieck CategoryTheory.GrothendieckTopology.toPretopology
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pretopology.gi
-  signature: : GaloisInsertion
-  body: by
-    constructor
-    · intro h X R hR
-      exact h _ ⟨_, hR, Sieve.le_generate R⟩
-    · rintro h X S ⟨R, hR, RS⟩
-      apply J.superset_covering _ (h _ hR)
-      rwa [Sieve.giGenerate.gc]
-  le_l_u J _ S hS := ⟨S, J.superset_covering (Sieve.le_generate S.arrows) hS, le_rfl⟩
-  choice x _ := toGrothendieck x
-  choice_eq _ _ := rfl
-
-中文:
-定义 Pretopology.gi
-  签名: : Galois嵌入
-  定义体: by
-    constructor
-    · intro h X R hR
-      exact h _ ⟨_, hR, Sieve.le_generate R⟩
-    · rintro h X S ⟨R, hR, RS⟩
-      apply J.superset_covering _ (h _ hR)
-      rwa [Sieve.giGenerate.gc]
-  le_l_u J _ S hS := ⟨S, J.superset_covering (Sieve.le_generate S.arrows) hS, le_rfl⟩
-  choice x _ := toGrothendieck x
-  choice_eq _ _ := rfl
-
-Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.toPretopology, toPretopology
+--- 原说明 ---
+We have a Galois insertion from pretopologies to Grothendieck topologies.
 -/
 def Pretopology.gi : GaloisInsertion
     (toGrothendieck (C := C)) (GrothendieckTopology.toPretopology (C := C)) where
@@ -409,24 +250,20 @@ def Pretopology.gi : GaloisInsertion
   le_l_u J _ S hS := ⟨S, J.superset_covering (Sieve.le_generate S.arrows) hS, le_rfl⟩
   choice x _ := toGrothendieck x
   choice_eq _ _ := rfl
-
-/--
-lemma `GrothendieckTopology.mem_toPretopology` / 引理 `GrothendieckTopology.mem_toPretopology`
-
-English:
-lemma GrothendieckTopology.mem_toPretopology
-  given: (t : GrothendieckTopology C) {X : C} (S : Presieve X)
-  proof: Iff.rfl
-
-中文:
-引理 Grothendieck拓扑.mem_toPretopology
-  条件: (t : Grothendieck拓扑 C) {X : C} (S : Presieve X)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.GrothendieckTopology.mem_toPretopology** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.Limits.HasPullbacks C]   (t : CategoryTheory.GrothendieckTopology C) {X 
+: C} (S : CategoryTheory.Presieve X),   S ∈ t.toPretopology.coverings X ↔ Catego
+ryTheory.Sieve.generate S ∈ t X
+参数：C : Type u；t : CategoryTheory.GrothendieckTopology C；S : CategoryTheory.Presi
+eve X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma GrothendieckTopology.mem_toPretopology (t : GrothendieckTopology C) {X : C} (S : Presieve X) :
-    S in t.toPretopology X ↔ Sieve.generate S in t X :=
+    S ∈ t.toPretopology X ↔ Sieve.generate S ∈ t X :=
   Iff.rfl
 
 namespace Pretopology
@@ -436,79 +273,20 @@ set_option backward.isDefEq.respectTransparency false in
 The trivial pretopology, in which the coverings are exactly singleton isomorphisms. This topology is
 also known as the indiscrete, coarse, or chaotic topology. -/
 @[stacks 07GE]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.Pretopology.trivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.P
+retopology`。
+形式化陈述：trivial : Pretopology C where coverings X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: : Pretopology C where
-  body: {S | exists (Y : _) (f : Y ⟶ X) (_ : IsIso f), S = Presieve.singleton f}
-  has_isos _ _ _ i := ⟨_, _, i, rfl⟩
-  pullbacks X Y f S := by
-    rintro ⟨Z, g, i, rfl⟩
-    refine ⟨pullback g f, pullback.snd _ _, ?_, ?_⟩
-    · refine ⟨⟨pullback.lift (f ≫ inv g) (𝟙 _) (by simp), ⟨?_, by simp⟩⟩⟩
-      ext
-      · rw [assoc, pullback.lift_fst, ← pullback.condition_assoc]
-        simp
-      · simp
-    · apply pullback_singleton
-  transitive := by
-    rintro X S Ti ⟨Z, g, i, rfl⟩ hS
-    rcases hS g (singleton_self g) with ⟨Y, f, i, hTi⟩
-    refine ⟨_, f ≫ g, ?_, ?_⟩
-    · infer_instance
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): the next four lines were just "ext (W k)"
-    apply funext
-    intro W
-    ext K
-    constructor
-    · rintro ⟨V, h, k, ⟨_⟩, hh, rfl⟩
-      rw [hTi] at hh
-      cases hh
-      apply singleton.mk
-    · rintro ⟨_⟩
-      refine bind_comp g singleton.mk ?_
-      rw [hTi]
-      apply singleton.mk
-
-中文:
-定义 trivial
-  签名: : Pretopology C where
-  定义体: {S | exists (Y : _) (f : Y ⟶ X) (_ : IsIso f), S = Presieve.singleton f}
-  has_isos _ _ _ i := ⟨_, _, i, rfl⟩
-  pullbacks X Y f S := by
-    rintro ⟨Z, g, i, rfl⟩
-    refine ⟨pullback g f, pullback.snd _ _, ?_, ?_⟩
-    · refine ⟨⟨pullback.lift (f ≫ inv g) (𝟙 _) (by simp), ⟨?_, by simp⟩⟩⟩
-      ext
-      · rw [assoc, pullback.lift_fst, ← pullback.condition_assoc]
-        simp
-      · simp
-    · apply pullback_singleton
-  transitive := by
-    rintro X S Ti ⟨Z, g, i, rfl⟩ hS
-    rcases hS g (singleton_self g) with ⟨Y, f, i, hTi⟩
-    refine ⟨_, f ≫ g, ?_, ?_⟩
-    · infer_instance
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): the next four lines were just "ext (W k)"
-    apply funext
-    intro W
-    ext K
-    constructor
-    · rintro ⟨V, h, k, ⟨_⟩, hh, rfl⟩
-      rw [hTi] at hh
-      cases hh
-      apply singleton.mk
-    · rintro ⟨_⟩
-      refine bind_comp g singleton.mk ?_
-      rw [hTi]
-      apply singleton.mk
-
-Depends on / 依赖: Presieve, Presieve.singleton, singleton
+--- 原说明 ---
+The trivial pretopology, in which the coverings are exactly singleton isomorphis
+ms. This topology is
+also known as the indiscrete, coarse, or chaotic topology.
 -/
 def trivial : Pretopology C where
-  coverings X := {S | exists (Y : _) (f : Y ⟶ X) (_ : IsIso f), S = Presieve.singleton f}
+  coverings X := {S | ∃ (Y : _) (f : Y ⟶ X) (_ : IsIso f), S = Presieve.singleton f}
   has_isos _ _ _ i := ⟨_, _, i, rfl⟩
   pullbacks X Y f S := by
     rintro ⟨Z, g, i, rfl⟩
@@ -537,25 +315,12 @@ def trivial : Pretopology C where
       refine bind_comp g singleton.mk ?_
       rw [hTi]
       apply singleton.mk
-
-/--
-Instance `orderBot` / 实例 `orderBot`
-
-English:
-instance orderBot
-  signature: : OrderBot (Pretopology C) where
-  body: trivial C
-  bot_le K X R := by
-    rintro ⟨Y, f, hf, rfl⟩
-    exact K.has_isos f
-
-中文:
-实例 orderBot
-  签名: : 有底序 (Pretopology C) where
-  定义体: trivial C
-  bot_le K X R := by
-    rintro ⟨Y, f, hf, rfl⟩
-    exact K.has_isos f
+/-
+**CategoryTheory.Pretopology.orderBot** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Pretopology`。
+形式化陈述：orderBot : OrderBot (Pretopology C) where bot
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance orderBot : OrderBot (Pretopology C) where
   bot := trivial C
@@ -563,263 +328,188 @@ instance orderBot : OrderBot (Pretopology C) where
     rintro ⟨Y, f, hf, rfl⟩
     exact K.has_isos f
 
-/--
-theorem `toGrothendieck_bot` / 定理 `toGrothendieck_bot`
+/-- The trivial pretopology induces the trivial Grothendieck topology. -/
+/-
+**CategoryTheory.Pretopology.toGrothendieck_bot** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Pretopology`。
+形式化陈述：toGrothendieck_bot : toGrothendieck (C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_bot`：∀ {α : Type u} {β : Type v} [inst : PartialOrder
+ α] [inst_1 : Preorder β] [inst_2 : OrderBot α] [inst_3 : OrderBot β]   {u : α →
+ β} {l : β →…
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 
-English:
-theorem toGrothendieck_bot
-  statement: toGrothendieck (C := C) ⊥ = ⊥
-  proof: (gi C).gc.l_bot
-
-@[gcongr]
-
-中文:
-定理 toGrothendieck_bot
-  结论: toGrothendieck (C := C) ⊥ = ⊥
-  证明: (gi C).gc.l_bot
-
-@[gcongr]
+--- 原说明 ---
+The trivial pretopology induces the trivial Grothendieck topology.
 -/
 theorem toGrothendieck_bot : toGrothendieck (C := C) ⊥ = ⊥ :=
   (gi C).gc.l_bot
 
 @[gcongr]
-/--
-lemma `toGrothendieck_mono` / 引理 `toGrothendieck_mono`
-
-English:
-lemma toGrothendieck_mono
-  given: {J K : Pretopology C} (h : J <= K)
-  statement: J.toGrothendieck <= K.toGrothendieck
-  proof: fun _ _ ⟨R, hR, hle⟩ => ⟨R, h _ hR, hle⟩
-
-中文:
-引理 toGrothendieck_mono
-  条件: {J K : Pretopology C} (h : J <= K)
-  结论: J.toGrothendieck <= K.toGrothendieck
-  证明: fun _ _ ⟨R, hR, hle⟩ => ⟨R, h _ hR, hle⟩
+/-
+**CategoryTheory.Pretopology.toGrothendieck_mono** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretopology`。
+形式化陈述：toGrothendieck_mono {J K : Pretopology C} (h : J <= K) : J.toGrothendieck 
+<= K.toGrothendieck
+参数：h : J <= K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toGrothendieck_mono {J K : Pretopology C} (h : J <= K) : J.toGrothendieck <= K.toGrothendieck :=
-  fun _ _ ⟨R, hR, hle⟩ => ⟨R, h _ hR, hle⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Pretopology C)
-  body: {
-    coverings := sInf ((fun J => J.coverings) '' T)
-    has_isos := fun X Y f _ => by
-      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
-        Set.iInter_exists,
-        Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter]
-      intro t _
-      exact t.has_isos f
-    pullbacks := fun X Y f S hS => by
-      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
-        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS ⊢
-      intro t ht
-      exact t.pullbacks f S (hS t ht)
-    transitive := fun X S Ti hS hTi => by
-      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
-        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS hTi ⊢
-      intro t ht
-      exact t.transitive S Ti (hS t ht) (fun Y f H => hTi f H t ht)
-  }
-
-中文:
-实例 :
-  签名: 下确界集 (Pretopology C)
-  定义体: {
-    coverings := sInf ((fun J => J.coverings) '' T)
-    has_isos := fun X Y f _ => by
-      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
-        Set.iInter_exists,
-        Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter]
-      intro t _
-      exact t.has_isos f
-    pullbacks := fun X Y f S hS => by
-      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
-        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS ⊢
-      intro t ht
-      exact t.pullbacks f S (hS t ht)
-    transitive := fun X S Ti hS hTi => by
-      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
-        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS hTi ⊢
-      intro t ht
-      exact t.transitive S Ti (hS t ht) (fun Y f H => hTi f H t ht)
-  }
+lemma toGrothendieck_mono {J K : Pretopology C} (h : J ≤ K) : J.toGrothendieck ≤ K.toGrothendieck :=
+  fun _ _ ⟨R, hR, hle⟩ ↦ ⟨R, h _ hR, hle⟩
+/-
+**CategoryTheory.Pretopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pretopol
+ogy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (Pretopology C) where
   sInf T := {
-    coverings := sInf ((fun J => J.coverings) '' T)
-    has_isos := fun X Y f _ => by
+    coverings := sInf ((fun J ↦ J.coverings) '' T)
+    has_isos := fun X Y f _ ↦ by
       simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
         Set.iInter_exists,
         Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter]
       intro t _
       exact t.has_isos f
-    pullbacks := fun X Y f S hS => by
+    pullbacks := fun X Y f S hS ↦ by
       simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
         Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS ⊢
       intro t ht
       exact t.pullbacks f S (hS t ht)
-    transitive := fun X S Ti hS hTi => by
+    transitive := fun X S Ti hS hTi ↦ by
       simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
         Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS hTi ⊢
       intro t ht
-      exact t.transitive S Ti (hS t ht) (fun Y f H => hTi f H t ht)
+      exact t.transitive S Ti (hS t ht) (fun Y f H ↦ hTi f H t ht)
   }
-
-/--
-lemma `mem_sInf` / 引理 `mem_sInf`
-
-English:
-lemma mem_sInf
-  given: (T : Set (Pretopology C)) {X : C} (S : Presieve X)
-  proof: by
-  change S in sInf ((fun J : Pretopology C => J.coverings) '' T) X ↔ _
-  simp
-
-中文:
-引理 mem_sInf
-  条件: (T : 集合 (Pretopology C)) {X : C} (S : Presieve X)
-  证明: by
-  change S in sInf ((fun J : Pretopology C => J.coverings) '' T) X ↔ _
-  simp
-
-Depends on / 依赖: J.coverings, Pretopology, coverings
+/-
+**CategoryTheory.Pretopology.mem_sInf** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Pretopology`。
+形式化陈述：mem_sInf (T : Set (Pretopology C)) {X : C} (S : Presieve X) : S in sInf T 
+X ↔ forall t in T, S in t X
+参数：T : Set (Pretopology C)；S : Presieve X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.iInter_coe_set`：iInter_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋂ i, f i = ⋂ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.biInter_and'`：biInter_and' (p : ι' -> Prop) (q : ι -> ι' -> Prop) (s
+ : forall x y, p y ∧ q x y -> Set α) : ⋂ (x : ι) (y : ι') (h : p y ∧ q x y), s x
+ y h =…
+· 使用定理 `Set.iInter_iInter_eq_right`：iInter_iInter_eq_right {b : β} {s : forall x
+ : β, b = x -> Set α} : ⋂ (x) (h : b = x), s x h = s b rfl
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mem_sInf (T : Set (Pretopology C)) {X : C} (S : Presieve X) :
-    S in sInf T X ↔ forall t in T, S in t X := by
-  change S in sInf ((fun J : Pretopology C => J.coverings) '' T) X ↔ _
+    S ∈ sInf T X ↔ ∀ t ∈ T, S ∈ t X := by
+  change S ∈ sInf ((fun J : Pretopology C ↦ J.coverings) '' T) X ↔ _
   simp
-
-/--
-lemma `sInf_ofGrothendieck` / 引理 `sInf_ofGrothendieck`
-
-English:
-lemma sInf_ofGrothendieck
-  given: (T : Set (GrothendieckTopology C))
-  proof: by
-  ext X S
-  simp [mem_sInf, GrothendieckTopology.mem_toPretopology, GrothendieckTopology.mem_sInf]
-
-中文:
-引理 sInf_ofGrothendieck
-  条件: (T : 集合 (Grothendieck拓扑 C))
-  证明: by
-  ext X S
-  simp [mem_sInf, GrothendieckTopology.mem_toPretopology, GrothendieckTopology.mem_sInf]
-
-Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.mem_sInf, GrothendieckTopology.mem_toPretopology, mem_sInf, mem_toPretopology
+/-
+**CategoryTheory.Pretopology.sInf_ofGrothendieck** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Pretopology`。
+形式化陈述：sInf_ofGrothendieck (T : Set (GrothendieckTopology C)) : (sInf T).toPretop
+ology = sInf (GrothendieckTopology.toPretopology '' T)
+参数：T : Set (GrothendieckTopology C)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretopology.ext`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {inst_1 : CategoryTheory.Limits.HasPullbacks C}   {x y : Catego
+ryTheory.Pretopology…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma sInf_ofGrothendieck (T : Set (GrothendieckTopology C)) :
     (sInf T).toPretopology = sInf (GrothendieckTopology.toPretopology '' T) := by
   ext X S
   simp [mem_sInf, GrothendieckTopology.mem_toPretopology, GrothendieckTopology.mem_sInf]
-
-/--
-lemma `isGLB_sInf` / 引理 `isGLB_sInf`
-
-English:
-lemma isGLB_sInf
-  given: (T : Set (Pretopology C))
-  statement: IsGLB T (sInf T)
-  proof: IsGLB.of_image (f := fun J => J.coverings) Iff.rfl (_root_.isGLB_sInf _)
-
-中文:
-引理 isGLB_sInf
-  条件: (T : 集合 (Pretopology C))
-  结论: IsGLB T (sInf T)
-  证明: IsGLB.of_image (f := fun J => J.coverings) Iff.rfl (_root_.isGLB_sInf _)
-
-Depends on / 依赖: Iff.rfl, IsGLB.of_image, J.coverings, _root_, _root_.isGLB_sInf, coverings, isGLB_sInf, of_image
+/-
+**CategoryTheory.Pretopology.isGLB_sInf** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Pretopology`。
+形式化陈述：isGLB_sInf (T : Set (Pretopology C)) : IsGLB T (sInf T)
+参数：T : Set (Pretopology C)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsGLB.of_image`：IsGLB.of_image [Preorder α] [Preorder β] {f : α -> β} (h
+f : forall {x y}, f x <= f y ↔ x <= y) {s : Set α} {x : α} (hx : IsGLB (f '' s) 
+(f x…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `isGLB_sInf`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] (s : Set 
+α), IsGLB s (sInf s)
 -/
 lemma isGLB_sInf (T : Set (Pretopology C)) : IsGLB T (sInf T) :=
-  IsGLB.of_image (f := fun J => J.coverings) Iff.rfl (_root_.isGLB_sInf _)
+  IsGLB.of_image (f := fun J ↦ J.coverings) Iff.rfl (_root_.isGLB_sInf _)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The complete lattice structure on pretopologies. This is induced by the `InfSet` instance, but
+with good definitional equalities for `⊥`, `⊤` and `⊓`. -/
+/-
+**CategoryTheory.Pretopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pretopol
+ogy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CompleteLattice (Pretopology C)
-  body: orderBot C
-  __ := orderTop C
-  inf t₁ t₂ := {
-    coverings := fun X => t₁.coverings X inter t₂.coverings X
-    has_isos := fun _ _ f _ =>
-      ⟨t₁.has_isos f, t₂.has_isos f⟩
-    pullbacks := fun _ _ f S hS =>
-      ⟨t₁.pullbacks f S hS.left, t₂.pullbacks f S hS.right⟩
-    transitive := fun _ S Ti hS hTi =>
-      ⟨t₁.transitive S Ti hS.left (fun _ f H => (hTi f H).left),
-        t₂.transitive S Ti hS.right (fun _ f H => (hTi f H).right)⟩
-  }
-  inf_le_left _ _ _ _ hS := hS.left
-  inf_le_right _ _ _ _ hS := hS.right
-  le_inf _ _ _ hts htr X _ hS := ⟨hts X hS, htr X hS⟩
-  __ := completeLatticeOfInf _ (isGLB_sInf C)
-
-中文:
-实例 :
-  签名: 完备格 (Pretopology C)
-  定义体: orderBot C
-  __ := orderTop C
-  inf t₁ t₂ := {
-    coverings := fun X => t₁.coverings X inter t₂.coverings X
-    has_isos := fun _ _ f _ =>
-      ⟨t₁.has_isos f, t₂.has_isos f⟩
-    pullbacks := fun _ _ f S hS =>
-      ⟨t₁.pullbacks f S hS.left, t₂.pullbacks f S hS.right⟩
-    transitive := fun _ S Ti hS hTi =>
-      ⟨t₁.transitive S Ti hS.left (fun _ f H => (hTi f H).left),
-        t₂.transitive S Ti hS.right (fun _ f H => (hTi f H).right)⟩
-  }
-  inf_le_left _ _ _ _ hS := hS.left
-  inf_le_right _ _ _ _ hS := hS.right
-  le_inf _ _ _ hts htr X _ hS := ⟨hts X hS, htr X hS⟩
-  __ := completeLatticeOfInf _ (isGLB_sInf C)
-
-Depends on / 依赖: orderBot
+--- 原说明 ---
+The complete lattice structure on pretopologies. This is induced by the `InfSet`
+ instance, but
+with good definitional equalities for `⊥`, `⊤` and `⊓`.
 -/
 instance : CompleteLattice (Pretopology C) where
   __ := orderBot C
   __ := orderTop C
   inf t₁ t₂ := {
-    coverings := fun X => t₁.coverings X inter t₂.coverings X
-    has_isos := fun _ _ f _ =>
+    coverings := fun X ↦ t₁.coverings X ∩ t₂.coverings X
+    has_isos := fun _ _ f _ ↦
       ⟨t₁.has_isos f, t₂.has_isos f⟩
-    pullbacks := fun _ _ f S hS =>
+    pullbacks := fun _ _ f S hS ↦
       ⟨t₁.pullbacks f S hS.left, t₂.pullbacks f S hS.right⟩
-    transitive := fun _ S Ti hS hTi =>
-      ⟨t₁.transitive S Ti hS.left (fun _ f H => (hTi f H).left),
-        t₂.transitive S Ti hS.right (fun _ f H => (hTi f H).right)⟩
+    transitive := fun _ S Ti hS hTi ↦
+      ⟨t₁.transitive S Ti hS.left (fun _ f H ↦ (hTi f H).left),
+        t₂.transitive S Ti hS.right (fun _ f H ↦ (hTi f H).right)⟩
   }
   inf_le_left _ _ _ _ hS := hS.left
   inf_le_right _ _ _ _ hS := hS.right
   le_inf _ _ _ hts htr X _ hS := ⟨hts X hS, htr X hS⟩
   __ := completeLatticeOfInf _ (isGLB_sInf C)
-
-/--
-lemma `mem_inf` / 引理 `mem_inf`
-
-English:
-lemma mem_inf
-  given: (t₁ t₂ : Pretopology C) {X : C} (S : Presieve X)
-  proof: Iff.rfl
-
-中文:
-引理 mem_inf
-  条件: (t₁ t₂ : Pretopology C) {X : C} (S : Presieve X)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.Pretopology.mem_inf** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.P
+retopology`。
+形式化陈述：mem_inf (t₁ t₂ : Pretopology C) {X : C} (S : Presieve X) : S in (t₁ ⊓ t₂) 
+X ↔ S in t₁ X ∧ S in t₂ X
+参数：t₁ t₂ : Pretopology C；S : Presieve X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_inf (t₁ t₂ : Pretopology C) {X : C} (S : Presieve X) :
-    S in (t₁ ⊓ t₂) X ↔ S in t₁ X ∧ S in t₂ X :=
+    S ∈ (t₁ ⊓ t₂) X ↔ S ∈ t₁ X ∧ S ∈ t₂ X :=
   Iff.rfl
 
 end Pretopology
@@ -827,60 +517,22 @@ end Pretopology
 /-- If `J` is a precoverage that has isomorphisms and is stable under composition and
 base change, it defines a pretopology. -/
 @[simps toPrecoverage]
-/--
-Definition of `Precoverage.toPretopology` / `Precoverage.toPretopology` 的定义
+/-
+**CategoryTheory.Precoverage.toPretopology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Precoverage`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasPullbacks C] →       (J : CategoryTheory.Precoverage C
+) →         [J.HasIsos] → [J.IsStableUnderBaseChange] → [J.IsStableUnderComposit
+ion] → CategoryTheory.Pretopology C
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Precoverage.mem_coverings_of_isIso`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} {J : CategoryTheory.Precoverage C} [self : J
+.HasIsos] {S T : C}   (f : S ⟶ T) [Cate…
 
-English:
-definition Precoverage.toPretopology
-  signature: [Limits.HasPullbacks C] (J : Precoverage C) [J.HasIsos]
-  body: J
-  has_isos X Y f hf := mem_coverings_of_isIso f
-  pullbacks X Y f R hR := J.pullbackArrows_mem f hR
-  transitive X R Ti hR hTi := by
-    obtain ⟨ι, Z, g, rfl⟩ := R.exists_eq_ofArrows
-    choose κ W p hp using fun ⦃Y⦄ (f : Y ⟶ X) hf => (Ti f hf).exists_eq_ofArrows
-    have : (Presieve.ofArrows Z g).bind Ti =
-        .ofArrows (fun ij : Σ i, κ (g i) ⟨i⟩ => W _ _ ij.2) (fun ij => p _ _ ij.2 ≫ g ij.1) := by
-      apply le_antisymm
-      · rintro T u ⟨S, v, w, ⟨i⟩, hv, rfl⟩
-        rw [hp] at hv
-        obtain ⟨j⟩ := hv
-exact .mk Sigma.mk (β := fun i : ι => κ (g i) ⟨i⟩) i j
-      · rintro T u ⟨ij⟩
-        use Z ij.1, p (g ij.1) ⟨ij.1⟩ ij.2, g ij.1, ⟨ij.1⟩
-        rw [hp]
-        exact ⟨⟨_⟩, rfl⟩
-    rw [this]
-    refine J.comp_mem_coverings (Y := fun (i : ι) (j : κ (g i) ⟨i⟩) => W _ _ j)
-      (g := fun i j => p _ _ j) _ hR fun i => ?_
-    rw [← hp]
-    exact hTi _ _
-
-中文:
-定义 Precoverage.toPretopology
-  签名: [Limits.有Pullbacks C] (J : Precoverage C) [J.有是os]
-  定义体: J
-  has_isos X Y f hf := mem_coverings_of_isIso f
-  pullbacks X Y f R hR := J.pullbackArrows_mem f hR
-  transitive X R Ti hR hTi := by
-    obtain ⟨ι, Z, g, rfl⟩ := R.exists_eq_ofArrows
-    choose κ W p hp using fun ⦃Y⦄ (f : Y ⟶ X) hf => (Ti f hf).exists_eq_ofArrows
-    have : (Presieve.ofArrows Z g).bind Ti =
-        .ofArrows (fun ij : Σ i, κ (g i) ⟨i⟩ => W _ _ ij.2) (fun ij => p _ _ ij.2 ≫ g ij.1) := by
-      apply le_antisymm
-      · rintro T u ⟨S, v, w, ⟨i⟩, hv, rfl⟩
-        rw [hp] at hv
-        obtain ⟨j⟩ := hv
-exact .mk Sigma.mk (β := fun i : ι => κ (g i) ⟨i⟩) i j
-      · rintro T u ⟨ij⟩
-        use Z ij.1, p (g ij.1) ⟨ij.1⟩ ij.2, g ij.1, ⟨ij.1⟩
-        rw [hp]
-        exact ⟨⟨_⟩, rfl⟩
-    rw [this]
-    refine J.comp_mem_coverings (Y := fun (i : ι) (j : κ (g i) ⟨i⟩) => W _ _ j)
-      (g := fun i j => p _ _ j) _ hR fun i => ?_
-    rw [← hp]
-    exact hTi _ _
+--- 原说明 ---
+If `J` is a precoverage that has isomorphisms and is stable under composition an
+d
+base change, it defines a pretopology.
 -/
 def Precoverage.toPretopology [Limits.HasPullbacks C] (J : Precoverage C) [J.HasIsos]
     [J.IsStableUnderBaseChange] [J.IsStableUnderComposition] : Pretopology C where
@@ -889,22 +541,23 @@ def Precoverage.toPretopology [Limits.HasPullbacks C] (J : Precoverage C) [J.Has
   pullbacks X Y f R hR := J.pullbackArrows_mem f hR
   transitive X R Ti hR hTi := by
     obtain ⟨ι, Z, g, rfl⟩ := R.exists_eq_ofArrows
-    choose κ W p hp using fun ⦃Y⦄ (f : Y ⟶ X) hf => (Ti f hf).exists_eq_ofArrows
+    choose κ W p hp using fun ⦃Y⦄ (f : Y ⟶ X) hf ↦ (Ti f hf).exists_eq_ofArrows
     have : (Presieve.ofArrows Z g).bind Ti =
-        .ofArrows (fun ij : Σ i, κ (g i) ⟨i⟩ => W _ _ ij.2) (fun ij => p _ _ ij.2 ≫ g ij.1) := by
+        .ofArrows (fun ij : Σ i, κ (g i) ⟨i⟩ ↦ W _ _ ij.2) (fun ij ↦ p _ _ ij.2 ≫ g ij.1) := by
       apply le_antisymm
       · rintro T u ⟨S, v, w, ⟨i⟩, hv, rfl⟩
         rw [hp] at hv
         obtain ⟨j⟩ := hv
-exact .mk Sigma.mk (β := fun i : ι => κ (g i) ⟨i⟩) i j
+        exact .mk <| Sigma.mk (β := fun i : ι ↦ κ (g i) ⟨i⟩) i j
       · rintro T u ⟨ij⟩
         use Z ij.1, p (g ij.1) ⟨ij.1⟩ ij.2, g ij.1, ⟨ij.1⟩
         rw [hp]
         exact ⟨⟨_⟩, rfl⟩
     rw [this]
-    refine J.comp_mem_coverings (Y := fun (i : ι) (j : κ (g i) ⟨i⟩) => W _ _ j)
-      (g := fun i j => p _ _ j) _ hR fun i => ?_
+    refine J.comp_mem_coverings (Y := fun (i : ι) (j : κ (g i) ⟨i⟩) ↦ W _ _ j)
+      (g := fun i j ↦ p _ _ j) _ hR fun i ↦ ?_
     rw [← hp]
     exact hTi _ _
 
 end CategoryTheory
+

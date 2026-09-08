@@ -44,62 +44,41 @@ namespace CategoryTheory
 
 open Limits
 
-variable (C : Type*) [Category* C] [Preadditive C] [HasZeroObject C] [HasShift C Int]
-  [forall (n : Int), (shiftFunctor C n).Additive] [Pretriangulated C]
+variable (C : Type*) [Category* C] [Preadditive C] [HasZeroObject C] [HasShift C ℤ]
+  [∀ (n : ℤ), (shiftFunctor C n).Additive] [Pretriangulated C]
 
 namespace Triangulated
 
 open Pretriangulated
 
-/--
-Definition of `TStructure` / `TStructure` 的定义
+/-- `TStructure C` is the type of t-structures on the (pre)triangulated category `C`. -/
+/-
+**CategoryTheory.Triangulated.TStructure** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheo
+ry.Triangulated`。
+形式化陈述：TStructure where /-- the predicate of objects that are `≤ n` for `n : ℤ`. 
+-/ le (n : Int) : ObjectProperty C /-- the predicate of objects that are `≥ n` f
+or `n : ℤ`. -/ ge (n : Int) : ObjectProperty C le_isClosedUnderIsomorphisms (n :
+ Int) : (le n).IsClosedUnderIsomorphisms
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TStructure
-  parameters: where
-  axioms and operations (10):
-    - le((n : Int)) : ObjectProperty C
-    - ge((n : Int)) : ObjectProperty C
-    - le_isClosedUnderIsomorphisms((n : Int)) : (le n).IsClosedUnderIsomorphisms  [default: by infer_instance]
-    - ge_isClosedUnderIsomorphisms((n : Int)) : (ge n).IsClosedUnderIsomorphisms  [default: by infer_instance]
-    - le_shift((n a n' : Int) (h : a + n' = n) (X : C) (hX : le n X)) : le n' (X⟦a⟧)
-    - ge_shift((n a n' : Int) (h : a + n' = n) (X : C) (hX : ge n X)) : ge n' (X⟦a⟧)
-    - zero'(⦃X Y) : C⦄ (f : X ⟶ Y) (hX : le 0 X) (hY : ge 1 Y) : f = 0
-    - le_zero_le : le 0 <= le 1
-    - ge_one_le : ge 1 <= ge 0
-    - exists_triangle_zero_one((A : C)) : exists (X Y : C) (_ : le 0 X) (_ : ge 1 Y) (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : Int)⟧), Triangle.mk f g h in distTriang C
-
-中文:
-结构 TStructure
-  参数: where
-  公理与运算 (10 个):
-    - le((n : 整数)) : ObjectProperty C
-    - ge((n : 整数)) : ObjectProperty C
-    - le_isClosedUnderIsomorphisms((n : 整数)) : (le n).在同构下封闭  [默认: by infer_instance]
-    - ge_isClosedUnderIsomorphisms((n : 整数)) : (ge n).在同构下封闭  [默认: by infer_instance]
-    - le_shift((n a n' : 整数) (h : a + n' = n) (X : C) (hX : le n X)) : le n' (X⟦a⟧)
-    - ge_shift((n a n' : 整数) (h : a + n' = n) (X : C) (hX : ge n X)) : ge n' (X⟦a⟧)
-    - zero'(⦃X Y) : C⦄ (f : X ⟶ Y) (hX : le 0 X) (hY : ge 1 Y) : f = 0
-    - le_zero_le : le 0 <= le 1
-    - ge_one_le : ge 1 <= ge 0
-    - exists_triangle_zero_one((A : C)) : 存在 (X Y : C) (_ : le 0 X) (_ : ge 1 Y) (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : 整数)⟧), Triangle.mk f g h in distTriang C
-
-Depends on / 依赖: IsClosedUnderIsomorphisms, exists_triangle_zero_one, ge_isClosedUnderIsomorphisms, ge_one_le, ge_shift, infer_instance, le_shift, le_zero_le
+--- 原说明 ---
+`TStructure C` is the type of t-structures on the (pre)triangulated category `C`
+.
 -/
 structure TStructure where
   /-- the predicate of objects that are `≤ n` for `n : ℤ`. -/
-  le (n : Int) : ObjectProperty C
+  le (n : ℤ) : ObjectProperty C
   /-- the predicate of objects that are `≥ n` for `n : ℤ`. -/
-  ge (n : Int) : ObjectProperty C
-  le_isClosedUnderIsomorphisms (n : Int) : (le n).IsClosedUnderIsomorphisms := by infer_instance
-  ge_isClosedUnderIsomorphisms (n : Int) : (ge n).IsClosedUnderIsomorphisms := by infer_instance
-  le_shift (n a n' : Int) (h : a + n' = n) (X : C) (hX : le n X) : le n' (X⟦a⟧)
-  ge_shift (n a n' : Int) (h : a + n' = n) (X : C) (hX : ge n X) : ge n' (X⟦a⟧)
+  ge (n : ℤ) : ObjectProperty C
+  le_isClosedUnderIsomorphisms (n : ℤ) : (le n).IsClosedUnderIsomorphisms := by infer_instance
+  ge_isClosedUnderIsomorphisms (n : ℤ) : (ge n).IsClosedUnderIsomorphisms := by infer_instance
+  le_shift (n a n' : ℤ) (h : a + n' = n) (X : C) (hX : le n X) : le n' (X⟦a⟧)
+  ge_shift (n a n' : ℤ) (h : a + n' = n) (X : C) (hX : ge n X) : ge n' (X⟦a⟧)
   zero' ⦃X Y : C⦄ (f : X ⟶ Y) (hX : le 0 X) (hY : ge 1 Y) : f = 0
-  le_zero_le : le 0 <= le 1
-  ge_one_le : ge 1 <= ge 0
-  exists_triangle_zero_one (A : C) : exists (X Y : C) (_ : le 0 X) (_ : ge 1 Y)
-    (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : Int)⟧), Triangle.mk f g h in distTriang C
+  le_zero_le : le 0 ≤ le 1
+  ge_one_le : ge 1 ≤ ge 0
+  exists_triangle_zero_one (A : C) : ∃ (X Y : C) (_ : le 0 X) (_ : ge 1 Y)
+    (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : ℤ)⟧), Triangle.mk f g h ∈ distTriang C
 
 namespace TStructure
 
@@ -110,82 +89,90 @@ variable (t : TStructure C)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `exists_triangle` / 引理 `exists_triangle`
-
-English:
-lemma exists_triangle
-  given: (A : C) (n₀ n₁ : Int) (h : n₀ + 1 = n₁)
-  proof: by
-  obtain ⟨X, Y, hX, hY, f, g, h, mem⟩ := t.exists_triangle_zero_one (A⟦n₀⟧)
-  let T := (Triangle.shiftFunctor C (-n₀)).obj (Triangle.mk f g h)
-  let e := (shiftEquiv C n₀).unitIso.symm.app A
-  have hT' : Triangle.mk (T.mor₁ ≫ e.hom) (e.inv ≫ T.mor₂) T.mor₃ in distTriang C := by
-    refine isomorphic_distinguished _ (Triangle.shift_distinguished _ mem (-n₀)) _ ?_
-    refine Triangle.isoMk _ _ (Iso.refl _) e.symm (Iso.refl _) ?_ ?_ ?_
-    all_goals simp [T]
-  exact ⟨_, _, t.le_shift _ _ _ (neg_add_cancel n₀) _ hX,
-    t.ge_shift _ _ _ (by lia) _ hY, _, _, _, hT'⟩
-
-中文:
-引理 存在_triangle
-  条件: (A : C) (n₀ n₁ : 整数) (h : n₀ + 1 = n₁)
-  证明: by
-  obtain ⟨X, Y, hX, hY, f, g, h, mem⟩ := t.exists_triangle_zero_one (A⟦n₀⟧)
-  let T := (Triangle.shiftFunctor C (-n₀)).obj (Triangle.mk f g h)
-  let e := (shiftEquiv C n₀).unitIso.symm.app A
-  have hT' : Triangle.mk (T.mor₁ ≫ e.hom) (e.inv ≫ T.mor₂) T.mor₃ in distTriang C := by
-    refine isomorphic_distinguished _ (Triangle.shift_distinguished _ mem (-n₀)) _ ?_
-    refine Triangle.isoMk _ _ (Iso.refl _) e.symm (Iso.refl _) ?_ ?_ ?_
-    all_goals simp [T]
-  exact ⟨_, _, t.le_shift _ _ _ (neg_add_cancel n₀) _ hX,
-    t.ge_shift _ _ _ (by lia) _ hY, _, _, _, hT'⟩
-
-Depends on / 依赖: Iso.refl, T.mor, Triangle, Triangle.isoMk, Triangle.mk, Triangle.shiftFunctor, Triangle.shift_distinguished, all_goals, distTriang, e.hom, e.inv, e.symm, exists_triangle_zero_one, isomorphic_distinguished, le_shift, neg_add_cancel, shiftEquiv, shiftFunctor, shift_distinguished, t.exists_triangle_zero_one
+/-
+**CategoryTheory.Triangulated.TStructure.exists_triangle** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：exists_triangle (A : C) (n₀ n₁ : Int) (h : n₀ + 1 = n₁) : exists (X Y : C)
+ (_ : t.le n₀ X) (_ : t.ge n₁ Y) (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : Int)⟧),
+ Triangle.mk f g h in distTriang C
+参数：A : C；n₀ n₁ : Int；h : n₀ + 1 = n₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Triangulated.TStructure.exists_triangle_zero_one`：∀ {C : 
+Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory
+.Preadditive C]   [inst_2 : CategoryTheory.Limits.Has…
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.shift_distinguished`：shift_disti
+nguished (n : Int) : (CategoryTheory.shiftFunctor (Triangle C) n).obj T in distT
+riang C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Int.negOnePow_neg`：negOnePow_neg (n : Int) : (-n).negOnePow = n.negOnePo
+w
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Triangulated.TStructure.le_shift`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C] 
+  [inst_2 : CategoryTheory.Limits.Has…
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `CategoryTheory.Triangulated.TStructure.ge_shift`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C] 
+  [inst_2 : CategoryTheory.Limits.Has…
 -/
-lemma exists_triangle (A : C) (n₀ n₁ : Int) (h : n₀ + 1 = n₁) :
-    exists (X Y : C) (_ : t.le n₀ X) (_ : t.ge n₁ Y) (f : X ⟶ A) (g : A ⟶ Y)
-      (h : Y ⟶ X⟦(1 : Int)⟧), Triangle.mk f g h in distTriang C := by
+lemma exists_triangle (A : C) (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁) :
+    ∃ (X Y : C) (_ : t.le n₀ X) (_ : t.ge n₁ Y) (f : X ⟶ A) (g : A ⟶ Y)
+      (h : Y ⟶ X⟦(1 : ℤ)⟧), Triangle.mk f g h ∈ distTriang C := by
   obtain ⟨X, Y, hX, hY, f, g, h, mem⟩ := t.exists_triangle_zero_one (A⟦n₀⟧)
   let T := (Triangle.shiftFunctor C (-n₀)).obj (Triangle.mk f g h)
   let e := (shiftEquiv C n₀).unitIso.symm.app A
-  have hT' : Triangle.mk (T.mor₁ ≫ e.hom) (e.inv ≫ T.mor₂) T.mor₃ in distTriang C := by
+  have hT' : Triangle.mk (T.mor₁ ≫ e.hom) (e.inv ≫ T.mor₂) T.mor₃ ∈ distTriang C := by
     refine isomorphic_distinguished _ (Triangle.shift_distinguished _ mem (-n₀)) _ ?_
     refine Triangle.isoMk _ _ (Iso.refl _) e.symm (Iso.refl _) ?_ ?_ ?_
     all_goals simp [T]
   exact ⟨_, _, t.le_shift _ _ _ (neg_add_cancel n₀) _ hX,
     t.ge_shift _ _ _ (by lia) _ hY, _, _, _, hT'⟩
-
-/--
-lemma `shift_le` / 引理 `shift_le`
-
-English:
-lemma shift_le
-  given: (a n n' : Int) (hn' : a + n = n')
-  proof: by
-  ext X
-  constructor
-  · intro hX
-    exact ((t.le n').prop_iff_of_iso ((shiftEquiv C a).unitIso.symm.app X)).1
-      (t.le_shift n (-a) n' (by lia) _ hX)
-  · intro hX
-    exact t.le_shift _ _ _ hn' X hX
-
-中文:
-引理 shift_le
-  条件: (a n n' : 整数) (hn' : a + n = n')
-  证明: by
-  ext X
-  constructor
-  · intro hX
-    exact ((t.le n').prop_iff_of_iso ((shiftEquiv C a).unitIso.symm.app X)).1
-      (t.le_shift n (-a) n' (by lia) _ hX)
-  · intro hX
-    exact t.le_shift _ _ _ hn' X hX
-
-Depends on / 依赖: le_shift, prop_iff_of_iso, shiftEquiv, t.le, t.le_shift, unitIso, unitIso.symm.app
+/-
+**CategoryTheory.Triangulated.TStructure.shift_le** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Triangulated.TStructure`。
+形式化陈述：shift_le (a n n' : Int) (hn' : a + n = n') : (t.le n).shift a = t.le n'
+参数：a n n' : Int；hn' : a + n = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `CategoryTheory.ObjectProperty.prop_iff_of_iso`：prop_iff_of_iso [IsClosed
+UnderIsomorphisms P] {X Y : C} (e : X ≅ Y) : P X ↔ P Y
+· 使用定理 `CategoryTheory.Triangulated.TStructure.le_isClosedUnderIsomorphisms`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTh
+eory.Preadditive C]   [inst_2 : CategoryTheory.Limits.Has…
+· 使用定理 `CategoryTheory.Triangulated.TStructure.le_shift`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C] 
+  [inst_2 : CategoryTheory.Limits.Has…
 -/
-lemma shift_le (a n n' : Int) (hn' : a + n = n') :
+lemma shift_le (a n n' : ℤ) (hn' : a + n = n') :
     (t.le n).shift a = t.le n' := by
   ext X
   constructor
@@ -194,37 +181,26 @@ lemma shift_le (a n n' : Int) (hn' : a + n = n') :
       (t.le_shift n (-a) n' (by lia) _ hX)
   · intro hX
     exact t.le_shift _ _ _ hn' X hX
-
-/--
-lemma `shift_ge` / 引理 `shift_ge`
-
-English:
-lemma shift_ge
-  given: (a n n' : Int) (hn' : a + n = n')
-  proof: by
-  ext X
-  constructor
-  · intro hX
-    exact ((t.ge n').prop_iff_of_iso ((shiftEquiv C a).unitIso.symm.app X)).1
-      (t.ge_shift n (-a) n' (by lia) _ hX)
-  · intro hX
-    exact t.ge_shift _ _ _ hn' X hX
-
-中文:
-引理 shift_ge
-  条件: (a n n' : 整数) (hn' : a + n = n')
-  证明: by
-  ext X
-  constructor
-  · intro hX
-    exact ((t.ge n').prop_iff_of_iso ((shiftEquiv C a).unitIso.symm.app X)).1
-      (t.ge_shift n (-a) n' (by lia) _ hX)
-  · intro hX
-    exact t.ge_shift _ _ _ hn' X hX
-
-Depends on / 依赖: ge_shift, prop_iff_of_iso, shiftEquiv, t.ge, t.ge_shift, unitIso, unitIso.symm.app
+/-
+**CategoryTheory.Triangulated.TStructure.shift_ge** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Triangulated.TStructure`。
+形式化陈述：shift_ge (a n n' : Int) (hn' : a + n = n') : (t.ge n).shift a = t.ge n'
+参数：a n n' : Int；hn' : a + n = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `CategoryTheory.ObjectProperty.prop_iff_of_iso`：prop_iff_of_iso [IsClosed
+UnderIsomorphisms P] {X Y : C} (e : X ≅ Y) : P X ↔ P Y
+· 使用定理 `CategoryTheory.Triangulated.TStructure.ge_isClosedUnderIsomorphisms`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTh
+eory.Preadditive C]   [inst_2 : CategoryTheory.Limits.Has…
+· 使用定理 `CategoryTheory.Triangulated.TStructure.ge_shift`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C] 
+  [inst_2 : CategoryTheory.Limits.Has…
 -/
-lemma shift_ge (a n n' : Int) (hn' : a + n = n') :
+lemma shift_ge (a n n' : ℤ) (hn' : a + n = n') :
     (t.ge n).shift a = t.ge n' := by
   ext X
   constructor
@@ -233,67 +209,37 @@ lemma shift_ge (a n n' : Int) (hn' : a + n = n') :
       (t.ge_shift n (-a) n' (by lia) _ hX)
   · intro hX
     exact t.ge_shift _ _ _ hn' X hX
-
-/--
-lemma `le_monotone` / 引理 `le_monotone`
-
-English:
-lemma le_monotone
-  statement: Monotone t.le
-  proof: by
-  let H := fun (a : Nat) => forall (n : Int), t.le n <= t.le (n + a)
-  suffices forall (a : Nat), H a by
-    intro n₀ n₁ h
-    obtain ⟨a, ha⟩ := Int.nonneg_def.1 h
-    obtain rfl : n₁ = n₀ + a := by lia
-    apply this
-  have H_zero : H 0 := fun n => by
-    simp only [Nat.cast_zero, add_zero]
-    rfl
-  have H_one : H 1 := fun n X hX => by
-    rw [← t.shift_le n 1 (n + (1 : Nat)) rfl]; rw [ObjectProperty.prop_shift_iff]
-    rw [← t.shift_le n 0 n (add_zero n)]; rw [ObjectProperty.prop_shift_iff] at hX
-    exact t.le_zero_le _ hX
-  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
-    intro a b c h ha hb n
-    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
-    exact (ha n).trans (hb (n + a))
-  intro a
-  induction a with
-  | zero => exact H_zero
-  | succ a ha => exact H_add a 1 _ rfl ha H_one
-
-中文:
-引理 le_monotone
-  结论: 递增 t.le
-  证明: by
-  let H := fun (a : Nat) => forall (n : Int), t.le n <= t.le (n + a)
-  suffices forall (a : Nat), H a by
-    intro n₀ n₁ h
-    obtain ⟨a, ha⟩ := Int.nonneg_def.1 h
-    obtain rfl : n₁ = n₀ + a := by lia
-    apply this
-  have H_zero : H 0 := fun n => by
-    simp only [Nat.cast_zero, add_zero]
-    rfl
-  have H_one : H 1 := fun n X hX => by
-    rw [← t.shift_le n 1 (n + (1 : Nat)) rfl]; rw [ObjectProperty.prop_shift_iff]
-    rw [← t.shift_le n 0 n (add_zero n)]; rw [ObjectProperty.prop_shift_iff] at hX
-    exact t.le_zero_le _ hX
-  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
-    intro a b c h ha hb n
-    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
-    exact (ha n).trans (hb (n + a))
-  intro a
-  induction a with
-  | zero => exact H_zero
-  | succ a ha => exact H_add a 1 _ rfl ha H_one
-
-Depends on / 依赖: H_one, H_zero, Int.nonneg_def, Nat.cast_zero, ObjectProperty, ObjectProperty.prop_shift_iff, add_zero, cast_zero, le_zero_le, nonneg_def, prop_shift_iff, shift_le, t.le, t.le_zero_le, t.shift_le
+/-
+**CategoryTheory.Triangulated.TStructure.le_monotone** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：le_monotone : Monotone t.le
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Triangulated.TStructure.shift_le`：shift_le (a n n' : Int)
+ (hn' : a + n = n') : (t.le n).shift a = t.le n'
+· 使用引理 `CategoryTheory.ObjectProperty.prop_shift_iff`：prop_shift_iff (a : A) (X 
+: C) : P.shift a X ↔ P (X⟦a⟧)
+· 使用定理 `CategoryTheory.Triangulated.TStructure.le_zero_le`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C
+]   [inst_2 : CategoryTheory.Limits.Has…
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.nonneg_def`：∀ {a : ℤ}, a.NonNeg ↔ ∃ n, a = ↑n
 -/
 lemma le_monotone : Monotone t.le := by
-  let H := fun (a : Nat) => forall (n : Int), t.le n <= t.le (n + a)
-  suffices forall (a : Nat), H a by
+  let H := fun (a : ℕ) => ∀ (n : ℤ), t.le n ≤ t.le (n + a)
+  suffices ∀ (a : ℕ), H a by
     intro n₀ n₁ h
     obtain ⟨a, ha⟩ := Int.nonneg_def.1 h
     obtain rfl : n₁ = n₀ + a := by lia
@@ -302,78 +248,53 @@ lemma le_monotone : Monotone t.le := by
     simp only [Nat.cast_zero, add_zero]
     rfl
   have H_one : H 1 := fun n X hX => by
-    rw [← t.shift_le n 1 (n + (1 : Nat)) rfl]; rw [ObjectProperty.prop_shift_iff]
-    rw [← t.shift_le n 0 n (add_zero n)]; rw [ObjectProperty.prop_shift_iff] at hX
+    rw [← t.shift_le n 1 (n + (1 : ℕ)) rfl, ObjectProperty.prop_shift_iff]
+    rw [← t.shift_le n 0 n (add_zero n), ObjectProperty.prop_shift_iff] at hX
     exact t.le_zero_le _ hX
-  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
+  have H_add : ∀ (a b c : ℕ) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
     intro a b c h ha hb n
-    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
+    rw [← h, Nat.cast_add, ← add_assoc]
     exact (ha n).trans (hb (n + a))
   intro a
   induction a with
   | zero => exact H_zero
   | succ a ha => exact H_add a 1 _ rfl ha H_one
-
-/--
-lemma `ge_antitone` / 引理 `ge_antitone`
-
-English:
-lemma ge_antitone
-  statement: Antitone t.ge
-  proof: by
-  let H := fun (a : Nat) => forall (n : Int), t.ge (n + a) <= t.ge n
-  suffices forall (a : Nat), H a by
-    intro n₀ n₁ h
-    obtain ⟨a, ha⟩ := Int.nonneg_def.1 h
-    obtain rfl : n₁ = n₀ + a := by lia
-    apply this
-  have H_zero : H 0 := fun n => by
-    simp only [Nat.cast_zero, add_zero]
-    rfl
-  have H_one : H 1 := fun n X hX => by
-    rw [← t.shift_ge n 1 (n + (1 : Nat)) (by simp)]; rw [ObjectProperty.prop_shift_iff] at hX
-    rw [← t.shift_ge n 0 n (add_zero n)]
-    exact t.ge_one_le _ hX
-  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
-    intro a b c h ha hb n
-    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
-    exact (hb (n + a)).trans (ha n)
-  intro a
-  induction a with
-  | zero => exact H_zero
-  | succ a ha => exact H_add a 1 _ rfl ha H_one
-
-中文:
-引理 ge_antitone
-  结论: 递减 t.ge
-  证明: by
-  let H := fun (a : Nat) => forall (n : Int), t.ge (n + a) <= t.ge n
-  suffices forall (a : Nat), H a by
-    intro n₀ n₁ h
-    obtain ⟨a, ha⟩ := Int.nonneg_def.1 h
-    obtain rfl : n₁ = n₀ + a := by lia
-    apply this
-  have H_zero : H 0 := fun n => by
-    simp only [Nat.cast_zero, add_zero]
-    rfl
-  have H_one : H 1 := fun n X hX => by
-    rw [← t.shift_ge n 1 (n + (1 : Nat)) (by simp)]; rw [ObjectProperty.prop_shift_iff] at hX
-    rw [← t.shift_ge n 0 n (add_zero n)]
-    exact t.ge_one_le _ hX
-  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
-    intro a b c h ha hb n
-    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
-    exact (hb (n + a)).trans (ha n)
-  intro a
-  induction a with
-  | zero => exact H_zero
-  | succ a ha => exact H_add a 1 _ rfl ha H_one
-
-Depends on / 依赖: H_add, H_one, H_zero, Int.nonneg_def, Nat.cast_zero, ObjectProperty, ObjectProperty.prop_shift_iff, add_zero, cast_zero, ge_one_le, nonneg_def, prop_shift_iff, shift_ge, t.ge, t.ge_one_le, t.shift_ge
+/-
+**CategoryTheory.Triangulated.TStructure.ge_antitone** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：ge_antitone : Antitone t.ge
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Triangulated.TStructure.shift_ge`：shift_ge (a n n' : Int)
+ (hn' : a + n = n') : (t.ge n).shift a = t.ge n'
+· 使用定理 `CategoryTheory.Triangulated.TStructure.ge_one_le`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]
+   [inst_2 : CategoryTheory.Limits.Has…
+· 使用引理 `CategoryTheory.ObjectProperty.prop_shift_iff`：prop_shift_iff (a : A) (X 
+: C) : P.shift a X ↔ P (X⟦a⟧)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.nonneg_def`：∀ {a : ℤ}, a.NonNeg ↔ ∃ n, a = ↑n
 -/
 lemma ge_antitone : Antitone t.ge := by
-  let H := fun (a : Nat) => forall (n : Int), t.ge (n + a) <= t.ge n
-  suffices forall (a : Nat), H a by
+  let H := fun (a : ℕ) => ∀ (n : ℤ), t.ge (n + a) ≤ t.ge n
+  suffices ∀ (a : ℕ), H a by
     intro n₀ n₁ h
     obtain ⟨a, ha⟩ := Int.nonneg_def.1 h
     obtain rfl : n₁ = n₀ + a := by lia
@@ -382,425 +303,330 @@ lemma ge_antitone : Antitone t.ge := by
     simp only [Nat.cast_zero, add_zero]
     rfl
   have H_one : H 1 := fun n X hX => by
-    rw [← t.shift_ge n 1 (n + (1 : Nat)) (by simp)]; rw [ObjectProperty.prop_shift_iff] at hX
+    rw [← t.shift_ge n 1 (n + (1 : ℕ)) (by simp), ObjectProperty.prop_shift_iff] at hX
     rw [← t.shift_ge n 0 n (add_zero n)]
     exact t.ge_one_le _ hX
-  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
+  have H_add : ∀ (a b c : ℕ) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
     intro a b c h ha hb n
-    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
+    rw [← h, Nat.cast_add, ← add_assoc]
     exact (hb (n + a)).trans (ha n)
   intro a
   induction a with
   | zero => exact H_zero
   | succ a ha => exact H_add a 1 _ rfl ha H_one
 
-/--
-Definition of `IsLE` / `IsLE` 的定义
+/-- Given a t-structure `t` on a pretriangulated category `C`, the property `t.IsLE X n`
+holds if `X : C` is `≤ n` for the t-structure. -/
+/-
+**CategoryTheory.Triangulated.TStructure.IsLE** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.Triangulated.TStructure`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.Preadditive C] →       [inst_2 : CategoryTheory.Limits.Has
+ZeroObject C] →         [inst_3 : CategoryTheory.HasShift C ℤ] →           [inst
+_4 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor C n).Additive] →             [inst_
+5 : CategoryTheory.Pretriangulated C] → CategoryTheory.Triangulated.TStructure C
+ → C → ℤ → Prop
+参数：n : ℤ；CategoryTheory.shiftFunctor C n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLE
-  parameters: (X : C) (n : Int)
-  axioms and operations (1):
-    - le : t.le n X
-
-中文:
-类 是LE
-  参数: (X : C) (n : 整数)
-  公理与运算 (1 个):
-    - le : t.le n X
+--- 原说明 ---
+Given a t-structure `t` on a pretriangulated category `C`, the property `t.IsLE 
+X n`
+holds if `X : C` is `≤ n` for the t-structure.
 -/
-class IsLE (X : C) (n : Int) : Prop where
+class IsLE (X : C) (n : ℤ) : Prop where
   le : t.le n X
 
-/--
-Definition of `IsGE` / `IsGE` 的定义
+/-- Given a t-structure `t` on a pretriangulated category `C`, the property `t.IsGE X n`
+holds if `X : C` is `≥ n` for the t-structure. -/
+/-
+**CategoryTheory.Triangulated.TStructure.IsGE** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.Triangulated.TStructure`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.Preadditive C] →       [inst_2 : CategoryTheory.Limits.Has
+ZeroObject C] →         [inst_3 : CategoryTheory.HasShift C ℤ] →           [inst
+_4 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor C n).Additive] →             [inst_
+5 : CategoryTheory.Pretriangulated C] → CategoryTheory.Triangulated.TStructure C
+ → C → ℤ → Prop
+参数：n : ℤ；CategoryTheory.shiftFunctor C n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsGE
-  parameters: (X : C) (n : Int)
-  axioms and operations (1):
-    - ge : t.ge n X
-
-中文:
-类 是GE
-  参数: (X : C) (n : 整数)
-  公理与运算 (1 个):
-    - ge : t.ge n X
+--- 原说明 ---
+Given a t-structure `t` on a pretriangulated category `C`, the property `t.IsGE 
+X n`
+holds if `X : C` is `≥ n` for the t-structure.
 -/
-class IsGE (X : C) (n : Int) : Prop where
+class IsGE (X : C) (n : ℤ) : Prop where
   ge : t.ge n X
-
-/--
-lemma `le_of_isLE` / 引理 `le_of_isLE`
-
-English:
-lemma le_of_isLE
-  given: (X : C) (n : Int) [t.IsLE X n]
-  statement: t.le n X
-  proof: IsLE.le
-
-中文:
-引理 le_of_isLE
-  条件: (X : C) (n : 整数) [t.是LE X n]
-  结论: t.le n X
-  证明: IsLE.le
-
-Depends on / 依赖: IsLE.le
+/-
+**CategoryTheory.Triangulated.TStructure.le_of_isLE** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Triangulated.TStructure`。
+形式化陈述：le_of_isLE (X : C) (n : Int) [t.IsLE X n] : t.le n X
+参数：X : C；n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Triangulated.TStructure.IsLE.le`：∀ {C : Type u_1} {inst :
+ CategoryTheory.Category.{v_1, u_1} C} {inst_1 : CategoryTheory.Preadditive C}  
+ {inst_2 : CategoryTheory.Limits.Has…
 -/
-lemma le_of_isLE (X : C) (n : Int) [t.IsLE X n] : t.le n X := IsLE.le
-
-/--
-lemma `ge_of_isGE` / 引理 `ge_of_isGE`
-
-English:
-lemma ge_of_isGE
-  given: (X : C) (n : Int) [t.IsGE X n]
-  statement: t.ge n X
-  proof: IsGE.ge
-
-中文:
-引理 ge_of_isGE
-  条件: (X : C) (n : 整数) [t.是GE X n]
-  结论: t.ge n X
-  证明: IsGE.ge
-
-Depends on / 依赖: IsGE.ge
+lemma le_of_isLE (X : C) (n : ℤ) [t.IsLE X n] : t.le n X := IsLE.le
+/-
+**CategoryTheory.Triangulated.TStructure.ge_of_isGE** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Triangulated.TStructure`。
+形式化陈述：ge_of_isGE (X : C) (n : Int) [t.IsGE X n] : t.ge n X
+参数：X : C；n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Triangulated.TStructure.IsGE.ge`：∀ {C : Type u_1} {inst :
+ CategoryTheory.Category.{v_1, u_1} C} {inst_1 : CategoryTheory.Preadditive C}  
+ {inst_2 : CategoryTheory.Limits.Has…
 -/
-lemma ge_of_isGE (X : C) (n : Int) [t.IsGE X n] : t.ge n X := IsGE.ge
-
-/--
-lemma `isLE_of_iso` / 引理 `isLE_of_iso`
-
-English:
-lemma isLE_of_iso
-  given: {X Y : C} (e : X ≅ Y) (n : Int) [t.IsLE X n]
-  statement: t.IsLE Y n where
-  proof: (t.le n).prop_of_iso e (t.le_of_isLE X n)
-
-中文:
-引理 isLE_of_iso
-  条件: {X Y : C} (e : X ≅ Y) (n : 整数) [t.是LE X n]
-  结论: t.是LE Y n where
-  证明: (t.le n).prop_of_iso e (t.le_of_isLE X n)
-
-Depends on / 依赖: le_of_isLE, prop_of_iso, t.le, t.le_of_isLE
+lemma ge_of_isGE (X : C) (n : ℤ) [t.IsGE X n] : t.ge n X := IsGE.ge
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isLE_of_iso {X Y : C} (e : X ≅ Y) (n : Int) [t.IsLE X n] : t.IsLE Y n wher
+e le
+参数：e : X ≅ Y；n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_iso`：prop_of_iso [IsClosedUnderIso
+morphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y
+· 使用定理 `CategoryTheory.Triangulated.TStructure.le_isClosedUnderIsomorphisms`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTh
+eory.Preadditive C]   [inst_2 : CategoryTheory.Limits.Has…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.le_of_isLE`：le_of_isLE (X : C) (n
+ : Int) [t.IsLE X n] : t.le n X
 -/
-lemma isLE_of_iso {X Y : C} (e : X ≅ Y) (n : Int) [t.IsLE X n] : t.IsLE Y n where
+lemma isLE_of_iso {X Y : C} (e : X ≅ Y) (n : ℤ) [t.IsLE X n] : t.IsLE Y n where
   le := (t.le n).prop_of_iso e (t.le_of_isLE X n)
-
-/--
-lemma `isGE_of_iso` / 引理 `isGE_of_iso`
-
-English:
-lemma isGE_of_iso
-  given: {X Y : C} (e : X ≅ Y) (n : Int) [t.IsGE X n]
-  statement: t.IsGE Y n where
-  proof: (t.ge n).prop_of_iso e (t.ge_of_isGE X n)
-
-中文:
-引理 isGE_of_iso
-  条件: {X Y : C} (e : X ≅ Y) (n : 整数) [t.是GE X n]
-  结论: t.是GE Y n where
-  证明: (t.ge n).prop_of_iso e (t.ge_of_isGE X n)
-
-Depends on / 依赖: ge_of_isGE, prop_of_iso, t.ge, t.ge_of_isGE
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isGE_of_iso {X Y : C} (e : X ≅ Y) (n : Int) [t.IsGE X n] : t.IsGE Y n wher
+e ge
+参数：e : X ≅ Y；n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_iso`：prop_of_iso [IsClosedUnderIso
+morphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y
+· 使用定理 `CategoryTheory.Triangulated.TStructure.ge_isClosedUnderIsomorphisms`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTh
+eory.Preadditive C]   [inst_2 : CategoryTheory.Limits.Has…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.ge_of_isGE`：ge_of_isGE (X : C) (n
+ : Int) [t.IsGE X n] : t.ge n X
 -/
-lemma isGE_of_iso {X Y : C} (e : X ≅ Y) (n : Int) [t.IsGE X n] : t.IsGE Y n where
+lemma isGE_of_iso {X Y : C} (e : X ≅ Y) (n : ℤ) [t.IsGE X n] : t.IsGE Y n where
   ge := (t.ge n).prop_of_iso e (t.ge_of_isGE X n)
-
-/--
-lemma `isLE_of_le` / 引理 `isLE_of_le`
-
-English:
-lemma isLE_of_le
-  given: (X : C) (p q : Int) (hpq : p <= q := by lia) [t.IsLE X p]
-  statement: t.IsLE X q where
-  proof: le_monotone t hpq _ (t.le_of_isLE X p)
-
-中文:
-引理 isLE_of_le
-  条件: (X : C) (p q : 整数) (hpq : p <= q := by lia) [t.是LE X p]
-  结论: t.是LE X q where
-  证明: le_monotone t hpq _ (t.le_of_isLE X p)
-
-Depends on / 依赖: le_monotone, le_of_isLE, t.IsLE, t.le_of_isLE
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_of_le** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Triangulated.TStructure`。
+形式化陈述：isLE_of_le (X : C) (p q : Int) (hpq : p <= q
+参数：X : C；p q : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.le_monotone`：le_monotone : Monoto
+ne t.le
+· 使用引理 `CategoryTheory.Triangulated.TStructure.le_of_isLE`：le_of_isLE (X : C) (n
+ : Int) [t.IsLE X n] : t.le n X
 -/
-lemma isLE_of_le (X : C) (p q : Int) (hpq : p <= q := by lia) [t.IsLE X p] : t.IsLE X q where
+lemma isLE_of_le (X : C) (p q : ℤ) (hpq : p ≤ q := by lia) [t.IsLE X p] : t.IsLE X q where
   le := le_monotone t hpq _ (t.le_of_isLE X p)
-
-/--
-lemma `isGE_of_ge` / 引理 `isGE_of_ge`
-
-English:
-lemma isGE_of_ge
-  given: (X : C) (p q : Int) (hpq : p <= q := by lia) [t.IsGE X q]
-  statement: t.IsGE X p where
-  proof: ge_antitone t hpq _ (t.ge_of_isGE X q)
-
-@[deprecated (since := "2026-01-30")] alias isLE_of_LE := isLE_of_le
-@[deprecated (since := "2026-01-30")] alias isGE_of_GE := isGE_of_ge
-
-@[simp]
-
-中文:
-引理 isGE_of_ge
-  条件: (X : C) (p q : 整数) (hpq : p <= q := by lia) [t.是GE X q]
-  结论: t.是GE X p where
-  证明: ge_antitone t hpq _ (t.ge_of_isGE X q)
-
-@[deprecated (since := "2026-01-30")] alias isLE_of_LE := isLE_of_le
-@[deprecated (since := "2026-01-30")] alias isGE_of_GE := isGE_of_ge
-
-@[simp]
-
-Depends on / 依赖: ge_antitone, ge_of_isGE, t.IsGE, t.ge_of_isGE
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_of_ge** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Triangulated.TStructure`。
+形式化陈述：isGE_of_ge (X : C) (p q : Int) (hpq : p <= q
+参数：X : C；p q : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.ge_antitone`：ge_antitone : Antito
+ne t.ge
+· 使用引理 `CategoryTheory.Triangulated.TStructure.ge_of_isGE`：ge_of_isGE (X : C) (n
+ : Int) [t.IsGE X n] : t.ge n X
 -/
-lemma isGE_of_ge (X : C) (p q : Int) (hpq : p <= q := by lia) [t.IsGE X q] : t.IsGE X p where
+lemma isGE_of_ge (X : C) (p q : ℤ) (hpq : p ≤ q := by lia) [t.IsGE X q] : t.IsGE X p where
   ge := ge_antitone t hpq _ (t.ge_of_isGE X q)
 
 @[deprecated (since := "2026-01-30")] alias isLE_of_LE := isLE_of_le
 @[deprecated (since := "2026-01-30")] alias isGE_of_GE := isGE_of_ge
 
 @[simp]
-/--
-lemma `le_iff_isLE` / 引理 `le_iff_isLE`
-
-English:
-lemma le_iff_isLE
-  given: (X : C) (n : Int)
-  statement: t.le n X ↔ t.IsLE X n
-  proof: ⟨fun h => ⟨h⟩, fun _ => t.le_of_isLE X n⟩
-
-@[simp]
-
-中文:
-引理 le_iff_isLE
-  条件: (X : C) (n : 整数)
-  结论: t.le n X ↔ t.是LE X n
-  证明: ⟨fun h => ⟨h⟩, fun _ => t.le_of_isLE X n⟩
-
-@[simp]
-
-Depends on / 依赖: le_of_isLE, t.le_of_isLE
+/-
+**CategoryTheory.Triangulated.TStructure.le_iff_isLE** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：le_iff_isLE (X : C) (n : Int) : t.le n X ↔ t.IsLE X n
+参数：X : C；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.le_of_isLE`：le_of_isLE (X : C) (n
+ : Int) [t.IsLE X n] : t.le n X
 -/
-lemma le_iff_isLE (X : C) (n : Int) : t.le n X ↔ t.IsLE X n :=
-  ⟨fun h => ⟨h⟩, fun _ => t.le_of_isLE X n⟩
+lemma le_iff_isLE (X : C) (n : ℤ) : t.le n X ↔ t.IsLE X n :=
+  ⟨fun h ↦ ⟨h⟩, fun _ ↦ t.le_of_isLE X n⟩
 
 @[simp]
-/--
-lemma `ge_iff_isGE` / 引理 `ge_iff_isGE`
-
-English:
-lemma ge_iff_isGE
-  given: (X : C) (n : Int)
-  statement: t.ge n X ↔ t.IsGE X n
-  proof: ⟨fun h => ⟨h⟩, fun _ => t.ge_of_isGE X n⟩
-
-中文:
-引理 ge_iff_isGE
-  条件: (X : C) (n : 整数)
-  结论: t.ge n X ↔ t.是GE X n
-  证明: ⟨fun h => ⟨h⟩, fun _ => t.ge_of_isGE X n⟩
-
-Depends on / 依赖: ge_of_isGE, t.ge_of_isGE
+/-
+**CategoryTheory.Triangulated.TStructure.ge_iff_isGE** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：ge_iff_isGE (X : C) (n : Int) : t.ge n X ↔ t.IsGE X n
+参数：X : C；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.ge_of_isGE`：ge_of_isGE (X : C) (n
+ : Int) [t.IsGE X n] : t.ge n X
 -/
-lemma ge_iff_isGE (X : C) (n : Int) : t.ge n X ↔ t.IsGE X n :=
-  ⟨fun h => ⟨h⟩, fun _ => t.ge_of_isGE X n⟩
-
-instance (n : Int) : (t.le n).IsClosedUnderIsomorphisms where
+lemma ge_iff_isGE (X : C) (n : ℤ) : t.ge n X ↔ t.IsGE X n :=
+  ⟨fun h ↦ ⟨h⟩, fun _ ↦ t.ge_of_isGE X n⟩
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) : (t.le n).IsClosedUnderIsomorphisms where
   of_iso e h := by
     simp only [le_iff_isLE] at h ⊢
     exact t.isLE_of_iso e _
-
-instance (n : Int) : (t.ge n).IsClosedUnderIsomorphisms where
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) : (t.ge n).IsClosedUnderIsomorphisms where
   of_iso e h := by
     simp only [ge_iff_isGE] at h ⊢
     exact t.isGE_of_iso e _
-
-/--
-lemma `isLE_shift` / 引理 `isLE_shift`
-
-English:
-lemma isLE_shift
-  given: (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsLE X n]
-  proof: ⟨t.le_shift n a n' hn' X (t.le_of_isLE X n)⟩
-
-中文:
-引理 isLE_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是LE X n]
-  证明: ⟨t.le_shift n a n' hn' X (t.le_of_isLE X n)⟩
-
-Depends on / 依赖: le_of_isLE, le_shift, t.IsLE, t.le_of_isLE, t.le_shift
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_shift** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Triangulated.TStructure`。
+形式化陈述：isLE_shift (X : C) (n a n' : Int) (hn' : a + n' = n
+参数：X : C；n a n' : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Triangulated.TStructure.le_shift`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C] 
+  [inst_2 : CategoryTheory.Limits.Has…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.le_of_isLE`：le_of_isLE (X : C) (n
+ : Int) [t.IsLE X n] : t.le n X
 -/
-lemma isLE_shift (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsLE X n] :
+lemma isLE_shift (X : C) (n a n' : ℤ) (hn' : a + n' = n := by lia) [t.IsLE X n] :
     t.IsLE (X⟦a⟧) n' :=
   ⟨t.le_shift n a n' hn' X (t.le_of_isLE X n)⟩
-
-/--
-lemma `isGE_shift` / 引理 `isGE_shift`
-
-English:
-lemma isGE_shift
-  given: (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsGE X n]
-  proof: ⟨t.ge_shift n a n' hn' X (t.ge_of_isGE X n)⟩
-
-中文:
-引理 isGE_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是GE X n]
-  证明: ⟨t.ge_shift n a n' hn' X (t.ge_of_isGE X n)⟩
-
-Depends on / 依赖: ge_of_isGE, ge_shift, t.IsGE, t.ge_of_isGE, t.ge_shift
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_shift** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Triangulated.TStructure`。
+形式化陈述：isGE_shift (X : C) (n a n' : Int) (hn' : a + n' = n
+参数：X : C；n a n' : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Triangulated.TStructure.ge_shift`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C] 
+  [inst_2 : CategoryTheory.Limits.Has…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.ge_of_isGE`：ge_of_isGE (X : C) (n
+ : Int) [t.IsGE X n] : t.ge n X
 -/
-lemma isGE_shift (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsGE X n] :
+lemma isGE_shift (X : C) (n a n' : ℤ) (hn' : a + n' = n := by lia) [t.IsGE X n] :
     t.IsGE (X⟦a⟧) n' :=
   ⟨t.ge_shift n a n' hn' X (t.ge_of_isGE X n)⟩
-
-/--
-lemma `isLE_of_shift` / 引理 `isLE_of_shift`
-
-English:
-lemma isLE_of_shift
-  given: (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsLE (X⟦a⟧) n']
-  proof: by
-  have h := t.isLE_shift (X⟦a⟧) n' (-a) n
-  exact t.isLE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
-
-中文:
-引理 isLE_of_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是LE (X⟦a⟧) n']
-  证明: by
-  have h := t.isLE_shift (X⟦a⟧) n' (-a) n
-  exact t.isLE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
-
-Depends on / 依赖: isLE_of_iso, isLE_shift, shiftEquiv, t.IsLE, t.isLE_of_iso, t.isLE_shift, unitIso, unitIso.symm.app
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_of_shift** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isLE_of_shift (X : C) (n a n' : Int) (hn' : a + n' = n
+参数：X : C；n a n' : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isLE_shift`：isLE_shift (X : C) (n
+ a n' : Int) (hn' : a + n' = n
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isLE_of_iso`：isLE_of_iso {X Y : C
+} (e : X ≅ Y) (n : Int) [t.IsLE X n] : t.IsLE Y n where le
 -/
-lemma isLE_of_shift (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsLE (X⟦a⟧) n'] :
+lemma isLE_of_shift (X : C) (n a n' : ℤ) (hn' : a + n' = n := by lia) [t.IsLE (X⟦a⟧) n'] :
     t.IsLE X n := by
   have h := t.isLE_shift (X⟦a⟧) n' (-a) n
   exact t.isLE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
-
-/--
-lemma `isGE_of_shift` / 引理 `isGE_of_shift`
-
-English:
-lemma isGE_of_shift
-  given: (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsGE (X⟦a⟧) n']
-  proof: by
-  have h := t.isGE_shift (X⟦a⟧) n' (-a) n
-  exact t.isGE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
-
-中文:
-引理 isGE_of_shift
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia) [t.是GE (X⟦a⟧) n']
-  证明: by
-  have h := t.isGE_shift (X⟦a⟧) n' (-a) n
-  exact t.isGE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
-
-Depends on / 依赖: isGE_of_iso, isGE_shift, shiftEquiv, t.IsGE, t.isGE_of_iso, t.isGE_shift, unitIso, unitIso.symm.app
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_of_shift** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isGE_of_shift (X : C) (n a n' : Int) (hn' : a + n' = n
+参数：X : C；n a n' : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_shift`：isGE_shift (X : C) (n
+ a n' : Int) (hn' : a + n' = n
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_of_iso`：isGE_of_iso {X Y : C
+} (e : X ≅ Y) (n : Int) [t.IsGE X n] : t.IsGE Y n where ge
 -/
-lemma isGE_of_shift (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) [t.IsGE (X⟦a⟧) n'] :
+lemma isGE_of_shift (X : C) (n a n' : ℤ) (hn' : a + n' = n := by lia) [t.IsGE (X⟦a⟧) n'] :
     t.IsGE X n := by
   have h := t.isGE_shift (X⟦a⟧) n' (-a) n
   exact t.isGE_of_iso (show X⟦a⟧⟦-a⟧ ≅ X from (shiftEquiv C a).unitIso.symm.app X) n
-
-/--
-lemma `isLE_shift_iff` / 引理 `isLE_shift_iff`
-
-English:
-lemma isLE_shift_iff
-  given: (X : C) (n a n' : Int) (hn' : a + n' = n := by lia)
-  proof: by
-  constructor
-  · intro
-    exact t.isLE_of_shift X n a n' hn'
-  · intro
-    exact t.isLE_shift X n a n' hn'
-
-中文:
-引理 isLE_shift_iff
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia)
-  证明: by
-  constructor
-  · intro
-    exact t.isLE_of_shift X n a n' hn'
-  · intro
-    exact t.isLE_shift X n a n' hn'
-
-Depends on / 依赖: isLE_of_shift, isLE_shift, t.IsLE, t.isLE_of_shift, t.isLE_shift
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_shift_iff** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isLE_shift_iff (X : C) (n a n' : Int) (hn' : a + n' = n
+参数：X : C；n a n' : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isLE_of_shift`：isLE_of_shift (X :
+ C) (n a n' : Int) (hn' : a + n' = n
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isLE_shift`：isLE_shift (X : C) (n
+ a n' : Int) (hn' : a + n' = n
 -/
-lemma isLE_shift_iff (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) :
+lemma isLE_shift_iff (X : C) (n a n' : ℤ) (hn' : a + n' = n := by lia) :
     t.IsLE (X⟦a⟧) n' ↔ t.IsLE X n := by
   constructor
   · intro
     exact t.isLE_of_shift X n a n' hn'
   · intro
     exact t.isLE_shift X n a n' hn'
-
-/--
-lemma `isGE_shift_iff` / 引理 `isGE_shift_iff`
-
-English:
-lemma isGE_shift_iff
-  given: (X : C) (n a n' : Int) (hn' : a + n' = n := by lia)
-  proof: by
-  constructor
-  · intro
-    exact t.isGE_of_shift X n a n' hn'
-  · intro
-    exact t.isGE_shift X n a n' hn'
-
-中文:
-引理 isGE_shift_iff
-  条件: (X : C) (n a n' : 整数) (hn' : a + n' = n := by lia)
-  证明: by
-  constructor
-  · intro
-    exact t.isGE_of_shift X n a n' hn'
-  · intro
-    exact t.isGE_shift X n a n' hn'
-
-Depends on / 依赖: isGE_of_shift, isGE_shift, t.IsGE, t.isGE_of_shift, t.isGE_shift
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_shift_iff** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isGE_shift_iff (X : C) (n a n' : Int) (hn' : a + n' = n
+参数：X : C；n a n' : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_of_shift`：isGE_of_shift (X :
+ C) (n a n' : Int) (hn' : a + n' = n
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_shift`：isGE_shift (X : C) (n
+ a n' : Int) (hn' : a + n' = n
 -/
-lemma isGE_shift_iff (X : C) (n a n' : Int) (hn' : a + n' = n := by lia) :
+lemma isGE_shift_iff (X : C) (n a n' : ℤ) (hn' : a + n' = n := by lia) :
     t.IsGE (X⟦a⟧) n' ↔ t.IsGE X n := by
   constructor
   · intro
     exact t.isGE_of_shift X n a n' hn'
   · intro
     exact t.isGE_shift X n a n' hn'
-
-/--
-lemma `zero` / 引理 `zero`
-
-English:
-lemma zero
-  statement: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁ := by lia)
-  proof: by
-  have := t.isLE_shift X n₀ n₀ 0 (add_zero n₀)
-  have := t.isGE_shift Y n₁ n₀ (n₁ - n₀)
-  have := t.isGE_of_ge (Y⟦n₀⟧) 1 (n₁ - n₀)
-  apply (shiftFunctor C n₀).map_injective
-  simp only [Functor.map_zero]
-  apply t.zero'
-  · apply t.le_of_isLE
-  · apply t.ge_of_isGE
-
-中文:
-引理 zero
-  结论: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : 整数) (h : n₀ < n₁ := by lia)
-  证明: by
-  have := t.isLE_shift X n₀ n₀ 0 (add_zero n₀)
-  have := t.isGE_shift Y n₁ n₀ (n₁ - n₀)
-  have := t.isGE_of_ge (Y⟦n₀⟧) 1 (n₁ - n₀)
-  apply (shiftFunctor C n₀).map_injective
-  simp only [Functor.map_zero]
-  apply t.zero'
-  · apply t.le_of_isLE
-  · apply t.ge_of_isGE
-
-Depends on / 依赖: Functor, Functor.map_zero, add_zero, ge_of_isGE, isGE_of_ge, isGE_shift, isLE_shift, le_of_isLE, map_injective, map_zero, shiftFunctor, t.IsGE, t.IsLE, t.ge_of_isGE, t.isGE_of_ge, t.isGE_shift, t.isLE_shift, t.le_of_isLE, t.zero
+/-
+**CategoryTheory.Triangulated.TStructure.zero** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Triangulated.TStructure`。
+形式化陈述：zero {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁
+参数：f : X ⟶ Y；n₀ n₁ : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isLE_shift`：isLE_shift (X : C) (n
+ a n' : Int) (hn' : a + n' = n
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_shift`：isGE_shift (X : C) (n
+ a n' : Int) (hn' : a + n' = n
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_of_ge`：isGE_of_ge (X : C) (p
+ q : Int) (hpq : p <= q
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.instIsEquivalenceShiftFunctor`：∀ (C : Type u) {A : Type u
+_1} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : AddGroup A]   [inst_2 : 
+CategoryTheory.HasShift C A] (i : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_zero`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   [inst_2 : Category…
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Triangulated.TStructure.zero'`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]   [
+inst_2 : CategoryTheory.Limits.Has…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.le_of_isLE`：le_of_isLE (X : C) (n
+ : Int) [t.IsLE X n] : t.le n X
+· 使用引理 `CategoryTheory.Triangulated.TStructure.ge_of_isGE`：ge_of_isGE (X : C) (n
+ : Int) [t.IsGE X n] : t.ge n X
 -/
-lemma zero {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁ := by lia)
+lemma zero {X Y : C} (f : X ⟶ Y) (n₀ n₁ : ℤ) (h : n₀ < n₁ := by lia)
     [t.IsLE X n₀] [t.IsGE Y n₁] : f = 0 := by
   have := t.isLE_shift X n₀ n₀ 0 (add_zero n₀)
   have := t.isGE_shift Y n₁ n₀ (n₁ - n₀)
@@ -810,230 +636,124 @@ lemma zero {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁ := by lia)
   apply t.zero'
   · apply t.le_of_isLE
   · apply t.ge_of_isGE
-
-/--
-lemma `zero_of_isLE_of_isGE` / 引理 `zero_of_isLE_of_isGE`
-
-English:
-lemma zero_of_isLE_of_isGE
-  statement: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁)
-  proof: t.zero f n₀ n₁ h
-
-中文:
-引理 zero_of_isLE_of_isGE
-  结论: {X Y : C} (f : X ⟶ Y) (n₀ n₁ : 整数) (h : n₀ < n₁)
-  证明: t.zero f n₀ n₁ h
-
-Depends on / 依赖: t.zero
+/-
+**CategoryTheory.Triangulated.TStructure.zero_of_isLE_of_isGE** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：zero_of_isLE_of_isGE {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁) (_ 
+: t.IsLE X n₀) (_ : t.IsGE Y n₁) : f = 0
+参数：f : X ⟶ Y；n₀ n₁ : Int；h : n₀ < n₁；_ : t.IsLE X n₀；_ : t.IsGE Y n₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.zero`：zero {X Y : C} (f : X ⟶ Y) 
+(n₀ n₁ : Int) (h : n₀ < n₁
 -/
-lemma zero_of_isLE_of_isGE {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁)
+lemma zero_of_isLE_of_isGE {X Y : C} (f : X ⟶ Y) (n₀ n₁ : ℤ) (h : n₀ < n₁)
     (_ : t.IsLE X n₀) (_ : t.IsGE Y n₁) : f = 0 :=
   t.zero f n₀ n₁ h
-
-/--
-lemma `isZero` / 引理 `isZero`
-
-English:
-lemma isZero
-  statement: (X : C) (n₀ n₁ : Int) (h : n₀ < n₁ := by lia)
-  proof: by
-  rw [IsZero.iff_id_eq_zero]
-  exact t.zero _ n₀ n₁ h
-
-中文:
-引理 isZero
-  结论: (X : C) (n₀ n₁ : 整数) (h : n₀ < n₁ := by lia)
-  证明: by
-  rw [IsZero.iff_id_eq_zero]
-  exact t.zero _ n₀ n₁ h
-
-Depends on / 依赖: IsZero, IsZero.iff_id_eq_zero, iff_id_eq_zero, t.IsGE, t.IsLE, t.zero
+/-
+**CategoryTheory.Triangulated.TStructure.isZero** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Triangulated.TStructure`。
+形式化陈述：isZero (X : C) (n₀ n₁ : Int) (h : n₀ < n₁
+参数：X : C；n₀ n₁ : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsZero.iff_id_eq_zero`：iff_id_eq_zero (X : C) : Is
+Zero X ↔ 𝟙 X = 0
+· 使用引理 `CategoryTheory.Triangulated.TStructure.zero`：zero {X Y : C} (f : X ⟶ Y) 
+(n₀ n₁ : Int) (h : n₀ < n₁
 -/
-lemma isZero (X : C) (n₀ n₁ : Int) (h : n₀ < n₁ := by lia)
+lemma isZero (X : C) (n₀ n₁ : ℤ) (h : n₀ < n₁ := by lia)
     [t.IsLE X n₀] [t.IsGE X n₁] : IsZero X := by
   rw [IsZero.iff_id_eq_zero]
   exact t.zero _ n₀ n₁ h
 
-/--
-Definition of `minus` / `minus` 的定义
+/-- The full subcategory consisting of `t`-bounded above objects. -/
+/-
+**CategoryTheory.Triangulated.TStructure.minus** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Triangulated.TStructure`。
+形式化陈述：minus : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition minus
-  signature: : ObjectProperty C
-  body: fun X => exists (n : Int), t.IsLE X n
-
-中文:
-定义 minus
-  签名: : ObjectProperty C
-  定义体: fun X => exists (n : Int), t.IsLE X n
-
-Depends on / 依赖: t.IsLE
+--- 原说明 ---
+The full subcategory consisting of `t`-bounded above objects.
 -/
-def minus : ObjectProperty C := fun X => exists (n : Int), t.IsLE X n
+def minus : ObjectProperty C := fun X ↦ ∃ (n : ℤ), t.IsLE X n
 
-/--
-Definition of `plus` / `plus` 的定义
+/-- The full subcategory consisting of `t`-bounded below objects. -/
+/-
+**CategoryTheory.Triangulated.TStructure.plus** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Triangulated.TStructure`。
+形式化陈述：plus : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition plus
-  signature: : ObjectProperty C
-  body: fun X => exists (n : Int), t.IsGE X n
-
-中文:
-定义 plus
-  签名: : ObjectProperty C
-  定义体: fun X => exists (n : Int), t.IsGE X n
-
-Depends on / 依赖: t.IsGE
+--- 原说明 ---
+The full subcategory consisting of `t`-bounded below objects.
 -/
-def plus : ObjectProperty C := fun X => exists (n : Int), t.IsGE X n
+def plus : ObjectProperty C := fun X ↦ ∃ (n : ℤ), t.IsGE X n
 
-/--
-Definition of `bounded` / `bounded` 的定义
+/-- The full subcategory consisting of `t`-bounded objects. -/
+/-
+**CategoryTheory.Triangulated.TStructure.bounded** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Triangulated.TStructure`。
+形式化陈述：bounded : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bounded
-  signature: : ObjectProperty C
-  body: t.plus ⊓ t.minus
-
-中文:
-定义 bounded
-  签名: : ObjectProperty C
-  定义体: t.plus ⊓ t.minus
-
-Depends on / 依赖: t.minus, t.plus
+--- 原说明 ---
+The full subcategory consisting of `t`-bounded objects.
 -/
 def bounded : ObjectProperty C := t.plus ⊓ t.minus
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: t.minus.IsClosedUnderIsomorphisms
-  body: by rintro ⟨n, _⟩; exact ⟨_, t.isLE_of_iso e n⟩
-
-中文:
-实例 :
-  签名: t.minus.在同构下封闭
-  定义体: by rintro ⟨n, _⟩; exact ⟨_, t.isLE_of_iso e n⟩
-
-Depends on / 依赖: isLE_of_iso, t.isLE_of_iso
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : t.minus.IsClosedUnderIsomorphisms where
   of_iso e := by rintro ⟨n, _⟩; exact ⟨_, t.isLE_of_iso e n⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: t.minus.IsStableUnderShift Int
-  body: { le_shift := by
-        rintro X ⟨i, _⟩
-        exact ⟨i - n, t.isLE_shift _ i _ _ (by omega)⟩ }
-
-中文:
-实例 :
-  签名: t.minus.是StableUnderShift 整数
-  定义体: { le_shift := by
-        rintro X ⟨i, _⟩
-        exact ⟨i - n, t.isLE_shift _ i _ _ (by omega)⟩ }
-
-Depends on / 依赖: isLE_shift, le_shift, t.isLE_shift
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : t.minus.IsStableUnderShift Int where
+instance : t.minus.IsStableUnderShift ℤ where
   isStableUnderShiftBy n :=
     { le_shift := by
         rintro X ⟨i, _⟩
         exact ⟨i - n, t.isLE_shift _ i _ _ (by omega)⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: t.plus.IsClosedUnderIsomorphisms
-  body: by rintro ⟨n, _⟩; exact ⟨_, t.isGE_of_iso e n⟩
-
-中文:
-实例 :
-  签名: t.plus.在同构下封闭
-  定义体: by rintro ⟨n, _⟩; exact ⟨_, t.isGE_of_iso e n⟩
-
-Depends on / 依赖: isGE_of_iso, t.isGE_of_iso
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : t.plus.IsClosedUnderIsomorphisms where
   of_iso e := by rintro ⟨n, _⟩; exact ⟨_, t.isGE_of_iso e n⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: t.plus.IsStableUnderShift Int
-  body: { le_shift := by
-        rintro X ⟨i, _⟩
-        exact ⟨i - n, t.isGE_shift _ i _ _ (by omega)⟩ }
-
-中文:
-实例 :
-  签名: t.plus.是StableUnderShift 整数
-  定义体: { le_shift := by
-        rintro X ⟨i, _⟩
-        exact ⟨i - n, t.isGE_shift _ i _ _ (by omega)⟩ }
-
-Depends on / 依赖: isGE_shift, le_shift, t.isGE_shift
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : t.plus.IsStableUnderShift Int where
+instance : t.plus.IsStableUnderShift ℤ where
   isStableUnderShiftBy n :=
     { le_shift := by
         rintro X ⟨i, _⟩
         exact ⟨i - n, t.isGE_shift _ i _ _ (by omega)⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: t.bounded.IsClosedUnderIsomorphisms
-  body: by
-  dsimp [bounded]
-  infer_instance
-
-中文:
-实例 :
-  签名: t.bounded.在同构下封闭
-  定义体: by
-  dsimp [bounded]
-  infer_instance
-
-Depends on / 依赖: bounded, infer_instance
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : t.bounded.IsClosedUnderIsomorphisms := by
   dsimp [bounded]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: t.bounded.IsStableUnderShift Int
-  body: by
-  dsimp [bounded]
-  infer_instance
-
-中文:
-实例 :
-  签名: t.bounded.是StableUnderShift 整数
-  定义体: by
-  dsimp [bounded]
-  infer_instance
-
-Depends on / 依赖: bounded, infer_instance
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : t.bounded.IsStableUnderShift Int := by
+instance : t.bounded.IsStableUnderShift ℤ := by
   dsimp [bounded]
   infer_instance
 
@@ -1042,3 +762,4 @@ end TStructure
 end Triangulated
 
 end CategoryTheory
+

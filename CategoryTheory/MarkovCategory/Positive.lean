@@ -50,27 +50,23 @@ namespace CategoryTheory
 
 open MonoidalCategory CopyDiscardCategory ComonObj
 
-/--
-Definition of `PositiveCategory` / `PositiveCategory` 的定义
+/-- Markov category where copy is natural given deterministic composition of morphisms. -/
+/-
+**CategoryTheory.PositiveCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.MonoidalCategory C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class PositiveCategory
-  parameters: (C : Type u) [Category.{v} C] [MonoidalCategory C]
-  axioms and operations (1):
-    - copy_comp_natural({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [h : Deterministic (f ≫ g)]) : f ≫ Δ ≫ (g otimesₘ 𝟙 Y) = Δ ≫ (f ≫ g otimesₘ f)
-
-中文:
-类 正范畴
-  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴 C]
-  公理与运算 (1 个):
-    - copy_comp_natural({X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [h : 确定性 (f ≫ g)]) : f ≫ Δ ≫ (g otimesₘ 𝟙 Y) = Δ ≫ (f ≫ g otimesₘ f)
+--- 原说明 ---
+Markov category where copy is natural given deterministic composition of morphis
+ms.
 -/
 class PositiveCategory (C : Type u) [Category.{v} C] [MonoidalCategory C] extends
     MarkovCategory C where
   /-- Given morphisms `f : X ⟶ Y` and `g : Y ⟶ Z`, if their composition is deterministic, then
   process `f`, copy and then process `g` equals copy and process `f` and `g` independently. -/
   copy_comp_natural {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [h : Deterministic (f ≫ g)] :
-      f ≫ Δ ≫ (g otimesₘ 𝟙 Y) = Δ ≫ (f ≫ g otimesₘ f)
+      f ≫ Δ ≫ (g ⊗ₘ 𝟙 Y) = Δ ≫ (f ≫ g ⊗ₘ f)
 
 variable {C : Type u} [Category.{v} C] [MonoidalCategory C]
 
@@ -78,22 +74,28 @@ namespace PositiveCategory
 
 variable [PositiveCategory C]
 
+/-
+**CategoryTheory.PositiveCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pos
+itiveCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : C} (f : X ⟶ Y) [IsIso f] : Deterministic f where
   hom_comul := by
     calc
-    _ = f ≫ Δ ≫ (inv f otimesₘ 𝟙 Y) ≫ (f otimesₘ 𝟙 Y) := by
+    _ = f ≫ Δ ≫ (inv f ⊗ₘ 𝟙 Y) ≫ (f ⊗ₘ 𝟙 Y) := by
       cat_disch
-    _ = (f ≫ Δ ≫ (inv f otimesₘ 𝟙 Y)) ≫ (f otimesₘ 𝟙 Y) := by
+    _ = (f ≫ Δ ≫ (inv f ⊗ₘ 𝟙 Y)) ≫ (f ⊗ₘ 𝟙 Y) := by
       simp
-    _ = (Δ ≫ (𝟙 X otimesₘ f)) ≫ (f otimesₘ 𝟙 Y) := by
+    _ = (Δ ≫ (𝟙 X ⊗ₘ f)) ≫ (f ⊗ₘ 𝟙 Y) := by
       rw [copy_comp_natural (h := by rw [IsIso.hom_inv_id]; infer_instance)]
       simp
-    _ = Δ ≫ (𝟙 X otimesₘ f) ≫ (f otimesₘ 𝟙 Y) := by
+    _ = Δ ≫ (𝟙 X ⊗ₘ f) ≫ (f ⊗ₘ 𝟙 Y) := by
       simp
-    _ = Δ ≫ ((𝟙 X ≫ f) otimesₘ (f ≫ 𝟙 Y)) := by
+    _ = Δ ≫ ((𝟙 X ≫ f) ⊗ₘ (f ≫ 𝟙 Y)) := by
       rw [MonoidalCategory.tensorHom_comp_tensorHom]
-    _ = Δ ≫ (f otimesₘ f) := by cat_disch
+    _ = Δ ≫ (f ⊗ₘ f) := by cat_disch
 
 end PositiveCategory
 
 end CategoryTheory
+

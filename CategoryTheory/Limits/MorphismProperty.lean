@@ -29,24 +29,23 @@ variable (D : J ⥤ P.Comma L R ⊤ ⊤)
 /-- If `P` is closed under limits of shape `J` in `Comma L R`, then when `D` has
 a limit in `Comma L R`, the forgetful functor creates this limit. -/
 @[instance_reducible]
-/--
-Definition of `forgetCreatesLimitOfClosed` / `forgetCreatesLimitOfClosed` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.forgetCreatesLimitOfClosed** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：forgetCreatesLimitOfClosed [(P.commaObj L R).IsClosedUnderLimitsOfShape J]
+ [HasLimit (D ⋙ forget L R P ⊤ ⊤)] : CreatesLimit D (forget L R P ⊤ ⊤)
+参数：P.commaObj L R；D ⋙ forget L R P ⊤ ⊤。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.instFullTopCommaForget`：∀ {A : Typ
+e u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : 
+CategoryTheory.Category.{v_2, u_2} B] {T : Type u_…
 
-English:
-definition forgetCreatesLimitOfClosed
-  body: createsLimitOfFullyFaithfulOfIso
-    (⟨limit (D ⋙ forget L R P ⊤ ⊤),
-      ObjectProperty.prop_limit (P.commaObj L R) _
-        fun j => (D.obj j).prop⟩) (Iso.refl _)
-
-中文:
-定义 forgetCreatesLimitOfClosed
-  定义体: createsLimitOfFullyFaithfulOfIso
-    (⟨limit (D ⋙ forget L R P ⊤ ⊤),
-      ObjectProperty.prop_limit (P.commaObj L R) _
-        fun j => (D.obj j).prop⟩) (Iso.refl _)
-
-Depends on / 依赖: D.obj, Iso.refl, ObjectProperty, ObjectProperty.prop_limit, P.commaObj, commaObj, createsLimitOfFullyFaithfulOfIso, forget, prop_limit
+--- 原说明 ---
+If `P` is closed under limits of shape `J` in `Comma L R`, then when `D` has
+a limit in `Comma L R`, the forgetful functor creates this limit.
 -/
 noncomputable def forgetCreatesLimitOfClosed
     [(P.commaObj L R).IsClosedUnderLimitsOfShape J]
@@ -55,45 +54,44 @@ noncomputable def forgetCreatesLimitOfClosed
   createsLimitOfFullyFaithfulOfIso
     (⟨limit (D ⋙ forget L R P ⊤ ⊤),
       ObjectProperty.prop_limit (P.commaObj L R) _
-        fun j => (D.obj j).prop⟩) (Iso.refl _)
+        fun j ↦ (D.obj j).prop⟩) (Iso.refl _)
 
 /-- If `Comma L R` has limits of shape `J` and `Comma L R` is closed under limits of shape
 `J`, then `forget L R P ⊤ ⊤` creates limits of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `forgetCreatesLimitsOfShapeOfClosed` / `forgetCreatesLimitsOfShapeOfClosed` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.forgetCreatesLimitsOfShapeOfClosed** 是 M
+athlib 中的一个定义，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：forgetCreatesLimitsOfShapeOfClosed [HasLimitsOfShape J (Comma L R)] [Objec
+tProperty.IsClosedUnderLimitsOfShape (P.commaObj L R) J] : CreatesLimitsOfShape 
+J (forget L R P ⊤ ⊤) where CreatesLimit
+参数：Comma L R；P.commaObj L R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition forgetCreatesLimitsOfShapeOfClosed
-  signature: [HasLimitsOfShape J (Comma L R)]
-  body: forgetCreatesLimitOfClosed _ _
-
-中文:
-定义 forgetCreatesLimitsOfShapeOfClosed
-  签名: [有形状极限 J (交换a L R)]
-  定义体: forgetCreatesLimitOfClosed _ _
-
-Depends on / 依赖: forgetCreatesLimitOfClosed
+--- 原说明 ---
+If `Comma L R` has limits of shape `J` and `Comma L R` is closed under limits of
+ shape
+`J`, then `forget L R P ⊤ ⊤` creates limits of shape `J`.
 -/
 noncomputable def forgetCreatesLimitsOfShapeOfClosed [HasLimitsOfShape J (Comma L R)]
     [ObjectProperty.IsClosedUnderLimitsOfShape (P.commaObj L R) J] :
     CreatesLimitsOfShape J (forget L R P ⊤ ⊤) where
   CreatesLimit := forgetCreatesLimitOfClosed _ _
-
-/--
-lemma `hasLimit_of_closedUnderLimitsOfShape` / 引理 `hasLimit_of_closedUnderLimitsOfShape`
-
-English:
-lemma hasLimit_of_closedUnderLimitsOfShape
-  proof: haveI : CreatesLimit D (forget L R P ⊤ ⊤) := forgetCreatesLimitOfClosed _ D
-  hasLimit_of_created D (forget L R P ⊤ ⊤)
-
-中文:
-引理 hasLimit_of_closedUnderLimitsOfShape
-  证明: haveI : CreatesLimit D (forget L R P ⊤ ⊤) := forgetCreatesLimitOfClosed _ D
-  hasLimit_of_created D (forget L R P ⊤ ⊤)
-
-Depends on / 依赖: CreatesLimit, forget, forgetCreatesLimitOfClosed, hasLimit_of_created
+/-
+**CategoryTheory.MorphismProperty.Comma.hasLimit_of_closedUnderLimitsOfShape** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：hasLimit_of_closedUnderLimitsOfShape [(P.commaObj L R).IsClosedUnderLimits
+OfShape J] [HasLimit (D ⋙ forget L R P ⊤ ⊤)] : HasLimit D
+参数：P.commaObj L R；D ⋙ forget L R P ⊤ ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.hasLimit_of_created`：hasLimit_of_created (K : J ⥤ C) (F :
+ C ⥤ D) [HasLimit (K ⋙ F)] [CreatesLimit K F] : HasLimit K
 -/
 lemma hasLimit_of_closedUnderLimitsOfShape
     [(P.commaObj L R).IsClosedUnderLimitsOfShape J]
@@ -101,21 +99,23 @@ lemma hasLimit_of_closedUnderLimitsOfShape
     HasLimit D :=
   haveI : CreatesLimit D (forget L R P ⊤ ⊤) := forgetCreatesLimitOfClosed _ D
   hasLimit_of_created D (forget L R P ⊤ ⊤)
-
-/--
-Instance `hasLimitsOfShape_of_closedUnderLimitsOfShape` / 实例 `hasLimitsOfShape_of_closedUnderLimitsOfShape`
-
-English:
-instance hasLimitsOfShape_of_closedUnderLimitsOfShape
-  signature: [HasLimitsOfShape J (Comma L R)]
-  body: hasLimit_of_closedUnderLimitsOfShape _ _
-
-中文:
-实例 hasLimitsOfShape_of_closedUnderLimitsOfShape
-  签名: [有形状极限 J (交换a L R)]
-  定义体: hasLimit_of_closedUnderLimitsOfShape _ _
-
-Depends on / 依赖: hasLimit_of_closedUnderLimitsOfShape
+/-
+**CategoryTheory.MorphismProperty.Comma.hasLimitsOfShape_of_closedUnderLimitsOfS
+hape** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：hasLimitsOfShape_of_closedUnderLimitsOfShape [HasLimitsOfShape J (Comma L 
+R)] [(P.commaObj L R).IsClosedUnderLimitsOfShape J] : HasLimitsOfShape J (P.Comm
+a L R ⊤ ⊤) where has_limit _
+参数：Comma L R；P.commaObj L R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用引理 `CategoryTheory.MorphismProperty.Comma.hasLimit_of_closedUnderLimitsOfSha
+pe`：hasLimit_of_closedUnderLimitsOfShape [(P.commaObj L R).IsClosedUnderLimitsOf
+Shape J] [HasLimit (D ⋙ forget L R P ⊤ ⊤)] : HasLimit D
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance hasLimitsOfShape_of_closedUnderLimitsOfShape [HasLimitsOfShape J (Comma L R)]
     [(P.commaObj L R).IsClosedUnderLimitsOfShape J] :
@@ -125,22 +125,23 @@ instance hasLimitsOfShape_of_closedUnderLimitsOfShape [HasLimitsOfShape J (Comma
 /-- If `P` is closed under colimits of shape `J` in `Comma L R`, then when `D` has
 a colimit in `Comma L R`, the forgetful functor creates this colimit. -/
 @[instance_reducible]
-/--
-Definition of `forgetCreatesColimitOfClosed` / `forgetCreatesColimitOfClosed` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.forgetCreatesColimitOfClosed** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：forgetCreatesColimitOfClosed [(P.commaObj L R).IsClosedUnderColimitsOfShap
+e J] [HasColimit (D ⋙ forget L R P ⊤ ⊤)] : CreatesColimit D (forget L R P ⊤ ⊤)
+参数：P.commaObj L R；D ⋙ forget L R P ⊤ ⊤。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.instFullTopCommaForget`：∀ {A : Typ
+e u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : 
+CategoryTheory.Category.{v_2, u_2} B] {T : Type u_…
 
-English:
-definition forgetCreatesColimitOfClosed
-  body: createsColimitOfFullyFaithfulOfIso
-    (⟨colimit (D ⋙ forget L R P ⊤ ⊤),
-      (P.commaObj L R).prop_colimit _ (fun j => (D.obj j).prop)⟩) (Iso.refl _)
-
-中文:
-定义 forgetCreatesColimitOfClosed
-  定义体: createsColimitOfFullyFaithfulOfIso
-    (⟨colimit (D ⋙ forget L R P ⊤ ⊤),
-      (P.commaObj L R).prop_colimit _ (fun j => (D.obj j).prop)⟩) (Iso.refl _)
-
-Depends on / 依赖: D.obj, Iso.refl, P.commaObj, colimit, commaObj, createsColimitOfFullyFaithfulOfIso, forget, prop_colimit
+--- 原说明 ---
+If `P` is closed under colimits of shape `J` in `Comma L R`, then when `D` has
+a colimit in `Comma L R`, the forgetful functor creates this colimit.
 -/
 noncomputable def forgetCreatesColimitOfClosed
     [(P.commaObj L R).IsClosedUnderColimitsOfShape J]
@@ -148,46 +149,45 @@ noncomputable def forgetCreatesColimitOfClosed
     CreatesColimit D (forget L R P ⊤ ⊤) :=
   createsColimitOfFullyFaithfulOfIso
     (⟨colimit (D ⋙ forget L R P ⊤ ⊤),
-      (P.commaObj L R).prop_colimit _ (fun j => (D.obj j).prop)⟩) (Iso.refl _)
+      (P.commaObj L R).prop_colimit _ (fun j ↦ (D.obj j).prop)⟩) (Iso.refl _)
 
 variable (J) in
 /-- If `Comma L R` has colimits of shape `J` and `Comma L R` is closed under colimits of shape
 `J`, then `forget L R P ⊤ ⊤` creates colimits of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `forgetCreatesColimitsOfShapeOfClosed` / `forgetCreatesColimitsOfShapeOfClosed` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.forgetCreatesColimitsOfShapeOfClosed** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：forgetCreatesColimitsOfShapeOfClosed [HasColimitsOfShape J (Comma L R)] [(
+P.commaObj L R).IsClosedUnderColimitsOfShape J] : CreatesColimitsOfShape J (forg
+et L R P ⊤ ⊤) where CreatesColimit
+参数：Comma L R；P.commaObj L R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition forgetCreatesColimitsOfShapeOfClosed
-  signature: [HasColimitsOfShape J (Comma L R)]
-  body: forgetCreatesColimitOfClosed _ _
-
-中文:
-定义 forgetCreatesColimitsOfShapeOfClosed
-  签名: [有形状余极限 J (交换a L R)]
-  定义体: forgetCreatesColimitOfClosed _ _
-
-Depends on / 依赖: forgetCreatesColimitOfClosed
+--- 原说明 ---
+If `Comma L R` has colimits of shape `J` and `Comma L R` is closed under colimit
+s of shape
+`J`, then `forget L R P ⊤ ⊤` creates colimits of shape `J`.
 -/
 noncomputable def forgetCreatesColimitsOfShapeOfClosed [HasColimitsOfShape J (Comma L R)]
     [(P.commaObj L R).IsClosedUnderColimitsOfShape J] :
     CreatesColimitsOfShape J (forget L R P ⊤ ⊤) where
   CreatesColimit := forgetCreatesColimitOfClosed _ _
-
-/--
-lemma `hasColimit_of_closedUnderColimitsOfShape` / 引理 `hasColimit_of_closedUnderColimitsOfShape`
-
-English:
-lemma hasColimit_of_closedUnderColimitsOfShape
-  proof: haveI : CreatesColimit D (forget L R P ⊤ ⊤) := forgetCreatesColimitOfClosed _ D
-  hasColimit_of_created D (forget L R P ⊤ ⊤)
-
-中文:
-引理 hasColimit_of_closedUnderColimitsOfShape
-  证明: haveI : CreatesColimit D (forget L R P ⊤ ⊤) := forgetCreatesColimitOfClosed _ D
-  hasColimit_of_created D (forget L R P ⊤ ⊤)
-
-Depends on / 依赖: CreatesColimit, forget, forgetCreatesColimitOfClosed, hasColimit_of_created
+/-
+**CategoryTheory.MorphismProperty.Comma.hasColimit_of_closedUnderColimitsOfShape
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：hasColimit_of_closedUnderColimitsOfShape [(P.commaObj L R).IsClosedUnderCo
+limitsOfShape J] [HasColimit (D ⋙ forget L R P ⊤ ⊤)] : HasColimit D
+参数：P.commaObj L R；D ⋙ forget L R P ⊤ ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.hasColimit_of_created`：hasColimit_of_created (K : J ⥤ C) 
+(F : C ⥤ D) [HasColimit (K ⋙ F)] [CreatesColimit K F] : HasColimit K
 -/
 lemma hasColimit_of_closedUnderColimitsOfShape
     [(P.commaObj L R).IsClosedUnderColimitsOfShape J]
@@ -195,21 +195,23 @@ lemma hasColimit_of_closedUnderColimitsOfShape
     HasColimit D :=
   haveI : CreatesColimit D (forget L R P ⊤ ⊤) := forgetCreatesColimitOfClosed _ D
   hasColimit_of_created D (forget L R P ⊤ ⊤)
-
-/--
-Instance `hasColimitsOfShape_of_closedUnderColimitsOfShape` / 实例 `hasColimitsOfShape_of_closedUnderColimitsOfShape`
-
-English:
-instance hasColimitsOfShape_of_closedUnderColimitsOfShape
-  signature: [HasColimitsOfShape J (Comma L R)]
-  body: hasColimit_of_closedUnderColimitsOfShape _ _
-
-中文:
-实例 hasColimitsOfShape_of_closedUnderColimitsOfShape
-  签名: [有形状余极限 J (交换a L R)]
-  定义体: hasColimit_of_closedUnderColimitsOfShape _ _
-
-Depends on / 依赖: hasColimit_of_closedUnderColimitsOfShape
+/-
+**CategoryTheory.MorphismProperty.Comma.hasColimitsOfShape_of_closedUnderColimit
+sOfShape** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：hasColimitsOfShape_of_closedUnderColimitsOfShape [HasColimitsOfShape J (Co
+mma L R)] [(P.commaObj L R).IsClosedUnderColimitsOfShape J] : HasColimitsOfShape
+ J (P.Comma L R ⊤ ⊤) where has_colimit _
+参数：Comma L R；P.commaObj L R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用引理 `CategoryTheory.MorphismProperty.Comma.hasColimit_of_closedUnderColimitsO
+fShape`：hasColimit_of_closedUnderColimitsOfShape [(P.commaObj L R).IsClosedUnder
+ColimitsOfShape J] [HasColimit (D ⋙ forget L R P ⊤ ⊤)] : HasColimit …
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance hasColimitsOfShape_of_closedUnderColimitsOfShape [HasColimitsOfShape J (Comma L R)]
     [(P.commaObj L R).IsClosedUnderColimitsOfShape J] :
@@ -222,30 +224,29 @@ section CostructuredArrow
 
 variable {A : Type*} [Category* A] {L : A ⥤ T}
 
-/--
-Instance `CostructuredArrow.closedUnderLimitsOfShape_discrete_empty` / 实例 `CostructuredArrow.closedUnderLimitsOfShape_discrete_empty`
-
-English:
-instance CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
-  signature: [L.Faithful] [L.Full] {Y : A}
-  body: by
-    rintro X p
-    let t : IsTerminal X := (ObjectProperty.limitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
-    let e : X ≅ CostructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso CostructuredArrow.mkIdTerminal
-    simpa [MorphismProperty.costructuredArrowObj_iff,
-      P.costructuredArrow_iso_iff e] using P.id_mem (L.obj Y)
-
-中文:
-实例 CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
-  签名: [L.忠实] [L.满] {Y : A}
-  定义体: by
-    rintro X p
-    let t : IsTerminal X := (ObjectProperty.limitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
-    let e : X ≅ CostructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso CostructuredArrow.mkIdTerminal
-    simpa [MorphismProperty.costructuredArrowObj_iff,
-      P.costructuredArrow_iso_iff e] using P.id_mem (L.obj Y)
-
-Depends on / 依赖: Discrete, IsClosedUnderLimitsOfShape, L.obj, PEmpty
+/-
+**CategoryTheory.CostructuredArrow.closedUnderLimitsOfShape_discrete_empty** 是 M
+athlib 中的一个定理，位于命名空间 `CategoryTheory.CostructuredArrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Catego
+ryTheory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTheory.Category.
+{v_2, u_2} A] {L : CategoryTheory.Functor A T} [L.Faithful] [L.Full] {Y : A}   [
+P.ContainsIdentities] [P.RespectsIso],   (CategoryTheory.MorphismProperty.costru
+cturedArrowObj L P).IsClosedUnderLimitsOfShape     (CategoryTheory.Discrete PEmp
+ty.{1})
+参数：P : CategoryTheory.MorphismProperty T；CategoryTheory.MorphismProperty.costruc
+turedArrowObj L P；CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `CategoryTheory.ObjectProperty.limitsOfShape_isEmpty_iff`：limitsOfShape_i
+sEmpty_iff [IsEmpty J] (X : C) : P.limitsOfShape J X ↔ Nonempty (IsTerminal X)
+· 使用定理 `CategoryTheory.instIsEmptyDiscrete`：∀ (α : Type u_1) [IsEmpty α], IsEmpt
+y (CategoryTheory.Discrete α)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.MorphismProperty.costructuredArrow_iso_iff`：costructuredA
+rrow_iso_iff (P : MorphismProperty T) [P.RespectsIso] {L : A ⥤ T} {X : T} {f g :
+ CostructuredArrow L X} (e : f ≅ g) : P f.hom ↔…
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
 -/
 instance CostructuredArrow.closedUnderLimitsOfShape_discrete_empty [L.Faithful] [L.Full] {Y : A}
     [P.ContainsIdentities] [P.RespectsIso] :
@@ -259,94 +260,160 @@ instance CostructuredArrow.closedUnderLimitsOfShape_discrete_empty [L.Faithful] 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `CostructuredArrow.isClosedUnderColimitsOfShape` / 引理 `CostructuredArrow.isClosedUnderColimitsOfShape`
-
-English:
-lemma CostructuredArrow.isClosedUnderColimitsOfShape
-  statement: {J : Type*} [Category* J]
-  proof: by
-    intro ⟨d⟩
-    let hd : IsColimit ((CategoryTheory.CostructuredArrow.proj L X ⋙ L).mapCocone d.cocone) :=
-      isColimitOfPreserves _ d.isColimit
-    have heq : Y.hom = hd.desc { pt := X, ι := { app j := (d.diag.obj j).hom } } := by
-      refine hd.hom_ext fun j => ?_
-      simp only [IsColimit.fac]
-      simp
-    rw [P.costructuredArrowObj_iff]; rw [heq]; rw [← hd.coconePointUniqueUpToIso_hom_desc (hc _)]; rw [P.cancel_left_of_respectsIso]
-    exact H _ _ d.prop_diag_obj
-
-中文:
-引理 CostructuredArrow.isClosedUnderColimitsOfShape
-  结论: {J : 类型} [范畴* J]
-  证明: by
-    intro ⟨d⟩
-    let hd : IsColimit ((CategoryTheory.CostructuredArrow.proj L X ⋙ L).mapCocone d.cocone) :=
-      isColimitOfPreserves _ d.isColimit
-    have heq : Y.hom = hd.desc { pt := X, ι := { app j := (d.diag.obj j).hom } } := by
-      refine hd.hom_ext fun j => ?_
-      simp only [IsColimit.fac]
-      simp
-    rw [P.costructuredArrowObj_iff]; rw [heq]; rw [← hd.coconePointUniqueUpToIso_hom_desc (hc _)]; rw [P.cancel_left_of_respectsIso]
-    exact H _ _ d.prop_diag_obj
-
-Depends on / 依赖: IsClosedUnderColimitsOfShape
+/-
+**CategoryTheory.CostructuredArrow.isClosedUnderColimitsOfShape** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.CostructuredArrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {A : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} A] {L : CategoryTheory.Functo
+r A T} {J : Type u_3}   [inst_2 : CategoryTheory.Category.{v_3, u_3} J] {P : Cat
+egoryTheory.MorphismProperty T} [P.RespectsIso]   [CategoryTheory.Limits.Preserv
+esColimitsOfShape J L] [CategoryTheory.Limits.HasColimitsOfShape J A]   (c : (D 
+: CategoryTheory.Functor J T) → [CategoryTheory.Limits.HasColimit D] → CategoryT
+heory.Limits.Cocone D)   (hc :     (D : CategoryTheory.Functor J T) →       [ins
+t_6 : CategoryTheory.Limits.HasColimit D] → CategoryTheory.Limits.IsColimit (c D
+)),   (∀ (D : CategoryTheory.Functor J T) [inst_6 : CategoryTheory.Limits.HasCol
+imit D] {X : T}       (s : D ⟶ (CategoryTheory.Functor.const J).obj X),       (∀
+ (j : J), P (s.app j)) → P ((hc D).desc { pt := X, ι := s })) →     ∀ (X : T), (
+CategoryTheory.MorphismProperty.costructuredArrowObj L P).IsClosedUnderColimitsO
+fShape J
+参数：c : (D : CategoryTheory.Functor J T) → [CategoryTheory.Limits.HasColimit D] →
+ CategoryTheory.Limits.Cocone D；hc :     (D : CategoryTheory.Functor J T) →     
+  [inst_6 : CategoryTheory.Limits.HasColimit D] → CategoryTheory.Limits.IsColimi
+t (c D)；∀ (D : CategoryTheory.Functor J T) [inst_6 : CategoryTheory.Limits.HasCo
+limit D] {X : T}       (s : D ⟶ (CategoryTheory.Functor.const J).obj X),       (
+∀ (j : J), P (s.app j)) → P ((hc D).desc { pt := X, ι := s })；X : T；CategoryTheo
+ry.MorphismProperty.costructuredArrowObj L P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.preservesColimit_of_createsColimit_and_hasColimit`：∀ {C :
+ Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommaMorphism.w`：∀ {A : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} B] 
+  {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} C]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MorphismProperty.costructuredArrowObj_iff`：∀ {A : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} A] {T : Type u_3}   [inst_1 : Cate
+goryTheory.Category.{v_3, u_3} T] (L : Categor…
+· 使用定理 `CategoryTheory.Limits.instHasColimitCompOfPreservesColimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.comp_preservesColimitsOfShape`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.preservesColimitOfShape_of_createsColimitsOfShape_and_has
+ColimitsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D 
+: Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsColimit.coconePointUniqueUpToIso_hom_desc`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.MorphismProperty.cancel_left_of_respectsIso`：cancel_left_
+of_respectsIso (P : MorphismProperty C) [hP : RespectsIso P] {X Y Z : C} (f : X 
+⟶ Y) (g : Y ⟶ Z) [IsIso f] : P (f ≫ g) ↔ P g
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
 -/
 lemma CostructuredArrow.isClosedUnderColimitsOfShape {J : Type*} [Category* J]
     {P : MorphismProperty T} [P.RespectsIso] [PreservesColimitsOfShape J L] [HasColimitsOfShape J A]
-    (c : forall (D : J ⥤ T) [HasColimit D], Cocone D)
-    (hc : forall (D : J ⥤ T) [HasColimit D], IsColimit (c D))
-    (H : forall (D : J ⥤ T) [HasColimit D] {X : T} (s : D ⟶ (Functor.const J).obj X),
-      (forall j, P (s.app j)) -> P ((hc D).desc (Cocone.mk X s))) (X : T) :
+    (c : ∀ (D : J ⥤ T) [HasColimit D], Cocone D)
+    (hc : ∀ (D : J ⥤ T) [HasColimit D], IsColimit (c D))
+    (H : ∀ (D : J ⥤ T) [HasColimit D] {X : T} (s : D ⟶ (Functor.const J).obj X),
+      (∀ j, P (s.app j)) → P ((hc D).desc (Cocone.mk X s))) (X : T) :
     (P.costructuredArrowObj L (X := X)).IsClosedUnderColimitsOfShape J where
   colimitsOfShape_le Y := by
     intro ⟨d⟩
     let hd : IsColimit ((CategoryTheory.CostructuredArrow.proj L X ⋙ L).mapCocone d.cocone) :=
       isColimitOfPreserves _ d.isColimit
     have heq : Y.hom = hd.desc { pt := X, ι := { app j := (d.diag.obj j).hom } } := by
-      refine hd.hom_ext fun j => ?_
+      refine hd.hom_ext fun j ↦ ?_
       simp only [IsColimit.fac]
       simp
-    rw [P.costructuredArrowObj_iff]; rw [heq]; rw [← hd.coconePointUniqueUpToIso_hom_desc (hc _)]; rw [P.cancel_left_of_respectsIso]
+    rw [P.costructuredArrowObj_iff, heq, ← hd.coconePointUniqueUpToIso_hom_desc (hc _),
+      P.cancel_left_of_respectsIso]
     exact H _ _ d.prop_diag_obj
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `CostructuredArrow.closedUnderLimitsOfShape_walkingCospan` / 引理 `CostructuredArrow.closedUnderLimitsOfShape_walkingCospan`
-
-English:
-lemma CostructuredArrow.closedUnderLimitsOfShape_walkingCospan
-  statement: [HasPullbacks A] [HasPullbacks T]
-  proof: by
-    rintro Y ⟨pres, hpres⟩
-    have h : IsPullback (L.map (pres.π.app .left).left) (L.map (pres.π.app .right).left)
-        (L.map (pres.diag.map WalkingCospan.Hom.inl).left)
-          (L.map (pres.diag.map WalkingCospan.Hom.inr).left) :=
-IsPullback.of_isLimit_cone isLimitOfPreserves
-        (CategoryTheory.CostructuredArrow.toOver L X ⋙ CategoryTheory.Over.forget X) pres.isLimit
-    rw [MorphismProperty.costructuredArrowObj_iff]
-    rw [show Y.hom = L.map (pres.π.app .left).left ≫ (pres.diag.obj .left).hom by simp]
-    apply P.comp_mem _ _ (P.of_isPullback h.flip ?_) (hpres _)
-    exact P.of_postcomp _ (pres.diag.obj WalkingCospan.one).hom (hpres .one)
-      (by simpa using hpres .right)
-
-中文:
-引理 CostructuredArrow.closedUnderLimitsOfShape_walkingCospan
-  结论: [有Pullbacks A] [有Pullbacks T]
-  证明: by
-    rintro Y ⟨pres, hpres⟩
-    have h : IsPullback (L.map (pres.π.app .left).left) (L.map (pres.π.app .right).left)
-        (L.map (pres.diag.map WalkingCospan.Hom.inl).left)
-          (L.map (pres.diag.map WalkingCospan.Hom.inr).left) :=
-IsPullback.of_isLimit_cone isLimitOfPreserves
-        (CategoryTheory.CostructuredArrow.toOver L X ⋙ CategoryTheory.Over.forget X) pres.isLimit
-    rw [MorphismProperty.costructuredArrowObj_iff]
-    rw [show Y.hom = L.map (pres.π.app .left).left ≫ (pres.diag.obj .left).hom by simp]
-    apply P.comp_mem _ _ (P.of_isPullback h.flip ?_) (hpres _)
-    exact P.of_postcomp _ (pres.diag.obj WalkingCospan.one).hom (hpres .one)
-      (by simpa using hpres .right)
-
-Depends on / 依赖: IsClosedUnderLimitsOfShape, WalkingCospan
+/-
+**CategoryTheory.CostructuredArrow.closedUnderLimitsOfShape_walkingCospan** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.CostructuredArrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Catego
+ryTheory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTheory.Category.
+{v_2, u_2} A] {L : CategoryTheory.Functor A T}   [CategoryTheory.Limits.HasPullb
+acks A] [CategoryTheory.Limits.HasPullbacks T]   [CategoryTheory.Limits.Preserve
+sLimitsOfShape CategoryTheory.Limits.WalkingCospan L] (X : T)   [P.IsStableUnder
+Composition] [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P],   (Categor
+yTheory.MorphismProperty.costructuredArrowObj L P).IsClosedUnderLimitsOfShape   
+  CategoryTheory.Limits.WalkingCospan
+参数：P : CategoryTheory.MorphismProperty T；X : T；CategoryTheory.MorphismProperty.c
+ostructuredArrowObj L P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.of_isLimit_cone`：of_isLimit_cone {D : WalkingC
+ospan ⥤ C} {c : Cone D} (hc : IsLimit c) : IsPullback (c.π.app .left) (c.π.app .
+right) (D.map WalkingCospan.Hom…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.instPreservesLimitsOfShapeCostructuredArrowOverToOverOfIs
+ConnectedOfHasLimitsOfShape`：∀ {J : Type u'} [inst : CategoryTheory.Category.{v'
+, u'} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   {D : Type u_
+1} [inst_…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MorphismProperty.costructuredArrowObj_iff`：∀ {A : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} A] {T : Type u_3}   [inst_1 : Cate
+goryTheory.Category.{v_3, u_3} T] (L : Categor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.CommaMorphism.w`：∀ {A : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} B] 
+  {T : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.MorphismProperty.comp_mem`：comp_mem (W : MorphismProperty
+ C) [W.IsStableUnderComposition] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W f) 
+(hg : W g) : W (f ≫ g)
+· 使用定理 `CategoryTheory.MorphismProperty.of_isPullback`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} {P : CategoryTheory.MorphismProperty C}   [self 
+: P.IsStableUnderBaseChange] {X Y Y…
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用引理 `CategoryTheory.MorphismProperty.of_postcomp`：of_postcomp [W.HasOfPostcom
+pProperty W'] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hg : W' g) (hfg : W (f ≫ g)) 
+: W f
 -/
 lemma CostructuredArrow.closedUnderLimitsOfShape_walkingCospan [HasPullbacks A] [HasPullbacks T]
     [PreservesLimitsOfShape WalkingCospan L] (X : T)
@@ -358,7 +425,7 @@ lemma CostructuredArrow.closedUnderLimitsOfShape_walkingCospan [HasPullbacks A] 
     have h : IsPullback (L.map (pres.π.app .left).left) (L.map (pres.π.app .right).left)
         (L.map (pres.diag.map WalkingCospan.Hom.inl).left)
           (L.map (pres.diag.map WalkingCospan.Hom.inr).left) :=
-IsPullback.of_isLimit_cone isLimitOfPreserves
+      IsPullback.of_isLimit_cone <| isLimitOfPreserves
         (CategoryTheory.CostructuredArrow.toOver L X ⋙ CategoryTheory.Over.forget X) pres.isLimit
     rw [MorphismProperty.costructuredArrowObj_iff]
     rw [show Y.hom = L.map (pres.π.app .left).left ≫ (pres.diag.obj .left).hom by simp]
@@ -372,86 +439,46 @@ variable (X : T) [P.IsStableUnderComposition] [P.IsStableUnderBaseChange]
   [P.HasOfPostcompProperty P] [HasPullbacks A] [HasPullbacks T]
   [PreservesLimitsOfShape WalkingCospan L]
 
-/--
-Instance `createsLimitsOfShape_walkingCospan` / 实例 `createsLimitsOfShape_walkingCospan`
-
-English:
-instance createsLimitsOfShape_walkingCospan
-  signature: :
-  body: by
-  apply +allowSynthFailures forgetCreatesLimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasLimitsOfShape WalkingCospan (CostructuredArrow L X))
-  · exact CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
-
-中文:
-实例 createsLimitsOfShape_walkingCospan
-  签名: :
-  定义体: by
-  apply +allowSynthFailures forgetCreatesLimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasLimitsOfShape WalkingCospan (CostructuredArrow L X))
-  · exact CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.closedUnderLimitsOfShape_walkingCospan, HasLimitsOfShape, WalkingCospan, allowSynthFailures, closedUnderLimitsOfShape_walkingCospan, forgetCreatesLimitsOfShapeOfClosed
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.createsLimitsOfShape_walking
+Cospan** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.MorphismProperty.CostructuredAr
+row`。
+形式化陈述：createsLimitsOfShape_walkingCospan : CreatesLimitsOfShape WalkingCospan (C
+ostructuredArrow.forget P ⊤ L X)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.closedUnderLimitsOfShape_walkingCospan`
+：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryThe
+ory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTh…
 -/
 noncomputable instance createsLimitsOfShape_walkingCospan :
     CreatesLimitsOfShape WalkingCospan (CostructuredArrow.forget P ⊤ L X) := by
   apply +allowSynthFailures forgetCreatesLimitsOfShapeOfClosed
   · exact inferInstanceAs (HasLimitsOfShape WalkingCospan (CostructuredArrow L X))
   · exact CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
-
-/--
-Instance `hasPullbacks` / 实例 `hasPullbacks`
-
-English:
-instance hasPullbacks
-  signature: : HasPullbacks (P.CostructuredArrow ⊤ L X)
-  body: by
-  apply +allowSynthFailures hasLimitsOfShape_of_closedUnderLimitsOfShape
-  · exact inferInstanceAs (HasLimitsOfShape WalkingCospan (CostructuredArrow L X))
-  · exact CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
-
-中文:
-实例 hasPullbacks
-  签名: : 有Pullbacks (P.CostructuredArrow ⊤ L X)
-  定义体: by
-  apply +allowSynthFailures hasLimitsOfShape_of_closedUnderLimitsOfShape
-  · exact inferInstanceAs (HasLimitsOfShape WalkingCospan (CostructuredArrow L X))
-  · exact CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.closedUnderLimitsOfShape_walkingCospan, HasLimitsOfShape, WalkingCospan, allowSynthFailures, closedUnderLimitsOfShape_walkingCospan, hasLimitsOfShape_of_closedUnderLimitsOfShape
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.hasPullbacks** 是 Mathlib 中的一
+个实例，位于命名空间 `CategoryTheory.MorphismProperty.CostructuredArrow`。
+形式化陈述：hasPullbacks : HasPullbacks (P.CostructuredArrow ⊤ L X)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.closedUnderLimitsOfShape_walkingCospan`
+：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryThe
+ory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTh…
 -/
 instance hasPullbacks : HasPullbacks (P.CostructuredArrow ⊤ L X) := by
   apply +allowSynthFailures hasLimitsOfShape_of_closedUnderLimitsOfShape
   · exact inferInstanceAs (HasLimitsOfShape WalkingCospan (CostructuredArrow L X))
   · exact CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesLimitsOfShape WalkingCospan (CostructuredArrow.toOver P L X)
-  body: have : PreservesLimitsOfShape WalkingCospan
-      (CostructuredArrow.toOver P L X ⋙ Over.forget P ⊤ X) :=
-inferInstanceAs PreservesLimitsOfShape WalkingCospan
-      CostructuredArrow.forget P ⊤ L X ⋙ CategoryTheory.CostructuredArrow.toOver L X
-  preservesLimitsOfShape_of_reflects_of_preserves _ (Over.forget _ _ X)
-
-中文:
-实例 :
-  签名: 保持形状极限 WalkingCospan (CostructuredArrow.toOver P L X)
-  定义体: have : PreservesLimitsOfShape WalkingCospan
-      (CostructuredArrow.toOver P L X ⋙ Over.forget P ⊤ X) :=
-inferInstanceAs PreservesLimitsOfShape WalkingCospan
-      CostructuredArrow.forget P ⊤ L X ⋙ CategoryTheory.CostructuredArrow.toOver L X
-  preservesLimitsOfShape_of_reflects_of_preserves _ (Over.forget _ _ X)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.CostructuredArrow.toOver, CostructuredArrow, CostructuredArrow.forget, CostructuredArrow.toOver, Over.forget, PreservesLimitsOfShape, WalkingCospan, forget, preservesLimitsOfShape_of_reflects_of_preserves, toOver
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.MorphismProperty.CostructuredArrow`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesLimitsOfShape WalkingCospan (CostructuredArrow.toOver P L X) :=
   have : PreservesLimitsOfShape WalkingCospan
       (CostructuredArrow.toOver P L X ⋙ Over.forget P ⊤ X) :=
-inferInstanceAs PreservesLimitsOfShape WalkingCospan
+    inferInstanceAs <| PreservesLimitsOfShape WalkingCospan <|
       CostructuredArrow.forget P ⊤ L X ⋙ CategoryTheory.CostructuredArrow.toOver L X
   preservesLimitsOfShape_of_reflects_of_preserves _ (Over.forget _ _ X)
 
@@ -463,30 +490,30 @@ section
 
 variable {A : Type*} [Category* A] {L : A ⥤ T}
 
-/--
-Instance `StructuredArrow.closedUnderColimitsOfShape_discrete_empty` / 实例 `StructuredArrow.closedUnderColimitsOfShape_discrete_empty`
-
-English:
-instance StructuredArrow.closedUnderColimitsOfShape_discrete_empty
-  signature: [L.Faithful] [L.Full] {Y : A}
-  body: by
-    rintro X p
-    let t : IsInitial X := (ObjectProperty.colimitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
-    let e : X ≅ StructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso StructuredArrow.mkIdInitial
-    simpa [MorphismProperty.structuredArrowObj_iff,
-      P.structuredArrow_iso_iff e] using P.id_mem (L.obj Y)
-
-中文:
-实例 结构化箭头.closedUnderColimitsOfShape_discrete_empty
-  签名: [L.忠实] [L.满] {Y : A}
-  定义体: by
-    rintro X p
-    let t : IsInitial X := (ObjectProperty.colimitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
-    let e : X ≅ StructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso StructuredArrow.mkIdInitial
-    simpa [MorphismProperty.structuredArrowObj_iff,
-      P.structuredArrow_iso_iff e] using P.id_mem (L.obj Y)
-
-Depends on / 依赖: Discrete, IsClosedUnderColimitsOfShape, L.obj, PEmpty
+/-
+**CategoryTheory.StructuredArrow.closedUnderColimitsOfShape_discrete_empty** 是 M
+athlib 中的一个定理，位于命名空间 `CategoryTheory.StructuredArrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Catego
+ryTheory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTheory.Category.
+{v_2, u_2} A] {L : CategoryTheory.Functor A T} [L.Faithful] [L.Full] {Y : A}   [
+P.ContainsIdentities] [P.RespectsIso],   (CategoryTheory.MorphismProperty.struct
+uredArrowObj L P).IsClosedUnderColimitsOfShape     (CategoryTheory.Discrete PEmp
+ty.{1})
+参数：P : CategoryTheory.MorphismProperty T；CategoryTheory.MorphismProperty.structu
+redArrowObj L P；CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_isEmpty_iff`：colimitsOfSha
+pe_isEmpty_iff [IsEmpty J] (X : C) : P.colimitsOfShape J X ↔ Nonempty (IsInitial
+ X)
+· 使用定理 `CategoryTheory.instIsEmptyDiscrete`：∀ (α : Type u_1) [IsEmpty α], IsEmpt
+y (CategoryTheory.Discrete α)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.MorphismProperty.structuredArrow_iso_iff`：structuredArrow
+_iso_iff (P : MorphismProperty T) [P.RespectsIso] {L : A ⥤ T} {X : T} {f g : Str
+ucturedArrow X L} (e : f ≅ g) : P f.hom ↔ P g…
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
 -/
 instance StructuredArrow.closedUnderColimitsOfShape_discrete_empty [L.Faithful] [L.Full] {Y : A}
     [P.ContainsIdentities] [P.RespectsIso] :
@@ -500,55 +527,98 @@ instance StructuredArrow.closedUnderColimitsOfShape_discrete_empty [L.Faithful] 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `StructuredArrow.isClosedUnderLimitsOfShape` / 引理 `StructuredArrow.isClosedUnderLimitsOfShape`
-
-English:
-lemma StructuredArrow.isClosedUnderLimitsOfShape
-  statement: {J : Type*} [Category* J]
-  proof: by
-    intro ⟨d⟩
-    let hd : IsLimit ((CategoryTheory.StructuredArrow.proj X L ⋙ L).mapCone d.cone) :=
-      isLimitOfPreserves _ d.isLimit
-    have heq : Y.hom = hd.lift { pt := X, π := { app j := (d.diag.obj j).hom } } := by
-      refine hd.hom_ext fun j => ?_
-      simp only [IsLimit.fac]
-      simp
-    rw [P.structuredArrowObj_iff]; rw [heq]; rw [← (hc _).lift_comp_conePointUniqueUpToIso_hom hd]; rw [P.cancel_right_of_respectsIso]
-    exact H _ _ d.prop_diag_obj
-
-中文:
-引理 结构化箭头.isClosedUnderLimitsOfShape
-  结论: {J : 类型} [范畴* J]
-  证明: by
-    intro ⟨d⟩
-    let hd : IsLimit ((CategoryTheory.StructuredArrow.proj X L ⋙ L).mapCone d.cone) :=
-      isLimitOfPreserves _ d.isLimit
-    have heq : Y.hom = hd.lift { pt := X, π := { app j := (d.diag.obj j).hom } } := by
-      refine hd.hom_ext fun j => ?_
-      simp only [IsLimit.fac]
-      simp
-    rw [P.structuredArrowObj_iff]; rw [heq]; rw [← (hc _).lift_comp_conePointUniqueUpToIso_hom hd]; rw [P.cancel_right_of_respectsIso]
-    exact H _ _ d.prop_diag_obj
-
-Depends on / 依赖: IsClosedUnderLimitsOfShape
+/-
+**CategoryTheory.StructuredArrow.isClosedUnderLimitsOfShape** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.StructuredArrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {A : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} A] {L : CategoryTheory.Functo
+r A T} {J : Type u_3}   [inst_2 : CategoryTheory.Category.{v_3, u_3} J] {P : Cat
+egoryTheory.MorphismProperty T} [P.RespectsIso]   [CategoryTheory.Limits.Preserv
+esLimitsOfShape J L] [CategoryTheory.Limits.HasLimitsOfShape J A]   (c : (D : Ca
+tegoryTheory.Functor J T) → [CategoryTheory.Limits.HasLimit D] → CategoryTheory.
+Limits.Cone D)   (hc :     (D : CategoryTheory.Functor J T) →       [inst_6 : Ca
+tegoryTheory.Limits.HasLimit D] → CategoryTheory.Limits.IsLimit (c D)),   (∀ (D 
+: CategoryTheory.Functor J T) [inst_6 : CategoryTheory.Limits.HasLimit D] {X : T
+}       (s : (CategoryTheory.Functor.const J).obj X ⟶ D),       (∀ (j : J), P (s
+.app j)) → P ((hc D).lift { pt := X, π := s })) →     ∀ (X : T), (CategoryTheory
+.MorphismProperty.structuredArrowObj L P).IsClosedUnderLimitsOfShape J
+参数：c : (D : CategoryTheory.Functor J T) → [CategoryTheory.Limits.HasLimit D] → C
+ategoryTheory.Limits.Cone D；hc :     (D : CategoryTheory.Functor J T) →       [i
+nst_6 : CategoryTheory.Limits.HasLimit D] → CategoryTheory.Limits.IsLimit (c D)；
+∀ (D : CategoryTheory.Functor J T) [inst_6 : CategoryTheory.Limits.HasLimit D] {
+X : T}       (s : (CategoryTheory.Functor.const J).obj X ⟶ D),       (∀ (j : J),
+ P (s.app j)) → P ((hc D).lift { pt := X, π := s })；X : T；CategoryTheory.Morphis
+mProperty.structuredArrowObj L P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.StructuredArrow.w`：w : X.hom ≫ T.map f.right = Y.hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MorphismProperty.structuredArrowObj_iff`：∀ {B : Type u_2}
+ [inst : CategoryTheory.Category.{v_2, u_2} B] {T : Type u_3}   [inst_1 : Catego
+ryTheory.Category.{v_3, u_3} T] (R : Categor…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.comp_preservesLimitsOfShape`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimi
+tsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type
+ u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsLimit.lift_comp_conePointUniqueUpToIso_hom`：lift
+_comp_conePointUniqueUpToIso_hom {r s t : Cone F} (P : IsLimit s) (Q : IsLimit t
+) : P.lift r ≫ (conePointUniqueUpToIso P Q).hom = Q.lift…
+· 使用定理 `CategoryTheory.MorphismProperty.cancel_right_of_respectsIso`：cancel_righ
+t_of_respectsIso (P : MorphismProperty C) [hP : RespectsIso P] {X Y Z : C} (f : 
+X ⟶ Y) (g : Y ⟶ Z) [IsIso g] : P (f ≫ g) ↔ P f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.ObjectProperty.LimitOfShape.prop_diag_obj`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPrope
+rty C} {J : Type u'}   [inst_1 : CategoryTheor…
 -/
 lemma StructuredArrow.isClosedUnderLimitsOfShape {J : Type*} [Category* J]
     {P : MorphismProperty T} [P.RespectsIso] [PreservesLimitsOfShape J L] [HasLimitsOfShape J A]
-    (c : forall (D : J ⥤ T) [HasLimit D], Cone D)
-    (hc : forall (D : J ⥤ T) [HasLimit D], IsLimit (c D))
-    (H : forall (D : J ⥤ T) [HasLimit D] {X : T} (s : (Functor.const J).obj X ⟶ D),
-      (forall j, P (s.app j)) -> P ((hc D).lift (Cone.mk X s))) (X : T) :
+    (c : ∀ (D : J ⥤ T) [HasLimit D], Cone D)
+    (hc : ∀ (D : J ⥤ T) [HasLimit D], IsLimit (c D))
+    (H : ∀ (D : J ⥤ T) [HasLimit D] {X : T} (s : (Functor.const J).obj X ⟶ D),
+      (∀ j, P (s.app j)) → P ((hc D).lift (Cone.mk X s))) (X : T) :
     (P.structuredArrowObj L (X := X)).IsClosedUnderLimitsOfShape J where
   limitsOfShape_le Y := by
     intro ⟨d⟩
     let hd : IsLimit ((CategoryTheory.StructuredArrow.proj X L ⋙ L).mapCone d.cone) :=
       isLimitOfPreserves _ d.isLimit
     have heq : Y.hom = hd.lift { pt := X, π := { app j := (d.diag.obj j).hom } } := by
-      refine hd.hom_ext fun j => ?_
+      refine hd.hom_ext fun j ↦ ?_
       simp only [IsLimit.fac]
       simp
-    rw [P.structuredArrowObj_iff]; rw [heq]; rw [← (hc _).lift_comp_conePointUniqueUpToIso_hom hd]; rw [P.cancel_right_of_respectsIso]
+    rw [P.structuredArrowObj_iff, heq, ← (hc _).lift_comp_conePointUniqueUpToIso_hom hd,
+      P.cancel_right_of_respectsIso]
     exact H _ _ d.prop_diag_obj
 
 end
@@ -557,40 +627,59 @@ section
 
 variable {X : T}
 
-/--
-Instance `Over.closedUnderLimitsOfShape_discrete_empty` / 实例 `Over.closedUnderLimitsOfShape_discrete_empty`
-
-English:
-instance Over.closedUnderLimitsOfShape_discrete_empty
-  signature: [P.ContainsIdentities] [P.RespectsIso]
-  body: CostructuredArrow.closedUnderLimitsOfShape_discrete_empty P
-
-中文:
-实例 Over.closedUnderLimitsOfShape_discrete_empty
-  签名: [P.余ntainsIdentities] [P.RespectsIso]
-  定义体: CostructuredArrow.closedUnderLimitsOfShape_discrete_empty P
-
-Depends on / 依赖: Discrete, IsClosedUnderLimitsOfShape, PEmpty
+/-
+**CategoryTheory.Over.closedUnderLimitsOfShape_discrete_empty** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Over`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Catego
+ryTheory.MorphismProperty T) {X : T}   [P.ContainsIdentities] [P.RespectsIso], P
+.overObj.IsClosedUnderLimitsOfShape (CategoryTheory.Discrete PEmpty.{1})
+参数：P : CategoryTheory.MorphismProperty T；CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
+`：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryTh
+eory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.Faithful.id`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C], (CategoryTheory.Functor.id C).Faithful
+· 使用定理 `CategoryTheory.Functor.Full.id`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C], (CategoryTheory.Functor.id C).Full
 -/
 instance Over.closedUnderLimitsOfShape_discrete_empty [P.ContainsIdentities] [P.RespectsIso] :
     (P.overObj (X := X)).IsClosedUnderLimitsOfShape (Discrete PEmpty.{1}) :=
   CostructuredArrow.closedUnderLimitsOfShape_discrete_empty P
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `Over.closedUnderLimitsOfShape_pullback` / 实例 `Over.closedUnderLimitsOfShape_pullback`
+/-- Let `P` be stable under composition and base change. If `P` satisfies cancellation on the right,
+the subcategory of `Over X` defined by `P` is closed under pullbacks.
 
-English:
-instance Over.closedUnderLimitsOfShape_pullback
-  signature: [HasPullbacks T]
-  body: CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
+Without the cancellation property, this does not in general. Consider for example
+`P = Function.Surjective` on `Type`. -/
+/-
+**CategoryTheory.Over.closedUnderLimitsOfShape_pullback** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Over`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Catego
+ryTheory.MorphismProperty T) {X : T}   [CategoryTheory.Limits.HasPullbacks T] [P
+.IsStableUnderComposition] [P.IsStableUnderBaseChange]   [P.HasOfPostcompPropert
+y P], P.overObj.IsClosedUnderLimitsOfShape CategoryTheory.Limits.WalkingCospan
+参数：P : CategoryTheory.MorphismProperty T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.closedUnderLimitsOfShape_walkingCospan`
+：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryThe
+ory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.instPreservesLimitsOfShapeOfIsRightAdjoint`：∀ {J 
+: Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1, 
+u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
 
-中文:
-实例 Over.closedUnderLimitsOfShape_pullback
-  签名: [有Pullbacks T]
-  定义体: CostructuredArrow.closedUnderLimitsOfShape_walkingCospan _ _
+--- 原说明 ---
+Let `P` be stable under composition and base change. If `P` satisfies cancellati
+on on the right,
+the subcategory of `Over X` defined by `P` is closed under pullbacks.
 
-Depends on / 依赖: Functor, Functor.Monoidal.map_tensor, IsClosedUnderLimitsOfShape, Monoidal, MorphismProperty, MorphismProperty.RespectsIso.postcomp, MorphismProperty.RespectsIso.precomp, RespectsIso, WalkingCospan, inverseImage_iff, map_tensor, postcomp, precomp, tensorHom_mem
+Without the cancellation property, this does not in general. Consider for exampl
+e
+`P = Function.Surjective` on `Type`.
 -/
 instance Over.closedUnderLimitsOfShape_pullback [HasPullbacks T]
     [P.IsStableUnderComposition] [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P] :
@@ -603,51 +692,86 @@ section
 
 variable {X : T}
 
-/--
-Instance `Under.closedUnderColimitsOfShape_discrete_empty` / 实例 `Under.closedUnderColimitsOfShape_discrete_empty`
-
-English:
-instance Under.closedUnderColimitsOfShape_discrete_empty
-  signature: [P.ContainsIdentities] [P.RespectsIso]
-  body: StructuredArrow.closedUnderColimitsOfShape_discrete_empty (L := 𝟭 _) P
-
-中文:
-实例 Under.closedUnderColimitsOfShape_discrete_empty
-  签名: [P.余ntainsIdentities] [P.RespectsIso]
-  定义体: StructuredArrow.closedUnderColimitsOfShape_discrete_empty (L := 𝟭 _) P
-
-Depends on / 依赖: Discrete, IsClosedUnderColimitsOfShape, PEmpty
+/-
+**CategoryTheory.Under.closedUnderColimitsOfShape_discrete_empty** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Under`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Catego
+ryTheory.MorphismProperty T) {X : T}   [P.ContainsIdentities] [P.RespectsIso], P
+.underObj.IsClosedUnderColimitsOfShape (CategoryTheory.Discrete PEmpty.{1})
+参数：P : CategoryTheory.MorphismProperty T；CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StructuredArrow.closedUnderColimitsOfShape_discrete_empty
+`：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryTh
+eory.MorphismProperty T) {A : Type u_2}   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.Faithful.id`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C], (CategoryTheory.Functor.id C).Faithful
+· 使用定理 `CategoryTheory.Functor.Full.id`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C], (CategoryTheory.Functor.id C).Full
 -/
 instance Under.closedUnderColimitsOfShape_discrete_empty [P.ContainsIdentities] [P.RespectsIso] :
     (P.underObj (X := X)).IsClosedUnderColimitsOfShape (Discrete PEmpty.{1}) :=
   StructuredArrow.closedUnderColimitsOfShape_discrete_empty (L := 𝟭 _) P
 
-/--
-Instance `Under.closedUnderColimitsOfShape_pushout` / 实例 `Under.closedUnderColimitsOfShape_pushout`
+/-- Let `P` be stable under composition and cobase change. If `P` satisfies cancellation on the
+left, the subcategory of `Under X` defined by `P` is closed under pushouts. -/
+/-
+**CategoryTheory.Under.closedUnderColimitsOfShape_pushout** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Under`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Catego
+ryTheory.MorphismProperty T) {X : T}   [CategoryTheory.Limits.HasPushouts T] [P.
+IsStableUnderComposition] [P.IsStableUnderCobaseChange]   [P.HasOfPrecompPropert
+y P], P.underObj.IsClosedUnderColimitsOfShape CategoryTheory.Limits.WalkingSpan
+参数：P : CategoryTheory.MorphismProperty T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff_op`：isClo
+sedUnderColimitsOfShape_iff_op : P.IsClosedUnderColimitsOfShape J ↔ P.op.IsClose
+dUnderLimitsOfShape Jᵒᵖ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_if
+f`：isClosedUnderLimitsOfShape_inverseImage_iff (P : ObjectProperty D) [P.IsClose
+dUnderIsomorphisms] (e : C ≌ D) : (P.inverseImage e.functor).Is…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsOppositeOp`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.Obje
+ctProperty C)   [P.IsClosedUnderIsomorphisms], P.op.IsClose…
+· 使用定理 `CategoryTheory.MorphismProperty.instIsClosedUnderIsomorphismsUnderUnderO
+bjOfRespectsIso`：∀ {T : Type u_3} [inst : CategoryTheory.Category.{v_3, u_3} T] 
+{W : CategoryTheory.MorphismProperty T} {X : T}   [W.RespectsIso], W.underObj…
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderCobaseChange.respectsIso`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.Morp
+hismProperty C}   [P.IsStableUnderCobaseChange], P.Respects…
+· 使用引理 `CategoryTheory.MorphismProperty.inverseImage_op_underObj`：inverseImage_o
+p_underObj (W : MorphismProperty T) {X : T} : W.underObj.op.inverseImage (Over.o
+pEquivOpUnder X).functor = W.op.overObj
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivale
+nce`：isClosedUnderLimitsOfShape_iff_of_equivalence (e : J ≌ J') : P.IsClosedUnde
+rLimitsOfShape J ↔ P.IsClosedUnderLimitsOfShape J'
+· 使用定理 `CategoryTheory.Over.closedUnderLimitsOfShape_pullback`：∀ {T : Type u_1} 
+[inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryTheory.MorphismProper
+ty T) {X : T}   [CategoryTheory.Limits.HasP…
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderComposition.op`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.MorphismProper
+ty C}   [P.IsStableUnderComposition], P.op.IsStab…
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderCobaseChange.op`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.MorphismPrope
+rty C}   [P.IsStableUnderCobaseChange], P.op.IsSta…
+· 使用定理 `CategoryTheory.MorphismProperty.instHasOfPostcompPropertyOppositeOpOfHas
+OfPrecompProperty`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (W :
+ CategoryTheory.MorphismProperty C)   {W' : CategoryTheory.MorphismProperty C} …
 
-English:
-instance Under.closedUnderColimitsOfShape_pushout
-  signature: [HasPushouts T]
-  body: by
-  rw [ObjectProperty.isClosedUnderColimitsOfShape_iff_op]; rw [←
-    ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff _ _ (Over.opEquivOpUnder _)]; rw [MorphismProperty.inverseImage_op_underObj]; rw [ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence _ walkingSpanOpEquiv]
-  infer_instance
-
-中文:
-实例 Under.closedUnderColimitsOfShape_pushout
-  签名: [有Pushouts T]
-  定义体: by
-  rw [ObjectProperty.isClosedUnderColimitsOfShape_iff_op]; rw [←
-    ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff _ _ (Over.opEquivOpUnder _)]; rw [MorphismProperty.inverseImage_op_underObj]; rw [ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence _ walkingSpanOpEquiv]
-  infer_instance
-
-Depends on / 依赖: IsClosedUnderColimitsOfShape, MorphismProperty, MorphismProperty.inverseImage_op_underObj, ObjectProperty, ObjectProperty.isClosedUnderColimitsOfShape_iff_op, ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence, ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff, Over.opEquivOpUnder, WalkingSpan, infer_instance, inverseImage_op_underObj, isClosedUnderColimitsOfShape_iff_op, isClosedUnderLimitsOfShape_iff_of_equivalence, isClosedUnderLimitsOfShape_inverseImage_iff, opEquivOpUnder, walkingSpanOpEquiv
+--- 原说明 ---
+Let `P` be stable under composition and cobase change. If `P` satisfies cancella
+tion on the
+left, the subcategory of `Under X` defined by `P` is closed under pushouts.
 -/
 instance Under.closedUnderColimitsOfShape_pushout [HasPushouts T]
     [P.IsStableUnderComposition] [P.IsStableUnderCobaseChange] [P.HasOfPrecompProperty P] :
     (P.underObj (X := X)).IsClosedUnderColimitsOfShape WalkingSpan := by
-  rw [ObjectProperty.isClosedUnderColimitsOfShape_iff_op]; rw [←
-    ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff _ _ (Over.opEquivOpUnder _)]; rw [MorphismProperty.inverseImage_op_underObj]; rw [ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence _ walkingSpanOpEquiv]
+  rw [ObjectProperty.isClosedUnderColimitsOfShape_iff_op, ←
+    ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff _ _ (Over.opEquivOpUnder _),
+    MorphismProperty.inverseImage_op_underObj,
+    ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence _ walkingSpanOpEquiv]
   infer_instance
 
 end
@@ -656,26 +780,10 @@ namespace MorphismProperty.Over
 
 variable (X : T)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsIdentities]
-  signature: [P.RespectsIso]
-  body: by
-  apply +allowSynthFailures forgetCreatesLimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasLimitsOfShape _ (Over X))
-  · apply Over.closedUnderLimitsOfShape_discrete_empty _
-
-中文:
-实例 [P.余ntainsIdentities]
-  签名: [P.RespectsIso]
-  定义体: by
-  apply +allowSynthFailures forgetCreatesLimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasLimitsOfShape _ (Over X))
-  · apply Over.closedUnderLimitsOfShape_discrete_empty _
-
-Depends on / 依赖: HasLimitsOfShape, Over.closedUnderLimitsOfShape_discrete_empty, allowSynthFailures, closedUnderLimitsOfShape_discrete_empty, forgetCreatesLimitsOfShapeOfClosed
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [P.ContainsIdentities] [P.RespectsIso] :
     CreatesLimitsOfShape (Discrete PEmpty.{1}) (Over.forget P ⊤ X) := by
@@ -686,30 +794,10 @@ noncomputable instance [P.ContainsIdentities] [P.RespectsIso] :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 variable {X} in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsIdentities]
-  signature: (Y : P.Over ⊤ X)
-  body: Over.homMk Y.hom
-  uniq a := by
-    ext
-    · simp only [mk_left, homMk_hom, Over.homMk_left]
-      rw [← Over.w a]
-      simp only [mk_left, Functor.const_obj_obj, mk_hom, Category.comp_id]
-
-中文:
-实例 [P.余ntainsIdentities]
-  签名: (Y : P.Over ⊤ X)
-  定义体: Over.homMk Y.hom
-  uniq a := by
-    ext
-    · simp only [mk_left, homMk_hom, Over.homMk_left]
-      rw [← Over.w a]
-      simp only [mk_left, Functor.const_obj_obj, mk_hom, Category.comp_id]
-
-Depends on / 依赖: Over.homMk, Y.hom
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.ContainsIdentities] (Y : P.Over ⊤ X) :
     Unique (Y ⟶ Over.mk ⊤ (𝟙 X) (P.id_mem X)) where
@@ -720,60 +808,48 @@ instance [P.ContainsIdentities] (Y : P.Over ⊤ X) :
       rw [← Over.w a]
       simp only [mk_left, Functor.const_obj_obj, mk_hom, Category.comp_id]
 
-/--
-Definition of `mkIdTerminal` / `mkIdTerminal` 的定义
+/-- `X ⟶ X` is the terminal object of `P.Over ⊤ X`. -/
+/-
+**CategoryTheory.MorphismProperty.Over.mkIdTerminal** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.MorphismProperty.Over`。
+形式化陈述：mkIdTerminal [P.ContainsIdentities] : IsTerminal (Over.mk ⊤ (𝟙 X) (P.id_me
+m X))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
 
-English:
-definition mkIdTerminal
-  signature: [P.ContainsIdentities]
-  body: IsTerminal.ofUnique _
-
-中文:
-定义 mkIdTerminal
-  签名: [P.余ntainsIdentities]
-  定义体: IsTerminal.ofUnique _
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
+--- 原说明 ---
+`X ⟶ X` is the terminal object of `P.Over ⊤ X`.
 -/
 def mkIdTerminal [P.ContainsIdentities] :
     IsTerminal (Over.mk ⊤ (𝟙 X) (P.id_mem X)) :=
   IsTerminal.ofUnique _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsIdentities]
-  signature: : HasTerminal (P.Over ⊤ X)
-  body: let h : IsTerminal (Over.mk ⊤ (𝟙 X) (P.id_mem X)) := Over.mkIdTerminal P X
-  h.hasTerminal
-
-中文:
-实例 [P.余ntainsIdentities]
-  签名: : 有终止 (P.Over ⊤ X)
-  定义体: let h : IsTerminal (Over.mk ⊤ (𝟙 X) (P.id_mem X)) := Over.mkIdTerminal P X
-  h.hasTerminal
-
-Depends on / 依赖: IsTerminal, Over.mk, Over.mkIdTerminal, P.id_mem, h.hasTerminal, hasTerminal, id_mem, mkIdTerminal
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.ContainsIdentities] : HasTerminal (P.Over ⊤ X) :=
   let h : IsTerminal (Over.mk ⊤ (𝟙 X) (P.id_mem X)) := Over.mkIdTerminal P X
   h.hasTerminal
 
-/--
-Instance `createsLimitsOfShape_walkingCospan` / 实例 `createsLimitsOfShape_walkingCospan`
+/-- If `P` is stable under composition, base change and satisfies post-cancellation,
+`Over.forget P ⊤ X` creates pullbacks. -/
+/-
+**CategoryTheory.MorphismProperty.Over.createsLimitsOfShape_walkingCospan** 是 Ma
+thlib 中的一个实例，位于命名空间 `CategoryTheory.MorphismProperty.Over`。
+形式化陈述：createsLimitsOfShape_walkingCospan [HasPullbacks T] [P.IsStableUnderCompos
+ition] [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P] : CreatesLimitsOf
+Shape WalkingCospan (Over.forget P ⊤ X)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance createsLimitsOfShape_walkingCospan
-  signature: [HasPullbacks T]
-  body: CostructuredArrow.createsLimitsOfShape_walkingCospan _ _
-
-中文:
-实例 createsLimitsOfShape_walkingCospan
-  签名: [有Pullbacks T]
-  定义体: CostructuredArrow.createsLimitsOfShape_walkingCospan _ _
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.createsLimitsOfShape_walkingCospan, createsLimitsOfShape_walkingCospan
+--- 原说明 ---
+If `P` is stable under composition, base change and satisfies post-cancellation,
+`Over.forget P ⊤ X` creates pullbacks.
 -/
 noncomputable instance createsLimitsOfShape_walkingCospan [HasPullbacks T]
     [P.IsStableUnderComposition] [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P] :
@@ -782,90 +858,81 @@ noncomputable instance createsLimitsOfShape_walkingCospan [HasPullbacks T]
 
 /-- If `P` is stable under composition, base change and satisfies post-cancellation,
 `P.Over ⊤ X` has pullbacks -/
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `P` is stable under composition, base change and satisfies post-cancellation,
+`P.Over ⊤ X` has pullbacks
+-/
 instance (priority := 900) hasPullbacks [HasPullbacks T] [P.IsStableUnderComposition]
     [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P] : HasPullbacks (P.Over ⊤ X) :=
   CostructuredArrow.hasPullbacks _ _
 
 variable [HasPullbacks T] [P.IsMultiplicative]
   [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P]
-
-/--
-Instance `hasFiniteLimits` / 实例 `hasFiniteLimits`
-
-English:
-instance hasFiniteLimits
-  signature: : HasFiniteLimits (P.Over ⊤ X)
-  body: hasFiniteLimits_of_hasTerminal_and_pullbacks
-
-中文:
-实例 hasFiniteLimits
-  签名: : 有有限极限 (P.Over ⊤ X)
-  定义体: hasFiniteLimits_of_hasTerminal_and_pullbacks
-
-Depends on / 依赖: hasFiniteLimits_of_hasTerminal_and_pullbacks
+/-
+**CategoryTheory.MorphismProperty.Over.hasFiniteLimits** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.MorphismProperty.Over`。
+形式化陈述：hasFiniteLimits : HasFiniteLimits (P.Over ⊤ X)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasTerminal_and_pullbacks`：hasF
+initeLimits_of_hasTerminal_and_pullbacks [HasTerminal C] [HasPullbacks C] : HasF
+initeLimits C
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.MorphismProperty.Over.instHasTerminalTopOfContainsIdentit
+ies`：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Categor
+yTheory.MorphismProperty T) (X : T)   [P.ContainsIdentities], Cat…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toContainsIdentities`：∀
+ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheory.Morp
+hismProperty C}   [self : W.IsMultiplicative], W.ContainsId…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `CategoryTheory.Functor.instPreservesLimitsOfShapeOfIsRightAdjoint`：∀ {J 
+: Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1, 
+u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
 -/
 instance hasFiniteLimits : HasFiniteLimits (P.Over ⊤ X) :=
   hasFiniteLimits_of_hasTerminal_and_pullbacks
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesFiniteLimits (Over.forget P ⊤ X)
-  body: createsFiniteLimitsOfCreatesTerminalAndPullbacks _
-
-中文:
-实例 :
-  签名: 创造有限极限 (Over.forget P ⊤ X)
-  定义体: createsFiniteLimitsOfCreatesTerminalAndPullbacks _
-
-Depends on / 依赖: createsFiniteLimitsOfCreatesTerminalAndPullbacks
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesFiniteLimits (Over.forget P ⊤ X) :=
   createsFiniteLimitsOfCreatesTerminalAndPullbacks _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteWidePullbacks
-  signature: T] : HasFiniteLimits (P.Over ⊤ X)
-  body: hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits (Over.forget P ⊤ X)
-
-中文:
-实例 [有FiniteWidePullbacks
-  签名: T] : 有有限极限 (P.Over ⊤ X)
-  定义体: hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits (Over.forget P ⊤ X)
-
-Depends on / 依赖: Over.forget, forget, hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteWidePullbacks T] : HasFiniteLimits (P.Over ⊤ X) :=
   hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits (Over.forget P ⊤ X)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteLimits (Over.forget P ⊤ X)
-  body: preservesFiniteLimits_of_preservesTerminal_and_pullbacks (Over.forget P ⊤ X)
-
-中文:
-实例 :
-  签名: 保持FiniteLimits (Over.forget P ⊤ X)
-  定义体: preservesFiniteLimits_of_preservesTerminal_and_pullbacks (Over.forget P ⊤ X)
-
-Depends on / 依赖: Over.forget, forget, preservesFiniteLimits_of_preservesTerminal_and_pullbacks
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteLimits (Over.forget P ⊤ X) :=
   preservesFiniteLimits_of_preservesTerminal_and_pullbacks (Over.forget P ⊤ X)
-
+/-
+**CategoryTheory.MorphismProperty.Over.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.MorphismProperty.Over`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : T} (f : X ⟶ Y) : PreservesFiniteLimits (pullback P ⊤ f) where
   preservesFiniteLimits J _ _ := by
     have : PreservesLimitsOfShape J
         (MorphismProperty.Over.pullback P ⊤ f ⋙ MorphismProperty.Over.forget _ _ _) :=
-inferInstanceAs PreservesLimitsOfShape J
+      inferInstanceAs <| PreservesLimitsOfShape J <|
         Over.forget _ _ _ ⋙ CategoryTheory.Over.pullback f
     exact preservesLimitsOfShape_of_reflects_of_preserves
       (MorphismProperty.Over.pullback P ⊤ f) (MorphismProperty.Over.forget _ _ _)
@@ -876,26 +943,10 @@ namespace MorphismProperty.Under
 
 variable (X : T)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsIdentities]
-  signature: [P.RespectsIso]
-  body: by
-  apply +allowSynthFailures forgetCreatesColimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasColimitsOfShape _ (Under X))
-  · apply Under.closedUnderColimitsOfShape_discrete_empty _
-
-中文:
-实例 [P.余ntainsIdentities]
-  签名: [P.RespectsIso]
-  定义体: by
-  apply +allowSynthFailures forgetCreatesColimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasColimitsOfShape _ (Under X))
-  · apply Under.closedUnderColimitsOfShape_discrete_empty _
-
-Depends on / 依赖: HasColimitsOfShape, Under.closedUnderColimitsOfShape_discrete_empty, allowSynthFailures, closedUnderColimitsOfShape_discrete_empty, forgetCreatesColimitsOfShapeOfClosed
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [P.ContainsIdentities] [P.RespectsIso] :
     CreatesColimitsOfShape (Discrete PEmpty.{1}) (Under.forget P ⊤ X) := by
@@ -906,85 +957,54 @@ noncomputable instance [P.ContainsIdentities] [P.RespectsIso] :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable {X} in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsIdentities]
-  signature: (Y : P.Under ⊤ X)
-  body: Under.homMk Y.hom (by simp)
-  uniq a := by ext; simp [← Under.w a]
-
-中文:
-实例 [P.余ntainsIdentities]
-  签名: (Y : P.Under ⊤ X)
-  定义体: Under.homMk Y.hom (by simp)
-  uniq a := by ext; simp [← Under.w a]
-
-Depends on / 依赖: Under.homMk, Y.hom
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.ContainsIdentities] (Y : P.Under ⊤ X) :
     Unique (Under.mk ⊤ (𝟙 X) (P.id_mem X) ⟶ Y) where
   default := Under.homMk Y.hom (by simp)
   uniq a := by ext; simp [← Under.w a]
 
-/--
-Definition of `mkIdInitial` / `mkIdInitial` 的定义
+/-- `X ⟶ X` is the initial object of `P.Under ⊤ X`. -/
+/-
+**CategoryTheory.MorphismProperty.Under.mkIdInitial** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.MorphismProperty.Under`。
+形式化陈述：mkIdInitial [P.ContainsIdentities] : IsInitial (Under.mk ⊤ (𝟙 X) (P.id_mem
+ X))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
 
-English:
-definition mkIdInitial
-  signature: [P.ContainsIdentities]
-  body: .ofUnique _
-
-中文:
-定义 mkIdInitial
-  签名: [P.余ntainsIdentities]
-  定义体: .ofUnique _
-
-Depends on / 依赖: ofUnique
+--- 原说明 ---
+`X ⟶ X` is the initial object of `P.Under ⊤ X`.
 -/
 def mkIdInitial [P.ContainsIdentities] :
     IsInitial (Under.mk ⊤ (𝟙 X) (P.id_mem X)) :=
   .ofUnique _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsIdentities]
-  signature: : HasInitial (P.Under ⊤ X)
-  body: (Under.mkIdInitial P X).hasInitial
-
-中文:
-实例 [P.余ntainsIdentities]
-  签名: : HasInitial (P.Under ⊤ X)
-  定义体: (Under.mkIdInitial P X).hasInitial
-
-Depends on / 依赖: Under.mkIdInitial, hasInitial, mkIdInitial
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.ContainsIdentities] : HasInitial (P.Under ⊤ X) :=
   (Under.mkIdInitial P X).hasInitial
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `P` is stable under composition, cobase change and satisfies pre-cancellation,
+`Under.forget P ⊤ X` creates pushouts. -/
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [HasPushouts
-  signature: T]
-  body: by
-  apply +allowSynthFailures forgetCreatesColimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasColimitsOfShape WalkingSpan (Under X))
-  · apply Under.closedUnderColimitsOfShape_pushout
-
-中文:
-实例 [有Pushouts
-  签名: T]
-  定义体: by
-  apply +allowSynthFailures forgetCreatesColimitsOfShapeOfClosed
-  · exact inferInstanceAs (HasColimitsOfShape WalkingSpan (Under X))
-  · apply Under.closedUnderColimitsOfShape_pushout
-
-Depends on / 依赖: HasColimitsOfShape, Under.closedUnderColimitsOfShape_pushout, WalkingSpan, allowSynthFailures, closedUnderColimitsOfShape_pushout, forgetCreatesColimitsOfShapeOfClosed
+--- 原说明 ---
+If `P` is stable under composition, cobase change and satisfies pre-cancellation
+,
+`Under.forget P ⊤ X` creates pushouts.
 -/
 noncomputable instance [HasPushouts T]
     [P.IsStableUnderComposition] [P.IsStableUnderCobaseChange] [P.HasOfPrecompProperty P] :
@@ -995,6 +1015,16 @@ noncomputable instance [HasPushouts T]
 
 /-- If `P` is stable under composition, cobase change and satisfies pre-cancellation,
 `P.Under ⊤ X` has pushouts. -/
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `P` is stable under composition, cobase change and satisfies pre-cancellation
+,
+`P.Under ⊤ X` has pushouts.
+-/
 instance (priority := 900) [HasPushouts T] [P.IsStableUnderComposition]
     [P.IsStableUnderCobaseChange] [P.HasOfPrecompProperty P] : HasPushouts (P.Under ⊤ X) := by
   apply +allowSynthFailures hasColimitsOfShape_of_closedUnderColimitsOfShape
@@ -1003,57 +1033,24 @@ instance (priority := 900) [HasPushouts T] [P.IsStableUnderComposition]
 
 variable [HasPushouts T] [P.IsStableUnderComposition] [P.ContainsIdentities]
   [P.IsStableUnderCobaseChange] [P.HasOfPrecompProperty P]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesFiniteColimits (Under.forget P ⊤ X)
-  body: createsFiniteColimitsOfCreatesInitialAndPushouts _
-
-中文:
-实例 :
-  签名: 创造有限余极限 (Under.forget P ⊤ X)
-  定义体: createsFiniteColimitsOfCreatesInitialAndPushouts _
-
-Depends on / 依赖: createsFiniteColimitsOfCreatesInitialAndPushouts
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesFiniteColimits (Under.forget P ⊤ X) :=
   createsFiniteColimitsOfCreatesInitialAndPushouts _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteWidePushouts
-  signature: T] : HasFiniteColimits (P.Under ⊤ X)
-  body: hasFiniteColimits_of_hasColimits_of_createsFiniteColimits (Under.forget P ⊤ X)
-
-中文:
-实例 [有FiniteWidePushouts
-  签名: T] : 有有限余极限 (P.Under ⊤ X)
-  定义体: hasFiniteColimits_of_hasColimits_of_createsFiniteColimits (Under.forget P ⊤ X)
-
-Depends on / 依赖: Under.forget, forget, hasFiniteColimits_of_hasColimits_of_createsFiniteColimits
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteWidePushouts T] : HasFiniteColimits (P.Under ⊤ X) :=
   hasFiniteColimits_of_hasColimits_of_createsFiniteColimits (Under.forget P ⊤ X)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteColimits (Under.forget P ⊤ X)
-  body: preservesFiniteColimits_of_preservesInitial_and_pushouts (Under.forget P ⊤ X)
-
-中文:
-实例 :
-  签名: 保持FiniteColimits (Under.forget P ⊤ X)
-  定义体: preservesFiniteColimits_of_preservesInitial_and_pushouts (Under.forget P ⊤ X)
-
-Depends on / 依赖: Under.forget, forget, preservesFiniteColimits_of_preservesInitial_and_pushouts
+/-
+**CategoryTheory.MorphismProperty.Under.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Under`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteColimits (Under.forget P ⊤ X) :=
   preservesFiniteColimits_of_preservesInitial_and_pushouts (Under.forget P ⊤ X)
@@ -1061,3 +1058,4 @@ instance : PreservesFiniteColimits (Under.forget P ⊤ X) :=
 end MorphismProperty.Under
 
 end CategoryTheory
+

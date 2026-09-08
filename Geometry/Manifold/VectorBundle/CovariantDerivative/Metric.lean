@@ -47,13 +47,13 @@ open scoped Manifold ContDiff
 
 variable
   -- Let `M` be a real manifold modeled on `(E, H)`
-  {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
-  {H : Type*} [TopologicalSpace H] (I : ModelWithCorners Real E H)
+  {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  {H : Type*} [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
   {M : Type*} [TopologicalSpace M] [ChartedSpace H M]
   -- Let `V` be a bundle over `M` with standard fiber `F`.
-  {F : Type*} [NormedAddCommGroup F] [NormedSpace Real F]
-  {V : M -> Type*} [TopologicalSpace (TotalSpace F V)]
-  [forall x, NormedAddCommGroup (V x)] [forall x, InnerProductSpace Real (V x)] [FiberBundle F V]
+  {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+  {V : M → Type*} [TopologicalSpace (TotalSpace F V)]
+  [∀ x, NormedAddCommGroup (V x)] [∀ x, InnerProductSpace ℝ (V x)] [FiberBundle F V]
 
 /-! # Compatible connections
 
@@ -68,7 +68,7 @@ differentiable at `x`.
 
 variable {σ σ' σ'' τ τ' τ'' : Π x : M, V x}
 
-local notation "⟪" σ ", " τ "⟫" => fun x => inner Real (σ x) (τ x)
+local notation "⟪" σ ", " τ "⟫" => fun x ↦ inner ℝ (σ x) (τ x)
 
 namespace CovariantDerivative
 
@@ -78,91 +78,49 @@ variable (cov : CovariantDerivative I F V)
 /-- Local notation for a covariant derivative on a vector bundle acting on a vector field and a
 section. -/
 local syntax "∇" term:arg term : term
-local macro_rules | `(∇ $X $σ) => `(fun (x : M) => cov $σ x ($X x))
+local macro_rules | `(∇ $X $σ) => `(fun (x : M) ↦ cov $σ x ($X x))
 
-/--
-Definition of `derivMetricTensorAux` / `derivMetricTensorAux` 的定义
+/-- The function defining the compatibility tensor for `∇` w.r.t. `g`:
+prefer using `derivMetricTensor` instead -/
+/-
+**CovariantDerivative.derivMetricTensorAux** 是 Mathlib 中的一个定义，位于命名空间 `CovariantD
+erivative`。
+形式化陈述：derivMetricTensorAux (σ τ : Π x : M, V x) (x : M) : TangentSpace I x ->L[R
+eal] Real
+参数：σ τ : Π x : M, V x；x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition derivMetricTensorAux
-  signature: (σ τ : Π x : M, V x) (x : M)
-  body: d% ⟪σ, τ⟫ x - innerSL Real (τ x) ∘L cov σ x - innerSL Real (σ x) ∘L cov τ x
-
-@[simp]
-
-中文:
-定义 derivMetricTensorAux
-  签名: (σ τ : Π x : M, V x) (x : M)
-  定义体: d% ⟪σ, τ⟫ x - innerSL Real (τ x) ∘L cov σ x - innerSL Real (σ x) ∘L cov τ x
-
-@[simp]
-
-Depends on / 依赖: innerSL
+--- 原说明 ---
+The function defining the compatibility tensor for `∇` w.r.t. `g`:
+prefer using `derivMetricTensor` instead
 -/
-noncomputable def derivMetricTensorAux (σ τ : Π x : M, V x) (x : M) : TangentSpace I x ->L[Real] Real :=
-  d% ⟪σ, τ⟫ x - innerSL Real (τ x) ∘L cov σ x - innerSL Real (σ x) ∘L cov τ x
+noncomputable def derivMetricTensorAux (σ τ : Π x : M, V x) (x : M) : TangentSpace I x →L[ℝ] ℝ :=
+  d% ⟪σ, τ⟫ x - innerSL ℝ (τ x) ∘L cov σ x - innerSL ℝ (σ x) ∘L cov τ x
 
 @[simp]
-/--
-lemma `derivMetricTensorAux_apply` / 引理 `derivMetricTensorAux_apply`
-
-English:
-lemma derivMetricTensorAux_apply
-  given: (σ τ : Π x : M, V x) {x : M} (X₀ : TangentSpace I x)
-  proof: by
-  rw [real_inner_comm]
-  rfl
-
-中文:
-引理 derivMetricTensorAux_apply
-  条件: (σ τ : Π x : M, V x) {x : M} (X₀ : TangentSpace I x)
-  证明: by
-  rw [real_inner_comm]
-  rfl
-
-Depends on / 依赖: real_inner_comm
+/-
+**CovariantDerivative.derivMetricTensorAux_apply** 是 Mathlib 中的一个引理，位于命名空间 `Cova
+riantDerivative`。
+形式化陈述：derivMetricTensorAux_apply (σ τ : Π x : M, V x) {x : M} (X₀ : TangentSpace
+ I x) : derivMetricTensorAux I cov σ τ x X₀ = d% ⟪σ, τ⟫ x X₀ - inner Real (cov σ
+ x X₀) (τ x) - inner Real (σ x) (cov τ x X₀)
+参数：σ τ : Π x : M, V x；X₀ : TangentSpace I x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma derivMetricTensorAux_apply (σ τ : Π x : M, V x) {x : M} (X₀ : TangentSpace I x) :
     derivMetricTensorAux I cov σ τ x X₀ =
-      d% ⟪σ, τ⟫ x X₀ - inner Real (cov σ x X₀) (τ x) - inner Real (σ x) (cov τ x X₀) := by
+      d% ⟪σ, τ⟫ x X₀ - inner ℝ (cov σ x X₀) (τ x) - inner ℝ (σ x) (cov τ x X₀) := by
   rw [real_inner_comm]
   rfl
 
 -- From now on, assume `V` is a vector bundle endowed with a `C¹` Riemannian metric.
-variable [VectorBundle Real F V] [IsContMDiffRiemannianBundle I 1 F V] {x : M}
-
-/--
-theorem `tensorial_derivMetricTensorAux₁` / 定理 `tensorial_derivMetricTensorAux₁`
-
-English:
-theorem tensorial_derivMetricTensorAux₁
-  given: (τ : Π x, V x) (hτ : MDiffAt (T% τ) x)
-  proof: by
-    ext X₀
-    simp [mvfderiv_fun_mul hf (hσ.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.leibniz hσ hf, inner_add_left, inner_smul_left]
-    ring
-  add hσ hσ' := by
-    ext X₀
-    simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ'.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.add hσ hσ', inner_add_left]
-    abel
-
-中文:
-定理 tensorial_derivMetricTensorAux₁
-  条件: (τ : Π x, V x) (hτ : MDiffAt (T% τ) x)
-  证明: by
-    ext X₀
-    simp [mvfderiv_fun_mul hf (hσ.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.leibniz hσ hf, inner_add_left, inner_smul_left]
-    ring
-  add hσ hσ' := by
-    ext X₀
-    simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ'.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.add hσ hσ', inner_add_left]
-    abel
-
-Depends on / 依赖: cov.isCovariantDerivativeOn.add, cov.isCovariantDerivativeOn.leibniz, inner_add_left, inner_bundle, inner_smul_left, isCovariantDerivativeOn, leibniz, mvfderiv_fun_add, mvfderiv_fun_mul
+variable [VectorBundle ℝ F V] [IsContMDiffRiemannianBundle I 1 F V] {x : M}
+/-
+**CovariantDerivative.tensorial_derivMetricTensorAux** 是 Mathlib 中的一个定理，位于命名空间 `
+CovariantDerivative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tensorial_derivMetricTensorAux₁ (τ : Π x, V x) (hτ : MDiffAt (T% τ) x) :
     TensorialAt I F (derivMetricTensorAux I cov · τ x) x where
@@ -176,39 +134,10 @@ theorem tensorial_derivMetricTensorAux₁ (τ : Π x, V x) (hτ : MDiffAt (T% τ
     simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ'.inner_bundle hτ),
       cov.isCovariantDerivativeOn.add hσ hσ', inner_add_left]
     abel
-
-/--
-theorem `tensorial_derivMetricTensorAux₂` / 定理 `tensorial_derivMetricTensorAux₂`
-
-English:
-theorem tensorial_derivMetricTensorAux₂
-  given: (σ : Π x, V x) (hσ : MDiffAt (T% σ) x)
-  proof: by
-    ext X₀
-    simp [mvfderiv_fun_mul hf (hσ.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.leibniz hτ hf, inner_add_right, inner_smul_right]
-    ring
-  add hτ hτ' := by
-    ext X₀
-    simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ.inner_bundle hτ'),
-      cov.isCovariantDerivativeOn.add hτ hτ', inner_add_right]
-    abel
-
-中文:
-定理 tensorial_derivMetricTensorAux₂
-  条件: (σ : Π x, V x) (hσ : MDiffAt (T% σ) x)
-  证明: by
-    ext X₀
-    simp [mvfderiv_fun_mul hf (hσ.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.leibniz hτ hf, inner_add_right, inner_smul_right]
-    ring
-  add hτ hτ' := by
-    ext X₀
-    simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ.inner_bundle hτ'),
-      cov.isCovariantDerivativeOn.add hτ hτ', inner_add_right]
-    abel
-
-Depends on / 依赖: cov.isCovariantDerivativeOn.add, cov.isCovariantDerivativeOn.leibniz, inner_add_right, inner_bundle, inner_smul_right, isCovariantDerivativeOn, leibniz, mvfderiv_fun_add, mvfderiv_fun_mul
+/-
+**CovariantDerivative.tensorial_derivMetricTensorAux** 是 Mathlib 中的一个定理，位于命名空间 `
+CovariantDerivative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tensorial_derivMetricTensorAux₂ (σ : Π x, V x) (hσ : MDiffAt (T% σ) x) :
     TensorialAt I F (derivMetricTensorAux I cov σ · x) x where
@@ -226,41 +155,41 @@ theorem tensorial_derivMetricTensorAux₂ (σ : Π x, V x) (hσ : MDiffAt (T% σ
 variable {I} [ContMDiffVectorBundle 1 F V I] in
 /-- The tensor `(X, σ, τ) ↦ X g(σ, τ) - g(∇_X σ, τ) - g(σ, ∇_X τ)` defining when a connection
 `∇` on a Riemannian bundle `(M, V)` is compatible with the metric `g`. -/
-public noncomputable def derivMetricTensor [FiniteDimensional Real F] (x : M) :
-    V x ->L[Real] V x ->L[Real] (TangentSpace I x ->L[Real] Real) :=
+public noncomputable def derivMetricTensor [FiniteDimensional ℝ F] (x : M) :
+    V x →L[ℝ] V x →L[ℝ] (TangentSpace I x →L[ℝ] ℝ) :=
   TensorialAt.mkHom₂ (derivMetricTensorAux I cov · · x) _
     (tensorial_derivMetricTensorAux₁ I cov) (tensorial_derivMetricTensorAux₂ I cov)
 
 variable {X : Π x : M, TangentSpace I x}
 
 variable {I} [ContMDiffVectorBundle 1 F V I] in
-public theorem derivMetricTensor_apply [FiniteDimensional Real F] (x : M)
+public theorem derivMetricTensor_apply [FiniteDimensional ℝ F] (x : M)
     (hσ : MDiffAt (T% σ) x) (hτ : MDiffAt (T% τ) x) :
     cov.derivMetricTensor x (σ x) (τ x) (X x) =
     d% ⟪σ, τ⟫ x (X x) - ⟪∇ X σ, τ⟫ x - ⟪σ, ∇ X τ⟫ x := by
   unfold derivMetricTensor
-  rw [TensorialAt.mkHom₂_apply _ _ hσ hτ]; rw [derivMetricTensorAux_apply]
+  rw [TensorialAt.mkHom₂_apply _ _ hσ hτ, derivMetricTensorAux_apply]
 
 variable {I} [ContMDiffVectorBundle 1 F V I] in
-public theorem derivMetricTensor_apply_eq_extend [FiniteDimensional Real F]
+public theorem derivMetricTensor_apply_eq_extend [FiniteDimensional ℝ F]
     (X₀ : TangentSpace I x) (σ₀ τ₀ : V x) :
     cov.derivMetricTensor x σ₀ τ₀ X₀ =
       d% ⟪(FiberBundle.extend F σ₀), (FiberBundle.extend F τ₀)⟫ x X₀
-        - inner Real (cov (FiberBundle.extend F σ₀) x X₀) τ₀
-        - inner Real σ₀ (cov (FiberBundle.extend F τ₀) x X₀) := by
+        - inner ℝ (cov (FiberBundle.extend F σ₀) x X₀) τ₀
+        - inner ℝ σ₀ (cov (FiberBundle.extend F τ₀) x X₀) := by
   simp [derivMetricTensor, TensorialAt.mkHom₂_apply_eq_extend]
 
 variable {I} [ContMDiffVectorBundle 1 F V I] in
 /-- Predicate saying that a connection `∇` on a Riemannian bundle `(V, g)` is compatible with the
 ambient metric, i.e. for all differentiable vector fields `X` on `M` and sections `σ` and `τ` of
 `V`, we have `X ⟨σ, τ⟩ = ⟨∇_X σ, τ⟩ + ⟨σ, ∇_X τ⟩`. -/
-public def IsMetricCompatible [FiniteDimensional Real F] : Prop := derivMetricTensor cov = 0
+public def IsMetricCompatible [FiniteDimensional ℝ F] : Prop := derivMetricTensor cov = 0
 
 variable {I} [ContMDiffVectorBundle 1 F V I]
 
 variable {cov} in
-public lemma IsMetricCompatible.mvfderiv_inner_eq [FiniteDimensional Real F]
-    (hcov : cov.IsMetricCompatible) {x : M} (X : Π x, TangentSpace I x) {σ τ : (x : M) -> V x}
+public lemma IsMetricCompatible.mvfderiv_inner_eq [FiniteDimensional ℝ F]
+    (hcov : cov.IsMetricCompatible) {x : M} (X : Π x, TangentSpace I x) {σ τ : (x : M) → V x}
     (hσ : MDiffAt (T% σ) x) (hτ : MDiffAt (T% τ) x) :
     d% ⟪σ, τ⟫ x (X x) = ⟪∇ X σ, τ⟫ x + ⟪σ, ∇ X τ⟫ x := by
   have H := congr($hcov x (σ x) (τ x) (X x))
@@ -269,11 +198,11 @@ public lemma IsMetricCompatible.mvfderiv_inner_eq [FiniteDimensional Real F]
 
 variable [IsManifold I 1 M]
 
-public lemma isMetricCompatible_iff [FiniteDimensional Real F] :
-    cov.IsMetricCompatible ↔ forall {x : M} {X : Π x, TangentSpace I x} {σ τ : (x : M) -> V x},
-      MDiffAt (T% X) x -> MDiffAt (T% σ) x -> MDiffAt (T% τ) x ->
+public lemma isMetricCompatible_iff [FiniteDimensional ℝ F] :
+    cov.IsMetricCompatible ↔ ∀ {x : M} {X : Π x, TangentSpace I x} {σ τ : (x : M) → V x},
+      MDiffAt (T% X) x → MDiffAt (T% σ) x → MDiffAt (T% τ) x →
       d% ⟪σ, τ⟫ x (X x) = ⟪∇ X σ, τ⟫ x + ⟪σ, ∇ X τ⟫ x := by
-  refine ⟨fun hcov x X σ τ hX => hcov.mvfderiv_inner_eq X, fun h => ?_⟩
+  refine ⟨fun hcov x X σ τ hX ↦ hcov.mvfderiv_inner_eq X, fun h ↦ ?_⟩
   ext1 x
   apply VectorBundle.injective_eval_mdifferentiableAt_sec I F; ext1 σ; ext1 hσ
   apply VectorBundle.injective_eval_mdifferentiableAt_sec I F; ext1 τ; ext1 hτ
@@ -282,3 +211,4 @@ public lemma isMetricCompatible_iff [FiniteDimensional Real F] :
   linear_combination h hX hσ hτ
 
 end CovariantDerivative
+

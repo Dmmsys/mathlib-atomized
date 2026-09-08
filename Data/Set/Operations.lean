@@ -77,80 +77,48 @@ variable {α : Type u} {β : Type v} {γ : Type w}
 /-! ### Lemmas about `mem` and `Set.ofPred` -/
 
 @[simp, mfld_simps, push]
-/--
-theorem `mem_ofPred_eq` / 定理 `mem_ofPred_eq`
+/-
+**Set.mem_ofPred_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p y}) = p x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mem_ofPred_eq
-  given: {x : α} {p : α -> Prop}
-  statement: (x in {y | p y}) = p x
-  proof: rfl
+--- 原说明 ---
+### Lemmas about `mem` and `Set.ofPred`
+-/
+theorem mem_ofPred_eq {x : α} {p : α → Prop} : (x ∈ {y | p y}) = p x := rfl
 
 @[deprecated (since := "2026-07-09")] alias mem_setOf_eq := mem_ofPred_eq
 
-grind_pattern mem_ofPred_eq => x in Set.ofPred p
+grind_pattern mem_ofPred_eq => x ∈ Set.ofPred p
 
-中文:
-定理 mem_ofPred_eq
-  条件: {x : α} {p : α -> 命题}
-  结论: (x in {y | p y}) = p x
-  证明: rfl
+/-- This lemma is intended for use with `rw` where a membership predicate is needed,
+hence the explicit argument and the equality in the reverse direction from normal.
+See also `Set.mem_ofPred_eq` for the reverse direction applied to an argument. -/
+/-
+**Set.eq_mem_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：eq_mem_ofPred (p : α -> Prop) : p = (· in {a | p a})
+参数：p : α -> Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[deprecated (since := "2026-07-09")] alias mem_setOf_eq := mem_ofPred_eq
-
-grind_pattern mem_ofPred_eq => x in Set.ofPred p
+--- 原说明 ---
+This lemma is intended for use with `rw` where a membership predicate is needed,
+hence the explicit argument and the equality in the reverse direction from norma
+l.
+See also `Set.mem_ofPred_eq` for the reverse direction applied to an argument.
 -/
-theorem mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p y}) = p x := rfl
-
-@[deprecated (since := "2026-07-09")] alias mem_setOf_eq := mem_ofPred_eq
-
-grind_pattern mem_ofPred_eq => x in Set.ofPred p
-
-/--
-theorem `eq_mem_ofPred` / 定理 `eq_mem_ofPred`
-
-English:
-theorem eq_mem_ofPred
-  given: (p : α -> Prop)
-  statement: p = (· in {a | p a})
-  proof: rfl
+theorem eq_mem_ofPred (p : α → Prop) : p = (· ∈ {a | p a}) := rfl
 
 @[deprecated (since := "2026-07-09")] alias eq_mem_setOf := eq_mem_ofPred
-
-中文:
-定理 eq_mem_ofPred
-  条件: (p : α -> 命题)
-  结论: p = (· in {a | p a})
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias eq_mem_setOf := eq_mem_ofPred
+/-
+**Set.mem_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ p a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem eq_mem_ofPred (p : α -> Prop) : p = (· in {a | p a}) := rfl
-
-@[deprecated (since := "2026-07-09")] alias eq_mem_setOf := eq_mem_ofPred
-
-/--
-theorem `mem_ofPred` / 定理 `mem_ofPred`
-
-English:
-theorem mem_ofPred
-  given: {a : α} {p : α -> Prop}
-  statement: a in { x | p x } ↔ p a
-  proof: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias mem_setOf := mem_ofPred
-
-中文:
-定理 mem_ofPred
-  条件: {a : α} {p : α -> 命题}
-  结论: a in { x | p x } ↔ p a
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias mem_setOf := mem_ofPred
-
-Depends on / 依赖: Iff.rfl
--/
-theorem mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ p a := Iff.rfl
+theorem mem_ofPred {a : α} {p : α → Prop} : a ∈ { x | p x } ↔ p a := Iff.rfl
 
 @[deprecated (since := "2026-07-09")] alias mem_setOf := mem_ofPred
 
@@ -159,1143 +127,910 @@ nevertheless be useful for various reasons, e.g. to apply further projection not
 argument to `simp`. -/
 alias ⟨_root_.Membership.mem.out, _⟩ := mem_ofPred
 
-/--
-theorem `notMem_ofPred_iff` / 定理 `notMem_ofPred_iff`
-
-English:
-theorem notMem_ofPred_iff
-  given: {a : α} {p : α -> Prop}
-  statement: a ∉ { x | p x } ↔ ¬p a
-  proof: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias notMem_setOf_iff := notMem_ofPred_iff
-
-中文:
-定理 notMem_ofPred_iff
-  条件: {a : α} {p : α -> 命题}
-  结论: a ∉ { x | p x } ↔ ¬p a
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-07-09")] alias notMem_setOf_iff := notMem_ofPred_iff
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.notMem_ofPred_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：notMem_ofPred_iff {a : α} {p : α -> Prop} : a ∉ { x | p x } ↔ ¬p a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem notMem_ofPred_iff {a : α} {p : α -> Prop} : a ∉ { x | p x } ↔ ¬p a := Iff.rfl
+theorem notMem_ofPred_iff {a : α} {p : α → Prop} : a ∉ { x | p x } ↔ ¬p a := Iff.rfl
 
 @[deprecated (since := "2026-07-09")] alias notMem_setOf_iff := notMem_ofPred_iff
-
-/--
-theorem `ofPred_mem_eq` / 定理 `ofPred_mem_eq`
-
-English:
-theorem ofPred_mem_eq
-  given: {s : Set α}
-  statement: { x | x in s } = s
-  proof: rfl
+/-
+**Set.ofPred_mem_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s : Set α}, {x | x ∈ s} = s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp] theorem ofPred_mem_eq {s : Set α} : { x | x ∈ s } = s := rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_mem_eq := ofPred_mem_eq
 
 @[simp, mfld_simps, grind ←, push]
-
-中文:
-定理 ofPred_mem_eq
-  条件: {s : 集合 α}
-  结论: { x | x in s } = s
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_mem_eq := ofPred_mem_eq
-
-@[simp, mfld_simps, grind ←, push]
+/-
+**Set.mem_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_univ (x : α) : x in @univ α
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-@[simp] theorem ofPred_mem_eq {s : Set α} : { x | x in s } = s := rfl
+theorem mem_univ (x : α) : x ∈ @univ α := trivial
 
-@[deprecated (since := "2026-07-09")] alias setOf_mem_eq := ofPred_mem_eq
+/-! ### Operations -/
 
-@[simp, mfld_simps, grind ←, push]
-/--
-theorem `mem_univ` / 定理 `mem_univ`
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mem_univ
-  given: (x : α)
-  statement: x in @univ α
-  proof: trivial
-
-中文:
-定理 mem_univ
-  条件: (x : α)
-  结论: x in @univ α
-  证明: trivial
+--- 原说明 ---
+### Operations
 -/
-theorem mem_univ (x : α) : x in @univ α := trivial
-
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Compl (Set α)
-  body: ⟨fun s => {x | x ∉ s}⟩
+instance : Compl (Set α) := ⟨fun s ↦ {x | x ∉ s}⟩
 
 @[simp, grind =, push]
-
-中文:
-实例 :
-  签名: 补集 (集合 α)
-  定义体: ⟨fun s => {x | x ∉ s}⟩
-
-@[simp, grind =, push]
+/-
+**Set.mem_compl_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_compl_iff (s : Set α) (x : α) : x in sᶜ ↔ x ∉ s
+参数：s : Set α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-instance : Compl (Set α) := ⟨fun s => {x | x ∉ s}⟩
-
-@[simp, grind =, push]
-/--
-theorem `mem_compl_iff` / 定理 `mem_compl_iff`
-
-English:
-theorem mem_compl_iff
-  given: (s : Set α) (x : α)
-  statement: x in sᶜ ↔ x ∉ s
-  proof: Iff.rfl
-
-中文:
-定理 mem_compl_iff
-  条件: (s : 集合 α) (x : α)
-  结论: x in sᶜ ↔ x ∉ s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+theorem mem_compl_iff (s : Set α) (x : α) : x ∈ sᶜ ↔ x ∉ s := Iff.rfl
+/-
+**Set.sdiff_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_compl_iff (s : Set α) (x : α) : x in sᶜ ↔ x ∉ s := Iff.rfl
-
-/--
-theorem `sdiff_eq` / 定理 `sdiff_eq`
-
-English:
-theorem sdiff_eq
-  given: (s t : Set α)
-  statement: s \ t = s inter tᶜ
-  proof: rfl
+theorem sdiff_eq (s t : Set α) : s \ t = s ∩ tᶜ := rfl
 
 @[deprecated (since := "2026-06-03")] alias diff_eq := sdiff_eq
 
 @[simp, grind =, push]
-
-中文:
-定理 sdiff_eq
-  条件: (s t : 集合 α)
-  结论: s \ t = s inter tᶜ
-  证明: rfl
-
-@[deprecated (since := "2026-06-03")] alias diff_eq := sdiff_eq
-
-@[simp, grind =, push]
+/-
+**Set.mem_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_sdiff {s t : Set α} (x : α) : x in s \ t ↔ x in s ∧ x ∉ t
+参数：x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sdiff_eq (s t : Set α) : s \ t = s inter tᶜ := rfl
-
-@[deprecated (since := "2026-06-03")] alias diff_eq := sdiff_eq
-
-@[simp, grind =, push]
-/--
-theorem `mem_sdiff` / 定理 `mem_sdiff`
-
-English:
-theorem mem_sdiff
-  given: {s t : Set α} (x : α)
-  statement: x in s \ t ↔ x in s ∧ x ∉ t
-  proof: Iff.rfl
+theorem mem_sdiff {s t : Set α} (x : α) : x ∈ s \ t ↔ x ∈ s ∧ x ∉ t := Iff.rfl
 
 @[deprecated (since := "2026-06-03")] alias mem_diff := mem_sdiff
-
-中文:
-定理 mem_sdiff
-  条件: {s t : 集合 α} (x : α)
-  结论: x in s \ t ↔ x in s ∧ x ∉ t
-  证明: Iff.rfl
-
-@[deprecated (since := "2026-06-03")] alias mem_diff := mem_sdiff
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_sdiff_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_sdiff_of_mem {s t : Set α} {x : α} (h1 : x in s) (h2 : x ∉ t) : x in s
+ \ t
+参数：h1 : x in s；h2 : x ∉ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_sdiff {s t : Set α} (x : α) : x in s \ t ↔ x in s ∧ x ∉ t := Iff.rfl
-
-@[deprecated (since := "2026-06-03")] alias mem_diff := mem_sdiff
-
-/--
-theorem `mem_sdiff_of_mem` / 定理 `mem_sdiff_of_mem`
-
-English:
-theorem mem_sdiff_of_mem
-  given: {s t : Set α} {x : α} (h1 : x in s) (h2 : x ∉ t)
-  statement: x in s \ t
-  proof: ⟨h1, h2⟩
-
-@[deprecated (since := "2026-06-03")] alias mem_diff_of_mem := mem_sdiff_of_mem
-
-中文:
-定理 mem_sdiff_of_mem
-  条件: {s t : 集合 α} {x : α} (h1 : x in s) (h2 : x ∉ t)
-  结论: x in s \ t
-  证明: ⟨h1, h2⟩
-
-@[deprecated (since := "2026-06-03")] alias mem_diff_of_mem := mem_sdiff_of_mem
-
-Depends on / 依赖: infer_instance, invApp
--/
-theorem mem_sdiff_of_mem {s t : Set α} {x : α} (h1 : x in s) (h2 : x ∉ t) : x in s \ t := ⟨h1, h2⟩
+theorem mem_sdiff_of_mem {s t : Set α} {x : α} (h1 : x ∈ s) (h2 : x ∉ t) : x ∈ s \ t := ⟨h1, h2⟩
 
 @[deprecated (since := "2026-06-03")] alias mem_diff_of_mem := mem_sdiff_of_mem
 
 /-- The preimage of `s : Set β` by `f : α → β`, written `f ⁻¹' s`,
   is the set of `x : α` such that `f x ∈ s`. -/
 @[implicit_reducible]
-/--
-Definition of `preimage` / `preimage` 的定义
+/-
+**Set.preimage** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：preimage (f : α -> β) (s : Set β) : Set α
+参数：f : α -> β；s : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preimage
-  signature: (f : α -> β) (s : Set β)
-  body: {x | f x in s}
-
-中文:
-定义 原像
-  签名: (f : α -> β) (s : 集合 β)
-  定义体: {x | f x in s}
+--- 原说明 ---
+The preimage of `s : Set β` by `f : α → β`, written `f ⁻¹' s`,
+  is the set of `x : α` such that `f x ∈ s`.
 -/
-def preimage (f : α -> β) (s : Set β) : Set α := {x | f x in s}
+def preimage (f : α → β) (s : Set β) : Set α := {x | f x ∈ s}
 
 /-- `f ⁻¹' t` denotes the preimage of `t : Set β` under the function `f : α → β`. -/
 infixr:80 " ⁻¹' " => preimage
 
 @[simp, mfld_simps, grind =, push]
-/--
-theorem `mem_preimage` / 定理 `mem_preimage`
-
-English:
-theorem mem_preimage
-  given: {f : α -> β} {s : Set β} {a : α}
-  statement: a in f ⁻¹' s ↔ f a in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_preimage
-  条件: {f : α -> β} {s : 集合 β} {a : α}
-  结论: a in f ⁻¹' s ↔ f a in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f ⁻¹' s ↔ f a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f ⁻¹' s ↔ f a in s := Iff.rfl
+theorem mem_preimage {f : α → β} {s : Set β} {a : α} : a ∈ f ⁻¹' s ↔ f a ∈ s := Iff.rfl
 
 /-- `f '' s` denotes the image of `s : Set α` under the function `f : α → β`. -/
 infixr:80 " '' " => image
 
 @[simp, grind =, push]
-/--
-theorem `mem_image` / 定理 `mem_image`
-
-English:
-theorem mem_image
-  given: (f : α -> β) (s : Set α) (y : β)
-  statement: y in f '' s ↔ exists x in s, f x = y
-  proof: Iff.rfl
-
-@[mfld_simps]
-
-中文:
-定理 mem_image
-  条件: (f : α -> β) (s : 集合 α) (y : β)
-  结论: y in f '' s ↔ 存在 x in s, f x = y
-  证明: Iff.rfl
-
-@[mfld_simps]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s ↔ exists x in s, 
+f x = y
+参数：f : α -> β；s : Set α；y : β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s ↔ exists x in s, f x = y :=
+theorem mem_image (f : α → β) (s : Set α) (y : β) : y ∈ f '' s ↔ ∃ x ∈ s, f x = y :=
   Iff.rfl
 
 @[mfld_simps]
-/--
-theorem `mem_image_of_mem` / 定理 `mem_image_of_mem`
-
-English:
-theorem mem_image_of_mem
-  given: (f : α -> β) {x : α} {a : Set α} (h : x in a)
-  statement: f x in f '' a
-  proof: ⟨_, h, rfl⟩
-
-中文:
-定理 mem_image_of_mem
-  条件: (f : α -> β) {x : α} {a : 集合 α} (h : x in a)
-  结论: f x in f '' a
-  证明: ⟨_, h, rfl⟩
+/-
+**Set.mem_image_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} (h : x in a) : f x in f 
+'' a
+参数：f : α -> β；h : x in a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_image_of_mem (f : α -> β) {x : α} {a : Set α} (h : x in a) : f x in f '' a :=
+theorem mem_image_of_mem (f : α → β) {x : α} {a : Set α} (h : x ∈ a) : f x ∈ f '' a :=
   ⟨_, h, rfl⟩
 
-/--
-Definition of `imageFactorization` / `imageFactorization` 的定义
+/-- Restriction of `f` to `s` factors through `s.imageFactorization f : s → f '' s`. -/
+/-
+**Set.imageFactorization** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：imageFactorization (f : α -> β) (s : Set α) : s -> f '' s
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageFactorization
-  signature: (f : α -> β) (s : Set α)
-  body: fun p =>
+--- 原说明 ---
+Restriction of `f` to `s` factors through `s.imageFactorization f : s → f '' s`.
+-/
+def imageFactorization (f : α → β) (s : Set α) : s → f '' s := fun p =>
   ⟨f p.1, mem_image_of_mem f p.2⟩
 
-中文:
-定义 imageFactorization
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: fun p =>
-  ⟨f p.1, mem_image_of_mem f p.2⟩
+/-- `kernImage f s` is the set of `y` such that `f ⁻¹ y ⊆ s`. -/
+/-
+**Set.kernImage** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：kernImage (f : α -> β) (s : Set α) : Set β
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`kernImage f s` is the set of `y` such that `f ⁻¹ y ⊆ s`.
 -/
-def imageFactorization (f : α -> β) (s : Set α) : s -> f '' s := fun p =>
-  ⟨f p.1, mem_image_of_mem f p.2⟩
-
-/--
-Definition of `kernImage` / `kernImage` 的定义
-
-English:
-definition kernImage
-  signature: (f : α -> β) (s : Set α)
-  body: {y | forall ⦃x⦄, f x = y -> x in s}
-
-中文:
-定义 kernImage
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: {y | forall ⦃x⦄, f x = y -> x in s}
+def kernImage (f : α → β) (s : Set α) : Set β := {y | ∀ ⦃x⦄, f x = y → x ∈ s}
+/-
+**Set.subset_kernImage_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：subset_kernImage_iff {s : Set β} {t : Set α} {f : α -> β} : s subseteq ker
+nImage f t ↔ f ⁻¹' s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-def kernImage (f : α -> β) (s : Set α) : Set β := {y | forall ⦃x⦄, f x = y -> x in s}
-
-/--
-lemma `subset_kernImage_iff` / 引理 `subset_kernImage_iff`
-
-English:
-lemma subset_kernImage_iff
-  given: {s : Set β} {t : Set α} {f : α -> β}
-  statement: s subseteq kernImage f t ↔ f ⁻¹' s subseteq t
-  proof: ⟨fun h _ hx => h hx rfl,
-    fun h _ hx y hy => h (show f y in s from hy.symm ▸ hx)⟩
-
-中文:
-引理 subset_kernImage_iff
-  条件: {s : 集合 β} {t : 集合 α} {f : α -> β}
-  结论: s subseteq kernImage f t ↔ f ⁻¹' s subseteq t
-  证明: ⟨fun h _ hx => h hx rfl,
-    fun h _ hx y hy => h (show f y in s from hy.symm ▸ hx)⟩
-
-Depends on / 依赖: hy.symm
--/
-lemma subset_kernImage_iff {s : Set β} {t : Set α} {f : α -> β} : s subseteq kernImage f t ↔ f ⁻¹' s subseteq t :=
-  ⟨fun h _ hx => h hx rfl,
-    fun h _ hx y hy => h (show f y in s from hy.symm ▸ hx)⟩
+lemma subset_kernImage_iff {s : Set β} {t : Set α} {f : α → β} : s ⊆ kernImage f t ↔ f ⁻¹' s ⊆ t :=
+  ⟨fun h _ hx ↦ h hx rfl,
+    fun h _ hx y hy ↦ h (show f y ∈ s from hy.symm ▸ hx)⟩
 
 section Range
 
-variable {ι : Sort*} {f : ι -> α}
+variable {ι : Sort*} {f : ι → α}
 
-/--
-Definition of `range` / `range` 的定义
+/-- Range of a function.
 
-English:
-definition range
-  signature: (f : ι -> α)
-  body: {x | exists y, f y = x}
+This function is more flexible than `f '' univ`, as the image requires that the domain is in Type
+and not an arbitrary Sort. -/
+/-
+**Set.range** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：range (f : ι -> α) : Set α
+参数：f : ι -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 range
-  签名: (f : ι -> α)
-  定义体: {x | exists y, f y = x}
+--- 原说明 ---
+Range of a function.
+
+This function is more flexible than `f '' univ`, as the image requires that the 
+domain is in Type
+and not an arbitrary Sort.
 -/
-def range (f : ι -> α) : Set α := {x | exists y, f y = x}
-
-/--
-theorem `mem_range` / 定理 `mem_range`
-
-English:
-theorem mem_range
-  given: {x : α}
-  statement: x in range f ↔ exists y, f y = x
-  proof: Iff.rfl
-
-中文:
-定理 mem_range
-  条件: {x : α}
-  结论: x in range f ↔ 存在 y, f y = x
-  证明: Iff.rfl
+def range (f : ι → α) : Set α := {x | ∃ y, f y = x}
+/-
+**Set.mem_range** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Set.range f ↔ ∃ y, 
+f y = x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, grind =, push] theorem mem_range {x : α} : x in range f ↔ exists y, f y = x := Iff.rfl
-
-/--
-theorem `mem_range_self` / 定理 `mem_range_self`
-
-English:
-theorem mem_range_self
-  given: (i : ι)
-  statement: f i in range f
-  proof: ⟨i, rfl⟩
-
-中文:
-定理 mem_range_self
-  条件: (i : ι)
-  结论: f i in range f
-  证明: ⟨i, rfl⟩
+@[simp, grind =, push] theorem mem_range {x : α} : x ∈ range f ↔ ∃ y, f y = x := Iff.rfl
+/-
+**Set.mem_range_self** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f i ∈ Set.range f
+参数：i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[mfld_simps] theorem mem_range_self (i : ι) : f i in range f := ⟨i, rfl⟩
+@[mfld_simps] theorem mem_range_self (i : ι) : f i ∈ range f := ⟨i, rfl⟩
 
-/--
-Definition of `rangeFactorization` / `rangeFactorization` 的定义
+/-- Any map `f : ι → α` factors through a map `rangeFactorization f : ι → range f`. -/
+/-
+**Set.rangeFactorization** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：rangeFactorization (f : ι -> α) : ι -> range f
+参数：f : ι -> α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 
-English:
-definition rangeFactorization
-  signature: (f : ι -> α)
-  body: fun i => ⟨f i, mem_range_self i⟩
-
-中文:
-定义 rangeFactorization
-  签名: (f : ι -> α)
-  定义体: fun i => ⟨f i, mem_range_self i⟩
-
-Depends on / 依赖: mem_range_self
+--- 原说明 ---
+Any map `f : ι → α` factors through a map `rangeFactorization f : ι → range f`.
 -/
-def rangeFactorization (f : ι -> α) : ι -> range f := fun i => ⟨f i, mem_range_self i⟩
-
-/--
-lemma `rangeFactorization_injective` / 引理 `rangeFactorization_injective`
-
-English:
-lemma rangeFactorization_injective
-  proof: by
-  simp [Function.Injective, rangeFactorization]
-
-中文:
-引理 rangeFactorization_injective
-  证明: by
-  simp [Function.Injective, rangeFactorization]
+def rangeFactorization (f : ι → α) : ι → range f := fun i => ⟨f i, mem_range_self i⟩
+/-
+**Set.rangeFactorization_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {ι : Sort u_1} {f : ι → α}, Function.Injective (Set.rangeFa
+ctorization f) ↔ Function.Injective f
+参数：Set.rangeFactorization f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma rangeFactorization_injective :
     (Set.rangeFactorization f).Injective ↔ f.Injective := by
   simp [Function.Injective, rangeFactorization]
-
-/--
-lemma `rangeFactorization_surjective` / 引理 `rangeFactorization_surjective`
-
-English:
-lemma rangeFactorization_surjective
-  statement: (rangeFactorization f).Surjective
-  proof: fun ⟨_, i, rfl⟩ => ⟨i, rfl⟩
-
-中文:
-引理 rangeFactorization_surjective
-  结论: (rangeFactorization f).满射
-  证明: fun ⟨_, i, rfl⟩ => ⟨i, rfl⟩
-
-Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict, X.toPresheafedSpace, ofRestrict, toPresheafedSpace
+/-
+**Set.rangeFactorization_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {ι : Sort u_1} {f : ι → α}, Function.Surjective (Set.rangeF
+actorization f)
+参数：Set.rangeFactorization f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma rangeFactorization_surjective : (rangeFactorization f).Surjective :=
-  fun ⟨_, i, rfl⟩ => ⟨i, rfl⟩
-
-/--
-lemma `rangeFactorization_bijective` / 引理 `rangeFactorization_bijective`
-
-English:
-lemma rangeFactorization_bijective
-  proof: by simp [Function.Bijective]
-
-中文:
-引理 rangeFactorization_bijective
-  证明: by simp [Function.Bijective]
-
-Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion, infer_instance, of_isIso
+  fun ⟨_, i, rfl⟩ ↦ ⟨i, rfl⟩
+/-
+**Set.rangeFactorization_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {ι : Sort u_1} {f : ι → α}, Function.Bijective (Set.rangeFa
+ctorization f) ↔ Function.Injective f
+参数：Set.rangeFactorization f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma rangeFactorization_bijective :
     (Set.rangeFactorization f).Bijective ↔ f.Injective := by simp [Function.Bijective]
-
-/--
-lemma `rangeFactorization_eq_rangeFactorization_iff` / 引理 `rangeFactorization_eq_rangeFactorization_iff`
-
-English:
-lemma rangeFactorization_eq_rangeFactorization_iff
-  statement: {ι : Sort*} {α : Type*} {f : ι -> α}
-  proof: by
-  simp [Set.rangeFactorization]
-
-中文:
-引理 rangeFactorization_eq_rangeFactorization_iff
-  结论: {ι : 类型层*} {α : 类型} {f : ι -> α}
-  证明: by
-  simp [Set.rangeFactorization]
+/-
+**Set.rangeFactorization_eq_rangeFactorization_iff** 是 Mathlib 中的一个定理，位于命名空间 `Se
+t`。
+形式化陈述：∀ {ι : Sort u_2} {α : Type u_3} {f : ι → α} (a b : ι),   Set.rangeFactoriz
+ation f a = Set.rangeFactorization f b ↔ f a = f b
+参数：a b : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma rangeFactorization_eq_rangeFactorization_iff {ι : Sort*} {α : Type*} {f : ι -> α}
+@[simp] lemma rangeFactorization_eq_rangeFactorization_iff {ι : Sort*} {α : Type*} {f : ι → α}
     (a b : ι) : Set.rangeFactorization f a = Set.rangeFactorization f b ↔ f a = f b := by
   simp [Set.rangeFactorization]
-
-/--
-lemma `rangeFactorization_eq_iff` / 引理 `rangeFactorization_eq_iff`
-
-English:
-lemma rangeFactorization_eq_iff
-  given: {ι : Sort*} {α : Type*} {f : ι -> α} (a : ι) (b : Set.range f)
-  proof: by
-  rw [Set.rangeFactorization]; rw [← b.coe_eta b.2]; rw [Subtype.ext_iff]
-
-中文:
-引理 rangeFactorization_eq_iff
-  条件: {ι : 类型层*} {α : 类型} {f : ι -> α} (a : ι) (b : 集合.range f)
-  证明: by
-  rw [Set.rangeFactorization]; rw [← b.coe_eta b.2]; rw [Subtype.ext_iff]
-
-Depends on / 依赖: Set.rangeFactorization, Subtype, Subtype.ext_iff, b.coe_eta, coe_eta, ext_iff, rangeFactorization
+/-
+**Set.rangeFactorization_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：rangeFactorization_eq_iff {ι : Sort*} {α : Type*} {f : ι -> α} (a : ι) (b 
+: Set.range f) : Set.rangeFactorization f a = b ↔ f a = b
+参数：a : ι；b : Set.range f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.rangeFactorization.eq_1`：∀ {α : Type u} {ι : Sort u_1} (f : ι → α) (
+i : ι), Set.rangeFactorization f i = ⟨f i, ⋯⟩
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma rangeFactorization_eq_iff {ι : Sort*} {α : Type*} {f : ι -> α} (a : ι) (b : Set.range f) :
+lemma rangeFactorization_eq_iff {ι : Sort*} {α : Type*} {f : ι → α} (a : ι) (b : Set.range f) :
     Set.rangeFactorization f a = b ↔ f a = b := by
-  rw [Set.rangeFactorization]; rw [← b.coe_eta b.2]; rw [Subtype.ext_iff]
+  rw [Set.rangeFactorization, ← b.coe_eta b.2, Subtype.ext_iff]
 
 end Range
 
-/--
-Definition of `rangeSplitting` / `rangeSplitting` 的定义
+/-- We can use the axiom of choice to pick a preimage for every element of `range f`. -/
+/-
+**Set.rangeSplitting** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：rangeSplitting (f : α -> β) : range f -> α
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rangeSplitting
-  signature: (f : α -> β)
-  body: fun x => x.2.choose
-
-中文:
-定义 rangeSplitting
-  签名: (f : α -> β)
-  定义体: fun x => x.2.choose
+--- 原说明 ---
+We can use the axiom of choice to pick a preimage for every element of `range f`
+.
 -/
-noncomputable def rangeSplitting (f : α -> β) : range f -> α := fun x => x.2.choose
+noncomputable def rangeSplitting (f : α → β) : range f → α := fun x => x.2.choose
 
 -- This cannot be a `@[simp]` lemma because the head of the left-hand side is a variable.
-/--
-theorem `apply_rangeSplitting` / 定理 `apply_rangeSplitting`
-
-English:
-theorem apply_rangeSplitting
-  given: (f : α -> β) (x : range f)
-  statement: f (rangeSplitting f x) = x
-  proof: x.2.choose_spec
-
-@[simp]
-
-中文:
-定理 apply_rangeSplitting
-  条件: (f : α -> β) (x : range f)
-  结论: f (rangeSplitting f x) = x
-  证明: x.2.choose_spec
-
-@[simp]
-
-Depends on / 依赖: choose_spec
+/-
+**Set.apply_rangeSplitting** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：apply_rangeSplitting (f : α -> β) (x : range f) : f (rangeSplitting f x) =
+ x
+参数：f : α -> β；x : range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem apply_rangeSplitting (f : α -> β) (x : range f) : f (rangeSplitting f x) = x :=
+theorem apply_rangeSplitting (f : α → β) (x : range f) : f (rangeSplitting f x) = x :=
   x.2.choose_spec
 
 @[simp]
-/--
-theorem `comp_rangeSplitting` / 定理 `comp_rangeSplitting`
-
-English:
-theorem comp_rangeSplitting
-  given: (f : α -> β)
-  statement: f ∘ rangeSplitting f = Subtype.val
-  proof: by
-  ext
-  simp only [Function.comp_apply]
-  apply apply_rangeSplitting
-
-中文:
-定理 comp_rangeSplitting
-  条件: (f : α -> β)
-  结论: f ∘ rangeSplitting f = 子类型.val
-  证明: by
-  ext
-  simp only [Function.comp_apply]
-  apply apply_rangeSplitting
-
-Depends on / 依赖: Function, Function.comp_apply, apply_rangeSplitting, comp_apply
+/-
+**Set.comp_rangeSplitting** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：comp_rangeSplitting (f : α -> β) : f ∘ rangeSplitting f = Subtype.val
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.apply_rangeSplitting`：apply_rangeSplitting (f : α -> β) (x : range f
+) : f (rangeSplitting f x) = x
 -/
-theorem comp_rangeSplitting (f : α -> β) : f ∘ rangeSplitting f = Subtype.val := by
+theorem comp_rangeSplitting (f : α → β) : f ∘ rangeSplitting f = Subtype.val := by
   ext
   simp only [Function.comp_apply]
   apply apply_rangeSplitting
-
-/--
-lemma `Subtype.range_coind` / 引理 `Subtype.range_coind`
-
-English:
-lemma Subtype.range_coind
-  given: (f : α -> β) {p : β -> Prop} (h : forall (a : α), p (f a))
-  proof: by
-  simp [Set.ext_iff, Subtype.ext_iff]
-
-中文:
-引理 子类型.range_coind
-  条件: (f : α -> β) {p : β -> 命题} (h : 对任意 (a : α), p (f a))
-  证明: by
-  simp [Set.ext_iff, Subtype.ext_iff]
-
-Depends on / 依赖: Set.ext_iff, Subtype, Subtype.ext_iff, ext_iff
+/-
+**Set.Subtype.range_coind** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subtype`。
+形式化陈述：∀ {α : Type u} {β : Type v} (f : α → β) {p : β → Prop} (h : ∀ (a : α), p (
+f a)),   Set.range (Subtype.coind f h) = Subtype.val ⁻¹' Set.range f
+参数：f : α → β；h : ∀ (a : α), p (f a)；Subtype.coind f h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subtype.coind_coe`：∀ {α : Sort u_4} {β : Sort u_5} (f : α → β) {p : β → 
+Prop} (h : ∀ (a : α), p (f a)) (a : α),   ↑(Subtype.coind f h a) = f a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma Subtype.range_coind (f : α -> β) {p : β -> Prop} (h : forall (a : α), p (f a)) :
+lemma Subtype.range_coind (f : α → β) {p : β → Prop} (h : ∀ (a : α), p (f a)) :
     range (Subtype.coind f h) = Subtype.val ⁻¹' range f := by
   simp [Set.ext_iff, Subtype.ext_iff]
 
 section Prod
 
-/--
-theorem `prodMk_mem_set_prod_eq` / 定理 `prodMk_mem_set_prod_eq`
+/-- The Cartesian product `Set.prod s t` is the set of `(a, b)` such that `a ∈ s` and `b ∈ t`. -/
+@[wikidata Q173740]
+/-
+**Set.prod** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：prod (s : Set α) (t : Set β) : Set (α × β)
+参数：s : Set α；t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem prodMk_mem_set_prod_eq
-  statement: ((a, b) in s ×ˢ t) = (a in s ∧ b in t)
-  proof: rfl
-
-中文:
-定理 prodMk_mem_set_prod_eq
-  结论: ((a, b) in s ×ˢ t) = (a in s ∧ b in t)
-  证明: rfl
+--- 原说明 ---
+The Cartesian product `Set.prod s t` is the set of `(a, b)` such that `a ∈ s` an
+d `b ∈ t`.
 -/
-theorem prodMk_mem_set_prod_eq : ((a, b) in s ×ˢ t) = (a in s ∧ b in t) :=
+def prod (s : Set α) (t : Set β) : Set (α × β) := {p | p.1 ∈ s ∧ p.2 ∈ t}
+
+@[default_instance]
+/-
+**Set.instSProd** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：instSProd : SProd (Set α) (Set β) (Set (α × β)) where sprod
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance instSProd : SProd (Set α) (Set β) (Set (α × β)) where
+  sprod := Set.prod
+/-
+**Set.prod_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：prod_eq (s : Set α) (t : Set β) : s ×ˢ t = Prod.fst ⁻¹' s inter Prod.snd ⁻
+¹' t
+参数：s : Set α；t : Set β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem prod_eq (s : Set α) (t : Set β) : s ×ˢ t = Prod.fst ⁻¹' s ∩ Prod.snd ⁻¹' t := rfl
+
+variable {a : α} {b : β} {s : Set α} {t : Set β} {p : α × β}
+/-
+**Set.mem_prod_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_prod_eq : (p in s ×ˢ t) = (p.1 in s ∧ p.2 in t)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem mem_prod_eq : (p ∈ s ×ˢ t) = (p.1 ∈ s ∧ p.2 ∈ t) := rfl
+
+@[simp, mfld_simps, grind =, push]
+/-
+**Set.mem_prod** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_prod : p in s ×ˢ t ↔ p.1 in s ∧ p.2 in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem mem_prod : p ∈ s ×ˢ t ↔ p.1 ∈ s ∧ p.2 ∈ t := .rfl
+
+@[mfld_simps, push only high] /- This `push` lemma is so that `(a, b) ∈ s ×ˢ t` gets turned
+into `a ∈ s ∧ b ∈ t`, instead of getting `(a, b).1` and `(a, b).2`. -/
+/-
+**Set.prodMk_mem_set_prod_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：prodMk_mem_set_prod_eq : ((a, b) in s ×ˢ t) = (a in s ∧ b in t)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This `push` lemma is so that `(a, b) ∈ s ×ˢ t` gets turned
+into `a ∈ s ∧ b ∈ t`, instead of getting `(a, b).1` and `(a, b).2`.
+-/
+theorem prodMk_mem_set_prod_eq : ((a, b) ∈ s ×ˢ t) = (a ∈ s ∧ b ∈ t) :=
   rfl
-
-/--
-theorem `mk_mem_prod` / 定理 `mk_mem_prod`
-
-English:
-theorem mk_mem_prod
-  given: (ha : a in s) (hb : b in t)
-  statement: (a, b) in s ×ˢ t
-  proof: ⟨ha, hb⟩
-
-中文:
-定理 mk_mem_prod
-  条件: (ha : a in s) (hb : b in t)
-  结论: (a, b) in s ×ˢ t
-  证明: ⟨ha, hb⟩
+/-
+**Set.mk_mem_prod** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mk_mem_prod (ha : a in s) (hb : b in t) : (a, b) in s ×ˢ t
+参数：ha : a in s；hb : b in t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_mem_prod (ha : a in s) (hb : b in t) : (a, b) in s ×ˢ t := ⟨ha, hb⟩
-
-/--
-theorem `prod_image_left` / 定理 `prod_image_left`
-
-English:
-theorem prod_image_left
-  given: (f : α -> γ) (s : Set α) (t : Set β)
-  proof: by
-  aesop
-
-中文:
-定理 prod_image_left
-  条件: (f : α -> γ) (s : 集合 α) (t : 集合 β)
-  证明: by
-  aesop
+theorem mk_mem_prod (ha : a ∈ s) (hb : b ∈ t) : (a, b) ∈ s ×ˢ t := ⟨ha, hb⟩
+/-
+**Set.prod_image_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：prod_image_left (f : α -> γ) (s : Set α) (t : Set β) : (f '' s) ×ˢ t = (fu
+n x => (f x.1, x.2)) '' s ×ˢ t
+参数：f : α -> γ；s : Set α；t : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem prod_image_left (f : α -> γ) (s : Set α) (t : Set β) :
-    (f '' s) ×ˢ t = (fun x => (f x.1, x.2)) '' s ×ˢ t := by
+theorem prod_image_left (f : α → γ) (s : Set α) (t : Set β) :
+    (f '' s) ×ˢ t = (fun x ↦ (f x.1, x.2)) '' s ×ˢ t := by
   aesop
-
-/--
-theorem `prod_image_right` / 定理 `prod_image_right`
-
-English:
-theorem prod_image_right
-  given: (f : α -> γ) (s : Set α) (t : Set β)
-  proof: by
-  aesop
-
-中文:
-定理 prod_image_right
-  条件: (f : α -> γ) (s : 集合 α) (t : 集合 β)
-  证明: by
-  aesop
+/-
+**Set.prod_image_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：prod_image_right (f : α -> γ) (s : Set α) (t : Set β) : t ×ˢ (f '' s) = (f
+un x => (x.1, f x.2)) '' t ×ˢ s
+参数：f : α -> γ；s : Set α；t : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_image_right (f : α -> γ) (s : Set α) (t : Set β) :
-    t ×ˢ (f '' s) = (fun x => (x.1, f x.2)) '' t ×ˢ s := by
+theorem prod_image_right (f : α → γ) (s : Set α) (t : Set β) :
+    t ×ˢ (f '' s) = (fun x ↦ (x.1, f x.2)) '' t ×ˢ s := by
   aesop
 
 end Prod
 
 section Diagonal
 
-/--
-Definition of `diagonal` / `diagonal` 的定义
+/-- `diagonal α` is the set of `α × α` consisting of all pairs of the form `(a, a)`. -/
+/-
+**Set.diagonal** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：diagonal (α : Type*) : Set (α × α)
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagonal
-  signature: (α : Type*)
-  body: {p | p.1 = p.2}
-
-中文:
-定义 diagonal
-  签名: (α : 类型)
-  定义体: {p | p.1 = p.2}
+--- 原说明 ---
+`diagonal α` is the set of `α × α` consisting of all pairs of the form `(a, a)`.
 -/
 def diagonal (α : Type*) : Set (α × α) := {p | p.1 = p.2}
-
-/--
-theorem `mem_diagonal` / 定理 `mem_diagonal`
-
-English:
-theorem mem_diagonal
-  given: (x : α)
-  statement: (x, x) in diagonal α
-  proof: rfl
-
-中文:
-定理 mem_diagonal
-  条件: (x : α)
-  结论: (x, x) in diagonal α
-  证明: rfl
+/-
+**Set.mem_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_diagonal (x : α) : (x, x) in diagonal α
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_diagonal (x : α) : (x, x) in diagonal α := rfl
-
-/--
-theorem `mem_diagonal_iff` / 定理 `mem_diagonal_iff`
-
-English:
-theorem mem_diagonal_iff
-  given: {x : α × α}
-  statement: x in diagonal α ↔ x.1 = x.2
-  proof: .rfl
-
-中文:
-定理 mem_diagonal_iff
-  条件: {x : α × α}
-  结论: x in diagonal α ↔ x.1 = x.2
-  证明: .rfl
+theorem mem_diagonal (x : α) : (x, x) ∈ diagonal α := rfl
+/-
+**Set.mem_diagonal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {x : α × α}, x ∈ Set.diagonal α ↔ x.1 = x.2
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, grind =, push] theorem mem_diagonal_iff {x : α × α} : x in diagonal α ↔ x.1 = x.2 := .rfl
+@[simp, grind =, push] theorem mem_diagonal_iff {x : α × α} : x ∈ diagonal α ↔ x.1 = x.2 := .rfl
 
-/--
-Definition of `offDiag` / `offDiag` 的定义
+/-- The off-diagonal of a set `s` is the set of pairs `(a, b)` with `a, b ∈ s` and `a ≠ b`. -/
+/-
+**Set.offDiag** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：offDiag (s : Set α) : Set (α × α)
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition offDiag
-  signature: (s : Set α)
-  body: {x | x.1 in s ∧ x.2 in s ∧ x.1 != x.2}
+--- 原说明 ---
+The off-diagonal of a set `s` is the set of pairs `(a, b)` with `a, b ∈ s` and `
+a ≠ b`.
+-/
+def offDiag (s : Set α) : Set (α × α) := {x | x.1 ∈ s ∧ x.2 ∈ s ∧ x.1 ≠ x.2}
 
 @[simp, grind =, push]
-
-中文:
-定义 offDiag
-  签名: (s : 集合 α)
-  定义体: {x | x.1 in s ∧ x.2 in s ∧ x.1 != x.2}
-
-@[simp, grind =, push]
+/-
+**Set.mem_offDiag** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_offDiag {x : α × α} {s : Set α} : x in s.offDiag ↔ x.1 in s ∧ x.2 in s
+ ∧ x.1 != x.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-def offDiag (s : Set α) : Set (α × α) := {x | x.1 in s ∧ x.2 in s ∧ x.1 != x.2}
-
-@[simp, grind =, push]
-/--
-theorem `mem_offDiag` / 定理 `mem_offDiag`
-
-English:
-theorem mem_offDiag
-  given: {x : α × α} {s : Set α}
-  statement: x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2
-  proof: Iff.rfl
-
-中文:
-定理 mem_offDiag
-  条件: {x : α × α} {s : 集合 α}
-  结论: x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
--/
-theorem mem_offDiag {x : α × α} {s : Set α} : x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2 :=
+theorem mem_offDiag {x : α × α} {s : Set α} : x ∈ s.offDiag ↔ x.1 ∈ s ∧ x.2 ∈ s ∧ x.1 ≠ x.2 :=
   Iff.rfl
 
 end Diagonal
 
 section Pi
 
-variable {ι : Type*} {α : ι -> Type*}
+variable {ι : Type*} {α : ι → Type*}
 
-/--
-Definition of `pi` / `pi` 的定义
+/-- Given an index set `ι` and a family of sets `t : Π i, Set (α i)`, `pi s t`
+is the set of dependent functions `f : Πa, π a` such that `f i` belongs to `t i`
+whenever `i ∈ s`. -/
+/-
+**Set.pi** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：pi (s : Set ι) (t : forall i, Set (α i)) : Set (forall i, α i)
+参数：s : Set ι；t : forall i, Set (α i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: (s : Set ι) (t : forall i, Set (α i))
-  body: {f | forall i in s, f i in t i}
-
-中文:
-定义 pi
-  签名: (s : 集合 ι) (t : 对任意 i, 集合 (α i))
-  定义体: {f | forall i in s, f i in t i}
+--- 原说明 ---
+Given an index set `ι` and a family of sets `t : Π i, Set (α i)`, `pi s t`
+is the set of dependent functions `f : Πa, π a` such that `f i` belongs to `t i`
+whenever `i ∈ s`.
 -/
-def pi (s : Set ι) (t : forall i, Set (α i)) : Set (forall i, α i) := {f | forall i in s, f i in t i}
+def pi (s : Set ι) (t : ∀ i, Set (α i)) : Set (∀ i, α i) := {f | ∀ i ∈ s, f i ∈ t i}
 
-variable {s : Set ι} {t : forall i, Set (α i)} {f : forall i, α i}
-
-/--
-theorem `mem_pi` / 定理 `mem_pi`
-
-English:
-theorem mem_pi
-  statement: f in s.pi t ↔ forall i in s, f i in t i
-  proof: .rfl
-
-中文:
-定理 mem_pi
-  结论: f in s.pi t ↔ 对任意 i in s, f i in t i
-  证明: .rfl
+variable {s : Set ι} {t : ∀ i, Set (α i)} {f : ∀ i, α i}
+/-
+**Set.mem_pi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} {s : Set ι} {t : (i : ι) → Set (α i)} 
+{f : (i : ι) → α i},   f ∈ s.pi t ↔ ∀ i ∈ s, f i ∈ t i
+参数：i : ι；α i；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, grind =, push] theorem mem_pi : f in s.pi t ↔ forall i in s, f i in t i := .rfl
-
-/--
-theorem `mem_univ_pi` / 定理 `mem_univ_pi`
-
-English:
-theorem mem_univ_pi
-  statement: f in pi univ t ↔ forall i, f i in t i
-  proof: by simp
-
-中文:
-定理 mem_univ_pi
-  结论: f in pi univ t ↔ 对任意 i, f i in t i
-  证明: by simp
+@[simp, grind =, push] theorem mem_pi : f ∈ s.pi t ↔ ∀ i ∈ s, f i ∈ t i := .rfl
+/-
+**Set.mem_univ_pi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_univ_pi : f in pi univ t ↔ forall i, f i in t i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_univ_pi : f in pi univ t ↔ forall i, f i in t i := by simp
+theorem mem_univ_pi : f ∈ pi univ t ↔ ∀ i, f i ∈ t i := by simp
 
 end Pi
 
-/--
-Definition of `EqOn` / `EqOn` 的定义
+/-- Two functions `f₁ f₂ : α → β` are equal on `s` if `f₁ x = f₂ x` for all `x ∈ s`. -/
+/-
+**Set.EqOn** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：EqOn (f₁ f₂ : α -> β) (s : Set α) : Prop
+参数：f₁ f₂ : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EqOn
-  signature: (f₁ f₂ : α -> β) (s : Set α)
-  body: forall ⦃x⦄, x in s -> f₁ x = f₂ x
-
-中文:
-定义 EqOn
-  签名: (f₁ f₂ : α -> β) (s : 集合 α)
-  定义体: forall ⦃x⦄, x in s -> f₁ x = f₂ x
+--- 原说明 ---
+Two functions `f₁ f₂ : α → β` are equal on `s` if `f₁ x = f₂ x` for all `x ∈ s`.
 -/
-def EqOn (f₁ f₂ : α -> β) (s : Set α) : Prop := forall ⦃x⦄, x in s -> f₁ x = f₂ x
+def EqOn (f₁ f₂ : α → β) (s : Set α) : Prop := ∀ ⦃x⦄, x ∈ s → f₁ x = f₂ x
 
-/--
-Definition of `MapsTo` / `MapsTo` 的定义
+/-- `MapsTo f s t` means that the image of `s` is contained in `t`. -/
+/-
+**Set.MapsTo** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：MapsTo (f : α -> β) (s : Set α) (t : Set β) : Prop
+参数：f : α -> β；s : Set α；t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MapsTo
-  signature: (f : α -> β) (s : Set α) (t : Set β)
-  body: forall ⦃x⦄, x in s -> f x in t
-
-中文:
-定义 映射到
-  签名: (f : α -> β) (s : 集合 α) (t : 集合 β)
-  定义体: forall ⦃x⦄, x in s -> f x in t
+--- 原说明 ---
+`MapsTo f s t` means that the image of `s` is contained in `t`.
 -/
-def MapsTo (f : α -> β) (s : Set α) (t : Set β) : Prop := forall ⦃x⦄, x in s -> f x in t
-
-/--
-theorem `mapsTo_image` / 定理 `mapsTo_image`
-
-English:
-theorem mapsTo_image
-  given: (f : α -> β) (s : Set α)
-  statement: MapsTo f s (f '' s)
-  proof: fun _ => mem_image_of_mem f
-
-中文:
-定理 mapsTo_image
-  条件: (f : α -> β) (s : 集合 α)
-  结论: 映射到 f s (f '' s)
-  证明: fun _ => mem_image_of_mem f
-
-Depends on / 依赖: mem_image_of_mem
+def MapsTo (f : α → β) (s : Set α) (t : Set β) : Prop := ∀ ⦃x⦄, x ∈ s → f x ∈ t
+/-
+**Set.mapsTo_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f '' s)
+参数：f : α -> β；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-theorem mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f '' s) := fun _ => mem_image_of_mem f
-
-/--
-theorem `mapsTo_preimage` / 定理 `mapsTo_preimage`
-
-English:
-theorem mapsTo_preimage
-  given: (f : α -> β) (t : Set β)
-  statement: MapsTo f (f ⁻¹' t) t
-  proof: fun _ => id
-
-中文:
-定理 mapsTo_preimage
-  条件: (f : α -> β) (t : 集合 β)
-  结论: 映射到 f (f ⁻¹' t) t
-  证明: fun _ => id
+theorem mapsTo_image (f : α → β) (s : Set α) : MapsTo f s (f '' s) := fun _ ↦ mem_image_of_mem f
+/-
+**Set.mapsTo_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mapsTo_preimage (f : α -> β) (t : Set β) : MapsTo f (f ⁻¹' t) t
+参数：f : α -> β；t : Set β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapsTo_preimage (f : α -> β) (t : Set β) : MapsTo f (f ⁻¹' t) t := fun _ => id
+theorem mapsTo_preimage (f : α → β) (t : Set β) : MapsTo f (f ⁻¹' t) t := fun _ ↦ id
 
-/--
-Definition of `MapsTo.restrict` / `MapsTo.restrict` 的定义
+/-- Given a map `f` sending `s : Set α` into `t : Set β`, restrict domain of `f` to `s`
+and the codomain to `t`. Same as `Subtype.map`. -/
+/-
+**Set.MapsTo.restrict** 是 Mathlib 中的一个定义，位于命名空间 `Set.MapsTo`。
+形式化陈述：{α : Type u} → {β : Type v} → (f : α → β) → (s : Set α) → (t : Set β) → Se
+t.MapsTo f s t → ↑s → ↑t
+参数：f : α → β；s : Set α；t : Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MapsTo.restrict
-  signature: (f : α -> β) (s : Set α) (t : Set β) (h : MapsTo f s t)
-  body: Subtype.map f h
-
-中文:
-定义 映射到.restrict
-  签名: (f : α -> β) (s : 集合 α) (t : 集合 β) (h : 映射到 f s t)
-  定义体: Subtype.map f h
-
-Depends on / 依赖: Subtype, Subtype.map
+--- 原说明 ---
+Given a map `f` sending `s : Set α` into `t : Set β`, restrict domain of `f` to 
+`s`
+and the codomain to `t`. Same as `Subtype.map`.
 -/
-def MapsTo.restrict (f : α -> β) (s : Set α) (t : Set β) (h : MapsTo f s t) : s -> t :=
+def MapsTo.restrict (f : α → β) (s : Set α) (t : Set β) (h : MapsTo f s t) : s → t :=
   Subtype.map f h
 
 /-- The restriction of a function onto the preimage of a set. -/
 @[simps!]
-/--
-Definition of `restrictPreimage` / `restrictPreimage` 的定义
+/-
+**Set.restrictPreimage** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：restrictPreimage (t : Set β) (f : α -> β) : f ⁻¹' t -> t
+参数：t : Set β；f : α -> β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mapsTo_preimage`：mapsTo_preimage (f : α -> β) (t : Set β) : MapsTo f
+ (f ⁻¹' t) t
 
-English:
-definition restrictPreimage
-  signature: (t : Set β) (f : α -> β)
-  body: (Set.mapsTo_preimage f t).restrict _ _ _
-
-中文:
-定义 restrictPreimage
-  签名: (t : 集合 β) (f : α -> β)
-  定义体: (Set.mapsTo_preimage f t).restrict _ _ _
-
-Depends on / 依赖: Set.mapsTo_preimage, mapsTo_preimage, restrict
+--- 原说明 ---
+The restriction of a function onto the preimage of a set.
 -/
-def restrictPreimage (t : Set β) (f : α -> β) : f ⁻¹' t -> t :=
+def restrictPreimage (t : Set β) (f : α → β) : f ⁻¹' t → t :=
   (Set.mapsTo_preimage f t).restrict _ _ _
 
-/--
-Definition of `InjOn` / `InjOn` 的定义
+/-- `f` is injective on `s` if the restriction of `f` to `s` is injective. -/
+/-
+**Set.InjOn** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：InjOn (f : α -> β) (s : Set α) : Prop
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition InjOn
-  signature: (f : α -> β) (s : Set α)
-  body: forall ⦃x₁ : α⦄, x₁ in s -> forall ⦃x₂ : α⦄, x₂ in s -> f x₁ = f x₂ -> x₁ = x₂
-
-中文:
-定义 单射限制
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: forall ⦃x₁ : α⦄, x₁ in s -> forall ⦃x₂ : α⦄, x₂ in s -> f x₁ = f x₂ -> x₁ = x₂
+--- 原说明 ---
+`f` is injective on `s` if the restriction of `f` to `s` is injective.
 -/
-def InjOn (f : α -> β) (s : Set α) : Prop :=
-  forall ⦃x₁ : α⦄, x₁ in s -> forall ⦃x₂ : α⦄, x₂ in s -> f x₁ = f x₂ -> x₁ = x₂
+def InjOn (f : α → β) (s : Set α) : Prop :=
+  ∀ ⦃x₁ : α⦄, x₁ ∈ s → ∀ ⦃x₂ : α⦄, x₂ ∈ s → f x₁ = f x₂ → x₁ = x₂
 
-/--
-Definition of `graphOn` / `graphOn` 的定义
+/-- The graph of a function `f : α → β` on a set `s`. -/
+/-
+**Set.graphOn** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：graphOn (f : α -> β) (s : Set α) : Set (α × β)
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition graphOn
-  signature: (f : α -> β) (s : Set α)
-  body: (fun x => (x, f x)) '' s
-
-中文:
-定义 graphOn
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: (fun x => (x, f x)) '' s
+--- 原说明 ---
+The graph of a function `f : α → β` on a set `s`.
 -/
-def graphOn (f : α -> β) (s : Set α) : Set (α × β) := (fun x => (x, f x)) '' s
+def graphOn (f : α → β) (s : Set α) : Set (α × β) := (fun x ↦ (x, f x)) '' s
 
-/--
-Definition of `SurjOn` / `SurjOn` 的定义
+/-- `f` is surjective from `s` to `t` if `t` is contained in the image of `s`. -/
+/-
+**Set.SurjOn** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：SurjOn (f : α -> β) (s : Set α) (t : Set β) : Prop
+参数：f : α -> β；s : Set α；t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SurjOn
-  signature: (f : α -> β) (s : Set α) (t : Set β)
-  body: t subseteq f '' s
-
-中文:
-定义 满射限制
-  签名: (f : α -> β) (s : 集合 α) (t : 集合 β)
-  定义体: t subseteq f '' s
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+`f` is surjective from `s` to `t` if `t` is contained in the image of `s`.
 -/
-def SurjOn (f : α -> β) (s : Set α) (t : Set β) : Prop := t subseteq f '' s
+def SurjOn (f : α → β) (s : Set α) (t : Set β) : Prop := t ⊆ f '' s
 
-/--
-Definition of `BijOn` / `BijOn` 的定义
+/-- `f` is bijective from `s` to `t` if `f` is injective on `s` and `f '' s = t`. -/
+/-
+**Set.BijOn** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：BijOn (f : α -> β) (s : Set α) (t : Set β) : Prop
+参数：f : α -> β；s : Set α；t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BijOn
-  signature: (f : α -> β) (s : Set α) (t : Set β)
-  body: MapsTo f s t ∧ InjOn f s ∧ SurjOn f s t
-
-中文:
-定义 双射限制
-  签名: (f : α -> β) (s : 集合 α) (t : 集合 β)
-  定义体: MapsTo f s t ∧ InjOn f s ∧ SurjOn f s t
-
-Depends on / 依赖: MapsTo, SurjOn
+--- 原说明 ---
+`f` is bijective from `s` to `t` if `f` is injective on `s` and `f '' s = t`.
 -/
-def BijOn (f : α -> β) (s : Set α) (t : Set β) : Prop := MapsTo f s t ∧ InjOn f s ∧ SurjOn f s t
+def BijOn (f : α → β) (s : Set α) (t : Set β) : Prop := MapsTo f s t ∧ InjOn f s ∧ SurjOn f s t
 
-/--
-Definition of `LeftInvOn` / `LeftInvOn` 的定义
+/-- `g` is a left inverse to `f` on `s` means that `g (f x) = x` for all `x ∈ s`. -/
+/-
+**Set.LeftInvOn** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：LeftInvOn (g : β -> α) (f : α -> β) (s : Set α) : Prop
+参数：g : β -> α；f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftInvOn
-  signature: (g : β -> α) (f : α -> β) (s : Set α)
-  body: forall ⦃x⦄, x in s -> g (f x) = x
-
-中文:
-定义 LeftInvOn
-  签名: (g : β -> α) (f : α -> β) (s : 集合 α)
-  定义体: forall ⦃x⦄, x in s -> g (f x) = x
-
-Depends on / 依赖: infer_instance, invApp
+--- 原说明 ---
+`g` is a left inverse to `f` on `s` means that `g (f x) = x` for all `x ∈ s`.
 -/
-def LeftInvOn (g : β -> α) (f : α -> β) (s : Set α) : Prop := forall ⦃x⦄, x in s -> g (f x) = x
+def LeftInvOn (g : β → α) (f : α → β) (s : Set α) : Prop := ∀ ⦃x⦄, x ∈ s → g (f x) = x
 
-/--
-Definition of `RightInvOn` / `RightInvOn` 的定义
+/-- `g` is a right inverse to `f` on `t` if `f (g x) = x` for all `x ∈ t`. -/
+/-
+**Set.RightInvOn** 是 Mathlib 中的一个缩写定义，位于命名空间 `Set`。
+形式化陈述：RightInvOn (g : β -> α) (f : α -> β) (t : Set β) : Prop
+参数：g : β -> α；f : α -> β；t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RightInvOn
-  signature: (g : β -> α) (f : α -> β) (t : Set β)
-  body: LeftInvOn f g t
-
-中文:
-缩写 RightInvOn
-  签名: (g : β -> α) (f : α -> β) (t : 集合 β)
-  定义体: LeftInvOn f g t
-
-Depends on / 依赖: LeftInvOn
+--- 原说明 ---
+`g` is a right inverse to `f` on `t` if `f (g x) = x` for all `x ∈ t`.
 -/
-abbrev RightInvOn (g : β -> α) (f : α -> β) (t : Set β) : Prop := LeftInvOn f g t
+abbrev RightInvOn (g : β → α) (f : α → β) (t : Set β) : Prop := LeftInvOn f g t
 
-/--
-Definition of `InvOn` / `InvOn` 的定义
+/-- `g` is an inverse to `f` viewed as a map from `s` to `t` -/
+/-
+**Set.InvOn** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：InvOn (g : β -> α) (f : α -> β) (s : Set α) (t : Set β) : Prop
+参数：g : β -> α；f : α -> β；s : Set α；t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition InvOn
-  signature: (g : β -> α) (f : α -> β) (s : Set α) (t : Set β)
-  body: LeftInvOn g f s ∧ RightInvOn g f t
-
-中文:
-定义 InvOn
-  签名: (g : β -> α) (f : α -> β) (s : 集合 α) (t : 集合 β)
-  定义体: LeftInvOn g f s ∧ RightInvOn g f t
-
-Depends on / 依赖: LeftInvOn, RightInvOn
+--- 原说明 ---
+`g` is an inverse to `f` viewed as a map from `s` to `t`
 -/
-def InvOn (g : β -> α) (f : α -> β) (s : Set α) (t : Set β) : Prop :=
+def InvOn (g : β → α) (f : α → β) (s : Set α) (t : Set β) : Prop :=
   LeftInvOn g f s ∧ RightInvOn g f t
 
 section image2
 
-/--
-Definition of `image2` / `image2` 的定义
+/-- The image of a binary function `f : α → β → γ` as a function `Set α → Set β → Set γ`.
+Mathematically this should be thought of as the image of the corresponding function `α × β → γ`. -/
+/-
+**Set.image2** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：image2 (f : α -> β -> γ) (s : Set α) (t : Set β) : Set γ
+参数：f : α -> β -> γ；s : Set α；t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image2
-  signature: (f : α -> β -> γ) (s : Set α) (t : Set β)
-  body: {c | exists a in s, exists b in t, f a b = c}
-
-中文:
-定义 image2
-  签名: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β)
-  定义体: {c | exists a in s, exists b in t, f a b = c}
+--- 原说明 ---
+The image of a binary function `f : α → β → γ` as a function `Set α → Set β → Se
+t γ`.
+Mathematically this should be thought of as the image of the corresponding funct
+ion `α × β → γ`.
 -/
-def image2 (f : α -> β -> γ) (s : Set α) (t : Set β) : Set γ := {c | exists a in s, exists b in t, f a b = c}
+def image2 (f : α → β → γ) (s : Set α) (t : Set β) : Set γ := {c | ∃ a ∈ s, ∃ b ∈ t, f a b = c}
 
-variable {f : α -> β -> γ} {s : Set α} {t : Set β} {a : α} {b : β} {c : γ}
-
-/--
-theorem `mem_image2` / 定理 `mem_image2`
-
-English:
-theorem mem_image2
-  statement: c in image2 f s t ↔ exists a in s, exists b in t, f a b = c
-  proof: .rfl
-
-中文:
-定理 mem_image2
-  结论: c in image2 f s t ↔ 存在 a in s, 存在 b in t, f a b = c
-  证明: .rfl
+variable {f : α → β → γ} {s : Set α} {t : Set β} {a : α} {b : β} {c : γ}
+/-
+**Set.mem_image2** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} {f : α → β → γ} {s : Set α} {t : 
+Set β} {c : γ},   c ∈ Set.image2 f s t ↔ ∃ a ∈ s, ∃ b ∈ t, f a b = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, grind =] theorem mem_image2 : c in image2 f s t ↔ exists a in s, exists b in t, f a b = c := .rfl
-
-/--
-theorem `mem_image2_of_mem` / 定理 `mem_image2_of_mem`
-
-English:
-theorem mem_image2_of_mem
-  given: (ha : a in s) (hb : b in t)
-  statement: f a b in image2 f s t
-  proof: ⟨a, ha, b, hb, rfl⟩
-
-中文:
-定理 mem_image2_of_mem
-  条件: (ha : a in s) (hb : b in t)
-  结论: f a b in image2 f s t
-  证明: ⟨a, ha, b, hb, rfl⟩
+@[simp, grind =] theorem mem_image2 : c ∈ image2 f s t ↔ ∃ a ∈ s, ∃ b ∈ t, f a b = c := .rfl
+/-
+**Set.mem_image2_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_image2_of_mem (ha : a in s) (hb : b in t) : f a b in image2 f s t
+参数：ha : a in s；hb : b in t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_image2_of_mem (ha : a in s) (hb : b in t) : f a b in image2 f s t :=
+theorem mem_image2_of_mem (ha : a ∈ s) (hb : b ∈ t) : f a b ∈ image2 f s t :=
   ⟨a, ha, b, hb, rfl⟩
 
 end image2
 
-/--
-Definition of `seq` / `seq` 的定义
+/-- Given a set `s` of functions `α → β` and `t : Set α`, `seq s t` is the union of `f '' t` over
+all `f ∈ s`. -/
+/-
+**Set.seq** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：seq (s : Set (α -> β)) (t : Set α) : Set β
+参数：s : Set (α -> β)；t : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition seq
-  signature: (s : Set (α -> β)) (t : Set α)
-  body: image2 (fun f => f) s t
-
-@[simp, grind =]
-
-中文:
-定义 seq
-  签名: (s : 集合 (α -> β)) (t : 集合 α)
-  定义体: image2 (fun f => f) s t
-
-@[simp, grind =]
-
-Depends on / 依赖: image2
+--- 原说明 ---
+Given a set `s` of functions `α → β` and `t : Set α`, `seq s t` is the union of 
+`f '' t` over
+all `f ∈ s`.
 -/
-def seq (s : Set (α -> β)) (t : Set α) : Set β := image2 (fun f => f) s t
+def seq (s : Set (α → β)) (t : Set α) : Set β := image2 (fun f ↦ f) s t
 
 @[simp, grind =]
-/--
-theorem `mem_seq_iff` / 定理 `mem_seq_iff`
-
-English:
-theorem mem_seq_iff
-  given: {s : Set (α -> β)} {t : Set α} {b : β}
-  proof: Iff.rfl
-
-中文:
-定理 mem_seq_iff
-  条件: {s : 集合 (α -> β)} {t : 集合 α} {b : β}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_seq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_seq_iff {s : Set (α -> β)} {t : Set α} {b : β} : b in seq s t ↔ exists
+ f in s, exists a in t, (f : α -> β) a = b
+参数：α -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_seq_iff {s : Set (α -> β)} {t : Set α} {b : β} :
-    b in seq s t ↔ exists f in s, exists a in t, (f : α -> β) a = b :=
+theorem mem_seq_iff {s : Set (α → β)} {t : Set α} {b : β} :
+    b ∈ seq s t ↔ ∃ f ∈ s, ∃ a ∈ t, (f : α → β) a = b :=
   Iff.rfl
-
-/--
-lemma `seq_eq_image2` / 引理 `seq_eq_image2`
-
-English:
-lemma seq_eq_image2
-  given: (s : Set (α -> β)) (t : Set α)
-  statement: seq s t = image2 (fun f a => f a) s t
-  proof: rfl
-
-中文:
-引理 seq_eq_image2
-  条件: (s : 集合 (α -> β)) (t : 集合 α)
-  结论: seq s t = image2 (fun f a => f a) s t
-  证明: rfl
+/-
+**Set.seq_eq_image2** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：seq_eq_image2 (s : Set (α -> β)) (t : Set α) : seq s t = image2 (fun f a =
+> f a) s t
+参数：s : Set (α -> β)；t : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma seq_eq_image2 (s : Set (α -> β)) (t : Set α) : seq s t = image2 (fun f a => f a) s t := rfl
+lemma seq_eq_image2 (s : Set (α → β)) (t : Set α) : seq s t = image2 (fun f a ↦ f a) s t := rfl
 
 end Set
+

@@ -8,7 +8,7 @@ module
 public meta import Lean.Meta.Hint
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public import Mathlib.Tactic.Linter.Header -- shake: keep
+public import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # The `haveI`/`letI` linter
@@ -45,40 +45,18 @@ public register_option linter.style.haveILetI : Bool := {
   descr := "enable the `haveILetI` linter"
 }
 
-/--
-Definition of `runHaveI` / `runHaveI` 的定义
+/-- Run the `haveI` tactic, with a try this suggestion when the goal is a `Prop`. -/
+/-
+**Mathlib.Linter.HaveILetI.runHaveI** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter.Ha
+veILetI`。
+形式化陈述：runHaveI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) :
+ TacticM Unit
+参数：tk : Syntax；c : TSyntax ``letConfig；d : TSyntax ``letDecl。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runHaveI
-  signature: (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl)
-  body: do
-  evalTactic (← `(tactic| haveI $c:letConfig $d:letDecl))
-  if getLinterValue linter.style.haveILetI (← getLinterOptions) then
-    withMainContext do
-    if ← isProp (← getMainTarget) then
-      let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "have"}] tk none false
-      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
-        The goal is a proposition, so `have` is preferred over `haveI`.\n\
-        The difference between `have` and `haveI` is that `haveI` inlines the value.\n\
-        But this is not relevant for proofs because of proof irrelevance."
-
-@[tactic_alt Parser.Tactic.tacticHaveI__]
-
-中文:
-定义 runHaveI
-  签名: (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl)
-  定义体: do
-  evalTactic (← `(tactic| haveI $c:letConfig $d:letDecl))
-  if getLinterValue linter.style.haveILetI (← getLinterOptions) then
-    withMainContext do
-    if ← isProp (← getMainTarget) then
-      let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "have"}] tk none false
-      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
-        The goal is a proposition, so `have` is preferred over `haveI`.\n\
-        The difference between `have` and `haveI` is that `haveI` inlines the value.\n\
-        But this is not relevant for proofs because of proof irrelevance."
-
-@[tactic_alt Parser.Tactic.tacticHaveI__]
+--- 原说明 ---
+Run the `haveI` tactic, with a try this suggestion when the goal is a `Prop`.
 -/
 def runHaveI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) : TacticM Unit := do
   evalTactic (← `(tactic| haveI $c:letConfig $d:letDecl))
@@ -94,40 +72,18 @@ def runHaveI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) : T
 @[tactic_alt Parser.Tactic.tacticHaveI__]
 elab (priority := high) tk:"haveI" c:letConfig d:letDecl : tactic => runHaveI tk c d
 
-/--
-Definition of `runLetI` / `runLetI` 的定义
+/-- Run the `letI` tactic, with a try this suggestion when the goal is a `Prop`. -/
+/-
+**Mathlib.Linter.HaveILetI.runLetI** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter.Hav
+eILetI`。
+形式化陈述：runLetI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) : 
+TacticM Unit
+参数：tk : Syntax；c : TSyntax ``letConfig；d : TSyntax ``letDecl。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runLetI
-  signature: (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl)
-  body: do
-  evalTactic (← `(tactic| letI $c:letConfig $d:letDecl))
-  if getLinterValue linter.style.haveILetI (← getLinterOptions) then
-    withMainContext do
-    if ← isProp (← getMainTarget) then
-      let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "let"}] tk none false
-      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
-        The goal is a proposition, so `let` is preferred over `letI`.\n\
-        The difference between `let` and `letI` is that `letI` inlines the value.\n\
-        But this is not relevant for proofs because of proof irrelevance."
-
-@[tactic_alt Parser.Tactic.tacticLetI__]
-
-中文:
-定义 runLetI
-  签名: (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl)
-  定义体: do
-  evalTactic (← `(tactic| letI $c:letConfig $d:letDecl))
-  if getLinterValue linter.style.haveILetI (← getLinterOptions) then
-    withMainContext do
-    if ← isProp (← getMainTarget) then
-      let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "let"}] tk none false
-      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
-        The goal is a proposition, so `let` is preferred over `letI`.\n\
-        The difference between `let` and `letI` is that `letI` inlines the value.\n\
-        But this is not relevant for proofs because of proof irrelevance."
-
-@[tactic_alt Parser.Tactic.tacticLetI__]
+--- 原说明 ---
+Run the `letI` tactic, with a try this suggestion when the goal is a `Prop`.
 -/
 def runLetI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) : TacticM Unit := do
   evalTactic (← `(tactic| letI $c:letConfig $d:letDecl))
@@ -144,3 +100,4 @@ def runLetI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) : Ta
 elab (priority := high) tk:"letI" c:letConfig d:letDecl : tactic => runLetI tk c d
 
 end Mathlib.Linter.HaveILetI
+

@@ -16,22 +16,30 @@ The function is defined in terms of natural numbers with no dependencies outside
 
 @[expose] public section
 
-/--
-Definition of `Nat.nthRoot` / `Nat.nthRoot` 的定义
+/-- `Nat.nthRoot n a = ⌊(a : ℝ) ^ (1 / n : ℝ)⌋₊` defined in terms of natural numbers.
 
-English:
-definition Nat.nthRoot
-  signature: : Nat -> Nat -> Nat
-  body: (a / guess ^ (n + 1) + (n + 1) * guess) / (n + 2)
-        if next < guess then go n a fuel next else guess
+We use Newton's method to find a root of $x^n = a$,
+so it converges superexponentially fast. -/
+/-
+**Nat.nthRoot** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Nat.nthRoot : Nat -> Nat -> Nat | 0, _ => 1 | 1, a => a | n + 2, a => go n
+ a a a where /-- Auxiliary definition for `Nat.nthRoot`.  Given natural numbers 
+`n`, `a`, `fuel`, `guess` such that `⌊(a : ℝ) ^ (1 / (n + 2) : ℝ)⌋₊ ≤ guess ≤ fu
+el`, returns `⌊(a : ℝ) ^ (1 / (n + 2) : ℝ)⌋₊`.  The auxiliary number `guess` is 
+the current approximation in Newton's method, tracked in the arguments so that t
+he definition uses a tail recursion which is unfolded into a loop by the compile
+r.  The auxiliary number `
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 自然数.nthRoot
-  签名: : 自然数 -> 自然数 -> 自然数
-  定义体: (a / guess ^ (n + 1) + (n + 1) * guess) / (n + 2)
-        if next < guess then go n a fuel next else guess
+--- 原说明 ---
+`Nat.nthRoot n a = ⌊(a : ℝ) ^ (1 / n : ℝ)⌋₊` defined in terms of natural numbers
+.
+
+We use Newton's method to find a root of $x^n = a$,
+so it converges superexponentially fast. -/
 -/
-def Nat.nthRoot : Nat -> Nat -> Nat
+def Nat.nthRoot : Nat → Nat → Nat
   | 0, _ => 1
   | 1, a => a
   | n + 2, a =>

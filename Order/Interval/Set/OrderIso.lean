@@ -23,301 +23,237 @@ section Preorder
 variable {α β : Type*} [Preorder α] [Preorder β]
 
 @[to_dual (attr := simp)]
-/--
-theorem `preimage_Iic` / 定理 `preimage_Iic`
-
-English:
-theorem preimage_Iic
-  given: (e : α ≃o β) (b : β)
-  statement: e ⁻¹' Iic b = Iic (e.symm b)
-  proof: by
-  ext x
-  simp [← e.le_iff_le]
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 preimage_Iic
-  条件: (e : α ≃o β) (b : β)
-  结论: e ⁻¹' 左无界右闭区间 b = 左无界右闭区间 (e.symm b)
-  证明: by
-  ext x
-  simp [← e.le_iff_le]
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: e.le_iff_le, le_iff_le
+/-
+**OrderIso.preimage_Iic** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：preimage_Iic (e : α ≃o β) (b : β) : e ⁻¹' Iic b = Iic (e.symm b)
+参数：e : α ≃o β；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.le_iff_le`：le_iff_le (e : α ≃o β) {x y : α} : e x <= e y ↔ x <=
+ y
+· 使用定理 `OrderIso.apply_symm_apply`：apply_symm_apply (e : α ≃o β) (x : β) : e (e.
+symm x) = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem preimage_Iic (e : α ≃o β) (b : β) : e ⁻¹' Iic b = Iic (e.symm b) := by
   ext x
   simp [← e.le_iff_le]
 
 @[to_dual (attr := simp)]
-/--
-theorem `preimage_Iio` / 定理 `preimage_Iio`
-
-English:
-theorem preimage_Iio
-  given: (e : α ≃o β) (b : β)
-  statement: e ⁻¹' Iio b = Iio (e.symm b)
-  proof: by
-  ext x
-  simp [← e.lt_iff_lt]
-
-@[simp, to_dual self]
-
-中文:
-定理 preimage_Iio
-  条件: (e : α ≃o β) (b : β)
-  结论: e ⁻¹' 左无界右开区间 b = 左无界右开区间 (e.symm b)
-  证明: by
-  ext x
-  simp [← e.lt_iff_lt]
-
-@[simp, to_dual self]
-
-Depends on / 依赖: e.lt_iff_lt, lt_iff_lt
+/-
+**OrderIso.preimage_Iio** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：preimage_Iio (e : α ≃o β) (b : β) : e ⁻¹' Iio b = Iio (e.symm b)
+参数：e : α ≃o β；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.lt_iff_lt`：lt_iff_lt (e : α ≃o β) {x y : α} : e x < e y ↔ x < y
+· 使用定理 `OrderIso.apply_symm_apply`：apply_symm_apply (e : α ≃o β) (x : β) : e (e.
+symm x) = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem preimage_Iio (e : α ≃o β) (b : β) : e ⁻¹' Iio b = Iio (e.symm b) := by
   ext x
   simp [← e.lt_iff_lt]
 
 @[simp, to_dual self]
-/--
-theorem `preimage_Icc` / 定理 `preimage_Icc`
-
-English:
-theorem preimage_Icc
-  given: (e : α ≃o β) (a b : β)
-  statement: e ⁻¹' Icc a b = Icc (e.symm a) (e.symm b)
-  proof: by
-  simp [← Ici_inter_Iic]
-
-@[to_dual (attr := simp) (reorder := a b)]
-
-中文:
-定理 preimage_Icc
-  条件: (e : α ≃o β) (a b : β)
-  结论: e ⁻¹' 闭区间 a b = 闭区间 (e.symm a) (e.symm b)
-  证明: by
-  simp [← Ici_inter_Iic]
-
-@[to_dual (attr := simp) (reorder := a b)]
-
-Depends on / 依赖: Ici_inter_Iic
+/-
+**OrderIso.preimage_Icc** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：preimage_Icc (e : α ≃o β) (a b : β) : e ⁻¹' Icc a b = Icc (e.symm a) (e.sy
+mm b)
+参数：e : α ≃o β；a b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `OrderIso.preimage_Ici`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder 
+α] [inst_1 : Preorder β] (e : α ≃o β) (b : β),   ⇑e ⁻¹' Set.Ici b = Set.Ici (e.s
+ymm b)
+· 使用定理 `OrderIso.preimage_Iic`：preimage_Iic (e : α ≃o β) (b : β) : e ⁻¹' Iic b =
+ Iic (e.symm b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preimage_Icc (e : α ≃o β) (a b : β) : e ⁻¹' Icc a b = Icc (e.symm a) (e.symm b) := by
   simp [← Ici_inter_Iic]
 
 @[to_dual (attr := simp) (reorder := a b)]
-/--
-theorem `preimage_Ico` / 定理 `preimage_Ico`
-
-English:
-theorem preimage_Ico
-  given: (e : α ≃o β) (a b : β)
-  statement: e ⁻¹' Ico a b = Ico (e.symm a) (e.symm b)
-  proof: by
-  simp [← Ici_inter_Iio]
-
-@[simp, to_dual self]
-
-中文:
-定理 preimage_Ico
-  条件: (e : α ≃o β) (a b : β)
-  结论: e ⁻¹' 左闭右开区间 a b = 左闭右开区间 (e.symm a) (e.symm b)
-  证明: by
-  simp [← Ici_inter_Iio]
-
-@[simp, to_dual self]
-
-Depends on / 依赖: Ici_inter_Iio
+/-
+**OrderIso.preimage_Ico** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：preimage_Ico (e : α ≃o β) (a b : β) : e ⁻¹' Ico a b = Ico (e.symm a) (e.sy
+mm b)
+参数：e : α ≃o β；a b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `OrderIso.preimage_Ici`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder 
+α] [inst_1 : Preorder β] (e : α ≃o β) (b : β),   ⇑e ⁻¹' Set.Ici b = Set.Ici (e.s
+ymm b)
+· 使用定理 `OrderIso.preimage_Iio`：preimage_Iio (e : α ≃o β) (b : β) : e ⁻¹' Iio b =
+ Iio (e.symm b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preimage_Ico (e : α ≃o β) (a b : β) : e ⁻¹' Ico a b = Ico (e.symm a) (e.symm b) := by
   simp [← Ici_inter_Iio]
 
 @[simp, to_dual self]
-/--
-theorem `preimage_Ioo` / 定理 `preimage_Ioo`
-
-English:
-theorem preimage_Ioo
-  given: (e : α ≃o β) (a b : β)
-  statement: e ⁻¹' Ioo a b = Ioo (e.symm a) (e.symm b)
-  proof: by
-  simp [← Ioi_inter_Iio]
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 preimage_Ioo
-  条件: (e : α ≃o β) (a b : β)
-  结论: e ⁻¹' 开区间 a b = 开区间 (e.symm a) (e.symm b)
-  证明: by
-  simp [← Ioi_inter_Iio]
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Ioi_inter_Iio
+/-
+**OrderIso.preimage_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：preimage_Ioo (e : α ≃o β) (a b : β) : e ⁻¹' Ioo a b = Ioo (e.symm a) (e.sy
+mm b)
+参数：e : α ≃o β；a b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `OrderIso.preimage_Ioi`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder 
+α] [inst_1 : Preorder β] (e : α ≃o β) (b : β),   ⇑e ⁻¹' Set.Ioi b = Set.Ioi (e.s
+ymm b)
+· 使用定理 `OrderIso.preimage_Iio`：preimage_Iio (e : α ≃o β) (b : β) : e ⁻¹' Iio b =
+ Iio (e.symm b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preimage_Ioo (e : α ≃o β) (a b : β) : e ⁻¹' Ioo a b = Ioo (e.symm a) (e.symm b) := by
   simp [← Ioi_inter_Iio]
 
 @[to_dual (attr := simp)]
-/--
-theorem `image_Iic` / 定理 `image_Iic`
-
-English:
-theorem image_Iic
-  given: (e : α ≃o β) (a : α)
-  statement: e '' Iic a = Iic (e a)
-  proof: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iic]; rw [e.symm_symm]
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 image_Iic
-  条件: (e : α ≃o β) (a : α)
-  结论: e '' 左无界右闭区间 a = 左无界右闭区间 (e a)
-  证明: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iic]; rw [e.symm_symm]
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: e.image_eq_preimage_symm, e.symm.preimage_Iic, e.symm_symm, image_eq_preimage_symm, preimage_Iic, symm_symm
+/-
+**OrderIso.image_Iic** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：image_Iic (e : α ≃o β) (a : α) : e '' Iic a = Iic (e a)
+参数：e : α ≃o β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃o β) (s 
+: Set α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `OrderIso.preimage_Iic`：preimage_Iic (e : α ≃o β) (b : β) : e ⁻¹' Iic b =
+ Iic (e.symm b)
+· 使用定理 `OrderIso.symm_symm`：symm_symm (e : α ≃o β) : e.symm.symm = e
 -/
 theorem image_Iic (e : α ≃o β) (a : α) : e '' Iic a = Iic (e a) := by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iic]; rw [e.symm_symm]
+  rw [e.image_eq_preimage_symm, e.symm.preimage_Iic, e.symm_symm]
 
 @[to_dual (attr := simp)]
-/--
-theorem `image_Iio` / 定理 `image_Iio`
-
-English:
-theorem image_Iio
-  given: (e : α ≃o β) (a : α)
-  statement: e '' Iio a = Iio (e a)
-  proof: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iio]; rw [e.symm_symm]
-
-@[simp, to_dual self]
-
-中文:
-定理 image_Iio
-  条件: (e : α ≃o β) (a : α)
-  结论: e '' 左无界右开区间 a = 左无界右开区间 (e a)
-  证明: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iio]; rw [e.symm_symm]
-
-@[simp, to_dual self]
-
-Depends on / 依赖: e.image_eq_preimage_symm, e.symm.preimage_Iio, e.symm_symm, image_eq_preimage_symm, preimage_Iio, symm_symm
+/-
+**OrderIso.image_Iio** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：image_Iio (e : α ≃o β) (a : α) : e '' Iio a = Iio (e a)
+参数：e : α ≃o β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃o β) (s 
+: Set α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `OrderIso.preimage_Iio`：preimage_Iio (e : α ≃o β) (b : β) : e ⁻¹' Iio b =
+ Iio (e.symm b)
+· 使用定理 `OrderIso.symm_symm`：symm_symm (e : α ≃o β) : e.symm.symm = e
 -/
 theorem image_Iio (e : α ≃o β) (a : α) : e '' Iio a = Iio (e a) := by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Iio]; rw [e.symm_symm]
+  rw [e.image_eq_preimage_symm, e.symm.preimage_Iio, e.symm_symm]
 
 @[simp, to_dual self]
-/--
-theorem `image_Ioo` / 定理 `image_Ioo`
-
-English:
-theorem image_Ioo
-  given: (e : α ≃o β) (a b : α)
-  statement: e '' Ioo a b = Ioo (e a) (e b)
-  proof: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioo]; rw [e.symm_symm]
-
-@[to_dual (attr := simp) (reorder := a b)]
-
-中文:
-定理 image_Ioo
-  条件: (e : α ≃o β) (a b : α)
-  结论: e '' 开区间 a b = 开区间 (e a) (e b)
-  证明: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioo]; rw [e.symm_symm]
-
-@[to_dual (attr := simp) (reorder := a b)]
-
-Depends on / 依赖: e.image_eq_preimage_symm, e.symm.preimage_Ioo, e.symm_symm, image_eq_preimage_symm, preimage_Ioo, symm_symm
+/-
+**OrderIso.image_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：image_Ioo (e : α ≃o β) (a b : α) : e '' Ioo a b = Ioo (e a) (e b)
+参数：e : α ≃o β；a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃o β) (s 
+: Set α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `OrderIso.preimage_Ioo`：preimage_Ioo (e : α ≃o β) (a b : β) : e ⁻¹' Ioo a
+ b = Ioo (e.symm a) (e.symm b)
+· 使用定理 `OrderIso.symm_symm`：symm_symm (e : α ≃o β) : e.symm.symm = e
 -/
 theorem image_Ioo (e : α ≃o β) (a b : α) : e '' Ioo a b = Ioo (e a) (e b) := by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioo]; rw [e.symm_symm]
+  rw [e.image_eq_preimage_symm, e.symm.preimage_Ioo, e.symm_symm]
 
 @[to_dual (attr := simp) (reorder := a b)]
-/--
-theorem `image_Ioc` / 定理 `image_Ioc`
-
-English:
-theorem image_Ioc
-  given: (e : α ≃o β) (a b : α)
-  statement: e '' Ioc a b = Ioc (e a) (e b)
-  proof: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioc]; rw [e.symm_symm]
-
-@[simp, to_dual self]
-
-中文:
-定理 image_Ioc
-  条件: (e : α ≃o β) (a b : α)
-  结论: e '' 左开右闭区间 a b = 左开右闭区间 (e a) (e b)
-  证明: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioc]; rw [e.symm_symm]
-
-@[simp, to_dual self]
-
-Depends on / 依赖: e.image_eq_preimage_symm, e.symm.preimage_Ioc, e.symm_symm, image_eq_preimage_symm, preimage_Ioc, symm_symm
+/-
+**OrderIso.image_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：image_Ioc (e : α ≃o β) (a b : α) : e '' Ioc a b = Ioc (e a) (e b)
+参数：e : α ≃o β；a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃o β) (s 
+: Set α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `OrderIso.preimage_Ioc`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder 
+α] [inst_1 : Preorder β] (e : α ≃o β) (b a : β),   ⇑e ⁻¹' Set.Ioc b a = Set.Ioc 
+(e.symm b) …
+· 使用定理 `OrderIso.symm_symm`：symm_symm (e : α ≃o β) : e.symm.symm = e
 -/
 theorem image_Ioc (e : α ≃o β) (a b : α) : e '' Ioc a b = Ioc (e a) (e b) := by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Ioc]; rw [e.symm_symm]
+  rw [e.image_eq_preimage_symm, e.symm.preimage_Ioc, e.symm_symm]
 
 @[simp, to_dual self]
-/--
-theorem `image_Icc` / 定理 `image_Icc`
-
-English:
-theorem image_Icc
-  given: (e : α ≃o β) (a b : α)
-  statement: e '' Icc a b = Icc (e a) (e b)
-  proof: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Icc]; rw [e.symm_symm]
-
-中文:
-定理 image_Icc
-  条件: (e : α ≃o β) (a b : α)
-  结论: e '' 闭区间 a b = 闭区间 (e a) (e b)
-  证明: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Icc]; rw [e.symm_symm]
-
-Depends on / 依赖: e.image_eq_preimage_symm, e.symm.preimage_Icc, e.symm_symm, image_eq_preimage_symm, preimage_Icc, symm_symm
+/-
+**OrderIso.image_Icc** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：image_Icc (e : α ≃o β) (a b : α) : e '' Icc a b = Icc (e a) (e b)
+参数：e : α ≃o β；a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃o β) (s 
+: Set α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `OrderIso.preimage_Icc`：preimage_Icc (e : α ≃o β) (a b : β) : e ⁻¹' Icc a
+ b = Icc (e.symm a) (e.symm b)
+· 使用定理 `OrderIso.symm_symm`：symm_symm (e : α ≃o β) : e.symm.symm = e
 -/
 theorem image_Icc (e : α ≃o β) (a b : α) : e '' Icc a b = Icc (e a) (e b) := by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.preimage_Icc]; rw [e.symm_symm]
+  rw [e.image_eq_preimage_symm, e.symm.preimage_Icc, e.symm_symm]
 
 end Preorder
 
 /-- Order isomorphism between `Iic (⊤ : α)` and `α` when `α` has a top element -/
 @[to_dual
 /-- Order isomorphism between `Ici (⊥ : α)` and `α` when `α` has a bottom element -/]
-/--
-Definition of `IicTop` / `IicTop` 的定义
-
-English:
-definition IicTop
-  signature: {α : Type*} [Preorder α] [OrderTop α]
-  body: { @Equiv.subtypeUnivEquiv α (· in Iic (⊤ : α)) fun _ => le_top with
-    map_rel_iff' := @fun x y => by rfl }
-
-中文:
-定义 IicTop
-  签名: {α : 类型} [预序 α] [有顶序 α]
-  定义体: { @Equiv.subtypeUnivEquiv α (· in Iic (⊤ : α)) fun _ => le_top with
-    map_rel_iff' := @fun x y => by rfl }
-
-Depends on / 依赖: Equiv.subtypeUnivEquiv, le_top, map_rel_iff, subtypeUnivEquiv
+/-
+**OrderIso.IicTop** 是 Mathlib 中的一个定义，位于命名空间 `OrderIso`。
+形式化陈述：IicTop {α : Type*} [Preorder α] [OrderTop α] : Iic (⊤ : α) ≃o α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def IicTop {α : Type*} [Preorder α] [OrderTop α] : Iic (⊤ : α) ≃o α :=
-  { @Equiv.subtypeUnivEquiv α (· in Iic (⊤ : α)) fun _ => le_top with
+  { @Equiv.subtypeUnivEquiv α (· ∈ Iic (⊤ : α)) fun _ => le_top with
     map_rel_iff' := @fun x y => by rfl }
 
 end OrderIso
+

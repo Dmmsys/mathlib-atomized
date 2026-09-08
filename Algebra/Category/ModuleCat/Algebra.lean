@@ -45,42 +45,30 @@ variable {A : Type w} [Ring A] [Algebra k A]
 
 /-- Type synonym for considering a module over a `k`-algebra as a `k`-module. -/
 @[instance_reducible]
-/--
-Definition of `moduleOfAlgebraModule` / `moduleOfAlgebraModule` 的定义
+/-
+**ModuleCat.moduleOfAlgebraModule** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：moduleOfAlgebraModule (M : ModuleCat.{v} A) : Module k M
+参数：M : ModuleCat.{v} A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition moduleOfAlgebraModule
-  signature: (M : ModuleCat.{v} A)
-  body: Module.restrictScalars k A M
-
-中文:
-定义 moduleOfAlgebraModule
-  签名: (M : 模范畴.{v} A)
-  定义体: Module.restrictScalars k A M
-
-Depends on / 依赖: Module, Module.restrictScalars, restrictScalars
+--- 原说明 ---
+Type synonym for considering a module over a `k`-algebra as a `k`-module.
 -/
 def moduleOfAlgebraModule (M : ModuleCat.{v} A) : Module k M :=
   Module.restrictScalars k A M
 
 attribute [scoped instance] ModuleCat.moduleOfAlgebraModule
-
-/--
-theorem `isScalarTower_of_algebra_moduleCat` / 定理 `isScalarTower_of_algebra_moduleCat`
-
-English:
-theorem isScalarTower_of_algebra_moduleCat
-  given: (M : ModuleCat.{v} A)
-  statement: IsScalarTower k A M
-  proof: IsScalarTower.restrictScalars k A M
-
-中文:
-定理 isScalarTower_of_algebra_moduleCat
-  条件: (M : 模范畴.{v} A)
-  结论: 标量塔 k A M
-  证明: IsScalarTower.restrictScalars k A M
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.restrictScalars, restrictScalars
+/-
+**ModuleCat.isScalarTower_of_algebra_moduleCat** 是 Mathlib 中的一个定理，位于命名空间 `Module
+Cat`。
+形式化陈述：isScalarTower_of_algebra_moduleCat (M : ModuleCat.{v} A) : IsScalarTower k
+ A M
+参数：M : ModuleCat.{v} A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.restrictScalars`：IsScalarTower.restrictScalars [Module S M
+] : letI
 -/
 theorem isScalarTower_of_algebra_moduleCat (M : ModuleCat.{v} A) : IsScalarTower k A M :=
   IsScalarTower.restrictScalars k A M
@@ -88,22 +76,19 @@ theorem isScalarTower_of_algebra_moduleCat (M : ModuleCat.{v} A) : IsScalarTower
 attribute [scoped instance] ModuleCat.isScalarTower_of_algebra_moduleCat
 
 -- We verify that the morphism spaces become `k`-modules.
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (M N : ModuleCat.{v} A) : Module k (M ⟶ N) := inferInstance
-
-/--
-Instance `linearOverField` / 实例 `linearOverField`
-
-English:
-instance linearOverField
-  signature: : Linear k (ModuleCat.{v} A) where
-  body: inferInstance
-
-中文:
-实例 linearOverField
-  签名: : 线性 k (模范畴.{v} A) where
-  定义体: inferInstance
+/-
+**ModuleCat.linearOverField** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+形式化陈述：linearOverField : Linear k (ModuleCat.{v} A) where homModule _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance linearOverField : Linear k (ModuleCat.{v} A) where
   homModule _ _ := inferInstance
 
 end ModuleCat
+

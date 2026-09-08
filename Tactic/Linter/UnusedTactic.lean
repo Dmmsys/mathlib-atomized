@@ -8,7 +8,7 @@ module
 public meta import Lean.Server.InfoUtils
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Batteries.Tactic.Unreachable
 public import Lean.Parser.Syntax
 public import Mathlib.Tactic.Linter.UnusedTacticExtension
@@ -68,18 +68,15 @@ public register_option linter.unusedTactic : Bool := {
 
 namespace UnusedTactic
 
-/--
-Definition of `M` / `M` 的定义
+/-- The monad for collecting the ranges of the syntaxes that do not modify any goal. -/
+/-
+**Mathlib.Linter.UnusedTactic.M** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Linter.Unus
+edTactic`。
+形式化陈述：M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation M
-  body: StateRefT (Std.HashMap Lean.Syntax.Range Syntax) IO
-
-中文:
-缩写 M
-  定义体: StateRefT (Std.HashMap Lean.Syntax.Range Syntax) IO
-
-Depends on / 依赖: HashMap, Lean.Syntax.Range, StateRefT, Std.HashMap, Syntax
+--- 原说明 ---
+The monad for collecting the ranges of the syntaxes that do not modify any goal.
 -/
 abbrev M := StateRefT (Std.HashMap Lean.Syntax.Range Syntax) IO
 
@@ -102,7 +99,7 @@ A list of blocklisted syntax kinds, which are expected to have subterms that con
 unused tactics.
 -/
 initialize ignoreTacticKindsRef : IO.Ref NameHashSet ←
-IO.mkRef .ofArray #[
+  IO.mkRef <| .ofArray #[
     `Mathlib.Tactic.Says.says,
     ``Parser.Term.binderTactic,
     ``Lean.Parser.Term.dynamicQuot,
@@ -126,72 +123,54 @@ IO.mkRef .ofArray #[
     `Mathlib.Tactic.failIfNoProgress
   ]
 
-/--
-Definition of `isIgnoreTacticKind` / `isIgnoreTacticKind` 的定义
+/-- Is this a syntax kind that contains intentionally unused tactic subterms? -/
+/-
+**Mathlib.Linter.UnusedTactic.isIgnoreTacticKind** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Linter.UnusedTactic`。
+形式化陈述：isIgnoreTacticKind (ignoreTacticKinds : NameHashSet) (k : SyntaxNodeKind) 
+: Bool
+参数：ignoreTacticKinds : NameHashSet；k : SyntaxNodeKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isIgnoreTacticKind
-  signature: (ignoreTacticKinds : NameHashSet) (k : SyntaxNodeKind)
-  body: k matches .str _ "quot" ||
-  ignoreTacticKinds.contains k
-
-中文:
-定义 isIgnoreTacticKind
-  签名: (ignoreTacticKinds : NameHashSet) (k : SyntaxNodeKind)
-  定义体: k matches .str _ "quot" ||
-  ignoreTacticKinds.contains k
-
-Depends on / 依赖: contains, ignoreTacticKinds, ignoreTacticKinds.contains, matches
+--- 原说明 ---
+Is this a syntax kind that contains intentionally unused tactic subterms?
 -/
 def isIgnoreTacticKind (ignoreTacticKinds : NameHashSet) (k : SyntaxNodeKind) : Bool :=
   k matches .str _ "quot" ||
   ignoreTacticKinds.contains k
 
 /--
-Definition of `addIgnoreTacticKind` / `addIgnoreTacticKind` 的定义
+Adds a new syntax kind whose children will be ignored by the `unusedTactic` linter.
+This should be called from an `initialize` block.
+-/
+/-
+**Mathlib.Linter.UnusedTactic.addIgnoreTacticKind** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Linter.UnusedTactic`。
+形式化陈述：addIgnoreTacticKind (kind : SyntaxNodeKind) : IO Unit
+参数：kind : SyntaxNodeKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addIgnoreTacticKind
-  signature: (kind : SyntaxNodeKind)
-  body: ignoreTacticKindsRef.modify (·.insert kind)
-
-中文:
-定义 addIgnoreTacticKind
-  签名: (kind : SyntaxNodeKind)
-  定义体: ignoreTacticKindsRef.modify (·.insert kind)
-
-Depends on / 依赖: ignoreTacticKindsRef, ignoreTacticKindsRef.modify, insert, modify
+--- 原说明 ---
+Adds a new syntax kind whose children will be ignored by the `unusedTactic` lint
+er.
+This should be called from an `initialize` block.
 -/
 def addIgnoreTacticKind (kind : SyntaxNodeKind) : IO Unit :=
   ignoreTacticKindsRef.modify (·.insert kind)
 
-/--
-Definition of `getTactics` / `getTactics` 的定义
+/-- Accumulates the set of tactic syntaxes that should be evaluated at least once. -/
+/-
+**Mathlib.Linter.UnusedTactic.getTactics** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Lint
+er.UnusedTactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getTactics
-  signature: (ignoreTacticKinds : NameHashSet)
-  body: do
-  if let .node _ k args := stx then
-    if !isIgnoreTacticKind ignoreTacticKinds k then
-      args.forM (getTactics ignoreTacticKinds isTacKind)
-    if isTacKind k then
-      if let some r := stx.getRange? true then
-        modify fun m => m.insert r stx
-
-中文:
-定义 getTactics
-  签名: (ignoreTacticKinds : NameHashSet)
-  定义体: do
-  if let .node _ k args := stx then
-    if !isIgnoreTacticKind ignoreTacticKinds k then
-      args.forM (getTactics ignoreTacticKinds isTacKind)
-    if isTacKind k then
-      if let some r := stx.getRange? true then
-        modify fun m => m.insert r stx
+--- 原说明 ---
+Accumulates the set of tactic syntaxes that should be evaluated at least once.
 -/
 @[specialize] partial def getTactics (ignoreTacticKinds : NameHashSet)
-    (isTacKind : SyntaxNodeKind -> Bool) (stx : Syntax) : M Unit := do
+    (isTacKind : SyntaxNodeKind → Bool) (stx : Syntax) : M Unit := do
   if let .node _ k args := stx then
     if !isIgnoreTacticKind ignoreTacticKinds k then
       args.forM (getTactics ignoreTacticKinds isTacKind)
@@ -199,82 +178,40 @@ definition getTactics
       if let some r := stx.getRange? true then
         modify fun m => m.insert r stx
 
-/--
-Definition of `getNames` / `getNames` 的定义
+/-- `getNames mctx` extracts the names of all the local declarations implied by the
+`MetavarContext` `mctx`. -/
+/-
+**Mathlib.Linter.UnusedTactic.getNames** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter
+.UnusedTactic`。
+形式化陈述：getNames (mctx : MetavarContext) : List Name
+参数：mctx : MetavarContext。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getNames
-  signature: (mctx : MetavarContext)
-  body: let lcts := mctx.decls.toList.map (MetavarDecl.lctx ∘ Prod.snd)
-  let locDecls := (lcts.map (PersistentArray.toList ∘ LocalContext.decls)).flatten.reduceOption
-  locDecls.map LocalDecl.userName
-
-中文:
-定义 getNames
-  签名: (mctx : MetavarContext)
-  定义体: let lcts := mctx.decls.toList.map (MetavarDecl.lctx ∘ Prod.snd)
-  let locDecls := (lcts.map (PersistentArray.toList ∘ LocalContext.decls)).flatten.reduceOption
-  locDecls.map LocalDecl.userName
-
-Depends on / 依赖: LocalContext, LocalContext.decls, LocalDecl, LocalDecl.userName, MetavarDecl, MetavarDecl.lctx, PersistentArray, PersistentArray.toList, Prod.snd, flatten, flatten.reduceOption, lcts.map, locDecls, locDecls.map, mctx.decls.toList.map, reduceOption, toList, userName
+--- 原说明 ---
+`getNames mctx` extracts the names of all the local declarations implied by the
+`MetavarContext` `mctx`.
 -/
 def getNames (mctx : MetavarContext) : List Name :=
   let lcts := mctx.decls.toList.map (MetavarDecl.lctx ∘ Prod.snd)
   let locDecls := (lcts.map (PersistentArray.toList ∘ LocalContext.decls)).flatten.reduceOption
   locDecls.map LocalDecl.userName
 
-/--
-Definition of `eraseUsedTactics` / `eraseUsedTactics` 的定义
+/-- Search for tactic executions in the info tree and remove the syntax of the tactics that
+changed something. -/
+/-
+**Mathlib.Linter.UnusedTactic.eraseUsedTactics** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Linter.UnusedTactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eraseUsedTactics
-  signature: (exceptions : Std.HashSet SyntaxNodeKind)
-  body: let ranges := trees.foldl (init := #[]) InfoTree.foldInfo fun _ i ranges => Id.run do
-    let .ofTacticInfo i := i | return ranges
-    let stx := i.stx
-    let some r := stx.getRange? true | return ranges
-    let kind := stx.getKind
-    -- if the tactic is allowed to not change the goals
-    if exceptions.contains kind then
-      return ranges.push r
-    -- if the goals have changed
-    if i.goalsAfter != i.goalsBefore then
-      return ranges.push r
-    -- bespoke check for `swap_var`: the only change that it does is
-    -- in the usernames of local declarations, so we check the names before and after
-    if (kind == `Mathlib.Tactic.«tacticSwap_var__,,») &&
-            (getNames i.mctxBefore != getNames i.mctxAfter) then
-      return ranges.push r
-    return ranges
-  for r in ranges do
-    modify (·.erase r)
-
-中文:
-定义 eraseUsedTactics
-  签名: (exceptions : Std.HashSet SyntaxNodeKind)
-  定义体: let ranges := trees.foldl (init := #[]) InfoTree.foldInfo fun _ i ranges => Id.run do
-    let .ofTacticInfo i := i | return ranges
-    let stx := i.stx
-    let some r := stx.getRange? true | return ranges
-    let kind := stx.getKind
-    -- if the tactic is allowed to not change the goals
-    if exceptions.contains kind then
-      return ranges.push r
-    -- if the goals have changed
-    if i.goalsAfter != i.goalsBefore then
-      return ranges.push r
-    -- bespoke check for `swap_var`: the only change that it does is
-    -- in the usernames of local declarations, so we check the names before and after
-    if (kind == `Mathlib.Tactic.«tacticSwap_var__,,») &&
-            (getNames i.mctxBefore != getNames i.mctxAfter) then
-      return ranges.push r
-    return ranges
-  for r in ranges do
-    modify (·.erase r)
+--- 原说明 ---
+Search for tactic executions in the info tree and remove the syntax of the tacti
+cs that
+changed something.
 -/
 partial def eraseUsedTactics (exceptions : Std.HashSet SyntaxNodeKind)
     (trees : PersistentArray InfoTree) : M Unit :=
-let ranges := trees.foldl (init := #[]) InfoTree.foldInfo fun _ i ranges => Id.run do
+  let ranges := trees.foldl (init := #[]) <| InfoTree.foldInfo fun _ i ranges => Id.run do
     let .ofTacticInfo i := i | return ranges
     let stx := i.stx
     let some r := stx.getRange? true | return ranges
@@ -294,72 +231,16 @@ let ranges := trees.foldl (init := #[]) InfoTree.foldInfo fun _ i ranges => Id.r
   for r in ranges do
     modify (·.erase r)
 
-/--
-Definition of `unusedTacticLinter` / `unusedTacticLinter` 的定义
+/-- The main entry point to the unused tactic linter. -/
+/-
+**Mathlib.Linter.UnusedTactic.unusedTacticLinter** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Linter.UnusedTactic`。
+形式化陈述：unusedTacticLinter : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unusedTacticLinter
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-  unless getLinterValue linter.unusedTactic (← getLinterOptions) && (← getInfoState).enabled do
-    return
-  if (← get).messages.hasErrors then
-    return
-  let env ← getEnv
-  let cats := (Parser.parserExtension.getState env).categories
-  -- These lookups may fail when the linter is run in a fresh, empty environment
-let some tactics := Parser.ParserCategory.kinds < > cats.find? `tactic
-    | return
-let some convs := Parser.ParserCategory.kinds < > cats.find? `conv
-    | return
-  let trees ← getInfoTrees
-let exceptions := (← allowedRef.get).union allowedUnusedTacticExt.getState env
-  let go : M Unit := do
-    getTactics (← ignoreTacticKindsRef.get) (fun k => tactics.contains k || convs.contains k) stx
-    eraseUsedTactics exceptions trees
-  let (_, map) ← go.run {}
-  let unused := map.toArray
-  let key (r : Lean.Syntax.Range) := (r.start.byteIdx, (-r.stop.byteIdx : Int))
-  let mut last : Lean.Syntax.Range := ⟨0, 0⟩
-  for (r, stx) in let _ := @lexOrd; let _ := @ltOfOrd.{0}; unused.qsort (key ·.1 < key ·.1) do
-    if stx.getKind in [``Batteries.Tactic.unreachable, ``Batteries.Tactic.unreachableConv] then
-      continue
-    if last.start <= r.start && r.stop <= last.stop then continue
-    Linter.logLint linter.unusedTactic stx m!"Unused tactic linter: `{stx}` does nothing"
-    last := r
-
-中文:
-定义 unusedTacticLinter
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-  unless getLinterValue linter.unusedTactic (← getLinterOptions) && (← getInfoState).enabled do
-    return
-  if (← get).messages.hasErrors then
-    return
-  let env ← getEnv
-  let cats := (Parser.parserExtension.getState env).categories
-  -- These lookups may fail when the linter is run in a fresh, empty environment
-let some tactics := Parser.ParserCategory.kinds < > cats.find? `tactic
-    | return
-let some convs := Parser.ParserCategory.kinds < > cats.find? `conv
-    | return
-  let trees ← getInfoTrees
-let exceptions := (← allowedRef.get).union allowedUnusedTacticExt.getState env
-  let go : M Unit := do
-    getTactics (← ignoreTacticKindsRef.get) (fun k => tactics.contains k || convs.contains k) stx
-    eraseUsedTactics exceptions trees
-  let (_, map) ← go.run {}
-  let unused := map.toArray
-  let key (r : Lean.Syntax.Range) := (r.start.byteIdx, (-r.stop.byteIdx : Int))
-  let mut last : Lean.Syntax.Range := ⟨0, 0⟩
-  for (r, stx) in let _ := @lexOrd; let _ := @ltOfOrd.{0}; unused.qsort (key ·.1 < key ·.1) do
-    if stx.getKind in [``Batteries.Tactic.unreachable, ``Batteries.Tactic.unreachableConv] then
-      continue
-    if last.start <= r.start && r.stop <= last.stop then continue
-    Linter.logLint linter.unusedTactic stx m!"Unused tactic linter: `{stx}` does nothing"
-    last := r
-
-Depends on / 依赖: withSetOptionIn
+--- 原说明 ---
+The main entry point to the unused tactic linter.
 -/
 def unusedTacticLinter : Linter where run := withSetOptionIn fun stx => do
   unless getLinterValue linter.unusedTactic (← getLinterOptions) && (← getInfoState).enabled do
@@ -369,12 +250,12 @@ def unusedTacticLinter : Linter where run := withSetOptionIn fun stx => do
   let env ← getEnv
   let cats := (Parser.parserExtension.getState env).categories
   -- These lookups may fail when the linter is run in a fresh, empty environment
-let some tactics := Parser.ParserCategory.kinds < > cats.find? `tactic
+  let some tactics := Parser.ParserCategory.kinds <$> cats.find? `tactic
     | return
-let some convs := Parser.ParserCategory.kinds < > cats.find? `conv
+  let some convs := Parser.ParserCategory.kinds <$> cats.find? `conv
     | return
   let trees ← getInfoTrees
-let exceptions := (← allowedRef.get).union allowedUnusedTacticExt.getState env
+  let exceptions := (← allowedRef.get).union <| allowedUnusedTacticExt.getState env
   let go : M Unit := do
     getTactics (← ignoreTacticKindsRef.get) (fun k => tactics.contains k || convs.contains k) stx
     eraseUsedTactics exceptions trees
@@ -383,9 +264,9 @@ let exceptions := (← allowedRef.get).union allowedUnusedTacticExt.getState env
   let key (r : Lean.Syntax.Range) := (r.start.byteIdx, (-r.stop.byteIdx : Int))
   let mut last : Lean.Syntax.Range := ⟨0, 0⟩
   for (r, stx) in let _ := @lexOrd; let _ := @ltOfOrd.{0}; unused.qsort (key ·.1 < key ·.1) do
-    if stx.getKind in [``Batteries.Tactic.unreachable, ``Batteries.Tactic.unreachableConv] then
+    if stx.getKind ∈ [``Batteries.Tactic.unreachable, ``Batteries.Tactic.unreachableConv] then
       continue
-    if last.start <= r.start && r.stop <= last.stop then continue
+    if last.start ≤ r.start && r.stop ≤ last.stop then continue
     Linter.logLint linter.unusedTactic stx m!"Unused tactic linter: `{stx}` does nothing"
     last := r
 

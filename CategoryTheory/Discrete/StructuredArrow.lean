@@ -30,26 +30,22 @@ namespace Discrete
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `structuredArrowEquivalenceOfUnique` / `structuredArrowEquivalenceOfUnique` 的定义
+/-- If `F : C ⥤ Discrete T` is a functor with `T` containing
+a unique element `t`, then this is the equivalence
+`StructuredArrow (Discrete.mk t) F ≌ C`. -/
+/-
+**CategoryTheory.Discrete.structuredArrowEquivalenceOfUnique** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Discrete`。
+形式化陈述：structuredArrowEquivalenceOfUnique (F : C ⥤ Discrete T) (t : T) [Subsingle
+ton T] : StructuredArrow (.mk t) F ≌ C where functor
+参数：F : C ⥤ Discrete T；t : T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structuredArrowEquivalenceOfUnique
-  body: StructuredArrow.proj _ _
-  inverse.obj X := StructuredArrow.mk (Y := X) (eqToHom (by subsingleton))
-  inverse.map f := StructuredArrow.homMk f
-  unitIso := NatIso.ofComponents (fun _ => StructuredArrow.isoMk (Iso.refl _))
-  counitIso := Iso.refl _
-
-中文:
-定义 structuredArrowEquivalenceOfUnique
-  定义体: StructuredArrow.proj _ _
-  inverse.obj X := StructuredArrow.mk (Y := X) (eqToHom (by subsingleton))
-  inverse.map f := StructuredArrow.homMk f
-  unitIso := NatIso.ofComponents (fun _ => StructuredArrow.isoMk (Iso.refl _))
-  counitIso := Iso.refl _
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.proj
+--- 原说明 ---
+If `F : C ⥤ Discrete T` is a functor with `T` containing
+a unique element `t`, then this is the equivalence
+`StructuredArrow (Discrete.mk t) F ≌ C`.
 -/
 def structuredArrowEquivalenceOfUnique
     (F : C ⥤ Discrete T) (t : T) [Subsingleton T] :
@@ -57,31 +53,27 @@ def structuredArrowEquivalenceOfUnique
   functor := StructuredArrow.proj _ _
   inverse.obj X := StructuredArrow.mk (Y := X) (eqToHom (by subsingleton))
   inverse.map f := StructuredArrow.homMk f
-  unitIso := NatIso.ofComponents (fun _ => StructuredArrow.isoMk (Iso.refl _))
+  unitIso := NatIso.ofComponents (fun _ ↦ StructuredArrow.isoMk (Iso.refl _))
   counitIso := Iso.refl _
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `costructuredArrowEquivalenceOfUnique` / `costructuredArrowEquivalenceOfUnique` 的定义
+/-- If `F : C ⥤ Discrete T` is a functor with `T` containing
+a unique element `t`, then this is the equivalence
+`CostructuredArrow F (Discrete.mk t) ≌ C`. -/
+/-
+**CategoryTheory.Discrete.costructuredArrowEquivalenceOfUnique** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Discrete`。
+形式化陈述：costructuredArrowEquivalenceOfUnique (F : C ⥤ Discrete T) (t : T) [Subsing
+leton T] : CostructuredArrow F (.mk t) ≌ C where functor
+参数：F : C ⥤ Discrete T；t : T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition costructuredArrowEquivalenceOfUnique
-  body: CostructuredArrow.proj _ _
-  inverse.obj X := CostructuredArrow.mk (Y := X) (eqToHom (by subsingleton))
-  inverse.map f := CostructuredArrow.homMk f
-  unitIso := NatIso.ofComponents (fun _ => CostructuredArrow.isoMk (Iso.refl _))
-  counitIso := Iso.refl _
-
-中文:
-定义 costructuredArrowEquivalenceOfUnique
-  定义体: CostructuredArrow.proj _ _
-  inverse.obj X := CostructuredArrow.mk (Y := X) (eqToHom (by subsingleton))
-  inverse.map f := CostructuredArrow.homMk f
-  unitIso := NatIso.ofComponents (fun _ => CostructuredArrow.isoMk (Iso.refl _))
-  counitIso := Iso.refl _
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj
+--- 原说明 ---
+If `F : C ⥤ Discrete T` is a functor with `T` containing
+a unique element `t`, then this is the equivalence
+`CostructuredArrow F (Discrete.mk t) ≌ C`.
 -/
 def costructuredArrowEquivalenceOfUnique
     (F : C ⥤ Discrete T) (t : T) [Subsingleton T] :
@@ -89,9 +81,10 @@ def costructuredArrowEquivalenceOfUnique
   functor := CostructuredArrow.proj _ _
   inverse.obj X := CostructuredArrow.mk (Y := X) (eqToHom (by subsingleton))
   inverse.map f := CostructuredArrow.homMk f
-  unitIso := NatIso.ofComponents (fun _ => CostructuredArrow.isoMk (Iso.refl _))
+  unitIso := NatIso.ofComponents (fun _ ↦ CostructuredArrow.isoMk (Iso.refl _))
   counitIso := Iso.refl _
 
 end Discrete
 
 end CategoryTheory
+

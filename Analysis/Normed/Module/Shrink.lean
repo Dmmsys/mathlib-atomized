@@ -20,56 +20,24 @@ namespace Shrink
 universe v
 variable {R 𝕜 α : Type*} [Small.{v} α] [Semiring R] [NormedField 𝕜]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SeminormedAddCommGroup
-  signature: α] : SeminormedAddCommGroup (Shrink.{v} α)
-  body: (equivShrink α).symm.seminormedAddCommGroup
-
-中文:
-实例 [SeminormedAddComm群
-  签名: α] : SeminormedAddComm群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.seminormedAddCommGroup
-
-Depends on / 依赖: equivShrink, seminormedAddCommGroup, symm.seminormedAddCommGroup
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SeminormedAddCommGroup α] : SeminormedAddCommGroup (Shrink.{v} α) :=
   (equivShrink α).symm.seminormedAddCommGroup
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NormedAddCommGroup
-  signature: α] : NormedAddCommGroup (Shrink.{v} α)
-  body: (equivShrink α).symm.normedAddCommGroup
-
-中文:
-实例 [赋范交换加群
-  签名: α] : 赋范交换加群 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.normedAddCommGroup
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NormedAddCommGroup α] : NormedAddCommGroup (Shrink.{v} α) :=
   (equivShrink α).symm.normedAddCommGroup
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SeminormedAddCommGroup
-  signature: α] [NormedSpace 𝕜 α] : NormedSpace 𝕜 (Shrink.{v} α)
-  body: (equivShrink α).symm.normedSpace 𝕜
-
-中文:
-实例 [SeminormedAddComm群
-  签名: α] [赋范空间 𝕜 α] : 赋范空间 𝕜 (Shrink.{v} α)
-  定义体: (equivShrink α).symm.normedSpace 𝕜
-
-Depends on / 依赖: equivShrink, normedSpace, symm.normedSpace
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SeminormedAddCommGroup α] [NormedSpace 𝕜 α] : NormedSpace 𝕜 (Shrink.{v} α) :=
   (equivShrink α).symm.normedSpace 𝕜
 
 end Shrink
+

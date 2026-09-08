@@ -24,22 +24,13 @@ variable {ι : Sort*} {R : Type*} [NonAssocRing R]
 
 /-- Pull a subring back to an opposite subring along `MulOpposite.unop` -/
 @[simps! coe toSubsemiring]
-/--
-Definition of `op` / `op` 的定义
+/-
+**Subring.op** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：{R : Type u_2} → [inst : NonAssocRing R] → Subring R → Subring Rᵐᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: (S : Subring R)
-  body: S.toSubsemiring.op
-  neg_mem' := by simp
-
-中文:
-定义 op
-  签名: (S : 子环 R)
-  定义体: S.toSubsemiring.op
-  neg_mem' := by simp
-
-Depends on / 依赖: IsAffineOpen, IsAffineOpen.fromSpecStalk_isPreimmersion, fromSpecStalk_isPreimmersion
+--- 原说明 ---
+Pull a subring back to an opposite subring along `MulOpposite.unop`
 -/
 protected def op (S : Subring R) : Subring Rᵐᵒᵖ where
   toSubsemiring := S.toSubsemiring.op
@@ -48,41 +39,24 @@ protected def op (S : Subring R) : Subring Rᵐᵒᵖ where
 attribute [norm_cast] coe_op
 
 @[simp]
-/--
-theorem `mem_op` / 定理 `mem_op`
-
-English:
-theorem mem_op
-  given: {x : Rᵐᵒᵖ} {S : Subring R}
-  statement: x in S.op ↔ x.unop in S
-  proof: Iff.rfl
-
-中文:
-定理 mem_op
-  条件: {x : Rᵐᵒᵖ} {S : 子环 R}
-  结论: x in S.op ↔ x.unop in S
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subring.mem_op** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：mem_op {x : Rᵐᵒᵖ} {S : Subring R} : x in S.op ↔ x.unop in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_op {x : Rᵐᵒᵖ} {S : Subring R} : x in S.op ↔ x.unop in S := Iff.rfl
+theorem mem_op {x : Rᵐᵒᵖ} {S : Subring R} : x ∈ S.op ↔ x.unop ∈ S := Iff.rfl
 
 /-- Pull an opposite subring back to a subring along `MulOpposite.op` -/
 @[simps! coe toSubsemiring]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**Subring.unop** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：{R : Type u_2} → [inst : NonAssocRing R] → Subring Rᵐᵒᵖ → Subring R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: (S : Subring Rᵐᵒᵖ)
-  body: S.toSubsemiring.unop
-  neg_mem' := by simp
-
-中文:
-定义 unop
-  签名: (S : 子环 Rᵐᵒᵖ)
-  定义体: S.toSubsemiring.unop
-  neg_mem' := by simp
+--- 原说明 ---
+Pull an opposite subring back to a subring along `MulOpposite.op`
 -/
 protected def unop (S : Subring Rᵐᵒᵖ) : Subring R where
   toSubsemiring := S.toSubsemiring.unop
@@ -91,184 +65,110 @@ protected def unop (S : Subring Rᵐᵒᵖ) : Subring R where
 attribute [norm_cast] coe_unop
 
 @[simp]
-/--
-theorem `mem_unop` / 定理 `mem_unop`
-
-English:
-theorem mem_unop
-  given: {x : R} {S : Subring Rᵐᵒᵖ}
-  statement: x in S.unop ↔ MulOpposite.op x in S
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_unop
-  条件: {x : R} {S : 子环 Rᵐᵒᵖ}
-  结论: x in S.unop ↔ MulOpposite.op x in S
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subring.mem_unop** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：mem_unop {x : R} {S : Subring Rᵐᵒᵖ} : x in S.unop ↔ MulOpposite.op x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_unop {x : R} {S : Subring Rᵐᵒᵖ} : x in S.unop ↔ MulOpposite.op x in S := Iff.rfl
+theorem mem_unop {x : R} {S : Subring Rᵐᵒᵖ} : x ∈ S.unop ↔ MulOpposite.op x ∈ S := Iff.rfl
 
 @[simp]
-/--
-theorem `unop_op` / 定理 `unop_op`
-
-English:
-theorem unop_op
-  given: (S : Subring R)
-  statement: S.op.unop = S
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unop_op
-  条件: (S : 子环 R)
-  结论: S.op.unop = S
-  证明: rfl
-
-@[simp]
+/-
+**Subring.unop_op** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_op (S : Subring R) : S.op.unop = S
+参数：S : Subring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_op (S : Subring R) : S.op.unop = S := rfl
 
 @[simp]
-/--
-theorem `op_unop` / 定理 `op_unop`
-
-English:
-theorem op_unop
-  given: (S : Subring Rᵐᵒᵖ)
-  statement: S.unop.op = S
-  proof: rfl
-
-中文:
-定理 op_unop
-  条件: (S : 子环 Rᵐᵒᵖ)
-  结论: S.unop.op = S
-  证明: rfl
+/-
+**Subring.op_unop** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_unop (S : Subring Rᵐᵒᵖ) : S.unop.op = S
+参数：S : Subring Rᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_unop (S : Subring Rᵐᵒᵖ) : S.unop.op = S := rfl
 
+/-! ### Lattice results -/
 
-/--
-theorem `op_le_iff` / 定理 `op_le_iff`
+/-
+**Subring.op_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_le_iff {S₁ : Subring R} {S₂ : Subring Rᵐᵒᵖ} : S₁.op <= S₂ ↔ S₁ <= S₂.un
+op
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `MulOpposite.op_surjective`：op_surjective : Surjective (op : α -> αᵐᵒᵖ)
 
-English:
-theorem op_le_iff
-  given: {S₁ : Subring R} {S₂ : Subring Rᵐᵒᵖ}
-  statement: S₁.op <= S₂ ↔ S₁ <= S₂.unop
-  proof: MulOpposite.op_surjective.forall
-
-中文:
-定理 op_le_iff
-  条件: {S₁ : 子环 R} {S₂ : 子环 Rᵐᵒᵖ}
-  结论: S₁.op <= S₂ ↔ S₁ <= S₂.unop
-  证明: MulOpposite.op_surjective.forall
-
-Depends on / 依赖: MulOpposite, MulOpposite.op_surjective.forall, op_surjective
+--- 原说明 ---
+### Lattice results
 -/
-theorem op_le_iff {S₁ : Subring R} {S₂ : Subring Rᵐᵒᵖ} : S₁.op <= S₂ ↔ S₁ <= S₂.unop :=
+theorem op_le_iff {S₁ : Subring R} {S₂ : Subring Rᵐᵒᵖ} : S₁.op ≤ S₂ ↔ S₁ ≤ S₂.unop :=
   MulOpposite.op_surjective.forall
-
-/--
-theorem `le_op_iff` / 定理 `le_op_iff`
-
-English:
-theorem le_op_iff
-  given: {S₁ : Subring Rᵐᵒᵖ} {S₂ : Subring R}
-  statement: S₁ <= S₂.op ↔ S₁.unop <= S₂
-  proof: MulOpposite.op_surjective.forall
-
-@[simp]
-
-中文:
-定理 le_op_iff
-  条件: {S₁ : 子环 Rᵐᵒᵖ} {S₂ : 子环 R}
-  结论: S₁ <= S₂.op ↔ S₁.unop <= S₂
-  证明: MulOpposite.op_surjective.forall
-
-@[simp]
-
-Depends on / 依赖: MulOpposite, MulOpposite.op_surjective.forall, op_surjective
+/-
+**Subring.le_op_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：le_op_iff {S₁ : Subring Rᵐᵒᵖ} {S₂ : Subring R} : S₁ <= S₂.op ↔ S₁.unop <= 
+S₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `MulOpposite.op_surjective`：op_surjective : Surjective (op : α -> αᵐᵒᵖ)
 -/
-theorem le_op_iff {S₁ : Subring Rᵐᵒᵖ} {S₂ : Subring R} : S₁ <= S₂.op ↔ S₁.unop <= S₂ :=
+theorem le_op_iff {S₁ : Subring Rᵐᵒᵖ} {S₂ : Subring R} : S₁ ≤ S₂.op ↔ S₁.unop ≤ S₂ :=
   MulOpposite.op_surjective.forall
 
 @[simp]
-/--
-theorem `op_le_op_iff` / 定理 `op_le_op_iff`
-
-English:
-theorem op_le_op_iff
-  given: {S₁ S₂ : Subring R}
-  statement: S₁.op <= S₂.op ↔ S₁ <= S₂
-  proof: MulOpposite.op_surjective.forall
-
-@[simp]
-
-中文:
-定理 op_le_op_iff
-  条件: {S₁ S₂ : 子环 R}
-  结论: S₁.op <= S₂.op ↔ S₁ <= S₂
-  证明: MulOpposite.op_surjective.forall
-
-@[simp]
-
-Depends on / 依赖: MulOpposite, MulOpposite.op_surjective.forall, op_surjective
+/-
+**Subring.op_le_op_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_le_op_iff {S₁ S₂ : Subring R} : S₁.op <= S₂.op ↔ S₁ <= S₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `MulOpposite.op_surjective`：op_surjective : Surjective (op : α -> αᵐᵒᵖ)
 -/
-theorem op_le_op_iff {S₁ S₂ : Subring R} : S₁.op <= S₂.op ↔ S₁ <= S₂ :=
+theorem op_le_op_iff {S₁ S₂ : Subring R} : S₁.op ≤ S₂.op ↔ S₁ ≤ S₂ :=
   MulOpposite.op_surjective.forall
 
 @[simp]
-/--
-theorem `unop_le_unop_iff` / 定理 `unop_le_unop_iff`
-
-English:
-theorem unop_le_unop_iff
-  given: {S₁ S₂ : Subring Rᵐᵒᵖ}
-  statement: S₁.unop <= S₂.unop ↔ S₁ <= S₂
-  proof: MulOpposite.unop_surjective.forall
-
-中文:
-定理 unop_le_unop_iff
-  条件: {S₁ S₂ : 子环 Rᵐᵒᵖ}
-  结论: S₁.unop <= S₂.unop ↔ S₁ <= S₂
-  证明: MulOpposite.unop_surjective.forall
-
-Depends on / 依赖: MulOpposite, MulOpposite.unop_surjective.forall, unop_surjective
+/-
+**Subring.unop_le_unop_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_le_unop_iff {S₁ S₂ : Subring Rᵐᵒᵖ} : S₁.unop <= S₂.unop ↔ S₁ <= S₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `MulOpposite.unop_surjective`：unop_surjective : Surjective (unop : αᵐᵒᵖ -
+> α)
 -/
-theorem unop_le_unop_iff {S₁ S₂ : Subring Rᵐᵒᵖ} : S₁.unop <= S₂.unop ↔ S₁ <= S₂ :=
+theorem unop_le_unop_iff {S₁ S₂ : Subring Rᵐᵒᵖ} : S₁.unop ≤ S₂.unop ↔ S₁ ≤ S₂ :=
   MulOpposite.unop_surjective.forall
 
 /-- A subring `S` of `R` determines a subring `S.op` of the opposite ring `Rᵐᵒᵖ`. -/
 @[simps]
-/--
-Definition of `opEquiv` / `opEquiv` 的定义
+/-
+**Subring.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：opEquiv : Subring R ≃o Subring Rᵐᵒᵖ where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subring.unop_op`：unop_op (S : Subring R) : S.op.unop = S
+· 使用定理 `Subring.op_unop`：op_unop (S : Subring Rᵐᵒᵖ) : S.unop.op = S
+· 使用定理 `Subring.op_le_op_iff`：op_le_op_iff {S₁ S₂ : Subring R} : S₁.op <= S₂.op 
+↔ S₁ <= S₂
 
-English:
-definition opEquiv
-  signature: : Subring R ≃o Subring Rᵐᵒᵖ where
-  body: Subring.op
-  invFun := Subring.unop
-  left_inv := unop_op
-  right_inv := op_unop
-  map_rel_iff' := op_le_op_iff
-
-中文:
-定义 opEquiv
-  签名: : 子环 R ≃o 子环 Rᵐᵒᵖ where
-  定义体: Subring.op
-  invFun := Subring.unop
-  left_inv := unop_op
-  right_inv := op_unop
-  map_rel_iff' := op_le_op_iff
-
-Depends on / 依赖: Subring, Subring.op
+--- 原说明 ---
+A subring `S` of `R` determines a subring `S.op` of the opposite ring `Rᵐᵒᵖ`.
 -/
 def opEquiv : Subring R ≃o Subring Rᵐᵒᵖ where
   toFun := Subring.op
@@ -276,592 +176,353 @@ def opEquiv : Subring R ≃o Subring Rᵐᵒᵖ where
   left_inv := unop_op
   right_inv := op_unop
   map_rel_iff' := op_le_op_iff
-
-/--
-theorem `op_injective` / 定理 `op_injective`
-
-English:
-theorem op_injective
-  statement: (@Subring.op R _).Injective
-  proof: opEquiv.injective
-
-中文:
-定理 op_injective
-  结论: (@子环.op R _).单射
-  证明: opEquiv.injective
-
-Depends on / 依赖: injective, opEquiv, opEquiv.injective
+/-
+**Subring.op_injective** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_injective : (@Subring.op R _).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.injective`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α] [inst_
+1 : LE β] (e : α ≃o β), Function.Injective ⇑e
 -/
 theorem op_injective : (@Subring.op R _).Injective := opEquiv.injective
-/--
-theorem `unop_injective` / 定理 `unop_injective`
-
-English:
-theorem unop_injective
-  statement: (@Subring.unop R _).Injective
-  proof: opEquiv.symm.injective
-
-中文:
-定理 unop_injective
-  结论: (@子环.unop R _).单射
-  证明: opEquiv.symm.injective
-
-Depends on / 依赖: injective, opEquiv, opEquiv.symm.injective
+/-
+**Subring.unop_injective** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_injective : (@Subring.unop R _).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.injective`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α] [inst_
+1 : LE β] (e : α ≃o β), Function.Injective ⇑e
 -/
 theorem unop_injective : (@Subring.unop R _).Injective := opEquiv.symm.injective
-/--
-theorem `op_inj` / 定理 `op_inj`
-
-English:
-theorem op_inj
-  given: {S T : Subring R}
-  statement: S.op = T.op ↔ S = T
-  proof: opEquiv.eq_iff_eq
-
-中文:
-定理 op_inj
-  条件: {S T : 子环 R}
-  结论: S.op = T.op ↔ S = T
-  证明: opEquiv.eq_iff_eq
+/-
+**Subring.op_inj** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：∀ {R : Type u_2} [inst : NonAssocRing R] {S T : Subring R}, S.op = T.op ↔ 
+S = T
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RelIso.eq_iff_eq`：eq_iff_eq (f : r ≃r s) {a b} : f a = f b ↔ a = b
 -/
 @[simp] theorem op_inj {S T : Subring R} : S.op = T.op ↔ S = T := opEquiv.eq_iff_eq
-/--
-theorem `unop_inj` / 定理 `unop_inj`
-
-English:
-theorem unop_inj
-  given: {S T : Subring Rᵐᵒᵖ}
-  statement: S.unop = T.unop ↔ S = T
-  proof: opEquiv.symm.eq_iff_eq
-
-@[simp]
-
-中文:
-定理 unop_inj
-  条件: {S T : 子环 Rᵐᵒᵖ}
-  结论: S.unop = T.unop ↔ S = T
-  证明: opEquiv.symm.eq_iff_eq
-
-@[simp]
+/-
+**Subring.unop_inj** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：∀ {R : Type u_2} [inst : NonAssocRing R] {S T : Subring Rᵐᵒᵖ}, S.unop = T.
+unop ↔ S = T
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RelIso.eq_iff_eq`：eq_iff_eq (f : r ≃r s) {a b} : f a = f b ↔ a = b
 -/
 @[simp] theorem unop_inj {S T : Subring Rᵐᵒᵖ} : S.unop = T.unop ↔ S = T := opEquiv.symm.eq_iff_eq
 
 @[simp]
-/--
-theorem `op_bot` / 定理 `op_bot`
-
-English:
-theorem op_bot
-  statement: (⊥ : Subring R).op = ⊥
-  proof: opEquiv.map_bot
-
-@[simp]
-
-中文:
-定理 op_bot
-  结论: (⊥ : 子环 R).op = ⊥
-  证明: opEquiv.map_bot
-
-@[simp]
-
-Depends on / 依赖: map_bot, opEquiv, opEquiv.map_bot
+/-
+**Subring.op_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_bot : (⊥ : Subring R).op = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_bot`：OrderIso.map_bot [LE α] [PartialOrder β] [OrderBot α] 
+[OrderBot β] (f : α ≃o β) : f ⊥ = ⊥
 -/
 theorem op_bot : (⊥ : Subring R).op = ⊥ := opEquiv.map_bot
 
 @[simp]
-/--
-theorem `op_eq_bot` / 定理 `op_eq_bot`
-
-English:
-theorem op_eq_bot
-  given: {S : Subring R}
-  statement: S.op = ⊥ ↔ S = ⊥
-  proof: op_injective.eq_iff' op_bot
-
-@[simp]
-
-中文:
-定理 op_eq_bot
-  条件: {S : 子环 R}
-  结论: S.op = ⊥ ↔ S = ⊥
-  证明: op_injective.eq_iff' op_bot
-
-@[simp]
-
-Depends on / 依赖: eq_iff, op_bot, op_injective, op_injective.eq_iff
+/-
+**Subring.op_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_eq_bot {S : Subring R} : S.op = ⊥ ↔ S = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subring.op_injective`：op_injective : (@Subring.op R _).Injective
+· 使用定理 `Subring.op_bot`：op_bot : (⊥ : Subring R).op = ⊥
 -/
 theorem op_eq_bot {S : Subring R} : S.op = ⊥ ↔ S = ⊥ := op_injective.eq_iff' op_bot
 
 @[simp]
-/--
-theorem `unop_bot` / 定理 `unop_bot`
-
-English:
-theorem unop_bot
-  statement: (⊥ : Subring Rᵐᵒᵖ).unop = ⊥
-  proof: opEquiv.symm.map_bot
-
-@[simp]
-
-中文:
-定理 unop_bot
-  结论: (⊥ : 子环 Rᵐᵒᵖ).unop = ⊥
-  证明: opEquiv.symm.map_bot
-
-@[simp]
-
-Depends on / 依赖: map_bot, opEquiv, opEquiv.symm.map_bot
+/-
+**Subring.unop_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_bot : (⊥ : Subring Rᵐᵒᵖ).unop = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_bot`：OrderIso.map_bot [LE α] [PartialOrder β] [OrderBot α] 
+[OrderBot β] (f : α ≃o β) : f ⊥ = ⊥
 -/
 theorem unop_bot : (⊥ : Subring Rᵐᵒᵖ).unop = ⊥ := opEquiv.symm.map_bot
 
 @[simp]
-/--
-theorem `unop_eq_bot` / 定理 `unop_eq_bot`
-
-English:
-theorem unop_eq_bot
-  given: {S : Subring Rᵐᵒᵖ}
-  statement: S.unop = ⊥ ↔ S = ⊥
-  proof: unop_injective.eq_iff' unop_bot
-
-@[simp]
-
-中文:
-定理 unop_eq_bot
-  条件: {S : 子环 Rᵐᵒᵖ}
-  结论: S.unop = ⊥ ↔ S = ⊥
-  证明: unop_injective.eq_iff' unop_bot
-
-@[simp]
-
-Depends on / 依赖: eq_iff, unop_bot, unop_injective, unop_injective.eq_iff
+/-
+**Subring.unop_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_eq_bot {S : Subring Rᵐᵒᵖ} : S.unop = ⊥ ↔ S = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subring.unop_injective`：unop_injective : (@Subring.unop R _).Injective
+· 使用定理 `Subring.unop_bot`：unop_bot : (⊥ : Subring Rᵐᵒᵖ).unop = ⊥
 -/
 theorem unop_eq_bot {S : Subring Rᵐᵒᵖ} : S.unop = ⊥ ↔ S = ⊥ := unop_injective.eq_iff' unop_bot
 
 @[simp]
-/--
-theorem `op_top` / 定理 `op_top`
-
-English:
-theorem op_top
-  statement: (⊤ : Subring R).op = ⊤
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 op_top
-  结论: (⊤ : 子环 R).op = ⊤
-  证明: rfl
-
-@[simp]
+/-
+**Subring.op_top** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_top : (⊤ : Subring R).op = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_top : (⊤ : Subring R).op = ⊤ := rfl
 
 @[simp]
-/--
-theorem `op_eq_top` / 定理 `op_eq_top`
-
-English:
-theorem op_eq_top
-  given: {S : Subring R}
-  statement: S.op = ⊤ ↔ S = ⊤
-  proof: op_injective.eq_iff' op_top
-
-@[simp]
-
-中文:
-定理 op_eq_top
-  条件: {S : 子环 R}
-  结论: S.op = ⊤ ↔ S = ⊤
-  证明: op_injective.eq_iff' op_top
-
-@[simp]
-
-Depends on / 依赖: eq_iff, op_injective, op_injective.eq_iff, op_top
+/-
+**Subring.op_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_eq_top {S : Subring R} : S.op = ⊤ ↔ S = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subring.op_injective`：op_injective : (@Subring.op R _).Injective
+· 使用定理 `Subring.op_top`：op_top : (⊤ : Subring R).op = ⊤
 -/
 theorem op_eq_top {S : Subring R} : S.op = ⊤ ↔ S = ⊤ := op_injective.eq_iff' op_top
 
 @[simp]
-/--
-theorem `unop_top` / 定理 `unop_top`
-
-English:
-theorem unop_top
-  statement: (⊤ : Subring Rᵐᵒᵖ).unop = ⊤
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unop_top
-  结论: (⊤ : 子环 Rᵐᵒᵖ).unop = ⊤
-  证明: rfl
-
-@[simp]
+/-
+**Subring.unop_top** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_top : (⊤ : Subring Rᵐᵒᵖ).unop = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_top : (⊤ : Subring Rᵐᵒᵖ).unop = ⊤ := rfl
 
 @[simp]
-/--
-theorem `unop_eq_top` / 定理 `unop_eq_top`
-
-English:
-theorem unop_eq_top
-  given: {S : Subring Rᵐᵒᵖ}
-  statement: S.unop = ⊤ ↔ S = ⊤
-  proof: unop_injective.eq_iff' unop_top
-
-中文:
-定理 unop_eq_top
-  条件: {S : 子环 Rᵐᵒᵖ}
-  结论: S.unop = ⊤ ↔ S = ⊤
-  证明: unop_injective.eq_iff' unop_top
-
-Depends on / 依赖: eq_iff, unop_injective, unop_injective.eq_iff, unop_top
+/-
+**Subring.unop_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_eq_top {S : Subring Rᵐᵒᵖ} : S.unop = ⊤ ↔ S = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subring.unop_injective`：unop_injective : (@Subring.unop R _).Injective
+· 使用定理 `Subring.unop_top`：unop_top : (⊤ : Subring Rᵐᵒᵖ).unop = ⊤
 -/
 theorem unop_eq_top {S : Subring Rᵐᵒᵖ} : S.unop = ⊤ ↔ S = ⊤ := unop_injective.eq_iff' unop_top
-
-/--
-theorem `op_sup` / 定理 `op_sup`
-
-English:
-theorem op_sup
-  given: (S₁ S₂ : Subring R)
-  statement: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
-  proof: opEquiv.map_sup _ _
-
-中文:
-定理 op_sup
-  条件: (S₁ S₂ : 子环 R)
-  结论: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
-  证明: opEquiv.map_sup _ _
-
-Depends on / 依赖: map_sup, opEquiv, opEquiv.map_sup
+/-
+**Subring.op_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_sup (S₁ S₂ : Subring R) : (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
+参数：S₁ S₂ : Subring R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] [inst_1 : SemilatticeSup β] (f : α ≃o β) (x y : α),   f (x ⊔ y) = f x ⊔ f y
 -/
 theorem op_sup (S₁ S₂ : Subring R) : (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op :=
   opEquiv.map_sup _ _
-
-/--
-theorem `unop_sup` / 定理 `unop_sup`
-
-English:
-theorem unop_sup
-  given: (S₁ S₂ : Subring Rᵐᵒᵖ)
-  statement: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
-  proof: opEquiv.symm.map_sup _ _
-
-中文:
-定理 unop_sup
-  条件: (S₁ S₂ : 子环 Rᵐᵒᵖ)
-  结论: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
-  证明: opEquiv.symm.map_sup _ _
-
-Depends on / 依赖: map_sup, opEquiv, opEquiv.symm.map_sup
+/-
+**Subring.unop_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_sup (S₁ S₂ : Subring Rᵐᵒᵖ) : (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
+参数：S₁ S₂ : Subring Rᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] [inst_1 : SemilatticeSup β] (f : α ≃o β) (x y : α),   f (x ⊔ y) = f x ⊔ f y
 -/
 theorem unop_sup (S₁ S₂ : Subring Rᵐᵒᵖ) : (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop :=
   opEquiv.symm.map_sup _ _
-
-/--
-theorem `op_inf` / 定理 `op_inf`
-
-English:
-theorem op_inf
-  given: (S₁ S₂ : Subring R)
-  statement: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
-  proof: rfl
-
-中文:
-定理 op_inf
-  条件: (S₁ S₂ : 子环 R)
-  结论: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
-  证明: rfl
+/-
+**Subring.op_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_inf (S₁ S₂ : Subring R) : (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
+参数：S₁ S₂ : Subring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_inf (S₁ S₂ : Subring R) : (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op := rfl
-
-/--
-theorem `unop_inf` / 定理 `unop_inf`
-
-English:
-theorem unop_inf
-  given: (S₁ S₂ : Subring Rᵐᵒᵖ)
-  statement: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
-  proof: rfl
-
-中文:
-定理 unop_inf
-  条件: (S₁ S₂ : 子环 Rᵐᵒᵖ)
-  结论: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
-  证明: rfl
+/-
+**Subring.unop_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_inf (S₁ S₂ : Subring Rᵐᵒᵖ) : (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
+参数：S₁ S₂ : Subring Rᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_inf (S₁ S₂ : Subring Rᵐᵒᵖ) : (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop := rfl
-
-/--
-theorem `op_sSup` / 定理 `op_sSup`
-
-English:
-theorem op_sSup
-  given: (S : Set (Subring R))
-  statement: (sSup S).op = sSup (.unop ⁻¹' S)
-  proof: opEquiv.map_sSup_eq_sSup_symm_preimage _
-
-中文:
-定理 op_sSup
-  条件: (S : 集合 (子环 R))
-  结论: (sSup S).op = sSup (.unop ⁻¹' S)
-  证明: opEquiv.map_sSup_eq_sSup_symm_preimage _
-
-Depends on / 依赖: map_sSup_eq_sSup_symm_preimage, opEquiv, opEquiv.map_sSup_eq_sSup_symm_preimage
+/-
+**Subring.op_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_sSup (S : Set (Subring R)) : (sSup S).op = sSup (.unop ⁻¹' S)
+参数：S : Set (Subring R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sSup_eq_sSup_symm_preimage`：OrderIso.map_sSup_eq_sSup_symm_
+preimage [CompleteLattice β] (f : α ≃o β) (s : Set α) : f (sSup s) = sSup (f.sym
+m ⁻¹' s)
 -/
 theorem op_sSup (S : Set (Subring R)) : (sSup S).op = sSup (.unop ⁻¹' S) :=
   opEquiv.map_sSup_eq_sSup_symm_preimage _
-
-/--
-theorem `unop_sSup` / 定理 `unop_sSup`
-
-English:
-theorem unop_sSup
-  given: (S : Set (Subring Rᵐᵒᵖ))
-  statement: (sSup S).unop = sSup (.op ⁻¹' S)
-  proof: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
-
-中文:
-定理 unop_sSup
-  条件: (S : 集合 (子环 Rᵐᵒᵖ))
-  结论: (sSup S).unop = sSup (.op ⁻¹' S)
-  证明: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
-
-Depends on / 依赖: map_sSup_eq_sSup_symm_preimage, opEquiv, opEquiv.symm.map_sSup_eq_sSup_symm_preimage
+/-
+**Subring.unop_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_sSup (S : Set (Subring Rᵐᵒᵖ)) : (sSup S).unop = sSup (.op ⁻¹' S)
+参数：S : Set (Subring Rᵐᵒᵖ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sSup_eq_sSup_symm_preimage`：OrderIso.map_sSup_eq_sSup_symm_
+preimage [CompleteLattice β] (f : α ≃o β) (s : Set α) : f (sSup s) = sSup (f.sym
+m ⁻¹' s)
 -/
 theorem unop_sSup (S : Set (Subring Rᵐᵒᵖ)) : (sSup S).unop = sSup (.op ⁻¹' S) :=
   opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
-
-/--
-theorem `op_sInf` / 定理 `op_sInf`
-
-English:
-theorem op_sInf
-  given: (S : Set (Subring R))
-  statement: (sInf S).op = sInf (.unop ⁻¹' S)
-  proof: opEquiv.map_sInf_eq_sInf_symm_preimage _
-
-中文:
-定理 op_sInf
-  条件: (S : 集合 (子环 R))
-  结论: (sInf S).op = sInf (.unop ⁻¹' S)
-  证明: opEquiv.map_sInf_eq_sInf_symm_preimage _
-
-Depends on / 依赖: map_sInf_eq_sInf_symm_preimage, opEquiv, opEquiv.map_sInf_eq_sInf_symm_preimage
+/-
+**Subring.op_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_sInf (S : Set (Subring R)) : (sInf S).op = sInf (.unop ⁻¹' S)
+参数：S : Set (Subring R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sInf_eq_sInf_symm_preimage`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β) (s : Set α
+),   f (sInf s) = sInf (⇑f.sy…
 -/
 theorem op_sInf (S : Set (Subring R)) : (sInf S).op = sInf (.unop ⁻¹' S) :=
   opEquiv.map_sInf_eq_sInf_symm_preimage _
-
-/--
-theorem `unop_sInf` / 定理 `unop_sInf`
-
-English:
-theorem unop_sInf
-  given: (S : Set (Subring Rᵐᵒᵖ))
-  statement: (sInf S).unop = sInf (.op ⁻¹' S)
-  proof: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
-
-中文:
-定理 unop_sInf
-  条件: (S : 集合 (子环 Rᵐᵒᵖ))
-  结论: (sInf S).unop = sInf (.op ⁻¹' S)
-  证明: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
-
-Depends on / 依赖: map_sInf_eq_sInf_symm_preimage, opEquiv, opEquiv.symm.map_sInf_eq_sInf_symm_preimage
+/-
+**Subring.unop_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_sInf (S : Set (Subring Rᵐᵒᵖ)) : (sInf S).unop = sInf (.op ⁻¹' S)
+参数：S : Set (Subring Rᵐᵒᵖ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sInf_eq_sInf_symm_preimage`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β) (s : Set α
+),   f (sInf s) = sInf (⇑f.sy…
 -/
 theorem unop_sInf (S : Set (Subring Rᵐᵒᵖ)) : (sInf S).unop = sInf (.op ⁻¹' S) :=
   opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
-
-/--
-theorem `op_iSup` / 定理 `op_iSup`
-
-English:
-theorem op_iSup
-  given: (S : ι -> Subring R)
-  statement: (iSup S).op = ⨆ i, (S i).op
-  proof: opEquiv.map_iSup _
-
-中文:
-定理 op_iSup
-  条件: (S : ι -> 子环 R)
-  结论: (iSup S).op = ⨆ i, (S i).op
-  证明: opEquiv.map_iSup _
-
-Depends on / 依赖: map_iSup, opEquiv, opEquiv.map_iSup
+/-
+**Subring.op_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_iSup (S : ι -> Subring R) : (iSup S).op = ⨆ i, (S i).op
+参数：S : ι -> Subring R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iSup`：OrderIso.map_iSup [CompleteLattice β] (f : α ≃o β) (x
+ : ι -> α) : f (⨆ i, x i) = ⨆ i, f (x i)
 -/
-theorem op_iSup (S : ι -> Subring R) : (iSup S).op = ⨆ i, (S i).op := opEquiv.map_iSup _
-
-/--
-theorem `unop_iSup` / 定理 `unop_iSup`
-
-English:
-theorem unop_iSup
-  given: (S : ι -> Subring Rᵐᵒᵖ)
-  statement: (iSup S).unop = ⨆ i, (S i).unop
-  proof: opEquiv.symm.map_iSup _
-
-中文:
-定理 unop_iSup
-  条件: (S : ι -> 子环 Rᵐᵒᵖ)
-  结论: (iSup S).unop = ⨆ i, (S i).unop
-  证明: opEquiv.symm.map_iSup _
-
-Depends on / 依赖: map_iSup, opEquiv, opEquiv.symm.map_iSup
+theorem op_iSup (S : ι → Subring R) : (iSup S).op = ⨆ i, (S i).op := opEquiv.map_iSup _
+/-
+**Subring.unop_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_iSup (S : ι -> Subring Rᵐᵒᵖ) : (iSup S).unop = ⨆ i, (S i).unop
+参数：S : ι -> Subring Rᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iSup`：OrderIso.map_iSup [CompleteLattice β] (f : α ≃o β) (x
+ : ι -> α) : f (⨆ i, x i) = ⨆ i, f (x i)
 -/
-theorem unop_iSup (S : ι -> Subring Rᵐᵒᵖ) : (iSup S).unop = ⨆ i, (S i).unop :=
+theorem unop_iSup (S : ι → Subring Rᵐᵒᵖ) : (iSup S).unop = ⨆ i, (S i).unop :=
   opEquiv.symm.map_iSup _
-
-/--
-theorem `op_iInf` / 定理 `op_iInf`
-
-English:
-theorem op_iInf
-  given: (S : ι -> Subring R)
-  statement: (iInf S).op = ⨅ i, (S i).op
-  proof: opEquiv.map_iInf _
-
-中文:
-定理 op_iInf
-  条件: (S : ι -> 子环 R)
-  结论: (iInf S).op = ⨅ i, (S i).op
-  证明: opEquiv.map_iInf _
-
-Depends on / 依赖: map_iInf, opEquiv, opEquiv.map_iInf
+/-
+**Subring.op_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_iInf (S : ι -> Subring R) : (iInf S).op = ⨅ i, (S i).op
+参数：S : ι -> Subring R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iInf`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β)   (x : ι → α), f 
+(⨅ i, x…
 -/
-theorem op_iInf (S : ι -> Subring R) : (iInf S).op = ⨅ i, (S i).op := opEquiv.map_iInf _
-
-/--
-theorem `unop_iInf` / 定理 `unop_iInf`
-
-English:
-theorem unop_iInf
-  given: (S : ι -> Subring Rᵐᵒᵖ)
-  statement: (iInf S).unop = ⨅ i, (S i).unop
-  proof: opEquiv.symm.map_iInf _
-
-中文:
-定理 unop_iInf
-  条件: (S : ι -> 子环 Rᵐᵒᵖ)
-  结论: (iInf S).unop = ⨅ i, (S i).unop
-  证明: opEquiv.symm.map_iInf _
-
-Depends on / 依赖: map_iInf, opEquiv, opEquiv.symm.map_iInf
+theorem op_iInf (S : ι → Subring R) : (iInf S).op = ⨅ i, (S i).op := opEquiv.map_iInf _
+/-
+**Subring.unop_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_iInf (S : ι -> Subring Rᵐᵒᵖ) : (iInf S).unop = ⨅ i, (S i).unop
+参数：S : ι -> Subring Rᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iInf`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β)   (x : ι → α), f 
+(⨅ i, x…
 -/
-theorem unop_iInf (S : ι -> Subring Rᵐᵒᵖ) : (iInf S).unop = ⨅ i, (S i).unop :=
+theorem unop_iInf (S : ι → Subring Rᵐᵒᵖ) : (iInf S).unop = ⨅ i, (S i).unop :=
   opEquiv.symm.map_iInf _
-
-/--
-theorem `op_closure` / 定理 `op_closure`
-
-English:
-theorem op_closure
-  given: (s : Set R)
-  statement: (closure s).op = closure (MulOpposite.unop ⁻¹' s)
-  proof: by
-  simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, coe_unop]
-  congr with a
-  exact MulOpposite.unop_surjective.forall
-
-中文:
-定理 op_closure
-  条件: (s : 集合 R)
-  结论: (closure s).op = closure (MulOpposite.unop ⁻¹' s)
-  证明: by
-  simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, coe_unop]
-  congr with a
-  exact MulOpposite.unop_surjective.forall
-
-Depends on / 依赖: MulOpposite, MulOpposite.unop_surjective.forall, Set.preimage_ofPred_eq, closure, coe_unop, op_sInf, preimage_ofPred_eq, simp_rw, unop_surjective
+/-
+**Subring.op_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：op_closure (s : Set R) : (closure s).op = closure (MulOpposite.unop ⁻¹' s)
+参数：s : Set R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subring.op_sInf`：op_sInf (S : Set (Subring R)) : (sInf S).op = sInf (.un
+op ⁻¹' S)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subring.coe_unop`：∀ {R : Type u_2} [inst : NonAssocRing R] (S : Subring 
+Rᵐᵒᵖ), ↑S.unop = MulOpposite.op ⁻¹' ↑S
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `MulOpposite.unop_surjective`：unop_surjective : Surjective (unop : αᵐᵒᵖ -
+> α)
 -/
 theorem op_closure (s : Set R) : (closure s).op = closure (MulOpposite.unop ⁻¹' s) := by
   simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, coe_unop]
   congr with a
   exact MulOpposite.unop_surjective.forall
-
-/--
-theorem `unop_closure` / 定理 `unop_closure`
-
-English:
-theorem unop_closure
-  given: (s : Set Rᵐᵒᵖ)
-  statement: (closure s).unop = closure (MulOpposite.op ⁻¹' s)
-  proof: by
-  rw [← op_inj]; rw [op_unop]; rw [op_closure]
-  simp_rw [Set.preimage_preimage, MulOpposite.op_unop, Set.preimage_id']
-
-中文:
-定理 unop_closure
-  条件: (s : 集合 Rᵐᵒᵖ)
-  结论: (closure s).unop = closure (MulOpposite.op ⁻¹' s)
-  证明: by
-  rw [← op_inj]; rw [op_unop]; rw [op_closure]
-  simp_rw [Set.preimage_preimage, MulOpposite.op_unop, Set.preimage_id']
-
-Depends on / 依赖: MulOpposite, MulOpposite.op_unop, Set.preimage_id, Set.preimage_preimage, op_closure, op_inj, op_unop, preimage_id, preimage_preimage, simp_rw
+/-
+**Subring.unop_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：unop_closure (s : Set Rᵐᵒᵖ) : (closure s).unop = closure (MulOpposite.op ⁻
+¹' s)
+参数：s : Set Rᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subring.op_inj`：∀ {R : Type u_2} [inst : NonAssocRing R] {S T : Subring 
+R}, S.op = T.op ↔ S = T
+· 使用定理 `Subring.op_unop`：op_unop (S : Subring Rᵐᵒᵖ) : S.unop.op = S
+· 使用定理 `Subring.op_closure`：op_closure (s : Set R) : (closure s).op = closure (M
+ulOpposite.unop ⁻¹' s)
+· 使用定理 `Set.preimage_preimage`：preimage_preimage {g : β -> γ} {f : α -> β} {s : 
+Set γ} : f ⁻¹' g ⁻¹' s = (fun x => g (f x)) ⁻¹' s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unop_closure (s : Set Rᵐᵒᵖ) : (closure s).unop = closure (MulOpposite.op ⁻¹' s) := by
-  rw [← op_inj]; rw [op_unop]; rw [op_closure]
+  rw [← op_inj, op_unop, op_closure]
   simp_rw [Set.preimage_preimage, MulOpposite.op_unop, Set.preimage_id']
 
 /-- Bijection between a subring `S` and its opposite. -/
 @[simps!]
-/--
-Definition of `addEquivOp` / `addEquivOp` 的定义
+/-
+**Subring.addEquivOp** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：addEquivOp (S : Subring R) : S ≃+ S.op
+参数：S : Subring R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addEquivOp
-  signature: (S : Subring R)
-  body: S.toSubsemiring.addEquivOp
-
-中文:
-定义 addEquivOp
-  签名: (S : 子环 R)
-  定义体: S.toSubsemiring.addEquivOp
-
-Depends on / 依赖: S.toSubsemiring.addEquivOp, addEquivOp, toSubsemiring
+--- 原说明 ---
+Bijection between a subring `S` and its opposite.
 -/
 def addEquivOp (S : Subring R) : S ≃+ S.op := S.toSubsemiring.addEquivOp
 
 /-- Bijection between a subring `S` and `MulOpposite` of its opposite. -/
 @[simps!]
-/--
-Definition of `ringEquivOpMop` / `ringEquivOpMop` 的定义
+/-
+**Subring.ringEquivOpMop** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：ringEquivOpMop (S : Subring R) : S ≃+* (S.op)ᵐᵒᵖ
+参数：S : Subring R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringEquivOpMop
-  signature: (S : Subring R)
-  body: S.toSubsemiring.ringEquivOpMop
-
-中文:
-定义 ringEquivOpMop
-  签名: (S : 子环 R)
-  定义体: S.toSubsemiring.ringEquivOpMop
-
-Depends on / 依赖: S.toSubsemiring.ringEquivOpMop, ringEquivOpMop, toSubsemiring
+--- 原说明 ---
+Bijection between a subring `S` and `MulOpposite` of its opposite.
 -/
 def ringEquivOpMop (S : Subring R) : S ≃+* (S.op)ᵐᵒᵖ := S.toSubsemiring.ringEquivOpMop
 
 /-- Bijection between `MulOpposite` of a subring `S` and its opposite. -/
 @[simps!]
-/--
-Definition of `mopRingEquivOp` / `mopRingEquivOp` 的定义
+/-
+**Subring.mopRingEquivOp** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：mopRingEquivOp (S : Subring R) : Sᵐᵒᵖ ≃+* S.op
+参数：S : Subring R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mopRingEquivOp
-  signature: (S : Subring R)
-  body: S.toSubsemiring.mopRingEquivOp
-
-中文:
-定义 mopRingEquivOp
-  签名: (S : 子环 R)
-  定义体: S.toSubsemiring.mopRingEquivOp
-
-Depends on / 依赖: S.toSubsemiring.mopRingEquivOp, mopRingEquivOp, toSubsemiring
+--- 原说明 ---
+Bijection between `MulOpposite` of a subring `S` and its opposite.
 -/
 def mopRingEquivOp (S : Subring R) : Sᵐᵒᵖ ≃+* S.op := S.toSubsemiring.mopRingEquivOp
 
 end Subring
+

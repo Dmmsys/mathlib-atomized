@@ -29,139 +29,82 @@ and `Preorder.frestrictLe₂`.
 
 namespace Preorder
 
-variable {α : Type*} [Preorder α] {π : α -> Type*}
+variable {α : Type*} [Preorder α] {π : α → Type*}
 
 section Set
 
 open Set
 
-/--
-Definition of `restrictLe` / `restrictLe` 的定义
+/-- Restrict domain of a function `f` indexed by `α` to elements `≤ a`. -/
+/-
+**Preorder.restrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：restrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictLe
-  signature: (a : α)
-  body: (Iic a).domRestrict (π := π)
-
-@[simp]
-
-中文:
-定义 restrictLe
-  签名: (a : α)
-  定义体: (Iic a).domRestrict (π := π)
-
-@[simp]
-
-Depends on / 依赖: domRestrict
+--- 原说明 ---
+Restrict domain of a function `f` indexed by `α` to elements `≤ a`.
 -/
 def restrictLe (a : α) := (Iic a).domRestrict (π := π)
 
 @[simp]
-/--
-lemma `restrictLe_apply` / 引理 `restrictLe_apply`
-
-English:
-lemma restrictLe_apply
-  given: (a : α) (f : (a : α) -> π a) (i : Iic a)
-  statement: restrictLe a f i = f i
-  proof: rfl
-
-中文:
-引理 restrictLe_apply
-  条件: (a : α) (f : (a : α) -> π a) (i : 左无界右闭区间 a)
-  结论: restrictLe a f i = f i
-  证明: rfl
+/-
+**Preorder.restrictLe_apply** 是 Mathlib 中的一个引理，位于命名空间 `Preorder`。
+形式化陈述：restrictLe_apply (a : α) (f : (a : α) -> π a) (i : Iic a) : restrictLe a f
+ i = f i
+参数：a : α；f : (a : α) -> π a；i : Iic a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma restrictLe_apply (a : α) (f : (a : α) -> π a) (i : Iic a) : restrictLe a f i = f i := rfl
+lemma restrictLe_apply (a : α) (f : (a : α) → π a) (i : Iic a) : restrictLe a f i = f i := rfl
 
-/--
-Definition of `restrictLe₂` / `restrictLe₂` 的定义
+/-- If a function `f` indexed by `α` is restricted to elements `≤ π`, and `a ≤ b`,
+this is the restriction to elements `≤ a`. -/
+/-
+**Preorder.restrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：restrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictLe₂
-  signature: {a b : α} (hab : a <= b)
-  body: Set.domRestrict₂ (π := π) (Iic_subset_Iic.2 hab)
+--- 原说明 ---
+If a function `f` indexed by `α` is restricted to elements `≤ π`, and `a ≤ b`,
+this is the restriction to elements `≤ a`.
+-/
+def restrictLe₂ {a b : α} (hab : a ≤ b) := Set.domRestrict₂ (π := π) (Iic_subset_Iic.2 hab)
 
 @[simp]
-
-中文:
-定义 restrictLe₂
-  签名: {a b : α} (hab : a <= b)
-  定义体: Set.domRestrict₂ (π := π) (Iic_subset_Iic.2 hab)
-
-@[simp]
-
-Depends on / 依赖: Iic_subset_Iic, Set.domRestrict
+/-
+**Preorder.restrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：restrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def restrictLe₂ {a b : α} (hab : a <= b) := Set.domRestrict₂ (π := π) (Iic_subset_Iic.2 hab)
-
-@[simp]
-/--
-lemma `restrictLe₂_apply` / 引理 `restrictLe₂_apply`
-
-English:
-lemma restrictLe₂_apply
-  given: {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a)
-  proof: rfl
-
-中文:
-引理 restrictLe₂_apply
-  条件: {a b : α} (hab : a <= b) (f : (i : 左无界右闭区间 b) -> π i) (i : 左无界右闭区间 a)
-  证明: rfl
--/
-lemma restrictLe₂_apply {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a) :
+lemma restrictLe₂_apply {a b : α} (hab : a ≤ b) (f : (i : Iic b) → π i) (i : Iic a) :
     restrictLe₂ hab f i = f ⟨i.1, Iic_subset_Iic.2 hab i.2⟩ := rfl
-
-/--
-theorem `restrictLe₂_comp_restrictLe` / 定理 `restrictLe₂_comp_restrictLe`
-
-English:
-theorem restrictLe₂_comp_restrictLe
-  given: {a b : α} (hab : a <= b)
-  proof: rfl
-
-中文:
-定理 restrictLe₂_comp_restrictLe
-  条件: {a b : α} (hab : a <= b)
-  证明: rfl
-
-Depends on / 依赖: restrictLe
+/-
+**Preorder.restrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：restrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem restrictLe₂_comp_restrictLe {a b : α} (hab : a <= b) :
+theorem restrictLe₂_comp_restrictLe {a b : α} (hab : a ≤ b) :
     (restrictLe₂ (π := π) hab) ∘ (restrictLe b) = restrictLe a := rfl
-
-/--
-theorem `restrictLe₂_comp_restrictLe₂` / 定理 `restrictLe₂_comp_restrictLe₂`
-
-English:
-theorem restrictLe₂_comp_restrictLe₂
-  given: {a b c : α} (hab : a <= b) (hbc : b <= c)
-  proof: rfl
-
-中文:
-定理 restrictLe₂_comp_restrictLe₂
-  条件: {a b c : α} (hab : a <= b) (hbc : b <= c)
-  证明: rfl
-
-Depends on / 依赖: hab.trans
+/-
+**Preorder.restrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：restrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem restrictLe₂_comp_restrictLe₂ {a b c : α} (hab : a <= b) (hbc : b <= c) :
+theorem restrictLe₂_comp_restrictLe₂ {a b c : α} (hab : a ≤ b) (hbc : b ≤ c) :
     (restrictLe₂ (π := π) hab) ∘ (restrictLe₂ hbc) = restrictLe₂ (hab.trans hbc) := rfl
-
-/--
-lemma `dependsOn_restrictLe` / 引理 `dependsOn_restrictLe`
-
-English:
-lemma dependsOn_restrictLe
-  given: (a : α)
-  statement: DependsOn (restrictLe (π := π) a) (Iic a)
-  proof: (Iic a).dependsOn_domRestrict
-
-中文:
-引理 dependsOn_restrictLe
-  条件: (a : α)
-  结论: DependsOn (restrictLe (π := π) a) (左无界右闭区间 a)
-  证明: (Iic a).dependsOn_domRestrict
+/-
+**Preorder.dependsOn_restrictLe** 是 Mathlib 中的一个引理，位于命名空间 `Preorder`。
+形式化陈述：dependsOn_restrictLe (a : α) : DependsOn (restrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.dependsOn_domRestrict`：Set.dependsOn_domRestrict (s : Set ι) : Depen
+dsOn (s.domRestrict (π
 -/
 lemma dependsOn_restrictLe (a : α) : DependsOn (restrictLe (π := π) a) (Iic a) :=
   (Iic a).dependsOn_domRestrict
@@ -174,153 +117,89 @@ variable [LocallyFiniteOrderBot α]
 
 open Finset
 
-/--
-Definition of `frestrictLe` / `frestrictLe` 的定义
+/-- Restrict domain of a function `f` indexed by `α` to elements `≤ a`, seen as a finite set. -/
+/-
+**Preorder.frestrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition frestrictLe
-  signature: (a : α)
-  body: (Iic a).restrict (π := π)
-
-@[simp]
-
-中文:
-定义 frestrictLe
-  签名: (a : α)
-  定义体: (Iic a).restrict (π := π)
-
-@[simp]
-
-Depends on / 依赖: restrict
+--- 原说明 ---
+Restrict domain of a function `f` indexed by `α` to elements `≤ a`, seen as a fi
+nite set.
 -/
 def frestrictLe (a : α) := (Iic a).restrict (π := π)
 
 @[simp]
-/--
-lemma `frestrictLe_apply` / 引理 `frestrictLe_apply`
-
-English:
-lemma frestrictLe_apply
-  given: (a : α) (f : (a : α) -> π a) (i : Iic a)
-  statement: frestrictLe a f i = f i
-  proof: rfl
-
-中文:
-引理 frestrictLe_apply
-  条件: (a : α) (f : (a : α) -> π a) (i : 左无界右闭区间 a)
-  结论: frestrictLe a f i = f i
-  证明: rfl
+/-
+**Preorder.frestrictLe_apply** 是 Mathlib 中的一个引理，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe_apply (a : α) (f : (a : α) -> π a) (i : Iic a) : frestrictLe a
+ f i = f i
+参数：a : α；f : (a : α) -> π a；i : Iic a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma frestrictLe_apply (a : α) (f : (a : α) -> π a) (i : Iic a) : frestrictLe a f i = f i := rfl
+lemma frestrictLe_apply (a : α) (f : (a : α) → π a) (i : Iic a) : frestrictLe a f i = f i := rfl
 
-/--
-Definition of `frestrictLe₂` / `frestrictLe₂` 的定义
+/-- If a function `f` indexed by `α` is restricted to elements `≤ b`, and `a ≤ b`,
+this is the restriction to elements `≤ b`. Intervals are seen as finite sets. -/
+/-
+**Preorder.frestrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition frestrictLe₂
-  signature: {a b : α} (hab : a <= b)
-  body: restrict₂ (π := π) (Iic_subset_Iic.2 hab)
+--- 原说明 ---
+If a function `f` indexed by `α` is restricted to elements `≤ b`, and `a ≤ b`,
+this is the restriction to elements `≤ b`. Intervals are seen as finite sets.
+-/
+def frestrictLe₂ {a b : α} (hab : a ≤ b) := restrict₂ (π := π) (Iic_subset_Iic.2 hab)
 
 @[simp]
-
-中文:
-定义 frestrictLe₂
-  签名: {a b : α} (hab : a <= b)
-  定义体: restrict₂ (π := π) (Iic_subset_Iic.2 hab)
-
-@[simp]
-
-Depends on / 依赖: Iic_subset_Iic
+/-
+**Preorder.frestrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def frestrictLe₂ {a b : α} (hab : a <= b) := restrict₂ (π := π) (Iic_subset_Iic.2 hab)
-
-@[simp]
-/--
-lemma `frestrictLe₂_apply` / 引理 `frestrictLe₂_apply`
-
-English:
-lemma frestrictLe₂_apply
-  given: {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a)
-  proof: rfl
-
-中文:
-引理 frestrictLe₂_apply
-  条件: {a b : α} (hab : a <= b) (f : (i : 左无界右闭区间 b) -> π i) (i : 左无界右闭区间 a)
-  证明: rfl
--/
-lemma frestrictLe₂_apply {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a) :
+lemma frestrictLe₂_apply {a b : α} (hab : a ≤ b) (f : (i : Iic b) → π i) (i : Iic a) :
     frestrictLe₂ hab f i = f ⟨i.1, Iic_subset_Iic.2 hab i.2⟩ := rfl
-
-/--
-theorem `frestrictLe₂_comp_frestrictLe` / 定理 `frestrictLe₂_comp_frestrictLe`
-
-English:
-theorem frestrictLe₂_comp_frestrictLe
-  given: {a b : α} (hab : a <= b)
-  proof: rfl
-
-中文:
-定理 frestrictLe₂_comp_frestrictLe
-  条件: {a b : α} (hab : a <= b)
-  证明: rfl
-
-Depends on / 依赖: frestrictLe
+/-
+**Preorder.frestrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem frestrictLe₂_comp_frestrictLe {a b : α} (hab : a <= b) :
+theorem frestrictLe₂_comp_frestrictLe {a b : α} (hab : a ≤ b) :
     (frestrictLe₂ (π := π) hab) ∘ (frestrictLe b) = frestrictLe a := rfl
-
-/--
-theorem `frestrictLe₂_comp_frestrictLe₂` / 定理 `frestrictLe₂_comp_frestrictLe₂`
-
-English:
-theorem frestrictLe₂_comp_frestrictLe₂
-  given: {a b c : α} (hab : a <= b) (hbc : b <= c)
-  proof: rfl
-
-中文:
-定理 frestrictLe₂_comp_frestrictLe₂
-  条件: {a b c : α} (hab : a <= b) (hbc : b <= c)
-  证明: rfl
-
-Depends on / 依赖: IsLocalization, IsLocalization.Away.mul, Localization, Localization.Away, algebraMap, hab.trans
+/-
+**Preorder.frestrictLe** 是 Mathlib 中的一个定义，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe (a : α)
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem frestrictLe₂_comp_frestrictLe₂ {a b c : α} (hab : a <= b) (hbc : b <= c) :
+theorem frestrictLe₂_comp_frestrictLe₂ {a b c : α} (hab : a ≤ b) (hbc : b ≤ c) :
     (frestrictLe₂ (π := π) hab) ∘ (frestrictLe₂ hbc) = frestrictLe₂ (hab.trans hbc) := rfl
-
-/--
-theorem `piCongrLeft_comp_restrictLe` / 定理 `piCongrLeft_comp_restrictLe`
-
-English:
-theorem piCongrLeft_comp_restrictLe
-  given: {a : α}
-  proof: rfl
-
-中文:
-定理 piCongrLeft_comp_restrictLe
-  条件: {a : α}
-  证明: rfl
-
-Depends on / 依赖: IsLocalization, IsLocalization.Away.mul, Localization, Localization.Away, algebraMap
+/-
+**Preorder.piCongrLeft_comp_restrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：piCongrLeft_comp_restrictLe {a : α} : ((Equiv.IicFinsetSet a).symm.piCongr
+Left (fun i : Iic a => π i)) ∘ (restrictLe a) = frestrictLe a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem piCongrLeft_comp_restrictLe {a : α} :
-    ((Equiv.IicFinsetSet a).symm.piCongrLeft (fun i : Iic a => π i)) ∘ (restrictLe a) =
+    ((Equiv.IicFinsetSet a).symm.piCongrLeft (fun i : Iic a ↦ π i)) ∘ (restrictLe a) =
     frestrictLe a := rfl
-
-/--
-theorem `piCongrLeft_comp_frestrictLe` / 定理 `piCongrLeft_comp_frestrictLe`
-
-English:
-theorem piCongrLeft_comp_frestrictLe
-  given: {a : α}
-  proof: rfl
-
-中文:
-定理 piCongrLeft_comp_frestrictLe
-  条件: {a : α}
-  证明: rfl
+/-
+**Preorder.piCongrLeft_comp_frestrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：piCongrLeft_comp_frestrictLe {a : α} : ((Equiv.IicFinsetSet a).piCongrLeft
+ (fun i : Set.Iic a => π i)) ∘ (frestrictLe a) = restrictLe a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem piCongrLeft_comp_frestrictLe {a : α} :
-    ((Equiv.IicFinsetSet a).piCongrLeft (fun i : Set.Iic a => π i)) ∘ (frestrictLe a) =
+    ((Equiv.IicFinsetSet a).piCongrLeft (fun i : Set.Iic a ↦ π i)) ∘ (frestrictLe a) =
     restrictLe a := rfl
 
 section updateFinset
@@ -329,88 +208,68 @@ open Function
 
 variable [DecidableEq α]
 
-/--
-lemma `frestrictLe_updateFinset_of_le` / 引理 `frestrictLe_updateFinset_of_le`
-
-English:
-lemma frestrictLe_updateFinset_of_le
-  given: {a b : α} (hab : a <= b) (x : Π c, π c) (y : Π c : Iic b, π c)
-  proof: restrict_updateFinset_of_subset (Iic_subset_Iic.2 hab) ..
-
-中文:
-引理 frestrictLe_updateFinset_of_le
-  条件: {a b : α} (hab : a <= b) (x : Π c, π c) (y : Π c : 左无界右闭区间 b, π c)
-  证明: restrict_updateFinset_of_subset (Iic_subset_Iic.2 hab) ..
-
-Depends on / 依赖: Iic_subset_Iic, restrict_updateFinset_of_subset
+/-
+**Preorder.frestrictLe_updateFinset_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe_updateFinset_of_le {a b : α} (hab : a <= b) (x : Π c, π c) (y 
+: Π c : Iic b, π c) : frestrictLe a (updateFinset x _ y) = frestrictLe₂ hab y
+参数：hab : a <= b；x : Π c, π c；y : Π c : Iic b, π c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.restrict_updateFinset_of_subset`：restrict_updateFinset_of_subse
+t {s t : Finset ι} (hst : s subseteq t) (x : Π i, π i) (y : Π i : t, π i) : s.re
+strict (updateFinset x t y) = …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.Iic_subset_Iic`：Iic_subset_Iic : Iic a subseteq Iic b ↔ a <= b
 -/
-lemma frestrictLe_updateFinset_of_le {a b : α} (hab : a <= b) (x : Π c, π c) (y : Π c : Iic b, π c) :
+lemma frestrictLe_updateFinset_of_le {a b : α} (hab : a ≤ b) (x : Π c, π c) (y : Π c : Iic b, π c) :
     frestrictLe a (updateFinset x _ y) = frestrictLe₂ hab y :=
   restrict_updateFinset_of_subset (Iic_subset_Iic.2 hab) ..
-
-/--
-lemma `frestrictLe_updateFinset` / 引理 `frestrictLe_updateFinset`
-
-English:
-lemma frestrictLe_updateFinset
-  given: {a : α} (x : Π a, π a) (y : Π b : Iic a, π b)
-  proof: restrict_updateFinset ..
-
-@[simp]
-
-中文:
-引理 frestrictLe_updateFinset
-  条件: {a : α} (x : Π a, π a) (y : Π b : 左无界右闭区间 a, π b)
-  证明: restrict_updateFinset ..
-
-@[simp]
-
-Depends on / 依赖: restrict_updateFinset
+/-
+**Preorder.frestrictLe_updateFinset** 是 Mathlib 中的一个引理，位于命名空间 `Preorder`。
+形式化陈述：frestrictLe_updateFinset {a : α} (x : Π a, π a) (y : Π b : Iic a, π b) : f
+restrictLe a (updateFinset x _ y) = y
+参数：x : Π a, π a；y : Π b : Iic a, π b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.restrict_updateFinset`：restrict_updateFinset {s : Finset ι} (x 
+: Π i, π i) (y : Π i : s, π i) : s.restrict (updateFinset x s y) = y
 -/
 lemma frestrictLe_updateFinset {a : α} (x : Π a, π a) (y : Π b : Iic a, π b) :
     frestrictLe a (updateFinset x _ y) = y := restrict_updateFinset ..
 
 @[simp]
-/--
-lemma `updateFinset_frestrictLe` / 引理 `updateFinset_frestrictLe`
-
-English:
-lemma updateFinset_frestrictLe
-  given: (a : α) (x : Π a, π a)
-  statement: updateFinset x _ (frestrictLe a x) = x
-  proof: by
-  simp [frestrictLe]
-
-中文:
-引理 updateFinset_frestrictLe
-  条件: (a : α) (x : Π a, π a)
-  结论: updateFinset x _ (frestrictLe a x) = x
-  证明: by
-  simp [frestrictLe]
-
-Depends on / 依赖: frestrictLe
+/-
+**Preorder.updateFinset_frestrictLe** 是 Mathlib 中的一个引理，位于命名空间 `Preorder`。
+形式化陈述：updateFinset_frestrictLe (a : α) (x : Π a, π a) : updateFinset x _ (frestr
+ictLe a x) = x
+参数：a : α；x : Π a, π a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Function.updateFinset_restrict`：updateFinset_restrict {s : Finset ι} (x 
+: Π i, π i) : updateFinset x s (s.restrict x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma updateFinset_frestrictLe (a : α) (x : Π a, π a) : updateFinset x _ (frestrictLe a x) = x := by
   simp [frestrictLe]
 
 end updateFinset
 
-/--
-lemma `dependsOn_frestrictLe` / 引理 `dependsOn_frestrictLe`
-
-English:
-lemma dependsOn_frestrictLe
-  given: (a : α)
-  statement: DependsOn (frestrictLe (π := π) a) (Set.Iic a)
-  proof: coe_Iic a ▸ (Finset.Iic a).dependsOn_restrict
-
-中文:
-引理 dependsOn_frestrictLe
-  条件: (a : α)
-  结论: DependsOn (frestrictLe (π := π) a) (集合.左无界右闭区间 a)
-  证明: coe_Iic a ▸ (Finset.Iic a).dependsOn_restrict
-
-Depends on / 依赖: Set.Iic
+/-
+**Preorder.dependsOn_frestrictLe** 是 Mathlib 中的一个引理，位于命名空间 `Preorder`。
+形式化陈述：dependsOn_frestrictLe (a : α) : DependsOn (frestrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.dependsOn_restrict`：dependsOn_restrict (s : Finset ι) : DependsOn
+ (s.restrict (π
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
 -/
 lemma dependsOn_frestrictLe (a : α) : DependsOn (frestrictLe (π := π) a) (Set.Iic a) :=
   coe_Iic a ▸ (Finset.Iic a).dependsOn_restrict
@@ -418,3 +277,4 @@ lemma dependsOn_frestrictLe (a : α) : DependsOn (frestrictLe (π := π) a) (Set
 end Finset
 
 end Preorder
+

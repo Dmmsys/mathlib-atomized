@@ -34,84 +34,62 @@ variable {F : Cᵒᵖ ⥤ Type w} {X : Cᵒᵖ} (x : F.obj X)
 /-- The subpresheaf of `F : Cᵒᵖ ⥤ Type w` that is generated
 by a section `x : F.obj X`. -/
 @[simps -isSimp]
-/--
-Definition of `ofSection` / `ofSection` 的定义
+/-
+**CategoryTheory.Subfunctor.ofSection** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Subfunctor`。
+形式化陈述：ofSection : Subfunctor F where obj U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSection
-  signature: : Subfunctor F where
-  body: Set.ofPred (fun u => exists (f : X ⟶ U), F.map f x = u)
-  map {U V} g := by
-    rintro _ ⟨f, rfl⟩
-    exact ⟨f ≫ g, by simp⟩
-
-中文:
-定义 ofSection
-  签名: : 子函子 F where
-  定义体: Set.ofPred (fun u => exists (f : X ⟶ U), F.map f x = u)
-  map {U V} g := by
-    rintro _ ⟨f, rfl⟩
-    exact ⟨f ≫ g, by simp⟩
-
-Depends on / 依赖: F.map, Set.ofPred, ofPred
+--- 原说明 ---
+The subpresheaf of `F : Cᵒᵖ ⥤ Type w` that is generated
+by a section `x : F.obj X`.
 -/
 def ofSection : Subfunctor F where
-  obj U := Set.ofPred (fun u => exists (f : X ⟶ U), F.map f x = u)
+  obj U := Set.ofPred (fun u ↦ ∃ (f : X ⟶ U), F.map f x = u)
   map {U V} g := by
     rintro _ ⟨f, rfl⟩
     exact ⟨f ≫ g, by simp⟩
-
-/--
-lemma `mem_ofSection_obj` / 引理 `mem_ofSection_obj`
-
-English:
-lemma mem_ofSection_obj
-  statement: x in (ofSection x).obj X
-  proof: ⟨𝟙 _, by simp⟩
-
-@[simp]
-
-中文:
-引理 mem_ofSection_obj
-  结论: x in (ofSection x).obj X
-  证明: ⟨𝟙 _, by simp⟩
-
-@[simp]
+/-
+**CategoryTheory.Subfunctor.mem_ofSection_obj** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Subfunctor`。
+形式化陈述：mem_ofSection_obj : x in (ofSection x).obj X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mem_ofSection_obj : x in (ofSection x).obj X := ⟨𝟙 _, by simp⟩
+lemma mem_ofSection_obj : x ∈ (ofSection x).obj X := ⟨𝟙 _, by simp⟩
 
 @[simp]
-/--
-lemma `ofSection_le_iff` / 引理 `ofSection_le_iff`
-
-English:
-lemma ofSection_le_iff
-  given: (G : Subfunctor F)
-  proof: by
-  constructor
-  · intro hx
-    exact hx _ (mem_ofSection_obj x)
-  · rintro hx U _ ⟨f, rfl⟩
-    exact G.map f hx
-
-@[simp]
-
-中文:
-引理 ofSection_le_iff
-  条件: (G : 子函子 F)
-  证明: by
-  constructor
-  · intro hx
-    exact hx _ (mem_ofSection_obj x)
-  · rintro hx U _ ⟨f, rfl⟩
-    exact G.map f hx
-
-@[simp]
-
-Depends on / 依赖: G.map, mem_ofSection_obj
+/-
+**CategoryTheory.Subfunctor.ofSection_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Subfunctor`。
+形式化陈述：ofSection_le_iff (G : Subfunctor F) : ofSection x <= G ↔ x in G.obj X
+参数：G : Subfunctor F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Subfunctor.mem_ofSection_obj`：mem_ofSection_obj : x in (o
+fSection x).obj X
+· 使用定理 `CategoryTheory.Subfunctor.map`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {F : CategoryTheory.Functor C (Type w)}   (self : CategoryTheory
+.Subfunctor F) {U V…
 -/
 lemma ofSection_le_iff (G : Subfunctor F) :
-    ofSection x <= G ↔ x in G.obj X := by
+    ofSection x ≤ G ↔ x ∈ G.obj X := by
   constructor
   · intro hx
     exact hx _ (mem_ofSection_obj x)
@@ -119,30 +97,46 @@ lemma ofSection_le_iff (G : Subfunctor F) :
     exact G.map f hx
 
 @[simp]
-/--
-lemma `ofSection_image` / 引理 `ofSection_image`
-
-English:
-lemma ofSection_image
-  given: {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F')
-  proof: by
-  apply le_antisymm
-  · rw [image_le_iff, ofSection_le_iff, preimage_obj, Set.mem_preimage]
-    exact ⟨𝟙 X, by simp⟩
-  · simp only [ofSection_le_iff, image_obj, Set.mem_image]
-    exact ⟨x, mem_ofSection_obj x, rfl⟩
-
-中文:
-引理 ofSection_image
-  条件: {F' : Cᵒᵖ ⥤ 类型 w} (f : F ⟶ F')
-  证明: by
-  apply le_antisymm
-  · rw [image_le_iff, ofSection_le_iff, preimage_obj, Set.mem_preimage]
-    exact ⟨𝟙 X, by simp⟩
-  · simp only [ofSection_le_iff, image_obj, Set.mem_image]
-    exact ⟨x, mem_ofSection_obj x, rfl⟩
-
-Depends on / 依赖: Set.mem_image, Set.mem_preimage, image_le_iff, image_obj, le_antisymm, mem_image, mem_ofSection_obj, mem_preimage, ofSection_le_iff, preimage_obj
+/-
+**CategoryTheory.Subfunctor.ofSection_image** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Subfunctor`。
+形式化陈述：ofSection_image {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F') : (ofSection x).image f =
+ ofSection (f.app _ x)
+参数：f : F ⟶ F'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Subfunctor.image_le_iff`：image_le_iff (G : Subfunctor F) 
+(f : F ⟶ F') (G' : Subfunctor F') : G.image f <= G' ↔ G <= G'.preimage f
+· 使用引理 `CategoryTheory.Subfunctor.ofSection_le_iff`：ofSection_le_iff (G : Subfun
+ctor F) : ofSection x <= G ↔ x in G.obj X
+· 使用定理 `CategoryTheory.Subfunctor.preimage_obj`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Categ
+oryTheory.Subfunctor F) (p :…
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Subfunctor.image_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)}   (G : Category
+Theory.Subfunctor F) (f :…
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用引理 `CategoryTheory.Subfunctor.mem_ofSection_obj`：mem_ofSection_obj : x in (o
+fSection x).obj X
 -/
 lemma ofSection_image {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F') :
     (ofSection x).image f = ofSection (f.app _ x) := by
@@ -158,36 +152,34 @@ section
 
 variable {F : Cᵒᵖ ⥤ Type v}
 
-/--
-lemma `ofSection_eq_range` / 引理 `ofSection_eq_range`
-
-English:
-lemma ofSection_eq_range
-  given: {X : Cᵒᵖ} (x : F.obj X)
-  proof: by
-  ext U y
-  simp only [ofSection_obj, Set.mem_ofPred_eq, Opposite.op_unop, range_obj,
-    Set.mem_range]
-  constructor
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.unop, rfl⟩
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.op, rfl⟩
-
-中文:
-引理 ofSection_eq_range
-  条件: {X : Cᵒᵖ} (x : F.obj X)
-  证明: by
-  ext U y
-  simp only [ofSection_obj, Set.mem_ofPred_eq, Opposite.op_unop, range_obj,
-    Set.mem_range]
-  constructor
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.unop, rfl⟩
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.op, rfl⟩
-
-Depends on / 依赖: Opposite, Opposite.op_unop, Set.mem_ofPred_eq, Set.mem_range, f.op, f.unop, mem_ofPred_eq, mem_range, ofSection_obj, op_unop, range_obj
+/-
+**CategoryTheory.Subfunctor.ofSection_eq_range** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Subfunctor`。
+形式化陈述：ofSection_eq_range {X : Cᵒᵖ} (x : F.obj X) : ofSection x = range (yonedaEq
+uiv.symm x)
+参数：x : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Subfunctor.ofSection_obj`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {F : CategoryTheory.Functor Cᵒᵖ (Type w)} {X : Cᵒᵖ}   
+(x : F.obj X) (U : Cᵒᵖ),   (C…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Subfunctor.range_obj`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {F F' : CategoryTheory.Functor C (Type w)} (p : F' ⟶ F)   
+(U : C), (CategoryTheory.…
 -/
 lemma ofSection_eq_range {X : Cᵒᵖ} (x : F.obj X) :
     ofSection x = range (yonedaEquiv.symm x) := by
@@ -199,27 +191,25 @@ lemma ofSection_eq_range {X : Cᵒᵖ} (x : F.obj X) :
     exact ⟨f.unop, rfl⟩
   · rintro ⟨f, rfl⟩
     exact ⟨f.op, rfl⟩
-
-/--
-lemma `range_eq_ofSection` / 引理 `range_eq_ofSection`
-
-English:
-lemma range_eq_ofSection
-  given: {X : C} (f : yoneda.obj X ⟶ F)
-  proof: by
-  rw [ofSection_eq_range]; rw [Equiv.symm_apply_apply]
-
-中文:
-引理 range_eq_ofSection
-  条件: {X : C} (f : yoneda.obj X ⟶ F)
-  证明: by
-  rw [ofSection_eq_range]; rw [Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.symm_apply_apply, ofSection_eq_range, symm_apply_apply
+/-
+**CategoryTheory.Subfunctor.range_eq_ofSection** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Subfunctor`。
+形式化陈述：range_eq_ofSection {X : C} (f : yoneda.obj X ⟶ F) : range f = ofSection (y
+onedaEquiv f)
+参数：f : yoneda.obj X ⟶ F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Subfunctor.ofSection_eq_range`：ofSection_eq_range {X : Cᵒ
+ᵖ} (x : F.obj X) : ofSection x = range (yonedaEquiv.symm x)
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 lemma range_eq_ofSection {X : C} (f : yoneda.obj X ⟶ F) :
     range f = ofSection (yonedaEquiv f) := by
-  rw [ofSection_eq_range]; rw [Equiv.symm_apply_apply]
+  rw [ofSection_eq_range, Equiv.symm_apply_apply]
 
 end
 
@@ -228,36 +218,24 @@ section
 variable {F : Cᵒᵖ ⥤ Type max v w}
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `ofSection_eq_range'` / 引理 `ofSection_eq_range'`
-
-English:
-lemma ofSection_eq_range'
-  given: {X : Cᵒᵖ} (x : F.obj X)
-  proof: by
-  ext U y
-  dsimp [uliftYonedaEquiv]
-  simp only [Set.mem_range, ULift.exists]
-  constructor
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.unop, rfl⟩
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.op, rfl⟩
-
-中文:
-引理 ofSection_eq_range'
-  条件: {X : Cᵒᵖ} (x : F.obj X)
-  证明: by
-  ext U y
-  dsimp [uliftYonedaEquiv]
-  simp only [Set.mem_range, ULift.exists]
-  constructor
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.unop, rfl⟩
-  · rintro ⟨f, rfl⟩
-    exact ⟨f.op, rfl⟩
-
-Depends on / 依赖: Set.mem_range, ULift.exists, f.op, f.unop, mem_range, uliftYonedaEquiv
+/-
+**CategoryTheory.Subfunctor.ofSection_eq_range'** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Subfunctor`。
+形式化陈述：ofSection_eq_range' {X : Cᵒᵖ} (x : F.obj X) : ofSection x = range (uliftYo
+nedaEquiv.symm x)
+参数：x : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {F : CategoryTheory.Functor C (Type w)}   {x y : CategoryTheory.
+Subfunctor F}, x.ob…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 lemma ofSection_eq_range' {X : Cᵒᵖ} (x : F.obj X) :
     ofSection x = range (uliftYonedaEquiv.symm x) := by
@@ -271,29 +249,29 @@ lemma ofSection_eq_range' {X : Cᵒᵖ} (x : F.obj X) :
     exact ⟨f.op, rfl⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `range_eq_ofSection'` / 引理 `range_eq_ofSection'`
-
-English:
-lemma range_eq_ofSection'
-  given: {X : C} (f : yoneda.obj X ⋙ uliftFunctor.{w} ⟶ F)
-  proof: by
-  rw [ofSection_eq_range']; rw [Equiv.symm_apply_apply]
-
-中文:
-引理 range_eq_ofSection'
-  条件: {X : C} (f : yoneda.obj X ⋙ uliftFunctor.{w} ⟶ F)
-  证明: by
-  rw [ofSection_eq_range']; rw [Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.symm_apply_apply, ofSection_eq_range, symm_apply_apply
+/-
+**CategoryTheory.Subfunctor.range_eq_ofSection'** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Subfunctor`。
+形式化陈述：range_eq_ofSection' {X : C} (f : yoneda.obj X ⋙ uliftFunctor.{w} ⟶ F) : ra
+nge f = ofSection (uliftYonedaEquiv f)
+参数：f : yoneda.obj X ⋙ uliftFunctor.{w} ⟶ F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Subfunctor.ofSection_eq_range'`：ofSection_eq_range' {X : 
+Cᵒᵖ} (x : F.obj X) : ofSection x = range (uliftYonedaEquiv.symm x)
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 lemma range_eq_ofSection' {X : C} (f : yoneda.obj X ⋙ uliftFunctor.{w} ⟶ F) :
     range f = ofSection (uliftYonedaEquiv f) := by
-  rw [ofSection_eq_range']; rw [Equiv.symm_apply_apply]
+  rw [ofSection_eq_range', Equiv.symm_apply_apply]
 
 end
 
 end Subfunctor
 
 end CategoryTheory
+

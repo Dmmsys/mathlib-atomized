@@ -22,7 +22,7 @@ ideal `I` of `R`, where `R` is a commutative ring, as the direct limit of Ext mo
 
 Given a collection of ideals cofinal with the powers of `I`, consider the directed system of
 quotients of `R` by these ideals, and take the direct limit of the system induced on the `i`-th
-Ext into `M`. One can, of course, take the collection to simply be the integral powers of `I`.
+Ext into `M`.  One can, of course, take the collection to simply be the integral powers of `I`.
 
 ## References
 
@@ -62,43 +62,40 @@ section
 
 variable {R : Type u} [CommRing R] {D : Type v} [SmallCategory D]
 
-/--
-Definition of `ringModIdeals` / `ringModIdeals` 的定义
+/-- The directed system of `R`-modules of the form `R/J`, where `J` is an ideal of `R`,
+determined by the functor `I` -/
+/-
+**localCohomology.ringModIdeals** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：ringModIdeals (I : D ⥤ Ideal R) : D ⥤ ModuleCat.{u} R where obj t
+参数：I : D ⥤ Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringModIdeals
-  signature: (I : D ⥤ Ideal R)
-  body: ModuleCat.of R R ⧸ I.obj t
-map w := ModuleCat.ofHom Submodule.mapQ _ _ LinearMap.id (I.map w).down.down
-
-中文:
-定义 ringModIdeals
-  签名: (I : D ⥤ 理想 R)
-  定义体: ModuleCat.of R R ⧸ I.obj t
-map w := ModuleCat.ofHom Submodule.mapQ _ _ LinearMap.id (I.map w).down.down
-
-Depends on / 依赖: I.obj, ModuleCat, ModuleCat.of
+--- 原说明 ---
+The directed system of `R`-modules of the form `R/J`, where `J` is an ideal of `
+R`,
+determined by the functor `I`
 -/
 def ringModIdeals (I : D ⥤ Ideal R) : D ⥤ ModuleCat.{u} R where
-obj t := ModuleCat.of R R ⧸ I.obj t
-map w := ModuleCat.ofHom Submodule.mapQ _ _ LinearMap.id (I.map w).down.down
+  obj t := ModuleCat.of R <| R ⧸ I.obj t
+  map w := ModuleCat.ofHom <| Submodule.mapQ _ _ LinearMap.id (I.map w).down.down
 
-/--
-Definition of `diagram` / `diagram` 的定义
+/-- The diagram we will take the colimit of to define local cohomology, corresponding to the
+directed system determined by the functor `I` -/
+/-
+**localCohomology.diagram** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：diagram (I : D ⥤ Ideal R) (i : Nat) : Dᵒᵖ ⥤ ModuleCat.{u} R ⥤ ModuleCat.{u
+} R
+参数：I : D ⥤ Ideal R；i : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagram
-  signature: (I : D ⥤ Ideal R) (i : Nat)
-  body: (ringModIdeals I).op ⋙ Ext R (ModuleCat.{u} R) i
-
-中文:
-定义 diagram
-  签名: (I : D ⥤ 理想 R) (i : 自然数)
-  定义体: (ringModIdeals I).op ⋙ Ext R (ModuleCat.{u} R) i
-
-Depends on / 依赖: ModuleCat, ringModIdeals
+--- 原说明 ---
+The diagram we will take the colimit of to define local cohomology, correspondin
+g to the
+directed system determined by the functor `I`
 -/
-def diagram (I : D ⥤ Ideal R) (i : Nat) : Dᵒᵖ ⥤ ModuleCat.{u} R ⥤ ModuleCat.{u} R :=
+def diagram (I : D ⥤ Ideal R) (i : ℕ) : Dᵒᵖ ⥤ ModuleCat.{u} R ⥤ ModuleCat.{u} R :=
   (ringModIdeals I).op ⋙ Ext R (ModuleCat.{u} R) i
 
 end
@@ -109,20 +106,18 @@ section
 -- along diagrams either in Type, or in the same universe as the ring, and we need to cover both.
 variable {R : Type max u v} [CommRing R] {D : Type v} [SmallCategory D]
 
-/--
-lemma `hasColimitDiagram` / 引理 `hasColimitDiagram`
-
-English:
-lemma hasColimitDiagram
-  given: (I : D ⥤ Ideal R) (i : Nat)
-  proof: inferInstance
-
-中文:
-引理 hasColimitDiagram
-  条件: (I : D ⥤ 理想 R) (i : 自然数)
-  证明: inferInstance
+/-
+**localCohomology.hasColimitDiagram** 是 Mathlib 中的一个引理，位于命名空间 `localCohomology`。
+形式化陈述：hasColimitDiagram (I : D ⥤ Ideal R) (i : Nat) : HasColimit (diagram I i)
+参数：I : D ⥤ Ideal R；i : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.HasColimit.instHasColimit`：∀ {R : Type w} [inst : Ring R] {J :
+ Type u} [inst_1 : CategoryTheory.Category.{v, u} J]   (F : CategoryTheory.Funct
+or J (ModuleCat R))   [Ca…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-lemma hasColimitDiagram (I : D ⥤ Ideal R) (i : Nat) :
+lemma hasColimitDiagram (I : D ⥤ Ideal R) (i : ℕ) :
     HasColimit (diagram I i) := inferInstance
 
 /-
@@ -132,24 +127,27 @@ will be where `I` is (cofinal with) the diagram of powers of a single given idea
 Below, we give two equivalent definitions of the usual local cohomology with support
 in an ideal `J`, `localCohomology` and `localCohomology.ofSelfLERadical`.
 -/
-/--
-Definition of `ofDiagram` / `ofDiagram` 的定义
+/-- `localCohomology.ofDiagram I i` is the functor sending a module `M` over a commutative
+ring `R` to the direct limit of `Ext^i(R/J, M)`, where `J` ranges over a collection of ideals
+of `R`, represented as a functor `I`. -/
+/-
+**localCohomology.ofDiagram** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：ofDiagram (I : D ⥤ Ideal R) (i : Nat) : ModuleCat.{max u v} R ⥤ ModuleCat.
+{max u v} R
+参数：I : D ⥤ Ideal R；i : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `localCohomology.hasColimitDiagram`：hasColimitDiagram (I : D ⥤ Ideal R) (
+i : Nat) : HasColimit (diagram I i)
 
-English:
-definition ofDiagram
-  signature: (I : D ⥤ Ideal R) (i : Nat)
-  body: have := hasColimitDiagram.{u, v} I i
-  colimit (diagram I i)
-
-中文:
-定义 ofDiagram
-  签名: (I : D ⥤ 理想 R) (i : 自然数)
-  定义体: have := hasColimitDiagram.{u, v} I i
-  colimit (diagram I i)
-
-Depends on / 依赖: colimit, diagram, hasColimitDiagram
+--- 原说明 ---
+`localCohomology.ofDiagram I i` is the functor sending a module `M` over a commu
+tative
+ring `R` to the direct limit of `Ext^i(R/J, M)`, where `J` ranges over a collect
+ion of ideals
+of `R`, represented as a functor `I`.
 -/
-def ofDiagram (I : D ⥤ Ideal R) (i : Nat) : ModuleCat.{max u v} R ⥤ ModuleCat.{max u v} R :=
+def ofDiagram (I : D ⥤ Ideal R) (i : ℕ) : ModuleCat.{max u v} R ⥤ ModuleCat.{max u v} R :=
   have := hasColimitDiagram.{u, v} I i
   colimit (diagram I i)
 
@@ -160,46 +158,36 @@ section
 variable {R : Type max u v v'} [CommRing R] {D : Type v} [SmallCategory D]
 variable {E : Type v'} [SmallCategory E] (I' : E ⥤ D) (I : D ⥤ Ideal R)
 
-/--
-Definition of `diagramComp` / `diagramComp` 的定义
+/-- Local cohomology along a composition of diagrams. -/
+/-
+**localCohomology.diagramComp** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：diagramComp (i : Nat) : diagram (I' ⋙ I) i ≅ I'.op ⋙ diagram I i
+参数：i : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagramComp
-  signature: (i : Nat)
-  body: Iso.refl _
-
-中文:
-定义 diagramComp
-  签名: (i : 自然数)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Local cohomology along a composition of diagrams.
 -/
-def diagramComp (i : Nat) : diagram (I' ⋙ I) i ≅ I'.op ⋙ diagram I i :=
+def diagramComp (i : ℕ) : diagram (I' ⋙ I) i ≅ I'.op ⋙ diagram I i :=
   Iso.refl _
 
 /-- Local cohomology agrees along precomposition with a cofinal diagram. -/
 @[nolint unusedHavesSuffices]
-/--
-Definition of `isoOfFinal` / `isoOfFinal` 的定义
+/-
+**localCohomology.isoOfFinal** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：isoOfFinal [Functor.Initial I'] (i : Nat) : ofDiagram.{max u v, v'} (I' ⋙ 
+I) i ≅ ofDiagram.{max u v', v} I i
+参数：i : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `localCohomology.hasColimitDiagram`：hasColimitDiagram (I : D ⥤ Ideal R) (
+i : Nat) : HasColimit (diagram I i)
 
-English:
-definition isoOfFinal
-  signature: [Functor.Initial I'] (i : Nat)
-  body: have := hasColimitDiagram.{max u v', v} I i
-  have := hasColimitDiagram.{max u v, v'} (I' ⋙ I) i
-  HasColimit.isoOfNatIso (diagramComp.{u} I' I i) ≪≫ Functor.Final.colimitIso _ _
-
-中文:
-定义 isoOfFinal
-  签名: [函子.初始 I'] (i : 自然数)
-  定义体: have := hasColimitDiagram.{max u v', v} I i
-  have := hasColimitDiagram.{max u v, v'} (I' ⋙ I) i
-  HasColimit.isoOfNatIso (diagramComp.{u} I' I i) ≪≫ Functor.Final.colimitIso _ _
-
-Depends on / 依赖: Functor, Functor.Final.colimitIso, HasColimit, HasColimit.isoOfNatIso, colimitIso, diagramComp, hasColimitDiagram, isoOfNatIso
+--- 原说明 ---
+Local cohomology agrees along precomposition with a cofinal diagram.
 -/
-def isoOfFinal [Functor.Initial I'] (i : Nat) :
+def isoOfFinal [Functor.Initial I'] (i : ℕ) :
     ofDiagram.{max u v, v'} (I' ⋙ I) i ≅ ofDiagram.{max u v', v} I i :=
   have := hasColimitDiagram.{max u v', v} I i
   have := hasColimitDiagram.{max u v, v'} (I' ⋙ I) i
@@ -211,78 +199,61 @@ section Diagrams
 
 variable {R : Type u} [CommRing R]
 
-/--
-Definition of `idealPowersDiagram` / `idealPowersDiagram` 的定义
+/-- The functor sending a natural number `i` to the `i`-th power of the ideal `J` -/
+/-
+**localCohomology.idealPowersDiagram** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`
+。
+形式化陈述：idealPowersDiagram (J : Ideal R) : Natᵒᵖ ⥤ Ideal R where obj t
+参数：J : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition idealPowersDiagram
-  signature: (J : Ideal R)
-  body: J ^ unop t
-  map w := ⟨⟨Ideal.pow_le_pow_right w.unop.down.down⟩⟩
-
-中文:
-定义 idealPowersDiagram
-  签名: (J : 理想 R)
-  定义体: J ^ unop t
-  map w := ⟨⟨Ideal.pow_le_pow_right w.unop.down.down⟩⟩
+--- 原说明 ---
+The functor sending a natural number `i` to the `i`-th power of the ideal `J`
 -/
-def idealPowersDiagram (J : Ideal R) : Natᵒᵖ ⥤ Ideal R where
+def idealPowersDiagram (J : Ideal R) : ℕᵒᵖ ⥤ Ideal R where
   obj t := J ^ unop t
   map w := ⟨⟨Ideal.pow_le_pow_right w.unop.down.down⟩⟩
 
-/--
-Definition of `SelfLERadical` / `SelfLERadical` 的定义
+/-- The full subcategory of all ideals with radical containing `J` -/
+/-
+**localCohomology.SelfLERadical** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：SelfLERadical (J : Ideal R) : Type u
+参数：J : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SelfLERadical
-  signature: (J : Ideal R)
-  body: ObjectProperty.FullSubcategory fun J' : Ideal R => J <= J'.radical
-deriving Category
-
-中文:
-定义 SelfLERadical
-  签名: (J : 理想 R)
-  定义体: ObjectProperty.FullSubcategory fun J' : Ideal R => J <= J'.radical
-deriving Category
-
-Depends on / 依赖: FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory, radical
+--- 原说明 ---
+The full subcategory of all ideals with radical containing `J`
 -/
 def SelfLERadical (J : Ideal R) : Type u :=
-  ObjectProperty.FullSubcategory fun J' : Ideal R => J <= J'.radical
+  ObjectProperty.FullSubcategory fun J' : Ideal R => J ≤ J'.radical
 deriving Category
-
-/--
-Instance `SelfLERadical.inhabited` / 实例 `SelfLERadical.inhabited`
-
-English:
-instance SelfLERadical.inhabited
-  signature: (J : Ideal R)
-  body: ⟨J, Ideal.le_radical⟩
-
-中文:
-实例 SelfLERadical.inhabited
-  签名: (J : 理想 R)
-  定义体: ⟨J, Ideal.le_radical⟩
-
-Depends on / 依赖: Ideal.le_radical, le_radical
+/-
+**localCohomology.SelfLERadical.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `localCohomo
+logy.SelfLERadical`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → (J : Ideal R) → Inhabited (localCohom
+ology.SelfLERadical J)
+参数：J : Ideal R；localCohomology.SelfLERadical J。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance SelfLERadical.inhabited (J : Ideal R) : Inhabited (SelfLERadical J) where
   default := ⟨J, Ideal.le_radical⟩
 
-/--
-Definition of `selfLERadicalDiagram` / `selfLERadicalDiagram` 的定义
+/-- The diagram of all ideals with radical containing `J`, represented as a functor.
+This is the "largest" diagram that computes local cohomology with support in `J`. -/
+/-
+**localCohomology.selfLERadicalDiagram** 是 Mathlib 中的一个定义，位于命名空间 `localCohomolog
+y`。
+形式化陈述：selfLERadicalDiagram (J : Ideal R) : SelfLERadical J ⥤ Ideal R
+参数：J : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition selfLERadicalDiagram
-  signature: (J : Ideal R)
-  body: ObjectProperty.ι _
-
-中文:
-定义 selfLERadicalDiagram
-  签名: (J : 理想 R)
-  定义体: ObjectProperty.ι _
-
-Depends on / 依赖: ObjectProperty
+--- 原说明 ---
+The diagram of all ideals with radical containing `J`, represented as a functor.
+This is the "largest" diagram that computes local cohomology with support in `J`
+.
 -/
 def selfLERadicalDiagram (J : Ideal R) : SelfLERadical J ⥤ Ideal R :=
   ObjectProperty.ι _
@@ -302,40 +273,42 @@ open localCohomology
 
 variable {R : Type u} [CommRing R]
 
-/--
-Definition of `localCohomology` / `localCohomology` 的定义
+/-- `localCohomology J i` is `i`-th the local cohomology module of a module `M` over
+a commutative ring `R` with support in the ideal `J` of `R`, defined as the direct limit
+of `Ext^i(R/J^t, M)` over all powers `t : ℕ`. -/
+/-
+**localCohomology** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：localCohomology (J : Ideal R) (i : Nat) : ModuleCat.{u} R ⥤ ModuleCat.{u} 
+R
+参数：J : Ideal R；i : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition localCohomology
-  signature: (J : Ideal R) (i : Nat)
-  body: ofDiagram (idealPowersDiagram J) i
-
-中文:
-定义 localCohomology
-  签名: (J : 理想 R) (i : 自然数)
-  定义体: ofDiagram (idealPowersDiagram J) i
-
-Depends on / 依赖: idealPowersDiagram, ofDiagram
+--- 原说明 ---
+`localCohomology J i` is `i`-th the local cohomology module of a module `M` over
+a commutative ring `R` with support in the ideal `J` of `R`, defined as the dire
+ct limit
+of `Ext^i(R/J^t, M)` over all powers `t : ℕ`.
 -/
-def localCohomology (J : Ideal R) (i : Nat) : ModuleCat.{u} R ⥤ ModuleCat.{u} R :=
+def localCohomology (J : Ideal R) (i : ℕ) : ModuleCat.{u} R ⥤ ModuleCat.{u} R :=
   ofDiagram (idealPowersDiagram J) i
 
-/--
-Definition of `localCohomology.ofSelfLERadical` / `localCohomology.ofSelfLERadical` 的定义
+/-- Local cohomology as the direct limit of `Ext^i(R/J', M)` over *all* ideals `J'` with radical
+containing `J`. -/
+/-
+**localCohomology.ofSelfLERadical** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：localCohomology.ofSelfLERadical (J : Ideal R) (i : Nat) : ModuleCat.{u} R 
+⥤ ModuleCat.{u} R
+参数：J : Ideal R；i : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition localCohomology.ofSelfLERadical
-  signature: (J : Ideal R) (i : Nat)
-  body: ofDiagram.{u} (selfLERadicalDiagram.{u} J) i
-
-中文:
-定义 localCohomology.ofSelfLERadical
-  签名: (J : 理想 R) (i : 自然数)
-  定义体: ofDiagram.{u} (selfLERadicalDiagram.{u} J) i
-
-Depends on / 依赖: ofDiagram, selfLERadicalDiagram
+--- 原说明 ---
+Local cohomology as the direct limit of `Ext^i(R/J', M)` over *all* ideals `J'` 
+with radical
+containing `J`.
 -/
-def localCohomology.ofSelfLERadical (J : Ideal R) (i : Nat) : ModuleCat.{u} R ⥤ ModuleCat.{u} R :=
+def localCohomology.ofSelfLERadical (J : Ideal R) (i : ℕ) : ModuleCat.{u} R ⥤ ModuleCat.{u} R :=
   ofDiagram.{u} (selfLERadicalDiagram.{u} J) i
 
 end ModelsForLocalCohomology
@@ -354,76 +327,58 @@ section LocalCohomologyEquiv
 
 variable {R : Type u} [CommRing R]
 
-/--
-Definition of `idealPowersToSelfLERadical` / `idealPowersToSelfLERadical` 的定义
+/-- Lifting `idealPowersDiagram J` from a diagram valued in `ideals R` to a diagram
+valued in `SelfLERadical J`. -/
+/-
+**localCohomology.idealPowersToSelfLERadical** 是 Mathlib 中的一个定义，位于命名空间 `localCoh
+omology`。
+形式化陈述：idealPowersToSelfLERadical (J : Ideal R) : Natᵒᵖ ⥤ SelfLERadical J
+参数：J : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition idealPowersToSelfLERadical
-  signature: (J : Ideal R)
-  body: ObjectProperty.lift _ (idealPowersDiagram J) fun k => by
-    change _ <= (J ^ unop k).radical
-    rcases unop k with - | n
-    · simp [Ideal.radical_top, pow_zero, Ideal.one_eq_top, le_top]
-    · simp only [J.radical_pow n.succ_ne_zero, Ideal.le_radical]
-
-中文:
-定义 idealPowersToSelfLERadical
-  签名: (J : 理想 R)
-  定义体: ObjectProperty.lift _ (idealPowersDiagram J) fun k => by
-    change _ <= (J ^ unop k).radical
-    rcases unop k with - | n
-    · simp [Ideal.radical_top, pow_zero, Ideal.one_eq_top, le_top]
-    · simp only [J.radical_pow n.succ_ne_zero, Ideal.le_radical]
-
-Depends on / 依赖: Ideal.le_radical, Ideal.one_eq_top, Ideal.radical_top, J.radical_pow, ObjectProperty, ObjectProperty.lift, idealPowersDiagram, le_radical, le_top, n.succ_ne_zero, one_eq_top, pow_zero, radical, radical_pow, radical_top, succ_ne_zero
+--- 原说明 ---
+Lifting `idealPowersDiagram J` from a diagram valued in `ideals R` to a diagram
+valued in `SelfLERadical J`.
 -/
-def idealPowersToSelfLERadical (J : Ideal R) : Natᵒᵖ ⥤ SelfLERadical J :=
+def idealPowersToSelfLERadical (J : Ideal R) : ℕᵒᵖ ⥤ SelfLERadical J :=
   ObjectProperty.lift _ (idealPowersDiagram J) fun k => by
-    change _ <= (J ^ unop k).radical
+    change _ ≤ (J ^ unop k).radical
     rcases unop k with - | n
     · simp [Ideal.radical_top, pow_zero, Ideal.one_eq_top, le_top]
     · simp only [J.radical_pow n.succ_ne_zero, Ideal.le_radical]
 
 variable {I J K : Ideal R}
 
-/--
-Instance `ideal_powers_initial` / 实例 `ideal_powers_initial`
+/-- The diagram of powers of `J` is initial in the diagram of all ideals with
+radical containing `J`. This uses Noetherianness. -/
+/-
+**localCohomology.ideal_powers_initial** 是 Mathlib 中的一个实例，位于命名空间 `localCohomolog
+y`。
+形式化陈述：ideal_powers_initial [hR : IsNoetherian R R] : Functor.Initial (idealPower
+sToSelfLERadical J) where out J'
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.zigzag_isConnected`：zigzag_isConnected [Nonempty J] (h : 
+forall j₁ j₂ : J, Zigzag j₁ j₂) : IsConnected J
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `Ideal.exists_pow_le_of_le_radical_of_fg`：exists_pow_le_of_le_radical_of_
+fg {R : Type*} [CommSemiring R] {I J : Ideal R} (h' : I <= J.radical) (h : I.FG)
+ : exists n : Nat, I ^ n <= J
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isNoetherian_def`：isNoetherian_def : IsNoetherian R M ↔ forall s : Submo
+dule R M, s.FG
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
 
-English:
-instance ideal_powers_initial
-  signature: [hR : IsNoetherian R R]
-  body: by
-    apply +allowSynthFailures zigzag_isConnected
-    · obtain ⟨k, hk⟩ := Ideal.exists_pow_le_of_le_radical_of_fg J'.2 (isNoetherian_def.mp hR _)
-      exact ⟨CostructuredArrow.mk (⟨⟨⟨hk⟩⟩⟩ : (idealPowersToSelfLERadical J).obj (op k) ⟶ J')⟩
-    · intro j1 j2
-      apply Relation.ReflTransGen.single
-      -- The inclusions `J^n1 ≤ J'` and `J^n2 ≤ J'` always form a triangle, based on
-      -- which exponent is larger.
-      rcases le_total (unop j1.left) (unop j2.left) with h | h
-      · right; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
-      · left; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
-
-example : HasColimitsOfSize.{0, 0, u, u + 1} (ModuleCat.{u, u} R) := inferInstance
-
-中文:
-实例 ideal_powers_initial
-  签名: [hR : 是Noether R R]
-  定义体: by
-    apply +allowSynthFailures zigzag_isConnected
-    · obtain ⟨k, hk⟩ := Ideal.exists_pow_le_of_le_radical_of_fg J'.2 (isNoetherian_def.mp hR _)
-      exact ⟨CostructuredArrow.mk (⟨⟨⟨hk⟩⟩⟩ : (idealPowersToSelfLERadical J).obj (op k) ⟶ J')⟩
-    · intro j1 j2
-      apply Relation.ReflTransGen.single
-      -- The inclusions `J^n1 ≤ J'` and `J^n2 ≤ J'` always form a triangle, based on
-      -- which exponent is larger.
-      rcases le_total (unop j1.left) (unop j2.left) with h | h
-      · right; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
-      · left; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
-
-example : HasColimitsOfSize.{0, 0, u, u + 1} (ModuleCat.{u, u} R) := inferInstance
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, Ideal.exists_pow_le_of_le_radical_of_fg, ReflTransGen, Relation, Relation.ReflTransGen.single, allowSynthFailures, exists_pow_le_of_le_radical_of_fg, idealPowersToSelfLERadical, isNoetherian_def, isNoetherian_def.mp, single, zigzag_isConnected
+--- 原说明 ---
+The diagram of powers of `J` is initial in the diagram of all ideals with
+radical containing `J`. This uses Noetherianness.
 -/
 instance ideal_powers_initial [hR : IsNoetherian R R] :
     Functor.Initial (idealPowersToSelfLERadical J) where
@@ -438,51 +393,46 @@ instance ideal_powers_initial [hR : IsNoetherian R R] :
       rcases le_total (unop j1.left) (unop j2.left) with h | h
       · right; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
       · left; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
-
-example : HasColimitsOfSize.{0, 0, u, u + 1} (ModuleCat.{u, u} R) := inferInstance
-/--
-Definition of `isoSelfLERadical` / `isoSelfLERadical` 的定义
-
-English:
-definition isoSelfLERadical
-  signature: (J : Ideal.{u} R) [IsNoetherian.{u, u} R R] (i : Nat)
-  body: (localCohomology.isoOfFinal.{u, u, 0} (idealPowersToSelfLERadical.{u} J)
-    (selfLERadicalDiagram.{u} J) i).symm ≪≫
-      HasColimit.isoOfNatIso.{0, 0, u + 1, u + 1} (Iso.refl.{u + 1, u + 1} _)
-
-中文:
-定义 isoSelfLERadical
-  签名: (J : 理想.{u} R) [是Noether.{u, u} R R] (i : 自然数)
-  定义体: (localCohomology.isoOfFinal.{u, u, 0} (idealPowersToSelfLERadical.{u} J)
-    (selfLERadicalDiagram.{u} J) i).symm ≪≫
-      HasColimit.isoOfNatIso.{0, 0, u + 1, u + 1} (Iso.refl.{u + 1, u + 1} _)
-
-Depends on / 依赖: HasColimit, HasColimit.isoOfNatIso, Iso.refl, idealPowersToSelfLERadical, isoOfFinal, isoOfNatIso, localCohomology, localCohomology.isoOfFinal, selfLERadicalDiagram
+/-
+**localCohomology.** 是 Mathlib 中的一个示例，位于命名空间 `localCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def isoSelfLERadical (J : Ideal.{u} R) [IsNoetherian.{u, u} R R] (i : Nat) :
+example : HasColimitsOfSize.{0, 0, u, u + 1} (ModuleCat.{u, u} R) := inferInstance
+/-- Local cohomology (defined in terms of powers of `J`) agrees with local
+cohomology computed over all ideals with radical containing `J`. -/
+/-
+**localCohomology.isoSelfLERadical** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：isoSelfLERadical (J : Ideal.{u} R) [IsNoetherian.{u, u} R R] (i : Nat) : l
+ocalCohomology.ofSelfLERadical.{u} J i ≅ localCohomology.{u} J i
+参数：J : Ideal.{u} R；i : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Local cohomology (defined in terms of powers of `J`) agrees with local
+cohomology computed over all ideals with radical containing `J`.
+-/
+def isoSelfLERadical (J : Ideal.{u} R) [IsNoetherian.{u, u} R R] (i : ℕ) :
     localCohomology.ofSelfLERadical.{u} J i ≅ localCohomology.{u} J i :=
   (localCohomology.isoOfFinal.{u, u, 0} (idealPowersToSelfLERadical.{u} J)
     (selfLERadicalDiagram.{u} J) i).symm ≪≫
       HasColimit.isoOfNatIso.{0, 0, u + 1, u + 1} (Iso.refl.{u + 1, u + 1} _)
 
-/--
-Definition of `SelfLERadical.cast` / `SelfLERadical.cast` 的定义
+/-- Casting from the full subcategory of ideals with radical containing `J` to the full
+subcategory of ideals with radical containing `K`. -/
+/-
+**localCohomology.SelfLERadical.cast** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology.
+SelfLERadical`。
+形式化陈述：{R : Type u} →   [inst : CommRing R] →     {J K : Ideal R} →       J.radic
+al = K.radical → CategoryTheory.Functor (localCohomology.SelfLERadical J) (local
+Cohomology.SelfLERadical K)
+参数：localCohomology.SelfLERadical J；localCohomology.SelfLERadical K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SelfLERadical.cast
-  signature: (hJK : J.radical = K.radical)
-  body: ObjectProperty.ιOfLE fun L hL => by
-    rw [← Ideal.radical_le_radical_iff] at hL ⊢
-    exact hJK.symm.trans_le hL
-
-中文:
-定义 SelfLERadical.cast
-  签名: (hJK : J.radical = K.radical)
-  定义体: ObjectProperty.ιOfLE fun L hL => by
-    rw [← Ideal.radical_le_radical_iff] at hL ⊢
-    exact hJK.symm.trans_le hL
-
-Depends on / 依赖: Ideal.radical_le_radical_iff, ObjectProperty, hJK.symm.trans_le, radical_le_radical_iff, trans_le
+--- 原说明 ---
+Casting from the full subcategory of ideals with radical containing `J` to the f
+ull
+subcategory of ideals with radical containing `K`.
 -/
 def SelfLERadical.cast (hJK : J.radical = K.radical) : SelfLERadical J ⥤ SelfLERadical K :=
   ObjectProperty.ιOfLE fun L hL => by
@@ -490,26 +440,19 @@ def SelfLERadical.cast (hJK : J.radical = K.radical) : SelfLERadical J ⥤ SelfL
     exact hJK.symm.trans_le hL
 
 -- TODO generalize this to the equivalence of full categories for any `iff`.
-/--
-Definition of `SelfLERadical.castEquivalence` / `SelfLERadical.castEquivalence` 的定义
+/-- The equivalence of categories `SelfLERadical J ≌ SelfLERadical K`
+when `J.radical = K.radical`. -/
+/-
+**localCohomology.SelfLERadical.castEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `local
+Cohomology.SelfLERadical`。
+形式化陈述：{R : Type u} →   [inst : CommRing R] →     {J K : Ideal R} → J.radical = K
+.radical → (localCohomology.SelfLERadical J ≌ localCohomology.SelfLERadical K)
+参数：localCohomology.SelfLERadical J ≌ localCohomology.SelfLERadical K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SelfLERadical.castEquivalence
-  signature: (hJK : J.radical = K.radical)
-  body: SelfLERadical.cast hJK
-  inverse := SelfLERadical.cast hJK.symm
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 SelfLERadical.castEquivalence
-  签名: (hJK : J.radical = K.radical)
-  定义体: SelfLERadical.cast hJK
-  inverse := SelfLERadical.cast hJK.symm
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: SelfLERadical, SelfLERadical.cast
+--- 原说明 ---
+The equivalence of categories `SelfLERadical J ≌ SelfLERadical K`
+when `J.radical = K.radical`.
 -/
 def SelfLERadical.castEquivalence (hJK : J.radical = K.radical) :
     SelfLERadical J ≌ SelfLERadical K where
@@ -517,64 +460,58 @@ def SelfLERadical.castEquivalence (hJK : J.radical = K.radical) :
   inverse := SelfLERadical.cast hJK.symm
   unitIso := Iso.refl _
   counitIso := Iso.refl _
-
-/--
-Instance `SelfLERadical.cast_isEquivalence` / 实例 `SelfLERadical.cast_isEquivalence`
-
-English:
-instance SelfLERadical.cast_isEquivalence
-  signature: (hJK : J.radical = K.radical)
-  body: (castEquivalence hJK).isEquivalence_functor
-
-中文:
-实例 SelfLERadical.cast_isEquivalence
-  签名: (hJK : J.radical = K.radical)
-  定义体: (castEquivalence hJK).isEquivalence_functor
-
-Depends on / 依赖: castEquivalence, isEquivalence_functor
+/-
+**localCohomology.SelfLERadical.cast_isEquivalence** 是 Mathlib 中的一个定理，位于命名空间 `lo
+calCohomology.SelfLERadical`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {J K : Ideal R} (hJK : J.radical = K.ra
+dical),   (localCohomology.SelfLERadical.cast hJK).IsEquivalence
+参数：hJK : J.radical = K.radical；localCohomology.SelfLERadical.cast hJK。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 instance SelfLERadical.cast_isEquivalence (hJK : J.radical = K.radical) :
     (SelfLERadical.cast hJK).IsEquivalence :=
   (castEquivalence hJK).isEquivalence_functor
 
-/--
-Definition of `SelfLERadical.isoOfSameRadical` / `SelfLERadical.isoOfSameRadical` 的定义
+/-- The natural isomorphism between local cohomology defined using the `of_self_le_radical`
+diagram, assuming `J.radical = K.radical`. -/
+/-
+**localCohomology.SelfLERadical.isoOfSameRadical** 是 Mathlib 中的一个定义，位于命名空间 `loca
+lCohomology.SelfLERadical`。
+形式化陈述：{R : Type u} →   [inst : CommRing R] →     {J K : Ideal R} →       J.radic
+al = K.radical → (i : ℕ) → localCohomology.ofSelfLERadical J i ≅ localCohomology
+.ofSelfLERadical K i
+参数：i : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SelfLERadical.isoOfSameRadical
-  signature: (hJK : J.radical = K.radical) (i : Nat)
-  body: (isoOfFinal.{u, u, u} (SelfLERadical.cast hJK.symm) _ _).symm
-
-中文:
-定义 SelfLERadical.isoOfSameRadical
-  签名: (hJK : J.radical = K.radical) (i : 自然数)
-  定义体: (isoOfFinal.{u, u, u} (SelfLERadical.cast hJK.symm) _ _).symm
-
-Depends on / 依赖: SelfLERadical, SelfLERadical.cast, hJK.symm, isoOfFinal
+--- 原说明 ---
+The natural isomorphism between local cohomology defined using the `of_self_le_r
+adical`
+diagram, assuming `J.radical = K.radical`.
 -/
-def SelfLERadical.isoOfSameRadical (hJK : J.radical = K.radical) (i : Nat) :
+def SelfLERadical.isoOfSameRadical (hJK : J.radical = K.radical) (i : ℕ) :
     ofSelfLERadical J i ≅ ofSelfLERadical K i :=
   (isoOfFinal.{u, u, u} (SelfLERadical.cast hJK.symm) _ _).symm
 
-/--
-Definition of `isoOfSameRadical` / `isoOfSameRadical` 的定义
+/-- Local cohomology agrees on ideals with the same radical. -/
+/-
+**localCohomology.isoOfSameRadical** 是 Mathlib 中的一个定义，位于命名空间 `localCohomology`。
+形式化陈述：isoOfSameRadical [IsNoetherian R R] (hJK : J.radical = K.radical) (i : Nat
+) : localCohomology J i ≅ localCohomology K i
+参数：hJK : J.radical = K.radical；i : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfSameRadical
-  signature: [IsNoetherian R R] (hJK : J.radical = K.radical) (i : Nat)
-  body: (isoSelfLERadical J i).symm ≪≫ SelfLERadical.isoOfSameRadical hJK i ≪≫ isoSelfLERadical K i
-
-中文:
-定义 isoOfSameRadical
-  签名: [是Noether R R] (hJK : J.radical = K.radical) (i : 自然数)
-  定义体: (isoSelfLERadical J i).symm ≪≫ SelfLERadical.isoOfSameRadical hJK i ≪≫ isoSelfLERadical K i
-
-Depends on / 依赖: SelfLERadical, SelfLERadical.isoOfSameRadical, isoOfSameRadical, isoSelfLERadical
+--- 原说明 ---
+Local cohomology agrees on ideals with the same radical.
 -/
-def isoOfSameRadical [IsNoetherian R R] (hJK : J.radical = K.radical) (i : Nat) :
+def isoOfSameRadical [IsNoetherian R R] (hJK : J.radical = K.radical) (i : ℕ) :
     localCohomology J i ≅ localCohomology K i :=
   (isoSelfLERadical J i).symm ≪≫ SelfLERadical.isoOfSameRadical hJK i ≪≫ isoSelfLERadical K i
 
 end LocalCohomologyEquiv
 
 end localCohomology
+

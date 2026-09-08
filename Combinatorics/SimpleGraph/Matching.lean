@@ -61,323 +61,276 @@ variable {V W : Type*} {G G' : SimpleGraph V} {M M' : Subgraph G} {u v w : V}
 namespace Subgraph
 
 /--
-Definition of `IsMatching` / `IsMatching` 的定义
-
-English:
-definition IsMatching
-  signature: (M : Subgraph G)
-  body: forall ⦃v⦄, v in M.verts -> exists! w, M.Adj v w
-
-中文:
-定义 IsMatching
-  签名: (M : 子图 G)
-  定义体: forall ⦃v⦄, v in M.verts -> exists! w, M.Adj v w
-
-Depends on / 依赖: M.Adj, M.verts
+The subgraph `M` of `G` is a matching if every vertex of `M` is incident to exactly one edge in `M`.
+We say that the vertices in `M.support` are *matched* or *saturated*.
 -/
-def IsMatching (M : Subgraph G) : Prop := forall ⦃v⦄, v in M.verts -> exists! w, M.Adj v w
+/-
+**SimpleGraph.Subgraph.IsMatching** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgrap
+h`。
+形式化陈述：IsMatching (M : Subgraph G) : Prop
+参数：M : Subgraph G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `IsMatching.toEdge` / `IsMatching.toEdge` 的定义
+--- 原说明 ---
+The subgraph `M` of `G` is a matching if every vertex of `M` is incident to exac
+tly one edge in `M`.
+We say that the vertices in `M.support` are *matched* or *saturated*.
+-/
+def IsMatching (M : Subgraph G) : Prop := ∀ ⦃v⦄, v ∈ M.verts → ∃! w, M.Adj v w
 
-English:
-definition IsMatching.toEdge
-  signature: (h : M.IsMatching) (v : M.verts)
-  body: ⟨s(v, (h v.property).choose), (h v.property).choose_spec.1⟩
+/-- Given a vertex, returns the unique edge of the matching it is incident to. -/
+/-
+**SimpleGraph.Subgraph.IsMatching.toEdge** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.
+Subgraph.IsMatching`。
+形式化陈述：{V : Type u_1} → {G : SimpleGraph V} → {M : G.Subgraph} → M.IsMatching → ↑
+M.verts → ↑M.edgeSet
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 IsMatching.toEdge
-  签名: (h : M.IsMatching) (v : M.verts)
-  定义体: ⟨s(v, (h v.property).choose), (h v.property).choose_spec.1⟩
-
-Depends on / 依赖: choose_spec, property, v.property
+--- 原说明 ---
+Given a vertex, returns the unique edge of the matching it is incident to.
 -/
 noncomputable def IsMatching.toEdge (h : M.IsMatching) (v : M.verts) : M.edgeSet :=
   ⟨s(v, (h v.property).choose), (h v.property).choose_spec.1⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `IsMatching.toEdge_eq_of_adj` / 定理 `IsMatching.toEdge_eq_of_adj`
-
-English:
-theorem IsMatching.toEdge_eq_of_adj
-  given: (h : M.IsMatching) (hvw : M.Adj v w)
-  proof: by
-  rw [IsMatching.toEdge]; rw [Subtype.mk_eq_mk]; rw [← h hvw.fst_mem |>.choose_spec.right w hvw]
-
-中文:
-定理 IsMatching.toEdge_eq_of_adj
-  条件: (h : M.IsMatching) (hvw : M.伴随 v w)
-  证明: by
-  rw [IsMatching.toEdge]; rw [Subtype.mk_eq_mk]; rw [← h hvw.fst_mem |>.choose_spec.right w hvw]
-
-Depends on / 依赖: IsMatching, IsMatching.toEdge, Subtype, Subtype.mk_eq_mk, choose_spec, choose_spec.right, fst_mem, hvw.fst_mem, mk_eq_mk, toEdge
+/-
+**SimpleGraph.Subgraph.IsMatching.toEdge_eq_of_adj** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} {v w : V} (h : M.IsM
+atching) (hvw : M.Adj v w),   h.toEdge ⟨v, ⋯⟩ = ⟨s(v, w), hvw⟩
+参数：h : M.IsMatching；hvw : M.Adj v w；v, w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.Adj.fst_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → u ∈ H.verts
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.toEdge.eq_1`：∀ {V : Type u_1} {G : Simpl
+eGraph V} {M : G.Subgraph} (h : M.IsMatching) (v : ↑M.verts),   h.toEdge v = ⟨s(
+↑v, Exists.choose ⋯), ⋯⟩
+· 使用定理 `Subtype.mk_eq_mk`：mk_eq_mk {a h a' h'} : @mk α p a h = @mk α p a' h' ↔ a
+ = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 theorem IsMatching.toEdge_eq_of_adj (h : M.IsMatching) (hvw : M.Adj v w) :
     h.toEdge ⟨v, hvw.fst_mem⟩ = ⟨s(v, w), hvw⟩ := by
-  rw [IsMatching.toEdge]; rw [Subtype.mk_eq_mk]; rw [← h hvw.fst_mem |>.choose_spec.right w hvw]
-
-/--
-theorem `IsMatching.toEdge.surjective` / 定理 `IsMatching.toEdge.surjective`
-
-English:
-theorem IsMatching.toEdge.surjective
-  given: (h : M.IsMatching)
-  statement: Surjective h.toEdge
-  proof: by
-  rintro ⟨⟨x, y⟩, he⟩
-  exact ⟨⟨x, M.edge_vert he⟩, h.toEdge_eq_of_adj he⟩
-
-中文:
-定理 IsMatching.toEdge.surjective
-  条件: (h : M.IsMatching)
-  结论: 满射 h.toEdge
-  证明: by
-  rintro ⟨⟨x, y⟩, he⟩
-  exact ⟨⟨x, M.edge_vert he⟩, h.toEdge_eq_of_adj he⟩
-
-Depends on / 依赖: M.edge_vert, edge_vert, h.toEdge_eq_of_adj, toEdge_eq_of_adj
+  rw [IsMatching.toEdge, Subtype.mk_eq_mk, ← h hvw.fst_mem |>.choose_spec.right w hvw]
+/-
+**SimpleGraph.Subgraph.IsMatching.toEdge.surjective** 是 Mathlib 中的一个定理，位于命名空间 `S
+impleGraph.Subgraph.IsMatching.toEdge`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} (h : M.IsMatching), 
+Function.Surjective h.toEdge
+参数：h : M.IsMatching。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.toEdge_eq_of_adj`：∀ {V : Type u_1} {G : 
+SimpleGraph V} {M : G.Subgraph} {v w : V} (h : M.IsMatching) (hvw : M.Adj v w), 
+  h.toEdge ⟨v, ⋯⟩ = ⟨s(v, w), hvw⟩
 -/
 theorem IsMatching.toEdge.surjective (h : M.IsMatching) : Surjective h.toEdge := by
   rintro ⟨⟨x, y⟩, he⟩
   exact ⟨⟨x, M.edge_vert he⟩, h.toEdge_eq_of_adj he⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `IsMatching.toEdge_eq_toEdge_of_adj` / 定理 `IsMatching.toEdge_eq_toEdge_of_adj`
-
-English:
-theorem IsMatching.toEdge_eq_toEdge_of_adj
-  given: (h : M.IsMatching) (ha : M.Adj v w)
-  proof: by
-  rw [h.toEdge_eq_of_adj ha]; rw [h.toEdge_eq_of_adj ha.symm]; rw [Subtype.mk_eq_mk]; rw [Sym2.eq_swap]
-
-中文:
-定理 IsMatching.toEdge_eq_toEdge_of_adj
-  条件: (h : M.IsMatching) (ha : M.伴随 v w)
-  证明: by
-  rw [h.toEdge_eq_of_adj ha]; rw [h.toEdge_eq_of_adj ha.symm]; rw [Subtype.mk_eq_mk]; rw [Sym2.eq_swap]
-
-Depends on / 依赖: Subtype, Subtype.mk_eq_mk, Sym2.eq_swap, eq_swap, h.toEdge_eq_of_adj, ha.symm, mk_eq_mk, toEdge_eq_of_adj
+/-
+**SimpleGraph.Subgraph.IsMatching.toEdge_eq_toEdge_of_adj** 是 Mathlib 中的一个定理，位于命
+名空间 `SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} {v w : V} (h : M.IsM
+atching) (ha : M.Adj v w),   h.toEdge ⟨v, ⋯⟩ = h.toEdge ⟨w, ⋯⟩
+参数：h : M.IsMatching；ha : M.Adj v w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.Adj.fst_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → u ∈ H.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.snd_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → v ∈ H.verts
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.toEdge_eq_of_adj`：∀ {V : Type u_1} {G : 
+SimpleGraph V} {M : G.Subgraph} {v w : V} (h : M.IsMatching) (hvw : M.Adj v w), 
+  h.toEdge ⟨v, ⋯⟩ = ⟨s(v, w), hvw⟩
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
+· 使用定理 `Subtype.mk_eq_mk`：mk_eq_mk {a h a' h'} : @mk α p a h = @mk α p a' h' ↔ a
+ = a'
+· 使用定理 `Sym2.eq_swap`：eq_swap {a b : α} : s(a, b) = s(b, a)
 -/
 theorem IsMatching.toEdge_eq_toEdge_of_adj (h : M.IsMatching) (ha : M.Adj v w) :
     h.toEdge ⟨v, ha.fst_mem⟩ = h.toEdge ⟨w, ha.snd_mem⟩ := by
-  rw [h.toEdge_eq_of_adj ha]; rw [h.toEdge_eq_of_adj ha.symm]; rw [Subtype.mk_eq_mk]; rw [Sym2.eq_swap]
-
-/--
-theorem `IsMatching.mem_coe_toEdge` / 定理 `IsMatching.mem_coe_toEdge`
-
-English:
-theorem IsMatching.mem_coe_toEdge
-  given: (h : M.IsMatching) {v : V} (hv : v in M.verts)
-  proof: .choose, rfl⟩ ⟨h hv
-
-中文:
-定理 IsMatching.mem_coe_toEdge
-  条件: (h : M.IsMatching) {v : V} (hv : v in M.verts)
-  证明: .choose, rfl⟩ ⟨h hv
+  rw [h.toEdge_eq_of_adj ha, h.toEdge_eq_of_adj ha.symm, Subtype.mk_eq_mk, Sym2.eq_swap]
+/-
+**SimpleGraph.Subgraph.IsMatching.mem_coe_toEdge** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} (h : M.IsMatching) {
+v : V} (hv : v ∈ M.verts),   v ∈ ↑(h.toEdge ⟨v, hv⟩)
+参数：h : M.IsMatching；hv : v ∈ M.verts；h.toEdge ⟨v, hv⟩。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsMatching.mem_coe_toEdge (h : M.IsMatching) {v : V} (hv : v in M.verts) :
-    v in (h.toEdge ⟨v, hv⟩ : Sym2 V) :=
-.choose, rfl⟩ ⟨h hv
+theorem IsMatching.mem_coe_toEdge (h : M.IsMatching) {v : V} (hv : v ∈ M.verts) :
+    v ∈ (h.toEdge ⟨v, hv⟩ : Sym2 V) :=
+  ⟨h hv |>.choose, rfl⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `IsMatching.toEdge_preimage_singleton` / 定理 `IsMatching.toEdge_preimage_singleton`
-
-English:
-theorem IsMatching.toEdge_preimage_singleton
-  given: (h : M.IsMatching) (huv : M.Adj u v)
-  proof: by
-  refine Set.ext fun w => ⟨fun hw => ?_, fun hw => ?_⟩
-  · grind [h.mem_coe_toEdge w.property]
-  · rcases hw with rfl | rfl
-    · simp [h.toEdge_eq_of_adj huv]
-    · simp [h.toEdge_eq_of_adj huv.symm]
-
-中文:
-定理 IsMatching.toEdge_preimage_singleton
-  条件: (h : M.IsMatching) (huv : M.伴随 u v)
-  证明: by
-  refine Set.ext fun w => ⟨fun hw => ?_, fun hw => ?_⟩
-  · grind [h.mem_coe_toEdge w.property]
-  · rcases hw with rfl | rfl
-    · simp [h.toEdge_eq_of_adj huv]
-    · simp [h.toEdge_eq_of_adj huv.symm]
-
-Depends on / 依赖: Set.ext, h.mem_coe_toEdge, h.toEdge_eq_of_adj, huv.symm, mem_coe_toEdge, property, toEdge_eq_of_adj, w.property
+/-
+**SimpleGraph.Subgraph.IsMatching.toEdge_preimage_singleton** 是 Mathlib 中的一个定理，位
+于命名空间 `SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} {u v : V} (h : M.IsM
+atching) (huv : M.Adj u v),   h.toEdge ⁻¹' {⟨s(u, v), huv⟩} = {⟨u, ⋯⟩, ⟨v, ⋯⟩}
+参数：h : M.IsMatching；huv : M.Adj u v；u, v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `SimpleGraph.Subgraph.Adj.fst_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → u ∈ H.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.snd_mem`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → v ∈ H.verts
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.toEdge_eq_of_adj`：∀ {V : Type u_1} {G : 
+SimpleGraph V} {M : G.Subgraph} {v w : V} (h : M.IsMatching) (hvw : M.Adj v w), 
+  h.toEdge ⟨v, ⋯⟩ = ⟨s(v, w), hvw⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
 theorem IsMatching.toEdge_preimage_singleton (h : M.IsMatching) (huv : M.Adj u v) :
     h.toEdge ⁻¹' {⟨s(u, v), huv⟩} = {⟨u, huv.fst_mem⟩, ⟨v, huv.snd_mem⟩} := by
-  refine Set.ext fun w => ⟨fun hw => ?_, fun hw => ?_⟩
+  refine Set.ext fun w ↦ ⟨fun hw ↦ ?_, fun hw ↦ ?_⟩
   · grind [h.mem_coe_toEdge w.property]
   · rcases hw with rfl | rfl
     · simp [h.toEdge_eq_of_adj huv]
     · simp [h.toEdge_eq_of_adj huv.symm]
-
-/--
-lemma `IsMatching.map_ofLE` / 引理 `IsMatching.map_ofLE`
-
-English:
-lemma IsMatching.map_ofLE
-  given: (h : M.IsMatching) (hGG' : G <= G')
-  proof: by
-  intro _ hv
-.mp hv obtain ⟨_, hv, hv'⟩ := Set.mem_image _ _ _
-  obtain ⟨w, hw⟩ := h hv
-  use w
-  simpa using hv' ▸ hw
-
-中文:
-引理 IsMatching.map_ofLE
-  条件: (h : M.IsMatching) (hGG' : G <= G')
-  证明: by
-  intro _ hv
-.mp hv obtain ⟨_, hv, hv'⟩ := Set.mem_image _ _ _
-  obtain ⟨w, hw⟩ := h hv
-  use w
-  simpa using hv' ▸ hw
-
-Depends on / 依赖: Set.mem_image, mem_image
+/-
+**SimpleGraph.Subgraph.IsMatching.map_ofLE** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V} {M : G.Subgraph},   M.IsMatching →
+ ∀ (hGG' : G ≤ G'), (SimpleGraph.Subgraph.map (SimpleGraph.Hom.ofLE hGG') M).IsM
+atching
+参数：hGG' : G ≤ G'；SimpleGraph.Subgraph.map (SimpleGraph.Hom.ofLE hGG') M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+· 使用定理 `Relation.map_id_id`：∀ {α : Type u_1} {β : Type u_2} (r : α → β → Prop), 
+Relation.Map r id id = r
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-lemma IsMatching.map_ofLE (h : M.IsMatching) (hGG' : G <= G') :
+lemma IsMatching.map_ofLE (h : M.IsMatching) (hGG' : G ≤ G') :
     (M.map (Hom.ofLE hGG')).IsMatching := by
   intro _ hv
-.mp hv obtain ⟨_, hv, hv'⟩ := Set.mem_image _ _ _
+  obtain ⟨_, hv, hv'⟩ := Set.mem_image _ _ _ |>.mp hv
   obtain ⟨w, hw⟩ := h hv
   use w
   simpa using hv' ▸ hw
-
-/--
-lemma `IsMatching.eq_of_adj_left` / 引理 `IsMatching.eq_of_adj_left`
-
-English:
-lemma IsMatching.eq_of_adj_left
-  given: (hM : M.IsMatching) (huv : M.Adj u v) (huw : M.Adj u w)
-  statement: v = w
-  proof: (hM <| M.edge_vert huv).unique huv huw
-
-中文:
-引理 IsMatching.eq_of_adj_left
-  条件: (hM : M.IsMatching) (huv : M.伴随 u v) (huw : M.伴随 u w)
-  结论: v = w
-  证明: (hM <| M.edge_vert huv).unique huv huw
-
-Depends on / 依赖: M.edge_vert, edge_vert, unique
+/-
+**SimpleGraph.Subgraph.IsMatching.eq_of_adj_left** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} {u v w : V}, M.IsMat
+ching → M.Adj u v → M.Adj u w → v = w
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
 -/
 lemma IsMatching.eq_of_adj_left (hM : M.IsMatching) (huv : M.Adj u v) (huw : M.Adj u w) : v = w :=
   (hM <| M.edge_vert huv).unique huv huw
-
-/--
-lemma `IsMatching.eq_of_adj_right` / 引理 `IsMatching.eq_of_adj_right`
-
-English:
-lemma IsMatching.eq_of_adj_right
-  given: (hM : M.IsMatching) (huw : M.Adj u w) (hvw : M.Adj v w)
-  statement: u = v
-  proof: hM.eq_of_adj_left huw.symm hvw.symm
-
-中文:
-引理 IsMatching.eq_of_adj_right
-  条件: (hM : M.IsMatching) (huw : M.伴随 u w) (hvw : M.伴随 v w)
-  结论: u = v
-  证明: hM.eq_of_adj_left huw.symm hvw.symm
-
-Depends on / 依赖: eq_of_adj_left, hM.eq_of_adj_left, huw.symm, hvw.symm
+/-
+**SimpleGraph.Subgraph.IsMatching.eq_of_adj_right** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} {u v w : V}, M.IsMat
+ching → M.Adj u w → M.Adj v w → u = v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.eq_of_adj_left`：∀ {V : Type u_1} {G : Si
+mpleGraph V} {M : G.Subgraph} {u v w : V}, M.IsMatching → M.Adj u v → M.Adj u w 
+→ v = w
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
 -/
 lemma IsMatching.eq_of_adj_right (hM : M.IsMatching) (huw : M.Adj u w) (hvw : M.Adj v w) : u = v :=
   hM.eq_of_adj_left huw.symm hvw.symm
-
-/--
-lemma `IsMatching.not_adj_left_of_ne` / 引理 `IsMatching.not_adj_left_of_ne`
-
-English:
-lemma IsMatching.not_adj_left_of_ne
-  given: (hM : M.IsMatching) (hvw : v != w) (huv : M.Adj u v)
-  proof: fun huw => hvw hM.eq_of_adj_left huv huw
-
-中文:
-引理 IsMatching.not_adj_left_of_ne
-  条件: (hM : M.IsMatching) (hvw : v != w) (huv : M.伴随 u v)
-  证明: fun huw => hvw hM.eq_of_adj_left huv huw
-
-Depends on / 依赖: eq_of_adj_left, hM.eq_of_adj_left
+/-
+**SimpleGraph.Subgraph.IsMatching.not_adj_left_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `
+SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} {u v w : V}, M.IsMat
+ching → v ≠ w → M.Adj u v → ¬M.Adj u w
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.eq_of_adj_left`：∀ {V : Type u_1} {G : Si
+mpleGraph V} {M : G.Subgraph} {u v w : V}, M.IsMatching → M.Adj u v → M.Adj u w 
+→ v = w
 -/
-lemma IsMatching.not_adj_left_of_ne (hM : M.IsMatching) (hvw : v != w) (huv : M.Adj u v) :
-¬M.Adj u w := fun huw => hvw hM.eq_of_adj_left huv huw
-
-/--
-lemma `IsMatching.not_adj_right_of_ne` / 引理 `IsMatching.not_adj_right_of_ne`
-
-English:
-lemma IsMatching.not_adj_right_of_ne
-  given: (hM : M.IsMatching) (huv : u != v) (huw : M.Adj u w)
-  proof: fun hvw => huv hM.eq_of_adj_right huw hvw
-
-中文:
-引理 IsMatching.not_adj_right_of_ne
-  条件: (hM : M.IsMatching) (huv : u != v) (huw : M.伴随 u w)
-  证明: fun hvw => huv hM.eq_of_adj_right huw hvw
-
-Depends on / 依赖: eq_of_adj_right, hM.eq_of_adj_right
+lemma IsMatching.not_adj_left_of_ne (hM : M.IsMatching) (hvw : v ≠ w) (huv : M.Adj u v) :
+    ¬M.Adj u w := fun huw ↦ hvw <| hM.eq_of_adj_left huv huw
+/-
+**SimpleGraph.Subgraph.IsMatching.not_adj_right_of_ne** 是 Mathlib 中的一个定理，位于命名空间 
+`SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} {u v w : V}, M.IsMat
+ching → u ≠ v → M.Adj u w → ¬M.Adj v w
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.eq_of_adj_right`：∀ {V : Type u_1} {G : S
+impleGraph V} {M : G.Subgraph} {u v w : V}, M.IsMatching → M.Adj u w → M.Adj v w
+ → u = v
 -/
-lemma IsMatching.not_adj_right_of_ne (hM : M.IsMatching) (huv : u != v) (huw : M.Adj u w) :
-¬M.Adj v w := fun hvw => huv hM.eq_of_adj_right huw hvw
-
-/--
-lemma `IsMatching.sup` / 引理 `IsMatching.sup`
-
-English:
-lemma IsMatching.sup
-  statement: (hM : M.IsMatching) (hM' : M'.IsMatching)
-  proof: by
-  intro v hv
-  have aux {N N' : Subgraph G} (hN : N.IsMatching) (hd : Disjoint N.support N'.support)
-    (hmN : v in N.verts) : exists! w, (N ⊔ N').Adj v w := by
-    obtain ⟨w, hw⟩ := hN hmN
-    use w
-    refine ⟨sup_adj.mpr (.inl hw.1), ?_⟩
-    intro y hy
-    cases hy with
-    | inl h => exact hw.2 y h
-    | inr h =>
-      rw [Set.disjoint_left] at hd
-      simpa [(mem_support _).mpr ⟨w, hw.1⟩, (mem_support _).mpr ⟨y, h⟩] using @hd v
-  cases Set.mem_or_mem_of_mem_union hv with
-  | inl hmM => exact aux hM hd hmM
-  | inr hmM' =>
-    rw [sup_comm]
-    exact aux hM' (Disjoint.symm hd) hmM'
-
-中文:
-引理 IsMatching.上确界
-  结论: (hM : M.IsMatching) (hM' : M'.IsMatching)
-  证明: by
-  intro v hv
-  have aux {N N' : Subgraph G} (hN : N.IsMatching) (hd : Disjoint N.support N'.support)
-    (hmN : v in N.verts) : exists! w, (N ⊔ N').Adj v w := by
-    obtain ⟨w, hw⟩ := hN hmN
-    use w
-    refine ⟨sup_adj.mpr (.inl hw.1), ?_⟩
-    intro y hy
-    cases hy with
-    | inl h => exact hw.2 y h
-    | inr h =>
-      rw [Set.disjoint_left] at hd
-      simpa [(mem_support _).mpr ⟨w, hw.1⟩, (mem_support _).mpr ⟨y, h⟩] using @hd v
-  cases Set.mem_or_mem_of_mem_union hv with
-  | inl hmM => exact aux hM hd hmM
-  | inr hmM' =>
-    rw [sup_comm]
-    exact aux hM' (Disjoint.symm hd) hmM'
-
-Depends on / 依赖: Disjoint, IsMatching, N.IsMatching, N.support, N.verts, Set.disjoint_left, Set.mem_or_mem_of_mem_union, Subgraph, disjoint_left, mem_or_mem_of_mem_union, mem_support, sup_adj, sup_adj.mpr, sup_comm, support
+lemma IsMatching.not_adj_right_of_ne (hM : M.IsMatching) (huv : u ≠ v) (huw : M.Adj u w) :
+    ¬M.Adj v w := fun hvw ↦ huv <| hM.eq_of_adj_right huw hvw
+/-
+**SimpleGraph.Subgraph.IsMatching.sup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Sub
+graph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M M' : G.Subgraph},   M.IsMatching →
+ M'.IsMatching → Disjoint M.support M'.support → (M ⊔ M').IsMatching
+参数：M ⊔ M'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.Subgraph.sup_adj`：sup_adj : (G₁ ⊔ G₂).Adj a b ↔ G₁.Adj a b ∨
+ G₂.Adj a b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `SimpleGraph.Subgraph.mem_support`：mem_support (H : Subgraph G) {v : V} :
+ v in H.support ↔ exists w, H.Adj v w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
+· 使用定理 `Set.mem_or_mem_of_mem_union`：mem_or_mem_of_mem_union {x : α} {a b : Set 
+α} (H : x in a union b) : x in a ∨ x in b
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
 -/
 lemma IsMatching.sup (hM : M.IsMatching) (hM' : M'.IsMatching)
     (hd : Disjoint M.support M'.support) : (M ⊔ M').IsMatching := by
   intro v hv
   have aux {N N' : Subgraph G} (hN : N.IsMatching) (hd : Disjoint N.support N'.support)
-    (hmN : v in N.verts) : exists! w, (N ⊔ N').Adj v w := by
+    (hmN : v ∈ N.verts) : ∃! w, (N ⊔ N').Adj v w := by
     obtain ⟨w, hw⟩ := hN hmN
     use w
     refine ⟨sup_adj.mpr (.inl hw.1), ?_⟩
@@ -392,48 +345,38 @@ lemma IsMatching.sup (hM : M.IsMatching) (hM' : M'.IsMatching)
   | inr hmM' =>
     rw [sup_comm]
     exact aux hM' (Disjoint.symm hd) hmM'
-
-/--
-lemma `IsMatching.iSup` / 引理 `IsMatching.iSup`
-
-English:
-lemma IsMatching.iSup
-  statement: {ι : Sort _} {f : ι -> Subgraph G} (hM : (i : ι) -> (f i).IsMatching)
-  proof: by
-  intro v hv
-  obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (verts_iSup ▸ hv)
-  obtain ⟨w, hw⟩ := hM i hi
-  use w
-  refine ⟨iSup_adj.mpr ⟨i, hw.1⟩, ?_⟩
-  intro y hy
-  obtain ⟨i', hi'⟩ := iSup_adj.mp hy
-  by_cases heq : i = i'
-  · exact hw.2 y (heq.symm ▸ hi')
-  · have := hd heq
-    simp only [Set.disjoint_left] at this
-    simpa [(mem_support _).mpr ⟨w, hw.1⟩, (mem_support _).mpr ⟨y, hi'⟩] using @this v
-
-中文:
-引理 IsMatching.iSup
-  结论: {ι : 类型层 _} {f : ι -> 子图 G} (hM : (i : ι) -> (f i).IsMatching)
-  证明: by
-  intro v hv
-  obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (verts_iSup ▸ hv)
-  obtain ⟨w, hw⟩ := hM i hi
-  use w
-  refine ⟨iSup_adj.mpr ⟨i, hw.1⟩, ?_⟩
-  intro y hy
-  obtain ⟨i', hi'⟩ := iSup_adj.mp hy
-  by_cases heq : i = i'
-  · exact hw.2 y (heq.symm ▸ hi')
-  · have := hd heq
-    simp only [Set.disjoint_left] at this
-    simpa [(mem_support _).mpr ⟨w, hw.1⟩, (mem_support _).mpr ⟨y, hi'⟩] using @this v
-
-Depends on / 依赖: Set.disjoint_left, Set.mem_iUnion.mp, disjoint_left, heq.symm, iSup_adj, iSup_adj.mp, iSup_adj.mpr, mem_iUnion, mem_support, verts_iSup
+/-
+**SimpleGraph.Subgraph.IsMatching.iSup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {ι : Type u_3} {f : ι → G.Subgraph}, 
+  (∀ (i : ι), (f i).IsMatching) → (Pairwise fun i j => Disjoint (f i).support (f
+ j).support) → (⨆ i, f i).IsMatching
+参数：∀ (i : ι), (f i).IsMatching；Pairwise fun i j => Disjoint (f i).support (f j).
+support；⨆ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `SimpleGraph.Subgraph.verts_iSup`：verts_iSup {f : ι -> G.Subgraph} : (⨆ i
+, f i).verts = ⋃ i, (f i).verts
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.Subgraph.iSup_adj`：iSup_adj {f : ι -> G.Subgraph} : (⨆ i, f 
+i).Adj a b ↔ exists i, (f i).Adj a b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `SimpleGraph.Subgraph.mem_support`：mem_support (H : Subgraph G) {v : V} :
+ v in H.support ↔ exists w, H.Adj v w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
-lemma IsMatching.iSup {ι : Sort _} {f : ι -> Subgraph G} (hM : (i : ι) -> (f i).IsMatching)
-    (hd : Pairwise fun i j => Disjoint (f i).support (f j).support) :
+lemma IsMatching.iSup {ι : Sort _} {f : ι → Subgraph G} (hM : (i : ι) → (f i).IsMatching)
+    (hd : Pairwise fun i j ↦ Disjoint (f i).support (f j).support) :
     (⨆ i, f i).IsMatching := by
   intro v hv
   obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (verts_iSup ▸ hv)
@@ -447,153 +390,139 @@ lemma IsMatching.iSup {ι : Sort _} {f : ι -> Subgraph G} (hM : (i : ι) -> (f 
   · have := hd heq
     simp only [Set.disjoint_left] at this
     simpa [(mem_support _).mpr ⟨w, hw.1⟩, (mem_support _).mpr ⟨y, hi'⟩] using @this v
-
-/--
-lemma `IsMatching.subgraphOfAdj` / 引理 `IsMatching.subgraphOfAdj`
-
-English:
-lemma IsMatching.subgraphOfAdj
-  given: (h : G.Adj v w)
-  statement: (G.subgraphOfAdj h).IsMatching
-  proof: by
-  intro _ hv
-  rw [subgraphOfAdj_verts]; rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff] at hv
-  cases hv with
-  | inl => use w; aesop
-  | inr => use v; aesop
-
-中文:
-引理 IsMatching.subgraphOfAdj
-  条件: (h : G.伴随 v w)
-  结论: (G.subgraphOfAdj h).IsMatching
-  证明: by
-  intro _ hv
-  rw [subgraphOfAdj_verts]; rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff] at hv
-  cases hv with
-  | inl => use w; aesop
-  | inr => use v; aesop
-
-Depends on / 依赖: Set.mem_insert_iff, Set.mem_singleton_iff, mem_insert_iff, mem_singleton_iff, subgraphOfAdj_verts
+/-
+**SimpleGraph.Subgraph.IsMatching.subgraphOfAdj** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v w : V} (h : G.Adj v w), (G.subgrap
+hOfAdj h).IsMatching
+参数：h : G.Adj v w；G.subgraphOfAdj h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Set.mem_insert_iff`：mem_insert_iff {x a : α} {s : Set α} : x in insert a
+ s ↔ x = a ∨ x in s
+· 使用定理 `SimpleGraph.subgraphOfAdj_verts`：∀ {V : Type u} (G : SimpleGraph V) {v w
+ : V} (hvw : G.Adj v w), (G.subgraphOfAdj hvw).verts = {v, w}
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 lemma IsMatching.subgraphOfAdj (h : G.Adj v w) : (G.subgraphOfAdj h).IsMatching := by
   intro _ hv
-  rw [subgraphOfAdj_verts]; rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff] at hv
+  rw [subgraphOfAdj_verts, Set.mem_insert_iff, Set.mem_singleton_iff] at hv
   cases hv with
   | inl => use w; aesop
   | inr => use v; aesop
-
-/--
-lemma `IsMatching.coeSubgraph` / 引理 `IsMatching.coeSubgraph`
-
-English:
-lemma IsMatching.coeSubgraph
-  given: {G' : Subgraph G} {M : Subgraph G'.coe} (hM : M.IsMatching)
-  proof: by
-  intro _ hv
-obtain ⟨w, hw⟩ := hM Set.mem_of_mem_image_val (Subgraph.verts_coeSubgraph M).symm ▸ hv
-  use w
-  refine ⟨?_, fun y hy => ?_⟩
-· obtain ⟨v, hv⟩ := (Set.mem_image _ _ _).mp (Subgraph.verts_coeSubgraph M).symm ▸ hv
-    simp only [coeSubgraph_adj, Subtype.coe_eta, Subtype.coe_prop, exists_const]
-    exact ⟨hv.2 ▸ v.2, hw.1⟩
-  · obtain ⟨_, hw', hvw⟩ := (coeSubgraph_adj _ _ _).mp hy
-    rw [← hw.2 ⟨y]; rw [hw'⟩ hvw]
-
-中文:
-引理 IsMatching.coeSubgraph
-  条件: {G' : 子图 G} {M : 子图 G'.coe} (hM : M.IsMatching)
-  证明: by
-  intro _ hv
-obtain ⟨w, hw⟩ := hM Set.mem_of_mem_image_val (Subgraph.verts_coeSubgraph M).symm ▸ hv
-  use w
-  refine ⟨?_, fun y hy => ?_⟩
-· obtain ⟨v, hv⟩ := (Set.mem_image _ _ _).mp (Subgraph.verts_coeSubgraph M).symm ▸ hv
-    simp only [coeSubgraph_adj, Subtype.coe_eta, Subtype.coe_prop, exists_const]
-    exact ⟨hv.2 ▸ v.2, hw.1⟩
-  · obtain ⟨_, hw', hvw⟩ := (coeSubgraph_adj _ _ _).mp hy
-    rw [← hw.2 ⟨y]; rw [hw'⟩ hvw]
-
-Depends on / 依赖: Set.mem_image, Set.mem_of_mem_image_val, Subgraph, Subgraph.verts_coeSubgraph, Subtype, Subtype.coe_eta, Subtype.coe_prop, coeSubgraph_adj, coe_eta, coe_prop, exists_const, mem_image, mem_of_mem_image_val, verts_coeSubgraph
+/-
+**SimpleGraph.Subgraph.IsMatching.coeSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleG
+raph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {G' : G.Subgraph} {M : G'.coe.Subgrap
+h},   M.IsMatching → (SimpleGraph.Subgraph.coeSubgraph M).IsMatching
+参数：SimpleGraph.Subgraph.coeSubgraph M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_val_subset`：image_val_subset : (γ : Set α) subseteq β
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.Subgraph.verts_coeSubgraph`：verts_coeSubgraph {G' : Subgraph
+ G} (G'' : Subgraph G'.coe) : (Subgraph.coeSubgraph G'').verts = (G''.verts : Se
+t V)
+· 使用定理 `Set.mem_of_mem_image_val`：mem_of_mem_image_val (ha : a in (γ : Set α)) :
+ ⟨a, image_val_subset ha⟩ in γ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `SimpleGraph.Subgraph.coeSubgraph_adj`：coeSubgraph_adj {G' : G.Subgraph} 
+(G'' : G'.coe.Subgraph) (v w : V) : (G'.coeSubgraph G'').Adj v w ↔ exists (hv : 
+v in G'.verts) (hw : w in …
 -/
 lemma IsMatching.coeSubgraph {G' : Subgraph G} {M : Subgraph G'.coe} (hM : M.IsMatching) :
     (Subgraph.coeSubgraph M).IsMatching := by
   intro _ hv
-obtain ⟨w, hw⟩ := hM Set.mem_of_mem_image_val (Subgraph.verts_coeSubgraph M).symm ▸ hv
+  obtain ⟨w, hw⟩ := hM <| Set.mem_of_mem_image_val <| (Subgraph.verts_coeSubgraph M).symm ▸ hv
   use w
   refine ⟨?_, fun y hy => ?_⟩
-· obtain ⟨v, hv⟩ := (Set.mem_image _ _ _).mp (Subgraph.verts_coeSubgraph M).symm ▸ hv
+  · obtain ⟨v, hv⟩ := (Set.mem_image _ _ _).mp <| (Subgraph.verts_coeSubgraph M).symm ▸ hv
     simp only [coeSubgraph_adj, Subtype.coe_eta, Subtype.coe_prop, exists_const]
     exact ⟨hv.2 ▸ v.2, hw.1⟩
   · obtain ⟨_, hw', hvw⟩ := (coeSubgraph_adj _ _ _).mp hy
-    rw [← hw.2 ⟨y]; rw [hw'⟩ hvw]
-
-/--
-lemma `IsMatching.exists_of_disjoint_sets_of_equiv` / 引理 `IsMatching.exists_of_disjoint_sets_of_equiv`
-
-English:
-lemma IsMatching.exists_of_disjoint_sets_of_equiv
-  statement: {s t : Set V} (h : Disjoint s t)
-  proof: by
-  use {
-    verts := s union t
-    Adj := fun v w => (exists h : v in s, f ⟨v, h⟩ = w) ∨ (exists h : w in s, f ⟨w, h⟩ = v)
-    adj_sub := by
-      intro v w h
-      obtain (⟨hv, rfl⟩ | ⟨hw, rfl⟩) := h
-      · exact hadj ⟨v, _⟩
-      · exact (hadj ⟨w, _⟩).symm
-    edge_vert := by grind }
-  simp only [Subgraph.IsMatching, Set.mem_union, true_and]
-  intro v hv
-  rcases hv with hl | hr
-  · use f ⟨v, hl⟩
-    simp only [hl, exists_const, true_or, exists_true_left, true_and]
-    rintro y (rfl | ⟨hys, rfl⟩)
-    · rfl
-    · exact (h.ne_of_mem hl (f ⟨y, hys⟩).coe_prop rfl).elim
-  · use f.symm ⟨v, hr⟩
-    simp only [Subtype.coe_eta, Equiv.apply_symm_apply, Subtype.coe_prop, exists_const, or_true,
-      true_and]
-    rintro y (⟨hy, rfl⟩ | ⟨hy, rfl⟩)
-    · exact (h.ne_of_mem hy hr rfl).elim
-    · simp
-
-中文:
-引理 IsMatching.存在_of_disjoint_sets_of_equiv
-  结论: {s t : 集合 V} (h : Disjoint s t)
-  证明: by
-  use {
-    verts := s union t
-    Adj := fun v w => (exists h : v in s, f ⟨v, h⟩ = w) ∨ (exists h : w in s, f ⟨w, h⟩ = v)
-    adj_sub := by
-      intro v w h
-      obtain (⟨hv, rfl⟩ | ⟨hw, rfl⟩) := h
-      · exact hadj ⟨v, _⟩
-      · exact (hadj ⟨w, _⟩).symm
-    edge_vert := by grind }
-  simp only [Subgraph.IsMatching, Set.mem_union, true_and]
-  intro v hv
-  rcases hv with hl | hr
-  · use f ⟨v, hl⟩
-    simp only [hl, exists_const, true_or, exists_true_left, true_and]
-    rintro y (rfl | ⟨hys, rfl⟩)
-    · rfl
-    · exact (h.ne_of_mem hl (f ⟨y, hys⟩).coe_prop rfl).elim
-  · use f.symm ⟨v, hr⟩
-    simp only [Subtype.coe_eta, Equiv.apply_symm_apply, Subtype.coe_prop, exists_const, or_true,
-      true_and]
-    rintro y (⟨hy, rfl⟩ | ⟨hy, rfl⟩)
-    · exact (h.ne_of_mem hy hr rfl).elim
-    · simp
-
-Depends on / 依赖: IsMatching, Set.mem_union, Subgraph, Subgraph.IsMatching, adj_sub, coe_pro, edge_vert, exists_const, exists_true_left, h.ne_of_mem, mem_union, ne_of_mem, true_and, true_or
+    rw [← hw.2 ⟨y, hw'⟩ hvw]
+/-
+**SimpleGraph.Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv** 是 Mathlib 中
+的一个定理，位于命名空间 `SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {s t : Set V},   Disjoint s t → ∀ (f 
+: ↑s ≃ ↑t), (∀ (v : ↑s), G.Adj ↑v ↑(f v)) → ∃ M, M.verts = s ∪ t ∧ M.IsMatching
+参数：f : ↑s ≃ ↑t；∀ (v : ↑s), G.Adj ↑v ↑(f v)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Disjoint.ne_of_mem`：∀ {α : Type u} {s t : Set α}, Disjoint s t → ∀ ⦃a : 
+α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ t → a ≠ b
+· 使用定理 `Subtype.coe_prop`：coe_prop {S : Set α} (a : { a // a in S }) : ↑a in S
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 lemma IsMatching.exists_of_disjoint_sets_of_equiv {s t : Set V} (h : Disjoint s t)
-    (f : s ≃ t) (hadj : forall v : s, G.Adj v (f v)) :
-    exists M : Subgraph G, M.verts = s union t ∧ M.IsMatching := by
+    (f : s ≃ t) (hadj : ∀ v : s, G.Adj v (f v)) :
+    ∃ M : Subgraph G, M.verts = s ∪ t ∧ M.IsMatching := by
   use {
-    verts := s union t
-    Adj := fun v w => (exists h : v in s, f ⟨v, h⟩ = w) ∨ (exists h : w in s, f ⟨w, h⟩ = v)
+    verts := s ∪ t
+    Adj := fun v w ↦ (∃ h : v ∈ s, f ⟨v, h⟩ = w) ∨ (∃ h : w ∈ s, f ⟨w, h⟩ = v)
     adj_sub := by
       intro v w h
       obtain (⟨hv, rfl⟩ | ⟨hw, rfl⟩) := h
@@ -614,39 +543,21 @@ lemma IsMatching.exists_of_disjoint_sets_of_equiv {s t : Set V} (h : Disjoint s 
     rintro y (⟨hy, rfl⟩ | ⟨hy, rfl⟩)
     · exact (h.ne_of_mem hy hr rfl).elim
     · simp
-
-/--
-lemma `IsMatching.map` / 引理 `IsMatching.map`
-
-English:
-lemma IsMatching.map
-  statement: {G' : SimpleGraph W} {M : Subgraph G} (f : G ->g G')
-  proof: by
-  rintro _ ⟨v, hv, rfl⟩
-  obtain ⟨v', hv'⟩ := hM hv
-  use f v'
-  refine ⟨⟨v, v', hv'.1, rfl, rfl⟩, ?_⟩
-  rintro _ ⟨w, w', hw, hw', rfl⟩
-  cases hf hw'.symm
-  rw [hv'.2 w' hw]
-
-@[simp]
-
-中文:
-引理 IsMatching.map
-  结论: {G' : 简单图 W} {M : 子图 G} (f : G ->g G')
-  证明: by
-  rintro _ ⟨v, hv, rfl⟩
-  obtain ⟨v', hv'⟩ := hM hv
-  use f v'
-  refine ⟨⟨v, v', hv'.1, rfl, rfl⟩, ?_⟩
-  rintro _ ⟨w, w', hw, hw', rfl⟩
-  cases hf hw'.symm
-  rw [hv'.2 w' hw]
-
-@[simp]
+/-
+**SimpleGraph.Subgraph.IsMatching.map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Sub
+graph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {G' : SimpleGraph W} {
+M : G.Subgraph} (f : G →g G'),   Function.Injective ⇑f → M.IsMatching → (SimpleG
+raph.Subgraph.map f M).IsMatching
+参数：f : G →g G'；SimpleGraph.Subgraph.map f M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-protected lemma IsMatching.map {G' : SimpleGraph W} {M : Subgraph G} (f : G ->g G')
+protected lemma IsMatching.map {G' : SimpleGraph W} {M : Subgraph G} (f : G →g G')
     (hf : Injective f) (hM : M.IsMatching) : (M.map f).IsMatching := by
   rintro _ ⟨v, hv, rfl⟩
   obtain ⟨v', hv'⟩ := hM hv
@@ -657,442 +568,437 @@ protected lemma IsMatching.map {G' : SimpleGraph W} {M : Subgraph G} (f : G ->g 
   rw [hv'.2 w' hw]
 
 @[simp]
-/--
-lemma `Iso.isMatching_map` / 引理 `Iso.isMatching_map`
-
-English:
-lemma Iso.isMatching_map
-  given: {G' : SimpleGraph W} {M : Subgraph G} (f : G ≃g G')
-  proof: by simpa [← map_comp] using h.map f.symm.toHom f.symm.injective
-  mpr := .map f.toHom f.injective
-
-中文:
-引理 同构.isMatching_map
-  条件: {G' : 简单图 W} {M : 子图 G} (f : G ≃g G')
-  证明: by simpa [← map_comp] using h.map f.symm.toHom f.symm.injective
-  mpr := .map f.toHom f.injective
-
-Depends on / 依赖: f.injective, f.symm.injective, f.symm.toHom, f.toHom, h.map, injective, map_comp
+/-
+**SimpleGraph.Subgraph.Iso.isMatching_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Subgraph.Iso`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {G' : SimpleGraph W} {
+M : G.Subgraph} (f : G ≃g G'),   (SimpleGraph.Subgraph.map f.toHom M).IsMatching
+ ↔ M.IsMatching
+参数：f : G ≃g G'；SimpleGraph.Subgraph.map f.toHom M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Iso.symm_toHom_comp_toHom`：symm_toHom_comp_toHom : f.symm.to
+Hom.comp f.toHom = Hom.id
+· 使用定理 `SimpleGraph.Subgraph.map_id`：∀ {V : Type u} {G : SimpleGraph V} (H : G.S
+ubgraph), SimpleGraph.Subgraph.map SimpleGraph.Hom.id H = H
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.map`：∀ {V : Type u_1} {W : Type u_2} {G 
+: SimpleGraph V} {G' : SimpleGraph W} {M : G.Subgraph} (f : G →g G'),   Function
+.Injective ⇑f → M.IsMatch…
+· 使用定理 `RelIso.injective`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {s 
+: β → β → Prop} (e : r ≃r s), Function.Injective ⇑e
 -/
 lemma Iso.isMatching_map {G' : SimpleGraph W} {M : Subgraph G} (f : G ≃g G') :
     (M.map f.toHom).IsMatching ↔ M.IsMatching where
   mp h := by simpa [← map_comp] using h.map f.symm.toHom f.symm.injective
   mpr := .map f.toHom f.injective
-
-/--
-theorem `IsMatching.verts_eq_biUnion_edgeSet` / 定理 `IsMatching.verts_eq_biUnion_edgeSet`
-
-English:
-theorem IsMatching.verts_eq_biUnion_edgeSet
-  given: {M : G.Subgraph} (h : M.IsMatching)
-  proof: by
-  refine Set.ext fun v => .trans ⟨fun hv => ?_, fun ⟨e, he, hv⟩ => ?_⟩ Set.mem_iUnion₂.symm
-  · have ⟨u, he, _⟩ := h hv
-    exact ⟨s(v, u), he, Sym2.mem_mk_left ..⟩
-  · exact mem_verts_of_mem_edge he hv
-
-中文:
-定理 IsMatching.verts_eq_biUnion_edgeSet
-  条件: {M : G.子图} (h : M.IsMatching)
-  证明: by
-  refine Set.ext fun v => .trans ⟨fun hv => ?_, fun ⟨e, he, hv⟩ => ?_⟩ Set.mem_iUnion₂.symm
-  · have ⟨u, he, _⟩ := h hv
-    exact ⟨s(v, u), he, Sym2.mem_mk_left ..⟩
-  · exact mem_verts_of_mem_edge he hv
-
-Depends on / 依赖: Set.ext, Set.mem_iUnion, Sym2.mem_mk_left, mem_mk_left, mem_verts_of_mem_edge
+/-
+**SimpleGraph.Subgraph.IsMatching.verts_eq_biUnion_edgeSet** 是 Mathlib 中的一个定理，位于
+命名空间 `SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph}, M.IsMatching → M.ve
+rts = ⋃ e ∈ M.edgeSet, ↑e
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Sym2.mem_mk_left`：mem_mk_left (x y : α) : x in s(x, y)
+· 使用定理 `SimpleGraph.Subgraph.mem_verts_of_mem_edge`：mem_verts_of_mem_edge {G' : 
+Subgraph G} {e : Sym2 V} {v : V} (he : e in G'.edgeSet) (hv : v in e) : v in G'.
+verts
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.mem_iUnion₂`：mem_iUnion₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋃ (i) (j), s i j) ↔ exists i j, x in s i j
 -/
 theorem IsMatching.verts_eq_biUnion_edgeSet {M : G.Subgraph} (h : M.IsMatching) :
-    M.verts = ⋃ e in M.edgeSet, (e : Set V) := by
-  refine Set.ext fun v => .trans ⟨fun hv => ?_, fun ⟨e, he, hv⟩ => ?_⟩ Set.mem_iUnion₂.symm
+    M.verts = ⋃ e ∈ M.edgeSet, (e : Set V) := by
+  refine Set.ext fun v ↦ .trans ⟨fun hv ↦ ?_, fun ⟨e, he, hv⟩ ↦ ?_⟩ Set.mem_iUnion₂.symm
   · have ⟨u, he, _⟩ := h hv
     exact ⟨s(v, u), he, Sym2.mem_mk_left ..⟩
   · exact mem_verts_of_mem_edge he hv
-
-/--
-theorem `IsMatching.injOn_edgeSet` / 定理 `IsMatching.injOn_edgeSet`
-
-English:
-theorem IsMatching.injOn_edgeSet
-  statement: (Set.ofPred IsMatching).InjOn (edgeSet (G := G))
-  proof: by
-refine fun M₁ h₁ M₂ h₂ h => Subgraph.ext ?_ .mp h Sym2.fromRel_eq_fromRel_iff_eq ..
-  rw [h₁.verts_eq_biUnion_edgeSet]; rw [h₂.verts_eq_biUnion_edgeSet]; rw [h]
-
-中文:
-定理 IsMatching.injOn_edgeSet
-  结论: (集合.ofPred IsMatching).单射限制 (edgeSet (G := G))
-  证明: by
-refine fun M₁ h₁ M₂ h₂ h => Subgraph.ext ?_ .mp h Sym2.fromRel_eq_fromRel_iff_eq ..
-  rw [h₁.verts_eq_biUnion_edgeSet]; rw [h₂.verts_eq_biUnion_edgeSet]; rw [h]
-
-Depends on / 依赖: Subgraph, Subgraph.ext, Sym2.fromRel_eq_fromRel_iff_eq, fromRel_eq_fromRel_iff_eq, verts_eq_biUnion_edgeSet
+/-
+**SimpleGraph.Subgraph.IsMatching.injOn_edgeSet** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V},   Set.InjOn SimpleGraph.Subgraph.edg
+eSet (Set.ofPred SimpleGraph.Subgraph.IsMatching)
+参数：Set.ofPred SimpleGraph.Subgraph.IsMatching。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.verts_eq_biUnion_edgeSet`：∀ {V : Type u_
+1} {G : SimpleGraph V} {M : G.Subgraph}, M.IsMatching → M.verts = ⋃ e ∈ M.edgeSe
+t, ↑e
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.Subgraph.symm`：∀ {V : Type u} {G : SimpleGraph V} (self : G.
+Subgraph), Std.Symm self.Adj
+· 使用定理 `Sym2.fromRel_eq_fromRel_iff_eq`：fromRel_eq_fromRel_iff_eq {r₁ r₂ : α -> 
+α -> Prop} (sym₁ : Std.Symm r₁) (sym₂ : Std.Symm r₂) : fromRel sym₁ = fromRel sy
+m₂ ↔ r₁ = r₂
 -/
 theorem IsMatching.injOn_edgeSet : (Set.ofPred IsMatching).InjOn (edgeSet (G := G)) := by
-refine fun M₁ h₁ M₂ h₂ h => Subgraph.ext ?_ .mp h Sym2.fromRel_eq_fromRel_iff_eq ..
-  rw [h₁.verts_eq_biUnion_edgeSet]; rw [h₂.verts_eq_biUnion_edgeSet]; rw [h]
-
-/--
-theorem `IsMatching.strictMonoOn_edgeSet` / 定理 `IsMatching.strictMonoOn_edgeSet`
-
-English:
-theorem IsMatching.strictMonoOn_edgeSet
-  statement: StrictMonoOn (edgeSet (G := G)) (Set.ofPred IsMatching)
-  proof: .strictMonoOn_of_injOn injOn_edgeSet edgeSet_monotone.monotoneOn _
-
-中文:
-定理 IsMatching.strictMonoOn_edgeSet
-  结论: StrictMonoOn (edgeSet (G := G)) (集合.ofPred IsMatching)
-  证明: .strictMonoOn_of_injOn injOn_edgeSet edgeSet_monotone.monotoneOn _
-
-Depends on / 依赖: IsMatching, Set.ofPred, ofPred
+  refine fun M₁ h₁ M₂ h₂ h ↦ Subgraph.ext ?_ <| Sym2.fromRel_eq_fromRel_iff_eq .. |>.mp h
+  rw [h₁.verts_eq_biUnion_edgeSet, h₂.verts_eq_biUnion_edgeSet, h]
+/-
+**SimpleGraph.Subgraph.IsMatching.strictMonoOn_edgeSet** 是 Mathlib 中的一个定理，位于命名空间
+ `SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V},   StrictMonoOn SimpleGraph.Subgraph.
+edgeSet (Set.ofPred SimpleGraph.Subgraph.IsMatching)
+参数：Set.ofPred SimpleGraph.Subgraph.IsMatching。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonotoneOn.strictMonoOn_of_injOn`：MonotoneOn.strictMonoOn_of_injOn (hmon
+o : MonotoneOn f s) (hinj : s.InjOn f) : StrictMonoOn f s
+· 使用定理 `Monotone.monotoneOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Monotone f → ∀ (s : Set α), MonotoneOn f s
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_monotone`：edgeSet_monotone : Monotone (edge
+Set (G
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.injOn_edgeSet`：∀ {V : Type u_1} {G : Sim
+pleGraph V},   Set.InjOn SimpleGraph.Subgraph.edgeSet (Set.ofPred SimpleGraph.Su
+bgraph.IsMatching)
 -/
 theorem IsMatching.strictMonoOn_edgeSet : StrictMonoOn (edgeSet (G := G)) (Set.ofPred IsMatching) :=
-.strictMonoOn_of_injOn injOn_edgeSet edgeSet_monotone.monotoneOn _
+  edgeSet_monotone.monotoneOn _ |>.strictMonoOn_of_injOn injOn_edgeSet
 
 /--
-Definition of `IsPerfectMatching` / `IsPerfectMatching` 的定义
+The subgraph `M` of `G` is a perfect matching on `G` if it's a matching and every vertex `G` is
+matched.
+-/
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.
+Subgraph`。
+形式化陈述：IsPerfectMatching (M : G.Subgraph) : Prop
+参数：M : G.Subgraph。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPerfectMatching
-  signature: (M : G.Subgraph)
-  body: M.IsMatching ∧ M.IsSpanning
-
-中文:
-定义 IsPerfectMatching
-  签名: (M : G.子图)
-  定义体: M.IsMatching ∧ M.IsSpanning
-
-Depends on / 依赖: IsMatching, IsSpanning, M.IsMatching, M.IsSpanning
+--- 原说明 ---
+The subgraph `M` of `G` is a perfect matching on `G` if it's a matching and ever
+y vertex `G` is
+matched.
 -/
 def IsPerfectMatching (M : G.Subgraph) : Prop := M.IsMatching ∧ M.IsSpanning
-
-/--
-theorem `IsMatching.support_eq_verts` / 定理 `IsMatching.support_eq_verts`
-
-English:
-theorem IsMatching.support_eq_verts
-  given: (h : M.IsMatching)
-  statement: M.support = M.verts
-  proof: by
-  refine M.support_subset_verts.antisymm fun v hv => ?_
-  obtain ⟨w, hvw, -⟩ := h hv
-  exact ⟨_, hvw⟩
-
-中文:
-定理 IsMatching.support_eq_verts
-  条件: (h : M.IsMatching)
-  结论: M.support = M.verts
-  证明: by
-  refine M.support_subset_verts.antisymm fun v hv => ?_
-  obtain ⟨w, hvw, -⟩ := h hv
-  exact ⟨_, hvw⟩
-
-Depends on / 依赖: M.support_subset_verts.antisymm, antisymm, support_subset_verts
+/-
+**SimpleGraph.Subgraph.IsMatching.support_eq_verts** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph}, M.IsMatching → M.su
+pport = M.verts
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `SimpleGraph.Subgraph.support_subset_verts`：support_subset_verts (H : Sub
+graph G) : H.support subseteq H.verts
 -/
 theorem IsMatching.support_eq_verts (h : M.IsMatching) : M.support = M.verts := by
   refine M.support_subset_verts.antisymm fun v hv => ?_
   obtain ⟨w, hvw, -⟩ := h hv
   exact ⟨_, hvw⟩
-
-/--
-theorem `isMatching_iff_forall_degree` / 定理 `isMatching_iff_forall_degree`
-
-English:
-theorem isMatching_iff_forall_degree
-  given: [forall v, Fintype (M.neighborSet v)]
-  proof: by
-  simp only [degree_eq_one_iff_existsUnique_adj, IsMatching]
-
-中文:
-定理 isMatching_iff_对任意_degree
-  条件: [对任意 v, 有限类型 (M.neighborSet v)]
-  证明: by
-  simp only [degree_eq_one_iff_existsUnique_adj, IsMatching]
-
-Depends on / 依赖: IsMatching, degree_eq_one_iff_existsUnique_adj
+/-
+**SimpleGraph.Subgraph.isMatching_iff_forall_degree** 是 Mathlib 中的一个定理，位于命名空间 `S
+impleGraph.Subgraph`。
+形式化陈述：isMatching_iff_forall_degree [forall v, Fintype (M.neighborSet v)] : M.IsM
+atching ↔ forall v : V, v in M.verts -> M.degree v = 1
+参数：M.neighborSet v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isMatching_iff_forall_degree [forall v, Fintype (M.neighborSet v)] :
-    M.IsMatching ↔ forall v : V, v in M.verts -> M.degree v = 1 := by
+theorem isMatching_iff_forall_degree [∀ v, Fintype (M.neighborSet v)] :
+    M.IsMatching ↔ ∀ v : V, v ∈ M.verts → M.degree v = 1 := by
   simp only [degree_eq_one_iff_existsUnique_adj, IsMatching]
-
-/--
-theorem `IsMatching.even_card` / 定理 `IsMatching.even_card`
-
-English:
-theorem IsMatching.even_card
-  given: [Fintype M.verts] (h : M.IsMatching)
-  statement: Even M.verts.toFinset.card
-  proof: by
-  classical
-  rw [isMatching_iff_forall_degree] at h
-  use M.coe.edgeFinset.card
-  rw [← two_mul]; rw [← M.coe.sum_degrees_eq_twice_card_edges]
-  simp [h, Finset.card_univ]
-
-中文:
-定理 IsMatching.even_card
-  条件: [有限类型 M.verts] (h : M.IsMatching)
-  结论: Even M.verts.toFinset.card
-  证明: by
-  classical
-  rw [isMatching_iff_forall_degree] at h
-  use M.coe.edgeFinset.card
-  rw [← two_mul]; rw [← M.coe.sum_degrees_eq_twice_card_edges]
-  simp [h, Finset.card_univ]
-
-Depends on / 依赖: Finset, Finset.card_univ, M.coe.edgeFinset.card, M.coe.sum_degrees_eq_twice_card_edges, card_univ, classical, edgeFinset, isMatching_iff_forall_degree, sum_degrees_eq_twice_card_edges, two_mul
+/-
+**SimpleGraph.Subgraph.IsMatching.even_card** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} [inst : Fintype ↑M.v
+erts],   M.IsMatching → Even M.verts.toFinset.card
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `SimpleGraph.sum_degrees_eq_twice_card_edges`：sum_degrees_eq_twice_card_e
+dges : ∑ v, G.degree v = 2 * #G.edgeFinset
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
+· 使用定理 `Set.fintypeCard_eq_ncard`：fintypeCard_eq_ncard [Fintype s] : Fintype.car
+d s = s.ncard
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `SimpleGraph.Subgraph.coe_degree`：coe_degree (G' : Subgraph G) (v : G'.ve
+rts) [Fintype (G'.coe.neighborSet v)] [Fintype (G'.neighborSet v)] : G'.coe.degr
+ee v = G'.degree v
+· 使用定理 `SimpleGraph.Subgraph.isMatching_iff_forall_degree`：isMatching_iff_forall
+_degree [forall v, Fintype (M.neighborSet v)] : M.IsMatching ↔ forall v : V, v i
+n M.verts -> M.degree v = 1
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsMatching.even_card [Fintype M.verts] (h : M.IsMatching) : Even M.verts.toFinset.card := by
   classical
   rw [isMatching_iff_forall_degree] at h
   use M.coe.edgeFinset.card
-  rw [← two_mul]; rw [← M.coe.sum_degrees_eq_twice_card_edges]
+  rw [← two_mul, ← M.coe.sum_degrees_eq_twice_card_edges]
   simp [h, Finset.card_univ]
-
-/--
-theorem `isPerfectMatching_iff` / 定理 `isPerfectMatching_iff`
-
-English:
-theorem isPerfectMatching_iff
-  statement: M.IsPerfectMatching ↔ forall v, exists! w, M.Adj v w
-  proof: by
-  refine ⟨?_, fun hm => ⟨fun v _ => hm v, fun v => ?_⟩⟩
-  · rintro ⟨hm, hs⟩ v
-    exact hm (hs v)
-  · obtain ⟨w, hw, -⟩ := hm v
-    exact M.edge_vert hw
-
-中文:
-定理 isPerfectMatching_iff
-  结论: M.IsPerfectMatching ↔ 对任意 v, 存在! w, M.伴随 v w
-  证明: by
-  refine ⟨?_, fun hm => ⟨fun v _ => hm v, fun v => ?_⟩⟩
-  · rintro ⟨hm, hs⟩ v
-    exact hm (hs v)
-  · obtain ⟨w, hw, -⟩ := hm v
-    exact M.edge_vert hw
-
-Depends on / 依赖: M.edge_vert, edge_vert
+/-
+**SimpleGraph.Subgraph.isPerfectMatching_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.Subgraph`。
+形式化陈述：isPerfectMatching_iff : M.IsPerfectMatching ↔ forall v, exists! w, M.Adj v
+ w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
 -/
-theorem isPerfectMatching_iff : M.IsPerfectMatching ↔ forall v, exists! w, M.Adj v w := by
+theorem isPerfectMatching_iff : M.IsPerfectMatching ↔ ∀ v, ∃! w, M.Adj v w := by
   refine ⟨?_, fun hm => ⟨fun v _ => hm v, fun v => ?_⟩⟩
   · rintro ⟨hm, hs⟩ v
     exact hm (hs v)
   · obtain ⟨w, hw, -⟩ := hm v
     exact M.edge_vert hw
-
-/--
-theorem `isPerfectMatching_iff_forall_degree` / 定理 `isPerfectMatching_iff_forall_degree`
-
-English:
-theorem isPerfectMatching_iff_forall_degree
-  given: [forall v, Fintype (M.neighborSet v)]
-  proof: by
-  simp [degree_eq_one_iff_existsUnique_adj, isPerfectMatching_iff]
-
-中文:
-定理 isPerfectMatching_iff_对任意_degree
-  条件: [对任意 v, 有限类型 (M.neighborSet v)]
-  证明: by
-  simp [degree_eq_one_iff_existsUnique_adj, isPerfectMatching_iff]
-
-Depends on / 依赖: degree_eq_one_iff_existsUnique_adj, isPerfectMatching_iff
+/-
+**SimpleGraph.Subgraph.isPerfectMatching_iff_forall_degree** 是 Mathlib 中的一个定理，位于
+命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：isPerfectMatching_iff_forall_degree [forall v, Fintype (M.neighborSet v)] 
+: M.IsPerfectMatching ↔ forall v, M.degree v = 1
+参数：M.neighborSet v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isPerfectMatching_iff_forall_degree [forall v, Fintype (M.neighborSet v)] :
-    M.IsPerfectMatching ↔ forall v, M.degree v = 1 := by
+theorem isPerfectMatching_iff_forall_degree [∀ v, Fintype (M.neighborSet v)] :
+    M.IsPerfectMatching ↔ ∀ v, M.degree v = 1 := by
   simp [degree_eq_one_iff_existsUnique_adj, isPerfectMatching_iff]
-
-/--
-theorem `IsPerfectMatching.even_card` / 定理 `IsPerfectMatching.even_card`
-
-English:
-theorem IsPerfectMatching.even_card
-  given: [Fintype V] (h : M.IsPerfectMatching)
-  proof: by
-  classical
-  simpa only [h.2.card_verts] using IsMatching.even_card h.1
-
-中文:
-定理 IsPerfectMatching.even_card
-  条件: [有限类型 V] (h : M.IsPerfectMatching)
-  证明: by
-  classical
-  simpa only [h.2.card_verts] using IsMatching.even_card h.1
-
-Depends on / 依赖: IsMatching, IsMatching.even_card, card_verts, classical, even_card
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching.even_card** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph.Subgraph.IsPerfectMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph} [inst : Fintype V], 
+M.IsPerfectMatching → Even (Fintype.card V)
+参数：Fintype.card V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.IsSpanning.card_verts`：∀ {V : Type u} {G : SimpleGr
+aph V} [inst : Fintype V] {G' : G.Subgraph} [inst_1 : Fintype ↑G'.verts],   G'.I
+sSpanning → G'.verts.toFinset.ca…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.even_card`：∀ {V : Type u_1} {G : SimpleG
+raph V} {M : G.Subgraph} [inst : Fintype ↑M.verts],   M.IsMatching → Even M.vert
+s.toFinset.card
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsPerfectMatching.even_card [Fintype V] (h : M.IsPerfectMatching) :
     Even (Fintype.card V) := by
   classical
   simpa only [h.2.card_verts] using IsMatching.even_card h.1
-
-/--
-lemma `IsMatching.induce_connectedComponent` / 引理 `IsMatching.induce_connectedComponent`
-
-English:
-lemma IsMatching.induce_connectedComponent
-  given: (h : M.IsMatching) (c : ConnectedComponent G)
-  proof: by
-  intro _ hv
-  obtain ⟨hv, rfl⟩ := hv
-  obtain ⟨w, hvw, hw⟩ := h hv
-  use w
-  simpa [hv, hvw, M.edge_vert hvw.symm, (M.adj_sub hvw).symm.reachable] using fun _ _ _ => hw _
-
-中文:
-引理 IsMatching.induce_connectedComponent
-  条件: (h : M.IsMatching) (c : ConnectedComponent G)
-  证明: by
-  intro _ hv
-  obtain ⟨hv, rfl⟩ := hv
-  obtain ⟨w, hvw, hw⟩ := h hv
-  use w
-  simpa [hv, hvw, M.edge_vert hvw.symm, (M.adj_sub hvw).symm.reachable] using fun _ _ _ => hw _
-
-Depends on / 依赖: M.adj_sub, M.edge_vert, adj_sub, edge_vert, hvw.symm, reachable, symm.reachable
+/-
+**SimpleGraph.Subgraph.IsMatching.induce_connectedComponent** 是 Mathlib 中的一个定理，位
+于命名空间 `SimpleGraph.Subgraph.IsMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph},   M.IsMatching → ∀ 
+(c : G.ConnectedComponent), (M.induce (M.verts ∩ c.supp)).IsMatching
+参数：c : G.ConnectedComponent；M.induce (M.verts ∩ c.supp)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
+· 使用定理 `SimpleGraph.Adj.reachable`：∀ {V : Type u} {G : SimpleGraph V} {u v : V},
+ G.Adj u v → G.Reachable u v
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 lemma IsMatching.induce_connectedComponent (h : M.IsMatching) (c : ConnectedComponent G) :
-    (M.induce (M.verts inter c.supp)).IsMatching := by
+    (M.induce (M.verts ∩ c.supp)).IsMatching := by
   intro _ hv
   obtain ⟨hv, rfl⟩ := hv
   obtain ⟨w, hvw, hw⟩ := h hv
   use w
-  simpa [hv, hvw, M.edge_vert hvw.symm, (M.adj_sub hvw).symm.reachable] using fun _ _ _ => hw _
-
-/--
-lemma `IsPerfectMatching.induce_connectedComponent_isMatching` / 引理 `IsPerfectMatching.induce_connectedComponent_isMatching`
-
-English:
-lemma IsPerfectMatching.induce_connectedComponent_isMatching
-  statement: (h : M.IsPerfectMatching)
-  proof: by
-  simpa [h.2.verts_eq_univ] using h.1.induce_connectedComponent c
-
-@[simp]
-
-中文:
-引理 IsPerfectMatching.induce_connectedComponent_isMatching
-  结论: (h : M.IsPerfectMatching)
-  证明: by
-  simpa [h.2.verts_eq_univ] using h.1.induce_connectedComponent c
-
-@[simp]
-
-Depends on / 依赖: induce_connectedComponent, verts_eq_univ
+  simpa [hv, hvw, M.edge_vert hvw.symm, (M.adj_sub hvw).symm.reachable] using fun _ _ _ ↦ hw _
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching.induce_connectedComponent_isMatching** 
+是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Subgraph.IsPerfectMatching`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph},   M.IsPerfectMatchi
+ng → ∀ (c : G.ConnectedComponent), (M.induce c.supp).IsMatching
+参数：c : G.ConnectedComponent；M.induce c.supp。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Subgraph.IsSpanning.verts_eq_univ`：∀ {V : Type u} {G : Simpl
+eGraph V} {G' : G.Subgraph}, G'.IsSpanning → G'.verts = Set.univ
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.induce_connectedComponent`：∀ {V : Type u
+_1} {G : SimpleGraph V} {M : G.Subgraph},   M.IsMatching → ∀ (c : G.ConnectedCom
+ponent), (M.induce (M.verts ∩ c.supp)).IsMatchi…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 lemma IsPerfectMatching.induce_connectedComponent_isMatching (h : M.IsPerfectMatching)
     (c : ConnectedComponent G) : (M.induce c.supp).IsMatching := by
   simpa [h.2.verts_eq_univ] using h.1.induce_connectedComponent c
 
 @[simp]
-/--
-lemma `IsPerfectMatching.toSubgraph_iff` / 引理 `IsPerfectMatching.toSubgraph_iff`
-
-English:
-lemma IsPerfectMatching.toSubgraph_iff
-  given: (h : M.spanningCoe <= G')
-  proof: by
-  simp only [isPerfectMatching_iff, toSubgraph_adj, spanningCoe_adj]
-
-中文:
-引理 IsPerfectMatching.toSubgraph_iff
-  条件: (h : M.spanningCoe <= G')
-  证明: by
-  simp only [isPerfectMatching_iff, toSubgraph_adj, spanningCoe_adj]
-
-Depends on / 依赖: isPerfectMatching_iff, spanningCoe_adj, toSubgraph_adj
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching.toSubgraph_iff** 是 Mathlib 中的一个定理，位于命名空
+间 `SimpleGraph.Subgraph.IsPerfectMatching`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V} {M : G.Subgraph} (h : M.spanningCo
+e ≤ G'),   (SimpleGraph.toSubgraph M.spanningCoe h).IsPerfectMatching ↔ M.IsPerf
+ectMatching
+参数：h : M.spanningCoe ≤ G'；SimpleGraph.toSubgraph M.spanningCoe h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.toSubgraph_adj`：∀ {V : Type u} {G : SimpleGraph V} (H : Simp
+leGraph V) (h : H ≤ G) (a a_1 : V),   (SimpleGraph.toSubgraph H h).Adj a a_1 = H
+.Adj a a_1
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma IsPerfectMatching.toSubgraph_iff (h : M.spanningCoe <= G') :
+lemma IsPerfectMatching.toSubgraph_iff (h : M.spanningCoe ≤ G') :
     (G'.toSubgraph M.spanningCoe h).IsPerfectMatching ↔ M.IsPerfectMatching := by
   simp only [isPerfectMatching_iff, toSubgraph_adj, spanningCoe_adj]
 
 end Subgraph
 
-/--
-lemma `IsClique.even_iff_exists_isMatching` / 引理 `IsClique.even_iff_exists_isMatching`
-
-English:
-lemma IsClique.even_iff_exists_isMatching
-  statement: {u : Set V} (hc : G.IsClique u)
-  proof: by
-  refine ⟨fun h => ?_, by
-    rintro ⟨M, rfl, hMr⟩
-    simpa [Set.ncard_eq_toFinset_card _ hu, Set.toFinite_toFinset,
-      ← Set.toFinset_card] using! @hMr.even_card _ _ _ hu.fintype⟩
-  obtain ⟨t, u, rfl, hd, hcard⟩ := Set.exists_union_disjoint_ncard_eq_of_even h
-  obtain ⟨f⟩ : Nonempty (t ≃ u) := by
-    rw [← Cardinal.eq]; rw [← t.cast_ncard (Set.finite_union.mp hu).1]; rw [← u.cast_ncard (Set.finite_union.mp hu).2]
-    exact congrArg Nat.cast hcard
-  exact Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv hd f
-fun v => hc (by simp) (by simp) hd.ne_of_mem (by simp) (by simp)
-
-中文:
-引理 IsClique.even_iff_存在_isMatching
-  结论: {u : 集合 V} (hc : G.IsClique u)
-  证明: by
-  refine ⟨fun h => ?_, by
-    rintro ⟨M, rfl, hMr⟩
-    simpa [Set.ncard_eq_toFinset_card _ hu, Set.toFinite_toFinset,
-      ← Set.toFinset_card] using! @hMr.even_card _ _ _ hu.fintype⟩
-  obtain ⟨t, u, rfl, hd, hcard⟩ := Set.exists_union_disjoint_ncard_eq_of_even h
-  obtain ⟨f⟩ : Nonempty (t ≃ u) := by
-    rw [← Cardinal.eq]; rw [← t.cast_ncard (Set.finite_union.mp hu).1]; rw [← u.cast_ncard (Set.finite_union.mp hu).2]
-    exact congrArg Nat.cast hcard
-  exact Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv hd f
-fun v => hc (by simp) (by simp) hd.ne_of_mem (by simp) (by simp)
-
-Depends on / 依赖: Cardinal, Cardinal.eq, IsMatching, Nat.cast, Nonempty, Set.exists_union_disjoint_ncard_eq_of_even, Set.finite_union.mp, Set.ncard_eq_toFinset_card, Set.toFinite_toFinset, Set.toFinset_card, Subgraph, Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv, cast_ncard, even_card, exists_of_disjoint_sets_of_equiv, exists_union_disjoint_ncard_eq_of_even, finite_union, fintype, hMr.even_card, hu.fintype
+/-
+**SimpleGraph.IsClique.even_iff_exists_isMatching** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph.IsClique`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {u : Set V},   G.IsClique u → u.Finit
+e → (Even u.ncard ↔ ∃ M, M.verts = u ∧ M.IsMatching)
+参数：Even u.ncard ↔ ∃ M, M.verts = u ∧ M.IsMatching。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.exists_union_disjoint_ncard_eq_of_even`：exists_union_disjoint_ncard_
+eq_of_even (he : Even s.ncard) : exists (t u : Set α), t union u = s ∧ Disjoint 
+t u ∧ t.ncard = u.ncard
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
+· 使用引理 `Set.cast_ncard`：cast_ncard {s : Set α} (hs : s.Finite) : (s.ncard : Card
+inal) = Cardinal.mk s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.finite_union`：finite_union {s t : Set α} : (s union t).Finite ↔ s.Fi
+nite ∧ t.Finite
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv`：∀ {V :
+ Type u_1} {G : SimpleGraph V} {s t : Set V},   Disjoint s t → ∀ (f : ↑s ≃ ↑t), 
+(∀ (v : ↑s), G.Adj ↑v ↑(f v)) → ∃ M, M.verts = s ∪ t ∧…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Disjoint.ne_of_mem`：∀ {α : Type u} {s t : Set α}, Disjoint s t → ∀ ⦃a : 
+α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ t → a ≠ b
+· 使用定理 `Set.ncard_eq_toFinset_card`：ncard_eq_toFinset_card (s : Set α) (hs : s.F
+inite
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.even_card`：∀ {V : Type u_1} {G : SimpleG
+raph V} {M : G.Subgraph} [inst : Fintype ↑M.verts],   M.IsMatching → Even M.vert
+s.toFinset.card
 -/
 lemma IsClique.even_iff_exists_isMatching {u : Set V} (hc : G.IsClique u)
-    (hu : u.Finite) : Even u.ncard ↔ exists (M : Subgraph G), M.verts = u ∧ M.IsMatching := by
-  refine ⟨fun h => ?_, by
+    (hu : u.Finite) : Even u.ncard ↔ ∃ (M : Subgraph G), M.verts = u ∧ M.IsMatching := by
+  refine ⟨fun h ↦ ?_, by
     rintro ⟨M, rfl, hMr⟩
     simpa [Set.ncard_eq_toFinset_card _ hu, Set.toFinite_toFinset,
       ← Set.toFinset_card] using! @hMr.even_card _ _ _ hu.fintype⟩
   obtain ⟨t, u, rfl, hd, hcard⟩ := Set.exists_union_disjoint_ncard_eq_of_even h
   obtain ⟨f⟩ : Nonempty (t ≃ u) := by
-    rw [← Cardinal.eq]; rw [← t.cast_ncard (Set.finite_union.mp hu).1]; rw [← u.cast_ncard (Set.finite_union.mp hu).2]
+    rw [← Cardinal.eq, ← t.cast_ncard (Set.finite_union.mp hu).1,
+      ← u.cast_ncard (Set.finite_union.mp hu).2]
     exact congrArg Nat.cast hcard
   exact Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv hd f
-fun v => hc (by simp) (by simp) hd.ne_of_mem (by simp) (by simp)
+    fun v ↦ hc (by simp) (by simp) <| hd.ne_of_mem (by simp) (by simp)
 
 namespace ConnectedComponent
 
 section Finite
 
-/--
-lemma `even_card_of_isPerfectMatching` / 引理 `even_card_of_isPerfectMatching`
-
-English:
-lemma even_card_of_isPerfectMatching
-  statement: [Fintype V] [DecidableEq V] [DecidableRel G.Adj]
-  proof: by
-  #adaptation_note /-- https://github.com/leanprover/lean4/pull/5020
-  some instances that use the chain of coercions
-  `[SetLike X], X → Set α → Sort _` are
-  blocked by the discrimination tree. This can be fixed by redeclaring the instance for `X`
-  using the double coercion but the proper fix seems to avoid the double coercion. -/
-  let : DecidablePred fun x => x in (M.induce c.supp).verts := fun a => G.instDecidableMemSupp c a
-  have := (hM.induce_connectedComponent_isMatching c).even_card
-  simp only [Subgraph.induce_verts, Set.toFinset_card] at this
-  exact this
-
-中文:
-引理 even_card_of_isPerfectMatching
-  结论: [有限类型 V] [DecidableEq V] [DecidableRel G.伴随]
-  证明: by
-  #adaptation_note /-- https://github.com/leanprover/lean4/pull/5020
-  some instances that use the chain of coercions
-  `[SetLike X], X → Set α → Sort _` are
-  blocked by the discrimination tree. This can be fixed by redeclaring the instance for `X`
-  using the double coercion but the proper fix seems to avoid the double coercion. -/
-  let : DecidablePred fun x => x in (M.induce c.supp).verts := fun a => G.instDecidableMemSupp c a
-  have := (hM.induce_connectedComponent_isMatching c).even_card
-  simp only [Subgraph.induce_verts, Set.toFinset_card] at this
-  exact this
-
-Depends on / 依赖: DecidablePred, G.instDecidableMemSupp, M.induce, SetLike, adaptation_note, blocked, c.supp, coercion, coercions, discrimination, double, even_card, github, github.com, hM.induce_connectedComponent_isMatching, induce, induce_connectedComponent_isMatching, instDecidableMemSupp, instance, instances
+/-
+**SimpleGraph.ConnectedComponent.even_card_of_isPerfectMatching** 是 Mathlib 中的一个
+引理，位于命名空间 `SimpleGraph.ConnectedComponent`。
+形式化陈述：even_card_of_isPerfectMatching [Fintype V] [DecidableEq V] [DecidableRel G
+.Adj] (c : ConnectedComponent G) (hM : M.IsPerfectMatching) : Even (Fintype.card
+ c.supp)
+参数：c : ConnectedComponent G；hM : M.IsPerfectMatching。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.even_card`：∀ {V : Type u_1} {G : SimpleG
+raph V} {M : G.Subgraph} [inst : Fintype ↑M.verts],   M.IsMatching → Even M.vert
+s.toFinset.card
+· 使用定理 `SimpleGraph.Subgraph.IsPerfectMatching.induce_connectedComponent_isMatch
+ing`：∀ {V : Type u_1} {G : SimpleGraph V} {M : G.Subgraph},   M.IsPerfectMatchin
+g → ∀ (c : G.ConnectedComponent), (M.induce c.supp).IsMatching
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
 -/
 lemma even_card_of_isPerfectMatching [Fintype V] [DecidableEq V] [DecidableRel G.Adj]
     (c : ConnectedComponent G) (hM : M.IsPerfectMatching) :
@@ -1102,73 +1008,79 @@ lemma even_card_of_isPerfectMatching [Fintype V] [DecidableEq V] [DecidableRel G
   `[SetLike X], X → Set α → Sort _` are
   blocked by the discrimination tree. This can be fixed by redeclaring the instance for `X`
   using the double coercion but the proper fix seems to avoid the double coercion. -/
-  let : DecidablePred fun x => x in (M.induce c.supp).verts := fun a => G.instDecidableMemSupp c a
+  let : DecidablePred fun x ↦ x ∈ (M.induce c.supp).verts := fun a ↦ G.instDecidableMemSupp c a
   have := (hM.induce_connectedComponent_isMatching c).even_card
   simp only [Subgraph.induce_verts, Set.toFinset_card] at this
   exact this
-
-/--
-lemma `odd_matches_node_outside` / 引理 `odd_matches_node_outside`
-
-English:
-lemma odd_matches_node_outside
-  statement: [Finite V] {u : Set V}
-  proof: by
-  by_contra! h
-  have hMmatch : (M.induce c.val.supp).IsMatching := by
-    intro v hv
-    obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
-    obtain ⟨⟨v', hv'⟩, ⟨hv, rfl⟩⟩ := hv
-    use w
-    have hwnu : w ∉ u := fun hw' => h w hw' ⟨v', hv'⟩ (hw.1) hv
-    refine ⟨⟨⟨⟨v', hv'⟩, hv, rfl⟩, ?_, hw.1⟩, fun _ hy => hw.2 _ hy.2.2⟩
-    apply ConnectedComponent.mem_coe_supp_of_adj ⟨⟨v', hv'⟩, ⟨hv, rfl⟩⟩ ⟨by trivial, hwnu⟩
-    simp only [Subgraph.induce_verts, Subgraph.verts_top, Set.mem_sdiff, Set.mem_univ, true_and,
-      Subgraph.induce_adj, hwnu, not_false_eq_true, and_self, Subgraph.top_adj, M.adj_sub hw.1,
-      and_true] at hv' ⊢
-    trivial
-  apply Nat.not_even_iff_odd.2 c.prop
-  have : Fintype ↑(Subgraph.induce M (Subtype.val '' supp c.val)).verts := Fintype.ofFinite _
-  classical
-  have := Fintype.ofFinite c.val.supp
-  simpa [Finset.card_image_of_injective] using hMmatch.even_card
-
-中文:
-引理 odd_matches_node_outside
-  结论: [有限 V] {u : 集合 V}
-  证明: by
-  by_contra! h
-  have hMmatch : (M.induce c.val.supp).IsMatching := by
-    intro v hv
-    obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
-    obtain ⟨⟨v', hv'⟩, ⟨hv, rfl⟩⟩ := hv
-    use w
-    have hwnu : w ∉ u := fun hw' => h w hw' ⟨v', hv'⟩ (hw.1) hv
-    refine ⟨⟨⟨⟨v', hv'⟩, hv, rfl⟩, ?_, hw.1⟩, fun _ hy => hw.2 _ hy.2.2⟩
-    apply ConnectedComponent.mem_coe_supp_of_adj ⟨⟨v', hv'⟩, ⟨hv, rfl⟩⟩ ⟨by trivial, hwnu⟩
-    simp only [Subgraph.induce_verts, Subgraph.verts_top, Set.mem_sdiff, Set.mem_univ, true_and,
-      Subgraph.induce_adj, hwnu, not_false_eq_true, and_self, Subgraph.top_adj, M.adj_sub hw.1,
-      and_true] at hv' ⊢
-    trivial
-  apply Nat.not_even_iff_odd.2 c.prop
-  have : Fintype ↑(Subgraph.induce M (Subtype.val '' supp c.val)).verts := Fintype.ofFinite _
-  classical
-  have := Fintype.ofFinite c.val.supp
-  simpa [Finset.card_image_of_injective] using hMmatch.even_card
-
-Depends on / 依赖: ConnectedComponent, ConnectedComponent.mem_coe_supp_of_adj, IsMatching, M.induce, Set.mem_sdiff, Set.mem_univ, Subgraph, Subgraph.induce_adj, Subgraph.induce_verts, Subgraph.verts_top, c.val.supp, hMmatch, induce, induce_adj, induce_verts, mem_coe_supp_of_adj, mem_sdiff, mem_univ, not_false, true_and
+/-
+**SimpleGraph.ConnectedComponent.odd_matches_node_outside** 是 Mathlib 中的一个引理，位于命
+名空间 `SimpleGraph.ConnectedComponent`。
+形式化陈述：odd_matches_node_outside [Finite V] {u : Set V} (hM : M.IsPerfectMatching)
+ (c : (Subgraph.deleteVerts ⊤ u).coe.oddComponents) : existsᵉ (w in u) (v : ((⊤ 
+: G.Subgraph).deleteVerts u).verts), M.Adj v w ∧ v in c.val.supp
+参数：hM : M.IsPerfectMatching；c : (Subgraph.deleteVerts ⊤ u).coe.oddComponents。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `SimpleGraph.ConnectedComponent.mem_coe_supp_of_adj`：mem_coe_supp_of_adj 
+{v w : V} {H : Subgraph G} {c : ConnectedComponent H.coe} (hv : v in (↑) '' (c :
+ Set H.verts)) (hw : w in H.verts) (hadj…
+· 使用定理 `SimpleGraph.Subgraph.induce_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' 
+: G.Subgraph) (s : Set V) (u v : V),   (G'.induce s).Adj u v = (u ∈ s ∧ v ∈ s ∧ 
+G'.Adj u v)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `SimpleGraph.Subgraph.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} (self :
+ G.Subgraph) {v w : V}, self.Adj v w → G.Adj v w
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `SimpleGraph.Subgraph.induce_verts`：∀ {V : Type u} {G : SimpleGraph V} (G
+' : G.Subgraph) (s : Set V), (G'.induce s).verts = s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.not_even_iff_odd`：∀ {n : ℕ}, ¬Even n ↔ Odd n
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `Set.toFinset_image`：toFinset_image [DecidableEq β] (f : α -> β) (s : Set
+ α) [Fintype s] [Fintype (f '' s)] : (f '' s).toFinset = s.toFinset.image f
+· 使用定理 `Finset.card_image_of_injective`：card_image_of_injective [DecidableEq β] 
+(s : Finset α) (H : Injective f) : #(s.image f) = #s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
+· 使用定理 `Set.fintypeCard_eq_ncard`：fintypeCard_eq_ncard [Fintype s] : Fintype.car
+d s = s.ncard
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.even_card`：∀ {V : Type u_1} {G : SimpleG
+raph V} {M : G.Subgraph} [inst : Fintype ↑M.verts],   M.IsMatching → Even M.vert
+s.toFinset.card
 -/
 lemma odd_matches_node_outside [Finite V] {u : Set V}
     (hM : M.IsPerfectMatching) (c : (Subgraph.deleteVerts ⊤ u).coe.oddComponents) :
-    existsᵉ (w in u) (v : ((⊤ : G.Subgraph).deleteVerts u).verts), M.Adj v w ∧ v in c.val.supp := by
+    ∃ᵉ (w ∈ u) (v : ((⊤ : G.Subgraph).deleteVerts u).verts), M.Adj v w ∧ v ∈ c.val.supp := by
   by_contra! h
   have hMmatch : (M.induce c.val.supp).IsMatching := by
     intro v hv
     obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
     obtain ⟨⟨v', hv'⟩, ⟨hv, rfl⟩⟩ := hv
     use w
-    have hwnu : w ∉ u := fun hw' => h w hw' ⟨v', hv'⟩ (hw.1) hv
-    refine ⟨⟨⟨⟨v', hv'⟩, hv, rfl⟩, ?_, hw.1⟩, fun _ hy => hw.2 _ hy.2.2⟩
+    have hwnu : w ∉ u := fun hw' ↦ h w hw' ⟨v', hv'⟩ (hw.1) hv
+    refine ⟨⟨⟨⟨v', hv'⟩, hv, rfl⟩, ?_, hw.1⟩, fun _ hy ↦ hw.2 _ hy.2.2⟩
     apply ConnectedComponent.mem_coe_supp_of_adj ⟨⟨v', hv'⟩, ⟨hv, rfl⟩⟩ ⟨by trivial, hwnu⟩
     simp only [Subgraph.induce_verts, Subgraph.verts_top, Set.mem_sdiff, Set.mem_univ, true_and,
       Subgraph.induce_adj, hwnu, not_false_eq_true, and_self, Subgraph.top_adj, M.adj_sub hw.1,
@@ -1184,52 +1096,46 @@ end Finite
 end ConnectedComponent
 
 /--
-Definition of `IsMatchingFree` / `IsMatchingFree` 的定义
-
-English:
-definition IsMatchingFree
-  signature: (G : SimpleGraph V)
-  body: forall M : Subgraph G, ¬ M.IsPerfectMatching
-
-中文:
-定义 IsMatchingFree
-  签名: (G : 简单图 V)
-  定义体: forall M : Subgraph G, ¬ M.IsPerfectMatching
-
-Depends on / 依赖: IsPerfectMatching, M.IsPerfectMatching, Subgraph
+A graph is matching free if it has no perfect matching. It does not make much sense to
+consider a graph being free of just matchings, because any non-trivial graph has those.
 -/
-def IsMatchingFree (G : SimpleGraph V) := forall M : Subgraph G, ¬ M.IsPerfectMatching
+/-
+**SimpleGraph.IsMatchingFree** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：IsMatchingFree (G : SimpleGraph V)
+参数：G : SimpleGraph V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `IsMatchingFree.mono` / 引理 `IsMatchingFree.mono`
-
-English:
-lemma IsMatchingFree.mono
-  given: {G G' : SimpleGraph V} (h : G <= G') (hmf : G'.IsMatchingFree)
-  proof: by
-  intro x
-  by_contra! hc
-  apply hmf (x.map (SimpleGraph.Hom.ofLE h))
-  refine ⟨hc.1.map_ofLE h, ?_⟩
-  intro v
-  simp only [Subgraph.map_verts, Hom.coe_ofLE, id_eq, Set.image_id']
-  exact hc.2 v
-
-中文:
-引理 IsMatchingFree.mono
-  条件: {G G' : 简单图 V} (h : G <= G') (hmf : G'.IsMatchingFree)
-  证明: by
-  intro x
-  by_contra! hc
-  apply hmf (x.map (SimpleGraph.Hom.ofLE h))
-  refine ⟨hc.1.map_ofLE h, ?_⟩
-  intro v
-  simp only [Subgraph.map_verts, Hom.coe_ofLE, id_eq, Set.image_id']
-  exact hc.2 v
-
-Depends on / 依赖: Hom.coe_ofLE, Set.image_id, SimpleGraph, SimpleGraph.Hom.ofLE, Subgraph, Subgraph.map_verts, coe_ofLE, id_eq, image_id, map_ofLE, map_verts, x.map
+--- 原说明 ---
+A graph is matching free if it has no perfect matching. It does not make much se
+nse to
+consider a graph being free of just matchings, because any non-trivial graph has
+ those.
 -/
-lemma IsMatchingFree.mono {G G' : SimpleGraph V} (h : G <= G') (hmf : G'.IsMatchingFree) :
+def IsMatchingFree (G : SimpleGraph V) := ∀ M : Subgraph G, ¬ M.IsPerfectMatching
+/-
+**SimpleGraph.IsMatchingFree.mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsMatch
+ingFree`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V}, G ≤ G' → G'.IsMatchingFree → G.Is
+MatchingFree
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.IsMatching.map_ofLE`：∀ {V : Type u_1} {G G' : Simpl
+eGraph V} {M : G.Subgraph},   M.IsMatching → ∀ (hGG' : G ≤ G'), (SimpleGraph.Sub
+graph.map (SimpleGraph.Hom.ofL…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+-/
+lemma IsMatchingFree.mono {G G' : SimpleGraph V} (h : G ≤ G') (hmf : G'.IsMatchingFree) :
     G.IsMatchingFree := by
   intro x
   by_contra! hc
@@ -1238,113 +1144,114 @@ lemma IsMatchingFree.mono {G G' : SimpleGraph V} (h : G <= G') (hmf : G'.IsMatch
   intro v
   simp only [Subgraph.map_verts, Hom.coe_ofLE, id_eq, Set.image_id']
   exact hc.2 v
-
-/--
-lemma `exists_maximal_isMatchingFree` / 引理 `exists_maximal_isMatchingFree`
-
-English:
-lemma exists_maximal_isMatchingFree
-  given: [Finite V] (h : G.IsMatchingFree)
-  proof: by
-  simp_rw [← @not_forall_not _ Subgraph.IsPerfectMatching]
-  obtain ⟨Gmax, hGmax⟩ := Finite.exists_le_maximal h
-  exact ⟨Gmax, ⟨hGmax.1, ⟨hGmax.2.prop, fun _ h' => hGmax.2.not_prop_of_gt h'⟩⟩⟩
-
-中文:
-引理 存在_maximal_isMatchingFree
-  条件: [有限 V] (h : G.IsMatchingFree)
-  证明: by
-  simp_rw [← @not_forall_not _ Subgraph.IsPerfectMatching]
-  obtain ⟨Gmax, hGmax⟩ := Finite.exists_le_maximal h
-  exact ⟨Gmax, ⟨hGmax.1, ⟨hGmax.2.prop, fun _ h' => hGmax.2.not_prop_of_gt h'⟩⟩⟩
-
-Depends on / 依赖: Finite, Finite.exists_le_maximal, IsPerfectMatching, Subgraph, Subgraph.IsPerfectMatching, exists_le_maximal, not_forall_not, not_prop_of_gt, simp_rw
+/-
+**SimpleGraph.exists_maximal_isMatchingFree** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：exists_maximal_isMatchingFree [Finite V] (h : G.IsMatchingFree) : exists G
+max : SimpleGraph V, G <= Gmax ∧ Gmax.IsMatchingFree ∧ forall G', G' > Gmax -> e
+xists M : Subgraph G', M.IsPerfectMatching
+参数：h : G.IsMatchingFree。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_forall_not`：not_forall_not : (¬forall x, ¬p x) ↔ exists x, p x
+· 使用引理 `Finite.exists_le_maximal`：Finite.exists_le_maximal (hs : s.Finite) (ha :
+ a in s) : exists b, a <= b ∧ Maximal (· in s) b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Maximal.prop`：∀ {α : Type u_1} [inst : LE α] {P : α → Prop} {x : α}, Max
+imal P x → P x
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Maximal.not_prop_of_gt`：∀ {α : Type u_2} {P : α → Prop} {x y : α} [inst 
+: Preorder α], Maximal P x → x < y → ¬P y
 -/
 lemma exists_maximal_isMatchingFree [Finite V] (h : G.IsMatchingFree) :
-    exists Gmax : SimpleGraph V, G <= Gmax ∧ Gmax.IsMatchingFree ∧
-      forall G', G' > Gmax -> exists M : Subgraph G', M.IsPerfectMatching := by
+    ∃ Gmax : SimpleGraph V, G ≤ Gmax ∧ Gmax.IsMatchingFree ∧
+      ∀ G', G' > Gmax → ∃ M : Subgraph G', M.IsPerfectMatching := by
   simp_rw [← @not_forall_not _ Subgraph.IsPerfectMatching]
   obtain ⟨Gmax, hGmax⟩ := Finite.exists_le_maximal h
-  exact ⟨Gmax, ⟨hGmax.1, ⟨hGmax.2.prop, fun _ h' => hGmax.2.not_prop_of_gt h'⟩⟩⟩
+  exact ⟨Gmax, ⟨hGmax.1, ⟨hGmax.2.prop, fun _ h' ↦ hGmax.2.not_prop_of_gt h'⟩⟩⟩
 
-/--
-Definition of `IsCycles` / `IsCycles` 的定义
-
-English:
-definition IsCycles
-  signature: (G : SimpleGraph V)
-  body: forall ⦃v⦄, (G.neighborSet v).Nonempty -> (G.neighborSet v).ncard = 2
-
-中文:
-定义 IsCycles
-  签名: (G : 简单图 V)
-  定义体: forall ⦃v⦄, (G.neighborSet v).Nonempty -> (G.neighborSet v).ncard = 2
-
-Depends on / 依赖: G.neighborSet, Nonempty, neighborSet
+/-- A graph `G` consists of a set of cycles, if each vertex is either isolated or connected to
+exactly two vertices. This is used to create new matchings by taking the `symmDiff` with cycles.
+The definition of `symmDiff` that makes sense is the one for `SimpleGraph`. The `symmDiff`
+for `SimpleGraph.Subgraph` deriving from the lattice structure also affects the vertices included,
+which we do not want in this case. This is why this property is defined for `SimpleGraph`, rather
+than `SimpleGraph.Subgraph`.
 -/
-def IsCycles (G : SimpleGraph V) := forall ⦃v⦄, (G.neighborSet v).Nonempty -> (G.neighborSet v).ncard = 2
+/-
+**SimpleGraph.IsCycles** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：IsCycles (G : SimpleGraph V)
+参数：G : SimpleGraph V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A graph `G` consists of a set of cycles, if each vertex is either isolated or co
+nnected to
+exactly two vertices. This is used to create new matchings by taking the `symmDi
+ff` with cycles.
+The definition of `symmDiff` that makes sense is the one for `SimpleGraph`. The 
+`symmDiff`
+for `SimpleGraph.Subgraph` deriving from the lattice structure also affects the 
+vertices included,
+which we do not want in this case. This is why this property is defined for `Sim
+pleGraph`, rather
+than `SimpleGraph.Subgraph`.
+-/
+def IsCycles (G : SimpleGraph V) := ∀ ⦃v⦄, (G.neighborSet v).Nonempty → (G.neighborSet v).ncard = 2
 
 /--
-lemma `IsCycles.other_adj_of_adj` / 引理 `IsCycles.other_adj_of_adj`
+Given a vertex with one edge in a graph of cycles this gives the other edge incident
+to the same vertex.
+-/
+/-
+**SimpleGraph.IsCycles.other_adj_of_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.I
+sCycles`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v w : V}, G.IsCycles → G.Adj v w → ∃
+ w', w ≠ w' ∧ G.Adj v w'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.exists_ne_of_one_lt_ncard`：exists_ne_of_one_lt_ncard (hs : 1 < s.nca
+rd) (a : α) : exists b, b in s ∧ b != a
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 
-English:
-lemma IsCycles.other_adj_of_adj
-  given: (h : G.IsCycles) (hadj : G.Adj v w)
-  proof: by
-  simp_rw [← SimpleGraph.mem_neighborSet] at hadj ⊢
-  have := h ⟨w, hadj⟩
-  obtain ⟨w', hww'⟩ := (G.neighborSet v).exists_ne_of_one_lt_ncard (by lia) w
-  exact ⟨w', ⟨hww'.2.symm, hww'.1⟩⟩
-
-中文:
-引理 IsCycles.other_adj_of_adj
-  条件: (h : G.IsCycles) (hadj : G.伴随 v w)
-  证明: by
-  simp_rw [← SimpleGraph.mem_neighborSet] at hadj ⊢
-  have := h ⟨w, hadj⟩
-  obtain ⟨w', hww'⟩ := (G.neighborSet v).exists_ne_of_one_lt_ncard (by lia) w
-  exact ⟨w', ⟨hww'.2.symm, hww'.1⟩⟩
-
-Depends on / 依赖: G.neighborSet, SimpleGraph, SimpleGraph.mem_neighborSet, exists_ne_of_one_lt_ncard, mem_neighborSet, neighborSet, simp_rw
+--- 原说明 ---
+Given a vertex with one edge in a graph of cycles this gives the other edge inci
+dent
+to the same vertex.
 -/
 lemma IsCycles.other_adj_of_adj (h : G.IsCycles) (hadj : G.Adj v w) :
-    exists w', w != w' ∧ G.Adj v w' := by
+    ∃ w', w ≠ w' ∧ G.Adj v w' := by
   simp_rw [← SimpleGraph.mem_neighborSet] at hadj ⊢
   have := h ⟨w, hadj⟩
   obtain ⟨w', hww'⟩ := (G.neighborSet v).exists_ne_of_one_lt_ncard (by lia) w
   exact ⟨w', ⟨hww'.2.symm, hww'.1⟩⟩
-
-/--
-lemma `IsCycles.existsUnique_ne_adj` / 引理 `IsCycles.existsUnique_ne_adj`
-
-English:
-lemma IsCycles.existsUnique_ne_adj
-  given: (h : G.IsCycles) (hadj : G.Adj v w)
-  proof: by
-  obtain ⟨w', ⟨hww, hww'⟩⟩ := h.other_adj_of_adj hadj
-  use w'
-  refine ⟨⟨hww, hww'⟩, ?_⟩
-  intro y ⟨hwy, hwy'⟩
-  obtain ⟨x, y', hxy'⟩ := Set.ncard_eq_two.mp (h ⟨w, hadj⟩)
-  simp_rw [← SimpleGraph.mem_neighborSet] at *
-  grind
-
-中文:
-引理 IsCycles.存在Unique_ne_adj
-  条件: (h : G.IsCycles) (hadj : G.伴随 v w)
-  证明: by
-  obtain ⟨w', ⟨hww, hww'⟩⟩ := h.other_adj_of_adj hadj
-  use w'
-  refine ⟨⟨hww, hww'⟩, ?_⟩
-  intro y ⟨hwy, hwy'⟩
-  obtain ⟨x, y', hxy'⟩ := Set.ncard_eq_two.mp (h ⟨w, hadj⟩)
-  simp_rw [← SimpleGraph.mem_neighborSet] at *
-  grind
-
-Depends on / 依赖: Set.ncard_eq_two.mp, SimpleGraph, SimpleGraph.mem_neighborSet, h.other_adj_of_adj, mem_neighborSet, ncard_eq_two, other_adj_of_adj, simp_rw
+/-
+**SimpleGraph.IsCycles.existsUnique_ne_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.IsCycles`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v w : V}, G.IsCycles → G.Adj v w → ∃
+! w', w ≠ w' ∧ G.Adj v w'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsCycles.other_adj_of_adj`：∀ {V : Type u_1} {G : SimpleGraph
+ V} {v w : V}, G.IsCycles → G.Adj v w → ∃ w', w ≠ w' ∧ G.Adj v w'
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ncard_eq_two`：ncard_eq_two : s.ncard = 2 ↔ exists x y, x != y ∧ s = 
+{x, y}
 -/
 lemma IsCycles.existsUnique_ne_adj (h : G.IsCycles) (hadj : G.Adj v w) :
-    exists! w', w != w' ∧ G.Adj v w' := by
+    ∃! w', w ≠ w' ∧ G.Adj v w' := by
   obtain ⟨w', ⟨hww, hww'⟩⟩ := h.other_adj_of_adj hadj
   use w'
   refine ⟨⟨hww, hww'⟩, ?_⟩
@@ -1352,105 +1259,109 @@ lemma IsCycles.existsUnique_ne_adj (h : G.IsCycles) (hadj : G.Adj v w) :
   obtain ⟨x, y', hxy'⟩ := Set.ncard_eq_two.mp (h ⟨w, hadj⟩)
   simp_rw [← SimpleGraph.mem_neighborSet] at *
   grind
-
-/--
-lemma `IsCycles.toSimpleGraph` / 引理 `IsCycles.toSimpleGraph`
-
-English:
-lemma IsCycles.toSimpleGraph
-  given: (c : G.ConnectedComponent) (h : G.IsCycles)
-  proof: by
-  intro v ⟨w, hw⟩
-  rw [mem_neighborSet]; rw [c.adj_spanningCoe_toSimpleGraph] at hw
-  rw [← h ⟨w]; rw [hw.2⟩]
-  congr 1
-  ext w'
-  simp only [mem_neighborSet, c.adj_spanningCoe_toSimpleGraph, hw, true_and]
-
-中文:
-引理 IsCycles.toSimpleGraph
-  条件: (c : G.ConnectedComponent) (h : G.IsCycles)
-  证明: by
-  intro v ⟨w, hw⟩
-  rw [mem_neighborSet]; rw [c.adj_spanningCoe_toSimpleGraph] at hw
-  rw [← h ⟨w]; rw [hw.2⟩]
-  congr 1
-  ext w'
-  simp only [mem_neighborSet, c.adj_spanningCoe_toSimpleGraph, hw, true_and]
-
-Depends on / 依赖: adj_spanningCoe_toSimpleGraph, c.adj_spanningCoe_toSimpleGraph, mem_neighborSet, true_and
+/-
+**SimpleGraph.IsCycles.toSimpleGraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsCy
+cles`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} (c : G.ConnectedComponent), G.IsCycle
+s → c.toSimpleGraph.spanningCoe.IsCycles
+参数：c : G.ConnectedComponent。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `SimpleGraph.ConnectedComponent.adj_spanningCoe_toSimpleGraph`：adj_spanni
+ngCoe_toSimpleGraph {v w : V} (C : G.ConnectedComponent) : C.toSimpleGraph.spann
+ingCoe.Adj v w ↔ v in C.supp ∧ G.Adj v w
+· 使用定理 `SimpleGraph.mem_neighborSet`：mem_neighborSet (v w : V) : w in G.neighbor
+Set v ↔ G.Adj v w
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma IsCycles.toSimpleGraph (c : G.ConnectedComponent) (h : G.IsCycles) :
     c.toSimpleGraph.spanningCoe.IsCycles := by
   intro v ⟨w, hw⟩
-  rw [mem_neighborSet]; rw [c.adj_spanningCoe_toSimpleGraph] at hw
-  rw [← h ⟨w]; rw [hw.2⟩]
+  rw [mem_neighborSet, c.adj_spanningCoe_toSimpleGraph] at hw
+  rw [← h ⟨w, hw.2⟩]
   congr 1
   ext w'
   simp only [mem_neighborSet, c.adj_spanningCoe_toSimpleGraph, hw, true_and]
-
-/--
-lemma `Walk.IsCycle.isCycles_spanningCoe_toSubgraph` / 引理 `Walk.IsCycle.isCycles_spanningCoe_toSubgraph`
-
-English:
-lemma Walk.IsCycle.isCycles_spanningCoe_toSubgraph
-  given: {u : V} {p : G.Walk u u} (hpc : p.IsCycle)
-  proof: by
-  intro v hv
-  apply hpc.ncard_neighborSet_toSubgraph_eq_two
-  obtain ⟨_, hw⟩ := hv
-exact p.mem_verts_toSubgraph.mp p.toSubgraph.edge_vert hw
-
-中文:
-引理 途径.是环.isCycles_spanningCoe_toSubgraph
-  条件: {u : V} {p : G.途径 u u} (hpc : p.是环)
-  证明: by
-  intro v hv
-  apply hpc.ncard_neighborSet_toSubgraph_eq_two
-  obtain ⟨_, hw⟩ := hv
-exact p.mem_verts_toSubgraph.mp p.toSubgraph.edge_vert hw
-
-Depends on / 依赖: edge_vert, hpc.ncard_neighborSet_toSubgraph_eq_two, mem_verts_toSubgraph, ncard_neighborSet_toSubgraph_eq_two, p.mem_verts_toSubgraph.mp, p.toSubgraph.edge_vert, toSubgraph
+/-
+**SimpleGraph.Walk.IsCycle.isCycles_spanningCoe_toSubgraph** 是 Mathlib 中的一个定理，位于
+命名空间 `SimpleGraph.Walk.IsCycle`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {u : V} {p : G.Walk u u}, p.IsCycle →
+ p.toSubgraph.spanningCoe.IsCycles
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.Walk.IsCycle.ncard_neighborSet_toSubgraph_eq_two`：ncard_neig
+hborSet_toSubgraph_eq_two {u v} {p : G.Walk u u} (hpc : p.IsCycle) (h : v in p.s
+upport) : (p.toSubgraph.neighborSet v).ncard = 2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.Walk.mem_verts_toSubgraph`：mem_verts_toSubgraph (p : G.Walk 
+u v) : w in p.toSubgraph.verts ↔ w in p.support
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
 -/
 lemma Walk.IsCycle.isCycles_spanningCoe_toSubgraph {u : V} {p : G.Walk u u} (hpc : p.IsCycle) :
     p.toSubgraph.spanningCoe.IsCycles := by
   intro v hv
   apply hpc.ncard_neighborSet_toSubgraph_eq_two
   obtain ⟨_, hw⟩ := hv
-exact p.mem_verts_toSubgraph.mp p.toSubgraph.edge_vert hw
+  exact p.mem_verts_toSubgraph.mp <| p.toSubgraph.edge_vert hw
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge` / 引理 `Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge`
-
-English:
-lemma Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge
-  statement: {u v} {p : G.Walk u v} (hp : p.IsPath)
-  proof: by
-  let c := (p.mapLe (OrderTop.le_top G)).cons (by simp [h.symm] : (completeGraph V).Adj v u)
-  have : p.toSubgraph.spanningCoe ⊔ edge v u = c.toSubgraph.spanningCoe := by
-    ext w x
-    simp only [sup_adj, Subgraph.spanningCoe_adj, completeGraph_eq_top, edge_adj, c,
-      Walk.toSubgraph, Subgraph.sup_adj, subgraphOfAdj_adj, adj_toSubgraph_mapLe]
-    grind
-  exact this ▸ IsCycle.isCycles_spanningCoe_toSubgraph (by simp [Walk.cons_isCycle_iff, c, hp, hs])
-
-中文:
-引理 途径.是道路.isCycles_spanningCoe_toSubgraph_sup_edge
-  结论: {u v} {p : G.途径 u v} (hp : p.是道路)
-  证明: by
-  let c := (p.mapLe (OrderTop.le_top G)).cons (by simp [h.symm] : (completeGraph V).Adj v u)
-  have : p.toSubgraph.spanningCoe ⊔ edge v u = c.toSubgraph.spanningCoe := by
-    ext w x
-    simp only [sup_adj, Subgraph.spanningCoe_adj, completeGraph_eq_top, edge_adj, c,
-      Walk.toSubgraph, Subgraph.sup_adj, subgraphOfAdj_adj, adj_toSubgraph_mapLe]
-    grind
-  exact this ▸ IsCycle.isCycles_spanningCoe_toSubgraph (by simp [Walk.cons_isCycle_iff, c, hp, hs])
-
-Depends on / 依赖: IsCycle, IsCycle.isCycles_spanningCoe_toSubgraph, OrderTop, OrderTop.le_top, Subgraph, Subgraph.spanningCoe_adj, Subgraph.sup_adj, Walk.cons_isCycle_iff, Walk.toSubgraph, adj_toSubgraph_mapLe, c.toSubgraph.spanningCoe, completeGraph, completeGraph_eq_top, cons_isCycle_iff, edge_adj, h.symm, isCycles_spanningCoe_toSubgraph, le_top, p.mapLe, p.toSubgraph.spanningCoe
+/-
+**SimpleGraph.Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge** 是 Mathlib 中
+的一个定理，位于命名空间 `SimpleGraph.Walk.IsPath`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {u v : V} {p : G.Walk u v},   p.IsPat
+h → u ≠ v → s(v, u) ∉ p.edges → (p.toSubgraph.spanningCoe ⊔ SimpleGraph.edge v u
+).IsCycles
+参数：v, u；p.toSubgraph.spanningCoe ⊔ SimpleGraph.edge v u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `OrderTop.le_top`：∀ {α : Type u} {inst : LE α} [self : OrderTop α] (a : α
+), a ≤ ⊤
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
+· 使用定理 `SimpleGraph.subgraphOfAdj_adj`：∀ {V : Type u} (G : SimpleGraph V) {v w :
+ V} (hvw : G.Adj v w) (a b : V),   (G.subgraphOfAdj hvw).Adj a b = (s(v, w) = s(
+a, b))
+· 使用定理 `SimpleGraph.Walk.IsCycle.isCycles_spanningCoe_toSubgraph`：∀ {V : Type u_
+1} {G : SimpleGraph V} {u : V} {p : G.Walk u u}, p.IsCycle → p.toSubgraph.spanni
+ngCoe.IsCycles
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Walk.edges_map`：edges_map : (p.map f).edges = p.edges.map (S
+ym2.map f)
+· 使用定理 `Sym2.map_id`：map_id : map (@id α) = id
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun`：∀ {α : Type u_1}, List.map id = id
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge {u v} {p : G.Walk u v} (hp : p.IsPath)
-    (h : u != v) (hs : s(v, u) ∉ p.edges) : (p.toSubgraph.spanningCoe ⊔ edge v u).IsCycles := by
+    (h : u ≠ v) (hs : s(v, u) ∉ p.edges) : (p.toSubgraph.spanningCoe ⊔ edge v u).IsCycles := by
   let c := (p.mapLe (OrderTop.le_top G)).cons (by simp [h.symm] : (completeGraph V).Adj v u)
   have : p.toSubgraph.spanningCoe ⊔ edge v u = c.toSubgraph.spanningCoe := by
     ext w x
@@ -1458,80 +1369,101 @@ lemma Walk.IsPath.isCycles_spanningCoe_toSubgraph_sup_edge {u v} {p : G.Walk u v
       Walk.toSubgraph, Subgraph.sup_adj, subgraphOfAdj_adj, adj_toSubgraph_mapLe]
     grind
   exact this ▸ IsCycle.isCycles_spanningCoe_toSubgraph (by simp [Walk.cons_isCycle_iff, c, hp, hs])
-
-/--
-lemma `Walk.IsCycle.adj_toSubgraph_iff_of_isCycles` / 引理 `Walk.IsCycle.adj_toSubgraph_iff_of_isCycles`
-
-English:
-lemma Walk.IsCycle.adj_toSubgraph_iff_of_isCycles
-  statement: [LocallyFinite G] {u} {p : G.Walk u u}
-  proof: by
-  refine fun w => Subgraph.adj_iff_of_neighborSet_equiv (?_ : Nonempty _).some (Set.toFinite _)
-  have := hp.ncard_neighborSet_toSubgraph_eq_two (by aesop)
-  rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (finite_neighborSet_toSubgraph p)]; rw [hcyc
-      (Set.Nonempty.mono (p.toSubgraph.neighborSet_subset v) <|
-Set.nonempty_of_ncard_ne_zero by simp [this]),
-    this]
-
-中文:
-引理 途径.是环.adj_toSubgraph_iff_of_isCycles
-  结论: [局部有限 G] {u} {p : G.途径 u u}
-  证明: by
-  refine fun w => Subgraph.adj_iff_of_neighborSet_equiv (?_ : Nonempty _).some (Set.toFinite _)
-  have := hp.ncard_neighborSet_toSubgraph_eq_two (by aesop)
-  rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (finite_neighborSet_toSubgraph p)]; rw [hcyc
-      (Set.Nonempty.mono (p.toSubgraph.neighborSet_subset v) <|
-Set.nonempty_of_ncard_ne_zero by simp [this]),
-    this]
-
-Depends on / 依赖: Cardinal, Cardinal.eq, Nonempty, Set.Nonempty.mono, Set.cast_ncard, Set.nonempty_of_ncard_ne_zero, Set.toFinite, Subgraph, Subgraph.adj_iff_of_neighborSet_equiv, adj_iff_of_neighborSet_equiv, cast_ncard, finite_neighborSet_toSubgraph, hp.ncard_neighborSet_toSubgraph_eq_two, ncard_neighborSet_toSubgraph_eq_two, neighborSet_subset, nonempty_of_ncard_ne_zero, p.toSubgraph.neighborSet_subset, toFinite, toSubgraph
+/-
+**SimpleGraph.Walk.IsCycle.adj_toSubgraph_iff_of_isCycles** 是 Mathlib 中的一个定理，位于命
+名空间 `SimpleGraph.Walk.IsCycle`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v : V} [G.LocallyFinite] {u : V} {p 
+: G.Walk u u},   p.IsCycle → G.IsCycles → v ∈ p.toSubgraph.verts → ∀ (w : V), p.
+toSubgraph.Adj v w ↔ G.Adj v w
+参数：w : V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.Subgraph.adj_iff_of_neighborSet_equiv`：adj_iff_of_neighborSe
+t_equiv {v : V} {H : Subgraph G} (h : G.neighborSet v ≃ H.neighborSet v) (hfin :
+ (G.neighborSet v).Finite) : forall {w}…
+· 使用引理 `SimpleGraph.Walk.IsCycle.ncard_neighborSet_toSubgraph_eq_two`：ncard_neig
+hborSet_toSubgraph_eq_two {u v} {p : G.Walk u u} (hpc : p.IsCycle) (h : v in p.s
+upport) : (p.toSubgraph.neighborSet v).ncard = 2
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.verts_toSubgraph`：verts_toSubgraph (p : G.Walk u v) : p
+.toSubgraph.verts = { w | w in p.support }
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
+· 使用引理 `Set.cast_ncard`：cast_ncard {s : Set α} (hs : s.Finite) : (s.ncard : Card
+inal) = Cardinal.mk s
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `SimpleGraph.Walk.finite_neighborSet_toSubgraph`：finite_neighborSet_toSub
+graph (p : G.Walk u v) : (p.toSubgraph.neighborSet w).Finite
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_subset`：neighborSet_subset (G' : Subgra
+ph G) (v : V) : G'.neighborSet v subseteq G.neighborSet v
+· 使用定理 `Set.nonempty_of_ncard_ne_zero`：nonempty_of_ncard_ne_zero (hs : s.ncard !
+= 0) : s.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma Walk.IsCycle.adj_toSubgraph_iff_of_isCycles [LocallyFinite G] {u} {p : G.Walk u u}
-    (hp : p.IsCycle) (hcyc : G.IsCycles) (hv : v in p.toSubgraph.verts) :
-    forall w, p.toSubgraph.Adj v w ↔ G.Adj v w := by
-  refine fun w => Subgraph.adj_iff_of_neighborSet_equiv (?_ : Nonempty _).some (Set.toFinite _)
+    (hp : p.IsCycle) (hcyc : G.IsCycles) (hv : v ∈ p.toSubgraph.verts) :
+    ∀ w, p.toSubgraph.Adj v w ↔ G.Adj v w := by
+  refine fun w ↦ Subgraph.adj_iff_of_neighborSet_equiv (?_ : Nonempty _).some (Set.toFinite _)
   have := hp.ncard_neighborSet_toSubgraph_eq_two (by aesop)
-  rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (finite_neighborSet_toSubgraph p)]; rw [hcyc
+  rw [← Cardinal.eq, ← Set.cast_ncard (Set.toFinite _),
+    ← Set.cast_ncard (finite_neighborSet_toSubgraph p),
+    hcyc
       (Set.Nonempty.mono (p.toSubgraph.neighborSet_subset v) <|
-Set.nonempty_of_ncard_ne_zero by simp [this]),
+        Set.nonempty_of_ncard_ne_zero <| by simp [this]),
     this]
 
 open scoped symmDiff
-
-/--
-lemma `Subgraph.IsPerfectMatching.symmDiff_isCycles` / 引理 `Subgraph.IsPerfectMatching.symmDiff_isCycles`
-
-English:
-lemma Subgraph.IsPerfectMatching.symmDiff_isCycles
-  proof: by
-  intro v
-  obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
-  obtain ⟨w', hw'⟩ := hM'.1 (hM'.2 v)
-  simp only [symmDiff_def, Set.ncard_eq_two, ne_eq, imp_iff_not_or, Set.not_nonempty_iff_eq_empty,
-    Set.eq_empty_iff_forall_notMem, SimpleGraph.mem_neighborSet, SimpleGraph.sup_adj, sdiff_adj,
-    spanningCoe_adj, not_or, not_and, not_not]
-  by_cases hww' : w = w'
-  · simp_all [← imp_iff_not_or]
-  · right
-    use w, w'
-    aesop
-
-中文:
-引理 子图.IsPerfectMatching.symmDiff_isCycles
-  证明: by
-  intro v
-  obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
-  obtain ⟨w', hw'⟩ := hM'.1 (hM'.2 v)
-  simp only [symmDiff_def, Set.ncard_eq_two, ne_eq, imp_iff_not_or, Set.not_nonempty_iff_eq_empty,
-    Set.eq_empty_iff_forall_notMem, SimpleGraph.mem_neighborSet, SimpleGraph.sup_adj, sdiff_adj,
-    spanningCoe_adj, not_or, not_and, not_not]
-  by_cases hww' : w = w'
-  · simp_all [← imp_iff_not_or]
-  · right
-    use w, w'
-    aesop
-
-Depends on / 依赖: Set.eq_empty_iff_forall_notMem, Set.ncard_eq_two, Set.not_nonempty_iff_eq_empty, SimpleGraph, SimpleGraph.mem_neighborSet, SimpleGraph.sup_adj, eq_empty_iff_forall_notMem, imp_iff_not_or, mem_neighborSet, ncard_eq_two, ne_eq, not_and, not_nonempty_iff_eq_empty, not_not, not_or, sdiff_adj, spanningCoe_adj, sup_adj, symmDiff_def
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching.symmDiff_isCycles** 是 Mathlib 中的一个定理，位于
+命名空间 `SimpleGraph.Subgraph.IsPerfectMatching`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V} {M : G.Subgraph} {M' : G'.Subgraph
+},   M.IsPerfectMatching → M'.IsPerfectMatching → (symmDiff M.spanningCoe M'.spa
+nningCoe).IsCycles
+参数：symmDiff M.spanningCoe M'.spanningCoe。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 -/
 lemma Subgraph.IsPerfectMatching.symmDiff_isCycles
     {M : Subgraph G} {M' : Subgraph G'} (hM : M.IsPerfectMatching)
@@ -1547,44 +1479,49 @@ lemma Subgraph.IsPerfectMatching.symmDiff_isCycles
   · right
     use w, w'
     aesop
-
-/--
-lemma `IsCycles.snd_of_mem_support_of_isPath_of_adj` / 引理 `IsCycles.snd_of_mem_support_of_isPath_of_adj`
-
-English:
-lemma IsCycles.snd_of_mem_support_of_isPath_of_adj
-  statement: [Finite V] {v w w' : V}
-  proof: by
-  apply hp.snd_of_toSubgraph_adj
-  rw [Walk.mem_support_iff_exists_getVert] at hw'
-  obtain ⟨n, ⟨rfl, hnl⟩⟩ := hw'
-  by_cases hn : n = 0 ∨ n = p.length
-  · aesop
-  have e : G.neighborSet (p.getVert n) ≃ p.toSubgraph.neighborSet (p.getVert n) := by
-    refine @Classical.ofNonempty _ ?_
-    rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [hp.ncard_neighborSet_toSubgraph_internal_eq_two (by lia) (by lia)]; rw [hcyc (Set.nonempty_of_mem hadj.symm)]
-  rw [Subgraph.adj_comm]; rw [Subgraph.adj_iff_of_neighborSet_equiv e (Set.toFinite _)]
-  exact hadj.symm
-
-中文:
-引理 IsCycles.snd_of_mem_support_of_isPath_of_adj
-  结论: [有限 V] {v w w' : V}
-  证明: by
-  apply hp.snd_of_toSubgraph_adj
-  rw [Walk.mem_support_iff_exists_getVert] at hw'
-  obtain ⟨n, ⟨rfl, hnl⟩⟩ := hw'
-  by_cases hn : n = 0 ∨ n = p.length
-  · aesop
-  have e : G.neighborSet (p.getVert n) ≃ p.toSubgraph.neighborSet (p.getVert n) := by
-    refine @Classical.ofNonempty _ ?_
-    rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [hp.ncard_neighborSet_toSubgraph_internal_eq_two (by lia) (by lia)]; rw [hcyc (Set.nonempty_of_mem hadj.symm)]
-  rw [Subgraph.adj_comm]; rw [Subgraph.adj_iff_of_neighborSet_equiv e (Set.toFinite _)]
-  exact hadj.symm
-
-Depends on / 依赖: Cardinal, Cardinal.eq, Classical, Classical.ofNonempty, G.neighborSet, Set.cast_ncard, Set.nonempty_of_mem, Set.toFinite, Subgraph, Walk.mem_support_iff_exists_getVert, cast_ncard, getVert, hadj.symm, hp.ncard_neighborSet_toSubgraph_internal_eq_two, hp.snd_of_toSubgraph_adj, length, mem_support_iff_exists_getVert, ncard_neighborSet_toSubgraph_internal_eq_two, neighborSet, nonempty_of_mem
+/-
+**SimpleGraph.IsCycles.snd_of_mem_support_of_isPath_of_adj** 是 Mathlib 中的一个定理，位于
+命名空间 `SimpleGraph.IsCycles`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} [Finite V] {v w w' : V},   G.IsCycles
+ → ∀ (p : G.Walk v w), w ≠ w' → w' ∈ p.support → p.IsPath → G.Adj v w' → p.snd =
+ w'
+参数：p : G.Walk v w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.Walk.IsPath.snd_of_toSubgraph_adj`：snd_of_toSubgraph_adj {u 
+v v'} {p : G.Walk u v} (hp : p.IsPath) (hadj : p.toSubgraph.Adj u v') : p.snd = 
+v'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.mem_support_iff_exists_getVert`：mem_support_iff_exists_
+getVert {u v w : V} {p : G.Walk v w} : u in p.support ↔ exists n, p.getVert n = 
+u ∧ n <= p.length
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.getVert_length`：getVert_length {u v} (w : G.Walk u v) :
+ w.getVert w.length = v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
+· 使用引理 `Set.cast_ncard`：cast_ncard {s : Set α} (hs : s.Finite) : (s.ncard : Card
+inal) = Cardinal.mk s
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用引理 `SimpleGraph.Walk.IsPath.ncard_neighborSet_toSubgraph_internal_eq_two`：nc
+ard_neighborSet_toSubgraph_internal_eq_two {u} {i : Nat} {p : G.Walk u v} (hp : 
+p.IsPath) (h : i != 0) (h' : i < p.length) : (p.toSubgraph…
+· 使用定理 `Set.nonempty_of_mem`：nonempty_of_mem {x} (h : x in s) : s.Nonempty
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `SimpleGraph.Subgraph.adj_comm`：adj_comm (G' : Subgraph G) (v w : V) : G'
+.Adj v w ↔ G'.Adj w v
+· 使用引理 `SimpleGraph.Subgraph.adj_iff_of_neighborSet_equiv`：adj_iff_of_neighborSe
+t_equiv {v : V} {H : Subgraph G} (h : G.neighborSet v ≃ H.neighborSet v) (hfin :
+ (G.neighborSet v).Finite) : forall {w}…
 -/
 lemma IsCycles.snd_of_mem_support_of_isPath_of_adj [Finite V] {v w w' : V}
-    (hcyc : G.IsCycles) (p : G.Walk v w) (hw : w != w') (hw' : w' in p.support) (hp : p.IsPath)
+    (hcyc : G.IsCycles) (p : G.Walk v w) (hw : w ≠ w') (hw' : w' ∈ p.support) (hp : p.IsPath)
     (hadj : G.Adj v w') : p.snd = w' := by
   apply hp.snd_of_toSubgraph_adj
   rw [Walk.mem_support_iff_exists_getVert] at hw'
@@ -1593,98 +1530,15 @@ lemma IsCycles.snd_of_mem_support_of_isPath_of_adj [Finite V] {v w w' : V}
   · aesop
   have e : G.neighborSet (p.getVert n) ≃ p.toSubgraph.neighborSet (p.getVert n) := by
     refine @Classical.ofNonempty _ ?_
-    rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [hp.ncard_neighborSet_toSubgraph_internal_eq_two (by lia) (by lia)]; rw [hcyc (Set.nonempty_of_mem hadj.symm)]
-  rw [Subgraph.adj_comm]; rw [Subgraph.adj_iff_of_neighborSet_equiv e (Set.toFinite _)]
+    rw [← Cardinal.eq, ← Set.cast_ncard (Set.toFinite _), ← Set.cast_ncard (Set.toFinite _),
+        hp.ncard_neighborSet_toSubgraph_internal_eq_two (by lia) (by lia),
+        hcyc (Set.nonempty_of_mem hadj.symm)]
+  rw [Subgraph.adj_comm, Subgraph.adj_iff_of_neighborSet_equiv e (Set.toFinite _)]
   exact hadj.symm
-
-/--
-lemma `IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux` / 引理 `IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux`
-
-English:
-lemma IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux
-  statement: [Finite V] {v w : V}
-  proof: by
-  -- Consider the case when p is nil
-  by_cases hvw : v = w
-  · subst hvw
-    use .nil
-  have hpn : ¬p.Nil := Walk.not_nil_of_ne hvw
-  obtain ⟨w', ⟨hw'1, hw'2⟩, hwu⟩ := hcyc.existsUnique_ne_adj
-    (p.toSubgraph_adj_snd hpn).adj_sub
-  -- The edge (v, w) can't be in p, because then it would be the second node
-  have hnpvw' : ¬ p.toSubgraph.Adj v w' := by
-    intro h
-    exact hw'1 (hp.snd_of_toSubgraph_adj h)
-  -- If w = w', then the reachability can be proved with just one edge
-  by_cases hww' : w = w'
-  · subst hww'
-    have : (G \ p.toSubgraph.spanningCoe).Adj w v := by
-      simp only [sdiff_adj, Subgraph.spanningCoe_adj]
-      exact ⟨hw'2.symm, fun h => hnpvw' h.symm⟩
-    exact this.reachable
-  -- Construct the walk needed recursively by extending p
-  have hle : (G \ (p.cons hw'2.symm).toSubgraph.spanningCoe) <= (G \ p.toSubgraph.spanningCoe) := by
-    apply sdiff_le_sdiff (by rfl) ?hcd
-    simp
-  have hp'p : (p.cons hw'2.symm).IsPath := by
-    rw [Walk.cons_isPath_iff]
-    refine ⟨hp, fun hw' => ?_⟩
-    exact hw'1 (hcyc.snd_of_mem_support_of_isPath_of_adj _ hww' hw' hp hw'2)
-  have : (G \ p.toSubgraph.spanningCoe).Adj w' v := by
-    simp only [sdiff_adj, Subgraph.spanningCoe_adj]
-    refine ⟨hw'2.symm, fun h => ?_⟩
-    exact hnpvw' h.symm
-  use (((hcyc.reachable_sdiff_toSubgraph_spanningCoe_aux
-    (p.cons hw'2.symm) hp'p).some).mapLe hle).append this.toWalk
-termination_by Nat.card V + 1 - p.length
-decreasing_by
-  have := Fintype.ofFinite V
-  simp_wf
-  have := Walk.IsPath.length_lt hp
-  lia
-
-中文:
-引理 IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux
-  结论: [有限 V] {v w : V}
-  证明: by
-  -- Consider the case when p is nil
-  by_cases hvw : v = w
-  · subst hvw
-    use .nil
-  have hpn : ¬p.Nil := Walk.not_nil_of_ne hvw
-  obtain ⟨w', ⟨hw'1, hw'2⟩, hwu⟩ := hcyc.existsUnique_ne_adj
-    (p.toSubgraph_adj_snd hpn).adj_sub
-  -- The edge (v, w) can't be in p, because then it would be the second node
-  have hnpvw' : ¬ p.toSubgraph.Adj v w' := by
-    intro h
-    exact hw'1 (hp.snd_of_toSubgraph_adj h)
-  -- If w = w', then the reachability can be proved with just one edge
-  by_cases hww' : w = w'
-  · subst hww'
-    have : (G \ p.toSubgraph.spanningCoe).Adj w v := by
-      simp only [sdiff_adj, Subgraph.spanningCoe_adj]
-      exact ⟨hw'2.symm, fun h => hnpvw' h.symm⟩
-    exact this.reachable
-  -- Construct the walk needed recursively by extending p
-  have hle : (G \ (p.cons hw'2.symm).toSubgraph.spanningCoe) <= (G \ p.toSubgraph.spanningCoe) := by
-    apply sdiff_le_sdiff (by rfl) ?hcd
-    simp
-  have hp'p : (p.cons hw'2.symm).IsPath := by
-    rw [Walk.cons_isPath_iff]
-    refine ⟨hp, fun hw' => ?_⟩
-    exact hw'1 (hcyc.snd_of_mem_support_of_isPath_of_adj _ hww' hw' hp hw'2)
-  have : (G \ p.toSubgraph.spanningCoe).Adj w' v := by
-    simp only [sdiff_adj, Subgraph.spanningCoe_adj]
-    refine ⟨hw'2.symm, fun h => ?_⟩
-    exact hnpvw' h.symm
-  use (((hcyc.reachable_sdiff_toSubgraph_spanningCoe_aux
-    (p.cons hw'2.symm) hp'p).some).mapLe hle).append this.toWalk
-termination_by Nat.card V + 1 - p.length
-decreasing_by
-  have := Fintype.ofFinite V
-  simp_wf
-  have := Walk.IsPath.length_lt hp
-  lia
+/-
+**SimpleGraph.IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux** 是 Mathlib 中的
+一个引理，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux [Finite V] {v w : V}
     (hcyc : G.IsCycles) (p : G.Walk v w) (hp : p.IsPath) :
@@ -1705,19 +1559,19 @@ private lemma IsCycles.reachable_sdiff_toSubgraph_spanningCoe_aux [Finite V] {v 
   · subst hww'
     have : (G \ p.toSubgraph.spanningCoe).Adj w v := by
       simp only [sdiff_adj, Subgraph.spanningCoe_adj]
-      exact ⟨hw'2.symm, fun h => hnpvw' h.symm⟩
+      exact ⟨hw'2.symm, fun h ↦ hnpvw' h.symm⟩
     exact this.reachable
   -- Construct the walk needed recursively by extending p
-  have hle : (G \ (p.cons hw'2.symm).toSubgraph.spanningCoe) <= (G \ p.toSubgraph.spanningCoe) := by
+  have hle : (G \ (p.cons hw'2.symm).toSubgraph.spanningCoe) ≤ (G \ p.toSubgraph.spanningCoe) := by
     apply sdiff_le_sdiff (by rfl) ?hcd
     simp
   have hp'p : (p.cons hw'2.symm).IsPath := by
     rw [Walk.cons_isPath_iff]
-    refine ⟨hp, fun hw' => ?_⟩
+    refine ⟨hp, fun hw' ↦ ?_⟩
     exact hw'1 (hcyc.snd_of_mem_support_of_isPath_of_adj _ hww' hw' hp hw'2)
   have : (G \ p.toSubgraph.spanningCoe).Adj w' v := by
     simp only [sdiff_adj, Subgraph.spanningCoe_adj]
-    refine ⟨hw'2.symm, fun h => ?_⟩
+    refine ⟨hw'2.symm, fun h ↦ ?_⟩
     exact hnpvw' h.symm
   use (((hcyc.reachable_sdiff_toSubgraph_spanningCoe_aux
     (p.cons hw'2.symm) hp'p).some).mapLe hle).append this.toWalk
@@ -1727,59 +1581,52 @@ decreasing_by
   simp_wf
   have := Walk.IsPath.length_lt hp
   lia
-
-/--
-lemma `IsCycles.reachable_sdiff_toSubgraph_spanningCoe` / 引理 `IsCycles.reachable_sdiff_toSubgraph_spanningCoe`
-
-English:
-lemma IsCycles.reachable_sdiff_toSubgraph_spanningCoe
-  statement: [Finite V] {v w : V} (hcyc : G.IsCycles)
-  proof: by
-  have : Fintype V := Fintype.ofFinite V
-  exact reachable_sdiff_toSubgraph_spanningCoe_aux hcyc p hp
-
-中文:
-引理 IsCycles.reachable_sdiff_toSubgraph_spanningCoe
-  结论: [有限 V] {v w : V} (hcyc : G.IsCycles)
-  证明: by
-  have : Fintype V := Fintype.ofFinite V
-  exact reachable_sdiff_toSubgraph_spanningCoe_aux hcyc p hp
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, ofFinite, reachable_sdiff_toSubgraph_spanningCoe_aux
+/-
+**SimpleGraph.IsCycles.reachable_sdiff_toSubgraph_spanningCoe** 是 Mathlib 中的一个定理
+，位于命名空间 `SimpleGraph.IsCycles`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} [Finite V] {v w : V},   G.IsCycles → 
+∀ (p : G.Walk v w), p.IsPath → (G \ p.toSubgraph.spanningCoe).Reachable w v
+参数：p : G.Walk v w；G \ p.toSubgraph.spanningCoe。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Matching.0.SimpleGraph.IsCycl
+es.reachable_sdiff_toSubgraph_spanningCoe_aux`：∀ {V : Type u_1} {G : SimpleGraph
+ V} [Finite V] {v w : V},   G.IsCycles → ∀ (p : G.Walk v w), p.IsPath → (G \ p.t
+oSubgraph.spanningCoe).Reac…
 -/
 lemma IsCycles.reachable_sdiff_toSubgraph_spanningCoe [Finite V] {v w : V} (hcyc : G.IsCycles)
     (p : G.Walk v w) (hp : p.IsPath) : (G \ p.toSubgraph.spanningCoe).Reachable w v := by
   have : Fintype V := Fintype.ofFinite V
   exact reachable_sdiff_toSubgraph_spanningCoe_aux hcyc p hp
-
-/--
-lemma `IsCycles.reachable_deleteEdges` / 引理 `IsCycles.reachable_deleteEdges`
-
-English:
-lemma IsCycles.reachable_deleteEdges
-  statement: [Finite V] (hadj : G.Adj v w)
-  proof: by
-  have : fromEdgeSet {s(v, w)} = hadj.toWalk.toSubgraph.spanningCoe := by
-    simp only [Walk.toSubgraph, singletonSubgraph_le_iff, subgraphOfAdj_verts, Set.mem_insert_iff,
-      Set.mem_singleton_iff, or_true, sup_of_le_left]
-    exact (Subgraph.spanningCoe_subgraphOfAdj hadj).symm
-  rw [show G.deleteEdges {s(v]; rw [w)} = G \ fromEdgeSet {s(v]; rw [w)} by rfl]
-  exact this ▸ (hcyc.reachable_sdiff_toSubgraph_spanningCoe hadj.toWalk
-    (Walk.IsPath.of_adj hadj)).symm
-
-中文:
-引理 IsCycles.reachable_deleteEdges
-  结论: [有限 V] (hadj : G.伴随 v w)
-  证明: by
-  have : fromEdgeSet {s(v, w)} = hadj.toWalk.toSubgraph.spanningCoe := by
-    simp only [Walk.toSubgraph, singletonSubgraph_le_iff, subgraphOfAdj_verts, Set.mem_insert_iff,
-      Set.mem_singleton_iff, or_true, sup_of_le_left]
-    exact (Subgraph.spanningCoe_subgraphOfAdj hadj).symm
-  rw [show G.deleteEdges {s(v]; rw [w)} = G \ fromEdgeSet {s(v]; rw [w)} by rfl]
-  exact this ▸ (hcyc.reachable_sdiff_toSubgraph_spanningCoe hadj.toWalk
-    (Walk.IsPath.of_adj hadj)).symm
-
-Depends on / 依赖: G.deleteEdges, IsPath, Set.mem_insert_iff, Set.mem_singleton_iff, Subgraph, Subgraph.spanningCoe_subgraphOfAdj, Walk.IsPath.of_adj, Walk.toSubgraph, deleteEdges, fromEdgeSet, hadj.toWalk, hadj.toWalk.toSubgraph.spanningCoe, hcyc.reachable_sdiff_toSubgraph_spanningCoe, mem_insert_iff, mem_singleton_iff, of_adj, or_true, reachable_sdiff_toSubgraph_spanningCoe, singletonSubgraph_le_iff, spanningCoe
+/-
+**SimpleGraph.IsCycles.reachable_deleteEdges** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.IsCycles`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v w : V} [Finite V],   G.Adj v w → G
+.IsCycles → (G.deleteEdges {s(v, w)}).Reachable v w
+参数：G.deleteEdges {s(v, w)}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.subgraphOfAdj_verts`：∀ {V : Type u} (G : SimpleGraph V) {v w
+ : V} (hvw : G.Adj v w), (G.subgraphOfAdj hvw).verts = {v, w}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.Subgraph.spanningCoe_subgraphOfAdj`：spanningCoe_subgraphOfAd
+j {v w : V} (hadj : G.Adj v w) : (G.subgraphOfAdj hadj).spanningCoe = fromEdgeSe
+t {s(v, w)}
+· 使用定理 `SimpleGraph.Reachable.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}
+, G.Reachable u v → G.Reachable v u
+· 使用定理 `SimpleGraph.IsCycles.reachable_sdiff_toSubgraph_spanningCoe`：∀ {V : Type
+ u_1} {G : SimpleGraph V} [Finite V] {v w : V},   G.IsCycles → ∀ (p : G.Walk v w
+), p.IsPath → (G \ p.toSubgraph.spanningCoe).Reac…
+· 使用定理 `SimpleGraph.Walk.IsPath.of_adj`：∀ {V : Type u} {G : SimpleGraph V} {u v 
+: V} (h : G.Adj u v), h.toWalk.IsPath
 -/
 lemma IsCycles.reachable_deleteEdges [Finite V] (hadj : G.Adj v w)
     (hcyc : G.IsCycles) : (G.deleteEdges {s(v, w)}).Reachable v w := by
@@ -1787,82 +1634,80 @@ lemma IsCycles.reachable_deleteEdges [Finite V] (hadj : G.Adj v w)
     simp only [Walk.toSubgraph, singletonSubgraph_le_iff, subgraphOfAdj_verts, Set.mem_insert_iff,
       Set.mem_singleton_iff, or_true, sup_of_le_left]
     exact (Subgraph.spanningCoe_subgraphOfAdj hadj).symm
-  rw [show G.deleteEdges {s(v]; rw [w)} = G \ fromEdgeSet {s(v]; rw [w)} by rfl]
+  rw [show G.deleteEdges {s(v, w)} = G \ fromEdgeSet {s(v, w)} by rfl]
   exact this ▸ (hcyc.reachable_sdiff_toSubgraph_spanningCoe hadj.toWalk
     (Walk.IsPath.of_adj hadj)).symm
-
-/--
-lemma `IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp` / 引理 `IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp`
-
-English:
-lemma IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp
-  statement: [Finite V]
-  proof: by
-  classical
-  obtain ⟨w, hw⟩ := hn
-  obtain ⟨u, p, hp⟩ := SimpleGraph.adj_and_reachable_delete_edges_iff_exists_cycle.mp
-    ⟨hw, h.reachable_deleteEdges hw⟩
-  have hvp : v in p.support := SimpleGraph.Walk.fst_mem_support_of_mem_edges _ hp.2
-  have : p.toSubgraph.verts = c.supp := by
-    obtain ⟨c', hc'⟩ := p.toSubgraph_connected.exists_verts_eq_connectedComponentSupp (by
-      intro v hv w hadj
-      refine (Subgraph.adj_iff_of_neighborSet_equiv ?_ (Set.toFinite _)).mpr hadj
-      have : (G.neighborSet v).Nonempty := by
-        rw [Walk.mem_verts_toSubgraph] at hv
-        refine (Set.nonempty_of_ncard_ne_zero ?_).mono (p.toSubgraph.neighborSet_subset v)
-        rw [hp.1.ncard_neighborSet_toSubgraph_eq_two hv]
-        lia
-      refine @Classical.ofNonempty _ ?_
-      rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [h this]; rw [hp.1.ncard_neighborSet_toSubgraph_eq_two (p.mem_verts_toSubgraph.mp hv)])
-    rw [hc']
-    have : v in c'.supp := by
-      rw [← hc']; rw [Walk.mem_verts_toSubgraph]
-      exact hvp
-    simp_all
-  use p.rotate v hvp
-  rw [← this]
-  exact ⟨hp.1.rotate _, by simp⟩
-
-中文:
-引理 IsCycles.存在_cycle_toSubgraph_verts_eq_connectedComponentSupp
-  结论: [有限 V]
-  证明: by
-  classical
-  obtain ⟨w, hw⟩ := hn
-  obtain ⟨u, p, hp⟩ := SimpleGraph.adj_and_reachable_delete_edges_iff_exists_cycle.mp
-    ⟨hw, h.reachable_deleteEdges hw⟩
-  have hvp : v in p.support := SimpleGraph.Walk.fst_mem_support_of_mem_edges _ hp.2
-  have : p.toSubgraph.verts = c.supp := by
-    obtain ⟨c', hc'⟩ := p.toSubgraph_connected.exists_verts_eq_connectedComponentSupp (by
-      intro v hv w hadj
-      refine (Subgraph.adj_iff_of_neighborSet_equiv ?_ (Set.toFinite _)).mpr hadj
-      have : (G.neighborSet v).Nonempty := by
-        rw [Walk.mem_verts_toSubgraph] at hv
-        refine (Set.nonempty_of_ncard_ne_zero ?_).mono (p.toSubgraph.neighborSet_subset v)
-        rw [hp.1.ncard_neighborSet_toSubgraph_eq_two hv]
-        lia
-      refine @Classical.ofNonempty _ ?_
-      rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [h this]; rw [hp.1.ncard_neighborSet_toSubgraph_eq_two (p.mem_verts_toSubgraph.mp hv)])
-    rw [hc']
-    have : v in c'.supp := by
-      rw [← hc']; rw [Walk.mem_verts_toSubgraph]
-      exact hvp
-    simp_all
-  use p.rotate v hvp
-  rw [← this]
-  exact ⟨hp.1.rotate _, by simp⟩
-
-Depends on / 依赖: G.neighborSet, Nonempty, Set.toFinite, SimpleGraph, SimpleGraph.Walk.fst_mem_support_of_mem_edges, SimpleGraph.adj_and_reachable_delete_edges_iff_exists_cycle.mp, Subgraph, Subgraph.adj_iff_of_neighborSet_equiv, adj_and_reachable_delete_edges_iff_exists_cycle, adj_iff_of_neighborSet_equiv, c.supp, classical, exists_verts_eq_connectedComponentSupp, fst_mem_support_of_mem_edges, h.reachable_deleteEdges, neighborSet, p.support, p.toSubgraph.verts, p.toSubgraph_connected.exists_verts_eq_connectedComponentSupp, reachable_deleteEdges
+/-
+**SimpleGraph.IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp**
+ 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsCycles`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v : V} [Finite V] {c : G.ConnectedCo
+mponent},   G.IsCycles → v ∈ c.supp → (G.neighborSet v).Nonempty → ∃ p, p.IsCycl
+e ∧ p.toSubgraph.verts = c.supp
+参数：G.neighborSet v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.adj_and_reachable_delete_edges_iff_exists_cycle`：adj_and_rea
+chable_delete_edges_iff_exists_cycle {v w : V} : G.Adj v w ∧ (G.deleteEdges {s(v
+, w)}).Reachable v w ↔ exists (u : V) (p : G.Walk…
+· 使用定理 `SimpleGraph.IsCycles.reachable_deleteEdges`：∀ {V : Type u_1} {G : Simple
+Graph V} {v w : V} [Finite V],   G.Adj v w → G.IsCycles → (G.deleteEdges {s(v, w
+)}).Reachable v w
+· 使用定理 `SimpleGraph.Walk.fst_mem_support_of_mem_edges`：fst_mem_support_of_mem_ed
+ges {t u v w : V} (p : G.Walk v w) (he : s(t, u) in p.edges) : t in p.support
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `SimpleGraph.Subgraph.Connected.exists_verts_eq_connectedComponentSupp`：∀
+ {V : Type u} {G : SimpleGraph V} {H : G.Subgraph},   H.Connected → (∀ v ∈ H.ver
+ts, ∀ (w : V), G.Adj v w → H.Adj v w) → ∃ c, H.verts = c.su…
+· 使用定理 `SimpleGraph.Walk.toSubgraph_connected`：∀ {V : Type u} {G : SimpleGraph V
+} {u v : V} (p : G.Walk u v), p.toSubgraph.Connected
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `SimpleGraph.Subgraph.adj_iff_of_neighborSet_equiv`：adj_iff_of_neighborSe
+t_equiv {v : V} {H : Subgraph G} (h : G.neighborSet v ≃ H.neighborSet v) (hfin :
+ (G.neighborSet v).Finite) : forall {w}…
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `SimpleGraph.Subgraph.neighborSet_subset`：neighborSet_subset (G' : Subgra
+ph G) (v : V) : G'.neighborSet v subseteq G.neighborSet v
+· 使用定理 `Set.nonempty_of_ncard_ne_zero`：nonempty_of_ncard_ne_zero (hs : s.ncard !
+= 0) : s.Nonempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.Walk.IsCycle.ncard_neighborSet_toSubgraph_eq_two`：ncard_neig
+hborSet_toSubgraph_eq_two {u v} {p : G.Walk u u} (hpc : p.IsCycle) (h : v in p.s
+upport) : (p.toSubgraph.neighborSet v).ncard = 2
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `SimpleGraph.Walk.mem_verts_toSubgraph`：mem_verts_toSubgraph (p : G.Walk 
+u v) : w in p.toSubgraph.verts ↔ w in p.support
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.eq`：∀ {α β : Type u}, Cardinal.mk α = Cardinal.mk β ↔ Nonempty 
+(α ≃ β)
+· 使用引理 `Set.cast_ncard`：cast_ncard {s : Set α} (hs : s.Finite) : (s.ncard : Card
+inal) = Cardinal.mk s
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.Walk.IsCycle.rotate`：∀ {V : Type u} {G : SimpleGraph V} {u v
+ : V} [inst : DecidableEq V] {c : G.Walk v v} (hu : u ∈ c.support),   c.IsCycle 
+→ (c.rotate u hu).IsC…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.Walk.toSubgraph_rotate`：toSubgraph_rotate [DecidableEq V] (c
+ : G.Walk v v) (h : u in c.support) : (c.rotate u h).toSubgraph = c.toSubgraph
+· 使用定理 `SimpleGraph.Walk.verts_toSubgraph`：verts_toSubgraph (p : G.Walk u v) : p
+.toSubgraph.verts = { w | w in p.support }
 -/
 lemma IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp [Finite V]
-    {c : G.ConnectedComponent} (h : G.IsCycles) (hv : v in c.supp)
+    {c : G.ConnectedComponent} (h : G.IsCycles) (hv : v ∈ c.supp)
     (hn : (G.neighborSet v).Nonempty) :
-    exists (p : G.Walk v v), p.IsCycle ∧ p.toSubgraph.verts = c.supp := by
+    ∃ (p : G.Walk v v), p.IsCycle ∧ p.toSubgraph.verts = c.supp := by
   classical
   obtain ⟨w, hw⟩ := hn
   obtain ⟨u, p, hp⟩ := SimpleGraph.adj_and_reachable_delete_edges_iff_exists_cycle.mp
     ⟨hw, h.reachable_deleteEdges hw⟩
-  have hvp : v in p.support := SimpleGraph.Walk.fst_mem_support_of_mem_edges _ hp.2
+  have hvp : v ∈ p.support := SimpleGraph.Walk.fst_mem_support_of_mem_edges _ hp.2
   have : p.toSubgraph.verts = c.supp := by
     obtain ⟨c', hc'⟩ := p.toSubgraph_connected.exists_verts_eq_connectedComponentSupp (by
       intro v hv w hadj
@@ -1873,10 +1718,11 @@ lemma IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp [Finite V
         rw [hp.1.ncard_neighborSet_toSubgraph_eq_two hv]
         lia
       refine @Classical.ofNonempty _ ?_
-      rw [← Cardinal.eq]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [← Set.cast_ncard (Set.toFinite _)]; rw [h this]; rw [hp.1.ncard_neighborSet_toSubgraph_eq_two (p.mem_verts_toSubgraph.mp hv)])
+      rw [← Cardinal.eq, ← Set.cast_ncard (Set.toFinite _), ← Set.cast_ncard (Set.toFinite _),
+        h this, hp.1.ncard_neighborSet_toSubgraph_eq_two (p.mem_verts_toSubgraph.mp hv)])
     rw [hc']
-    have : v in c'.supp := by
-      rw [← hc']; rw [Walk.mem_verts_toSubgraph]
+    have : v ∈ c'.supp := by
+      rw [← hc', Walk.mem_verts_toSubgraph]
       exact hvp
     simp_all
   use p.rotate v hvp
@@ -1884,118 +1730,95 @@ lemma IsCycles.exists_cycle_toSubgraph_verts_eq_connectedComponentSupp [Finite V
   exact ⟨hp.1.rotate _, by simp⟩
 
 /--
-Definition of `IsAlternating` / `IsAlternating` 的定义
+A graph `G` is alternating with respect to some other graph `G'`, if exactly every other edge in
+`G` is in `G'`. Note that the degree of each vertex needs to be at most 2 for this to be
+possible. This property is used to create new matchings using `symmDiff`.
+The definition of `symmDiff` that makes sense is the one for `SimpleGraph`. The `symmDiff`
+for `SimpleGraph.Subgraph` deriving from the lattice structure also affects the vertices included,
+which we do not want in this case. This is why this property, just like `IsCycles`, is defined
+for `SimpleGraph` rather than `SimpleGraph.Subgraph`.
+-/
+/-
+**SimpleGraph.IsAlternating** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：IsAlternating (G G' : SimpleGraph V)
+参数：G G' : SimpleGraph V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsAlternating
-  signature: (G G' : SimpleGraph V)
-  body: forall ⦃v w w' : V⦄, w != w' -> G.Adj v w -> G.Adj v w' -> (G'.Adj v w ↔ ¬ G'.Adj v w')
-
-中文:
-定义 IsAlternating
-  签名: (G G' : 简单图 V)
-  定义体: forall ⦃v w w' : V⦄, w != w' -> G.Adj v w -> G.Adj v w' -> (G'.Adj v w ↔ ¬ G'.Adj v w')
-
-Depends on / 依赖: G.Adj
+--- 原说明 ---
+A graph `G` is alternating with respect to some other graph `G'`, if exactly eve
+ry other edge in
+`G` is in `G'`. Note that the degree of each vertex needs to be at most 2 for th
+is to be
+possible. This property is used to create new matchings using `symmDiff`.
+The definition of `symmDiff` that makes sense is the one for `SimpleGraph`. The 
+`symmDiff`
+for `SimpleGraph.Subgraph` deriving from the lattice structure also affects the 
+vertices included,
+which we do not want in this case. This is why this property, just like `IsCycle
+s`, is defined
+for `SimpleGraph` rather than `SimpleGraph.Subgraph`.
 -/
 def IsAlternating (G G' : SimpleGraph V) :=
-  forall ⦃v w w' : V⦄, w != w' -> G.Adj v w -> G.Adj v w' -> (G'.Adj v w ↔ ¬ G'.Adj v w')
-
-/--
-lemma `IsAlternating.mono` / 引理 `IsAlternating.mono`
-
-English:
-lemma IsAlternating.mono
-  given: {G'' : SimpleGraph V} (halt : G.IsAlternating G') (h : G'' <= G)
-  proof: fun _ _ _ hww' hvw hvw' => halt hww' (h hvw) (h hvw')
-
-中文:
-引理 IsAlternating.mono
-  条件: {G'' : 简单图 V} (halt : G.IsAlternating G') (h : G'' <= G)
-  证明: fun _ _ _ hww' hvw hvw' => halt hww' (h hvw) (h hvw')
+  ∀ ⦃v w w' : V⦄, w ≠ w' → G.Adj v w → G.Adj v w' → (G'.Adj v w ↔ ¬ G'.Adj v w')
+/-
+**SimpleGraph.IsAlternating.mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsAltern
+ating`。
+形式化陈述：∀ {V : Type u_1} {G G' G'' : SimpleGraph V}, G.IsAlternating G' → G'' ≤ G 
+→ G''.IsAlternating G'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsAlternating.mono {G'' : SimpleGraph V} (halt : G.IsAlternating G') (h : G'' <= G) :
-    G''.IsAlternating G' := fun _ _ _ hww' hvw hvw' => halt hww' (h hvw) (h hvw')
-
-/--
-lemma `IsAlternating.spanningCoe` / 引理 `IsAlternating.spanningCoe`
-
-English:
-lemma IsAlternating.spanningCoe
-  given: (halt : G.IsAlternating G') (H : Subgraph G)
-  proof: by
-  intro v w w' hww' hvw hvv'
-  simp only [Subgraph.spanningCoe_adj] at hvw hvv'
-  exact halt hww' hvw.adj_sub hvv'.adj_sub
-
-中文:
-引理 IsAlternating.spanningCoe
-  条件: (halt : G.IsAlternating G') (H : 子图 G)
-  证明: by
-  intro v w w' hww' hvw hvv'
-  simp only [Subgraph.spanningCoe_adj] at hvw hvv'
-  exact halt hww' hvw.adj_sub hvv'.adj_sub
-
-Depends on / 依赖: Subgraph, Subgraph.spanningCoe_adj, adj_sub, hvw.adj_sub, spanningCoe_adj
+lemma IsAlternating.mono {G'' : SimpleGraph V} (halt : G.IsAlternating G') (h : G'' ≤ G) :
+    G''.IsAlternating G' := fun _ _ _ hww' hvw hvw' ↦ halt hww' (h hvw) (h hvw')
+/-
+**SimpleGraph.IsAlternating.spanningCoe** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.I
+sAlternating`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V}, G.IsAlternating G' → ∀ (H : G.Sub
+graph), H.spanningCoe.IsAlternating G'
+参数：H : G.Subgraph。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.Adj.adj_sub`：∀ {V : Type u} {G : SimpleGraph V} {H 
+: G.Subgraph} {u v : V}, H.Adj u v → G.Adj u v
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
 -/
 lemma IsAlternating.spanningCoe (halt : G.IsAlternating G') (H : Subgraph G) :
     H.spanningCoe.IsAlternating G' := by
   intro v w w' hww' hvw hvv'
   simp only [Subgraph.spanningCoe_adj] at hvw hvv'
   exact halt hww' hvw.adj_sub hvv'.adj_sub
-
-/--
-lemma `IsAlternating.sup_edge` / 引理 `IsAlternating.sup_edge`
-
-English:
-lemma IsAlternating.sup_edge
-  statement: {u x : V} (halt : G.IsAlternating G') (hnadj : ¬G'.Adj u x)
-  proof: by
-  by_cases hadj : G.Adj u x
-  · rwa [sup_edge_of_adj G hadj]
-  intro v w w' hww' hvw hvv'
-  simp only [sup_adj, edge_adj] at hvw hvv'
-  obtain hl | hr := hvw <;> obtain h1 | h2 := hvv'
-  · exact halt hww' hl h1
-  · rw [G'.adj_congr_of_sym2 (by grind : s(v, w') = s(u, x))]
-    simp only [hnadj, not_false_eq_true, iff_true]
-    rcases h2.1 with ⟨rfl, rfl⟩ | ⟨h2r1, h2r2⟩
-    · exact (hx' _ hww' hl.symm).symm
-    · simp_all
-  · rw [G'.adj_congr_of_sym2 (by grind : s(v, w) = s(u, x))]
-    simp only [hnadj, false_iff, not_not]
-    rcases hr.1 with ⟨rfl, rfl⟩ | ⟨hrr1, hrr2⟩
-    · exact (hx' _ hww'.symm h1.symm).symm
-    · grind
-  · grind
-
-中文:
-引理 IsAlternating.sup_edge
-  结论: {u x : V} (halt : G.IsAlternating G') (hnadj : ¬G'.伴随 u x)
-  证明: by
-  by_cases hadj : G.Adj u x
-  · rwa [sup_edge_of_adj G hadj]
-  intro v w w' hww' hvw hvv'
-  simp only [sup_adj, edge_adj] at hvw hvv'
-  obtain hl | hr := hvw <;> obtain h1 | h2 := hvv'
-  · exact halt hww' hl h1
-  · rw [G'.adj_congr_of_sym2 (by grind : s(v, w') = s(u, x))]
-    simp only [hnadj, not_false_eq_true, iff_true]
-    rcases h2.1 with ⟨rfl, rfl⟩ | ⟨h2r1, h2r2⟩
-    · exact (hx' _ hww' hl.symm).symm
-    · simp_all
-  · rw [G'.adj_congr_of_sym2 (by grind : s(v, w) = s(u, x))]
-    simp only [hnadj, false_iff, not_not]
-    rcases hr.1 with ⟨rfl, rfl⟩ | ⟨hrr1, hrr2⟩
-    · exact (hx' _ hww'.symm h1.symm).symm
-    · grind
-  · grind
-
-Depends on / 依赖: G.Adj, adj_congr_of_sym2, edge_adj, false_iff, hl.symm, iff_true, not_false_eq_true, not_not, sup_adj, sup_edge_of_adj
+/-
+**SimpleGraph.IsAlternating.sup_edge** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsAl
+ternating`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V} {u x : V},   G.IsAlternating G' → 
+    ¬G'.Adj u x →       (∀ (u' : V), u' ≠ u → G.Adj x u' → G'.Adj x u') →       
+  (∀ (x' : V), x' ≠ x → G.Adj x' u → G'.Adj x' u) → (G ⊔ SimpleGraph.edge u x).I
+sAlternating G'
+参数：∀ (u' : V), u' ≠ u → G.Adj x u' → G'.Adj x u'；∀ (x' : V), x' ≠ x → G.Adj x' u
+ → G'.Adj x' u；G ⊔ SimpleGraph.edge u x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.sup_edge_of_adj`：sup_edge_of_adj (h : G.Adj s t) : G ⊔ edge 
+s t = G
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.adj_congr_of_sym2`：adj_congr_of_sym2 {u v w x : V} (h : s(u,
+ v) = s(w, x)) : G.Adj u v ↔ G.Adj w x
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
 lemma IsAlternating.sup_edge {u x : V} (halt : G.IsAlternating G') (hnadj : ¬G'.Adj u x)
-    (hu' : forall u', u' != u -> G.Adj x u' -> G'.Adj x u')
-    (hx' : forall x', x' != x -> G.Adj x' u -> G'.Adj x' u) : (G ⊔ edge u x).IsAlternating G' := by
+    (hu' : ∀ u', u' ≠ u → G.Adj x u' → G'.Adj x u')
+    (hx' : ∀ x', x' ≠ x → G.Adj x' u → G'.Adj x' u) : (G ⊔ edge u x).IsAlternating G' := by
   by_cases hadj : G.Adj u x
   · rwa [sup_edge_of_adj G hadj]
   intro v w w' hww' hvw hvv'
@@ -2015,64 +1838,44 @@ lemma IsAlternating.sup_edge {u x : V} (halt : G.IsAlternating G') (hnadj : ¬G'
   · grind
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Subgraph.IsPerfectMatching.symmDiff_of_isAlternating` / 引理 `Subgraph.IsPerfectMatching.symmDiff_of_isAlternating`
-
-English:
-lemma Subgraph.IsPerfectMatching.symmDiff_of_isAlternating
-  statement: (hM : M.IsPerfectMatching)
-  proof: by
-  rw [Subgraph.isPerfectMatching_iff]
-  intro v
-  simp only [symmDiff_def]
-  obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
-  by_cases h : G'.Adj v w
-  · obtain ⟨w', hw'⟩ := hG'cyc.other_adj_of_adj h
-    have hmadj : M.Adj v w ↔ ¬M.Adj v w' := by simpa using hG' hw'.1 h hw'.2
-    use w'
-    simp only [Subgraph.top_adj, SimpleGraph.sup_adj, sdiff_adj, Subgraph.spanningCoe_adj,
-      hmadj.mp hw.1, hw'.2, not_true_eq_false, and_self, not_false_eq_true, or_true, true_and]
-    rintro y (hl | hr)
-    · grind
-    · obtain ⟨w'', hw''⟩ := hG'cyc.other_adj_of_adj hr.1
-      by_contra! hc
-      simp_all [show M.Adj v y ↔ ¬M.Adj v w' by simpa using hG' hc hr.1 hw'.2]
-  · use w
-    simp only [Subgraph.top_adj, SimpleGraph.sup_adj, sdiff_adj, Subgraph.spanningCoe_adj, hw.1, h,
-      not_false_eq_true, and_self, not_true_eq_false, or_false, true_and]
-    rintro y (hl | hr)
-    · exact hw.2 _ hl.1
-    · have ⟨w', hw'⟩ := hG'cyc.other_adj_of_adj hr.1
-      simp_all [show M.Adj v y ↔ ¬M.Adj v w' by simpa using hG' hw'.1 hr.1 hw'.2]
-
-中文:
-引理 子图.IsPerfectMatching.symmDiff_of_isAlternating
-  结论: (hM : M.IsPerfectMatching)
-  证明: by
-  rw [Subgraph.isPerfectMatching_iff]
-  intro v
-  simp only [symmDiff_def]
-  obtain ⟨w, hw⟩ := hM.1 (hM.2 v)
-  by_cases h : G'.Adj v w
-  · obtain ⟨w', hw'⟩ := hG'cyc.other_adj_of_adj h
-    have hmadj : M.Adj v w ↔ ¬M.Adj v w' := by simpa using hG' hw'.1 h hw'.2
-    use w'
-    simp only [Subgraph.top_adj, SimpleGraph.sup_adj, sdiff_adj, Subgraph.spanningCoe_adj,
-      hmadj.mp hw.1, hw'.2, not_true_eq_false, and_self, not_false_eq_true, or_true, true_and]
-    rintro y (hl | hr)
-    · grind
-    · obtain ⟨w'', hw''⟩ := hG'cyc.other_adj_of_adj hr.1
-      by_contra! hc
-      simp_all [show M.Adj v y ↔ ¬M.Adj v w' by simpa using hG' hc hr.1 hw'.2]
-  · use w
-    simp only [Subgraph.top_adj, SimpleGraph.sup_adj, sdiff_adj, Subgraph.spanningCoe_adj, hw.1, h,
-      not_false_eq_true, and_self, not_true_eq_false, or_false, true_and]
-    rintro y (hl | hr)
-    · exact hw.2 _ hl.1
-    · have ⟨w', hw'⟩ := hG'cyc.other_adj_of_adj hr.1
-      simp_all [show M.Adj v y ↔ ¬M.Adj v w' by simpa using hG' hw'.1 hr.1 hw'.2]
-
-Depends on / 依赖: M.Adj, SimpleGraph, SimpleGraph.sup_adj, Subgraph, Subgraph.isPerfectMatching_iff, Subgraph.spanningCoe_adj, Subgraph.top_adj, and_self, cyc.other_adj_, cyc.other_adj_of_adj, hmadj.mp, isPerfectMatching_iff, not_false_eq_true, not_true_eq_false, or_true, other_adj_, other_adj_of_adj, sdiff_adj, spanningCoe_adj, sup_adj
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching.symmDiff_of_isAlternating** 是 Mathlib 中
+的一个定理，位于命名空间 `SimpleGraph.Subgraph.IsPerfectMatching`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V} {M : G.Subgraph},   M.IsPerfectMat
+ching → G'.IsAlternating M.spanningCoe → G'.IsCycles → ⊤.IsPerfectMatching
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.isPerfectMatching_iff`：isPerfectMatching_iff : M.Is
+PerfectMatching ↔ forall v, exists! w, M.Adj v w
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `SimpleGraph.IsCycles.other_adj_of_adj`：∀ {V : Type u_1} {G : SimpleGraph
+ V} {v w : V}, G.IsCycles → G.Adj v w → ∃ w', w ≠ w' ∧ G.Adj v w'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
 lemma Subgraph.IsPerfectMatching.symmDiff_of_isAlternating (hM : M.IsPerfectMatching)
     (hG' : G'.IsAlternating M.spanningCoe) (hG'cyc : G'.IsCycles) :
@@ -2099,31 +1902,31 @@ lemma Subgraph.IsPerfectMatching.symmDiff_of_isAlternating (hM : M.IsPerfectMatc
     · exact hw.2 _ hl.1
     · have ⟨w', hw'⟩ := hG'cyc.other_adj_of_adj hr.1
       simp_all [show M.Adj v y ↔ ¬M.Adj v w' by simpa using hG' hw'.1 hr.1 hw'.2]
-
-/--
-lemma `Subgraph.IsPerfectMatching.isAlternating_symmDiff_left` / 引理 `Subgraph.IsPerfectMatching.isAlternating_symmDiff_left`
-
-English:
-lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_left
-  statement: {M' : Subgraph G'}
-  proof: by
-  intro v w w' hww' hvw hvw'
-  obtain ⟨v1, hm1, hv1⟩ := hM.1 (hM.2 v)
-  obtain ⟨v2, hm2, hv2⟩ := hM'.1 (hM'.2 v)
-  simp only [symmDiff_def] at *
-  aesop
-
-中文:
-引理 子图.IsPerfectMatching.isAlternating_symmDiff_left
-  结论: {M' : 子图 G'}
-  证明: by
-  intro v w w' hww' hvw hvw'
-  obtain ⟨v1, hm1, hv1⟩ := hM.1 (hM.2 v)
-  obtain ⟨v2, hm2, hv2⟩ := hM'.1 (hM'.2 v)
-  simp only [symmDiff_def] at *
-  aesop
-
-Depends on / 依赖: symmDiff_def
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching.isAlternating_symmDiff_left** 是 Mathlib
+ 中的一个定理，位于命名空间 `SimpleGraph.Subgraph.IsPerfectMatching`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V} {M : G.Subgraph} {M' : G'.Subgraph
+},   M.IsPerfectMatching → M'.IsPerfectMatching → (symmDiff M.spanningCoe M'.spa
+nningCoe).IsAlternating M.spanningCoe
+参数：symmDiff M.spanningCoe M'.spanningCoe。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.spanningCoe_adj`：∀ {V : Type u} {G : SimpleGraph V}
+ (G' : G.Subgraph) (a a_1 : V), G'.spanningCoe.Adj a a_1 = G'.Adj a a_1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
 -/
 lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_left {M' : Subgraph G'}
     (hM : M.IsPerfectMatching) (hM' : M'.IsPerfectMatching) :
@@ -2133,21 +1936,22 @@ lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_left {M' : Subgraph G'}
   obtain ⟨v2, hm2, hv2⟩ := hM'.1 (hM'.2 v)
   simp only [symmDiff_def] at *
   aesop
-
-/--
-lemma `Subgraph.IsPerfectMatching.isAlternating_symmDiff_right` / 引理 `Subgraph.IsPerfectMatching.isAlternating_symmDiff_right`
-
-English:
-lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_right
-  proof: by
-  simpa [symmDiff_comm] using isAlternating_symmDiff_left hM' hM
-
-中文:
-引理 子图.IsPerfectMatching.isAlternating_symmDiff_right
-  证明: by
-  simpa [symmDiff_comm] using isAlternating_symmDiff_left hM' hM
-
-Depends on / 依赖: isAlternating_symmDiff_left, symmDiff_comm
+/-
+**SimpleGraph.Subgraph.IsPerfectMatching.isAlternating_symmDiff_right** 是 Mathli
+b 中的一个定理，位于命名空间 `SimpleGraph.Subgraph.IsPerfectMatching`。
+形式化陈述：∀ {V : Type u_1} {G G' : SimpleGraph V} {M : G.Subgraph} {M' : G'.Subgraph
+},   M.IsPerfectMatching → M'.IsPerfectMatching → (symmDiff M.spanningCoe M'.spa
+nningCoe).IsAlternating M'.spanningCoe
+参数：symmDiff M.spanningCoe M'.spanningCoe。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `symmDiff_comm`：symmDiff_comm : a ∆ b = b ∆ a
+· 使用定理 `SimpleGraph.Subgraph.IsPerfectMatching.isAlternating_symmDiff_left`：∀ {V
+ : Type u_1} {G G' : SimpleGraph V} {M : G.Subgraph} {M' : G'.Subgraph},   M.IsP
+erfectMatching → M'.IsPerfectMatching → (symmDiff M.span…
 -/
 lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_right
     {M' : Subgraph G'} (hM : M.IsPerfectMatching) (hM' : M'.IsPerfectMatching) :
@@ -2155,3 +1959,4 @@ lemma Subgraph.IsPerfectMatching.isAlternating_symmDiff_right
   simpa [symmDiff_comm] using isAlternating_symmDiff_left hM' hM
 
 end SimpleGraph
+

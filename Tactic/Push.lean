@@ -26,42 +26,41 @@ public meta section
 
 namespace Mathlib.Tactic.Push
 
-variable (p q : Prop) {α : Sort*} (s : α -> Prop)
+variable (p q : Prop) {α : Sort*} (s : α → Prop)
 
 -- The more specific `Classical.not_imp` is attempted before the more general `not_forall_eq`.
 -- This happens because `not_forall_eq` is handled manually in `pushNegBuiltin`.
 attribute [push] not_not not_or Classical.not_imp not_false_eq_true not_true_eq_false
 attribute [push ←] ne_eq
 
-/--
-theorem `not_iff` / 定理 `not_iff`
-
-English:
-theorem not_iff
-  statement: ¬ (p ↔ q) ↔ (p ∧ ¬ q) ∨ (¬ p ∧ q)
-  proof: _root_.not_iff.trans iff_iff_and_or_not_and_not.trans by rw [not_not, or_comm]
-
-中文:
-定理 not_iff
-  结论: ¬ (p ↔ q) ↔ (p ∧ ¬ q) ∨ (¬ p ∧ q)
-  证明: _root_.not_iff.trans iff_iff_and_or_not_and_not.trans by rw [not_not, or_comm]
+/-
+**Mathlib.Tactic.Push.not_iff** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：∀ (p q : Prop), ¬(p ↔ q) ↔ p ∧ ¬q ∨ ¬p ∧ q
+参数：p q : Prop；p ↔ q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `not_iff`：not_iff : ¬(a ↔ b) ↔ (¬a ↔ b)
+· 使用定理 `iff_iff_and_or_not_and_not`：iff_iff_and_or_not_and_not : (a ↔ b) ↔ a ∧ b
+ ∨ ¬a ∧ ¬b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[push] theorem not_iff : ¬ (p ↔ q) ↔ (p ∧ ¬ q) ∨ (¬ p ∧ q) :=
-_root_.not_iff.trans iff_iff_and_or_not_and_not.trans by rw [not_not, or_comm]
-/--
-theorem `not_exists` / 定理 `not_exists`
-
-English:
-theorem not_exists
-  statement: (¬ Exists s) ↔ (forall x, binderNameHint x s <| ¬ s x)
-  proof: _root_.not_exists
-
-中文:
-定理 not_存在
-  结论: (¬ 存在 s) ↔ (对任意 x, binderNameHint x s <| ¬ s x)
-  证明: _root_.not_exists
+  _root_.not_iff.trans <| iff_iff_and_or_not_and_not.trans <| by rw [not_not, or_comm]
+/-
+**Mathlib.Tactic.Push.not_exists** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Push`
+。
+形式化陈述：∀ {α : Sort u_1} (s : α → Prop), ¬Exists s ↔ ∀ (x : α), binderNameHint x s
+ ¬s x
+参数：s : α → Prop；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_exists`：∀ {α : Sort u_1} {p : α → Prop}, (¬∃ x, p x) ↔ ∀ (x : α), ¬p
+ x
 -/
-@[push] theorem not_exists : (¬ Exists s) ↔ (forall x, binderNameHint x s <| ¬ s x) :=
+@[push] theorem not_exists : (¬ Exists s) ↔ (∀ x, binderNameHint x s <| ¬ s x) :=
   _root_.not_exists
 
 -- TODO: lemmas involving `∃` should be tagged using `binderNameHint`,
@@ -80,56 +79,35 @@ attribute [push ←] Function.id_def
 
 -- TODO: decide if we want this lemma, and if so, fix the proofs that break as a result
 -- @[push high] theorem Nat.not_nonneg_iff_eq_zero (n : Nat) : ¬ 0 < n ↔ n = 0 :=
--- Nat.not_lt.trans Nat.le_zero
-
-/--
-theorem `not_and_eq` / 定理 `not_and_eq`
-
-English:
-theorem not_and_eq
-  statement: (¬ (p ∧ q)) = (p -> ¬ q)
-  proof: propext not_and
-
-中文:
-定理 not_and_eq
-  结论: (¬ (p ∧ q)) = (p -> ¬ q)
-  证明: propext not_and
-
-Depends on / 依赖: not_and, propext
+--   Nat.not_lt.trans Nat.le_zero
+/-
+**Mathlib.Tactic.Push.not_and_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Push`
+。
+形式化陈述：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_and`：∀ {a b : Prop}, ¬(a ∧ b) ↔ a → ¬b
 -/
-theorem not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q) := propext not_and
-/--
-theorem `not_and_or_eq` / 定理 `not_and_or_eq`
-
-English:
-theorem not_and_or_eq
-  statement: (¬ (p ∧ q)) = (¬ p ∨ ¬ q)
-  proof: propext not_and_or
-
-中文:
-定理 not_and_or_eq
-  结论: (¬ (p ∧ q)) = (¬ p ∨ ¬ q)
-  证明: propext not_and_or
-
-Depends on / 依赖: not_and_or, propext
+theorem not_and_eq : (¬ (p ∧ q)) = (p → ¬ q) := propext not_and
+/-
+**Mathlib.Tactic.Push.not_and_or_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Pu
+sh`。
+形式化陈述：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ ¬ q)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
 -/
 theorem not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ ¬ q) := propext not_and_or
-/--
-theorem `not_forall_eq` / 定理 `not_forall_eq`
-
-English:
-theorem not_forall_eq
-  statement: (¬ forall x, s x) = (exists x, ¬ s x)
-  proof: propext not_forall
-
-中文:
-定理 not_对任意_eq
-  结论: (¬ 对任意 x, s x) = (存在 x, ¬ s x)
-  证明: propext not_forall
-
-Depends on / 依赖: not_forall, propext
+/-
+**Mathlib.Tactic.Push.not_forall_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Pu
+sh`。
+形式化陈述：not_forall_eq : (¬ forall x, s x) = (exists x, ¬ s x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
 -/
-theorem not_forall_eq : (¬ forall x, s x) = (exists x, ¬ s x) := propext not_forall
+theorem not_forall_eq : (¬ ∀ x, s x) = (∃ x, ¬ s x) := propext not_forall
 
 /-- Set `distrib` to true in `push Not` and related tactics. -/
 register_option push_neg.use_distrib : Bool :=
@@ -138,20 +116,16 @@ register_option push_neg.use_distrib : Bool :=
 
 open Lean Meta Elab.Tactic Parser.Tactic
 
-/--
-Definition of `Config` / `Config` 的定义
+/-- The configuration options for the `push` tactic. -/
+/-
+**Mathlib.Tactic.Push.Config** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：Config where /-- If `true` (default `false`), rewrite `¬ (p ∧ q)` into `¬ 
+p ∨ ¬ q` instead of `p → ¬ q`. -/ distrib : Bool
+参数：default `false`；p ∧ q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Config
-  parameters: where
-  axioms and operations (1):
-    - distrib : Bool  [default: false]
-
-中文:
-结构 余nfig
-  参数: where
-  公理与运算 (1 个):
-    - distrib : 布尔值  [默认: false]
+--- 原说明 ---
+The configuration options for the `push` tactic.
 -/
 structure Config where
   /-- If `true` (default `false`), rewrite `¬ (p ∧ q)` into `¬ p ∨ ¬ q` instead of `p → ¬ q`. -/
@@ -161,43 +135,22 @@ structure Config where
 declare_config_elab elabPushConfig Config
 
 /--
-Definition of `pushNegBuiltin` / `pushNegBuiltin` 的定义
+`pushNegBuiltin` is a simproc for pushing `¬` in a way that can't be done
+using the `@[push]` attribute.
+- `¬ (p ∧ q)` turns into `p → ¬ q` or `¬ p ∨ ¬ q`, depending on the `distrib` configuration.
+- `¬ ∀ a, p` turns into `∃ a, ¬ p`, where the binder name `a` is preserved.
+-/
+/-
+**Mathlib.Tactic.Push.pushNegBuiltin** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.P
+ush`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushNegBuiltin
-  signature: (cfg : Config)
-  body: fun e => do
-  let e := (← instantiateMVars e).cleanupAnnotations
-  match e with
-  | .app (.app (.const ``And _) p) q =>
-    if cfg.distrib then
-      return mkSimpStep (mkOr (mkNot p) (mkNot q)) (mkApp2 (.const ``not_and_or_eq []) p q)
-    else
-      return mkSimpStep (.forallE `_ p (mkNot q) .default) (mkApp2 (.const ``not_and_eq []) p q)
-  | .forallE name ty body binfo =>
-    let body' : Expr := .lam name ty (mkNot body) binfo
-    let body'' : Expr := .lam name ty body binfo
-    return mkSimpStep (← mkAppM ``Exists #[body']) (← mkAppM ``not_forall_eq #[body''])
-  | _ =>
-    return Simp.Step.continue
-
-中文:
-定义 pushNegBuiltin
-  签名: (cfg : 余nfig)
-  定义体: fun e => do
-  let e := (← instantiateMVars e).cleanupAnnotations
-  match e with
-  | .app (.app (.const ``And _) p) q =>
-    if cfg.distrib then
-      return mkSimpStep (mkOr (mkNot p) (mkNot q)) (mkApp2 (.const ``not_and_or_eq []) p q)
-    else
-      return mkSimpStep (.forallE `_ p (mkNot q) .default) (mkApp2 (.const ``not_and_eq []) p q)
-  | .forallE name ty body binfo =>
-    let body' : Expr := .lam name ty (mkNot body) binfo
-    let body'' : Expr := .lam name ty body binfo
-    return mkSimpStep (← mkAppM ``Exists #[body']) (← mkAppM ``not_forall_eq #[body''])
-  | _ =>
-    return Simp.Step.continue
+--- 原说明 ---
+`pushNegBuiltin` is a simproc for pushing `¬` in a way that can't be done
+using the `@[push]` attribute.
+- `¬ (p ∧ q)` turns into `p → ¬ q` or `¬ p ∨ ¬ q`, depending on the `distrib` co
+nfiguration.
+- `¬ ∀ a, p` turns into `∃ a, ¬ p`, where the binder name `a` is preserved.
 -/
 private def pushNegBuiltin (cfg : Config) : Simp.Simproc := fun e => do
   let e := (← instantiateMVars e).cleanupAnnotations
@@ -217,63 +170,31 @@ where
   mkSimpStep (e : Expr) (pf : Expr) : Simp.Step :=
     Simp.Step.continue (some { expr := e, proof? := some pf })
 
-/--
-Definition of `pushSimpConfig` / `pushSimpConfig` 的定义
+/-- The `simp` configuration used in `push`. -/
+/-
+**Mathlib.Tactic.Push.pushSimpConfig** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.P
+ush`。
+形式化陈述：pushSimpConfig : Simp.Config where zeta
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushSimpConfig
-  signature: : Simp.Config where
-  body: false
-  proj := false
-
-中文:
-定义 pushSimpConfig
-  签名: : Simp.余nfig where
-  定义体: false
-  proj := false
+--- 原说明 ---
+The `simp` configuration used in `push`.
 -/
 def pushSimpConfig : Simp.Config where
   zeta := false
   proj := false
 
-/--
-Definition of `pushStep` / `pushStep` 的定义
+/-- Try to rewrite using a `push` lemma. -/
+/-
+**Mathlib.Tactic.Push.pushStep** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：pushStep (head : Head) (cfg : Config) : Simp.Simproc
+参数：head : Head；cfg : Config。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushStep
-  signature: (head : Head) (cfg : Config)
-  body: fun e => do
-  let e_whnf ← whnf e
-  let some e_head := Head.ofExpr? e_whnf | return Simp.Step.continue
-  unless e_head == head do
-    return Simp.Step.continue
-  let thms := pushExt.getState (← getEnv)
-  if let some r ← Simp.rewrite? e thms {} "push" false then
-    -- We return `.visit r` instead of `.continue r`, because in the case of a triple negation,
-    -- after rewriting `¬ ¬ ¬ p` into `¬ p`, we may want to rewrite `¬ p` again.
-    return Simp.Step.visit r
-  if let some e := e_whnf.not? then
-    pushNegBuiltin cfg e
-  else
-    return Simp.Step.continue
-
-中文:
-定义 pushStep
-  签名: (head : Head) (cfg : 余nfig)
-  定义体: fun e => do
-  let e_whnf ← whnf e
-  let some e_head := Head.ofExpr? e_whnf | return Simp.Step.continue
-  unless e_head == head do
-    return Simp.Step.continue
-  let thms := pushExt.getState (← getEnv)
-  if let some r ← Simp.rewrite? e thms {} "push" false then
-    -- We return `.visit r` instead of `.continue r`, because in the case of a triple negation,
-    -- after rewriting `¬ ¬ ¬ p` into `¬ p`, we may want to rewrite `¬ p` again.
-    return Simp.Step.visit r
-  if let some e := e_whnf.not? then
-    pushNegBuiltin cfg e
-  else
-    return Simp.Step.continue
+--- 原说明 ---
+Try to rewrite using a `push` lemma.
 -/
 def pushStep (head : Head) (cfg : Config) : Simp.Simproc := fun e => do
   let e_whnf ← whnf e
@@ -290,40 +211,17 @@ def pushStep (head : Head) (cfg : Config) : Simp.Simproc := fun e => do
   else
     return Simp.Step.continue
 
-/--
-Definition of `pushCore` / `pushCore` 的定义
+/-- Common entry point to the implementation of `push`. -/
+/-
+**Mathlib.Tactic.Push.pushCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：pushCore (head : Head) (cfg : Config) (disch? : Option Simp.Discharge) (tg
+t : Expr) : MetaM Simp.Result
+参数：head : Head；cfg : Config；disch? : Option Simp.Discharge；tgt : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushCore
-  signature: (head : Head) (cfg : Config) (disch? : Option Simp.Discharge) (tgt : Expr)
-  body: do
-  let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
-      (simpTheorems := #[])
-      (congrTheorems := ← getSimpCongrTheorems)
-  let methods := match disch? with
-    | none => { pre := pushStep head cfg, post _ := return .continue }
-    | some disch => {
-      pre := pushStep head cfg,
-      post _ := return .continue,
-      discharge? := disch,
-      wellBehavedDischarge := false }
-(·.1) < > Simp.main tgt ctx (methods := methods)
-
-中文:
-定义 pushCore
-  签名: (head : Head) (cfg : 余nfig) (disch? : 选项类型 Simp.Discharge) (tgt : Expr)
-  定义体: do
-  let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
-      (simpTheorems := #[])
-      (congrTheorems := ← getSimpCongrTheorems)
-  let methods := match disch? with
-    | none => { pre := pushStep head cfg, post _ := return .continue }
-    | some disch => {
-      pre := pushStep head cfg,
-      post _ := return .continue,
-      discharge? := disch,
-      wellBehavedDischarge := false }
-(·.1) < > Simp.main tgt ctx (methods := methods)
+--- 原说明 ---
+Common entry point to the implementation of `push`.
 -/
 def pushCore (head : Head) (cfg : Config) (disch? : Option Simp.Discharge) (tgt : Expr) :
     MetaM Simp.Result := do
@@ -337,50 +235,24 @@ def pushCore (head : Head) (cfg : Config) (disch? : Option Simp.Discharge) (tgt 
       post _ := return .continue,
       discharge? := disch,
       wellBehavedDischarge := false }
-(·.1) < > Simp.main tgt ctx (methods := methods)
+  (·.1) <$> Simp.main tgt ctx (methods := methods)
 
-/--
-Definition of `pullStep` / `pullStep` 的定义
+/-- Try to rewrite using a `pull` lemma. -/
+/-
+**Mathlib.Tactic.Push.pullStep** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：pullStep (head : Head) : Simp.Simproc
+参数：head : Head。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullStep
-  signature: (head : Head)
-  body: fun e => do
-  let thms := pullExt.getState (← getEnv)
-  -- We can't use `Simp.rewrite?` here, because we need to only allow rewriting with theorems
-  -- that pull the correct head.
-let candidates ← Simp.withSimpIndexConfig thms.getMatchWithExtra e
-  if candidates.isEmpty then
-    return Simp.Step.continue
-  let candidates := candidates.insertionSort fun e₁ e₂ => e₁.1.1.priority > e₂.1.1.priority
-  for ((thm, thm_head), numExtraArgs) in candidates do
-    if thm_head == head then
-      if let some result ← Simp.tryTheoremWithExtraArgs? e thm numExtraArgs then
-        return Simp.Step.continue result
-  return Simp.Step.continue
-
-中文:
-定义 pullStep
-  签名: (head : Head)
-  定义体: fun e => do
-  let thms := pullExt.getState (← getEnv)
-  -- We can't use `Simp.rewrite?` here, because we need to only allow rewriting with theorems
-  -- that pull the correct head.
-let candidates ← Simp.withSimpIndexConfig thms.getMatchWithExtra e
-  if candidates.isEmpty then
-    return Simp.Step.continue
-  let candidates := candidates.insertionSort fun e₁ e₂ => e₁.1.1.priority > e₂.1.1.priority
-  for ((thm, thm_head), numExtraArgs) in candidates do
-    if thm_head == head then
-      if let some result ← Simp.tryTheoremWithExtraArgs? e thm numExtraArgs then
-        return Simp.Step.continue result
-  return Simp.Step.continue
+--- 原说明 ---
+Try to rewrite using a `pull` lemma.
 -/
 def pullStep (head : Head) : Simp.Simproc := fun e => do
   let thms := pullExt.getState (← getEnv)
   -- We can't use `Simp.rewrite?` here, because we need to only allow rewriting with theorems
   -- that pull the correct head.
-let candidates ← Simp.withSimpIndexConfig thms.getMatchWithExtra e
+  let candidates ← Simp.withSimpIndexConfig <| thms.getMatchWithExtra e
   if candidates.isEmpty then
     return Simp.Step.continue
   let candidates := candidates.insertionSort fun e₁ e₂ => e₁.1.1.priority > e₂.1.1.priority
@@ -390,32 +262,17 @@ let candidates ← Simp.withSimpIndexConfig thms.getMatchWithExtra e
         return Simp.Step.continue result
   return Simp.Step.continue
 
-/--
-Definition of `pullCore` / `pullCore` 的定义
+/-- Common entry point to the implementation of `pull`. -/
+/-
+**Mathlib.Tactic.Push.pullCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：pullCore (head : Head) (tgt : Expr) (disch? : Option Simp.Discharge) : Met
+aM Simp.Result
+参数：head : Head；tgt : Expr；disch? : Option Simp.Discharge。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullCore
-  signature: (head : Head) (tgt : Expr) (disch? : Option Simp.Discharge)
-  body: do
-  let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
-      (simpTheorems := #[])
-      (congrTheorems := ← getSimpCongrTheorems)
-  let methods := match disch? with
-    | none => { post := pullStep head }
-    | some disch => { post := pullStep head, discharge? := disch, wellBehavedDischarge := false }
-(·.1) < > Simp.main tgt ctx (methods := methods)
-
-中文:
-定义 pullCore
-  签名: (head : Head) (tgt : Expr) (disch? : 选项类型 Simp.Discharge)
-  定义体: do
-  let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
-      (simpTheorems := #[])
-      (congrTheorems := ← getSimpCongrTheorems)
-  let methods := match disch? with
-    | none => { post := pullStep head }
-    | some disch => { post := pullStep head, discharge? := disch, wellBehavedDischarge := false }
-(·.1) < > Simp.main tgt ctx (methods := methods)
+--- 原说明 ---
+Common entry point to the implementation of `pull`.
 -/
 def pullCore (head : Head) (tgt : Expr) (disch? : Option Simp.Discharge) : MetaM Simp.Result := do
   let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
@@ -424,77 +281,42 @@ def pullCore (head : Head) (tgt : Expr) (disch? : Option Simp.Discharge) : MetaM
   let methods := match disch? with
     | none => { post := pullStep head }
     | some disch => { post := pullStep head, discharge? := disch, wellBehavedDischarge := false }
-(·.1) < > Simp.main tgt ctx (methods := methods)
+  (·.1) <$> Simp.main tgt ctx (methods := methods)
 
 section ElabHead
 open Elab Term
 
-/--
-Definition of `isUnderscore` / `isUnderscore` 的定义
+/-- Return `true` if `stx` is an underscore, i.e. `_` or `fun $_ => _`/`fun $_ ↦ _`. -/
+/-
+**Mathlib.Tactic.Push.isUnderscore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Pus
+h`。
+形式化陈述：Term → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isUnderscore
-  signature: : Term -> Bool
-
-中文:
-定义 isUnderscore
-  签名: : 项 -> 布尔值
+--- 原说明 ---
+Return `true` if `stx` is an underscore, i.e. `_` or `fun $_ => _`/`fun $_ ↦ _`.
 -/
-partial def isUnderscore : Term -> Bool
+partial def isUnderscore : Term → Bool
   | `(_) | `(fun $_ => _) => true
   | _ => false
 
-/--
-Definition of `resolvePushId?` / `resolvePushId?` 的定义
+/-- `resolvePushId?` is a version of `resolveId?` that also supports notations like `_ ∈ _`,
+`∃ x, _` and `∑ x, _`. -/
+/-
+**Mathlib.Tactic.Push.resolvePushId** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Pu
+sh`。
+形式化陈述：resolvePushId? (stx : Term) : TermElabM (Option Expr)
+参数：stx : Term。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resolvePushId?
-  signature: (stx : Term)
-  body: do
-match ← liftMacroM expandMacros stx with
-  | `($f $args*) =>
-    -- Note: we would like to insist that all arguments in the notation are given as underscores,
-    -- but for example `∑ x, _` expands to `Finset.sum Finset.univ fun _ ↦ _`,
-    -- in which `Finset.univ` is not an underscore. So instead
-    -- we only insist that the last argument is an underscore.
-    if args.back?.all isUnderscore then
-      try resolveId? f catch _ => return none
-    else
-      return none
-  | `(binop% $f _ _)
-  | `(binop_lazy% $f _ _)
-  | `(leftact% $f _ _)
-  | `(rightact% $f _ _)
-  | `(binrel% $f _ _)
-  | `(binrel_no_prop% $f _ _)
-  | `(unop% $f _)
-  | f => try resolveId? f catch _ => return none
-
-中文:
-定义 resolvePushId?
-  签名: (stx : 项)
-  定义体: do
-match ← liftMacroM expandMacros stx with
-  | `($f $args*) =>
-    -- Note: we would like to insist that all arguments in the notation are given as underscores,
-    -- but for example `∑ x, _` expands to `Finset.sum Finset.univ fun _ ↦ _`,
-    -- in which `Finset.univ` is not an underscore. So instead
-    -- we only insist that the last argument is an underscore.
-    if args.back?.all isUnderscore then
-      try resolveId? f catch _ => return none
-    else
-      return none
-  | `(binop% $f _ _)
-  | `(binop_lazy% $f _ _)
-  | `(leftact% $f _ _)
-  | `(rightact% $f _ _)
-  | `(binrel% $f _ _)
-  | `(binrel_no_prop% $f _ _)
-  | `(unop% $f _)
-  | f => try resolveId? f catch _ => return none
+--- 原说明 ---
+`resolvePushId?` is a version of `resolveId?` that also supports notations like 
+`_ ∈ _`,
+`∃ x, _` and `∑ x, _`.
 -/
 def resolvePushId? (stx : Term) : TermElabM (Option Expr) := do
-match ← liftMacroM expandMacros stx with
+  match ← liftMacroM <| expandMacros stx with
   | `($f $args*) =>
     -- Note: we would like to insist that all arguments in the notation are given as underscores,
     -- but for example `∑ x, _` expands to `Finset.sum Finset.univ fun _ ↦ _`,
@@ -513,55 +335,26 @@ match ← liftMacroM expandMacros stx with
   | `(unop% $f _)
   | f => try resolveId? f catch _ => return none
 
-/--
-Definition of `elabHead` / `elabHead` 的定义
+/-- Elaborator for the argument passed to `push`. It accepts a constant, or a function -/
+/-
+**Mathlib.Tactic.Push.elabHead** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：elabHead (stx : Term) : TermElabM Head
+参数：stx : Term。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabHead
-  signature: (stx : Term)
-  body: withRef stx do
-  -- we elaborate `stx` to get an appropriate error message if the term isn't well formed,
-  -- and to add hover information
-_ ← withTheReader Term.Context ({ · with ignoreTCFailures := true })
-Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm stx none
-  match stx with
-  | `(fun $_ => _) => return .lambda
-  | `(forall $_, _) => return .forall
-  | _ =>
-    match ← resolvePushId? stx with
-    | some (.const c _) => return .const c
-    | _ => throwError "Could not resolve `push` argument `{stx}`. \
-      Expected either a constant, e.g. `push Not`, \
-      or notation with underscores, e.g. `push ¬ _`"
-
-中文:
-定义 elabHead
-  签名: (stx : 项)
-  定义体: withRef stx do
-  -- we elaborate `stx` to get an appropriate error message if the term isn't well formed,
-  -- and to add hover information
-_ ← withTheReader Term.Context ({ · with ignoreTCFailures := true })
-Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm stx none
-  match stx with
-  | `(fun $_ => _) => return .lambda
-  | `(forall $_, _) => return .forall
-  | _ =>
-    match ← resolvePushId? stx with
-    | some (.const c _) => return .const c
-    | _ => throwError "Could not resolve `push` argument `{stx}`. \
-      Expected either a constant, e.g. `push Not`, \
-      or notation with underscores, e.g. `push ¬ _`"
-
-Depends on / 依赖: withRef
+--- 原说明 ---
+Elaborator for the argument passed to `push`. It accepts a constant, or a functi
+on
 -/
 def elabHead (stx : Term) : TermElabM Head := withRef stx do
   -- we elaborate `stx` to get an appropriate error message if the term isn't well formed,
   -- and to add hover information
-_ ← withTheReader Term.Context ({ · with ignoreTCFailures := true })
-Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm stx none
+  _ ← withTheReader Term.Context ({ · with ignoreTCFailures := true }) <|
+    Term.withoutModifyingElabMetaStateWithInfo <| Term.withoutErrToSorry <| Term.elabTerm stx none
   match stx with
   | `(fun $_ => _) => return .lambda
-  | `(forall $_, _) => return .forall
+  | `(∀ $_, _) => return .forall
   | _ =>
     match ← resolvePushId? stx with
     | some (.const c _) => return .const c
@@ -571,42 +364,31 @@ Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm 
 
 end ElabHead
 
-/--
-Definition of `elabDischarger` / `elabDischarger` 的定义
+/-- Elaborate the `(disch := ...)` syntax for a `simp`-like tactic. -/
+/-
+**Mathlib.Tactic.Push.elabDischarger** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.P
+ush`。
+形式化陈述：elabDischarger (stx : TSyntax ``discharger) : TacticM Simp.Discharge
+参数：stx : TSyntax ``discharger。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabDischarger
-  signature: (stx : TSyntax ``discharger)
-  body: (·.2) < > tacticToDischarge stx.raw[3]
-
-中文:
-定义 elabDischarger
-  签名: (stx : TSyntax ``discharger)
-  定义体: (·.2) < > tacticToDischarge stx.raw[3]
-
-Depends on / 依赖: stx.raw, tacticToDischarge
+--- 原说明 ---
+Elaborate the `(disch := ...)` syntax for a `simp`-like tactic.
 -/
 def elabDischarger (stx : TSyntax ``discharger) : TacticM Simp.Discharge :=
-(·.2) < > tacticToDischarge stx.raw[3]
+  (·.2) <$> tacticToDischarge stx.raw[3]
 
-/--
-Definition of `push` / `push` 的定义
+/-- Run the `push` tactic. -/
+/-
+**Mathlib.Tactic.Push.push** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：push (cfg : Config) (disch? : Option Simp.Discharge) (head : Head) (loc : 
+Location) (ifUnchanged : BehaviorIfUnchanged
+参数：cfg : Config；disch? : Option Simp.Discharge；head : Head；loc : Location。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition push
-  signature: (cfg : Config) (disch? : Option Simp.Discharge) (head : Head) (loc : Location)
-  body: do
-  let cfg := { distrib := cfg.distrib || (← getBoolOption `push_neg.use_distrib) }
-  transformAtLocation (pushCore head cfg disch? ·) s!"push {head}" loc ifUnchanged
-
-中文:
-定义 push
-  签名: (cfg : 余nfig) (disch? : 选项类型 Simp.Discharge) (head : Head) (loc : Location)
-  定义体: do
-  let cfg := { distrib := cfg.distrib || (← getBoolOption `push_neg.use_distrib) }
-  transformAtLocation (pushCore head cfg disch? ·) s!"push {head}" loc ifUnchanged
-
-Depends on / 依赖: TacticM
+--- 原说明 ---
+Run the `push` tactic.
 -/
 def push (cfg : Config) (disch? : Option Simp.Discharge) (head : Head) (loc : Location)
     (ifUnchanged : BehaviorIfUnchanged := .error) : TacticM Unit := do
@@ -721,7 +503,7 @@ elab (name := pull) "pull" disch?:(discharger)? head:(ppSpace colGt term) loc:(l
   transformAtLocation (pullCore head · disch?) "pull" loc (ifUnchanged := .error) false
 
 /-- A simproc variant of `push fun _ ↦ _`, to be used as `simp [↓pushFun]`. -/
-simproc_decl _root_.pushFun (fun _ => ?_) := pushStep .lambda {}
+simproc_decl _root_.pushFun (fun _ ↦ ?_) := pushStep .lambda {}
 
 /-- A simproc variant of `pull fun _ ↦ _`, to be used as `simp [pullFun]`. -/
 simproc_decl _root_.pullFun (_) := pullStep .lambda
@@ -788,50 +570,12 @@ This can be helpful when you are constructing a set of `push` lemmas for the con
 syntax (name := pushTree) "#push_discr_tree " (colGt term) : command
 
 @[command_elab pushTree, inherit_doc pushTree]
-/--
-Definition of `elabPushTree` / `elabPushTree` 的定义
-
-English:
-definition elabPushTree
-  signature: : Elab.Command.CommandElab
-  body: fun stx => do
-  Elab.Command.runTermElabM fun _ => do
-  let head ← elabHead ⟨stx[1]⟩
-  let thms := pushExt.getState (← getEnv)
-  let mut logged := false
-  for (key, trie) in thms.root do
-    let matchesHead (k : DiscrTree.Key) : Bool :=
-      match k, head with
-      | .const c _, .const c' => c == c'
-      | .other , .lambda => true
-      | .arrow , .forall => true
-      | _ , _ => false
-    if matchesHead key then
-      logInfo m! "DiscrTree branch for {key}:{indentD (format trie)}"
-      logged := true
-  unless logged do
-    logInfo m! "There are no `push` theorems for `{head.toString}`"
-
-中文:
-定义 elabPushTree
-  签名: : Elab.Command.CommandElab
-  定义体: fun stx => do
-  Elab.Command.runTermElabM fun _ => do
-  let head ← elabHead ⟨stx[1]⟩
-  let thms := pushExt.getState (← getEnv)
-  let mut logged := false
-  for (key, trie) in thms.root do
-    let matchesHead (k : DiscrTree.Key) : Bool :=
-      match k, head with
-      | .const c _, .const c' => c == c'
-      | .other , .lambda => true
-      | .arrow , .forall => true
-      | _ , _ => false
-    if matchesHead key then
-      logInfo m! "DiscrTree branch for {key}:{indentD (format trie)}"
-      logged := true
-  unless logged do
-    logInfo m! "There are no `push` theorems for `{head.toString}`"
+/-
+**Mathlib.Tactic.Push.elabPushTree** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Pus
+h`。
+形式化陈述：elabPushTree : Elab.Command.CommandElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabPushTree : Elab.Command.CommandElab := fun stx => do
   Elab.Command.runTermElabM fun _ => do
@@ -842,9 +586,9 @@ def elabPushTree : Elab.Command.CommandElab := fun stx => do
     let matchesHead (k : DiscrTree.Key) : Bool :=
       match k, head with
       | .const c _, .const c' => c == c'
-      | .other , .lambda => true
-      | .arrow , .forall => true
-      | _ , _ => false
+      | .other    , .lambda  => true
+      | .arrow    , .forall  => true
+      | _         , _        => false
     if matchesHead key then
       logInfo m! "DiscrTree branch for {key}:{indentD (format trie)}"
       logged := true
@@ -854,3 +598,4 @@ def elabPushTree : Elab.Command.CommandElab := fun stx => do
 end DiscrTree
 
 end Mathlib.Tactic.Push
+

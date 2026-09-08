@@ -23,124 +23,93 @@ assert_not_exists RelIso
 
 namespace Nat
 
+/-! ### Sets -/
 
 
-/--
-Instance `Subtype.orderBot` / 实例 `Subtype.orderBot`
+/-
+**Nat.Subtype.orderBot** 是 Mathlib 中的一个定义，位于命名空间 `Nat.Subtype`。
+形式化陈述：(s : Set ℕ) → [DecidablePred fun x => x ∈ s] → [h : Nonempty ↑s] → OrderBo
+t ↑s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Subtype.orderBot
-  signature: (s : Set Nat) [DecidablePred (· in s)] [h : Nonempty s]
-  body: ⟨Nat.find (nonempty_subtype.1 h), Nat.find_spec (nonempty_subtype.1 h)⟩
-  bot_le x := Nat.find_min' _ x.2
-
-中文:
-实例 子类型.orderBot
-  签名: (s : 集合 自然数) [DecidablePred (· in s)] [h : 非空 s]
-  定义体: ⟨Nat.find (nonempty_subtype.1 h), Nat.find_spec (nonempty_subtype.1 h)⟩
-  bot_le x := Nat.find_min' _ x.2
-
-Depends on / 依赖: Nat.find, Nat.find_spec, find_spec, nonempty_subtype
+--- 原说明 ---
+### Sets
 -/
-instance Subtype.orderBot (s : Set Nat) [DecidablePred (· in s)] [h : Nonempty s] : OrderBot s where
+instance Subtype.orderBot (s : Set ℕ) [DecidablePred (· ∈ s)] [h : Nonempty s] : OrderBot s where
   bot := ⟨Nat.find (nonempty_subtype.1 h), Nat.find_spec (nonempty_subtype.1 h)⟩
   bot_le x := Nat.find_min' _ x.2
-
-/--
-Instance `Subtype.semilatticeSup` / 实例 `Subtype.semilatticeSup`
-
-English:
-instance Subtype.semilatticeSup
-  signature: (p : Nat -> Prop)
-  body: { Subtype.instLinearOrder p, LinearOrder.toLattice with }
-
-中文:
-实例 子类型.semilatticeSup
-  签名: (p : 自然数 -> 命题)
-  定义体: { Subtype.instLinearOrder p, LinearOrder.toLattice with }
-
-Depends on / 依赖: LinearOrder, LinearOrder.toLattice, Subtype, Subtype.instLinearOrder, instLinearOrder, toLattice
+/-
+**Nat.Subtype.semilatticeSup** 是 Mathlib 中的一个定义，位于命名空间 `Nat.Subtype`。
+形式化陈述：(p : ℕ → Prop) → SemilatticeSup (Subtype p)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Subtype.semilatticeSup (p : Nat -> Prop) : SemilatticeSup (Subtype p) :=
+instance Subtype.semilatticeSup (p : ℕ → Prop) : SemilatticeSup (Subtype p) :=
   { Subtype.instLinearOrder p, LinearOrder.toLattice with }
-
-/--
-theorem `Subtype.coe_bot` / 定理 `Subtype.coe_bot`
-
-English:
-theorem Subtype.coe_bot
-  given: {s : Set Nat} [DecidablePred (· in s)] [h : Nonempty s]
-  proof: rfl
-
-中文:
-定理 子类型.coe_bot
-  条件: {s : 集合 自然数} [DecidablePred (· in s)] [h : 非空 s]
-  证明: rfl
+/-
+**Nat.Subtype.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：∀ {s : Set ℕ} [inst : DecidablePred fun x => x ∈ s] [h : Nonempty ↑s], ↑⊥ 
+= Nat.find ⋯
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subtype.coe_bot {s : Set Nat} [DecidablePred (· in s)] [h : Nonempty s] :
-    ((⊥ : s) : Nat) = Nat.find (nonempty_subtype.1 h) :=
+theorem Subtype.coe_bot {s : Set ℕ} [DecidablePred (· ∈ s)] [h : Nonempty s] :
+    ((⊥ : s) : ℕ) = Nat.find (nonempty_subtype.1 h) :=
   rfl
-
-/--
-theorem `set_eq_univ` / 定理 `set_eq_univ`
-
-English:
-theorem set_eq_univ
-  given: {S : Set Nat}
-  statement: S = Set.univ ↔ 0 in S ∧ forall k : Nat, k in S -> k + 1 in S
-  proof: ⟨by rintro rfl; simp, fun ⟨h0, hs⟩ => Set.eq_univ_of_forall (set_induction h0 hs)⟩
-
-中文:
-定理 set_eq_univ
-  条件: {S : 集合 自然数}
-  结论: S = 集合.univ ↔ 0 in S ∧ 对任意 k : 自然数, k in S -> k + 1 in S
-  证明: ⟨by rintro rfl; simp, fun ⟨h0, hs⟩ => Set.eq_univ_of_forall (set_induction h0 hs)⟩
-
-Depends on / 依赖: Set.eq_univ_of_forall, eq_univ_of_forall, set_induction
+/-
+**Nat.set_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：set_eq_univ {S : Set Nat} : S = Set.univ ↔ 0 in S ∧ forall k : Nat, k in S
+ -> k + 1 in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用引理 `Nat.set_induction`：set_induction {S : Set Nat} (hb : 0 in S) (h_ind : fo
+rall k : Nat, k in S -> k + 1 in S) (n : Nat) : n in S
 -/
-theorem set_eq_univ {S : Set Nat} : S = Set.univ ↔ 0 in S ∧ forall k : Nat, k in S -> k + 1 in S :=
+theorem set_eq_univ {S : Set ℕ} : S = Set.univ ↔ 0 ∈ S ∧ ∀ k : ℕ, k ∈ S → k + 1 ∈ S :=
   ⟨by rintro rfl; simp, fun ⟨h0, hs⟩ => Set.eq_univ_of_forall (set_induction h0 hs)⟩
-
-/--
-lemma `exists_not_and_succ_of_not_zero_of_exists` / 引理 `exists_not_and_succ_of_not_zero_of_exists`
-
-English:
-lemma exists_not_and_succ_of_not_zero_of_exists
-  given: {p : Nat -> Prop} (H' : ¬ p 0) (H : exists n, p n)
-  proof: by
-  classical
-  let k := Nat.find H
-  have hk : p k := Nat.find_spec H
-  suffices 0 < k from
-⟨k - 1, Nat.find_min H Nat.pred_lt this.ne', by rwa [Nat.sub_add_cancel this]⟩
-  by_contra! contra
-  rw [le_zero_eq] at contra
-  exact H' (contra ▸ hk)
-
-中文:
-引理 存在_not_and_succ_of_not_zero_of_存在
-  条件: {p : 自然数 -> 命题} (H' : ¬ p 0) (H : 存在 n, p n)
-  证明: by
-  classical
-  let k := Nat.find H
-  have hk : p k := Nat.find_spec H
-  suffices 0 < k from
-⟨k - 1, Nat.find_min H Nat.pred_lt this.ne', by rwa [Nat.sub_add_cancel this]⟩
-  by_contra! contra
-  rw [le_zero_eq] at contra
-  exact H' (contra ▸ hk)
-
-Depends on / 依赖: Nat.find, Nat.find_min, Nat.find_spec, Nat.pred_lt, Nat.sub_add_cancel, classical, contra, find_min, find_spec, le_zero_eq, pred_lt, sub_add_cancel, this.ne
+/-
+**Nat.exists_not_and_succ_of_not_zero_of_exists** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：exists_not_and_succ_of_not_zero_of_exists {p : Nat -> Prop} (H' : ¬ p 0) (
+H : exists n, p n) : exists n, ¬ p n ∧ p (n + 1)
+参数：H' : ¬ p 0；H : exists n, p n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.find_spec`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n),
+ p (Nat.find H)
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.le_zero_eq`：∀ (a : ℕ), (a ≤ 0) = (a = 0)
+· 使用定理 `Nat.find_min`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n) {
+m : ℕ}, m < Nat.find H → ¬p m
+· 使用定理 `Nat.pred_lt`：∀ {n : ℕ}, n ≠ 0 → n.pred < n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
 -/
-lemma exists_not_and_succ_of_not_zero_of_exists {p : Nat -> Prop} (H' : ¬ p 0) (H : exists n, p n) :
-    exists n, ¬ p n ∧ p (n + 1) := by
+lemma exists_not_and_succ_of_not_zero_of_exists {p : ℕ → Prop} (H' : ¬ p 0) (H : ∃ n, p n) :
+    ∃ n, ¬ p n ∧ p (n + 1) := by
   classical
   let k := Nat.find H
   have hk : p k := Nat.find_spec H
   suffices 0 < k from
-⟨k - 1, Nat.find_min H Nat.pred_lt this.ne', by rwa [Nat.sub_add_cancel this]⟩
+    ⟨k - 1, Nat.find_min H <| Nat.pred_lt this.ne', by rwa [Nat.sub_add_cancel this]⟩
   by_contra! contra
   rw [le_zero_eq] at contra
   exact H' (contra ▸ hk)
 
 end Nat
+

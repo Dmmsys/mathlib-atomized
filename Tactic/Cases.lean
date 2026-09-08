@@ -42,102 +42,40 @@ public meta section
 namespace Mathlib.Tactic
 open Lean Meta Elab Elab.Tactic
 
-/--
-Definition of `getAltNumFields` / `getAltNumFields` 的定义
-
-English:
-definition getAltNumFields
-  signature: (elimInfo : ElimInfo) (altName : Name)
-  body: do
-  for altInfo in elimInfo.altsInfo do
-    if altInfo.name == altName then
-      return altInfo.numFields
-  throwError "unknown alternative name '{altName}'"
-
-中文:
-定义 getAltNumFields
-  签名: (elimInfo : ElimInfo) (altName : Name)
-  定义体: do
-  for altInfo in elimInfo.altsInfo do
-    if altInfo.name == altName then
-      return altInfo.numFields
-  throwError "unknown alternative name '{altName}'"
+/-
+**Mathlib.Tactic.getAltNumFields** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def getAltNumFields (elimInfo : ElimInfo) (altName : Name) : TermElabM Nat := do
   for altInfo in elimInfo.altsInfo do
     if altInfo.name == altName then
       return altInfo.numFields
   throwError "unknown alternative name '{altName}'"
-
-/--
-Definition of `ElimApp.evalNames` / `ElimApp.evalNames` 的定义
-
-English:
-definition ElimApp.evalNames
-  signature: (elimInfo : ElimInfo) (alts : Array ElimApp.Alt) (withArg : Syntax)
-  body: do
-.toList let mut names : List Syntax := withArg[1].getArgs
-  let mut subgoals := #[]
-  for { name := altName, mvarId := g, .. } in alts do
-    let numFields ← getAltNumFields elimInfo altName
-    let (altVarNames, names') := names.splitAtD numFields (Unhygienic.run `(_))
-    names := names'
-let (fvars, g) ← g.introN numFields altVarNames.map (getNameOfIdent' ·[0])
-    let some (g, subst) ← Cases.unifyEqs? numEqs g {} | pure ()
-    let (introduced, g) ← g.introNP generalized.size
-    let subst := (generalized.zip introduced).foldl (init := subst) fun subst (a, b) =>
-      subst.insert a (.fvar b)
-let g ← liftM toClear.foldlM (·.tryClear) g
-    g.withContext do
-      for (stx, fvar) in toTag do
-        Term.addLocalVarInfo stx (subst.get fvar)
-      for fvar in fvars, stx in altVarNames do
-        (subst.get fvar).addLocalVarInfoForBinderIdent ⟨stx⟩
-    subgoals := subgoals.push g
-  pure subgoals
-
-中文:
-定义 ElimApp.evalNames
-  签名: (elimInfo : ElimInfo) (alts : 数组 ElimApp.Alt) (withArg : Syntax)
-  定义体: do
-.toList let mut names : List Syntax := withArg[1].getArgs
-  let mut subgoals := #[]
-  for { name := altName, mvarId := g, .. } in alts do
-    let numFields ← getAltNumFields elimInfo altName
-    let (altVarNames, names') := names.splitAtD numFields (Unhygienic.run `(_))
-    names := names'
-let (fvars, g) ← g.introN numFields altVarNames.map (getNameOfIdent' ·[0])
-    let some (g, subst) ← Cases.unifyEqs? numEqs g {} | pure ()
-    let (introduced, g) ← g.introNP generalized.size
-    let subst := (generalized.zip introduced).foldl (init := subst) fun subst (a, b) =>
-      subst.insert a (.fvar b)
-let g ← liftM toClear.foldlM (·.tryClear) g
-    g.withContext do
-      for (stx, fvar) in toTag do
-        Term.addLocalVarInfo stx (subst.get fvar)
-      for fvar in fvars, stx in altVarNames do
-        (subst.get fvar).addLocalVarInfoForBinderIdent ⟨stx⟩
-    subgoals := subgoals.push g
-  pure subgoals
-
-Depends on / 依赖: FVarId, generalized, toClear
+/-
+**Mathlib.Tactic.ElimApp.evalNames** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Eli
+mApp`。
+形式化陈述：Meta.ElimInfo →   Array Elab.Tactic.ElimApp.Alt →     Syntax →       optPa
+ram ℕ 0 →         optParam (Array FVarId) #[] →           optParam (Array FVarId
+) #[] → optParam (Array (Ident × FVarId)) #[] → Elab.TermElabM (Array MVarId)
+参数：Array FVarId；Array FVarId；Array (Ident × FVarId)；Array MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ElimApp.evalNames (elimInfo : ElimInfo) (alts : Array ElimApp.Alt) (withArg : Syntax)
     (numEqs := 0) (generalized : Array FVarId := #[]) (toClear : Array FVarId := #[])
     (toTag : Array (Ident × FVarId) := #[]) :
     TermElabM (Array MVarId) := do
-.toList let mut names : List Syntax := withArg[1].getArgs
+  let mut names : List Syntax := withArg[1].getArgs |>.toList
   let mut subgoals := #[]
   for { name := altName, mvarId := g, .. } in alts do
     let numFields ← getAltNumFields elimInfo altName
     let (altVarNames, names') := names.splitAtD numFields (Unhygienic.run `(_))
     names := names'
-let (fvars, g) ← g.introN numFields altVarNames.map (getNameOfIdent' ·[0])
+    let (fvars, g) ← g.introN numFields <| altVarNames.map (getNameOfIdent' ·[0])
     let some (g, subst) ← Cases.unifyEqs? numEqs g {} | pure ()
     let (introduced, g) ← g.introNP generalized.size
     let subst := (generalized.zip introduced).foldl (init := subst) fun subst (a, b) =>
       subst.insert a (.fvar b)
-let g ← liftM toClear.foldlM (·.tryClear) g
+    let g ← liftM <| toClear.foldlM (·.tryClear) g
     g.withContext do
       for (stx, fvar) in toTag do
         Term.addLocalVarInfo stx (subst.get fvar)
@@ -214,13 +152,13 @@ elab (name := induction') "induction' " tgts:(Parser.Tactic.elimTarget,+)
         s := s.insert v
       let (fvarIds, g) ← g.revert (← sortFVarIds s.toArray)
       g.withContext do
-let result ← withRef tgts ElimApp.mkElimApp elimInfo targets (← g.getTag)
+        let result ← withRef tgts <| ElimApp.mkElimApp elimInfo targets (← g.getTag)
         let elimArgs := result.elimApp.getAppArgs
         ElimApp.setMotiveArg g elimArgs[elimInfo.motivePos]!.mvarId! targetFVarIds
         g.assign result.elimApp
         let subgoals ← ElimApp.evalNames elimInfo result.alts withArg
           (generalized := fvarIds) (toClear := targetFVarIds) (toTag := toTag)
-setGoals (subgoals ++ result.others).toList ++ gs
+        setGoals <| (subgoals ++ result.others).toList ++ gs
 
 /-- `cases' x`, where the variable `x` has inductive type `t`, splits the main goal,
 producing one goal for each constructor of `t`, in which `x` is replaced by that constructor
@@ -267,7 +205,7 @@ elab (name := cases') "cases' " tgts:(Parser.Tactic.elimTarget,+) usingArg:((" u
   g.withContext do
     let elimInfo ← getElimNameInfo usingArg targets (induction := false)
     let targets ← addImplicitTargets elimInfo targets
-let result ← withRef tgts ElimApp.mkElimApp elimInfo targets (← g.getTag)
+    let result ← withRef tgts <| ElimApp.mkElimApp elimInfo targets (← g.getTag)
     let elimArgs := result.elimApp.getAppArgs
     let targets ← elimInfo.targetsPos.mapM (instantiateMVars elimArgs[·]!)
     let motive := elimArgs[elimInfo.motivePos]!
@@ -278,6 +216,7 @@ let result ← withRef tgts ElimApp.mkElimApp elimInfo targets (← g.getTag)
       g.assign result.elimApp
       let subgoals ← ElimApp.evalNames elimInfo result.alts withArg
          (numEqs := targets.size) (toClear := targetsNew) (toTag := toTag)
-setGoals subgoals.toList ++ gs
+      setGoals <| subgoals.toList ++ gs
 
 end Mathlib.Tactic
+

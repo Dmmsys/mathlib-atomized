@@ -34,30 +34,25 @@ section Fintype
 
 variable {α β : Type*} [Fintype α] [DecidableEq β] (e : Equiv.Perm α) (f : α ↪ β)
 
-/--
-Definition of `Function.Embedding.toEquivRange` / `Function.Embedding.toEquivRange` 的定义
+/-- Computably turn an embedding `f : α ↪ β` into an equiv `α ≃ Set.range f`,
+if `α` is a `Fintype`. Has poor computational performance, due to exhaustive searching in
+constructed inverse. When a better inverse is known, use `Equiv.ofLeftInverse'` or
+`Equiv.ofLeftInverse` instead. This is the computable version of `Equiv.ofInjective`.
+-/
+/-
+**Function.Embedding.toEquivRange** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Function.Embedding.toEquivRange : α ≃ Set.range f where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Function.Embedding.toEquivRange
-  signature: : α ≃ Set.range f where
-  body: fun a => ⟨f a, Set.mem_range_self a⟩
-  invFun := f.invOfMemRange
-  left_inv := fun _ => by simp
-  right_inv := fun _ => by simp
-
-@[simp]
-
-中文:
-定义 函数.嵌入.toEquivRange
-  签名: : α ≃ 集合.range f where
-  定义体: fun a => ⟨f a, Set.mem_range_self a⟩
-  invFun := f.invOfMemRange
-  left_inv := fun _ => by simp
-  right_inv := fun _ => by simp
-
-@[simp]
-
-Depends on / 依赖: Set.mem_range_self, mem_range_self
+--- 原说明 ---
+Computably turn an embedding `f : α ↪ β` into an equiv `α ≃ Set.range f`,
+if `α` is a `Fintype`. Has poor computational performance, due to exhaustive sea
+rching in
+constructed inverse. When a better inverse is known, use `Equiv.ofLeftInverse'` 
+or
+`Equiv.ofLeftInverse` instead. This is the computable version of `Equiv.ofInject
+ive`.
 -/
 def Function.Embedding.toEquivRange : α ≃ Set.range f where
   toFun := fun a => ⟨f a, Set.mem_range_self a⟩
@@ -66,156 +61,146 @@ def Function.Embedding.toEquivRange : α ≃ Set.range f where
   right_inv := fun _ => by simp
 
 @[simp]
-/--
-theorem `Function.Embedding.toEquivRange_apply` / 定理 `Function.Embedding.toEquivRange_apply`
-
-English:
-theorem Function.Embedding.toEquivRange_apply
-  given: (a : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 函数.嵌入.toEquivRange_apply
-  条件: (a : α)
-  证明: rfl
-
-@[simp]
+/-
+**Function.Embedding.toEquivRange_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Embedding.toEquivRange_apply (a : α) : f.toEquivRange a = ⟨f a, S
+et.mem_range_self a⟩
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Function.Embedding.toEquivRange_apply (a : α) :
     f.toEquivRange a = ⟨f a, Set.mem_range_self a⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `Function.Embedding.toEquivRange_symm_apply_self` / 定理 `Function.Embedding.toEquivRange_symm_apply_self`
-
-English:
-theorem Function.Embedding.toEquivRange_symm_apply_self
-  given: (a : α)
-  proof: by simp [Equiv.symm_apply_eq]
-
-中文:
-定理 函数.嵌入.toEquivRange_symm_apply_self
-  条件: (a : α)
-  证明: by simp [Equiv.symm_apply_eq]
-
-Depends on / 依赖: Equiv.symm_apply_eq, symm_apply_eq
+/-
+**Function.Embedding.toEquivRange_symm_apply_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Embedding.toEquivRange_symm_apply_self (a : α) : f.toEquivRange.s
+ymm ⟨f a, Set.mem_range_self a⟩ = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Function.Embedding.toEquivRange_symm_apply_self (a : α) :
     f.toEquivRange.symm ⟨f a, Set.mem_range_self a⟩ = a := by simp [Equiv.symm_apply_eq]
-
-/--
-theorem `Function.Embedding.toEquivRange_eq_ofInjective` / 定理 `Function.Embedding.toEquivRange_eq_ofInjective`
-
-English:
-theorem Function.Embedding.toEquivRange_eq_ofInjective
-  proof: by
-  ext
-  simp
-
-中文:
-定理 函数.嵌入.toEquivRange_eq_ofInjective
-  证明: by
-  ext
-  simp
+/-
+**Function.Embedding.toEquivRange_eq_ofInjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Embedding.toEquivRange_eq_ofInjective : f.toEquivRange = Equiv.of
+Injective f f.injective
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.ofInjective_apply`：∀ {α : Sort u_3} {β : Type u_4} (f : α → β) (hf
+ : Function.Injective f) (a : α), (Equiv.ofInjective f hf) a = ⟨f a, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Function.Embedding.toEquivRange_eq_ofInjective :
     f.toEquivRange = Equiv.ofInjective f f.injective := by
   ext
   simp
 
-/--
-Definition of `Equiv.Perm.viaFintypeEmbedding` / `Equiv.Perm.viaFintypeEmbedding` 的定义
+/-- Extend the domain of `e : Equiv.Perm α`, mapping it through `f : α ↪ β`.
+Everything outside of `Set.range f` is kept fixed. Has poor computational performance,
+due to exhaustive searching in constructed inverse due to using `Function.Embedding.toEquivRange`.
+When a better `α ≃ Set.range f` is known, use `Equiv.Perm.viaSetRange`.
+When `[Fintype α]` is not available, a noncomputable version is available as
+`Equiv.Perm.viaEmbedding`.
+-/
+/-
+**Equiv.Perm.viaFintypeEmbedding** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.Perm.viaFintypeEmbedding : Equiv.Perm β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equiv.Perm.viaFintypeEmbedding
-  signature: : Equiv.Perm β
-  body: e.extendDomain f.toEquivRange
-
-@[simp]
-
-中文:
-定义 等价.置换.viaFintypeEmbedding
-  签名: : 等价.置换 β
-  定义体: e.extendDomain f.toEquivRange
-
-@[simp]
-
-Depends on / 依赖: e.extendDomain, extendDomain, f.toEquivRange, toEquivRange
+--- 原说明 ---
+Extend the domain of `e : Equiv.Perm α`, mapping it through `f : α ↪ β`.
+Everything outside of `Set.range f` is kept fixed. Has poor computational perfor
+mance,
+due to exhaustive searching in constructed inverse due to using `Function.Embedd
+ing.toEquivRange`.
+When a better `α ≃ Set.range f` is known, use `Equiv.Perm.viaSetRange`.
+When `[Fintype α]` is not available, a noncomputable version is available as
+`Equiv.Perm.viaEmbedding`.
 -/
 def Equiv.Perm.viaFintypeEmbedding : Equiv.Perm β :=
   e.extendDomain f.toEquivRange
 
 @[simp]
-/--
-theorem `Equiv.Perm.viaFintypeEmbedding_apply_image` / 定理 `Equiv.Perm.viaFintypeEmbedding_apply_image`
-
-English:
-theorem Equiv.Perm.viaFintypeEmbedding_apply_image
-  given: (a : α)
-  proof: by
-  rw [Equiv.Perm.viaFintypeEmbedding]
-  convert! Equiv.Perm.extendDomain_apply_image e (Function.Embedding.toEquivRange f) a
-
-中文:
-定理 等价.置换.viaFintypeEmbedding_apply_image
-  条件: (a : α)
-  证明: by
-  rw [Equiv.Perm.viaFintypeEmbedding]
-  convert! Equiv.Perm.extendDomain_apply_image e (Function.Embedding.toEquivRange f) a
-
-Depends on / 依赖: Embedding, Equiv.Perm.extendDomain_apply_image, Equiv.Perm.viaFintypeEmbedding, Function, Function.Embedding.toEquivRange, convert, extendDomain_apply_image, toEquivRange, viaFintypeEmbedding
+/-
+**Equiv.Perm.viaFintypeEmbedding_apply_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.Perm.viaFintypeEmbedding_apply_image (a : α) : e.viaFintypeEmbedding
+ f (f a) = f (e a)
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.viaFintypeEmbedding.eq_1`：∀ {α : Type u_1} {β : Type u_2} [in
+st : Fintype α] [inst_1 : DecidableEq β] (e : Equiv.Perm α) (f : α ↪ β),   e.via
+FintypeEmbedding f = e.ex…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.extendDomain_apply_image`：∀ {α' : Type u_9} {β' : Type u_10} 
+(e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype p
+)   (a : α'), (e.extendDo…
 -/
 theorem Equiv.Perm.viaFintypeEmbedding_apply_image (a : α) :
     e.viaFintypeEmbedding f (f a) = f (e a) := by
   rw [Equiv.Perm.viaFintypeEmbedding]
   convert! Equiv.Perm.extendDomain_apply_image e (Function.Embedding.toEquivRange f) a
-
-/--
-theorem `Equiv.Perm.viaFintypeEmbedding_apply_mem_range` / 定理 `Equiv.Perm.viaFintypeEmbedding_apply_mem_range`
-
-English:
-theorem Equiv.Perm.viaFintypeEmbedding_apply_mem_range
-  given: {b : β} (h : b in Set.range f)
-  proof: by
-  simp only [viaFintypeEmbedding, Function.Embedding.invOfMemRange]
-  rw [Equiv.Perm.extendDomain_apply_subtype _ _ h]
-  congr
-
-中文:
-定理 等价.置换.viaFintypeEmbedding_apply_mem_range
-  条件: {b : β} (h : b in 集合.range f)
-  证明: by
-  simp only [viaFintypeEmbedding, Function.Embedding.invOfMemRange]
-  rw [Equiv.Perm.extendDomain_apply_subtype _ _ h]
-  congr
-
-Depends on / 依赖: Embedding, Equiv.Perm.extendDomain_apply_subtype, Function, Function.Embedding.invOfMemRange, extendDomain_apply_subtype, invOfMemRange, viaFintypeEmbedding
+/-
+**Equiv.Perm.viaFintypeEmbedding_apply_mem_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.Perm.viaFintypeEmbedding_apply_mem_range {b : β} (h : b in Set.range
+ f) : e.viaFintypeEmbedding f b = f (e (f.invOfMemRange ⟨b, h⟩))
+参数：h : b in Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.extendDomain_apply_subtype`：∀ {α' : Type u_9} {β' : Type u_10
+} (e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Subtype
+ p)   {b : β'} (h : p b), (…
 -/
-theorem Equiv.Perm.viaFintypeEmbedding_apply_mem_range {b : β} (h : b in Set.range f) :
+theorem Equiv.Perm.viaFintypeEmbedding_apply_mem_range {b : β} (h : b ∈ Set.range f) :
     e.viaFintypeEmbedding f b = f (e (f.invOfMemRange ⟨b, h⟩)) := by
   simp only [viaFintypeEmbedding, Function.Embedding.invOfMemRange]
   rw [Equiv.Perm.extendDomain_apply_subtype _ _ h]
   congr
-
-/--
-theorem `Equiv.Perm.viaFintypeEmbedding_apply_notMem_range` / 定理 `Equiv.Perm.viaFintypeEmbedding_apply_notMem_range`
-
-English:
-theorem Equiv.Perm.viaFintypeEmbedding_apply_notMem_range
-  given: {b : β} (h : b ∉ Set.range f)
-  proof: by
-  rwa [Equiv.Perm.viaFintypeEmbedding, Equiv.Perm.extendDomain_apply_not_subtype]
-
-中文:
-定理 等价.置换.viaFintypeEmbedding_apply_notMem_range
-  条件: {b : β} (h : b ∉ 集合.range f)
-  证明: by
-  rwa [Equiv.Perm.viaFintypeEmbedding, Equiv.Perm.extendDomain_apply_not_subtype]
-
-Depends on / 依赖: Equiv.Perm.extendDomain_apply_not_subtype, Equiv.Perm.viaFintypeEmbedding, extendDomain_apply_not_subtype, viaFintypeEmbedding
+/-
+**Equiv.Perm.viaFintypeEmbedding_apply_notMem_range** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：Equiv.Perm.viaFintypeEmbedding_apply_notMem_range {b : β} (h : b ∉ Set.ran
+ge f) : e.viaFintypeEmbedding f b = b
+参数：h : b ∉ Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.viaFintypeEmbedding.eq_1`：∀ {α : Type u_1} {β : Type u_2} [in
+st : Fintype α] [inst_1 : DecidableEq β] (e : Equiv.Perm α) (f : α ↪ β),   e.via
+FintypeEmbedding f = e.ex…
+· 使用定理 `Equiv.Perm.extendDomain_apply_not_subtype`：∀ {α' : Type u_9} {β' : Type 
+u_10} (e : Equiv.Perm α') {p : β' → Prop} [inst : DecidablePred p] (f : α' ≃ Sub
+type p)   {b : β'}, ¬p b → (e.e…
 -/
 theorem Equiv.Perm.viaFintypeEmbedding_apply_notMem_range {b : β} (h : b ∉ Set.range f) :
     e.viaFintypeEmbedding f b = b := by
@@ -227,273 +212,265 @@ namespace Equiv
 
 variable {α β : Type*}
 
-/--
-Definition of `setDiffEquiv` / `setDiffEquiv` 的定义
+/-- If two sets have the same finite cardinality, their set differences are equivalent. -/
+/-
+**Equiv.setDiffEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：setDiffEquiv {s t : Set α} [Fintype s] [Fintype t] (h : Fintype.card s = F
+intype.card t) : (s \ t : Set α) ≃ (t \ s : Set α)
+参数：h : Fintype.card s = Fintype.card t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setDiffEquiv
-  signature: {s t : Set α} [Fintype s] [Fintype t]
-  body: by
-  classical
-  let fs : Finset α := Finset.univ.map (Function.Embedding.subtype (· in s))
-  let ft : Finset α := Finset.univ.map (Function.Embedding.subtype (· in t))
-  have hs (x : α) : x in fs ↔ x in s := by simp [fs]
-  have ht (x : α) : x in ft ↔ x in t := by simp [ft]
-  have hst (x : α) : x in fs \ ft ↔ x in s \ t := by simp [hs, ht]
-  have hts (x : α) : x in ft \ fs ↔ x in t \ s := by simp [hs, ht]
-  have hc : fs.card = ft.card := by
-    rw [← Fintype.subtype_card fs hs]; rw [← Fintype.subtype_card ft ht]; convert! h
-  replace hc := Finset.card_sdiff_comm hc
-  rw [← Fintype.subtype_card (fs \ ft) hst]; rw [← Fintype.subtype_card (ft \ fs) hts] at hc
-  exact ((Fintype.card_eq (_F := (_)) (_G := (_))).mp hc).some
-
-中文:
-定义 setDiffEquiv
-  签名: {s t : 集合 α} [有限类型 s] [有限类型 t]
-  定义体: by
-  classical
-  let fs : Finset α := Finset.univ.map (Function.Embedding.subtype (· in s))
-  let ft : Finset α := Finset.univ.map (Function.Embedding.subtype (· in t))
-  have hs (x : α) : x in fs ↔ x in s := by simp [fs]
-  have ht (x : α) : x in ft ↔ x in t := by simp [ft]
-  have hst (x : α) : x in fs \ ft ↔ x in s \ t := by simp [hs, ht]
-  have hts (x : α) : x in ft \ fs ↔ x in t \ s := by simp [hs, ht]
-  have hc : fs.card = ft.card := by
-    rw [← Fintype.subtype_card fs hs]; rw [← Fintype.subtype_card ft ht]; convert! h
-  replace hc := Finset.card_sdiff_comm hc
-  rw [← Fintype.subtype_card (fs \ ft) hst]; rw [← Fintype.subtype_card (ft \ fs) hts] at hc
-  exact ((Fintype.card_eq (_F := (_)) (_G := (_))).mp hc).some
-
-Depends on / 依赖: Embedding, Finset, Finset.univ.map, Fintype, Fintype.subtype_card, Function, Function.Embedding.subtype, classical, fs.card, ft.card, subtype, subtype_card
+--- 原说明 ---
+If two sets have the same finite cardinality, their set differences are equivale
+nt.
 -/
 noncomputable def setDiffEquiv {s t : Set α} [Fintype s] [Fintype t]
     (h : Fintype.card s = Fintype.card t) : (s \ t : Set α) ≃ (t \ s : Set α) := by
   classical
-  let fs : Finset α := Finset.univ.map (Function.Embedding.subtype (· in s))
-  let ft : Finset α := Finset.univ.map (Function.Embedding.subtype (· in t))
-  have hs (x : α) : x in fs ↔ x in s := by simp [fs]
-  have ht (x : α) : x in ft ↔ x in t := by simp [ft]
-  have hst (x : α) : x in fs \ ft ↔ x in s \ t := by simp [hs, ht]
-  have hts (x : α) : x in ft \ fs ↔ x in t \ s := by simp [hs, ht]
+  let fs : Finset α := Finset.univ.map (Function.Embedding.subtype (· ∈ s))
+  let ft : Finset α := Finset.univ.map (Function.Embedding.subtype (· ∈ t))
+  have hs (x : α) : x ∈ fs ↔ x ∈ s := by simp [fs]
+  have ht (x : α) : x ∈ ft ↔ x ∈ t := by simp [ft]
+  have hst (x : α) : x ∈ fs \ ft ↔ x ∈ s \ t := by simp [hs, ht]
+  have hts (x : α) : x ∈ ft \ fs ↔ x ∈ t \ s := by simp [hs, ht]
   have hc : fs.card = ft.card := by
-    rw [← Fintype.subtype_card fs hs]; rw [← Fintype.subtype_card ft ht]; convert! h
+    rw [← Fintype.subtype_card fs hs, ← Fintype.subtype_card ft ht]; convert! h
   replace hc := Finset.card_sdiff_comm hc
-  rw [← Fintype.subtype_card (fs \ ft) hst]; rw [← Fintype.subtype_card (ft \ fs) hts] at hc
+  rw [← Fintype.subtype_card (fs \ ft) hst, ← Fintype.subtype_card (ft \ fs) hts] at hc
   exact ((Fintype.card_eq (_F := (_)) (_G := (_))).mp hc).some
 
 open scoped Classical in
-/--
-Definition of `toCompl` / `toCompl` 的定义
+/-- If `e` is an equivalence between two subtypes of a type `α`, `e.toCompl`
+is an equivalence between the complement of those subtypes.
 
-English:
-definition toCompl
-  signature: {p q : α -> Prop} [Finite {x | p x}]
-  body: let sp : Set α := {x | p x}
-  let sq : Set α := {x | q x}
-  letI : Fintype sp := Fintype.ofFinite sp
-  letI : Fintype sq := Fintype.ofEquiv sp e
-  have h := setDiffEquiv (Fintype.card_congr e)
-  have hpc : spᶜ = (sq \ sp) union (sp union sq)ᶜ := by ext; simp; tauto
-  have hqc : sqᶜ = (sp \ sq) union (sp union sq)ᶜ := by ext; simp; tauto
-  let epc := (Equiv.setCongr hpc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
-  let eqc := (Equiv.setCongr hqc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
-epc.trans .trans (h.symm.sumCongr <| .refl _) eqc.symm
+See also `Equiv.compl`, for a computable version when a term of type
+`{e' : α ≃ α // ∀ x : {x // p x}, e' x = e x}` is known. -/
+/-
+**Equiv.toCompl** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：toCompl {p q : α -> Prop} [Finite {x | p x}] (e : { x | p x } ≃ { x | q x 
+}) : { x | ¬p x } ≃ { x | ¬q x }
+参数：e : { x | p x } ≃ { x | q x }。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-中文:
-定义 toCompl
-  签名: {p q : α -> 命题} [有限 {x | p x}]
-  定义体: let sp : Set α := {x | p x}
-  let sq : Set α := {x | q x}
-  letI : Fintype sp := Fintype.ofFinite sp
-  letI : Fintype sq := Fintype.ofEquiv sp e
-  have h := setDiffEquiv (Fintype.card_congr e)
-  have hpc : spᶜ = (sq \ sp) union (sp union sq)ᶜ := by ext; simp; tauto
-  have hqc : sqᶜ = (sp \ sq) union (sp union sq)ᶜ := by ext; simp; tauto
-  let epc := (Equiv.setCongr hpc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
-  let eqc := (Equiv.setCongr hqc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
-epc.trans .trans (h.symm.sumCongr <| .refl _) eqc.symm
+--- 原说明 ---
+If `e` is an equivalence between two subtypes of a type `α`, `e.toCompl`
+is an equivalence between the complement of those subtypes.
 
-Depends on / 依赖: Equiv.Set.union, Equiv.setCongr, Fintype, Fintype.card_congr, Fintype.ofEquiv, Fintype.ofFinite, Set.disjoint_le, Set.disjoint_left, card_congr, disjoint_le, disjoint_left, ofEquiv, ofFinite, setCongr, setDiffEquiv
+See also `Equiv.compl`, for a computable version when a term of type
+`{e' : α ≃ α // ∀ x : {x // p x}, e' x = e x}` is known.
 -/
-noncomputable def toCompl {p q : α -> Prop} [Finite {x | p x}]
+noncomputable def toCompl {p q : α → Prop} [Finite {x | p x}]
     (e : { x | p x } ≃ { x | q x }) : { x | ¬p x } ≃ { x | ¬q x } :=
   let sp : Set α := {x | p x}
   let sq : Set α := {x | q x}
   letI : Fintype sp := Fintype.ofFinite sp
   letI : Fintype sq := Fintype.ofEquiv sp e
   have h := setDiffEquiv (Fintype.card_congr e)
-  have hpc : spᶜ = (sq \ sp) union (sp union sq)ᶜ := by ext; simp; tauto
-  have hqc : sqᶜ = (sp \ sq) union (sp union sq)ᶜ := by ext; simp; tauto
+  have hpc : spᶜ = (sq \ sp) ∪ (sp ∪ sq)ᶜ := by ext; simp; tauto
+  have hqc : sqᶜ = (sp \ sq) ∪ (sp ∪ sq)ᶜ := by ext; simp; tauto
   let epc := (Equiv.setCongr hpc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
   let eqc := (Equiv.setCongr hqc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
-epc.trans .trans (h.symm.sumCongr <| .refl _) eqc.symm
+  epc.trans <| .trans (h.symm.sumCongr <| .refl _) eqc.symm
 
-variable {p q : α -> Prop} [DecidablePred p] [DecidablePred q] [Finite {x | p x}]
+variable {p q : α → Prop} [DecidablePred p] [DecidablePred q] [Finite {x | p x}]
 
-/--
-Definition of `extendSubtype` / `extendSubtype` 的定义
+/-- If `e` is an equivalence between two subtypes of a type `α`, `e.extendSubtype`
+is a permutation of `α` acting like `e` on the subtypes and doing something arbitrary outside.
 
-English:
-abbreviation extendSubtype
-  signature: (e : { x // p x } ≃ { x // q x })
-  body: subtypeCongr e e.toCompl
+Note that when `p = q`, `Equiv.Perm.subtypeCongr e (Equiv.refl _)` can be used instead. -/
+/-
+**Equiv.extendSubtype** 是 Mathlib 中的一个缩写定义，位于命名空间 `Equiv`。
+形式化陈述：extendSubtype (e : { x // p x } ≃ { x // q x }) : Perm α
+参数：e : { x // p x } ≃ { x // q x }。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 extendSubtype
-  签名: (e : { x // p x } ≃ { x // q x })
-  定义体: subtypeCongr e e.toCompl
+--- 原说明 ---
+If `e` is an equivalence between two subtypes of a type `α`, `e.extendSubtype`
+is a permutation of `α` acting like `e` on the subtypes and doing something arbi
+trary outside.
 
-Depends on / 依赖: e.toCompl, subtypeCongr, toCompl
+Note that when `p = q`, `Equiv.Perm.subtypeCongr e (Equiv.refl _)` can be used i
+nstead.
 -/
 noncomputable abbrev extendSubtype (e : { x // p x } ≃ { x // q x }) : Perm α :=
   subtypeCongr e e.toCompl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `extendSubtype_apply_of_mem` / 定理 `extendSubtype_apply_of_mem`
-
-English:
-theorem extendSubtype_apply_of_mem
-  given: (e : { x // p x } ≃ { x // q x }) (x) (hx : p x)
-  proof: by
-  simp [extendSubtype, subtypeCongr, sumCompl_symm_apply_of_pos hx]
-
-中文:
-定理 extendSubtype_apply_of_mem
-  条件: (e : { x // p x } ≃ { x // q x }) (x) (hx : p x)
-  证明: by
-  simp [extendSubtype, subtypeCongr, sumCompl_symm_apply_of_pos hx]
-
-Depends on / 依赖: extendSubtype, subtypeCongr, sumCompl_symm_apply_of_pos
+/-
+**Equiv.extendSubtype_apply_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：extendSubtype_apply_of_mem (e : { x // p x } ≃ { x // q x }) (x) (hx : p x
+) : e.extendSubtype x = e ⟨x, hx⟩
+参数：e : { x // p x } ≃ { x // q x }；x；hx : p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.sumCompl_symm_apply_of_pos`：sumCompl_symm_apply_of_pos {α} {p : α 
+-> Prop} [DecidablePred p] {a : α} (h : p a) : (sumCompl p).symm a = Sum.inl ⟨a,
+ h⟩
+· 使用定理 `Equiv.sumCongr_apply`：∀ {α₁ : Type u_9} {α₂ : Type u_10} {β₁ : Type u_11
+} {β₂ : Type u_12} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) (a : α₁ ⊕ β₁),   (ea.sumCongr e
+b) a = Sum…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem extendSubtype_apply_of_mem (e : { x // p x } ≃ { x // q x }) (x) (hx : p x) :
     e.extendSubtype x = e ⟨x, hx⟩ := by
   simp [extendSubtype, subtypeCongr, sumCompl_symm_apply_of_pos hx]
-
-/--
-theorem `extendSubtype_mem` / 定理 `extendSubtype_mem`
-
-English:
-theorem extendSubtype_mem
-  given: (e : { x // p x } ≃ { x // q x }) (x) (hx : p x)
-  proof: (e.extendSubtype_apply_of_mem _ hx).symm ▸ (e ⟨x, hx⟩).2
-
-中文:
-定理 extendSubtype_mem
-  条件: (e : { x // p x } ≃ { x // q x }) (x) (hx : p x)
-  证明: (e.extendSubtype_apply_of_mem _ hx).symm ▸ (e ⟨x, hx⟩).2
-
-Depends on / 依赖: e.extendSubtype_apply_of_mem, extendSubtype_apply_of_mem
+/-
+**Equiv.extendSubtype_mem** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：extendSubtype_mem (e : { x // p x } ≃ { x // q x }) (x) (hx : p x) : q (e.
+extendSubtype x)
+参数：e : { x // p x } ≃ { x // q x }；x；hx : p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.extendSubtype_apply_of_mem`：extendSubtype_apply_of_mem (e : { x //
+ p x } ≃ { x // q x }) (x) (hx : p x) : e.extendSubtype x = e ⟨x, hx⟩
 -/
 theorem extendSubtype_mem (e : { x // p x } ≃ { x // q x }) (x) (hx : p x) :
     q (e.extendSubtype x) :=
   (e.extendSubtype_apply_of_mem _ hx).symm ▸ (e ⟨x, hx⟩).2
-
-/--
-theorem `extendSubtype_apply_of_not_mem` / 定理 `extendSubtype_apply_of_not_mem`
-
-English:
-theorem extendSubtype_apply_of_not_mem
-  given: (e : { x // p x } ≃ { x // q x }) (x) (hx : ¬p x)
-  proof: by
-  simp only [extendSubtype, subtypeCongr, Equiv.trans_apply,
-    sumCompl_symm_apply_of_neg hx]
-  rfl
-
-中文:
-定理 extendSubtype_apply_of_not_mem
-  条件: (e : { x // p x } ≃ { x // q x }) (x) (hx : ¬p x)
-  证明: by
-  simp only [extendSubtype, subtypeCongr, Equiv.trans_apply,
-    sumCompl_symm_apply_of_neg hx]
-  rfl
-
-Depends on / 依赖: Equiv.trans_apply, extendSubtype, subtypeCongr, sumCompl_symm_apply_of_neg, trans_apply
+/-
+**Equiv.extendSubtype_apply_of_not_mem** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：extendSubtype_apply_of_not_mem (e : { x // p x } ≃ { x // q x }) (x) (hx :
+ ¬p x) : e.extendSubtype x = e.toCompl ⟨x, hx⟩
+参数：e : { x // p x } ≃ { x // q x }；x；hx : ¬p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.sumCompl_symm_apply_of_neg`：sumCompl_symm_apply_of_neg {α} {p : α 
+-> Prop} [DecidablePred p] {a : α} (h : ¬p a) : (sumCompl p).symm a = Sum.inr ⟨a
+, h⟩
 -/
 theorem extendSubtype_apply_of_not_mem (e : { x // p x } ≃ { x // q x }) (x) (hx : ¬p x) :
     e.extendSubtype x = e.toCompl ⟨x, hx⟩ := by
   simp only [extendSubtype, subtypeCongr, Equiv.trans_apply,
     sumCompl_symm_apply_of_neg hx]
   rfl
-
-/--
-theorem `extendSubtype_not_mem` / 定理 `extendSubtype_not_mem`
-
-English:
-theorem extendSubtype_not_mem
-  given: (e : { x // p x } ≃ { x // q x }) (x) (hx : ¬p x)
-  proof: e.extendSubtype_apply_of_not_mem _ hx ▸ (e.toCompl ⟨x, hx⟩).2
-
-中文:
-定理 extendSubtype_not_mem
-  条件: (e : { x // p x } ≃ { x // q x }) (x) (hx : ¬p x)
-  证明: e.extendSubtype_apply_of_not_mem _ hx ▸ (e.toCompl ⟨x, hx⟩).2
-
-Depends on / 依赖: e.extendSubtype_apply_of_not_mem, e.toCompl, extendSubtype_apply_of_not_mem, toCompl
+/-
+**Equiv.extendSubtype_not_mem** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：extendSubtype_not_mem (e : { x // p x } ≃ { x // q x }) (x) (hx : ¬p x) : 
+¬q (e.extendSubtype x)
+参数：e : { x // p x } ≃ { x // q x }；x；hx : ¬p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.extendSubtype_apply_of_not_mem`：extendSubtype_apply_of_not_mem (e 
+: { x // p x } ≃ { x // q x }) (x) (hx : ¬p x) : e.extendSubtype x = e.toCompl ⟨
+x, hx⟩
 -/
 theorem extendSubtype_not_mem (e : { x // p x } ≃ { x // q x }) (x) (hx : ¬p x) :
     ¬q (e.extendSubtype x) :=
   e.extendSubtype_apply_of_not_mem _ hx ▸ (e.toCompl ⟨x, hx⟩).2
 
-/--
-theorem `Perm.exists_extending_pair` / 定理 `Perm.exists_extending_pair`
+/-- Given two injective functions `f` and `g` from a finite type `α` to any type `β`,
+there exists a permutation of `β` that maps `f` to `g`. -/
+/-
+**Equiv.Perm.exists_extending_pair** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [Finite α] (f g : α → β),   Function.Injec
+tive f → Function.Injective g → ∃ σ, ∀ (a : α), σ (f a) = g a
+参数：f g : α → β；a : α；f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_surjective`：Finite.of_surjective {α β : Sort*} [Finite α] (f :
+ α -> β) (H : Surjective f) : Finite β
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Set.codRestrict_range_surjective`：codRestrict_range_surjective (f : ι ->
+ α) : ((range f).codRestrict f mem_range_self).Surjective
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.extendSubtype_apply_of_mem`：extendSubtype_apply_of_mem (e : { x //
+ p x } ≃ { x // q x }) (x) (hx : p x) : e.extendSubtype x = e ⟨x, hx⟩
+· 使用定理 `Equiv.ofInjective_symm_apply`：ofInjective_symm_apply {α β} {f : α -> β} 
+(hf : Injective f) (a : α) : (ofInjective f hf).symm ⟨f a, ⟨a, rfl⟩⟩ = a
+· 使用定理 `Equiv.ofInjective_apply`：∀ {α : Sort u_3} {β : Type u_4} (f : α → β) (hf
+ : Function.Injective f) (a : α), (Equiv.ofInjective f hf) a = ⟨f a, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem Perm.exists_extending_pair
-  statement: [Finite α]
-  proof: by
-  classical
-  have : Finite {x | x in Set.range f} := .of_surjective _ (Set.codRestrict_range_surjective f)
-  refine ⟨((Equiv.ofInjective f hf).symm.trans (Equiv.ofInjective g hg)).extendSubtype, ?_⟩
-  simp [Equiv.extendSubtype_apply_of_mem]
-
-中文:
-定理 置换.存在_extending_pair
-  结论: [有限 α]
-  证明: by
-  classical
-  have : Finite {x | x in Set.range f} := .of_surjective _ (Set.codRestrict_range_surjective f)
-  refine ⟨((Equiv.ofInjective f hf).symm.trans (Equiv.ofInjective g hg)).extendSubtype, ?_⟩
-  simp [Equiv.extendSubtype_apply_of_mem]
-
-Depends on / 依赖: Equiv.extendSubtype_apply_of_mem, Equiv.ofInjective, Finite, Set.codRestrict_range_surjective, Set.range, classical, codRestrict_range_surjective, extendSubtype, extendSubtype_apply_of_mem, ofInjective, of_surjective, symm.trans
+--- 原说明 ---
+Given two injective functions `f` and `g` from a finite type `α` to any type `β`
+,
+there exists a permutation of `β` that maps `f` to `g`.
 -/
 theorem Perm.exists_extending_pair [Finite α]
-    (f g : α -> β) (hf : Function.Injective f) (hg : Function.Injective g) :
-    exists σ : Perm β, forall a, σ (f a) = g a := by
+    (f g : α → β) (hf : Function.Injective f) (hg : Function.Injective g) :
+    ∃ σ : Perm β, ∀ a, σ (f a) = g a := by
   classical
-  have : Finite {x | x in Set.range f} := .of_surjective _ (Set.codRestrict_range_surjective f)
+  have : Finite {x | x ∈ Set.range f} := .of_surjective _ (Set.codRestrict_range_surjective f)
   refine ⟨((Equiv.ofInjective f hf).symm.trans (Equiv.ofInjective g hg)).extendSubtype, ?_⟩
   simp [Equiv.extendSubtype_apply_of_mem]
 
-/--
-theorem `Perm.exists_map_finset_eq` / 定理 `Perm.exists_map_finset_eq`
+/-- Any two same-cardinality finsets are related by a permutation. -/
+/-
+**Equiv.Perm.exists_map_finset_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {β : Type u_2} (s t : Finset β), s.card = t.card → ∃ σ, Finset.map (Equi
+v.toEmbedding σ) s = t
+参数：s t : Finset β；Equiv.toEmbedding σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.exists_extending_pair`：∀ {α : Type u_1} {β : Type u_2} [Finit
+e α] (f g : α → β),   Function.Injective f → Function.Injective g → ∃ σ, ∀ (a : 
+α), σ (f a) = g a
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Finset.eq_of_subset_of_card_le`：eq_of_subset_of_card_le (h : s subseteq 
+t) (h₂ : #t <= #s) : s = t
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_map`：mem_map {b : β} : b in s.map f ↔ exists a in s, f a = b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
 
-English:
-theorem Perm.exists_map_finset_eq
-  proof: by
-  obtain ⟨σ, hσ⟩ := Perm.exists_extending_pair
-    (fun x : s => (x : β)) (fun x : s => ((s.equivOfCardEq h) x : β))
-    Subtype.val_injective (Subtype.val_injective.comp (s.equivOfCardEq h).injective)
-  refine ⟨σ, Finset.eq_of_subset_of_card_le (fun b hb => ?_) (by simp [h])⟩
-  obtain ⟨a, ha, rfl⟩ := Finset.mem_map.mp hb
-  exact (hσ ⟨a, ha⟩) ▸ ((s.equivOfCardEq h) ⟨a, ha⟩).2
-
-中文:
-定理 置换.存在_map_finset_eq
-  证明: by
-  obtain ⟨σ, hσ⟩ := Perm.exists_extending_pair
-    (fun x : s => (x : β)) (fun x : s => ((s.equivOfCardEq h) x : β))
-    Subtype.val_injective (Subtype.val_injective.comp (s.equivOfCardEq h).injective)
-  refine ⟨σ, Finset.eq_of_subset_of_card_le (fun b hb => ?_) (by simp [h])⟩
-  obtain ⟨a, ha, rfl⟩ := Finset.mem_map.mp hb
-  exact (hσ ⟨a, ha⟩) ▸ ((s.equivOfCardEq h) ⟨a, ha⟩).2
-
-Depends on / 依赖: Finset, Finset.eq_of_subset_of_card_le, Finset.mem_map.mp, Perm.exists_extending_pair, Subtype, Subtype.val_injective, Subtype.val_injective.comp, eq_of_subset_of_card_le, equivOfCardEq, exists_extending_pair, injective, mem_map, s.equivOfCardEq, val_injective
+--- 原说明 ---
+Any two same-cardinality finsets are related by a permutation.
 -/
 theorem Perm.exists_map_finset_eq
     (s t : Finset β) (h : s.card = t.card) :
-    exists σ : Perm β, s.map σ.toEmbedding = t := by
+    ∃ σ : Perm β, s.map σ.toEmbedding = t := by
   obtain ⟨σ, hσ⟩ := Perm.exists_extending_pair
     (fun x : s => (x : β)) (fun x : s => ((s.equivOfCardEq h) x : β))
     Subtype.val_injective (Subtype.val_injective.comp (s.equivOfCardEq h).injective)
@@ -502,3 +479,4 @@ theorem Perm.exists_map_finset_eq
   exact (hσ ⟨a, ha⟩) ▸ ((s.equivOfCardEq h) ⟨a, ha⟩).2
 
 end Equiv
+

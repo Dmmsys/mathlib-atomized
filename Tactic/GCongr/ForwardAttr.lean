@@ -17,44 +17,34 @@ open Lean Meta Elab Tactic
 
 namespace Mathlib.Tactic.GCongr
 
-/--
-Definition of `ForwardExt` / `ForwardExt` 的定义
+/-- An extension for `gcongr_forward`. -/
+/-
+**Mathlib.Tactic.GCongr.ForwardExt** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.G
+Congr`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ForwardExt
-  parameters: where
-  axioms and operations (1):
-    - eval((h : Expr) (goal : MVarId)) : MetaM Unit
-
-中文:
-结构 ForwardExt
-  参数: where
-  公理与运算 (1 个):
-    - eval((h : Expr) (goal : MVarId)) : MetaM 单元
+--- 原说明 ---
+An extension for `gcongr_forward`.
 -/
 structure ForwardExt where
   eval (h : Expr) (goal : MVarId) : MetaM Unit
 
-/--
-Definition of `mkForwardExt` / `mkForwardExt` 的定义
+/-- Read a `gcongr_forward` extension from a declaration of the right type. -/
+/-
+**Mathlib.Tactic.GCongr.mkForwardExt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.G
+Congr`。
+形式化陈述：mkForwardExt (n : Name) : ImportM ForwardExt
+参数：n : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkForwardExt
-  signature: (n : Name)
-  body: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck ForwardExt opts ``ForwardExt n
-
-中文:
-定义 mkForwardExt
-  签名: (n : Name)
-  定义体: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck ForwardExt opts ``ForwardExt n
+--- 原说明 ---
+Read a `gcongr_forward` extension from a declaration of the right type.
 -/
 def mkForwardExt (n : Name) : ImportM ForwardExt := do
   let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck ForwardExt opts ``ForwardExt n
+  IO.ofExcept <| unsafe env.evalConstCheck ForwardExt opts ``ForwardExt n
 
 /-- Environment extensions for `gcongrForward` declarations -/
 initialize forwardExt : PersistentEnvExtension Name (Name × ForwardExt)
@@ -83,10 +73,11 @@ initialize registerBuiltinAttribute {
         throwError "invalid attribute 'gcongr_forward', declaration is in an imported module"
       if (IR.getSorryDep env declName).isSome then return -- ignore in progress definitions
       let ext ← mkForwardExt declName
-setEnv forwardExt.addEntry env (declName, ext)
+      setEnv <| forwardExt.addEntry env (declName, ext)
     | _ => throwUnsupportedSyntax
 }
 
 end GCongr
 
 end Mathlib.Tactic
+

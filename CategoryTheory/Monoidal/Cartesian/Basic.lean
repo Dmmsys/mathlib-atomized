@@ -49,82 +49,64 @@ universe v v₁ v₂ v₃ u u₁ u₂ u₃
 
 open MonoidalCategory Limits
 
-/--
-Definition of `SemiCartesianMonoidalCategory` / `SemiCartesianMonoidalCategory` 的定义
+/-- A monoidal category is semicartesian if the unit for the tensor product is a terminal object. -/
+/-
+**CategoryTheory.SemiCartesianMonoidalCategory** 是 Mathlib 中的一个类，位于命名空间 `Categor
+yTheory`。
+形式化陈述：SemiCartesianMonoidalCategory (C : Type u) [Category.{v} C] extends Monoid
+alCategory C where /-- The tensor unit is a terminal object. -/ isTerminalTensor
+Unit : IsTerminal (𝟙_ C) /-- The first projection from the product. -/ fst (X Y 
+: C) : X otimes Y ⟶ X /-- The second projection from the product. -/ snd (X Y : 
+C) : X otimes Y ⟶ Y fst_def (X Y : C) : fst X Y = X ◁ isTerminalTensorUnit.from 
+Y ≫ (ρ_ X).hom
+参数：C : Type u。
+继承自：MonoidalCategory C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SemiCartesianMonoidalCategory
-  parameters: (C : Type u) [Category.{v} C]
-  extends: MonoidalCategory C
-  axioms and operations (5):
-    - isTerminalTensorUnit : IsTerminal (𝟙_ C)
-    - fst((X Y : C)) : X otimes Y ⟶ X
-    - snd((X Y : C)) : X otimes Y ⟶ Y
-    - fst_def((X Y : C)) : fst X Y = X ◁ isTerminalTensorUnit.from Y ≫ (ρ_ X).hom  [default: by cat_disch]
-    - snd_def((X Y : C)) : snd X Y = isTerminalTensorUnit.from X ▷ Y ≫ (fun_ Y).hom  [default: by cat_disch]
-
-中文:
-类 SemiCartesianMonoidal范畴
-  参数: (C : 类型u) [范畴.{v} C]
-  继承: 幺半群范畴 C
-  公理与运算 (5 个):
-    - isTerminalTensorUnit : 是终止 (𝟙_ C)
-    - fst((X Y : C)) : X otimes Y ⟶ X
-    - snd((X Y : C)) : X otimes Y ⟶ Y
-    - fst_def((X Y : C)) : fst X Y = X ◁ isTerminalTensorUnit.from Y ≫ (ρ_ X).hom  [默认: by cat_disch]
-    - snd_def((X Y : C)) : snd X Y = isTerminalTensorUnit.from X ▷ Y ≫ (fun_ Y).hom  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, fun_, isTerminalTensorUnit, isTerminalTensorUnit.from, snd_def
+--- 原说明 ---
+A monoidal category is semicartesian if the unit for the tensor product is a ter
+minal object.
 -/
 class SemiCartesianMonoidalCategory (C : Type u) [Category.{v} C] extends MonoidalCategory C where
   /-- The tensor unit is a terminal object. -/
   isTerminalTensorUnit : IsTerminal (𝟙_ C)
   /-- The first projection from the product. -/
-  fst (X Y : C) : X otimes Y ⟶ X
+  fst (X Y : C) : X ⊗ Y ⟶ X
   /-- The second projection from the product. -/
-  snd (X Y : C) : X otimes Y ⟶ Y
+  snd (X Y : C) : X ⊗ Y ⟶ Y
   fst_def (X Y : C) : fst X Y = X ◁ isTerminalTensorUnit.from Y ≫ (ρ_ X).hom := by cat_disch
-  snd_def (X Y : C) : snd X Y = isTerminalTensorUnit.from X ▷ Y ≫ (fun_ Y).hom := by cat_disch
+  snd_def (X Y : C) : snd X Y = isTerminalTensorUnit.from X ▷ Y ≫ (λ_ Y).hom := by cat_disch
 
 namespace SemiCartesianMonoidalCategory
 
 variable {C : Type u} [Category.{v} C] [SemiCartesianMonoidalCategory C]
 
-/--
-Definition of `toUnit` / `toUnit` 的定义
+/-- The unique map to the terminal object. -/
+/-
+**CategoryTheory.SemiCartesianMonoidalCategory.toUnit** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.SemiCartesianMonoidalCategory`。
+形式化陈述：toUnit (X : C) : X ⟶ 𝟙_ C
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toUnit
-  signature: (X : C)
-  body: isTerminalTensorUnit.from X
-
-中文:
-定义 toUnit
-  签名: (X : C)
-  定义体: isTerminalTensorUnit.from X
-
-Depends on / 依赖: J.overEquiv_symm_mem_over, isTerminalTensorUnit, isTerminalTensorUnit.from, overEquiv_symm_mem_over
+--- 原说明 ---
+The unique map to the terminal object.
 -/
 def toUnit (X : C) : X ⟶ 𝟙_ C := isTerminalTensorUnit.from X
-
+/-
+**CategoryTheory.SemiCartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `Categ
+oryTheory.SemiCartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : Unique (X ⟶ 𝟙_ C) := isTerminalEquivUnique _ _ isTerminalTensorUnit _
-
-/--
-lemma `default_eq_toUnit` / 引理 `default_eq_toUnit`
-
-English:
-lemma default_eq_toUnit
-  given: (X : C)
-  statement: default = toUnit X
-  proof: rfl
-
-中文:
-引理 default_eq_toUnit
-  条件: (X : C)
-  结论: default = toUnit X
-  证明: rfl
-
-Depends on / 依赖: Functor, Functor.isContinuous_of_coverPreserving, isContinuous_of_coverPreserving, over_forget_compatiblePreserving, over_forget_coverPreserving
+/-
+**CategoryTheory.SemiCartesianMonoidalCategory.default_eq_toUnit** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.SemiCartesianMonoidalCategory`。
+形式化陈述：default_eq_toUnit (X : C) : default = toUnit X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma default_eq_toUnit (X : C) : default = toUnit X := rfl
 
@@ -134,62 +116,48 @@ it is often convenient to use it directly as `apply toUnit_unique` forcing
 lean to do the necessary elaboration.
 -/
 @[ext]
-/--
-lemma `toUnit_unique` / 引理 `toUnit_unique`
+/-
+**CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.SemiCartesianMonoidalCategory`。
+形式化陈述：toUnit_unique {X : C} (f g : X ⟶ 𝟙_ _) : f = g
+参数：f g : X ⟶ 𝟙_ _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-lemma toUnit_unique
-  given: {X : C} (f g : X ⟶ 𝟙_ _)
-  statement: f = g
-  proof: Subsingleton.elim _ _
-
-中文:
-引理 toUnit_unique
-  条件: {X : C} (f g : X ⟶ 𝟙_ _)
-  结论: f = g
-  证明: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+--- 原说明 ---
+This lemma follows from the preexisting `Unique` instance, but
+it is often convenient to use it directly as `apply toUnit_unique` forcing
+lean to do the necessary elaboration.
 -/
 lemma toUnit_unique {X : C} (f g : X ⟶ 𝟙_ _) : f = g :=
   Subsingleton.elim _ _
-
-/--
-lemma `toUnit_unit` / 引理 `toUnit_unit`
-
-English:
-lemma toUnit_unit
-  statement: toUnit (𝟙_ C) = 𝟙 (𝟙_ C)
-  proof: toUnit_unique ..
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 toUnit_unit
-  结论: toUnit (𝟙_ C) = 𝟙 (𝟙_ C)
-  证明: toUnit_unique ..
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unit** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.SemiCartesianMonoidalCategory`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.SemiCartesianMonoidalCategory C],   CategoryTheory.SemiCartesianMonoidal
+Category.toUnit (CategoryTheory.MonoidalCategoryStruct.tensorUnit C) =     Categ
+oryTheory.CategoryStruct.id (CategoryTheory.MonoidalCategoryStruct.tensorUnit C)
+参数：CategoryTheory.MonoidalCategoryStruct.tensorUnit C；CategoryTheory.MonoidalCat
+egoryStruct.tensorUnit C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 @[simp] lemma toUnit_unit : toUnit (𝟙_ C) = 𝟙 (𝟙_ C) := toUnit_unique ..
 
 @[reassoc (attr := simp)]
-/--
-theorem `comp_toUnit` / 定理 `comp_toUnit`
-
-English:
-theorem comp_toUnit
-  given: {X Y : C} (f : X ⟶ Y)
-  statement: f ≫ toUnit Y = toUnit X
-  proof: toUnit_unique _ _
-
-中文:
-定理 comp_toUnit
-  条件: {X Y : C} (f : X ⟶ Y)
-  结论: f ≫ toUnit Y = toUnit X
-  证明: toUnit_unique _ _
-
-Depends on / 依赖: toUnit_unique
+/-
+**CategoryTheory.SemiCartesianMonoidalCategory.comp_toUnit** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.SemiCartesianMonoidalCategory`。
+形式化陈述：comp_toUnit {X Y : C} (f : X ⟶ Y) : f ≫ toUnit Y = toUnit X
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 theorem comp_toUnit {X Y : C} (f : X ⟶ Y) : f ≫ toUnit Y = toUnit X :=
   toUnit_unique _ _
@@ -198,26 +166,30 @@ end SemiCartesianMonoidalCategory
 
 variable (C) in
 /--
-Definition of `CartesianMonoidalCategory` / `CartesianMonoidalCategory` 的定义
+An instance of `CartesianMonoidalCategory C` bundles an explicit choice of a binary
+product of two objects of `C`, and a terminal object in `C`.
 
-English:
-class CartesianMonoidalCategory
-  parameters: (C : Type u) [Category.{v} C]
-  axioms and operations (1):
-    - tensorProductIsBinaryProduct((X Y : C)) : IsLimit BinaryFan.mk (fst X Y) (snd X Y)
+Users should use the monoidal notation: `X ⊗ Y` for the product and `𝟙_ C` for
+the terminal object.
+-/
+/-
+**CategoryTheory.CartesianMonoidalCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `Category
+Theory`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 CartesianMonoidal范畴
-  参数: (C : 类型u) [范畴.{v} C]
-  公理与运算 (1 个):
-    - tensorProductIsBinaryProduct((X Y : C)) : 是极限 BinaryFan.mk (fst X Y) (snd X Y)
+--- 原说明 ---
+An instance of `CartesianMonoidalCategory C` bundles an explicit choice of a bin
+ary
+product of two objects of `C`, and a terminal object in `C`.
 
-Depends on / 依赖: Functor, Functor.isContinuous_of_coverPreserving, isContinuous_of_coverPreserving, over_map_compatiblePreserving, over_map_coverPreserving
+Users should use the monoidal notation: `X ⊗ Y` for the product and `𝟙_ C` for
+the terminal object.
 -/
 class CartesianMonoidalCategory (C : Type u) [Category.{v} C] extends
     SemiCartesianMonoidalCategory C where
   /-- The monoidal product is the categorical product. -/
-tensorProductIsBinaryProduct (X Y : C) : IsLimit BinaryFan.mk (fst X Y) (snd X Y)
+  tensorProductIsBinaryProduct (X Y : C) : IsLimit <| BinaryFan.mk (fst X Y) (snd X Y)
 
 namespace CartesianMonoidalCategory
 
@@ -227,123 +199,167 @@ export SemiCartesianMonoidalCategory (isTerminalTensorUnit fst snd fst_def snd_d
 variable {C : Type u} [Category.{v} C]
 
 section OfChosenFiniteProducts
-variable (𝒯 : LimitCone (Functor.empty.{0} C)) (ℬ : forall X Y : C, LimitCone (pair X Y))
+variable (𝒯 : LimitCone (Functor.empty.{0} C)) (ℬ : ∀ X Y : C, LimitCone (pair X Y))
   {X₁ X₂ X₃ Y₁ Y₂ Y₃ Z₁ Z₂ : C}
 
 namespace ofChosenFiniteProducts
 
-/--
-Definition of `tensorObj` / `tensorObj` 的定义
+/-- Implementation of the tensor product for `CartesianMonoidalCategory.ofChosenFiniteProducts`. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.tensorObj** 是 
+Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofChosenFinite
+Products`。
+形式化陈述：tensorObj (X Y : C) : C
+参数：X Y : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation tensorObj
-  signature: (X Y : C)
-  body: (ℬ X Y).cone.pt
-
-中文:
-缩写 tensorObj
-  签名: (X Y : C)
-  定义体: (ℬ X Y).cone.pt
-
-Depends on / 依赖: J.mem_over_iff, Sieve.overEquiv_functorPullback_map, cone.pt, mem_over_iff, overEquiv_functorPullback_map
+--- 原说明 ---
+Implementation of the tensor product for `CartesianMonoidalCategory.ofChosenFini
+teProducts`.
 -/
 abbrev tensorObj (X Y : C) : C := (ℬ X Y).cone.pt
 
-/--
-Definition of `tensorHom` / `tensorHom` 的定义
+/-- Implementation of the tensor product of morphisms for
+`CartesianMonoidalCategory.ofChosenFiniteProducts`. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.tensorHom** 是 
+Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofChosenFinite
+Products`。
+形式化陈述：tensorHom (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂) : tensorObj ℬ X₁ X₂ ⟶ tensorObj ℬ Y₁
+ Y₂
+参数：f : X₁ ⟶ Y₁；g : X₂ ⟶ Y₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation tensorHom
-  signature: (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
-  body: (BinaryFan.IsLimit.lift' (ℬ Y₁ Y₂).isLimit ((ℬ X₁ X₂).cone.π.app ⟨.left⟩ ≫ f)
-      (((ℬ X₁ X₂).cone.π.app ⟨.right⟩ : (ℬ X₁ X₂).cone.pt ⟶ X₂) ≫ g)).val
-
-中文:
-缩写 tensorHom
-  签名: (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
-  定义体: (BinaryFan.IsLimit.lift' (ℬ Y₁ Y₂).isLimit ((ℬ X₁ X₂).cone.π.app ⟨.left⟩ ≫ f)
-      (((ℬ X₁ X₂).cone.π.app ⟨.right⟩ : (ℬ X₁ X₂).cone.pt ⟶ X₂) ≫ g)).val
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.lift, IsCocontinuous, IsLimit, J.over, K.over, cone.pt, isLimit
+--- 原说明 ---
+Implementation of the tensor product of morphisms for
+`CartesianMonoidalCategory.ofChosenFiniteProducts`.
 -/
 abbrev tensorHom (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂) : tensorObj ℬ X₁ X₂ ⟶ tensorObj ℬ Y₁ Y₂ :=
   (BinaryFan.IsLimit.lift' (ℬ Y₁ Y₂).isLimit ((ℬ X₁ X₂).cone.π.app ⟨.left⟩ ≫ f)
       (((ℬ X₁ X₂).cone.π.app ⟨.right⟩ : (ℬ X₁ X₂).cone.pt ⟶ X₂) ≫ g)).val
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `id_tensorHom_id` / 引理 `id_tensorHom_id`
-
-English:
-lemma id_tensorHom_id
-  given: (X Y : C)
-  statement: tensorHom ℬ (𝟙 X) (𝟙 Y) = 𝟙 (tensorObj ℬ X Y)
-  proof: (ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp [tensorHom]
-
-中文:
-引理 id_tensorHom_id
-  条件: (X Y : C)
-  结论: tensorHom ℬ (𝟙 X) (𝟙 Y) = 𝟙 (tensorObj ℬ X Y)
-  证明: (ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp [tensorHom]
-
-Depends on / 依赖: hom_ext, isLimit, isLimit.hom_ext, tensorHom
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.id_tensorHom_i
+d** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofChosenFi
+niteProducts`。
+形式化陈述：id_tensorHom_id (X Y : C) : tensorHom ℬ (𝟙 X) (𝟙 Y) = 𝟙 (tensorObj ℬ X Y)
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift'_coe`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Binar
+yFan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma id_tensorHom_id (X Y : C) : tensorHom ℬ (𝟙 X) (𝟙 Y) = 𝟙 (tensorObj ℬ X Y) :=
-(ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp [tensorHom]
+  (ℬ _ _).isLimit.hom_ext <| by rintro ⟨_ | _⟩ <;> simp [tensorHom]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `tensorHom_comp_tensorHom` / 引理 `tensorHom_comp_tensorHom`
-
-English:
-lemma tensorHom_comp_tensorHom
-  given: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (g₁ : Y₁ ⟶ Z₁) (g₂ : Y₂ ⟶ Z₂)
-  proof: (ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp [tensorHom]
-
-中文:
-引理 tensorHom_comp_tensorHom
-  条件: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (g₁ : Y₁ ⟶ Z₁) (g₂ : Y₂ ⟶ Z₂)
-  证明: (ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp [tensorHom]
-
-Depends on / 依赖: Category, Category.assoc, E.mem, GrothendieckTopology, GrothendieckTopology.mem_over_iff, Over.forget, Over.forget_map, Over.forget_obj, Over.hom, Over.homMk, Over.mk, Over.w, PreZeroHypercover, PreZeroHypercover.sieve, Sieve.overEquiv_preOneHypercover_sieve, forget, forget_map, forget_obj, hom_ext, isLimit
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.tensorHom_comp
+_tensorHom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.o
+fChosenFiniteProducts`。
+形式化陈述：tensorHom_comp_tensorHom (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (g₁ : Y₁ ⟶ Z₁) (g₂ 
+: Y₂ ⟶ Z₂) : tensorHom ℬ f₁ f₂ ≫ tensorHom ℬ g₁ g₂ = tensorHom ℬ (f₁ ≫ g₁) (f₂ ≫
+ g₂)
+参数：f₁ : X₁ ⟶ Y₁；f₂ : X₂ ⟶ Y₂；g₁ : Y₁ ⟶ Z₁；g₂ : Y₂ ⟶ Z₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift'_coe`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Binar
+yFan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac_assoc`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensorHom_comp_tensorHom (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (g₁ : Y₁ ⟶ Z₁) (g₂ : Y₂ ⟶ Z₂) :
     tensorHom ℬ f₁ f₂ ≫ tensorHom ℬ g₁ g₂ = tensorHom ℬ (f₁ ≫ g₁) (f₂ ≫ g₂) :=
-(ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp [tensorHom]
+  (ℬ _ _).isLimit.hom_ext <| by rintro ⟨_ | _⟩ <;> simp [tensorHom]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `pentagon` / 引理 `pentagon`
-
-English:
-lemma pentagon
-  given: (W X Y Z : C)
-  proof: by
-  dsimp [tensorHom]
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩
-  · simp
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩
-  · simp
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩ <;> simp
-
-中文:
-引理 pentagon
-  条件: (W X Y Z : C)
-  证明: by
-  dsimp [tensorHom]
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩
-  · simp
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩
-  · simp
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩ <;> simp
-
-Depends on / 依赖: E.map, GrothendieckTopology, GrothendieckTopology.mem_over_iff, Over.forget, Over.post_forget_eq_forget_comp, Over.post_obj, PreOneHypercover, PreOneHypercover.map_comp, PreZeroHypercover, PreZeroHypercover.sieve, Sieve.functorPushforward_ofArrows, Sieve.overEquiv_ofArrows, Sieve.overEquiv_preOneHypercover_sieve, forget, functorPushforward_ofArrows, hom_ext, isLimit, isLimit.hom_ext, map_comp, mem_over_iff
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.pentagon** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofChosenFinitePro
+ducts`。
+形式化陈述：pentagon (W X Y Z : C) : tensorHom ℬ (BinaryFan.associatorOfLimitCone ℬ W 
+X Y).hom (𝟙 Z) ≫ (BinaryFan.associatorOfLimitCone ℬ W (tensorObj ℬ X Y) Z).hom ≫
+ tensorHom ℬ (𝟙 W) (BinaryFan.associatorOfLimitCone ℬ X Y Z).hom = (BinaryFan.as
+sociatorOfLimitCone ℬ (tensorObj ℬ W X) Y Z).hom ≫ (BinaryFan.associatorOfLimitC
+one ℬ W X (tensorObj ℬ Y Z)).hom
+参数：W X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift'_coe`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Binar
+yFan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac_assoc`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp_assoc`：∀ {
+J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 :
+ CategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma pentagon (W X Y Z : C) :
     tensorHom ℬ (BinaryFan.associatorOfLimitCone ℬ W X Y).hom (𝟙 Z) ≫
@@ -362,44 +378,88 @@ lemma pentagon (W X Y Z : C) :
   rintro ⟨_ | _⟩ <;> simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `triangle` / 引理 `triangle`
-
-English:
-lemma triangle
-  given: (X Y : C)
-  proof: (ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp
-
-中文:
-引理 triangle
-  条件: (X Y : C)
-  证明: (ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp
-
-Depends on / 依赖: Functor, Functor.isContinuous_comp, K.over, hom_ext, isContinuous_comp, isLimit, isLimit.hom_ext
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.triangle** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofChosenFinitePro
+ducts`。
+形式化陈述：triangle (X Y : C) : (BinaryFan.associatorOfLimitCone ℬ X 𝒯.cone.pt Y).hom
+ ≫ tensorHom ℬ (𝟙 X) (BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt Y).isLimit).ho
+m = tensorHom ℬ (BinaryFan.rightUnitor 𝒯.isLimit (ℬ X 𝒯.cone.pt).isLimit).hom (𝟙
+ Y)
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.BinaryFan.leftUnitor_hom`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X : C}   {s : CategoryTheory.Limits.Cone (Cate
+goryTheory.Functor.empty C)} (P : Ca…
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift'_coe`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Binar
+yFan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
+· 使用定理 `CategoryTheory.Limits.BinaryFan.rightUnitor_hom`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {X : C}   {s : CategoryTheory.Limits.Cone (Cat
+egoryTheory.Functor.empty C)} (P : Ca…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp_assoc`：∀ {
+J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 :
+ CategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
 -/
 lemma triangle (X Y : C) :
     (BinaryFan.associatorOfLimitCone ℬ X 𝒯.cone.pt Y).hom ≫
         tensorHom ℬ (𝟙 X) (BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt Y).isLimit).hom =
       tensorHom ℬ (BinaryFan.rightUnitor 𝒯.isLimit (ℬ X 𝒯.cone.pt).isLimit).hom (𝟙 Y) :=
-(ℬ _ _).isLimit.hom_ext by rintro ⟨_ | _⟩ <;> simp
+  (ℬ _ _).isLimit.hom_ext <| by rintro ⟨_ | _⟩ <;> simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `leftUnitor_naturality` / 引理 `leftUnitor_naturality`
-
-English:
-lemma leftUnitor_naturality
-  given: (f : X₁ ⟶ X₂)
-  proof: by
-  simp [tensorHom]
-
-中文:
-引理 leftUnitor_naturality
-  条件: (f : X₁ ⟶ X₂)
-  证明: by
-  simp [tensorHom]
-
-Depends on / 依赖: tensorHom
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.leftUnitor_nat
+urality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofCh
+osenFiniteProducts`。
+形式化陈述：leftUnitor_naturality (f : X₁ ⟶ X₂) : tensorHom ℬ (𝟙 𝒯.cone.pt) f ≫ (Binar
+yFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt X₂).isLimit).hom = (BinaryFan.leftUnitor 
+𝒯.isLimit (ℬ 𝒯.cone.pt X₁).isLimit).hom ≫ f
+参数：f : X₁ ⟶ X₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift'_coe`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Binar
+yFan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Limits.BinaryFan.leftUnitor_hom`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X : C}   {s : CategoryTheory.Limits.Cone (Cate
+goryTheory.Functor.empty C)} (P : Ca…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma leftUnitor_naturality (f : X₁ ⟶ X₂) :
     tensorHom ℬ (𝟙 𝒯.cone.pt) f ≫ (BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt X₂).isLimit).hom =
@@ -407,22 +467,34 @@ lemma leftUnitor_naturality (f : X₁ ⟶ X₂) :
   simp [tensorHom]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `rightUnitor_naturality` / 引理 `rightUnitor_naturality`
-
-English:
-lemma rightUnitor_naturality
-  given: (f : X₁ ⟶ X₂)
-  proof: by
-  simp [tensorHom]
-
-中文:
-引理 rightUnitor_naturality
-  条件: (f : X₁ ⟶ X₂)
-  证明: by
-  simp [tensorHom]
-
-Depends on / 依赖: tensorHom
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.rightUnitor_na
+turality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofC
+hosenFiniteProducts`。
+形式化陈述：rightUnitor_naturality (f : X₁ ⟶ X₂) : tensorHom ℬ f (𝟙 𝒯.cone.pt) ≫ (Bina
+ryFan.rightUnitor 𝒯.isLimit (ℬ X₂ 𝒯.cone.pt).isLimit).hom = (BinaryFan.rightUnit
+or 𝒯.isLimit (ℬ X₁ 𝒯.cone.pt).isLimit).hom ≫ f
+参数：f : X₁ ⟶ X₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift'_coe`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Binar
+yFan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Limits.BinaryFan.rightUnitor_hom`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {X : C}   {s : CategoryTheory.Limits.Cone (Cat
+egoryTheory.Functor.empty C)} (P : Ca…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rightUnitor_naturality (f : X₁ ⟶ X₂) :
     tensorHom ℬ f (𝟙 𝒯.cone.pt) ≫ (BinaryFan.rightUnitor 𝒯.isLimit (ℬ X₂ 𝒯.cone.pt).isLimit).hom =
@@ -430,32 +502,46 @@ lemma rightUnitor_naturality (f : X₁ ⟶ X₂) :
   simp [tensorHom]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `associator_naturality` / 引理 `associator_naturality`
-
-English:
-lemma associator_naturality
-  given: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃)
-  proof: by
-  dsimp [tensorHom]
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩
-  · simp
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩ <;> simp
-
-中文:
-引理 associator_naturality
-  条件: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃)
-  证明: by
-  dsimp [tensorHom]
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩
-  · simp
-  apply (ℬ _ _).isLimit.hom_ext
-  rintro ⟨_ | _⟩ <;> simp
-
-Depends on / 依赖: hom_ext, isLimit, isLimit.hom_ext, tensorHom
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.associator_nat
+urality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory.ofCh
+osenFiniteProducts`。
+形式化陈述：associator_naturality (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃) : tenso
+rHom ℬ (tensorHom ℬ f₁ f₂) f₃ ≫ (BinaryFan.associatorOfLimitCone ℬ Y₁ Y₂ Y₃).hom
+ = (BinaryFan.associatorOfLimitCone ℬ X₁ X₂ X₃).hom ≫ tensorHom ℬ f₁ (tensorHom 
+ℬ f₂ f₃)
+参数：f₁ : X₁ ⟶ Y₁；f₂ : X₂ ⟶ Y₂；f₃ : X₃ ⟶ Y₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift'_coe`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Binar
+yFan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac_assoc`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp_assoc`：∀ {
+J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 :
+ CategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_naturality (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃) :
     tensorHom ℬ (tensorHom ℬ f₁ f₂) f₃ ≫ (BinaryFan.associatorOfLimitCone ℬ Y₁ Y₂ Y₃).hom =
@@ -472,90 +558,40 @@ end ofChosenFiniteProducts
 open ofChosenFiniteProducts
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `ofChosenFiniteProducts` / `ofChosenFiniteProducts` 的定义
+/-- Construct an instance of `CartesianMonoidalCategory C` given a terminal object and limit cones
+over arbitrary pairs of objects. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts** 是 Mathlib 中的
+一个缩写定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：ofChosenFiniteProducts : CartesianMonoidalCategory C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.id_tenso
+rHom_id`：id_tensorHom_id (X Y : C) : tensorHom ℬ (𝟙 X) (𝟙 Y) = 𝟙 (tensorObj ℬ X 
+Y)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.tensorHo
+m_comp_tensorHom`：tensorHom_comp_tensorHom (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (g₁ : Y
+₁ ⟶ Z₁) (g₂ : Y₂ ⟶ Z₂) : tensorHom ℬ f₁ f₂ ≫ tensorHom ℬ g₁ g₂ = tensorHom ℬ (…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.associat
+or_naturality`：associator_naturality (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃
+) : tensorHom ℬ (tensorHom ℬ f₁ f₂) f₃ ≫ (BinaryFan.associatorOfLimitCone ℬ…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.leftUnit
+or_naturality`：leftUnitor_naturality (f : X₁ ⟶ X₂) : tensorHom ℬ (𝟙 𝒯.cone.pt) f
+ ≫ (BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt X₂).isLimit).hom = (BinaryF…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.rightUni
+tor_naturality`：rightUnitor_naturality (f : X₁ ⟶ X₂) : tensorHom ℬ f (𝟙 𝒯.cone.p
+t) ≫ (BinaryFan.rightUnitor 𝒯.isLimit (ℬ X₂ 𝒯.cone.pt).isLimit).hom = (Binar…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.pentagon
+`：pentagon (W X Y Z : C) : tensorHom ℬ (BinaryFan.associatorOfLimitCone ℬ W X Y)
+.hom (𝟙 Z) ≫ (BinaryFan.associatorOfLimitCone ℬ W (tensorObj ℬ…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.ofChosenFiniteProducts.triangle
+`：triangle (X Y : C) : (BinaryFan.associatorOfLimitCone ℬ X 𝒯.cone.pt Y).hom ≫ t
+ensorHom ℬ (𝟙 X) (BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt …
 
-English:
-abbreviation ofChosenFiniteProducts
-  signature: : CartesianMonoidalCategory C
-  body: letI : MonoidalCategoryStruct C := {
-    tensorUnit := 𝒯.cone.pt
-    tensorObj := tensorObj ℬ
-    tensorHom := tensorHom ℬ
-    whiskerLeft X {_ _} g := tensorHom ℬ (𝟙 X) g
-    whiskerRight {_ _} f Y := tensorHom ℬ f (𝟙 Y)
-    associator := BinaryFan.associatorOfLimitCone ℬ
-    leftUnitor X := BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt X).isLimit
-    rightUnitor X := BinaryFan.rightUnitor 𝒯.isLimit (ℬ X 𝒯.cone.pt).isLimit
-  }
-  {
-  toMonoidalCategory := .ofTensorHom
-    (id_tensorHom_id := id_tensorHom_id ℬ)
-    (tensorHom_comp_tensorHom := tensorHom_comp_tensorHom ℬ)
-    (pentagon := pentagon ℬ)
-    (triangle := triangle 𝒯 ℬ)
-    (leftUnitor_naturality := leftUnitor_naturality 𝒯 ℬ)
-    (rightUnitor_naturality := rightUnitor_naturality 𝒯 ℬ)
-    (associator_naturality := associator_naturality ℬ)
-  isTerminalTensorUnit :=
-    .ofUniqueHom (𝒯.isLimit.lift <| asEmptyCone ·) fun _ _ => 𝒯.isLimit.hom_ext (by simp)
-  fst X Y := BinaryFan.fst (ℬ X Y).cone
-  snd X Y := BinaryFan.snd (ℬ X Y).cone
-  tensorProductIsBinaryProduct X Y := BinaryFan.IsLimit.mk _
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).1)
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.1)
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.2)
-    (fun f g m hf hg =>
-      BinaryFan.IsLimit.hom_ext (ℬ X Y).isLimit (by simpa using hf) (by simpa using hg))
-  fst_def X Y := (((ℬ X 𝒯.cone.pt).isLimit.fac
-    (BinaryFan.mk _ _) ⟨.left⟩).trans (Category.comp_id _)).symm
-  snd_def X Y := (((ℬ 𝒯.cone.pt Y).isLimit.fac
-    (BinaryFan.mk _ _) ⟨.right⟩).trans (Category.comp_id _)).symm
-  }
-
-omit 𝒯 in
-
-中文:
-缩写 ofChosenFiniteProducts
-  签名: : CartesianMonoidal范畴 C
-  定义体: letI : MonoidalCategoryStruct C := {
-    tensorUnit := 𝒯.cone.pt
-    tensorObj := tensorObj ℬ
-    tensorHom := tensorHom ℬ
-    whiskerLeft X {_ _} g := tensorHom ℬ (𝟙 X) g
-    whiskerRight {_ _} f Y := tensorHom ℬ f (𝟙 Y)
-    associator := BinaryFan.associatorOfLimitCone ℬ
-    leftUnitor X := BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt X).isLimit
-    rightUnitor X := BinaryFan.rightUnitor 𝒯.isLimit (ℬ X 𝒯.cone.pt).isLimit
-  }
-  {
-  toMonoidalCategory := .ofTensorHom
-    (id_tensorHom_id := id_tensorHom_id ℬ)
-    (tensorHom_comp_tensorHom := tensorHom_comp_tensorHom ℬ)
-    (pentagon := pentagon ℬ)
-    (triangle := triangle 𝒯 ℬ)
-    (leftUnitor_naturality := leftUnitor_naturality 𝒯 ℬ)
-    (rightUnitor_naturality := rightUnitor_naturality 𝒯 ℬ)
-    (associator_naturality := associator_naturality ℬ)
-  isTerminalTensorUnit :=
-    .ofUniqueHom (𝒯.isLimit.lift <| asEmptyCone ·) fun _ _ => 𝒯.isLimit.hom_ext (by simp)
-  fst X Y := BinaryFan.fst (ℬ X Y).cone
-  snd X Y := BinaryFan.snd (ℬ X Y).cone
-  tensorProductIsBinaryProduct X Y := BinaryFan.IsLimit.mk _
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).1)
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.1)
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.2)
-    (fun f g m hf hg =>
-      BinaryFan.IsLimit.hom_ext (ℬ X Y).isLimit (by simpa using hf) (by simpa using hg))
-  fst_def X Y := (((ℬ X 𝒯.cone.pt).isLimit.fac
-    (BinaryFan.mk _ _) ⟨.left⟩).trans (Category.comp_id _)).symm
-  snd_def X Y := (((ℬ 𝒯.cone.pt Y).isLimit.fac
-    (BinaryFan.mk _ _) ⟨.right⟩).trans (Category.comp_id _)).symm
-  }
-
-omit 𝒯 in
-
-Depends on / 依赖: BinaryFan, BinaryFan.associatorOfLimitCone, BinaryFan.leftUnitor, BinaryFan.rightUnitor, Functor, Functor.isContinuous_of_coverPreserving, J.over, MonoidalCategoryStruct, Over.star, associator, associatorOfLimitCone, compatiblePreservingOfFlat, cone.pt, coverPreserving_over_star, id_tensorHom_id, isContinuous_of_coverPreserving, isLimit, leftUnitor, ofTensorHom, rightUnitor
+--- 原说明 ---
+Construct an instance of `CartesianMonoidalCategory C` given a terminal object a
+nd limit cones
+over arbitrary pairs of objects.
 -/
 abbrev ofChosenFiniteProducts : CartesianMonoidalCategory C :=
   letI : MonoidalCategoryStruct C := {
@@ -578,14 +614,14 @@ abbrev ofChosenFiniteProducts : CartesianMonoidalCategory C :=
     (rightUnitor_naturality := rightUnitor_naturality 𝒯 ℬ)
     (associator_naturality := associator_naturality ℬ)
   isTerminalTensorUnit :=
-    .ofUniqueHom (𝒯.isLimit.lift <| asEmptyCone ·) fun _ _ => 𝒯.isLimit.hom_ext (by simp)
+    .ofUniqueHom (𝒯.isLimit.lift <| asEmptyCone ·) fun _ _ ↦ 𝒯.isLimit.hom_ext (by simp)
   fst X Y := BinaryFan.fst (ℬ X Y).cone
   snd X Y := BinaryFan.snd (ℬ X Y).cone
   tensorProductIsBinaryProduct X Y := BinaryFan.IsLimit.mk _
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).1)
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.1)
-    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.2)
-    (fun f g m hf hg =>
+    (fun f g ↦ (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).1)
+    (fun f g ↦ (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.1)
+    (fun f g ↦ (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.2)
+    (fun f g m hf hg ↦
       BinaryFan.IsLimit.hom_ext (ℬ X Y).isLimit (by simpa using hf) (by simpa using hg))
   fst_def X Y := (((ℬ X 𝒯.cone.pt).isLimit.fac
     (BinaryFan.mk _ _) ⟨.left⟩).trans (Category.comp_id _)).symm
@@ -594,20 +630,19 @@ abbrev ofChosenFiniteProducts : CartesianMonoidalCategory C :=
   }
 
 omit 𝒯 in
-/--
-Definition of `ofHasFiniteProducts` / `ofHasFiniteProducts` 的定义
+/-- Constructs an instance of `CartesianMonoidalCategory C` given the existence of finite products
+in `C`. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.ofHasFiniteProducts** 是 Mathlib 中的一个缩
+写定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：ofHasFiniteProducts [HasFiniteProducts C] : CartesianMonoidalCategory C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHasFiniteProducts
-  signature: [HasFiniteProducts C]
-  body: .ofChosenFiniteProducts (getLimitCone (.empty C)) (getLimitCone <| pair · ·)
-
-中文:
-缩写 ofHasFiniteProducts
-  签名: [有FiniteProducts C]
-  定义体: .ofChosenFiniteProducts (getLimitCone (.empty C)) (getLimitCone <| pair · ·)
-
-Depends on / 依赖: getLimitCone, ofChosenFiniteProducts
+--- 原说明 ---
+Constructs an instance of `CartesianMonoidalCategory C` given the existence of f
+inite products
+in `C`.
 -/
 noncomputable abbrev ofHasFiniteProducts [HasFiniteProducts C] : CartesianMonoidalCategory C :=
   .ofChosenFiniteProducts (getLimitCone (.empty C)) (getLimitCone <| pair · ·)
@@ -619,132 +654,101 @@ variable {C : Type u} [Category.{v} C] [CartesianMonoidalCategory C]
 open MonoidalCategory
 
 /--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  body: (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).1
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lift
-  签名: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  定义体: (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.lift, IsLimit, tensorProductIsBinaryProduct
+Constructs a morphism to the product given its two components.
 -/
-def lift {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : T ⟶ X otimes Y :=
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : T ⟶ X otimes Y
+参数：f : T ⟶ X；g : T ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Constructs a morphism to the product given its two components.
+-/
+def lift {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : T ⟶ X ⊗ Y :=
   (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).1
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_fst` / 引理 `lift_fst`
-
-English:
-lemma lift_fst
-  given: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  statement: lift f g ≫ fst _ _ = f
-  proof: (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).2.1
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_fst
-  条件: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  结论: lift f g ≫ fst _ _ = f
-  证明: (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).2.1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.lift, IsLimit, tensorProductIsBinaryProduct
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_fst** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_fst {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+参数：f : T ⟶ X；g : T ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma lift_fst {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f :=
   (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).2.1
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_snd` / 引理 `lift_snd`
-
-English:
-lemma lift_snd
-  given: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  statement: lift f g ≫ snd _ _ = g
-  proof: (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).2.2
-
-中文:
-引理 lift_snd
-  条件: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  结论: lift f g ≫ snd _ _ = g
-  证明: (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).2.2
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.lift, IsLimit, tensorProductIsBinaryProduct
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_snd** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_snd {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+参数：f : T ⟶ X；g : T ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma lift_snd {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g :=
   (BinaryFan.IsLimit.lift' (tensorProductIsBinaryProduct X Y) f g).2.2
-
-/--
-Instance `mono_lift_of_mono_left` / 实例 `mono_lift_of_mono_left`
-
-English:
-instance mono_lift_of_mono_left
-  signature: {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y)
-  body: mono_of_mono_fac lift_fst _ _
-
-中文:
-实例 mono_lift_of_mono_left
-  签名: {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y)
-  定义体: mono_of_mono_fac lift_fst _ _
-
-Depends on / 依赖: lift_fst, mono_of_mono_fac
+/-
+**CategoryTheory.CartesianMonoidalCategory.mono_lift_of_mono_left** 是 Mathlib 中的
+一个实例，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：mono_lift_of_mono_left {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y) [Mono f] : Mono
+ (lift f g)
+参数：f : W ⟶ X；g : W ⟶ Y。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.mono_of_mono_fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y Z : C} {f : Y ⟶ X} {g : Z ⟶ Y} {h : Z ⟶ X}   [CategoryThe
+ory.Mono h], Category…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
 -/
 instance mono_lift_of_mono_left {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y)
     [Mono f] : Mono (lift f g) :=
-mono_of_mono_fac lift_fst _ _
-
-/--
-Instance `mono_lift_of_mono_right` / 实例 `mono_lift_of_mono_right`
-
-English:
-instance mono_lift_of_mono_right
-  signature: {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y)
-  body: mono_of_mono_fac lift_snd _ _
-
-@[ext 1050]
-
-中文:
-实例 mono_lift_of_mono_right
-  签名: {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y)
-  定义体: mono_of_mono_fac lift_snd _ _
-
-@[ext 1050]
-
-Depends on / 依赖: lift_snd, mono_of_mono_fac
+  mono_of_mono_fac <| lift_fst _ _
+/-
+**CategoryTheory.CartesianMonoidalCategory.mono_lift_of_mono_right** 是 Mathlib 中
+的一个实例，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：mono_lift_of_mono_right {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y) [Mono g] : Mon
+o (lift f g)
+参数：f : W ⟶ X；g : W ⟶ Y。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.mono_of_mono_fac`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y Z : C} {f : Y ⟶ X} {g : Z ⟶ Y} {h : Z ⟶ X}   [CategoryThe
+ory.Mono h], Category…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
 instance mono_lift_of_mono_right {W X Y : C} (f : W ⟶ X) (g : W ⟶ Y)
     [Mono g] : Mono (lift f g) :=
-mono_of_mono_fac lift_snd _ _
+  mono_of_mono_fac <| lift_snd _ _
 
 @[ext 1050]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {T X Y : C} (f g : T ⟶ X otimes Y)
-  proof: BinaryFan.IsLimit.hom_ext (tensorProductIsBinaryProduct X Y) h_fst h_snd
-
-中文:
-引理 hom_ext
-  结论: {T X Y : C} (f g : T ⟶ X otimes Y)
-  证明: BinaryFan.IsLimit.hom_ext (tensorProductIsBinaryProduct X Y) h_fst h_snd
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.hom_ext, IsLimit, h_fst, h_snd, hom_ext, tensorProductIsBinaryProduct
+/-
+**CategoryTheory.CartesianMonoidalCategory.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.CartesianMonoidalCategory`。
+形式化陈述：hom_ext {T X Y : C} (f g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst 
+_ _) (h_snd : f ≫ snd _ _ = g ≫ snd _ _) : f = g
+参数：f g : T ⟶ X otimes Y；h_fst : f ≫ fst _ _ = g ≫ fst _ _；h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.hom_ext`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.BinaryF
+an X Y}   (h : CategoryTheory.Limits.…
 -/
-lemma hom_ext {T X Y : C} (f g : T ⟶ X otimes Y)
+lemma hom_ext {T X Y : C} (f g : T ⟶ X ⊗ Y)
     (h_fst : f ≫ fst _ _ = g ≫ fst _ _)
     (h_snd : f ≫ snd _ _ = g ≫ snd _ _) :
     f = g :=
@@ -753,372 +757,481 @@ lemma hom_ext {T X Y : C} (f g : T ⟶ X otimes Y)
 -- Similarly to `CategoryTheory.Limits.prod.comp_lift`, we do not make the `assoc` version a simp
 -- lemma
 @[reassoc, simp]
-/--
-lemma `comp_lift` / 引理 `comp_lift`
-
-English:
-lemma comp_lift
-  given: {V W X Y : C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y)
-  proof: by ext <;> simp
-
-@[simp]
-
-中文:
-引理 comp_lift
-  条件: {V W X Y : C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y)
-  证明: by ext <;> simp
-
-@[simp]
+/-
+**CategoryTheory.CartesianMonoidalCategory.comp_lift** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：comp_lift {V W X Y : C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) : f ≫ lift g h
+ = lift (f ≫ g) (f ≫ h)
+参数：f : V ⟶ W；g : W ⟶ X；h : W ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
 lemma comp_lift {V W X Y : C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) :
     f ≫ lift g h = lift (f ≫ g) (f ≫ h) := by ext <;> simp
 
 @[simp]
-/--
-lemma `lift_fst_snd` / 引理 `lift_fst_snd`
-
-English:
-lemma lift_fst_snd
-  given: {X Y : C}
-  statement: lift (fst X Y) (snd X Y) = 𝟙 (X otimes Y)
-  proof: by ext <;> simp
-
-@[simp]
-
-中文:
-引理 lift_fst_snd
-  条件: {X Y : C}
-  结论: lift (fst X Y) (snd X Y) = 𝟙 (X otimes Y)
-  证明: by ext <;> simp
-
-@[simp]
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_fst_snd** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_fst_snd {X Y : C} : lift (fst X Y) (snd X Y) = 𝟙 (X otimes Y)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
-lemma lift_fst_snd {X Y : C} : lift (fst X Y) (snd X Y) = 𝟙 (X otimes Y) := by ext <;> simp
+lemma lift_fst_snd {X Y : C} : lift (fst X Y) (snd X Y) = 𝟙 (X ⊗ Y) := by ext <;> simp
 
 @[simp]
-/--
-lemma `lift_comp_fst_snd` / 引理 `lift_comp_fst_snd`
-
-English:
-lemma lift_comp_fst_snd
-  given: {X Y Z : C} (f : X ⟶ Y otimes Z)
-  proof: by
-  cat_disch
-
-中文:
-引理 lift_comp_fst_snd
-  条件: {X Y Z : C} (f : X ⟶ Y otimes Z)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_comp_fst_snd** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_comp_fst_snd {X Y Z : C} (f : X ⟶ Y otimes Z) : lift (f ≫ fst _ _) (f
+ ≫ snd _ _) = f
+参数：f : X ⟶ Y otimes Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
-lemma lift_comp_fst_snd {X Y Z : C} (f : X ⟶ Y otimes Z) :
+lemma lift_comp_fst_snd {X Y Z : C} (f : X ⟶ Y ⊗ Z) :
     lift (f ≫ fst _ _) (f ≫ snd _ _) = f := by
   cat_disch
 
 /-- The universal property of a cartesian `⊗` as an equivalence. -/
 @[simps]
-/--
-Definition of `liftEquiv` / `liftEquiv` 的定义
+/-
+**CategoryTheory.CartesianMonoidalCategory.liftEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：liftEquiv {T X Y : C} : (T ⟶ X) × (T ⟶ Y) ≃ (T ⟶ X otimes Y) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftEquiv
-  signature: {T X Y : C}
-  body: lift f.1 f.2
-  invFun f := ⟨f ≫ fst _ _, f ≫ snd _ _⟩
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 liftEquiv
-  签名: {T X Y : C}
-  定义体: lift f.1 f.2
-  invFun f := ⟨f ≫ fst _ _, f ≫ snd _ _⟩
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+The universal property of a cartesian `⊗` as an equivalence.
 -/
-def liftEquiv {T X Y : C} : (T ⟶ X) × (T ⟶ Y) ≃ (T ⟶ X otimes Y) where
+def liftEquiv {T X Y : C} : (T ⟶ X) × (T ⟶ Y) ≃ (T ⟶ X ⊗ Y) where
   toFun f := lift f.1 f.2
   invFun f := ⟨f ≫ fst _ _, f ≫ snd _ _⟩
   left_inv := by cat_disch
   right_inv := by cat_disch
 
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerLeft_fst` / 引理 `whiskerLeft_fst`
-
-English:
-lemma whiskerLeft_fst
-  given: (X : C) {Y Z : C} (f : Y ⟶ Z)
-  statement: X ◁ f ≫ fst _ _ = fst _ _
-  proof: by
-  simp [fst_def, ← whiskerLeft_comp_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 whiskerLeft_fst
-  条件: (X : C) {Y Z : C} (f : Y ⟶ Z)
-  结论: X ◁ f ≫ fst _ _ = fst _ _
-  证明: by
-  simp [fst_def, ← whiskerLeft_comp_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fst_def, whiskerLeft_comp_assoc
+/-
+**CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：whiskerLeft_fst (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
+参数：X : C；f : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma whiskerLeft_fst (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _ := by
   simp [fst_def, ← whiskerLeft_comp_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerLeft_snd` / 引理 `whiskerLeft_snd`
-
-English:
-lemma whiskerLeft_snd
-  given: (X : C) {Y Z : C} (f : Y ⟶ Z)
-  statement: X ◁ f ≫ snd _ _ = snd _ _ ≫ f
-  proof: by
-  simp [snd_def, whisker_exchange_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 whiskerLeft_snd
-  条件: (X : C) {Y Z : C} (f : Y ⟶ Z)
-  结论: X ◁ f ≫ snd _ _ = snd _ _ ≫ f
-  证明: by
-  simp [snd_def, whisker_exchange_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.mem_over_iff, Over.iteratedSliceBackward_forget_forget, Sieve.functorPushforward_comp, Sieve.overEquiv, functorPushforward_comp, iteratedSliceBackward_forget_forget, mem_over_iff, overEquiv, snd_def, whisker_exchange_assoc
+/-
+**CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：whiskerLeft_snd (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ 
+≫ f
+参数：X : C；f : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerLeft`：id_whiskerLeft {X Y : C}
+ (f : X ⟶ Y) : 𝟙_ C ◁ f = (fun_ X).hom ≫ f ≫ (fun_ Y).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma whiskerLeft_snd (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f := by
   simp [snd_def, whisker_exchange_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerRight_fst` / 引理 `whiskerRight_fst`
-
-English:
-lemma whiskerRight_fst
-  given: {X Y : C} (f : X ⟶ Y) (Z : C)
-  statement: f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
-  proof: by
-  simp [fst_def, ← whisker_exchange_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 whiskerRight_fst
-  条件: {X Y : C} (f : X ⟶ Y) (Z : C)
-  结论: f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
-  证明: by
-  simp [fst_def, ← whisker_exchange_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsContinuous, f.iteratedSliceEquiv.functor.IsContinuous, fst_def, functor, iteratedSliceEquiv, whisker_exchange_assoc
+/-
+**CategoryTheory.CartesianMonoidalCategory.whiskerRight_fst** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：whiskerRight_fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _
+ ≫ f
+参数：f : X ⟶ Y；Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_id`：whiskerRight_id {X Y : 
+C} (f : X ⟶ Y) : f ▷ 𝟙_ C = (ρ_ X).hom ≫ f ≫ (ρ_ Y).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma whiskerRight_fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _ ≫ f := by
   simp [fst_def, ← whisker_exchange_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerRight_snd` / 引理 `whiskerRight_snd`
-
-English:
-lemma whiskerRight_snd
-  given: {X Y : C} (f : X ⟶ Y) (Z : C)
-  statement: f ▷ Z ≫ snd _ _ = snd _ _
-  proof: by
-  simp [snd_def, ← comp_whiskerRight_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 whiskerRight_snd
-  条件: {X Y : C} (f : X ⟶ Y) (Z : C)
-  结论: f ▷ Z ≫ snd _ _ = snd _ _
-  证明: by
-  simp [snd_def, ← comp_whiskerRight_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsCocontinuous, comp_whiskerRight_assoc, f.iteratedSliceEquiv.functor.IsCocontinuous, functor, iteratedSliceEquiv, snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：whiskerRight_snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _
+参数：f : X ⟶ Y；Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma whiskerRight_snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _ := by
   simp [snd_def, ← comp_whiskerRight_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `tensorHom_fst` / 引理 `tensorHom_fst`
-
-English:
-lemma tensorHom_fst
-  given: {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂)
-  proof: by simp [tensorHom_def]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 tensorHom_fst
-  条件: {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂)
-  证明: by simp [tensorHom_def]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsContinuous, f.iteratedSliceEquiv.inverse.IsContinuous, inverse, iteratedSliceEquiv, tensorHom_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.tensorHom_fst** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：tensorHom_fst {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g
+) ≫ fst _ _ = fst _ _ ≫ f
+参数：f : X₁ ⟶ X₂；g : Y₁ ⟶ Y₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def`：∀ {C : Type u} {𝒞 : Categ
+oryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X₁ Y₁ X
+₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst`：whiskerLeft_fs
+t (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_fst`：whiskerRight_
+fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensorHom_fst {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) :
-    (f otimesₘ g) ≫ fst _ _ = fst _ _ ≫ f := by simp [tensorHom_def]
+    (f ⊗ₘ g) ≫ fst _ _ = fst _ _ ≫ f := by simp [tensorHom_def]
 
 @[reassoc (attr := simp)]
-/--
-lemma `tensorHom_snd` / 引理 `tensorHom_snd`
-
-English:
-lemma tensorHom_snd
-  given: {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂)
-  proof: by simp [tensorHom_def]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 tensorHom_snd
-  条件: {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂)
-  证明: by simp [tensorHom_def]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsCocontinuous, f.iteratedSliceEquiv.inverse.IsCocontinuous, inverse, iteratedSliceEquiv, tensorHom_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.tensorHom_snd** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：tensorHom_snd {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g
+) ≫ snd _ _ = snd _ _ ≫ g
+参数：f : X₁ ⟶ X₂；g : Y₁ ⟶ Y₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def`：∀ {C : Type u} {𝒞 : Categ
+oryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X₁ Y₁ X
+₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd`：whiskerLeft_sn
+d (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Carte
+sianMonoidalCategory C] {X Y : C}   (f : X ⟶ Y) (Z : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensorHom_snd {X₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) :
-    (f otimesₘ g) ≫ snd _ _ = snd _ _ ≫ g := by simp [tensorHom_def]
+    (f ⊗ₘ g) ≫ snd _ _ = snd _ _ ≫ g := by simp [tensorHom_def]
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_map` / 引理 `lift_map`
-
-English:
-lemma lift_map
-  given: {V W X Y Z : C} (f : V ⟶ W) (g : V ⟶ X) (h : W ⟶ Y) (k : X ⟶ Z)
-  proof: by ext <;> simp
-
-@[simp]
-
-中文:
-引理 lift_map
-  条件: {V W X Y Z : C} (f : V ⟶ W) (g : V ⟶ X) (h : W ⟶ Y) (k : X ⟶ Z)
-  证明: by ext <;> simp
-
-@[simp]
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_map** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_map {V W X Y Z : C} (f : V ⟶ W) (g : V ⟶ X) (h : W ⟶ Y) (k : X ⟶ Z) :
+ lift f g ≫ (h otimesₘ k) = lift (f ≫ h) (g ≫ k)
+参数：f : V ⟶ W；g : V ⟶ X；h : W ⟶ Y；k : X ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_fst`：tensorHom_fst {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ fst _ _ = fst _ _ 
+≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_fst_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {T X Y : C} (f : T ⟶ X) (g …
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_snd`：tensorHom_snd {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ snd _ _ = snd _ _ 
+≫ g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_snd_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {T X Y : C} (f : T ⟶ X) (g …
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
 lemma lift_map {V W X Y Z : C} (f : V ⟶ W) (g : V ⟶ X) (h : W ⟶ Y) (k : X ⟶ Z) :
-    lift f g ≫ (h otimesₘ k) = lift (f ≫ h) (g ≫ k) := by ext <;> simp
+    lift f g ≫ (h ⊗ₘ k) = lift (f ≫ h) (g ≫ k) := by ext <;> simp
 
 @[simp]
-/--
-lemma `lift_fst_comp_snd_comp` / 引理 `lift_fst_comp_snd_comp`
-
-English:
-lemma lift_fst_comp_snd_comp
-  given: {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z)
-  proof: by ext <;> simp
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_fst_comp_snd_comp
-  条件: {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z)
-  证明: by ext <;> simp
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_fst_comp_snd_comp** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_fst_comp_snd_comp {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z) : lift (fst 
+_ _ ≫ g) (snd _ _ ≫ g') = g otimesₘ g'
+参数：g : W ⟶ X；g' : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_fst`：tensorHom_fst {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ fst _ _ = fst _ _ 
+≫ f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_snd`：tensorHom_snd {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ snd _ _ = snd _ _ 
+≫ g
 -/
 lemma lift_fst_comp_snd_comp {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z) :
-    lift (fst _ _ ≫ g) (snd _ _ ≫ g') = g otimesₘ g' := by ext <;> simp
+    lift (fst _ _ ≫ g) (snd _ _ ≫ g') = g ⊗ₘ g' := by ext <;> simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_whiskerRight` / 引理 `lift_whiskerRight`
-
-English:
-lemma lift_whiskerRight
-  given: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Y ⟶ W)
-  proof: by
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_whiskerRight
-  条件: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Y ⟶ W)
-  证明: by
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_whiskerRight** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_whiskerRight {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Y ⟶ W) : lift
+ f g ≫ (h ▷ Z) = lift (f ≫ h) g
+参数：f : X ⟶ Y；g : X ⟶ Z；h : Y ⟶ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_fst`：whiskerRight_
+fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_fst_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {T X Y : C} (f : T ⟶ X) (g …
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd`：whiskerRight_
+snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
 lemma lift_whiskerRight {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Y ⟶ W) :
     lift f g ≫ (h ▷ Z) = lift (f ≫ h) g := by
   cat_disch
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_whiskerLeft` / 引理 `lift_whiskerLeft`
-
-English:
-lemma lift_whiskerLeft
-  given: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Z ⟶ W)
-  proof: by
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_whiskerLeft
-  条件: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Z ⟶ W)
-  证明: by
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_whiskerLeft** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_whiskerLeft {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Z ⟶ W) : lift 
+f g ≫ (Y ◁ h) = lift f (g ≫ h)
+参数：f : X ⟶ Y；g : X ⟶ Z；h : Z ⟶ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst`：whiskerLeft_fs
+t (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd`：whiskerLeft_sn
+d (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_snd_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {T X Y : C} (f : T ⟶ X) (g …
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
 lemma lift_whiskerLeft {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Z ⟶ W) :
     lift f g ≫ (Y ◁ h) = lift f (g ≫ h) := by
   cat_disch
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_hom_fst` / 引理 `associator_hom_fst`
-
-English:
-lemma associator_hom_fst
-  given: (X Y Z : C)
-  proof: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor,
-    ← whiskerLeft_comp_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_hom_fst
-  条件: (X Y Z : C)
-  证明: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor,
-    ← whiskerLeft_comp_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fst_def, whiskerLeft_comp_assoc, whiskerLeft_rightUnitor, whiskerLeft_rightUnitor_assoc
+/-
+**CategoryTheory.CartesianMonoidalCategory.associator_hom_fst** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：associator_hom_fst (X Y Z : C) : (α_ X Y Z).hom ≫ fst _ _ = fst _ _ ≫ fst 
+_ _
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_hom_fst (X Y Z : C) :
     (α_ X Y Z).hom ≫ fst _ _ = fst _ _ ≫ fst _ _ := by
@@ -1126,54 +1239,77 @@ lemma associator_hom_fst (X Y Z : C) :
     ← whiskerLeft_comp_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_hom_snd_fst` / 引理 `associator_hom_snd_fst`
-
-English:
-lemma associator_hom_snd_fst
-  given: (X Y Z : C)
-  proof: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_hom_snd_fst
-  条件: (X Y Z : C)
-  证明: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fst_def, whiskerLeft_rightUnitor, whiskerLeft_rightUnitor_assoc
+/-
+**CategoryTheory.CartesianMonoidalCategory.associator_hom_snd_fst** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：associator_hom_snd_fst (X Y Z : C) : (α_ X Y Z).hom ≫ snd _ _ ≫ fst _ _ = 
+fst _ _ ≫ snd _ _
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd`：whiskerLeft_sn
+d (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd_assoc`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Cartes
+ianMonoidalCategory C] (X : C)   {Y Z : C} (f : Y ⟶ …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_hom_snd_fst (X Y Z : C) :
     (α_ X Y Z).hom ≫ snd _ _ ≫ fst _ _ = fst _ _ ≫ snd _ _ := by
   simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor]
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_hom_snd_snd` / 引理 `associator_hom_snd_snd`
-
-English:
-lemma associator_hom_snd_snd
-  given: (X Y Z : C)
-  proof: by
-  simp [snd_def, ← leftUnitor_whiskerRight_assoc, -leftUnitor_whiskerRight,
-    ← comp_whiskerRight_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_hom_snd_snd
-  条件: (X Y Z : C)
-  证明: by
-  simp [snd_def, ← leftUnitor_whiskerRight_assoc, -leftUnitor_whiskerRight,
-    ← comp_whiskerRight_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_whiskerRight_assoc, leftUnitor_whiskerRight, leftUnitor_whiskerRight_assoc, snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.associator_hom_snd_snd** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：associator_hom_snd_snd (X Y Z : C) : (α_ X Y Z).hom ≫ snd _ _ ≫ snd _ _ = 
+snd _ _
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_tensor`：whiskerRight_tensor
+ {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) = (α_ X Y Z).inv ≫ f ▷ Y ▷
+ Z ≫ (α_ X' Y Z).hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_hom_snd_snd (X Y Z : C) :
     (α_ X Y Z).hom ≫ snd _ _ ≫ snd _ _ = snd _ _ := by
@@ -1181,28 +1317,38 @@ lemma associator_hom_snd_snd (X Y Z : C) :
     ← comp_whiskerRight_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_inv_fst_fst` / 引理 `associator_inv_fst_fst`
-
-English:
-lemma associator_inv_fst_fst
-  given: (X Y Z : C)
-  proof: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor,
-    ← whiskerLeft_comp_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_inv_fst_fst
-  条件: (X Y Z : C)
-  证明: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor,
-    ← whiskerLeft_comp_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fst_def, whiskerLeft_comp_assoc, whiskerLeft_rightUnitor, whiskerLeft_rightUnitor_assoc
+/-
+**CategoryTheory.CartesianMonoidalCategory.associator_inv_fst_fst** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：associator_inv_fst_fst (X Y Z : C) : (α_ X Y Z).inv ≫ fst _ _ ≫ fst _ _ = 
+fst _ _
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_inv_fst_fst (X Y Z : C) :
     (α_ X Y Z).inv ≫ fst _ _ ≫ fst _ _ = fst _ _ := by
@@ -1210,54 +1356,77 @@ lemma associator_inv_fst_fst (X Y Z : C) :
     ← whiskerLeft_comp_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_inv_fst_snd` / 引理 `associator_inv_fst_snd`
-
-English:
-lemma associator_inv_fst_snd
-  given: (X Y Z : C)
-  proof: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_inv_fst_snd
-  条件: (X Y Z : C)
-  证明: by
-  simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fst_def, whiskerLeft_rightUnitor, whiskerLeft_rightUnitor_assoc
+/-
+**CategoryTheory.CartesianMonoidalCategory.associator_inv_fst_snd** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：associator_inv_fst_snd (X Y Z : C) : (α_ X Y Z).inv ≫ fst _ _ ≫ snd _ _ = 
+snd _ _ ≫ fst _ _
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd`：whiskerLeft_sn
+d (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd_assoc`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Cartes
+ianMonoidalCategory C] (X : C)   {Y Z : C} (f : Y ⟶ …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_inv_fst_snd (X Y Z : C) :
     (α_ X Y Z).inv ≫ fst _ _ ≫ snd _ _ = snd _ _ ≫ fst _ _ := by
   simp [fst_def, ← whiskerLeft_rightUnitor_assoc, -whiskerLeft_rightUnitor]
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_inv_snd` / 引理 `associator_inv_snd`
-
-English:
-lemma associator_inv_snd
-  given: (X Y Z : C)
-  proof: by
-  simp [snd_def, ← leftUnitor_whiskerRight_assoc, -leftUnitor_whiskerRight,
-    ← comp_whiskerRight_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_inv_snd
-  条件: (X Y Z : C)
-  证明: by
-  simp [snd_def, ← leftUnitor_whiskerRight_assoc, -leftUnitor_whiskerRight,
-    ← comp_whiskerRight_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_whiskerRight_assoc, leftUnitor_whiskerRight, leftUnitor_whiskerRight_assoc, snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.associator_inv_snd** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：associator_inv_snd (X Y Z : C) : (α_ X Y Z).inv ≫ snd _ _ = snd _ _ ≫ snd 
+_ _
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_tensor`：whiskerRight_tensor
+ {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) = (α_ X Y Z).inv ≫ f ▷ Y ▷
+ Z ≫ (α_ X' Y Z).hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma associator_inv_snd (X Y Z : C) :
     (α_ X Y Z).inv ≫ snd _ _ = snd _ _ ≫ snd _ _ := by
@@ -1265,288 +1434,425 @@ lemma associator_inv_snd (X Y Z : C) :
     ← comp_whiskerRight_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_lift_associator_hom` / 引理 `lift_lift_associator_hom`
-
-English:
-lemma lift_lift_associator_hom
-  given: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W)
-  proof: by
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_lift_associator_hom
-  条件: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W)
-  证明: by
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_lift_associator_hom** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_lift_associator_hom {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W)
+ : lift (lift f g) h ≫ (α_ Y Z W).hom = lift f (lift g h)
+参数：f : X ⟶ Y；g : X ⟶ Z；h : X ⟶ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_hom_fst`：associator_
+hom_fst (X Y Z : C) : (α_ X Y Z).hom ≫ fst _ _ = fst _ _ ≫ fst _ _
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_fst_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {T X Y : C} (f : T ⟶ X) (g …
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_hom_snd_fst`：associa
+tor_hom_snd_fst (X Y Z : C) : (α_ X Y Z).hom ≫ snd _ _ ≫ fst _ _ = fst _ _ ≫ snd
+ _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_hom_snd_snd`：associa
+tor_hom_snd_snd (X Y Z : C) : (α_ X Y Z).hom ≫ snd _ _ ≫ snd _ _ = snd _ _
 -/
 lemma lift_lift_associator_hom {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W) :
     lift (lift f g) h ≫ (α_ Y Z W).hom = lift f (lift g h) := by
   cat_disch
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_lift_associator_inv` / 引理 `lift_lift_associator_inv`
-
-English:
-lemma lift_lift_associator_inv
-  given: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W)
-  proof: by
-  cat_disch
-
-中文:
-引理 lift_lift_associator_inv
-  条件: {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_lift_associator_inv** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_lift_associator_inv {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W)
+ : lift f (lift g h) ≫ (α_ Y Z W).inv = lift (lift f g) h
+参数：f : X ⟶ Y；g : X ⟶ Z；h : X ⟶ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_inv_fst_fst`：associa
+tor_inv_fst_fst (X Y Z : C) : (α_ X Y Z).inv ≫ fst _ _ ≫ fst _ _ = fst _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_inv_fst_snd`：associa
+tor_inv_fst_snd (X Y Z : C) : (α_ X Y Z).inv ≫ fst _ _ ≫ snd _ _ = snd _ _ ≫ fst
+ _ _
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_snd_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.CartesianMono
+idalCategory C]   {T X Y : C} (f : T ⟶ X) (g …
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_inv_snd`：associator_
+inv_snd (X Y Z : C) : (α_ X Y Z).inv ≫ snd _ _ = snd _ _ ≫ snd _ _
 -/
 lemma lift_lift_associator_inv {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W) :
     lift f (lift g h) ≫ (α_ Y Z W).inv = lift (lift f g) h := by
   cat_disch
-
-/--
-lemma `leftUnitor_hom` / 引理 `leftUnitor_hom`
-
-English:
-lemma leftUnitor_hom
-  given: (X : C)
-  statement: (fun_ X).hom = snd _ _
-  proof: by simp [snd_def]
-
-中文:
-引理 leftUnitor_hom
-  条件: (X : C)
-  结论: (fun_ X).hom = snd _ _
-  证明: by simp [snd_def]
-
-Depends on / 依赖: snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.leftUnitor_hom** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：leftUnitor_hom (X : C) : (fun_ X).hom = snd _ _
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.IsTerminal.from_self`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (t : CategoryTheory.Limits.IsTerminal X)
+,   t.from X = CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma leftUnitor_hom (X : C) : (fun_ X).hom = snd _ _ := by simp [snd_def]
-/--
-lemma `rightUnitor_hom` / 引理 `rightUnitor_hom`
-
-English:
-lemma rightUnitor_hom
-  given: (X : C)
-  statement: (ρ_ X).hom = fst _ _
-  proof: by simp [fst_def]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 rightUnitor_hom
-  条件: (X : C)
-  结论: (ρ_ X).hom = fst _ _
-  证明: by simp [fst_def]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fst_def
+lemma leftUnitor_hom (X : C) : (λ_ X).hom = snd _ _ := by simp [snd_def]
+/-
+**CategoryTheory.CartesianMonoidalCategory.rightUnitor_hom** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：rightUnitor_hom (X : C) : (ρ_ X).hom = fst _ _
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsTerminal.from_self`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (t : CategoryTheory.Limits.IsTerminal X)
+,   t.from X = CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_id`：∀ {C : Type u} {𝒞 : Cate
+goryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y : 
+C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rightUnitor_hom (X : C) : (ρ_ X).hom = fst _ _ := by simp [fst_def]
 
 @[reassoc (attr := simp)]
-/--
-lemma `leftUnitor_inv_fst` / 引理 `leftUnitor_inv_fst`
-
-English:
-lemma leftUnitor_inv_fst
-  given: (X : C)
-  proof: toUnit_unique _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 leftUnitor_inv_fst
-  条件: (X : C)
-  证明: toUnit_unique _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: toUnit_unique
+/-
+**CategoryTheory.CartesianMonoidalCategory.leftUnitor_inv_fst** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：leftUnitor_inv_fst (X : C) : (fun_ X).inv ≫ fst _ _ = toUnit _
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma leftUnitor_inv_fst (X : C) :
-    (fun_ X).inv ≫ fst _ _ = toUnit _ := toUnit_unique _ _
+    (λ_ X).inv ≫ fst _ _ = toUnit _ := toUnit_unique _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `leftUnitor_inv_snd` / 引理 `leftUnitor_inv_snd`
-
-English:
-lemma leftUnitor_inv_snd
-  given: (X : C)
-  proof: by simp [snd_def]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 leftUnitor_inv_snd
-  条件: (X : C)
-  证明: by simp [snd_def]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.leftUnitor_inv_snd** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：leftUnitor_inv_snd (X : C) : (fun_ X).inv ≫ snd _ _ = 𝟙 X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.IsTerminal.from_self`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (t : CategoryTheory.Limits.IsTerminal X)
+,   t.from X = CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma leftUnitor_inv_snd (X : C) :
-    (fun_ X).inv ≫ snd _ _ = 𝟙 X := by simp [snd_def]
+    (λ_ X).inv ≫ snd _ _ = 𝟙 X := by simp [snd_def]
 
 @[reassoc (attr := simp)]
-/--
-lemma `rightUnitor_inv_fst` / 引理 `rightUnitor_inv_fst`
-
-English:
-lemma rightUnitor_inv_fst
-  given: (X : C)
-  proof: by simp [fst_def]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 rightUnitor_inv_fst
-  条件: (X : C)
-  证明: by simp [fst_def]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fst_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.rightUnitor_inv_fst** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：rightUnitor_inv_fst (X : C) : (ρ_ X).inv ≫ fst _ _ = 𝟙 X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `CategoryTheory.Limits.IsTerminal.from_self`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {X : C} (t : CategoryTheory.Limits.IsTerminal X)
+,   t.from X = CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_id`：∀ {C : Type u} {𝒞 : Cate
+goryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y : 
+C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rightUnitor_inv_fst (X : C) :
     (ρ_ X).inv ≫ fst _ _ = 𝟙 X := by simp [fst_def]
 
 @[reassoc (attr := simp)]
-/--
-lemma `rightUnitor_inv_snd` / 引理 `rightUnitor_inv_snd`
-
-English:
-lemma rightUnitor_inv_snd
-  given: (X : C)
-  proof: toUnit_unique _ _
-
-@[reassoc]
-
-中文:
-引理 rightUnitor_inv_snd
-  条件: (X : C)
-  证明: toUnit_unique _ _
-
-@[reassoc]
-
-Depends on / 依赖: toUnit_unique
+/-
+**CategoryTheory.CartesianMonoidalCategory.rightUnitor_inv_snd** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：rightUnitor_inv_snd (X : C) : (ρ_ X).inv ≫ snd _ _ = toUnit _
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma rightUnitor_inv_snd (X : C) :
     (ρ_ X).inv ≫ snd _ _ = toUnit _ := toUnit_unique _ _
 
 @[reassoc]
-/--
-lemma `whiskerLeft_toUnit_comp_rightUnitor_hom` / 引理 `whiskerLeft_toUnit_comp_rightUnitor_hom`
-
-English:
-lemma whiskerLeft_toUnit_comp_rightUnitor_hom
-  given: (X Y : C)
-  statement: X ◁ toUnit Y ≫ (ρ_ X).hom = fst X Y
-  proof: by
-  rw [← cancel_mono (ρ_ X).inv]; aesop
-
-@[reassoc]
-
-中文:
-引理 whiskerLeft_toUnit_comp_rightUnitor_hom
-  条件: (X Y : C)
-  结论: X ◁ toUnit Y ≫ (ρ_ X).hom = fst X Y
-  证明: by
-  rw [← cancel_mono (ρ_ X).inv]; aesop
-
-@[reassoc]
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.CartesianMonoidalCategory.whiskerLeft_toUnit_comp_rightUnitor_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：whiskerLeft_toUnit_comp_rightUnitor_hom (X Y : C) : X ◁ toUnit Y ≫ (ρ_ X).
+hom = fst X Y
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst`：whiskerLeft_fs
+t (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.rightUnitor_inv_fst`：rightUnito
+r_inv_fst (X : C) : (ρ_ X).inv ≫ fst _ _ = 𝟙 X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma whiskerLeft_toUnit_comp_rightUnitor_hom (X Y : C) : X ◁ toUnit Y ≫ (ρ_ X).hom = fst X Y := by
   rw [← cancel_mono (ρ_ X).inv]; aesop
 
 @[reassoc]
-/--
-lemma `whiskerRight_toUnit_comp_leftUnitor_hom` / 引理 `whiskerRight_toUnit_comp_leftUnitor_hom`
-
-English:
-lemma whiskerRight_toUnit_comp_leftUnitor_hom
-  given: (X Y : C)
-  statement: toUnit X ▷ Y ≫ (fun_ Y).hom = snd X Y
-  proof: by
-  rw [← cancel_mono (fun_ Y).inv]; aesop
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 whiskerRight_toUnit_comp_leftUnitor_hom
-  条件: (X Y : C)
-  结论: toUnit X ▷ Y ≫ (fun_ Y).hom = snd X Y
-  证明: by
-  rw [← cancel_mono (fun_ Y).inv]; aesop
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_mono, fun_
+/-
+**CategoryTheory.CartesianMonoidalCategory.whiskerRight_toUnit_comp_leftUnitor_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：whiskerRight_toUnit_comp_leftUnitor_hom (X Y : C) : toUnit X ▷ Y ≫ (fun_ Y
+).hom = snd X Y
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd`：whiskerRight_
+snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.leftUnitor_inv_snd`：leftUnitor_
+inv_snd (X : C) : (fun_ X).inv ≫ snd _ _ = 𝟙 X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma whiskerRight_toUnit_comp_leftUnitor_hom (X Y : C) : toUnit X ▷ Y ≫ (fun_ Y).hom = snd X Y := by
-  rw [← cancel_mono (fun_ Y).inv]; aesop
+lemma whiskerRight_toUnit_comp_leftUnitor_hom (X Y : C) : toUnit X ▷ Y ≫ (λ_ Y).hom = snd X Y := by
+  rw [← cancel_mono (λ_ Y).inv]; aesop
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_leftUnitor_hom` / 引理 `lift_leftUnitor_hom`
-
-English:
-lemma lift_leftUnitor_hom
-  given: {X Y : C} (f : X ⟶ 𝟙_ C) (g : X ⟶ Y)
-  proof: by
-  rw [← Iso.eq_comp_inv]
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_leftUnitor_hom
-  条件: {X Y : C} (f : X ⟶ 𝟙_ C) (g : X ⟶ Y)
-  证明: by
-  rw [← Iso.eq_comp_inv]
-  cat_disch
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.eq_comp_inv, cat_disch, eq_comp_inv
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_leftUnitor_hom** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_leftUnitor_hom {X Y : C} (f : X ⟶ 𝟙_ C) (g : X ⟶ Y) : lift f g ≫ (fun
+_ Y).hom = g
+参数：f : X ⟶ 𝟙_ C；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.leftUnitor_inv_snd`：leftUnitor_
+inv_snd (X : C) : (fun_ X).inv ≫ snd _ _ = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lift_leftUnitor_hom {X Y : C} (f : X ⟶ 𝟙_ C) (g : X ⟶ Y) :
-    lift f g ≫ (fun_ Y).hom = g := by
+    lift f g ≫ (λ_ Y).hom = g := by
   rw [← Iso.eq_comp_inv]
   cat_disch
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_rightUnitor_hom` / 引理 `lift_rightUnitor_hom`
-
-English:
-lemma lift_rightUnitor_hom
-  given: {X Y : C} (f : X ⟶ Y) (g : X ⟶ 𝟙_ C)
-  proof: by
-  rw [← Iso.eq_comp_inv]
-  cat_disch
-
-中文:
-引理 lift_rightUnitor_hom
-  条件: {X Y : C} (f : X ⟶ Y) (g : X ⟶ 𝟙_ C)
-  证明: by
-  rw [← Iso.eq_comp_inv]
-  cat_disch
-
-Depends on / 依赖: Iso.eq_comp_inv, cat_disch, eq_comp_inv
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_rightUnitor_hom** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_rightUnitor_hom {X Y : C} (f : X ⟶ Y) (g : X ⟶ 𝟙_ C) : lift f g ≫ (ρ_
+ Y).hom = f
+参数：f : X ⟶ Y；g : X ⟶ 𝟙_ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.rightUnitor_inv_fst`：rightUnito
+r_inv_fst (X : C) : (ρ_ X).inv ≫ fst _ _ = 𝟙 X
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma lift_rightUnitor_hom {X Y : C} (f : X ⟶ Y) (g : X ⟶ 𝟙_ C) :
     lift f g ≫ (ρ_ Y).hom = f := by
@@ -1556,26 +1862,20 @@ lemma lift_rightUnitor_hom {X Y : C} (f : X ⟶ Y) (g : X ⟶ 𝟙_ C) :
 /-- Universal property of the Cartesian product: Maps to `X ⊗ Y` correspond to pairs of maps to `X`
 and to `Y`. -/
 @[simps]
-/--
-Definition of `homEquivToProd` / `homEquivToProd` 的定义
+/-
+**CategoryTheory.CartesianMonoidalCategory.homEquivToProd** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：homEquivToProd {X Y Z : C} : (Z ⟶ X otimes Y) ≃ (Z ⟶ X) × (Z ⟶ Y) where to
+Fun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homEquivToProd
-  signature: {X Y Z : C}
-  body: ⟨f ≫ fst _ _, f ≫ snd _ _⟩
-  invFun f := lift f.1 f.2
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-中文:
-定义 homEquivToProd
-  签名: {X Y Z : C}
-  定义体: ⟨f ≫ fst _ _, f ≫ snd _ _⟩
-  invFun f := lift f.1 f.2
-  left_inv _ := by simp
-  right_inv _ := by simp
+--- 原说明 ---
+Universal property of the Cartesian product: Maps to `X ⊗ Y` correspond to pairs
+ of maps to `X`
+and to `Y`.
 -/
-def homEquivToProd {X Y Z : C} : (Z ⟶ X otimes Y) ≃ (Z ⟶ X) × (Z ⟶ Y) where
+def homEquivToProd {X Y Z : C} : (Z ⟶ X ⊗ Y) ≃ (Z ⟶ X) × (Z ⟶ Y) where
   toFun f := ⟨f ≫ fst _ _, f ≫ snd _ _⟩
   invFun f := lift f.1 f.2
   left_inv _ := by simp
@@ -1586,342 +1886,362 @@ section BraidedCategory
 variable [BraidedCategory C]
 
 @[reassoc (attr := simp)]
-/--
-theorem `braiding_hom_fst` / 定理 `braiding_hom_fst`
-
-English:
-theorem braiding_hom_fst
-  given: (X Y : C)
-  statement: (β_ X Y).hom ≫ fst _ _ = snd _ _
-  proof: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_naturality_left_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 braiding_hom_fst
-  条件: (X Y : C)
-  结论: (β_ X Y).hom ≫ fst _ _ = snd _ _
-  证明: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_naturality_left_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: BraidedCategory, BraidedCategory.braiding_naturality_left_assoc, braiding_naturality_left_assoc, fst_def, snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.braiding_hom_fst** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：braiding_hom_fst (X Y : C) : (β_ X Y).hom ≫ fst _ _ = snd _ _
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.braiding_tensorUnit_left`：braiding_tensorUnit_left (X : C
+) : (β_ (𝟙_ C) X).hom = (fun_ X).hom ≫ (ρ_ X).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem braiding_hom_fst (X Y : C) : (β_ X Y).hom ≫ fst _ _ = snd _ _ := by
   simp [fst_def, snd_def, ← BraidedCategory.braiding_naturality_left_assoc]
 
 @[reassoc (attr := simp)]
-/--
-theorem `braiding_hom_snd` / 定理 `braiding_hom_snd`
-
-English:
-theorem braiding_hom_snd
-  given: (X Y : C)
-  statement: (β_ X Y).hom ≫ snd _ _ = fst _ _
-  proof: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_naturality_right_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 braiding_hom_snd
-  条件: (X Y : C)
-  结论: (β_ X Y).hom ≫ snd _ _ = fst _ _
-  证明: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_naturality_right_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: BraidedCategory, BraidedCategory.braiding_naturality_right_assoc, braiding_naturality_right_assoc, fst_def, snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.braiding_hom_snd** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：braiding_hom_snd (X Y : C) : (β_ X Y).hom ≫ snd _ _ = fst _ _
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.braiding_tensorUnit_right`：braiding_tensorUnit_right (X :
+ C) : (β_ X (𝟙_ C)).hom = (ρ_ X).hom ≫ (fun_ X).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem braiding_hom_snd (X Y : C) : (β_ X Y).hom ≫ snd _ _ = fst _ _ := by
   simp [fst_def, snd_def, ← BraidedCategory.braiding_naturality_right_assoc]
 
 @[reassoc (attr := simp)]
-/--
-theorem `braiding_inv_fst` / 定理 `braiding_inv_fst`
-
-English:
-theorem braiding_inv_fst
-  given: (X Y : C)
-  statement: (β_ X Y).inv ≫ fst _ _ = snd _ _
-  proof: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_inv_naturality_left_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 braiding_inv_fst
-  条件: (X Y : C)
-  结论: (β_ X Y).inv ≫ fst _ _ = snd _ _
-  证明: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_inv_naturality_left_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: BraidedCategory, BraidedCategory.braiding_inv_naturality_left_assoc, braiding_inv_naturality_left_assoc, fst_def, snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.braiding_inv_fst** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：braiding_inv_fst (X Y : C) : (β_ X Y).inv ≫ fst _ _ = snd _ _
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.braiding_inv_tensorUnit_right`：braiding_inv_tensorUnit_ri
+ght (X : C) : (β_ X (𝟙_ C)).inv = (fun_ X).hom ≫ (ρ_ X).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem braiding_inv_fst (X Y : C) : (β_ X Y).inv ≫ fst _ _ = snd _ _ := by
   simp [fst_def, snd_def, ← BraidedCategory.braiding_inv_naturality_left_assoc]
 
 @[reassoc (attr := simp)]
-/--
-theorem `braiding_inv_snd` / 定理 `braiding_inv_snd`
-
-English:
-theorem braiding_inv_snd
-  given: (X Y : C)
-  statement: (β_ X Y).inv ≫ snd _ _ = fst _ _
-  proof: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_inv_naturality_right_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 braiding_inv_snd
-  条件: (X Y : C)
-  结论: (β_ X Y).inv ≫ snd _ _ = fst _ _
-  证明: by
-  simp [fst_def, snd_def, ← BraidedCategory.braiding_inv_naturality_right_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: BraidedCategory, BraidedCategory.braiding_inv_naturality_right_assoc, braiding_inv_naturality_right_assoc, fst_def, snd_def
+/-
+**CategoryTheory.CartesianMonoidalCategory.braiding_inv_snd** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：braiding_inv_snd (X Y : C) : (β_ X Y).inv ≫ snd _ _ = fst _ _
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.snd_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.braiding_inv_tensorUnit_left`：braiding_inv_tensorUnit_lef
+t (X : C) : (β_ (𝟙_ C) X).inv = (ρ_ X).hom ≫ (fun_ X).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.SemiCartesianMonoidalCategory.fst_def`：∀ {C : Type u} {in
+st : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.SemiCartesianMonoi
+dalCategory C]   (X Y : C),   CategoryTheo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem braiding_inv_snd (X Y : C) : (β_ X Y).inv ≫ snd _ _ = fst _ _ := by
   simp [fst_def, snd_def, ← BraidedCategory.braiding_inv_naturality_right_assoc]
 
 @[reassoc (attr := simp)]
-/--
-lemma `tensorμ_fst` / 引理 `tensorμ_fst`
-
-English:
-lemma tensorμ_fst
-  given: (W X Y Z : C)
-  statement: tensorμ W X Y Z ≫ fst (W otimes Y) (X otimes Z) = fst W X otimesₘ fst Y Z
-  proof: by
-  ext <;> simp [tensorμ]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 tensorμ_fst
-  条件: (W X Y Z : C)
-  结论: tensorμ W X Y Z ≫ fst (W otimes Y) (X otimes Z) = fst W X otimesₘ fst Y Z
-  证明: by
-  ext <;> simp [tensorμ]
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.CartesianMonoidalCategory.tensor** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorμ_fst (W X Y Z : C) : tensorμ W X Y Z ≫ fst (W otimes Y) (X otimes Z) = fst W X otimesₘ fst Y Z := by
+lemma tensorμ_fst (W X Y Z : C) : tensorμ W X Y Z ≫ fst (W ⊗ Y) (X ⊗ Z) = fst W X ⊗ₘ fst Y Z := by
   ext <;> simp [tensorμ]
 
 @[reassoc (attr := simp)]
-/--
-lemma `tensorμ_snd` / 引理 `tensorμ_snd`
-
-English:
-lemma tensorμ_snd
-  given: (W X Y Z : C)
-  statement: tensorμ W X Y Z ≫ snd (W otimes Y) (X otimes Z) = snd W X otimesₘ snd Y Z
-  proof: by
-  ext <;> simp [tensorμ]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 tensorμ_snd
-  条件: (W X Y Z : C)
-  结论: tensorμ W X Y Z ≫ snd (W otimes Y) (X otimes Z) = snd W X otimesₘ snd Y Z
-  证明: by
-  ext <;> simp [tensorμ]
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.CartesianMonoidalCategory.tensor** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorμ_snd (W X Y Z : C) : tensorμ W X Y Z ≫ snd (W otimes Y) (X otimes Z) = snd W X otimesₘ snd Y Z := by
+lemma tensorμ_snd (W X Y Z : C) : tensorμ W X Y Z ≫ snd (W ⊗ Y) (X ⊗ Z) = snd W X ⊗ₘ snd Y Z := by
   ext <;> simp [tensorμ]
 
 @[reassoc (attr := simp)]
-/--
-lemma `tensorδ_fst` / 引理 `tensorδ_fst`
-
-English:
-lemma tensorδ_fst
-  given: (W X Y Z : C)
-  statement: tensorδ W X Y Z ≫ fst (W otimes X) (Y otimes Z) = fst W Y otimesₘ fst X Z
-  proof: by
-  ext <;> simp [tensorδ]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 tensorδ_fst
-  条件: (W X Y Z : C)
-  结论: tensorδ W X Y Z ≫ fst (W otimes X) (Y otimes Z) = fst W Y otimesₘ fst X Z
-  证明: by
-  ext <;> simp [tensorδ]
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.CartesianMonoidalCategory.tensor** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorδ_fst (W X Y Z : C) : tensorδ W X Y Z ≫ fst (W otimes X) (Y otimes Z) = fst W Y otimesₘ fst X Z := by
+lemma tensorδ_fst (W X Y Z : C) : tensorδ W X Y Z ≫ fst (W ⊗ X) (Y ⊗ Z) = fst W Y ⊗ₘ fst X Z := by
   ext <;> simp [tensorδ]
 
 @[reassoc (attr := simp)]
-/--
-lemma `tensorδ_snd` / 引理 `tensorδ_snd`
-
-English:
-lemma tensorδ_snd
-  given: (W X Y Z : C)
-  statement: tensorδ W X Y Z ≫ snd (W otimes X) (Y otimes Z) = snd W Y otimesₘ snd X Z
-  proof: by
-  ext <;> simp [tensorδ]
-
-中文:
-引理 tensorδ_snd
-  条件: (W X Y Z : C)
-  结论: tensorδ W X Y Z ≫ snd (W otimes X) (Y otimes Z) = snd W Y otimesₘ snd X Z
-  证明: by
-  ext <;> simp [tensorδ]
+/-
+**CategoryTheory.CartesianMonoidalCategory.tensor** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorδ_snd (W X Y Z : C) : tensorδ W X Y Z ≫ snd (W otimes X) (Y otimes Z) = snd W Y otimesₘ snd X Z := by
+lemma tensorδ_snd (W X Y Z : C) : tensorδ W X Y Z ≫ snd (W ⊗ X) (Y ⊗ Z) = snd W Y ⊗ₘ snd X Z := by
   ext <;> simp [tensorδ]
-
-/--
-theorem `lift_snd_fst` / 定理 `lift_snd_fst`
-
-English:
-theorem lift_snd_fst
-  given: {X Y : C}
-  statement: lift (snd X Y) (fst X Y) = (β_ X Y).hom
-  proof: by cat_disch
-
-@[simp, reassoc]
-
-中文:
-定理 lift_snd_fst
-  条件: {X Y : C}
-  结论: lift (snd X Y) (fst X Y) = (β_ X Y).hom
-  证明: by cat_disch
-
-@[simp, reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_snd_fst** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_snd_fst {X Y : C} : lift (snd X Y) (fst X Y) = (β_ X Y).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_hom_fst`：braiding_hom_
+fst (X Y : C) : (β_ X Y).hom ≫ fst _ _ = snd _ _
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_hom_snd`：braiding_hom_
+snd (X Y : C) : (β_ X Y).hom ≫ snd _ _ = fst _ _
 -/
 theorem lift_snd_fst {X Y : C} : lift (snd X Y) (fst X Y) = (β_ X Y).hom := by cat_disch
 
 @[simp, reassoc]
-/--
-lemma `lift_snd_comp_fst_comp` / 引理 `lift_snd_comp_fst_comp`
-
-English:
-lemma lift_snd_comp_fst_comp
-  given: {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z)
-  proof: by cat_disch
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_snd_comp_fst_comp
-  条件: {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z)
-  证明: by cat_disch
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_snd_comp_fst_comp** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_snd_comp_fst_comp {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z) : lift (snd 
+_ _ ≫ g') (fst _ _ ≫ g) = (β_ _ _).hom ≫ (g' otimesₘ g)
+参数：g : W ⟶ X；g' : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_fst`：tensorHom_fst {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ fst _ _ = fst _ _ 
+≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_hom_fst_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Carte
+sianMonoidalCategory C]   [inst_2 : CategoryTheory.Br…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_snd`：tensorHom_snd {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ snd _ _ = snd _ _ 
+≫ g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_hom_snd_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Carte
+sianMonoidalCategory C]   [inst_2 : CategoryTheory.Br…
 -/
 lemma lift_snd_comp_fst_comp {W X Y Z : C} (g : W ⟶ X) (g' : Y ⟶ Z) :
-    lift (snd _ _ ≫ g') (fst _ _ ≫ g) = (β_ _ _).hom ≫ (g' otimesₘ g) := by cat_disch
+    lift (snd _ _ ≫ g') (fst _ _ ≫ g) = (β_ _ _).hom ≫ (g' ⊗ₘ g) := by cat_disch
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_braiding_hom` / 引理 `lift_braiding_hom`
-
-English:
-lemma lift_braiding_hom
-  given: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  proof: by aesop
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_braiding_hom
-  条件: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  证明: by aesop
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_braiding_hom** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_braiding_hom {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ (β_ X Y
+).hom = lift g f
+参数：f : T ⟶ X；g : T ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_hom_fst`：braiding_hom_
+fst (X Y : C) : (β_ X Y).hom ≫ fst _ _ = snd _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_hom_snd`：braiding_hom_
+snd (X Y : C) : (β_ X Y).hom ≫ snd _ _ = fst _ _
 -/
 lemma lift_braiding_hom {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) :
     lift f g ≫ (β_ X Y).hom = lift g f := by aesop
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_braiding_inv` / 引理 `lift_braiding_inv`
-
-English:
-lemma lift_braiding_inv
-  given: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  proof: by aesop
-
-中文:
-引理 lift_braiding_inv
-  条件: {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y)
-  证明: by aesop
+/-
+**CategoryTheory.CartesianMonoidalCategory.lift_braiding_inv** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：lift_braiding_inv {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ (β_ Y X
+).inv = lift g f
+参数：f : T ⟶ X；g : T ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_inv_fst`：braiding_inv_
+fst (X Y : C) : (β_ X Y).inv ≫ fst _ _ = snd _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.braiding_inv_snd`：braiding_inv_
+snd (X Y : C) : (β_ X Y).inv ≫ snd _ _ = fst _ _
 -/
 lemma lift_braiding_inv {T X Y : C} (f : T ⟶ X) (g : T ⟶ Y) :
     lift f g ≫ (β_ Y X).inv = lift g f := by aesop
 
 -- See note [lower instance priority]
+/-
+**CategoryTheory.CartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) toSymmetricCategory : SymmetricCategory C where
 
 /-- `CartesianMonoidalCategory` implies `BraidedCategory`.
 This is not an instance to prevent diamonds. -/
 @[instance_reducible]
-/--
-Definition of `_root_.CategoryTheory.BraidedCategory.ofCartesianMonoidalCategory` / `_root_.CategoryTheory.BraidedCategory.ofCartesianMonoidalCategory` 的定义
+/-
+**CategoryTheory.CartesianMonoidalCategory._root_.CategoryTheory.BraidedCategory
+.ofCartesianMonoidalCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Cartesian
+MonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.CategoryTheory.BraidedCategory.ofCartesianMonoidalCategory
-  signature: : BraidedCategory C where
-  body: { hom := lift (snd _ _) (fst _ _), inv := lift (snd _ _) (fst _ _) }
-
-中文:
-定义 _root_.范畴论.辫范畴.ofCartesianMonoidalCategory
-  签名: : 辫范畴 C where
-  定义体: { hom := lift (snd _ _) (fst _ _), inv := lift (snd _ _) (fst _ _) }
+--- 原说明 ---
+`CartesianMonoidalCategory` implies `BraidedCategory`.
+This is not an instance to prevent diamonds.
 -/
 def _root_.CategoryTheory.BraidedCategory.ofCartesianMonoidalCategory : BraidedCategory C where
   braiding X Y := { hom := lift (snd _ _) (fst _ _), inv := lift (snd _ _) (fst _ _) }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nonempty (BraidedCategory C)
-  body: ⟨.ofCartesianMonoidalCategory⟩
-
-中文:
-实例 :
-  签名: 非空 (辫范畴 C)
-  定义体: ⟨.ofCartesianMonoidalCategory⟩
-
-Depends on / 依赖: ofCartesianMonoidalCategory
+/-
+**CategoryTheory.CartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nonempty (BraidedCategory C) := ⟨.ofCartesianMonoidalCategory⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton (BraidedCategory C)
-
-中文:
-实例 :
-  签名: 子单例 (辫范畴 C)
+/-
+**CategoryTheory.CartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton (BraidedCategory C) where
   allEq
@@ -1932,29 +2252,23 @@ instance : Subsingleton (BraidedCategory C) where
           (@braiding_hom_fst C _ ‹_› ⟨e₂, a₂, b₂, c₂, d₂⟩ ..).symm
       · exact (@braiding_hom_snd C _ ‹_› ⟨e₁, a₁, b₁, c₁, d₁⟩ ..).trans
           (@braiding_hom_snd C _ ‹_› ⟨e₂, a₂, b₂, c₂, d₂⟩ ..).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton (SymmetricCategory C)
-  body: by rintro ⟨_⟩ ⟨_⟩; congr; exact Subsingleton.elim _ _
-
-中文:
-实例 :
-  签名: 子单例 (对称范畴 C)
-  定义体: by rintro ⟨_⟩ ⟨_⟩; congr; exact Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**CategoryTheory.CartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton (SymmetricCategory C) where
   allEq := by rintro ⟨_⟩ ⟨_⟩; congr; exact Subsingleton.elim _ _
 
 end BraidedCategory
 
+/-
+**CategoryTheory.CartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : Limits.HasFiniteProducts C :=
-  letI : forall (X Y : C), Limits.HasLimit (Limits.pair X Y) := fun _ _ =>
+  letI : ∀ (X Y : C), Limits.HasLimit (Limits.pair X Y) := fun _ _ =>
     .mk ⟨_, tensorProductIsBinaryProduct _ _⟩
   letI : Limits.HasBinaryProducts C := Limits.hasBinaryProducts_of_hasLimit_pair _
   letI : Limits.HasTerminal C := Limits.hasTerminal_of_unique (𝟙_ C)
@@ -1967,95 +2281,74 @@ variable {E : Type u₂} [Category.{v₂} E] [CartesianMonoidalCategory E] (G : 
 
 section terminalComparison
 
-/--
-Definition of `terminalComparison` / `terminalComparison` 的定义
+/-- When `C` and `D` have chosen finite products and `F : C ⥤ D` is any functor,
+`terminalComparison F` is the unique map `F (𝟙_ C) ⟶ 𝟙_ D`. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.terminalComparison** 是 Mathlib 中的一个缩写
+定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：terminalComparison : F.obj (𝟙_ C) ⟶ 𝟙_ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation terminalComparison
-  signature: : F.obj (𝟙_ C) ⟶ 𝟙_ D
-  body: toUnit _
-
-@[reassoc]
-
-中文:
-缩写 terminalComparison
-  签名: : F.obj (𝟙_ C) ⟶ 𝟙_ D
-  定义体: toUnit _
-
-@[reassoc]
-
-Depends on / 依赖: toUnit
+--- 原说明 ---
+When `C` and `D` have chosen finite products and `F : C ⥤ D` is any functor,
+`terminalComparison F` is the unique map `F (𝟙_ C) ⟶ 𝟙_ D`.
 -/
 abbrev terminalComparison : F.obj (𝟙_ C) ⟶ 𝟙_ D := toUnit _
 
 @[reassoc]
-/--
-lemma `map_toUnit_comp_terminalComparison` / 引理 `map_toUnit_comp_terminalComparison`
-
-English:
-lemma map_toUnit_comp_terminalComparison
-  given: (A : C)
-  proof: toUnit_unique _ _
-
-中文:
-引理 map_toUnit_comp_terminalComparison
-  条件: (A : C)
-  证明: toUnit_unique _ _
-
-Depends on / 依赖: toUnit_unique
+/-
+**CategoryTheory.CartesianMonoidalCategory.map_toUnit_comp_terminalComparison** 
+是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：map_toUnit_comp_terminalComparison (A : C) : F.map (toUnit A) ≫ terminalCo
+mparison F = toUnit _
+参数：A : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma map_toUnit_comp_terminalComparison (A : C) :
     F.map (toUnit A) ≫ terminalComparison F = toUnit _ := toUnit_unique _ _
 
 open Limits
 
-/--
-lemma `preservesLimit_empty_of_isIso_terminalComparison` / 引理 `preservesLimit_empty_of_isIso_terminalComparison`
+/-- If `terminalComparison F` is an Iso, then `F` preserves terminal objects. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.preservesLimit_empty_of_isIso_termina
+lComparison** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`
+。
+形式化陈述：preservesLimit_empty_of_isIso_terminalComparison [IsIso (terminalCompariso
+n F)] : PreservesLimit (Functor.empty.{0} C) F
+参数：terminalComparison F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
 
-English:
-lemma preservesLimit_empty_of_isIso_terminalComparison
-  given: [IsIso (terminalComparison F)]
-  proof: by
-  apply preservesLimit_of_preserves_limit_cone isTerminalTensorUnit
-  apply isLimitChangeEmptyCone D isTerminalTensorUnit
-.symm exact asIso (terminalComparison F)
-
-中文:
-引理 preservesLimit_empty_of_isIso_terminalComparison
-  条件: [是同构 (terminalComparison F)]
-  证明: by
-  apply preservesLimit_of_preserves_limit_cone isTerminalTensorUnit
-  apply isLimitChangeEmptyCone D isTerminalTensorUnit
-.symm exact asIso (terminalComparison F)
-
-Depends on / 依赖: isLimitChangeEmptyCone, isTerminalTensorUnit, mem_coverings_of_isIso, preservesLimit_of_preserves_limit_cone, terminalComparison
+--- 原说明 ---
+If `terminalComparison F` is an Iso, then `F` preserves terminal objects.
 -/
 lemma preservesLimit_empty_of_isIso_terminalComparison [IsIso (terminalComparison F)] :
     PreservesLimit (Functor.empty.{0} C) F := by
   apply preservesLimit_of_preserves_limit_cone isTerminalTensorUnit
   apply isLimitChangeEmptyCone D isTerminalTensorUnit
-.symm exact asIso (terminalComparison F)
+  exact asIso (terminalComparison F) |>.symm
 
-/--
-Definition of `preservesTerminalIso` / `preservesTerminalIso` 的定义
+/-- If `F` preserves terminal objects, then `terminalComparison F` is an isomorphism. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.preservesTerminalIso** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：preservesTerminalIso [h : PreservesLimit (Functor.empty.{0} C) F] : F.obj 
+(𝟙_ C) ≅ 𝟙_ D
+参数：Functor.empty.{0} C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preservesTerminalIso
-  signature: [h : PreservesLimit (Functor.empty.{0} C) F]
-  body: (isLimitChangeEmptyCone D (isLimitOfPreserves _ isTerminalTensorUnit) (asEmptyCone (F.obj (𝟙_ C)))
-    (Iso.refl _)).conePointUniqueUpToIso isTerminalTensorUnit
-
-@[simp]
-
-中文:
-定义 preservesTerminalIso
-  签名: [h : 保持极限 (函子.empty.{0} C) F]
-  定义体: (isLimitChangeEmptyCone D (isLimitOfPreserves _ isTerminalTensorUnit) (asEmptyCone (F.obj (𝟙_ C)))
-    (Iso.refl _)).conePointUniqueUpToIso isTerminalTensorUnit
-
-@[simp]
-
-Depends on / 依赖: F.obj, Iso.refl, asEmptyCone, conePointUniqueUpToIso, isLimitChangeEmptyCone, isLimitOfPreserves, isTerminalTensorUnit, mem_coverings_of_isPullback
+--- 原说明 ---
+If `F` preserves terminal objects, then `terminalComparison F` is an isomorphism
+.
 -/
 noncomputable def preservesTerminalIso [h : PreservesLimit (Functor.empty.{0} C) F] :
     F.obj (𝟙_ C) ≅ 𝟙_ D :=
@@ -2063,46 +2356,35 @@ noncomputable def preservesTerminalIso [h : PreservesLimit (Functor.empty.{0} C)
     (Iso.refl _)).conePointUniqueUpToIso isTerminalTensorUnit
 
 @[simp]
-/--
-lemma `preservesTerminalIso_hom` / 引理 `preservesTerminalIso_hom`
-
-English:
-lemma preservesTerminalIso_hom
-  given: [PreservesLimit (Functor.empty.{0} C) F]
-  proof: toUnit_unique _ _
-
-中文:
-引理 preservesTerminalIso_hom
-  条件: [保持极限 (函子.empty.{0} C) F]
-  证明: toUnit_unique _ _
-
-Depends on / 依赖: comp_mem_coverings, toUnit_unique
+/-
+**CategoryTheory.CartesianMonoidalCategory.preservesTerminalIso_hom** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：preservesTerminalIso_hom [PreservesLimit (Functor.empty.{0} C) F] : (prese
+rvesTerminalIso F).hom = terminalComparison F
+参数：Functor.empty.{0} C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma preservesTerminalIso_hom [PreservesLimit (Functor.empty.{0} C) F] :
     (preservesTerminalIso F).hom = terminalComparison F := toUnit_unique _ _
-
-/--
-Instance `terminalComparison_isIso_of_preservesLimits` / 实例 `terminalComparison_isIso_of_preservesLimits`
-
-English:
-instance terminalComparison_isIso_of_preservesLimits
-  signature: [PreservesLimit (Functor.empty.{0} C) F]
-  body: by
-  rw [← preservesTerminalIso_hom]
-  infer_instance
-
-@[simp]
-
-中文:
-实例 terminalComparison_isIso_of_preservesLimits
-  签名: [保持极限 (函子.empty.{0} C) F]
-  定义体: by
-  rw [← preservesTerminalIso_hom]
-  infer_instance
-
-@[simp]
-
-Depends on / 依赖: J.sup_mem_coverings, K.sup_mem_coverings, infer_instance, preservesTerminalIso_hom, sup_mem_coverings
+/-
+**CategoryTheory.CartesianMonoidalCategory.terminalComparison_isIso_of_preserves
+Limits** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：terminalComparison_isIso_of_preservesLimits [PreservesLimit (Functor.empty
+.{0} C) F] : IsIso (terminalComparison F)
+参数：Functor.empty.{0} C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.preservesTerminalIso_hom`：prese
+rvesTerminalIso_hom [PreservesLimit (Functor.empty.{0} C) F] : (preservesTermina
+lIso F).hom = terminalComparison F
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance terminalComparison_isIso_of_preservesLimits [PreservesLimit (Functor.empty.{0} C) F] :
     IsIso (terminalComparison F) := by
@@ -2110,47 +2392,43 @@ instance terminalComparison_isIso_of_preservesLimits [PreservesLimit (Functor.em
   infer_instance
 
 @[simp]
-/--
-lemma `preservesTerminalIso_id` / 引理 `preservesTerminalIso_id`
-
-English:
-lemma preservesTerminalIso_id
-  statement: preservesTerminalIso (𝟭 C) = .refl _
-  proof: by
-  cat_disch
-
-@[simp]
-
-中文:
-引理 preservesTerminalIso_id
-  结论: preservesTerminalIso (𝟭 C) = .refl _
-  证明: by
-  cat_disch
-
-@[simp]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.preservesTerminalIso_id** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：preservesTerminalIso_id : preservesTerminalIso (𝟭 C) = .refl _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma preservesTerminalIso_id : preservesTerminalIso (𝟭 C) = .refl _ := by
   cat_disch
 
 @[simp]
-/--
-lemma `preservesTerminalIso_comp` / 引理 `preservesTerminalIso_comp`
-
-English:
-lemma preservesTerminalIso_comp
-  statement: [PreservesLimit (Functor.empty.{0} C) F]
-  proof: by
-  cat_disch
-
-中文:
-引理 preservesTerminalIso_comp
-  结论: [保持极限 (函子.empty.{0} C) F]
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.CartesianMonoidalCategory.preservesTerminalIso_comp** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：preservesTerminalIso_comp [PreservesLimit (Functor.empty.{0} C) F] [Preser
+vesLimit (Functor.empty.{0} D) G] [PreservesLimit (Functor.empty.{0} C) (F ⋙ G)]
+ : preservesTerminalIso (F ⋙ G) = G.mapIso (preservesTerminalIso F) ≪≫ preserves
+TerminalIso G
+参数：Functor.empty.{0} C；Functor.empty.{0} D；Functor.empty.{0} C；F ⋙ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma preservesTerminalIso_comp [PreservesLimit (Functor.empty.{0} C) F]
     [PreservesLimit (Functor.empty.{0} D) G] [PreservesLimit (Functor.empty.{0} C) (F ⋙ G)] :
@@ -2164,112 +2442,86 @@ section prodComparison
 
 variable (A B : C)
 
-/--
-Definition of `prodComparison` / `prodComparison` 的定义
+/-- When `C` and `D` have chosen finite products and `F : C ⥤ D` is any functor,
+`prodComparison F A B` is the canonical comparison morphism from `F (A ⊗ B)` to `F(A) ⊗ F(B)`. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison (A B : C) : F.obj (A otimes B) ⟶ F.obj A otimes F.obj B
+参数：A B : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodComparison
-  signature: (A B : C)
-  body: lift (F.map (fst A B)) (F.map (snd A B))
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 prodComparison
-  签名: (A B : C)
-  定义体: lift (F.map (fst A B)) (F.map (snd A B))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map
+--- 原说明 ---
+When `C` and `D` have chosen finite products and `F : C ⥤ D` is any functor,
+`prodComparison F A B` is the canonical comparison morphism from `F (A ⊗ B)` to 
+`F(A) ⊗ F(B)`.
 -/
-def prodComparison (A B : C) : F.obj (A otimes B) ⟶ F.obj A otimes F.obj B :=
+def prodComparison (A B : C) : F.obj (A ⊗ B) ⟶ F.obj A ⊗ F.obj B :=
   lift (F.map (fst A B)) (F.map (snd A B))
 
 @[reassoc (attr := simp)]
-/--
-theorem `prodComparison_fst` / 定理 `prodComparison_fst`
-
-English:
-theorem prodComparison_fst
-  statement: prodComparison F A B ≫ fst _ _ = F.map (fst A B)
-  proof: lift_fst _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 prodComparison_fst
-  结论: prodComparison F A B ≫ fst _ _ = F.map (fst A B)
-  证明: lift_fst _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: lift_fst
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_fst** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_fst : prodComparison F A B ≫ fst _ _ = F.map (fst A B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
 -/
 theorem prodComparison_fst : prodComparison F A B ≫ fst _ _ = F.map (fst A B) :=
   lift_fst _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `prodComparison_snd` / 定理 `prodComparison_snd`
-
-English:
-theorem prodComparison_snd
-  statement: prodComparison F A B ≫ snd _ _ = F.map (snd A B)
-  proof: lift_snd _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 prodComparison_snd
-  结论: prodComparison F A B ≫ snd _ _ = F.map (snd A B)
-  证明: lift_snd _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: lift_snd
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_snd** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_snd : prodComparison F A B ≫ snd _ _ = F.map (snd A B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
 -/
 theorem prodComparison_snd : prodComparison F A B ≫ snd _ _ = F.map (snd A B) :=
   lift_snd _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `inv_prodComparison_map_fst` / 定理 `inv_prodComparison_map_fst`
-
-English:
-theorem inv_prodComparison_map_fst
-  given: [IsIso (prodComparison F A B)]
-  proof: by simp [IsIso.inv_comp_eq]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inv_prodComparison_map_fst
-  条件: [是同构 (prodComparison F A B)]
-  证明: by simp [IsIso.inv_comp_eq]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsIso.inv_comp_eq, inv_comp_eq
+/-
+**CategoryTheory.CartesianMonoidalCategory.inv_prodComparison_map_fst** 是 Mathli
+b 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：inv_prodComparison_map_fst [IsIso (prodComparison F A B)] : inv (prodCompa
+rison F A B) ≫ F.map (fst _ _) = fst _ _
+参数：prodComparison F A B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_fst`：prodCompari
+son_fst : prodComparison F A B ≫ fst _ _ = F.map (fst A B)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_prodComparison_map_fst [IsIso (prodComparison F A B)] :
     inv (prodComparison F A B) ≫ F.map (fst _ _) = fst _ _ := by simp [IsIso.inv_comp_eq]
 
 @[reassoc (attr := simp)]
-/--
-theorem `inv_prodComparison_map_snd` / 定理 `inv_prodComparison_map_snd`
-
-English:
-theorem inv_prodComparison_map_snd
-  given: [IsIso (prodComparison F A B)]
-  proof: by simp [IsIso.inv_comp_eq]
-
-中文:
-定理 inv_prodComparison_map_snd
-  条件: [是同构 (prodComparison F A B)]
-  证明: by simp [IsIso.inv_comp_eq]
-
-Depends on / 依赖: IsIso.inv_comp_eq, inv_comp_eq
+/-
+**CategoryTheory.CartesianMonoidalCategory.inv_prodComparison_map_snd** 是 Mathli
+b 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：inv_prodComparison_map_snd [IsIso (prodComparison F A B)] : inv (prodCompa
+rison F A B) ≫ F.map (snd _ _) = snd _ _
+参数：prodComparison F A B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_snd`：prodCompari
+son_snd : prodComparison F A B ≫ snd _ _ = F.map (snd A B)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_prodComparison_map_snd [IsIso (prodComparison F A B)] :
     inv (prodComparison F A B) ≫ F.map (snd _ _) = snd _ _ := by simp [IsIso.inv_comp_eq]
@@ -2278,52 +2530,95 @@ variable {A B} {A' B' : C}
 
 /-- Naturality of the `prodComparison` morphism in both arguments. -/
 @[reassoc]
-/--
-theorem `prodComparison_natural` / 定理 `prodComparison_natural`
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_natural** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_natural (f : A ⟶ A') (g : B ⟶ B') : F.map (f otimesₘ g) ≫ p
+rodComparison F A' B' = prodComparison F A B ≫ (F.map f otimesₘ F.map g)
+参数：f : A ⟶ A'；g : B ⟶ B'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_fst`：prodCompari
+son_fst : prodComparison F A B ≫ fst _ _ = F.map (fst A B)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_fst`：tensorHom_fst {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ fst _ _ = fst _ _ 
+≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_fst_assoc`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Car
+tesianMonoidalCategory C]   {D : Type u₁} [inst_2 : Cat…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_snd`：prodCompari
+son_snd : prodComparison F A B ≫ snd _ _ = F.map (snd A B)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_snd`：tensorHom_snd {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ snd _ _ = snd _ _ 
+≫ g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_snd_assoc`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Car
+tesianMonoidalCategory C]   {D : Type u₁} [inst_2 : Cat…
 
-English:
-theorem prodComparison_natural
-  given: (f : A ⟶ A') (g : B ⟶ B')
-  proof: by
-  apply hom_ext <;>
-  simp only [Category.assoc, prodComparison_fst, tensorHom_fst, prodComparison_fst_assoc,
-    prodComparison_snd, tensorHom_snd, prodComparison_snd_assoc, ← F.map_comp]
-
-中文:
-定理 prodComparison_natural
-  条件: (f : A ⟶ A') (g : B ⟶ B')
-  证明: by
-  apply hom_ext <;>
-  simp only [Category.assoc, prodComparison_fst, tensorHom_fst, prodComparison_fst_assoc,
-    prodComparison_snd, tensorHom_snd, prodComparison_snd_assoc, ← F.map_comp]
-
-Depends on / 依赖: Category, Category.assoc, F.map_comp, hom_ext, map_comp, prodComparison_fst, prodComparison_fst_assoc, prodComparison_snd, prodComparison_snd_assoc, tensorHom_fst, tensorHom_snd
+--- 原说明 ---
+Naturality of the `prodComparison` morphism in both arguments.
 -/
 theorem prodComparison_natural (f : A ⟶ A') (g : B ⟶ B') :
-    F.map (f otimesₘ g) ≫ prodComparison F A' B' =
-      prodComparison F A B ≫ (F.map f otimesₘ F.map g) := by
+    F.map (f ⊗ₘ g) ≫ prodComparison F A' B' =
+      prodComparison F A B ≫ (F.map f ⊗ₘ F.map g) := by
   apply hom_ext <;>
   simp only [Category.assoc, prodComparison_fst, tensorHom_fst, prodComparison_fst_assoc,
     prodComparison_snd, tensorHom_snd, prodComparison_snd_assoc, ← F.map_comp]
 
 /-- Naturality of the `prodComparison` morphism in the right argument. -/
 @[reassoc]
-/--
-theorem `prodComparison_natural_whiskerLeft` / 定理 `prodComparison_natural_whiskerLeft`
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_natural_whiskerLeft** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_natural_whiskerLeft (g : B ⟶ B') : F.map (A ◁ g) ≫ prodComp
+arison F A B' = prodComparison F A B ≫ (F.obj A ◁ F.map g)
+参数：g : B ⟶ B'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_fst`：prodCompari
+son_fst : prodComparison F A B ≫ fst _ _ = F.map (fst A B)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst`：whiskerLeft_fs
+t (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_snd`：prodCompari
+son_snd : prodComparison F A B ≫ snd _ _ = F.map (snd A B)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd`：whiskerLeft_sn
+d (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_snd_assoc`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Car
+tesianMonoidalCategory C]   {D : Type u₁} [inst_2 : Cat…
 
-English:
-theorem prodComparison_natural_whiskerLeft
-  given: (g : B ⟶ B')
-  proof: by
-  ext <;> simp [← Functor.map_comp]
-
-中文:
-定理 prodComparison_natural_whiskerLeft
-  条件: (g : B ⟶ B')
-  证明: by
-  ext <;> simp [← Functor.map_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp, map_comp
+--- 原说明 ---
+Naturality of the `prodComparison` morphism in the right argument.
 -/
 theorem prodComparison_natural_whiskerLeft (g : B ⟶ B') :
     F.map (A ◁ g) ≫ prodComparison F A B' =
@@ -2332,22 +2627,41 @@ theorem prodComparison_natural_whiskerLeft (g : B ⟶ B') :
 
 /-- Naturality of the `prodComparison` morphism in the left argument. -/
 @[reassoc]
-/--
-theorem `prodComparison_natural_whiskerRight` / 定理 `prodComparison_natural_whiskerRight`
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_natural_whiskerRight**
+ 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_natural_whiskerRight (f : A ⟶ A') : F.map (f ▷ B) ≫ prodCom
+parison F A' B = prodComparison F A B ≫ (F.map f ▷ F.obj B)
+参数：f : A ⟶ A'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_fst`：prodCompari
+son_fst : prodComparison F A B ≫ fst _ _ = F.map (fst A B)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_fst`：whiskerRight_
+fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_fst_assoc`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Car
+tesianMonoidalCategory C]   {D : Type u₁} [inst_2 : Cat…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_snd`：prodCompari
+son_snd : prodComparison F A B ≫ snd _ _ = F.map (snd A B)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd`：whiskerRight_
+snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _
 
-English:
-theorem prodComparison_natural_whiskerRight
-  given: (f : A ⟶ A')
-  proof: by
-  ext <;> simp [← Functor.map_comp]
-
-中文:
-定理 prodComparison_natural_whiskerRight
-  条件: (f : A ⟶ A')
-  证明: by
-  ext <;> simp [← Functor.map_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp, map_comp
+--- 原说明 ---
+Naturality of the `prodComparison` morphism in the left argument.
 -/
 theorem prodComparison_natural_whiskerRight (f : A ⟶ A') :
     F.map (f ▷ B) ≫ prodComparison F A' B =
@@ -2359,99 +2673,138 @@ variable [IsIso (prodComparison F A B)]
 
 /-- If the product comparison morphism is an iso, its inverse is natural in both argument. -/
 @[reassoc]
-/--
-theorem `prodComparison_inv_natural` / 定理 `prodComparison_inv_natural`
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_inv_natural** 是 Mathli
+b 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_inv_natural (f : A ⟶ A') (g : B ⟶ B') [IsIso (prodCompariso
+n F A' B')] : inv (prodComparison F A B) ≫ F.map (f otimesₘ g) = (F.map f otimes
+ₘ F.map g) ≫ inv (prodComparison F A' B')
+参数：f : A ⟶ A'；g : B ⟶ B'；prodComparison F A' B'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.eq_comp_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_comp_eq`：inv_comp_eq (α : X ⟶ Y) [IsIso α] {f :
+ X ⟶ Z} {g : Y ⟶ Z} : inv α ≫ f = g ↔ f = α ≫ g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_natural`：prodCom
+parison_natural (f : A ⟶ A') (g : B ⟶ B') : F.map (f otimesₘ g) ≫ prodComparison
+ F A' B' = prodComparison F A B ≫ (F.map f otimesₘ F.…
 
-English:
-theorem prodComparison_inv_natural
-  given: (f : A ⟶ A') (g : B ⟶ B') [IsIso (prodComparison F A' B')]
-  proof: by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural]
-
-中文:
-定理 prodComparison_inv_natural
-  条件: (f : A ⟶ A') (g : B ⟶ B') [是同构 (prodComparison F A' B')]
-  证明: by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural]
-
-Depends on / 依赖: Category, Category.assoc, IsIso.eq_comp_inv, IsIso.inv_comp_eq, eq_comp_inv, inv_comp_eq, prodComparison_natural
+--- 原说明 ---
+If the product comparison morphism is an iso, its inverse is natural in both arg
+ument.
 -/
 theorem prodComparison_inv_natural (f : A ⟶ A') (g : B ⟶ B') [IsIso (prodComparison F A' B')] :
-    inv (prodComparison F A B) ≫ F.map (f otimesₘ g) =
-      (F.map f otimesₘ F.map g) ≫ inv (prodComparison F A' B') := by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural]
+    inv (prodComparison F A B) ≫ F.map (f ⊗ₘ g) =
+      (F.map f ⊗ₘ F.map g) ≫ inv (prodComparison F A' B') := by
+  rw [IsIso.eq_comp_inv, Category.assoc, IsIso.inv_comp_eq, prodComparison_natural]
 
 /-- If the product comparison morphism is an iso, its inverse is natural in the right argument. -/
 @[reassoc]
-/--
-theorem `prodComparison_inv_natural_whiskerLeft` / 定理 `prodComparison_inv_natural_whiskerLeft`
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_inv_natural_whiskerLef
+t** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_inv_natural_whiskerLeft (g : B ⟶ B') [IsIso (prodComparison
+ F A B')] : inv (prodComparison F A B) ≫ F.map (A ◁ g) = (F.obj A ◁ F.map g) ≫ i
+nv (prodComparison F A B')
+参数：g : B ⟶ B'；prodComparison F A B'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.eq_comp_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_comp_eq`：inv_comp_eq (α : X ⟶ Y) [IsIso α] {f :
+ X ⟶ Z} {g : Y ⟶ Z} : inv α ≫ f = g ↔ f = α ≫ g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_natural_whiskerL
+eft`：prodComparison_natural_whiskerLeft (g : B ⟶ B') : F.map (A ◁ g) ≫ prodCompa
+rison F A B' = prodComparison F A B ≫ (F.obj A ◁ F.map g)
 
-English:
-theorem prodComparison_inv_natural_whiskerLeft
-  given: (g : B ⟶ B') [IsIso (prodComparison F A B')]
-  proof: by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerLeft]
-
-中文:
-定理 prodComparison_inv_natural_whiskerLeft
-  条件: (g : B ⟶ B') [是同构 (prodComparison F A B')]
-  证明: by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerLeft]
-
-Depends on / 依赖: Category, Category.assoc, IsIso.eq_comp_inv, IsIso.inv_comp_eq, eq_comp_inv, inv_comp_eq, prodComparison_natural_whiskerLeft
+--- 原说明 ---
+If the product comparison morphism is an iso, its inverse is natural in the righ
+t argument.
 -/
 theorem prodComparison_inv_natural_whiskerLeft (g : B ⟶ B') [IsIso (prodComparison F A B')] :
     inv (prodComparison F A B) ≫ F.map (A ◁ g) =
       (F.obj A ◁ F.map g) ≫ inv (prodComparison F A B') := by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerLeft]
+  rw [IsIso.eq_comp_inv, Category.assoc, IsIso.inv_comp_eq, prodComparison_natural_whiskerLeft]
 
 /-- If the product comparison morphism is an iso, its inverse is natural in the left argument. -/
 @[reassoc]
-/--
-theorem `prodComparison_inv_natural_whiskerRight` / 定理 `prodComparison_inv_natural_whiskerRight`
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_inv_natural_whiskerRig
+ht** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_inv_natural_whiskerRight (f : A ⟶ A') [IsIso (prodCompariso
+n F A' B)] : inv (prodComparison F A B) ≫ F.map (f ▷ B) = (F.map f ▷ F.obj B) ≫ 
+inv (prodComparison F A' B)
+参数：f : A ⟶ A'；prodComparison F A' B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.eq_comp_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_comp_eq`：inv_comp_eq (α : X ⟶ Y) [IsIso α] {f :
+ X ⟶ Z} {g : Y ⟶ Z} : inv α ≫ f = g ↔ f = α ≫ g
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_natural_whiskerR
+ight`：prodComparison_natural_whiskerRight (f : A ⟶ A') : F.map (f ▷ B) ≫ prodCom
+parison F A' B = prodComparison F A B ≫ (F.map f ▷ F.obj B)
 
-English:
-theorem prodComparison_inv_natural_whiskerRight
-  given: (f : A ⟶ A') [IsIso (prodComparison F A' B)]
-  proof: by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerRight]
-
-中文:
-定理 prodComparison_inv_natural_whiskerRight
-  条件: (f : A ⟶ A') [是同构 (prodComparison F A' B)]
-  证明: by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerRight]
-
-Depends on / 依赖: Category, Category.assoc, IsIso.eq_comp_inv, IsIso.inv_comp_eq, eq_comp_inv, inv_comp_eq, prodComparison_natural_whiskerRight
+--- 原说明 ---
+If the product comparison morphism is an iso, its inverse is natural in the left
+ argument.
 -/
 theorem prodComparison_inv_natural_whiskerRight (f : A ⟶ A') [IsIso (prodComparison F A' B)] :
     inv (prodComparison F A B) ≫ F.map (f ▷ B) =
       (F.map f ▷ F.obj B) ≫ inv (prodComparison F A' B) := by
-  rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural_whiskerRight]
+  rw [IsIso.eq_comp_inv, Category.assoc, IsIso.inv_comp_eq, prodComparison_natural_whiskerRight]
 
 end
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `prodComparison_comp` / 引理 `prodComparison_comp`
-
-English:
-lemma prodComparison_comp
-  proof: by
-  unfold prodComparison
-  ext <;> simp [← G.map_comp]
-
-@[simp]
-
-中文:
-引理 prodComparison_comp
-  证明: by
-  unfold prodComparison
-  ext <;> simp [← G.map_comp]
-
-@[simp]
-
-Depends on / 依赖: G.map_comp, map_comp, prodComparison
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_comp** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_comp : prodComparison (F ⋙ G) A B = G.map (prodComparison F
+ A B) ≫ prodComparison G (F.obj A) (F.obj B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.comp_lift`：comp_lift {V W X Y :
+ C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) : f ≫ lift g h = lift (f ≫ g) (f ≫ h)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodComparison_comp :
     prodComparison (F ⋙ G) A B =
@@ -2460,50 +2813,35 @@ lemma prodComparison_comp :
   ext <;> simp [← G.map_comp]
 
 @[simp]
-/--
-lemma `prodComparison_id` / 引理 `prodComparison_id`
-
-English:
-lemma prodComparison_id
-  proof: lift_fst_snd
-
-中文:
-引理 prodComparison_id
-  证明: lift_fst_snd
-
-Depends on / 依赖: lift_fst_snd
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparison_id** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparison_id : prodComparison (𝟭 C) A B = 𝟙 (A otimes B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst_snd`：lift_fst_snd {X Y
+ : C} : lift (fst X Y) (snd X Y) = 𝟙 (X otimes Y)
 -/
 lemma prodComparison_id :
-    prodComparison (𝟭 C) A B = 𝟙 (A otimes B) := lift_fst_snd
+    prodComparison (𝟭 C) A B = 𝟙 (A ⊗ B) := lift_fst_snd
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The product comparison morphism from `F(A ⊗ -)` to `FA ⊗ F-`, whose components are given by
 `prodComparison`. -/
 @[simps]
-/--
-Definition of `prodComparisonNatTrans` / `prodComparisonNatTrans` 的定义
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonNatTrans** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonNatTrans (A : C) : (curriedTensor C).obj A ⋙ F ⟶ F ⋙ (currie
+dTensor D).obj (F.obj A) where app B
+参数：A : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodComparisonNatTrans
-  signature: (A : C)
-  body: prodComparison F A B
-  naturality x y f := by
-    apply hom_ext <;>
-    simp only [Functor.comp_obj, curriedTensor_obj_obj,
-      Functor.comp_map, curriedTensor_obj_map, Category.assoc, prodComparison_fst, whiskerLeft_fst,
-      prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map_comp]
-
-中文:
-定义 prodComparison自然数Trans
-  签名: (A : C)
-  定义体: prodComparison F A B
-  naturality x y f := by
-    apply hom_ext <;>
-    simp only [Functor.comp_obj, curriedTensor_obj_obj,
-      Functor.comp_map, curriedTensor_obj_map, Category.assoc, prodComparison_fst, whiskerLeft_fst,
-      prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map_comp]
-
-Depends on / 依赖: prodComparison
+--- 原说明 ---
+The product comparison morphism from `F(A ⊗ -)` to `FA ⊗ F-`, whose components a
+re given by
+`prodComparison`.
 -/
 def prodComparisonNatTrans (A : C) :
     (curriedTensor C).obj A ⋙ F ⟶ F ⋙ (curriedTensor D).obj (F.obj A) where
@@ -2515,20 +2853,28 @@ def prodComparisonNatTrans (A : C) :
       prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map_comp]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `prodComparisonNatTrans_comp` / 定理 `prodComparisonNatTrans_comp`
-
-English:
-theorem prodComparisonNatTrans_comp
-  proof: by
-  ext; simp [prodComparison_comp]
-
-中文:
-定理 prodComparison自然数Trans_comp
-  证明: by
-  ext; simp [prodComparison_comp]
-
-Depends on / 依赖: prodComparison_comp
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonNatTrans_comp** 是 Mathl
+ib 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonNatTrans_comp : prodComparisonNatTrans (F ⋙ G) A = Functor.w
+hiskerRight (prodComparisonNatTrans F A) G ≫ Functor.whiskerLeft F (prodComparis
+onNatTrans G (F.obj A))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_comp`：prodCompar
+ison_comp : prodComparison (F ⋙ G) A B = G.map (prodComparison F A B) ≫ prodComp
+arison G (F.obj A) (F.obj B)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prodComparisonNatTrans_comp :
     prodComparisonNatTrans (F ⋙ G) A = Functor.whiskerRight (prodComparisonNatTrans F A) G ≫
@@ -2537,16 +2883,25 @@ theorem prodComparisonNatTrans_comp :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `prodComparisonNatTrans_id` / 引理 `prodComparisonNatTrans_id`
-
-English:
-lemma prodComparisonNatTrans_id
-  proof: by ext; simp
-
-中文:
-引理 prodComparison自然数Trans_id
-  证明: by ext; simp
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonNatTrans_id** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonNatTrans_id : prodComparisonNatTrans (𝟭 C) A = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_id`：prodComparis
+on_id : prodComparison (𝟭 C) A B = 𝟙 (A otimes B)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodComparisonNatTrans_id :
     prodComparisonNatTrans (𝟭 C) A = 𝟙 _ := by ext; simp
@@ -2555,26 +2910,19 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The product comparison morphism from `F(- ⊗ -)` to `F- ⊗ F-`, whose components are given by
 `prodComparison`. -/
 @[simps]
-/--
-Definition of `prodComparisonBifunctorNatTrans` / `prodComparisonBifunctorNatTrans` 的定义
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonBifunctorNatTrans** 是 M
+athlib 中的一个定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonBifunctorNatTrans : curriedTensor C ⋙ (Functor.whiskeringRig
+ht _ _ _).obj F ⟶ F ⋙ curriedTensor D ⋙ (Functor.whiskeringLeft _ _ _).obj F whe
+re app A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodComparisonBifunctorNatTrans
-  signature: :
-  body: prodComparisonNatTrans F A
-  naturality x y f := by
-    ext z
-    apply hom_ext <;> simp [← Functor.map_comp]
-
-中文:
-定义 prodComparisonBifunctor自然数Trans
-  签名: :
-  定义体: prodComparisonNatTrans F A
-  naturality x y f := by
-    ext z
-    apply hom_ext <;> simp [← Functor.map_comp]
-
-Depends on / 依赖: prodComparisonNatTrans
+--- 原说明 ---
+The product comparison morphism from `F(- ⊗ -)` to `F- ⊗ F-`, whose components a
+re given by
+`prodComparison`.
 -/
 def prodComparisonBifunctorNatTrans :
     curriedTensor C ⋙ (Functor.whiskeringRight _ _ _).obj F ⟶
@@ -2588,22 +2936,29 @@ variable {E : Type u₂} [Category.{v₂} E] [CartesianMonoidalCategory E] (G : 
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `prodComparisonBifunctorNatTrans_comp` / 定理 `prodComparisonBifunctorNatTrans_comp`
-
-English:
-theorem prodComparisonBifunctorNatTrans_comp
-  statement: prodComparisonBifunctorNatTrans (F ⋙ G) =
-  proof: by
-  ext; simp [prodComparison_comp]
-
-中文:
-定理 prodComparisonBifunctor自然数Trans_comp
-  结论: prodComparisonBifunctor自然数Trans (F ⋙ G) =
-  证明: by
-  ext; simp [prodComparison_comp]
-
-Depends on / 依赖: prodComparison_comp
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonBifunctorNatTrans_comp*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonBifunctorNatTrans_comp : prodComparisonBifunctorNatTrans (F 
+⋙ G) = Functor.whiskerRight (prodComparisonBifunctorNatTrans F) ((Functor.whiske
+ringRight _ _ _).obj G) ≫ Functor.whiskerLeft F (Functor.whiskerRight (prodCompa
+risonBifunctorNatTrans G) ((Functor.whiskeringLeft _ _ _).obj F))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_comp`：prodCompar
+ison_comp : prodComparison (F ⋙ G) A B = G.map (prodComparison F A B) ≫ prodComp
+arison G (F.obj A) (F.obj B)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prodComparisonBifunctorNatTrans_comp : prodComparisonBifunctorNatTrans (F ⋙ G) =
     Functor.whiskerRight
@@ -2611,36 +2966,24 @@ theorem prodComparisonBifunctorNatTrans_comp : prodComparisonBifunctorNatTrans (
         Functor.whiskerLeft F (Functor.whiskerRight (prodComparisonBifunctorNatTrans G)
           ((Functor.whiskeringLeft _ _ _).obj F)) := by
   ext; simp [prodComparison_comp]
-
-instance (A : C) [forall B, IsIso (prodComparison F A B)] : IsIso (prodComparisonNatTrans F A) := by
-  let : forall X, IsIso ((prodComparisonNatTrans F A).app X) := by assumption
+/-
+**CategoryTheory.CartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (A : C) [∀ B, IsIso (prodComparison F A B)] : IsIso (prodComparisonNatTrans F A) := by
+  let : ∀ X, IsIso ((prodComparisonNatTrans F A).app X) := by assumption
   apply NatIso.isIso_of_isIso_app
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: A B, IsIso (prodComparison F A B)] : IsIso (prodComparisonBifunctorNatTrans F)
-  body: by
-  let : forall X, IsIso ((prodComparisonBifunctorNatTrans F).app X) :=
-    fun _ => by dsimp; apply NatIso.isIso_of_isIso_app
-  apply NatIso.isIso_of_isIso_app
-
-中文:
-实例 [对任意
-  签名: A B, 是同构 (prodComparison F A B)] : 是同构 (prodComparisonBifunctor自然数Trans F)
-  定义体: by
-  let : forall X, IsIso ((prodComparisonBifunctorNatTrans F).app X) :=
-    fun _ => by dsimp; apply NatIso.isIso_of_isIso_app
-  apply NatIso.isIso_of_isIso_app
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app, prodComparisonBifunctorNatTrans
+/-
+**CategoryTheory.CartesianMonoidalCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.CartesianMonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall A B, IsIso (prodComparison F A B)] : IsIso (prodComparisonBifunctorNatTrans F) := by
-  let : forall X, IsIso ((prodComparisonBifunctorNatTrans F).app X) :=
-    fun _ => by dsimp; apply NatIso.isIso_of_isIso_app
+instance [∀ A B, IsIso (prodComparison F A B)] : IsIso (prodComparisonBifunctorNatTrans F) := by
+  let : ∀ X, IsIso ((prodComparisonBifunctorNatTrans F).app X) :=
+    fun _ ↦ by dsimp; apply NatIso.isIso_of_isIso_app
   apply NatIso.isIso_of_isIso_app
 
 open Limits
@@ -2650,129 +2993,148 @@ section
 variable (A B)
 variable [PreservesLimit (pair A B) F]
 
-/--
-Definition of `isLimitCartesianMonoidalCategoryOfPreservesLimits` / `isLimitCartesianMonoidalCategoryOfPreservesLimits` 的定义
+/-- If `F` preserves the limit of the pair `(A, B)`, then the binary fan given by
+`(F.map fst A B, F.map (snd A B))` is a limit cone. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.isLimitCartesianMonoidalCategoryOfPre
+servesLimits** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory
+`。
+形式化陈述：isLimitCartesianMonoidalCategoryOfPreservesLimits : IsLimit BinaryFan.mk (
+F.map (fst A B)) (F.map (snd A B))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitCartesianMonoidalCategoryOfPreservesLimits
-  signature: :
-  body: mapIsLimitOfPreservesOfIsLimit F (fst _ _) (snd _ _)
-(tensorProductIsBinaryProduct A B).ofIsoLimit
-      isoBinaryFanMk (BinaryFan.mk (fst A B) (snd A B))
-
-中文:
-定义 isLimitCartesianMonoidalCategoryOfPreservesLimits
-  签名: :
-  定义体: mapIsLimitOfPreservesOfIsLimit F (fst _ _) (snd _ _)
-(tensorProductIsBinaryProduct A B).ofIsoLimit
-      isoBinaryFanMk (BinaryFan.mk (fst A B) (snd A B))
-
-Depends on / 依赖: BinaryFan, BinaryFan.mk, isoBinaryFanMk, mapIsLimitOfPreservesOfIsLimit, ofIsoLimit, tensorProductIsBinaryProduct
+--- 原说明 ---
+If `F` preserves the limit of the pair `(A, B)`, then the binary fan given by
+`(F.map fst A B, F.map (snd A B))` is a limit cone.
 -/
 noncomputable def isLimitCartesianMonoidalCategoryOfPreservesLimits :
-IsLimit BinaryFan.mk (F.map (fst A B)) (F.map (snd A B)) :=
-mapIsLimitOfPreservesOfIsLimit F (fst _ _) (snd _ _)
-(tensorProductIsBinaryProduct A B).ofIsoLimit
+    IsLimit <| BinaryFan.mk (F.map (fst A B)) (F.map (snd A B)) :=
+  mapIsLimitOfPreservesOfIsLimit F (fst _ _) (snd _ _) <|
+    (tensorProductIsBinaryProduct A B).ofIsoLimit <|
       isoBinaryFanMk (BinaryFan.mk (fst A B) (snd A B))
 
-/--
-Definition of `prodComparisonIso` / `prodComparisonIso` 的定义
-
-English:
-definition prodComparisonIso
-  signature: : F.obj (A otimes B) ≅ F.obj A otimes F.obj B
-  body: IsLimit.conePointUniqueUpToIso (isLimitCartesianMonoidalCategoryOfPreservesLimits F A B)
-    (tensorProductIsBinaryProduct _ _)
-
-@[simp]
-
-中文:
-定义 prodComparisonIso
-  签名: : F.obj (A otimes B) ≅ F.obj A otimes F.obj B
-  定义体: IsLimit.conePointUniqueUpToIso (isLimitCartesianMonoidalCategoryOfPreservesLimits F A B)
-    (tensorProductIsBinaryProduct _ _)
-
-@[simp]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimitCartesianMonoidalCategoryOfPreservesLimits, tensorProductIsBinaryProduct
+/-- If `F` preserves the limit of the pair `(A, B)`, then `prodComparison F A B` is an isomorphism.
 -/
-noncomputable def prodComparisonIso : F.obj (A otimes B) ≅ F.obj A otimes F.obj B :=
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonIso** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonIso : F.obj (A otimes B) ≅ F.obj A otimes F.obj B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `F` preserves the limit of the pair `(A, B)`, then `prodComparison F A B` is 
+an isomorphism.
+-/
+noncomputable def prodComparisonIso : F.obj (A ⊗ B) ≅ F.obj A ⊗ F.obj B :=
   IsLimit.conePointUniqueUpToIso (isLimitCartesianMonoidalCategoryOfPreservesLimits F A B)
     (tensorProductIsBinaryProduct _ _)
 
 @[simp]
-/--
-lemma `prodComparisonIso_hom` / 引理 `prodComparisonIso_hom`
-
-English:
-lemma prodComparisonIso_hom
-  statement: (prodComparisonIso F A B).hom = prodComparison F A B
-  proof: rfl
-
-中文:
-引理 prodComparisonIso_hom
-  结论: (prodComparisonIso F A B).hom = prodComparison F A B
-  证明: rfl
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonIso_hom** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonIso_hom : (prodComparisonIso F A B).hom = prodComparison F A
+ B
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prodComparisonIso_hom : (prodComparisonIso F A B).hom = prodComparison F A B :=
   rfl
-
-/--
-Instance `isIso_prodComparison_of_preservesLimit_pair` / 实例 `isIso_prodComparison_of_preservesLimit_pair`
-
-English:
-instance isIso_prodComparison_of_preservesLimit_pair
-  signature: : IsIso (prodComparison F A B)
-  body: by
-  rw [← prodComparisonIso_hom]
-  infer_instance
-
-中文:
-实例 isIso_prodComparison_of_preservesLimit_pair
-  签名: : 是同构 (prodComparison F A B)
-  定义体: by
-  rw [← prodComparisonIso_hom]
-  infer_instance
-
-Depends on / 依赖: infer_instance, prodComparisonIso_hom
+/-
+**CategoryTheory.CartesianMonoidalCategory.isIso_prodComparison_of_preservesLimi
+t_pair** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：isIso_prodComparison_of_preservesLimit_pair : IsIso (prodComparison F A B)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.prodComparisonIso_hom`：prodComp
+arisonIso_hom : (prodComparisonIso F A B).hom = prodComparison F A B
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance isIso_prodComparison_of_preservesLimit_pair : IsIso (prodComparison F A B) := by
   rw [← prodComparisonIso_hom]
   infer_instance
-
-/--
-lemma `prodComparisonIso_id` / 引理 `prodComparisonIso_id`
-
-English:
-lemma prodComparisonIso_id
-  statement: prodComparisonIso (𝟭 C) A B = .refl _
-  proof: by ext <;> simp
-
-中文:
-引理 prodComparisonIso_id
-  结论: prodComparisonIso (𝟭 C) A B = .refl _
-  证明: by ext <;> simp
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonIso_id** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.CartesianMonoidalCategory C]   (A B : C),   CategoryTheory.CartesianMono
+idalCategory.prodComparisonIso (CategoryTheory.Functor.id C) A B =     CategoryT
+heory.Iso.refl ((CategoryTheory.Functor.id C).obj (CategoryTheory.MonoidalCatego
+ryStruct.tensorObj A B))
+参数：A B : C；CategoryTheory.Functor.id C；(CategoryTheory.Functor.id C).obj (Catego
+ryTheory.MonoidalCategoryStruct.tensorObj A B)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_id`：prodComparis
+on_id : prodComparison (𝟭 C) A B = 𝟙 (A otimes B)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma prodComparisonIso_id : prodComparisonIso (𝟭 C) A B = .refl _ := by ext <;> simp
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `prodComparisonIso_comp` / 引理 `prodComparisonIso_comp`
-
-English:
-lemma prodComparisonIso_comp
-  statement: [PreservesLimit (pair A B) (F ⋙ G)]
-  proof: by
-  ext <;> simp [CartesianMonoidalCategory.prodComparison, ← G.map_comp]
-
-中文:
-引理 prodComparisonIso_comp
-  结论: [保持极限 (pair A B) (F ⋙ G)]
-  证明: by
-  ext <;> simp [CartesianMonoidalCategory.prodComparison, ← G.map_comp]
-
-Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.prodComparison, G.map_comp, map_comp, prodComparison
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonIso_comp** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonIso_comp [PreservesLimit (pair A B) (F ⋙ G)] [PreservesLimit
+ (pair (F.obj A) (F.obj B)) G] : prodComparisonIso (F ⋙ G) A B = G.mapIso (prodC
+omparisonIso F A B) ≪≫ prodComparisonIso G (F.obj A) (F.obj B)
+参数：pair A B；F ⋙ G；pair (F.obj A) (F.obj B)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.comp_lift`：comp_lift {V W X Y :
+ C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) : f ≫ lift g h = lift (f ≫ g) (f ≫ h)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodComparisonIso_comp [PreservesLimit (pair A B) (F ⋙ G)]
     [PreservesLimit (pair (F.obj A) (F.obj B)) G] :
@@ -2785,44 +3147,42 @@ end
 /-- The natural isomorphism `F(A ⊗ -) ≅ FA ⊗ F-`, provided each `prodComparison F A B` is an
 isomorphism (as `B` changes). -/
 @[simps! hom inv]
-/--
-Definition of `prodComparisonNatIso` / `prodComparisonNatIso` 的定义
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonNatIso** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonNatIso (A : C) [forall B, PreservesLimit (pair A B) F] : (cu
+rriedTensor C).obj A ⋙ F ≅ F ⋙ (curriedTensor D).obj (F.obj A)
+参数：A : C；pair A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodComparisonNatIso
-  signature: (A : C) [forall B, PreservesLimit (pair A B) F]
-  body: asIso (prodComparisonNatTrans F A)
-
-中文:
-定义 prodComparison自然数Iso
-  签名: (A : C) [对任意 B, 保持极限 (pair A B) F]
-  定义体: asIso (prodComparisonNatTrans F A)
-
-Depends on / 依赖: prodComparisonNatTrans
+--- 原说明 ---
+The natural isomorphism `F(A ⊗ -) ≅ FA ⊗ F-`, provided each `prodComparison F A 
+B` is an
+isomorphism (as `B` changes).
 -/
-noncomputable def prodComparisonNatIso (A : C) [forall B, PreservesLimit (pair A B) F] :
+noncomputable def prodComparisonNatIso (A : C) [∀ B, PreservesLimit (pair A B) F] :
     (curriedTensor C).obj A ⋙ F ≅ F ⋙ (curriedTensor D).obj (F.obj A) :=
   asIso (prodComparisonNatTrans F A)
 
 /-- The natural isomorphism of bifunctors `F(- ⊗ -) ≅ F- ⊗ F-`, provided each
 `prodComparison F A B` is an isomorphism. -/
 @[simps! hom inv]
-/--
-Definition of `prodComparisonBifunctorNatIso` / `prodComparisonBifunctorNatIso` 的定义
+/-
+**CategoryTheory.CartesianMonoidalCategory.prodComparisonBifunctorNatIso** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：prodComparisonBifunctorNatIso [forall A B, PreservesLimit (pair A B) F] : 
+curriedTensor C ⋙ (Functor.whiskeringRight _ _ _).obj F ≅ F ⋙ curriedTensor D ⋙ 
+(Functor.whiskeringLeft _ _ _).obj F
+参数：pair A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodComparisonBifunctorNatIso
-  signature: [forall A B, PreservesLimit (pair A B) F]
-  body: asIso (prodComparisonBifunctorNatTrans F)
-
-中文:
-定义 prodComparisonBifunctor自然数Iso
-  签名: [对任意 A B, 保持极限 (pair A B) F]
-  定义体: asIso (prodComparisonBifunctorNatTrans F)
-
-Depends on / 依赖: prodComparisonBifunctorNatTrans
+--- 原说明 ---
+The natural isomorphism of bifunctors `F(- ⊗ -) ≅ F- ⊗ F-`, provided each
+`prodComparison F A B` is an isomorphism.
 -/
-noncomputable def prodComparisonBifunctorNatIso [forall A B, PreservesLimit (pair A B) F] :
+noncomputable def prodComparisonBifunctorNatIso [∀ A B, PreservesLimit (pair A B) F] :
     curriedTensor C ⋙ (Functor.whiskeringRight _ _ _).obj F ≅
       F ⋙ curriedTensor D ⋙ (Functor.whiskeringLeft _ _ _).obj F :=
   asIso (prodComparisonBifunctorNatTrans F)
@@ -2832,38 +3192,42 @@ end PreservesLimitPairs
 section ProdComparisonIso
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `preservesLimit_pair_of_isIso_prodComparison` / 引理 `preservesLimit_pair_of_isIso_prodComparison`
+/-- If `prodComparison F A B` is an isomorphism, then `F` preserves the limit of `pair A B`. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.preservesLimit_pair_of_isIso_prodComp
+arison** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：preservesLimit_pair_of_isIso_prodComparison (A B : C) [IsIso (prodComparis
+on F A B)] : PreservesLimit (pair A B) F
+参数：A B : C；prodComparison F A B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.diagramIsoPair_hom_app`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor (CategoryTheory.Dis
+crete CategoryTheory.Limits.Walkin…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_fst`：prodCompari
+son_fst : prodComparison F A B ≫ fst _ _ = F.map (fst A B)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.prodComparison_snd`：prodCompari
+son_snd : prodComparison F A B ≫ snd _ _ = F.map (snd A B)
 
-English:
-lemma preservesLimit_pair_of_isIso_prodComparison
-  statement: (A B : C)
-  proof: by
-  apply preservesLimit_of_preserves_limit_cone (tensorProductIsBinaryProduct A B)
-  refine IsLimit.equivOfNatIsoOfIso (pairComp A B F) _
-    ((BinaryFan.mk (fst (F.obj A) (F.obj B)) (snd _ _)).extend (prodComparison F A B))
-.invFun (BinaryFan.ext (by exact Iso.refl _) ?_ ?_)
-      (IsLimit.extendIso _ (tensorProductIsBinaryProduct (F.obj A) (F.obj B)))
-  · dsimp only [BinaryFan.fst]
-    simp [pairComp]
-  · dsimp only [BinaryFan.snd]
-    simp [pairComp]
-
-中文:
-引理 preservesLimit_pair_of_isIso_prodComparison
-  结论: (A B : C)
-  证明: by
-  apply preservesLimit_of_preserves_limit_cone (tensorProductIsBinaryProduct A B)
-  refine IsLimit.equivOfNatIsoOfIso (pairComp A B F) _
-    ((BinaryFan.mk (fst (F.obj A) (F.obj B)) (snd _ _)).extend (prodComparison F A B))
-.invFun (BinaryFan.ext (by exact Iso.refl _) ?_ ?_)
-      (IsLimit.extendIso _ (tensorProductIsBinaryProduct (F.obj A) (F.obj B)))
-  · dsimp only [BinaryFan.fst]
-    simp [pairComp]
-  · dsimp only [BinaryFan.snd]
-    simp [pairComp]
-
-Depends on / 依赖: BinaryFan, BinaryFan.ext, BinaryFan.fst, BinaryFan.mk, BinaryFan.snd, F.obj, IsLimit, IsLimit.equivOfNatIsoOfIso, IsLimit.extendIso, Iso.refl, equivOfNatIsoOfIso, extend, extendIso, invFun, mem_toPrecoverage_iff, pairComp, preservesLimit_of_preserves_limit_cone, prodComparison, tensorProductIsBinaryProduct
+--- 原说明 ---
+If `prodComparison F A B` is an isomorphism, then `F` preserves the limit of `pa
+ir A B`.
 -/
 lemma preservesLimit_pair_of_isIso_prodComparison (A B : C)
     [IsIso (prodComparison F A B)] :
@@ -2871,36 +3235,39 @@ lemma preservesLimit_pair_of_isIso_prodComparison (A B : C)
   apply preservesLimit_of_preserves_limit_cone (tensorProductIsBinaryProduct A B)
   refine IsLimit.equivOfNatIsoOfIso (pairComp A B F) _
     ((BinaryFan.mk (fst (F.obj A) (F.obj B)) (snd _ _)).extend (prodComparison F A B))
-.invFun (BinaryFan.ext (by exact Iso.refl _) ?_ ?_)
+      (BinaryFan.ext (by exact Iso.refl _) ?_ ?_) |>.invFun
       (IsLimit.extendIso _ (tensorProductIsBinaryProduct (F.obj A) (F.obj B)))
   · dsimp only [BinaryFan.fst]
     simp [pairComp]
   · dsimp only [BinaryFan.snd]
     simp [pairComp]
 
-/--
-lemma `preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison` / 引理 `preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison`
+/-- If `prodComparison F A B` is an isomorphism for all `A B` then `F` preserves limits of shape
+`Discrete (WalkingPair)`. -/
+/-
+**CategoryTheory.CartesianMonoidalCategory.preservesLimitsOfShape_discrete_walki
+ngPair_of_isIso_prodComparison** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Cartesi
+anMonoidalCategory`。
+形式化陈述：preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison [foral
+l A B, IsIso (prodComparison F A B)] : PreservesLimitsOfShape (Discrete WalkingP
+air) F
+参数：prodComparison F A B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_iso_diagram`：preservesLimit_of_i
+so_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesLimit K₁ F] : Pre
+servesLimit K₂ F where preserves {c} t
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.preservesLimit_pair_of_isIso_pr
+odComparison`：preservesLimit_pair_of_isIso_prodComparison (A B : C) [IsIso (prod
+Comparison F A B)] : PreservesLimit (pair A B) F
 
-English:
-lemma preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison
-  proof: by
-  constructor
-  intro K
-  refine @preservesLimit_of_iso_diagram _ _ _ _ _ _ _ _ _ (diagramIsoPair K).symm ?_
-  apply preservesLimit_pair_of_isIso_prodComparison
-
-中文:
-引理 preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison
-  证明: by
-  constructor
-  intro K
-  refine @preservesLimit_of_iso_diagram _ _ _ _ _ _ _ _ _ (diagramIsoPair K).symm ?_
-  apply preservesLimit_pair_of_isIso_prodComparison
-
-Depends on / 依赖: J.bindOfArrows, Presieve, Presieve.bindOfArrows_ofArrows, bindOfArrows, bindOfArrows_ofArrows, diagramIsoPair, mem_toPrecoverage_iff, preservesLimit_of_iso_diagram, preservesLimit_pair_of_isIso_prodComparison
+--- 原说明 ---
+If `prodComparison F A B` is an isomorphism for all `A B` then `F` preserves lim
+its of shape
+`Discrete (WalkingPair)`.
 -/
 lemma preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison
-    [forall A B, IsIso (prodComparison F A B)] : PreservesLimitsOfShape (Discrete WalkingPair) F := by
+    [∀ A B, IsIso (prodComparison F A B)] : PreservesLimitsOfShape (Discrete WalkingPair) F := by
   constructor
   intro K
   refine @preservesLimit_of_iso_diagram _ _ _ _ _ _ _ _ _ (diagramIsoPair K).symm ?_
@@ -2914,28 +3281,24 @@ end CartesianMonoidalCategoryComparison
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `tensorLeftIsoProd` / `tensorLeftIsoProd` 的定义
+/-- In a cartesian monoidal category, `tensorLeft X` is naturally isomorphic `prod.functor.obj X`.
+-/
+/-
+**CategoryTheory.CartesianMonoidalCategory.tensorLeftIsoProd** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：tensorLeftIsoProd [HasBinaryProducts C] (X : C) : MonoidalCategory.tensorL
+eft X ≅ prod.functor.obj X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorLeftIsoProd
-  signature: [HasBinaryProducts C] (X : C)
-  body: NatIso.ofComponents fun Y =>
-    (CartesianMonoidalCategory.tensorProductIsBinaryProduct X Y).conePointUniqueUpToIso
-      (limit.isLimit _)
-
-中文:
-定义 tensorLeftIsoProd
-  签名: [HasBinaryProducts C] (X : C)
-  定义体: NatIso.ofComponents fun Y =>
-    (CartesianMonoidalCategory.tensorProductIsBinaryProduct X Y).conePointUniqueUpToIso
-      (limit.isLimit _)
-
-Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.tensorProductIsBinaryProduct, J.pullback_stable, NatIso, NatIso.ofComponents, Sieve.ofArrows, Sieve.ofArrows_eq_pullback_of_isPullback, conePointUniqueUpToIso, isLimit, limit.isLimit, mem_toPrecoverage_iff, ofArrows, ofArrows_eq_pullback_of_isPullback, ofComponents, pullback_stable, tensorProductIsBinaryProduct
+--- 原说明 ---
+In a cartesian monoidal category, `tensorLeft X` is naturally isomorphic `prod.f
+unctor.obj X`.
 -/
 noncomputable def tensorLeftIsoProd [HasBinaryProducts C] (X : C) :
     MonoidalCategory.tensorLeft X ≅ prod.functor.obj X :=
-  NatIso.ofComponents fun Y =>
+  NatIso.ofComponents fun Y ↦
     (CartesianMonoidalCategory.tensorProductIsBinaryProduct X Y).conePointUniqueUpToIso
       (limit.isLimit _)
 
@@ -2949,42 +3312,20 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The restriction of a Cartesian-monoidal category along an object property that's closed under
 finite products is Cartesian-monoidal. -/
 @[simps!]
-/--
-Instance `fullSubcategory` / 实例 `fullSubcategory`
+/-
+**CategoryTheory.CartesianMonoidalCategory.fullSubcategory** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.CartesianMonoidalCategory`。
+形式化陈述：fullSubcategory [P.IsClosedUnderLimitsOfShape (Discrete PEmpty)] [P.IsClos
+edUnderLimitsOfShape (Discrete WalkingPair)] : CartesianMonoidalCategory P.FullS
+ubcategory where __
+参数：Discrete PEmpty；Discrete WalkingPair。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance fullSubcategory
-  body: MonoidalCategory.fullSubcategory P
-      (P.prop_of_isLimit isTerminalTensorUnit (by simp))
-      (fun X Y hX hY => P.prop_of_isLimit (tensorProductIsBinaryProduct X Y)
-        (by rintro (_ | _) <;> assumption))
-  isTerminalTensorUnit := .ofUniqueHom (fun X => ObjectProperty.homMk (toUnit X.1))
-    fun _ _ => by ext; apply toUnit_unique
-  fst X Y := ObjectProperty.homMk (fst X.1 Y.1)
-  snd X Y := ObjectProperty.homMk (snd X.1 Y.1)
-  tensorProductIsBinaryProduct X Y :=
-    BinaryFan.IsLimit.mk _ (fun f g => ObjectProperty.homMk (lift f.hom g.hom))
-      (by aesop_cat) (by aesop_cat) (by aesop_cat)
-  fst_def X Y := by ext; exact fst_def X.1 Y.1
-  snd_def X Y := by ext; exact snd_def X.1 Y.1
-
-中文:
-实例 fullSubcategory
-  定义体: MonoidalCategory.fullSubcategory P
-      (P.prop_of_isLimit isTerminalTensorUnit (by simp))
-      (fun X Y hX hY => P.prop_of_isLimit (tensorProductIsBinaryProduct X Y)
-        (by rintro (_ | _) <;> assumption))
-  isTerminalTensorUnit := .ofUniqueHom (fun X => ObjectProperty.homMk (toUnit X.1))
-    fun _ _ => by ext; apply toUnit_unique
-  fst X Y := ObjectProperty.homMk (fst X.1 Y.1)
-  snd X Y := ObjectProperty.homMk (snd X.1 Y.1)
-  tensorProductIsBinaryProduct X Y :=
-    BinaryFan.IsLimit.mk _ (fun f g => ObjectProperty.homMk (lift f.hom g.hom))
-      (by aesop_cat) (by aesop_cat) (by aesop_cat)
-  fst_def X Y := by ext; exact fst_def X.1 Y.1
-  snd_def X Y := by ext; exact snd_def X.1 Y.1
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.fullSubcategory, fullSubcategory
+--- 原说明 ---
+The restriction of a Cartesian-monoidal category along an object property that's
+ closed under
+finite products is Cartesian-monoidal.
 -/
 instance fullSubcategory
     [P.IsClosedUnderLimitsOfShape (Discrete PEmpty)]
@@ -2992,14 +3333,14 @@ instance fullSubcategory
     CartesianMonoidalCategory P.FullSubcategory where
   __ := MonoidalCategory.fullSubcategory P
       (P.prop_of_isLimit isTerminalTensorUnit (by simp))
-      (fun X Y hX hY => P.prop_of_isLimit (tensorProductIsBinaryProduct X Y)
+      (fun X Y hX hY ↦ P.prop_of_isLimit (tensorProductIsBinaryProduct X Y)
         (by rintro (_ | _) <;> assumption))
-  isTerminalTensorUnit := .ofUniqueHom (fun X => ObjectProperty.homMk (toUnit X.1))
-    fun _ _ => by ext; apply toUnit_unique
+  isTerminalTensorUnit := .ofUniqueHom (fun X ↦ ObjectProperty.homMk (toUnit X.1))
+    fun _ _ ↦ by ext; apply toUnit_unique
   fst X Y := ObjectProperty.homMk (fst X.1 Y.1)
   snd X Y := ObjectProperty.homMk (snd X.1 Y.1)
   tensorProductIsBinaryProduct X Y :=
-    BinaryFan.IsLimit.mk _ (fun f g => ObjectProperty.homMk (lift f.hom g.hom))
+    BinaryFan.IsLimit.mk _ (fun f g ↦ ObjectProperty.homMk (lift f.hom g.hom))
       (by aesop_cat) (by aesop_cat) (by aesop_cat)
   fst_def X Y := by ext; exact fst_def X.1 Y.1
   snd_def X Y := by ext; exact snd_def X.1 Y.1
@@ -3020,53 +3361,19 @@ open Limits (PreservesFiniteProducts)
 namespace Functor.OplaxMonoidal
 variable [F.OplaxMonoidal]
 
-/--
-lemma `η_of_cartesianMonoidalCategory` / 引理 `η_of_cartesianMonoidalCategory`
-
-English:
-lemma η_of_cartesianMonoidalCategory
-  proof: toUnit_unique ..
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 η_of_cartesianMonoidalCategory
-  证明: toUnit_unique ..
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: toUnit_unique
+/-
+**CategoryTheory.Functor.OplaxMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma η_of_cartesianMonoidalCategory :
     η F = CartesianMonoidalCategory.terminalComparison F := toUnit_unique ..
 
 @[reassoc (attr := simp)]
-/--
-lemma `δ_fst` / 引理 `δ_fst`
-
-English:
-lemma δ_fst
-  given: (X Y : C)
-  proof: by
-  trans F.map (X ◁ toUnit Y) ≫ F.map (ρ_ X).hom
-  · rw [← whiskerLeft_fst _ (F.map (toUnit Y)), δ_natural_right_assoc]
-    simp [← OplaxMonoidal.right_unitality_hom, rightUnitor_hom (F.obj X)]
-  · simp [← Functor.map_comp, rightUnitor_hom]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 δ_fst
-  条件: (X Y : C)
-  证明: by
-  trans F.map (X ◁ toUnit Y) ≫ F.map (ρ_ X).hom
-  · rw [← whiskerLeft_fst _ (F.map (toUnit Y)), δ_natural_right_assoc]
-    simp [← OplaxMonoidal.right_unitality_hom, rightUnitor_hom (F.obj X)]
-  · simp [← Functor.map_comp, rightUnitor_hom]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map, F.obj, Functor, Functor.map_comp, OplaxMonoidal, OplaxMonoidal.right_unitality_hom, map_comp, rightUnitor_hom, right_unitality_hom, toUnit, whiskerLeft_fst
+/-
+**CategoryTheory.Functor.OplaxMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_fst (X Y : C) :
     δ F X Y ≫ fst _ _ = F.map (fst _ _) := by
@@ -3076,101 +3383,47 @@ lemma δ_fst (X Y : C) :
   · simp [← Functor.map_comp, rightUnitor_hom]
 
 @[reassoc (attr := simp)]
-/--
-lemma `δ_snd` / 引理 `δ_snd`
-
-English:
-lemma δ_snd
-  given: (X Y : C)
-  proof: by
-  trans F.map (toUnit X ▷ Y) ≫ F.map (fun_ Y).hom
-  · rw [← whiskerRight_snd (F.map (toUnit X)), δ_natural_left_assoc]
-    simp [← OplaxMonoidal.left_unitality_hom, leftUnitor_hom (F.obj Y)]
-  · simp [← Functor.map_comp, leftUnitor_hom]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 δ_snd
-  条件: (X Y : C)
-  证明: by
-  trans F.map (toUnit X ▷ Y) ≫ F.map (fun_ Y).hom
-  · rw [← whiskerRight_snd (F.map (toUnit X)), δ_natural_left_assoc]
-    simp [← OplaxMonoidal.left_unitality_hom, leftUnitor_hom (F.obj Y)]
-  · simp [← Functor.map_comp, leftUnitor_hom]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map, F.obj, Functor, Functor.map_comp, OplaxMonoidal, OplaxMonoidal.left_unitality_hom, fun_, leftUnitor_hom, left_unitality_hom, map_comp, toUnit, whiskerRight_snd
+/-
+**CategoryTheory.Functor.OplaxMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_snd (X Y : C) :
     δ F X Y ≫ snd _ _ = F.map (snd _ _) := by
-  trans F.map (toUnit X ▷ Y) ≫ F.map (fun_ Y).hom
+  trans F.map (toUnit X ▷ Y) ≫ F.map (λ_ Y).hom
   · rw [← whiskerRight_snd (F.map (toUnit X)), δ_natural_left_assoc]
     simp [← OplaxMonoidal.left_unitality_hom, leftUnitor_hom (F.obj Y)]
   · simp [← Functor.map_comp, leftUnitor_hom]
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_δ` / 引理 `lift_δ`
-
-English:
-lemma lift_δ
-  given: (f : X ⟶ Y) (g : X ⟶ Z)
-  statement: F.map (lift f g) ≫ δ F _ _ = lift (F.map f) (F.map g)
-  proof: by
-  ext <;> simp [← map_comp]
-
-中文:
-引理 lift_δ
-  条件: (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: F.map (lift f g) ≫ δ F _ _ = lift (F.map f) (F.map g)
-  证明: by
-  ext <;> simp [← map_comp]
-
-Depends on / 依赖: map_comp
+/-
+**CategoryTheory.Functor.OplaxMonoidal.lift_** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lift_δ (f : X ⟶ Y) (g : X ⟶ Z) : F.map (lift f g) ≫ δ F _ _ = lift (F.map f) (F.map g) := by
   ext <;> simp [← map_comp]
-
-/--
-lemma `δ_of_cartesianMonoidalCategory` / 引理 `δ_of_cartesianMonoidalCategory`
-
-English:
-lemma δ_of_cartesianMonoidalCategory
-  given: (X Y : C)
-  proof: by cat_disch
-
-中文:
-引理 δ_of_cartesianMonoidalCategory
-  条件: (X Y : C)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.OplaxMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_of_cartesianMonoidalCategory (X Y : C) :
     δ F X Y = CartesianMonoidalCategory.prodComparison F X Y := by cat_disch
 
 variable [PreservesFiniteProducts F]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (η F)
-  body: η_of_cartesianMonoidalCategory F ▸ terminalComparison_isIso_of_preservesLimits F
-
-中文:
-实例 :
-  签名: 是同构 (η F)
-  定义体: η_of_cartesianMonoidalCategory F ▸ terminalComparison_isIso_of_preservesLimits F
-
-Depends on / 依赖: terminalComparison_isIso_of_preservesLimits
+/-
+**CategoryTheory.Functor.OplaxMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (η F) :=
   η_of_cartesianMonoidalCategory F ▸ terminalComparison_isIso_of_preservesLimits F
-
+/-
+**CategoryTheory.Functor.OplaxMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : C) : IsIso (δ F X Y) :=
   δ_of_cartesianMonoidalCategory F X Y ▸ isIso_prodComparison_of_preservesLimit_pair F X Y
 
@@ -3180,36 +3433,20 @@ omit [F.OplaxMonoidal] in
 This is not made an instance because it would create a diamond for the oplax monoidal structure on
 the identity and composition of functors. -/
 @[instance_reducible]
-/--
-Definition of `ofChosenFiniteProducts` / `ofChosenFiniteProducts` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofChosenFiniteProducts** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Functor.OplaxMonoidal`。
+形式化陈述：ofChosenFiniteProducts (F : C ⥤ D) : F.OplaxMonoidal where η
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofChosenFiniteProducts
-  signature: (F : C ⥤ D)
-  body: terminalComparison F
-  δ X Y := prodComparison F X Y
-  δ_natural_left f X := by ext <;> simp [← Functor.map_comp]
-  δ_natural_right X g := by ext <;> simp [← Functor.map_comp]
-  oplax_associativity _ _ _ := by ext <;> simp [← Functor.map_comp]
-  oplax_left_unitality _ := by ext; simp [← Functor.map_comp]
-  oplax_right_unitality _ := by ext; simp [← Functor.map_comp]
+--- 原说明 ---
+Any functor between Cartesian-monoidal categories is oplax monoidal.
 
-omit [F.OplaxMonoidal] in
-
-中文:
-定义 ofChosenFiniteProducts
-  签名: (F : C ⥤ D)
-  定义体: terminalComparison F
-  δ X Y := prodComparison F X Y
-  δ_natural_left f X := by ext <;> simp [← Functor.map_comp]
-  δ_natural_right X g := by ext <;> simp [← Functor.map_comp]
-  oplax_associativity _ _ _ := by ext <;> simp [← Functor.map_comp]
-  oplax_left_unitality _ := by ext; simp [← Functor.map_comp]
-  oplax_right_unitality _ := by ext; simp [← Functor.map_comp]
-
-omit [F.OplaxMonoidal] in
-
-Depends on / 依赖: terminalComparison
+This is not made an instance because it would create a diamond for the oplax mon
+oidal structure on
+the identity and composition of functors.
 -/
 def ofChosenFiniteProducts (F : C ⥤ D) : F.OplaxMonoidal where
   η := terminalComparison F
@@ -3221,26 +3458,15 @@ def ofChosenFiniteProducts (F : C ⥤ D) : F.OplaxMonoidal where
   oplax_right_unitality _ := by ext; simp [← Functor.map_comp]
 
 omit [F.OplaxMonoidal] in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Any functor between Cartesian-monoidal categories is oplax monoidal in a unique way. -/
+/-
+**CategoryTheory.Functor.OplaxMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Functor.OplaxMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Subsingleton F.OplaxMonoidal
-  body: by
-    ext1
-    · exact toUnit_unique _ _
-    · ext1; ext1; rw [δ_of_cartesianMonoidalCategory, δ_of_cartesianMonoidalCategory]
-
-中文:
-实例 :
-  签名: 子单例 F.反松弛幺半群
-  定义体: by
-    ext1
-    · exact toUnit_unique _ _
-    · ext1; ext1; rw [δ_of_cartesianMonoidalCategory, δ_of_cartesianMonoidalCategory]
-
-Depends on / 依赖: toUnit_unique
+--- 原说明 ---
+Any functor between Cartesian-monoidal categories is oplax monoidal in a unique 
+way.
 -/
 instance : Subsingleton F.OplaxMonoidal where
   allEq a b := by
@@ -3254,99 +3480,37 @@ namespace Monoidal
 variable [F.Monoidal] [G.Monoidal]
 
 @[reassoc (attr := simp)]
-/--
-lemma `toUnit_ε` / 引理 `toUnit_ε`
-
-English:
-lemma toUnit_ε
-  given: (X : C)
-  statement: toUnit (F.obj X) ≫ ε F = F.map (toUnit X)
-  proof: by
-  rw [← cancel_mono (εIso F).inv]; exact toUnit_unique ..
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 toUnit_ε
-  条件: (X : C)
-  结论: toUnit (F.obj X) ≫ ε F = F.map (toUnit X)
-  证明: by
-  rw [← cancel_mono (εIso F).inv]; exact toUnit_unique ..
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_mono, toUnit_unique
+/-
+**CategoryTheory.Functor.Monoidal.toUnit_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Functor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toUnit_ε (X : C) : toUnit (F.obj X) ≫ ε F = F.map (toUnit X) := by
   rw [← cancel_mono (εIso F).inv]; exact toUnit_unique ..
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_μ` / 引理 `lift_μ`
-
-English:
-lemma lift_μ
-  given: (f : X ⟶ Y) (g : X ⟶ Z)
-  statement: lift (F.map f) (F.map g) ≫ μ F _ _ = F.map (lift f g)
-  proof: (cancel_mono (μIso _ _ _).inv).1 (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_μ
-  条件: (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: lift (F.map f) (F.map g) ≫ μ F _ _ = F.map (lift f g)
-  证明: (cancel_mono (μIso _ _ _).inv).1 (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.Functor.Monoidal.lift_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lift_μ (f : X ⟶ Y) (g : X ⟶ Z) : lift (F.map f) (F.map g) ≫ μ F _ _ = F.map (lift f g) :=
   (cancel_mono (μIso _ _ _).inv).1 (by simp)
 
 @[reassoc (attr := simp)]
-/--
-lemma `μ_fst` / 引理 `μ_fst`
-
-English:
-lemma μ_fst
-  given: (X Y : C)
-  statement: μ F X Y ≫ F.map (fst X Y) = fst (F.obj X) (F.obj Y)
-  proof: (cancel_epi (μIso _ _ _).inv).1 (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 μ_fst
-  条件: (X Y : C)
-  结论: μ F X Y ≫ F.map (fst X Y) = fst (F.obj X) (F.obj Y)
-  证明: (cancel_epi (μIso _ _ _).inv).1 (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_epi
+/-
+**CategoryTheory.Functor.Monoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Fun
+ctor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_fst (X Y : C) : μ F X Y ≫ F.map (fst X Y) = fst (F.obj X) (F.obj Y) :=
   (cancel_epi (μIso _ _ _).inv).1 (by simp)
 
 @[reassoc (attr := simp)]
-/--
-lemma `μ_snd` / 引理 `μ_snd`
-
-English:
-lemma μ_snd
-  given: (X Y : C)
-  statement: μ F X Y ≫ F.map (snd X Y) = snd (F.obj X) (F.obj Y)
-  proof: (cancel_epi (μIso _ _ _).inv).1 (by simp)
-
-中文:
-引理 μ_snd
-  条件: (X Y : C)
-  结论: μ F X Y ≫ F.map (snd X Y) = snd (F.obj X) (F.obj Y)
-  证明: (cancel_epi (μIso _ _ _).inv).1 (by simp)
-
-Depends on / 依赖: cancel_epi
+/-
+**CategoryTheory.Functor.Monoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Fun
+ctor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_snd (X Y : C) : μ F X Y ≫ F.map (snd X Y) = snd (F.obj X) (F.obj Y) :=
   (cancel_epi (μIso _ _ _).inv).1 (by simp)
@@ -3354,68 +3518,26 @@ lemma μ_snd (X Y : C) : μ F X Y ≫ F.map (snd X Y) = snd (F.obj X) (F.obj Y) 
 set_option backward.defeqAttrib.useBackward true in
 attribute [-instance] Functor.LaxMonoidal.comp Functor.Monoidal.instComp in
 @[reassoc]
-/--
-lemma `μ_comp` / 引理 `μ_comp`
-
-English:
-lemma μ_comp
-  given: [(F ⋙ G).Monoidal] (X Y : C)
-  statement: μ (F ⋙ G) X Y = μ G _ _ ≫ G.map (μ F X Y)
-  proof: by
-  rw [← cancel_mono (μIso _ _ _).inv]; ext <;> simp [← Functor.comp_obj, ← Functor.map_comp]
-
-中文:
-引理 μ_comp
-  条件: [(F ⋙ G).幺半群] (X Y : C)
-  结论: μ (F ⋙ G) X Y = μ G _ _ ≫ G.map (μ F X Y)
-  证明: by
-  rw [← cancel_mono (μIso _ _ _).inv]; ext <;> simp [← Functor.comp_obj, ← Functor.map_comp]
-
-Depends on / 依赖: Functor, Functor.comp_obj, Functor.map_comp, cancel_mono, comp_obj, map_comp
+/-
+**CategoryTheory.Functor.Monoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Fun
+ctor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_comp [(F ⋙ G).Monoidal] (X Y : C) : μ (F ⋙ G) X Y = μ G _ _ ≫ G.map (μ F X Y) := by
   rw [← cancel_mono (μIso _ _ _).inv]; ext <;> simp [← Functor.comp_obj, ← Functor.map_comp]
 
 variable [PreservesFiniteProducts F]
-
-/--
-lemma `ε_of_cartesianMonoidalCategory` / 引理 `ε_of_cartesianMonoidalCategory`
-
-English:
-lemma ε_of_cartesianMonoidalCategory
-  statement: ε F = (preservesTerminalIso F).inv
-  proof: by
-  change (εIso F).symm.inv = _; congr; ext
-
-中文:
-引理 ε_of_cartesianMonoidalCategory
-  结论: ε F = (preservesTerminalIso F).inv
-  证明: by
-  change (εIso F).symm.inv = _; congr; ext
-
-Depends on / 依赖: symm.inv
+/-
+**CategoryTheory.Functor.Monoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Fun
+ctor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ε_of_cartesianMonoidalCategory : ε F = (preservesTerminalIso F).inv := by
   change (εIso F).symm.inv = _; congr; ext
-
-/--
-lemma `μ_of_cartesianMonoidalCategory` / 引理 `μ_of_cartesianMonoidalCategory`
-
-English:
-lemma μ_of_cartesianMonoidalCategory
-  given: (X Y : C)
-  statement: μ F X Y = (prodComparisonIso F X Y).inv
-  proof: by
-  change (μIso F X Y).symm.inv = _; congr; ext : 1; simpa using δ_of_cartesianMonoidalCategory F X Y
-
-中文:
-引理 μ_of_cartesianMonoidalCategory
-  条件: (X Y : C)
-  结论: μ F X Y = (prodComparisonIso F X Y).inv
-  证明: by
-  change (μIso F X Y).symm.inv = _; congr; ext : 1; simpa using δ_of_cartesianMonoidalCategory F X Y
-
-Depends on / 依赖: symm.inv
+/-
+**CategoryTheory.Functor.Monoidal.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Fun
+ctor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_of_cartesianMonoidalCategory (X Y : C) : μ F X Y = (prodComparisonIso F X Y).inv := by
   change (μIso F X Y).symm.inv = _; congr; ext : 1; simpa using δ_of_cartesianMonoidalCategory F X Y
@@ -3427,38 +3549,31 @@ omit [F.Monoidal] in
 This is not made an instance because it would create a diamond for the monoidal structure on
 the identity and composition of functors. -/
 @[instance_reducible]
-/--
-Definition of `ofChosenFiniteProducts` / `ofChosenFiniteProducts` 的定义
+/-
+**CategoryTheory.Functor.Monoidal.ofChosenFiniteProducts** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Functor.Monoidal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             (F : CategoryTheory.Functor C D) →
+ [CategoryTheory.Limits.PreservesFiniteProducts F] → F.Monoidal
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofChosenFiniteProducts
-  signature: (F : C ⥤ D) [PreservesFiniteProducts F]
-  body: .ofOplaxMonoidal F
+--- 原说明 ---
+A finite-product-preserving functor between Cartesian monoidal categories is mon
+oidal.
 
-中文:
-定义 ofChosenFiniteProducts
-  签名: (F : C ⥤ D) [保持FiniteProducts F]
-  定义体: .ofOplaxMonoidal F
-
-Depends on / 依赖: IsLimit, IsLimit.mapConeEquiv, J.yoneda.mapCocone, J.yonedaOpCompCoyoneda, X.obj, c.op, coyoneda, coyoneda.mapCone, evaluation, evaluationJointlyReflectsLimits, hc.op, isColimitOfOp, isLimitOfPreserves, isLimitOfReflects, isoWhiskerRight, mapCocone, mapCone, mapConeEquiv, ofOplaxMonoidal, uliftFunctor
+This is not made an instance because it would create a diamond for the monoidal 
+structure on
+the identity and composition of functors.
 -/
 noncomputable def ofChosenFiniteProducts (F : C ⥤ D) [PreservesFiniteProducts F] : F.Monoidal :=
   .ofOplaxMonoidal F
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton F.Monoidal
-  body: (toOplaxMonoidal_injective F).subsingleton
-
-中文:
-实例 :
-  签名: 子单例 F.幺半群
-  定义体: (toOplaxMonoidal_injective F).subsingleton
-
-Depends on / 依赖: subsingleton, toOplaxMonoidal_injective
+/-
+**CategoryTheory.Functor.Monoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Fun
+ctor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton F.Monoidal := (toOplaxMonoidal_injective F).subsingleton
 
@@ -3466,34 +3581,10 @@ end Monoidal
 
 namespace Monoidal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Monoidal]
-  signature: : PreservesFiniteProducts F
-  body: have (A B : _) : IsIso (CartesianMonoidalCategory.prodComparison F A B) :=
-    δ_of_cartesianMonoidalCategory F A B ▸ inferInstance
-  have : IsIso (CartesianMonoidalCategory.terminalComparison F) :=
-    η_of_cartesianMonoidalCategory F ▸ inferInstance
-  have := preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison F
-  have := preservesLimit_empty_of_isIso_terminalComparison F
-  have := Limits.preservesLimitsOfShape_pempty_of_preservesTerminal F
-  .of_preserves_binary_and_terminal _
-
-中文:
-实例 [F.幺半群]
-  签名: : 保持FiniteProducts F
-  定义体: have (A B : _) : IsIso (CartesianMonoidalCategory.prodComparison F A B) :=
-    δ_of_cartesianMonoidalCategory F A B ▸ inferInstance
-  have : IsIso (CartesianMonoidalCategory.terminalComparison F) :=
-    η_of_cartesianMonoidalCategory F ▸ inferInstance
-  have := preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison F
-  have := preservesLimit_empty_of_isIso_terminalComparison F
-  have := Limits.preservesLimitsOfShape_pempty_of_preservesTerminal F
-  .of_preserves_binary_and_terminal _
-
-Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.prodComparison, CartesianMonoidalCategory.terminalComparison, IsLimit, IsLimit.mapConeEquiv, J.uliftYoneda.mapCocone, J.uliftYonedaOpCompCoyoneda, Limits, Limits.preservesLimitsOfShape_pempty_of_preservesTerminal, X.obj, c.op, coyoneda, coyoneda.mapCone, evaluation, evaluationJointlyReflectsLimits, hc.op, isColimitOfOp, isLimitOfPreserves, isLimitOfReflects, isoWhiskerRight
+/-
+**CategoryTheory.Functor.Monoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Fun
+ctor.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.Monoidal] : PreservesFiniteProducts F :=
   have (A B : _) : IsIso (CartesianMonoidalCategory.prodComparison F A B) :=
@@ -3507,21 +3598,29 @@ instance [F.Monoidal] : PreservesFiniteProducts F :=
 
 attribute [local instance] OplaxMonoidal.ofChosenFiniteProducts in
 /--
-lemma `nonempty_monoidal_iff_preservesFiniteProducts` / 引理 `nonempty_monoidal_iff_preservesFiniteProducts`
+A functor between Cartesian monoidal categories is monoidal iff it preserves finite products.
+-/
+/-
+**CategoryTheory.Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Functor.Monoidal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   (F
+ : CategoryTheory.Functor C D), Nonempty F.Monoidal ↔ CategoryTheory.Limits.Pres
+ervesFiniteProducts F
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Monoidal.instPreservesFiniteProducts`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Cartes
+ianMonoidalCategory C]   {D : Type u₂} [inst_2 : …
 
-English:
-lemma nonempty_monoidal_iff_preservesFiniteProducts
-  proof: ⟨fun ⟨_⟩ => inferInstance, fun _ => ⟨ofChosenFiniteProducts F⟩⟩
-
-中文:
-引理 nonempty_monoidal_iff_preservesFiniteProducts
-  证明: ⟨fun ⟨_⟩ => inferInstance, fun _ => ⟨ofChosenFiniteProducts F⟩⟩
-
-Depends on / 依赖: ofChosenFiniteProducts
+--- 原说明 ---
+A functor between Cartesian monoidal categories is monoidal iff it preserves fin
+ite products.
 -/
 lemma nonempty_monoidal_iff_preservesFiniteProducts :
     Nonempty F.Monoidal ↔ PreservesFiniteProducts F :=
-  ⟨fun ⟨_⟩ => inferInstance, fun _ => ⟨ofChosenFiniteProducts F⟩⟩
+  ⟨fun ⟨_⟩ ↦ inferInstance, fun _ ↦ ⟨ofChosenFiniteProducts F⟩⟩
 
 end Monoidal
 
@@ -3534,38 +3633,33 @@ attribute [local instance] Functor.Monoidal.ofChosenFiniteProducts in
 This is not made an instance because it would create a diamond for the monoidal structure on
 the identity and composition of functors. -/
 @[instance_reducible]
-/--
-Definition of `ofChosenFiniteProducts` / `ofChosenFiniteProducts` 的定义
+/-
+**CategoryTheory.Functor.Braided.ofChosenFiniteProducts** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Functor.Braided`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       {D : Type u₂} →         
+[inst_2 : CategoryTheory.Category.{v₂, u₂} D] →           [inst_3 : CategoryTheo
+ry.CartesianMonoidalCategory D] →             [inst_4 : CategoryTheory.BraidedCa
+tegory C] →               [inst_5 : CategoryTheory.BraidedCategory D] →         
+        (F : CategoryTheory.Functor C D) → [CategoryTheory.Limits.PreservesFinit
+eProducts F] → F.Braided
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofChosenFiniteProducts
-  signature: (F : C ⥤ D) [PreservesFiniteProducts F]
-  body: by rw [← cancel_mono (Monoidal.μIso _ _ _).inv]; ext <;> simp [← F.map_comp]
+--- 原说明 ---
+A finite-product-preserving functor between Cartesian monoidal categories is bra
+ided.
 
-中文:
-定义 ofChosenFiniteProducts
-  签名: (F : C ⥤ D) [保持FiniteProducts F]
-  定义体: by rw [← cancel_mono (Monoidal.μIso _ _ _).inv]; ext <;> simp [← F.map_comp]
-
-Depends on / 依赖: F.map_comp, Monoidal, cancel_mono, map_comp
+This is not made an instance because it would create a diamond for the monoidal 
+structure on
+the identity and composition of functors.
 -/
 noncomputable def ofChosenFiniteProducts (F : C ⥤ D) [PreservesFiniteProducts F] : F.Braided where
   braided X Y := by rw [← cancel_mono (Monoidal.μIso _ _ _).inv]; ext <;> simp [← F.map_comp]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton F.Braided
-  body: (Braided.toMonoidal_injective F).subsingleton
-
-中文:
-实例 :
-  签名: 子单例 F.辫
-  定义体: (Braided.toMonoidal_injective F).subsingleton
-
-Depends on / 依赖: Braided, Braided.toMonoidal_injective, J.uliftYonedaIsoYoneda, preservesColimit_of_natIso, subsingleton, toMonoidal_injective, uliftYonedaIsoYoneda
+/-
+**CategoryTheory.Functor.Braided.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Func
+tor.Braided`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton F.Braided := (Braided.toMonoidal_injective F).subsingleton
 
@@ -3575,88 +3669,149 @@ namespace EssImageSubcategory
 variable [F.Full] [F.Faithful] [PreservesFiniteProducts F] {T X Y Z : F.EssImageSubcategory}
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `tensor_obj` / 引理 `tensor_obj`
-
-English:
-lemma tensor_obj
-  given: (X Y : F.EssImageSubcategory)
-  statement: (X otimes Y).obj = X.obj otimes Y.obj
-  proof: rfl
-
-中文:
-引理 tensor_obj
-  条件: (X Y : F.EssImageSubcategory)
-  结论: (X otimes Y).obj = X.obj otimes Y.obj
-  证明: rfl
+/-
+**CategoryTheory.Functor.EssImageSubcategory.tensor_obj** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Functor.EssImageSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   (F
+ : CategoryTheory.Functor C D) [inst_4 : F.Full] [inst_5 : F.Faithful]   [inst_6
+ : CategoryTheory.Limits.PreservesFiniteProducts F] (X Y : F.EssImageSubcategory
+),   (CategoryTheory.MonoidalCategoryStruct.tensorObj X Y).obj =     CategoryThe
+ory.MonoidalCategoryStruct.tensorObj X.obj Y.obj
+参数：F : CategoryTheory.Functor C D；X Y : F.EssImageSubcategory；CategoryTheory.Mon
+oidalCategoryStruct.tensorObj X Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instIsClosedUnderLimitsOfShapeEssImageOfHasLimitsO
+fShapeOfPreservesLimitsOfShapeOfFullOfFaithful`：∀ {J : Type w} [inst : CategoryT
+heory.Category.{w', w} J] {C : Type u₁} [inst_1 : CategoryTheory.Category.{v₁, u
+₁} C]   {D : Type u₂} [inst_…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.instPreservesLimitsOfShapeDiscreteOfFiniteOfPreser
+vesFiniteProducts`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
-lemma tensor_obj (X Y : F.EssImageSubcategory) : (X otimes Y).obj = X.obj otimes Y.obj := rfl
+lemma tensor_obj (X Y : F.EssImageSubcategory) : (X ⊗ Y).obj = X.obj ⊗ Y.obj := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `lift_def` / 引理 `lift_def`
-
-English:
-lemma lift_def
-  given: (f : T ⟶ X) (g : T ⟶ Y)
-  statement: lift f g = ObjectProperty.homMk (lift f.hom g.hom)
-  proof: rfl
-
-中文:
-引理 lift_def
-  条件: (f : T ⟶ X) (g : T ⟶ Y)
-  结论: lift f g = ObjectProperty.homMk (lift f.hom g.hom)
-  证明: rfl
+/-
+**CategoryTheory.Functor.EssImageSubcategory.lift_def** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Functor.EssImageSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   (F
+ : CategoryTheory.Functor C D) [inst_4 : F.Full] [inst_5 : F.Faithful]   [inst_6
+ : CategoryTheory.Limits.PreservesFiniteProducts F] {T X Y : F.EssImageSubcatego
+ry} (f : T ⟶ X) (g : T ⟶ Y),   CategoryTheory.CartesianMonoidalCategory.lift f g
+ =     CategoryTheory.ObjectProperty.homMk (CategoryTheory.CartesianMonoidalCate
+gory.lift f.hom g.hom)
+参数：F : CategoryTheory.Functor C D；f : T ⟶ X；g : T ⟶ Y；CategoryTheory.CartesianMo
+noidalCategory.lift f.hom g.hom。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instIsClosedUnderLimitsOfShapeEssImageOfHasLimitsO
+fShapeOfPreservesLimitsOfShapeOfFullOfFaithful`：∀ {J : Type w} [inst : CategoryT
+heory.Category.{w', w} J] {C : Type u₁} [inst_1 : CategoryTheory.Category.{v₁, u
+₁} C]   {D : Type u₂} [inst_…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.instPreservesLimitsOfShapeDiscreteOfFiniteOfPreser
+vesFiniteProducts`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma lift_def (f : T ⟶ X) (g : T ⟶ Y) : lift f g = ObjectProperty.homMk (lift f.hom g.hom) := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `associator_hom_def` / 引理 `associator_hom_def`
-
-English:
-lemma associator_hom_def
-  given: (X Y Z : F.EssImageSubcategory)
-  proof: rfl
-
-中文:
-引理 associator_hom_def
-  条件: (X Y Z : F.EssImageSubcategory)
-  证明: rfl
+/-
+**CategoryTheory.Functor.EssImageSubcategory.associator_hom_def** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Functor.EssImageSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   (F
+ : CategoryTheory.Functor C D) [inst_4 : F.Full] [inst_5 : F.Faithful]   [inst_6
+ : CategoryTheory.Limits.PreservesFiniteProducts F] (X Y Z : F.EssImageSubcatego
+ry),   (CategoryTheory.MonoidalCategoryStruct.associator X Y Z).hom =     Catego
+ryTheory.ObjectProperty.homMk (CategoryTheory.MonoidalCategoryStruct.associator 
+X.obj Y.obj Z.obj).hom
+参数：F : CategoryTheory.Functor C D；X Y Z : F.EssImageSubcategory；CategoryTheory.M
+onoidalCategoryStruct.associator X Y Z；CategoryTheory.MonoidalCategoryStruct.ass
+ociator X.obj Y.obj Z.obj。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instIsClosedUnderLimitsOfShapeEssImageOfHasLimitsO
+fShapeOfPreservesLimitsOfShapeOfFullOfFaithful`：∀ {J : Type w} [inst : CategoryT
+heory.Category.{w', w} J] {C : Type u₁} [inst_1 : CategoryTheory.Category.{v₁, u
+₁} C]   {D : Type u₂} [inst_…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.instPreservesLimitsOfShapeDiscreteOfFiniteOfPreser
+vesFiniteProducts`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma associator_hom_def (X Y Z : F.EssImageSubcategory) :
     (α_ X Y Z).hom = ObjectProperty.homMk (α_ X.obj Y.obj Z.obj).hom := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `associator_inv_def` / 引理 `associator_inv_def`
-
-English:
-lemma associator_inv_def
-  given: (X Y Z : F.EssImageSubcategory)
-  proof: rfl
-
-中文:
-引理 associator_inv_def
-  条件: (X Y Z : F.EssImageSubcategory)
-  证明: rfl
+/-
+**CategoryTheory.Functor.EssImageSubcategory.associator_inv_def** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Functor.EssImageSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   (F
+ : CategoryTheory.Functor C D) [inst_4 : F.Full] [inst_5 : F.Faithful]   [inst_6
+ : CategoryTheory.Limits.PreservesFiniteProducts F] (X Y Z : F.EssImageSubcatego
+ry),   (CategoryTheory.MonoidalCategoryStruct.associator X Y Z).inv =     Catego
+ryTheory.ObjectProperty.homMk (CategoryTheory.MonoidalCategoryStruct.associator 
+X.obj Y.obj Z.obj).inv
+参数：F : CategoryTheory.Functor C D；X Y Z : F.EssImageSubcategory；CategoryTheory.M
+onoidalCategoryStruct.associator X Y Z；CategoryTheory.MonoidalCategoryStruct.ass
+ociator X.obj Y.obj Z.obj。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instIsClosedUnderLimitsOfShapeEssImageOfHasLimitsO
+fShapeOfPreservesLimitsOfShapeOfFullOfFaithful`：∀ {J : Type w} [inst : CategoryT
+heory.Category.{w', w} J] {C : Type u₁} [inst_1 : CategoryTheory.Category.{v₁, u
+₁} C]   {D : Type u₂} [inst_…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.instPreservesLimitsOfShapeDiscreteOfFiniteOfPreser
+vesFiniteProducts`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma associator_inv_def (X Y Z : F.EssImageSubcategory) :
     (α_ X Y Z).inv = ObjectProperty.homMk (α_ X.obj Y.obj Z.obj).inv := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `toUnit_def` / 引理 `toUnit_def`
-
-English:
-lemma toUnit_def
-  given: (X : F.EssImageSubcategory)
-  proof: rfl
-
-中文:
-引理 toUnit_def
-  条件: (X : F.EssImageSubcategory)
-  证明: rfl
+/-
+**CategoryTheory.Functor.EssImageSubcategory.toUnit_def** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Functor.EssImageSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   (F
+ : CategoryTheory.Functor C D) [inst_4 : F.Full] [inst_5 : F.Faithful]   [inst_6
+ : CategoryTheory.Limits.PreservesFiniteProducts F] (X : F.EssImageSubcategory),
+   CategoryTheory.SemiCartesianMonoidalCategory.toUnit X =     CategoryTheory.Ob
+jectProperty.homMk (CategoryTheory.SemiCartesianMonoidalCategory.toUnit X.obj)
+参数：F : CategoryTheory.Functor C D；X : F.EssImageSubcategory；CategoryTheory.SemiC
+artesianMonoidalCategory.toUnit X.obj。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instIsClosedUnderLimitsOfShapeEssImageOfHasLimitsO
+fShapeOfPreservesLimitsOfShapeOfFullOfFaithful`：∀ {J : Type w} [inst : CategoryT
+heory.Category.{w', w} J] {C : Type u₁} [inst_1 : CategoryTheory.Category.{v₁, u
+₁} C]   {D : Type u₂} [inst_…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instHasFiniteProducts`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.CartesianMonoid
+alCategory C],   CategoryTheory.Limits.HasFiniteProd…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.instPreservesLimitsOfShapeDiscreteOfFiniteOfPreser
+vesFiniteProducts`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma toUnit_def (X : F.EssImageSubcategory) :
     toUnit X = ObjectProperty.homMk (toUnit X.obj) := rfl
@@ -3666,28 +3821,85 @@ end Functor.EssImageSubcategory
 namespace NatTrans
 variable (F G : C ⥤ D) [F.Monoidal] [G.Monoidal]
 
-/--
-Instance `IsMonoidal.of_cartesianMonoidalCategory` / 实例 `IsMonoidal.of_cartesianMonoidalCategory`
-
-English:
-instance IsMonoidal.of_cartesianMonoidalCategory
-  signature: (α : F ⟶ G)
-  body: (cancel_mono (Functor.Monoidal.εIso _).inv).1 (toUnit_unique _ _)
-  tensor {X Y} := by
-    rw [← cancel_mono (Functor.Monoidal.μIso _ _ _).inv]
-    rw [← cancel_epi (Functor.Monoidal.μIso _ _ _).inv]
-    apply CartesianMonoidalCategory.hom_ext <;> simp
-
-中文:
-实例 是幺半群.of_cartesianMonoidalCategory
-  签名: (α : F ⟶ G)
-  定义体: (cancel_mono (Functor.Monoidal.εIso _).inv).1 (toUnit_unique _ _)
-  tensor {X Y} := by
-    rw [← cancel_mono (Functor.Monoidal.μIso _ _ _).inv]
-    rw [← cancel_epi (Functor.Monoidal.μIso _ _ _).inv]
-    apply CartesianMonoidalCategory.hom_ext <;> simp
-
-Depends on / 依赖: Functor, Functor.Monoidal, Monoidal, cancel_mono, toUnit_unique
+/-
+**CategoryTheory.NatTrans.IsMonoidal.of_cartesianMonoidalCategory** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.NatTrans.IsMonoidal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {D : Type u₂} [inst_2 : CategoryTheory
+.Category.{v₂, u₂} D] [inst_3 : CategoryTheory.CartesianMonoidalCategory D]   (F
+ G : CategoryTheory.Functor C D) [inst_4 : F.Monoidal] [inst_5 : G.Monoidal] (α 
+: F ⟶ G),   CategoryTheory.NatTrans.IsMonoidal α
+参数：F G : CategoryTheory.Functor C D；α : F ⟶ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.Monoidal.μIso_inv`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {D : 
+Type u₂}   [inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.Monoidal.δ_μ_assoc`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D :
+ Type u₂}   {inst_2 : CategoryT…
+· 使用引理 `CategoryTheory.Functor.OplaxMonoidal.δ_fst`：δ_fst (X Y : C) : δ F X Y ≫ 
+fst _ _ = F.map (fst _ _)
+· 使用定理 `CategoryTheory.Functor.Monoidal.μ_δ`：∀ {C : Type u₁} {inst : CategoryThe
+ory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D : Type 
+u₂}   {inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_fst`：tensorHom_fst {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ fst _ _ = fst _ _ 
+≫ f
+· 使用定理 `CategoryTheory.Functor.OplaxMonoidal.δ_fst_assoc`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidal
+Category C]   {D : Type u₂} [inst_2 : …
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Functor.OplaxMonoidal.δ_snd`：δ_snd (X Y : C) : δ F X Y ≫ 
+snd _ _ = F.map (snd _ _)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_snd`：tensorHom_snd {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ snd _ _ = snd _ _ 
+≫ g
+· 使用定理 `CategoryTheory.Functor.OplaxMonoidal.δ_snd_assoc`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidal
+Category C]   {D : Type u₂} [inst_2 : …
 -/
 instance IsMonoidal.of_cartesianMonoidalCategory (α : F ⟶ G) : IsMonoidal α where
   unit := (cancel_mono (Functor.Monoidal.εIso _).inv).1 (toUnit_unique _ _)
@@ -3699,3 +3911,4 @@ instance IsMonoidal.of_cartesianMonoidalCategory (α : F ⟶ G) : IsMonoidal α 
 end NatTrans
 
 end CategoryTheory
+

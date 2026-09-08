@@ -41,207 +41,141 @@ section term_defs
 ## Definitions of the summands
 -/
 
-/--
-Definition of `jacobiTheta₂_term` / `jacobiTheta₂_term` 的定义
+/-- Summand in the series for the Jacobi theta function. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition jacobiTheta₂_term
-  signature: (n : Int) (z τ : Complex)
-  body: cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)
-
-中文:
-定义 jacobiTheta₂_term
-  签名: (n : 整数) (z τ : 复形)
-  定义体: cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)
+--- 原说明 ---
+Summand in the series for the Jacobi theta function.
 -/
-def jacobiTheta₂_term (n : Int) (z τ : Complex) : Complex := cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)
+def jacobiTheta₂_term (n : ℤ) (z τ : ℂ) : ℂ := cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)
 
-/--
-Definition of `jacobiTheta₂_term_fderiv` / `jacobiTheta₂_term_fderiv` 的定义
+/-- Summand in the series for the Fréchet derivative of the Jacobi theta function. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition jacobiTheta₂_term_fderiv
-  signature: (n : Int) (z τ : Complex)
-  body: cexp (2 * π * I * n * z + π * I * n ^ 2 * τ) •
-    ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex) +
-      (π * I * n ^ 2) • (ContinuousLinearMap.snd Complex Complex Complex))
-
-中文:
-定义 jacobiTheta₂_term_fderiv
-  签名: (n : 整数) (z τ : 复形)
-  定义体: cexp (2 * π * I * n * z + π * I * n ^ 2 * τ) •
-    ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex) +
-      (π * I * n ^ 2) • (ContinuousLinearMap.snd Complex Complex Complex))
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.fst, ContinuousLinearMap.snd
+--- 原说明 ---
+Summand in the series for the Fréchet derivative of the Jacobi theta function.
 -/
-def jacobiTheta₂_term_fderiv (n : Int) (z τ : Complex) : Complex × Complex ->L[Complex] Complex :=
+def jacobiTheta₂_term_fderiv (n : ℤ) (z τ : ℂ) : ℂ × ℂ →L[ℂ] ℂ :=
   cexp (2 * π * I * n * z + π * I * n ^ 2 * τ) •
-    ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex) +
-      (π * I * n ^ 2) • (ContinuousLinearMap.snd Complex Complex Complex))
-
-/--
-lemma `hasFDerivAt_jacobiTheta₂_term` / 引理 `hasFDerivAt_jacobiTheta₂_term`
-
-English:
-lemma hasFDerivAt_jacobiTheta₂_term
-  given: (n : Int) (z τ : Complex)
-  proof: by
-  let f : Complex × Complex -> Complex := fun p => 2 * π * I * n * p.1 + π * I * n ^ 2 * p.2
-  suffices HasFDerivAt f ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex)
-    + (π * I * n ^ 2) • (ContinuousLinearMap.snd Complex Complex Complex)) (z, τ) from this.cexp
-  exact (hasFDerivAt_fst.const_mul _).add (hasFDerivAt_snd.const_mul _)
-
-中文:
-引理 hasFDerivAt_jacobiTheta₂_term
-  条件: (n : 整数) (z τ : 复形)
-  证明: by
-  let f : Complex × Complex -> Complex := fun p => 2 * π * I * n * p.1 + π * I * n ^ 2 * p.2
-  suffices HasFDerivAt f ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex)
-    + (π * I * n ^ 2) • (ContinuousLinearMap.snd Complex Complex Complex)) (z, τ) from this.cexp
-  exact (hasFDerivAt_fst.const_mul _).add (hasFDerivAt_snd.const_mul _)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.fst, ContinuousLinearMap.snd, HasFDerivAt, const_mul, hasFDerivAt_fst, hasFDerivAt_fst.const_mul, hasFDerivAt_snd, hasFDerivAt_snd.const_mul, this.cexp
+    ((2 * π * I * n) • (ContinuousLinearMap.fst ℂ ℂ ℂ) +
+      (π * I * n ^ 2) • (ContinuousLinearMap.snd ℂ ℂ ℂ))
+/-
+**hasFDerivAt_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hasFDerivAt_jacobiTheta₂_term (n : Int) (z τ : Complex) :
-    HasFDerivAt (fun p : Complex × Complex => jacobiTheta₂_term n p.1 p.2)
+lemma hasFDerivAt_jacobiTheta₂_term (n : ℤ) (z τ : ℂ) :
+    HasFDerivAt (fun p : ℂ × ℂ ↦ jacobiTheta₂_term n p.1 p.2)
     (jacobiTheta₂_term_fderiv n z τ) (z, τ) := by
-  let f : Complex × Complex -> Complex := fun p => 2 * π * I * n * p.1 + π * I * n ^ 2 * p.2
-  suffices HasFDerivAt f ((2 * π * I * n) • (ContinuousLinearMap.fst Complex Complex Complex)
-    + (π * I * n ^ 2) • (ContinuousLinearMap.snd Complex Complex Complex)) (z, τ) from this.cexp
+  let f : ℂ × ℂ → ℂ := fun p ↦ 2 * π * I * n * p.1 + π * I * n ^ 2 * p.2
+  suffices HasFDerivAt f ((2 * π * I * n) • (ContinuousLinearMap.fst ℂ ℂ ℂ)
+    + (π * I * n ^ 2) • (ContinuousLinearMap.snd ℂ ℂ ℂ)) (z, τ) from this.cexp
   exact (hasFDerivAt_fst.const_mul _).add (hasFDerivAt_snd.const_mul _)
 
-/--
-Definition of `jacobiTheta₂'_term` / `jacobiTheta₂'_term` 的定义
+/-- Summand in the series for the `z`-derivative of the Jacobi theta function. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition jacobiTheta₂'_term
-  signature: (n : Int) (z τ : Complex)
-  body: 2 * π * I * n * jacobiTheta₂_term n z τ
-
-中文:
-定义 jacobiTheta₂'_term
-  签名: (n : 整数) (z τ : 复形)
-  定义体: 2 * π * I * n * jacobiTheta₂_term n z τ
+--- 原说明 ---
+Summand in the series for the `z`-derivative of the Jacobi theta function.
 -/
-def jacobiTheta₂'_term (n : Int) (z τ : Complex) := 2 * π * I * n * jacobiTheta₂_term n z τ
+def jacobiTheta₂'_term (n : ℤ) (z τ : ℂ) := 2 * π * I * n * jacobiTheta₂_term n z τ
 
 end term_defs
 
 section term_bounds
+/-!
+## Bounds for the summands
 
-/--
-lemma `norm_jacobiTheta₂_term` / 引理 `norm_jacobiTheta₂_term`
-
-English:
-lemma norm_jacobiTheta₂_term
-  given: (n : Int) (z τ : Complex)
-  proof: by
-  rw [jacobiTheta₂_term]; rw [Complex.norm_exp]; rw [(by push_cast; ring :
-    (2 * π : Complex) * I * n * z + π * I * n ^ 2 * τ = (π * (2 * n) :) * z * I + (π * n ^ 2 :) * τ * I)]; rw [add_re]; rw [mul_I_re]; rw [im_ofReal_mul]; rw [mul_I_re]; rw [im_ofReal_mul]
-  ring_nf
-
-中文:
-引理 norm_jacobiTheta₂_term
-  条件: (n : 整数) (z τ : 复形)
-  证明: by
-  rw [jacobiTheta₂_term]; rw [Complex.norm_exp]; rw [(by push_cast; ring :
-    (2 * π : Complex) * I * n * z + π * I * n ^ 2 * τ = (π * (2 * n) :) * z * I + (π * n ^ 2 :) * τ * I)]; rw [add_re]; rw [mul_I_re]; rw [im_ofReal_mul]; rw [mul_I_re]; rw [im_ofReal_mul]
-  ring_nf
-
-Depends on / 依赖: Complex.norm_exp, add_re, im_ofReal_mul, mul_I_re, norm_exp, ring_nf
+We show that the sums of the three functions `jacobiTheta₂_term`, `jacobiTheta₂'_term` and
+`jacobiTheta₂_term_fderiv` are locally uniformly convergent in the domain `0 < im τ`, and diverge
+everywhere else.
 -/
-lemma norm_jacobiTheta₂_term (n : Int) (z τ : Complex) :
+
+/-
+**norm_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+## Bounds for the summands
+
+We show that the sums of the three functions `jacobiTheta₂_term`, `jacobiTheta₂'
+_term` and
+`jacobiTheta₂_term_fderiv` are locally uniformly convergent in the domain `0 < i
+m τ`, and diverge
+everywhere else.
+-/
+lemma norm_jacobiTheta₂_term (n : ℤ) (z τ : ℂ) :
     ‖jacobiTheta₂_term n z τ‖ = rexp (-π * n ^ 2 * τ.im - 2 * π * n * z.im) := by
-  rw [jacobiTheta₂_term]; rw [Complex.norm_exp]; rw [(by push_cast; ring :
-    (2 * π : Complex) * I * n * z + π * I * n ^ 2 * τ = (π * (2 * n) :) * z * I + (π * n ^ 2 :) * τ * I)]; rw [add_re]; rw [mul_I_re]; rw [im_ofReal_mul]; rw [mul_I_re]; rw [im_ofReal_mul]
+  rw [jacobiTheta₂_term, Complex.norm_exp, (by push_cast; ring :
+    (2 * π : ℂ) * I * n * z + π * I * n ^ 2 * τ = (π * (2 * n) :) * z * I + (π * n ^ 2 :) * τ * I),
+    add_re, mul_I_re, im_ofReal_mul, mul_I_re, im_ofReal_mul]
   ring_nf
 
-/--
-lemma `norm_jacobiTheta₂_term_le` / 引理 `norm_jacobiTheta₂_term_le`
+/-- A uniform upper bound for `jacobiTheta₂_term` on compact subsets. -/
+/-
+**norm_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma norm_jacobiTheta₂_term_le
-  statement: {S T : Real} (hT : 0 < T) {z τ : Complex}
-  proof: by
-  simp_rw [norm_jacobiTheta₂_term, Real.exp_le_exp, sub_eq_add_neg, neg_mul, ← neg_add,
-    neg_le_neg_iff, mul_comm (2 : Real), mul_assoc π, ← mul_add, mul_le_mul_iff_right₀ pi_pos,
-    mul_comm T, mul_comm S]
-  refine add_le_add (mul_le_mul le_rfl hτ hT.le (sq_nonneg _)) ?_
-  rw [← mul_neg]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_le_mul_iff_right₀ two_pos]; rw [mul_comm]; rw [neg_mul]; rw [← mul_neg]
-  refine le_trans ?_ (neg_abs_le _)
-  rw [mul_neg]; rw [neg_le_neg_iff]; rw [abs_mul]; rw [Int.cast_abs]
-  exact mul_le_mul_of_nonneg_left hz (abs_nonneg _)
-
-中文:
-引理 norm_jacobiTheta₂_term_le
-  结论: {S T : 实数} (hT : 0 < T) {z τ : 复形}
-  证明: by
-  simp_rw [norm_jacobiTheta₂_term, Real.exp_le_exp, sub_eq_add_neg, neg_mul, ← neg_add,
-    neg_le_neg_iff, mul_comm (2 : Real), mul_assoc π, ← mul_add, mul_le_mul_iff_right₀ pi_pos,
-    mul_comm T, mul_comm S]
-  refine add_le_add (mul_le_mul le_rfl hτ hT.le (sq_nonneg _)) ?_
-  rw [← mul_neg]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_le_mul_iff_right₀ two_pos]; rw [mul_comm]; rw [neg_mul]; rw [← mul_neg]
-  refine le_trans ?_ (neg_abs_le _)
-  rw [mul_neg]; rw [neg_le_neg_iff]; rw [abs_mul]; rw [Int.cast_abs]
-  exact mul_le_mul_of_nonneg_left hz (abs_nonneg _)
-
-Depends on / 依赖: Int.cast_abs, Real.exp_le_exp, abs_mul, add_le_add, cast_abs, exp_le_exp, hT.le, le_rfl, le_trans, mul_add, mul_assoc, mul_comm, mul_le_mul, mul_neg, neg_abs_le, neg_add, neg_le_neg_iff, neg_mul, pi_pos, simp_rw
+--- 原说明 ---
+A uniform upper bound for `jacobiTheta₂_term` on compact subsets.
 -/
-lemma norm_jacobiTheta₂_term_le {S T : Real} (hT : 0 < T) {z τ : Complex}
-    (hz : |im z| <= S) (hτ : T <= im τ) (n : Int) :
-    ‖jacobiTheta₂_term n z τ‖ <= rexp (-π * (T * n ^ 2 - 2 * S * |n|)) := by
+lemma norm_jacobiTheta₂_term_le {S T : ℝ} (hT : 0 < T) {z τ : ℂ}
+    (hz : |im z| ≤ S) (hτ : T ≤ im τ) (n : ℤ) :
+    ‖jacobiTheta₂_term n z τ‖ ≤ rexp (-π * (T * n ^ 2 - 2 * S * |n|)) := by
   simp_rw [norm_jacobiTheta₂_term, Real.exp_le_exp, sub_eq_add_neg, neg_mul, ← neg_add,
-    neg_le_neg_iff, mul_comm (2 : Real), mul_assoc π, ← mul_add, mul_le_mul_iff_right₀ pi_pos,
+    neg_le_neg_iff, mul_comm (2 : ℝ), mul_assoc π, ← mul_add, mul_le_mul_iff_right₀ pi_pos,
     mul_comm T, mul_comm S]
   refine add_le_add (mul_le_mul le_rfl hτ hT.le (sq_nonneg _)) ?_
-  rw [← mul_neg]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_le_mul_iff_right₀ two_pos]; rw [mul_comm]; rw [neg_mul]; rw [← mul_neg]
+  rw [← mul_neg, mul_assoc, mul_assoc, mul_le_mul_iff_right₀ two_pos, mul_comm, neg_mul, ← mul_neg]
   refine le_trans ?_ (neg_abs_le _)
-  rw [mul_neg]; rw [neg_le_neg_iff]; rw [abs_mul]; rw [Int.cast_abs]
+  rw [mul_neg, neg_le_neg_iff, abs_mul, Int.cast_abs]
   exact mul_le_mul_of_nonneg_left hz (abs_nonneg _)
 
-/--
-lemma `norm_jacobiTheta₂'_term_le` / 引理 `norm_jacobiTheta₂'_term_le`
+/-- A uniform upper bound for `jacobiTheta₂'_term` on compact subsets. -/
+/-
+**norm_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma norm_jacobiTheta₂'_term_le
-  statement: {S T : Real} (hT : 0 < T) {z τ : Complex}
-  proof: by
-  rw [jacobiTheta₂'_term]; rw [norm_mul]
-  refine mul_le_mul (le_of_eq ?_) (norm_jacobiTheta₂_term_le hT hz hτ n)
-    (norm_nonneg _) (by positivity)
-  simp only [norm_mul, Complex.norm_two, norm_I, Complex.norm_of_nonneg pi_pos.le,
-    norm_intCast, mul_one, Int.cast_abs]
-
-中文:
-引理 norm_jacobiTheta₂'_term_le
-  结论: {S T : 实数} (hT : 0 < T) {z τ : 复形}
-  证明: by
-  rw [jacobiTheta₂'_term]; rw [norm_mul]
-  refine mul_le_mul (le_of_eq ?_) (norm_jacobiTheta₂_term_le hT hz hτ n)
-    (norm_nonneg _) (by positivity)
-  simp only [norm_mul, Complex.norm_two, norm_I, Complex.norm_of_nonneg pi_pos.le,
-    norm_intCast, mul_one, Int.cast_abs]
-
-Depends on / 依赖: Complex.norm_of_nonneg, Complex.norm_two, Int.cast_abs, _term, cast_abs, le_of_eq, mul_le_mul, mul_one, norm_I, norm_intCast, norm_mul, norm_nonneg, norm_of_nonneg, norm_two, pi_pos, pi_pos.le
+--- 原说明 ---
+A uniform upper bound for `jacobiTheta₂'_term` on compact subsets.
 -/
-lemma norm_jacobiTheta₂'_term_le {S T : Real} (hT : 0 < T) {z τ : Complex}
-    (hz : |im z| <= S) (hτ : T <= im τ) (n : Int) :
-    ‖jacobiTheta₂'_term n z τ‖ <= 2 * π * |n| * rexp (-π * (T * n ^ 2 - 2 * S * |n|)) := by
-  rw [jacobiTheta₂'_term]; rw [norm_mul]
+lemma norm_jacobiTheta₂'_term_le {S T : ℝ} (hT : 0 < T) {z τ : ℂ}
+    (hz : |im z| ≤ S) (hτ : T ≤ im τ) (n : ℤ) :
+    ‖jacobiTheta₂'_term n z τ‖ ≤ 2 * π * |n| * rexp (-π * (T * n ^ 2 - 2 * S * |n|)) := by
+  rw [jacobiTheta₂'_term, norm_mul]
   refine mul_le_mul (le_of_eq ?_) (norm_jacobiTheta₂_term_le hT hz hτ n)
     (norm_nonneg _) (by positivity)
   simp only [norm_mul, Complex.norm_two, norm_I, Complex.norm_of_nonneg pi_pos.le,
     norm_intCast, mul_one, Int.cast_abs]
 
-/--
-lemma `summable_pow_mul_jacobiTheta₂_term_bound` / 引理 `summable_pow_mul_jacobiTheta₂_term_bound`
+/-- The uniform bound we have given is summable, and remains so after multiplying by any fixed
+power of `|n|` (we shall need this for `k = 0, 1, 2`). -/
+/-
+**summable_pow_mul_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma summable_pow_mul_jacobiTheta₂_term_bound
-  given: (S : Real) {T : Real} (hT : 0 < T) (k : Nat)
-  proof: by
-  suffices Summable (fun n : Nat => (n ^ k : Real) * Real.exp (-π * (T * n ^ 2 - 2 * S * n))) by
+--- 原说明 ---
+The uniform bound we have given is summable, and remains so after multiplying by
+ any fixed
+power of `|n|` (we shall need this for `k = 0, 1, 2`).
+-/
+lemma summable_pow_mul_jacobiTheta₂_term_bound (S : ℝ) {T : ℝ} (hT : 0 < T) (k : ℕ) :
+    Summable (fun n : ℤ ↦ (|n| ^ k : ℝ) * Real.exp (-π * (T * n ^ 2 - 2 * S * |n|))) := by
+  suffices Summable (fun n : ℕ ↦ (n ^ k : ℝ) * Real.exp (-π * (T * n ^ 2 - 2 * S * n))) by
     apply Summable.of_nat_of_neg <;>
     simpa only [Int.cast_neg, neg_sq, abs_neg, Int.cast_natCast, Nat.abs_cast]
   apply summable_of_isBigO_nat (summable_pow_mul_exp_neg_nat_mul k zero_lt_one)
@@ -254,58 +188,25 @@ lemma summable_pow_mul_jacobiTheta₂_term_bound
   refine tendsto_natCast_atTop_atTop.atTop_mul_atTop₀ (tendsto_atTop_add_const_right _ _ ?_)
   exact tendsto_natCast_atTop_atTop.const_mul_atTop (mul_pos pi_pos hT)
 
-中文:
-引理 summable_pow_mul_jacobiTheta₂_term_bound
-  条件: (S : 实数) {T : 实数} (hT : 0 < T) (k : 自然数)
-  证明: by
-  suffices Summable (fun n : Nat => (n ^ k : Real) * Real.exp (-π * (T * n ^ 2 - 2 * S * n))) by
-    apply Summable.of_nat_of_neg <;>
-    simpa only [Int.cast_neg, neg_sq, abs_neg, Int.cast_natCast, Nat.abs_cast]
-  apply summable_of_isBigO_nat (summable_pow_mul_exp_neg_nat_mul k zero_lt_one)
-  apply IsBigO.mul (isBigO_refl _ _)
-  refine Real.isBigO_exp_comp_exp_comp.mpr (Tendsto.isBoundedUnder_le_atBot ?_)
-  simp_rw [← tendsto_neg_atTop_iff, Pi.sub_apply]
-  conv =>
-    enter [1, n]
-    rw [show -(-π * (T * n ^ 2 - 2 * S * n) - -1 * n) = n * (π * T * n - (2 * π * S + 1)) by ring]
-  refine tendsto_natCast_atTop_atTop.atTop_mul_atTop₀ (tendsto_atTop_add_const_right _ _ ?_)
-  exact tendsto_natCast_atTop_atTop.const_mul_atTop (mul_pos pi_pos hT)
+/-- The series defining the theta function is summable if and only if `0 < im τ`. -/
+/-
+**summable_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Int.cast_natCast, Int.cast_neg, IsBigO, IsBigO.mul, Nat.abs_cast, Pi.sub_apply, Real.exp, Real.isBigO_exp_comp_exp_comp.mpr, Summable, Summable.of_nat_of_neg, Tendsto, Tendsto.isBoundedUnder_le_atBot, abs_cast, abs_neg, cast_natCast, cast_neg, isBigO_exp_comp_exp_comp, isBigO_refl, isBoundedUnder_le_atBot, neg_sq
+--- 原说明 ---
+The series defining the theta function is summable if and only if `0 < im τ`.
 -/
-lemma summable_pow_mul_jacobiTheta₂_term_bound (S : Real) {T : Real} (hT : 0 < T) (k : Nat) :
-    Summable (fun n : Int => (|n| ^ k : Real) * Real.exp (-π * (T * n ^ 2 - 2 * S * |n|))) := by
-  suffices Summable (fun n : Nat => (n ^ k : Real) * Real.exp (-π * (T * n ^ 2 - 2 * S * n))) by
-    apply Summable.of_nat_of_neg <;>
-    simpa only [Int.cast_neg, neg_sq, abs_neg, Int.cast_natCast, Nat.abs_cast]
-  apply summable_of_isBigO_nat (summable_pow_mul_exp_neg_nat_mul k zero_lt_one)
-  apply IsBigO.mul (isBigO_refl _ _)
-  refine Real.isBigO_exp_comp_exp_comp.mpr (Tendsto.isBoundedUnder_le_atBot ?_)
-  simp_rw [← tendsto_neg_atTop_iff, Pi.sub_apply]
-  conv =>
-    enter [1, n]
-    rw [show -(-π * (T * n ^ 2 - 2 * S * n) - -1 * n) = n * (π * T * n - (2 * π * S + 1)) by ring]
-  refine tendsto_natCast_atTop_atTop.atTop_mul_atTop₀ (tendsto_atTop_add_const_right _ _ ?_)
-  exact tendsto_natCast_atTop_atTop.const_mul_atTop (mul_pos pi_pos hT)
-
-/--
-lemma `summable_jacobiTheta₂_term_iff` / 引理 `summable_jacobiTheta₂_term_iff`
-
-English:
-lemma summable_jacobiTheta₂_term_iff
-  given: (z τ : Complex)
-  statement: Summable (jacobiTheta₂_term · z τ) ↔ 0 < im τ
-  proof: by
+lemma summable_jacobiTheta₂_term_iff (z τ : ℂ) : Summable (jacobiTheta₂_term · z τ) ↔ 0 < im τ := by
   -- NB. This is a statement of no great mathematical interest; it is included largely to avoid
   -- having to impose `0 < im τ` as a hypothesis on many later lemmas.
-  refine Iff.symm ⟨fun hτ => ?_, fun h => ?_⟩ -- do quicker implication first!
+  refine Iff.symm ⟨fun hτ ↦ ?_, fun h ↦ ?_⟩ -- do quicker implication first!
   · refine (summable_pow_mul_jacobiTheta₂_term_bound |im z| hτ 0).of_norm_bounded ?_
     simpa only [pow_zero, one_mul] using norm_jacobiTheta₂_term_le hτ le_rfl le_rfl
   · by_contra! hτ
     rcases lt_or_eq_of_le hτ with hτ | hτ
     · -- easy case `im τ < 0`
-      suffices Tendsto (fun n : Nat => ‖jacobiTheta₂_term ↑n z τ‖) atTop atTop by
-        replace h := (h.comp_injective (fun a b => Int.ofNat_inj.mp)).tendsto_atTop_zero.norm
+      suffices Tendsto (fun n : ℕ ↦ ‖jacobiTheta₂_term ↑n z τ‖) atTop atTop by
+        replace h := (h.comp_injective (fun a b ↦ Int.ofNat_inj.mp)).tendsto_atTop_zero.norm
         exact atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop _) this)
       simp only [norm_jacobiTheta₂_term, Int.cast_natCast]
       conv =>
@@ -316,9 +217,9 @@ lemma summable_jacobiTheta₂_term_iff
       exact tendsto_atTop_add_const_right _ _ (tendsto_natCast_atTop_atTop.atTop_mul_const
         (mul_pos_of_neg_of_neg (neg_lt_zero.mpr pi_pos) hτ))
     · -- case im τ = 0: 3-way split according to `im z`
-      simp_rw [← summable_norm_iff (E := Complex), norm_jacobiTheta₂_term, hτ, mul_zero, zero_sub] at h
+      simp_rw [← summable_norm_iff (E := ℂ), norm_jacobiTheta₂_term, hτ, mul_zero, zero_sub] at h
       rcases lt_trichotomy (im z) 0 with hz | hz | hz
-      · replace h := (h.comp_injective (fun a b => Int.ofNat_inj.mp)).tendsto_atTop_zero
+      · replace h := (h.comp_injective (fun a b ↦ Int.ofNat_inj.mp)).tendsto_atTop_zero
         simp_rw [Function.comp_def, Int.cast_natCast] at h
         refine atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop 0) ?_)
         refine tendsto_exp_atTop.comp ?_
@@ -327,105 +228,22 @@ lemma summable_jacobiTheta₂_term_iff
         exact (tendsto_natCast_atTop_atTop.atTop_mul_const_of_neg hz).const_mul_atBot pi_pos
       · revert h
         simpa only [hz, mul_zero, neg_zero, Real.exp_zero, summable_const_iff] using one_ne_zero
-      · have : ((-↑·) : Nat -> Int).Injective := fun _ _ => by simp only [neg_inj, Nat.cast_inj, imp_self]
+      · have : ((-↑·) : ℕ → ℤ).Injective := fun _ _ ↦ by simp only [neg_inj, Nat.cast_inj, imp_self]
         replace h := (h.comp_injective this).tendsto_atTop_zero
         simp_rw [Function.comp_def, Int.cast_neg, Int.cast_natCast, mul_neg, neg_mul, neg_neg] at h
         refine atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop 0) ?_)
         exact tendsto_exp_atTop.comp ((tendsto_natCast_atTop_atTop.const_mul_atTop
           (mul_pos two_pos pi_pos)).atTop_mul_const hz)
-
-中文:
-引理 summable_jacobiTheta₂_term_iff
-  条件: (z τ : 复形)
-  结论: Summable (jacobiTheta₂_term · z τ) ↔ 0 < im τ
-  证明: by
-  -- NB. This is a statement of no great mathematical interest; it is included largely to avoid
-  -- having to impose `0 < im τ` as a hypothesis on many later lemmas.
-  refine Iff.symm ⟨fun hτ => ?_, fun h => ?_⟩ -- do quicker implication first!
-  · refine (summable_pow_mul_jacobiTheta₂_term_bound |im z| hτ 0).of_norm_bounded ?_
-    simpa only [pow_zero, one_mul] using norm_jacobiTheta₂_term_le hτ le_rfl le_rfl
-  · by_contra! hτ
-    rcases lt_or_eq_of_le hτ with hτ | hτ
-    · -- easy case `im τ < 0`
-      suffices Tendsto (fun n : Nat => ‖jacobiTheta₂_term ↑n z τ‖) atTop atTop by
-        replace h := (h.comp_injective (fun a b => Int.ofNat_inj.mp)).tendsto_atTop_zero.norm
-        exact atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop _) this)
-      simp only [norm_jacobiTheta₂_term, Int.cast_natCast]
-      conv =>
-        enter [1, n]
-        rw [show -π * n ^ 2 * τ.im - 2 * π * n * z.im =
-              n * (n * (-π * τ.im) - 2 * π * z.im) by ring]
-      refine tendsto_exp_atTop.comp (tendsto_natCast_atTop_atTop.atTop_mul_atTop₀ ?_)
-      exact tendsto_atTop_add_const_right _ _ (tendsto_natCast_atTop_atTop.atTop_mul_const
-        (mul_pos_of_neg_of_neg (neg_lt_zero.mpr pi_pos) hτ))
-    · -- case im τ = 0: 3-way split according to `im z`
-      simp_rw [← summable_norm_iff (E := Complex), norm_jacobiTheta₂_term, hτ, mul_zero, zero_sub] at h
-      rcases lt_trichotomy (im z) 0 with hz | hz | hz
-      · replace h := (h.comp_injective (fun a b => Int.ofNat_inj.mp)).tendsto_atTop_zero
-        simp_rw [Function.comp_def, Int.cast_natCast] at h
-        refine atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop 0) ?_)
-        refine tendsto_exp_atTop.comp ?_
-        simp only [tendsto_neg_atTop_iff, mul_assoc]
-        apply Filter.Tendsto.const_mul_atBot two_pos
-        exact (tendsto_natCast_atTop_atTop.atTop_mul_const_of_neg hz).const_mul_atBot pi_pos
-      · revert h
-        simpa only [hz, mul_zero, neg_zero, Real.exp_zero, summable_const_iff] using one_ne_zero
-      · have : ((-↑·) : Nat -> Int).Injective := fun _ _ => by simp only [neg_inj, Nat.cast_inj, imp_self]
-        replace h := (h.comp_injective this).tendsto_atTop_zero
-        simp_rw [Function.comp_def, Int.cast_neg, Int.cast_natCast, mul_neg, neg_mul, neg_neg] at h
-        refine atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop 0) ?_)
-        exact tendsto_exp_atTop.comp ((tendsto_natCast_atTop_atTop.const_mul_atTop
-          (mul_pos two_pos pi_pos)).atTop_mul_const hz)
+/-
+**norm_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma summable_jacobiTheta₂_term_iff (z τ : Complex) : Summable (jacobiTheta₂_term · z τ) ↔ 0 < im τ := by
-  -- NB. This is a statement of no great mathematical interest; it is included largely to avoid
-  -- having to impose `0 < im τ` as a hypothesis on many later lemmas.
-  refine Iff.symm ⟨fun hτ => ?_, fun h => ?_⟩ -- do quicker implication first!
-  · refine (summable_pow_mul_jacobiTheta₂_term_bound |im z| hτ 0).of_norm_bounded ?_
-    simpa only [pow_zero, one_mul] using norm_jacobiTheta₂_term_le hτ le_rfl le_rfl
-  · by_contra! hτ
-    rcases lt_or_eq_of_le hτ with hτ | hτ
-    · -- easy case `im τ < 0`
-      suffices Tendsto (fun n : Nat => ‖jacobiTheta₂_term ↑n z τ‖) atTop atTop by
-        replace h := (h.comp_injective (fun a b => Int.ofNat_inj.mp)).tendsto_atTop_zero.norm
-        exact atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop _) this)
-      simp only [norm_jacobiTheta₂_term, Int.cast_natCast]
-      conv =>
-        enter [1, n]
-        rw [show -π * n ^ 2 * τ.im - 2 * π * n * z.im =
-              n * (n * (-π * τ.im) - 2 * π * z.im) by ring]
-      refine tendsto_exp_atTop.comp (tendsto_natCast_atTop_atTop.atTop_mul_atTop₀ ?_)
-      exact tendsto_atTop_add_const_right _ _ (tendsto_natCast_atTop_atTop.atTop_mul_const
-        (mul_pos_of_neg_of_neg (neg_lt_zero.mpr pi_pos) hτ))
-    · -- case im τ = 0: 3-way split according to `im z`
-      simp_rw [← summable_norm_iff (E := Complex), norm_jacobiTheta₂_term, hτ, mul_zero, zero_sub] at h
-      rcases lt_trichotomy (im z) 0 with hz | hz | hz
-      · replace h := (h.comp_injective (fun a b => Int.ofNat_inj.mp)).tendsto_atTop_zero
-        simp_rw [Function.comp_def, Int.cast_natCast] at h
-        refine atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop 0) ?_)
-        refine tendsto_exp_atTop.comp ?_
-        simp only [tendsto_neg_atTop_iff, mul_assoc]
-        apply Filter.Tendsto.const_mul_atBot two_pos
-        exact (tendsto_natCast_atTop_atTop.atTop_mul_const_of_neg hz).const_mul_atBot pi_pos
-      · revert h
-        simpa only [hz, mul_zero, neg_zero, Real.exp_zero, summable_const_iff] using one_ne_zero
-      · have : ((-↑·) : Nat -> Int).Injective := fun _ _ => by simp only [neg_inj, Nat.cast_inj, imp_self]
-        replace h := (h.comp_injective this).tendsto_atTop_zero
-        simp_rw [Function.comp_def, Int.cast_neg, Int.cast_natCast, mul_neg, neg_mul, neg_neg] at h
-        refine atTop_neBot.ne (disjoint_self.mp <| h.disjoint (disjoint_nhds_atTop 0) ?_)
-        exact tendsto_exp_atTop.comp ((tendsto_natCast_atTop_atTop.const_mul_atTop
-          (mul_pos two_pos pi_pos)).atTop_mul_const hz)
-
-/--
-lemma `norm_jacobiTheta₂_term_fderiv_le` / 引理 `norm_jacobiTheta₂_term_fderiv_le`
-
-English:
-lemma norm_jacobiTheta₂_term_fderiv_le
-  given: (n : Int) (z τ : Complex)
-  proof: by
+lemma norm_jacobiTheta₂_term_fderiv_le (n : ℤ) (z τ : ℂ) :
+    ‖jacobiTheta₂_term_fderiv n z τ‖ ≤ 3 * π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ := by
   -- this is slow to elaborate so do it once and reuse:
-  have hns (a : Complex) (f : (Complex × Complex) ->L[Complex] Complex) : ‖a • f‖ = ‖a‖ * ‖f‖ := norm_smul a f
-  rw [jacobiTheta₂_term_fderiv]; rw [jacobiTheta₂_term]; rw [hns]; rw [mul_comm _ ‖cexp _‖]; rw [(by norm_num : (3 : Real) = 2 + 1)]; rw [add_mul]; rw [add_mul]
+  have hns (a : ℂ) (f : (ℂ × ℂ) →L[ℂ] ℂ) : ‖a • f‖ = ‖a‖ * ‖f‖ := norm_smul a f
+  rw [jacobiTheta₂_term_fderiv, jacobiTheta₂_term, hns,
+    mul_comm _ ‖cexp _‖, (by norm_num : (3 : ℝ) = 2 + 1), add_mul, add_mul]
   refine mul_le_mul_of_nonneg_left ((norm_add_le _ _).trans (add_le_add ?_ ?_)) (norm_nonneg _)
   · simp_rw [hns, norm_mul, ← ofReal_ofNat, ← ofReal_intCast,
       norm_real, norm_of_nonneg zero_le_two, Real.norm_of_nonneg pi_pos.le, norm_I, mul_one,
@@ -436,49 +254,13 @@ lemma norm_jacobiTheta₂_term_fderiv_le
       Real.norm_eq_abs, Int.cast_abs, abs_pow]
     apply mul_le_of_le_one_right (mul_nonneg pi_pos.le (pow_nonneg (abs_nonneg _) _))
     exact ContinuousLinearMap.norm_snd_le ..
-
-中文:
-引理 norm_jacobiTheta₂_term_fderiv_le
-  条件: (n : 整数) (z τ : 复形)
-  证明: by
-  -- this is slow to elaborate so do it once and reuse:
-  have hns (a : Complex) (f : (Complex × Complex) ->L[Complex] Complex) : ‖a • f‖ = ‖a‖ * ‖f‖ := norm_smul a f
-  rw [jacobiTheta₂_term_fderiv]; rw [jacobiTheta₂_term]; rw [hns]; rw [mul_comm _ ‖cexp _‖]; rw [(by norm_num : (3 : Real) = 2 + 1)]; rw [add_mul]; rw [add_mul]
-  refine mul_le_mul_of_nonneg_left ((norm_add_le _ _).trans (add_le_add ?_ ?_)) (norm_nonneg _)
-  · simp_rw [hns, norm_mul, ← ofReal_ofNat, ← ofReal_intCast,
-      norm_real, norm_of_nonneg zero_le_two, Real.norm_of_nonneg pi_pos.le, norm_I, mul_one,
-      Real.norm_eq_abs, ← Int.cast_abs, ← Int.cast_pow]
-    grw [ContinuousLinearMap.norm_fst_le, mul_one, ← Int.le_self_sq]
-  · simp_rw [hns, norm_mul, one_mul, norm_I, mul_one,
-      norm_real, norm_of_nonneg pi_pos.le, ← ofReal_intCast, ← ofReal_pow, norm_real,
-      Real.norm_eq_abs, Int.cast_abs, abs_pow]
-    apply mul_le_of_le_one_right (mul_nonneg pi_pos.le (pow_nonneg (abs_nonneg _) _))
-    exact ContinuousLinearMap.norm_snd_le ..
+/-
+**norm_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma norm_jacobiTheta₂_term_fderiv_le (n : Int) (z τ : Complex) :
-    ‖jacobiTheta₂_term_fderiv n z τ‖ <= 3 * π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ := by
-  -- this is slow to elaborate so do it once and reuse:
-  have hns (a : Complex) (f : (Complex × Complex) ->L[Complex] Complex) : ‖a • f‖ = ‖a‖ * ‖f‖ := norm_smul a f
-  rw [jacobiTheta₂_term_fderiv]; rw [jacobiTheta₂_term]; rw [hns]; rw [mul_comm _ ‖cexp _‖]; rw [(by norm_num : (3 : Real) = 2 + 1)]; rw [add_mul]; rw [add_mul]
-  refine mul_le_mul_of_nonneg_left ((norm_add_le _ _).trans (add_le_add ?_ ?_)) (norm_nonneg _)
-  · simp_rw [hns, norm_mul, ← ofReal_ofNat, ← ofReal_intCast,
-      norm_real, norm_of_nonneg zero_le_two, Real.norm_of_nonneg pi_pos.le, norm_I, mul_one,
-      Real.norm_eq_abs, ← Int.cast_abs, ← Int.cast_pow]
-    grw [ContinuousLinearMap.norm_fst_le, mul_one, ← Int.le_self_sq]
-  · simp_rw [hns, norm_mul, one_mul, norm_I, mul_one,
-      norm_real, norm_of_nonneg pi_pos.le, ← ofReal_intCast, ← ofReal_pow, norm_real,
-      Real.norm_eq_abs, Int.cast_abs, abs_pow]
-    apply mul_le_of_le_one_right (mul_nonneg pi_pos.le (pow_nonneg (abs_nonneg _) _))
-    exact ContinuousLinearMap.norm_snd_le ..
-
-/--
-lemma `norm_jacobiTheta₂_term_fderiv_ge` / 引理 `norm_jacobiTheta₂_term_fderiv_ge`
-
-English:
-lemma norm_jacobiTheta₂_term_fderiv_ge
-  given: (n : Int) (z τ : Complex)
-  proof: by
-  have : ‖(jacobiTheta₂_term_fderiv n z τ) (0, 1)‖ <= ‖jacobiTheta₂_term_fderiv n z τ‖ := by
+lemma norm_jacobiTheta₂_term_fderiv_ge (n : ℤ) (z τ : ℂ) :
+    π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ ≤ ‖jacobiTheta₂_term_fderiv n z τ‖ := by
+  have : ‖(jacobiTheta₂_term_fderiv n z τ) (0, 1)‖ ≤ ‖jacobiTheta₂_term_fderiv n z τ‖ := by
     refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
     simp_rw [Prod.norm_def, norm_one, norm_zero, max_eq_right zero_le_one, mul_one, le_refl]
   refine le_trans ?_ this
@@ -488,200 +270,58 @@ lemma norm_jacobiTheta₂_term_fderiv_ge
   refine mul_le_mul_of_nonneg_left (le_of_eq ?_) (norm_nonneg _)
   simp_rw [norm_real, norm_of_nonneg pi_pos.le, norm_I, mul_one,
     Int.cast_abs, ← norm_intCast, norm_pow]
-
-中文:
-引理 norm_jacobiTheta₂_term_fderiv_ge
-  条件: (n : 整数) (z τ : 复形)
-  证明: by
-  have : ‖(jacobiTheta₂_term_fderiv n z τ) (0, 1)‖ <= ‖jacobiTheta₂_term_fderiv n z τ‖ := by
-    refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
-    simp_rw [Prod.norm_def, norm_one, norm_zero, max_eq_right zero_le_one, mul_one, le_refl]
-  refine le_trans ?_ this
-  simp_rw [jacobiTheta₂_term_fderiv, jacobiTheta₂_term, FunLike.coe_smul, Pi.smul_apply, add_apply,
-    FunLike.coe_smul, ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd', Pi.smul_apply,
-    smul_zero, zero_add, smul_eq_mul, mul_one, mul_comm _ ‖cexp _‖, norm_mul]
-  refine mul_le_mul_of_nonneg_left (le_of_eq ?_) (norm_nonneg _)
-  simp_rw [norm_real, norm_of_nonneg pi_pos.le, norm_I, mul_one,
-    Int.cast_abs, ← norm_intCast, norm_pow]
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_fst, ContinuousLinearMap.coe_snd, ContinuousLinearMap.le_opNorm, FunLike, FunLike.coe_smul, Pi.smul_apply, Prod.norm_def, add_apply, coe_fst, coe_smul, coe_snd, le_opNorm, le_refl, le_trans, max_eq_right, mul_com, mul_one, norm_def, norm_one
+/-
+**summable_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma norm_jacobiTheta₂_term_fderiv_ge (n : Int) (z τ : Complex) :
-    π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ <= ‖jacobiTheta₂_term_fderiv n z τ‖ := by
-  have : ‖(jacobiTheta₂_term_fderiv n z τ) (0, 1)‖ <= ‖jacobiTheta₂_term_fderiv n z τ‖ := by
-    refine (ContinuousLinearMap.le_opNorm _ _).trans ?_
-    simp_rw [Prod.norm_def, norm_one, norm_zero, max_eq_right zero_le_one, mul_one, le_refl]
-  refine le_trans ?_ this
-  simp_rw [jacobiTheta₂_term_fderiv, jacobiTheta₂_term, FunLike.coe_smul, Pi.smul_apply, add_apply,
-    FunLike.coe_smul, ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd', Pi.smul_apply,
-    smul_zero, zero_add, smul_eq_mul, mul_one, mul_comm _ ‖cexp _‖, norm_mul]
-  refine mul_le_mul_of_nonneg_left (le_of_eq ?_) (norm_nonneg _)
-  simp_rw [norm_real, norm_of_nonneg pi_pos.le, norm_I, mul_one,
-    Int.cast_abs, ← norm_intCast, norm_pow]
-
-/--
-lemma `summable_jacobiTheta₂_term_fderiv_iff` / 引理 `summable_jacobiTheta₂_term_fderiv_iff`
-
-English:
-lemma summable_jacobiTheta₂_term_fderiv_iff
-  given: (z τ : Complex)
-  proof: by
-  constructor
-  · rw [← summable_jacobiTheta₂_term_iff (z := z)]
-    intro h
-    have := h.norm
-    refine this.of_norm_bounded_eventually ?_
-    have : forallᶠ (n : Int) in cofinite, n != 0 :=
-      Int.cofinite_eq ▸ (mem_sup.mpr ⟨eventually_ne_atBot 0, eventually_ne_atTop 0⟩)
-    filter_upwards [this] with n hn
-    refine le_trans ?_ (norm_jacobiTheta₂_term_fderiv_ge n z τ)
-    apply le_mul_of_one_le_left (norm_nonneg _)
-    refine one_le_pi_div_two.trans (mul_le_mul_of_nonneg_left ?_ pi_pos.le)
-    refine (by norm_num : 2⁻¹ <= (1 : Real)).trans ?_
-    rw [one_le_sq_iff_one_le_abs]; rw [← Int.cast_abs]; rw [abs_abs]; rw [← Int.cast_one]; rw [Int.cast_le]
-    exact Int.one_le_abs hn
-  · intro hτ
-    refine ((summable_pow_mul_jacobiTheta₂_term_bound
-      |z.im| hτ 2).mul_left (3 * π)).of_norm_bounded (fun n => ?_)
-    refine (norm_jacobiTheta₂_term_fderiv_le n z τ).trans
-      (?_ : 3 * π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ <= _)
-    simp_rw [mul_assoc (3 * π)]
-    refine mul_le_mul_of_nonneg_left ?_ (mul_pos (by simp : 0 < (3 : Real)) pi_pos).le
-    refine mul_le_mul_of_nonneg_left ?_ (pow_nonneg (Int.cast_nonneg (abs_nonneg _)) _)
-    exact norm_jacobiTheta₂_term_le hτ le_rfl le_rfl n
-
-中文:
-引理 summable_jacobiTheta₂_term_fderiv_iff
-  条件: (z τ : 复形)
-  证明: by
-  constructor
-  · rw [← summable_jacobiTheta₂_term_iff (z := z)]
-    intro h
-    have := h.norm
-    refine this.of_norm_bounded_eventually ?_
-    have : forallᶠ (n : Int) in cofinite, n != 0 :=
-      Int.cofinite_eq ▸ (mem_sup.mpr ⟨eventually_ne_atBot 0, eventually_ne_atTop 0⟩)
-    filter_upwards [this] with n hn
-    refine le_trans ?_ (norm_jacobiTheta₂_term_fderiv_ge n z τ)
-    apply le_mul_of_one_le_left (norm_nonneg _)
-    refine one_le_pi_div_two.trans (mul_le_mul_of_nonneg_left ?_ pi_pos.le)
-    refine (by norm_num : 2⁻¹ <= (1 : Real)).trans ?_
-    rw [one_le_sq_iff_one_le_abs]; rw [← Int.cast_abs]; rw [abs_abs]; rw [← Int.cast_one]; rw [Int.cast_le]
-    exact Int.one_le_abs hn
-  · intro hτ
-    refine ((summable_pow_mul_jacobiTheta₂_term_bound
-      |z.im| hτ 2).mul_left (3 * π)).of_norm_bounded (fun n => ?_)
-    refine (norm_jacobiTheta₂_term_fderiv_le n z τ).trans
-      (?_ : 3 * π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ <= _)
-    simp_rw [mul_assoc (3 * π)]
-    refine mul_le_mul_of_nonneg_left ?_ (mul_pos (by simp : 0 < (3 : Real)) pi_pos).le
-    refine mul_le_mul_of_nonneg_left ?_ (pow_nonneg (Int.cast_nonneg (abs_nonneg _)) _)
-    exact norm_jacobiTheta₂_term_le hτ le_rfl le_rfl n
-
-Depends on / 依赖: Int.cofinite_eq, cofinite, cofinite_eq, eventually_ne_atBot, eventually_ne_atTop, filter_upwards, h.norm, le_mul_of_one_le_left, le_trans, mem_sup, mem_sup.mpr, mul_le_mul_of_nonneg_left, norm_nonneg, of_norm_bounded_eventually, one_le_pi_div_two, one_le_pi_div_two.trans, pi_pos, pi_pos.le, this.of_norm_bounded_eventually
--/
-lemma summable_jacobiTheta₂_term_fderiv_iff (z τ : Complex) :
+lemma summable_jacobiTheta₂_term_fderiv_iff (z τ : ℂ) :
     Summable (jacobiTheta₂_term_fderiv · z τ) ↔ 0 < im τ := by
   constructor
   · rw [← summable_jacobiTheta₂_term_iff (z := z)]
     intro h
     have := h.norm
     refine this.of_norm_bounded_eventually ?_
-    have : forallᶠ (n : Int) in cofinite, n != 0 :=
+    have : ∀ᶠ (n : ℤ) in cofinite, n ≠ 0 :=
       Int.cofinite_eq ▸ (mem_sup.mpr ⟨eventually_ne_atBot 0, eventually_ne_atTop 0⟩)
     filter_upwards [this] with n hn
     refine le_trans ?_ (norm_jacobiTheta₂_term_fderiv_ge n z τ)
     apply le_mul_of_one_le_left (norm_nonneg _)
     refine one_le_pi_div_two.trans (mul_le_mul_of_nonneg_left ?_ pi_pos.le)
-    refine (by norm_num : 2⁻¹ <= (1 : Real)).trans ?_
-    rw [one_le_sq_iff_one_le_abs]; rw [← Int.cast_abs]; rw [abs_abs]; rw [← Int.cast_one]; rw [Int.cast_le]
+    refine (by norm_num : 2⁻¹ ≤ (1 : ℝ)).trans ?_
+    rw [one_le_sq_iff_one_le_abs, ← Int.cast_abs, abs_abs, ← Int.cast_one, Int.cast_le]
     exact Int.one_le_abs hn
   · intro hτ
     refine ((summable_pow_mul_jacobiTheta₂_term_bound
-      |z.im| hτ 2).mul_left (3 * π)).of_norm_bounded (fun n => ?_)
+      |z.im| hτ 2).mul_left (3 * π)).of_norm_bounded (fun n ↦ ?_)
     refine (norm_jacobiTheta₂_term_fderiv_le n z τ).trans
-      (?_ : 3 * π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ <= _)
+      (?_ : 3 * π * |n| ^ 2 * ‖jacobiTheta₂_term n z τ‖ ≤ _)
     simp_rw [mul_assoc (3 * π)]
-    refine mul_le_mul_of_nonneg_left ?_ (mul_pos (by simp : 0 < (3 : Real)) pi_pos).le
+    refine mul_le_mul_of_nonneg_left ?_ (mul_pos (by simp : 0 < (3 : ℝ)) pi_pos).le
     refine mul_le_mul_of_nonneg_left ?_ (pow_nonneg (Int.cast_nonneg (abs_nonneg _)) _)
     exact norm_jacobiTheta₂_term_le hτ le_rfl le_rfl n
-
-/--
-lemma `summable_jacobiTheta₂'_term_iff` / 引理 `summable_jacobiTheta₂'_term_iff`
-
-English:
-lemma summable_jacobiTheta₂'_term_iff
-  given: (z τ : Complex)
-  proof: by
-  constructor
-  · rw [← summable_jacobiTheta₂_term_iff (z := z)]
-    refine fun h => (h.norm.mul_left (2 * π)⁻¹).of_norm_bounded_eventually ?_
-    have : forallᶠ (n : Int) in cofinite, n != 0 :=
-      Int.cofinite_eq ▸ (mem_sup.mpr ⟨eventually_ne_atBot 0, eventually_ne_atTop 0⟩)
-    filter_upwards [this] with n hn
-    rw [jacobiTheta₂'_term]; rw [norm_mul]; rw [← mul_assoc]
-    refine le_mul_of_one_le_left (norm_nonneg _) ?_
-    simp_rw [norm_mul, norm_I, norm_real, mul_one, norm_of_nonneg pi_pos.le,
-      ← ofReal_ofNat, norm_real, norm_of_nonneg two_pos.le, ← ofReal_intCast, norm_real,
-      Real.norm_eq_abs, ← Int.cast_abs, ← mul_assoc _ (2 * π),
-      inv_mul_cancel₀ (mul_pos two_pos pi_pos).ne', one_mul]
-    rw [← Int.cast_one]; rw [Int.cast_le]
-    exact Int.one_le_abs hn
-  · refine fun hτ => ((summable_pow_mul_jacobiTheta₂_term_bound
-      |z.im| hτ 1).mul_left (2 * π)).of_norm_bounded (fun n => ?_)
-    rw [jacobiTheta₂'_term]; rw [norm_mul]; rw [← mul_assoc]; rw [pow_one]
-    refine mul_le_mul (le_of_eq ?_) (norm_jacobiTheta₂_term_le hτ le_rfl le_rfl n)
-      (norm_nonneg _) (by positivity)
-    simp_rw [norm_mul, Complex.norm_two, norm_I, Complex.norm_of_nonneg pi_pos.le,
-      norm_intCast, mul_one, Int.cast_abs]
-
-中文:
-引理 summable_jacobiTheta₂'_term_iff
-  条件: (z τ : 复形)
-  证明: by
-  constructor
-  · rw [← summable_jacobiTheta₂_term_iff (z := z)]
-    refine fun h => (h.norm.mul_left (2 * π)⁻¹).of_norm_bounded_eventually ?_
-    have : forallᶠ (n : Int) in cofinite, n != 0 :=
-      Int.cofinite_eq ▸ (mem_sup.mpr ⟨eventually_ne_atBot 0, eventually_ne_atTop 0⟩)
-    filter_upwards [this] with n hn
-    rw [jacobiTheta₂'_term]; rw [norm_mul]; rw [← mul_assoc]
-    refine le_mul_of_one_le_left (norm_nonneg _) ?_
-    simp_rw [norm_mul, norm_I, norm_real, mul_one, norm_of_nonneg pi_pos.le,
-      ← ofReal_ofNat, norm_real, norm_of_nonneg two_pos.le, ← ofReal_intCast, norm_real,
-      Real.norm_eq_abs, ← Int.cast_abs, ← mul_assoc _ (2 * π),
-      inv_mul_cancel₀ (mul_pos two_pos pi_pos).ne', one_mul]
-    rw [← Int.cast_one]; rw [Int.cast_le]
-    exact Int.one_le_abs hn
-  · refine fun hτ => ((summable_pow_mul_jacobiTheta₂_term_bound
-      |z.im| hτ 1).mul_left (2 * π)).of_norm_bounded (fun n => ?_)
-    rw [jacobiTheta₂'_term]; rw [norm_mul]; rw [← mul_assoc]; rw [pow_one]
-    refine mul_le_mul (le_of_eq ?_) (norm_jacobiTheta₂_term_le hτ le_rfl le_rfl n)
-      (norm_nonneg _) (by positivity)
-    simp_rw [norm_mul, Complex.norm_two, norm_I, Complex.norm_of_nonneg pi_pos.le,
-      norm_intCast, mul_one, Int.cast_abs]
-
-Depends on / 依赖: Int.cofinite_eq, _term, cofinite, cofinite_eq, eventually_ne_atBot, eventually_ne_atTop, filter_upwards, h.norm.mul_left, le_mul_of_one_le_left, mem_sup, mem_sup.mpr, mul_assoc, mul_left, mul_one, norm_I, norm_mul, norm_nonneg, norm_of_nonneg, norm_real, ofReal_ofNat
+/-
+**summable_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma summable_jacobiTheta₂'_term_iff (z τ : Complex) :
+lemma summable_jacobiTheta₂'_term_iff (z τ : ℂ) :
     Summable (jacobiTheta₂'_term · z τ) ↔ 0 < im τ := by
   constructor
   · rw [← summable_jacobiTheta₂_term_iff (z := z)]
-    refine fun h => (h.norm.mul_left (2 * π)⁻¹).of_norm_bounded_eventually ?_
-    have : forallᶠ (n : Int) in cofinite, n != 0 :=
+    refine fun h ↦ (h.norm.mul_left (2 * π)⁻¹).of_norm_bounded_eventually ?_
+    have : ∀ᶠ (n : ℤ) in cofinite, n ≠ 0 :=
       Int.cofinite_eq ▸ (mem_sup.mpr ⟨eventually_ne_atBot 0, eventually_ne_atTop 0⟩)
     filter_upwards [this] with n hn
-    rw [jacobiTheta₂'_term]; rw [norm_mul]; rw [← mul_assoc]
+    rw [jacobiTheta₂'_term, norm_mul, ← mul_assoc]
     refine le_mul_of_one_le_left (norm_nonneg _) ?_
     simp_rw [norm_mul, norm_I, norm_real, mul_one, norm_of_nonneg pi_pos.le,
       ← ofReal_ofNat, norm_real, norm_of_nonneg two_pos.le, ← ofReal_intCast, norm_real,
       Real.norm_eq_abs, ← Int.cast_abs, ← mul_assoc _ (2 * π),
       inv_mul_cancel₀ (mul_pos two_pos pi_pos).ne', one_mul]
-    rw [← Int.cast_one]; rw [Int.cast_le]
+    rw [← Int.cast_one, Int.cast_le]
     exact Int.one_le_abs hn
-  · refine fun hτ => ((summable_pow_mul_jacobiTheta₂_term_bound
-      |z.im| hτ 1).mul_left (2 * π)).of_norm_bounded (fun n => ?_)
-    rw [jacobiTheta₂'_term]; rw [norm_mul]; rw [← mul_assoc]; rw [pow_one]
+  · refine fun hτ ↦ ((summable_pow_mul_jacobiTheta₂_term_bound
+      |z.im| hτ 1).mul_left (2 * π)).of_norm_bounded (fun n ↦ ?_)
+    rw [jacobiTheta₂'_term, norm_mul, ← mul_assoc, pow_one]
     refine mul_le_mul (le_of_eq ?_) (norm_jacobiTheta₂_term_le hτ le_rfl le_rfl n)
       (norm_nonneg _) (by positivity)
     simp_rw [norm_mul, Complex.norm_two, norm_I, Complex.norm_of_nonneg pi_pos.le,
@@ -693,463 +333,298 @@ end term_bounds
 ## Definitions of the functions
 -/
 
-/--
-Definition of `jacobiTheta₂` / `jacobiTheta₂` 的定义
-
-English:
-definition jacobiTheta₂
-  signature: (z τ : Complex)
-  body: ∑' n : Int, jacobiTheta₂_term n z τ
-
-中文:
-定义 jacobiTheta₂
-  签名: (z τ : 复形)
-  定义体: ∑' n : Int, jacobiTheta₂_term n z τ
+/-- The two-variable Jacobi theta function,
+`θ z τ = ∑' (n : ℤ), cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)`.
 -/
-def jacobiTheta₂ (z τ : Complex) : Complex := ∑' n : Int, jacobiTheta₂_term n z τ
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `jacobiTheta₂_fderiv` / `jacobiTheta₂_fderiv` 的定义
-
-English:
-definition jacobiTheta₂_fderiv
-  signature: (z τ : Complex)
-  body: ∑' n : Int, jacobiTheta₂_term_fderiv n z τ
-
-中文:
-定义 jacobiTheta₂_fderiv
-  签名: (z τ : 复形)
-  定义体: ∑' n : Int, jacobiTheta₂_term_fderiv n z τ
+--- 原说明 ---
+The two-variable Jacobi theta function,
+`θ z τ = ∑' (n : ℤ), cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)`.
 -/
-def jacobiTheta₂_fderiv (z τ : Complex) : Complex × Complex ->L[Complex] Complex := ∑' n : Int, jacobiTheta₂_term_fderiv n z τ
+def jacobiTheta₂ (z τ : ℂ) : ℂ := ∑' n : ℤ, jacobiTheta₂_term n z τ
 
-/--
-Definition of `jacobiTheta₂'` / `jacobiTheta₂'` 的定义
+/-- Fréchet derivative of the two-variable Jacobi theta function. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition jacobiTheta₂'
-  signature: (z τ : Complex)
-  body: ∑' n : Int, jacobiTheta₂'_term n z τ
-
-中文:
-定义 jacobiTheta₂'
-  签名: (z τ : 复形)
-  定义体: ∑' n : Int, jacobiTheta₂'_term n z τ
+--- 原说明 ---
+Fréchet derivative of the two-variable Jacobi theta function.
 -/
-def jacobiTheta₂' (z τ : Complex) := ∑' n : Int, jacobiTheta₂'_term n z τ
+def jacobiTheta₂_fderiv (z τ : ℂ) : ℂ × ℂ →L[ℂ] ℂ := ∑' n : ℤ, jacobiTheta₂_term_fderiv n z τ
 
-/--
-lemma `hasSum_jacobiTheta₂_term` / 引理 `hasSum_jacobiTheta₂_term`
-
-English:
-lemma hasSum_jacobiTheta₂_term
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: ((summable_jacobiTheta₂_term_iff z τ).mpr hτ).hasSum
-
-中文:
-引理 hasSum_jacobiTheta₂_term
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: ((summable_jacobiTheta₂_term_iff z τ).mpr hτ).hasSum
-
-Depends on / 依赖: hasSum
+/-- The `z`-derivative of the Jacobi theta function,
+`θ' z τ = ∑' (n : ℤ), 2 * π * I * n * cexp (2 * π * I * n * z + π * I * n ^ 2 * τ)`.
 -/
-lemma hasSum_jacobiTheta₂_term (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    HasSum (fun n => jacobiTheta₂_term n z τ) (jacobiTheta₂ z τ) :=
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The `z`-derivative of the Jacobi theta function,
+`θ' z τ = ∑' (n : ℤ), 2 * π * I * n * cexp (2 * π * I * n * z + π * I * n ^ 2 * 
+τ)`.
+-/
+def jacobiTheta₂' (z τ : ℂ) := ∑' n : ℤ, jacobiTheta₂'_term n z τ
+/-
+**hasSum_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma hasSum_jacobiTheta₂_term (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    HasSum (fun n ↦ jacobiTheta₂_term n z τ) (jacobiTheta₂ z τ) :=
   ((summable_jacobiTheta₂_term_iff z τ).mpr hτ).hasSum
-
-/--
-lemma `hasSum_jacobiTheta₂_term_fderiv` / 引理 `hasSum_jacobiTheta₂_term_fderiv`
-
-English:
-lemma hasSum_jacobiTheta₂_term_fderiv
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: ((summable_jacobiTheta₂_term_fderiv_iff z τ).mpr hτ).hasSum
-
-中文:
-引理 hasSum_jacobiTheta₂_term_fderiv
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: ((summable_jacobiTheta₂_term_fderiv_iff z τ).mpr hτ).hasSum
-
-Depends on / 依赖: hasSum
+/-
+**hasSum_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hasSum_jacobiTheta₂_term_fderiv (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    HasSum (fun n => jacobiTheta₂_term_fderiv n z τ) (jacobiTheta₂_fderiv z τ) :=
+lemma hasSum_jacobiTheta₂_term_fderiv (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    HasSum (fun n ↦ jacobiTheta₂_term_fderiv n z τ) (jacobiTheta₂_fderiv z τ) :=
   ((summable_jacobiTheta₂_term_fderiv_iff z τ).mpr hτ).hasSum
-
-/--
-lemma `hasSum_jacobiTheta₂'_term` / 引理 `hasSum_jacobiTheta₂'_term`
-
-English:
-lemma hasSum_jacobiTheta₂'_term
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: ((summable_jacobiTheta₂'_term_iff z τ).mpr hτ).hasSum
-
-中文:
-引理 hasSum_jacobiTheta₂'_term
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: ((summable_jacobiTheta₂'_term_iff z τ).mpr hτ).hasSum
-
-Depends on / 依赖: _term_iff, hasSum
+/-
+**hasSum_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hasSum_jacobiTheta₂'_term (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    HasSum (fun n => jacobiTheta₂'_term n z τ) (jacobiTheta₂' z τ) :=
+lemma hasSum_jacobiTheta₂'_term (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    HasSum (fun n ↦ jacobiTheta₂'_term n z τ) (jacobiTheta₂' z τ) :=
   ((summable_jacobiTheta₂'_term_iff z τ).mpr hτ).hasSum
-
-/--
-lemma `jacobiTheta₂_undef` / 引理 `jacobiTheta₂_undef`
-
-English:
-lemma jacobiTheta₂_undef
-  given: (z : Complex) {τ : Complex} (hτ : im τ <= 0)
-  statement: jacobiTheta₂ z τ = 0
-  proof: by
-  apply tsum_eq_zero_of_not_summable
-  rw [summable_jacobiTheta₂_term_iff]
-  exact not_lt.mpr hτ
-
-中文:
-引理 jacobiTheta₂_undef
-  条件: (z : 复形) {τ : 复形} (hτ : im τ <= 0)
-  结论: jacobiTheta₂ z τ = 0
-  证明: by
-  apply tsum_eq_zero_of_not_summable
-  rw [summable_jacobiTheta₂_term_iff]
-  exact not_lt.mpr hτ
-
-Depends on / 依赖: not_lt, not_lt.mpr, tsum_eq_zero_of_not_summable
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂_undef (z : Complex) {τ : Complex} (hτ : im τ <= 0) : jacobiTheta₂ z τ = 0 := by
+lemma jacobiTheta₂_undef (z : ℂ) {τ : ℂ} (hτ : im τ ≤ 0) : jacobiTheta₂ z τ = 0 := by
   apply tsum_eq_zero_of_not_summable
   rw [summable_jacobiTheta₂_term_iff]
   exact not_lt.mpr hτ
-
-/--
-lemma `jacobiTheta₂_fderiv_undef` / 引理 `jacobiTheta₂_fderiv_undef`
-
-English:
-lemma jacobiTheta₂_fderiv_undef
-  given: (z : Complex) {τ : Complex} (hτ : im τ <= 0)
-  statement: jacobiTheta₂_fderiv z τ = 0
-  proof: by
-  apply tsum_eq_zero_of_not_summable
-  rw [summable_jacobiTheta₂_term_fderiv_iff]
-  exact not_lt.mpr hτ
-
-中文:
-引理 jacobiTheta₂_fderiv_undef
-  条件: (z : 复形) {τ : 复形} (hτ : im τ <= 0)
-  结论: jacobiTheta₂_fderiv z τ = 0
-  证明: by
-  apply tsum_eq_zero_of_not_summable
-  rw [summable_jacobiTheta₂_term_fderiv_iff]
-  exact not_lt.mpr hτ
-
-Depends on / 依赖: not_lt, not_lt.mpr, tsum_eq_zero_of_not_summable
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂_fderiv_undef (z : Complex) {τ : Complex} (hτ : im τ <= 0) : jacobiTheta₂_fderiv z τ = 0 := by
+lemma jacobiTheta₂_fderiv_undef (z : ℂ) {τ : ℂ} (hτ : im τ ≤ 0) : jacobiTheta₂_fderiv z τ = 0 := by
   apply tsum_eq_zero_of_not_summable
   rw [summable_jacobiTheta₂_term_fderiv_iff]
   exact not_lt.mpr hτ
-
-/--
-lemma `jacobiTheta₂'_undef` / 引理 `jacobiTheta₂'_undef`
-
-English:
-lemma jacobiTheta₂'_undef
-  given: (z : Complex) {τ : Complex} (hτ : im τ <= 0)
-  statement: jacobiTheta₂' z τ = 0
-  proof: by
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma jacobiTheta₂'_undef (z : ℂ) {τ : ℂ} (hτ : im τ ≤ 0) : jacobiTheta₂' z τ = 0 := by
   apply tsum_eq_zero_of_not_summable
   rw [summable_jacobiTheta₂'_term_iff]
   exact not_lt.mpr hτ
 
-中文:
-引理 jacobiTheta₂'_undef
-  条件: (z : 复形) {τ : 复形} (hτ : im τ <= 0)
-  结论: jacobiTheta₂' z τ = 0
-  证明: by
-  apply tsum_eq_zero_of_not_summable
-  rw [summable_jacobiTheta₂'_term_iff]
-  exact not_lt.mpr hτ
+/-!
+## Derivatives and continuity
 -/
-lemma jacobiTheta₂'_undef (z : Complex) {τ : Complex} (hτ : im τ <= 0) : jacobiTheta₂' z τ = 0 := by
-  apply tsum_eq_zero_of_not_summable
-  rw [summable_jacobiTheta₂'_term_iff]
-  exact not_lt.mpr hτ
 
+/-
+**hasFDerivAt_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `hasFDerivAt_jacobiTheta₂` / 引理 `hasFDerivAt_jacobiTheta₂`
-
-English:
-lemma hasFDerivAt_jacobiTheta₂
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: by
+--- 原说明 ---
+## Derivatives and continuity
+-/
+lemma hasFDerivAt_jacobiTheta₂ (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    HasFDerivAt (fun p : ℂ × ℂ ↦ jacobiTheta₂ p.1 p.2) (jacobiTheta₂_fderiv z τ) (z, τ) := by
   obtain ⟨T, hT, hτ'⟩ := exists_between hτ
   obtain ⟨S, hz⟩ := exists_gt |im z|
   let V := {u | |im u| < S} ×ˢ {v | T < im v}
   have hVo : IsOpen V := by
     refine ((_root_.continuous_abs.comp continuous_im).isOpen_preimage _ isOpen_Iio).prod ?_
     exact continuous_im.isOpen_preimage _ isOpen_Ioi
-  have hVmem : (z, τ) in V := ⟨hz, hτ'⟩
+  have hVmem : (z, τ) ∈ V := ⟨hz, hτ'⟩
   have hVp : IsPreconnected V := by
     refine (Convex.isPreconnected ?_).prod (convex_halfSpace_im_gt T).isPreconnected
     simpa only [abs_lt] using! (convex_halfSpace_im_gt _).inter (convex_halfSpace_im_lt _)
-  let f : Int -> Complex × Complex -> Complex := fun n p => jacobiTheta₂_term n p.1 p.2
-  let f' : Int -> Complex × Complex -> Complex × Complex ->L[Complex] Complex := fun n p => jacobiTheta₂_term_fderiv n p.1 p.2
-  have hf (n : Int) : forall p in V, HasFDerivAt (f n) (f' n p) p :=
-    fun p _ => hasFDerivAt_jacobiTheta₂_term n p.1 p.2
-  let u : Int -> Real := fun n => 3 * π * |n| ^ 2 * Real.exp (-π * (T * n ^ 2 - 2 * S * |n|))
-  have hu : forall (n : Int), forall x in V, ‖f' n x‖ <= u n := by
-    refine fun n p hp => (norm_jacobiTheta₂_term_fderiv_le n p.1 p.2).trans ?_
+  let f : ℤ → ℂ × ℂ → ℂ := fun n p ↦ jacobiTheta₂_term n p.1 p.2
+  let f' : ℤ → ℂ × ℂ → ℂ × ℂ →L[ℂ] ℂ := fun n p ↦ jacobiTheta₂_term_fderiv n p.1 p.2
+  have hf (n : ℤ) : ∀ p ∈ V, HasFDerivAt (f n) (f' n p) p :=
+    fun p _ ↦ hasFDerivAt_jacobiTheta₂_term n p.1 p.2
+  let u : ℤ → ℝ := fun n ↦ 3 * π * |n| ^ 2 * Real.exp (-π * (T * n ^ 2 - 2 * S * |n|))
+  have hu : ∀ (n : ℤ), ∀ x ∈ V, ‖f' n x‖ ≤ u n := by
+    refine fun n p hp ↦ (norm_jacobiTheta₂_term_fderiv_le n p.1 p.2).trans ?_
     refine mul_le_mul_of_nonneg_left ?_ (by positivity)
     exact norm_jacobiTheta₂_term_le hT (le_of_lt hp.1) (le_of_lt hp.2) n
   have hu_sum : Summable u := by
     simp_rw [u, mul_assoc (3 * π)]
     exact (summable_pow_mul_jacobiTheta₂_term_bound S hT 2).mul_left _
-  have hf_sum : Summable fun n : Int => f n (z, τ) := by
+  have hf_sum : Summable fun n : ℤ ↦ f n (z, τ) := by
     refine (summable_pow_mul_jacobiTheta₂_term_bound S hT 0).of_norm_bounded ?_
     simpa only [pow_zero, one_mul] using! norm_jacobiTheta₂_term_le hT hz.le hτ'.le
   simpa only [jacobiTheta₂, jacobiTheta₂_fderiv, f, f'] using!
     hasFDerivAt_tsum_of_isPreconnected hu_sum hVo hVp hf hu hVmem hf_sum hVmem
-
-中文:
-引理 hasFDerivAt_jacobiTheta₂
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: by
-  obtain ⟨T, hT, hτ'⟩ := exists_between hτ
-  obtain ⟨S, hz⟩ := exists_gt |im z|
-  let V := {u | |im u| < S} ×ˢ {v | T < im v}
-  have hVo : IsOpen V := by
-    refine ((_root_.continuous_abs.comp continuous_im).isOpen_preimage _ isOpen_Iio).prod ?_
-    exact continuous_im.isOpen_preimage _ isOpen_Ioi
-  have hVmem : (z, τ) in V := ⟨hz, hτ'⟩
-  have hVp : IsPreconnected V := by
-    refine (Convex.isPreconnected ?_).prod (convex_halfSpace_im_gt T).isPreconnected
-    simpa only [abs_lt] using! (convex_halfSpace_im_gt _).inter (convex_halfSpace_im_lt _)
-  let f : Int -> Complex × Complex -> Complex := fun n p => jacobiTheta₂_term n p.1 p.2
-  let f' : Int -> Complex × Complex -> Complex × Complex ->L[Complex] Complex := fun n p => jacobiTheta₂_term_fderiv n p.1 p.2
-  have hf (n : Int) : forall p in V, HasFDerivAt (f n) (f' n p) p :=
-    fun p _ => hasFDerivAt_jacobiTheta₂_term n p.1 p.2
-  let u : Int -> Real := fun n => 3 * π * |n| ^ 2 * Real.exp (-π * (T * n ^ 2 - 2 * S * |n|))
-  have hu : forall (n : Int), forall x in V, ‖f' n x‖ <= u n := by
-    refine fun n p hp => (norm_jacobiTheta₂_term_fderiv_le n p.1 p.2).trans ?_
-    refine mul_le_mul_of_nonneg_left ?_ (by positivity)
-    exact norm_jacobiTheta₂_term_le hT (le_of_lt hp.1) (le_of_lt hp.2) n
-  have hu_sum : Summable u := by
-    simp_rw [u, mul_assoc (3 * π)]
-    exact (summable_pow_mul_jacobiTheta₂_term_bound S hT 2).mul_left _
-  have hf_sum : Summable fun n : Int => f n (z, τ) := by
-    refine (summable_pow_mul_jacobiTheta₂_term_bound S hT 0).of_norm_bounded ?_
-    simpa only [pow_zero, one_mul] using! norm_jacobiTheta₂_term_le hT hz.le hτ'.le
-  simpa only [jacobiTheta₂, jacobiTheta₂_fderiv, f, f'] using!
-    hasFDerivAt_tsum_of_isPreconnected hu_sum hVo hVp hf hu hVmem hf_sum hVmem
-
-Depends on / 依赖: Convex, Convex.isPreconnected, IsOpen, IsPreconnected, _root_, _root_.continuous_abs.comp, abs_lt, continuous_abs, continuous_im, continuous_im.isOpen_preimage, convex_halfSpace_im_gt, exists_between, exists_gt, isOpen_Iio, isOpen_Ioi, isOpen_preimage, isPreconnected
+/-
+**continuousAt_jacobiTheta** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_jacobiTheta {τ : Complex} (hτ : 0 < im τ) : ContinuousAt jaco
+biTheta τ
+参数：hτ : 0 < im τ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.continuousAt`：DifferentiableAt.continuousAt (h : Differ
+entiableAt 𝕜 f x) : ContinuousAt f x
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `differentiableAt_jacobiTheta`：differentiableAt_jacobiTheta {τ : Complex}
+ (hτ : 0 < im τ) : DifferentiableAt Complex jacobiTheta τ
 -/
-lemma hasFDerivAt_jacobiTheta₂ (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    HasFDerivAt (fun p : Complex × Complex => jacobiTheta₂ p.1 p.2) (jacobiTheta₂_fderiv z τ) (z, τ) := by
-  obtain ⟨T, hT, hτ'⟩ := exists_between hτ
-  obtain ⟨S, hz⟩ := exists_gt |im z|
-  let V := {u | |im u| < S} ×ˢ {v | T < im v}
-  have hVo : IsOpen V := by
-    refine ((_root_.continuous_abs.comp continuous_im).isOpen_preimage _ isOpen_Iio).prod ?_
-    exact continuous_im.isOpen_preimage _ isOpen_Ioi
-  have hVmem : (z, τ) in V := ⟨hz, hτ'⟩
-  have hVp : IsPreconnected V := by
-    refine (Convex.isPreconnected ?_).prod (convex_halfSpace_im_gt T).isPreconnected
-    simpa only [abs_lt] using! (convex_halfSpace_im_gt _).inter (convex_halfSpace_im_lt _)
-  let f : Int -> Complex × Complex -> Complex := fun n p => jacobiTheta₂_term n p.1 p.2
-  let f' : Int -> Complex × Complex -> Complex × Complex ->L[Complex] Complex := fun n p => jacobiTheta₂_term_fderiv n p.1 p.2
-  have hf (n : Int) : forall p in V, HasFDerivAt (f n) (f' n p) p :=
-    fun p _ => hasFDerivAt_jacobiTheta₂_term n p.1 p.2
-  let u : Int -> Real := fun n => 3 * π * |n| ^ 2 * Real.exp (-π * (T * n ^ 2 - 2 * S * |n|))
-  have hu : forall (n : Int), forall x in V, ‖f' n x‖ <= u n := by
-    refine fun n p hp => (norm_jacobiTheta₂_term_fderiv_le n p.1 p.2).trans ?_
-    refine mul_le_mul_of_nonneg_left ?_ (by positivity)
-    exact norm_jacobiTheta₂_term_le hT (le_of_lt hp.1) (le_of_lt hp.2) n
-  have hu_sum : Summable u := by
-    simp_rw [u, mul_assoc (3 * π)]
-    exact (summable_pow_mul_jacobiTheta₂_term_bound S hT 2).mul_left _
-  have hf_sum : Summable fun n : Int => f n (z, τ) := by
-    refine (summable_pow_mul_jacobiTheta₂_term_bound S hT 0).of_norm_bounded ?_
-    simpa only [pow_zero, one_mul] using! norm_jacobiTheta₂_term_le hT hz.le hτ'.le
-  simpa only [jacobiTheta₂, jacobiTheta₂_fderiv, f, f'] using!
-    hasFDerivAt_tsum_of_isPreconnected hu_sum hVo hVp hf hu hVmem hf_sum hVmem
-
-/--
-lemma `continuousAt_jacobiTheta₂` / 引理 `continuousAt_jacobiTheta₂`
-
-English:
-lemma continuousAt_jacobiTheta₂
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: (hasFDerivAt_jacobiTheta₂ z hτ).continuousAt
-
-中文:
-引理 continuousAt_jacobiTheta₂
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: (hasFDerivAt_jacobiTheta₂ z hτ).continuousAt
-
-Depends on / 依赖: continuousAt
--/
-lemma continuousAt_jacobiTheta₂ (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    ContinuousAt (fun p : Complex × Complex => jacobiTheta₂ p.1 p.2) (z, τ) :=
+lemma continuousAt_jacobiTheta₂ (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    ContinuousAt (fun p : ℂ × ℂ ↦ jacobiTheta₂ p.1 p.2) (z, τ) :=
   (hasFDerivAt_jacobiTheta₂ z hτ).continuousAt
 
-/--
-lemma `differentiableAt_jacobiTheta₂_fst` / 引理 `differentiableAt_jacobiTheta₂_fst`
+/-- Differentiability of `Θ z τ` in `z`, for fixed `τ`. -/
+/-
+**differentiableAt_jacobiTheta** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableAt_jacobiTheta {τ : Complex} (hτ : 0 < im τ) : Differentiabl
+eAt Complex jacobiTheta τ
+参数：hτ : 0 < im τ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `jacobiTheta_eq_jacobiTheta₂`：jacobiTheta_eq_jacobiTheta₂ (τ : Complex) :
+ jacobiTheta τ = jacobiTheta₂ 0 τ
+· 使用引理 `differentiableAt_jacobiTheta₂_snd`：differentiableAt_jacobiTheta₂_snd (z 
+: Complex) {τ : Complex} (hτ : 0 < im τ) : DifferentiableAt Complex (jacobiTheta
+₂ z) τ
 
-English:
-lemma differentiableAt_jacobiTheta₂_fst
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: ((hasFDerivAt_jacobiTheta₂ z hτ).comp (𝕜 := Complex) z (hasFDerivAt_prodMk_left z τ) :).differentiableAt
-
-中文:
-引理 differentiableAt_jacobiTheta₂_fst
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: ((hasFDerivAt_jacobiTheta₂ z hτ).comp (𝕜 := Complex) z (hasFDerivAt_prodMk_left z τ) :).differentiableAt
-
-Depends on / 依赖: differentiableAt, hasFDerivAt_prodMk_left
+--- 原说明 ---
+Differentiability of `Θ z τ` in `z`, for fixed `τ`.
 -/
-lemma differentiableAt_jacobiTheta₂_fst (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    DifferentiableAt Complex (jacobiTheta₂ · τ) z :=
-  ((hasFDerivAt_jacobiTheta₂ z hτ).comp (𝕜 := Complex) z (hasFDerivAt_prodMk_left z τ) :).differentiableAt
+lemma differentiableAt_jacobiTheta₂_fst (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    DifferentiableAt ℂ (jacobiTheta₂ · τ) z :=
+  ((hasFDerivAt_jacobiTheta₂ z hτ).comp (𝕜 := ℂ) z (hasFDerivAt_prodMk_left z τ) :).differentiableAt
 
-/--
-lemma `differentiableAt_jacobiTheta₂_snd` / 引理 `differentiableAt_jacobiTheta₂_snd`
+/-- Differentiability of `Θ z τ` in `τ`, for fixed `z`. -/
+/-
+**differentiableAt_jacobiTheta** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableAt_jacobiTheta {τ : Complex} (hτ : 0 < im τ) : Differentiabl
+eAt Complex jacobiTheta τ
+参数：hτ : 0 < im τ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `jacobiTheta_eq_jacobiTheta₂`：jacobiTheta_eq_jacobiTheta₂ (τ : Complex) :
+ jacobiTheta τ = jacobiTheta₂ 0 τ
+· 使用引理 `differentiableAt_jacobiTheta₂_snd`：differentiableAt_jacobiTheta₂_snd (z 
+: Complex) {τ : Complex} (hτ : 0 < im τ) : DifferentiableAt Complex (jacobiTheta
+₂ z) τ
 
-English:
-lemma differentiableAt_jacobiTheta₂_snd
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: ((hasFDerivAt_jacobiTheta₂ z hτ).comp τ (hasFDerivAt_prodMk_right z τ)).differentiableAt
-
-中文:
-引理 differentiableAt_jacobiTheta₂_snd
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: ((hasFDerivAt_jacobiTheta₂ z hτ).comp τ (hasFDerivAt_prodMk_right z τ)).differentiableAt
-
-Depends on / 依赖: differentiableAt, hasFDerivAt_prodMk_right
+--- 原说明 ---
+Differentiability of `Θ z τ` in `τ`, for fixed `z`.
 -/
-lemma differentiableAt_jacobiTheta₂_snd (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    DifferentiableAt Complex (jacobiTheta₂ z) τ :=
+lemma differentiableAt_jacobiTheta₂_snd (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    DifferentiableAt ℂ (jacobiTheta₂ z) τ :=
   ((hasFDerivAt_jacobiTheta₂ z hτ).comp τ (hasFDerivAt_prodMk_right z τ)).differentiableAt
-
-/--
-lemma `hasDerivAt_jacobiTheta₂_fst` / 引理 `hasDerivAt_jacobiTheta₂_fst`
-
-English:
-lemma hasDerivAt_jacobiTheta₂_fst
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: by
-  -- This proof is annoyingly fiddly, because of the need to commute "evaluation at a point"
-  -- through infinite sums of continuous linear maps.
-  let eval_fst_CLM : (Complex × Complex ->L[Complex] Complex) ->L[Complex] Complex :=
-  { toFun := fun f => f (1, 0)
-    map_add' := by simp only [add_apply, forall_const]
-    map_smul' := by simp }
-  have step1 : HasSum (fun n => (jacobiTheta₂_term_fderiv n z τ) (1, 0))
-      ((jacobiTheta₂_fderiv z τ) (1, 0)) := by
-    apply eval_fst_CLM.hasSum (hasSum_jacobiTheta₂_term_fderiv z hτ)
-  have step2 (n : Int) : (jacobiTheta₂_term_fderiv n z τ) (1, 0) = jacobiTheta₂'_term n z τ := by
-    simp [jacobiTheta₂_term_fderiv, jacobiTheta₂'_term, jacobiTheta₂_term, mul_comm]
-  simp only [step2] at step1
-  have step3 : HasDerivAt (fun x => jacobiTheta₂ x τ) ((jacobiTheta₂_fderiv z τ) (1, 0)) z :=
-    (((hasFDerivAt_jacobiTheta₂ z hτ).comp z (hasFDerivAt_prodMk_left z τ)).hasDerivAt :)
-  rwa [← step1.tsum_eq] at step3
-
-中文:
-引理 hasDerivAt_jacobiTheta₂_fst
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: by
-  -- This proof is annoyingly fiddly, because of the need to commute "evaluation at a point"
-  -- through infinite sums of continuous linear maps.
-  let eval_fst_CLM : (Complex × Complex ->L[Complex] Complex) ->L[Complex] Complex :=
-  { toFun := fun f => f (1, 0)
-    map_add' := by simp only [add_apply, forall_const]
-    map_smul' := by simp }
-  have step1 : HasSum (fun n => (jacobiTheta₂_term_fderiv n z τ) (1, 0))
-      ((jacobiTheta₂_fderiv z τ) (1, 0)) := by
-    apply eval_fst_CLM.hasSum (hasSum_jacobiTheta₂_term_fderiv z hτ)
-  have step2 (n : Int) : (jacobiTheta₂_term_fderiv n z τ) (1, 0) = jacobiTheta₂'_term n z τ := by
-    simp [jacobiTheta₂_term_fderiv, jacobiTheta₂'_term, jacobiTheta₂_term, mul_comm]
-  simp only [step2] at step1
-  have step3 : HasDerivAt (fun x => jacobiTheta₂ x τ) ((jacobiTheta₂_fderiv z τ) (1, 0)) z :=
-    (((hasFDerivAt_jacobiTheta₂ z hτ).comp z (hasFDerivAt_prodMk_left z τ)).hasDerivAt :)
-  rwa [← step1.tsum_eq] at step3
+/-
+**hasDerivAt_jacobiTheta** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hasDerivAt_jacobiTheta₂_fst (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
+lemma hasDerivAt_jacobiTheta₂_fst (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
     HasDerivAt (jacobiTheta₂ · τ) (jacobiTheta₂' z τ) z := by
   -- This proof is annoyingly fiddly, because of the need to commute "evaluation at a point"
   -- through infinite sums of continuous linear maps.
-  let eval_fst_CLM : (Complex × Complex ->L[Complex] Complex) ->L[Complex] Complex :=
-  { toFun := fun f => f (1, 0)
+  let eval_fst_CLM : (ℂ × ℂ →L[ℂ] ℂ) →L[ℂ] ℂ :=
+  { toFun := fun f ↦ f (1, 0)
     map_add' := by simp only [add_apply, forall_const]
     map_smul' := by simp }
-  have step1 : HasSum (fun n => (jacobiTheta₂_term_fderiv n z τ) (1, 0))
+  have step1 : HasSum (fun n ↦ (jacobiTheta₂_term_fderiv n z τ) (1, 0))
       ((jacobiTheta₂_fderiv z τ) (1, 0)) := by
     apply eval_fst_CLM.hasSum (hasSum_jacobiTheta₂_term_fderiv z hτ)
-  have step2 (n : Int) : (jacobiTheta₂_term_fderiv n z τ) (1, 0) = jacobiTheta₂'_term n z τ := by
+  have step2 (n : ℤ) : (jacobiTheta₂_term_fderiv n z τ) (1, 0) = jacobiTheta₂'_term n z τ := by
     simp [jacobiTheta₂_term_fderiv, jacobiTheta₂'_term, jacobiTheta₂_term, mul_comm]
   simp only [step2] at step1
-  have step3 : HasDerivAt (fun x => jacobiTheta₂ x τ) ((jacobiTheta₂_fderiv z τ) (1, 0)) z :=
+  have step3 : HasDerivAt (fun x ↦ jacobiTheta₂ x τ) ((jacobiTheta₂_fderiv z τ) (1, 0)) z :=
     (((hasFDerivAt_jacobiTheta₂ z hτ).comp z (hasFDerivAt_prodMk_left z τ)).hasDerivAt :)
   rwa [← step1.tsum_eq] at step3
-
-/--
-lemma `continuousAt_jacobiTheta₂'` / 引理 `continuousAt_jacobiTheta₂'`
-
-English:
-lemma continuousAt_jacobiTheta₂'
-  given: (z : Complex) {τ : Complex} (hτ : 0 < im τ)
-  proof: by
-  obtain ⟨T, hT, hτ'⟩ := exists_between hτ
-  obtain ⟨S, hz⟩ := exists_gt |im z|
-  let V := {u | |im u| < S} ×ˢ {v | T < im v}
-  have hVo : IsOpen V := ((_root_.continuous_abs.comp continuous_im).isOpen_preimage _
-    isOpen_Iio).prod (continuous_im.isOpen_preimage _ isOpen_Ioi)
-  refine ContinuousOn.continuousAt ?_ (hVo.mem_nhds ⟨hz, hτ'⟩)
-  let u (n : Int) : Real := 2 * π * |n| * rexp (-π * (T * n ^ 2 - 2 * S * |n|))
-  have hu : Summable u := by simpa only [u, mul_assoc, pow_one]
-      using (summable_pow_mul_jacobiTheta₂_term_bound S hT 1).mul_left (2 * π)
-  refine continuousOn_tsum (fun n => ?_) hu (fun n ⟨z', τ'⟩ ⟨hz', hτ'⟩ => ?_)
-  · apply Continuous.continuousOn
-    unfold jacobiTheta₂'_term jacobiTheta₂_term
-    fun_prop
-  · exact norm_jacobiTheta₂'_term_le hT (le_of_lt hz') (le_of_lt hτ') n
-
-中文:
-引理 continuousAt_jacobiTheta₂'
-  条件: (z : 复形) {τ : 复形} (hτ : 0 < im τ)
-  证明: by
-  obtain ⟨T, hT, hτ'⟩ := exists_between hτ
-  obtain ⟨S, hz⟩ := exists_gt |im z|
-  let V := {u | |im u| < S} ×ˢ {v | T < im v}
-  have hVo : IsOpen V := ((_root_.continuous_abs.comp continuous_im).isOpen_preimage _
-    isOpen_Iio).prod (continuous_im.isOpen_preimage _ isOpen_Ioi)
-  refine ContinuousOn.continuousAt ?_ (hVo.mem_nhds ⟨hz, hτ'⟩)
-  let u (n : Int) : Real := 2 * π * |n| * rexp (-π * (T * n ^ 2 - 2 * S * |n|))
-  have hu : Summable u := by simpa only [u, mul_assoc, pow_one]
-      using (summable_pow_mul_jacobiTheta₂_term_bound S hT 1).mul_left (2 * π)
-  refine continuousOn_tsum (fun n => ?_) hu (fun n ⟨z', τ'⟩ ⟨hz', hτ'⟩ => ?_)
-  · apply Continuous.continuousOn
-    unfold jacobiTheta₂'_term jacobiTheta₂_term
-    fun_prop
-  · exact norm_jacobiTheta₂'_term_le hT (le_of_lt hz') (le_of_lt hτ') n
-
-Depends on / 依赖: ContinuousOn, ContinuousOn.continuousAt, IsOpen, Summable, _root_, _root_.continuous_abs.comp, continuousAt, continuous_abs, continuous_im, continuous_im.isOpen_preimage, exists_between, exists_gt, hVo.mem_nhds, isOpen_Iio, isOpen_Ioi, isOpen_preimage, mem_nhds, mul_assoc, pow_one, summable_pow_mul_jacob
+/-
+**continuousAt_jacobiTheta** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_jacobiTheta {τ : Complex} (hτ : 0 < im τ) : ContinuousAt jaco
+biTheta τ
+参数：hτ : 0 < im τ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.continuousAt`：DifferentiableAt.continuousAt (h : Differ
+entiableAt 𝕜 f x) : ContinuousAt f x
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `differentiableAt_jacobiTheta`：differentiableAt_jacobiTheta {τ : Complex}
+ (hτ : 0 < im τ) : DifferentiableAt Complex jacobiTheta τ
 -/
-lemma continuousAt_jacobiTheta₂' (z : Complex) {τ : Complex} (hτ : 0 < im τ) :
-    ContinuousAt (fun p : Complex × Complex => jacobiTheta₂' p.1 p.2) (z, τ) := by
+lemma continuousAt_jacobiTheta₂' (z : ℂ) {τ : ℂ} (hτ : 0 < im τ) :
+    ContinuousAt (fun p : ℂ × ℂ ↦ jacobiTheta₂' p.1 p.2) (z, τ) := by
   obtain ⟨T, hT, hτ'⟩ := exists_between hτ
   obtain ⟨S, hz⟩ := exists_gt |im z|
   let V := {u | |im u| < S} ×ˢ {v | T < im v}
   have hVo : IsOpen V := ((_root_.continuous_abs.comp continuous_im).isOpen_preimage _
     isOpen_Iio).prod (continuous_im.isOpen_preimage _ isOpen_Ioi)
   refine ContinuousOn.continuousAt ?_ (hVo.mem_nhds ⟨hz, hτ'⟩)
-  let u (n : Int) : Real := 2 * π * |n| * rexp (-π * (T * n ^ 2 - 2 * S * |n|))
+  let u (n : ℤ) : ℝ := 2 * π * |n| * rexp (-π * (T * n ^ 2 - 2 * S * |n|))
   have hu : Summable u := by simpa only [u, mul_assoc, pow_one]
       using (summable_pow_mul_jacobiTheta₂_term_bound S hT 1).mul_left (2 * π)
-  refine continuousOn_tsum (fun n => ?_) hu (fun n ⟨z', τ'⟩ ⟨hz', hτ'⟩ => ?_)
+  refine continuousOn_tsum (fun n ↦ ?_) hu (fun n ⟨z', τ'⟩ ⟨hz', hτ'⟩ ↦ ?_)
   · apply Continuous.continuousOn
     unfold jacobiTheta₂'_term jacobiTheta₂_term
     fun_prop
@@ -1159,260 +634,125 @@ lemma continuousAt_jacobiTheta₂' (z : Complex) {τ : Complex} (hτ : 0 < im τ
 ## Periodicity and conjugation
 -/
 
-/--
-lemma `jacobiTheta₂_add_right` / 引理 `jacobiTheta₂_add_right`
+/-- The two-variable Jacobi theta function is periodic in `τ` with period 2. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma jacobiTheta₂_add_right
-  given: (z τ : Complex)
-  statement: jacobiTheta₂ z (τ + 2) = jacobiTheta₂ z τ
-  proof: by
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, Complex.exp_add]
-  suffices cexp (π * I * n ^ 2 * 2 : Complex) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
-  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : Complex) = (n ^ 2 :) * (2 * π * I))]; rw [exp_int_mul]; rw [exp_two_pi_mul_I]; rw [one_zpow]
-
-中文:
-引理 jacobiTheta₂_add_right
-  条件: (z τ : 复形)
-  结论: jacobiTheta₂ z (τ + 2) = jacobiTheta₂ z τ
-  证明: by
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, Complex.exp_add]
-  suffices cexp (π * I * n ^ 2 * 2 : Complex) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
-  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : Complex) = (n ^ 2 :) * (2 * π * I))]; rw [exp_int_mul]; rw [exp_two_pi_mul_I]; rw [one_zpow]
-
-Depends on / 依赖: Complex.exp_add, exp_add, exp_int_mul, exp_two_pi_mul_I, mul_add, mul_one, one_zpow, simp_rw, tsum_congr
+--- 原说明 ---
+The two-variable Jacobi theta function is periodic in `τ` with period 2.
 -/
-lemma jacobiTheta₂_add_right (z τ : Complex) : jacobiTheta₂ z (τ + 2) = jacobiTheta₂ z τ := by
-  refine tsum_congr (fun n => ?_)
+lemma jacobiTheta₂_add_right (z τ : ℂ) : jacobiTheta₂ z (τ + 2) = jacobiTheta₂ z τ := by
+  refine tsum_congr (fun n ↦ ?_)
   simp_rw [jacobiTheta₂_term, Complex.exp_add]
-  suffices cexp (π * I * n ^ 2 * 2 : Complex) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
-  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : Complex) = (n ^ 2 :) * (2 * π * I))]; rw [exp_int_mul]; rw [exp_two_pi_mul_I]; rw [one_zpow]
+  suffices cexp (π * I * n ^ 2 * 2 : ℂ) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
+  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : ℂ) = (n ^ 2 :) * (2 * π * I)), exp_int_mul,
+    exp_two_pi_mul_I, one_zpow]
 
-/--
-lemma `jacobiTheta₂_add_left` / 引理 `jacobiTheta₂_add_left`
+/-- The two-variable Jacobi theta function is periodic in `z` with period 1. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma jacobiTheta₂_add_left
-  given: (z τ : Complex)
-  statement: jacobiTheta₂ (z + 1) τ = jacobiTheta₂ z τ
-  proof: by
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, mul_add, Complex.exp_add, mul_one, mul_comm _ (n : Complex),
+--- 原说明 ---
+The two-variable Jacobi theta function is periodic in `z` with period 1.
+-/
+lemma jacobiTheta₂_add_left (z τ : ℂ) : jacobiTheta₂ (z + 1) τ = jacobiTheta₂ z τ := by
+  refine tsum_congr (fun n ↦ ?_)
+  simp_rw [jacobiTheta₂_term, mul_add, Complex.exp_add, mul_one, mul_comm _ (n : ℂ),
     exp_int_mul_two_pi_mul_I, mul_one]
 
-中文:
-引理 jacobiTheta₂_add_left
-  条件: (z τ : 复形)
-  结论: jacobiTheta₂ (z + 1) τ = jacobiTheta₂ z τ
-  证明: by
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, mul_add, Complex.exp_add, mul_one, mul_comm _ (n : Complex),
-    exp_int_mul_two_pi_mul_I, mul_one]
+/-- The two-variable Jacobi theta function is quasi-periodic in `z` with period `τ`. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Complex.exp_add, exp_add, exp_int_mul_two_pi_mul_I, mul_add, mul_comm, mul_one, simp_rw, tsum_congr
+--- 原说明 ---
+The two-variable Jacobi theta function is quasi-periodic in `z` with period `τ`.
 -/
-lemma jacobiTheta₂_add_left (z τ : Complex) : jacobiTheta₂ (z + 1) τ = jacobiTheta₂ z τ := by
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, mul_add, Complex.exp_add, mul_one, mul_comm _ (n : Complex),
-    exp_int_mul_two_pi_mul_I, mul_one]
-
-/--
-lemma `jacobiTheta₂_add_left'` / 引理 `jacobiTheta₂_add_left'`
-
-English:
-lemma jacobiTheta₂_add_left'
-  given: (z τ : Complex)
-  proof: by
-  conv_rhs => rw [jacobiTheta₂, ← tsum_mul_left, ← (Equiv.addRight 1).tsum_eq]
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, ← Complex.exp_add, Equiv.coe_addRight, Int.cast_add]
-  ring_nf
-
-中文:
-引理 jacobiTheta₂_add_left'
-  条件: (z τ : 复形)
-  证明: by
-  conv_rhs => rw [jacobiTheta₂, ← tsum_mul_left, ← (Equiv.addRight 1).tsum_eq]
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, ← Complex.exp_add, Equiv.coe_addRight, Int.cast_add]
-  ring_nf
-
-Depends on / 依赖: Complex.exp_add, Equiv.addRight, Equiv.coe_addRight, Int.cast_add, addRight, cast_add, coe_addRight, conv_rhs, exp_add, ring_nf, simp_rw, tsum_congr, tsum_eq, tsum_mul_left
--/
-lemma jacobiTheta₂_add_left' (z τ : Complex) :
+lemma jacobiTheta₂_add_left' (z τ : ℂ) :
     jacobiTheta₂ (z + τ) τ = cexp (-π * I * (τ + 2 * z)) * jacobiTheta₂ z τ := by
   conv_rhs => rw [jacobiTheta₂, ← tsum_mul_left, ← (Equiv.addRight 1).tsum_eq]
-  refine tsum_congr (fun n => ?_)
+  refine tsum_congr (fun n ↦ ?_)
   simp_rw [jacobiTheta₂_term, ← Complex.exp_add, Equiv.coe_addRight, Int.cast_add]
   ring_nf
 
 /-- The two-variable Jacobi theta function is even in `z`. -/
 @[simp]
-/--
-lemma `jacobiTheta₂_neg_left` / 引理 `jacobiTheta₂_neg_left`
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma jacobiTheta₂_neg_left
-  given: (z τ : Complex)
-  statement: jacobiTheta₂ (-z) τ = jacobiTheta₂ z τ
-  proof: by
-  conv_lhs => rw [jacobiTheta₂, ← Equiv.tsum_eq (Equiv.neg Int)]
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, Equiv.neg_apply, Int.cast_neg, neg_sq, mul_assoc, neg_mul_neg]
-
-中文:
-引理 jacobiTheta₂_neg_left
-  条件: (z τ : 复形)
-  结论: jacobiTheta₂ (-z) τ = jacobiTheta₂ z τ
-  证明: by
-  conv_lhs => rw [jacobiTheta₂, ← Equiv.tsum_eq (Equiv.neg Int)]
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂_term, Equiv.neg_apply, Int.cast_neg, neg_sq, mul_assoc, neg_mul_neg]
-
-Depends on / 依赖: Equiv.neg, Equiv.neg_apply, Equiv.tsum_eq, Int.cast_neg, cast_neg, conv_lhs, mul_assoc, neg_apply, neg_mul_neg, neg_sq, simp_rw, tsum_congr, tsum_eq
+--- 原说明 ---
+The two-variable Jacobi theta function is even in `z`.
 -/
-lemma jacobiTheta₂_neg_left (z τ : Complex) : jacobiTheta₂ (-z) τ = jacobiTheta₂ z τ := by
-  conv_lhs => rw [jacobiTheta₂, ← Equiv.tsum_eq (Equiv.neg Int)]
-  refine tsum_congr (fun n => ?_)
+lemma jacobiTheta₂_neg_left (z τ : ℂ) : jacobiTheta₂ (-z) τ = jacobiTheta₂ z τ := by
+  conv_lhs => rw [jacobiTheta₂, ← Equiv.tsum_eq (Equiv.neg ℤ)]
+  refine tsum_congr (fun n ↦ ?_)
   simp_rw [jacobiTheta₂_term, Equiv.neg_apply, Int.cast_neg, neg_sq, mul_assoc, neg_mul_neg]
-
-/--
-lemma `jacobiTheta₂_conj` / 引理 `jacobiTheta₂_conj`
-
-English:
-lemma jacobiTheta₂_conj
-  given: (z τ : Complex)
-  proof: by
-  rw [← jacobiTheta₂_neg_left]; rw [jacobiTheta₂]; rw [conj_tsum]
-  congr 2 with n
-  simp only [jacobiTheta₂_term, mul_neg, ← exp_conj, map_add, map_neg, map_mul, map_ofNat,
-    conj_ofReal, conj_I, map_intCast, neg_mul, neg_neg, map_pow]
-
-中文:
-引理 jacobiTheta₂_conj
-  条件: (z τ : 复形)
-  证明: by
-  rw [← jacobiTheta₂_neg_left]; rw [jacobiTheta₂]; rw [conj_tsum]
-  congr 2 with n
-  simp only [jacobiTheta₂_term, mul_neg, ← exp_conj, map_add, map_neg, map_mul, map_ofNat,
-    conj_ofReal, conj_I, map_intCast, neg_mul, neg_neg, map_pow]
-
-Depends on / 依赖: conj_I, conj_ofReal, conj_tsum, exp_conj, map_add, map_intCast, map_mul, map_neg, map_ofNat, map_pow, mul_neg, neg_mul, neg_neg
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂_conj (z τ : Complex) :
+lemma jacobiTheta₂_conj (z τ : ℂ) :
     conj (jacobiTheta₂ z τ) = jacobiTheta₂ (conj z) (-conj τ) := by
-  rw [← jacobiTheta₂_neg_left]; rw [jacobiTheta₂]; rw [conj_tsum]
+  rw [← jacobiTheta₂_neg_left, jacobiTheta₂, conj_tsum]
   congr 2 with n
   simp only [jacobiTheta₂_term, mul_neg, ← exp_conj, map_add, map_neg, map_mul, map_ofNat,
     conj_ofReal, conj_I, map_intCast, neg_mul, neg_neg, map_pow]
-
-/--
-lemma `jacobiTheta₂'_add_right` / 引理 `jacobiTheta₂'_add_right`
-
-English:
-lemma jacobiTheta₂'_add_right
-  given: (z τ : Complex)
-  statement: jacobiTheta₂' z (τ + 2) = jacobiTheta₂' z τ
-  proof: by
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂'_term, jacobiTheta₂_term, Complex.exp_add]
-  suffices cexp (π * I * n ^ 2 * 2 : Complex) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
-  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : Complex) = (n ^ 2 :) * (2 * π * I))]; rw [exp_int_mul]; rw [exp_two_pi_mul_I]; rw [one_zpow]
-
-中文:
-引理 jacobiTheta₂'_add_right
-  条件: (z τ : 复形)
-  结论: jacobiTheta₂' z (τ + 2) = jacobiTheta₂' z τ
-  证明: by
-  refine tsum_congr (fun n => ?_)
-  simp_rw [jacobiTheta₂'_term, jacobiTheta₂_term, Complex.exp_add]
-  suffices cexp (π * I * n ^ 2 * 2 : Complex) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
-  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : Complex) = (n ^ 2 :) * (2 * π * I))]; rw [exp_int_mul]; rw [exp_two_pi_mul_I]; rw [one_zpow]
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂'_add_right (z τ : Complex) : jacobiTheta₂' z (τ + 2) = jacobiTheta₂' z τ := by
-  refine tsum_congr (fun n => ?_)
+lemma jacobiTheta₂'_add_right (z τ : ℂ) : jacobiTheta₂' z (τ + 2) = jacobiTheta₂' z τ := by
+  refine tsum_congr (fun n ↦ ?_)
   simp_rw [jacobiTheta₂'_term, jacobiTheta₂_term, Complex.exp_add]
-  suffices cexp (π * I * n ^ 2 * 2 : Complex) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
-  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : Complex) = (n ^ 2 :) * (2 * π * I))]; rw [exp_int_mul]; rw [exp_two_pi_mul_I]; rw [one_zpow]
-
-/--
-lemma `jacobiTheta₂'_add_left` / 引理 `jacobiTheta₂'_add_left`
-
-English:
-lemma jacobiTheta₂'_add_left
-  given: (z τ : Complex)
-  statement: jacobiTheta₂' (z + 1) τ = jacobiTheta₂' z τ
-  proof: by
-  unfold jacobiTheta₂' jacobiTheta₂'_term jacobiTheta₂_term
-  refine tsum_congr (fun n => ?_)
-  simp only [mul_add, Complex.exp_add, mul_one, mul_comm _ (n : Complex), exp_int_mul_two_pi_mul_I,
-    mul_one]
-
-中文:
-引理 jacobiTheta₂'_add_left
-  条件: (z τ : 复形)
-  结论: jacobiTheta₂' (z + 1) τ = jacobiTheta₂' z τ
-  证明: by
-  unfold jacobiTheta₂' jacobiTheta₂'_term jacobiTheta₂_term
-  refine tsum_congr (fun n => ?_)
-  simp only [mul_add, Complex.exp_add, mul_one, mul_comm _ (n : Complex), exp_int_mul_two_pi_mul_I,
-    mul_one]
+  suffices cexp (π * I * n ^ 2 * 2 : ℂ) = 1 by rw [mul_add, Complex.exp_add, this, mul_one]
+  rw [(by push_cast; ring : (π * I * n ^ 2 * 2 : ℂ) = (n ^ 2 :) * (2 * π * I)), exp_int_mul,
+    exp_two_pi_mul_I, one_zpow]
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂'_add_left (z τ : Complex) : jacobiTheta₂' (z + 1) τ = jacobiTheta₂' z τ := by
+lemma jacobiTheta₂'_add_left (z τ : ℂ) : jacobiTheta₂' (z + 1) τ = jacobiTheta₂' z τ := by
   unfold jacobiTheta₂' jacobiTheta₂'_term jacobiTheta₂_term
-  refine tsum_congr (fun n => ?_)
-  simp only [mul_add, Complex.exp_add, mul_one, mul_comm _ (n : Complex), exp_int_mul_two_pi_mul_I,
+  refine tsum_congr (fun n ↦ ?_)
+  simp only [mul_add, Complex.exp_add, mul_one, mul_comm _ (n : ℂ), exp_int_mul_two_pi_mul_I,
     mul_one]
-
-/--
-lemma `jacobiTheta₂'_add_left'` / 引理 `jacobiTheta₂'_add_left'`
-
-English:
-lemma jacobiTheta₂'_add_left'
-  given: (z τ : Complex)
-  proof: by
-  rcases le_or_gt τ.im 0 with hτ | hτ
-  · simp_rw [jacobiTheta₂_undef _ hτ, jacobiTheta₂'_undef _ hτ, mul_zero, sub_zero, mul_zero]
-  have (n : Int) : jacobiTheta₂'_term n (z + τ) τ =
-      cexp (-π * I * (τ + 2 * z)) * (jacobiTheta₂'_term (n + 1) z τ -
-      2 * π * I * jacobiTheta₂_term (n + 1) z τ) := by
-    simp only [jacobiTheta₂'_term, jacobiTheta₂_term]
-    conv_rhs => rw [← sub_mul, mul_comm, mul_assoc, ← Complex.exp_add, Int.cast_add, Int.cast_one,
-      mul_add, mul_one, add_sub_cancel_right]
-    congr 2
-    ring
-  rw [jacobiTheta₂']; rw [funext this]; rw [tsum_mul_left]; rw [← (Equiv.subRight (1 : Int)).tsum_eq]
-  simp only [jacobiTheta₂, jacobiTheta₂', Equiv.subRight_apply, sub_add_cancel,
-    (hasSum_jacobiTheta₂'_term z hτ).summable.tsum_sub
-    ((hasSum_jacobiTheta₂_term z hτ).summable.mul_left _), tsum_mul_left]
-
-中文:
-引理 jacobiTheta₂'_add_left'
-  条件: (z τ : 复形)
-  证明: by
-  rcases le_or_gt τ.im 0 with hτ | hτ
-  · simp_rw [jacobiTheta₂_undef _ hτ, jacobiTheta₂'_undef _ hτ, mul_zero, sub_zero, mul_zero]
-  have (n : Int) : jacobiTheta₂'_term n (z + τ) τ =
-      cexp (-π * I * (τ + 2 * z)) * (jacobiTheta₂'_term (n + 1) z τ -
-      2 * π * I * jacobiTheta₂_term (n + 1) z τ) := by
-    simp only [jacobiTheta₂'_term, jacobiTheta₂_term]
-    conv_rhs => rw [← sub_mul, mul_comm, mul_assoc, ← Complex.exp_add, Int.cast_add, Int.cast_one,
-      mul_add, mul_one, add_sub_cancel_right]
-    congr 2
-    ring
-  rw [jacobiTheta₂']; rw [funext this]; rw [tsum_mul_left]; rw [← (Equiv.subRight (1 : Int)).tsum_eq]
-  simp only [jacobiTheta₂, jacobiTheta₂', Equiv.subRight_apply, sub_add_cancel,
-    (hasSum_jacobiTheta₂'_term z hτ).summable.tsum_sub
-    ((hasSum_jacobiTheta₂_term z hτ).summable.mul_left _), tsum_mul_left]
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂'_add_left' (z τ : Complex) :
+lemma jacobiTheta₂'_add_left' (z τ : ℂ) :
     jacobiTheta₂' (z + τ) τ =
       cexp (-π * I * (τ + 2 * z)) * (jacobiTheta₂' z τ - 2 * π * I * jacobiTheta₂ z τ) := by
   rcases le_or_gt τ.im 0 with hτ | hτ
   · simp_rw [jacobiTheta₂_undef _ hτ, jacobiTheta₂'_undef _ hτ, mul_zero, sub_zero, mul_zero]
-  have (n : Int) : jacobiTheta₂'_term n (z + τ) τ =
+  have (n : ℤ) : jacobiTheta₂'_term n (z + τ) τ =
       cexp (-π * I * (τ + 2 * z)) * (jacobiTheta₂'_term (n + 1) z τ -
       2 * π * I * jacobiTheta₂_term (n + 1) z τ) := by
     simp only [jacobiTheta₂'_term, jacobiTheta₂_term]
@@ -1420,72 +760,34 @@ lemma jacobiTheta₂'_add_left' (z τ : Complex) :
       mul_add, mul_one, add_sub_cancel_right]
     congr 2
     ring
-  rw [jacobiTheta₂']; rw [funext this]; rw [tsum_mul_left]; rw [← (Equiv.subRight (1 : Int)).tsum_eq]
+  rw [jacobiTheta₂', funext this, tsum_mul_left, ← (Equiv.subRight (1 : ℤ)).tsum_eq]
   simp only [jacobiTheta₂, jacobiTheta₂', Equiv.subRight_apply, sub_add_cancel,
     (hasSum_jacobiTheta₂'_term z hτ).summable.tsum_sub
     ((hasSum_jacobiTheta₂_term z hτ).summable.mul_left _), tsum_mul_left]
-
-/--
-lemma `jacobiTheta₂'_neg_left` / 引理 `jacobiTheta₂'_neg_left`
-
-English:
-lemma jacobiTheta₂'_neg_left
-  given: (z τ : Complex)
-  statement: jacobiTheta₂' (-z) τ = -jacobiTheta₂' z τ
-  proof: by
-  rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [← tsum_neg]; rw [← (Equiv.neg Int).tsum_eq]
-  congr 1 with n
-  simp only [jacobiTheta₂'_term, jacobiTheta₂_term]
-  rw [Equiv.neg_apply]; rw [← neg_mul]
-  push_cast
-  ring_nf
-
-中文:
-引理 jacobiTheta₂'_neg_left
-  条件: (z τ : 复形)
-  结论: jacobiTheta₂' (-z) τ = -jacobiTheta₂' z τ
-  证明: by
-  rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [← tsum_neg]; rw [← (Equiv.neg Int).tsum_eq]
-  congr 1 with n
-  simp only [jacobiTheta₂'_term, jacobiTheta₂_term]
-  rw [Equiv.neg_apply]; rw [← neg_mul]
-  push_cast
-  ring_nf
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂'_neg_left (z τ : Complex) : jacobiTheta₂' (-z) τ = -jacobiTheta₂' z τ := by
-  rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [← tsum_neg]; rw [← (Equiv.neg Int).tsum_eq]
+lemma jacobiTheta₂'_neg_left (z τ : ℂ) : jacobiTheta₂' (-z) τ = -jacobiTheta₂' z τ := by
+  rw [jacobiTheta₂', jacobiTheta₂', ← tsum_neg, ← (Equiv.neg ℤ).tsum_eq]
   congr 1 with n
   simp only [jacobiTheta₂'_term, jacobiTheta₂_term]
-  rw [Equiv.neg_apply]; rw [← neg_mul]
+  rw [Equiv.neg_apply, ← neg_mul]
   push_cast
   ring_nf
-
-/--
-lemma `jacobiTheta₂'_conj` / 引理 `jacobiTheta₂'_conj`
-
-English:
-lemma jacobiTheta₂'_conj
-  given: (z τ : Complex)
-  proof: by
-  rw [← neg_inj]; rw [← jacobiTheta₂'_neg_left]; rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [conj_tsum]; rw [← tsum_neg]
-  congr 1 with n
-  simp_rw [jacobiTheta₂'_term, jacobiTheta₂_term, map_mul, ← Complex.exp_conj, map_add, map_mul,
-    ← ofReal_intCast, ← ofReal_ofNat, map_pow, conj_ofReal, conj_I]
-  ring_nf
-
-中文:
-引理 jacobiTheta₂'_conj
-  条件: (z τ : 复形)
-  证明: by
-  rw [← neg_inj]; rw [← jacobiTheta₂'_neg_left]; rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [conj_tsum]; rw [← tsum_neg]
-  congr 1 with n
-  simp_rw [jacobiTheta₂'_term, jacobiTheta₂_term, map_mul, ← Complex.exp_conj, map_add, map_mul,
-    ← ofReal_intCast, ← ofReal_ofNat, map_pow, conj_ofReal, conj_I]
-  ring_nf
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma jacobiTheta₂'_conj (z τ : Complex) :
+lemma jacobiTheta₂'_conj (z τ : ℂ) :
     conj (jacobiTheta₂' z τ) = jacobiTheta₂' (conj z) (-conj τ) := by
-  rw [← neg_inj]; rw [← jacobiTheta₂'_neg_left]; rw [jacobiTheta₂']; rw [jacobiTheta₂']; rw [conj_tsum]; rw [← tsum_neg]
+  rw [← neg_inj, ← jacobiTheta₂'_neg_left, jacobiTheta₂', jacobiTheta₂', conj_tsum, ← tsum_neg]
   congr 1 with n
   simp_rw [jacobiTheta₂'_term, jacobiTheta₂_term, map_mul, ← Complex.exp_conj, map_add, map_mul,
     ← ofReal_intCast, ← ofReal_ofNat, map_pow, conj_ofReal, conj_I]
@@ -1495,88 +797,40 @@ lemma jacobiTheta₂'_conj (z τ : Complex) :
 ## Functional equations
 -/
 
-/--
-theorem `jacobiTheta₂_functional_equation` / 定理 `jacobiTheta₂_functional_equation`
+/-- The functional equation for the Jacobi theta function: `jacobiTheta₂ z τ` is an explicit factor
+times `jacobiTheta₂ (z / τ) (-1 / τ)`. This is the key lemma behind the proof of the functional
+equation for L-series of even Dirichlet characters. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem jacobiTheta₂_functional_equation
-  given: (z τ : Complex)
-  statement: jacobiTheta₂ z τ =
-  proof: by
-  rcases le_or_gt (im τ) 0 with hτ | hτ
-  · have : (-1 / τ).im <= 0 := by
-      rw [neg_div]; rw [neg_im]; rw [one_div]; rw [inv_im]; rw [neg_nonpos]
-      exact div_nonneg (neg_nonneg.mpr hτ) (normSq_nonneg τ)
-    rw [jacobiTheta₂_undef z hτ]; rw [jacobiTheta₂_undef _ this]; rw [mul_zero]
-  unfold jacobiTheta₂ jacobiTheta₂_term
-  have h2 : 0 < (-I * τ).re := by
-    simpa only [neg_mul, neg_re, mul_re, I_re, zero_mul, I_im, one_mul, zero_sub, neg_neg] using hτ
-  calc
-  _ = ∑' n : Int, cexp (-π * (-I * τ) * ↑n ^ 2 + 2 * π * (I * z) * ↑n) :=
-    tsum_congr (fun n => by ring_nf)
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) * ∑' (n : Int), cexp (-π / (-I * τ) * (n + I * (I * z)) ^ 2) := by
-    rw [tsum_exp_neg_quadratic h2]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) * cexp (π * I * (-1 / τ) * z ^ 2) *
-      ∑' (n : Int), cexp (2 * π * I * n * (z / τ) + π * I * n ^ 2 * (-1 / τ)) := by
-    simp_rw [mul_assoc _ (cexp _), ← tsum_mul_left (a := cexp _), ← Complex.exp_add]
-    congr 2 with n : 1; congr 1
-    field_simp
-    ring_nf
-    simp_rw [I_sq, I_pow_four]
-    ring_nf
-  _ = _ := by
-    congr 3
-    ring
-
-中文:
-定理 jacobiTheta₂_functional_equation
-  条件: (z τ : 复形)
-  结论: jacobiTheta₂ z τ =
-  证明: by
-  rcases le_or_gt (im τ) 0 with hτ | hτ
-  · have : (-1 / τ).im <= 0 := by
-      rw [neg_div]; rw [neg_im]; rw [one_div]; rw [inv_im]; rw [neg_nonpos]
-      exact div_nonneg (neg_nonneg.mpr hτ) (normSq_nonneg τ)
-    rw [jacobiTheta₂_undef z hτ]; rw [jacobiTheta₂_undef _ this]; rw [mul_zero]
-  unfold jacobiTheta₂ jacobiTheta₂_term
-  have h2 : 0 < (-I * τ).re := by
-    simpa only [neg_mul, neg_re, mul_re, I_re, zero_mul, I_im, one_mul, zero_sub, neg_neg] using hτ
-  calc
-  _ = ∑' n : Int, cexp (-π * (-I * τ) * ↑n ^ 2 + 2 * π * (I * z) * ↑n) :=
-    tsum_congr (fun n => by ring_nf)
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) * ∑' (n : Int), cexp (-π / (-I * τ) * (n + I * (I * z)) ^ 2) := by
-    rw [tsum_exp_neg_quadratic h2]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) * cexp (π * I * (-1 / τ) * z ^ 2) *
-      ∑' (n : Int), cexp (2 * π * I * n * (z / τ) + π * I * n ^ 2 * (-1 / τ)) := by
-    simp_rw [mul_assoc _ (cexp _), ← tsum_mul_left (a := cexp _), ← Complex.exp_add]
-    congr 2 with n : 1; congr 1
-    field_simp
-    ring_nf
-    simp_rw [I_sq, I_pow_four]
-    ring_nf
-  _ = _ := by
-    congr 3
-    ring
-
-Depends on / 依赖: I_im, I_re, div_nonneg, inv_im, le_or_gt, mul_re, mul_zero, neg_div, neg_im, neg_mul, neg_neg, neg_nonneg, neg_nonneg.mpr, neg_nonpos, neg_re, normSq_nonneg, one_div, one_mul, zero_mul, zero_sub
+--- 原说明 ---
+The functional equation for the Jacobi theta function: `jacobiTheta₂ z τ` is an 
+explicit factor
+times `jacobiTheta₂ (z / τ) (-1 / τ)`. This is the key lemma behind the proof of
+ the functional
+equation for L-series of even Dirichlet characters.
 -/
-theorem jacobiTheta₂_functional_equation (z τ : Complex) : jacobiTheta₂ z τ =
-    1 / (-I * τ) ^ (1 / 2 : Complex) * cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ) := by
+theorem jacobiTheta₂_functional_equation (z τ : ℂ) : jacobiTheta₂ z τ =
+    1 / (-I * τ) ^ (1 / 2 : ℂ) * cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ) := by
   rcases le_or_gt (im τ) 0 with hτ | hτ
-  · have : (-1 / τ).im <= 0 := by
-      rw [neg_div]; rw [neg_im]; rw [one_div]; rw [inv_im]; rw [neg_nonpos]
+  · have : (-1 / τ).im ≤ 0 := by
+      rw [neg_div, neg_im, one_div, inv_im, neg_nonpos]
       exact div_nonneg (neg_nonneg.mpr hτ) (normSq_nonneg τ)
-    rw [jacobiTheta₂_undef z hτ]; rw [jacobiTheta₂_undef _ this]; rw [mul_zero]
+    rw [jacobiTheta₂_undef z hτ, jacobiTheta₂_undef _ this, mul_zero]
   unfold jacobiTheta₂ jacobiTheta₂_term
   have h2 : 0 < (-I * τ).re := by
     simpa only [neg_mul, neg_re, mul_re, I_re, zero_mul, I_im, one_mul, zero_sub, neg_neg] using hτ
   calc
-  _ = ∑' n : Int, cexp (-π * (-I * τ) * ↑n ^ 2 + 2 * π * (I * z) * ↑n) :=
-    tsum_congr (fun n => by ring_nf)
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) * ∑' (n : Int), cexp (-π / (-I * τ) * (n + I * (I * z)) ^ 2) := by
+  _ = ∑' n : ℤ, cexp (-π * (-I * τ) * ↑n ^ 2 + 2 * π * (I * z) * ↑n) :=
+    tsum_congr (fun n ↦ by ring_nf)
+  _ = 1 / (-I * τ) ^ (1 / 2 : ℂ) * ∑' (n : ℤ), cexp (-π / (-I * τ) * (n + I * (I * z)) ^ 2) := by
     rw [tsum_exp_neg_quadratic h2]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) * cexp (π * I * (-1 / τ) * z ^ 2) *
-      ∑' (n : Int), cexp (2 * π * I * n * (z / τ) + π * I * n ^ 2 * (-1 / τ)) := by
+  _ = 1 / (-I * τ) ^ (1 / 2 : ℂ) * cexp (π * I * (-1 / τ) * z ^ 2) *
+      ∑' (n : ℤ), cexp (2 * π * I * n * (z / τ) + π * I * n ^ 2 * (-1 / τ)) := by
     simp_rw [mul_assoc _ (cexp _), ← tsum_mul_left (a := cexp _), ← Complex.exp_add]
     congr 2 with n : 1; congr 1
     field_simp
@@ -1587,109 +841,54 @@ theorem jacobiTheta₂_functional_equation (z τ : Complex) : jacobiTheta₂ z �
     congr 3
     ring
 
-/--
-theorem `jacobiTheta₂'_functional_equation` / 定理 `jacobiTheta₂'_functional_equation`
+/-- The functional equation for the derivative of the Jacobi theta function, relating
+`jacobiTheta₂' z τ` to `jacobiTheta₂' (z / τ) (-1 / τ)`. This is the key lemma behind the proof of
+the functional equation for L-series of odd Dirichlet characters. -/
+/-
+**jacobiTheta** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：jacobiTheta (τ : Complex) : Complex
+参数：τ : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem jacobiTheta₂'_functional_equation
-  given: (z τ : Complex)
-  proof: by
-  rcases le_or_gt (im τ) 0 with hτ | hτ
-  · rw [jacobiTheta₂'_undef z hτ, jacobiTheta₂'_undef, jacobiTheta₂_undef, mul_zero,
-      sub_zero, mul_zero] <;>
-    rw [neg_div]; rw [neg_im]; rw [one_div]; rw [inv_im]; rw [neg_nonpos] <;>
-    exact div_nonneg (neg_nonneg.mpr hτ) (normSq_nonneg τ)
-  have hτ' : 0 < (-1 / τ).im := by
-    rw [div_eq_mul_inv]; rw [neg_one_mul]; rw [neg_im]; rw [inv_im]; rw [neg_div]; rw [neg_neg]
-    exact div_pos hτ (normSq_pos.mpr (fun h => lt_irrefl 0 (zero_im ▸ h ▸ hτ)))
-  have hj : HasDerivAt (fun w => jacobiTheta₂ (w / τ) (-1 / τ))
-      ((1 / τ) * jacobiTheta₂' (z / τ) (-1 / τ)) z := by
-    have := hasDerivAt_jacobiTheta₂_fst (z / τ) hτ'
-    simpa only [mul_comm, one_div] using! this.comp z (hasDerivAt_mul_const τ⁻¹)
-  calc
-  _ = deriv (jacobiTheta₂ · τ) z := (hasDerivAt_jacobiTheta₂_fst z hτ).deriv.symm
-  _ = deriv (fun z => 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ)) z := by
-    rw [funext (jacobiTheta₂_functional_equation · τ)]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        deriv (fun z => cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ)) z := by
-    simp_rw [mul_assoc, deriv_const_mul_field]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        (deriv (fun z => cexp (-π * I * z ^ 2 / τ)) z * jacobiTheta₂ (z / τ) (-1 / τ)
-         + cexp (-π * I * z ^ 2 / τ) * deriv (fun z => jacobiTheta₂ (z / τ) (-1 / τ)) z) := by
-    rw [deriv_fun_mul _ hj.differentiableAt]
-    exact (((differentiableAt_pow 2).const_mul _).mul_const _).cexp
-  _ = _ := by
-    rw [hj.deriv]
-    simp only [div_eq_mul_inv _ τ]
-    rw [deriv_cexp (((differentiableAt_pow _).const_mul _).mul_const _)]; rw [mul_comm]; rw [deriv_mul_const_field]; rw [deriv_const_mul_field]; rw [deriv_pow_field]
-    ring_nf
-
-中文:
-定理 jacobiTheta₂'_functional_equation
-  条件: (z τ : 复形)
-  证明: by
-  rcases le_or_gt (im τ) 0 with hτ | hτ
-  · rw [jacobiTheta₂'_undef z hτ, jacobiTheta₂'_undef, jacobiTheta₂_undef, mul_zero,
-      sub_zero, mul_zero] <;>
-    rw [neg_div]; rw [neg_im]; rw [one_div]; rw [inv_im]; rw [neg_nonpos] <;>
-    exact div_nonneg (neg_nonneg.mpr hτ) (normSq_nonneg τ)
-  have hτ' : 0 < (-1 / τ).im := by
-    rw [div_eq_mul_inv]; rw [neg_one_mul]; rw [neg_im]; rw [inv_im]; rw [neg_div]; rw [neg_neg]
-    exact div_pos hτ (normSq_pos.mpr (fun h => lt_irrefl 0 (zero_im ▸ h ▸ hτ)))
-  have hj : HasDerivAt (fun w => jacobiTheta₂ (w / τ) (-1 / τ))
-      ((1 / τ) * jacobiTheta₂' (z / τ) (-1 / τ)) z := by
-    have := hasDerivAt_jacobiTheta₂_fst (z / τ) hτ'
-    simpa only [mul_comm, one_div] using! this.comp z (hasDerivAt_mul_const τ⁻¹)
-  calc
-  _ = deriv (jacobiTheta₂ · τ) z := (hasDerivAt_jacobiTheta₂_fst z hτ).deriv.symm
-  _ = deriv (fun z => 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ)) z := by
-    rw [funext (jacobiTheta₂_functional_equation · τ)]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        deriv (fun z => cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ)) z := by
-    simp_rw [mul_assoc, deriv_const_mul_field]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        (deriv (fun z => cexp (-π * I * z ^ 2 / τ)) z * jacobiTheta₂ (z / τ) (-1 / τ)
-         + cexp (-π * I * z ^ 2 / τ) * deriv (fun z => jacobiTheta₂ (z / τ) (-1 / τ)) z) := by
-    rw [deriv_fun_mul _ hj.differentiableAt]
-    exact (((differentiableAt_pow 2).const_mul _).mul_const _).cexp
-  _ = _ := by
-    rw [hj.deriv]
-    simp only [div_eq_mul_inv _ τ]
-    rw [deriv_cexp (((differentiableAt_pow _).const_mul _).mul_const _)]; rw [mul_comm]; rw [deriv_mul_const_field]; rw [deriv_const_mul_field]; rw [deriv_pow_field]
-    ring_nf
+--- 原说明 ---
+The functional equation for the derivative of the Jacobi theta function, relatin
+g
+`jacobiTheta₂' z τ` to `jacobiTheta₂' (z / τ) (-1 / τ)`. This is the key lemma b
+ehind the proof of
+the functional equation for L-series of odd Dirichlet characters.
 -/
-theorem jacobiTheta₂'_functional_equation (z τ : Complex) :
-    jacobiTheta₂' z τ = 1 / (-I * τ) ^ (1 / 2 : Complex) * cexp (-π * I * z ^ 2 / τ) / τ *
+theorem jacobiTheta₂'_functional_equation (z τ : ℂ) :
+    jacobiTheta₂' z τ = 1 / (-I * τ) ^ (1 / 2 : ℂ) * cexp (-π * I * z ^ 2 / τ) / τ *
       (jacobiTheta₂' (z / τ) (-1 / τ) - 2 * π * I * z * jacobiTheta₂ (z / τ) (-1 / τ)) := by
   rcases le_or_gt (im τ) 0 with hτ | hτ
   · rw [jacobiTheta₂'_undef z hτ, jacobiTheta₂'_undef, jacobiTheta₂_undef, mul_zero,
       sub_zero, mul_zero] <;>
-    rw [neg_div]; rw [neg_im]; rw [one_div]; rw [inv_im]; rw [neg_nonpos] <;>
+    rw [neg_div, neg_im, one_div, inv_im, neg_nonpos] <;>
     exact div_nonneg (neg_nonneg.mpr hτ) (normSq_nonneg τ)
   have hτ' : 0 < (-1 / τ).im := by
-    rw [div_eq_mul_inv]; rw [neg_one_mul]; rw [neg_im]; rw [inv_im]; rw [neg_div]; rw [neg_neg]
-    exact div_pos hτ (normSq_pos.mpr (fun h => lt_irrefl 0 (zero_im ▸ h ▸ hτ)))
-  have hj : HasDerivAt (fun w => jacobiTheta₂ (w / τ) (-1 / τ))
+    rw [div_eq_mul_inv, neg_one_mul, neg_im, inv_im, neg_div, neg_neg]
+    exact div_pos hτ (normSq_pos.mpr (fun h ↦ lt_irrefl 0 (zero_im ▸ h ▸ hτ)))
+  have hj : HasDerivAt (fun w ↦ jacobiTheta₂ (w / τ) (-1 / τ))
       ((1 / τ) * jacobiTheta₂' (z / τ) (-1 / τ)) z := by
     have := hasDerivAt_jacobiTheta₂_fst (z / τ) hτ'
     simpa only [mul_comm, one_div] using! this.comp z (hasDerivAt_mul_const τ⁻¹)
   calc
   _ = deriv (jacobiTheta₂ · τ) z := (hasDerivAt_jacobiTheta₂_fst z hτ).deriv.symm
-  _ = deriv (fun z => 1 / (-I * τ) ^ (1 / 2 : Complex) *
+  _ = deriv (fun z ↦ 1 / (-I * τ) ^ (1 / 2 : ℂ) *
         cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ)) z := by
     rw [funext (jacobiTheta₂_functional_equation · τ)]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        deriv (fun z => cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ)) z := by
+  _ = 1 / (-I * τ) ^ (1 / 2 : ℂ) *
+        deriv (fun z ↦ cexp (-π * I * z ^ 2 / τ) * jacobiTheta₂ (z / τ) (-1 / τ)) z := by
     simp_rw [mul_assoc, deriv_const_mul_field]
-  _ = 1 / (-I * τ) ^ (1 / 2 : Complex) *
-        (deriv (fun z => cexp (-π * I * z ^ 2 / τ)) z * jacobiTheta₂ (z / τ) (-1 / τ)
-         + cexp (-π * I * z ^ 2 / τ) * deriv (fun z => jacobiTheta₂ (z / τ) (-1 / τ)) z) := by
+  _ = 1 / (-I * τ) ^ (1 / 2 : ℂ) *
+        (deriv (fun z ↦ cexp (-π * I * z ^ 2 / τ)) z * jacobiTheta₂ (z / τ) (-1 / τ)
+         + cexp (-π * I * z ^ 2 / τ) * deriv (fun z ↦ jacobiTheta₂ (z / τ) (-1 / τ)) z) := by
     rw [deriv_fun_mul _ hj.differentiableAt]
     exact (((differentiableAt_pow 2).const_mul _).mul_const _).cexp
   _ = _ := by
     rw [hj.deriv]
     simp only [div_eq_mul_inv _ τ]
-    rw [deriv_cexp (((differentiableAt_pow _).const_mul _).mul_const _)]; rw [mul_comm]; rw [deriv_mul_const_field]; rw [deriv_const_mul_field]; rw [deriv_pow_field]
+    rw [deriv_cexp (((differentiableAt_pow _).const_mul _).mul_const _), mul_comm,
+      deriv_mul_const_field, deriv_const_mul_field, deriv_pow_field]
     ring_nf

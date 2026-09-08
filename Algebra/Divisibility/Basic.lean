@@ -42,511 +42,330 @@ variable [Semigroup α] {a b c : α}
 
 /-- There are two possible conventions for divisibility, which coincide in a `CommMonoid`.
 This matches the convention for ordinals. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+There are two possible conventions for divisibility, which coincide in a `CommMo
+noid`.
+This matches the convention for ordinals.
+-/
 instance (priority := 100) semigroupDvd : Dvd α :=
-  Dvd.mk fun a b => exists c, b = a * c
+  Dvd.mk fun a b => ∃ c, b = a * c
 
 -- TODO: this used to not have `c` explicit, but that seems to be important
--- for use with tactics, similar to `Exists.intro`
-/--
-theorem `Dvd.intro` / 定理 `Dvd.intro`
-
-English:
-theorem Dvd.intro
-  given: (c : α) (h : a * c = b)
-  statement: a ∣ b
-  proof: Exists.intro c h.symm
-
-alias dvd_of_mul_right_eq := Dvd.intro
-
-中文:
-定理 Dvd.intro
-  条件: (c : α) (h : a * c = b)
-  结论: a ∣ b
-  证明: Exists.intro c h.symm
-
-alias dvd_of_mul_right_eq := Dvd.intro
-
-Depends on / 依赖: Exists, Exists.intro, h.symm
+--       for use with tactics, similar to `Exists.intro`
+/-
+**Dvd.intro** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+参数：c : α；h : a * c = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Dvd.intro (c : α) (h : a * c = b) : a ∣ b :=
   Exists.intro c h.symm
 
 alias dvd_of_mul_right_eq := Dvd.intro
-
-/--
-theorem `exists_eq_mul_right_of_dvd` / 定理 `exists_eq_mul_right_of_dvd`
-
-English:
-theorem exists_eq_mul_right_of_dvd
-  given: (h : a ∣ b)
-  statement: exists c, b = a * c
-  proof: h
-
-中文:
-定理 存在_eq_mul_right_of_dvd
-  条件: (h : a ∣ b)
-  结论: 存在 c, b = a * c
-  证明: h
+/-
+**exists_eq_mul_right_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_eq_mul_right_of_dvd (h : a ∣ b) : exists c, b = a * c
+参数：h : a ∣ b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem exists_eq_mul_right_of_dvd (h : a ∣ b) : exists c, b = a * c :=
+theorem exists_eq_mul_right_of_dvd (h : a ∣ b) : ∃ c, b = a * c :=
   h
-
-/--
-theorem `dvd_def` / 定理 `dvd_def`
-
-English:
-theorem dvd_def
-  statement: a ∣ b ↔ exists c, b = a * c
-  proof: Iff.rfl
-
-alias dvd_iff_exists_eq_mul_right := dvd_def
-
-中文:
-定理 dvd_def
-  结论: a ∣ b ↔ 存在 c, b = a * c
-  证明: Iff.rfl
-
-alias dvd_iff_exists_eq_mul_right := dvd_def
-
-Depends on / 依赖: Iff.rfl
+/-
+**dvd_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_def : a ∣ b ↔ exists c, b = a * c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem dvd_def : a ∣ b ↔ exists c, b = a * c :=
+theorem dvd_def : a ∣ b ↔ ∃ c, b = a * c :=
   Iff.rfl
 
 alias dvd_iff_exists_eq_mul_right := dvd_def
-
-/--
-theorem `Dvd.elim` / 定理 `Dvd.elim`
-
-English:
-theorem Dvd.elim
-  given: {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : forall c, b = a * c -> P)
-  statement: P
-  proof: Exists.elim H₁ H₂
-
-中文:
-定理 Dvd.elim
-  条件: {P : 命题} {a b : α} (H₁ : a ∣ b) (H₂ : 对任意 c, b = a * c -> P)
-  结论: P
-  证明: Exists.elim H₁ H₂
-
-Depends on / 依赖: Exists, Exists.elim
+/-
+**Dvd.elim** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dvd.elim {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : forall c, b = a * c -> P)
+ : P
+参数：H₁ : a ∣ b；H₂ : forall c, b = a * c -> P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
 -/
-theorem Dvd.elim {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : forall c, b = a * c -> P) : P :=
+theorem Dvd.elim {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : ∀ c, b = a * c → P) : P :=
   Exists.elim H₁ H₂
 
 attribute [local simp] mul_assoc mul_comm mul_left_comm
 
 @[trans]
-/--
-theorem `dvd_trans` / 定理 `dvd_trans`
-
-English:
-theorem dvd_trans
-  statement: a ∣ b -> b ∣ c -> a ∣ c
-  proof: dvd_trans
-
-中文:
-定理 dvd_trans
-  结论: a ∣ b -> b ∣ c -> a ∣ c
-  证明: dvd_trans
-
-Depends on / 依赖: dvd_trans
+/-
+**dvd_trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_trans : a ∣ b -> b ∣ c -> a ∣ c | ⟨d, h₁⟩, ⟨e, h₂⟩ => ⟨d * e, h₁ ▸ h₂.
+trans mul_assoc a d e⟩  alias Dvd.dvd.trans
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem dvd_trans : a ∣ b -> b ∣ c -> a ∣ c
-| ⟨d, h₁⟩, ⟨e, h₂⟩ => ⟨d * e, h₁ ▸ h₂.trans mul_assoc a d e⟩
+theorem dvd_trans : a ∣ b → b ∣ c → a ∣ c
+  | ⟨d, h₁⟩, ⟨e, h₂⟩ => ⟨d * e, h₁ ▸ h₂.trans <| mul_assoc a d e⟩
 
 alias Dvd.dvd.trans := dvd_trans
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Transitivity of `|` for use in `calc` blocks. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: IsTrans α Dvd.dvd
-  body: ⟨fun _ _ _ => dvd_trans⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是Trans α Dvd.dvd
-  定义体: ⟨fun _ _ _ => dvd_trans⟩
-
-@[simp]
-
-Depends on / 依赖: dvd_trans
+--- 原说明 ---
+Transitivity of `|` for use in `calc` blocks.
 -/
 instance : IsTrans α Dvd.dvd :=
   ⟨fun _ _ _ => dvd_trans⟩
 
 @[simp]
-/--
-theorem `dvd_mul_right` / 定理 `dvd_mul_right`
-
-English:
-theorem dvd_mul_right
-  given: (a b : α)
-  statement: a ∣ a * b
-  proof: Dvd.intro b rfl
-
-中文:
-定理 dvd_mul_right
-  条件: (a b : α)
-  结论: a ∣ a * b
-  证明: Dvd.intro b rfl
-
-Depends on / 依赖: Dvd.intro
+/-
+**dvd_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_mul_right (a b : α) : a ∣ a * b
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
 -/
 theorem dvd_mul_right (a b : α) : a ∣ a * b :=
   Dvd.intro b rfl
-
-/--
-theorem `dvd_mul_of_dvd_left` / 定理 `dvd_mul_of_dvd_left`
-
-English:
-theorem dvd_mul_of_dvd_left
-  given: (h : a ∣ b) (c : α)
-  statement: a ∣ b * c
-  proof: h.trans (dvd_mul_right b c)
-
-alias Dvd.dvd.mul_right := dvd_mul_of_dvd_left
-
-中文:
-定理 dvd_mul_of_dvd_left
-  条件: (h : a ∣ b) (c : α)
-  结论: a ∣ b * c
-  证明: h.trans (dvd_mul_right b c)
-
-alias Dvd.dvd.mul_right := dvd_mul_of_dvd_left
-
-Depends on / 依赖: dvd_mul_right, h.trans
+/-
+**dvd_mul_of_dvd_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_mul_of_dvd_left (h : a ∣ b) (c : α) : a ∣ b * c
+参数：h : a ∣ b；c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
 -/
 theorem dvd_mul_of_dvd_left (h : a ∣ b) (c : α) : a ∣ b * c :=
   h.trans (dvd_mul_right b c)
 
 alias Dvd.dvd.mul_right := dvd_mul_of_dvd_left
-
-/--
-theorem `dvd_of_mul_right_dvd` / 定理 `dvd_of_mul_right_dvd`
-
-English:
-theorem dvd_of_mul_right_dvd
-  given: (h : a * b ∣ c)
-  statement: a ∣ c
-  proof: (dvd_mul_right a b).trans h
-
-中文:
-定理 dvd_of_mul_right_dvd
-  条件: (h : a * b ∣ c)
-  结论: a ∣ c
-  证明: (dvd_mul_right a b).trans h
-
-Depends on / 依赖: dvd_mul_right
+/-
+**dvd_of_mul_right_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_of_mul_right_dvd (h : a * b ∣ c) : a ∣ c
+参数：h : a * b ∣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
 -/
 theorem dvd_of_mul_right_dvd (h : a * b ∣ c) : a ∣ c :=
   (dvd_mul_right a b).trans h
 
-/--
-Definition of `IsPrimal` / `IsPrimal` 的定义
+/-- An element `a` in a semigroup is primal if whenever `a` is a divisor of `b * c`, it can be
+factored as the product of a divisor of `b` and a divisor of `c`. -/
+/-
+**IsPrimal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsPrimal (a : α) : Prop
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPrimal
-  signature: (a : α)
-  body: forall ⦃b c⦄, a ∣ b * c -> exists a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a₁ * a₂
-
-中文:
-定义 IsPrimal
-  签名: (a : α)
-  定义体: forall ⦃b c⦄, a ∣ b * c -> exists a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a₁ * a₂
+--- 原说明 ---
+An element `a` in a semigroup is primal if whenever `a` is a divisor of `b * c`,
+ it can be
+factored as the product of a divisor of `b` and a divisor of `c`.
 -/
-def IsPrimal (a : α) : Prop := forall ⦃b c⦄, a ∣ b * c -> exists a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a₁ * a₂
+def IsPrimal (a : α) : Prop := ∀ ⦃b c⦄, a ∣ b * c → ∃ a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a₁ * a₂
 
 variable (α) in
-/--
-Definition of `DecompositionMonoid` / `DecompositionMonoid` 的定义
+/-- A monoid is a decomposition monoid if every element is primal. An integral domain whose
+multiplicative monoid is a decomposition monoid, is called a pre-Schreier domain; it is a
+Schreier domain if it is moreover integrally closed. -/
+/-
+**DecompositionMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Semigroup α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class DecompositionMonoid
-  parameters: : Prop where
-  axioms and operations (1):
-    - primal((a : α)) : IsPrimal a
-
-中文:
-类 分解幺半群
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - primal((a : α)) : IsPrimal a
+--- 原说明 ---
+A monoid is a decomposition monoid if every element is primal. An integral domai
+n whose
+multiplicative monoid is a decomposition monoid, is called a pre-Schreier domain
+; it is a
+Schreier domain if it is moreover integrally closed.
 -/
 @[mk_iff] class DecompositionMonoid : Prop where
   primal (a : α) : IsPrimal a
-
-/--
-theorem `exists_dvd_and_dvd_of_dvd_mul` / 定理 `exists_dvd_and_dvd_of_dvd_mul`
-
-English:
-theorem exists_dvd_and_dvd_of_dvd_mul
-  given: [DecompositionMonoid α] {b c a : α} (H : a ∣ b * c)
-  proof: DecompositionMonoid.primal a H
-
-@[gcongr]
-
-中文:
-定理 存在_dvd_and_dvd_of_dvd_mul
-  条件: [分解幺半群 α] {b c a : α} (H : a ∣ b * c)
-  证明: DecompositionMonoid.primal a H
-
-@[gcongr]
-
-Depends on / 依赖: DecompositionMonoid, DecompositionMonoid.primal, primal
+/-
+**exists_dvd_and_dvd_of_dvd_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_dvd_and_dvd_of_dvd_mul [DecompositionMonoid α] {b c a : α} (H : a ∣
+ b * c) : exists a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a₁ * a₂
+参数：H : a ∣ b * c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DecompositionMonoid.primal`：∀ {α : Type u_1} {inst : Semigroup α} [self 
+: DecompositionMonoid α] (a : α), IsPrimal a
 -/
 theorem exists_dvd_and_dvd_of_dvd_mul [DecompositionMonoid α] {b c a : α} (H : a ∣ b * c) :
-    exists a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a₁ * a₂ := DecompositionMonoid.primal a H
+    ∃ a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a₁ * a₂ := DecompositionMonoid.primal a H
 
 @[gcongr]
-/--
-theorem `mul_dvd_mul_left` / 定理 `mul_dvd_mul_left`
-
-English:
-theorem mul_dvd_mul_left
-  given: (a : α) (h : b ∣ c)
-  statement: a * b ∣ a * c
-  proof: by
-  obtain ⟨d, rfl⟩ := h
-  use d
-  rw [mul_assoc]
-
-中文:
-定理 mul_dvd_mul_left
-  条件: (a : α) (h : b ∣ c)
-  结论: a * b ∣ a * c
-  证明: by
-  obtain ⟨d, rfl⟩ := h
-  use d
-  rw [mul_assoc]
-
-Depends on / 依赖: mul_assoc
+/-
+**mul_dvd_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_dvd_mul_left (a : α) (h : b ∣ c) : a * b ∣ a * c
+参数：a : α；h : b ∣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mul_dvd_mul_left (a : α) (h : b ∣ c) : a * b ∣ a * c := by
   obtain ⟨d, rfl⟩ := h
   use d
   rw [mul_assoc]
-
-/--
-theorem `IsLeftRegular.dvd_cancel_left` / 定理 `IsLeftRegular.dvd_cancel_left`
-
-English:
-theorem IsLeftRegular.dvd_cancel_left
-  given: (h : IsLeftRegular a)
-  statement: a * b ∣ a * c ↔ b ∣ c
-  proof: ⟨fun dvd => have ⟨d, eq⟩ := dvd; ⟨d, h (eq.trans <| mul_assoc ..)⟩, mul_dvd_mul_left a⟩
-
-中文:
-定理 IsLeftRegular.dvd_cancel_left
-  条件: (h : IsLeftRegular a)
-  结论: a * b ∣ a * c ↔ b ∣ c
-  证明: ⟨fun dvd => have ⟨d, eq⟩ := dvd; ⟨d, h (eq.trans <| mul_assoc ..)⟩, mul_dvd_mul_left a⟩
-
-Depends on / 依赖: eq.trans, mul_assoc, mul_dvd_mul_left
+/-
+**IsLeftRegular.dvd_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLeftRegular.dvd_cancel_left (h : IsLeftRegular a) : a * b ∣ a * c ↔ b ∣ 
+c
+参数：h : IsLeftRegular a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_dvd_mul_left`：mul_dvd_mul_left (a : α) (h : b ∣ c) : a * b ∣ a * c
 -/
 theorem IsLeftRegular.dvd_cancel_left (h : IsLeftRegular a) : a * b ∣ a * c ↔ b ∣ c :=
-  ⟨fun dvd => have ⟨d, eq⟩ := dvd; ⟨d, h (eq.trans <| mul_assoc ..)⟩, mul_dvd_mul_left a⟩
+  ⟨fun dvd ↦ have ⟨d, eq⟩ := dvd; ⟨d, h (eq.trans <| mul_assoc ..)⟩, mul_dvd_mul_left a⟩
 
-/--
-Definition of `RightDvd` / `RightDvd` 的定义
+/-- Right divisibility relation. `RightDvd a b` means `a` right-divides `b`,
+i.e., `∃ c, b = c * a`. -/
+/-
+**RightDvd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RightDvd (a b : α) : Prop
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RightDvd
-  signature: (a b : α)
-  body: exists c, b = c * a
-
-@[inherit_doc]
-infix:50 " ∣ᵣ " => RightDvd
-
-@[trans]
-
-中文:
-定义 RightDvd
-  签名: (a b : α)
-  定义体: exists c, b = c * a
-
-@[inherit_doc]
-infix:50 " ∣ᵣ " => RightDvd
-
-@[trans]
+--- 原说明 ---
+Right divisibility relation. `RightDvd a b` means `a` right-divides `b`,
+i.e., `∃ c, b = c * a`.
 -/
-def RightDvd (a b : α) : Prop := exists c, b = c * a
+def RightDvd (a b : α) : Prop := ∃ c, b = c * a
 
 @[inherit_doc]
 infix:50 " ∣ᵣ " => RightDvd
 
 @[trans]
-/--
-theorem `RightDvd.trans` / 定理 `RightDvd.trans`
-
-English:
-theorem RightDvd.trans
-  statement: a ∣ᵣ b -> b ∣ᵣ c -> a ∣ᵣ c
-
-中文:
-定理 RightDvd.trans
-  结论: a ∣ᵣ b -> b ∣ᵣ c -> a ∣ᵣ c
+/-
+**RightDvd.trans** 是 Mathlib 中的一个定理，位于命名空间 `RightDvd`。
+形式化陈述：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ᵣ b → b ∣ᵣ c → a ∣ᵣ 
+c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-protected theorem RightDvd.trans : a ∣ᵣ b -> b ∣ᵣ c -> a ∣ᵣ c
-| ⟨d, h₁⟩, ⟨e, h₂⟩ => ⟨e * d, h₁ ▸ h₂.trans (mul_assoc e d a).symm⟩
+protected theorem RightDvd.trans : a ∣ᵣ b → b ∣ᵣ c → a ∣ᵣ c
+  | ⟨d, h₁⟩, ⟨e, h₂⟩ => ⟨e * d, h₁ ▸ h₂.trans <| (mul_assoc e d a).symm⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Transitivity of `RightDvd` for use in `calc` blocks. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: IsTrans α RightDvd
-  body: ⟨fun _ _ _ => RightDvd.trans⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是Trans α RightDvd
-  定义体: ⟨fun _ _ _ => RightDvd.trans⟩
-
-@[simp]
-
-Depends on / 依赖: RightDvd, RightDvd.trans
+--- 原说明 ---
+Transitivity of `RightDvd` for use in `calc` blocks.
 -/
 instance : IsTrans α RightDvd :=
   ⟨fun _ _ _ => RightDvd.trans⟩
 
 @[simp]
-/--
-theorem `RightDvd.mul_self` / 定理 `RightDvd.mul_self`
-
-English:
-theorem RightDvd.mul_self
-  given: (a b : α)
-  statement: a ∣ᵣ b * a
-  proof: ⟨b, rfl⟩
-
-中文:
-定理 RightDvd.mul_self
-  条件: (a b : α)
-  结论: a ∣ᵣ b * a
-  证明: ⟨b, rfl⟩
+/-
+**RightDvd.mul_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RightDvd.mul_self (a b : α) : a ∣ᵣ b * a
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RightDvd.mul_self (a b : α) : a ∣ᵣ b * a :=
   ⟨b, rfl⟩
-
-/--
-theorem `RightDvd.mul_left` / 定理 `RightDvd.mul_left`
-
-English:
-theorem RightDvd.mul_left
-  given: (h : a ∣ᵣ b) (c : α)
-  statement: a ∣ᵣ c * b
-  proof: h.trans (RightDvd.mul_self b c)
-
-中文:
-定理 RightDvd.mul_left
-  条件: (h : a ∣ᵣ b) (c : α)
-  结论: a ∣ᵣ c * b
-  证明: h.trans (RightDvd.mul_self b c)
-
-Depends on / 依赖: RightDvd, RightDvd.mul_self, h.trans, mul_self
+/-
+**RightDvd.mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RightDvd.mul_left (h : a ∣ᵣ b) (c : α) : a ∣ᵣ c * b
+参数：h : a ∣ᵣ b；c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RightDvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ᵣ 
+b → b ∣ᵣ c → a ∣ᵣ c
+· 使用定理 `RightDvd.mul_self`：RightDvd.mul_self (a b : α) : a ∣ᵣ b * a
 -/
 theorem RightDvd.mul_left (h : a ∣ᵣ b) (c : α) : a ∣ᵣ c * b :=
   h.trans (RightDvd.mul_self b c)
-
-/--
-theorem `RightDvd.of_mul_left` / 定理 `RightDvd.of_mul_left`
-
-English:
-theorem RightDvd.of_mul_left
-  given: (h : b * a ∣ᵣ c)
-  statement: a ∣ᵣ c
-  proof: (RightDvd.mul_self a b).trans h
-
-@[gcongr]
-
-中文:
-定理 RightDvd.of_mul_left
-  条件: (h : b * a ∣ᵣ c)
-  结论: a ∣ᵣ c
-  证明: (RightDvd.mul_self a b).trans h
-
-@[gcongr]
-
-Depends on / 依赖: RightDvd, RightDvd.mul_self, mul_self
+/-
+**RightDvd.of_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RightDvd.of_mul_left (h : b * a ∣ᵣ c) : a ∣ᵣ c
+参数：h : b * a ∣ᵣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RightDvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ᵣ 
+b → b ∣ᵣ c → a ∣ᵣ c
+· 使用定理 `RightDvd.mul_self`：RightDvd.mul_self (a b : α) : a ∣ᵣ b * a
 -/
 theorem RightDvd.of_mul_left (h : b * a ∣ᵣ c) : a ∣ᵣ c :=
   (RightDvd.mul_self a b).trans h
 
 @[gcongr]
-/--
-theorem `RightDvd.mul_const` / 定理 `RightDvd.mul_const`
-
-English:
-theorem RightDvd.mul_const
-  given: (a : α) (h : b ∣ᵣ c)
-  statement: b * a ∣ᵣ c * a
-  proof: by
-  obtain ⟨d, rfl⟩ := h
-  use d
-  rw [mul_assoc]
-
-中文:
-定理 RightDvd.mul_const
-  条件: (a : α) (h : b ∣ᵣ c)
-  结论: b * a ∣ᵣ c * a
-  证明: by
-  obtain ⟨d, rfl⟩ := h
-  use d
-  rw [mul_assoc]
-
-Depends on / 依赖: mul_assoc
+/-
+**RightDvd.mul_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RightDvd.mul_const (a : α) (h : b ∣ᵣ c) : b * a ∣ᵣ c * a
+参数：a : α；h : b ∣ᵣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem RightDvd.mul_const (a : α) (h : b ∣ᵣ c) : b * a ∣ᵣ c * a := by
   obtain ⟨d, rfl⟩ := h
   use d
   rw [mul_assoc]
-
-/--
-theorem `IsRightRegular.rightDvd_cancel_right` / 定理 `IsRightRegular.rightDvd_cancel_right`
-
-English:
-theorem IsRightRegular.rightDvd_cancel_right
-  given: (h : IsRightRegular a)
-  proof: ⟨fun dvd => have ⟨d, eq⟩ := dvd
-    ⟨d, h (eq.trans <| (mul_assoc ..).symm)⟩, RightDvd.mul_const a⟩
-
-中文:
-定理 IsRightRegular.rightDvd_cancel_right
-  条件: (h : IsRightRegular a)
-  证明: ⟨fun dvd => have ⟨d, eq⟩ := dvd
-    ⟨d, h (eq.trans <| (mul_assoc ..).symm)⟩, RightDvd.mul_const a⟩
-
-Depends on / 依赖: RightDvd, RightDvd.mul_const, eq.trans, mul_assoc, mul_const
+/-
+**IsRightRegular.rightDvd_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsRightRegular.rightDvd_cancel_right (h : IsRightRegular a) : b * a ∣ᵣ c *
+ a ↔ b ∣ᵣ c
+参数：h : IsRightRegular a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `RightDvd.mul_const`：RightDvd.mul_const (a : α) (h : b ∣ᵣ c) : b * a ∣ᵣ c
+ * a
 -/
 theorem IsRightRegular.rightDvd_cancel_right (h : IsRightRegular a) :
     b * a ∣ᵣ c * a ↔ b ∣ᵣ c :=
-  ⟨fun dvd => have ⟨d, eq⟩ := dvd
+  ⟨fun dvd ↦ have ⟨d, eq⟩ := dvd
     ⟨d, h (eq.trans <| (mul_assoc ..).symm)⟩, RightDvd.mul_const a⟩
-
-/--
-theorem `rightDvd_iff_op_dvd_op` / 定理 `rightDvd_iff_op_dvd_op`
-
-English:
-theorem rightDvd_iff_op_dvd_op
-  statement: a ∣ᵣ b ↔ MulOpposite.op a ∣ MulOpposite.op b
-  proof: ⟨fun ⟨c, hc⟩ => ⟨MulOpposite.op c, by simp [hc]⟩,
-   fun ⟨c, hc⟩ => ⟨MulOpposite.unop c, by simpa using congrArg MulOpposite.unop hc⟩⟩
-
-中文:
-定理 rightDvd_iff_op_dvd_op
-  结论: a ∣ᵣ b ↔ MulOpposite.op a ∣ MulOpposite.op b
-  证明: ⟨fun ⟨c, hc⟩ => ⟨MulOpposite.op c, by simp [hc]⟩,
-   fun ⟨c, hc⟩ => ⟨MulOpposite.unop c, by simpa using congrArg MulOpposite.unop hc⟩⟩
-
-Depends on / 依赖: MulOpposite, MulOpposite.op, MulOpposite.unop
+/-
+**rightDvd_iff_op_dvd_op** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rightDvd_iff_op_dvd_op : a ∣ᵣ b ↔ MulOpposite.op a ∣ MulOpposite.op b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightDvd_iff_op_dvd_op : a ∣ᵣ b ↔ MulOpposite.op a ∣ MulOpposite.op b :=
   ⟨fun ⟨c, hc⟩ => ⟨MulOpposite.op c, by simp [hc]⟩,
@@ -559,269 +378,161 @@ section RightCancelSemigroup
 variable [RightCancelSemigroup α] {a b c : α}
 
 @[simp]
-/--
-theorem `mul_rightDvd_mul_iff_left` / 定理 `mul_rightDvd_mul_iff_left`
-
-English:
-theorem mul_rightDvd_mul_iff_left
-  statement: b * a ∣ᵣ c * a ↔ b ∣ᵣ c
-  proof: ⟨fun ⟨d, eq⟩ => ⟨d, mul_right_cancel (eq.trans (mul_assoc ..).symm)⟩, RightDvd.mul_const a⟩
-
-中文:
-定理 mul_rightDvd_mul_iff_left
-  结论: b * a ∣ᵣ c * a ↔ b ∣ᵣ c
-  证明: ⟨fun ⟨d, eq⟩ => ⟨d, mul_right_cancel (eq.trans (mul_assoc ..).symm)⟩, RightDvd.mul_const a⟩
-
-Depends on / 依赖: RightDvd, RightDvd.mul_const, eq.trans, mul_assoc, mul_const, mul_right_cancel
+/-
+**mul_rightDvd_mul_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_rightDvd_mul_iff_left : b * a ∣ᵣ c * a ↔ b ∣ᵣ c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_right_cancel`：mul_right_cancel : a * b = c * b -> a = c
+· 使用定理 `RightCancelSemigroup.toIsRightCancelMul`：∀ {G : Type u} [self : RightCan
+celSemigroup G], IsRightCancelMul G
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `RightDvd.mul_const`：RightDvd.mul_const (a : α) (h : b ∣ᵣ c) : b * a ∣ᵣ c
+ * a
 -/
 theorem mul_rightDvd_mul_iff_left : b * a ∣ᵣ c * a ↔ b ∣ᵣ c :=
-  ⟨fun ⟨d, eq⟩ => ⟨d, mul_right_cancel (eq.trans (mul_assoc ..).symm)⟩, RightDvd.mul_const a⟩
+  ⟨fun ⟨d, eq⟩ ↦ ⟨d, mul_right_cancel (eq.trans (mul_assoc ..).symm)⟩, RightDvd.mul_const a⟩
 
 end RightCancelSemigroup
 
 section Monoid
-variable [Monoid α] {a b c : α} {m n : Nat}
+variable [Monoid α] {a b c : α} {m n : ℕ}
 
 @[refl, simp]
-/--
-theorem `dvd_refl` / 定理 `dvd_refl`
-
-English:
-theorem dvd_refl
-  given: (a : α)
-  statement: a ∣ a
-  proof: Dvd.intro 1 (mul_one a)
-
-中文:
-定理 dvd_refl
-  条件: (a : α)
-  结论: a ∣ a
-  证明: Dvd.intro 1 (mul_one a)
-
-Depends on / 依赖: Dvd.intro, mul_one
+/-
+**dvd_refl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_refl (a : α) : a ∣ a
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem dvd_refl (a : α) : a ∣ a :=
   Dvd.intro 1 (mul_one a)
-
-/--
-theorem `dvd_rfl` / 定理 `dvd_rfl`
-
-English:
-theorem dvd_rfl
-  statement: forall {a : α}, a ∣ a
-  proof: fun {a} => dvd_refl a
-
-中文:
-定理 dvd_rfl
-  结论: 对任意 {a : α}, a ∣ a
-  证明: fun {a} => dvd_refl a
-
-Depends on / 依赖: dvd_refl
+/-
+**dvd_rfl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_rfl : forall {a : α}, a ∣ a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
 -/
-theorem dvd_rfl : forall {a : α}, a ∣ a := fun {a} => dvd_refl a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: @Std.Refl α (· ∣ ·)
-  body: ⟨dvd_refl⟩
-
-中文:
-实例 :
-  签名: @Std.Refl α (· ∣ ·)
-  定义体: ⟨dvd_refl⟩
-
-Depends on / 依赖: dvd_refl
+theorem dvd_rfl : ∀ {a : α}, a ∣ a := fun {a} => dvd_refl a
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : @Std.Refl α (· ∣ ·) :=
   ⟨dvd_refl⟩
-
-/--
-theorem `one_dvd` / 定理 `one_dvd`
-
-English:
-theorem one_dvd
-  given: (a : α)
-  statement: 1 ∣ a
-  proof: Dvd.intro a (one_mul a)
-
-中文:
-定理 one_dvd
-  条件: (a : α)
-  结论: 1 ∣ a
-  证明: Dvd.intro a (one_mul a)
-
-Depends on / 依赖: Dvd.intro, one_mul
+/-
+**one_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_dvd (a : α) : 1 ∣ a
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem one_dvd (a : α) : 1 ∣ a :=
   Dvd.intro a (one_mul a)
-
-/--
-theorem `dvd_of_eq` / 定理 `dvd_of_eq`
-
-English:
-theorem dvd_of_eq
-  given: (h : a = b)
-  statement: a ∣ b
-  proof: by rw [h]
-
-alias Eq.dvd := dvd_of_eq
-
-@[gcongr]
-
-中文:
-定理 dvd_of_eq
-  条件: (h : a = b)
-  结论: a ∣ b
-  证明: by rw [h]
-
-alias Eq.dvd := dvd_of_eq
-
-@[gcongr]
+/-
+**dvd_of_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_of_eq (h : a = b) : a ∣ b
+参数：h : a = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
 -/
 theorem dvd_of_eq (h : a = b) : a ∣ b := by rw [h]
 
 alias Eq.dvd := dvd_of_eq
 
 @[gcongr]
-/--
-lemma `pow_dvd_pow` / 引理 `pow_dvd_pow`
-
-English:
-lemma pow_dvd_pow
-  given: (a : α) (h : m <= n)
-  statement: a ^ m ∣ a ^ n
-  proof: ⟨a ^ (n - m), by rw [← pow_add, Nat.add_comm, Nat.sub_add_cancel h]⟩
-
-中文:
-引理 pow_dvd_pow
-  条件: (a : α) (h : m <= n)
-  结论: a ^ m ∣ a ^ n
-  证明: ⟨a ^ (n - m), by rw [← pow_add, Nat.add_comm, Nat.sub_add_cancel h]⟩
-
-Depends on / 依赖: Nat.add_comm, Nat.sub_add_cancel, add_comm, pow_add, sub_add_cancel
+/-
+**pow_dvd_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+参数：a : α；h : m <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
 -/
-lemma pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n :=
+lemma pow_dvd_pow (a : α) (h : m ≤ n) : a ^ m ∣ a ^ n :=
   ⟨a ^ (n - m), by rw [← pow_add, Nat.add_comm, Nat.sub_add_cancel h]⟩
-
-/--
-lemma `dvd_pow` / 引理 `dvd_pow`
-
-English:
-lemma dvd_pow
-  given: (hab : a ∣ b)
-  statement: forall {n : Nat} (_ : n != 0), a ∣ b ^ n
-  proof: dvd_pow
-
-中文:
-引理 dvd_pow
-  条件: (hab : a ∣ b)
-  结论: 对任意 {n : 自然数} (_ : n != 0), a ∣ b ^ n
-  证明: dvd_pow
-
-Depends on / 依赖: dvd_pow
+/-
+**dvd_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：dvd_pow (hab : a ∣ b) : forall {n : Nat} (_ : n != 0), a ∣ b ^ n | 0, hn =
+> (hn rfl).elim | n + 1, _ => by rw [pow_succ']; exact hab.mul_right _  alias Dv
+d.dvd.pow
+参数：hab : a ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Dvd.dvd.mul_right`：∀ {α : Type u_1} [inst : Semigroup α] {a b : α}, a ∣ 
+b → ∀ (c : α), a ∣ b * c
 -/
-lemma dvd_pow (hab : a ∣ b) : forall {n : Nat} (_ : n != 0), a ∣ b ^ n
+lemma dvd_pow (hab : a ∣ b) : ∀ {n : ℕ} (_ : n ≠ 0), a ∣ b ^ n
   | 0, hn => (hn rfl).elim
   | n + 1, _ => by rw [pow_succ']; exact hab.mul_right _
 
 alias Dvd.dvd.pow := dvd_pow
-
-/--
-lemma `dvd_pow_self` / 引理 `dvd_pow_self`
-
-English:
-lemma dvd_pow_self
-  given: (a : α) {n : Nat} (hn : n != 0)
-  statement: a ∣ a ^ n
-  proof: dvd_rfl.pow hn
-
-@[refl, simp]
-
-中文:
-引理 dvd_pow_self
-  条件: (a : α) {n : 自然数} (hn : n != 0)
-  结论: a ∣ a ^ n
-  证明: dvd_rfl.pow hn
-
-@[refl, simp]
-
-Depends on / 依赖: dvd_rfl, dvd_rfl.pow
+/-
+**dvd_pow_self** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：dvd_pow_self (a : α) {n : Nat} (hn : n != 0) : a ∣ a ^ n
+参数：a : α；hn : n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.pow`：∀ {α : Type u_1} [inst : Monoid α] {a b : α}, a ∣ b → ∀ {n 
+: ℕ}, n ≠ 0 → a ∣ b ^ n
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
 -/
-lemma dvd_pow_self (a : α) {n : Nat} (hn : n != 0) : a ∣ a ^ n := dvd_rfl.pow hn
+lemma dvd_pow_self (a : α) {n : ℕ} (hn : n ≠ 0) : a ∣ a ^ n := dvd_rfl.pow hn
 
 @[refl, simp]
-/--
-theorem `RightDvd.refl` / 定理 `RightDvd.refl`
-
-English:
-theorem RightDvd.refl
-  given: (a : α)
-  statement: a ∣ᵣ a
-  proof: ⟨1, (one_mul a).symm⟩
-
-中文:
-定理 RightDvd.refl
-  条件: (a : α)
-  结论: a ∣ᵣ a
-  证明: ⟨1, (one_mul a).symm⟩
+/-
+**RightDvd.refl** 是 Mathlib 中的一个定理，位于命名空间 `RightDvd`。
+形式化陈述：∀ {α : Type u_1} [inst : Monoid α] (a : α), a ∣ᵣ a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 protected theorem RightDvd.refl (a : α) : a ∣ᵣ a :=
   ⟨1, (one_mul a).symm⟩
-
-/--
-theorem `RightDvd.rfl` / 定理 `RightDvd.rfl`
-
-English:
-theorem RightDvd.rfl
-  given: {a : α}
-  statement: a ∣ᵣ a
-  proof: .refl _
-
-中文:
-定理 RightDvd.rfl
-  条件: {a : α}
-  结论: a ∣ᵣ a
-  证明: .refl _
+/-
+**RightDvd.rfl** 是 Mathlib 中的一个定理，位于命名空间 `RightDvd`。
+形式化陈述：∀ {α : Type u_1} [inst : Monoid α] {a : α}, a ∣ᵣ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RightDvd.refl`：∀ {α : Type u_1} [inst : Monoid α] (a : α), a ∣ᵣ a
 -/
 protected theorem RightDvd.rfl {a : α} : a ∣ᵣ a := .refl _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPreorder α RightDvd
-  body: .refl
-
-中文:
-实例 :
-  签名: 是预序 α RightDvd
-  定义体: .refl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsPreorder α RightDvd where
   refl := .refl
-
-/--
-theorem `RightDvd.of_eq` / 定理 `RightDvd.of_eq`
-
-English:
-theorem RightDvd.of_eq
-  given: (h : a = b)
-  statement: a ∣ᵣ b
-  proof: by rw [h]
-
-alias Eq.rightDvd := RightDvd.of_eq
-
-中文:
-定理 RightDvd.of_eq
-  条件: (h : a = b)
-  结论: a ∣ᵣ b
-  证明: by rw [h]
-
-alias Eq.rightDvd := RightDvd.of_eq
+/-
+**RightDvd.of_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RightDvd.of_eq (h : a = b) : a ∣ᵣ b
+参数：h : a = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RightDvd.refl`：∀ {α : Type u_1} [inst : Monoid α] (a : α), a ∣ᵣ a
 -/
 theorem RightDvd.of_eq (h : a = b) : a ∣ᵣ b := by rw [h]
 
@@ -833,143 +544,85 @@ section CommSemigroup
 
 variable [CommSemigroup α] {a b c : α}
 
-/--
-theorem `Dvd.intro_left` / 定理 `Dvd.intro_left`
-
-English:
-theorem Dvd.intro_left
-  given: (c : α) (h : c * a = b)
-  statement: a ∣ b
-  proof: Dvd.intro c (by rw [mul_comm] at h; apply h)
-
-alias dvd_of_mul_left_eq := Dvd.intro_left
-
-中文:
-定理 Dvd.intro_left
-  条件: (c : α) (h : c * a = b)
-  结论: a ∣ b
-  证明: Dvd.intro c (by rw [mul_comm] at h; apply h)
-
-alias dvd_of_mul_left_eq := Dvd.intro_left
-
-Depends on / 依赖: Dvd.intro, mul_comm
+/-
+**Dvd.intro_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dvd.intro_left (c : α) (h : c * a = b) : a ∣ b
+参数：c : α；h : c * a = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem Dvd.intro_left (c : α) (h : c * a = b) : a ∣ b :=
   Dvd.intro c (by rw [mul_comm] at h; apply h)
 
 alias dvd_of_mul_left_eq := Dvd.intro_left
-
-/--
-theorem `exists_eq_mul_left_of_dvd` / 定理 `exists_eq_mul_left_of_dvd`
-
-English:
-theorem exists_eq_mul_left_of_dvd
-  given: (h : a ∣ b)
-  statement: exists c, b = c * a
-  proof: Dvd.elim h fun c => fun H1 : b = a * c => Exists.intro c (Eq.trans H1 (mul_comm a c))
-
-中文:
-定理 存在_eq_mul_left_of_dvd
-  条件: (h : a ∣ b)
-  结论: 存在 c, b = c * a
-  证明: Dvd.elim h fun c => fun H1 : b = a * c => Exists.intro c (Eq.trans H1 (mul_comm a c))
-
-Depends on / 依赖: Dvd.elim, Eq.trans, Exists, Exists.intro, mul_comm
+/-
+**exists_eq_mul_left_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_eq_mul_left_of_dvd (h : a ∣ b) : exists c, b = c * a
+参数：h : a ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.elim`：Dvd.elim {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : forall c, b =
+ a * c -> P) : P
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem exists_eq_mul_left_of_dvd (h : a ∣ b) : exists c, b = c * a :=
+theorem exists_eq_mul_left_of_dvd (h : a ∣ b) : ∃ c, b = c * a :=
   Dvd.elim h fun c => fun H1 : b = a * c => Exists.intro c (Eq.trans H1 (mul_comm a c))
-
-/--
-theorem `dvd_iff_exists_eq_mul_left` / 定理 `dvd_iff_exists_eq_mul_left`
-
-English:
-theorem dvd_iff_exists_eq_mul_left
-  statement: a ∣ b ↔ exists c, b = c * a
-  proof: ⟨exists_eq_mul_left_of_dvd, by
-    rintro ⟨c, rfl⟩
-    exact ⟨c, mul_comm _ _⟩⟩
-
-中文:
-定理 dvd_iff_存在_eq_mul_left
-  结论: a ∣ b ↔ 存在 c, b = c * a
-  证明: ⟨exists_eq_mul_left_of_dvd, by
-    rintro ⟨c, rfl⟩
-    exact ⟨c, mul_comm _ _⟩⟩
-
-Depends on / 依赖: exists_eq_mul_left_of_dvd, mul_comm
+/-
+**dvd_iff_exists_eq_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_iff_exists_eq_mul_left : a ∣ b ↔ exists c, b = c * a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_eq_mul_left_of_dvd`：exists_eq_mul_left_of_dvd (h : a ∣ b) : exist
+s c, b = c * a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem dvd_iff_exists_eq_mul_left : a ∣ b ↔ exists c, b = c * a :=
+theorem dvd_iff_exists_eq_mul_left : a ∣ b ↔ ∃ c, b = c * a :=
   ⟨exists_eq_mul_left_of_dvd, by
     rintro ⟨c, rfl⟩
     exact ⟨c, mul_comm _ _⟩⟩
-
-/--
-theorem `Dvd.elim_left` / 定理 `Dvd.elim_left`
-
-English:
-theorem Dvd.elim_left
-  given: {P : Prop} (h₁ : a ∣ b) (h₂ : forall c, b = c * a -> P)
-  statement: P
-  proof: Exists.elim (exists_eq_mul_left_of_dvd h₁) fun c => fun h₃ : b = c * a => h₂ c h₃
-
-@[simp]
-
-中文:
-定理 Dvd.elim_left
-  条件: {P : 命题} (h₁ : a ∣ b) (h₂ : 对任意 c, b = c * a -> P)
-  结论: P
-  证明: Exists.elim (exists_eq_mul_left_of_dvd h₁) fun c => fun h₃ : b = c * a => h₂ c h₃
-
-@[simp]
-
-Depends on / 依赖: Exists, Exists.elim, exists_eq_mul_left_of_dvd
+/-
+**Dvd.elim_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dvd.elim_left {P : Prop} (h₁ : a ∣ b) (h₂ : forall c, b = c * a -> P) : P
+参数：h₁ : a ∣ b；h₂ : forall c, b = c * a -> P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `exists_eq_mul_left_of_dvd`：exists_eq_mul_left_of_dvd (h : a ∣ b) : exist
+s c, b = c * a
 -/
-theorem Dvd.elim_left {P : Prop} (h₁ : a ∣ b) (h₂ : forall c, b = c * a -> P) : P :=
+theorem Dvd.elim_left {P : Prop} (h₁ : a ∣ b) (h₂ : ∀ c, b = c * a → P) : P :=
   Exists.elim (exists_eq_mul_left_of_dvd h₁) fun c => fun h₃ : b = c * a => h₂ c h₃
 
 @[simp]
-/--
-theorem `dvd_mul_left` / 定理 `dvd_mul_left`
-
-English:
-theorem dvd_mul_left
-  given: (a b : α)
-  statement: a ∣ b * a
-  proof: Dvd.intro b (mul_comm a b)
-
-中文:
-定理 dvd_mul_left
-  条件: (a b : α)
-  结论: a ∣ b * a
-  证明: Dvd.intro b (mul_comm a b)
-
-Depends on / 依赖: Dvd.intro, mul_comm
+/-
+**dvd_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_mul_left (a b : α) : a ∣ b * a
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem dvd_mul_left (a b : α) : a ∣ b * a :=
   Dvd.intro b (mul_comm a b)
-
-/--
-theorem `dvd_mul_of_dvd_right` / 定理 `dvd_mul_of_dvd_right`
-
-English:
-theorem dvd_mul_of_dvd_right
-  given: (h : a ∣ b) (c : α)
-  statement: a ∣ c * b
-  proof: by
-  rw [mul_comm]; exact h.mul_right _
-
-alias Dvd.dvd.mul_left := dvd_mul_of_dvd_right
-
-中文:
-定理 dvd_mul_of_dvd_right
-  条件: (h : a ∣ b) (c : α)
-  结论: a ∣ c * b
-  证明: by
-  rw [mul_comm]; exact h.mul_right _
-
-alias Dvd.dvd.mul_left := dvd_mul_of_dvd_right
-
-Depends on / 依赖: h.mul_right, mul_comm, mul_right
+/-
+**dvd_mul_of_dvd_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_mul_of_dvd_right (h : a ∣ b) (c : α) : a ∣ c * b
+参数：h : a ∣ b；c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Dvd.dvd.mul_right`：∀ {α : Type u_1} [inst : Semigroup α] {a b : α}, a ∣ 
+b → ∀ (c : α), a ∣ b * c
 -/
 theorem dvd_mul_of_dvd_right (h : a ∣ b) (c : α) : a ∣ c * b := by
   rw [mul_comm]; exact h.mul_right _
@@ -979,89 +632,78 @@ alias Dvd.dvd.mul_left := dvd_mul_of_dvd_right
 attribute [local simp] mul_assoc mul_comm mul_left_comm
 
 @[gcongr]
-/--
-theorem `mul_dvd_mul` / 定理 `mul_dvd_mul`
-
-English:
-theorem mul_dvd_mul
-  statement: forall {a b c d : α}, a ∣ b -> c ∣ d -> a * c ∣ b * d
-
-中文:
-定理 mul_dvd_mul
-  结论: 对任意 {a b c d : α}, a ∣ b -> c ∣ d -> a * c ∣ b * d
+/-
+**mul_dvd_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : CommSemigroup α] {a b c d : α}, a ∣ b → c ∣ d → a
+ * c ∣ b * d
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mul_dvd_mul : forall {a b c d : α}, a ∣ b -> c ∣ d -> a * c ∣ b * d
+theorem mul_dvd_mul : ∀ {a b c d : α}, a ∣ b → c ∣ d → a * c ∣ b * d
   | a, _, c, _, ⟨e, rfl⟩, ⟨f, rfl⟩ => ⟨e * f, by simp⟩
-
-/--
-theorem `dvd_of_mul_left_dvd` / 定理 `dvd_of_mul_left_dvd`
-
-English:
-theorem dvd_of_mul_left_dvd
-  given: (h : a * b ∣ c)
-  statement: b ∣ c
-  proof: Dvd.elim h fun d ceq => Dvd.intro (a * d) (by simp [ceq])
-
-中文:
-定理 dvd_of_mul_left_dvd
-  条件: (h : a * b ∣ c)
-  结论: b ∣ c
-  证明: Dvd.elim h fun d ceq => Dvd.intro (a * d) (by simp [ceq])
-
-Depends on / 依赖: Dvd.elim, Dvd.intro
+/-
+**dvd_of_mul_left_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_of_mul_left_dvd (h : a * b ∣ c) : b ∣ c
+参数：h : a * b ∣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.elim`：Dvd.elim {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : forall c, b =
+ a * c -> P) : P
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dvd_of_mul_left_dvd (h : a * b ∣ c) : b ∣ c :=
   Dvd.elim h fun d ceq => Dvd.intro (a * d) (by simp [ceq])
-
-/--
-theorem `dvd_mul` / 定理 `dvd_mul`
-
-English:
-theorem dvd_mul
-  given: [DecompositionMonoid α] {k m n : α}
-  proof: by
-  refine ⟨exists_dvd_and_dvd_of_dvd_mul, ?_⟩
-  rintro ⟨d₁, d₂, hy, hz, rfl⟩
-  gcongr
-
-@[simp]
-
-中文:
-定理 dvd_mul
-  条件: [分解幺半群 α] {k m n : α}
-  证明: by
-  refine ⟨exists_dvd_and_dvd_of_dvd_mul, ?_⟩
-  rintro ⟨d₁, d₂, hy, hz, rfl⟩
-  gcongr
-
-@[simp]
-
-Depends on / 依赖: exists_dvd_and_dvd_of_dvd_mul
+/-
+**dvd_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_mul [DecompositionMonoid α] {k m n : α} : k ∣ m * n ↔ exists d₁ d₂, d₁
+ ∣ m ∧ d₂ ∣ n ∧ k = d₁ * d₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_dvd_and_dvd_of_dvd_mul`：exists_dvd_and_dvd_of_dvd_mul [Decomposit
+ionMonoid α] {b c a : α} (H : a ∣ b * c) : exists a₁ a₂, a₁ ∣ b ∧ a₂ ∣ c ∧ a = a
+₁ * a₂
+· 使用定理 `mul_dvd_mul`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b c d : α}, a 
+∣ b → c ∣ d → a * c ∣ b * d
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem dvd_mul [DecompositionMonoid α] {k m n : α} :
-    k ∣ m * n ↔ exists d₁ d₂, d₁ ∣ m ∧ d₂ ∣ n ∧ k = d₁ * d₂ := by
+    k ∣ m * n ↔ ∃ d₁ d₂, d₁ ∣ m ∧ d₂ ∣ n ∧ k = d₁ * d₂ := by
   refine ⟨exists_dvd_and_dvd_of_dvd_mul, ?_⟩
   rintro ⟨d₁, d₂, hy, hz, rfl⟩
   gcongr
 
 @[simp]
-/--
-theorem `rightDvd_iff_dvd` / 定理 `rightDvd_iff_dvd`
-
-English:
-theorem rightDvd_iff_dvd
-  statement: a ∣ᵣ b ↔ a ∣ b
-  proof: exists_congr fun c => by rw [mul_comm]
-
-中文:
-定理 rightDvd_iff_dvd
-  结论: a ∣ᵣ b ↔ a ∣ b
-  证明: exists_congr fun c => by rw [mul_comm]
-
-Depends on / 依赖: exists_congr, mul_comm
+/-
+**rightDvd_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rightDvd_iff_dvd : a ∣ᵣ b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem rightDvd_iff_dvd : a ∣ᵣ b ↔ a ∣ b :=
-  exists_congr fun c => by rw [mul_comm]
+  exists_congr fun c ↦ by rw [mul_comm]
 
 end CommSemigroup
 
@@ -1069,85 +711,57 @@ section CommMonoid
 
 variable [CommMonoid α] {a b : α}
 
-/--
-theorem `mul_dvd_mul_right` / 定理 `mul_dvd_mul_right`
-
-English:
-theorem mul_dvd_mul_right
-  given: (h : a ∣ b) (c : α)
-  statement: a * c ∣ b * c
-  proof: by
-  gcongr
-
-中文:
-定理 mul_dvd_mul_right
-  条件: (h : a ∣ b) (c : α)
-  结论: a * c ∣ b * c
-  证明: by
-  gcongr
+/-
+**mul_dvd_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_dvd_mul_right (h : a ∣ b) (c : α) : a * c ∣ b * c
+参数：h : a ∣ b；c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_dvd_mul`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b c d : α}, a 
+∣ b → c ∣ d → a * c ∣ b * d
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
 -/
 theorem mul_dvd_mul_right (h : a ∣ b) (c : α) : a * c ∣ b * c := by
   gcongr
-
-/--
-theorem `pow_dvd_pow_of_dvd` / 定理 `pow_dvd_pow_of_dvd`
-
-English:
-theorem pow_dvd_pow_of_dvd
-  given: (h : a ∣ b) (n : Nat)
-  statement: a ^ n ∣ b ^ n
-  proof: by
-  induction n with
-  | zero => simp
-  | succ =>
-    rw [pow_succ]; rw [pow_succ]
-    gcongr
-
-@[gcongr]
-
-中文:
-定理 pow_dvd_pow_of_dvd
-  条件: (h : a ∣ b) (n : 自然数)
-  结论: a ^ n ∣ b ^ n
-  证明: by
-  induction n with
-  | zero => simp
-  | succ =>
-    rw [pow_succ]; rw [pow_succ]
-    gcongr
-
-@[gcongr]
-
-Depends on / 依赖: pow_succ
+/-
+**pow_dvd_pow_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pow_dvd_pow_of_dvd (h : a ∣ b) (n : Nat) : a ^ n ∣ b ^ n
+参数：h : a ∣ b；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `mul_dvd_mul`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b c d : α}, a 
+∣ b → c ∣ d → a * c ∣ b * d
 -/
-theorem pow_dvd_pow_of_dvd (h : a ∣ b) (n : Nat) : a ^ n ∣ b ^ n := by
+theorem pow_dvd_pow_of_dvd (h : a ∣ b) (n : ℕ) : a ^ n ∣ b ^ n := by
   induction n with
   | zero => simp
   | succ =>
-    rw [pow_succ]; rw [pow_succ]
+    rw [pow_succ, pow_succ]
     gcongr
 
 @[gcongr]
-/--
-lemma `pow_dvd_pow_of_dvd_of_le` / 引理 `pow_dvd_pow_of_dvd_of_le`
-
-English:
-lemma pow_dvd_pow_of_dvd_of_le
-  given: {m n : Nat} (hab : a ∣ b) (hmn : m <= n)
-  statement: a ^ m ∣ b ^ n
-  proof: by
-  trans (a ^ n) <;> [gcongr; apply_rules [pow_dvd_pow_of_dvd]]
-
-中文:
-引理 pow_dvd_pow_of_dvd_of_le
-  条件: {m n : 自然数} (hab : a ∣ b) (hmn : m <= n)
-  结论: a ^ m ∣ b ^ n
-  证明: by
-  trans (a ^ n) <;> [gcongr; apply_rules [pow_dvd_pow_of_dvd]]
-
-Depends on / 依赖: apply_rules, pow_dvd_pow_of_dvd
+/-
+**pow_dvd_pow_of_dvd_of_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pow_dvd_pow_of_dvd_of_le {m n : Nat} (hab : a ∣ b) (hmn : m <= n) : a ^ m 
+∣ b ^ n
+参数：hab : a ∣ b；hmn : m <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTransDvd`：∀ {α : Type u_1} [inst : Semigroup α], IsTrans α Dvd.dvd
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `pow_dvd_pow_of_dvd`：pow_dvd_pow_of_dvd (h : a ∣ b) (n : Nat) : a ^ n ∣ b
+ ^ n
 -/
-lemma pow_dvd_pow_of_dvd_of_le {m n : Nat} (hab : a ∣ b) (hmn : m <= n) : a ^ m ∣ b ^ n := by
+lemma pow_dvd_pow_of_dvd_of_le {m n : ℕ} (hab : a ∣ b) (hmn : m ≤ n) : a ^ m ∣ b ^ n := by
   trans (a ^ n) <;> [gcongr; apply_rules [pow_dvd_pow_of_dvd]]
 
 end CommMonoid
+

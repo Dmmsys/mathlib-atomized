@@ -21,57 +21,40 @@ variable {X : Type*}
 
 open Set TopologicalSpace
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `X` is a topological space, `s` is a set in `X` such that the induced topology is T₀ and is
+second countable, then there exists a countable family of open sets in `X` that separates points
+of `s`. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [TopologicalSpace
-  signature: X] {s
-  body: by
-  suffices HasCountableSeparatingOn s IsOpen univ from .of_subtype fun _ => isOpen_induced_iff.1
-  refine ⟨⟨countableBasis s, countable_countableBasis _, fun _ => isOpen_of_mem_countableBasis,
-    fun x _ y _ h => ?_⟩⟩
-  exact ((isBasis_countableBasis _).inseparable_iff.2 h).eq
-
-中文:
-实例 [拓扑空间
-  签名: X] {s
-  定义体: by
-  suffices HasCountableSeparatingOn s IsOpen univ from .of_subtype fun _ => isOpen_induced_iff.1
-  refine ⟨⟨countableBasis s, countable_countableBasis _, fun _ => isOpen_of_mem_countableBasis,
-    fun x _ y _ h => ?_⟩⟩
-  exact ((isBasis_countableBasis _).inseparable_iff.2 h).eq
-
-Depends on / 依赖: HasCountableSeparatingOn, IsOpen, countableBasis, countable_countableBasis, inseparable_iff, isBasis_countableBasis, isOpen_induced_iff, isOpen_of_mem_countableBasis, of_subtype
+--- 原说明 ---
+If `X` is a topological space, `s` is a set in `X` such that the induced topolog
+y is T₀ and is
+second countable, then there exists a countable family of open sets in `X` that 
+separates points
+of `s`.
 -/
 instance [TopologicalSpace X] {s : Set X} [T0Space s] [SecondCountableTopology s] :
     HasCountableSeparatingOn X IsOpen s := by
-  suffices HasCountableSeparatingOn s IsOpen univ from .of_subtype fun _ => isOpen_induced_iff.1
-  refine ⟨⟨countableBasis s, countable_countableBasis _, fun _ => isOpen_of_mem_countableBasis,
-    fun x _ y _ h => ?_⟩⟩
+  suffices HasCountableSeparatingOn s IsOpen univ from .of_subtype fun _ ↦ isOpen_induced_iff.1
+  refine ⟨⟨countableBasis s, countable_countableBasis _, fun _ ↦ isOpen_of_mem_countableBasis,
+    fun x _ y _ h ↦ ?_⟩⟩
   exact ((isBasis_countableBasis _).inseparable_iff.2 h).eq
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If there exists a countable family of open sets separating points of `s`, then there exists
+a countable family of closed sets separating points of `s`. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [TopologicalSpace
-  signature: X] {s
-  body: let ⟨S, hSc, hSo, hS⟩ := h.1
-  ⟨compl '' S, hSc.image _, forall_mem_image.2 fun U hU => (hSo U hU).isClosed_compl,
-fun x hx y hy h => hS x hx y hy fun _U hU => not_iff_not.1 h _ (mem_image_of_mem _ hU)⟩
-
-中文:
-实例 [拓扑空间
-  签名: X] {s
-  定义体: let ⟨S, hSc, hSo, hS⟩ := h.1
-  ⟨compl '' S, hSc.image _, forall_mem_image.2 fun U hU => (hSo U hU).isClosed_compl,
-fun x hx y hy h => hS x hx y hy fun _U hU => not_iff_not.1 h _ (mem_image_of_mem _ hU)⟩
-
-Depends on / 依赖: forall_mem_image, hSc.image, isClosed_compl, mem_image_of_mem, not_iff_not
+--- 原说明 ---
+If there exists a countable family of open sets separating points of `s`, then t
+here exists
+a countable family of closed sets separating points of `s`.
 -/
 instance [TopologicalSpace X] {s : Set X} [h : HasCountableSeparatingOn X IsOpen s] :
     HasCountableSeparatingOn X IsClosed s :=
   let ⟨S, hSc, hSo, hS⟩ := h.1
-  ⟨compl '' S, hSc.image _, forall_mem_image.2 fun U hU => (hSo U hU).isClosed_compl,
-fun x hx y hy h => hS x hx y hy fun _U hU => not_iff_not.1 h _ (mem_image_of_mem _ hU)⟩
+  ⟨compl '' S, hSc.image _, forall_mem_image.2 fun U hU ↦ (hSo U hU).isClosed_compl,
+    fun x hx y hy h ↦ hS x hx y hy fun _U hU ↦ not_iff_not.1 <| h _ (mem_image_of_mem _ hU)⟩

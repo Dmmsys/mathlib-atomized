@@ -38,7 +38,7 @@ requiring `𝓞 K`. This is so that `ℤ` and `𝓞 ℚ` can be used interchange
   unfolded.
 * `NumberField.FinitePlace.hasFiniteMulSupport`: the `v`-adic absolute value of a non-zero element
   of `K` is different from 1 for at most finitely many `v`.
-* The valuation subrings of the field at the `v`-valuation and it's adic completion are
+*  The valuation subrings of the field at the `v`-valuation and it's adic completion are
    discrete valuation rings.
 
 ## Tags
@@ -57,105 +57,35 @@ variable (A : Type*) [CommRing A] [IsDedekindDomain A]
     (K : Type*) [Field K] [Algebra A K] [IsFractionRing A K]
     (v : HeightOneSpectrum A) (hv : Finite (A ⧸ v.asIdeal))
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPrincipalIdealRing (v.valuation K).integer
-  body: by
-  rw [(Valuation.integer.integers (v.valuation K)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
-  simpa using (v.valuation K).toMonoidWithZeroHom.range_nontrivial
-
-中文:
-实例 :
-  签名: 是主理想环 (v.valuation K).integer
-  定义体: by
-  rw [(Valuation.integer.integers (v.valuation K)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
-  simpa using (v.valuation K).toMonoidWithZeroHom.range_nontrivial
-
-Depends on / 依赖: Valuation, Valuation.integer.integers, WithZero, WithZero.denselyOrdered_set_iff_subsingleton, denselyOrdered_set_iff_subsingleton, integer, integers, isPrincipalIdealRing_iff_not_denselyOrdered, range_nontrivial, toMonoidWithZeroHom, toMonoidWithZeroHom.range_nontrivial, v.valuation, valuation
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsPrincipalIdealRing (v.valuation K).integer := by
-  rw [(Valuation.integer.integers (v.valuation K)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
+  rw [(Valuation.integer.integers (v.valuation K)).isPrincipalIdealRing_iff_not_denselyOrdered,
+    WithZero.denselyOrdered_set_iff_subsingleton]
   simpa using (v.valuation K).toMonoidWithZeroHom.range_nontrivial
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsDiscreteValuationRing (v.valuation K).integer
-  body: (v.valuation K).valuationSubring_isDiscreteValuationRing
-
-中文:
-实例 :
-  签名: 是离散赋值环 (v.valuation K).integer
-  定义体: (v.valuation K).valuationSubring_isDiscreteValuationRing
-
-Depends on / 依赖: v.valuation, valuation, valuationSubring_isDiscreteValuationRing
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsDiscreteValuationRing (v.valuation K).integer :=
   (v.valuation K).valuationSubring_isDiscreteValuationRing
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPrincipalIdealRing (v.adicCompletionIntegers K)
-  body: by
-  unfold HeightOneSpectrum.adicCompletionIntegers
-  rw [(Valuation.valuationSubring.integers (Valued.v)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
-  simpa using Valued.v.range_nontrivial
-
-中文:
-实例 :
-  签名: 是主理想环 (v.adicCompletion整数egers K)
-  定义体: by
-  unfold HeightOneSpectrum.adicCompletionIntegers
-  rw [(Valuation.valuationSubring.integers (Valued.v)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
-  simpa using Valued.v.range_nontrivial
-
-Depends on / 依赖: HeightOneSpectrum, HeightOneSpectrum.adicCompletionIntegers, Valuation, Valuation.valuationSubring.integers, Valued, Valued.v, Valued.v.range_nontrivial, WithZero, WithZero.denselyOrdered_set_iff_subsingleton, adicCompletionIntegers, denselyOrdered_set_iff_subsingleton, integers, isPrincipalIdealRing_iff_not_denselyOrdered, range_nontrivial, valuationSubring
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsPrincipalIdealRing (v.adicCompletionIntegers K) := by
   unfold HeightOneSpectrum.adicCompletionIntegers
-  rw [(Valuation.valuationSubring.integers (Valued.v)).isPrincipalIdealRing_iff_not_denselyOrdered]; rw [WithZero.denselyOrdered_set_iff_subsingleton]
+  rw [(Valuation.valuationSubring.integers (Valued.v)).isPrincipalIdealRing_iff_not_denselyOrdered,
+    WithZero.denselyOrdered_set_iff_subsingleton]
   simpa using Valued.v.range_nontrivial
 
 -- TODO: make this inferred from `IsRankOneDiscrete`, or
 -- develop the API for a completion of a base `IsDVR` ring
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsDiscreteValuationRing (v.adicCompletionIntegers K)
-  body: by
-    unfold HeightOneSpectrum.adicCompletionIntegers
-    simp only [ne_eq, Ideal.ext_iff, Valuation.mem_maximalIdeal_iff, Ideal.mem_bot, Subtype.ext_iff,
-      ZeroMemClass.coe_zero, Subtype.forall, Valuation.mem_valuationSubring_iff, not_forall,
-      exists_prop]
-    obtain ⟨π, hπ⟩ := v.valuation_exists_uniformizer K
-    use (WithVal.equiv (v.valuation K)).symm π
-    simp [hπ, ← exp_zero, -exp_neg,
-      ← (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰).map_eq_zero_iff]
-
-中文:
-实例 :
-  签名: 是离散赋值环 (v.adicCompletion整数egers K)
-  定义体: by
-    unfold HeightOneSpectrum.adicCompletionIntegers
-    simp only [ne_eq, Ideal.ext_iff, Valuation.mem_maximalIdeal_iff, Ideal.mem_bot, Subtype.ext_iff,
-      ZeroMemClass.coe_zero, Subtype.forall, Valuation.mem_valuationSubring_iff, not_forall,
-      exists_prop]
-    obtain ⟨π, hπ⟩ := v.valuation_exists_uniformizer K
-    use (WithVal.equiv (v.valuation K)).symm π
-    simp [hπ, ← exp_zero, -exp_neg,
-      ← (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰).map_eq_zero_iff]
-
-Depends on / 依赖: HeightOneSpectrum, HeightOneSpectrum.adicCompletionIntegers, Ideal.ext_iff, Ideal.mem_bot, Subtype, Subtype.ext_iff, Subtype.forall, Valuation, Valuation.mem_maximalIdeal_iff, Valuation.mem_valuationSubring_iff, Valued, Valued.v, WithVal, WithVal.equiv, ZeroMemClass, ZeroMemClass.coe_zero, adicCompletion, adicCompletionIntegers, coe_zero, exists_prop
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsDiscreteValuationRing (v.adicCompletionIntegers K) where
   not_a_field' := by
@@ -166,7 +96,7 @@ instance : IsDiscreteValuationRing (v.adicCompletionIntegers K) where
     obtain ⟨π, hπ⟩ := v.valuation_exists_uniformizer K
     use (WithVal.equiv (v.valuation K)).symm π
     simp [hπ, ← exp_zero, -exp_neg,
-      ← (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰).map_eq_zero_iff]
+      ← (Valued.v : Valuation (v.adicCompletion K) ℤᵐ⁰).map_eq_zero_iff]
 
 end DVR
 
@@ -175,68 +105,45 @@ namespace NumberField
 variable {K : Type*} [Field K] {R : Type*} [CommRing R] [Algebra R K] [IsDedekindDomain R]
   [IsFractionRing R K] (v : HeightOneSpectrum R)
 
-/--
-Definition of `FinitePlace.embedding` / `FinitePlace.embedding` 的定义
+/-- The embedding of a field inside its `adicCompletion` with respect to `v`. -/
+/-
+**NumberField.FinitePlace.embedding** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Finit
+ePlace`。
+形式化陈述：{K : Type u_1} →   [inst : Field K] →     {R : Type u_2} →       [inst_1 :
+ CommRing R] →         [inst_2 : Algebra R K] →           [inst_3 : IsDedekindDo
+main R] →             [inst_4 : IsFractionRing R K] →               (v : IsDedek
+indDomain.HeightOneSpectrum R) → K →+* IsDedekindDomain.HeightOneSpectrum.adicCo
+mpletion K v
+参数：v : IsDedekindDomain.HeightOneSpectrum R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FinitePlace.embedding
-  signature: : K ->+* adicCompletion K v
-  body: (adicCompletion.equiv K v).symm.toRingHom.comp
-    (UniformSpace.Completion.coeRingHom.comp (WithVal.equiv (v.valuation K)).symm)
-
-中文:
-定义 FinitePlace.embedding
-  签名: : K ->+* adicCompletion K v
-  定义体: (adicCompletion.equiv K v).symm.toRingHom.comp
-    (UniformSpace.Completion.coeRingHom.comp (WithVal.equiv (v.valuation K)).symm)
-
-Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion.coeRingHom.comp, WithVal, WithVal.equiv, adicCompletion, adicCompletion.equiv, coeRingHom, symm.toRingHom.comp, toRingHom, v.valuation, valuation
+--- 原说明 ---
+The embedding of a field inside its `adicCompletion` with respect to `v`.
 -/
-noncomputable def FinitePlace.embedding : K ->+* adicCompletion K v :=
+noncomputable def FinitePlace.embedding : K →+* adicCompletion K v :=
   (adicCompletion.equiv K v).symm.toRingHom.comp
     (UniformSpace.Completion.coeRingHom.comp (WithVal.equiv (v.valuation K)).symm)
-
-/--
-theorem `FinitePlace.embedding_apply` / 定理 `FinitePlace.embedding_apply`
-
-English:
-theorem FinitePlace.embedding_apply
-  given: (x : K)
-  statement: embedding v x = ↑x
-  proof: rfl
-
-中文:
-定理 FinitePlace.embedding_apply
-  条件: (x : K)
-  结论: embedding v x = ↑x
-  证明: rfl
+/-
+**NumberField.FinitePlace.embedding_apply** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.FinitePlace`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R) (x : K),   (NumberField.FinitePlace
+.embedding v) x =     { toCompletion := ↑((WithVal.equiv (IsDedekindDomain.Heigh
+tOneSpectrum.valuation K v)).symm x) }
+参数：v : IsDedekindDomain.HeightOneSpectrum R；x : K；NumberField.FinitePlace.embedd
+ing v；(WithVal.equiv (IsDedekindDomain.HeightOneSpectrum.valuation K v)).symm x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem FinitePlace.embedding_apply (x : K) : embedding v x = ↑x := rfl
 
 section AbsoluteValue
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ((Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰)).IsRankOneDiscrete
-  body: by
-    have h : (v.valuation K).IsRankOneDiscrete := Valuation.IsRankOneDiscrete.mk' (valuation K v)
-    exact ⟨h.generator, by rw [h.generator_zpowers_eq_valueGroup, adicCompletion_valueGroup_eq],
-      h.generator_lt_one⟩
-
-中文:
-实例 :
-  签名: ((赋值.v : 赋值 (v.adicCompletion K) 整数ᵐ⁰)).是RankOneDiscrete
-  定义体: by
-    have h : (v.valuation K).IsRankOneDiscrete := Valuation.IsRankOneDiscrete.mk' (valuation K v)
-    exact ⟨h.generator, by rw [h.generator_zpowers_eq_valueGroup, adicCompletion_valueGroup_eq],
-      h.generator_lt_one⟩
-
-Depends on / 依赖: IsRankOneDiscrete, Valuation, Valuation.IsRankOneDiscrete.mk, adicCompletion_valueGroup_eq, generator, generator_lt_one, generator_zpowers_eq_valueGroup, h.generator, h.generator_lt_one, h.generator_zpowers_eq_valueGroup, v.valuation, valuation
+/-
+**NumberField.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : ((Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰)).IsRankOneDiscrete where
+noncomputable instance : ((Valued.v : Valuation (v.adicCompletion K) ℤᵐ⁰)).IsRankOneDiscrete where
   exists_generator_lt_one' := by
     have h : (v.valuation K).IsRankOneDiscrete := Valuation.IsRankOneDiscrete.mk' (valuation K v)
     exact ⟨h.generator, by rw [h.generator_zpowers_eq_valueGroup, adicCompletion_valueGroup_eq],
@@ -248,281 +155,295 @@ section FiniteFree
 This characterises `R` as being isomorphic to `𝓞 K` without explicitly requiring that type.
 As a result, if `F = ℚ`, then we can use `ℤ` and `𝓞 ℚ` interchangeably. -/
 
-variable [Module.Finite Int R] [Module.Free Int R]
+variable [Module.Finite ℤ R] [Module.Free ℤ R]
 
 namespace HeightOneSpectrum
 
-/--
-lemma `one_lt_absNorm` / 引理 `one_lt_absNorm`
+/-- The norm of a maximal ideal is `> 1` -/
+/-
+**NumberField.HeightOneSpectrum.one_lt_absNorm** 是 Mathlib 中的一个引理，位于命名空间 `Number
+Field.HeightOneSpectrum`。
+形式化陈述：one_lt_absNorm : 1 < absNorm v.asIdeal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Ideal.IsPrime.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}, 
+I.IsPrime → I ≠ ⊤
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.isPrime`：∀ {R : Type u_1} [inst : Com
+mRing R] (self : IsDedekindDomain.HeightOneSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.absNorm_eq_one_iff`：absNorm_eq_one_iff {I : Ideal S} : absNorm I =
+ 1 ↔ I = ⊤
+· 使用定理 `Nat.pos_iff_ne_zero`：∀ {n : ℕ}, 0 < n ↔ n ≠ 0
+· 使用定理 `Ideal.absNorm_ne_zero_iff`：absNorm_ne_zero_iff (I : Ideal S) : Ideal.abs
+Norm I != 0 ↔ Finite (S ⧸ I)
+· 使用定理 `Ideal.finiteQuotientOfFreeOfNeBot`：finiteQuotientOfFreeOfNeBot [Module.F
+ree Int S] [Module.Finite Int S] (I : Ideal S) (hI : I != ⊥) : Finite (S ⧸ I)
+· 使用定理 `IsDedekindDomain.toIsDomain`：∀ {A : Type u_2} {inst : CommRing A} [self 
+: IsDedekindDomain A], IsDomain A
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.ne_bot`：∀ {R : Type u_1} [inst : Comm
+Ring R] (self : IsDedekindDomain.HeightOneSpectrum R), self.asIdeal ≠ ⊥
 
-English:
-lemma one_lt_absNorm
-  statement: 1 < absNorm v.asIdeal
-  proof: by
-  by_contra! h
-  apply IsPrime.ne_top v.isPrime
-  rw [← absNorm_eq_one_iff]
-  have : 0 < absNorm v.asIdeal := by
-    rw [Nat.pos_iff_ne_zero]; rw [absNorm_ne_zero_iff]
-    exact v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
-  lia
-
-中文:
-引理 one_lt_absNorm
-  结论: 1 < absNorm v.asIdeal
-  证明: by
-  by_contra! h
-  apply IsPrime.ne_top v.isPrime
-  rw [← absNorm_eq_one_iff]
-  have : 0 < absNorm v.asIdeal := by
-    rw [Nat.pos_iff_ne_zero]; rw [absNorm_ne_zero_iff]
-    exact v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
-  lia
-
-Depends on / 依赖: IsPrime, IsPrime.ne_top, Nat.pos_iff_ne_zero, absNorm, absNorm_eq_one_iff, absNorm_ne_zero_iff, asIdeal, finiteQuotientOfFreeOfNeBot, isPrime, ne_bot, ne_top, pos_iff_ne_zero, v.asIdeal, v.asIdeal.finiteQuotientOfFreeOfNeBot, v.isPrime, v.ne_bot
+--- 原说明 ---
+The norm of a maximal ideal is `> 1`
 -/
 lemma one_lt_absNorm : 1 < absNorm v.asIdeal := by
   by_contra! h
   apply IsPrime.ne_top v.isPrime
   rw [← absNorm_eq_one_iff]
   have : 0 < absNorm v.asIdeal := by
-    rw [Nat.pos_iff_ne_zero]; rw [absNorm_ne_zero_iff]
+    rw [Nat.pos_iff_ne_zero, absNorm_ne_zero_iff]
     exact v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
   lia
 
-/--
-lemma `one_lt_absNorm_nnreal` / 引理 `one_lt_absNorm_nnreal`
+/-- The norm of a maximal ideal as an element of `ℝ≥0` is `> 1` -/
+/-
+**NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal** 是 Mathlib 中的一个引理，位于命名空间 
+`NumberField.HeightOneSpectrum`。
+形式化陈述：one_lt_absNorm_nnreal : 1 < (absNorm v.asIdeal : Real>=0)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm`：one_lt_absNorm : 1 < absNo
+rm v.asIdeal
 
-English:
-lemma one_lt_absNorm_nnreal
-  statement: 1 < (absNorm v.asIdeal : Real>=0)
-  proof: mod_cast one_lt_absNorm v
-
-中文:
-引理 one_lt_absNorm_nnreal
-  结论: 1 < (absNorm v.asIdeal : 实数>=0)
-  证明: mod_cast one_lt_absNorm v
-
-Depends on / 依赖: mod_cast, one_lt_absNorm
+--- 原说明 ---
+The norm of a maximal ideal as an element of `ℝ≥0` is `> 1`
 -/
-lemma one_lt_absNorm_nnreal : 1 < (absNorm v.asIdeal : Real>=0) := mod_cast one_lt_absNorm v
+lemma one_lt_absNorm_nnreal : 1 < (absNorm v.asIdeal : ℝ≥0) := mod_cast one_lt_absNorm v
 
-/--
-lemma `absNorm_ne_zero` / 引理 `absNorm_ne_zero`
+/-- The norm of a maximal ideal as an element of `ℝ≥0` is `≠ 0` -/
+/-
+**NumberField.HeightOneSpectrum.absNorm_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Numbe
+rField.HeightOneSpectrum`。
+形式化陈述：absNorm_ne_zero : (absNorm v.asIdeal : Real>=0) != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_zero_of_lt`：∀ {α : Type u_1} {a b : α} [inst : Preorder α] [inst_1 : 
+Zero α] [IsBotZeroClass α], a < b → b ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
 
-English:
-lemma absNorm_ne_zero
-  statement: (absNorm v.asIdeal : Real>=0) != 0
-  proof: ne_zero_of_lt (one_lt_absNorm_nnreal v)
-
-中文:
-引理 absNorm_ne_zero
-  结论: (absNorm v.asIdeal : 实数>=0) != 0
-  证明: ne_zero_of_lt (one_lt_absNorm_nnreal v)
-
-Depends on / 依赖: ne_zero_of_lt, one_lt_absNorm_nnreal
+--- 原说明 ---
+The norm of a maximal ideal as an element of `ℝ≥0` is `≠ 0`
 -/
-lemma absNorm_ne_zero : (absNorm v.asIdeal : Real>=0) != 0 :=
+lemma absNorm_ne_zero : (absNorm v.asIdeal : ℝ≥0) ≠ 0 :=
   ne_zero_of_lt (one_lt_absNorm_nnreal v)
 
 variable (K)
 
-/--
-Definition of `adicAbv` / `adicAbv` 的定义
+/-- The `v`-adic absolute value on `K` defined as the norm of `v` raised to negative `v`-adic
+valuation -/
+/-
+**NumberField.HeightOneSpectrum.adicAbv** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.H
+eightOneSpectrum`。
+形式化陈述：adicAbv : AbsoluteValue K Real
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
 
-English:
-definition adicAbv
-  signature: : AbsoluteValue K Real
-  body: v.adicAbv one_lt_absNorm_nnreal v
-
-中文:
-定义 adicAbv
-  签名: : 绝对值 K 实数
-  定义体: v.adicAbv one_lt_absNorm_nnreal v
-
-Depends on / 依赖: adicAbv, one_lt_absNorm_nnreal, v.adicAbv
+--- 原说明 ---
+The `v`-adic absolute value on `K` defined as the norm of `v` raised to negative
+ `v`-adic
+valuation
 -/
-noncomputable def adicAbv : AbsoluteValue K Real := v.adicAbv one_lt_absNorm_nnreal v
-
-/--
-theorem `adicAbv_def` / 定理 `adicAbv_def`
-
-English:
-theorem adicAbv_def
-  given: {x : K}
-  statement: adicAbv K v x = toNNReal (absNorm_ne_zero v) (v.valuation K x)
-  proof: rfl
-
-中文:
-定理 adicAbv_def
-  条件: {x : K}
-  结论: adicAbv K v x = toNN实数 (absNorm_ne_zero v) (v.valuation K x)
-  证明: rfl
+noncomputable def adicAbv : AbsoluteValue K ℝ := v.adicAbv <| one_lt_absNorm_nnreal v
+/-
+**NumberField.HeightOneSpectrum.adicAbv_def** 是 Mathlib 中的一个定理，位于命名空间 `NumberFie
+ld.HeightOneSpectrum`。
+形式化陈述：adicAbv_def {x : K} : adicAbv K v x = toNNReal (absNorm_ne_zero v) (v.valu
+ation K x)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adicAbv_def {x : K} : adicAbv K v x = toNNReal (absNorm_ne_zero v) (v.valuation K x) := rfl
 
-/--
-theorem `isNonarchimedean_adicAbv` / 定理 `isNonarchimedean_adicAbv`
+/-- The `v`-adic absolute value is nonarchimedean -/
+/-
+**NumberField.HeightOneSpectrum.isNonarchimedean_adicAbv** 是 Mathlib 中的一个定理，位于命名
+空间 `NumberField.HeightOneSpectrum`。
+形式化陈述：isNonarchimedean_adicAbv : IsNonarchimedean (adicAbv K v)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.isNonarchimedean_adicAbv`：isNonarchim
+edean_adicAbv : IsNonarchimedean (α
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
 
-English:
-theorem isNonarchimedean_adicAbv
-  statement: IsNonarchimedean (adicAbv K v)
-  proof: v.isNonarchimedean_adicAbv one_lt_absNorm_nnreal v
-
-中文:
-定理 isNonarchimedean_adicAbv
-  结论: IsNonarchimedean (adicAbv K v)
-  证明: v.isNonarchimedean_adicAbv one_lt_absNorm_nnreal v
-
-Depends on / 依赖: isNonarchimedean_adicAbv, one_lt_absNorm_nnreal, v.isNonarchimedean_adicAbv
+--- 原说明 ---
+The `v`-adic absolute value is nonarchimedean
 -/
 theorem isNonarchimedean_adicAbv : IsNonarchimedean (adicAbv K v) :=
-v.isNonarchimedean_adicAbv one_lt_absNorm_nnreal v
+  v.isNonarchimedean_adicAbv <| one_lt_absNorm_nnreal v
 
 open Valuation.IsRankOneDiscrete
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (v.valuation K).RankOne
-  body: rankOne (v.valuation K) (one_lt_absNorm_nnreal v)
-
-中文:
-实例 :
-  签名: (v.valuation K).秩一
-  定义体: rankOne (v.valuation K) (one_lt_absNorm_nnreal v)
-
-Depends on / 依赖: one_lt_absNorm_nnreal, rankOne, v.valuation, valuation
+/-
+**NumberField.HeightOneSpectrum.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.HeightOn
+eSpectrum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (v.valuation K).RankOne :=
   rankOne (v.valuation K) (one_lt_absNorm_nnreal v)
-
-/--
-Instance `instRankOneAdicCompletion` / 实例 `instRankOneAdicCompletion`
-
-English:
-instance instRankOneAdicCompletion
-  signature: :
-  body: rankOne (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰) (one_lt_absNorm_nnreal v)
-
-中文:
-实例 instRankOneAdicCompletion
-  签名: :
-  定义体: rankOne (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰) (one_lt_absNorm_nnreal v)
-
-Depends on / 依赖: Valuation, Valued, Valued.v, adicCompletion, one_lt_absNorm_nnreal, rankOne, v.adicCompletion
+/-
+**NumberField.HeightOneSpectrum.instRankOneAdicCompletion** 是 Mathlib 中的一个实例，位于命
+名空间 `NumberField.HeightOneSpectrum`。
+形式化陈述：instRankOneAdicCompletion : (Valued.v : Valuation (v.adicCompletion K) Int
+ᵐ⁰).RankOne
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.instIsRankOneDiscreteWithZeroMultiplicativeIntAdicCompletion
+V`：∀ {K : Type u_1} [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [inst_
+2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFr…
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
 -/
 noncomputable instance instRankOneAdicCompletion :
-    (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰).RankOne :=
-  rankOne (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰) (one_lt_absNorm_nnreal v)
-
-/--
-lemma `rankOne_hom'_def` / 引理 `rankOne_hom'_def`
-
-English:
-lemma rankOne_hom'_def
-  proof: rfl
-
-中文:
-引理 rankOne_hom'_def
-  证明: rfl
+    (Valued.v : Valuation (v.adicCompletion K) ℤᵐ⁰).RankOne :=
+  rankOne (Valued.v : Valuation (v.adicCompletion K) ℤᵐ⁰) (one_lt_absNorm_nnreal v)
+/-
+**NumberField.HeightOneSpectrum.rankOne_hom'_def** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.HeightOneSpectrum`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R],   Valuation.RankLeOne.hom' Valued.v =     (WithZeroMulIn
+t.toNNReal ⋯).comp       (Valuation.IsRankOneDiscrete.valueGroup₀_equiv_withZero
+MulInt Valued.v).toMonoidWithZeroHom
+参数：K : Type u_1；v : IsDedekindDomain.HeightOneSpectrum R；WithZeroMulInt.toNNReal
+ ⋯；Valuation.IsRankOneDiscrete.valueGroup₀_equiv_withZeroMulInt Valued.v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
 -/
 lemma rankOne_hom'_def :
     (instRankOneAdicCompletion K v).hom' = (toNNReal (absNorm_ne_zero v)).comp
       (valueGroup₀_equiv_withZeroMulInt Valued.v).toMonoidWithZeroHom := rfl
 
-/--
-Instance `instNormedFieldValuedAdicCompletion` / 实例 `instNormedFieldValuedAdicCompletion`
+/-- The `v`-adic completion of `K` is a normed field. -/
+/-
+**NumberField.HeightOneSpectrum.instNormedFieldValuedAdicCompletion** 是 Mathlib 
+中的一个实例，位于命名空间 `NumberField.HeightOneSpectrum`。
+形式化陈述：instNormedFieldValuedAdicCompletion : NormedField (adicCompletion K v)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instNormedFieldValuedAdicCompletion
-  signature: : NormedField (adicCompletion K v)
-  body: Valued.toNormedField (adicCompletion K v) Intᵐ⁰
-
-中文:
-实例 instNormedFieldValuedAdicCompletion
-  签名: : 赋范域 (adicCompletion K v)
-  定义体: Valued.toNormedField (adicCompletion K v) Intᵐ⁰
-
-Depends on / 依赖: Valued, Valued.toNormedField, adicCompletion, toNormedField
+--- 原说明 ---
+The `v`-adic completion of `K` is a normed field.
 -/
 noncomputable instance instNormedFieldValuedAdicCompletion : NormedField (adicCompletion K v) :=
-  Valued.toNormedField (adicCompletion K v) Intᵐ⁰
-
-/--
-lemma `toNNReal_valued_eq_adicAbv` / 引理 `toNNReal_valued_eq_adicAbv`
-
-English:
-lemma toNNReal_valued_eq_adicAbv
-  given: (x : WithVal (v.valuation K))
-  proof: rfl
-
-中文:
-引理 toNN实数_valued_eq_adicAbv
-  条件: (x : WithVal (v.valuation K))
-  证明: rfl
+  Valued.toNormedField (adicCompletion K v) ℤᵐ⁰
+/-
+**NumberField.HeightOneSpectrum.toNNReal_valued_eq_adicAbv** 是 Mathlib 中的一个引理，位于
+命名空间 `NumberField.HeightOneSpectrum`。
+形式化陈述：toNNReal_valued_eq_adicAbv (x : WithVal (v.valuation K)) : toNNReal (absNo
+rm_ne_zero v) (Valued.v x) = adicAbv K v (WithVal.equiv _ x)
+参数：x : WithVal (v.valuation K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NumberField.HeightOneSpectrum.absNorm_ne_zero`：absNorm_ne_zero : (absNor
+m v.asIdeal : Real>=0) != 0
 -/
 lemma toNNReal_valued_eq_adicAbv (x : WithVal (v.valuation K)) :
     toNNReal (absNorm_ne_zero v) (Valued.v x) = adicAbv K v (WithVal.equiv _ x) := rfl
 
-/--
-theorem `adicAbv_add_le_max` / 定理 `adicAbv_add_le_max`
+/-- The `v`-adic absolute value satisfies the ultrametric inequality. -/
+/-
+**NumberField.HeightOneSpectrum.adicAbv_add_le_max** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.HeightOneSpectrum`。
+形式化陈述：adicAbv_add_le_max (x y : K) : adicAbv K v (x + y) <= (adicAbv K v x) ⊔ (a
+dicAbv K v y)
+参数：x y : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.HeightOneSpectrum.isNonarchimedean_adicAbv`：isNonarchimedean
+_adicAbv : IsNonarchimedean (adicAbv K v)
 
-English:
-theorem adicAbv_add_le_max
-  given: (x y : K)
-  proof: isNonarchimedean_adicAbv K v x y
-
-中文:
-定理 adicAbv_add_le_max
-  条件: (x y : K)
-  证明: isNonarchimedean_adicAbv K v x y
-
-Depends on / 依赖: isNonarchimedean_adicAbv
+--- 原说明 ---
+The `v`-adic absolute value satisfies the ultrametric inequality.
 -/
 theorem adicAbv_add_le_max (x y : K) :
-    adicAbv K v (x + y) <= (adicAbv K v x) ⊔ (adicAbv K v y) := isNonarchimedean_adicAbv K v x y
+    adicAbv K v (x + y) ≤ (adicAbv K v x) ⊔ (adicAbv K v y) := isNonarchimedean_adicAbv K v x y
 
-/--
-theorem `adicAbv_natCast_le_one` / 定理 `adicAbv_natCast_le_one`
+/-- The `v`-adic absolute value of a natural number is `≤ 1`. -/
+/-
+**NumberField.HeightOneSpectrum.adicAbv_natCast_le_one** 是 Mathlib 中的一个定理，位于命名空间
+ `NumberField.HeightOneSpectrum`。
+形式化陈述：adicAbv_natCast_le_one (n : Nat) : adicAbv K v n <= 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsNonarchimedean.apply_natCast_le_one`：apply_natCast_le_one {F α : Type*
+} [AddMonoidWithOne α] [FunLike F α R] [ZeroHomClass F α R] [NonnegHomClass F α 
+R] [OneHomClass F α R] {f :…
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.HeightOneSpectrum.isNonarchimedean_adicAbv`：isNonarchimedean
+_adicAbv : IsNonarchimedean (adicAbv K v)
 
-English:
-theorem adicAbv_natCast_le_one
-  given: (n : Nat)
-  statement: adicAbv K v n <= 1
-  proof: (isNonarchimedean_adicAbv K v).apply_natCast_le_one
-
-中文:
-定理 adicAbv_natCast_le_one
-  条件: (n : 自然数)
-  结论: adicAbv K v n <= 1
-  证明: (isNonarchimedean_adicAbv K v).apply_natCast_le_one
-
-Depends on / 依赖: apply_natCast_le_one, isNonarchimedean_adicAbv
+--- 原说明 ---
+The `v`-adic absolute value of a natural number is `≤ 1`.
 -/
-theorem adicAbv_natCast_le_one (n : Nat) : adicAbv K v n <= 1 :=
+theorem adicAbv_natCast_le_one (n : ℕ) : adicAbv K v n ≤ 1 :=
   (isNonarchimedean_adicAbv K v).apply_natCast_le_one
 
-/--
-theorem `adicAbv_intCast_le_one` / 定理 `adicAbv_intCast_le_one`
+/-- The `v`-adic absolute value of an integer is `≤ 1`. -/
+/-
+**NumberField.HeightOneSpectrum.adicAbv_intCast_le_one** 是 Mathlib 中的一个定理，位于命名空间
+ `NumberField.HeightOneSpectrum`。
+形式化陈述：adicAbv_intCast_le_one (n : Int) : adicAbv K v n <= 1
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsNonarchimedean.apply_intCast_le_one`：apply_intCast_le_one [IsStrictOrd
+eredRing R] {F α : Type*} [AddGroupWithOne α] [FunLike F α R] [AddGroupSeminormC
+lass F α R] [OneHomClass F …
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.HeightOneSpectrum.isNonarchimedean_adicAbv`：isNonarchimedean
+_adicAbv : IsNonarchimedean (adicAbv K v)
 
-English:
-theorem adicAbv_intCast_le_one
-  given: (n : Int)
-  statement: adicAbv K v n <= 1
-  proof: (isNonarchimedean_adicAbv K v).apply_intCast_le_one
-
-中文:
-定理 adicAbv_intCast_le_one
-  条件: (n : 整数)
-  结论: adicAbv K v n <= 1
-  证明: (isNonarchimedean_adicAbv K v).apply_intCast_le_one
-
-Depends on / 依赖: apply_intCast_le_one, isNonarchimedean_adicAbv
+--- 原说明 ---
+The `v`-adic absolute value of an integer is `≤ 1`.
 -/
-theorem adicAbv_intCast_le_one (n : Int) : adicAbv K v n <= 1 :=
+theorem adicAbv_intCast_le_one (n : ℤ) : adicAbv K v n ≤ 1 :=
   (isNonarchimedean_adicAbv K v).apply_intCast_le_one
 
 set_option linter.dupNamespace false in
@@ -601,26 +522,54 @@ end HeightOneSpectrum
 open HeightOneSpectrum Valuation.IsRankOneDiscrete
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `FinitePlace.norm_def` / 定理 `FinitePlace.norm_def`
+/-- The norm of an element in the `v`-adic completion of `K`. See `FinitePlace.norm_embedding`
+for the equality involving `‖embedding v x‖` on the LHS. -/
+/-
+**NumberField.FinitePlace.norm_def** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Finite
+Place`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] (x : IsDedekindDomain.HeightOneSpectrum.adicCompletion K 
+v),   ‖x‖ = ↑((WithZeroMulInt.toNNReal ⋯) (Valued.v x))
+参数：v : IsDedekindDomain.HeightOneSpectrum R；x : IsDedekindDomain.HeightOneSpectr
+um.adicCompletion K v；(WithZeroMulInt.toNNReal ⋯) (Valued.v x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `NumberField.HeightOneSpectrum.absNorm_ne_zero`：absNorm_ne_zero : (absNor
+m v.asIdeal : Real>=0) != 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `OrderMonoidIso.instMulEquivClass`：∀ {α : Type u_2} {β : Type u_3} [inst 
+: Preorder α] [inst_1 : Preorder β] [inst_2 : Mul α] [inst_3 : Mul β],   MulEqui
+vClass (α ≃*o β) α β
+· 使用定理 `NumberField.instIsRankOneDiscreteWithZeroMultiplicativeIntAdicCompletion
+V`：∀ {K : Type u_1} [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [inst_
+2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFr…
+· 使用引理 `Valuation.IsRankOneDiscrete.valueGroup₀_equiv_withZeroMulInt_restrict_ap
+ply_of_surjective`：valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
+ (hsurj : Function.Surjective v) (x : R) : (valueGroup₀_equiv_withZeroMulInt v)…
+· 使用引理 `IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_surjective`：valu
+edAdicCompletion_surjective : Function.Surjective (Valued.v : (v.adicCompletion 
+K) -> Intᵐ⁰)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem FinitePlace.norm_def
-  given: (x : v.adicCompletion K)
-  proof: by
-  simp [Valued.toNormedField.norm_def, Valuation.RankOne.hom, HeightOneSpectrum.rankOne_hom'_def,
-    valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
-      (valuedAdicCompletion_surjective K v)]
-
-中文:
-定理 FinitePlace.norm_def
-  条件: (x : v.adicCompletion K)
-  证明: by
-  simp [Valued.toNormedField.norm_def, Valuation.RankOne.hom, HeightOneSpectrum.rankOne_hom'_def,
-    valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
-      (valuedAdicCompletion_surjective K v)]
-
-Depends on / 依赖: HeightOneSpectrum, HeightOneSpectrum.rankOne_hom, RankOne, Valuation, Valuation.RankOne.hom, Valued, Valued.toNormedField.norm_def, _def, norm_def, rankOne_hom, toNormedField, valuedAdicCompletion_surjective
+--- 原说明 ---
+The norm of an element in the `v`-adic completion of `K`. See `FinitePlace.norm_
+embedding`
+for the equality involving `‖embedding v x‖` on the LHS.
 -/
 theorem FinitePlace.norm_def (x : v.adicCompletion K) :
     ‖x‖ = toNNReal (absNorm_ne_zero v) (Valued.v x) := by
@@ -628,75 +577,123 @@ theorem FinitePlace.norm_def (x : v.adicCompletion K) :
     valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
       (valuedAdicCompletion_surjective K v)]
 
-/--
-theorem `FinitePlace.norm_embedding` / 定理 `FinitePlace.norm_embedding`
+/-- The norm of the image after the embedding associated to `v` is equal to the `v`-adic absolute
+value. -/
+/-
+**NumberField.FinitePlace.norm_embedding** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.
+FinitePlace`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] (x : K),   ‖(NumberField.FinitePlace.embedding v) x‖ = (N
+umberField.HeightOneSpectrum.adicAbv K v) x
+参数：v : IsDedekindDomain.HeightOneSpectrum R；x : K；NumberField.FinitePlace.embedd
+ing v；NumberField.HeightOneSpectrum.adicAbv K v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `NumberField.HeightOneSpectrum.absNorm_ne_zero`：absNorm_ne_zero : (absNor
+m v.asIdeal : Real>=0) != 0
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithVal.equiv_symm_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : Linea
+rOrderedCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (ofVal : 
+R), (WithVal.e…
+· 使用定理 `NumberField.FinitePlace.norm_def`：∀ {K : Type u_1} [inst : Field K] {R :
+ Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDedekindDo
+main R] [inst_4 : IsFr…
+· 使用定理 `Valued.valuedCompletion_apply`：valuedCompletion_apply (x : K) : Valued.v
+ (x : hat K) = v x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem FinitePlace.norm_embedding
-  given: (x : K)
-  statement: ‖embedding v x‖ = adicAbv K v x
-  proof: by
-  simp [norm_def, embedding_apply, adicAbv_def]
-
-中文:
-定理 FinitePlace.norm_embedding
-  条件: (x : K)
-  结论: ‖embedding v x‖ = adicAbv K v x
-  证明: by
-  simp [norm_def, embedding_apply, adicAbv_def]
-
-Depends on / 依赖: adicAbv_def, embedding_apply, norm_def
+--- 原说明 ---
+The norm of the image after the embedding associated to `v` is equal to the `v`-
+adic absolute
+value.
 -/
 theorem FinitePlace.norm_embedding (x : K) : ‖embedding v x‖ = adicAbv K v x := by
   simp [norm_def, embedding_apply, adicAbv_def]
 
-/--
-theorem `FinitePlace.norm_embedding'` / 定理 `FinitePlace.norm_embedding'`
+/-- The norm of the image after the embedding associated to `v` is equal to the norm of `v` raised
+to the power of the `v`-adic valuation. -/
+/-
+**NumberField.FinitePlace.norm_embedding'** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.FinitePlace`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] (x : K),   ‖(NumberField.FinitePlace.embedding v) x‖ =   
+  ↑((WithZeroMulInt.toNNReal ⋯) ((IsDedekindDomain.HeightOneSpectrum.valuation K
+ v) x))
+参数：v : IsDedekindDomain.HeightOneSpectrum R；x : K；NumberField.FinitePlace.embedd
+ing v；(WithZeroMulInt.toNNReal ⋯) ((IsDedekindDomain.HeightOneSpectrum.valuation
+ K v) x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NumberField.HeightOneSpectrum.absNorm_ne_zero`：absNorm_ne_zero : (absNor
+m v.asIdeal : Real>=0) != 0
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.FinitePlace.norm_embedding`：∀ {K : Type u_1} [inst : Field K
+] {R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDede
+kindDomain R] [inst_4 : IsFr…
+· 使用定理 `NumberField.HeightOneSpectrum.adicAbv_def`：adicAbv_def {x : K} : adicAbv
+ K v x = toNNReal (absNorm_ne_zero v) (v.valuation K x)
 
-English:
-theorem FinitePlace.norm_embedding'
-  given: (x : K)
-  proof: by
-  rw [norm_embedding]; rw [adicAbv_def]
-
-中文:
-定理 FinitePlace.norm_embedding'
-  条件: (x : K)
-  证明: by
-  rw [norm_embedding]; rw [adicAbv_def]
-
-Depends on / 依赖: adicAbv_def, norm_embedding
+--- 原说明 ---
+The norm of the image after the embedding associated to `v` is equal to the norm
+ of `v` raised
+to the power of the `v`-adic valuation.
 -/
 theorem FinitePlace.norm_embedding' (x : K) :
     ‖embedding v x‖ = toNNReal (absNorm_ne_zero v) (v.valuation K x) := by
-  rw [norm_embedding]; rw [adicAbv_def]
+  rw [norm_embedding, adicAbv_def]
 
 variable (K)
 
-/--
-theorem `FinitePlace.norm_embedding_int` / 定理 `FinitePlace.norm_embedding_int`
+/-- The norm of the image after the embedding associated to `v` is equal to the norm of `v` raised
+to the power of the `v`-adic valuation for integers. -/
+/-
+**NumberField.FinitePlace.norm_embedding_int** 是 Mathlib 中的一个定理，位于命名空间 `NumberFi
+eld.FinitePlace`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] (x : R),   ‖(NumberField.FinitePlace.embedding v) ((algeb
+raMap R K) x)‖ = ↑((WithZeroMulInt.toNNReal ⋯) (v.intValuation x))
+参数：K : Type u_1；v : IsDedekindDomain.HeightOneSpectrum R；x : R；NumberField.Finit
+ePlace.embedding v；(algebraMap R K) x；(WithZeroMulInt.toNNReal ⋯) (v.intValuatio
+n x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `NumberField.HeightOneSpectrum.absNorm_ne_zero`：absNorm_ne_zero : (absNor
+m v.asIdeal : Real>=0) != 0
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.FinitePlace.norm_embedding`：∀ {K : Type u_1} [inst : Field K
+] {R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDede
+kindDomain R] [inst_4 : IsFr…
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_of_algebraMap`：valuation_of
+_algebraMap (r : R) : v.valuation K r = v.intValuation r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem FinitePlace.norm_embedding_int
-  given: (x : R)
-  proof: by
-  simp [norm_embedding, adicAbv_def, valuation_of_algebraMap]
-
-@[deprecated (since := "2026-03-05")] alias FinitePlace.norm_def' := FinitePlace.norm_embedding'
-@[deprecated (since := "2026-03-05")] alias FinitePlace.norm_def_int :=
-  FinitePlace.norm_embedding_int
-
-中文:
-定理 FinitePlace.norm_embedding_int
-  条件: (x : R)
-  证明: by
-  simp [norm_embedding, adicAbv_def, valuation_of_algebraMap]
-
-@[deprecated (since := "2026-03-05")] alias FinitePlace.norm_def' := FinitePlace.norm_embedding'
-@[deprecated (since := "2026-03-05")] alias FinitePlace.norm_def_int :=
-  FinitePlace.norm_embedding_int
-
-Depends on / 依赖: adicAbv_def, norm_embedding, valuation_of_algebraMap
+--- 原说明 ---
+The norm of the image after the embedding associated to `v` is equal to the norm
+ of `v` raised
+to the power of the `v`-adic valuation for integers.
 -/
 theorem FinitePlace.norm_embedding_int (x : R) :
     ‖embedding v (algebraMap _ K x)‖ = toNNReal (absNorm_ne_zero v) (v.intValuation x) := by
@@ -708,115 +705,178 @@ theorem FinitePlace.norm_embedding_int (x : R) :
 
 open FinitePlace
 
-/--
-theorem `FinitePlace.norm_le_one` / 定理 `FinitePlace.norm_le_one`
+/-- The `v`-adic norm of an integer is at most 1. -/
+/-
+**NumberField.FinitePlace.norm_le_one** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Fin
+itePlace`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] (x : R),   ‖(NumberField.FinitePlace.embedding v) ((algeb
+raMap R K) x)‖ ≤ 1
+参数：K : Type u_1；v : IsDedekindDomain.HeightOneSpectrum R；x : R；NumberField.Finit
+ePlace.embedding v；(algebraMap R K) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.FinitePlace.norm_embedding`：∀ {K : Type u_1} [inst : Field K
+] {R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDede
+kindDomain R] [inst_4 : IsFr…
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.adicAbv_coe_le_one`：adicAbv_coe_le_on
+e : v.adicAbv hb (algebraMap R K r) <= 1
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
 
-English:
-theorem FinitePlace.norm_le_one
-  given: (x : R)
-  statement: ‖embedding v (algebraMap _ K x)‖ <= 1
-  proof: by
-  rw [norm_embedding]
-  exact v.adicAbv_coe_le_one (one_lt_absNorm_nnreal v) x
-
-中文:
-定理 FinitePlace.norm_le_one
-  条件: (x : R)
-  结论: ‖embedding v (algebraMap _ K x)‖ <= 1
-  证明: by
-  rw [norm_embedding]
-  exact v.adicAbv_coe_le_one (one_lt_absNorm_nnreal v) x
-
-Depends on / 依赖: adicAbv_coe_le_one, norm_embedding, one_lt_absNorm_nnreal, v.adicAbv_coe_le_one
+--- 原说明 ---
+The `v`-adic norm of an integer is at most 1.
 -/
-theorem FinitePlace.norm_le_one (x : R) : ‖embedding v (algebraMap _ K x)‖ <= 1 := by
+theorem FinitePlace.norm_le_one (x : R) : ‖embedding v (algebraMap _ K x)‖ ≤ 1 := by
   rw [norm_embedding]
   exact v.adicAbv_coe_le_one (one_lt_absNorm_nnreal v) x
 
-/--
-theorem `FinitePlace.norm_eq_one_iff_notMem` / 定理 `FinitePlace.norm_eq_one_iff_notMem`
+/-- The `v`-adic norm of an integer is 1 if and only if it is not in the ideal. -/
+/-
+**NumberField.FinitePlace.norm_eq_one_iff_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.FinitePlace`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] (x : R),   ‖(NumberField.FinitePlace.embedding v) ((algeb
+raMap R K) x)‖ = 1 ↔ x ∉ v.asIdeal
+参数：K : Type u_1；v : IsDedekindDomain.HeightOneSpectrum R；x : R；NumberField.Finit
+ePlace.embedding v；(algebraMap R K) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.FinitePlace.norm_embedding`：∀ {K : Type u_1} [inst : Field K
+] {R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDede
+kindDomain R] [inst_4 : IsFr…
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.adicAbv_coe_eq_one_iff`：adicAbv_coe_e
+q_one_iff : v.adicAbv hb (algebraMap R K r) = 1 ↔ r ∉ v.asIdeal
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
 
-English:
-theorem FinitePlace.norm_eq_one_iff_notMem
-  given: (x : R)
-  proof: by
-  rw [norm_embedding]
-  exact v.adicAbv_coe_eq_one_iff (one_lt_absNorm_nnreal v) x
-
-中文:
-定理 FinitePlace.norm_eq_one_iff_notMem
-  条件: (x : R)
-  证明: by
-  rw [norm_embedding]
-  exact v.adicAbv_coe_eq_one_iff (one_lt_absNorm_nnreal v) x
-
-Depends on / 依赖: adicAbv_coe_eq_one_iff, norm_embedding, one_lt_absNorm_nnreal, v.adicAbv_coe_eq_one_iff
+--- 原说明 ---
+The `v`-adic norm of an integer is 1 if and only if it is not in the ideal.
 -/
 theorem FinitePlace.norm_eq_one_iff_notMem (x : R) :
     ‖embedding v (algebraMap _ K x)‖ = 1 ↔ x ∉ v.asIdeal := by
   rw [norm_embedding]
   exact v.adicAbv_coe_eq_one_iff (one_lt_absNorm_nnreal v) x
 
-/--
-theorem `FinitePlace.norm_lt_one_iff_mem` / 定理 `FinitePlace.norm_lt_one_iff_mem`
+/-- The `v`-adic norm of an integer is less than 1 if and only if it is in the ideal. -/
+/-
+**NumberField.FinitePlace.norm_lt_one_iff_mem** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.FinitePlace`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] (x : R),   ‖(NumberField.FinitePlace.embedding v) ((algeb
+raMap R K) x)‖ < 1 ↔ x ∈ v.asIdeal
+参数：K : Type u_1；v : IsDedekindDomain.HeightOneSpectrum R；x : R；NumberField.Finit
+ePlace.embedding v；(algebraMap R K) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.FinitePlace.norm_embedding`：∀ {K : Type u_1} [inst : Field K
+] {R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDede
+kindDomain R] [inst_4 : IsFr…
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.adicAbv_coe_lt_one_iff`：adicAbv_coe_l
+t_one_iff : v.adicAbv hb (algebraMap R K r) < 1 ↔ r in v.asIdeal
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
 
-English:
-theorem FinitePlace.norm_lt_one_iff_mem
-  given: (x : R)
-  proof: by
-  rw [norm_embedding]
-  exact v.adicAbv_coe_lt_one_iff (one_lt_absNorm_nnreal v) x
-
-中文:
-定理 FinitePlace.norm_lt_one_iff_mem
-  条件: (x : R)
-  证明: by
-  rw [norm_embedding]
-  exact v.adicAbv_coe_lt_one_iff (one_lt_absNorm_nnreal v) x
-
-Depends on / 依赖: adicAbv_coe_lt_one_iff, norm_embedding, one_lt_absNorm_nnreal, v.adicAbv_coe_lt_one_iff
+--- 原说明 ---
+The `v`-adic norm of an integer is less than 1 if and only if it is in the ideal
+.
 -/
 theorem FinitePlace.norm_lt_one_iff_mem (x : R) :
-    ‖embedding v (algebraMap _ K x)‖ < 1 ↔ x in v.asIdeal := by
+    ‖embedding v (algebraMap _ K x)‖ < 1 ↔ x ∈ v.asIdeal := by
   rw [norm_embedding]
   exact v.adicAbv_coe_lt_one_iff (one_lt_absNorm_nnreal v) x
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `HeightOneSpectrum.embedding_mul_absNorm` / 引理 `HeightOneSpectrum.embedding_mul_absNorm`
-
-English:
-lemma HeightOneSpectrum.embedding_mul_absNorm
-  given: {x : R} (h_x_nezero : x != 0)
-  proof: by
-  rw [maxPowDividing]; rw [map_pow]; rw [Nat.cast_pow]; rw [norm_embedding]; rw [adicAbv_def]; rw [WithZeroMulInt.toNNReal_neg_apply _ ((v.valuation K).ne_zero_iff.mpr
-      ((FaithfulSMul.algebraMap_eq_zero_iff R K).not.2 h_x_nezero))]
-  push_cast
-  rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_cast (zero_lt_one.trans (one_lt_absNorm_nnreal v)).ne']
-  norm_cast
-  rw [zpow_eq_one_iff_right₀ (Nat.cast_nonneg' _) (mod_cast (one_lt_absNorm_nnreal v).ne')]
-  simp [valuation_of_algebraMap, intValuation_if_neg, h_x_nezero]
-
-中文:
-引理 高一谱.embedding_mul_absNorm
-  条件: {x : R} (h_x_nezero : x != 0)
-  证明: by
-  rw [maxPowDividing]; rw [map_pow]; rw [Nat.cast_pow]; rw [norm_embedding]; rw [adicAbv_def]; rw [WithZeroMulInt.toNNReal_neg_apply _ ((v.valuation K).ne_zero_iff.mpr
-      ((FaithfulSMul.algebraMap_eq_zero_iff R K).not.2 h_x_nezero))]
-  push_cast
-  rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_cast (zero_lt_one.trans (one_lt_absNorm_nnreal v)).ne']
-  norm_cast
-  rw [zpow_eq_one_iff_right₀ (Nat.cast_nonneg' _) (mod_cast (one_lt_absNorm_nnreal v).ne')]
-  simp [valuation_of_algebraMap, intValuation_if_neg, h_x_nezero]
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, Nat.cast_nonneg, Nat.cast_pow, WithZeroMulInt, WithZeroMulInt.toNNReal_neg_apply, adicAbv_def, algebraMap_eq_zero_iff, cast_nonneg, cast_pow, h_x_ne, h_x_nezero, intValuation_if_neg, map_pow, maxPowDividing, mod_cast, ne_zero_iff, ne_zero_iff.mpr, norm_embedding, one_lt_absNorm_nnreal
+/-
+**NumberField.HeightOneSpectrum.embedding_mul_absNorm** 是 Mathlib 中的一个定理，位于命名空间 
+`NumberField.HeightOneSpectrum`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] {R : Type u_2} [inst_1 : CommRing R] [in
+st_2 : Algebra R K]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R K
+] (v : IsDedekindDomain.HeightOneSpectrum R)   [inst_5 : Module.Finite ℤ R] [ins
+t_6 : Module.Free ℤ R] {x : R},   x ≠ 0 →     ‖(NumberField.FinitePlace.embeddin
+g v) ((algebraMap R K) x)‖ *         ↑(Ideal.absNorm (v.maxPowDividing (Ideal.sp
+an {x}))) =       1
+参数：K : Type u_1；v : IsDedekindDomain.HeightOneSpectrum R；NumberField.FinitePlace
+.embedding v；(algebraMap R K) x；Ideal.absNorm (v.maxPowDividing (Ideal.span {x})
+)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.maxPowDividing.eq_1`：∀ {R : Type u_1}
+ [inst : CommRing R] [inst_1 : IsDedekindDomain R] (v : IsDedekindDomain.HeightO
+neSpectrum R)   (I : Ideal R), v.maxPowDivid…
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `Nat.cast_pow`：∀ {α : Type u_1} [inst : Semiring α] (m n : ℕ), ↑(m ^ n) =
+ ↑m ^ n
+· 使用定理 `NumberField.FinitePlace.norm_embedding`：∀ {K : Type u_1} [inst : Field K
+] {R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDede
+kindDomain R] [inst_4 : IsFr…
+· 使用引理 `NumberField.HeightOneSpectrum.absNorm_ne_zero`：absNorm_ne_zero : (absNor
+m v.asIdeal : Real>=0) != 0
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `NumberField.HeightOneSpectrum.adicAbv_def`：adicAbv_def {x : K} : adicAbv
+ K v x = toNNReal (absNorm_ne_zero v) (v.valuation K x)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Valuation.ne_zero_iff`：ne_zero_iff [Nontrivial Γ₀] (v : Valuation K Γ₀) 
+{x : K} : v x != 0 ↔ x != 0
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `FaithfulSMul.algebraMap_eq_zero_iff`：algebraMap_eq_zero_iff {r : R} : al
+gebraMap R A r = 0 ↔ r = 0
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `WithZeroMulInt.toNNReal_neg_apply`：toNNReal_neg_apply {e : Real>=0} (he 
+: e != 0) {x : Intᵐ⁰} (hx : x != 0) : toNNReal he x = e ^ (WithZero.unzero hx).t
+oAdd
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNReal.coe_natCast`：∀ (n : ℕ), ↑↑n = ↑n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用引理 `zpow_add₀`：zpow_add₀ (ha : a != 0) (m n : Int) : a ^ (m + n) = a ^ m * a
+ ^ n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用引理 `NumberField.HeightOneSpectrum.one_lt_absNorm_nnreal`：one_lt_absNorm_nnre
+al : 1 < (absNorm v.asIdeal : Real>=0)
+（共 48 条，此处仅展示前 30 条）
 -/
-lemma HeightOneSpectrum.embedding_mul_absNorm {x : R} (h_x_nezero : x != 0) :
+lemma HeightOneSpectrum.embedding_mul_absNorm {x : R} (h_x_nezero : x ≠ 0) :
     ‖embedding v (algebraMap _ K x)‖ * absNorm (v.maxPowDividing (span {x})) = 1 := by
-  rw [maxPowDividing]; rw [map_pow]; rw [Nat.cast_pow]; rw [norm_embedding]; rw [adicAbv_def]; rw [WithZeroMulInt.toNNReal_neg_apply _ ((v.valuation K).ne_zero_iff.mpr
+  rw [maxPowDividing, map_pow, Nat.cast_pow, norm_embedding, adicAbv_def,
+    WithZeroMulInt.toNNReal_neg_apply _ ((v.valuation K).ne_zero_iff.mpr
       ((FaithfulSMul.algebraMap_eq_zero_iff R K).not.2 h_x_nezero))]
   push_cast
-  rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_cast (zero_lt_one.trans (one_lt_absNorm_nnreal v)).ne']
+  rw [← zpow_natCast, ← zpow_add₀ <| mod_cast (zero_lt_one.trans (one_lt_absNorm_nnreal v)).ne']
   norm_cast
   rw [zpow_eq_one_iff_right₀ (Nat.cast_nonneg' _) (mod_cast (one_lt_absNorm_nnreal v).ne')]
   simp [valuation_of_algebraMap, intValuation_if_neg, h_x_nezero]
@@ -827,417 +887,366 @@ end AbsoluteValue
 
 open HeightOneSpectrum
 
-/--
-Definition of `FinitePlace` / `FinitePlace` 的定义
+/-- A finite place of a number field `K` is a place associated to an embedding into a completion
+with respect to a maximal ideal. -/
+/-
+**NumberField.FinitePlace** 是 Mathlib 中的一个定义，位于命名空间 `NumberField`。
+形式化陈述：FinitePlace (K : Type*) [Field K] [NumberField K]
+参数：K : Type*。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 
-English:
-definition FinitePlace
-  signature: (K : Type*) [Field K] [NumberField K]
-  body: {w : AbsoluteValue K Real // exists v : HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w}
-
-中文:
-定义 FinitePlace
-  签名: (K : 类型) [域 K] [数域 K]
-  定义体: {w : AbsoluteValue K Real // exists v : HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w}
-
-Depends on / 依赖: AbsoluteValue, FinitePlace, FinitePlace.embedding, HeightOneSpectrum, embedding
+--- 原说明 ---
+A finite place of a number field `K` is a place associated to an embedding into 
+a completion
+with respect to a maximal ideal.
 -/
 def FinitePlace (K : Type*) [Field K] [NumberField K] :=
-  {w : AbsoluteValue K Real // exists v : HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w}
+  {w : AbsoluteValue K ℝ // ∃ v : HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w}
 
-/--
-Definition of `FinitePlace.mk` / `FinitePlace.mk` 的定义
+/-- Return the finite place defined by a maximal ideal `v`. -/
+/-
+**NumberField.FinitePlace.mk** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.FinitePlace`
+。
+形式化陈述：{K : Type u_1} →   [inst : Field K] →     [inst_1 : NumberField K] →      
+ IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers K) → NumberField
+.FinitePlace K
+参数：NumberField.RingOfIntegers K。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 
-English:
-definition FinitePlace.mk
-  signature: [NumberField K] (v : HeightOneSpectrum (𝓞 K))
-  body: ⟨place (embedding v), ⟨v, rfl⟩⟩
-
-中文:
-定义 FinitePlace.mk
-  签名: [数域 K] (v : 高一谱 (𝓞 K))
-  定义体: ⟨place (embedding v), ⟨v, rfl⟩⟩
-
-Depends on / 依赖: IsSuccArchimedean, embedding, isPredArchimedean_of_isSuccArchimedean
+--- 原说明 ---
+Return the finite place defined by a maximal ideal `v`.
 -/
 noncomputable def FinitePlace.mk [NumberField K] (v : HeightOneSpectrum (𝓞 K)) : FinitePlace K :=
   ⟨place (embedding v), ⟨v, rfl⟩⟩
 
-/--
-Definition of `IsFinitePlace` / `IsFinitePlace` 的定义
+/-- A predicate singling out finite places among the absolute values on a number field `K`. -/
+/-
+**NumberField.IsFinitePlace** 是 Mathlib 中的一个定义，位于命名空间 `NumberField`。
+形式化陈述：IsFinitePlace [NumberField K] (w : AbsoluteValue K Real) : Prop
+参数：w : AbsoluteValue K Real。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 
-English:
-definition IsFinitePlace
-  signature: [NumberField K] (w : AbsoluteValue K Real)
-  body: exists v : IsDedekindDomain.HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w
-
-中文:
-定义 IsFinitePlace
-  签名: [数域 K] (w : 绝对值 K 实数)
-  定义体: exists v : IsDedekindDomain.HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w
-
-Depends on / 依赖: FinitePlace, FinitePlace.embedding, HeightOneSpectrum, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum, embedding
+--- 原说明 ---
+A predicate singling out finite places among the absolute values on a number fie
+ld `K`.
 -/
-def IsFinitePlace [NumberField K] (w : AbsoluteValue K Real) : Prop :=
-  exists v : IsDedekindDomain.HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w
-
-/--
-lemma `FinitePlace.isFinitePlace` / 引理 `FinitePlace.isFinitePlace`
-
-English:
-lemma FinitePlace.isFinitePlace
-  given: [NumberField K] (v : FinitePlace K)
-  statement: IsFinitePlace v.val
-  proof: by
-  simp [IsFinitePlace, v.prop]
-
-中文:
-引理 FinitePlace.isFinitePlace
-  条件: [数域 K] (v : FinitePlace K)
-  结论: IsFinitePlace v.val
-  证明: by
-  simp [IsFinitePlace, v.prop]
-
-Depends on / 依赖: IsFinitePlace, v.prop
+def IsFinitePlace [NumberField K] (w : AbsoluteValue K ℝ) : Prop :=
+  ∃ v : IsDedekindDomain.HeightOneSpectrum (𝓞 K), place (FinitePlace.embedding v) = w
+/-
+**NumberField.FinitePlace.isFinitePlace** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.F
+initePlace`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] [inst_1 : NumberField K] (v : NumberFiel
+d.FinitePlace K), NumberField.IsFinitePlace ↑v
+参数：v : NumberField.FinitePlace K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 -/
 lemma FinitePlace.isFinitePlace [NumberField K] (v : FinitePlace K) : IsFinitePlace v.val := by
   simp [IsFinitePlace, v.prop]
-
-/--
-lemma `isFinitePlace_iff` / 引理 `isFinitePlace_iff`
-
-English:
-lemma isFinitePlace_iff
-  given: [NumberField K] (v : AbsoluteValue K Real)
-  proof: ⟨fun H => ⟨⟨v, H⟩, rfl⟩, fun ⟨w, hw⟩ => hw ▸ w.isFinitePlace⟩
-
-中文:
-引理 isFinitePlace_iff
-  条件: [数域 K] (v : 绝对值 K 实数)
-  证明: ⟨fun H => ⟨⟨v, H⟩, rfl⟩, fun ⟨w, hw⟩ => hw ▸ w.isFinitePlace⟩
-
-Depends on / 依赖: isFinitePlace, w.isFinitePlace
+/-
+**NumberField.isFinitePlace_iff** 是 Mathlib 中的一个引理，位于命名空间 `NumberField`。
+形式化陈述：isFinitePlace_iff [NumberField K] (v : AbsoluteValue K Real) : IsFinitePla
+ce v ↔ exists w : FinitePlace K, w.val = v
+参数：v : AbsoluteValue K Real。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.FinitePlace.isFinitePlace`：∀ {K : Type u_1} [inst : Field K]
+ [inst_1 : NumberField K] (v : NumberField.FinitePlace K), NumberField.IsFiniteP
+lace ↑v
 -/
-lemma isFinitePlace_iff [NumberField K] (v : AbsoluteValue K Real) :
-    IsFinitePlace v ↔ exists w : FinitePlace K, w.val = v :=
-  ⟨fun H => ⟨⟨v, H⟩, rfl⟩, fun ⟨w, hw⟩ => hw ▸ w.isFinitePlace⟩
+lemma isFinitePlace_iff [NumberField K] (v : AbsoluteValue K ℝ) :
+    IsFinitePlace v ↔ ∃ w : FinitePlace K, w.val = v :=
+  ⟨fun H ↦ ⟨⟨v, H⟩, rfl⟩, fun ⟨w, hw⟩ ↦ hw ▸ w.isFinitePlace⟩
 
 namespace FinitePlace
 
 variable [NumberField K]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (FinitePlace K) K Real
-  body: w.1 x
-  coe_injective _ _ h := Subtype.ext (AbsoluteValue.ext <| congr_fun h)
-
-中文:
-实例 :
-  签名: 函数状 (FinitePlace K) K 实数
-  定义体: w.1 x
-  coe_injective _ _ h := Subtype.ext (AbsoluteValue.ext <| congr_fun h)
+/-
+**NumberField.FinitePlace.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.FinitePlace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (FinitePlace K) K Real where
+instance : FunLike (FinitePlace K) K ℝ where
   coe w x := w.1 x
   coe_injective _ _ h := Subtype.ext (AbsoluteValue.ext <| congr_fun h)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidWithZeroHomClass (FinitePlace K) K Real
-  body: w.1.map_mul
-  map_one w := w.1.map_one
-  map_zero w := w.1.map_zero
-
-中文:
-实例 :
-  签名: 带零幺半群态射类 (FinitePlace K) K 实数
-  定义体: w.1.map_mul
-  map_one w := w.1.map_one
-  map_zero w := w.1.map_zero
-
-Depends on / 依赖: map_mul
+/-
+**NumberField.FinitePlace.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.FinitePlace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MonoidWithZeroHomClass (FinitePlace K) K Real where
+instance : MonoidWithZeroHomClass (FinitePlace K) K ℝ where
   map_mul w := w.1.map_mul
   map_one w := w.1.map_one
   map_zero w := w.1.map_zero
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NonnegHomClass (FinitePlace K) K Real
-  body: w.1.nonneg
-
-@[simp]
-
-中文:
-实例 :
-  签名: Nonneg态射类 (FinitePlace K) K 实数
-  定义体: w.1.nonneg
-
-@[simp]
-
-Depends on / 依赖: nonneg
+/-
+**NumberField.FinitePlace.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.FinitePlace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NonnegHomClass (FinitePlace K) K Real where
+instance : NonnegHomClass (FinitePlace K) K ℝ where
   apply_nonneg w := w.1.nonneg
 
 @[simp]
-/--
-theorem `mk_apply` / 定理 `mk_apply`
-
-English:
-theorem mk_apply
-  given: (v : HeightOneSpectrum (𝓞 K)) (x : K)
-  statement: mk v x = ‖embedding v x‖
-  proof: rfl
-
-中文:
-定理 mk_apply
-  条件: (v : 高一谱 (𝓞 K)) (x : K)
-  结论: mk v x = ‖embedding v x‖
-  证明: rfl
+/-
+**NumberField.FinitePlace.mk_apply** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Finite
+Place`。
+形式化陈述：mk_apply (v : HeightOneSpectrum (𝓞 K)) (x : K) : mk v x = ‖embedding v x‖
+参数：v : HeightOneSpectrum (𝓞 K)；x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_apply (v : HeightOneSpectrum (𝓞 K)) (x : K) : mk v x = ‖embedding v x‖ := rfl
-
-/--
-lemma `coe_apply` / 引理 `coe_apply`
-
-English:
-lemma coe_apply
-  given: (v : FinitePlace K) (x : K)
-  statement: v x = v.val x
-  proof: rfl
-
-中文:
-引理 coe_apply
-  条件: (v : FinitePlace K) (x : K)
-  结论: v x = v.val x
-  证明: rfl
+/-
+**NumberField.FinitePlace.coe_apply** 是 Mathlib 中的一个引理，位于命名空间 `NumberField.Finit
+ePlace`。
+形式化陈述：coe_apply (v : FinitePlace K) (x : K) : v x = v.val x
+参数：v : FinitePlace K；x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_apply (v : FinitePlace K) (x : K) : v x = v.val x := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulRingNormClass (FinitePlace K) K Real
-  body: by simpa [coe_apply] using IsAbsoluteValue.abv_add' x y
-  map_neg_eq_map v x := by simp [coe_apply]
-  eq_zero_of_map_eq_zero v := by simp
-
-中文:
-实例 :
-  签名: 乘法环范数类 (FinitePlace K) K 实数
-  定义体: by simpa [coe_apply] using IsAbsoluteValue.abv_add' x y
-  map_neg_eq_map v x := by simp [coe_apply]
-  eq_zero_of_map_eq_zero v := by simp
-
-Depends on / 依赖: IsAbsoluteValue, IsAbsoluteValue.abv_add, abv_add, coe_apply, eq_zero_of_map_eq_zero, map_neg_eq_map
+/-
+**NumberField.FinitePlace.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.FinitePlace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MulRingNormClass (FinitePlace K) K Real where
+instance : MulRingNormClass (FinitePlace K) K ℝ where
   map_add_le_add v x y := by simpa [coe_apply] using IsAbsoluteValue.abv_add' x y
   map_neg_eq_map v x := by simp [coe_apply]
   eq_zero_of_map_eq_zero v := by simp
 
-/--
-Definition of `maximalIdeal` / `maximalIdeal` 的定义
+/-- For a finite place `w`, return a maximal ideal `v` such that `w = finite_place v` . -/
+/-
+**NumberField.FinitePlace.maximalIdeal** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Fi
+nitePlace`。
+形式化陈述：maximalIdeal (w : FinitePlace K) : HeightOneSpectrum (𝓞 K)
+参数：w : FinitePlace K。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 
-English:
-definition maximalIdeal
-  signature: (w : FinitePlace K)
-  body: w.2.choose
-
-@[simp]
-
-中文:
-定义 maximalIdeal
-  签名: (w : FinitePlace K)
-  定义体: w.2.choose
-
-@[simp]
+--- 原说明 ---
+For a finite place `w`, return a maximal ideal `v` such that `w = finite_place v
+` .
 -/
 noncomputable def maximalIdeal (w : FinitePlace K) : HeightOneSpectrum (𝓞 K) := w.2.choose
 
 @[simp]
-/--
-theorem `mk_maximalIdeal` / 定理 `mk_maximalIdeal`
-
-English:
-theorem mk_maximalIdeal
-  given: (w : FinitePlace K)
-  statement: mk (maximalIdeal w) = w
-  proof: Subtype.ext w.2.choose_spec
-
-@[simp]
-
-中文:
-定理 mk_maximalIdeal
-  条件: (w : FinitePlace K)
-  结论: mk (maximalIdeal w) = w
-  证明: Subtype.ext w.2.choose_spec
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, choose_spec
+/-
+**NumberField.FinitePlace.mk_maximalIdeal** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.FinitePlace`。
+形式化陈述：mk_maximalIdeal (w : FinitePlace K) : mk (maximalIdeal w) = w
+参数：w : FinitePlace K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem mk_maximalIdeal (w : FinitePlace K) : mk (maximalIdeal w) = w := Subtype.ext w.2.choose_spec
 
 @[simp]
-/--
-theorem `norm_embedding_eq` / 定理 `norm_embedding_eq`
-
-English:
-theorem norm_embedding_eq
-  given: (w : FinitePlace K) (x : K)
-  proof: by
-  conv_rhs => rw [← mk_maximalIdeal w, mk_apply]
-
-中文:
-定理 norm_embedding_eq
-  条件: (w : FinitePlace K) (x : K)
-  证明: by
-  conv_rhs => rw [← mk_maximalIdeal w, mk_apply]
-
-Depends on / 依赖: IsSuccArchimedean, LocallyFiniteOrder, SuccOrder, conv_rhs, mk_apply, mk_maximalIdeal
+/-
+**NumberField.FinitePlace.norm_embedding_eq** 是 Mathlib 中的一个定理，位于命名空间 `NumberFie
+ld.FinitePlace`。
+形式化陈述：norm_embedding_eq (w : FinitePlace K) (x : K) : ‖embedding (maximalIdeal w
+) x‖ = w x
+参数：w : FinitePlace K；x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `NumberField.RingOfIntegers.instFG`：∀ (K : Type u_1) [inst : Field K] [Nu
+mberField K], AddGroup.FG (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.FinitePlace.mk_maximalIdeal`：mk_maximalIdeal (w : FinitePlac
+e K) : mk (maximalIdeal w) = w
+· 使用定理 `NumberField.FinitePlace.mk_apply`：mk_apply (v : HeightOneSpectrum (𝓞 K))
+ (x : K) : mk v x = ‖embedding v x‖
 -/
 theorem norm_embedding_eq (w : FinitePlace K) (x : K) :
     ‖embedding (maximalIdeal w) x‖ = w x := by
   conv_rhs => rw [← mk_maximalIdeal w, mk_apply]
-
-/--
-theorem `pos_iff` / 定理 `pos_iff`
-
-English:
-theorem pos_iff
-  given: {w : FinitePlace K} {x : K}
-  statement: 0 < w x ↔ x != 0
-  proof: w.1.pos_iff
-
-@[simp]
-
-中文:
-定理 pos_iff
-  条件: {w : FinitePlace K} {x : K}
-  结论: 0 < w x ↔ x != 0
-  证明: w.1.pos_iff
-
-@[simp]
-
-Depends on / 依赖: IsPredArchimedean, LocallyFiniteOrder, PredOrder, pos_iff
+/-
+**NumberField.FinitePlace.pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.FiniteP
+lace`。
+形式化陈述：pos_iff {w : FinitePlace K} {x : K} : 0 < w x ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbsoluteValue.pos_iff`：∀ {R : Type u_5} {S : Type u_6} [inst : Semiring 
+R] [inst_1 : Semiring S] [inst_2 : PartialOrder S]   (abv : AbsoluteValue R S) {
+x : R}, 0 <…
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
 -/
-theorem pos_iff {w : FinitePlace K} {x : K} : 0 < w x ↔ x != 0 := w.1.pos_iff
+theorem pos_iff {w : FinitePlace K} {x : K} : 0 < w x ↔ x ≠ 0 := w.1.pos_iff
 
 @[simp]
-/--
-theorem `mk_eq_iff` / 定理 `mk_eq_iff`
-
-English:
-theorem mk_eq_iff
-  given: {v₁ v₂ : HeightOneSpectrum (𝓞 K)}
-  statement: mk v₁ = mk v₂ ↔ v₁ = v₂
-  proof: by
-  refine ⟨?_, fun a => by rw [a]⟩
-  contrapose!
-  intro h
-  rw [DFunLike.ne_iff]
-  have ⟨x, hx1, hx2⟩ : exists x : 𝓞 K, x in v₁.asIdeal ∧ x ∉ v₂.asIdeal := by
-    by_contra! H
-exact h HeightOneSpectrum.ext_iff.mpr IsMaximal.eq_of_le (isMaximal v₁) IsPrime.ne_top' H
-  use x
-  simp only [mk_apply]
-  rw [← norm_lt_one_iff_mem K] at hx1
-  rw [← norm_eq_one_iff_notMem K] at hx2
-  linarith
-
-中文:
-定理 mk_eq_iff
-  条件: {v₁ v₂ : 高一谱 (𝓞 K)}
-  结论: mk v₁ = mk v₂ ↔ v₁ = v₂
-  证明: by
-  refine ⟨?_, fun a => by rw [a]⟩
-  contrapose!
-  intro h
-  rw [DFunLike.ne_iff]
-  have ⟨x, hx1, hx2⟩ : exists x : 𝓞 K, x in v₁.asIdeal ∧ x ∉ v₂.asIdeal := by
-    by_contra! H
-exact h HeightOneSpectrum.ext_iff.mpr IsMaximal.eq_of_le (isMaximal v₁) IsPrime.ne_top' H
-  use x
-  simp only [mk_apply]
-  rw [← norm_lt_one_iff_mem K] at hx1
-  rw [← norm_eq_one_iff_notMem K] at hx2
-  linarith
-
-Depends on / 依赖: DFunLike, DFunLike.ne_iff, HeightOneSpectrum, HeightOneSpectrum.ext_iff.mpr, IsMaximal, IsMaximal.eq_of_le, IsPrime, IsPrime.ne_top, asIdeal, contrapose, eq_of_le, ext_iff, isMaximal, mk_apply, ne_iff, ne_top, norm_eq_one_iff_notMem, norm_lt_one_iff_mem
+/-
+**NumberField.FinitePlace.mk_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Finit
+ePlace`。
+形式化陈述：mk_eq_iff {v₁ v₂ : HeightOneSpectrum (𝓞 K)} : mk v₁ = mk v₂ ↔ v₁ = v₂
+参数：𝓞 K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFunLike.ne_iff`：ne_iff {f g : F} : f != g ↔ exists a, f a != g a
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.ext_iff`：∀ {R : Type u_1} {inst : Com
+mRing R} {x y : IsDedekindDomain.HeightOneSpectrum R}, x = y ↔ x.asIdeal = y.asI
+deal
+· 使用定理 `Ideal.IsMaximal.eq_of_le`：∀ {α : Type u} [inst : Semiring α] {I J : Idea
+l α}, I.IsMaximal → J ≠ ⊤ → I ≤ J → I = J
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `Ideal.IsPrime.ne_top'`：∀ {α : Type u} {inst : Semiring α} {I : Ideal α} 
+[self : I.IsPrime], I ≠ ⊤
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.isPrime`：∀ {R : Type u_1} [inst : Com
+mRing R] (self : IsDedekindDomain.HeightOneSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Not.intro`：∀ {a : Prop}, (a → False) → ¬a
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `NumberField.RingOfIntegers.instFG`：∀ (K : Type u_1) [inst : Field K] [Nu
+mberField K], AddGroup.FG (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+（共 55 条，此处仅展示前 30 条）
 -/
 theorem mk_eq_iff {v₁ v₂ : HeightOneSpectrum (𝓞 K)} : mk v₁ = mk v₂ ↔ v₁ = v₂ := by
-  refine ⟨?_, fun a => by rw [a]⟩
+  refine ⟨?_, fun a ↦ by rw [a]⟩
   contrapose!
   intro h
   rw [DFunLike.ne_iff]
-  have ⟨x, hx1, hx2⟩ : exists x : 𝓞 K, x in v₁.asIdeal ∧ x ∉ v₂.asIdeal := by
+  have ⟨x, hx1, hx2⟩ : ∃ x : 𝓞 K, x ∈ v₁.asIdeal ∧ x ∉ v₂.asIdeal := by
     by_contra! H
-exact h HeightOneSpectrum.ext_iff.mpr IsMaximal.eq_of_le (isMaximal v₁) IsPrime.ne_top' H
+    exact h <| HeightOneSpectrum.ext_iff.mpr <| IsMaximal.eq_of_le (isMaximal v₁) IsPrime.ne_top' H
   use x
   simp only [mk_apply]
   rw [← norm_lt_one_iff_mem K] at hx1
   rw [← norm_eq_one_iff_notMem K] at hx2
   linarith
-
-/--
-theorem `maximalIdeal_mk` / 定理 `maximalIdeal_mk`
-
-English:
-theorem maximalIdeal_mk
-  given: (v : HeightOneSpectrum (𝓞 K))
-  statement: maximalIdeal (mk v) = v
-  proof: by
-  rw [← mk_eq_iff]; rw [mk_maximalIdeal]
-
-中文:
-定理 maximalIdeal_mk
-  条件: (v : 高一谱 (𝓞 K))
-  结论: maximalIdeal (mk v) = v
-  证明: by
-  rw [← mk_eq_iff]; rw [mk_maximalIdeal]
-
-Depends on / 依赖: mk_eq_iff, mk_maximalIdeal
+/-
+**NumberField.FinitePlace.maximalIdeal_mk** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.FinitePlace`。
+形式化陈述：maximalIdeal_mk (v : HeightOneSpectrum (𝓞 K)) : maximalIdeal (mk v) = v
+参数：v : HeightOneSpectrum (𝓞 K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.FinitePlace.mk_eq_iff`：mk_eq_iff {v₁ v₂ : HeightOneSpectrum 
+(𝓞 K)} : mk v₁ = mk v₂ ↔ v₁ = v₂
+· 使用定理 `NumberField.FinitePlace.mk_maximalIdeal`：mk_maximalIdeal (w : FinitePlac
+e K) : mk (maximalIdeal w) = w
 -/
 theorem maximalIdeal_mk (v : HeightOneSpectrum (𝓞 K)) : maximalIdeal (mk v) = v := by
-  rw [← mk_eq_iff]; rw [mk_maximalIdeal]
+  rw [← mk_eq_iff, mk_maximalIdeal]
 
 /-- The equivalence between finite places and maximal ideals. -/
 @[simps apply]
-/--
-Definition of `equivHeightOneSpectrum` / `equivHeightOneSpectrum` 的定义
+/-
+**NumberField.FinitePlace.equivHeightOneSpectrum** 是 Mathlib 中的一个定义，位于命名空间 `Numb
+erField.FinitePlace`。
+形式化陈述：equivHeightOneSpectrum : FinitePlace K ≃ HeightOneSpectrum (𝓞 K) where toF
+un
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.FinitePlace.mk_maximalIdeal`：mk_maximalIdeal (w : FinitePlac
+e K) : mk (maximalIdeal w) = w
+· 使用定理 `NumberField.FinitePlace.maximalIdeal_mk`：maximalIdeal_mk (v : HeightOneS
+pectrum (𝓞 K)) : maximalIdeal (mk v) = v
 
-English:
-definition equivHeightOneSpectrum
-  signature: :
-  body: maximalIdeal
-  invFun := mk
-  left_inv := mk_maximalIdeal
-  right_inv := maximalIdeal_mk
-
-中文:
-定义 equivHeightOneSpectrum
-  签名: :
-  定义体: maximalIdeal
-  invFun := mk
-  left_inv := mk_maximalIdeal
-  right_inv := maximalIdeal_mk
-
-Depends on / 依赖: maximalIdeal
+--- 原说明 ---
+The equivalence between finite places and maximal ideals.
 -/
 noncomputable def equivHeightOneSpectrum :
     FinitePlace K ≃ HeightOneSpectrum (𝓞 K) where
@@ -1245,99 +1254,89 @@ noncomputable def equivHeightOneSpectrum :
   invFun := mk
   left_inv := mk_maximalIdeal
   right_inv := maximalIdeal_mk
-
-/--
-lemma `maximalIdeal_injective` / 引理 `maximalIdeal_injective`
-
-English:
-lemma maximalIdeal_injective
-  statement: (fun w : FinitePlace K => maximalIdeal w).Injective
-  proof: equivHeightOneSpectrum.injective
-
-中文:
-引理 maximalIdeal_injective
-  结论: (fun w : FinitePlace K => maximalIdeal w).单射
-  证明: equivHeightOneSpectrum.injective
-
-Depends on / 依赖: equivHeightOneSpectrum, equivHeightOneSpectrum.injective, injective
+/-
+**NumberField.FinitePlace.maximalIdeal_injective** 是 Mathlib 中的一个引理，位于命名空间 `Numb
+erField.FinitePlace`。
+形式化陈述：maximalIdeal_injective : (fun w : FinitePlace K => maximalIdeal w).Injecti
+ve
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-lemma maximalIdeal_injective : (fun w : FinitePlace K => maximalIdeal w).Injective :=
+lemma maximalIdeal_injective : (fun w : FinitePlace K ↦ maximalIdeal w).Injective :=
   equivHeightOneSpectrum.injective
-
-/--
-lemma `maximalIdeal_inj` / 引理 `maximalIdeal_inj`
-
-English:
-lemma maximalIdeal_inj
-  given: (w₁ w₂ : FinitePlace K)
-  statement: maximalIdeal w₁ = maximalIdeal w₂ ↔ w₁ = w₂
-  proof: equivHeightOneSpectrum.injective.eq_iff
-
-@[fun_prop]
-
-中文:
-引理 maximalIdeal_inj
-  条件: (w₁ w₂ : FinitePlace K)
-  结论: maximalIdeal w₁ = maximalIdeal w₂ ↔ w₁ = w₂
-  证明: equivHeightOneSpectrum.injective.eq_iff
-
-@[fun_prop]
-
-Depends on / 依赖: eq_iff, equivHeightOneSpectrum, equivHeightOneSpectrum.injective.eq_iff, injective
+/-
+**NumberField.FinitePlace.maximalIdeal_inj** 是 Mathlib 中的一个引理，位于命名空间 `NumberFiel
+d.FinitePlace`。
+形式化陈述：maximalIdeal_inj (w₁ w₂ : FinitePlace K) : maximalIdeal w₁ = maximalIdeal 
+w₂ ↔ w₁ = w₂
+参数：w₁ w₂ : FinitePlace K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma maximalIdeal_inj (w₁ w₂ : FinitePlace K) : maximalIdeal w₁ = maximalIdeal w₂ ↔ w₁ = w₂ :=
   equivHeightOneSpectrum.injective.eq_iff
 
 @[fun_prop]
-/--
-theorem `hasFiniteMulSupport_int` / 定理 `hasFiniteMulSupport_int`
-
-English:
-theorem hasFiniteMulSupport_int
-  given: {x : 𝓞 K} (h_x_nezero : x != 0)
-  proof: by
-  have (w : FinitePlace K) : w x != 1 ↔ w x < 1 :=
-ne_iff_lt_iff_le.mpr norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
-  simp_rw [Function.HasFiniteMulSupport, Function.mulSupport, this, ← norm_embedding_eq,
-    norm_lt_one_iff_mem, ← Ideal.dvd_span_singleton]
-  have h : {v : HeightOneSpectrum (𝓞 K) | v.asIdeal ∣ span {x}}.Finite := by
-    apply Ideal.finite_factors
-    simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot, h_x_nezero, not_false_eq_true]
-  have h_inj : Set.InjOn FinitePlace.maximalIdeal {w | w.maximalIdeal.asIdeal ∣ span {x}} :=
-    Function.Injective.injOn maximalIdeal_injective
-  refine (h.subset ?_).of_finite_image h_inj
-  simp only [dvd_span_singleton, Set.image_subset_iff, Set.preimage_ofPred_eq, subset_refl]
-
-@[deprecated (since := "2026-03-03")] alias mulSupport_finite_int := hasFiniteMulSupport_int
-
-@[fun_prop]
-
-中文:
-定理 hasFiniteMulSupport_int
-  条件: {x : 𝓞 K} (h_x_nezero : x != 0)
-  证明: by
-  have (w : FinitePlace K) : w x != 1 ↔ w x < 1 :=
-ne_iff_lt_iff_le.mpr norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
-  simp_rw [Function.HasFiniteMulSupport, Function.mulSupport, this, ← norm_embedding_eq,
-    norm_lt_one_iff_mem, ← Ideal.dvd_span_singleton]
-  have h : {v : HeightOneSpectrum (𝓞 K) | v.asIdeal ∣ span {x}}.Finite := by
-    apply Ideal.finite_factors
-    simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot, h_x_nezero, not_false_eq_true]
-  have h_inj : Set.InjOn FinitePlace.maximalIdeal {w | w.maximalIdeal.asIdeal ∣ span {x}} :=
-    Function.Injective.injOn maximalIdeal_injective
-  refine (h.subset ?_).of_finite_image h_inj
-  simp only [dvd_span_singleton, Set.image_subset_iff, Set.preimage_ofPred_eq, subset_refl]
-
-@[deprecated (since := "2026-03-03")] alias mulSupport_finite_int := hasFiniteMulSupport_int
-
-@[fun_prop]
-
-Depends on / 依赖: Finite, FinitePlace, FinitePlace.maxi, Function, Function.HasFiniteMulSupport, Function.mulSupport, HasFiniteMulSupport, HeightOneSpectrum, Ideal.dvd_span_singleton, Ideal.finite_factors, Set.InjOn, Submodule, Submodule.zero_eq_bot, asIdeal, dvd_span_singleton, finite_factors, h_inj, h_x_nezero, maximalIdeal, mulSupport
+/-
+**NumberField.FinitePlace.hasFiniteMulSupport_int** 是 Mathlib 中的一个定理，位于命名空间 `Num
+berField.FinitePlace`。
+形式化陈述：hasFiniteMulSupport_int {x : 𝓞 K} (h_x_nezero : x != 0) : (fun w : FiniteP
+lace K => w x).HasFiniteMulSupport
+参数：h_x_nezero : x != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ne_iff_lt_iff_le`：ne_iff_lt_iff_le : (a != b ↔ a < b) ↔ a <= b
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `NumberField.RingOfIntegers.instFG`：∀ (K : Type u_1) [inst : Field K] [Nu
+mberField K], AddGroup.FG (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.FinitePlace.norm_le_one`：∀ (K : Type u_1) [inst : Field K] {
+R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [inst_3 : IsDedekin
+dDomain R] [inst_4 : IsFr…
+· 使用定理 `NumberField.FinitePlace.norm_embedding_eq`：norm_embedding_eq (w : Finite
+Place K) (x : K) : ‖embedding (maximalIdeal w) x‖ = w x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.finite_factors`：Ideal.finite_factors {I : Ideal R} (hI : I != 0) :
+ {v : HeightOneSpectrum R | v.asIdeal ∣ I}.Finite
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用引理 `NumberField.FinitePlace.maximalIdeal_injective`：maximalIdeal_injective :
+ (fun w : FinitePlace K => maximalIdeal w).Injective
+· 使用定理 `Set.Finite.of_finite_image`：∀ {α : Type u} {β : Type v} {s : Set α} {f :
+ α → β}, (f '' s).Finite → Set.InjOn f s → s.Finite
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-theorem hasFiniteMulSupport_int {x : 𝓞 K} (h_x_nezero : x != 0) :
-    (fun w : FinitePlace K => w x).HasFiniteMulSupport := by
-  have (w : FinitePlace K) : w x != 1 ↔ w x < 1 :=
-ne_iff_lt_iff_le.mpr norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
+theorem hasFiniteMulSupport_int {x : 𝓞 K} (h_x_nezero : x ≠ 0) :
+    (fun w : FinitePlace K ↦ w x).HasFiniteMulSupport := by
+  have (w : FinitePlace K) : w x ≠ 1 ↔ w x < 1 :=
+    ne_iff_lt_iff_le.mpr <| norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
   simp_rw [Function.HasFiniteMulSupport, Function.mulSupport, this, ← norm_embedding_eq,
     norm_lt_one_iff_mem, ← Ideal.dvd_span_singleton]
   have h : {v : HeightOneSpectrum (𝓞 K) | v.asIdeal ∣ span {x}}.Finite := by
@@ -1351,37 +1350,51 @@ ne_iff_lt_iff_le.mpr norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
 @[deprecated (since := "2026-03-03")] alias mulSupport_finite_int := hasFiniteMulSupport_int
 
 @[fun_prop]
-/--
-theorem `hasFiniteMulSupport` / 定理 `hasFiniteMulSupport`
-
-English:
-theorem hasFiniteMulSupport
-  given: {x : K} (h_x_nezero : x != 0)
-  proof: by
-  rcases IsFractionRing.div_surjective (𝓞 K) x with ⟨a, b, hb, rfl⟩
-  simp_all only [ne_eq, div_eq_zero_iff, FaithfulSMul.algebraMap_eq_zero_iff, not_or, map_div₀]
-  obtain ⟨ha, hb⟩ := h_x_nezero
-  simp_rw [← RingOfIntegers.coe_eq_algebraMap]
-  fun_prop
-
-@[deprecated (since := "2026-03-03")] alias mulSupport_finite := hasFiniteMulSupport
-
-中文:
-定理 hasFiniteMulSupport
-  条件: {x : K} (h_x_nezero : x != 0)
-  证明: by
-  rcases IsFractionRing.div_surjective (𝓞 K) x with ⟨a, b, hb, rfl⟩
-  simp_all only [ne_eq, div_eq_zero_iff, FaithfulSMul.algebraMap_eq_zero_iff, not_or, map_div₀]
-  obtain ⟨ha, hb⟩ := h_x_nezero
-  simp_rw [← RingOfIntegers.coe_eq_algebraMap]
-  fun_prop
-
-@[deprecated (since := "2026-03-03")] alias mulSupport_finite := hasFiniteMulSupport
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, IsFractionRing, IsFractionRing.div_surjective, RingOfIntegers, RingOfIntegers.coe_eq_algebraMap, algebraMap_eq_zero_iff, coe_eq_algebraMap, div_eq_zero_iff, div_surjective, fun_prop, h_x_nezero, ne_eq, not_or, simp_rw
+/-
+**NumberField.FinitePlace.hasFiniteMulSupport** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.FinitePlace`。
+形式化陈述：hasFiniteMulSupport {x : K} (h_x_nezero : x != 0) : (fun w : FinitePlace K
+ => w x).HasFiniteMulSupport
+参数：h_x_nezero : x != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFractionRing.div_surjective`：div_surjective (z : K) : exists x y : A, 
+y in nonZeroDivisors A ∧ algebraMap _ _ x / algebraMap _ _ y = z
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `NumberField.FinitePlace.instMonoidWithZeroHomClassReal`：∀ {K : Type u_1}
+ [inst : Field K] [inst_1 : NumberField K], MonoidWithZeroHomClass (NumberField.
+FinitePlace K) K ℝ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.RingOfIntegers.instIsTorsionFree_2`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   Module.IsT
+orsionFree (NumberField.RingOfIntege…
+· 使用定理 `Function.HasFiniteMulSupport.fun_div`：∀ {α : Type u_1} {M : Type u_3} [i
+nst : DivisionMonoid M] {f g : α → M},   Function.HasFiniteMulSupport f → Functi
+on.HasFiniteMulSupport g →…
+· 使用定理 `NumberField.FinitePlace.hasFiniteMulSupport_int`：hasFiniteMulSupport_int
+ {x : 𝓞 K} (h_x_nezero : x != 0) : (fun w : FinitePlace K => w x).HasFiniteMulSu
+pport
 -/
-theorem hasFiniteMulSupport {x : K} (h_x_nezero : x != 0) :
-    (fun w : FinitePlace K => w x).HasFiniteMulSupport := by
+theorem hasFiniteMulSupport {x : K} (h_x_nezero : x ≠ 0) :
+    (fun w : FinitePlace K ↦ w x).HasFiniteMulSupport := by
   rcases IsFractionRing.div_surjective (𝓞 K) x with ⟨a, b, hb, rfl⟩
   simp_all only [ne_eq, div_eq_zero_iff, FaithfulSMul.algebraMap_eq_zero_iff, not_or, map_div₀]
   obtain ⟨ha, hb⟩ := h_x_nezero
@@ -1389,111 +1402,87 @@ theorem hasFiniteMulSupport {x : K} (h_x_nezero : x != 0) :
   fun_prop
 
 @[deprecated (since := "2026-03-03")] alias mulSupport_finite := hasFiniteMulSupport
-
-/--
-lemma `hasFiniteMulSupport_fun_pow_multiplicity` / 引理 `hasFiniteMulSupport_fun_pow_multiplicity`
-
-English:
-lemma hasFiniteMulSupport_fun_pow_multiplicity
-  statement: {M : Type*} [CommMonoid M] {I : Ideal (𝓞 K)}
-  proof: UniqueFactorizationMonoid.hasFiniteMulSupport_fun_pow_multiplicity _
-    (asIdeal_injective.comp maximalIdeal_injective) (fun v => v.maximalIdeal.irreducible) hI
-
-protected
-
-中文:
-引理 hasFiniteMulSupport_fun_pow_multiplicity
-  结论: {M : 类型} [交换幺半群 M] {I : 理想 (𝓞 K)}
-  证明: UniqueFactorizationMonoid.hasFiniteMulSupport_fun_pow_multiplicity _
-    (asIdeal_injective.comp maximalIdeal_injective) (fun v => v.maximalIdeal.irreducible) hI
-
-protected
-
-Depends on / 依赖: UniqueFactorizationMonoid, UniqueFactorizationMonoid.hasFiniteMulSupport_fun_pow_multiplicity, asIdeal_injective, asIdeal_injective.comp, hasFiniteMulSupport_fun_pow_multiplicity, irreducible, maximalIdeal, maximalIdeal_injective, v.maximalIdeal.irreducible
+/-
+**NumberField.FinitePlace.hasFiniteMulSupport_fun_pow_multiplicity** 是 Mathlib 中
+的一个引理，位于命名空间 `NumberField.FinitePlace`。
+形式化陈述：hasFiniteMulSupport_fun_pow_multiplicity {M : Type*} [CommMonoid M] {I : I
+deal (𝓞 K)} (hI : I != ⊥) (f : Ideal (𝓞 K) -> M) : (fun v : FinitePlace K => f v
+.maximalIdeal.asIdeal ^ multiplicity v.maximalIdeal.asIdeal I).HasFiniteMulSuppo
+rt
+参数：𝓞 K；hI : I != ⊥；f : Ideal (𝓞 K) -> M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `UniqueFactorizationMonoid.hasFiniteMulSupport_fun_pow_multiplicity`：hasF
+initeMulSupport_fun_pow_multiplicity {α M : Type*} [CommMonoid M] [Subsingleton 
+Rˣ] (f : α -> M) {g : α -> R} (hgi : g.Injective) (hg : …
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用引理 `IsDedekindDomain.HeightOneSpectrum.asIdeal_injective`：asIdeal_injective 
+: (HeightOneSpectrum.asIdeal (R
+· 使用引理 `NumberField.FinitePlace.maximalIdeal_injective`：maximalIdeal_injective :
+ (fun w : FinitePlace K => maximalIdeal w).Injective
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.irreducible`：irreducible : Irreducibl
+e v.asIdeal
 -/
 lemma hasFiniteMulSupport_fun_pow_multiplicity {M : Type*} [CommMonoid M] {I : Ideal (𝓞 K)}
-    (hI : I != ⊥) (f : Ideal (𝓞 K) -> M) :
-    (fun v : FinitePlace K =>
+    (hI : I ≠ ⊥) (f : Ideal (𝓞 K) → M) :
+    (fun v : FinitePlace K ↦
       f v.maximalIdeal.asIdeal ^ multiplicity v.maximalIdeal.asIdeal I).HasFiniteMulSupport :=
   UniqueFactorizationMonoid.hasFiniteMulSupport_fun_pow_multiplicity _
-    (asIdeal_injective.comp maximalIdeal_injective) (fun v => v.maximalIdeal.irreducible) hI
+    (asIdeal_injective.comp maximalIdeal_injective) (fun v ↦ v.maximalIdeal.irreducible) hI
 
 protected
-/--
-lemma `add_le` / 引理 `add_le`
-
-English:
-lemma add_le
-  given: (v : FinitePlace K) (x y : K)
-  proof: by
-  obtain ⟨w, hw⟩ := v.prop
-  have H x : v x = NumberField.HeightOneSpectrum.adicAbv K w x := by
-    rw [show v x = v.val x from rfl]
-    grind only [place_apply, norm_embedding]
-  simpa only [H] using adicAbv_add_le_max K w x y
-
-中文:
-引理 add_le
-  条件: (v : FinitePlace K) (x y : K)
-  证明: by
-  obtain ⟨w, hw⟩ := v.prop
-  have H x : v x = NumberField.HeightOneSpectrum.adicAbv K w x := by
-    rw [show v x = v.val x from rfl]
-    grind only [place_apply, norm_embedding]
-  simpa only [H] using adicAbv_add_le_max K w x y
-
-Depends on / 依赖: HeightOneSpectrum, NumberField, NumberField.HeightOneSpectrum.adicAbv, adicAbv, adicAbv_add_le_max, norm_embedding, place_apply, v.prop, v.val
+/-
+**NumberField.FinitePlace.add_le** 是 Mathlib 中的一个引理，位于命名空间 `NumberField.FinitePl
+ace`。
+形式化陈述：add_le (v : FinitePlace K) (x y : K) : v (x + y) <= max (v x) (v y)
+参数：v : FinitePlace K；x y : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `NumberField.RingOfIntegers.instFG`：∀ (K : Type u_1) [inst : Field K] [Nu
+mberField K], AddGroup.FG (NumberField.RingOfIntegers K)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `NumberField.HeightOneSpectrum.adicAbv_add_le_max`：adicAbv_add_le_max (x 
+y : K) : adicAbv K v (x + y) <= (adicAbv K v x) ⊔ (adicAbv K v y)
 -/
 lemma add_le (v : FinitePlace K) (x y : K) :
-    v (x + y) <= max (v x) (v y) := by
+    v (x + y) ≤ max (v x) (v y) := by
   obtain ⟨w, hw⟩ := v.prop
   have H x : v x = NumberField.HeightOneSpectrum.adicAbv K w x := by
     rw [show v x = v.val x from rfl]
     grind only [place_apply, norm_embedding]
   simpa only [H] using adicAbv_add_le_max K w x y
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NonarchimedeanHomClass (FinitePlace K) K Real
-  body: FinitePlace.add_le v a b
-
-中文:
-实例 :
-  签名: Nonarchimedean态射类 (FinitePlace K) K 实数
-  定义体: FinitePlace.add_le v a b
-
-Depends on / 依赖: FinitePlace, FinitePlace.add_le, add_le
+/-
+**NumberField.FinitePlace.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.FinitePlace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NonarchimedeanHomClass (FinitePlace K) K Real where
+instance : NonarchimedeanHomClass (FinitePlace K) K ℝ where
   map_add_le_max v a b := FinitePlace.add_le v a b
-
-/--
-lemma `equivHeightOneSpectrum_symm_apply` / 引理 `equivHeightOneSpectrum_symm_apply`
-
-English:
-lemma equivHeightOneSpectrum_symm_apply
-  given: (v : HeightOneSpectrum (𝓞 K)) (x : K)
-  proof: rfl
-
-@[deprecated (since := "2026-03-11")]
-alias IsDedekindDomain.HeightOneSpectrum.equivHeightOneSpectrum_symm_apply :=
-  equivHeightOneSpectrum_symm_apply
-@[deprecated (since := "2026-03-11")]
-alias IsDedekindDomain.HeightOneSpectrum.embedding_mul_absNorm := embedding_mul_absNorm
-
-中文:
-引理 equivHeightOneSpectrum_symm_apply
-  条件: (v : 高一谱 (𝓞 K)) (x : K)
-  证明: rfl
-
-@[deprecated (since := "2026-03-11")]
-alias IsDedekindDomain.HeightOneSpectrum.equivHeightOneSpectrum_symm_apply :=
-  equivHeightOneSpectrum_symm_apply
-@[deprecated (since := "2026-03-11")]
-alias IsDedekindDomain.HeightOneSpectrum.embedding_mul_absNorm := embedding_mul_absNorm
+/-
+**NumberField.FinitePlace.equivHeightOneSpectrum_symm_apply** 是 Mathlib 中的一个引理，位
+于命名空间 `NumberField.FinitePlace`。
+形式化陈述：equivHeightOneSpectrum_symm_apply (v : HeightOneSpectrum (𝓞 K)) (x : K) : 
+(equivHeightOneSpectrum.symm v) x = ‖embedding v x‖
+参数：v : HeightOneSpectrum (𝓞 K)；x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma equivHeightOneSpectrum_symm_apply (v : HeightOneSpectrum (𝓞 K)) (x : K) :
     (equivHeightOneSpectrum.symm v) x = ‖embedding v x‖ := rfl
@@ -1503,56 +1492,92 @@ alias IsDedekindDomain.HeightOneSpectrum.equivHeightOneSpectrum_symm_apply :=
   equivHeightOneSpectrum_symm_apply
 @[deprecated (since := "2026-03-11")]
 alias IsDedekindDomain.HeightOneSpectrum.embedding_mul_absNorm := embedding_mul_absNorm
-
-/--
-lemma `finprod_finitePlace_pow_multiplicity` / 引理 `finprod_finitePlace_pow_multiplicity`
-
-English:
-lemma finprod_finitePlace_pow_multiplicity
-  given: {I : Ideal (𝓞 K)} (hI : I != ⊥)
-  proof: by
-  conv_rhs => rw [← finprod_heightOneSpectrum_pow_multiplicity hI]
-  simp only [← finprod_comp_equiv (equivHeightOneSpectrum (K := K)), equivHeightOneSpectrum_apply]
-
-中文:
-引理 finprod_finitePlace_pow_multiplicity
-  条件: {I : 理想 (𝓞 K)} (hI : I != ⊥)
-  证明: by
-  conv_rhs => rw [← finprod_heightOneSpectrum_pow_multiplicity hI]
-  simp only [← finprod_comp_equiv (equivHeightOneSpectrum (K := K)), equivHeightOneSpectrum_apply]
-
-Depends on / 依赖: conv_rhs, equivHeightOneSpectrum, equivHeightOneSpectrum_apply, finprod_comp_equiv, finprod_heightOneSpectrum_pow_multiplicity
+/-
+**NumberField.FinitePlace.finprod_finitePlace_pow_multiplicity** 是 Mathlib 中的一个引
+理，位于命名空间 `NumberField.FinitePlace`。
+形式化陈述：finprod_finitePlace_pow_multiplicity {I : Ideal (𝓞 K)} (hI : I != ⊥) : ∏ᶠ 
+v : FinitePlace K, v.maximalIdeal.asIdeal ^ multiplicity v.maximalIdeal.asIdeal 
+I = I
+参数：𝓞 K；hI : I != ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Ideal.finprod_heightOneSpectrum_pow_multiplicity`：Ideal.finprod_heightOn
+eSpectrum_pow_multiplicity {I : Ideal R} (hI : I != ⊥) : ∏ᶠ p : HeightOneSpectru
+m R, p.asIdeal ^ multiplicity p.asIdea…
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `finprod_comp_equiv`：finprod_comp_equiv (e : α ≃ β) {f : β -> M} : (∏ᶠ i,
+ f (e i)) = ∏ᶠ i', f i'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `NumberField.FinitePlace.equivHeightOneSpectrum_apply`：∀ {K : Type u_1} [
+inst : Field K] [inst_1 : NumberField K] (w : NumberField.FinitePlace K),   Numb
+erField.FinitePlace.equivHeightOneSpectrum…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma finprod_finitePlace_pow_multiplicity {I : Ideal (𝓞 K)} (hI : I != ⊥) :
+lemma finprod_finitePlace_pow_multiplicity {I : Ideal (𝓞 K)} (hI : I ≠ ⊥) :
     ∏ᶠ v : FinitePlace K, v.maximalIdeal.asIdeal ^ multiplicity v.maximalIdeal.asIdeal I = I := by
   conv_rhs => rw [← finprod_heightOneSpectrum_pow_multiplicity hI]
   simp only [← finprod_comp_equiv (equivHeightOneSpectrum (K := K)), equivHeightOneSpectrum_apply]
-
-/--
-lemma `apply_mul_absNorm_pow_eq_one` / 引理 `apply_mul_absNorm_pow_eq_one`
-
-English:
-lemma apply_mul_absNorm_pow_eq_one
-  given: (v : FinitePlace K) {x : 𝓞 K} (hx : x != 0)
-  proof: by
-  have hnz : span {x} != ⊥ := mt Submodule.span_singleton_eq_bot.mp hx
-  rw [← norm_embedding_eq v x]; rw [← Nat.cast_pow]; rw [← map_pow]; rw [← maxPowDividing_eq_pow_multiplicity hnz]
-  exact HeightOneSpectrum.embedding_mul_absNorm K v.maximalIdeal hx
-
-中文:
-引理 apply_mul_absNorm_pow_eq_one
-  条件: (v : FinitePlace K) {x : 𝓞 K} (hx : x != 0)
-  证明: by
-  have hnz : span {x} != ⊥ := mt Submodule.span_singleton_eq_bot.mp hx
-  rw [← norm_embedding_eq v x]; rw [← Nat.cast_pow]; rw [← map_pow]; rw [← maxPowDividing_eq_pow_multiplicity hnz]
-  exact HeightOneSpectrum.embedding_mul_absNorm K v.maximalIdeal hx
-
-Depends on / 依赖: HeightOneSpectrum, HeightOneSpectrum.embedding_mul_absNorm, Nat.cast_pow, Submodule, Submodule.span_singleton_eq_bot.mp, cast_pow, embedding_mul_absNorm, map_pow, maxPowDividing_eq_pow_multiplicity, maximalIdeal, norm_embedding_eq, span_singleton_eq_bot, v.maximalIdeal
+/-
+**NumberField.FinitePlace.apply_mul_absNorm_pow_eq_one** 是 Mathlib 中的一个引理，位于命名空间
+ `NumberField.FinitePlace`。
+形式化陈述：apply_mul_absNorm_pow_eq_one (v : FinitePlace K) {x : 𝓞 K} (hx : x != 0) :
+ v x * v.maximalIdeal.asIdeal.absNorm ^ multiplicity v.maximalIdeal.asIdeal (spa
+n {x}) = 1
+参数：v : FinitePlace K；hx : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.span_singleton_eq_bot`：span_singleton_eq_bot : R ∙ x = ⊥ ↔ x =
+ 0
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsFractionRing`：∀ {K : Type u_1} [inst : 
+Field K] [NumberField K], IsFractionRing (NumberField.RingOfIntegers K) K
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `NumberField.RingOfIntegers.instFG`：∀ (K : Type u_1) [inst : Field K] [Nu
+mberField K], AddGroup.FG (NumberField.RingOfIntegers K)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.FinitePlace.norm_embedding_eq`：norm_embedding_eq (w : Finite
+Place K) (x : K) : ‖embedding (maximalIdeal w) x‖ = w x
+· 使用定理 `Nat.cast_pow`：∀ {α : Type u_1} [inst : Semiring α] (m n : ℕ), ↑(m ^ n) =
+ ↑m ^ n
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `IsDedekindDomain.HeightOneSpectrum.maxPowDividing_eq_pow_multiplicity`：m
+axPowDividing_eq_pow_multiplicity : p.maxPowDividing I = p.asIdeal ^ multiplicit
+y p.asIdeal I
+· 使用定理 `NumberField.HeightOneSpectrum.embedding_mul_absNorm`：∀ (K : Type u_1) [i
+nst : Field K] {R : Type u_2} [inst_1 : CommRing R] [inst_2 : Algebra R K]   [in
+st_3 : IsDedekindDomain R] [inst_4 : IsFr…
 -/
-lemma apply_mul_absNorm_pow_eq_one (v : FinitePlace K) {x : 𝓞 K} (hx : x != 0) :
+lemma apply_mul_absNorm_pow_eq_one (v : FinitePlace K) {x : 𝓞 K} (hx : x ≠ 0) :
     v x * v.maximalIdeal.asIdeal.absNorm ^ multiplicity v.maximalIdeal.asIdeal (span {x}) = 1 := by
-  have hnz : span {x} != ⊥ := mt Submodule.span_singleton_eq_bot.mp hx
-  rw [← norm_embedding_eq v x]; rw [← Nat.cast_pow]; rw [← map_pow]; rw [← maxPowDividing_eq_pow_multiplicity hnz]
+  have hnz : span {x} ≠ ⊥ := mt Submodule.span_singleton_eq_bot.mp hx
+  rw [← norm_embedding_eq v x, ← Nat.cast_pow, ← map_pow, ← maxPowDividing_eq_pow_multiplicity hnz]
   exact HeightOneSpectrum.embedding_mul_absNorm K v.maximalIdeal hx
 
 end FinitePlace
@@ -1571,46 +1596,20 @@ local notation "Kv" => v.adicCompletion K
 local notation "Lw" => w.adicCompletion L
 
 open scoped TensorProduct Valued in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module.Finite Kv Lw
-  body: let Φ : Kv otimes[K] L ->ₗ[Kv] Lw := Algebra.TensorProduct.lift (Algebra.algHom Kv Kv Lw)
-.toLinearMap (Algebra.algHom K L Lw) (fun _ _ => mul_comm ..)
-  have h_dense : DenseRange Φ := by
-    apply (w.denseRange_algebraMap L).mono
-    rintro _ ⟨l, rfl⟩
-    exact ⟨1 otimesₜ l, by simp [Φ, Algebra.algHom]⟩
-  .of_surjective Φ (by
-    rw [← Set.range_eq_univ]; rw [← Φ.coe_range]; rw [← Φ.range.closed_of_finiteDimensional.closure_eq]
-    exact h_dense.closure_range)
-
-中文:
-实例 :
-  签名: 模.有限 Kv Lw
-  定义体: let Φ : Kv otimes[K] L ->ₗ[Kv] Lw := Algebra.TensorProduct.lift (Algebra.algHom Kv Kv Lw)
-.toLinearMap (Algebra.algHom K L Lw) (fun _ _ => mul_comm ..)
-  have h_dense : DenseRange Φ := by
-    apply (w.denseRange_algebraMap L).mono
-    rintro _ ⟨l, rfl⟩
-    exact ⟨1 otimesₜ l, by simp [Φ, Algebra.algHom]⟩
-  .of_surjective Φ (by
-    rw [← Set.range_eq_univ]; rw [← Φ.coe_range]; rw [← Φ.range.closed_of_finiteDimensional.closure_eq]
-    exact h_dense.closure_range)
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.lift, Algebra.algHom, DenseRange, Set.range_eq_univ, TensorProduct, algHom, closed_of_finiteDimensional, closure_eq, closure_range, coe_range, denseRange_algebraMap, h_dense, h_dense.closure_range, mul_comm, of_surjective, otimes, range.closed_of_finiteDimensional.closure_eq, range_eq_univ, toLinearMap
+/-
+**NumberField.HeightOneSpectrum.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.HeightOn
+eSpectrum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module.Finite Kv Lw :=
-  let Φ : Kv otimes[K] L ->ₗ[Kv] Lw := Algebra.TensorProduct.lift (Algebra.algHom Kv Kv Lw)
-.toLinearMap (Algebra.algHom K L Lw) (fun _ _ => mul_comm ..)
+  let Φ : Kv ⊗[K] L →ₗ[Kv] Lw := Algebra.TensorProduct.lift (Algebra.algHom Kv Kv Lw)
+    (Algebra.algHom K L Lw) (fun _ _ ↦ mul_comm ..) |>.toLinearMap
   have h_dense : DenseRange Φ := by
     apply (w.denseRange_algebraMap L).mono
     rintro _ ⟨l, rfl⟩
-    exact ⟨1 otimesₜ l, by simp [Φ, Algebra.algHom]⟩
+    exact ⟨1 ⊗ₜ l, by simp [Φ, Algebra.algHom]⟩
   .of_surjective Φ (by
-    rw [← Set.range_eq_univ]; rw [← Φ.coe_range]; rw [← Φ.range.closed_of_finiteDimensional.closure_eq]
+    rw [← Set.range_eq_univ, ← Φ.coe_range, ← Φ.range.closed_of_finiteDimensional.closure_eq]
     exact h_dense.closure_range)
 
 end HeightOneSpectrum
@@ -1618,3 +1617,4 @@ end HeightOneSpectrum
 end LiesOver
 
 end NumberField
+

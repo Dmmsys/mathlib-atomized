@@ -43,20 +43,12 @@ variable {F} [Mul M] [Mul N] [Mul P] [FunLike F M N] [MulHomClass F M N]
 /-- The natural homomorphism from a magma to its quotient by a congruence relation. -/
 @[to_additive (attr := simps) /-- The natural homomorphism from an additive magma to its quotient by
 an additive congruence relation. -/]
-/--
-Definition of `mkMulHom` / `mkMulHom` 的定义
-
-English:
-definition mkMulHom
-  signature: (c : Con M)
-  body: (↑)
-  map_mul' _ _ := rfl
-
-中文:
-定义 mkMulHom
-  签名: (c : Con M)
-  定义体: (↑)
-  map_mul' _ _ := rfl
+/-
+**Con.mkMulHom** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：mkMulHom (c : Con M) : MulHom M c.Quotient where toFun
+参数：c : Con M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mkMulHom (c : Con M) : MulHom M c.Quotient where
   toFun := (↑)
@@ -64,102 +56,57 @@ def mkMulHom (c : Con M) : MulHom M c.Quotient where
 
 /-- The kernel of a multiplicative homomorphism as a congruence relation. -/
 @[to_additive /-- The kernel of an additive homomorphism as an additive congruence relation. -/]
-/--
-Definition of `ker` / `ker` 的定义
+/-
+**Con.ker** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：ker (f : F) : Con M where toSetoid
+参数：f : F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ker
-  signature: (f : F)
-  body: Setoid.ker f
-  mul' h1 h2 := by
-    dsimp +instances [Setoid.ker, onFun] at *
-    rw [map_mul]; rw [h1]; rw [h2]; rw [map_mul]
-
-@[to_additive (attr := norm_cast)]
-
-中文:
-定义 ker
-  签名: (f : F)
-  定义体: Setoid.ker f
-  mul' h1 h2 := by
-    dsimp +instances [Setoid.ker, onFun] at *
-    rw [map_mul]; rw [h1]; rw [h2]; rw [map_mul]
-
-@[to_additive (attr := norm_cast)]
-
-Depends on / 依赖: Setoid, Setoid.ker
+--- 原说明 ---
+The kernel of a multiplicative homomorphism as a congruence relation.
 -/
 def ker (f : F) : Con M where
   toSetoid := Setoid.ker f
   mul' h1 h2 := by
     dsimp +instances [Setoid.ker, onFun] at *
-    rw [map_mul]; rw [h1]; rw [h2]; rw [map_mul]
+    rw [map_mul, h1, h2, map_mul]
 
 @[to_additive (attr := norm_cast)]
-/--
-theorem `ker_coeMulHom` / 定理 `ker_coeMulHom`
-
-English:
-theorem ker_coeMulHom
-  given: (f : F)
-  statement: ker (f : MulHom M N) = ker f
-  proof: rfl
-
-中文:
-定理 ker_coeMulHom
-  条件: (f : F)
-  结论: ker (f : 乘法半群态射 M N) = ker f
-  证明: rfl
+/-
+**Con.ker_coeMulHom** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：ker_coeMulHom (f : F) : ker (f : MulHom M N) = ker f
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ker_coeMulHom (f : F) : ker (f : MulHom M N) = ker f := rfl
 
 /-- The definition of the congruence relation defined by a monoid homomorphism's kernel. -/
 @[to_additive (attr := simp) /-- The definition of the additive congruence relation defined by an
 `AddMonoid` homomorphism's kernel. -/]
-/--
-theorem `ker_rel` / 定理 `ker_rel`
-
-English:
-theorem ker_rel
-  given: (f : F) {x y}
-  statement: ker f x y ↔ f x = f y
-  proof: Iff.rfl
-
-@[to_additive (attr := simp) /-- The kernel of the quotient map induced by an additive congruence
-relation `c` equals `c`. -/]
-
-中文:
-定理 ker_rel
-  条件: (f : F) {x y}
-  结论: ker f x y ↔ f x = f y
-  证明: Iff.rfl
-
-@[to_additive (attr := simp) /-- The kernel of the quotient map induced by an additive congruence
-relation `c` equals `c`. -/]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Con.ker_rel** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：ker_rel (f : F) {x y} : ker f x y ↔ f x = f y
+参数：f : F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ker_rel (f : F) {x y} : ker f x y ↔ f x = f y :=
   Iff.rfl
 
 @[to_additive (attr := simp) /-- The kernel of the quotient map induced by an additive congruence
 relation `c` equals `c`. -/]
-/--
-theorem `ker_mkMulHom_eq` / 定理 `ker_mkMulHom_eq`
-
-English:
-theorem ker_mkMulHom_eq
-  given: (c : Con M)
-  statement: ker (mkMulHom c) = c
-  proof: ext fun _ _ => Quotient.eq''
-
-中文:
-定理 ker_mkMulHom_eq
-  条件: (c : Con M)
-  结论: ker (mkMulHom c) = c
-  证明: ext fun _ _ => Quotient.eq''
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**Con.ker_mkMulHom_eq** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：ker_mkMulHom_eq (c : Con M) : ker (mkMulHom c) = c
+参数：c : Con M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.ext`：ext {c d : Con M} (H : forall x y, c x y ↔ d x y) : c = d
+· 使用定理 `Quotient.eq''`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk''
+ a = Quotient.mk'' b ↔ s₁ a b
 -/
 theorem ker_mkMulHom_eq (c : Con M) : ker (mkMulHom c) = c :=
   ext fun _ _ => Quotient.eq''
@@ -170,23 +117,15 @@ by a congruence relation `c`.' -/
 @[to_additive /-- Given a function `f`, the smallest additive congruence relation containing the
 binary relation on `f`'s image defined by '`x ≈ y` iff the elements of `f⁻¹(x)` are related to the
 elements of `f⁻¹(y)` by an additive congruence relation `c`.' -/]
-/--
-Definition of `mapGen` / `mapGen` 的定义
-
-English:
-definition mapGen
-  signature: {c : Con M} (f : M -> N)
-  body: conGen Relation.Map c f f
-
-中文:
-定义 mapGen
-  签名: {c : Con M} (f : M -> N)
-  定义体: conGen Relation.Map c f f
-
-Depends on / 依赖: Relation, Relation.Map, conGen
+/-
+**Con.mapGen** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：mapGen {c : Con M} (f : M -> N) : Con N
+参数：f : M -> N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mapGen {c : Con M} (f : M -> N) : Con N :=
-conGen Relation.Map c f f
+def mapGen {c : Con M} (f : M → N) : Con N :=
+  conGen <| Relation.Map c f f
 
 /-- Given a surjective multiplicative-preserving function `f` whose kernel is contained in a
 congruence relation `c`, the congruence relation on `f`'s codomain defined by '`x ≈ y` iff the
@@ -194,30 +133,15 @@ elements of `f⁻¹(x)` are related to the elements of `f⁻¹(y)` by `c`.' -/
 @[to_additive /-- Given a surjective addition-preserving function `f` whose kernel is contained in
 an additive congruence relation `c`, the additive congruence relation on `f`'s codomain defined
 by '`x ≈ y` iff the elements of `f⁻¹(x)` are related to the elements of `f⁻¹(y)` by `c`.' -/]
-/--
-Definition of `mapOfSurjective` / `mapOfSurjective` 的定义
-
-English:
-definition mapOfSurjective
-  signature: {c : Con M} (f : F) (h : ker f <= c) (hf : Surjective f)
-  body: c.toSetoid.mapOfSurjective f h hf
-  mul' h₁ h₂ := by
-    rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
-    rcases h₂ with ⟨p, q, h2, rfl, rfl⟩
-    exact ⟨a * p, b * q, c.mul h1 h2, map_mul f _ _, map_mul f _ _⟩
-
-中文:
-定义 mapOfSurjective
-  签名: {c : Con M} (f : F) (h : ker f <= c) (hf : 满射 f)
-  定义体: c.toSetoid.mapOfSurjective f h hf
-  mul' h₁ h₂ := by
-    rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
-    rcases h₂ with ⟨p, q, h2, rfl, rfl⟩
-    exact ⟨a * p, b * q, c.mul h1 h2, map_mul f _ _, map_mul f _ _⟩
-
-Depends on / 依赖: c.toSetoid.mapOfSurjective, mapOfSurjective, toSetoid
+/-
+**Con.mapOfSurjective** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：mapOfSurjective {c : Con M} (f : F) (h : ker f <= c) (hf : Surjective f) :
+ Con N where __
+参数：f : F；h : ker f <= c；hf : Surjective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mapOfSurjective {c : Con M} (f : F) (h : ker f <= c) (hf : Surjective f) : Con N where
+def mapOfSurjective {c : Con M} (f : F) (h : ker f ≤ c) (hf : Surjective f) : Con N where
   __ := c.toSetoid.mapOfSurjective f h hf
   mul' h₁ h₂ := by
     rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
@@ -228,24 +152,19 @@ def mapOfSurjective {c : Con M} (f : F) (h : ker f <= c) (hf : Surjective f) : C
 equals `c`'. -/
 @[to_additive /-- A specialization of 'the smallest additive congruence relation containing
 an additive congruence relation `c` equals `c`'. -/]
-/--
-theorem `mapOfSurjective_eq_mapGen` / 定理 `mapOfSurjective_eq_mapGen`
-
-English:
-theorem mapOfSurjective_eq_mapGen
-  given: {c : Con M} {f : F} (h : ker f <= c) (hf : Surjective f)
-  proof: by
-  rw [← conGen_of_con (c.mapOfSurjective f h hf)]; rfl
-
-中文:
-定理 mapOfSurjective_eq_mapGen
-  条件: {c : Con M} {f : F} (h : ker f <= c) (hf : 满射 f)
-  证明: by
-  rw [← conGen_of_con (c.mapOfSurjective f h hf)]; rfl
-
-Depends on / 依赖: c.mapOfSurjective, conGen_of_con, mapOfSurjective
+/-
+**Con.mapOfSurjective_eq_mapGen** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：mapOfSurjective_eq_mapGen {c : Con M} {f : F} (h : ker f <= c) (hf : Surje
+ctive f) : c.mapGen f = c.mapOfSurjective f h hf
+参数：h : ker f <= c；hf : Surjective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Con.conGen_of_con`：conGen_of_con (c : Con M) : conGen c = c
 -/
-theorem mapOfSurjective_eq_mapGen {c : Con M} {f : F} (h : ker f <= c) (hf : Surjective f) :
+theorem mapOfSurjective_eq_mapGen {c : Con M} {f : F} (h : ker f ≤ c) (hf : Surjective f) :
     c.mapGen f = c.mapOfSurjective f h hf := by
   rw [← conGen_of_con (c.mapOfSurjective f h hf)]; rfl
 
@@ -255,78 +174,28 @@ on the quotient of `M` by `c`. -/
 @[to_additive /-- Given an additive congruence relation `c` on a type `M` with an addition,
 the order-preserving bijection between the set of additive congruence relations containing `c` and
 the additive congruence relations on the quotient of `M` by `c`. -/]
-/--
-Definition of `correspondence` / `correspondence` 的定义
-
-English:
-definition correspondence
-  signature: {c : Con M}
-  body: d.1.mapOfSurjective (mkMulHom c) (by rw [Con.ker_mkMulHom_eq]; exact d.2)
-      Quotient.mk_surjective
-  invFun d :=
-    ⟨comap ((↑) : M -> c.Quotient) (fun _ _ => rfl) d, fun x y h =>
-      show d x y by rw [c.eq.2 h]; exact d.refl _⟩
-  left_inv d :=
-Subtype.ext_iff.2
-      ext fun x y =>
-        ⟨fun ⟨a, b, H, hx, hy⟩ =>
-d.1.trans (d.1.symm <| d.2 <| c.eq.1 hx) d.1.trans H d.2 c.eq.1 hy,
-          fun h => ⟨_, _, h, rfl, rfl⟩⟩
-  right_inv d :=
-    Con.ext fun x y => by
-      refine ⟨?_, Con.induction_on₂ x y fun w z h => ⟨w, z, h, rfl, rfl⟩⟩
-      rintro ⟨a, b, H, rfl, rfl⟩
-      exact H
-  map_rel_iff' {s t} := by
-    constructor
-    · intro h x y hs
-      rcases h ⟨x, y, hs, rfl, rfl⟩ with ⟨a, b, ht, hx, hy⟩
-      exact t.1.trans (t.1.symm <| t.2 <| c.eq.1 hx) (t.1.trans ht (t.2 <| c.eq.1 hy))
-    · exact Relation.map_mono
-
-中文:
-定义 correspondence
-  签名: {c : Con M}
-  定义体: d.1.mapOfSurjective (mkMulHom c) (by rw [Con.ker_mkMulHom_eq]; exact d.2)
-      Quotient.mk_surjective
-  invFun d :=
-    ⟨comap ((↑) : M -> c.Quotient) (fun _ _ => rfl) d, fun x y h =>
-      show d x y by rw [c.eq.2 h]; exact d.refl _⟩
-  left_inv d :=
-Subtype.ext_iff.2
-      ext fun x y =>
-        ⟨fun ⟨a, b, H, hx, hy⟩ =>
-d.1.trans (d.1.symm <| d.2 <| c.eq.1 hx) d.1.trans H d.2 c.eq.1 hy,
-          fun h => ⟨_, _, h, rfl, rfl⟩⟩
-  right_inv d :=
-    Con.ext fun x y => by
-      refine ⟨?_, Con.induction_on₂ x y fun w z h => ⟨w, z, h, rfl, rfl⟩⟩
-      rintro ⟨a, b, H, rfl, rfl⟩
-      exact H
-  map_rel_iff' {s t} := by
-    constructor
-    · intro h x y hs
-      rcases h ⟨x, y, hs, rfl, rfl⟩ with ⟨a, b, ht, hx, hy⟩
-      exact t.1.trans (t.1.symm <| t.2 <| c.eq.1 hx) (t.1.trans ht (t.2 <| c.eq.1 hy))
-    · exact Relation.map_mono
-
-Depends on / 依赖: Con.ext, Con.induction_on, Con.ker_mkMulHom_eq, IsStablyFiniteRing, Matrix, Matrix.mul_smul, Quotient, Quotient.mk_surjective, Subtype, Subtype.ext_iff, add_add_add_comm, add_assoc, add_smul, c.Quotient, c.eq, d.refl, detp_mul, detp_neg_one_one, detp_one_one, detp_smul_adjp
+/-
+**Con.correspondence** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：correspondence {c : Con M} : { d // c <= d } ≃o Con c.Quotient where toFun
+ d
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def correspondence {c : Con M} : { d // c <= d } ≃o Con c.Quotient where
+def correspondence {c : Con M} : { d // c ≤ d } ≃o Con c.Quotient where
   toFun d :=
-d.1.mapOfSurjective (mkMulHom c) (by rw [Con.ker_mkMulHom_eq]; exact d.2)
+    d.1.mapOfSurjective (mkMulHom c) (by rw [Con.ker_mkMulHom_eq]; exact d.2) <|
       Quotient.mk_surjective
   invFun d :=
-    ⟨comap ((↑) : M -> c.Quotient) (fun _ _ => rfl) d, fun x y h =>
+    ⟨comap ((↑) : M → c.Quotient) (fun _ _ => rfl) d, fun x y h =>
       show d x y by rw [c.eq.2 h]; exact d.refl _⟩
   left_inv d :=
-Subtype.ext_iff.2
+    Subtype.ext_iff.2 <|
       ext fun x y =>
         ⟨fun ⟨a, b, H, hx, hy⟩ =>
-d.1.trans (d.1.symm <| d.2 <| c.eq.1 hx) d.1.trans H d.2 c.eq.1 hy,
+          d.1.trans (d.1.symm <| d.2 <| c.eq.1 hx) <| d.1.trans H <| d.2 <| c.eq.1 hy,
           fun h => ⟨_, _, h, rfl, rfl⟩⟩
   right_inv d :=
-    Con.ext fun x y => by
+    Con.ext fun x y ↦ by
       refine ⟨?_, Con.induction_on₂ x y fun w z h => ⟨w, z, h, rfl, rfl⟩⟩
       rintro ⟨a, b, H, rfl, rfl⟩
       exact H
@@ -348,24 +217,13 @@ variable (c)
 /-- The natural homomorphism from a monoid to its quotient by a congruence relation. -/
 @[to_additive /-- The natural homomorphism from an `AddMonoid` to its quotient by an additive
 congruence relation. -/]
-/--
-Definition of `mk'` / `mk'` 的定义
-
-English:
-definition mk'
-  signature: : M ->* c.Quotient where
-  body: mkMulHom c
-  map_one' := rfl
-
-中文:
-定义 mk'
-  签名: : M ->* c.商 where
-  定义体: mkMulHom c
-  map_one' := rfl
-
-Depends on / 依赖: mkMulHom
+/-
+**Con.mk'** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：mk' : M ->* c.Quotient where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mk' : M ->* c.Quotient where
+def mk' : M →* c.Quotient where
   __ := mkMulHom c
   map_one' := rfl
 
@@ -375,20 +233,17 @@ variable (x y : M)
 relation `c` equals `c`. -/
 @[to_additive (attr := simp) /-- The kernel of the natural homomorphism from an `AddMonoid` to its
 quotient by an additive congruence relation `c` equals `c`. -/]
-/--
-theorem `mk'_ker` / 定理 `mk'_ker`
-
-English:
-theorem mk'_ker
-  statement: ker c.mk' = c
-  proof: ext fun _ _ => c.eq
-
-中文:
-定理 mk'_ker
-  结论: ker c.mk' = c
-  证明: ext fun _ _ => c.eq
-
-Depends on / 依赖: Finset, Finset.smul_sum, Finset.sum_congr, Matrix, Matrix.toLinearMap, ite_smul, mem_univ, one_smul, reduceIte, simp_rw, smul_sum, sum_congr, sum_ite_eq, zero_smul
+/-
+**Con.mk'_ker** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：∀ {M : Type u_1} [inst : MulOneClass M] (c : Con M), Con.ker c.mk' = c
+参数：c : Con M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.ext`：ext {c d : Con M} (H : forall x y, c x y ↔ d x y) : c = d
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Con.eq`：∀ {M : Type u_1} [inst : Mul M] (c : Con M) {a b : M}, ↑a = ↑b ↔
+ c a b
 -/
 theorem mk'_ker : ker c.mk' = c :=
   ext fun _ _ => c.eq
@@ -399,66 +254,39 @@ variable {c}
 surjective. -/
 @[to_additive /-- The natural homomorphism from an `AddMonoid` to its quotient by a congruence
 relation is surjective. -/]
-/--
-theorem `mk'_surjective` / 定理 `mk'_surjective`
-
-English:
-theorem mk'_surjective
-  statement: Surjective c.mk'
-  proof: Quotient.mk''_surjective
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mk'_surjective
-  结论: 满射 c.mk'
-  证明: Quotient.mk''_surjective
-
-@[to_additive (attr := simp)]
+/-
+**Con.mk'_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：∀ {M : Type u_1} [inst : MulOneClass M] {c : Con M}, Function.Surjective ⇑
+c.mk'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''_surjective`：∀ {α : Sort u_1} {s₁ : Setoid α}, Function.Sur
+jective Quotient.mk''
 -/
 theorem mk'_surjective : Surjective c.mk' :=
   Quotient.mk''_surjective
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  statement: (c.mk' : M -> c.Quotient) = ((↑) : M -> c.Quotient)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_mk'
-  结论: (c.mk' : M -> c.商) = ((↑) : M -> c.商)
-  证明: rfl
-
-@[to_additive]
+/-
+**Con.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：coe_mk' : (c.mk' : M -> c.Quotient) = ((↑) : M -> c.Quotient)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk' : (c.mk' : M -> c.Quotient) = ((↑) : M -> c.Quotient) :=
+theorem coe_mk' : (c.mk' : M → c.Quotient) = ((↑) : M → c.Quotient) :=
   rfl
 
 @[to_additive]
-/--
-theorem `ker_apply` / 定理 `ker_apply`
-
-English:
-theorem ker_apply
-  given: {f : M ->* P} {x y}
-  statement: ker f x y ↔ f x = f y
-  proof: Iff.rfl
-
-中文:
-定理 ker_apply
-  条件: {f : M ->* P} {x y}
-  结论: ker f x y ↔ f x = f y
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Con.ker_apply** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：ker_apply {f : M ->* P} {x y} : ker f x y ↔ f x = f y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-theorem ker_apply {f : M ->* P} {x y} : ker f x y ↔ f x = f y := Iff.rfl
+theorem ker_apply {f : M →* P} {x y} : ker f x y ↔ f x = f y := Iff.rfl
 
 /-- Given a monoid homomorphism `f : N → M` and a congruence relation `c` on `M`, the congruence
 relation induced on `N` by `f` equals the kernel of `c`'s quotient homomorphism composed with
@@ -466,57 +294,42 @@ relation induced on `N` by `f` equals the kernel of `c`'s quotient homomorphism 
 @[to_additive /-- Given an `AddMonoid` homomorphism `f : N → M` and an additive congruence relation
 `c` on `M`, the additive congruence relation induced on `N` by `f` equals the kernel of `c`'s
 quotient homomorphism composed with `f`. -/]
-/--
-theorem `comap_eq` / 定理 `comap_eq`
-
-English:
-theorem comap_eq
-  given: {f : N ->* M}
-  statement: comap f f.map_mul c = ker (c.mk'.comp f)
-  proof: ext fun x y => show c _ _ ↔ c.mk' _ = c.mk' _ by rw [← c.eq]; rfl
-
-中文:
-定理 comap_eq
-  条件: {f : N ->* M}
-  结论: comap f f.map_mul c = ker (c.mk'.comp f)
-  证明: ext fun x y => show c _ _ ↔ c.mk' _ = c.mk' _ by rw [← c.eq]; rfl
-
-Depends on / 依赖: c.eq, c.mk
+/-
+**Con.comap_eq** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：comap_eq {f : N ->* M} : comap f f.map_mul c = ker (c.mk'.comp f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.ext`：ext {c d : Con M} (H : forall x y, c x y ↔ d x y) : c = d
+· 使用定理 `MonoidHom.map_mul`：∀ {M : Type u_4} {N : Type u_5} [inst : MulOne M] [in
+st_1 : MulOne N] (f : M →* N) (a b : M), f (a * b) = f a * f b
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Con.eq`：∀ {M : Type u_1} [inst : Mul M] (c : Con M) {a b : M}, ↑a = ↑b ↔
+ c a b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem comap_eq {f : N ->* M} : comap f f.map_mul c = ker (c.mk'.comp f) :=
+theorem comap_eq {f : N →* M} : comap f f.map_mul c = ker (c.mk'.comp f) :=
   ext fun x y => show c _ _ ↔ c.mk' _ = c.mk' _ by rw [← c.eq]; rfl
 
-variable (c) (f : M ->* P)
+variable (c) (f : M →* P)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The homomorphism on the quotient of a monoid by a congruence relation `c` induced by a
 homomorphism constant on `c`'s equivalence classes. -/
 @[to_additive /-- The homomorphism on the quotient of an `AddMonoid` by an additive congruence
 relation `c` induced by a homomorphism constant on `c`'s equivalence classes. -/]
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: (H : c <= ker f)
-  body: (Con.liftOn x f) fun _ _ h => H h
-  map_one' := by rw [← f.map_one]; rfl
-  map_mul' x y := Con.induction_on₂ x y fun m n => by
-    dsimp only [← coe_mul, Con.liftOn_coe]
-    rw [map_mul]
-
-中文:
-定义 lift
-  签名: (H : c <= ker f)
-  定义体: (Con.liftOn x f) fun _ _ h => H h
-  map_one' := by rw [← f.map_one]; rfl
-  map_mul' x y := Con.induction_on₂ x y fun m n => by
-    dsimp only [← coe_mul, Con.liftOn_coe]
-    rw [map_mul]
-
-Depends on / 依赖: Con.liftOn, liftOn
+/-
+**Con.lift** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：lift (H : c <= ker f) : c.Quotient ->* P where toFun x
+参数：H : c <= ker f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def lift (H : c <= ker f) : c.Quotient ->* P where
+def lift (H : c ≤ ker f) : c.Quotient →* P where
   toFun x := (Con.liftOn x f) fun _ _ h => H h
   map_one' := by rw [← f.map_one]; rfl
   map_mul' x y := Con.induction_on₂ x y fun m n => by
@@ -528,66 +341,51 @@ variable {c f}
 /-- The diagram describing the universal property for quotients of monoids commutes. -/
 @[to_additive /-- The diagram describing the universal property for quotients of `AddMonoid`s
 commutes. -/]
-/--
-theorem `lift_mk'` / 定理 `lift_mk'`
-
-English:
-theorem lift_mk'
-  given: (H : c <= ker f) (x)
-  statement: c.lift f H (c.mk' x) = f x
-  proof: rfl
-
-中文:
-定理 lift_mk'
-  条件: (H : c <= ker f) (x)
-  结论: c.lift f H (c.mk' x) = f x
-  证明: rfl
+/-
+**Con.lift_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：lift_mk' (H : c <= ker f) (x) : c.lift f H (c.mk' x) = f x
+参数：H : c <= ker f；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-theorem lift_mk' (H : c <= ker f) (x) : c.lift f H (c.mk' x) = f x :=
+theorem lift_mk' (H : c ≤ ker f) (x) : c.lift f H (c.mk' x) = f x :=
   rfl
 
 /-- The diagram describing the universal property for quotients of monoids commutes. -/
 @[to_additive (attr := simp) /-- The diagram describing the universal property for quotients of
 `AddMonoid`s commutes. -/]
-/--
-theorem `lift_coe` / 定理 `lift_coe`
-
-English:
-theorem lift_coe
-  given: (H : c <= ker f) (x : M)
-  statement: c.lift f H x = f x
-  proof: rfl
-
-中文:
-定理 lift_coe
-  条件: (H : c <= ker f) (x : M)
-  结论: c.lift f H x = f x
-  证明: rfl
+/-
+**Con.lift_coe** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：lift_coe (H : c <= ker f) (x : M) : c.lift f H x = f x
+参数：H : c <= ker f；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-theorem lift_coe (H : c <= ker f) (x : M) : c.lift f H x = f x :=
+theorem lift_coe (H : c ≤ ker f) (x : M) : c.lift f H x = f x :=
   rfl
 
 /-- The diagram describing the universal property for quotients of monoids commutes. -/
 @[to_additive (attr := simp) /-- The diagram describing the universal property for quotients of
 `AddMonoid`s commutes. -/]
-/--
-theorem `lift_comp_mk'` / 定理 `lift_comp_mk'`
-
-English:
-theorem lift_comp_mk'
-  given: (H : c <= ker f)
-  statement: (c.lift f H).comp c.mk' = f
-  proof: by ext; rfl
-
-中文:
-定理 lift_comp_mk'
-  条件: (H : c <= ker f)
-  结论: (c.lift f H).comp c.mk' = f
-  证明: by ext; rfl
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix
+/-
+**Con.lift_comp_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：lift_comp_mk' (H : c <= ker f) : (c.lift f H).comp c.mk' = f
+参数：H : c <= ker f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
 -/
-theorem lift_comp_mk' (H : c <= ker f) : (c.lift f H).comp c.mk' = f := by ext; rfl
+theorem lift_comp_mk' (H : c ≤ ker f) : (c.lift f H).comp c.mk' = f := by ext; rfl
 
 /-- Given a homomorphism `f` from the quotient of a monoid by a congruence relation, `f` equals the
 homomorphism on the quotient induced by `f` composed with the natural map from the monoid to
@@ -595,22 +393,17 @@ the quotient. -/
 @[to_additive (attr := simp) /-- Given a homomorphism `f` from the quotient of an `AddMonoid` by an
 additive congruence relation, `f` equals the homomorphism on the quotient induced by `f` composed
 with the natural map from the `AddMonoid` to the quotient. -/]
-/--
-theorem `lift_apply_mk'` / 定理 `lift_apply_mk'`
-
-English:
-theorem lift_apply_mk'
-  given: (f : c.Quotient ->* P)
-  proof: by
-  ext x; rcases x with ⟨⟩; rfl
-
-中文:
-定理 lift_apply_mk'
-  条件: (f : c.商 ->* P)
-  证明: by
-  ext x; rcases x with ⟨⟩; rfl
+/-
+**Con.lift_apply_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：lift_apply_mk' (f : c.Quotient ->* P) : (c.lift (f.comp c.mk') fun x y h =
+> show f ↑x = f ↑y by rw [c.eq.2 h]) = f
+参数：f : c.Quotient ->* P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
 -/
-theorem lift_apply_mk' (f : c.Quotient ->* P) :
+theorem lift_apply_mk' (f : c.Quotient →* P) :
     (c.lift (f.comp c.mk') fun x y h => show f ↑x = f ↑y by rw [c.eq.2 h]) = f := by
   ext x; rcases x with ⟨⟩; rfl
 
@@ -618,73 +411,61 @@ theorem lift_apply_mk' (f : c.Quotient ->* P) :
 compositions with `c.mk'` are equal. -/
 @[to_additive (attr := ext) /-- Homomorphisms on the quotient of an `AddMonoid` by an additive
 congruence relation `c` are equal if their compositions with `c.mk'` are equal. -/]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {f g : c.Quotient ->* P} (h : f.comp c.mk' = g.comp c.mk')
-  statement: f = g
-  proof: by
-  rw [← lift_apply_mk' f]; rw [← lift_apply_mk' g]
-  congr 1
-
-中文:
-引理 hom_ext
-  条件: {f g : c.商 ->* P} (h : f.comp c.mk' = g.comp c.mk')
-  结论: f = g
-  证明: by
-  rw [← lift_apply_mk' f]; rw [← lift_apply_mk' g]
-  congr 1
-
-Depends on / 依赖: Finset, Finset.sum_congr, LinearEquiv, LinearEquiv.coe_symm_mk, coe_symm_mk, lift_apply_mk, smul_comm, sum_congr
+/-
+**Con.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `Con`。
+形式化陈述：hom_ext {f g : c.Quotient ->* P} (h : f.comp c.mk' = g.comp c.mk') : f = g
+参数：h : f.comp c.mk' = g.comp c.mk'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Con.lift_apply_mk'`：lift_apply_mk' (f : c.Quotient ->* P) : (c.lift (f.c
+omp c.mk') fun x y h => show f ↑x = f ↑y by rw [c.eq.2 h]) = f
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-lemma hom_ext {f g : c.Quotient ->* P} (h : f.comp c.mk' = g.comp c.mk') : f = g := by
-  rw [← lift_apply_mk' f]; rw [← lift_apply_mk' g]
+lemma hom_ext {f g : c.Quotient →* P} (h : f.comp c.mk' = g.comp c.mk') : f = g := by
+  rw [← lift_apply_mk' f, ← lift_apply_mk' g]
   congr 1
 
 /-- Homomorphisms on the quotient of a monoid by a congruence relation are equal if they
 are equal on elements that are coercions from the monoid. -/
 @[to_additive /-- Homomorphisms on the quotient of an `AddMonoid` by an additive congruence relation
 are equal if they are equal on elements that are coercions from the `AddMonoid`. -/]
-/--
-theorem `lift_funext` / 定理 `lift_funext`
-
-English:
-theorem lift_funext
-  given: (f g : c.Quotient ->* P) (h : forall a : M, f a = g a)
-  statement: f = g
-  proof: hom_ext DFunLike.ext _ _ h
-
-中文:
-定理 lift_funext
-  条件: (f g : c.商 ->* P) (h : 对任意 a : M, f a = g a)
-  结论: f = g
-  证明: hom_ext DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext, Finset, Finset.sum_congr, RingHom, RingHom.id_apply, hom_ext, id_apply, smul_comm, sum_congr
+/-
+**Con.lift_funext** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：lift_funext (f g : c.Quotient ->* P) (h : forall a : M, f a = g a) : f = g
+参数：f g : c.Quotient ->* P；h : forall a : M, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Con.hom_ext`：hom_ext {f g : c.Quotient ->* P} (h : f.comp c.mk' = g.comp
+ c.mk') : f = g
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem lift_funext (f g : c.Quotient ->* P) (h : forall a : M, f a = g a) : f = g :=
-hom_ext DFunLike.ext _ _ h
+theorem lift_funext (f g : c.Quotient →* P) (h : ∀ a : M, f a = g a) : f = g :=
+  hom_ext <| DFunLike.ext _ _ h
 
 /-- The uniqueness part of the universal property for quotients of monoids. -/
 @[to_additive /-- The uniqueness part of the universal property for quotients of `AddMonoid`s. -/]
-/--
-theorem `lift_unique` / 定理 `lift_unique`
+/-
+**Con.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：lift_unique (H : c <= ker f) (g : c.Quotient ->* P) (Hg : g.comp c.mk' = f
+) : g = c.lift f H
+参数：H : c <= ker f；g : c.Quotient ->* P；Hg : g.comp c.mk' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用引理 `Con.hom_ext`：hom_ext {f g : c.Quotient ->* P} (h : f.comp c.mk' = g.comp
+ c.mk') : f = g
 
-English:
-theorem lift_unique
-  given: (H : c <= ker f) (g : c.Quotient ->* P) (Hg : g.comp c.mk' = f)
-  proof: hom_ext Hg
-
-中文:
-定理 lift_unique
-  条件: (H : c <= ker f) (g : c.商 ->* P) (Hg : g.comp c.mk' = f)
-  证明: hom_ext Hg
-
-Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_congr, Matrix, Matrix.mulVec, Matrix.toLinearMap, _apply, dotProduct, hom_ext, mulVec, mul_assoc, mul_comm, mul_sum, simp_rw, smul_eq_mul, sum_congr
+--- 原说明 ---
+The uniqueness part of the universal property for quotients of monoids.
 -/
-theorem lift_unique (H : c <= ker f) (g : c.Quotient ->* P) (Hg : g.comp c.mk' = f) :
+theorem lift_unique (H : c ≤ ker f) (g : c.Quotient →* P) (Hg : g.comp c.mk' = f) :
     g = c.lift f H :=
   hom_ext Hg
 
@@ -692,24 +473,22 @@ theorem lift_unique (H : c <= ker f) (g : c.Quotient ->* P) (Hg : g.comp c.mk' =
 induce a surjective homomorphism on `c`'s quotient. -/
 @[to_additive /-- Surjective `AddMonoid` homomorphisms constant on an additive congruence
 relation `c`'s equivalence classes induce a surjective homomorphism on `c`'s quotient. -/]
-/--
-theorem `lift_surjective_of_surjective` / 定理 `lift_surjective_of_surjective`
-
-English:
-theorem lift_surjective_of_surjective
-  given: (h : c <= ker f) (hf : Surjective f)
-  proof: fun y =>
-  (Exists.elim (hf y)) fun w hw => ⟨w, (lift_mk' h w).symm ▸ hw⟩
-
-中文:
-定理 lift_surjective_of_surjective
-  条件: (h : c <= ker f) (hf : 满射 f)
-  证明: fun y =>
-  (Exists.elim (hf y)) fun w hw => ⟨w, (lift_mk' h w).symm ▸ hw⟩
-
-Depends on / 依赖: Aux_single, Matrix, Matrix.toLinearMap
+/-
+**Con.lift_surjective_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：lift_surjective_of_surjective (h : c <= ker f) (hf : Surjective f) : Surje
+ctive (c.lift f h)
+参数：h : c <= ker f；hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Con.lift_mk'`：lift_mk' (H : c <= ker f) (x) : c.lift f H (c.mk' x) = f x
 -/
-theorem lift_surjective_of_surjective (h : c <= ker f) (hf : Surjective f) :
+theorem lift_surjective_of_surjective (h : c ≤ ker f) (hf : Surjective f) :
     Surjective (c.lift f h) := fun y =>
   (Exists.elim (hf y)) fun w hw => ⟨w, (lift_mk' h w).symm ▸ hw⟩
 
@@ -720,45 +499,36 @@ relation on `M` whose induced map from the quotient of `M` to `P` is injective. 
 @[to_additive /-- Given an `AddMonoid` homomorphism `f` from `M` to `P`, the kernel of `f`
 is the unique additive congruence relation on `M` whose induced map from the quotient of `M`
 to `P` is injective. -/]
-/--
-theorem `ker_eq_lift_of_injective` / 定理 `ker_eq_lift_of_injective`
-
-English:
-theorem ker_eq_lift_of_injective
-  given: (H : c <= ker f) (h : Injective (c.lift f H))
-  statement: ker f = c
-  proof: toSetoid_injective Setoid.ker_eq_lift_of_injective f H h
-
-中文:
-定理 ker_eq_lift_of_injective
-  条件: (H : c <= ker f) (h : 单射 (c.lift f H))
-  结论: ker f = c
-  证明: toSetoid_injective Setoid.ker_eq_lift_of_injective f H h
-
-Depends on / 依赖: Aux_single, Matrix, Matrix.toLinearMap, Setoid, Setoid.ker_eq_lift_of_injective, ker_eq_lift_of_injective, toSetoid_injective
+/-
+**Con.ker_eq_lift_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：ker_eq_lift_of_injective (H : c <= ker f) (h : Injective (c.lift f H)) : k
+er f = c
+参数：H : c <= ker f；h : Injective (c.lift f H)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Con.toSetoid_injective`：∀ {M : Type u_1} [inst : Mul M], Function.Inject
+ive Con.toSetoid
+· 使用定理 `Setoid.ker_eq_lift_of_injective`：ker_eq_lift_of_injective {r : Setoid α}
+ (f : α -> β) (H : r <= ker f) (h : Injective (Quotient.lift f H)) : ker f = r
 -/
-theorem ker_eq_lift_of_injective (H : c <= ker f) (h : Injective (c.lift f H)) : ker f = c :=
-toSetoid_injective Setoid.ker_eq_lift_of_injective f H h
+theorem ker_eq_lift_of_injective (H : c ≤ ker f) (h : Injective (c.lift f H)) : ker f = c :=
+  toSetoid_injective <| Setoid.ker_eq_lift_of_injective f H h
 
 variable {c}
 
 /-- The homomorphism induced on the quotient of a monoid by the kernel of a monoid homomorphism. -/
 @[to_additive /-- The homomorphism induced on the quotient of an `AddMonoid` by the kernel
 of an `AddMonoid` homomorphism. -/]
-/--
-Definition of `kerLift` / `kerLift` 的定义
-
-English:
-definition kerLift
-  signature: : (ker f).Quotient ->* P
-  body: ((ker f).lift f) fun _ _ => id
-
-中文:
-定义 kerLift
-  签名: : (ker f).商 ->* P
-  定义体: ((ker f).lift f) fun _ _ => id
+/-
+**Con.kerLift** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：kerLift : (ker f).Quotient ->* P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def kerLift : (ker f).Quotient ->* P :=
+def kerLift : (ker f).Quotient →* P :=
   ((ker f).lift f) fun _ _ => id
 
 variable {f}
@@ -768,22 +538,15 @@ relation is the kernel of the homomorphism, commutes. -/
 @[to_additive (attr := simp) /-- The diagram described by the universal property for quotients
 of `AddMonoid`s, when the additive congruence relation is the kernel of the homomorphism,
 commutes. -/]
-/--
-theorem `kerLift_mk` / 定理 `kerLift_mk`
-
-English:
-theorem kerLift_mk
-  given: (x : M)
-  statement: kerLift f x = f x
-  proof: rfl
-
-中文:
-定理 kerLift_mk
-  条件: (x : M)
-  结论: kerLift f x = f x
-  证明: rfl
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, symm_symm
+/-
+**Con.kerLift_mk** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：kerLift_mk (x : M) : kerLift f x = f x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
 theorem kerLift_mk (x : M) : kerLift f x = f x :=
   rfl
@@ -791,26 +554,23 @@ theorem kerLift_mk (x : M) : kerLift f x = f x :=
 /-- A monoid homomorphism `f` induces an injective homomorphism on the quotient by `f`'s kernel. -/
 @[to_additive /-- An `AddMonoid` homomorphism `f` induces an injective homomorphism on the quotient
 by `f`'s kernel. -/]
-/--
-theorem `kerLift_injective` / 定理 `kerLift_injective`
-
-English:
-theorem kerLift_injective
-  given: (f : M ->* P)
-  statement: Injective (kerLift f)
-  proof: fun x y =>
-  Quotient.inductionOn₂' x y fun _ _ => (ker f).eq.2
-
-中文:
-定理 kerLift_injective
-  条件: (f : M ->* P)
-  结论: 单射 (kerLift f)
-  证明: fun x y =>
-  Quotient.inductionOn₂' x y fun _ _ => (ker f).eq.2
-
-Depends on / 依赖: Matrix, Matrix.toLinearMap, apply_symm_apply
+/-
+**Con.kerLift_injective** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：kerLift_injective (f : M ->* P) : Injective (kerLift f)
+参数：f : M ->* P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Quotient.inductionOn₂'`：∀ {α : Sort u_1} {β : Sort u_2} {s₁ : Setoid α} 
+{s₂ : Setoid β} {p : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q₂ 
+: Quotient s…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Con.eq`：∀ {M : Type u_1} [inst : Mul M] (c : Con M) {a b : M}, ↑a = ↑b ↔
+ c a b
 -/
-theorem kerLift_injective (f : M ->* P) : Injective (kerLift f) := fun x y =>
+theorem kerLift_injective (f : M →* P) : Injective (kerLift f) := fun x y =>
   Quotient.inductionOn₂' x y fun _ _ => (ker f).eq.2
 
 /-- Given congruence relations `c, d` on a monoid such that `d` contains `c`, `d`'s quotient
@@ -818,22 +578,14 @@ map induces a homomorphism from the quotient by `c` to the quotient by `d`. -/
 @[to_additive /-- Given additive congruence relations `c, d` on an `AddMonoid` such that `d`
 contains `c`, `d`'s quotient map induces a homomorphism from the quotient by `c` to the quotient
 by `d`. -/]
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (c d : Con M) (h : c <= d)
-  body: (c.lift d.mk') fun x y hc => show (ker d.mk') x y from (mk'_ker d).symm ▸ h hc
-
-中文:
-定义 map
-  签名: (c d : Con M) (h : c <= d)
-  定义体: (c.lift d.mk') fun x y hc => show (ker d.mk') x y from (mk'_ker d).symm ▸ h hc
-
-Depends on / 依赖: Matrix, Matrix.toLinearMap, _ker, apply_symm_apply, c.lift, d.mk
+/-
+**Con.map** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：map (c d : Con M) (h : c <= d) : c.Quotient ->* d.Quotient
+参数：c d : Con M；h : c <= d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def map (c d : Con M) (h : c <= d) : c.Quotient ->* d.Quotient :=
+def map (c d : Con M) (h : c ≤ d) : c.Quotient →* d.Quotient :=
   (c.lift d.mk') fun x y hc => show (ker d.mk') x y from (mk'_ker d).symm ▸ h hc
 
 /-- Given congruence relations `c, d` on a monoid such that `d` contains `c`, the definition of
@@ -841,25 +593,19 @@ the homomorphism from the quotient by `c` to the quotient by `d` induced by `d`'
 @[to_additive /-- Given additive congruence relations `c, d` on an `AddMonoid` such that `d`
 contains `c`, the definition of the homomorphism from the quotient by `c` to the quotient by `d`
 induced by `d`'s quotient map. -/]
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: {c d : Con M} (h : c <= d) (x)
-  proof: rfl
-
-中文:
-定理 map_apply
-  条件: {c d : Con M} (h : c <= d) (x)
-  证明: rfl
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, apply_symm_apply
+/-
+**Con.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `Con`。
+形式化陈述：map_apply {c d : Con M} (h : c <= d) (x) : c.map d h x = c.lift d.mk' (fun
+ _ _ hc => d.eq.2 <| h hc) x
+参数：h : c <= d；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply {c d : Con M} (h : c <= d) (x) :
+theorem map_apply {c d : Con M} (h : c ≤ d) (x) :
     c.map d h x = c.lift d.mk' (fun _ _ hc => d.eq.2 <| h hc) x :=
   rfl
 
 end MulOneClass
 
 end Con
+

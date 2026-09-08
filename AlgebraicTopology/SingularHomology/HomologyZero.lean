@@ -31,42 +31,28 @@ namespace TopCat
 
 variable (X : TopCat.{w}) (R : C)
 
-/--
-Definition of `singularHomology₀Iso` / `singularHomology₀Iso` 的定义
+/-- The singular homology of a topological space `X` with coefficients in `R`
+identifies with the coproduct of copies of `R` indexed by `ZerothHomotopy X`. -/
+/-
+**TopCat.singularHomology** 是 Mathlib 中的一个定义，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition singularHomology₀Iso
-  signature: :
-  body: SSet.homology₀Iso _ _ ≪≫
-    (sigmaConst.obj R).mapIso zerothHomotopyEquiv.toIso.symm
-
-中文:
-定义 singularHomology₀Iso
-  签名: :
-  定义体: SSet.homology₀Iso _ _ ≪≫
-    (sigmaConst.obj R).mapIso zerothHomotopyEquiv.toIso.symm
-
-Depends on / 依赖: SSet.homology, mapIso, sigmaConst, sigmaConst.obj, zerothHomotopyEquiv, zerothHomotopyEquiv.toIso.symm
+--- 原说明 ---
+The singular homology of a topological space `X` with coefficients in `R`
+identifies with the coproduct of copies of `R` indexed by `ZerothHomotopy X`.
 -/
 noncomputable def singularHomology₀Iso :
-    ((singularHomologyFunctor C 0).obj R).obj X ≅ ∐ (fun (_ : ZerothHomotopy X) => R) :=
+    ((singularHomologyFunctor C 0).obj R).obj X ≅ ∐ (fun (_ : ZerothHomotopy X) ↦ R) :=
   SSet.homology₀Iso _ _ ≪≫
     (sigmaConst.obj R).mapIso zerothHomotopyEquiv.toIso.symm
 
-/--
-Definition of `singularHomology₀ε` / `singularHomology₀ε` 的定义
+/-- The augmentation map `((singularHomologyFunctor C 0).obj R).obj X ⟶ R`. -/
+/-
+**TopCat.singularHomology** 是 Mathlib 中的一个定义，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition singularHomology₀ε
-  signature: :
-  body: SSet.homology₀ε _ _
-
-中文:
-定义 singularHomology₀ε
-  签名: :
-  定义体: SSet.homology₀ε _ _
-
-Depends on / 依赖: SSet.homology
+--- 原说明 ---
+The augmentation map `((singularHomologyFunctor C 0).obj R).obj X ⟶ R`.
 -/
 noncomputable def singularHomology₀ε :
     ((singularHomologyFunctor C 0).obj R).obj X ⟶ R :=
@@ -74,44 +60,20 @@ noncomputable def singularHomology₀ε :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `singularHomology₀Iso_sigma_desc_id` / 引理 `singularHomology₀Iso_sigma_desc_id`
-
-English:
-lemma singularHomology₀Iso_sigma_desc_id
-  proof: by
-  dsimp only [singularHomology₀Iso, singularHomology₀ε, SSet.homology₀ε]
-  cat_disch
-
-中文:
-引理 singularHomology₀Iso_sigma_desc_id
-  证明: by
-  dsimp only [singularHomology₀Iso, singularHomology₀ε, SSet.homology₀ε]
-  cat_disch
-
-Depends on / 依赖: SSet.homology, cat_disch
+/-
+**TopCat.singularHomology** 是 Mathlib 中的一个引理，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma singularHomology₀Iso_sigma_desc_id :
-    (singularHomology₀Iso X R).hom ≫ Sigma.desc (fun _ => 𝟙 R) = singularHomology₀ε X R := by
+    (singularHomology₀Iso X R).hom ≫ Sigma.desc (fun _ ↦ 𝟙 R) = singularHomology₀ε X R := by
   dsimp only [singularHomology₀Iso, singularHomology₀ε, SSet.homology₀ε]
   cat_disch
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PathConnectedSpace
-  signature: X] : IsIso (X.singularHomology₀ε R)
-  body: inferInstanceAs (IsIso ((toSSet.obj X).homology₀ε R))
-
-中文:
-实例 [道路连通空间
-  签名: X] : 是同构 (X.singularHomology₀ε R)
-  定义体: inferInstanceAs (IsIso ((toSSet.obj X).homology₀ε R))
-
-Depends on / 依赖: toSSet, toSSet.obj
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PathConnectedSpace X] : IsIso (X.singularHomology₀ε R) :=
   inferInstanceAs (IsIso ((toSSet.obj X).homology₀ε R))
 
 end TopCat
+

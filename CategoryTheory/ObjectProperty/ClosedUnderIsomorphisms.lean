@@ -27,347 +27,244 @@ variable {C : Type u} [Category.{v} C] {D : Type u'} [Category.{v'} D]
 
 namespace ObjectProperty
 
-/--
-Definition of `IsClosedUnderIsomorphisms` / `IsClosedUnderIsomorphisms` 的定义
+/-- A predicate `C → Prop` on the objects of a category is closed under isomorphisms
+if whenever `P X`, then all the objects `Y` that are isomorphic to `X` also satisfy `P Y`. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderIsomorphisms** 是 Mathlib 中的一个归纳类型，位
+于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+ObjectProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderIsomorphisms
-  parameters: : Prop where
-  axioms and operations (1):
-    - of_iso({X Y : C} (_ : X ≅ Y) (_ : P X)) : P Y
-
-中文:
-类 在同构下封闭
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - of_iso({X Y : C} (_ : X ≅ Y) (_ : P X)) : P Y
+--- 原说明 ---
+A predicate `C → Prop` on the objects of a category is closed under isomorphisms
+if whenever `P X`, then all the objects `Y` that are isomorphic to `X` also sati
+sfy `P Y`.
 -/
 class IsClosedUnderIsomorphisms : Prop where
   of_iso {X Y : C} (_ : X ≅ Y) (_ : P X) : P Y
-
-/--
-lemma `prop_of_iso` / 引理 `prop_of_iso`
-
-English:
-lemma prop_of_iso
-  given: [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y) (hX : P X)
-  statement: P Y
-  proof: IsClosedUnderIsomorphisms.of_iso e hX
-
-中文:
-引理 prop_of_iso
-  条件: [在同构下封闭 P] {X Y : C} (e : X ≅ Y) (hX : P X)
-  结论: P Y
-  证明: IsClosedUnderIsomorphisms.of_iso e hX
-
-Depends on / 依赖: IsClosedUnderIsomorphisms, IsClosedUnderIsomorphisms.of_iso, of_iso
+/-
+**CategoryTheory.ObjectProperty.prop_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ObjectProperty`。
+形式化陈述：prop_of_iso [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y) (hX : P X)
+ : P Y
+参数：e : X ≅ Y；hX : P X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderIsomorphisms.of_iso`：∀ {C : T
+ype u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectPrope
+rty C}   [self : P.IsClosedUnderIsomorphisms] {X Y :…
 -/
 lemma prop_of_iso [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y :=
   IsClosedUnderIsomorphisms.of_iso e hX
-
-/--
-lemma `prop_iff_of_iso` / 引理 `prop_iff_of_iso`
-
-English:
-lemma prop_iff_of_iso
-  given: [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y)
-  statement: P X ↔ P Y
-  proof: ⟨prop_of_iso P e, prop_of_iso P e.symm⟩
-
-中文:
-引理 prop_iff_of_iso
-  条件: [在同构下封闭 P] {X Y : C} (e : X ≅ Y)
-  结论: P X ↔ P Y
-  证明: ⟨prop_of_iso P e, prop_of_iso P e.symm⟩
-
-Depends on / 依赖: e.symm, prop_of_iso
+/-
+**CategoryTheory.ObjectProperty.prop_iff_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.ObjectProperty`。
+形式化陈述：prop_iff_of_iso [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y) : P X 
+↔ P Y
+参数：e : X ≅ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_iso`：prop_of_iso [IsClosedUnderIso
+morphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y
 -/
 lemma prop_iff_of_iso [IsClosedUnderIsomorphisms P] {X Y : C} (e : X ≅ Y) : P X ↔ P Y :=
   ⟨prop_of_iso P e, prop_of_iso P e.symm⟩
-
-/--
-lemma `prop_of_isIso` / 引理 `prop_of_isIso`
-
-English:
-lemma prop_of_isIso
-  given: [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f] (hX : P X)
-  proof: prop_of_iso P (asIso f) hX
-
-中文:
-引理 prop_of_isIso
-  条件: [在同构下封闭 P] {X Y : C} (f : X ⟶ Y) [是同构 f] (hX : P X)
-  证明: prop_of_iso P (asIso f) hX
-
-Depends on / 依赖: prop_of_iso
+/-
+**CategoryTheory.ObjectProperty.prop_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.ObjectProperty`。
+形式化陈述：prop_of_isIso [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f
+] (hX : P X) : P Y
+参数：f : X ⟶ Y；hX : P X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_iso`：prop_of_iso [IsClosedUnderIso
+morphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y
 -/
 lemma prop_of_isIso [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f] (hX : P X) :
     P Y :=
   prop_of_iso P (asIso f) hX
-
-/--
-lemma `prop_iff_of_isIso` / 引理 `prop_iff_of_isIso`
-
-English:
-lemma prop_iff_of_isIso
-  given: [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f]
-  statement: P X ↔ P Y
-  proof: prop_iff_of_iso P (asIso f)
-
-中文:
-引理 prop_iff_of_isIso
-  条件: [在同构下封闭 P] {X Y : C} (f : X ⟶ Y) [是同构 f]
-  结论: P X ↔ P Y
-  证明: prop_iff_of_iso P (asIso f)
-
-Depends on / 依赖: prop_iff_of_iso
+/-
+**CategoryTheory.ObjectProperty.prop_iff_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ObjectProperty`。
+形式化陈述：prop_iff_of_isIso [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsI
+so f] : P X ↔ P Y
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_iff_of_iso`：prop_iff_of_iso [IsClosed
+UnderIsomorphisms P] {X Y : C} (e : X ≅ Y) : P X ↔ P Y
 -/
 lemma prop_iff_of_isIso [IsClosedUnderIsomorphisms P] {X Y : C} (f : X ⟶ Y) [IsIso f] : P X ↔ P Y :=
   prop_iff_of_iso P (asIso f)
 
-/--
-Definition of `isoClosure` / `isoClosure` 的定义
+/-- The closure by isomorphisms of a predicate on objects in a category. -/
+/-
+**CategoryTheory.ObjectProperty.isoClosure** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ObjectProperty`。
+形式化陈述：isoClosure : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoClosure
-  signature: : ObjectProperty C
-  body: fun X => exists (Y : C) (_ : P Y), Nonempty (X ≅ Y)
-
-中文:
-定义 isoClosure
-  签名: : ObjectProperty C
-  定义体: fun X => exists (Y : C) (_ : P Y), Nonempty (X ≅ Y)
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+The closure by isomorphisms of a predicate on objects in a category.
 -/
-def isoClosure : ObjectProperty C := fun X => exists (Y : C) (_ : P Y), Nonempty (X ≅ Y)
-
-/--
-lemma `prop_isoClosure_iff` / 引理 `prop_isoClosure_iff`
-
-English:
-lemma prop_isoClosure_iff
-  given: (X : C)
-  proof: by rfl
-
-中文:
-引理 prop_isoClosure_iff
-  条件: (X : C)
-  证明: by rfl
+def isoClosure : ObjectProperty C := fun X => ∃ (Y : C) (_ : P Y), Nonempty (X ≅ Y)
+/-
+**CategoryTheory.ObjectProperty.prop_isoClosure_iff** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ObjectProperty`。
+形式化陈述：prop_isoClosure_iff (X : C) : isoClosure P X ↔ exists (Y : C) (_ : P Y), N
+onempty (X ≅ Y)
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma prop_isoClosure_iff (X : C) :
-    isoClosure P X ↔ exists (Y : C) (_ : P Y), Nonempty (X ≅ Y) := by rfl
+    isoClosure P X ↔ ∃ (Y : C) (_ : P Y), Nonempty (X ≅ Y) := by rfl
 
 variable {P} in
-/--
-lemma `prop_isoClosure` / 引理 `prop_isoClosure`
-
-English:
-lemma prop_isoClosure
-  given: {X Y : C} (h : P X) (e : X ⟶ Y) [IsIso e]
-  statement: isoClosure P Y
-  proof: ⟨X, h, ⟨(asIso e).symm⟩⟩
-
-中文:
-引理 prop_isoClosure
-  条件: {X Y : C} (h : P X) (e : X ⟶ Y) [是同构 e]
-  结论: isoClosure P Y
-  证明: ⟨X, h, ⟨(asIso e).symm⟩⟩
+/-
+**CategoryTheory.ObjectProperty.prop_isoClosure** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.ObjectProperty`。
+形式化陈述：prop_isoClosure {X Y : C} (h : P X) (e : X ⟶ Y) [IsIso e] : isoClosure P Y
+参数：h : P X；e : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prop_isoClosure {X Y : C} (h : P X) (e : X ⟶ Y) [IsIso e] : isoClosure P Y :=
   ⟨X, h, ⟨(asIso e).symm⟩⟩
-
-/--
-lemma `le_isoClosure` / 引理 `le_isoClosure`
-
-English:
-lemma le_isoClosure
-  statement: P <= isoClosure P
-  proof: fun X hX => ⟨X, hX, ⟨Iso.refl X⟩⟩
-
-中文:
-引理 le_isoClosure
-  结论: P <= isoClosure P
-  证明: fun X hX => ⟨X, hX, ⟨Iso.refl X⟩⟩
-
-Depends on / 依赖: Iso.refl
+/-
+**CategoryTheory.ObjectProperty.le_isoClosure** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.ObjectProperty`。
+形式化陈述：le_isoClosure : P <= isoClosure P
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le_isoClosure : P <= isoClosure P :=
+lemma le_isoClosure : P ≤ isoClosure P :=
   fun X hX => ⟨X, hX, ⟨Iso.refl X⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.Nonempty]
-  signature: : P.isoClosure.Nonempty
-  body: .mono P.le_isoClosure
-
-中文:
-实例 [P.非空]
-  签名: : P.isoClosure.非空
-  定义体: .mono P.le_isoClosure
-
-Depends on / 依赖: P.le_isoClosure, le_isoClosure
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.Nonempty] : P.isoClosure.Nonempty := .mono P.le_isoClosure
 
 variable {P Q} in
-/--
-lemma `monotone_isoClosure` / 引理 `monotone_isoClosure`
-
-English:
-lemma monotone_isoClosure
-  given: (h : P <= Q)
-  statement: isoClosure P <= isoClosure Q
-  proof: by
-  rintro X ⟨X', hX', ⟨e⟩⟩
-  exact ⟨X', h _ hX', ⟨e⟩⟩
-
-中文:
-引理 monotone_isoClosure
-  条件: (h : P <= Q)
-  结论: isoClosure P <= isoClosure Q
-  证明: by
-  rintro X ⟨X', hX', ⟨e⟩⟩
-  exact ⟨X', h _ hX', ⟨e⟩⟩
+/-
+**CategoryTheory.ObjectProperty.monotone_isoClosure** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ObjectProperty`。
+形式化陈述：monotone_isoClosure (h : P <= Q) : isoClosure P <= isoClosure Q
+参数：h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monotone_isoClosure (h : P <= Q) : isoClosure P <= isoClosure Q := by
+lemma monotone_isoClosure (h : P ≤ Q) : isoClosure P ≤ isoClosure Q := by
   rintro X ⟨X', hX', ⟨e⟩⟩
   exact ⟨X', h _ hX', ⟨e⟩⟩
-
-/--
-lemma `isoClosure_eq_self` / 引理 `isoClosure_eq_self`
-
-English:
-lemma isoClosure_eq_self
-  given: [IsClosedUnderIsomorphisms P]
-  statement: isoClosure P = P
-  proof: by
-  apply le_antisymm
-  · intro X ⟨Y, hY, ⟨e⟩⟩
-    exact prop_of_iso P e.symm hY
-  · exact le_isoClosure P
-
-中文:
-引理 isoClosure_eq_self
-  条件: [在同构下封闭 P]
-  结论: isoClosure P = P
-  证明: by
-  apply le_antisymm
-  · intro X ⟨Y, hY, ⟨e⟩⟩
-    exact prop_of_iso P e.symm hY
-  · exact le_isoClosure P
-
-Depends on / 依赖: e.symm, le_antisymm, le_isoClosure, prop_of_iso
+/-
+**CategoryTheory.ObjectProperty.isoClosure_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：isoClosure_eq_self [IsClosedUnderIsomorphisms P] : isoClosure P = P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_iso`：prop_of_iso [IsClosedUnderIso
+morphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
 -/
 lemma isoClosure_eq_self [IsClosedUnderIsomorphisms P] : isoClosure P = P := by
   apply le_antisymm
   · intro X ⟨Y, hY, ⟨e⟩⟩
     exact prop_of_iso P e.symm hY
   · exact le_isoClosure P
-
-/--
-lemma `isoClosure_le_iff` / 引理 `isoClosure_le_iff`
-
-English:
-lemma isoClosure_le_iff
-  given: [IsClosedUnderIsomorphisms Q]
-  statement: isoClosure P <= Q ↔ P <= Q
-  proof: ⟨(le_isoClosure P).trans,
-    fun h => (monotone_isoClosure h).trans (by rw [isoClosure_eq_self])⟩
-
-中文:
-引理 isoClosure_le_iff
-  条件: [在同构下封闭 Q]
-  结论: isoClosure P <= Q ↔ P <= Q
-  证明: ⟨(le_isoClosure P).trans,
-    fun h => (monotone_isoClosure h).trans (by rw [isoClosure_eq_self])⟩
-
-Depends on / 依赖: isoClosure_eq_self, le_isoClosure, monotone_isoClosure
+/-
+**CategoryTheory.ObjectProperty.isoClosure_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ObjectProperty`。
+形式化陈述：isoClosure_le_iff [IsClosedUnderIsomorphisms Q] : isoClosure P <= Q ↔ P <=
+ Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
+· 使用引理 `CategoryTheory.ObjectProperty.monotone_isoClosure`：monotone_isoClosure (
+h : P <= Q) : isoClosure P <= isoClosure Q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.isoClosure_eq_self`：isoClosure_eq_self [Is
+ClosedUnderIsomorphisms P] : isoClosure P = P
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma isoClosure_le_iff [IsClosedUnderIsomorphisms Q] : isoClosure P <= Q ↔ P <= Q :=
+lemma isoClosure_le_iff [IsClosedUnderIsomorphisms Q] : isoClosure P ≤ Q ↔ P ≤ Q :=
   ⟨(le_isoClosure P).trans,
     fun h => (monotone_isoClosure h).trans (by rw [isoClosure_eq_self])⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsClosedUnderIsomorphisms (isoClosure P)
-  body: by
-    rintro X Y e ⟨Z, hZ, ⟨f⟩⟩
-    exact ⟨Z, hZ, ⟨e.symm.trans f⟩⟩
-
-中文:
-实例 :
-  签名: 在同构下封闭 (isoClosure P)
-  定义体: by
-    rintro X Y e ⟨Z, hZ, ⟨f⟩⟩
-    exact ⟨Z, hZ, ⟨e.symm.trans f⟩⟩
-
-Depends on / 依赖: e.symm.trans
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsClosedUnderIsomorphisms (isoClosure P) where
   of_iso := by
     rintro X Y e ⟨Z, hZ, ⟨f⟩⟩
     exact ⟨Z, hZ, ⟨e.symm.trans f⟩⟩
-
-/--
-lemma `isClosedUnderIsomorphisms_iff_isoClosure_eq_self` / 引理 `isClosedUnderIsomorphisms_iff_isoClosure_eq_self`
-
-English:
-lemma isClosedUnderIsomorphisms_iff_isoClosure_eq_self
-  proof: ⟨fun _ => isoClosure_eq_self _, fun h => by rw [← h]; infer_instance⟩
-
-中文:
-引理 isClosedUnderIsomorphisms_iff_isoClosure_eq_self
-  证明: ⟨fun _ => isoClosure_eq_self _, fun h => by rw [← h]; infer_instance⟩
-
-Depends on / 依赖: infer_instance, isoClosure_eq_self
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderIsomorphisms_iff_isoClosure_eq_self
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderIsomorphisms_iff_isoClosure_eq_self : IsClosedUnderIsomorphis
+ms P ↔ isoClosure P = P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.isoClosure_eq_self`：isoClosure_eq_self [Is
+ClosedUnderIsomorphisms P] : isoClosure P = P
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsIsoClosure`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.Obje
+ctProperty C),   P.isoClosure.IsClosedUnderIsomorphisms
 -/
 lemma isClosedUnderIsomorphisms_iff_isoClosure_eq_self :
     IsClosedUnderIsomorphisms P ↔ isoClosure P = P :=
-  ⟨fun _ => isoClosure_eq_self _, fun h => by rw [← h]; infer_instance⟩
-
+  ⟨fun _ ↦ isoClosure_eq_self _, fun h ↦ by rw [← h]; infer_instance⟩
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) : IsClosedUnderIsomorphisms (P.map F) where
   of_iso := by
     rintro _ _ e ⟨X, hX, ⟨e'⟩⟩
     exact ⟨X, hX, ⟨e' ≪≫ e⟩⟩
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : D ⥤ C) [P.IsClosedUnderIsomorphisms] :
     IsClosedUnderIsomorphisms (P.inverseImage F) where
   of_iso e hX := P.prop_of_iso (F.mapIso e) hX
 
 @[simp]
-/--
-lemma `isoClosure_strictMap` / 引理 `isoClosure_strictMap`
-
-English:
-lemma isoClosure_strictMap
-  given: (F : C ⥤ D)
-  proof: by
-  refine le_antisymm ?_ ?_
-  · rw [isoClosure_le_iff]
-    exact P.strictMap_le_map F
-  · rintro X ⟨Y, hY, ⟨e⟩⟩
-    exact ⟨F.obj Y, ⟨Y, hY⟩, ⟨e.symm⟩⟩
-
-@[simp]
-
-中文:
-引理 isoClosure_strictMap
-  条件: (F : C ⥤ D)
-  证明: by
-  refine le_antisymm ?_ ?_
-  · rw [isoClosure_le_iff]
-    exact P.strictMap_le_map F
-  · rintro X ⟨Y, hY, ⟨e⟩⟩
-    exact ⟨F.obj Y, ⟨Y, hY⟩, ⟨e.symm⟩⟩
-
-@[simp]
-
-Depends on / 依赖: F.obj, P.strictMap_le_map, e.symm, isoClosure_le_iff, le_antisymm, strictMap_le_map
+/-
+**CategoryTheory.ObjectProperty.isoClosure_strictMap** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ObjectProperty`。
+形式化陈述：isoClosure_strictMap (F : C ⥤ D) : (P.strictMap F).isoClosure = P.map F
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.isoClosure_le_iff`：isoClosure_le_iff [IsCl
+osedUnderIsomorphisms Q] : isoClosure P <= Q ↔ P <= Q
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsMap`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u'} [inst_1 : Categor
+yTheory.Category.{v', u'} D]   (P : CategoryTheory.O…
+· 使用引理 `CategoryTheory.ObjectProperty.strictMap_le_map`：strictMap_le_map (P : Ob
+jectProperty C) (F : C ⥤ D) : P.strictMap F <= P.map F
 -/
 lemma isoClosure_strictMap (F : C ⥤ D) :
     (P.strictMap F).isoClosure = P.map F := by
@@ -378,26 +275,18 @@ lemma isoClosure_strictMap (F : C ⥤ D) :
     exact ⟨F.obj Y, ⟨Y, hY⟩, ⟨e.symm⟩⟩
 
 @[simp]
-/--
-lemma `map_isoClosure` / 引理 `map_isoClosure`
-
-English:
-lemma map_isoClosure
-  given: (F : C ⥤ D)
-  proof: by
-  refine le_antisymm ?_ (map_monotone P.le_isoClosure F)
-  rintro X ⟨Y, ⟨Z, hZ, ⟨e⟩⟩, ⟨e'⟩⟩
-  exact ⟨Z, hZ, ⟨F.mapIso e.symm ≪≫ e'⟩⟩
-
-中文:
-引理 map_isoClosure
-  条件: (F : C ⥤ D)
-  证明: by
-  refine le_antisymm ?_ (map_monotone P.le_isoClosure F)
-  rintro X ⟨Y, ⟨Z, hZ, ⟨e⟩⟩, ⟨e'⟩⟩
-  exact ⟨Z, hZ, ⟨F.mapIso e.symm ≪≫ e'⟩⟩
-
-Depends on / 依赖: F.mapIso, P.le_isoClosure, e.symm, le_antisymm, le_isoClosure, mapIso, map_monotone
+/-
+**CategoryTheory.ObjectProperty.map_isoClosure** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ObjectProperty`。
+形式化陈述：map_isoClosure (F : C ⥤ D) : P.isoClosure.map F = P.map F
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.map_monotone`：map_monotone {P Q : ObjectPr
+operty C} (h : P <= Q) (F : C ⥤ D) : P.map F <= Q.map F
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
 -/
 lemma map_isoClosure (F : C ⥤ D) :
     P.isoClosure.map F = P.map F := by
@@ -408,3 +297,4 @@ lemma map_isoClosure (F : C ⥤ D) :
 end ObjectProperty
 
 end CategoryTheory
+

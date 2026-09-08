@@ -69,25 +69,57 @@ namespace AlgebraicGeometry
 
 namespace Scheme
 
-/--
-Definition of `GlueData` / `GlueData` 的定义
+/-- A family of gluing data consists of
+1. An index type `J`
+2. A scheme `U i` for each `i : J`.
+3. A scheme `V i j` for each `i j : J`.
+  (Note that this is `J × J → Scheme` rather than `J → J → Scheme` to connect to the
+  limits library easier.)
+4. An open immersion `f i j : V i j ⟶ U i` for each `i j : ι`.
+5. A transition map `t i j : V i j ⟶ V j i` for each `i j : ι`.
 
-English:
-structure GlueData
-  parameters: extends CategoryTheory.GlueData Scheme
-  extends: CategoryTheory.GlueData Scheme
-  axioms and operations (1):
-    - f_open : forall i j, IsOpenImmersion (f i j)
+such that
+6. `f i i` is an isomorphism.
+7. `t i i` is the identity.
+8. `V i j ×[U i] V i k ⟶ V i j ⟶ V j i` factors through `V j k ×[U j] V j i ⟶ V j i` via some
+    `t' : V i j ×[U i] V i k ⟶ V j k ×[U j] V j i`.
+9. `t' i j k ≫ t' j k i ≫ t' k i j = 𝟙 _`.
 
-中文:
-结构 粘合数据
-  参数: extends 范畴论.粘合数据 概形
-  继承: 范畴论.粘合数据 概形
-  公理与运算 (1 个):
-    - f_open : 对任意 i j, 是开浸入 (f i j)
+We can then glue the schemes `U i` together by identifying `V i j` with `V j i`, such
+that the `U i`'s are open subschemes of the glued space.
+-/
+/-
+**AlgebraicGeometry.Scheme.GlueData** 是 Mathlib 中的一个归纳类型，位于命名空间 `AlgebraicGeomet
+ry.Scheme`。
+形式化陈述：Type (u_1 + 1)
+参数：u_1 + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A family of gluing data consists of
+1. An index type `J`
+2. A scheme `U i` for each `i : J`.
+3. A scheme `V i j` for each `i j : J`.
+  (Note that this is `J × J → Scheme` rather than `J → J → Scheme` to connect to
+ the
+  limits library easier.)
+4. An open immersion `f i j : V i j ⟶ U i` for each `i j : ι`.
+5. A transition map `t i j : V i j ⟶ V j i` for each `i j : ι`.
+
+such that
+6. `f i i` is an isomorphism.
+7. `t i i` is the identity.
+8. `V i j ×[U i] V i k ⟶ V i j ⟶ V j i` factors through `V j k ×[U j] V j i ⟶ V 
+j i` via some
+    `t' : V i j ×[U i] V i k ⟶ V j k ×[U j] V j i`.
+9. `t' i j k ≫ t' j k i ≫ t' k i j = 𝟙 _`.
+
+We can then glue the schemes `U i` together by identifying `V i j` with `V j i`,
+ such
+that the `U i`'s are open subschemes of the glued space.
 -/
 structure GlueData extends CategoryTheory.GlueData Scheme where
-  f_open : forall i j, IsOpenImmersion (f i j)
+  f_open : ∀ i j, IsOpenImmersion (f i j)
 
 attribute [instance] GlueData.f_open
 
@@ -97,85 +129,73 @@ variable (D : GlueData.{u})
 
 local notation "𝖣" => D.toGlueData
 
-/--
-Definition of `toLocallyRingedSpaceGlueData` / `toLocallyRingedSpaceGlueData` 的定义
+/-- The glue data of locally ringed spaces associated to a family of glue data of schemes. -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.toLocallyRingedSpaceGlueData** 是 Mathlib 中的一
+个缩写定义，位于命名空间 `AlgebraicGeometry.Scheme.GlueData`。
+形式化陈述：toLocallyRingedSpaceGlueData : LocallyRingedSpace.GlueData
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.f_open`：∀ (self : AlgebraicGeometry.Sc
+heme.GlueData) (i j : self.J), AlgebraicGeometry.IsOpenImmersion (self.f i j)
 
-English:
-abbreviation toLocallyRingedSpaceGlueData
-  signature: : LocallyRingedSpace.GlueData
-  body: { f_open := D.f_open
-    toGlueData := 𝖣.mapGlueData forgetToLocallyRingedSpace }
-
-中文:
-缩写 toLocallyRingedSpaceGlueData
-  签名: : LocallyRinged空间.粘合数据
-  定义体: { f_open := D.f_open
-    toGlueData := 𝖣.mapGlueData forgetToLocallyRingedSpace }
-
-Depends on / 依赖: D.f_open, f_open, forgetToLocallyRingedSpace, mapGlueData, toGlueData
+--- 原说明 ---
+The glue data of locally ringed spaces associated to a family of glue data of sc
+hemes.
 -/
 abbrev toLocallyRingedSpaceGlueData : LocallyRingedSpace.GlueData :=
   { f_open := D.f_open
     toGlueData := 𝖣.mapGlueData forgetToLocallyRingedSpace }
-
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i j : 𝖣.J) :
     LocallyRingedSpace.IsOpenImmersion ((D.toLocallyRingedSpaceGlueData).toGlueData.f i j) := by
   apply GlueData.f_open
-
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i j : 𝖣.J) :
     SheafedSpace.IsOpenImmersion
       (D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toGlueData.f i j) := by
   apply GlueData.f_open
-
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i j : 𝖣.J) :
     PresheafedSpace.IsOpenImmersion
       (D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toGlueData.f
         i j) := by
   apply GlueData.f_open
-
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : 𝖣.J) :
     LocallyRingedSpace.IsOpenImmersion ((D.toLocallyRingedSpaceGlueData).toGlueData.ι i) := by
   apply LocallyRingedSpace.GlueData.ι_isOpenImmersion
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `gluedScheme` / `gluedScheme` 的定义
+/-- (Implementation). The glued scheme of a glue data.
+This should not be used outside this file. Use `AlgebraicGeometry.Scheme.GlueData.glued` instead. -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.gluedScheme** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.Scheme.GlueData`。
+形式化陈述：gluedScheme : Scheme
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gluedScheme
-  signature: : Scheme
-  body: by
-  apply LocallyRingedSpace.IsOpenImmersion.scheme
-    D.toLocallyRingedSpaceGlueData.toGlueData.glued
-  intro x
-  obtain ⟨i, y, rfl⟩ := D.toLocallyRingedSpaceGlueData.ι_jointly_surjective x
-  obtain ⟨j, z, hz⟩ := (D.U i).affineCover.exists_eq y
-  refine ⟨_, ((D.U i).affineCover.f j).toLRSHom ≫
-    D.toLocallyRingedSpaceGlueData.toGlueData.ι i, ?_⟩
-  constructor
-  · simp only [LocallyRingedSpace.comp_toHom, PresheafedSpace.comp_base,
-      TopCat.hom_comp, ContinuousMap.coe_comp, Set.range_comp]
-    exact Set.mem_image_of_mem _ ⟨z, hz⟩
-  · infer_instance
-
-中文:
-定义 gluedScheme
-  签名: : 概形
-  定义体: by
-  apply LocallyRingedSpace.IsOpenImmersion.scheme
-    D.toLocallyRingedSpaceGlueData.toGlueData.glued
-  intro x
-  obtain ⟨i, y, rfl⟩ := D.toLocallyRingedSpaceGlueData.ι_jointly_surjective x
-  obtain ⟨j, z, hz⟩ := (D.U i).affineCover.exists_eq y
-  refine ⟨_, ((D.U i).affineCover.f j).toLRSHom ≫
-    D.toLocallyRingedSpaceGlueData.toGlueData.ι i, ?_⟩
-  constructor
-  · simp only [LocallyRingedSpace.comp_toHom, PresheafedSpace.comp_base,
-      TopCat.hom_comp, ContinuousMap.coe_comp, Set.range_comp]
-    exact Set.mem_image_of_mem _ ⟨z, hz⟩
-  · infer_instance
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.coe_comp, D.toLocallyRingedSpaceGlueData, D.toLocallyRingedSpaceGlueData.toGlueData, D.toLocallyRingedSpaceGlueData.toGlueData.glued, IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion.scheme, LocallyRingedSpace.comp_toHom, PresheafedSpace, PresheafedSpace.comp_base, Set.mem_image_of_me, Set.range_comp, TopCat, TopCat.hom_comp, affineCover, affineCover.exists_eq, affineCover.f, coe_comp, comp_base
+--- 原说明 ---
+(Implementation). The glued scheme of a glue data.
+This should not be used outside this file. Use `AlgebraicGeometry.Scheme.GlueDat
+a.glued` instead.
 -/
 def gluedScheme : Scheme := by
   apply LocallyRingedSpace.IsOpenImmersion.scheme
@@ -192,149 +212,88 @@ def gluedScheme : Scheme := by
   · infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesColimit 𝖣.diagram.multispan forgetToLocallyRingedSpace
-  body: createsColimitOfFullyFaithfulOfIso D.gluedScheme
-    (HasColimit.isoOfNatIso (𝖣.diagramIso forgetToLocallyRingedSpace).symm)
-
-中文:
-实例 :
-  签名: 创造余极限 𝖣.diagram.multispan forgetToLocallyRingedSpace
-  定义体: createsColimitOfFullyFaithfulOfIso D.gluedScheme
-    (HasColimit.isoOfNatIso (𝖣.diagramIso forgetToLocallyRingedSpace).symm)
-
-Depends on / 依赖: D.gluedScheme, HasColimit, HasColimit.isoOfNatIso, createsColimitOfFullyFaithfulOfIso, diagramIso, forgetToLocallyRingedSpace, gluedScheme, isoOfNatIso
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CreatesColimit 𝖣.diagram.multispan forgetToLocallyRingedSpace :=
   createsColimitOfFullyFaithfulOfIso D.gluedScheme
     (HasColimit.isoOfNatIso (𝖣.diagramIso forgetToLocallyRingedSpace).symm)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimit (𝖣.diagram.multispan) forgetToTop
-  body: inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToLocallyRingedSpace ⋙
-      LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget CommRingCat))
-
-中文:
-实例 :
-  签名: 保持余极限 (𝖣.diagram.multispan) forgetToTop
-  定义体: inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToLocallyRingedSpace ⋙
-      LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget CommRingCat))
-
-Depends on / 依赖: CommRingCat, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace, PreservesColimit, SheafedSpace, SheafedSpace.forget, diagram, forget, forgetToLocallyRingedSpace, forgetToSheafedSpace, multispan
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesColimit (𝖣.diagram.multispan) forgetToTop :=
   inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToLocallyRingedSpace ⋙
       LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget CommRingCat))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimit (𝖣.diagram.multispan) forget
-  body: inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToTop ⋙ CategoryTheory.forget _))
-
-中文:
-实例 :
-  签名: 保持余极限 (𝖣.diagram.multispan) forget
-  定义体: inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToTop ⋙ CategoryTheory.forget _))
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.forget, PreservesColimit, diagram, forget, forgetToTop, multispan
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesColimit (𝖣.diagram.multispan) forget :=
   inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToTop ⋙ CategoryTheory.forget _))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasMulticoequalizer 𝖣.diagram
-  body: hasColimit_of_created _ forgetToLocallyRingedSpace
-
-中文:
-实例 :
-  签名: HasMulticoequalizer 𝖣.diagram
-  定义体: hasColimit_of_created _ forgetToLocallyRingedSpace
-
-Depends on / 依赖: forgetToLocallyRingedSpace, hasColimit_of_created
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasMulticoequalizer 𝖣.diagram :=
   hasColimit_of_created _ forgetToLocallyRingedSpace
 
-/--
-Definition of `glued` / `glued` 的定义
+/-- The glued scheme of a glued space. -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.glued** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebraic
+Geometry.Scheme.GlueData`。
+形式化陈述：glued : Scheme
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.instHasMulticoequalizerDiagram`：∀ (D :
+ AlgebraicGeometry.Scheme.GlueData), CategoryTheory.Limits.HasMulticoequalizer D
+.diagram
 
-English:
-abbreviation glued
-  signature: : Scheme
-  body: 𝖣.glued
-
-中文:
-缩写 glued
-  签名: : 概形
-  定义体: 𝖣.glued
+--- 原说明 ---
+The glued scheme of a glued space.
 -/
 abbrev glued : Scheme :=
   𝖣.glued
 
-/--
-Definition of `ι` / `ι` 的定义
+/-- The immersion from `D.U i` into the glued space. -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicGeome
+try.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ι
-  signature: (i : D.J)
-  body: 𝖣.ι i
-
-中文:
-缩写 ι
-  签名: (i : D.J)
-  定义体: 𝖣.ι i
+--- 原说明 ---
+The immersion from `D.U i` into the glued space.
 -/
 abbrev ι (i : D.J) : D.U i ⟶ D.glued :=
   𝖣.ι i
 
-/--
-Definition of `isoLocallyRingedSpace` / `isoLocallyRingedSpace` 的定义
+/-- The gluing as sheafed spaces is isomorphic to the gluing as presheafed spaces. -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.isoLocallyRingedSpace** 是 Mathlib 中的一个缩写定义，位
+于命名空间 `AlgebraicGeometry.Scheme.GlueData`。
+形式化陈述：isoLocallyRingedSpace : D.glued.toLocallyRingedSpace ≅ D.toLocallyRingedSp
+aceGlueData.toGlueData.glued
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.instHasMulticoequalizerDiagram`：∀ (D :
+ AlgebraicGeometry.Scheme.GlueData), CategoryTheory.Limits.HasMulticoequalizer D
+.diagram
 
-English:
-abbreviation isoLocallyRingedSpace
-  signature: :
-  body: 𝖣.gluedIso forgetToLocallyRingedSpace
-
-中文:
-缩写 isoLocallyRingedSpace
-  签名: :
-  定义体: 𝖣.gluedIso forgetToLocallyRingedSpace
-
-Depends on / 依赖: forgetToLocallyRingedSpace, gluedIso
+--- 原说明 ---
+The gluing as sheafed spaces is isomorphic to the gluing as presheafed spaces.
 -/
 abbrev isoLocallyRingedSpace :
     D.glued.toLocallyRingedSpace ≅ D.toLocallyRingedSpaceGlueData.toGlueData.glued :=
   𝖣.gluedIso forgetToLocallyRingedSpace
-
-/--
-theorem `ι_isoLocallyRingedSpace_inv` / 定理 `ι_isoLocallyRingedSpace_inv`
-
-English:
-theorem ι_isoLocallyRingedSpace_inv
-  given: (i : D.J)
-  proof: 𝖣.ι_gluedIso_inv forgetToLocallyRingedSpace i
-
-中文:
-定理 ι_isoLocallyRingedSpace_inv
-  条件: (i : D.J)
-  证明: 𝖣.ι_gluedIso_inv forgetToLocallyRingedSpace i
-
-Depends on / 依赖: forgetToLocallyRingedSpace
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_isoLocallyRingedSpace_inv (i : D.J) :
     D.toLocallyRingedSpaceGlueData.toGlueData.ι i ≫
@@ -342,144 +301,110 @@ theorem ι_isoLocallyRingedSpace_inv (i : D.J) :
   𝖣.ι_gluedIso_inv forgetToLocallyRingedSpace i
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `ι_isOpenImmersion` / 实例 `ι_isOpenImmersion`
-
-English:
-instance ι_isOpenImmersion
-  signature: (i : D.J)
-  body: by
-  rw [IsOpenImmersion]; rw [← D.ι_isoLocallyRingedSpace_inv]; infer_instance
-
-中文:
-实例 ι_isOpenImmersion
-  签名: (i : D.J)
-  定义体: by
-  rw [IsOpenImmersion]; rw [← D.ι_isoLocallyRingedSpace_inv]; infer_instance
-
-Depends on / 依赖: IsOpenImmersion, infer_instance
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ι_isOpenImmersion (i : D.J) : IsOpenImmersion (𝖣.ι i) := by
-  rw [IsOpenImmersion]; rw [← D.ι_isoLocallyRingedSpace_inv]; infer_instance
-
-/--
-theorem `ι_jointly_surjective` / 定理 `ι_jointly_surjective`
-
-English:
-theorem ι_jointly_surjective
-  given: (x : 𝖣.glued.carrier)
-  proof: 𝖣.ι_jointly_surjective forget x
-
-中文:
-定理 ι_jointly_surjective
-  条件: (x : 𝖣.glued.carrier)
-  证明: 𝖣.ι_jointly_surjective forget x
-
-Depends on / 依赖: forget
+  rw [IsOpenImmersion, ← D.ι_isoLocallyRingedSpace_inv]; infer_instance
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_jointly_surjective (x : 𝖣.glued.carrier) :
-    exists (i : D.J) (y : (D.U i).carrier), D.ι i y = x :=
+    ∃ (i : D.J) (y : (D.U i).carrier), D.ι i y = x :=
   𝖣.ι_jointly_surjective forget x
 
 /-- Promoted to higher priority to short circuit simplifier. -/
 @[simp (high), reassoc]
-/--
-theorem `glue_condition` / 定理 `glue_condition`
+/-
+**AlgebraicGeometry.Scheme.GlueData.glue_condition** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicGeometry.Scheme.GlueData`。
+形式化陈述：glue_condition (i j : D.J) : D.t i j ≫ D.f j i ≫ D.ι j = D.f i j ≫ D.ι i
+参数：i j : D.J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GlueData.glue_condition`：glue_condition (i j : D.J) : D.t
+ i j ≫ D.f j i ≫ D.ι j = D.f i j ≫ D.ι i
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.instHasMulticoequalizerDiagram`：∀ (D :
+ AlgebraicGeometry.Scheme.GlueData), CategoryTheory.Limits.HasMulticoequalizer D
+.diagram
 
-English:
-theorem glue_condition
-  given: (i j : D.J)
-  statement: D.t i j ≫ D.f j i ≫ D.ι j = D.f i j ≫ D.ι i
-  proof: 𝖣.glue_condition i j
-
-中文:
-定理 glue_condition
-  条件: (i j : D.J)
-  结论: D.t i j ≫ D.f j i ≫ D.ι j = D.f i j ≫ D.ι i
-  证明: 𝖣.glue_condition i j
-
-Depends on / 依赖: glue_condition
+--- 原说明 ---
+Promoted to higher priority to short circuit simplifier.
 -/
 theorem glue_condition (i j : D.J) : D.t i j ≫ D.f j i ≫ D.ι j = D.f i j ≫ D.ι i :=
   𝖣.glue_condition i j
 
-/--
-Definition of `vPullbackCone` / `vPullbackCone` 的定义
+/-- The pullback cone spanned by `V i j ⟶ U i` and `V i j ⟶ U j`.
+This is a pullback diagram (`vPullbackConeIsLimit`). -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.vPullbackCone** 是 Mathlib 中的一个定义，位于命名空间 `Alg
+ebraicGeometry.Scheme.GlueData`。
+形式化陈述：vPullbackCone (i j : D.J) : PullbackCone (D.ι i) (D.ι j)
+参数：i j : D.J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vPullbackCone
-  signature: (i j : D.J)
-  body: PullbackCone.mk (D.f i j) (D.t i j ≫ D.f j i) (by simp)
-
-中文:
-定义 vPullbackCone
-  签名: (i j : D.J)
-  定义体: PullbackCone.mk (D.f i j) (D.t i j ≫ D.f j i) (by simp)
-
-Depends on / 依赖: PullbackCone, PullbackCone.mk
+--- 原说明 ---
+The pullback cone spanned by `V i j ⟶ U i` and `V i j ⟶ U j`.
+This is a pullback diagram (`vPullbackConeIsLimit`).
 -/
 def vPullbackCone (i j : D.J) : PullbackCone (D.ι i) (D.ι j) :=
   PullbackCone.mk (D.f i j) (D.t i j ≫ D.f j i) (by simp)
 
-/--
-Definition of `vPullbackConeIsLimit` / `vPullbackConeIsLimit` 的定义
+/-- The following diagram is a pullback, i.e. `Vᵢⱼ` is the intersection of `Uᵢ` and `Uⱼ` in `X`.
+```
+Vᵢⱼ ⟶ Uᵢ
+ |      |
+ ↓      ↓
+ Uⱼ ⟶ X
+```
+-/
+/-
+**AlgebraicGeometry.Scheme.GlueData.vPullbackConeIsLimit** 是 Mathlib 中的一个定义，位于命名
+空间 `AlgebraicGeometry.Scheme.GlueData`。
+形式化陈述：vPullbackConeIsLimit (i j : D.J) : IsLimit (D.vPullbackCone i j)
+参数：i j : D.J。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.instHasMulticoequalizerDiagram`：∀ (D :
+ AlgebraicGeometry.Scheme.GlueData), CategoryTheory.Limits.HasMulticoequalizer D
+.diagram
 
-English:
-definition vPullbackConeIsLimit
-  signature: (i j : D.J)
-  body: 𝖣.vPullbackConeIsLimitOfMap forgetToLocallyRingedSpace i j
-    (D.toLocallyRingedSpaceGlueData.vPullbackConeIsLimit _ _)
-
-local notation "D_" => TopCat.GlueData.toGlueData
-  D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
-
-中文:
-定义 vPullbackConeIsLimit
-  签名: (i j : D.J)
-  定义体: 𝖣.vPullbackConeIsLimitOfMap forgetToLocallyRingedSpace i j
-    (D.toLocallyRingedSpaceGlueData.vPullbackConeIsLimit _ _)
-
-local notation "D_" => TopCat.GlueData.toGlueData
-  D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
-
-Depends on / 依赖: D.toLocallyRingedSpaceGlueData.vPullbackConeIsLimit, forgetToLocallyRingedSpace, toLocallyRingedSpaceGlueData, vPullbackConeIsLimit, vPullbackConeIsLimitOfMap
+--- 原说明 ---
+The following diagram is a pullback, i.e. `Vᵢⱼ` is the intersection of `Uᵢ` and 
+`Uⱼ` in `X`.
+```
+Vᵢⱼ ⟶ Uᵢ
+ |      |
+ ↓      ↓
+ Uⱼ ⟶ X
+```
 -/
 def vPullbackConeIsLimit (i j : D.J) : IsLimit (D.vPullbackCone i j) :=
   𝖣.vPullbackConeIsLimitOfMap forgetToLocallyRingedSpace i j
     (D.toLocallyRingedSpaceGlueData.vPullbackConeIsLimit _ _)
 
-local notation "D_" => TopCat.GlueData.toGlueData
+local notation "D_" => TopCat.GlueData.toGlueData <|
   D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `isoCarrier` / `isoCarrier` 的定义
+/-- The underlying topological space of the glued scheme is isomorphic to the gluing of the
+underlying spaces -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.isoCarrier** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme.GlueData`。
+形式化陈述：isoCarrier : D.glued.carrier ≅ (D_).glued
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoCarrier
-  signature: :
-  body: by
-  refine (PresheafedSpace.forget _).mapIso ?_ ≪≫
-    GlueData.gluedIso _ (PresheafedSpace.forget.{_, _, u} _)
-  refine SheafedSpace.forgetToPresheafedSpace.mapIso ?_ ≪≫
-    SheafedSpace.GlueData.isoPresheafedSpace _
-  refine LocallyRingedSpace.forgetToSheafedSpace.mapIso ?_ ≪≫
-    LocallyRingedSpace.GlueData.isoSheafedSpace _
-  exact Scheme.GlueData.isoLocallyRingedSpace _
-
-中文:
-定义 isoCarrier
-  签名: :
-  定义体: by
-  refine (PresheafedSpace.forget _).mapIso ?_ ≪≫
-    GlueData.gluedIso _ (PresheafedSpace.forget.{_, _, u} _)
-  refine SheafedSpace.forgetToPresheafedSpace.mapIso ?_ ≪≫
-    SheafedSpace.GlueData.isoPresheafedSpace _
-  refine LocallyRingedSpace.forgetToSheafedSpace.mapIso ?_ ≪≫
-    LocallyRingedSpace.GlueData.isoSheafedSpace _
-  exact Scheme.GlueData.isoLocallyRingedSpace _
-
-Depends on / 依赖: GlueData, GlueData.gluedIso, LocallyRingedSpace, LocallyRingedSpace.GlueData.isoSheafedSpace, LocallyRingedSpace.forgetToSheafedSpace.mapIso, PresheafedSpace, PresheafedSpace.forget, Scheme, Scheme.GlueData.isoLocallyRingedSpace, SheafedSpace, SheafedSpace.GlueData.isoPresheafedSpace, SheafedSpace.forgetToPresheafedSpace.mapIso, forget, forgetToPresheafedSpace, forgetToSheafedSpace, gluedIso, isoLocallyRingedSpace, isoPresheafedSpace, isoSheafedSpace, mapIso
+--- 原说明 ---
+The underlying topological space of the glued scheme is isomorphic to the gluing
+ of the
+underlying spaces
 -/
 def isoCarrier :
     D.glued.carrier ≅ (D_).glued := by
@@ -493,91 +418,48 @@ def isoCarrier :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `ι_isoCarrier_inv` / 定理 `ι_isoCarrier_inv`
-
-English:
-theorem ι_isoCarrier_inv
-  given: (i : D.J)
-  proof: by
-  delta isoCarrier
-  rw [Iso.trans_inv]; rw [GlueData.ι_gluedIso_inv_assoc]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [SheafedSpace.forgetToPresheafedSpace_map]; rw [PresheafedSpace.forget_map]; rw [PresheafedSpace.forget_map]; rw [← PresheafedSpace.comp_base]; rw [← Category.assoc]; rw [D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.ι_isoPresheafedSpace_inv i]
-  dsimp
-  rw [← Category.assoc]; rw [← PresheafedSpace.comp_base]; rw [← InducedCategory.comp_hom]; rw [D.toLocallyRingedSpaceGlueData.ι_isoSheafedSpace_inv i]; rw [← PresheafedSpace.comp_base]
-  change (_ ≫ D.isoLocallyRingedSpace.inv).base = _
-  rw [D.ι_isoLocallyRingedSpace_inv i]
-
-中文:
-定理 ι_isoCarrier_inv
-  条件: (i : D.J)
-  证明: by
-  delta isoCarrier
-  rw [Iso.trans_inv]; rw [GlueData.ι_gluedIso_inv_assoc]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [SheafedSpace.forgetToPresheafedSpace_map]; rw [PresheafedSpace.forget_map]; rw [PresheafedSpace.forget_map]; rw [← PresheafedSpace.comp_base]; rw [← Category.assoc]; rw [D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.ι_isoPresheafedSpace_inv i]
-  dsimp
-  rw [← Category.assoc]; rw [← PresheafedSpace.comp_base]; rw [← InducedCategory.comp_hom]; rw [D.toLocallyRingedSpaceGlueData.ι_isoSheafedSpace_inv i]; rw [← PresheafedSpace.comp_base]
-  change (_ ≫ D.isoLocallyRingedSpace.inv).base = _
-  rw [D.ι_isoLocallyRingedSpace_inv i]
-
-Depends on / 依赖: Category, Category.assoc, D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData, Functor, Functor.mapIso_inv, GlueData, InducedCa, Iso.trans_inv, PresheafedSpace, PresheafedSpace.comp_base, PresheafedSpace.forget_map, SheafedSpace, SheafedSpace.forgetToPresheafedSpace_map, comp_base, forgetToPresheafedSpace_map, forget_map, isoCarrier, mapIso_inv, toLocallyRingedSpaceGlueData, toSheafedSpaceGlueData
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_isoCarrier_inv (i : D.J) :
     (D_).ι i ≫ D.isoCarrier.inv = (D.ι i).base := by
   delta isoCarrier
-  rw [Iso.trans_inv]; rw [GlueData.ι_gluedIso_inv_assoc]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [SheafedSpace.forgetToPresheafedSpace_map]; rw [PresheafedSpace.forget_map]; rw [PresheafedSpace.forget_map]; rw [← PresheafedSpace.comp_base]; rw [← Category.assoc]; rw [D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.ι_isoPresheafedSpace_inv i]
+  rw [Iso.trans_inv, GlueData.ι_gluedIso_inv_assoc, Functor.mapIso_inv, Iso.trans_inv,
+    Functor.mapIso_inv, Iso.trans_inv, SheafedSpace.forgetToPresheafedSpace_map,
+    PresheafedSpace.forget_map,
+    PresheafedSpace.forget_map, ← PresheafedSpace.comp_base, ← Category.assoc,
+    D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.ι_isoPresheafedSpace_inv i]
   dsimp
-  rw [← Category.assoc]; rw [← PresheafedSpace.comp_base]; rw [← InducedCategory.comp_hom]; rw [D.toLocallyRingedSpaceGlueData.ι_isoSheafedSpace_inv i]; rw [← PresheafedSpace.comp_base]
+  rw [← Category.assoc, ← PresheafedSpace.comp_base,
+    ← InducedCategory.comp_hom, D.toLocallyRingedSpaceGlueData.ι_isoSheafedSpace_inv i,
+    ← PresheafedSpace.comp_base]
   change (_ ≫ D.isoLocallyRingedSpace.inv).base = _
   rw [D.ι_isoLocallyRingedSpace_inv i]
 
-/--
-Definition of `Rel` / `Rel` 的定义
+/-- An equivalence relation on `Σ i, D.U i` that holds iff `𝖣.ι i x = 𝖣.ι j y`.
+See `AlgebraicGeometry.Scheme.GlueData.ι_eq_iff`. -/
+/-
+**AlgebraicGeometry.Scheme.GlueData.Rel** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.Scheme.GlueData`。
+形式化陈述：Rel (a b : Σ i, ((D.U i).carrier : Type _)) : Prop
+参数：a b : Σ i, ((D.U i).carrier : Type _)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Rel
-  signature: (a b : Σ i, ((D.U i).carrier : Type _))
-  body: exists x : (D.V (a.1, b.1)).carrier, D.f _ _ x = a.2 ∧ (D.t _ _ ≫ D.f _ _) x = b.2
-
-中文:
-定义 关系
-  签名: (a b : Σ i, ((D.U i).carrier : 类型 _))
-  定义体: exists x : (D.V (a.1, b.1)).carrier, D.f _ _ x = a.2 ∧ (D.t _ _ ≫ D.f _ _) x = b.2
-
-Depends on / 依赖: carrier
+--- 原说明 ---
+An equivalence relation on `Σ i, D.U i` that holds iff `𝖣.ι i x = 𝖣.ι j y`.
+See `AlgebraicGeometry.Scheme.GlueData.ι_eq_iff`.
 -/
 def Rel (a b : Σ i, ((D.U i).carrier : Type _)) : Prop :=
-  exists x : (D.V (a.1, b.1)).carrier, D.f _ _ x = a.2 ∧ (D.t _ _ ≫ D.f _ _) x = b.2
+  ∃ x : (D.V (a.1, b.1)).carrier, D.f _ _ x = a.2 ∧ (D.t _ _ ≫ D.f _ _) x = b.2
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `ι_eq_iff` / 定理 `ι_eq_iff`
-
-English:
-theorem ι_eq_iff
-  given: (i j : D.J) (x : (D.U i).carrier) (y : (D.U j).carrier)
-  proof: by
-  refine Iff.trans ?_
-    (TopCat.GlueData.ι_eq_iff_rel
-      D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
-      i j x y)
-  rw [← ((TopCat.mono_iff_injective D.isoCarrier.inv).mp _).eq_iff]; rw [← ConcreteCategory.comp_apply]
-  · simp_rw [← D.ι_isoCarrier_inv]
-    rfl -- `rfl` was not needed before https://github.com/leanprover-community/mathlib4/pull/13170
-  · infer_instance
-
-中文:
-定理 ι_eq_iff
-  条件: (i j : D.J) (x : (D.U i).carrier) (y : (D.U j).carrier)
-  证明: by
-  refine Iff.trans ?_
-    (TopCat.GlueData.ι_eq_iff_rel
-      D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
-      i j x y)
-  rw [← ((TopCat.mono_iff_injective D.isoCarrier.inv).mp _).eq_iff]; rw [← ConcreteCategory.comp_apply]
-  · simp_rw [← D.ι_isoCarrier_inv]
-    rfl -- `rfl` was not needed before https://github.com/leanprover-community/mathlib4/pull/13170
-  · infer_instance
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, D.isoCarrier.inv, D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData, GlueData, Iff.trans, TopCat, TopCat.GlueData, TopCat.mono_iff_injective, before, community, comp_apply, eq_iff, github, github.com, infer_instance, isoCarrier, leanprover, mathlib4, mono_iff_injective
+/-
+**AlgebraicGeometry.Scheme.GlueData.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.Scheme.GlueData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_eq_iff (i j : D.J) (x : (D.U i).carrier) (y : (D.U j).carrier) :
     𝖣.ι i x = 𝖣.ι j y ↔ D.Rel ⟨i, x⟩ ⟨j, y⟩ := by
@@ -585,70 +467,61 @@ theorem ι_eq_iff (i j : D.J) (x : (D.U i).carrier) (y : (D.U j).carrier) :
     (TopCat.GlueData.ι_eq_iff_rel
       D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
       i j x y)
-  rw [← ((TopCat.mono_iff_injective D.isoCarrier.inv).mp _).eq_iff]; rw [← ConcreteCategory.comp_apply]
+  rw [← ((TopCat.mono_iff_injective D.isoCarrier.inv).mp _).eq_iff, ← ConcreteCategory.comp_apply]
   · simp_rw [← D.ι_isoCarrier_inv]
     rfl -- `rfl` was not needed before https://github.com/leanprover-community/mathlib4/pull/13170
   · infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `isOpen_iff` / 定理 `isOpen_iff`
-
-English:
-theorem isOpen_iff
-  given: (U : Set D.glued.carrier)
-  statement: IsOpen U ↔ forall i, IsOpen (D.ι i ⁻¹' U)
-  proof: by
-  rw [← (TopCat.homeoOfIso D.isoCarrier.symm).isOpen_preimage]; rw [TopCat.GlueData.isOpen_iff]
-  apply forall_congr'
-  intro i
-  rw [← Set.preimage_comp]; rw [← ι_isoCarrier_inv]
-  rfl
-
-中文:
-定理 isOpen_iff
-  条件: (U : 集合 D.glued.carrier)
-  结论: 是开集 U ↔ 对任意 i, 是开集 (D.ι i ⁻¹' U)
-  证明: by
-  rw [← (TopCat.homeoOfIso D.isoCarrier.symm).isOpen_preimage]; rw [TopCat.GlueData.isOpen_iff]
-  apply forall_congr'
-  intro i
-  rw [← Set.preimage_comp]; rw [← ι_isoCarrier_inv]
-  rfl
-
-Depends on / 依赖: D.isoCarrier.symm, GlueData, Set.preimage_comp, TopCat, TopCat.GlueData.isOpen_iff, TopCat.homeoOfIso, forall_congr, homeoOfIso, isOpen_iff, isOpen_preimage, isoCarrier, preimage_comp
+/-
+**AlgebraicGeometry.Scheme.GlueData.isOpen_iff** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.Scheme.GlueData`。
+形式化陈述：isOpen_iff (U : Set D.glued.carrier) : IsOpen U ↔ forall i, IsOpen (D.ι i 
+⁻¹' U)
+参数：U : Set D.glued.carrier。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.WalkingMultispan.instSmallOfLOfR`：∀ {J : CategoryT
+heory.Limits.MultispanShape} [Small.{t, w} J.L] [Small.{t, w'} J.R],   Small.{t,
+ max w' w} (CategoryTheory.Limits.WalkingMul…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.isOpen_preimage`：isOpen_preimage (h : X ≃ₜ Y) {s : Set Y} : I
+sOpen (h ⁻¹' s) ↔ IsOpen s
+· 使用定理 `TopCat.GlueData.isOpen_iff`：isOpen_iff (U : Set 𝖣.glued) : IsOpen U ↔ fo
+rall i, IsOpen (𝖣.ι i ⁻¹' U)
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.ι_isoCarrier_inv`：ι_isoCarrier_inv (i 
+: D.J) : (D_).ι i ≫ D.isoCarrier.inv = (D.ι i).base
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem isOpen_iff (U : Set D.glued.carrier) : IsOpen U ↔ forall i, IsOpen (D.ι i ⁻¹' U) := by
-  rw [← (TopCat.homeoOfIso D.isoCarrier.symm).isOpen_preimage]; rw [TopCat.GlueData.isOpen_iff]
+theorem isOpen_iff (U : Set D.glued.carrier) : IsOpen U ↔ ∀ i, IsOpen (D.ι i ⁻¹' U) := by
+  rw [← (TopCat.homeoOfIso D.isoCarrier.symm).isOpen_preimage, TopCat.GlueData.isOpen_iff]
   apply forall_congr'
   intro i
-  rw [← Set.preimage_comp]; rw [← ι_isoCarrier_inv]
+  rw [← Set.preimage_comp, ← ι_isoCarrier_inv]
   rfl
 
 /-- The open cover of the glued space given by the glue data. -/
 @[simps -isSimp]
-/--
-Definition of `openCover` / `openCover` 的定义
+/-
+**AlgebraicGeometry.Scheme.GlueData.openCover** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.Scheme.GlueData`。
+形式化陈述：openCover (D : Scheme.GlueData) : OpenCover D.glued where I₀
+参数：D : Scheme.GlueData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition openCover
-  signature: (D : Scheme.GlueData)
-  body: D.J
-  X := D.U
-  f := D.ι
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    exact ⟨D.ι_jointly_surjective, inferInstance⟩
-
-中文:
-定义 openCover
-  签名: (D : 概形.粘合数据)
-  定义体: D.J
-  X := D.U
-  f := D.ι
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    exact ⟨D.ι_jointly_surjective, inferInstance⟩
+--- 原说明 ---
+The open cover of the glued space given by the glue data.
 -/
 def openCover (D : Scheme.GlueData) : OpenCover D.glued where
   I₀ := D.J
@@ -664,32 +537,20 @@ namespace Cover
 
 variable {X : Scheme.{u}} (𝒰 : OpenCover.{u} X)
 
-/--
-Definition of `gluedCoverT'` / `gluedCoverT'` 的定义
+/-- (Implementation) the transition maps in the glue data associated with an open cover. -/
+/-
+**AlgebraicGeometry.Scheme.Cover.gluedCoverT'** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.Scheme.Cover`。
+形式化陈述：gluedCoverT' (x y z : 𝒰.I₀) : pullback (pullback.fst (𝒰.f x) (𝒰.f y)) (pul
+lback.fst (𝒰.f x) (𝒰.f z)) ⟶ pullback (pullback.fst (𝒰.f y) (𝒰.f z)) (pullback.f
+st (𝒰.f y) (𝒰.f x))
+参数：x y z : 𝒰.I₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gluedCoverT'
-  signature: (x y z : 𝒰.I₀)
-  body: by
-  refine (pullbackRightPullbackFstIso _ _ _).hom ≫ ?_
-  refine ?_ ≫ (pullbackSymmetry _ _).hom
-  refine ?_ ≫ (pullbackRightPullbackFstIso _ _ _).inv
-  refine pullback.map _ _ _ _ (pullbackSymmetry _ _).hom (𝟙 _) (𝟙 _) ?_ ?_
-  · simp [pullback.condition]
-  · simp
-
-中文:
-定义 gluedCoverT'
-  签名: (x y z : 𝒰.I₀)
-  定义体: by
-  refine (pullbackRightPullbackFstIso _ _ _).hom ≫ ?_
-  refine ?_ ≫ (pullbackSymmetry _ _).hom
-  refine ?_ ≫ (pullbackRightPullbackFstIso _ _ _).inv
-  refine pullback.map _ _ _ _ (pullbackSymmetry _ _).hom (𝟙 _) (𝟙 _) ?_ ?_
-  · simp [pullback.condition]
-  · simp
-
-Depends on / 依赖: condition, pullback, pullback.condition, pullback.map, pullbackRightPullbackFstIso, pullbackSymmetry
+--- 原说明 ---
+(Implementation) the transition maps in the glue data associated with an open co
+ver.
 -/
 def gluedCoverT' (x y z : 𝒰.I₀) :
     pullback (pullback.fst (𝒰.f x) (𝒰.f y)) (pullback.fst (𝒰.f x) (𝒰.f z)) ⟶
@@ -703,20 +564,59 @@ def gluedCoverT' (x y z : 𝒰.I₀) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc]
-/--
-theorem `gluedCoverT'_fst_fst` / 定理 `gluedCoverT'_fst_fst`
-
-English:
-theorem gluedCoverT'_fst_fst
-  given: (x y z : 𝒰.I₀)
-  proof: by
-  delta gluedCoverT'; simp
-
-中文:
-定理 gluedCoverT'_fst_fst
-  条件: (x y z : 𝒰.I₀)
-  证明: by
-  delta gluedCoverT'; simp
+/-
+**AlgebraicGeometry.Scheme.Cover.gluedCoverT'_fst_fst** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   Categ
+oryTheory.CategoryStruct.comp (AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x y
+ z)       (CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pul
+lback.fst (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (Catego
+ryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pu
+llback.fst (𝒰.f y) (𝒰.f z))) =     CategoryTheory.CategoryStruct.comp       (Cat
+egoryTheory.Limits.pullback.fst (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f
+ y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f z)))       (Catego
+ryTheory.Limits.pullback.snd (𝒰.f x) (𝒰.f y))
+参数：𝒰 : X.OpenCover；x y z : 𝒰.I₀；AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x 
+y z；CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pullback.f
+st (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (CategoryTheor
+y.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pullback.
+fst (𝒰.f y) (𝒰.f z))；CategoryTheory.Limits.pullback.fst (CategoryTheory.Limits.p
+ullback.fst (𝒰.f x) (𝒰.f y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x)
+ (𝒰.f z))；CategoryTheory.Limits.pullback.snd (𝒰.f x) (𝒰.f y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_fst_assoc`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) 
+  [inst_1 : CategoryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_snd_fst`：pullbackR
+ightPullbackFstIso_inv_snd_fst : (pullbackRightPullbackFstIso f g f').inv ≫ pull
+back.snd _ _ ≫ pullback.fst _ _ = pullback.fst _ _ …
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_fst`：pullbackSymmetry_ho
+m_comp_fst [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.fst g f = p
+ullback.snd f g
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_hom_fst_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Z) (g :
+ Y ⟶ Z) (f' : W ⟶ X)   [inst_1 : CategoryTheory.Limit…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem gluedCoverT'_fst_fst (x y z : 𝒰.I₀) :
     𝒰.gluedCoverT' x y z ≫ pullback.fst _ _ ≫ pullback.fst _ _ =
@@ -725,20 +625,59 @@ theorem gluedCoverT'_fst_fst (x y z : 𝒰.I₀) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc]
-/--
-theorem `gluedCoverT'_fst_snd` / 定理 `gluedCoverT'_fst_snd`
-
-English:
-theorem gluedCoverT'_fst_snd
-  given: (x y z : 𝒰.I₀)
-  proof: by
-  delta gluedCoverT'; simp
-
-中文:
-定理 gluedCoverT'_fst_snd
-  条件: (x y z : 𝒰.I₀)
-  证明: by
-  delta gluedCoverT'; simp
+/-
+**AlgebraicGeometry.Scheme.Cover.gluedCoverT'_fst_snd** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   Categ
+oryTheory.CategoryStruct.comp (AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x y
+ z)       (CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pul
+lback.fst (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (Catego
+ryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pu
+llback.snd (𝒰.f y) (𝒰.f z))) =     CategoryTheory.CategoryStruct.comp       (Cat
+egoryTheory.Limits.pullback.snd (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f
+ y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f z)))       (Catego
+ryTheory.Limits.pullback.snd (𝒰.f x) (𝒰.f z))
+参数：𝒰 : X.OpenCover；x y z : 𝒰.I₀；AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x 
+y z；CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pullback.f
+st (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (CategoryTheor
+y.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pullback.
+snd (𝒰.f y) (𝒰.f z))；CategoryTheory.Limits.pullback.snd (CategoryTheory.Limits.p
+ullback.fst (𝒰.f x) (𝒰.f y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x)
+ (𝒰.f z))；CategoryTheory.Limits.pullback.snd (𝒰.f x) (𝒰.f z)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_fst_assoc`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) 
+  [inst_1 : CategoryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_snd_snd`：pullbackR
+ightPullbackFstIso_inv_snd_snd : (pullbackRightPullbackFstIso f g f').inv ≫ pull
+back.snd _ _ ≫ pullback.snd _ _ = pullback.snd _ _
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_hom_snd`：pullbackRight
+PullbackFstIso_hom_snd : (pullbackRightPullbackFstIso f g f').hom ≫ pullback.snd
+ _ _ = pullback.snd f' (pullback.fst f g) ≫ pul…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem gluedCoverT'_fst_snd (x y z : 𝒰.I₀) :
     gluedCoverT' 𝒰 x y z ≫ pullback.fst _ _ ≫ pullback.snd _ _ =
@@ -747,20 +686,59 @@ theorem gluedCoverT'_fst_snd (x y z : 𝒰.I₀) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc]
-/--
-theorem `gluedCoverT'_snd_fst` / 定理 `gluedCoverT'_snd_fst`
-
-English:
-theorem gluedCoverT'_snd_fst
-  given: (x y z : 𝒰.I₀)
-  proof: by
-  delta gluedCoverT'; simp
-
-中文:
-定理 gluedCoverT'_snd_fst
-  条件: (x y z : 𝒰.I₀)
-  证明: by
-  delta gluedCoverT'; simp
+/-
+**AlgebraicGeometry.Scheme.Cover.gluedCoverT'_snd_fst** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   Categ
+oryTheory.CategoryStruct.comp (AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x y
+ z)       (CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pul
+lback.snd (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (Catego
+ryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pu
+llback.fst (𝒰.f y) (𝒰.f x))) =     CategoryTheory.CategoryStruct.comp       (Cat
+egoryTheory.Limits.pullback.fst (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f
+ y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f z)))       (Catego
+ryTheory.Limits.pullback.snd (𝒰.f x) (𝒰.f y))
+参数：𝒰 : X.OpenCover；x y z : 𝒰.I₀；AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x 
+y z；CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pullback.s
+nd (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (CategoryTheor
+y.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pullback.
+fst (𝒰.f y) (𝒰.f x))；CategoryTheory.Limits.pullback.fst (CategoryTheory.Limits.p
+ullback.fst (𝒰.f x) (𝒰.f y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x)
+ (𝒰.f z))；CategoryTheory.Limits.pullback.snd (𝒰.f x) (𝒰.f y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_snd_assoc`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) 
+  [inst_1 : CategoryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_fst_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Z) (g :
+ Y ⟶ Z) (f' : W ⟶ X)   [inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_fst`：pullbackSymmetry_ho
+m_comp_fst [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.fst g f = p
+ullback.snd f g
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_hom_fst_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Z) (g :
+ Y ⟶ Z) (f' : W ⟶ X)   [inst_1 : CategoryTheory.Limit…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem gluedCoverT'_snd_fst (x y z : 𝒰.I₀) :
     gluedCoverT' 𝒰 x y z ≫ pullback.snd _ _ ≫ pullback.fst _ _ =
@@ -769,90 +747,180 @@ theorem gluedCoverT'_snd_fst (x y z : 𝒰.I₀) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc]
-/--
-theorem `gluedCoverT'_snd_snd` / 定理 `gluedCoverT'_snd_snd`
-
-English:
-theorem gluedCoverT'_snd_snd
-  given: (x y z : 𝒰.I₀)
-  proof: by
-  delta gluedCoverT'; simp
-
-中文:
-定理 gluedCoverT'_snd_snd
-  条件: (x y z : 𝒰.I₀)
-  证明: by
-  delta gluedCoverT'; simp
+/-
+**AlgebraicGeometry.Scheme.Cover.gluedCoverT'_snd_snd** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   Categ
+oryTheory.CategoryStruct.comp (AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x y
+ z)       (CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pul
+lback.snd (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (Catego
+ryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pu
+llback.snd (𝒰.f y) (𝒰.f x))) =     CategoryTheory.CategoryStruct.comp       (Cat
+egoryTheory.Limits.pullback.fst (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f
+ y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f z)))       (Catego
+ryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f y))
+参数：𝒰 : X.OpenCover；x y z : 𝒰.I₀；AlgebraicGeometry.Scheme.Cover.gluedCoverT' 𝒰 x 
+y z；CategoryTheory.CategoryStruct.comp         (CategoryTheory.Limits.pullback.s
+nd (CategoryTheory.Limits.pullback.fst (𝒰.f y) (𝒰.f z))           (CategoryTheor
+y.Limits.pullback.fst (𝒰.f y) (𝒰.f x)))         (CategoryTheory.Limits.pullback.
+snd (𝒰.f y) (𝒰.f x))；CategoryTheory.Limits.pullback.fst (CategoryTheory.Limits.p
+ullback.fst (𝒰.f x) (𝒰.f y))         (CategoryTheory.Limits.pullback.fst (𝒰.f x)
+ (𝒰.f z))；CategoryTheory.Limits.pullback.fst (𝒰.f x) (𝒰.f y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_snd_assoc`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) 
+  [inst_1 : CategoryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_fst_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Z) (g :
+ Y ⟶ Z) (f' : W ⟶ X)   [inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_snd`：pullbackSymmetry_ho
+m_comp_snd [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.snd g f = p
+ullback.fst f g
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_hom_fst_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Z) (g :
+ Y ⟶ Z) (f' : W ⟶ X)   [inst_1 : CategoryTheory.Limit…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem gluedCoverT'_snd_snd (x y z : 𝒰.I₀) :
     gluedCoverT' 𝒰 x y z ≫ pullback.snd _ _ ≫ pullback.snd _ _ =
       pullback.fst _ _ ≫ pullback.fst _ _ := by
   delta gluedCoverT'; simp
-
-/--
-theorem `glued_cover_cocycle_fst` / 定理 `glued_cover_cocycle_fst`
-
-English:
-theorem glued_cover_cocycle_fst
-  given: (x y z : 𝒰.I₀)
-  proof: by
-  apply pullback.hom_ext <;> simp
-
-中文:
-定理 glued_cover_cocycle_fst
-  条件: (x y z : 𝒰.I₀)
-  证明: by
-  apply pullback.hom_ext <;> simp
-
-Depends on / 依赖: hom_ext, pullback, pullback.hom_ext
+/-
+**AlgebraicGeometry.Scheme.Cover.glued_cover_cocycle_fst** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：glued_cover_cocycle_fst (x y z : 𝒰.I₀) : gluedCoverT' 𝒰 x y z ≫ gluedCover
+T' 𝒰 y z x ≫ gluedCoverT' 𝒰 z x y ≫ pullback.fst _ _ = pullback.fst _ _
+参数：x y z : 𝒰.I₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.gluedCoverT'_fst_fst`：∀ {X : AlgebraicGeo
+metry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   CategoryTheory.CategoryStruct.
+comp (AlgebraicGeometry.Scheme.Cover.glue…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.gluedCoverT'_fst_snd`：∀ {X : AlgebraicGeo
+metry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   CategoryTheory.CategoryStruct.
+comp (AlgebraicGeometry.Scheme.Cover.glue…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.gluedCoverT'_snd_snd`：∀ {X : AlgebraicGeo
+metry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   CategoryTheory.CategoryStruct.
+comp (AlgebraicGeometry.Scheme.Cover.glue…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem glued_cover_cocycle_fst (x y z : 𝒰.I₀) :
     gluedCoverT' 𝒰 x y z ≫ gluedCoverT' 𝒰 y z x ≫ gluedCoverT' 𝒰 z x y ≫ pullback.fst _ _ =
       pullback.fst _ _ := by
   apply pullback.hom_ext <;> simp
-
-/--
-theorem `glued_cover_cocycle_snd` / 定理 `glued_cover_cocycle_snd`
-
-English:
-theorem glued_cover_cocycle_snd
-  given: (x y z : 𝒰.I₀)
-  proof: by
-  apply pullback.hom_ext <;> simp [pullback.condition]
-
-中文:
-定理 glued_cover_cocycle_snd
-  条件: (x y z : 𝒰.I₀)
-  证明: by
-  apply pullback.hom_ext <;> simp [pullback.condition]
-
-Depends on / 依赖: condition, hom_ext, pullback, pullback.condition, pullback.hom_ext
+/-
+**AlgebraicGeometry.Scheme.Cover.glued_cover_cocycle_snd** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：glued_cover_cocycle_snd (x y z : 𝒰.I₀) : gluedCoverT' 𝒰 x y z ≫ gluedCover
+T' 𝒰 y z x ≫ gluedCoverT' 𝒰 z x y ≫ pullback.snd _ _ = pullback.snd _ _
+参数：x y z : 𝒰.I₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.gluedCoverT'_snd_fst`：∀ {X : AlgebraicGeo
+metry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   CategoryTheory.CategoryStruct.
+comp (AlgebraicGeometry.Scheme.Cover.glue…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.gluedCoverT'_fst_snd`：∀ {X : AlgebraicGeo
+metry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   CategoryTheory.CategoryStruct.
+comp (AlgebraicGeometry.Scheme.Cover.glue…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.gluedCoverT'_snd_snd`：∀ {X : AlgebraicGeo
+metry.Scheme} (𝒰 : X.OpenCover) (x y z : 𝒰.I₀),   CategoryTheory.CategoryStruct.
+comp (AlgebraicGeometry.Scheme.Cover.glue…
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem glued_cover_cocycle_snd (x y z : 𝒰.I₀) :
     gluedCoverT' 𝒰 x y z ≫ gluedCoverT' 𝒰 y z x ≫ gluedCoverT' 𝒰 z x y ≫ pullback.snd _ _ =
       pullback.snd _ _ := by
   apply pullback.hom_ext <;> simp [pullback.condition]
-
-/--
-theorem `glued_cover_cocycle` / 定理 `glued_cover_cocycle`
-
-English:
-theorem glued_cover_cocycle
-  given: (x y z : 𝒰.I₀)
-  proof: by
-  apply pullback.hom_ext <;> simp_rw [Category.id_comp, Category.assoc]
-  · apply glued_cover_cocycle_fst
-  · apply glued_cover_cocycle_snd
-
-中文:
-定理 glued_cover_cocycle
-  条件: (x y z : 𝒰.I₀)
-  证明: by
-  apply pullback.hom_ext <;> simp_rw [Category.id_comp, Category.assoc]
-  · apply glued_cover_cocycle_fst
-  · apply glued_cover_cocycle_snd
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, glued_cover_cocycle_fst, glued_cover_cocycle_snd, hom_ext, id_comp, pullback, pullback.hom_ext, simp_rw
+/-
+**AlgebraicGeometry.Scheme.Cover.glued_cover_cocycle** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：glued_cover_cocycle (x y z : 𝒰.I₀) : gluedCoverT' 𝒰 x y z ≫ gluedCoverT' 𝒰
+ y z x ≫ gluedCoverT' 𝒰 z x y = 𝟙 _
+参数：x y z : 𝒰.I₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.glued_cover_cocycle_fst`：glued_cover_cocy
+cle_fst (x y z : 𝒰.I₀) : gluedCoverT' 𝒰 x y z ≫ gluedCoverT' 𝒰 y z x ≫ gluedCove
+rT' 𝒰 z x y ≫ pullback.fst _ _ = pullback.fs…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.glued_cover_cocycle_snd`：glued_cover_cocy
+cle_snd (x y z : 𝒰.I₀) : gluedCoverT' 𝒰 x y z ≫ gluedCoverT' 𝒰 y z x ≫ gluedCove
+rT' 𝒰 z x y ≫ pullback.snd _ _ = pullback.sn…
 -/
 theorem glued_cover_cocycle (x y z : 𝒰.I₀) :
     gluedCoverT' 𝒰 x y z ≫ gluedCoverT' 𝒰 y z x ≫ gluedCoverT' 𝒰 z x y = 𝟙 _ := by
@@ -863,40 +931,19 @@ theorem glued_cover_cocycle (x y z : 𝒰.I₀) :
 /-- The glue data associated with an open cover.
 The canonical isomorphism `𝒰.gluedCover.glued ⟶ X` is provided by `𝒰.fromGlued`. -/
 @[simps]
-/--
-Definition of `gluedCover` / `gluedCover` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.gluedCover** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.Scheme.Cover`。
+形式化陈述：gluedCover : Scheme.GlueData.{u} where J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.glued_cover_cocycle`：glued_cover_cocycle 
+(x y z : 𝒰.I₀) : gluedCoverT' 𝒰 x y z ≫ gluedCoverT' 𝒰 y z x ≫ gluedCoverT' 𝒰 z 
+x y = 𝟙 _
 
-English:
-definition gluedCover
-  signature: : Scheme.GlueData.{u} where
-  body: 𝒰.I₀
-  U := 𝒰.X
-  V := fun ⟨x, y⟩ => pullback (𝒰.f x) (𝒰.f y)
-  f _ _ := pullback.fst _ _
-  f_id _ := inferInstance
-  t _ _ := (pullbackSymmetry _ _).hom
-  t_id x := by simp
-  t' x y z := gluedCoverT' 𝒰 x y z
-  t_fac x y z := by apply pullback.hom_ext <;> simp
-  -- The `cocycle` field could have been `by tidy` but lean timeouts.
-  cocycle x y z := glued_cover_cocycle 𝒰 x y z
-  f_open _ := inferInstance
-
-中文:
-定义 gluedCover
-  签名: : 概形.粘合数据.{u} where
-  定义体: 𝒰.I₀
-  U := 𝒰.X
-  V := fun ⟨x, y⟩ => pullback (𝒰.f x) (𝒰.f y)
-  f _ _ := pullback.fst _ _
-  f_id _ := inferInstance
-  t _ _ := (pullbackSymmetry _ _).hom
-  t_id x := by simp
-  t' x y z := gluedCoverT' 𝒰 x y z
-  t_fac x y z := by apply pullback.hom_ext <;> simp
-  -- The `cocycle` field could have been `by tidy` but lean timeouts.
-  cocycle x y z := glued_cover_cocycle 𝒰 x y z
-  f_open _ := inferInstance
+--- 原说明 ---
+The glue data associated with an open cover.
+The canonical isomorphism `𝒰.gluedCover.glued ⟶ X` is provided by `𝒰.fromGlued`.
 -/
 def gluedCover : Scheme.GlueData.{u} where
   J := 𝒰.I₀
@@ -913,34 +960,18 @@ def gluedCover : Scheme.GlueData.{u} where
   f_open _ := inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `fromGlued` / `fromGlued` 的定义
+/-- The canonical morphism from the gluing of an open cover of `X` into `X`.
+This is an isomorphism, as witnessed by an `IsIso` instance. -/
+/-
+**AlgebraicGeometry.Scheme.Cover.fromGlued** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.Scheme.Cover`。
+形式化陈述：fromGlued : 𝒰.gluedCover.glued ⟶ X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromGlued
-  signature: : 𝒰.gluedCover.glued ⟶ X
-  body: by
-  fapply Multicoequalizer.desc
-  · exact fun x => 𝒰.f x
-  rintro ⟨x, y⟩
-  change pullback.fst _ _ ≫ _ = ((pullbackSymmetry _ _).hom ≫ pullback.fst _ _) ≫ _
-  simpa using! pullback.condition
-
-@[simp, reassoc]
-
-中文:
-定义 fromGlued
-  签名: : 𝒰.gluedCover.glued ⟶ X
-  定义体: by
-  fapply Multicoequalizer.desc
-  · exact fun x => 𝒰.f x
-  rintro ⟨x, y⟩
-  change pullback.fst _ _ ≫ _ = ((pullbackSymmetry _ _).hom ≫ pullback.fst _ _) ≫ _
-  simpa using! pullback.condition
-
-@[simp, reassoc]
-
-Depends on / 依赖: Multicoequalizer, Multicoequalizer.desc, condition, fapply, pullback, pullback.condition, pullback.fst, pullbackSymmetry
+--- 原说明 ---
+The canonical morphism from the gluing of an open cover of `X` into `X`.
+This is an isomorphism, as witnessed by an `IsIso` instance.
 -/
 def fromGlued : 𝒰.gluedCover.glued ⟶ X := by
   fapply Multicoequalizer.desc
@@ -950,85 +981,58 @@ def fromGlued : 𝒰.gluedCover.glued ⟶ X := by
   simpa using! pullback.condition
 
 @[simp, reassoc]
-/--
-theorem `ι_fromGlued` / 定理 `ι_fromGlued`
-
-English:
-theorem ι_fromGlued
-  given: (x : 𝒰.I₀)
-  statement: 𝒰.gluedCover.ι x ≫ 𝒰.fromGlued = 𝒰.f x
-  proof: Multicoequalizer.π_desc _ _ _ _ _
-
-中文:
-定理 ι_fromGlued
-  条件: (x : 𝒰.I₀)
-  结论: 𝒰.gluedCover.ι x ≫ 𝒰.fromGlued = 𝒰.f x
-  证明: Multicoequalizer.π_desc _ _ _ _ _
-
-Depends on / 依赖: Multicoequalizer
+/-
+**AlgebraicGeometry.Scheme.Cover.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+cheme.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_fromGlued (x : 𝒰.I₀) : 𝒰.gluedCover.ι x ≫ 𝒰.fromGlued = 𝒰.f x :=
   Multicoequalizer.π_desc _ _ _ _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `fromGlued_injective` / 定理 `fromGlued_injective`
-
-English:
-theorem fromGlued_injective
-  statement: Function.Injective 𝒰.fromGlued
-  proof: by
-  intro x y h
-  obtain ⟨i, x, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective x
-  obtain ⟨j, y, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective y
-  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply] at h
-  simp_rw [← Scheme.Hom.comp_base] at h
-  rw [ι_fromGlued]; rw [ι_fromGlued] at h
-  let e :=
-    (TopCat.pullbackConeIsLimit _ _).conePointUniqueUpToIso
-      (isLimitOfHasPullbackOfPreservesLimit Scheme.forgetToTop (𝒰.f i) (𝒰.f j))
-  rw [𝒰.gluedCover.ι_eq_iff]
-  use e.hom ⟨⟨x, y⟩, h⟩
-  constructor
-  · erw [← ConcreteCategory.comp_apply e.hom,
-      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left]
-    rfl
-  · erw [← ConcreteCategory.comp_apply e.hom, pullbackSymmetry_hom_comp_fst,
-      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right]
-    rfl
-
-中文:
-定理 fromGlued_injective
-  结论: 函数.单射 𝒰.fromGlued
-  证明: by
-  intro x y h
-  obtain ⟨i, x, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective x
-  obtain ⟨j, y, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective y
-  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply] at h
-  simp_rw [← Scheme.Hom.comp_base] at h
-  rw [ι_fromGlued]; rw [ι_fromGlued] at h
-  let e :=
-    (TopCat.pullbackConeIsLimit _ _).conePointUniqueUpToIso
-      (isLimitOfHasPullbackOfPreservesLimit Scheme.forgetToTop (𝒰.f i) (𝒰.f j))
-  rw [𝒰.gluedCover.ι_eq_iff]
-  use e.hom ⟨⟨x, y⟩, h⟩
-  constructor
-  · erw [← ConcreteCategory.comp_apply e.hom,
-      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left]
-    rfl
-  · erw [← ConcreteCategory.comp_apply e.hom, pullbackSymmetry_hom_comp_fst,
-      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right]
-    rfl
-
-Depends on / 依赖: Concre, ConcreteCategory, ConcreteCategory.comp_apply, Scheme, Scheme.Hom.comp_base, Scheme.forgetToTop, TopCat, TopCat.pullbackConeIsLimit, comp_apply, comp_base, conePointUniqueUpToIso, e.hom, forgetToTop, gluedCover, isLimitOfHasPullbackOfPreservesLimit, pullbackConeIsLimit, simp_rw
+/-
+**AlgebraicGeometry.Scheme.Cover.fromGlued_injective** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：fromGlued_injective : Function.Injective 𝒰.fromGlued
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.ι_jointly_surjective`：ι_jointly_surjec
+tive (x : 𝖣.glued.carrier) : exists (i : D.J) (y : (D.U i).carrier), D.ι i y = x
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instPreservesLimitSchemeTopCatWalkingC
+ospanCospanForgetToTop_1`：∀ {X Y Z : AlgebraicGeometry.Scheme} (f : X ⟶ Z) (g : 
+Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],   CategoryTheory.Limits.Preser
+vesLim…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.instHasMulticoequalizerDiagram`：∀ (D :
+ AlgebraicGeometry.Scheme.GlueData), CategoryTheory.Limits.HasMulticoequalizer D
+.diagram
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.ι_eq_iff`：ι_eq_iff (i j : D.J) (x : (D
+.U i).carrier) (y : (D.U j).carrier) : 𝖣.ι i x = 𝖣.ι j y ↔ D.Rel ⟨i, x⟩ ⟨j, y⟩
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.ι_fromGlued`：ι_fromGlued (x : 𝒰.I₀) : 𝒰.g
+luedCover.ι x ≫ 𝒰.fromGlued = 𝒰.f x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
+· 使用定理 `CategoryTheory.Limits.hasPullback_symmetry`：hasPullback_symmetry [HasPul
+lback f g] : HasPullback g f
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_fst`：pullbackSymmetry_ho
+m_comp_fst [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.fst g f = p
+ullback.snd f g
 -/
 theorem fromGlued_injective : Function.Injective 𝒰.fromGlued := by
   intro x y h
   obtain ⟨i, x, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective x
   obtain ⟨j, y, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective y
-  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply] at h
+  rw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply] at h
   simp_rw [← Scheme.Hom.comp_base] at h
-  rw [ι_fromGlued]; rw [ι_fromGlued] at h
+  rw [ι_fromGlued, ι_fromGlued] at h
   let e :=
     (TopCat.pullbackConeIsLimit _ _).conePointUniqueUpToIso
       (isLimitOfHasPullbackOfPreservesLimit Scheme.forgetToTop (𝒰.f i) (𝒰.f j))
@@ -1043,67 +1047,70 @@ theorem fromGlued_injective : Function.Injective 𝒰.fromGlued := by
     rfl
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**AlgebraicGeometry.Scheme.Cover.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : 𝒰.gluedCover.glued.carrier) :
     IsIso (𝒰.fromGlued.stalkMap x) := by
   obtain ⟨i, x, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective x
   have := Hom.stalkMap_congr_hom _ _ (𝒰.ι_fromGlued i) x
-  rw [Hom.stalkMap_comp]; rw [← IsIso.eq_comp_inv] at this
+  rw [Hom.stalkMap_comp, ← IsIso.eq_comp_inv] at this
   rw [this]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `isOpenMap_fromGlued` / 定理 `isOpenMap_fromGlued`
-
-English:
-theorem isOpenMap_fromGlued
-  statement: IsOpenMap 𝒰.fromGlued
-  proof: by
-  intro U hU
-  rw [isOpen_iff_forall_mem_open]
-  intro x hx
-  rw [𝒰.gluedCover.isOpen_iff] at hU
-  use 𝒰.fromGlued '' U inter Set.range (𝒰.f (𝒰.idx x))
-  use Set.inter_subset_left
-  constructor
-  · rw [← Set.image_preimage_eq_inter_range]
-    apply (𝒰.f (𝒰.idx x)).isOpenEmbedding.isOpenMap
-    convert! hU (𝒰.idx x) using 1
-    simp only [← ι_fromGlued, gluedCover_U, Hom.comp_base, TopCat.hom_comp, ContinuousMap.coe_comp,
-      Set.preimage_comp]
-    congr! 1
-    exact Set.preimage_image_eq _ 𝒰.fromGlued_injective
-  · exact ⟨hx, 𝒰.covers x⟩
-
-中文:
-定理 isOpenMap_fromGlued
-  结论: 是开映射 𝒰.fromGlued
-  证明: by
-  intro U hU
-  rw [isOpen_iff_forall_mem_open]
-  intro x hx
-  rw [𝒰.gluedCover.isOpen_iff] at hU
-  use 𝒰.fromGlued '' U inter Set.range (𝒰.f (𝒰.idx x))
-  use Set.inter_subset_left
-  constructor
-  · rw [← Set.image_preimage_eq_inter_range]
-    apply (𝒰.f (𝒰.idx x)).isOpenEmbedding.isOpenMap
-    convert! hU (𝒰.idx x) using 1
-    simp only [← ι_fromGlued, gluedCover_U, Hom.comp_base, TopCat.hom_comp, ContinuousMap.coe_comp,
-      Set.preimage_comp]
-    congr! 1
-    exact Set.preimage_image_eq _ 𝒰.fromGlued_injective
-  · exact ⟨hx, 𝒰.covers x⟩
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.coe_comp, Hom.comp_base, Set.image_preimage_eq_inter_range, Set.inter_subset_left, Set.preimage_comp, Set.preimage_image_eq, Set.range, TopCat, TopCat.hom_comp, coe_comp, comp_base, convert, fromGlued, fromGlued_injective, gluedCover, gluedCover.isOpen_iff, gluedCover_U, hom_comp, image_preimage_eq_inter_range
+/-
+**AlgebraicGeometry.Scheme.Cover.isOpenMap_fromGlued** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：isOpenMap_fromGlued : IsOpenMap 𝒰.fromGlued
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isOpen_iff_forall_mem_open`：isOpen_iff_forall_mem_open : IsOpen s ↔ fora
+ll x in s, exists t, t subseteq s ∧ IsOpen t ∧ x in t
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `Topology.IsOpenEmbedding.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} {f :
+ X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.Is
+OpenEmbedding f → IsOpen…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isOpenEmbedding`：isOpenEmbedding : IsOpenEm
+bedding f
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.fromGlued_injective`：fromGlued_injective 
+: Function.Injective 𝒰.fromGlued
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.isOpen_iff`：isOpen_iff (U : Set D.glue
+d.carrier) : IsOpen U ↔ forall i, IsOpen (D.ι i ⁻¹' U)
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.covers`：∀ {K : CategoryTheory.Precoverage
+ AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}   [inst : AlgebraicGeo
+metry.Scheme.JointlySurject…
 -/
 theorem isOpenMap_fromGlued : IsOpenMap 𝒰.fromGlued := by
   intro U hU
   rw [isOpen_iff_forall_mem_open]
   intro x hx
   rw [𝒰.gluedCover.isOpen_iff] at hU
-  use 𝒰.fromGlued '' U inter Set.range (𝒰.f (𝒰.idx x))
+  use 𝒰.fromGlued '' U ∩ Set.range (𝒰.f (𝒰.idx x))
   use Set.inter_subset_left
   constructor
   · rw [← Set.image_preimage_eq_inter_range]
@@ -1114,54 +1121,30 @@ theorem isOpenMap_fromGlued : IsOpenMap 𝒰.fromGlued := by
     congr! 1
     exact Set.preimage_image_eq _ 𝒰.fromGlued_injective
   · exact ⟨hx, 𝒰.covers x⟩
-
-/--
-theorem `isOpenEmbedding_fromGlued` / 定理 `isOpenEmbedding_fromGlued`
-
-English:
-theorem isOpenEmbedding_fromGlued
-  statement: IsOpenEmbedding 𝒰.fromGlued
-  proof: .of_continuous_injective_isOpenMap (by fun_prop) 𝒰.fromGlued_injective 𝒰.isOpenMap_fromGlued
-
-中文:
-定理 isOpenEmbedding_fromGlued
-  结论: 是开嵌入 𝒰.fromGlued
-  证明: .of_continuous_injective_isOpenMap (by fun_prop) 𝒰.fromGlued_injective 𝒰.isOpenMap_fromGlued
-
-Depends on / 依赖: fromGlued_injective, fun_prop, isOpenMap_fromGlued, of_continuous_injective_isOpenMap
+/-
+**AlgebraicGeometry.Scheme.Cover.isOpenEmbedding_fromGlued** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：isOpenEmbedding_fromGlued : IsOpenEmbedding 𝒰.fromGlued
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap`：∀ {X : Type 
+u_1} {Y : Type u_2} {f : X → Y} [inst : TopologicalSpace X] [inst_1 : Topologica
+lSpace Y],   Continuous f → Function.Injective f…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.continuous`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y), Continuous ⇑f
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.fromGlued_injective`：fromGlued_injective 
+: Function.Injective 𝒰.fromGlued
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.isOpenMap_fromGlued`：isOpenMap_fromGlued 
+: IsOpenMap 𝒰.fromGlued
 -/
 theorem isOpenEmbedding_fromGlued : IsOpenEmbedding 𝒰.fromGlued :=
   .of_continuous_injective_isOpenMap (by fun_prop) 𝒰.fromGlued_injective 𝒰.isOpenMap_fromGlued
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Epi 𝒰.fromGlued.base
-  body: by
-  rw [TopCat.epi_iff_surjective]
-  intro x
-  obtain ⟨y, h⟩ := 𝒰.covers x
-  use 𝒰.gluedCover.ι (𝒰.idx x) y
-  rw [← ConcreteCategory.comp_apply]
-  rw [← 𝒰.ι_fromGlued (𝒰.idx x)] at h
-  exact h
-
-中文:
-实例 :
-  签名: 满态射 𝒰.fromGlued.base
-  定义体: by
-  rw [TopCat.epi_iff_surjective]
-  intro x
-  obtain ⟨y, h⟩ := 𝒰.covers x
-  use 𝒰.gluedCover.ι (𝒰.idx x) y
-  rw [← ConcreteCategory.comp_apply]
-  rw [← 𝒰.ι_fromGlued (𝒰.idx x)] at h
-  exact h
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, TopCat, TopCat.epi_iff_surjective, comp_apply, covers, epi_iff_surjective, gluedCover
+/-
+**AlgebraicGeometry.Scheme.Cover.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Epi 𝒰.fromGlued.base := by
   rw [TopCat.epi_iff_surjective]
@@ -1171,49 +1154,17 @@ instance : Epi 𝒰.fromGlued.base := by
   rw [← ConcreteCategory.comp_apply]
   rw [← 𝒰.ι_fromGlued (𝒰.idx x)] at h
   exact h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsOpenImmersion 𝒰.fromGlued
-  body: IsOpenImmersion.of_isIso_stalkMap _ 𝒰.isOpenEmbedding_fromGlued
-
-中文:
-实例 :
-  签名: 是开浸入 𝒰.fromGlued
-  定义体: IsOpenImmersion.of_isIso_stalkMap _ 𝒰.isOpenEmbedding_fromGlued
-
-Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.of_isIso_stalkMap, isOpenEmbedding_fromGlued, of_isIso_stalkMap
+/-
+**AlgebraicGeometry.Scheme.Cover.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsOpenImmersion 𝒰.fromGlued :=
   IsOpenImmersion.of_isIso_stalkMap _ 𝒰.isOpenEmbedding_fromGlued
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso 𝒰.fromGlued
-  body: let F := Scheme.forgetToLocallyRingedSpace ⋙ LocallyRingedSpace.forgetToSheafedSpace ⋙
-    SheafedSpace.forgetToPresheafedSpace
-  have : IsIso (F.map (fromGlued 𝒰)) := by
-    change IsIso 𝒰.fromGlued.toPshHom
-    apply PresheafedSpace.IsOpenImmersion.to_iso
-  isIso_of_reflects_iso _ F
-
-中文:
-实例 :
-  签名: 是同构 𝒰.fromGlued
-  定义体: let F := Scheme.forgetToLocallyRingedSpace ⋙ LocallyRingedSpace.forgetToSheafedSpace ⋙
-    SheafedSpace.forgetToPresheafedSpace
-  have : IsIso (F.map (fromGlued 𝒰)) := by
-    change IsIso 𝒰.fromGlued.toPshHom
-    apply PresheafedSpace.IsOpenImmersion.to_iso
-  isIso_of_reflects_iso _ F
-
-Depends on / 依赖: F.map, IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace, PresheafedSpace, PresheafedSpace.IsOpenImmersion.to_iso, Scheme, Scheme.forgetToLocallyRingedSpace, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, forgetToLocallyRingedSpace, forgetToPresheafedSpace, forgetToSheafedSpace, fromGlued, fromGlued.toPshHom, isIso_of_reflects_iso, toPshHom, to_iso
+/-
+**AlgebraicGeometry.Scheme.Cover.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+cheme.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso 𝒰.fromGlued :=
   let F := Scheme.forgetToLocallyRingedSpace ⋙ LocallyRingedSpace.forgetToSheafedSpace ⋙
@@ -1225,114 +1176,105 @@ instance : IsIso 𝒰.fromGlued :=
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `glueMorphisms` / `glueMorphisms` 的定义
+/-- Given an open cover of `X`, and a morphism `𝒰.X x ⟶ Y` for each open subscheme in the cover,
+such that these morphisms are compatible in the intersection (pullback), we may glue the morphisms
+together into a morphism `X ⟶ Y`.
 
-English:
-definition glueMorphisms
-  signature: (𝒰 : OpenCover.{v} X) {Y : Scheme.{u}} (f : forall x, 𝒰.X x ⟶ Y)
-  body: by
-  refine inv 𝒰.ulift.fromGlued ≫ ?_
-  fapply Multicoequalizer.desc
-  · exact fun i => f _
-  rintro ⟨i, j⟩
-  dsimp
-  change pullback.fst _ _ ≫ f _ = (_ ≫ _) ≫ f _
-  simpa [pullbackSymmetry_hom_comp_fst] using hf _ _
-
-中文:
-定义 glueMorphisms
-  签名: (𝒰 : OpenCover.{v} X) {Y : 概形.{u}} (f : 对任意 x, 𝒰.X x ⟶ Y)
-  定义体: by
-  refine inv 𝒰.ulift.fromGlued ≫ ?_
-  fapply Multicoequalizer.desc
-  · exact fun i => f _
-  rintro ⟨i, j⟩
-  dsimp
-  change pullback.fst _ _ ≫ f _ = (_ ≫ _) ≫ f _
-  simpa [pullbackSymmetry_hom_comp_fst] using hf _ _
-
-Depends on / 依赖: Multicoequalizer, Multicoequalizer.desc, fapply, fromGlued, pullback, pullback.fst, pullbackSymmetry_hom_comp_fst, ulift.fromGlued
+Note:
+If `X` is exactly (defeq to) the gluing of `U i`, then using `Multicoequalizer.desc` suffices.
 -/
-def glueMorphisms (𝒰 : OpenCover.{v} X) {Y : Scheme.{u}} (f : forall x, 𝒰.X x ⟶ Y)
-    (hf : forall x y, pullback.fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback.snd _ _ ≫ f y) :
+/-
+**AlgebraicGeometry.Scheme.Cover.glueMorphisms** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme.Cover`。
+形式化陈述：glueMorphisms (𝒰 : OpenCover.{v} X) {Y : Scheme.{u}} (f : forall x, 𝒰.X x 
+⟶ Y) (hf : forall x y, pullback.fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback.snd _ _ ≫ f
+ y) : X ⟶ Y
+参数：𝒰 : OpenCover.{v} X；f : forall x, 𝒰.X x ⟶ Y；hf : forall x y, pullback.fst (𝒰.
+f x) (𝒰.f y) ≫ f x = pullback.snd _ _ ≫ f y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
+
+--- 原说明 ---
+Given an open cover of `X`, and a morphism `𝒰.X x ⟶ Y` for each open subscheme i
+n the cover,
+such that these morphisms are compatible in the intersection (pullback), we may 
+glue the morphisms
+together into a morphism `X ⟶ Y`.
+
+Note:
+If `X` is exactly (defeq to) the gluing of `U i`, then using `Multicoequalizer.d
+esc` suffices.
+-/
+def glueMorphisms (𝒰 : OpenCover.{v} X) {Y : Scheme.{u}} (f : ∀ x, 𝒰.X x ⟶ Y)
+    (hf : ∀ x y, pullback.fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback.snd _ _ ≫ f y) :
     X ⟶ Y := by
   refine inv 𝒰.ulift.fromGlued ≫ ?_
   fapply Multicoequalizer.desc
-  · exact fun i => f _
+  · exact fun i ↦ f _
   rintro ⟨i, j⟩
   dsimp
   change pullback.fst _ _ ≫ f _ = (_ ≫ _) ≫ f _
   simpa [pullbackSymmetry_hom_comp_fst] using hf _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  statement: (𝒰 : OpenCover.{v} X) {Y : Scheme} (f₁ f₂ : X ⟶ Y)
-  proof: by
-  rw [← cancel_epi 𝒰.ulift.fromGlued]
-  apply Multicoequalizer.hom_ext
-  intro x
-  rw [fromGlued]; rw [Multicoequalizer.π_desc_assoc]; rw [Multicoequalizer.π_desc_assoc]
-  exact h _
-
-中文:
-定理 hom_ext
-  结论: (𝒰 : OpenCover.{v} X) {Y : 概形} (f₁ f₂ : X ⟶ Y)
-  证明: by
-  rw [← cancel_epi 𝒰.ulift.fromGlued]
-  apply Multicoequalizer.hom_ext
-  intro x
-  rw [fromGlued]; rw [Multicoequalizer.π_desc_assoc]; rw [Multicoequalizer.π_desc_assoc]
-  exact h _
-
-Depends on / 依赖: Multicoequalizer, Multicoequalizer.hom_ext, cancel_epi, fromGlued, hom_ext, ulift.fromGlued
+/-
+**AlgebraicGeometry.Scheme.Cover.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry.Scheme.Cover`。
+形式化陈述：hom_ext (𝒰 : OpenCover.{v} X) {Y : Scheme} (f₁ f₂ : X ⟶ Y) (h : forall x, 
+𝒰.f x ≫ f₁ = 𝒰.f x ≫ f₂) : f₁ = f₂
+参数：𝒰 : OpenCover.{v} X；f₁ f₂ : X ⟶ Y；h : forall x, 𝒰.f x ≫ f₁ = 𝒰.f x ≫ f₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.instIsIsoFromGlued`：∀ {X : AlgebraicGeome
+try.Scheme} (𝒰 : X.OpenCover), CategoryTheory.IsIso (AlgebraicGeometry.Scheme.Co
+ver.fromGlued 𝒰)
+· 使用定理 `CategoryTheory.Limits.Multicoequalizer.hom_ext`：hom_ext {W : C} (i j : m
+ulticoequalizer I ⟶ W) (h : forall b, Multicoequalizer.π I b ≫ i = Multicoequali
+zer.π I b ≫ j) : i = j
+· 使用定理 `AlgebraicGeometry.Scheme.GlueData.instHasMulticoequalizerDiagram`：∀ (D :
+ AlgebraicGeometry.Scheme.GlueData), CategoryTheory.Limits.HasMulticoequalizer D
+.diagram
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.fromGlued.eq_1`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover),   AlgebraicGeometry.Scheme.Cover.fromGlued 𝒰 =     Ca
+tegoryTheory.Limits.Multicoequalize…
+· 使用定理 `CategoryTheory.Limits.Multicoequalizer.π_desc_assoc`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.Limits.MultispanShape}
+   (I : CategoryTheory.Limits.MultispanIn…
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
 -/
 theorem hom_ext (𝒰 : OpenCover.{v} X) {Y : Scheme} (f₁ f₂ : X ⟶ Y)
-    (h : forall x, 𝒰.f x ≫ f₁ = 𝒰.f x ≫ f₂) : f₁ = f₂ := by
+    (h : ∀ x, 𝒰.f x ≫ f₁ = 𝒰.f x ≫ f₂) : f₁ = f₂ := by
   rw [← cancel_epi 𝒰.ulift.fromGlued]
   apply Multicoequalizer.hom_ext
   intro x
-  rw [fromGlued]; rw [Multicoequalizer.π_desc_assoc]; rw [Multicoequalizer.π_desc_assoc]
+  rw [fromGlued, Multicoequalizer.π_desc_assoc, Multicoequalizer.π_desc_assoc]
   exact h _
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `ι_glueMorphisms` / 定理 `ι_glueMorphisms`
-
-English:
-theorem ι_glueMorphisms
-  statement: (𝒰 : OpenCover.{v} X) {Y : Scheme} (f : forall x, 𝒰.X x ⟶ Y)
-  proof: by
-  refine Cover.hom_ext (𝒰.ulift.pullback₁ (𝒰.f x)) _ _ fun i => ?_
-  dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
-    PreZeroHypercover.pullback₁_X, ulift_X, ulift_f, PreZeroHypercover.pullback₁_f]
-  simp_rw [pullback.condition_assoc, ← ulift_f, ← ι_fromGlued, Category.assoc, glueMorphisms,
-    IsIso.hom_inv_id_assoc, ulift_f, hf]
-  simp [CategoryTheory.GlueData.ι]
-
-中文:
-定理 ι_glueMorphisms
-  结论: (𝒰 : OpenCover.{v} X) {Y : 概形} (f : 对任意 x, 𝒰.X x ⟶ Y)
-  证明: by
-  refine Cover.hom_ext (𝒰.ulift.pullback₁ (𝒰.f x)) _ _ fun i => ?_
-  dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
-    PreZeroHypercover.pullback₁_X, ulift_X, ulift_f, PreZeroHypercover.pullback₁_f]
-  simp_rw [pullback.condition_assoc, ← ulift_f, ← ι_fromGlued, Category.assoc, glueMorphisms,
-    IsIso.hom_inv_id_assoc, ulift_f, hf]
-  simp [CategoryTheory.GlueData.ι]
-
-Depends on / 依赖: Category, Category.assoc, CategoryTheory, CategoryTheory.GlueData, Cover.hom_ext, GlueData, IsIso.hom_inv_id_assoc, PreZeroHypercover, PreZeroHypercover.pullback, Precoverage, Precoverage.ZeroHypercover.pullback, ZeroHypercover, condition_assoc, glueMorphisms, hom_ext, hom_inv_id_assoc, pullback, pullback.condition_assoc, simp_rw, ulift.pullback
+/-
+**AlgebraicGeometry.Scheme.Cover.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+cheme.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ι_glueMorphisms (𝒰 : OpenCover.{v} X) {Y : Scheme} (f : forall x, 𝒰.X x ⟶ Y)
-    (hf : forall x y, pullback.fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback.snd _ _ ≫ f y)
+theorem ι_glueMorphisms (𝒰 : OpenCover.{v} X) {Y : Scheme} (f : ∀ x, 𝒰.X x ⟶ Y)
+    (hf : ∀ x y, pullback.fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback.snd _ _ ≫ f y)
     (x : 𝒰.I₀) : 𝒰.f x ≫ 𝒰.glueMorphisms f hf = f x := by
-  refine Cover.hom_ext (𝒰.ulift.pullback₁ (𝒰.f x)) _ _ fun i => ?_
+  refine Cover.hom_ext (𝒰.ulift.pullback₁ (𝒰.f x)) _ _ fun i ↦ ?_
   dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
     PreZeroHypercover.pullback₁_X, ulift_X, ulift_f, PreZeroHypercover.pullback₁_f]
   simp_rw [pullback.condition_assoc, ← ulift_f, ← ι_fromGlued, Category.assoc, glueMorphisms,
@@ -1341,43 +1283,40 @@ theorem ι_glueMorphisms (𝒰 : OpenCover.{v} X) {Y : Scheme} (f : forall x, �
 
 end Cover
 
-/--
-lemma `hom_ext_of_forall` / 引理 `hom_ext_of_forall`
-
-English:
-lemma hom_ext_of_forall
-  statement: {X Y : Scheme} (f g : X ⟶ Y)
-  proof: by
-  choose U hxU hU using H
-  let 𝒰 : X.OpenCover := {
-    I₀ := X, X i := (U i), f i := (U i).ι,
-    mem₀ := by
-      rw [presieve₀_mem_precoverage_iff]
-      refine ⟨fun x => ⟨x, by simpa using hxU x⟩, inferInstance⟩ }
-  exact 𝒰.hom_ext _ _ hU
-
-中文:
-引理 hom_ext_of_对任意
-  结论: {X Y : 概形} (f g : X ⟶ Y)
-  证明: by
-  choose U hxU hU using H
-  let 𝒰 : X.OpenCover := {
-    I₀ := X, X i := (U i), f i := (U i).ι,
-    mem₀ := by
-      rw [presieve₀_mem_precoverage_iff]
-      refine ⟨fun x => ⟨x, by simpa using hxU x⟩, inferInstance⟩ }
-  exact 𝒰.hom_ext _ _ hU
-
-Depends on / 依赖: OpenCover, X.OpenCover, hom_ext
+/-
+**AlgebraicGeometry.Scheme.hom_ext_of_forall** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry.Scheme`。
+形式化陈述：hom_ext_of_forall {X Y : Scheme} (f g : X ⟶ Y) (H : forall x : X, exists U
+ : X.Opens, x in U ∧ U.ι ≫ f = U.ι ≫ g) : f = g
+参数：f g : X ⟶ Y；H : forall x : X, exists U : X.Opens, x in U ∧ U.ι ≫ f = U.ι ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.presieve₀_mem_precoverage_iff`：presieve₀_mem_pr
+ecoverage_iff (E : PreZeroHypercover X) : E.presieve₀ in precoverage P X ↔ (fora
+ll x, exists i, x in Set.range (E.f i)) ∧ fo…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `AlgebraicGeometry.Scheme.Opens.range_ι`：range_ι : Set.range U.ι = U
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.hom_ext`：hom_ext (𝒰 : OpenCover.{v} X) {Y
+ : Scheme} (f₁ f₂ : X ⟶ Y) (h : forall x, 𝒰.f x ≫ f₁ = 𝒰.f x ≫ f₂) : f₁ = f₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma hom_ext_of_forall {X Y : Scheme} (f g : X ⟶ Y)
-    (H : forall x : X, exists U : X.Opens, x in U ∧ U.ι ≫ f = U.ι ≫ g) : f = g := by
+    (H : ∀ x : X, ∃ U : X.Opens, x ∈ U ∧ U.ι ≫ f = U.ι ≫ g) : f = g := by
   choose U hxU hU using H
   let 𝒰 : X.OpenCover := {
     I₀ := X, X i := (U i), f i := (U i).ι,
     mem₀ := by
       rw [presieve₀_mem_precoverage_iff]
-      refine ⟨fun x => ⟨x, by simpa using hxU x⟩, inferInstance⟩ }
+      refine ⟨fun x ↦ ⟨x, by simpa using hxU x⟩, inferInstance⟩ }
   exact 𝒰.hom_ext _ _ hU
 
 set_option backward.defeqAttrib.useBackward true in
@@ -1385,35 +1324,17 @@ set_option backward.isDefEq.respectTransparency false in
 -- TODO: generalize to covers in subcanonical topologies
 open pullback in
 attribute [local simp] condition condition_assoc in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (MorphismProperty.isomorphisms Scheme).IsLocalAtTarget zariskiPrecoverage
-  body: .mk_of_isStableUnderBaseChange fun {X Y} f (𝒰 : Y.OpenCover) (H : forall i, IsIso _) =>
-    ⟨𝒰.glueMorphisms (fun i => inv (snd f (𝒰.f i)) ≫ fst _ _) fun i j => by
-    rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ map (fst f (𝒰.f i) ≫ f)
-      (𝒰.f j) (𝒰.f i) (𝒰.f j) (snd _ _) (𝟙 _) (𝟙 _) (by simp) (by simp))]
-    simp, Cover.hom_ext (𝒰.pullback₁ f) _ _ fun i => by simp, Cover.hom_ext 𝒰 _ _ fun i => by simp⟩
-
-中文:
-实例 :
-  签名: (MorphismProperty.isomorphisms 概形).是LocalAtTarget zariskiPrecoverage
-  定义体: .mk_of_isStableUnderBaseChange fun {X Y} f (𝒰 : Y.OpenCover) (H : forall i, IsIso _) =>
-    ⟨𝒰.glueMorphisms (fun i => inv (snd f (𝒰.f i)) ≫ fst _ _) fun i j => by
-    rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ map (fst f (𝒰.f i) ≫ f)
-      (𝒰.f j) (𝒰.f i) (𝒰.f j) (snd _ _) (𝟙 _) (𝟙 _) (by simp) (by simp))]
-    simp, Cover.hom_ext (𝒰.pullback₁ f) _ _ fun i => by simp, Cover.hom_ext 𝒰 _ _ fun i => by simp⟩
-
-Depends on / 依赖: Cover.hom_ext, OpenCover, Y.OpenCover, cancel_epi, glueMorphisms, hom_ext, mk_of_isStableUnderBaseChange, pullbackRightPullbackFstIso
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (MorphismProperty.isomorphisms Scheme).IsLocalAtTarget zariskiPrecoverage :=
-  .mk_of_isStableUnderBaseChange fun {X Y} f (𝒰 : Y.OpenCover) (H : forall i, IsIso _) =>
-    ⟨𝒰.glueMorphisms (fun i => inv (snd f (𝒰.f i)) ≫ fst _ _) fun i j => by
+  .mk_of_isStableUnderBaseChange fun {X Y} f (𝒰 : Y.OpenCover) (H : ∀ i, IsIso _) ↦
+    ⟨𝒰.glueMorphisms (fun i ↦ inv (snd f (𝒰.f i)) ≫ fst _ _) fun i j ↦ by
     rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ map (fst f (𝒰.f i) ≫ f)
       (𝒰.f j) (𝒰.f i) (𝒰.f j) (snd _ _) (𝟙 _) (𝟙 _) (by simp) (by simp))]
-    simp, Cover.hom_ext (𝒰.pullback₁ f) _ _ fun i => by simp, Cover.hom_ext 𝒰 _ _ fun i => by simp⟩
+    simp, Cover.hom_ext (𝒰.pullback₁ f) _ _ fun i ↦ by simp, Cover.hom_ext 𝒰 _ _ fun i ↦ by simp⟩
 
 /-!
 
@@ -1439,46 +1360,44 @@ open TopologicalSpace.Opens
 universe w
 
 variable {J : Type w} [Category.{v} J] (F : J ⥤ Scheme.{u})
-variable [forall {i j} (f : i ⟶ j), IsOpenImmersion (F.map f)]
+variable [∀ {i j} (f : i ⟶ j), IsOpenImmersion (F.map f)]
 
 namespace IsLocallyDirected
 
 /-- (Implementation detail)
 The intersection `V` in the glue data associated to a locally directed diagram. -/
 noncomputable
-/--
-Definition of `V` / `V` 的定义
-
-English:
-definition V
-  signature: (i j : J)
-  body: ⨆ (k : Σ k, (k ⟶ i) × (k ⟶ j)), (F.map k.2.1).opensRange
-
-中文:
-定义 V
-  签名: (i j : J)
-  定义体: ⨆ (k : Σ k, (k ⟶ i) × (k ⟶ j)), (F.map k.2.1).opensRange
-
-Depends on / 依赖: F.map, opensRange
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.V** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：V (i j : J) : (F.obj i).Opens
+参数：i j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def V (i j : J) : (F.obj i).Opens := ⨆ (k : Σ k, (k ⟶ i) × (k ⟶ j)), (F.map k.2.1).opensRange
-
-/--
-lemma `V_self` / 引理 `V_self`
-
-English:
-lemma V_self
-  given: (i)
-  statement: V F i i = ⊤
-  proof: top_le_iff.mp (le_iSup_of_le ⟨i, 𝟙 _, 𝟙 _⟩ (by simp [Scheme.Hom.opensRange_of_isIso]))
-
-中文:
-引理 V_self
-  条件: (i)
-  结论: V F i i = ⊤
-  证明: top_le_iff.mp (le_iSup_of_le ⟨i, 𝟙 _, 𝟙 _⟩ (by simp [Scheme.Hom.opensRange_of_isIso]))
-
-Depends on / 依赖: Scheme, Scheme.Hom.opensRange_of_isIso, le_iSup_of_le, opensRange_of_isIso, top_le_iff, top_le_iff.mp
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.V_self** 是 Mathlib 中的一个引理，位于命名空间 `A
+lgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：V_self (i) : V F i i = ⊤
+参数：i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `le_iSup_of_le`：le_iSup_of_le (i : ι) (h : a <= f i) : a <= iSup f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.opensRange.congr_simp`：∀ {X Y : AlgebraicGe
+ometry.Scheme} (f f_1 : X ⟶ Y) (e_f : f = f_1) [H : AlgebraicGeometry.IsOpenImme
+rsion f],   AlgebraicGeometry.Scheme.Hom…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.opensRange_of_isIso`：opensRange_of_isIso {X
+ Y : Scheme} (f : X ⟶ Y) [IsIso f] : f.opensRange = ⊤
 -/
 lemma V_self (i) : V F i i = ⊤ :=
   top_le_iff.mp (le_iSup_of_le ⟨i, 𝟙 _, 𝟙 _⟩ (by simp [Scheme.Hom.opensRange_of_isIso]))
@@ -1486,69 +1405,82 @@ lemma V_self (i) : V F i i = ⊤ :=
 variable [(F ⋙ forget).IsLocallyDirected]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `exists_of_pullback_V_V` / 引理 `exists_of_pullback_V_V`
-
-English:
-lemma exists_of_pullback_V_V
-  given: {i j k : J} (x : pullback (C := Scheme) (V F i j).ι (V F i k).ι)
-  proof: by
-  obtain ⟨k₁, y₁, hy₁⟩ := mem_iSup.mp ((pullback.fst (C := Scheme) _ _) x).2
-  obtain ⟨k₂, y₂, hy₂⟩ := mem_iSup.mp ((pullback.snd (C := Scheme) _ _) x).2
-  obtain ⟨l, hli, hlk, z, rfl, rfl⟩ :=
-    (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1 y₁ y₂
-      (by simpa [hy₁, hy₂] using congr($(pullback.condition (f := (V F i j).ι)) x))
-  let α : F.obj l ⟶ pullback (V F i j).ι (V F i k).ι :=
-    pullback.lift
-      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
-        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2⟩ le_rfl))
-      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
-        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hlk ≫ k₂.2.2⟩ le_rfl))
-      (by simp)
-  have : IsOpenImmersion α := by
-    apply +allowSynthFailures IsOpenImmersion.of_comp
-    · exact (inferInstance : IsOpenImmersion (pullback.fst (V F i j).ι (V F i k).ι))
-    · simp only [limit.lift_π, PullbackCone.mk_π_app, α]
-      infer_instance
-  have : α z = x := by
-    apply (pullback.fst (C := Scheme) _ _).isOpenEmbedding.injective
-    apply (V F i j).ι.isOpenEmbedding.injective
-    rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]; rw [pullback.lift_fst_assoc]
-    simpa using hy₁
-  exact ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2, hlk ≫ k₂.2.2, α, z, ‹_›, by simp [α], by simp [α], ‹_›⟩
-
-中文:
-引理 存在_of_pullback_V_V
-  条件: {i j k : J} (x : pullback (C := 概形) (V F i j).ι (V F i k).ι)
-  证明: by
-  obtain ⟨k₁, y₁, hy₁⟩ := mem_iSup.mp ((pullback.fst (C := Scheme) _ _) x).2
-  obtain ⟨k₂, y₂, hy₂⟩ := mem_iSup.mp ((pullback.snd (C := Scheme) _ _) x).2
-  obtain ⟨l, hli, hlk, z, rfl, rfl⟩ :=
-    (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1 y₁ y₂
-      (by simpa [hy₁, hy₂] using congr($(pullback.condition (f := (V F i j).ι)) x))
-  let α : F.obj l ⟶ pullback (V F i j).ι (V F i k).ι :=
-    pullback.lift
-      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
-        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2⟩ le_rfl))
-      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
-        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hlk ≫ k₂.2.2⟩ le_rfl))
-      (by simp)
-  have : IsOpenImmersion α := by
-    apply +allowSynthFailures IsOpenImmersion.of_comp
-    · exact (inferInstance : IsOpenImmersion (pullback.fst (V F i j).ι (V F i k).ι))
-    · simp only [limit.lift_π, PullbackCone.mk_π_app, α]
-      infer_instance
-  have : α z = x := by
-    apply (pullback.fst (C := Scheme) _ _).isOpenEmbedding.injective
-    apply (V F i j).ι.isOpenEmbedding.injective
-    rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]; rw [pullback.lift_fst_assoc]
-    simpa using hy₁
-  exact ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2, hlk ≫ k₂.2.2, α, z, ‹_›, by simp [α], by simp [α], ‹_›⟩
-
-Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, MonoidalCategoryStruct, MonoidalCategoryStruct.rightUnitor, MonoidalCategoryStruct.tensorObj, MonoidalCategoryStruct.tensorUnit, MonoidalCategoryStruct.whiskerLeft, OrderEmbedding, OrderEmbedding.toOrderHom, Scheme, WithInitial, WithInitial.comp, WithInitial.down, WithInitial.id, rightUnitor, tensorHom, tensorObj, tensorUnit, toOrderHom
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.exists_of_pullback_V_V** 是 Mathlib 
+中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：exists_of_pullback_V_V {i j k : J} (x : pullback (C
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `le_iSup_of_le`：le_iSup_of_le (i : ι) (h : a <= f i) : a <= iSup f
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.Opens.mem_iSup`：mem_iSup {ι} {x : α} {s : ι -> Opens α}
+ : x in iSup s ↔ exists i, x in s i
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `CategoryTheory.Functor.exists_map_eq_of_isLocallyDirected`：∀ {J : Type u
+_1} {inst : CategoryTheory.Category.{v_1, u_1} J} (F : CategoryTheory.Functor J 
+(Type u_2))   [self : F.IsLocallyDirected] {i j…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoOpensRange_hom_ι`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f],   Categor
+yTheory.CategoryStruct.comp (Algebraic…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.of_comp`：of_comp {X Y Z : Scheme.{u}} 
+(f : X ⟶ Y) (g : Y ⟶ Z) [IsOpenImmersion g] [IsOpenImmersion (f ≫ g)] : IsOpenIm
+mersion f
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionHomOfLE`：∀ (X : AlgebraicGeometry.S
+cheme) {U V : X.Opens} (e : U ≤ V), AlgebraicGeometry.IsOpenImmersion (X.homOfLE
+ e)
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isOpenEmbedding`：isOpenEmbedding : IsOpenEm
+bedding f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_apply`：comp_apply {X Y Z : Scheme} (f 
+: X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+（共 32 条，此处仅展示前 30 条）
 -/
 lemma exists_of_pullback_V_V {i j k : J} (x : pullback (C := Scheme) (V F i j).ι (V F i k).ι) :
-    exists (l : J) (fi : l ⟶ i) (fj : l ⟶ j) (fk : l ⟶ k)
+    ∃ (l : J) (fi : l ⟶ i) (fj : l ⟶ j) (fk : l ⟶ k)
       (α : F.obj l ⟶ pullback (V F i j).ι (V F i k).ι) (z : F.obj l),
       IsOpenImmersion α ∧
       α ≫ pullback.fst _ _ = (F.map fi).isoOpensRange.hom ≫
@@ -1576,7 +1508,7 @@ lemma exists_of_pullback_V_V {i j k : J} (x : pullback (C := Scheme) (V F i j).�
   have : α z = x := by
     apply (pullback.fst (C := Scheme) _ _).isOpenEmbedding.injective
     apply (V F i j).ι.isOpenEmbedding.injective
-    rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]; rw [pullback.lift_fst_assoc]
+    rw [← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply, pullback.lift_fst_assoc]
     simpa using hy₁
   exact ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2, hlk ≫ k₂.2.2, α, z, ‹_›, by simp [α], by simp [α], ‹_›⟩
 
@@ -1584,84 +1516,94 @@ variable [Quiver.IsThin J]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `fst_inv_eq_snd_inv` / 引理 `fst_inv_eq_snd_inv`
-
-English:
-lemma fst_inv_eq_snd_inv
-  proof: by
-  apply Scheme.hom_ext_of_forall
-  intro x
-  obtain ⟨l, hli, hlj, y, hy₁, hy₂⟩ := (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1
-    ((pullback.fst _ _ ≫ (F.map k₁.2.1).isoOpensRange.inv) x)
-    ((pullback.snd _ _ ≫ (F.map k₂.2.1).isoOpensRange.inv) x) (by
-      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
-        ConcreteCategory.hom_ofHom, Hom.comp_base, TopCat.hom_comp, ContinuousMap.comp_apply,
-        TypeCat.Fun.coe_mk]
-      simp only [← Hom.comp_apply]
-      congr 5
-      simpa using congr($(pullback.condition (f := (F.obj i).homOfLE h₁)
-        (g := (F.obj i).homOfLE h₂)) ≫ Scheme.Opens.ι _))
-  let α : F.obj l ⟶ pullback ((F.obj i).homOfLE h₁) ((F.obj i).homOfLE h₂) :=
-    pullback.lift
-      (F.map hli ≫ (F.map k₁.2.1).isoOpensRange.hom)
-      (F.map hlj ≫ (F.map k₂.2.1).isoOpensRange.hom)
-      (by simp [← cancel_mono (Scheme.Opens.ι _), ← Functor.map_comp,
-        Subsingleton.elim (hli ≫ k₁.2.1) (hlj ≫ k₂.2.1)])
-  have : IsOpenImmersion α := by
-    have : IsOpenImmersion (α ≫ pullback.fst _ _) := by
-      simp only [pullback.lift_fst, α]; infer_instance
-    exact .of_comp _ (pullback.fst _ _)
-  have : α y = x := by
-    simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map, Hom.comp_base,
-      TopCat.hom_comp, ContinuousMap.comp_apply] at hy₁
-    apply (pullback.fst ((F.obj i).homOfLE h₁) _).isOpenEmbedding.injective
-    simp only [← Scheme.Hom.comp_apply, α, pullback.lift_fst]
-    simp_all
-  refine ⟨α.opensRange, ⟨y, this⟩, ?_⟩
-  rw [← cancel_epi α.isoOpensRange.hom]
-  simp [α, ← Functor.map_comp, Subsingleton.elim (hli ≫ k₁.2.2) (hlj ≫ k₂.2.2)]
-
-中文:
-引理 fst_inv_eq_snd_inv
-  证明: by
-  apply Scheme.hom_ext_of_forall
-  intro x
-  obtain ⟨l, hli, hlj, y, hy₁, hy₂⟩ := (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1
-    ((pullback.fst _ _ ≫ (F.map k₁.2.1).isoOpensRange.inv) x)
-    ((pullback.snd _ _ ≫ (F.map k₂.2.1).isoOpensRange.inv) x) (by
-      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
-        ConcreteCategory.hom_ofHom, Hom.comp_base, TopCat.hom_comp, ContinuousMap.comp_apply,
-        TypeCat.Fun.coe_mk]
-      simp only [← Hom.comp_apply]
-      congr 5
-      simpa using congr($(pullback.condition (f := (F.obj i).homOfLE h₁)
-        (g := (F.obj i).homOfLE h₂)) ≫ Scheme.Opens.ι _))
-  let α : F.obj l ⟶ pullback ((F.obj i).homOfLE h₁) ((F.obj i).homOfLE h₂) :=
-    pullback.lift
-      (F.map hli ≫ (F.map k₁.2.1).isoOpensRange.hom)
-      (F.map hlj ≫ (F.map k₂.2.1).isoOpensRange.hom)
-      (by simp [← cancel_mono (Scheme.Opens.ι _), ← Functor.map_comp,
-        Subsingleton.elim (hli ≫ k₁.2.1) (hlj ≫ k₂.2.1)])
-  have : IsOpenImmersion α := by
-    have : IsOpenImmersion (α ≫ pullback.fst _ _) := by
-      simp only [pullback.lift_fst, α]; infer_instance
-    exact .of_comp _ (pullback.fst _ _)
-  have : α y = x := by
-    simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map, Hom.comp_base,
-      TopCat.hom_comp, ContinuousMap.comp_apply] at hy₁
-    apply (pullback.fst ((F.obj i).homOfLE h₁) _).isOpenEmbedding.injective
-    simp only [← Scheme.Hom.comp_apply, α, pullback.lift_fst]
-    simp_all
-  refine ⟨α.opensRange, ⟨y, this⟩, ?_⟩
-  rw [← cancel_epi α.isoOpensRange.hom]
-  simp [α, ← Functor.map_comp, Subsingleton.elim (hli ≫ k₁.2.2) (hlj ≫ k₂.2.2)]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, ContinuousMap, ContinuousMap.comp_apply, F.map, Functor, Functor.comp_map, Functor.comp_obj, Hom.comp_apply, Hom.comp_base, MonoidalCategoryStruct, MonoidalCategoryStruct.leftUnitor, MonoidalCategoryStruct.whiskerRight, OrderEmbedding, OrderEmbedding.toOrderHom, Scheme, Scheme.hom_ext_of_forall, TopCat, TopCat.hom_comp, TypeCat
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.fst_inv_eq_snd_inv** 是 Mathlib 中的一个
+引理，位于命名空间 `AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：fst_inv_eq_snd_inv {i j : J} (k₁ k₂ : (k : J) × (k ⟶ i) × (k ⟶ j)) {U : (F
+.obj i).Opens} (h₁ : (F.map k₁.2.1).opensRange <= U) (h₂ : (F.map k₂.2.1).opensR
+ange <= U) : pullback.fst ((F.obj i).homOfLE h₁) ((F.obj i).homOfLE h₂) ≫ (F.map
+ k₁.2.1).isoOpensRange.inv ≫ F.map k₁.2.2 = pullback.snd ((F.obj i).homOfLE h₁) 
+((F.obj i).homOfLE h₂) ≫ (F.map k₂.2.1).isoOpensRange.inv ≫ F.map k₂.2.2
+参数：k₁ k₂ : (k : J) × (k ⟶ i) × (k ⟶ j)；F.obj i；h₁ : (F.map k₁.2.1).opensRange <=
+ U；h₂ : (F.map k₂.2.1).opensRange <= U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.hom_ext_of_forall`：hom_ext_of_forall {X Y : Sch
+eme} (f g : X ⟶ Y) (H : forall x : X, exists U : X.Opens, x in U ∧ U.ι ≫ f = U.ι
+ ≫ g) : f = g
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionHomOfLE`：∀ (X : AlgebraicGeometry.S
+cheme) {U V : X.Opens} (e : U ≤ V), AlgebraicGeometry.IsOpenImmersion (X.homOfLE
+ e)
+· 使用定理 `CategoryTheory.Functor.exists_map_eq_of_isLocallyDirected`：∀ {J : Type u
+_1} {inst : CategoryTheory.Category.{v_1, u_1} J} (F : CategoryTheory.Functor J 
+(Type u_2))   [self : F.IsLocallyDirected] {i j…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoOpensRange_inv_comp`：∀ {X Y : AlgebraicG
+eometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f],   Cate
+goryTheory.CategoryStruct.comp (Algebraic…
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoOpensRange_hom_ι`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f],   Categor
+yTheory.CategoryStruct.comp (Algebraic…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.pullback.lift_fst`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {W X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Cate
+goryTheory.Limits.HasPullback…
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用引理 `AlgebraicGeometry.IsOpenImmersion.of_comp`：of_comp {X Y Z : Scheme.{u}} 
+(f : X ⟶ Y) (g : Y ⟶ Z) [IsOpenImmersion g] [IsOpenImmersion (f ≫ g)] : IsOpenIm
+mersion f
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.instFstScheme`：∀ {X Y Z : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [H : AlgebraicGeometry.IsOpenImmersion f],
+   AlgebraicGeometry.IsOpenImmersion …
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isOpenEmbedding`：isOpenEmbedding : IsOpenEm
+bedding f
+· 使用定理 `AlgebraicGeometry.Scheme.inv_hom_apply`：∀ {X Y : AlgebraicGeometry.Schem
+e} (e : X ≅ Y) (y : ↥Y), e.hom (e.inv y) = y
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+（共 34 条，此处仅展示前 30 条）
 -/
 lemma fst_inv_eq_snd_inv
     {i j : J} (k₁ k₂ : (k : J) × (k ⟶ i) × (k ⟶ j)) {U : (F.obj i).Opens}
-    (h₁ : (F.map k₁.2.1).opensRange <= U) (h₂ : (F.map k₂.2.1).opensRange <= U) :
+    (h₁ : (F.map k₁.2.1).opensRange ≤ U) (h₂ : (F.map k₂.2.1).opensRange ≤ U) :
     pullback.fst ((F.obj i).homOfLE h₁) ((F.obj i).homOfLE h₂) ≫
       (F.map k₁.2.1).isoOpensRange.inv ≫ F.map k₁.2.2 =
     pullback.snd ((F.obj i).homOfLE h₁) ((F.obj i).homOfLE h₂) ≫
@@ -1698,49 +1640,41 @@ lemma fst_inv_eq_snd_inv
   rw [← cancel_epi α.isoOpensRange.hom]
   simp [α, ← Functor.map_comp, Subsingleton.elim (hli ≫ k₁.2.2) (hlj ≫ k₂.2.2)]
 
-/--
-Definition of `tAux` / `tAux` 的定义
+/-- (Implementation detail)
+The inclusion map `V i j ⟶ F j` in the glue data associated to a locally directed diagram. -/
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.tAux** 是 Mathlib 中的一个定义，位于命名空间 `Alg
+ebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：tAux (i j : J) : (V F i j).toScheme ⟶ F.obj j
+参数：i j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tAux
-  signature: (i j : J)
-  body: (Scheme.Opens.iSupOpenCover _).glueMorphisms
-    (fun k => (F.map k.2.1).isoOpensRange.inv ≫ F.map k.2.2) fun k₁ k₂ => by
-      dsimp [Scheme.Opens.iSupOpenCover]
-      apply fst_inv_eq_snd_inv F
-
-中文:
-定义 tAux
-  签名: (i j : J)
-  定义体: (Scheme.Opens.iSupOpenCover _).glueMorphisms
-    (fun k => (F.map k.2.1).isoOpensRange.inv ≫ F.map k.2.2) fun k₁ k₂ => by
-      dsimp [Scheme.Opens.iSupOpenCover]
-      apply fst_inv_eq_snd_inv F
-
-Depends on / 依赖: F.map, Scheme, Scheme.Opens.iSupOpenCover, fst_inv_eq_snd_inv, glueMorphisms, iSupOpenCover, isoOpensRange, isoOpensRange.inv
+--- 原说明 ---
+(Implementation detail)
+The inclusion map `V i j ⟶ F j` in the glue data associated to a locally directe
+d diagram.
 -/
 def tAux (i j : J) : (V F i j).toScheme ⟶ F.obj j :=
   (Scheme.Opens.iSupOpenCover _).glueMorphisms
-    (fun k => (F.map k.2.1).isoOpensRange.inv ≫ F.map k.2.2) fun k₁ k₂ => by
+    (fun k ↦ (F.map k.2.1).isoOpensRange.inv ≫ F.map k.2.2) fun k₁ k₂ ↦ by
       dsimp [Scheme.Opens.iSupOpenCover]
       apply fst_inv_eq_snd_inv F
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `homOfLE_tAux` / 引理 `homOfLE_tAux`
-
-English:
-lemma homOfLE_tAux
-  given: (i j : J) {k : J} (fi : k ⟶ i) (fj : k ⟶ j)
-  proof: (Scheme.Opens.iSupOpenCover (J := Σ k, (k ⟶ i) × (k ⟶ j)) _).ι_glueMorphisms _ _ ⟨k, fi, fj⟩
-
-中文:
-引理 homOfLE_tAux
-  条件: (i j : J) {k : J} (fi : k ⟶ i) (fj : k ⟶ j)
-  证明: (Scheme.Opens.iSupOpenCover (J := Σ k, (k ⟶ i) × (k ⟶ j)) _).ι_glueMorphisms _ _ ⟨k, fi, fj⟩
-
-Depends on / 依赖: Scheme, Scheme.Opens.iSupOpenCover, iSupOpenCover
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.homOfLE_tAux** 是 Mathlib 中的一个引理，位于命
+名空间 `AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：homOfLE_tAux (i j : J) {k : J} (fi : k ⟶ i) (fj : k ⟶ j) : (F.obj i).homOf
+LE (le_iSup_of_le ⟨k, fi, fj⟩ le_rfl) ≫ tAux F i j = (F.map fi).isoOpensRange.in
+v ≫ F.map fj
+参数：i j : J；fi : k ⟶ i；fj : k ⟶ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.ι_glueMorphisms`：ι_glueMorphisms (𝒰 : Ope
+nCover.{v} X) {Y : Scheme} (f : forall x, 𝒰.X x ⟶ Y) (hf : forall x y, pullback.
+fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback…
 -/
 lemma homOfLE_tAux (i j : J) {k : J} (fi : k ⟶ i) (fj : k ⟶ j) :
     (F.obj i).homOfLE (le_iSup_of_le ⟨k, fi, fj⟩ le_rfl) ≫
@@ -1748,32 +1682,20 @@ lemma homOfLE_tAux (i j : J) {k : J} (fi : k ⟶ i) (fj : k ⟶ j) :
   (Scheme.Opens.iSupOpenCover (J := Σ k, (k ⟶ i) × (k ⟶ j)) _).ι_glueMorphisms _ _ ⟨k, fi, fj⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `t` / `t` 的定义
+/-- (Implementation detail)
+The transition map `V i j ⟶ V j i` in the glue data associated to a locally directed diagram. -/
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.t** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：t (i j : J) : (V F i j).toScheme ⟶ (V F j i).toScheme
+参数：i j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition t
-  signature: (i j : J)
-  body: IsOpenImmersion.lift (V F j i).ι (tAux F i j) (by
-    rintro _ ⟨x, rfl⟩
-    obtain ⟨l, x, rfl⟩ := (Scheme.Opens.iSupOpenCover _).exists_eq x
-    simp only [V, tAux, ← Scheme.Hom.comp_apply, Cover.ι_glueMorphisms]
-    simp only [Opens.range_ι, iSup_mk, carrier_eq_coe, Hom.coe_opensRange, coe_mk, Hom.comp_base,
-      TopCat.hom_comp, ContinuousMap.comp_apply]
-    exact Set.mem_iUnion.mpr ⟨⟨l.1, l.2.2, l.2.1⟩, ⟨_, rfl⟩⟩)
-
-中文:
-定义 t
-  签名: (i j : J)
-  定义体: IsOpenImmersion.lift (V F j i).ι (tAux F i j) (by
-    rintro _ ⟨x, rfl⟩
-    obtain ⟨l, x, rfl⟩ := (Scheme.Opens.iSupOpenCover _).exists_eq x
-    simp only [V, tAux, ← Scheme.Hom.comp_apply, Cover.ι_glueMorphisms]
-    simp only [Opens.range_ι, iSup_mk, carrier_eq_coe, Hom.coe_opensRange, coe_mk, Hom.comp_base,
-      TopCat.hom_comp, ContinuousMap.comp_apply]
-    exact Set.mem_iUnion.mpr ⟨⟨l.1, l.2.2, l.2.1⟩, ⟨_, rfl⟩⟩)
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.comp_apply, Hom.coe_opensRange, Hom.comp_base, IsOpenImmersion, IsOpenImmersion.lift, Opens.range_, Scheme, Scheme.Hom.comp_apply, Scheme.Opens.iSupOpenCover, Set.mem_iUnion.mpr, TopCat, TopCat.hom_comp, carrier_eq_coe, coe_mk, coe_opensRange, comp_apply, comp_base, exists_eq, hom_comp
+--- 原说明 ---
+(Implementation detail)
+The transition map `V i j ⟶ V j i` in the glue data associated to a locally dire
+cted diagram.
 -/
 def t (i j : J) : (V F i j).toScheme ⟶ (V F j i).toScheme :=
   IsOpenImmersion.lift (V F j i).ι (tAux F i j) (by
@@ -1783,34 +1705,49 @@ def t (i j : J) : (V F i j).toScheme ⟶ (V F j i).toScheme :=
     simp only [Opens.range_ι, iSup_mk, carrier_eq_coe, Hom.coe_opensRange, coe_mk, Hom.comp_base,
       TopCat.hom_comp, ContinuousMap.comp_apply]
     exact Set.mem_iUnion.mpr ⟨⟨l.1, l.2.2, l.2.1⟩, ⟨_, rfl⟩⟩)
-
-/--
-lemma `t_id` / 引理 `t_id`
-
-English:
-lemma t_id
-  given: (i : J)
-  statement: t F i i = 𝟙 _
-  proof: by
-  refine (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
-  simp only [Category.comp_id, ← cancel_mono (Scheme.Opens.ι _), Category.assoc,
-    IsOpenImmersion.lift_fac, Scheme.Cover.ι_glueMorphisms, t, tAux, V]
-  simp [Scheme.Opens.iSupOpenCover, Iso.inv_comp_eq, Subsingleton.elim k.2.1 k.2.2]
-
-中文:
-引理 t_id
-  条件: (i : J)
-  结论: t F i i = 𝟙 _
-  证明: by
-  refine (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
-  simp only [Category.comp_id, ← cancel_mono (Scheme.Opens.ι _), Category.assoc,
-    IsOpenImmersion.lift_fac, Scheme.Cover.ι_glueMorphisms, t, tAux, V]
-  simp [Scheme.Opens.iSupOpenCover, Iso.inv_comp_eq, Subsingleton.elim k.2.1 k.2.2]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, IsOpenImmersion, IsOpenImmersion.lift_fac, Iso.inv_comp_eq, Scheme, Scheme.Cover, Scheme.Opens, Scheme.Opens.iSupOpenCover, Subsingleton, Subsingleton.elim, cancel_mono, comp_id, hom_ext, iSupOpenCover, inv_comp_eq, lift_fac
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.t_id** 是 Mathlib 中的一个引理，位于命名空间 `Alg
+ebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：t_id (i : J) : t F i i = 𝟙 _
+参数：i : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.hom_ext`：hom_ext (𝒰 : OpenCover.{v} X) {Y
+ : Scheme} (f₁ f₂ : X ⟶ Y) (h : forall x, 𝒰.f x ≫ f₁ = 𝒰.f x ≫ f₂) : f₁ = f₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.lift_fac`：lift_fac (H' : Set.range g s
+ubseteq Set.range f) : lift f g H' ≫ f = g
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.ι_glueMorphisms`：ι_glueMorphisms (𝒰 : Ope
+nCover.{v} X) {Y : Scheme} (f : forall x, 𝒰.X x ⟶ Y) (hf : forall x y, pullback.
+fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AlgebraicGeometry.Scheme.homOfLE_ι`：∀ (X : AlgebraicGeometry.Scheme) {U 
+V : X.Opens} (e : U ≤ V), CategoryTheory.CategoryStruct.comp (X.homOfLE e) V.ι =
+ U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoOpensRange_hom_ι`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f],   Categor
+yTheory.CategoryStruct.comp (Algebraic…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma t_id (i : J) : t F i i = 𝟙 _ := by
-  refine (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
+  refine (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k ↦ ?_
   simp only [Category.comp_id, ← cancel_mono (Scheme.Opens.ι _), Category.assoc,
     IsOpenImmersion.lift_fac, Scheme.Cover.ι_glueMorphisms, t, tAux, V]
   simp [Scheme.Opens.iSupOpenCover, Iso.inv_comp_eq, Subsingleton.elim k.2.1 k.2.2]
@@ -1820,106 +1757,25 @@ variable [Small.{u} J]
 local notation3:max "↓"j:arg => Equiv.symm (equivShrink _) j
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `glueData` / `glueData` 的定义
+/-- (Implementation detail)
+The glue data associated to a locally directed diagram.
 
-English:
-definition glueData
-  signature: : Scheme.GlueData where
-  body: Shrink.{u} J
-  U j := F.obj ↓j
-  V ij := V F ↓ij.1 ↓ij.2
-  f i j := Scheme.Opens.ι _
-  f_id i := V_self F ↓i ▸ (Scheme.topIso _).isIso_hom
-  f_hasPullback := inferInstance
-  f_open := inferInstance
-  t i j := t F ↓i ↓j
-  t_id i := t_id F ↓i
-  t' i j k := pullback.lift
-    (IsOpenImmersion.lift (V F ↓j ↓k).ι (pullback.fst _ _ ≫ tAux F ↓i ↓j) (by
-      rintro _ ⟨x, rfl⟩
-      obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, rfl⟩ := exists_of_pullback_V_V F x
-      rw [← Scheme.Hom.comp_apply]; rw [reassoc_of% hα₁]; rw [homOfLE_tAux F ↓i ↓j fi fj]; rw [Iso.hom_inv_id_assoc]; rw [Scheme.Opens.range_ι]; rw [SetLike.mem_coe]
-      exact TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨l, fj, fk⟩, ⟨z, rfl⟩⟩))
-      (pullback.fst _ _ ≫ t F _ _) (by simp [t])
-  t_fac i j k := pullback.lift_snd _ _ _
-  cocycle i j k := by
-    refine Scheme.hom_ext_of_forall _ _ fun x => ?_
-    have := exists_of_pullback_V_V F x
-    obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, e⟩ := this -- doing them in the same step times out.
-    refine ⟨α.opensRange, ⟨_, e⟩, ?_⟩
-    rw [← cancel_mono (pullback.snd _ _)]; rw [← cancel_mono (Scheme.Opens.ι _)]
-    simp only [t, Category.assoc, limit.lift_π, PullbackCone.mk_π_app,
-      limit.lift_π_assoc, cospan_left, IsOpenImmersion.lift_fac, Category.id_comp]
-    rw [IsOpenImmersion.comp_lift_assoc]
-    simp only [limit.lift_π_assoc, cospan_left, PullbackCone.mk_π_app]
-    rw [← cancel_epi α.isoOpensRange.hom]
-    simp_rw [Scheme.Hom.isoOpensRange_hom_ι_assoc, IsOpenImmersion.comp_lift_assoc]
-    simp only [reassoc_of% hα₁, homOfLE_tAux F _ _ fi fj, Iso.hom_inv_id_assoc, reassoc_of% hα₂]
-    generalize_proofs _ h₁
-    have : IsOpenImmersion.lift (V F ↓j ↓k).ι (F.map fj) h₁ = (F.map fj).isoOpensRange.hom ≫
-        (F.obj ↓j).homOfLE (le_iSup_of_le ⟨l, fj, fk⟩ le_rfl) := by
-      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
-      exact (Scheme.homOfLE_ι _ _).symm
-    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fj fk, Iso.hom_inv_id_assoc]
-    generalize_proofs h₂
-    have : IsOpenImmersion.lift (V F ↓k ↓i).ι (F.map fk) h₂ = (F.map fk).isoOpensRange.hom ≫
-        (F.obj ↓k).homOfLE (le_iSup_of_le ⟨l, fk, fi⟩ le_rfl) := by
-      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
-      exact (Scheme.homOfLE_ι _ _).symm
-    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fk fi, Iso.hom_inv_id_assoc,
-      ← Iso.inv_comp_eq, Scheme.Hom.isoOpensRange_inv_comp]
-    exact (Scheme.homOfLE_ι _ _).symm
+One usually does not want to use this directly, and instead use the generic `colimit` API.
+-/
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.glueData** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：glueData : Scheme.GlueData where J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-中文:
-定义 glueData
-  签名: : 概形.粘合数据 where
-  定义体: Shrink.{u} J
-  U j := F.obj ↓j
-  V ij := V F ↓ij.1 ↓ij.2
-  f i j := Scheme.Opens.ι _
-  f_id i := V_self F ↓i ▸ (Scheme.topIso _).isIso_hom
-  f_hasPullback := inferInstance
-  f_open := inferInstance
-  t i j := t F ↓i ↓j
-  t_id i := t_id F ↓i
-  t' i j k := pullback.lift
-    (IsOpenImmersion.lift (V F ↓j ↓k).ι (pullback.fst _ _ ≫ tAux F ↓i ↓j) (by
-      rintro _ ⟨x, rfl⟩
-      obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, rfl⟩ := exists_of_pullback_V_V F x
-      rw [← Scheme.Hom.comp_apply]; rw [reassoc_of% hα₁]; rw [homOfLE_tAux F ↓i ↓j fi fj]; rw [Iso.hom_inv_id_assoc]; rw [Scheme.Opens.range_ι]; rw [SetLike.mem_coe]
-      exact TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨l, fj, fk⟩, ⟨z, rfl⟩⟩))
-      (pullback.fst _ _ ≫ t F _ _) (by simp [t])
-  t_fac i j k := pullback.lift_snd _ _ _
-  cocycle i j k := by
-    refine Scheme.hom_ext_of_forall _ _ fun x => ?_
-    have := exists_of_pullback_V_V F x
-    obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, e⟩ := this -- doing them in the same step times out.
-    refine ⟨α.opensRange, ⟨_, e⟩, ?_⟩
-    rw [← cancel_mono (pullback.snd _ _)]; rw [← cancel_mono (Scheme.Opens.ι _)]
-    simp only [t, Category.assoc, limit.lift_π, PullbackCone.mk_π_app,
-      limit.lift_π_assoc, cospan_left, IsOpenImmersion.lift_fac, Category.id_comp]
-    rw [IsOpenImmersion.comp_lift_assoc]
-    simp only [limit.lift_π_assoc, cospan_left, PullbackCone.mk_π_app]
-    rw [← cancel_epi α.isoOpensRange.hom]
-    simp_rw [Scheme.Hom.isoOpensRange_hom_ι_assoc, IsOpenImmersion.comp_lift_assoc]
-    simp only [reassoc_of% hα₁, homOfLE_tAux F _ _ fi fj, Iso.hom_inv_id_assoc, reassoc_of% hα₂]
-    generalize_proofs _ h₁
-    have : IsOpenImmersion.lift (V F ↓j ↓k).ι (F.map fj) h₁ = (F.map fj).isoOpensRange.hom ≫
-        (F.obj ↓j).homOfLE (le_iSup_of_le ⟨l, fj, fk⟩ le_rfl) := by
-      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
-      exact (Scheme.homOfLE_ι _ _).symm
-    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fj fk, Iso.hom_inv_id_assoc]
-    generalize_proofs h₂
-    have : IsOpenImmersion.lift (V F ↓k ↓i).ι (F.map fk) h₂ = (F.map fk).isoOpensRange.hom ≫
-        (F.obj ↓k).homOfLE (le_iSup_of_le ⟨l, fk, fi⟩ le_rfl) := by
-      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
-      exact (Scheme.homOfLE_ι _ _).symm
-    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fk fi, Iso.hom_inv_id_assoc,
-      ← Iso.inv_comp_eq, Scheme.Hom.isoOpensRange_inv_comp]
-    exact (Scheme.homOfLE_ι _ _).symm
+--- 原说明 ---
+(Implementation detail)
+The glue data associated to a locally directed diagram.
 
-Depends on / 依赖: Shrink
+One usually does not want to use this directly, and instead use the generic `col
+imit` API.
 -/
 def glueData : Scheme.GlueData where
   J := Shrink.{u} J
@@ -1935,16 +1791,17 @@ def glueData : Scheme.GlueData where
     (IsOpenImmersion.lift (V F ↓j ↓k).ι (pullback.fst _ _ ≫ tAux F ↓i ↓j) (by
       rintro _ ⟨x, rfl⟩
       obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, rfl⟩ := exists_of_pullback_V_V F x
-      rw [← Scheme.Hom.comp_apply]; rw [reassoc_of% hα₁]; rw [homOfLE_tAux F ↓i ↓j fi fj]; rw [Iso.hom_inv_id_assoc]; rw [Scheme.Opens.range_ι]; rw [SetLike.mem_coe]
+      rw [← Scheme.Hom.comp_apply, reassoc_of% hα₁, homOfLE_tAux F ↓i ↓j fi fj,
+        Iso.hom_inv_id_assoc, Scheme.Opens.range_ι, SetLike.mem_coe]
       exact TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨l, fj, fk⟩, ⟨z, rfl⟩⟩))
       (pullback.fst _ _ ≫ t F _ _) (by simp [t])
   t_fac i j k := pullback.lift_snd _ _ _
   cocycle i j k := by
-    refine Scheme.hom_ext_of_forall _ _ fun x => ?_
+    refine Scheme.hom_ext_of_forall _ _ fun x ↦ ?_
     have := exists_of_pullback_V_V F x
     obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, e⟩ := this -- doing them in the same step times out.
     refine ⟨α.opensRange, ⟨_, e⟩, ?_⟩
-    rw [← cancel_mono (pullback.snd _ _)]; rw [← cancel_mono (Scheme.Opens.ι _)]
+    rw [← cancel_mono (pullback.snd _ _), ← cancel_mono (Scheme.Opens.ι _)]
     simp only [t, Category.assoc, limit.lift_π, PullbackCone.mk_π_app,
       limit.lift_π_assoc, cospan_left, IsOpenImmersion.lift_fac, Category.id_comp]
     rw [IsOpenImmersion.comp_lift_assoc]
@@ -1955,53 +1812,28 @@ def glueData : Scheme.GlueData where
     generalize_proofs _ h₁
     have : IsOpenImmersion.lift (V F ↓j ↓k).ι (F.map fj) h₁ = (F.map fj).isoOpensRange.hom ≫
         (F.obj ↓j).homOfLE (le_iSup_of_le ⟨l, fj, fk⟩ le_rfl) := by
-      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
+      rw [← cancel_mono (Scheme.Opens.ι _), Category.assoc, IsOpenImmersion.lift_fac,
+        ← Iso.inv_comp_eq, Scheme.Hom.isoOpensRange_inv_comp]
       exact (Scheme.homOfLE_ι _ _).symm
     simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fj fk, Iso.hom_inv_id_assoc]
     generalize_proofs h₂
     have : IsOpenImmersion.lift (V F ↓k ↓i).ι (F.map fk) h₂ = (F.map fk).isoOpensRange.hom ≫
         (F.obj ↓k).homOfLE (le_iSup_of_le ⟨l, fk, fi⟩ le_rfl) := by
-      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
+      rw [← cancel_mono (Scheme.Opens.ι _), Category.assoc, IsOpenImmersion.lift_fac,
+        ← Iso.inv_comp_eq, Scheme.Hom.isoOpensRange_inv_comp]
       exact (Scheme.homOfLE_ι _ _).symm
     simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fk fi, Iso.hom_inv_id_assoc,
       ← Iso.inv_comp_eq, Scheme.Hom.isoOpensRange_inv_comp]
     exact (Scheme.homOfLE_ι _ _).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `glueDataι_naturality` / 引理 `glueDataι_naturality`
-
-English:
-lemma glueDataι_naturality
-  given: {i j : Shrink.{u} J} (f : ↓i ⟶ ↓j)
-  proof: by
-  have : IsIso (V F ↓i ↓j).ι := by
-    have : V F ↓i ↓j = ⊤ :=
-      top_le_iff.mp (le_iSup_of_le ⟨_, 𝟙 _, f⟩ (by simp [Scheme.Hom.opensRange_of_isIso]))
-    exact this ▸ (topIso _).isIso_hom
-  have : t F ↓i ↓j ≫ (V F ↓j ↓i).ι ≫ _ = (V F ↓i ↓j).ι ≫ _ :=
-    (glueData F).glue_condition i j
-  simp only [t, IsOpenImmersion.lift_fac_assoc] at this
-  rw [← cancel_epi (V F ↓i ↓j).ι]; rw [← this]; rw [← Category.assoc]; rw [← (Iso.eq_inv_comp _).mp (homOfLE_tAux F ↓i ↓j (𝟙 _) f)]; rw [← Category.assoc]; rw [← Category.assoc]; rw [Category.assoc]
-  convert! Category.id_comp _
-  simp [← cancel_mono (Opens.ι _), V]
-
-中文:
-引理 glueDataι_naturality
-  条件: {i j : Shrink.{u} J} (f : ↓i ⟶ ↓j)
-  证明: by
-  have : IsIso (V F ↓i ↓j).ι := by
-    have : V F ↓i ↓j = ⊤ :=
-      top_le_iff.mp (le_iSup_of_le ⟨_, 𝟙 _, f⟩ (by simp [Scheme.Hom.opensRange_of_isIso]))
-    exact this ▸ (topIso _).isIso_hom
-  have : t F ↓i ↓j ≫ (V F ↓j ↓i).ι ≫ _ = (V F ↓i ↓j).ι ≫ _ :=
-    (glueData F).glue_condition i j
-  simp only [t, IsOpenImmersion.lift_fac_assoc] at this
-  rw [← cancel_epi (V F ↓i ↓j).ι]; rw [← this]; rw [← Category.assoc]; rw [← (Iso.eq_inv_comp _).mp (homOfLE_tAux F ↓i ↓j (𝟙 _) f)]; rw [← Category.assoc]; rw [← Category.assoc]; rw [Category.assoc]
-  convert! Category.id_comp _
-  simp [← cancel_mono (Opens.ι _), V]
-
-Depends on / 依赖: Category, Category.assoc, IsOpenImmersion, IsOpenImmersion.lift_fac_assoc, Iso.eq_inv_comp, Scheme, Scheme.Hom.opensRange_of_isIso, cancel_epi, eq_inv_comp, glueData, glue_condition, homOfLE_tAux, isIso_hom, le_iSup_of_le, lift_fac_assoc, opensRange_of_isIso, topIso, top_le_iff, top_le_iff.mp
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.glueData** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：glueData : Scheme.GlueData where J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma glueDataι_naturality {i j : Shrink.{u} J} (f : ↓i ⟶ ↓j) :
     F.map f ≫ (glueData F).ι j = (glueData F).ι i := by
@@ -2012,34 +1844,33 @@ lemma glueDataι_naturality {i j : Shrink.{u} J} (f : ↓i ⟶ ↓j) :
   have : t F ↓i ↓j ≫ (V F ↓j ↓i).ι ≫ _ = (V F ↓i ↓j).ι ≫ _ :=
     (glueData F).glue_condition i j
   simp only [t, IsOpenImmersion.lift_fac_assoc] at this
-  rw [← cancel_epi (V F ↓i ↓j).ι]; rw [← this]; rw [← Category.assoc]; rw [← (Iso.eq_inv_comp _).mp (homOfLE_tAux F ↓i ↓j (𝟙 _) f)]; rw [← Category.assoc]; rw [← Category.assoc]; rw [Category.assoc]
+  rw [← cancel_epi (V F ↓i ↓j).ι, ← this, ← Category.assoc,
+    ← (Iso.eq_inv_comp _).mp (homOfLE_tAux F ↓i ↓j (𝟙 _) f),
+    ← Category.assoc, ← Category.assoc, Category.assoc]
   convert! Category.id_comp _
   simp [← cancel_mono (Opens.ι _), V]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `cocone` / `cocone` 的定义
+/-- (Implementation detail)
+The cocone associated to a locally directed diagram.
 
-English:
-definition cocone
-  signature: : Cocone F where
-  body: (glueData F).glued
-  ι.app j := F.map (eqToHom (by simp)) ≫ (glueData F).ι (equivShrink _ j)
-  ι.naturality {i j} f := by
-    simp only [← IsIso.inv_comp_eq, ← Functor.map_inv, ← Functor.map_comp_assoc,
-      glueDataι_naturality, Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id]
+One usually does not want to use this directly, and instead use the generic `colimit` API.
+-/
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.cocone** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：cocone : Cocone F where pt
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-中文:
-定义 cocone
-  签名: : 余锥 F where
-  定义体: (glueData F).glued
-  ι.app j := F.map (eqToHom (by simp)) ≫ (glueData F).ι (equivShrink _ j)
-  ι.naturality {i j} f := by
-    simp only [← IsIso.inv_comp_eq, ← Functor.map_inv, ← Functor.map_comp_assoc,
-      glueDataι_naturality, Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id]
+--- 原说明 ---
+(Implementation detail)
+The cocone associated to a locally directed diagram.
 
-Depends on / 依赖: glueData
+One usually does not want to use this directly, and instead use the generic `col
+imit` API.
 -/
 def cocone : Cocone F where
   pt := (glueData F).glued
@@ -2056,63 +1887,28 @@ The cocone associated to a locally directed diagram is a colimit.
 One usually does not want to use this directly, and instead use the generic `colimit` API.
 -/
 noncomputable
-/--
-Definition of `isColimit` / `isColimit` 的定义
-
-English:
-definition isColimit
-  signature: : IsColimit (cocone F) where
-  body: Multicoequalizer.desc _ _ (fun i => s.ι.app ↓i) (by
-    rintro ⟨i, j⟩
-    dsimp [glueData, GlueData.diagram]
-    simp only [t, IsOpenImmersion.lift_fac]
-    apply (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
-    simp only [Opens.iSupOpenCover, V, Scheme.homOfLE_ι_assoc]
-    rw [homOfLE_tAux_assoc F ↓i ↓j k.2.1 k.2.2]; rw [Iso.eq_inv_comp]
-    simp)
-  fac s j := by
-    refine (Category.assoc _ _ _).trans ?_
-    conv_lhs => enter [2]; tactic => exact Multicoequalizer.π_desc _ _ _ _ _
-    simp
-  uniq s m hm := Multicoequalizer.hom_ext _ _ _ fun i => by
-    simp [← hm ↓i, cocone, reassoc_of% glueDataι_naturality]
-    rfl
-
-中文:
-定义 isColimit
-  签名: : 是余极限 (cocone F) where
-  定义体: Multicoequalizer.desc _ _ (fun i => s.ι.app ↓i) (by
-    rintro ⟨i, j⟩
-    dsimp [glueData, GlueData.diagram]
-    simp only [t, IsOpenImmersion.lift_fac]
-    apply (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
-    simp only [Opens.iSupOpenCover, V, Scheme.homOfLE_ι_assoc]
-    rw [homOfLE_tAux_assoc F ↓i ↓j k.2.1 k.2.2]; rw [Iso.eq_inv_comp]
-    simp)
-  fac s j := by
-    refine (Category.assoc _ _ _).trans ?_
-    conv_lhs => enter [2]; tactic => exact Multicoequalizer.π_desc _ _ _ _ _
-    simp
-  uniq s m hm := Multicoequalizer.hom_ext _ _ _ fun i => by
-    simp [← hm ↓i, cocone, reassoc_of% glueDataι_naturality]
-    rfl
-
-Depends on / 依赖: Category, Category.assoc, GlueData, GlueData.diagram, IsOpenImmersion, IsOpenImmersion.lift_fac, Iso.eq_inv_comp, Multicoequalizer, Multicoequalizer.desc, Multicoequalizer.hom_, Opens.iSupOpenCover, Scheme, Scheme.Opens.iSupOpenCover, Scheme.homOfLE_, conv_lhs, diagram, eq_inv_comp, glueData, homOfLE_tAux_assoc, hom_
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.isColimit** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：isColimit : IsColimit (cocone F) where desc s
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def isColimit : IsColimit (cocone F) where
-  desc s := Multicoequalizer.desc _ _ (fun i => s.ι.app ↓i) (by
+  desc s := Multicoequalizer.desc _ _ (fun i ↦ s.ι.app ↓i) (by
     rintro ⟨i, j⟩
     dsimp [glueData, GlueData.diagram]
     simp only [t, IsOpenImmersion.lift_fac]
-    apply (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
+    apply (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k ↦ ?_
     simp only [Opens.iSupOpenCover, V, Scheme.homOfLE_ι_assoc]
-    rw [homOfLE_tAux_assoc F ↓i ↓j k.2.1 k.2.2]; rw [Iso.eq_inv_comp]
+    rw [homOfLE_tAux_assoc F ↓i ↓j k.2.1 k.2.2, Iso.eq_inv_comp]
     simp)
   fac s j := by
     refine (Category.assoc _ _ _).trans ?_
     conv_lhs => enter [2]; tactic => exact Multicoequalizer.π_desc _ _ _ _ _
     simp
-  uniq s m hm := Multicoequalizer.hom_ext _ _ _ fun i => by
+  uniq s m hm := Multicoequalizer.hom_ext _ _ _ fun i ↦ by
     simp [← hm ↓i, cocone, reassoc_of% glueDataι_naturality]
     rfl
 
@@ -2124,81 +1920,32 @@ The cocone associated to a locally directed diagram is a colimit as locally ring
 One usually does not want to use this directly, and instead use the generic `colimit` API.
 -/
 noncomputable
-/--
-Definition of `isColimitForgetToLocallyRingedSpace` / `isColimitForgetToLocallyRingedSpace` 的定义
-
-English:
-definition isColimitForgetToLocallyRingedSpace
-  signature: :
-  body: (glueData F).isoLocallyRingedSpace.hom ≫
-    Multicoequalizer.desc _ _ (fun i => s.ι.app ↓i) (by
-      rintro ⟨i, j⟩
-      dsimp [glueData, GlueData.diagram]
-      simp only [t, IsOpenImmersion.lift_fac, ← Scheme.Hom.comp_toLRSHom]
-      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlued.toLRSHom]; rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.gluedCover.isoLocallyRingedSpace.inv]
-      refine Multicoequalizer.hom_ext _ _ _ fun ⟨k, hk⟩ => ?_
-      rw [← CategoryTheory.GlueData.ι]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [← cancel_epi (Hom.isoOpensRange (F.map _)).hom.toLRSHom]
-      simp +instances only [Opens.iSupOpenCover, Cover.ulift, V, ← Hom.comp_toLRSHom_assoc,
-        Cover.ι_fromGlued_assoc, homOfLE_ι, Hom.isoOpensRange_hom_ι, Cover.idx]
-      generalize_proofs _ _ h
-      rw [homOfLE_tAux F ↓i ↓j h.choose.2.1 h.choose.2.2]; rw [Iso.hom_inv_id_assoc]
-      exact (s.w h.choose.2.1).trans (s.w h.choose.2.2).symm)
-  fac s j := by
-    simp only [cocone, Functor.mapCocone_ι_app, Scheme.Hom.comp_toLRSHom,
-      forgetToLocallyRingedSpace_map, ← GlueData.ι_isoLocallyRingedSpace_inv]
-    simpa [CategoryTheory.GlueData.ι] using s.w _
-  uniq s m hm := by
-    rw [← Iso.inv_comp_eq]
-    refine Multicoequalizer.hom_ext _ _ _ fun i => ?_
-    conv_lhs => rw [← ι.eq_def]
-    dsimp
-    simp [cocone, ← hm, glueDataι_naturality,
-      ← GlueData.ι_isoLocallyRingedSpace_inv, -ι_gluedIso_inv_assoc, -ι_gluedIso_inv]
-
-中文:
-定义 isColimitForgetToLocallyRingedSpace
-  签名: :
-  定义体: (glueData F).isoLocallyRingedSpace.hom ≫
-    Multicoequalizer.desc _ _ (fun i => s.ι.app ↓i) (by
-      rintro ⟨i, j⟩
-      dsimp [glueData, GlueData.diagram]
-      simp only [t, IsOpenImmersion.lift_fac, ← Scheme.Hom.comp_toLRSHom]
-      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlued.toLRSHom]; rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.gluedCover.isoLocallyRingedSpace.inv]
-      refine Multicoequalizer.hom_ext _ _ _ fun ⟨k, hk⟩ => ?_
-      rw [← CategoryTheory.GlueData.ι]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [← cancel_epi (Hom.isoOpensRange (F.map _)).hom.toLRSHom]
-      simp +instances only [Opens.iSupOpenCover, Cover.ulift, V, ← Hom.comp_toLRSHom_assoc,
-        Cover.ι_fromGlued_assoc, homOfLE_ι, Hom.isoOpensRange_hom_ι, Cover.idx]
-      generalize_proofs _ _ h
-      rw [homOfLE_tAux F ↓i ↓j h.choose.2.1 h.choose.2.2]; rw [Iso.hom_inv_id_assoc]
-      exact (s.w h.choose.2.1).trans (s.w h.choose.2.2).symm)
-  fac s j := by
-    simp only [cocone, Functor.mapCocone_ι_app, Scheme.Hom.comp_toLRSHom,
-      forgetToLocallyRingedSpace_map, ← GlueData.ι_isoLocallyRingedSpace_inv]
-    simpa [CategoryTheory.GlueData.ι] using s.w _
-  uniq s m hm := by
-    rw [← Iso.inv_comp_eq]
-    refine Multicoequalizer.hom_ext _ _ _ fun i => ?_
-    conv_lhs => rw [← ι.eq_def]
-    dsimp
-    simp [cocone, ← hm, glueDataι_naturality,
-      ← GlueData.ι_isoLocallyRingedSpace_inv, -ι_gluedIso_inv_assoc, -ι_gluedIso_inv]
-
-Depends on / 依赖: glueData, isoLocallyRingedSpace, isoLocallyRingedSpace.hom
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.isColimitForgetToLocallyRingedSpace
+** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：isColimitForgetToLocallyRingedSpace : IsColimit (Scheme.forgetToLocallyRin
+gedSpace.mapCocone (cocone F)) where desc s
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def isColimitForgetToLocallyRingedSpace :
     IsColimit (Scheme.forgetToLocallyRingedSpace.mapCocone (cocone F)) where
   desc s := (glueData F).isoLocallyRingedSpace.hom ≫
-    Multicoequalizer.desc _ _ (fun i => s.ι.app ↓i) (by
+    Multicoequalizer.desc _ _ (fun i ↦ s.ι.app ↓i) (by
       rintro ⟨i, j⟩
       dsimp [glueData, GlueData.diagram]
       simp only [t, IsOpenImmersion.lift_fac, ← Scheme.Hom.comp_toLRSHom]
-      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlued.toLRSHom]; rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.gluedCover.isoLocallyRingedSpace.inv]
-      refine Multicoequalizer.hom_ext _ _ _ fun ⟨k, hk⟩ => ?_
-      rw [← CategoryTheory.GlueData.ι]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [← cancel_epi (Hom.isoOpensRange (F.map _)).hom.toLRSHom]
+      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlued.toLRSHom,
+        ← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.gluedCover.isoLocallyRingedSpace.inv]
+      refine Multicoequalizer.hom_ext _ _ _ fun ⟨k, hk⟩ ↦ ?_
+      rw [← CategoryTheory.GlueData.ι, reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv,
+        reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv,
+        ← cancel_epi (Hom.isoOpensRange (F.map _)).hom.toLRSHom]
       simp +instances only [Opens.iSupOpenCover, Cover.ulift, V, ← Hom.comp_toLRSHom_assoc,
         Cover.ι_fromGlued_assoc, homOfLE_ι, Hom.isoOpensRange_hom_ι, Cover.idx]
       generalize_proofs _ _ h
-      rw [homOfLE_tAux F ↓i ↓j h.choose.2.1 h.choose.2.2]; rw [Iso.hom_inv_id_assoc]
+      rw [homOfLE_tAux F ↓i ↓j h.choose.2.1 h.choose.2.2, Iso.hom_inv_id_assoc]
       exact (s.w h.choose.2.1).trans (s.w h.choose.2.2).symm)
   fac s j := by
     simp only [cocone, Functor.mapCocone_ι_app, Scheme.Hom.comp_toLRSHom,
@@ -2206,61 +1953,28 @@ def isColimitForgetToLocallyRingedSpace :
     simpa [CategoryTheory.GlueData.ι] using s.w _
   uniq s m hm := by
     rw [← Iso.inv_comp_eq]
-    refine Multicoequalizer.hom_ext _ _ _ fun i => ?_
+    refine Multicoequalizer.hom_ext _ _ _ fun i ↦ ?_
     conv_lhs => rw [← ι.eq_def]
     dsimp
     simp [cocone, ← hm, glueDataι_naturality,
       ← GlueData.ι_isoLocallyRingedSpace_inv, -ι_gluedIso_inv_assoc, -ι_gluedIso_inv]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimit F
-  body: ⟨_, isColimit F⟩
-
-中文:
-实例 :
-  签名: 有余极限 F
-  定义体: ⟨_, isColimit F⟩
-
-Depends on / 依赖: isColimit
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra
+icGeometry.Scheme.IsLocallyDirected`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimit F := ⟨_, isColimit F⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimit F Scheme.forgetToLocallyRingedSpace
-  body: preservesColimit_of_preserves_colimit_cocone (isColimit F) (isColimitForgetToLocallyRingedSpace F)
-
-中文:
-实例 :
-  签名: 保持余极限 F 概形.forgetToLocallyRingedSpace
-  定义体: preservesColimit_of_preserves_colimit_cocone (isColimit F) (isColimitForgetToLocallyRingedSpace F)
-
-Depends on / 依赖: isColimit, isColimitForgetToLocallyRingedSpace, preservesColimit_of_preserves_colimit_cocone
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra
+icGeometry.Scheme.IsLocallyDirected`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesColimit F Scheme.forgetToLocallyRingedSpace :=
   preservesColimit_of_preserves_colimit_cocone (isColimit F) (isColimitForgetToLocallyRingedSpace F)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesColimit F Scheme.forgetToLocallyRingedSpace
-  body: CategoryTheory.createsColimitOfReflectsIsomorphismsOfPreserves
-
-中文:
-实例 :
-  签名: 创造余极限 F 概形.forgetToLocallyRingedSpace
-  定义体: CategoryTheory.createsColimitOfReflectsIsomorphismsOfPreserves
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.createsColimitOfReflectsIsomorphismsOfPreserves, createsColimitOfReflectsIsomorphismsOfPreserves
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra
+icGeometry.Scheme.IsLocallyDirected`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CreatesColimit F Scheme.forgetToLocallyRingedSpace :=
   CategoryTheory.createsColimitOfReflectsIsomorphismsOfPreserves
@@ -2269,100 +1983,55 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The open cover of the colimit of a locally directed diagram by the components. -/
 @[simps! I₀ X f]
-/--
-Definition of `openCover` / `openCover` 的定义
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.openCover** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.Scheme.IsLocallyDirected`。
+形式化陈述：openCover : (colimit F).OpenCover
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.IsLocallyDirected.instHasColimit`：∀ {J : Type w
+} [inst : CategoryTheory.Category.{v, w} J] (F : CategoryTheory.Functor J Algebr
+aicGeometry.Scheme)   [∀ {i j : J} (f : i ⟶ j),…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderCompositionPrecoverageOfIsStab
+leUnderComposition`：∀ (P : CategoryTheory.MorphismProperty AlgebraicGeometry.Sch
+eme) [P.IsStableUnderComposition],   (AlgebraicGeometry.Scheme.precoverage P).Is
+…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toContainsIdentities`：∀
+ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheory.Morp
+hismProperty C}   [self : W.IsMultiplicative], W.ContainsId…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition openCover
-  signature: : (colimit F).OpenCover
-  body: Cover.copy ((coverOfIsIso ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).hom).bind
-    fun i => (glueData F).openCover) J F.obj (colimit.ι F)
-    ((equivShrink J).trans <| (Equiv.uniqueSigma fun (_ : Unit) => Shrink J).symm)
-    (fun _ => F.mapIso (eqToIso (by simp [GlueData.openCover, glueData]))) fun i => by
-  change colimit.ι F i = _ ≫ (glueData F).ι (equivShrink J i) ≫ _
-  simp [← Category.assoc, ← Iso.comp_inv_eq, cocone]
-
-中文:
-定义 openCover
-  签名: : (colimit F).OpenCover
-  定义体: Cover.copy ((coverOfIsIso ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).hom).bind
-    fun i => (glueData F).openCover) J F.obj (colimit.ι F)
-    ((equivShrink J).trans <| (Equiv.uniqueSigma fun (_ : Unit) => Shrink J).symm)
-    (fun _ => F.mapIso (eqToIso (by simp [GlueData.openCover, glueData]))) fun i => by
-  change colimit.ι F i = _ ≫ (glueData F).ι (equivShrink J i) ≫ _
-  simp [← Category.assoc, ← Iso.comp_inv_eq, cocone]
-
-Depends on / 依赖: Category, Category.assoc, Cover.copy, Equiv.uniqueSigma, F.mapIso, F.obj, GlueData, GlueData.openCover, Iso.comp_inv_eq, Shrink, cocone, coconePointUniqueUpToIso, colimit, colimit.isColimit, comp_inv_eq, coverOfIsIso, eqToIso, equivShrink, glueData, isColimit
+--- 原说明 ---
+The open cover of the colimit of a locally directed diagram by the components.
 -/
 def openCover : (colimit F).OpenCover :=
   Cover.copy ((coverOfIsIso ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).hom).bind
-    fun i => (glueData F).openCover) J F.obj (colimit.ι F)
-    ((equivShrink J).trans <| (Equiv.uniqueSigma fun (_ : Unit) => Shrink J).symm)
-    (fun _ => F.mapIso (eqToIso (by simp [GlueData.openCover, glueData]))) fun i => by
+    fun i ↦ (glueData F).openCover) J F.obj (colimit.ι F)
+    ((equivShrink J).trans <| (Equiv.uniqueSigma fun (_ : Unit) ↦ Shrink J).symm)
+    (fun _ ↦ F.mapIso (eqToIso (by simp [GlueData.openCover, glueData]))) fun i ↦ by
   change colimit.ι F i = _ ≫ (glueData F).ι (equivShrink J i) ≫ _
   simp [← Category.assoc, ← Iso.comp_inv_eq, cocone]
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra
+icGeometry.Scheme.IsLocallyDirected`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i) : IsOpenImmersion (colimit.ι F i) :=
   inferInstanceAs (IsOpenImmersion ((openCover F).f i))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ι_eq_ι_iff` / 引理 `ι_eq_ι_iff`
-
-English:
-lemma ι_eq_ι_iff
-  given: {i j : J} {xi : F.obj i} {xj : F.obj j}
-  proof: by
-  constructor; swap
-  · rintro ⟨k, fi, fj, x, rfl, rfl⟩; simp only [← Scheme.Hom.comp_apply, colimit.w]
-  obtain ⟨i, rfl⟩ := (equivShrink J).symm.surjective i
-  obtain ⟨j, rfl⟩ := (equivShrink J).symm.surjective j
-  rw [← ((isColimit F).coconePointUniqueUpToIso
-    (colimit.isColimit F)).inv.isOpenEmbedding.injective.eq_iff]
-  simp only [Limits.colimit, ← Scheme.Hom.comp_apply,
-    colimit.comp_coconePointUniqueUpToIso_inv, cocone, glueDataι_naturality]
-  refine ?_ ∘ ((glueData F).ι_eq_iff _ _ _ _).mp
-  dsimp +instances only [GlueData.Rel]
-  rintro ⟨x, rfl, rfl⟩
-  obtain ⟨⟨k, ki, kj⟩, y, hy : F.map ki y = (glueData F).f i j x⟩ := mem_iSup.mp x.2
-  refine ⟨k, ki, kj, y, hy, ?_⟩
-  obtain ⟨k, rfl⟩ := (equivShrink J).symm.surjective k
-  apply ((glueData F).ι _).isOpenEmbedding.injective
-  simp only [← Scheme.Hom.comp_apply, Category.assoc, GlueData.glue_condition]
-  trans (glueData F).ι k y
-  · simp [← glueDataι_naturality F kj]; rfl
-  · simp [← glueDataι_naturality F ki, ← hy]; rfl
-
-中文:
-引理 ι_eq_ι_iff
-  条件: {i j : J} {xi : F.obj i} {xj : F.obj j}
-  证明: by
-  constructor; swap
-  · rintro ⟨k, fi, fj, x, rfl, rfl⟩; simp only [← Scheme.Hom.comp_apply, colimit.w]
-  obtain ⟨i, rfl⟩ := (equivShrink J).symm.surjective i
-  obtain ⟨j, rfl⟩ := (equivShrink J).symm.surjective j
-  rw [← ((isColimit F).coconePointUniqueUpToIso
-    (colimit.isColimit F)).inv.isOpenEmbedding.injective.eq_iff]
-  simp only [Limits.colimit, ← Scheme.Hom.comp_apply,
-    colimit.comp_coconePointUniqueUpToIso_inv, cocone, glueDataι_naturality]
-  refine ?_ ∘ ((glueData F).ι_eq_iff _ _ _ _).mp
-  dsimp +instances only [GlueData.Rel]
-  rintro ⟨x, rfl, rfl⟩
-  obtain ⟨⟨k, ki, kj⟩, y, hy : F.map ki y = (glueData F).f i j x⟩ := mem_iSup.mp x.2
-  refine ⟨k, ki, kj, y, hy, ?_⟩
-  obtain ⟨k, rfl⟩ := (equivShrink J).symm.surjective k
-  apply ((glueData F).ι _).isOpenEmbedding.injective
-  simp only [← Scheme.Hom.comp_apply, Category.assoc, GlueData.glue_condition]
-  trans (glueData F).ι k y
-  · simp [← glueDataι_naturality F kj]; rfl
-  · simp [← glueDataι_naturality F ki, ← hy]; rfl
-
-Depends on / 依赖: Limits, Limits.colimit, Scheme, Scheme.Hom.comp_apply, cocone, coconePointUniqueUpToIso, colimit, colimit.comp_coconePointUniqueUpToIso_inv, colimit.isColimit, colimit.w, comp_apply, comp_coconePointUniqueUpToIso_inv, eq_iff, equivShrink, glueData, injective, inv.isOpenEmbedding.injective.eq_iff, isColimit, isOpenEmbedding, surjective
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme.IsLocallyDirected`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_eq_ι_iff {i j : J} {xi : F.obj i} {xj : F.obj j} :
     colimit.ι F i xi = colimit.ι F j xj ↔
-      exists k fi fj, exists (x : F.obj k), F.map fi x = xi ∧ F.map fj x = xj := by
+      ∃ k fi fj, ∃ (x : F.obj k), F.map fi x = xi ∧ F.map fj x = xj := by
   constructor; swap
   · rintro ⟨k, fi, fj, x, rfl, rfl⟩; simp only [← Scheme.Hom.comp_apply, colimit.w]
   obtain ⟨i, rfl⟩ := (equivShrink J).symm.surjective i
@@ -2384,43 +2053,13 @@ lemma ι_eq_ι_iff {i j : J} {xi : F.obj i} {xj : F.obj j} :
   · simp [← glueDataι_naturality F ki, ← hy]; rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ι_jointly_surjective` / 引理 `ι_jointly_surjective`
-
-English:
-lemma ι_jointly_surjective
-  given: (x : ↑(colimit F))
-  proof: by
-  obtain ⟨i, xi, h⟩ :=
-    (IsLocallyDirected.glueData F).ι_jointly_surjective
-      (((IsLocallyDirected.isColimit F).coconePointUniqueUpToIso (colimit.isColimit _)).inv x)
-  use (equivShrink J).symm i, xi
-  apply ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).inv.isOpenEmbedding.injective
-  simp_rw [← h, colimit.cocone_x, ← Scheme.Hom.comp_apply]
-  congr 5
-  have := eqToHom_naturality (fun j => (glueData F).ι j)
-    (show i = ((equivShrink J) ((equivShrink J).symm i)) by simp)
-  simp [cocone, eqToHom_map, ← this]
-
-中文:
-引理 ι_jointly_surjective
-  条件: (x : ↑(colimit F))
-  证明: by
-  obtain ⟨i, xi, h⟩ :=
-    (IsLocallyDirected.glueData F).ι_jointly_surjective
-      (((IsLocallyDirected.isColimit F).coconePointUniqueUpToIso (colimit.isColimit _)).inv x)
-  use (equivShrink J).symm i, xi
-  apply ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).inv.isOpenEmbedding.injective
-  simp_rw [← h, colimit.cocone_x, ← Scheme.Hom.comp_apply]
-  congr 5
-  have := eqToHom_naturality (fun j => (glueData F).ι j)
-    (show i = ((equivShrink J) ((equivShrink J).symm i)) by simp)
-  simp [cocone, eqToHom_map, ← this]
-
-Depends on / 依赖: IsLocallyDirected, IsLocallyDirected.glueData, IsLocallyDirected.isColimit, Scheme, Scheme.Hom.comp_apply, cocone, coconePointUniqueUpToIso, cocone_x, colimit, colimit.cocone_x, colimit.isColimit, comp_apply, eqToHom_m, eqToHom_naturality, equivShrink, glueData, injective, inv.isOpenEmbedding.injective, isColimit, isOpenEmbedding
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme.IsLocallyDirected`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_jointly_surjective (x : ↑(colimit F)) :
-    exists (i : J) (xi : F.obj i), colimit.ι F i xi = x := by
+    ∃ (i : J) (xi : F.obj i), colimit.ι F i xi = x := by
   obtain ⟨i, xi, h⟩ :=
     (IsLocallyDirected.glueData F).ι_jointly_surjective
       (((IsLocallyDirected.isColimit F).coconePointUniqueUpToIso (colimit.isColimit _)).inv x)
@@ -2428,11 +2067,15 @@ lemma ι_jointly_surjective (x : ↑(colimit F)) :
   apply ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).inv.isOpenEmbedding.injective
   simp_rw [← h, colimit.cocone_x, ← Scheme.Hom.comp_apply]
   congr 5
-  have := eqToHom_naturality (fun j => (glueData F).ι j)
+  have := eqToHom_naturality (fun j ↦ (glueData F).ι j)
     (show i = ((equivShrink J) ((equivShrink J).symm i)) by simp)
   simp [cocone, eqToHom_map, ← this]
-
-instance (F : WidePushoutShape J ⥤ Scheme.{u}) [forall {i j} (f : i ⟶ j), IsOpenImmersion (F.map f)] :
+/-
+**AlgebraicGeometry.Scheme.IsLocallyDirected.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra
+icGeometry.Scheme.IsLocallyDirected`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (F : WidePushoutShape J ⥤ Scheme.{u}) [∀ {i j} (f : i ⟶ j), IsOpenImmersion (F.map f)] :
     (F ⋙ forget).IsLocallyDirected :=
   have (i : _) : Mono ((F ⋙ forget).map (.init i)) :=
     (mono_iff_injective _).mpr (F.map _).isOpenEmbedding.injective
@@ -2445,3 +2088,4 @@ end IsLocallyDirected
 end Scheme
 
 end AlgebraicGeometry
+

@@ -21,53 +21,24 @@ namespace Mathlib.Tactic
 open Lean Elab.Tactic
 open Parser.Tactic (optConfig rwRuleSeq location getConfigItems)
 
-/--
-Definition of `withSimpRWRulesSeq` / `withSimpRWRulesSeq` 的定义
+/-- A version of `withRWRulesSeq` (in core) that doesn't attempt to find equation lemmas, and simply
+  passes the rw rules on to `x`. -/
+/-
+**Mathlib.Tactic.withSimpRWRulesSeq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：withSimpRWRulesSeq (rwRulesSeqStx : Syntax) (x : (symm : Bool) -> (term : 
+Syntax) -> TacticM Unit) : TacticM Unit
+参数：rwRulesSeqStx : Syntax；x : (symm : Bool) -> (term : Syntax) -> TacticM Unit。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition withSimpRWRulesSeq
-  signature: (rwRulesSeqStx : Syntax)
-  body: do
-  let lbrak := rwRulesSeqStx[0]
-  let rules := rwRulesSeqStx[1].getArgs
-  -- show initial state up to (incl.) `[`
-  withTacticInfoContext lbrak (pure ())
-  let numRules := (rules.size + 1) / 2
-  for i in [:numRules] do
-    let rule := rules[i * 2]!
-    let sep := rules.getD (i * 2 + 1) Syntax.missing
-    -- show rule state up to (incl.) next `,`
-    withTacticInfoContext (mkNullNode #[rule, sep]) do
-      -- show errors on rule
-      withRef rule do
-        let symm := !rule[0].isNone
-        let term := rule[1]
-        -- let processId (id : Syntax) : TacticM Unit := do
-        x symm term
-
-中文:
-定义 withSimpRWRulesSeq
-  签名: (rwRulesSeqStx : Syntax)
-  定义体: do
-  let lbrak := rwRulesSeqStx[0]
-  let rules := rwRulesSeqStx[1].getArgs
-  -- show initial state up to (incl.) `[`
-  withTacticInfoContext lbrak (pure ())
-  let numRules := (rules.size + 1) / 2
-  for i in [:numRules] do
-    let rule := rules[i * 2]!
-    let sep := rules.getD (i * 2 + 1) Syntax.missing
-    -- show rule state up to (incl.) next `,`
-    withTacticInfoContext (mkNullNode #[rule, sep]) do
-      -- show errors on rule
-      withRef rule do
-        let symm := !rule[0].isNone
-        let term := rule[1]
-        -- let processId (id : Syntax) : TacticM Unit := do
-        x symm term
+--- 原说明 ---
+A version of `withRWRulesSeq` (in core) that doesn't attempt to find equation le
+mmas, and simply
+  passes the rw rules on to `x`.
 -/
 def withSimpRWRulesSeq (rwRulesSeqStx : Syntax)
-    (x : (symm : Bool) -> (term : Syntax) -> TacticM Unit) : TacticM Unit := do
+    (x : (symm : Bool) → (term : Syntax) → TacticM Unit) : TacticM Unit := do
   let lbrak := rwRulesSeqStx[0]
   let rules := rwRulesSeqStx[1].getArgs
   -- show initial state up to (incl.) `[`
@@ -75,7 +46,7 @@ def withSimpRWRulesSeq (rwRulesSeqStx : Syntax)
   let numRules := (rules.size + 1) / 2
   for i in [:numRules] do
     let rule := rules[i * 2]!
-    let sep := rules.getD (i * 2 + 1) Syntax.missing
+    let sep  := rules.getD (i * 2 + 1) Syntax.missing
     -- show rule state up to (incl.) next `,`
     withTacticInfoContext (mkNullNode #[rule, sep]) do
       -- show errors on rule
@@ -118,3 +89,4 @@ elab s:"simp_rw " cfg:optConfig rws:rwRuleSeq g:(location)? : tactic => focus do
         `(tactic| simp%$e $cfg only [$e:term] $g ?))
 
 end Mathlib.Tactic
+

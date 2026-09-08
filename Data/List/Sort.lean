@@ -28,7 +28,7 @@ namespace List
 
 section sort
 
-variable {α β : Type*} (r : α -> α -> Prop) (s : β -> β -> Prop)
+variable {α β : Type*} (r : α → α → Prop) (s : β → β → Prop)
 
 variable [DecidableRel r] [DecidableRel s]
 
@@ -39,210 +39,145 @@ local infixl:50 " ≼ " => s
 
 section InsertionSort
 
-/--
-Definition of `orderedInsert` / `orderedInsert` 的定义
+/-- `orderedInsert a l` inserts `a` into `l` at such that
+  `orderedInsert a l` is sorted if `l` is. -/
+/-
+**List.orderedInsert** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} → (r : α → α → Prop) → [DecidableRel r] → α → List α → List
+ α
+参数：r : α → α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderedInsert
-  signature: (a : α)
-
-中文:
-定义 orderedInsert
-  签名: (a : α)
+--- 原说明 ---
+`orderedInsert a l` inserts `a` into `l` at such that
+  `orderedInsert a l` is sorted if `l` is.
 -/
-def orderedInsert (a : α) : List α -> List α
+def orderedInsert (a : α) : List α → List α
   | [] => [a]
   | b :: l => if a ≼ b then a :: b :: l else b :: orderedInsert a l
-
-/--
-theorem `orderedInsert_nil` / 定理 `orderedInsert_nil`
-
-English:
-theorem orderedInsert_nil
-  given: (a : α)
-  statement: [].orderedInsert r a = [a]
-  proof: .refl _
-
-中文:
-定理 orderedInsert_nil
-  条件: (a : α)
-  结论: [].orderedInsert r a = [a]
-  证明: .refl _
+/-
+**List.orderedInsert_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (r : α → α → Prop) [inst : DecidableRel r] (a : α), List.
+orderedInsert r a [] = [a]
+参数：r : α → α → Prop；a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, grind =] theorem orderedInsert_nil (a : α) : [].orderedInsert r a = [a] := .refl _
-
-/--
-theorem `orderedInsert_cons` / 定理 `orderedInsert_cons`
-
-English:
-theorem orderedInsert_cons
-  given: (a b : α) (l : List α)
-  proof: .refl _
-
-中文:
-定理 orderedInsert_cons
-  条件: (a b : α) (l : 列表 α)
-  证明: .refl _
+/-
+**List.orderedInsert_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (r : α → α → Prop) [inst : DecidableRel r] (a b : α) (l :
+ List α),   List.orderedInsert r a (b :: l) = if r a b then a :: b :: l else b :
+: List.orderedInsert r a l
+参数：r : α → α → Prop；a b : α；l : List α；b :: l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, grind =] theorem orderedInsert_cons (a b : α) (l : List α) :
     (b :: l).orderedInsert r a = if r a b then a :: b :: l else b :: l.orderedInsert r a :=
   .refl _
-
-/--
-theorem `orderedInsert_cons_of_le` / 定理 `orderedInsert_cons_of_le`
-
-English:
-theorem orderedInsert_cons_of_le
-  given: {a b : α} (l : List α) (h : a ≼ b)
-  proof: dif_pos h
-
-中文:
-定理 orderedInsert_cons_of_le
-  条件: {a b : α} (l : 列表 α) (h : a ≼ b)
-  证明: dif_pos h
-
-Depends on / 依赖: dif_pos
+/-
+**List.orderedInsert_cons_of_le** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：orderedInsert_cons_of_le {a b : α} (l : List α) (h : a ≼ b) : orderedInser
+t r a (b :: l) = a :: b :: l
+参数：l : List α；h : a ≼ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
 theorem orderedInsert_cons_of_le {a b : α} (l : List α) (h : a ≼ b) :
     orderedInsert r a (b :: l) = a :: b :: l :=
   dif_pos h
-
-/--
-theorem `orderedInsert_of_not_le` / 定理 `orderedInsert_of_not_le`
-
-English:
-theorem orderedInsert_of_not_le
-  given: {a b : α} (l : List α) (h : ¬ a ≼ b)
-  proof: dif_neg h
-
-中文:
-定理 orderedInsert_of_not_le
-  条件: {a b : α} (l : 列表 α) (h : ¬ a ≼ b)
-  证明: dif_neg h
-
-Depends on / 依赖: dif_neg
+/-
+**List.orderedInsert_of_not_le** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：orderedInsert_of_not_le {a b : α} (l : List α) (h : ¬ a ≼ b) : orderedInse
+rt r a (b :: l) = b :: orderedInsert r a l
+参数：l : List α；h : ¬ a ≼ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem orderedInsert_of_not_le {a b : α} (l : List α) (h : ¬ a ≼ b) :
     orderedInsert r a (b :: l) = b :: orderedInsert r a l := dif_neg h
 
-/--
-Definition of `insertionSort` / `insertionSort` 的定义
+/-- `insertionSort l` returns `l` sorted using the insertion sort algorithm. -/
+/-
+**List.insertionSort** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：insertionSort : List α -> List α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition insertionSort
-  signature: : List α -> List α
-  body: foldr (orderedInsert r) []
-
-@[simp, grind =]
-
-中文:
-定义 insertionSort
-  签名: : 列表 α -> 列表 α
-  定义体: foldr (orderedInsert r) []
-
-@[simp, grind =]
-
-Depends on / 依赖: orderedInsert
+--- 原说明 ---
+`insertionSort l` returns `l` sorted using the insertion sort algorithm.
 -/
-def insertionSort : List α -> List α := foldr (orderedInsert r) []
+def insertionSort : List α → List α := foldr (orderedInsert r) []
 
 @[simp, grind =]
-/--
-theorem `insertionSort_nil` / 定理 `insertionSort_nil`
-
-English:
-theorem insertionSort_nil
-  statement: [].insertionSort r = []
-  proof: .refl _
-
-中文:
-定理 insertionSort_nil
-  结论: [].insertionSort r = []
-  证明: .refl _
+/-
+**List.insertionSort_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：insertionSort_nil : [].insertionSort r = []
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem insertionSort_nil : [].insertionSort r = [] := .refl _
-
-/--
-theorem `insertionSort_cons` / 定理 `insertionSort_cons`
-
-English:
-theorem insertionSort_cons
-  given: (a : α) (l : List α)
-  proof: .refl _
-
-中文:
-定理 insertionSort_cons
-  条件: (a : α) (l : 列表 α)
-  证明: .refl _
+/-
+**List.insertionSort_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (r : α → α → Prop) [inst : DecidableRel r] (a : α) (l : L
+ist α),   List.insertionSort r (a :: l) = List.orderedInsert r a (List.insertion
+Sort r l)
+参数：r : α → α → Prop；a : α；l : List α；a :: l；List.insertionSort r l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, grind =] theorem insertionSort_cons (a : α) (l : List α) :
     (a :: l).insertionSort r = orderedInsert r a (insertionSort r l) := .refl _
 
 -- A quick check that insertionSort is stable:
+/-
+**List.** 是 Mathlib 中的一个示例，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example :
-    insertionSort (fun m n => m / 10 <= n / 10) [5, 27, 221, 95, 17, 43, 7, 2, 98, 567, 23, 12] =
+    insertionSort (fun m n => m / 10 ≤ n / 10) [5, 27, 221, 95, 17, 43, 7, 2, 98, 567, 23, 12] =
       [5, 7, 2, 17, 12, 27, 23, 43, 95, 98, 221, 567] := rfl
-
-/--
-theorem `orderedInsert_length` / 定理 `orderedInsert_length`
-
-English:
-theorem orderedInsert_length
-  given: (L : List α) (a : α)
-  proof: by
-  induction L <;> grind
-
-中文:
-定理 orderedInsert_length
-  条件: (L : 列表 α) (a : α)
-  证明: by
-  induction L <;> grind
-
-Depends on / 依赖: Nonempty, Nonempty.of_image2_left, of_image2_left
+/-
+**List.orderedInsert_length** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：orderedInsert_length (L : List α) (a : α) : (L.orderedInsert r a).length =
+ L.length + 1
+参数：L : List α；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem orderedInsert_length (L : List α) (a : α) :
     (L.orderedInsert r a).length = L.length + 1 := by
   induction L <;> grind
 
-/--
-theorem `orderedInsert_eq_take_drop` / 定理 `orderedInsert_eq_take_drop`
+/-- An alternative definition of `orderedInsert` using `takeWhile` and `dropWhile`. -/
+/-
+**List.orderedInsert_eq_take_drop** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：orderedInsert_eq_take_drop (a : α) (l : List α) : l.orderedInsert r a = (l
+.takeWhile fun b => ¬a ≼ b) ++ a :: l.dropWhile fun b => ¬a ≼ b
+参数：a : α；l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem orderedInsert_eq_take_drop
-  given: (a : α) (l : List α)
-  proof: by
-  induction l <;> grind [takeWhile, dropWhile]
-
-中文:
-定理 orderedInsert_eq_take_drop
-  条件: (a : α) (l : 列表 α)
-  证明: by
-  induction l <;> grind [takeWhile, dropWhile]
-
-Depends on / 依赖: Nonempty, Nonempty.of_image2_right, dropWhile, of_image2_right, takeWhile
+--- 原说明 ---
+An alternative definition of `orderedInsert` using `takeWhile` and `dropWhile`.
 -/
 theorem orderedInsert_eq_take_drop (a : α) (l : List α) :
     l.orderedInsert r a = (l.takeWhile fun b => ¬a ≼ b) ++ a :: l.dropWhile fun b => ¬a ≼ b := by
   induction l <;> grind [takeWhile, dropWhile]
-
-/--
-theorem `insertionSort_cons_eq_take_drop` / 定理 `insertionSort_cons_eq_take_drop`
-
-English:
-theorem insertionSort_cons_eq_take_drop
-  given: (a : α) (l : List α)
-  proof: orderedInsert_eq_take_drop r a _
-
-@[simp]
-
-中文:
-定理 insertionSort_cons_eq_take_drop
-  条件: (a : α) (l : 列表 α)
-  证明: orderedInsert_eq_take_drop r a _
-
-@[simp]
-
-Depends on / 依赖: orderedInsert_eq_take_drop
+/-
+**List.insertionSort_cons_eq_take_drop** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：insertionSort_cons_eq_take_drop (a : α) (l : List α) : insertionSort r (a 
+:: l) = ((insertionSort r l).takeWhile fun b => ¬a ≼ b) ++ a :: (insertionSort r
+ l).dropWhile fun b => ¬a ≼ b
+参数：a : α；l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.orderedInsert_eq_take_drop`：orderedInsert_eq_take_drop (a : α) (l :
+ List α) : l.orderedInsert r a = (l.takeWhile fun b => ¬a ≼ b) ++ a :: l.dropWhi
+le fun b => ¬a ≼ b
 -/
 theorem insertionSort_cons_eq_take_drop (a : α) (l : List α) :
     insertionSort r (a :: l) =
@@ -251,423 +186,280 @@ theorem insertionSort_cons_eq_take_drop (a : α) (l : List α) :
   orderedInsert_eq_take_drop r a _
 
 @[simp]
-/--
-theorem `mem_orderedInsert` / 定理 `mem_orderedInsert`
-
-English:
-theorem mem_orderedInsert
-  given: {a b : α} {l : List α}
-  proof: by
-  induction l <;> grind
-
-中文:
-定理 mem_orderedInsert
-  条件: {a b : α} {l : 列表 α}
-  证明: by
-  induction l <;> grind
+/-
+**List.mem_orderedInsert** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：mem_orderedInsert {a b : α} {l : List α} : a in orderedInsert r b l ↔ a = 
+b ∨ a in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mem_orderedInsert {a b : α} {l : List α} :
-    a in orderedInsert r b l ↔ a = b ∨ a in l := by
+    a ∈ orderedInsert r b l ↔ a = b ∨ a ∈ l := by
   induction l <;> grind
-
-/--
-theorem `map_orderedInsert` / 定理 `map_orderedInsert`
-
-English:
-theorem map_orderedInsert
-  statement: (f : α -> β) (l : List α) (x : α)
-  proof: by
-  induction l <;> grind
-
-中文:
-定理 map_orderedInsert
-  结论: (f : α -> β) (l : 列表 α) (x : α)
-  证明: by
-  induction l <;> grind
+/-
+**List.map_orderedInsert** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：map_orderedInsert (f : α -> β) (l : List α) (x : α) (hl₁ : forall a in l, 
+a ≼ x ↔ f a ≼ f x) (hl₂ : forall a in l, x ≼ a ↔ f x ≼ f a) : (l.orderedInsert r
+ x).map f = (l.map f).orderedInsert s (f x)
+参数：f : α -> β；l : List α；x : α；hl₁ : forall a in l, a ≼ x ↔ f a ≼ f x；hl₂ : fora
+ll a in l, x ≼ a ↔ f x ≼ f a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_orderedInsert (f : α -> β) (l : List α) (x : α)
-    (hl₁ : forall a in l, a ≼ x ↔ f a ≼ f x) (hl₂ : forall a in l, x ≼ a ↔ f x ≼ f a) :
+theorem map_orderedInsert (f : α → β) (l : List α) (x : α)
+    (hl₁ : ∀ a ∈ l, a ≼ x ↔ f a ≼ f x) (hl₂ : ∀ a ∈ l, x ≼ a ↔ f x ≼ f a) :
     (l.orderedInsert r x).map f = (l.map f).orderedInsert s (f x) := by
   induction l <;> grind
 
 section Correctness
 
-/--
-theorem `perm_orderedInsert` / 定理 `perm_orderedInsert`
-
-English:
-theorem perm_orderedInsert
-  given: (a)
-  statement: forall l : List α, orderedInsert r a l ~ a :: l
-
-中文:
-定理 perm_orderedInsert
-  条件: (a)
-  结论: 对任意 l : 列表 α, orderedInsert r a l ~ a :: l
+/-
+**List.perm_orderedInsert** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (r : α → α → Prop) [inst : DecidableRel r] (a : α) (l : L
+ist α),   (List.orderedInsert r a l).Perm (a :: l)
+参数：r : α → α → Prop；a : α；l : List α；List.orderedInsert r a l；a :: l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem perm_orderedInsert (a) : forall l : List α, orderedInsert r a l ~ a :: l
+theorem perm_orderedInsert (a) : ∀ l : List α, orderedInsert r a l ~ a :: l
   | [] => Perm.refl _
   | b :: l => by
     by_cases h : a ≼ b
     · simp [h]
     · simpa [h] using ((perm_orderedInsert a l).cons _).trans (Perm.swap _ _ _)
-
-/--
-theorem `orderedInsert_count` / 定理 `orderedInsert_count`
-
-English:
-theorem orderedInsert_count
-  given: [DecidableEq α] (L : List α) (a b : α)
-  proof: by
-  rw [(L.perm_orderedInsert r b).count_eq]; rw [count_cons]
-  simp
-
-中文:
-定理 orderedInsert_count
-  条件: [DecidableEq α] (L : 列表 α) (a b : α)
-  证明: by
-  rw [(L.perm_orderedInsert r b).count_eq]; rw [count_cons]
-  simp
-
-Depends on / 依赖: L.perm_orderedInsert, count_cons, count_eq, perm_orderedInsert
+/-
+**List.orderedInsert_count** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：orderedInsert_count [DecidableEq α] (L : List α) (a b : α) : count a (L.or
+deredInsert r b) = count a L + if b = a then 1 else 0
+参数：L : List α；a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Perm.count_eq`：∀ {α : Type u_1} [inst : BEq α] {l₁ l₂ : List α}, l₁
+.Perm l₂ → ∀ (a : α), List.count a l₁ = List.count a l₂
+· 使用定理 `List.perm_orderedInsert`：∀ {α : Type u_1} (r : α → α → Prop) [inst : Dec
+idableRel r] (a : α) (l : List α),   (List.orderedInsert r a l).Perm (a :: l)
+· 使用定理 `List.count_cons`：∀ {α : Type u_1} [inst : BEq α] {a b : α} {l : List α},
+   List.count a (b :: l) = List.count a l + if (b == a) = true then 1 else 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem orderedInsert_count [DecidableEq α] (L : List α) (a b : α) :
     count a (L.orderedInsert r b) = count a L + if b = a then 1 else 0 := by
-  rw [(L.perm_orderedInsert r b).count_eq]; rw [count_cons]
+  rw [(L.perm_orderedInsert r b).count_eq, count_cons]
   simp
-
-/--
-theorem `perm_insertionSort` / 定理 `perm_insertionSort`
-
-English:
-theorem perm_insertionSort
-  given: (l : List α)
-  statement: insertionSort r l ~ l
-  proof: by
-  induction l <;> grind [List.Perm, perm_orderedInsert]
-
-@[simp]
-
-中文:
-定理 perm_insertionSort
-  条件: (l : 列表 α)
-  结论: insertionSort r l ~ l
-  证明: by
-  induction l <;> grind [List.Perm, perm_orderedInsert]
-
-@[simp]
-
-Depends on / 依赖: List.Perm, perm_orderedInsert
+/-
+**List.perm_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：perm_insertionSort (l : List α) : insertionSort r l ~ l
+参数：l : List α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem perm_insertionSort (l : List α) : insertionSort r l ~ l := by
   induction l <;> grind [List.Perm, perm_orderedInsert]
 
 @[simp]
-/--
-theorem `mem_insertionSort` / 定理 `mem_insertionSort`
-
-English:
-theorem mem_insertionSort
-  given: {l : List α} {x : α}
-  statement: x in l.insertionSort r ↔ x in l
-  proof: (perm_insertionSort r l).mem_iff
-
-@[simp]
-
-中文:
-定理 mem_insertionSort
-  条件: {l : 列表 α} {x : α}
-  结论: x in l.insertionSort r ↔ x in l
-  证明: (perm_insertionSort r l).mem_iff
-
-@[simp]
-
-Depends on / 依赖: mem_iff, perm_insertionSort
+/-
+**List.mem_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：mem_insertionSort {l : List α} {x : α} : x in l.insertionSort r ↔ x in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.mem_iff`：∀ {α : Type u_1} {a : α} {l₁ l₂ : List α}, l₁.Perm l₂
+ → (a ∈ l₁ ↔ a ∈ l₂)
+· 使用定理 `List.perm_insertionSort`：perm_insertionSort (l : List α) : insertionSort
+ r l ~ l
 -/
-theorem mem_insertionSort {l : List α} {x : α} : x in l.insertionSort r ↔ x in l :=
+theorem mem_insertionSort {l : List α} {x : α} : x ∈ l.insertionSort r ↔ x ∈ l :=
   (perm_insertionSort r l).mem_iff
 
 @[simp]
-/--
-theorem `length_insertionSort` / 定理 `length_insertionSort`
-
-English:
-theorem length_insertionSort
-  given: (l : List α)
-  statement: (insertionSort r l).length = l.length
-  proof: (perm_insertionSort r _).length_eq
-
-中文:
-定理 length_insertionSort
-  条件: (l : 列表 α)
-  结论: (insertionSort r l).length = l.length
-  证明: (perm_insertionSort r _).length_eq
-
-Depends on / 依赖: length_eq, perm_insertionSort
+/-
+**List.length_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：length_insertionSort (l : List α) : (insertionSort r l).length = l.length
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.length_eq`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₁.
+length = l₂.length
+· 使用定理 `List.perm_insertionSort`：perm_insertionSort (l : List α) : insertionSort
+ r l ~ l
 -/
 theorem length_insertionSort (l : List α) : (insertionSort r l).length = l.length :=
   (perm_insertionSort r _).length_eq
-
-/--
-theorem `insertionSort_cons_of_forall_rel` / 定理 `insertionSort_cons_of_forall_rel`
-
-English:
-theorem insertionSort_cons_of_forall_rel
-  given: {a : α} {l : List α} (h : forall b in l, r a b)
-  proof: by
-  rw [insertionSort_cons]
-  cases hi : insertionSort r l with
-  | nil => rfl
-  | cons b m =>
-    rw [orderedInsert_cons_of_le]
-apply h b (mem_insertionSort r).1 _
-    rw [hi]
-    exact mem_cons_self
-
-中文:
-定理 insertionSort_cons_of_对任意_rel
-  条件: {a : α} {l : 列表 α} (h : 对任意 b in l, r a b)
-  证明: by
-  rw [insertionSort_cons]
-  cases hi : insertionSort r l with
-  | nil => rfl
-  | cons b m =>
-    rw [orderedInsert_cons_of_le]
-apply h b (mem_insertionSort r).1 _
-    rw [hi]
-    exact mem_cons_self
-
-Depends on / 依赖: insertionSort, insertionSort_cons, mem_cons_self, mem_insertionSort, orderedInsert_cons_of_le
+/-
+**List.insertionSort_cons_of_forall_rel** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：insertionSort_cons_of_forall_rel {a : α} {l : List α} (h : forall b in l, 
+r a b) : insertionSort r (a :: l) = a :: insertionSort r l
+参数：h : forall b in l, r a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.insertionSort_cons`：∀ {α : Type u_1} (r : α → α → Prop) [inst : Dec
+idableRel r] (a : α) (l : List α),   List.insertionSort r (a :: l) = List.ordere
+dInsert r a (…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.orderedInsert_cons_of_le`：orderedInsert_cons_of_le {a b : α} (l : L
+ist α) (h : a ≼ b) : orderedInsert r a (b :: l) = a :: b :: l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.mem_insertionSort`：mem_insertionSort {l : List α} {x : α} : x in l.
+insertionSort r ↔ x in l
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
 -/
-theorem insertionSort_cons_of_forall_rel {a : α} {l : List α} (h : forall b in l, r a b) :
+theorem insertionSort_cons_of_forall_rel {a : α} {l : List α} (h : ∀ b ∈ l, r a b) :
     insertionSort r (a :: l) = a :: insertionSort r l := by
   rw [insertionSort_cons]
   cases hi : insertionSort r l with
   | nil => rfl
   | cons b m =>
     rw [orderedInsert_cons_of_le]
-apply h b (mem_insertionSort r).1 _
+    apply h b <| (mem_insertionSort r).1 _
     rw [hi]
     exact mem_cons_self
-
-/--
-theorem `map_insertionSort` / 定理 `map_insertionSort`
-
-English:
-theorem map_insertionSort
-  given: (f : α -> β) (l : List α) (hl : forall a in l, forall b in l, a ≼ b ↔ f a ≼ f b)
-  proof: by
-  induction l with
-  | nil => simp
-  | cons x xs ih =>
-    simp_rw [List.forall_mem_cons, forall_and] at hl
-    simp_rw [List.map, insertionSort_cons]
-    rw [List.map_orderedInsert _ s]; rw [ih hl.2.2]
-    · simpa only [mem_insertionSort] using hl.2.1
-    · simpa only [mem_insertionSort] using hl.1.2
-
-中文:
-定理 map_insertionSort
-  条件: (f : α -> β) (l : 列表 α) (hl : 对任意 a in l, 对任意 b in l, a ≼ b ↔ f a ≼ f b)
-  证明: by
-  induction l with
-  | nil => simp
-  | cons x xs ih =>
-    simp_rw [List.forall_mem_cons, forall_and] at hl
-    simp_rw [List.map, insertionSort_cons]
-    rw [List.map_orderedInsert _ s]; rw [ih hl.2.2]
-    · simpa only [mem_insertionSort] using hl.2.1
-    · simpa only [mem_insertionSort] using hl.1.2
-
-Depends on / 依赖: List.forall_mem_cons, List.map, List.map_orderedInsert, forall_and, forall_mem_cons, insertionSort_cons, map_orderedInsert, mem_insertionSort, simp_rw
+/-
+**List.map_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：map_insertionSort (f : α -> β) (l : List α) (hl : forall a in l, forall b 
+in l, a ≼ b ↔ f a ≼ f b) : (l.insertionSort r).map f = (l.map f).insertionSort s
+参数：f : α -> β；l : List α；hl : forall a in l, forall b in l, a ≼ b ↔ f a ≼ f b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.insertionSort_nil`：insertionSort_nil : [].insertionSort r = []
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `List.insertionSort.congr_simp`：∀ {α : Type u_1} (r r_1 : α → α → Prop), 
+  r = r_1 →     ∀ {inst : DecidableRel r} [inst_1 : DecidableRel r_1] (a a_1 : L
+ist α),       a = a…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.insertionSort_cons`：∀ {α : Type u_1} (r : α → α → Prop) [inst : Dec
+idableRel r] (a : α) (l : List α),   List.insertionSort r (a :: l) = List.ordere
+dInsert r a (…
+· 使用定理 `List.map_orderedInsert`：map_orderedInsert (f : α -> β) (l : List α) (x :
+ α) (hl₁ : forall a in l, a ≼ x ↔ f a ≼ f x) (hl₂ : forall a in l, x ≼ a ↔ f x ≼
+ f a) : (l.o…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem map_insertionSort (f : α -> β) (l : List α) (hl : forall a in l, forall b in l, a ≼ b ↔ f a ≼ f b) :
+theorem map_insertionSort (f : α → β) (l : List α) (hl : ∀ a ∈ l, ∀ b ∈ l, a ≼ b ↔ f a ≼ f b) :
     (l.insertionSort r).map f = (l.map f).insertionSort s := by
   induction l with
   | nil => simp
   | cons x xs ih =>
     simp_rw [List.forall_mem_cons, forall_and] at hl
     simp_rw [List.map, insertionSort_cons]
-    rw [List.map_orderedInsert _ s]; rw [ih hl.2.2]
+    rw [List.map_orderedInsert _ s, ih hl.2.2]
     · simpa only [mem_insertionSort] using hl.2.1
     · simpa only [mem_insertionSort] using hl.1.2
 
 variable {r}
 
-/--
-theorem `Pairwise.insertionSort_eq` / 定理 `Pairwise.insertionSort_eq`
+/-- If `l` is already `List.Pairwise` with respect to `r`, then `insertionSort` does not change
+it. -/
+/-
+**List.Pairwise.insertionSort_eq** 是 Mathlib 中的一个定理，位于命名空间 `List.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [inst : DecidableRel r] {l : List α}, 
+List.Pairwise r l → List.insertionSort r l = l
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Pairwise.insertionSort_eq
-  given: {l : List α}
-  statement: Pairwise r l -> insertionSort r l = l
-  proof: by
-  induction l <;> grind [cases List]
-
-中文:
-定理 两两.insertionSort_eq
-  条件: {l : 列表 α}
-  结论: 两两 r l -> insertionSort r l = l
-  证明: by
-  induction l <;> grind [cases List]
+--- 原说明 ---
+If `l` is already `List.Pairwise` with respect to `r`, then `insertionSort` does
+ not change
+it.
 -/
-theorem Pairwise.insertionSort_eq {l : List α} : Pairwise r l -> insertionSort r l = l := by
+theorem Pairwise.insertionSort_eq {l : List α} : Pairwise r l → insertionSort r l = l := by
   induction l <;> grind [cases List]
 
-/--
-theorem `erase_orderedInsert` / 定理 `erase_orderedInsert`
+/-- For a reflexive relation, insert then erasing is the identity. -/
+/-
+**List.erase_orderedInsert** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：erase_orderedInsert [DecidableEq α] [Std.Refl r] (x : α) (xs : List α) : (
+xs.orderedInsert r x).erase x = xs
+参数：x : α；xs : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem erase_orderedInsert
-  given: [DecidableEq α] [Std.Refl r] (x : α) (xs : List α)
-  proof: by
-  induction xs <;> grind [Std.Refl]
-
-中文:
-定理 erase_orderedInsert
-  条件: [DecidableEq α] [Std.Refl r] (x : α) (xs : 列表 α)
-  证明: by
-  induction xs <;> grind [Std.Refl]
-
-Depends on / 依赖: Std.Refl
+--- 原说明 ---
+For a reflexive relation, insert then erasing is the identity.
 -/
 theorem erase_orderedInsert [DecidableEq α] [Std.Refl r] (x : α) (xs : List α) :
     (xs.orderedInsert r x).erase x = xs := by
   induction xs <;> grind [Std.Refl]
 
-/--
-theorem `erase_orderedInsert_of_notMem` / 定理 `erase_orderedInsert_of_notMem`
+/-- Inserting then erasing an element that is absent is the identity. -/
+/-
+**List.erase_orderedInsert_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：erase_orderedInsert_of_notMem [DecidableEq α] {x : α} {xs : List α} (hx : 
+x ∉ xs) : (xs.orderedInsert r x).erase x = xs
+参数：hx : x ∉ xs。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem erase_orderedInsert_of_notMem
-  statement: [DecidableEq α]
-  proof: by
-  induction xs <;> grind
-
-中文:
-定理 erase_orderedInsert_of_notMem
-  结论: [DecidableEq α]
-  证明: by
-  induction xs <;> grind
+--- 原说明 ---
+Inserting then erasing an element that is absent is the identity.
 -/
 theorem erase_orderedInsert_of_notMem [DecidableEq α]
     {x : α} {xs : List α} (hx : x ∉ xs) :
     (xs.orderedInsert r x).erase x = xs := by
   induction xs <;> grind
 
-/--
-theorem `orderedInsert_erase` / 定理 `orderedInsert_erase`
+/-- For an antisymmetric relation, erasing then inserting is the identity. -/
+/-
+**List.orderedInsert_erase** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：orderedInsert_erase [DecidableEq α] [Std.Antisymm r] (x : α) (xs : List α)
+ (hx : x in xs) (hxs : Pairwise r xs) : (xs.erase x).orderedInsert r x = xs
+参数：x : α；xs : List α；hx : x in xs；hxs : Pairwise r xs。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem orderedInsert_erase
-  statement: [DecidableEq α] [Std.Antisymm r] (x : α) (xs : List α) (hx : x in xs)
-  proof: by
-  induction xs with grind +splitIndPred
-
-中文:
-定理 orderedInsert_erase
-  结论: [DecidableEq α] [Std.反对称 r] (x : α) (xs : 列表 α) (hx : x in xs)
-  证明: by
-  induction xs with grind +splitIndPred
-
-Depends on / 依赖: splitIndPred
+--- 原说明 ---
+For an antisymmetric relation, erasing then inserting is the identity.
 -/
-theorem orderedInsert_erase [DecidableEq α] [Std.Antisymm r] (x : α) (xs : List α) (hx : x in xs)
+theorem orderedInsert_erase [DecidableEq α] [Std.Antisymm r] (x : α) (xs : List α) (hx : x ∈ xs)
     (hxs : Pairwise r xs) :
     (xs.erase x).orderedInsert r x = xs := by
   induction xs with grind +splitIndPred
-
-/--
-theorem `sublist_orderedInsert` / 定理 `sublist_orderedInsert`
-
-English:
-theorem sublist_orderedInsert
-  given: (x : α) (xs : List α)
-  statement: xs <+ xs.orderedInsert r x
-  proof: by
-  induction xs <;> grind
-
-中文:
-定理 sublist_orderedInsert
-  条件: (x : α) (xs : 列表 α)
-  结论: xs <+ xs.orderedInsert r x
-  证明: by
-  induction xs <;> grind
+/-
+**List.sublist_orderedInsert** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sublist_orderedInsert (x : α) (xs : List α) : xs <+ xs.orderedInsert r x
+参数：x : α；xs : List α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sublist_orderedInsert (x : α) (xs : List α) : xs <+ xs.orderedInsert r x := by
   induction xs <;> grind
-
-/--
-theorem `cons_sublist_orderedInsert` / 定理 `cons_sublist_orderedInsert`
-
-English:
-theorem cons_sublist_orderedInsert
-  given: {l c : List α} {a : α} (hl : c <+ l) (ha : forall a' in c, a ≼ a')
-  proof: by
-  induction l <;> grind
-
-中文:
-定理 cons_sublist_orderedInsert
-  条件: {l c : 列表 α} {a : α} (hl : c <+ l) (ha : 对任意 a' in c, a ≼ a')
-  证明: by
-  induction l <;> grind
+/-
+**List.cons_sublist_orderedInsert** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：cons_sublist_orderedInsert {l c : List α} {a : α} (hl : c <+ l) (ha : fora
+ll a' in c, a ≼ a') : a :: c <+ orderedInsert r a l
+参数：hl : c <+ l；ha : forall a' in c, a ≼ a'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cons_sublist_orderedInsert {l c : List α} {a : α} (hl : c <+ l) (ha : forall a' in c, a ≼ a') :
+theorem cons_sublist_orderedInsert {l c : List α} {a : α} (hl : c <+ l) (ha : ∀ a' ∈ c, a ≼ a') :
     a :: c <+ orderedInsert r a l := by
   induction l <;> grind
-
-/--
-theorem `Sublist.orderedInsert_sublist` / 定理 `Sublist.orderedInsert_sublist`
-
-English:
-theorem Sublist.orderedInsert_sublist
-  statement: [IsTrans α r] {as bs} (x) (hs : as <+ bs)
-  proof: by
-  cases as with
-  | nil => simp
-  | cons a as =>
-    cases bs with
-    | nil => contradiction
-    | cons b bs =>
-      unfold orderedInsert
-      cases hs <;> split_ifs with hr
-· exact .cons_cons _ .cons _ ‹a :: as <+ bs›
-      · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
-        simp only [hr, orderedInsert_cons, ite_true] at ih
-exact .trans ih .cons _ (.refl _)
-.left _ (mem_of_cons_sublist ‹a :: as <+ bs›) · have hba := pairwise_cons.mp hb
-        exact absurd (trans_of _ ‹r x b› hba) hr
-      · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
-        rw [orderedInsert_cons]; rw [if_neg hr] at ih
-        exact .cons _ ih
-      · simp_all
-· exact .cons_cons _ orderedInsert_sublist x ‹as <+ bs› hb.of_cons
-
-中文:
-定理 子表.orderedInsert_sublist
-  结论: [是Trans α r] {as bs} (x) (hs : as <+ bs)
-  证明: by
-  cases as with
-  | nil => simp
-  | cons a as =>
-    cases bs with
-    | nil => contradiction
-    | cons b bs =>
-      unfold orderedInsert
-      cases hs <;> split_ifs with hr
-· exact .cons_cons _ .cons _ ‹a :: as <+ bs›
-      · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
-        simp only [hr, orderedInsert_cons, ite_true] at ih
-exact .trans ih .cons _ (.refl _)
-.left _ (mem_of_cons_sublist ‹a :: as <+ bs›) · have hba := pairwise_cons.mp hb
-        exact absurd (trans_of _ ‹r x b› hba) hr
-      · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
-        rw [orderedInsert_cons]; rw [if_neg hr] at ih
-        exact .cons _ ih
-      · simp_all
-· exact .cons_cons _ orderedInsert_sublist x ‹as <+ bs› hb.of_cons
-
-Depends on / 依赖: absurd, cons_cons, hb.of_cons, ite_true, mem_of_cons_sublist, of_cons, orderedInsert, orderedInsert_cons, orderedInsert_sublist, pairwise_cons, pairwise_cons.mp, split_ifs, trans_of
+/-
+**List.Sublist.orderedInsert_sublist** 是 Mathlib 中的一个定理，位于命名空间 `List.Sublist`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [inst : DecidableRel r] [IsTrans α r] 
+{as bs : List α} (x : α),   as.Sublist bs → List.Pairwise r bs → (List.orderedIn
+sert r x as).Sublist (List.orderedInsert r x bs)
+参数：x : α；List.orderedInsert r x as；List.orderedInsert r x bs。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Sublist.orderedInsert_sublist [IsTrans α r] {as bs} (x) (hs : as <+ bs)
     (hb : bs.Pairwise r) : orderedInsert r x as <+ orderedInsert r x bs := by
@@ -679,41 +471,36 @@ theorem Sublist.orderedInsert_sublist [IsTrans α r] {as bs} (x) (hs : as <+ bs)
     | cons b bs =>
       unfold orderedInsert
       cases hs <;> split_ifs with hr
-· exact .cons_cons _ .cons _ ‹a :: as <+ bs›
+      · exact .cons_cons _ <| .cons _ ‹a :: as <+ bs›
       · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
         simp only [hr, orderedInsert_cons, ite_true] at ih
-exact .trans ih .cons _ (.refl _)
-.left _ (mem_of_cons_sublist ‹a :: as <+ bs›) · have hba := pairwise_cons.mp hb
+        exact .trans ih <| .cons _ (.refl _)
+      · have hba := pairwise_cons.mp hb |>.left _ (mem_of_cons_sublist ‹a :: as <+ bs›)
         exact absurd (trans_of _ ‹r x b› hba) hr
       · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
-        rw [orderedInsert_cons]; rw [if_neg hr] at ih
+        rw [orderedInsert_cons, if_neg hr] at ih
         exact .cons _ ih
       · simp_all
-· exact .cons_cons _ orderedInsert_sublist x ‹as <+ bs› hb.of_cons
+      · exact .cons_cons _ <| orderedInsert_sublist x ‹as <+ bs› hb.of_cons
 
 section TotalAndTransitive
 
 variable [Std.Total r] [IsTrans α r]
 
-/--
-theorem `Pairwise.orderedInsert` / 定理 `Pairwise.orderedInsert`
-
-English:
-theorem Pairwise.orderedInsert
-  given: (a : α)
-  statement: forall l, Pairwise r l -> Pairwise r (orderedInsert r a l)
-
-中文:
-定理 两两.orderedInsert
-  条件: (a : α)
-  结论: 对任意 l, 两两 r l -> 两两 r (orderedInsert r a l)
+/-
+**List.Pairwise.orderedInsert** 是 Mathlib 中的一个定理，位于命名空间 `List.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [inst : DecidableRel r] [Std.Total r] 
+[IsTrans α r] (a : α) (l : List α),   List.Pairwise r l → List.Pairwise r (List.
+orderedInsert r a l)
+参数：a : α；l : List α；List.orderedInsert r a l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Pairwise.orderedInsert (a : α) : forall l, Pairwise r l -> Pairwise r (orderedInsert r a l)
+theorem Pairwise.orderedInsert (a : α) : ∀ l, Pairwise r l → Pairwise r (orderedInsert r a l)
   | [], _ => pairwise_singleton _ a
   | b :: l, h => by
     by_cases h' : a ≼ b
     · grind
-    · suffices forall b' : α, b' in List.orderedInsert r a l -> r b b' by
+    · suffices ∀ b' : α, b' ∈ List.orderedInsert r a l → r b b' by
         simpa [orderedInsert_cons, h', h.of_cons.orderedInsert a l]
       intro b' bm
       rcases (mem_orderedInsert r).mp bm with rfl | bm
@@ -722,18 +509,18 @@ theorem Pairwise.orderedInsert (a : α) : forall l, Pairwise r l -> Pairwise r (
 
 variable (r)
 
-/--
-theorem `pairwise_insertionSort` / 定理 `pairwise_insertionSort`
+/-- The list `List.insertionSort r l` is `List.Pairwise` with respect to `r`. -/
+/-
+**List.pairwise_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (r : α → α → Prop) [inst : DecidableRel r] [Std.Total r] 
+[IsTrans α r] (l : List α),   List.Pairwise r (List.insertionSort r l)
+参数：r : α → α → Prop；l : List α；List.insertionSort r l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem pairwise_insertionSort
-  statement: forall l, Pairwise r (insertionSort r l)
-
-中文:
-定理 pairwise_insertionSort
-  结论: 对任意 l, 两两 r (insertionSort r l)
+--- 原说明 ---
+The list `List.insertionSort r l` is `List.Pairwise` with respect to `r`.
 -/
-theorem pairwise_insertionSort : forall l, Pairwise r (insertionSort r l)
+theorem pairwise_insertionSort : ∀ l, Pairwise r (insertionSort r l)
   | [] => Pairwise.nil
   | a :: l => (pairwise_insertionSort l).orderedInsert a _
 
@@ -741,61 +528,67 @@ end TotalAndTransitive
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
 /--
-theorem `sublist_insertionSort` / 定理 `sublist_insertionSort`
+If `c` is a sorted sublist of `l`, then `c` is still a sublist of `insertionSort r l`.
+-/
+/-
+**List.sublist_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sublist_insertionSort {l c : List α} (hr : c.Pairwise r) (hc : c <+ l) : c
+ <+ insertionSort r l
+参数：hr : c.Pairwise r；hc : c <+ l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Sublist.trans`：∀ {α : Type u_1} {l₁ l₂ l₃ : List α}, l₁.Sublist l₂ 
+→ l₂.Sublist l₃ → l₁.Sublist l₃
+· 使用定理 `List.sublist_orderedInsert`：sublist_orderedInsert (x : α) (xs : List α) 
+: xs <+ xs.orderedInsert r x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.pairwise_cons`：∀ {α : Type u} {R : α → α → Prop} {a : α} {l : List 
+α},   List.Pairwise R (a :: l) ↔ (∀ a' ∈ l, R a a') ∧ List.Pairwise R l
+· 使用定理 `List.cons_sublist_orderedInsert`：cons_sublist_orderedInsert {l c : List 
+α} {a : α} (hl : c <+ l) (ha : forall a' in c, a ≼ a') : a :: c <+ orderedInsert
+ r a l
 
-English:
-theorem sublist_insertionSort
-  given: {l c : List α} (hr : c.Pairwise r) (hc : c <+ l)
-  proof: by
-  induction l generalizing c with
-  | nil => grind
-  | cons _ _ ih =>
-    cases hc with
-.trans (sublist_orderedInsert ..) | cons _ h => exact ih hr h
-    | cons_cons _ h =>
-      obtain ⟨hr, hp⟩ := pairwise_cons.mp hr
-      exact cons_sublist_orderedInsert (ih hp h) hr
-
-中文:
-定理 sublist_insertionSort
-  条件: {l c : 列表 α} (hr : c.两两 r) (hc : c <+ l)
-  证明: by
-  induction l generalizing c with
-  | nil => grind
-  | cons _ _ ih =>
-    cases hc with
-.trans (sublist_orderedInsert ..) | cons _ h => exact ih hr h
-    | cons_cons _ h =>
-      obtain ⟨hr, hp⟩ := pairwise_cons.mp hr
-      exact cons_sublist_orderedInsert (ih hp h) hr
-
-Depends on / 依赖: cons_cons, cons_sublist_orderedInsert, generalizing, pairwise_cons, pairwise_cons.mp, sublist_orderedInsert
+--- 原说明 ---
+If `c` is a sorted sublist of `l`, then `c` is still a sublist of `insertionSort
+ r l`.
 -/
 theorem sublist_insertionSort {l c : List α} (hr : c.Pairwise r) (hc : c <+ l) :
     c <+ insertionSort r l := by
   induction l generalizing c with
-  | nil => grind
+  | nil         => grind
   | cons _ _ ih =>
     cases hc with
-.trans (sublist_orderedInsert ..) | cons _ h => exact ih hr h
+    | cons  _ h => exact ih hr h |>.trans (sublist_orderedInsert ..)
     | cons_cons _ h =>
       obtain ⟨hr, hp⟩ := pairwise_cons.mp hr
       exact cons_sublist_orderedInsert (ih hp h) hr
 
 /--
-theorem `pair_sublist_insertionSort` / 定理 `pair_sublist_insertionSort`
+Another statement of stability of insertion sort.
+If a pair `[a, b]` is a sublist of `l` and `r a b`,
+then `[a, b]` is still a sublist of `insertionSort r l`.
+-/
+/-
+**List.pair_sublist_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：pair_sublist_insertionSort {a b : α} {l : List α} (hab : r a b) (h : [a, b
+] <+ l) : [a, b] <+ insertionSort r l
+参数：hab : r a b；h : [a, b] <+ l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sublist_insertionSort`：sublist_insertionSort {l c : List α} (hr : c
+.Pairwise r) (hc : c <+ l) : c <+ insertionSort r l
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.pairwise_pair`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α}, List.
+Pairwise R [a, b] ↔ R a b
 
-English:
-theorem pair_sublist_insertionSort
-  given: {a b : α} {l : List α} (hab : r a b) (h : [a, b] <+ l)
-  proof: sublist_insertionSort (pairwise_pair.mpr hab) h
-
-中文:
-定理 pair_sublist_insertionSort
-  条件: {a b : α} {l : 列表 α} (hab : r a b) (h : [a, b] <+ l)
-  证明: sublist_insertionSort (pairwise_pair.mpr hab) h
-
-Depends on / 依赖: pairwise_pair, pairwise_pair.mpr, sublist_insertionSort
+--- 原说明 ---
+Another statement of stability of insertion sort.
+If a pair `[a, b]` is a sublist of `l` and `r a b`,
+then `[a, b]` is still a sublist of `insertionSort r l`.
 -/
 theorem pair_sublist_insertionSort {a b : α} {l : List α} (hab : r a b) (h : [a, b] <+ l) :
     [a, b] <+ insertionSort r l :=
@@ -805,73 +598,88 @@ variable [Std.Antisymm r] [Std.Total r] [IsTrans α r]
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
 /--
-theorem `sublist_insertionSort'` / 定理 `sublist_insertionSort'`
+A version of `insertionSort_stable` which only assumes `c <+~ l` (instead of `c <+ l`), but
+additionally requires `Std.Antisymm r`, `Std.Total r` and `IsTrans α r`.
+-/
+/-
+**List.sublist_insertionSort'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sublist_insertionSort' {l c : List α} (hs : c.Pairwise r) (hc : c <+~ l) :
+ c <+ insertionSort r l
+参数：hs : c.Pairwise r；hc : c <+~ l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Sublist.trans`：∀ {α : Type u_1} {l₁ l₂ l₃ : List α}, l₁.Sublist l₂ 
+→ l₂.Sublist l₃ → l₁.Sublist l₃
+· 使用定理 `List.sublist_orderedInsert`：sublist_orderedInsert (x : α) (xs : List α) 
+: xs <+ xs.orderedInsert r x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.Perm.mem_iff`：∀ {α : Type u_1} {a : α} {l₁ l₂ : List α}, l₁.Perm l₂
+ → (a ∈ l₁ ↔ a ∈ l₂)
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `List.orderedInsert_erase`：orderedInsert_erase [DecidableEq α] [Std.Antis
+ymm r] (x : α) (xs : List α) (hx : x in xs) (hxs : Pairwise r xs) : (xs.erase x)
+.orderedInsert…
+· 使用定理 `List.Sublist.orderedInsert_sublist`：∀ {α : Type u_1} {r : α → α → Prop} 
+[inst : DecidableRel r] [IsTrans α r] {as bs : List α} (x : α),   as.Sublist bs 
+→ List.Pairwise r bs → (…
+· 使用定理 `List.Pairwise.erase`：∀ {α : Type u_1} [inst : BEq α] {p : α → α → Prop} 
+[LawfulBEq α] {l : List α} (a : α),   List.Pairwise p l → List.Pairwise p (l.era
+se a)
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `List.Perm.erase`：∀ {α : Type u_1} [inst : BEq α] [LawfulBEq α] (a : α) {
+l₁ l₂ : List α}, l₁.Perm l₂ → (l₁.erase a).Perm (l₂.erase a)
+· 使用定理 `List.erase_cons_head`：∀ {α : Type u_1} [inst : BEq α] [LawfulBEq α] (a :
+ α) (l : List α), (a :: l).erase a = l
+· 使用定理 `List.pairwise_insertionSort`：∀ {α : Type u_1} (r : α → α → Prop) [inst :
+ DecidableRel r] [Std.Total r] [IsTrans α r] (l : List α),   List.Pairwise r (Li
+st.insertionSort …
 
-English:
-theorem sublist_insertionSort'
-  given: {l c : List α} (hs : c.Pairwise r) (hc : c <+~ l)
-  proof: by
-  classical
-  obtain ⟨d, hc, hd⟩ := hc
-  induction l generalizing c d with
-  | nil => grind [nil_perm]
-  | cons a _ ih =>
-    cases hd with
-.trans (sublist_orderedInsert ..) | cons _ h => exact ih hs _ hc h
-    | cons_cons _ h =>
-      specialize ih (hs.erase _) _ (erase_cons_head a ‹List _› ▸ hc.erase a) h
-have hm := hc.mem_iff.mp mem_cons_self ..
-      have he := orderedInsert_erase _ _ hm hs
-      exact he ▸ Sublist.orderedInsert_sublist _ ih (pairwise_insertionSort ..)
-
-中文:
-定理 sublist_insertionSort'
-  条件: {l c : 列表 α} (hs : c.两两 r) (hc : c <+~ l)
-  证明: by
-  classical
-  obtain ⟨d, hc, hd⟩ := hc
-  induction l generalizing c d with
-  | nil => grind [nil_perm]
-  | cons a _ ih =>
-    cases hd with
-.trans (sublist_orderedInsert ..) | cons _ h => exact ih hs _ hc h
-    | cons_cons _ h =>
-      specialize ih (hs.erase _) _ (erase_cons_head a ‹List _› ▸ hc.erase a) h
-have hm := hc.mem_iff.mp mem_cons_self ..
-      have he := orderedInsert_erase _ _ hm hs
-      exact he ▸ Sublist.orderedInsert_sublist _ ih (pairwise_insertionSort ..)
-
-Depends on / 依赖: Sublist, Sublist.orderedInsert_sublist, classical, cons_cons, erase_cons_head, generalizing, hc.erase, hc.mem_iff.mp, hs.erase, mem_cons_self, mem_iff, nil_perm, orderedInsert_erase, orderedInsert_sublist, pairwise_insertionSort, specialize, sublist_orderedInsert
+--- 原说明 ---
+A version of `insertionSort_stable` which only assumes `c <+~ l` (instead of `c 
+<+ l`), but
+additionally requires `Std.Antisymm r`, `Std.Total r` and `IsTrans α r`.
 -/
 theorem sublist_insertionSort' {l c : List α} (hs : c.Pairwise r) (hc : c <+~ l) :
     c <+ insertionSort r l := by
   classical
   obtain ⟨d, hc, hd⟩ := hc
   induction l generalizing c d with
-  | nil => grind [nil_perm]
+  | nil         => grind [nil_perm]
   | cons a _ ih =>
     cases hd with
-.trans (sublist_orderedInsert ..) | cons _ h => exact ih hs _ hc h
+    | cons  _ h => exact ih hs _ hc h |>.trans (sublist_orderedInsert ..)
     | cons_cons _ h =>
       specialize ih (hs.erase _) _ (erase_cons_head a ‹List _› ▸ hc.erase a) h
-have hm := hc.mem_iff.mp mem_cons_self ..
+      have hm := hc.mem_iff.mp <| mem_cons_self ..
       have he := orderedInsert_erase _ _ hm hs
       exact he ▸ Sublist.orderedInsert_sublist _ ih (pairwise_insertionSort ..)
 
 /--
-theorem `pair_sublist_insertionSort'` / 定理 `pair_sublist_insertionSort'`
+Another statement of stability of insertion sort.
+If a pair `[a, b]` is a sublist of a permutation of `l` and `a ≼ b`,
+then `[a, b]` is still a sublist of `insertionSort r l`.
+-/
+/-
+**List.pair_sublist_insertionSort'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：pair_sublist_insertionSort' {a b : α} {l : List α} (hab : a ≼ b) (h : [a, 
+b] <+~ l) : [a, b] <+ insertionSort r l
+参数：hab : a ≼ b；h : [a, b] <+~ l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sublist_insertionSort'`：sublist_insertionSort' {l c : List α} (hs :
+ c.Pairwise r) (hc : c <+~ l) : c <+ insertionSort r l
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.pairwise_pair`：∀ {α : Type u_1} {R : α → α → Prop} {a b : α}, List.
+Pairwise R [a, b] ↔ R a b
 
-English:
-theorem pair_sublist_insertionSort'
-  given: {a b : α} {l : List α} (hab : a ≼ b) (h : [a, b] <+~ l)
-  proof: sublist_insertionSort' (pairwise_pair.mpr hab) h
-
-中文:
-定理 pair_sublist_insertionSort'
-  条件: {a b : α} {l : 列表 α} (hab : a ≼ b) (h : [a, b] <+~ l)
-  证明: sublist_insertionSort' (pairwise_pair.mpr hab) h
-
-Depends on / 依赖: pairwise_pair, pairwise_pair.mpr, sublist_insertionSort
+--- 原说明 ---
+Another statement of stability of insertion sort.
+If a pair `[a, b]` is a sublist of a permutation of `l` and `a ≼ b`,
+then `[a, b]` is still a sublist of `insertionSort r l`.
 -/
 theorem pair_sublist_insertionSort' {a b : α} {l : List α} (hab : a ≼ b) (h : [a, b] <+~ l) :
     [a, b] <+ insertionSort r l :=
@@ -889,7 +697,7 @@ use Mathlib order typeclasses instead.
 -/
 
 set_option linter.hashCommand false in
-#guard mergeSort [5, 27, 221, 95, 17, 43, 7, 2, 98, 567, 23, 12] (fun m n => m / 10 <= n / 10) =
+#guard mergeSort [5, 27, 221, 95, 17, 43, 7, 2, 98, 567, 23, 12] (fun m n => m / 10 ≤ n / 10) =
   [5, 7, 2, 17, 12, 27, 23, 43, 95, 98, 221, 567]
 
 section MergeSort
@@ -898,90 +706,78 @@ section Correctness
 
 section Antisymm
 
-variable {r : α -> α -> Prop} [Std.Antisymm r]
+variable {r : α → α → Prop} [Std.Antisymm r]
 
-/--
-theorem `Perm.eq_of_pairwise'` / 定理 `Perm.eq_of_pairwise'`
+/-- Variant of `Perm.eq_of_pairwise` using relation typeclasses. -/
+/-
+**List.Perm.eq_of_pairwise'** 是 Mathlib 中的一个定理，位于命名空间 `List.Perm`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [Std.Antisymm r] {l₁ l₂ : List α},   L
+ist.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂ → l₁ = l₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.eq_of_pairwise`：∀ {α : Type u_1} {le : α → α → Prop} {l₁ l₂ : 
+List α},   (∀ (a b : α), a ∈ l₁ → b ∈ l₂ → le a b → le b a → a = b) →     List.P
+airwise le l₁ …
+· 使用引理 `antisymm`：antisymm [Std.Antisymm r] : a ≺ b -> b ≺ a -> a = b
 
-English:
-theorem Perm.eq_of_pairwise'
-  given: {l₁ l₂ : List α}
-  proof: eq_of_pairwise (fun _ _ _ _ => antisymm)
-
-中文:
-定理 置换.eq_of_pairwise'
-  条件: {l₁ l₂ : 列表 α}
-  证明: eq_of_pairwise (fun _ _ _ _ => antisymm)
-
-Depends on / 依赖: antisymm, eq_of_pairwise
+--- 原说明 ---
+Variant of `Perm.eq_of_pairwise` using relation typeclasses.
 -/
 theorem Perm.eq_of_pairwise' {l₁ l₂ : List α} :
-    Pairwise r l₁ -> Pairwise r l₂ -> (hl : l₁ ~ l₂) -> l₁ = l₂ :=
+    Pairwise r l₁ → Pairwise r l₂ → (hl : l₁ ~ l₂) → l₁ = l₂ :=
   eq_of_pairwise (fun _ _ _ _ => antisymm)
-
-/--
-theorem `sublist_of_subperm_of_pairwise` / 定理 `sublist_of_subperm_of_pairwise`
-
-English:
-theorem sublist_of_subperm_of_pairwise
-  statement: {l₁ l₂ : List α} (hp : l₁ <+~ l₂)
-  proof: by
-  let ⟨_, h, h'⟩ := hp
-  exact Sublist.trans (h.eq_of_pairwise' (hs₂.sublist h') hs₁ ▸ Sublist.refl _) h'
-
-中文:
-定理 sublist_of_subperm_of_pairwise
-  结论: {l₁ l₂ : 列表 α} (hp : l₁ <+~ l₂)
-  证明: by
-  let ⟨_, h, h'⟩ := hp
-  exact Sublist.trans (h.eq_of_pairwise' (hs₂.sublist h') hs₁ ▸ Sublist.refl _) h'
-
-Depends on / 依赖: Sublist, Sublist.refl, Sublist.trans, eq_of_pairwise, h.eq_of_pairwise, sublist
+/-
+**List.sublist_of_subperm_of_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sublist_of_subperm_of_pairwise {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hs₁ : l₁
+.Pairwise r) (hs₂ : l₂.Pairwise r) : l₁ <+ l₂
+参数：hp : l₁ <+~ l₂；hs₁ : l₁.Pairwise r；hs₂ : l₂.Pairwise r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Sublist.trans`：∀ {α : Type u_1} {l₁ l₂ l₃ : List α}, l₁.Sublist l₂ 
+→ l₂.Sublist l₃ → l₁.Sublist l₃
+· 使用定理 `List.Sublist.refl`：∀ {α : Type u_1} (l : List α), l.Sublist l
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `List.Pairwise.sublist`：∀ {α : Type u_1} {l₁ l₂ : List α} {R : α → α → Pr
+op}, l₁.Sublist l₂ → List.Pairwise R l₂ → List.Pairwise R l₁
 -/
 theorem sublist_of_subperm_of_pairwise {l₁ l₂ : List α} (hp : l₁ <+~ l₂)
     (hs₁ : l₁.Pairwise r) (hs₂ : l₂.Pairwise r) : l₁ <+ l₂ := by
   let ⟨_, h, h'⟩ := hp
   exact Sublist.trans (h.eq_of_pairwise' (hs₂.sublist h') hs₁ ▸ Sublist.refl _) h'
-
-/--
-theorem `Subset.antisymm_of_pairwise` / 定理 `Subset.antisymm_of_pairwise`
-
-English:
-theorem Subset.antisymm_of_pairwise
-  statement: [Std.Irrefl r] {l₁ l₂ : List α}
-  proof: ((subperm_of_subset h₁.nodup hl₁₂).antisymm
-    (subperm_of_subset h₂.nodup hl₁₂')).eq_of_pairwise' h₁ h₂
-
-中文:
-定理 子集.antisymm_of_pairwise
-  结论: [Std.Irrefl r] {l₁ l₂ : 列表 α}
-  证明: ((subperm_of_subset h₁.nodup hl₁₂).antisymm
-    (subperm_of_subset h₂.nodup hl₁₂')).eq_of_pairwise' h₁ h₂
-
-Depends on / 依赖: antisymm, eq_of_pairwise, subperm_of_subset
+/-
+**List.Subset.antisymm_of_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `List.Subset`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [Std.Antisymm r] [Std.Irrefl r] {l₁ l₂
+ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁ ⊆ l₂ → l₂ ⊆ l₁ → l₁ =
+ l₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `List.Subperm.antisymm`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Subperm l₂ 
+→ l₂.Subperm l₁ → l₁.Perm l₂
+· 使用定理 `List.subperm_of_subset`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Nodup → l₁
+ ⊆ l₂ → l₁.Subperm l₂
+· 使用定理 `List.Pairwise.nodup`：∀ {α : Type u} {l : List α} {r : α → α → Prop} [Std
+.Irrefl r], List.Pairwise r l → l.Nodup
 -/
 theorem Subset.antisymm_of_pairwise [Std.Irrefl r] {l₁ l₂ : List α}
-    (h₁ : Pairwise r l₁) (h₂ : Pairwise r l₂) (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁) : l₁ = l₂ :=
+    (h₁ : Pairwise r l₁) (h₂ : Pairwise r l₂) (hl₁₂ : l₁ ⊆ l₂) (hl₁₂' : l₂ ⊆ l₁) : l₁ = l₂ :=
   ((subperm_of_subset h₁.nodup hl₁₂).antisymm
     (subperm_of_subset h₂.nodup hl₁₂')).eq_of_pairwise' h₁ h₂
-
-/--
-theorem `Pairwise.eq_of_mem_iff` / 定理 `Pairwise.eq_of_mem_iff`
-
-English:
-theorem Pairwise.eq_of_mem_iff
-  statement: [Std.Irrefl r] {l₁ l₂ : List α}
-  proof: Subset.antisymm_of_pairwise h₁ h₂ (by grind) (by grind)
-
-中文:
-定理 两两.eq_of_mem_iff
-  结论: [Std.Irrefl r] {l₁ l₂ : 列表 α}
-  证明: Subset.antisymm_of_pairwise h₁ h₂ (by grind) (by grind)
-
-Depends on / 依赖: Subset, Subset.antisymm_of_pairwise, antisymm_of_pairwise
+/-
+**List.Pairwise.eq_of_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [Std.Antisymm r] [Std.Irrefl r] {l₁ l₂
+ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → (∀ (a : α), a ∈ l₁ ↔ a ∈
+ l₂) → l₁ = l₂
+参数：∀ (a : α), a ∈ l₁ ↔ a ∈ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Subset.antisymm_of_pairwise`：∀ {α : Type u_1} {r : α → α → Prop} [S
+td.Antisymm r] [Std.Irrefl r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pair
+wise r l₂ → l₁ ⊆ l₂ → …
 -/
 theorem Pairwise.eq_of_mem_iff [Std.Irrefl r] {l₁ l₂ : List α}
-    (h₁ : Pairwise r l₁) (h₂ : Pairwise r l₂) (h : forall a : α, a in l₁ ↔ a in l₂) : l₁ = l₂ :=
+    (h₁ : Pairwise r l₁) (h₂ : Pairwise r l₂) (h : ∀ a : α, a ∈ l₁ ↔ a ∈ l₂) : l₁ = l₂ :=
   Subset.antisymm_of_pairwise h₁ h₂ (by grind) (by grind)
 
 end Antisymm
@@ -990,28 +786,32 @@ section TotalAndTransitive
 
 variable {r} [Std.Total r] [IsTrans α r]
 
-/--
-theorem `Pairwise.merge` / 定理 `Pairwise.merge`
-
-English:
-theorem Pairwise.merge
-  given: {l l' : List α} (h : Pairwise r l) (h' : Pairwise r l')
-  proof: by
-  simpa using pairwise_merge (le := (r · ·))
-    (fun a b c h₁ h₂ => by simpa using _root_.trans (by simpa using h₁) (by simpa using h₂))
-    (fun a b => by simpa using Std.Total.total a b)
-    l l' (by simpa using h) (by simpa using h')
-
-中文:
-定理 两两.merge
-  条件: {l l' : 列表 α} (h : 两两 r l) (h' : 两两 r l')
-  证明: by
-  simpa using pairwise_merge (le := (r · ·))
-    (fun a b c h₁ h₂ => by simpa using _root_.trans (by simpa using h₁) (by simpa using h₂))
-    (fun a b => by simpa using Std.Total.total a b)
-    l l' (by simpa using h) (by simpa using h')
-
-Depends on / 依赖: Std.Total.total, _root_, _root_.trans, pairwise_merge
+/-
+**List.Pairwise.merge** 是 Mathlib 中的一个定理，位于命名空间 `List.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} [inst : DecidableRel r] [Std.Total r] 
+[IsTrans α r] {l l' : List α},   List.Pairwise r l → List.Pairwise r l' → List.P
+airwise r (l.merge l' fun x1 x2 => decide (r x1 x2))
+参数：l.merge l' fun x1 x2 => decide (r x1 x2)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用定理 `List.pairwise_merge`：∀ {α : Type u_1} {le : α → α → Bool},   (∀ (a b c :
+ α), le a b = true → le b c = true → le a c = true) →     (∀ (a b : α), (le a b 
+|| le b a…
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Bool.or_eq_true`：∀ (a b : Bool), ((a || b) = true) = (a = true ∨ b = tru
+e)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Std.Total.total`：∀ {α : Sort u} {r : α → α → Prop} [self : Std.Total r] 
+(a b : α), r a b ∨ r b a
 -/
 theorem Pairwise.merge {l l' : List α} (h : Pairwise r l) (h' : Pairwise r l') :
     Pairwise r (merge l l' (r · ·)) := by
@@ -1022,30 +822,39 @@ theorem Pairwise.merge {l l' : List α} (h : Pairwise r l) (h' : Pairwise r l') 
 
 variable (r)
 
-/--
-theorem `pairwise_mergeSort'` / 定理 `pairwise_mergeSort'`
+/-- Variant of `pairwise_mergeSort` using relation typeclasses. -/
+/-
+**List.pairwise_mergeSort'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：pairwise_mergeSort' (l : List α) : Pairwise r (mergeSort l (r · ·))
+参数：l : List α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用定理 `List.pairwise_mergeSort`：∀ {α : Type u_1} {le : α → α → Bool},   (∀ (a b
+ c : α), le a b = true → le b c = true → le a c = true) →     (∀ (a b : α), (le 
+a b || le b a…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `trans_of`：∀ {α : Sort u_1} (r : α → α → Prop) {a b c : α} [IsTrans α r],
+ r a b → r b c → r a c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Bool.or_eq_true`：∀ (a b : Bool), ((a || b) = true) = (a = true ∨ b = tru
+e)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `total_of`：total_of [Std.Total r] (a b : α) : a ≺ b ∨ b ≺ a
 
-English:
-theorem pairwise_mergeSort'
-  given: (l : List α)
-  statement: Pairwise r (mergeSort l (r · ·))
-  proof: by
-  simpa using pairwise_mergeSort (le := (r · ·))
-    (fun _ _ _ => by simpa using trans_of r)
-    (by simpa using total_of r)
-    l
-
-中文:
-定理 pairwise_mergeSort'
-  条件: (l : 列表 α)
-  结论: 两两 r (mergeSort l (r · ·))
-  证明: by
-  simpa using pairwise_mergeSort (le := (r · ·))
-    (fun _ _ _ => by simpa using trans_of r)
-    (by simpa using total_of r)
-    l
-
-Depends on / 依赖: pairwise_mergeSort, total_of, trans_of
+--- 原说明 ---
+Variant of `pairwise_mergeSort` using relation typeclasses.
 -/
 theorem pairwise_mergeSort' (l : List α) : Pairwise r (mergeSort l (r · ·)) := by
   simpa using pairwise_mergeSort (le := (r · ·))
@@ -1054,43 +863,42 @@ theorem pairwise_mergeSort' (l : List α) : Pairwise r (mergeSort l (r · ·)) :
     l
 
 variable [Std.Antisymm r]
-
-/--
-theorem `mergeSort_eq_self` / 定理 `mergeSort_eq_self`
-
-English:
-theorem mergeSort_eq_self
-  given: {l : List α}
-  statement: Pairwise r l -> mergeSort l (r · ·) = l
-  proof: (mergeSort_perm _ _).eq_of_pairwise' (pairwise_mergeSort' _ l)
-
-中文:
-定理 mergeSort_eq_self
-  条件: {l : 列表 α}
-  结论: 两两 r l -> mergeSort l (r · ·) = l
-  证明: (mergeSort_perm _ _).eq_of_pairwise' (pairwise_mergeSort' _ l)
-
-Depends on / 依赖: eq_of_pairwise, mergeSort_perm, pairwise_mergeSort
+/-
+**List.mergeSort_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：mergeSort_eq_self {l : List α} : Pairwise r l -> mergeSort l (r · ·) = l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `List.pairwise_mergeSort'`：pairwise_mergeSort' (l : List α) : Pairwise r 
+(mergeSort l (r · ·))
+· 使用定理 `List.mergeSort_perm`：∀ {α : Type u_1} (l : List α) (le : α → α → Bool), 
+(l.mergeSort le).Perm l
 -/
-theorem mergeSort_eq_self {l : List α} : Pairwise r l -> mergeSort l (r · ·) = l :=
+theorem mergeSort_eq_self {l : List α} : Pairwise r l → mergeSort l (r · ·) = l :=
   (mergeSort_perm _ _).eq_of_pairwise' (pairwise_mergeSort' _ l)
-
-/--
-theorem `mergeSort_eq_insertionSort` / 定理 `mergeSort_eq_insertionSort`
-
-English:
-theorem mergeSort_eq_insertionSort
-  given: (l : List α)
-  proof: ((mergeSort_perm l _).trans (perm_insertionSort r l).symm).eq_of_pairwise'
-    (pairwise_mergeSort' r l) (pairwise_insertionSort r l)
-
-中文:
-定理 mergeSort_eq_insertionSort
-  条件: (l : 列表 α)
-  证明: ((mergeSort_perm l _).trans (perm_insertionSort r l).symm).eq_of_pairwise'
-    (pairwise_mergeSort' r l) (pairwise_insertionSort r l)
-
-Depends on / 依赖: eq_of_pairwise, mergeSort_perm, pairwise_insertionSort, pairwise_mergeSort, perm_insertionSort
+/-
+**List.mergeSort_eq_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：mergeSort_eq_insertionSort (l : List α) : mergeSort l (r · ·) = insertionS
+ort r l
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `List.pairwise_mergeSort'`：pairwise_mergeSort' (l : List α) : Pairwise r 
+(mergeSort l (r · ·))
+· 使用定理 `List.pairwise_insertionSort`：∀ {α : Type u_1} (r : α → α → Prop) [inst :
+ DecidableRel r] [Std.Total r] [IsTrans α r] (l : List α),   List.Pairwise r (Li
+st.insertionSort …
+· 使用定理 `List.mergeSort_perm`：∀ {α : Type u_1} (l : List α) (le : α → α → Bool), 
+(l.mergeSort le).Perm l
+· 使用定理 `List.Perm.symm`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₂.Perm 
+l₁
+· 使用定理 `List.perm_insertionSort`：perm_insertionSort (l : List α) : insertionSort
+ r l ~ l
 -/
 theorem mergeSort_eq_insertionSort (l : List α) :
     mergeSort l (r · ·) = insertionSort r l :=
@@ -1126,133 +934,81 @@ The provided API should be used to move to and from `IsChain`,
 `Pairwise` or `Monotone` as needed.
 --/
 
-/--
-Definition of `SortedLE` / `SortedLE` 的定义
+/-- `l.SortedLE` means that the list is monotonic. -/
+/-
+**List.SortedLE** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：SortedLE (l : List α)
+参数：l : List α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SortedLE
-  signature: (l : List α)
-  body: Monotone l.get
-
-中文:
-定义 SortedLE
-  签名: (l : 列表 α)
-  定义体: Monotone l.get
-
-Depends on / 依赖: Monotone, l.get
+--- 原说明 ---
+`l.SortedLE` means that the list is monotonic.
 -/
 def SortedLE (l : List α) := Monotone l.get
-/--
-Definition of `SortedGE` / `SortedGE` 的定义
+/-- `l.SortedGE` means that the list is antitonic. -/
+/-
+**List.SortedGE** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} → [Preorder α] → List α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SortedGE
-  signature: (l : List α)
-  body: Antitone l.get
-
-中文:
-定义 SortedGE
-  签名: (l : 列表 α)
-  定义体: Antitone l.get
+--- 原说明 ---
+`l.SortedGE` means that the list is antitonic.
 -/
 @[to_dual existing SortedLE] def SortedGE (l : List α) := Antitone l.get
-/--
-Definition of `SortedLT` / `SortedLT` 的定义
+/-- `l.SortedLT` means that the list is strictly monotonic. -/
+/-
+**List.SortedLT** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：SortedLT (l : List α)
+参数：l : List α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SortedLT
-  signature: (l : List α)
-  body: StrictMono l.get
-
-中文:
-定义 SortedLT
-  签名: (l : 列表 α)
-  定义体: StrictMono l.get
-
-Depends on / 依赖: StrictMono, l.get
+--- 原说明 ---
+`l.SortedLT` means that the list is strictly monotonic.
 -/
 def SortedLT (l : List α) := StrictMono l.get
-/--
-Definition of `SortedGT` / `SortedGT` 的定义
+/-- `l.SortedGT` means that the list is strictly antitonic. -/
+/-
+**List.SortedGT** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} → [Preorder α] → List α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SortedGT
-  signature: (l : List α)
-  body: StrictAnti l.get
-
-中文:
-定义 SortedGT
-  签名: (l : 列表 α)
-  定义体: StrictAnti l.get
+--- 原说明 ---
+`l.SortedGT` means that the list is strictly antitonic.
 -/
 @[to_dual existing SortedLT] def SortedGT (l : List α) := StrictAnti l.get
 
 section Get
 
-/--
-theorem `sortedLE_iff_monotone_get` / 定理 `sortedLE_iff_monotone_get`
-
-English:
-theorem sortedLE_iff_monotone_get
-  statement: l.SortedLE ↔ Monotone l.get
-  proof: .rfl
-
-中文:
-定理 sortedLE_iff_monotone_get
-  结论: l.SortedLE ↔ 递增 l.get
-  证明: .rfl
+/-
+**List.sortedLE_iff_monotone_get** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_iff_monotone_get : l.SortedLE ↔ Monotone l.get
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sortedLE_iff_monotone_get : l.SortedLE ↔ Monotone l.get := .rfl
-/--
-theorem `sortedGE_iff_antitone_get` / 定理 `sortedGE_iff_antitone_get`
-
-English:
-theorem sortedGE_iff_antitone_get
-  statement: l.SortedGE ↔ Antitone l.get
-  proof: .rfl
-
-中文:
-定理 sortedGE_iff_antitone_get
-  结论: l.SortedGE ↔ 递减 l.get
-  证明: .rfl
+/-
+**List.sortedGE_iff_antitone_get** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGE_iff_antitone_get : l.SortedGE ↔ Antitone l.get
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sortedGE_iff_antitone_get : l.SortedGE ↔ Antitone l.get := .rfl
-/--
-theorem `sortedLT_iff_strictMono_get` / 定理 `sortedLT_iff_strictMono_get`
-
-English:
-theorem sortedLT_iff_strictMono_get
-  statement: l.SortedLT ↔ StrictMono l.get
-  proof: .rfl
-
-中文:
-定理 sortedLT_iff_strictMono_get
-  结论: l.SortedLT ↔ 严格递增 l.get
-  证明: .rfl
+/-
+**List.sortedLT_iff_strictMono_get** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_iff_strictMono_get : l.SortedLT ↔ StrictMono l.get
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sortedLT_iff_strictMono_get : l.SortedLT ↔ StrictMono l.get := .rfl
-/--
-theorem `sortedGT_iff_strictAnti_get` / 定理 `sortedGT_iff_strictAnti_get`
-
-English:
-theorem sortedGT_iff_strictAnti_get
-  statement: l.SortedGT ↔ StrictAnti l.get
-  proof: .rfl
-
-protected alias ⟨SortedLE.monotone_get, _root_.Monotone.sortedLE⟩ := sortedLE_iff_monotone_get
-protected alias ⟨SortedGE.antitone_get, _root_.Antitone.sortedGE⟩ := sortedGE_iff_antitone_get
-protected alias ⟨SortedLT.strictMono_get, _root_.StrictMono.sortedLT⟩ := sortedLT_iff_strictMono_get
-protected alias ⟨SortedGT.strictAnti_get, _root_.StrictAnti.sortedGT⟩ := sortedGT_iff_strictAnti_get
-
-中文:
-定理 sortedGT_iff_strictAnti_get
-  结论: l.SortedGT ↔ 严格递减 l.get
-  证明: .rfl
-
-protected alias ⟨SortedLE.monotone_get, _root_.Monotone.sortedLE⟩ := sortedLE_iff_monotone_get
-protected alias ⟨SortedGE.antitone_get, _root_.Antitone.sortedGE⟩ := sortedGE_iff_antitone_get
-protected alias ⟨SortedLT.strictMono_get, _root_.StrictMono.sortedLT⟩ := sortedLT_iff_strictMono_get
-protected alias ⟨SortedGT.strictAnti_get, _root_.StrictAnti.sortedGT⟩ := sortedGT_iff_strictAnti_get
+/-
+**List.sortedGT_iff_strictAnti_get** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGT_iff_strictAnti_get : l.SortedGT ↔ StrictAnti l.get
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sortedGT_iff_strictAnti_get : l.SortedGT ↔ StrictAnti l.get := .rfl
 
@@ -1265,92 +1021,70 @@ end Get
 
 section Pairwise
 
-/--
-theorem `sortedLE_iff_pairwise` / 定理 `sortedLE_iff_pairwise`
-
-English:
-theorem sortedLE_iff_pairwise
-  statement: l.SortedLE ↔ l.Pairwise (· <= ·)
-  proof: by
-  simp only [sortedLE_iff_monotone_get, monotone_iff_forall_lt, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
-
-中文:
-定理 sortedLE_iff_pairwise
-  结论: l.SortedLE ↔ l.两两 (· <= ·)
-  证明: by
-  simp only [sortedLE_iff_monotone_get, monotone_iff_forall_lt, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
+/-
+**List.sortedLE_iff_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.SortedLE ↔ List.Pairw
+ise (fun x1 x2 => x1 ≤ x2) l
+参数：fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-@[grind =] theorem sortedLE_iff_pairwise : l.SortedLE ↔ l.Pairwise (· <= ·) := by
+@[grind =] theorem sortedLE_iff_pairwise : l.SortedLE ↔ l.Pairwise (· ≤ ·) := by
   simp only [sortedLE_iff_monotone_get, monotone_iff_forall_lt, Fin.forall_iff]
   grind [pairwise_iff_getElem]
-/--
-theorem `sortedGE_iff_pairwise` / 定理 `sortedGE_iff_pairwise`
-
-English:
-theorem sortedGE_iff_pairwise
-  statement: l.SortedGE ↔ l.Pairwise (· >= ·)
-  proof: by
-  simp only [sortedGE_iff_antitone_get, antitone_iff_forall_lt, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
-
-中文:
-定理 sortedGE_iff_pairwise
-  结论: l.SortedGE ↔ l.两两 (· >= ·)
-  证明: by
-  simp only [sortedGE_iff_antitone_get, antitone_iff_forall_lt, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
+/-
+**List.sortedGE_iff_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.SortedGE ↔ List.Pairw
+ise (fun x1 x2 => x1 ≥ x2) l
+参数：fun x1 x2 => x1 ≥ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-@[grind =] theorem sortedGE_iff_pairwise : l.SortedGE ↔ l.Pairwise (· >= ·) := by
+@[grind =] theorem sortedGE_iff_pairwise : l.SortedGE ↔ l.Pairwise (· ≥ ·) := by
   simp only [sortedGE_iff_antitone_get, antitone_iff_forall_lt, Fin.forall_iff]
   grind [pairwise_iff_getElem]
-/--
-theorem `sortedLT_iff_pairwise` / 定理 `sortedLT_iff_pairwise`
-
-English:
-theorem sortedLT_iff_pairwise
-  statement: l.SortedLT ↔ l.Pairwise (· < ·)
-  proof: by
-  simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
-
-中文:
-定理 sortedLT_iff_pairwise
-  结论: l.SortedLT ↔ l.两两 (· < ·)
-  证明: by
-  simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
+/-
+**List.sortedLT_iff_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.SortedLT ↔ List.Pairw
+ise (fun x1 x2 => x1 < x2) l
+参数：fun x1 x2 => x1 < x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 @[grind =] theorem sortedLT_iff_pairwise : l.SortedLT ↔ l.Pairwise (· < ·) := by
   simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff]
   grind [pairwise_iff_getElem]
-/--
-theorem `sortedGT_iff_pairwise` / 定理 `sortedGT_iff_pairwise`
-
-English:
-theorem sortedGT_iff_pairwise
-  statement: l.SortedGT ↔ l.Pairwise (· > ·)
-  proof: by
-  simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
-
-protected alias ⟨SortedLE.pairwise, Pairwise.sortedLE⟩ := sortedLE_iff_pairwise
-protected alias ⟨SortedGE.pairwise, Pairwise.sortedGE⟩ := sortedGE_iff_pairwise
-protected alias ⟨SortedLT.pairwise, Pairwise.sortedLT⟩ := sortedLT_iff_pairwise
-protected alias ⟨SortedGT.pairwise, Pairwise.sortedGT⟩ := sortedGT_iff_pairwise
-
-中文:
-定理 sortedGT_iff_pairwise
-  结论: l.SortedGT ↔ l.两两 (· > ·)
-  证明: by
-  simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff]
-  grind [pairwise_iff_getElem]
-
-protected alias ⟨SortedLE.pairwise, Pairwise.sortedLE⟩ := sortedLE_iff_pairwise
-protected alias ⟨SortedGE.pairwise, Pairwise.sortedGE⟩ := sortedGE_iff_pairwise
-protected alias ⟨SortedLT.pairwise, Pairwise.sortedLT⟩ := sortedLT_iff_pairwise
-protected alias ⟨SortedGT.pairwise, Pairwise.sortedGT⟩ := sortedGT_iff_pairwise
+/-
+**List.sortedGT_iff_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.SortedGT ↔ List.Pairw
+ise (fun x1 x2 => x1 > x2) l
+参数：fun x1 x2 => x1 > x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 @[grind =] theorem sortedGT_iff_pairwise : l.SortedGT ↔ l.Pairwise (· > ·) := by
   simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff]
@@ -1365,81 +1099,59 @@ end Pairwise
 
 section IsChain
 
-/--
-theorem `sortedLE_iff_isChain` / 定理 `sortedLE_iff_isChain`
-
-English:
-theorem sortedLE_iff_isChain
-  statement: l.SortedLE ↔ IsChain (· <= ·) l
-  proof: sortedLE_iff_pairwise.trans isChain_iff_pairwise.symm
-
-中文:
-定理 sortedLE_iff_isChain
-  结论: l.SortedLE ↔ IsChain (· <= ·) l
-  证明: sortedLE_iff_pairwise.trans isChain_iff_pairwise.symm
-
-Depends on / 依赖: isChain_iff_pairwise, isChain_iff_pairwise.symm, sortedLE_iff_pairwise, sortedLE_iff_pairwise.trans
+/-
+**List.sortedLE_iff_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_iff_isChain : l.SortedLE ↔ IsChain (· <= ·) l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `List.sortedLE_iff_pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedLE ↔ List.Pairwise (fun x1 x2 => x1 ≤ x2) l
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
 -/
-theorem sortedLE_iff_isChain : l.SortedLE ↔ IsChain (· <= ·) l :=
+theorem sortedLE_iff_isChain : l.SortedLE ↔ IsChain (· ≤ ·) l :=
   sortedLE_iff_pairwise.trans isChain_iff_pairwise.symm
-/--
-theorem `sortedGE_iff_isChain` / 定理 `sortedGE_iff_isChain`
-
-English:
-theorem sortedGE_iff_isChain
-  statement: l.SortedGE ↔ IsChain (· >= ·) l
-  proof: sortedGE_iff_pairwise.trans isChain_iff_pairwise.symm
-
-中文:
-定理 sortedGE_iff_isChain
-  结论: l.SortedGE ↔ IsChain (· >= ·) l
-  证明: sortedGE_iff_pairwise.trans isChain_iff_pairwise.symm
-
-Depends on / 依赖: isChain_iff_pairwise, isChain_iff_pairwise.symm, sortedGE_iff_pairwise, sortedGE_iff_pairwise.trans
+/-
+**List.sortedGE_iff_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGE_iff_isChain : l.SortedGE ↔ IsChain (· >= ·) l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `List.sortedGE_iff_pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedGE ↔ List.Pairwise (fun x1 x2 => x1 ≥ x2) l
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
 -/
-theorem sortedGE_iff_isChain : l.SortedGE ↔ IsChain (· >= ·) l :=
+theorem sortedGE_iff_isChain : l.SortedGE ↔ IsChain (· ≥ ·) l :=
   sortedGE_iff_pairwise.trans isChain_iff_pairwise.symm
-/--
-theorem `sortedLT_iff_isChain` / 定理 `sortedLT_iff_isChain`
-
-English:
-theorem sortedLT_iff_isChain
-  statement: l.SortedLT ↔ IsChain (· < ·) l
-  proof: sortedLT_iff_pairwise.trans isChain_iff_pairwise.symm
-
-中文:
-定理 sortedLT_iff_isChain
-  结论: l.SortedLT ↔ IsChain (· < ·) l
-  证明: sortedLT_iff_pairwise.trans isChain_iff_pairwise.symm
-
-Depends on / 依赖: isChain_iff_pairwise, isChain_iff_pairwise.symm, sortedLT_iff_pairwise, sortedLT_iff_pairwise.trans
+/-
+**List.sortedLT_iff_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_iff_isChain : l.SortedLT ↔ IsChain (· < ·) l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `List.sortedLT_iff_pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedLT ↔ List.Pairwise (fun x1 x2 => x1 < x2) l
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
 -/
 theorem sortedLT_iff_isChain : l.SortedLT ↔ IsChain (· < ·) l :=
   sortedLT_iff_pairwise.trans isChain_iff_pairwise.symm
-/--
-theorem `sortedGT_iff_isChain` / 定理 `sortedGT_iff_isChain`
-
-English:
-theorem sortedGT_iff_isChain
-  statement: l.SortedGT ↔ IsChain (· > ·) l
-  proof: sortedGT_iff_pairwise.trans isChain_iff_pairwise.symm
-
-protected alias ⟨SortedLE.isChain, IsChain.sortedLE⟩ := sortedLE_iff_isChain
-protected alias ⟨SortedGE.isChain, IsChain.sortedGE⟩ := sortedGE_iff_isChain
-protected alias ⟨SortedLT.isChain, IsChain.sortedLT⟩ := sortedLT_iff_isChain
-protected alias ⟨SortedGT.isChain, IsChain.sortedGT⟩ := sortedGT_iff_isChain
-
-中文:
-定理 sortedGT_iff_isChain
-  结论: l.SortedGT ↔ IsChain (· > ·) l
-  证明: sortedGT_iff_pairwise.trans isChain_iff_pairwise.symm
-
-protected alias ⟨SortedLE.isChain, IsChain.sortedLE⟩ := sortedLE_iff_isChain
-protected alias ⟨SortedGE.isChain, IsChain.sortedGE⟩ := sortedGE_iff_isChain
-protected alias ⟨SortedLT.isChain, IsChain.sortedLT⟩ := sortedLT_iff_isChain
-protected alias ⟨SortedGT.isChain, IsChain.sortedGT⟩ := sortedGT_iff_isChain
-
-Depends on / 依赖: isChain_iff_pairwise, isChain_iff_pairwise.symm, sortedGT_iff_pairwise, sortedGT_iff_pairwise.trans
+/-
+**List.sortedGT_iff_isChain** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGT_iff_isChain : l.SortedGT ↔ IsChain (· > ·) l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `List.sortedGT_iff_pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedGT ↔ List.Pairwise (fun x1 x2 => x1 > x2) l
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `List.isChain_iff_pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l : List
+ α} [Trans R R R], List.IsChain R l ↔ List.Pairwise R l
 -/
 theorem sortedGT_iff_isChain : l.SortedGT ↔ IsChain (· > ·) l :=
   sortedGT_iff_pairwise.trans isChain_iff_pairwise.symm
@@ -1451,63 +1163,43 @@ protected alias ⟨SortedGT.isChain, IsChain.sortedGT⟩ := sortedGT_iff_isChain
 
 section Decidable
 
-/--
-Instance `decidableSortedLE` / 实例 `decidableSortedLE`
-
-English:
-instance decidableSortedLE
-  signature: [DecidableLE α]
-  body: fun _ => decidable_of_iff' _ sortedLE_iff_isChain
-
-中文:
-实例 decidableSortedLE
-  签名: [DecidableLE α]
-  定义体: fun _ => decidable_of_iff' _ sortedLE_iff_isChain
+/-
+**List.decidableSortedLE** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+形式化陈述：decidableSortedLE [DecidableLE α] : DecidablePred (SortedLE (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sortedLE_iff_isChain`：sortedLE_iff_isChain : l.SortedLE ↔ IsChain (
+· <= ·) l
 -/
 instance decidableSortedLE [DecidableLE α] : DecidablePred (SortedLE (α := α)) :=
   fun _ => decidable_of_iff' _ sortedLE_iff_isChain
-/--
-Instance `decidableSortedGE` / 实例 `decidableSortedGE`
-
-English:
-instance decidableSortedGE
-  signature: [DecidableLE α]
-  body: fun _ => decidable_of_iff' _ sortedGE_iff_isChain
-
-中文:
-实例 decidableSortedGE
-  签名: [DecidableLE α]
-  定义体: fun _ => decidable_of_iff' _ sortedGE_iff_isChain
+/-
+**List.decidableSortedGE** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+形式化陈述：decidableSortedGE [DecidableLE α] : DecidablePred (SortedGE (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sortedGE_iff_isChain`：sortedGE_iff_isChain : l.SortedGE ↔ IsChain (
+· >= ·) l
 -/
 instance decidableSortedGE [DecidableLE α] : DecidablePred (SortedGE (α := α)) :=
   fun _ => decidable_of_iff' _ sortedGE_iff_isChain
-/--
-Instance `decidableSortedLT` / 实例 `decidableSortedLT`
-
-English:
-instance decidableSortedLT
-  signature: [DecidableLT α]
-  body: fun _ => decidable_of_iff' _ sortedLT_iff_isChain
-
-中文:
-实例 decidableSortedLT
-  签名: [DecidableLT α]
-  定义体: fun _ => decidable_of_iff' _ sortedLT_iff_isChain
+/-
+**List.decidableSortedLT** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+形式化陈述：decidableSortedLT [DecidableLT α] : DecidablePred (SortedLT (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sortedLT_iff_isChain`：sortedLT_iff_isChain : l.SortedLT ↔ IsChain (
+· < ·) l
 -/
 instance decidableSortedLT [DecidableLT α] : DecidablePred (SortedLT (α := α)) :=
   fun _ => decidable_of_iff' _ sortedLT_iff_isChain
-/--
-Instance `decidableSortedGT` / 实例 `decidableSortedGT`
-
-English:
-instance decidableSortedGT
-  signature: [DecidableLT α]
-  body: fun _ => decidable_of_iff' _ sortedGT_iff_isChain
-
-中文:
-实例 decidableSortedGT
-  签名: [DecidableLT α]
-  定义体: fun _ => decidable_of_iff' _ sortedGT_iff_isChain
+/-
+**List.decidableSortedGT** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+形式化陈述：decidableSortedGT [DecidableLT α] : DecidablePred (SortedGT (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sortedGT_iff_isChain`：sortedGT_iff_isChain : l.SortedGT ↔ IsChain (
+· > ·) l
 -/
 instance decidableSortedGT [DecidableLT α] : DecidablePred (SortedGT (α := α)) :=
   fun _ => decidable_of_iff' _ sortedGT_iff_isChain
@@ -1518,88 +1210,66 @@ end IsChain
 
 section GetElem
 
-/--
-theorem `sortedLE_iff_getElem_le_getElem_of_le` / 定理 `sortedLE_iff_getElem_le_getElem_of_le`
-
-English:
-theorem sortedLE_iff_getElem_le_getElem_of_le
-  proof: ⟨fun h _ _ _ _ hij => h.monotone_get hij, fun h => Monotone.sortedLE fun _ _ => (h ·)⟩
-
-中文:
-定理 sortedLE_iff_getElem_le_getElem_of_le
-  证明: ⟨fun h _ _ _ _ hij => h.monotone_get hij, fun h => Monotone.sortedLE fun _ _ => (h ·)⟩
-
-Depends on / 依赖: Monotone, Monotone.sortedLE, h.monotone_get, monotone_get, sortedLE
+/-
+**List.sortedLE_iff_getElem_le_getElem_of_le** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_iff_getElem_le_getElem_of_le : l.SortedLE ↔ forall ⦃i j : Nat⦄ ⦃h
+i : i < l.length⦄ ⦃hj : j < l.length⦄, i <= j -> l[i] <= l[j]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedLE.monotone_get`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedLE → Monotone l.get
+· 使用定理 `Monotone.sortedLE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], Mo
+notone l.get → l.SortedLE
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
 -/
 theorem sortedLE_iff_getElem_le_getElem_of_le :
-    l.SortedLE ↔ forall ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, i <= j -> l[i] <= l[j] :=
-⟨fun h _ _ _ _ hij => h.monotone_get hij, fun h => Monotone.sortedLE fun _ _ => (h ·)⟩
-/--
-theorem `sortedGE_iff_getElem_ge_getElem_of_le` / 定理 `sortedGE_iff_getElem_ge_getElem_of_le`
-
-English:
-theorem sortedGE_iff_getElem_ge_getElem_of_le
-  proof: ⟨fun h _ _ _ _ hij => h.antitone_get hij, fun h => Antitone.sortedGE fun _ _ => (h ·)⟩
-
-中文:
-定理 sortedGE_iff_getElem_ge_getElem_of_le
-  证明: ⟨fun h _ _ _ _ hij => h.antitone_get hij, fun h => Antitone.sortedGE fun _ _ => (h ·)⟩
-
-Depends on / 依赖: Antitone, Antitone.sortedGE, antitone_get, h.antitone_get, sortedGE
+    l.SortedLE ↔ ∀ ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, i ≤ j → l[i] ≤ l[j] :=
+  ⟨fun h _ _ _ _ hij => h.monotone_get hij, fun h => Monotone.sortedLE <| fun _ _ => (h ·)⟩
+/-
+**List.sortedGE_iff_getElem_ge_getElem_of_le** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGE_iff_getElem_ge_getElem_of_le : l.SortedGE ↔ forall ⦃i j : Nat⦄ ⦃h
+i : i < l.length⦄ ⦃hj : j < l.length⦄, j <= i -> l[i] <= l[j]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedGE.antitone_get`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedGE → Antitone l.get
+· 使用定理 `Antitone.sortedGE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], An
+titone l.get → l.SortedGE
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
 -/
 theorem sortedGE_iff_getElem_ge_getElem_of_le :
-    l.SortedGE ↔ forall ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, j <= i -> l[i] <= l[j] :=
-⟨fun h _ _ _ _ hij => h.antitone_get hij, fun h => Antitone.sortedGE fun _ _ => (h ·)⟩
-/--
-theorem `sortedLT_iff_getElem_lt_getElem_of_lt` / 定理 `sortedLT_iff_getElem_lt_getElem_of_lt`
-
-English:
-theorem sortedLT_iff_getElem_lt_getElem_of_lt
-  proof: ⟨fun h _ _ _ _ hij => h.strictMono_get hij, fun h => StrictMono.sortedLT fun _ _ => (h ·)⟩
-
-中文:
-定理 sortedLT_iff_getElem_lt_getElem_of_lt
-  证明: ⟨fun h _ _ _ _ hij => h.strictMono_get hij, fun h => StrictMono.sortedLT fun _ _ => (h ·)⟩
-
-Depends on / 依赖: StrictMono, StrictMono.sortedLT, h.strictMono_get, sortedLT, strictMono_get
+    l.SortedGE ↔ ∀ ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, j ≤ i → l[i] ≤ l[j] :=
+  ⟨fun h _ _ _ _ hij => h.antitone_get hij, fun h => Antitone.sortedGE <| fun _ _ => (h ·)⟩
+/-
+**List.sortedLT_iff_getElem_lt_getElem_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_iff_getElem_lt_getElem_of_lt : l.SortedLT ↔ forall ⦃i j : Nat⦄ ⦃h
+i : i < l.length⦄ ⦃hj : j < l.length⦄, i < j -> l[i] < l[j]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedLT.strictMono_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedLT → StrictMono l.get
+· 使用定理 `StrictMono.sortedLT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], 
+StrictMono l.get → l.SortedLT
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
 -/
 theorem sortedLT_iff_getElem_lt_getElem_of_lt :
-    l.SortedLT ↔ forall ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, i < j -> l[i] < l[j] :=
-⟨fun h _ _ _ _ hij => h.strictMono_get hij, fun h => StrictMono.sortedLT fun _ _ => (h ·)⟩
-/--
-theorem `sortedGT_iff_getElem_gt_getElem_of_lt` / 定理 `sortedGT_iff_getElem_gt_getElem_of_lt`
-
-English:
-theorem sortedGT_iff_getElem_gt_getElem_of_lt
-  proof: ⟨fun h _ _ _ _ hij => h.strictAnti_get hij, fun h => StrictAnti.sortedGT fun _ _ => (h ·)⟩
-
-alias ⟨SortedLE.getElem_le_getElem_of_le, sortedLE_of_getElem_le_getElem_of_le⟩ :=
-  sortedLE_iff_getElem_le_getElem_of_le
-alias ⟨SortedGE.getElem_ge_getElem_of_le, sortedGE_of_getElem_ge_getElem_of_le⟩ :=
-  sortedGE_iff_getElem_ge_getElem_of_le
-alias ⟨SortedLT.getElem_lt_getElem_of_lt, sortedLT_of_getElem_lt_getElem_of_lt⟩ :=
-  sortedLT_iff_getElem_lt_getElem_of_lt
-alias ⟨SortedGT.getElem_gt_getElem_of_lt, sortedGT_of_getElem_gt_getElem_of_lt⟩ :=
-  sortedGT_iff_getElem_gt_getElem_of_lt
-
-中文:
-定理 sortedGT_iff_getElem_gt_getElem_of_lt
-  证明: ⟨fun h _ _ _ _ hij => h.strictAnti_get hij, fun h => StrictAnti.sortedGT fun _ _ => (h ·)⟩
-
-alias ⟨SortedLE.getElem_le_getElem_of_le, sortedLE_of_getElem_le_getElem_of_le⟩ :=
-  sortedLE_iff_getElem_le_getElem_of_le
-alias ⟨SortedGE.getElem_ge_getElem_of_le, sortedGE_of_getElem_ge_getElem_of_le⟩ :=
-  sortedGE_iff_getElem_ge_getElem_of_le
-alias ⟨SortedLT.getElem_lt_getElem_of_lt, sortedLT_of_getElem_lt_getElem_of_lt⟩ :=
-  sortedLT_iff_getElem_lt_getElem_of_lt
-alias ⟨SortedGT.getElem_gt_getElem_of_lt, sortedGT_of_getElem_gt_getElem_of_lt⟩ :=
-  sortedGT_iff_getElem_gt_getElem_of_lt
-
-Depends on / 依赖: StrictAnti, StrictAnti.sortedGT, h.strictAnti_get, sortedGT, strictAnti_get
+    l.SortedLT ↔ ∀ ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, i < j → l[i] < l[j] :=
+  ⟨fun h _ _ _ _ hij => h.strictMono_get hij, fun h => StrictMono.sortedLT <| fun _ _ => (h ·)⟩
+/-
+**List.sortedGT_iff_getElem_gt_getElem_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGT_iff_getElem_gt_getElem_of_lt : l.SortedGT ↔ forall ⦃i j : Nat⦄ ⦃h
+i : i < l.length⦄ ⦃hj : j < l.length⦄, j < i -> l[i] < l[j]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedGT.strictAnti_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedGT → StrictAnti l.get
+· 使用定理 `StrictAnti.sortedGT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], 
+StrictAnti l.get → l.SortedGT
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
 -/
 theorem sortedGT_iff_getElem_gt_getElem_of_lt :
-    l.SortedGT ↔ forall ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, j < i -> l[i] < l[j] :=
-⟨fun h _ _ _ _ hij => h.strictAnti_get hij, fun h => StrictAnti.sortedGT fun _ _ => (h ·)⟩
+    l.SortedGT ↔ ∀ ⦃i j : Nat⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, j < i → l[i] < l[j] :=
+  ⟨fun h _ _ _ _ hij => h.strictAnti_get hij, fun h => StrictAnti.sortedGT <| fun _ _ => (h ·)⟩
 
 alias ⟨SortedLE.getElem_le_getElem_of_le, sortedLE_of_getElem_le_getElem_of_le⟩ :=
   sortedLE_iff_getElem_le_getElem_of_le
@@ -1614,165 +1284,140 @@ end GetElem
 
 section
 
-/--
-theorem `SortedLT.sortedLE` / 定理 `SortedLT.sortedLE`
-
-English:
-theorem SortedLT.sortedLE
-  given: {l : List α} (h : l.SortedLT)
-  statement: l.SortedLE
-  proof: h.strictMono_get.monotone.sortedLE
-
-中文:
-定理 SortedLT.sortedLE
-  条件: {l : 列表 α} (h : l.SortedLT)
-  结论: l.SortedLE
-  证明: h.strictMono_get.monotone.sortedLE
+/-
+**List.SortedLT.sortedLE** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedLT`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {l : List α}, l.SortedLT → l.SortedLE
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.sortedLE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], Mo
+notone l.get → l.SortedLE
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `List.SortedLT.strictMono_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedLT → StrictMono l.get
 -/
 protected theorem SortedLT.sortedLE {l : List α} (h : l.SortedLT) : l.SortedLE :=
   h.strictMono_get.monotone.sortedLE
-/--
-theorem `SortedGT.sortedGE` / 定理 `SortedGT.sortedGE`
-
-English:
-theorem SortedGT.sortedGE
-  given: {l : List α} (h : l.SortedGT)
-  statement: l.SortedGE
-  proof: h.strictAnti_get.antitone.sortedGE
-
-中文:
-定理 SortedGT.sortedGE
-  条件: {l : 列表 α} (h : l.SortedGT)
-  结论: l.SortedGE
-  证明: h.strictAnti_get.antitone.sortedGE
+/-
+**List.SortedGT.sortedGE** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedGT`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {l : List α}, l.SortedGT → l.SortedGE
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Antitone.sortedGE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], An
+titone l.get → l.SortedGE
+· 使用定理 `StrictAnti.antitone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictAnti f → Antitone f
+· 使用定理 `List.SortedGT.strictAnti_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedGT → StrictAnti l.get
 -/
 protected theorem SortedGT.sortedGE {l : List α} (h : l.SortedGT) : l.SortedGE :=
   h.strictAnti_get.antitone.sortedGE
-
-/--
-theorem `SortedLT.nodup` / 定理 `SortedLT.nodup`
-
-English:
-theorem SortedLT.nodup
-  given: (h : l.SortedLT)
-  statement: l.Nodup
-  proof: h.strictMono_get.injective.nodup
-
-中文:
-定理 SortedLT.nodup
-  条件: (h : l.SortedLT)
-  结论: l.Nodup
-  证明: h.strictMono_get.injective.nodup
+/-
+**List.SortedLT.nodup** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedLT`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.SortedLT → l.Nodup
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.nodup`：∀ {α : Type u} {l : List α}, Function.Injectiv
+e l.get → l.Nodup
+· 使用定理 `StrictMono.injective`：StrictMono.injective (hf : StrictMono f) : Injecti
+ve f
+· 使用定理 `List.SortedLT.strictMono_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedLT → StrictMono l.get
 -/
 protected theorem SortedLT.nodup (h : l.SortedLT) : l.Nodup := h.strictMono_get.injective.nodup
-/--
-theorem `SortedGT.nodup` / 定理 `SortedGT.nodup`
-
-English:
-theorem SortedGT.nodup
-  given: (h : l.SortedGT)
-  statement: l.Nodup
-  proof: h.strictAnti_get.injective.nodup
-
-中文:
-定理 SortedGT.nodup
-  条件: (h : l.SortedGT)
-  结论: l.Nodup
-  证明: h.strictAnti_get.injective.nodup
+/-
+**List.SortedGT.nodup** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedGT`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.SortedGT → l.Nodup
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.nodup`：∀ {α : Type u} {l : List α}, Function.Injectiv
+e l.get → l.Nodup
+· 使用定理 `StrictAnti.injective`：StrictAnti.injective (hf : StrictAnti f) : Injecti
+ve f
+· 使用定理 `List.SortedGT.strictAnti_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedGT → StrictAnti l.get
 -/
 protected theorem SortedGT.nodup (h : l.SortedGT) : l.Nodup := h.strictAnti_get.injective.nodup
-
-/--
-theorem `sortedLE_replicate` / 定理 `sortedLE_replicate`
-
-English:
-theorem sortedLE_replicate
-  given: {a : α} (n : Nat)
-  statement: (replicate n a).SortedLE
-  proof: (pairwise_replicate.mpr (Or.inr le_rfl)).sortedLE
-
-中文:
-定理 sortedLE_replicate
-  条件: {a : α} (n : 自然数)
-  结论: (replicate n a).SortedLE
-  证明: (pairwise_replicate.mpr (Or.inr le_rfl)).sortedLE
-
-Depends on / 依赖: Or.inr, le_rfl, pairwise_replicate, pairwise_replicate.mpr, sortedLE
+/-
+**List.sortedLE_replicate** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_replicate {a : α} (n : Nat) : (replicate n a).SortedLE
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedLE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 ≤ x2) l → l.SortedLE
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.pairwise_replicate`：∀ {α : Type u_1} {R : α → α → Prop} {n : ℕ} {a 
+: α}, List.Pairwise R (List.replicate n a) ↔ n ≤ 1 ∨ R a a
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem sortedLE_replicate {a : α} (n : Nat) : (replicate n a).SortedLE :=
+theorem sortedLE_replicate {a : α} (n : ℕ) : (replicate n a).SortedLE :=
   (pairwise_replicate.mpr (Or.inr le_rfl)).sortedLE
-
-/--
-theorem `sortedLT_finRange` / 定理 `sortedLT_finRange`
-
-English:
-theorem sortedLT_finRange
-  given: (n : Nat)
-  statement: (finRange n).SortedLT
-  proof: sortedLT_of_getElem_lt_getElem_of_lt by simp
-
-中文:
-定理 sortedLT_finRange
-  条件: (n : 自然数)
-  结论: (finRange n).SortedLT
-  证明: sortedLT_of_getElem_lt_getElem_of_lt by simp
-
-Depends on / 依赖: sortedLT_of_getElem_lt_getElem_of_lt
+/-
+**List.sortedLT_finRange** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_finRange (n : Nat) : (finRange n).SortedLT
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sortedLT_of_getElem_lt_getElem_of_lt`：∀ {α : Type u_1} {l : List α}
+ [inst : Preorder α],   (∀ ⦃i j : ℕ⦄ ⦃hi : i < l.length⦄ ⦃hj : j < l.length⦄, i 
+< j → l[i] < l[j]) → l.SortedLT
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_finRange`：∀ {n : ℕ}, (List.finRange n).length = n
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.getElem_finRange`：∀ {n i : ℕ} (h : i < (List.finRange n).length), (
+List.finRange n)[i] = Fin.cast ⋯ ⟨i, h⟩
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem sortedLT_finRange (n : Nat) : (finRange n).SortedLT :=
-sortedLT_of_getElem_lt_getElem_of_lt by simp
-
-/--
-theorem `sortedLT_range` / 定理 `sortedLT_range`
-
-English:
-theorem sortedLT_range
-  given: (n : Nat)
-  statement: (range n).SortedLT
-  proof: pairwise_lt_range.sortedLT
-
-中文:
-定理 sortedLT_range
-  条件: (n : 自然数)
-  结论: (range n).SortedLT
-  证明: pairwise_lt_range.sortedLT
-
-Depends on / 依赖: pairwise_lt_range, pairwise_lt_range.sortedLT, sortedLT
+theorem sortedLT_finRange (n : ℕ) : (finRange n).SortedLT :=
+  sortedLT_of_getElem_lt_getElem_of_lt <| by simp
+/-
+**List.sortedLT_range** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_range (n : Nat) : (range n).SortedLT
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedLT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 < x2) l → l.SortedLT
+· 使用定理 `List.pairwise_lt_range`：∀ {n : ℕ}, List.Pairwise (fun x1 x2 => x1 < x2) 
+(List.range n)
 -/
-theorem sortedLT_range (n : Nat) : (range n).SortedLT := pairwise_lt_range.sortedLT
-
-/--
-theorem `sortedLT_range'` / 定理 `sortedLT_range'`
-
-English:
-theorem sortedLT_range'
-  given: (a b) {s} (hs : s != 0)
-  proof: (pairwise_lt_range' _ (Nat.pos_of_ne_zero hs)).sortedLT
-
-中文:
-定理 sortedLT_range'
-  条件: (a b) {s} (hs : s != 0)
-  证明: (pairwise_lt_range' _ (Nat.pos_of_ne_zero hs)).sortedLT
-
-Depends on / 依赖: Nat.pos_of_ne_zero, pairwise_lt_range, pos_of_ne_zero, sortedLT
+theorem sortedLT_range (n : ℕ) : (range n).SortedLT := pairwise_lt_range.sortedLT
+/-
+**List.sortedLT_range'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_range' (a b) {s} (hs : s != 0) : (range' a b s).SortedLT
+参数：a b；hs : s != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedLT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 < x2) l → l.SortedLT
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `List.pairwise_lt_range'`：∀ {s n : ℕ} (step : optParam ℕ 1),   autoParam 
+(0 < step) List.pairwise_lt_range'._auto_1 → List.Pairwise (fun x1 x2 => x1 < x2
+) (List.range…
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
 -/
-theorem sortedLT_range' (a b) {s} (hs : s != 0) :
+theorem sortedLT_range' (a b) {s} (hs : s ≠ 0) :
     (range' a b s).SortedLT := (pairwise_lt_range' _ (Nat.pos_of_ne_zero hs)).sortedLT
-
-/--
-theorem `sortedLE_range'` / 定理 `sortedLE_range'`
-
-English:
-theorem sortedLE_range'
-  given: (a b s)
-  proof: (pairwise_le_range' _).sortedLE
-
-中文:
-定理 sortedLE_range'
-  条件: (a b s)
-  证明: (pairwise_le_range' _).sortedLE
-
-Depends on / 依赖: pairwise_le_range, sortedLE
+/-
+**List.sortedLE_range'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_range' (a b s) : (range' a b s).SortedLE
+参数：a b s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedLE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 ≤ x2) l → l.SortedLE
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `List.pairwise_le_range'`：∀ {s n : ℕ} (step : optParam ℕ 1), List.Pairwis
+e (fun x1 x2 => x1 ≤ x2) (List.range' s n step)
 -/
 theorem sortedLE_range' (a b s) :
     (range' a b s).SortedLE := (pairwise_le_range' _).sortedLE
@@ -1781,87 +1426,147 @@ end
 
 section OfFn
 
-variable {n : Nat} {f : Fin n -> α}
+variable {n : ℕ} {f : Fin n → α}
 
-/--
-theorem `sortedLE_ofFn_iff` / 定理 `sortedLE_ofFn_iff`
+/-- The list `List.ofFn f` is sorted with respect to `(· ≤ ·)` if and only if `f` is monotone. -/
+/-
+**List.sortedLE_ofFn_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin n → α}, (List.ofFn f
+).SortedLE ↔ Monotone f
+参数：List.ofFn f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_ofFn`：∀ {n : ℕ} {α : Type u_1} {f : Fin n → α}, (List.ofFn f
+).length = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `List.get_ofFn`：get_ofFn {n} (f : Fin n -> α) (i) : get (ofFn f) i = f (F
+in.cast (by simp) i)
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem sortedLE_ofFn_iff
-  statement: (ofFn f).SortedLE ↔ Monotone f
-  proof: by
-  simp only [sortedLE_iff_monotone_get, Monotone, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
-
-中文:
-定理 sortedLE_ofFn_iff
-  结论: (ofFn f).SortedLE ↔ 递增 f
-  证明: by
-  simp only [sortedLE_iff_monotone_get, Monotone, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
+--- 原说明 ---
+The list `List.ofFn f` is sorted with respect to `(· ≤ ·)` if and only if `f` is
+ monotone.
 -/
 @[simp] theorem sortedLE_ofFn_iff : (ofFn f).SortedLE ↔ Monotone f := by
   simp only [sortedLE_iff_monotone_get, Monotone, Fin.forall_iff,
     length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
 
-/--
-theorem `sortedGE_ofFn_iff` / 定理 `sortedGE_ofFn_iff`
+/-- The list `List.ofFn f` is sorted with respect to `(· ≥ ·)` if and only if `f` is antitone. -/
+/-
+**List.sortedGE_ofFn_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin n → α}, (List.ofFn f
+).SortedGE ↔ Antitone f
+参数：List.ofFn f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_ofFn`：∀ {n : ℕ} {α : Type u_1} {f : Fin n → α}, (List.ofFn f
+).length = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `List.get_ofFn`：get_ofFn {n} (f : Fin n -> α) (i) : get (ofFn f) i = f (F
+in.cast (by simp) i)
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem sortedGE_ofFn_iff
-  statement: (ofFn f).SortedGE ↔ Antitone f
-  proof: by
-  simp only [sortedGE_iff_antitone_get, Antitone, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
-
-中文:
-定理 sortedGE_ofFn_iff
-  结论: (ofFn f).SortedGE ↔ 递减 f
-  证明: by
-  simp only [sortedGE_iff_antitone_get, Antitone, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
+--- 原说明 ---
+The list `List.ofFn f` is sorted with respect to `(· ≥ ·)` if and only if `f` is
+ antitone.
 -/
 @[simp] theorem sortedGE_ofFn_iff : (ofFn f).SortedGE ↔ Antitone f := by
   simp only [sortedGE_iff_antitone_get, Antitone, Fin.forall_iff,
     length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
 
-/--
-theorem `sortedLT_ofFn_iff` / 定理 `sortedLT_ofFn_iff`
+/-- The list `List.ofFn f` is strictly sorted with respect to `(· ≤ ·)` if and only if `f` is
+strictly monotone. -/
+/-
+**List.sortedLT_ofFn_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin n → α}, (List.ofFn f
+).SortedLT ↔ StrictMono f
+参数：List.ofFn f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_ofFn`：∀ {n : ℕ} {α : Type u_1} {f : Fin n → α}, (List.ofFn f
+).length = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `List.get_ofFn`：get_ofFn {n} (f : Fin n -> α) (i) : get (ofFn f) i = f (F
+in.cast (by simp) i)
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem sortedLT_ofFn_iff
-  statement: (ofFn f).SortedLT ↔ StrictMono f
-  proof: by
-  simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_lt_mk]
-
-中文:
-定理 sortedLT_ofFn_iff
-  结论: (ofFn f).SortedLT ↔ 严格递增 f
-  证明: by
-  simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_lt_mk]
+--- 原说明 ---
+The list `List.ofFn f` is strictly sorted with respect to `(· ≤ ·)` if and only 
+if `f` is
+strictly monotone.
 -/
 @[simp] theorem sortedLT_ofFn_iff : (ofFn f).SortedLT ↔ StrictMono f := by
   simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff,
     length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_lt_mk]
 
-/--
-theorem `sortedGT_ofFn_iff` / 定理 `sortedGT_ofFn_iff`
+/-- The list `List.ofFn f` is strictly sorted with respect to `(· ≥ ·)` if and only if `f` is
+strictly antitone. -/
+/-
+**List.sortedGT_ofFn_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin n → α}, (List.ofFn f
+).SortedGT ↔ StrictAnti f
+参数：List.ofFn f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_ofFn`：∀ {n : ℕ} {α : Type u_1} {f : Fin n → α}, (List.ofFn f
+).length = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `List.get_ofFn`：get_ofFn {n} (f : Fin n -> α) (i) : get (ofFn f) i = f (F
+in.cast (by simp) i)
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem sortedGT_ofFn_iff
-  statement: (ofFn f).SortedGT ↔ StrictAnti f
-  proof: by
-  simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_lt_mk]
-
-中文:
-定理 sortedGT_ofFn_iff
-  结论: (ofFn f).SortedGT ↔ 严格递减 f
-  证明: by
-  simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff,
-    length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_lt_mk]
+--- 原说明 ---
+The list `List.ofFn f` is strictly sorted with respect to `(· ≥ ·)` if and only 
+if `f` is
+strictly antitone.
 -/
 @[simp] theorem sortedGT_ofFn_iff : (ofFn f).SortedGT ↔ StrictAnti f := by
   simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff,
@@ -1880,70 +1585,32 @@ end OfFn
 
 section Reverse
 
-/--
-theorem `sortedLE_reverse` / 定理 `sortedLE_reverse`
-
-English:
-theorem sortedLE_reverse
-  statement: l.reverse.SortedLE ↔ l.SortedGE
-  proof: by grind
-
-中文:
-定理 sortedLE_reverse
-  结论: l.reverse.SortedLE ↔ l.SortedGE
-  证明: by grind
+/-
+**List.sortedLE_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.reverse.SortedLE ↔ l.
+SortedGE
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedLE_reverse : l.reverse.SortedLE ↔ l.SortedGE := by grind
-/--
-theorem `sortedGE_reverse` / 定理 `sortedGE_reverse`
-
-English:
-theorem sortedGE_reverse
-  statement: l.reverse.SortedGE ↔ l.SortedLE
-  proof: by grind
-
-中文:
-定理 sortedGE_reverse
-  结论: l.reverse.SortedGE ↔ l.SortedLE
-  证明: by grind
+/-
+**List.sortedGE_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.reverse.SortedGE ↔ l.
+SortedLE
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedGE_reverse : l.reverse.SortedGE ↔ l.SortedLE := by grind
-/--
-theorem `sortedLT_reverse` / 定理 `sortedLT_reverse`
-
-English:
-theorem sortedLT_reverse
-  statement: l.reverse.SortedLT ↔ l.SortedGT
-  proof: by grind
-
-中文:
-定理 sortedLT_reverse
-  结论: l.reverse.SortedLT ↔ l.SortedGT
-  证明: by grind
+/-
+**List.sortedLT_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.reverse.SortedLT ↔ l.
+SortedGT
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedLT_reverse : l.reverse.SortedLT ↔ l.SortedGT := by grind
-/--
-theorem `sortedGT_reverse` / 定理 `sortedGT_reverse`
-
-English:
-theorem sortedGT_reverse
-  statement: l.reverse.SortedGT ↔ l.SortedLT
-  proof: by grind
-
-protected alias ⟨SortedLE.of_reverse, SortedGE.reverse⟩ := sortedLE_reverse
-protected alias ⟨SortedGE.of_reverse, SortedLE.reverse⟩ := sortedGE_reverse
-protected alias ⟨SortedLT.of_reverse, SortedGT.reverse⟩ := sortedLT_reverse
-protected alias ⟨SortedGT.of_reverse, SortedLT.reverse⟩ := sortedGT_reverse
-
-中文:
-定理 sortedGT_reverse
-  结论: l.reverse.SortedGT ↔ l.SortedLT
-  证明: by grind
-
-protected alias ⟨SortedLE.of_reverse, SortedGE.reverse⟩ := sortedLE_reverse
-protected alias ⟨SortedGE.of_reverse, SortedLE.reverse⟩ := sortedGE_reverse
-protected alias ⟨SortedLT.of_reverse, SortedGT.reverse⟩ := sortedLT_reverse
-protected alias ⟨SortedGT.of_reverse, SortedLT.reverse⟩ := sortedGT_reverse
+/-
+**List.sortedGT_reverse** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : Preorder α], l.reverse.SortedGT ↔ l.
+SortedLT
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedGT_reverse : l.reverse.SortedGT ↔ l.SortedLT := by grind
 
@@ -1960,82 +1627,42 @@ section OfDual
 
 variable {l : List αᵒᵈ}
 
-/--
-theorem `sortedLE_map_ofDual` / 定理 `sortedLE_map_ofDual`
-
-English:
-theorem sortedLE_map_ofDual
-  given: {l : List αᵒᵈ}
-  proof: by
-  grind [OrderDual.ofDual_le_ofDual]
-
-中文:
-定理 sortedLE_map_ofDual
-  条件: {l : 列表 αᵒᵈ}
-  证明: by
-  grind [OrderDual.ofDual_le_ofDual]
+/-
+**List.sortedLE_map_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {l : List αᵒᵈ}, (List.map (⇑OrderDual
+.ofDual) l).SortedLE ↔ l.SortedGE
+参数：List.map (⇑OrderDual.ofDual) l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedLE_map_ofDual {l : List αᵒᵈ} :
     (l.map OrderDual.ofDual).SortedLE ↔ l.SortedGE := by
   grind [OrderDual.ofDual_le_ofDual]
-/--
-theorem `sortedGE_map_ofDual` / 定理 `sortedGE_map_ofDual`
-
-English:
-theorem sortedGE_map_ofDual
-  proof: by
-  grind [OrderDual.ofDual_le_ofDual]
-
-中文:
-定理 sortedGE_map_ofDual
-  证明: by
-  grind [OrderDual.ofDual_le_ofDual]
+/-
+**List.sortedGE_map_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {l : List αᵒᵈ}, (List.map (⇑OrderDual
+.ofDual) l).SortedGE ↔ l.SortedLE
+参数：List.map (⇑OrderDual.ofDual) l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedGE_map_ofDual :
     (l.map OrderDual.ofDual).SortedGE ↔ l.SortedLE := by
   grind [OrderDual.ofDual_le_ofDual]
-/--
-theorem `sortedLT_map_ofDual` / 定理 `sortedLT_map_ofDual`
-
-English:
-theorem sortedLT_map_ofDual
-  given: {l : List αᵒᵈ}
-  proof: by
-  grind [OrderDual.ofDual_lt_ofDual]
-
-中文:
-定理 sortedLT_map_ofDual
-  条件: {l : 列表 αᵒᵈ}
-  证明: by
-  grind [OrderDual.ofDual_lt_ofDual]
+/-
+**List.sortedLT_map_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {l : List αᵒᵈ}, (List.map (⇑OrderDual
+.ofDual) l).SortedLT ↔ l.SortedGT
+参数：List.map (⇑OrderDual.ofDual) l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedLT_map_ofDual {l : List αᵒᵈ} :
     (l.map OrderDual.ofDual).SortedLT ↔ l.SortedGT := by
   grind [OrderDual.ofDual_lt_ofDual]
-/--
-theorem `sortedGT_map_ofDual` / 定理 `sortedGT_map_ofDual`
-
-English:
-theorem sortedGT_map_ofDual
-  given: {l : List αᵒᵈ}
-  proof: by
-  grind [OrderDual.ofDual_lt_ofDual]
-
-protected alias ⟨SortedLE.map_ofDual, SortedGE.of_map_ofDual⟩ := sortedLE_map_ofDual
-protected alias ⟨SortedGE.map_ofDual, SortedLE.of_map_ofDual⟩ := sortedGE_map_ofDual
-protected alias ⟨SortedLT.map_ofDual, SortedGT.of_map_ofDual⟩ := sortedLT_map_ofDual
-protected alias ⟨SortedGT.map_ofDual, SortedLT.of_map_ofDual⟩ := sortedGT_map_ofDual
-
-中文:
-定理 sortedGT_map_ofDual
-  条件: {l : 列表 αᵒᵈ}
-  证明: by
-  grind [OrderDual.ofDual_lt_ofDual]
-
-protected alias ⟨SortedLE.map_ofDual, SortedGE.of_map_ofDual⟩ := sortedLE_map_ofDual
-protected alias ⟨SortedGE.map_ofDual, SortedLE.of_map_ofDual⟩ := sortedGE_map_ofDual
-protected alias ⟨SortedLT.map_ofDual, SortedGT.of_map_ofDual⟩ := sortedLT_map_ofDual
-protected alias ⟨SortedGT.map_ofDual, SortedLT.of_map_ofDual⟩ := sortedGT_map_ofDual
+/-
+**List.sortedGT_map_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {l : List αᵒᵈ}, (List.map (⇑OrderDual
+.ofDual) l).SortedGT ↔ l.SortedLT
+参数：List.map (⇑OrderDual.ofDual) l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sortedGT_map_ofDual {l : List αᵒᵈ} :
     (l.map OrderDual.ofDual).SortedGT ↔ l.SortedLT := by
@@ -2052,92 +1679,42 @@ section ToDual
 
 variable {l : List α}
 
-/--
-theorem `sortedLE_map_toDual` / 定理 `sortedLE_map_toDual`
-
-English:
-theorem sortedLE_map_toDual
-  given: {l : List α}
-  proof: by
-  grind [OrderDual.toDual_le_toDual]
-
-中文:
-定理 sortedLE_map_toDual
-  条件: {l : 列表 α}
-  证明: by
-  grind [OrderDual.toDual_le_toDual]
-
-Depends on / 依赖: OrderDual, OrderDual.toDual_le_toDual, toDual_le_toDual
+/-
+**List.sortedLE_map_toDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_map_toDual {l : List α} : (l.map OrderDual.toDual).SortedLE ↔ l.S
+ortedGE
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedLE_map_toDual {l : List α} :
     (l.map OrderDual.toDual).SortedLE ↔ l.SortedGE := by
   grind [OrderDual.toDual_le_toDual]
-/--
-theorem `sortedGE_map_toDual` / 定理 `sortedGE_map_toDual`
-
-English:
-theorem sortedGE_map_toDual
-  given: {l : List α}
-  proof: by
-  grind [OrderDual.toDual_le_toDual]
-
-中文:
-定理 sortedGE_map_toDual
-  条件: {l : 列表 α}
-  证明: by
-  grind [OrderDual.toDual_le_toDual]
-
-Depends on / 依赖: OrderDual, OrderDual.toDual_le_toDual, toDual_le_toDual
+/-
+**List.sortedGE_map_toDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGE_map_toDual {l : List α} : (l.map OrderDual.toDual).SortedGE ↔ l.S
+ortedLE
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedGE_map_toDual {l : List α} :
     (l.map OrderDual.toDual).SortedGE ↔ l.SortedLE := by
   grind [OrderDual.toDual_le_toDual]
-/--
-theorem `sortedLT_map_toDual` / 定理 `sortedLT_map_toDual`
-
-English:
-theorem sortedLT_map_toDual
-  given: {l : List α}
-  proof: by
-  grind [OrderDual.toDual_lt_toDual]
-
-中文:
-定理 sortedLT_map_toDual
-  条件: {l : 列表 α}
-  证明: by
-  grind [OrderDual.toDual_lt_toDual]
-
-Depends on / 依赖: OrderDual, OrderDual.toDual_lt_toDual, toDual_lt_toDual
+/-
+**List.sortedLT_map_toDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_map_toDual {l : List α} : (l.map OrderDual.toDual).SortedLT ↔ l.S
+ortedGT
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedLT_map_toDual {l : List α} :
     (l.map OrderDual.toDual).SortedLT ↔ l.SortedGT := by
   grind [OrderDual.toDual_lt_toDual]
-/--
-theorem `sortedGT_map_toDual` / 定理 `sortedGT_map_toDual`
-
-English:
-theorem sortedGT_map_toDual
-  given: {l : List αᵒᵈ}
-  proof: by
-  grind [OrderDual.toDual_lt_toDual]
-
-protected alias ⟨SortedLE.map_toDual, SortedGE.of_map_toDual⟩ := sortedLE_map_toDual
-protected alias ⟨SortedGE.map_toDual, SortedLE.of_map_toDual⟩ := sortedGE_map_toDual
-protected alias ⟨SortedLT.map_toDual, SortedGT.of_map_toDual⟩ := sortedLT_map_toDual
-protected alias ⟨SortedGT.map_toDual, SortedLT.of_map_toDual⟩ := sortedGT_map_toDual
-
-中文:
-定理 sortedGT_map_toDual
-  条件: {l : 列表 αᵒᵈ}
-  证明: by
-  grind [OrderDual.toDual_lt_toDual]
-
-protected alias ⟨SortedLE.map_toDual, SortedGE.of_map_toDual⟩ := sortedLE_map_toDual
-protected alias ⟨SortedGE.map_toDual, SortedLE.of_map_toDual⟩ := sortedGE_map_toDual
-protected alias ⟨SortedLT.map_toDual, SortedGT.of_map_toDual⟩ := sortedLT_map_toDual
-protected alias ⟨SortedGT.map_toDual, SortedLT.of_map_toDual⟩ := sortedGT_map_toDual
-
-Depends on / 依赖: OrderDual, OrderDual.toDual_lt_toDual, toDual_lt_toDual
+/-
+**List.sortedGT_map_toDual** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGT_map_toDual {l : List αᵒᵈ} : (l.map OrderDual.toDual).SortedGT ↔ l
+.SortedLT
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedGT_map_toDual {l : List αᵒᵈ} :
     (l.map OrderDual.toDual).SortedGT ↔ l.SortedLT := by
@@ -2158,278 +1735,253 @@ section PartialOrder
 
 variable [PartialOrder α]
 
-/--
-theorem `SortedLE.sortedLT_of_nodup` / 定理 `SortedLE.sortedLT_of_nodup`
-
-English:
-theorem SortedLE.sortedLT_of_nodup
-  given: {l : List α} (h₁ : l.SortedLE) (h₂ : l.Nodup)
-  proof: (h₁.monotone_get.strictMono_of_injective h₂.injective_get).sortedLT
-
-中文:
-定理 SortedLE.sortedLT_of_nodup
-  条件: {l : 列表 α} (h₁ : l.SortedLE) (h₂ : l.Nodup)
-  证明: (h₁.monotone_get.strictMono_of_injective h₂.injective_get).sortedLT
+/-
+**List.SortedLE.sortedLT_of_nodup** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedLE`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l : List α}, l.SortedLE → l.Nodu
+p → l.SortedLT
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.sortedLT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], 
+StrictMono l.get → l.SortedLT
+· 使用定理 `Monotone.strictMono_of_injective`：Monotone.strictMono_of_injective (h₁ :
+ Monotone f) (h₂ : Injective f) : StrictMono f
+· 使用定理 `List.SortedLE.monotone_get`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedLE → Monotone l.get
+· 使用定理 `List.Nodup.injective_get`：∀ {α : Type u} {l : List α}, l.Nodup → Functio
+n.Injective l.get
 -/
 protected theorem SortedLE.sortedLT_of_nodup {l : List α} (h₁ : l.SortedLE) (h₂ : l.Nodup) :
     l.SortedLT := (h₁.monotone_get.strictMono_of_injective h₂.injective_get).sortedLT
-
-/--
-theorem `SortedGE.sortedGT_of_nodup` / 定理 `SortedGE.sortedGT_of_nodup`
-
-English:
-theorem SortedGE.sortedGT_of_nodup
-  given: {l : List α} (h₁ : l.SortedGE) (h₂ : l.Nodup)
-  proof: (h₁.antitone_get.strictAnti_of_injective h₂.injective_get).sortedGT
-
-中文:
-定理 SortedGE.sortedGT_of_nodup
-  条件: {l : 列表 α} (h₁ : l.SortedGE) (h₂ : l.Nodup)
-  证明: (h₁.antitone_get.strictAnti_of_injective h₂.injective_get).sortedGT
+/-
+**List.SortedGE.sortedGT_of_nodup** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedGE`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l : List α}, l.SortedGE → l.Nodu
+p → l.SortedGT
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictAnti.sortedGT`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], 
+StrictAnti l.get → l.SortedGT
+· 使用定理 `Antitone.strictAnti_of_injective`：Antitone.strictAnti_of_injective (h₁ :
+ Antitone f) (h₂ : Injective f) : StrictAnti f
+· 使用定理 `List.SortedGE.antitone_get`：∀ {α : Type u_1} {l : List α} [inst : Preord
+er α], l.SortedGE → Antitone l.get
+· 使用定理 `List.Nodup.injective_get`：∀ {α : Type u} {l : List α}, l.Nodup → Functio
+n.Injective l.get
 -/
 protected theorem SortedGE.sortedGT_of_nodup {l : List α} (h₁ : l.SortedGE) (h₂ : l.Nodup) :
     l.SortedGT := (h₁.antitone_get.strictAnti_of_injective h₂.injective_get).sortedGT
-
-/--
-theorem `sortedLT_iff_nodup_and_sortedLE` / 定理 `sortedLT_iff_nodup_and_sortedLE`
-
-English:
-theorem sortedLT_iff_nodup_and_sortedLE
-  statement: l.SortedLT ↔ l.Nodup ∧ l.SortedLE
-  proof: ⟨fun h => ⟨h.nodup, h.sortedLE⟩, fun h => h.2.sortedLT_of_nodup h.1⟩
-
-中文:
-定理 sortedLT_iff_nodup_and_sortedLE
-  结论: l.SortedLT ↔ l.Nodup ∧ l.SortedLE
-  证明: ⟨fun h => ⟨h.nodup, h.sortedLE⟩, fun h => h.2.sortedLT_of_nodup h.1⟩
-
-Depends on / 依赖: h.nodup, h.sortedLE, sortedLE, sortedLT_of_nodup
+/-
+**List.sortedLT_iff_nodup_and_sortedLE** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLT_iff_nodup_and_sortedLE : l.SortedLT ↔ l.Nodup ∧ l.SortedLE
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedLT.nodup`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], 
+l.SortedLT → l.Nodup
+· 使用定理 `List.SortedLT.sortedLE`：∀ {α : Type u_1} [inst : Preorder α] {l : List α
+}, l.SortedLT → l.SortedLE
+· 使用定理 `List.SortedLE.sortedLT_of_nodup`：∀ {α : Type u_1} [inst : PartialOrder α
+] {l : List α}, l.SortedLE → l.Nodup → l.SortedLT
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem sortedLT_iff_nodup_and_sortedLE : l.SortedLT ↔ l.Nodup ∧ l.SortedLE :=
   ⟨fun h => ⟨h.nodup, h.sortedLE⟩, fun h => h.2.sortedLT_of_nodup h.1⟩
-
-/--
-theorem `sortedGT_iff_nodup_and_sortedGE` / 定理 `sortedGT_iff_nodup_and_sortedGE`
-
-English:
-theorem sortedGT_iff_nodup_and_sortedGE
-  statement: l.SortedGT ↔ l.Nodup ∧ l.SortedGE
-  proof: ⟨fun h => ⟨h.nodup, h.sortedGE⟩, fun h => h.2.sortedGT_of_nodup h.1⟩
-
-中文:
-定理 sortedGT_iff_nodup_and_sortedGE
-  结论: l.SortedGT ↔ l.Nodup ∧ l.SortedGE
-  证明: ⟨fun h => ⟨h.nodup, h.sortedGE⟩, fun h => h.2.sortedGT_of_nodup h.1⟩
-
-Depends on / 依赖: h.nodup, h.sortedGE, sortedGE, sortedGT_of_nodup
+/-
+**List.sortedGT_iff_nodup_and_sortedGE** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGT_iff_nodup_and_sortedGE : l.SortedGT ↔ l.Nodup ∧ l.SortedGE
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedGT.nodup`：∀ {α : Type u_1} {l : List α} [inst : Preorder α], 
+l.SortedGT → l.Nodup
+· 使用定理 `List.SortedGT.sortedGE`：∀ {α : Type u_1} [inst : Preorder α] {l : List α
+}, l.SortedGT → l.SortedGE
+· 使用定理 `List.SortedGE.sortedGT_of_nodup`：∀ {α : Type u_1} [inst : PartialOrder α
+] {l : List α}, l.SortedGE → l.Nodup → l.SortedGT
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem sortedGT_iff_nodup_and_sortedGE : l.SortedGT ↔ l.Nodup ∧ l.SortedGE :=
   ⟨fun h => ⟨h.nodup, h.sortedGE⟩, fun h => h.2.sortedGT_of_nodup h.1⟩
-
-/--
-theorem `Perm.eq_of_sortedLE` / 定理 `Perm.eq_of_sortedLE`
-
-English:
-theorem Perm.eq_of_sortedLE
-  statement: {l₁ l₂ : List α} (hl₁ : l₁.SortedLE)
-  proof: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
-
-中文:
-定理 置换.eq_of_sortedLE
-  结论: {l₁ l₂ : 列表 α} (hl₁ : l₁.SortedLE)
-  证明: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
-
-Depends on / 依赖: Perm.eq_of_pairwise, eq_of_pairwise, pairwise
+/-
+**List.Perm.eq_of_sortedLE** 是 Mathlib 中的一个定理，位于命名空间 `List.Perm`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α}, l₁.SortedLE → l
+₂.SortedLE → l₁.Perm l₂ → l₁ = l₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `List.SortedLE.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedLE → List.Pairwise (fun x1 x2 => x1 ≤ x2) l
 -/
 theorem Perm.eq_of_sortedLE {l₁ l₂ : List α} (hl₁ : l₁.SortedLE)
-    (hl₂ : l₂.SortedLE) : (hl₁₂ : l₁ ~ l₂) -> l₁ = l₂ :=
+    (hl₂ : l₂.SortedLE) : (hl₁₂ : l₁ ~ l₂) → l₁ = l₂ :=
   Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
-
-/--
-theorem `Perm.eq_of_sortedGE` / 定理 `Perm.eq_of_sortedGE`
-
-English:
-theorem Perm.eq_of_sortedGE
-  statement: {l₁ l₂ : List α} (hl₁ : l₁.SortedGE)
-  proof: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
-
-中文:
-定理 置换.eq_of_sortedGE
-  结论: {l₁ l₂ : 列表 α} (hl₁ : l₁.SortedGE)
-  证明: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
-
-Depends on / 依赖: Perm.eq_of_pairwise, eq_of_pairwise, pairwise
+/-
+**List.Perm.eq_of_sortedGE** 是 Mathlib 中的一个定理，位于命名空间 `List.Perm`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α}, l₁.SortedGE → l
+₂.SortedGE → l₁.Perm l₂ → l₁ = l₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `instAntisymmGe`：∀ {α : Type u} [inst : PartialOrder α], Std.Antisymm fun
+ x1 x2 => x2 ≤ x1
+· 使用定理 `List.SortedGE.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedGE → List.Pairwise (fun x1 x2 => x1 ≥ x2) l
 -/
 theorem Perm.eq_of_sortedGE {l₁ l₂ : List α} (hl₁ : l₁.SortedGE)
-    (hl₂ : l₂.SortedGE) : (hl₁₂ : l₁ ~ l₂) -> l₁ = l₂ :=
+    (hl₂ : l₂.SortedGE) : (hl₁₂ : l₁ ~ l₂) → l₁ = l₂ :=
   Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
-
-/--
-theorem `Subset.antisymm_of_sortedLT` / 定理 `Subset.antisymm_of_sortedLT`
-
-English:
-theorem Subset.antisymm_of_sortedLT
-  statement: {l₁ l₂ : List α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
-  proof: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
-
-中文:
-定理 子集.antisymm_of_sortedLT
-  结论: {l₁ l₂ : 列表 α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
-  证明: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
-
-Depends on / 依赖: antisymm_of_pairwise, pairwise
+/-
+**List.Subset.antisymm_of_sortedLT** 是 Mathlib 中的一个定理，位于命名空间 `List.Subset`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α}, l₁ ⊆ l₂ → l₂ ⊆ 
+l₁ → l₁.SortedLT → l₂.SortedLT → l₁ = l₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Subset.antisymm_of_pairwise`：∀ {α : Type u_1} {r : α → α → Prop} [S
+td.Antisymm r] [Std.Irrefl r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pair
+wise r l₂ → l₁ ⊆ l₂ → …
+· 使用定理 `List.SortedLT.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedLT → List.Pairwise (fun x1 x2 => x1 < x2) l
 -/
-theorem Subset.antisymm_of_sortedLT {l₁ l₂ : List α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
+theorem Subset.antisymm_of_sortedLT {l₁ l₂ : List α} (hl₁₂ : l₁ ⊆ l₂) (hl₁₂' : l₂ ⊆ l₁)
     (h₁ : l₁.SortedLT) (h₂ : l₂.SortedLT) : l₁ = l₂ :=
   hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
-
-/--
-theorem `Subset.antisymm_of_sortedGT` / 定理 `Subset.antisymm_of_sortedGT`
-
-English:
-theorem Subset.antisymm_of_sortedGT
-  statement: {l₁ l₂ : List α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
-  proof: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
-
-中文:
-定理 子集.antisymm_of_sortedGT
-  结论: {l₁ l₂ : 列表 α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
-  证明: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
-
-Depends on / 依赖: antisymm_of_pairwise, pairwise
+/-
+**List.Subset.antisymm_of_sortedGT** 是 Mathlib 中的一个定理，位于命名空间 `List.Subset`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α}, l₁ ⊆ l₂ → l₂ ⊆ 
+l₁ → l₁.SortedGT → l₂.SortedGT → l₁ = l₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Subset.antisymm_of_pairwise`：∀ {α : Type u_1} {r : α → α → Prop} [S
+td.Antisymm r] [Std.Irrefl r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pair
+wise r l₂ → l₁ ⊆ l₂ → …
+· 使用定理 `instAntisymmGt`：∀ {α : Type u} [inst : Preorder α], Std.Antisymm fun x1 
+x2 => x2 < x1
+· 使用定理 `instIrreflGt`：∀ {α : Type u} [inst : Preorder α], Std.Irrefl fun x1 x2 =
+> x2 < x1
+· 使用定理 `List.SortedGT.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedGT → List.Pairwise (fun x1 x2 => x1 > x2) l
 -/
-theorem Subset.antisymm_of_sortedGT {l₁ l₂ : List α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
+theorem Subset.antisymm_of_sortedGT {l₁ l₂ : List α} (hl₁₂ : l₁ ⊆ l₂) (hl₁₂' : l₂ ⊆ l₁)
     (h₁ : l₁.SortedGT) (h₂ : l₂.SortedGT) : l₁ = l₂ :=
   hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
-
-/--
-theorem `SortedLT.eq_of_mem_iff` / 定理 `SortedLT.eq_of_mem_iff`
-
-English:
-theorem SortedLT.eq_of_mem_iff
-  statement: {l₁ l₂ : List α}
-  proof: h₁.pairwise.eq_of_mem_iff h₂.pairwise
-
-中文:
-定理 SortedLT.eq_of_mem_iff
-  结论: {l₁ l₂ : 列表 α}
-  证明: h₁.pairwise.eq_of_mem_iff h₂.pairwise
-
-Depends on / 依赖: eq_of_mem_iff, pairwise, pairwise.eq_of_mem_iff
+/-
+**List.SortedLT.eq_of_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedLT`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α},   l₁.SortedLT →
+ l₂.SortedLT → (∀ (a : α), a ∈ l₁ ↔ a ∈ l₂) → l₁ = l₂
+参数：∀ (a : α), a ∈ l₁ ↔ a ∈ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.eq_of_mem_iff`：∀ {α : Type u_1} {r : α → α → Prop} [Std.An
+tisymm r] [Std.Irrefl r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise 
+r l₂ → (∀ (a : α)…
+· 使用定理 `List.SortedLT.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedLT → List.Pairwise (fun x1 x2 => x1 < x2) l
 -/
 theorem SortedLT.eq_of_mem_iff {l₁ l₂ : List α}
-    (h₁ : l₁.SortedLT) (h₂ : l₂.SortedLT) : (h : forall a : α, a in l₁ ↔ a in l₂) -> l₁ = l₂ :=
+    (h₁ : l₁.SortedLT) (h₂ : l₂.SortedLT) : (h : ∀ a : α, a ∈ l₁ ↔ a ∈ l₂) → l₁ = l₂ :=
   h₁.pairwise.eq_of_mem_iff h₂.pairwise
-
-/--
-theorem `SortedGT.eq_of_mem_iff` / 定理 `SortedGT.eq_of_mem_iff`
-
-English:
-theorem SortedGT.eq_of_mem_iff
-  statement: {l₁ l₂ : List α}
-  proof: h₁.pairwise.eq_of_mem_iff h₂.pairwise h
-
-中文:
-定理 SortedGT.eq_of_mem_iff
-  结论: {l₁ l₂ : 列表 α}
-  证明: h₁.pairwise.eq_of_mem_iff h₂.pairwise h
-
-Depends on / 依赖: eq_of_mem_iff, pairwise, pairwise.eq_of_mem_iff
+/-
+**List.SortedGT.eq_of_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedGT`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α},   l₁.SortedGT →
+ l₂.SortedGT → (∀ (a : α), a ∈ l₁ ↔ a ∈ l₂) → l₁ = l₂
+参数：∀ (a : α), a ∈ l₁ ↔ a ∈ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.eq_of_mem_iff`：∀ {α : Type u_1} {r : α → α → Prop} [Std.An
+tisymm r] [Std.Irrefl r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise 
+r l₂ → (∀ (a : α)…
+· 使用定理 `instAntisymmGt`：∀ {α : Type u} [inst : Preorder α], Std.Antisymm fun x1 
+x2 => x2 < x1
+· 使用定理 `instIrreflGt`：∀ {α : Type u} [inst : Preorder α], Std.Irrefl fun x1 x2 =
+> x2 < x1
+· 使用定理 `List.SortedGT.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedGT → List.Pairwise (fun x1 x2 => x1 > x2) l
 -/
 theorem SortedGT.eq_of_mem_iff {l₁ l₂ : List α}
-    (h₁ : l₁.SortedGT) (h₂ : l₂.SortedGT) (h : forall a : α, a in l₁ ↔ a in l₂) : l₁ = l₂ :=
+    (h₁ : l₁.SortedGT) (h₂ : l₂.SortedGT) (h : ∀ a : α, a ∈ l₁ ↔ a ∈ l₂) : l₁ = l₂ :=
   h₁.pairwise.eq_of_mem_iff h₂.pairwise h
-
-/--
-theorem `Perm.eq_reverse_of_sortedLE_of_sortedGE` / 定理 `Perm.eq_reverse_of_sortedLE_of_sortedGE`
-
-English:
-theorem Perm.eq_reverse_of_sortedLE_of_sortedGE
-  statement: {l₁ l₂ : List α} (hp : l₁ ~ l₂) (hl₁ : l₁.SortedLE)
-  proof: (perm_reverse.mpr hp).eq_of_sortedLE hl₁ hl₂.reverse
-
-中文:
-定理 置换.eq_reverse_of_sortedLE_of_sortedGE
-  结论: {l₁ l₂ : 列表 α} (hp : l₁ ~ l₂) (hl₁ : l₁.SortedLE)
-  证明: (perm_reverse.mpr hp).eq_of_sortedLE hl₁ hl₂.reverse
-
-Depends on / 依赖: eq_of_sortedLE, perm_reverse, perm_reverse.mpr, reverse
+/-
+**List.Perm.eq_reverse_of_sortedLE_of_sortedGE** 是 Mathlib 中的一个定理，位于命名空间 `List.P
+erm`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α}, l₁.Perm l₂ → l₁
+.SortedLE → l₂.SortedGE → l₁ = l₂.reverse
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.eq_of_sortedLE`：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l
+₂ : List α}, l₁.SortedLE → l₂.SortedLE → l₁.Perm l₂ → l₁ = l₂
+· 使用定理 `List.SortedGE.reverse`：∀ {α : Type u_1} {l : List α} [inst : Preorder α]
+, l.SortedGE → l.reverse.SortedLE
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.perm_reverse`：∀ {α : Type u} {l₁ l₂ : List α}, l₁.Perm l₂.reverse ↔
+ l₁.Perm l₂
 -/
 theorem Perm.eq_reverse_of_sortedLE_of_sortedGE {l₁ l₂ : List α} (hp : l₁ ~ l₂) (hl₁ : l₁.SortedLE)
     (hl₂ : l₂.SortedGE) : l₁ = l₂.reverse :=
   (perm_reverse.mpr hp).eq_of_sortedLE hl₁ hl₂.reverse
-
-/--
-theorem `SortedLT.eq_reverse_of_mem_iff_of_sortedGT` / 定理 `SortedLT.eq_reverse_of_mem_iff_of_sortedGT`
-
-English:
-theorem SortedLT.eq_reverse_of_mem_iff_of_sortedGT
-  statement: {l₁ l₂ : List α}
-  proof: hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
-
-中文:
-定理 SortedLT.eq_reverse_of_mem_iff_of_sortedGT
-  结论: {l₁ l₂ : 列表 α}
-  证明: hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
-
-Depends on / 依赖: eq_of_mem_iff, reverse
+/-
+**List.SortedLT.eq_reverse_of_mem_iff_of_sortedGT** 是 Mathlib 中的一个定理，位于命名空间 `Lis
+t.SortedLT`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α},   (∀ (a : α), a
+ ∈ l₁ ↔ a ∈ l₂) → l₁.SortedLT → l₂.SortedGT → l₁ = l₂.reverse
+参数：∀ (a : α), a ∈ l₁ ↔ a ∈ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedLT.eq_of_mem_iff`：∀ {α : Type u_1} [inst : PartialOrder α] {l
+₁ l₂ : List α},   l₁.SortedLT → l₂.SortedLT → (∀ (a : α), a ∈ l₁ ↔ a ∈ l₂) → l₁ 
+= l₂
+· 使用定理 `List.SortedGT.reverse`：∀ {α : Type u_1} {l : List α} [inst : Preorder α]
+, l.SortedGT → l.reverse.SortedLT
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem SortedLT.eq_reverse_of_mem_iff_of_sortedGT {l₁ l₂ : List α}
-    (h : forall a : α, a in l₁ ↔ a in l₂) (hl₁ : l₁.SortedLT)
+    (h : ∀ a : α, a ∈ l₁ ↔ a ∈ l₂) (hl₁ : l₁.SortedLT)
     (hl₂ : l₂.SortedGT) : l₁ = l₂.reverse := hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
-
-/--
-theorem `SortedGT.eq_reverse_of_mem_iff_of_sortedLT` / 定理 `SortedGT.eq_reverse_of_mem_iff_of_sortedLT`
-
-English:
-theorem SortedGT.eq_reverse_of_mem_iff_of_sortedLT
-  statement: {l₁ l₂ : List α}
-  proof: hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
-
-中文:
-定理 SortedGT.eq_reverse_of_mem_iff_of_sortedLT
-  结论: {l₁ l₂ : 列表 α}
-  证明: hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
-
-Depends on / 依赖: eq_of_mem_iff, reverse
+/-
+**List.SortedGT.eq_reverse_of_mem_iff_of_sortedLT** 是 Mathlib 中的一个定理，位于命名空间 `Lis
+t.SortedGT`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] {l₁ l₂ : List α},   (∀ (a : α), a
+ ∈ l₁ ↔ a ∈ l₂) → l₁.SortedGT → l₂.SortedLT → l₁ = l₂.reverse
+参数：∀ (a : α), a ∈ l₁ ↔ a ∈ l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.SortedGT.eq_of_mem_iff`：∀ {α : Type u_1} [inst : PartialOrder α] {l
+₁ l₂ : List α},   l₁.SortedGT → l₂.SortedGT → (∀ (a : α), a ∈ l₁ ↔ a ∈ l₂) → l₁ 
+= l₂
+· 使用定理 `List.SortedLT.reverse`：∀ {α : Type u_1} {l : List α} [inst : Preorder α]
+, l.SortedLT → l.reverse.SortedGT
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem SortedGT.eq_reverse_of_mem_iff_of_sortedLT {l₁ l₂ : List α}
-    (h : forall a : α, a in l₁ ↔ a in l₂) (hl₁ : l₁.SortedGT)
+    (h : ∀ a : α, a ∈ l₁ ↔ a ∈ l₂) (hl₁ : l₁.SortedGT)
     (hl₂ : l₂.SortedLT) : l₁ = l₂.reverse :=
   hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
-
-/--
-theorem `sublist_of_subperm_of_sortedLE` / 定理 `sublist_of_subperm_of_sortedLE`
-
-English:
-theorem sublist_of_subperm_of_sortedLE
-  statement: {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedLE)
-  proof: sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
-
-中文:
-定理 sublist_of_subperm_of_sortedLE
-  结论: {l₁ l₂ : 列表 α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedLE)
-  证明: sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
-
-Depends on / 依赖: pairwise, sublist_of_subperm_of_pairwise
+/-
+**List.sublist_of_subperm_of_sortedLE** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sublist_of_subperm_of_sortedLE {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁
+.SortedLE) (hl₂ : l₂.SortedLE) : l₁ <+ l₂
+参数：hp : l₁ <+~ l₂；hl₁ : l₁.SortedLE；hl₂ : l₂.SortedLE。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sublist_of_subperm_of_pairwise`：sublist_of_subperm_of_pairwise {l₁ 
+l₂ : List α} (hp : l₁ <+~ l₂) (hs₁ : l₁.Pairwise r) (hs₂ : l₂.Pairwise r) : l₁ <
++ l₂
+· 使用定理 `List.SortedLE.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedLE → List.Pairwise (fun x1 x2 => x1 ≤ x2) l
 -/
 theorem sublist_of_subperm_of_sortedLE {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedLE)
     (hl₂ : l₂.SortedLE) : l₁ <+ l₂ := sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
-
-/--
-theorem `sublist_of_subperm_of_sortedGE` / 定理 `sublist_of_subperm_of_sortedGE`
-
-English:
-theorem sublist_of_subperm_of_sortedGE
-  statement: {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedGE)
-  proof: sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
-
-中文:
-定理 sublist_of_subperm_of_sortedGE
-  结论: {l₁ l₂ : 列表 α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedGE)
-  证明: sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
-
-Depends on / 依赖: pairwise, sublist_of_subperm_of_pairwise
+/-
+**List.sublist_of_subperm_of_sortedGE** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sublist_of_subperm_of_sortedGE {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁
+.SortedGE) (hl₂ : l₂.SortedGE) : l₁ <+ l₂
+参数：hp : l₁ <+~ l₂；hl₁ : l₁.SortedGE；hl₂ : l₂.SortedGE。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.sublist_of_subperm_of_pairwise`：sublist_of_subperm_of_pairwise {l₁ 
+l₂ : List α} (hp : l₁ <+~ l₂) (hs₁ : l₁.Pairwise r) (hs₂ : l₂.Pairwise r) : l₁ <
++ l₂
+· 使用定理 `instAntisymmGe`：∀ {α : Type u} [inst : PartialOrder α], Std.Antisymm fun
+ x1 x2 => x2 ≤ x1
+· 使用定理 `List.SortedGE.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedGE → List.Pairwise (fun x1 x2 => x1 ≥ x2) l
 -/
 theorem sublist_of_subperm_of_sortedGE {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedGE)
     (hl₂ : l₂.SortedGE) : l₁ <+ l₂ := sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
@@ -2440,166 +1992,125 @@ section LinearOrder
 
 variable [LinearOrder α]
 
-/--
-theorem `sortedLE_mergeSort` / 定理 `sortedLE_mergeSort`
-
-English:
-theorem sortedLE_mergeSort
-  statement: (l.mergeSort (· <= ·)).SortedLE
-  proof: (pairwise_mergeSort' _ _).sortedLE
-
-中文:
-定理 sortedLE_mergeSort
-  结论: (l.mergeSort (· <= ·)).SortedLE
-  证明: (pairwise_mergeSort' _ _).sortedLE
-
-Depends on / 依赖: pairwise_mergeSort, sortedLE
+/-
+**List.sortedLE_mergeSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_mergeSort : (l.mergeSort (· <= ·)).SortedLE
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedLE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 ≤ x2) l → l.SortedLE
+· 使用定理 `List.pairwise_mergeSort'`：pairwise_mergeSort' (l : List α) : Pairwise r 
+(mergeSort l (r · ·))
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
 -/
-theorem sortedLE_mergeSort : (l.mergeSort (· <= ·)).SortedLE :=
+theorem sortedLE_mergeSort : (l.mergeSort (· ≤ ·)).SortedLE :=
   (pairwise_mergeSort' _ _).sortedLE
-
-/--
-theorem `sortedGE_mergeSort` / 定理 `sortedGE_mergeSort`
-
-English:
-theorem sortedGE_mergeSort
-  statement: (l.mergeSort (· >= ·)).SortedGE
-  proof: (pairwise_mergeSort' _ _).sortedGE
-
-中文:
-定理 sortedGE_mergeSort
-  结论: (l.mergeSort (· >= ·)).SortedGE
-  证明: (pairwise_mergeSort' _ _).sortedGE
-
-Depends on / 依赖: Decidable, Fintype, fintypeInsert, pairwise_mergeSort, sortedGE
+/-
+**List.sortedGE_mergeSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGE_mergeSort : (l.mergeSort (· >= ·)).SortedGE
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedGE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 ≥ x2) l → l.SortedGE
+· 使用定理 `List.pairwise_mergeSort'`：pairwise_mergeSort' (l : List α) : Pairwise r 
+(mergeSort l (r · ·))
+· 使用定理 `LE.total'`：∀ {α : Type u} [inst : LinearOrder α], Std.Total fun x1 x2 =>
+ x2 ≤ x1
+· 使用定理 `instIsTransGe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x2 ≤ x1
 -/
-theorem sortedGE_mergeSort : (l.mergeSort (· >= ·)).SortedGE :=
+theorem sortedGE_mergeSort : (l.mergeSort (· ≥ ·)).SortedGE :=
   (pairwise_mergeSort' _ _).sortedGE
-
-/--
-theorem `sortedLE_insertionSort` / 定理 `sortedLE_insertionSort`
-
-English:
-theorem sortedLE_insertionSort
-  statement: (l.insertionSort (· <= ·)).SortedLE
-  proof: (pairwise_insertionSort _ _).sortedLE
-
-中文:
-定理 sortedLE_insertionSort
-  结论: (l.insertionSort (· <= ·)).SortedLE
-  证明: (pairwise_insertionSort _ _).sortedLE
-
-Depends on / 依赖: pairwise_insertionSort, sortedLE
+/-
+**List.sortedLE_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedLE_insertionSort : (l.insertionSort (· <= ·)).SortedLE
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedLE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 ≤ x2) l → l.SortedLE
+· 使用定理 `List.pairwise_insertionSort`：∀ {α : Type u_1} (r : α → α → Prop) [inst :
+ DecidableRel r] [Std.Total r] [IsTrans α r] (l : List α),   List.Pairwise r (Li
+st.insertionSort …
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
 -/
-theorem sortedLE_insertionSort : (l.insertionSort (· <= ·)).SortedLE :=
+theorem sortedLE_insertionSort : (l.insertionSort (· ≤ ·)).SortedLE :=
   (pairwise_insertionSort _ _).sortedLE
-
-/--
-theorem `sortedGE_insertionSort` / 定理 `sortedGE_insertionSort`
-
-English:
-theorem sortedGE_insertionSort
-  statement: (l.insertionSort (· >= ·)).SortedGE
-  proof: (pairwise_insertionSort _ _).sortedGE
-
-@[simp]
-
-中文:
-定理 sortedGE_insertionSort
-  结论: (l.insertionSort (· >= ·)).SortedGE
-  证明: (pairwise_insertionSort _ _).sortedGE
-
-@[simp]
-
-Depends on / 依赖: pairwise_insertionSort, sortedGE
+/-
+**List.sortedGE_insertionSort** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：sortedGE_insertionSort : (l.insertionSort (· >= ·)).SortedGE
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.sortedGE`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], List.Pairwise (fun x1 x2 => x1 ≥ x2) l → l.SortedGE
+· 使用定理 `List.pairwise_insertionSort`：∀ {α : Type u_1} (r : α → α → Prop) [inst :
+ DecidableRel r] [Std.Total r] [IsTrans α r] (l : List α),   List.Pairwise r (Li
+st.insertionSort …
+· 使用定理 `LE.total'`：∀ {α : Type u} [inst : LinearOrder α], Std.Total fun x1 x2 =>
+ x2 ≤ x1
+· 使用定理 `instIsTransGe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x2 ≤ x1
 -/
-theorem sortedGE_insertionSort : (l.insertionSort (· >= ·)).SortedGE :=
+theorem sortedGE_insertionSort : (l.insertionSort (· ≥ ·)).SortedGE :=
   (pairwise_insertionSort _ _).sortedGE
 
 @[simp]
-/--
-theorem `SortedLT.getElem_le_getElem_iff` / 定理 `SortedLT.getElem_le_getElem_iff`
-
-English:
-theorem SortedLT.getElem_le_getElem_iff
-  statement: (hl : l.SortedLT) {i j} {hi : i < l.length}
-  proof: hl.strictMono_get.le_iff_le
-
-@[simp]
-
-中文:
-定理 SortedLT.getElem_le_getElem_iff
-  结论: (hl : l.SortedLT) {i j} {hi : i < l.length}
-  证明: hl.strictMono_get.le_iff_le
-
-@[simp]
-
-Depends on / 依赖: hl.strictMono_get.le_iff_le, le_iff_le, strictMono_get
+/-
+**List.SortedLT.getElem_le_getElem_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedLT`
+。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : LinearOrder α],   l.SortedLT → ∀ {i 
+j : ℕ} {hi : i < l.length} {hj : j < l.length}, l[i] ≤ l[j] ↔ i ≤ j
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `List.SortedLT.strictMono_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedLT → StrictMono l.get
 -/
 theorem SortedLT.getElem_le_getElem_iff (hl : l.SortedLT) {i j} {hi : i < l.length}
-    {hj : j < l.length} : l[i] <= l[j] ↔ i <= j := hl.strictMono_get.le_iff_le
+    {hj : j < l.length} : l[i] ≤ l[j] ↔ i ≤ j := hl.strictMono_get.le_iff_le
 
 @[simp]
-/--
-theorem `SortedGT.getElem_le_getElem_iff` / 定理 `SortedGT.getElem_le_getElem_iff`
-
-English:
-theorem SortedGT.getElem_le_getElem_iff
-  statement: (hl : l.SortedGT) {i j} {hi : i < l.length}
-  proof: hl.strictAnti_get.le_iff_ge
-
-@[simp]
-
-中文:
-定理 SortedGT.getElem_le_getElem_iff
-  结论: (hl : l.SortedGT) {i j} {hi : i < l.length}
-  证明: hl.strictAnti_get.le_iff_ge
-
-@[simp]
-
-Depends on / 依赖: hl.strictAnti_get.le_iff_ge, le_iff_ge, strictAnti_get
+/-
+**List.SortedGT.getElem_le_getElem_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedGT`
+。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : LinearOrder α],   l.SortedGT → ∀ {i 
+j : ℕ} {hi : i < l.length} {hj : j < l.length}, l[i] ≤ l[j] ↔ j ≤ i
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictAnti.le_iff_ge`：StrictAnti.le_iff_ge (hf : StrictAnti f) {a b : α}
+ : f a <= f b ↔ b <= a
+· 使用定理 `List.SortedGT.strictAnti_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedGT → StrictAnti l.get
 -/
 theorem SortedGT.getElem_le_getElem_iff (hl : l.SortedGT) {i j} {hi : i < l.length}
-    {hj : j < l.length} : l[i] <= l[j] ↔ j <= i := hl.strictAnti_get.le_iff_ge
+    {hj : j < l.length} : l[i] ≤ l[j] ↔ j ≤ i := hl.strictAnti_get.le_iff_ge
 
 @[simp]
-/--
-theorem `SortedLT.getElem_lt_getElem_iff` / 定理 `SortedLT.getElem_lt_getElem_iff`
-
-English:
-theorem SortedLT.getElem_lt_getElem_iff
-  statement: (hl : l.SortedLT) {i j} {hi : i < l.length}
-  proof: hl.strictMono_get.lt_iff_lt
-
-@[simp]
-
-中文:
-定理 SortedLT.getElem_lt_getElem_iff
-  结论: (hl : l.SortedLT) {i j} {hi : i < l.length}
-  证明: hl.strictMono_get.lt_iff_lt
-
-@[simp]
-
-Depends on / 依赖: hl.strictMono_get.lt_iff_lt, lt_iff_lt, strictMono_get
+/-
+**List.SortedLT.getElem_lt_getElem_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedLT`
+。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : LinearOrder α],   l.SortedLT → ∀ {i 
+j : ℕ} {hi : i < l.length} {hj : j < l.length}, l[i] < l[j] ↔ i < j
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `List.SortedLT.strictMono_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedLT → StrictMono l.get
 -/
 theorem SortedLT.getElem_lt_getElem_iff (hl : l.SortedLT) {i j} {hi : i < l.length}
     {hj : j < l.length} : l[i] < l[j] ↔ i < j := hl.strictMono_get.lt_iff_lt
 
 @[simp]
-/--
-theorem `SortedGT.getElem_lt_getElem_iff` / 定理 `SortedGT.getElem_lt_getElem_iff`
-
-English:
-theorem SortedGT.getElem_lt_getElem_iff
-  statement: (hl : l.SortedGT) {i j} {hi : i < l.length}
-  proof: hl.strictAnti_get.lt_iff_gt
-
-中文:
-定理 SortedGT.getElem_lt_getElem_iff
-  结论: (hl : l.SortedGT) {i j} {hi : i < l.length}
-  证明: hl.strictAnti_get.lt_iff_gt
-
-Depends on / 依赖: hl.strictAnti_get.lt_iff_gt, lt_iff_gt, strictAnti_get
+/-
+**List.SortedGT.getElem_lt_getElem_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.SortedGT`
+。
+形式化陈述：∀ {α : Type u_1} {l : List α} [inst : LinearOrder α],   l.SortedGT → ∀ {i 
+j : ℕ} {hi : i < l.length} {hj : j < l.length}, l[i] < l[j] ↔ j < i
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictAnti.lt_iff_gt`：StrictAnti.lt_iff_gt (hf : StrictAnti f) {a b : α}
+ : f a < f b ↔ b < a
+· 使用定理 `List.SortedGT.strictAnti_get`：∀ {α : Type u_1} {l : List α} [inst : Preo
+rder α], l.SortedGT → StrictAnti l.get
 -/
 theorem SortedGT.getElem_lt_getElem_iff (hl : l.SortedGT) {i j} {hi : i < l.length}
     {hj : j < l.length} : l[i] < l[j] ↔ j < i := hl.strictAnti_get.lt_iff_gt
@@ -2614,52 +2125,50 @@ namespace RelEmbedding
 
 open List
 
-variable {α β : Type*} {ra : α -> α -> Prop} {rb : β -> β -> Prop}
+variable {α β : Type*} {ra : α → α → Prop} {rb : β → β → Prop}
 
 @[simp]
-/--
-theorem `pairwise_listMap` / 定理 `pairwise_listMap`
-
-English:
-theorem pairwise_listMap
-  given: (e : ra ↪r rb) {l : List α}
-  statement: (l.map e).Pairwise rb ↔ l.Pairwise ra
-  proof: by
-  simp [pairwise_map, e.map_rel_iff]
-
-@[simp]
-
-中文:
-定理 pairwise_listMap
-  条件: (e : ra ↪r rb) {l : 列表 α}
-  结论: (l.map e).两两 rb ↔ l.两两 ra
-  证明: by
-  simp [pairwise_map, e.map_rel_iff]
-
-@[simp]
-
-Depends on / 依赖: e.map_rel_iff, map_rel_iff, pairwise_map
+/-
+**RelEmbedding.pairwise_listMap** 是 Mathlib 中的一个定理，位于命名空间 `RelEmbedding`。
+形式化陈述：pairwise_listMap (e : ra ↪r rb) {l : List α} : (l.map e).Pairwise rb ↔ l.P
+airwise ra
+参数：e : ra ↪r rb。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `RelEmbedding.map_rel_iff`：map_rel_iff (f : r ↪r s) {a b} : s (f a) (f b)
+ ↔ r a b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem pairwise_listMap (e : ra ↪r rb) {l : List α} : (l.map e).Pairwise rb ↔ l.Pairwise ra := by
   simp [pairwise_map, e.map_rel_iff]
 
 @[simp]
-/--
-theorem `pairwise_swap_listMap` / 定理 `pairwise_swap_listMap`
-
-English:
-theorem pairwise_swap_listMap
-  given: (e : ra ↪r rb) {l : List α}
-  proof: by
-  simp [pairwise_map, e.map_rel_iff]
-
-中文:
-定理 pairwise_swap_listMap
-  条件: (e : ra ↪r rb) {l : 列表 α}
-  证明: by
-  simp [pairwise_map, e.map_rel_iff]
-
-Depends on / 依赖: e.map_rel_iff, map_rel_iff, pairwise_map
+/-
+**RelEmbedding.pairwise_swap_listMap** 是 Mathlib 中的一个定理，位于命名空间 `RelEmbedding`。
+形式化陈述：pairwise_swap_listMap (e : ra ↪r rb) {l : List α} : (l.map e).Pairwise (Fu
+nction.swap rb) ↔ l.Pairwise (Function.swap ra)
+参数：e : ra ↪r rb。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `RelEmbedding.map_rel_iff`：map_rel_iff (f : r ↪r s) {a b} : s (f a) (f b)
+ ↔ r a b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem pairwise_swap_listMap (e : ra ↪r rb) {l : List α} :
     (l.map e).Pairwise (Function.swap rb) ↔ l.Pairwise (Function.swap ra) := by
@@ -2669,48 +2178,33 @@ end RelEmbedding
 
 namespace RelIso
 
-variable {α β : Type*} {ra : α -> α -> Prop} {rb : β -> β -> Prop}
+variable {α β : Type*} {ra : α → α → Prop} {rb : β → β → Prop}
 
 @[simp]
-/--
-theorem `pairwise_listMap` / 定理 `pairwise_listMap`
-
-English:
-theorem pairwise_listMap
-  given: (e : ra ≃r rb) {l : List α}
-  statement: (l.map e).Pairwise rb ↔ l.Pairwise ra
-  proof: e.toRelEmbedding.pairwise_listMap
-
-@[simp]
-
-中文:
-定理 pairwise_listMap
-  条件: (e : ra ≃r rb) {l : 列表 α}
-  结论: (l.map e).两两 rb ↔ l.两两 ra
-  证明: e.toRelEmbedding.pairwise_listMap
-
-@[simp]
-
-Depends on / 依赖: e.toRelEmbedding.pairwise_listMap, pairwise_listMap, toRelEmbedding
+/-
+**RelIso.pairwise_listMap** 是 Mathlib 中的一个定理，位于命名空间 `RelIso`。
+形式化陈述：pairwise_listMap (e : ra ≃r rb) {l : List α} : (l.map e).Pairwise rb ↔ l.P
+airwise ra
+参数：e : ra ≃r rb。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RelEmbedding.pairwise_listMap`：pairwise_listMap (e : ra ↪r rb) {l : List
+ α} : (l.map e).Pairwise rb ↔ l.Pairwise ra
 -/
 theorem pairwise_listMap (e : ra ≃r rb) {l : List α} : (l.map e).Pairwise rb ↔ l.Pairwise ra :=
   e.toRelEmbedding.pairwise_listMap
 
 @[simp]
-/--
-theorem `pairwise_swap_listMap` / 定理 `pairwise_swap_listMap`
-
-English:
-theorem pairwise_swap_listMap
-  given: (e : ra ≃r rb) {l : List α}
-  proof: e.toRelEmbedding.pairwise_swap_listMap
-
-中文:
-定理 pairwise_swap_listMap
-  条件: (e : ra ≃r rb) {l : 列表 α}
-  证明: e.toRelEmbedding.pairwise_swap_listMap
-
-Depends on / 依赖: e.toRelEmbedding.pairwise_swap_listMap, pairwise_swap_listMap, toRelEmbedding
+/-
+**RelIso.pairwise_swap_listMap** 是 Mathlib 中的一个定理，位于命名空间 `RelIso`。
+形式化陈述：pairwise_swap_listMap (e : ra ≃r rb) {l : List α} : (l.map e).Pairwise (Fu
+nction.swap rb) ↔ l.Pairwise (Function.swap ra)
+参数：e : ra ≃r rb。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RelEmbedding.pairwise_swap_listMap`：pairwise_swap_listMap (e : ra ↪r rb)
+ {l : List α} : (l.map e).Pairwise (Function.swap rb) ↔ l.Pairwise (Function.swa
+p ra)
 -/
 theorem pairwise_swap_listMap (e : ra ≃r rb) {l : List α} :
     (l.map e).Pairwise (Function.swap rb) ↔ l.Pairwise (Function.swap ra) :=
@@ -2725,54 +2219,43 @@ open List
 variable {α β : Type*} [Preorder α] [Preorder β]
 
 @[simp]
-/--
-theorem `sortedLE_listMap` / 定理 `sortedLE_listMap`
-
-English:
-theorem sortedLE_listMap
-  given: (e : α ↪o β) {l : List α}
-  proof: by
-  simp_rw [sortedLE_iff_pairwise, e.pairwise_listMap]
-
-@[simp]
-
-中文:
-定理 sortedLE_listMap
-  条件: (e : α ↪o β) {l : 列表 α}
-  证明: by
-  simp_rw [sortedLE_iff_pairwise, e.pairwise_listMap]
-
-@[simp]
-
-Depends on / 依赖: e.pairwise_listMap, pairwise_listMap, simp_rw, sortedLE_iff_pairwise
+/-
+**OrderEmbedding.sortedLE_listMap** 是 Mathlib 中的一个定理，位于命名空间 `OrderEmbedding`。
+形式化陈述：sortedLE_listMap (e : α ↪o β) {l : List α} : (l.map e).SortedLE ↔ l.Sorted
+LE
+参数：e : α ↪o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RelEmbedding.pairwise_listMap`：pairwise_listMap (e : ra ↪r rb) {l : List
+ α} : (l.map e).Pairwise rb ↔ l.Pairwise ra
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sortedLE_listMap (e : α ↪o β) {l : List α} :
     (l.map e).SortedLE ↔ l.SortedLE := by
   simp_rw [sortedLE_iff_pairwise, e.pairwise_listMap]
 
 @[simp]
-/--
-theorem `sortedLT_listMap` / 定理 `sortedLT_listMap`
-
-English:
-theorem sortedLT_listMap
-  given: (e : α ↪o β) {l : List α}
-  proof: by
-  simp_rw [sortedLT_iff_pairwise]
-  exact e.ltEmbedding.pairwise_listMap
-
-@[simp]
-
-中文:
-定理 sortedLT_listMap
-  条件: (e : α ↪o β) {l : 列表 α}
-  证明: by
-  simp_rw [sortedLT_iff_pairwise]
-  exact e.ltEmbedding.pairwise_listMap
-
-@[simp]
-
-Depends on / 依赖: e.ltEmbedding.pairwise_listMap, ltEmbedding, pairwise_listMap, simp_rw, sortedLT_iff_pairwise
+/-
+**OrderEmbedding.sortedLT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `OrderEmbedding`。
+形式化陈述：sortedLT_listMap (e : α ↪o β) {l : List α} : (l.map e).SortedLT ↔ l.Sorted
+LT
+参数：e : α ↪o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RelEmbedding.pairwise_listMap`：pairwise_listMap (e : ra ↪r rb) {l : List
+ α} : (l.map e).Pairwise rb ↔ l.Pairwise ra
 -/
 theorem sortedLT_listMap (e : α ↪o β) {l : List α} :
     (l.map e).SortedLT ↔ l.SortedLT := by
@@ -2780,48 +2263,44 @@ theorem sortedLT_listMap (e : α ↪o β) {l : List α} :
   exact e.ltEmbedding.pairwise_listMap
 
 @[simp]
-/--
-theorem `sortedGE_listMap` / 定理 `sortedGE_listMap`
-
-English:
-theorem sortedGE_listMap
-  given: (e : α ↪o β) {l : List α}
-  proof: by
-  simp_rw [← sortedLE_reverse, ← map_reverse, sortedLE_listMap]
-
-@[simp]
-
-中文:
-定理 sortedGE_listMap
-  条件: (e : α ↪o β) {l : 列表 α}
-  证明: by
-  simp_rw [← sortedLE_reverse, ← map_reverse, sortedLE_listMap]
-
-@[simp]
-
-Depends on / 依赖: map_reverse, simp_rw, sortedLE_listMap, sortedLE_reverse
+/-
+**OrderEmbedding.sortedGE_listMap** 是 Mathlib 中的一个定理，位于命名空间 `OrderEmbedding`。
+形式化陈述：sortedGE_listMap (e : α ↪o β) {l : List α} : (l.map e).SortedGE ↔ l.Sorted
+GE
+参数：e : α ↪o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sortedGE_listMap (e : α ↪o β) {l : List α} :
     (l.map e).SortedGE ↔ l.SortedGE := by
   simp_rw [← sortedLE_reverse, ← map_reverse, sortedLE_listMap]
 
 @[simp]
-/--
-theorem `sortedGT_listMap` / 定理 `sortedGT_listMap`
-
-English:
-theorem sortedGT_listMap
-  given: (e : α ↪o β) {l : List α}
-  proof: by
-  simp_rw [← sortedLT_reverse, ← map_reverse, sortedLT_listMap]
-
-中文:
-定理 sortedGT_listMap
-  条件: (e : α ↪o β) {l : 列表 α}
-  证明: by
-  simp_rw [← sortedLT_reverse, ← map_reverse, sortedLT_listMap]
-
-Depends on / 依赖: OrderIso, OrderIso.finsetSetFinite.symm.toOrderEmbedding.wellFoundedLT, finsetSetFinite, map_reverse, simp_rw, sortedLT_listMap, sortedLT_reverse, toOrderEmbedding, wellFoundedLT
+/-
+**OrderEmbedding.sortedGT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `OrderEmbedding`。
+形式化陈述：sortedGT_listMap (e : α ↪o β) {l : List α} : (l.map e).SortedGT ↔ l.Sorted
+GT
+参数：e : α ↪o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sortedGT_listMap (e : α ↪o β) {l : List α} :
     (l.map e).SortedGT ↔ l.SortedGT := by
@@ -2834,44 +2313,30 @@ namespace OrderIso
 variable {α β : Type*} [Preorder α] [Preorder β]
 
 @[simp]
-/--
-theorem `sortedLT_listMap` / 定理 `sortedLT_listMap`
-
-English:
-theorem sortedLT_listMap
-  given: (e : α ≃o β) {l : List α}
-  proof: e.toOrderEmbedding.sortedLT_listMap
-
-@[simp]
-
-中文:
-定理 sortedLT_listMap
-  条件: (e : α ≃o β) {l : 列表 α}
-  证明: e.toOrderEmbedding.sortedLT_listMap
-
-@[simp]
-
-Depends on / 依赖: e.toOrderEmbedding.sortedLT_listMap, sortedLT_listMap, toOrderEmbedding
+/-
+**OrderIso.sortedLT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：sortedLT_listMap (e : α ≃o β) {l : List α} : (l.map e).SortedLT ↔ l.Sorted
+LT
+参数：e : α ≃o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.sortedLT_listMap`：sortedLT_listMap (e : α ↪o β) {l : List
+ α} : (l.map e).SortedLT ↔ l.SortedLT
 -/
 theorem sortedLT_listMap (e : α ≃o β) {l : List α} :
     (l.map e).SortedLT ↔ l.SortedLT :=
   e.toOrderEmbedding.sortedLT_listMap
 
 @[simp]
-/--
-theorem `sortedGT_listMap` / 定理 `sortedGT_listMap`
-
-English:
-theorem sortedGT_listMap
-  given: (e : α ≃o β) {l : List α}
-  proof: e.toOrderEmbedding.sortedGT_listMap
-
-中文:
-定理 sortedGT_listMap
-  条件: (e : α ≃o β) {l : 列表 α}
-  证明: e.toOrderEmbedding.sortedGT_listMap
-
-Depends on / 依赖: e.toOrderEmbedding.sortedGT_listMap, sortedGT_listMap, toOrderEmbedding
+/-
+**OrderIso.sortedGT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：sortedGT_listMap (e : α ≃o β) {l : List α} : (l.map e).SortedGT ↔ l.Sorted
+GT
+参数：e : α ≃o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.sortedGT_listMap`：sortedGT_listMap (e : α ↪o β) {l : List
+ α} : (l.map e).SortedGT ↔ l.SortedGT
 -/
 theorem sortedGT_listMap (e : α ≃o β) {l : List α} :
     (l.map e).SortedGT ↔ l.SortedGT :=
@@ -2881,79 +2346,52 @@ end OrderIso
 
 namespace StrictMono
 
-variable {α β : Type*} [LinearOrder α] [Preorder β] {f : α -> β} {l : List α}
+variable {α β : Type*} [LinearOrder α] [Preorder β] {f : α → β} {l : List α}
 
-/--
-theorem `sortedLE_listMap` / 定理 `sortedLE_listMap`
-
-English:
-theorem sortedLE_listMap
-  given: (hf : StrictMono f)
-  proof: (OrderEmbedding.ofStrictMono f hf).sortedLE_listMap
-
-中文:
-定理 sortedLE_listMap
-  条件: (hf : 严格递增 f)
-  证明: (OrderEmbedding.ofStrictMono f hf).sortedLE_listMap
-
-Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedLE_listMap
+/-
+**StrictMono.sortedLE_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：sortedLE_listMap (hf : StrictMono f) : (l.map f).SortedLE ↔ l.SortedLE
+参数：hf : StrictMono f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.sortedLE_listMap`：sortedLE_listMap (e : α ↪o β) {l : List
+ α} : (l.map e).SortedLE ↔ l.SortedLE
 -/
 theorem sortedLE_listMap (hf : StrictMono f) :
     (l.map f).SortedLE ↔ l.SortedLE :=
   (OrderEmbedding.ofStrictMono f hf).sortedLE_listMap
-
-/--
-theorem `sortedGE_listMap` / 定理 `sortedGE_listMap`
-
-English:
-theorem sortedGE_listMap
-  given: (hf : StrictMono f)
-  proof: (OrderEmbedding.ofStrictMono f hf).sortedGE_listMap
-
-中文:
-定理 sortedGE_listMap
-  条件: (hf : 严格递增 f)
-  证明: (OrderEmbedding.ofStrictMono f hf).sortedGE_listMap
-
-Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedGE_listMap
+/-
+**StrictMono.sortedGE_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：sortedGE_listMap (hf : StrictMono f) : (l.map f).SortedGE ↔ l.SortedGE
+参数：hf : StrictMono f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.sortedGE_listMap`：sortedGE_listMap (e : α ↪o β) {l : List
+ α} : (l.map e).SortedGE ↔ l.SortedGE
 -/
 theorem sortedGE_listMap (hf : StrictMono f) :
     (l.map f).SortedGE ↔ l.SortedGE :=
   (OrderEmbedding.ofStrictMono f hf).sortedGE_listMap
-
-/--
-theorem `sortedLT_listMap` / 定理 `sortedLT_listMap`
-
-English:
-theorem sortedLT_listMap
-  given: (hf : StrictMono f)
-  proof: (OrderEmbedding.ofStrictMono f hf).sortedLT_listMap
-
-中文:
-定理 sortedLT_listMap
-  条件: (hf : 严格递增 f)
-  证明: (OrderEmbedding.ofStrictMono f hf).sortedLT_listMap
-
-Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedLT_listMap
+/-
+**StrictMono.sortedLT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：sortedLT_listMap (hf : StrictMono f) : (l.map f).SortedLT ↔ l.SortedLT
+参数：hf : StrictMono f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.sortedLT_listMap`：sortedLT_listMap (e : α ↪o β) {l : List
+ α} : (l.map e).SortedLT ↔ l.SortedLT
 -/
 theorem sortedLT_listMap (hf : StrictMono f) :
     (l.map f).SortedLT ↔ l.SortedLT :=
   (OrderEmbedding.ofStrictMono f hf).sortedLT_listMap
-
-/--
-theorem `sortedGT_listMap` / 定理 `sortedGT_listMap`
-
-English:
-theorem sortedGT_listMap
-  given: (hf : StrictMono f)
-  proof: (OrderEmbedding.ofStrictMono f hf).sortedGT_listMap
-
-中文:
-定理 sortedGT_listMap
-  条件: (hf : 严格递增 f)
-  证明: (OrderEmbedding.ofStrictMono f hf).sortedGT_listMap
-
-Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedGT_listMap
+/-
+**StrictMono.sortedGT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictMono`。
+形式化陈述：sortedGT_listMap (hf : StrictMono f) : (l.map f).SortedGT ↔ l.SortedGT
+参数：hf : StrictMono f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.sortedGT_listMap`：sortedGT_listMap (e : α ↪o β) {l : List
+ α} : (l.map e).SortedGT ↔ l.SortedGT
 -/
 theorem sortedGT_listMap (hf : StrictMono f) :
     (l.map f).SortedGT ↔ l.SortedGT :=
@@ -2965,90 +2403,48 @@ namespace StrictAnti
 
 open List
 
-variable {α β : Type*} [LinearOrder α] [Preorder β] {f : α -> β} {l : List α}
+variable {α β : Type*} [LinearOrder α] [Preorder β] {f : α → β} {l : List α}
 
-/--
-theorem `sortedLE_listMap` / 定理 `sortedLE_listMap`
-
-English:
-theorem sortedLE_listMap
-  given: (hf : StrictAnti f)
-  proof: by
-  grind [hf.le_iff_ge]
-
-中文:
-定理 sortedLE_listMap
-  条件: (hf : 严格递减 f)
-  证明: by
-  grind [hf.le_iff_ge]
-
-Depends on / 依赖: hf.le_iff_ge, le_iff_ge
+/-
+**StrictAnti.sortedLE_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：sortedLE_listMap (hf : StrictAnti f) : (l.map f).SortedLE ↔ l.SortedGE
+参数：hf : StrictAnti f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedLE_listMap (hf : StrictAnti f) :
     (l.map f).SortedLE ↔ l.SortedGE := by
   grind [hf.le_iff_ge]
-
-/--
-theorem `sortedGE_listMap` / 定理 `sortedGE_listMap`
-
-English:
-theorem sortedGE_listMap
-  given: (hf : StrictAnti f)
-  proof: by
-  grind [hf.le_iff_ge]
-
-中文:
-定理 sortedGE_listMap
-  条件: (hf : 严格递减 f)
-  证明: by
-  grind [hf.le_iff_ge]
-
-Depends on / 依赖: hf.le_iff_ge, le_iff_ge
+/-
+**StrictAnti.sortedGE_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：sortedGE_listMap (hf : StrictAnti f) : (l.map f).SortedGE ↔ l.SortedLE
+参数：hf : StrictAnti f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedGE_listMap (hf : StrictAnti f) :
     (l.map f).SortedGE ↔ l.SortedLE := by
   grind [hf.le_iff_ge]
-
-/--
-theorem `sortedLT_listMap` / 定理 `sortedLT_listMap`
-
-English:
-theorem sortedLT_listMap
-  given: (hf : StrictAnti f)
-  proof: by
-  grind [hf.lt_iff_gt]
-
-中文:
-定理 sortedLT_listMap
-  条件: (hf : 严格递减 f)
-  证明: by
-  grind [hf.lt_iff_gt]
-
-Depends on / 依赖: hf.lt_iff_gt, lt_iff_gt
+/-
+**StrictAnti.sortedLT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：sortedLT_listMap (hf : StrictAnti f) : (l.map f).SortedLT ↔ l.SortedGT
+参数：hf : StrictAnti f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedLT_listMap (hf : StrictAnti f) :
     (l.map f).SortedLT ↔ l.SortedGT := by
   grind [hf.lt_iff_gt]
-
-/--
-theorem `sortedGT_listMap` / 定理 `sortedGT_listMap`
-
-English:
-theorem sortedGT_listMap
-  given: (hf : StrictAnti f)
-  proof: by
-  grind [hf.lt_iff_gt]
-
-中文:
-定理 sortedGT_listMap
-  条件: (hf : 严格递减 f)
-  证明: by
-  grind [hf.lt_iff_gt]
-
-Depends on / 依赖: hf.lt_iff_gt, lt_iff_gt
+/-
+**StrictAnti.sortedGT_listMap** 是 Mathlib 中的一个定理，位于命名空间 `StrictAnti`。
+形式化陈述：sortedGT_listMap (hf : StrictAnti f) : (l.map f).SortedGT ↔ l.SortedLT
+参数：hf : StrictAnti f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sortedGT_listMap (hf : StrictAnti f) :
     (l.map f).SortedGT ↔ l.SortedLT := by
   grind [hf.lt_iff_gt]
 
 end StrictAnti
+

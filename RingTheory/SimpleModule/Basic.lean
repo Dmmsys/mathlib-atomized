@@ -56,352 +56,329 @@ public import Mathlib.Algebra.NoZeroSMulDivisors.Basic
 
 variable {ι : Type*} (R S : Type*) [Ring R] [Ring S] (M : Type*) [AddCommGroup M] [Module R M]
 
-/--
-Definition of `IsSimpleModule` / `IsSimpleModule` 的定义
+/-- A module is simple when it has only two submodules, `⊥` and `⊤`. -/
+/-
+**IsSimpleModule** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_2) → [inst : Ring R] → (M : Type u_4) → [inst_1 : AddCommGroup
+ M] → [_root_.Module R M] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSimpleModule
-  parameters: extends
-  (no additional axioms)
-
-中文:
-类 是单模
-  参数: extends
-  (无附加公理)
+--- 原说明 ---
+A module is simple when it has only two submodules, `⊥` and `⊤`.
 -/
 @[mk_iff] class IsSimpleModule extends
   IsSimpleOrder (Submodule R M)
 
-/--
-Definition of `IsSemisimpleModule` / `IsSemisimpleModule` 的定义
+/-- A module is semisimple when every submodule has a complement, or equivalently, the module
+  is a direct sum of simple modules. -/
+/-
+**IsSemisimpleModule** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_2) → [inst : Ring R] → (M : Type u_4) → [inst_1 : AddCommGroup
+ M] → [_root_.Module R M] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSemisimpleModule
-  parameters: extends
-  (no additional axioms)
-
-中文:
-类 是半单模
-  参数: extends
-  (无附加公理)
+--- 原说明 ---
+A module is semisimple when every submodule has a complement, or equivalently, t
+he module
+  is a direct sum of simple modules.
 -/
 @[mk_iff] class IsSemisimpleModule extends
   ComplementedLattice (Submodule R M)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsSimpleModule
-  signature: R M] : IsSemisimpleModule R M where
-
-中文:
-实例 [是单模
-  签名: R M] : 是半单模 R M where
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsSimpleModule R M] : IsSemisimpleModule R M where
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R) [DivisionRing R] : IsSimpleModule R R where
 
-/--
-Definition of `IsSemisimpleRing` / `IsSemisimpleRing` 的定义
+/-- A ring is semisimple if it is semisimple as a module over itself. -/
+/-
+**IsSemisimpleRing** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IsSemisimpleRing
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsSemisimpleRing
-  body: IsSemisimpleModule R R
-
-中文:
-缩写 IsSemisimpleRing
-  定义体: IsSemisimpleModule R R
-
-Depends on / 依赖: IsSemisimpleModule
+--- 原说明 ---
+A ring is semisimple if it is semisimple as a module over itself.
 -/
 abbrev IsSemisimpleRing := IsSemisimpleModule R R
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [Subsingleton R] : IsSemisimpleRing R :=
   (isSemisimpleModule_iff R R).mpr Subsingleton.instComplementedLattice
 
 variable {R S} in
-/--
-theorem `RingEquiv.isSemisimpleRing` / 定理 `RingEquiv.isSemisimpleRing`
-
-English:
-theorem RingEquiv.isSemisimpleRing
-  given: (e : R ≃+* S) [IsSemisimpleRing R]
-  statement: IsSemisimpleRing S where
-  proof: have := RingHomInvPair.of_ringEquiv e; have := this.symm
-    (Submodule.orderIsoMapComap e.toSemilinearEquiv).complementedLattice
-
-中文:
-定理 环等价.isSemisimpleRing
-  条件: (e : R ≃+* S) [IsSemisimpleRing R]
-  结论: IsSemisimpleRing S where
-  证明: have := RingHomInvPair.of_ringEquiv e; have := this.symm
-    (Submodule.orderIsoMapComap e.toSemilinearEquiv).complementedLattice
-
-Depends on / 依赖: RingHomInvPair, RingHomInvPair.of_ringEquiv, of_ringEquiv, this.symm
+/-
+**RingEquiv.isSemisimpleRing** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingEquiv.isSemisimpleRing (e : R ≃+* S) [IsSemisimpleRing R] : IsSemisimp
+leRing S where __
+参数：e : R ≃+* S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用引理 `RingHomInvPair.of_ringEquiv`：of_ringEquiv (e : R₁ ≃+* R₂) : RingHomInvPa
+ir (↑e : R₁ ->+* R₂) ↑e.symm
+· 使用定理 `RingHomInvPair.symm`：symm (σ₁₂ : R₁ ->+* R₂) (σ₂₁ : R₂ ->+* R₁) [RingHom
+InvPair σ₁₂ σ₂₁] : RingHomInvPair σ₂₁ σ₁₂
+· 使用定理 `OrderIso.complementedLattice`：OrderIso.complementedLattice [Complemented
+Lattice α] (f : α ≃o β) : ComplementedLattice β
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
+· 使用定理 `RingHomSurjective.instToRingHomRingEquiv`：∀ {R₁ : Type u_1} {R₂ : Type u
+_2} [inst : Semiring R₁] [inst_1 : Semiring R₂] (σ : R₁ ≃+* R₂), RingHomSurjecti
+ve ↑σ
 -/
 theorem RingEquiv.isSemisimpleRing (e : R ≃+* S) [IsSemisimpleRing R] : IsSemisimpleRing S where
   __ := have := RingHomInvPair.of_ringEquiv e; have := this.symm
     (Submodule.orderIsoMapComap e.toSemilinearEquiv).complementedLattice
 
 variable {R S} in
-/--
-theorem `RingEquiv.isSemisimpleRing_iff` / 定理 `RingEquiv.isSemisimpleRing_iff`
-
-English:
-theorem RingEquiv.isSemisimpleRing_iff
-  given: (e : R ≃+* S)
-  statement: IsSemisimpleRing R ↔ IsSemisimpleRing S
-  proof: ⟨fun _ => e.isSemisimpleRing, fun _ => e.symm.isSemisimpleRing⟩
-
-中文:
-定理 环等价.isSemisimpleRing_iff
-  条件: (e : R ≃+* S)
-  结论: IsSemisimpleRing R ↔ IsSemisimpleRing S
-  证明: ⟨fun _ => e.isSemisimpleRing, fun _ => e.symm.isSemisimpleRing⟩
-
-Depends on / 依赖: e.isSemisimpleRing, e.symm.isSemisimpleRing, isSemisimpleRing
+/-
+**RingEquiv.isSemisimpleRing_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingEquiv.isSemisimpleRing_iff (e : R ≃+* S) : IsSemisimpleRing R ↔ IsSemi
+simpleRing S
+参数：e : R ≃+* S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquiv.isSemisimpleRing`：RingEquiv.isSemisimpleRing (e : R ≃+* S) [Is
+SemisimpleRing R] : IsSemisimpleRing S where __
 -/
 theorem RingEquiv.isSemisimpleRing_iff (e : R ≃+* S) : IsSemisimpleRing R ↔ IsSemisimpleRing S :=
-  ⟨fun _ => e.isSemisimpleRing, fun _ => e.symm.isSemisimpleRing⟩
-
-/--
-theorem `IsSimpleModule.nontrivial` / 定理 `IsSimpleModule.nontrivial`
-
-English:
-theorem IsSimpleModule.nontrivial
-  given: [IsSimpleModule R M]
-  statement: Nontrivial M
-  proof: ⟨⟨0, by
-      have h : (⊥ : Submodule R M) != ⊤ := bot_ne_top
-      contrapose! h
-      ext x
-      simp [Submodule.mem_bot, Submodule.mem_top, h x]⟩⟩
-
-中文:
-定理 是单模.nontrivial
-  条件: [是单模 R M]
-  结论: 非平凡 M
-  证明: ⟨⟨0, by
-      have h : (⊥ : Submodule R M) != ⊤ := bot_ne_top
-      contrapose! h
-      ext x
-      simp [Submodule.mem_bot, Submodule.mem_top, h x]⟩⟩
-
-Depends on / 依赖: Submodule, Submodule.mem_bot, Submodule.mem_top, bot_ne_top, contrapose, mem_bot, mem_top
+  ⟨fun _ ↦ e.isSemisimpleRing, fun _ ↦ e.symm.isSemisimpleRing⟩
+/-
+**IsSimpleModule.nontrivial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSimpleModule.nontrivial [IsSimpleModule R M] : Nontrivial M
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_ne_top`：bot_ne_top : (⊥ : α) != ⊤
+· 使用定理 `IsSimpleOrder.toNontrivial`：∀ {α : Type u_4} {inst : LE α} {inst_1 : Bou
+ndedOrder α} [self : IsSimpleOrder α], Nontrivial α
+· 使用定理 `IsSimpleModule.toIsSimpleOrder`：∀ {R : Type u_2} {inst : Ring R} {M : Ty
+pe u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self : IsSimpl
+eModule R M], IsSimp…
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem IsSimpleModule.nontrivial [IsSimpleModule R M] : Nontrivial M :=
   ⟨⟨0, by
-      have h : (⊥ : Submodule R M) != ⊤ := bot_ne_top
+      have h : (⊥ : Submodule R M) ≠ ⊤ := bot_ne_top
       contrapose! h
       ext x
       simp [Submodule.mem_bot, Submodule.mem_top, h x]⟩⟩
 
 variable {m : Submodule R M} {N : Type*} [AddCommGroup N] {R S M}
-
-/--
-theorem `LinearMap.isSimpleModule_iff_of_bijective` / 定理 `LinearMap.isSimpleModule_iff_of_bijective`
-
-English:
-theorem LinearMap.isSimpleModule_iff_of_bijective
-  statement: [Module S N] {σ : R ->+* S} [RingHomSurjective σ]
-  proof: by
-  simp_rw [isSimpleModule_iff, (Submodule.orderIsoMapComapOfBijective l hl).isSimpleOrder_iff]
-
-中文:
-定理 线性映射.isSimpleModule_iff_of_bijective
-  结论: [模 S N] {σ : R ->+* S} [RingHomSurjective σ]
-  证明: by
-  simp_rw [isSimpleModule_iff, (Submodule.orderIsoMapComapOfBijective l hl).isSimpleOrder_iff]
-
-Depends on / 依赖: Submodule, Submodule.orderIsoMapComapOfBijective, isSimpleModule_iff, isSimpleOrder_iff, orderIsoMapComapOfBijective, simp_rw
+/-
+**LinearMap.isSimpleModule_iff_of_bijective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearMap.isSimpleModule_iff_of_bijective [Module S N] {σ : R ->+* S} [Rin
+gHomSurjective σ] (l : M ->ₛₗ[σ] N) (hl : Function.Bijective l) : IsSimpleModule
+ R M ↔ IsSimpleModule S N
+参数：l : M ->ₛₗ[σ] N；hl : Function.Bijective l。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `OrderIso.isSimpleOrder_iff`：isSimpleOrder_iff [BoundedOrder α] [BoundedO
+rder β] (f : α ≃o β) : IsSimpleOrder α ↔ IsSimpleOrder β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem LinearMap.isSimpleModule_iff_of_bijective [Module S N] {σ : R ->+* S} [RingHomSurjective σ]
-    (l : M ->ₛₗ[σ] N) (hl : Function.Bijective l) : IsSimpleModule R M ↔ IsSimpleModule S N := by
+theorem LinearMap.isSimpleModule_iff_of_bijective [Module S N] {σ : R →+* S} [RingHomSurjective σ]
+    (l : M →ₛₗ[σ] N) (hl : Function.Bijective l) : IsSimpleModule R M ↔ IsSimpleModule S N := by
   simp_rw [isSimpleModule_iff, (Submodule.orderIsoMapComapOfBijective l hl).isSimpleOrder_iff]
-
-/--
-lemma `isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective` / 引理 `isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective`
-
-English:
-lemma isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective
-  proof: by
-  rw [isSimpleModule_iff]; rw [isSimpleModule_iff]; rw [(Submodule.orderIsoOfAlgebraMapSurjective h).isSimpleOrder_iff]
-
-中文:
-引理 isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective
-  证明: by
-  rw [isSimpleModule_iff]; rw [isSimpleModule_iff]; rw [(Submodule.orderIsoOfAlgebraMapSurjective h).isSimpleOrder_iff]
-
-Depends on / 依赖: Submodule, Submodule.orderIsoOfAlgebraMapSurjective, isSimpleModule_iff, isSimpleOrder_iff, orderIsoOfAlgebraMapSurjective
+/-
+**isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective** 是 Mathlib 中的一个引理，
+位于命名空间 ``。
+形式化陈述：isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective {R : Type*} [Co
+mmRing R] [Algebra R S] [Module R M] [Module S M] [IsScalarTower R S M] (h : Fun
+ction.Surjective (algebraMap R S)) : IsSimpleModule R M ↔ IsSimpleModule S M
+参数：h : Function.Surjective (algebraMap R S)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isSimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSimpleModule R M ↔ IsSim
+pleOrder…
+· 使用定理 `OrderIso.isSimpleOrder_iff`：isSimpleOrder_iff [BoundedOrder α] [BoundedO
+rder β] (f : α ≃o β) : IsSimpleOrder α ↔ IsSimpleOrder β
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective
     {R : Type*} [CommRing R] [Algebra R S] [Module R M] [Module S M] [IsScalarTower R S M]
     (h : Function.Surjective (algebraMap R S)) : IsSimpleModule R M ↔ IsSimpleModule S M := by
-  rw [isSimpleModule_iff]; rw [isSimpleModule_iff]; rw [(Submodule.orderIsoOfAlgebraMapSurjective h).isSimpleOrder_iff]
+  rw [isSimpleModule_iff, isSimpleModule_iff,
+    (Submodule.orderIsoOfAlgebraMapSurjective h).isSimpleOrder_iff]
 
 variable [Module R N]
-
-/--
-theorem `IsSimpleModule.congr` / 定理 `IsSimpleModule.congr`
-
-English:
-theorem IsSimpleModule.congr
-  given: (e : M ≃ₗ[R] N) [IsSimpleModule R N]
-  statement: IsSimpleModule R M where
-  proof: (Submodule.orderIsoMapComap e).isSimpleOrder
-
-中文:
-定理 是单模.congr
-  条件: (e : M ≃ₗ[R] N) [是单模 R N]
-  结论: 是单模 R M where
-  证明: (Submodule.orderIsoMapComap e).isSimpleOrder
-
-Depends on / 依赖: Submodule, Submodule.orderIsoMapComap, isSimpleOrder, orderIsoMapComap
+/-
+**IsSimpleModule.congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSimpleModule.congr (e : M ≃ₗ[R] N) [IsSimpleModule R N] : IsSimpleModule
+ R M where __
+参数：e : M ≃ₗ[R] N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isSimpleOrder`：isSimpleOrder [BoundedOrder α] [BoundedOrder β] 
+[h : IsSimpleOrder β] (f : α ≃o β) : IsSimpleOrder α
+· 使用定理 `IsSimpleModule.toIsSimpleOrder`：∀ {R : Type u_2} {inst : Ring R} {M : Ty
+pe u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self : IsSimpl
+eModule R M], IsSimp…
 -/
 theorem IsSimpleModule.congr (e : M ≃ₗ[R] N) [IsSimpleModule R N] : IsSimpleModule R M where
   __ := (Submodule.orderIsoMapComap e).isSimpleOrder
-
-/--
-theorem `LinearEquiv.isSimpleModule_iff` / 定理 `LinearEquiv.isSimpleModule_iff`
-
-English:
-theorem LinearEquiv.isSimpleModule_iff
-  given: (e : M ≃ₗ[R] N)
-  statement: IsSimpleModule R M ↔ IsSimpleModule R N
-  proof: ⟨(·.congr e.symm), (·.congr e)⟩
-
-中文:
-定理 线性等价.isSimpleModule_iff
-  条件: (e : M ≃ₗ[R] N)
-  结论: 是单模 R M ↔ 是单模 R N
-  证明: ⟨(·.congr e.symm), (·.congr e)⟩
-
-Depends on / 依赖: e.symm
+/-
+**LinearEquiv.isSimpleModule_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearEquiv.isSimpleModule_iff (e : M ≃ₗ[R] N) : IsSimpleModule R M ↔ IsSi
+mpleModule R N
+参数：e : M ≃ₗ[R] N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSimpleModule.congr`：IsSimpleModule.congr (e : M ≃ₗ[R] N) [IsSimpleModu
+le R N] : IsSimpleModule R M where __
 -/
 theorem LinearEquiv.isSimpleModule_iff (e : M ≃ₗ[R] N) : IsSimpleModule R M ↔ IsSimpleModule R N :=
   ⟨(·.congr e.symm), (·.congr e)⟩
-
-/--
-theorem `isSimpleModule_iff_isAtom` / 定理 `isSimpleModule_iff_isAtom`
-
-English:
-theorem isSimpleModule_iff_isAtom
-  statement: IsSimpleModule R m ↔ IsAtom m
-  proof: by
-  rw [← Set.isSimpleOrder_Iic_iff_isAtom]; rw [isSimpleModule_iff]
-  exact m.mapIic.isSimpleOrder_iff
-
-中文:
-定理 isSimpleModule_iff_isAtom
-  结论: 是单模 R m ↔ IsAtom m
-  证明: by
-  rw [← Set.isSimpleOrder_Iic_iff_isAtom]; rw [isSimpleModule_iff]
-  exact m.mapIic.isSimpleOrder_iff
-
-Depends on / 依赖: Set.isSimpleOrder_Iic_iff_isAtom, isSimpleModule_iff, isSimpleOrder_Iic_iff_isAtom, isSimpleOrder_iff, m.mapIic.isSimpleOrder_iff, mapIic
+/-
+**isSimpleModule_iff_isAtom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSimpleModule_iff_isAtom : IsSimpleModule R m ↔ IsAtom m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.isSimpleOrder_Iic_iff_isAtom`：isSimpleOrder_Iic_iff_isAtom [PartialO
+rder α] [OrderBot α] {a : α} : IsSimpleOrder (Iic a) ↔ IsAtom a
+· 使用定理 `isSimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSimpleModule R M ↔ IsSim
+pleOrder…
+· 使用定理 `OrderIso.isSimpleOrder_iff`：isSimpleOrder_iff [BoundedOrder α] [BoundedO
+rder β] (f : α ≃o β) : IsSimpleOrder α ↔ IsSimpleOrder β
 -/
 theorem isSimpleModule_iff_isAtom : IsSimpleModule R m ↔ IsAtom m := by
-  rw [← Set.isSimpleOrder_Iic_iff_isAtom]; rw [isSimpleModule_iff]
+  rw [← Set.isSimpleOrder_Iic_iff_isAtom, isSimpleModule_iff]
   exact m.mapIic.isSimpleOrder_iff
-
-/--
-theorem `isSimpleModule_iff_isCoatom` / 定理 `isSimpleModule_iff_isCoatom`
-
-English:
-theorem isSimpleModule_iff_isCoatom
-  statement: IsSimpleModule R (M ⧸ m) ↔ IsCoatom m
-  proof: by
-  rw [← Set.isSimpleOrder_Ici_iff_isCoatom]; rw [isSimpleModule_iff]
-  exact (Submodule.comapMkQRelIso m).isSimpleOrder_iff
-
-中文:
-定理 isSimpleModule_iff_isCoatom
-  结论: 是单模 R (M ⧸ m) ↔ IsCoatom m
-  证明: by
-  rw [← Set.isSimpleOrder_Ici_iff_isCoatom]; rw [isSimpleModule_iff]
-  exact (Submodule.comapMkQRelIso m).isSimpleOrder_iff
-
-Depends on / 依赖: Set.isSimpleOrder_Ici_iff_isCoatom, Submodule, Submodule.comapMkQRelIso, comapMkQRelIso, isSimpleModule_iff, isSimpleOrder_Ici_iff_isCoatom, isSimpleOrder_iff
+/-
+**isSimpleModule_iff_isCoatom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSimpleModule_iff_isCoatom : IsSimpleModule R (M ⧸ m) ↔ IsCoatom m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.isSimpleOrder_Ici_iff_isCoatom`：isSimpleOrder_Ici_iff_isCoatom [Part
+ialOrder α] [OrderTop α] {a : α} : IsSimpleOrder (Ici a) ↔ IsCoatom a
+· 使用定理 `isSimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSimpleModule R M ↔ IsSim
+pleOrder…
+· 使用定理 `OrderIso.isSimpleOrder_iff`：isSimpleOrder_iff [BoundedOrder α] [BoundedO
+rder β] (f : α ≃o β) : IsSimpleOrder α ↔ IsSimpleOrder β
 -/
 theorem isSimpleModule_iff_isCoatom : IsSimpleModule R (M ⧸ m) ↔ IsCoatom m := by
-  rw [← Set.isSimpleOrder_Ici_iff_isCoatom]; rw [isSimpleModule_iff]
+  rw [← Set.isSimpleOrder_Ici_iff_isCoatom, isSimpleModule_iff]
   exact (Submodule.comapMkQRelIso m).isSimpleOrder_iff
-
-/--
-theorem `covBy_iff_quot_is_simple` / 定理 `covBy_iff_quot_is_simple`
-
-English:
-theorem covBy_iff_quot_is_simple
-  given: {A B : Submodule R M} (hAB : A <= B)
-  proof: by
-  set f : Submodule R B ≃o Set.Iic B := B.mapIic with hf
-  rw [covBy_iff_coatom_Iic hAB]; rw [isSimpleModule_iff_isCoatom]; rw [← OrderIso.isCoatom_iff f]; rw [hf]
-  simp [-OrderIso.isCoatom_iff, Submodule.map_comap_subtype, inf_eq_right.2 hAB]
-
-中文:
-定理 covBy_iff_quot_is_simple
-  条件: {A B : 子模 R M} (hAB : A <= B)
-  证明: by
-  set f : Submodule R B ≃o Set.Iic B := B.mapIic with hf
-  rw [covBy_iff_coatom_Iic hAB]; rw [isSimpleModule_iff_isCoatom]; rw [← OrderIso.isCoatom_iff f]; rw [hf]
-  simp [-OrderIso.isCoatom_iff, Submodule.map_comap_subtype, inf_eq_right.2 hAB]
-
-Depends on / 依赖: B.mapIic, OrderIso, OrderIso.isCoatom_iff, Set.Iic, Submodule, Submodule.map_comap_subtype, covBy_iff_coatom_Iic, inf_eq_right, isCoatom_iff, isSimpleModule_iff_isCoatom, mapIic, map_comap_subtype
+/-
+**covBy_iff_quot_is_simple** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：covBy_iff_quot_is_simple {A B : Submodule R M} (hAB : A <= B) : A ⋖ B ↔ Is
+SimpleModule R (B ⧸ Submodule.comap B.subtype A)
+参数：hAB : A <= B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `covBy_iff_coatom_Iic`：covBy_iff_coatom_Iic (h : a <= b) : a ⋖ b ↔ IsCoat
+om (⟨a, h⟩ : Set.Iic b)
+· 使用定理 `isSimpleModule_iff_isCoatom`：isSimpleModule_iff_isCoatom : IsSimpleModul
+e R (M ⧸ m) ↔ IsCoatom m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.isCoatom_iff`：isCoatom_iff [OrderTop α] [OrderTop β] (f : α ≃o 
+β) (a : α) : IsCoatom (f a) ↔ IsCoatom a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.map_comap_subtype`：map_comap_subtype : map p.subtype (comap p.
+subtype p') = p ⊓ p'
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inf_eq_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+= b ↔ b ≤ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem covBy_iff_quot_is_simple {A B : Submodule R M} (hAB : A <= B) :
+theorem covBy_iff_quot_is_simple {A B : Submodule R M} (hAB : A ≤ B) :
     A ⋖ B ↔ IsSimpleModule R (B ⧸ Submodule.comap B.subtype A) := by
   set f : Submodule R B ≃o Set.Iic B := B.mapIic with hf
-  rw [covBy_iff_coatom_Iic hAB]; rw [isSimpleModule_iff_isCoatom]; rw [← OrderIso.isCoatom_iff f]; rw [hf]
+  rw [covBy_iff_coatom_Iic hAB, isSimpleModule_iff_isCoatom, ← OrderIso.isCoatom_iff f, hf]
   simp [-OrderIso.isCoatom_iff, Submodule.map_comap_subtype, inf_eq_right.2 hAB]
 
 namespace IsSimpleModule
 
 @[simp]
-/--
-theorem `isAtom` / 定理 `isAtom`
-
-English:
-theorem isAtom
-  given: [IsSimpleModule R m]
-  statement: IsAtom m
-  proof: isSimpleModule_iff_isAtom.1 ‹_›
-
-中文:
-定理 isAtom
-  条件: [是单模 R m]
-  结论: IsAtom m
-  证明: isSimpleModule_iff_isAtom.1 ‹_›
-
-Depends on / 依赖: isSimpleModule_iff_isAtom
+/-
+**IsSimpleModule.isAtom** 是 Mathlib 中的一个定理，位于命名空间 `IsSimpleModule`。
+形式化陈述：isAtom [IsSimpleModule R m] : IsAtom m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isSimpleModule_iff_isAtom`：isSimpleModule_iff_isAtom : IsSimpleModule R 
+m ↔ IsAtom m
 -/
 theorem isAtom [IsSimpleModule R m] : IsAtom m :=
   isSimpleModule_iff_isAtom.1 ‹_›
 
 variable [IsSimpleModule R M] (R)
 open LinearMap
-
-/--
-theorem `span_singleton_eq_top` / 定理 `span_singleton_eq_top`
-
-English:
-theorem span_singleton_eq_top
-  given: {m : M} (hm : m != 0)
-  statement: Submodule.span R {m} = ⊤
-  proof: (eq_bot_or_eq_top _).resolve_left fun h => hm (h.le <| Submodule.mem_span_singleton_self m)
-
-中文:
-定理 span_singleton_eq_top
-  条件: {m : M} (hm : m != 0)
-  结论: 子模.span R {m} = ⊤
-  证明: (eq_bot_or_eq_top _).resolve_left fun h => hm (h.le <| Submodule.mem_span_singleton_self m)
-
-Depends on / 依赖: Submodule, Submodule.mem_span_singleton_self, eq_bot_or_eq_top, h.le, mem_span_singleton_self, resolve_left
+/-
+**IsSimpleModule.span_singleton_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `IsSimpleModule
+`。
+形式化陈述：span_singleton_eq_top {m : M} (hm : m != 0) : Submodule.span R {m} = ⊤
+参数：hm : m != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `IsSimpleOrder.eq_bot_or_eq_top`：∀ {α : Type u_4} {inst : LE α} {inst_1 :
+ BoundedOrder α} [self : IsSimpleOrder α] (a : α), a = ⊥ ∨ a = ⊤
+· 使用定理 `IsSimpleModule.toIsSimpleOrder`：∀ {R : Type u_2} {inst : Ring R} {M : Ty
+pe u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self : IsSimpl
+eModule R M], IsSimp…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Submodule.mem_span_singleton_self`：mem_span_singleton_self (x : M) : x i
+n R ∙ x
 -/
-theorem span_singleton_eq_top {m : M} (hm : m != 0) : Submodule.span R {m} = ⊤ :=
-  (eq_bot_or_eq_top _).resolve_left fun h => hm (h.le <| Submodule.mem_span_singleton_self m)
-
+theorem span_singleton_eq_top {m : M} (hm : m ≠ 0) : Submodule.span R {m} = ⊤ :=
+  (eq_bot_or_eq_top _).resolve_left fun h ↦ hm (h.le <| Submodule.mem_span_singleton_self m)
+/-
+**IsSimpleModule.** 是 Mathlib 中的一个实例，位于命名空间 `IsSimpleModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : Submodule R M) : S.IsPrincipal where
   principal := by
     obtain rfl | rfl := eq_bot_or_eq_top S
@@ -409,206 +386,222 @@ instance (S : Submodule R M) : S.IsPrincipal where
     have := IsSimpleModule.nontrivial R M
     have ⟨m, hm⟩ := exists_ne (0 : M)
     exact ⟨m, (span_singleton_eq_top R hm).symm⟩
-
-/--
-theorem `toSpanSingleton_surjective` / 定理 `toSpanSingleton_surjective`
-
-English:
-theorem toSpanSingleton_surjective
-  given: {m : M} (hm : m != 0)
-  proof: by
-  rw [← range_eq_top]; rw [← span_singleton_eq_range]; rw [span_singleton_eq_top R hm]
-
-中文:
-定理 toSpanSingleton_surjective
-  条件: {m : M} (hm : m != 0)
-  证明: by
-  rw [← range_eq_top]; rw [← span_singleton_eq_range]; rw [span_singleton_eq_top R hm]
-
-Depends on / 依赖: range_eq_top, span_singleton_eq_range, span_singleton_eq_top
+/-
+**IsSimpleModule.toSpanSingleton_surjective** 是 Mathlib 中的一个定理，位于命名空间 `IsSimpleM
+odule`。
+形式化陈述：toSpanSingleton_surjective {m : M} (hm : m != 0) : Function.Surjective (to
+SpanSingleton R M m)
+参数：hm : m != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.span_singleton_eq_range`：span_singleton_eq_range (x : M) : R ∙
+ x = range (toSpanSingleton R M x)
+· 使用定理 `IsSimpleModule.span_singleton_eq_top`：span_singleton_eq_top {m : M} (hm 
+: m != 0) : Submodule.span R {m} = ⊤
 -/
-theorem toSpanSingleton_surjective {m : M} (hm : m != 0) :
+theorem toSpanSingleton_surjective {m : M} (hm : m ≠ 0) :
     Function.Surjective (toSpanSingleton R M m) := by
-  rw [← range_eq_top]; rw [← span_singleton_eq_range]; rw [span_singleton_eq_top R hm]
-
-/--
-theorem `ker_toSpanSingleton_isMaximal` / 定理 `ker_toSpanSingleton_isMaximal`
-
-English:
-theorem ker_toSpanSingleton_isMaximal
-  given: {m : M} (hm : m != 0)
-  proof: by
-  rw [Ideal.isMaximal_def]; rw [← isSimpleModule_iff_isCoatom]
-  exact congr (quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm)
-
-中文:
-定理 ker_toSpanSingleton_isMaximal
-  条件: {m : M} (hm : m != 0)
-  证明: by
-  rw [Ideal.isMaximal_def]; rw [← isSimpleModule_iff_isCoatom]
-  exact congr (quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm)
-
-Depends on / 依赖: Ideal.isMaximal_def, isMaximal_def, isSimpleModule_iff_isCoatom, quotKerEquivOfSurjective, toSpanSingleton_surjective
+  rw [← range_eq_top, ← span_singleton_eq_range, span_singleton_eq_top R hm]
+/-
+**IsSimpleModule.ker_toSpanSingleton_isMaximal** 是 Mathlib 中的一个定理，位于命名空间 `IsSimp
+leModule`。
+形式化陈述：ker_toSpanSingleton_isMaximal {m : M} (hm : m != 0) : Ideal.IsMaximal (ker
+ (toSpanSingleton R M m))
+参数：hm : m != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.isMaximal_def`：isMaximal_def {I : Ideal α} : I.IsMaximal ↔ IsCoato
+m I
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isSimpleModule_iff_isCoatom`：isSimpleModule_iff_isCoatom : IsSimpleModul
+e R (M ⧸ m) ↔ IsCoatom m
+· 使用定理 `IsSimpleModule.congr`：IsSimpleModule.congr (e : M ≃ₗ[R] N) [IsSimpleModu
+le R N] : IsSimpleModule R M where __
+· 使用定理 `IsSimpleModule.toSpanSingleton_surjective`：toSpanSingleton_surjective {m
+ : M} (hm : m != 0) : Function.Surjective (toSpanSingleton R M m)
 -/
-theorem ker_toSpanSingleton_isMaximal {m : M} (hm : m != 0) :
+theorem ker_toSpanSingleton_isMaximal {m : M} (hm : m ≠ 0) :
     Ideal.IsMaximal (ker (toSpanSingleton R M m)) := by
-  rw [Ideal.isMaximal_def]; rw [← isSimpleModule_iff_isCoatom]
+  rw [Ideal.isMaximal_def, ← isSimpleModule_iff_isCoatom]
   exact congr (quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm)
 
 open scoped IsSimpleOrder in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNoetherian R M
-  body: isNoetherian_iff'.mpr inferInstance
-
-中文:
-实例 :
-  签名: 是Noether R M
-  定义体: isNoetherian_iff'.mpr inferInstance
-
-Depends on / 依赖: DiscreteTopology, DiscreteTopology.eq_bot, bot_le, eq_bot, isNoetherian_iff
+/-
+**IsSimpleModule.** 是 Mathlib 中的一个实例，位于命名空间 `IsSimpleModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsNoetherian R M := isNoetherian_iff'.mpr inferInstance
 
 end IsSimpleModule
 
 open IsSimpleModule in
-/--
-theorem `isSimpleModule_iff_quot_maximal` / 定理 `isSimpleModule_iff_quot_maximal`
+/-- A module is simple iff it's isomorphic to the quotient of the ring by a maximal left ideal
+(not necessarily unique if the ring is not commutative). -/
+/-
+**isSimpleModule_iff_quot_maximal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSimpleModule_iff_quot_maximal : IsSimpleModule R M ↔ exists I : Ideal R,
+ I.IsMaximal ∧ Nonempty (M ≃ₗ[R] R ⧸ I)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSimpleModule.nontrivial`：IsSimpleModule.nontrivial [IsSimpleModule R M
+] : Nontrivial M
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用定理 `IsSimpleModule.ker_toSpanSingleton_isMaximal`：ker_toSpanSingleton_isMaxi
+mal {m : M} (hm : m != 0) : Ideal.IsMaximal (ker (toSpanSingleton R M m))
+· 使用定理 `IsSimpleModule.toSpanSingleton_surjective`：toSpanSingleton_surjective {m
+ : M} (hm : m != 0) : Function.Surjective (toSpanSingleton R M m)
+· 使用定理 `IsSimpleModule.congr`：IsSimpleModule.congr (e : M ≃ₗ[R] N) [IsSimpleModu
+le R N] : IsSimpleModule R M where __
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isSimpleModule_iff_isCoatom`：isSimpleModule_iff_isCoatom : IsSimpleModul
+e R (M ⧸ m) ↔ IsCoatom m
 
-English:
-theorem isSimpleModule_iff_quot_maximal
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨I, ⟨coatom⟩, ⟨equiv⟩⟩ => ?_⟩
-  · have := IsSimpleModule.nontrivial R M
-    have ⟨m, hm⟩ := exists_ne (0 : M)
-    exact ⟨_, ker_toSpanSingleton_isMaximal R hm,
-      ⟨(LinearMap.quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm).symm⟩⟩
-  · convert! congr equiv; rwa [isSimpleModule_iff_isCoatom]
-
-中文:
-定理 isSimpleModule_iff_quot_maximal
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨I, ⟨coatom⟩, ⟨equiv⟩⟩ => ?_⟩
-  · have := IsSimpleModule.nontrivial R M
-    have ⟨m, hm⟩ := exists_ne (0 : M)
-    exact ⟨_, ker_toSpanSingleton_isMaximal R hm,
-      ⟨(LinearMap.quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm).symm⟩⟩
-  · convert! congr equiv; rwa [isSimpleModule_iff_isCoatom]
-
-Depends on / 依赖: IsSimpleModule, IsSimpleModule.nontrivial, LinearMap, LinearMap.quotKerEquivOfSurjective, coatom, convert, exists_ne, isSimpleModule_iff_isCoatom, ker_toSpanSingleton_isMaximal, nontrivial, quotKerEquivOfSurjective, toSpanSingleton_surjective
+--- 原说明 ---
+A module is simple iff it's isomorphic to the quotient of the ring by a maximal 
+left ideal
+(not necessarily unique if the ring is not commutative).
 -/
 theorem isSimpleModule_iff_quot_maximal :
-    IsSimpleModule R M ↔ exists I : Ideal R, I.IsMaximal ∧ Nonempty (M ≃ₗ[R] R ⧸ I) := by
-  refine ⟨fun h => ?_, fun ⟨I, ⟨coatom⟩, ⟨equiv⟩⟩ => ?_⟩
+    IsSimpleModule R M ↔ ∃ I : Ideal R, I.IsMaximal ∧ Nonempty (M ≃ₗ[R] R ⧸ I) := by
+  refine ⟨fun h ↦ ?_, fun ⟨I, ⟨coatom⟩, ⟨equiv⟩⟩ ↦ ?_⟩
   · have := IsSimpleModule.nontrivial R M
     have ⟨m, hm⟩ := exists_ne (0 : M)
     exact ⟨_, ker_toSpanSingleton_isMaximal R hm,
       ⟨(LinearMap.quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm).symm⟩⟩
   · convert! congr equiv; rwa [isSimpleModule_iff_isCoatom]
 
-/--
-theorem `IsSimpleModule.annihilator_isMaximal` / 定理 `IsSimpleModule.annihilator_isMaximal`
+/-- In general, the annihilator of a simple module is called a primitive ideal, and it is
+always a two-sided prime ideal, but mathlib's `Ideal.IsPrime` is not the correct definition
+for noncommutative rings. -/
+/-
+**IsSimpleModule.annihilator_isMaximal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSimpleModule.annihilator_isMaximal {R} [CommRing R] [Module R M] [simple
+ : IsSimpleModule R M] : (Module.annihilator R M).IsMaximal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isSimpleModule_iff_quot_maximal`：isSimpleModule_iff_quot_maximal : IsSim
+pleModule R M ↔ exists I : Ideal R, I.IsMaximal ∧ Nonempty (M ≃ₗ[R] R ⧸ I)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.annihilator_eq`：LinearEquiv.annihilator_eq (e : M ≃ₗ[R] M') 
+: Module.annihilator R M = Module.annihilator R M'
+· 使用定理 `Ideal.annihilator_quotient`：∀ {R : Type u_1} [inst : Ring R] {I : Ideal 
+R} [I.IsTwoSided], Module.annihilator R (R ⧸ I) = I
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 
-English:
-theorem IsSimpleModule.annihilator_isMaximal
-  statement: {R} [CommRing R] [Module R M]
-  proof: by
-  have ⟨I, max, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp simple
-  rwa [e.annihilator_eq, I.annihilator_quotient]
-
-中文:
-定理 是单模.annihilator_isMaximal
-  结论: {R} [交换环 R] [模 R M]
-  证明: by
-  have ⟨I, max, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp simple
-  rwa [e.annihilator_eq, I.annihilator_quotient]
-
-Depends on / 依赖: I.annihilator_quotient, annihilator_eq, annihilator_quotient, e.annihilator_eq, isSimpleModule_iff_quot_maximal, isSimpleModule_iff_quot_maximal.mp, simple
+--- 原说明 ---
+In general, the annihilator of a simple module is called a primitive ideal, and 
+it is
+always a two-sided prime ideal, but mathlib's `Ideal.IsPrime` is not the correct
+ definition
+for noncommutative rings.
 -/
 theorem IsSimpleModule.annihilator_isMaximal {R} [CommRing R] [Module R M]
     [simple : IsSimpleModule R M] : (Module.annihilator R M).IsMaximal := by
   have ⟨I, max, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp simple
   rwa [e.annihilator_eq, I.annihilator_quotient]
-
-/--
-theorem `isSimpleModule_iff_toSpanSingleton_surjective` / 定理 `isSimpleModule_iff_toSpanSingleton_surjective`
-
-English:
-theorem isSimpleModule_iff_toSpanSingleton_surjective
-  statement: IsSimpleModule R M ↔
-  proof: ⟨h.nontrivial, fun _ => h.toSpanSingleton_surjective⟩
-  mpr := fun ⟨_, h⟩ => (isSimpleModule_iff R M).mpr
-    ⟨fun m => or_iff_not_imp_left.mpr fun ne_bot =>
-      have ⟨x, hxm, hx0⟩ := m.ne_bot_iff.mp ne_bot
-top_unique fun z _ => by obtain ⟨y, rfl⟩ := h x hx0 z; exact m.smul_mem _ hxm⟩
-
-中文:
-定理 isSimpleModule_iff_toSpanSingleton_surjective
-  结论: 是单模 R M ↔
-  证明: ⟨h.nontrivial, fun _ => h.toSpanSingleton_surjective⟩
-  mpr := fun ⟨_, h⟩ => (isSimpleModule_iff R M).mpr
-    ⟨fun m => or_iff_not_imp_left.mpr fun ne_bot =>
-      have ⟨x, hxm, hx0⟩ := m.ne_bot_iff.mp ne_bot
-top_unique fun z _ => by obtain ⟨y, rfl⟩ := h x hx0 z; exact m.smul_mem _ hxm⟩
-
-Depends on / 依赖: h.nontrivial, h.toSpanSingleton_surjective, nontrivial, toSpanSingleton_surjective
+/-
+**isSimpleModule_iff_toSpanSingleton_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSimpleModule_iff_toSpanSingleton_surjective : IsSimpleModule R M ↔ Nontr
+ivial M ∧ forall x : M, x != 0 -> Function.Surjective (LinearMap.toSpanSingleton
+ R M x) where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSimpleModule.nontrivial`：IsSimpleModule.nontrivial [IsSimpleModule R M
+] : Nontrivial M
+· 使用定理 `IsSimpleModule.toSpanSingleton_surjective`：toSpanSingleton_surjective {m
+ : M} (hm : m != 0) : Function.Surjective (toSpanSingleton R M m)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isSimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSimpleModule R M ↔ IsSim
+pleOrder…
+· 使用定理 `Submodule.instNontrivial`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Nontrivial M], 
+Nontrivial (Su…
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.ne_bot_iff`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R
+] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M),
+ p ≠ ⊥ ↔ ∃…
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
 -/
 theorem isSimpleModule_iff_toSpanSingleton_surjective : IsSimpleModule R M ↔
-    Nontrivial M ∧ forall x : M, x != 0 -> Function.Surjective (LinearMap.toSpanSingleton R M x) where
-  mp h := ⟨h.nontrivial, fun _ => h.toSpanSingleton_surjective⟩
-  mpr := fun ⟨_, h⟩ => (isSimpleModule_iff R M).mpr
-    ⟨fun m => or_iff_not_imp_left.mpr fun ne_bot =>
+    Nontrivial M ∧ ∀ x : M, x ≠ 0 → Function.Surjective (LinearMap.toSpanSingleton R M x) where
+  mp h := ⟨h.nontrivial, fun _ ↦ h.toSpanSingleton_surjective⟩
+  mpr := fun ⟨_, h⟩ ↦ (isSimpleModule_iff R M).mpr
+    ⟨fun m ↦ or_iff_not_imp_left.mpr fun ne_bot ↦
       have ⟨x, hxm, hx0⟩ := m.ne_bot_iff.mp ne_bot
-top_unique fun z _ => by obtain ⟨y, rfl⟩ := h x hx0 z; exact m.smul_mem _ hxm⟩
+      top_unique <| fun z _ ↦ by obtain ⟨y, rfl⟩ := h x hx0 z; exact m.smul_mem _ hxm⟩
 
-/--
-theorem `isSimpleModule_self_iff_isUnit` / 定理 `isSimpleModule_self_iff_isUnit`
+/-- A ring is a simple module over itself iff it is a division ring. -/
+/-
+**isSimpleModule_self_iff_isUnit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSimpleModule_self_iff_isUnit : IsSimpleModule R R ↔ Nontrivial R ∧ foral
+l x : R, x != 0 -> IsUnit x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `isSimpleModule_iff_toSpanSingleton_surjective`：isSimpleModule_iff_toSpan
+Singleton_surjective : IsSimpleModule R M ↔ Nontrivial M ∧ forall x : M, x != 0 
+-> Function.Surjective (LinearMap.t…
+· 使用定理 `and_congr_right`：∀ {a b c : Prop}, (a → (b ↔ c)) → (a ∧ b ↔ a ∧ c)
+· 使用定理 `left_ne_zero_of_mul`：left_ne_zero_of_mul : a * b != 0 -> a != 0
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `left_inv_eq_right_inv`：∀ {M : Type u_2} [inst : Monoid M] {a b c : M}, b
+ * a = 1 → a * c = 1 → b = c
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用定理 `Units.mulRight_bijective`：mulRight_bijective (a : Mˣ) : Function.Bijecti
+ve ((· * a) : M -> M)
 
-English:
-theorem isSimpleModule_self_iff_isUnit
-  proof: isSimpleModule_iff_toSpanSingleton_surjective.trans and_congr_right fun _ => by
-    refine ⟨fun h x hx => ?_, fun h x hx => (h x hx).unit.mulRight_bijective.surjective⟩
-    obtain ⟨y, hyx : y * x = 1⟩ := h x hx 1
-    have hy : y != 0 := left_ne_zero_of_mul (hyx.symm ▸ one_ne_zero)
-    obtain ⟨z, hzy : z * y = 1⟩ := h y hy 1
-    exact ⟨⟨x, y, left_inv_eq_right_inv hzy hyx ▸ hzy, hyx⟩, rfl⟩
-
-中文:
-定理 isSimpleModule_self_iff_isUnit
-  证明: isSimpleModule_iff_toSpanSingleton_surjective.trans and_congr_right fun _ => by
-    refine ⟨fun h x hx => ?_, fun h x hx => (h x hx).unit.mulRight_bijective.surjective⟩
-    obtain ⟨y, hyx : y * x = 1⟩ := h x hx 1
-    have hy : y != 0 := left_ne_zero_of_mul (hyx.symm ▸ one_ne_zero)
-    obtain ⟨z, hzy : z * y = 1⟩ := h y hy 1
-    exact ⟨⟨x, y, left_inv_eq_right_inv hzy hyx ▸ hzy, hyx⟩, rfl⟩
-
-Depends on / 依赖: and_congr_right, hyx.symm, isSimpleModule_iff_toSpanSingleton_surjective, isSimpleModule_iff_toSpanSingleton_surjective.trans, left_inv_eq_right_inv, left_ne_zero_of_mul, mulRight_bijective, one_ne_zero, surjective, unit.mulRight_bijective.surjective
+--- 原说明 ---
+A ring is a simple module over itself iff it is a division ring.
 -/
 theorem isSimpleModule_self_iff_isUnit :
-    IsSimpleModule R R ↔ Nontrivial R ∧ forall x : R, x != 0 -> IsUnit x :=
-isSimpleModule_iff_toSpanSingleton_surjective.trans and_congr_right fun _ => by
-    refine ⟨fun h x hx => ?_, fun h x hx => (h x hx).unit.mulRight_bijective.surjective⟩
+    IsSimpleModule R R ↔ Nontrivial R ∧ ∀ x : R, x ≠ 0 → IsUnit x :=
+  isSimpleModule_iff_toSpanSingleton_surjective.trans <| and_congr_right fun _ ↦ by
+    refine ⟨fun h x hx ↦ ?_, fun h x hx ↦ (h x hx).unit.mulRight_bijective.surjective⟩
     obtain ⟨y, hyx : y * x = 1⟩ := h x hx 1
-    have hy : y != 0 := left_ne_zero_of_mul (hyx.symm ▸ one_ne_zero)
+    have hy : y ≠ 0 := left_ne_zero_of_mul (hyx.symm ▸ one_ne_zero)
     obtain ⟨z, hzy : z * y = 1⟩ := h y hy 1
     exact ⟨⟨x, y, left_inv_eq_right_inv hzy hyx ▸ hzy, hyx⟩, rfl⟩
-
-/--
-theorem `IsSemisimpleModule.of_sSup_simples_eq_top` / 定理 `IsSemisimpleModule.of_sSup_simples_eq_top`
-
-English:
-theorem IsSemisimpleModule.of_sSup_simples_eq_top
-  proof: complementedLattice_of_sSup_atoms_eq_top (by simp_rw [← h, isSimpleModule_iff_isAtom])
-
-中文:
-定理 是半单模.of_sSup_simples_eq_top
-  证明: complementedLattice_of_sSup_atoms_eq_top (by simp_rw [← h, isSimpleModule_iff_isAtom])
-
-Depends on / 依赖: complementedLattice_of_sSup_atoms_eq_top, isSimpleModule_iff_isAtom, simp_rw
+/-
+**IsSemisimpleModule.of_sSup_simples_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSemisimpleModule.of_sSup_simples_eq_top (h : sSup { m : Submodule R M | 
+IsSimpleModule R m } = ⊤) : IsSemisimpleModule R M where __
+参数：h : sSup { m : Submodule R M | IsSimpleModule R m } = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `complementedLattice_of_sSup_atoms_eq_top`：complementedLattice_of_sSup_at
+oms_eq_top (h : sSup { a : α | IsAtom a } = ⊤) : ComplementedLattice α where exi
+sts_isCompl b
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsSemisimpleModule.of_sSup_simples_eq_top
     (h : sSup { m : Submodule R M | IsSimpleModule R m } = ⊤) : IsSemisimpleModule R M where
@@ -620,44 +613,29 @@ variable (R₀ P : Type*) [Semiring R₀] [AddCommMonoid P] [Module R P]
 
 section
 
-variable [Module R₀ P] [SMulCommClass R R₀ P] [Module.Finite R₀ (M ->ₗ[R] P)]
+variable [Module R₀ P] [SMulCommClass R R₀ P] [Module.Finite R₀ (M →ₗ[R] P)]
 
-/--
-theorem `of_isComplemented_domain` / 定理 `of_isComplemented_domain`
-
-English:
-theorem of_isComplemented_domain
-  given: (h : IsComplemented m)
-  statement: Module.Finite R₀ (m ->ₗ[R] P)
-  proof: .of_surjective (.lcomp R₀ P ..) (LinearMap.surjective_comp_subtype_of_isComplemented h)
-
-中文:
-定理 of_isComplemented_domain
-  条件: (h : IsComplemented m)
-  结论: 模.有限 R₀ (m ->ₗ[R] P)
-  证明: .of_surjective (.lcomp R₀ P ..) (LinearMap.surjective_comp_subtype_of_isComplemented h)
-
-Depends on / 依赖: LinearMap, LinearMap.surjective_comp_subtype_of_isComplemented, of_surjective, surjective_comp_subtype_of_isComplemented
+/-
+**Module.Finite.of_isComplemented_domain** 是 Mathlib 中的一个定理，位于命名空间 `Module.Finit
+e`。
+形式化陈述：of_isComplemented_domain (h : IsComplemented m) : Module.Finite R₀ (m ->ₗ[
+R] P)
+参数：h : IsComplemented m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.of_surjective`：of_surjective [hM : Module.Finite R M] (f :
+ M ->ₛₗ[σ] P) (hf : Surjective f) : Module.Finite S P
+· 使用定理 `LinearMap.surjective_comp_subtype_of_isComplemented`：surjective_comp_sub
+type_of_isComplemented (h : IsComplemented p) [Module R M] : Function.Surjective
+ fun f : E ->ₗ[R] M => f ∘ₗ p.subtype
 -/
-theorem of_isComplemented_domain (h : IsComplemented m) : Module.Finite R₀ (m ->ₗ[R] P) :=
+theorem of_isComplemented_domain (h : IsComplemented m) : Module.Finite R₀ (m →ₗ[R] P) :=
   .of_surjective (.lcomp R₀ P ..) (LinearMap.surjective_comp_subtype_of_isComplemented h)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsSemisimpleModule
-  signature: R M] : Module.Finite R₀ (m ->ₗ[R] P)
-  body: .of_isComplemented_domain _ _ (exists_isCompl m)
-
-中文:
-实例 [是半单模
-  签名: R M] : 模.有限 R₀ (m ->ₗ[R] P)
-  定义体: .of_isComplemented_domain _ _ (exists_isCompl m)
-
-Depends on / 依赖: exists_isCompl, of_isComplemented_domain
+/-
+**Module.Finite.** 是 Mathlib 中的一个实例，位于命名空间 `Module.Finite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsSemisimpleModule R M] : Module.Finite R₀ (m ->ₗ[R] P) :=
+instance [IsSemisimpleModule R M] : Module.Finite R₀ (m →ₗ[R] P) :=
   .of_isComplemented_domain _ _ (exists_isCompl m)
 
 end
@@ -665,44 +643,37 @@ end
 section
 
 variable [Module R₀ M] [SMulCommClass R R₀ M] [SMul R₀ R]
-  [IsScalarTower R₀ R M] [Module.Finite R₀ (P ->ₗ[R] M)]
+  [IsScalarTower R₀ R M] [Module.Finite R₀ (P →ₗ[R] M)]
 
-/--
-theorem `of_isComplemented_codomain` / 定理 `of_isComplemented_codomain`
-
-English:
-theorem of_isComplemented_codomain
-  given: (h : IsComplemented m)
-  statement: Module.Finite R₀ (P ->ₗ[R] m)
-  proof: .of_surjective (.compRight ..) (LinearMap.surjective_comp_projectionOnto h.choose_spec)
-
-中文:
-定理 of_isComplemented_codomain
-  条件: (h : IsComplemented m)
-  结论: 模.有限 R₀ (P ->ₗ[R] m)
-  证明: .of_surjective (.compRight ..) (LinearMap.surjective_comp_projectionOnto h.choose_spec)
-
-Depends on / 依赖: LinearMap, LinearMap.surjective_comp_projectionOnto, choose_spec, compRight, continuous_quotient_mk, h.choose_spec, of_surjective, surjective_comp_projectionOnto, uCompactlyGeneratedSpace_of_coinduced
+/-
+**Module.Finite.of_isComplemented_codomain** 是 Mathlib 中的一个定理，位于命名空间 `Module.Fin
+ite`。
+形式化陈述：of_isComplemented_codomain (h : IsComplemented m) : Module.Finite R₀ (P ->
+ₗ[R] m)
+参数：h : IsComplemented m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.of_surjective`：of_surjective [hM : Module.Finite R M] (f :
+ M ->ₛₗ[σ] P) (hf : Surjective f) : Module.Finite S P
+· 使用定理 `SetLike.instSMulCommClassSubtypeMem_2`：∀ {S : Type u'} {M : Type v} {N :
+ Type u_1} {α : Type u_2} [inst : SetLike S α] [inst_1 : SMul M N] [inst_2 : SMu
+l M α]   [inst_3 : Monoid N…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `LinearMap.surjective_comp_projectionOnto`：surjective_comp_projectionOnto
+ (h : IsCompl p q) [Module R M] : Function.Surjective (comp (p.projectionOnto q 
+h) : (M ->ₗ[R] E) -> _)
 -/
-theorem of_isComplemented_codomain (h : IsComplemented m) : Module.Finite R₀ (P ->ₗ[R] m) :=
+theorem of_isComplemented_codomain (h : IsComplemented m) : Module.Finite R₀ (P →ₗ[R] m) :=
   .of_surjective (.compRight ..) (LinearMap.surjective_comp_projectionOnto h.choose_spec)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsSemisimpleModule
-  signature: R M] : Module.Finite R₀ (P ->ₗ[R] m)
-  body: .of_isComplemented_codomain _ _ (exists_isCompl m)
-
-中文:
-实例 [是半单模
-  签名: R M] : 模.有限 R₀ (P ->ₗ[R] m)
-  定义体: .of_isComplemented_codomain _ _ (exists_isCompl m)
-
-Depends on / 依赖: exists_isCompl, of_isComplemented_codomain
+/-
+**Module.Finite.** 是 Mathlib 中的一个实例，位于命名空间 `Module.Finite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsSemisimpleModule R M] : Module.Finite R₀ (P ->ₗ[R] m) :=
+instance [IsSemisimpleModule R M] : Module.Finite R₀ (P →ₗ[R] m) :=
   .of_isComplemented_codomain _ _ (exists_isCompl m)
 
 end
@@ -711,332 +682,406 @@ end Module.Finite
 
 namespace IsSemisimpleModule
 
-/--
-theorem `eq_bot_or_exists_simple_le` / 定理 `eq_bot_or_exists_simple_le`
-
-English:
-theorem eq_bot_or_exists_simple_le
-  given: (N : Submodule R M) [IsSemisimpleModule R N]
-  proof: by
-  rw [← N.subsingleton_iff_eq_bot]; rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]
-  refine (eq_bot_or_exists_atom_le _).imp .symm fun ⟨m, h, _⟩ => ⟨_, N.map_subtype_le m, ?_⟩
-  rw [← isSimpleModule_iff_isAtom] at h
-  exact .congr (m.equivMapOfInjective _ N.subtype_injective).symm
-
-中文:
-定理 eq_bot_or_存在_simple_le
-  条件: (N : 子模 R M) [是半单模 R N]
-  证明: by
-  rw [← N.subsingleton_iff_eq_bot]; rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]
-  refine (eq_bot_or_exists_atom_le _).imp .symm fun ⟨m, h, _⟩ => ⟨_, N.map_subtype_le m, ?_⟩
-  rw [← isSimpleModule_iff_isAtom] at h
-  exact .congr (m.equivMapOfInjective _ N.subtype_injective).symm
-
-Depends on / 依赖: N.map_subtype_le, N.subsingleton_iff_eq_bot, N.subtype_injective, Sigma.mk, Submodule, Submodule.subsingleton_iff, UCompactlyGeneratedSpace, UCompactlyGeneratedSpace.isClosed, continuous_sigmaMk, continuous_sigmaMk.comp, eq_bot_or_exists_atom_le, equivMapOfInjective, isClosed, isClosed_sigma_iff, isSimpleModule_iff_isAtom, m.equivMapOfInjective, map_subtype_le, subsingleton_iff, subsingleton_iff_bot_eq_top, subsingleton_iff_eq_bot
+/-
+**IsSemisimpleModule.eq_bot_or_exists_simple_le** 是 Mathlib 中的一个定理，位于命名空间 `IsSem
+isimpleModule`。
+形式化陈述：eq_bot_or_exists_simple_le (N : Submodule R M) [IsSemisimpleModule R N] : 
+N = ⊥ ∨ exists m <= N, IsSimpleModule R m
+参数：N : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.subsingleton_iff_eq_bot`：subsingleton_iff_eq_bot : Subsingleto
+n p ↔ p = ⊥
+· 使用定理 `Submodule.subsingleton_iff`：subsingleton_iff : Subsingleton (Submodule R
+ M) ↔ Subsingleton M
+· 使用定理 `subsingleton_iff_bot_eq_top`：subsingleton_iff_bot_eq_top : (⊥ : α) = (⊤ 
+: α) ↔ Subsingleton α
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Submodule.map_subtype_le`：map_subtype_le (p' : Submodule R p) : map p.su
+btype p' <= p
+· 使用定理 `IsSimpleModule.congr`：IsSimpleModule.congr (e : M ≃ₗ[R] N) [IsSimpleModu
+le R N] : IsSimpleModule R M where __
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用引理 `Submodule.subtype_injective`：subtype_injective : Function.Injective p.su
+btype
+· 使用定理 `isSimpleModule_iff_isAtom`：isSimpleModule_iff_isAtom : IsSimpleModule R 
+m ↔ IsAtom m
+· 使用定理 `IsAtomic.eq_bot_or_exists_atom_le`：∀ {α : Type u_2} {inst : PartialOrder
+ α} {inst_1 : OrderBot α} [self : IsAtomic α] (b : α),   b = ⊥ ∨ ∃ a, IsAtom a ∧
+ a ≤ b
+· 使用定理 `isAtomic_of_complementedLattice`：∀ {α : Type u_2} [inst : CompleteLattic
+e α] [IsModularLattice α] [IsCompactlyGenerated α] [ComplementedLattice α],   Is
+Atomic α
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 theorem eq_bot_or_exists_simple_le (N : Submodule R M) [IsSemisimpleModule R N] :
-    N = ⊥ ∨ exists m <= N, IsSimpleModule R m := by
-  rw [← N.subsingleton_iff_eq_bot]; rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]
-  refine (eq_bot_or_exists_atom_le _).imp .symm fun ⟨m, h, _⟩ => ⟨_, N.map_subtype_le m, ?_⟩
+    N = ⊥ ∨ ∃ m ≤ N, IsSimpleModule R m := by
+  rw [← N.subsingleton_iff_eq_bot, ← Submodule.subsingleton_iff R, ← subsingleton_iff_bot_eq_top]
+  refine (eq_bot_or_exists_atom_le _).imp .symm fun ⟨m, h, _⟩ ↦ ⟨_, N.map_subtype_le m, ?_⟩
   rw [← isSimpleModule_iff_isAtom] at h
   exact .congr (m.equivMapOfInjective _ N.subtype_injective).symm
 
 variable [IsSemisimpleModule R M]
-
-/--
-theorem `exists_submodule_linearEquiv_quotient` / 定理 `exists_submodule_linearEquiv_quotient`
-
-English:
-theorem exists_submodule_linearEquiv_quotient
-  given: (N : Submodule R M)
-  proof: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(N.quotientEquivOfIsCompl P compl).symm⟩⟩
-
-中文:
-定理 存在_submodule_linearEquiv_quotient
-  条件: (N : 子模 R M)
-  证明: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(N.quotientEquivOfIsCompl P compl).symm⟩⟩
-
-Depends on / 依赖: Filter, Filter.Tendsto, Filter.atTop, IsClosed, IsClosed.mem_of_tend, N.quotientEquivOfIsCompl, Nat.cofinite_eq_atTop, OnePoint, OnePoint.some, SequentialSpace, SequentialSpace.isClosed_of_seq, Tendsto, UCompactlyGeneratedSpace, ULift.down, ULift.up, coclosedCompact_eq_cocompact, cocompact_eq_cofinite, cofinite_eq_atTop, continuousMapMkNat, exists_isCompl
+/-
+**IsSemisimpleModule.exists_submodule_linearEquiv_quotient** 是 Mathlib 中的一个定理，位于
+命名空间 `IsSemisimpleModule`。
+形式化陈述：exists_submodule_linearEquiv_quotient (N : Submodule R M) : exists (P : Su
+bmodule R M), Nonempty (P ≃ₗ[R] M ⧸ N)
+参数：N : Submodule R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 theorem exists_submodule_linearEquiv_quotient (N : Submodule R M) :
-    exists (P : Submodule R M), Nonempty (P ≃ₗ[R] M ⧸ N) :=
+    ∃ (P : Submodule R M), Nonempty (P ≃ₗ[R] M ⧸ N) :=
   have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(N.quotientEquivOfIsCompl P compl).symm⟩⟩
-
-/--
-theorem `exists_quotient_linearEquiv_submodule` / 定理 `exists_quotient_linearEquiv_submodule`
-
-English:
-theorem exists_quotient_linearEquiv_submodule
-  given: (N : Submodule R M)
-  proof: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(P.quotientEquivOfIsCompl N compl.symm).symm⟩⟩
-
-中文:
-定理 存在_quotient_linearEquiv_submodule
-  条件: (N : 子模 R M)
-  证明: have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(P.quotientEquivOfIsCompl N compl.symm).symm⟩⟩
-
-Depends on / 依赖: P.quotientEquivOfIsCompl, compl.symm, exists_isCompl, quotientEquivOfIsCompl
+/-
+**IsSemisimpleModule.exists_quotient_linearEquiv_submodule** 是 Mathlib 中的一个定理，位于
+命名空间 `IsSemisimpleModule`。
+形式化陈述：exists_quotient_linearEquiv_submodule (N : Submodule R M) : exists (P : Su
+bmodule R M), Nonempty (N ≃ₗ[R] M ⧸ P)
+参数：N : Submodule R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
 -/
 theorem exists_quotient_linearEquiv_submodule (N : Submodule R M) :
-    exists (P : Submodule R M), Nonempty (N ≃ₗ[R] M ⧸ P) :=
+    ∃ (P : Submodule R M), Nonempty (N ≃ₗ[R] M ⧸ P) :=
   have ⟨P, compl⟩ := exists_isCompl N; ⟨P, ⟨(P.quotientEquivOfIsCompl N compl.symm).symm⟩⟩
-
-/--
-theorem `extension_property` / 定理 `extension_property`
-
-English:
-theorem extension_property
-  statement: {P} [AddCommGroup P] [Module R P] (f : N ->ₗ[R] M)
-  proof: have ⟨m, compl⟩ := exists_isCompl (LinearMap.range f)
-  ⟨g ∘ₗ f.linearProjOfIsCompl _ hf compl, by ext; simp⟩
-
-中文:
-定理 extension_property
-  结论: {P} [加法交换群 P] [模 R P] (f : N ->ₗ[R] M)
-  证明: have ⟨m, compl⟩ := exists_isCompl (LinearMap.range f)
-  ⟨g ∘ₗ f.linearProjOfIsCompl _ hf compl, by ext; simp⟩
-
-Depends on / 依赖: LinearMap, LinearMap.range, exists_isCompl, f.linearProjOfIsCompl, linearProjOfIsCompl
+/-
+**IsSemisimpleModule.extension_property** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimpleM
+odule`。
+形式化陈述：extension_property {P} [AddCommGroup P] [Module R P] (f : N ->ₗ[R] M) (hf 
+: Function.Injective f) (g : N ->ₗ[R] P) : exists h : M ->ₗ[R] P, h ∘ₗ f = g
+参数：f : N ->ₗ[R] M；hf : Function.Injective f；g : N ->ₗ[R] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.linearProjOfIsCompl_apply_left`：linearProjOfIsCompl_apply_left
+ (x : F) : linearProjOfIsCompl q i hi h (i x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem extension_property {P} [AddCommGroup P] [Module R P] (f : N ->ₗ[R] M)
-    (hf : Function.Injective f) (g : N ->ₗ[R] P) :
-    exists h : M ->ₗ[R] P, h ∘ₗ f = g :=
+theorem extension_property {P} [AddCommGroup P] [Module R P] (f : N →ₗ[R] M)
+    (hf : Function.Injective f) (g : N →ₗ[R] P) :
+    ∃ h : M →ₗ[R] P, h ∘ₗ f = g :=
   have ⟨m, compl⟩ := exists_isCompl (LinearMap.range f)
   ⟨g ∘ₗ f.linearProjOfIsCompl _ hf compl, by ext; simp⟩
-
-/--
-theorem `lifting_property` / 定理 `lifting_property`
-
-English:
-theorem lifting_property
-  statement: {P} [AddCommGroup P] [Module R P] (f : M ->ₗ[R] N)
-  proof: by
-  have ⟨m, compl⟩ := exists_isCompl (LinearMap.ker f)
-  let e := (Submodule.quotientEquivOfIsCompl _ m compl).symm ≪≫ₗ f.quotKerEquivOfSurjective hf
-  refine ⟨Submodule.subtype _ ∘ₗ e.symm.toLinearMap ∘ₗ g, LinearMap.ext fun x => ?_⟩
-  obtain ⟨z, eq⟩ := e.surjective (g x)
-  simp only [LinearMap.comp_apply, ← eq, LinearEquiv.coe_coe, e.symm_apply_apply]
-  simp [e]
-
-中文:
-定理 lifting_property
-  结论: {P} [加法交换群 P] [模 R P] (f : M ->ₗ[R] N)
-  证明: by
-  have ⟨m, compl⟩ := exists_isCompl (LinearMap.ker f)
-  let e := (Submodule.quotientEquivOfIsCompl _ m compl).symm ≪≫ₗ f.quotKerEquivOfSurjective hf
-  refine ⟨Submodule.subtype _ ∘ₗ e.symm.toLinearMap ∘ₗ g, LinearMap.ext fun x => ?_⟩
-  obtain ⟨z, eq⟩ := e.surjective (g x)
-  simp only [LinearMap.comp_apply, ← eq, LinearEquiv.coe_coe, e.symm_apply_apply]
-  simp [e]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.comp_apply, LinearMap.ext, LinearMap.ker, Submodule, Submodule.quotientEquivOfIsCompl, Submodule.subtype, coe_coe, comp_apply, e.surjective, e.symm.toLinearMap, e.symm_apply_apply, exists_isCompl, f.quotKerEquivOfSurjective, quotKerEquivOfSurjective, quotientEquivOfIsCompl, subtype, surjective
+/-
+**IsSemisimpleModule.lifting_property** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimpleMod
+ule`。
+形式化陈述：lifting_property {P} [AddCommGroup P] [Module R P] (f : M ->ₗ[R] N) (hf : 
+Function.Surjective f) (g : P ->ₗ[R] N) : exists h : P ->ₗ[R] M, f ∘ₗ h = g
+参数：f : M ->ₗ[R] N；hf : Function.Surjective f；g : P ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Submodule.quotientEquivOfIsCompl_symm_apply`：∀ {R : Type u_1} [inst : Ri
+ng R] {E : Type u_2} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module R E]   (p
+ q : Submodule R E) (h : IsCompl …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lifting_property {P} [AddCommGroup P] [Module R P] (f : M ->ₗ[R] N)
-    (hf : Function.Surjective f) (g : P ->ₗ[R] N) :
-    exists h : P ->ₗ[R] M, f ∘ₗ h = g := by
+theorem lifting_property {P} [AddCommGroup P] [Module R P] (f : M →ₗ[R] N)
+    (hf : Function.Surjective f) (g : P →ₗ[R] N) :
+    ∃ h : P →ₗ[R] M, f ∘ₗ h = g := by
   have ⟨m, compl⟩ := exists_isCompl (LinearMap.ker f)
   let e := (Submodule.quotientEquivOfIsCompl _ m compl).symm ≪≫ₗ f.quotKerEquivOfSurjective hf
-  refine ⟨Submodule.subtype _ ∘ₗ e.symm.toLinearMap ∘ₗ g, LinearMap.ext fun x => ?_⟩
+  refine ⟨Submodule.subtype _ ∘ₗ e.symm.toLinearMap ∘ₗ g, LinearMap.ext fun x ↦ ?_⟩
   obtain ⟨z, eq⟩ := e.surjective (g x)
   simp only [LinearMap.comp_apply, ← eq, LinearEquiv.coe_coe, e.symm_apply_apply]
   simp [e]
-
-/--
-theorem `sSup_simples_le` / 定理 `sSup_simples_le`
-
-English:
-theorem sSup_simples_le
-  given: (N : Submodule R M)
-  proof: by
-  simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_le_eq _
-
-中文:
-定理 sSup_simples_le
-  条件: (N : 子模 R M)
-  证明: by
-  simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_le_eq _
-
-Depends on / 依赖: isSimpleModule_iff_isAtom, sSup_atoms_le_eq
+/-
+**IsSemisimpleModule.sSup_simples_le** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimpleModu
+le`。
+形式化陈述：sSup_simples_le (N : Submodule R M) : sSup { m : Submodule R M | IsSimpleM
+odule R m ∧ m <= N } = N
+参数：N : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sSup_atoms_le_eq`：sSup_atoms_le_eq {α} [CompleteLattice α] [IsAtomistic 
+α] (b : α) : sSup { a : α | IsAtom a ∧ a <= b } = b
+· 使用定理 `isAtomistic_of_complementedLattice`：∀ {α : Type u_2} [inst : CompleteLat
+tice α] [IsModularLattice α] [IsCompactlyGenerated α] [ComplementedLattice α],  
+ IsAtomistic α
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 theorem sSup_simples_le (N : Submodule R M) :
-    sSup { m : Submodule R M | IsSimpleModule R m ∧ m <= N } = N := by
+    sSup { m : Submodule R M | IsSimpleModule R m ∧ m ≤ N } = N := by
   simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_le_eq _
 
 variable (R M)
-
-/--
-theorem `exists_simple_submodule` / 定理 `exists_simple_submodule`
-
-English:
-theorem exists_simple_submodule
-  given: [Nontrivial M]
-  statement: exists m : Submodule R M, IsSimpleModule R m
-  proof: by
-  simpa only [isSimpleModule_iff_isAtom] using IsAtomic.exists_atom _
-
-中文:
-定理 存在_simple_submodule
-  条件: [非平凡 M]
-  结论: 存在 m : 子模 R M, 是单模 R m
-  证明: by
-  simpa only [isSimpleModule_iff_isAtom] using IsAtomic.exists_atom _
-
-Depends on / 依赖: IsAtomic, IsAtomic.exists_atom, exists_atom, isSimpleModule_iff_isAtom
+/-
+**IsSemisimpleModule.exists_simple_submodule** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisi
+mpleModule`。
+形式化陈述：exists_simple_submodule [Nontrivial M] : exists m : Submodule R M, IsSimpl
+eModule R m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `IsAtomic.exists_atom`：IsAtomic.exists_atom [OrderBot α] [Nontrivial α] [
+IsAtomic α] : exists a : α, IsAtom a
+· 使用定理 `Submodule.instNontrivial`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Nontrivial M], 
+Nontrivial (Su…
+· 使用定理 `isAtomic_of_complementedLattice`：∀ {α : Type u_2} [inst : CompleteLattic
+e α] [IsModularLattice α] [IsCompactlyGenerated α] [ComplementedLattice α],   Is
+Atomic α
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
-theorem exists_simple_submodule [Nontrivial M] : exists m : Submodule R M, IsSimpleModule R m := by
+theorem exists_simple_submodule [Nontrivial M] : ∃ m : Submodule R M, IsSimpleModule R m := by
   simpa only [isSimpleModule_iff_isAtom] using IsAtomic.exists_atom _
-
-/--
-theorem `sSup_simples_eq_top` / 定理 `sSup_simples_eq_top`
-
-English:
-theorem sSup_simples_eq_top
-  statement: sSup { m : Submodule R M | IsSimpleModule R m } = ⊤
-  proof: by
-  simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_eq_top
-
-中文:
-定理 sSup_simples_eq_top
-  结论: sSup { m : 子模 R M | 是单模 R m } = ⊤
-  证明: by
-  simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_eq_top
-
-Depends on / 依赖: isSimpleModule_iff_isAtom, sSup_atoms_eq_top
+/-
+**IsSemisimpleModule.sSup_simples_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimple
+Module`。
+形式化陈述：sSup_simples_eq_top : sSup { m : Submodule R M | IsSimpleModule R m } = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sSup_atoms_eq_top`：sSup_atoms_eq_top {α} [CompleteLattice α] [IsAtomisti
+c α] : sSup { a : α | IsAtom a } = ⊤
+· 使用定理 `isAtomistic_of_complementedLattice`：∀ {α : Type u_2} [inst : CompleteLat
+tice α] [IsModularLattice α] [IsCompactlyGenerated α] [ComplementedLattice α],  
+ IsAtomistic α
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 theorem sSup_simples_eq_top : sSup { m : Submodule R M | IsSimpleModule R m } = ⊤ := by
   simpa only [isSimpleModule_iff_isAtom] using sSup_atoms_eq_top
-
-/--
-theorem `exists_sSupIndep_sSup_simples_eq_top` / 定理 `exists_sSupIndep_sSup_simples_eq_top`
-
-English:
-theorem exists_sSupIndep_sSup_simples_eq_top
-  proof: by
-  have := sSup_simples_eq_top R M
-  simp_rw [isSimpleModule_iff_isAtom] at this ⊢
-  exact exists_sSupIndep_of_sSup_atoms_eq_top this
-
-中文:
-定理 存在_sSupIndep_sSup_simples_eq_top
-  证明: by
-  have := sSup_simples_eq_top R M
-  simp_rw [isSimpleModule_iff_isAtom] at this ⊢
-  exact exists_sSupIndep_of_sSup_atoms_eq_top this
-
-Depends on / 依赖: exists_sSupIndep_of_sSup_atoms_eq_top, isSimpleModule_iff_isAtom, sSup_simples_eq_top, simp_rw
+/-
+**IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top** 是 Mathlib 中的一个定理，位于命
+名空间 `IsSemisimpleModule`。
+形式化陈述：exists_sSupIndep_sSup_simples_eq_top : exists s : Set (Submodule R M), sSu
+pIndep s ∧ sSup s = ⊤ ∧ forall m in s, IsSimpleModule R m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.sSup_simples_eq_top`：sSup_simples_eq_top : sSup { m :
+ Submodule R M | IsSimpleModule R m } = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `exists_sSupIndep_of_sSup_atoms_eq_top`：exists_sSupIndep_of_sSup_atoms_eq
+_top (h : sSup {a : α | IsAtom a} = ⊤) : exists s : Set α, sSupIndep s ∧ sSup s 
+= ⊤ ∧ forall ⦃a⦄, a in s ->…
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 theorem exists_sSupIndep_sSup_simples_eq_top :
-    exists s : Set (Submodule R M), sSupIndep s ∧ sSup s = ⊤ ∧ forall m in s, IsSimpleModule R m := by
+    ∃ s : Set (Submodule R M), sSupIndep s ∧ sSup s = ⊤ ∧ ∀ m ∈ s, IsSimpleModule R m := by
   have := sSup_simples_eq_top R M
   simp_rw [isSimpleModule_iff_isAtom] at this ⊢
   exact exists_sSupIndep_of_sSup_atoms_eq_top this
 
-/--
-theorem `annihilator_isRadical` / 定理 `annihilator_isRadical`
+/-- The annihilator of a semisimple module over a commutative ring is a radical ideal. -/
+/-
+**IsSemisimpleModule.annihilator_isRadical** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimp
+leModule`。
+形式化陈述：annihilator_isRadical (R) [CommRing R] [Module R M] [IsSemisimpleModule R 
+M] : (Module.annihilator R M).IsRadical
+参数：R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.annihilator_top`：annihilator_top : (⊤ : Submodule R M).annihil
+ator = Module.annihilator R M
+· 使用定理 `IsSemisimpleModule.sSup_simples_eq_top`：sSup_simples_eq_top : sSup { m :
+ Submodule R M | IsSimpleModule R m } = ⊤
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用定理 `Submodule.annihilator_iSup`：annihilator_iSup (ι : Sort w) (f : ι -> Subm
+odule R M) : annihilator (⨆ i, f i) = ⨅ i, annihilator (f i)
+· 使用定理 `Ideal.isRadical_iInf`：isRadical_iInf {ι} (I : ι -> Ideal R) (hI : forall
+ i, IsRadical (I i)) : IsRadical (⨅ i, I i)
+· 使用定理 `Ideal.IsPrime.isRadical`：∀ {R : Type u} [inst : CommSemiring R] {I : Ide
+al R}, I.IsPrime → I.IsRadical
+· 使用定理 `Ideal.IsMaximal.isPrime`：∀ {α : Type u} [inst : CommSemiring α] {I : Ide
+al α}, I.IsMaximal → I.IsPrime
+· 使用定理 `IsSimpleModule.annihilator_isMaximal`：IsSimpleModule.annihilator_isMaxim
+al {R} [CommRing R] [Module R M] [simple : IsSimpleModule R M] : (Module.annihil
+ator R M).IsMaximal
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem annihilator_isRadical
-  given: (R) [CommRing R] [Module R M] [IsSemisimpleModule R M]
-  proof: by
-  rw [← Submodule.annihilator_top]; rw [← sSup_simples_eq_top]; rw [sSup_eq_iSup']; rw [Submodule.annihilator_iSup]
-  exact Ideal.isRadical_iInf _ fun i => (i.2.annihilator_isMaximal).isPrime.isRadical
-
-中文:
-定理 annihilator_isRadical
-  条件: (R) [交换环 R] [模 R M] [是半单模 R M]
-  证明: by
-  rw [← Submodule.annihilator_top]; rw [← sSup_simples_eq_top]; rw [sSup_eq_iSup']; rw [Submodule.annihilator_iSup]
-  exact Ideal.isRadical_iInf _ fun i => (i.2.annihilator_isMaximal).isPrime.isRadical
-
-Depends on / 依赖: Ideal.isRadical_iInf, Submodule, Submodule.annihilator_iSup, Submodule.annihilator_top, annihilator_iSup, annihilator_isMaximal, annihilator_top, isPrime, isPrime.isRadical, isRadical, isRadical_iInf, sSup_eq_iSup, sSup_simples_eq_top
+--- 原说明 ---
+The annihilator of a semisimple module over a commutative ring is a radical idea
+l.
 -/
 theorem annihilator_isRadical (R) [CommRing R] [Module R M] [IsSemisimpleModule R M] :
     (Module.annihilator R M).IsRadical := by
-  rw [← Submodule.annihilator_top]; rw [← sSup_simples_eq_top]; rw [sSup_eq_iSup']; rw [Submodule.annihilator_iSup]
-  exact Ideal.isRadical_iInf _ fun i => (i.2.annihilator_isMaximal).isPrime.isRadical
-
-/--
-Instance `submodule` / 实例 `submodule`
-
-English:
-instance submodule
-  signature: {m : Submodule R M}
-  body: m.mapIic.complementedLattice_iff.2 IsModularLattice.complementedLattice_Iic
-
-中文:
-实例 submodule
-  签名: {m : 子模 R M}
-  定义体: m.mapIic.complementedLattice_iff.2 IsModularLattice.complementedLattice_Iic
-
-Depends on / 依赖: IsModularLattice, IsModularLattice.complementedLattice_Iic, complementedLattice_Iic, complementedLattice_iff, m.mapIic.complementedLattice_iff, mapIic
+  rw [← Submodule.annihilator_top, ← sSup_simples_eq_top, sSup_eq_iSup', Submodule.annihilator_iSup]
+  exact Ideal.isRadical_iInf _ fun i ↦ (i.2.annihilator_isMaximal).isPrime.isRadical
+/-
+**IsSemisimpleModule.submodule** 是 Mathlib 中的一个实例，位于命名空间 `IsSemisimpleModule`。
+形式化陈述：submodule {m : Submodule R M} : IsSemisimpleModule R m where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `OrderIso.complementedLattice_iff`：OrderIso.complementedLattice_iff (f : 
+α ≃o β) : ComplementedLattice α ↔ ComplementedLattice β
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 instance submodule {m : Submodule R M} : IsSemisimpleModule R m where
   __ := m.mapIic.complementedLattice_iff.2 IsModularLattice.complementedLattice_Iic
 
 variable {R M}
 open LinearMap
-
-/--
-theorem `congr` / 定理 `congr`
-
-English:
-theorem congr
-  given: (e : N ≃ₗ[R] M)
-  statement: IsSemisimpleModule R N where
-  proof: (Submodule.orderIsoMapComap e.symm).complementedLattice
-
-中文:
-定理 congr
-  条件: (e : N ≃ₗ[R] M)
-  结论: 是半单模 R N where
-  证明: (Submodule.orderIsoMapComap e.symm).complementedLattice
-
-Depends on / 依赖: Submodule, Submodule.orderIsoMapComap, complementedLattice, e.symm, orderIsoMapComap
+/-
+**IsSemisimpleModule.congr** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimpleModule`。
+形式化陈述：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N where __
+参数：e : N ≃ₗ[R] M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.complementedLattice`：OrderIso.complementedLattice [Complemented
+Lattice α] (f : α ≃o β) : ComplementedLattice β
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
 -/
 theorem congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N where
   __ := (Submodule.orderIsoMapComap e.symm).complementedLattice
-
-/--
-theorem `of_injective` / 定理 `of_injective`
-
-English:
-theorem of_injective
-  given: (f : N ->ₗ[R] M) (hf : Function.Injective f)
-  statement: IsSemisimpleModule R N
-  proof: congr (Submodule.topEquiv.symm.trans <| Submodule.equivMapOfInjective f hf _)
-
-中文:
-定理 of_injective
-  条件: (f : N ->ₗ[R] M) (hf : 函数.单射 f)
-  结论: 是半单模 R N
-  证明: congr (Submodule.topEquiv.symm.trans <| Submodule.equivMapOfInjective f hf _)
-
-Depends on / 依赖: CompactlyGeneratedSpace, CompactlyGeneratedSpace.isClosed, Continuous, Sigma.mk, Submodule, Submodule.equivMapOfInjective, Submodule.topEquiv.symm.trans, ULift.down, compactlyGeneratedSpace_of_isClosed, continuous_sigmaMk, continuous_sigmaMk.comp, continuous_uliftDown, continuous_uliftUp, equivMapOfInjective, hf.comp, isClosed, isClosed_sigma_iff, preimage, topEquiv
+/-
+**IsSemisimpleModule.of_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimpleModule`
+。
+形式化陈述：of_injective (f : N ->ₗ[R] M) (hf : Function.Injective f) : IsSemisimpleMo
+dule R N
+参数：f : N ->ₗ[R] M；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.congr`：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N
+ where __
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
 -/
-theorem of_injective (f : N ->ₗ[R] M) (hf : Function.Injective f) : IsSemisimpleModule R N :=
+theorem of_injective (f : N →ₗ[R] M) (hf : Function.Injective f) : IsSemisimpleModule R N :=
   congr (Submodule.topEquiv.symm.trans <| Submodule.equivMapOfInjective f hf _)
-
-/--
-Instance `quotient` / 实例 `quotient`
-
-English:
-instance quotient
-  signature: : IsSemisimpleModule R (M ⧸ m)
-  body: have ⟨_, ⟨e⟩⟩ := exists_submodule_linearEquiv_quotient m
-  .congr e.symm
-
-中文:
-实例 quotient
-  签名: : 是半单模 R (M ⧸ m)
-  定义体: have ⟨_, ⟨e⟩⟩ := exists_submodule_linearEquiv_quotient m
-  .congr e.symm
-
-Depends on / 依赖: e.symm, exists_submodule_linearEquiv_quotient
+/-
+**IsSemisimpleModule.quotient** 是 Mathlib 中的一个实例，位于命名空间 `IsSemisimpleModule`。
+形式化陈述：quotient : IsSemisimpleModule R (M ⧸ m)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.exists_submodule_linearEquiv_quotient`：exists_submodu
+le_linearEquiv_quotient (N : Submodule R M) : exists (P : Submodule R M), Nonemp
+ty (P ≃ₗ[R] M ⧸ N)
+· 使用定理 `IsSemisimpleModule.congr`：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N
+ where __
 -/
 instance quotient : IsSemisimpleModule R (M ⧸ m) :=
   have ⟨_, ⟨e⟩⟩ := exists_submodule_linearEquiv_quotient m
   .congr e.symm
-
+/-
+**IsSemisimpleModule.** 是 Mathlib 中的一个实例，位于命名空间 `IsSemisimpleModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [Module.Finite R M] : IsNoetherian R M where
   noetherian m :=
     have ⟨_, ⟨e⟩⟩ := exists_quotient_linearEquiv_submodule m
@@ -1044,65 +1089,42 @@ instance (priority := low) [Module.Finite R M] : IsNoetherian R M where
     .of_finite
 
 -- does not work as an instance, not sure why
-/--
-theorem `range` / 定理 `range`
-
-English:
-theorem range
-  given: (f : M ->ₗ[R] N)
-  statement: IsSemisimpleModule R (range f)
-  proof: congr (quotKerEquivRange _).symm
-
-中文:
-定理 range
-  条件: (f : M ->ₗ[R] N)
-  结论: 是半单模 R (range f)
-  证明: congr (quotKerEquivRange _).symm
+/-
+**IsSemisimpleModule.range** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimpleModule`。
+形式化陈述：∀ {R : Type u_2} [inst : Ring R] {M : Type u_4} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] {N : Type u_5}   [inst_3 : AddCommGroup N] [inst_4 
+: _root_.Module R N] [IsSemisimpleModule R M] (f : M →ₗ[R] N),   IsSemisimpleMod
+ule R ↥f.range
+参数：f : M →ₗ[R] N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.congr`：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N
+ where __
 -/
-protected theorem range (f : M ->ₗ[R] N) : IsSemisimpleModule R (range f) :=
+protected theorem range (f : M →ₗ[R] N) : IsSemisimpleModule R (range f) :=
   congr (quotKerEquivRange _).symm
-
-/--
-theorem `of_surjective` / 定理 `of_surjective`
-
-English:
-theorem of_surjective
-  given: (f : M ->ₗ[R] N) (hf : Function.Surjective f)
-  statement: IsSemisimpleModule R N
-  proof: congr (f.quotKerEquivOfSurjective hf).symm
-
-中文:
-定理 of_surjective
-  条件: (f : M ->ₗ[R] N) (hf : 函数.满射 f)
-  结论: 是半单模 R N
-  证明: congr (f.quotKerEquivOfSurjective hf).symm
-
-Depends on / 依赖: f.quotKerEquivOfSurjective, quotKerEquivOfSurjective
+/-
+**IsSemisimpleModule.of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `IsSemisimpleModule
+`。
+形式化陈述：of_surjective (f : M ->ₗ[R] N) (hf : Function.Surjective f) : IsSemisimple
+Module R N
+参数：f : M ->ₗ[R] N；hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.congr`：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N
+ where __
 -/
-theorem of_surjective (f : M ->ₗ[R] N) (hf : Function.Surjective f) : IsSemisimpleModule R N :=
+theorem of_surjective (f : M →ₗ[R] N) (hf : Function.Surjective f) : IsSemisimpleModule R N :=
   congr (f.quotKerEquivOfSurjective hf).symm
 
 section
 
 variable {M' : Type*} [AddCommGroup M'] [Module R M'] {N'} [AddCommGroup N'] [Module S N']
-  {σ : R ->+* S} (l : M' ->ₛₗ[σ] N')
+  {σ : R →+* S} (l : M' →ₛₗ[σ] N')
 
-/--
-theorem `_root_.LinearMap.isSemisimpleModule_iff_of_bijective` / 定理 `_root_.LinearMap.isSemisimpleModule_iff_of_bijective`
-
-English:
-theorem _root_.LinearMap.isSemisimpleModule_iff_of_bijective
-  proof: by
-  simp_rw [isSemisimpleModule_iff,
-    (Submodule.orderIsoMapComapOfBijective l hl).complementedLattice_iff]
-
-中文:
-定理 _root_.线性映射.isSemisimpleModule_iff_of_bijective
-  证明: by
-  simp_rw [isSemisimpleModule_iff,
-    (Submodule.orderIsoMapComapOfBijective l hl).complementedLattice_iff]
-
-Depends on / 依赖: Submodule, Submodule.orderIsoMapComapOfBijective, WeaklyLocallyCompactSpace, complementedLattice_iff, isSemisimpleModule_iff, orderIsoMapComapOfBijective, simp_rw
+/-
+**IsSemisimpleModule._root_.LinearMap.isSemisimpleModule_iff_of_bijective** 是 Ma
+thlib 中的一个定理，位于命名空间 `IsSemisimpleModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearMap.isSemisimpleModule_iff_of_bijective
     [RingHomSurjective σ] (hl : Function.Bijective l) :
@@ -1122,320 +1144,349 @@ end
 
 end IsSemisimpleModule
 
-/--
-theorem `LinearEquiv.isSemisimpleModule_iff` / 定理 `LinearEquiv.isSemisimpleModule_iff`
-
-English:
-theorem LinearEquiv.isSemisimpleModule_iff
-  given: (e : M ≃ₗ[R] N)
-  proof: ⟨(·.congr e.symm), (·.congr e)⟩
-
-中文:
-定理 线性等价.isSemisimpleModule_iff
-  条件: (e : M ≃ₗ[R] N)
-  证明: ⟨(·.congr e.symm), (·.congr e)⟩
-
-Depends on / 依赖: e.symm
+/-
+**LinearEquiv.isSemisimpleModule_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearEquiv.isSemisimpleModule_iff (e : M ≃ₗ[R] N) : IsSemisimpleModule R 
+M ↔ IsSemisimpleModule R N
+参数：e : M ≃ₗ[R] N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.congr`：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N
+ where __
 -/
 theorem LinearEquiv.isSemisimpleModule_iff (e : M ≃ₗ[R] N) :
     IsSemisimpleModule R M ↔ IsSemisimpleModule R N :=
   ⟨(·.congr e.symm), (·.congr e)⟩
 
-/--
-theorem `sSup_simples_eq_top_iff_isSemisimpleModule` / 定理 `sSup_simples_eq_top_iff_isSemisimpleModule`
+/-- A module is semisimple iff it is generated by its simple submodules. -/
+/-
+**sSup_simples_eq_top_iff_isSemisimpleModule** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sSup_simples_eq_top_iff_isSemisimpleModule : sSup { m : Submodule R M | Is
+SimpleModule R m } = ⊤ ↔ IsSemisimpleModule R M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.of_sSup_simples_eq_top`：IsSemisimpleModule.of_sSup_si
+mples_eq_top (h : sSup { m : Submodule R M | IsSimpleModule R m } = ⊤) : IsSemis
+impleModule R M where __
+· 使用定理 `IsSemisimpleModule.sSup_simples_eq_top`：sSup_simples_eq_top : sSup { m :
+ Submodule R M | IsSimpleModule R m } = ⊤
 
-English:
-theorem sSup_simples_eq_top_iff_isSemisimpleModule
-  proof: ⟨.of_sSup_simples_eq_top, fun _ => IsSemisimpleModule.sSup_simples_eq_top _ _⟩
-
-中文:
-定理 sSup_simples_eq_top_iff_isSemisimpleModule
-  证明: ⟨.of_sSup_simples_eq_top, fun _ => IsSemisimpleModule.sSup_simples_eq_top _ _⟩
-
-Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.sSup_simples_eq_top, of_sSup_simples_eq_top, sSup_simples_eq_top
+--- 原说明 ---
+A module is semisimple iff it is generated by its simple submodules.
 -/
 theorem sSup_simples_eq_top_iff_isSemisimpleModule :
     sSup { m : Submodule R M | IsSimpleModule R m } = ⊤ ↔ IsSemisimpleModule R M :=
-  ⟨.of_sSup_simples_eq_top, fun _ => IsSemisimpleModule.sSup_simples_eq_top _ _⟩
+  ⟨.of_sSup_simples_eq_top, fun _ ↦ IsSemisimpleModule.sSup_simples_eq_top _ _⟩
 
-/--
-lemma `isSemisimpleModule_of_isSemisimpleModule_submodule` / 引理 `isSemisimpleModule_of_isSemisimpleModule_submodule`
+/-- A module generated by semisimple submodules is itself semisimple. -/
+/-
+**isSemisimpleModule_of_isSemisimpleModule_submodule** 是 Mathlib 中的一个引理，位于命名空间 `
+`。
+形式化陈述：isSemisimpleModule_of_isSemisimpleModule_submodule {s : Set ι} {p : ι -> S
+ubmodule R M} (hp : forall i in s, IsSemisimpleModule R (p i)) (hp' : ⨆ i in s, 
+p i = ⊤) : IsSemisimpleModule R M
+参数：hp : forall i in s, IsSemisimpleModule R (p i)；hp' : ⨆ i in s, p i = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `complementedLattice_of_complementedLattice_Iic`：complementedLattice_of_c
+omplementedLattice_Iic [IsModularLattice α] [IsCompactlyGenerated α] {s : Set ι}
+ {f : ι -> α} (h : forall i in s, Co…
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.complementedLattice_iff`：OrderIso.complementedLattice_iff (f : 
+α ≃o β) : ComplementedLattice α ↔ ComplementedLattice β
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 
-English:
-lemma isSemisimpleModule_of_isSemisimpleModule_submodule
-  statement: {s : Set ι} {p : ι -> Submodule R M}
-  proof: by
-  simp_rw [isSemisimpleModule_iff] at hp ⊢
-  refine complementedLattice_of_complementedLattice_Iic (fun i hi => ?_) hp'
-  simpa only [← (p i).mapIic.complementedLattice_iff] using hp i hi
-
-中文:
-引理 isSemisimpleModule_of_isSemisimpleModule_submodule
-  结论: {s : 集合 ι} {p : ι -> 子模 R M}
-  证明: by
-  simp_rw [isSemisimpleModule_iff] at hp ⊢
-  refine complementedLattice_of_complementedLattice_Iic (fun i hi => ?_) hp'
-  simpa only [← (p i).mapIic.complementedLattice_iff] using hp i hi
-
-Depends on / 依赖: complementedLattice_iff, complementedLattice_of_complementedLattice_Iic, isSemisimpleModule_iff, mapIic, mapIic.complementedLattice_iff, simp_rw
+--- 原说明 ---
+A module generated by semisimple submodules is itself semisimple.
 -/
-lemma isSemisimpleModule_of_isSemisimpleModule_submodule {s : Set ι} {p : ι -> Submodule R M}
-    (hp : forall i in s, IsSemisimpleModule R (p i)) (hp' : ⨆ i in s, p i = ⊤) :
+lemma isSemisimpleModule_of_isSemisimpleModule_submodule {s : Set ι} {p : ι → Submodule R M}
+    (hp : ∀ i ∈ s, IsSemisimpleModule R (p i)) (hp' : ⨆ i ∈ s, p i = ⊤) :
     IsSemisimpleModule R M := by
   simp_rw [isSemisimpleModule_iff] at hp ⊢
-  refine complementedLattice_of_complementedLattice_Iic (fun i hi => ?_) hp'
+  refine complementedLattice_of_complementedLattice_Iic (fun i hi ↦ ?_) hp'
   simpa only [← (p i).mapIic.complementedLattice_iff] using hp i hi
 
 open Submodule in
-/--
-lemma `isSemisimpleModule_biSup_of_isSemisimpleModule_submodule` / 引理 `isSemisimpleModule_biSup_of_isSemisimpleModule_submodule`
-
-English:
-lemma isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
-  statement: {s : Set ι} {p : ι -> Submodule R M}
-  proof: by
-  refine isSemisimpleModule_of_isSemisimpleModule_submodule
-    ((comap_equiv_self_of_inj_of_le (injective_subtype _) ?_).isSemisimpleModule_iff.mpr <| hp · ·)
-    (biSup_comap_subtype_eq_top ..)
-  simp_rw [range_subtype, le_biSup p ‹_›]
-
-中文:
-引理 isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
-  结论: {s : 集合 ι} {p : ι -> 子模 R M}
-  证明: by
-  refine isSemisimpleModule_of_isSemisimpleModule_submodule
-    ((comap_equiv_self_of_inj_of_le (injective_subtype _) ?_).isSemisimpleModule_iff.mpr <| hp · ·)
-    (biSup_comap_subtype_eq_top ..)
-  simp_rw [range_subtype, le_biSup p ‹_›]
-
-Depends on / 依赖: biSup_comap_subtype_eq_top, comap_equiv_self_of_inj_of_le, injective_subtype, isSemisimpleModule_iff, isSemisimpleModule_iff.mpr, isSemisimpleModule_of_isSemisimpleModule_submodule, le_biSup, range_subtype, simp_rw
+/-
+**isSemisimpleModule_biSup_of_isSemisimpleModule_submodule** 是 Mathlib 中的一个引理，位于
+命名空间 ``。
+形式化陈述：isSemisimpleModule_biSup_of_isSemisimpleModule_submodule {s : Set ι} {p : 
+ι -> Submodule R M} (hp : forall i in s, IsSemisimpleModule R (p i)) : IsSemisim
+pleModule R ↥(⨆ i in s, p i)
+参数：hp : forall i in s, IsSemisimpleModule R (p i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `isSemisimpleModule_of_isSemisimpleModule_submodule`：isSemisimpleModule_o
+f_isSemisimpleModule_submodule {s : Set ι} {p : ι -> Submodule R M} (hp : forall
+ i in s, IsSemisimpleModule R (p i)) (hp…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.isSemisimpleModule_iff`：LinearEquiv.isSemisimpleModule_iff (
+e : M ≃ₗ[R] N) : IsSemisimpleModule R M ↔ IsSemisimpleModule R N
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用引理 `le_biSup`：le_biSup {ι : Type*} {s : Set ι} (f : ι -> α) {i : ι} (hi : i 
+in s) : f i <= ⨆ i in s, f i
+· 使用引理 `Submodule.biSup_comap_subtype_eq_top`：biSup_comap_subtype_eq_top {ι : Ty
+pe*} (s : Set ι) (p : ι -> Submodule R M) : ⨆ i in s, (p i).comap (⨆ i in s, p i
+).subtype = ⊤
 -/
-lemma isSemisimpleModule_biSup_of_isSemisimpleModule_submodule {s : Set ι} {p : ι -> Submodule R M}
-    (hp : forall i in s, IsSemisimpleModule R (p i)) :
-    IsSemisimpleModule R ↥(⨆ i in s, p i) := by
+lemma isSemisimpleModule_biSup_of_isSemisimpleModule_submodule {s : Set ι} {p : ι → Submodule R M}
+    (hp : ∀ i ∈ s, IsSemisimpleModule R (p i)) :
+    IsSemisimpleModule R ↥(⨆ i ∈ s, p i) := by
   refine isSemisimpleModule_of_isSemisimpleModule_submodule
     ((comap_equiv_self_of_inj_of_le (injective_subtype _) ?_).isSemisimpleModule_iff.mpr <| hp · ·)
     (biSup_comap_subtype_eq_top ..)
   simp_rw [range_subtype, le_biSup p ‹_›]
-
-/--
-lemma `isSemisimpleModule_of_isSemisimpleModule_submodule'` / 引理 `isSemisimpleModule_of_isSemisimpleModule_submodule'`
-
-English:
-lemma isSemisimpleModule_of_isSemisimpleModule_submodule'
-  statement: {p : ι -> Submodule R M}
-  proof: isSemisimpleModule_of_isSemisimpleModule_submodule (s := Set.univ) (fun i _ => hp i) (by simpa)
-
-中文:
-引理 isSemisimpleModule_of_isSemisimpleModule_submodule'
-  结论: {p : ι -> 子模 R M}
-  证明: isSemisimpleModule_of_isSemisimpleModule_submodule (s := Set.univ) (fun i _ => hp i) (by simpa)
-
-Depends on / 依赖: Set.univ, isSemisimpleModule_of_isSemisimpleModule_submodule
+/-
+**isSemisimpleModule_of_isSemisimpleModule_submodule'** 是 Mathlib 中的一个引理，位于命名空间 
+``。
+形式化陈述：isSemisimpleModule_of_isSemisimpleModule_submodule' {p : ι -> Submodule R 
+M} (hp : forall i, IsSemisimpleModule R (p i)) (hp' : ⨆ i, p i = ⊤) : IsSemisimp
+leModule R M
+参数：hp : forall i, IsSemisimpleModule R (p i)；hp' : ⨆ i, p i = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `isSemisimpleModule_of_isSemisimpleModule_submodule`：isSemisimpleModule_o
+f_isSemisimpleModule_submodule {s : Set ι} {p : ι -> Submodule R M} (hp : forall
+ i in s, IsSemisimpleModule R (p i)) (hp…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-lemma isSemisimpleModule_of_isSemisimpleModule_submodule' {p : ι -> Submodule R M}
-    (hp : forall i, IsSemisimpleModule R (p i)) (hp' : ⨆ i, p i = ⊤) :
+lemma isSemisimpleModule_of_isSemisimpleModule_submodule' {p : ι → Submodule R M}
+    (hp : ∀ i, IsSemisimpleModule R (p i)) (hp' : ⨆ i, p i = ⊤) :
     IsSemisimpleModule R M :=
-  isSemisimpleModule_of_isSemisimpleModule_submodule (s := Set.univ) (fun i _ => hp i) (by simpa)
-
-instance {ι} (M : ι -> Type*) [forall i, AddCommGroup (M i)] [forall i, Module R (M i)]
-    [forall i, IsSemisimpleModule R (M i)] : IsSemisimpleModule R (Π₀ i, M i) := by
+  isSemisimpleModule_of_isSemisimpleModule_submodule (s := Set.univ) (fun i _ ↦ hp i) (by simpa)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {ι} (M : ι → Type*) [∀ i, AddCommGroup (M i)] [∀ i, Module R (M i)]
+    [∀ i, IsSemisimpleModule R (M i)] : IsSemisimpleModule R (Π₀ i, M i) := by
   classical
   exact isSemisimpleModule_of_isSemisimpleModule_submodule'
-    (fun _ => .range _) DFinsupp.iSup_range_lsingle
+    (fun _ ↦ .range _) DFinsupp.iSup_range_lsingle
 
 variable (R M) in
-/--
-theorem `IsSemisimpleModule.exists_linearEquiv_dfinsupp` / 定理 `IsSemisimpleModule.exists_linearEquiv_dfinsupp`
-
-English:
-theorem IsSemisimpleModule.exists_linearEquiv_dfinsupp
-  given: [IsSemisimpleModule R M]
-  proof: by
-  have ⟨s, ind, sSup, simple⟩ := IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top R M
-  refine ⟨s, ?_, ind, SetCoe.forall.mpr simple⟩
-  rw [sSupIndep_iff] at ind
-exact .symm .trans (.ofInjective _ ind.dfinsupp_lsum_injective) .trans (.ofEq _ ⊤ <|
-    by rw [← Submodule.iSup_eq_range_dfinsupp_lsum, ← sSup, sSup_eq_iSup']) Submodule.topEquiv
-
-中文:
-定理 是半单模.存在_linearEquiv_dfinsupp
-  条件: [是半单模 R M]
-  证明: by
-  have ⟨s, ind, sSup, simple⟩ := IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top R M
-  refine ⟨s, ?_, ind, SetCoe.forall.mpr simple⟩
-  rw [sSupIndep_iff] at ind
-exact .symm .trans (.ofInjective _ ind.dfinsupp_lsum_injective) .trans (.ofEq _ ⊤ <|
-    by rw [← Submodule.iSup_eq_range_dfinsupp_lsum, ← sSup, sSup_eq_iSup']) Submodule.topEquiv
-
-Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top, SetCoe, SetCoe.forall.mpr, Submodule, Submodule.iSup_eq_range_dfinsupp_lsum, Submodule.topEquiv, dfinsupp_lsum_injective, exists_sSupIndep_sSup_simples_eq_top, iSup_eq_range_dfinsupp_lsum, ind.dfinsupp_lsum_injective, ofInjective, sSupIndep_iff, sSup_eq_iSup, simple, topEquiv
+/-
+**IsSemisimpleModule.exists_linearEquiv_dfinsupp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSemisimpleModule.exists_linearEquiv_dfinsupp [IsSemisimpleModule R M] : 
+exists (s : Set (Submodule R M)) (_ : M ≃ₗ[R] Π₀ m : s, m.1), sSupIndep s ∧ fora
+ll m : s, IsSimpleModule R m.1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top`：exists_sSupInde
+p_sSup_simples_eq_top : exists s : Set (Submodule R M), sSupIndep s ∧ sSup s = ⊤
+ ∧ forall m in s, IsSimpleModule R m
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `iSupIndep.dfinsupp_lsum_injective`：iSupIndep.dfinsupp_lsum_injective {p 
+: ι -> Submodule R N} (h : iSupIndep p) : Function.Injective (lsum Nat fun i => 
+(p i).subtype)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSupIndep_iff`：sSupIndep_iff {α : Type*} [CompleteLattice α] (s : Set α)
+ : sSupIndep s ↔ iSupIndep ((↑) : s -> α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.iSup_eq_range_dfinsupp_lsum`：iSup_eq_range_dfinsupp_lsum (p : 
+ι -> Submodule R N) : iSup p = LinearMap.range (DFinsupp.lsum Nat fun i => (p i)
+.subtype)
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SetCoe.forall`：SetCoe.forall {s : Set α} {p : s -> Prop} : (forall x : s
+, p x) ↔ forall (x) (h : x in s), p ⟨x, h⟩
 -/
 theorem IsSemisimpleModule.exists_linearEquiv_dfinsupp [IsSemisimpleModule R M] :
-    exists (s : Set (Submodule R M)) (_ : M ≃ₗ[R] Π₀ m : s, m.1),
-      sSupIndep s ∧ forall m : s, IsSimpleModule R m.1 := by
+    ∃ (s : Set (Submodule R M)) (_ : M ≃ₗ[R] Π₀ m : s, m.1),
+      sSupIndep s ∧ ∀ m : s, IsSimpleModule R m.1 := by
   have ⟨s, ind, sSup, simple⟩ := IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top R M
   refine ⟨s, ?_, ind, SetCoe.forall.mpr simple⟩
   rw [sSupIndep_iff] at ind
-exact .symm .trans (.ofInjective _ ind.dfinsupp_lsum_injective) .trans (.ofEq _ ⊤ <|
+  exact .symm <| .trans (.ofInjective _ ind.dfinsupp_lsum_injective) <| .trans (.ofEq _ ⊤ <|
     by rw [← Submodule.iSup_eq_range_dfinsupp_lsum, ← sSup, sSup_eq_iSup']) Submodule.topEquiv
-
-/--
-theorem `isSemisimpleModule_iff_exists_linearEquiv_dfinsupp` / 定理 `isSemisimpleModule_iff_exists_linearEquiv_dfinsupp`
-
-English:
-theorem isSemisimpleModule_iff_exists_linearEquiv_dfinsupp
-  statement: IsSemisimpleModule R M ↔
-  proof: by
-  refine ⟨fun _ => ?_, fun ⟨s, e, h⟩ => .congr e⟩
-  have ⟨s, e, h⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
-  exact ⟨s, e, h.2⟩
-
-中文:
-定理 isSemisimpleModule_iff_存在_linearEquiv_dfinsupp
-  结论: 是半单模 R M ↔
-  证明: by
-  refine ⟨fun _ => ?_, fun ⟨s, e, h⟩ => .congr e⟩
-  have ⟨s, e, h⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
-  exact ⟨s, e, h.2⟩
-
-Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.exists_linearEquiv_dfinsupp, exists_linearEquiv_dfinsupp
+/-
+**isSemisimpleModule_iff_exists_linearEquiv_dfinsupp** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：isSemisimpleModule_iff_exists_linearEquiv_dfinsupp : IsSemisimpleModule R 
+M ↔ exists (s : Set (Submodule R M)) (_ : M ≃ₗ[R] Π₀ m : s, m.1), forall m : s, 
+IsSimpleModule R m.1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.exists_linearEquiv_dfinsupp`：IsSemisimpleModule.exist
+s_linearEquiv_dfinsupp [IsSemisimpleModule R M] : exists (s : Set (Submodule R M
+)) (_ : M ≃ₗ[R] Π₀ m : s, m.1), sSup…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsSemisimpleModule.congr`：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N
+ where __
+· 使用定理 `instIsSemisimpleModuleDFinsupp`：∀ {R : Type u_2} [inst : Ring R] {ι : Ty
+pe u_7} (M : ι → Type u_6) [inst_1 : (i : ι) → AddCommGroup (M i)]   [inst_2 : (
+i : ι) → _root_.Modu…
+· 使用定理 `instIsSemisimpleModuleOfIsSimpleModule`：∀ (R : Type u_2) [inst : Ring R]
+ (M : Type u_4) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimp
+leModule R M], IsSemisimpleM…
 -/
 theorem isSemisimpleModule_iff_exists_linearEquiv_dfinsupp : IsSemisimpleModule R M ↔
-    exists (s : Set (Submodule R M)) (_ : M ≃ₗ[R] Π₀ m : s, m.1), forall m : s, IsSimpleModule R m.1 := by
-  refine ⟨fun _ => ?_, fun ⟨s, e, h⟩ => .congr e⟩
+    ∃ (s : Set (Submodule R M)) (_ : M ≃ₗ[R] Π₀ m : s, m.1), ∀ m : s, IsSimpleModule R m.1 := by
+  refine ⟨fun _ ↦ ?_, fun ⟨s, e, h⟩ ↦ .congr e⟩
   have ⟨s, e, h⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
   exact ⟨s, e, h.2⟩
 
 variable (R M) in
-/--
-theorem `IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp` / 定理 `IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp`
-
-English:
-theorem IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp
-  statement: [IsSemisimpleModule R M]
-  proof: have ⟨s, e, h, simple⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
-  have := WellFoundedGT.finite_of_iSupIndep ((sSupIndep_iff _).mp h)
-fun S => (S.1.nontrivial_iff_ne_bot).mp IsSimpleModule.nontrivial R S
-⟨_, _, e.trans DirectSum.lequivCongrLeft R (Finite.equivFin s), fun _ => simple _⟩
-
-中文:
-定理 是半单模.存在_linearEquiv_fin_dfinsupp
-  结论: [是半单模 R M]
-  证明: have ⟨s, e, h, simple⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
-  have := WellFoundedGT.finite_of_iSupIndep ((sSupIndep_iff _).mp h)
-fun S => (S.1.nontrivial_iff_ne_bot).mp IsSimpleModule.nontrivial R S
-⟨_, _, e.trans DirectSum.lequivCongrLeft R (Finite.equivFin s), fun _ => simple _⟩
-
-Depends on / 依赖: DirectSum, DirectSum.lequivCongrLeft, Finite, Finite.equivFin, IsSemisimpleModule, IsSemisimpleModule.exists_linearEquiv_dfinsupp, IsSimpleModule, IsSimpleModule.nontrivial, WellFoundedGT, WellFoundedGT.finite_of_iSupIndep, e.trans, equivFin, exists_linearEquiv_dfinsupp, finite_of_iSupIndep, lequivCongrLeft, nontrivial, nontrivial_iff_ne_bot, sSupIndep_iff, simple
+/-
+**IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp [IsSemisimpleModule R M
+] [Module.Finite R M] : exists (n : Nat) (S : Fin n -> Submodule R M) (_ : M ≃ₗ[
+R] Π₀ i : Fin n, S i), forall i, IsSimpleModule R (S i)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.exists_linearEquiv_dfinsupp`：IsSemisimpleModule.exist
+s_linearEquiv_dfinsupp [IsSemisimpleModule R M] : exists (s : Set (Submodule R M
+)) (_ : M ≃ₗ[R] Π₀ m : s, m.1), sSup…
+· 使用定理 `WellFoundedGT.finite_of_iSupIndep`：WellFoundedGT.finite_of_iSupIndep [We
+llFoundedGT α] {ι : Type*} {t : ι -> α} (ht : iSupIndep t) (h_ne_bot : forall i,
+ t i != ⊥) : Finite ι
+· 使用定理 `IsSemisimpleModule.instIsNoetherianOfFinite`：∀ {R : Type u_2} [inst : Ri
+ng R] {M : Type u_4} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [I
+sSemisimpleModule R M] [Module.Fi…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sSupIndep_iff`：sSupIndep_iff {α : Type*} [CompleteLattice α] (s : Set α)
+ : sSupIndep s ↔ iSupIndep ((↑) : s -> α)
+· 使用定理 `Submodule.nontrivial_iff_ne_bot`：nontrivial_iff_ne_bot : Nontrivial p ↔ 
+p != ⊥
+· 使用定理 `IsSimpleModule.nontrivial`：IsSimpleModule.nontrivial [IsSimpleModule R M
+] : Nontrivial M
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem IsSemisimpleModule.exists_linearEquiv_fin_dfinsupp [IsSemisimpleModule R M]
-    [Module.Finite R M] : exists (n : Nat) (S : Fin n -> Submodule R M)
-      (_ : M ≃ₗ[R] Π₀ i : Fin n, S i), forall i, IsSimpleModule R (S i) :=
+    [Module.Finite R M] : ∃ (n : ℕ) (S : Fin n → Submodule R M)
+      (_ : M ≃ₗ[R] Π₀ i : Fin n, S i), ∀ i, IsSimpleModule R (S i) :=
   have ⟨s, e, h, simple⟩ := IsSemisimpleModule.exists_linearEquiv_dfinsupp R M
   have := WellFoundedGT.finite_of_iSupIndep ((sSupIndep_iff _).mp h)
-fun S => (S.1.nontrivial_iff_ne_bot).mp IsSimpleModule.nontrivial R S
-⟨_, _, e.trans DirectSum.lequivCongrLeft R (Finite.equivFin s), fun _ => simple _⟩
+    fun S ↦ (S.1.nontrivial_iff_ne_bot).mp <| IsSimpleModule.nontrivial R S
+  ⟨_, _, e.trans <| DirectSum.lequivCongrLeft R (Finite.equivFin s), fun _ ↦ simple _⟩
 
 open LinearMap in
-instance {ι} [Finite ι] (M : ι -> Type*) [forall i, AddCommGroup (M i)] [forall i, Module R (M i)]
-    [forall i, IsSemisimpleModule R (M i)] : IsSemisimpleModule R (Π i, M i) := by
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {ι} [Finite ι] (M : ι → Type*) [∀ i, AddCommGroup (M i)] [∀ i, Module R (M i)]
+    [∀ i, IsSemisimpleModule R (M i)] : IsSemisimpleModule R (Π i, M i) := by
   classical
   exact isSemisimpleModule_of_isSemisimpleModule_submodule' (p := (range <| single _ _ ·))
-    (fun i => .range _) (by simp_rw [range_eq_map, Submodule.iSup_map_single, Submodule.pi_top])
-
-/--
-theorem `IsSemisimpleModule.sup` / 定理 `IsSemisimpleModule.sup`
-
-English:
-theorem IsSemisimpleModule.sup
-  statement: {p q : Submodule R M}
-  proof: by
-  let f : Bool -> Submodule R M := Bool.rec q p
-  rw [show p ⊔ q = ⨆ i in Set.univ]; rw [f i by rw [iSup_univ]; rw [iSup_bool_eq]]
-  exact isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
-    (by rintro (_ | _) _ <;> assumption)
-
-中文:
-定理 是半单模.上确界
-  结论: {p q : 子模 R M}
-  证明: by
-  let f : Bool -> Submodule R M := Bool.rec q p
-  rw [show p ⊔ q = ⨆ i in Set.univ]; rw [f i by rw [iSup_univ]; rw [iSup_bool_eq]]
-  exact isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
-    (by rintro (_ | _) _ <;> assumption)
-
-Depends on / 依赖: Bool.rec, Set.univ, Submodule, iSup_bool_eq, iSup_univ, isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
+    (fun i ↦ .range _) (by simp_rw [range_eq_map, Submodule.iSup_map_single, Submodule.pi_top])
+/-
+**IsSemisimpleModule.sup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSemisimpleModule.sup {p q : Submodule R M} (_ : IsSemisimpleModule R p) 
+(_ : IsSemisimpleModule R q) : IsSemisimpleModule R ↥(p ⊔ q)
+参数：_ : IsSemisimpleModule R p；_ : IsSemisimpleModule R q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup_univ`：iSup_univ {f : β -> α} : ⨆ x in (univ : Set β), f x = ⨆ x, f 
+x
+· 使用定理 `iSup_bool_eq`：iSup_bool_eq {f : Bool -> α} : ⨆ b : Bool, f b = f true ⊔ 
+f false
+· 使用引理 `isSemisimpleModule_biSup_of_isSemisimpleModule_submodule`：isSemisimpleMo
+dule_biSup_of_isSemisimpleModule_submodule {s : Set ι} {p : ι -> Submodule R M} 
+(hp : forall i in s, IsSemisimpleModule R (p i…
 -/
 theorem IsSemisimpleModule.sup {p q : Submodule R M}
     (_ : IsSemisimpleModule R p) (_ : IsSemisimpleModule R q) :
     IsSemisimpleModule R ↥(p ⊔ q) := by
-  let f : Bool -> Submodule R M := Bool.rec q p
-  rw [show p ⊔ q = ⨆ i in Set.univ]; rw [f i by rw [iSup_univ]; rw [iSup_bool_eq]]
+  let f : Bool → Submodule R M := Bool.rec q p
+  rw [show p ⊔ q = ⨆ i ∈ Set.univ, f i by rw [iSup_univ, iSup_bool_eq]]
   exact isSemisimpleModule_biSup_of_isSemisimpleModule_submodule
     (by rintro (_ | _) _ <;> assumption)
 
 variable (R M) in
-/--
-theorem `IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule` / 定理 `IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule`
-
-English:
-theorem IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule
-  statement: [IsSemisimpleRing R]
-  proof: have ⟨J, _, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp h
-  have ⟨I, ⟨e'⟩⟩ := IsSemisimpleModule.exists_submodule_linearEquiv_quotient J
-  ⟨I, ⟨e.trans e'.symm⟩⟩
-
-中文:
-定理 IsSemisimpleRing.存在_linearEquiv_ideal_of_isSimpleModule
-  结论: [IsSemisimpleRing R]
-  证明: have ⟨J, _, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp h
-  have ⟨I, ⟨e'⟩⟩ := IsSemisimpleModule.exists_submodule_linearEquiv_quotient J
-  ⟨I, ⟨e.trans e'.symm⟩⟩
-
-Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.exists_submodule_linearEquiv_quotient, e.trans, exists_submodule_linearEquiv_quotient, isSimpleModule_iff_quot_maximal, isSimpleModule_iff_quot_maximal.mp
+/-
+**IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule** 是 Mathlib 中的一个定理
+，位于命名空间 ``。
+形式化陈述：IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule [IsSemisimpleR
+ing R] [h : IsSimpleModule R M] : exists I : Ideal R, Nonempty (M ≃ₗ[R] I)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isSimpleModule_iff_quot_maximal`：isSimpleModule_iff_quot_maximal : IsSim
+pleModule R M ↔ exists I : Ideal R, I.IsMaximal ∧ Nonempty (M ≃ₗ[R] R ⧸ I)
+· 使用定理 `IsSemisimpleModule.exists_submodule_linearEquiv_quotient`：exists_submodu
+le_linearEquiv_quotient (N : Submodule R M) : exists (P : Submodule R M), Nonemp
+ty (P ≃ₗ[R] M ⧸ N)
 -/
 theorem IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule [IsSemisimpleRing R]
-    [h : IsSimpleModule R M] : exists I : Ideal R, Nonempty (M ≃ₗ[R] I) :=
+    [h : IsSimpleModule R M] : ∃ I : Ideal R, Nonempty (M ≃ₗ[R] I) :=
   have ⟨J, _, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp h
   have ⟨I, ⟨e'⟩⟩ := IsSemisimpleModule.exists_submodule_linearEquiv_quotient J
   ⟨I, ⟨e.trans e'.symm⟩⟩
-
-instance (ι) [IsSemisimpleModule R M] : IsSemisimpleModule R (ι ->₀ M) :=
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (ι) [IsSemisimpleModule R M] : IsSemisimpleModule R (ι →₀ M) :=
   isSemisimpleModule_of_isSemisimpleModule_submodule'
-    (fun _ => .congr (LinearMap.quotKerEquivRange _).symm) Finsupp.iSup_lsingle_range
-
-/--
-Instance `IsSemisimpleRing.isSemisimpleModule` / 实例 `IsSemisimpleRing.isSemisimpleModule`
-
-English:
-instance IsSemisimpleRing.isSemisimpleModule
-  signature: [IsSemisimpleRing R]
-  body: .congr (LinearMap.quotKerEquivOfSurjective _ <| Finsupp.linearCombination_id_surjective R M).symm
-
-中文:
-实例 IsSemisimpleRing.isSemisimpleModule
-  签名: [IsSemisimpleRing R]
-  定义体: .congr (LinearMap.quotKerEquivOfSurjective _ <| Finsupp.linearCombination_id_surjective R M).symm
-
-Depends on / 依赖: Finsupp, Finsupp.linearCombination_id_surjective, LinearMap, LinearMap.quotKerEquivOfSurjective, linearCombination_id_surjective, quotKerEquivOfSurjective
+    (fun _ ↦ .congr (LinearMap.quotKerEquivRange _).symm) Finsupp.iSup_lsingle_range
+/-
+**IsSemisimpleRing.isSemisimpleModule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsSemisimpleRing.isSemisimpleModule [IsSemisimpleRing R] : IsSemisimpleMod
+ule R M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemisimpleModule.congr`：congr (e : N ≃ₗ[R] M) : IsSemisimpleModule R N
+ where __
+· 使用定理 `instIsSemisimpleModuleFinsupp`：∀ {R : Type u_2} [inst : Ring R] {M : Typ
+e u_4} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] (ι : Type u_6)   [
+IsSemisimpleModule …
+· 使用定理 `Finsupp.linearCombination_id_surjective`：linearCombination_id_surjective
+ (M) [AddCommMonoid M] [Module R M] : Function.Surjective (linearCombination R (
+id : M -> M))
 -/
 instance IsSemisimpleRing.isSemisimpleModule [IsSemisimpleRing R] : IsSemisimpleModule R M :=
   .congr (LinearMap.quotKerEquivOfSurjective _ <| Finsupp.linearCombination_id_surjective R M).symm
-
-/--
-Instance `IsSemisimpleModule.isCoatomic_submodule` / 实例 `IsSemisimpleModule.isCoatomic_submodule`
-
-English:
-instance IsSemisimpleModule.isCoatomic_submodule
-  signature: [IsSemisimpleModule R M]
-  body: isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
-
-中文:
-实例 是半单模.isCoatomic_submodule
-  签名: [是半单模 R M]
-  定义体: isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
-
-Depends on / 依赖: isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
+/-
+**IsSemisimpleModule.isCoatomic_submodule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsSemisimpleModule.isCoatomic_submodule [IsSemisimpleModule R M] : IsCoato
+mic (Submodule R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `isCoatomic_of_isAtomic_of_complementedLattice_of_isModular`：isCoatomic_o
+f_isAtomic_of_complementedLattice_of_isModular [IsAtomic α] : IsCoatomic α
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
+· 使用定理 `isAtomic_of_complementedLattice`：∀ {α : Type u_2} [inst : CompleteLattic
+e α] [IsModularLattice α] [IsCompactlyGenerated α] [ComplementedLattice α],   Is
+Atomic α
+· 使用定理 `Submodule.instIsCompactlyGenerated`：∀ {R : Type u_1} {M : Type u_4} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   IsCom
+pactlyGenerated (Submodu…
 -/
 instance IsSemisimpleModule.isCoatomic_submodule [IsSemisimpleModule R M] :
     IsCoatomic (Submodule R M) :=
@@ -1444,349 +1495,277 @@ instance IsSemisimpleModule.isCoatomic_submodule [IsSemisimpleModule R M] :
 set_option backward.isDefEq.respectTransparency false in
 open LinearMap in
 /-- A finite product of semisimple rings is semisimple. -/
-instance {ι} [Finite ι] (R : ι -> Type*) [Π i, Ring (R i)] [forall i, IsSemisimpleRing (R i)] :
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A finite product of semisimple rings is semisimple.
+-/
+instance {ι} [Finite ι] (R : ι → Type*) [Π i, Ring (R i)] [∀ i, IsSemisimpleRing (R i)] :
     IsSemisimpleRing (Π i, R i) := by
   let _ (i) : Module (Π i, R i) (R i) := Module.compHom _ (Pi.evalRingHom R i)
-  let e (i) : R i ->ₛₗ[Pi.evalRingHom R i] R i :=
-    { AddMonoidHom.id (R i) with map_smul' := fun _ _ => rfl }
+  let e (i) : R i →ₛₗ[Pi.evalRingHom R i] R i :=
+    { AddMonoidHom.id (R i) with map_smul' := fun _ _ ↦ rfl }
   have (i : _) : IsSemisimpleModule (Π i, R i) (R i) :=
     ((e i).isSemisimpleModule_iff_of_bijective Function.bijective_id).mpr inferInstance
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A binary product of semisimple rings is semisimple. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [hR
-  signature: : IsSemisimpleRing R] [hS : IsSemisimpleRing S] : IsSemisimpleRing (R × S)
-  body: by
-  let : Module (R × S) R := Module.compHom _ (.fst R S)
-  let : Module (R × S) S := Module.compHom _ (.snd R S)
-  -- e₁, e₂ got falsely flagged by the unused argument linter
-  let _e₁ : R ->ₛₗ[.fst R S] R := { AddMonoidHom.id R with map_smul' := fun _ _ => rfl }
-  let _e₂ : S ->ₛₗ[.snd R S] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
-  rw [IsSemisimpleRing]; rw [← _e₁.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hR
-  rw [IsSemisimpleRing]; rw [← _e₂.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hS
-  rw [IsSemisimpleRing]; rw [← Submodule.topEquiv.isSemisimpleModule_iff_of_bijective
-    (LinearEquiv.bijective _)]; rw [← LinearMap.sup_range_inl_inr]
-  exact .sup (.range _) (.range _)
-
-中文:
-实例 [hR
-  签名: : IsSemisimpleRing R] [hS : IsSemisimpleRing S] : IsSemisimpleRing (R × S)
-  定义体: by
-  let : Module (R × S) R := Module.compHom _ (.fst R S)
-  let : Module (R × S) S := Module.compHom _ (.snd R S)
-  -- e₁, e₂ got falsely flagged by the unused argument linter
-  let _e₁ : R ->ₛₗ[.fst R S] R := { AddMonoidHom.id R with map_smul' := fun _ _ => rfl }
-  let _e₂ : S ->ₛₗ[.snd R S] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
-  rw [IsSemisimpleRing]; rw [← _e₁.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hR
-  rw [IsSemisimpleRing]; rw [← _e₂.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hS
-  rw [IsSemisimpleRing]; rw [← Submodule.topEquiv.isSemisimpleModule_iff_of_bijective
-    (LinearEquiv.bijective _)]; rw [← LinearMap.sup_range_inl_inr]
-  exact .sup (.range _) (.range _)
-
-Depends on / 依赖: Module, Module.compHom, compHom
+--- 原说明 ---
+A binary product of semisimple rings is semisimple.
 -/
 instance [hR : IsSemisimpleRing R] [hS : IsSemisimpleRing S] : IsSemisimpleRing (R × S) := by
   let : Module (R × S) R := Module.compHom _ (.fst R S)
   let : Module (R × S) S := Module.compHom _ (.snd R S)
   -- e₁, e₂ got falsely flagged by the unused argument linter
-  let _e₁ : R ->ₛₗ[.fst R S] R := { AddMonoidHom.id R with map_smul' := fun _ _ => rfl }
-  let _e₂ : S ->ₛₗ[.snd R S] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
-  rw [IsSemisimpleRing]; rw [← _e₁.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hR
-  rw [IsSemisimpleRing]; rw [← _e₂.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hS
-  rw [IsSemisimpleRing]; rw [← Submodule.topEquiv.isSemisimpleModule_iff_of_bijective
-    (LinearEquiv.bijective _)]; rw [← LinearMap.sup_range_inl_inr]
+  let _e₁ : R →ₛₗ[.fst R S] R := { AddMonoidHom.id R with map_smul' := fun _ _ ↦ rfl }
+  let _e₂ : S →ₛₗ[.snd R S] S := { AddMonoidHom.id S with map_smul' := fun _ _ ↦ rfl }
+  rw [IsSemisimpleRing, ← _e₁.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hR
+  rw [IsSemisimpleRing, ← _e₂.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hS
+  rw [IsSemisimpleRing, ← Submodule.topEquiv.isSemisimpleModule_iff_of_bijective
+    (LinearEquiv.bijective _), ← LinearMap.sup_range_inl_inr]
   exact .sup (.range _) (.range _)
-
-/--
-theorem `RingHom.isSemisimpleRing_of_surjective` / 定理 `RingHom.isSemisimpleRing_of_surjective`
-
-English:
-theorem RingHom.isSemisimpleRing_of_surjective
-  statement: (f : R ->+* S) (hf : Function.Surjective f)
-  proof: by
-  let : Module R S := Module.compHom _ f
-  have : RingHomSurjective f := ⟨hf⟩
-  let e : S ->ₛₗ[f] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
-  rw [IsSemisimpleRing]; rw [← e.isSemisimpleModule_iff_of_bijective Function.bijective_id]
-  infer_instance
-
-中文:
-定理 环态射.isSemisimpleRing_of_surjective
-  结论: (f : R ->+* S) (hf : 函数.满射 f)
-  证明: by
-  let : Module R S := Module.compHom _ f
-  have : RingHomSurjective f := ⟨hf⟩
-  let e : S ->ₛₗ[f] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
-  rw [IsSemisimpleRing]; rw [← e.isSemisimpleModule_iff_of_bijective Function.bijective_id]
-  infer_instance
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, Function, Function.bijective_id, IsSemisimpleRing, Module, Module.compHom, RingHomSurjective, bijective_id, compHom, e.isSemisimpleModule_iff_of_bijective, infer_instance, isSemisimpleModule_iff_of_bijective, map_smul
+/-
+**RingHom.isSemisimpleRing_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.isSemisimpleRing_of_surjective (f : R ->+* S) (hf : Function.Surje
+ctive f) [IsSemisimpleRing R] : IsSemisimpleRing S
+参数：f : R ->+* S；hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_add'`：∀ {M : Type u_10} {N : Type u_11} [inst : AddZero
+ M] [inst_1 : AddZero N] (self : M →+ N) (x y : M),   (↑self).toFun (x + y) = (↑
+self).toFun…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsSemisimpleRing.eq_1`：∀ (R : Type u_2) [inst : Ring R], IsSemisimpleRin
+g R = IsSemisimpleModule R R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.isSemisimpleModule_iff_of_bijective`：∀ {R : Type u_2} {S : Typ
+e u_3} [inst : Ring R] [inst_1 : Ring S] {M' : Type u_6} [inst_2 : AddCommGroup 
+M']   [inst_3 : _root_.Module R M']…
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 -/
-theorem RingHom.isSemisimpleRing_of_surjective (f : R ->+* S) (hf : Function.Surjective f)
+theorem RingHom.isSemisimpleRing_of_surjective (f : R →+* S) (hf : Function.Surjective f)
     [IsSemisimpleRing R] : IsSemisimpleRing S := by
   let : Module R S := Module.compHom _ f
   have : RingHomSurjective f := ⟨hf⟩
-  let e : S ->ₛₗ[f] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
-  rw [IsSemisimpleRing]; rw [← e.isSemisimpleModule_iff_of_bijective Function.bijective_id]
+  let e : S →ₛₗ[f] S := { AddMonoidHom.id S with map_smul' := fun _ _ ↦ rfl }
+  rw [IsSemisimpleRing, ← e.isSemisimpleModule_iff_of_bijective Function.bijective_id]
   infer_instance
-
-/--
-theorem `IsSemisimpleRing.ideal_eq_span_idempotent` / 定理 `IsSemisimpleRing.ideal_eq_span_idempotent`
-
-English:
-theorem IsSemisimpleRing.ideal_eq_span_idempotent
-  given: [IsSemisimpleRing R] (I : Ideal R)
-  proof: by
-  obtain ⟨J, h⟩ := exists_isCompl I
-  obtain ⟨f, idem, rfl⟩ := I.isIdempotentElemEquiv.symm (I.isComplEquivProj ⟨J, h⟩)
-  exact ⟨f 1, LinearMap.isIdempotentElem_map_one_iff.mpr idem, by
-    rw [LinearMap.range_eq_map]; rw [← Ideal.span_one]; rw [← Ideal.submodule_span_eq]; rw [LinearMap.map_span]; rw [Set.image_one]; rw [Ideal.submodule_span_eq]⟩
-
-中文:
-定理 IsSemisimpleRing.ideal_eq_span_idempotent
-  条件: [IsSemisimpleRing R] (I : 理想 R)
-  证明: by
-  obtain ⟨J, h⟩ := exists_isCompl I
-  obtain ⟨f, idem, rfl⟩ := I.isIdempotentElemEquiv.symm (I.isComplEquivProj ⟨J, h⟩)
-  exact ⟨f 1, LinearMap.isIdempotentElem_map_one_iff.mpr idem, by
-    rw [LinearMap.range_eq_map]; rw [← Ideal.span_one]; rw [← Ideal.submodule_span_eq]; rw [LinearMap.map_span]; rw [Set.image_one]; rw [Ideal.submodule_span_eq]⟩
-
-Depends on / 依赖: I.isComplEquivProj, I.isIdempotentElemEquiv.symm, Ideal.span_one, Ideal.submodule_span_eq, LinearMap, LinearMap.isIdempotentElem_map_one_iff.mpr, LinearMap.map_span, LinearMap.range_eq_map, Set.image_one, exists_isCompl, image_one, isComplEquivProj, isIdempotentElemEquiv, isIdempotentElem_map_one_iff, map_span, range_eq_map, span_one, submodule_span_eq
+/-
+**IsSemisimpleRing.ideal_eq_span_idempotent** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSemisimpleRing.ideal_eq_span_idempotent [IsSemisimpleRing R] (I : Ideal 
+R) : exists e : R, IsIdempotentElem e ∧ I = .span {e}
+参数：I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.isIdempotentElem_map_one_iff`：isIdempotentElem_map_one_iff {f 
+: Module.End R R} : IsIdempotentElem (f 1) ↔ IsIdempotentElem f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.range_eq_map`：range_eq_map [RingHomSurjective τ₁₂] (f : M ->ₛₗ
+[τ₁₂] M₂) : range f = map f ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_one`：span_one : span (1 : Set α) = ⊤
+· 使用定理 `Ideal.submodule_span_eq`：submodule_span_eq {s : Set α} : Submodule.span 
+α s = Ideal.span s
+· 使用定理 `LinearMap.map_span`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_4} {M₂ 
+: Type u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Mo
+dule R M…
+· 使用定理 `Set.image_one`：image_one {f : α -> β} : f '' 1 = {f 1}
 -/
 theorem IsSemisimpleRing.ideal_eq_span_idempotent [IsSemisimpleRing R] (I : Ideal R) :
-    exists e : R, IsIdempotentElem e ∧ I = .span {e} := by
+    ∃ e : R, IsIdempotentElem e ∧ I = .span {e} := by
   obtain ⟨J, h⟩ := exists_isCompl I
   obtain ⟨f, idem, rfl⟩ := I.isIdempotentElemEquiv.symm (I.isComplEquivProj ⟨J, h⟩)
   exact ⟨f 1, LinearMap.isIdempotentElem_map_one_iff.mpr idem, by
-    rw [LinearMap.range_eq_map]; rw [← Ideal.span_one]; rw [← Ideal.submodule_span_eq]; rw [LinearMap.map_span]; rw [Set.image_one]; rw [Ideal.submodule_span_eq]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsSemisimpleRing
-  signature: R] : IsPrincipalIdealRing R where
-  body: have ⟨e, _, he⟩ := IsSemisimpleRing.ideal_eq_span_idempotent I; ⟨e, he⟩
-
-中文:
-实例 [IsSemisimpleRing
-  签名: R] : 是主理想环 R where
-  定义体: have ⟨e, _, he⟩ := IsSemisimpleRing.ideal_eq_span_idempotent I; ⟨e, he⟩
-
-Depends on / 依赖: IsSemisimpleRing, IsSemisimpleRing.ideal_eq_span_idempotent, ideal_eq_span_idempotent
+    rw [LinearMap.range_eq_map, ← Ideal.span_one, ← Ideal.submodule_span_eq, LinearMap.map_span,
+      Set.image_one, Ideal.submodule_span_eq]⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsSemisimpleRing R] : IsPrincipalIdealRing R where
   principal I := have ⟨e, _, he⟩ := IsSemisimpleRing.ideal_eq_span_idempotent I; ⟨e, he⟩
 
 namespace LinearMap
 
-/--
-theorem `injective_or_eq_zero` / 定理 `injective_or_eq_zero`
-
-English:
-theorem injective_or_eq_zero
-  given: [IsSimpleModule R M] (f : M ->ₗ[R] N)
-  proof: by
-  rw [← ker_eq_bot]; rw [← ker_eq_top]
-  apply eq_bot_or_eq_top
-
-中文:
-定理 injective_or_eq_zero
-  条件: [是单模 R M] (f : M ->ₗ[R] N)
-  证明: by
-  rw [← ker_eq_bot]; rw [← ker_eq_top]
-  apply eq_bot_or_eq_top
-
-Depends on / 依赖: eq_bot_or_eq_top, ker_eq_bot, ker_eq_top
+/-
+**LinearMap.injective_or_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：injective_or_eq_zero [IsSimpleModule R M] (f : M ->ₗ[R] N) : Function.Inje
+ctive f ∨ f = 0
+参数：f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `LinearMap.ker_eq_top`：ker_eq_top {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊤ ↔ f = 
+0
+· 使用定理 `IsSimpleOrder.eq_bot_or_eq_top`：∀ {α : Type u_4} {inst : LE α} {inst_1 :
+ BoundedOrder α} [self : IsSimpleOrder α] (a : α), a = ⊥ ∨ a = ⊤
+· 使用定理 `IsSimpleModule.toIsSimpleOrder`：∀ {R : Type u_2} {inst : Ring R} {M : Ty
+pe u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self : IsSimpl
+eModule R M], IsSimp…
 -/
-theorem injective_or_eq_zero [IsSimpleModule R M] (f : M ->ₗ[R] N) :
+theorem injective_or_eq_zero [IsSimpleModule R M] (f : M →ₗ[R] N) :
     Function.Injective f ∨ f = 0 := by
-  rw [← ker_eq_bot]; rw [← ker_eq_top]
+  rw [← ker_eq_bot, ← ker_eq_top]
   apply eq_bot_or_eq_top
-
-/--
-theorem `injective_of_ne_zero` / 定理 `injective_of_ne_zero`
-
-English:
-theorem injective_of_ne_zero
-  given: [IsSimpleModule R M] {f : M ->ₗ[R] N} (h : f != 0)
-  proof: f.injective_or_eq_zero.resolve_right h
-
-中文:
-定理 injective_of_ne_zero
-  条件: [是单模 R M] {f : M ->ₗ[R] N} (h : f != 0)
-  证明: f.injective_or_eq_zero.resolve_right h
-
-Depends on / 依赖: f.injective_or_eq_zero.resolve_right, injective_or_eq_zero, resolve_right
+/-
+**LinearMap.injective_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：injective_of_ne_zero [IsSimpleModule R M] {f : M ->ₗ[R] N} (h : f != 0) : 
+Function.Injective f
+参数：h : f != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `LinearMap.injective_or_eq_zero`：injective_or_eq_zero [IsSimpleModule R M
+] (f : M ->ₗ[R] N) : Function.Injective f ∨ f = 0
 -/
-theorem injective_of_ne_zero [IsSimpleModule R M] {f : M ->ₗ[R] N} (h : f != 0) :
+theorem injective_of_ne_zero [IsSimpleModule R M] {f : M →ₗ[R] N} (h : f ≠ 0) :
     Function.Injective f :=
   f.injective_or_eq_zero.resolve_right h
-
-/--
-theorem `surjective_or_eq_zero` / 定理 `surjective_or_eq_zero`
-
-English:
-theorem surjective_or_eq_zero
-  given: [IsSimpleModule R N] (f : M ->ₗ[R] N)
-  proof: by
-  rw [← range_eq_top]; rw [← range_eq_bot]; rw [or_comm]
-  apply eq_bot_or_eq_top
-
-中文:
-定理 surjective_or_eq_zero
-  条件: [是单模 R N] (f : M ->ₗ[R] N)
-  证明: by
-  rw [← range_eq_top]; rw [← range_eq_bot]; rw [or_comm]
-  apply eq_bot_or_eq_top
-
-Depends on / 依赖: eq_bot_or_eq_top, or_comm, range_eq_bot, range_eq_top
+/-
+**LinearMap.surjective_or_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：surjective_or_eq_zero [IsSimpleModule R N] (f : M ->ₗ[R] N) : Function.Sur
+jective f ∨ f = 0
+参数：f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.range_eq_bot`：range_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : range f = ⊥ 
+↔ f = 0
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用定理 `IsSimpleOrder.eq_bot_or_eq_top`：∀ {α : Type u_4} {inst : LE α} {inst_1 :
+ BoundedOrder α} [self : IsSimpleOrder α] (a : α), a = ⊥ ∨ a = ⊤
+· 使用定理 `IsSimpleModule.toIsSimpleOrder`：∀ {R : Type u_2} {inst : Ring R} {M : Ty
+pe u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self : IsSimpl
+eModule R M], IsSimp…
 -/
-theorem surjective_or_eq_zero [IsSimpleModule R N] (f : M ->ₗ[R] N) :
+theorem surjective_or_eq_zero [IsSimpleModule R N] (f : M →ₗ[R] N) :
     Function.Surjective f ∨ f = 0 := by
-  rw [← range_eq_top]; rw [← range_eq_bot]; rw [or_comm]
+  rw [← range_eq_top, ← range_eq_bot, or_comm]
   apply eq_bot_or_eq_top
-
-/--
-theorem `surjective_of_ne_zero` / 定理 `surjective_of_ne_zero`
-
-English:
-theorem surjective_of_ne_zero
-  given: [IsSimpleModule R N] {f : M ->ₗ[R] N} (h : f != 0)
-  proof: f.surjective_or_eq_zero.resolve_right h
-
-中文:
-定理 surjective_of_ne_zero
-  条件: [是单模 R N] {f : M ->ₗ[R] N} (h : f != 0)
-  证明: f.surjective_or_eq_zero.resolve_right h
-
-Depends on / 依赖: f.surjective_or_eq_zero.resolve_right, resolve_right, surjective_or_eq_zero
+/-
+**LinearMap.surjective_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：surjective_of_ne_zero [IsSimpleModule R N] {f : M ->ₗ[R] N} (h : f != 0) :
+ Function.Surjective f
+参数：h : f != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `LinearMap.surjective_or_eq_zero`：surjective_or_eq_zero [IsSimpleModule R
+ N] (f : M ->ₗ[R] N) : Function.Surjective f ∨ f = 0
 -/
-theorem surjective_of_ne_zero [IsSimpleModule R N] {f : M ->ₗ[R] N} (h : f != 0) :
+theorem surjective_of_ne_zero [IsSimpleModule R N] {f : M →ₗ[R] N} (h : f ≠ 0) :
     Function.Surjective f :=
   f.surjective_or_eq_zero.resolve_right h
 
-/--
-theorem `bijective_or_eq_zero` / 定理 `bijective_or_eq_zero`
+/-- **Schur's Lemma** for linear maps between (possibly distinct) simple modules -/
+/-
+**LinearMap.bijective_or_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：bijective_or_eq_zero [IsSimpleModule R M] [IsSimpleModule R N] (f : M ->ₗ[
+R] N) : Function.Bijective f ∨ f = 0
+参数：f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_right`：∀ {a b : Prop}, a ∨ b ↔ ¬b → a
+· 使用定理 `LinearMap.injective_of_ne_zero`：injective_of_ne_zero [IsSimpleModule R M
+] {f : M ->ₗ[R] N} (h : f != 0) : Function.Injective f
+· 使用定理 `LinearMap.surjective_of_ne_zero`：surjective_of_ne_zero [IsSimpleModule R
+ N] {f : M ->ₗ[R] N} (h : f != 0) : Function.Surjective f
 
-English:
-theorem bijective_or_eq_zero
-  given: [IsSimpleModule R M] [IsSimpleModule R N] (f : M ->ₗ[R] N)
-  proof: or_iff_not_imp_right.mpr fun h => ⟨injective_of_ne_zero h, surjective_of_ne_zero h⟩
-
-中文:
-定理 bijective_or_eq_zero
-  条件: [是单模 R M] [是单模 R N] (f : M ->ₗ[R] N)
-  证明: or_iff_not_imp_right.mpr fun h => ⟨injective_of_ne_zero h, surjective_of_ne_zero h⟩
-
-Depends on / 依赖: injective_of_ne_zero, or_iff_not_imp_right, or_iff_not_imp_right.mpr, surjective_of_ne_zero
+--- 原说明 ---
+**Schur's Lemma** for linear maps between (possibly distinct) simple modules
 -/
-theorem bijective_or_eq_zero [IsSimpleModule R M] [IsSimpleModule R N] (f : M ->ₗ[R] N) :
+theorem bijective_or_eq_zero [IsSimpleModule R M] [IsSimpleModule R N] (f : M →ₗ[R] N) :
     Function.Bijective f ∨ f = 0 :=
-  or_iff_not_imp_right.mpr fun h => ⟨injective_of_ne_zero h, surjective_of_ne_zero h⟩
-
-/--
-theorem `bijective_of_ne_zero` / 定理 `bijective_of_ne_zero`
-
-English:
-theorem bijective_of_ne_zero
-  given: [IsSimpleModule R M] [IsSimpleModule R N] {f : M ->ₗ[R] N} (h : f != 0)
-  proof: f.bijective_or_eq_zero.resolve_right h
-
-中文:
-定理 bijective_of_ne_zero
-  条件: [是单模 R M] [是单模 R N] {f : M ->ₗ[R] N} (h : f != 0)
-  证明: f.bijective_or_eq_zero.resolve_right h
-
-Depends on / 依赖: bijective_or_eq_zero, f.bijective_or_eq_zero.resolve_right, resolve_right
+  or_iff_not_imp_right.mpr fun h ↦ ⟨injective_of_ne_zero h, surjective_of_ne_zero h⟩
+/-
+**LinearMap.bijective_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：bijective_of_ne_zero [IsSimpleModule R M] [IsSimpleModule R N] {f : M ->ₗ[
+R] N} (h : f != 0) : Function.Bijective f
+参数：h : f != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `LinearMap.bijective_or_eq_zero`：bijective_or_eq_zero [IsSimpleModule R M
+] [IsSimpleModule R N] (f : M ->ₗ[R] N) : Function.Bijective f ∨ f = 0
 -/
-theorem bijective_of_ne_zero [IsSimpleModule R M] [IsSimpleModule R N] {f : M ->ₗ[R] N} (h : f != 0) :
+theorem bijective_of_ne_zero [IsSimpleModule R M] [IsSimpleModule R N] {f : M →ₗ[R] N} (h : f ≠ 0) :
     Function.Bijective f :=
   f.bijective_or_eq_zero.resolve_right h
-
-/--
-theorem `isCoatom_ker_of_surjective` / 定理 `isCoatom_ker_of_surjective`
-
-English:
-theorem isCoatom_ker_of_surjective
-  statement: [IsSimpleModule R N] {f : M ->ₗ[R] N}
-  proof: by
-  rw [← isSimpleModule_iff_isCoatom]
-  exact IsSimpleModule.congr (f.quotKerEquivOfSurjective hf)
-
-中文:
-定理 isCoatom_ker_of_surjective
-  结论: [是单模 R N] {f : M ->ₗ[R] N}
-  证明: by
-  rw [← isSimpleModule_iff_isCoatom]
-  exact IsSimpleModule.congr (f.quotKerEquivOfSurjective hf)
-
-Depends on / 依赖: IsSimpleModule, IsSimpleModule.congr, f.quotKerEquivOfSurjective, isSimpleModule_iff_isCoatom, quotKerEquivOfSurjective
+/-
+**LinearMap.isCoatom_ker_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isCoatom_ker_of_surjective [IsSimpleModule R N] {f : M ->ₗ[R] N} (hf : Fun
+ction.Surjective f) : IsCoatom (LinearMap.ker f)
+参数：hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isSimpleModule_iff_isCoatom`：isSimpleModule_iff_isCoatom : IsSimpleModul
+e R (M ⧸ m) ↔ IsCoatom m
+· 使用定理 `IsSimpleModule.congr`：IsSimpleModule.congr (e : M ≃ₗ[R] N) [IsSimpleModu
+le R N] : IsSimpleModule R M where __
 -/
-theorem isCoatom_ker_of_surjective [IsSimpleModule R N] {f : M ->ₗ[R] N}
+theorem isCoatom_ker_of_surjective [IsSimpleModule R N] {f : M →ₗ[R] N}
     (hf : Function.Surjective f) : IsCoatom (LinearMap.ker f) := by
   rw [← isSimpleModule_iff_isCoatom]
   exact IsSimpleModule.congr (f.quotKerEquivOfSurjective hf)
-
-/--
-theorem `linearEquiv_of_ne_zero` / 定理 `linearEquiv_of_ne_zero`
-
-English:
-theorem linearEquiv_of_ne_zero
-  statement: [IsSemisimpleModule R M] [IsSimpleModule R N]
-  proof: have ⟨m, (_ : IsSimpleModule R m), ne⟩ :=
-    exists_ne_zero_of_sSup_eq_top h _ (IsSemisimpleModule.sSup_simples_eq_top ..)
-⟨m, ⟨.symm .ofBijective _ ((bijective_or_eq_zero _).resolve_right ne)⟩⟩
-
-中文:
-定理 linearEquiv_of_ne_zero
-  结论: [是半单模 R M] [是单模 R N]
-  证明: have ⟨m, (_ : IsSimpleModule R m), ne⟩ :=
-    exists_ne_zero_of_sSup_eq_top h _ (IsSemisimpleModule.sSup_simples_eq_top ..)
-⟨m, ⟨.symm .ofBijective _ ((bijective_or_eq_zero _).resolve_right ne)⟩⟩
-
-Depends on / 依赖: CountablyCompactSpace, IsSemisimpleModule, IsSemisimpleModule.sSup_simples_eq_top, IsSimpleModule, SequentialSpace, bijective_or_eq_zero, exists_ne_zero_of_sSup_eq_top, ofBijective, resolve_right, sSup_simples_eq_top
+/-
+**LinearMap.linearEquiv_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：linearEquiv_of_ne_zero [IsSemisimpleModule R M] [IsSimpleModule R N] {f : 
+M ->ₗ[R] N} (h : f != 0) : exists S : Submodule R M, Nonempty (N ≃ₗ[R] S)
+参数：h : f != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.exists_ne_zero_of_sSup_eq_top`：exists_ne_zero_of_sSup_eq_top {
+f : M ->ₛₗ[τ₁₂] M₂} (h : f != 0) (s : Set (Submodule R M)) (hs : sSup s = ⊤) : e
+xists m in s, f ∘ₛₗ m.subtype…
+· 使用定理 `IsSemisimpleModule.sSup_simples_eq_top`：sSup_simples_eq_top : sSup { m :
+ Submodule R M | IsSimpleModule R m } = ⊤
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `LinearMap.bijective_or_eq_zero`：bijective_or_eq_zero [IsSimpleModule R M
+] [IsSimpleModule R N] (f : M ->ₗ[R] N) : Function.Bijective f ∨ f = 0
 -/
 theorem linearEquiv_of_ne_zero [IsSemisimpleModule R M] [IsSimpleModule R N]
-    {f : M ->ₗ[R] N} (h : f != 0) : exists S : Submodule R M, Nonempty (N ≃ₗ[R] S) :=
+    {f : M →ₗ[R] N} (h : f ≠ 0) : ∃ S : Submodule R M, Nonempty (N ≃ₗ[R] S) :=
   have ⟨m, (_ : IsSimpleModule R m), ne⟩ :=
     exists_ne_zero_of_sSup_eq_top h _ (IsSemisimpleModule.sSup_simples_eq_top ..)
-⟨m, ⟨.symm .ofBijective _ ((bijective_or_eq_zero _).resolve_right ne)⟩⟩
+  ⟨m, ⟨.symm <| .ofBijective _ ((bijective_or_eq_zero _).resolve_right ne)⟩⟩
 
-/--
-Instance `_root_.Module.End.instDivisionRing` / 实例 `_root_.Module.End.instDivisionRing`
+/-- Schur's Lemma makes the endomorphism ring of a simple module a division ring. -/
+/-
+**LinearMap._root_.Module.End.instDivisionRing** 是 Mathlib 中的一个实例，位于命名空间 `Linear
+Map`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance _root_.Module.End.instDivisionRing
-  body: if h : f = 0 then 0 else (LinearEquiv.ofBijective _ <| bijective_of_ne_zero h).symm
-  exists_pair_ne := ⟨0, 1, have := IsSimpleModule.nontrivial R M; zero_ne_one⟩
-  mul_inv_cancel a a0 := by
-    simp_rw [dif_neg a0]; ext
-    exact (LinearEquiv.ofBijective _ <| bijective_of_ne_zero a0).right_inv _
-  inv_zero := dif_pos rfl
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-
-中文:
-实例 _root_.模.End.instDivisionRing
-  定义体: if h : f = 0 then 0 else (LinearEquiv.ofBijective _ <| bijective_of_ne_zero h).symm
-  exists_pair_ne := ⟨0, 1, have := IsSimpleModule.nontrivial R M; zero_ne_one⟩
-  mul_inv_cancel a a0 := by
-    simp_rw [dif_neg a0]; ext
-    exact (LinearEquiv.ofBijective _ <| bijective_of_ne_zero a0).right_inv _
-  inv_zero := dif_pos rfl
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, bijective_of_ne_zero, ofBijective
+--- 原说明 ---
+Schur's Lemma makes the endomorphism ring of a simple module a division ring.
 -/
 noncomputable instance _root_.Module.End.instDivisionRing
     [DecidableEq (Module.End R M)] [IsSimpleModule R M] : DivisionRing (Module.End R M) where
@@ -1800,9 +1779,12 @@ noncomputable instance _root_.Module.End.instDivisionRing
   nnqsmul_def := fun _ _ => rfl
   qsmul := _
   qsmul_def := fun _ _ => rfl
-
+/-
+**LinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R) [DivisionRing R] [Module R M] [Nontrivial M] : IsSimpleModule (Module.End R M) M :=
-isSimpleModule_iff_toSpanSingleton_surjective.mpr .intro ‹_› fun v hv w =>
+  isSimpleModule_iff_toSpanSingleton_surjective.mpr <| .intro ‹_› fun v hv w ↦
     have ⟨f, eq⟩ := IsSemisimpleModule.extension_property _
       (ker_eq_bot.mp (ker_toSpanSingleton R hv)) (toSpanSingleton R M w)
     ⟨f, by simpa using congr($eq 1)⟩
@@ -1811,33 +1793,31 @@ end LinearMap
 
 namespace JordanHolderLattice
 
-/--
-Definition of `Iso.linearEquiv` / `Iso.linearEquiv` 的定义
+/-- The isomorphism relation for composition series of modules implies isomorphism of quotients. -/
+/-
+**JordanHolderLattice.Iso.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `JordanHolderLat
+tice.Iso`。
+形式化陈述：{R : Type u_2} →   [inst : Ring R] →     {M : Type u_4} →       [inst_1 : 
+AddCommGroup M] →         [inst_2 : _root_.Module R M] →           {X Y : Submod
+ule R M × Submodule R M} →             JordanHolderLattice.Iso X Y →            
+   (↥X.2 ⧸ Submodule.comap X.2.subtype X.1) ≃ₗ[R] ↥Y.2 ⧸ Submodule.comap Y.2.sub
+type Y.1
+参数：↥X.2 ⧸ Submodule.comap X.2.subtype X.1。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.instIsModularLattice`：∀ {R : Type u_10} {M : Type u_11} [inst 
+: Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsModularLat
+tice (Submodule R M)
 
-English:
-definition Iso.linearEquiv
-  signature: {X Y : Submodule R M × Submodule R M} (h : Iso X Y)
-  body: letI e : Submodule R M × Submodule R M -> Submodule R M × Submodule R M -> Prop :=
-fun X Y => Nonempty (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype
-Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩)
-    fun h => by rw [sup_comm, inf_comm]; exact ⟨(LinearMap.quotientInfEquivSupQuotient ..).symm⟩
-
-中文:
-定义 同构.linearEquiv
-  签名: {X Y : 子模 R M × 子模 R M} (h : 同构 X Y)
-  定义体: letI e : Submodule R M × Submodule R M -> Submodule R M × Submodule R M -> Prop :=
-fun X Y => Nonempty (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype
-Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩)
-    fun h => by rw [sup_comm, inf_comm]; exact ⟨(LinearMap.quotientInfEquivSupQuotient ..).symm⟩
-
-Depends on / 依赖: LinearMap, LinearMap.quotientInfEquivSupQuotient, Nonempty, Nonempty.some, Submodule, f.symm, f.trans, h.rel, inf_comm, quotientInfEquivSupQuotient, subtype, sup_comm
+--- 原说明 ---
+The isomorphism relation for composition series of modules implies isomorphism o
+f quotients.
 -/
 noncomputable def Iso.linearEquiv {X Y : Submodule R M × Submodule R M} (h : Iso X Y) :
     (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype :=
-  letI e : Submodule R M × Submodule R M -> Submodule R M × Submodule R M -> Prop :=
-fun X Y => Nonempty (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype
-Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩)
-    fun h => by rw [sup_comm, inf_comm]; exact ⟨(LinearMap.quotientInfEquivSupQuotient ..).symm⟩
+  letI e : Submodule R M × Submodule R M → Submodule R M × Submodule R M → Prop :=
+    fun X Y ↦ Nonempty <| (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype
+  Nonempty.some <| h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ ↦ ⟨f.symm⟩) (fun ⟨f⟩ ⟨g⟩ ↦ ⟨f.trans g⟩)
+    fun h ↦ by rw [sup_comm, inf_comm]; exact ⟨(LinearMap.quotientInfEquivSupQuotient ..).symm⟩
 
 end JordanHolderLattice
 
@@ -1849,88 +1829,132 @@ open Submodule
 variable [IsSemisimpleModule R M]
 
 -- Statement and proof follow [Lorenz2008], Chapter 28, F20.
-/--
-theorem `jacobson_density` / 定理 `jacobson_density`
-
-English:
-theorem jacobson_density
-  given: (f : End (End R M) M) (s : Finset M)
-  proof: let x := Finsupp.equivFunOnFinite.symm (·.1 : s -> M)
-  have ⟨_, h⟩ := exists_isCompl (R ∙ x)
-  let p := projection _ _ h
-  let f := End.ringHomEndFinsupp s f
-  have : f (p • x) = f x := congr(f $(projection_apply_left h ⟨x, mem_span_singleton_self x⟩))
-  have : f x in R ∙ x := by rw [← this, map_smul, End.smul_def]; apply projection_apply_mem
-  have ⟨r, hr⟩ := mem_span_singleton.mp this
-  ⟨r, fun m hm => by simpa [x] using! congr($hr ⟨m, hm⟩).symm⟩
-
-中文:
-定理 jacobson_density
-  条件: (f : End (End R M) M) (s : 有限集 M)
-  证明: let x := Finsupp.equivFunOnFinite.symm (·.1 : s -> M)
-  have ⟨_, h⟩ := exists_isCompl (R ∙ x)
-  let p := projection _ _ h
-  let f := End.ringHomEndFinsupp s f
-  have : f (p • x) = f x := congr(f $(projection_apply_left h ⟨x, mem_span_singleton_self x⟩))
-  have : f x in R ∙ x := by rw [← this, map_smul, End.smul_def]; apply projection_apply_mem
-  have ⟨r, hr⟩ := mem_span_singleton.mp this
-  ⟨r, fun m hm => by simpa [x] using! congr($hr ⟨m, hm⟩).symm⟩
-
-Depends on / 依赖: End.ringHomEndFinsupp, End.smul_def, Finsupp, Finsupp.equivFunOnFinite.symm, equivFunOnFinite, exists_isCompl, map_smul, mem_span_singleton, mem_span_singleton.mp, mem_span_singleton_self, projection, projection_apply_left, projection_apply_mem, ringHomEndFinsupp, smul_def
+/-
+**jacobson_density** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：jacobson_density (f : End (End R M) M) (s : Finset M) : exists r : R, fora
+ll m in s, f m = r • m
+参数：f : End (End R M) M；s : Finset M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `ComplementedLattice.exists_isCompl`：∀ {α : Type u_2} {inst : Lattice α} 
+{inst_1 : BoundedOrder α} [self : ComplementedLattice α] (a : α), ∃ b, IsCompl a
+ b
+· 使用定理 `IsSemisimpleModule.toComplementedLattice`：∀ {R : Type u_2} {inst : Ring 
+R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self
+ : IsSemisimpleModule R M], Co…
+· 使用定理 `instIsSemisimpleModuleFinsupp`：∀ {R : Type u_2} [inst : Ring R] {M : Typ
+e u_4} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] (ι : Type u_6)   [
+IsSemisimpleModule …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_span_singleton_self`：mem_span_singleton_self (x : M) : x i
+n R ∙ x
+· 使用定理 `Submodule.projection_apply_left`：projection_apply_left (hpq : IsCompl p 
+q) (x : p) : p.projection q hpq x = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Module.End.smul_def`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (f : Module.End R M) 
+(a : M), …
+· 使用定理 `Submodule.projection_apply_mem`：projection_apply_mem (hpq : IsCompl p q)
+ (x : E) : p.projection q hpq x in p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_span_singleton`：mem_span_singleton {y : M} : x in R ∙ y ↔ 
+exists a : R, a • y = x
 -/
 theorem jacobson_density (f : End (End R M) M) (s : Finset M) :
-    exists r : R, forall m in s, f m = r • m :=
-  let x := Finsupp.equivFunOnFinite.symm (·.1 : s -> M)
+    ∃ r : R, ∀ m ∈ s, f m = r • m :=
+  let x := Finsupp.equivFunOnFinite.symm (·.1 : s → M)
   have ⟨_, h⟩ := exists_isCompl (R ∙ x)
   let p := projection _ _ h
   let f := End.ringHomEndFinsupp s f
   have : f (p • x) = f x := congr(f $(projection_apply_left h ⟨x, mem_span_singleton_self x⟩))
-  have : f x in R ∙ x := by rw [← this, map_smul, End.smul_def]; apply projection_apply_mem
+  have : f x ∈ R ∙ x := by rw [← this, map_smul, End.smul_def]; apply projection_apply_mem
   have ⟨r, hr⟩ := mem_span_singleton.mp this
-  ⟨r, fun m hm => by simpa [x] using! congr($hr ⟨m, hm⟩).symm⟩
+  ⟨r, fun m hm ↦ by simpa [x] using! congr($hr ⟨m, hm⟩).symm⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Module.Finite.toModuleEnd_moduleEnd_surjective` / 定理 `Module.Finite.toModuleEnd_moduleEnd_surjective`
+/-- The Jacobson density theorem for a module finite over its endomorphism ring. -/
+/-
+**Module.Finite.toModuleEnd_moduleEnd_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Modu
+le.Finite`。
+形式化陈述：∀ {R : Type u_2} [inst : Ring R] {M : Type u_4} [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   [IsSemisimpleModule R M] [Module.Finite (Module.E
+nd R M) M],   Function.Surjective ⇑(Module.toModuleEnd (Module.End R M) M)
+参数：Module.End R M；Module.toModuleEnd (Module.End R M) M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.fg_top`：∀ {R : Type u_1} {M : Type u_4} {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Finit
+e R M], ⊤.…
+· 使用定理 `jacobson_density`：jacobson_density (f : End (End R M) M) (s : Finset M) 
+: exists r : R, forall m in s, f m = r • m
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Submodule.span_induction`：span_induction {p : (x : M) -> x in span R s -
+> Prop} (mem : forall (x) (h : x in s), p x (subset_span h)) (zero : p 0 (Submod
+ule.zero_mem _…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Module.toModuleEnd_apply`：∀ (R : Type u_1) {S : Type u_3} (M : Type u_4)
+ [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [
+inst_3 : Semir…
+· 使用定理 `DistribSMul.toLinearMap_apply`：∀ (R : Type u_1) {S : Type u_3} (M : Type
+ u_4) [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R
+ M] [inst_3 : Distr…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `trivial`：True
 
-English:
-theorem Module.Finite.toModuleEnd_moduleEnd_surjective
-  given: [Module.Finite (End R M) M]
-  proof: by
-  have ⟨s, hs⟩ := Module.Finite.fg_top (R := End R M) (M := M)
-  intro f
-  have ⟨r, hr⟩ := jacobson_density f s
-  refine ⟨r, LinearMap.ext fun m => ?_⟩
-  induction hs.ge (trivial : m in ⊤) using Submodule.span_induction with
-  | mem m hm => exact (hr m hm).symm
-  | zero => simp
-  | add _ _ _ _ h₁ h₂ => simpa using congr($h₁ + $h₂)
-  | smul g _ _ h => simp_rw [map_smul, h]
-
-中文:
-定理 模.有限.toModuleEnd_moduleEnd_surjective
-  条件: [模.有限 (End R M) M]
-  证明: by
-  have ⟨s, hs⟩ := Module.Finite.fg_top (R := End R M) (M := M)
-  intro f
-  have ⟨r, hr⟩ := jacobson_density f s
-  refine ⟨r, LinearMap.ext fun m => ?_⟩
-  induction hs.ge (trivial : m in ⊤) using Submodule.span_induction with
-  | mem m hm => exact (hr m hm).symm
-  | zero => simp
-  | add _ _ _ _ h₁ h₂ => simpa using congr($h₁ + $h₂)
-  | smul g _ _ h => simp_rw [map_smul, h]
+--- 原说明 ---
+The Jacobson density theorem for a module finite over its endomorphism ring.
 -/
 protected theorem Module.Finite.toModuleEnd_moduleEnd_surjective [Module.Finite (End R M) M] :
     Function.Surjective (Module.toModuleEnd (End R M) (S := R) M) := by
   have ⟨s, hs⟩ := Module.Finite.fg_top (R := End R M) (M := M)
   intro f
   have ⟨r, hr⟩ := jacobson_density f s
-  refine ⟨r, LinearMap.ext fun m => ?_⟩
-  induction hs.ge (trivial : m in ⊤) using Submodule.span_induction with
+  refine ⟨r, LinearMap.ext fun m ↦ ?_⟩
+  induction hs.ge (trivial : m ∈ ⊤) using Submodule.span_induction with
   | mem m hm => exact (hr m hm).symm
   | zero => simp
   | add _ _ _ _ h₁ h₂ => simpa using congr($h₁ + $h₂)
   | smul g _ _ h => simp_rw [map_smul, h]
 
 end jacobson_density
+

@@ -29,56 +29,59 @@ from the natural numbers into it is injective.
 
 public section
 
-/--
-Definition of `CharZero` / `CharZero` 的定义
+/-- Typeclass for monoids with characteristic zero.
+  (This is usually stated on fields but it makes sense for any additive monoid with 1.)
 
-English:
-class CharZero
-  parameters: (R) [AddMonoidWithOne R]
-  axioms and operations (1):
-    - cast_injective : Function.Injective (Nat.cast : Nat -> R)
+*Warning*: for a semiring `R`, `CharZero R` and `CharP R 0` need not coincide.
+* `CharZero R` requires an injection `ℕ ↪ R`;
+* `CharP R 0` asks that only `0 : ℕ` maps to `0 : R` under the map `ℕ → R`.
+  For instance, endowing `{0, 1}` with addition given by `max` (i.e. `1` is absorbing), shows that
+  `CharZero {0, 1}` does not hold and yet `CharP {0, 1} 0` does.
+  This example is formalized in `Counterexamples/CharPZeroNeCharZero.lean`.
+-/
+/-
+**CharZero** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [AddMonoidWithOne R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 特征零
-  参数: (R) [加法带幺幺半群 R]
-  公理与运算 (1 个):
-    - cast_injective : 函数.单射 (自然数.cast : 自然数 -> R)
+--- 原说明 ---
+Typeclass for monoids with characteristic zero.
+  (This is usually stated on fields but it makes sense for any additive monoid w
+ith 1.)
+
+*Warning*: for a semiring `R`, `CharZero R` and `CharP R 0` need not coincide.
+* `CharZero R` requires an injection `ℕ ↪ R`;
+* `CharP R 0` asks that only `0 : ℕ` maps to `0 : R` under the map `ℕ → R`.
+  For instance, endowing `{0, 1}` with addition given by `max` (i.e. `1` is abso
+rbing), shows that
+  `CharZero {0, 1}` does not hold and yet `CharP {0, 1} 0` does.
+  This example is formalized in `Counterexamples/CharPZeroNeCharZero.lean`.
 -/
 class CharZero (R) [AddMonoidWithOne R] : Prop where
   /-- An additive monoid with one has characteristic zero if the canonical map `ℕ → R` is
   injective. -/
-  cast_injective : Function.Injective (Nat.cast : Nat -> R)
+  cast_injective : Function.Injective (Nat.cast : ℕ → R)
 
 variable {R : Type*}
-
-/--
-theorem `charZero_of_inj_zero` / 定理 `charZero_of_inj_zero`
-
-English:
-theorem charZero_of_inj_zero
-  given: [AddGroupWithOne R] (H : forall n : Nat, (n : R) = 0 -> n = 0)
-  proof: ⟨@fun m n h => by
-    induction m generalizing n with
-    | zero => rw [H n]; rw [← h, Nat.cast_zero]
-    | succ m ih =>
-      cases n
-      · apply H; rw [h, Nat.cast_zero]
-      · simp only [Nat.cast_succ, add_right_cancel_iff] at h; rwa [ih]⟩
-
-中文:
-定理 charZero_of_inj_zero
-  条件: [加法带幺群 R] (H : 对任意 n : 自然数, (n : R) = 0 -> n = 0)
-  证明: ⟨@fun m n h => by
-    induction m generalizing n with
-    | zero => rw [H n]; rw [← h, Nat.cast_zero]
-    | succ m ih =>
-      cases n
-      · apply H; rw [h, Nat.cast_zero]
-      · simp only [Nat.cast_succ, add_right_cancel_iff] at h; rwa [ih]⟩
-
-Depends on / 依赖: Nat.cast_succ, Nat.cast_zero, add_right_cancel_iff, cast_succ, cast_zero, generalizing
+/-
+**charZero_of_inj_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：charZero_of_inj_zero [AddGroupWithOne R] (H : forall n : Nat, (n : R) = 0 
+-> n = 0) : CharZero R
+参数：H : forall n : Nat, (n : R) = 0 -> n = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-theorem charZero_of_inj_zero [AddGroupWithOne R] (H : forall n : Nat, (n : R) = 0 -> n = 0) :
+theorem charZero_of_inj_zero [AddGroupWithOne R] (H : ∀ n : ℕ, (n : R) = 0 → n = 0) :
     CharZero R :=
   ⟨@fun m n h => by
     induction m generalizing n with
@@ -92,165 +95,106 @@ namespace Nat
 
 variable [AddMonoidWithOne R] [CharZero R]
 
-/--
-theorem `cast_injective` / 定理 `cast_injective`
-
-English:
-theorem cast_injective
-  statement: Function.Injective (Nat.cast : Nat -> R)
-  proof: CharZero.cast_injective
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_injective
-  结论: 函数.单射 (自然数.cast : 自然数 -> R)
-  证明: CharZero.cast_injective
-
-@[simp, norm_cast]
-
-Depends on / 依赖: CharZero, CharZero.cast_injective, cast_injective
+/-
+**Nat.cast_injective** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_injective : Function.Injective (Nat.cast : Nat -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CharZero.cast_injective`：∀ {R : Type u_1} {inst : AddMonoidWithOne R} [s
+elf : CharZero R], Function.Injective Nat.cast
 -/
-theorem cast_injective : Function.Injective (Nat.cast : Nat -> R) :=
+theorem cast_injective : Function.Injective (Nat.cast : ℕ → R) :=
   CharZero.cast_injective
 
 @[simp, norm_cast]
-/--
-theorem `cast_inj` / 定理 `cast_inj`
-
-English:
-theorem cast_inj
-  given: {m n : Nat}
-  statement: (m : R) = n ↔ m = n
-  proof: cast_injective.eq_iff
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_inj
-  条件: {m n : 自然数}
-  结论: (m : R) = n ↔ m = n
-  证明: cast_injective.eq_iff
-
-@[simp, norm_cast]
-
-Depends on / 依赖: cast_injective, cast_injective.eq_iff, eq_iff
+/-
+**Nat.cast_inj** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_inj {m n : Nat} : (m : R) = n ↔ m = n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Nat.cast_injective`：cast_injective : Function.Injective (Nat.cast : Nat 
+-> R)
 -/
-theorem cast_inj {m n : Nat} : (m : R) = n ↔ m = n :=
+theorem cast_inj {m n : ℕ} : (m : R) = n ↔ m = n :=
   cast_injective.eq_iff
 
 @[simp, norm_cast]
-/--
-theorem `cast_eq_zero` / 定理 `cast_eq_zero`
-
-English:
-theorem cast_eq_zero
-  given: {n : Nat}
-  statement: (n : R) = 0 ↔ n = 0
-  proof: by rw [← cast_zero, cast_inj]
-
-@[norm_cast]
-
-中文:
-定理 cast_eq_zero
-  条件: {n : 自然数}
-  结论: (n : R) = 0 ↔ n = 0
-  证明: by rw [← cast_zero, cast_inj]
-
-@[norm_cast]
-
-Depends on / 依赖: cast_inj, cast_zero
+/-
+**Nat.cast_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_eq_zero {n : Nat} : (n : R) = 0 ↔ n = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.cast_inj`：cast_inj {m n : Nat} : (m : R) = n ↔ m = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_eq_zero {n : Nat} : (n : R) = 0 ↔ n = 0 := by rw [← cast_zero, cast_inj]
+theorem cast_eq_zero {n : ℕ} : (n : R) = 0 ↔ n = 0 := by rw [← cast_zero, cast_inj]
 
 @[norm_cast]
-/--
-theorem `cast_ne_zero` / 定理 `cast_ne_zero`
-
-English:
-theorem cast_ne_zero
-  given: {n : Nat}
-  statement: (n : R) != 0 ↔ n != 0
-  proof: not_congr cast_eq_zero
-
-中文:
-定理 cast_ne_zero
-  条件: {n : 自然数}
-  结论: (n : R) != 0 ↔ n != 0
-  证明: not_congr cast_eq_zero
-
-Depends on / 依赖: cast_eq_zero, not_congr
+/-
+**Nat.cast_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Nat.cast_eq_zero`：cast_eq_zero {n : Nat} : (n : R) = 0 ↔ n = 0
 -/
-theorem cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0 :=
+theorem cast_ne_zero {n : ℕ} : (n : R) ≠ 0 ↔ n ≠ 0 :=
   not_congr cast_eq_zero
-
-/--
-theorem `cast_add_one_ne_zero` / 定理 `cast_add_one_ne_zero`
-
-English:
-theorem cast_add_one_ne_zero
-  given: (n : Nat)
-  statement: (n + 1 : R) != 0
-  proof: mod_cast n.succ_ne_zero
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_add_one_ne_zero
-  条件: (n : 自然数)
-  结论: (n + 1 : R) != 0
-  证明: mod_cast n.succ_ne_zero
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mod_cast, n.succ_ne_zero, succ_ne_zero
+/-
+**Nat.cast_add_one_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_add_one_ne_zero (n : Nat) : (n + 1 : R) != 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
 -/
-theorem cast_add_one_ne_zero (n : Nat) : (n + 1 : R) != 0 :=
+theorem cast_add_one_ne_zero (n : ℕ) : (n + 1 : R) ≠ 0 :=
   mod_cast n.succ_ne_zero
 
 @[simp, norm_cast]
-/--
-theorem `cast_eq_one` / 定理 `cast_eq_one`
-
-English:
-theorem cast_eq_one
-  given: {n : Nat}
-  statement: (n : R) = 1 ↔ n = 1
-  proof: by rw [← cast_one, cast_inj]
-
-@[norm_cast]
-
-中文:
-定理 cast_eq_one
-  条件: {n : 自然数}
-  结论: (n : R) = 1 ↔ n = 1
-  证明: by rw [← cast_one, cast_inj]
-
-@[norm_cast]
-
-Depends on / 依赖: cast_inj, cast_one
+/-
+**Nat.cast_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_eq_one {n : Nat} : (n : R) = 1 ↔ n = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_inj`：cast_inj {m n : Nat} : (m : R) = n ↔ m = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cast_eq_one {n : Nat} : (n : R) = 1 ↔ n = 1 := by rw [← cast_one, cast_inj]
+theorem cast_eq_one {n : ℕ} : (n : R) = 1 ↔ n = 1 := by rw [← cast_one, cast_inj]
 
 @[norm_cast]
-/--
-theorem `cast_ne_one` / 定理 `cast_ne_one`
-
-English:
-theorem cast_ne_one
-  given: {n : Nat}
-  statement: (n : R) != 1 ↔ n != 1
-  proof: cast_eq_one.not
-
-中文:
-定理 cast_ne_one
-  条件: {n : 自然数}
-  结论: (n : R) != 1 ↔ n != 1
-  证明: cast_eq_one.not
-
-Depends on / 依赖: cast_eq_one, cast_eq_one.not
+/-
+**Nat.cast_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_ne_one {n : Nat} : (n : R) != 1 ↔ n != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Nat.cast_eq_one`：cast_eq_one {n : Nat} : (n : R) = 1 ↔ n = 1
 -/
-theorem cast_ne_one {n : Nat} : (n : R) != 1 ↔ n != 1 :=
+theorem cast_ne_one {n : ℕ} : (n : R) ≠ 1 ↔ n ≠ 1 :=
   cast_eq_one.not
 
 end Nat
@@ -259,158 +203,115 @@ namespace OfNat
 
 variable [AddMonoidWithOne R] [CharZero R]
 
-/--
-lemma `ofNat_ne_zero` / 引理 `ofNat_ne_zero`
-
-English:
-lemma ofNat_ne_zero
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (ofNat(n) : R) != 0
-  proof: Nat.cast_ne_zero.2 (NeZero.ne n)
-
-中文:
-引理 of自然数_ne_zero
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : R) != 0
-  证明: Nat.cast_ne_zero.2 (NeZero.ne n)
+/-
+**OfNat.ofNat_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `OfNat`。
+形式化陈述：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZero R] (n : ℕ) [inst_2 
+: n.AtLeastTwo], OfNat.ofNat n ≠ 0
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `Nat.AtLeastTwo.toNeZero`：∀ (n : ℕ) [n.AtLeastTwo], NeZero n
 -/
-@[simp] lemma ofNat_ne_zero (n : Nat) [n.AtLeastTwo] : (ofNat(n) : R) != 0 :=
+@[simp] lemma ofNat_ne_zero (n : ℕ) [n.AtLeastTwo] : (ofNat(n) : R) ≠ 0 :=
   Nat.cast_ne_zero.2 (NeZero.ne n)
-
-/--
-lemma `zero_ne_ofNat` / 引理 `zero_ne_ofNat`
-
-English:
-lemma zero_ne_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: 0 != (ofNat(n) : R)
-  proof: (ofNat_ne_zero n).symm
-
-中文:
-引理 zero_ne_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: 0 != (of自然数(n) : R)
-  证明: (ofNat_ne_zero n).symm
+/-
+**OfNat.zero_ne_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `OfNat`。
+形式化陈述：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZero R] (n : ℕ) [inst_2 
+: n.AtLeastTwo], 0 ≠ OfNat.ofNat n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `OfNat.ofNat_ne_zero`：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZ
+ero R] (n : ℕ) [inst_2 : n.AtLeastTwo], OfNat.ofNat n ≠ 0
 -/
-@[simp] lemma zero_ne_ofNat (n : Nat) [n.AtLeastTwo] : 0 != (ofNat(n) : R) :=
+@[simp] lemma zero_ne_ofNat (n : ℕ) [n.AtLeastTwo] : 0 ≠ (ofNat(n) : R) :=
   (ofNat_ne_zero n).symm
-
-/--
-lemma `ofNat_ne_one` / 引理 `ofNat_ne_one`
-
-English:
-lemma ofNat_ne_one
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (ofNat(n) : R) != 1
-  proof: Nat.cast_ne_one.2 (Nat.AtLeastTwo.ne_one)
-
-中文:
-引理 of自然数_ne_one
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : R) != 1
-  证明: Nat.cast_ne_one.2 (Nat.AtLeastTwo.ne_one)
+/-
+**OfNat.ofNat_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `OfNat`。
+形式化陈述：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZero R] (n : ℕ) [inst_2 
+: n.AtLeastTwo], OfNat.ofNat n ≠ 1
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_one`：cast_ne_one {n : Nat} : (n : R) != 1 ↔ n != 1
+· 使用引理 `Nat.AtLeastTwo.ne_one`：ne_one : n != 1
 -/
-@[simp] lemma ofNat_ne_one (n : Nat) [n.AtLeastTwo] : (ofNat(n) : R) != 1 :=
+@[simp] lemma ofNat_ne_one (n : ℕ) [n.AtLeastTwo] : (ofNat(n) : R) ≠ 1 :=
   Nat.cast_ne_one.2 (Nat.AtLeastTwo.ne_one)
-
-/--
-lemma `one_ne_ofNat` / 引理 `one_ne_ofNat`
-
-English:
-lemma one_ne_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (1 : R) != ofNat(n)
-  proof: (ofNat_ne_one n).symm
-
-中文:
-引理 one_ne_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (1 : R) != of自然数(n)
-  证明: (ofNat_ne_one n).symm
+/-
+**OfNat.one_ne_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `OfNat`。
+形式化陈述：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZero R] (n : ℕ) [inst_2 
+: n.AtLeastTwo], 1 ≠ OfNat.ofNat n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `OfNat.ofNat_ne_one`：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZe
+ro R] (n : ℕ) [inst_2 : n.AtLeastTwo], OfNat.ofNat n ≠ 1
 -/
-@[simp] lemma one_ne_ofNat (n : Nat) [n.AtLeastTwo] : (1 : R) != ofNat(n) :=
+@[simp] lemma one_ne_ofNat (n : ℕ) [n.AtLeastTwo] : (1 : R) ≠ ofNat(n) :=
   (ofNat_ne_one n).symm
-
-/--
-lemma `ofNat_eq_ofNat` / 引理 `ofNat_eq_ofNat`
-
-English:
-lemma ofNat_eq_ofNat
-  given: {m n : Nat} [m.AtLeastTwo] [n.AtLeastTwo]
-  proof: Nat.cast_inj
-
-中文:
-引理 of自然数_eq_of自然数
-  条件: {m n : 自然数} [m.AtLeastTwo] [n.AtLeastTwo]
-  证明: Nat.cast_inj
+/-
+**OfNat.ofNat_eq_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `OfNat`。
+形式化陈述：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZero R] {m n : ℕ} [inst_
+2 : m.AtLeastTwo] [inst_3 : n.AtLeastTwo],   OfNat.ofNat m = OfNat.ofNat n ↔ OfN
+at.ofNat m = OfNat.ofNat n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_inj`：cast_inj {m n : Nat} : (m : R) = n ↔ m = n
 -/
-@[simp] lemma ofNat_eq_ofNat {m n : Nat} [m.AtLeastTwo] [n.AtLeastTwo] :
-    (ofNat(m) : R) = ofNat(n) ↔ (ofNat m : Nat) = ofNat n :=
+@[simp] lemma ofNat_eq_ofNat {m n : ℕ} [m.AtLeastTwo] [n.AtLeastTwo] :
+    (ofNat(m) : R) = ofNat(n) ↔ (ofNat m : ℕ) = ofNat n :=
   Nat.cast_inj
 
 end OfNat
 
 namespace NeZero
 
-/--
-Instance `charZero` / 实例 `charZero`
-
-English:
-instance charZero
-  signature: {M} {n : Nat} [NeZero n] [AddMonoidWithOne M] [CharZero M]
-  body: ⟨Nat.cast_ne_zero.mpr out⟩
-
-中文:
-实例 charZero
-  签名: {M} {n : 自然数} [NeZero n] [加法带幺幺半群 M] [特征零 M]
-  定义体: ⟨Nat.cast_ne_zero.mpr out⟩
-
-Depends on / 依赖: Nat.cast_ne_zero.mpr, cast_ne_zero
+/-
+**NeZero.charZero** 是 Mathlib 中的一个实例，位于命名空间 `NeZero`。
+形式化陈述：charZero {M} {n : Nat} [NeZero n] [AddMonoidWithOne M] [CharZero M] : NeZe
+ro (n : M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
 -/
-instance charZero {M} {n : Nat} [NeZero n] [AddMonoidWithOne M] [CharZero M] : NeZero (n : M) :=
+instance charZero {M} {n : ℕ} [NeZero n] [AddMonoidWithOne M] [CharZero M] : NeZero (n : M) :=
   ⟨Nat.cast_ne_zero.mpr out⟩
-
-/--
-Instance `charZero_one` / 实例 `charZero_one`
-
-English:
-instance charZero_one
-  signature: {M} [AddMonoidWithOne M] [CharZero M]
-  body: by
-    rw [← Nat.cast_one]; rw [Nat.cast_ne_zero]
-    trivial
-
-中文:
-实例 charZero_one
-  签名: {M} [加法带幺幺半群 M] [特征零 M]
-  定义体: by
-    rw [← Nat.cast_one]; rw [Nat.cast_ne_zero]
-    trivial
-
-Depends on / 依赖: Nat.cast_ne_zero, Nat.cast_one, cast_ne_zero, cast_one
+/-
+**NeZero.charZero_one** 是 Mathlib 中的一个实例，位于命名空间 `NeZero`。
+形式化陈述：charZero_one {M} [AddMonoidWithOne M] [CharZero M] : NeZero (1 : M) where 
+out
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
 -/
 instance charZero_one {M} [AddMonoidWithOne M] [CharZero M] : NeZero (1 : M) where
   out := by
-    rw [← Nat.cast_one]; rw [Nat.cast_ne_zero]
+    rw [← Nat.cast_one, Nat.cast_ne_zero]
     trivial
-
-/--
-Instance `charZero_ofNat` / 实例 `charZero_ofNat`
-
-English:
-instance charZero_ofNat
-  signature: {M} {n : Nat} [n.AtLeastTwo] [AddMonoidWithOne M] [CharZero M]
-  body: ⟨OfNat.ofNat_ne_zero n⟩
-
-中文:
-实例 charZero_of自然数
-  签名: {M} {n : 自然数} [n.AtLeastTwo] [加法带幺幺半群 M] [特征零 M]
-  定义体: ⟨OfNat.ofNat_ne_zero n⟩
-
-Depends on / 依赖: OfNat.ofNat_ne_zero, ofNat_ne_zero
+/-
+**NeZero.charZero_ofNat** 是 Mathlib 中的一个实例，位于命名空间 `NeZero`。
+形式化陈述：charZero_ofNat {M} {n : Nat} [n.AtLeastTwo] [AddMonoidWithOne M] [CharZero
+ M] : NeZero (OfNat.ofNat n : M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `OfNat.ofNat_ne_zero`：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZ
+ero R] (n : ℕ) [inst_2 : n.AtLeastTwo], OfNat.ofNat n ≠ 0
 -/
-instance charZero_ofNat {M} {n : Nat} [n.AtLeastTwo] [AddMonoidWithOne M] [CharZero M] :
+instance charZero_ofNat {M} {n : ℕ} [n.AtLeastTwo] [AddMonoidWithOne M] [CharZero M] :
     NeZero (OfNat.ofNat n : M) :=
   ⟨OfNat.ofNat_ne_zero n⟩
 
 end NeZero
+

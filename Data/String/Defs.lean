@@ -14,55 +14,57 @@ This file defines a bunch of functions for the `String` datatype.
 
 @[expose] public section
 
-/--
-Definition of `Char.isAscii` / `Char.isAscii` 的定义
+/-- Determine if a unicode character is part of the ASCII subset.
 
-English:
-definition Char.isAscii
-  signature: (c : Char)
-  body: c.toNat < 0x80
+ASCII characters have code points in the range U+0000-U+007F.
+(Note: [the Unicode standard](https://www.unicode.org/Public/draft/charts/CodeCharts.pdf)) does
+not mention ASCII and instead calls this subset "C0 Controls and Basic Latin".)
+-/
+/-
+**Char.isAscii** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Char.isAscii (c : Char) : Bool
+参数：c : Char。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Char.isAscii
-  签名: (c : Char)
-  定义体: c.toNat < 0x80
+--- 原说明 ---
+Determine if a unicode character is part of the ASCII subset.
 
-Depends on / 依赖: c.toNat
+ASCII characters have code points in the range U+0000-U+007F.
+(Note: [the Unicode standard](https://www.unicode.org/Public/draft/charts/CodeCh
+arts.pdf)) does
+not mention ASCII and instead calls this subset "C0 Controls and Basic Latin".)
 -/
 def Char.isAscii (c : Char) : Bool := c.toNat < 0x80
 
 namespace String
 
-/--
-Definition of `leftpad` / `leftpad` 的定义
+/-- Pad `s : String` with repeated occurrences of `c : Char` until it's of length `n`.
+  If `s` is initially larger than `n`, just return `s`. -/
+/-
+**String.leftpad** 是 Mathlib 中的一个定义，位于命名空间 `String`。
+形式化陈述：leftpad (n : Nat) (c : Char
+参数：n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftpad
-  signature: (n : Nat) (c : Char := ' ') (s : String)
-  body: ofList (List.leftpad n c s.toList)
-
-中文:
-定义 leftpad
-  签名: (n : 自然数) (c : Char := ' ') (s : String)
-  定义体: ofList (List.leftpad n c s.toList)
+--- 原说明 ---
+Pad `s : String` with repeated occurrences of `c : Char` until it's of length `n
+`.
+  If `s` is initially larger than `n`, just return `s`.
 -/
 def leftpad (n : Nat) (c : Char := ' ') (s : String) : String :=
   ofList (List.leftpad n c s.toList)
 
-/--
-Definition of `replicate` / `replicate` 的定义
+/-- Construct the string consisting of `n` copies of the character `c`. -/
+/-
+**String.replicate** 是 Mathlib 中的一个定义，位于命名空间 `String`。
+形式化陈述：replicate (n : Nat) (c : Char) : String
+参数：n : Nat；c : Char。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition replicate
-  signature: (n : Nat) (c : Char)
-  body: ofList (List.replicate n c)
-
-中文:
-定义 replicate
-  签名: (n : 自然数) (c : Char)
-  定义体: ofList (List.replicate n c)
-
-Depends on / 依赖: List.replicate, ofList, replicate
+--- 原说明 ---
+Construct the string consisting of `n` copies of the character `c`.
 -/
 def replicate (n : Nat) (c : Char) : String :=
   ofList (List.replicate n c)
@@ -70,84 +72,78 @@ def replicate (n : Nat) (c : Char) : String :=
 -- TODO bring this definition in line with the above, either by:
 -- adding `List.rightpad` to Batteries and changing the definition of `rightpad` here to match
 -- or by changing the definition of `leftpad` above to match this
-/--
-Definition of `rightpad` / `rightpad` 的定义
+/-- Pad `s : String` with repeated occurrences of `c : Char` on the right until it's of length `n`.
+  If `s` is initially larger than `n`, just return `s`. -/
+/-
+**String.rightpad** 是 Mathlib 中的一个定义，位于命名空间 `String`。
+形式化陈述：rightpad (n : Nat) (c : Char
+参数：n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightpad
-  signature: (n : Nat) (c : Char := ' ') (s : String)
-  body: s ++ String.replicate (n - s.length) c
-
-中文:
-定义 rightpad
-  签名: (n : 自然数) (c : Char := ' ') (s : String)
-  定义体: s ++ String.replicate (n - s.length) c
+--- 原说明 ---
+Pad `s : String` with repeated occurrences of `c : Char` on the right until it's
+ of length `n`.
+  If `s` is initially larger than `n`, just return `s`.
 -/
 def rightpad (n : Nat) (c : Char := ' ') (s : String) : String :=
   s ++ String.replicate (n - s.length) c
 
-/--
-Definition of `IsPrefix` / `IsPrefix` 的定义
+/-- `s.IsPrefix t` checks if the string `s` is a prefix of the string `t`. -/
+/-
+**String.IsPrefix** 是 Mathlib 中的一个定义，位于命名空间 `String`。
+形式化陈述：String → String → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPrefix
-  signature: : String -> String -> Prop
-
-中文:
-定义 IsPrefix
-  签名: : String -> String -> 命题
+--- 原说明 ---
+`s.IsPrefix t` checks if the string `s` is a prefix of the string `t`.
 -/
-def IsPrefix : String -> String -> Prop
+def IsPrefix : String → String → Prop
   | d1, d2 => List.IsPrefix d1.toList d2.toList
 
-/--
-Definition of `IsSuffix` / `IsSuffix` 的定义
+/-- `s.IsSuffix t` checks if the string `s` is a suffix of the string `t`. -/
+/-
+**String.IsSuffix** 是 Mathlib 中的一个定义，位于命名空间 `String`。
+形式化陈述：String → String → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSuffix
-  signature: : String -> String -> Prop
-
-中文:
-定义 IsSuffix
-  签名: : String -> String -> 命题
+--- 原说明 ---
+`s.IsSuffix t` checks if the string `s` is a suffix of the string `t`.
 -/
-def IsSuffix : String -> String -> Prop
+def IsSuffix : String → String → Prop
   | d1, d2 => List.IsSuffix d1.toList d2.toList
 
-/--
-Definition of `mapTokens` / `mapTokens` 的定义
+/-- `String.mapTokens c f s` tokenizes `s : string` on `c : char`, maps `f` over each token, and
+then reassembles the string by intercalating the separator token `c` over the mapped tokens. -/
+/-
+**String.mapTokens** 是 Mathlib 中的一个定义，位于命名空间 `String`。
+形式化陈述：mapTokens (c : Char) (f : String -> String) : String -> String
+参数：c : Char；f : String -> String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapTokens
-  signature: (c : Char) (f : String -> String)
-  body: intercalate (singleton c) ∘ List.map f ∘ (·.splitToList (· = c))
-
-中文:
-定义 mapTokens
-  签名: (c : Char) (f : String -> String)
-  定义体: intercalate (singleton c) ∘ List.map f ∘ (·.splitToList (· = c))
-
-Depends on / 依赖: List.map, intercalate, singleton, splitToList
+--- 原说明 ---
+`String.mapTokens c f s` tokenizes `s : string` on `c : char`, maps `f` over eac
+h token, and
+then reassembles the string by intercalating the separator token `c` over the ma
+pped tokens.
 -/
-def mapTokens (c : Char) (f : String -> String) : String -> String :=
+def mapTokens (c : Char) (f : String → String) : String → String :=
   intercalate (singleton c) ∘ List.map f ∘ (·.splitToList (· = c))
 
-/--
-Definition of `head` / `head` 的定义
+/-- Produce the head character from the string `s`, if `s` is not empty, otherwise `'A'`. -/
+/-
+**String.head** 是 Mathlib 中的一个定义，位于命名空间 `String`。
+形式化陈述：head (s : String) : Char
+参数：s : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition head
-  signature: (s : String)
-  body: s.front
-
-中文:
-定义 head
-  签名: (s : String)
-  定义体: s.front
-
-Depends on / 依赖: s.front
+--- 原说明 ---
+Produce the head character from the string `s`, if `s` is not empty, otherwise `
+'A'`.
 -/
 def head (s : String) : Char :=
   s.front
 
 end String
+

@@ -8,7 +8,7 @@ module
 public import Mathlib.Computability.Halting
 public import Mathlib.Computability.TuringMachine.StackTuringMachine
 public import Mathlib.Data.Num.Lemmas
-public import Mathlib.Tactic.DeriveFintype -- shake: keep (deriving handlers not tracked yet)
+public import Mathlib.Tactic.DeriveFintype  -- shake: keep (deriving handlers not tracked yet)
 public import Mathlib.Computability.TuringMachine.Config
 
 /-!
@@ -54,7 +54,7 @@ positions, or labels `Λ`, each of which executes a finite sequence of basic sta
 For this program we will need four stacks, each on an alphabet `Γ'` like so:
 
 ```
-    inductive Γ' | consₗ | cons | bit0 | bit1
+    inductive Γ'  | consₗ | cons | bit0 | bit1
 ```
 
 We represent a number as a bit sequence, lists of numbers by putting `cons` after each element, and
@@ -155,24 +155,19 @@ section
 open ToPartrec
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Inductive type `Γ'` / 归纳类型 `Γ'`
+/-- The alphabet for the stacks in the program. `bit0` and `bit1` are used to represent `ℕ` values
+as lists of binary digits, `cons` is used to separate `List ℕ` values, and `consₗ` is used to
+separate `List (List ℕ)` values. See the section documentation. -/
+/-
+**Turing.PartrecToTM2.** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Γ'
-  constructors (4):
-    - consₗ: 
-    - cons: 
-    - bit0: 
-    - bit1: 
-
-中文:
-归纳类型 Γ'
-  构造子 (4 个):
-    - consₗ: 
-    - cons: 
-    - bit0: 
-    - bit1: 
+--- 原说明 ---
+The alphabet for the stacks in the program. `bit0` and `bit1` are used to repres
+ent `ℕ` values
+as lists of binary digits, `cons` is used to separate `List ℕ` values, and `cons
+ₗ` is used to
+separate `List (List ℕ)` values. See the section documentation.
 -/
 inductive Γ'
   | consₗ
@@ -182,39 +177,31 @@ inductive Γ'
   deriving DecidableEq, Inhabited, Fintype
 
 -- A proof below relies on the value of that `deriving Inhabited` picks here.
-/--
-theorem `default_Γ'` / 定理 `default_Γ'`
-
-English:
-theorem default_Γ'
-  statement: (default : Γ') = .consₗ
-  proof: rfl
-
-中文:
-定理 default_Γ'
-  结论: (default : Γ') = .consₗ
-  证明: rfl
+/-
+**Turing.PartrecToTM2.default_** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem default_Γ' : (default : Γ') = .consₗ := rfl
 
-/--
-Inductive type `K'` / 归纳类型 `K'`
+/-- The four stacks used by the program. `main` is used to store the input value in `trNormal`
+mode and the output value in `Λ'.ret` mode, while `stack` is used to keep all the data for the
+continuations. `rev` is used to store reversed lists when transferring values between stacks, and
+`aux` is only used once in `cons₁`. See the section documentation. -/
+/-
+**Turing.PartrecToTM2.K'** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：K'.elim_main (a b c d) : K'.elim a b c d K'.main = a
+参数：a b c d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive K'
-  constructors (4):
-    - main: 
-    - rev: 
-    - aux: 
-    - stack: 
-
-中文:
-归纳类型 K'
-  构造子 (4 个):
-    - main: 
-    - rev: 
-    - aux: 
-    - stack: 
+--- 原说明 ---
+The four stacks used by the program. `main` is used to store the input value in 
+`trNormal`
+mode and the output value in `Λ'.ret` mode, while `stack` is used to keep all th
+e data for the
+continuations. `rev` is used to store reversed lists when transferring values be
+tween stacks, and
+`aux` is only used once in `cons₁`. See the section documentation.
 -/
 inductive K'
   | main
@@ -225,68 +212,58 @@ inductive K'
 
 open K'
 
-/--
-Inductive type `Cont'` / 归纳类型 `Cont'`
+/-- Continuations as in `ToPartrec.Cont` but with the data removed. This is done because we want
+the set of all continuations in the program to be finite (so that it can ultimately be encoded into
+the finite state machine of a Turing machine), but a continuation can handle a potentially infinite
+number of data values during execution. -/
+/-
+**Turing.PartrecToTM2.Cont'** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Cont'
-  constructors (5):
-    - halt: 
-    - cons₁: Code -> Cont' -> Cont'
-    - cons₂: Cont' -> Cont'
-    - comp: Code -> Cont' -> Cont'
-    - fix: Code -> Cont' -> Cont'
-
-中文:
-归纳类型 余nt'
-  构造子 (5 个):
-    - halt: 
-    - cons₁: 余de -> 余nt' -> 余nt'
-    - cons₂: 余nt' -> 余nt'
-    - comp: 余de -> 余nt' -> 余nt'
-    - fix: 余de -> 余nt' -> 余nt'
+--- 原说明 ---
+Continuations as in `ToPartrec.Cont` but with the data removed. This is done bec
+ause we want
+the set of all continuations in the program to be finite (so that it can ultimat
+ely be encoded into
+the finite state machine of a Turing machine), but a continuation can handle a p
+otentially infinite
+number of data values during execution.
 -/
 inductive Cont'
   | halt
-  | cons₁ : Code -> Cont' -> Cont'
-  | cons₂ : Cont' -> Cont'
-  | comp : Code -> Cont' -> Cont'
-  | fix : Code -> Cont' -> Cont'
+  | cons₁ : Code → Cont' → Cont'
+  | cons₂ : Cont' → Cont'
+  | comp : Code → Cont' → Cont'
+  | fix : Code → Cont' → Cont'
   deriving DecidableEq, Inhabited
 
-/--
-Inductive type `Λ'` / 归纳类型 `Λ'`
+/-- The set of program positions. We make extensive use of inductive types here to let us describe
+"subroutines"; for example `clear p k q` is a program that clears stack `k`, then does `q` where
+`q` is another label. In order to prevent this from resulting in an infinite number of distinct
+accessible states, we are careful to be non-recursive (although loops are okay). See the section
+documentation for a description of all the programs. -/
+/-
+**Turing.PartrecToTM2.** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Λ'
-  constructors (8):
-    - move: (p : Γ' -> Bool) (k₁ k₂ : K') (q : Λ')
-    - clear: (p : Γ' -> Bool) (k : K') (q : Λ')
-    - copy: (q : Λ')
-    - push: (k : K') (s : Option Γ' -> Option Γ') (q : Λ')
-    - read: (f : Option Γ' -> Λ')
-    - succ: (q : Λ')
-    - pred: (q₁ q₂ : Λ')
-    - ret: (k : Cont')
-
-中文:
-归纳类型 Λ'
-  构造子 (8 个):
-    - move: (p : Γ' -> 布尔值) (k₁ k₂ : K') (q : Λ')
-    - clear: (p : Γ' -> 布尔值) (k : K') (q : Λ')
-    - copy: (q : Λ')
-    - push: (k : K') (s : 选项类型 Γ' -> 选项类型 Γ') (q : Λ')
-    - read: (f : 选项类型 Γ' -> Λ')
-    - succ: (q : Λ')
-    - pred: (q₁ q₂ : Λ')
-    - ret: (k : 余nt')
+--- 原说明 ---
+The set of program positions. We make extensive use of inductive types here to l
+et us describe
+"subroutines"; for example `clear p k q` is a program that clears stack `k`, the
+n does `q` where
+`q` is another label. In order to prevent this from resulting in an infinite num
+ber of distinct
+accessible states, we are careful to be non-recursive (although loops are okay).
+ See the section
+documentation for a description of all the programs.
 -/
 inductive Λ'
-  | move (p : Γ' -> Bool) (k₁ k₂ : K') (q : Λ')
-  | clear (p : Γ' -> Bool) (k : K') (q : Λ')
+  | move (p : Γ' → Bool) (k₁ k₂ : K') (q : Λ')
+  | clear (p : Γ' → Bool) (k : K') (q : Λ')
   | copy (q : Λ')
-  | push (k : K') (s : Option Γ' -> Option Γ') (q : Λ')
-  | read (f : Option Γ' -> Λ')
+  | push (k : K') (s : Option Γ' → Option Γ') (q : Λ')
+  | read (f : Option Γ' → Λ')
   | succ (q : Λ')
   | pred (q₁ q₂ : Λ')
   | ret (k : Cont')
@@ -295,57 +272,15 @@ compile_inductive% Code
 compile_inductive% Cont'
 compile_inductive% K'
 compile_inductive% Λ'
-
-/--
-Instance `Λ'.instInhabited` / 实例 `Λ'.instInhabited`
-
-English:
-instance Λ'.instInhabited
-  signature: : Inhabited Λ'
-  body: ⟨Λ'.ret Cont'.halt⟩
-
-中文:
-实例 Λ'.instInhabited
-  签名: : 可居 Λ'
-  定义体: ⟨Λ'.ret Cont'.halt⟩
+/-
+**Turing.PartrecToTM2.** 是 Mathlib 中的一个实例，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Λ'.instInhabited : Inhabited Λ' :=
   ⟨Λ'.ret Cont'.halt⟩
-
-/--
-Instance `Λ'.instDecidableEq` / 实例 `Λ'.instDecidableEq`
-
-English:
-instance Λ'.instDecidableEq
-  signature: : DecidableEq Λ'
-  body: fun a b => by
-  induction a generalizing b <;> cases b
-  case move.move p k₁ k₂ q _ p' k₁' k₂' q' =>
-    exact decidable_of_iff' (p = p' ∧ k₁ = k₁' ∧ k₂ = k₂' ∧ q = q') (by simp)
-  case clear.clear p k q _ p' k' q' => exact decidable_of_iff' (p = p' ∧ k = k' ∧ q = q') (by simp)
-  case copy.copy q _ q' => exact decidable_of_iff' (q = q') (by simp)
-  case push.push k s q _ k' s' q' => exact decidable_of_iff' (k = k' ∧ s = s' ∧ q = q') (by simp)
-  case read.read f _ f' => exact decidable_of_iff' (forall a, f a = f' a) (by simp [funext_iff])
-  case succ.succ q _ q' => exact decidable_of_iff' (q = q') (by simp)
-  case pred.pred q₁ q₂ _ _ q₁' q₂' => exact decidable_of_iff' (q₁ = q₁' ∧ q₂ = q₂') (by simp)
-  case ret.ret k k' => exact decidable_of_iff' (k = k') (by simp)
-  all_goals exact .isFalse (by rintro ⟨⟨⟩⟩)
-
-中文:
-实例 Λ'.instDecidableEq
-  签名: : DecidableEq Λ'
-  定义体: fun a b => by
-  induction a generalizing b <;> cases b
-  case move.move p k₁ k₂ q _ p' k₁' k₂' q' =>
-    exact decidable_of_iff' (p = p' ∧ k₁ = k₁' ∧ k₂ = k₂' ∧ q = q') (by simp)
-  case clear.clear p k q _ p' k' q' => exact decidable_of_iff' (p = p' ∧ k = k' ∧ q = q') (by simp)
-  case copy.copy q _ q' => exact decidable_of_iff' (q = q') (by simp)
-  case push.push k s q _ k' s' q' => exact decidable_of_iff' (k = k' ∧ s = s' ∧ q = q') (by simp)
-  case read.read f _ f' => exact decidable_of_iff' (forall a, f a = f' a) (by simp [funext_iff])
-  case succ.succ q _ q' => exact decidable_of_iff' (q = q') (by simp)
-  case pred.pred q₁ q₂ _ _ q₁' q₂' => exact decidable_of_iff' (q₁ = q₁' ∧ q₂ = q₂') (by simp)
-  case ret.ret k k' => exact decidable_of_iff' (k = k') (by simp)
-  all_goals exact .isFalse (by rintro ⟨⟨⟩⟩)
+/-
+**Turing.PartrecToTM2.** 是 Mathlib 中的一个实例，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Λ'.instDecidableEq : DecidableEq Λ' := fun a b => by
   induction a generalizing b <;> cases b
@@ -354,40 +289,36 @@ instance Λ'.instDecidableEq : DecidableEq Λ' := fun a b => by
   case clear.clear p k q _ p' k' q' => exact decidable_of_iff' (p = p' ∧ k = k' ∧ q = q') (by simp)
   case copy.copy q _ q' => exact decidable_of_iff' (q = q') (by simp)
   case push.push k s q _ k' s' q' => exact decidable_of_iff' (k = k' ∧ s = s' ∧ q = q') (by simp)
-  case read.read f _ f' => exact decidable_of_iff' (forall a, f a = f' a) (by simp [funext_iff])
+  case read.read f _ f' => exact decidable_of_iff' (∀ a, f a = f' a) (by simp [funext_iff])
   case succ.succ q _ q' => exact decidable_of_iff' (q = q') (by simp)
   case pred.pred q₁ q₂ _ _ q₁' q₂' => exact decidable_of_iff' (q₁ = q₁' ∧ q₂ = q₂') (by simp)
   case ret.ret k k' => exact decidable_of_iff' (k = k') (by simp)
   all_goals exact .isFalse (by rintro ⟨⟨⟩⟩)
 
-/--
-Definition of `Stmt'` / `Stmt'` 的定义
+/-- The type of TM2 statements used by this machine. -/
+/-
+**Turing.PartrecToTM2.Stmt'** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Stmt'
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition Stmt'
-  body: TM2.Stmt (fun _ : K' => Γ') Λ' (Option Γ') deriving Inhabited
-
-中文:
-定义 Stmt'
-  定义体: TM2.Stmt (fun _ : K' => Γ') Λ' (Option Γ') deriving Inhabited
-
-Depends on / 依赖: Inhabited, TM2.Stmt, deriving
+--- 原说明 ---
+The type of TM2 statements used by this machine.
 -/
 def Stmt' :=
   TM2.Stmt (fun _ : K' => Γ') Λ' (Option Γ') deriving Inhabited
 
-/--
-Definition of `Cfg'` / `Cfg'` 的定义
+/-- The type of TM2 configurations used by this machine. -/
+/-
+**Turing.PartrecToTM2.Cfg'** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Cfg'
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition Cfg'
-  body: TM2.Cfg (fun _ : K' => Γ') Λ' (Option Γ') deriving Inhabited
-
-中文:
-定义 Cfg'
-  定义体: TM2.Cfg (fun _ : K' => Γ') Λ' (Option Γ') deriving Inhabited
-
-Depends on / 依赖: Inhabited, TM2.Cfg, deriving
+--- 原说明 ---
+The type of TM2 configurations used by this machine.
 -/
 def Cfg' :=
   TM2.Cfg (fun _ : K' => Γ') Λ' (Option Γ') deriving Inhabited
@@ -397,18 +328,18 @@ open TM2.Stmt
 /-- A predicate that detects the end of a natural number, either `Γ'.cons` or `Γ'.consₗ` (or
 implicitly the end of the list), for use in predicate-taking functions like `move` and `clear`. -/
 @[simp]
-/--
-Definition of `natEnd` / `natEnd` 的定义
+/-
+**Turing.PartrecToTM2.natEnd** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Turing.PartrecToTM2.Γ' → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natEnd
-  signature: : Γ' -> Bool
-
-中文:
-定义 natEnd
-  签名: : Γ' -> 布尔值
+--- 原说明 ---
+A predicate that detects the end of a natural number, either `Γ'.cons` or `Γ'.co
+nsₗ` (or
+implicitly the end of the list), for use in predicate-taking functions like `mov
+e` and `clear`.
 -/
-def natEnd : Γ' -> Bool
+def natEnd : Γ' → Bool
   | Γ'.consₗ => true
   | Γ'.cons => true
   | _ => false
@@ -416,175 +347,160 @@ attribute [nolint simpNF] natEnd.eq_3
 
 /-- Pop a value from the stack and place the result in local store. -/
 @[simp]
-/--
-Definition of `pop'` / `pop'` 的定义
+/-
+**Turing.PartrecToTM2.pop'** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：pop' (k : K') : Stmt' -> Stmt'
+参数：k : K'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition pop'
-  signature: (k : K')
-  body: pop k fun _ v => v
-
-中文:
-定义 pop'
-  签名: (k : K')
-  定义体: pop k fun _ v => v
+--- 原说明 ---
+Pop a value from the stack and place the result in local store.
 -/
-def pop' (k : K') : Stmt' -> Stmt' :=
+def pop' (k : K') : Stmt' → Stmt' :=
   pop k fun _ v => v
 
 /-- Peek a value from the stack and place the result in local store. -/
 @[simp]
-/--
-Definition of `peek'` / `peek'` 的定义
+/-
+**Turing.PartrecToTM2.peek'** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：peek' (k : K') : Stmt' -> Stmt'
+参数：k : K'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition peek'
-  signature: (k : K')
-  body: peek k fun _ v => v
-
-中文:
-定义 peek'
-  签名: (k : K')
-  定义体: peek k fun _ v => v
+--- 原说明 ---
+Peek a value from the stack and place the result in local store.
 -/
-def peek' (k : K') : Stmt' -> Stmt' :=
+def peek' (k : K') : Stmt' → Stmt' :=
   peek k fun _ v => v
 
 /-- Push the value in the local store to the given stack. -/
 @[simp]
-/--
-Definition of `push'` / `push'` 的定义
+/-
+**Turing.PartrecToTM2.push'** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：push' (k : K') : Stmt' -> Stmt'
+参数：k : K'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition push'
-  signature: (k : K')
-  body: push k fun x => x.getD default
-
-中文:
-定义 push'
-  签名: (k : K')
-  定义体: push k fun x => x.getD default
-
-Depends on / 依赖: x.getD
+--- 原说明 ---
+Push the value in the local store to the given stack.
 -/
-def push' (k : K') : Stmt' -> Stmt' :=
+def push' (k : K') : Stmt' → Stmt' :=
   push k fun x => x.getD default
 
-/--
-Definition of `unrev` / `unrev` 的定义
+/-- Move everything from the `rev` stack to the `main` stack (reversed). -/
+/-
+**Turing.PartrecToTM2.unrev** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：unrev
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unrev
-  body: Λ'.move (fun _ => false) rev main
-
-中文:
-定义 unrev
-  定义体: Λ'.move (fun _ => false) rev main
+--- 原说明 ---
+Move everything from the `rev` stack to the `main` stack (reversed).
 -/
 def unrev :=
   Λ'.move (fun _ => false) rev main
 
-/--
-Definition of `moveExcl` / `moveExcl` 的定义
+/-- Move elements from `k₁` to `k₂` while `p` holds, with the last element being left on `k₁`. -/
+/-
+**Turing.PartrecToTM2.moveExcl** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：moveExcl (p k₁ k₂ q)
+参数：p k₁ k₂ q。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition moveExcl
-  signature: (p k₁ k₂ q)
-  body: Λ'.move p k₁ k₂ Λ'.push k₁ id q
-
-中文:
-定义 moveExcl
-  签名: (p k₁ k₂ q)
-  定义体: Λ'.move p k₁ k₂ Λ'.push k₁ id q
+--- 原说明 ---
+Move elements from `k₁` to `k₂` while `p` holds, with the last element being lef
+t on `k₁`.
 -/
 def moveExcl (p k₁ k₂ q) :=
-Λ'.move p k₁ k₂ Λ'.push k₁ id q
+  Λ'.move p k₁ k₂ <| Λ'.push k₁ id q
 
-/--
-Definition of `move₂` / `move₂` 的定义
+/-- Move elements from `k₁` to `k₂` without reversion, by performing a double move via the `rev`
+stack. -/
+/-
+**Turing.PartrecToTM2.move** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition move₂
-  signature: (p k₁ k₂ q)
-  body: moveExcl p k₁ rev Λ'.move (fun _ => false) rev k₂ q
-
-中文:
-定义 move₂
-  签名: (p k₁ k₂ q)
-  定义体: moveExcl p k₁ rev Λ'.move (fun _ => false) rev k₂ q
-
-Depends on / 依赖: moveExcl
+--- 原说明 ---
+Move elements from `k₁` to `k₂` without reversion, by performing a double move v
+ia the `rev`
+stack.
 -/
 def move₂ (p k₁ k₂ q) :=
-moveExcl p k₁ rev Λ'.move (fun _ => false) rev k₂ q
+  moveExcl p k₁ rev <| Λ'.move (fun _ => false) rev k₂ q
 
-/--
-Definition of `head` / `head` 的定义
+/-- Assuming `trList v` is on the front of stack `k`, remove it, and push `v.headI` onto `main`.
+See the section documentation. -/
+/-
+**Turing.PartrecToTM2.head** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：head (k : K') (q : Λ') : Λ'
+参数：k : K'；q : Λ'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition head
-  signature: (k : K') (q : Λ')
-  body: Λ'.move natEnd k rev
-(Λ'.push rev fun _ => some Γ'.cons)
-      Λ'.read fun s =>
-(if s = some Γ'.consₗ then id else Λ'.clear (fun x => x = Γ'.consₗ) k) unrev q
-
-中文:
-定义 head
-  签名: (k : K') (q : Λ')
-  定义体: Λ'.move natEnd k rev
-(Λ'.push rev fun _ => some Γ'.cons)
-      Λ'.read fun s =>
-(if s = some Γ'.consₗ then id else Λ'.clear (fun x => x = Γ'.consₗ) k) unrev q
-
-Depends on / 依赖: natEnd
+--- 原说明 ---
+Assuming `trList v` is on the front of stack `k`, remove it, and push `v.headI` 
+onto `main`.
+See the section documentation.
 -/
 def head (k : K') (q : Λ') : Λ' :=
-Λ'.move natEnd k rev
-(Λ'.push rev fun _ => some Γ'.cons)
+  Λ'.move natEnd k rev <|
+    (Λ'.push rev fun _ => some Γ'.cons) <|
       Λ'.read fun s =>
-(if s = some Γ'.consₗ then id else Λ'.clear (fun x => x = Γ'.consₗ) k) unrev q
+        (if s = some Γ'.consₗ then id else Λ'.clear (fun x => x = Γ'.consₗ) k) <| unrev q
 
 /-- The program that evaluates code `c` with continuation `k`. This expects an initial state where
 `trList v` is on `main`, `trContStack k` is on `stack`, and `aux` and `rev` are empty.
 See the section documentation for details. -/
 @[simp]
-/--
-Definition of `trNormal` / `trNormal` 的定义
+/-
+**Turing.PartrecToTM2.trNormal** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Turing.ToPartrec.Code → Turing.PartrecToTM2.Cont' → Turing.PartrecToTM2.Λ'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trNormal
-  signature: : Code -> Cont' -> Λ'
-
-中文:
-定义 trNormal
-  签名: : 余de -> 余nt' -> Λ'
+--- 原说明 ---
+The program that evaluates code `c` with continuation `k`. This expects an initi
+al state where
+`trList v` is on `main`, `trContStack k` is on `stack`, and `aux` and `rev` are 
+empty.
+See the section documentation for details.
 -/
-def trNormal : Code -> Cont' -> Λ'
-| Code.zero', k => (Λ'.push main fun _ => some Γ'.cons) Λ'.ret k
-| Code.succ, k => head main Λ'.succ Λ'.ret k
-| Code.tail, k => Λ'.clear natEnd main Λ'.ret k
+def trNormal : Code → Cont' → Λ'
+  | Code.zero', k => (Λ'.push main fun _ => some Γ'.cons) <| Λ'.ret k
+  | Code.succ, k => head main <| Λ'.succ <| Λ'.ret k
+  | Code.tail, k => Λ'.clear natEnd main <| Λ'.ret k
   | Code.cons f fs, k =>
-(Λ'.push stack fun _ => some Γ'.consₗ)
-Λ'.move (fun _ => false) main rev Λ'.copy trNormal f (Cont'.cons₁ fs k)
+    (Λ'.push stack fun _ => some Γ'.consₗ) <|
+      Λ'.move (fun _ => false) main rev <| Λ'.copy <| trNormal f (Cont'.cons₁ fs k)
   | Code.comp f g, k => trNormal g (Cont'.comp f k)
   | Code.case f g, k => Λ'.pred (trNormal f k) (trNormal g k)
   | Code.fix f, k => trNormal f (Cont'.fix f k)
 
-/--
-Definition of `tr` / `tr` 的定义
+/-- The main program. See the section documentation for details. -/
+/-
+**Turing.PartrecToTM2.tr** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Turing.PartrecToTM2.Λ' → Turing.PartrecToTM2.Stmt'
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition tr
-  signature: : Λ' -> Stmt'
-
-中文:
-定义 tr
-  签名: : Λ' -> Stmt'
+--- 原说明 ---
+The main program. See the section documentation for details.
 -/
-def tr : Λ' -> Stmt'
+def tr : Λ' → Stmt'
   | Λ'.move p k₁ k₂ q =>
-pop' k₁
+    pop' k₁ <|
       branch (fun s => s.elim true p) (goto fun _ => q)
         (push' k₂ <| goto fun _ => Λ'.move p k₁ k₂ q)
   | Λ'.push k f q =>
@@ -592,417 +508,328 @@ pop' k₁
       (goto fun _ => q)
   | Λ'.read q => goto q
   | Λ'.clear p k q =>
-pop' k branch (fun s => s.elim true p) (goto fun _ => q) (goto fun _ => Λ'.clear p k q)
+    pop' k <| branch (fun s => s.elim true p) (goto fun _ => q) (goto fun _ => Λ'.clear p k q)
   | Λ'.copy q =>
-pop' rev
+    pop' rev <|
       branch Option.isSome (push' main <| push' stack <| goto fun _ => Λ'.copy q) (goto fun _ => q)
   | Λ'.succ q =>
-pop' main
-branch (fun s => s = some Γ'.bit1) ((push rev fun _ => Γ'.bit0) <| goto fun _ => Λ'.succ q)
+    pop' main <|
+      branch (fun s => s = some Γ'.bit1) ((push rev fun _ => Γ'.bit0) <| goto fun _ => Λ'.succ q) <|
         branch (fun s => s = some Γ'.cons)
           ((push main fun _ => Γ'.cons) <| (push main fun _ => Γ'.bit1) <| goto fun _ => unrev q)
           ((push main fun _ => Γ'.bit1) <| goto fun _ => unrev q)
   | Λ'.pred q₁ q₂ =>
-pop' main
+    pop' main <|
       branch (fun s => s = some Γ'.bit0)
-((push rev fun _ => Γ'.bit1) <| goto fun _ => Λ'.pred q₁ q₂)
+          ((push rev fun _ => Γ'.bit1) <| goto fun _ => Λ'.pred q₁ q₂) <|
         branch (fun s => natEnd (s.getD default)) (goto fun _ => q₁)
           (peek' main <|
             branch (fun s => natEnd (s.getD default)) (goto fun _ => unrev q₂)
               ((push rev fun _ => Γ'.bit0) <| goto fun _ => unrev q₂))
   | Λ'.ret (Cont'.cons₁ fs k) =>
     goto fun _ =>
-move₂ (fun _ => false) main aux
-move₂ (fun s => s = Γ'.consₗ) stack main
-move₂ (fun _ => false) aux stack trNormal fs (Cont'.cons₂ k)
-| Λ'.ret (Cont'.cons₂ k) => goto fun _ => head stack Λ'.ret k
+      move₂ (fun _ => false) main aux <|
+        move₂ (fun s => s = Γ'.consₗ) stack main <|
+          move₂ (fun _ => false) aux stack <| trNormal fs (Cont'.cons₂ k)
+  | Λ'.ret (Cont'.cons₂ k) => goto fun _ => head stack <| Λ'.ret k
   | Λ'.ret (Cont'.comp f k) => goto fun _ => trNormal f k
   | Λ'.ret (Cont'.fix f k) =>
-pop' main
+    pop' main <|
       goto fun s =>
-cond (natEnd (s.getD default)) (Λ'.ret k)
-Λ'.clear natEnd main trNormal f (Cont'.fix f k)
-| Λ'.ret Cont'.halt => (load fun _ => none) halt
+        cond (natEnd (s.getD default)) (Λ'.ret k) <|
+          Λ'.clear natEnd main <| trNormal f (Cont'.fix f k)
+  | Λ'.ret Cont'.halt => (load fun _ => none) <| halt
 
 @[simp]
-/--
-theorem `tr_move` / 定理 `tr_move`
-
-English:
-theorem tr_move
-  given: (p k₁ k₂ q)
-  statement: tr (Λ'.move p k₁ k₂ q) =
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_move
-  条件: (p k₁ k₂ q)
-  结论: tr (Λ'.move p k₁ k₂ q) =
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_move** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_move (p k₁ k₂ q) : tr (Λ'.move p k₁ k₂ q) = pop' k₁ (branch (fun s => s
+.elim true p) (goto fun _ => q) (push' k₂ <| goto fun _ => Λ'.move p k₁ k₂ q))
+参数：p k₁ k₂ q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 -/
 theorem tr_move (p k₁ k₂ q) : tr (Λ'.move p k₁ k₂ q) =
     pop' k₁ (branch (fun s => s.elim true p) (goto fun _ => q)
       (push' k₂ <| goto fun _ => Λ'.move p k₁ k₂ q)) := rfl
 
 @[simp]
-/--
-theorem `tr_push` / 定理 `tr_push`
-
-English:
-theorem tr_push
-  given: (k f q)
-  statement: tr (Λ'.push k f q) = branch (fun s => (f s).isSome)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_push
-  条件: (k f q)
-  结论: tr (Λ'.push k f q) = branch (fun s => (f s).isSome)
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_push** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_push (k f q) : tr (Λ'.push k f q) = branch (fun s => (f s).isSome) ((pu
+sh k fun s => (f s).getD default) <| goto fun _ => q) (goto fun _ => q)
+参数：k f q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 -/
 theorem tr_push (k f q) : tr (Λ'.push k f q) = branch (fun s => (f s).isSome)
     ((push k fun s => (f s).getD default) <| goto fun _ => q) (goto fun _ => q) := rfl
 
 @[simp]
-/--
-theorem `tr_read` / 定理 `tr_read`
-
-English:
-theorem tr_read
-  given: (q)
-  statement: tr (Λ'.read q) = goto q
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_read
-  条件: (q)
-  结论: tr (Λ'.read q) = goto q
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_read** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_read (q) : tr (Λ'.read q) = goto q
+参数：q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_read (q) : tr (Λ'.read q) = goto q := rfl
 
 @[simp]
-/--
-theorem `tr_clear` / 定理 `tr_clear`
-
-English:
-theorem tr_clear
-  given: (p k q)
-  statement: tr (Λ'.clear p k q) = pop' k (branch
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_clear
-  条件: (p k q)
-  结论: tr (Λ'.clear p k q) = pop' k (branch
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_clear** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_clear (p k q) : tr (Λ'.clear p k q) = pop' k (branch (fun s => s.elim t
+rue p) (goto fun _ => q) (goto fun _ => Λ'.clear p k q))
+参数：p k q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 -/
 theorem tr_clear (p k q) : tr (Λ'.clear p k q) = pop' k (branch
     (fun s => s.elim true p) (goto fun _ => q) (goto fun _ => Λ'.clear p k q)) := rfl
 
 @[simp]
-/--
-theorem `tr_copy` / 定理 `tr_copy`
-
-English:
-theorem tr_copy
-  given: (q)
-  statement: tr (Λ'.copy q) = pop' rev (branch Option.isSome
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_copy
-  条件: (q)
-  结论: tr (Λ'.copy q) = pop' rev (branch 选项类型.isSome
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_copy** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_copy (q) : tr (Λ'.copy q) = pop' rev (branch Option.isSome (push' main 
+<| push' stack <| goto fun _ => Λ'.copy q) (goto fun _ => q))
+参数：q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_copy (q) : tr (Λ'.copy q) = pop' rev (branch Option.isSome
     (push' main <| push' stack <| goto fun _ => Λ'.copy q) (goto fun _ => q)) := rfl
 
 @[simp]
-/--
-theorem `tr_succ` / 定理 `tr_succ`
-
-English:
-theorem tr_succ
-  given: (q)
-  statement: tr (Λ'.succ q) = pop' main (branch (fun s => s = some Γ'.bit1)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_succ
-  条件: (q)
-  结论: tr (Λ'.succ q) = pop' main (branch (fun s => s = some Γ'.bit1)
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_succ** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_succ (q) : tr (Λ'.succ q) = pop' main (branch (fun s => s = some Γ'.bit
+1) ((push rev fun _ => Γ'.bit0) <| goto fun _ => Λ'.succ q) branch (fun s => s =
+ some Γ'.cons) ((push main fun _ => Γ'.cons) <| (push main fun _ => Γ'.bit1) <| 
+goto fun _ => unrev q) ((push main fun _ => Γ'.bit1) <| goto fun _ => unrev q))
+参数：q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_succ (q) : tr (Λ'.succ q) = pop' main (branch (fun s => s = some Γ'.bit1)
-((push rev fun _ => Γ'.bit0) <| goto fun _ => Λ'.succ q)
+    ((push rev fun _ => Γ'.bit0) <| goto fun _ => Λ'.succ q) <|
       branch (fun s => s = some Γ'.cons)
         ((push main fun _ => Γ'.cons) <| (push main fun _ => Γ'.bit1) <| goto fun _ => unrev q)
         ((push main fun _ => Γ'.bit1) <| goto fun _ => unrev q)) := rfl
 
 @[simp]
-/--
-theorem `tr_pred` / 定理 `tr_pred`
-
-English:
-theorem tr_pred
-  given: (q₁ q₂)
-  statement: tr (Λ'.pred q₁ q₂) = pop' main (branch (fun s => s = some Γ'.bit0)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_pred
-  条件: (q₁ q₂)
-  结论: tr (Λ'.pred q₁ q₂) = pop' main (branch (fun s => s = some Γ'.bit0)
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_pred** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_pred (q₁ q₂) : tr (Λ'.pred q₁ q₂) = pop' main (branch (fun s => s = som
+e Γ'.bit0) ((push rev fun _ => Γ'.bit1) <| goto fun _ => Λ'.pred q₁ q₂) branch (
+fun s => natEnd (s.getD default)) (goto fun _ => q₁) (peek' main <| branch (fun 
+s => natEnd (s.getD default)) (goto fun _ => unrev q₂) ((push rev fun _ => Γ'.bi
+t0) <| goto fun _ => unrev q₂)))
+参数：q₁ q₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_pred (q₁ q₂) : tr (Λ'.pred q₁ q₂) = pop' main (branch (fun s => s = some Γ'.bit0)
-((push rev fun _ => Γ'.bit1) <| goto fun _ => Λ'.pred q₁ q₂)
+    ((push rev fun _ => Γ'.bit1) <| goto fun _ => Λ'.pred q₁ q₂) <|
     branch (fun s => natEnd (s.getD default)) (goto fun _ => q₁)
       (peek' main <|
         branch (fun s => natEnd (s.getD default)) (goto fun _ => unrev q₂)
           ((push rev fun _ => Γ'.bit0) <| goto fun _ => unrev q₂))) := rfl
 
 @[simp]
-/--
-theorem `tr_ret_cons₁` / 定理 `tr_ret_cons₁`
-
-English:
-theorem tr_ret_cons₁
-  given: (fs k)
-  statement: tr (Λ'.ret (Cont'.cons₁ fs k)) = goto fun _ =>
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_ret_cons₁
-  条件: (fs k)
-  结论: tr (Λ'.ret (余nt'.cons₁ fs k)) = goto fun _ =>
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_ret_cons** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_ret_cons₁ (fs k) : tr (Λ'.ret (Cont'.cons₁ fs k)) = goto fun _ =>
-move₂ (fun _ => false) main aux
-move₂ (fun s => s = Γ'.consₗ) stack main
-move₂ (fun _ => false) aux stack trNormal fs (Cont'.cons₂ k) := rfl
+    move₂ (fun _ => false) main aux <|
+      move₂ (fun s => s = Γ'.consₗ) stack main <|
+        move₂ (fun _ => false) aux stack <| trNormal fs (Cont'.cons₂ k) := rfl
 
 @[simp]
-/--
-theorem `tr_ret_cons₂` / 定理 `tr_ret_cons₂`
-
-English:
-theorem tr_ret_cons₂
-  given: (k)
-  statement: tr (Λ'.ret (Cont'.cons₂ k)) =
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_ret_cons₂
-  条件: (k)
-  结论: tr (Λ'.ret (余nt'.cons₂ k)) =
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_ret_cons** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_ret_cons₂ (k) : tr (Λ'.ret (Cont'.cons₂ k)) =
-goto fun _ => head stack Λ'.ret k := rfl
+    goto fun _ => head stack <| Λ'.ret k := rfl
 
 @[simp]
-/--
-theorem `tr_ret_comp` / 定理 `tr_ret_comp`
-
-English:
-theorem tr_ret_comp
-  given: (f k)
-  statement: tr (Λ'.ret (Cont'.comp f k)) = goto fun _ => trNormal f k
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_ret_comp
-  条件: (f k)
-  结论: tr (Λ'.ret (余nt'.comp f k)) = goto fun _ => trNormal f k
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_ret_comp** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+`。
+形式化陈述：tr_ret_comp (f k) : tr (Λ'.ret (Cont'.comp f k)) = goto fun _ => trNormal 
+f k
+参数：f k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_ret_comp (f k) : tr (Λ'.ret (Cont'.comp f k)) = goto fun _ => trNormal f k := rfl
 
 @[simp]
-/--
-theorem `tr_ret_fix` / 定理 `tr_ret_fix`
-
-English:
-theorem tr_ret_fix
-  given: (f k)
-  statement: tr (Λ'.ret (Cont'.fix f k)) = pop' main (goto fun s =>
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tr_ret_fix
-  条件: (f k)
-  结论: tr (Λ'.ret (余nt'.fix f k)) = pop' main (goto fun s =>
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.tr_ret_fix** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`
+。
+形式化陈述：tr_ret_fix (f k) : tr (Λ'.ret (Cont'.fix f k)) = pop' main (goto fun s => 
+cond (natEnd (s.getD default)) (Λ'.ret k) Λ'.clear natEnd main trNormal f (Cont'
+.fix f k))
+参数：f k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_ret_fix (f k) : tr (Λ'.ret (Cont'.fix f k)) = pop' main (goto fun s =>
-cond (natEnd (s.getD default)) (Λ'.ret k)
-Λ'.clear natEnd main trNormal f (Cont'.fix f k)) := rfl
+    cond (natEnd (s.getD default)) (Λ'.ret k) <|
+      Λ'.clear natEnd main <| trNormal f (Cont'.fix f k)) := rfl
 
 @[simp]
-/--
-theorem `tr_ret_halt` / 定理 `tr_ret_halt`
-
-English:
-theorem tr_ret_halt
-  statement: tr (Λ'.ret Cont'.halt) = (load fun _ => none) halt
-  proof: rfl
-
-中文:
-定理 tr_ret_halt
-  结论: tr (Λ'.ret 余nt'.halt) = (load fun _ => none) halt
-  证明: rfl
+/-
+**Turing.PartrecToTM2.tr_ret_halt** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+`。
+形式化陈述：tr_ret_halt : tr (Λ'.ret Cont'.halt) = (load fun _ => none) halt
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tr_ret_halt : tr (Λ'.ret Cont'.halt) = (load fun _ => none) halt := rfl
 
-/--
-Definition of `trCont` / `trCont` 的定义
+/-- Translating a `Cont` continuation to a `Cont'` continuation simply entails dropping all the
+data. This data is instead encoded in `trContStack` in the configuration. -/
+/-
+**Turing.PartrecToTM2.trCont** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Turing.ToPartrec.Cont → Turing.PartrecToTM2.Cont'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trCont
-  signature: : Cont -> Cont'
-
-中文:
-定义 trCont
-  签名: : 余nt -> 余nt'
+--- 原说明 ---
+Translating a `Cont` continuation to a `Cont'` continuation simply entails dropp
+ing all the
+data. This data is instead encoded in `trContStack` in the configuration.
 -/
-def trCont : Cont -> Cont'
+def trCont : Cont → Cont'
   | Cont.halt => Cont'.halt
   | Cont.cons₁ c _ k => Cont'.cons₁ c (trCont k)
   | Cont.cons₂ _ k => Cont'.cons₂ (trCont k)
   | Cont.comp c k => Cont'.comp c (trCont k)
   | Cont.fix c k => Cont'.fix c (trCont k)
 
-/--
-Definition of `trPosNum` / `trPosNum` 的定义
+/-- We use `PosNum` to define the translation of binary natural numbers. A natural number is
+represented as a little-endian list of `bit0` and `bit1` elements:
 
-English:
-definition trPosNum
-  signature: : PosNum -> List Γ'
+```
+    1 = [bit1]
+    2 = [bit0, bit1]
+    3 = [bit1, bit1]
+    4 = [bit0, bit0, bit1]
+```
 
-中文:
-定义 trPosNum
-  签名: : PosNum -> 列表 Γ'
+In particular, this representation guarantees no trailing `bit0`'s at the end of the list. -/
+/-
+**Turing.PartrecToTM2.trPosNum** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：PosNum → List Turing.PartrecToTM2.Γ'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We use `PosNum` to define the translation of binary natural numbers. A natural n
+umber is
+represented as a little-endian list of `bit0` and `bit1` elements:
+
+```
+    1 = [bit1]
+    2 = [bit0, bit1]
+    3 = [bit1, bit1]
+    4 = [bit0, bit0, bit1]
+```
+
+In particular, this representation guarantees no trailing `bit0`'s at the end of
+ the list.
 -/
-def trPosNum : PosNum -> List Γ'
+def trPosNum : PosNum → List Γ'
   | PosNum.one => [Γ'.bit1]
   | PosNum.bit0 n => Γ'.bit0 :: trPosNum n
   | PosNum.bit1 n => Γ'.bit1 :: trPosNum n
 
-/--
-Definition of `trNum` / `trNum` 的定义
+/-- We use `Num` to define the translation of binary natural numbers. Positive numbers are
+translated using `trPosNum`, and `trNum 0 = []`. So there are never any trailing `bit0`'s in
+a translated `Num`.
 
-English:
-definition trNum
-  signature: : Num -> List Γ'
-
-中文:
-定义 trNum
-  签名: : Num -> 列表 Γ'
+```
+    0 = []
+    1 = [bit1]
+    2 = [bit0, bit1]
+    3 = [bit1, bit1]
+    4 = [bit0, bit0, bit1]
+```
 -/
-def trNum : Num -> List Γ'
+/-
+**Turing.PartrecToTM2.trNum** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Num → List Turing.PartrecToTM2.Γ'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We use `Num` to define the translation of binary natural numbers. Positive numbe
+rs are
+translated using `trPosNum`, and `trNum 0 = []`. So there are never any trailing
+ `bit0`'s in
+a translated `Num`.
+
+```
+    0 = []
+    1 = [bit1]
+    2 = [bit0, bit1]
+    3 = [bit1, bit1]
+    4 = [bit0, bit0, bit1]
+```
+-/
+def trNum : Num → List Γ'
   | Num.zero => []
   | Num.pos n => trPosNum n
 
-/--
-Definition of `trNat` / `trNat` 的定义
+/-- Because we use binary encoding, we define `trNat` in terms of `trNum`, using `Num`, which are
+binary natural numbers. (We could also use `Nat.binaryRecOn`, but `Num` and `PosNum` make for
+easy inductions.) -/
+/-
+**Turing.PartrecToTM2.trNat** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：trNat (n : Nat) : List Γ'
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trNat
-  signature: (n : Nat)
-  body: trNum n
-
-@[simp]
-
-中文:
-定义 tr自然数
-  签名: (n : 自然数)
-  定义体: trNum n
-
-@[simp]
+--- 原说明 ---
+Because we use binary encoding, we define `trNat` in terms of `trNum`, using `Nu
+m`, which are
+binary natural numbers. (We could also use `Nat.binaryRecOn`, but `Num` and `Pos
+Num` make for
+easy inductions.)
 -/
-def trNat (n : Nat) : List Γ' :=
+def trNat (n : ℕ) : List Γ' :=
   trNum n
 
 @[simp]
-/--
-theorem `trNat_zero` / 定理 `trNat_zero`
-
-English:
-theorem trNat_zero
-  statement: trNat 0 = []
-  proof: by rw [trNat, Nat.cast_zero]; rfl
-
-中文:
-定理 tr自然数_zero
-  结论: tr自然数 0 = []
-  证明: by rw [trNat, Nat.cast_zero]; rfl
-
-Depends on / 依赖: Nat.cast_zero, cast_zero
+/-
+**Turing.PartrecToTM2.trNat_zero** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`
+。
+形式化陈述：trNat_zero : trNat 0 = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.PartrecToTM2.trNat.eq_1`：∀ (n : ℕ), Turing.PartrecToTM2.trNat n =
+ Turing.PartrecToTM2.trNum ↑n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
 theorem trNat_zero : trNat 0 = [] := by rw [trNat, Nat.cast_zero]; rfl
-
-/--
-theorem `trNat_default` / 定理 `trNat_default`
-
-English:
-theorem trNat_default
-  statement: trNat default = []
-  proof: trNat_zero
-
-中文:
-定理 tr自然数_default
-  结论: tr自然数 default = []
-  证明: trNat_zero
-
-Depends on / 依赖: trNat_zero
+/-
+**Turing.PartrecToTM2.trNat_default** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：trNat_default : trNat default = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.trNat_zero`：trNat_zero : trNat 0 = []
 -/
 theorem trNat_default : trNat default = [] :=
   trNat_zero
@@ -1018,18 +845,23 @@ For example:
 ```
 -/
 @[simp]
-/--
-Definition of `trList` / `trList` 的定义
+/-
+**Turing.PartrecToTM2.trList** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：List ℕ → List Turing.PartrecToTM2.Γ'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trList
-  signature: : List Nat -> List Γ'
+--- 原说明 ---
+Lists are translated with a `cons` after each encoded number.
+For example:
 
-中文:
-定义 trList
-  签名: : 列表 自然数 -> 列表 Γ'
+```
+    [] = []
+    [0] = [cons]
+    [1] = [bit1, cons]
+    [6, 0] = [bit0, bit1, bit1, cons, cons]
+```
 -/
-def trList : List Nat -> List Γ'
+def trList : List ℕ → List Γ'
   | [] => []
   | n::ns => trNat n ++ Γ'.cons :: trList ns
 
@@ -1045,334 +877,295 @@ For example:
 ```
 -/
 @[simp]
-/--
-Definition of `trLList` / `trLList` 的定义
+/-
+**Turing.PartrecToTM2.trLList** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：List (List ℕ) → List Turing.PartrecToTM2.Γ'
+参数：List ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trLList
-  signature: : List (List Nat) -> List Γ'
+--- 原说明 ---
+Lists of lists are translated with a `consₗ` after each encoded list.
+For example:
 
-中文:
-定义 trLList
-  签名: : 列表 (列表 自然数) -> 列表 Γ'
+```
+    [] = []
+    [[]] = [consₗ]
+    [[], []] = [consₗ, consₗ]
+    [[0]] = [cons, consₗ]
+    [[1, 2], [0]] = [bit1, cons, bit0, bit1, cons, consₗ, cons, consₗ]
+```
 -/
-def trLList : List (List Nat) -> List Γ'
+def trLList : List (List ℕ) → List Γ'
   | [] => []
   | l::ls => trList l ++ Γ'.consₗ :: trLList ls
 
 /-- The data part of a continuation is a list of lists, which is encoded on the `stack` stack
 using `trLList`. -/
 @[simp]
-/--
-Definition of `contStack` / `contStack` 的定义
+/-
+**Turing.PartrecToTM2.contStack** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Turing.ToPartrec.Cont → List (List ℕ)
+参数：List ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition contStack
-  signature: : Cont -> List (List Nat)
-
-中文:
-定义 contStack
-  签名: : 余nt -> 列表 (列表 自然数)
+--- 原说明 ---
+The data part of a continuation is a list of lists, which is encoded on the `sta
+ck` stack
+using `trLList`.
 -/
-def contStack : Cont -> List (List Nat)
+def contStack : Cont → List (List ℕ)
   | Cont.halt => []
   | Cont.cons₁ _ ns k => ns :: contStack k
   | Cont.cons₂ ns k => ns :: contStack k
   | Cont.comp _ k => contStack k
   | Cont.fix _ k => contStack k
 
-/--
-Definition of `trContStack` / `trContStack` 的定义
+/-- The data part of a continuation is a list of lists, which is encoded on the `stack` stack
+using `trLList`. -/
+/-
+**Turing.PartrecToTM2.trContStack** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2
+`。
+形式化陈述：trContStack (k : Cont)
+参数：k : Cont。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trContStack
-  signature: (k : Cont)
-  body: trLList (contStack k)
-
-中文:
-定义 trContStack
-  签名: (k : 余nt)
-  定义体: trLList (contStack k)
-
-Depends on / 依赖: contStack, trLList
+--- 原说明 ---
+The data part of a continuation is a list of lists, which is encoded on the `sta
+ck` stack
+using `trLList`.
 -/
 def trContStack (k : Cont) :=
   trLList (contStack k)
 
-/--
-Definition of `K'.elim` / `K'.elim` 的定义
+/-- This is the nondependent eliminator for `K'`, but we use it specifically here in order to
+represent the stack data as four lists rather than as a function `K' → List Γ'`, because this makes
+rewrites easier. The theorems `K'.elim_update_main` et. al. show how such a function is updated
+after an `update` to one of the components. -/
+/-
+**Turing.PartrecToTM2.K'.elim** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2.K'`
+。
+形式化陈述：List Turing.PartrecToTM2.Γ' →   List Turing.PartrecToTM2.Γ' →     List Tur
+ing.PartrecToTM2.Γ' → List Turing.PartrecToTM2.Γ' → Turing.PartrecToTM2.K' → Lis
+t Turing.PartrecToTM2.Γ'
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition K'.elim
-  signature: (a b c d : List Γ')
-
-中文:
-定义 K'.elim
-  签名: (a b c d : 列表 Γ')
+--- 原说明 ---
+This is the nondependent eliminator for `K'`, but we use it specifically here in
+ order to
+represent the stack data as four lists rather than as a function `K' → List Γ'`,
+ because this makes
+rewrites easier. The theorems `K'.elim_update_main` et. al. show how such a func
+tion is updated
+after an `update` to one of the components.
 -/
-def K'.elim (a b c d : List Γ') : K' -> List Γ'
+def K'.elim (a b c d : List Γ') : K' → List Γ'
   | K'.main => a
   | K'.rev => b
   | K'.aux => c
   | K'.stack => d
 
 -- The equation lemma of `elim` simplifies to `match` structures.
-
-/--
-theorem `K'.elim_main` / 定理 `K'.elim_main`
-
-English:
-theorem K'.elim_main
-  given: (a b c d)
-  statement: K'.elim a b c d K'.main = a
-  proof: rfl
-
-中文:
-定理 K'.elim_main
-  条件: (a b c d)
-  结论: K'.elim a b c d K'.main = a
-  证明: rfl
+/-
+**Turing.PartrecToTM2.K'.elim_main** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM
+2.K'`。
+形式化陈述：∀ (a b c d : List Turing.PartrecToTM2.Γ'), Turing.PartrecToTM2.K'.elim a b
+ c d Turing.PartrecToTM2.K'.main = a
+参数：a b c d : List Turing.PartrecToTM2.Γ'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem K'.elim_main (a b c d) : K'.elim a b c d K'.main = a := rfl
-
-/--
-theorem `K'.elim_rev` / 定理 `K'.elim_rev`
-
-English:
-theorem K'.elim_rev
-  given: (a b c d)
-  statement: K'.elim a b c d K'.rev = b
-  proof: rfl
-
-中文:
-定理 K'.elim_rev
-  条件: (a b c d)
-  结论: K'.elim a b c d K'.rev = b
-  证明: rfl
+/-
+**Turing.PartrecToTM2.K'.elim_rev** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+.K'`。
+形式化陈述：∀ (a b c d : List Turing.PartrecToTM2.Γ'), Turing.PartrecToTM2.K'.elim a b
+ c d Turing.PartrecToTM2.K'.rev = b
+参数：a b c d : List Turing.PartrecToTM2.Γ'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem K'.elim_rev (a b c d) : K'.elim a b c d K'.rev = b := rfl
-
-/--
-theorem `K'.elim_aux` / 定理 `K'.elim_aux`
-
-English:
-theorem K'.elim_aux
-  given: (a b c d)
-  statement: K'.elim a b c d K'.aux = c
-  proof: rfl
-
-中文:
-定理 K'.elim_aux
-  条件: (a b c d)
-  结论: K'.elim a b c d K'.aux = c
-  证明: rfl
+/-
+**Turing.PartrecToTM2.K'.elim_aux** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+.K'`。
+形式化陈述：∀ (a b c d : List Turing.PartrecToTM2.Γ'), Turing.PartrecToTM2.K'.elim a b
+ c d Turing.PartrecToTM2.K'.aux = c
+参数：a b c d : List Turing.PartrecToTM2.Γ'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem K'.elim_aux (a b c d) : K'.elim a b c d K'.aux = c := rfl
-
-/--
-theorem `K'.elim_stack` / 定理 `K'.elim_stack`
-
-English:
-theorem K'.elim_stack
-  given: (a b c d)
-  statement: K'.elim a b c d K'.stack = d
-  proof: rfl
-
-中文:
-定理 K'.elim_stack
-  条件: (a b c d)
-  结论: K'.elim a b c d K'.stack = d
-  证明: rfl
+/-
+**Turing.PartrecToTM2.K'.elim_stack** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2.K'`。
+形式化陈述：∀ (a b c d : List Turing.PartrecToTM2.Γ'), Turing.PartrecToTM2.K'.elim a b
+ c d Turing.PartrecToTM2.K'.stack = d
+参数：a b c d : List Turing.PartrecToTM2.Γ'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem K'.elim_stack (a b c d) : K'.elim a b c d K'.stack = d := rfl
 
 attribute [simp] K'.elim
 
 @[simp]
-/--
-theorem `K'.elim_update_main` / 定理 `K'.elim_update_main`
-
-English:
-theorem K'.elim_update_main
-  given: {a b c d a'}
-  statement: update (K'.elim a b c d) main a' = K'.elim a' b c d
-  proof: by
-  funext x; cases x <;> rfl
-
-@[simp]
-
-中文:
-定理 K'.elim_update_main
-  条件: {a b c d a'}
-  结论: update (K'.elim a b c d) main a' = K'.elim a' b c d
-  证明: by
-  funext x; cases x <;> rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.K'.elim_update_main** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Part
+recToTM2.K'`。
+形式化陈述：∀ {a b c d a' : List Turing.PartrecToTM2.Γ'},   Function.update (Turing.Pa
+rtrecToTM2.K'.elim a b c d) Turing.PartrecToTM2.K'.main a' =     Turing.PartrecT
+oTM2.K'.elim a' b c d
+参数：Turing.PartrecToTM2.K'.elim a b c d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem K'.elim_update_main {a b c d a'} : update (K'.elim a b c d) main a' = K'.elim a' b c d := by
   funext x; cases x <;> rfl
 
 @[simp]
-/--
-theorem `K'.elim_update_rev` / 定理 `K'.elim_update_rev`
-
-English:
-theorem K'.elim_update_rev
-  given: {a b c d b'}
-  statement: update (K'.elim a b c d) rev b' = K'.elim a b' c d
-  proof: by
-  funext x; cases x <;> rfl
-
-@[simp]
-
-中文:
-定理 K'.elim_update_rev
-  条件: {a b c d b'}
-  结论: update (K'.elim a b c d) rev b' = K'.elim a b' c d
-  证明: by
-  funext x; cases x <;> rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.K'.elim_update_rev** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partr
+ecToTM2.K'`。
+形式化陈述：∀ {a b c d b' : List Turing.PartrecToTM2.Γ'},   Function.update (Turing.Pa
+rtrecToTM2.K'.elim a b c d) Turing.PartrecToTM2.K'.rev b' =     Turing.PartrecTo
+TM2.K'.elim a b' c d
+参数：Turing.PartrecToTM2.K'.elim a b c d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem K'.elim_update_rev {a b c d b'} : update (K'.elim a b c d) rev b' = K'.elim a b' c d := by
   funext x; cases x <;> rfl
 
 @[simp]
-/--
-theorem `K'.elim_update_aux` / 定理 `K'.elim_update_aux`
-
-English:
-theorem K'.elim_update_aux
-  given: {a b c d c'}
-  statement: update (K'.elim a b c d) aux c' = K'.elim a b c' d
-  proof: by
-  funext x; cases x <;> rfl
-
-@[simp]
-
-中文:
-定理 K'.elim_update_aux
-  条件: {a b c d c'}
-  结论: update (K'.elim a b c d) aux c' = K'.elim a b c' d
-  证明: by
-  funext x; cases x <;> rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.K'.elim_update_aux** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partr
+ecToTM2.K'`。
+形式化陈述：∀ {a b c d c' : List Turing.PartrecToTM2.Γ'},   Function.update (Turing.Pa
+rtrecToTM2.K'.elim a b c d) Turing.PartrecToTM2.K'.aux c' =     Turing.PartrecTo
+TM2.K'.elim a b c' d
+参数：Turing.PartrecToTM2.K'.elim a b c d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem K'.elim_update_aux {a b c d c'} : update (K'.elim a b c d) aux c' = K'.elim a b c' d := by
   funext x; cases x <;> rfl
 
 @[simp]
-/--
-theorem `K'.elim_update_stack` / 定理 `K'.elim_update_stack`
-
-English:
-theorem K'.elim_update_stack
-  given: {a b c d d'}
-  proof: by funext x; cases x <;> rfl
-
-中文:
-定理 K'.elim_update_stack
-  条件: {a b c d d'}
-  证明: by funext x; cases x <;> rfl
+/-
+**Turing.PartrecToTM2.K'.elim_update_stack** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Par
+trecToTM2.K'`。
+形式化陈述：∀ {a b c d d' : List Turing.PartrecToTM2.Γ'},   Function.update (Turing.Pa
+rtrecToTM2.K'.elim a b c d) Turing.PartrecToTM2.K'.stack d' =     Turing.Partrec
+ToTM2.K'.elim a b c d'
+参数：Turing.PartrecToTM2.K'.elim a b c d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem K'.elim_update_stack {a b c d d'} :
     update (K'.elim a b c d) stack d' = K'.elim a b c d' := by funext x; cases x <;> rfl
 
-/--
-Definition of `halt` / `halt` 的定义
+/-- The halting state corresponding to a `List ℕ` output value. -/
+/-
+**Turing.PartrecToTM2.halt** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：halt (v : List Nat) : Cfg'
+参数：v : List Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition halt
-  signature: (v : List Nat)
-  body: ⟨none, none, K'.elim (trList v) [] [] []⟩
-
-中文:
-定义 halt
-  签名: (v : 列表 自然数)
-  定义体: ⟨none, none, K'.elim (trList v) [] [] []⟩
-
-Depends on / 依赖: trList
+--- 原说明 ---
+The halting state corresponding to a `List ℕ` output value.
 -/
-def halt (v : List Nat) : Cfg' :=
+def halt (v : List ℕ) : Cfg' :=
   ⟨none, none, K'.elim (trList v) [] [] []⟩
 
-/--
-Definition of `TrCfg` / `TrCfg` 的定义
-
-English:
-definition TrCfg
-  signature: : Cfg -> Cfg' -> Prop
-
-中文:
-定义 TrCfg
-  签名: : Cfg -> Cfg' -> 命题
+/-- The `Cfg` states map to `Cfg'` states almost one to one, except that in normal operation the
+local store contains an arbitrary garbage value. To make the final theorem cleaner we explicitly
+clear it in the halt state so that there is exactly one configuration corresponding to output `v`.
 -/
-def TrCfg : Cfg -> Cfg' -> Prop
+/-
+**Turing.PartrecToTM2.TrCfg** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Turing.ToPartrec.Cfg → Turing.PartrecToTM2.Cfg' → Prop
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+
+--- 原说明 ---
+The `Cfg` states map to `Cfg'` states almost one to one, except that in normal o
+peration the
+local store contains an arbitrary garbage value. To make the final theorem clean
+er we explicitly
+clear it in the halt state so that there is exactly one configuration correspond
+ing to output `v`.
+-/
+def TrCfg : Cfg → Cfg' → Prop
   | Cfg.ret k v, c' =>
-    exists s, c' = ⟨some (Λ'.ret (trCont k)), s, K'.elim (trList v) [] [] (trContStack k)⟩
+    ∃ s, c' = ⟨some (Λ'.ret (trCont k)), s, K'.elim (trList v) [] [] (trContStack k)⟩
   | Cfg.halt v, c' => c' = halt v
 
-/--
-Definition of `splitAtPred` / `splitAtPred` 的定义
+/-- This could be a general list definition, but it is also somewhat specialized to this
+application. `splitAtPred p L` will search `L` for the first element satisfying `p`.
+If it is found, say `L = l₁ ++ a :: l₂` where `a` satisfies `p` but `l₁` does not, then it returns
+`(l₁, some a, l₂)`. Otherwise, if there is no such element, it returns `(L, none, [])`. -/
+/-
+**Turing.PartrecToTM2.splitAtPred** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2
+`。
+形式化陈述：splitAtPred {α} (p : α -> Bool) : List α -> List α × Option α × List α | [
+] => ([], none, []) | a :: as => cond (p a) ([], some a, as) let ⟨l₁, o, l₂⟩
+参数：p : α -> Bool。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition splitAtPred
-  signature: {α} (p : α -> Bool)
-  body: splitAtPred p as
-      ⟨a::l₁, o, l₂⟩
-
-中文:
-定义 splitAtPred
-  签名: {α} (p : α -> 布尔值)
-  定义体: splitAtPred p as
-      ⟨a::l₁, o, l₂⟩
-
-Depends on / 依赖: splitAtPred
+--- 原说明 ---
+This could be a general list definition, but it is also somewhat specialized to 
+this
+application. `splitAtPred p L` will search `L` for the first element satisfying 
+`p`.
+If it is found, say `L = l₁ ++ a :: l₂` where `a` satisfies `p` but `l₁` does no
+t, then it returns
+`(l₁, some a, l₂)`. Otherwise, if there is no such element, it returns `(L, none
+, [])`.
 -/
-def splitAtPred {α} (p : α -> Bool) : List α -> List α × Option α × List α
+def splitAtPred {α} (p : α → Bool) : List α → List α × Option α × List α
   | [] => ([], none, [])
   | a :: as =>
-cond (p a) ([], some a, as)
+    cond (p a) ([], some a, as) <|
       let ⟨l₁, o, l₂⟩ := splitAtPred p as
       ⟨a::l₁, o, l₂⟩
-
-/--
-theorem `splitAtPred_eq` / 定理 `splitAtPred_eq`
-
-English:
-theorem splitAtPred_eq
-  given: {α} (p : α -> Bool)
-  proof: splitAtPred_eq p L
-    rcases o with - | o
-    · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨⟨⟩, rfl⟩
-      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH L none [] _ ⟨rfl, rfl⟩]
-      exact fun x h => h₁ x (List.Mem.tail _ h)
-    · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨h₂, ⟨⟩⟩
-      · rw [h₂, cond]
-      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH l₁ (some o) l₂ _ ⟨h₂]; rw [_⟩] <;> try rfl
-      exact fun x h => h₁ x (List.Mem.tail _ h)
-
-中文:
-定理 splitAtPred_eq
-  条件: {α} (p : α -> 布尔值)
-  证明: splitAtPred_eq p L
-    rcases o with - | o
-    · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨⟨⟩, rfl⟩
-      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH L none [] _ ⟨rfl, rfl⟩]
-      exact fun x h => h₁ x (List.Mem.tail _ h)
-    · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨h₂, ⟨⟩⟩
-      · rw [h₂, cond]
-      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH l₁ (some o) l₂ _ ⟨h₂]; rw [_⟩] <;> try rfl
-      exact fun x h => h₁ x (List.Mem.tail _ h)
-
-Depends on / 依赖: splitAtPred_eq
+/-
+**Turing.PartrecToTM2.splitAtPred_eq** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecTo
+TM2`。
+形式化陈述：splitAtPred_eq {α} (p : α -> Bool) : forall L l₁ o l₂, (forall x in l₁, p 
+x = false) -> Option.elim' (L = l₁ ∧ l₂ = []) (fun a => p a = true ∧ L = l₁ ++ a
+::l₂) o -> splitAtPred p L = (l₁, o, l₂) | [], _, none, _, _, ⟨rfl, rfl⟩ => rfl 
+| [], l₁, some o, l₂, _, ⟨_, h₃⟩ => by simp at h₃ | a :: L, l₁, o, l₂, h₁, h₂ =>
+ by rw [splitAtPred] have IH
+参数：p : α -> Bool。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
 -/
-theorem splitAtPred_eq {α} (p : α -> Bool) :
-    forall L l₁ o l₂,
-      (forall x in l₁, p x = false) ->
-        Option.elim' (L = l₁ ∧ l₂ = []) (fun a => p a = true ∧ L = l₁ ++ a::l₂) o ->
+theorem splitAtPred_eq {α} (p : α → Bool) :
+    ∀ L l₁ o l₂,
+      (∀ x ∈ l₁, p x = false) →
+        Option.elim' (L = l₁ ∧ l₂ = []) (fun a => p a = true ∧ L = l₁ ++ a::l₂) o →
           splitAtPred p L = (l₁, o, l₂)
   | [], _, none, _, _, ⟨rfl, rfl⟩ => rfl
   | [], l₁, some o, l₂, _, ⟨_, h₃⟩ => by simp at h₃
@@ -1381,95 +1174,84 @@ theorem splitAtPred_eq {α} (p : α -> Bool) :
     have IH := splitAtPred_eq p L
     rcases o with - | o
     · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨⟨⟩, rfl⟩
-      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH L none [] _ ⟨rfl, rfl⟩]
+      rw [h₁ a (List.Mem.head _), cond, IH L none [] _ ⟨rfl, rfl⟩]
       exact fun x h => h₁ x (List.Mem.tail _ h)
     · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨h₂, ⟨⟩⟩
       · rw [h₂, cond]
-      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH l₁ (some o) l₂ _ ⟨h₂]; rw [_⟩] <;> try rfl
+      rw [h₁ a (List.Mem.head _), cond, IH l₁ (some o) l₂ _ ⟨h₂, _⟩] <;> try rfl
       exact fun x h => h₁ x (List.Mem.tail _ h)
-
-/--
-theorem `splitAtPred_false` / 定理 `splitAtPred_false`
-
-English:
-theorem splitAtPred_false
-  given: {α} (L : List α)
-  statement: splitAtPred (fun _ => false) L = (L, none, [])
-  proof: splitAtPred_eq _ _ _ _ _ (fun _ _ => rfl) ⟨rfl, rfl⟩
-
-中文:
-定理 splitAtPred_false
-  条件: {α} (L : 列表 α)
-  结论: splitAtPred (fun _ => false) L = (L, none, [])
-  证明: splitAtPred_eq _ _ _ _ _ (fun _ _ => rfl) ⟨rfl, rfl⟩
-
-Depends on / 依赖: splitAtPred_eq
+/-
+**Turing.PartrecToTM2.splitAtPred_false** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partre
+cToTM2`。
+形式化陈述：splitAtPred_false {α} (L : List α) : splitAtPred (fun _ => false) L = (L, 
+none, [])
+参数：L : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.splitAtPred_eq`：splitAtPred_eq {α} (p : α -> Bool) :
+ forall L l₁ o l₂, (forall x in l₁, p x = false) -> Option.elim' (L = l₁ ∧ l₂ = 
+[]) (fun a => p a = true…
 -/
 theorem splitAtPred_false {α} (L : List α) : splitAtPred (fun _ => false) L = (L, none, []) :=
   splitAtPred_eq _ _ _ _ _ (fun _ _ => rfl) ⟨rfl, rfl⟩
-
-/--
-theorem `move_ok` / 定理 `move_ok`
-
-English:
-theorem move_ok
-  statement: {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ != k₂)
-  proof: by
-  induction L₁ generalizing S s with
-  | nil =>
-    rw [(_ : [].reverseAux _ = _), Function.update_eq_self]
-    swap
-    · rw [Function.update_of_ne h₁.symm, List.reverseAux_nil]
-    refine TransGen.head' rfl ?_
-    simp only [tr_move, pop', TM2.stepAux]
-    grind [splitAtPred.eq_def]
-  | cons a L₁ IH =>
-    refine TransGen.head rfl ?_
-    rw [tr]; simp only [pop', Option.elim, TM2.stepAux, push']
-    rcases e₁ : S k₁ with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
-    · cases e
-    cases e₂ : p a' <;> simp only [e₂, cond] at e
-    swap
-    · cases e
-    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
-    rw [e₃] at e
-    cases e
-    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
-    convert! @IH _ (update (update S k₁ Sk) k₂ (a :: S k₂)) _ using 2 <;>
-      simp [Function.update_of_ne, h₁, h₁.symm, e₃, List.reverseAux]
-    simp [Function.update_comm h₁.symm]
-
-中文:
-定理 move_ok
-  结论: {p k₁ k₂ q s L₁ o L₂} {S : K' -> 列表 Γ'} (h₁ : k₁ != k₂)
-  证明: by
-  induction L₁ generalizing S s with
-  | nil =>
-    rw [(_ : [].reverseAux _ = _), Function.update_eq_self]
-    swap
-    · rw [Function.update_of_ne h₁.symm, List.reverseAux_nil]
-    refine TransGen.head' rfl ?_
-    simp only [tr_move, pop', TM2.stepAux]
-    grind [splitAtPred.eq_def]
-  | cons a L₁ IH =>
-    refine TransGen.head rfl ?_
-    rw [tr]; simp only [pop', Option.elim, TM2.stepAux, push']
-    rcases e₁ : S k₁ with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
-    · cases e
-    cases e₂ : p a' <;> simp only [e₂, cond] at e
-    swap
-    · cases e
-    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
-    rw [e₃] at e
-    cases e
-    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
-    convert! @IH _ (update (update S k₁ Sk) k₂ (a :: S k₂)) _ using 2 <;>
-      simp [Function.update_of_ne, h₁, h₁.symm, e₃, List.reverseAux]
-    simp [Function.update_comm h₁.symm]
-
-Depends on / 依赖: Function, Function.update_eq_self, Function.update_of_ne, List.reverseAux_nil, Option.elim, TM2.stepAux, TransGen, TransGen.head, eq_def, generalizing, reverseAux, reverseAux_nil, splitAtPred, splitAtPred.eq_def, stepAux, tr_move, update_eq_self, update_of_ne
+/-
+**Turing.PartrecToTM2.move_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：move_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ != k₂) (e : spl
+itAtPred p (S k₁) = (L₁, o, L₂)) : Reaches₁ (TM2.step tr) ⟨some (Λ'.move p k₁ k₂
+ q), s, S⟩ ⟨some q, o, update (update S k₁ L₂) k₂ (L₁.reverseAux (S k₂))⟩
+参数：h₁ : k₁ != k₂；e : splitAtPred p (S k₁) = (L₁, o, L₂)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `List.reverseAux_nil`：∀ {α : Type u_1} {r : List α}, [].reverseAux r = r
+· 使用定理 `Function.update_eq_self`：update_eq_self (a : α) (f : forall a, β a) : up
+date f a (f a) = f
+· 使用定理 `Relation.TransGen.head'`：head' (hab : r a b) (hbc : ReflTransGen r b c) 
+: TransGen r a c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.TM2.stepAux.eq_3`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `Turing.PartrecToTM2.tr.eq_1`：∀ (p : Turing.PartrecToTM2.Γ' → Bool) (k₁ k
+₂ : Turing.PartrecToTM2.K') (q : Turing.PartrecToTM2.Λ'),   Turing.PartrecToTM2.
+tr (Turing.Partre…
+· 使用定理 `Turing.PartrecToTM2.splitAtPred.eq_1`：∀ {α : Type u_1} (p : α → Bool), T
+uring.PartrecToTM2.splitAtPred p [] = ([], none, [])
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Turing.PartrecToTM2.splitAtPred.eq_2`：∀ {α : Type u_1} (p : α → Bool) (a
+ : α) (as : List α),   Turing.PartrecToTM2.splitAtPred p (a :: as) =     bif p a
+ then ([], some a, as)    …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.reverseAux_eq`：∀ {α : Type u_1} {as bs : List α}, as.reverseAux bs 
+= as.reverse ++ bs
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `Function.update_comm`：update_comm {α} [DecidableEq α] {β : α -> Sort*} {
+a b : α} (h : a != b) (v : β a) (w : β b) (f : forall a, β a) : update (update f
+ a v) b w …
+· 使用定理 `Function.update_idem`：update_idem {α} [DecidableEq α] {β : α -> Sort*} {
+a : α} (v w : β a) (f : forall a, β a) : update (update f a v) a w = update f a 
+w
 -/
-theorem move_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ != k₂)
+theorem move_ok {p k₁ k₂ q s L₁ o L₂} {S : K' → List Γ'} (h₁ : k₁ ≠ k₂)
     (e : splitAtPred p (S k₁) = (L₁, o, L₂)) :
     Reaches₁ (TM2.step tr) ⟨some (Λ'.move p k₁ k₂ q), s, S⟩
       ⟨some q, o, update (update S k₁ L₂) k₂ (L₁.reverseAux (S k₂))⟩ := by
@@ -1496,77 +1278,32 @@ theorem move_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ 
     convert! @IH _ (update (update S k₁ Sk) k₂ (a :: S k₂)) _ using 2 <;>
       simp [Function.update_of_ne, h₁, h₁.symm, e₃, List.reverseAux]
     simp [Function.update_comm h₁.symm]
-
-/--
-theorem `unrev_ok` / 定理 `unrev_ok`
-
-English:
-theorem unrev_ok
-  given: {q s} {S : K' -> List Γ'}
-  proof: move_ok (by decide) splitAtPred_false _
-
-中文:
-定理 unrev_ok
-  条件: {q s} {S : K' -> 列表 Γ'}
-  证明: move_ok (by decide) splitAtPred_false _
-
-Depends on / 依赖: move_ok, splitAtPred_false
+/-
+**Turing.PartrecToTM2.unrev_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：unrev_ok {q s} {S : K' -> List Γ'} : Reaches₁ (TM2.step tr) ⟨some (unrev q
+), s, S⟩ ⟨some q, none, update (update S rev []) main (List.reverseAux (S rev) (
+S main))⟩
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.PartrecToTM2.move_ok`：move_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> Li
+st Γ'} (h₁ : k₁ != k₂) (e : splitAtPred p (S k₁) = (L₁, o, L₂)) : Reaches₁ (TM2.
+step tr) ⟨some (Λ…
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Turing.PartrecToTM2.splitAtPred_false`：splitAtPred_false {α} (L : List α
+) : splitAtPred (fun _ => false) L = (L, none, [])
 -/
-theorem unrev_ok {q s} {S : K' -> List Γ'} :
+theorem unrev_ok {q s} {S : K' → List Γ'} :
     Reaches₁ (TM2.step tr) ⟨some (unrev q), s, S⟩
       ⟨some q, none, update (update S rev []) main (List.reverseAux (S rev) (S main))⟩ :=
-move_ok (by decide) splitAtPred_false _
-
-/--
-theorem `move₂_ok` / 定理 `move₂_ok`
-
-English:
-theorem move₂_ok
-  statement: {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ != rev ∧ k₂ != rev ∧ k₁ != k₂)
-  proof: by
-  refine (move_ok h₁.1 e).trans (TransGen.head rfl ?_)
-  simp only [TM2.step, Option.mem_def, Option.elim]
-  cases o <;> simp only <;> rw [tr]
-    <;> simp only [id, TM2.stepAux, Option.isSome, cond_true, cond_false]
-  · convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
-    simp only [Function.update_comm h₁.1, Function.update_idem]
-    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
-    simp only [Function.update_of_ne h₁.2.2.symm, Function.update_of_ne h₁.2.1,
-      Function.update_of_ne h₁.1.symm, List.reverseAux_eq, h₂, Function.update_self,
-      List.append_nil, List.reverse_reverse]
-  · simp only [Option.getD_some]
-    convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
-    simp only [h₂, Function.update_comm h₁.1, List.reverseAux_eq, Function.update_self,
-      List.append_nil, Function.update_idem]
-    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
-    simp only [Function.update_of_ne h₁.1.symm, Function.update_of_ne h₁.2.2.symm,
-      Function.update_of_ne h₁.2.1, Function.update_self, List.reverse_reverse]
-
-中文:
-定理 move₂_ok
-  结论: {p k₁ k₂ q s L₁ o L₂} {S : K' -> 列表 Γ'} (h₁ : k₁ != rev ∧ k₂ != rev ∧ k₁ != k₂)
-  证明: by
-  refine (move_ok h₁.1 e).trans (TransGen.head rfl ?_)
-  simp only [TM2.step, Option.mem_def, Option.elim]
-  cases o <;> simp only <;> rw [tr]
-    <;> simp only [id, TM2.stepAux, Option.isSome, cond_true, cond_false]
-  · convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
-    simp only [Function.update_comm h₁.1, Function.update_idem]
-    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
-    simp only [Function.update_of_ne h₁.2.2.symm, Function.update_of_ne h₁.2.1,
-      Function.update_of_ne h₁.1.symm, List.reverseAux_eq, h₂, Function.update_self,
-      List.append_nil, List.reverse_reverse]
-  · simp only [Option.getD_some]
-    convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
-    simp only [h₂, Function.update_comm h₁.1, List.reverseAux_eq, Function.update_self,
-      List.append_nil, Function.update_idem]
-    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
-    simp only [Function.update_of_ne h₁.1.symm, Function.update_of_ne h₁.2.2.symm,
-      Function.update_of_ne h₁.2.1, Function.update_self, List.reverse_reverse]
-
-Depends on / 依赖: Function, Function.update_comm, Function.update_eq_self, Function.update_idem, Function.update_of_ne, Option.elim, Option.isSome, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, cond_false, cond_true, convert, isSome, mem_def, move_ok, splitAtPred_false, stepAux
+  move_ok (by decide) <| splitAtPred_false _
+/-
+**Turing.PartrecToTM2.move** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem move₂_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k₁ != rev ∧ k₂ != rev ∧ k₁ != k₂)
+theorem move₂_ok {p k₁ k₂ q s L₁ o L₂} {S : K' → List Γ'} (h₁ : k₁ ≠ rev ∧ k₂ ≠ rev ∧ k₁ ≠ k₂)
     (h₂ : S rev = []) (e : splitAtPred p (S k₁) = (L₁, o, L₂)) :
     Reaches₁ (TM2.step tr) ⟨some (move₂ p k₁ k₂ q), s, S⟩
       ⟨some q, none, update (update S k₁ (o.elim id List.cons L₂)) k₂ (L₁ ++ S k₂)⟩ := by
@@ -1587,73 +1324,58 @@ theorem move₂_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> List Γ'} (h₁ : k�
     rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
     simp only [Function.update_of_ne h₁.1.symm, Function.update_of_ne h₁.2.2.symm,
       Function.update_of_ne h₁.2.1, Function.update_self, List.reverse_reverse]
-
-/--
-theorem `clear_ok` / 定理 `clear_ok`
-
-English:
-theorem clear_ok
-  given: {p k q s L₁ o L₂} {S : K' -> List Γ'} (e : splitAtPred p (S k) = (L₁, o, L₂))
-  proof: by
-  induction L₁ generalizing S s with
-  | nil =>
-    refine TransGen.head' rfl ?_
-    rw [tr]; simp only [pop', TM2.step, Option.mem_def, TM2.stepAux, Option.elim]
-    revert e; rcases S k with - | ⟨a, Sk⟩ <;> intro e
-    · cases e
-      rfl
-    simp only [splitAtPred, List.head?, List.tail_cons] at e ⊢
-    revert e; cases p a <;> intro e <;>
-      simp only [cond_false, cond_true, Prod.mk.injEq, true_and, false_and, reduceCtorEq] at e ⊢
-    rcases e with ⟨e₁, e₂⟩
-    rw [e₁]; rw [e₂]
-  | cons a L₁ IH =>
-    refine TransGen.head rfl ?_
-    rw [tr]; simp only [pop', TM2.step, Option.mem_def, TM2.stepAux, Option.elim]
-    rcases e₁ : S k with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
-    · cases e
-    cases e₂ : p a' <;> simp only [e₂, cond] at e
-    swap
-    · cases e
-    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
-    rw [e₃] at e
-    cases e
-    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
-    convert! @IH _ (update S k Sk) _ using 2 <;> simp [e₃]
-
-中文:
-定理 clear_ok
-  条件: {p k q s L₁ o L₂} {S : K' -> 列表 Γ'} (e : splitAtPred p (S k) = (L₁, o, L₂))
-  证明: by
-  induction L₁ generalizing S s with
-  | nil =>
-    refine TransGen.head' rfl ?_
-    rw [tr]; simp only [pop', TM2.step, Option.mem_def, TM2.stepAux, Option.elim]
-    revert e; rcases S k with - | ⟨a, Sk⟩ <;> intro e
-    · cases e
-      rfl
-    simp only [splitAtPred, List.head?, List.tail_cons] at e ⊢
-    revert e; cases p a <;> intro e <;>
-      simp only [cond_false, cond_true, Prod.mk.injEq, true_and, false_and, reduceCtorEq] at e ⊢
-    rcases e with ⟨e₁, e₂⟩
-    rw [e₁]; rw [e₂]
-  | cons a L₁ IH =>
-    refine TransGen.head rfl ?_
-    rw [tr]; simp only [pop', TM2.step, Option.mem_def, TM2.stepAux, Option.elim]
-    rcases e₁ : S k with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
-    · cases e
-    cases e₂ : p a' <;> simp only [e₂, cond] at e
-    swap
-    · cases e
-    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
-    rw [e₃] at e
-    cases e
-    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
-    convert! @IH _ (update S k Sk) _ using 2 <;> simp [e₃]
-
-Depends on / 依赖: List.head, List.tail_cons, Option.elim, Option.mem_def, Prod.mk.injEq, TM2.step, TM2.stepAux, TransGen, TransGen.head, cond_false, cond_true, false_and, generalizing, mem_def, reduceCtorEq, revert, splitAtPred, stepAux, tail_cons, true_and
+/-
+**Turing.PartrecToTM2.clear_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：clear_ok {p k q s L₁ o L₂} {S : K' -> List Γ'} (e : splitAtPred p (S k) = 
+(L₁, o, L₂)) : Reaches₁ (TM2.step tr) ⟨some (Λ'.clear p k q), s, S⟩ ⟨some q, o, 
+update S k L₂⟩
+参数：e : splitAtPred p (S k) = (L₁, o, L₂)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Relation.TransGen.head'`：head' (hab : r a b) (hbc : ReflTransGen r b c) 
+: TransGen r a c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.PartrecToTM2.tr.eq_4`：∀ (p : Turing.PartrecToTM2.Γ' → Bool) (k : 
+Turing.PartrecToTM2.K') (q : Turing.PartrecToTM2.Λ'),   Turing.PartrecToTM2.tr (
+Turing.PartrecToT…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.TM2.stepAux.eq_3`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `Turing.PartrecToTM2.splitAtPred.eq_1`：∀ {α : Type u_1} (p : α → Bool), T
+uring.PartrecToTM2.splitAtPred p [] = ([], none, [])
+· 使用定理 `Turing.PartrecToTM2.splitAtPred.eq_2`：∀ {α : Type u_1} (p : α → Bool) (a
+ : α) (as : List α),   Turing.PartrecToTM2.splitAtPred p (a :: as) =     bif p a
+ then ([], some a, as)    …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Function.update_idem`：update_idem {α} [DecidableEq α] {β : α -> Sort*} {
+a : α} (v w : β a) (f : forall a, β a) : update (update f a v) a w = update f a 
+w
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
 -/
-theorem clear_ok {p k q s L₁ o L₂} {S : K' -> List Γ'} (e : splitAtPred p (S k) = (L₁, o, L₂)) :
+theorem clear_ok {p k q s L₁ o L₂} {S : K' → List Γ'} (e : splitAtPred p (S k) = (L₁, o, L₂)) :
     Reaches₁ (TM2.step tr) ⟨some (Λ'.clear p k q), s, S⟩ ⟨some q, o, update S k L₂⟩ := by
   induction L₁ generalizing S s with
   | nil =>
@@ -1666,7 +1388,7 @@ theorem clear_ok {p k q s L₁ o L₂} {S : K' -> List Γ'} (e : splitAtPred p (
     revert e; cases p a <;> intro e <;>
       simp only [cond_false, cond_true, Prod.mk.injEq, true_and, false_and, reduceCtorEq] at e ⊢
     rcases e with ⟨e₁, e₂⟩
-    rw [e₁]; rw [e₂]
+    rw [e₁, e₂]
   | cons a L₁ IH =>
     refine TransGen.head rfl ?_
     rw [tr]; simp only [pop', TM2.step, Option.mem_def, TM2.stepAux, Option.elim]
@@ -1682,42 +1404,63 @@ theorem clear_ok {p k q s L₁ o L₂} {S : K' -> List Γ'} (e : splitAtPred p (
     convert! @IH _ (update S k Sk) _ using 2 <;> simp [e₃]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `copy_ok` / 定理 `copy_ok`
-
-English:
-theorem copy_ok
-  given: (q s a b c d)
-  proof: by
-  induction b generalizing a d s with
-  | nil =>
-    refine TransGen.single ?_
-    simp
-  | cons x b IH =>
-    refine TransGen.head rfl ?_
-    rw [tr]
-    simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_rev, List.head?_cons, Option.isSome_some,
-      List.tail_cons, elim_update_rev, elim_main, elim_update_main,
-      elim_stack, elim_update_stack, cond_true, List.reverseAux_cons, pop', push']
-    exact IH _ _ _
-
-中文:
-定理 copy_ok
-  条件: (q s a b c d)
-  证明: by
-  induction b generalizing a d s with
-  | nil =>
-    refine TransGen.single ?_
-    simp
-  | cons x b IH =>
-    refine TransGen.head rfl ?_
-    rw [tr]
-    simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_rev, List.head?_cons, Option.isSome_some,
-      List.tail_cons, elim_update_rev, elim_main, elim_update_main,
-      elim_stack, elim_update_stack, cond_true, List.reverseAux_cons, pop', push']
-    exact IH _ _ _
-
-Depends on / 依赖: List.head, List.reverseAux_cons, List.tail_cons, Option.isSome_some, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, TransGen.single, _cons, cond_true, elim_main, elim_rev, elim_stack, elim_update_main, elim_update_rev, elim_update_stack, generalizing, isSome_some
+/-
+**Turing.PartrecToTM2.copy_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：copy_ok (q s a b c d) : Reaches₁ (TM2.step tr) ⟨some (Λ'.copy q), s, K'.el
+im a b c d⟩ ⟨some q, none, K'.elim (List.reverseAux b a) [] c (List.reverseAux b
+ d)⟩
+参数：q s a b c d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.TM2.step.eq_2`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u_3}
+ {σ : Type u_4} [inst : DecidableEq K] (M : Λ → Turing.TM2.Stmt Γ Λ σ)   (l : Λ)
+ (v : σ) (…
+· 使用定理 `Turing.TM2.stepAux.eq_3`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_rev`：∀ {a b c d b' : List Turing.Part
+recToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Par
+trecToTM2.K'.rev b' =     Tu…
+· 使用定理 `Turing.TM2.stepAux.eq_5`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Boo…
+· 使用定理 `Turing.TM2.stepAux.eq_1`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_main`：∀ {a b c d a' : List Turing.Par
+trecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Pa
+rtrecToTM2.K'.main a' =     T…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_stack`：∀ {a b c d d' : List Turing.Pa
+rtrecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.P
+artrecToTM2.K'.stack d' =     …
+· 使用定理 `Turing.TM2.stepAux.eq_6`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Λ),…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.reverseAux_eq`：∀ {α : Type u_1} {as bs : List α}, as.reverseAux bs 
+= as.reverse ++ bs
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `Turing.PartrecToTM2.tr.eq_5`：∀ (q : Turing.PartrecToTM2.Λ'),   Turing.Pa
+rtrecToTM2.tr q.copy =     Turing.PartrecToTM2.pop' Turing.PartrecToTM2.K'.rev  
+     (Turing.TM2.…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `Function.update_congr`：update_congr {β : Sort*} {f₁ f₂ : α -> β} (hf : f
+₁ = f₂) {a'₁ a'₂ : α} (ha' : a'₁ = a'₂) {v₁ v₂ : β} (hv : v₁ = v₂) {a₁ a₂ : α} (
+ha : a₁ = a…
 -/
 theorem copy_ok (q s a b c d) :
     Reaches₁ (TM2.step tr) ⟨some (Λ'.copy q), s, K'.elim a b c d⟩
@@ -1733,81 +1476,50 @@ theorem copy_ok (q s a b c d) :
       List.tail_cons, elim_update_rev, elim_main, elim_update_main,
       elim_stack, elim_update_stack, cond_true, List.reverseAux_cons, pop', push']
     exact IH _ _ _
-
-/--
-theorem `trPosNum_natEnd` / 定理 `trPosNum_natEnd`
-
-English:
-theorem trPosNum_natEnd
-  statement: forall (n), forall x in trPosNum n, natEnd x = false
-
-中文:
-定理 trPosNum_natEnd
-  结论: 对任意 (n), 对任意 x in trPosNum n, natEnd x = false
+/-
+**Turing.PartrecToTM2.trPosNum_natEnd** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecT
+oTM2`。
+形式化陈述：∀ (n : PosNum), ∀ x ∈ Turing.PartrecToTM2.trPosNum n, Turing.PartrecToTM2.
+natEnd x = false
+参数：n : PosNum。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem trPosNum_natEnd : forall (n), forall x in trPosNum n, natEnd x = false
+theorem trPosNum_natEnd : ∀ (n), ∀ x ∈ trPosNum n, natEnd x = false
   | PosNum.one, _, List.Mem.head _ => rfl
   | PosNum.bit0 _, _, List.Mem.head _ => rfl
   | PosNum.bit0 n, _, List.Mem.tail _ h => trPosNum_natEnd n _ h
   | PosNum.bit1 _, _, List.Mem.head _ => rfl
   | PosNum.bit1 n, _, List.Mem.tail _ h => trPosNum_natEnd n _ h
-
-/--
-theorem `trNum_natEnd` / 定理 `trNum_natEnd`
-
-English:
-theorem trNum_natEnd
-  statement: forall (n), forall x in trNum n, natEnd x = false
-
-中文:
-定理 trNum_natEnd
-  结论: 对任意 (n), 对任意 x in trNum n, natEnd x = false
+/-
+**Turing.PartrecToTM2.trNum_natEnd** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM
+2`。
+形式化陈述：∀ (n : Num), ∀ x ∈ Turing.PartrecToTM2.trNum n, Turing.PartrecToTM2.natEnd
+ x = false
+参数：n : Num。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.trPosNum_natEnd`：∀ (n : PosNum), ∀ x ∈ Turing.Partre
+cToTM2.trPosNum n, Turing.PartrecToTM2.natEnd x = false
 -/
-theorem trNum_natEnd : forall (n), forall x in trNum n, natEnd x = false
+theorem trNum_natEnd : ∀ (n), ∀ x ∈ trNum n, natEnd x = false
   | Num.pos n, x, h => trPosNum_natEnd n x h
-
-/--
-theorem `trNat_natEnd` / 定理 `trNat_natEnd`
-
-English:
-theorem trNat_natEnd
-  given: (n)
-  statement: forall x in trNat n, natEnd x = false
-  proof: trNum_natEnd _
-
-中文:
-定理 tr自然数_natEnd
-  条件: (n)
-  结论: 对任意 x in tr自然数 n, natEnd x = false
-  证明: trNum_natEnd _
-
-Depends on / 依赖: trNum_natEnd
+/-
+**Turing.PartrecToTM2.trNat_natEnd** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM
+2`。
+形式化陈述：trNat_natEnd (n) : forall x in trNat n, natEnd x = false
+参数：n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.trNum_natEnd`：∀ (n : Num), ∀ x ∈ Turing.PartrecToTM2
+.trNum n, Turing.PartrecToTM2.natEnd x = false
 -/
-theorem trNat_natEnd (n) : forall x in trNat n, natEnd x = false :=
+theorem trNat_natEnd (n) : ∀ x ∈ trNat n, natEnd x = false :=
   trNum_natEnd _
-
-/--
-theorem `trList_ne_consₗ` / 定理 `trList_ne_consₗ`
-
-English:
-theorem trList_ne_consₗ
-  statement: forall (l), forall x in trList l, x != Γ'.consₗ
-  proof: h
-    · rintro rfl
-      cases trNat_natEnd _ _ h
-    · rintro ⟨⟩
-    · exact trList_ne_consₗ l _ h
-
-中文:
-定理 trList_ne_consₗ
-  结论: 对任意 (l), 对任意 x in trList l, x != Γ'.consₗ
-  证明: h
-    · rintro rfl
-      cases trNat_natEnd _ _ h
-    · rintro ⟨⟩
-    · exact trList_ne_consₗ l _ h
+/-
+**Turing.PartrecToTM2.trList_ne_cons** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecTo
+TM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem trList_ne_consₗ : forall (l), forall x in trList l, x != Γ'.consₗ
+theorem trList_ne_consₗ : ∀ (l), ∀ x ∈ trList l, x ≠ Γ'.consₗ
   | a :: l, x, h => by
     simp only [trList, List.mem_append, List.mem_cons] at h
     obtain h | rfl | h := h
@@ -1815,47 +1527,71 @@ theorem trList_ne_consₗ : forall (l), forall x in trList l, x != Γ'.consₗ
       cases trNat_natEnd _ _ h
     · rintro ⟨⟩
     · exact trList_ne_consₗ l _ h
-
-/--
-theorem `head_main_ok` / 定理 `head_main_ok`
-
-English:
-theorem head_main_ok
-  given: {q s L} {c d : List Γ'}
-  proof: by
-  let o : Option Γ' := List.casesOn L none fun _ _ => some Γ'.cons
-  refine
-    (move_ok (by decide)
-          (splitAtPred_eq _ _ (trNat L.headI) o (trList L.tail) (trNat_natEnd _) ?_)).trans
-      (TransGen.head rfl (TransGen.head rfl ?_))
-  · cases L <;> simp [o]
-  rw [tr]
-  simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_update_main, elim_rev, elim_update_rev,
-    Function.update_self, trList]
-  rw [if_neg (show o != some Γ'.consₗ by cases L <;> simp [o])]
-  refine (clear_ok (splitAtPred_eq _ _ _ none [] ?_ ⟨rfl, rfl⟩)).trans ?_
-  · exact fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)
-  convert! unrev_ok using 2; simp [List.reverseAux_eq]
-
-中文:
-定理 head_main_ok
-  条件: {q s L} {c d : 列表 Γ'}
-  证明: by
-  let o : Option Γ' := List.casesOn L none fun _ _ => some Γ'.cons
-  refine
-    (move_ok (by decide)
-          (splitAtPred_eq _ _ (trNat L.headI) o (trList L.tail) (trNat_natEnd _) ?_)).trans
-      (TransGen.head rfl (TransGen.head rfl ?_))
-  · cases L <;> simp [o]
-  rw [tr]
-  simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_update_main, elim_rev, elim_update_rev,
-    Function.update_self, trList]
-  rw [if_neg (show o != some Γ'.consₗ by cases L <;> simp [o])]
-  refine (clear_ok (splitAtPred_eq _ _ _ none [] ?_ ⟨rfl, rfl⟩)).trans ?_
-  · exact fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)
-  convert! unrev_ok using 2; simp [List.reverseAux_eq]
-
-Depends on / 依赖: Function, Function.update_self, L.headI, L.tail, List.casesOn, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, casesOn, clear_ok, elim_rev, elim_update_main, elim_update_rev, if_neg, mem_def, move_ok, splitAtPred_eq, stepAux
+/-
+**Turing.PartrecToTM2.head_main_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM
+2`。
+形式化陈述：head_main_ok {q s L} {c d : List Γ'} : Reaches₁ (TM2.step tr) ⟨some (head 
+main q), s, K'.elim (trList L) [] c d⟩ ⟨some q, none, K'.elim (trList [L.headI])
+ [] c d⟩
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.TransGen.trans`：∀ {α : Sort u} {r : α → α → Prop} {a b c : α}, 
+  Relation.TransGen r a b → Relation.TransGen r b c → Relation.TransGen r a c
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.PartrecToTM2.move_ok`：move_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> Li
+st Γ'} (h₁ : k₁ != k₂) (e : splitAtPred p (S k₁) = (L₁, o, L₂)) : Reaches₁ (TM2.
+step tr) ⟨some (Λ…
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Turing.PartrecToTM2.splitAtPred_eq`：splitAtPred_eq {α} (p : α -> Bool) :
+ forall L l₁ o l₂, (forall x in l₁, p x = false) -> Option.elim' (L = l₁ ∧ l₂ = 
+[]) (fun a => p a = true…
+· 使用定理 `Turing.PartrecToTM2.trNat_natEnd`：trNat_natEnd (n) : forall x in trNat n
+, natEnd x = false
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.PartrecToTM2.trNat_zero`：trNat_zero : trNat 0 = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Turing.PartrecToTM2.trList.eq_1`：Turing.PartrecToTM2.trList [] = []
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `List.append_cancel_left_eq`：∀ {α : Type u_1} (as bs cs : List α), (as ++
+ bs = as ++ cs) = (bs = cs)
+· 使用定理 `List.cons.injEq`：∀ {α : Type u} (head : α) (tail : List α) (head_1 : α) 
+(tail_1 : List α),   (head :: tail = head_1 :: tail_1) = (head = head_1 ∧ tail =
+ tail…
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `Turing.PartrecToTM2.tr.eq_3`：∀ (q : Option Turing.PartrecToTM2.Γ' → Turi
+ng.PartrecToTM2.Λ'),   Turing.PartrecToTM2.tr (Turing.PartrecToTM2.Λ'.read q) = 
+Turing.TM2.Stmt.g…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_main`：∀ {a b c d a' : List Turing.Par
+trecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Pa
+rtrecToTM2.K'.main a' =     T…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_rev`：∀ {a b c d b' : List Turing.Part
+recToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Par
+trecToTM2.K'.rev b' =     Tu…
+（共 46 条，此处仅展示前 30 条）
 -/
 theorem head_main_ok {q s L} {c d : List Γ'} :
     Reaches₁ (TM2.step tr) ⟨some (head main q), s, K'.elim (trList L) [] c d⟩
@@ -1869,83 +1605,81 @@ theorem head_main_ok {q s L} {c d : List Γ'} :
   rw [tr]
   simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_update_main, elim_rev, elim_update_rev,
     Function.update_self, trList]
-  rw [if_neg (show o != some Γ'.consₗ by cases L <;> simp [o])]
+  rw [if_neg (show o ≠ some Γ'.consₗ by cases L <;> simp [o])]
   refine (clear_ok (splitAtPred_eq _ _ _ none [] ?_ ⟨rfl, rfl⟩)).trans ?_
   · exact fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)
   convert! unrev_ok using 2; simp [List.reverseAux_eq]
-
-/--
-theorem `head_stack_ok` / 定理 `head_stack_ok`
-
-English:
-theorem head_stack_ok
-  given: {q s L₁ L₂ L₃}
-  proof: by
-  rcases L₂ with - | ⟨a, L₂⟩
-  · refine
-      TransGen.trans
-        (move_ok (by decide)
-          (splitAtPred_eq _ _ [] (some Γ'.consₗ) L₃ (by rintro _ ⟨⟩) ⟨rfl, rfl⟩))
-        (TransGen.head rfl (TransGen.head rfl ?_))
-    rw [tr]
-    simp only [TM2.step, Option.mem_def, TM2.stepAux, ite_true, id_eq, trList, List.nil_append,
-      elim_update_stack, elim_rev, List.reverseAux_nil, elim_update_rev, Function.update_self,
-      List.headI_nil, trNat_default]
-    convert! unrev_ok using 2
-    simp
-  · refine
-      TransGen.trans
-        (move_ok (by decide)
-          (splitAtPred_eq _ _ (trNat a) (some Γ'.cons) (trList L₂ ++ Γ'.consₗ :: L₃)
-            (trNat_natEnd _) ⟨rfl, by simp⟩))
-        (TransGen.head rfl (TransGen.head rfl ?_))
-    simp only [TM2.step, Option.mem_def, trList, List.append_assoc,
-      List.cons_append, elim_update_stack, elim_rev, elim_update_rev, Function.update_self,
-      List.headI_cons]
-    refine
-      TransGen.trans
-        (clear_ok
-          (splitAtPred_eq _ _ (trList L₂) (some Γ'.consₗ) L₃
-            (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, by simp⟩))
-        ?_
-    convert! unrev_ok using 2
-    simp [List.reverseAux_eq]
-
-中文:
-定理 head_stack_ok
-  条件: {q s L₁ L₂ L₃}
-  证明: by
-  rcases L₂ with - | ⟨a, L₂⟩
-  · refine
-      TransGen.trans
-        (move_ok (by decide)
-          (splitAtPred_eq _ _ [] (some Γ'.consₗ) L₃ (by rintro _ ⟨⟩) ⟨rfl, rfl⟩))
-        (TransGen.head rfl (TransGen.head rfl ?_))
-    rw [tr]
-    simp only [TM2.step, Option.mem_def, TM2.stepAux, ite_true, id_eq, trList, List.nil_append,
-      elim_update_stack, elim_rev, List.reverseAux_nil, elim_update_rev, Function.update_self,
-      List.headI_nil, trNat_default]
-    convert! unrev_ok using 2
-    simp
-  · refine
-      TransGen.trans
-        (move_ok (by decide)
-          (splitAtPred_eq _ _ (trNat a) (some Γ'.cons) (trList L₂ ++ Γ'.consₗ :: L₃)
-            (trNat_natEnd _) ⟨rfl, by simp⟩))
-        (TransGen.head rfl (TransGen.head rfl ?_))
-    simp only [TM2.step, Option.mem_def, trList, List.append_assoc,
-      List.cons_append, elim_update_stack, elim_rev, elim_update_rev, Function.update_self,
-      List.headI_cons]
-    refine
-      TransGen.trans
-        (clear_ok
-          (splitAtPred_eq _ _ (trList L₂) (some Γ'.consₗ) L₃
-            (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, by simp⟩))
-        ?_
-    convert! unrev_ok using 2
-    simp [List.reverseAux_eq]
-
-Depends on / 依赖: Function, Function.update_self, List.headI_nil, List.nil_append, List.reverseAux_nil, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, TransGen.trans, convert, elim_rev, elim_update_rev, elim_update_stack, headI_nil, id_eq, ite_true, mem_def, move_ok
+/-
+**Turing.PartrecToTM2.head_stack_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：head_stack_ok {q s L₁ L₂ L₃} : Reaches₁ (TM2.step tr) ⟨some (head stack q)
+, s, K'.elim (trList L₁) [] [] (trList L₂ ++ Γ'.consₗ :: L₃)⟩ ⟨some q, none, K'.
+elim (trList (L₂.headI :: L₁)) [] [] L₃⟩
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Relation.TransGen.trans`：∀ {α : Sort u} {r : α → α → Prop} {a b c : α}, 
+  Relation.TransGen r a b → Relation.TransGen r b c → Relation.TransGen r a c
+· 使用定理 `Turing.PartrecToTM2.move_ok`：move_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> Li
+st Γ'} (h₁ : k₁ != k₂) (e : splitAtPred p (S k₁) = (L₁, o, L₂)) : Reaches₁ (TM2.
+step tr) ⟨some (Λ…
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Turing.PartrecToTM2.splitAtPred_eq`：splitAtPred_eq {α} (p : α -> Bool) :
+ forall L l₁ o l₂, (forall x in l₁, p x = false) -> Option.elim' (L = l₁ ∧ l₂ = 
+[]) (fun a => p a = true…
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.PartrecToTM2.tr.eq_3`：∀ (q : Option Turing.PartrecToTM2.Γ' → Turi
+ng.PartrecToTM2.Λ'),   Turing.PartrecToTM2.tr (Turing.PartrecToTM2.Λ'.read q) = 
+Turing.TM2.Stmt.g…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_stack`：∀ {a b c d d' : List Turing.Pa
+rtrecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.P
+artrecToTM2.K'.stack d' =     …
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_rev`：∀ {a b c d b' : List Turing.Part
+recToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Par
+trecToTM2.K'.rev b' =     Tu…
+· 使用定理 `Function.update.congr_simp`：∀ {α : Sort u} {β : α → Sort v} {inst : Deci
+dableEq α} [inst_1 : DecidableEq α] (f f_1 : (a : α) → β a),   f = f_1 → ∀ (a' :
+ α) (v v_1 : β a…
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `Turing.PartrecToTM2.trNat_default`：trNat_default : trNat default = []
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.reverseAux_eq`：∀ {α : Type u_1} {as bs : List α}, as.reverseAux bs 
+= as.reverse ++ bs
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_main`：∀ {a b c d a' : List Turing.Par
+trecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Pa
+rtrecToTM2.K'.main a' =     T…
+· 使用定理 `Turing.PartrecToTM2.unrev_ok`：unrev_ok {q s} {S : K' -> List Γ'} : Reach
+es₁ (TM2.step tr) ⟨some (unrev q), s, S⟩ ⟨some q, none, update (update S rev [])
+ main (List.revers…
+· 使用定理 `Turing.PartrecToTM2.trNat_natEnd`：trNat_natEnd (n) : forall x in trNat n
+, natEnd x = false
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+（共 39 条，此处仅展示前 30 条）
 -/
 theorem head_stack_ok {q s L₁ L₂ L₃} :
     Reaches₁ (TM2.step tr)
@@ -1982,84 +1716,73 @@ theorem head_stack_ok {q s L₁ L₂ L₃} :
     simp [List.reverseAux_eq]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `succ_ok` / 定理 `succ_ok`
-
-English:
-theorem succ_ok
-  given: {q s n} {c d : List Γ'}
-  proof: by
-  simp only [trList, trNat.eq_1, Nat.cast_succ, Num.add_one]
-  rcases (n : Num) with - | a
-  · refine TransGen.head rfl ?_
-    simp only [Option.mem_def]
-    convert! unrev_ok using 1
-    simp only [elim_update_rev, elim_rev, elim_main, List.reverseAux_nil, elim_update_main]
-    rfl
-  simp only [trNum, Num.succ, Num.succ']
-  suffices forall l₁, exists l₁' l₂' s',
-      List.reverseAux l₁ (trPosNum a.succ) = List.reverseAux l₁' l₂' ∧
-        Reaches₁ (TM2.step tr) ⟨some q.succ, s, K'.elim (trPosNum a ++ [Γ'.cons]) l₁ c d⟩
-          ⟨some (unrev q), s', K'.elim (l₂' ++ [Γ'.cons]) l₁' c d⟩ by
-    obtain ⟨l₁', l₂', s', e, h⟩ := this []
-    simp only [List.reverseAux] at e
-    refine h.trans ?_
-    convert! unrev_ok using 2
-    simp [e, List.reverseAux_eq]
-  induction a generalizing s with intro l₁
-  | one =>
-    refine ⟨Γ'.bit0 :: l₁, [Γ'.bit1], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
-    simp [trPosNum]
-  | bit1 m IH =>
-    obtain ⟨l₁', l₂', s', e, h⟩ := IH (Γ'.bit0 :: l₁)
-    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
-    simp [trPosNum]
-    rfl
-  | bit0 m _ =>
-    refine ⟨l₁, _, some Γ'.bit0, rfl, TransGen.single ?_⟩
-    simp only [TM2.step]; rw [tr]
-    simp only [TM2.stepAux, pop', elim_main, elim_update_main,
-      elim_rev, elim_update_rev, Function.update_self, Option.mem_def, Option.some.injEq]
-    rfl
-
-中文:
-定理 succ_ok
-  条件: {q s n} {c d : 列表 Γ'}
-  证明: by
-  simp only [trList, trNat.eq_1, Nat.cast_succ, Num.add_one]
-  rcases (n : Num) with - | a
-  · refine TransGen.head rfl ?_
-    simp only [Option.mem_def]
-    convert! unrev_ok using 1
-    simp only [elim_update_rev, elim_rev, elim_main, List.reverseAux_nil, elim_update_main]
-    rfl
-  simp only [trNum, Num.succ, Num.succ']
-  suffices forall l₁, exists l₁' l₂' s',
-      List.reverseAux l₁ (trPosNum a.succ) = List.reverseAux l₁' l₂' ∧
-        Reaches₁ (TM2.step tr) ⟨some q.succ, s, K'.elim (trPosNum a ++ [Γ'.cons]) l₁ c d⟩
-          ⟨some (unrev q), s', K'.elim (l₂' ++ [Γ'.cons]) l₁' c d⟩ by
-    obtain ⟨l₁', l₂', s', e, h⟩ := this []
-    simp only [List.reverseAux] at e
-    refine h.trans ?_
-    convert! unrev_ok using 2
-    simp [e, List.reverseAux_eq]
-  induction a generalizing s with intro l₁
-  | one =>
-    refine ⟨Γ'.bit0 :: l₁, [Γ'.bit1], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
-    simp [trPosNum]
-  | bit1 m IH =>
-    obtain ⟨l₁', l₂', s', e, h⟩ := IH (Γ'.bit0 :: l₁)
-    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
-    simp [trPosNum]
-    rfl
-  | bit0 m _ =>
-    refine ⟨l₁, _, some Γ'.bit0, rfl, TransGen.single ?_⟩
-    simp only [TM2.step]; rw [tr]
-    simp only [TM2.stepAux, pop', elim_main, elim_update_main,
-      elim_rev, elim_update_rev, Function.update_self, Option.mem_def, Option.some.injEq]
-    rfl
-
-Depends on / 依赖: List.reverseAux, List.reverseAux_nil, Nat.cast_succ, Num.add_one, Num.succ, Option.mem_def, TM2.step, TransGen, TransGen.head, a.succ, add_one, cast_succ, convert, elim_main, elim_rev, elim_update_main, elim_update_rev, eq_1, mem_def, q.succ
+/-
+**Turing.PartrecToTM2.succ_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：succ_ok {q s n} {c d : List Γ'} : Reaches₁ (TM2.step tr) ⟨some (Λ'.succ q)
+, s, K'.elim (trList [n]) [] c d⟩ ⟨some q, none, K'.elim (trList [n.succ]) [] c 
+d⟩
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.PartrecToTM2.trNat.eq_1`：∀ (n : ℕ), Turing.PartrecToTM2.trNat n =
+ Turing.PartrecToTM2.trNum ↑n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `Num.add_one`：∀ (n : Num), n + 1 = n.succ
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_main`：∀ {a b c d a' : List Turing.Par
+trecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Pa
+rtrecToTM2.K'.main a' =     T…
+· 使用引理 `Function.update_congr`：update_congr {β : Sort*} {f₁ f₂ : α -> β} (hf : f
+₁ = f₂) {a'₁ a'₂ : α} (ha' : a'₁ = a'₂) {v₁ v₂ : β} (hv : v₁ = v₂) {a₁ a₂ : α} (
+ha : a₁ = a…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_rev`：∀ {a b c d b' : List Turing.Part
+recToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Par
+trecToTM2.K'.rev b' =     Tu…
+· 使用定理 `Turing.PartrecToTM2.unrev_ok`：unrev_ok {q s} {S : K' -> List Γ'} : Reach
+es₁ (TM2.step tr) ⟨some (unrev q), s, S⟩ ⟨some q, none, update (update S rev [])
+ main (List.revers…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.TM2.stepAux.eq_3`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Turing.TM2.stepAux.eq_5`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Boo…
+· 使用定理 `Decidable.decide.congr_simp`：∀ (p p_1 : Prop), p = p_1 → ∀ {h : Decidabl
+e p} [h_1 : Decidable p_1], decide p = decide p_1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `decide_true`：∀ (h : Decidable True), decide True = true
+· 使用定理 `Turing.TM2.stepAux.eq_1`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Turing.TM2.stepAux.eq_6`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Λ),…
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `decide_false`：∀ (h : Decidable False), decide False = false
+· 使用定理 `Turing.TM2.step.eq_2`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u_3}
+ {σ : Type u_4} [inst : DecidableEq K] (M : Λ → Turing.TM2.Stmt Γ Λ σ)   (l : Λ)
+ (v : σ) (…
+（共 38 条，此处仅展示前 30 条）
 -/
 theorem succ_ok {q s n} {c d : List Γ'} :
     Reaches₁ (TM2.step tr) ⟨some (Λ'.succ q), s, K'.elim (trList [n]) [] c d⟩
@@ -2072,7 +1795,7 @@ theorem succ_ok {q s n} {c d : List Γ'} :
     simp only [elim_update_rev, elim_rev, elim_main, List.reverseAux_nil, elim_update_main]
     rfl
   simp only [trNum, Num.succ, Num.succ']
-  suffices forall l₁, exists l₁' l₂' s',
+  suffices ∀ l₁, ∃ l₁' l₂' s',
       List.reverseAux l₁ (trPosNum a.succ) = List.reverseAux l₁' l₂' ∧
         Reaches₁ (TM2.step tr) ⟨some q.succ, s, K'.elim (trPosNum a ++ [Γ'.cons]) l₁ c d⟩
           ⟨some (unrev q), s', K'.elim (l₂' ++ [Γ'.cons]) l₁' c d⟩ by
@@ -2098,106 +1821,76 @@ theorem succ_ok {q s n} {c d : List Γ'} :
     rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `pred_ok` / 定理 `pred_ok`
-
-English:
-theorem pred_ok
-  given: (q₁ q₂ s v) (c d : List Γ')
-  statement: exists s',
-  proof: by
-  rcases v with (_ | ⟨_ | n, v⟩)
-  · refine ⟨none, TransGen.single ?_⟩
-    simp
-  · refine ⟨some Γ'.cons, TransGen.single ?_⟩
-    simp
-  refine ⟨none, ?_⟩
-  simp only [trList, trNat.eq_1, trNum, Nat.cast_succ, Num.add_one, Num.succ,
-    List.tail_cons, List.headI_cons]
-  rcases (n : Num) with - | a
-  · simp only [trPosNum, Num.succ', List.singleton_append, List.nil_append]
-    refine TransGen.head rfl ?_
-    rw [tr]; simp only [pop', TM2.stepAux]
-    convert! unrev_ok using 2
-    simp
-  simp only [Num.succ']
-  suffices forall l₁, exists l₁' l₂' s',
-    List.reverseAux l₁ (trPosNum a) = List.reverseAux l₁' l₂' ∧
-      Reaches₁ (TM2.step tr)
-        ⟨some (q₁.pred q₂), s, K'.elim (trPosNum a.succ ++ Γ'.cons :: trList v) l₁ c d⟩
-        ⟨some (unrev q₂), s', K'.elim (l₂' ++ Γ'.cons :: trList v) l₁' c d⟩ by
-    obtain ⟨l₁', l₂', s', e, h⟩ := this []
-    simp only [List.reverseAux] at e
-    refine h.trans ?_
-    convert! unrev_ok using 2
-    simp [e, List.reverseAux_eq]
-  induction a generalizing s with intro l₁
-  | one =>
-    refine ⟨Γ'.bit1::l₁, [], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
-    simp [trPosNum, show PosNum.one.succ = PosNum.one.bit0 from rfl]
-  | bit1 m IH =>
-    obtain ⟨l₁', l₂', s', e, h⟩ := IH (some Γ'.bit0) (Γ'.bit1 :: l₁)
-    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
-    simp
-    rfl
-  | bit0 m IH =>
-    obtain ⟨a, l, e, h⟩ : exists a l, (trPosNum m = a::l) ∧ natEnd a = false := by
-      cases m <;> refine ⟨_, _, rfl, rfl⟩
-    refine ⟨Γ'.bit0 :: l₁, _, some a, rfl, TransGen.single ?_⟩
-    simp [trPosNum, PosNum.succ, e, h, show some Γ'.bit1 != some Γ'.bit0 by decide,
-      Option.getD, -natEnd]
-    rfl
-
-中文:
-定理 pred_ok
-  条件: (q₁ q₂ s v) (c d : 列表 Γ')
-  结论: 存在 s',
-  证明: by
-  rcases v with (_ | ⟨_ | n, v⟩)
-  · refine ⟨none, TransGen.single ?_⟩
-    simp
-  · refine ⟨some Γ'.cons, TransGen.single ?_⟩
-    simp
-  refine ⟨none, ?_⟩
-  simp only [trList, trNat.eq_1, trNum, Nat.cast_succ, Num.add_one, Num.succ,
-    List.tail_cons, List.headI_cons]
-  rcases (n : Num) with - | a
-  · simp only [trPosNum, Num.succ', List.singleton_append, List.nil_append]
-    refine TransGen.head rfl ?_
-    rw [tr]; simp only [pop', TM2.stepAux]
-    convert! unrev_ok using 2
-    simp
-  simp only [Num.succ']
-  suffices forall l₁, exists l₁' l₂' s',
-    List.reverseAux l₁ (trPosNum a) = List.reverseAux l₁' l₂' ∧
-      Reaches₁ (TM2.step tr)
-        ⟨some (q₁.pred q₂), s, K'.elim (trPosNum a.succ ++ Γ'.cons :: trList v) l₁ c d⟩
-        ⟨some (unrev q₂), s', K'.elim (l₂' ++ Γ'.cons :: trList v) l₁' c d⟩ by
-    obtain ⟨l₁', l₂', s', e, h⟩ := this []
-    simp only [List.reverseAux] at e
-    refine h.trans ?_
-    convert! unrev_ok using 2
-    simp [e, List.reverseAux_eq]
-  induction a generalizing s with intro l₁
-  | one =>
-    refine ⟨Γ'.bit1::l₁, [], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
-    simp [trPosNum, show PosNum.one.succ = PosNum.one.bit0 from rfl]
-  | bit1 m IH =>
-    obtain ⟨l₁', l₂', s', e, h⟩ := IH (some Γ'.bit0) (Γ'.bit1 :: l₁)
-    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
-    simp
-    rfl
-  | bit0 m IH =>
-    obtain ⟨a, l, e, h⟩ : exists a l, (trPosNum m = a::l) ∧ natEnd a = false := by
-      cases m <;> refine ⟨_, _, rfl, rfl⟩
-    refine ⟨Γ'.bit0 :: l₁, _, some a, rfl, TransGen.single ?_⟩
-    simp [trPosNum, PosNum.succ, e, h, show some Γ'.bit1 != some Γ'.bit0 by decide,
-      Option.getD, -natEnd]
-    rfl
-
-Depends on / 依赖: List.headI_cons, List.nil_append, List.singleton_append, List.tail_cons, Nat.cast_succ, Num.add_one, Num.succ, TM2.stepAux, TransGen, TransGen.head, TransGen.single, add_one, cast_succ, convert, eq_1, headI_cons, nil_append, single, singleton_append, stepAux
+/-
+**Turing.PartrecToTM2.pred_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：pred_ok (q₁ q₂ s v) (c d : List Γ') : exists s', Reaches₁ (TM2.step tr) ⟨s
+ome (Λ'.pred q₁ q₂), s, K'.elim (trList v) [] c d⟩ (v.headI.rec ⟨some q₁, s', K'
+.elim (trList v.tail) [] c d⟩ fun n _ => ⟨some q₂, s', K'.elim (trList (n::v.tai
+l)) [] c d⟩)
+参数：q₁ q₂ s v；c d : List Γ'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.TM2.step.eq_2`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u_3}
+ {σ : Type u_4} [inst : DecidableEq K] (M : Λ → Turing.TM2.Stmt Γ Λ σ)   (l : Λ)
+ (v : σ) (…
+· 使用定理 `Turing.TM2.stepAux.eq_3`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_main`：∀ {a b c d a' : List Turing.Par
+trecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Pa
+rtrecToTM2.K'.main a' =     T…
+· 使用定理 `Turing.TM2.stepAux.eq_5`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Boo…
+· 使用定理 `Decidable.decide.congr_simp`：∀ (p p_1 : Prop), p = p_1 → ∀ {h : Decidabl
+e p} [h_1 : Decidable p_1], decide p = decide p_1
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `decide_false`：∀ (h : Decidable False), decide False = false
+· 使用定理 `Turing.TM2.stepAux.eq_1`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_rev`：∀ {a b c d b' : List Turing.Part
+recToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Par
+trecToTM2.K'.rev b' =     Tu…
+· 使用定理 `Turing.TM2.stepAux.eq_6`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Λ),…
+· 使用定理 `Turing.TM2.stepAux.eq_2`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.PartrecToTM2.trList.eq_1`：Turing.PartrecToTM2.trList [] = []
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Turing.PartrecToTM2.trNat_zero`：trNat_zero : trNat 0 = []
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `Turing.PartrecToTM2.trNat.eq_1`：∀ (n : ℕ), Turing.PartrecToTM2.trNat n =
+ Turing.PartrecToTM2.trNum ↑n
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `Num.add_one`：∀ (n : Num), n + 1 = n.succ
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `Turing.PartrecToTM2.tr.eq_7`：∀ (q₁ q₂ : Turing.PartrecToTM2.Λ'),   Turin
+g.PartrecToTM2.tr (q₁.pred q₂) =     Turing.PartrecToTM2.pop' Turing.PartrecToTM
+2.K'.main       (…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 45 条，此处仅展示前 30 条）
 -/
-theorem pred_ok (q₁ q₂ s v) (c d : List Γ') : exists s',
+theorem pred_ok (q₁ q₂ s v) (c d : List Γ') : ∃ s',
     Reaches₁ (TM2.step tr) ⟨some (Λ'.pred q₁ q₂), s, K'.elim (trList v) [] c d⟩
       (v.headI.rec ⟨some q₁, s', K'.elim (trList v.tail) [] c d⟩ fun n _ =>
         ⟨some q₂, s', K'.elim (trList (n::v.tail)) [] c d⟩) := by
@@ -2216,7 +1909,7 @@ theorem pred_ok (q₁ q₂ s v) (c d : List Γ') : exists s',
     convert! unrev_ok using 2
     simp
   simp only [Num.succ']
-  suffices forall l₁, exists l₁' l₂' s',
+  suffices ∀ l₁, ∃ l₁' l₂' s',
     List.reverseAux l₁ (trPosNum a) = List.reverseAux l₁' l₂' ∧
       Reaches₁ (TM2.step tr)
         ⟨some (q₁.pred q₂), s, K'.elim (trPosNum a.succ ++ Γ'.cons :: trList v) l₁ c d⟩
@@ -2236,89 +1929,86 @@ theorem pred_ok (q₁ q₂ s v) (c d : List Γ') : exists s',
     simp
     rfl
   | bit0 m IH =>
-    obtain ⟨a, l, e, h⟩ : exists a l, (trPosNum m = a::l) ∧ natEnd a = false := by
+    obtain ⟨a, l, e, h⟩ : ∃ a l, (trPosNum m = a::l) ∧ natEnd a = false := by
       cases m <;> refine ⟨_, _, rfl, rfl⟩
     refine ⟨Γ'.bit0 :: l₁, _, some a, rfl, TransGen.single ?_⟩
-    simp [trPosNum, PosNum.succ, e, h, show some Γ'.bit1 != some Γ'.bit0 by decide,
+    simp [trPosNum, PosNum.succ, e, h, show some Γ'.bit1 ≠ some Γ'.bit0 by decide,
       Option.getD, -natEnd]
     rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `trNormal_respects` / 定理 `trNormal_respects`
-
-English:
-theorem trNormal_respects
-  given: (c k v s)
-  proof: by
-  induction c generalizing k v s with
-  | zero' => refine ⟨_, ⟨s, rfl⟩, TransGen.single ?_⟩; simp
-  | succ => refine ⟨_, ⟨none, rfl⟩, head_main_ok.trans succ_ok⟩
-  | tail =>
-    let o : Option Γ' := List.casesOn v none fun _ _ => some Γ'.cons
-    refine ⟨_, ⟨o, rfl⟩, ?_⟩; convert! clear_ok _ using 2
-    · simp; rfl
-    swap
-    refine splitAtPred_eq _ _ (trNat v.headI) _ _ (trNat_natEnd _) ?_
-    cases v <;> simp [o]
-  | cons f fs IHf _ =>
-    obtain ⟨c, h₁, h₂⟩ := IHf (Cont.cons₁ fs v k) v none
-refine ⟨c, h₁, TransGen.head rfl (move_ok (by decide) (splitAtPred_false _)).trans ?_⟩
-    simp only [TM2.step, Option.mem_def, elim_stack, elim_update_stack, elim_update_main,
-      elim_main, elim_rev, elim_update_rev]
-    refine (copy_ok _ none [] (trList v).reverse _ _).trans ?_
-    convert! h₂ using 2
-    simp [List.reverseAux_eq, trContStack]
-  | comp f _ _ IHg => exact IHg (Cont.comp f k) v s
-  | case f g IHf IHg =>
-    rw [stepNormal]
-    simp only
-    obtain ⟨s', h⟩ := pred_ok _ _ s v _ _
-    revert h; rcases v.headI with - | n <;> intro h
-    · obtain ⟨c, h₁, h₂⟩ := IHf k _ s'
-      exact ⟨_, h₁, h.trans h₂⟩
-    · obtain ⟨c, h₁, h₂⟩ := IHg k _ s'
-      exact ⟨_, h₁, h.trans h₂⟩
-  | fix f IH => apply IH
-
-中文:
-定理 trNormal_respects
-  条件: (c k v s)
-  证明: by
-  induction c generalizing k v s with
-  | zero' => refine ⟨_, ⟨s, rfl⟩, TransGen.single ?_⟩; simp
-  | succ => refine ⟨_, ⟨none, rfl⟩, head_main_ok.trans succ_ok⟩
-  | tail =>
-    let o : Option Γ' := List.casesOn v none fun _ _ => some Γ'.cons
-    refine ⟨_, ⟨o, rfl⟩, ?_⟩; convert! clear_ok _ using 2
-    · simp; rfl
-    swap
-    refine splitAtPred_eq _ _ (trNat v.headI) _ _ (trNat_natEnd _) ?_
-    cases v <;> simp [o]
-  | cons f fs IHf _ =>
-    obtain ⟨c, h₁, h₂⟩ := IHf (Cont.cons₁ fs v k) v none
-refine ⟨c, h₁, TransGen.head rfl (move_ok (by decide) (splitAtPred_false _)).trans ?_⟩
-    simp only [TM2.step, Option.mem_def, elim_stack, elim_update_stack, elim_update_main,
-      elim_main, elim_rev, elim_update_rev]
-    refine (copy_ok _ none [] (trList v).reverse _ _).trans ?_
-    convert! h₂ using 2
-    simp [List.reverseAux_eq, trContStack]
-  | comp f _ _ IHg => exact IHg (Cont.comp f k) v s
-  | case f g IHf IHg =>
-    rw [stepNormal]
-    simp only
-    obtain ⟨s', h⟩ := pred_ok _ _ s v _ _
-    revert h; rcases v.headI with - | n <;> intro h
-    · obtain ⟨c, h₁, h₂⟩ := IHf k _ s'
-      exact ⟨_, h₁, h.trans h₂⟩
-    · obtain ⟨c, h₁, h₂⟩ := IHg k _ s'
-      exact ⟨_, h₁, h.trans h₂⟩
-  | fix f IH => apply IH
-
-Depends on / 依赖: Cont.cons, List.casesOn, TransGen, TransGen.head, TransGen.single, casesOn, clear_ok, convert, generalizing, head_main_ok, head_main_ok.trans, single, splitAtPred_eq, succ_ok, trNat_natEnd, v.headI
+/-
+**Turing.PartrecToTM2.trNormal_respects** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partre
+cToTM2`。
+形式化陈述：trNormal_respects (c k v s) : exists b₂, TrCfg (stepNormal c k v) b₂ ∧ Rea
+ches₁ (TM2.step tr) ⟨some (trNormal c (trCont k)), s, K'.elim (trList v) [] [] (
+trContStack k)⟩ b₂
+参数：c k v s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.TM2.step.eq_2`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u_3}
+ {σ : Type u_4} [inst : DecidableEq K] (M : Λ → Turing.TM2.Stmt Γ Λ σ)   (l : Λ)
+ (v : σ) (…
+· 使用定理 `Turing.TM2.stepAux.eq_5`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Boo…
+· 使用定理 `Turing.TM2.stepAux.eq_1`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (k : K) (f :…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_main`：∀ {a b c d a' : List Turing.Par
+trecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Pa
+rtrecToTM2.K'.main a' =     T…
+· 使用定理 `Turing.TM2.stepAux.eq_6`：∀ {K : Type u_1} {Γ : K → Type u_2} {Λ : Type u
+_3} {σ : Type u_4} [inst : DecidableEq K] (x : σ)   (x_1 : (k : K) → List (Γ k))
+ (f : σ → Λ),…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.PartrecToTM2.trNat_zero`：trNat_zero : trNat 0 = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Relation.TransGen.trans`：∀ {α : Sort u} {r : α → α → Prop} {a b c : α}, 
+  Relation.TransGen r a b → Relation.TransGen r b c → Relation.TransGen r a c
+· 使用定理 `Turing.PartrecToTM2.head_main_ok`：head_main_ok {q s L} {c d : List Γ'} :
+ Reaches₁ (TM2.step tr) ⟨some (head main q), s, K'.elim (trList L) [] c d⟩ ⟨some
+ q, none, K'.elim (trL…
+· 使用定理 `Turing.PartrecToTM2.succ_ok`：succ_ok {q s n} {c d : List Γ'} : Reaches₁ 
+(TM2.step tr) ⟨some (Λ'.succ q), s, K'.elim (trList [n]) [] c d⟩ ⟨some q, none, 
+K'.elim (trList […
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.PartrecToTM2.clear_ok`：clear_ok {p k q s L₁ o L₂} {S : K' -> List
+ Γ'} (e : splitAtPred p (S k) = (L₁, o, L₂)) : Reaches₁ (TM2.step tr) ⟨some (Λ'.
+clear p k q), s, S…
+· 使用定理 `Turing.PartrecToTM2.splitAtPred_eq`：splitAtPred_eq {α} (p : α -> Bool) :
+ forall L l₁ o l₂, (forall x in l₁, p x = false) -> Option.elim' (L = l₁ ∧ l₂ = 
+[]) (fun a => p a = true…
+· 使用定理 `Turing.PartrecToTM2.trNat_natEnd`：trNat_natEnd (n) : forall x in trNat n
+, natEnd x = false
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `Turing.PartrecToTM2.trList.eq_1`：Turing.PartrecToTM2.trList [] = []
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+（共 47 条，此处仅展示前 30 条）
 -/
 theorem trNormal_respects (c k v s) :
-    exists b₂,
+    ∃ b₂,
       TrCfg (stepNormal c k v) b₂ ∧
         Reaches₁ (TM2.step tr)
           ⟨some (trNormal c (trCont k)), s, K'.elim (trList v) [] [] (trContStack k)⟩ b₂ := by
@@ -2334,7 +2024,7 @@ theorem trNormal_respects (c k v s) :
     cases v <;> simp [o]
   | cons f fs IHf _ =>
     obtain ⟨c, h₁, h₂⟩ := IHf (Cont.cons₁ fs v k) v none
-refine ⟨c, h₁, TransGen.head rfl (move_ok (by decide) (splitAtPred_false _)).trans ?_⟩
+    refine ⟨c, h₁, TransGen.head rfl <| (move_ok (by decide) (splitAtPred_false _)).trans ?_⟩
     simp only [TM2.step, Option.mem_def, elim_stack, elim_update_stack, elim_update_main,
       elim_main, elim_rev, elim_update_rev]
     refine (copy_ok _ none [] (trList v).reverse _ _).trans ?_
@@ -2353,124 +2043,83 @@ refine ⟨c, h₁, TransGen.head rfl (move_ok (by decide) (splitAtPred_false _))
   | fix f IH => apply IH
 
 set_option linter.flexible false in -- TODO: revisit this after #13791 is merged
-/--
-theorem `tr_ret_respects` / 定理 `tr_ret_respects`
-
-English:
-theorem tr_ret_respects
-  given: (k v s)
-  statement: exists b₂,
-  proof: by
-  induction k generalizing v s with
-  | halt => exact ⟨_, rfl, TransGen.single rfl⟩
-  | cons₁ fs as k _ =>
-    obtain ⟨s', h₁, h₂⟩ := trNormal_respects fs (Cont.cons₂ v k) as none
-    refine ⟨s', h₁, TransGen.head rfl ?_⟩; simp
-    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
-    simp only [TM2.step, Option.mem_def, Option.elim, id_eq, elim_update_main, elim_main, elim_aux,
-      List.append_nil, elim_update_aux]
-    refine (move₂_ok (L₁ := ?_) (o := ?_) (L₂ := ?_) (by decide) rfl ?_).trans ?_
-    pick_goal 4
-    · exact splitAtPred_eq _ _ _ (some Γ'.consₗ) _
-        (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, rfl⟩
-    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
-    simp only [TM2.step, Option.mem_def, Option.elim, elim_update_stack, elim_main,
-      List.append_nil, elim_update_main, id_eq, elim_update_aux,
-      elim_aux, elim_stack]
-    exact h₂
-  | cons₂ ns k IH =>
-    obtain ⟨c, h₁, h₂⟩ := IH (ns.headI :: v) none
-exact ⟨c, h₁, TransGen.head rfl head_stack_ok.trans h₂⟩
-  | comp f k _ =>
-    obtain ⟨s', h₁, h₂⟩ := trNormal_respects f k v s
-    exact ⟨_, h₁, TransGen.head rfl h₂⟩
-  | fix f k IH =>
-    rw [stepRet]
-    have :
-      if v.headI = 0 then natEnd ((trList v).head?.getD default) = true ∧
-          (trList v).tail = trList v.tail
-      else
-        natEnd ((trList v).head?.getD default) = false ∧
-          (trList v).tail = (trNat v.headI).tail ++ Γ'.cons :: trList v.tail := by
-      obtain - | n := v
-      · exact ⟨rfl, rfl⟩
-      rcases n with - | n
-      · simp
-      rw [trList]; rw [List.headI]; rw [trNat]; rw [Nat.cast_succ]; rw [Num.add_one]; rw [Num.succ]; rw [List.tail]
-      cases (n : Num).succ' <;> exact ⟨rfl, rfl⟩
-    by_cases h : v.headI = 0 <;> simp only [h, ite_true, ite_false] at this ⊢
-    · obtain ⟨c, h₁, h₂⟩ := IH v.tail (trList v).head?
-      refine ⟨c, h₁, TransGen.head rfl ?_⟩
-      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this, elim_update_main]
-      exact h₂
-    · obtain ⟨s', h₁, h₂⟩ := trNormal_respects f (Cont.fix f k) v.tail (some Γ'.cons)
-refine ⟨_, h₁, TransGen.head rfl TransGen.trans ?_ h₂⟩
-      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this.1]
-      convert! clear_ok (splitAtPred_eq _ _ (trNat v.headI).tail (some Γ'.cons) _ _ _) using 2
-      · simp
-        convert! rfl
-      · exact fun x h => trNat_natEnd _ _ (List.tail_subset _ h)
-      · exact ⟨rfl, this.2⟩
-
-中文:
-定理 tr_ret_respects
-  条件: (k v s)
-  结论: 存在 b₂,
-  证明: by
-  induction k generalizing v s with
-  | halt => exact ⟨_, rfl, TransGen.single rfl⟩
-  | cons₁ fs as k _ =>
-    obtain ⟨s', h₁, h₂⟩ := trNormal_respects fs (Cont.cons₂ v k) as none
-    refine ⟨s', h₁, TransGen.head rfl ?_⟩; simp
-    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
-    simp only [TM2.step, Option.mem_def, Option.elim, id_eq, elim_update_main, elim_main, elim_aux,
-      List.append_nil, elim_update_aux]
-    refine (move₂_ok (L₁ := ?_) (o := ?_) (L₂ := ?_) (by decide) rfl ?_).trans ?_
-    pick_goal 4
-    · exact splitAtPred_eq _ _ _ (some Γ'.consₗ) _
-        (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, rfl⟩
-    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
-    simp only [TM2.step, Option.mem_def, Option.elim, elim_update_stack, elim_main,
-      List.append_nil, elim_update_main, id_eq, elim_update_aux,
-      elim_aux, elim_stack]
-    exact h₂
-  | cons₂ ns k IH =>
-    obtain ⟨c, h₁, h₂⟩ := IH (ns.headI :: v) none
-exact ⟨c, h₁, TransGen.head rfl head_stack_ok.trans h₂⟩
-  | comp f k _ =>
-    obtain ⟨s', h₁, h₂⟩ := trNormal_respects f k v s
-    exact ⟨_, h₁, TransGen.head rfl h₂⟩
-  | fix f k IH =>
-    rw [stepRet]
-    have :
-      if v.headI = 0 then natEnd ((trList v).head?.getD default) = true ∧
-          (trList v).tail = trList v.tail
-      else
-        natEnd ((trList v).head?.getD default) = false ∧
-          (trList v).tail = (trNat v.headI).tail ++ Γ'.cons :: trList v.tail := by
-      obtain - | n := v
-      · exact ⟨rfl, rfl⟩
-      rcases n with - | n
-      · simp
-      rw [trList]; rw [List.headI]; rw [trNat]; rw [Nat.cast_succ]; rw [Num.add_one]; rw [Num.succ]; rw [List.tail]
-      cases (n : Num).succ' <;> exact ⟨rfl, rfl⟩
-    by_cases h : v.headI = 0 <;> simp only [h, ite_true, ite_false] at this ⊢
-    · obtain ⟨c, h₁, h₂⟩ := IH v.tail (trList v).head?
-      refine ⟨c, h₁, TransGen.head rfl ?_⟩
-      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this, elim_update_main]
-      exact h₂
-    · obtain ⟨s', h₁, h₂⟩ := trNormal_respects f (Cont.fix f k) v.tail (some Γ'.cons)
-refine ⟨_, h₁, TransGen.head rfl TransGen.trans ?_ h₂⟩
-      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this.1]
-      convert! clear_ok (splitAtPred_eq _ _ (trNat v.headI).tail (some Γ'.cons) _ _ _) using 2
-      · simp
-        convert! rfl
-      · exact fun x h => trNat_natEnd _ _ (List.tail_subset _ h)
-      · exact ⟨rfl, this.2⟩
-
-Depends on / 依赖: Cont.cons, List.append_nil, Option.elim, Option.mem_def, TM2.step, TransGen, TransGen.head, TransGen.single, append_nil, elim_aux, elim_main, elim_update_aux, elim_update_main, generalizing, id_eq, mem_def, single, splitAtPred_false, trNormal_respects
+/-
+**Turing.PartrecToTM2.tr_ret_respects** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecT
+oTM2`。
+形式化陈述：tr_ret_respects (k v s) : exists b₂, TrCfg (stepRet k v) b₂ ∧ Reaches₁ (TM
+2.step tr) ⟨some (Λ'.ret (trCont k)), s, K'.elim (trList v) [] [] (trContStack k
+)⟩ b₂
+参数：k v s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.PartrecToTM2.trNormal_respects`：trNormal_respects (c k v s) : exi
+sts b₂, TrCfg (stepNormal c k v) b₂ ∧ Reaches₁ (TM2.step tr) ⟨some (trNormal c (
+trCont k)), s, K'.elim (trL…
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Relation.TransGen.trans`：∀ {α : Sort u} {r : α → α → Prop} {a b c : α}, 
+  Relation.TransGen r a b → Relation.TransGen r b c → Relation.TransGen r a c
+· 使用定理 `Turing.PartrecToTM2.move₂_ok`：move₂_ok {p k₁ k₂ q s L₁ o L₂} {S : K' -> 
+List Γ'} (h₁ : k₁ != rev ∧ k₂ != rev ∧ k₁ != k₂) (h₂ : S rev = []) (e : splitAtP
+red p (S k₁) = (L₁…
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Turing.PartrecToTM2.splitAtPred_false`：splitAtPred_false {α} (L : List α
+) : splitAtPred (fun _ => false) L = (L, none, [])
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_main`：∀ {a b c d a' : List Turing.Par
+trecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Pa
+rtrecToTM2.K'.main a' =     T…
+· 使用定理 `List.append_nil`：∀ {α : Type u} (as : List α), as ++ [] = as
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_aux`：∀ {a b c d c' : List Turing.Part
+recToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.Par
+trecToTM2.K'.aux c' =     Tu…
+· 使用定理 `Turing.PartrecToTM2.splitAtPred_eq`：splitAtPred_eq {α} (p : α -> Bool) :
+ forall L l₁ o l₂, (forall x in l₁, p x = false) -> Option.elim' (L = l₁ ∧ l₂ = 
+[]) (fun a => p a = true…
+· 使用定理 `Bool.decide_false`：decide_false {p : Prop} [Decidable p] : ¬p -> decide 
+p = false
+· 使用定理 `Turing.PartrecToTM2.trList_ne_consₗ`：trList_ne_consₗ : forall (l), foral
+l x in trList l, x != Γ'.consₗ | a :: l, x, h => by simp only [trList, List.mem_
+append, List.mem_cons] at…
+· 使用定理 `Turing.PartrecToTM2.K'.elim_update_stack`：∀ {a b c d d' : List Turing.Pa
+rtrecToTM2.Γ'},   Function.update (Turing.PartrecToTM2.K'.elim a b c d) Turing.P
+artrecToTM2.K'.stack d' =     …
+· 使用定理 `Function.update.congr_simp`：∀ {α : Sort u} {β : α → Sort v} {inst : Deci
+dableEq α} [inst_1 : DecidableEq α] (f f_1 : (a : α) → β a),   f = f_1 → ∀ (a' :
+ α) (v v_1 : β a…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.PartrecToTM2.head_stack_ok`：head_stack_ok {q s L₁ L₂ L₃} : Reache
+s₁ (TM2.step tr) ⟨some (head stack q), s, K'.elim (trList L₁) [] [] (trList L₂ +
++ Γ'.consₗ :: L₃)⟩ ⟨som…
+· 使用定理 `Turing.ToPartrec.stepRet.eq_5`：∀ (x : List ℕ) (f : Turing.ToPartrec.Code
+) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont
+.fix f k) x =     i…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Turing.PartrecToTM2.trNat_zero`：trNat_zero : trNat 0 = []
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Turing.PartrecToTM2.trList.eq_2`：∀ (n : ℕ) (ns : List ℕ),   Turing.Partr
+ecToTM2.trList (n :: ns) =     Turing.PartrecToTM2.trNat n ++ Turing.PartrecToTM
+2.Γ'.cons :: Turing.P…
+· 使用定理 `List.headI.eq_2`：∀ {α : Type u_1} [inst : Inhabited α] (a : α) (tail : L
+ist α), (a :: tail).headI = a
+（共 47 条，此处仅展示前 30 条）
 -/
-theorem tr_ret_respects (k v s) : exists b₂,
+theorem tr_ret_respects (k v s) : ∃ b₂,
     TrCfg (stepRet k v) b₂ ∧
       Reaches₁ (TM2.step tr)
         ⟨some (Λ'.ret (trCont k)), s, K'.elim (trList v) [] [] (trContStack k)⟩ b₂ := by
@@ -2493,7 +2142,7 @@ theorem tr_ret_respects (k v s) : exists b₂,
     exact h₂
   | cons₂ ns k IH =>
     obtain ⟨c, h₁, h₂⟩ := IH (ns.headI :: v) none
-exact ⟨c, h₁, TransGen.head rfl head_stack_ok.trans h₂⟩
+    exact ⟨c, h₁, TransGen.head rfl <| head_stack_ok.trans h₂⟩
   | comp f k _ =>
     obtain ⟨s', h₁, h₂⟩ := trNormal_respects f k v s
     exact ⟨_, h₁, TransGen.head rfl h₂⟩
@@ -2509,121 +2158,108 @@ exact ⟨c, h₁, TransGen.head rfl head_stack_ok.trans h₂⟩
       · exact ⟨rfl, rfl⟩
       rcases n with - | n
       · simp
-      rw [trList]; rw [List.headI]; rw [trNat]; rw [Nat.cast_succ]; rw [Num.add_one]; rw [Num.succ]; rw [List.tail]
+      rw [trList, List.headI, trNat, Nat.cast_succ, Num.add_one, Num.succ, List.tail]
       cases (n : Num).succ' <;> exact ⟨rfl, rfl⟩
     by_cases h : v.headI = 0 <;> simp only [h, ite_true, ite_false] at this ⊢
     · obtain ⟨c, h₁, h₂⟩ := IH v.tail (trList v).head?
       refine ⟨c, h₁, TransGen.head rfl ?_⟩
-      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this, elim_update_main]
+      rw [trCont, tr]; simp only [pop', TM2.stepAux, elim_main, this, elim_update_main]
       exact h₂
     · obtain ⟨s', h₁, h₂⟩ := trNormal_respects f (Cont.fix f k) v.tail (some Γ'.cons)
-refine ⟨_, h₁, TransGen.head rfl TransGen.trans ?_ h₂⟩
-      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this.1]
+      refine ⟨_, h₁, TransGen.head rfl <| TransGen.trans ?_ h₂⟩
+      rw [trCont, tr]; simp only [pop', TM2.stepAux, elim_main, this.1]
       convert! clear_ok (splitAtPred_eq _ _ (trNat v.headI).tail (some Γ'.cons) _ _ _) using 2
       · simp
         convert! rfl
       · exact fun x h => trNat_natEnd _ _ (List.tail_subset _ h)
       · exact ⟨rfl, this.2⟩
-
-/--
-theorem `tr_respects` / 定理 `tr_respects`
-
-English:
-theorem tr_respects
-  statement: Respects step (TM2.step tr) TrCfg
-
-中文:
-定理 tr_respects
-  结论: Respects step (TM2.step tr) TrCfg
+/-
+**Turing.PartrecToTM2.tr_respects** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+`。
+形式化陈述：StateTransition.Respects Turing.ToPartrec.step (Turing.TM2.step Turing.Par
+trecToTM2.tr) Turing.PartrecToTM2.TrCfg
+参数：Turing.TM2.step Turing.PartrecToTM2.tr。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.PartrecToTM2.tr_ret_respects`：tr_ret_respects (k v s) : exists b₂
+, TrCfg (stepRet k v) b₂ ∧ Reaches₁ (TM2.step tr) ⟨some (Λ'.ret (trCont k)), s, 
+K'.elim (trList v) [] [] …
 -/
 theorem tr_respects : Respects step (TM2.step tr) TrCfg
   | Cfg.ret _ _, _, ⟨_, rfl⟩ => tr_ret_respects _ _ _
   | Cfg.halt _, _, rfl => rfl
 
-/--
-Definition of `init` / `init` 的定义
+/-- The initial state, evaluating function `c` on input `v`. -/
+/-
+**Turing.PartrecToTM2.init** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：init (c : Code) (v : List Nat) : Cfg'
+参数：c : Code；v : List Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition init
-  signature: (c : Code) (v : List Nat)
-  body: ⟨some (trNormal c Cont'.halt), none, K'.elim (trList v) [] [] []⟩
-
-中文:
-定义 init
-  签名: (c : 余de) (v : 列表 自然数)
-  定义体: ⟨some (trNormal c Cont'.halt), none, K'.elim (trList v) [] [] []⟩
-
-Depends on / 依赖: trList, trNormal
+--- 原说明 ---
+The initial state, evaluating function `c` on input `v`.
 -/
-def init (c : Code) (v : List Nat) : Cfg' :=
+def init (c : Code) (v : List ℕ) : Cfg' :=
   ⟨some (trNormal c Cont'.halt), none, K'.elim (trList v) [] [] []⟩
-
-/--
-theorem `tr_init` / 定理 `tr_init`
-
-English:
-theorem tr_init
-  given: (c v)
-  proof: trNormal_respects _ _ _ _
-
-中文:
-定理 tr_init
-  条件: (c v)
-  证明: trNormal_respects _ _ _ _
-
-Depends on / 依赖: trNormal_respects
+/-
+**Turing.PartrecToTM2.tr_init** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_init (c v) : exists b, TrCfg (stepNormal c Cont.halt v) b ∧ Reaches₁ (T
+M2.step tr) (init c v) b
+参数：c v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.trNormal_respects`：trNormal_respects (c k v s) : exi
+sts b₂, TrCfg (stepNormal c k v) b₂ ∧ Reaches₁ (TM2.step tr) ⟨some (trNormal c (
+trCont k)), s, K'.elim (trL…
 -/
 theorem tr_init (c v) :
-    exists b, TrCfg (stepNormal c Cont.halt v) b ∧ Reaches₁ (TM2.step tr) (init c v) b :=
+    ∃ b, TrCfg (stepNormal c Cont.halt v) b ∧ Reaches₁ (TM2.step tr) (init c v) b :=
   trNormal_respects _ _ _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `tr_eval` / 定理 `tr_eval`
-
-English:
-theorem tr_eval
-  given: (c v)
-  statement: eval (TM2.step tr) (init c v) = halt < > Code.eval c v
-  proof: by
-  obtain ⟨i, h₁, h₂⟩ := tr_init c v
-  refine Part.ext fun x => ?_
-  rw [reaches_eval h₂.to_reflTransGen]; simp only [Part.map_eq_map, Part.mem_map_iff]
-  refine ⟨fun h => ?_, ?_⟩
-  · obtain ⟨c, hc₁, hc₂⟩ := tr_eval_rev tr_respects h₁ h
-    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff] at hc₂
-    obtain ⟨v', hv, rfl⟩ := hc₂
-    exact ⟨_, hv, hc₁.symm⟩
-  · rintro ⟨v', hv, rfl⟩
-    have := StateTransition.tr_eval (b₁ := Cfg.halt v') tr_respects h₁
-    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff, Cfg.halt.injEq,
-      exists_eq_right] at this
-    obtain ⟨_, ⟨⟩, h⟩ := this hv
-    exact h
-
-中文:
-定理 tr_eval
-  条件: (c v)
-  结论: eval (TM2.step tr) (init c v) = halt < > 余de.eval c v
-  证明: by
-  obtain ⟨i, h₁, h₂⟩ := tr_init c v
-  refine Part.ext fun x => ?_
-  rw [reaches_eval h₂.to_reflTransGen]; simp only [Part.map_eq_map, Part.mem_map_iff]
-  refine ⟨fun h => ?_, ?_⟩
-  · obtain ⟨c, hc₁, hc₂⟩ := tr_eval_rev tr_respects h₁ h
-    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff] at hc₂
-    obtain ⟨v', hv, rfl⟩ := hc₂
-    exact ⟨_, hv, hc₁.symm⟩
-  · rintro ⟨v', hv, rfl⟩
-    have := StateTransition.tr_eval (b₁ := Cfg.halt v') tr_respects h₁
-    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff, Cfg.halt.injEq,
-      exists_eq_right] at this
-    obtain ⟨_, ⟨⟩, h⟩ := this hv
-    exact h
-
-Depends on / 依赖: Cfg.halt, Part.ext, Part.map_eq_map, Part.mem_map_i, Part.mem_map_iff, StateTransition, StateTransition.tr_eval, map_eq_map, mem_map_i, mem_map_iff, reaches_eval, stepNormal_eval, to_reflTransGen, tr_eval, tr_eval_rev, tr_init, tr_respects
+/-
+**Turing.PartrecToTM2.tr_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：tr_eval (c v) : eval (TM2.step tr) (init c v) = halt < > Code.eval c v
+参数：c v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.PartrecToTM2.tr_init`：tr_init (c v) : exists b, TrCfg (stepNormal
+ c Cont.halt v) b ∧ Reaches₁ (TM2.step tr) (init c v) b
+· 使用定理 `Part.ext`：ext {o p : Part α} (H : forall a, a in o ↔ a in p) : o = p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StateTransition.reaches_eval`：reaches_eval {σ} {f : σ -> Option σ} {a b}
+ (ab : Reaches f a b) : eval f a = eval f b
+· 使用定理 `Relation.TransGen.to_reflTransGen`：to_reflTransGen {a b} : TransGen r a 
+b -> ReflTransGen r a b
+· 使用定理 `StateTransition.tr_eval_rev`：tr_eval_rev {σ₁ σ₂ f₁ f₂} {tr : σ₁ -> σ₂ ->
+ Prop} (H : Respects f₁ f₂ tr) {a₁ b₂ a₂} (aa : tr a₁ a₂) (ab : b₂ in eval f₂ a₂
+) : exists b₁, tr…
+· 使用定理 `Turing.PartrecToTM2.tr_respects`：StateTransition.Respects Turing.ToPartr
+ec.step (Turing.TM2.step Turing.PartrecToTM2.tr) Turing.PartrecToTM2.TrCfg
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.ToPartrec.stepNormal_eval`：stepNormal_eval (c v) : eval step (ste
+pNormal c Cont.halt v) = Cfg.halt < > c.eval v
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StateTransition.tr_eval`：tr_eval {σ₁ σ₂ f₁ f₂} {tr : σ₁ -> σ₂ -> Prop} (
+H : Respects f₁ f₂ tr) {a₁ b₁ a₂} (aa : tr a₁ a₂) (ab : b₁ in eval f₁ a₁) : exis
+ts b₂, tr b₁ …
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.ToPartrec.Cfg.halt.injEq`：∀ (a a_1 : List ℕ), (Turing.ToPartrec.C
+fg.halt a = Turing.ToPartrec.Cfg.halt a_1) = (a = a_1)
 -/
-theorem tr_eval (c v) : eval (TM2.step tr) (init c v) = halt < > Code.eval c v := by
+theorem tr_eval (c v) : eval (TM2.step tr) (init c v) = halt <$> Code.eval c v := by
   obtain ⟨i, h₁, h₂⟩ := tr_init c v
   refine Part.ext fun x => ?_
   rw [reaches_eval h₂.to_reflTransGen]; simp only [Part.map_eq_map, Part.mem_map_iff]
@@ -2639,36 +2275,31 @@ theorem tr_eval (c v) : eval (TM2.step tr) (init c v) = halt < > Code.eval c v :
     obtain ⟨_, ⟨⟩, h⟩ := this hv
     exact h
 
-/--
-Definition of `trStmts₁` / `trStmts₁` 的定义
+/-- The set of machine states reachable via downward label jumps, discounting jumps via `ret`. -/
+/-
+**Turing.PartrecToTM2.trStmts** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trStmts₁
-  signature: : Λ' -> Finset Λ'
-
-中文:
-定义 trStmts₁
-  签名: : Λ' -> 有限集 Λ'
+--- 原说明 ---
+The set of machine states reachable via downward label jumps, discounting jumps 
+via `ret`.
 -/
-def trStmts₁ : Λ' -> Finset Λ'
-| Q@(Λ'.move _ _ _ q) => insert Q trStmts₁ q
-| Q@(Λ'.push _ _ q) => insert Q trStmts₁ q
-| Q@(Λ'.read q) => insert Q Finset.univ.biUnion fun s => trStmts₁ (q s)
-| Q@(Λ'.clear _ _ q) => insert Q trStmts₁ q
-| Q@(Λ'.copy q) => insert Q trStmts₁ q
-| Q@(Λ'.succ q) => insert Q insert (unrev q) trStmts₁ q
-| Q@(Λ'.pred q₁ q₂) => insert Q trStmts₁ q₁ union insert (unrev q₂) (trStmts₁ q₂)
+def trStmts₁ : Λ' → Finset Λ'
+  | Q@(Λ'.move _ _ _ q) => insert Q <| trStmts₁ q
+  | Q@(Λ'.push _ _ q) => insert Q <| trStmts₁ q
+  | Q@(Λ'.read q) => insert Q <| Finset.univ.biUnion fun s => trStmts₁ (q s)
+  | Q@(Λ'.clear _ _ q) => insert Q <| trStmts₁ q
+  | Q@(Λ'.copy q) => insert Q <| trStmts₁ q
+  | Q@(Λ'.succ q) => insert Q <| insert (unrev q) <| trStmts₁ q
+  | Q@(Λ'.pred q₁ q₂) => insert Q <| trStmts₁ q₁ ∪ insert (unrev q₂) (trStmts₁ q₂)
   | Q@(Λ'.ret _) => {Q}
 
 set_option linter.flexible false in -- TODO: revisit this after #13791 is merged
-/--
-theorem `trStmts₁_trans` / 定理 `trStmts₁_trans`
-
-English:
-theorem trStmts₁_trans
-  given: {q q'}
-  statement: q' in trStmts₁ q -> trStmts₁ q' subseteq trStmts₁ q
-  proof: by
+/-
+**Turing.PartrecToTM2.trStmts** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem trStmts₁_trans {q q'} : q' ∈ trStmts₁ q → trStmts₁ q' ⊆ trStmts₁ q := by
   induction q with
   | move _ _ _ q q_ih => _ | clear _ _ q q_ih => _ | copy q q_ih => _ | push _ _ q q_ih => _
   | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
@@ -2690,689 +2321,594 @@ theorem trStmts₁_trans
     · exact Or.inr (Or.inr <| Or.inl <| q₁_ih h h')
     · rcases Finset.mem_insert.1 h' with h' | h' <;> simp [h', unrev]
     · exact Or.inr (Or.inr <| Or.inr <| q₂_ih h h')
-
-中文:
-定理 trStmts₁_trans
-  条件: {q q'}
-  结论: q' in trStmts₁ q -> trStmts₁ q' subseteq trStmts₁ q
-  证明: by
-  induction q with
-  | move _ _ _ q q_ih => _ | clear _ _ q q_ih => _ | copy q q_ih => _ | push _ _ q q_ih => _
-  | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
-  all_goals
-    simp +contextual only [trStmts₁, Finset.mem_insert, Finset.mem_union,
-      or_imp, Finset.mem_singleton, Finset.Subset.refl, imp_true_iff, true_and]
-    repeat exact fun h => Finset.Subset.trans (q_ih h) (Finset.subset_insert _ _)
-  · simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, forall_exists_index]
-    intro s h x h'
-    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_insert]
-    exact Or.inr ⟨_, q_ih s h h'⟩
-  · constructor
-    · rintro rfl
-      apply Finset.subset_insert
-    · intro h x h'
-      simp only [Finset.mem_insert]
-      exact Or.inr (Or.inr <| q_ih h h')
-  · refine ⟨fun h x h' => ?_, fun _ x h' => ?_, fun h x h' => ?_⟩ <;> simp
-    · exact Or.inr (Or.inr <| Or.inl <| q₁_ih h h')
-    · rcases Finset.mem_insert.1 h' with h' | h' <;> simp [h', unrev]
-    · exact Or.inr (Or.inr <| Or.inr <| q₂_ih h h')
-
-Depends on / 依赖: Finset, Finset.Subset.refl, Finset.Subset.trans, Finset.mem_biUnion, Finset.mem_insert, Finset.mem_singleton, Finset.mem_union, Finset.mem_univ, Finset.subset_insert, Subset, all_goals, contextual, forall_exists_, imp_true_iff, mem_biUnion, mem_insert, mem_singleton, mem_union, mem_univ, or_imp
+/-
+**Turing.PartrecToTM2.trStmts** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem trStmts₁_trans {q q'} : q' in trStmts₁ q -> trStmts₁ q' subseteq trStmts₁ q := by
-  induction q with
-  | move _ _ _ q q_ih => _ | clear _ _ q q_ih => _ | copy q q_ih => _ | push _ _ q q_ih => _
-  | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
-  all_goals
-    simp +contextual only [trStmts₁, Finset.mem_insert, Finset.mem_union,
-      or_imp, Finset.mem_singleton, Finset.Subset.refl, imp_true_iff, true_and]
-    repeat exact fun h => Finset.Subset.trans (q_ih h) (Finset.subset_insert _ _)
-  · simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, forall_exists_index]
-    intro s h x h'
-    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_insert]
-    exact Or.inr ⟨_, q_ih s h h'⟩
-  · constructor
-    · rintro rfl
-      apply Finset.subset_insert
-    · intro h x h'
-      simp only [Finset.mem_insert]
-      exact Or.inr (Or.inr <| q_ih h h')
-  · refine ⟨fun h x h' => ?_, fun _ x h' => ?_, fun h x h' => ?_⟩ <;> simp
-    · exact Or.inr (Or.inr <| Or.inl <| q₁_ih h h')
-    · rcases Finset.mem_insert.1 h' with h' | h' <;> simp [h', unrev]
-    · exact Or.inr (Or.inr <| Or.inr <| q₂_ih h h')
-
-/--
-theorem `trStmts₁_self` / 定理 `trStmts₁_self`
-
-English:
-theorem trStmts₁_self
-  given: (q)
-  statement: q in trStmts₁ q
-  proof: by
+theorem trStmts₁_self (q) : q ∈ trStmts₁ q := by
   induction q <;> · first | apply Finset.mem_singleton_self | apply Finset.mem_insert_self
 
-中文:
-定理 trStmts₁_self
-  条件: (q)
-  结论: q in trStmts₁ q
-  证明: by
-  induction q <;> · first | apply Finset.mem_singleton_self | apply Finset.mem_insert_self
+/-- The (finite!) set of machine states visited during the course of evaluation of `c`,
+including the state `ret k` but not any states after that (that is, the states visited while
+evaluating `k`). -/
+/-
+**Turing.PartrecToTM2.codeSupp'** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：codeSupp'_self (c k) : trStmts₁ (trNormal c k) subseteq codeSupp' c k
+参数：c k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Finset, Finset.mem_insert_self, Finset.mem_singleton_self, mem_insert_self, mem_singleton_self
+--- 原说明 ---
+The (finite!) set of machine states visited during the course of evaluation of `
+c`,
+including the state `ret k` but not any states after that (that is, the states v
+isited while
+evaluating `k`).
 -/
-theorem trStmts₁_self (q) : q in trStmts₁ q := by
-  induction q <;> · first | apply Finset.mem_singleton_self | apply Finset.mem_insert_self
-
-/--
-Definition of `codeSupp'` / `codeSupp'` 的定义
-
-English:
-definition codeSupp'
-  signature: : Code -> Cont' -> Finset Λ'
-
-中文:
-定义 codeSupp'
-  签名: : 余de -> 余nt' -> 有限集 Λ'
--/
-def codeSupp' : Code -> Cont' -> Finset Λ'
+def codeSupp' : Code → Cont' → Finset Λ'
   | c@Code.zero', k => trStmts₁ (trNormal c k)
   | c@Code.succ, k => trStmts₁ (trNormal c k)
   | c@Code.tail, k => trStmts₁ (trNormal c k)
   | c@(Code.cons f fs), k =>
-    trStmts₁ (trNormal c k) union
-      (codeSupp' f (Cont'.cons₁ fs k) union
+    trStmts₁ (trNormal c k) ∪
+      (codeSupp' f (Cont'.cons₁ fs k) ∪
         (trStmts₁
             (move₂ (fun _ => false) main aux <|
-move₂ (fun s => s = Γ'.consₗ) stack main
-move₂ (fun _ => false) aux stack trNormal fs (Cont'.cons₂ k)) union
-          (codeSupp' fs (Cont'.cons₂ k) union trStmts₁ (head stack <| Λ'.ret k))))
+              move₂ (fun s => s = Γ'.consₗ) stack main <|
+                move₂ (fun _ => false) aux stack <| trNormal fs (Cont'.cons₂ k)) ∪
+          (codeSupp' fs (Cont'.cons₂ k) ∪ trStmts₁ (head stack <| Λ'.ret k))))
   | c@(Code.comp f g), k =>
-    trStmts₁ (trNormal c k) union
-      (codeSupp' g (Cont'.comp f k) union (trStmts₁ (trNormal f k) union codeSupp' f k))
-  | c@(Code.case f g), k => trStmts₁ (trNormal c k) union (codeSupp' f k union codeSupp' g k)
+    trStmts₁ (trNormal c k) ∪
+      (codeSupp' g (Cont'.comp f k) ∪ (trStmts₁ (trNormal f k) ∪ codeSupp' f k))
+  | c@(Code.case f g), k => trStmts₁ (trNormal c k) ∪ (codeSupp' f k ∪ codeSupp' g k)
   | c@(Code.fix f), k =>
-    trStmts₁ (trNormal c k) union
-      (codeSupp' f (Cont'.fix f k) union
-        (trStmts₁ (Λ'.clear natEnd main <| trNormal f (Cont'.fix f k)) union {Λ'.ret k}))
+    trStmts₁ (trNormal c k) ∪
+      (codeSupp' f (Cont'.fix f k) ∪
+        (trStmts₁ (Λ'.clear natEnd main <| trNormal f (Cont'.fix f k)) ∪ {Λ'.ret k}))
 
 @[simp]
-/--
-theorem `codeSupp'_self` / 定理 `codeSupp'_self`
-
-English:
-theorem codeSupp'_self
-  given: (c k)
-  statement: trStmts₁ (trNormal c k) subseteq codeSupp' c k
-  proof: by
-  cases c <;> first | rfl | exact Finset.union_subset_left (fun _ a => a)
-
-中文:
-定理 codeSupp'_self
-  条件: (c k)
-  结论: trStmts₁ (trNormal c k) subseteq codeSupp' c k
-  证明: by
-  cases c <;> first | rfl | exact Finset.union_subset_left (fun _ a => a)
-
-Depends on / 依赖: Finset, Finset.union_subset_left, union_subset_left
+/-
+**Turing.PartrecToTM2.codeSupp'_self** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecTo
+TM2`。
+形式化陈述：∀ (c : Turing.ToPartrec.Code) (k : Turing.PartrecToTM2.Cont'),   Turing.Pa
+rtrecToTM2.trStmts₁ (Turing.PartrecToTM2.trNormal c k) ⊆ Turing.PartrecToTM2.cod
+eSupp' c k
+参数：c : Turing.ToPartrec.Code；k : Turing.PartrecToTM2.Cont'；Turing.PartrecToTM2.t
+rNormal c k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.union_subset_left`：union_subset_left (h : s union t subseteq u) :
+ s subseteq u
 -/
-theorem codeSupp'_self (c k) : trStmts₁ (trNormal c k) subseteq codeSupp' c k := by
-  cases c <;> first | rfl | exact Finset.union_subset_left (fun _ a => a)
+theorem codeSupp'_self (c k) : trStmts₁ (trNormal c k) ⊆ codeSupp' c k := by
+  cases c <;> first | rfl | exact Finset.union_subset_left (fun _ a ↦ a)
 
-/--
-Definition of `contSupp` / `contSupp` 的定义
+/-- The (finite!) set of machine states visited during the course of evaluation of a continuation
+`k`, not including the initial state `ret k`. -/
+/-
+**Turing.PartrecToTM2.contSupp** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Turing.PartrecToTM2.Cont' → Finset Turing.PartrecToTM2.Λ'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition contSupp
-  signature: : Cont' -> Finset Λ'
-
-中文:
-定义 contSupp
-  签名: : 余nt' -> 有限集 Λ'
+--- 原说明 ---
+The (finite!) set of machine states visited during the course of evaluation of a
+ continuation
+`k`, not including the initial state `ret k`.
 -/
-def contSupp : Cont' -> Finset Λ'
+def contSupp : Cont' → Finset Λ'
   | Cont'.cons₁ fs k =>
     trStmts₁
         (move₂ (fun _ => false) main aux <|
-move₂ (fun s => s = Γ'.consₗ) stack main
-move₂ (fun _ => false) aux stack trNormal fs (Cont'.cons₂ k)) union
-      (codeSupp' fs (Cont'.cons₂ k) union (trStmts₁ (head stack <| Λ'.ret k) union contSupp k))
-  | Cont'.cons₂ k => trStmts₁ (head stack <| Λ'.ret k) union contSupp k
-  | Cont'.comp f k => codeSupp' f k union contSupp k
-  | Cont'.fix f k => codeSupp' (Code.fix f) k union contSupp k
+          move₂ (fun s => s = Γ'.consₗ) stack main <|
+            move₂ (fun _ => false) aux stack <| trNormal fs (Cont'.cons₂ k)) ∪
+      (codeSupp' fs (Cont'.cons₂ k) ∪ (trStmts₁ (head stack <| Λ'.ret k) ∪ contSupp k))
+  | Cont'.cons₂ k => trStmts₁ (head stack <| Λ'.ret k) ∪ contSupp k
+  | Cont'.comp f k => codeSupp' f k ∪ contSupp k
+  | Cont'.fix f k => codeSupp' (Code.fix f) k ∪ contSupp k
   | Cont'.halt => ∅
 
-/--
-Definition of `codeSupp` / `codeSupp` 的定义
+/-- The (finite!) set of machine states visited during the course of evaluation of `c` in
+continuation `k`. This is actually closed under forward simulation (see `tr_supports`), and the
+existence of this set means that the machine constructed in this section is in fact a proper
+Turing machine, with a finite set of states. -/
+/-
+**Turing.PartrecToTM2.codeSupp** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：codeSupp (c : Code) (k : Cont') : Finset Λ'
+参数：c : Code；k : Cont'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
 
-English:
-definition codeSupp
-  signature: (c : Code) (k : Cont')
-  body: codeSupp' c k union contSupp k
-
-@[simp]
-
-中文:
-定义 codeSupp
-  签名: (c : 余de) (k : 余nt')
-  定义体: codeSupp' c k union contSupp k
-
-@[simp]
-
-Depends on / 依赖: codeSupp, contSupp
+--- 原说明 ---
+The (finite!) set of machine states visited during the course of evaluation of `
+c` in
+continuation `k`. This is actually closed under forward simulation (see `tr_supp
+orts`), and the
+existence of this set means that the machine constructed in this section is in f
+act a proper
+Turing machine, with a finite set of states.
 -/
 def codeSupp (c : Code) (k : Cont') : Finset Λ' :=
-  codeSupp' c k union contSupp k
+  codeSupp' c k ∪ contSupp k
 
 @[simp]
-/--
-theorem `codeSupp_self` / 定理 `codeSupp_self`
-
-English:
-theorem codeSupp_self
-  given: (c k)
-  statement: trStmts₁ (trNormal c k) subseteq codeSupp c k
-  proof: Finset.Subset.trans (codeSupp'_self _ _) (Finset.union_subset_left fun _ a => a)
-
-@[simp]
-
-中文:
-定理 codeSupp_self
-  条件: (c k)
-  结论: trStmts₁ (trNormal c k) subseteq codeSupp c k
-  证明: Finset.Subset.trans (codeSupp'_self _ _) (Finset.union_subset_left fun _ a => a)
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Subset.trans, Finset.union_subset_left, Subset, _self, codeSupp, union_subset_left
+/-
+**Turing.PartrecToTM2.codeSupp_self** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：codeSupp_self (c k) : trStmts₁ (trNormal c k) subseteq codeSupp c k
+参数：c k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Subset.trans`：∀ {α : Type u_1} {s₁ s₂ s₃ : Finset α}, s₁ ⊆ s₂ → s
+₂ ⊆ s₃ → s₁ ⊆ s₃
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Turing.PartrecToTM2.codeSupp'_self`：∀ (c : Turing.ToPartrec.Code) (k : T
+uring.PartrecToTM2.Cont'),   Turing.PartrecToTM2.trStmts₁ (Turing.PartrecToTM2.t
+rNormal c k) ⊆ Turing.Pa…
+· 使用定理 `Finset.union_subset_left`：union_subset_left (h : s union t subseteq u) :
+ s subseteq u
 -/
-theorem codeSupp_self (c k) : trStmts₁ (trNormal c k) subseteq codeSupp c k :=
-  Finset.Subset.trans (codeSupp'_self _ _) (Finset.union_subset_left fun _ a => a)
+theorem codeSupp_self (c k) : trStmts₁ (trNormal c k) ⊆ codeSupp c k :=
+  Finset.Subset.trans (codeSupp'_self _ _) (Finset.union_subset_left fun _ a ↦ a)
 
 @[simp]
-/--
-theorem `codeSupp_zero` / 定理 `codeSupp_zero`
-
-English:
-theorem codeSupp_zero
-  given: (k)
-  statement: codeSupp Code.zero' k = trStmts₁ (trNormal Code.zero' k) union contSupp k
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 codeSupp_zero
-  条件: (k)
-  结论: codeSupp 余de.zero' k = trStmts₁ (trNormal 余de.zero' k) union contSupp k
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.codeSupp_zero** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：codeSupp_zero (k) : codeSupp Code.zero' k = trStmts₁ (trNormal Code.zero' 
+k) union contSupp k
+参数：k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
 -/
-theorem codeSupp_zero (k) : codeSupp Code.zero' k = trStmts₁ (trNormal Code.zero' k) union contSupp k :=
+theorem codeSupp_zero (k) : codeSupp Code.zero' k = trStmts₁ (trNormal Code.zero' k) ∪ contSupp k :=
   rfl
 
 @[simp]
-/--
-theorem `codeSupp_succ` / 定理 `codeSupp_succ`
-
-English:
-theorem codeSupp_succ
-  given: (k)
-  statement: codeSupp Code.succ k = trStmts₁ (trNormal Code.succ k) union contSupp k
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 codeSupp_succ
-  条件: (k)
-  结论: codeSupp 余de.succ k = trStmts₁ (trNormal 余de.succ k) union contSupp k
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.codeSupp_succ** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：codeSupp_succ (k) : codeSupp Code.succ k = trStmts₁ (trNormal Code.succ k)
+ union contSupp k
+参数：k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem codeSupp_succ (k) : codeSupp Code.succ k = trStmts₁ (trNormal Code.succ k) union contSupp k :=
+theorem codeSupp_succ (k) : codeSupp Code.succ k = trStmts₁ (trNormal Code.succ k) ∪ contSupp k :=
   rfl
 
 @[simp]
-/--
-theorem `codeSupp_tail` / 定理 `codeSupp_tail`
-
-English:
-theorem codeSupp_tail
-  given: (k)
-  statement: codeSupp Code.tail k = trStmts₁ (trNormal Code.tail k) union contSupp k
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 codeSupp_tail
-  条件: (k)
-  结论: codeSupp 余de.tail k = trStmts₁ (trNormal 余de.tail k) union contSupp k
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.codeSupp_tail** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：codeSupp_tail (k) : codeSupp Code.tail k = trStmts₁ (trNormal Code.tail k)
+ union contSupp k
+参数：k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem codeSupp_tail (k) : codeSupp Code.tail k = trStmts₁ (trNormal Code.tail k) union contSupp k :=
+theorem codeSupp_tail (k) : codeSupp Code.tail k = trStmts₁ (trNormal Code.tail k) ∪ contSupp k :=
   rfl
 
 @[simp]
-/--
-theorem `codeSupp_cons` / 定理 `codeSupp_cons`
-
-English:
-theorem codeSupp_cons
-  given: (f fs k)
-  proof: by
-  simp [codeSupp, codeSupp', contSupp, Finset.union_assoc]
-
-@[simp]
-
-中文:
-定理 codeSupp_cons
-  条件: (f fs k)
-  证明: by
-  simp [codeSupp, codeSupp', contSupp, Finset.union_assoc]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.union_assoc, codeSupp, contSupp, union_assoc
+/-
+**Turing.PartrecToTM2.codeSupp_cons** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：codeSupp_cons (f fs k) : codeSupp (Code.cons f fs) k = trStmts₁ (trNormal 
+(Code.cons f fs) k) union codeSupp f (Cont'.cons₁ fs k)
+参数：f fs k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_assoc`：union_assoc (s₁ s₂ s₃ : Finset α) : s₁ union s₂ unio
+n s₃ = s₁ union (s₂ union s₃)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem codeSupp_cons (f fs k) :
     codeSupp (Code.cons f fs) k =
-      trStmts₁ (trNormal (Code.cons f fs) k) union codeSupp f (Cont'.cons₁ fs k) := by
+      trStmts₁ (trNormal (Code.cons f fs) k) ∪ codeSupp f (Cont'.cons₁ fs k) := by
   simp [codeSupp, codeSupp', contSupp, Finset.union_assoc]
 
 @[simp]
-/--
-theorem `codeSupp_comp` / 定理 `codeSupp_comp`
-
-English:
-theorem codeSupp_comp
-  given: (f g k)
-  proof: by
-  simp only [codeSupp, codeSupp', trNormal, Finset.union_assoc, contSupp]
-  rw [← Finset.union_assoc _ _ (contSupp k)]; rw [Finset.union_eq_right.2 (codeSupp'_self _ _)]
-
-@[simp]
-
-中文:
-定理 codeSupp_comp
-  条件: (f g k)
-  证明: by
-  simp only [codeSupp, codeSupp', trNormal, Finset.union_assoc, contSupp]
-  rw [← Finset.union_assoc _ _ (contSupp k)]; rw [Finset.union_eq_right.2 (codeSupp'_self _ _)]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.union_assoc, Finset.union_eq_right, _self, codeSupp, contSupp, trNormal, union_assoc, union_eq_right
+/-
+**Turing.PartrecToTM2.codeSupp_comp** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：codeSupp_comp (f g k) : codeSupp (Code.comp f g) k = trStmts₁ (trNormal (C
+ode.comp f g) k) union codeSupp g (Cont'.comp f k)
+参数：f g k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.union_assoc`：union_assoc (s₁ s₂ s₃ : Finset α) : s₁ union s₂ unio
+n s₃ = s₁ union (s₂ union s₃)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.union_eq_right`：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Fi
+nset α}, s ∪ t = t ↔ s ⊆ t
+· 使用定理 `Turing.PartrecToTM2.codeSupp'_self`：∀ (c : Turing.ToPartrec.Code) (k : T
+uring.PartrecToTM2.Cont'),   Turing.PartrecToTM2.trStmts₁ (Turing.PartrecToTM2.t
+rNormal c k) ⊆ Turing.Pa…
 -/
 theorem codeSupp_comp (f g k) :
     codeSupp (Code.comp f g) k =
-      trStmts₁ (trNormal (Code.comp f g) k) union codeSupp g (Cont'.comp f k) := by
+      trStmts₁ (trNormal (Code.comp f g) k) ∪ codeSupp g (Cont'.comp f k) := by
   simp only [codeSupp, codeSupp', trNormal, Finset.union_assoc, contSupp]
-  rw [← Finset.union_assoc _ _ (contSupp k)]; rw [Finset.union_eq_right.2 (codeSupp'_self _ _)]
+  rw [← Finset.union_assoc _ _ (contSupp k),
+    Finset.union_eq_right.2 (codeSupp'_self _ _)]
 
 @[simp]
-/--
-theorem `codeSupp_case` / 定理 `codeSupp_case`
-
-English:
-theorem codeSupp_case
-  given: (f g k)
-  proof: by
-  simp [codeSupp, codeSupp', Finset.union_assoc, Finset.union_left_comm]
-
-@[simp]
-
-中文:
-定理 codeSupp_case
-  条件: (f g k)
-  证明: by
-  simp [codeSupp, codeSupp', Finset.union_assoc, Finset.union_left_comm]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.union_assoc, Finset.union_left_comm, codeSupp, union_assoc, union_left_comm
+/-
+**Turing.PartrecToTM2.codeSupp_case** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：codeSupp_case (f g k) : codeSupp (Code.case f g) k = trStmts₁ (trNormal (C
+ode.case f g) k) union (codeSupp f k union codeSupp g k)
+参数：f g k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.union_left_comm`：union_left_comm (s t u : Finset α) : s union (t 
+union u) = t union (s union u)
+· 使用定理 `Finset.union_assoc`：union_assoc (s₁ s₂ s₃ : Finset α) : s₁ union s₂ unio
+n s₃ = s₁ union (s₂ union s₃)
+· 使用定理 `Finset.union_idempotent`：union_idempotent (s : Finset α) : s union s = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem codeSupp_case (f g k) :
     codeSupp (Code.case f g) k =
-      trStmts₁ (trNormal (Code.case f g) k) union (codeSupp f k union codeSupp g k) := by
+      trStmts₁ (trNormal (Code.case f g) k) ∪ (codeSupp f k ∪ codeSupp g k) := by
   simp [codeSupp, codeSupp', Finset.union_assoc, Finset.union_left_comm]
 
 @[simp]
-/--
-theorem `codeSupp_fix` / 定理 `codeSupp_fix`
-
-English:
-theorem codeSupp_fix
-  given: (f k)
-  proof: by
-  simp [codeSupp, codeSupp', contSupp, Finset.union_assoc, Finset.union_left_comm,
-    Finset.union_left_idem]
-
-@[simp]
-
-中文:
-定理 codeSupp_fix
-  条件: (f k)
-  证明: by
-  simp [codeSupp, codeSupp', contSupp, Finset.union_assoc, Finset.union_left_comm,
-    Finset.union_left_idem]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.union_assoc, Finset.union_left_comm, Finset.union_left_idem, codeSupp, contSupp, union_assoc, union_left_comm, union_left_idem
+/-
+**Turing.PartrecToTM2.codeSupp_fix** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM
+2`。
+形式化陈述：codeSupp_fix (f k) : codeSupp (Code.fix f) k = trStmts₁ (trNormal (Code.fi
+x f) k) union codeSupp f (Cont'.fix f k)
+参数：f k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finset.union_singleton`：union_singleton (x : α) (s : Finset α) : s union
+ {x} = insert x s
+· 使用定理 `Finset.union_insert`：union_insert (a : α) (s t : Finset α) : s union ins
+ert a t = insert a (s union t)
+· 使用定理 `Finset.union_left_comm`：union_left_comm (s t u : Finset α) : s union (t 
+union u) = t union (s union u)
+· 使用定理 `Finset.insert_union`：insert_union (a : α) (s t : Finset α) : insert a s 
+union t = insert a (s union t)
+· 使用定理 `Finset.union_assoc`：union_assoc (s₁ s₂ s₃ : Finset α) : s₁ union s₂ unio
+n s₃ = s₁ union (s₂ union s₃)
+· 使用定理 `Finset.union_left_idem`：union_left_idem (s t : Finset α) : s union (s un
+ion t) = s union t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem codeSupp_fix (f k) :
-    codeSupp (Code.fix f) k = trStmts₁ (trNormal (Code.fix f) k) union codeSupp f (Cont'.fix f k) := by
+    codeSupp (Code.fix f) k = trStmts₁ (trNormal (Code.fix f) k) ∪ codeSupp f (Cont'.fix f k) := by
   simp [codeSupp, codeSupp', contSupp, Finset.union_assoc, Finset.union_left_comm,
     Finset.union_left_idem]
 
 @[simp]
-/--
-theorem `contSupp_cons₁` / 定理 `contSupp_cons₁`
-
-English:
-theorem contSupp_cons₁
-  given: (fs k)
-  proof: by
-  simp [codeSupp, contSupp]
-
-@[simp]
-
-中文:
-定理 contSupp_cons₁
-  条件: (fs k)
-  证明: by
-  simp [codeSupp, contSupp]
-
-@[simp]
-
-Depends on / 依赖: codeSupp, contSupp
+/-
+**Turing.PartrecToTM2.contSupp_cons** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem contSupp_cons₁ (fs k) :
     contSupp (Cont'.cons₁ fs k) =
       trStmts₁
           (move₂ (fun _ => false) main aux <|
-move₂ (fun s => s = Γ'.consₗ) stack main
-move₂ (fun _ => false) aux stack trNormal fs (Cont'.cons₂ k)) union
+            move₂ (fun s => s = Γ'.consₗ) stack main <|
+              move₂ (fun _ => false) aux stack <| trNormal fs (Cont'.cons₂ k)) ∪
         codeSupp fs (Cont'.cons₂ k) := by
   simp [codeSupp, contSupp]
 
 @[simp]
-/--
-theorem `contSupp_cons₂` / 定理 `contSupp_cons₂`
-
-English:
-theorem contSupp_cons₂
-  given: (k)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 contSupp_cons₂
-  条件: (k)
-  证明: rfl
-
-@[simp]
+/-
+**Turing.PartrecToTM2.contSupp_cons** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem contSupp_cons₂ (k) :
-    contSupp (Cont'.cons₂ k) = trStmts₁ (head stack <| Λ'.ret k) union contSupp k :=
+    contSupp (Cont'.cons₂ k) = trStmts₁ (head stack <| Λ'.ret k) ∪ contSupp k :=
   rfl
 
 @[simp]
-/--
-theorem `contSupp_comp` / 定理 `contSupp_comp`
-
-English:
-theorem contSupp_comp
-  given: (f k)
-  statement: contSupp (Cont'.comp f k) = codeSupp f k
-  proof: rfl
-
-中文:
-定理 contSupp_comp
-  条件: (f k)
-  结论: contSupp (余nt'.comp f k) = codeSupp f k
-  证明: rfl
+/-
+**Turing.PartrecToTM2.contSupp_comp** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：contSupp_comp (f k) : contSupp (Cont'.comp f k) = codeSupp f k
+参数：f k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem contSupp_comp (f k) : contSupp (Cont'.comp f k) = codeSupp f k :=
   rfl
-
-/--
-theorem `contSupp_fix` / 定理 `contSupp_fix`
-
-English:
-theorem contSupp_fix
-  given: (f k)
-  statement: contSupp (Cont'.fix f k) = codeSupp f (Cont'.fix f k)
-  proof: by
-  simp +contextual [codeSupp, codeSupp', contSupp, Finset.union_assoc,
-    Finset.subset_iff, -Finset.singleton_union, -Finset.union_singleton]
-
-@[simp]
-
-中文:
-定理 contSupp_fix
-  条件: (f k)
-  结论: contSupp (余nt'.fix f k) = codeSupp f (余nt'.fix f k)
-  证明: by
-  simp +contextual [codeSupp, codeSupp', contSupp, Finset.union_assoc,
-    Finset.subset_iff, -Finset.singleton_union, -Finset.union_singleton]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.singleton_union, Finset.subset_iff, Finset.union_assoc, Finset.union_singleton, codeSupp, contSupp, contextual, singleton_union, subset_iff, union_assoc, union_singleton
+/-
+**Turing.PartrecToTM2.contSupp_fix** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM
+2`。
+形式化陈述：contSupp_fix (f k) : contSupp (Cont'.fix f k) = codeSupp f (Cont'.fix f k)
+参数：f k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_assoc`：union_assoc (s₁ s₂ s₃ : Finset α) : s₁ union s₂ unio
+n s₃ = s₁ union (s₂ union s₃)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem contSupp_fix (f k) : contSupp (Cont'.fix f k) = codeSupp f (Cont'.fix f k) := by
   simp +contextual [codeSupp, codeSupp', contSupp, Finset.union_assoc,
     Finset.subset_iff, -Finset.singleton_union, -Finset.union_singleton]
 
 @[simp]
-/--
-theorem `contSupp_halt` / 定理 `contSupp_halt`
-
-English:
-theorem contSupp_halt
-  statement: contSupp Cont'.halt = ∅
-  proof: rfl
-
-中文:
-定理 contSupp_halt
-  结论: contSupp 余nt'.halt = ∅
-  证明: rfl
+/-
+**Turing.PartrecToTM2.contSupp_halt** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：contSupp_halt : contSupp Cont'.halt = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem contSupp_halt : contSupp Cont'.halt = ∅ :=
   rfl
 
-/--
-Definition of `Λ'.Supports` / `Λ'.Supports` 的定义
+/-- The statement `Λ'.Supports S q` means that `contSupp k ⊆ S` for any `ret k`
+reachable from `q`.
+(This is a technical condition used in the proof that the machine is supported.) -/
+/-
+**Turing.PartrecToTM2.** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Λ'.Supports
-  signature: (S : Finset Λ')
-
-中文:
-定义 Λ'.Supports
-  签名: (S : 有限集 Λ')
+--- 原说明 ---
+The statement `Λ'.Supports S q` means that `contSupp k ⊆ S` for any `ret k`
+reachable from `q`.
+(This is a technical condition used in the proof that the machine is supported.)
 -/
-def Λ'.Supports (S : Finset Λ') : Λ' -> Prop
+def Λ'.Supports (S : Finset Λ') : Λ' → Prop
   | Λ'.move _ _ _ q => Λ'.Supports S q
   | Λ'.push _ _ q => Λ'.Supports S q
-  | Λ'.read q => forall s, Λ'.Supports S (q s)
+  | Λ'.read q => ∀ s, Λ'.Supports S (q s)
   | Λ'.clear _ _ q => Λ'.Supports S q
   | Λ'.copy q => Λ'.Supports S q
   | Λ'.succ q => Λ'.Supports S q
   | Λ'.pred q₁ q₂ => Λ'.Supports S q₁ ∧ Λ'.Supports S q₂
-  | Λ'.ret k => contSupp k subseteq S
+  | Λ'.ret k => contSupp k ⊆ S
 
-/--
-Definition of `Supports` / `Supports` 的定义
+/-- A shorthand for the predicate that we are proving in the main theorems `trStmts₁_supports`,
+`codeSupp'_supports`, `contSupp_supports`, `codeSupp_supports`. The set `S` is fixed throughout
+the proof, and denotes the full set of states in the machine, while `K` is a subset that we are
+currently proving a property about. The predicate asserts that every state in `K` is closed in `S`
+under forward simulation, i.e. stepping forward through evaluation starting from any state in `K`
+stays entirely within `S`. -/
+/-
+**Turing.PartrecToTM2.Supports** 是 Mathlib 中的一个定义，位于命名空间 `Turing.PartrecToTM2`。
+形式化陈述：Supports (K S : Finset Λ')
+参数：K S : Finset Λ'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
 
-English:
-definition Supports
-  signature: (K S : Finset Λ')
-  body: forall q in K, TM2.SupportsStmt S (tr q)
-
-中文:
-定义 Supports
-  签名: (K S : 有限集 Λ')
-  定义体: forall q in K, TM2.SupportsStmt S (tr q)
-
-Depends on / 依赖: SupportsStmt, TM2.SupportsStmt
+--- 原说明 ---
+A shorthand for the predicate that we are proving in the main theorems `trStmts₁
+_supports`,
+`codeSupp'_supports`, `contSupp_supports`, `codeSupp_supports`. The set `S` is f
+ixed throughout
+the proof, and denotes the full set of states in the machine, while `K` is a sub
+set that we are
+currently proving a property about. The predicate asserts that every state in `K
+` is closed in `S`
+under forward simulation, i.e. stepping forward through evaluation starting from
+ any state in `K`
+stays entirely within `S`.
 -/
 def Supports (K S : Finset Λ') :=
-  forall q in K, TM2.SupportsStmt S (tr q)
-
-/--
-theorem `supports_insert` / 定理 `supports_insert`
-
-English:
-theorem supports_insert
-  given: {K S q}
-  proof: by simp [Supports]
-
-中文:
-定理 supports_insert
-  条件: {K S q}
-  证明: by simp [Supports]
-
-Depends on / 依赖: Supports
+  ∀ q ∈ K, TM2.SupportsStmt S (tr q)
+/-
+**Turing.PartrecToTM2.supports_insert** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecT
+oTM2`。
+形式化陈述：supports_insert {K S q} : Supports (insert q K) S ↔ TM2.SupportsStmt S (tr
+ q) ∧ Supports K S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem supports_insert {K S q} :
     Supports (insert q K) S ↔ TM2.SupportsStmt S (tr q) ∧ Supports K S := by simp [Supports]
-
-/--
-theorem `supports_singleton` / 定理 `supports_singleton`
-
-English:
-theorem supports_singleton
-  given: {S q}
-  statement: Supports {q} S ↔ TM2.SupportsStmt S (tr q)
-  proof: by simp [Supports]
-
-中文:
-定理 supports_singleton
-  条件: {S q}
-  结论: Supports {q} S ↔ TM2.SupportsStmt S (tr q)
-  证明: by simp [Supports]
-
-Depends on / 依赖: Supports
+/-
+**Turing.PartrecToTM2.supports_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partr
+ecToTM2`。
+形式化陈述：supports_singleton {S q} : Supports {q} S ↔ TM2.SupportsStmt S (tr q)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem supports_singleton {S q} : Supports {q} S ↔ TM2.SupportsStmt S (tr q) := by simp [Supports]
-
-/--
-theorem `supports_union` / 定理 `supports_union`
-
-English:
-theorem supports_union
-  given: {K₁ K₂ S}
-  statement: Supports (K₁ union K₂) S ↔ Supports K₁ S ∧ Supports K₂ S
-  proof: by
-  simp [Supports, or_imp, forall_and]
-
-中文:
-定理 supports_union
-  条件: {K₁ K₂ S}
-  结论: Supports (K₁ union K₂) S ↔ Supports K₁ S ∧ Supports K₂ S
-  证明: by
-  simp [Supports, or_imp, forall_and]
-
-Depends on / 依赖: Supports, forall_and, or_imp
+/-
+**Turing.PartrecToTM2.supports_union** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecTo
+TM2`。
+形式化陈述：supports_union {K₁ K₂ S} : Supports (K₁ union K₂) S ↔ Supports K₁ S ∧ Supp
+orts K₂ S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem supports_union {K₁ K₂ S} : Supports (K₁ union K₂) S ↔ Supports K₁ S ∧ Supports K₂ S := by
+theorem supports_union {K₁ K₂ S} : Supports (K₁ ∪ K₂) S ↔ Supports K₁ S ∧ Supports K₂ S := by
   simp [Supports, or_imp, forall_and]
-
-/--
-theorem `supports_biUnion` / 定理 `supports_biUnion`
-
-English:
-theorem supports_biUnion
-  given: {K : Option Γ' -> Finset Λ'} {S}
-  proof: by
-  simpa [Supports] using forall_comm
-
-中文:
-定理 supports_biUnion
-  条件: {K : 选项类型 Γ' -> 有限集 Λ'} {S}
-  证明: by
-  simpa [Supports] using forall_comm
-
-Depends on / 依赖: Supports, forall_comm
+/-
+**Turing.PartrecToTM2.supports_biUnion** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partrec
+ToTM2`。
+形式化陈述：supports_biUnion {K : Option Γ' -> Finset Λ'} {S} : Supports (Finset.univ.
+biUnion K) S ↔ forall a, Supports (K a) S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
 -/
-theorem supports_biUnion {K : Option Γ' -> Finset Λ'} {S} :
-    Supports (Finset.univ.biUnion K) S ↔ forall a, Supports (K a) S := by
+theorem supports_biUnion {K : Option Γ' → Finset Λ'} {S} :
+    Supports (Finset.univ.biUnion K) S ↔ ∀ a, Supports (K a) S := by
   simpa [Supports] using forall_comm
-
-/--
-theorem `head_supports` / 定理 `head_supports`
-
-English:
-theorem head_supports
-  given: {S k q} (H : (q : Λ').Supports S)
-  statement: (head k q).Supports S
-  proof: fun _ => by
-  dsimp only; split_ifs <;> exact H
-
-中文:
-定理 head_supports
-  条件: {S k q} (H : (q : Λ').Supports S)
-  结论: (head k q).Supports S
-  证明: fun _ => by
-  dsimp only; split_ifs <;> exact H
-
-Depends on / 依赖: split_ifs
+/-
+**Turing.PartrecToTM2.head_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToT
+M2`。
+形式化陈述：head_supports {S k q} (H : (q : Λ').Supports S) : (head k q).Supports S
+参数：H : (q : Λ').Supports S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
 theorem head_supports {S k q} (H : (q : Λ').Supports S) : (head k q).Supports S := fun _ => by
   dsimp only; split_ifs <;> exact H
-
-/--
-theorem `ret_supports` / 定理 `ret_supports`
-
-English:
-theorem ret_supports
-  given: {S k} (H₁ : contSupp k subseteq S)
-  statement: TM2.SupportsStmt S (tr (Λ'.ret k))
-  proof: by
-  have W := fun {q} => trStmts₁_self q
-  cases k with
-  | halt => trivial
-  | cons₁ => rw [contSupp_cons₁, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
-  | cons₂ => rw [contSupp_cons₂, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
-  | comp => rw [contSupp_comp] at H₁; exact fun _ => H₁ (codeSupp_self _ _ W)
-  | fix =>
-    rw [contSupp_fix] at H₁
-    have L := @Finset.mem_union_left; have R := @Finset.mem_union_right
-    intro s; dsimp only; cases natEnd (s.getD default)
-    · refine H₁ (R _ <| L _ <| R _ <| R _ <| L _ W)
-    · exact H₁ (R _ <| L _ <| R _ <| R _ <| R _ <| Finset.mem_singleton_self _)
-
-中文:
-定理 ret_supports
-  条件: {S k} (H₁ : contSupp k subseteq S)
-  结论: TM2.SupportsStmt S (tr (Λ'.ret k))
-  证明: by
-  have W := fun {q} => trStmts₁_self q
-  cases k with
-  | halt => trivial
-  | cons₁ => rw [contSupp_cons₁, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
-  | cons₂ => rw [contSupp_cons₂, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
-  | comp => rw [contSupp_comp] at H₁; exact fun _ => H₁ (codeSupp_self _ _ W)
-  | fix =>
-    rw [contSupp_fix] at H₁
-    have L := @Finset.mem_union_left; have R := @Finset.mem_union_right
-    intro s; dsimp only; cases natEnd (s.getD default)
-    · refine H₁ (R _ <| L _ <| R _ <| R _ <| L _ W)
-    · exact H₁ (R _ <| L _ <| R _ <| R _ <| R _ <| Finset.mem_singleton_self _)
-
-Depends on / 依赖: Finset, Finset.mem_union_left, Finset.mem_union_right, Finset.union_subset_iff, codeSupp_self, contSupp_comp, contSupp_fix, mem_union_left, mem_union_right, natEnd, s.getD, union_subset_iff
+/-
+**Turing.PartrecToTM2.ret_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM
+2`。
+形式化陈述：ret_supports {S k} (H₁ : contSupp k subseteq S) : TM2.SupportsStmt S (tr (
+Λ'.ret k))
+参数：H₁ : contSupp k subseteq S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.trStmts₁_self`：trStmts₁_self (q) : q in trStmts₁ q
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_subset_iff`：union_subset_iff : s union t subseteq u ↔ s sub
+seteq u ∧ t subseteq u
+· 使用定理 `Turing.PartrecToTM2.contSupp_cons₁`：contSupp_cons₁ (fs k) : contSupp (Co
+nt'.cons₁ fs k) = trStmts₁ (move₂ (fun _ => false) main aux <| move₂ (fun s => s
+ = Γ'.consₗ) stack main …
+· 使用定理 `Turing.PartrecToTM2.contSupp_cons₂`：contSupp_cons₂ (k) : contSupp (Cont'
+.cons₂ k) = trStmts₁ (head stack <| Λ'.ret k) union contSupp k
+· 使用定理 `Turing.PartrecToTM2.contSupp_comp`：contSupp_comp (f k) : contSupp (Cont'
+.comp f k) = codeSupp f k
+· 使用定理 `Turing.PartrecToTM2.codeSupp_self`：codeSupp_self (c k) : trStmts₁ (trNor
+mal c k) subseteq codeSupp c k
+· 使用定理 `Finset.mem_union_left`：mem_union_left (t : Finset α) (h : a in s) : a in
+ s union t
+· 使用定理 `Finset.mem_union_right`：mem_union_right (s : Finset α) (h : a in t) : a 
+in s union t
+· 使用定理 `Turing.PartrecToTM2.contSupp_fix`：contSupp_fix (f k) : contSupp (Cont'.f
+ix f k) = codeSupp f (Cont'.fix f k)
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Finset.mem_singleton_self`：mem_singleton_self (a : α) : a in ({a} : Fins
+et α)
 -/
-theorem ret_supports {S k} (H₁ : contSupp k subseteq S) : TM2.SupportsStmt S (tr (Λ'.ret k)) := by
+theorem ret_supports {S k} (H₁ : contSupp k ⊆ S) : TM2.SupportsStmt S (tr (Λ'.ret k)) := by
   have W := fun {q} => trStmts₁_self q
   cases k with
   | halt => trivial
@@ -3388,70 +2924,11 @@ theorem ret_supports {S k} (H₁ : contSupp k subseteq S) : TM2.SupportsStmt S (
 
 set_option linter.flexible false in -- TODO: revisit this after #13791 is merged
 -- simp acts on multiple goals at the same time
-/--
-theorem `trStmts₁_supports` / 定理 `trStmts₁_supports`
-
-English:
-theorem trStmts₁_supports
-  given: {S q} (H₁ : (q : Λ').Supports S) (HS₁ : trStmts₁ q subseteq S)
-  proof: by
-  have W := fun {q} => trStmts₁_self q
-  induction q with
-  | move _ _ _ q q_ih => _ | clear _ _ q q_ih => _ | copy q q_ih => _ | push _ _ q q_ih => _
-  | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
-    simp [trStmts₁, -Finset.singleton_subset_iff] at HS₁ ⊢
-  any_goals
-    obtain ⟨h₁, h₂⟩ := Finset.insert_subset_iff.1 HS₁
-    first | have h₃ := h₂ W | try simp [Finset.subset_iff] at h₂
-  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- move
-  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- clear
-  · exact supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- copy
-  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- push
-  · refine supports_insert.2 ⟨fun _ => h₂ _ W, ?_⟩ -- read
-    exact supports_biUnion.2 fun _ => q_ih _ (H₁ _) fun _ h => h₂ _ h
-  · refine supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩ -- succ
-    exact supports_insert.2 ⟨⟨fun _ => h₂.2 _ W, fun _ => h₂.1⟩, q_ih H₁ h₂.2⟩
-  · refine -- pred
-      supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.2 _ (Or.inl W),
-                          fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩
-    refine supports_insert.2 ⟨⟨fun _ => h₂.2 _ (Or.inr W), fun _ => h₂.1⟩, ?_⟩
-    refine supports_union.2 ⟨?_, ?_⟩
-    · exact q₁_ih H₁.1 fun _ h => h₂.2 _ (Or.inl h)
-    · exact q₂_ih H₁.2 fun _ h => h₂.2 _ (Or.inr h)
-  · exact supports_singleton.2 (ret_supports H₁) -- ret
-
-中文:
-定理 trStmts₁_supports
-  条件: {S q} (H₁ : (q : Λ').Supports S) (HS₁ : trStmts₁ q subseteq S)
-  证明: by
-  have W := fun {q} => trStmts₁_self q
-  induction q with
-  | move _ _ _ q q_ih => _ | clear _ _ q q_ih => _ | copy q q_ih => _ | push _ _ q q_ih => _
-  | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
-    simp [trStmts₁, -Finset.singleton_subset_iff] at HS₁ ⊢
-  any_goals
-    obtain ⟨h₁, h₂⟩ := Finset.insert_subset_iff.1 HS₁
-    first | have h₃ := h₂ W | try simp [Finset.subset_iff] at h₂
-  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- move
-  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- clear
-  · exact supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- copy
-  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- push
-  · refine supports_insert.2 ⟨fun _ => h₂ _ W, ?_⟩ -- read
-    exact supports_biUnion.2 fun _ => q_ih _ (H₁ _) fun _ h => h₂ _ h
-  · refine supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩ -- succ
-    exact supports_insert.2 ⟨⟨fun _ => h₂.2 _ W, fun _ => h₂.1⟩, q_ih H₁ h₂.2⟩
-  · refine -- pred
-      supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.2 _ (Or.inl W),
-                          fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩
-    refine supports_insert.2 ⟨⟨fun _ => h₂.2 _ (Or.inr W), fun _ => h₂.1⟩, ?_⟩
-    refine supports_union.2 ⟨?_, ?_⟩
-    · exact q₁_ih H₁.1 fun _ h => h₂.2 _ (Or.inl h)
-    · exact q₂_ih H₁.2 fun _ h => h₂.2 _ (Or.inr h)
-  · exact supports_singleton.2 (ret_supports H₁) -- ret
-
-Depends on / 依赖: Finset, Finset.insert_subset_iff, Finset.singleton_subset_iff, Finset.subset_iff, any_goals, insert_subset_iff, q_ih, singleton_subset_iff, subset_iff, supports_i, supports_insert
+/-
+**Turing.PartrecToTM2.trStmts** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem trStmts₁_supports {S q} (H₁ : (q : Λ').Supports S) (HS₁ : trStmts₁ q subseteq S) :
+theorem trStmts₁_supports {S q} (H₁ : (q : Λ').Supports S) (HS₁ : trStmts₁ q ⊆ S) :
     Supports (trStmts₁ q) S := by
   have W := fun {q} => trStmts₁_self q
   induction q with
@@ -3476,77 +2953,69 @@ theorem trStmts₁_supports {S q} (H₁ : (q : Λ').Supports S) (HS₁ : trStmts
     refine supports_union.2 ⟨?_, ?_⟩
     · exact q₁_ih H₁.1 fun _ h => h₂.2 _ (Or.inl h)
     · exact q₂_ih H₁.2 fun _ h => h₂.2 _ (Or.inr h)
-  · exact supports_singleton.2 (ret_supports H₁) -- ret
-
-/--
-theorem `trStmts₁_supports'` / 定理 `trStmts₁_supports'`
-
-English:
-theorem trStmts₁_supports'
-  statement: {S q K} (H₁ : (q : Λ').Supports S) (H₂ : trStmts₁ q union K subseteq S)
-  proof: by
-  simp only [Finset.union_subset_iff] at H₂
-  exact supports_union.2 ⟨trStmts₁_supports H₁ H₂.1, H₃ H₂.2⟩
-
-中文:
-定理 trStmts₁_supports'
-  结论: {S q K} (H₁ : (q : Λ').Supports S) (H₂ : trStmts₁ q union K subseteq S)
-  证明: by
-  simp only [Finset.union_subset_iff] at H₂
-  exact supports_union.2 ⟨trStmts₁_supports H₁ H₂.1, H₃ H₂.2⟩
-
-Depends on / 依赖: Finset, Finset.union_subset_iff, supports_union, union_subset_iff
+  · exact supports_singleton.2 (ret_supports H₁)  -- ret
+/-
+**Turing.PartrecToTM2.trStmts** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem trStmts₁_supports' {S q K} (H₁ : (q : Λ').Supports S) (H₂ : trStmts₁ q union K subseteq S)
-    (H₃ : K subseteq S -> Supports K S) : Supports (trStmts₁ q union K) S := by
+theorem trStmts₁_supports' {S q K} (H₁ : (q : Λ').Supports S) (H₂ : trStmts₁ q ∪ K ⊆ S)
+    (H₃ : K ⊆ S → Supports K S) : Supports (trStmts₁ q ∪ K) S := by
   simp only [Finset.union_subset_iff] at H₂
   exact supports_union.2 ⟨trStmts₁_supports H₁ H₂.1, H₃ H₂.2⟩
 
 set_option linter.flexible false in -- TODO: revisit this after #13791 is merged
-/--
-theorem `trNormal_supports` / 定理 `trNormal_supports`
-
-English:
-theorem trNormal_supports
-  given: {S c k} (Hk : codeSupp c k subseteq S)
-  statement: (trNormal c k).Supports S
-  proof: by
-  induction c generalizing k with simp [Λ'.Supports, head]
-  | zero' => exact Finset.union_subset_right Hk
-  | succ => intro; split_ifs <;> exact Finset.union_subset_right Hk
-  | tail => exact Finset.union_subset_right Hk
-  | cons f fs IHf _ =>
-    apply IHf
-    rw [codeSupp_cons] at Hk
-    exact Finset.union_subset_right Hk
-  | comp f g _ IHg => apply IHg; rw [codeSupp_comp] at Hk; exact Finset.union_subset_right Hk
-  | case f g IHf IHg =>
-    simp only [codeSupp_case, Finset.union_subset_iff] at Hk
-    exact ⟨IHf Hk.2.1, IHg Hk.2.2⟩
-  | fix f IHf => apply IHf; rw [codeSupp_fix] at Hk; exact Finset.union_subset_right Hk
-
-中文:
-定理 trNormal_supports
-  条件: {S c k} (Hk : codeSupp c k subseteq S)
-  结论: (trNormal c k).Supports S
-  证明: by
-  induction c generalizing k with simp [Λ'.Supports, head]
-  | zero' => exact Finset.union_subset_right Hk
-  | succ => intro; split_ifs <;> exact Finset.union_subset_right Hk
-  | tail => exact Finset.union_subset_right Hk
-  | cons f fs IHf _ =>
-    apply IHf
-    rw [codeSupp_cons] at Hk
-    exact Finset.union_subset_right Hk
-  | comp f g _ IHg => apply IHg; rw [codeSupp_comp] at Hk; exact Finset.union_subset_right Hk
-  | case f g IHf IHg =>
-    simp only [codeSupp_case, Finset.union_subset_iff] at Hk
-    exact ⟨IHf Hk.2.1, IHg Hk.2.2⟩
-  | fix f IHf => apply IHf; rw [codeSupp_fix] at Hk; exact Finset.union_subset_right Hk
-
-Depends on / 依赖: Finset, Finset.union_subset_iff, Finset.union_subset_right, Supports, codeSupp_case, codeSupp_comp, codeSupp_cons, generalizing, split_ifs, union_subset_iff, union_subset_right
+/-
+**Turing.PartrecToTM2.trNormal_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partre
+cToTM2`。
+形式化陈述：trNormal_supports {S c k} (Hk : codeSupp c k subseteq S) : (trNormal c k).
+Supports S
+参数：Hk : codeSupp c k subseteq S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `Turing.PartrecToTM2.Λ'.Supports.eq_2`：∀ (S : Finset Turing.PartrecToTM2.
+Λ') (k : Turing.PartrecToTM2.K')   (s : Option Turing.PartrecToTM2.Γ' → Option T
+uring.PartrecToTM2.Γ') (q …
+· 使用定理 `Finset.union_subset_right`：union_subset_right {s t u : Finset α} (h : s 
+union t subseteq u) : t subseteq u
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Turing.PartrecToTM2.Λ'.Supports.eq_1`：∀ (S : Finset Turing.PartrecToTM2.
+Λ') (p : Turing.PartrecToTM2.Γ' → Bool) (k₁ k₂ : Turing.PartrecToTM2.K')   (q : 
+Turing.PartrecToTM2.Λ'),  …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Turing.PartrecToTM2.Λ'.Supports.eq_4`：∀ (S : Finset Turing.PartrecToTM2.
+Λ') (p : Turing.PartrecToTM2.Γ' → Bool) (k : Turing.PartrecToTM2.K')   (q : Turi
+ng.PartrecToTM2.Λ'),   Tur…
+· 使用定理 `Turing.PartrecToTM2.codeSupp_cons`：codeSupp_cons (f fs k) : codeSupp (Co
+de.cons f fs) k = trStmts₁ (trNormal (Code.cons f fs) k) union codeSupp f (Cont'
+.cons₁ fs k)
+· 使用定理 `Turing.PartrecToTM2.codeSupp_comp`：codeSupp_comp (f g k) : codeSupp (Cod
+e.comp f g) k = trStmts₁ (trNormal (Code.comp f g) k) union codeSupp g (Cont'.co
+mp f k)
+· 使用定理 `Turing.PartrecToTM2.Λ'.Supports.eq_7`：∀ (S : Finset Turing.PartrecToTM2.
+Λ') (q₁ q₂ : Turing.PartrecToTM2.Λ'),   Turing.PartrecToTM2.Λ'.Supports S (q₁.pr
+ed q₂) =     (Turing.Partr…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.PartrecToTM2.codeSupp_case`：codeSupp_case (f g k) : codeSupp (Cod
+e.case f g) k = trStmts₁ (trNormal (Code.case f g) k) union (codeSupp f k union 
+codeSupp g k)
+· 使用定理 `Turing.PartrecToTM2.codeSupp_fix`：codeSupp_fix (f k) : codeSupp (Code.fi
+x f) k = trStmts₁ (trNormal (Code.fix f) k) union codeSupp f (Cont'.fix f k)
 -/
-theorem trNormal_supports {S c k} (Hk : codeSupp c k subseteq S) : (trNormal c k).Supports S := by
+theorem trNormal_supports {S c k} (Hk : codeSupp c k ⊆ S) : (trNormal c k).Supports S := by
   induction c generalizing k with simp [Λ'.Supports, head]
   | zero' => exact Finset.union_subset_right Hk
   | succ => intro; split_ifs <;> exact Finset.union_subset_right Hk
@@ -3560,15 +3029,70 @@ theorem trNormal_supports {S c k} (Hk : codeSupp c k subseteq S) : (trNormal c k
     simp only [codeSupp_case, Finset.union_subset_iff] at Hk
     exact ⟨IHf Hk.2.1, IHg Hk.2.2⟩
   | fix f IHf => apply IHf; rw [codeSupp_fix] at Hk; exact Finset.union_subset_right Hk
-
-/--
-theorem `codeSupp'_supports` / 定理 `codeSupp'_supports`
-
-English:
-theorem codeSupp'_supports
-  given: {S c k} (H : codeSupp c k subseteq S)
-  statement: Supports (codeSupp' c k) S
-  proof: by
+/-
+**Turing.PartrecToTM2.codeSupp'_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partr
+ecToTM2`。
+形式化陈述：∀ {S : Finset Turing.PartrecToTM2.Λ'} {c : Turing.ToPartrec.Code} {k : Tur
+ing.PartrecToTM2.Cont'},   Turing.PartrecToTM2.codeSupp c k ⊆ S → Turing.Partrec
+ToTM2.Supports (Turing.PartrecToTM2.codeSupp' c k) S
+参数：Turing.PartrecToTM2.codeSupp' c k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `Turing.PartrecToTM2.trStmts₁_supports`：trStmts₁_supports {S q} (H₁ : (q 
+: Λ').Supports S) (HS₁ : trStmts₁ q subseteq S) : Supports (trStmts₁ q) S
+· 使用定理 `Turing.PartrecToTM2.trNormal_supports`：trNormal_supports {S c k} (Hk : c
+odeSupp c k subseteq S) : (trNormal c k).Supports S
+· 使用定理 `Finset.Subset.trans`：∀ {α : Type u_1} {s₁ s₂ s₃ : Finset α}, s₁ ⊆ s₂ → s
+₂ ⊆ s₃ → s₁ ⊆ s₃
+· 使用定理 `Turing.PartrecToTM2.codeSupp_self`：codeSupp_self (c k) : trStmts₁ (trNor
+mal c k) subseteq codeSupp c k
+· 使用定理 `Turing.PartrecToTM2.trStmts₁_supports'`：trStmts₁_supports' {S q K} (H₁ :
+ (q : Λ').Supports S) (H₂ : trStmts₁ q union K subseteq S) (H₃ : K subseteq S ->
+ Supports K S) : Supports (t…
+· 使用定理 `Finset.union_subset_left`：union_subset_left (h : s union t subseteq u) :
+ s subseteq u
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Turing.PartrecToTM2.supports_union`：supports_union {K₁ K₂ S} : Supports 
+(K₁ union K₂) S ↔ Supports K₁ S ∧ Supports K₂ S
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.PartrecToTM2.codeSupp_cons`：codeSupp_cons (f fs k) : codeSupp (Co
+de.cons f fs) k = trStmts₁ (trNormal (Code.cons f fs) k) union codeSupp f (Cont'
+.cons₁ fs k)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.union_subset_right`：union_subset_right {s t u : Finset α} (h : s 
+union t subseteq u) : t subseteq u
+· 使用定理 `Turing.PartrecToTM2.contSupp_cons₁`：contSupp_cons₁ (fs k) : contSupp (Co
+nt'.cons₁ fs k) = trStmts₁ (move₂ (fun _ => false) main aux <| move₂ (fun s => s
+ = Γ'.consₗ) stack main …
+· 使用定理 `Turing.PartrecToTM2.codeSupp.eq_1`：∀ (c : Turing.ToPartrec.Code) (k : Tu
+ring.PartrecToTM2.Cont'),   Turing.PartrecToTM2.codeSupp c k = Turing.PartrecToT
+M2.codeSupp' c k ∪ Turi…
+· 使用定理 `Turing.PartrecToTM2.head_supports`：head_supports {S k q} (H : (q : Λ').S
+upports S) : (head k q).Supports S
+· 使用定理 `Turing.PartrecToTM2.codeSupp_comp`：codeSupp_comp (f g k) : codeSupp (Cod
+e.comp f g) k = trStmts₁ (trNormal (Code.comp f g) k) union codeSupp g (Cont'.co
+mp f k)
+· 使用定理 `Turing.PartrecToTM2.codeSupp_case`：codeSupp_case (f g k) : codeSupp (Cod
+e.case f g) k = trStmts₁ (trNormal (Code.case f g) k) union (codeSupp f k union 
+codeSupp g k)
+· 使用定理 `Turing.PartrecToTM2.codeSupp_fix`：codeSupp_fix (f k) : codeSupp (Code.fi
+x f) k = trStmts₁ (trNormal (Code.fix f) k) union codeSupp f (Cont'.fix f k)
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.PartrecToTM2.supports_singleton`：supports_singleton {S q} : Suppo
+rts {q} S ↔ TM2.SupportsStmt S (tr q)
+· 使用定理 `Turing.PartrecToTM2.ret_supports`：ret_supports {S k} (H₁ : contSupp k su
+bseteq S) : TM2.SupportsStmt S (tr (Λ'.ret k))
+-/
+theorem codeSupp'_supports {S c k} (H : codeSupp c k ⊆ S) : Supports (codeSupp' c k) S := by
   induction c generalizing k with
   | cons f fs IHf IHfs =>
     have H' := H; simp only [codeSupp_cons, Finset.union_subset_iff] at H'
@@ -3605,95 +3129,56 @@ theorem codeSupp'_supports
       exact ⟨h.1, ⟨H.1.1, h⟩, H.2⟩
     exact supports_singleton.2 (ret_supports <| Finset.union_subset_right H)
   | _ => exact trStmts₁_supports (trNormal_supports H) (Finset.Subset.trans (codeSupp_self _ _) H)
-
-中文:
-定理 codeSupp'_supports
-  条件: {S c k} (H : codeSupp c k subseteq S)
-  结论: Supports (codeSupp' c k) S
-  证明: by
-  induction c generalizing k with
-  | cons f fs IHf IHfs =>
-    have H' := H; simp only [codeSupp_cons, Finset.union_subset_iff] at H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
-    refine supports_union.2 ⟨IHf H'.2, ?_⟩
-    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun h => ?_
-    · simp only [codeSupp, Finset.union_subset_iff, contSupp] at h H ⊢
-      exact ⟨h.2.2.1, h.2.2.2, H.2⟩
-    refine supports_union.2 ⟨IHfs ?_, ?_⟩
-    · rw [codeSupp, contSupp_cons₁] at H'
-      exact Finset.union_subset_right (Finset.union_subset_right H'.2)
-    exact
-      trStmts₁_supports (head_supports <| Finset.union_subset_right H)
-        (Finset.union_subset_right h)
-  | comp f g IHf IHg =>
-    have H' := H; rw [codeSupp_comp] at H'; have H' := Finset.union_subset_right H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
-    refine supports_union.2 ⟨IHg H', ?_⟩
-    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
-    · simp only [codeSupp', codeSupp, Finset.union_subset_iff] at h H ⊢
-      exact ⟨h.2.2, H.2⟩
-    exact IHf (Finset.union_subset_right H')
-  | case f g IHf IHg =>
-    have H' := H; simp only [codeSupp_case, Finset.union_subset_iff] at H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun _ => ?_
-    exact supports_union.2 ⟨IHf H'.2.1, IHg H'.2.2⟩
-  | fix f IHf =>
-    have H' := H; simp only [codeSupp_fix, Finset.union_subset_iff] at H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
-    refine supports_union.2 ⟨IHf H'.2, ?_⟩
-    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
-    · simp only [codeSupp', codeSupp, Finset.union_subset_iff, contSupp, trStmts₁,
-        Finset.insert_subset_iff] at h H ⊢
-      exact ⟨h.1, ⟨H.1.1, h⟩, H.2⟩
-    exact supports_singleton.2 (ret_supports <| Finset.union_subset_right H)
-  | _ => exact trStmts₁_supports (trNormal_supports H) (Finset.Subset.trans (codeSupp_self _ _) H)
+/-
+**Turing.PartrecToTM2.contSupp_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partre
+cToTM2`。
+形式化陈述：contSupp_supports {S k} (H : contSupp k subseteq S) : Supports (contSupp k
+) S
+参数：H : contSupp k subseteq S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finset.union_subset_right`：union_subset_right {s t u : Finset α} (h : s 
+union t subseteq u) : t subseteq u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.PartrecToTM2.contSupp_cons₁`：contSupp_cons₁ (fs k) : contSupp (Co
+nt'.cons₁ fs k) = trStmts₁ (move₂ (fun _ => false) main aux <| move₂ (fun s => s
+ = Γ'.consₗ) stack main …
+· 使用定理 `Turing.PartrecToTM2.trStmts₁_supports'`：trStmts₁_supports' {S q K} (H₁ :
+ (q : Λ').Supports S) (H₂ : trStmts₁ q union K subseteq S) (H₃ : K subseteq S ->
+ Supports K S) : Supports (t…
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Turing.PartrecToTM2.trNormal_supports`：trNormal_supports {S c k} (Hk : c
+odeSupp c k subseteq S) : (trNormal c k).Supports S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Turing.PartrecToTM2.supports_union`：supports_union {K₁ K₂ S} : Supports 
+(K₁ union K₂) S ↔ Supports K₁ S ∧ Supports K₂ S
+· 使用定理 `Turing.PartrecToTM2.codeSupp'_supports`：∀ {S : Finset Turing.PartrecToTM
+2.Λ'} {c : Turing.ToPartrec.Code} {k : Turing.PartrecToTM2.Cont'},   Turing.Part
+recToTM2.codeSupp c k ⊆ S → …
+· 使用定理 `Turing.PartrecToTM2.head_supports`：head_supports {S k q} (H : (q : Λ').S
+upports S) : (head k q).Supports S
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Turing.PartrecToTM2.contSupp_cons₂`：contSupp_cons₂ (k) : contSupp (Cont'
+.cons₂ k) = trStmts₁ (head stack <| Λ'.ret k) union contSupp k
+· 使用定理 `Turing.PartrecToTM2.contSupp_comp`：contSupp_comp (f k) : contSupp (Cont'
+.comp f k) = codeSupp f k
+· 使用定理 `Turing.PartrecToTM2.contSupp.eq_4`：∀ (f : Turing.ToPartrec.Code) (k : Tu
+ring.PartrecToTM2.Cont'),   Turing.PartrecToTM2.contSupp (Turing.PartrecToTM2.Co
+nt'.fix f k) =     Turi…
 -/
-theorem codeSupp'_supports {S c k} (H : codeSupp c k subseteq S) : Supports (codeSupp' c k) S := by
-  induction c generalizing k with
-  | cons f fs IHf IHfs =>
-    have H' := H; simp only [codeSupp_cons, Finset.union_subset_iff] at H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
-    refine supports_union.2 ⟨IHf H'.2, ?_⟩
-    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun h => ?_
-    · simp only [codeSupp, Finset.union_subset_iff, contSupp] at h H ⊢
-      exact ⟨h.2.2.1, h.2.2.2, H.2⟩
-    refine supports_union.2 ⟨IHfs ?_, ?_⟩
-    · rw [codeSupp, contSupp_cons₁] at H'
-      exact Finset.union_subset_right (Finset.union_subset_right H'.2)
-    exact
-      trStmts₁_supports (head_supports <| Finset.union_subset_right H)
-        (Finset.union_subset_right h)
-  | comp f g IHf IHg =>
-    have H' := H; rw [codeSupp_comp] at H'; have H' := Finset.union_subset_right H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
-    refine supports_union.2 ⟨IHg H', ?_⟩
-    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
-    · simp only [codeSupp', codeSupp, Finset.union_subset_iff] at h H ⊢
-      exact ⟨h.2.2, H.2⟩
-    exact IHf (Finset.union_subset_right H')
-  | case f g IHf IHg =>
-    have H' := H; simp only [codeSupp_case, Finset.union_subset_iff] at H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun _ => ?_
-    exact supports_union.2 ⟨IHf H'.2.1, IHg H'.2.2⟩
-  | fix f IHf =>
-    have H' := H; simp only [codeSupp_fix, Finset.union_subset_iff] at H'
-    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
-    refine supports_union.2 ⟨IHf H'.2, ?_⟩
-    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
-    · simp only [codeSupp', codeSupp, Finset.union_subset_iff, contSupp, trStmts₁,
-        Finset.insert_subset_iff] at h H ⊢
-      exact ⟨h.1, ⟨H.1.1, h⟩, H.2⟩
-    exact supports_singleton.2 (ret_supports <| Finset.union_subset_right H)
-  | _ => exact trStmts₁_supports (trNormal_supports H) (Finset.Subset.trans (codeSupp_self _ _) H)
-
-/--
-theorem `contSupp_supports` / 定理 `contSupp_supports`
-
-English:
-theorem contSupp_supports
-  given: {S k} (H : contSupp k subseteq S)
-  statement: Supports (contSupp k) S
-  proof: by
+theorem contSupp_supports {S k} (H : contSupp k ⊆ S) : Supports (contSupp k) S := by
   induction k with
   | halt => simp [contSupp_halt, Supports]
   | cons₁ f k IH =>
@@ -3711,87 +3196,62 @@ theorem contSupp_supports
   | fix f k IH =>
     rw [contSupp] at H
     exact supports_union.2 ⟨codeSupp'_supports H, IH (Finset.union_subset_right H)⟩
-
-中文:
-定理 contSupp_supports
-  条件: {S k} (H : contSupp k subseteq S)
-  结论: Supports (contSupp k) S
-  证明: by
-  induction k with
-  | halt => simp [contSupp_halt, Supports]
-  | cons₁ f k IH =>
-    have H₁ := H; rw [contSupp_cons₁] at H₁; have H₂ := Finset.union_subset_right H₁
-    refine trStmts₁_supports' (trNormal_supports H₂) H₁ fun h => ?_
-    refine supports_union.2 ⟨codeSupp'_supports H₂, ?_⟩
-    simp only [codeSupp, contSupp_cons₂, Finset.union_subset_iff] at H₂
-    exact trStmts₁_supports' (head_supports H₂.2.2) (Finset.union_subset_right h) IH
-  | cons₂ k IH =>
-    have H' := H; rw [contSupp_cons₂] at H'
-    exact trStmts₁_supports' (head_supports <| Finset.union_subset_right H') H' IH
-  | comp f k IH =>
-    have H' := H; rw [contSupp_comp] at H'; have H₂ := Finset.union_subset_right H'
-    exact supports_union.2 ⟨codeSupp'_supports H', IH H₂⟩
-  | fix f k IH =>
-    rw [contSupp] at H
-    exact supports_union.2 ⟨codeSupp'_supports H, IH (Finset.union_subset_right H)⟩
-
-Depends on / 依赖: Finset, Finset.union_subset_iff, Finset.union_subset_right, Supports, _supports, codeSupp, contSupp_halt, head_supports, supports_union, trNormal_supports, union_subset_iff, union_subset_right
+/-
+**Turing.PartrecToTM2.codeSupp_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.Partre
+cToTM2`。
+形式化陈述：codeSupp_supports {S c k} (H : codeSupp c k subseteq S) : Supports (codeSu
+pp c k) S
+参数：H : codeSupp c k subseteq S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Turing.PartrecToTM2.codeSupp'`：codeSupp'_self (c k) : trStmts₁ (trNormal
+ c k) subseteq codeSupp' c k
+· 使用定理 `Turing.PartrecToTM2.supports_union`：supports_union {K₁ K₂ S} : Supports 
+(K₁ union K₂) S ↔ Supports K₁ S ∧ Supports K₂ S
+· 使用定理 `Turing.PartrecToTM2.codeSupp'_supports`：∀ {S : Finset Turing.PartrecToTM
+2.Λ'} {c : Turing.ToPartrec.Code} {k : Turing.PartrecToTM2.Cont'},   Turing.Part
+recToTM2.codeSupp c k ⊆ S → …
+· 使用定理 `Turing.PartrecToTM2.contSupp_supports`：contSupp_supports {S k} (H : cont
+Supp k subseteq S) : Supports (contSupp k) S
+· 使用定理 `Finset.union_subset_right`：union_subset_right {s t u : Finset α} (h : s 
+union t subseteq u) : t subseteq u
 -/
-theorem contSupp_supports {S k} (H : contSupp k subseteq S) : Supports (contSupp k) S := by
-  induction k with
-  | halt => simp [contSupp_halt, Supports]
-  | cons₁ f k IH =>
-    have H₁ := H; rw [contSupp_cons₁] at H₁; have H₂ := Finset.union_subset_right H₁
-    refine trStmts₁_supports' (trNormal_supports H₂) H₁ fun h => ?_
-    refine supports_union.2 ⟨codeSupp'_supports H₂, ?_⟩
-    simp only [codeSupp, contSupp_cons₂, Finset.union_subset_iff] at H₂
-    exact trStmts₁_supports' (head_supports H₂.2.2) (Finset.union_subset_right h) IH
-  | cons₂ k IH =>
-    have H' := H; rw [contSupp_cons₂] at H'
-    exact trStmts₁_supports' (head_supports <| Finset.union_subset_right H') H' IH
-  | comp f k IH =>
-    have H' := H; rw [contSupp_comp] at H'; have H₂ := Finset.union_subset_right H'
-    exact supports_union.2 ⟨codeSupp'_supports H', IH H₂⟩
-  | fix f k IH =>
-    rw [contSupp] at H
-    exact supports_union.2 ⟨codeSupp'_supports H, IH (Finset.union_subset_right H)⟩
-
-/--
-theorem `codeSupp_supports` / 定理 `codeSupp_supports`
-
-English:
-theorem codeSupp_supports
-  given: {S c k} (H : codeSupp c k subseteq S)
-  statement: Supports (codeSupp c k) S
-  proof: supports_union.2 ⟨codeSupp'_supports H, contSupp_supports (Finset.union_subset_right H)⟩
-
-中文:
-定理 codeSupp_supports
-  条件: {S c k} (H : codeSupp c k subseteq S)
-  结论: Supports (codeSupp c k) S
-  证明: supports_union.2 ⟨codeSupp'_supports H, contSupp_supports (Finset.union_subset_right H)⟩
-
-Depends on / 依赖: Finset, Finset.union_subset_right, _supports, codeSupp, contSupp_supports, supports_union, union_subset_right
--/
-theorem codeSupp_supports {S c k} (H : codeSupp c k subseteq S) : Supports (codeSupp c k) S :=
+theorem codeSupp_supports {S c k} (H : codeSupp c k ⊆ S) : Supports (codeSupp c k) S :=
   supports_union.2 ⟨codeSupp'_supports H, contSupp_supports (Finset.union_subset_right H)⟩
 
-/--
-theorem `tr_supports` / 定理 `tr_supports`
+/-- The set `codeSupp c k` is a finite set that witnesses the effective finiteness of the `tr`
+Turing machine. Starting from the initial state `trNormal c k`, forward simulation uses only
+states in `codeSupp c k`, so this is a finite state machine. Even though the underlying type of
+state labels `Λ'` is infinite, for a given partial recursive function `c` and continuation `k`,
+only finitely many states are accessed, corresponding roughly to subterms of `c`. -/
+/-
+**Turing.PartrecToTM2.tr_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.PartrecToTM2
+`。
+形式化陈述：tr_supports (c k) : @TM2.Supports _ _ _ _ ⟨trNormal c k⟩ tr (codeSupp c k)
+参数：c k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.PartrecToTM2.K'`：K'.elim_main (a b c d) : K'.elim a b c d K'.main
+ = a
+· 使用定理 `Turing.PartrecToTM2.codeSupp_self`：codeSupp_self (c k) : trStmts₁ (trNor
+mal c k) subseteq codeSupp c k
+· 使用定理 `Turing.PartrecToTM2.trStmts₁_self`：trStmts₁_self (q) : q in trStmts₁ q
+· 使用定理 `Turing.PartrecToTM2.codeSupp_supports`：codeSupp_supports {S c k} (H : co
+deSupp c k subseteq S) : Supports (codeSupp c k) S
+· 使用定理 `Finset.Subset.refl`：∀ {α : Type u_1} (s : Finset α), s ⊆ s
 
-English:
-theorem tr_supports
-  given: (c k)
-  statement: @TM2.Supports _ _ _ _ ⟨trNormal c k⟩ tr (codeSupp c k)
-  proof: ⟨codeSupp_self _ _ (trStmts₁_self _), fun _ => codeSupp_supports (Finset.Subset.refl _) _⟩
-
-中文:
-定理 tr_supports
-  条件: (c k)
-  结论: @TM2.Supports _ _ _ _ ⟨trNormal c k⟩ tr (codeSupp c k)
-  证明: ⟨codeSupp_self _ _ (trStmts₁_self _), fun _ => codeSupp_supports (Finset.Subset.refl _) _⟩
-
-Depends on / 依赖: Finset, Finset.Subset.refl, Subset, codeSupp_self, codeSupp_supports
+--- 原说明 ---
+The set `codeSupp c k` is a finite set that witnesses the effective finiteness o
+f the `tr`
+Turing machine. Starting from the initial state `trNormal c k`, forward simulati
+on uses only
+states in `codeSupp c k`, so this is a finite state machine. Even though the und
+erlying type of
+state labels `Λ'` is infinite, for a given partial recursive function `c` and co
+ntinuation `k`,
+only finitely many states are accessed, corresponding roughly to subterms of `c`
+.
 -/
 theorem tr_supports (c k) : @TM2.Supports _ _ _ _ ⟨trNormal c k⟩ tr (codeSupp c k) :=
   ⟨codeSupp_self _ _ (trStmts₁_self _), fun _ => codeSupp_supports (Finset.Subset.refl _) _⟩
@@ -3801,3 +3261,4 @@ end
 end PartrecToTM2
 
 end Turing
+

@@ -29,28 +29,9 @@ variable {C : Type u'} [Category.{v'} C] {J : GrothendieckTopology C}
 variable (R : Sheaf J RingCat.{u}) [HasWeakSheafify J AddCommGrpCat.{v}]
   [J.WEqualsLocallyBijective AddCommGrpCat.{v}] (K : Type w) [Category.{w'} K]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimitsOfShape
-  signature: K (PresheafOfModules.{v} R.obj)] :
-  body: by
-    let e : F ≅ (F ⋙ forget R) ⋙ PresheafOfModules.sheafification (𝟙 R.obj) :=
-      Functor.isoWhiskerLeft F
-        (asIso (PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).counit).symm
-    exact hasColimit_of_iso e
-
-中文:
-实例 [有形状余极限
-  签名: K (预模层.{v} R.obj)] :
-  定义体: by
-    let e : F ≅ (F ⋙ forget R) ⋙ PresheafOfModules.sheafification (𝟙 R.obj) :=
-      Functor.isoWhiskerLeft F
-        (asIso (PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).counit).symm
-    exact hasColimit_of_iso e
-
-Depends on / 依赖: Functor, Functor.isoWhiskerLeft, PresheafOfModules, PresheafOfModules.sheafification, PresheafOfModules.sheafificationAdjunction, R.obj, counit, forget, hasColimit_of_iso, isoWhiskerLeft, sheafification, sheafificationAdjunction
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasColimitsOfShape K (PresheafOfModules.{v} R.obj)] :
     HasColimitsOfShape K (SheafOfModules.{v} R) where
@@ -59,19 +40,12 @@ instance [HasColimitsOfShape K (PresheafOfModules.{v} R.obj)] :
       Functor.isoWhiskerLeft F
         (asIso (PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).counit).symm
     exact hasColimit_of_iso e
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimitsOfSize.{w',
-  signature: w} (PresheafOfModules.{v} R.obj)] :
-
-中文:
-实例 [有余limitsOfSize.{w',
-  签名: w} (预模层.{v} R.obj)] :
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasColimitsOfSize.{w', w} (PresheafOfModules.{v} R.obj)] :
     HasColimitsOfSize.{w', w} (SheafOfModules.{v} R) where
 
 end SheafOfModules
+

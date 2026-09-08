@@ -31,23 +31,20 @@ open Real Northcott
 
 variable {K : Type*} [Field K]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A field that satisfies the Northcott property for `mulHeight₁` also does for `logHeight₁`. -/
+/-
+**Height.** 是 Mathlib 中的一个实例，位于命名空间 `Height`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [AdmissibleAbsValues
-  signature: K] [Northcott (mulHeight₁ (K := K))] :
-  body: comp_of_bddAbove mulHeight₁ log fun B => bddAbove_def.mpr ⟨exp B, fun _ => le_exp_of_log_le⟩
-
-中文:
-实例 [AdmissibleAbsValues
-  签名: K] [Northcott (mulHeight₁ (K := K))] :
-  定义体: comp_of_bddAbove mulHeight₁ log fun B => bddAbove_def.mpr ⟨exp B, fun _ => le_exp_of_log_le⟩
+--- 原说明 ---
+A field that satisfies the Northcott property for `mulHeight₁` also does for `lo
+gHeight₁`.
 -/
 instance [AdmissibleAbsValues K] [Northcott (mulHeight₁ (K := K))] :
     Northcott (logHeight₁ (K := K)) :=
-  comp_of_bddAbove mulHeight₁ log fun B => bddAbove_def.mpr ⟨exp B, fun _ => le_exp_of_log_le⟩
+  comp_of_bddAbove mulHeight₁ log fun B ↦ bddAbove_def.mpr ⟨exp B, fun _ ↦ le_exp_of_log_le⟩
 
 end
 
 end Height
+

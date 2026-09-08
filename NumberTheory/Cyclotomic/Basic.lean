@@ -73,31 +73,30 @@ noncomputable section
 that there is an `n`-th primitive root of unity in `B` for all nonzero `n ∈ S` and that
 `B` is generated over `A` by the roots of `X ^ n - 1`. -/
 @[mk_iff]
-/--
-Definition of `IsCyclotomicExtension` / `IsCyclotomicExtension` 的定义
+/-
+**IsCyclotomicExtension** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Set ℕ → (A : Type u) → (B : Type v) → [inst : CommRing A] → [inst_1 : Comm
+Ring B] → [Algebra A B] → Prop
+参数：A : Type u；B : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCyclotomicExtension
-  axioms and operations (2):
-    - exists_isPrimitiveRoot({S} (A B) {n : Nat} (ha : n in S) (ha' : n != 0)) : exists r : B, IsPrimitiveRoot r n
-    - adjoin_roots : forall x : B, x in adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}
-
-中文:
-类 是CyclotomicExtension
-  公理与运算 (2 个):
-    - exists_isPrimitiveRoot({S} (A B) {n : 自然数} (ha : n in S) (ha' : n != 0)) : 存在 r : B, 是PrimitiveRoot r n
-    - adjoin_roots : 对任意 x : B, x in adjoin A {b : B | 存在 n : 自然数, n in S ∧ n != 0 ∧ b ^ n = 1}
+--- 原说明 ---
+Given an `A`-algebra `B` and `S : Set ℕ`, we define `IsCyclotomicExtension S A B
+` requiring
+that there is an `n`-th primitive root of unity in `B` for all nonzero `n ∈ S` a
+nd that
+`B` is generated over `A` by the roots of `X ^ n - 1`.
 -/
 class IsCyclotomicExtension
-    (S : Set Nat) (A : Type u) (B : Type v)
+    (S : Set ℕ) (A : Type u) (B : Type v)
     [CommRing A] [CommRing B] [Algebra A B] : Prop where
   /-- For all nonzero `n ∈ S`, there exists a primitive `n`-th root of unity in `B`. -/
-  exists_isPrimitiveRoot {S} (A B) {n : Nat} (ha : n in S) (ha' : n != 0) :
-    exists r : B, IsPrimitiveRoot r n
+  exists_isPrimitiveRoot {S} (A B) {n : ℕ} (ha : n ∈ S) (ha' : n ≠ 0) :
+    ∃ r : B, IsPrimitiveRoot r n
   /-- The `n`-th roots of unity, for `n ∈ S` nonzero, generate `B` as an `A`-algebra. -/
-  adjoin_roots : forall x : B, x in adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}
+  adjoin_roots : ∀ x : B, x ∈ adjoin A {b : B | ∃ n : ℕ, n ∈ S ∧ n ≠ 0 ∧ b ^ n = 1}
 
-variable (n : Nat) [NeZero n] (S T : Set Nat) (A : Type u) (B : Type v) (K : Type w) (L : Type z)
+variable (n : ℕ) [NeZero n] (S T : Set ℕ) (A : Type u) (B : Type v) (K : Type w) (L : Type z)
 variable [CommRing A] [CommRing B] [Algebra A B]
 variable [Field K] [Field L] [Algebra K L]
 
@@ -105,103 +104,163 @@ namespace IsCyclotomicExtension
 
 section Basic
 
-/--
-theorem `iff_adjoin_eq_top` / 定理 `iff_adjoin_eq_top`
+/-- A reformulation of `IsCyclotomicExtension` that uses `⊤`. -/
+/-
+**IsCyclotomicExtension.iff_adjoin_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomi
+cExtension`。
+形式化陈述：iff_adjoin_eq_top : IsCyclotomicExtension S A B ↔ (forall n : Nat, n in S 
+-> n != 0 -> exists r : B, IsPrimitiveRoot r n) ∧ adjoin A {b : B | exists n : N
+at, n in S ∧ n != 0 ∧ b ^ n = 1} = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.eq_top_iff`：eq_top_iff {S : Subalgebra R A} : S = ⊤ ↔ forall x :
+ A, x in S
+· 使用定理 `IsCyclotomicExtension.adjoin_roots`：∀ {S : Set ℕ} {A : Type u} {B : Type
+ v} {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}   [self : I
+sCyclotomicExtension S A…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem iff_adjoin_eq_top
-  proof: ⟨fun h => ⟨fun _ => h.exists_isPrimitiveRoot, Algebra.eq_top_iff.2 h.adjoin_roots⟩, fun h =>
-    ⟨h.1 _, Algebra.eq_top_iff.1 h.2⟩⟩
-
-中文:
-定理 iff_adjoin_eq_top
-  证明: ⟨fun h => ⟨fun _ => h.exists_isPrimitiveRoot, Algebra.eq_top_iff.2 h.adjoin_roots⟩, fun h =>
-    ⟨h.1 _, Algebra.eq_top_iff.1 h.2⟩⟩
-
-Depends on / 依赖: Algebra, Algebra.eq_top_iff, adjoin_roots, eq_top_iff, exists_isPrimitiveRoot, h.adjoin_roots, h.exists_isPrimitiveRoot
+--- 原说明 ---
+A reformulation of `IsCyclotomicExtension` that uses `⊤`.
 -/
 theorem iff_adjoin_eq_top :
     IsCyclotomicExtension S A B ↔
-      (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiveRoot r n) ∧
-        adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1} = ⊤ :=
+      (∀ n : ℕ, n ∈ S → n ≠ 0 → ∃ r : B, IsPrimitiveRoot r n) ∧
+        adjoin A {b : B | ∃ n : ℕ, n ∈ S ∧ n ≠ 0 ∧ b ^ n = 1} = ⊤ :=
   ⟨fun h => ⟨fun _ => h.exists_isPrimitiveRoot, Algebra.eq_top_iff.2 h.adjoin_roots⟩, fun h =>
     ⟨h.1 _, Algebra.eq_top_iff.1 h.2⟩⟩
 
-/--
-theorem `iff_singleton` / 定理 `iff_singleton`
+/-- A reformulation of `IsCyclotomicExtension` in the case `S` is a singleton. -/
+/-
+**IsCyclotomicExtension.iff_singleton** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExt
+ension`。
+形式化陈述：iff_singleton : IsCyclotomicExtension {n} A B ↔ (exists r : B, IsPrimitive
+Root r n) ∧ forall x, x in adjoin A {b : B | b ^ n = 1}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem iff_singleton
-  proof: by
-  simp [isCyclotomicExtension_iff, NeZero.ne]
-
-中文:
-定理 iff_singleton
-  证明: by
-  simp [isCyclotomicExtension_iff, NeZero.ne]
-
-Depends on / 依赖: NeZero, NeZero.ne, isCyclotomicExtension_iff
+--- 原说明 ---
+A reformulation of `IsCyclotomicExtension` in the case `S` is a singleton.
 -/
 theorem iff_singleton :
     IsCyclotomicExtension {n} A B ↔
-      (exists r : B, IsPrimitiveRoot r n) ∧ forall x, x in adjoin A {b : B | b ^ n = 1} := by
+      (∃ r : B, IsPrimitiveRoot r n) ∧ ∀ x, x ∈ adjoin A {b : B | b ^ n = 1} := by
   simp [isCyclotomicExtension_iff, NeZero.ne]
-
-/--
-Instance `instSubsingleton` / 实例 `instSubsingleton`
-
-English:
-instance instSubsingleton
-  signature: [h : IsCyclotomicExtension ∅ A B]
-  body: subsingleton_of_bot_eq_top by simpa [Algebra.eq_top_iff, isCyclotomicExtension_iff] using h
-
-中文:
-实例 instSubsingleton
-  签名: [h : 是CyclotomicExtension ∅ A B]
-  定义体: subsingleton_of_bot_eq_top by simpa [Algebra.eq_top_iff, isCyclotomicExtension_iff] using h
-
-Depends on / 依赖: Algebra, Algebra.eq_top_iff, eq_top_iff, isCyclotomicExtension_iff, subsingleton_of_bot_eq_top
+/-
+**IsCyclotomicExtension.instSubsingleton** 是 Mathlib 中的一个实例，位于命名空间 `IsCyclotomic
+Extension`。
+形式化陈述：instSubsingleton [h : IsCyclotomicExtension ∅ A B] : Subsingleton (Subalge
+bra A B)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_of_bot_eq_top`：subsingleton_of_bot_eq_top (hα : (⊥ : α) = (
+⊤ : α)) : Subsingleton α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Algebra.adjoin_empty`：adjoin_empty : adjoin R (∅ : Set A) = ⊥
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 instance instSubsingleton [h : IsCyclotomicExtension ∅ A B] : Subsingleton (Subalgebra A B) :=
-subsingleton_of_bot_eq_top by simpa [Algebra.eq_top_iff, isCyclotomicExtension_iff] using h
-
-/--
-theorem `eq_self_sdiff_zero` / 定理 `eq_self_sdiff_zero`
-
-English:
-theorem eq_self_sdiff_zero
-  proof: by
-  simp [isCyclotomicExtension_iff, and_assoc]
-
-中文:
-定理 eq_self_sdiff_zero
-  证明: by
-  simp [isCyclotomicExtension_iff, and_assoc]
-
-Depends on / 依赖: and_assoc, isCyclotomicExtension_iff
+  subsingleton_of_bot_eq_top <| by simpa [Algebra.eq_top_iff, isCyclotomicExtension_iff] using h
+/-
+**IsCyclotomicExtension.eq_self_sdiff_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotom
+icExtension`。
+形式化陈述：eq_self_sdiff_zero : IsCyclotomicExtension S A B = IsCyclotomicExtension (
+S \ {0}) A B
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_self_sdiff_zero :
     IsCyclotomicExtension S A B = IsCyclotomicExtension (S \ {0}) A B := by
   simp [isCyclotomicExtension_iff, and_assoc]
 
-/--
-theorem `singleton_one` / 定理 `singleton_one`
+/-- If `IsCyclotomicExtension {1} A B`, then the image of `A` in `B` equals `B`. -/
+/-
+**IsCyclotomicExtension.singleton_one** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExt
+ension`。
+形式化陈述：singleton_one [h : IsCyclotomicExtension {1} A B] : (⊥ : Subalgebra A B) =
+ ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.eq_top_iff`：eq_top_iff {S : Subalgebra R A} : S = ⊤ ↔ forall x :
+ A, x in S
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Algebra.adjoin_singleton_one`：adjoin_singleton_one : R[1 : A]= ⊥
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_iff`：∀ (S : Set ℕ) (A : Type u) (B : Type v) [inst
+ : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B],   IsCyclotomicExten
+sion S A B ↔   …
 
-English:
-theorem singleton_one
-  given: [h : IsCyclotomicExtension {1} A B]
-  statement: (⊥ : Subalgebra A B) = ⊤
-  proof: Algebra.eq_top_iff.2 fun x => by
-    simpa [adjoin_singleton_one] using ((isCyclotomicExtension_iff _ _ _).1 h).2 x
-
-中文:
-定理 singleton_one
-  条件: [h : 是CyclotomicExtension {1} A B]
-  结论: (⊥ : 子代数 A B) = ⊤
-  证明: Algebra.eq_top_iff.2 fun x => by
-    simpa [adjoin_singleton_one] using ((isCyclotomicExtension_iff _ _ _).1 h).2 x
-
-Depends on / 依赖: Algebra, Algebra.eq_top_iff, adjoin_singleton_one, eq_top_iff, isCyclotomicExtension_iff
+--- 原说明 ---
+If `IsCyclotomicExtension {1} A B`, then the image of `A` in `B` equals `B`.
 -/
 theorem singleton_one [h : IsCyclotomicExtension {1} A B] : (⊥ : Subalgebra A B) = ⊤ :=
   Algebra.eq_top_iff.2 fun x => by
@@ -209,113 +268,136 @@ theorem singleton_one [h : IsCyclotomicExtension {1} A B] : (⊥ : Subalgebra A 
 
 variable {A B}
 
-/--
-theorem `singleton_zero_of_bot_eq_top` / 定理 `singleton_zero_of_bot_eq_top`
+/-- If `(⊥ : SubAlgebra A B) = ⊤`, then `IsCyclotomicExtension {0} A B`. -/
+/-
+**IsCyclotomicExtension.singleton_zero_of_bot_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `
+IsCyclotomicExtension`。
+形式化陈述：singleton_zero_of_bot_eq_top (h : (⊥ : Subalgebra A B) = ⊤) : IsCyclotomic
+Extension {0} A B
+参数：h : (⊥ : Subalgebra A B) = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Algebra.adjoin_empty`：adjoin_empty : adjoin R (∅ : Set A) = ⊥
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 
-English:
-theorem singleton_zero_of_bot_eq_top
-  given: (h : (⊥ : Subalgebra A B) = ⊤)
-  proof: (iff_adjoin_eq_top _ _ _).2 by simpa
-
-中文:
-定理 singleton_zero_of_bot_eq_top
-  条件: (h : (⊥ : 子代数 A B) = ⊤)
-  证明: (iff_adjoin_eq_top _ _ _).2 by simpa
-
-Depends on / 依赖: iff_adjoin_eq_top
+--- 原说明 ---
+If `(⊥ : SubAlgebra A B) = ⊤`, then `IsCyclotomicExtension {0} A B`.
 -/
 theorem singleton_zero_of_bot_eq_top (h : (⊥ : Subalgebra A B) = ⊤) :
     IsCyclotomicExtension {0} A B :=
-(iff_adjoin_eq_top _ _ _).2 by simpa
-
-/--
-theorem `isCyclotomicExtension_zero_iff` / 定理 `isCyclotomicExtension_zero_iff`
-
-English:
-theorem isCyclotomicExtension_zero_iff
-  proof: by
-  rw [surjective_algebraMap_iff]; rw [eq_comm]
-  refine ⟨?_, fun h => singleton_zero_of_bot_eq_top h⟩
-  rw [eq_self_sdiff_zero]; rw [sdiff_self]; rw [subsingleton_iff_bot_eq_top]
-  exact fun _ => instSubsingleton A B
-
-中文:
-定理 isCyclotomicExtension_zero_iff
-  证明: by
-  rw [surjective_algebraMap_iff]; rw [eq_comm]
-  refine ⟨?_, fun h => singleton_zero_of_bot_eq_top h⟩
-  rw [eq_self_sdiff_zero]; rw [sdiff_self]; rw [subsingleton_iff_bot_eq_top]
-  exact fun _ => instSubsingleton A B
-
-Depends on / 依赖: eq_comm, eq_self_sdiff_zero, instSubsingleton, sdiff_self, singleton_zero_of_bot_eq_top, subsingleton_iff_bot_eq_top, surjective_algebraMap_iff
+  (iff_adjoin_eq_top _ _ _).2 <| by simpa
+/-
+**IsCyclotomicExtension.isCyclotomicExtension_zero_iff** 是 Mathlib 中的一个定理，位于命名空间
+ `IsCyclotomicExtension`。
+形式化陈述：isCyclotomicExtension_zero_iff : IsCyclotomicExtension {0} A B ↔ Function.
+Surjective (algebraMap A B)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.surjective_algebraMap_iff`：surjective_algebraMap_iff : Function.
+Surjective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `IsCyclotomicExtension.eq_self_sdiff_zero`：eq_self_sdiff_zero : IsCycloto
+micExtension S A B = IsCyclotomicExtension (S \ {0}) A B
+· 使用定理 `Set.sdiff_self`：sdiff_self {s : Set α} : s \ s = ∅
+· 使用定理 `subsingleton_iff_bot_eq_top`：subsingleton_iff_bot_eq_top : (⊥ : α) = (⊤ 
+: α) ↔ Subsingleton α
+· 使用定理 `IsCyclotomicExtension.singleton_zero_of_bot_eq_top`：singleton_zero_of_bo
+t_eq_top (h : (⊥ : Subalgebra A B) = ⊤) : IsCyclotomicExtension {0} A B
 -/
 theorem isCyclotomicExtension_zero_iff :
     IsCyclotomicExtension {0} A B ↔ Function.Surjective (algebraMap A B) := by
-  rw [surjective_algebraMap_iff]; rw [eq_comm]
-  refine ⟨?_, fun h => singleton_zero_of_bot_eq_top h⟩
-  rw [eq_self_sdiff_zero]; rw [sdiff_self]; rw [subsingleton_iff_bot_eq_top]
-  exact fun _ => instSubsingleton A B
+  rw [surjective_algebraMap_iff, eq_comm]
+  refine ⟨?_, fun h ↦ singleton_zero_of_bot_eq_top h⟩
+  rw [eq_self_sdiff_zero, sdiff_self, subsingleton_iff_bot_eq_top]
+  exact fun _ ↦ instSubsingleton A B
 
 variable (A B)
 
-/--
-theorem `trans` / 定理 `trans`
+/-- Transitivity of cyclotomic extensions. -/
+/-
+**IsCyclotomicExtension.trans** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+形式化陈述：trans (C : Type w) [CommRing C] [Algebra A C] [Algebra B C] [IsScalarTower
+ A B C] [hS : IsCyclotomicExtension S A B] [hT : IsCyclotomicExtension T B C] (h
+ : Function.Injective (algebraMap B C)) : IsCyclotomicExtension (S union T) A C
+参数：C : Type w；h : Function.Injective (algebraMap B C)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_iff`：∀ (S : Set ℕ) (A : Type u) (B : Type v) [inst
+ : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B],   IsCyclotomicExten
+sion S A B ↔   …
+· 使用定理 `IsPrimitiveRoot.map_of_injective`：map_of_injective [MonoidHomClass F M N
+] (h : IsPrimitiveRoot ζ k) (hf : Injective f) : IsPrimitiveRoot (f ζ) k where p
+ow_eq_one
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Algebra.adjoin_induction`：adjoin_induction {p : (x : A) -> x in adjoin R
+ s -> Prop} (mem : forall (x) (hx : x in s), p x (subset_adjoin hx)) (algebraMap
+ : forall r, p…
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Algebra.adjoin_mono`：adjoin_mono (H : s subseteq t) : adjoin R s <= adjo
+in R t
+· 使用定理 `Set.mem_union_left`：mem_union_left {x : α} {a : Set α} (b : Set α) : x i
+n a -> x in a union b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Algebra.adjoin_image`：adjoin_image (f : A ->ₐ[R] B) (s : Set A) : adjoin
+ R (f '' s) = (adjoin R s).map f
+· 使用定理 `IsScalarTower.toAlgHom_apply`：toAlgHom_apply (y : S) : toAlgHom R S A y 
+= algebraMap S A y
+· 使用定理 `Subalgebra.add_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x y : A}, x
+ ∈ S → y…
+· 使用定理 `Subalgebra.mul_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x y : A}, x
+ ∈ S → y…
 
-English:
-theorem trans
-  statement: (C : Type w) [CommRing C] [Algebra A C] [Algebra B C] [IsScalarTower A B C]
-  proof: by
-  refine ⟨fun hn => ?_, fun x => ?_⟩
-  · intro hn'
-    rcases hn with hn | hn
-    · obtain ⟨b, hb⟩ := ((isCyclotomicExtension_iff _ _ _).1 hS).1 hn hn'
-      refine ⟨algebraMap B C b, ?_⟩
-      exact hb.map_of_injective h
-    · exact ((isCyclotomicExtension_iff _ _ _).1 hT).1 hn hn'
-  · refine adjoin_induction (hx := ((isCyclotomicExtension_iff T B _).1 hT).2 x)
-      (fun c ⟨n, hn⟩ => subset_adjoin ⟨n, Or.inr hn.1, hn.2⟩) (fun b => ?_)
-      (fun x y _ _ hx hy => Subalgebra.add_mem _ hx hy)
-      fun x y _ _ hx hy => Subalgebra.mul_mem _ hx hy
-    let f := IsScalarTower.toAlgHom A B C
-    have hb : f b in (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}).map f :=
-      ⟨b, ((isCyclotomicExtension_iff _ _ _).1 hS).2 b, rfl⟩
-    rw [IsScalarTower.toAlgHom_apply]; rw [← adjoin_image] at hb
-    refine adjoin_mono (fun y hy => ?_) hb
-    obtain ⟨b₁, ⟨⟨n, hn⟩, h₁⟩⟩ := hy
-    exact ⟨n, ⟨mem_union_left T hn.1, hn.2.1, by rw [← h₁, ← map_pow, hn.2.2, map_one]⟩⟩
-
-@[nontriviality]
-
-中文:
-定理 trans
-  结论: (C : 类型 w) [交换环 C] [代数 A C] [代数 B C] [标量塔 A B C]
-  证明: by
-  refine ⟨fun hn => ?_, fun x => ?_⟩
-  · intro hn'
-    rcases hn with hn | hn
-    · obtain ⟨b, hb⟩ := ((isCyclotomicExtension_iff _ _ _).1 hS).1 hn hn'
-      refine ⟨algebraMap B C b, ?_⟩
-      exact hb.map_of_injective h
-    · exact ((isCyclotomicExtension_iff _ _ _).1 hT).1 hn hn'
-  · refine adjoin_induction (hx := ((isCyclotomicExtension_iff T B _).1 hT).2 x)
-      (fun c ⟨n, hn⟩ => subset_adjoin ⟨n, Or.inr hn.1, hn.2⟩) (fun b => ?_)
-      (fun x y _ _ hx hy => Subalgebra.add_mem _ hx hy)
-      fun x y _ _ hx hy => Subalgebra.mul_mem _ hx hy
-    let f := IsScalarTower.toAlgHom A B C
-    have hb : f b in (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}).map f :=
-      ⟨b, ((isCyclotomicExtension_iff _ _ _).1 hS).2 b, rfl⟩
-    rw [IsScalarTower.toAlgHom_apply]; rw [← adjoin_image] at hb
-    refine adjoin_mono (fun y hy => ?_) hb
-    obtain ⟨b₁, ⟨⟨n, hn⟩, h₁⟩⟩ := hy
-    exact ⟨n, ⟨mem_union_left T hn.1, hn.2.1, by rw [← h₁, ← map_pow, hn.2.2, map_one]⟩⟩
-
-@[nontriviality]
-
-Depends on / 依赖: Or.inr, Subalgebra, Subalgebra.add_mem, Subalgebra.mul_mem, add_mem, adjoin_induction, algebraMap, hb.map_of_injective, isCyclotomicExtension_iff, map_of_injective, mul_mem, subset_adjoin
+--- 原说明 ---
+Transitivity of cyclotomic extensions.
 -/
 theorem trans (C : Type w) [CommRing C] [Algebra A C] [Algebra B C] [IsScalarTower A B C]
     [hS : IsCyclotomicExtension S A B] [hT : IsCyclotomicExtension T B C]
-    (h : Function.Injective (algebraMap B C)) : IsCyclotomicExtension (S union T) A C := by
+    (h : Function.Injective (algebraMap B C)) : IsCyclotomicExtension (S ∪ T) A C := by
   refine ⟨fun hn => ?_, fun x => ?_⟩
   · intro hn'
     rcases hn with hn | hn
@@ -328,102 +410,89 @@ theorem trans (C : Type w) [CommRing C] [Algebra A C] [Algebra B C] [IsScalarTow
       (fun x y _ _ hx hy => Subalgebra.add_mem _ hx hy)
       fun x y _ _ hx hy => Subalgebra.mul_mem _ hx hy
     let f := IsScalarTower.toAlgHom A B C
-    have hb : f b in (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}).map f :=
+    have hb : f b ∈ (adjoin A {b : B | ∃ a : ℕ, a ∈ S ∧ a ≠ 0 ∧ b ^ a = 1}).map f :=
       ⟨b, ((isCyclotomicExtension_iff _ _ _).1 hS).2 b, rfl⟩
-    rw [IsScalarTower.toAlgHom_apply]; rw [← adjoin_image] at hb
+    rw [IsScalarTower.toAlgHom_apply, ← adjoin_image] at hb
     refine adjoin_mono (fun y hy => ?_) hb
     obtain ⟨b₁, ⟨⟨n, hn⟩, h₁⟩⟩ := hy
     exact ⟨n, ⟨mem_union_left T hn.1, hn.2.1, by rw [← h₁, ← map_pow, hn.2.2, map_one]⟩⟩
 
 @[nontriviality]
-/--
-theorem `subsingleton_iff` / 定理 `subsingleton_iff`
-
-English:
-theorem subsingleton_iff
-  given: [Subsingleton B]
-  proof: by
-  have : Subsingleton (Subalgebra A B) := inferInstance
-  refine ⟨fun ⟨hprim, _⟩ => ?_, fun hS => ?_⟩
-  · refine subset_pair_iff.mpr fun s hs => or_iff_not_imp_left.mpr fun hs' => ?_
-    obtain ⟨ζ, hζ⟩ := hprim hs hs'
-    exact mod_cast hζ.unique (IsPrimitiveRoot.of_subsingleton ζ)
-  · refine ⟨fun {s} hs hs' => ?_, fun x => by convert! (mem_top (R := A) : x in ⊤)⟩
-    · have : s = 1 := (subset_pair_iff.mp hS s hs).resolve_left hs'
-      exact ⟨0, this ▸ IsPrimitiveRoot.of_subsingleton 0⟩
-
-中文:
-定理 subsingleton_iff
-  条件: [子单例 B]
-  证明: by
-  have : Subsingleton (Subalgebra A B) := inferInstance
-  refine ⟨fun ⟨hprim, _⟩ => ?_, fun hS => ?_⟩
-  · refine subset_pair_iff.mpr fun s hs => or_iff_not_imp_left.mpr fun hs' => ?_
-    obtain ⟨ζ, hζ⟩ := hprim hs hs'
-    exact mod_cast hζ.unique (IsPrimitiveRoot.of_subsingleton ζ)
-  · refine ⟨fun {s} hs hs' => ?_, fun x => by convert! (mem_top (R := A) : x in ⊤)⟩
-    · have : s = 1 := (subset_pair_iff.mp hS s hs).resolve_left hs'
-      exact ⟨0, this ▸ IsPrimitiveRoot.of_subsingleton 0⟩
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.of_subsingleton, Subalgebra, Subsingleton, convert, mem_top, mod_cast, of_subsingleton, or_iff_not_imp_left, or_iff_not_imp_left.mpr, resolve_left, subset_pair_iff, subset_pair_iff.mp, subset_pair_iff.mpr, unique
+/-
+**IsCyclotomicExtension.subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomic
+Extension`。
+形式化陈述：subsingleton_iff [Subsingleton B] : IsCyclotomicExtension S A B ↔ S subset
+eq {0, 1}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.subset_pair_iff`：subset_pair_iff : s subseteq {a, b} ↔ forall x in s
+, x = a ∨ x = b
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `IsPrimitiveRoot.unique`：unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : 
+IsPrimitiveRoot ζ l) : k = l
+· 使用定理 `IsPrimitiveRoot.of_subsingleton`：of_subsingleton [Subsingleton M] (x : M
+) : IsPrimitiveRoot x 1
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Algebra.mem_top`：mem_top {x : A} : x in (⊤ : Subalgebra R A)
 -/
 theorem subsingleton_iff [Subsingleton B] :
-    IsCyclotomicExtension S A B ↔ S subseteq {0, 1} := by
+    IsCyclotomicExtension S A B ↔ S ⊆ {0, 1} := by
   have : Subsingleton (Subalgebra A B) := inferInstance
-  refine ⟨fun ⟨hprim, _⟩ => ?_, fun hS => ?_⟩
-  · refine subset_pair_iff.mpr fun s hs => or_iff_not_imp_left.mpr fun hs' => ?_
+  refine ⟨fun ⟨hprim, _⟩ ↦ ?_, fun hS ↦ ?_⟩
+  · refine subset_pair_iff.mpr fun s hs ↦ or_iff_not_imp_left.mpr fun hs' ↦ ?_
     obtain ⟨ζ, hζ⟩ := hprim hs hs'
     exact mod_cast hζ.unique (IsPrimitiveRoot.of_subsingleton ζ)
-  · refine ⟨fun {s} hs hs' => ?_, fun x => by convert! (mem_top (R := A) : x in ⊤)⟩
+  · refine ⟨fun {s} hs hs' ↦ ?_, fun x ↦ by convert! (mem_top (R := A) : x ∈ ⊤)⟩
     · have : s = 1 := (subset_pair_iff.mp hS s hs).resolve_left hs'
       exact ⟨0, this ▸ IsPrimitiveRoot.of_subsingleton 0⟩
 
-/--
-theorem `union_right` / 定理 `union_right`
+/-- If `B` is a cyclotomic extension of `A` given by roots of unity of order in `S ∪ T`, then `B`
+is a cyclotomic extension of `adjoin A { b : B | ∃ a : ℕ, a ∈ S ∧ a ≠ 0 ∧ b ^ a = 1 }` given by
+roots of unity of order in `T`. -/
+/-
+**IsCyclotomicExtension.union_right** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExten
+sion`。
+形式化陈述：union_right [h : IsCyclotomicExtension (S union T) A B] : IsCyclotomicExte
+nsion T (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}) B
+参数：S union T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_iff`：∀ (S : Set ℕ) (A : Type u) (B : Type v) [inst
+ : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B],   IsCyclotomicExten
+sion S A B ↔   …
+· 使用定理 `Set.mem_union_right`：mem_union_right {x : α} {b : Set α} (a : Set α) : x
+ in b -> x in a union b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subalgebra.mem_restrictScalars`：mem_restrictScalars {U : Subalgebra S A}
+ {x : A} : x in restrictScalars R U ↔ x in U
+· 使用定理 `Algebra.adjoin_union_eq_adjoin_adjoin`：adjoin_union_eq_adjoin_adjoin : a
+djoin R (s union t) = (adjoin (adjoin R s) t).restrictScalars R
 
-English:
-theorem union_right
-  given: [h : IsCyclotomicExtension (S union T) A B]
-  proof: by
-  have : {b : B | exists n : Nat, n in S union T ∧ n != 0 ∧ b ^ n = 1} =
-      {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1} union
-        {b : B | exists n : Nat, n in T ∧ n != 0 ∧ b ^ n = 1} := by
-    refine le_antisymm ?_ ?_
-    · rintro x ⟨n, hn₁ | hn₂, hnpow⟩
-      · left; exact ⟨n, hn₁, hnpow⟩
-      · right; exact ⟨n, hn₂, hnpow⟩
-    · rintro x (⟨n, hn⟩ | ⟨n, hn⟩)
-      · exact ⟨n, Or.inl hn.1, hn.2⟩
-      · exact ⟨n, Or.inr hn.1, hn.2⟩
-  refine ⟨fun hn => ((isCyclotomicExtension_iff _ A _).1 h).1 (mem_union_right S hn), fun b => ?_⟩
-  replace h := ((isCyclotomicExtension_iff _ _ _).1 h).2 b
-  rwa [this, adjoin_union_eq_adjoin_adjoin, Subalgebra.mem_restrictScalars] at h
-
-中文:
-定理 union_right
-  条件: [h : 是CyclotomicExtension (S union T) A B]
-  证明: by
-  have : {b : B | exists n : Nat, n in S union T ∧ n != 0 ∧ b ^ n = 1} =
-      {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1} union
-        {b : B | exists n : Nat, n in T ∧ n != 0 ∧ b ^ n = 1} := by
-    refine le_antisymm ?_ ?_
-    · rintro x ⟨n, hn₁ | hn₂, hnpow⟩
-      · left; exact ⟨n, hn₁, hnpow⟩
-      · right; exact ⟨n, hn₂, hnpow⟩
-    · rintro x (⟨n, hn⟩ | ⟨n, hn⟩)
-      · exact ⟨n, Or.inl hn.1, hn.2⟩
-      · exact ⟨n, Or.inr hn.1, hn.2⟩
-  refine ⟨fun hn => ((isCyclotomicExtension_iff _ A _).1 h).1 (mem_union_right S hn), fun b => ?_⟩
-  replace h := ((isCyclotomicExtension_iff _ _ _).1 h).2 b
-  rwa [this, adjoin_union_eq_adjoin_adjoin, Subalgebra.mem_restrictScalars] at h
-
-Depends on / 依赖: Or.inl, Or.inr, isCyclotomicExtension_iff, le_antisymm, mem_union_right
+--- 原说明 ---
+If `B` is a cyclotomic extension of `A` given by roots of unity of order in `S ∪
+ T`, then `B`
+is a cyclotomic extension of `adjoin A { b : B | ∃ a : ℕ, a ∈ S ∧ a ≠ 0 ∧ b ^ a 
+= 1 }` given by
+roots of unity of order in `T`.
 -/
-theorem union_right [h : IsCyclotomicExtension (S union T) A B] :
-    IsCyclotomicExtension T (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}) B := by
-  have : {b : B | exists n : Nat, n in S union T ∧ n != 0 ∧ b ^ n = 1} =
-      {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1} union
-        {b : B | exists n : Nat, n in T ∧ n != 0 ∧ b ^ n = 1} := by
+theorem union_right [h : IsCyclotomicExtension (S ∪ T) A B] :
+    IsCyclotomicExtension T (adjoin A {b : B | ∃ a : ℕ, a ∈ S ∧ a ≠ 0 ∧ b ^ a = 1}) B := by
+  have : {b : B | ∃ n : ℕ, n ∈ S ∪ T ∧ n ≠ 0 ∧ b ^ n = 1} =
+      {b : B | ∃ n : ℕ, n ∈ S ∧ n ≠ 0 ∧ b ^ n = 1} ∪
+        {b : B | ∃ n : ℕ, n ∈ T ∧ n ≠ 0 ∧ b ^ n = 1} := by
     refine le_antisymm ?_ ?_
     · rintro x ⟨n, hn₁ | hn₂, hnpow⟩
       · left; exact ⟨n, hn₁, hnpow⟩
@@ -435,87 +504,128 @@ theorem union_right [h : IsCyclotomicExtension (S union T) A B] :
   replace h := ((isCyclotomicExtension_iff _ _ _).1 h).2 b
   rwa [this, adjoin_union_eq_adjoin_adjoin, Subalgebra.mem_restrictScalars] at h
 
-/--
-theorem `union_left` / 定理 `union_left`
+/-- If `B` is a cyclotomic extension of `A` given by roots of unity of order in `T` and `S ⊆ T`,
+then `adjoin A { b : B | ∃ a : ℕ, a ∈ S ∧ a ≠ 0 ∧ b ^ a = 1 }` is a cyclotomic extension of `B`
+given by roots of unity of order in `S`. -/
+/-
+**IsCyclotomicExtension.union_left** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtens
+ion`。
+形式化陈述：union_left [h : IsCyclotomicExtension T A B] (hS : S subseteq T) : IsCyclo
+tomicExtension S A (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 
+1})
+参数：hS : S subseteq T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_iff`：∀ (S : Set ℕ) (A : Type u) (B : Type v) [inst
+ : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B],   IsCyclotomicExten
+sion S A B ↔   …
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPrimitiveRoot.coe_submonoidClass_iff`：coe_submonoidClass_iff {M B : Ty
+pe*} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] {N : B} {ζ : N} : IsPrimi
+tiveRoot (ζ : M) k ↔ IsPrimi…
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Algebra.adjoin_adjoin_coe_preimage`：adjoin_adjoin_coe_preimage {s : Set 
+A} : adjoin R (((↑) : adjoin R s -> A) ⁻¹' s) = ⊤
+· 使用定理 `Set.preimage_ofPred_eq`：preimage_ofPred_eq {p : α -> Prop} {f : β -> α} 
+: f ⁻¹' { a | p a } = { a | p (f a) }
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Algebra.mem_top`：mem_top {x : A} : x in (⊤ : Subalgebra R A)
 
-English:
-theorem union_left
-  given: [h : IsCyclotomicExtension T A B] (hS : S subseteq T)
-  proof: by
-  refine ⟨fun {n} hn hn' => ?_, fun b => ?_⟩
-  · obtain ⟨b, hb⟩ := ((isCyclotomicExtension_iff _ _ _).1 h).1 (hS hn) hn'
-    refine ⟨⟨b, subset_adjoin ⟨n, hn, hn', hb.pow_eq_one⟩⟩, ?_⟩
-    rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
-  · convert! mem_top (R := A) (x := b)
-    rw [← adjoin_adjoin_coe_preimage]; rw [preimage_ofPred_eq]
-    norm_cast
-
-中文:
-定理 union_left
-  条件: [h : 是CyclotomicExtension T A B] (hS : S subseteq T)
-  证明: by
-  refine ⟨fun {n} hn hn' => ?_, fun b => ?_⟩
-  · obtain ⟨b, hb⟩ := ((isCyclotomicExtension_iff _ _ _).1 h).1 (hS hn) hn'
-    refine ⟨⟨b, subset_adjoin ⟨n, hn, hn', hb.pow_eq_one⟩⟩, ?_⟩
-    rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
-  · convert! mem_top (R := A) (x := b)
-    rw [← adjoin_adjoin_coe_preimage]; rw [preimage_ofPred_eq]
-    norm_cast
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff, Subtype, Subtype.coe_mk, adjoin_adjoin_coe_preimage, coe_mk, coe_submonoidClass_iff, convert, hb.pow_eq_one, isCyclotomicExtension_iff, mem_top, pow_eq_one, preimage_ofPred_eq, subset_adjoin
+--- 原说明 ---
+If `B` is a cyclotomic extension of `A` given by roots of unity of order in `T` 
+and `S ⊆ T`,
+then `adjoin A { b : B | ∃ a : ℕ, a ∈ S ∧ a ≠ 0 ∧ b ^ a = 1 }` is a cyclotomic e
+xtension of `B`
+given by roots of unity of order in `S`.
 -/
-theorem union_left [h : IsCyclotomicExtension T A B] (hS : S subseteq T) :
-    IsCyclotomicExtension S A (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}) := by
+theorem union_left [h : IsCyclotomicExtension T A B] (hS : S ⊆ T) :
+    IsCyclotomicExtension S A (adjoin A {b : B | ∃ a : ℕ, a ∈ S ∧ a ≠ 0 ∧ b ^ a = 1}) := by
   refine ⟨fun {n} hn hn' => ?_, fun b => ?_⟩
   · obtain ⟨b, hb⟩ := ((isCyclotomicExtension_iff _ _ _).1 h).1 (hS hn) hn'
     refine ⟨⟨b, subset_adjoin ⟨n, hn, hn', hb.pow_eq_one⟩⟩, ?_⟩
     rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
   · convert! mem_top (R := A) (x := b)
-    rw [← adjoin_adjoin_coe_preimage]; rw [preimage_ofPred_eq]
+    rw [← adjoin_adjoin_coe_preimage, preimage_ofPred_eq]
     norm_cast
 
 variable {n}
 
-/--
-theorem `union_of_isPrimitiveRoot` / 定理 `union_of_isPrimitiveRoot`
+/-- If there exists a primitive root of unity of order `n` in `B`, then
+`IsCyclotomicExtension S A B` implies `IsCyclotomicExtension (S ∪ {n}) A B`. -/
+/-
+**IsCyclotomicExtension.union_of_isPrimitiveRoot** 是 Mathlib 中的一个定理，位于命名空间 `IsCy
+clotomicExtension`。
+形式化陈述：union_of_isPrimitiveRoot [hB : IsCyclotomicExtension S A B] {r : B} (hr : 
+IsPrimitiveRoot r n) : IsCyclotomicExtension (S union {n}) A B
+参数：hr : IsPrimitiveRoot r n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCyclotomicExtension.eq_self_sdiff_zero`：eq_self_sdiff_zero : IsCycloto
+micExtension S A B = IsCyclotomicExtension (S \ {0}) A B
+· 使用定理 `Set.union_sdiff_right`：union_sdiff_right {s t : Set α} : (s union t) \ t
+ = s \ t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.adjoin_mono`：adjoin_mono (H : s subseteq t) : adjoin R s <= adjo
+in R t
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem union_of_isPrimitiveRoot
-  statement: [hB : IsCyclotomicExtension S A B] {r : B}
-  proof: by
-  by_cases hn : n = 0
-  · rwa [hn, eq_self_sdiff_zero, Set.union_sdiff_right, ← eq_self_sdiff_zero]
-  rw [iff_adjoin_eq_top]
-  refine ⟨fun m hm₁ hm₂ => ?_, le_antisymm (by simp) ?_⟩
-  · obtain hm₁ | rfl := hm₁
-    · exact exists_isPrimitiveRoot A B hm₁ hm₂
-    · use r
-  · rw [← ((iff_adjoin_eq_top _ _ _).mp hB).2]
-    exact Algebra.adjoin_mono (by aesop)
-
-中文:
-定理 union_of_isPrimitiveRoot
-  结论: [hB : 是CyclotomicExtension S A B] {r : B}
-  证明: by
-  by_cases hn : n = 0
-  · rwa [hn, eq_self_sdiff_zero, Set.union_sdiff_right, ← eq_self_sdiff_zero]
-  rw [iff_adjoin_eq_top]
-  refine ⟨fun m hm₁ hm₂ => ?_, le_antisymm (by simp) ?_⟩
-  · obtain hm₁ | rfl := hm₁
-    · exact exists_isPrimitiveRoot A B hm₁ hm₂
-    · use r
-  · rw [← ((iff_adjoin_eq_top _ _ _).mp hB).2]
-    exact Algebra.adjoin_mono (by aesop)
-
-Depends on / 依赖: Algebra, Algebra.adjoin_mono, Set.union_sdiff_right, adjoin_mono, eq_self_sdiff_zero, exists_isPrimitiveRoot, iff_adjoin_eq_top, le_antisymm, union_sdiff_right
+--- 原说明 ---
+If there exists a primitive root of unity of order `n` in `B`, then
+`IsCyclotomicExtension S A B` implies `IsCyclotomicExtension (S ∪ {n}) A B`.
 -/
 theorem union_of_isPrimitiveRoot [hB : IsCyclotomicExtension S A B] {r : B}
     (hr : IsPrimitiveRoot r n) :
-    IsCyclotomicExtension (S union {n}) A B := by
+    IsCyclotomicExtension (S ∪ {n}) A B := by
   by_cases hn : n = 0
   · rwa [hn, eq_self_sdiff_zero, Set.union_sdiff_right, ← eq_self_sdiff_zero]
   rw [iff_adjoin_eq_top]
-  refine ⟨fun m hm₁ hm₂ => ?_, le_antisymm (by simp) ?_⟩
+  refine ⟨fun m hm₁ hm₂ ↦ ?_, le_antisymm (by simp) ?_⟩
   · obtain hm₁ | rfl := hm₁
     · exact exists_isPrimitiveRoot A B hm₁ hm₂
     · use r
@@ -524,114 +634,124 @@ theorem union_of_isPrimitiveRoot [hB : IsCyclotomicExtension S A B] {r : B}
 
 variable {S}
 
-/--
-theorem `of_union_of_dvd` / 定理 `of_union_of_dvd`
+/-- If there exists a nonzero `s ∈ S` such that `n ∣ s`, then `IsCyclotomicExtension S A B`
+implies `IsCyclotomicExtension (S ∪ {n}) A B`. -/
+/-
+**IsCyclotomicExtension.of_union_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicE
+xtension`。
+形式化陈述：of_union_of_dvd (h : exists s in S, s != 0 ∧ n ∣ s) [H : IsCyclotomicExten
+sion S A B] : IsCyclotomicExtension (S union {n}) A B
+参数：h : exists s in S, s != 0 ∧ n ∣ s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Set.mem_union`：mem_union (x : α) (a b : Set α) : x in a union b ↔ x in a
+ ∨ x in b
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `Nat.ne_zero_of_mul_ne_zero_right`：∀ {n m : ℕ}, n * m ≠ 0 → m ≠ 0
+· 使用定理 `IsPrimitiveRoot.pow_of_dvd`：pow_of_dvd (h : IsPrimitiveRoot ζ k) {p : Na
+t} (hp : p != 0) (hdiv : p ∣ k) : IsPrimitiveRoot (ζ ^ p) (k / p)
+· 使用定理 `dvd_mul_left`：dvd_mul_left (a b : α) : a ∣ b * a
+· 使用定理 `mul_div_cancel_right₀`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀] [ins
+t_1 : Div M₀] [MulDivCancelClass M₀] (a : M₀) {b : M₀},   b ≠ 0 → a * b / b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.adjoin_mono`：adjoin_mono (H : s subseteq t) : adjoin R s <= adjo
+in R t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
 
-English:
-theorem of_union_of_dvd
-  given: (h : exists s in S, s != 0 ∧ n ∣ s) [H : IsCyclotomicExtension S A B]
-  proof: by
-  refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs hs' => ?_, ?_⟩
-  · rw [mem_union, mem_singleton_iff] at hs
-    obtain hs | rfl := hs
-    · exact H.exists_isPrimitiveRoot hs hs'
-    · obtain ⟨m, hm, hm', ⟨x, rfl⟩⟩ := h
-      obtain ⟨ζ, hζ⟩ := H.exists_isPrimitiveRoot hm hm'
-      refine ⟨ζ ^ x, ?_⟩
-      have h_xnz : x != 0 := Nat.ne_zero_of_mul_ne_zero_right hm'
-      have := hζ.pow_of_dvd h_xnz (dvd_mul_left x s)
-      rwa [mul_div_cancel_right₀ _ h_xnz] at this
-  · refine _root_.eq_top_iff.2 ?_
-    rw [← ((iff_adjoin_eq_top S A B).1 H).2]
-    refine adjoin_mono fun x hx => ?_
-    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
-    obtain ⟨m, hm, hm'⟩ := hx
-    exact ⟨m, ⟨Or.inr hm, hm'⟩⟩
-
-中文:
-定理 of_union_of_dvd
-  条件: (h : 存在 s in S, s != 0 ∧ n ∣ s) [H : 是CyclotomicExtension S A B]
-  证明: by
-  refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs hs' => ?_, ?_⟩
-  · rw [mem_union, mem_singleton_iff] at hs
-    obtain hs | rfl := hs
-    · exact H.exists_isPrimitiveRoot hs hs'
-    · obtain ⟨m, hm, hm', ⟨x, rfl⟩⟩ := h
-      obtain ⟨ζ, hζ⟩ := H.exists_isPrimitiveRoot hm hm'
-      refine ⟨ζ ^ x, ?_⟩
-      have h_xnz : x != 0 := Nat.ne_zero_of_mul_ne_zero_right hm'
-      have := hζ.pow_of_dvd h_xnz (dvd_mul_left x s)
-      rwa [mul_div_cancel_right₀ _ h_xnz] at this
-  · refine _root_.eq_top_iff.2 ?_
-    rw [← ((iff_adjoin_eq_top S A B).1 H).2]
-    refine adjoin_mono fun x hx => ?_
-    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
-    obtain ⟨m, hm, hm'⟩ := hx
-    exact ⟨m, ⟨Or.inr hm, hm'⟩⟩
-
-Depends on / 依赖: H.exists_isPrimitiveRoot, Nat.ne_zero_of_mul_ne_zero_right, _root_, _root_.eq_top_iff, dvd_mul_left, eq_top_iff, exists_isPrimitiveRoot, h_xnz, iff_adjoin_eq_top, mem_singleton_iff, mem_union, ne_zero_of_mul_ne_zero_right, pow_of_dvd
+--- 原说明 ---
+If there exists a nonzero `s ∈ S` such that `n ∣ s`, then `IsCyclotomicExtension
+ S A B`
+implies `IsCyclotomicExtension (S ∪ {n}) A B`.
 -/
-theorem of_union_of_dvd (h : exists s in S, s != 0 ∧ n ∣ s) [H : IsCyclotomicExtension S A B] :
-    IsCyclotomicExtension (S union {n}) A B := by
-  refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs hs' => ?_, ?_⟩
+theorem of_union_of_dvd (h : ∃ s ∈ S, s ≠ 0 ∧ n ∣ s) [H : IsCyclotomicExtension S A B] :
+    IsCyclotomicExtension (S ∪ {n}) A B := by
+  refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs hs' ↦ ?_, ?_⟩
   · rw [mem_union, mem_singleton_iff] at hs
     obtain hs | rfl := hs
     · exact H.exists_isPrimitiveRoot hs hs'
     · obtain ⟨m, hm, hm', ⟨x, rfl⟩⟩ := h
       obtain ⟨ζ, hζ⟩ := H.exists_isPrimitiveRoot hm hm'
       refine ⟨ζ ^ x, ?_⟩
-      have h_xnz : x != 0 := Nat.ne_zero_of_mul_ne_zero_right hm'
+      have h_xnz : x ≠ 0 := Nat.ne_zero_of_mul_ne_zero_right hm'
       have := hζ.pow_of_dvd h_xnz (dvd_mul_left x s)
       rwa [mul_div_cancel_right₀ _ h_xnz] at this
   · refine _root_.eq_top_iff.2 ?_
     rw [← ((iff_adjoin_eq_top S A B).1 H).2]
-    refine adjoin_mono fun x hx => ?_
+    refine adjoin_mono fun x hx ↦ ?_
     simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
     obtain ⟨m, hm, hm'⟩ := hx
     exact ⟨m, ⟨Or.inr hm, hm'⟩⟩
 
-/--
-theorem `iff_union_of_dvd` / 定理 `iff_union_of_dvd`
+/-- If there exists a nonzero `s ∈ S` such that `n ∣ s`, then `IsCyclotomicExtension S A B`
+  if and only if `IsCyclotomicExtension (S ∪ {n}) A B`. -/
+/-
+**IsCyclotomicExtension.iff_union_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomic
+Extension`。
+形式化陈述：iff_union_of_dvd (h : exists s in S, s != 0 ∧ n ∣ s) : IsCyclotomicExtensi
+on S A B ↔ IsCyclotomicExtension (S union {n}) A B
+参数：h : exists s in S, s != 0 ∧ n ∣ s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.of_union_of_dvd`：of_union_of_dvd (h : exists s in 
+S, s != 0 ∧ n ∣ s) [H : IsCyclotomicExtension S A B] : IsCyclotomicExtension (S 
+union {n}) A B
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.adjoin_mono`：adjoin_mono (H : s subseteq t) : adjoin R s <= adjo
+in R t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem iff_union_of_dvd
-  given: (h : exists s in S, s != 0 ∧ n ∣ s)
-  proof: by
-  refine
-    ⟨fun H => of_union_of_dvd A B h, fun H => (iff_adjoin_eq_top _ A _).2
-      ⟨fun s hs => ?_, ?_⟩⟩
-  · exact H.exists_isPrimitiveRoot (subset_union_left hs)
-  · rw [_root_.eq_top_iff, ← ((iff_adjoin_eq_top _ A B).1 H).2]
-    refine adjoin_mono fun x hx => ?_
-    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
-    obtain ⟨m, rfl | hm, hxpow⟩ := hx
-    · obtain ⟨y, ⟨hy, hy', ⟨z, rfl⟩⟩⟩ := h
-      exact ⟨_, ⟨hy, hy', by simp only [pow_mul, hxpow, one_pow]⟩⟩
-    · exact ⟨m, ⟨hm, hxpow⟩⟩
-
-中文:
-定理 iff_union_of_dvd
-  条件: (h : 存在 s in S, s != 0 ∧ n ∣ s)
-  证明: by
-  refine
-    ⟨fun H => of_union_of_dvd A B h, fun H => (iff_adjoin_eq_top _ A _).2
-      ⟨fun s hs => ?_, ?_⟩⟩
-  · exact H.exists_isPrimitiveRoot (subset_union_left hs)
-  · rw [_root_.eq_top_iff, ← ((iff_adjoin_eq_top _ A B).1 H).2]
-    refine adjoin_mono fun x hx => ?_
-    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
-    obtain ⟨m, rfl | hm, hxpow⟩ := hx
-    · obtain ⟨y, ⟨hy, hy', ⟨z, rfl⟩⟩⟩ := h
-      exact ⟨_, ⟨hy, hy', by simp only [pow_mul, hxpow, one_pow]⟩⟩
-    · exact ⟨m, ⟨hm, hxpow⟩⟩
-
-Depends on / 依赖: H.exists_isPrimitiveRoot, _root_, _root_.eq_top_iff, adjoin_mono, eq_top_iff, exists_isPrimitiveRoot, iff_adjoin_eq_top, mem_insert_iff, mem_ofPred_eq, of_union_of_dvd, one_pow, pow_mul, subset_union_left, union_singleton
+--- 原说明 ---
+If there exists a nonzero `s ∈ S` such that `n ∣ s`, then `IsCyclotomicExtension
+ S A B`
+  if and only if `IsCyclotomicExtension (S ∪ {n}) A B`.
 -/
-theorem iff_union_of_dvd (h : exists s in S, s != 0 ∧ n ∣ s) :
-    IsCyclotomicExtension S A B ↔ IsCyclotomicExtension (S union {n}) A B := by
+theorem iff_union_of_dvd (h : ∃ s ∈ S, s ≠ 0 ∧ n ∣ s) :
+    IsCyclotomicExtension S A B ↔ IsCyclotomicExtension (S ∪ {n}) A B := by
   refine
-    ⟨fun H => of_union_of_dvd A B h, fun H => (iff_adjoin_eq_top _ A _).2
-      ⟨fun s hs => ?_, ?_⟩⟩
+    ⟨fun H ↦ of_union_of_dvd A B h, fun H => (iff_adjoin_eq_top _ A _).2
+      ⟨fun s hs ↦ ?_, ?_⟩⟩
   · exact H.exists_isPrimitiveRoot (subset_union_left hs)
   · rw [_root_.eq_top_iff, ← ((iff_adjoin_eq_top _ A B).1 H).2]
     refine adjoin_mono fun x hx => ?_
@@ -643,71 +763,112 @@ theorem iff_union_of_dvd (h : exists s in S, s != 0 ∧ n ∣ s) :
 
 variable (n S)
 
-/--
-theorem `iff_union_singleton_one` / 定理 `iff_union_singleton_one`
+/-- `IsCyclotomicExtension S A B` is equivalent to `IsCyclotomicExtension (S ∪ {1}) A B`. -/
+/-
+**IsCyclotomicExtension.iff_union_singleton_one** 是 Mathlib 中的一个定理，位于命名空间 `IsCyc
+lotomicExtension`。
+形式化陈述：iff_union_singleton_one : IsCyclotomicExtension S A B ↔ IsCyclotomicExtens
+ion (S union {1}) A B
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.iff_union_of_dvd`：iff_union_of_dvd (h : exists s i
+n S, s != 0 ∧ n ∣ s) : IsCyclotomicExtension S A B ↔ IsCyclotomicExtension (S un
+ion {n}) A B
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `IsCyclotomicExtension.eq_self_sdiff_zero`：eq_self_sdiff_zero : IsCycloto
+micExtension S A B = IsCyclotomicExtension (S \ {0}) A B
+· 使用定理 `Set.union_sdiff_distrib`：union_sdiff_distrib {s t u : Set α} : (s union 
+t) \ u = s \ u union t \ u
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Set.empty_union`：empty_union (a : Set α) : ∅ union a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Set.sdiff_singleton_eq_self`：sdiff_singleton_eq_self (h : a ∉ s) : s \ {
+a} = s
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Algebra.adjoin_singleton_one`：adjoin_singleton_one : R[1 : A]= ⊥
+· 使用定理 `subsingleton_iff_bot_eq_top`：subsingleton_iff_bot_eq_top : (⊥ : α) = (⊤ 
+: α) ↔ Subsingleton α
+· 使用定理 `Set.notMem_empty`：notMem_empty (x : α) : x ∉ (∅ : Set α)
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+（共 33 条，此处仅展示前 30 条）
 
-English:
-theorem iff_union_singleton_one
-  proof: by
-  by_cases hS : exists s in S, s != 0
-  · exact iff_union_of_dvd _ _ (by simpa)
-  · rw [eq_self_sdiff_zero S, eq_self_sdiff_zero (S union {1}), union_sdiff_distrib,
-      show S \ {0} = ∅ by aesop, empty_union, show {1} \ {0} = {1} by simp]
-    refine ⟨fun H => ?_, fun H => ?_⟩
-    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs _ => ⟨1, by simp [mem_singleton_iff.1 hs]⟩, ?_⟩
-      simpa [adjoin_singleton_one] using subsingleton_iff_bot_eq_top.mpr inferInstance
-    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs => (notMem_empty s hs).elim, ?_⟩
-      simp [singleton_one]
-
-中文:
-定理 iff_union_singleton_one
-  证明: by
-  by_cases hS : exists s in S, s != 0
-  · exact iff_union_of_dvd _ _ (by simpa)
-  · rw [eq_self_sdiff_zero S, eq_self_sdiff_zero (S union {1}), union_sdiff_distrib,
-      show S \ {0} = ∅ by aesop, empty_union, show {1} \ {0} = {1} by simp]
-    refine ⟨fun H => ?_, fun H => ?_⟩
-    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs _ => ⟨1, by simp [mem_singleton_iff.1 hs]⟩, ?_⟩
-      simpa [adjoin_singleton_one] using subsingleton_iff_bot_eq_top.mpr inferInstance
-    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs => (notMem_empty s hs).elim, ?_⟩
-      simp [singleton_one]
-
-Depends on / 依赖: adjoin_singleton_one, empty_union, eq_self_sdiff_zero, iff_adjoin_eq_top, iff_union_of_dvd, mem_singleton_iff, notMem_, subsingleton_iff_bot_eq_top, subsingleton_iff_bot_eq_top.mpr, union_sdiff_distrib
+--- 原说明 ---
+`IsCyclotomicExtension S A B` is equivalent to `IsCyclotomicExtension (S ∪ {1}) 
+A B`.
 -/
 theorem iff_union_singleton_one :
-    IsCyclotomicExtension S A B ↔ IsCyclotomicExtension (S union {1}) A B := by
-  by_cases hS : exists s in S, s != 0
+    IsCyclotomicExtension S A B ↔ IsCyclotomicExtension (S ∪ {1}) A B := by
+  by_cases hS : ∃ s ∈ S, s ≠ 0
   · exact iff_union_of_dvd _ _ (by simpa)
-  · rw [eq_self_sdiff_zero S, eq_self_sdiff_zero (S union {1}), union_sdiff_distrib,
+  · rw [eq_self_sdiff_zero S, eq_self_sdiff_zero (S ∪ {1}), union_sdiff_distrib,
       show S \ {0} = ∅ by aesop, empty_union, show {1} \ {0} = {1} by simp]
-    refine ⟨fun H => ?_, fun H => ?_⟩
-    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs _ => ⟨1, by simp [mem_singleton_iff.1 hs]⟩, ?_⟩
+    refine ⟨fun H ↦ ?_, fun H ↦ ?_⟩
+    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs _ ↦ ⟨1, by simp [mem_singleton_iff.1 hs]⟩, ?_⟩
       simpa [adjoin_singleton_one] using subsingleton_iff_bot_eq_top.mpr inferInstance
-    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs => (notMem_empty s hs).elim, ?_⟩
+    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs ↦ (notMem_empty s hs).elim, ?_⟩
       simp [singleton_one]
 
 variable {A B}
 
-/--
-theorem `singleton_one_of_bot_eq_top` / 定理 `singleton_one_of_bot_eq_top`
+/-- If `(⊥ : SubAlgebra A B) = ⊤`, then `IsCyclotomicExtension {1} A B`. -/
+/-
+**IsCyclotomicExtension.singleton_one_of_bot_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `I
+sCyclotomicExtension`。
+形式化陈述：singleton_one_of_bot_eq_top (h : (⊥ : Subalgebra A B) = ⊤) : IsCyclotomicE
+xtension {1} A B
+参数：h : (⊥ : Subalgebra A B) = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `Set.insert_sdiff_eq_singleton`：insert_sdiff_eq_singleton {a : α} {s : Se
+t α} (h : a ∉ s) : insert a s \ s = {a}
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_union_singleton_one`：iff_union_singleton_one :
+ IsCyclotomicExtension S A B ↔ IsCyclotomicExtension (S union {1}) A B
+· 使用定理 `IsCyclotomicExtension.singleton_zero_of_bot_eq_top`：singleton_zero_of_bo
+t_eq_top (h : (⊥ : Subalgebra A B) = ⊤) : IsCyclotomicExtension {0} A B
+· 使用定理 `IsCyclotomicExtension.eq_self_sdiff_zero`：eq_self_sdiff_zero : IsCycloto
+micExtension S A B = IsCyclotomicExtension (S \ {0}) A B
 
-English:
-theorem singleton_one_of_bot_eq_top
-  given: (h : (⊥ : Subalgebra A B) = ⊤)
-  proof: by
-  convert!
-    eq_self_sdiff_zero _ A B ▸ (iff_union_singleton_one _ A _).1 (singleton_zero_of_bot_eq_top h)
-  simp
-
-中文:
-定理 singleton_one_of_bot_eq_top
-  条件: (h : (⊥ : 子代数 A B) = ⊤)
-  证明: by
-  convert!
-    eq_self_sdiff_zero _ A B ▸ (iff_union_singleton_one _ A _).1 (singleton_zero_of_bot_eq_top h)
-  simp
-
-Depends on / 依赖: convert, eq_self_sdiff_zero, iff_union_singleton_one, singleton_zero_of_bot_eq_top
+--- 原说明 ---
+If `(⊥ : SubAlgebra A B) = ⊤`, then `IsCyclotomicExtension {1} A B`.
 -/
 theorem singleton_one_of_bot_eq_top (h : (⊥ : Subalgebra A B) = ⊤) :
     IsCyclotomicExtension {1} A B := by
@@ -715,20 +876,24 @@ theorem singleton_one_of_bot_eq_top (h : (⊥ : Subalgebra A B) = ⊤) :
     eq_self_sdiff_zero _ A B ▸ (iff_union_singleton_one _ A _).1 (singleton_zero_of_bot_eq_top h)
   simp
 
-/--
-theorem `singleton_one_of_algebraMap_bijective` / 定理 `singleton_one_of_algebraMap_bijective`
+/-- If `Function.Surjective (algebraMap A B)`, then `IsCyclotomicExtension {1} A B`. -/
+/-
+**IsCyclotomicExtension.singleton_one_of_algebraMap_bijective** 是 Mathlib 中的一个定理
+，位于命名空间 `IsCyclotomicExtension`。
+形式化陈述：singleton_one_of_algebraMap_bijective (h : Function.Surjective (algebraMap
+ A B)) : IsCyclotomicExtension {1} A B
+参数：h : Function.Surjective (algebraMap A B)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.singleton_one_of_bot_eq_top`：singleton_one_of_bot_
+eq_top (h : (⊥ : Subalgebra A B) = ⊤) : IsCyclotomicExtension {1} A B
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.surjective_algebraMap_iff`：surjective_algebraMap_iff : Function.
+Surjective (algebraMap R A) ↔ (⊤ : Subalgebra R A) = ⊥
 
-English:
-theorem singleton_one_of_algebraMap_bijective
-  given: (h : Function.Surjective (algebraMap A B))
-  proof: singleton_one_of_bot_eq_top (surjective_algebraMap_iff.1 h).symm
-
-中文:
-定理 singleton_one_of_algebraMap_bijective
-  条件: (h : 函数.满射 (algebraMap A B))
-  证明: singleton_one_of_bot_eq_top (surjective_algebraMap_iff.1 h).symm
-
-Depends on / 依赖: singleton_one_of_bot_eq_top, surjective_algebraMap_iff
+--- 原说明 ---
+If `Function.Surjective (algebraMap A B)`, then `IsCyclotomicExtension {1} A B`.
 -/
 theorem singleton_one_of_algebraMap_bijective (h : Function.Surjective (algebraMap A B)) :
     IsCyclotomicExtension {1} A B :=
@@ -739,28 +904,31 @@ variable (A B)
 /-- Given `(f : B ≃ₐ[A] C)`, if `IsCyclotomicExtension S A B` then
 `IsCyclotomicExtension S A C`. -/
 protected
-/--
-theorem `equiv` / 定理 `equiv`
-
-English:
-theorem equiv
-  statement: {C : Type*} [CommRing C] [Algebra A C] [h : IsCyclotomicExtension S A B]
-  proof: by
-  let : Algebra B C := f.toAlgHom.toRingHom.toAlgebra
-  have : IsCyclotomicExtension {1} B C := singleton_one_of_algebraMap_bijective f.surjective
-  have : IsScalarTower A B C := IsScalarTower.of_algHom f.toAlgHom
-  exact (iff_union_singleton_one _ _ _).2 (trans S {1} A B C f.injective)
-
-中文:
-定理 equiv
-  结论: {C : 类型} [交换环 C] [代数 A C] [h : 是CyclotomicExtension S A B]
-  证明: by
-  let : Algebra B C := f.toAlgHom.toRingHom.toAlgebra
-  have : IsCyclotomicExtension {1} B C := singleton_one_of_algebraMap_bijective f.surjective
-  have : IsScalarTower A B C := IsScalarTower.of_algHom f.toAlgHom
-  exact (iff_union_singleton_one _ _ _).2 (trans S {1} A B C f.injective)
-
-Depends on / 依赖: Algebra, IsCyclotomicExtension, IsScalarTower, IsScalarTower.of_algHom, f.injective, f.surjective, f.toAlgHom, f.toAlgHom.toRingHom.toAlgebra, iff_union_singleton_one, injective, of_algHom, singleton_one_of_algebraMap_bijective, surjective, toAlgHom, toAlgebra, toRingHom
+/-
+**IsCyclotomicExtension.equiv** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+形式化陈述：equiv {C : Type*} [CommRing C] [Algebra A C] [h : IsCyclotomicExtension S 
+A B] (f : B ≃ₐ[A] C) : IsCyclotomicExtension S A C
+参数：f : B ≃ₐ[A] C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.singleton_one_of_algebraMap_bijective`：singleton_o
+ne_of_algebraMap_bijective (h : Function.Surjective (algebraMap A B)) : IsCyclot
+omicExtension {1} A B
+· 使用定理 `AlgEquiv.surjective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [in
+st : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : A
+lgebra R …
+· 使用定理 `IsScalarTower.of_algHom`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} 
+[inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : CommSemiring B] [i
+nst_3 : Algeb…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsCyclotomicExtension.iff_union_singleton_one`：iff_union_singleton_one :
+ IsCyclotomicExtension S A B ↔ IsCyclotomicExtension (S union {1}) A B
+· 使用定理 `IsCyclotomicExtension.trans`：trans (C : Type w) [CommRing C] [Algebra A 
+C] [Algebra B C] [IsScalarTower A B C] [hS : IsCyclotomicExtension S A B] [hT : 
+IsCyclotomicExten…
+· 使用定理 `AlgEquiv.injective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [ins
+t : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Al
+gebra R …
 -/
 theorem equiv {C : Type*} [CommRing C] [Algebra A C] [h : IsCyclotomicExtension S A B]
     (f : B ≃ₐ[A] C) : IsCyclotomicExtension S A C := by
@@ -768,172 +936,126 @@ theorem equiv {C : Type*} [CommRing C] [Algebra A C] [h : IsCyclotomicExtension 
   have : IsCyclotomicExtension {1} B C := singleton_one_of_algebraMap_bijective f.surjective
   have : IsScalarTower A B C := IsScalarTower.of_algHom f.toAlgHom
   exact (iff_union_singleton_one _ _ _).2 (trans S {1} A B C f.injective)
-
-/--
-theorem `neZero_of_mem` / 定理 `neZero_of_mem`
-
-English:
-theorem neZero_of_mem
-  given: [IsCyclotomicExtension S A B] [IsDomain B] (hn : n in S)
-  statement: NeZero (n : B)
-  proof: (exists_isPrimitiveRoot A B hn NeZero.out).choose_spec.neZero'
-
-中文:
-定理 neZero_of_mem
-  条件: [是CyclotomicExtension S A B] [是整环 B] (hn : n in S)
-  结论: NeZero (n : B)
-  证明: (exists_isPrimitiveRoot A B hn NeZero.out).choose_spec.neZero'
-
-Depends on / 依赖: NeZero, NeZero.out, choose_spec, choose_spec.neZero, exists_isPrimitiveRoot, neZero
+/-
+**IsCyclotomicExtension.neZero_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExt
+ension`。
+形式化陈述：neZero_of_mem [IsCyclotomicExtension S A B] [IsDomain B] (hn : n in S) : N
+eZero (n : B)
+参数：hn : n in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.neZero'`：neZero' {n : Nat} [NeZero n] (hζ : IsPrimitiveR
+oot ζ n) : NeZero ((n : Nat) : R)
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem neZero_of_mem [IsCyclotomicExtension S A B] [IsDomain B] (hn : n in S) : NeZero (n : B) :=
+theorem neZero_of_mem [IsCyclotomicExtension S A B] [IsDomain B] (hn : n ∈ S) : NeZero (n : B) :=
   (exists_isPrimitiveRoot A B hn NeZero.out).choose_spec.neZero'
-
-/--
-theorem `neZero_of_mem'` / 定理 `neZero_of_mem'`
-
-English:
-theorem neZero_of_mem'
-  given: [IsCyclotomicExtension S A B] [IsDomain B] (hn : n in S)
-  statement: NeZero (n : A)
-  proof: (neZero_of_mem n S A B hn).nat_of_neZero (algebraMap A B)
-
-protected
-
-中文:
-定理 neZero_of_mem'
-  条件: [是CyclotomicExtension S A B] [是整环 B] (hn : n in S)
-  结论: NeZero (n : A)
-  证明: (neZero_of_mem n S A B hn).nat_of_neZero (algebraMap A B)
-
-protected
-
-Depends on / 依赖: algebraMap, nat_of_neZero, neZero_of_mem
+/-
+**IsCyclotomicExtension.neZero_of_mem'** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicEx
+tension`。
+形式化陈述：neZero_of_mem' [IsCyclotomicExtension S A B] [IsDomain B] (hn : n in S) : 
+NeZero (n : A)
+参数：hn : n in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.nat_of_neZero`：NeZero.nat_of_neZero {R S} [NonAssocSemiring R] [N
+onAssocSemiring S] {F} [FunLike F R S] [RingHomClass F R S] (f : F) {n : Nat} [h
+n : NeZero…
+· 使用定理 `IsCyclotomicExtension.neZero_of_mem`：neZero_of_mem [IsCyclotomicExtensio
+n S A B] [IsDomain B] (hn : n in S) : NeZero (n : B)
 -/
-theorem neZero_of_mem' [IsCyclotomicExtension S A B] [IsDomain B] (hn : n in S) : NeZero (n : A) :=
+theorem neZero_of_mem' [IsCyclotomicExtension S A B] [IsDomain B] (hn : n ∈ S) : NeZero (n : A) :=
   (neZero_of_mem n S A B hn).nat_of_neZero (algebraMap A B)
 
 protected
-/--
-theorem `neZero` / 定理 `neZero`
-
-English:
-theorem neZero
-  given: [IsCyclotomicExtension {n} A B] [IsDomain B]
-  statement: NeZero (n : B)
-  proof: neZero_of_mem n {n} A B (mem_singleton n)
-
-protected
-
-中文:
-定理 neZero
-  条件: [是CyclotomicExtension {n} A B] [是整环 B]
-  结论: NeZero (n : B)
-  证明: neZero_of_mem n {n} A B (mem_singleton n)
-
-protected
-
-Depends on / 依赖: mem_singleton, neZero_of_mem
+/-
+**IsCyclotomicExtension.neZero** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`
+。
+形式化陈述：neZero [IsCyclotomicExtension {n} A B] [IsDomain B] : NeZero (n : B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.neZero_of_mem`：neZero_of_mem [IsCyclotomicExtensio
+n S A B] [IsDomain B] (hn : n in S) : NeZero (n : B)
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
 theorem neZero [IsCyclotomicExtension {n} A B] [IsDomain B] : NeZero (n : B) :=
   neZero_of_mem n {n} A B (mem_singleton n)
 
 protected
-/--
-theorem `neZero'` / 定理 `neZero'`
-
-English:
-theorem neZero'
-  given: [IsCyclotomicExtension {n} A B] [IsDomain B]
-  statement: NeZero (n : A)
-  proof: neZero_of_mem' n {n} A B (mem_singleton n)
-
-中文:
-定理 neZero'
-  条件: [是CyclotomicExtension {n} A B] [是整环 B]
-  结论: NeZero (n : A)
-  证明: neZero_of_mem' n {n} A B (mem_singleton n)
-
-Depends on / 依赖: mem_singleton, neZero_of_mem
+/-
+**IsCyclotomicExtension.neZero'** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension
+`。
+形式化陈述：neZero' [IsCyclotomicExtension {n} A B] [IsDomain B] : NeZero (n : A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.neZero_of_mem'`：neZero_of_mem' [IsCyclotomicExtens
+ion S A B] [IsDomain B] (hn : n in S) : NeZero (n : A)
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
 theorem neZero' [IsCyclotomicExtension {n} A B] [IsDomain B] : NeZero (n : A) :=
   neZero_of_mem' n {n} A B (mem_singleton n)
 
-/--
-theorem `integral` / 定理 `integral`
+/-- A cyclotomic extension is integral. -/
+/-
+**IsCyclotomicExtension.integral** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtensio
+n`。
+形式化陈述：integral [IsCyclotomicExtension S A B] : Algebra.IsIntegral A B
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgEquiv.isIntegral_iff`：AlgEquiv.isIntegral_iff (e : A ≃ₐ[R] B) : Algeb
+ra.IsIntegral R A ↔ Algebra.IsIntegral R B
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `Algebra.IsIntegral.adjoin`：Algebra.IsIntegral.adjoin {S : Set A} (hS : f
+orall x in S, IsIntegral R x) : Algebra.IsIntegral R (adjoin R S)
+· 使用定理 `Polynomial.monic_X_pow_sub_C`：monic_X_pow_sub_C {R : Type u} [Ring R] (a
+ : R) {n : Nat} (h : n != 0) : (X ^ n - C a).Monic
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval₂_sub`：eval₂_sub {S} [Ring S] (f : R ->+* S) {x : S} : (p
+ - q).eval₂ f x = p.eval₂ f x - q.eval₂ f x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval₂_X_pow`：eval₂_X_pow {n : Nat} : (X ^ n).eval₂ f x = x ^ 
+n
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem integral
-  given: [IsCyclotomicExtension S A B]
-  statement: Algebra.IsIntegral A B
-  proof: by
-  rw [← (Subalgebra.equivOfEq _ _ ((IsCyclotomicExtension.iff_adjoin_eq_top S A B).1 ‹_›).2
-.trans Subalgebra.topEquiv).isIntegral_iff]
-  exact Algebra.IsIntegral.adjoin fun x ⟨n, hn, h1, h2⟩ =>
-    ⟨X ^ n - 1, monic_X_pow_sub_C 1 h1, by simp [h2]⟩
-
-中文:
-定理 integral
-  条件: [是CyclotomicExtension S A B]
-  结论: 代数.是整 A B
-  证明: by
-  rw [← (Subalgebra.equivOfEq _ _ ((IsCyclotomicExtension.iff_adjoin_eq_top S A B).1 ‹_›).2
-.trans Subalgebra.topEquiv).isIntegral_iff]
-  exact Algebra.IsIntegral.adjoin fun x ⟨n, hn, h1, h2⟩ =>
-    ⟨X ^ n - 1, monic_X_pow_sub_C 1 h1, by simp [h2]⟩
-
-Depends on / 依赖: Algebra, Algebra.IsIntegral.adjoin, IsCyclotomicExtension, IsCyclotomicExtension.iff_adjoin_eq_top, IsIntegral, Subalgebra, Subalgebra.equivOfEq, Subalgebra.topEquiv, adjoin, equivOfEq, iff_adjoin_eq_top, isIntegral_iff, monic_X_pow_sub_C, topEquiv
+--- 原说明 ---
+A cyclotomic extension is integral.
 -/
 theorem integral [IsCyclotomicExtension S A B] : Algebra.IsIntegral A B := by
   rw [← (Subalgebra.equivOfEq _ _ ((IsCyclotomicExtension.iff_adjoin_eq_top S A B).1 ‹_›).2
-.trans Subalgebra.topEquiv).isIntegral_iff]
-  exact Algebra.IsIntegral.adjoin fun x ⟨n, hn, h1, h2⟩ =>
+    |>.trans Subalgebra.topEquiv).isIntegral_iff]
+  exact Algebra.IsIntegral.adjoin fun x ⟨n, hn, h1, h2⟩ ↦
     ⟨X ^ n - 1, monic_X_pow_sub_C 1 h1, by simp [h2]⟩
-
-/--
-theorem `_root_.Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot` / 定理 `_root_.Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot`
-
-English:
-theorem _root_.Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
-  proof: by
-    obtain ⟨r, hr1, hr2⟩ := h n hn1 hn2
-    exact ⟨⟨r, subset_adjoin ⟨n, hn1, hn2, hr1⟩⟩, Subtype.val_injective hr1,
-      fun l hl => hr2 l congr($hl.1)⟩
-  adjoin_roots := by
-    rintro ⟨x, hx⟩
-    induction hx using adjoin_induction with
-    | mem x hx =>
-      obtain ⟨n, hn1, hn2, hx⟩ := hx
-      exact subset_adjoin ⟨n, hn1, hn2, Subtype.val_injective hx⟩
-    | algebraMap x => exact Subalgebra.algebraMap_mem _ x
-    | add x y hx hy ihx ihy => exact Subalgebra.add_mem _ ihx ihy
-    | mul x y hx hy ihx ihy => exact Subalgebra.mul_mem _ ihx ihy
-
-中文:
-定理 _root_.代数.isCyclotomicExtension_adjoin_of_存在_isPrimitiveRoot
-  证明: by
-    obtain ⟨r, hr1, hr2⟩ := h n hn1 hn2
-    exact ⟨⟨r, subset_adjoin ⟨n, hn1, hn2, hr1⟩⟩, Subtype.val_injective hr1,
-      fun l hl => hr2 l congr($hl.1)⟩
-  adjoin_roots := by
-    rintro ⟨x, hx⟩
-    induction hx using adjoin_induction with
-    | mem x hx =>
-      obtain ⟨n, hn1, hn2, hx⟩ := hx
-      exact subset_adjoin ⟨n, hn1, hn2, Subtype.val_injective hx⟩
-    | algebraMap x => exact Subalgebra.algebraMap_mem _ x
-    | add x y hx hy ihx ihy => exact Subalgebra.add_mem _ ihx ihy
-    | mul x y hx hy ihx ihy => exact Subalgebra.mul_mem _ ihx ihy
-
-Depends on / 依赖: Subalgebra, Subalgebra.add_mem, Subalgebra.algebraMap_mem, Subalgebra.mul_mem, Subtype, Subtype.val_injective, add_mem, adjoin_induction, adjoin_roots, algebraMap, algebraMap_mem, mul_mem, subset_adjoin, val_injective
+/-
+**IsCyclotomicExtension._root_.Algebra.isCyclotomicExtension_adjoin_of_exists_is
+PrimitiveRoot** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
-    (h : forall n in S, n != 0 -> exists r : B, IsPrimitiveRoot r n) :
-    IsCyclotomicExtension S A (adjoin A {b : B | exists n in S, n != 0 ∧ b ^ n = 1}) where
+    (h : ∀ n ∈ S, n ≠ 0 → ∃ r : B, IsPrimitiveRoot r n) :
+    IsCyclotomicExtension S A (adjoin A {b : B | ∃ n ∈ S, n ≠ 0 ∧ b ^ n = 1}) where
   exists_isPrimitiveRoot {n} hn1 hn2 := by
     obtain ⟨r, hr1, hr2⟩ := h n hn1 hn2
     exact ⟨⟨r, subset_adjoin ⟨n, hn1, hn2, hr1⟩⟩, Subtype.val_injective hr1,
-      fun l hl => hr2 l congr($hl.1)⟩
+      fun l hl ↦ hr2 l congr($hl.1)⟩
   adjoin_roots := by
     rintro ⟨x, hx⟩
     induction hx using adjoin_induction with
@@ -944,47 +1066,78 @@ theorem _root_.Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
     | add x y hx hy ihx ihy => exact Subalgebra.add_mem _ ihx ihy
     | mul x y hx hy ihx ihy => exact Subalgebra.mul_mem _ ihx ihy
 
-/--
-theorem `algEquiv_eq_of_apply_eq` / 定理 `algEquiv_eq_of_apply_eq`
+/-- Two elements in the Galois group of a cyclotomic extension are equal if
+their actions on primitive roots are equal. -/
+/-
+**IsCyclotomicExtension.algEquiv_eq_of_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsCyc
+lotomicExtension`。
+形式化陈述：algEquiv_eq_of_apply_eq [IsCyclotomicExtension S A B] [IsDomain B] {f g : 
+B ≃ₐ[A] B} (H : forall n in S, n != 0 -> exists r : B, IsPrimitiveRoot r n ∧ f r
+ = g r) : f = g
+参数：H : forall n in S, n != 0 -> exists r : B, IsPrimitiveRoot r n ∧ f r = g r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `IsCyclotomicExtension.adjoin_roots`：∀ {S : Set ℕ} {A : Type u} {B : Type
+ v} {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}   [self : I
+sCyclotomicExtension S A…
+· 使用定理 `Algebra.adjoin_induction`：adjoin_induction {p : (x : A) -> x in adjoin R
+ s -> Prop} (mem : forall (x) (hx : x in s), p x (subset_adjoin hx)) (algebraMap
+ : forall r, p…
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AlgEquiv.commutes`：commutes : forall r : R, e (algebraMap R A₁ r) = alge
+braMap R A₂ r
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
 
-English:
-theorem algEquiv_eq_of_apply_eq
-  statement: [IsCyclotomicExtension S A B] [IsDomain B] {f g : B ≃ₐ[A] B}
-  proof: by
-  ext x
-  have hx := ‹IsCyclotomicExtension S A B›.adjoin_roots x
-  induction hx using Algebra.adjoin_induction with
-  | mem y hy =>
-    obtain ⟨n, hn, h1, h2⟩ := hy
-    obtain ⟨r, hr1, hr2⟩ := H n hn h1
-    have := NeZero.mk h1
-    obtain ⟨m, -, rfl⟩ := hr1.eq_pow_of_pow_eq_one h2
-    simp [hr2]
-  | algebraMap y => simp
-  | add x y hx hy ihx ihy => simp [ihx, ihy]
-  | mul x y hx hy ihx ihy => simp [ihx, ihy]
-
-中文:
-定理 algEquiv_eq_of_apply_eq
-  结论: [是CyclotomicExtension S A B] [是整环 B] {f g : B ≃ₐ[A] B}
-  证明: by
-  ext x
-  have hx := ‹IsCyclotomicExtension S A B›.adjoin_roots x
-  induction hx using Algebra.adjoin_induction with
-  | mem y hy =>
-    obtain ⟨n, hn, h1, h2⟩ := hy
-    obtain ⟨r, hr1, hr2⟩ := H n hn h1
-    have := NeZero.mk h1
-    obtain ⟨m, -, rfl⟩ := hr1.eq_pow_of_pow_eq_one h2
-    simp [hr2]
-  | algebraMap y => simp
-  | add x y hx hy ihx ihy => simp [ihx, ihy]
-  | mul x y hx hy ihx ihy => simp [ihx, ihy]
-
-Depends on / 依赖: Algebra, Algebra.adjoin_induction, IsCyclotomicExtension, NeZero, NeZero.mk, adjoin_induction, adjoin_roots, algebraMap, eq_pow_of_pow_eq_one, hr1.eq_pow_of_pow_eq_one
+--- 原说明 ---
+Two elements in the Galois group of a cyclotomic extension are equal if
+their actions on primitive roots are equal.
 -/
 theorem algEquiv_eq_of_apply_eq [IsCyclotomicExtension S A B] [IsDomain B] {f g : B ≃ₐ[A] B}
-    (H : forall n in S, n != 0 -> exists r : B, IsPrimitiveRoot r n ∧ f r = g r) : f = g := by
+    (H : ∀ n ∈ S, n ≠ 0 → ∃ r : B, IsPrimitiveRoot r n ∧ f r = g r) : f = g := by
   ext x
   have hx := ‹IsCyclotomicExtension S A B›.adjoin_roots x
   induction hx using Algebra.adjoin_induction with
@@ -998,40 +1151,64 @@ theorem algEquiv_eq_of_apply_eq [IsCyclotomicExtension S A B] [IsDomain B] {f g 
   | add x y hx hy ihx ihy => simp [ihx, ihy]
   | mul x y hx hy ihx ihy => simp [ihx, ihy]
 
-/--
-theorem `isMulCommutative` / 定理 `isMulCommutative`
+/-- Cyclotomic extensions are abelian. -/
+/-
+**IsCyclotomicExtension.isMulCommutative** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomic
+Extension`。
+形式化陈述：isMulCommutative [IsCyclotomicExtension S A B] [IsDomain B] : IsMulCommuta
+tive (B ≃ₐ[A] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.algEquiv_eq_of_apply_eq`：algEquiv_eq_of_apply_eq [
+IsCyclotomicExtension S A B] [IsDomain B] {f g : B ≃ₐ[A] B} (H : forall n in S, 
+n != 0 -> exists r : B, IsPrimitive…
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem isMulCommutative
-  given: [IsCyclotomicExtension S A B] [IsDomain B]
-  proof: by
-  refine ⟨⟨fun f g => algEquiv_eq_of_apply_eq S A B fun n hn h1 => ?_⟩⟩
-  obtain ⟨r, hr⟩ := ‹IsCyclotomicExtension S A B›.exists_isPrimitiveRoot hn h1
-  use r, hr
-  simp only [AlgEquiv.mul_apply]
-  have := NeZero.mk h1
-  obtain ⟨mf, -, hf⟩ := hr.eq_pow_of_pow_eq_one (show f r ^ n = 1 by rw [← map_pow, hr.1, map_one])
-  obtain ⟨mg, -, hg⟩ := hr.eq_pow_of_pow_eq_one (show g r ^ n = 1 by rw [← map_pow, hr.1, map_one])
-  simp [← hf, ← hg, ← pow_mul, mul_comm mf mg]
-
-中文:
-定理 isMulCommutative
-  条件: [是CyclotomicExtension S A B] [是整环 B]
-  证明: by
-  refine ⟨⟨fun f g => algEquiv_eq_of_apply_eq S A B fun n hn h1 => ?_⟩⟩
-  obtain ⟨r, hr⟩ := ‹IsCyclotomicExtension S A B›.exists_isPrimitiveRoot hn h1
-  use r, hr
-  simp only [AlgEquiv.mul_apply]
-  have := NeZero.mk h1
-  obtain ⟨mf, -, hf⟩ := hr.eq_pow_of_pow_eq_one (show f r ^ n = 1 by rw [← map_pow, hr.1, map_one])
-  obtain ⟨mg, -, hg⟩ := hr.eq_pow_of_pow_eq_one (show g r ^ n = 1 by rw [← map_pow, hr.1, map_one])
-  simp [← hf, ← hg, ← pow_mul, mul_comm mf mg]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.mul_apply, IsCyclotomicExtension, NeZero, NeZero.mk, algEquiv_eq_of_apply_eq, eq_pow_of_pow_eq_one, exists_isPrimitiveRoot, hr.eq_pow_of_pow_eq_one, map_one, map_pow, mul_apply, mul_comm, pow_mul
+--- 原说明 ---
+Cyclotomic extensions are abelian.
 -/
 theorem isMulCommutative [IsCyclotomicExtension S A B] [IsDomain B] :
     IsMulCommutative (B ≃ₐ[A] B) := by
-  refine ⟨⟨fun f g => algEquiv_eq_of_apply_eq S A B fun n hn h1 => ?_⟩⟩
+  refine ⟨⟨fun f g ↦ algEquiv_eq_of_apply_eq S A B fun n hn h1 ↦ ?_⟩⟩
   obtain ⟨r, hr⟩ := ‹IsCyclotomicExtension S A B›.exists_isPrimitiveRoot hn h1
   use r, hr
   simp only [AlgEquiv.mul_apply]
@@ -1044,112 +1221,127 @@ end Basic
 
 section Fintype
 
-/--
-theorem `finite_of_singleton` / 定理 `finite_of_singleton`
-
-English:
-theorem finite_of_singleton
-  given: [IsDomain B] [h : IsCyclotomicExtension {n} A B]
-  proof: by
-  classical
-  rw [Module.finite_def]; rw [← top_toSubmodule]; rw [← ((iff_adjoin_eq_top _ _ _).1 h).2]
-  refine fg_adjoin_of_finite ?_ fun b ⟨n, hb⟩ => ?_
-  · simp only [mem_singleton_iff, exists_eq_left]
-    have : {b : B | n != 0 ∧ b ^ n = 1} = (nthRoots n (1 : B)).toFinset :=
-      Set.ext fun x => ⟨fun h => by simpa [n.pos_of_neZero] using h.2,
-        fun h => by simpa [n.pos_of_neZero, NeZero.ne n] using h⟩
-    rw [this]
-    exact (nthRoots n 1).toFinset.finite_toSet
-  · simp only [mem_singleton_iff] at hb
-    exact ⟨X ^ n - 1,
-      ⟨monic_X_pow_sub_C _ (hb.1 ▸ NeZero.ne _), by simpa [sub_eq_zero] using hb.2.2⟩⟩
-
-中文:
-定理 finite_of_singleton
-  条件: [是整环 B] [h : 是CyclotomicExtension {n} A B]
-  证明: by
-  classical
-  rw [Module.finite_def]; rw [← top_toSubmodule]; rw [← ((iff_adjoin_eq_top _ _ _).1 h).2]
-  refine fg_adjoin_of_finite ?_ fun b ⟨n, hb⟩ => ?_
-  · simp only [mem_singleton_iff, exists_eq_left]
-    have : {b : B | n != 0 ∧ b ^ n = 1} = (nthRoots n (1 : B)).toFinset :=
-      Set.ext fun x => ⟨fun h => by simpa [n.pos_of_neZero] using h.2,
-        fun h => by simpa [n.pos_of_neZero, NeZero.ne n] using h⟩
-    rw [this]
-    exact (nthRoots n 1).toFinset.finite_toSet
-  · simp only [mem_singleton_iff] at hb
-    exact ⟨X ^ n - 1,
-      ⟨monic_X_pow_sub_C _ (hb.1 ▸ NeZero.ne _), by simpa [sub_eq_zero] using hb.2.2⟩⟩
-
-Depends on / 依赖: Module, Module.finite_def, NeZero, NeZero.ne, Set.ext, classical, exists_eq_left, fg_adjoin_of_finite, finite_def, finite_toSet, iff_adjoin_eq_top, mem_singleton_iff, n.pos_of_neZero, nthRoots, pos_of_neZero, toFinset, toFinset.finite_toSet, top_toSubmodule
+/-
+**IsCyclotomicExtension.finite_of_singleton** 是 Mathlib 中的一个定理，位于命名空间 `IsCycloto
+micExtension`。
+形式化陈述：finite_of_singleton [IsDomain B] [h : IsCyclotomicExtension {n} A B] : Mod
+ule.Finite A B
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.finite_def`：finite_def {R M} [Semiring R] [AddCommMonoid M] [Modu
+le R M] : Module.Finite R M ↔ (⊤ : Submodule R M).FG
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.top_toSubmodule`：top_toSubmodule : Subalgebra.toSubmodule (⊤ : S
+ubalgebra R A) = ⊤
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `fg_adjoin_of_finite`：fg_adjoin_of_finite {s : Set A} (hfs : s.Finite) (h
+is : forall x in s, IsIntegral R x) : (Algebra.adjoin R s).toSubmodule.FG
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.pos_of_neZero`：∀ (n : ℕ) [NeZero n], 0 < n
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Polynomial.monic_X_pow_sub_C`：monic_X_pow_sub_C {R : Type u} [Ring R] (a
+ : R) {n : Nat} (h : n != 0) : (X ^ n - C a).Monic
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Polynomial.eval₂_sub`：eval₂_sub {S} [Ring S] (f : R ->+* S) {x : S} : (p
+ - q).eval₂ f x = p.eval₂ f x - q.eval₂ f x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval₂_X_pow`：eval₂_X_pow {n : Nat} : (X ^ n).eval₂ f x = x ^ 
+n
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
 -/
 theorem finite_of_singleton [IsDomain B] [h : IsCyclotomicExtension {n} A B] :
     Module.Finite A B := by
   classical
-  rw [Module.finite_def]; rw [← top_toSubmodule]; rw [← ((iff_adjoin_eq_top _ _ _).1 h).2]
+  rw [Module.finite_def, ← top_toSubmodule, ← ((iff_adjoin_eq_top _ _ _).1 h).2]
   refine fg_adjoin_of_finite ?_ fun b ⟨n, hb⟩ => ?_
   · simp only [mem_singleton_iff, exists_eq_left]
-    have : {b : B | n != 0 ∧ b ^ n = 1} = (nthRoots n (1 : B)).toFinset :=
-      Set.ext fun x => ⟨fun h => by simpa [n.pos_of_neZero] using h.2,
-        fun h => by simpa [n.pos_of_neZero, NeZero.ne n] using h⟩
+    have : {b : B | n ≠ 0 ∧ b ^ n = 1} = (nthRoots n (1 : B)).toFinset :=
+      Set.ext fun x ↦ ⟨fun h ↦ by simpa [n.pos_of_neZero] using h.2,
+        fun h ↦ by simpa [n.pos_of_neZero, NeZero.ne n] using h⟩
     rw [this]
     exact (nthRoots n 1).toFinset.finite_toSet
   · simp only [mem_singleton_iff] at hb
     exact ⟨X ^ n - 1,
       ⟨monic_X_pow_sub_C _ (hb.1 ▸ NeZero.ne _), by simpa [sub_eq_zero] using hb.2.2⟩⟩
 
-/--
-theorem `finite` / 定理 `finite`
+/-- If `S` is finite and `IsCyclotomicExtension S A B`, then `B` is a finite `A`-algebra. -/
+/-
+**IsCyclotomicExtension.finite** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`
+。
+形式化陈述：∀ (S : Set ℕ) (A : Type u) (B : Type v) [inst : CommRing A] [inst_1 : Comm
+Ring B] [inst_2 : Algebra A B] [IsDomain B]   [h₁ : Finite ↑S] [h₂ : IsCyclotomi
+cExtension S A B], Module.Finite A B
+参数：S : Set ℕ；A : Type u；B : Type v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.induction_on`：∀ {α : Type u} {motive : (s : Set α) → s.Finite
+ → Prop} (s : Set α) (hs : s.Finite),   motive ∅ ⋯ → (∀ {a : α} {s : Set α}, a ∉
+ s → ∀ (hs : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.finite_coe_iff`：finite_coe_iff {s : Set α} : Finite s ↔ s.Finite
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.finite_def`：finite_def {R M} [Semiring R] [AddCommMonoid M] [Modu
+le R M] : Module.Finite R M ↔ (⊤ : Submodule R M).FG
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `subsingleton_iff_bot_eq_top`：subsingleton_iff_bot_eq_top : (⊥ : α) = (⊤ 
+: α) ↔ Subsingleton α
+· 使用定理 `Algebra.toSubmodule_bot`：toSubmodule_bot : Subalgebra.toSubmodule (⊥ : S
+ubalgebra R A) = 1
+· 使用定理 `Submodule.one_eq_span`：one_eq_span : (1 : Submodule R A) = R ∙ 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Set.insert_sdiff_of_mem`：insert_sdiff_of_mem (s) (h : a in t) : insert a
+ s \ t = s \ t
+· 使用引理 `Set.sdiff_singleton_eq_self`：sdiff_singleton_eq_self (h : a ∉ s) : s \ {
+a} = s
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `IsCyclotomicExtension.eq_self_sdiff_zero`：eq_self_sdiff_zero : IsCycloto
+micExtension S A B = IsCyclotomicExtension (S \ {0}) A B
+· 使用定理 `IsCyclotomicExtension.union_left`：union_left [h : IsCyclotomicExtension 
+T A B] (hS : S subseteq T) : IsCyclotomicExtension S A (adjoin A {b : B | exists
+ a : Nat, a in S ∧ a !…
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
+· 使用定理 `IsCyclotomicExtension.union_right`：union_right [h : IsCyclotomicExtensio
+n (S union T) A B] : IsCyclotomicExtension T (adjoin A {b : B | exists a : Nat, 
+a in S ∧ a != 0 ∧ b ^ a…
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `IsCyclotomicExtension.finite_of_singleton`：finite_of_singleton [IsDomain
+ B] [h : IsCyclotomicExtension {n} A B] : Module.Finite A B
+· 使用定理 `Module.Finite.trans`：∀ {R : Type u_6} (A : Type u_7) (M : Type u_8) [ins
+t : Semiring R] [inst_1 : Semiring A] [inst_2 : _root_.Module R A]   [inst_3 : A
+ddCommMon…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-theorem finite
-  given: [IsDomain B] [h₁ : Finite S] [h₂ : IsCyclotomicExtension S A B]
-  proof: by
-  rw [finite_coe_iff] at h₁
-  induction S, h₁ using Set.Finite.induction_on generalizing h₂ A B with
-  | empty =>
-    refine Module.finite_def.2 ⟨({1} : Finset B), ?_⟩
-    simp [← top_toSubmodule, ← subsingleton_iff_bot_eq_top.mpr inferInstance,
-      toSubmodule_bot, Submodule.one_eq_span]
-  | @insert n S _ _ H =>
-    by_cases hn : n = 0
-    · have : insert n S \ {0} = S \ {0} := by simp_all
-      rw [eq_self_sdiff_zero]; rw [this]; rw [← eq_self_sdiff_zero] at h₂
-      exact H A B
-    have : IsCyclotomicExtension S A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) :=
-        union_left _ (insert n S) _ _ (subset_insert n S)
-    have := H A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1})
-    have : Module.Finite (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) B := by
-      rw [← union_singleton] at h₂
-      let _ := union_right S {n} A B
-      have : NeZero n := ⟨hn⟩
-      exact finite_of_singleton n _ _
-    exact Module.Finite.trans (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) _
-
-中文:
-定理 finite
-  条件: [是整环 B] [h₁ : 有限 S] [h₂ : 是CyclotomicExtension S A B]
-  证明: by
-  rw [finite_coe_iff] at h₁
-  induction S, h₁ using Set.Finite.induction_on generalizing h₂ A B with
-  | empty =>
-    refine Module.finite_def.2 ⟨({1} : Finset B), ?_⟩
-    simp [← top_toSubmodule, ← subsingleton_iff_bot_eq_top.mpr inferInstance,
-      toSubmodule_bot, Submodule.one_eq_span]
-  | @insert n S _ _ H =>
-    by_cases hn : n = 0
-    · have : insert n S \ {0} = S \ {0} := by simp_all
-      rw [eq_self_sdiff_zero]; rw [this]; rw [← eq_self_sdiff_zero] at h₂
-      exact H A B
-    have : IsCyclotomicExtension S A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) :=
-        union_left _ (insert n S) _ _ (subset_insert n S)
-    have := H A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1})
-    have : Module.Finite (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) B := by
-      rw [← union_singleton] at h₂
-      let _ := union_right S {n} A B
-      have : NeZero n := ⟨hn⟩
-      exact finite_of_singleton n _ _
-    exact Module.Finite.trans (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) _
+--- 原说明 ---
+If `S` is finite and `IsCyclotomicExtension S A B`, then `B` is a finite `A`-alg
+ebra.
 -/
 protected theorem finite [IsDomain B] [h₁ : Finite S] [h₂ : IsCyclotomicExtension S A B] :
     Module.Finite A B := by
@@ -1162,42 +1354,51 @@ protected theorem finite [IsDomain B] [h₁ : Finite S] [h₂ : IsCyclotomicExte
   | @insert n S _ _ H =>
     by_cases hn : n = 0
     · have : insert n S \ {0} = S \ {0} := by simp_all
-      rw [eq_self_sdiff_zero]; rw [this]; rw [← eq_self_sdiff_zero] at h₂
+      rw [eq_self_sdiff_zero, this, ← eq_self_sdiff_zero] at h₂
       exact H A B
-    have : IsCyclotomicExtension S A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) :=
+    have : IsCyclotomicExtension S A (adjoin A {b : B | ∃ n : ℕ, n ∈ S ∧ n ≠ 0 ∧ b ^ n = 1}) :=
         union_left _ (insert n S) _ _ (subset_insert n S)
-    have := H A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1})
-    have : Module.Finite (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) B := by
+    have := H A (adjoin A {b : B | ∃ n : ℕ, n ∈ S ∧ n ≠ 0 ∧ b ^ n = 1})
+    have : Module.Finite (adjoin A {b : B | ∃ n : ℕ, n ∈ S ∧ n ≠ 0 ∧ b ^ n = 1}) B := by
       rw [← union_singleton] at h₂
       let _ := union_right S {n} A B
       have : NeZero n := ⟨hn⟩
       exact finite_of_singleton n _ _
-    exact Module.Finite.trans (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) _
+    exact Module.Finite.trans (adjoin A {b : B | ∃ n : ℕ, n ∈ S ∧ n ≠ 0 ∧ b ^ n = 1}) _
 
-/--
-theorem `numberField` / 定理 `numberField`
+/-- A cyclotomic finite extension of a number field is a number field. -/
+/-
+**IsCyclotomicExtension.numberField** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExten
+sion`。
+形式化陈述：numberField [h : NumberField K] [Finite S] [IsCyclotomicExtension S K L] :
+ NumberField L
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `charZero_of_injective_algebraMap`：charZero_of_injective_algebraMap [Comm
+Semiring R] [Semiring A] [Algebra R A] (h : Function.Injective (algebraMap R A))
+ [CharZero R] : CharZe…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `IsCyclotomicExtension.finite`：∀ (S : Set ℕ) (A : Type u) (B : Type v) [i
+nst : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B] [IsDomain B]   [h
+₁ : Finite ↑S] [h₂…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Module.Finite.trans`：∀ {R : Type u_6} (A : Type u_7) (M : Type u_8) [ins
+t : Semiring R] [inst_1 : Semiring A] [inst_2 : _root_.Module R A]   [inst_3 : A
+ddCommMon…
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
 
-English:
-theorem numberField
-  given: [h : NumberField K] [Finite S] [IsCyclotomicExtension S K L]
-  statement: NumberField L
-  proof: { to_charZero := charZero_of_injective_algebraMap (algebraMap K L).injective
-    to_finiteDimensional := by
-      have := charZero_of_injective_algebraMap (algebraMap K L).injective
-      have := IsCyclotomicExtension.finite S K L
-      exact Module.Finite.trans K _ }
-
-中文:
-定理 numberField
-  条件: [h : 数域 K] [有限 S] [是CyclotomicExtension S K L]
-  结论: 数域 L
-  证明: { to_charZero := charZero_of_injective_algebraMap (algebraMap K L).injective
-    to_finiteDimensional := by
-      have := charZero_of_injective_algebraMap (algebraMap K L).injective
-      have := IsCyclotomicExtension.finite S K L
-      exact Module.Finite.trans K _ }
-
-Depends on / 依赖: Finite, IsCyclotomicExtension, IsCyclotomicExtension.finite, Module, Module.Finite.trans, algebraMap, charZero_of_injective_algebraMap, finite, injective, to_charZero, to_finiteDimensional
+--- 原说明 ---
+A cyclotomic finite extension of a number field is a number field.
 -/
 theorem numberField [h : NumberField K] [Finite S] [IsCyclotomicExtension S K L] : NumberField L :=
   { to_charZero := charZero_of_injective_algebraMap (algebraMap K L).injective
@@ -1206,20 +1407,22 @@ theorem numberField [h : NumberField K] [Finite S] [IsCyclotomicExtension S K L]
       have := IsCyclotomicExtension.finite S K L
       exact Module.Finite.trans K _ }
 
-/--
-theorem `finiteDimensional` / 定理 `finiteDimensional`
+/-- If `S` is finite and `IsCyclotomicExtension S K A`, then `finiteDimensional K A`. -/
+/-
+**IsCyclotomicExtension.finiteDimensional** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomi
+cExtension`。
+形式化陈述：finiteDimensional (C : Type z) [Finite S] [CommRing C] [Algebra K C] [IsDo
+main C] [IsCyclotomicExtension S K C] : FiniteDimensional K C
+参数：C : Type z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.finite`：∀ (S : Set ℕ) (A : Type u) (B : Type v) [i
+nst : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B] [IsDomain B]   [h
+₁ : Finite ↑S] [h₂…
 
-English:
-theorem finiteDimensional
-  statement: (C : Type z) [Finite S] [CommRing C] [Algebra K C] [IsDomain C]
-  proof: IsCyclotomicExtension.finite S K C
-
-中文:
-定理 finiteDimensional
-  结论: (C : 类型 z) [有限 S] [交换环 C] [代数 K C] [是整环 C]
-  证明: IsCyclotomicExtension.finite S K C
-
-Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.finite, finite
+--- 原说明 ---
+If `S` is finite and `IsCyclotomicExtension S K A`, then `finiteDimensional K A`
+.
 -/
 theorem finiteDimensional (C : Type z) [Finite S] [CommRing C] [Algebra K C] [IsDomain C]
     [IsCyclotomicExtension S K C] : FiniteDimensional K C :=
@@ -1231,103 +1434,147 @@ section
 
 variable {A B}
 
-/--
-theorem `adjoin_roots_cyclotomic_eq_adjoin_nth_roots` / 定理 `adjoin_roots_cyclotomic_eq_adjoin_nth_roots`
-
-English:
-theorem adjoin_roots_cyclotomic_eq_adjoin_nth_roots
-  statement: [IsDomain B] {ζ : B} {n : Nat} [NeZero n]
-  proof: by
-  simp only [mem_singleton_iff, exists_eq_left]
-  refine le_antisymm (adjoin_mono fun x hx => ?_) (adjoin_le fun x hx => ?_)
-  · rw [mem_rootSet'] at hx
-    simp only [mem_ofPred_eq]
-    rw [isRoot_of_unity_iff (NeZero.pos n)]
-    refine ⟨NeZero.ne n, n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
-    rw [IsRoot.def]; rw [← map_cyclotomic n (algebraMap A B)]; rw [eval_map_algebraMap]
-    exact hx.2
-  · simp only [mem_ofPred_eq] at hx
-    obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx.2
-    refine SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin ?_) _)
-    rw [mem_rootSet']; rw [map_cyclotomic]; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot]
-    exact ⟨cyclotomic_ne_zero n B, hζ.isRoot_cyclotomic (NeZero.pos n)⟩
-
-中文:
-定理 adjoin_roots_cyclotomic_eq_adjoin_nth_roots
-  结论: [是整环 B] {ζ : B} {n : 自然数} [NeZero n]
-  证明: by
-  simp only [mem_singleton_iff, exists_eq_left]
-  refine le_antisymm (adjoin_mono fun x hx => ?_) (adjoin_le fun x hx => ?_)
-  · rw [mem_rootSet'] at hx
-    simp only [mem_ofPred_eq]
-    rw [isRoot_of_unity_iff (NeZero.pos n)]
-    refine ⟨NeZero.ne n, n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
-    rw [IsRoot.def]; rw [← map_cyclotomic n (algebraMap A B)]; rw [eval_map_algebraMap]
-    exact hx.2
-  · simp only [mem_ofPred_eq] at hx
-    obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx.2
-    refine SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin ?_) _)
-    rw [mem_rootSet']; rw [map_cyclotomic]; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot]
-    exact ⟨cyclotomic_ne_zero n B, hζ.isRoot_cyclotomic (NeZero.pos n)⟩
-
-Depends on / 依赖: IsRoot, IsRoot.def, Nat.mem_divisors_self, NeZero, NeZero.ne, NeZero.pos, SetLike, SetLike.mem_coe, Subalgebra, adjoin_le, adjoin_mono, algebraMap, eq_pow_of_pow_eq_one, eval_map_algebraMap, exists_eq_left, isRoot_of_unity_iff, le_antisymm, map_cyclotomic, mem_coe, mem_divisors_self
+/-
+**IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots** 是 Mathlib 
+中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+形式化陈述：adjoin_roots_cyclotomic_eq_adjoin_nth_roots [IsDomain B] {ζ : B} {n : Nat}
+ [NeZero n] (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotomic n A).rootSet B) =
+ adjoin A {b : B | exists a : Nat, a in ({n} : Set Nat) ∧ a != 0 ∧ b ^ a = 1}
+参数：hζ : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.adjoin_mono`：adjoin_mono (H : s subseteq t) : adjoin R s <= adjo
+in R t
+· 使用定理 `isRoot_of_unity_iff`：∀ {n : ℕ},   0 < n →     ∀ (R : Type u_2) [inst : C
+ommRing R] [IsDomain R] {ζ : R},       ζ ^ n = 1 ↔ ∃ i ∈ n.divisors, (Polynomial
+.cyclotom…
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `Nat.mem_divisors_self`：mem_divisors_self (n : Nat) (h : n != 0) : n in n
+.divisors
+· 使用定理 `Polynomial.IsRoot.def`：∀ {R : Type u} {a : R} [inst : Semiring R] {p : P
+olynomial R}, p.IsRoot a ↔ Polynomial.eval a p = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.map_cyclotomic`：map_cyclotomic (n : Nat) {R S : Type*} [Ring 
+R] [Ring S] (f : R ->+* S) : map f (cyclotomic n R) = cyclotomic n S
+· 使用引理 `Polynomial.eval_map_algebraMap`：eval_map_algebraMap (P : R[X]) (b : B) :
+ (map (algebraMap R B) P).eval b = aeval b P
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Polynomial.mem_rootSet'`：mem_rootSet' {p : T[X]} {S : Type*} [CommRing S
+] [IsDomain S] [Algebra T S] {a : S} : a in p.rootSet S ↔ p.map (algebraMap T S)
+ != 0 ∧ aeval…
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Polynomial.IsRoot.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomi
+al R) (a : R), p.IsRoot a = (Polynomial.eval a p = 0)
+· 使用定理 `Polynomial.cyclotomic_ne_zero`：cyclotomic_ne_zero (n : Nat) (R : Type*) 
+[Ring R] [Nontrivial R] : cyclotomic n R != 0
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsPrimitiveRoot.isRoot_cyclotomic`：∀ {R : Type u_1} [inst : CommRing R] 
+{n : ℕ} [IsDomain R],   0 < n → ∀ {μ : R}, IsPrimitiveRoot μ n → (Polynomial.cyc
+lotomic n R).IsRoot μ
 -/
-theorem adjoin_roots_cyclotomic_eq_adjoin_nth_roots [IsDomain B] {ζ : B} {n : Nat} [NeZero n]
+theorem adjoin_roots_cyclotomic_eq_adjoin_nth_roots [IsDomain B] {ζ : B} {n : ℕ} [NeZero n]
     (hζ : IsPrimitiveRoot ζ n) :
     adjoin A ((cyclotomic n A).rootSet B) =
-      adjoin A {b : B | exists a : Nat, a in ({n} : Set Nat) ∧ a != 0 ∧ b ^ a = 1} := by
+      adjoin A {b : B | ∃ a : ℕ, a ∈ ({n} : Set ℕ) ∧ a ≠ 0 ∧ b ^ a = 1} := by
   simp only [mem_singleton_iff, exists_eq_left]
   refine le_antisymm (adjoin_mono fun x hx => ?_) (adjoin_le fun x hx => ?_)
   · rw [mem_rootSet'] at hx
     simp only [mem_ofPred_eq]
     rw [isRoot_of_unity_iff (NeZero.pos n)]
     refine ⟨NeZero.ne n, n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
-    rw [IsRoot.def]; rw [← map_cyclotomic n (algebraMap A B)]; rw [eval_map_algebraMap]
+    rw [IsRoot.def, ← map_cyclotomic n (algebraMap A B), eval_map_algebraMap]
     exact hx.2
   · simp only [mem_ofPred_eq] at hx
     obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx.2
     refine SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin ?_) _)
-    rw [mem_rootSet']; rw [map_cyclotomic]; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot]
+    rw [mem_rootSet', map_cyclotomic, ← eval_map_algebraMap, map_cyclotomic, ← IsRoot]
     exact ⟨cyclotomic_ne_zero n B, hζ.isRoot_cyclotomic (NeZero.pos n)⟩
-
-/--
-theorem `adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic` / 定理 `adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic`
-
-English:
-theorem adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic
-  statement: {n : Nat} [NeZero n] [IsDomain B] {ζ : B}
-  proof: by
-  refine le_antisymm (adjoin_le fun x hx => ?_) (adjoin_mono fun x hx => ?_)
-  · suffices hx : x ^ n = 1 by
-      obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
-      exact SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin <| mem_singleton ζ) _)
-    refine (isRoot_of_unity_iff (NeZero.pos n) B).2 ?_
-    refine ⟨n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
-    rw [mem_rootSet']; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot] at hx
-    exact hx.2
-  · simp only [mem_singleton_iff] at hx
-    simpa only [hx, mem_rootSet', map_cyclotomic, ← eval_map_algebraMap, IsRoot] using
-      And.intro (cyclotomic_ne_zero n B) (hζ.isRoot_cyclotomic (NeZero.pos n))
-
-中文:
-定理 adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic
-  结论: {n : 自然数} [NeZero n] [是整环 B] {ζ : B}
-  证明: by
-  refine le_antisymm (adjoin_le fun x hx => ?_) (adjoin_mono fun x hx => ?_)
-  · suffices hx : x ^ n = 1 by
-      obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
-      exact SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin <| mem_singleton ζ) _)
-    refine (isRoot_of_unity_iff (NeZero.pos n) B).2 ?_
-    refine ⟨n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
-    rw [mem_rootSet']; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot] at hx
-    exact hx.2
-  · simp only [mem_singleton_iff] at hx
-    simpa only [hx, mem_rootSet', map_cyclotomic, ← eval_map_algebraMap, IsRoot] using
-      And.intro (cyclotomic_ne_zero n B) (hζ.isRoot_cyclotomic (NeZero.pos n))
-
-Depends on / 依赖: IsRoot, Nat.mem_divisors_self, NeZero, NeZero.ne, NeZero.pos, SetLike, SetLike.mem_coe, Subalgebra, Subalgebra.pow_mem, adjoin_le, adjoin_mono, eq_pow_of_pow_eq_one, eval_map_algebraMap, isRoot_of_unity_iff, le_antisymm, map_cyclotomic, mem_coe, mem_divisors_self, mem_rootSet, mem_singleton
+/-
+**IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic** 是 Ma
+thlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+形式化陈述：adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic {n : Nat} [NeZero n] [Is
+Domain B] {ζ : B} (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotomic n A).rootSe
+t B) = adjoin A {ζ}
+参数：hζ : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isRoot_of_unity_iff`：∀ {n : ℕ},   0 < n →     ∀ (R : Type u_2) [inst : C
+ommRing R] [IsDomain R] {ζ : R},       ζ ^ n = 1 ↔ ∃ i ∈ n.divisors, (Polynomial
+.cyclotom…
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.mem_divisors_self`：mem_divisors_self (n : Nat) (h : n != 0) : n in n
+.divisors
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.IsRoot.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomi
+al R) (a : R), p.IsRoot a = (Polynomial.eval a p = 0)
+· 使用定理 `Polynomial.map_cyclotomic`：map_cyclotomic (n : Nat) {R S : Type*} [Ring 
+R] [Ring S] (f : R ->+* S) : map f (cyclotomic n R) = cyclotomic n S
+· 使用引理 `Polynomial.eval_map_algebraMap`：eval_map_algebraMap (P : R[X]) (b : B) :
+ (map (algebraMap R B) P).eval b = aeval b P
+· 使用定理 `Polynomial.mem_rootSet'`：mem_rootSet' {p : T[X]} {S : Type*} [CommRing S
+] [IsDomain S] [Algebra T S] {a : S} : a in p.rootSet S ↔ p.map (algebraMap T S)
+ != 0 ∧ aeval…
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `Algebra.adjoin_mono`：adjoin_mono (H : s subseteq t) : adjoin R s <= adjo
+in R t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.cyclotomic_ne_zero`：cyclotomic_ne_zero (n : Nat) (R : Type*) 
+[Ring R] [Nontrivial R] : cyclotomic n R != 0
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsPrimitiveRoot.isRoot_cyclotomic`：∀ {R : Type u_1} [inst : CommRing R] 
+{n : ℕ} [IsDomain R],   0 < n → ∀ {μ : R}, IsPrimitiveRoot μ n → (Polynomial.cyc
+lotomic n R).IsRoot μ
 -/
-theorem adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic {n : Nat} [NeZero n] [IsDomain B] {ζ : B}
+theorem adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic {n : ℕ} [NeZero n] [IsDomain B] {ζ : B}
     (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotomic n A).rootSet B) = adjoin A {ζ} := by
   refine le_antisymm (adjoin_le fun x hx => ?_) (adjoin_mono fun x hx => ?_)
   · suffices hx : x ^ n = 1 by
@@ -1335,34 +1582,36 @@ theorem adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic {n : Nat} [NeZero n] [
       exact SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin <| mem_singleton ζ) _)
     refine (isRoot_of_unity_iff (NeZero.pos n) B).2 ?_
     refine ⟨n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
-    rw [mem_rootSet']; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot] at hx
+    rw [mem_rootSet', ← eval_map_algebraMap, map_cyclotomic, ← IsRoot] at hx
     exact hx.2
   · simp only [mem_singleton_iff] at hx
     simpa only [hx, mem_rootSet', map_cyclotomic, ← eval_map_algebraMap, IsRoot] using
       And.intro (cyclotomic_ne_zero n B) (hζ.isRoot_cyclotomic (NeZero.pos n))
-
-/--
-theorem `adjoin_primitive_root_eq_top` / 定理 `adjoin_primitive_root_eq_top`
-
-English:
-theorem adjoin_primitive_root_eq_top
-  statement: {n : Nat} [NeZero n] [IsDomain B]
-  proof: by
-  rw [← adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic hζ]
-  rw [adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ]
-  exact ((iff_adjoin_eq_top {n} A B).mp h).2
-
-中文:
-定理 adjoin_primitive_root_eq_top
-  结论: {n : 自然数} [NeZero n] [是整环 B]
-  证明: by
-  rw [← adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic hζ]
-  rw [adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ]
-  exact ((iff_adjoin_eq_top {n} A B).mp h).2
-
-Depends on / 依赖: adjoin_roots_cyclotomic_eq_adjoin_nth_roots, adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic, iff_adjoin_eq_top
+/-
+**IsCyclotomicExtension.adjoin_primitive_root_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `
+IsCyclotomicExtension`。
+形式化陈述：adjoin_primitive_root_eq_top {n : Nat} [NeZero n] [IsDomain B] [h : IsCycl
+otomicExtension {n} A B] {ζ : B} (hζ : IsPrimitiveRoot ζ n) : adjoin A ({ζ} : Se
+t B) = ⊤
+参数：hζ : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic`
+：adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic {n : Nat} [NeZero n] [IsDomai
+n B] {ζ : B} (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotom…
+· 使用定理 `IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots`：adjoi
+n_roots_cyclotomic_eq_adjoin_nth_roots [IsDomain B] {ζ : B} {n : Nat} [NeZero n]
+ (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotomic n A…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
 -/
-theorem adjoin_primitive_root_eq_top {n : Nat} [NeZero n] [IsDomain B]
+theorem adjoin_primitive_root_eq_top {n : ℕ} [NeZero n] [IsDomain B]
     [h : IsCyclotomicExtension {n} A B]
     {ζ : B} (hζ : IsPrimitiveRoot ζ n) : adjoin A ({ζ} : Set B) = ⊤ := by
   rw [← adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic hζ]
@@ -1370,59 +1619,16 @@ theorem adjoin_primitive_root_eq_top {n : Nat} [NeZero n] [IsDomain B]
   exact ((iff_adjoin_eq_top {n} A B).mp h).2
 
 variable (A)
-
-/--
-theorem `_root_.IsPrimitiveRoot.adjoin_isCyclotomicExtension` / 定理 `_root_.IsPrimitiveRoot.adjoin_isCyclotomicExtension`
-
-English:
-theorem _root_.IsPrimitiveRoot.adjoin_isCyclotomicExtension
-  statement: {ζ : B} {n : Nat} [NeZero n]
-  proof: { exists_isPrimitiveRoot := fun hi hi' => by
-      rw [Set.mem_singleton_iff] at hi
-refine ⟨⟨ζ, subset_adjoin Set.mem_singleton ζ⟩, ?_⟩
-      rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk, hi]
-    adjoin_roots := fun ⟨x, hx⟩ => by
-      refine
-        adjoin_induction
-          (hx := hx) (fun b hb => ?_) (fun a => ?_) (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
-          (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
-      · rw [Set.mem_singleton_iff] at hb
-        refine subset_adjoin ?_
-        simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq, hb]
-        rw [← Subalgebra.coe_eq_one]; rw [Subalgebra.coe_pow]; rw [Subtype.coe_mk]
-        exact ⟨NeZero.ne n, ((IsPrimitiveRoot.iff_def ζ n).1 h).1⟩
-      · exact Subalgebra.algebraMap_mem _ _
-      · exact Subalgebra.add_mem _ hb₁ hb₂
-      · exact Subalgebra.mul_mem _ hb₁ hb₂ }
-
-中文:
-定理 _root_.是PrimitiveRoot.adjoin_isCyclotomicExtension
-  结论: {ζ : B} {n : 自然数} [NeZero n]
-  证明: { exists_isPrimitiveRoot := fun hi hi' => by
-      rw [Set.mem_singleton_iff] at hi
-refine ⟨⟨ζ, subset_adjoin Set.mem_singleton ζ⟩, ?_⟩
-      rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk, hi]
-    adjoin_roots := fun ⟨x, hx⟩ => by
-      refine
-        adjoin_induction
-          (hx := hx) (fun b hb => ?_) (fun a => ?_) (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
-          (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
-      · rw [Set.mem_singleton_iff] at hb
-        refine subset_adjoin ?_
-        simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq, hb]
-        rw [← Subalgebra.coe_eq_one]; rw [Subalgebra.coe_pow]; rw [Subtype.coe_mk]
-        exact ⟨NeZero.ne n, ((IsPrimitiveRoot.iff_def ζ n).1 h).1⟩
-      · exact Subalgebra.algebraMap_mem _ _
-      · exact Subalgebra.add_mem _ hb₁ hb₂
-      · exact Subalgebra.mul_mem _ hb₁ hb₂ }
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff, Set.mem_singleton, Set.mem_singleton_iff, Subalgebra, Subalgebra.co, Subtype, Subtype.coe_mk, adjoin_induction, adjoin_roots, coe_mk, coe_submonoidClass_iff, exists_eq_left, exists_isPrimitiveRoot, mem_ofPred_eq, mem_singleton, mem_singleton_iff, subset_adjoin
+/-
+**IsCyclotomicExtension._root_.IsPrimitiveRoot.adjoin_isCyclotomicExtension** 是 
+Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.IsPrimitiveRoot.adjoin_isCyclotomicExtension {ζ : B} {n : Nat} [NeZero n]
+theorem _root_.IsPrimitiveRoot.adjoin_isCyclotomicExtension {ζ : B} {n : ℕ} [NeZero n]
     (h : IsPrimitiveRoot ζ n) : IsCyclotomicExtension {n} A (adjoin A ({ζ} : Set B)) :=
   { exists_isPrimitiveRoot := fun hi hi' => by
       rw [Set.mem_singleton_iff] at hi
-refine ⟨⟨ζ, subset_adjoin Set.mem_singleton ζ⟩, ?_⟩
+      refine ⟨⟨ζ, subset_adjoin <| Set.mem_singleton ζ⟩, ?_⟩
       rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk, hi]
     adjoin_roots := fun ⟨x, hx⟩ => by
       refine
@@ -1432,34 +1638,20 @@ refine ⟨⟨ζ, subset_adjoin Set.mem_singleton ζ⟩, ?_⟩
       · rw [Set.mem_singleton_iff] at hb
         refine subset_adjoin ?_
         simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq, hb]
-        rw [← Subalgebra.coe_eq_one]; rw [Subalgebra.coe_pow]; rw [Subtype.coe_mk]
+        rw [← Subalgebra.coe_eq_one, Subalgebra.coe_pow, Subtype.coe_mk]
         exact ⟨NeZero.ne n, ((IsPrimitiveRoot.iff_def ζ n).1 h).1⟩
       · exact Subalgebra.algebraMap_mem _ _
       · exact Subalgebra.add_mem _ hb₁ hb₂
       · exact Subalgebra.mul_mem _ hb₁ hb₂ }
 
 variable {L} in
-/--
-theorem `_root_.IsPrimitiveRoot.intermediateField_adjoin_isCyclotomicExtension` / 定理 `_root_.IsPrimitiveRoot.intermediateField_adjoin_isCyclotomicExtension`
-
-English:
-theorem _root_.IsPrimitiveRoot.intermediateField_adjoin_isCyclotomicExtension
-  proof: by
-  change IsCyclotomicExtension {n} K (IntermediateField.adjoin K {ζ}).toSubalgebra
-  rw [IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.isAlgebraic ζ)]
-  exact hζ.adjoin_isCyclotomicExtension K
-
-中文:
-定理 _root_.是PrimitiveRoot.intermediateField_adjoin_isCyclotomicExtension
-  证明: by
-  change IsCyclotomicExtension {n} K (IntermediateField.adjoin K {ζ}).toSubalgebra
-  rw [IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.isAlgebraic ζ)]
-  exact hζ.adjoin_isCyclotomicExtension K
-
-Depends on / 依赖: IntermediateField, IntermediateField.adjoin, IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic, IsAlgebraic, IsAlgebraic.isAlgebraic, IsCyclotomicExtension, adjoin, adjoin_isCyclotomicExtension, adjoin_simple_toSubalgebra_of_isAlgebraic, isAlgebraic, toSubalgebra
+/-
+**IsCyclotomicExtension._root_.IsPrimitiveRoot.intermediateField_adjoin_isCyclot
+omicExtension** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsPrimitiveRoot.intermediateField_adjoin_isCyclotomicExtension
-    [Algebra.IsIntegral K L] {n : Nat} [NeZero n] {ζ : L} (hζ : IsPrimitiveRoot ζ n) :
+    [Algebra.IsIntegral K L] {n : ℕ} [NeZero n] {ζ : L} (hζ : IsPrimitiveRoot ζ n) :
     IsCyclotomicExtension {n} K (IntermediateField.adjoin K {ζ}) := by
   change IsCyclotomicExtension {n} K (IntermediateField.adjoin K {ζ}).toSubalgebra
   rw [IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.isAlgebraic ζ)]
@@ -1471,210 +1663,274 @@ section Field
 
 variable {n S}
 
-/--
-theorem `splits_X_pow_sub_one` / 定理 `splits_X_pow_sub_one`
+/-- A cyclotomic extension splits `X ^ n - 1` if `n ∈ S`. -/
+/-
+**IsCyclotomicExtension.splits_X_pow_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclot
+omicExtension`。
+形式化陈述：splits_X_pow_sub_one [H : IsCyclotomicExtension S K L] (hS : n in S) : Spl
+its (map (algebraMap K L) (X ^ n - 1))
+参数：hS : n in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_sub`：∀ {R : Type u} [inst : Ring R] {p q : Polynomial R} 
+{S : Type u_1} [inst_1 : Ring S] (f : R →+* S),   Polynomial.map f (p - q) = Pol
+ynomial.…
+· 使用定理 `Polynomial.map_one`：∀ {R : Type u} {S : Type v} [inst : Semiring R] [ins
+t_1 : Semiring S] (f : R →+* S), Polynomial.map f 1 = 1
+· 使用定理 `Polynomial.map_pow`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p :
+ Polynomial R} [inst_1 : Semiring S] (f : R →+* S) (n : ℕ),   Polynomial.map f (
+p ^ n) =…
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_iff`：∀ (S : Set ℕ) (A : Type u) (B : Type v) [inst
+ : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B],   IsCyclotomicExten
+sion S A B ↔   …
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `Polynomial.X_pow_sub_one_splits`：X_pow_sub_one_splits {ζ : K} {n : Nat} 
+(h : IsPrimitiveRoot ζ n) : Splits (X ^ n - C (1 : K))
 
-English:
-theorem splits_X_pow_sub_one
-  given: [H : IsCyclotomicExtension S K L] (hS : n in S)
-  proof: by
-  rw [Polynomial.map_sub]; rw [Polynomial.map_one]; rw [Polynomial.map_pow]; rw [Polynomial.map_X]
-  obtain ⟨z, hz⟩ := ((isCyclotomicExtension_iff _ _ _).1 H).1 hS (NeZero.ne _)
-  exact X_pow_sub_one_splits hz
-
-中文:
-定理 splits_X_pow_sub_one
-  条件: [H : 是CyclotomicExtension S K L] (hS : n in S)
-  证明: by
-  rw [Polynomial.map_sub]; rw [Polynomial.map_one]; rw [Polynomial.map_pow]; rw [Polynomial.map_X]
-  obtain ⟨z, hz⟩ := ((isCyclotomicExtension_iff _ _ _).1 H).1 hS (NeZero.ne _)
-  exact X_pow_sub_one_splits hz
-
-Depends on / 依赖: NeZero, NeZero.ne, Polynomial, Polynomial.map_X, Polynomial.map_one, Polynomial.map_pow, Polynomial.map_sub, X_pow_sub_one_splits, isCyclotomicExtension_iff, map_X, map_one, map_pow, map_sub
+--- 原说明 ---
+A cyclotomic extension splits `X ^ n - 1` if `n ∈ S`.
 -/
-theorem splits_X_pow_sub_one [H : IsCyclotomicExtension S K L] (hS : n in S) :
+theorem splits_X_pow_sub_one [H : IsCyclotomicExtension S K L] (hS : n ∈ S) :
     Splits (map (algebraMap K L) (X ^ n - 1)) := by
-  rw [Polynomial.map_sub]; rw [Polynomial.map_one]; rw [Polynomial.map_pow]; rw [Polynomial.map_X]
+  rw [Polynomial.map_sub, Polynomial.map_one, Polynomial.map_pow,
+    Polynomial.map_X]
   obtain ⟨z, hz⟩ := ((isCyclotomicExtension_iff _ _ _).1 H).1 hS (NeZero.ne _)
   exact X_pow_sub_one_splits hz
 
-/--
-theorem `splits_cyclotomic` / 定理 `splits_cyclotomic`
+/-- A cyclotomic extension splits `cyclotomic n K` if `n ∈ S`. -/
+/-
+**IsCyclotomicExtension.splits_cyclotomic** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomi
+cExtension`。
+形式化陈述：splits_cyclotomic [IsCyclotomicExtension S K L] (hS : n in S) : Splits ((c
+yclotomic n K).map (algebraMap K L))
+参数：hS : n in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.Splits.of_dvd`：∀ {R : Type u_1} [inst : CommRing R] {f g : Po
+lynomial R} [IsDomain R], g.Splits → g ≠ 0 → f ∣ g → f.Splits
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsCyclotomicExtension.splits_X_pow_sub_one`：splits_X_pow_sub_one [H : Is
+CyclotomicExtension S K L] (hS : n in S) : Splits (map (algebraMap K L) (X ^ n -
+ 1))
+· 使用定理 `Polynomial.map_ne_zero`：map_ne_zero {f : R ->+* S} (hp : p != 0) : p.map
+ f != 0
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Polynomial.X_pow_sub_C_ne_zero`：X_pow_sub_C_ne_zero {n : Nat} (hn : 0 < 
+n) (a : R) : (X : R[X]) ^ n - C a != 0
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Polynomial.map_dvd_map'`：map_dvd_map' [Field k] (f : R ->+* k) {x y : R[
+X]} : x.map f ∣ y.map f ↔ x ∣ y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Polynomial.eq_cyclotomic_iff`：eq_cyclotomic_iff {R : Type*} [CommRing R]
+ {n : Nat} (hpos : 0 < n) (P : R[X]) : P = cyclotomic n R ↔ (P * ∏ i in Nat.prop
+erDivisors n, Poly…
 
-English:
-theorem splits_cyclotomic
-  given: [IsCyclotomicExtension S K L] (hS : n in S)
-  proof: by
-  refine (splits_X_pow_sub_one K L hS).of_dvd
-    (map_ne_zero (X_pow_sub_C_ne_zero (NeZero.pos _) _)) ((map_dvd_map' _).mpr ?_)
-  use ∏ i in n.properDivisors, Polynomial.cyclotomic i K
-  rw [(eq_cyclotomic_iff (NeZero.pos _) _).1 rfl]
-
-中文:
-定理 splits_cyclotomic
-  条件: [是CyclotomicExtension S K L] (hS : n in S)
-  证明: by
-  refine (splits_X_pow_sub_one K L hS).of_dvd
-    (map_ne_zero (X_pow_sub_C_ne_zero (NeZero.pos _) _)) ((map_dvd_map' _).mpr ?_)
-  use ∏ i in n.properDivisors, Polynomial.cyclotomic i K
-  rw [(eq_cyclotomic_iff (NeZero.pos _) _).1 rfl]
-
-Depends on / 依赖: NeZero, NeZero.pos, Polynomial, Polynomial.cyclotomic, X_pow_sub_C_ne_zero, cyclotomic, eq_cyclotomic_iff, map_dvd_map, map_ne_zero, n.properDivisors, of_dvd, properDivisors, splits_X_pow_sub_one
+--- 原说明 ---
+A cyclotomic extension splits `cyclotomic n K` if `n ∈ S`.
 -/
-theorem splits_cyclotomic [IsCyclotomicExtension S K L] (hS : n in S) :
+theorem splits_cyclotomic [IsCyclotomicExtension S K L] (hS : n ∈ S) :
     Splits ((cyclotomic n K).map (algebraMap K L)) := by
   refine (splits_X_pow_sub_one K L hS).of_dvd
     (map_ne_zero (X_pow_sub_C_ne_zero (NeZero.pos _) _)) ((map_dvd_map' _).mpr ?_)
-  use ∏ i in n.properDivisors, Polynomial.cyclotomic i K
+  use ∏ i ∈ n.properDivisors, Polynomial.cyclotomic i K
   rw [(eq_cyclotomic_iff (NeZero.pos _) _).1 rfl]
 
 variable (n S)
-
-/--
-theorem `_root_.IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot` / 定理 `_root_.IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot`
-
-English:
-theorem _root_.IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
-  proof: by
-  have key : forall b in {b : L | exists n in S, n != 0 ∧ b ^ n = 1}, IsAlgebraic K b := by
-    rintro b ⟨n, hn, h1, h2⟩
-    exact ⟨X ^ n - 1, (monic_X_pow_sub_C (1 : K) h1).ne_zero, by simp [h2]⟩
-  change IsCyclotomicExtension S K (IntermediateField.toSubalgebra _)
-  rw [congr(IsCyclotomicExtension S K $(IntermediateField.adjoin_toSubalgebra_of_isAlgebraic key))]
-  exact Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K L h
-
-中文:
-定理 _root_.中间域.isCyclotomicExtension_adjoin_of_存在_isPrimitiveRoot
-  证明: by
-  have key : forall b in {b : L | exists n in S, n != 0 ∧ b ^ n = 1}, IsAlgebraic K b := by
-    rintro b ⟨n, hn, h1, h2⟩
-    exact ⟨X ^ n - 1, (monic_X_pow_sub_C (1 : K) h1).ne_zero, by simp [h2]⟩
-  change IsCyclotomicExtension S K (IntermediateField.toSubalgebra _)
-  rw [congr(IsCyclotomicExtension S K $(IntermediateField.adjoin_toSubalgebra_of_isAlgebraic key))]
-  exact Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K L h
-
-Depends on / 依赖: Algebra, Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot, IntermediateField, IntermediateField.adjoin_toSubalgebra_of_isAlgebraic, IntermediateField.toSubalgebra, IsAlgebraic, IsCyclotomicExtension, adjoin_toSubalgebra_of_isAlgebraic, isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot, monic_X_pow_sub_C, ne_zero, toSubalgebra
+/-
+**IsCyclotomicExtension._root_.IntermediateField.isCyclotomicExtension_adjoin_of
+_exists_isPrimitiveRoot** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
-    (h : forall n in S, n != 0 -> exists r : L, IsPrimitiveRoot r n) :
+    (h : ∀ n ∈ S, n ≠ 0 → ∃ r : L, IsPrimitiveRoot r n) :
     IsCyclotomicExtension S K
-      (IntermediateField.adjoin K {b : L | exists n in S, n != 0 ∧ b ^ n = 1}) := by
-  have key : forall b in {b : L | exists n in S, n != 0 ∧ b ^ n = 1}, IsAlgebraic K b := by
+      (IntermediateField.adjoin K {b : L | ∃ n ∈ S, n ≠ 0 ∧ b ^ n = 1}) := by
+  have key : ∀ b ∈ {b : L | ∃ n ∈ S, n ≠ 0 ∧ b ^ n = 1}, IsAlgebraic K b := by
     rintro b ⟨n, hn, h1, h2⟩
     exact ⟨X ^ n - 1, (monic_X_pow_sub_C (1 : K) h1).ne_zero, by simp [h2]⟩
   change IsCyclotomicExtension S K (IntermediateField.toSubalgebra _)
   rw [congr(IsCyclotomicExtension S K $(IntermediateField.adjoin_toSubalgebra_of_isAlgebraic key))]
   exact Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K L h
-
-/--
-theorem `isSeparable` / 定理 `isSeparable`
-
-English:
-theorem isSeparable
-  given: [IsCyclotomicExtension S K L]
-  statement: Algebra.IsSeparable K L
-  proof: by
-  have := integral S K L
-.2 have h := (IsCyclotomicExtension.iff_adjoin_eq_top S K L).1 ‹_›
-  rw [← IntermediateField.adjoin_toSubalgebra_of_isAlgebraic
-    fun b _ => Algebra.IsAlgebraic.isAlgebraic b]; rw [← IntermediateField.top_toSubalgebra] at h
-  rw [← AlgEquiv.Algebra.isSeparable_iff <|
-    (IntermediateField.equivOfEq (IntermediateField.toSubalgebra_injective h)).trans
-      IntermediateField.topEquiv]; rw [IntermediateField.isSeparable_adjoin_iff_isSeparable]
-  rintro b ⟨n, hn, h1, h2⟩
-  have := NeZero.mk h1
-  have := Polynomial.X_pow_sub_one_separable_iff.2 (neZero_of_mem' n S K L hn).out
-exact this.of_dvd minpoly.dvd K b by simp [h2]
-
-中文:
-定理 isSeparable
-  条件: [是CyclotomicExtension S K L]
-  结论: 代数.是可分 K L
-  证明: by
-  have := integral S K L
-.2 have h := (IsCyclotomicExtension.iff_adjoin_eq_top S K L).1 ‹_›
-  rw [← IntermediateField.adjoin_toSubalgebra_of_isAlgebraic
-    fun b _ => Algebra.IsAlgebraic.isAlgebraic b]; rw [← IntermediateField.top_toSubalgebra] at h
-  rw [← AlgEquiv.Algebra.isSeparable_iff <|
-    (IntermediateField.equivOfEq (IntermediateField.toSubalgebra_injective h)).trans
-      IntermediateField.topEquiv]; rw [IntermediateField.isSeparable_adjoin_iff_isSeparable]
-  rintro b ⟨n, hn, h1, h2⟩
-  have := NeZero.mk h1
-  have := Polynomial.X_pow_sub_one_separable_iff.2 (neZero_of_mem' n S K L hn).out
-exact this.of_dvd minpoly.dvd K b by simp [h2]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.Algebra.isSeparable_iff, Algebra, Algebra.IsAlgebraic.isAlgebraic, IntermediateField, IntermediateField.adjoin_toSubalgebra_of_isAlgebraic, IntermediateField.equivOfEq, IntermediateField.isSeparable_adjoin_iff_isSeparable, IntermediateField.toSubalgebra_injective, IntermediateField.topEquiv, IntermediateField.top_toSubalgebra, IsAlgebraic, IsCyclotomicExtension, IsCyclotomicExtension.iff_adjoin_eq_top, NeZero, NeZero.mk, adjoin_toSubalgebra_of_isAlgebraic, equivOfEq, iff_adjoin_eq_top, integral
+/-
+**IsCyclotomicExtension.isSeparable** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExten
+sion`。
+形式化陈述：isSeparable [IsCyclotomicExtension S K L] : Algebra.IsSeparable K L
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.integral`：integral [IsCyclotomicExtension S A B] :
+ Algebra.IsIntegral A B
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgEquiv.Algebra.isSeparable_iff`：AlgEquiv.Algebra.isSeparable_iff : Alg
+ebra.IsSeparable F K ↔ Algebra.IsSeparable F E
+· 使用定理 `IntermediateField.toSubalgebra_injective`：toSubalgebra_injective : Funct
+ion.Injective (toSubalgebra : IntermediateField K L -> _)
+· 使用定理 `IntermediateField.top_toSubalgebra`：top_toSubalgebra : (⊤ : Intermediate
+Field F E).toSubalgebra = ⊤
+· 使用定理 `IntermediateField.adjoin_toSubalgebra_of_isAlgebraic`：adjoin_toSubalgebr
+a_of_isAlgebraic {S : Set E} (hS : forall x in S, IsAlgebraic F x) : (adjoin F S
+).toSubalgebra = Algebra.adjoin F S
+· 使用定理 `Algebra.IsAlgebraic.isAlgebraic`：∀ {R : Type u} {A : Type v} {inst : Com
+mRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsAlgebraic 
+R A] (x : A), IsAlgeb…
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `IntermediateField.isSeparable_adjoin_iff_isSeparable`：IntermediateField.
+isSeparable_adjoin_iff_isSeparable {S : Set E} : Algebra.IsSeparable F (adjoin F
+ S) ↔ forall x in S, IsSeparable F x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Polynomial.X_pow_sub_one_separable_iff`：X_pow_sub_one_separable_iff {n :
+ Nat} : (X ^ n - 1 : F[X]).Separable ↔ (n : F) != 0
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用定理 `IsCyclotomicExtension.neZero_of_mem'`：neZero_of_mem' [IsCyclotomicExtens
+ion S A B] [IsDomain B] (hn : n in S) : NeZero (n : A)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.Separable.of_dvd`：∀ {R : Type u} [inst : CommSemiring R] {f g
+ : Polynomial R}, f.Separable → g ∣ f → g.Separable
+· 使用定理 `minpoly.dvd`：dvd {p : A[X]} (hp : Polynomial.aeval x p = 0) : minpoly A 
+x ∣ p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.aeval_sub`：aeval_sub {p q : R[X]} [Ring A] [Algebra R A] (x :
+ A) : aeval x (p - q) = aeval x p - aeval x q
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+（共 35 条，此处仅展示前 30 条）
 -/
 theorem isSeparable [IsCyclotomicExtension S K L] : Algebra.IsSeparable K L := by
   have := integral S K L
-.2 have h := (IsCyclotomicExtension.iff_adjoin_eq_top S K L).1 ‹_›
+  have h := (IsCyclotomicExtension.iff_adjoin_eq_top S K L).1 ‹_› |>.2
   rw [← IntermediateField.adjoin_toSubalgebra_of_isAlgebraic
-    fun b _ => Algebra.IsAlgebraic.isAlgebraic b]; rw [← IntermediateField.top_toSubalgebra] at h
+    fun b _ ↦ Algebra.IsAlgebraic.isAlgebraic b, ← IntermediateField.top_toSubalgebra] at h
   rw [← AlgEquiv.Algebra.isSeparable_iff <|
     (IntermediateField.equivOfEq (IntermediateField.toSubalgebra_injective h)).trans
-      IntermediateField.topEquiv]; rw [IntermediateField.isSeparable_adjoin_iff_isSeparable]
+      IntermediateField.topEquiv, IntermediateField.isSeparable_adjoin_iff_isSeparable]
   rintro b ⟨n, hn, h1, h2⟩
   have := NeZero.mk h1
   have := Polynomial.X_pow_sub_one_separable_iff.2 (neZero_of_mem' n S K L hn).out
-exact this.of_dvd minpoly.dvd K b by simp [h2]
-
-/--
-theorem `nonempty_algEquiv_adjoin_of_isSepClosed` / 定理 `nonempty_algEquiv_adjoin_of_isSepClosed`
-
-English:
-theorem nonempty_algEquiv_adjoin_of_isSepClosed
-  statement: [IsCyclotomicExtension S K L]
-  proof: by
-  have := isSeparable S K L
-  let i : L ->ₐ[K] M := IsSepClosed.lift
-  refine ⟨(show L ≃ₐ[K] i.fieldRange from AlgEquiv.ofInjectiveField i).trans
-    (IntermediateField.equivOfEq ?_)⟩
-  have htop : IntermediateField.adjoin K {x : L | exists n in S, n != 0 ∧ x ^ n = 1} = ⊤ :=
-    IntermediateField.adjoin_eq_top_of_algebra K _ ((iff_adjoin_eq_top S K L).1 ‹_›).2
-  rw [AlgHom.fieldRange_eq_map]; rw [← htop]; rw [IntermediateField.adjoin_map]
-  apply le_antisymm <;> rw [IntermediateField.adjoin_le_iff]
-  · rintro _ ⟨y, ⟨n, hn, h1, h2⟩, rfl⟩
-    exact IntermediateField.subset_adjoin K _ ⟨n, hn, h1, by simpa using congrArg i h2⟩
-  · rintro x ⟨n, hn, h1, h2⟩
-    have : NeZero n := ⟨h1⟩
-    obtain ⟨y, hy⟩ := exists_isPrimitiveRoot K L hn h1
-    obtain ⟨m, -, rfl⟩ := (hy.map_of_injective i.injective).eq_pow_of_pow_eq_one h2
-    exact pow_mem (IntermediateField.subset_adjoin K (i '' {x : L | exists n in S, n != 0 ∧ x ^ n = 1})
-      ⟨y, ⟨n, hn, h1, hy.pow_eq_one⟩, rfl⟩) m
-
-中文:
-定理 nonempty_algEquiv_adjoin_of_isSepClosed
-  结论: [是CyclotomicExtension S K L]
-  证明: by
-  have := isSeparable S K L
-  let i : L ->ₐ[K] M := IsSepClosed.lift
-  refine ⟨(show L ≃ₐ[K] i.fieldRange from AlgEquiv.ofInjectiveField i).trans
-    (IntermediateField.equivOfEq ?_)⟩
-  have htop : IntermediateField.adjoin K {x : L | exists n in S, n != 0 ∧ x ^ n = 1} = ⊤ :=
-    IntermediateField.adjoin_eq_top_of_algebra K _ ((iff_adjoin_eq_top S K L).1 ‹_›).2
-  rw [AlgHom.fieldRange_eq_map]; rw [← htop]; rw [IntermediateField.adjoin_map]
-  apply le_antisymm <;> rw [IntermediateField.adjoin_le_iff]
-  · rintro _ ⟨y, ⟨n, hn, h1, h2⟩, rfl⟩
-    exact IntermediateField.subset_adjoin K _ ⟨n, hn, h1, by simpa using congrArg i h2⟩
-  · rintro x ⟨n, hn, h1, h2⟩
-    have : NeZero n := ⟨h1⟩
-    obtain ⟨y, hy⟩ := exists_isPrimitiveRoot K L hn h1
-    obtain ⟨m, -, rfl⟩ := (hy.map_of_injective i.injective).eq_pow_of_pow_eq_one h2
-    exact pow_mem (IntermediateField.subset_adjoin K (i '' {x : L | exists n in S, n != 0 ∧ x ^ n = 1})
-      ⟨y, ⟨n, hn, h1, hy.pow_eq_one⟩, rfl⟩) m
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, AlgHom, AlgHom.fieldRange_eq_map, IntermediateField, IntermediateField.adjoin, IntermediateField.adjoin_eq_top_of_algebra, IntermediateField.adjoin_le_iff, IntermediateField.adjoin_map, IntermediateField.equivOfEq, IsSepClosed, IsSepClosed.lift, adjoin, adjoin_eq_top_of_algebra, adjoin_le_iff, adjoin_map, equivOfEq, fieldRange, fieldRange_eq_map, i.fieldRange
+  exact this.of_dvd <| minpoly.dvd K b <| by simp [h2]
+/-
+**IsCyclotomicExtension.nonempty_algEquiv_adjoin_of_isSepClosed** 是 Mathlib 中的一个
+定理，位于命名空间 `IsCyclotomicExtension`。
+形式化陈述：nonempty_algEquiv_adjoin_of_isSepClosed [IsCyclotomicExtension S K L] (M :
+ Type*) [Field M] [Algebra K M] [IsSepClosed M] : Nonempty (L ≃ₐ[K] Intermediate
+Field.adjoin K {x : M | exists n in S, n != 0 ∧ x ^ n = 1})
+参数：M : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.isSeparable`：isSeparable [IsCyclotomicExtension S 
+K L] : Algebra.IsSeparable K L
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `IntermediateField.adjoin_eq_top_of_algebra`：adjoin_eq_top_of_algebra (hS
+ : Algebra.adjoin F S = ⊤) : adjoin F S = ⊤
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.fieldRange_eq_map`：∀ {F : Type u_1} [inst : Field F] {E : Type u_
+2} [inst_1 : Field E] [inst_2 : Algebra F E] {K : Type u_3}   [inst_3 : Field K]
+ [inst_4 : Alg…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IntermediateField.adjoin_map`：adjoin_map {E' : Type*} [Field E'] [Algebr
+a F E'] (f : E ->ₐ[F] E') : (adjoin F S).map f = adjoin F (f '' S)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IntermediateField.adjoin_le_iff`：adjoin_le_iff {S : Set E} {T : Intermed
+iateField F E} : adjoin F S <= T ↔ S subseteq T
+· 使用定理 `IntermediateField.subset_adjoin`：subset_adjoin : S subseteq adjoin F S
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsPrimitiveRoot.map_of_injective`：map_of_injective [MonoidHomClass F M N
+] (h : IsPrimitiveRoot ζ k) (hf : Injective f) : IsPrimitiveRoot (f ζ) k where p
+ow_eq_one
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `pow_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : Set
+Like A M] [SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ …
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+（共 33 条，此处仅展示前 30 条）
 -/
 theorem nonempty_algEquiv_adjoin_of_isSepClosed [IsCyclotomicExtension S K L]
     (M : Type*) [Field M] [Algebra K M] [IsSepClosed M] :
-    Nonempty (L ≃ₐ[K] IntermediateField.adjoin K {x : M | exists n in S, n != 0 ∧ x ^ n = 1}) := by
+    Nonempty (L ≃ₐ[K] IntermediateField.adjoin K {x : M | ∃ n ∈ S, n ≠ 0 ∧ x ^ n = 1}) := by
   have := isSeparable S K L
-  let i : L ->ₐ[K] M := IsSepClosed.lift
+  let i : L →ₐ[K] M := IsSepClosed.lift
   refine ⟨(show L ≃ₐ[K] i.fieldRange from AlgEquiv.ofInjectiveField i).trans
     (IntermediateField.equivOfEq ?_)⟩
-  have htop : IntermediateField.adjoin K {x : L | exists n in S, n != 0 ∧ x ^ n = 1} = ⊤ :=
+  have htop : IntermediateField.adjoin K {x : L | ∃ n ∈ S, n ≠ 0 ∧ x ^ n = 1} = ⊤ :=
     IntermediateField.adjoin_eq_top_of_algebra K _ ((iff_adjoin_eq_top S K L).1 ‹_›).2
-  rw [AlgHom.fieldRange_eq_map]; rw [← htop]; rw [IntermediateField.adjoin_map]
+  rw [AlgHom.fieldRange_eq_map, ← htop, IntermediateField.adjoin_map]
   apply le_antisymm <;> rw [IntermediateField.adjoin_le_iff]
   · rintro _ ⟨y, ⟨n, hn, h1, h2⟩, rfl⟩
     exact IntermediateField.subset_adjoin K _ ⟨n, hn, h1, by simpa using congrArg i h2⟩
@@ -1682,85 +1938,90 @@ theorem nonempty_algEquiv_adjoin_of_isSepClosed [IsCyclotomicExtension S K L]
     have : NeZero n := ⟨h1⟩
     obtain ⟨y, hy⟩ := exists_isPrimitiveRoot K L hn h1
     obtain ⟨m, -, rfl⟩ := (hy.map_of_injective i.injective).eq_pow_of_pow_eq_one h2
-    exact pow_mem (IntermediateField.subset_adjoin K (i '' {x : L | exists n in S, n != 0 ∧ x ^ n = 1})
+    exact pow_mem (IntermediateField.subset_adjoin K (i '' {x : L | ∃ n ∈ S, n ≠ 0 ∧ x ^ n = 1})
       ⟨y, ⟨n, hn, h1, hy.pow_eq_one⟩, rfl⟩) m
-
-/--
-theorem `isGalois` / 定理 `isGalois`
-
-English:
-theorem isGalois
-  given: [IsCyclotomicExtension S K L]
-  statement: IsGalois K L
-  proof: by
-  rw [isGalois_iff]
-  use isSeparable S K L
-  obtain ⟨i⟩ := nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)
-  rw [i.transfer_normal]; rw [IntermediateField.normal_iff_forall_map_le]
-  intro f x hx
-  rw [← IntermediateField.mem_toSubalgebra]; rw [IntermediateField.toSubalgebra_map]; rw [Subalgebra.mem_map] at hx
-  obtain ⟨y, hy, rfl⟩ := hx
-  rw [IntermediateField.mem_toSubalgebra] at hy
-  induction hy using IntermediateField.adjoin_induction with
-  | mem x hx =>
-    obtain ⟨n, hn, h1, h2⟩ := hx
-    apply IntermediateField.subset_adjoin
-    use n, hn, h1
-    rw [← map_pow]; rw [← map_one f]; rw [h2]
-  | algebraMap x =>
-    convert! IntermediateField.algebraMap_mem _ x
-    exact AlgHom.commutes _ x
-  | add x y hx hy ihx ihy =>
-    rw [map_add]
-    exact add_mem ihx ihy
-  | mul x y hx hy ihx ihy =>
-    rw [map_mul]
-    exact mul_mem ihx ihy
-  | inv x hx ihx =>
-    rw [map_inv₀]
-    exact inv_mem ihx
-
-中文:
-定理 isGalois
-  条件: [是CyclotomicExtension S K L]
-  结论: 是Galois K L
-  证明: by
-  rw [isGalois_iff]
-  use isSeparable S K L
-  obtain ⟨i⟩ := nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)
-  rw [i.transfer_normal]; rw [IntermediateField.normal_iff_forall_map_le]
-  intro f x hx
-  rw [← IntermediateField.mem_toSubalgebra]; rw [IntermediateField.toSubalgebra_map]; rw [Subalgebra.mem_map] at hx
-  obtain ⟨y, hy, rfl⟩ := hx
-  rw [IntermediateField.mem_toSubalgebra] at hy
-  induction hy using IntermediateField.adjoin_induction with
-  | mem x hx =>
-    obtain ⟨n, hn, h1, h2⟩ := hx
-    apply IntermediateField.subset_adjoin
-    use n, hn, h1
-    rw [← map_pow]; rw [← map_one f]; rw [h2]
-  | algebraMap x =>
-    convert! IntermediateField.algebraMap_mem _ x
-    exact AlgHom.commutes _ x
-  | add x y hx hy ihx ihy =>
-    rw [map_add]
-    exact add_mem ihx ihy
-  | mul x y hx hy ihx ihy =>
-    rw [map_mul]
-    exact mul_mem ihx ihy
-  | inv x hx ihx =>
-    rw [map_inv₀]
-    exact inv_mem ihx
-
-Depends on / 依赖: AlgebraicClosure, IntermediateField, IntermediateField.adjoin_induction, IntermediateField.mem_toSubalgebra, IntermediateField.normal_iff_forall_map_le, IntermediateField.toSubalgebra_map, Subalgebra, Subalgebra.mem_map, adjoin_induction, i.transfer_normal, isGalois_iff, isSeparable, mem_map, mem_toSubalgebra, nonempty_algEquiv_adjoin_of_isSepClosed, normal_iff_forall_map_le, toSubalgebra_map, transfer_normal
+/-
+**IsCyclotomicExtension.isGalois** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtensio
+n`。
+形式化陈述：isGalois [IsCyclotomicExtension S K L] : IsGalois K L
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isGalois_iff`：isGalois_iff : IsGalois F E ↔ Algebra.IsSeparable F E ∧ No
+rmal F E
+· 使用定理 `IsCyclotomicExtension.isSeparable`：isSeparable [IsCyclotomicExtension S 
+K L] : Algebra.IsSeparable K L
+· 使用定理 `IsCyclotomicExtension.nonempty_algEquiv_adjoin_of_isSepClosed`：nonempty_
+algEquiv_adjoin_of_isSepClosed [IsCyclotomicExtension S K L] (M : Type*) [Field 
+M] [Algebra K M] [IsSepClosed M] : Nonempty (L ≃ₐ[K…
+· 使用定理 `AlgEquiv.transfer_normal`：AlgEquiv.transfer_normal (f : E ≃ₐ[F] E') : No
+rmal F E ↔ Normal F E'
+· 使用引理 `IntermediateField.normal_iff_forall_map_le`：normal_iff_forall_map_le : N
+ormal F K ↔ forall σ : L ->ₐ[F] L, K.map σ <= K
+· 使用定理 `IsAlgClosure.normal`：∀ (R : Type u_1) (K : Type u_2) [inst : Field R] [i
+nst_1 : Field K] [inst_2 : Algebra R K] [IsAlgClosure R K],   Normal R K
+· 使用定理 `AlgebraicClosure.instIsAlgClosureOfIsAlgebraic`：∀ (k : Type u) [inst : F
+ield k] {L : Type u_1} [inst_1 : Field L] [inst_2 : Algebra k L] [Algebra.IsAlge
+braic k L],   IsAlgClosure k (Algebr…
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Subalgebra.mem_map`：mem_map {S : Subalgebra R A} {f : A ->ₐ[R] B} {y : B
+} : y in map f S ↔ exists x in S, f x = y
+· 使用定理 `IntermediateField.toSubalgebra_map`：toSubalgebra_map (f : L ->ₐ[K] L') :
+ (S.map f).toSubalgebra = S.toSubalgebra.map f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IntermediateField.mem_toSubalgebra`：mem_toSubalgebra (s : IntermediateFi
+eld K L) (x : L) : x in s.toSubalgebra ↔ x in s
+· 使用定理 `IntermediateField.adjoin_induction`：adjoin_induction {s : Set E} {p : fo
+rall x in adjoin F s, Prop} (mem : forall x hx, p x (subset_adjoin _ _ hx)) (alg
+ebraMap : forall x, p (a…
+· 使用定理 `IntermediateField.subset_adjoin`：subset_adjoin : S subseteq adjoin F S
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `IntermediateField.algebraMap_mem`：algebraMap_mem (x : K) : algebraMap K 
+L x in S
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+（共 43 条，此处仅展示前 30 条）
 -/
 theorem isGalois [IsCyclotomicExtension S K L] : IsGalois K L := by
   rw [isGalois_iff]
   use isSeparable S K L
   obtain ⟨i⟩ := nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)
-  rw [i.transfer_normal]; rw [IntermediateField.normal_iff_forall_map_le]
+  rw [i.transfer_normal, IntermediateField.normal_iff_forall_map_le]
   intro f x hx
-  rw [← IntermediateField.mem_toSubalgebra]; rw [IntermediateField.toSubalgebra_map]; rw [Subalgebra.mem_map] at hx
+  rw [← IntermediateField.mem_toSubalgebra, IntermediateField.toSubalgebra_map,
+    Subalgebra.mem_map] at hx
   obtain ⟨y, hy, rfl⟩ := hx
   rw [IntermediateField.mem_toSubalgebra] at hy
   induction hy using IntermediateField.adjoin_induction with
@@ -1768,7 +2029,7 @@ theorem isGalois [IsCyclotomicExtension S K L] : IsGalois K L := by
     obtain ⟨n, hn, h1, h2⟩ := hx
     apply IntermediateField.subset_adjoin
     use n, hn, h1
-    rw [← map_pow]; rw [← map_one f]; rw [h2]
+    rw [← map_pow, ← map_one f, h2]
   | algebraMap x =>
     convert! IntermediateField.algebraMap_mem _ x
     exact AlgHom.commutes _ x
@@ -1782,70 +2043,62 @@ theorem isGalois [IsCyclotomicExtension S K L] : IsGalois K L := by
     rw [map_inv₀]
     exact inv_mem ihx
 
-/--
-theorem `isAbelianGalois` / 定理 `isAbelianGalois`
+/-- Cyclotomic extensions are abelian. -/
+/-
+**IsCyclotomicExtension.isAbelianGalois** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicE
+xtension`。
+形式化陈述：isAbelianGalois [IsCyclotomicExtension S K L] : IsAbelianGalois K L where 
+__
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.isGalois`：isGalois [IsCyclotomicExtension S K L] :
+ IsGalois K L
+· 使用定理 `IsCyclotomicExtension.isMulCommutative`：isMulCommutative [IsCyclotomicEx
+tension S A B] [IsDomain B] : IsMulCommutative (B ≃ₐ[A] B)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 
-English:
-theorem isAbelianGalois
-  given: [IsCyclotomicExtension S K L]
-  proof: isGalois S K L
-  __ := isMulCommutative S K L
-
-中文:
-定理 isAbelianGalois
-  条件: [是CyclotomicExtension S K L]
-  证明: isGalois S K L
-  __ := isMulCommutative S K L
-
-Depends on / 依赖: isGalois
+--- 原说明 ---
+Cyclotomic extensions are abelian.
 -/
 theorem isAbelianGalois [IsCyclotomicExtension S K L] :
     IsAbelianGalois K L where
   __ := isGalois S K L
   __ := isMulCommutative S K L
 
-/--
-Definition of `algEquiv` / `algEquiv` 的定义
+/-- Any two `S`-cyclotomic extensions are isomorphic. -/
+/-
+**IsCyclotomicExtension.algEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsCyclotomicExtensio
+n`。
+形式化陈述：algEquiv [IsCyclotomicExtension S K L] (L' : Type*) [Field L'] [Algebra K 
+L'] [IsCyclotomicExtension S K L'] : L ≃ₐ[K] L'
+参数：L' : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algEquiv
-  signature: [IsCyclotomicExtension S K L]
-  body: (nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)).some.trans
-    (nonempty_algEquiv_adjoin_of_isSepClosed S K L' (AlgebraicClosure K)).some.symm
-
-中文:
-定义 algEquiv
-  签名: [是CyclotomicExtension S K L]
-  定义体: (nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)).some.trans
-    (nonempty_algEquiv_adjoin_of_isSepClosed S K L' (AlgebraicClosure K)).some.symm
-
-Depends on / 依赖: AlgebraicClosure, nonempty_algEquiv_adjoin_of_isSepClosed, some.symm, some.trans
+--- 原说明 ---
+Any two `S`-cyclotomic extensions are isomorphic.
 -/
 noncomputable def algEquiv [IsCyclotomicExtension S K L]
     (L' : Type*) [Field L'] [Algebra K L'] [IsCyclotomicExtension S K L'] : L ≃ₐ[K] L' :=
   (nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)).some.trans
     (nonempty_algEquiv_adjoin_of_isSepClosed S K L' (AlgebraicClosure K)).some.symm
-
-/--
-theorem `nonempty_algEquiv_adjoin_of_exists_isPrimitiveRoot` / 定理 `nonempty_algEquiv_adjoin_of_exists_isPrimitiveRoot`
-
-English:
-theorem nonempty_algEquiv_adjoin_of_exists_isPrimitiveRoot
-  statement: [IsCyclotomicExtension S K L]
-  proof: have := IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K M h
-  ⟨algEquiv S K L _⟩
-
-中文:
-定理 nonempty_algEquiv_adjoin_of_存在_isPrimitiveRoot
-  结论: [是CyclotomicExtension S K L]
-  证明: have := IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K M h
-  ⟨algEquiv S K L _⟩
-
-Depends on / 依赖: IntermediateField, IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot, algEquiv, isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
+/-
+**IsCyclotomicExtension.nonempty_algEquiv_adjoin_of_exists_isPrimitiveRoot** 是 M
+athlib 中的一个定理，位于命名空间 `IsCyclotomicExtension`。
+形式化陈述：nonempty_algEquiv_adjoin_of_exists_isPrimitiveRoot [IsCyclotomicExtension 
+S K L] (M : Type*) [Field M] [Algebra K M] (h : forall n in S, n != 0 -> exists 
+r : M, IsPrimitiveRoot r n) : Nonempty (L ≃ₐ[K] IntermediateField.adjoin K {x : 
+M | exists n in S, n != 0 ∧ x ^ n = 1})
+参数：M : Type*；h : forall n in S, n != 0 -> exists r : M, IsPrimitiveRoot r n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
+`：∀ (S : Set ℕ) (K : Type w) (L : Type z) [inst : Field K] [inst_1 : Field L] [i
+nst_2 : Algebra K L],   (∀ n ∈ S, n ≠ 0 → ∃ r, IsPrimitiveRoot…
 -/
 theorem nonempty_algEquiv_adjoin_of_exists_isPrimitiveRoot [IsCyclotomicExtension S K L]
-    (M : Type*) [Field M] [Algebra K M] (h : forall n in S, n != 0 -> exists r : M, IsPrimitiveRoot r n) :
-    Nonempty (L ≃ₐ[K] IntermediateField.adjoin K {x : M | exists n in S, n != 0 ∧ x ^ n = 1}) :=
+    (M : Type*) [Field M] [Algebra K M] (h : ∀ n ∈ S, n ≠ 0 → ∃ r : M, IsPrimitiveRoot r n) :
+    Nonempty (L ≃ₐ[K] IntermediateField.adjoin K {x : M | ∃ n ∈ S, n ≠ 0 ∧ x ^ n = 1}) :=
   have := IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K M h
   ⟨algEquiv S K L _⟩
 
@@ -1853,42 +2106,76 @@ section Singleton
 
 variable [IsCyclotomicExtension {n} K L]
 
-/--
-theorem `isSplittingField_X_pow_sub_one` / 定理 `isSplittingField_X_pow_sub_one`
+/-- If `IsCyclotomicExtension {n} K L`, then `L` is the splitting field of `X ^ n - 1`. -/
+/-
+**IsCyclotomicExtension.isSplittingField_X_pow_sub_one** 是 Mathlib 中的一个定理，位于命名空间
+ `IsCyclotomicExtension`。
+形式化陈述：isSplittingField_X_pow_sub_one : IsSplittingField K L (X ^ n - 1)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.splits_X_pow_sub_one`：splits_X_pow_sub_one [H : Is
+CyclotomicExtension S K L] (hS : n in S) : Splits (map (algebraMap K L) (X ^ n -
+ 1))
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.map_sub`：∀ {R : Type u} [inst : Ring R] {p q : Polynomial R} 
+{S : Type u_1} [inst_1 : Ring S] (f : R →+* S),   Polynomial.map f (p - q) = Pol
+ynomial.…
+· 使用定理 `Polynomial.map_pow`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p :
+ Polynomial R} [inst_1 : Semiring S] (f : R →+* S) (n : ℕ),   Polynomial.map f (
+p ^ n) =…
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `Polynomial.map_one`：∀ {R : Type u} {S : Type v} [inst : Semiring R] [ins
+t_1 : Semiring S] (f : R →+* S), Polynomial.map f 1 = 1
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `Polynomial.aeval_one`：aeval_one : aeval x (1 : R[X]) = 1
+· 使用定理 `Polynomial.X_pow_sub_C_ne_zero`：X_pow_sub_C_ne_zero {n : Nat} (hn : 0 < 
+n) (a : R) : (X : R[X]) ^ n - C a != 0
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem isSplittingField_X_pow_sub_one
-  statement: IsSplittingField K L (X ^ n - 1)
-  proof: { splits' := splits_X_pow_sub_one K L (mem_singleton n)
-    adjoin_rootSet' := by
-      rw [← ((iff_adjoin_eq_top {n} K L).1 inferInstance).2]
-      congr
-      refine Set.ext fun x => ?_
-      simp only [mem_singleton_iff, ne_eq, exists_eq_left, NeZero.ne, not_false_eq_true, true_and,
-        mem_ofPred_eq]
-      simp only [mem_rootSet', map_sub, map_pow, aeval_one, aeval_X, sub_eq_zero, map_X,
-        and_iff_right_iff_imp, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_one]
-      exact fun _ => X_pow_sub_C_ne_zero (NeZero.pos n) (1 : L) }
-
-scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.isSplittingField_X_pow_sub_one
-
-中文:
-定理 isSplittingField_X_pow_sub_one
-  结论: 是分裂域 K L (X ^ n - 1)
-  证明: { splits' := splits_X_pow_sub_one K L (mem_singleton n)
-    adjoin_rootSet' := by
-      rw [← ((iff_adjoin_eq_top {n} K L).1 inferInstance).2]
-      congr
-      refine Set.ext fun x => ?_
-      simp only [mem_singleton_iff, ne_eq, exists_eq_left, NeZero.ne, not_false_eq_true, true_and,
-        mem_ofPred_eq]
-      simp only [mem_rootSet', map_sub, map_pow, aeval_one, aeval_X, sub_eq_zero, map_X,
-        and_iff_right_iff_imp, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_one]
-      exact fun _ => X_pow_sub_C_ne_zero (NeZero.pos n) (1 : L) }
-
-scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.isSplittingField_X_pow_sub_one
-
-Depends on / 依赖: NeZero, NeZero.ne, NeZero.pos, Polynomial, Polynomial.map_one, Polynomial.map_pow, Polynomial.map_sub, Set.ext, X_pow_sub_C_ne_zero, adjoin_rootSet, aeval_X, aeval_one, and_iff_right_iff_imp, exists_eq_left, iff_adjoin_eq_top, map_X, map_one, map_pow, map_sub, mem_ofPred_eq
+--- 原说明 ---
+If `IsCyclotomicExtension {n} K L`, then `L` is the splitting field of `X ^ n - 
+1`.
 -/
 theorem isSplittingField_X_pow_sub_one : IsSplittingField K L (X ^ n - 1) :=
   { splits' := splits_X_pow_sub_one K L (mem_singleton n)
@@ -1904,36 +2191,37 @@ theorem isSplittingField_X_pow_sub_one : IsSplittingField K L (X ^ n - 1) :=
 
 scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.isSplittingField_X_pow_sub_one
 
-/--
-theorem `splitting_field_cyclotomic` / 定理 `splitting_field_cyclotomic`
+/-- If `IsCyclotomicExtension {n} K L`, then `L` is the splitting field of `cyclotomic n K`. -/
+/-
+**IsCyclotomicExtension.splitting_field_cyclotomic** 是 Mathlib 中的一个定理，位于命名空间 `Is
+CyclotomicExtension`。
+形式化陈述：splitting_field_cyclotomic : IsSplittingField K L (cyclotomic n K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.splits_cyclotomic`：splits_cyclotomic [IsCyclotomic
+Extension S K L] (hS : n in S) : Splits ((cyclotomic n K).map (algebraMap K L))
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots`：adjoi
+n_roots_cyclotomic_eq_adjoin_nth_roots [IsDomain B] {ζ : B} {n : Nat} [NeZero n]
+ (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotomic n A…
 
-English:
-theorem splitting_field_cyclotomic
-  statement: IsSplittingField K L (cyclotomic n K)
-  proof: { splits' := splits_cyclotomic K L (mem_singleton n)
-    adjoin_rootSet' := by
-      rw [← ((iff_adjoin_eq_top {n} K L).1 inferInstance).2]
-      let := Classical.decEq L
-      obtain ⟨ζ : L, hζ⟩ :=
-        IsCyclotomicExtension.exists_isPrimitiveRoot K L (mem_singleton n) (NeZero.ne _)
-      exact adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ }
-
-scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.splitting_field_cyclotomic
-
-中文:
-定理 splitting_field_cyclotomic
-  结论: 是分裂域 K L (cyclotomic n K)
-  证明: { splits' := splits_cyclotomic K L (mem_singleton n)
-    adjoin_rootSet' := by
-      rw [← ((iff_adjoin_eq_top {n} K L).1 inferInstance).2]
-      let := Classical.decEq L
-      obtain ⟨ζ : L, hζ⟩ :=
-        IsCyclotomicExtension.exists_isPrimitiveRoot K L (mem_singleton n) (NeZero.ne _)
-      exact adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ }
-
-scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.splitting_field_cyclotomic
-
-Depends on / 依赖: Classical, Classical.decEq, IsCyclotomicExtension, IsCyclotomicExtension.exists_isPrimitiveRoot, NeZero, NeZero.ne, adjoin_rootSet, adjoin_roots_cyclotomic_eq_adjoin_nth_roots, exists_isPrimitiveRoot, iff_adjoin_eq_top, mem_singleton, splits, splits_cyclotomic
+--- 原说明 ---
+If `IsCyclotomicExtension {n} K L`, then `L` is the splitting field of `cyclotom
+ic n K`.
 -/
 theorem splitting_field_cyclotomic : IsSplittingField K L (cyclotomic n K) :=
   { splits' := splits_cyclotomic K L (mem_singleton n)
@@ -1954,22 +2242,19 @@ end IsCyclotomicExtension
 
 section CyclotomicField
 
-/--
-Definition of `CyclotomicField` / `CyclotomicField` 的定义
+/-- Given a nonzero `n : ℕ` and a field `K`, we define `CyclotomicField n K` as the
+splitting field of `cyclotomic n K`. If `n` is nonzero in `K`, it has
+the instance `IsCyclotomicExtension {n} K (CyclotomicField n K)`. -/
+/-
+**CyclotomicField** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CyclotomicField : Type w
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CyclotomicField
-  signature: : Type w
-  body: (cyclotomic n K).SplittingField
-deriving Inhabited
-
-中文:
-定义 CyclotomicField
-  签名: : 类型 w
-  定义体: (cyclotomic n K).SplittingField
-deriving Inhabited
-
-Depends on / 依赖: SplittingField, cyclotomic
+--- 原说明 ---
+Given a nonzero `n : ℕ` and a field `K`, we define `CyclotomicField n K` as the
+splitting field of `cyclotomic n K`. If `n` is nonzero in `K`, it has
+the instance `IsCyclotomicExtension {n} K (CyclotomicField n K)`.
 -/
 def CyclotomicField : Type w :=
   (cyclotomic n K).SplittingField
@@ -1981,82 +2266,87 @@ namespace CyclotomicField
 variable [Algebra A K] in
 deriving instance SMul A, Field, Algebra A, IsScalarTower A K for CyclotomicField n K
 
-/--
-Instance `algebra` / 实例 `algebra`
-
-English:
-instance algebra
-  signature: : Algebra K (CyclotomicField n K)
-  body: inferInstance
-
-中文:
-实例 algebra
-  签名: : 代数 K (CyclotomicField n K)
-  定义体: inferInstance
+/-
+**CyclotomicField.algebra** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicField`。
+形式化陈述：algebra : Algebra K (CyclotomicField n K)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance algebra : Algebra K (CyclotomicField n K) := inferInstance
 
 /-- Ensure there are no diamonds when `A = ℤ` but there are `reducible_and_instances` https://github.com/leanprover-community/mathlib4/issues/10906 -/
-example : Ring.toIntAlgebra (CyclotomicField n Rat) = CyclotomicField.instAlgebra _ _ _ := rfl
+/-
+**CyclotomicField.** 是 Mathlib 中的一个示例，位于命名空间 `CyclotomicField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: K] : CharZero (CyclotomicField n K)
-  body: charZero_of_injective_algebraMap (algebraMap K _).injective
-
-中文:
-实例 [特征零
-  签名: K] : 特征零 (CyclotomicField n K)
-  定义体: charZero_of_injective_algebraMap (algebraMap K _).injective
-
-Depends on / 依赖: algebraMap, charZero_of_injective_algebraMap, injective
+--- 原说明 ---
+Ensure there are no diamonds when `A = ℤ` but there are `reducible_and_instances
+` https://github.com/leanprover-community/mathlib4/issues/10906
+-/
+example : Ring.toIntAlgebra (CyclotomicField n ℚ) = CyclotomicField.instAlgebra _ _ _ := rfl
+/-
+**CyclotomicField.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharZero K] : CharZero (CyclotomicField n K) :=
   charZero_of_injective_algebraMap (algebraMap K _).injective
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isCyclotomicExtension` / 实例 `isCyclotomicExtension`
-
-English:
-instance isCyclotomicExtension
-  signature: [NeZero (n : K)]
-  body: by
-  have : NeZero (n : CyclotomicField n K) :=
-    NeZero.nat_of_injective (algebraMap K _).injective
-  let := Classical.decEq (CyclotomicField n K)
-  have := (degree_cyclotomic_pos n K (NeZero.pos n)).ne'
-  obtain ⟨ζ, hζ⟩ :=
-    Splits.exists_eval_eq_zero (SplittingField.splits (cyclotomic n K)) (by rwa [degree_map])
-  rw [eval_map]; rw [← eval_map]; rw [← IsRoot.def]; rw [map_cyclotomic]; rw [isRoot_cyclotomic_iff] at hζ
-  refine ⟨?_, ?_⟩
-  · simp only [mem_singleton_iff, forall_eq]
-    exact fun _ => ⟨ζ, hζ⟩
-  · rw [← Algebra.eq_top_iff, ← SplittingField.adjoin_rootSet, eq_comm]
-    exact IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ
-
-中文:
-实例 isCyclotomicExtension
-  签名: [NeZero (n : K)]
-  定义体: by
-  have : NeZero (n : CyclotomicField n K) :=
-    NeZero.nat_of_injective (algebraMap K _).injective
-  let := Classical.decEq (CyclotomicField n K)
-  have := (degree_cyclotomic_pos n K (NeZero.pos n)).ne'
-  obtain ⟨ζ, hζ⟩ :=
-    Splits.exists_eval_eq_zero (SplittingField.splits (cyclotomic n K)) (by rwa [degree_map])
-  rw [eval_map]; rw [← eval_map]; rw [← IsRoot.def]; rw [map_cyclotomic]; rw [isRoot_cyclotomic_iff] at hζ
-  refine ⟨?_, ?_⟩
-  · simp only [mem_singleton_iff, forall_eq]
-    exact fun _ => ⟨ζ, hζ⟩
-  · rw [← Algebra.eq_top_iff, ← SplittingField.adjoin_rootSet, eq_comm]
-    exact IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ
-
-Depends on / 依赖: Classical, Classical.decEq, CyclotomicField, IsRoot, IsRoot.def, NeZero, NeZero.nat_of_injective, NeZero.pos, Splits, Splits.exists_eval_eq_zero, SplittingField, SplittingField.splits, algebraMap, cyclotomic, degree_cyclotomic_pos, degree_map, eval_map, exists_eval_eq_zero, forall_eq, injective
+/-
+**CyclotomicField.isCyclotomicExtension** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicFie
+ld`。
+形式化陈述：isCyclotomicExtension [NeZero (n : K)] : IsCyclotomicExtension {n} K (Cycl
+otomicField n K)
+参数：n : K。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.nat_of_injective`：NeZero.nat_of_injective {n : Nat} [NeZero (n : 
+R)] [RingHomClass F R S] {f : F} (hf : Function.Injective f) : NeZero (n : S)
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Polynomial.degree_cyclotomic_pos`：degree_cyclotomic_pos (n : Nat) (R : T
+ype*) (hpos : 0 < n) [Ring R] [Nontrivial R] : 0 < (cyclotomic n R).degree
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Polynomial.Splits.exists_eval_eq_zero`：∀ {R : Type u_1} [inst : CommRing
+ R] {f : Polynomial R}, f.Splits → f.degree ≠ 0 → ∃ a, Polynomial.eval a f = 0
+· 使用定理 `Polynomial.SplittingField.splits`：∀ {K : Type v} [inst : Field K] (f : P
+olynomial K), (Polynomial.map (algebraMap K f.SplittingField) f).Splits
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_map`：degree_map (p : R[X]) (f : R ->+* S) : (p.map f).
+degree = p.degree
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Polynomial.isRoot_cyclotomic_iff`：isRoot_cyclotomic_iff [NeZero (n : R)]
+ {μ : R} : IsRoot (cyclotomic n R) μ ↔ IsPrimitiveRoot μ n
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.map_cyclotomic`：map_cyclotomic (n : Nat) {R S : Type*} [Ring 
+R] [Ring S] (f : R ->+* S) : map f (cyclotomic n R) = cyclotomic n S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.IsRoot.def`：∀ {R : Type u} {a : R} [inst : Semiring R] {p : P
+olynomial R}, p.IsRoot a ↔ Polynomial.eval a p = 0
+· 使用定理 `Polynomial.eval_map`：eval_map (x : S) : (p.map f).eval x = p.eval₂ f x
+· 使用定理 `Algebra.eq_top_iff`：eq_top_iff {S : Subalgebra R A} : S = ⊤ ↔ forall x :
+ A, x in S
+· 使用定理 `Polynomial.SplittingField.adjoin_rootSet`：adjoin_rootSet : Algebra.adjoi
+n K (f.rootSet (SplittingField f)) = ⊤
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots`：adjoi
+n_roots_cyclotomic_eq_adjoin_nth_roots [IsDomain B] {ζ : B} {n : Nat} [NeZero n]
+ (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotomic n A…
 -/
 instance isCyclotomicExtension [NeZero (n : K)] :
     IsCyclotomicExtension {n} K (CyclotomicField n K) := by
@@ -2066,47 +2356,15 @@ instance isCyclotomicExtension [NeZero (n : K)] :
   have := (degree_cyclotomic_pos n K (NeZero.pos n)).ne'
   obtain ⟨ζ, hζ⟩ :=
     Splits.exists_eval_eq_zero (SplittingField.splits (cyclotomic n K)) (by rwa [degree_map])
-  rw [eval_map]; rw [← eval_map]; rw [← IsRoot.def]; rw [map_cyclotomic]; rw [isRoot_cyclotomic_iff] at hζ
+  rw [eval_map, ← eval_map, ← IsRoot.def, map_cyclotomic, isRoot_cyclotomic_iff] at hζ
   refine ⟨?_, ?_⟩
   · simp only [mem_singleton_iff, forall_eq]
-    exact fun _ => ⟨ζ, hζ⟩
+    exact fun _ ↦ ⟨ζ, hζ⟩
   · rw [← Algebra.eq_top_iff, ← SplittingField.adjoin_rootSet, eq_comm]
     exact IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsCyclotomicExtension {0} K (CyclotomicField 0 K)
-  body: by aesop
-  adjoin_roots x := by
-    have finrank : Module.finrank K (CyclotomicField 0 K) = 1 := by
-      have : Polynomial.IsSplittingField K K (Polynomial.cyclotomic 0 K) :=
-        Polynomial.isSplittingField_C 1
-      let e : K ≃ₗ[K] (CyclotomicField 0 K) :=
-        (Polynomial.IsSplittingField.algEquiv K (Polynomial.cyclotomic 0 K)).toLinearEquiv
-      simp [← LinearEquiv.finrank_eq e, finrank_self]
-    simp [Subalgebra.bot_eq_top_iff_finrank_eq_one.mpr finrank]
-
-omit [NeZero n]
-
-中文:
-实例 :
-  签名: 是CyclotomicExtension {0} K (CyclotomicField 0 K)
-  定义体: by aesop
-  adjoin_roots x := by
-    have finrank : Module.finrank K (CyclotomicField 0 K) = 1 := by
-      have : Polynomial.IsSplittingField K K (Polynomial.cyclotomic 0 K) :=
-        Polynomial.isSplittingField_C 1
-      let e : K ≃ₗ[K] (CyclotomicField 0 K) :=
-        (Polynomial.IsSplittingField.algEquiv K (Polynomial.cyclotomic 0 K)).toLinearEquiv
-      simp [← LinearEquiv.finrank_eq e, finrank_self]
-    simp [Subalgebra.bot_eq_top_iff_finrank_eq_one.mpr finrank]
-
-omit [NeZero n]
-
-Depends on / 依赖: CyclotomicField, IsSplittingField, LinearEquiv, LinearEquiv.finrank_eq, Module, Module.finrank, Polynomial, Polynomial.IsSplittingField, Polynomial.IsSplittingField.algEquiv, Polynomial.cyclotomic, Polynomial.isSplittingField_C, Subalgebra, Subalgebra.bot_eq_top_iff_finrank_eq_one.mpr, adjoin_roots, algEquiv, bot_eq_top_iff_finrank_eq_one, cyclotomic, finrank, finrank_eq, finrank_self
+/-
+**CyclotomicField.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsCyclotomicExtension {0} K (CyclotomicField 0 K) where
   exists_isPrimitiveRoot := by aesop
@@ -2120,43 +2378,17 @@ instance : IsCyclotomicExtension {0} K (CyclotomicField 0 K) where
     simp [Subalgebra.bot_eq_top_iff_finrank_eq_one.mpr finrank]
 
 omit [NeZero n]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: K] : IsCyclotomicExtension {n} K (CyclotomicField n K)
-  body: match n with
-  | 0 => inferInstance
-  | _ + 1 => inferInstance
-
-中文:
-实例 [特征零
-  签名: K] : 是CyclotomicExtension {n} K (CyclotomicField n K)
-  定义体: match n with
-  | 0 => inferInstance
-  | _ + 1 => inferInstance
+/-
+**CyclotomicField.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharZero K] : IsCyclotomicExtension {n} K (CyclotomicField n K) :=
   match n with
   | 0 => inferInstance
   | _ + 1 => inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NumberField
-  signature: K] : NumberField (CyclotomicField n K)
-  body: IsCyclotomicExtension.numberField {n} K _
-
-中文:
-实例 [数域
-  签名: K] : 数域 (CyclotomicField n K)
-  定义体: IsCyclotomicExtension.numberField {n} K _
-
-Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.numberField, numberField
+/-
+**CyclotomicField.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NumberField K] : NumberField (CyclotomicField n K) :=
   IsCyclotomicExtension.numberField {n} K _
@@ -2171,31 +2403,13 @@ variable [Algebra A K]
 
 section CyclotomicRing
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsDomain
-  signature: A] [IsFractionRing A K] : Module.IsTorsionFree A (CyclotomicField n K)
-  body: by
-  rw [isTorsionFree_iff_faithfulSMul]; rw [faithfulSMul_iff_algebraMap_injective]; rw [IsScalarTower.algebraMap_eq A K (CyclotomicField n K)]
-  exact
-    (Function.Injective.comp (FaithfulSMul.algebraMap_injective K (CyclotomicField n K))
-      (IsFractionRing.injective A K) :)
-
-中文:
-实例 [是整环
-  签名: A] [IsFractionRing A K] : 模.是无挠 A (CyclotomicField n K)
-  定义体: by
-  rw [isTorsionFree_iff_faithfulSMul]; rw [faithfulSMul_iff_algebraMap_injective]; rw [IsScalarTower.algebraMap_eq A K (CyclotomicField n K)]
-  exact
-    (Function.Injective.comp (FaithfulSMul.algebraMap_injective K (CyclotomicField n K))
-      (IsFractionRing.injective A K) :)
-
-Depends on / 依赖: CyclotomicField, FaithfulSMul, FaithfulSMul.algebraMap_injective, Function, Function.Injective.comp, Injective, IsFractionRing, IsFractionRing.injective, IsScalarTower, IsScalarTower.algebraMap_eq, algebraMap_eq, algebraMap_injective, faithfulSMul_iff_algebraMap_injective, injective, isTorsionFree_iff_faithfulSMul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsDomain A] [IsFractionRing A K] : Module.IsTorsionFree A (CyclotomicField n K) := by
-  rw [isTorsionFree_iff_faithfulSMul]; rw [faithfulSMul_iff_algebraMap_injective]; rw [IsScalarTower.algebraMap_eq A K (CyclotomicField n K)]
+  rw [isTorsionFree_iff_faithfulSMul, faithfulSMul_iff_algebraMap_injective,
+    IsScalarTower.algebraMap_eq A K (CyclotomicField n K)]
   exact
     (Function.Injective.comp (FaithfulSMul.algebraMap_injective K (CyclotomicField n K))
       (IsFractionRing.injective A K) :)
@@ -2204,22 +2418,19 @@ instance [IsDomain A] [IsFractionRing A K] : Module.IsTorsionFree A (CyclotomicF
 the `A`-subalgebra of `CyclotomicField n K` generated by the roots of `X ^ n - 1`. If `n`
 is nonzero in `A`, it has the instance `IsCyclotomicExtension {n} A (CyclotomicRing n A K)`. -/
 @[nolint unusedArguments]
-/--
-Definition of `CyclotomicRing` / `CyclotomicRing` 的定义
+/-
+**CyclotomicRing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CyclotomicRing : Type w
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CyclotomicRing
-  signature: : Type w
-  body: adjoin A {b : CyclotomicField n K | b ^ n = 1}
-deriving CommRing, IsDomain, Inhabited
-
-中文:
-定义 CyclotomicRing
-  签名: : 类型 w
-  定义体: adjoin A {b : CyclotomicField n K | b ^ n = 1}
-deriving CommRing, IsDomain, Inhabited
-
-Depends on / 依赖: CyclotomicField, adjoin
+--- 原说明 ---
+If `A` is a domain with fraction field `K` and `n : ℕ`, we define `CyclotomicRin
+g n A K` as
+the `A`-subalgebra of `CyclotomicField n K` generated by the roots of `X ^ n - 1
+`. If `n`
+is nonzero in `A`, it has the instance `IsCyclotomicExtension {n} A (CyclotomicR
+ing n A K)`.
 -/
 def CyclotomicRing : Type w :=
   adjoin A {b : CyclotomicField n K | b ^ n = 1}
@@ -2227,207 +2438,171 @@ deriving CommRing, IsDomain, Inhabited
 
 namespace CyclotomicRing
 
-/--
-Instance `algebraBase` / 实例 `algebraBase`
+/-- The `A`-algebra structure on `CyclotomicRing n A K`. -/
+/-
+**CyclotomicRing.algebraBase** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicRing`。
+形式化陈述：algebraBase : Algebra A (CyclotomicRing n A K)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance algebraBase
-  signature: : Algebra A (CyclotomicRing n A K)
-  body: inferInstanceAs Algebra A (adjoin A _)
-
-中文:
-实例 algebraBase
-  签名: : 代数 A (CyclotomicRing n A K)
-  定义体: inferInstanceAs Algebra A (adjoin A _)
-
-Depends on / 依赖: Algebra, adjoin
+--- 原说明 ---
+The `A`-algebra structure on `CyclotomicRing n A K`.
 -/
 instance algebraBase : Algebra A (CyclotomicRing n A K) :=
-inferInstanceAs Algebra A (adjoin A _)
+  inferInstanceAs <| Algebra A (adjoin A _)
 
 -- Ensure that there is no diamonds with ℤ.
 -- but there is at `reducible_and_instances` https://github.com/leanprover-community/mathlib4/issues/10906
-example {n : Nat} : CyclotomicRing.algebraBase n Int Rat = Ring.toIntAlgebra _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsDomain
-  signature: A] [IsFractionRing A K] : IsTorsionFree A (CyclotomicRing n A K)
-  body: (adjoin A _).instIsTorsionFree
-
-omit [NeZero n] in
-
-中文:
-实例 [是整环
-  签名: A] [IsFractionRing A K] : 是无挠 A (CyclotomicRing n A K)
-  定义体: (adjoin A _).instIsTorsionFree
-
-omit [NeZero n] in
-
-Depends on / 依赖: adjoin, instIsTorsionFree
+/-
+**CyclotomicRing.** 是 Mathlib 中的一个示例，位于命名空间 `CyclotomicRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example {n : ℕ} : CyclotomicRing.algebraBase n ℤ ℚ = Ring.toIntAlgebra _ := rfl
+/-
+**CyclotomicRing.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsDomain A] [IsFractionRing A K] : IsTorsionFree A (CyclotomicRing n A K) :=
   (adjoin A _).instIsTorsionFree
 
 omit [NeZero n] in
-/--
-theorem `algebraBase_injective` / 定理 `algebraBase_injective`
-
-English:
-theorem algebraBase_injective
-  given: [IsDomain A] [IsFractionRing A K]
-  proof: FaithfulSMul.algebraMap_injective _ _
-
-中文:
-定理 algebraBase_injective
-  条件: [是整环 A] [IsFractionRing A K]
-  证明: FaithfulSMul.algebraMap_injective _ _
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, HeytingAlgebra, HeytingHomClass, HeytingHomClass.toBoundedLatticeHomClass, algebraMap_injective, toBoundedLatticeHomClass
+/-
+**CyclotomicRing.algebraBase_injective** 是 Mathlib 中的一个定理，位于命名空间 `CyclotomicRing
+`。
+形式化陈述：algebraBase_injective [IsDomain A] [IsFractionRing A K] : Function.Injecti
+ve algebraMap A (CyclotomicRing n A K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `instIsDomainCyclotomicRing`：∀ (n : ℕ) (A : Type u_2) (K : Type u_1) [ins
+t : CommRing A] [inst_1 : Field K] [inst_2 : Algebra A K],   IsDomain (Cyclotomi
+cRing n A K)
+· 使用定理 `CyclotomicRing.instIsTorsionFreeOfIsDomainOfIsFractionRing`：∀ (n : ℕ) (A
+ : Type u) (K : Type w) [inst : CommRing A] [inst_1 : Field K] [inst_2 : Algebra
+ A K] [IsDomain A]   [IsFractionRing A K], Modul…
 -/
 theorem algebraBase_injective [IsDomain A] [IsFractionRing A K] :
-Function.Injective algebraMap A (CyclotomicRing n A K) :=
+    Function.Injective <| algebraMap A (CyclotomicRing n A K) :=
   FaithfulSMul.algebraMap_injective _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra (CyclotomicRing n A K) (CyclotomicField n K)
-  body: inferInstanceAs Algebra (adjoin A _) (CyclotomicField n K)
-
-omit [NeZero n] in
-
-中文:
-实例 :
-  签名: 代数 (CyclotomicRing n A K) (CyclotomicField n K)
-  定义体: inferInstanceAs Algebra (adjoin A _) (CyclotomicField n K)
-
-omit [NeZero n] in
-
-Depends on / 依赖: Algebra, CoheytingAlgebra, CoheytingHomClass, CoheytingHomClass.toBoundedLatticeHomClass, CyclotomicField, adjoin, toBoundedLatticeHomClass
+/-
+**CyclotomicRing.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra (CyclotomicRing n A K) (CyclotomicField n K) :=
-inferInstanceAs Algebra (adjoin A _) (CyclotomicField n K)
+  inferInstanceAs <| Algebra (adjoin A _) (CyclotomicField n K)
 
 omit [NeZero n] in
-/--
-theorem `adjoin_algebra_injective` / 定理 `adjoin_algebra_injective`
-
-English:
-theorem adjoin_algebra_injective
-  proof: Subtype.val_injective
-
-中文:
-定理 adjoin_algebra_injective
-  证明: Subtype.val_injective
-
-Depends on / 依赖: BiheytingAlgebra, BiheytingHomClass, BiheytingHomClass.toHeytingHomClass, Subtype, Subtype.val_injective, toHeytingHomClass, val_injective
+/-
+**CyclotomicRing.adjoin_algebra_injective** 是 Mathlib 中的一个定理，位于命名空间 `CyclotomicR
+ing`。
+形式化陈述：adjoin_algebra_injective : Function.Injective algebraMap (CyclotomicRing n
+ A K) (CyclotomicField n K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
 -/
 theorem adjoin_algebra_injective :
-Function.Injective algebraMap (CyclotomicRing n A K) (CyclotomicField n K) :=
+    Function.Injective <| algebraMap (CyclotomicRing n A K) (CyclotomicField n K) :=
   Subtype.val_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTorsionFree (CyclotomicRing n A K) (CyclotomicField n K)
-  body: isTorsionFree_iff_algebraMap_injective.mpr (adjoin_algebra_injective n A K)
-
-中文:
-实例 :
-  签名: 是无挠 (CyclotomicRing n A K) (CyclotomicField n K)
-  定义体: isTorsionFree_iff_algebraMap_injective.mpr (adjoin_algebra_injective n A K)
-
-Depends on / 依赖: BiheytingAlgebra, BiheytingHomClass, BiheytingHomClass.toCoheytingHomClass, adjoin_algebra_injective, isTorsionFree_iff_algebraMap_injective, isTorsionFree_iff_algebraMap_injective.mpr, toCoheytingHomClass
+/-
+**CyclotomicRing.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTorsionFree (CyclotomicRing n A K) (CyclotomicField n K) :=
   isTorsionFree_iff_algebraMap_injective.mpr (adjoin_algebra_injective n A K)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower A (CyclotomicRing n A K) (CyclotomicField n K)
-  body: inferInstanceAs IsScalarTower A (adjoin A _) (CyclotomicField n K)
-
-中文:
-实例 :
-  签名: 标量塔 A (CyclotomicRing n A K) (CyclotomicField n K)
-  定义体: inferInstanceAs IsScalarTower A (adjoin A _) (CyclotomicField n K)
-
-Depends on / 依赖: CyclotomicField, HeytingAlgebra, IsScalarTower, OrderIsoClass, OrderIsoClass.toHeytingHomClass, adjoin, toHeytingHomClass
+/-
+**CyclotomicRing.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower A (CyclotomicRing n A K) (CyclotomicField n K) :=
-inferInstanceAs IsScalarTower A (adjoin A _) (CyclotomicField n K)
+  inferInstanceAs <| IsScalarTower A (adjoin A _) (CyclotomicField n K)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isCyclotomicExtension` / 实例 `isCyclotomicExtension`
-
-English:
-instance isCyclotomicExtension
-  signature: [IsDomain A] [IsFractionRing A K] [NeZero ((n : Nat) : A)]
-  body: by
-    rw [mem_singleton_iff] at han
-    subst a
-    have := NeZero.of_faithfulSMul A K n
-    have := NeZero.of_faithfulSMul A (CyclotomicField n K) n
-    obtain ⟨μ, hμ⟩ := (CyclotomicField.isCyclotomicExtension n K).exists_isPrimitiveRoot
-      (mem_singleton n) (NeZero.ne n)
-    refine ⟨⟨μ, subset_adjoin ?_⟩, ?_⟩
-    · apply (isRoot_of_unity_iff (NeZero.pos n) (CyclotomicField n K)).mpr
-      refine ⟨n, Nat.mem_divisors_self _ (NeZero.ne n), ?_⟩
-      rwa [← isRoot_cyclotomic_iff] at hμ
-    · rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
-  adjoin_roots x := by
-    obtain ⟨x, hx⟩ := x
-    refine
-      adjoin_induction (fun y hy => ?_) (fun a => ?_) (fun y z _ _ hy hz => ?_)
-        (fun y z _ _ hy hz => ?_) hx
-    · refine subset_adjoin ?_
-      simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq]
-      exact ⟨NeZero.ne n, by rwa [← Subalgebra.coe_eq_one, Subalgebra.coe_pow, Subtype.coe_mk]⟩
-    · exact Subalgebra.algebraMap_mem _ a
-    · exact Subalgebra.add_mem _ hy hz
-    · exact Subalgebra.mul_mem _ hy hz
-
-中文:
-实例 isCyclotomicExtension
-  签名: [是整环 A] [IsFractionRing A K] [NeZero ((n : 自然数) : A)]
-  定义体: by
-    rw [mem_singleton_iff] at han
-    subst a
-    have := NeZero.of_faithfulSMul A K n
-    have := NeZero.of_faithfulSMul A (CyclotomicField n K) n
-    obtain ⟨μ, hμ⟩ := (CyclotomicField.isCyclotomicExtension n K).exists_isPrimitiveRoot
-      (mem_singleton n) (NeZero.ne n)
-    refine ⟨⟨μ, subset_adjoin ?_⟩, ?_⟩
-    · apply (isRoot_of_unity_iff (NeZero.pos n) (CyclotomicField n K)).mpr
-      refine ⟨n, Nat.mem_divisors_self _ (NeZero.ne n), ?_⟩
-      rwa [← isRoot_cyclotomic_iff] at hμ
-    · rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
-  adjoin_roots x := by
-    obtain ⟨x, hx⟩ := x
-    refine
-      adjoin_induction (fun y hy => ?_) (fun a => ?_) (fun y z _ _ hy hz => ?_)
-        (fun y z _ _ hy hz => ?_) hx
-    · refine subset_adjoin ?_
-      simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq]
-      exact ⟨NeZero.ne n, by rwa [← Subalgebra.coe_eq_one, Subalgebra.coe_pow, Subtype.coe_mk]⟩
-    · exact Subalgebra.algebraMap_mem _ a
-    · exact Subalgebra.add_mem _ hy hz
-    · exact Subalgebra.mul_mem _ hy hz
-
-Depends on / 依赖: CoheytingAlgebra, CyclotomicField, CyclotomicField.isCyclotomicExtension, IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff, Nat.mem_divisors_self, NeZero, NeZero.ne, NeZero.of_faithfulSMul, NeZero.pos, OrderIsoClass, OrderIsoClass.toCoheytingHomClass, coe_submonoidClass_iff, exists_isPrimitiveRoot, isCyclotomicExtension, isRoot_cyclotomic_iff, isRoot_of_unity_iff, mem_divisors_self, mem_singleton, mem_singleton_iff
+/-
+**CyclotomicRing.isCyclotomicExtension** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicRing
+`。
+形式化陈述：isCyclotomicExtension [IsDomain A] [IsFractionRing A K] [NeZero ((n : Nat)
+ : A)] : IsCyclotomicExtension {n} A (CyclotomicRing n A K) where exists_isPrimi
+tiveRoot {a} han _
+参数：(n : Nat) : A。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.of_faithfulSMul`：∀ (R : Type u_1) (A : Type u_2) [inst : Semiring
+ R] [inst_1 : Semiring A] [inst_2 : _root_.Module R A]   [IsScalarTower R A A] [
+FaithfulSMul…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `FaithfulSMul.to_isTorsionFree`：∀ (R : Type u_1) (A : Type u_3) [inst : C
+ommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A] [FaithfulSMul R A]  
+ [Nontrivial R] [Is…
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeCyclotomicFieldOfIsDomainOfIsFractionRing`：∀ (n : ℕ) (A
+ : Type u) (K : Type w) [inst : CommRing A] [inst_1 : Field K] [inst_2 : Algebra
+ A K] [IsDomain A]   [IsFractionRing A K], Modul…
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isRoot_of_unity_iff`：∀ {n : ℕ},   0 < n →     ∀ (R : Type u_2) [inst : C
+ommRing R] [IsDomain R] {ζ : R},       ζ ^ n = 1 ↔ ∃ i ∈ n.divisors, (Polynomial
+.cyclotom…
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.mem_divisors_self`：mem_divisors_self (n : Nat) (h : n != 0) : n in n
+.divisors
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.isRoot_cyclotomic_iff`：isRoot_cyclotomic_iff [NeZero (n : R)]
+ {μ : R} : IsRoot (cyclotomic n R) μ ↔ IsPrimitiveRoot μ n
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `IsPrimitiveRoot.coe_submonoidClass_iff`：coe_submonoidClass_iff {M B : Ty
+pe*} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] {N : B} {ζ : N} : IsPrimi
+tiveRoot (ζ : M) k ↔ IsPrimi…
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Algebra.adjoin_induction`：adjoin_induction {p : (x : A) -> x in adjoin R
+ s -> Prop} (mem : forall (x) (hx : x in s), p x (subset_adjoin hx)) (algebraMap
+ : forall r, p…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+（共 39 条，此处仅展示前 30 条）
 -/
-instance isCyclotomicExtension [IsDomain A] [IsFractionRing A K] [NeZero ((n : Nat) : A)] :
+instance isCyclotomicExtension [IsDomain A] [IsFractionRing A K] [NeZero ((n : ℕ) : A)] :
     IsCyclotomicExtension {n} A (CyclotomicRing n A K) where
   exists_isPrimitiveRoot {a} han _ := by
     rw [mem_singleton_iff] at han
@@ -2452,81 +2627,9 @@ instance isCyclotomicExtension [IsDomain A] [IsFractionRing A K] [NeZero ((n : N
     · exact Subalgebra.algebraMap_mem _ a
     · exact Subalgebra.add_mem _ hy hz
     · exact Subalgebra.mul_mem _ hy hz
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFractionRing
-  signature: A K] [IsDomain A] [NeZero (n : A)] :
-  body: fun ⟨x, hx⟩ => by
-    rw [isUnit_iff_ne_zero]
-    apply map_ne_zero_of_mem_nonZeroDivisors
-    · apply adjoin_algebra_injective
-    · exact hx
-  surj x := by
-    have : NeZero (n : K) := NeZero.nat_of_injective (IsFractionRing.injective A K)
-    refine
-      Algebra.adjoin_induction
-        (hx := ((IsCyclotomicExtension.iff_singleton n K (CyclotomicField n K)).1
-            (CyclotomicField.isCyclotomicExtension n K)).2 x)
-        (fun y hy => ?_) (fun k => ?_) ?_ ?_
-    · exact ⟨⟨⟨y, subset_adjoin hy⟩, 1⟩, by simp; rfl⟩
-    · have : IsLocalization (nonZeroDivisors A) K := inferInstance
-      replace := this.surj
-      obtain ⟨⟨z, w⟩, hw⟩ := this k
-      refine ⟨⟨algebraMap A (CyclotomicRing n A K) z, algebraMap A (CyclotomicRing n A K) w,
-        map_mem_nonZeroDivisors _ (algebraBase_injective n A K) w.2⟩, ?_⟩
-      let : IsScalarTower A K (CyclotomicField n K) :=
-        IsScalarTower.of_algebraMap_eq (congr_fun rfl)
-      rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [@IsScalarTower.algebraMap_apply A K _ _ _ _ _ (_root_.CyclotomicField.algebra n K) _ _ w]; rw [← map_mul]; rw [hw]; rw [← IsScalarTower.algebraMap_apply]
-    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
-      refine ⟨⟨a.1 * b.2 + b.1 * a.2, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
-      rw [map_mul]; rw [add_mul]; rw [← mul_assoc]; rw [ha]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [hb]
-      simp only [map_add, map_mul]
-    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
-      refine ⟨⟨a.1 * b.1, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
-      rw [map_mul]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [mul_assoc]; rw [←
-        mul_assoc z]; rw [hb]; rw [← mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [ha]
-      simp only [map_mul]
-  exists_of_eq {x y} h := ⟨1, by rw [adjoin_algebra_injective n A K h]⟩
-
-中文:
-实例 [IsFractionRing
-  签名: A K] [是整环 A] [NeZero (n : A)] :
-  定义体: fun ⟨x, hx⟩ => by
-    rw [isUnit_iff_ne_zero]
-    apply map_ne_zero_of_mem_nonZeroDivisors
-    · apply adjoin_algebra_injective
-    · exact hx
-  surj x := by
-    have : NeZero (n : K) := NeZero.nat_of_injective (IsFractionRing.injective A K)
-    refine
-      Algebra.adjoin_induction
-        (hx := ((IsCyclotomicExtension.iff_singleton n K (CyclotomicField n K)).1
-            (CyclotomicField.isCyclotomicExtension n K)).2 x)
-        (fun y hy => ?_) (fun k => ?_) ?_ ?_
-    · exact ⟨⟨⟨y, subset_adjoin hy⟩, 1⟩, by simp; rfl⟩
-    · have : IsLocalization (nonZeroDivisors A) K := inferInstance
-      replace := this.surj
-      obtain ⟨⟨z, w⟩, hw⟩ := this k
-      refine ⟨⟨algebraMap A (CyclotomicRing n A K) z, algebraMap A (CyclotomicRing n A K) w,
-        map_mem_nonZeroDivisors _ (algebraBase_injective n A K) w.2⟩, ?_⟩
-      let : IsScalarTower A K (CyclotomicField n K) :=
-        IsScalarTower.of_algebraMap_eq (congr_fun rfl)
-      rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [@IsScalarTower.algebraMap_apply A K _ _ _ _ _ (_root_.CyclotomicField.algebra n K) _ _ w]; rw [← map_mul]; rw [hw]; rw [← IsScalarTower.algebraMap_apply]
-    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
-      refine ⟨⟨a.1 * b.2 + b.1 * a.2, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
-      rw [map_mul]; rw [add_mul]; rw [← mul_assoc]; rw [ha]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [hb]
-      simp only [map_add, map_mul]
-    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
-      refine ⟨⟨a.1 * b.1, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
-      rw [map_mul]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [mul_assoc]; rw [←
-        mul_assoc z]; rw [hb]; rw [← mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [ha]
-      simp only [map_mul]
-  exists_of_eq {x y} h := ⟨1, by rw [adjoin_algebra_injective n A K h]⟩
-
-Depends on / 依赖: Algebra, Algebra.adjoin_induction, BiheytingAlgebra, CyclotomicField, CyclotomicField.isCyclotomicExtension, IsCyclotomicExtension, IsCyclotomicExtension.iff_singleton, IsFractionRing, IsFractionRing.injective, IsLocalization, NeZero, NeZero.nat_of_injective, OrderIsoClass, OrderIsoClass.toBiheytingHomClass, adjoin_algebra_injective, adjoin_induction, iff_singleton, injective, isCyclotomicExtension, isUnit_iff_ne_zero
+/-
+**CyclotomicRing.** 是 Mathlib 中的一个实例，位于命名空间 `CyclotomicRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFractionRing A K] [IsDomain A] [NeZero (n : A)] :
     IsFractionRing (CyclotomicRing n A K) (CyclotomicField n K) where
@@ -2550,40 +2653,55 @@ instance [IsFractionRing A K] [IsDomain A] [NeZero (n : A)] :
         map_mem_nonZeroDivisors _ (algebraBase_injective n A K) w.2⟩, ?_⟩
       let : IsScalarTower A K (CyclotomicField n K) :=
         IsScalarTower.of_algebraMap_eq (congr_fun rfl)
-      rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [@IsScalarTower.algebraMap_apply A K _ _ _ _ _ (_root_.CyclotomicField.algebra n K) _ _ w]; rw [← map_mul]; rw [hw]; rw [← IsScalarTower.algebraMap_apply]
+      rw [← IsScalarTower.algebraMap_apply, ← IsScalarTower.algebraMap_apply,
+        @IsScalarTower.algebraMap_apply A K _ _ _ _ _ (_root_.CyclotomicField.algebra n K) _ _ w,
+        ← map_mul, hw, ← IsScalarTower.algebraMap_apply]
     · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
       refine ⟨⟨a.1 * b.2 + b.1 * a.2, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
-      rw [map_mul]; rw [add_mul]; rw [← mul_assoc]; rw [ha]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [hb]
+      rw [map_mul, add_mul, ← mul_assoc, ha,
+        mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2), ← mul_assoc, hb]
       simp only [map_add, map_mul]
     · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
       refine ⟨⟨a.1 * b.1, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
-      rw [map_mul]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [mul_assoc]; rw [←
-        mul_assoc z]; rw [hb]; rw [← mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [ha]
+      rw [map_mul, mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2), mul_assoc, ←
+        mul_assoc z, hb, ← mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2), ← mul_assoc, ha]
       simp only [map_mul]
   exists_of_eq {x y} h := ⟨1, by rw [adjoin_algebra_injective n A K h]⟩
-
-/--
-theorem `eq_adjoin_primitive_root` / 定理 `eq_adjoin_primitive_root`
-
-English:
-theorem eq_adjoin_primitive_root
-  given: {μ : CyclotomicField n K} (h : IsPrimitiveRoot μ n)
-  proof: by
-  rw [← IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic h]; rw [IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots h]
-  simp [CyclotomicRing, NeZero.ne n]
-
-中文:
-定理 eq_adjoin_primitive_root
-  条件: {μ : CyclotomicField n K} (h : 是PrimitiveRoot μ n)
-  证明: by
-  rw [← IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic h]; rw [IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots h]
-  simp [CyclotomicRing, NeZero.ne n]
-
-Depends on / 依赖: CyclotomicRing, IsCyclotomicExtension, IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots, IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic, NeZero, NeZero.ne, adjoin_roots_cyclotomic_eq_adjoin_nth_roots, adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic
+/-
+**CyclotomicRing.eq_adjoin_primitive_root** 是 Mathlib 中的一个定理，位于命名空间 `CyclotomicR
+ing`。
+形式化陈述：eq_adjoin_primitive_root {μ : CyclotomicField n K} (h : IsPrimitiveRoot μ 
+n) : CyclotomicRing n A K = adjoin A ({μ} : Set (CyclotomicField n K))
+参数：h : IsPrimitiveRoot μ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic`
+：adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic {n : Nat} [NeZero n] [IsDomai
+n B] {ζ : B} (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotom…
+· 使用定理 `IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots`：adjoi
+n_roots_cyclotomic_eq_adjoin_nth_roots [IsDomain B] {ζ : B} {n : Nat} [NeZero n]
+ (hζ : IsPrimitiveRoot ζ n) : adjoin A ((cyclotomic n A…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_adjoin_primitive_root {μ : CyclotomicField n K} (h : IsPrimitiveRoot μ n) :
     CyclotomicRing n A K = adjoin A ({μ} : Set (CyclotomicField n K)) := by
-  rw [← IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic h]; rw [IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots h]
+  rw [← IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic h,
+    IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots h]
   simp [CyclotomicRing, NeZero.ne n]
 
 end CyclotomicRing
@@ -2596,62 +2714,78 @@ section IsSepClosed
 
 variable [IsSepClosed K]
 
-/--
-theorem `IsSepClosed.isCyclotomicExtension` / 定理 `IsSepClosed.isCyclotomicExtension`
+/-- Separably closed fields are `S`-cyclotomic extensions over themselves if
+`NeZero ((a : ℕ) : K)` for all nonzero `a ∈ S`. -/
+/-
+**IsSepClosed.isCyclotomicExtension** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSepClosed.isCyclotomicExtension (h : forall a in S, a != 0 -> NeZero (a 
+: K)) : IsCyclotomicExtension S K K
+参数：h : forall a in S, a != 0 -> NeZero (a : K)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSepClosed.exists_aeval_eq_zero`：exists_aeval_eq_zero {k : Type*} [Comm
+Semiring k] [IsSepClosed K] [Algebra k K] [FaithfulSMul k K] (p : k[X]) (hp : p.
+degree != 0) (hsep : p…
+· 使用定理 `instFaithfulSMul_1`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] [IsSimpleRing R]   [Nontrivial A], 
+Faithful…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Polynomial.degree_cyclotomic_pos`：degree_cyclotomic_pos (n : Nat) (R : T
+ype*) (hpos : 0 < n) [Ring R] [Nontrivial R] : 0 < (cyclotomic n R).degree
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Polynomial.separable_cyclotomic`：separable_cyclotomic (n : Nat) (K : Typ
+e*) [Field K] [NeZero (n : K)] : (cyclotomic n K).Separable
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.isRoot_cyclotomic_iff`：isRoot_cyclotomic_iff [NeZero (n : R)]
+ {μ : R} : IsRoot (cyclotomic n R) μ ↔ IsPrimitiveRoot μ n
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.IsRoot.def`：∀ {R : Type u} {a : R} [inst : Semiring R] {p : P
+olynomial R}, p.IsRoot a ↔ Polynomial.eval a p = 0
+· 使用定理 `Polynomial.coe_aeval_eq_eval`：coe_aeval_eq_eval (r : R) : (aeval r : R[X
+] -> R) = eval r
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.eq_top_iff`：eq_top_iff {S : Subalgebra R A} : S = ⊤ ↔ forall x :
+ A, x in S
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-theorem IsSepClosed.isCyclotomicExtension
-  given: (h : forall a in S, a != 0 -> NeZero (a : K))
-  proof: by
-refine ⟨fun {a} ha ha' => ?_, Algebra.eq_top_iff.mp Subsingleton.elim _ _⟩
-  have := h a ha ha'
-  obtain ⟨r, hr⟩ := IsSepClosed.exists_aeval_eq_zero K _
-    (degree_cyclotomic_pos a K (Nat.pos_of_ne_zero ha')).ne' (separable_cyclotomic a K)
-  exact ⟨r, by rwa [coe_aeval_eq_eval, ← IsRoot.def, isRoot_cyclotomic_iff] at hr⟩
-
-中文:
-定理 是SepClosed.isCyclotomicExtension
-  条件: (h : 对任意 a in S, a != 0 -> NeZero (a : K))
-  证明: by
-refine ⟨fun {a} ha ha' => ?_, Algebra.eq_top_iff.mp Subsingleton.elim _ _⟩
-  have := h a ha ha'
-  obtain ⟨r, hr⟩ := IsSepClosed.exists_aeval_eq_zero K _
-    (degree_cyclotomic_pos a K (Nat.pos_of_ne_zero ha')).ne' (separable_cyclotomic a K)
-  exact ⟨r, by rwa [coe_aeval_eq_eval, ← IsRoot.def, isRoot_cyclotomic_iff] at hr⟩
-
-Depends on / 依赖: Algebra, Algebra.eq_top_iff.mp, IsRoot, IsRoot.def, IsSepClosed, IsSepClosed.exists_aeval_eq_zero, Nat.pos_of_ne_zero, Subsingleton, Subsingleton.elim, coe_aeval_eq_eval, degree_cyclotomic_pos, eq_top_iff, exists_aeval_eq_zero, isRoot_cyclotomic_iff, pos_of_ne_zero, separable_cyclotomic
+--- 原说明 ---
+Separably closed fields are `S`-cyclotomic extensions over themselves if
+`NeZero ((a : ℕ) : K)` for all nonzero `a ∈ S`.
 -/
-theorem IsSepClosed.isCyclotomicExtension (h : forall a in S, a != 0 -> NeZero (a : K)) :
+theorem IsSepClosed.isCyclotomicExtension (h : ∀ a ∈ S, a ≠ 0 → NeZero (a : K)) :
     IsCyclotomicExtension S K K := by
-refine ⟨fun {a} ha ha' => ?_, Algebra.eq_top_iff.mp Subsingleton.elim _ _⟩
+  refine ⟨fun {a} ha ha' ↦ ?_, Algebra.eq_top_iff.mp <| Subsingleton.elim _ _⟩
   have := h a ha ha'
   obtain ⟨r, hr⟩ := IsSepClosed.exists_aeval_eq_zero K _
     (degree_cyclotomic_pos a K (Nat.pos_of_ne_zero ha')).ne' (separable_cyclotomic a K)
   exact ⟨r, by rwa [coe_aeval_eq_eval, ← IsRoot.def, isRoot_cyclotomic_iff] at hr⟩
-
-/--
-Instance `IsSepClosedOfCharZero.isCyclotomicExtension` / 实例 `IsSepClosedOfCharZero.isCyclotomicExtension`
-
-English:
-instance IsSepClosedOfCharZero.isCyclotomicExtension
-  signature: [CharZero K]
-  body: fun S => by
-  rw [IsCyclotomicExtension.eq_self_sdiff_zero]
-  exact IsSepClosed.isCyclotomicExtension _ K fun _ _ h => ⟨Nat.cast_ne_zero.mpr h⟩
-
-中文:
-实例 IsSepClosedOfCharZero.isCyclotomicExtension
-  签名: [特征零 K]
-  定义体: fun S => by
-  rw [IsCyclotomicExtension.eq_self_sdiff_zero]
-  exact IsSepClosed.isCyclotomicExtension _ K fun _ _ h => ⟨Nat.cast_ne_zero.mpr h⟩
-
-Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.eq_self_sdiff_zero, IsSepClosed, IsSepClosed.isCyclotomicExtension, Nat.cast_ne_zero.mpr, cast_ne_zero, eq_self_sdiff_zero, isCyclotomicExtension
+/-
+**IsSepClosedOfCharZero.isCyclotomicExtension** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsSepClosedOfCharZero.isCyclotomicExtension [CharZero K] : forall S, IsCyc
+lotomicExtension S K K
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCyclotomicExtension.eq_self_sdiff_zero`：eq_self_sdiff_zero : IsCycloto
+micExtension S A B = IsCyclotomicExtension (S \ {0}) A B
+· 使用定理 `IsSepClosed.isCyclotomicExtension`：IsSepClosed.isCyclotomicExtension (h 
+: forall a in S, a != 0 -> NeZero (a : K)) : IsCyclotomicExtension S K K
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
 -/
 instance IsSepClosedOfCharZero.isCyclotomicExtension [CharZero K] :
-    forall S, IsCyclotomicExtension S K K := fun S => by
+    ∀ S, IsCyclotomicExtension S K K := fun S => by
   rw [IsCyclotomicExtension.eq_self_sdiff_zero]
-  exact IsSepClosed.isCyclotomicExtension _ K fun _ _ h => ⟨Nat.cast_ne_zero.mpr h⟩
+  exact IsSepClosed.isCyclotomicExtension _ K fun _ _ h ↦ ⟨Nat.cast_ne_zero.mpr h⟩
 
 end IsSepClosed
 
@@ -2659,252 +2793,328 @@ section Subalgebra
 
 variable {A B} [IsDomain B]
 
-/--
-theorem `IsCyclotomicExtension.mem_of_pow_eq_one` / 定理 `IsCyclotomicExtension.mem_of_pow_eq_one`
-
-English:
-theorem IsCyclotomicExtension.mem_of_pow_eq_one
-  statement: (C : Subalgebra A B)
-  proof: by
-  obtain ⟨η, hη⟩ := h.1 h₁ h₂
-  replace hη := hη.map_of_injective (FaithfulSMul.algebraMap_injective C B)
-  have : NeZero m := ⟨h₂⟩
-  obtain ⟨k, _, rfl⟩ := hη.eq_pow_of_pow_eq_one hζ
-  rw [← map_pow]
-  exact Subalgebra.pow_mem _ η.prop _
-
-中文:
-定理 是CyclotomicExtension.mem_of_pow_eq_one
-  结论: (C : 子代数 A B)
-  证明: by
-  obtain ⟨η, hη⟩ := h.1 h₁ h₂
-  replace hη := hη.map_of_injective (FaithfulSMul.algebraMap_injective C B)
-  have : NeZero m := ⟨h₂⟩
-  obtain ⟨k, _, rfl⟩ := hη.eq_pow_of_pow_eq_one hζ
-  rw [← map_pow]
-  exact Subalgebra.pow_mem _ η.prop _
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, NeZero, Subalgebra, Subalgebra.pow_mem, algebraMap_injective, eq_pow_of_pow_eq_one, map_of_injective, map_pow, pow_mem, replace
+/-
+**IsCyclotomicExtension.mem_of_pow_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCyclotomicExtension.mem_of_pow_eq_one (C : Subalgebra A B) [h : IsCyclot
+omicExtension S A C] {m : Nat} {ζ : B} (h₁ : m in S) (h₂ : m != 0) (hζ : ζ ^ m =
+ 1) : ζ in C
+参数：C : Subalgebra A B；h₁ : m in S；h₂ : m != 0；hζ : ζ ^ m = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `IsPrimitiveRoot.map_of_injective`：map_of_injective [MonoidHomClass F M N
+] (h : IsPrimitiveRoot ζ k) (hf : Injective f) : IsPrimitiveRoot (f ζ) k where p
+ow_eq_one
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Subalgebra.instFaithfulSMulSubtypeMem`：∀ {R : Type u} {A : Type v} [inst
+ : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A] {α : Type u_1}  
+ [inst_3 : SMul A α] [Faith…
+· 使用定理 `Module.Free.instFaithfulSMulOfNontrivial`：∀ (R : Type u) (M : Type v) [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Mod
+ule.Free R M] [Nontrivial M], …
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem IsCyclotomicExtension.mem_of_pow_eq_one (C : Subalgebra A B)
-    [h : IsCyclotomicExtension S A C] {m : Nat} {ζ : B} (h₁ : m in S) (h₂ : m != 0)
-    (hζ : ζ ^ m = 1) : ζ in C := by
+    [h : IsCyclotomicExtension S A C] {m : ℕ} {ζ : B} (h₁ : m ∈ S) (h₂ : m ≠ 0)
+    (hζ : ζ ^ m = 1) : ζ ∈ C := by
   obtain ⟨η, hη⟩ := h.1 h₁ h₂
   replace hη := hη.map_of_injective (FaithfulSMul.algebraMap_injective C B)
   have : NeZero m := ⟨h₂⟩
   obtain ⟨k, _, rfl⟩ := hη.eq_pow_of_pow_eq_one hζ
   rw [← map_pow]
   exact Subalgebra.pow_mem _ η.prop _
-
-/--
-theorem `isCyclotomicExtension_iff_eq_adjoin` / 定理 `isCyclotomicExtension_iff_eq_adjoin`
-
-English:
-theorem isCyclotomicExtension_iff_eq_adjoin
-  statement: (C : Subalgebra A B)
-  proof: by
-  refine ⟨fun h => ?_, fun h => h ▸ isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S A B hS⟩
-  have := congr_arg (Subalgebra.map C.val) ((IsCyclotomicExtension.iff_adjoin_eq_top _ _ _).mp h).2
-  rw [← Subalgebra.range_val C]; rw [← Algebra.map_top]; rw [← this]; rw [AlgHom.map_adjoin]
-  congr; ext
-  simp only [Subalgebra.coe_val, ne_eq, ← Subalgebra.coe_eq_one, SubmonoidClass.coe_pow,
-    Set.mem_image, Set.mem_ofPred_eq, Subtype.exists, exists_and_left, exists_prop,
-    exists_eq_right_right, and_iff_left_iff_imp, forall_exists_index, and_imp]
-  exact fun n hn₁ hn₂ hx => h.mem_of_pow_eq_one S C hn₁ hn₂ hx
-
-中文:
-定理 isCyclotomicExtension_iff_eq_adjoin
-  结论: (C : 子代数 A B)
-  证明: by
-  refine ⟨fun h => ?_, fun h => h ▸ isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S A B hS⟩
-  have := congr_arg (Subalgebra.map C.val) ((IsCyclotomicExtension.iff_adjoin_eq_top _ _ _).mp h).2
-  rw [← Subalgebra.range_val C]; rw [← Algebra.map_top]; rw [← this]; rw [AlgHom.map_adjoin]
-  congr; ext
-  simp only [Subalgebra.coe_val, ne_eq, ← Subalgebra.coe_eq_one, SubmonoidClass.coe_pow,
-    Set.mem_image, Set.mem_ofPred_eq, Subtype.exists, exists_and_left, exists_prop,
-    exists_eq_right_right, and_iff_left_iff_imp, forall_exists_index, and_imp]
-  exact fun n hn₁ hn₂ hx => h.mem_of_pow_eq_one S C hn₁ hn₂ hx
-
-Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.map_top, C.val, IsCyclotomicExtension, IsCyclotomicExtension.iff_adjoin_eq_top, Set.mem_image, Set.mem_ofPred_eq, Subalgebra, Subalgebra.coe_eq_one, Subalgebra.coe_val, Subalgebra.map, Subalgebra.range_val, SubmonoidClass, SubmonoidClass.coe_pow, Subtype, Subtype.exists, and_iff_, coe_eq_one
+/-
+**isCyclotomicExtension_iff_eq_adjoin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCyclotomicExtension_iff_eq_adjoin (C : Subalgebra A B) (hS : forall n in
+ S, n != 0 -> exists r : B, IsPrimitiveRoot r n) : IsCyclotomicExtension S A C ↔
+ C = Algebra.adjoin A {x : B | exists n in S, n != 0 ∧ x ^ n = 1}
+参数：C : Subalgebra A B；hS : forall n in S, n != 0 -> exists r : B, IsPrimitiveRoo
+t r n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCyclotomicExtension.iff_adjoin_eq_top`：iff_adjoin_eq_top : IsCyclotomi
+cExtension S A B ↔ (forall n : Nat, n in S -> n != 0 -> exists r : B, IsPrimitiv
+eRoot r n) ∧ adjoin A {b : B …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subalgebra.range_val`：range_val : S.val.range = S
+· 使用定理 `Algebra.map_top`：map_top (f : A ->ₐ[R] B) : (⊤ : Subalgebra R A).map f =
+ f.range
+· 使用定理 `AlgHom.map_adjoin`：map_adjoin (φ : A ->ₐ[R] B) (s : Set A) : (adjoin R s
+).map φ = adjoin R (φ '' s)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsCyclotomicExtension.mem_of_pow_eq_one`：IsCyclotomicExtension.mem_of_po
+w_eq_one (C : Subalgebra A B) [h : IsCyclotomicExtension S A C] {m : Nat} {ζ : B
+} (h₁ : m in S) (h₂ : m != 0)…
+· 使用定理 `Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot`：∀ (S : S
+et ℕ) (A : Type u) (B : Type v) [inst : CommRing A] [inst_1 : CommRing B] [inst_
+2 : Algebra A B],   (∀ n ∈ S, n ≠ 0 → ∃ r, IsPrimiti…
 -/
 theorem isCyclotomicExtension_iff_eq_adjoin (C : Subalgebra A B)
-    (hS : forall n in S, n != 0 -> exists r : B, IsPrimitiveRoot r n) :
-    IsCyclotomicExtension S A C ↔ C = Algebra.adjoin A {x : B | exists n in S, n != 0 ∧ x ^ n = 1} := by
-  refine ⟨fun h => ?_, fun h => h ▸ isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S A B hS⟩
+    (hS : ∀ n ∈ S, n ≠ 0 → ∃ r : B, IsPrimitiveRoot r n) :
+    IsCyclotomicExtension S A C ↔ C = Algebra.adjoin A {x : B | ∃ n ∈ S, n ≠ 0 ∧ x ^ n = 1} := by
+  refine ⟨fun h ↦ ?_, fun h ↦ h ▸ isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S A B hS⟩
   have := congr_arg (Subalgebra.map C.val) ((IsCyclotomicExtension.iff_adjoin_eq_top _ _ _).mp h).2
-  rw [← Subalgebra.range_val C]; rw [← Algebra.map_top]; rw [← this]; rw [AlgHom.map_adjoin]
+  rw [← Subalgebra.range_val C, ← Algebra.map_top, ← this, AlgHom.map_adjoin]
   congr; ext
   simp only [Subalgebra.coe_val, ne_eq, ← Subalgebra.coe_eq_one, SubmonoidClass.coe_pow,
     Set.mem_image, Set.mem_ofPred_eq, Subtype.exists, exists_and_left, exists_prop,
     exists_eq_right_right, and_iff_left_iff_imp, forall_exists_index, and_imp]
-  exact fun n hn₁ hn₂ hx => h.mem_of_pow_eq_one S C hn₁ hn₂ hx
-
-/--
-theorem `isCyclotomicExtension_singleton_iff_eq_adjoin` / 定理 `isCyclotomicExtension_singleton_iff_eq_adjoin`
-
-English:
-theorem isCyclotomicExtension_singleton_iff_eq_adjoin
-  statement: (C : Subalgebra A B) {ζ : B}
-  proof: by
-  rw [isCyclotomicExtension_iff_eq_adjoin]
-  · simp only [Set.mem_singleton_iff, exists_eq_left]
-    suffices adjoin A {b | n != 0 ∧ b ^ n = 1} = adjoin A {ζ} by rw [this]
-    apply le_antisymm
-    · refine adjoin_le fun x ⟨_, hx⟩ => ?_
-      obtain ⟨k, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
-      exact Subalgebra.pow_mem _ (self_mem_adjoin_singleton A ζ) _
-· exact adjoin_mono Set.singleton_subset_iff.mpr ⟨NeZero.ne n, hζ.pow_eq_one⟩
-  · simpa only [Set.mem_singleton_iff, ne_eq, forall_eq, NeZero.ne n, not_false_eq_true,
-      forall_const] using ⟨ζ, hζ⟩
-
-中文:
-定理 isCyclotomicExtension_singleton_iff_eq_adjoin
-  结论: (C : 子代数 A B) {ζ : B}
-  证明: by
-  rw [isCyclotomicExtension_iff_eq_adjoin]
-  · simp only [Set.mem_singleton_iff, exists_eq_left]
-    suffices adjoin A {b | n != 0 ∧ b ^ n = 1} = adjoin A {ζ} by rw [this]
-    apply le_antisymm
-    · refine adjoin_le fun x ⟨_, hx⟩ => ?_
-      obtain ⟨k, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
-      exact Subalgebra.pow_mem _ (self_mem_adjoin_singleton A ζ) _
-· exact adjoin_mono Set.singleton_subset_iff.mpr ⟨NeZero.ne n, hζ.pow_eq_one⟩
-  · simpa only [Set.mem_singleton_iff, ne_eq, forall_eq, NeZero.ne n, not_false_eq_true,
-      forall_const] using ⟨ζ, hζ⟩
-
-Depends on / 依赖: NeZero, NeZero.ne, Set.mem_singleton_iff, Set.singleton_subset_iff.mpr, Subalgebra, Subalgebra.pow_mem, adjoin, adjoin_le, adjoin_mono, eq_pow_of_pow_eq_one, exists_eq_left, forall_eq, isCyclotomicExtension_iff_eq_adjoin, le_antisymm, mem_singleton_iff, ne_eq, not_false_eq_true, pow_eq_one, pow_mem, self_mem_adjoin_singleton
+  exact fun n hn₁ hn₂ hx ↦ h.mem_of_pow_eq_one S C hn₁ hn₂ hx
+/-
+**isCyclotomicExtension_singleton_iff_eq_adjoin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCyclotomicExtension_singleton_iff_eq_adjoin (C : Subalgebra A B) {ζ : B}
+ (hζ : IsPrimitiveRoot ζ n) : IsCyclotomicExtension {n} A C ↔ C = adjoin A {ζ}
+参数：C : Subalgebra A B；hζ : IsPrimitiveRoot ζ n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isCyclotomicExtension_iff_eq_adjoin`：isCyclotomicExtension_iff_eq_adjoin
+ (C : Subalgebra A B) (hS : forall n in S, n != 0 -> exists r : B, IsPrimitiveRo
+ot r n) : IsCyclotomicExt…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
+· 使用定理 `Algebra.adjoin_mono`：adjoin_mono (H : s subseteq t) : adjoin R s <= adjo
+in R t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isCyclotomicExtension_singleton_iff_eq_adjoin (C : Subalgebra A B) {ζ : B}
     (hζ : IsPrimitiveRoot ζ n) : IsCyclotomicExtension {n} A C ↔ C = adjoin A {ζ} := by
   rw [isCyclotomicExtension_iff_eq_adjoin]
   · simp only [Set.mem_singleton_iff, exists_eq_left]
-    suffices adjoin A {b | n != 0 ∧ b ^ n = 1} = adjoin A {ζ} by rw [this]
+    suffices adjoin A {b | n ≠ 0 ∧ b ^ n = 1} = adjoin A {ζ} by rw [this]
     apply le_antisymm
-    · refine adjoin_le fun x ⟨_, hx⟩ => ?_
+    · refine adjoin_le fun x ⟨_, hx⟩ ↦ ?_
       obtain ⟨k, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
       exact Subalgebra.pow_mem _ (self_mem_adjoin_singleton A ζ) _
-· exact adjoin_mono Set.singleton_subset_iff.mpr ⟨NeZero.ne n, hζ.pow_eq_one⟩
+    · exact adjoin_mono <| Set.singleton_subset_iff.mpr ⟨NeZero.ne n, hζ.pow_eq_one⟩
   · simpa only [Set.mem_singleton_iff, ne_eq, forall_eq, NeZero.ne n, not_false_eq_true,
       forall_const] using ⟨ζ, hζ⟩
-
-/--
-theorem `IsCyclotomicExtension.eq` / 定理 `IsCyclotomicExtension.eq`
-
-English:
-theorem IsCyclotomicExtension.eq
-  statement: (C₁ C₂ : Subalgebra A B) [h₁ : IsCyclotomicExtension S A C₁]
-  proof: by
-  have hC (n) (hn₁ : n in S) (hn₂ : n != 0) : exists x : B, IsPrimitiveRoot x n := by
-    obtain ⟨ζ, hζ⟩ := h₁.1 hn₁ hn₂
-    exact ⟨ζ, IsPrimitiveRoot.coe_submonoidClass_iff.mpr hζ⟩
-  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁]; rw [(isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂]
-
-中文:
-定理 是CyclotomicExtension.eq
-  结论: (C₁ C₂ : 子代数 A B) [h₁ : 是CyclotomicExtension S A C₁]
-  证明: by
-  have hC (n) (hn₁ : n in S) (hn₂ : n != 0) : exists x : B, IsPrimitiveRoot x n := by
-    obtain ⟨ζ, hζ⟩ := h₁.1 hn₁ hn₂
-    exact ⟨ζ, IsPrimitiveRoot.coe_submonoidClass_iff.mpr hζ⟩
-  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁]; rw [(isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂]
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff.mpr, coe_submonoidClass_iff, isCyclotomicExtension_iff_eq_adjoin
+/-
+**IsCyclotomicExtension.eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCyclotomicExtension.eq (C₁ C₂ : Subalgebra A B) [h₁ : IsCyclotomicExtens
+ion S A C₁] [h₂ : IsCyclotomicExtension S A C₂] : C₁ = C₂
+参数：C₁ C₂ : Subalgebra A B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `IsPrimitiveRoot.coe_submonoidClass_iff`：coe_submonoidClass_iff {M B : Ty
+pe*} [CommMonoid M] [SetLike B M] [SubmonoidClass B M] {N : B} {ζ : N} : IsPrimi
+tiveRoot (ζ : M) k ↔ IsPrimi…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_iff_eq_adjoin`：isCyclotomicExtension_iff_eq_adjoin
+ (C : Subalgebra A B) (hS : forall n in S, n != 0 -> exists r : B, IsPrimitiveRo
+ot r n) : IsCyclotomicExt…
 -/
 theorem IsCyclotomicExtension.eq (C₁ C₂ : Subalgebra A B) [h₁ : IsCyclotomicExtension S A C₁]
     [h₂ : IsCyclotomicExtension S A C₂] : C₁ = C₂ := by
-  have hC (n) (hn₁ : n in S) (hn₂ : n != 0) : exists x : B, IsPrimitiveRoot x n := by
+  have hC (n) (hn₁ : n ∈ S) (hn₂ : n ≠ 0) : ∃ x : B, IsPrimitiveRoot x n := by
     obtain ⟨ζ, hζ⟩ := h₁.1 hn₁ hn₂
     exact ⟨ζ, IsPrimitiveRoot.coe_submonoidClass_iff.mpr hζ⟩
-  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁]; rw [(isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂]
+  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁,
+    (isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂]
 
-variable (n₁ n₂ : Nat) (C₁ C₂ : Subalgebra A B) [h₁ : IsCyclotomicExtension {n₁} A C₁]
+variable (n₁ n₂ : ℕ) (C₁ C₂ : Subalgebra A B) [h₁ : IsCyclotomicExtension {n₁} A C₁]
   [h₂ : IsCyclotomicExtension {n₂} A C₂]
-
-/--
-theorem `IsCyclotomicExtension.le_of_dvd` / 定理 `IsCyclotomicExtension.le_of_dvd`
-
-English:
-theorem IsCyclotomicExtension.le_of_dvd
-  given: [NeZero n₂] (h : n₁ ∣ n₂)
-  statement: C₁ <= C₂
-  proof: by
-  have : NeZero n₁ := by
-    constructor
-    rintro rfl
-exact NeZero.ne n₂ eq_zero_of_zero_dvd h
-  obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
-  replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
-  obtain ⟨d, hd⟩ := h
-  have hζ₁ := IsPrimitiveRoot.pow n₂.pos_of_neZero hζ₂ (by rwa [mul_comm])
-  simpa [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁,
-    (isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂] using
-adjoin_le Set.singleton_subset_iff.mpr
-      Subalgebra.pow_mem _ (self_mem_adjoin_singleton A _) _
-
-中文:
-定理 是CyclotomicExtension.le_of_dvd
-  条件: [NeZero n₂] (h : n₁ ∣ n₂)
-  结论: C₁ <= C₂
-  证明: by
-  have : NeZero n₁ := by
-    constructor
-    rintro rfl
-exact NeZero.ne n₂ eq_zero_of_zero_dvd h
-  obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
-  replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
-  obtain ⟨d, hd⟩ := h
-  have hζ₁ := IsPrimitiveRoot.pow n₂.pos_of_neZero hζ₂ (by rwa [mul_comm])
-  simpa [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁,
-    (isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂] using
-adjoin_le Set.singleton_subset_iff.mpr
-      Subalgebra.pow_mem _ (self_mem_adjoin_singleton A _) _
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsPrimitiveRoot, IsPrimitiveRoot.pow, NeZero, NeZero.ne, Set.singleton_subset_iff.mpr, Subalgebra, Subalgebra.pow, adjoin_le, algebraMap_injective, eq_zero_of_zero_dvd, isCyclotomicExtension_singleton_iff_eq_adjoin, map_of_injective, mul_comm, pos_of_neZero, replace, singleton_subset_iff
+/-
+**IsCyclotomicExtension.le_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCyclotomicExtension.le_of_dvd [NeZero n₂] (h : n₁ ∣ n₂) : C₁ <= C₂
+参数：h : n₁ ∣ n₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `eq_zero_of_zero_dvd`：eq_zero_of_zero_dvd (h : 0 ∣ a) : a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `IsPrimitiveRoot.map_of_injective`：map_of_injective [MonoidHomClass F M N
+] (h : IsPrimitiveRoot ζ k) (hf : Injective f) : IsPrimitiveRoot (f ζ) k where p
+ow_eq_one
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Subalgebra.instFaithfulSMulSubtypeMem`：∀ {R : Type u} {A : Type v} [inst
+ : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A] {α : Type u_1}  
+ [inst_3 : SMul A α] [Faith…
+· 使用定理 `Module.Free.instFaithfulSMulOfNontrivial`：∀ (R : Type u) (M : Type v) [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Mod
+ule.Free R M] [Nontrivial M], …
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsPrimitiveRoot.pow`：pow {n : Nat} {a b : Nat} (hn : 0 < n) (h : IsPrimi
+tiveRoot ζ n) (hprod : n = a * b) : IsPrimitiveRoot (ζ ^ a) b
+· 使用定理 `Nat.pos_of_neZero`：∀ (n : ℕ) [NeZero n], 0 < n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_singleton_iff_eq_adjoin`：isCyclotomicExtension_sin
+gleton_iff_eq_adjoin (C : Subalgebra A B) {ζ : B} (hζ : IsPrimitiveRoot ζ n) : I
+sCyclotomicExtension {n} A C ↔ C = …
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
 -/
-theorem IsCyclotomicExtension.le_of_dvd [NeZero n₂] (h : n₁ ∣ n₂) : C₁ <= C₂ := by
+theorem IsCyclotomicExtension.le_of_dvd [NeZero n₂] (h : n₁ ∣ n₂) : C₁ ≤ C₂ := by
   have : NeZero n₁ := by
     constructor
     rintro rfl
-exact NeZero.ne n₂ eq_zero_of_zero_dvd h
+    exact NeZero.ne n₂ <| eq_zero_of_zero_dvd h
   obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
   replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
   obtain ⟨d, hd⟩ := h
   have hζ₁ := IsPrimitiveRoot.pow n₂.pos_of_neZero hζ₂ (by rwa [mul_comm])
   simpa [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁,
     (isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂] using
-adjoin_le Set.singleton_subset_iff.mpr
+    adjoin_le <| Set.singleton_subset_iff.mpr <|
       Subalgebra.pow_mem _ (self_mem_adjoin_singleton A _) _
-
-/--
-theorem `IsCyclotomicExtension.lcm_sup` / 定理 `IsCyclotomicExtension.lcm_sup`
-
-English:
-theorem IsCyclotomicExtension.lcm_sup
-  given: [NeZero n₁] [NeZero n₂]
-  proof: by
-  obtain ⟨ζ₁, hζ₁⟩ := h₁.1 rfl (NeZero.ne n₁)
-  obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
-  replace hζ₁ := hζ₁.map_of_injective (FaithfulSMul.algebraMap_injective C₁ B)
-  replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
-  have hζ := hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)
-  rw [sup_comm]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂]; rw [← adjoin_union]; rw [Set.union_singleton]; rw [hζ₁.adjoin_pair_eq A hζ₂ (NeZero.ne _) (NeZero.ne _) hζ]
-  have : NeZero (n₁.lcm n₂) := ⟨Nat.lcm_ne_zero (NeZero.ne _) (NeZero.ne _)⟩
-  exact (hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)).adjoin_isCyclotomicExtension A
-
-中文:
-定理 是CyclotomicExtension.lcm_sup
-  条件: [NeZero n₁] [NeZero n₂]
-  证明: by
-  obtain ⟨ζ₁, hζ₁⟩ := h₁.1 rfl (NeZero.ne n₁)
-  obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
-  replace hζ₁ := hζ₁.map_of_injective (FaithfulSMul.algebraMap_injective C₁ B)
-  replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
-  have hζ := hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)
-  rw [sup_comm]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂]; rw [← adjoin_union]; rw [Set.union_singleton]; rw [hζ₁.adjoin_pair_eq A hζ₂ (NeZero.ne _) (NeZero.ne _) hζ]
-  have : NeZero (n₁.lcm n₂) := ⟨Nat.lcm_ne_zero (NeZero.ne _) (NeZero.ne _)⟩
-  exact (hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)).adjoin_isCyclotomicExtension A
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, NeZero, NeZero.ne, Set.union_, adjoin_union, algebraMap_injective, isCyclotomicExtension_singleton_iff_eq_adjoin, map_of_injective, pow_mul_pow_lcm, replace, sup_comm, union_
+/-
+**IsCyclotomicExtension.lcm_sup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCyclotomicExtension.lcm_sup [NeZero n₁] [NeZero n₂] : IsCyclotomicExtens
+ion {n₁.lcm n₂} A (C₁ ⊔ C₂ : Subalgebra A B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `IsPrimitiveRoot.map_of_injective`：map_of_injective [MonoidHomClass F M N
+] (h : IsPrimitiveRoot ζ k) (hf : Injective f) : IsPrimitiveRoot (f ζ) k where p
+ow_eq_one
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Subalgebra.instFaithfulSMulSubtypeMem`：∀ {R : Type u} {A : Type v} [inst
+ : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A] {α : Type u_1}  
+ [inst_3 : SMul A α] [Faith…
+· 使用定理 `Module.Free.instFaithfulSMulOfNontrivial`：∀ (R : Type u) (M : Type v) [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Mod
+ule.Free R M] [Nontrivial M], …
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsPrimitiveRoot.pow_mul_pow_lcm`：pow_mul_pow_lcm {ζ' : M} {k' : Nat} (hζ
+ : IsPrimitiveRoot ζ k) (hζ' : IsPrimitiveRoot ζ' k') (hk : k != 0) (hk' : k' !=
+ 0) : IsPrimitiveRoot…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCyclotomicExtension_singleton_iff_eq_adjoin`：isCyclotomicExtension_sin
+gleton_iff_eq_adjoin (C : Subalgebra A B) {ζ : B} (hζ : IsPrimitiveRoot ζ n) : I
+sCyclotomicExtension {n} A C ↔ C = …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.adjoin_union`：adjoin_union (s t : Set A) : adjoin R (s union t) 
+= adjoin R s ⊔ adjoin R t
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `IsPrimitiveRoot.adjoin_pair_eq`：adjoin_pair_eq (S : Type*) [CommSemiring
+ S] [Algebra S R] {ζ₁ ζ₂ : R} {k₁ : Nat} {k₂ : Nat} (hζ₁ : IsPrimitiveRoot ζ₁ k₁
+) (hζ₂ : IsPrimitive…
+· 使用定理 `Nat.lcm_ne_zero`：∀ {m n : ℕ}, m ≠ 0 → n ≠ 0 → m.lcm n ≠ 0
+· 使用定理 `IsPrimitiveRoot.adjoin_isCyclotomicExtension`：∀ (A : Type u) {B : Type v
+} [inst : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B] {ζ : B} {n : 
+ℕ} [NeZero n],   IsPrimitiveRoot ζ…
 -/
 theorem IsCyclotomicExtension.lcm_sup [NeZero n₁] [NeZero n₂] :
     IsCyclotomicExtension {n₁.lcm n₂} A (C₁ ⊔ C₂ : Subalgebra A B) := by
@@ -2913,106 +3123,109 @@ theorem IsCyclotomicExtension.lcm_sup [NeZero n₁] [NeZero n₂] :
   replace hζ₁ := hζ₁.map_of_injective (FaithfulSMul.algebraMap_injective C₁ B)
   replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
   have hζ := hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)
-  rw [sup_comm]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂]; rw [← adjoin_union]; rw [Set.union_singleton]; rw [hζ₁.adjoin_pair_eq A hζ₂ (NeZero.ne _) (NeZero.ne _) hζ]
+  rw [sup_comm, (isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁,
+    (isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂, ← adjoin_union,
+    Set.union_singleton, hζ₁.adjoin_pair_eq A hζ₂ (NeZero.ne _) (NeZero.ne _) hζ]
   have : NeZero (n₁.lcm n₂) := ⟨Nat.lcm_ne_zero (NeZero.ne _) (NeZero.ne _)⟩
   exact (hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)).adjoin_isCyclotomicExtension A
-
-/--
-theorem `IntermediateField.isCyclotomicExtension_singleton_iff_eq_adjoin` / 定理 `IntermediateField.isCyclotomicExtension_singleton_iff_eq_adjoin`
-
-English:
-theorem IntermediateField.isCyclotomicExtension_singleton_iff_eq_adjoin
-  statement: (F : IntermediateField K L)
-  proof: by
-  rw [← toSubalgebra_inj]; rw [adjoin_simple_toSubalgebra_of_isAlgebraic
-    (hζ.isIntegral (NeZero.pos _)).tower_top.isAlgebraic]
-  exact _root_.isCyclotomicExtension_singleton_iff_eq_adjoin n F.toSubalgebra hζ
-
-中文:
-定理 中间域.isCyclotomicExtension_singleton_iff_eq_adjoin
-  结论: (F : 中间域 K L)
-  证明: by
-  rw [← toSubalgebra_inj]; rw [adjoin_simple_toSubalgebra_of_isAlgebraic
-    (hζ.isIntegral (NeZero.pos _)).tower_top.isAlgebraic]
-  exact _root_.isCyclotomicExtension_singleton_iff_eq_adjoin n F.toSubalgebra hζ
-
-Depends on / 依赖: F.toSubalgebra, NeZero, NeZero.pos, _root_, _root_.isCyclotomicExtension_singleton_iff_eq_adjoin, adjoin_simple_toSubalgebra_of_isAlgebraic, isAlgebraic, isCyclotomicExtension_singleton_iff_eq_adjoin, isIntegral, toSubalgebra, toSubalgebra_inj, tower_top, tower_top.isAlgebraic
+/-
+**IntermediateField.isCyclotomicExtension_singleton_iff_eq_adjoin** 是 Mathlib 中的
+一个定理，位于命名空间 ``。
+形式化陈述：IntermediateField.isCyclotomicExtension_singleton_iff_eq_adjoin (F : Inter
+mediateField K L) {ζ : L} (hζ : IsPrimitiveRoot ζ n) : IsCyclotomicExtension {n}
+ K F ↔ F = IntermediateField.adjoin K {ζ}
+参数：F : IntermediateField K L；hζ : IsPrimitiveRoot ζ n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IntermediateField.toSubalgebra_inj`：toSubalgebra_inj : F.toSubalgebra = 
+E.toSubalgebra ↔ F = E
+· 使用定理 `IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic`：adjoin_simp
+le_toSubalgebra_of_isAlgebraic (hα : IsAlgebraic F α) : F⟮α⟯.toSubalgebra = F[α]
+· 使用定理 `IsIntegral.isAlgebraic`：IsIntegral.isAlgebraic [Nontrivial R] {x : A} : 
+IsIntegral R x -> IsAlgebraic R x
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `IsIntegral.tower_top`：IsIntegral.tower_top [Algebra A B] [IsScalarTower 
+R A B] {x : B} (hx : IsIntegral R x) : IsIntegral A x
+· 使用定理 `IsPrimitiveRoot.isIntegral`：isIntegral (hpos : 0 < n) : IsIntegral Int μ
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `isCyclotomicExtension_singleton_iff_eq_adjoin`：isCyclotomicExtension_sin
+gleton_iff_eq_adjoin (C : Subalgebra A B) {ζ : B} (hζ : IsPrimitiveRoot ζ n) : I
+sCyclotomicExtension {n} A C ↔ C = …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
 theorem IntermediateField.isCyclotomicExtension_singleton_iff_eq_adjoin (F : IntermediateField K L)
     {ζ : L} (hζ : IsPrimitiveRoot ζ n) :
     IsCyclotomicExtension {n} K F ↔ F = IntermediateField.adjoin K {ζ} := by
-  rw [← toSubalgebra_inj]; rw [adjoin_simple_toSubalgebra_of_isAlgebraic
+  rw [← toSubalgebra_inj, adjoin_simple_toSubalgebra_of_isAlgebraic
     (hζ.isIntegral (NeZero.pos _)).tower_top.isAlgebraic]
   exact _root_.isCyclotomicExtension_singleton_iff_eq_adjoin n F.toSubalgebra hζ
-
-/--
-theorem `IntermediateField.isCyclotomicExtension_eq` / 定理 `IntermediateField.isCyclotomicExtension_eq`
-
-English:
-theorem IntermediateField.isCyclotomicExtension_eq
-  statement: (F₁ F₂ : IntermediateField K L)
-  proof: toSubalgebra_inj.mp _root_.IsCyclotomicExtension.eq S F₁.toSubalgebra F₂.toSubalgebra
-
-中文:
-定理 中间域.isCyclotomicExtension_eq
-  结论: (F₁ F₂ : 中间域 K L)
-  证明: toSubalgebra_inj.mp _root_.IsCyclotomicExtension.eq S F₁.toSubalgebra F₂.toSubalgebra
-
-Depends on / 依赖: IsCyclotomicExtension, _root_, _root_.IsCyclotomicExtension.eq, toSubalgebra, toSubalgebra_inj, toSubalgebra_inj.mp
+/-
+**IntermediateField.isCyclotomicExtension_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IntermediateField.isCyclotomicExtension_eq (F₁ F₂ : IntermediateField K L)
+ [h₁ : IsCyclotomicExtension S K F₁] [h₂ : IsCyclotomicExtension S K F₂] : F₁ = 
+F₂
+参数：F₁ F₂ : IntermediateField K L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IntermediateField.toSubalgebra_inj`：toSubalgebra_inj : F.toSubalgebra = 
+E.toSubalgebra ↔ F = E
+· 使用定理 `IsCyclotomicExtension.eq`：IsCyclotomicExtension.eq (C₁ C₂ : Subalgebra A
+ B) [h₁ : IsCyclotomicExtension S A C₁] [h₂ : IsCyclotomicExtension S A C₂] : C₁
+ = C₂
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
 theorem IntermediateField.isCyclotomicExtension_eq (F₁ F₂ : IntermediateField K L)
     [h₁ : IsCyclotomicExtension S K F₁] [h₂ : IsCyclotomicExtension S K F₂] :
     F₁ = F₂ :=
-toSubalgebra_inj.mp _root_.IsCyclotomicExtension.eq S F₁.toSubalgebra F₂.toSubalgebra
+  toSubalgebra_inj.mp <| _root_.IsCyclotomicExtension.eq S F₁.toSubalgebra F₂.toSubalgebra
 
 variable (F₁ F₂ : IntermediateField K L) [h₁ : IsCyclotomicExtension {n₁} K F₁]
   [h₂ : IsCyclotomicExtension {n₂} K F₂]
-
-/--
-theorem `IntermediateField.isCyclotomicExtension_le_of_dvd` / 定理 `IntermediateField.isCyclotomicExtension_le_of_dvd`
-
-English:
-theorem IntermediateField.isCyclotomicExtension_le_of_dvd
-  given: [NeZero n₂] (h : n₁ ∣ n₂)
-  statement: F₁ <= F₂
-  proof: by
-exact toSubalgebra_le_toSubalgebra.mp
-    IsCyclotomicExtension.le_of_dvd n₁ n₂ F₁.toSubalgebra F₂.toSubalgebra h
-
-中文:
-定理 中间域.isCyclotomicExtension_le_of_dvd
-  条件: [NeZero n₂] (h : n₁ ∣ n₂)
-  结论: F₁ <= F₂
-  证明: by
-exact toSubalgebra_le_toSubalgebra.mp
-    IsCyclotomicExtension.le_of_dvd n₁ n₂ F₁.toSubalgebra F₂.toSubalgebra h
-
-Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.le_of_dvd, le_of_dvd, toSubalgebra, toSubalgebra_le_toSubalgebra, toSubalgebra_le_toSubalgebra.mp
+/-
+**IntermediateField.isCyclotomicExtension_le_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：IntermediateField.isCyclotomicExtension_le_of_dvd [NeZero n₂] (h : n₁ ∣ n₂
+) : F₁ <= F₂
+参数：h : n₁ ∣ n₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IntermediateField.toSubalgebra_le_toSubalgebra`：toSubalgebra_le_toSubalg
+ebra {S S' : IntermediateField K L} : S.toSubalgebra <= S'.toSubalgebra ↔ S <= S
+'
+· 使用定理 `IsCyclotomicExtension.le_of_dvd`：IsCyclotomicExtension.le_of_dvd [NeZero
+ n₂] (h : n₁ ∣ n₂) : C₁ <= C₂
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
-theorem IntermediateField.isCyclotomicExtension_le_of_dvd [NeZero n₂] (h : n₁ ∣ n₂) : F₁ <= F₂ := by
-exact toSubalgebra_le_toSubalgebra.mp
+theorem IntermediateField.isCyclotomicExtension_le_of_dvd [NeZero n₂] (h : n₁ ∣ n₂) : F₁ ≤ F₂ := by
+  exact toSubalgebra_le_toSubalgebra.mp <|
     IsCyclotomicExtension.le_of_dvd n₁ n₂ F₁.toSubalgebra F₂.toSubalgebra h
-
-/--
-theorem `IntermediateField.isCyclotomicExtension_lcm_sup` / 定理 `IntermediateField.isCyclotomicExtension_lcm_sup`
-
-English:
-theorem IntermediateField.isCyclotomicExtension_lcm_sup
-  given: [NeZero n₁] [NeZero n₂]
-  proof: by
-  have : FiniteDimensional K F₁ := IsCyclotomicExtension.finite_of_singleton n₁ K F₁
-  have := IsCyclotomicExtension.lcm_sup n₁ n₂ F₁.toSubalgebra F₂.toSubalgebra
-  rwa [← sup_toSubalgebra_of_left] at this
-
-中文:
-定理 中间域.isCyclotomicExtension_lcm_sup
-  条件: [NeZero n₁] [NeZero n₂]
-  证明: by
-  have : FiniteDimensional K F₁ := IsCyclotomicExtension.finite_of_singleton n₁ K F₁
-  have := IsCyclotomicExtension.lcm_sup n₁ n₂ F₁.toSubalgebra F₂.toSubalgebra
-  rwa [← sup_toSubalgebra_of_left] at this
-
-Depends on / 依赖: FiniteDimensional, IsCyclotomicExtension, IsCyclotomicExtension.finite_of_singleton, IsCyclotomicExtension.lcm_sup, finite_of_singleton, lcm_sup, sup_toSubalgebra_of_left, toSubalgebra
+/-
+**IntermediateField.isCyclotomicExtension_lcm_sup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IntermediateField.isCyclotomicExtension_lcm_sup [NeZero n₁] [NeZero n₂] : 
+IsCyclotomicExtension {n₁.lcm n₂} K (F₁ ⊔ F₂ : IntermediateField K L)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.finite_of_singleton`：finite_of_singleton [IsDomain
+ B] [h : IsCyclotomicExtension {n} A B] : Module.Finite A B
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsCyclotomicExtension.lcm_sup`：IsCyclotomicExtension.lcm_sup [NeZero n₁]
+ [NeZero n₂] : IsCyclotomicExtension {n₁.lcm n₂} A (C₁ ⊔ C₂ : Subalgebra A B)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IntermediateField.sup_toSubalgebra_of_left`：sup_toSubalgebra_of_left [Fi
+niteDimensional K E1] : (E1 ⊔ E2).toSubalgebra = E1.toSubalgebra ⊔ E2.toSubalgeb
+ra
 -/
 theorem IntermediateField.isCyclotomicExtension_lcm_sup [NeZero n₁] [NeZero n₂] :
     IsCyclotomicExtension {n₁.lcm n₂} K (F₁ ⊔ F₂ : IntermediateField K L) := by
@@ -3021,3 +3234,4 @@ theorem IntermediateField.isCyclotomicExtension_lcm_sup [NeZero n₁] [NeZero n�
   rwa [← sup_toSubalgebra_of_left] at this
 
 end Subalgebra
+

@@ -23,43 +23,57 @@ variable {R A : Type*}
 section Semiring
 variable [CommSemiring R] [Semiring A] [Bialgebra R A] {a b : A}
 
-/--
-lemma `IsGroupLikeElem.one` / 引理 `IsGroupLikeElem.one`
+/-- In a bialgebra, `1` is a group-like element. -/
+/-
+**IsGroupLikeElem.one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGroupLikeElem.one : IsGroupLikeElem R (1 : A) where counit_eq_one
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bialgebra.counit_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R
+} {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.counit 1 = 1
+· 使用定理 `Bialgebra.comul_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R}
+ {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.comul 1 = 1
 
-English:
-lemma IsGroupLikeElem.one
-  statement: IsGroupLikeElem R (1 : A) where
-  proof: counit_one
-  comul_eq_tmul_self := comul_one
-
-中文:
-引理 是GroupLikeElem.one
-  结论: 是GroupLikeElem R (1 : A) where
-  证明: counit_one
-  comul_eq_tmul_self := comul_one
-
-Depends on / 依赖: counit_one
+--- 原说明 ---
+In a bialgebra, `1` is a group-like element.
 -/
 lemma IsGroupLikeElem.one : IsGroupLikeElem R (1 : A) where
   counit_eq_one := counit_one
   comul_eq_tmul_self := comul_one
 
-/--
-lemma `IsGroupLikeElem.mul` / 引理 `IsGroupLikeElem.mul`
+/-- Group-like elements in a bialgebra are stable under multiplication. -/
+/-
+**IsGroupLikeElem.mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGroupLikeElem.mul (ha : IsGroupLikeElem R a) (hb : IsGroupLikeElem R b) 
+: IsGroupLikeElem R (a * b) where counit_eq_one
+参数：ha : IsGroupLikeElem R a；hb : IsGroupLikeElem R b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Bialgebra.counit_mul`：counit_mul (a b : A) : counit (R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsGroupLikeElem.counit_eq_one`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] {…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `Bialgebra.comul_mul`：comul_mul (a b : A) : comul (R
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
 
-English:
-lemma IsGroupLikeElem.mul
-  given: (ha : IsGroupLikeElem R a) (hb : IsGroupLikeElem R b)
-  proof: by simp [ha, hb]
-  comul_eq_tmul_self := by simp [ha, hb]
-
-中文:
-引理 是GroupLikeElem.mul
-  条件: (ha : 是GroupLikeElem R a) (hb : 是GroupLikeElem R b)
-  证明: by simp [ha, hb]
-  comul_eq_tmul_self := by simp [ha, hb]
-
-Depends on / 依赖: comul_eq_tmul_self
+--- 原说明 ---
+Group-like elements in a bialgebra are stable under multiplication.
 -/
 lemma IsGroupLikeElem.mul (ha : IsGroupLikeElem R a) (hb : IsGroupLikeElem R b) :
     IsGroupLikeElem R (a * b) where
@@ -67,68 +81,79 @@ lemma IsGroupLikeElem.mul (ha : IsGroupLikeElem R a) (hb : IsGroupLikeElem R b) 
   comul_eq_tmul_self := by simp [ha, hb]
 
 variable (R A) in
-/--
-Definition of `groupLikeSubmonoid` / `groupLikeSubmonoid` 的定义
+/-- The group-like elements form a submonoid. -/
+/-
+**groupLikeSubmonoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：groupLikeSubmonoid : Submonoid A where carrier
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsGroupLikeElem.mul`：IsGroupLikeElem.mul (ha : IsGroupLikeElem R a) (hb 
+: IsGroupLikeElem R b) : IsGroupLikeElem R (a * b) where counit_eq_one
+· 使用引理 `IsGroupLikeElem.one`：IsGroupLikeElem.one : IsGroupLikeElem R (1 : A) whe
+re counit_eq_one
 
-English:
-definition groupLikeSubmonoid
-  signature: : Submonoid A where
-  body: {a | IsGroupLikeElem R a}
-  one_mem' := .one
-  mul_mem' := .mul
-
-中文:
-定义 groupLikeSubmonoid
-  签名: : 子幺半群 A where
-  定义体: {a | IsGroupLikeElem R a}
-  one_mem' := .one
-  mul_mem' := .mul
-
-Depends on / 依赖: IsGroupLikeElem
+--- 原说明 ---
+The group-like elements form a submonoid.
 -/
 def groupLikeSubmonoid : Submonoid A where
   carrier := {a | IsGroupLikeElem R a}
   one_mem' := .one
   mul_mem' := .mul
 
-/--
-lemma `IsGroupLikeElem.pow` / 引理 `IsGroupLikeElem.pow`
+/-- Group-like elements in a bialgebra are stable under power. -/
+/-
+**IsGroupLikeElem.pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGroupLikeElem.pow {n : Nat} (ha : IsGroupLikeElem R a) : IsGroupLikeElem
+ R (a ^ n)
+参数：ha : IsGroupLikeElem R a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.pow_mem`：∀ {M : Type u_5} [inst : Monoid M] (S : Submonoid M) 
+{x : M}, x ∈ S → ∀ (n : ℕ), x ^ n ∈ S
 
-English:
-lemma IsGroupLikeElem.pow
-  given: {n : Nat} (ha : IsGroupLikeElem R a)
-  statement: IsGroupLikeElem R (a ^ n)
-  proof: (groupLikeSubmonoid R A).pow_mem ha _
-
-中文:
-引理 是GroupLikeElem.pow
-  条件: {n : 自然数} (ha : 是GroupLikeElem R a)
-  结论: 是GroupLikeElem R (a ^ n)
-  证明: (groupLikeSubmonoid R A).pow_mem ha _
-
-Depends on / 依赖: groupLikeSubmonoid, pow_mem
+--- 原说明 ---
+Group-like elements in a bialgebra are stable under power.
 -/
-lemma IsGroupLikeElem.pow {n : Nat} (ha : IsGroupLikeElem R a) : IsGroupLikeElem R (a ^ n) :=
+lemma IsGroupLikeElem.pow {n : ℕ} (ha : IsGroupLikeElem R a) : IsGroupLikeElem R (a ^ n) :=
   (groupLikeSubmonoid R A).pow_mem ha _
 
-/--
-lemma `IsGroupLikeElem.of_mul_eq_one` / 引理 `IsGroupLikeElem.of_mul_eq_one`
+/-- Group-like elements in a bialgebra are stable under inverses, when they exist. -/
+/-
+**IsGroupLikeElem.of_mul_eq_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGroupLikeElem.of_mul_eq_one (hab : a * b = 1) (hba : b * a = 1) (ha : Is
+GroupLikeElem R a) : IsGroupLikeElem R b where counit_eq_one
+参数：hab : a * b = 1；hba : b * a = 1；ha : IsGroupLikeElem R a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `left_inv_eq_right_inv`：∀ {M : Type u_2} [inst : Monoid M] {a b c : M}, b
+ * a = 1 → a * c = 1 → b = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Bialgebra.counit_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R
+} {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.counit 1 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsGroupLikeElem.counit_eq_one`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] {…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Bialgebra.comul_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R}
+ {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.comul 1 = 1
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 
-English:
-lemma IsGroupLikeElem.of_mul_eq_one
-  given: (hab : a * b = 1) (hba : b * a = 1) (ha : IsGroupLikeElem R a)
-  proof: left_inv_eq_right_inv (a := counit a) (by simp [← counit_mul, hba]) (by simp [ha])
-  comul_eq_tmul_self := left_inv_eq_right_inv (a := comul a) (by simp [← comul_mul, hba])
-    (by simp [ha, hab, Algebra.TensorProduct.one_def])
-
-中文:
-引理 是GroupLikeElem.of_mul_eq_one
-  条件: (hab : a * b = 1) (hba : b * a = 1) (ha : 是GroupLikeElem R a)
-  证明: left_inv_eq_right_inv (a := counit a) (by simp [← counit_mul, hba]) (by simp [ha])
-  comul_eq_tmul_self := left_inv_eq_right_inv (a := comul a) (by simp [← comul_mul, hba])
-    (by simp [ha, hab, Algebra.TensorProduct.one_def])
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.one_def, TensorProduct, comul_eq_tmul_self, comul_mul, counit, counit_mul, left_inv_eq_right_inv, one_def
+--- 原说明 ---
+Group-like elements in a bialgebra are stable under inverses, when they exist.
 -/
 lemma IsGroupLikeElem.of_mul_eq_one (hab : a * b = 1) (hba : b * a = 1) (ha : IsGroupLikeElem R a) :
     IsGroupLikeElem R b where
@@ -137,40 +162,40 @@ lemma IsGroupLikeElem.of_mul_eq_one (hab : a * b = 1) (hba : b * a = 1) (ha : Is
   comul_eq_tmul_self := left_inv_eq_right_inv (a := comul a) (by simp [← comul_mul, hba])
     (by simp [ha, hab, Algebra.TensorProduct.one_def])
 
-/--
-lemma `isGroupLikeElem_iff_of_mul_eq_one` / 引理 `isGroupLikeElem_iff_of_mul_eq_one`
+/-- Group-like elements in a bialgebra are stable under inverses, when they exist. -/
+/-
+**isGroupLikeElem_iff_of_mul_eq_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isGroupLikeElem_iff_of_mul_eq_one (hab : a * b = 1) (hba : b * a = 1) : Is
+GroupLikeElem R a ↔ IsGroupLikeElem R b
+参数：hab : a * b = 1；hba : b * a = 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsGroupLikeElem.of_mul_eq_one`：IsGroupLikeElem.of_mul_eq_one (hab : a * 
+b = 1) (hba : b * a = 1) (ha : IsGroupLikeElem R a) : IsGroupLikeElem R b where 
+counit_eq_one
 
-English:
-lemma isGroupLikeElem_iff_of_mul_eq_one
-  given: (hab : a * b = 1) (hba : b * a = 1)
-  proof: ⟨.of_mul_eq_one hab hba, .of_mul_eq_one hba hab⟩
-
-中文:
-引理 isGroupLikeElem_iff_of_mul_eq_one
-  条件: (hab : a * b = 1) (hba : b * a = 1)
-  证明: ⟨.of_mul_eq_one hab hba, .of_mul_eq_one hba hab⟩
-
-Depends on / 依赖: of_mul_eq_one
+--- 原说明 ---
+Group-like elements in a bialgebra are stable under inverses, when they exist.
 -/
 lemma isGroupLikeElem_iff_of_mul_eq_one (hab : a * b = 1) (hba : b * a = 1) :
     IsGroupLikeElem R a ↔ IsGroupLikeElem R b := ⟨.of_mul_eq_one hab hba, .of_mul_eq_one hba hab⟩
-
-/--
-lemma `isGroupLikeElem_unitsInv` / 引理 `isGroupLikeElem_unitsInv`
-
-English:
-lemma isGroupLikeElem_unitsInv
-  given: {u : Aˣ}
-  proof: isGroupLikeElem_iff_of_mul_eq_one (by simp) (by simp)
-
-alias ⟨IsGroupLikeElem.of_unitsInv, IsGroupLikeElem.unitsInv⟩ := isGroupLikeElem_unitsInv
-
-中文:
-引理 isGroupLikeElem_unitsInv
-  条件: {u : Aˣ}
-  证明: isGroupLikeElem_iff_of_mul_eq_one (by simp) (by simp)
-
-alias ⟨IsGroupLikeElem.of_unitsInv, IsGroupLikeElem.unitsInv⟩ := isGroupLikeElem_unitsInv
+/-
+**isGroupLikeElem_unitsInv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : CommSemiring R] [inst_1 : Semiring
+ A] [inst_2 : Bialgebra R A] {u : Aˣ},   IsGroupLikeElem R ↑u⁻¹ ↔ IsGroupLikeEle
+m R ↑u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `isGroupLikeElem_iff_of_mul_eq_one`：isGroupLikeElem_iff_of_mul_eq_one (ha
+b : a * b = 1) (hba : b * a = 1) : IsGroupLikeElem R a ↔ IsGroupLikeElem R b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Units.inv_mul`：inv_mul : (↑a⁻¹ * a : α) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
 -/
 @[simp] lemma isGroupLikeElem_unitsInv {u : Aˣ} :
     IsGroupLikeElem R u⁻¹.val ↔ IsGroupLikeElem R u.val :=
@@ -180,132 +205,67 @@ alias ⟨IsGroupLikeElem.of_unitsInv, IsGroupLikeElem.unitsInv⟩ := isGroupLike
 
 namespace GroupLike
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (GroupLike R A)
-  body: ⟨1, .one⟩
-
-中文:
-实例 :
-  签名: 幺 (群状 R A)
-  定义体: ⟨1, .one⟩
+/-
+**GroupLike.** 是 Mathlib 中的一个实例，位于命名空间 `GroupLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (GroupLike R A) where one := ⟨1, .one⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (GroupLike R A)
-  body: ⟨a * b, a.2.mul b.2⟩
-
-中文:
-实例 :
-  签名: 乘法 (群状 R A)
-  定义体: ⟨a * b, a.2.mul b.2⟩
+/-
+**GroupLike.** 是 Mathlib 中的一个实例，位于命名空间 `GroupLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (GroupLike R A) where mul a b := ⟨a * b, a.2.mul b.2⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow (GroupLike R A) Nat
-  body: ⟨a ^ n, a.2.pow⟩
-
-中文:
-实例 :
-  签名: 幂 (群状 R A) 自然数
-  定义体: ⟨a ^ n, a.2.pow⟩
+/-
+**GroupLike.** 是 Mathlib 中的一个实例，位于命名空间 `GroupLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow (GroupLike R A) Nat where pow a n := ⟨a ^ n, a.2.pow⟩
-
-/--
-lemma `val_one` / 引理 `val_one`
-
-English:
-lemma val_one
-  statement: (1 : GroupLike R A) = (1 : A)
-  proof: rfl
-
-中文:
-引理 val_one
-  结论: (1 : 群状 R A) = (1 : A)
-  证明: rfl
+instance : Pow (GroupLike R A) ℕ where pow a n := ⟨a ^ n, a.2.pow⟩
+/-
+**GroupLike.val_one** 是 Mathlib 中的一个定理，位于命名空间 `GroupLike`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : CommSemiring R] [inst_1 : Semiring
+ A] [inst_2 : Bialgebra R A], ↑1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma val_one : (1 : GroupLike R A) = (1 : A) := rfl
-/--
-lemma `val_mul` / 引理 `val_mul`
-
-English:
-lemma val_mul
-  given: (a b : GroupLike R A)
-  statement: ↑(a * b) = (a * b : A)
-  proof: rfl
-
-中文:
-引理 val_mul
-  条件: (a b : 群状 R A)
-  结论: ↑(a * b) = (a * b : A)
-  证明: rfl
+/-
+**GroupLike.val_mul** 是 Mathlib 中的一个定理，位于命名空间 `GroupLike`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : CommSemiring R] [inst_1 : Semiring
+ A] [inst_2 : Bialgebra R A]   (a b : GroupLike R A), ↑(a * b) = ↑a * ↑b
+参数：a b : GroupLike R A；a * b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma val_mul (a b : GroupLike R A) : ↑(a * b) = (a * b : A) := rfl
-/--
-lemma `val_pow` / 引理 `val_pow`
-
-English:
-lemma val_pow
-  given: (a : GroupLike R A) (n : Nat)
-  statement: ↑(a ^ n) = (a ^ n : A)
-  proof: rfl
-
-中文:
-引理 val_pow
-  条件: (a : 群状 R A) (n : 自然数)
-  结论: ↑(a ^ n) = (a ^ n : A)
-  证明: rfl
+/-
+**GroupLike.val_pow** 是 Mathlib 中的一个定理，位于命名空间 `GroupLike`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : CommSemiring R] [inst_1 : Semiring
+ A] [inst_2 : Bialgebra R A]   (a : GroupLike R A) (n : ℕ), ↑(a ^ n) = ↑a ^ n
+参数：a : GroupLike R A；n : ℕ；a ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma val_pow (a : GroupLike R A) (n : Nat) : ↑(a ^ n) = (a ^ n : A) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid (GroupLike R A)
-  body: val_injective.monoid val val_one val_mul val_pow
-
-中文:
-实例 :
-  签名: 幺半群 (群状 R A)
-  定义体: val_injective.monoid val val_one val_mul val_pow
-
-Depends on / 依赖: monoid, val_injective, val_injective.monoid, val_mul, val_one, val_pow
+@[simp] lemma val_pow (a : GroupLike R A) (n : ℕ) : ↑(a ^ n) = (a ^ n : A) := rfl
+/-
+**GroupLike.** 是 Mathlib 中的一个实例，位于命名空间 `GroupLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Monoid (GroupLike R A) := val_injective.monoid val val_one val_mul val_pow
 
 variable (R A) in
-/--
-Definition of `valMonoidHom` / `valMonoidHom` 的定义
+/-- `GroupLike.val` as a monoid hom. -/
+/-
+**GroupLike.valMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `GroupLike`。
+形式化陈述：(R : Type u_1) →   (A : Type u_2) → [inst : CommSemiring R] → [inst_1 : Se
+miring A] → [inst_2 : Bialgebra R A] → GroupLike R A →* A
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupLike.val_one`：∀ {R : Type u_1} {A : Type u_2} [inst : CommSemiring 
+R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A], ↑1 = 1
+· 使用定理 `GroupLike.val_mul`：∀ {R : Type u_1} {A : Type u_2} [inst : CommSemiring 
+R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A]   (a b : GroupLike R A), ↑(a *
+ b) = ↑…
 
-English:
-definition valMonoidHom
-  signature: : GroupLike R A ->* A where
-  body: val
-  map_one' := val_one
-  map_mul' := val_mul
-
-中文:
-定义 valMonoidHom
-  签名: : 群状 R A ->* A where
-  定义体: val
-  map_one' := val_one
-  map_mul' := val_mul
+--- 原说明 ---
+`GroupLike.val` as a monoid hom.
 -/
-@[simps] def valMonoidHom : GroupLike R A ->* A where
+@[simps] def valMonoidHom : GroupLike R A →* A where
   toFun := val
   map_one' := val_one
   map_mul' := val_mul
@@ -315,20 +275,11 @@ end Semiring
 
 variable [CommSemiring R] [CommSemiring A] [Bialgebra R A] {a b : A}
 
-/--
-Instance `GroupLike.instCommMonoid` / 实例 `GroupLike.instCommMonoid`
-
-English:
-instance GroupLike.instCommMonoid
-  signature: : CommMonoid (GroupLike R A)
-  body: val_injective.commMonoid val val_one val_mul val_pow
-
-中文:
-实例 群状.instCommMonoid
-  签名: : 交换幺半群 (群状 R A)
-  定义体: val_injective.commMonoid val val_one val_mul val_pow
-
-Depends on / 依赖: commMonoid, val_injective, val_injective.commMonoid, val_mul, val_one, val_pow
+/-
+**GroupLike.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：GroupLike.instCommMonoid : CommMonoid (GroupLike R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance GroupLike.instCommMonoid : CommMonoid (GroupLike R A) :=
   val_injective.commMonoid val val_one val_mul val_pow

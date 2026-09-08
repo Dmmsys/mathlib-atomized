@@ -53,176 +53,121 @@ set_option genInjectivity false in
 This is implemented as a type, rather than a `Prop`-valued predicate,
 for good definitional properties of the default term. -/
 @[ext]
-/--
-Definition of `Unique` / `Unique` 的定义
+/-
+**Unique** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Sort u → Sort (max 1 u)
+参数：max 1 u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Unique
-  parameters: (α : Sort u)
-  extends: Inhabited α
-  axioms and operations (1):
-    - uniq : forall a : α, a = default
+--- 原说明 ---
+`Unique α` expresses that `α` is a type with a unique term `default`.
 
-中文:
-结构 唯一
-  参数: (α : 类型层 u)
-  继承: 可居 α
-  公理与运算 (1 个):
-    - uniq : 对任意 a : α, a = default
+This is implemented as a type, rather than a `Prop`-valued predicate,
+for good definitional properties of the default term.
 -/
 structure Unique (α : Sort u) extends Inhabited α where
   /-- In a `Unique` type, every term is equal to the default element (from `Inhabited`). -/
-  uniq : forall a : α, a = default
+  uniq : ∀ a : α, a = default
 
 attribute [class] Unique
-
-/--
-theorem `unique_iff_existsUnique` / 定理 `unique_iff_existsUnique`
-
-English:
-theorem unique_iff_existsUnique
-  given: (α : Sort u)
-  statement: Nonempty (Unique α) ↔ exists! _ : α, True
-  proof: ⟨fun ⟨u⟩ => ⟨u.default, trivial, fun a _ => u.uniq a⟩,
-   fun ⟨a, _, h⟩ => ⟨⟨⟨a⟩, fun _ => h _ trivial⟩⟩⟩
-
-中文:
-定理 unique_iff_存在Unique
-  条件: (α : 类型层 u)
-  结论: 非空 (唯一 α) ↔ 存在! _ : α, 真
-  证明: ⟨fun ⟨u⟩ => ⟨u.default, trivial, fun a _ => u.uniq a⟩,
-   fun ⟨a, _, h⟩ => ⟨⟨⟨a⟩, fun _ => h _ trivial⟩⟩⟩
-
-Depends on / 依赖: u.default, u.uniq
+/-
+**unique_iff_existsUnique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：unique_iff_existsUnique (α : Sort u) : Nonempty (Unique α) ↔ exists! _ : α
+, True
+参数：α : Sort u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `Unique.uniq`：∀ {α : Sort u} (self : Unique α) (a : α), a = default
 -/
-theorem unique_iff_existsUnique (α : Sort u) : Nonempty (Unique α) ↔ exists! _ : α, True :=
-  ⟨fun ⟨u⟩ => ⟨u.default, trivial, fun a _ => u.uniq a⟩,
-   fun ⟨a, _, h⟩ => ⟨⟨⟨a⟩, fun _ => h _ trivial⟩⟩⟩
-
-/--
-theorem `unique_subtype_iff_existsUnique` / 定理 `unique_subtype_iff_existsUnique`
-
-English:
-theorem unique_subtype_iff_existsUnique
-  given: {α} (p : α -> Prop)
-  proof: ⟨fun ⟨u⟩ => ⟨u.default.1, u.default.2, fun a h => congr_arg Subtype.val (u.uniq ⟨a, h⟩)⟩,
-   fun ⟨a, ha, he⟩ => ⟨⟨⟨⟨a, ha⟩⟩, fun ⟨b, hb⟩ => by
-      congr
-      exact he b hb⟩⟩⟩
-
-中文:
-定理 unique_subtype_iff_存在Unique
-  条件: {α} (p : α -> 命题)
-  证明: ⟨fun ⟨u⟩ => ⟨u.default.1, u.default.2, fun a h => congr_arg Subtype.val (u.uniq ⟨a, h⟩)⟩,
-   fun ⟨a, ha, he⟩ => ⟨⟨⟨⟨a, ha⟩⟩, fun ⟨b, hb⟩ => by
-      congr
-      exact he b hb⟩⟩⟩
-
-Depends on / 依赖: Subtype, Subtype.val, congr_arg, u.default, u.uniq
+theorem unique_iff_existsUnique (α : Sort u) : Nonempty (Unique α) ↔ ∃! _ : α, True :=
+  ⟨fun ⟨u⟩ ↦ ⟨u.default, trivial, fun a _ ↦ u.uniq a⟩,
+   fun ⟨a, _, h⟩ ↦ ⟨⟨⟨a⟩, fun _ ↦ h _ trivial⟩⟩⟩
+/-
+**unique_subtype_iff_existsUnique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：unique_subtype_iff_existsUnique {α} (p : α -> Prop) : Nonempty (Unique (Su
+btype p)) ↔ exists! a, p a
+参数：p : α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Unique.uniq`：∀ {α : Sort u} (self : Unique α) (a : α), a = default
 -/
-theorem unique_subtype_iff_existsUnique {α} (p : α -> Prop) :
-    Nonempty (Unique (Subtype p)) ↔ exists! a, p a :=
-  ⟨fun ⟨u⟩ => ⟨u.default.1, u.default.2, fun a h => congr_arg Subtype.val (u.uniq ⟨a, h⟩)⟩,
-   fun ⟨a, ha, he⟩ => ⟨⟨⟨⟨a, ha⟩⟩, fun ⟨b, hb⟩ => by
+theorem unique_subtype_iff_existsUnique {α} (p : α → Prop) :
+    Nonempty (Unique (Subtype p)) ↔ ∃! a, p a :=
+  ⟨fun ⟨u⟩ ↦ ⟨u.default.1, u.default.2, fun a h ↦ congr_arg Subtype.val (u.uniq ⟨a, h⟩)⟩,
+   fun ⟨a, ha, he⟩ ↦ ⟨⟨⟨⟨a, ha⟩⟩, fun ⟨b, hb⟩ ↦ by
       congr
       exact he b hb⟩⟩⟩
 
-/--
-Definition of `uniqueOfSubsingleton` / `uniqueOfSubsingleton` 的定义
+/-- Given an explicit `a : α` with `Subsingleton α`, we can construct
+a `Unique α` instance. This is a def because the typeclass search cannot
+arbitrarily invent the `a : α` term. Nevertheless, these instances are all
+equivalent by `Unique.Subsingleton.unique`.
 
-English:
-abbreviation uniqueOfSubsingleton
-  signature: {α : Sort*} [Subsingleton α] (a : α)
-  body: a
-  uniq _ := Subsingleton.elim _ _
+See note [reducible non-instances]. -/
+/-
+**uniqueOfSubsingleton** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：uniqueOfSubsingleton {α : Sort*} [Subsingleton α] (a : α) : Unique α where
+ default
+参数：a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 
-中文:
-缩写 uniqueOfSubsingleton
-  签名: {α : 类型层*} [子单例 α] (a : α)
-  定义体: a
-  uniq _ := Subsingleton.elim _ _
+--- 原说明 ---
+Given an explicit `a : α` with `Subsingleton α`, we can construct
+a `Unique α` instance. This is a def because the typeclass search cannot
+arbitrarily invent the `a : α` term. Nevertheless, these instances are all
+equivalent by `Unique.Subsingleton.unique`.
+
+See note [reducible non-instances].
 -/
 abbrev uniqueOfSubsingleton {α : Sort*} [Subsingleton α] (a : α) : Unique α where
   default := a
   uniq _ := Subsingleton.elim _ _
-
-/--
-Instance `PUnit.instUnique` / 实例 `PUnit.instUnique`
-
-English:
-instance PUnit.instUnique
-  signature: : Unique PUnit.{u} where
-  body: PUnit.unit
-  uniq x := ext x _
-
-@[simp]
-
-中文:
-实例 命题单元.instUnique
-  签名: : 唯一 命题单元.{u} where
-  定义体: PUnit.unit
-  uniq x := ext x _
-
-@[simp]
-
-Depends on / 依赖: PUnit.unit
+/-
+**PUnit.instUnique** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PUnit.instUnique : Unique PUnit.{u} where default
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `PUnit.ext`：∀ (a b : PUnit.{u_1}), a = b
 -/
 instance PUnit.instUnique : Unique PUnit.{u} where
   default := PUnit.unit
   uniq x := ext x _
 
 @[simp]
-/--
-theorem `PUnit.default_eq_unit` / 定理 `PUnit.default_eq_unit`
-
-English:
-theorem PUnit.default_eq_unit
-  statement: (default : PUnit) = PUnit.unit
-  proof: rfl
-
-中文:
-定理 命题单元.default_eq_unit
-  结论: (default : 命题单元) = 命题单元.unit
-  证明: rfl
+/-
+**PUnit.default_eq_unit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PUnit.default_eq_unit : (default : PUnit) = PUnit.unit
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem PUnit.default_eq_unit : (default : PUnit) = PUnit.unit :=
   rfl
 
 /-- Every provable proposition is unique, as all proofs are equal. -/
 @[instance_reducible]
-/--
-Definition of `uniqueProp` / `uniqueProp` 的定义
+/-
+**uniqueProp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：uniqueProp {p : Prop} (h : p) : Unique.{0} p where default
+参数：h : p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueProp
-  signature: {p : Prop} (h : p)
-  body: h
-  uniq _ := rfl
-
-中文:
-定义 uniqueProp
-  签名: {p : 命题} (h : p)
-  定义体: h
-  uniq _ := rfl
+--- 原说明 ---
+Every provable proposition is unique, as all proofs are equal.
 -/
 def uniqueProp {p : Prop} (h : p) : Unique.{0} p where
   default := h
   uniq _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Unique True
-  body: uniqueProp trivial
-
-中文:
-实例 :
-  签名: 唯一 真
-  定义体: uniqueProp trivial
-
-Depends on / 依赖: uniqueProp
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Unique True :=
   uniqueProp trivial
@@ -236,559 +181,418 @@ section
 variable {α : Sort*} [Unique α]
 
 -- see Note [lower instance priority]
+/-
+**Unique.** 是 Mathlib 中的一个实例，位于命名空间 `Unique`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : Inhabited α :=
   toInhabited ‹Unique α›
-
-/--
-theorem `eq_default` / 定理 `eq_default`
-
-English:
-theorem eq_default
-  given: (a : α)
-  statement: a = default
-  proof: uniq _ a
-
-中文:
-定理 eq_default
-  条件: (a : α)
-  结论: a = default
-  证明: uniq _ a
+/-
+**Unique.eq_default** 是 Mathlib 中的一个定理，位于命名空间 `Unique`。
+形式化陈述：eq_default (a : α) : a = default
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.uniq`：∀ {α : Sort u} (self : Unique α) (a : α), a = default
 -/
 theorem eq_default (a : α) : a = default :=
   uniq _ a
-
-/--
-theorem `default_eq` / 定理 `default_eq`
-
-English:
-theorem default_eq
-  given: (a : α)
-  statement: default = a
-  proof: (uniq _ a).symm
-
-中文:
-定理 default_eq
-  条件: (a : α)
-  结论: default = a
-  证明: (uniq _ a).symm
+/-
+**Unique.default_eq** 是 Mathlib 中的一个定理，位于命名空间 `Unique`。
+形式化陈述：default_eq (a : α) : default = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Unique.uniq`：∀ {α : Sort u} (self : Unique α) (a : α), a = default
 -/
 theorem default_eq (a : α) : default = a :=
   (uniq _ a).symm
 
 -- see Note [lower instance priority]
+/-
+**Unique.** 是 Mathlib 中的一个实例，位于命名空间 `Unique`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) instSubsingleton : Subsingleton α :=
   subsingleton_of_forall_eq _ eq_default
-
-/--
-theorem `forall_iff` / 定理 `forall_iff`
-
-English:
-theorem forall_iff
-  given: {p : α -> Prop}
-  statement: (forall a, p a) ↔ p default
-  proof: ⟨fun h => h _, fun h x => by rwa [Unique.eq_default x]⟩
-
-中文:
-定理 对任意_iff
-  条件: {p : α -> 命题}
-  结论: (对任意 a, p a) ↔ p default
-  证明: ⟨fun h => h _, fun h x => by rwa [Unique.eq_default x]⟩
-
-Depends on / 依赖: Unique, Unique.eq_default, eq_default
+/-
+**Unique.forall_iff** 是 Mathlib 中的一个定理，位于命名空间 `Unique`。
+形式化陈述：forall_iff {p : α -> Prop} : (forall a, p a) ↔ p default
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unique.eq_default`：eq_default (a : α) : a = default
 -/
-theorem forall_iff {p : α -> Prop} : (forall a, p a) ↔ p default :=
-  ⟨fun h => h _, fun h x => by rwa [Unique.eq_default x]⟩
-
-/--
-theorem `exists_iff` / 定理 `exists_iff`
-
-English:
-theorem exists_iff
-  given: {p : α -> Prop}
-  statement: Exists p ↔ p default
-  proof: ⟨fun ⟨a, ha⟩ => eq_default a ▸ ha, Exists.intro default⟩
-
-中文:
-定理 存在_iff
-  条件: {p : α -> 命题}
-  结论: 存在 p ↔ p default
-  证明: ⟨fun ⟨a, ha⟩ => eq_default a ▸ ha, Exists.intro default⟩
-
-Depends on / 依赖: Exists, Exists.intro, add_mul, eq_default, mul_pow, pow_ne_zero, right_ne_zero_of_mul
+theorem forall_iff {p : α → Prop} : (∀ a, p a) ↔ p default :=
+  ⟨fun h ↦ h _, fun h x ↦ by rwa [Unique.eq_default x]⟩
+/-
+**Unique.exists_iff** 是 Mathlib 中的一个定理，位于命名空间 `Unique`。
+形式化陈述：exists_iff {p : α -> Prop} : Exists p ↔ p default
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.eq_default`：eq_default (a : α) : a = default
 -/
-theorem exists_iff {p : α -> Prop} : Exists p ↔ p default :=
-  ⟨fun ⟨a, ha⟩ => eq_default a ▸ ha, Exists.intro default⟩
+theorem exists_iff {p : α → Prop} : Exists p ↔ p default :=
+  ⟨fun ⟨a, ha⟩ ↦ eq_default a ▸ ha, Exists.intro default⟩
 
 end
 
 variable {α : Sort*}
 
 @[ext]
-/--
-theorem `subsingleton_unique'` / 定理 `subsingleton_unique'`
-
-English:
-theorem subsingleton_unique'
-  statement: forall h₁ h₂ : Unique α, h₁ = h₂
-
-中文:
-定理 subsingleton_unique'
-  结论: 对任意 h₁ h₂ : 唯一 α, h₁ = h₂
-
-Depends on / 依赖: Iff.intro, fermatLastTheoremWith, h.fermatLastTheoremWith
+/-
+**Unique.subsingleton_unique'** 是 Mathlib 中的一个定理，位于命名空间 `Unique`。
+形式化陈述：∀ {α : Sort u_1} (h₁ h₂ : Unique α), h₁ = h₂
+参数：h₁ h₂ : Unique α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-protected theorem subsingleton_unique' : forall h₁ h₂ : Unique α, h₁ = h₂
+protected theorem subsingleton_unique' : ∀ h₁ h₂ : Unique α, h₁ = h₂
   | ⟨⟨x⟩, h⟩, ⟨⟨y⟩, _⟩ => by congr; rw [h x, h y]
-
-/--
-Instance `subsingleton_unique` / 实例 `subsingleton_unique`
-
-English:
-instance subsingleton_unique
-  signature: : Subsingleton (Unique α)
-  body: ⟨Unique.subsingleton_unique'⟩
-
-中文:
-实例 subsingleton_unique
-  签名: : 子单例 (唯一 α)
-  定义体: ⟨Unique.subsingleton_unique'⟩
-
-Depends on / 依赖: Int.reduceAdd, Nat.isUnit_iff, Nat.reduceAdd, OfNat.ofNat_ne_one, Unique, Unique.subsingleton_unique, _iff_fermatLastTheoremWith, fermatLastTheoremFor_iff_int, fermatLastTheoremWith, isUnit_iff, isUnit_pow_i, ne_eq, not_false_eq_true, ofNat_ne_one, one_pow, pow_zero, reduceAdd, subsingleton_unique, tfae_have
+/-
+**Unique.subsingleton_unique** 是 Mathlib 中的一个实例，位于命名空间 `Unique`。
+形式化陈述：subsingleton_unique : Subsingleton (Unique α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.subsingleton_unique'`：∀ {α : Sort u_1} (h₁ h₂ : Unique α), h₁ = h
+₂
 -/
 instance subsingleton_unique : Subsingleton (Unique α) :=
   ⟨Unique.subsingleton_unique'⟩
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- Construct `Unique` from `Inhabited` and `Subsingleton`. Making this an instance would create
+a loop in the class inheritance graph. -/
+/-
+**Unique.mk'** 是 Mathlib 中的一个缩写定义，位于命名空间 `Unique`。
+形式化陈述：mk' (α : Sort u) [h₁ : Inhabited α] [Subsingleton α] : Unique α
+参数：α : Sort u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk'
-  signature: (α : Sort u) [h₁ : Inhabited α] [Subsingleton α]
-  body: { h₁ with uniq := fun _ => Subsingleton.elim _ _ }
-
-中文:
-缩写 mk'
-  签名: (α : 类型层 u) [h₁ : 可居 α] [子单例 α]
-  定义体: { h₁ with uniq := fun _ => Subsingleton.elim _ _ }
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+--- 原说明 ---
+Construct `Unique` from `Inhabited` and `Subsingleton`. Making this an instance 
+would create
+a loop in the class inheritance graph.
 -/
 abbrev mk' (α : Sort u) [h₁ : Inhabited α] [Subsingleton α] : Unique α :=
-  { h₁ with uniq := fun _ => Subsingleton.elim _ _ }
+  { h₁ with uniq := fun _ ↦ Subsingleton.elim _ _ }
 
 end Unique
 
-/--
-theorem `nonempty_unique` / 定理 `nonempty_unique`
-
-English:
-theorem nonempty_unique
-  given: (α : Sort u) [Subsingleton α] [Nonempty α]
-  statement: Nonempty (Unique α)
-  proof: by
-  inhabit α
-  exact ⟨Unique.mk' α⟩
-
-中文:
-定理 nonempty_unique
-  条件: (α : 类型层 u) [子单例 α] [非空 α]
-  结论: 非空 (唯一 α)
-  证明: by
-  inhabit α
-  exact ⟨Unique.mk' α⟩
-
-Depends on / 依赖: Unique, Unique.mk, inhabit
+/-
+**nonempty_unique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty α] : Nonempty (Uni
+que α)
+参数：α : Sort u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty α] : Nonempty (Unique α) := by
   inhabit α
   exact ⟨Unique.mk' α⟩
-
-/--
-theorem `unique_iff_subsingleton_and_nonempty` / 定理 `unique_iff_subsingleton_and_nonempty`
-
-English:
-theorem unique_iff_subsingleton_and_nonempty
-  given: (α : Sort u)
-  proof: ⟨fun ⟨u⟩ => by constructor <;> exact inferInstance,
-   fun ⟨hs, hn⟩ => nonempty_unique α⟩
-
-中文:
-定理 unique_iff_subsingleton_and_nonempty
-  条件: (α : 类型层 u)
-  证明: ⟨fun ⟨u⟩ => by constructor <;> exact inferInstance,
-   fun ⟨hs, hn⟩ => nonempty_unique α⟩
-
-Depends on / 依赖: nonempty_unique
+/-
+**unique_iff_subsingleton_and_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：unique_iff_subsingleton_and_nonempty (α : Sort u) : Nonempty (Unique α) ↔ 
+Subsingleton α ∧ Nonempty α
+参数：α : Sort u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `nonempty_unique`：nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty
+ α] : Nonempty (Unique α)
 -/
 theorem unique_iff_subsingleton_and_nonempty (α : Sort u) :
     Nonempty (Unique α) ↔ Subsingleton α ∧ Nonempty α :=
-  ⟨fun ⟨u⟩ => by constructor <;> exact inferInstance,
-   fun ⟨hs, hn⟩ => nonempty_unique α⟩
+  ⟨fun ⟨u⟩ ↦ by constructor <;> exact inferInstance,
+   fun ⟨hs, hn⟩ ↦ nonempty_unique α⟩
 
 variable {α : Sort*}
 
 @[simp, push ←]
-/--
-theorem `Pi.default_def` / 定理 `Pi.default_def`
-
-English:
-theorem Pi.default_def
-  given: {β : α -> Sort v} [forall a, Inhabited (β a)]
-  proof: rfl
-
-中文:
-定理 依赖函数类型.default_def
-  条件: {β : α -> 类型层 v} [对任意 a, 可居 (β a)]
-  证明: rfl
+/-
+**Pi.default_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Pi.default_def {β : α -> Sort v} [forall a, Inhabited (β a)] : @default (f
+orall a, β a) _ = fun a : α => @default (β a) _
+参数：β a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Pi.default_def {β : α -> Sort v} [forall a, Inhabited (β a)] :
-    @default (forall a, β a) _ = fun a : α => @default (β a) _ :=
+theorem Pi.default_def {β : α → Sort v} [∀ a, Inhabited (β a)] :
+    @default (∀ a, β a) _ = fun a : α ↦ @default (β a) _ :=
   rfl
-
-/--
-theorem `Pi.default_apply` / 定理 `Pi.default_apply`
-
-English:
-theorem Pi.default_apply
-  given: {β : α -> Sort v} [forall a, Inhabited (β a)] (a : α)
-  proof: rfl
-
-中文:
-定理 依赖函数类型.default_apply
-  条件: {β : α -> 类型层 v} [对任意 a, 可居 (β a)] (a : α)
-  证明: rfl
+/-
+**Pi.default_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Pi.default_apply {β : α -> Sort v} [forall a, Inhabited (β a)] (a : α) : @
+default (forall a, β a) _ a = default
+参数：β a；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Pi.default_apply {β : α -> Sort v} [forall a, Inhabited (β a)] (a : α) :
-    @default (forall a, β a) _ a = default :=
+theorem Pi.default_apply {β : α → Sort v} [∀ a, Inhabited (β a)] (a : α) :
+    @default (∀ a, β a) _ a = default :=
   rfl
-
-/--
-Instance `Pi.unique` / 实例 `Pi.unique`
-
-English:
-instance Pi.unique
-  signature: {β : α -> Sort v} [forall a, Unique (β a)]
-  body: fun _ => funext fun _ => Unique.eq_default _
-
-中文:
-实例 依赖函数类型.unique
-  签名: {β : α -> 类型层 v} [对任意 a, 唯一 (β a)]
-  定义体: fun _ => funext fun _ => Unique.eq_default _
-
-Depends on / 依赖: Unique, Unique.eq_default, eq_default
+/-
+**Pi.unique** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.unique {β : α -> Sort v} [forall a, Unique (β a)] : Unique (forall a, β
+ a) where uniq
+参数：β a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Pi.unique {β : α -> Sort v} [forall a, Unique (β a)] : Unique (forall a, β a) where
-  uniq := fun _ => funext fun _ => Unique.eq_default _
+instance Pi.unique {β : α → Sort v} [∀ a, Unique (β a)] : Unique (∀ a, β a) where
+  uniq := fun _ ↦ funext fun _ ↦ Unique.eq_default _
 
-/--
-Instance `Pi.uniqueOfIsEmpty` / 实例 `Pi.uniqueOfIsEmpty`
+/-- There is a unique function on an empty domain. -/
+/-
+**Pi.uniqueOfIsEmpty** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.uniqueOfIsEmpty [IsEmpty α] (β : α -> Sort v) : Unique (forall a, β a) 
+where default
+参数：β : α -> Sort v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Pi.uniqueOfIsEmpty
-  signature: [IsEmpty α] (β : α -> Sort v)
-  body: isEmptyElim
-  uniq _ := funext isEmptyElim
-
-中文:
-实例 依赖函数类型.uniqueOfIsEmpty
-  签名: [是空 α] (β : α -> 类型层 v)
-  定义体: isEmptyElim
-  uniq _ := funext isEmptyElim
-
-Depends on / 依赖: isEmptyElim
+--- 原说明 ---
+There is a unique function on an empty domain.
 -/
-instance Pi.uniqueOfIsEmpty [IsEmpty α] (β : α -> Sort v) : Unique (forall a, β a) where
+instance Pi.uniqueOfIsEmpty [IsEmpty α] (β : α → Sort v) : Unique (∀ a, β a) where
   default := isEmptyElim
   uniq _ := funext isEmptyElim
-
-/--
-theorem `eq_const_of_subsingleton` / 定理 `eq_const_of_subsingleton`
-
-English:
-theorem eq_const_of_subsingleton
-  given: {β : Sort*} [Subsingleton α] (f : α -> β) (a : α)
-  proof: funext fun x => Subsingleton.elim x a ▸ rfl
-
-中文:
-定理 eq_const_of_subsingleton
-  条件: {β : 类型层*} [子单例 α] (f : α -> β) (a : α)
-  证明: funext fun x => Subsingleton.elim x a ▸ rfl
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**eq_const_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_const_of_subsingleton {β : Sort*} [Subsingleton α] (f : α -> β) (a : α)
+ : f = Function.const α (f a)
+参数：f : α -> β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem eq_const_of_subsingleton {β : Sort*} [Subsingleton α] (f : α -> β) (a : α) :
+theorem eq_const_of_subsingleton {β : Sort*} [Subsingleton α] (f : α → β) (a : α) :
     f = Function.const α (f a) :=
-  funext fun x => Subsingleton.elim x a ▸ rfl
-
-/--
-theorem `eq_const_of_unique` / 定理 `eq_const_of_unique`
-
-English:
-theorem eq_const_of_unique
-  given: {β : Sort*} [Unique α] (f : α -> β)
-  statement: f = Function.const α (f default)
-  proof: eq_const_of_subsingleton ..
-
-中文:
-定理 eq_const_of_unique
-  条件: {β : 类型层*} [唯一 α] (f : α -> β)
-  结论: f = 函数.const α (f default)
-  证明: eq_const_of_subsingleton ..
-
-Depends on / 依赖: eq_const_of_subsingleton
+  funext fun x ↦ Subsingleton.elim x a ▸ rfl
+/-
+**eq_const_of_unique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_const_of_unique {β : Sort*} [Unique α] (f : α -> β) : f = Function.cons
+t α (f default)
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_const_of_subsingleton`：eq_const_of_subsingleton {β : Sort*} [Subsingl
+eton α] (f : α -> β) (a : α) : f = Function.const α (f a)
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem eq_const_of_unique {β : Sort*} [Unique α] (f : α -> β) : f = Function.const α (f default) :=
+theorem eq_const_of_unique {β : Sort*} [Unique α] (f : α → β) : f = Function.const α (f default) :=
   eq_const_of_subsingleton ..
-
-/--
-theorem `heq_const_of_unique` / 定理 `heq_const_of_unique`
-
-English:
-theorem heq_const_of_unique
-  given: [Unique α] {β : α -> Sort v} (f : forall a, β a)
-  proof: (Function.hfunext rfl) fun i _ _ => by rw [Subsingleton.elim i default]; rfl
-
-中文:
-定理 heq_const_of_unique
-  条件: [唯一 α] {β : α -> 类型层 v} (f : 对任意 a, β a)
-  证明: (Function.hfunext rfl) fun i _ _ => by rw [Subsingleton.elim i default]; rfl
-
-Depends on / 依赖: Function, Function.hfunext, Subsingleton, Subsingleton.elim, hfunext
+/-
+**heq_const_of_unique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：heq_const_of_unique [Unique α] {β : α -> Sort v} (f : forall a, β a) : f ≍
+ Function.const α (f default)
+参数：f : forall a, β a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.hfunext`：hfunext {α α' : Sort u} {β : α -> Sort v} {β' : α' -> 
+Sort v} {f : forall a, β a} {f' : forall a, β' a} (hα : α = α') (h : forall a a'
+, a ≍ …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem heq_const_of_unique [Unique α] {β : α -> Sort v} (f : forall a, β a) :
+theorem heq_const_of_unique [Unique α] {β : α → Sort v} (f : ∀ a, β a) :
     f ≍ Function.const α (f default) :=
-  (Function.hfunext rfl) fun i _ _ => by rw [Subsingleton.elim i default]; rfl
+  (Function.hfunext rfl) fun i _ _ ↦ by rw [Subsingleton.elim i default]; rfl
 
 namespace Function
 
-variable {β : Sort*} {f : α -> β}
+variable {β : Sort*} {f : α → β}
 
-/--
-theorem `Injective.subsingleton` / 定理 `Injective.subsingleton`
+/-- If the codomain of an injective function is a subsingleton, then the domain
+is a subsingleton as well. -/
+/-
+**Function.Injective.subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Function.Injective`
+。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Function.Injective f → ∀ [Sub
+singleton β], Subsingleton α
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 
-English:
-theorem Injective.subsingleton
-  given: (hf : Injective f) [Subsingleton β]
-  statement: Subsingleton α
-  proof: ⟨fun _ _ => hf Subsingleton.elim _ _⟩
-
-中文:
-定理 单射.subsingleton
-  条件: (hf : 单射 f) [子单例 β]
-  结论: 子单例 α
-  证明: ⟨fun _ _ => hf Subsingleton.elim _ _⟩
+--- 原说明 ---
+If the codomain of an injective function is a subsingleton, then the domain
+is a subsingleton as well.
 -/
 protected theorem Injective.subsingleton (hf : Injective f) [Subsingleton β] : Subsingleton α :=
-⟨fun _ _ => hf Subsingleton.elim _ _⟩
+  ⟨fun _ _ ↦ hf <| Subsingleton.elim _ _⟩
 
-/--
-theorem `Surjective.subsingleton` / 定理 `Surjective.subsingleton`
+/-- If the domain of a surjective function is a subsingleton, then the codomain is a subsingleton as
+well. -/
+/-
+**Function.Surjective.subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Function.Surjectiv
+e`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β} [Subsingleton α], Function.Sur
+jective f → Subsingleton β
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall₂`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}
+,   Function.Surjective f → ∀ {p : β → β → Prop}, (∀ (y₁ y₂ : β), p y₁ y₂) ↔ ∀ (
+x₁ x₂ : α), p (f …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 
-English:
-theorem Surjective.subsingleton
-  given: [Subsingleton α] (hf : Surjective f)
-  statement: Subsingleton β
-  proof: ⟨hf.forall₂.2 fun x y => congr_arg f Subsingleton.elim x y⟩
-
-中文:
-定理 满射.subsingleton
-  条件: [子单例 α] (hf : 满射 f)
-  结论: 子单例 β
-  证明: ⟨hf.forall₂.2 fun x y => congr_arg f Subsingleton.elim x y⟩
+--- 原说明 ---
+If the domain of a surjective function is a subsingleton, then the codomain is a
+ subsingleton as
+well.
 -/
 protected theorem Surjective.subsingleton [Subsingleton α] (hf : Surjective f) : Subsingleton β :=
-⟨hf.forall₂.2 fun x y => congr_arg f Subsingleton.elim x y⟩
+  ⟨hf.forall₂.2 fun x y ↦ congr_arg f <| Subsingleton.elim x y⟩
 
 /-- If the domain of a surjective function is a singleton,
 then the codomain is a singleton as well. -/
 @[instance_reducible]
-/--
-Definition of `Surjective.unique` / `Surjective.unique` 的定义
+/-
+**Function.Surjective.unique** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjective`。
+形式化陈述：{β : Sort u_2} → {α : Sort u} → (f : α → β) → Function.Surjective f → [Uni
+que α] → Unique β
+参数：f : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Surjective.unique
-  signature: {α : Sort u} (f : α -> β) (hf : Surjective f) [Unique.{u} α]
-  body: @Unique.mk' _ ⟨f default⟩ hf.subsingleton
-
-中文:
-定义 满射.unique
-  签名: {α : 类型层 u} (f : α -> β) (hf : 满射 f) [唯一.{u} α]
-  定义体: @Unique.mk' _ ⟨f default⟩ hf.subsingleton
+--- 原说明 ---
+If the domain of a surjective function is a singleton,
+then the codomain is a singleton as well.
 -/
-protected def Surjective.unique {α : Sort u} (f : α -> β) (hf : Surjective f) [Unique.{u} α] :
+protected def Surjective.unique {α : Sort u} (f : α → β) (hf : Surjective f) [Unique.{u} α] :
     Unique β :=
   @Unique.mk' _ ⟨f default⟩ hf.subsingleton
 
 /-- If `α` is inhabited and admits an injective map to a subsingleton type, then `α` is `Unique`. -/
 @[instance_reducible]
-/--
-Definition of `Injective.unique` / `Injective.unique` 的定义
+/-
+**Function.Injective.unique** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{α : Sort u_1} → {β : Sort u_2} → {f : α → β} → [Inhabited α] → [Subsingle
+ton β] → Function.Injective f → Unique α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β}, Function.Injective f → ∀ [Subsingleton β], Subsingleton α
 
-English:
-definition Injective.unique
-  signature: [Inhabited α] [Subsingleton β] (hf : Injective f)
-  body: @Unique.mk' _ _ hf.subsingleton
-
-中文:
-定义 单射.unique
-  签名: [可居 α] [子单例 β] (hf : 单射 f)
-  定义体: @Unique.mk' _ _ hf.subsingleton
+--- 原说明 ---
+If `α` is inhabited and admits an injective map to a subsingleton type, then `α`
+ is `Unique`.
 -/
 protected def Injective.unique [Inhabited α] [Subsingleton β] (hf : Injective f) : Unique α :=
   @Unique.mk' _ _ hf.subsingleton
 
 /-- If a constant function is surjective, then the codomain is a singleton. -/
 @[instance_reducible]
-/--
-Definition of `Surjective.uniqueOfSurjectiveConst` / `Surjective.uniqueOfSurjectiveConst` 的定义
+/-
+**Function.Surjective.uniqueOfSurjectiveConst** 是 Mathlib 中的一个定义，位于命名空间 `Functio
+n.Surjective`。
+形式化陈述：(α : Type u_3) → {β : Type u_4} → (b : β) → Function.Surjective (Function.
+const α b) → Unique β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Surjective.uniqueOfSurjectiveConst
-  signature: (α : Type*) {β : Type*} (b : β)
-  body: @uniqueOfSubsingleton _ (subsingleton_of_forall_eq b <| h.forall.mpr fun _ => rfl) b
-
-中文:
-定义 满射.uniqueOfSurjectiveConst
-  签名: (α : 类型) {β : 类型} (b : β)
-  定义体: @uniqueOfSubsingleton _ (subsingleton_of_forall_eq b <| h.forall.mpr fun _ => rfl) b
-
-Depends on / 依赖: h.forall.mpr, subsingleton_of_forall_eq, uniqueOfSubsingleton
+--- 原说明 ---
+If a constant function is surjective, then the codomain is a singleton.
 -/
 def Surjective.uniqueOfSurjectiveConst (α : Type*) {β : Type*} (b : β)
     (h : Function.Surjective (Function.const α b)) : Unique β :=
-  @uniqueOfSubsingleton _ (subsingleton_of_forall_eq b <| h.forall.mpr fun _ => rfl) b
+  @uniqueOfSubsingleton _ (subsingleton_of_forall_eq b <| h.forall.mpr fun _ ↦ rfl) b
 
 end Function
 
 section Pi
 
-variable {ι : Sort*} {α : ι -> Sort*}
+variable {ι : Sort*} {α : ι → Sort*}
 
-/--
-Definition of `uniqueElim` / `uniqueElim` 的定义
+/-- Given one value over a unique, we get a dependent function. -/
+/-
+**uniqueElim** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：uniqueElim [Unique ι] (x : α (default : ι)) (i : ι) : α i
+参数：x : α (default : ι)；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueElim
-  signature: [Unique ι] (x : α (default : ι)) (i : ι)
-  body: by
-  rw [Unique.eq_default i]
-  exact x
-
-@[simp]
-
-中文:
-定义 uniqueElim
-  签名: [唯一 ι] (x : α (default : ι)) (i : ι)
-  定义体: by
-  rw [Unique.eq_default i]
-  exact x
-
-@[simp]
-
-Depends on / 依赖: Unique, Unique.eq_default, eq_default
+--- 原说明 ---
+Given one value over a unique, we get a dependent function.
 -/
 def uniqueElim [Unique ι] (x : α (default : ι)) (i : ι) : α i := by
   rw [Unique.eq_default i]
   exact x
 
 @[simp]
-/--
-theorem `uniqueElim_default` / 定理 `uniqueElim_default`
-
-English:
-theorem uniqueElim_default
-  given: {_ : Unique ι} (x : α (default : ι))
-  statement: uniqueElim x (default : ι) = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 uniqueElim_default
-  条件: {_ : 唯一 ι} (x : α (default : ι))
-  结论: uniqueElim x (default : ι) = x
-  证明: rfl
-
-@[simp]
+/-
+**uniqueElim_default** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueElim_default {_ : Unique ι} (x : α (default : ι)) : uniqueElim x (de
+fault : ι) = x
+参数：x : α (default : ι)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uniqueElim_default {_ : Unique ι} (x : α (default : ι)) : uniqueElim x (default : ι) = x :=
   rfl
 
 @[simp]
-/--
-theorem `uniqueElim_const` / 定理 `uniqueElim_const`
-
-English:
-theorem uniqueElim_const
-  given: {β : Sort*} {_ : Unique ι} (x : β) (i : ι)
-  proof: rfl
-
-中文:
-定理 uniqueElim_const
-  条件: {β : 类型层*} {_ : 唯一 ι} (x : β) (i : ι)
-  证明: rfl
+/-
+**uniqueElim_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueElim_const {β : Sort*} {_ : Unique ι} (x : β) (i : ι) : uniqueElim (
+α
+参数：x : β；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uniqueElim_const {β : Sort*} {_ : Unique ι} (x : β) (i : ι) :
-    uniqueElim (α := fun _ => β) x i = x :=
+    uniqueElim (α := fun _ ↦ β) x i = x :=
   rfl
 
 end Pi
 
 -- TODO: Mario turned this off as a simp lemma in Batteries, wanting to profile it.
 attribute [local simp] eq_iff_true_of_subsingleton in
-/--
-theorem `Unique.bijective` / 定理 `Unique.bijective`
-
-English:
-theorem Unique.bijective
-  given: {A B} [Unique A] [Unique B] {f : A -> B}
-  statement: Function.Bijective f
-  proof: by
-  rw [Function.bijective_iff_has_inverse]
-  refine ⟨default, ?_, ?_⟩ <;> intro x <;> simp
-
-中文:
-定理 唯一.bijective
-  条件: {A B} [唯一 A] [唯一 B] {f : A -> B}
-  结论: 函数.双射 f
-  证明: by
-  rw [Function.bijective_iff_has_inverse]
-  refine ⟨default, ?_, ?_⟩ <;> intro x <;> simp
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse, bijective_iff_has_inverse
+/-
+**Unique.bijective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Unique.bijective {A B} [Unique A] [Unique B] {f : A -> B} : Function.Bijec
+tive f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem Unique.bijective {A B} [Unique A] [Unique B] {f : A -> B} : Function.Bijective f := by
+theorem Unique.bijective {A B} [Unique A] [Unique B] {f : A → B} : Function.Bijective f := by
   rw [Function.bijective_iff_has_inverse]
   refine ⟨default, ?_, ?_⟩ <;> intro x <;> simp
 
 namespace Option
 
-/--
-theorem `subsingleton_iff_isEmpty` / 定理 `subsingleton_iff_isEmpty`
+/-- `Option α` is a `Subsingleton` if and only if `α` is empty. -/
+/-
+**Option.subsingleton_iff_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：subsingleton_iff_isEmpty {α : Type u} : Subsingleton (Option α) ↔ IsEmpty 
+α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 
-English:
-theorem subsingleton_iff_isEmpty
-  given: {α : Type u}
-  statement: Subsingleton (Option α) ↔ IsEmpty α
-  proof: ⟨fun h => ⟨fun x => Option.noConfusion rfl (heq_of_eq (@Subsingleton.elim _ h x none))⟩,
-   fun h => ⟨fun x y =>
-     Option.casesOn x (Option.casesOn y rfl fun x => h.elim x) fun x => h.elim x⟩⟩
-
-中文:
-定理 subsingleton_iff_isEmpty
-  条件: {α : 类型u}
-  结论: 子单例 (选项类型 α) ↔ 是空 α
-  证明: ⟨fun h => ⟨fun x => Option.noConfusion rfl (heq_of_eq (@Subsingleton.elim _ h x none))⟩,
-   fun h => ⟨fun x y =>
-     Option.casesOn x (Option.casesOn y rfl fun x => h.elim x) fun x => h.elim x⟩⟩
-
-Depends on / 依赖: Option.casesOn, Option.noConfusion, Subsingleton, Subsingleton.elim, casesOn, h.elim, heq_of_eq, noConfusion
+--- 原说明 ---
+`Option α` is a `Subsingleton` if and only if `α` is empty.
 -/
 theorem subsingleton_iff_isEmpty {α : Type u} : Subsingleton (Option α) ↔ IsEmpty α :=
-  ⟨fun h => ⟨fun x => Option.noConfusion rfl (heq_of_eq (@Subsingleton.elim _ h x none))⟩,
-   fun h => ⟨fun x y =>
-     Option.casesOn x (Option.casesOn y rfl fun x => h.elim x) fun x => h.elim x⟩⟩
-
+  ⟨fun h ↦ ⟨fun x ↦ Option.noConfusion rfl (heq_of_eq (@Subsingleton.elim _ h x none))⟩,
+   fun h ↦ ⟨fun x y ↦
+     Option.casesOn x (Option.casesOn y rfl fun x ↦ h.elim x) fun x ↦ h.elim x⟩⟩
+/-
+**Option.** 是 Mathlib 中的一个实例，位于命名空间 `Option`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α} [IsEmpty α] : Unique (Option α) :=
   @Unique.mk' _ _ (subsingleton_iff_isEmpty.2 ‹_›)
 
@@ -796,59 +600,33 @@ end Option
 
 section Subtype
 
-/--
-Instance `Unique.subtypeEq` / 实例 `Unique.subtypeEq`
-
-English:
-instance Unique.subtypeEq
-  signature: (y : α)
-  body: ⟨y, rfl⟩
-  uniq := fun ⟨x, hx⟩ => by congr
-
-中文:
-实例 唯一.subtypeEq
-  签名: (y : α)
-  定义体: ⟨y, rfl⟩
-  uniq := fun ⟨x, hx⟩ => by congr
+/-
+**Unique.subtypeEq** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Unique.subtypeEq (y : α) : Unique { x // x = y } where default
+参数：y : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Unique.subtypeEq (y : α) : Unique { x // x = y } where
   default := ⟨y, rfl⟩
-  uniq := fun ⟨x, hx⟩ => by congr
-
-/--
-Instance `Unique.subtypeEq'` / 实例 `Unique.subtypeEq'`
-
-English:
-instance Unique.subtypeEq'
-  signature: (y : α)
-  body: ⟨y, rfl⟩
-  uniq := fun ⟨x, hx⟩ => by subst hx; congr
-
-中文:
-实例 唯一.subtypeEq'
-  签名: (y : α)
-  定义体: ⟨y, rfl⟩
-  uniq := fun ⟨x, hx⟩ => by subst hx; congr
+  uniq := fun ⟨x, hx⟩ ↦ by congr
+/-
+**Unique.subtypeEq'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Unique.subtypeEq' (y : α) : Unique { x // y = x } where default
+参数：y : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Unique.subtypeEq' (y : α) : Unique { x // y = x } where
   default := ⟨y, rfl⟩
-  uniq := fun ⟨x, hx⟩ => by subst hx; congr
+  uniq := fun ⟨x, hx⟩ ↦ by subst hx; congr
 
 end Subtype
 
-/--
-Instance `Fin.instUnique` / 实例 `Fin.instUnique`
-
-English:
-instance Fin.instUnique
-  signature: : Unique (Fin 1) where uniq _
-  body: Subsingleton.elim _ _
-
-中文:
-实例 有限集.instUnique
-  签名: : 唯一 (有限集 1) where uniq _
-  定义体: Subsingleton.elim _ _
-
-Depends on / 依赖: FermatLastTheoremWith, IsIntegrallyClosed, IsIntegrallyClosed.pow_dvd_pow_iff, Subsingleton, Subsingleton.elim, classical, eq_a, eq_b, eq_c, gcd_dvd_left, gcd_dvd_right, gcd_ne_zero_of_left, heq.symm, mul_add, mul_ne_zero_iff, mul_pow, pow_dvd_pow_iff
+/-
+**Fin.instUnique** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Fin.instUnique : Unique (Fin 1) where uniq _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Fin.instUnique : Unique (Fin 1) where uniq _ := Subsingleton.elim _ _

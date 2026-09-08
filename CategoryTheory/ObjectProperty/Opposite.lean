@@ -27,316 +27,214 @@ section
 
 variable [CategoryStruct.{v} C]
 
-/--
-Definition of `op` / `op` 的定义
+/-- The property of objects of `Cᵒᵖ` corresponding to `P : ObjectProperty C`. -/
+/-
+**CategoryTheory.ObjectProperty.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Obj
+ectProperty`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.CategoryStruct.{v, u} C] → Categor
+yTheory.ObjectProperty C → CategoryTheory.ObjectProperty Cᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: (P : ObjectProperty C)
-  body: fun X => P X.unop
-
-中文:
-定义 op
-  签名: (P : ObjectProperty C)
-  定义体: fun X => P X.unop
+--- 原说明 ---
+The property of objects of `Cᵒᵖ` corresponding to `P : ObjectProperty C`.
 -/
 protected def op (P : ObjectProperty C) : ObjectProperty Cᵒᵖ :=
-  fun X => P X.unop
+  fun X ↦ P X.unop
 
-/--
-Definition of `unop` / `unop` 的定义
+/-- The property of objects of `C` corresponding to `P : ObjectProperty Cᵒᵖ`. -/
+/-
+**CategoryTheory.ObjectProperty.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.O
+bjectProperty`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.CategoryStruct.{v, u} C] → Categor
+yTheory.ObjectProperty Cᵒᵖ → CategoryTheory.ObjectProperty C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: (P : ObjectProperty Cᵒᵖ)
-  body: fun X => P (op X)
-
-@[simp]
-
-中文:
-定义 unop
-  签名: (P : ObjectProperty Cᵒᵖ)
-  定义体: fun X => P (op X)
-
-@[simp]
+--- 原说明 ---
+The property of objects of `C` corresponding to `P : ObjectProperty Cᵒᵖ`.
 -/
 protected def unop (P : ObjectProperty Cᵒᵖ) : ObjectProperty C :=
-  fun X => P (op X)
+  fun X ↦ P (op X)
 
 @[simp]
-/--
-lemma `op_iff` / 引理 `op_iff`
-
-English:
-lemma op_iff
-  given: (P : ObjectProperty C) (X : Cᵒᵖ)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-引理 op_iff
-  条件: (P : ObjectProperty C) (X : Cᵒᵖ)
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.ObjectProperty.op_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ObjectProperty`。
+形式化陈述：op_iff (P : ObjectProperty C) (X : Cᵒᵖ) : P.op X ↔ P X.unop
+参数：P : ObjectProperty C；X : Cᵒᵖ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma op_iff (P : ObjectProperty C) (X : Cᵒᵖ) :
     P.op X ↔ P X.unop := Iff.rfl
 
 @[simp]
-/--
-lemma `unop_iff` / 引理 `unop_iff`
-
-English:
-lemma unop_iff
-  given: (P : ObjectProperty Cᵒᵖ) (X : C)
-  proof: Iff.rfl
-
-中文:
-引理 unop_iff
-  条件: (P : ObjectProperty Cᵒᵖ) (X : C)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.ObjectProperty.unop_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.ObjectProperty`。
+形式化陈述：unop_iff (P : ObjectProperty Cᵒᵖ) (X : C) : P.unop X ↔ P (op X)
+参数：P : ObjectProperty Cᵒᵖ；X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma unop_iff (P : ObjectProperty Cᵒᵖ) (X : C) :
     P.unop X ↔ P (op X) := Iff.rfl
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (P : ObjectProperty C) [P.Nonempty] : P.op.Nonempty :=
   ⟨op P.arbitrary, P.prop_arbitrary⟩
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (P : ObjectProperty Cᵒᵖ) [P.Nonempty] : P.unop.Nonempty :=
   ⟨P.arbitrary.unop, P.prop_arbitrary⟩
 
 @[simp]
-/--
-lemma `op_unop` / 引理 `op_unop`
-
-English:
-lemma op_unop
-  given: (P : ObjectProperty Cᵒᵖ)
-  statement: P.unop.op = P
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 op_unop
-  条件: (P : ObjectProperty Cᵒᵖ)
-  结论: P.unop.op = P
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ObjectProperty.op_unop** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ObjectProperty`。
+形式化陈述：op_unop (P : ObjectProperty Cᵒᵖ) : P.unop.op = P
+参数：P : ObjectProperty Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma op_unop (P : ObjectProperty Cᵒᵖ) : P.unop.op = P := rfl
 
 @[simp]
-/--
-lemma `unop_op` / 引理 `unop_op`
-
-English:
-lemma unop_op
-  given: (P : ObjectProperty C)
-  statement: P.op.unop = P
-  proof: rfl
-
-中文:
-引理 unop_op
-  条件: (P : ObjectProperty C)
-  结论: P.op.unop = P
-  证明: rfl
+/-
+**CategoryTheory.ObjectProperty.unop_op** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ObjectProperty`。
+形式化陈述：unop_op (P : ObjectProperty C) : P.op.unop = P
+参数：P : ObjectProperty C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma unop_op (P : ObjectProperty C) : P.op.unop = P := rfl
-
-/--
-lemma `op_injective` / 引理 `op_injective`
-
-English:
-lemma op_injective
-  given: {P Q : ObjectProperty C} (h : P.op = Q.op)
-  statement: P = Q
-  proof: by
-  rw [← P.unop_op]; rw [← Q.unop_op]; rw [h]
-
-中文:
-引理 op_injective
-  条件: {P Q : ObjectProperty C} (h : P.op = Q.op)
-  结论: P = Q
-  证明: by
-  rw [← P.unop_op]; rw [← Q.unop_op]; rw [h]
-
-Depends on / 依赖: P.unop_op, Q.unop_op, unop_op
+/-
+**CategoryTheory.ObjectProperty.op_injective** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ObjectProperty`。
+形式化陈述：op_injective {P Q : ObjectProperty C} (h : P.op = Q.op) : P = Q
+参数：h : P.op = Q.op。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.unop_op`：unop_op (P : ObjectProperty C) : 
+P.op.unop = P
 -/
 lemma op_injective {P Q : ObjectProperty C} (h : P.op = Q.op) : P = Q := by
-  rw [← P.unop_op]; rw [← Q.unop_op]; rw [h]
-
-/--
-lemma `unop_injective` / 引理 `unop_injective`
-
-English:
-lemma unop_injective
-  given: {P Q : ObjectProperty Cᵒᵖ} (h : P.unop = Q.unop)
-  statement: P = Q
-  proof: by
-  rw [← P.op_unop]; rw [← Q.op_unop]; rw [h]
-
-中文:
-引理 unop_injective
-  条件: {P Q : ObjectProperty Cᵒᵖ} (h : P.unop = Q.unop)
-  结论: P = Q
-  证明: by
-  rw [← P.op_unop]; rw [← Q.op_unop]; rw [h]
-
-Depends on / 依赖: P.op_unop, Q.op_unop, op_unop
+  rw [← P.unop_op, ← Q.unop_op, h]
+/-
+**CategoryTheory.ObjectProperty.unop_injective** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ObjectProperty`。
+形式化陈述：unop_injective {P Q : ObjectProperty Cᵒᵖ} (h : P.unop = Q.unop) : P = Q
+参数：h : P.unop = Q.unop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.op_unop`：op_unop (P : ObjectProperty Cᵒᵖ) 
+: P.unop.op = P
 -/
 lemma unop_injective {P Q : ObjectProperty Cᵒᵖ} (h : P.unop = Q.unop) : P = Q := by
-  rw [← P.op_unop]; rw [← Q.op_unop]; rw [h]
-
-/--
-lemma `op_injective_iff` / 引理 `op_injective_iff`
-
-English:
-lemma op_injective_iff
-  given: {P Q : ObjectProperty C}
-  proof: ⟨op_injective, by rintro rfl; rfl⟩
-
-中文:
-引理 op_injective_iff
-  条件: {P Q : ObjectProperty C}
-  证明: ⟨op_injective, by rintro rfl; rfl⟩
-
-Depends on / 依赖: op_injective
+  rw [← P.op_unop, ← Q.op_unop, h]
+/-
+**CategoryTheory.ObjectProperty.op_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.ObjectProperty`。
+形式化陈述：op_injective_iff {P Q : ObjectProperty C} : P.op = Q.op ↔ P = Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.op_injective`：op_injective {P Q : ObjectPr
+operty C} (h : P.op = Q.op) : P = Q
 -/
 lemma op_injective_iff {P Q : ObjectProperty C} :
     P.op = Q.op ↔ P = Q :=
   ⟨op_injective, by rintro rfl; rfl⟩
-
-/--
-lemma `unop_injective_iff` / 引理 `unop_injective_iff`
-
-English:
-lemma unop_injective_iff
-  given: {P Q : ObjectProperty Cᵒᵖ}
-  proof: ⟨unop_injective, by rintro rfl; rfl⟩
-
-中文:
-引理 unop_injective_iff
-  条件: {P Q : ObjectProperty Cᵒᵖ}
-  证明: ⟨unop_injective, by rintro rfl; rfl⟩
-
-Depends on / 依赖: unop_injective
+/-
+**CategoryTheory.ObjectProperty.unop_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：unop_injective_iff {P Q : ObjectProperty Cᵒᵖ} : P.unop = Q.unop ↔ P = Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.unop_injective`：unop_injective {P Q : Obje
+ctProperty Cᵒᵖ} (h : P.unop = Q.unop) : P = Q
 -/
 lemma unop_injective_iff {P Q : ObjectProperty Cᵒᵖ} :
     P.unop = Q.unop ↔ P = Q :=
   ⟨unop_injective, by rintro rfl; rfl⟩
-
-/--
-lemma `op_monotone` / 引理 `op_monotone`
-
-English:
-lemma op_monotone
-  given: {P Q : ObjectProperty C} (h : P <= Q)
-  statement: P.op <= Q.op
-  proof: fun _ hX => h _ hX
-
-中文:
-引理 op_monotone
-  条件: {P Q : ObjectProperty C} (h : P <= Q)
-  结论: P.op <= Q.op
-  证明: fun _ hX => h _ hX
+/-
+**CategoryTheory.ObjectProperty.op_monotone** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ObjectProperty`。
+形式化陈述：op_monotone {P Q : ObjectProperty C} (h : P <= Q) : P.op <= Q.op
+参数：h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma op_monotone {P Q : ObjectProperty C} (h : P <= Q) : P.op <= Q.op :=
-  fun _ hX => h _ hX
-
-/--
-lemma `unop_monotone` / 引理 `unop_monotone`
-
-English:
-lemma unop_monotone
-  given: {P Q : ObjectProperty Cᵒᵖ} (h : P <= Q)
-  statement: P.unop <= Q.unop
-  proof: fun _ hX => h _ hX
-
-@[simp]
-
-中文:
-引理 unop_monotone
-  条件: {P Q : ObjectProperty Cᵒᵖ} (h : P <= Q)
-  结论: P.unop <= Q.unop
-  证明: fun _ hX => h _ hX
-
-@[simp]
+lemma op_monotone {P Q : ObjectProperty C} (h : P ≤ Q) : P.op ≤ Q.op :=
+  fun _ hX ↦ h _ hX
+/-
+**CategoryTheory.ObjectProperty.unop_monotone** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.ObjectProperty`。
+形式化陈述：unop_monotone {P Q : ObjectProperty Cᵒᵖ} (h : P <= Q) : P.unop <= Q.unop
+参数：h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma unop_monotone {P Q : ObjectProperty Cᵒᵖ} (h : P <= Q) : P.unop <= Q.unop :=
-  fun _ hX => h _ hX
+lemma unop_monotone {P Q : ObjectProperty Cᵒᵖ} (h : P ≤ Q) : P.unop ≤ Q.unop :=
+  fun _ hX ↦ h _ hX
 
 @[simp]
-/--
-lemma `op_monotone_iff` / 引理 `op_monotone_iff`
-
-English:
-lemma op_monotone_iff
-  given: {P Q : ObjectProperty C}
-  statement: P.op <= Q.op ↔ P <= Q
-  proof: ⟨unop_monotone, op_monotone⟩
-
-@[simp]
-
-中文:
-引理 op_monotone_iff
-  条件: {P Q : ObjectProperty C}
-  结论: P.op <= Q.op ↔ P <= Q
-  证明: ⟨unop_monotone, op_monotone⟩
-
-@[simp]
-
-Depends on / 依赖: op_monotone, unop_monotone
+/-
+**CategoryTheory.ObjectProperty.op_monotone_iff** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.ObjectProperty`。
+形式化陈述：op_monotone_iff {P Q : ObjectProperty C} : P.op <= Q.op ↔ P <= Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.unop_monotone`：unop_monotone {P Q : Object
+Property Cᵒᵖ} (h : P <= Q) : P.unop <= Q.unop
+· 使用引理 `CategoryTheory.ObjectProperty.op_monotone`：op_monotone {P Q : ObjectProp
+erty C} (h : P <= Q) : P.op <= Q.op
 -/
-lemma op_monotone_iff {P Q : ObjectProperty C} : P.op <= Q.op ↔ P <= Q :=
+lemma op_monotone_iff {P Q : ObjectProperty C} : P.op ≤ Q.op ↔ P ≤ Q :=
   ⟨unop_monotone, op_monotone⟩
 
 @[simp]
-/--
-lemma `unop_monotone_iff` / 引理 `unop_monotone_iff`
-
-English:
-lemma unop_monotone_iff
-  given: {P Q : ObjectProperty Cᵒᵖ}
-  statement: P.unop <= Q.unop ↔ P <= Q
-  proof: ⟨op_monotone, unop_monotone⟩
-
-中文:
-引理 unop_monotone_iff
-  条件: {P Q : ObjectProperty Cᵒᵖ}
-  结论: P.unop <= Q.unop ↔ P <= Q
-  证明: ⟨op_monotone, unop_monotone⟩
-
-Depends on / 依赖: op_monotone, unop_monotone
+/-
+**CategoryTheory.ObjectProperty.unop_monotone_iff** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ObjectProperty`。
+形式化陈述：unop_monotone_iff {P Q : ObjectProperty Cᵒᵖ} : P.unop <= Q.unop ↔ P <= Q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.op_monotone`：op_monotone {P Q : ObjectProp
+erty C} (h : P <= Q) : P.op <= Q.op
+· 使用引理 `CategoryTheory.ObjectProperty.unop_monotone`：unop_monotone {P Q : Object
+Property Cᵒᵖ} (h : P <= Q) : P.unop <= Q.unop
 -/
-lemma unop_monotone_iff {P Q : ObjectProperty Cᵒᵖ} : P.unop <= Q.unop ↔ P <= Q :=
+lemma unop_monotone_iff {P Q : ObjectProperty Cᵒᵖ} : P.unop ≤ Q.unop ↔ P ≤ Q :=
   ⟨op_monotone, unop_monotone⟩
 
-/--
-Definition of `subtypeOpEquiv` / `subtypeOpEquiv` 的定义
+/-- The bijection `Subtype P.op ≃ Subtype P` for `P : ObjectProperty C`. -/
+/-
+**CategoryTheory.ObjectProperty.subtypeOpEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.ObjectProperty`。
+形式化陈述：subtypeOpEquiv (P : ObjectProperty C) : Subtype P.op ≃ Subtype P where toF
+un x
+参数：P : ObjectProperty C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-definition subtypeOpEquiv
-  signature: (P : ObjectProperty C)
-  body: ⟨x.1.unop, x.2⟩
-  invFun x := ⟨op x.1, x.2⟩
-
-@[simp]
-
-中文:
-定义 subtypeOpEquiv
-  签名: (P : ObjectProperty C)
-  定义体: ⟨x.1.unop, x.2⟩
-  invFun x := ⟨op x.1, x.2⟩
-
-@[simp]
+--- 原说明 ---
+The bijection `Subtype P.op ≃ Subtype P` for `P : ObjectProperty C`.
 -/
 def subtypeOpEquiv (P : ObjectProperty C) :
     Subtype P.op ≃ Subtype P where
@@ -344,42 +242,24 @@ def subtypeOpEquiv (P : ObjectProperty C) :
   invFun x := ⟨op x.1, x.2⟩
 
 @[simp]
-/--
-lemma `op_ofObj` / 引理 `op_ofObj`
-
-English:
-lemma op_ofObj
-  given: {ι : Type*} (X : ι -> C)
-  statement: (ofObj X).op = ofObj (fun i => op (X i))
-  proof: by
-  ext Z
-  simp only [op_iff, ofObj_iff]
-  constructor
-  · rintro ⟨i, hi⟩
-    exact ⟨i, by rw [hi]⟩
-  · rintro ⟨i, hi⟩
-    exact ⟨i, by rw [← hi]⟩
-
-@[simp]
-
-中文:
-引理 op_ofObj
-  条件: {ι : 类型} (X : ι -> C)
-  结论: (ofObj X).op = ofObj (fun i => op (X i))
-  证明: by
-  ext Z
-  simp only [op_iff, ofObj_iff]
-  constructor
-  · rintro ⟨i, hi⟩
-    exact ⟨i, by rw [hi]⟩
-  · rintro ⟨i, hi⟩
-    exact ⟨i, by rw [← hi]⟩
-
-@[simp]
-
-Depends on / 依赖: ofObj_iff, op_iff
+/-
+**CategoryTheory.ObjectProperty.op_ofObj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.ObjectProperty`。
+形式化陈述：op_ofObj {ι : Type*} (X : ι -> C) : (ofObj X).op = ofObj (fun i => op (X i
+))
+参数：X : ι -> C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma op_ofObj {ι : Type*} (X : ι -> C) : (ofObj X).op = ofObj (fun i => op (X i)) := by
+lemma op_ofObj {ι : Type*} (X : ι → C) : (ofObj X).op = ofObj (fun i ↦ op (X i)) := by
   ext Z
   simp only [op_iff, ofObj_iff]
   constructor
@@ -389,69 +269,62 @@ lemma op_ofObj {ι : Type*} (X : ι -> C) : (ofObj X).op = ofObj (fun i => op (X
     exact ⟨i, by rw [← hi]⟩
 
 @[simp]
-/--
-lemma `unop_ofObj` / 引理 `unop_ofObj`
-
-English:
-lemma unop_ofObj
-  given: {ι : Type*} (X : ι -> Cᵒᵖ)
-  statement: (ofObj X).unop = ofObj (fun i => (X i).unop)
-  proof: op_injective ((op_ofObj _).symm)
-
-@[simp high]
-
-中文:
-引理 unop_ofObj
-  条件: {ι : 类型} (X : ι -> Cᵒᵖ)
-  结论: (ofObj X).unop = ofObj (fun i => (X i).unop)
-  证明: op_injective ((op_ofObj _).symm)
-
-@[simp high]
-
-Depends on / 依赖: op_injective, op_ofObj
+/-
+**CategoryTheory.ObjectProperty.unop_ofObj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.ObjectProperty`。
+形式化陈述：unop_ofObj {ι : Type*} (X : ι -> Cᵒᵖ) : (ofObj X).unop = ofObj (fun i => (
+X i).unop)
+参数：X : ι -> Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.op_injective`：op_injective {P Q : ObjectPr
+operty C} (h : P.op = Q.op) : P = Q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.op_ofObj`：op_ofObj {ι : Type*} (X : ι -> C
+) : (ofObj X).op = ofObj (fun i => op (X i))
 -/
-lemma unop_ofObj {ι : Type*} (X : ι -> Cᵒᵖ) : (ofObj X).unop = ofObj (fun i => (X i).unop) :=
+lemma unop_ofObj {ι : Type*} (X : ι → Cᵒᵖ) : (ofObj X).unop = ofObj (fun i ↦ (X i).unop) :=
   op_injective ((op_ofObj _).symm)
 
 @[simp high]
-/--
-lemma `op_singleton` / 引理 `op_singleton`
-
-English:
-lemma op_singleton
-  given: (X : C)
-  proof: by
-  simp
-
-@[simp high]
-
-中文:
-引理 op_singleton
-  条件: (X : C)
-  证明: by
-  simp
-
-@[simp high]
+/-
+**CategoryTheory.ObjectProperty.op_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ObjectProperty`。
+形式化陈述：op_singleton (X : C) : (singleton X).op = singleton (op X)
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.op_ofObj`：op_ofObj {ι : Type*} (X : ι -> C
+) : (ofObj X).op = ofObj (fun i => op (X i))
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma op_singleton (X : C) :
     (singleton X).op = singleton (op X) := by
   simp
 
 @[simp high]
-/--
-lemma `unop_singleton` / 引理 `unop_singleton`
-
-English:
-lemma unop_singleton
-  given: (X : Cᵒᵖ)
-  proof: by
-  simp
-
-中文:
-引理 unop_singleton
-  条件: (X : Cᵒᵖ)
-  证明: by
-  simp
+/-
+**CategoryTheory.ObjectProperty.unop_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ObjectProperty`。
+形式化陈述：unop_singleton (X : Cᵒᵖ) : (singleton X).unop = singleton X.unop
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.unop_ofObj`：unop_ofObj {ι : Type*} (X : ι 
+-> Cᵒᵖ) : (ofObj X).unop = ofObj (fun i => (X i).unop)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma unop_singleton (X : Cᵒᵖ) :
     (singleton X).unop = singleton X.unop := by
@@ -463,185 +336,130 @@ section
 
 variable [Category.{v} C]
 
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (P : ObjectProperty C) [P.IsClosedUnderIsomorphisms] :
     P.op.IsClosedUnderIsomorphisms where
   of_iso e hX := P.prop_of_iso e.symm.unop hX
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (P : ObjectProperty Cᵒᵖ) [P.IsClosedUnderIsomorphisms] :
     P.unop.IsClosedUnderIsomorphisms where
   of_iso e hX := P.prop_of_iso e.symm.op hX
-
-/--
-lemma `op_isoClosure` / 引理 `op_isoClosure`
-
-English:
-lemma op_isoClosure
-  given: (P : ObjectProperty C)
-  proof: by
-  ext ⟨X⟩
-  exact ⟨fun ⟨Y, h, ⟨e⟩⟩ => ⟨op Y, h, ⟨e.op.symm⟩⟩,
-    fun ⟨Y, h, ⟨e⟩⟩ => ⟨Y.unop, h, ⟨e.unop.symm⟩⟩⟩
-
-中文:
-引理 op_isoClosure
-  条件: (P : ObjectProperty C)
-  证明: by
-  ext ⟨X⟩
-  exact ⟨fun ⟨Y, h, ⟨e⟩⟩ => ⟨op Y, h, ⟨e.op.symm⟩⟩,
-    fun ⟨Y, h, ⟨e⟩⟩ => ⟨Y.unop, h, ⟨e.unop.symm⟩⟩⟩
-
-Depends on / 依赖: Y.unop, e.op.symm, e.unop.symm
+/-
+**CategoryTheory.ObjectProperty.op_isoClosure** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.ObjectProperty`。
+形式化陈述：op_isoClosure (P : ObjectProperty C) : P.isoClosure.op = P.op.isoClosure
+参数：P : ObjectProperty C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma op_isoClosure (P : ObjectProperty C) :
     P.isoClosure.op = P.op.isoClosure := by
   ext ⟨X⟩
-  exact ⟨fun ⟨Y, h, ⟨e⟩⟩ => ⟨op Y, h, ⟨e.op.symm⟩⟩,
-    fun ⟨Y, h, ⟨e⟩⟩ => ⟨Y.unop, h, ⟨e.unop.symm⟩⟩⟩
-
-/--
-lemma `unop_isoClosure` / 引理 `unop_isoClosure`
-
-English:
-lemma unop_isoClosure
-  given: (P : ObjectProperty Cᵒᵖ)
-  proof: by
-  rw [← op_injective_iff]; rw [P.unop.op_isoClosure]; rw [op_unop]; rw [op_unop]
-
-中文:
-引理 unop_isoClosure
-  条件: (P : ObjectProperty Cᵒᵖ)
-  证明: by
-  rw [← op_injective_iff]; rw [P.unop.op_isoClosure]; rw [op_unop]; rw [op_unop]
-
-Depends on / 依赖: P.unop.op_isoClosure, op_injective_iff, op_isoClosure, op_unop
+  exact ⟨fun ⟨Y, h, ⟨e⟩⟩ ↦ ⟨op Y, h, ⟨e.op.symm⟩⟩,
+    fun ⟨Y, h, ⟨e⟩⟩ ↦ ⟨Y.unop, h, ⟨e.unop.symm⟩⟩⟩
+/-
+**CategoryTheory.ObjectProperty.unop_isoClosure** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.ObjectProperty`。
+形式化陈述：unop_isoClosure (P : ObjectProperty Cᵒᵖ) : P.isoClosure.unop = P.unop.isoC
+losure
+参数：P : ObjectProperty Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.op_injective_iff`：op_injective_iff {P Q : 
+ObjectProperty C} : P.op = Q.op ↔ P = Q
+· 使用引理 `CategoryTheory.ObjectProperty.op_isoClosure`：op_isoClosure (P : ObjectPr
+operty C) : P.isoClosure.op = P.op.isoClosure
+· 使用引理 `CategoryTheory.ObjectProperty.op_unop`：op_unop (P : ObjectProperty Cᵒᵖ) 
+: P.unop.op = P
 -/
 lemma unop_isoClosure (P : ObjectProperty Cᵒᵖ) :
     P.isoClosure.unop = P.unop.isoClosure := by
-  rw [← op_injective_iff]; rw [P.unop.op_isoClosure]; rw [op_unop]; rw [op_unop]
+  rw [← op_injective_iff, P.unop.op_isoClosure, op_unop, op_unop]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Given `P : ObjectProperty C`, this is the equivalence between `P.op.FullSubcategory`
 and `P.FullSubcategoryᵒᵖ`. -/
 @[simps]
-/--
-Definition of `opEquivalence` / `opEquivalence` 的定义
+/-
+**CategoryTheory.ObjectProperty.opEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ObjectProperty`。
+形式化陈述：opEquivalence (P : ObjectProperty C) : P.op.FullSubcategory ≌ P.FullSubcat
+egoryᵒᵖ where functor
+参数：P : ObjectProperty C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opEquivalence
-  signature: (P : ObjectProperty C)
-  body: (P.lift P.op.ι.leftOp (fun X => X.unop.property)).rightOp
-  inverse := P.op.lift P.ι.op (fun X => X.unop.property)
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-  functor_unitIso_comp X := Quiver.Hom.unop_inj (by cat_disch)
-
-@[simp]
-
-中文:
-定义 opEquivalence
-  签名: (P : ObjectProperty C)
-  定义体: (P.lift P.op.ι.leftOp (fun X => X.unop.property)).rightOp
-  inverse := P.op.lift P.ι.op (fun X => X.unop.property)
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-  functor_unitIso_comp X := Quiver.Hom.unop_inj (by cat_disch)
-
-@[simp]
-
-Depends on / 依赖: P.lift, P.op, X.unop.property, leftOp, property, rightOp
+--- 原说明 ---
+Given `P : ObjectProperty C`, this is the equivalence between `P.op.FullSubcateg
+ory`
+and `P.FullSubcategoryᵒᵖ`.
 -/
 def opEquivalence (P : ObjectProperty C) : P.op.FullSubcategory ≌ P.FullSubcategoryᵒᵖ where
-  functor := (P.lift P.op.ι.leftOp (fun X => X.unop.property)).rightOp
-  inverse := P.op.lift P.ι.op (fun X => X.unop.property)
+  functor := (P.lift P.op.ι.leftOp (fun X ↦ X.unop.property)).rightOp
+  inverse := P.op.lift P.ι.op (fun X ↦ X.unop.property)
   unitIso := Iso.refl _
   counitIso := Iso.refl _
   functor_unitIso_comp X := Quiver.Hom.unop_inj (by cat_disch)
 
 @[simp]
-/--
-lemma `op_inf` / 引理 `op_inf`
-
-English:
-lemma op_inf
-  given: (P Q : ObjectProperty C)
-  statement: (P ⊓ Q).op = P.op ⊓ Q.op
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 op_inf
-  条件: (P Q : ObjectProperty C)
-  结论: (P ⊓ Q).op = P.op ⊓ Q.op
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ObjectProperty.op_inf** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ObjectProperty`。
+形式化陈述：op_inf (P Q : ObjectProperty C) : (P ⊓ Q).op = P.op ⊓ Q.op
+参数：P Q : ObjectProperty C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma op_inf (P Q : ObjectProperty C) : (P ⊓ Q).op = P.op ⊓ Q.op := rfl
 
 @[simp]
-/--
-lemma `op_sup` / 引理 `op_sup`
-
-English:
-lemma op_sup
-  given: (P Q : ObjectProperty C)
-  statement: (P ⊔ Q).op = P.op ⊔ Q.op
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 op_sup
-  条件: (P Q : ObjectProperty C)
-  结论: (P ⊔ Q).op = P.op ⊔ Q.op
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ObjectProperty.op_sup** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ObjectProperty`。
+形式化陈述：op_sup (P Q : ObjectProperty C) : (P ⊔ Q).op = P.op ⊔ Q.op
+参数：P Q : ObjectProperty C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma op_sup (P Q : ObjectProperty C) : (P ⊔ Q).op = P.op ⊔ Q.op := rfl
 
 @[simp]
-/--
-lemma `unop_inf` / 引理 `unop_inf`
-
-English:
-lemma unop_inf
-  given: (P Q : ObjectProperty Cᵒᵖ)
-  statement: (P ⊓ Q).unop = P.unop ⊓ Q.unop
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 unop_inf
-  条件: (P Q : ObjectProperty Cᵒᵖ)
-  结论: (P ⊓ Q).unop = P.unop ⊓ Q.unop
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ObjectProperty.unop_inf** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.ObjectProperty`。
+形式化陈述：unop_inf (P Q : ObjectProperty Cᵒᵖ) : (P ⊓ Q).unop = P.unop ⊓ Q.unop
+参数：P Q : ObjectProperty Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma unop_inf (P Q : ObjectProperty Cᵒᵖ) : (P ⊓ Q).unop = P.unop ⊓ Q.unop := rfl
 
 @[simp]
-/--
-lemma `unop_sup` / 引理 `unop_sup`
-
-English:
-lemma unop_sup
-  given: (P Q : ObjectProperty Cᵒᵖ)
-  statement: (P ⊔ Q).unop = P.unop ⊔ Q.unop
-  proof: rfl
-
-中文:
-引理 unop_sup
-  条件: (P Q : ObjectProperty Cᵒᵖ)
-  结论: (P ⊔ Q).unop = P.unop ⊔ Q.unop
-  证明: rfl
+/-
+**CategoryTheory.ObjectProperty.unop_sup** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.ObjectProperty`。
+形式化陈述：unop_sup (P Q : ObjectProperty Cᵒᵖ) : (P ⊔ Q).unop = P.unop ⊔ Q.unop
+参数：P Q : ObjectProperty Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma unop_sup (P Q : ObjectProperty Cᵒᵖ) : (P ⊔ Q).unop = P.unop ⊔ Q.unop := rfl
 
 end
 
 end CategoryTheory.ObjectProperty
+

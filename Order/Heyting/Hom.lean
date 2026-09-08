@@ -36,122 +36,100 @@ open Function
 
 variable {F α β γ δ : Type*}
 
-/--
-Definition of `HeytingHom` / `HeytingHom` 的定义
+/-- The type of Heyting homomorphisms from `α` to `β`. Bounded lattice homomorphisms that preserve
+Heyting implication. -/
+/-
+**HeytingHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_6) → (β : Type u_7) → [HeytingAlgebra α] → [HeytingAlgebra β] 
+→ Type (max u_6 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HeytingHom
-  parameters: (α β : Type*) [HeytingAlgebra α] [HeytingAlgebra β]
-  axioms and operations (2):
-    - map_bot' : toFun ⊥ = ⊥
-    - map_himp' : forall a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
-
-中文:
-结构 Heyting态射
-  参数: (α β : 类型) [Heyting代数 α] [Heyting代数 β]
-  公理与运算 (2 个):
-    - map_bot' : toFun ⊥ = ⊥
-    - map_himp' : 对任意 a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
+--- 原说明 ---
+The type of Heyting homomorphisms from `α` to `β`. Bounded lattice homomorphisms
+ that preserve
+Heyting implication.
 -/
 structure HeytingHom (α β : Type*) [HeytingAlgebra α] [HeytingAlgebra β] extends
   LatticeHom α β where
   /-- The proposition that a Heyting homomorphism preserves the bottom element. -/
   protected map_bot' : toFun ⊥ = ⊥
   /-- The proposition that a Heyting homomorphism preserves the Heyting implication. -/
-  protected map_himp' : forall a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
+  protected map_himp' : ∀ a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
 
-/--
-Definition of `CoheytingHom` / `CoheytingHom` 的定义
+/-- The type of co-Heyting homomorphisms from `α` to `β`. Bounded lattice homomorphisms that
+preserve difference. -/
+/-
+**CoheytingHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_6) → (β : Type u_7) → [CoheytingAlgebra α] → [CoheytingAlgebra
+ β] → Type (max u_6 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CoheytingHom
-  parameters: (α β : Type*) [CoheytingAlgebra α] [CoheytingAlgebra β]
-  axioms and operations (2):
-    - map_top' : toFun ⊤ = ⊤
-    - map_sdiff' : forall a b, toFun (a \ b) = toFun a \ toFun b
-
-中文:
-结构 余heyting态射
-  参数: (α β : 类型) [余heyting代数 α] [余heyting代数 β]
-  公理与运算 (2 个):
-    - map_top' : toFun ⊤ = ⊤
-    - map_sdiff' : 对任意 a b, toFun (a \ b) = toFun a \ toFun b
+--- 原说明 ---
+The type of co-Heyting homomorphisms from `α` to `β`. Bounded lattice homomorphi
+sms that
+preserve difference.
 -/
 structure CoheytingHom (α β : Type*) [CoheytingAlgebra α] [CoheytingAlgebra β] extends
   LatticeHom α β where
   /-- The proposition that a co-Heyting homomorphism preserves the top element. -/
   protected map_top' : toFun ⊤ = ⊤
   /-- The proposition that a co-Heyting homomorphism preserves the difference operation. -/
-  protected map_sdiff' : forall a b, toFun (a \ b) = toFun a \ toFun b
+  protected map_sdiff' : ∀ a b, toFun (a \ b) = toFun a \ toFun b
 
-/--
-Definition of `BiheytingHom` / `BiheytingHom` 的定义
+/-- The type of bi-Heyting homomorphisms from `α` to `β`. Bounded lattice homomorphisms that
+preserve Heyting implication and difference. -/
+/-
+**BiheytingHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_6) → (β : Type u_7) → [BiheytingAlgebra α] → [BiheytingAlgebra
+ β] → Type (max u_6 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BiheytingHom
-  parameters: (α β : Type*) [BiheytingAlgebra α] [BiheytingAlgebra β]
-  axioms and operations (2):
-    - map_himp' : forall a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
-    - map_sdiff' : forall a b, toFun (a \ b) = toFun a \ toFun b
-
-中文:
-结构 Biheyting态射
-  参数: (α β : 类型) [Biheyting代数 α] [Biheyting代数 β]
-  公理与运算 (2 个):
-    - map_himp' : 对任意 a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
-    - map_sdiff' : 对任意 a b, toFun (a \ b) = toFun a \ toFun b
+--- 原说明 ---
+The type of bi-Heyting homomorphisms from `α` to `β`. Bounded lattice homomorphi
+sms that
+preserve Heyting implication and difference.
 -/
 structure BiheytingHom (α β : Type*) [BiheytingAlgebra α] [BiheytingAlgebra β] extends
   LatticeHom α β where
   /-- The proposition that a bi-Heyting homomorphism preserves the Heyting implication. -/
-  protected map_himp' : forall a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
+  protected map_himp' : ∀ a b, toFun (a ⇨ b) = toFun a ⇨ toFun b
   /-- The proposition that a bi-Heyting homomorphism preserves the difference operation. -/
-  protected map_sdiff' : forall a b, toFun (a \ b) = toFun a \ toFun b
+  protected map_sdiff' : ∀ a b, toFun (a \ b) = toFun a \ toFun b
 
-/--
-Definition of `HeytingHomClass` / `HeytingHomClass` 的定义
+/-- `HeytingHomClass F α β` states that `F` is a type of Heyting homomorphisms.
 
-English:
-class HeytingHomClass
-  parameters: (F α β : Type*) [HeytingAlgebra α] [HeytingAlgebra β] [FunLike F α β]
-  extends: LatticeHomClass F α β
-  axioms and operations (2):
-    - map_bot((f : F)) : f ⊥ = ⊥
-    - map_himp((f : F)) : forall a b, f (a ⇨ b) = f a ⇨ f b
+You should extend this class when you extend `HeytingHom`. -/
+/-
+**HeytingHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_6) → (α : Type u_7) → (β : Type u_8) → [HeytingAlgebra α] → [H
+eytingAlgebra β] → [FunLike F α β] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 Heyting态射类
-  参数: (F α β : 类型) [Heyting代数 α] [Heyting代数 β] [函数状 F α β]
-  继承: 格态射类 F α β
-  公理与运算 (2 个):
-    - map_bot((f : F)) : f ⊥ = ⊥
-    - map_himp((f : F)) : 对任意 a b, f (a ⇨ b) = f a ⇨ f b
+--- 原说明 ---
+`HeytingHomClass F α β` states that `F` is a type of Heyting homomorphisms.
+
+You should extend this class when you extend `HeytingHom`.
 -/
 class HeytingHomClass (F α β : Type*) [HeytingAlgebra α] [HeytingAlgebra β] [FunLike F α β] : Prop
     extends LatticeHomClass F α β where
   /-- The proposition that a Heyting homomorphism preserves the bottom element. -/
   map_bot (f : F) : f ⊥ = ⊥
   /-- The proposition that a Heyting homomorphism preserves the Heyting implication. -/
-  map_himp (f : F) : forall a b, f (a ⇨ b) = f a ⇨ f b
+  map_himp (f : F) : ∀ a b, f (a ⇨ b) = f a ⇨ f b
 
-/--
-Definition of `CoheytingHomClass` / `CoheytingHomClass` 的定义
+/-- `CoheytingHomClass F α β` states that `F` is a type of co-Heyting homomorphisms.
 
-English:
-class CoheytingHomClass
-  parameters: (F α β : Type*) [CoheytingAlgebra α] [CoheytingAlgebra β] [FunLike F α β]
-  extends: LatticeHomClass F α β
-  axioms and operations (2):
-    - map_top((f : F)) : f ⊤ = ⊤
-    - map_sdiff((f : F)) : forall a b, f (a \ b) = f a \ f b
+You should extend this class when you extend `CoheytingHom`. -/
+/-
+**CoheytingHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_6) → (α : Type u_7) → (β : Type u_8) → [CoheytingAlgebra α] → 
+[CoheytingAlgebra β] → [FunLike F α β] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 余heyting态射类
-  参数: (F α β : 类型) [余heyting代数 α] [余heyting代数 β] [函数状 F α β]
-  继承: 格态射类 F α β
-  公理与运算 (2 个):
-    - map_top((f : F)) : f ⊤ = ⊤
-    - map_sdiff((f : F)) : 对任意 a b, f (a \ b) = f a \ f b
+--- 原说明 ---
+`CoheytingHomClass F α β` states that `F` is a type of co-Heyting homomorphisms.
+
+You should extend this class when you extend `CoheytingHom`.
 -/
 class CoheytingHomClass (F α β : Type*) [CoheytingAlgebra α] [CoheytingAlgebra β] [FunLike F α β] :
     Prop
@@ -159,34 +137,29 @@ class CoheytingHomClass (F α β : Type*) [CoheytingAlgebra α] [CoheytingAlgebr
   /-- The proposition that a co-Heyting homomorphism preserves the top element. -/
   map_top (f : F) : f ⊤ = ⊤
   /-- The proposition that a co-Heyting homomorphism preserves the difference operation. -/
-  map_sdiff (f : F) : forall a b, f (a \ b) = f a \ f b
+  map_sdiff (f : F) : ∀ a b, f (a \ b) = f a \ f b
 
-/--
-Definition of `BiheytingHomClass` / `BiheytingHomClass` 的定义
+/-- `BiheytingHomClass F α β` states that `F` is a type of bi-Heyting homomorphisms.
 
-English:
-class BiheytingHomClass
-  parameters: (F α β : Type*) [BiheytingAlgebra α] [BiheytingAlgebra β] [FunLike F α β]
-  extends: LatticeHomClass F α β
-  axioms and operations (2):
-    - map_himp((f : F)) : forall a b, f (a ⇨ b) = f a ⇨ f b
-    - map_sdiff((f : F)) : forall a b, f (a \ b) = f a \ f b
+You should extend this class when you extend `BiheytingHom`. -/
+/-
+**BiheytingHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_6) → (α : Type u_7) → (β : Type u_8) → [BiheytingAlgebra α] → 
+[BiheytingAlgebra β] → [FunLike F α β] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 Biheyting态射类
-  参数: (F α β : 类型) [Biheyting代数 α] [Biheyting代数 β] [函数状 F α β]
-  继承: 格态射类 F α β
-  公理与运算 (2 个):
-    - map_himp((f : F)) : 对任意 a b, f (a ⇨ b) = f a ⇨ f b
-    - map_sdiff((f : F)) : 对任意 a b, f (a \ b) = f a \ f b
+--- 原说明 ---
+`BiheytingHomClass F α β` states that `F` is a type of bi-Heyting homomorphisms.
+
+You should extend this class when you extend `BiheytingHom`.
 -/
 class BiheytingHomClass (F α β : Type*) [BiheytingAlgebra α] [BiheytingAlgebra β] [FunLike F α β] :
     Prop
   extends LatticeHomClass F α β where
   /-- The proposition that a bi-Heyting homomorphism preserves the Heyting implication. -/
-  map_himp (f : F) : forall a b, f (a ⇨ b) = f a ⇨ f b
+  map_himp (f : F) : ∀ a b, f (a ⇨ b) = f a ⇨ f b
   /-- The proposition that a bi-Heyting homomorphism preserves the difference operation. -/
-  map_sdiff (f : F) : forall a b, f (a \ b) = f a \ f b
+  map_sdiff (f : F) : ∀ a b, f (a \ b) = f a \ f b
 
 export HeytingHomClass (map_himp)
 
@@ -201,24 +174,40 @@ variable [FunLike F α β]
 /-! This section passes in some instances implicitly. See note [implicit instance arguments] -/
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) HeytingHomClass.toBoundedLatticeHomClass [HeytingAlgebra α]
     {_ : HeytingAlgebra β} [HeytingHomClass F α β] : BoundedLatticeHomClass F α β :=
   { ‹HeytingHomClass F α β› with
     map_top := fun f => by rw [← @himp_self α _ ⊥, ← himp_self, map_himp] }
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CoheytingHomClass.toBoundedLatticeHomClass [CoheytingAlgebra α]
     {_ : CoheytingAlgebra β} [CoheytingHomClass F α β] : BoundedLatticeHomClass F α β :=
   { ‹CoheytingHomClass F α β› with
     map_bot := fun f => by rw [← @sdiff_self α _ ⊤, ← sdiff_self, map_sdiff] }
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) BiheytingHomClass.toHeytingHomClass [BiheytingAlgebra α]
     {_ : BiheytingAlgebra β} [BiheytingHomClass F α β] : HeytingHomClass F α β :=
   { ‹BiheytingHomClass F α β› with
     map_bot := fun f => by rw [← @sdiff_self α _ ⊤, ← sdiff_self, BiheytingHomClass.map_sdiff] }
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) BiheytingHomClass.toCoheytingHomClass [BiheytingAlgebra α]
     {_ : BiheytingAlgebra β} [BiheytingHomClass F α β] : CoheytingHomClass F α β :=
   { ‹BiheytingHomClass F α β› with
@@ -231,6 +220,10 @@ section Equiv
 variable [EquivLike F α β]
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) OrderIsoClass.toHeytingHomClass [HeytingAlgebra α]
     {_ : HeytingAlgebra β} [OrderIsoClass F α β] : HeytingHomClass F α β :=
   { OrderIsoClass.toBoundedLatticeHomClass with
@@ -241,6 +234,10 @@ instance (priority := 100) OrderIsoClass.toHeytingHomClass [HeytingAlgebra α]
         simp }
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) OrderIsoClass.toCoheytingHomClass [CoheytingAlgebra α]
     {_ : CoheytingAlgebra β} [OrderIsoClass F α β] : CoheytingHomClass F α β :=
   { OrderIsoClass.toBoundedLatticeHomClass with
@@ -251,6 +248,10 @@ instance (priority := 100) OrderIsoClass.toCoheytingHomClass [CoheytingAlgebra �
         simp }
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) OrderIsoClass.toBiheytingHomClass [BiheytingAlgebra α]
     {_ : BiheytingAlgebra β} [OrderIsoClass F α β] : BiheytingHomClass F α β :=
   { OrderIsoClass.toLatticeHomClass with
@@ -269,24 +270,41 @@ end Equiv
 
 variable [FunLike F α β]
 
-/--
-Instance `BoundedLatticeHomClass.toBiheytingHomClass` / 实例 `BoundedLatticeHomClass.toBiheytingHomClass`
-
-English:
-instance BoundedLatticeHomClass.toBiheytingHomClass
-  signature: [BooleanAlgebra α] [BooleanAlgebra β]
-  body: { ‹BoundedLatticeHomClass F α β› with
-    map_himp := fun f a b => by rw [himp_eq, himp_eq, map_sup, (isCompl_compl.map _).compl_eq]
-    map_sdiff := fun f a b => by rw [sdiff_eq, sdiff_eq, map_inf, (isCompl_compl.map _).compl_eq] }
-
-中文:
-实例 有界格态射类.toBiheytingHomClass
-  签名: [布尔代数 α] [布尔代数 β]
-  定义体: { ‹BoundedLatticeHomClass F α β› with
-    map_himp := fun f a b => by rw [himp_eq, himp_eq, map_sup, (isCompl_compl.map _).compl_eq]
-    map_sdiff := fun f a b => by rw [sdiff_eq, sdiff_eq, map_inf, (isCompl_compl.map _).compl_eq] }
-
-Depends on / 依赖: BoundedLatticeHomClass, compl_eq, himp_eq, isCompl_compl, isCompl_compl.map, map_himp, map_inf, map_sdiff, map_sup, sdiff_eq
+/-
+**BoundedLatticeHomClass.toBiheytingHomClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：BoundedLatticeHomClass.toBiheytingHomClass [BooleanAlgebra α] [BooleanAlge
+bra β] [BoundedLatticeHomClass F α β] : BiheytingHomClass F α β
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedLatticeHomClass.toLatticeHomClass`：∀ {F : Type u_6} {α : Type u_7
+} {β : Type u_8} {inst : Lattice α} {inst_1 : Lattice β} {inst_2 : BoundedOrder 
+α}   {inst_3 : BoundedOrder β}…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `himp_eq`：himp_eq : x ⇨ y = y ⊔ xᶜ
+· 使用定理 `SupHomClass.map_sup`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Max α} {inst_1 : Max β} {inst_2 : FunLike F α β}   [self : SupHomClass F α β
+] (f : F)…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `IsCompl.compl_eq`：IsCompl.compl_eq (h : IsCompl a b) : aᶜ = b
+· 使用定理 `IsCompl.map`：IsCompl.map [BoundedOrder α] [BoundedOrder β] [BoundedLatti
+ceHomClass F α β] {a b : α} (f : F) (h : IsCompl a b) : IsCompl (f a) (f b)
+· 使用定理 `isCompl_compl`：isCompl_compl : IsCompl x xᶜ
+· 使用定理 `sdiff_eq`：sdiff_eq : x \ y = x ⊓ yᶜ
+· 使用定理 `InfHomClass.map_inf`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Min α} {inst_1 : Min β} {inst_2 : FunLike F α β}   [self : InfHomClass F α β
+] (f : F)…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
 -/
 instance BoundedLatticeHomClass.toBiheytingHomClass [BooleanAlgebra α] [BooleanAlgebra β]
     [BoundedLatticeHomClass F α β] : BiheytingHomClass F α β :=
@@ -301,46 +319,65 @@ open scoped symmDiff
 variable [HeytingAlgebra α] [HeytingAlgebra β] [HeytingHomClass F α β] (f : F)
 
 @[simp]
-/--
-theorem `map_compl` / 定理 `map_compl`
-
-English:
-theorem map_compl
-  given: (a : α)
-  statement: f aᶜ = (f a)ᶜ
-  proof: by rw [← himp_bot, ← himp_bot, map_himp, map_bot]
-
-@[simp]
-
-中文:
-定理 map_compl
-  条件: (a : α)
-  结论: f aᶜ = (f a)ᶜ
-  证明: by rw [← himp_bot, ← himp_bot, map_himp, map_bot]
-
-@[simp]
-
-Depends on / 依赖: himp_bot, map_bot, map_himp
+/-
+**map_compl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_compl (a : α) : f aᶜ = (f a)ᶜ
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `himp_bot`：himp_bot (a : α) : a ⇨ ⊥ = aᶜ
+· 使用定理 `HeytingHomClass.map_himp`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8}
+ {inst : HeytingAlgebra α} {inst_1 : HeytingAlgebra β}   {inst_2 : FunLike F α β
+} [self : Heyt…
+· 使用定理 `BotHomClass.map_bot`：∀ {F : Type u_6} {α : outParam (Type u_7)} {β : out
+Param (Type u_8)} {inst : Bot α} {inst_1 : Bot β}   {inst_2 : FunLike F α β} [se
+lf : BotH…
+· 使用定理 `SupBotHomClass.toBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type 
+u_3} [inst : FunLike F α β] [inst_1 : Max α] [inst_2 : Max β] [inst_3 : Bot α]  
+ [inst_4 : Bot β] …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `HeytingHomClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u_2
+} {β : Type u_3} [inst : FunLike F α β] [inst_1 : HeytingAlgebra α] {x : Heyting
+Algebra β}   [HeytingHomClass …
 -/
 theorem map_compl (a : α) : f aᶜ = (f a)ᶜ := by rw [← himp_bot, ← himp_bot, map_himp, map_bot]
 
 @[simp]
-/--
-theorem `map_bihimp` / 定理 `map_bihimp`
-
-English:
-theorem map_bihimp
-  given: (a b : α)
-  statement: f (a ⇔ b) = f a ⇔ f b
-  proof: by simp_rw [bihimp, map_inf, map_himp]
-
-中文:
-定理 map_bihimp
-  条件: (a b : α)
-  结论: f (a ⇔ b) = f a ⇔ f b
-  证明: by simp_rw [bihimp, map_inf, map_himp]
-
-Depends on / 依赖: bihimp, map_himp, map_inf, simp_rw
+/-
+**map_bihimp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_bihimp (a b : α) : f (a ⇔ b) = f a ⇔ f b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `InfHomClass.map_inf`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Min α} {inst_1 : Min β} {inst_2 : FunLike F α β}   [self : InfHomClass F α β
+] (f : F)…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `HeytingHomClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u_2
+} {β : Type u_3} [inst : FunLike F α β] [inst_1 : HeytingAlgebra α] {x : Heyting
+Algebra β}   [HeytingHomClass …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `HeytingHomClass.map_himp`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8}
+ {inst : HeytingAlgebra α} {inst_1 : HeytingAlgebra β}   {inst_2 : FunLike F α β
+} [self : Heyt…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_bihimp (a b : α) : f (a ⇔ b) = f a ⇔ f b := by simp_rw [bihimp, map_inf, map_himp]
 
@@ -353,75 +390,74 @@ open scoped symmDiff
 variable [CoheytingAlgebra α] [CoheytingAlgebra β] [CoheytingHomClass F α β] (f : F)
 
 @[simp]
-/--
-theorem `map_hnot` / 定理 `map_hnot`
-
-English:
-theorem map_hnot
-  given: (a : α)
-  statement: f (￢a) = ￢f a
-  proof: by rw [← top_sdiff', ← top_sdiff', map_sdiff, map_top]
-
-@[simp]
-
-中文:
-定理 map_hnot
-  条件: (a : α)
-  结论: f (￢a) = ￢f a
-  证明: by rw [← top_sdiff', ← top_sdiff', map_sdiff, map_top]
-
-@[simp]
-
-Depends on / 依赖: map_sdiff, map_top, top_sdiff
+/-
+**map_hnot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_hnot (a : α) : f (￢a) = ￢f a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `top_sdiff'`：∀ {α : Type u_2} [inst : CoheytingAlgebra α] (a : α), ⊤ \ a 
+= ￢a
+· 使用定理 `CoheytingHomClass.map_sdiff`：∀ {F : Type u_6} {α : Type u_7} {β : Type u
+_8} {inst : CoheytingAlgebra α} {inst_1 : CoheytingAlgebra β}   {inst_2 : FunLik
+e F α β} [self : …
+· 使用定理 `TopHomClass.map_top`：∀ {F : Type u_6} {α : outParam (Type u_7)} {β : out
+Param (Type u_8)} {inst : Top α} {inst_1 : Top β}   {inst_2 : FunLike F α β} [se
+lf : TopH…
+· 使用定理 `InfTopHomClass.toTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type 
+u_3} [inst : FunLike F α β] [inst_1 : Min α] [inst_2 : Min β] [inst_3 : Top α]  
+ [inst_4 : Top β] …
+· 使用定理 `BoundedLatticeHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `CoheytingHomClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u
+_2} {β : Type u_3} [inst : FunLike F α β] [inst_1 : CoheytingAlgebra α]   {x : C
+oheytingAlgebra β} [CoheytingHom…
 -/
 theorem map_hnot (a : α) : f (￢a) = ￢f a := by rw [← top_sdiff', ← top_sdiff', map_sdiff, map_top]
 
 @[simp]
-/--
-theorem `map_symmDiff` / 定理 `map_symmDiff`
-
-English:
-theorem map_symmDiff
-  given: (a b : α)
-  statement: f (a ∆ b) = f a ∆ f b
-  proof: by simp_rw [symmDiff, map_sup, map_sdiff]
-
-中文:
-定理 map_symmDiff
-  条件: (a b : α)
-  结论: f (a ∆ b) = f a ∆ f b
-  证明: by simp_rw [symmDiff, map_sup, map_sdiff]
-
-Depends on / 依赖: map_sdiff, map_sup, simp_rw, symmDiff
+/-
+**map_symmDiff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_symmDiff (a b : α) : f (a ∆ b) = f a ∆ f b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SupHomClass.map_sup`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Max α} {inst_1 : Max β} {inst_2 : FunLike F α β}   [self : SupHomClass F α β
+] (f : F)…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `CoheytingHomClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u
+_2} {β : Type u_3} [inst : FunLike F α β] [inst_1 : CoheytingAlgebra α]   {x : C
+oheytingAlgebra β} [CoheytingHom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CoheytingHomClass.map_sdiff`：∀ {F : Type u_6} {α : Type u_7} {β : Type u
+_8} {inst : CoheytingAlgebra α} {inst_1 : CoheytingAlgebra β}   {inst_2 : FunLik
+e F α β} [self : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_symmDiff (a b : α) : f (a ∆ b) = f a ∆ f b := by simp_rw [symmDiff, map_sup, map_sdiff]
 
 end CoheytingAlgebra
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HeytingAlgebra
-  signature: α] [HeytingAlgebra β] [HeytingHomClass F α β] : CoeTC F (HeytingHom α β)
-  body: ⟨fun f =>
-    { toFun := f
-      map_sup' := map_sup f
-      map_inf' := map_inf f
-      map_bot' := map_bot f
-      map_himp' := map_himp f }⟩
-
-中文:
-实例 [Heyting代数
-  签名: α] [Heyting代数 β] [Heyting态射类 F α β] : CoeTC F (Heyting态射 α β)
-  定义体: ⟨fun f =>
-    { toFun := f
-      map_sup' := map_sup f
-      map_inf' := map_inf f
-      map_bot' := map_bot f
-      map_himp' := map_himp f }⟩
-
-Depends on / 依赖: map_bot, map_himp, map_inf, map_sup
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HeytingAlgebra α] [HeytingAlgebra β] [HeytingHomClass F α β] : CoeTC F (HeytingHom α β) :=
   ⟨fun f =>
@@ -430,31 +466,9 @@ instance [HeytingAlgebra α] [HeytingAlgebra β] [HeytingHomClass F α β] : Coe
       map_inf' := map_inf f
       map_bot' := map_bot f
       map_himp' := map_himp f }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CoheytingAlgebra
-  signature: α] [CoheytingAlgebra β] [CoheytingHomClass F α β] :
-  body: ⟨fun f =>
-    { toFun := f
-      map_sup' := map_sup f
-      map_inf' := map_inf f
-      map_top' := map_top f
-      map_sdiff' := map_sdiff f }⟩
-
-中文:
-实例 [余heyting代数
-  签名: α] [余heyting代数 β] [余heyting态射类 F α β] :
-  定义体: ⟨fun f =>
-    { toFun := f
-      map_sup' := map_sup f
-      map_inf' := map_inf f
-      map_top' := map_top f
-      map_sdiff' := map_sdiff f }⟩
-
-Depends on / 依赖: map_inf, map_sdiff, map_sup, map_top
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CoheytingAlgebra α] [CoheytingAlgebra β] [CoheytingHomClass F α β] :
     CoeTC F (CoheytingHom α β) :=
@@ -464,31 +478,9 @@ instance [CoheytingAlgebra α] [CoheytingAlgebra β] [CoheytingHomClass F α β]
       map_inf' := map_inf f
       map_top' := map_top f
       map_sdiff' := map_sdiff f }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [BiheytingAlgebra
-  signature: α] [BiheytingAlgebra β] [BiheytingHomClass F α β] :
-  body: ⟨fun f =>
-    { toFun := f
-      map_sup' := map_sup f
-      map_inf' := map_inf f
-      map_himp' := map_himp f
-      map_sdiff' := map_sdiff f }⟩
-
-中文:
-实例 [Biheyting代数
-  签名: α] [Biheyting代数 β] [Biheyting态射类 F α β] :
-  定义体: ⟨fun f =>
-    { toFun := f
-      map_sup' := map_sup f
-      map_inf' := map_inf f
-      map_himp' := map_himp f
-      map_sdiff' := map_sdiff f }⟩
-
-Depends on / 依赖: map_himp, map_inf, map_sdiff, map_sup
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [BiheytingAlgebra α] [BiheytingAlgebra β] [BiheytingHomClass F α β] :
     CoeTC F (BiheytingHom α β) :=
@@ -503,146 +495,84 @@ namespace HeytingHom
 
 variable [HeytingAlgebra α] [HeytingAlgebra β] [HeytingAlgebra γ] [HeytingAlgebra δ]
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (HeytingHom α β) α β where
-  body: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (Heyting态射 α β) α β where
-  定义体: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-Depends on / 依赖: f.toFun
+/-
+**HeytingHom.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `HeytingHom`。
+形式化陈述：instFunLike : FunLike (HeytingHom α β) α β where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike (HeytingHom α β) α β where
   coe f := f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-/--
-Instance `instHeytingHomClass` / 实例 `instHeytingHomClass`
-
-English:
-instance instHeytingHomClass
-  signature: : HeytingHomClass (HeytingHom α β) α β where
-  body: f.map_sup'
-  map_inf f := f.map_inf'
-  map_bot f := f.map_bot'
-  map_himp := HeytingHom.map_himp'
-
-中文:
-实例 instHeytingHomClass
-  签名: : Heyting态射类 (Heyting态射 α β) α β where
-  定义体: f.map_sup'
-  map_inf f := f.map_inf'
-  map_bot f := f.map_bot'
-  map_himp := HeytingHom.map_himp'
-
-Depends on / 依赖: f.map_sup, map_sup
+/-
+**HeytingHom.instHeytingHomClass** 是 Mathlib 中的一个实例，位于命名空间 `HeytingHom`。
+形式化陈述：instHeytingHomClass : HeytingHomClass (HeytingHom α β) α β where map_sup f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHom.map_sup'`：∀ {α : Type u_6} {β : Type u_7} [inst : Max α] [inst_1 
+: Max β] (self : SupHom α β) (a b : α),   self.toFun (a ⊔ b) = self.toFun a ⊔ se
+lf.to…
+· 使用定理 `LatticeHom.map_inf'`：∀ {α : Type u_6} {β : Type u_7} [inst : Lattice α] 
+[inst_1 : Lattice β] (self : LatticeHom α β) (a b : α),   self.toFun (a ⊓ b) = s
+elf.toFun…
+· 使用定理 `HeytingHom.map_bot'`：∀ {α : Type u_6} {β : Type u_7} [inst : HeytingAlge
+bra α] [inst_1 : HeytingAlgebra β] (self : HeytingHom α β),   self.toFun ⊥ = ⊥
+· 使用定理 `HeytingHom.map_himp'`：∀ {α : Type u_6} {β : Type u_7} [inst : HeytingAlg
+ebra α] [inst_1 : HeytingAlgebra β] (self : HeytingHom α β) (a b : α),   self.to
+Fun (a ⇨ b…
 -/
 instance instHeytingHomClass : HeytingHomClass (HeytingHom α β) α β where
   map_sup f := f.map_sup'
   map_inf f := f.map_inf'
   map_bot f := f.map_bot'
   map_himp := HeytingHom.map_himp'
-
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: {f : HeytingHom α β}
-  statement: f.toFun = ⇑f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFun_eq_coe
-  条件: {f : Heyting态射 α β}
-  结论: f.toFun = ⇑f
-  证明: rfl
-
-@[simp]
+/-
+**HeytingHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：toFun_eq_coe {f : HeytingHom α β} : f.toFun = ⇑f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe {f : HeytingHom α β} : f.toFun = ⇑f :=
   rfl
 
 @[simp]
-/--
-theorem `toFun_eq_coe_aux` / 定理 `toFun_eq_coe_aux`
-
-English:
-theorem toFun_eq_coe_aux
-  given: {f : HeytingHom α β}
-  statement: (↑f.toLatticeHom) = ⇑f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 toFun_eq_coe_aux
-  条件: {f : Heyting态射 α β}
-  结论: (↑f.toLatticeHom) = ⇑f
-  证明: rfl
-
-@[ext]
+/-
+**HeytingHom.toFun_eq_coe_aux** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：toFun_eq_coe_aux {f : HeytingHom α β} : (↑f.toLatticeHom) = ⇑f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe_aux {f : HeytingHom α β} : (↑f.toLatticeHom) = ⇑f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : HeytingHom α β} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : Heyting态射 α β} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**HeytingHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：ext {f g : HeytingHom α β} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : HeytingHom α β} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : HeytingHom α β} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `HeytingHom` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+/-
+**HeytingHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `HeytingHom`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : HeytingAlgebra α] →       
+[inst_1 : HeytingAlgebra β] → (f : HeytingHom α β) → (f' : α → β) → f' = ⇑f → He
+ytingHom α β
+参数：f : HeytingHom α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : HeytingHom α β) (f' : α -> β) (h : f' = f)
-  body: f'
-  map_sup' := by simpa only [h] using map_sup f
-  map_inf' := by simpa only [h] using map_inf f
-  map_bot' := by simpa only [h] using map_bot f
-  map_himp' := by simpa only [h] using map_himp f
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : Heyting态射 α β) (f' : α -> β) (h : f' = f)
-  定义体: f'
-  map_sup' := by simpa only [h] using map_sup f
-  map_inf' := by simpa only [h] using map_inf f
-  map_bot' := by simpa only [h] using map_bot f
-  map_himp' := by simpa only [h] using map_himp f
-
-@[simp]
+--- 原说明 ---
+Copy of a `HeytingHom` with a new `toFun` equal to the old one. Useful to fix de
+finitional
+equalities.
 -/
-protected def copy (f : HeytingHom α β) (f' : α -> β) (h : f' = f) : HeytingHom α β where
+protected def copy (f : HeytingHom α β) (f' : α → β) (h : f' = f) : HeytingHom α β where
   toFun := f'
   map_sup' := by simpa only [h] using map_sup f
   map_inf' := by simpa only [h] using map_inf f
@@ -650,66 +580,38 @@ protected def copy (f : HeytingHom α β) (f' : α -> β) (h : f' = f) : Heyting
   map_himp' := by simpa only [h] using map_himp f
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : HeytingHom α β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : Heyting态射 α β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**HeytingHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：coe_copy (f : HeytingHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) 
+= f'
+参数：f : HeytingHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : HeytingHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : HeytingHom α β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : HeytingHom α β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : Heyting态射 α β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**HeytingHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：copy_eq (f : HeytingHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f
+参数：f : HeytingHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : HeytingHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : HeytingHom α β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- `id` as a `HeytingHom`. -/
+/-
+**HeytingHom.id** 是 Mathlib 中的一个定义，位于命名空间 `HeytingHom`。
+形式化陈述：(α : Type u_2) → [inst : HeytingAlgebra α] → HeytingHom α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : HeytingHom α α
-  body: { BotHom.id _ with
-    toLatticeHom := LatticeHom.id _
-    map_himp' := fun _ _ => rfl }
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : Heyting态射 α α
-  定义体: { BotHom.id _ with
-    toLatticeHom := LatticeHom.id _
-    map_himp' := fun _ _ => rfl }
-
-@[simp, norm_cast]
+--- 原说明 ---
+`id` as a `HeytingHom`.
 -/
 protected def id : HeytingHom α α :=
   { BotHom.id _ with
@@ -717,18 +619,11 @@ protected def id : HeytingHom α α :=
     map_himp' := fun _ _ => rfl }
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(HeytingHom.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(Heyting态射.id α) = id
-  证明: rfl
+/-
+**HeytingHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：coe_id : ⇑(HeytingHom.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(HeytingHom.id α) = id :=
   rfl
@@ -736,80 +631,38 @@ theorem coe_id : ⇑(HeytingHom.id α) = id :=
 variable {α}
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (a : α)
-  statement: HeytingHom.id α a = a
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (a : α)
-  结论: Heyting态射.id α a = a
-  证明: rfl
+/-
+**HeytingHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：id_apply (a : α) : HeytingHom.id α a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (a : α) : HeytingHom.id α a = a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (HeytingHom α α)
-  body: ⟨HeytingHom.id _⟩
-
-中文:
-实例 :
-  签名: 可居 (Heyting态射 α α)
-  定义体: ⟨HeytingHom.id _⟩
-
-Depends on / 依赖: HeytingHom, HeytingHom.id
+/-
+**HeytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `HeytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (HeytingHom α α) :=
   ⟨HeytingHom.id _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (HeytingHom α β)
-  body: PartialOrder.lift _ DFunLike.coe_injective
-
-中文:
-实例 :
-  签名: 偏序 (Heyting态射 α β)
-  定义体: PartialOrder.lift _ DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
+/-
+**HeytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `HeytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (HeytingHom α β) :=
   PartialOrder.lift _ DFunLike.coe_injective
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of `HeytingHom`s as a `HeytingHom`. -/
+/-
+**HeytingHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `HeytingHom`。
+形式化陈述：comp (f : HeytingHom β γ) (g : HeytingHom α β) : HeytingHom α γ
+参数：f : HeytingHom β γ；g : HeytingHom α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : HeytingHom β γ) (g : HeytingHom α β)
-  body: { f.toLatticeHom.comp g.toLatticeHom with
-    toFun := f ∘ g
-    map_bot' := by simp
-    map_himp' := fun a b => by simp }
-
-中文:
-定义 comp
-  签名: (f : Heyting态射 β γ) (g : Heyting态射 α β)
-  定义体: { f.toLatticeHom.comp g.toLatticeHom with
-    toFun := f ∘ g
-    map_bot' := by simp
-    map_himp' := fun a b => by simp }
-
-Depends on / 依赖: f.toLatticeHom.comp, g.toLatticeHom, map_bot, map_himp, toLatticeHom
+--- 原说明 ---
+Composition of `HeytingHom`s as a `HeytingHom`.
 -/
 def comp (f : HeytingHom β γ) (g : HeytingHom α β) : HeytingHom α γ :=
   { f.toLatticeHom.comp g.toLatticeHom with
@@ -820,164 +673,107 @@ def comp (f : HeytingHom β γ) (g : HeytingHom α β) : HeytingHom α γ :=
 variable {f f₁ f₂ : HeytingHom α β} {g g₁ g₂ : HeytingHom β γ}
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : HeytingHom β γ) (g : HeytingHom α β)
-  statement: ⇑(f.comp g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : Heyting态射 β γ) (g : Heyting态射 α β)
-  结论: ⇑(f.comp g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**HeytingHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：coe_comp (f : HeytingHom β γ) (g : HeytingHom α β) : ⇑(f.comp g) = f ∘ g
+参数：f : HeytingHom β γ；g : HeytingHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp (f : HeytingHom β γ) (g : HeytingHom α β) : ⇑(f.comp g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : HeytingHom β γ) (g : HeytingHom α β) (a : α)
-  statement: f.comp g a = f (g a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : Heyting态射 β γ) (g : Heyting态射 α β) (a : α)
-  结论: f.comp g a = f (g a)
-  证明: rfl
-
-@[simp]
+/-
+**HeytingHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：comp_apply (f : HeytingHom β γ) (g : HeytingHom α β) (a : α) : f.comp g a 
+= f (g a)
+参数：f : HeytingHom β γ；g : HeytingHom α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : HeytingHom β γ) (g : HeytingHom α β) (a : α) : f.comp g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : HeytingHom γ δ) (g : HeytingHom β γ) (h : HeytingHom α β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : Heyting态射 γ δ) (g : Heyting态射 β γ) (h : Heyting态射 α β)
-  证明: rfl
-
-@[simp]
+/-
+**HeytingHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：comp_assoc (f : HeytingHom γ δ) (g : HeytingHom β γ) (h : HeytingHom α β) 
+: (f.comp g).comp h = f.comp (g.comp h)
+参数：f : HeytingHom γ δ；g : HeytingHom β γ；h : HeytingHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : HeytingHom γ δ) (g : HeytingHom β γ) (h : HeytingHom α β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : HeytingHom α β)
-  statement: f.comp (HeytingHom.id α) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : Heyting态射 α β)
-  结论: f.comp (Heyting态射.id α) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**HeytingHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：comp_id (f : HeytingHom α β) : f.comp (HeytingHom.id α) = f
+参数：f : HeytingHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HeytingHom.ext`：ext {f g : HeytingHom α β} (h : forall a, f a = g a) : f
+ = g
 -/
 theorem comp_id (f : HeytingHom α β) : f.comp (HeytingHom.id α) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : HeytingHom α β)
-  statement: (HeytingHom.id β).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : Heyting态射 α β)
-  结论: (Heyting态射.id β).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**HeytingHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：id_comp (f : HeytingHom α β) : (HeytingHom.id β).comp f = f
+参数：f : HeytingHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HeytingHom.ext`：ext {f g : HeytingHom α β} (h : forall a, f a = g a) : f
+ = g
 -/
 theorem id_comp (f : HeytingHom α β) : (HeytingHom.id β).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  given: (hf : Surjective f)
-  statement: g₁.comp f = g₂.comp f ↔ g₁ = g₂
-  proof: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  条件: (hf : 满射 f)
-  结论: g₁.comp f = g₂.comp f ↔ g₁ = g₂
-  证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, congr_arg, ext_iff, hf.forall
+/-
+**HeytingHom.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：cancel_right (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HeytingHom.ext`：ext {f g : HeytingHom α β} (h : forall a, f a = g a) : f
+ = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_right (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
+  ⟨fun h => ext <| hf.forall.2 <| DFunLike.ext_iff.1 h, congr_arg (fun a ↦ comp a f)⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: (hg : Injective g)
-  statement: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
-  proof: ⟨fun h => HeytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: (hg : 单射 g)
-  结论: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
-  证明: ⟨fun h => HeytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: HeytingHom, HeytingHom.ext, comp_apply, congr_arg
+/-
+**HeytingHom.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `HeytingHom`。
+形式化陈述：cancel_left (hg : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HeytingHom.ext`：ext {f g : HeytingHom α β} (h : forall a, f a = g a) : f
+ = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HeytingHom.comp_apply`：comp_apply (f : HeytingHom β γ) (g : HeytingHom α
+ β) (a : α) : f.comp g a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_left (hg : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => HeytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+  ⟨fun h => HeytingHom.ext fun a => hg <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 end HeytingHom
 
@@ -985,146 +781,69 @@ namespace CoheytingHom
 
 variable [CoheytingAlgebra α] [CoheytingAlgebra β] [CoheytingAlgebra γ] [CoheytingAlgebra δ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (CoheytingHom α β) α β
-  body: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-中文:
-实例 :
-  签名: 函数状 (余heyting态射 α β) α β
-  定义体: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-Depends on / 依赖: f.toFun
+/-
+**CoheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `CoheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (CoheytingHom α β) α β where
   coe f := f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoheytingHomClass (CoheytingHom α β) α β
-  body: f.map_sup'
-  map_inf f := f.map_inf'
-  map_top f := f.map_top'
-  map_sdiff := CoheytingHom.map_sdiff'
-
-中文:
-实例 :
-  签名: 余heyting态射类 (余heyting态射 α β) α β
-  定义体: f.map_sup'
-  map_inf f := f.map_inf'
-  map_top f := f.map_top'
-  map_sdiff := CoheytingHom.map_sdiff'
-
-Depends on / 依赖: f.map_sup, map_sup
+/-
+**CoheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `CoheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoheytingHomClass (CoheytingHom α β) α β where
   map_sup f := f.map_sup'
   map_inf f := f.map_inf'
   map_top f := f.map_top'
   map_sdiff := CoheytingHom.map_sdiff'
-
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: {f : CoheytingHom α β}
-  statement: f.toFun = (f : α -> β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFun_eq_coe
-  条件: {f : 余heyting态射 α β}
-  结论: f.toFun = (f : α -> β)
-  证明: rfl
-
-@[simp]
+/-
+**CoheytingHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：toFun_eq_coe {f : CoheytingHom α β} : f.toFun = (f : α -> β)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toFun_eq_coe {f : CoheytingHom α β} : f.toFun = (f : α -> β) :=
+theorem toFun_eq_coe {f : CoheytingHom α β} : f.toFun = (f : α → β) :=
   rfl
 
 @[simp]
-/--
-theorem `toFun_eq_coe_aux` / 定理 `toFun_eq_coe_aux`
-
-English:
-theorem toFun_eq_coe_aux
-  given: {f : CoheytingHom α β}
-  statement: (↑f.toLatticeHom) = ⇑f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 toFun_eq_coe_aux
-  条件: {f : 余heyting态射 α β}
-  结论: (↑f.toLatticeHom) = ⇑f
-  证明: rfl
-
-@[ext]
+/-
+**CoheytingHom.toFun_eq_coe_aux** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：toFun_eq_coe_aux {f : CoheytingHom α β} : (↑f.toLatticeHom) = ⇑f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe_aux {f : CoheytingHom α β} : (↑f.toLatticeHom) = ⇑f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : CoheytingHom α β} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : 余heyting态射 α β} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**CoheytingHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：ext {f g : CoheytingHom α β} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : CoheytingHom α β} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : CoheytingHom α β} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `CoheytingHom` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+/-
+**CoheytingHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `CoheytingHom`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : CoheytingAlgebra α] →     
+  [inst_1 : CoheytingAlgebra β] → (f : CoheytingHom α β) → (f' : α → β) → f' = ⇑
+f → CoheytingHom α β
+参数：f : CoheytingHom α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : CoheytingHom α β) (f' : α -> β) (h : f' = f)
-  body: f'
-  map_sup' := by simpa only [h] using map_sup f
-  map_inf' := by simpa only [h] using map_inf f
-  map_top' := by simpa only [h] using map_top f
-  map_sdiff' := by simpa only [h] using map_sdiff f
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : 余heyting态射 α β) (f' : α -> β) (h : f' = f)
-  定义体: f'
-  map_sup' := by simpa only [h] using map_sup f
-  map_inf' := by simpa only [h] using map_inf f
-  map_top' := by simpa only [h] using map_top f
-  map_sdiff' := by simpa only [h] using map_sdiff f
-
-@[simp]
+--- 原说明 ---
+Copy of a `CoheytingHom` with a new `toFun` equal to the old one. Useful to fix 
+definitional
+equalities.
 -/
-protected def copy (f : CoheytingHom α β) (f' : α -> β) (h : f' = f) : CoheytingHom α β where
+protected def copy (f : CoheytingHom α β) (f' : α → β) (h : f' = f) : CoheytingHom α β where
   toFun := f'
   map_sup' := by simpa only [h] using map_sup f
   map_inf' := by simpa only [h] using map_inf f
@@ -1132,66 +851,39 @@ protected def copy (f : CoheytingHom α β) (f' : α -> β) (h : f' = f) : Cohey
   map_sdiff' := by simpa only [h] using map_sdiff f
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : CoheytingHom α β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : 余heyting态射 α β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**CoheytingHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：coe_copy (f : CoheytingHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h
+) = f'
+参数：f : CoheytingHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : CoheytingHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : CoheytingHom α β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : CoheytingHom α β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : 余heyting态射 α β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**CoheytingHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：copy_eq (f : CoheytingHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = 
+f
+参数：f : CoheytingHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : CoheytingHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : CoheytingHom α β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- `id` as a `CoheytingHom`. -/
+/-
+**CoheytingHom.id** 是 Mathlib 中的一个定义，位于命名空间 `CoheytingHom`。
+形式化陈述：(α : Type u_2) → [inst : CoheytingAlgebra α] → CoheytingHom α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : CoheytingHom α α
-  body: { TopHom.id _ with
-    toLatticeHom := LatticeHom.id _
-    map_sdiff' := fun _ _ => rfl }
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : 余heyting态射 α α
-  定义体: { TopHom.id _ with
-    toLatticeHom := LatticeHom.id _
-    map_sdiff' := fun _ _ => rfl }
-
-@[simp, norm_cast]
+--- 原说明 ---
+`id` as a `CoheytingHom`.
 -/
 protected def id : CoheytingHom α α :=
   { TopHom.id _ with
@@ -1199,18 +891,11 @@ protected def id : CoheytingHom α α :=
     map_sdiff' := fun _ _ => rfl }
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(CoheytingHom.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(余heyting态射.id α) = id
-  证明: rfl
+/-
+**CoheytingHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：coe_id : ⇑(CoheytingHom.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(CoheytingHom.id α) = id :=
   rfl
@@ -1218,80 +903,38 @@ theorem coe_id : ⇑(CoheytingHom.id α) = id :=
 variable {α}
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (a : α)
-  statement: CoheytingHom.id α a = a
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (a : α)
-  结论: 余heyting态射.id α a = a
-  证明: rfl
+/-
+**CoheytingHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：id_apply (a : α) : CoheytingHom.id α a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (a : α) : CoheytingHom.id α a = a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (CoheytingHom α α)
-  body: ⟨CoheytingHom.id _⟩
-
-中文:
-实例 :
-  签名: 可居 (余heyting态射 α α)
-  定义体: ⟨CoheytingHom.id _⟩
-
-Depends on / 依赖: CoheytingHom, CoheytingHom.id
+/-
+**CoheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `CoheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (CoheytingHom α α) :=
   ⟨CoheytingHom.id _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (CoheytingHom α β)
-  body: PartialOrder.lift _ DFunLike.coe_injective
-
-中文:
-实例 :
-  签名: 偏序 (余heyting态射 α β)
-  定义体: PartialOrder.lift _ DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
+/-
+**CoheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `CoheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (CoheytingHom α β) :=
   PartialOrder.lift _ DFunLike.coe_injective
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of `CoheytingHom`s as a `CoheytingHom`. -/
+/-
+**CoheytingHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CoheytingHom`。
+形式化陈述：comp (f : CoheytingHom β γ) (g : CoheytingHom α β) : CoheytingHom α γ
+参数：f : CoheytingHom β γ；g : CoheytingHom α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : CoheytingHom β γ) (g : CoheytingHom α β)
-  body: { f.toLatticeHom.comp g.toLatticeHom with
-    toFun := f ∘ g
-    map_top' := by simp
-    map_sdiff' := fun a b => by simp }
-
-中文:
-定义 comp
-  签名: (f : 余heyting态射 β γ) (g : 余heyting态射 α β)
-  定义体: { f.toLatticeHom.comp g.toLatticeHom with
-    toFun := f ∘ g
-    map_top' := by simp
-    map_sdiff' := fun a b => by simp }
-
-Depends on / 依赖: f.toLatticeHom.comp, g.toLatticeHom, map_sdiff, map_top, toLatticeHom
+--- 原说明 ---
+Composition of `CoheytingHom`s as a `CoheytingHom`.
 -/
 def comp (f : CoheytingHom β γ) (g : CoheytingHom α β) : CoheytingHom α γ :=
   { f.toLatticeHom.comp g.toLatticeHom with
@@ -1302,164 +945,108 @@ def comp (f : CoheytingHom β γ) (g : CoheytingHom α β) : CoheytingHom α γ 
 variable {f f₁ f₂ : CoheytingHom α β} {g g₁ g₂ : CoheytingHom β γ}
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : CoheytingHom β γ) (g : CoheytingHom α β)
-  statement: ⇑(f.comp g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : 余heyting态射 β γ) (g : 余heyting态射 α β)
-  结论: ⇑(f.comp g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**CoheytingHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：coe_comp (f : CoheytingHom β γ) (g : CoheytingHom α β) : ⇑(f.comp g) = f ∘
+ g
+参数：f : CoheytingHom β γ；g : CoheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp (f : CoheytingHom β γ) (g : CoheytingHom α β) : ⇑(f.comp g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : CoheytingHom β γ) (g : CoheytingHom α β) (a : α)
-  statement: f.comp g a = f (g a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : 余heyting态射 β γ) (g : 余heyting态射 α β) (a : α)
-  结论: f.comp g a = f (g a)
-  证明: rfl
-
-@[simp]
+/-
+**CoheytingHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：comp_apply (f : CoheytingHom β γ) (g : CoheytingHom α β) (a : α) : f.comp 
+g a = f (g a)
+参数：f : CoheytingHom β γ；g : CoheytingHom α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : CoheytingHom β γ) (g : CoheytingHom α β) (a : α) : f.comp g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : CoheytingHom γ δ) (g : CoheytingHom β γ) (h : CoheytingHom α β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : 余heyting态射 γ δ) (g : 余heyting态射 β γ) (h : 余heyting态射 α β)
-  证明: rfl
-
-@[simp]
+/-
+**CoheytingHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：comp_assoc (f : CoheytingHom γ δ) (g : CoheytingHom β γ) (h : CoheytingHom
+ α β) : (f.comp g).comp h = f.comp (g.comp h)
+参数：f : CoheytingHom γ δ；g : CoheytingHom β γ；h : CoheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : CoheytingHom γ δ) (g : CoheytingHom β γ) (h : CoheytingHom α β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : CoheytingHom α β)
-  statement: f.comp (CoheytingHom.id α) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : 余heyting态射 α β)
-  结论: f.comp (余heyting态射.id α) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**CoheytingHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：comp_id (f : CoheytingHom α β) : f.comp (CoheytingHom.id α) = f
+参数：f : CoheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoheytingHom.ext`：ext {f g : CoheytingHom α β} (h : forall a, f a = g a)
+ : f = g
 -/
 theorem comp_id (f : CoheytingHom α β) : f.comp (CoheytingHom.id α) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : CoheytingHom α β)
-  statement: (CoheytingHom.id β).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : 余heyting态射 α β)
-  结论: (余heyting态射.id β).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**CoheytingHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：id_comp (f : CoheytingHom α β) : (CoheytingHom.id β).comp f = f
+参数：f : CoheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoheytingHom.ext`：ext {f g : CoheytingHom α β} (h : forall a, f a = g a)
+ : f = g
 -/
 theorem id_comp (f : CoheytingHom α β) : (CoheytingHom.id β).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  given: (hf : Surjective f)
-  statement: g₁.comp f = g₂.comp f ↔ g₁ = g₂
-  proof: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  条件: (hf : 满射 f)
-  结论: g₁.comp f = g₂.comp f ↔ g₁ = g₂
-  证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, congr_arg, ext_iff, hf.forall
+/-
+**CoheytingHom.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：cancel_right (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoheytingHom.ext`：ext {f g : CoheytingHom α β} (h : forall a, f a = g a)
+ : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_right (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
+  ⟨fun h => ext <| hf.forall.2 <| DFunLike.ext_iff.1 h, congr_arg (fun a ↦ comp a f)⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: (hg : Injective g)
-  statement: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
-  proof: ⟨fun h => CoheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: (hg : 单射 g)
-  结论: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
-  证明: ⟨fun h => CoheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: CoheytingHom, CoheytingHom.ext, comp_apply, congr_arg
+/-
+**CoheytingHom.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `CoheytingHom`。
+形式化陈述：cancel_left (hg : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoheytingHom.ext`：ext {f g : CoheytingHom α β} (h : forall a, f a = g a)
+ : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CoheytingHom.comp_apply`：comp_apply (f : CoheytingHom β γ) (g : Coheytin
+gHom α β) (a : α) : f.comp g a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_left (hg : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => CoheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+  ⟨fun h => CoheytingHom.ext fun a => hg <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 end CoheytingHom
 
@@ -1467,148 +1054,69 @@ namespace BiheytingHom
 
 variable [BiheytingAlgebra α] [BiheytingAlgebra β] [BiheytingAlgebra γ] [BiheytingAlgebra δ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (BiheytingHom α β) α β
-  body: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-中文:
-实例 :
-  签名: 函数状 (Biheyting态射 α β) α β
-  定义体: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-Depends on / 依赖: f.toFun
+/-
+**BiheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `BiheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (BiheytingHom α β) α β where
   coe f := f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BiheytingHomClass (BiheytingHom α β) α β
-  body: f.map_sup'
-  map_inf f := f.map_inf'
-  map_himp f := f.map_himp'
-  map_sdiff f := f.map_sdiff'
-
-中文:
-实例 :
-  签名: Biheyting态射类 (Biheyting态射 α β) α β
-  定义体: f.map_sup'
-  map_inf f := f.map_inf'
-  map_himp f := f.map_himp'
-  map_sdiff f := f.map_sdiff'
-
-Depends on / 依赖: MulPosMono, MulPosMono.toMulPosStrictMono, f.map_sup, map_sup, toMulPosStrictMono
+/-
+**BiheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `BiheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BiheytingHomClass (BiheytingHom α β) α β where
   map_sup f := f.map_sup'
   map_inf f := f.map_inf'
   map_himp f := f.map_himp'
   map_sdiff f := f.map_sdiff'
-
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: {f : BiheytingHom α β}
-  statement: f.toFun = (f : α -> β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFun_eq_coe
-  条件: {f : Biheyting态射 α β}
-  结论: f.toFun = (f : α -> β)
-  证明: rfl
-
-@[simp]
+/-
+**BiheytingHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：toFun_eq_coe {f : BiheytingHom α β} : f.toFun = (f : α -> β)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toFun_eq_coe {f : BiheytingHom α β} : f.toFun = (f : α -> β) :=
+theorem toFun_eq_coe {f : BiheytingHom α β} : f.toFun = (f : α → β) :=
   rfl
 
 @[simp]
-/--
-theorem `toFun_eq_coe_aux` / 定理 `toFun_eq_coe_aux`
-
-English:
-theorem toFun_eq_coe_aux
-  given: {f : BiheytingHom α β}
-  statement: (↑f.toLatticeHom) = ⇑f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 toFun_eq_coe_aux
-  条件: {f : Biheyting态射 α β}
-  结论: (↑f.toLatticeHom) = ⇑f
-  证明: rfl
-
-@[ext]
+/-
+**BiheytingHom.toFun_eq_coe_aux** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：toFun_eq_coe_aux {f : BiheytingHom α β} : (↑f.toLatticeHom) = ⇑f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe_aux {f : BiheytingHom α β} : (↑f.toLatticeHom) = ⇑f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : BiheytingHom α β} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : Biheyting态射 α β} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**BiheytingHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：ext {f g : BiheytingHom α β} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : BiheytingHom α β} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : BiheytingHom α β} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `BiheytingHom` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+/-
+**BiheytingHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `BiheytingHom`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : BiheytingAlgebra α] →     
+  [inst_1 : BiheytingAlgebra β] → (f : BiheytingHom α β) → (f' : α → β) → f' = ⇑
+f → BiheytingHom α β
+参数：f : BiheytingHom α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : BiheytingHom α β) (f' : α -> β) (h : f' = f)
-  body: f'
-  map_sup' := by simpa only [h] using map_sup f
-  map_inf' := by simpa only [h] using map_inf f
-  map_himp' := by simpa only [h] using map_himp f
-  map_sdiff' := by simpa only [h] using map_sdiff f
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : Biheyting态射 α β) (f' : α -> β) (h : f' = f)
-  定义体: f'
-  map_sup' := by simpa only [h] using map_sup f
-  map_inf' := by simpa only [h] using map_inf f
-  map_himp' := by simpa only [h] using map_himp f
-  map_sdiff' := by simpa only [h] using map_sdiff f
-
-@[simp]
-
-Depends on / 依赖: Ideal.dvdNotUnit_iff_lt, WellFoundedGT, convert, dvdNotUnit_iff_lt, this.wf
+--- 原说明 ---
+Copy of a `BiheytingHom` with a new `toFun` equal to the old one. Useful to fix 
+definitional
+equalities.
 -/
-protected def copy (f : BiheytingHom α β) (f' : α -> β) (h : f' = f) : BiheytingHom α β where
+protected def copy (f : BiheytingHom α β) (f' : α → β) (h : f' = f) : BiheytingHom α β where
   toFun := f'
   map_sup' := by simpa only [h] using map_sup f
   map_inf' := by simpa only [h] using map_inf f
@@ -1616,79 +1124,49 @@ protected def copy (f : BiheytingHom α β) (f' : α -> β) (h : f' = f) : Bihey
   map_sdiff' := by simpa only [h] using map_sdiff f
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : BiheytingHom α β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : Biheyting态射 α β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**BiheytingHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：coe_copy (f : BiheytingHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h
+) = f'
+参数：f : BiheytingHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : BiheytingHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : BiheytingHom α β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : BiheytingHom α β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : Biheyting态射 α β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**BiheytingHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：copy_eq (f : BiheytingHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = 
+f
+参数：f : BiheytingHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : BiheytingHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : BiheytingHom α β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- `id` as a `BiheytingHom`. -/
+/-
+**BiheytingHom.id** 是 Mathlib 中的一个定义，位于命名空间 `BiheytingHom`。
+形式化陈述：(α : Type u_2) → [inst : BiheytingAlgebra α] → BiheytingHom α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : BiheytingHom α α
-  body: { HeytingHom.id _, CoheytingHom.id _ with toLatticeHom := LatticeHom.id _ }
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : Biheyting态射 α α
-  定义体: { HeytingHom.id _, CoheytingHom.id _ with toLatticeHom := LatticeHom.id _ }
-
-@[simp, norm_cast]
+--- 原说明 ---
+`id` as a `BiheytingHom`.
 -/
 protected def id : BiheytingHom α α :=
   { HeytingHom.id _, CoheytingHom.id _ with toLatticeHom := LatticeHom.id _ }
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(BiheytingHom.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(Biheyting态射.id α) = id
-  证明: rfl
+/-
+**BiheytingHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：coe_id : ⇑(BiheytingHom.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(BiheytingHom.id α) = id :=
   rfl
@@ -1696,80 +1174,38 @@ theorem coe_id : ⇑(BiheytingHom.id α) = id :=
 variable {α}
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (a : α)
-  statement: BiheytingHom.id α a = a
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (a : α)
-  结论: Biheyting态射.id α a = a
-  证明: rfl
+/-
+**BiheytingHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：id_apply (a : α) : BiheytingHom.id α a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (a : α) : BiheytingHom.id α a = a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (BiheytingHom α α)
-  body: ⟨BiheytingHom.id _⟩
-
-中文:
-实例 :
-  签名: 可居 (Biheyting态射 α α)
-  定义体: ⟨BiheytingHom.id _⟩
-
-Depends on / 依赖: BiheytingHom, BiheytingHom.id
+/-
+**BiheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `BiheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (BiheytingHom α α) :=
   ⟨BiheytingHom.id _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (BiheytingHom α β)
-  body: PartialOrder.lift _ DFunLike.coe_injective
-
-中文:
-实例 :
-  签名: 偏序 (Biheyting态射 α β)
-  定义体: PartialOrder.lift _ DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
+/-
+**BiheytingHom.** 是 Mathlib 中的一个实例，位于命名空间 `BiheytingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (BiheytingHom α β) :=
   PartialOrder.lift _ DFunLike.coe_injective
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of `BiheytingHom`s as a `BiheytingHom`. -/
+/-
+**BiheytingHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `BiheytingHom`。
+形式化陈述：comp (f : BiheytingHom β γ) (g : BiheytingHom α β) : BiheytingHom α γ
+参数：f : BiheytingHom β γ；g : BiheytingHom α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : BiheytingHom β γ) (g : BiheytingHom α β)
-  body: { f.toLatticeHom.comp g.toLatticeHom with
-    toFun := f ∘ g
-    map_himp' := fun a b => by simp
-    map_sdiff' := fun a b => by simp }
-
-中文:
-定义 comp
-  签名: (f : Biheyting态射 β γ) (g : Biheyting态射 α β)
-  定义体: { f.toLatticeHom.comp g.toLatticeHom with
-    toFun := f ∘ g
-    map_himp' := fun a b => by simp
-    map_sdiff' := fun a b => by simp }
-
-Depends on / 依赖: f.toLatticeHom.comp, g.toLatticeHom, map_himp, map_sdiff, toLatticeHom
+--- 原说明 ---
+Composition of `BiheytingHom`s as a `BiheytingHom`.
 -/
 def comp (f : BiheytingHom β γ) (g : BiheytingHom α β) : BiheytingHom α γ :=
   { f.toLatticeHom.comp g.toLatticeHom with
@@ -1780,163 +1216,108 @@ def comp (f : BiheytingHom β γ) (g : BiheytingHom α β) : BiheytingHom α γ 
 variable {f f₁ f₂ : BiheytingHom α β} {g g₁ g₂ : BiheytingHom β γ}
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : BiheytingHom β γ) (g : BiheytingHom α β)
-  statement: ⇑(f.comp g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : Biheyting态射 β γ) (g : Biheyting态射 α β)
-  结论: ⇑(f.comp g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**BiheytingHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：coe_comp (f : BiheytingHom β γ) (g : BiheytingHom α β) : ⇑(f.comp g) = f ∘
+ g
+参数：f : BiheytingHom β γ；g : BiheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp (f : BiheytingHom β γ) (g : BiheytingHom α β) : ⇑(f.comp g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : BiheytingHom β γ) (g : BiheytingHom α β) (a : α)
-  statement: f.comp g a = f (g a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : Biheyting态射 β γ) (g : Biheyting态射 α β) (a : α)
-  结论: f.comp g a = f (g a)
-  证明: rfl
-
-@[simp]
+/-
+**BiheytingHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：comp_apply (f : BiheytingHom β γ) (g : BiheytingHom α β) (a : α) : f.comp 
+g a = f (g a)
+参数：f : BiheytingHom β γ；g : BiheytingHom α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : BiheytingHom β γ) (g : BiheytingHom α β) (a : α) : f.comp g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : BiheytingHom γ δ) (g : BiheytingHom β γ) (h : BiheytingHom α β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : Biheyting态射 γ δ) (g : Biheyting态射 β γ) (h : Biheyting态射 α β)
-  证明: rfl
-
-@[simp]
+/-
+**BiheytingHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：comp_assoc (f : BiheytingHom γ δ) (g : BiheytingHom β γ) (h : BiheytingHom
+ α β) : (f.comp g).comp h = f.comp (g.comp h)
+参数：f : BiheytingHom γ δ；g : BiheytingHom β γ；h : BiheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : BiheytingHom γ δ) (g : BiheytingHom β γ) (h : BiheytingHom α β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : BiheytingHom α β)
-  statement: f.comp (BiheytingHom.id α) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : Biheyting态射 α β)
-  结论: f.comp (Biheyting态射.id α) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**BiheytingHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：comp_id (f : BiheytingHom α β) : f.comp (BiheytingHom.id α) = f
+参数：f : BiheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BiheytingHom.ext`：ext {f g : BiheytingHom α β} (h : forall a, f a = g a)
+ : f = g
 -/
 theorem comp_id (f : BiheytingHom α β) : f.comp (BiheytingHom.id α) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : BiheytingHom α β)
-  statement: (BiheytingHom.id β).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : Biheyting态射 α β)
-  结论: (Biheyting态射.id β).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**BiheytingHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：id_comp (f : BiheytingHom α β) : (BiheytingHom.id β).comp f = f
+参数：f : BiheytingHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BiheytingHom.ext`：ext {f g : BiheytingHom α β} (h : forall a, f a = g a)
+ : f = g
 -/
 theorem id_comp (f : BiheytingHom α β) : (BiheytingHom.id β).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  given: (hf : Surjective f)
-  statement: g₁.comp f = g₂.comp f ↔ g₁ = g₂
-  proof: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  条件: (hf : 满射 f)
-  结论: g₁.comp f = g₂.comp f ↔ g₁ = g₂
-  证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, congr_arg, ext_iff, hf.forall
+/-
+**BiheytingHom.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：cancel_right (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BiheytingHom.ext`：ext {f g : BiheytingHom α β} (h : forall a, f a = g a)
+ : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_right (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun a => comp a f)⟩
+  ⟨fun h => ext <| hf.forall.2 <| DFunLike.ext_iff.1 h, congr_arg (fun a ↦ comp a f)⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: (hg : Injective g)
-  statement: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
-  proof: ⟨fun h => BiheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: (hg : 单射 g)
-  结论: g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
-  证明: ⟨fun h => BiheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: BiheytingHom, BiheytingHom.ext, comp_apply, congr_arg
+/-
+**BiheytingHom.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `BiheytingHom`。
+形式化陈述：cancel_left (hg : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BiheytingHom.ext`：ext {f g : BiheytingHom α β} (h : forall a, f a = g a)
+ : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `BiheytingHom.comp_apply`：comp_apply (f : BiheytingHom β γ) (g : Biheytin
+gHom α β) (a : α) : f.comp g a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_left (hg : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => BiheytingHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+  ⟨fun h => BiheytingHom.ext fun a => hg <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 end BiheytingHom
+

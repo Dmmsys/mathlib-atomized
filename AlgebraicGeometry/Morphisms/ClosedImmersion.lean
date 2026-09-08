@@ -42,24 +42,19 @@ namespace AlgebraicGeometry
 /-- A morphism of schemes `X ⟶ Y` is a closed immersion if the underlying
 topological map is a closed embedding and the induced stalk maps are surjective. -/
 @[mk_iff]
-/--
-Definition of `IsClosedImmersion` / `IsClosedImmersion` 的定义
+/-
+**AlgebraicGeometry.IsClosedImmersion** 是 Mathlib 中的一个类，位于命名空间 `AlgebraicGeometr
+y`。
+形式化陈述：IsClosedImmersion {X Y : Scheme} (f : X ⟶ Y) : Prop extends SurjectiveOnSt
+alks f where isClosedEmbedding (f) : IsClosedEmbedding f  alias Scheme.Hom.isClo
+sedEmbedding
+参数：f : X ⟶ Y。
+继承自：SurjectiveOnStalks f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedImmersion
-  parameters: {X Y : Scheme} (f : X ⟶ Y)
-  extends: SurjectiveOnStalks f
-  axioms and operations (1):
-    - isClosedEmbedding((f)) : IsClosedEmbedding f
-
-中文:
-类 是闭浸入
-  参数: {X Y : 概形} (f : X ⟶ Y)
-  继承: SurjectiveOnStalks f
-  公理与运算 (1 个):
-    - isClosedEmbedding((f)) : 是闭嵌入 f
-
-Depends on / 依赖: IsClosedImmersion, IsClosedImmersion.isClosedEmbedding, isClosedEmbedding
+--- 原说明 ---
+A morphism of schemes `X ⟶ Y` is a closed immersion if the underlying
+topological map is a closed embedding and the induced stalk maps are surjective.
 -/
 class IsClosedImmersion {X Y : Scheme} (f : X ⟶ Y) : Prop extends SurjectiveOnStalks f where
   isClosedEmbedding (f) : IsClosedEmbedding f
@@ -71,229 +66,256 @@ alias IsClosedImmersion.base_closed := Scheme.Hom.isClosedEmbedding
 
 namespace IsClosedImmersion
 
-/--
-lemma `eq_inf` / 引理 `eq_inf`
-
-English:
-lemma eq_inf
-  statement: @IsClosedImmersion = (topologically IsClosedEmbedding) ⊓
-  proof: by
-  ext X Y f
-  rw [isClosedImmersion_iff]; rw [and_comm]
-  rfl
-
-中文:
-引理 eq_inf
-  结论: @是闭浸入 = (topologically 是闭嵌入) ⊓
-  证明: by
-  ext X Y f
-  rw [isClosedImmersion_iff]; rw [and_comm]
-  rfl
-
-Depends on / 依赖: and_comm, isClosedImmersion_iff
+/-
+**AlgebraicGeometry.IsClosedImmersion.eq_inf** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry.IsClosedImmersion`。
+形式化陈述：eq_inf : @IsClosedImmersion = (topologically IsClosedEmbedding) ⊓ @Surject
+iveOnStalks
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.isClosedImmersion_iff`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y),   AlgebraicGeometry.IsClosedImmersion f ↔ AlgebraicGeometry.Sur
+jectiveOnStalks f ∧ Topology.…
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma eq_inf : @IsClosedImmersion = (topologically IsClosedEmbedding) ⊓
     @SurjectiveOnStalks := by
   ext X Y f
-  rw [isClosedImmersion_iff]; rw [and_comm]
+  rw [isClosedImmersion_iff, and_comm]
   rfl
-
-/--
-lemma `iff_isPreimmersion` / 引理 `iff_isPreimmersion`
-
-English:
-lemma iff_isPreimmersion
-  given: {X Y : Scheme} {f : X ⟶ Y}
-  proof: by
-  rw [isClosedImmersion_iff]; rw [isPreimmersion_iff]; rw [and_assoc]; rw [isClosedEmbedding_iff]
-
-中文:
-引理 iff_isPreimmersion
-  条件: {X Y : 概形} {f : X ⟶ Y}
-  证明: by
-  rw [isClosedImmersion_iff]; rw [isPreimmersion_iff]; rw [and_assoc]; rw [isClosedEmbedding_iff]
-
-Depends on / 依赖: and_assoc, isClosedEmbedding_iff, isClosedImmersion_iff, isPreimmersion_iff
+/-
+**AlgebraicGeometry.IsClosedImmersion.iff_isPreimmersion** 是 Mathlib 中的一个引理，位于命名
+空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：iff_isPreimmersion {X Y : Scheme} {f : X ⟶ Y} : IsClosedImmersion f ↔ IsPr
+eimmersion f ∧ IsClosed (Set.range f)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.isClosedImmersion_iff`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y),   AlgebraicGeometry.IsClosedImmersion f ↔ AlgebraicGeometry.Sur
+jectiveOnStalks f ∧ Topology.…
+· 使用定理 `AlgebraicGeometry.isPreimmersion_iff`：∀ {X Y : AlgebraicGeometry.Scheme}
+ (f : X ⟶ Y),   AlgebraicGeometry.IsPreimmersion f ↔ AlgebraicGeometry.Surjectiv
+eOnStalks f ∧ Topology.IsE…
+· 使用定理 `and_assoc`：∀ {a b c : Prop}, (a ∧ b) ∧ c ↔ a ∧ b ∧ c
+· 使用定理 `Topology.isClosedEmbedding_iff`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] (f : X → Y),   Topology.IsClosedEmbe
+dding f ↔ Topology.I…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma iff_isPreimmersion {X Y : Scheme} {f : X ⟶ Y} :
     IsClosedImmersion f ↔ IsPreimmersion f ∧ IsClosed (Set.range f) := by
-  rw [isClosedImmersion_iff]; rw [isPreimmersion_iff]; rw [and_assoc]; rw [isClosedEmbedding_iff]
-
-/--
-lemma `of_isPreimmersion` / 引理 `of_isPreimmersion`
-
-English:
-lemma of_isPreimmersion
-  statement: {X Y : Scheme} (f : X ⟶ Y) [IsPreimmersion f]
-  proof: iff_isPreimmersion.mpr ⟨‹_›, hf⟩
-
-中文:
-引理 of_isPreimmersion
-  结论: {X Y : 概形} (f : X ⟶ Y) [是Preimmersion f]
-  证明: iff_isPreimmersion.mpr ⟨‹_›, hf⟩
-
-Depends on / 依赖: iff_isPreimmersion, iff_isPreimmersion.mpr
+  rw [isClosedImmersion_iff, isPreimmersion_iff, and_assoc, isClosedEmbedding_iff]
+/-
+**AlgebraicGeometry.IsClosedImmersion.of_isPreimmersion** 是 Mathlib 中的一个引理，位于命名空
+间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：of_isPreimmersion {X Y : Scheme} (f : X ⟶ Y) [IsPreimmersion f] (hf : IsCl
+osed (Set.range f)) : IsClosedImmersion f
+参数：f : X ⟶ Y；hf : IsClosed (Set.range f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.iff_isPreimmersion`：iff_isPreimmersi
+on {X Y : Scheme} {f : X ⟶ Y} : IsClosedImmersion f ↔ IsPreimmersion f ∧ IsClose
+d (Set.range f)
 -/
 lemma of_isPreimmersion {X Y : Scheme} (f : X ⟶ Y) [IsPreimmersion f]
     (hf : IsClosed (Set.range f)) : IsClosedImmersion f :=
   iff_isPreimmersion.mpr ⟨‹_›, hf⟩
-
+/-
+**AlgebraicGeometry.IsClosedImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeome
+try.IsClosedImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) {X Y : Scheme} (f : X ⟶ Y) [IsClosedImmersion f] : IsPreimmersion f :=
   (iff_isPreimmersion.mp ‹_›).1
 
 /-- Isomorphisms are closed immersions. -/
-instance {X Y : Scheme} (f : X ⟶ Y) [IsIso f] : IsClosedImmersion f where
-isClosedEmbedding := Homeomorph.isClosedEmbedding TopCat.homeoOfIso (asIso f.base)
-  stalkMap_surjective := fun _ => (ConcreteCategory.bijective_of_isIso _).2
+/-
+**AlgebraicGeometry.IsClosedImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeome
+try.IsClosedImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
+--- 原说明 ---
+Isomorphisms are closed immersions.
+-/
+instance {X Y : Scheme} (f : X ⟶ Y) [IsIso f] : IsClosedImmersion f where
+  isClosedEmbedding := Homeomorph.isClosedEmbedding <| TopCat.homeoOfIso (asIso f.base)
+  stalkMap_surjective := fun _ ↦ (ConcreteCategory.bijective_of_isIso _).2
+/-
+**AlgebraicGeometry.IsClosedImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeome
+try.IsClosedImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) {X Y : Scheme.{u}} [IsEmpty X] (f : X ⟶ Y) : IsClosedImmersion f :=
   .of_isPreimmersion _ (by rw [Set.range_eq_empty]; exact isClosed_empty)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsMultiplicative @IsClosedImmersion
-  body: inferInstance
-  comp_mem f g _ _ := ⟨g.isClosedEmbedding.comp f.isClosedEmbedding⟩
-
-中文:
-实例 :
-  签名: MorphismProperty.是Multiplicative @是闭浸入
-  定义体: inferInstance
-  comp_mem f g _ _ := ⟨g.isClosedEmbedding.comp f.isClosedEmbedding⟩
+/-
+**AlgebraicGeometry.IsClosedImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeome
+try.IsClosedImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsMultiplicative @IsClosedImmersion where
   id_mem _ := inferInstance
   comp_mem f g _ _ := ⟨g.isClosedEmbedding.comp f.isClosedEmbedding⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `comp` / 实例 `comp`
+/-- Composition of closed immersions is a closed immersion. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.comp** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicG
+eometry.IsClosedImmersion`。
+形式化陈述：comp {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClosedImmersion f] [IsClo
+sedImmersion g] : IsClosedImmersion (f ≫ g)
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderComposition.comp_mem`：∀ {C 
+: Type u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.Morphism
+Property C}   [self : P.IsStableUnderComposition] {X Y …
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsMultiplicativeScheme`：Category
+Theory.MorphismProperty.IsMultiplicative @AlgebraicGeometry.IsClosedImmersion
 
-English:
-instance comp
-  signature: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClosedImmersion f]
-  body: MorphismProperty.IsStableUnderComposition.comp_mem f g inferInstance inferInstance
-
-中文:
-实例 comp
-  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是闭浸入 f]
-  定义体: MorphismProperty.IsStableUnderComposition.comp_mem f g inferInstance inferInstance
-
-Depends on / 依赖: IsStableUnderComposition, MorphismProperty, MorphismProperty.IsStableUnderComposition.comp_mem, comp_mem
+--- 原说明 ---
+Composition of closed immersions is a closed immersion.
 -/
 instance comp {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClosedImmersion f]
     [IsClosedImmersion g] : IsClosedImmersion (f ≫ g) :=
   MorphismProperty.IsStableUnderComposition.comp_mem f g inferInstance inferInstance
 
-/--
-Instance `respectsIso` / 实例 `respectsIso`
+/-- Composition with an isomorphism preserves closed immersions. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.respectsIso** 是 Mathlib 中的一个实例，位于命名空间 `Alg
+ebraicGeometry.IsClosedImmersion`。
+形式化陈述：respectsIso : MorphismProperty.RespectsIso @IsClosedImmersion
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.mk`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] (P : CategoryTheory.MorphismProperty C),   (∀ {
+X Y Z : C} (e : X ≅ Y) (f : Y ⟶ Z), …
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instOfIsIsoScheme`：∀ {X Y : Algebrai
+cGeometry.Scheme} (f : X ⟶ Y) [CategoryTheory.IsIso f], AlgebraicGeometry.IsClos
+edImmersion f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 
-English:
-instance respectsIso
-  signature: : MorphismProperty.RespectsIso @IsClosedImmersion
-  body: by
-  apply MorphismProperty.RespectsIso.mk <;> intro X Y Z e f hf <;> infer_instance
-
-中文:
-实例 respectsIso
-  签名: : MorphismProperty.RespectsIso @是闭浸入
-  定义体: by
-  apply MorphismProperty.RespectsIso.mk <;> intro X Y Z e f hf <;> infer_instance
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.RespectsIso.mk, RespectsIso, infer_instance
+--- 原说明 ---
+Composition with an isomorphism preserves closed immersions.
 -/
 instance respectsIso : MorphismProperty.RespectsIso @IsClosedImmersion := by
   apply MorphismProperty.RespectsIso.mk <;> intro X Y Z e f hf <;> infer_instance
-
+/-
+**AlgebraicGeometry.IsClosedImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeome
+try.IsClosedImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Scheme} (I : X.IdealSheafData) : IsClosedImmersion I.subschemeι :=
   .of_isPreimmersion _ (I.range_subschemeι ▸ I.support.isClosed)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `spec_of_surjective` / 定理 `spec_of_surjective`
+/-- Given two commutative rings `R S : CommRingCat` and a surjective morphism
+`f : R ⟶ S`, the induced scheme morphism `specObj S ⟶ specObj R` is a
+closed immersion. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.spec_of_surjective** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：spec_of_surjective {R S : CommRingCat} (f : R ⟶ S) (h : Function.Surjectiv
+e f) : IsClosedImmersion (Spec.map f) where isClosedEmbedding
+参数：f : R ⟶ S；h : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `RingHom.toMorphismProperty_respectsIso_iff`：toMorphismProperty_respectsI
+so_iff : RespectsIso P ↔ (toMorphismProperty P).RespectsIso
+· 使用定理 `RingHom.surjective_respectsIso`：surjective_respectsIso : RespectsIso sur
+jective
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `RingHom.surjective_localRingHom_of_surjective`：surjective_localRingHom_o
+f_surjective {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S) (h : Functi
+on.Surjective f) (P : Ideal S) [P.I…
+· 使用引理 `PrimeSpectrum.isClosedEmbedding_comap_of_surjective`：isClosedEmbedding_c
+omap_of_surjective (hf : Surjective f) : IsClosedEmbedding (comap f) where toIsI
+nducing
 
-English:
-theorem spec_of_surjective
-  given: {R S : CommRingCat} (f : R ⟶ S) (h : Function.Surjective f)
-  proof: PrimeSpectrum.isClosedEmbedding_comap_of_surjective _ _ h
-  stalkMap_surjective x := by
-    have : (RingHom.toMorphismProperty (fun f => Function.Surjective f)).RespectsIso := by
-      rw [← RingHom.toMorphismProperty_respectsIso_iff]
-      exact RingHom.surjective_respectsIso
-    apply (MorphismProperty.arrow_mk_iso_iff
-      (RingHom.toMorphismProperty (fun f => Function.Surjective f))
-      (Scheme.arrowStalkMapSpecIso f x)).mpr
-    exact RingHom.surjective_localRingHom_of_surjective f.hom h x.asIdeal
-
-中文:
-定理 spec_of_surjective
-  条件: {R S : 交换环范畴} (f : R ⟶ S) (h : 函数.满射 f)
-  证明: PrimeSpectrum.isClosedEmbedding_comap_of_surjective _ _ h
-  stalkMap_surjective x := by
-    have : (RingHom.toMorphismProperty (fun f => Function.Surjective f)).RespectsIso := by
-      rw [← RingHom.toMorphismProperty_respectsIso_iff]
-      exact RingHom.surjective_respectsIso
-    apply (MorphismProperty.arrow_mk_iso_iff
-      (RingHom.toMorphismProperty (fun f => Function.Surjective f))
-      (Scheme.arrowStalkMapSpecIso f x)).mpr
-    exact RingHom.surjective_localRingHom_of_surjective f.hom h x.asIdeal
-
-Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.isClosedEmbedding_comap_of_surjective, isClosedEmbedding_comap_of_surjective
+--- 原说明 ---
+Given two commutative rings `R S : CommRingCat` and a surjective morphism
+`f : R ⟶ S`, the induced scheme morphism `specObj S ⟶ specObj R` is a
+closed immersion.
 -/
 theorem spec_of_surjective {R S : CommRingCat} (f : R ⟶ S) (h : Function.Surjective f) :
     IsClosedImmersion (Spec.map f) where
   isClosedEmbedding := PrimeSpectrum.isClosedEmbedding_comap_of_surjective _ _ h
   stalkMap_surjective x := by
-    have : (RingHom.toMorphismProperty (fun f => Function.Surjective f)).RespectsIso := by
+    have : (RingHom.toMorphismProperty (fun f ↦ Function.Surjective f)).RespectsIso := by
       rw [← RingHom.toMorphismProperty_respectsIso_iff]
       exact RingHom.surjective_respectsIso
     apply (MorphismProperty.arrow_mk_iso_iff
-      (RingHom.toMorphismProperty (fun f => Function.Surjective f))
+      (RingHom.toMorphismProperty (fun f ↦ Function.Surjective f))
       (Scheme.arrowStalkMapSpecIso f x)).mpr
     exact RingHom.surjective_localRingHom_of_surjective f.hom h x.asIdeal
 
-/--
-Instance `spec_of_quotient_mk` / 实例 `spec_of_quotient_mk`
+/-- For any ideal `I` in a commutative ring `R`, the quotient map `specObj R ⟶ specObj (R ⧸ I)`
+is a closed immersion. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.spec_of_quotient_mk** 是 Mathlib 中的一个实例，位于命
+名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：spec_of_quotient_mk {R : CommRingCat.{u}} (I : Ideal R) : IsClosedImmersio
+n (Spec.map (CommRingCat.ofHom (Ideal.Quotient.mk I)))
+参数：I : Ideal R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.spec_of_surjective`：spec_of_surjecti
+ve {R S : CommRingCat} (f : R ⟶ S) (h : Function.Surjective f) : IsClosedImmersi
+on (Spec.map f) where isClosedEmbedding
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
 
-English:
-instance spec_of_quotient_mk
-  signature: {R : CommRingCat.{u}} (I : Ideal R)
-  body: spec_of_surjective _ Ideal.Quotient.mk_surjective
-
-中文:
-实例 spec_of_quotient_mk
-  签名: {R : 交换环范畴.{u}} (I : 理想 R)
-  定义体: spec_of_surjective _ Ideal.Quotient.mk_surjective
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Ideal.Quotient.mk_surjective, Quotient, comp_id, id_comp, mk_surjective, spec_of_surjective
+--- 原说明 ---
+For any ideal `I` in a commutative ring `R`, the quotient map `specObj R ⟶ specO
+bj (R ⧸ I)`
+is a closed immersion.
 -/
 instance spec_of_quotient_mk {R : CommRingCat.{u}} (I : Ideal R) :
     IsClosedImmersion (Spec.map (CommRingCat.ofHom (Ideal.Quotient.mk I))) :=
   spec_of_surjective _ Ideal.Quotient.mk_surjective
 
-/--
-lemma `of_surjective_of_isAffine` / 引理 `of_surjective_of_isAffine`
+/-- Any morphism between affine schemes that is surjective on global sections is a
+closed immersion. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.of_surjective_of_isAffine** 是 Mathlib 中的一个
+引理，位于命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：of_surjective_of_isAffine {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X 
+⟶ Y) (h : Function.Surjective (f.appTop)) : IsClosedImmersion f
+参数：f : X ⟶ Y；h : Function.Surjective (f.appTop)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.spec_of_surjective`：spec_of_surjecti
+ve {R S : CommRingCat} (f : R ⟶ S) (h : Function.Surjective f) : IsClosedImmersi
+on (Spec.map f) where isClosedEmbedding
 
-English:
-lemma of_surjective_of_isAffine
-  statement: {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y)
-  proof: by
-  rw [MorphismProperty.arrow_mk_iso_iff @IsClosedImmersion (arrowIsoSpecΓOfIsAffine f)]
-  apply spec_of_surjective
-  exact h
-
-中文:
-引理 of_surjective_of_isAffine
-  结论: {X Y : 概形} [是仿射 X] [是仿射 Y] (f : X ⟶ Y)
-  证明: by
-  rw [MorphismProperty.arrow_mk_iso_iff @IsClosedImmersion (arrowIsoSpecΓOfIsAffine f)]
-  apply spec_of_surjective
-  exact h
-
-Depends on / 依赖: IsClosedImmersion, MorphismProperty, MorphismProperty.arrow_mk_iso_iff, arrow_mk_iso_iff, spec_of_surjective
+--- 原说明 ---
+Any morphism between affine schemes that is surjective on global sections is a
+closed immersion.
 -/
 lemma of_surjective_of_isAffine {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y)
     (h : Function.Surjective (f.appTop)) : IsClosedImmersion f := by
@@ -302,39 +324,63 @@ lemma of_surjective_of_isAffine {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X 
   exact h
 
 /--
-theorem `of_comp_isClosedImmersion` / 定理 `of_comp_isClosedImmersion`
+If `f ≫ g` and `g` are closed immersions, then `f` is a closed immersion.
+Also see `IsClosedImmersion.of_comp` for the general version
+where `g` is only required to be separated.
+-/
+/-
+**AlgebraicGeometry.IsClosedImmersion.of_comp_isClosedImmersion** 是 Mathlib 中的一个
+定理，位于命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：of_comp_isClosedImmersion {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClos
+edImmersion g] [IsClosedImmersion (f ≫ g)] : IsClosedImmersion f where isClosedE
+mbedding
+参数：f : X ⟶ Y；g : Y ⟶ Z；f ≫ g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.stalkMap_surjective`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (f : X ⟶ Y) [self : AlgebraicGeometry.SurjectiveOnStalks f] (x : ↥X
+),   Function.Surjective ⇑(CategoryThe…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.toSurjectiveOnStalks`：∀ {X Y : Algeb
+raicGeometry.Scheme} {f : X ⟶ Y} [self : AlgebraicGeometry.IsClosedImmersion f],
+   AlgebraicGeometry.SurjectiveOnStalks f
+· 使用定理 `Function.Surjective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u
+_3} {f : α → β} {g : γ → α},   Function.Surjective (f ∘ g) → Function.Surjective
+ f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.stalkMap_comp`：stalkMap_comp {X Y Z : Schem
+e.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g : X ⟶ Z).stalkMap x = g.stalkMap
+ (f x) ≫ f.stalkMap x
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isClosedEmbedding`：∀ {X Y : AlgebraicGeomet
+ry.Scheme} (f : X ⟶ Y) [self : AlgebraicGeometry.IsClosedImmersion f],   Topolog
+y.IsClosedEmbedding ⇑f
+· 使用定理 `Topology.IsClosedEmbedding.of_continuous_injective_isClosedMap`：∀ {X : T
+ype u_1} {Y : Type u_2} {f : X → Y} [inst : TopologicalSpace X] [inst_1 : Topolo
+gicalSpace Y],   Continuous f → Function.Injective f…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.continuous`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y), Continuous ⇑f
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsClosedEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2
+} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.Is
+ClosedEmbedding f → Topology.I…
+· 使用定理 `Topology.IsClosedEmbedding.isClosed_iff_image_isClosed`：∀ {X : Type u_1}
+ {Y : Type u_2} {f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpa
+ce Y],   Topology.IsClosedEmbedding f → ∀ {s…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_comp`：image_comp (f : β -> γ) (g : α -> β) (a : Set α) : f ∘ g
+ '' a = f '' g '' a
+· 使用定理 `Topology.IsClosedEmbedding.isClosedMap`：∀ {X : Type u_1} {Y : Type u_2} 
+{f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topolog
+y.IsClosedEmbedding f → IsCl…
 
-English:
-theorem of_comp_isClosedImmersion
-  statement: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClosedImmersion g]
-  proof: by
-    have h := (f ≫ g).isClosedEmbedding
-    simp only [Scheme.Hom.comp_base, TopCat.coe_comp] at h
-    refine .of_continuous_injective_isClosedMap (Scheme.Hom.continuous f) h.injective.of_comp ?_
-    intro Z hZ
-    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding]; rw [← Set.image_comp]
-    exact h.isClosedMap _ hZ
-  stalkMap_surjective x := by
-    have h := (f ≫ g).stalkMap_surjective x
-    simp_rw [Scheme.Hom.stalkMap_comp] at h
-    exact Function.Surjective.of_comp h
-
-中文:
-定理 of_comp_isClosedImmersion
-  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z) [是闭浸入 g]
-  证明: by
-    have h := (f ≫ g).isClosedEmbedding
-    simp only [Scheme.Hom.comp_base, TopCat.coe_comp] at h
-    refine .of_continuous_injective_isClosedMap (Scheme.Hom.continuous f) h.injective.of_comp ?_
-    intro Z hZ
-    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding]; rw [← Set.image_comp]
-    exact h.isClosedMap _ hZ
-  stalkMap_surjective x := by
-    have h := (f ≫ g).stalkMap_surjective x
-    simp_rw [Scheme.Hom.stalkMap_comp] at h
-    exact Function.Surjective.of_comp h
-
-Depends on / 依赖: Function, Function.Surjective.of_comp, IsClosedEmbedding, IsClosedEmbedding.isClosed_iff_image_isClosed, Scheme, Scheme.Hom.comp_base, Scheme.Hom.continuous, Scheme.Hom.stalkMap_comp, Set.image_comp, Surjective, TopCat, TopCat.coe_comp, coe_comp, comp_base, continuous, g.isClosedEmbedding, h.injective.of_comp, h.isClosedMap, image_comp, injective
+--- 原说明 ---
+If `f ≫ g` and `g` are closed immersions, then `f` is a closed immersion.
+Also see `IsClosedImmersion.of_comp` for the general version
+where `g` is only required to be separated.
 -/
 theorem of_comp_isClosedImmersion {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [IsClosedImmersion g]
     [IsClosedImmersion (f ≫ g)] : IsClosedImmersion f where
@@ -343,45 +389,50 @@ theorem of_comp_isClosedImmersion {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z) [
     simp only [Scheme.Hom.comp_base, TopCat.coe_comp] at h
     refine .of_continuous_injective_isClosedMap (Scheme.Hom.continuous f) h.injective.of_comp ?_
     intro Z hZ
-    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding]; rw [← Set.image_comp]
+    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding,
+      ← Set.image_comp]
     exact h.isClosedMap _ hZ
   stalkMap_surjective x := by
     have h := (f ≫ g).stalkMap_surjective x
     simp_rw [Scheme.Hom.stalkMap_comp] at h
     exact Function.Surjective.of_comp h
-
-/--
-Instance `SpecMap_residue` / 实例 `SpecMap_residue`
-
-English:
-instance SpecMap_residue
-  signature: {X : Scheme.{u}} (x)
-  body: IsClosedImmersion.spec_of_surjective (X.residue x)
-    Ideal.Quotient.mk_surjective
-
-中文:
-实例 SpecMap_residue
-  签名: {X : 概形.{u}} (x)
-  定义体: IsClosedImmersion.spec_of_surjective (X.residue x)
-    Ideal.Quotient.mk_surjective
-
-Depends on / 依赖: Ideal.Quotient.mk_surjective, IsClosedImmersion, IsClosedImmersion.spec_of_surjective, Quotient, X.residue, mk_surjective, residue, spec_of_surjective
+/-
+**AlgebraicGeometry.IsClosedImmersion.SpecMap_residue** 是 Mathlib 中的一个实例，位于命名空间 
+`AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：SpecMap_residue {X : Scheme.{u}} (x) : IsClosedImmersion (Spec.map (X.resi
+due x))
+参数：x。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.spec_of_surjective`：spec_of_surjecti
+ve {R S : CommRingCat} (f : R ⟶ S) (h : Function.Surjective f) : IsClosedImmersi
+on (Spec.map f) where isClosedEmbedding
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
 -/
 instance SpecMap_residue {X : Scheme.{u}} (x) : IsClosedImmersion (Spec.map (X.residue x)) :=
   IsClosedImmersion.spec_of_surjective (X.residue x)
     Ideal.Quotient.mk_surjective
-
+/-
+**AlgebraicGeometry.IsClosedImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeome
+try.IsClosedImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) {X Y : Scheme} (f : X ⟶ Y) [IsClosedImmersion f] : IsAffineHom f :=
   isAffineHom_of_isInducing _ f.isClosedEmbedding.isInducing f.isClosedEmbedding.isClosed_range
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**AlgebraicGeometry.IsClosedImmersion.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeome
+try.IsClosedImmersion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Scheme.{u}} (f : X ⟶ Y) [IsClosedImmersion f] :
     IsIso f.toImage := by
   have := @of_comp_isClosedImmersion _ _ _ f.toImage f.imageι inferInstance
     (by rw [Scheme.Hom.toImage_imageι]; infer_instance)
   have : IsHomeomorph f.toImage :=
     isHomeomorph_iff_isEmbedding_surjective.mpr ⟨f.toImage.isEmbedding, by
-      rw [← Set.range_eq_univ]; rw [← f.toImage.isClosedEmbedding.isClosed_range.closure_eq]
+      rw [← Set.range_eq_univ, ← f.toImage.isClosedEmbedding.isClosed_range.closure_eq]
       exact f.toImage.denseRange.closure_eq⟩
   refine isomorphisms_eq_stalkwise.ge _ ⟨?_, ?_⟩
   · exact inferInstanceAs (IsIso (TopCat.isoOfHomeo this.homeomorph).hom)
@@ -400,46 +451,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The category of closed subschemes is contravariantly equivalent
 to the lattice of ideal sheaves. -/
 noncomputable
-/--
-Definition of `overEquivIdealSheafData` / `overEquivIdealSheafData` 的定义
-
-English:
-definition overEquivIdealSheafData
-  signature: (X : Scheme.{u})
-  body: (MorphismProperty.Over.forget _ _ _).op ⋙ X.kerFunctor
-  inverse :=
-  { obj I := .op <| .mk _ I.subschemeι inferInstance
-    map {I J} h := (MorphismProperty.Over.homMk (Scheme.IdealSheafData.inclusion h.le)).op
-    map_comp f g := Quiver.Hom.unop_inj (by ext1; simp) }
-  unitIso := NatIso.ofComponents (fun Y =>
-    letI : IsClosedImmersion Y.unop.hom := Y.unop.prop
-    ((MorphismProperty.Over.isoMk (asIso Y.unop.hom.toImage).symm).op)) fun {X Y} f => by
-      apply Quiver.Hom.unop_inj
-      ext1
-      dsimp
-      rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [← cancel_mono (Scheme.IdealSheafData.subschemeι _)]
-      simp
-  counitIso := NatIso.ofComponents (fun I => eqToIso (by simp))
-
-中文:
-定义 overEquivIdealSheafData
-  签名: (X : 概形.{u})
-  定义体: (MorphismProperty.Over.forget _ _ _).op ⋙ X.kerFunctor
-  inverse :=
-  { obj I := .op <| .mk _ I.subschemeι inferInstance
-    map {I J} h := (MorphismProperty.Over.homMk (Scheme.IdealSheafData.inclusion h.le)).op
-    map_comp f g := Quiver.Hom.unop_inj (by ext1; simp) }
-  unitIso := NatIso.ofComponents (fun Y =>
-    letI : IsClosedImmersion Y.unop.hom := Y.unop.prop
-    ((MorphismProperty.Over.isoMk (asIso Y.unop.hom.toImage).symm).op)) fun {X Y} f => by
-      apply Quiver.Hom.unop_inj
-      ext1
-      dsimp
-      rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [← cancel_mono (Scheme.IdealSheafData.subschemeι _)]
-      simp
-  counitIso := NatIso.ofComponents (fun I => eqToIso (by simp))
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.Over.forget, X.kerFunctor, forget, kerFunctor
+/-
+**AlgebraicGeometry.IsClosedImmersion.overEquivIdealSheafData** 是 Mathlib 中的一个定义
+，位于命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：overEquivIdealSheafData (X : Scheme.{u}) : (MorphismProperty.Over @IsClose
+dImmersion ⊤ X)ᵒᵖ ≌ X.IdealSheafData where functor
+参数：X : Scheme.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.MorphismProperty.instRespectsIsoTop`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C], ⊤.RespectsIso
 -/
 def overEquivIdealSheafData (X : Scheme.{u}) :
     (MorphismProperty.Over @IsClosedImmersion ⊤ X)ᵒᵖ ≌ X.IdealSheafData where
@@ -448,40 +471,39 @@ def overEquivIdealSheafData (X : Scheme.{u}) :
   { obj I := .op <| .mk _ I.subschemeι inferInstance
     map {I J} h := (MorphismProperty.Over.homMk (Scheme.IdealSheafData.inclusion h.le)).op
     map_comp f g := Quiver.Hom.unop_inj (by ext1; simp) }
-  unitIso := NatIso.ofComponents (fun Y =>
+  unitIso := NatIso.ofComponents (fun Y ↦
     letI : IsClosedImmersion Y.unop.hom := Y.unop.prop
-    ((MorphismProperty.Over.isoMk (asIso Y.unop.hom.toImage).symm).op)) fun {X Y} f => by
+    ((MorphismProperty.Over.isoMk (asIso Y.unop.hom.toImage).symm).op)) fun {X Y} f ↦ by
       apply Quiver.Hom.unop_inj
       ext1
       dsimp
-      rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [← cancel_mono (Scheme.IdealSheafData.subschemeι _)]
+      rw [IsIso.eq_comp_inv, Category.assoc, IsIso.inv_comp_eq,
+        ← cancel_mono (Scheme.IdealSheafData.subschemeι _)]
       simp
-  counitIso := NatIso.ofComponents (fun I => eqToIso (by simp))
-
-/--
-lemma `isIso_iff_ker_eq_bot` / 引理 `isIso_iff_ker_eq_bot`
-
-English:
-lemma isIso_iff_ker_eq_bot
-  given: {X Y : Scheme.{u}} {f : X ⟶ Y} [IsClosedImmersion f]
-  proof: by
-  refine ⟨fun _ => f.ker_eq_bot_of_isIso, fun H => ?_⟩
-  have : IsIso f.imageι := by simpa [Scheme.Hom.imageι, Scheme.Hom.image] using H ▸ inferInstance
-  exact f.toImage_imageι ▸ inferInstance
-
-中文:
-引理 isIso_iff_ker_eq_bot
-  条件: {X Y : 概形.{u}} {f : X ⟶ Y} [是闭浸入 f]
-  证明: by
-  refine ⟨fun _ => f.ker_eq_bot_of_isIso, fun H => ?_⟩
-  have : IsIso f.imageι := by simpa [Scheme.Hom.imageι, Scheme.Hom.image] using H ▸ inferInstance
-  exact f.toImage_imageι ▸ inferInstance
-
-Depends on / 依赖: Scheme, Scheme.Hom.image, f.image, f.ker_eq_bot_of_isIso, f.toImage_image, ker_eq_bot_of_isIso
+  counitIso := NatIso.ofComponents (fun I ↦ eqToIso (by simp))
+/-
+**AlgebraicGeometry.IsClosedImmersion.isIso_iff_ker_eq_bot** 是 Mathlib 中的一个引理，位于
+命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：isIso_iff_ker_eq_bot {X Y : Scheme.{u}} {f : X ⟶ Y} [IsClosedImmersion f] 
+: IsIso f ↔ f.ker = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.ker_eq_bot_of_isIso`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (f : X ⟶ Y) [CategoryTheory.IsIso f], AlgebraicGeometry.Scheme.Hom.
+ker f = ⊥
+· 使用定理 `AlgebraicGeometry.Scheme.instIsIsoSubschemeιBotIdealSheafData`：∀ {X : Al
+gebraicGeometry.Scheme}, CategoryTheory.IsIso ⊥.subschemeι
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsIsoSchemeToImage`：∀ {X Y : Alg
+ebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f],   Ca
+tegoryTheory.IsIso (AlgebraicGeometry.Scheme.Hom…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.toImage_imageι`：∀ {X Y : AlgebraicGeometry.
+Scheme} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.comp (AlgebraicGeometry.Sch
+eme.Hom.toImage f) (AlgebraicGeom…
 -/
 lemma isIso_iff_ker_eq_bot {X Y : Scheme.{u}} {f : X ⟶ Y} [IsClosedImmersion f] :
     IsIso f ↔ f.ker = ⊥ := by
-  refine ⟨fun _ => f.ker_eq_bot_of_isIso, fun H => ?_⟩
+  refine ⟨fun _ ↦ f.ker_eq_bot_of_isIso, fun H ↦ ?_⟩
   have : IsIso f.imageι := by simpa [Scheme.Hom.imageι, Scheme.Hom.image] using H ▸ inferInstance
   exact f.toImage_imageι ▸ inferInstance
 
@@ -491,82 +513,93 @@ contains the kernel of `X` in `Z`, we can lift this morphism to a unique `Y ⟶ 
 commutes with these maps.
 -/
 noncomputable
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: {X Y Z : Scheme.{u}}
-  body: g.toImage ≫ Scheme.IdealSheafData.inclusion H ≫ inv f.toImage
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lift
-  签名: {X Y Z : 概形.{u}}
-  定义体: g.toImage ≫ Scheme.IdealSheafData.inclusion H ≫ inv f.toImage
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IdealSheafData, Scheme, Scheme.IdealSheafData.inclusion, f.toImage, g.toImage, inclusion, toImage
+/-
+**AlgebraicGeometry.IsClosedImmersion.lift** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.IsClosedImmersion`。
+形式化陈述：lift {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f] (H
+ : f.ker <= g.ker) : Y ⟶ X
+参数：f : X ⟶ Z；g : Y ⟶ Z；H : f.ker <= g.ker。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsIsoSchemeToImage`：∀ {X Y : Alg
+ebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f],   Ca
+tegoryTheory.IsIso (AlgebraicGeometry.Scheme.Hom…
 -/
 def lift {X Y Z : Scheme.{u}}
-    (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f] (H : f.ker <= g.ker) : Y ⟶ X :=
+    (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f] (H : f.ker ≤ g.ker) : Y ⟶ X :=
   g.toImage ≫ Scheme.IdealSheafData.inclusion H ≫ inv f.toImage
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_fac` / 引理 `lift_fac`
-
-English:
-lemma lift_fac
-  statement: {X Y Z : Scheme.{u}}
-  proof: by
-  nth_rw 2 [← f.toImage_imageι]
-  simp [lift, -Scheme.Hom.toImage_imageι, g.toImage_imageι]
-
-中文:
-引理 lift_fac
-  结论: {X Y Z : 概形.{u}}
-  证明: by
-  nth_rw 2 [← f.toImage_imageι]
-  simp [lift, -Scheme.Hom.toImage_imageι, g.toImage_imageι]
-
-Depends on / 依赖: Scheme, Scheme.Hom.toImage_image, f.toImage_image, g.toImage_image, nth_rw
+/-
+**AlgebraicGeometry.IsClosedImmersion.lift_fac** 是 Mathlib 中的一个引理，位于命名空间 `Algebr
+aicGeometry.IsClosedImmersion`。
+形式化陈述：lift_fac {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f
+] (H : f.ker <= g.ker) : lift f g H ≫ f = g
+参数：f : X ⟶ Z；g : Y ⟶ Z；H : f.ker <= g.ker。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.toImage_imageι`：∀ {X Y : AlgebraicGeometry.
+Scheme} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.comp (AlgebraicGeometry.Sch
+eme.Hom.toImage f) (AlgebraicGeom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsIsoSchemeToImage`：∀ {X Y : Alg
+ebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f],   Ca
+tegoryTheory.IsIso (AlgebraicGeometry.Scheme.Hom…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用引理 `AlgebraicGeometry.Scheme.IdealSheafData.inclusion_subschemeι`：inclusion_
+subschemeι {I J : IdealSheafData X} (h : I <= J) : inclusion h ≫ I.subschemeι = 
+J.subschemeι
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lift_fac {X Y Z : Scheme.{u}}
-    (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f] (H : f.ker <= g.ker) : lift f g H ≫ f = g := by
+    (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f] (H : f.ker ≤ g.ker) : lift f g H ≫ f = g := by
   nth_rw 2 [← f.toImage_imageι]
   simp [lift, -Scheme.Hom.toImage_imageι, g.toImage_imageι]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isIso_of_ker_eq` / 引理 `isIso_of_ker_eq`
-
-English:
-lemma isIso_of_ker_eq
-  statement: {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
-  proof: by
-  let f' : MorphismProperty.Over.mk ⊤ i₁ ‹_› ⟶ .mk ⊤ i₂ ‹_› := MorphismProperty.Over.homMk f h
-  suffices h : IsIso f'.op by
-    rwa [isIso_op_iff, ← isIso_iff_of_reflects_iso _ (MorphismProperty.Over.forget ..),
-      ← isIso_iff_of_reflects_iso _ (Over.forget _)] at h
-  rw [← isIso_iff_of_reflects_iso _ (IsClosedImmersion.overEquivIdealSheafData X).functor]
-  simpa [IsClosedImmersion.overEquivIdealSheafData] using ⟨homOfLE h'.le, by simp, by simp⟩
-
-中文:
-引理 isIso_of_ker_eq
-  结论: {Z₁ Z₂ X : 概形.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
-  证明: by
-  let f' : MorphismProperty.Over.mk ⊤ i₁ ‹_› ⟶ .mk ⊤ i₂ ‹_› := MorphismProperty.Over.homMk f h
-  suffices h : IsIso f'.op by
-    rwa [isIso_op_iff, ← isIso_iff_of_reflects_iso _ (MorphismProperty.Over.forget ..),
-      ← isIso_iff_of_reflects_iso _ (Over.forget _)] at h
-  rw [← isIso_iff_of_reflects_iso _ (IsClosedImmersion.overEquivIdealSheafData X).functor]
-  simpa [IsClosedImmersion.overEquivIdealSheafData] using ⟨homOfLE h'.le, by simp, by simp⟩
-
-Depends on / 依赖: IsClosedImmersion, IsClosedImmersion.overEquivIdealSheafData, MorphismProperty, MorphismProperty.Over.forget, MorphismProperty.Over.homMk, MorphismProperty.Over.mk, Over.forget, forget, functor, homOfLE, isIso_iff_of_reflects_iso, isIso_op_iff, overEquivIdealSheafData
+/-
+**AlgebraicGeometry.IsClosedImmersion.isIso_of_ker_eq** 是 Mathlib 中的一个引理，位于命名空间 
+`AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：isIso_of_ker_eq {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X) [IsClos
+edImmersion i₁] [IsClosedImmersion i₂] (f : Z₁ ⟶ Z₂) (h : f ≫ i₂ = i₁) (h' : i₁.
+ker = i₂.ker) : IsIso f
+参数：i₁ : Z₁ ⟶ X；i₂ : Z₂ ⟶ X；f : Z₁ ⟶ Z₂；h : f ≫ i₂ = i₁；h' : i₁.ker = i₂.ker。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
+· 使用定理 `CategoryTheory.reflectsIsomorphisms_of_full_and_faithful`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.MorphismProperty.instFullOverTopOverForget`：∀ {T : Type u
+_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryTheory.MorphismPr
+operty T) (X : T),   (CategoryTheory.MorphismPr…
+· 使用定理 `CategoryTheory.MorphismProperty.instFaithfulOverOverForget`：∀ {T : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P Q : CategoryTheory.Morphis
+mProperty T) (X : T)   [inst_1 : Q.IsMultiplicat…
+· 使用定理 `CategoryTheory.isIso_op_iff`：isIso_op_iff {X Y : C} (f : X ⟶ Y) : IsIso 
+f.op ↔ IsIso f
 -/
 lemma isIso_of_ker_eq {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
     [IsClosedImmersion i₁] [IsClosedImmersion i₂] (f : Z₁ ⟶ Z₂)
@@ -577,21 +610,30 @@ lemma isIso_of_ker_eq {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z�
       ← isIso_iff_of_reflects_iso _ (Over.forget _)] at h
   rw [← isIso_iff_of_reflects_iso _ (IsClosedImmersion.overEquivIdealSheafData X).functor]
   simpa [IsClosedImmersion.overEquivIdealSheafData] using ⟨homOfLE h'.le, by simp, by simp⟩
-
-/--
-lemma `isIso_lift` / 引理 `isIso_lift`
-
-English:
-lemma isIso_lift
-  statement: {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
-  proof: isIso_of_ker_eq i₂ i₁ _ (by simp) h.symm
-
-中文:
-引理 isIso_lift
-  结论: {Z₁ Z₂ X : 概形.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
-  证明: isIso_of_ker_eq i₂ i₁ _ (by simp) h.symm
-
-Depends on / 依赖: h.symm, isIso_of_ker_eq
+/-
+**AlgebraicGeometry.IsClosedImmersion.isIso_lift** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry.IsClosedImmersion`。
+形式化陈述：isIso_lift {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X) [IsClosedImm
+ersion i₁] [IsClosedImmersion i₂] (h : i₁.ker = i₂.ker) : IsIso (lift i₁ i₂ h.le
+)
+参数：i₁ : Z₁ ⟶ X；i₂ : Z₂ ⟶ X；h : i₁.ker = i₂.ker。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.isIso_of_ker_eq`：isIso_of_ker_eq {Z₁
+ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X) [IsClosedImmersion i₁] [IsClosed
+Immersion i₂] (f : Z₁ ⟶ Z₂) (h : f ≫ i₂ =…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.lift_fac`：lift_fac {X Y Z : Scheme.{
+u}} (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f] (H : f.ker <= g.ker) : lift f 
+g H ≫ f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma isIso_lift {Z₁ Z₂ X : Scheme.{u}} (i₁ : Z₁ ⟶ X) (i₂ : Z₂ ⟶ X)
     [IsClosedImmersion i₁] [IsClosedImmersion i₂] (h : i₁.ker = i₂.ker) :
@@ -607,28 +649,40 @@ variable {X Y : Scheme.{u}} [IsAffine Y] {f : X ⟶ Y}
 open IsClosedImmersion LocallyRingedSpace
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isDominant_of_of_appTop_injective` / 引理 `isDominant_of_of_appTop_injective`
+/-- If `f : X ⟶ Y` is a morphism of schemes with quasi-compact source and affine target,
+`f` induces an injection on global sections, then `f` is dominant. -/
+/-
+**AlgebraicGeometry.isDominant_of_of_appTop_injective** 是 Mathlib 中的一个引理，位于命名空间 
+`AlgebraicGeometry`。
+形式化陈述：isDominant_of_of_appTop_injective [CompactSpace X] (hfinj : Function.Injec
+tive (f.appTop)) : IsDominant f
+参数：hfinj : Function.Injective (f.appTop)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.IdealSheafData.ext_of_isAffine`：ext_of_isAffine
+ [IsAffine X] {I J : IdealSheafData X} (H : I.ideal ⟨⊤, isAffineOpen_top X⟩ = J.
+ideal ⟨⊤, isAffineOpen_top X⟩) : I = J
+· 使用定理 `AlgebraicGeometry.isAffineOpen_top`：isAffineOpen_top (X : Scheme) [IsAff
+ine X] : IsAffineOpen (⊤ : X.Opens)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.ker_apply`：∀ {X Y : AlgebraicGeometry.Schem
+e} (f : X.Hom Y) [AlgebraicGeometry.QuasiCompact f] (U : ↑Y.affineOpens),   f.ke
+r.ideal U = RingHom.ker (Com…
+· 使用定理 `AlgebraicGeometry.quasiCompact_of_compactSpace`：∀ {X Y : AlgebraicGeomet
+ry.Scheme} (f : X ⟶ Y) [CompactSpace ↥X] [QuasiSeparatedSpace ↥Y],   AlgebraicGe
+ometry.QuasiCompact f
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.support_ker`：∀ {X Y : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) [AlgebraicGeometry.QuasiCompact f],   ↑(AlgebraicGeometry.Schem
+e.Hom.ker f).support = closure…
 
-English:
-lemma isDominant_of_of_appTop_injective
-  statement: [CompactSpace X]
-  proof: by
-  have : f.ker = ⊥ := Scheme.IdealSheafData.ext_of_isAffine
-    (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot])
-  exact ⟨by simpa only [Scheme.Hom.support_ker, Scheme.IdealSheafData.support_bot,
-    Closeds.coe_top, ← dense_iff_closure_eq] using! (congr((↑($this).support : Set Y)) :)⟩
-
-中文:
-引理 isDominant_of_of_appTop_injective
-  结论: [紧空间 X]
-  证明: by
-  have : f.ker = ⊥ := Scheme.IdealSheafData.ext_of_isAffine
-    (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot])
-  exact ⟨by simpa only [Scheme.Hom.support_ker, Scheme.IdealSheafData.support_bot,
-    Closeds.coe_top, ← dense_iff_closure_eq] using! (congr((↑($this).support : Set Y)) :)⟩
-
-Depends on / 依赖: Closeds, Closeds.coe_top, IdealSheafData, RingHom, RingHom.injective_iff_ker_eq_bot, Scheme, Scheme.Hom.support_ker, Scheme.IdealSheafData.ext_of_isAffine, Scheme.IdealSheafData.support_bot, coe_top, dense_iff_closure_eq, ext_of_isAffine, f.ker, f.ker_apply, injective_iff_ker_eq_bot, isAffineOpen_top, ker_apply, support, support_bot, support_ker
+--- 原说明 ---
+If `f : X ⟶ Y` is a morphism of schemes with quasi-compact source and affine tar
+get,
+`f` induces an injection on global sections, then `f` is dominant.
 -/
 lemma isDominant_of_of_appTop_injective [CompactSpace X]
     (hfinj : Function.Injective (f.appTop)) :
@@ -637,25 +691,9 @@ lemma isDominant_of_of_appTop_injective [CompactSpace X]
     (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot])
   exact ⟨by simpa only [Scheme.Hom.support_ker, Scheme.IdealSheafData.support_bot,
     Closeds.coe_top, ← dense_iff_closure_eq] using! (congr((↑($this).support : Set Y)) :)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CompactSpace
-  signature: X] : IsDominant X.toSpecΓ
-  body: isDominant_of_of_appTop_injective (by
-    simpa only [Scheme.toSpecΓ_appTop] using
-      (ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso Γ(X, ⊤)).hom).1)
-
-中文:
-实例 [紧空间
-  签名: X] : 是Dominant X.toSpecΓ
-  定义体: isDominant_of_of_appTop_injective (by
-    simpa only [Scheme.toSpecΓ_appTop] using
-      (ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso Γ(X, ⊤)).hom).1)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.bijective_of_isIso, Scheme, Scheme.toSpec, bijective_of_isIso, isDominant_of_of_appTop_injective
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CompactSpace X] : IsDominant X.toSpecΓ :=
   isDominant_of_of_appTop_injective (by
@@ -663,88 +701,83 @@ instance [CompactSpace X] : IsDominant X.toSpecΓ :=
       (ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso Γ(X, ⊤)).hom).1)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `stalkMap_injective_of_isOpenMap_of_injective` / 引理 `stalkMap_injective_of_isOpenMap_of_injective`
+/-- If `f : X ⟶ Y` is open, injective, `X` is quasi-compact and `Y` is affine, then `f` is stalkwise
+injective if it is injective on global sections. -/
+/-
+**AlgebraicGeometry.stalkMap_injective_of_isOpenMap_of_injective** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：stalkMap_injective_of_isOpenMap_of_injective [CompactSpace X] (hfopen : Is
+OpenMap f) (hfinj₁ : Function.Injective f) (hfinj₂ : Function.Injective f.appTop
+) (x : X) : Function.Injective (f.stalkMap x)
+参数：hfopen : IsOpenMap f；hfinj₁ : Function.Injective f；hfinj₂ : Function.Injectiv
+e f.appTop；x : X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.stalkMap_injective_of_isAffine`：stalkMap_injective_of_
+isAffine {X Y : Scheme} (f : X ⟶ Y) [IsAffine Y] (x : X) (h : forall g, f.stalkM
+ap x (Y.presheaf.Γgerm (f x) g) = 0 ->…
+· 使用定理 `trivial`：True
+· 使用引理 `AlgebraicGeometry.RingedSpace.exists_res_eq_zero_of_germ_eq_zero`：exists
+_res_eq_zero_of_germ_eq_zero (U : Opens X) (f : X.presheaf.obj (op U)) (x : U) (
+h : X.presheaf.germ U x.val x.property f = 0) : exists…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.germ_stalkMap_apply`：germ_stalkMap_apply (U
+ : Y.Opens) (x : X) (hx : f x in U) (y) : f.stalkMap x (Y.presheaf.germ _ (f x) 
+hx y) = X.presheaf.germ (f ⁻¹ᵁ U) x hx…
+· 使用定理 `TopCat.Presheaf.Γgerm.eq_1`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X : TopCat}   (F : 
+TopCat.Presheaf …
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.Opens.isBasis_iff_nbhd`：isBasis_iff_nbhd {B : Set (Open
+s α)} : IsBasis B ↔ forall {U : Opens α} {x}, x in U -> exists U' in B, x in U' 
+∧ U' <= U
+· 使用定理 `AlgebraicGeometry.isBasis_basicOpen`：isBasis_basicOpen (X : Scheme) [IsA
+ffine X] : Opens.IsBasis (Set.range (X.basicOpen : Γ(X, ⊤) -> X.Opens))
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.preimage_basicOpen_top`：preimage_basicOpen_top 
+{X Y : Scheme.{u}} (f : X ⟶ Y) (r : Γ(Y, ⊤)) : f ⁻¹ᵁ Y.basicOpen r = X.basicOpen
+ (f.appTop r)
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_base`：comp_base {X Y Z : Scheme} (f : 
+X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).base = f.base ≫ g.base
+· 使用定理 `TopologicalSpace.Opens.map_comp_obj`：map_comp_obj (f : X ⟶ Y) (g : Y ⟶ Z
+) (U) : (map (f ≫ g)).obj U = (map f).obj ((map g).obj U)
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.preimage_mono`：preimage_mono {U U' : Y.Open
+s} (hUU' : U <= U') : f ⁻¹ᵁ U <= f ⁻¹ᵁ U'
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `TopologicalSpace.Opens.mk.congr_simp`：∀ {α : Type u_2} [inst : Topologic
+alSpace α] (carrier carrier_1 : Set α) (e_carrier : carrier = carrier_1)   (is_o
+pen' : IsOpen carrier), { …
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.appLE_map`：appLE_map (e : V <= f ⁻¹ᵁ U) (i 
+: op V ⟶ op V') : f.appLE U V e ≫ X.presheaf.map i = f.appLE U V' (i.unop.le.tra
+ns e)
+（共 54 条，此处仅展示前 30 条）
 
-English:
-lemma stalkMap_injective_of_isOpenMap_of_injective
-  statement: [CompactSpace X]
-  proof: by
-  let φ : Γ(Y, ⊤) ⟶ Γ(X, ⊤) := f.appTop
-  let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover
-  let res (i : 𝒰.I₀) : Γ(X, ⊤) ⟶ Γ(𝒰.X i, ⊤) := (𝒰.f i).appTop
-  refine stalkMap_injective_of_isAffine _ _ (fun (g : Γ(Y, ⊤)) h => ?_)
-  rw [TopCat.Presheaf.Γgerm]; rw [Scheme.Hom.germ_stalkMap_apply] at h
-  obtain ⟨U, w, (hx : x in U), hg⟩ :=
-    X.toRingedSpace.exists_res_eq_zero_of_germ_eq_zero ⊤ (φ g) ⟨x, trivial⟩ h
-  obtain ⟨_, ⟨s, rfl⟩, hyv, bsle⟩ := Opens.isBasis_iff_nbhd.mp (isBasis_basicOpen Y)
-    (show f x in ⟨f '' U.carrier, hfopen U.carrier U.is_open'⟩ from ⟨x, by simpa⟩)
-  let W (i : 𝒰.I₀) : TopologicalSpace.Opens (𝒰.X i) := (𝒰.X i).basicOpen ((res i) (φ s))
-  have hwle (i : 𝒰.I₀) : W i <= (𝒰.f i) ⁻¹ᵁ U := by
-    change (𝒰.X i).basicOpen ((𝒰.f i ≫ f).appTop s) <= _
-    rw [← Scheme.preimage_basicOpen_top]; rw [Scheme.Hom.comp_base]; rw [Opens.map_comp_obj]
-    refine Scheme.Hom.preimage_mono _
-      (le_trans (f.preimage_mono bsle) (le_of_eq ?_))
-    simp [Set.preimage_image_eq _ hfinj₁]
-  have h0 (i : 𝒰.I₀) : (𝒰.f i).appLE _ (W i) (by simp) (φ g) = 0 := by
-    rw [← Scheme.Hom.appLE_map _ ((Opens.map _).map w).le (homOfLE <| hwle i).op]; rw [← Scheme.Hom.map_appLE _ le_rfl w.op]
-    simp only [CommRingCat.comp_apply]
-    rw [hg]
-    simp only [map_zero]
-  have h1 (i : 𝒰.I₀) : exists n, (res i) (φ (s ^ n * g)) = 0 := by
-    obtain ⟨n, hn⟩ := exists_of_res_zero_of_qcqs_of_top (s := ((res i) (φ s))) (h0 i)
-    exact ⟨n, by rwa [map_mul, map_mul, map_pow, map_pow]⟩
-  have h2 : exists n, forall i, (res i) (φ (s ^ n * g)) = 0 := by
-    choose fn hfn using h1
-    refine ⟨Finset.sup Finset.univ fn, fun i => ?_⟩
-    rw [map_mul]; rw [map_pow]; rw [map_mul]; rw [map_pow]
-    simp only [map_mul, map_pow, map_mul, map_pow] at hfn
-    apply pow_mul_eq_zero_of_le (Finset.le_sup (Finset.mem_univ i)) (hfn i)
-  obtain ⟨n, hn⟩ := h2
-  apply germ_eq_zero_of_pow_mul_eq_zero (U := ⊤) ⟨f x, trivial⟩ hyv
-  rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero] at hfinj₂
-  exact hfinj₂ _ (Scheme.zero_of_zero_cover _ _ hn)
-
-中文:
-引理 stalkMap_injective_of_isOpenMap_of_injective
-  结论: [紧空间 X]
-  证明: by
-  let φ : Γ(Y, ⊤) ⟶ Γ(X, ⊤) := f.appTop
-  let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover
-  let res (i : 𝒰.I₀) : Γ(X, ⊤) ⟶ Γ(𝒰.X i, ⊤) := (𝒰.f i).appTop
-  refine stalkMap_injective_of_isAffine _ _ (fun (g : Γ(Y, ⊤)) h => ?_)
-  rw [TopCat.Presheaf.Γgerm]; rw [Scheme.Hom.germ_stalkMap_apply] at h
-  obtain ⟨U, w, (hx : x in U), hg⟩ :=
-    X.toRingedSpace.exists_res_eq_zero_of_germ_eq_zero ⊤ (φ g) ⟨x, trivial⟩ h
-  obtain ⟨_, ⟨s, rfl⟩, hyv, bsle⟩ := Opens.isBasis_iff_nbhd.mp (isBasis_basicOpen Y)
-    (show f x in ⟨f '' U.carrier, hfopen U.carrier U.is_open'⟩ from ⟨x, by simpa⟩)
-  let W (i : 𝒰.I₀) : TopologicalSpace.Opens (𝒰.X i) := (𝒰.X i).basicOpen ((res i) (φ s))
-  have hwle (i : 𝒰.I₀) : W i <= (𝒰.f i) ⁻¹ᵁ U := by
-    change (𝒰.X i).basicOpen ((𝒰.f i ≫ f).appTop s) <= _
-    rw [← Scheme.preimage_basicOpen_top]; rw [Scheme.Hom.comp_base]; rw [Opens.map_comp_obj]
-    refine Scheme.Hom.preimage_mono _
-      (le_trans (f.preimage_mono bsle) (le_of_eq ?_))
-    simp [Set.preimage_image_eq _ hfinj₁]
-  have h0 (i : 𝒰.I₀) : (𝒰.f i).appLE _ (W i) (by simp) (φ g) = 0 := by
-    rw [← Scheme.Hom.appLE_map _ ((Opens.map _).map w).le (homOfLE <| hwle i).op]; rw [← Scheme.Hom.map_appLE _ le_rfl w.op]
-    simp only [CommRingCat.comp_apply]
-    rw [hg]
-    simp only [map_zero]
-  have h1 (i : 𝒰.I₀) : exists n, (res i) (φ (s ^ n * g)) = 0 := by
-    obtain ⟨n, hn⟩ := exists_of_res_zero_of_qcqs_of_top (s := ((res i) (φ s))) (h0 i)
-    exact ⟨n, by rwa [map_mul, map_mul, map_pow, map_pow]⟩
-  have h2 : exists n, forall i, (res i) (φ (s ^ n * g)) = 0 := by
-    choose fn hfn using h1
-    refine ⟨Finset.sup Finset.univ fn, fun i => ?_⟩
-    rw [map_mul]; rw [map_pow]; rw [map_mul]; rw [map_pow]
-    simp only [map_mul, map_pow, map_mul, map_pow] at hfn
-    apply pow_mul_eq_zero_of_le (Finset.le_sup (Finset.mem_univ i)) (hfn i)
-  obtain ⟨n, hn⟩ := h2
-  apply germ_eq_zero_of_pow_mul_eq_zero (U := ⊤) ⟨f x, trivial⟩ hyv
-  rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero] at hfinj₂
-  exact hfinj₂ _ (Scheme.zero_of_zero_cover _ _ hn)
-
-Depends on / 依赖: OpenCover, Opens.isBasis_iff_nbhd.mp, Presheaf, Scheme, Scheme.Hom.germ_stalkMap_apply, TopCat, TopCat.Presheaf, X.OpenCover, X.affineCover.finiteSubcover, X.toRingedSpace.exists_res_eq_zero_of_germ_eq_zero, affineCover, appTop, exists_res_eq_zero_of_germ_eq_zero, f.appTop, finiteSubcover, germ_stalkMap_apply, isBasis_basicOpen, isBasis_iff_nbhd, stalkMap_injective_of_isAffine, toRingedSpace
+--- 原说明 ---
+If `f : X ⟶ Y` is open, injective, `X` is quasi-compact and `Y` is affine, then 
+`f` is stalkwise
+injective if it is injective on global sections.
 -/
 lemma stalkMap_injective_of_isOpenMap_of_injective [CompactSpace X]
     (hfopen : IsOpenMap f) (hfinj₁ : Function.Injective f)
@@ -753,57 +786,80 @@ lemma stalkMap_injective_of_isOpenMap_of_injective [CompactSpace X]
   let φ : Γ(Y, ⊤) ⟶ Γ(X, ⊤) := f.appTop
   let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover
   let res (i : 𝒰.I₀) : Γ(X, ⊤) ⟶ Γ(𝒰.X i, ⊤) := (𝒰.f i).appTop
-  refine stalkMap_injective_of_isAffine _ _ (fun (g : Γ(Y, ⊤)) h => ?_)
-  rw [TopCat.Presheaf.Γgerm]; rw [Scheme.Hom.germ_stalkMap_apply] at h
-  obtain ⟨U, w, (hx : x in U), hg⟩ :=
+  refine stalkMap_injective_of_isAffine _ _ (fun (g : Γ(Y, ⊤)) h ↦ ?_)
+  rw [TopCat.Presheaf.Γgerm, Scheme.Hom.germ_stalkMap_apply] at h
+  obtain ⟨U, w, (hx : x ∈ U), hg⟩ :=
     X.toRingedSpace.exists_res_eq_zero_of_germ_eq_zero ⊤ (φ g) ⟨x, trivial⟩ h
   obtain ⟨_, ⟨s, rfl⟩, hyv, bsle⟩ := Opens.isBasis_iff_nbhd.mp (isBasis_basicOpen Y)
-    (show f x in ⟨f '' U.carrier, hfopen U.carrier U.is_open'⟩ from ⟨x, by simpa⟩)
+    (show f x ∈ ⟨f '' U.carrier, hfopen U.carrier U.is_open'⟩ from ⟨x, by simpa⟩)
   let W (i : 𝒰.I₀) : TopologicalSpace.Opens (𝒰.X i) := (𝒰.X i).basicOpen ((res i) (φ s))
-  have hwle (i : 𝒰.I₀) : W i <= (𝒰.f i) ⁻¹ᵁ U := by
-    change (𝒰.X i).basicOpen ((𝒰.f i ≫ f).appTop s) <= _
-    rw [← Scheme.preimage_basicOpen_top]; rw [Scheme.Hom.comp_base]; rw [Opens.map_comp_obj]
+  have hwle (i : 𝒰.I₀) : W i ≤ (𝒰.f i) ⁻¹ᵁ U := by
+    change (𝒰.X i).basicOpen ((𝒰.f i ≫ f).appTop s) ≤ _
+    rw [← Scheme.preimage_basicOpen_top, Scheme.Hom.comp_base, Opens.map_comp_obj]
     refine Scheme.Hom.preimage_mono _
       (le_trans (f.preimage_mono bsle) (le_of_eq ?_))
     simp [Set.preimage_image_eq _ hfinj₁]
   have h0 (i : 𝒰.I₀) : (𝒰.f i).appLE _ (W i) (by simp) (φ g) = 0 := by
-    rw [← Scheme.Hom.appLE_map _ ((Opens.map _).map w).le (homOfLE <| hwle i).op]; rw [← Scheme.Hom.map_appLE _ le_rfl w.op]
+    rw [← Scheme.Hom.appLE_map _ ((Opens.map _).map w).le (homOfLE <| hwle i).op,
+      ← Scheme.Hom.map_appLE _ le_rfl w.op]
     simp only [CommRingCat.comp_apply]
     rw [hg]
     simp only [map_zero]
-  have h1 (i : 𝒰.I₀) : exists n, (res i) (φ (s ^ n * g)) = 0 := by
+  have h1 (i : 𝒰.I₀) : ∃ n, (res i) (φ (s ^ n * g)) = 0 := by
     obtain ⟨n, hn⟩ := exists_of_res_zero_of_qcqs_of_top (s := ((res i) (φ s))) (h0 i)
     exact ⟨n, by rwa [map_mul, map_mul, map_pow, map_pow]⟩
-  have h2 : exists n, forall i, (res i) (φ (s ^ n * g)) = 0 := by
+  have h2 : ∃ n, ∀ i, (res i) (φ (s ^ n * g)) = 0 := by
     choose fn hfn using h1
-    refine ⟨Finset.sup Finset.univ fn, fun i => ?_⟩
-    rw [map_mul]; rw [map_pow]; rw [map_mul]; rw [map_pow]
+    refine ⟨Finset.sup Finset.univ fn, fun i ↦ ?_⟩
+    rw [map_mul, map_pow, map_mul, map_pow]
     simp only [map_mul, map_pow, map_mul, map_pow] at hfn
     apply pow_mul_eq_zero_of_le (Finset.le_sup (Finset.mem_univ i)) (hfn i)
   obtain ⟨n, hn⟩ := h2
   apply germ_eq_zero_of_pow_mul_eq_zero (U := ⊤) ⟨f x, trivial⟩ hyv
-  rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero] at hfinj₂
+  rw [RingHom.injective_iff_ker_eq_bot, RingHom.ker_eq_bot_iff_eq_zero] at hfinj₂
   exact hfinj₂ _ (Scheme.zero_of_zero_cover _ _ hn)
 
 namespace IsClosedImmersion
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `isIso_of_injective_of_isAffine` / 定理 `isIso_of_injective_of_isAffine`
+/-- If `f` is a closed immersion with affine target such that the induced map on global
+sections is injective, `f` is an isomorphism. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.isIso_of_injective_of_isAffine** 是 Mathlib
+ 中的一个定理，位于命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：isIso_of_injective_of_isAffine [IsClosedImmersion f] (hf : Function.Inject
+ive f.appTop) : IsIso f
+参数：hf : Function.Injective f.appTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.isIso_iff_ker_eq_bot`：isIso_iff_ker_
+eq_bot {X Y : Scheme.{u}} {f : X ⟶ Y} [IsClosedImmersion f] : IsIso f ↔ f.ker = 
+⊥
+· 使用引理 `AlgebraicGeometry.Scheme.IdealSheafData.ext_of_isAffine`：ext_of_isAffine
+ [IsAffine X] {I J : IdealSheafData X} (H : I.ideal ⟨⊤, isAffineOpen_top X⟩ = J.
+ideal ⟨⊤, isAffineOpen_top X⟩) : I = J
+· 使用定理 `AlgebraicGeometry.isAffineOpen_top`：isAffineOpen_top (X : Scheme) [IsAff
+ine X] : IsAffineOpen (⊤ : X.Opens)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.ker_apply`：∀ {X Y : AlgebraicGeometry.Schem
+e} (f : X.Hom Y) [AlgebraicGeometry.QuasiCompact f] (U : ↑Y.affineOpens),   f.ke
+r.ideal U = RingHom.ker (Com…
+· 使用定理 `AlgebraicGeometry.instQuasiCompactOfIsAffineHom`：∀ {X Y : AlgebraicGeome
+try.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsAffineHom f], AlgebraicGeometry.Qua
+siCompact f
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsAffineHom`：∀ {X Y : AlgebraicG
+eometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f], AlgebraicGe
+ometry.IsAffineHom f
 
-English:
-theorem isIso_of_injective_of_isAffine
-  statement: [IsClosedImmersion f]
-  proof: isIso_iff_ker_eq_bot.mpr (Scheme.IdealSheafData.ext_of_isAffine
-    (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot]))
-
-中文:
-定理 isIso_of_injective_of_isAffine
-  结论: [是闭浸入 f]
-  证明: isIso_iff_ker_eq_bot.mpr (Scheme.IdealSheafData.ext_of_isAffine
-    (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot]))
-
-Depends on / 依赖: IdealSheafData, RingHom, RingHom.injective_iff_ker_eq_bot, Scheme, Scheme.IdealSheafData.ext_of_isAffine, ext_of_isAffine, f.ker_apply, injective_iff_ker_eq_bot, isAffineOpen_top, isIso_iff_ker_eq_bot, isIso_iff_ker_eq_bot.mpr, ker_apply
+--- 原说明 ---
+If `f` is a closed immersion with affine target such that the induced map on glo
+bal
+sections is injective, `f` is an isomorphism.
 -/
 theorem isIso_of_injective_of_isAffine [IsClosedImmersion f]
     (hf : Function.Injective f.appTop) : IsIso f :=
@@ -813,92 +869,133 @@ theorem isIso_of_injective_of_isAffine [IsClosedImmersion f]
 variable (f)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isAffine_surjective_of_isAffine` / 定理 `isAffine_surjective_of_isAffine`
+/-- If `f` is a closed immersion with affine target, the source is affine and
+the induced map on global sections is surjective. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.isAffine_surjective_of_isAffine** 是 Mathli
+b 中的一个定理，位于命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：isAffine_surjective_of_isAffine [IsClosedImmersion f] : IsAffine X ∧ Funct
+ion.Surjective f.appTop
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.isAffine_of_isAffineHom`：isAffine_of_isAffineHom [IsAf
+fineHom f] [IsAffine Y] : IsAffine X
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsAffineHom`：∀ {X Y : AlgebraicG
+eometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f], AlgebraicGe
+ometry.IsAffineHom f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.toImage_imageι`：∀ {X Y : AlgebraicGeometry.
+Scheme} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.comp (AlgebraicGeometry.Sch
+eme.Hom.toImage f) (AlgebraicGeom…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appTop.eq_1`：∀ {X Y : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y),   AlgebraicGeometry.Scheme.Hom.appTop f = AlgebraicGeometry.Sc
+heme.Hom.app f ⊤
+· 使用定理 `AlgebraicGeometry.isAffineOpen_top`：isAffineOpen_top (X : Scheme) [IsAff
+ine X] : IsAffineOpen (⊤ : X.Opens)
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `AlgebraicGeometry.Scheme.IdealSheafData.subschemeι_app`：subschemeι_app (
+U : X.affineOpens) : I.subschemeι.app U = CommRingCat.ofHom (Ideal.Quotient.mk (
+I.ideal U)) ≫ (I.subschemeObjIso U).inv
+· 使用引理 `CommRingCat.hom_comp`：hom_comp {R S T : CommRingCat} (f : R ⟶ S) (g : S 
+⟶ T) : (f ≫ g).hom = g.hom.comp f.hom
+· 使用定理 `RingHom.coe_comp`：coe_comp (hnp : β ->+* γ) (hmn : α ->+* β) : (hnp.comp
+ hmn : α -> γ) = hnp ∘ hmn
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `CategoryTheory.ConcreteCategory.bijective_of_isIso`：bijective_of_isIso {
+X Y : C} (f : X ⟶ Y) [IsIso f] : Function.Bijective f
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.instIsIsoCommRingCatApp`：∀ {X Y : Algebraic
+Geometry.Scheme} (f : X ⟶ Y) [CategoryTheory.IsIso f] (U : Y.Opens),   CategoryT
+heory.IsIso (AlgebraicGeometry.Scheme.Hom.…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsIsoSchemeToImage`：∀ {X Y : Alg
+ebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f],   Ca
+tegoryTheory.IsIso (AlgebraicGeometry.Scheme.Hom…
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
 
-English:
-theorem isAffine_surjective_of_isAffine
-  given: [IsClosedImmersion f]
-  proof: by
-  refine ⟨isAffine_of_isAffineHom f, ?_⟩
-  simp only [← f.toImage_imageι, Scheme.Hom.comp_appTop, CommRingCat.hom_comp, RingHom.coe_comp,
-    Scheme.Hom.image, Scheme.Hom.imageι]
-  rw [Scheme.Hom.appTop]; rw [Scheme.Hom.appTop]; rw [f.ker.subschemeι_app ⟨⊤]; rw [isAffineOpen_top Y⟩]; rw [CommRingCat.hom_comp]; rw [RingHom.coe_comp]
-  exact (ConcreteCategory.bijective_of_isIso _).2.comp
-    ((ConcreteCategory.bijective_of_isIso _).2.comp Ideal.Quotient.mk_surjective)
-
-中文:
-定理 isAffine_surjective_of_isAffine
-  条件: [是闭浸入 f]
-  证明: by
-  refine ⟨isAffine_of_isAffineHom f, ?_⟩
-  simp only [← f.toImage_imageι, Scheme.Hom.comp_appTop, CommRingCat.hom_comp, RingHom.coe_comp,
-    Scheme.Hom.image, Scheme.Hom.imageι]
-  rw [Scheme.Hom.appTop]; rw [Scheme.Hom.appTop]; rw [f.ker.subschemeι_app ⟨⊤]; rw [isAffineOpen_top Y⟩]; rw [CommRingCat.hom_comp]; rw [RingHom.coe_comp]
-  exact (ConcreteCategory.bijective_of_isIso _).2.comp
-    ((ConcreteCategory.bijective_of_isIso _).2.comp Ideal.Quotient.mk_surjective)
-
-Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, ConcreteCategory, ConcreteCategory.bijective_of_isIso, Ideal.Quotient.mk_surjective, Quotient, RingHom, RingHom.coe_comp, Scheme, Scheme.Hom.appTop, Scheme.Hom.comp_appTop, Scheme.Hom.image, appTop, bijective_of_isIso, coe_comp, comp_appTop, f.ker.subscheme, f.toImage_image, hom_comp, isAffineOpen_top
+--- 原说明 ---
+If `f` is a closed immersion with affine target, the source is affine and
+the induced map on global sections is surjective.
 -/
 theorem isAffine_surjective_of_isAffine [IsClosedImmersion f] :
     IsAffine X ∧ Function.Surjective f.appTop := by
   refine ⟨isAffine_of_isAffineHom f, ?_⟩
   simp only [← f.toImage_imageι, Scheme.Hom.comp_appTop, CommRingCat.hom_comp, RingHom.coe_comp,
     Scheme.Hom.image, Scheme.Hom.imageι]
-  rw [Scheme.Hom.appTop]; rw [Scheme.Hom.appTop]; rw [f.ker.subschemeι_app ⟨⊤]; rw [isAffineOpen_top Y⟩]; rw [CommRingCat.hom_comp]; rw [RingHom.coe_comp]
+  rw [Scheme.Hom.appTop, Scheme.Hom.appTop, f.ker.subschemeι_app ⟨⊤, isAffineOpen_top Y⟩,
+    CommRingCat.hom_comp, RingHom.coe_comp]
   exact (ConcreteCategory.bijective_of_isIso _).2.comp
     ((ConcreteCategory.bijective_of_isIso _).2.comp Ideal.Quotient.mk_surjective)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `Spec_iff` / 引理 `Spec_iff`
-
-English:
-lemma Spec_iff
-  given: {R : CommRingCat} {f : X ⟶ Spec R}
-  proof: by
-  constructor
-  · intro H
-    obtain ⟨h₁, h₂⟩ := IsClosedImmersion.isAffine_surjective_of_isAffine f
-    let φ := (Scheme.ΓSpecIso R).inv ≫ f.appTop
-    refine ⟨RingHom.ker φ.1, Scheme.isoSpec _ ≪≫ Scheme.Spec.mapIso
-        (.op (RingEquiv.ofBijective φ.1.kerLift ?_).toCommRingCatIso), ?_⟩
-    · exact ⟨φ.1.kerLift_injective, Ideal.Quotient.lift_surjective_of_surjective _ _
-        (h₂.comp (Scheme.ΓSpecIso R).commRingCatIsoToRingEquiv.symm.surjective)⟩
-    · simp only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Scheme.Spec_map,
-        Quiver.Hom.unop_op, Category.assoc, ← Spec.map_comp]
-      change f = X.isoSpec.hom ≫ Spec.map φ
-      simp only [Scheme.isoSpec, asIso_hom, Spec.map_comp, ← Scheme.toSpecΓ_naturality_assoc,
-        ← SpecMap_ΓSpecIso_hom, φ]
-      simp
-  · rintro ⟨I, e, rfl⟩
-    infer_instance
-
-中文:
-引理 Spec_iff
-  条件: {R : 交换环范畴} {f : X ⟶ Spec R}
-  证明: by
-  constructor
-  · intro H
-    obtain ⟨h₁, h₂⟩ := IsClosedImmersion.isAffine_surjective_of_isAffine f
-    let φ := (Scheme.ΓSpecIso R).inv ≫ f.appTop
-    refine ⟨RingHom.ker φ.1, Scheme.isoSpec _ ≪≫ Scheme.Spec.mapIso
-        (.op (RingEquiv.ofBijective φ.1.kerLift ?_).toCommRingCatIso), ?_⟩
-    · exact ⟨φ.1.kerLift_injective, Ideal.Quotient.lift_surjective_of_surjective _ _
-        (h₂.comp (Scheme.ΓSpecIso R).commRingCatIsoToRingEquiv.symm.surjective)⟩
-    · simp only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Scheme.Spec_map,
-        Quiver.Hom.unop_op, Category.assoc, ← Spec.map_comp]
-      change f = X.isoSpec.hom ≫ Spec.map φ
-      simp only [Scheme.isoSpec, asIso_hom, Spec.map_comp, ← Scheme.toSpecΓ_naturality_assoc,
-        ← SpecMap_ΓSpecIso_hom, φ]
-      simp
-  · rintro ⟨I, e, rfl⟩
-    infer_instance
-
-Depends on / 依赖: Functor, Functor.mapIso_hom, Ideal.Quotient.lift_surjective_of_surjective, IsClosedImmersion, IsClosedImmersion.isAffine_surjective_of_isAffine, Iso.op_hom, Iso.trans_hom, Quotient, RingEquiv, RingEquiv.ofBijective, RingHom, RingHom.ker, Scheme, Scheme.Spec.mapIso, Scheme.Spec_map, Scheme.isoSpec, Spec_map, appTop, commRingCatIsoToRingEquiv, commRingCatIsoToRingEquiv.symm.surjective
+/-
+**AlgebraicGeometry.IsClosedImmersion.Spec_iff** 是 Mathlib 中的一个引理，位于命名空间 `Algebr
+aicGeometry.IsClosedImmersion`。
+形式化陈述：Spec_iff {R : CommRingCat} {f : X ⟶ Spec R} : IsClosedImmersion f ↔ exists
+ I : Ideal R, exists e : X ≅ Spec (.of <| R ⧸ I), f = e.hom ≫ Spec.map (CommRing
+Cat.ofHom (Ideal.Quotient.mk I))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.isAffine_surjective_of_isAffine`：isA
+ffine_surjective_of_isAffine [IsClosedImmersion f] : IsAffine X ∧ Function.Surje
+ctive f.appTop
+· 使用定理 `RingHom.instIsTwoSidedKer`：∀ {R : Type u} {S : Type v} {F : Type u_1} [i
+nst : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHo
+mClass F R S] (…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `RingHom.kerLift_injective`：kerLift_injective : Function.Injective (kerLi
+ft f)
+· 使用定理 `Ideal.Quotient.lift_surjective_of_surjective`：lift_surjective_of_surject
+ive {f : R ->+* S} (H : forall a : R, a in I -> f a = 0) (hf : Function.Surjecti
+ve f) : Function.Surjective (Ideal…
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `RingEquiv.surjective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [in
+st_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Surjec
+tive ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.op_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Catego
+ry.{v₁, u₁} C] {X Y : C} (α : X ≅ Y), α.op.hom = α.hom.op
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Spec.map_comp`：∀ {R S T : CommRingCat} (f : R ⟶ S) (g 
+: S ⟶ T),   AlgebraicGeometry.Spec.map (CategoryTheory.CategoryStruct.comp f g) 
+=     CategoryTheory.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AlgebraicGeometry.SpecMap_ΓSpecIso_hom`：SpecMap_ΓSpecIso_hom (R : CommRi
+ngCat.{u}) : Spec.map ((Scheme.ΓSpecIso R).hom) = (Spec R).toSpecΓ
+· 使用定理 `AlgebraicGeometry.toSpecΓ_SpecMap_ΓSpecIso_inv`：toSpecΓ_SpecMap_ΓSpecIso
+_inv (R : CommRingCat.{u}) : (Spec R).toSpecΓ ≫ Spec.map (Scheme.ΓSpecIso R).inv
+ = 𝟙 _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instOfIsIsoScheme`：∀ {X Y : Algebrai
+cGeometry.Scheme} (f : X ⟶ Y) [CategoryTheory.IsIso f], AlgebraicGeometry.IsClos
+edImmersion f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma Spec_iff {R : CommRingCat} {f : X ⟶ Spec R} :
-    IsClosedImmersion f ↔ exists I : Ideal R, exists e : X ≅ Spec (.of <| R ⧸ I),
+    IsClosedImmersion f ↔ ∃ I : Ideal R, ∃ e : X ≅ Spec (.of <| R ⧸ I),
       f = e.hom ≫ Spec.map (CommRingCat.ofHom (Ideal.Quotient.mk I)) := by
   constructor
   · intro H
@@ -924,121 +1021,154 @@ end Affine
 variable {X Y Z : Scheme.{u}}
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `IsClosedImmersion.isZariskiLocalAtTarget` / 实例 `IsClosedImmersion.isZariskiLocalAtTarget`
+/-- Being a closed immersion is local at the target. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.isZariskiLocalAtTarget** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：AlgebraicGeometry.IsZariskiLocalAtTarget @AlgebraicGeometry.IsClosedImmers
+ion
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.SurjectiveOnStalks.instIsZariskiLocalAtTarget`：Algebra
+icGeometry.IsZariskiLocalAtTarget @AlgebraicGeometry.SurjectiveOnStalks
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.eq_inf`：eq_inf : @IsClosedImmersion 
+= (topologically IsClosedEmbedding) ⊓ @SurjectiveOnStalks
 
-English:
-instance IsClosedImmersion.isZariskiLocalAtTarget
-  signature: : IsZariskiLocalAtTarget @IsClosedImmersion
-  body: eq_inf ▸ inferInstance
-
-中文:
-实例 是闭浸入.isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget @是闭浸入
-  定义体: eq_inf ▸ inferInstance
-
-Depends on / 依赖: eq_inf
+--- 原说明 ---
+Being a closed immersion is local at the target.
 -/
 instance IsClosedImmersion.isZariskiLocalAtTarget : IsZariskiLocalAtTarget @IsClosedImmersion :=
   eq_inf ▸ inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `IsClosedImmersion.hasAffineProperty` / 实例 `IsClosedImmersion.hasAffineProperty`
+/-- On morphisms with affine target, being a closed immersion is precisely having affine source
+and being surjective on global sections. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.hasAffineProperty** 是 Mathlib 中的一个定理，位于命名空
+间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：AlgebraicGeometry.HasAffineProperty @AlgebraicGeometry.IsClosedImmersion f
+un X x f [AlgebraicGeometry.IsAffine x] =>   AlgebraicGeometry.IsAffine X ∧     
+Function.Surjective ⇑(CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.Sch
+eme.Hom.appTop f))
+参数：CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.Scheme.Hom.appTop f)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.of_surjective_of_isAffine`：of_surjec
+tive_of_isAffine {X Y : Scheme} [IsAffine X] [IsAffine Y] (f : X ⟶ Y) (h : Funct
+ion.Surjective (f.appTop)) : IsClosedImmersion f
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.isAffine_surjective_of_isAffine`：isA
+ffine_surjective_of_isAffine [IsClosedImmersion f] : IsAffine X ∧ Function.Surje
+ctive f.appTop
+· 使用定理 `AlgebraicGeometry.HasAffineProperty.of_isZariskiLocalAtTarget`：∀ (P : Ca
+tegoryTheory.MorphismProperty AlgebraicGeometry.Scheme) [AlgebraicGeometry.IsZar
+iskiLocalAtTarget P],   AlgebraicGeometry.HasAffine…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.isZariskiLocalAtTarget`：AlgebraicGeo
+metry.IsZariskiLocalAtTarget @AlgebraicGeometry.IsClosedImmersion
 
-English:
-instance IsClosedImmersion.hasAffineProperty
-  signature: : HasAffineProperty @IsClosedImmersion
-  body: by
-  convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsClosedImmersion
-  refine ⟨fun ⟨h₁, h₂⟩ => of_surjective_of_isAffine _ h₂, by apply isAffine_surjective_of_isAffine⟩
-
-中文:
-实例 是闭浸入.hasAffineProperty
-  签名: : 有AffineProperty @是闭浸入
-  定义体: by
-  convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsClosedImmersion
-  refine ⟨fun ⟨h₁, h₂⟩ => of_surjective_of_isAffine _ h₂, by apply isAffine_surjective_of_isAffine⟩
-
-Depends on / 依赖: HasAffineProperty, HasAffineProperty.of_isZariskiLocalAtTarget, IsClosedImmersion, convert, isAffine_surjective_of_isAffine, of_isZariskiLocalAtTarget, of_surjective_of_isAffine
+--- 原说明 ---
+On morphisms with affine target, being a closed immersion is precisely having af
+fine source
+and being surjective on global sections.
 -/
 instance IsClosedImmersion.hasAffineProperty : HasAffineProperty @IsClosedImmersion
-    (fun X _ f => IsAffine X ∧ Function.Surjective (f.appTop)) := by
+    (fun X _ f ↦ IsAffine X ∧ Function.Surjective (f.appTop)) := by
   convert! HasAffineProperty.of_isZariskiLocalAtTarget @IsClosedImmersion
-  refine ⟨fun ⟨h₁, h₂⟩ => of_surjective_of_isAffine _ h₂, by apply isAffine_surjective_of_isAffine⟩
+  refine ⟨fun ⟨h₁, h₂⟩ ↦ of_surjective_of_isAffine _ h₂, by apply isAffine_surjective_of_isAffine⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isClosedImmersion_iff_isAffineHom` / 引理 `isClosedImmersion_iff_isAffineHom`
-
-English:
-lemma isClosedImmersion_iff_isAffineHom
-  given: {f : X ⟶ Y}
-  proof: by
-  rw [HasAffineProperty.eq_targetAffineLocally @IsClosedImmersion]
-  exact targetAffineLocally_affineAnd_iff' RingHom.surjective_respectsIso _
-
-中文:
-引理 isClosedImmersion_iff_isAffineHom
-  条件: {f : X ⟶ Y}
-  证明: by
-  rw [HasAffineProperty.eq_targetAffineLocally @IsClosedImmersion]
-  exact targetAffineLocally_affineAnd_iff' RingHom.surjective_respectsIso _
-
-Depends on / 依赖: HasAffineProperty, HasAffineProperty.eq_targetAffineLocally, IsClosedImmersion, RingHom, RingHom.surjective_respectsIso, eq_targetAffineLocally, surjective_respectsIso, targetAffineLocally_affineAnd_iff
+/-
+**AlgebraicGeometry.isClosedImmersion_iff_isAffineHom** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} {f : X ⟶ Y},   AlgebraicGeometry.IsClos
+edImmersion f ↔     AlgebraicGeometry.IsAffineHom f ∧       ∀ (U : Y.Opens),    
+     AlgebraicGeometry.IsAffineOpen U →           Function.Surjective ⇑(Category
+Theory.ConcreteCategory.hom (AlgebraicGeometry.Scheme.Hom.app f U))
+参数：U : Y.Opens；CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.Scheme.Hom
+.app f U)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.HasAffineProperty.eq_targetAffineLocally`：∀ (P : Categ
+oryTheory.MorphismProperty AlgebraicGeometry.Scheme) {Q : AlgebraicGeometry.Affi
+neTargetMorphismProperty}   [AlgebraicGeometry.H…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.hasAffineProperty`：AlgebraicGeometry
+.HasAffineProperty @AlgebraicGeometry.IsClosedImmersion fun X x f [AlgebraicGeom
+etry.IsAffine x] =>   AlgebraicGeometry.IsA…
+· 使用引理 `AlgebraicGeometry.targetAffineLocally_affineAnd_iff'`：targetAffineLocall
+y_affineAnd_iff' (hQi : RingHom.RespectsIso Q) {X Y : Scheme.{u}} (f : X ⟶ Y) : 
+targetAffineLocally (affineAnd Q) f ↔ IsAf…
+· 使用定理 `RingHom.surjective_respectsIso`：surjective_respectsIso : RespectsIso sur
+jective
 -/
 lemma isClosedImmersion_iff_isAffineHom {f : X ⟶ Y} :
     IsClosedImmersion f ↔
-      IsAffineHom f ∧ forall U : Y.Opens, IsAffineOpen U -> Function.Surjective (f.app U) := by
+      IsAffineHom f ∧ ∀ U : Y.Opens, IsAffineOpen U → Function.Surjective (f.app U) := by
   rw [HasAffineProperty.eq_targetAffineLocally @IsClosedImmersion]
   exact targetAffineLocally_affineAnd_iff' RingHom.surjective_respectsIso _
-
-/--
-lemma `Scheme.Hom.app_surjective` / 引理 `Scheme.Hom.app_surjective`
-
-English:
-lemma Scheme.Hom.app_surjective
-  statement: (f : X ⟶ Y) (U : Y.Opens) (hU : IsAffineOpen U)
-  proof: (isClosedImmersion_iff_isAffineHom.mp ‹_›).2 U hU
-
-中文:
-引理 概形.态射.app_surjective
-  结论: (f : X ⟶ Y) (U : Y.Opens) (hU : 是仿射开集 U)
-  证明: (isClosedImmersion_iff_isAffineHom.mp ‹_›).2 U hU
-
-Depends on / 依赖: isClosedImmersion_iff_isAffineHom, isClosedImmersion_iff_isAffineHom.mp
+/-
+**AlgebraicGeometry.Scheme.Hom.app_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) (U : Y.Opens),   AlgebraicG
+eometry.IsAffineOpen U →     ∀ [AlgebraicGeometry.IsClosedImmersion f],       Fu
+nction.Surjective ⇑(CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.Schem
+e.Hom.app f U))
+参数：f : X ⟶ Y；U : Y.Opens；CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.
+Scheme.Hom.app f U)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AlgebraicGeometry.isClosedImmersion_iff_isAffineHom`：∀ {X Y : AlgebraicG
+eometry.Scheme} {f : X ⟶ Y},   AlgebraicGeometry.IsClosedImmersion f ↔     Algeb
+raicGeometry.IsAffineHom f ∧       ∀ (U :…
 -/
 lemma Scheme.Hom.app_surjective (f : X ⟶ Y) (U : Y.Opens) (hU : IsAffineOpen U)
     [IsClosedImmersion f] : Function.Surjective (f.app U) :=
   (isClosedImmersion_iff_isAffineHom.mp ‹_›).2 U hU
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `IsClosedImmersion.isStableUnderBaseChange` / 实例 `IsClosedImmersion.isStableUnderBaseChange`
+/-- Being a closed immersion is stable under base change. -/
+/-
+**AlgebraicGeometry.IsClosedImmersion.isStableUnderBaseChange** 是 Mathlib 中的一个定理
+，位于命名空间 `AlgebraicGeometry.IsClosedImmersion`。
+形式化陈述：CategoryTheory.MorphismProperty.IsStableUnderBaseChange @AlgebraicGeometry
+.IsClosedImmersion
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.HasAffineProperty.isStableUnderBaseChange`：∀ {P : Cate
+goryTheory.MorphismProperty AlgebraicGeometry.Scheme} {Q : AlgebraicGeometry.Aff
+ineTargetMorphismProperty}   [AlgebraicGeometry.H…
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.hasAffineProperty`：AlgebraicGeometry
+.HasAffineProperty @AlgebraicGeometry.IsClosedImmersion fun X x f [AlgebraicGeom
+etry.IsAffine x] =>   AlgebraicGeometry.IsA…
+· 使用定理 `AlgebraicGeometry.HasAffineProperty.isLocal_affineProperty`：∀ (P : Categ
+oryTheory.MorphismProperty AlgebraicGeometry.Scheme)   {Q : outParam AlgebraicGe
+ometry.AffineTargetMorphismProperty} [self : Alg…
+· 使用定理 `AlgebraicGeometry.AffineTargetMorphismProperty.IsStableUnderBaseChange.m
+k`：∀ (P : AlgebraicGeometry.AffineTargetMorphismProperty) [P.toProperty.Respects
+Iso],   (∀ ⦃X Y S : AlgebraicGeometry.Scheme⦄ [inst : Algebraic…
+· 使用定理 `AlgebraicGeometry.AffineTargetMorphismProperty.IsLocal.respectsIso`：∀ {P
+ : AlgebraicGeometry.AffineTargetMorphismProperty} [self : P.IsLocal], P.toPrope
+rty.RespectsIso
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `AlgebraicGeometry.instIsAffinePullbackSchemeOfIsAffineHom_1`：∀ {X Y S : 
+AlgebraicGeometry.Scheme} (f : X ⟶ S) (g : Y ⟶ S) [AlgebraicGeometry.IsAffineHom
+ g]   [AlgebraicGeometry.IsAffine X], AlgebraicGe…
+· 使用定理 `AlgebraicGeometry.isAffineHom_of_isAffine`：∀ {X Y : AlgebraicGeometry.Sc
+heme} (f : X ⟶ Y) [AlgebraicGeometry.IsAffine X] [AlgebraicGeometry.IsAffine Y],
+   AlgebraicGeometry.IsAffineHo…
+· 使用定理 `RingHom.IsStableUnderBaseChange.pullback_fst_appTop`：∀ (P : {R S : Type 
+u} → [inst : CommRing R] → [inst_1 : CommRing S] → (R →+* S) → Prop),   (RingHom
+.IsStableUnderBaseChange fun {R S} [CommR…
+· 使用定理 `RingHom.surjective_isStableUnderBaseChange`：surjective_isStableUnderBase
+Change : IsStableUnderBaseChange surjective
+· 使用定理 `RingHom.surjective_respectsIso`：surjective_respectsIso : RespectsIso sur
+jective
 
-English:
-instance IsClosedImmersion.isStableUnderBaseChange
-  signature: :
-  body: by
-  apply HasAffineProperty.isStableUnderBaseChange
-  have := HasAffineProperty.isLocal_affineProperty @IsClosedImmersion
-  apply AffineTargetMorphismProperty.IsStableUnderBaseChange.mk
-  intro X Y S _ _ f g ⟨ha, hsurj⟩
-  exact ⟨inferInstance, RingHom.surjective_isStableUnderBaseChange.pullback_fst_appTop _
-    RingHom.surjective_respectsIso f _ hsurj⟩
-
-中文:
-实例 是闭浸入.isStableUnderBaseChange
-  签名: :
-  定义体: by
-  apply HasAffineProperty.isStableUnderBaseChange
-  have := HasAffineProperty.isLocal_affineProperty @IsClosedImmersion
-  apply AffineTargetMorphismProperty.IsStableUnderBaseChange.mk
-  intro X Y S _ _ f g ⟨ha, hsurj⟩
-  exact ⟨inferInstance, RingHom.surjective_isStableUnderBaseChange.pullback_fst_appTop _
-    RingHom.surjective_respectsIso f _ hsurj⟩
-
-Depends on / 依赖: AffineTargetMorphismProperty, AffineTargetMorphismProperty.IsStableUnderBaseChange.mk, HasAffineProperty, HasAffineProperty.isLocal_affineProperty, HasAffineProperty.isStableUnderBaseChange, IsClosedImmersion, IsStableUnderBaseChange, RingHom, RingHom.surjective_isStableUnderBaseChange.pullback_fst_appTop, RingHom.surjective_respectsIso, isLocal_affineProperty, isStableUnderBaseChange, pullback_fst_appTop, surjective_isStableUnderBaseChange, surjective_respectsIso
+--- 原说明 ---
+Being a closed immersion is stable under base change.
 -/
 instance IsClosedImmersion.isStableUnderBaseChange :
     MorphismProperty.IsStableUnderBaseChange @IsClosedImmersion := by
@@ -1050,78 +1180,126 @@ instance IsClosedImmersion.isStableUnderBaseChange :
     RingHom.surjective_respectsIso f _ hsurj⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion g] :
     IsClosedImmersion (Limits.pullback.fst f g) :=
   MorphismProperty.pullback_fst _ _ ‹_›
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Z) (g : Y ⟶ Z) [IsClosedImmersion f] :
     IsClosedImmersion (Limits.pullback.snd f g) :=
   MorphismProperty.pullback_snd _ _ ‹_›
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) (V : Y.Opens) [IsClosedImmersion f] :
     IsClosedImmersion (f ∣_ V) :=
   IsZariskiLocalAtTarget.restrict ‹_› V
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Closed immersions are locally of finite type. -/
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Closed immersions are locally of finite type.
+-/
 instance (priority := 900) {X Y : Scheme.{u}} (f : X ⟶ Y) [h : IsClosedImmersion f] :
     LocallyOfFiniteType f := by
-  rw [HasRingHomProperty.eq_affineLocally @LocallyOfFiniteType]; rw [← and_iff_right (inferInstance : IsAffineHom f) (b := affineLocally _ _)]; rw [← targetAffineLocally_affineAnd_iff_affineLocally RingHom.finiteType_isLocal]
+  rw [HasRingHomProperty.eq_affineLocally @LocallyOfFiniteType,
+    ← and_iff_right (inferInstance : IsAffineHom f) (b := affineLocally _ _),
+    ← targetAffineLocally_affineAnd_iff_affineLocally RingHom.finiteType_isLocal]
   rw [HasAffineProperty.eq_targetAffineLocally @IsClosedImmersion] at h
   exact targetAffineLocally_affineAnd_le (RingHom.FiniteType.of_surjective _) _ h
 
-/--
-lemma `isIso_of_isClosedImmersion_of_surjective` / 引理 `isIso_of_isClosedImmersion_of_surjective`
+/-- A surjective closed immersion is an isomorphism when the target is reduced. -/
+/-
+**AlgebraicGeometry.isIso_of_isClosedImmersion_of_surjective** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosed
+Immersion f] [AlgebraicGeometry.Surjective f]   [AlgebraicGeometry.IsReduced Y],
+ CategoryTheory.IsIso f
+参数：f : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.isIso_iff_ker_eq_bot`：isIso_iff_ker_
+eq_bot {X Y : Scheme.{u}} {f : X ⟶ Y} [IsClosedImmersion f] : IsIso f ↔ f.ker = 
+⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.IdealSheafData.support_eq_top_iff`：∀ {X : Algeb
+raicGeometry.Scheme} [AlgebraicGeometry.IsReduced X] {I : X.IdealSheafData}, I.s
+upport = ⊤ ↔ I = ⊥
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.support_ker`：∀ {X Y : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) [AlgebraicGeometry.QuasiCompact f],   ↑(AlgebraicGeometry.Schem
+e.Hom.ker f).support = closure…
+· 使用定理 `AlgebraicGeometry.instQuasiCompactOfIsAffineHom`：∀ {X Y : AlgebraicGeome
+try.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsAffineHom f], AlgebraicGeometry.Qua
+siCompact f
+· 使用定理 `AlgebraicGeometry.IsClosedImmersion.instIsAffineHom`：∀ {X Y : AlgebraicG
+eometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsClosedImmersion f], AlgebraicGe
+ometry.IsAffineHom f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `AlgebraicGeometry.range_eq_univ`：range_eq_univ [Surjective f] : Set.rang
+e f = Set.univ
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma isIso_of_isClosedImmersion_of_surjective
-  statement: {X Y : Scheme.{u}} (f : X ⟶ Y)
-  proof: by
-  rw [IsClosedImmersion.isIso_iff_ker_eq_bot]; rw [← Scheme.IdealSheafData.support_eq_top_iff]; rw [← SetLike.coe_injective.eq_iff]; rw [Scheme.Hom.support_ker]
-  simp
-
-中文:
-引理 isIso_of_isClosedImmersion_of_surjective
-  结论: {X Y : 概形.{u}} (f : X ⟶ Y)
-  证明: by
-  rw [IsClosedImmersion.isIso_iff_ker_eq_bot]; rw [← Scheme.IdealSheafData.support_eq_top_iff]; rw [← SetLike.coe_injective.eq_iff]; rw [Scheme.Hom.support_ker]
-  simp
-
-Depends on / 依赖: IdealSheafData, IsClosedImmersion, IsClosedImmersion.isIso_iff_ker_eq_bot, Scheme, Scheme.Hom.support_ker, Scheme.IdealSheafData.support_eq_top_iff, SetLike, SetLike.coe_injective.eq_iff, coe_injective, eq_iff, isIso_iff_ker_eq_bot, support_eq_top_iff, support_ker
+--- 原说明 ---
+A surjective closed immersion is an isomorphism when the target is reduced.
 -/
 lemma isIso_of_isClosedImmersion_of_surjective {X Y : Scheme.{u}} (f : X ⟶ Y)
     [IsClosedImmersion f] [Surjective f] [IsReduced Y] :
     IsIso f := by
-  rw [IsClosedImmersion.isIso_iff_ker_eq_bot]; rw [← Scheme.IdealSheafData.support_eq_top_iff]; rw [← SetLike.coe_injective.eq_iff]; rw [Scheme.Hom.support_ker]
+  rw [IsClosedImmersion.isIso_iff_ker_eq_bot, ← Scheme.IdealSheafData.support_eq_top_iff,
+    ← SetLike.coe_injective.eq_iff, Scheme.Hom.support_ker]
   simp
-
-/--
-lemma `isClosed_singleton_iff_isClosedImmersion` / 引理 `isClosed_singleton_iff_isClosedImmersion`
-
-English:
-lemma isClosed_singleton_iff_isClosedImmersion
-  given: {X : Scheme} {x : X}
-  proof: by
-  rw [← Scheme.range_fromSpecResidueField]
-  exact ⟨fun H => .of_isPreimmersion _ H,
-    fun _ => (X.fromSpecResidueField x).isClosedEmbedding.isClosed_range⟩
-
-中文:
-引理 isClosed_singleton_iff_isClosedImmersion
-  条件: {X : 概形} {x : X}
-  证明: by
-  rw [← Scheme.range_fromSpecResidueField]
-  exact ⟨fun H => .of_isPreimmersion _ H,
-    fun _ => (X.fromSpecResidueField x).isClosedEmbedding.isClosed_range⟩
-
-Depends on / 依赖: Scheme, Scheme.range_fromSpecResidueField, X.fromSpecResidueField, fromSpecResidueField, isClosedEmbedding, isClosedEmbedding.isClosed_range, isClosed_range, of_isPreimmersion, range_fromSpecResidueField
+/-
+**AlgebraicGeometry.isClosed_singleton_iff_isClosedImmersion** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {x : ↥X}, IsClosed {x} ↔ AlgebraicGeometr
+y.IsClosedImmersion (X.fromSpecResidueField x)
+参数：X.fromSpecResidueField x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.range_fromSpecResidueField`：range_fromSpecResid
+ueField (x : X.carrier) : Set.range (X.fromSpecResidueField x) = {x}
+· 使用引理 `AlgebraicGeometry.IsClosedImmersion.of_isPreimmersion`：of_isPreimmersion
+ {X Y : Scheme} (f : X ⟶ Y) [IsPreimmersion f] (hf : IsClosed (Set.range f)) : I
+sClosedImmersion f
+· 使用定理 `AlgebraicGeometry.Scheme.instIsPreimmersionFromSpecResidueField`：∀ {X : 
+AlgebraicGeometry.Scheme} (x : ↥X), AlgebraicGeometry.IsPreimmersion (X.fromSpec
+ResidueField x)
+· 使用定理 `Topology.IsClosedEmbedding.isClosed_range`：∀ {X : Type u_1} {Y : Type u_
+2} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.I
+sClosedEmbedding f → IsClosed (…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isClosedEmbedding`：∀ {X Y : AlgebraicGeomet
+ry.Scheme} (f : X ⟶ Y) [self : AlgebraicGeometry.IsClosedImmersion f],   Topolog
+y.IsClosedEmbedding ⇑f
 -/
 lemma isClosed_singleton_iff_isClosedImmersion {X : Scheme} {x : X} :
     IsClosed {x} ↔ IsClosedImmersion (X.fromSpecResidueField x) := by
   rw [← Scheme.range_fromSpecResidueField]
-  exact ⟨fun H => .of_isPreimmersion _ H,
-    fun _ => (X.fromSpecResidueField x).isClosedEmbedding.isClosed_range⟩
+  exact ⟨fun H ↦ .of_isPreimmersion _ H,
+    fun _ ↦ (X.fromSpecResidueField x).isClosedEmbedding.isClosed_range⟩
 
 section Section
 
@@ -1129,15 +1307,15 @@ set_option backward.isDefEq.respectTransparency false in
 nonrec theorem isClosedImmersion_of_comp_eq_id {X Y : Scheme.{u}} [Subsingleton Y]
     (f : X ⟶ Y) (g : Y ⟶ X) (hg : g ≫ f = 𝟙 Y) :
     IsClosedImmersion g := by
-  wlog hX : exists R, X = Spec R
+  wlog hX : ∃ R, X = Spec R
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsClosedImmersion) X.affineCover]
     intro i
-    by_cases hxU : Set.range g subseteq (X.affineCover.f i).opensRange
+    by_cases hxU : Set.range g ⊆ (X.affineCover.f i).opensRange
     · rw [Scheme.Cover.pullbackHom,
         ← (IsOpenImmersion.isPullback_lift_id _ _ hxU).flip.isoPullback_inv_snd,
         MorphismProperty.cancel_left_of_respectsIso @IsClosedImmersion]
       refine this (X.affineCover.f i ≫ f) _ ?_ ⟨_, rfl⟩
-      rw [IsOpenImmersion.lift_fac_assoc]; rw [hg]
+      rw [IsOpenImmersion.lift_fac_assoc, hg]
     · have : IsEmpty ((X.affineCover.pullback₁ g).X i) := by
         apply Scheme.isEmpty_pullback
         rw [← Set.subset_compl_iff_disjoint_left]
@@ -1147,7 +1325,7 @@ nonrec theorem isClosedImmersion_of_comp_eq_id {X Y : Scheme.{u}} [Subsingleton 
         exact Subsingleton.elim x y ▸ hx
       infer_instance
   obtain ⟨R, rfl⟩ := hX
-  wlog hY : exists S, Y = Spec S
+  wlog hY : ∃ S, Y = Spec S
   · have inst := (Scheme.isoSpec Y).inv.homeomorph.injective.subsingleton
     rw [← MorphismProperty.cancel_left_of_respectsIso @IsClosedImmersion (Scheme.isoSpec Y).inv]
     exact this R (f ≫ (Scheme.isoSpec Y).hom) ((Scheme.isoSpec Y).inv ≫ g)
@@ -1155,14 +1333,21 @@ nonrec theorem isClosedImmersion_of_comp_eq_id {X Y : Scheme.{u}} [Subsingleton 
   obtain ⟨S, rfl⟩ := hY
   obtain ⟨φ, rfl⟩ := Spec.map_surjective f
   obtain ⟨ψ, rfl⟩ := Spec.map_surjective g
-  rw [← Spec.map_comp]; rw [← Spec.map_id]; rw [Spec.map_injective.eq_iff] at hg
+  rw [← Spec.map_comp, ← Spec.map_id, Spec.map_injective.eq_iff] at hg
   apply IsClosedImmersion.spec_of_surjective
   apply Function.LeftInverse.surjective (g := φ)
-  exact fun x => congr($hg.1 x)
+  exact fun x ↦ congr($hg.1 x)
 
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Scheme.{u}} [Subsingleton X] (f : Retract X Y) : IsClosedImmersion f.i :=
   isClosedImmersion_of_comp_eq_id _ _ f.retract
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) {X Y : Scheme.{u}} [Subsingleton Y] [X.Over Y] (f : Y ⟶ X) [f.IsOver Y] :
     IsClosedImmersion f :=
   isClosedImmersion_of_comp_eq_id (X ↘ Y) f (by simp)
@@ -1170,3 +1355,4 @@ instance (priority := low) {X Y : Scheme.{u}} [Subsingleton Y] [X.Over Y] (f : Y
 end Section
 
 end AlgebraicGeometry
+

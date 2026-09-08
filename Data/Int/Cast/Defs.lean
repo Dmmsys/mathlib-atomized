@@ -11,7 +11,7 @@ public import Mathlib.Data.Nat.Cast.Defs
 # Cast of integers
 
 This file defines the *canonical* homomorphism from the integers into an
-additive group with a one (typically a `Ring`). In additive groups with a one
+additive group with a one (typically a `Ring`).  In additive groups with a one
 element, there exists a unique such homomorphism and we store it in the
 `intCast : ℤ → R` field.
 
@@ -28,69 +28,53 @@ Preferentially, the homomorphism is written as a coercion.
 
 universe u
 
-/--
-Definition of `Int.castDef` / `Int.castDef` 的定义
+/-- Default value for `IntCast.intCast` in an `AddGroupWithOne`. -/
+/-
+**Int.castDef** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：{R : Type u} → [NatCast R] → [Neg R] → ℤ → R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Int.castDef
-  signature: {R : Type u} [NatCast R] [Neg R]
-
-中文:
-定义 整数.castDef
-  签名: {R : 类型u} [自然数嵌入 R] [取负 R]
+--- 原说明 ---
+Default value for `IntCast.intCast` in an `AddGroupWithOne`.
 -/
-protected def Int.castDef {R : Type u} [NatCast R] [Neg R] : Int -> R
-  | (n : Nat) => n
-  | Int.negSucc n => -(n + 1 : Nat)
+protected def Int.castDef {R : Type u} [NatCast R] [Neg R] : ℤ → R
+  | (n : ℕ) => n
+  | Int.negSucc n => -(n + 1 : ℕ)
 
 /-! ### Additive groups with one -/
 
-/--
-Definition of `AddGroupWithOne` / `AddGroupWithOne` 的定义
+/-- An `AddGroupWithOne` is an `AddGroup` with a 1. It also contains data for the unique
+homomorphisms `ℕ → R` and `ℤ → R`. -/
+/-
+**AddGroupWithOne** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：AddGroupWithOne (R : Type u) extends IntCast R, AddMonoidWithOne R, AddGro
+up R where /-- The canonical homomorphism `ℤ → R`. -/ intCast
+参数：R : Type u。
+继承自：IntCast R, AddMonoidWithOne R, AddGroup R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AddGroupWithOne
-  parameters: (R : Type u)
-  extends: IntCast R, AddMonoidWithOne R, AddGroup R
-  axioms and operations (3):
-    - intCast : = Int.castDef
-    - intCast_ofNat : forall n : Nat, intCast (n : Nat) = Nat.cast n  [default: by intros; rfl]
-    - intCast_negSucc : forall n : Nat, intCast (Int.negSucc n) = -Nat.cast (n + 1)  [default: by intros; rfl]
-
-中文:
-类 加法带幺群
-  参数: (R : 类型u)
-  继承: 整数嵌入 R, 加法带幺幺半群 R, 加法群 R
-  公理与运算 (3 个):
-    - intCast : = 整数.castDef
-    - intCast_ofNat : 对任意 n : 自然数, intCast (n : 自然数) = 自然数.cast n  [默认: by intros; rfl]
-    - intCast_negSucc : 对任意 n : 自然数, intCast (整数.negSucc n) = -自然数.cast (n + 1)  [默认: by intros; rfl]
-
-Depends on / 依赖: Int.castDef, castDef
+--- 原说明 ---
+An `AddGroupWithOne` is an `AddGroup` with a 1. It also contains data for the un
+ique
+homomorphisms `ℕ → R` and `ℤ → R`.
 -/
 class AddGroupWithOne (R : Type u) extends IntCast R, AddMonoidWithOne R, AddGroup R where
   /-- The canonical homomorphism `ℤ → R`. -/
   intCast := Int.castDef
   /-- The canonical homomorphism `ℤ → R` agrees with the one from `ℕ → R` on `ℕ`. -/
-  intCast_ofNat : forall n : Nat, intCast (n : Nat) = Nat.cast n := by intros; rfl
+  intCast_ofNat : ∀ n : ℕ, intCast (n : ℕ) = Nat.cast n := by intros; rfl
   /-- The canonical homomorphism `ℤ → R` for negative values is just the negation of the values
   of the canonical homomorphism `ℕ → R`. -/
-  intCast_negSucc : forall n : Nat, intCast (Int.negSucc n) = -Nat.cast (n + 1) := by intros; rfl
+  intCast_negSucc : ∀ n : ℕ, intCast (Int.negSucc n) = -Nat.cast (n + 1) := by intros; rfl
 
-/--
-Definition of `AddCommGroupWithOne` / `AddCommGroupWithOne` 的定义
+/-- An `AddCommGroupWithOne` is an `AddGroupWithOne` satisfying `a + b = b + a`. -/
+/-
+**AddCommGroupWithOne** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AddCommGroupWithOne
-  parameters: (R : Type u)
-  extends: AddCommGroup R, AddGroupWithOne R, AddCommMonoidWithOne R
-  (no additional axioms)
-
-中文:
-类 加法交换带幺群
-  参数: (R : 类型u)
-  继承: 加法交换群 R, 加法带幺群 R, 加法交换带幺幺半群 R
-  (无附加公理)
+--- 原说明 ---
+An `AddCommGroupWithOne` is an `AddGroupWithOne` satisfying `a + b = b + a`.
 -/
 class AddCommGroupWithOne (R : Type u)
   extends AddCommGroup R, AddGroupWithOne R, AddCommMonoidWithOne R

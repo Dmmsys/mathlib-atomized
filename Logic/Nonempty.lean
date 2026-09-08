@@ -24,465 +24,259 @@ section
 variable {α β : Sort*}
 
 @[simp]
-/--
-theorem `Nonempty.forall` / 定理 `Nonempty.forall`
-
-English:
-theorem Nonempty.forall
-  given: {α} {p : Nonempty α -> Prop}
-  statement: (forall h : Nonempty α, p h) ↔ forall a, p ⟨a⟩
-  proof: Iff.intro (fun h _ => h _) fun h ⟨a⟩ => h a
-
-@[simp]
-
-中文:
-定理 非空.对任意
-  条件: {α} {p : 非空 α -> 命题}
-  结论: (对任意 h : 非空 α, p h) ↔ 对任意 a, p ⟨a⟩
-  证明: Iff.intro (fun h _ => h _) fun h ⟨a⟩ => h a
-
-@[simp]
-
-Depends on / 依赖: Iff.intro
+/-
+**Nonempty.forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nonempty.forall {α} {p : Nonempty α -> Prop} : (forall h : Nonempty α, p h
+) ↔ forall a, p ⟨a⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.forall {α} {p : Nonempty α -> Prop} : (forall h : Nonempty α, p h) ↔ forall a, p ⟨a⟩ :=
-  Iff.intro (fun h _ => h _) fun h ⟨a⟩ => h a
+theorem Nonempty.forall {α} {p : Nonempty α → Prop} : (∀ h : Nonempty α, p h) ↔ ∀ a, p ⟨a⟩ :=
+  Iff.intro (fun h _ ↦ h _) fun h ⟨a⟩ ↦ h a
 
 @[simp]
-/--
-theorem `Nonempty.exists` / 定理 `Nonempty.exists`
-
-English:
-theorem Nonempty.exists
-  given: {α} {p : Nonempty α -> Prop}
-  statement: (exists h : Nonempty α, p h) ↔ exists a, p ⟨a⟩
-  proof: Iff.intro (fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩
-
-中文:
-定理 非空.存在
-  条件: {α} {p : 非空 α -> 命题}
-  结论: (存在 h : 非空 α, p h) ↔ 存在 a, p ⟨a⟩
-  证明: Iff.intro (fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩
-
-Depends on / 依赖: Iff.intro
+/-
+**Nonempty.exists** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nonempty.exists {α} {p : Nonempty α -> Prop} : (exists h : Nonempty α, p h
+) ↔ exists a, p ⟨a⟩
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.exists {α} {p : Nonempty α -> Prop} : (exists h : Nonempty α, p h) ↔ exists a, p ⟨a⟩ :=
-  Iff.intro (fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩
+theorem Nonempty.exists {α} {p : Nonempty α → Prop} : (∃ h : Nonempty α, p h) ↔ ∃ a, p ⟨a⟩ :=
+  Iff.intro (fun ⟨⟨a⟩, h⟩ ↦ ⟨a, h⟩) fun ⟨a, h⟩ ↦ ⟨⟨a⟩, h⟩
 
 -- Note: we set low priority here, to ensure it is not applied before `exists_prop`
 -- and `exists_const`.
 @[simp low]
-/--
-theorem `exists_const_iff` / 定理 `exists_const_iff`
-
-English:
-theorem exists_const_iff
-  given: {α : Sort*} {P : Prop}
-  statement: (exists _ : α, P) ↔ Nonempty α ∧ P
-  proof: Iff.intro (fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩) fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩
-
-中文:
-定理 存在_const_iff
-  条件: {α : 类型层*} {P : 命题}
-  结论: (存在 _ : α, P) ↔ 非空 α ∧ P
-  证明: Iff.intro (fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩) fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩
-
-Depends on / 依赖: Iff.intro
+/-
+**exists_const_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_const_iff {α : Sort*} {P : Prop} : (exists _ : α, P) ↔ Nonempty α ∧
+ P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem exists_const_iff {α : Sort*} {P : Prop} : (exists _ : α, P) ↔ Nonempty α ∧ P :=
-  Iff.intro (fun ⟨a, h⟩ => ⟨⟨a⟩, h⟩) fun ⟨⟨a⟩, h⟩ => ⟨a, h⟩
-
-/--
-theorem `exists_true_iff_nonempty` / 定理 `exists_true_iff_nonempty`
-
-English:
-theorem exists_true_iff_nonempty
-  given: {α : Sort*}
-  statement: (exists _ : α, True) ↔ Nonempty α
-  proof: Iff.intro (fun ⟨a, _⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨a, trivial⟩
-
-中文:
-定理 存在_true_iff_nonempty
-  条件: {α : 类型层*}
-  结论: (存在 _ : α, 真) ↔ 非空 α
-  证明: Iff.intro (fun ⟨a, _⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨a, trivial⟩
-
-Depends on / 依赖: Iff.intro
+theorem exists_const_iff {α : Sort*} {P : Prop} : (∃ _ : α, P) ↔ Nonempty α ∧ P :=
+  Iff.intro (fun ⟨a, h⟩ ↦ ⟨⟨a⟩, h⟩) fun ⟨⟨a⟩, h⟩ ↦ ⟨a, h⟩
+/-
+**exists_true_iff_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_true_iff_nonempty {α : Sort*} : (exists _ : α, True) ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-theorem exists_true_iff_nonempty {α : Sort*} : (exists _ : α, True) ↔ Nonempty α :=
-  Iff.intro (fun ⟨a, _⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨a, trivial⟩
-
-/--
-theorem `Nonempty.imp` / 定理 `Nonempty.imp`
-
-English:
-theorem Nonempty.imp
-  given: {α} {p : Prop}
-  statement: (Nonempty α -> p) ↔ (α -> p)
-  proof: Nonempty.forall
-
-中文:
-定理 非空.imp
-  条件: {α} {p : 命题}
-  结论: (非空 α -> p) ↔ (α -> p)
-  证明: Nonempty.forall
-
-Depends on / 依赖: Nonempty, Nonempty.forall
+theorem exists_true_iff_nonempty {α : Sort*} : (∃ _ : α, True) ↔ Nonempty α :=
+  Iff.intro (fun ⟨a, _⟩ ↦ ⟨a⟩) fun ⟨a⟩ ↦ ⟨a, trivial⟩
+/-
+**Nonempty.imp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nonempty.imp {α} {p : Prop} : (Nonempty α -> p) ↔ (α -> p)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.forall`：Nonempty.forall {α} {p : Nonempty α -> Prop} : (forall 
+h : Nonempty α, p h) ↔ forall a, p ⟨a⟩
 -/
-theorem Nonempty.imp {α} {p : Prop} : (Nonempty α -> p) ↔ (α -> p) :=
+theorem Nonempty.imp {α} {p : Prop} : (Nonempty α → p) ↔ (α → p) :=
   Nonempty.forall
-
-/--
-theorem `not_nonempty_iff_imp_false` / 定理 `not_nonempty_iff_imp_false`
-
-English:
-theorem not_nonempty_iff_imp_false
-  given: {α : Sort*}
-  statement: ¬Nonempty α ↔ α -> False
-  proof: Nonempty.imp
-
-@[simp]
-
-中文:
-定理 not_nonempty_iff_imp_false
-  条件: {α : 类型层*}
-  结论: ¬非空 α ↔ α -> 假
-  证明: Nonempty.imp
-
-@[simp]
-
-Depends on / 依赖: Nonempty, Nonempty.imp
+/-
+**not_nonempty_iff_imp_false** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_nonempty_iff_imp_false {α : Sort*} : ¬Nonempty α ↔ α -> False
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.imp`：Nonempty.imp {α} {p : Prop} : (Nonempty α -> p) ↔ (α -> p)
 -/
-theorem not_nonempty_iff_imp_false {α : Sort*} : ¬Nonempty α ↔ α -> False :=
+theorem not_nonempty_iff_imp_false {α : Sort*} : ¬Nonempty α ↔ α → False :=
   Nonempty.imp
 
 @[simp]
-/--
-theorem `nonempty_psigma` / 定理 `nonempty_psigma`
-
-English:
-theorem nonempty_psigma
-  given: {α} {β : α -> Sort*}
-  statement: Nonempty (PSigma β) ↔ exists a : α, Nonempty (β a)
-  proof: Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
-
-@[simp]
-
-中文:
-定理 nonempty_psigma
-  条件: {α} {β : α -> 类型层*}
-  结论: 非空 (命题和类型 β) ↔ 存在 a : α, 非空 (β a)
-  证明: Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Iff.intro
+/-
+**nonempty_psigma** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_psigma {α} {β : α -> Sort*} : Nonempty (PSigma β) ↔ exists a : α,
+ Nonempty (β a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonempty_psigma {α} {β : α -> Sort*} : Nonempty (PSigma β) ↔ exists a : α, Nonempty (β a) :=
-  Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
+theorem nonempty_psigma {α} {β : α → Sort*} : Nonempty (PSigma β) ↔ ∃ a : α, Nonempty (β a) :=
+  Iff.intro (fun ⟨⟨a, c⟩⟩ ↦ ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ ↦ ⟨⟨a, c⟩⟩
 
 @[simp]
-/--
-theorem `nonempty_subtype` / 定理 `nonempty_subtype`
-
-English:
-theorem nonempty_subtype
-  given: {α} {p : α -> Prop}
-  statement: Nonempty (Subtype p) ↔ exists a : α, p a
-  proof: Iff.intro (fun ⟨⟨a, h⟩⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a, h⟩⟩
-
-@[simp]
-
-中文:
-定理 nonempty_subtype
-  条件: {α} {p : α -> 命题}
-  结论: 非空 (子类型 p) ↔ 存在 a : α, p a
-  证明: Iff.intro (fun ⟨⟨a, h⟩⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a, h⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Iff.intro
+/-
+**nonempty_subtype** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subtype p) ↔ exists a : α
+, p a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subtype p) ↔ exists a : α, p a :=
-  Iff.intro (fun ⟨⟨a, h⟩⟩ => ⟨a, h⟩) fun ⟨a, h⟩ => ⟨⟨a, h⟩⟩
+theorem nonempty_subtype {α} {p : α → Prop} : Nonempty (Subtype p) ↔ ∃ a : α, p a :=
+  Iff.intro (fun ⟨⟨a, h⟩⟩ ↦ ⟨a, h⟩) fun ⟨a, h⟩ ↦ ⟨⟨a, h⟩⟩
 
 @[simp]
-/--
-theorem `nonempty_pprod` / 定理 `nonempty_pprod`
-
-English:
-theorem nonempty_pprod
-  given: {α β}
-  statement: Nonempty (PProd α β) ↔ Nonempty α ∧ Nonempty β
-  proof: Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
-
-@[simp]
-
-中文:
-定理 nonempty_pprod
-  条件: {α β}
-  结论: 非空 (命题积类型 α β) ↔ 非空 α ∧ 非空 β
-  证明: Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Iff.intro
+/-
+**nonempty_pprod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_pprod {α β} : Nonempty (PProd α β) ↔ Nonempty α ∧ Nonempty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nonempty_pprod {α β} : Nonempty (PProd α β) ↔ Nonempty α ∧ Nonempty β :=
-  Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
+  Iff.intro (fun ⟨⟨a, b⟩⟩ ↦ ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ ↦ ⟨⟨a, b⟩⟩
 
 @[simp]
-/--
-theorem `nonempty_psum` / 定理 `nonempty_psum`
-
-English:
-theorem nonempty_psum
-  given: {α β}
-  statement: Nonempty (α oplus' β) ↔ Nonempty α ∨ Nonempty β
-  proof: Iff.intro
-    (fun ⟨h⟩ =>
-      match h with
-      | PSum.inl a => Or.inl ⟨a⟩
-      | PSum.inr b => Or.inr ⟨b⟩)
-    fun h =>
-    match h with
-    | Or.inl ⟨a⟩ => ⟨PSum.inl a⟩
-    | Or.inr ⟨b⟩ => ⟨PSum.inr b⟩
-
-@[simp]
-
-中文:
-定理 nonempty_psum
-  条件: {α β}
-  结论: 非空 (α oplus' β) ↔ 非空 α ∨ 非空 β
-  证明: Iff.intro
-    (fun ⟨h⟩ =>
-      match h with
-      | PSum.inl a => Or.inl ⟨a⟩
-      | PSum.inr b => Or.inr ⟨b⟩)
-    fun h =>
-    match h with
-    | Or.inl ⟨a⟩ => ⟨PSum.inl a⟩
-    | Or.inr ⟨b⟩ => ⟨PSum.inr b⟩
-
-@[simp]
-
-Depends on / 依赖: Iff.intro, Or.inl, Or.inr, PSum.inl, PSum.inr
+/-
+**nonempty_psum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_psum {α β} : Nonempty (α oplus' β) ↔ Nonempty α ∨ Nonempty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonempty_psum {α β} : Nonempty (α oplus' β) ↔ Nonempty α ∨ Nonempty β :=
+theorem nonempty_psum {α β} : Nonempty (α ⊕' β) ↔ Nonempty α ∨ Nonempty β :=
   Iff.intro
-    (fun ⟨h⟩ =>
+    (fun ⟨h⟩ ↦
       match h with
       | PSum.inl a => Or.inl ⟨a⟩
       | PSum.inr b => Or.inr ⟨b⟩)
-    fun h =>
+    fun h ↦
     match h with
     | Or.inl ⟨a⟩ => ⟨PSum.inl a⟩
     | Or.inr ⟨b⟩ => ⟨PSum.inr b⟩
 
 @[simp]
-/--
-theorem `nonempty_plift` / 定理 `nonempty_plift`
-
-English:
-theorem nonempty_plift
-  given: {α}
-  statement: Nonempty (PLift α) ↔ Nonempty α
-  proof: Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
-
-中文:
-定理 nonempty_plift
-  条件: {α}
-  结论: 非空 (命题层提升 α) ↔ 非空 α
-  证明: Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
-
-Depends on / 依赖: Iff.intro
+/-
+**nonempty_plift** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_plift {α} : Nonempty (PLift α) ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nonempty_plift {α} : Nonempty (PLift α) ↔ Nonempty α :=
-  Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
+  Iff.intro (fun ⟨⟨a⟩⟩ ↦ ⟨a⟩) fun ⟨a⟩ ↦ ⟨⟨a⟩⟩
 
 /-- Using `Classical.choice`, lifts a (`Prop`-valued) `Nonempty` instance to a (`Type`-valued)
 `Inhabited` instance. `Classical.inhabited_of_nonempty` already exists, in `Init/Classical.lean`,
 but the assumption is not a type class argument, which makes it unsuitable for some applications. -/
 @[instance_reducible]
-/--
-Definition of `Classical.inhabited_of_nonempty'` / `Classical.inhabited_of_nonempty'` 的定义
+/-
+**Classical.inhabited_of_nonempty'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Classical.inhabited_of_nonempty' {α} [h : Nonempty α] : Inhabited α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Classical.inhabited_of_nonempty'
-  signature: {α} [h : Nonempty α]
-  body: ⟨Classical.choice h⟩
-
-中文:
-定义 经典.inhabited_of_nonempty'
-  签名: {α} [h : 非空 α]
-  定义体: ⟨Classical.choice h⟩
-
-Depends on / 依赖: Classical, Classical.choice, choice
+--- 原说明 ---
+Using `Classical.choice`, lifts a (`Prop`-valued) `Nonempty` instance to a (`Typ
+e`-valued)
+`Inhabited` instance. `Classical.inhabited_of_nonempty` already exists, in `Init
+/Classical.lean`,
+but the assumption is not a type class argument, which makes it unsuitable for s
+ome applications.
 -/
 noncomputable def Classical.inhabited_of_nonempty' {α} [h : Nonempty α] : Inhabited α :=
   ⟨Classical.choice h⟩
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Using `Classical.choice`, extracts a term from a `Nonempty` type. -/
+/-
+**Nonempty.some** 是 Mathlib 中的一个定义，位于命名空间 `Nonempty`。
+形式化陈述：{α : Sort u_3} → Nonempty α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation noncomputable
-  signature: abbrev Nonempty.some {α} (h : Nonempty α)
-  body: Classical.choice h
-
-中文:
-缩写 noncomputable
-  签名: abbrev 非空.some {α} (h : 非空 α)
-  定义体: Classical.choice h
+--- 原说明 ---
+Using `Classical.choice`, extracts a term from a `Nonempty` type.
 -/
 protected noncomputable abbrev Nonempty.some {α} (h : Nonempty α) : α :=
   Classical.choice h
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Using `Classical.choice`, extracts a term from a `Nonempty` type. -/
+/-
+**Classical.arbitrary** 是 Mathlib 中的一个定义，位于命名空间 `Classical`。
+形式化陈述：(α : Sort u_3) → [h : Nonempty α] → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation noncomputable
-  signature: abbrev Classical.arbitrary (α) [h : Nonempty α]
-  body: Classical.choice h
-
-中文:
-缩写 noncomputable
-  签名: abbrev 经典.arbitrary (α) [h : 非空 α]
-  定义体: Classical.choice h
+--- 原说明 ---
+Using `Classical.choice`, extracts a term from a `Nonempty` type.
 -/
 protected noncomputable abbrev Classical.arbitrary (α) [h : Nonempty α] : α :=
   Classical.choice h
 
-/--
-theorem `Nonempty.map` / 定理 `Nonempty.map`
+/-- Given `f : α → β`, if `α` is nonempty then `β` is also nonempty.
+`Nonempty` cannot be a `functor`, because `Functor` is restricted to `Type`. -/
+/-
+**Nonempty.map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β | ⟨h⟩ => ⟨f h⟩ 
+ protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> γ) : Nonempty α 
+-> Nonempty β -> Nonempty γ | ⟨x⟩, ⟨y⟩ => ⟨f x y⟩  protected theorem Nonempty.co
+ngr {α β} (f : α -> β) (g : β -> α) : Nonempty α ↔ Nonempty β
+参数：f : α -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Nonempty.map
-  given: {α β} (f : α -> β)
-  statement: Nonempty α -> Nonempty β
-
-中文:
-定理 非空.map
-  条件: {α β} (f : α -> β)
-  结论: 非空 α -> 非空 β
-
-Depends on / 依赖: Nonempty, Nonempty.map
+--- 原说明 ---
+Given `f : α → β`, if `α` is nonempty then `β` is also nonempty.
+`Nonempty` cannot be a `functor`, because `Functor` is restricted to `Type`.
 -/
-theorem Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+theorem Nonempty.map {α β} (f : α → β) : Nonempty α → Nonempty β
   | ⟨h⟩ => ⟨f h⟩
-
-/--
-theorem `Nonempty.map2` / 定理 `Nonempty.map2`
-
-English:
-theorem Nonempty.map2
-  given: {α β γ : Sort*} (f : α -> β -> γ)
-
-中文:
-定理 非空.map2
-  条件: {α β γ : 类型层*} (f : α -> β -> γ)
+/-
+**Nonempty.map2** 是 Mathlib 中的一个定理，位于命名空间 `Nonempty`。
+形式化陈述：∀ {α : Sort u_3} {β : Sort u_4} {γ : Sort u_5} (f : α → β → γ), Nonempty α
+ → Nonempty β → Nonempty γ
+参数：f : α → β → γ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> γ) :
-    Nonempty α -> Nonempty β -> Nonempty γ
+protected theorem Nonempty.map2 {α β γ : Sort*} (f : α → β → γ) :
+    Nonempty α → Nonempty β → Nonempty γ
   | ⟨x⟩, ⟨y⟩ => ⟨f x y⟩
-
-/--
-theorem `Nonempty.congr` / 定理 `Nonempty.congr`
-
-English:
-theorem Nonempty.congr
-  given: {α β} (f : α -> β) (g : β -> α)
-  statement: Nonempty α ↔ Nonempty β
-  proof: ⟨Nonempty.map f, Nonempty.map g⟩
-
-中文:
-定理 非空.congr
-  条件: {α β} (f : α -> β) (g : β -> α)
-  结论: 非空 α ↔ 非空 β
-  证明: ⟨Nonempty.map f, Nonempty.map g⟩
+/-
+**Nonempty.congr** 是 Mathlib 中的一个定理，位于命名空间 `Nonempty`。
+形式化陈述：∀ {α : Sort u_3} {β : Sort u_4} (f : α → β) (g : β → α), Nonempty α ↔ None
+mpty β
+参数：f : α → β；g : β → α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
 -/
-protected theorem Nonempty.congr {α β} (f : α -> β) (g : β -> α) : Nonempty α ↔ Nonempty β :=
+protected theorem Nonempty.congr {α β} (f : α → β) (g : β → α) : Nonempty α ↔ Nonempty β :=
   ⟨Nonempty.map f, Nonempty.map g⟩
-
-/--
-theorem `Nonempty.elim_to_inhabited` / 定理 `Nonempty.elim_to_inhabited`
-
-English:
-theorem Nonempty.elim_to_inhabited
-  given: {α : Sort*} [h : Nonempty α] {p : Prop} (f : Inhabited α -> p)
-  proof: h.elim f ∘ Inhabited.mk
-
-中文:
-定理 非空.elim_to_inhabited
-  条件: {α : 类型层*} [h : 非空 α] {p : 命题} (f : 可居 α -> p)
-  证明: h.elim f ∘ Inhabited.mk
-
-Depends on / 依赖: Inhabited, Inhabited.mk, h.elim
+/-
+**Nonempty.elim_to_inhabited** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nonempty.elim_to_inhabited {α : Sort*} [h : Nonempty α] {p : Prop} (f : In
+habited α -> p) : p
+参数：f : Inhabited α -> p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
 -/
-theorem Nonempty.elim_to_inhabited {α : Sort*} [h : Nonempty α] {p : Prop} (f : Inhabited α -> p) :
+theorem Nonempty.elim_to_inhabited {α : Sort*} [h : Nonempty α] {p : Prop} (f : Inhabited α → p) :
     p :=
-h.elim f ∘ Inhabited.mk
-
-/--
-theorem `Classical.nonempty_pi` / 定理 `Classical.nonempty_pi`
-
-English:
-theorem Classical.nonempty_pi
-  given: {ι} {α : ι -> Sort*}
-  statement: Nonempty (forall i, α i) ↔ forall i, Nonempty (α i)
-  proof: ⟨fun ⟨f⟩ a => ⟨f a⟩, @Pi.instNonempty _ _⟩
-
-中文:
-定理 经典.nonempty_pi
-  条件: {ι} {α : ι -> 类型层*}
-  结论: 非空 (对任意 i, α i) ↔ 对任意 i, 非空 (α i)
-  证明: ⟨fun ⟨f⟩ a => ⟨f a⟩, @Pi.instNonempty _ _⟩
-
-Depends on / 依赖: Pi.instNonempty, instNonempty
+  h.elim <| f ∘ Inhabited.mk
+/-
+**Classical.nonempty_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Classical.nonempty_pi {ι} {α : ι -> Sort*} : Nonempty (forall i, α i) ↔ fo
+rall i, Nonempty (α i)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.instNonempty`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Nonempty (β
+ a)], Nonempty ((a : α) → β a)
 -/
-theorem Classical.nonempty_pi {ι} {α : ι -> Sort*} : Nonempty (forall i, α i) ↔ forall i, Nonempty (α i) :=
-  ⟨fun ⟨f⟩ a => ⟨f a⟩, @Pi.instNonempty _ _⟩
-
-/--
-theorem `subsingleton_of_not_nonempty` / 定理 `subsingleton_of_not_nonempty`
-
-English:
-theorem subsingleton_of_not_nonempty
-  given: {α : Sort*} (h : ¬Nonempty α)
-  statement: Subsingleton α
-  proof: ⟨fun x => False.elim not_nonempty_iff_imp_false.mp h x⟩
-
-中文:
-定理 subsingleton_of_not_nonempty
-  条件: {α : 类型层*} (h : ¬非空 α)
-  结论: 子单例 α
-  证明: ⟨fun x => False.elim not_nonempty_iff_imp_false.mp h x⟩
-
-Depends on / 依赖: False.elim, not_nonempty_iff_imp_false, not_nonempty_iff_imp_false.mp
+theorem Classical.nonempty_pi {ι} {α : ι → Sort*} : Nonempty (∀ i, α i) ↔ ∀ i, Nonempty (α i) :=
+  ⟨fun ⟨f⟩ a ↦ ⟨f a⟩, @Pi.instNonempty _ _⟩
+/-
+**subsingleton_of_not_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subsingleton_of_not_nonempty {α : Sort*} (h : ¬Nonempty α) : Subsingleton 
+α
+参数：h : ¬Nonempty α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_nonempty_iff_imp_false`：not_nonempty_iff_imp_false {α : Sort*} : ¬No
+nempty α ↔ α -> False
 -/
 theorem subsingleton_of_not_nonempty {α : Sort*} (h : ¬Nonempty α) : Subsingleton α :=
-⟨fun x => False.elim not_nonempty_iff_imp_false.mp h x⟩
-
-/--
-theorem `Function.Surjective.nonempty` / 定理 `Function.Surjective.nonempty`
-
-English:
-theorem Function.Surjective.nonempty
-  given: [h : Nonempty β] {f : α -> β} (hf : Function.Surjective f)
-  proof: let ⟨y⟩ := h
-  let ⟨x, _⟩ := hf y
-  ⟨x⟩
-
-中文:
-定理 函数.满射.nonempty
-  条件: [h : 非空 β] {f : α -> β} (hf : 函数.满射 f)
-  证明: let ⟨y⟩ := h
-  let ⟨x, _⟩ := hf y
-  ⟨x⟩
+  ⟨fun x ↦ False.elim <| not_nonempty_iff_imp_false.mp h x⟩
+/-
+**Function.Surjective.nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Surjective.nonempty [h : Nonempty β] {f : α -> β} (hf : Function.
+Surjective f) : Nonempty α
+参数：hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Function.Surjective.nonempty [h : Nonempty β] {f : α -> β} (hf : Function.Surjective f) :
+theorem Function.Surjective.nonempty [h : Nonempty β] {f : α → β} (hf : Function.Surjective f) :
     Nonempty α :=
   let ⟨y⟩ := h
   let ⟨x, _⟩ := hf y
@@ -491,118 +285,55 @@ theorem Function.Surjective.nonempty [h : Nonempty β] {f : α -> β} (hf : Func
 end
 
 section
-variable {α β : Type*} {γ : α -> Type*}
+variable {α β : Type*} {γ : α → Type*}
 
 @[simp]
-/--
-theorem `nonempty_sigma` / 定理 `nonempty_sigma`
-
-English:
-theorem nonempty_sigma
-  statement: Nonempty (Σ a : α, γ a) ↔ exists a : α, Nonempty (γ a)
-  proof: Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
-
-@[simp]
-
-中文:
-定理 nonempty_sigma
-  结论: 非空 (Σ a : α, γ a) ↔ 存在 a : α, 非空 (γ a)
-  证明: Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Iff.intro
+/-
+**nonempty_sigma** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_sigma : Nonempty (Σ a : α, γ a) ↔ exists a : α, Nonempty (γ a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonempty_sigma : Nonempty (Σ a : α, γ a) ↔ exists a : α, Nonempty (γ a) :=
-  Iff.intro (fun ⟨⟨a, c⟩⟩ => ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ => ⟨⟨a, c⟩⟩
+theorem nonempty_sigma : Nonempty (Σ a : α, γ a) ↔ ∃ a : α, Nonempty (γ a) :=
+  Iff.intro (fun ⟨⟨a, c⟩⟩ ↦ ⟨a, ⟨c⟩⟩) fun ⟨a, ⟨c⟩⟩ ↦ ⟨⟨a, c⟩⟩
 
 @[simp]
-/--
-theorem `nonempty_sum` / 定理 `nonempty_sum`
-
-English:
-theorem nonempty_sum
-  statement: Nonempty (α oplus β) ↔ Nonempty α ∨ Nonempty β
-  proof: Iff.intro
-    (fun ⟨h⟩ =>
-      match h with
-      | Sum.inl a => Or.inl ⟨a⟩
-      | Sum.inr b => Or.inr ⟨b⟩)
-    fun h =>
-    match h with
-    | Or.inl ⟨a⟩ => ⟨Sum.inl a⟩
-    | Or.inr ⟨b⟩ => ⟨Sum.inr b⟩
-
-@[simp]
-
-中文:
-定理 nonempty_sum
-  结论: 非空 (α oplus β) ↔ 非空 α ∨ 非空 β
-  证明: Iff.intro
-    (fun ⟨h⟩ =>
-      match h with
-      | Sum.inl a => Or.inl ⟨a⟩
-      | Sum.inr b => Or.inr ⟨b⟩)
-    fun h =>
-    match h with
-    | Or.inl ⟨a⟩ => ⟨Sum.inl a⟩
-    | Or.inr ⟨b⟩ => ⟨Sum.inr b⟩
-
-@[simp]
-
-Depends on / 依赖: Iff.intro, Or.inl, Or.inr, Sum.inl, Sum.inr
+/-
+**nonempty_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_sum : Nonempty (α oplus β) ↔ Nonempty α ∨ Nonempty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonempty_sum : Nonempty (α oplus β) ↔ Nonempty α ∨ Nonempty β :=
+theorem nonempty_sum : Nonempty (α ⊕ β) ↔ Nonempty α ∨ Nonempty β :=
   Iff.intro
-    (fun ⟨h⟩ =>
+    (fun ⟨h⟩ ↦
       match h with
       | Sum.inl a => Or.inl ⟨a⟩
       | Sum.inr b => Or.inr ⟨b⟩)
-    fun h =>
+    fun h ↦
     match h with
     | Or.inl ⟨a⟩ => ⟨Sum.inl a⟩
     | Or.inr ⟨b⟩ => ⟨Sum.inr b⟩
 
 @[simp]
-/--
-theorem `nonempty_prod` / 定理 `nonempty_prod`
-
-English:
-theorem nonempty_prod
-  statement: Nonempty (α × β) ↔ Nonempty α ∧ Nonempty β
-  proof: Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
-
-@[simp]
-
-中文:
-定理 nonempty_prod
-  结论: 非空 (α × β) ↔ 非空 α ∧ 非空 β
-  证明: Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Iff.intro
+/-
+**nonempty_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_prod : Nonempty (α × β) ↔ Nonempty α ∧ Nonempty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nonempty_prod : Nonempty (α × β) ↔ Nonempty α ∧ Nonempty β :=
-  Iff.intro (fun ⟨⟨a, b⟩⟩ => ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a, b⟩⟩
+  Iff.intro (fun ⟨⟨a, b⟩⟩ ↦ ⟨⟨a⟩, ⟨b⟩⟩) fun ⟨⟨a⟩, ⟨b⟩⟩ ↦ ⟨⟨a, b⟩⟩
 
 @[simp]
-/--
-theorem `nonempty_ulift` / 定理 `nonempty_ulift`
-
-English:
-theorem nonempty_ulift
-  statement: Nonempty (ULift α) ↔ Nonempty α
-  proof: Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
-
-中文:
-定理 nonempty_ulift
-  结论: 非空 (类型层提升 α) ↔ 非空 α
-  证明: Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
-
-Depends on / 依赖: Iff.intro
+/-
+**nonempty_ulift** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_ulift : Nonempty (ULift α) ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nonempty_ulift : Nonempty (ULift α) ↔ Nonempty α :=
-  Iff.intro (fun ⟨⟨a⟩⟩ => ⟨a⟩) fun ⟨a⟩ => ⟨⟨a⟩⟩
+  Iff.intro (fun ⟨⟨a⟩⟩ ↦ ⟨a⟩) fun ⟨a⟩ ↦ ⟨⟨a⟩⟩
 
 end
+

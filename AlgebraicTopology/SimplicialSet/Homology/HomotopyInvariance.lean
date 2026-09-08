@@ -53,33 +53,27 @@ variable {C : Type u} [Category.{v} C] [Preadditive C] [HasCoproducts.{w} C]
 namespace CategoryTheory.SimplicialObject.Homotopy
 
 /--
-Definition of `sSetChainComplexMap` / `sSetChainComplexMap` 的定义
+If `f` and `g` are simplicially homotopic maps of simplicial sets,
+then they induce chain-homotopic maps on the singular chain complexes
+with coefficients in `R`. The assumption is in `SimplicialObject.Homotopy`,
+see also `SSet.Homotopy.chainComplexMap` for the
+variant using `SSet.Homotopy` as an assumption.
+-/
+/-
+**CategoryTheory.SimplicialObject.Homotopy.sSetChainComplexMap** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.SimplicialObject.Homotopy`。
+形式化陈述：sSetChainComplexMap (H : SimplicialObject.Homotopy f g) (R : C) : _root_.H
+omotopy (SSet.chainComplexMap f R) (SSet.chainComplexMap g R)
+参数：H : SimplicialObject.Homotopy f g；R : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sSetChainComplexMap
-  body: toChainHomotopy (H.whiskerRight _)
-
-@[deprecated (since := "2026-04-05")]
-alias singularChainComplexFunctorObjMap :=
-  sSetChainComplexMap
-
-@[deprecated (since := "2026-03-24")]
-alias _root_.singularChainComplexFunctor_mapHomotopy_of_simplicialHomotopy :=
-  sSetChainComplexMap
-
-中文:
-定义 sSetChainComplexMap
-  定义体: toChainHomotopy (H.whiskerRight _)
-
-@[deprecated (since := "2026-04-05")]
-alias singularChainComplexFunctorObjMap :=
-  sSetChainComplexMap
-
-@[deprecated (since := "2026-03-24")]
-alias _root_.singularChainComplexFunctor_mapHomotopy_of_simplicialHomotopy :=
-  sSetChainComplexMap
-
-Depends on / 依赖: H.whiskerRight, toChainHomotopy, whiskerRight
+--- 原说明 ---
+If `f` and `g` are simplicially homotopic maps of simplicial sets,
+then they induce chain-homotopic maps on the singular chain complexes
+with coefficients in `R`. The assumption is in `SimplicialObject.Homotopy`,
+see also `SSet.Homotopy.chainComplexMap` for the
+variant using `SSet.Homotopy` as an assumption.
 -/
 noncomputable def sSetChainComplexMap
     (H : SimplicialObject.Homotopy f g) (R : C) :
@@ -96,36 +90,37 @@ alias _root_.singularChainComplexFunctor_mapHomotopy_of_simplicialHomotopy :=
 
 open HomologicalComplex in
 /--
-theorem `congr_sSetHomologyMap` / 定理 `congr_sSetHomologyMap`
+Simplicially homotopic maps of simplicial sets induce the same map on
+homology of the singular chain complex (with coefficients in `R`).
+The assumption is in `SimplicialObject.Homotopy`,
+see also `SSet.Homotopy.congr_homologyMap` for the
+variant using `SSet.Homotopy` as an assumption.
+-/
+/-
+**CategoryTheory.SimplicialObject.Homotopy.congr_sSetHomologyMap** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.SimplicialObject.Homotopy`。
+形式化陈述：congr_sSetHomologyMap [CategoryWithHomology C] (H : SimplicialObject.Homot
+opy f g) (R : C) (n : Nat) : SSet.homologyMap f R n = SSet.homologyMap g R n
+参数：H : SimplicialObject.Homotopy f g；R : C；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Homotopy.homologyMap_eq`：Homotopy.homologyMap_eq (ho : Homotopy f g) (i 
+: ι) [K.HasHomology i] [L.HasHomology i] : homologyMap f i = homologyMap g i
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
 
-English:
-theorem congr_sSetHomologyMap
-  statement: [CategoryWithHomology C]
-  proof: (H.sSetChainComplexMap R).homologyMap_eq n
-
-@[deprecated (since := "2026-03-24")]
-alias singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy :=
-  congr_sSetHomologyMap
-
-@[deprecated (since := "2026-04-05")] alias congr_homologyMap_singularChainComplexFunctor :=
-  congr_sSetHomologyMap
-
-中文:
-定理 congr_sSetHomologyMap
-  结论: [带同调范畴 C]
-  证明: (H.sSetChainComplexMap R).homologyMap_eq n
-
-@[deprecated (since := "2026-03-24")]
-alias singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy :=
-  congr_sSetHomologyMap
-
-@[deprecated (since := "2026-04-05")] alias congr_homologyMap_singularChainComplexFunctor :=
-  congr_sSetHomologyMap
-
-Depends on / 依赖: H.sSetChainComplexMap, homologyMap_eq, sSetChainComplexMap
+--- 原说明 ---
+Simplicially homotopic maps of simplicial sets induce the same map on
+homology of the singular chain complex (with coefficients in `R`).
+The assumption is in `SimplicialObject.Homotopy`,
+see also `SSet.Homotopy.congr_homologyMap` for the
+variant using `SSet.Homotopy` as an assumption.
 -/
 theorem congr_sSetHomologyMap [CategoryWithHomology C]
-    (H : SimplicialObject.Homotopy f g) (R : C) (n : Nat) :
+    (H : SimplicialObject.Homotopy f g) (R : C) (n : ℕ) :
     SSet.homologyMap f R n = SSet.homologyMap g R n :=
   (H.sSetChainComplexMap R).homologyMap_eq n
 
@@ -141,27 +136,25 @@ end CategoryTheory.SimplicialObject.Homotopy
 namespace SSet.Homotopy
 
 /--
-Definition of `chainComplexMap` / `chainComplexMap` 的定义
+If `f` and `g` are homotopic maps of simplicial sets, then they induce chain-homotopic
+maps on the singular chain complexes with coefficients in `R`.
+-/
+/-
+**SSet.Homotopy.chainComplexMap** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Homotopy`。
+形式化陈述：chainComplexMap (H : SSet.Homotopy f g) (R : C) : _root_.Homotopy (SSet.ch
+ainComplexMap f R) (SSet.chainComplexMap g R)
+参数：H : SSet.Homotopy f g；R : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chainComplexMap
-  body: H.toSimplicialObjectHomotopy.sSetChainComplexMap R
-
-@[deprecated (since := "2026-04-05")]
-alias singularChainComplexFunctorObjMap := chainComplexMap
-
-中文:
-定义 chainComplexMap
-  定义体: H.toSimplicialObjectHomotopy.sSetChainComplexMap R
-
-@[deprecated (since := "2026-04-05")]
-alias singularChainComplexFunctorObjMap := chainComplexMap
-
-Depends on / 依赖: H.toSimplicialObjectHomotopy.sSetChainComplexMap, sSetChainComplexMap, toSimplicialObjectHomotopy
+--- 原说明 ---
+If `f` and `g` are homotopic maps of simplicial sets, then they induce chain-hom
+otopic
+maps on the singular chain complexes with coefficients in `R`.
 -/
 noncomputable def chainComplexMap
     (H : SSet.Homotopy f g) (R : C) :
-    _root_.Homotopy (SSet.chainComplexMap f R) (SSet.chainComplexMap g R) :=
+    _root_.Homotopy (SSet.chainComplexMap f R) (SSet.chainComplexMap g R)  :=
   H.toSimplicialObjectHomotopy.sSetChainComplexMap R
 
 @[deprecated (since := "2026-04-05")]
@@ -169,28 +162,31 @@ alias singularChainComplexFunctorObjMap := chainComplexMap
 
 open HomologicalComplex in
 /--
-theorem `congr_homologyMap` / 定理 `congr_homologyMap`
+Homotopic maps of simplicial sets induce the same map on homology of the singular
+chain complex (with coefficients in `R`).
+-/
+/-
+**SSet.Homotopy.congr_homologyMap** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Homotopy`。
+形式化陈述：congr_homologyMap [CategoryWithHomology C] (H : SSet.Homotopy f g) (R : C)
+ (n : Nat) : SSet.homologyMap f R n = SSet.homologyMap g R n
+参数：H : SSet.Homotopy f g；R : C；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Homotopy.homologyMap_eq`：Homotopy.homologyMap_eq (ho : Homotopy f g) (i 
+: ι) [K.HasHomology i] [L.HasHomology i] : homologyMap f i = homologyMap g i
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
 
-English:
-theorem congr_homologyMap
-  statement: [CategoryWithHomology C]
-  proof: (H.chainComplexMap R).homologyMap_eq n
-
-@[deprecated (since := "2026-04-05")]
-alias congr_homologyMap_singularChainComplexFunctor := congr_homologyMap
-
-中文:
-定理 congr_homologyMap
-  结论: [带同调范畴 C]
-  证明: (H.chainComplexMap R).homologyMap_eq n
-
-@[deprecated (since := "2026-04-05")]
-alias congr_homologyMap_singularChainComplexFunctor := congr_homologyMap
-
-Depends on / 依赖: H.chainComplexMap, chainComplexMap, homologyMap_eq
+--- 原说明 ---
+Homotopic maps of simplicial sets induce the same map on homology of the singula
+r
+chain complex (with coefficients in `R`).
 -/
 theorem congr_homologyMap [CategoryWithHomology C]
-    (H : SSet.Homotopy f g) (R : C) (n : Nat) :
+    (H : SSet.Homotopy f g) (R : C) (n : ℕ) :
     SSet.homologyMap f R n = SSet.homologyMap g R n :=
   (H.chainComplexMap R).homologyMap_eq n
 
@@ -198,3 +194,4 @@ theorem congr_homologyMap [CategoryWithHomology C]
 alias congr_homologyMap_singularChainComplexFunctor := congr_homologyMap
 
 end SSet.Homotopy
+

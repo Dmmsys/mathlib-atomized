@@ -12,7 +12,7 @@ public import Mathlib.Topology.Category.TopCat.Limits.Basic
 # Topological Kőnig's lemma
 
 A topological version of Kőnig's lemma is that the inverse limit of nonempty compact Hausdorff
-spaces is nonempty. (Note: this can be generalized further to inverse limits of nonempty compact
+spaces is nonempty.  (Note: this can be generalized further to inverse limits of nonempty compact
 T0 spaces, where all the maps are closed maps; see [Stone1979] --- however there is an erratum
 for Theorem 4 that the element in the inverse limit can have cofinally many components that are
 not closed points.)
@@ -50,105 +50,77 @@ variable {J : Type u} [SmallCategory J]
 variable (F : J ⥤ TopCat.{v})
 
 set_option backward.privateInPublic true in
-/--
-Definition of `FiniteDiagramArrow` / `FiniteDiagramArrow` 的定义
-
-English:
-abbreviation FiniteDiagramArrow
-  signature: {J : Type u} [SmallCategory J] (G : Finset J)
-  body: Σ' (X Y : J) (_ : X in G) (_ : Y in G), X ⟶ Y
-
-中文:
-缩写 FiniteDiagramArrow
-  签名: {J : 类型u} [小范畴 J] (G : 有限集 J)
-  定义体: Σ' (X Y : J) (_ : X in G) (_ : Y in G), X ⟶ Y
+/-
+**TopCat.FiniteDiagramArrow** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private abbrev FiniteDiagramArrow {J : Type u} [SmallCategory J] (G : Finset J) :=
-  Σ' (X Y : J) (_ : X in G) (_ : Y in G), X ⟶ Y
+  Σ' (X Y : J) (_ : X ∈ G) (_ : Y ∈ G), X ⟶ Y
 
 set_option backward.privateInPublic true in
-/--
-Definition of `FiniteDiagram` / `FiniteDiagram` 的定义
-
-English:
-abbreviation FiniteDiagram
-  signature: (J : Type u) [SmallCategory J]
-  body: Σ G : Finset J, Finset (FiniteDiagramArrow G)
-
-中文:
-缩写 FiniteDiagram
-  签名: (J : 类型u) [小范畴 J]
-  定义体: Σ G : Finset J, Finset (FiniteDiagramArrow G)
+/-
+**TopCat.FiniteDiagram** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private abbrev FiniteDiagram (J : Type u) [SmallCategory J] :=
   Σ G : Finset J, Finset (FiniteDiagramArrow G)
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `partialSections` / `partialSections` 的定义
+/-- Partial sections of a cofiltered limit are sections when restricted to
+a finite subset of objects and morphisms of `J`.
+-/
+/-
+**TopCat.partialSections** 是 Mathlib 中的一个定义，位于命名空间 `TopCat`。
+形式化陈述：partialSections {J : Type u} [SmallCategory J] (F : J ⥤ TopCat.{v}) {G : F
+inset J} (H : Finset (FiniteDiagramArrow G)) : Set (forall j, F.obj j)
+参数：F : J ⥤ TopCat.{v}；H : Finset (FiniteDiagramArrow G)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partialSections
-  signature: {J : Type u} [SmallCategory J] (F : J ⥤ TopCat.{v}) {G : Finset J}
-  body: {u | forall {f : FiniteDiagramArrow G} (_ : f in H), F.map f.2.2.2.2 (u f.1) = u f.2.1}
-
-中文:
-定义 partialSections
-  签名: {J : 类型u} [小范畴 J] (F : J ⥤ 顶元素范畴.{v}) {G : 有限集 J}
-  定义体: {u | forall {f : FiniteDiagramArrow G} (_ : f in H), F.map f.2.2.2.2 (u f.1) = u f.2.1}
-
-Depends on / 依赖: F.map, FiniteDiagramArrow
+--- 原说明 ---
+Partial sections of a cofiltered limit are sections when restricted to
+a finite subset of objects and morphisms of `J`.
 -/
 def partialSections {J : Type u} [SmallCategory J] (F : J ⥤ TopCat.{v}) {G : Finset J}
-    (H : Finset (FiniteDiagramArrow G)) : Set (forall j, F.obj j) :=
-  {u | forall {f : FiniteDiagramArrow G} (_ : f in H), F.map f.2.2.2.2 (u f.1) = u f.2.1}
+    (H : Finset (FiniteDiagramArrow G)) : Set (∀ j, F.obj j) :=
+  {u | ∀ {f : FiniteDiagramArrow G} (_ : f ∈ H), F.map f.2.2.2.2 (u f.1) = u f.2.1}
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `partialSections.nonempty` / 定理 `partialSections.nonempty`
-
-English:
-theorem partialSections.nonempty
-  statement: [IsCofilteredOrEmpty J] [h : forall j : J, Nonempty (F.obj j)]
-  proof: by
-  classical
-  cases isEmpty_or_nonempty J
-  · exact ⟨isEmptyElim, fun {j} => IsEmpty.elim' inferInstance j.1⟩
-  have : IsCofiltered J := ⟨⟩
-  use fun j : J =>
-    if hj : j in G then F.map (IsCofiltered.infTo G H hj) (h (IsCofiltered.inf G H)).some
-    else (h _).some
-  rintro ⟨X, Y, hX, hY, f⟩ hf
-  dsimp only
-  rwa [dif_pos hX, dif_pos hY, ← comp_app, ← F.map_comp, @IsCofiltered.infTo_commutes _ _ _ G H]
-
-中文:
-定理 partialSections.nonempty
-  结论: [是余filteredOrEmpty J] [h : 对任意 j : J, 非空 (F.obj j)]
-  证明: by
-  classical
-  cases isEmpty_or_nonempty J
-  · exact ⟨isEmptyElim, fun {j} => IsEmpty.elim' inferInstance j.1⟩
-  have : IsCofiltered J := ⟨⟩
-  use fun j : J =>
-    if hj : j in G then F.map (IsCofiltered.infTo G H hj) (h (IsCofiltered.inf G H)).some
-    else (h _).some
-  rintro ⟨X, Y, hX, hY, f⟩ hf
-  dsimp only
-  rwa [dif_pos hX, dif_pos hY, ← comp_app, ← F.map_comp, @IsCofiltered.infTo_commutes _ _ _ G H]
-
-Depends on / 依赖: F.map, F.map_comp, IsCofiltered, IsCofiltered.inf, IsCofiltered.infTo, IsCofiltered.infTo_commutes, IsEmpty, IsEmpty.elim, classical, comp_app, dif_pos, infTo_commutes, isEmptyElim, isEmpty_or_nonempty, map_comp
+/-
+**TopCat.partialSections.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.partialSecti
+ons`。
+形式化陈述：∀ {J : Type u} [inst : CategoryTheory.SmallCategory J] (F : CategoryTheory
+.Functor J TopCat)   [CategoryTheory.IsCofilteredOrEmpty J] [h : ∀ (j : J), None
+mpty ↑(F.obj j)] {G : Finset J}   (H : Finset (TopCat.FiniteDiagramArrow✝ G)), (
+TopCat.partialSections F H).Nonempty
+参数：F : CategoryTheory.Functor J TopCat；j : J；F.obj j；H : Finset (TopCat.FiniteDi
+agramArrow✝ G)；TopCat.partialSections F H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopCat.comp_app`：comp_app {X Y Z : TopCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (
+x : X) : (f ≫ g : X -> Z) x = g (f x)
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.IsCofiltered.infTo_commutes`：infTo_commutes {X Y : C} (mX
+ : X in O) (mY : Y in O) {f : X ⟶ Y} (mf : (⟨X, Y, mX, mY, f⟩ : Σ' (X Y : C) (_ 
+: X in O) (_ : Y in O), X ⟶ Y) i…
 -/
-theorem partialSections.nonempty [IsCofilteredOrEmpty J] [h : forall j : J, Nonempty (F.obj j)]
+theorem partialSections.nonempty [IsCofilteredOrEmpty J] [h : ∀ j : J, Nonempty (F.obj j)]
     {G : Finset J} (H : Finset (FiniteDiagramArrow G)) : (partialSections F H).Nonempty := by
   classical
   cases isEmpty_or_nonempty J
   · exact ⟨isEmptyElim, fun {j} => IsEmpty.elim' inferInstance j.1⟩
   have : IsCofiltered J := ⟨⟩
   use fun j : J =>
-    if hj : j in G then F.map (IsCofiltered.infTo G H hj) (h (IsCofiltered.inf G H)).some
+    if hj : j ∈ G then F.map (IsCofiltered.infTo G H hj) (h (IsCofiltered.inf G H)).some
     else (h _).some
   rintro ⟨X, Y, hX, hY, f⟩ hf
   dsimp only
@@ -156,74 +128,39 @@ theorem partialSections.nonempty [IsCofilteredOrEmpty J] [h : forall j : J, None
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `partialSections.directed` / 定理 `partialSections.directed`
-
-English:
-theorem partialSections.directed
-  proof: by
-  classical
-  intro A B
-  let ιA : FiniteDiagramArrow A.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
-    ⟨f.1, f.2.1, Finset.mem_union_left _ f.2.2.1, Finset.mem_union_left _ f.2.2.2.1, f.2.2.2.2⟩
-  let ιB : FiniteDiagramArrow B.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
-    ⟨f.1, f.2.1, Finset.mem_union_right _ f.2.2.1, Finset.mem_union_right _ f.2.2.2.1, f.2.2.2.2⟩
-  refine ⟨⟨A.1 ⊔ B.1, A.2.image ιA ⊔ B.2.image ιB⟩, ?_, ?_⟩
-  · rintro u hu f hf
-    have : ιA f in A.2.image ιA ⊔ B.2.image ιB := by
-      apply Finset.mem_union_left
-      rw [Finset.mem_image]
-      exact ⟨f, hf, rfl⟩
-    exact hu this
-  · rintro u hu f hf
-    have : ιB f in A.2.image ιA ⊔ B.2.image ιB := by
-      apply Finset.mem_union_right
-      rw [Finset.mem_image]
-      exact ⟨f, hf, rfl⟩
-    exact hu this
-
-中文:
-定理 partialSections.directed
-  证明: by
-  classical
-  intro A B
-  let ιA : FiniteDiagramArrow A.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
-    ⟨f.1, f.2.1, Finset.mem_union_left _ f.2.2.1, Finset.mem_union_left _ f.2.2.2.1, f.2.2.2.2⟩
-  let ιB : FiniteDiagramArrow B.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
-    ⟨f.1, f.2.1, Finset.mem_union_right _ f.2.2.1, Finset.mem_union_right _ f.2.2.2.1, f.2.2.2.2⟩
-  refine ⟨⟨A.1 ⊔ B.1, A.2.image ιA ⊔ B.2.image ιB⟩, ?_, ?_⟩
-  · rintro u hu f hf
-    have : ιA f in A.2.image ιA ⊔ B.2.image ιB := by
-      apply Finset.mem_union_left
-      rw [Finset.mem_image]
-      exact ⟨f, hf, rfl⟩
-    exact hu this
-  · rintro u hu f hf
-    have : ιB f in A.2.image ιA ⊔ B.2.image ιB := by
-      apply Finset.mem_union_right
-      rw [Finset.mem_image]
-      exact ⟨f, hf, rfl⟩
-    exact hu this
-
-Depends on / 依赖: FiniteDiagramArrow, Finset, Finset.mem_union_left, Finset.mem_union_right, classical, mem_union_left, mem_union_right
+/-
+**TopCat.partialSections.directed** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.partialSecti
+ons`。
+形式化陈述：∀ {J : Type u} [inst : CategoryTheory.SmallCategory J] (F : CategoryTheory
+.Functor J TopCat),   Directed GE.ge fun G => TopCat.partialSections F G.snd
+参数：F : CategoryTheory.Functor J TopCat。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_union_left`：mem_union_left (t : Finset α) (h : a in s) : a in
+ s union t
+· 使用定理 `Finset.mem_union_right`：mem_union_right (s : Finset α) (h : a in t) : a 
+in s union t
+· 使用定理 `instSubsingleton`：∀ (p : Prop), Subsingleton p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.mem_image`：mem_image : b in s.image f ↔ exists a in s, f a = b
 -/
 theorem partialSections.directed :
     Directed GE.ge fun G : FiniteDiagram J => partialSections F G.2 := by
   classical
   intro A B
-  let ιA : FiniteDiagramArrow A.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
+  let ιA : FiniteDiagramArrow A.1 → FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
     ⟨f.1, f.2.1, Finset.mem_union_left _ f.2.2.1, Finset.mem_union_left _ f.2.2.2.1, f.2.2.2.2⟩
-  let ιB : FiniteDiagramArrow B.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
+  let ιB : FiniteDiagramArrow B.1 → FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
     ⟨f.1, f.2.1, Finset.mem_union_right _ f.2.2.1, Finset.mem_union_right _ f.2.2.2.1, f.2.2.2.2⟩
   refine ⟨⟨A.1 ⊔ B.1, A.2.image ιA ⊔ B.2.image ιB⟩, ?_, ?_⟩
   · rintro u hu f hf
-    have : ιA f in A.2.image ιA ⊔ B.2.image ιB := by
+    have : ιA f ∈ A.2.image ιA ⊔ B.2.image ιB := by
       apply Finset.mem_union_left
       rw [Finset.mem_image]
       exact ⟨f, hf, rfl⟩
     exact hu this
   · rintro u hu f hf
-    have : ιB f in A.2.image ιA ⊔ B.2.image ιB := by
+    have : ιB f ∈ A.2.image ιA ⊔ B.2.image ιB := by
       apply Finset.mem_union_right
       rw [Finset.mem_image]
       exact ⟨f, hf, rfl⟩
@@ -231,46 +168,47 @@ theorem partialSections.directed :
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `partialSections.closed` / 定理 `partialSections.closed`
-
-English:
-theorem partialSections.closed
-  statement: [forall j : J, T2Space (F.obj j)] {G : Finset J}
-  proof: by
-  have :
-    partialSections F H =
-      ⋂ (f : FiniteDiagramArrow G) (_ : f in H), {u | F.map f.2.2.2.2 (u f.1) = u f.2.1} := by
-    ext1
-    simp only [Set.mem_iInter, Set.mem_ofPred_eq]
-    rfl
-  rw [this]
-  apply isClosed_biInter
-  intro f _
-  apply isClosed_eq <;> fun_prop
-
-中文:
-定理 partialSections.closed
-  结论: [对任意 j : J, T2空间 (F.obj j)] {G : 有限集 J}
-  证明: by
-  have :
-    partialSections F H =
-      ⋂ (f : FiniteDiagramArrow G) (_ : f in H), {u | F.map f.2.2.2.2 (u f.1) = u f.2.1} := by
-    ext1
-    simp only [Set.mem_iInter, Set.mem_ofPred_eq]
-    rfl
-  rw [this]
-  apply isClosed_biInter
-  intro f _
-  apply isClosed_eq <;> fun_prop
-
-Depends on / 依赖: F.map, FiniteDiagramArrow, Set.mem_iInter, Set.mem_ofPred_eq, fun_prop, isClosed_biInter, isClosed_eq, mem_iInter, mem_ofPred_eq, partialSections
+/-
+**TopCat.partialSections.closed** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.partialSection
+s`。
+形式化陈述：∀ {J : Type u} [inst : CategoryTheory.SmallCategory J] (F : CategoryTheory
+.Functor J TopCat)   [∀ (j : J), T2Space ↑(F.obj j)] {G : Finset J} (H : Finset 
+(TopCat.FiniteDiagramArrow✝ G)),   IsClosed (TopCat.partialSections F H)
+参数：F : CategoryTheory.Functor J TopCat；j : J；F.obj j；H : Finset (TopCat.FiniteDi
+agramArrow✝ G)；TopCat.partialSections F H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `isClosed_biInter`：isClosed_biInter {s : Set α} {f : α -> Set X} (h : for
+all i in s, IsClosed (f i)) : IsClosed (⋂ i in s, f i)
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `continuous_apply`：continuous_apply (a : α) : Continuous (fun f : (α → X)
+ ↦ f a)
 -/
-theorem partialSections.closed [forall j : J, T2Space (F.obj j)] {G : Finset J}
+theorem partialSections.closed [∀ j : J, T2Space (F.obj j)] {G : Finset J}
     (H : Finset (FiniteDiagramArrow G)) : IsClosed (partialSections F H) := by
   have :
     partialSections F H =
-      ⋂ (f : FiniteDiagramArrow G) (_ : f in H), {u | F.map f.2.2.2.2 (u f.1) = u f.2.1} := by
+      ⋂ (f : FiniteDiagramArrow G) (_ : f ∈ H), {u | F.map f.2.2.2.2 (u f.1) = u f.2.1} := by
     ext1
     simp only [Set.mem_iInter, Set.mem_ofPred_eq]
     rfl
@@ -279,44 +217,43 @@ theorem partialSections.closed [forall j : J, T2Space (F.obj j)] {G : Finset J}
   intro f _
   apply isClosed_eq <;> fun_prop
 
-/--
-theorem `nonempty_limitCone_of_compact_t2_cofiltered_system` / 定理 `nonempty_limitCone_of_compact_t2_cofiltered_system`
+/-- Cofiltered limits of nonempty compact Hausdorff spaces are nonempty topological spaces.
+-/
+/-
+**TopCat.nonempty_limitCone_of_compact_t2_cofiltered_system** 是 Mathlib 中的一个定理，位
+于命名空间 `TopCat`。
+形式化陈述：nonempty_limitCone_of_compact_t2_cofiltered_system (F : J ⥤ TopCat.{max v 
+u}) [IsCofilteredOrEmpty J] [forall j : J, Nonempty (F.obj j)] [forall j : J, Co
+mpactSpace (F.obj j)] [forall j : J, T2Space (F.obj j)] : Nonempty (TopCat.limit
+Cone F).pt
+参数：F : J ⥤ TopCat.{max v u}；F.obj j；F.obj j；F.obj j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed`：IsCom
+pact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed {ι : Type v} [hι : 
+Nonempty ι] (t : ι -> Set X) (htd : Directed (· ⊇ ·) t)…
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `TopCat.partialSections.directed`：∀ {J : Type u} [inst : CategoryTheory.S
+mallCategory J] (F : CategoryTheory.Functor J TopCat),   Directed GE.ge fun G =>
+ TopCat.partialSectio…
+· 使用定理 `TopCat.partialSections.nonempty`：∀ {J : Type u} [inst : CategoryTheory.S
+mallCategory J] (F : CategoryTheory.Functor J TopCat)   [CategoryTheory.IsCofilt
+eredOrEmpty J] [h : ∀…
+· 使用定理 `IsClosed.isCompact`：IsClosed.isCompact [CompactSpace X] (h : IsClosed s)
+ : IsCompact s
+· 使用定理 `TopCat.partialSections.closed`：∀ {J : Type u} [inst : CategoryTheory.Sma
+llCategory J] (F : CategoryTheory.Functor J TopCat)   [∀ (j : J), T2Space ↑(F.ob
+j j)] {G : Finset J…
+· 使用定理 `Finset.mem_singleton_self`：mem_singleton_self (a : α) : a in ({a} : Fins
+et α)
 
-English:
-theorem nonempty_limitCone_of_compact_t2_cofiltered_system
-  statement: (F : J ⥤ TopCat.{max v u})
-  proof: by
-  classical
-  obtain ⟨u, hu⟩ :=
-    IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed (fun G => partialSections F _)
-      (partialSections.directed F) (fun G => partialSections.nonempty F _)
-      (fun G => IsClosed.isCompact (partialSections.closed F _)) fun G =>
-      partialSections.closed F _
-  use u
-  intro X Y f
-  let G : FiniteDiagram J := ⟨{X, Y}, {⟨X, Y, by grind, by grind, f⟩}⟩
-  exact hu _ ⟨G, rfl⟩ (Finset.mem_singleton_self _)
-
-中文:
-定理 nonempty_limitCone_of_compact_t2_cofiltered_system
-  结论: (F : J ⥤ 顶元素范畴.{最大值 v u})
-  证明: by
-  classical
-  obtain ⟨u, hu⟩ :=
-    IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed (fun G => partialSections F _)
-      (partialSections.directed F) (fun G => partialSections.nonempty F _)
-      (fun G => IsClosed.isCompact (partialSections.closed F _)) fun G =>
-      partialSections.closed F _
-  use u
-  intro X Y f
-  let G : FiniteDiagram J := ⟨{X, Y}, {⟨X, Y, by grind, by grind, f⟩}⟩
-  exact hu _ ⟨G, rfl⟩ (Finset.mem_singleton_self _)
-
-Depends on / 依赖: FiniteDiagram, Finset, Finset.mem_singleton_self, IsClosed, IsClosed.isCompact, IsCompact, IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed, classical, closed, directed, isCompact, mem_singleton_self, nonempty, nonempty_iInter_of_directed_nonempty_isCompact_isClosed, partialSections, partialSections.closed, partialSections.directed, partialSections.nonempty
+--- 原说明 ---
+Cofiltered limits of nonempty compact Hausdorff spaces are nonempty topological 
+spaces.
 -/
 theorem nonempty_limitCone_of_compact_t2_cofiltered_system (F : J ⥤ TopCat.{max v u})
     [IsCofilteredOrEmpty J]
-    [forall j : J, Nonempty (F.obj j)] [forall j : J, CompactSpace (F.obj j)] [forall j : J, T2Space (F.obj j)] :
+    [∀ j : J, Nonempty (F.obj j)] [∀ j : J, CompactSpace (F.obj j)] [∀ j : J, T2Space (F.obj j)] :
     Nonempty (TopCat.limitCone F).pt := by
   classical
   obtain ⟨u, hu⟩ :=
@@ -332,3 +269,4 @@ theorem nonempty_limitCone_of_compact_t2_cofiltered_system (F : J ⥤ TopCat.{ma
 end TopologicalKonig
 
 end TopCat
+

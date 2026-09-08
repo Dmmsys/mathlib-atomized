@@ -21,193 +21,145 @@ assert_not_exists Field
 
 variable {α : Type*}
 
-/--
-Instance `UnitsInt.fintype` / 实例 `UnitsInt.fintype`
-
-English:
-instance UnitsInt.fintype
-  signature: : Fintype Intˣ
-  body: ⟨{1, -1}, fun x => by cases Int.units_eq_one_or x <;> simp [*]⟩
-
-@[simp]
-
-中文:
-实例 Units整数.fintype
-  签名: : 有限类型 整数ˣ
-  定义体: ⟨{1, -1}, fun x => by cases Int.units_eq_one_or x <;> simp [*]⟩
-
-@[simp]
-
-Depends on / 依赖: Int.units_eq_one_or, units_eq_one_or
+/-
+**UnitsInt.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：UnitsInt.fintype : Fintype Intˣ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance UnitsInt.fintype : Fintype Intˣ :=
-  ⟨{1, -1}, fun x => by cases Int.units_eq_one_or x <;> simp [*]⟩
+instance UnitsInt.fintype : Fintype ℤˣ :=
+  ⟨{1, -1}, fun x ↦ by cases Int.units_eq_one_or x <;> simp [*]⟩
 
 @[simp]
-/--
-theorem `UnitsInt.univ` / 定理 `UnitsInt.univ`
-
-English:
-theorem UnitsInt.univ
-  statement: (Finset.univ : Finset Intˣ) = {1, -1}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 Units整数.univ
-  结论: (有限集.univ : 有限集 整数ˣ) = {1, -1}
-  证明: rfl
-
-@[simp]
+/-
+**UnitsInt.univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UnitsInt.univ : (Finset.univ : Finset Intˣ) = {1, -1}
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem UnitsInt.univ : (Finset.univ : Finset Intˣ) = {1, -1} := rfl
+theorem UnitsInt.univ : (Finset.univ : Finset ℤˣ) = {1, -1} := rfl
 
 @[simp]
-/--
-theorem `Fintype.card_units_int` / 定理 `Fintype.card_units_int`
-
-English:
-theorem Fintype.card_units_int
-  statement: Fintype.card Intˣ = 2
-  proof: rfl
-
-中文:
-定理 有限类型.card_units_int
-  结论: 有限类型.card 整数ˣ = 2
-  证明: rfl
+/-
+**Fintype.card_units_int** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.card_units_int : Fintype.card Intˣ = 2
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Fintype.card_units_int : Fintype.card Intˣ = 2 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [Fintype α] [DecidableEq α] : Fintype αˣ
-  body: Fintype.ofEquiv _ (unitsEquivProdSubtype α).symm
-
-中文:
-实例 [幺半群
-  签名: α] [有限类型 α] [DecidableEq α] : 有限类型 αˣ
-  定义体: Fintype.ofEquiv _ (unitsEquivProdSubtype α).symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, ofEquiv, unitsEquivProdSubtype
+theorem Fintype.card_units_int : Fintype.card ℤˣ = 2 := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [Fintype α] [DecidableEq α] : Fintype αˣ :=
   Fintype.ofEquiv _ (unitsEquivProdSubtype α).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [Finite α] : Finite αˣ
-  body: .of_injective _ Units.val_injective
-
-中文:
-实例 [幺半群
-  签名: α] [有限 α] : 有限 αˣ
-  定义体: .of_injective _ Units.val_injective
-
-Depends on / 依赖: Units.val_injective, of_injective, val_injective
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [Finite α] : Finite αˣ := .of_injective _ Units.val_injective
 
 variable (α)
-
-/--
-theorem `Nat.card_units` / 定理 `Nat.card_units`
-
-English:
-theorem Nat.card_units
-  given: [GroupWithZero α]
-  proof: by
-  classical
-  rw [Nat.card_congr unitsEquivNeZero]; rw [eq_comm]; rw [← Nat.card_congr (Equiv.sumCompl (· = (0 : α)))]
-  rcases finite_or_infinite {a : α // a != 0}
-  · rw [Nat.card_sum, Nat.card_unique, add_tsub_cancel_left]
-  · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zero_tsub]
-
-中文:
-定理 自然数.card_units
-  条件: [带零群 α]
-  证明: by
-  classical
-  rw [Nat.card_congr unitsEquivNeZero]; rw [eq_comm]; rw [← Nat.card_congr (Equiv.sumCompl (· = (0 : α)))]
-  rcases finite_or_infinite {a : α // a != 0}
-  · rw [Nat.card_sum, Nat.card_unique, add_tsub_cancel_left]
-  · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zero_tsub]
-
-Depends on / 依赖: Equiv.sumCompl, Nat.card_congr, Nat.card_eq_zero_of_infinite, Nat.card_sum, Nat.card_unique, add_tsub_cancel_left, card_congr, card_eq_zero_of_infinite, card_sum, card_unique, classical, eq_comm, finite_or_infinite, sumCompl, unitsEquivNeZero, zero_tsub
+/-
+**Nat.card_units** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.card_units [GroupWithZero α] : Nat.card αˣ = Nat.card α - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `Nat.card_sum`：card_sum [Finite α] [Finite β] : Nat.card (α oplus β) = Na
+t.card α + Nat.card β
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Nat.card_unique`：card_unique [Nonempty α] [Subsingleton α] : Nat.card α 
+= 1
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `add_tsub_cancel_left`：add_tsub_cancel_left (a b : α) : a + b - a = b
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.card_eq_zero_of_infinite`：∀ {α : Type u_1} [Infinite α], Nat.card α 
+= 0
+· 使用定理 `zero_tsub`：zero_tsub (a : α) : 0 - a = 0
 -/
 theorem Nat.card_units [GroupWithZero α] :
     Nat.card αˣ = Nat.card α - 1 := by
   classical
-  rw [Nat.card_congr unitsEquivNeZero]; rw [eq_comm]; rw [← Nat.card_congr (Equiv.sumCompl (· = (0 : α)))]
-  rcases finite_or_infinite {a : α // a != 0}
+  rw [Nat.card_congr unitsEquivNeZero, eq_comm, ← Nat.card_congr (Equiv.sumCompl (· = (0 : α)))]
+  rcases finite_or_infinite {a : α // a ≠ 0}
   · rw [Nat.card_sum, Nat.card_unique, add_tsub_cancel_left]
   · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zero_tsub]
-
-/--
-theorem `Nat.card_eq_card_units_add_one` / 定理 `Nat.card_eq_card_units_add_one`
-
-English:
-theorem Nat.card_eq_card_units_add_one
-  given: [GroupWithZero α] [Finite α]
-  proof: by
-  rw [Nat.card_units]; rw [tsub_add_cancel_of_le Nat.card_pos]
-
-中文:
-定理 自然数.card_eq_card_units_add_one
-  条件: [带零群 α] [有限 α]
-  证明: by
-  rw [Nat.card_units]; rw [tsub_add_cancel_of_le Nat.card_pos]
-
-Depends on / 依赖: Nat.card_pos, Nat.card_units, card_pos, card_units, tsub_add_cancel_of_le
+/-
+**Nat.card_eq_card_units_add_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.card_eq_card_units_add_one [GroupWithZero α] [Finite α] : Nat.card α =
+ Nat.card αˣ + 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_units`：Nat.card_units [GroupWithZero α] : Nat.card αˣ = Nat.car
+d α - 1
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.card_pos`：∀ {α : Type u_1} [Nonempty α] [Finite α], 0 < Nat.card α
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
 -/
 theorem Nat.card_eq_card_units_add_one [GroupWithZero α] [Finite α] :
     Nat.card α = Nat.card αˣ + 1 := by
-  rw [Nat.card_units]; rw [tsub_add_cancel_of_le Nat.card_pos]
-
-/--
-theorem `Fintype.card_units` / 定理 `Fintype.card_units`
-
-English:
-theorem Fintype.card_units
-  given: [GroupWithZero α] [Fintype α] [DecidableEq α]
-  proof: by
-  rw [← Nat.card_eq_fintype_card]; rw [Nat.card_units]; rw [Nat.card_eq_fintype_card]
-
-中文:
-定理 有限类型.card_units
-  条件: [带零群 α] [有限类型 α] [DecidableEq α]
-  证明: by
-  rw [← Nat.card_eq_fintype_card]; rw [Nat.card_units]; rw [Nat.card_eq_fintype_card]
-
-Depends on / 依赖: Nat.card_eq_fintype_card, Nat.card_units, card_eq_fintype_card, card_units
+  rw [Nat.card_units, tsub_add_cancel_of_le Nat.card_pos]
+/-
+**Fintype.card_units** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.card_units [GroupWithZero α] [Fintype α] [DecidableEq α] : Fintype
+.card αˣ = Fintype.card α - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Nat.card_units`：Nat.card_units [GroupWithZero α] : Nat.card αˣ = Nat.car
+d α - 1
 -/
 theorem Fintype.card_units [GroupWithZero α] [Fintype α] [DecidableEq α] :
     Fintype.card αˣ = Fintype.card α - 1 := by
-  rw [← Nat.card_eq_fintype_card]; rw [Nat.card_units]; rw [Nat.card_eq_fintype_card]
-
-/--
-theorem `Fintype.card_eq_card_units_add_one` / 定理 `Fintype.card_eq_card_units_add_one`
-
-English:
-theorem Fintype.card_eq_card_units_add_one
-  given: [GroupWithZero α] [Fintype α] [DecidableEq α]
-  proof: by
-  rw [Fintype.card_units]; rw [tsub_add_cancel_of_le Fintype.card_pos]
-
-中文:
-定理 有限类型.card_eq_card_units_add_one
-  条件: [带零群 α] [有限类型 α] [DecidableEq α]
-  证明: by
-  rw [Fintype.card_units]; rw [tsub_add_cancel_of_le Fintype.card_pos]
-
-Depends on / 依赖: Fintype, Fintype.card_pos, Fintype.card_units, card_pos, card_units, tsub_add_cancel_of_le
+  rw [← Nat.card_eq_fintype_card, Nat.card_units, Nat.card_eq_fintype_card]
+/-
+**Fintype.card_eq_card_units_add_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fintype.card_eq_card_units_add_one [GroupWithZero α] [Fintype α] [Decidabl
+eEq α] : Fintype.card α = Fintype.card αˣ + 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_units`：Fintype.card_units [GroupWithZero α] [Fintype α] [De
+cidableEq α] : Fintype.card αˣ = Fintype.card α - 1
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Fintype.card_pos`：card_pos [h : Nonempty α] : 0 < card α
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
 -/
 theorem Fintype.card_eq_card_units_add_one [GroupWithZero α] [Fintype α] [DecidableEq α] :
     Fintype.card α = Fintype.card αˣ + 1 := by
-  rw [Fintype.card_units]; rw [tsub_add_cancel_of_le Fintype.card_pos]
+  rw [Fintype.card_units, tsub_add_cancel_of_le Fintype.card_pos]

@@ -97,100 +97,79 @@ variable (K : Set α) (V : Set (β × β)) (f : C(α, β))
 
 namespace ContinuousMap
 
-/--
-theorem `tendsto_iff_forall_isCompact_tendstoUniformlyOn` / 定理 `tendsto_iff_forall_isCompact_tendstoUniformlyOn`
+/-- Compact-open topology on `C(α, β)` agrees with the topology of uniform convergence on compacts:
+a family of continuous functions `F i` tends to `f` in the compact-open topology
+if and only if the `F i` tends to `f` uniformly on all compact sets. -/
+/-
+**ContinuousMap.tendsto_iff_forall_isCompact_tendstoUniformlyOn** 是 Mathlib 中的一个
+定理，位于命名空间 `ContinuousMap`。
+形式化陈述：tendsto_iff_forall_isCompact_tendstoUniformlyOn {ι : Type u₃} {p : Filter 
+ι} {F : ι -> C(α, β)} {f} : Tendsto F p (𝓝 f) ↔ forall K, IsCompact K -> Tendsto
+UniformlyOn (fun i a => F i a) f p K
+参数：α, β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContinuousMap.tendsto_nhds_compactOpen`：tendsto_nhds_compactOpen {l : Fi
+lter α} {f : α -> C(Y, Z)} {g : C(Y, Z)} : Tendsto f l (𝓝 g) ↔ forall K, IsCompa
+ct K -> forall U, IsOpen U -…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact`：tendstoLoca
+llyUniformlyOn_iff_tendstoUniformlyOn_of_compact (hs : IsCompact s) : TendstoLoc
+allyUniformlyOn F f p s ↔ TendstoUniformlyOn F f …
+· 使用定理 `comp_open_symm_mem_uniformity_sets`：comp_open_symm_mem_uniformity_sets {
+s : SetRel α α} (hs : s in 𝓤 α) : exists t in 𝓤 α, IsOpen t ∧ SetRel.IsSymm t ∧ 
+t ○ t subseteq s
+· 使用定理 `mem_uniformity_isClosed`：mem_uniformity_isClosed {s : SetRel α α} (h : s
+ in 𝓤 α) : exists t in 𝓤 α, IsClosed t ∧ t subseteq s
+· 使用定理 `inter_mem_nhdsWithin`：inter_mem_nhdsWithin (s : Set α) {t : Set α} {a : 
+α} (h : t in 𝓝 a) : s inter t in 𝓝[s] a
+· 使用定理 `ContinuousMap.continuousAt`：∀ {α : Type u_1} {β : Type u_2} [inst : Topo
+logicalSpace α] [inst_1 : TopologicalSpace β] (f : C(α, β)) (x : α),   Continuou
+sAt (⇑f) x
+· 使用定理 `UniformSpace.ball_mem_nhds`：UniformSpace.ball_mem_nhds (x : α) ⦃V : SetR
+el α α⦄ (V_in : V in 𝓤 α) : ball x V in 𝓝 x
+· 使用定理 `IsCompact.inter_right`：IsCompact.inter_right (hs : IsCompact s) (ht : Is
+Closed t) : IsCompact (s inter t)
+· 使用定理 `IsClosed.preimage`：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h 
+: IsClosed t) : IsClosed (f ⁻¹' t)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用引理 `UniformSpace.isClosed_ball`：isClosed_ball (x : α) {V : SetRel α α} (hV :
+ IsClosed V) : IsClosed (ball x V)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `UniformSpace.isOpen_ball`：isOpen_ball (x : α) {V : SetRel α α} (hV : IsO
+pen V) : IsOpen (ball x V)
+· 使用定理 `SetRel.symm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R → (b, a) ∈ R
+· 使用定理 `lebesgue_number_of_compact_open`：lebesgue_number_of_compact_open {K U : 
+Set α} (hK : IsCompact K) (hU : IsOpen U) (hKU : K subseteq U) : exists V in 𝓤 α
+, IsOpen V ∧ forall x…
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `Set.MapsTo.image_subset`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t 
+: Set β} {f : α → β}, Set.MapsTo f s t → f '' s ⊆ t
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 
-English:
-theorem tendsto_iff_forall_isCompact_tendstoUniformlyOn
-  proof: by
-  rw [tendsto_nhds_compactOpen]
-  constructor
-  · -- Let us prove that convergence in the compact-open topology
-    -- implies uniform convergence on compacts.
-    -- Consider a compact set `K`
-    intro h K hK
-    -- Since `K` is compact, it suffices to prove locally uniform convergence
-    rw [← tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hK]
-    -- Now choose an entourage `U` in the codomain and a point `x ∈ K`.
-    intro U hU x _
-    -- Choose an open symmetric entourage `V` such that `V ○ V ⊆ U`.
-    rcases comp_open_symm_mem_uniformity_sets hU with ⟨V, hV, hVo, hVsymm, hVU⟩
-    -- Then choose a closed entourage `W ⊆ V`
-    rcases mem_uniformity_isClosed hV with ⟨W, hW, hWc, hWU⟩
-    -- Consider `s = {y ∈ K | (f x, f y) ∈ W}`
-    set s := K inter f ⁻¹' ball (f x) W
-    -- This is a neighbourhood of `x` within `K`, because `W` is an entourage.
-have hnhds : s in 𝓝[K] x := inter_mem_nhdsWithin _ f.continuousAt _ (ball_mem_nhds _ hW)
-    -- This set is compact because it is an intersection of `K`
-    -- with a closed set `{y | (f x, f y) ∈ W} = f ⁻¹' UniformSpace.ball (f x) W`
-have hcomp : IsCompact s := hK.inter_right (isClosed_ball _ hWc).preimage f.continuous
-    -- `f` maps `s` to the open set `ball (f x) V = {z | (f x, z) ∈ V}`
-    have hmaps : MapsTo f s (ball (f x) V) := fun x hx => hWU hx.2
-    use s, hnhds
-    -- Continuous maps `F i` in a neighbourhood of `f` map `s` to `ball (f x) V` as well.
-    refine (h s hcomp _ (isOpen_ball _ hVo) hmaps).mono fun g hg y hy => ?_
-    -- Then for `y ∈ s` we have `(f y, f x) ∈ V` and `(f x, F i y) ∈ V`, thus `(f y, F i y) ∈ U`
-exact hVU ⟨f x, SetRel.symm V hmaps hy, hg hy⟩
-  · -- Now we prove that uniform convergence on compacts
-    -- implies convergence in the compact-open topology
-    -- Consider a compact set `K`, an open set `U`, and a continuous map `f` that maps `K` to `U`
-    intro h K hK U hU hf
-    -- Due to Lebesgue number lemma, there exists an entourage `V`
-    -- such that `U` includes the `V`-thickening of `f '' K`.
-    rcases lebesgue_number_of_compact_open (hK.image (map_continuous f)) hU hf.image_subset
-        with ⟨V, hV, -, hVf⟩
-    -- Then any continuous map that is uniformly `V`-close to `f` on `K`
-    -- maps `K` to `U` as well
-    filter_upwards [h K hK V hV] with g hg x hx using hVf _ (mem_image_of_mem f hx) (hg x hx)
-
-中文:
-定理 tendsto_iff_对任意_isCompact_tendstoUniformlyOn
-  证明: by
-  rw [tendsto_nhds_compactOpen]
-  constructor
-  · -- Let us prove that convergence in the compact-open topology
-    -- implies uniform convergence on compacts.
-    -- Consider a compact set `K`
-    intro h K hK
-    -- Since `K` is compact, it suffices to prove locally uniform convergence
-    rw [← tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hK]
-    -- Now choose an entourage `U` in the codomain and a point `x ∈ K`.
-    intro U hU x _
-    -- Choose an open symmetric entourage `V` such that `V ○ V ⊆ U`.
-    rcases comp_open_symm_mem_uniformity_sets hU with ⟨V, hV, hVo, hVsymm, hVU⟩
-    -- Then choose a closed entourage `W ⊆ V`
-    rcases mem_uniformity_isClosed hV with ⟨W, hW, hWc, hWU⟩
-    -- Consider `s = {y ∈ K | (f x, f y) ∈ W}`
-    set s := K inter f ⁻¹' ball (f x) W
-    -- This is a neighbourhood of `x` within `K`, because `W` is an entourage.
-have hnhds : s in 𝓝[K] x := inter_mem_nhdsWithin _ f.continuousAt _ (ball_mem_nhds _ hW)
-    -- This set is compact because it is an intersection of `K`
-    -- with a closed set `{y | (f x, f y) ∈ W} = f ⁻¹' UniformSpace.ball (f x) W`
-have hcomp : IsCompact s := hK.inter_right (isClosed_ball _ hWc).preimage f.continuous
-    -- `f` maps `s` to the open set `ball (f x) V = {z | (f x, z) ∈ V}`
-    have hmaps : MapsTo f s (ball (f x) V) := fun x hx => hWU hx.2
-    use s, hnhds
-    -- Continuous maps `F i` in a neighbourhood of `f` map `s` to `ball (f x) V` as well.
-    refine (h s hcomp _ (isOpen_ball _ hVo) hmaps).mono fun g hg y hy => ?_
-    -- Then for `y ∈ s` we have `(f y, f x) ∈ V` and `(f x, F i y) ∈ V`, thus `(f y, F i y) ∈ U`
-exact hVU ⟨f x, SetRel.symm V hmaps hy, hg hy⟩
-  · -- Now we prove that uniform convergence on compacts
-    -- implies convergence in the compact-open topology
-    -- Consider a compact set `K`, an open set `U`, and a continuous map `f` that maps `K` to `U`
-    intro h K hK U hU hf
-    -- Due to Lebesgue number lemma, there exists an entourage `V`
-    -- such that `U` includes the `V`-thickening of `f '' K`.
-    rcases lebesgue_number_of_compact_open (hK.image (map_continuous f)) hU hf.image_subset
-        with ⟨V, hV, -, hVf⟩
-    -- Then any continuous map that is uniformly `V`-close to `f` on `K`
-    -- maps `K` to `U` as well
-    filter_upwards [h K hK V hV] with g hg x hx using hVf _ (mem_image_of_mem f hx) (hg x hx)
-
-Depends on / 依赖: compact, convergence, tendsto_nhds_compactOpen, topology
+--- 原说明 ---
+Compact-open topology on `C(α, β)` agrees with the topology of uniform convergen
+ce on compacts:
+a family of continuous functions `F i` tends to `f` in the compact-open topology
+if and only if the `F i` tends to `f` uniformly on all compact sets.
 -/
 theorem tendsto_iff_forall_isCompact_tendstoUniformlyOn
-    {ι : Type u₃} {p : Filter ι} {F : ι -> C(α, β)} {f} :
-    Tendsto F p (𝓝 f) ↔ forall K, IsCompact K -> TendstoUniformlyOn (fun i a => F i a) f p K := by
+    {ι : Type u₃} {p : Filter ι} {F : ι → C(α, β)} {f} :
+    Tendsto F p (𝓝 f) ↔ ∀ K, IsCompact K → TendstoUniformlyOn (fun i a => F i a) f p K := by
   rw [tendsto_nhds_compactOpen]
   constructor
   · -- Let us prove that convergence in the compact-open topology
@@ -206,19 +185,19 @@ theorem tendsto_iff_forall_isCompact_tendstoUniformlyOn
     -- Then choose a closed entourage `W ⊆ V`
     rcases mem_uniformity_isClosed hV with ⟨W, hW, hWc, hWU⟩
     -- Consider `s = {y ∈ K | (f x, f y) ∈ W}`
-    set s := K inter f ⁻¹' ball (f x) W
+    set s := K ∩ f ⁻¹' ball (f x) W
     -- This is a neighbourhood of `x` within `K`, because `W` is an entourage.
-have hnhds : s in 𝓝[K] x := inter_mem_nhdsWithin _ f.continuousAt _ (ball_mem_nhds _ hW)
+    have hnhds : s ∈ 𝓝[K] x := inter_mem_nhdsWithin _ <| f.continuousAt _ (ball_mem_nhds _ hW)
     -- This set is compact because it is an intersection of `K`
     -- with a closed set `{y | (f x, f y) ∈ W} = f ⁻¹' UniformSpace.ball (f x) W`
-have hcomp : IsCompact s := hK.inter_right (isClosed_ball _ hWc).preimage f.continuous
+    have hcomp : IsCompact s := hK.inter_right <| (isClosed_ball _ hWc).preimage f.continuous
     -- `f` maps `s` to the open set `ball (f x) V = {z | (f x, z) ∈ V}`
-    have hmaps : MapsTo f s (ball (f x) V) := fun x hx => hWU hx.2
+    have hmaps : MapsTo f s (ball (f x) V) := fun x hx ↦ hWU hx.2
     use s, hnhds
     -- Continuous maps `F i` in a neighbourhood of `f` map `s` to `ball (f x) V` as well.
-    refine (h s hcomp _ (isOpen_ball _ hVo) hmaps).mono fun g hg y hy => ?_
+    refine (h s hcomp _ (isOpen_ball _ hVo) hmaps).mono fun g hg y hy ↦ ?_
     -- Then for `y ∈ s` we have `(f y, f x) ∈ V` and `(f x, F i y) ∈ V`, thus `(f y, F i y) ∈ U`
-exact hVU ⟨f x, SetRel.symm V hmaps hy, hg hy⟩
+    exact hVU ⟨f x, SetRel.symm V <| hmaps hy, hg hy⟩
   · -- Now we prove that uniform convergence on compacts
     -- implies convergence in the compact-open topology
     -- Consider a compact set `K`, an open set `U`, and a continuous map `f` that maps `K` to `U`
@@ -231,268 +210,245 @@ exact hVU ⟨f x, SetRel.symm V hmaps hy, hg hy⟩
     -- maps `K` to `U` as well
     filter_upwards [h K hK V hV] with g hg x hx using hVf _ (mem_image_of_mem f hx) (hg x hx)
 
-/--
-Definition of `toUniformOnFunIsCompact` / `toUniformOnFunIsCompact` 的定义
+/-- Interpret a bundled continuous map as an element of `α →ᵤ[{K | IsCompact K}] β`.
 
-English:
-definition toUniformOnFunIsCompact
-  signature: (f : C(α, β))
-  body: UniformOnFun.ofFun {K | IsCompact K} f
+We use this map to induce the `UniformSpace` structure on `C(α, β)`. -/
+/-
+**ContinuousMap.toUniformOnFunIsCompact** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap
+`。
+形式化陈述：toUniformOnFunIsCompact (f : C(α, β)) : α ->ᵤ[{K | IsCompact K}] β
+参数：f : C(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Interpret a bundled continuous map as an element of `α →ᵤ[{K | IsCompact K}] β`.
 
-中文:
-定义 toUniformOnFunIsCompact
-  签名: (f : C(α, β))
-  定义体: UniformOnFun.ofFun {K | IsCompact K} f
-
-@[simp]
-
-Depends on / 依赖: IsCompact, UniformOnFun, UniformOnFun.ofFun
+We use this map to induce the `UniformSpace` structure on `C(α, β)`.
 -/
-def toUniformOnFunIsCompact (f : C(α, β)) : α ->ᵤ[{K | IsCompact K}] β :=
+def toUniformOnFunIsCompact (f : C(α, β)) : α →ᵤ[{K | IsCompact K}] β :=
   UniformOnFun.ofFun {K | IsCompact K} f
 
 @[simp]
-/--
-theorem `toUniformOnFun_toFun` / 定理 `toUniformOnFun_toFun`
-
-English:
-theorem toUniformOnFun_toFun
-  given: (f : C(α, β))
-  proof: rfl
-
-中文:
-定理 toUniformOnFun_toFun
-  条件: (f : C(α, β))
-  证明: rfl
+/-
+**ContinuousMap.toUniformOnFun_toFun** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：toUniformOnFun_toFun (f : C(α, β)) : UniformOnFun.toFun _ f.toUniformOnFun
+IsCompact = f
+参数：f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toUniformOnFun_toFun (f : C(α, β)) :
     UniformOnFun.toFun _ f.toUniformOnFunIsCompact = f := rfl
-
-/--
-theorem `range_toUniformOnFunIsCompact` / 定理 `range_toUniformOnFunIsCompact`
-
-English:
-theorem range_toUniformOnFunIsCompact
-  proof: Set.ext fun f => ⟨fun g => g.choose_spec ▸ g.choose.2, fun hf => ⟨⟨f, hf⟩, rfl⟩⟩
-
-中文:
-定理 range_toUniformOnFunIsCompact
-  证明: Set.ext fun f => ⟨fun g => g.choose_spec ▸ g.choose.2, fun hf => ⟨⟨f, hf⟩, rfl⟩⟩
-
-Depends on / 依赖: Set.ext, choose_spec, g.choose, g.choose_spec
+/-
+**ContinuousMap.range_toUniformOnFunIsCompact** 是 Mathlib 中的一个定理，位于命名空间 `Continu
+ousMap`。
+形式化陈述：range_toUniformOnFunIsCompact : range (toUniformOnFunIsCompact) = {f : Uni
+formOnFun α β {K | IsCompact K} | Continuous f}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `ContinuousMap.continuous_toFun`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+TopologicalSpace X] [inst_1 : TopologicalSpace Y] (self : C(X, Y)),   Continuous
+ self.toFun
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 theorem range_toUniformOnFunIsCompact :
     range (toUniformOnFunIsCompact) = {f : UniformOnFun α β {K | IsCompact K} | Continuous f} :=
-  Set.ext fun f => ⟨fun g => g.choose_spec ▸ g.choose.2, fun hf => ⟨⟨f, hf⟩, rfl⟩⟩
+  Set.ext fun f ↦ ⟨fun g ↦ g.choose_spec ▸ g.choose.2, fun hf ↦ ⟨⟨f, hf⟩, rfl⟩⟩
 
 open UniformSpace in
-/--
-Instance `compactConvergenceUniformSpace` / 实例 `compactConvergenceUniformSpace`
+/-- Uniform space structure on `C(α, β)`.
 
-English:
-instance compactConvergenceUniformSpace
-  signature: : UniformSpace C(α, β)
-  body: .replaceTopology (.comap toUniformOnFunIsCompact inferInstance) by
-    refine TopologicalSpace.ext_nhds fun f => eq_of_forall_le_iff fun l => ?_
-    simp_rw [← tendsto_id', tendsto_iff_forall_isCompact_tendstoUniformlyOn,
-      nhds_induced, tendsto_comap_iff, UniformOnFun.tendsto_iff_tendstoUniformlyOn]
-    rfl
+The uniformity comes from `α →ᵤ[{K | IsCompact K}] β` (i.e., `UniformOnFun α β {K | IsCompact K}`)
+which defines topology of uniform convergence on compact sets.
+We use `ContinuousMap.tendsto_iff_forall_isCompact_tendstoUniformlyOn`
+to show that the induced topology agrees with the compact-open topology
+and replace the topology with `compactOpen` to avoid non-defeq diamonds,
+see Note [forgetful inheritance]. -/
+/-
+**ContinuousMap.compactConvergenceUniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `Contin
+uousMap`。
+形式化陈述：compactConvergenceUniformSpace : UniformSpace C(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 compactConvergenceUniformSpace
-  签名: : 一致空间 C(α, β)
-  定义体: .replaceTopology (.comap toUniformOnFunIsCompact inferInstance) by
-    refine TopologicalSpace.ext_nhds fun f => eq_of_forall_le_iff fun l => ?_
-    simp_rw [← tendsto_id', tendsto_iff_forall_isCompact_tendstoUniformlyOn,
-      nhds_induced, tendsto_comap_iff, UniformOnFun.tendsto_iff_tendstoUniformlyOn]
-    rfl
+--- 原说明 ---
+Uniform space structure on `C(α, β)`.
 
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.ext_nhds, UniformOnFun, UniformOnFun.tendsto_iff_tendstoUniformlyOn, eq_of_forall_le_iff, ext_nhds, nhds_induced, replaceTopology, simp_rw, tendsto_comap_iff, tendsto_id, tendsto_iff_forall_isCompact_tendstoUniformlyOn, tendsto_iff_tendstoUniformlyOn, toUniformOnFunIsCompact
+The uniformity comes from `α →ᵤ[{K | IsCompact K}] β` (i.e., `UniformOnFun α β {
+K | IsCompact K}`)
+which defines topology of uniform convergence on compact sets.
+We use `ContinuousMap.tendsto_iff_forall_isCompact_tendstoUniformlyOn`
+to show that the induced topology agrees with the compact-open topology
+and replace the topology with `compactOpen` to avoid non-defeq diamonds,
+see Note [forgetful inheritance].
 -/
 instance compactConvergenceUniformSpace : UniformSpace C(α, β) :=
-.replaceTopology (.comap toUniformOnFunIsCompact inferInstance) by
-    refine TopologicalSpace.ext_nhds fun f => eq_of_forall_le_iff fun l => ?_
+  .replaceTopology (.comap toUniformOnFunIsCompact inferInstance) <| by
+    refine TopologicalSpace.ext_nhds fun f ↦ eq_of_forall_le_iff fun l ↦ ?_
     simp_rw [← tendsto_id', tendsto_iff_forall_isCompact_tendstoUniformlyOn,
       nhds_induced, tendsto_comap_iff, UniformOnFun.tendsto_iff_tendstoUniformlyOn]
     rfl
-
-/--
-theorem `isUniformEmbedding_toUniformOnFunIsCompact` / 定理 `isUniformEmbedding_toUniformOnFunIsCompact`
-
-English:
-theorem isUniformEmbedding_toUniformOnFunIsCompact
-  proof: rfl
-  injective := DFunLike.coe_injective
-
-中文:
-定理 isUniformEmbedding_toUniformOnFunIsCompact
-  证明: rfl
-  injective := DFunLike.coe_injective
+/-
+**ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact** 是 Mathlib 中的一个定理，位于
+命名空间 `ContinuousMap`。
+形式化陈述：isUniformEmbedding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniform
+OnFunIsCompact : C(α, β) -> α ->ᵤ[{K | IsCompact K}] β) where comap_uniformity
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
 theorem isUniformEmbedding_toUniformOnFunIsCompact :
-    IsUniformEmbedding (toUniformOnFunIsCompact : C(α, β) -> α ->ᵤ[{K | IsCompact K}] β) where
+    IsUniformEmbedding (toUniformOnFunIsCompact : C(α, β) → α →ᵤ[{K | IsCompact K}] β) where
   comap_uniformity := rfl
   injective := DFunLike.coe_injective
 
 open UniformOnFun in
-/--
-theorem `continuous_iff_continuous_uniformOnFun` / 定理 `continuous_iff_continuous_uniformOnFun`
+/-- `f : X → C(α, β)` is continuous if any only if it is continuous when reinterpreted as a
+map `f : X → α →ᵤ[{K | IsCompact K}] β`. -/
+/-
+**ContinuousMap.continuous_iff_continuous_uniformOnFun** 是 Mathlib 中的一个定理，位于命名空间
+ `ContinuousMap`。
+形式化陈述：continuous_iff_continuous_uniformOnFun {X : Type*} [TopologicalSpace X] (f
+ : X -> C(α, β)) : Continuous f ↔ Continuous (fun x => ofFun {K | IsCompact K} (
+f x))
+参数：f : X -> C(α, β)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsInducing.continuous_iff`：continuous_iff (hg : IsInducing g) :
+ Continuous f ↔ Continuous (g ∘ f)
+· 使用定理 `IsUniformInducing.isInducing`：IsUniformInducing.isInducing {f : α -> β} 
+(h : IsUniformInducing f) : IsInducing f
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact`：isUniformEmbed
+ding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniformOnFunIsCompact : C(α
+, β) -> α ->ᵤ[{K | IsCompact K}] β) where coma…
 
-English:
-theorem continuous_iff_continuous_uniformOnFun
-  given: {X : Type*} [TopologicalSpace X] (f : X -> C(α, β))
-  proof: isUniformEmbedding_toUniformOnFunIsCompact.isInducing.continuous_iff
-
-中文:
-定理 continuous_iff_continuous_uniformOnFun
-  条件: {X : 类型} [拓扑空间 X] (f : X -> C(α, β))
-  证明: isUniformEmbedding_toUniformOnFunIsCompact.isInducing.continuous_iff
-
-Depends on / 依赖: continuous_iff, isInducing, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.isInducing.continuous_iff
+--- 原说明 ---
+`f : X → C(α, β)` is continuous if any only if it is continuous when reinterpret
+ed as a
+map `f : X → α →ᵤ[{K | IsCompact K}] β`.
 -/
-theorem continuous_iff_continuous_uniformOnFun {X : Type*} [TopologicalSpace X] (f : X -> C(α, β)) :
-    Continuous f ↔ Continuous (fun x => ofFun {K | IsCompact K} (f x)) :=
+theorem continuous_iff_continuous_uniformOnFun {X : Type*} [TopologicalSpace X] (f : X → C(α, β)) :
+    Continuous f ↔ Continuous (fun x ↦ ofFun {K | IsCompact K} (f x)) :=
   isUniformEmbedding_toUniformOnFunIsCompact.isInducing.continuous_iff
 
 -- The following definitions and theorems
 -- used to be a part of the construction of the `UniformSpace C(α, β)` structure
 -- before it was migrated to `UniformOnFun`
-
-/--
-theorem `_root_.Filter.HasBasis.compactConvergenceUniformity` / 定理 `_root_.Filter.HasBasis.compactConvergenceUniformity`
-
-English:
-theorem _root_.Filter.HasBasis.compactConvergenceUniformity
-  statement: {ι : Type*} {pi : ι -> Prop}
-  proof: by
-  rw [← isUniformEmbedding_toUniformOnFunIsCompact.comap_uniformity]
-exact .comap _ UniformOnFun.hasBasis_uniformity_of_basis _ _ {K | IsCompact K}
-    ⟨∅, isCompact_empty⟩ (directedOn_of_sup_mem fun _ _ => IsCompact.union) h
-
-中文:
-定理 _root_.滤子.有基.compactConvergenceUniformity
-  结论: {ι : 类型} {pi : ι -> 命题}
-  证明: by
-  rw [← isUniformEmbedding_toUniformOnFunIsCompact.comap_uniformity]
-exact .comap _ UniformOnFun.hasBasis_uniformity_of_basis _ _ {K | IsCompact K}
-    ⟨∅, isCompact_empty⟩ (directedOn_of_sup_mem fun _ _ => IsCompact.union) h
-
-Depends on / 依赖: IsCompact, IsCompact.union, UniformOnFun, UniformOnFun.hasBasis_uniformity_of_basis, comap_uniformity, directedOn_of_sup_mem, hasBasis_uniformity_of_basis, isCompact_empty, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.comap_uniformity
+/-
+**ContinuousMap._root_.Filter.HasBasis.compactConvergenceUniformity** 是 Mathlib 
+中的一个定理，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Filter.HasBasis.compactConvergenceUniformity {ι : Type*} {pi : ι -> Prop}
-    {s : ι -> Set (β × β)} (h : (𝓤 β).HasBasis pi s) :
+theorem _root_.Filter.HasBasis.compactConvergenceUniformity {ι : Type*} {pi : ι → Prop}
+    {s : ι → Set (β × β)} (h : (𝓤 β).HasBasis pi s) :
     HasBasis (𝓤 C(α, β)) (fun p : Set α × ι => IsCompact p.1 ∧ pi p.2) fun p =>
-      { fg : C(α, β) × C(α, β) | forall x in p.1, (fg.1 x, fg.2 x) in s p.2 } := by
+      { fg : C(α, β) × C(α, β) | ∀ x ∈ p.1, (fg.1 x, fg.2 x) ∈ s p.2 } := by
   rw [← isUniformEmbedding_toUniformOnFunIsCompact.comap_uniformity]
-exact .comap _ UniformOnFun.hasBasis_uniformity_of_basis _ _ {K | IsCompact K}
-    ⟨∅, isCompact_empty⟩ (directedOn_of_sup_mem fun _ _ => IsCompact.union) h
-
-/--
-theorem `hasBasis_compactConvergenceUniformity` / 定理 `hasBasis_compactConvergenceUniformity`
-
-English:
-theorem hasBasis_compactConvergenceUniformity
-  proof: (basis_sets _).compactConvergenceUniformity
-
-中文:
-定理 hasBasis_compactConvergenceUniformity
-  证明: (basis_sets _).compactConvergenceUniformity
-
-Depends on / 依赖: basis_sets, compactConvergenceUniformity
+  exact .comap _ <| UniformOnFun.hasBasis_uniformity_of_basis _ _ {K | IsCompact K}
+    ⟨∅, isCompact_empty⟩ (directedOn_of_sup_mem fun _ _ ↦ IsCompact.union) h
+/-
+**ContinuousMap.hasBasis_compactConvergenceUniformity** 是 Mathlib 中的一个定理，位于命名空间 
+`ContinuousMap`。
+形式化陈述：hasBasis_compactConvergenceUniformity : HasBasis (𝓤 C(α, β)) (fun p : Set 
+α × Set (β × β) => IsCompact p.1 ∧ p.2 in 𝓤 β) fun p => { fg : C(α, β) × C(α, β)
+ | forall x in p.1, (fg.1 x, fg.2 x) in p.2 }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.compactConvergenceUniformity`：∀ {α : Type u₁} {β : Type 
+u₂} [inst : TopologicalSpace α] [inst_1 : UniformSpace β] {ι : Type u_1} {pi : ι
+ → Prop}   {s : ι → Set (β × β)}, …
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
 theorem hasBasis_compactConvergenceUniformity :
-    HasBasis (𝓤 C(α, β)) (fun p : Set α × Set (β × β) => IsCompact p.1 ∧ p.2 in 𝓤 β) fun p =>
-      { fg : C(α, β) × C(α, β) | forall x in p.1, (fg.1 x, fg.2 x) in p.2 } :=
+    HasBasis (𝓤 C(α, β)) (fun p : Set α × Set (β × β) => IsCompact p.1 ∧ p.2 ∈ 𝓤 β) fun p =>
+      { fg : C(α, β) × C(α, β) | ∀ x ∈ p.1, (fg.1 x, fg.2 x) ∈ p.2 } :=
   (basis_sets _).compactConvergenceUniformity
-
-/--
-theorem `mem_compactConvergence_entourage_iff` / 定理 `mem_compactConvergence_entourage_iff`
-
-English:
-theorem mem_compactConvergence_entourage_iff
-  given: (X : Set (C(α, β) × C(α, β)))
-  proof: by
-  simp [hasBasis_compactConvergenceUniformity.mem_iff, and_assoc]
-
-中文:
-定理 mem_compactConvergence_entourage_iff
-  条件: (X : 集合 (C(α, β) × C(α, β)))
-  证明: by
-  simp [hasBasis_compactConvergenceUniformity.mem_iff, and_assoc]
-
-Depends on / 依赖: and_assoc, hasBasis_compactConvergenceUniformity, hasBasis_compactConvergenceUniformity.mem_iff, mem_iff
+/-
+**ContinuousMap.mem_compactConvergence_entourage_iff** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousMap`。
+形式化陈述：mem_compactConvergence_entourage_iff (X : Set (C(α, β) × C(α, β))) : X in 
+𝓤 C(α, β) ↔ exists (K : Set α) (V : Set (β × β)), IsCompact K ∧ V in 𝓤 β ∧ { fg 
+: C(α, β) × C(α, β) | forall x in K, (fg.1 x, fg.2 x) in V } subseteq X
+参数：X : Set (C(α, β) × C(α, β))。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `ContinuousMap.hasBasis_compactConvergenceUniformity`：hasBasis_compactCon
+vergenceUniformity : HasBasis (𝓤 C(α, β)) (fun p : Set α × Set (β × β) => IsComp
+act p.1 ∧ p.2 in 𝓤 β) fun p => { fg : C(α…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_compactConvergence_entourage_iff (X : Set (C(α, β) × C(α, β))) :
-    X in 𝓤 C(α, β) ↔
-      exists (K : Set α) (V : Set (β × β)), IsCompact K ∧ V in 𝓤 β ∧
-        { fg : C(α, β) × C(α, β) | forall x in K, (fg.1 x, fg.2 x) in V } subseteq X := by
+    X ∈ 𝓤 C(α, β) ↔
+      ∃ (K : Set α) (V : Set (β × β)), IsCompact K ∧ V ∈ 𝓤 β ∧
+        { fg : C(α, β) × C(α, β) | ∀ x ∈ K, (fg.1 x, fg.2 x) ∈ V } ⊆ X := by
   simp [hasBasis_compactConvergenceUniformity.mem_iff, and_assoc]
 
-/--
-theorem `_root_.CompactExhaustion.hasBasis_compactConvergenceUniformity` / 定理 `_root_.CompactExhaustion.hasBasis_compactConvergenceUniformity`
+/-- If `K` is a compact exhaustion of `α`
+and `V i` bounded by `p i` is a basis of entourages of `β`,
+then `fun (n, i) ↦ {(f, g) | ∀ x ∈ K n, (f x, g x) ∈ V i}` bounded by `p i`
+is a basis of entourages of `C(α, β)`. -/
+/-
+**ContinuousMap._root_.CompactExhaustion.hasBasis_compactConvergenceUniformity**
+ 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.CompactExhaustion.hasBasis_compactConvergenceUniformity
-  statement: {ι : Type*}
-  proof: (UniformOnFun.hasBasis_uniformity_of_covering_of_basis {K | IsCompact K} K.isCompact
-    (Monotone.directed_le K.subset) (fun _ => K.exists_superset_of_isCompact) hb).comap _
-
-中文:
-定理 _root_.余mpactExhaustion.hasBasis_compactConvergenceUniformity
-  结论: {ι : 类型}
-  证明: (UniformOnFun.hasBasis_uniformity_of_covering_of_basis {K | IsCompact K} K.isCompact
-    (Monotone.directed_le K.subset) (fun _ => K.exists_superset_of_isCompact) hb).comap _
-
-Depends on / 依赖: IsCompact, K.exists_superset_of_isCompact, K.isCompact, K.subset, Monotone, Monotone.directed_le, UniformOnFun, UniformOnFun.hasBasis_uniformity_of_covering_of_basis, directed_le, exists_superset_of_isCompact, hasBasis_uniformity_of_covering_of_basis, isCompact, subset
+--- 原说明 ---
+If `K` is a compact exhaustion of `α`
+and `V i` bounded by `p i` is a basis of entourages of `β`,
+then `fun (n, i) ↦ {(f, g) | ∀ x ∈ K n, (f x, g x) ∈ V i}` bounded by `p i`
+is a basis of entourages of `C(α, β)`.
 -/
 theorem _root_.CompactExhaustion.hasBasis_compactConvergenceUniformity {ι : Type*}
-    {p : ι -> Prop} {V : ι -> Set (β × β)} (K : CompactExhaustion α) (hb : (𝓤 β).HasBasis p V) :
-    HasBasis (𝓤 C(α, β)) (fun i : Nat × ι => p i.2) fun i =>
-      {fg | forall x in K i.1, (fg.1 x, fg.2 x) in V i.2} :=
+    {p : ι → Prop} {V : ι → Set (β × β)} (K : CompactExhaustion α) (hb : (𝓤 β).HasBasis p V) :
+    HasBasis (𝓤 C(α, β)) (fun i : ℕ × ι ↦ p i.2) fun i ↦
+      {fg | ∀ x ∈ K i.1, (fg.1 x, fg.2 x) ∈ V i.2} :=
   (UniformOnFun.hasBasis_uniformity_of_covering_of_basis {K | IsCompact K} K.isCompact
-    (Monotone.directed_le K.subset) (fun _ => K.exists_superset_of_isCompact) hb).comap _
-
-/--
-theorem `_root_.CompactExhaustion.hasAntitoneBasis_compactConvergenceUniformity` / 定理 `_root_.CompactExhaustion.hasAntitoneBasis_compactConvergenceUniformity`
-
-English:
-theorem _root_.CompactExhaustion.hasAntitoneBasis_compactConvergenceUniformity
-  proof: (UniformOnFun.hasAntitoneBasis_uniformity {K | IsCompact K} K.isCompact
-    K.subset (fun _ => K.exists_superset_of_isCompact) hb).comap _
-
-中文:
-定理 _root_.余mpactExhaustion.hasAntitoneBasis_compactConvergenceUniformity
-  证明: (UniformOnFun.hasAntitoneBasis_uniformity {K | IsCompact K} K.isCompact
-    K.subset (fun _ => K.exists_superset_of_isCompact) hb).comap _
-
-Depends on / 依赖: IsCompact, K.exists_superset_of_isCompact, K.isCompact, K.subset, UniformOnFun, UniformOnFun.hasAntitoneBasis_uniformity, exists_superset_of_isCompact, hasAntitoneBasis_uniformity, isCompact, subset
+    (Monotone.directed_le K.subset) (fun _ ↦ K.exists_superset_of_isCompact) hb).comap _
+/-
+**ContinuousMap._root_.CompactExhaustion.hasAntitoneBasis_compactConvergenceUnif
+ormity** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.CompactExhaustion.hasAntitoneBasis_compactConvergenceUniformity
-    {V : Nat -> Set (β × β)} (K : CompactExhaustion α) (hb : (𝓤 β).HasAntitoneBasis V) :
-    HasAntitoneBasis (𝓤 C(α, β)) fun n => {fg | forall x in K n, (fg.1 x, fg.2 x) in V n} :=
+    {V : ℕ → Set (β × β)} (K : CompactExhaustion α) (hb : (𝓤 β).HasAntitoneBasis V) :
+    HasAntitoneBasis (𝓤 C(α, β)) fun n ↦ {fg | ∀ x ∈ K n, (fg.1 x, fg.2 x) ∈ V n} :=
   (UniformOnFun.hasAntitoneBasis_uniformity {K | IsCompact K} K.isCompact
-    K.subset (fun _ => K.exists_superset_of_isCompact) hb).comap _
+    K.subset (fun _ ↦ K.exists_superset_of_isCompact) hb).comap _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `α` is a weakly locally compact σ-compact space
+(e.g., a proper pseudometric space or a compact spaces)
+and the uniformity on `β` is pseudometrizable,
+then the uniformity on `C(α, β)` is pseudometrizable too.
+-/
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [WeaklyLocallyCompactSpace
-  signature: α] [SigmaCompactSpace α] [IsCountablyGenerated (𝓤 β)] :
-  body: let ⟨_V, hV⟩ := exists_antitone_basis (𝓤 β)
-  ((CompactExhaustion.choice α).hasAntitoneBasis_compactConvergenceUniformity
-    hV).isCountablyGenerated
-
-中文:
-实例 [WeaklyLocallyCompact空间
-  签名: α] [SigmaCompact空间 α] [是余untablyGenerated (𝓤 β)] :
-  定义体: let ⟨_V, hV⟩ := exists_antitone_basis (𝓤 β)
-  ((CompactExhaustion.choice α).hasAntitoneBasis_compactConvergenceUniformity
-    hV).isCountablyGenerated
-
-Depends on / 依赖: CompactExhaustion, CompactExhaustion.choice, choice, exists_antitone_basis, hasAntitoneBasis_compactConvergenceUniformity, isCountablyGenerated
+--- 原说明 ---
+If `α` is a weakly locally compact σ-compact space
+(e.g., a proper pseudometric space or a compact spaces)
+and the uniformity on `β` is pseudometrizable,
+then the uniformity on `C(α, β)` is pseudometrizable too.
 -/
 instance [WeaklyLocallyCompactSpace α] [SigmaCompactSpace α] [IsCountablyGenerated (𝓤 β)] :
     IsCountablyGenerated (𝓤 (C(α, β))) :=
@@ -500,30 +456,32 @@ instance [WeaklyLocallyCompactSpace α] [SigmaCompactSpace α] [IsCountablyGener
   ((CompactExhaustion.choice α).hasAntitoneBasis_compactConvergenceUniformity
     hV).isCountablyGenerated
 
-variable {ι : Type u₃} {p : Filter ι} {F : ι -> C(α, β)} {f}
+variable {ι : Type u₃} {p : Filter ι} {F : ι → C(α, β)} {f}
 
-/--
-theorem `tendsto_of_tendstoLocallyUniformly` / 定理 `tendsto_of_tendstoLocallyUniformly`
+/-- Locally uniform convergence implies convergence in the compact-open topology. -/
+/-
+**ContinuousMap.tendsto_of_tendstoLocallyUniformly** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousMap`。
+形式化陈述：tendsto_of_tendstoLocallyUniformly (h : TendstoLocallyUniformly (fun i a =
+> F i a) f p) : Tendsto F p (𝓝 f)
+参数：h : TendstoLocallyUniformly (fun i a => F i a) f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.tendsto_iff_forall_isCompact_tendstoUniformlyOn`：tendsto_i
+ff_forall_isCompact_tendstoUniformlyOn {ι : Type u₃} {p : Filter ι} {F : ι -> C(
+α, β)} {f} : Tendsto F p (𝓝 f) ↔ forall K, IsCompac…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact`：tendstoLoca
+llyUniformlyOn_iff_tendstoUniformlyOn_of_compact (hs : IsCompact s) : TendstoLoc
+allyUniformlyOn F f p s ↔ TendstoUniformlyOn F f …
+· 使用定理 `TendstoLocallyUniformly.tendstoLocallyUniformlyOn`：∀ {α : Type u_1} {β :
+ Type u_2} {ι : Type u_4} [inst : TopologicalSpace α] [inst_1 : UniformSpace β] 
+{F : ι → α → β}   {f : α → β} {s : Set …
 
-English:
-theorem tendsto_of_tendstoLocallyUniformly
-  given: (h : TendstoLocallyUniformly (fun i a => F i a) f p)
-  proof: by
-  rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn]
-  intro K hK
-  rw [← tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hK]
-  exact h.tendstoLocallyUniformlyOn
-
-中文:
-定理 tendsto_of_tendstoLocallyUniformly
-  条件: (h : TendstoLocallyUniformly (fun i a => F i a) f p)
-  证明: by
-  rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn]
-  intro K hK
-  rw [← tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hK]
-  exact h.tendstoLocallyUniformlyOn
-
-Depends on / 依赖: h.tendstoLocallyUniformlyOn, tendstoLocallyUniformlyOn, tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact, tendsto_iff_forall_isCompact_tendstoUniformlyOn
+--- 原说明 ---
+Locally uniform convergence implies convergence in the compact-open topology.
 -/
 theorem tendsto_of_tendstoLocallyUniformly (h : TendstoLocallyUniformly (fun i a => F i a) f p) :
     Tendsto F p (𝓝 f) := by
@@ -532,32 +490,41 @@ theorem tendsto_of_tendstoLocallyUniformly (h : TendstoLocallyUniformly (fun i a
   rw [← tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hK]
   exact h.tendstoLocallyUniformlyOn
 
-/--
-theorem `tendsto_iff_tendstoLocallyUniformly` / 定理 `tendsto_iff_tendstoLocallyUniformly`
+/-- In a weakly locally compact space,
+convergence in the compact-open topology is the same as locally uniform convergence.
 
-English:
-theorem tendsto_iff_tendstoLocallyUniformly
-  given: [WeaklyLocallyCompactSpace α]
-  proof: by
-  refine ⟨fun h V hV x => ?_, tendsto_of_tendstoLocallyUniformly⟩
-  rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn] at h
-  obtain ⟨n, hn₁, hn₂⟩ := exists_compact_mem_nhds x
-  exact ⟨n, hn₂, h n hn₁ V hV⟩
+The right-to-left implication holds in any topological space,
+see `ContinuousMap.tendsto_of_tendstoLocallyUniformly`. -/
+/-
+**ContinuousMap.tendsto_iff_tendstoLocallyUniformly** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuousMap`。
+形式化陈述：tendsto_iff_tendstoLocallyUniformly [WeaklyLocallyCompactSpace α] : Tendst
+o F p (𝓝 f) ↔ TendstoLocallyUniformly (fun i a => F i a) f p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WeaklyLocallyCompactSpace.exists_compact_mem_nhds`：∀ {X : Type u_3} {ins
+t : TopologicalSpace X} [self : WeaklyLocallyCompactSpace X] (x : X), ∃ s, IsCom
+pact s ∧ s ∈ nhds x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.tendsto_iff_forall_isCompact_tendstoUniformlyOn`：tendsto_i
+ff_forall_isCompact_tendstoUniformlyOn {ι : Type u₃} {p : Filter ι} {F : ι -> C(
+α, β)} {f} : Tendsto F p (𝓝 f) ↔ forall K, IsCompac…
+· 使用定理 `ContinuousMap.tendsto_of_tendstoLocallyUniformly`：tendsto_of_tendstoLoca
+llyUniformly (h : TendstoLocallyUniformly (fun i a => F i a) f p) : Tendsto F p 
+(𝓝 f)
 
-中文:
-定理 tendsto_iff_tendstoLocallyUniformly
-  条件: [WeaklyLocallyCompact空间 α]
-  证明: by
-  refine ⟨fun h V hV x => ?_, tendsto_of_tendstoLocallyUniformly⟩
-  rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn] at h
-  obtain ⟨n, hn₁, hn₂⟩ := exists_compact_mem_nhds x
-  exact ⟨n, hn₂, h n hn₁ V hV⟩
+--- 原说明 ---
+In a weakly locally compact space,
+convergence in the compact-open topology is the same as locally uniform converge
+nce.
 
-Depends on / 依赖: exists_compact_mem_nhds, tendsto_iff_forall_isCompact_tendstoUniformlyOn, tendsto_of_tendstoLocallyUniformly
+The right-to-left implication holds in any topological space,
+see `ContinuousMap.tendsto_of_tendstoLocallyUniformly`.
 -/
 theorem tendsto_iff_tendstoLocallyUniformly [WeaklyLocallyCompactSpace α] :
     Tendsto F p (𝓝 f) ↔ TendstoLocallyUniformly (fun i a => F i a) f p := by
-  refine ⟨fun h V hV x => ?_, tendsto_of_tendstoLocallyUniformly⟩
+  refine ⟨fun h V hV x ↦ ?_, tendsto_of_tendstoLocallyUniformly⟩
   rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn] at h
   obtain ⟨n, hn₁, hn₂⟩ := exists_compact_mem_nhds x
   exact ⟨n, hn₂, h n hn₁ V hV⟩
@@ -566,142 +533,152 @@ section Functorial
 
 variable {γ δ : Type*} [TopologicalSpace γ] [UniformSpace δ]
 
-/--
-theorem `uniformContinuous_comp` / 定理 `uniformContinuous_comp`
-
-English:
-theorem uniformContinuous_comp
-  given: (g : C(β, δ)) (hg : UniformContinuous g)
-  proof: isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr
-.comp UniformOnFun.postcomp_uniformContinuous hg
-      isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous
-
-中文:
-定理 uniformContinuous_comp
-  条件: (g : C(β, δ)) (hg : 一致连续 g)
-  证明: isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr
-.comp UniformOnFun.postcomp_uniformContinuous hg
-      isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous
-
-Depends on / 依赖: UniformOnFun, UniformOnFun.postcomp_uniformContinuous, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous, isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr, postcomp_uniformContinuous, uniformContinuous, uniformContinuous_iff
+/-
+**ContinuousMap.uniformContinuous_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`
+。
+形式化陈述：uniformContinuous_comp (g : C(β, δ)) (hg : UniformContinuous g) : UniformC
+ontinuous (ContinuousMap.comp g : C(α, β) -> C(α, δ))
+参数：g : C(β, δ)；hg : UniformContinuous g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsUniformInducing.uniformContinuous_iff`：IsUniformInducing.uniformContin
+uous_iff {f : α -> β} {g : β -> γ} (hg : IsUniformInducing g) : UniformContinuou
+s f ↔ UniformContinuous (g ∘ …
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact`：isUniformEmbed
+ding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniformOnFunIsCompact : C(α
+, β) -> α ->ᵤ[{K | IsCompact K}] β) where coma…
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `UniformOnFun.postcomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2}
+ {γ : Type u_3} [inst : UniformSpace β] {𝔖 : Set (Set α)} [inst_1 : UniformSpace
+ γ]   {f : γ → β},   UniformC…
+· 使用定理 `IsUniformInducing.uniformContinuous`：IsUniformInducing.uniformContinuous
+ {f : α -> β} (hf : IsUniformInducing f) : UniformContinuous f
 -/
 theorem uniformContinuous_comp (g : C(β, δ)) (hg : UniformContinuous g) :
-    UniformContinuous (ContinuousMap.comp g : C(α, β) -> C(α, δ)) :=
-isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr
-.comp UniformOnFun.postcomp_uniformContinuous hg
+    UniformContinuous (ContinuousMap.comp g : C(α, β) → C(α, δ)) :=
+  isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr <|
+    UniformOnFun.postcomp_uniformContinuous hg |>.comp
       isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous
-
-/--
-theorem `isUniformInducing_comp` / 定理 `isUniformInducing_comp`
-
-English:
-theorem isUniformInducing_comp
-  given: (g : C(β, δ)) (hg : IsUniformInducing g)
-  proof: isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing.of_comp_iff.mp
-.comp UniformOnFun.postcomp_isUniformInducing hg
-      isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing
-
-中文:
-定理 isUniformInducing_comp
-  条件: (g : C(β, δ)) (hg : 是UniformInducing g)
-  证明: isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing.of_comp_iff.mp
-.comp UniformOnFun.postcomp_isUniformInducing hg
-      isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing
-
-Depends on / 依赖: UniformOnFun, UniformOnFun.postcomp_isUniformInducing, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing, isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing.of_comp_iff.mp, isUniformInducing, of_comp_iff, postcomp_isUniformInducing
+/-
+**ContinuousMap.isUniformInducing_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`
+。
+形式化陈述：isUniformInducing_comp (g : C(β, δ)) (hg : IsUniformInducing g) : IsUnifor
+mInducing (ContinuousMap.comp g : C(α, β) -> C(α, δ))
+参数：g : C(β, δ)；hg : IsUniformInducing g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsUniformInducing.of_comp_iff`：IsUniformInducing.of_comp_iff {g : β -> γ
+} (hg : IsUniformInducing g) {f : α -> β} : IsUniformInducing (g ∘ f) ↔ IsUnifor
+mInducing f
+· 使用引理 `IsUniformEmbedding.isUniformInducing`：IsUniformEmbedding.isUniformInduci
+ng {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformInducing f
+· 使用定理 `ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact`：isUniformEmbed
+ding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniformOnFunIsCompact : C(α
+, β) -> α ->ᵤ[{K | IsCompact K}] β) where coma…
+· 使用定理 `IsUniformInducing.comp`：IsUniformInducing.comp {g : β -> γ} (hg : IsUnif
+ormInducing g) {f : α -> β} (hf : IsUniformInducing f) : IsUniformInducing (g ∘ 
+f)
+· 使用引理 `UniformOnFun.postcomp_isUniformInducing`：postcomp_isUniformInducing [Uni
+formSpace γ] {f : γ -> β} (hf : IsUniformInducing f) : IsUniformInducing (ofFun 
+𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)
 -/
 theorem isUniformInducing_comp (g : C(β, δ)) (hg : IsUniformInducing g) :
-    IsUniformInducing (ContinuousMap.comp g : C(α, β) -> C(α, δ)) :=
-isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing.of_comp_iff.mp
-.comp UniformOnFun.postcomp_isUniformInducing hg
+    IsUniformInducing (ContinuousMap.comp g : C(α, β) → C(α, δ)) :=
+  isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing.of_comp_iff.mp <|
+    UniformOnFun.postcomp_isUniformInducing hg |>.comp
       isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing
-
-/--
-theorem `isUniformEmbedding_comp` / 定理 `isUniformEmbedding_comp`
-
-English:
-theorem isUniformEmbedding_comp
-  given: (g : C(β, δ)) (hg : IsUniformEmbedding g)
-  proof: isUniformEmbedding_toUniformOnFunIsCompact.of_comp_iff.mp
-.comp UniformOnFun.postcomp_isUniformEmbedding hg
-      isUniformEmbedding_toUniformOnFunIsCompact
-
-中文:
-定理 isUniformEmbedding_comp
-  条件: (g : C(β, δ)) (hg : 是一致嵌入 g)
-  证明: isUniformEmbedding_toUniformOnFunIsCompact.of_comp_iff.mp
-.comp UniformOnFun.postcomp_isUniformEmbedding hg
-      isUniformEmbedding_toUniformOnFunIsCompact
-
-Depends on / 依赖: UniformOnFun, UniformOnFun.postcomp_isUniformEmbedding, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.of_comp_iff.mp, of_comp_iff, postcomp_isUniformEmbedding
+/-
+**ContinuousMap.isUniformEmbedding_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap
+`。
+形式化陈述：isUniformEmbedding_comp (g : C(β, δ)) (hg : IsUniformEmbedding g) : IsUnif
+ormEmbedding (ContinuousMap.comp g : C(α, β) -> C(α, δ))
+参数：g : C(β, δ)；hg : IsUniformEmbedding g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsUniformEmbedding.of_comp_iff`：IsUniformEmbedding.of_comp_iff {g : β ->
+ γ} (hg : IsUniformEmbedding g) {f : α -> β} : IsUniformEmbedding (g ∘ f) ↔ IsUn
+iformEmbedding f
+· 使用定理 `ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact`：isUniformEmbed
+ding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniformOnFunIsCompact : C(α
+, β) -> α ->ᵤ[{K | IsCompact K}] β) where coma…
+· 使用定理 `IsUniformEmbedding.comp`：IsUniformEmbedding.comp {g : β -> γ} (hg : IsUn
+iformEmbedding g) {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformEmbedding 
+(g ∘ f) where…
+· 使用定理 `UniformOnFun.postcomp_isUniformEmbedding`：∀ {α : Type u_1} {β : Type u_2
+} {γ : Type u_3} [inst : UniformSpace β] {𝔖 : Set (Set α)} [inst_1 : UniformSpac
+e γ]   {f : γ → β},   IsUnifor…
 -/
 theorem isUniformEmbedding_comp (g : C(β, δ)) (hg : IsUniformEmbedding g) :
-    IsUniformEmbedding (ContinuousMap.comp g : C(α, β) -> C(α, δ)) :=
-isUniformEmbedding_toUniformOnFunIsCompact.of_comp_iff.mp
-.comp UniformOnFun.postcomp_isUniformEmbedding hg
+    IsUniformEmbedding (ContinuousMap.comp g : C(α, β) → C(α, δ)) :=
+  isUniformEmbedding_toUniformOnFunIsCompact.of_comp_iff.mp <|
+    UniformOnFun.postcomp_isUniformEmbedding hg |>.comp
       isUniformEmbedding_toUniformOnFunIsCompact
-
-/--
-theorem `uniformContinuous_comp_left` / 定理 `uniformContinuous_comp_left`
-
-English:
-theorem uniformContinuous_comp_left
-  given: (g : C(α, γ))
-  proof: isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr
-.comp UniformOnFun.precomp_uniformContinuous (fun _ hK => hK.image g.continuous)
-      isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous
-
-中文:
-定理 uniformContinuous_comp_left
-  条件: (g : C(α, γ))
-  证明: isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr
-.comp UniformOnFun.precomp_uniformContinuous (fun _ hK => hK.image g.continuous)
-      isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous
-
-Depends on / 依赖: UniformOnFun, UniformOnFun.precomp_uniformContinuous, continuous, g.continuous, hK.image, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous, isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr, precomp_uniformContinuous, uniformContinuous, uniformContinuous_iff
+/-
+**ContinuousMap.uniformContinuous_comp_left** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sMap`。
+形式化陈述：uniformContinuous_comp_left (g : C(α, γ)) : UniformContinuous (fun f => f.
+comp g : C(γ, β) -> C(α, β))
+参数：g : C(α, γ)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsUniformInducing.uniformContinuous_iff`：IsUniformInducing.uniformContin
+uous_iff {f : α -> β} {g : β -> γ} (hg : IsUniformInducing g) : UniformContinuou
+s f ↔ UniformContinuous (g ∘ …
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact`：isUniformEmbed
+ding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniformOnFunIsCompact : C(α
+, β) -> α ->ᵤ[{K | IsCompact K}] β) where coma…
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `UniformOnFun.precomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2} 
+{γ : Type u_3} [inst : UniformSpace β] {𝔖 : Set (Set α)} {𝔗 : Set (Set γ)} {f : 
+γ → α},   Set.MapsTo (fun x …
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `IsUniformInducing.uniformContinuous`：IsUniformInducing.uniformContinuous
+ {f : α -> β} (hf : IsUniformInducing f) : UniformContinuous f
 -/
 theorem uniformContinuous_comp_left (g : C(α, γ)) :
-    UniformContinuous (fun f => f.comp g : C(γ, β) -> C(α, β)) :=
-isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr
-.comp UniformOnFun.precomp_uniformContinuous (fun _ hK => hK.image g.continuous)
+    UniformContinuous (fun f ↦ f.comp g : C(γ, β) → C(α, β)) :=
+  isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous_iff.mpr <|
+    UniformOnFun.precomp_uniformContinuous (fun _ hK ↦ hK.image g.continuous) |>.comp
       isUniformEmbedding_toUniformOnFunIsCompact.uniformContinuous
 
-/--
-Definition of `_root_.UniformEquiv.arrowCongr` / `_root_.UniformEquiv.arrowCongr` 的定义
+/-- Any pair of a homeomorphism `X ≃ₜ Z` and an isomorphism `Y ≃ᵤ T` of uniform spaces gives rise
+to an isomorphism `C(X, Y) ≃ᵤ C(Z, T)`. -/
+/-
+**ContinuousMap._root_.UniformEquiv.arrowCongr** 是 Mathlib 中的一个定义，位于命名空间 `Contin
+uousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.UniformEquiv.arrowCongr
-  signature: (φ : α ≃ₜ γ) (ψ : β ≃ᵤ δ)
-  body: .comp ψ.toHomeomorph f.comp φ.symm
-invFun f := .comp ψ.symm.toHomeomorph f.comp φ
-.trans congrArg f φ.left_inv _ left_inv f := ext fun _ => ψ.left_inv (f _)
-.trans congrArg f φ.right_inv _ right_inv f := ext fun _ => ψ.right_inv (f _)
-.comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.uniformContinuous
-    uniformContinuous_comp_left _
-.comp uniformContinuous_invFun := uniformContinuous_comp _ ψ.symm.uniformContinuous
-    uniformContinuous_comp_left _
-
-中文:
-定义 _root_.一致等价.arrowCongr
-  签名: (φ : α ≃ₜ γ) (ψ : β ≃ᵤ δ)
-  定义体: .comp ψ.toHomeomorph f.comp φ.symm
-invFun f := .comp ψ.symm.toHomeomorph f.comp φ
-.trans congrArg f φ.left_inv _ left_inv f := ext fun _ => ψ.left_inv (f _)
-.trans congrArg f φ.right_inv _ right_inv f := ext fun _ => ψ.right_inv (f _)
-.comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.uniformContinuous
-    uniformContinuous_comp_left _
-.comp uniformContinuous_invFun := uniformContinuous_comp _ ψ.symm.uniformContinuous
-    uniformContinuous_comp_left _
+--- 原说明 ---
+Any pair of a homeomorphism `X ≃ₜ Z` and an isomorphism `Y ≃ᵤ T` of uniform spac
+es gives rise
+to an isomorphism `C(X, Y) ≃ᵤ C(Z, T)`.
 -/
 protected def _root_.UniformEquiv.arrowCongr (φ : α ≃ₜ γ) (ψ : β ≃ᵤ δ) :
     C(α, β) ≃ᵤ C(γ, δ) where
-toFun f := .comp ψ.toHomeomorph f.comp φ.symm
-invFun f := .comp ψ.symm.toHomeomorph f.comp φ
-.trans congrArg f φ.left_inv _ left_inv f := ext fun _ => ψ.left_inv (f _)
-.trans congrArg f φ.right_inv _ right_inv f := ext fun _ => ψ.right_inv (f _)
-.comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.uniformContinuous
+  toFun f := .comp ψ.toHomeomorph <| f.comp φ.symm
+  invFun f := .comp ψ.symm.toHomeomorph <| f.comp φ
+  left_inv f := ext fun _ ↦ ψ.left_inv (f _) |>.trans <| congrArg f <| φ.left_inv _
+  right_inv f := ext fun _ ↦ ψ.right_inv (f _) |>.trans <| congrArg f <| φ.right_inv _
+  uniformContinuous_toFun := uniformContinuous_comp _ ψ.uniformContinuous |>.comp <|
     uniformContinuous_comp_left _
-.comp uniformContinuous_invFun := uniformContinuous_comp _ ψ.symm.uniformContinuous
+  uniformContinuous_invFun := uniformContinuous_comp _ ψ.symm.uniformContinuous |>.comp <|
     uniformContinuous_comp_left _
 
 end Functorial
@@ -710,97 +687,107 @@ section CompactDomain
 
 variable [CompactSpace α]
 
-/--
-theorem `hasBasis_compactConvergenceUniformity_of_compact` / 定理 `hasBasis_compactConvergenceUniformity_of_compact`
-
-English:
-theorem hasBasis_compactConvergenceUniformity_of_compact
-  proof: hasBasis_compactConvergenceUniformity.to_hasBasis
-    (fun p hp => ⟨p.2, hp.2, fun _fg hfg x _hx => hfg x⟩) fun V hV =>
-    ⟨⟨univ, V⟩, ⟨isCompact_univ, hV⟩, fun _fg hfg x => hfg x (mem_univ x)⟩
-
-中文:
-定理 hasBasis_compactConvergenceUniformity_of_compact
-  证明: hasBasis_compactConvergenceUniformity.to_hasBasis
-    (fun p hp => ⟨p.2, hp.2, fun _fg hfg x _hx => hfg x⟩) fun V hV =>
-    ⟨⟨univ, V⟩, ⟨isCompact_univ, hV⟩, fun _fg hfg x => hfg x (mem_univ x)⟩
-
-Depends on / 依赖: hasBasis_compactConvergenceUniformity, hasBasis_compactConvergenceUniformity.to_hasBasis, isCompact_univ, mem_univ, to_hasBasis
+/-
+**ContinuousMap.hasBasis_compactConvergenceUniformity_of_compact** 是 Mathlib 中的一
+个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：hasBasis_compactConvergenceUniformity_of_compact : HasBasis (𝓤 C(α, β)) (f
+un V : Set (β × β) => V in 𝓤 β) fun V => {fg : C(α, β) × C(α, β) | forall x, (fg
+.1 x, fg.2 x) in V}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `ContinuousMap.hasBasis_compactConvergenceUniformity`：hasBasis_compactCon
+vergenceUniformity : HasBasis (𝓤 C(α, β)) (fun p : Set α × Set (β × β) => IsComp
+act p.1 ∧ p.2 in 𝓤 β) fun p => { fg : C(α…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `isCompact_univ`：isCompact_univ [h : CompactSpace X] : IsCompact (univ : 
+Set X)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem hasBasis_compactConvergenceUniformity_of_compact :
-    HasBasis (𝓤 C(α, β)) (fun V : Set (β × β) => V in 𝓤 β) fun V =>
-      {fg : C(α, β) × C(α, β) | forall x, (fg.1 x, fg.2 x) in V} :=
+    HasBasis (𝓤 C(α, β)) (fun V : Set (β × β) => V ∈ 𝓤 β) fun V ↦
+      {fg : C(α, β) × C(α, β) | ∀ x, (fg.1 x, fg.2 x) ∈ V} :=
   hasBasis_compactConvergenceUniformity.to_hasBasis
-    (fun p hp => ⟨p.2, hp.2, fun _fg hfg x _hx => hfg x⟩) fun V hV =>
+    (fun p hp => ⟨p.2, hp.2, fun _fg hfg x _hx => hfg x⟩) fun V hV ↦
     ⟨⟨univ, V⟩, ⟨isCompact_univ, hV⟩, fun _fg hfg x => hfg x (mem_univ x)⟩
-
-/--
-theorem `_root_.Filter.HasBasis.compactConvergenceUniformity_of_compact` / 定理 `_root_.Filter.HasBasis.compactConvergenceUniformity_of_compact`
-
-English:
-theorem _root_.Filter.HasBasis.compactConvergenceUniformity_of_compact
-  proof: hasBasis_compactConvergenceUniformity_of_compact.to_hasBasis
-    (fun _U hU => (h.mem_iff.mp hU).imp fun _i ⟨hpi, hi⟩ => ⟨hpi, fun _ h a => hi <| h a⟩)
-    fun i hi => ⟨V i, h.mem_of_mem hi, .rfl⟩
-
-中文:
-定理 _root_.滤子.有基.compactConvergenceUniformity_of_compact
-  证明: hasBasis_compactConvergenceUniformity_of_compact.to_hasBasis
-    (fun _U hU => (h.mem_iff.mp hU).imp fun _i ⟨hpi, hi⟩ => ⟨hpi, fun _ h a => hi <| h a⟩)
-    fun i hi => ⟨V i, h.mem_of_mem hi, .rfl⟩
-
-Depends on / 依赖: h.mem_iff.mp, h.mem_of_mem, hasBasis_compactConvergenceUniformity_of_compact, hasBasis_compactConvergenceUniformity_of_compact.to_hasBasis, mem_iff, mem_of_mem, to_hasBasis
+/-
+**ContinuousMap._root_.Filter.HasBasis.compactConvergenceUniformity_of_compact**
+ 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Filter.HasBasis.compactConvergenceUniformity_of_compact
-    {ι : Sort*} {p : ι -> Prop} {V : ι -> Set (β × β)} (h : (𝓤 β).HasBasis p V) :
-    HasBasis (𝓤 C(α, β)) p fun i => {fg : C(α, β) × C(α, β) | forall x, (fg.1 x, fg.2 x) in V i} :=
+    {ι : Sort*} {p : ι → Prop} {V : ι → Set (β × β)} (h : (𝓤 β).HasBasis p V) :
+    HasBasis (𝓤 C(α, β)) p fun i ↦ {fg : C(α, β) × C(α, β) | ∀ x, (fg.1 x, fg.2 x) ∈ V i} :=
   hasBasis_compactConvergenceUniformity_of_compact.to_hasBasis
-    (fun _U hU => (h.mem_iff.mp hU).imp fun _i ⟨hpi, hi⟩ => ⟨hpi, fun _ h a => hi <| h a⟩)
-    fun i hi => ⟨V i, h.mem_of_mem hi, .rfl⟩
+    (fun _U hU ↦ (h.mem_iff.mp hU).imp fun _i ⟨hpi, hi⟩ ↦ ⟨hpi, fun _ h a ↦ hi <| h a⟩)
+    fun i hi ↦ ⟨V i, h.mem_of_mem hi, .rfl⟩
 
 open UniformFun in
-/--
-theorem `isUniformEmbedding_uniformFunOfFun` / 定理 `isUniformEmbedding_uniformFunOfFun`
-
-English:
-theorem isUniformEmbedding_uniformFunOfFun
-  proof: UniformOnFun.uniformEquivUniformFun β _ isCompact_univ
-.isUniformEmbedding.comp isUniformEmbedding_toUniformOnFunIsCompact
-.comap_uniformity
-  injective := DFunLike.coe_injective
-
-中文:
-定理 isUniformEmbedding_uniformFunOfFun
-  证明: UniformOnFun.uniformEquivUniformFun β _ isCompact_univ
-.isUniformEmbedding.comp isUniformEmbedding_toUniformOnFunIsCompact
-.comap_uniformity
-  injective := DFunLike.coe_injective
-
-Depends on / 依赖: UniformOnFun, UniformOnFun.uniformEquivUniformFun, isCompact_univ, uniformEquivUniformFun
+/-
+**ContinuousMap.isUniformEmbedding_uniformFunOfFun** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousMap`。
+形式化陈述：isUniformEmbedding_uniformFunOfFun : IsUniformEmbedding ((ofFun ·) : C(α, 
+β) -> α ->ᵤ β) where comap_uniformity
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `isCompact_univ`：isCompact_univ [h : CompactSpace X] : IsCompact (univ : 
+Set X)
+· 使用定理 `IsUniformEmbedding.comp`：IsUniformEmbedding.comp {g : β -> γ} (hg : IsUn
+iformEmbedding g) {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformEmbedding 
+(g ∘ f) where…
+· 使用引理 `UniformEquiv.isUniformEmbedding`：isUniformEmbedding (h : α ≃ᵤ β) : IsUni
+formEmbedding h
+· 使用定理 `ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact`：isUniformEmbed
+ding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniformOnFunIsCompact : C(α
+, β) -> α ->ᵤ[{K | IsCompact K}] β) where coma…
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
 theorem isUniformEmbedding_uniformFunOfFun :
-    IsUniformEmbedding ((ofFun ·) : C(α, β) -> α ->ᵤ β) where
+    IsUniformEmbedding ((ofFun ·) : C(α, β) → α →ᵤ β) where
   comap_uniformity := UniformOnFun.uniformEquivUniformFun β _ isCompact_univ
-.isUniformEmbedding.comp isUniformEmbedding_toUniformOnFunIsCompact
-.comap_uniformity
+    |>.isUniformEmbedding.comp isUniformEmbedding_toUniformOnFunIsCompact
+    |>.comap_uniformity
   injective := DFunLike.coe_injective
 
-/--
-theorem `tendsto_iff_tendstoUniformly` / 定理 `tendsto_iff_tendstoUniformly`
+/-- Convergence in the compact-open topology is the same as uniform convergence for sequences of
+continuous functions on a compact space. -/
+/-
+**ContinuousMap.tendsto_iff_tendstoUniformly** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usMap`。
+形式化陈述：tendsto_iff_tendstoUniformly : Tendsto F p (𝓝 f) ↔ TendstoUniformly (fun i
+ a => F i a) f p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsInducing.tendsto_nhds_iff`：tendsto_nhds_iff {f : ι -> Y} {l :
+ Filter ι} {y : Y} (hg : IsInducing g) : Tendsto f l (𝓝 y) ↔ Tendsto (g ∘ f) l (
+𝓝 (g y))
+· 使用定理 `IsUniformInducing.isInducing`：IsUniformInducing.isInducing {f : α -> β} 
+(h : IsUniformInducing f) : IsInducing f
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `ContinuousMap.isUniformEmbedding_uniformFunOfFun`：isUniformEmbedding_uni
+formFunOfFun : IsUniformEmbedding ((ofFun ·) : C(α, β) -> α ->ᵤ β) where comap_u
+niformity
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem tendsto_iff_tendstoUniformly
-  proof: by
-  simp [isUniformEmbedding_uniformFunOfFun.isInducing.tendsto_nhds_iff,
-    UniformFun.tendsto_iff_tendstoUniformly, Function.comp_def]
-
-中文:
-定理 tendsto_iff_tendstoUniformly
-  证明: by
-  simp [isUniformEmbedding_uniformFunOfFun.isInducing.tendsto_nhds_iff,
-    UniformFun.tendsto_iff_tendstoUniformly, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, UniformFun, UniformFun.tendsto_iff_tendstoUniformly, comp_def, isInducing, isUniformEmbedding_uniformFunOfFun, isUniformEmbedding_uniformFunOfFun.isInducing.tendsto_nhds_iff, tendsto_iff_tendstoUniformly, tendsto_nhds_iff
+--- 原说明 ---
+Convergence in the compact-open topology is the same as uniform convergence for 
+sequences of
+continuous functions on a compact space.
 -/
 theorem tendsto_iff_tendstoUniformly :
     Tendsto F p (𝓝 f) ↔ TendstoUniformly (fun i a => F i a) f p := by
@@ -808,62 +795,59 @@ theorem tendsto_iff_tendstoUniformly :
     UniformFun.tendsto_iff_tendstoUniformly, Function.comp_def]
 
 open UniformFun in
-/--
-theorem `continuous_iff_continuous_uniformFun` / 定理 `continuous_iff_continuous_uniformFun`
+/-- When `α` is compact, `f : X → C(α, β)` is continuous if any only if it is continuous when
+reinterpreted as a map `f : X → α →ᵤ β`. -/
+/-
+**ContinuousMap.continuous_iff_continuous_uniformFun** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousMap`。
+形式化陈述：continuous_iff_continuous_uniformFun {X : Type*} [TopologicalSpace X] (f :
+ X -> C(α, β)) : Continuous f ↔ Continuous (fun x => ofFun (f x))
+参数：f : X -> C(α, β)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsInducing.continuous_iff`：continuous_iff (hg : IsInducing g) :
+ Continuous f ↔ Continuous (g ∘ f)
+· 使用定理 `IsUniformInducing.isInducing`：IsUniformInducing.isInducing {f : α -> β} 
+(h : IsUniformInducing f) : IsInducing f
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `ContinuousMap.isUniformEmbedding_uniformFunOfFun`：isUniformEmbedding_uni
+formFunOfFun : IsUniformEmbedding ((ofFun ·) : C(α, β) -> α ->ᵤ β) where comap_u
+niformity
 
-English:
-theorem continuous_iff_continuous_uniformFun
-  given: {X : Type*} [TopologicalSpace X] (f : X -> C(α, β))
-  proof: isUniformEmbedding_uniformFunOfFun.isInducing.continuous_iff
-
-中文:
-定理 continuous_iff_continuous_uniformFun
-  条件: {X : 类型} [拓扑空间 X] (f : X -> C(α, β))
-  证明: isUniformEmbedding_uniformFunOfFun.isInducing.continuous_iff
-
-Depends on / 依赖: continuous_iff, isInducing, isUniformEmbedding_uniformFunOfFun, isUniformEmbedding_uniformFunOfFun.isInducing.continuous_iff
+--- 原说明 ---
+When `α` is compact, `f : X → C(α, β)` is continuous if any only if it is contin
+uous when
+reinterpreted as a map `f : X → α →ᵤ β`.
 -/
-theorem continuous_iff_continuous_uniformFun {X : Type*} [TopologicalSpace X] (f : X -> C(α, β)) :
-    Continuous f ↔ Continuous (fun x => ofFun (f x)) :=
+theorem continuous_iff_continuous_uniformFun {X : Type*} [TopologicalSpace X] (f : X → C(α, β)) :
+    Continuous f ↔ Continuous (fun x ↦ ofFun (f x)) :=
   isUniformEmbedding_uniformFunOfFun.isInducing.continuous_iff
 
 end CompactDomain
 
 section ContinuousOnRestrict
 
-/--
-theorem `_root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn` / 定理 `_root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn`
+/-- Given functions `F i, f` which are continuous on a compact set `s`, `F` tends to `f`
+uniformly on `s` if and only if the restrictions (as elements of `C(s, β)`) converge. -/
+/-
+**ContinuousMap._root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn**
+ 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn
-  statement: {s : Set α} [CompactSpace s]
-  proof: by
-  rw [ContinuousMap.tendsto_iff_tendstoUniformly]; rw [tendstoUniformlyOn_iff_tendstoUniformly_comp_coe]
-  congr!
-
-@[deprecated (since := "2026-07-19")]
-alias _root_.ContinuousOn.tendsto_restrict_iff_tendstoUniformlyOn :=
-  _root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn
-
-中文:
-定理 _root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn
-  结论: {s : 集合 α} [紧空间 s]
-  证明: by
-  rw [ContinuousMap.tendsto_iff_tendstoUniformly]; rw [tendstoUniformlyOn_iff_tendstoUniformly_comp_coe]
-  congr!
-
-@[deprecated (since := "2026-07-19")]
-alias _root_.ContinuousOn.tendsto_restrict_iff_tendstoUniformlyOn :=
-  _root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.tendsto_iff_tendstoUniformly, tendstoUniformlyOn_iff_tendstoUniformly_comp_coe, tendsto_iff_tendstoUniformly
+--- 原说明 ---
+Given functions `F i, f` which are continuous on a compact set `s`, `F` tends to
+ `f`
+uniformly on `s` if and only if the restrictions (as elements of `C(s, β)`) conv
+erge.
 -/
 theorem _root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn {s : Set α} [CompactSpace s]
-    {f : α -> β} (hf : ContinuousOn f s) {ι : Type*} {p : Filter ι}
-    {F : ι -> α -> β} (hF : forall i, ContinuousOn (F i) s) :
-    Tendsto (fun i => ⟨_, (hF i).domRestrict⟩ : ι -> C(s, β)) p (𝓝 ⟨_, hf.domRestrict⟩) ↔
+    {f : α → β} (hf : ContinuousOn f s) {ι : Type*} {p : Filter ι}
+    {F : ι → α → β} (hF : ∀ i, ContinuousOn (F i) s) :
+    Tendsto (fun i ↦ ⟨_, (hF i).domRestrict⟩ : ι → C(s, β)) p (𝓝 ⟨_, hf.domRestrict⟩) ↔
       TendstoUniformlyOn F f p s := by
-  rw [ContinuousMap.tendsto_iff_tendstoUniformly]; rw [tendstoUniformlyOn_iff_tendstoUniformly_comp_coe]
+  rw [ContinuousMap.tendsto_iff_tendstoUniformly, tendstoUniformlyOn_iff_tendstoUniformly_comp_coe]
   congr!
 
 @[deprecated (since := "2026-07-19")]
@@ -871,37 +855,27 @@ alias _root_.ContinuousOn.tendsto_restrict_iff_tendstoUniformlyOn :=
   _root_.ContinuousOn.tendsto_domRestrict_iff_tendstoUniformlyOn
 
 open UniformOnFun in
-/--
-theorem `_root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun` / 定理 `_root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun`
+/-- A family `f : X → α → β`, each of which is continuous on a compact set `s : Set α` is
+continuous in the topology `X → α →ᵤ[{s}] β` if and only if the family of continuous restrictions
+`X → C(s, β)` is continuous. -/
+/-
+**ContinuousMap._root_.ContinuousOn.continuous_domRestrict_iff_continuous_unifor
+mOnFun** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
-  proof: by
-  rw [ContinuousMap.continuous_iff_continuous_uniformFun]; rw [UniformOnFun.continuous_rng_iff]
-  simp [Function.comp_def]
-
-@[deprecated (since := "2026-07-19")]
-alias _root_.ContinuousOn.continuous_restrict_iff_continuous_uniformOnFun :=
-  _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
-
-中文:
-定理 _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
-  证明: by
-  rw [ContinuousMap.continuous_iff_continuous_uniformFun]; rw [UniformOnFun.continuous_rng_iff]
-  simp [Function.comp_def]
-
-@[deprecated (since := "2026-07-19")]
-alias _root_.ContinuousOn.continuous_restrict_iff_continuous_uniformOnFun :=
-  _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.continuous_iff_continuous_uniformFun, Function, Function.comp_def, UniformOnFun, UniformOnFun.continuous_rng_iff, comp_def, continuous_iff_continuous_uniformFun, continuous_rng_iff
+--- 原说明 ---
+A family `f : X → α → β`, each of which is continuous on a compact set `s : Set 
+α` is
+continuous in the topology `X → α →ᵤ[{s}] β` if and only if the family of contin
+uous restrictions
+`X → C(s, β)` is continuous.
 -/
 theorem _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
-    {X : Type*} [TopologicalSpace X] {f : X -> α -> β} {s : Set α}
-    (hf : forall x, ContinuousOn (f x) s) [CompactSpace s] :
-    Continuous (fun x => ⟨_, (hf x).domRestrict⟩ : X -> C(s, β)) ↔
-      Continuous (fun x => ofFun {s} (f x)) := by
-  rw [ContinuousMap.continuous_iff_continuous_uniformFun]; rw [UniformOnFun.continuous_rng_iff]
+    {X : Type*} [TopologicalSpace X] {f : X → α → β} {s : Set α}
+    (hf : ∀ x, ContinuousOn (f x) s) [CompactSpace s] :
+    Continuous (fun x ↦ ⟨_, (hf x).domRestrict⟩ : X → C(s, β)) ↔
+      Continuous (fun x ↦ ofFun {s} (f x)) := by
+  rw [ContinuousMap.continuous_iff_continuous_uniformFun, UniformOnFun.continuous_rng_iff]
   simp [Function.comp_def]
 
 @[deprecated (since := "2026-07-19")]
@@ -910,54 +884,44 @@ alias _root_.ContinuousOn.continuous_restrict_iff_continuous_uniformOnFun :=
 
 end ContinuousOnRestrict
 
-/--
-theorem `uniformSpace_eq_inf_precomp_of_cover` / 定理 `uniformSpace_eq_inf_precomp_of_cover`
-
-English:
-theorem uniformSpace_eq_inf_precomp_of_cover
-  statement: {δ₁ δ₂ : Type*} [TopologicalSpace δ₁]
-  proof: by
-  -- We check the analogous result for `UniformOnFun` using
-  -- `UniformOnFun.uniformSpace_eq_inf_precomp_of_cover`...
-  set 𝔖 : Set (Set α) := {K | IsCompact K}
-  set 𝔗₁ : Set (Set δ₁) := {K | IsCompact K}
-  set 𝔗₂ : Set (Set δ₂) := {K | IsCompact K}
-  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := fun K hK => hK.image φ₁.continuous
-  have h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖 := fun K hK => hK.image φ₂.continuous
-  have h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁ := fun K => h_proper₁.isCompact_preimage
-  have h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂ := fun K => h_proper₂.isCompact_preimage
-  have h_cover' : forall S in 𝔖, S subseteq range φ₁ union range φ₂ := fun S _ => h_cover ▸ subset_univ _
-  -- ... and we just pull it back.
-  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
-    UniformOnFun.uniformSpace_eq_inf_precomp_of_cover _ _ _ _ _
-      h_image₁ h_image₂ h_preimage₁ h_preimage₂ h_cover',
-    UniformSpace.comap_inf, ← UniformSpace.comap_comap]
-  rfl
-
-中文:
-定理 uniformSpace_eq_inf_precomp_of_cover
-  结论: {δ₁ δ₂ : 类型} [拓扑空间 δ₁]
-  证明: by
-  -- We check the analogous result for `UniformOnFun` using
-  -- `UniformOnFun.uniformSpace_eq_inf_precomp_of_cover`...
-  set 𝔖 : Set (Set α) := {K | IsCompact K}
-  set 𝔗₁ : Set (Set δ₁) := {K | IsCompact K}
-  set 𝔗₂ : Set (Set δ₂) := {K | IsCompact K}
-  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := fun K hK => hK.image φ₁.continuous
-  have h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖 := fun K hK => hK.image φ₂.continuous
-  have h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁ := fun K => h_proper₁.isCompact_preimage
-  have h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂ := fun K => h_proper₂.isCompact_preimage
-  have h_cover' : forall S in 𝔖, S subseteq range φ₁ union range φ₂ := fun S _ => h_cover ▸ subset_univ _
-  -- ... and we just pull it back.
-  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
-    UniformOnFun.uniformSpace_eq_inf_precomp_of_cover _ _ _ _ _
-      h_image₁ h_image₂ h_preimage₁ h_preimage₂ h_cover',
-    UniformSpace.comap_inf, ← UniformSpace.comap_comap]
-  rfl
+/-
+**ContinuousMap.uniformSpace_eq_inf_precomp_of_cover** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousMap`。
+形式化陈述：uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} [TopologicalSpace δ₁]
+ [TopologicalSpace δ₂] (φ₁ : C(δ₁, α)) (φ₂ : C(δ₂, α)) (h_proper₁ : IsProperMap 
+φ₁) (h_proper₂ : IsProperMap φ₂) (h_cover : range φ₁ union range φ₂ = univ) : ((
+inferInstance : UniformSpace C(α, β))) = .comap (comp · φ₁) inferInstance ⊓ .com
+ap (comp · φ₂) inferInstance
+参数：φ₁ : C(δ₁, α)；φ₂ : C(δ₂, α)；h_proper₁ : IsProperMap φ₁；h_proper₂ : IsProperMa
+p φ₂；h_cover : range φ₁ union range φ₂ = univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用引理 `IsProperMap.isCompact_preimage`：IsProperMap.isCompact_preimage (h : IsPr
+operMap f) {K : Set Y} (hK : IsCompact K) : IsCompact (f ⁻¹' K)
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.replaceTopology_eq`：UniformSpace.replaceTopology_eq {α : Ty
+pe*} [i : TopologicalSpace α] (u : UniformSpace α) (h : i = u.toTopologicalSpace
+) : u.replaceTopology…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `UniformOnFun.uniformSpace_eq_inf_precomp_of_cover`：uniformSpace_eq_inf_p
+recomp_of_cover {δ₁ δ₂ : Type*} (φ₁ : δ₁ -> α) (φ₂ : δ₂ -> α) (𝔗₁ : Set (Set δ₁)
+) (𝔗₂ : Set (Set δ₂)) (h_image₁ : MapsT…
+· 使用定理 `UniformSpace.comap_inf`：UniformSpace.comap_inf {α γ} {u₁ u₂ : UniformSpa
+ce γ} {f : α -> γ} : (u₁ ⊓ u₂).comap f = u₁.comap f ⊓ u₂.comap f
 -/
 theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} [TopologicalSpace δ₁]
     [TopologicalSpace δ₂] (φ₁ : C(δ₁, α)) (φ₂ : C(δ₂, α)) (h_proper₁ : IsProperMap φ₁)
-    (h_proper₂ : IsProperMap φ₂) (h_cover : range φ₁ union range φ₂ = univ) :
+    (h_proper₂ : IsProperMap φ₂) (h_cover : range φ₁ ∪ range φ₂ = univ) :
     ((inferInstance : UniformSpace C(α, β))) =
       .comap (comp · φ₁) inferInstance ⊓
       .comap (comp · φ₂) inferInstance := by
@@ -966,73 +930,81 @@ theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} [TopologicalS
   set 𝔖 : Set (Set α) := {K | IsCompact K}
   set 𝔗₁ : Set (Set δ₁) := {K | IsCompact K}
   set 𝔗₂ : Set (Set δ₂) := {K | IsCompact K}
-  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := fun K hK => hK.image φ₁.continuous
-  have h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖 := fun K hK => hK.image φ₂.continuous
-  have h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁ := fun K => h_proper₁.isCompact_preimage
-  have h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂ := fun K => h_proper₂.isCompact_preimage
-  have h_cover' : forall S in 𝔖, S subseteq range φ₁ union range φ₂ := fun S _ => h_cover ▸ subset_univ _
+  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := fun K hK ↦ hK.image φ₁.continuous
+  have h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖 := fun K hK ↦ hK.image φ₂.continuous
+  have h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁ := fun K ↦ h_proper₁.isCompact_preimage
+  have h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂ := fun K ↦ h_proper₂.isCompact_preimage
+  have h_cover' : ∀ S ∈ 𝔖, S ⊆ range φ₁ ∪ range φ₂ := fun S _ ↦ h_cover ▸ subset_univ _
   -- ... and we just pull it back.
   simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
     UniformOnFun.uniformSpace_eq_inf_precomp_of_cover _ _ _ _ _
       h_image₁ h_image₂ h_preimage₁ h_preimage₂ h_cover',
     UniformSpace.comap_inf, ← UniformSpace.comap_comap]
   rfl
-
-/--
-theorem `uniformSpace_eq_iInf_precomp_of_cover` / 定理 `uniformSpace_eq_iInf_precomp_of_cover`
-
-English:
-theorem uniformSpace_eq_iInf_precomp_of_cover
-  statement: {δ : ι -> Type*} [forall i, TopologicalSpace (δ i)]
-  proof: by
-  -- We check the analogous result for `UniformOnFun` using
-  -- `UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover`...
-  set 𝔖 : Set (Set α) := {K | IsCompact K}
-  set 𝔗 : Π i, Set (Set (δ i)) := fun i => {K | IsCompact K}
-  have h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK => hK.image (φ i).continuous
-  have h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i) := fun i K => (h_proper i).isCompact_preimage
-  have h_cover' : forall S in 𝔖, exists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i) := fun S hS => by
-    refine ⟨{i | (range (φ i) inter S).Nonempty}, h_lf.finite_nonempty_inter_compact hS,
-      inter_eq_right.mp ?_⟩
-    simp_rw [iUnion₂_inter, mem_ofPred, iUnion_nonempty_self, ← iUnion_inter, h_cover, univ_inter]
-  -- ... and we just pull it back.
-  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
-    UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover _ _ _ h_image h_preimage h_cover',
-    UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
-  rfl
-
-中文:
-定理 uniformSpace_eq_iInf_precomp_of_cover
-  结论: {δ : ι -> 类型} [对任意 i, 拓扑空间 (δ i)]
-  证明: by
-  -- We check the analogous result for `UniformOnFun` using
-  -- `UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover`...
-  set 𝔖 : Set (Set α) := {K | IsCompact K}
-  set 𝔗 : Π i, Set (Set (δ i)) := fun i => {K | IsCompact K}
-  have h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK => hK.image (φ i).continuous
-  have h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i) := fun i K => (h_proper i).isCompact_preimage
-  have h_cover' : forall S in 𝔖, exists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i) := fun S hS => by
-    refine ⟨{i | (range (φ i) inter S).Nonempty}, h_lf.finite_nonempty_inter_compact hS,
-      inter_eq_right.mp ?_⟩
-    simp_rw [iUnion₂_inter, mem_ofPred, iUnion_nonempty_self, ← iUnion_inter, h_cover, univ_inter]
-  -- ... and we just pull it back.
-  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
-    UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover _ _ _ h_image h_preimage h_cover',
-    UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
-  rfl
+/-
+**ContinuousMap.uniformSpace_eq_iInf_precomp_of_cover** 是 Mathlib 中的一个定理，位于命名空间 
+`ContinuousMap`。
+形式化陈述：uniformSpace_eq_iInf_precomp_of_cover {δ : ι -> Type*} [forall i, Topologi
+calSpace (δ i)] (φ : Π i, C(δ i, α)) (h_proper : forall i, IsProperMap (φ i)) (h
+_lf : LocallyFinite fun i => range (φ i)) (h_cover : ⋃ i, range (φ i) = univ) : 
+((inferInstance : UniformSpace C(α, β))) = ⨅ i, .comap (comp · (φ i)) inferInsta
+nce
+参数：δ i；φ : Π i, C(δ i, α)；h_proper : forall i, IsProperMap (φ i)；h_lf : LocallyF
+inite fun i => range (φ i)；h_cover : ⋃ i, range (φ i) = univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用引理 `IsProperMap.isCompact_preimage`：IsProperMap.isCompact_preimage (h : IsPr
+operMap f) {K : Set Y} (hK : IsCompact K) : IsCompact (f ⁻¹' K)
+· 使用定理 `LocallyFinite.finite_nonempty_inter_compact`：finite_nonempty_inter_compa
+ct {f : ι -> Set X} (hf : LocallyFinite f) (hs : IsCompact s) : { i | (f i inter
+ s).Nonempty }.Finite
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.inter_eq_right`：∀ {α : Type u} {s t : Set α}, s ∩ t = t ↔ t ⊆ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.iUnion₂_inter`：iUnion₂_inter (s : forall i, κ i -> Set α) (t : Set α
+) : (⋃ (i) (j), s i j) inter t = ⋃ (i) (j), s i j inter t
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_nonempty_self`：iUnion_nonempty_self (s : Set α) : ⋃ _ : s.Non
+empty, s = s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `UniformSpace.replaceTopology_eq`：UniformSpace.replaceTopology_eq {α : Ty
+pe*} [i : TopologicalSpace α] (u : UniformSpace α) (h : i = u.toTopologicalSpace
+) : u.replaceTopology…
+· 使用定理 `UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover`：uniformSpace_eq_iInf
+_precomp_of_cover {δ : ι -> Type*} (φ : Π i, δ i -> α) (𝔗 : forall i, Set (Set (
+δ i))) (h_image : forall i, MapsTo (φ i …
+· 使用定理 `UniformSpace.comap_iInf`：UniformSpace.comap_iInf {ι α γ} {u : ι -> Unifo
+rmSpace γ} {f : α -> γ} : (⨅ i, u i).comap f = ⨅ i, (u i).comap f
 -/
-theorem uniformSpace_eq_iInf_precomp_of_cover {δ : ι -> Type*} [forall i, TopologicalSpace (δ i)]
-    (φ : Π i, C(δ i, α)) (h_proper : forall i, IsProperMap (φ i))
-    (h_lf : LocallyFinite fun i => range (φ i)) (h_cover : ⋃ i, range (φ i) = univ) :
+theorem uniformSpace_eq_iInf_precomp_of_cover {δ : ι → Type*} [∀ i, TopologicalSpace (δ i)]
+    (φ : Π i, C(δ i, α)) (h_proper : ∀ i, IsProperMap (φ i))
+    (h_lf : LocallyFinite fun i ↦ range (φ i)) (h_cover : ⋃ i, range (φ i) = univ) :
     ((inferInstance : UniformSpace C(α, β))) = ⨅ i, .comap (comp · (φ i)) inferInstance := by
   -- We check the analogous result for `UniformOnFun` using
   -- `UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover`...
   set 𝔖 : Set (Set α) := {K | IsCompact K}
-  set 𝔗 : Π i, Set (Set (δ i)) := fun i => {K | IsCompact K}
-  have h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK => hK.image (φ i).continuous
-  have h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i) := fun i K => (h_proper i).isCompact_preimage
-  have h_cover' : forall S in 𝔖, exists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i) := fun S hS => by
-    refine ⟨{i | (range (φ i) inter S).Nonempty}, h_lf.finite_nonempty_inter_compact hS,
+  set 𝔗 : Π i, Set (Set (δ i)) := fun i ↦ {K | IsCompact K}
+  have h_image : ∀ i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK ↦ hK.image (φ i).continuous
+  have h_preimage : ∀ i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i) := fun i K ↦ (h_proper i).isCompact_preimage
+  have h_cover' : ∀ S ∈ 𝔖, ∃ I : Set ι, I.Finite ∧ S ⊆ ⋃ i ∈ I, range (φ i) := fun S hS ↦ by
+    refine ⟨{i | (range (φ i) ∩ S).Nonempty}, h_lf.finite_nonempty_inter_compact hS,
       inter_eq_right.mp ?_⟩
     simp_rw [iUnion₂_inter, mem_ofPred, iUnion_nonempty_self, ← iUnion_inter, h_cover, univ_inter]
   -- ... and we just pull it back.
@@ -1045,102 +1017,167 @@ section CompleteSpace
 
 variable [CompleteSpace β]
 
-/--
-Instance `instCompleteSpaceOfCompactlyCoherentSpace` / 实例 `instCompleteSpaceOfCompactlyCoherentSpace`
+/-- If the topology on `α` is generated by its restrictions to compact sets, then the space of
+continuous maps `C(α, β)` is complete (w.r.t. the compact convergence uniformity).
 
-English:
-instance instCompleteSpaceOfCompactlyCoherentSpace
-  signature: [CompactlyCoherentSpace α]
-  body: by
-  rw [completeSpace_iff_isComplete_range
-    isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing]; rw [range_toUniformOnFunIsCompact]; rw [← completeSpace_coe_iff_isComplete]
-  exact (UniformOnFun.isClosed_setOfPred_continuous
-    CompactlyCoherentSpace.isCoherentWith).completeSpace_coe
+Sufficient conditions on `α` to satisfy this condition are (weak) local compactness and sequential
+compactness. -/
+/-
+**ContinuousMap.instCompleteSpaceOfCompactlyCoherentSpace** 是 Mathlib 中的一个实例，位于命
+名空间 `ContinuousMap`。
+形式化陈述：instCompleteSpaceOfCompactlyCoherentSpace [CompactlyCoherentSpace α] : Com
+pleteSpace C(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `completeSpace_iff_isComplete_range`：completeSpace_iff_isComplete_range {
+f : α -> β} (hf : IsUniformInducing f) : CompleteSpace α ↔ IsComplete (range f)
+· 使用引理 `IsUniformEmbedding.isUniformInducing`：IsUniformEmbedding.isUniformInduci
+ng {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformInducing f
+· 使用定理 `ContinuousMap.isUniformEmbedding_toUniformOnFunIsCompact`：isUniformEmbed
+ding_toUniformOnFunIsCompact : IsUniformEmbedding (toUniformOnFunIsCompact : C(α
+, β) -> α ->ᵤ[{K | IsCompact K}] β) where coma…
+· 使用定理 `ContinuousMap.range_toUniformOnFunIsCompact`：range_toUniformOnFunIsCompa
+ct : range (toUniformOnFunIsCompact) = {f : UniformOnFun α β {K | IsCompact K} |
+ Continuous f}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `completeSpace_coe_iff_isComplete`：completeSpace_coe_iff_isComplete {s : 
+Set α} : CompleteSpace s ↔ IsComplete s
+· 使用定理 `UniformOnFun.instCompleteSpace`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+UniformSpace β] {𝔖 : Set (Set α)} [CompleteSpace β],   CompleteSpace (UniformOnF
+un α β 𝔖)
+· 使用定理 `UniformOnFun.isClosed_setOfPred_continuous`：isClosed_setOfPred_continuou
+s [TopologicalSpace α] (h : IsCoherentWith 𝔖) : IsClosed {f : α ->ᵤ[𝔖] β | Conti
+nuous (toFun 𝔖 f)}
+· 使用定理 `CompactlyCoherentSpace.isCoherentWith`：∀ {X : Type u_1} {inst : Topologi
+calSpace X} [self : CompactlyCoherentSpace X],   Topology.IsCoherentWith {K | Is
+Compact K}
 
-中文:
-实例 instCompleteSpaceOfCompactlyCoherentSpace
-  签名: [余mpactlyCoherent空间 α]
-  定义体: by
-  rw [completeSpace_iff_isComplete_range
-    isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing]; rw [range_toUniformOnFunIsCompact]; rw [← completeSpace_coe_iff_isComplete]
-  exact (UniformOnFun.isClosed_setOfPred_continuous
-    CompactlyCoherentSpace.isCoherentWith).completeSpace_coe
+--- 原说明 ---
+If the topology on `α` is generated by its restrictions to compact sets, then th
+e space of
+continuous maps `C(α, β)` is complete (w.r.t. the compact convergence uniformity
+).
 
-Depends on / 依赖: CompactlyCoherentSpace, CompactlyCoherentSpace.isCoherentWith, UniformOnFun, UniformOnFun.isClosed_setOfPred_continuous, completeSpace_coe, completeSpace_coe_iff_isComplete, completeSpace_iff_isComplete_range, isClosed_setOfPred_continuous, isCoherentWith, isUniformEmbedding_toUniformOnFunIsCompact, isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing, isUniformInducing, range_toUniformOnFunIsCompact
+Sufficient conditions on `α` to satisfy this condition are (weak) local compactn
+ess and sequential
+compactness.
 -/
 instance instCompleteSpaceOfCompactlyCoherentSpace [CompactlyCoherentSpace α] :
     CompleteSpace C(α, β) := by
   rw [completeSpace_iff_isComplete_range
-    isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing]; rw [range_toUniformOnFunIsCompact]; rw [← completeSpace_coe_iff_isComplete]
+    isUniformEmbedding_toUniformOnFunIsCompact.isUniformInducing,
+    range_toUniformOnFunIsCompact, ← completeSpace_coe_iff_isComplete]
   exact (UniformOnFun.isClosed_setOfPred_continuous
     CompactlyCoherentSpace.isCoherentWith).completeSpace_coe
 
 end CompleteSpace
 
-/--
-theorem `isComplete_setOfPred_eqOn` / 定理 `isComplete_setOfPred_eqOn`
+/-- If `C(α, β)` is a complete space, then for any (possibly, discontinuous) function `f`
+and any set `s`, the set of functions `g : C(α, β)` that are equal to `f` on `s`
+is a complete set.
 
-English:
-theorem isComplete_setOfPred_eqOn
-  given: [CompleteSpace C(α, β)] (f : α -> β) (s : Set α)
-  proof: by
-  classical
-  intro l hlc hlf
-  rcases CompleteSpace.complete hlc with ⟨f', hf'⟩
-  have := hlc.1
-  have H₁ : forall x in s, Inseparable (f x) (f' x) := fun x hx => by
-    refine tendsto_nhds_unique_inseparable ?_ ((continuous_eval_const x).continuousAt.mono_left hf')
-refine tendsto_const_nhds.congr' .filter_mono ?_ hlf
-    exact fun _ h => (h hx).symm
-  have H₂ (x) : Inseparable (s.piecewise f f' x) (f' x) := by
-    by_cases hx : x in s <;> simp [hx, H₁, Inseparable.refl]
-  set g : C(α, β) :=
-⟨s.piecewise f f', (continuous_congr_of_inseparable H₂).mpr map_continuous f'⟩
-  refine ⟨g, Set.piecewise_eqOn _ _ _, hf'.trans_eq ?_⟩
-  rwa [eq_comm, ← Inseparable, ← inseparable_coe, inseparable_pi]
+Note that this set does not have to be a closed set when `β` is not T0.
+This lemma is useful to prove that, e.g., the space of paths between two points
+and the space of homotopies between two continuous maps are complete spaces,
+without assuming that the codomain is a Hausdorff space. -/
+/-
+**ContinuousMap.isComplete_setOfPred_eqOn** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousM
+ap`。
+形式化陈述：isComplete_setOfPred_eqOn [CompleteSpace C(α, β)] (f : α -> β) (s : Set α)
+ : IsComplete {g : C(α, β) | EqOn g f s}
+参数：α, β；f : α -> β；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompleteSpace.complete`：∀ {α : Type u} {inst : UniformSpace α} [self : C
+ompleteSpace α] {f : Filter α}, Cauchy f → ∃ x, f ≤ nhds x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `tendsto_nhds_unique_inseparable`：tendsto_nhds_unique_inseparable {f : Y 
+-> X} {l : Filter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto 
+f l (𝓝 b)) : Insepara…
+· 使用定理 `instR1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [RegularSpace 
+X], R1Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.EventuallyEq.filter_mono`：∀ {α : Type u} {β : Type v} {l l' : Fil
+ter α} {f g : α → β}, f =ᶠ[l] g → l' ≤ l → f =ᶠ[l'] g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `ContinuousEvalConst.continuous_eval_const`：∀ {F : Type u_1} {α : outPara
+m (Type u_2)} {X : outParam (Type u_3)} {inst : FunLike F α X}   {inst_1 : Topol
+ogicalSpace F} {inst_2 : Topolo…
+· 使用定理 `ContinuousMap.instContinuousEvalConst`：∀ {X : Type u_2} {Y : Type u_3} [
+inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   ContinuousEvalConst 
+C(X, Y) X Y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.piecewise_eq_of_mem`：piecewise_eq_of_mem {i : α} (hi : i in s) : s.p
+iecewise f g i = f i
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.piecewise_eq_of_notMem`：piecewise_eq_of_notMem {i : α} (hi : i ∉ s) 
+: s.piecewise f g i = g i
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_congr_of_inseparable`：continuous_congr_of_inseparable (h : fo
+rall x, f x ~ᵢ g x) : Continuous f ↔ Continuous g
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `Set.piecewise_eqOn`：piecewise_eqOn (f g : α -> β) : EqOn (s.piecewise f 
+g) f s
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Inseparable.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (x y : X)
+, Inseparable x y = (nhds x = nhds y)
+· 使用引理 `ContinuousMap.inseparable_coe`：inseparable_coe {f g : C(X, Y)} : Insepar
+able (f : X -> Y) g ↔ Inseparable f g
+（共 31 条，此处仅展示前 30 条）
 
-@[deprecated (since := "2026-07-09")] alias isComplete_setOf_eqOn := isComplete_setOfPred_eqOn
+--- 原说明 ---
+If `C(α, β)` is a complete space, then for any (possibly, discontinuous) functio
+n `f`
+and any set `s`, the set of functions `g : C(α, β)` that are equal to `f` on `s`
+is a complete set.
 
-中文:
-定理 isComplete_setOfPred_eqOn
-  条件: [完备空间 C(α, β)] (f : α -> β) (s : 集合 α)
-  证明: by
-  classical
-  intro l hlc hlf
-  rcases CompleteSpace.complete hlc with ⟨f', hf'⟩
-  have := hlc.1
-  have H₁ : forall x in s, Inseparable (f x) (f' x) := fun x hx => by
-    refine tendsto_nhds_unique_inseparable ?_ ((continuous_eval_const x).continuousAt.mono_left hf')
-refine tendsto_const_nhds.congr' .filter_mono ?_ hlf
-    exact fun _ h => (h hx).symm
-  have H₂ (x) : Inseparable (s.piecewise f f' x) (f' x) := by
-    by_cases hx : x in s <;> simp [hx, H₁, Inseparable.refl]
-  set g : C(α, β) :=
-⟨s.piecewise f f', (continuous_congr_of_inseparable H₂).mpr map_continuous f'⟩
-  refine ⟨g, Set.piecewise_eqOn _ _ _, hf'.trans_eq ?_⟩
-  rwa [eq_comm, ← Inseparable, ← inseparable_coe, inseparable_pi]
-
-@[deprecated (since := "2026-07-09")] alias isComplete_setOf_eqOn := isComplete_setOfPred_eqOn
-
-Depends on / 依赖: CompleteSpace, CompleteSpace.complete, Inseparable, Inseparable.refl, classical, complete, continuousAt, continuousAt.mono_left, continuous_eval_const, filter_mono, mono_left, piecewise, s.piecewise, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_nhds_unique_inseparable
+Note that this set does not have to be a closed set when `β` is not T0.
+This lemma is useful to prove that, e.g., the space of paths between two points
+and the space of homotopies between two continuous maps are complete spaces,
+without assuming that the codomain is a Hausdorff space.
 -/
-theorem isComplete_setOfPred_eqOn [CompleteSpace C(α, β)] (f : α -> β) (s : Set α) :
+theorem isComplete_setOfPred_eqOn [CompleteSpace C(α, β)] (f : α → β) (s : Set α) :
     IsComplete {g : C(α, β) | EqOn g f s} := by
   classical
   intro l hlc hlf
   rcases CompleteSpace.complete hlc with ⟨f', hf'⟩
   have := hlc.1
-  have H₁ : forall x in s, Inseparable (f x) (f' x) := fun x hx => by
+  have H₁ : ∀ x ∈ s, Inseparable (f x) (f' x) := fun x hx ↦ by
     refine tendsto_nhds_unique_inseparable ?_ ((continuous_eval_const x).continuousAt.mono_left hf')
-refine tendsto_const_nhds.congr' .filter_mono ?_ hlf
-    exact fun _ h => (h hx).symm
+    refine tendsto_const_nhds.congr' <| .filter_mono ?_ hlf
+    exact fun _ h ↦ (h hx).symm
   have H₂ (x) : Inseparable (s.piecewise f f' x) (f' x) := by
-    by_cases hx : x in s <;> simp [hx, H₁, Inseparable.refl]
+    by_cases hx : x ∈ s <;> simp [hx, H₁, Inseparable.refl]
   set g : C(α, β) :=
-⟨s.piecewise f f', (continuous_congr_of_inseparable H₂).mpr map_continuous f'⟩
+    ⟨s.piecewise f f', (continuous_congr_of_inseparable H₂).mpr <| map_continuous f'⟩
   refine ⟨g, Set.piecewise_eqOn _ _ _, hf'.trans_eq ?_⟩
   rwa [eq_comm, ← Inseparable, ← inseparable_coe, inseparable_pi]
 
 @[deprecated (since := "2026-07-09")] alias isComplete_setOf_eqOn := isComplete_setOfPred_eqOn
 
 end ContinuousMap
+

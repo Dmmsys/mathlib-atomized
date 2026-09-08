@@ -34,109 +34,134 @@ variable (R) in
 /-- A group-like element in a coalgebra is an element `a` such that `ε(a) = 1` and `Δ(a) = a ⊗ₜ a`,
 where `ε` and `Δ` are the counit and comultiplication respectively. -/
 @[mk_iff]
-/--
-Definition of `IsGroupLikeElem` / `IsGroupLikeElem` 的定义
+/-
+**IsGroupLikeElem** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：IsGroupLikeElem (a : A) : Prop where /-- A group-like element `a` satisfie
+s `ε(a) = 1`. -/ counit_eq_one : counit (R
+参数：a : A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsGroupLikeElem
-  parameters: (a : A)
-  axioms and operations (2):
-    - counit_eq_one : counit (R := R) a = 1
-    - comul_eq_tmul_self : comul a = a otimesₜ[R] a
-
-中文:
-结构 是GroupLikeElem
-  参数: (a : A)
-  公理与运算 (2 个):
-    - counit_eq_one : counit (R := R) a = 1
-    - comul_eq_tmul_self : comul a = a otimesₜ[R] a
+--- 原说明 ---
+A group-like element in a coalgebra is an element `a` such that `ε(a) = 1` and `
+Δ(a) = a ⊗ₜ a`,
+where `ε` and `Δ` are the counit and comultiplication respectively.
 -/
 structure IsGroupLikeElem (a : A) : Prop where
   /-- A group-like element `a` satisfies `ε(a) = 1`. -/
   counit_eq_one : counit (R := R) a = 1
   /-- A group-like element `a` satisfies `Δ(a) = a ⊗ₜ a`. -/
-  comul_eq_tmul_self : comul a = a otimesₜ[R] a
+  comul_eq_tmul_self : comul a = a ⊗ₜ[R] a
 
 attribute [simp] IsGroupLikeElem.counit_eq_one IsGroupLikeElem.comul_eq_tmul_self
-
-/--
-lemma `isGroupLikeElem_self` / 引理 `isGroupLikeElem_self`
-
-English:
-lemma isGroupLikeElem_self
-  given: {r : R}
-  statement: IsGroupLikeElem R r ↔ r = 1
-  proof: by
-  simp +contextual [isGroupLikeElem_iff]
-
-中文:
-引理 isGroupLikeElem_self
-  条件: {r : R}
-  结论: 是GroupLikeElem R r ↔ r = 1
-  证明: by
-  simp +contextual [isGroupLikeElem_iff]
+/-
+**isGroupLikeElem_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {R : Type u_2} [inst : CommSemiring R] {r : R}, IsGroupLikeElem R r ↔ r 
+= 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[simp] lemma isGroupLikeElem_self {r : R} : IsGroupLikeElem R r ↔ r = 1 := by
   simp +contextual [isGroupLikeElem_iff]
-
-/--
-lemma `IsGroupLikeElem.ne_zero` / 引理 `IsGroupLikeElem.ne_zero`
-
-English:
-lemma IsGroupLikeElem.ne_zero
-  given: [Nontrivial R] (ha : IsGroupLikeElem R a)
-  statement: a != 0
-  proof: by
-  rintro rfl; simpa using ha.counit_eq_one
-
-中文:
-引理 是GroupLikeElem.ne_zero
-  条件: [非平凡 R] (ha : 是GroupLikeElem R a)
-  结论: a != 0
-  证明: by
-  rintro rfl; simpa using ha.counit_eq_one
-
-Depends on / 依赖: counit_eq_one, ha.counit_eq_one
+/-
+**IsGroupLikeElem.ne_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGroupLikeElem.ne_zero [Nontrivial R] (ha : IsGroupLikeElem R a) : a != 0
+参数：ha : IsGroupLikeElem R a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `IsGroupLikeElem.counit_eq_one`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] {…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma IsGroupLikeElem.ne_zero [Nontrivial R] (ha : IsGroupLikeElem R a) : a != 0 := by
+lemma IsGroupLikeElem.ne_zero [Nontrivial R] (ha : IsGroupLikeElem R a) : a ≠ 0 := by
   rintro rfl; simpa using ha.counit_eq_one
 
-/--
-lemma `IsGroupLikeElem.map` / 引理 `IsGroupLikeElem.map`
+/-- A coalgebra homomorphism sends group-like elements to group-like elements. -/
+/-
+**IsGroupLikeElem.map** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGroupLikeElem.map [FunLike F A B] [CoalgHomClass F R A B] (f : F) (ha : 
+IsGroupLikeElem R a) : IsGroupLikeElem R (f a) where counit_eq_one
+参数：f : F；ha : IsGroupLikeElem R a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CoalgHomClass.counit_comp_apply`：counit_comp_apply (f : F) (x : A) : cou
+nit (f x) = counit (R
+· 使用定理 `IsGroupLikeElem.counit_eq_one`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] {…
+· 使用定理 `CoalgHomClass.toSemilinearMapClass`：∀ {F : Type u_1} {R : outParam (Type
+ u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring 
+R}   {inst_1 : AddCommMo…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CoalgHomClass.map_comp_comul_apply`：map_comp_comul_apply (f : F) (x : A)
+ : TensorProduct.map f f (σ₁₂
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma IsGroupLikeElem.map
-  statement: [FunLike F A B] [CoalgHomClass F R A B] (f : F)
-  proof: by rw [CoalgHomClass.counit_comp_apply, ha.counit_eq_one]
-  comul_eq_tmul_self := by rw [← CoalgHomClass.map_comp_comul_apply, ha.comul_eq_tmul_self]; simp
-
-中文:
-引理 是GroupLikeElem.map
-  结论: [函数状 F A B] [余alg态射类 F R A B] (f : F)
-  证明: by rw [CoalgHomClass.counit_comp_apply, ha.counit_eq_one]
-  comul_eq_tmul_self := by rw [← CoalgHomClass.map_comp_comul_apply, ha.comul_eq_tmul_self]; simp
-
-Depends on / 依赖: CoalgHomClass, CoalgHomClass.counit_comp_apply, CoalgHomClass.map_comp_comul_apply, comul_eq_tmul_self, counit_comp_apply, counit_eq_one, ha.comul_eq_tmul_self, ha.counit_eq_one, map_comp_comul_apply
+--- 原说明 ---
+A coalgebra homomorphism sends group-like elements to group-like elements.
 -/
 lemma IsGroupLikeElem.map [FunLike F A B] [CoalgHomClass F R A B] (f : F)
     (ha : IsGroupLikeElem R a) : IsGroupLikeElem R (f a) where
   counit_eq_one := by rw [CoalgHomClass.counit_comp_apply, ha.counit_eq_one]
   comul_eq_tmul_self := by rw [← CoalgHomClass.map_comp_comul_apply, ha.comul_eq_tmul_self]; simp
 
-/--
-lemma `isGroupLikeElem_map_equiv` / 引理 `isGroupLikeElem_map_equiv`
+/-- A coalgebra isomorphism preserves group-like elements. -/
+/-
+**isGroupLikeElem_map_equiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {F : Type u_1} {R : Type u_2} {A : Type u_3} {B : Type u_4} [inst : Comm
+Semiring R] [inst_1 : AddCommMonoid A]   [inst_2 : AddCommMonoid B] [inst_3 : _r
+oot_.Module R A] [inst_4 : Coalgebra R A] [inst_5 : _root_.Module R B]   [inst_6
+ : Coalgebra R B] {a : A} [inst_7 : EquivLike F A B] [CoalgEquivClass F R A B] (
+f : F),   IsGroupLikeElem R (f a) ↔ IsGroupLikeElem R a
+参数：f : F；f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsGroupLikeElem.map`：IsGroupLikeElem.map [FunLike F A B] [CoalgHomClass 
+F R A B] (f : F) (ha : IsGroupLikeElem R a) : IsGroupLikeElem R (f a) where coun
+it_eq_one
+· 使用定理 `CoalgEquivClass.toCoalgHomClass`：∀ {F : Type u_5} {R : outParam (Type u_
+6)} {A : outParam (Type u_7)} {B : outParam (Type u_8)} {inst : CommSemiring R} 
+  {inst_1 : AddCommMo…
+· 使用定理 `CoalgEquiv.instCoalgEquivClass`：∀ {R : Type u_1} {A : Type u_2} {B : Typ
+e u_3} [inst : CommSemiring R] [inst_1 : AddCommMonoid A]   [inst_2 : AddCommMon
+oid B] [inst_3 : _ro…
+· 使用定理 `CoalgEquiv.symm_apply_apply`：symm_apply_apply (e : A ≃ₗc[R] B) (x) : e.s
+ymm (e x) = x
 
-English:
-lemma isGroupLikeElem_map_equiv
-  given: [EquivLike F A B] [CoalgEquivClass F R A B] (f : F)
-  proof: (CoalgEquivClass.toCoalgEquiv f).symm_apply_apply a ▸ ha.map _
-  mpr := .map f
-
-中文:
-引理 isGroupLikeElem_map_equiv
-  条件: [等价状 F A B] [余alg等价类 F R A B] (f : F)
-  证明: (CoalgEquivClass.toCoalgEquiv f).symm_apply_apply a ▸ ha.map _
-  mpr := .map f
+--- 原说明 ---
+A coalgebra isomorphism preserves group-like elements.
 -/
 @[simp] lemma isGroupLikeElem_map_equiv [EquivLike F A B] [CoalgEquivClass F R A B] (f : F) :
     IsGroupLikeElem R (f a) ↔ IsGroupLikeElem R a where
@@ -146,22 +171,14 @@ lemma isGroupLikeElem_map_equiv
 variable (R A) in
 /-- The type of group-like elements in a coalgebra. -/
 @[ext]
-/--
-Definition of `GroupLike` / `GroupLike` 的定义
+/-
+**GroupLike** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_2) →   (A : Type u_3) →     [inst : CommSemiring R] → [inst_1 
+: AddCommMonoid A] → [inst_2 : _root_.Module R A] → [Coalgebra R A] → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GroupLike
-  parameters: where
-  axioms and operations (2):
-    - val : A
-    - isGroupLikeElem_val : IsGroupLikeElem R val
-
-中文:
-结构 群状
-  参数: where
-  公理与运算 (2 个):
-    - val : A
-    - isGroupLikeElem_val : 是GroupLikeElem R val
+--- 原说明 ---
+The type of group-like elements in a coalgebra.
 -/
 structure GroupLike where
   /-- The underlying element of a group-like element. -/
@@ -176,76 +193,57 @@ attribute [simp] isGroupLikeElem_val
 
 attribute [coe] val
 
-/--
-Instance `instCoeOut` / 实例 `instCoeOut`
-
-English:
-instance instCoeOut
-  signature: : CoeOut (GroupLike R A) A where coe
-  body: val
-
-中文:
-实例 instCoeOut
-  签名: : CoeOut (群状 R A) A where coe
-  定义体: val
+/-
+**GroupLike.instCoeOut** 是 Mathlib 中的一个实例，位于命名空间 `GroupLike`。
+形式化陈述：instCoeOut : CoeOut (GroupLike R A) A where coe
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCoeOut : CoeOut (GroupLike R A) A where coe := val
-
-/--
-lemma `val_injective` / 引理 `val_injective`
-
-English:
-lemma val_injective
-  statement: Injective (val : GroupLike R A -> A)
-  proof: by rintro ⟨a, ha⟩; congr!
-
-中文:
-引理 val_injective
-  结论: 单射 (val : 群状 R A -> A)
-  证明: by rintro ⟨a, ha⟩; congr!
+/-
+**GroupLike.val_injective** 是 Mathlib 中的一个引理，位于命名空间 `GroupLike`。
+形式化陈述：val_injective : Injective (val : GroupLike R A -> A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `GroupLike.isGroupLikeElem_val`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] (…
 -/
-lemma val_injective : Injective (val : GroupLike R A -> A) := by rintro ⟨a, ha⟩; congr!
-
-/--
-lemma `val_inj` / 引理 `val_inj`
-
-English:
-lemma val_inj
-  given: {a b : GroupLike R A}
-  statement: a.val = b.val ↔ a = b
-  proof: val_injective.eq_iff
-
-中文:
-引理 val_inj
-  条件: {a b : 群状 R A}
-  结论: a.val = b.val ↔ a = b
-  证明: val_injective.eq_iff
+lemma val_injective : Injective (val : GroupLike R A → A) := by rintro ⟨a, ha⟩; congr!
+/-
+**GroupLike.val_inj** 是 Mathlib 中的一个定理，位于命名空间 `GroupLike`。
+形式化陈述：∀ {R : Type u_2} {A : Type u_3} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid A] [inst_2 : _root_.Module R A]   [inst_3 : Coalgebra R A] {a b : GroupLik
+e R A}, ↑a = ↑b ↔ a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `GroupLike.val_injective`：val_injective : Injective (val : GroupLike R A 
+-> A)
 -/
 @[simp, norm_cast] lemma val_inj {a b : GroupLike R A} : a.val = b.val ↔ a = b :=
   val_injective.eq_iff
 
 /-- Identity equivalence between `GroupLike R A` and `{a : A // IsGroupLikeElem R a}`. -/
 @[simps]
-/--
-Definition of `valEquiv` / `valEquiv` 的定义
+/-
+**GroupLike.valEquiv** 是 Mathlib 中的一个定义，位于命名空间 `GroupLike`。
+形式化陈述：valEquiv : GroupLike R A ≃ Subtype (IsGroupLikeElem R : A -> Prop) where t
+oFun a
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupLike.isGroupLikeElem_val`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] (…
 
-English:
-definition valEquiv
-  signature: : GroupLike R A ≃ Subtype (IsGroupLikeElem R : A -> Prop) where
-  body: ⟨a.1, a.2⟩
-  invFun a := ⟨a.1, a.2⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-中文:
-定义 valEquiv
-  签名: : 群状 R A ≃ 子类型 (是GroupLikeElem R : A -> 命题) where
-  定义体: ⟨a.1, a.2⟩
-  invFun a := ⟨a.1, a.2⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
+--- 原说明 ---
+Identity equivalence between `GroupLike R A` and `{a : A // IsGroupLikeElem R a}
+`.
 -/
-def valEquiv : GroupLike R A ≃ Subtype (IsGroupLikeElem R : A -> Prop) where
+def valEquiv : GroupLike R A ≃ Subtype (IsGroupLikeElem R : A → Prop) where
   toFun a := ⟨a.1, a.2⟩
   invFun a := ⟨a.1, a.2⟩
   left_inv _ := rfl
@@ -259,122 +257,80 @@ variable [CommRing R] [IsDomain R] [AddCommGroup A] [Module R A] [Coalgebra R A]
   [IsTorsionFree R A]
 
 open Submodule in
-/--
-lemma `linearIndepOn_isGroupLikeElem` / 引理 `linearIndepOn_isGroupLikeElem`
+/-- Group-like elements over a domain are linearly independent. -/
+/-
+**linearIndepOn_isGroupLikeElem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：linearIndepOn_isGroupLikeElem : LinearIndepOn R id {a : A | IsGroupLikeEle
+m R a}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `linearIndepOn_iff_linearIndepOn_finset`：linearIndepOn_iff_linearIndepOn_
+finset : LinearIndepOn R v s ↔ forall t : Finset ι, ↑t subseteq s -> LinearIndep
+On R v t where mp hv t hts
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.coe_cons`：coe_cons {a s h} : (@cons α a s h : Set α) = insert a (
+s : Set α)
+· 使用引理 `LinearIndepOn.id_insert'`：LinearIndepOn.id_insert' {s : Set M} {x : M} (
+hs : LinearIndepOn R id s) (hx : forall r : R, r • x in Submodule.span R s -> r 
+= 0) : LinearI…
+· 使用定理 `LinearIndepOn.tmul_of_isDomain`：∀ {R : Type u_1} {M : Type u_2} {N : Typ
+e u_3} [inst : CommRing R] [IsDomain R] [inst_2 : AddCommGroup M]   [inst_3 : _r
+oot_.Module R M] [in…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `ite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) [
+inst_1 : Decidable p] (a : α) (b c : β),   (if p then b else c) • a = if p the…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `Finset.sum_ite_mem`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoi
+d M] [inst_1 : DecidableEq ι] (s t : Finset ι) (f : ι → M),   (∑ i ∈ s, if i ∈ t
+ then f …
+· 使用定理 `Finset.inter_self`：inter_self (s : Finset α) : s inter s = s
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+（共 58 条，此处仅展示前 30 条）
 
-English:
-lemma linearIndepOn_isGroupLikeElem
-  statement: LinearIndepOn R id {a : A | IsGroupLikeElem R a}
-  proof: by
-  classical
-  -- We show that any finset `s` of group-like elements is linearly independent.
-  rw [linearIndepOn_iff_linearIndepOn_finset]
-  rintro s hs
-  -- For this, we do induction on `s`.
-  induction s using Finset.cons_induction with
-  -- The case `s = ∅` is trivial.
-  | empty => simp
-  -- Let's deal with the `s ∪ {a}` case.
-  | cons a s has ih =>
-  simp only [Finset.cons_eq_insert, Finset.coe_insert, Set.subset_def, Set.mem_insert_iff,
-    Finset.mem_coe, Set.mem_ofPred_eq, forall_eq_or_imp] at hs
-  obtain ⟨ha, hs⟩ := hs
-  specialize ih hs
-  -- Assume that there is some `c : A → R` and `d : R` such that `∑ x ∈ s, c x • x = d • a`.
-  -- We want to prove `d = 0` and `∀ x ∈ s, c x = 0`.
-  rw [Finset.coe_cons]
-  refine ih.id_insert' ?_
-  simp only [mem_span_finset, forall_exists_index, and_imp]
-  rintro d c - hc
-  -- `x ⊗ y` over `x, y ∈ s` are linearly independent since `s` is linearly independent and
-  -- `R` is a domain.
-  replace ih := ih.tmul_of_isDomain ih
-  simp_rw [← Finset.coe_product, linearIndepOn_finset_iffₛ, id] at ih
-  -- Tensoring the equality `∑ x ∈ s, c x • x = d • a` with itself, we get by linear independence
-  -- that `c x ^ 2 = d * c x` and `c x * c y = 0` for `x ≠ y`.
-  have key := calc
-        ∑ x in s, ∑ y in s, (if x = y then d * c x else 0) • x otimesₜ[R] y
-    _ = d • ∑ x in s, c x • x otimesₜ[R] x := by simp [Finset.smul_sum, mul_smul]
-    _ = d • comul (d • a) := by rw [← hc]; simp +contextual [(hs _ _).comul_eq_tmul_self]
-    _ = (d • a) otimesₜ (d • a) := by simp [ha.comul_eq_tmul_self, smul_tmul, tmul_smul, -neg_smul]
-    _ = ∑ x in s, ∑ y in s, (c x * c y) • x otimesₜ[R] y := by
-      simp_rw [← hc, sum_tmul, smul_tmul, Finset.smul_sum, tmul_sum, tmul_smul, mul_smul]
-  simp_rw [← Finset.sum_product'] at key
-  apply ih at key
-  -- Therefore, `c x = 0` for all `x ∈ s`.
-  replace key x (hx : x in s) : c x = 0 := by
-    -- Otherwise, we deduce from `key` that `c y = 0` for any `y ≠ x` with `y ∈ s`.
-    by_contra! hcx
-    have hcy (y) (hys : y in s) (hyx : y != x) : c y = 0 := by
-      simpa [*] using (key (y, x) (by simp [*])).symm
-    -- Then substitute this into `hc` to get `c x • x = d • a`.
-    rw [Finset.sum_eq_single x (by simp +contextual [hcy]) (by simp [hx])] at hc
-    -- But `key` also says that `c x = d`.
-    have hcxa : d = c x := mul_left_injective₀ hcx (by simpa using (key (x, x) (by simp [*])))
-    -- So `x = a`...
-    obtain rfl : x = a := by rwa [hcxa, smul_right_inj hcx] at hc
-    -- ... which contradicts `x ∈ s` and `a ∉ s`.
-    contradiction
-  -- We are now done, since `d • a = ∑ x ∈ s, c x • x = 0`
-  simp_all [ha.ne_zero, eq_comm]
-
-中文:
-引理 linearIndepOn_isGroupLikeElem
-  结论: LinearIndepOn R id {a : A | 是GroupLikeElem R a}
-  证明: by
-  classical
-  -- We show that any finset `s` of group-like elements is linearly independent.
-  rw [linearIndepOn_iff_linearIndepOn_finset]
-  rintro s hs
-  -- For this, we do induction on `s`.
-  induction s using Finset.cons_induction with
-  -- The case `s = ∅` is trivial.
-  | empty => simp
-  -- Let's deal with the `s ∪ {a}` case.
-  | cons a s has ih =>
-  simp only [Finset.cons_eq_insert, Finset.coe_insert, Set.subset_def, Set.mem_insert_iff,
-    Finset.mem_coe, Set.mem_ofPred_eq, forall_eq_or_imp] at hs
-  obtain ⟨ha, hs⟩ := hs
-  specialize ih hs
-  -- Assume that there is some `c : A → R` and `d : R` such that `∑ x ∈ s, c x • x = d • a`.
-  -- We want to prove `d = 0` and `∀ x ∈ s, c x = 0`.
-  rw [Finset.coe_cons]
-  refine ih.id_insert' ?_
-  simp only [mem_span_finset, forall_exists_index, and_imp]
-  rintro d c - hc
-  -- `x ⊗ y` over `x, y ∈ s` are linearly independent since `s` is linearly independent and
-  -- `R` is a domain.
-  replace ih := ih.tmul_of_isDomain ih
-  simp_rw [← Finset.coe_product, linearIndepOn_finset_iffₛ, id] at ih
-  -- Tensoring the equality `∑ x ∈ s, c x • x = d • a` with itself, we get by linear independence
-  -- that `c x ^ 2 = d * c x` and `c x * c y = 0` for `x ≠ y`.
-  have key := calc
-        ∑ x in s, ∑ y in s, (if x = y then d * c x else 0) • x otimesₜ[R] y
-    _ = d • ∑ x in s, c x • x otimesₜ[R] x := by simp [Finset.smul_sum, mul_smul]
-    _ = d • comul (d • a) := by rw [← hc]; simp +contextual [(hs _ _).comul_eq_tmul_self]
-    _ = (d • a) otimesₜ (d • a) := by simp [ha.comul_eq_tmul_self, smul_tmul, tmul_smul, -neg_smul]
-    _ = ∑ x in s, ∑ y in s, (c x * c y) • x otimesₜ[R] y := by
-      simp_rw [← hc, sum_tmul, smul_tmul, Finset.smul_sum, tmul_sum, tmul_smul, mul_smul]
-  simp_rw [← Finset.sum_product'] at key
-  apply ih at key
-  -- Therefore, `c x = 0` for all `x ∈ s`.
-  replace key x (hx : x in s) : c x = 0 := by
-    -- Otherwise, we deduce from `key` that `c y = 0` for any `y ≠ x` with `y ∈ s`.
-    by_contra! hcx
-    have hcy (y) (hys : y in s) (hyx : y != x) : c y = 0 := by
-      simpa [*] using (key (y, x) (by simp [*])).symm
-    -- Then substitute this into `hc` to get `c x • x = d • a`.
-    rw [Finset.sum_eq_single x (by simp +contextual [hcy]) (by simp [hx])] at hc
-    -- But `key` also says that `c x = d`.
-    have hcxa : d = c x := mul_left_injective₀ hcx (by simpa using (key (x, x) (by simp [*])))
-    -- So `x = a`...
-    obtain rfl : x = a := by rwa [hcxa, smul_right_inj hcx] at hc
-    -- ... which contradicts `x ∈ s` and `a ∉ s`.
-    contradiction
-  -- We are now done, since `d • a = ∑ x ∈ s, c x • x = 0`
-  simp_all [ha.ne_zero, eq_comm]
-
-Depends on / 依赖: classical
+--- 原说明 ---
+Group-like elements over a domain are linearly independent.
 -/
 lemma linearIndepOn_isGroupLikeElem : LinearIndepOn R id {a : A | IsGroupLikeElem R a} := by
   classical
@@ -404,19 +360,19 @@ lemma linearIndepOn_isGroupLikeElem : LinearIndepOn R id {a : A | IsGroupLikeEle
   -- Tensoring the equality `∑ x ∈ s, c x • x = d • a` with itself, we get by linear independence
   -- that `c x ^ 2 = d * c x` and `c x * c y = 0` for `x ≠ y`.
   have key := calc
-        ∑ x in s, ∑ y in s, (if x = y then d * c x else 0) • x otimesₜ[R] y
-    _ = d • ∑ x in s, c x • x otimesₜ[R] x := by simp [Finset.smul_sum, mul_smul]
+        ∑ x ∈ s, ∑ y ∈ s, (if x = y then d * c x else 0) • x ⊗ₜ[R] y
+    _ = d • ∑ x ∈ s, c x • x ⊗ₜ[R] x := by simp [Finset.smul_sum, mul_smul]
     _ = d • comul (d • a) := by rw [← hc]; simp +contextual [(hs _ _).comul_eq_tmul_self]
-    _ = (d • a) otimesₜ (d • a) := by simp [ha.comul_eq_tmul_self, smul_tmul, tmul_smul, -neg_smul]
-    _ = ∑ x in s, ∑ y in s, (c x * c y) • x otimesₜ[R] y := by
+    _ = (d • a) ⊗ₜ (d • a) := by simp [ha.comul_eq_tmul_self, smul_tmul, tmul_smul, -neg_smul]
+    _ = ∑ x ∈ s, ∑ y ∈ s, (c x * c y) • x ⊗ₜ[R] y := by
       simp_rw [← hc, sum_tmul, smul_tmul, Finset.smul_sum, tmul_sum, tmul_smul, mul_smul]
   simp_rw [← Finset.sum_product'] at key
   apply ih at key
   -- Therefore, `c x = 0` for all `x ∈ s`.
-  replace key x (hx : x in s) : c x = 0 := by
+  replace key x (hx : x ∈ s) : c x = 0 := by
     -- Otherwise, we deduce from `key` that `c y = 0` for any `y ≠ x` with `y ∈ s`.
     by_contra! hcx
-    have hcy (y) (hys : y in s) (hyx : y != x) : c y = 0 := by
+    have hcy (y) (hys : y ∈ s) (hyx : y ≠ x) : c y = 0 := by
       simpa [*] using (key (y, x) (by simp [*])).symm
     -- Then substitute this into `hc` to get `c x • x = d • a`.
     rw [Finset.sum_eq_single x (by simp +contextual [hcy]) (by simp [hx])] at hc
@@ -429,24 +385,23 @@ lemma linearIndepOn_isGroupLikeElem : LinearIndepOn R id {a : A | IsGroupLikeEle
   -- We are now done, since `d • a = ∑ x ∈ s, c x • x = 0`
   simp_all [ha.ne_zero, eq_comm]
 
-/--
-lemma `linearIndep_groupLikeVal` / 引理 `linearIndep_groupLikeVal`
+/-- Group-like elements over a domain are linearly independent. -/
+/-
+**linearIndep_groupLikeVal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：linearIndep_groupLikeVal : LinearIndependent R (GroupLike.val (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `linearIndependent_equiv`：linearIndependent_equiv (e : ι ≃ ι') {f : ι' ->
+ M} : LinearIndependent R (f ∘ e) ↔ LinearIndependent R f
+· 使用引理 `linearIndepOn_isGroupLikeElem`：linearIndepOn_isGroupLikeElem : LinearInd
+epOn R id {a : A | IsGroupLikeElem R a}
 
-English:
-lemma linearIndep_groupLikeVal
-  statement: LinearIndependent R (GroupLike.val (R := R) (A := A))
-  proof: by
-  simpa using! (linearIndependent_equiv GroupLike.valEquiv).2 linearIndepOn_isGroupLikeElem
-
-中文:
-引理 linearIndep_groupLikeVal
-  结论: LinearIndependent R (群状.val (R := R) (A := A))
-  证明: by
-  simpa using! (linearIndependent_equiv GroupLike.valEquiv).2 linearIndepOn_isGroupLikeElem
-
-Depends on / 依赖: GroupLike, GroupLike.valEquiv, linearIndepOn_isGroupLikeElem, linearIndependent_equiv, valEquiv
+--- 原说明 ---
+Group-like elements over a domain are linearly independent.
 -/
 lemma linearIndep_groupLikeVal : LinearIndependent R (GroupLike.val (R := R) (A := A)) := by
   simpa using! (linearIndependent_equiv GroupLike.valEquiv).2 linearIndepOn_isGroupLikeElem
 
 end CommRing
+

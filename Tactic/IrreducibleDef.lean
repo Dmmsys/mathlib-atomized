@@ -41,9 +41,9 @@ local elab "eta_helper " t:term : term => do
   let some (_, lhs, rhs) := t.eq? | throwError "not an equation: {t}"
   synthesizeSyntheticMVars
   let rhs ← instantiateMVars rhs
-  lambdaTelescope rhs fun xs rhs => do
+  lambdaTelescope rhs fun xs rhs ↦ do
     let lhs := (mkAppN lhs xs).headBeta
-mkForallFVars xs ← mkEq lhs rhs
+    mkForallFVars xs <|← mkEq lhs rhs
 
 /-- `val_proj x` elabs to the *primitive projection* `@x.val`. -/
 local elab "val_proj " e:term : term => do
@@ -80,59 +80,37 @@ elab mods:declModifiers "irreducible_def" n_id:declId n_def:(irredDefLemma)?
   let us' := us.getD { elemsAndSeps := #[] }
   let n_def ← match n_def.getD ⟨mkNullNode⟩ with
     | `(irredDefLemma| (lemma := $id)) => pure id
-| _ => pure mkIdentFrom n (·.review)
+    | _ => pure <| mkIdentFrom n <| (·.review) <|
       let scopes := extractMacroScopes n.getId
       { scopes with name := scopes.name.appendAfter "_def" }
   let `(Parser.Command.declModifiersF|
- [$doc:docComment]? [@[$attrs,*]]?
- [$vis]? [$prot:protected]? [$nc:noncomputable]? [$uns:unsafe]?) := mods
+      $[$doc:docComment]? $[@[$attrs,*]]?
+      $[$vis]? $[$prot:protected]? $[$nc:noncomputable]? $[$uns:unsafe]?) := mods
     | throwError "unsupported modifiers {format mods}"
   let attrs := attrs.getD {}
   let priv := vis.filter (· matches `(Parser.Command.visibility| private))
-elabCommand <- `(stop_at_first_error
- [$nc:noncomputable]? [$uns]? def definition [.{$us,*}]? declSig:optDeclSig val
- [$nc:noncomputable]? [$uns]? opaque wrapped [.{$us,*}]? : Subtype (Eq @definition.{$us',*}) :=
+  elabCommand <|<- `(stop_at_first_error
+    $[$nc:noncomputable]? $[$uns]? def definition$[.{$us,*}]? $declSig:optDeclSig $val
+    $[$nc:noncomputable]? $[$uns]? opaque wrapped$[.{$us,*}]? : Subtype (Eq @definition.{$us',*}) :=
       ⟨_, rfl⟩
- [$doc:docComment]? [private%$priv]? [$nc:noncomputable]? [$uns]?
-/--
-Definition of `n` / `n` 的定义
-
-English:
-definition n:ident
-  signature: [.{$us,*}]?
-  body: val_proj @wrapped.{$us',*}
- [private%$priv]? [$uns:unsafe]? theorem n_def:ident [.{$us,*}]? :
-eta_helper Eq @ n.{$us',*} @(delta% @definition) := by
-      intros
-delta n:ident
-      rw [show wrapped = ⟨@definition.{$us']; rw [*}]; rw [rfl⟩ from Subtype.ext wrapped.2.symm]
-      rfl
-
-中文:
-定义 n:ident
-  签名: [.{$us,*}]?
-  定义体: val_proj @wrapped.{$us',*}
- [private%$priv]? [$uns:unsafe]? theorem n_def:ident [.{$us,*}]? :
-eta_helper Eq @ n.{$us',*} @(delta% @definition) := by
-      intros
-delta n:ident
-      rw [show wrapped = ⟨@definition.{$us']; rw [*}]; rw [rfl⟩ from Subtype.ext wrapped.2.symm]
-      rfl
-
-Depends on / 依赖: Subtype, Subtype.ext, addProtected, attrInstance, attribute, definition, eta_helper, getCurrNamespace, intros, irreducible, isSome, modifyEnv, n.getId, n_def, private, prot.isSome, theorem, unsafe, val_proj, wrapped
+    $[$doc:docComment]? $[private%$priv]? $[$nc:noncomputable]? $[$uns]?
+/-
+**Lean.Elab.Command.** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Command`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def n:ident [.{$us,*}]? :=
+    def $n:ident$[.{$us,*}]? :=
       val_proj @wrapped.{$us',*}
- [private%$priv]? [$uns:unsafe]? theorem n_def:ident [.{$us,*}]? :
-eta_helper Eq @ n.{$us',*} @(delta% @definition) := by
+    $[private%$priv]? $[$uns:unsafe]? theorem $n_def:ident $[.{$us,*}]? :
+        eta_helper Eq @$n.{$us',*} @(delta% @definition) := by
       intros
-delta n:ident
-      rw [show wrapped = ⟨@definition.{$us']; rw [*}]; rw [rfl⟩ from Subtype.ext wrapped.2.symm]
+      delta $n:ident
+      rw [show wrapped = ⟨@definition.{$us',*}, rfl⟩ from Subtype.ext wrapped.2.symm]
       rfl
-attribute [irreducible] n definition
-attribute [eqns $n_def] n
-attribute [$attrs:attrInstance,*] n)
+    attribute [irreducible] $n definition
+    attribute [eqns $n_def] $n
+    attribute [$attrs:attrInstance,*] $n)
   if prot.isSome then
     modifyEnv (addProtected · ((← getCurrNamespace) ++ n.getId))
 
 end Lean.Elab.Command
+

@@ -27,35 +27,29 @@ namespace CategoryTheory.Monoidal
 open Functor.LaxMonoidal Functor.OplaxMonoidal
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Transported.instBraidedCategory` / 实例 `Transported.instBraidedCategory`
-
-English:
-instance Transported.instBraidedCategory
-  signature: (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C]
-  body: .ofFaithful e.inverse (fun _ _ => e.functor.mapIso (β_ _ _)) fun _ _ => by
-    simp +instances [fromInducedCoreMonoidal, Functor.CoreMonoidal.toLaxMonoidal]
-
-local notation "e'" e => equivalenceTransported e
-
-中文:
-实例 Transported.instBraidedCategory
-  签名: (e : C ≌ D) [幺半群范畴 C] [辫范畴 C]
-  定义体: .ofFaithful e.inverse (fun _ _ => e.functor.mapIso (β_ _ _)) fun _ _ => by
-    simp +instances [fromInducedCoreMonoidal, Functor.CoreMonoidal.toLaxMonoidal]
-
-local notation "e'" e => equivalenceTransported e
-
-Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toLaxMonoidal, e.functor.mapIso, e.inverse, fromInducedCoreMonoidal, functor, instances, inverse, mapIso, ofFaithful, toLaxMonoidal
+/-
+**CategoryTheory.Monoidal.Transported.instBraidedCategory** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Monoidal.Transported`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (e : C ≌
+ D) →           [inst_2 : CategoryTheory.MonoidalCategory C] →             [Cate
+goryTheory.BraidedCategory C] → CategoryTheory.BraidedCategory (CategoryTheory.M
+onoidal.Transported e)
+参数：e : C ≌ D；CategoryTheory.Monoidal.Transported e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Transported.instBraidedCategory (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C] :
     BraidedCategory (Transported e) :=
-  .ofFaithful e.inverse (fun _ _ => e.functor.mapIso (β_ _ _)) fun _ _ => by
+  .ofFaithful e.inverse (fun _ _ ↦ e.functor.mapIso (β_ _ _)) fun _ _ ↦ by
     simp +instances [fromInducedCoreMonoidal, Functor.CoreMonoidal.toLaxMonoidal]
 
 local notation "e'" e => equivalenceTransported e
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Monoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C] :
     (e' e).inverse.Braided where
   braided X Y := by
@@ -69,20 +63,22 @@ This is a def because once we have that both `(e' e).inverse` and `(e' e).functo
 braided, this causes a diamond.
 -/
 @[instance_reducible]
-/--
-Definition of `transportedFunctorCompInverseLaxBraided` / `transportedFunctorCompInverseLaxBraided` 的定义
+/-
+**CategoryTheory.Monoidal.transportedFunctorCompInverseLaxBraided** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Monoidal`。
+形式化陈述：transportedFunctorCompInverseLaxBraided (e : C ≌ D) [MonoidalCategory C] [
+BraidedCategory C] : ((e' e).functor ⋙ (e' e).inverse).LaxBraided
+参数：e : C ≌ D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Monoidal.instIsMonoidalUnitTransportedEquivalenceTranspor
+ted`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Categ
+oryTheory.MonoidalCategory C] {D : Type u₂}   [inst_2 : CategoryT…
 
-English:
-definition transportedFunctorCompInverseLaxBraided
-  signature: (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C]
-  body: Functor.LaxBraided.ofNatIso (e' e).unitIso
-
-中文:
-定义 transportedFunctorCompInverseLaxBraided
-  签名: (e : C ≌ D) [幺半群范畴 C] [辫范畴 C]
-  定义体: Functor.LaxBraided.ofNatIso (e' e).unitIso
-
-Depends on / 依赖: Functor, Functor.LaxBraided.ofNatIso, LaxBraided, ofNatIso, unitIso
+--- 原说明 ---
+This is a def because once we have that both `(e' e).inverse` and `(e' e).functo
+r` are
+braided, this causes a diamond.
 -/
 def transportedFunctorCompInverseLaxBraided (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C] :
     ((e' e).functor ⋙ (e' e).inverse).LaxBraided :=
@@ -94,22 +90,33 @@ This is a def because once we have that both `(e' e).inverse` and `(e' e).functo
 braided, this causes a diamond.
 -/
 @[instance_reducible]
-/--
-Definition of `transportedFunctorCompInverseBraided` / `transportedFunctorCompInverseBraided` 的定义
+/-
+**CategoryTheory.Monoidal.transportedFunctorCompInverseBraided** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Monoidal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (e : C ≌
+ D) →           [inst_2 : CategoryTheory.MonoidalCategory C] →             [inst
+_3 : CategoryTheory.BraidedCategory C] →               ((CategoryTheory.Monoidal
+.equivalenceTransported e).functor.comp                   (CategoryTheory.Monoid
+al.equivalenceTransported e).inverse).Braided
+参数：e : C ≌ D；(CategoryTheory.Monoidal.equivalenceTransported e).functor.comp    
+               (CategoryTheory.Monoidal.equivalenceTransported e).inverse。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transportedFunctorCompInverseBraided
-  signature: (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C]
-
-中文:
-定义 transportedFunctorCompInverseBraided
-  签名: (e : C ≌ D) [幺半群范畴 C] [辫范畴 C]
+--- 原说明 ---
+This is a def because once we have that both `(e' e).inverse` and `(e' e).functo
+r` are
+braided, this causes a diamond.
 -/
 def transportedFunctorCompInverseBraided (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C] :
     ((e' e).functor ⋙ (e' e).inverse).Braided where
 
 set_option backward.defeqAttrib.useBackward true in
 attribute [local instance] transportedFunctorCompInverseBraided in
+/-
+**CategoryTheory.Monoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C] :
     (e' e).functor.Braided where
   braided X Y := by
@@ -125,23 +132,20 @@ instance (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C] :
 
 end
 
-/--
-Instance `Transported.instSymmetricCategory` / 实例 `Transported.instSymmetricCategory`
-
-English:
-instance Transported.instSymmetricCategory
-  signature: (e : C ≌ D) [MonoidalCategory C]
-  body: .ofFaithful (equivalenceTransported e).inverse
-
-中文:
-实例 Transported.instSymmetricCategory
-  签名: (e : C ≌ D) [幺半群范畴 C]
-  定义体: .ofFaithful (equivalenceTransported e).inverse
-
-Depends on / 依赖: equivalenceTransported, inverse, ofFaithful
+/-
+**CategoryTheory.Monoidal.Transported.instSymmetricCategory** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Monoidal.Transported`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (e : C ≌
+ D) →           [inst_2 : CategoryTheory.MonoidalCategory C] →             [Cate
+goryTheory.SymmetricCategory C] →               CategoryTheory.SymmetricCategory
+ (CategoryTheory.Monoidal.Transported e)
+参数：e : C ≌ D；CategoryTheory.Monoidal.Transported e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Transported.instSymmetricCategory (e : C ≌ D) [MonoidalCategory C]
     [SymmetricCategory C] : SymmetricCategory (Transported e) :=
   .ofFaithful (equivalenceTransported e).inverse
 
 end CategoryTheory.Monoidal
+

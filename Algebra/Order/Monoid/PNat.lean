@@ -17,28 +17,16 @@ public import Mathlib.Data.PNat.Basic
 
 /-- `ℕ+` is equivalent to `nonZeroDivisors ℕ` in terms of order and multiplication. -/
 @[simps]
-/--
-Definition of `PNat.equivNonZeroDivisorsNat` / `PNat.equivNonZeroDivisorsNat` 的定义
+/-
+**PNat.equivNonZeroDivisorsNat** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PNat.equivNonZeroDivisorsNat : Nat+ ≃*o nonZeroDivisors Nat where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PNat.equivNonZeroDivisorsNat
-  signature: : Nat+ ≃*o nonZeroDivisors Nat where
-  body: ⟨x.val, by simp⟩
-  invFun x := ⟨x.val, by simp [Nat.pos_iff_ne_zero]⟩
-  map_mul' := by simp
-  map_le_map_iff' := by simp
-
-中文:
-定义 正自然数.equivNonZeroDivisors自然数
-  签名: : 自然数+ ≃*o nonZeroDivisors 自然数 where
-  定义体: ⟨x.val, by simp⟩
-  invFun x := ⟨x.val, by simp [Nat.pos_iff_ne_zero]⟩
-  map_mul' := by simp
-  map_le_map_iff' := by simp
-
-Depends on / 依赖: x.val
+--- 原说明 ---
+`ℕ+` is equivalent to `nonZeroDivisors ℕ` in terms of order and multiplication.
 -/
-def PNat.equivNonZeroDivisorsNat : Nat+ ≃*o nonZeroDivisors Nat where
+def PNat.equivNonZeroDivisorsNat : ℕ+ ≃*o nonZeroDivisors ℕ where
   toFun x := ⟨x.val, by simp⟩
   invFun x := ⟨x.val, by simp [Nat.pos_iff_ne_zero]⟩
   map_mul' := by simp

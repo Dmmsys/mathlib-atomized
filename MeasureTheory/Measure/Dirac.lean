@@ -31,619 +31,654 @@ namespace MeasureTheory
 
 namespace Measure
 
-/--
-Definition of `dirac` / `dirac` 的定义
+/-- The dirac measure. -/
+/-
+**MeasureTheory.Measure.dirac** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：dirac (a : α) : Measure α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dirac
-  signature: (a : α)
-  body: (OuterMeasure.dirac a).toMeasure (by simp)
-
-中文:
-定义 dirac
-  签名: (a : α)
-  定义体: (OuterMeasure.dirac a).toMeasure (by simp)
-
-Depends on / 依赖: OuterMeasure, OuterMeasure.dirac, toMeasure
+--- 原说明 ---
+The dirac measure.
 -/
 def dirac (a : α) : Measure α := (OuterMeasure.dirac a).toMeasure (by simp)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MeasureSpace PUnit
-  body: ⟨dirac PUnit.unit⟩
-
-中文:
-实例 :
-  签名: 测度空间 命题单元
-  定义体: ⟨dirac PUnit.unit⟩
-
-Depends on / 依赖: PUnit.unit
+/-
+**MeasureTheory.Measure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MeasureSpace PUnit :=
   ⟨dirac PUnit.unit⟩
-
-/--
-theorem `le_dirac_apply` / 定理 `le_dirac_apply`
-
-English:
-theorem le_dirac_apply
-  given: {a}
-  statement: s.indicator 1 a <= dirac a s
-  proof: OuterMeasure.dirac_apply a s ▸ le_toMeasure_apply _ _ _
-
-@[simp]
-
-中文:
-定理 le_dirac_apply
-  条件: {a}
-  结论: s.indicator 1 a <= dirac a s
-  证明: OuterMeasure.dirac_apply a s ▸ le_toMeasure_apply _ _ _
-
-@[simp]
-
-Depends on / 依赖: OuterMeasure, OuterMeasure.dirac_apply, dirac_apply, le_toMeasure_apply
+/-
+**MeasureTheory.Measure.le_dirac_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：le_dirac_apply {a} : s.indicator 1 a <= dirac a s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.le_toMeasure_apply`：le_toMeasure_apply (m : OuterMeasure α
+) (h : ms <= m.caratheodory) (s : Set α) : m s <= m.toMeasure h s
+· 使用定理 `MeasureTheory.OuterMeasure.dirac_apply`：dirac_apply (a : α) (s : Set α) 
+: dirac a s = indicator s (fun _ => 1) a
 -/
-theorem le_dirac_apply {a} : s.indicator 1 a <= dirac a s :=
+theorem le_dirac_apply {a} : s.indicator 1 a ≤ dirac a s :=
   OuterMeasure.dirac_apply a s ▸ le_toMeasure_apply _ _ _
 
 @[simp]
-/--
-theorem `dirac_apply'` / 定理 `dirac_apply'`
-
-English:
-theorem dirac_apply'
-  given: (a : α) (hs : MeasurableSet s)
-  statement: dirac a s = s.indicator 1 a
-  proof: toMeasure_apply _ _ hs
-
-中文:
-定理 dirac_apply'
-  条件: (a : α) (hs : 可测集 s)
-  结论: dirac a s = s.indicator 1 a
-  证明: toMeasure_apply _ _ hs
-
-Depends on / 依赖: toMeasure_apply
+/-
+**MeasureTheory.Measure.dirac_apply'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Me
+asure`。
+形式化陈述：dirac_apply' (a : α) (hs : MeasurableSet s) : dirac a s = s.indicator 1 a
+参数：a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.toMeasure_apply`：toMeasure_apply (m : OuterMeasure α) (h :
+ ms <= m.caratheodory) {s : Set α} (hs : MeasurableSet s) : m.toMeasure h s = m 
+s
 -/
 theorem dirac_apply' (a : α) (hs : MeasurableSet s) : dirac a s = s.indicator 1 a :=
   toMeasure_apply _ _ hs
-
-/--
-theorem `dirac_apply_eq_zero_or_one` / 定理 `dirac_apply_eq_zero_or_one`
-
-English:
-theorem dirac_apply_eq_zero_or_one
-  proof: by
-  rw [← measure_toMeasurable s]; rw [dirac_apply' a (measurableSet_toMeasurable ..)]; rw [indicator]
-  simp only [Pi.one_apply, ite_eq_right_iff, one_ne_zero, imp_false, ite_eq_left_iff, zero_ne_one,
-    not_not]
-  tauto
-
-@[simp]
-
-中文:
-定理 dirac_apply_eq_zero_or_one
-  证明: by
-  rw [← measure_toMeasurable s]; rw [dirac_apply' a (measurableSet_toMeasurable ..)]; rw [indicator]
-  simp only [Pi.one_apply, ite_eq_right_iff, one_ne_zero, imp_false, ite_eq_left_iff, zero_ne_one,
-    not_not]
-  tauto
-
-@[simp]
-
-Depends on / 依赖: Pi.one_apply, dirac_apply, imp_false, indicator, ite_eq_left_iff, ite_eq_right_iff, measurableSet_toMeasurable, measure_toMeasurable, not_not, one_apply, one_ne_zero, zero_ne_one
+/-
+**MeasureTheory.Measure.dirac_apply_eq_zero_or_one** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：dirac_apply_eq_zero_or_one : dirac a s = 0 ∨ dirac a s = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.measure_toMeasurable`：measure_toMeasurable (s : Set α) : μ
+ (toMeasurable μ s) = μ s
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `MeasureTheory.measurableSet_toMeasurable`：measurableSet_toMeasurable (μ 
+: Measure α) (s : Set α) : MeasurableSet (toMeasurable μ s)
+· 使用定理 `Set.indicator.eq_1`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] (s :
+ Set α) (f : α → M) (x : α),   s.indicator f x = if x ∈ s then f x else 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 -/
 theorem dirac_apply_eq_zero_or_one :
     dirac a s = 0 ∨ dirac a s = 1 := by
-  rw [← measure_toMeasurable s]; rw [dirac_apply' a (measurableSet_toMeasurable ..)]; rw [indicator]
+  rw [← measure_toMeasurable s, dirac_apply' a (measurableSet_toMeasurable ..), indicator]
   simp only [Pi.one_apply, ite_eq_right_iff, one_ne_zero, imp_false, ite_eq_left_iff, zero_ne_one,
     not_not]
   tauto
 
 @[simp]
-/--
-theorem `dirac_apply_ne_zero_iff_eq_one` / 定理 `dirac_apply_ne_zero_iff_eq_one`
-
-English:
-theorem dirac_apply_ne_zero_iff_eq_one
-  proof: dirac_apply_eq_zero_or_one.resolve_left
-  mpr := ne_zero_of_eq_one
-
-@[simp]
-
-中文:
-定理 dirac_apply_ne_zero_iff_eq_one
-  证明: dirac_apply_eq_zero_or_one.resolve_left
-  mpr := ne_zero_of_eq_one
-
-@[simp]
-
-Depends on / 依赖: dirac_apply_eq_zero_or_one, dirac_apply_eq_zero_or_one.resolve_left, resolve_left
+/-
+**MeasureTheory.Measure.dirac_apply_ne_zero_iff_eq_one** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Measure`。
+形式化陈述：dirac_apply_ne_zero_iff_eq_one : dirac a s != 0 ↔ dirac a s = 1 where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `MeasureTheory.Measure.dirac_apply_eq_zero_or_one`：dirac_apply_eq_zero_or
+_one : dirac a s = 0 ∨ dirac a s = 1
+· 使用引理 `ne_zero_of_eq_one`：ne_zero_of_eq_one [One α] [NeZero (1 : α)] {a : α} (h
+ : a = 1) : a != 0
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
 -/
 theorem dirac_apply_ne_zero_iff_eq_one :
-    dirac a s != 0 ↔ dirac a s = 1 where
+    dirac a s ≠ 0 ↔ dirac a s = 1 where
   mp := dirac_apply_eq_zero_or_one.resolve_left
   mpr := ne_zero_of_eq_one
 
 @[simp]
-/--
-theorem `dirac_apply_ne_one_iff_eq_zero` / 定理 `dirac_apply_ne_one_iff_eq_zero`
-
-English:
-theorem dirac_apply_ne_one_iff_eq_zero
-  proof: dirac_apply_eq_zero_or_one.resolve_right
-  mpr h := h ▸ zero_ne_one
-
-@[simp]
-
-中文:
-定理 dirac_apply_ne_one_iff_eq_zero
-  证明: dirac_apply_eq_zero_or_one.resolve_right
-  mpr h := h ▸ zero_ne_one
-
-@[simp]
-
-Depends on / 依赖: dirac_apply_eq_zero_or_one, dirac_apply_eq_zero_or_one.resolve_right, resolve_right
+/-
+**MeasureTheory.Measure.dirac_apply_ne_one_iff_eq_zero** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Measure`。
+形式化陈述：dirac_apply_ne_one_iff_eq_zero : dirac a s != 1 ↔ dirac a s = 0 where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `MeasureTheory.Measure.dirac_apply_eq_zero_or_one`：dirac_apply_eq_zero_or
+_one : dirac a s = 0 ∨ dirac a s = 1
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem dirac_apply_ne_one_iff_eq_zero :
-    dirac a s != 1 ↔ dirac a s = 0 where
+    dirac a s ≠ 1 ↔ dirac a s = 0 where
   mp := dirac_apply_eq_zero_or_one.resolve_right
   mpr h := h ▸ zero_ne_one
 
 @[simp]
-/--
-theorem `dirac_apply_of_mem` / 定理 `dirac_apply_of_mem`
-
-English:
-theorem dirac_apply_of_mem
-  given: {a : α} (h : a in s)
-  statement: dirac a s = 1
-  proof: by
-  have : forall t : Set α, a in t -> t.indicator (1 : α -> Real>=0∞) a = 1 := fun t ht => indicator_of_mem ht 1
-  refine le_antisymm (this univ trivial ▸ ?_) (this s h ▸ le_dirac_apply)
-  rw [← dirac_apply' a MeasurableSet.univ]
-  exact measure_mono (subset_univ s)
-
-@[simp]
-
-中文:
-定理 dirac_apply_of_mem
-  条件: {a : α} (h : a in s)
-  结论: dirac a s = 1
-  证明: by
-  have : forall t : Set α, a in t -> t.indicator (1 : α -> Real>=0∞) a = 1 := fun t ht => indicator_of_mem ht 1
-  refine le_antisymm (this univ trivial ▸ ?_) (this s h ▸ le_dirac_apply)
-  rw [← dirac_apply' a MeasurableSet.univ]
-  exact measure_mono (subset_univ s)
-
-@[simp]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, dirac_apply, indicator, indicator_of_mem, le_antisymm, le_dirac_apply, measure_mono, subset_univ, t.indicator
+/-
+**MeasureTheory.Measure.dirac_apply_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.Measure`。
+形式化陈述：dirac_apply_of_mem {a : α} (h : a in s) : dirac a s = 1
+参数：h : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `trivial`：True
+· 使用定理 `MeasureTheory.Measure.le_dirac_apply`：le_dirac_apply {a} : s.indicator 1
+ a <= dirac a s
 -/
-theorem dirac_apply_of_mem {a : α} (h : a in s) : dirac a s = 1 := by
-  have : forall t : Set α, a in t -> t.indicator (1 : α -> Real>=0∞) a = 1 := fun t ht => indicator_of_mem ht 1
+theorem dirac_apply_of_mem {a : α} (h : a ∈ s) : dirac a s = 1 := by
+  have : ∀ t : Set α, a ∈ t → t.indicator (1 : α → ℝ≥0∞) a = 1 := fun t ht => indicator_of_mem ht 1
   refine le_antisymm (this univ trivial ▸ ?_) (this s h ▸ le_dirac_apply)
   rw [← dirac_apply' a MeasurableSet.univ]
   exact measure_mono (subset_univ s)
 
 @[simp]
-/--
-theorem `dirac_apply` / 定理 `dirac_apply`
-
-English:
-theorem dirac_apply
-  given: [MeasurableSingletonClass α] (a : α) (s : Set α)
-  proof: by
-  by_cases h : a in s; · rw [dirac_apply_of_mem h, indicator_of_mem h, Pi.one_apply]
-  rw [indicator_of_notMem h]; rw [← nonpos_iff_eq_zero]
-  calc
-    dirac a s <= dirac a {a}ᶜ := measure_mono (subset_compl_comm.1 <| singleton_subset_iff.2 h)
-    _ = 0 := by simp [dirac_apply' _ (measurableSet_singleton _).compl]
-
-中文:
-定理 dirac_apply
-  条件: [MeasurableSingleton类 α] (a : α) (s : 集合 α)
-  证明: by
-  by_cases h : a in s; · rw [dirac_apply_of_mem h, indicator_of_mem h, Pi.one_apply]
-  rw [indicator_of_notMem h]; rw [← nonpos_iff_eq_zero]
-  calc
-    dirac a s <= dirac a {a}ᶜ := measure_mono (subset_compl_comm.1 <| singleton_subset_iff.2 h)
-    _ = 0 := by simp [dirac_apply' _ (measurableSet_singleton _).compl]
-
-Depends on / 依赖: Pi.one_apply, dirac_apply, dirac_apply_of_mem, indicator_of_mem, indicator_of_notMem, measurableSet_singleton, measure_mono, nonpos_iff_eq_zero, one_apply, singleton_subset_iff, subset_compl_comm
+/-
+**MeasureTheory.Measure.dirac_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Mea
+sure`。
+形式化陈述：dirac_apply [MeasurableSingletonClass α] (a : α) (s : Set α) : dirac a s =
+ s.indicator 1 a
+参数：a : α；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.dirac_apply_of_mem`：dirac_apply_of_mem {a : α} (h 
+: a in s) : dirac a s = 1
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用引理 `Pi.one_apply`：one_apply (i : ι) : (1 : forall i, M i) i = 1
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_compl_comm`：subset_compl_comm : s subseteq tᶜ ↔ t subseteq sᶜ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `MeasurableSingletonClass.measurableSet_singleton`：∀ {α : Type u_7} {inst
+ : MeasurableSpace α} [self : MeasurableSingletonClass α] (x : α), MeasurableSet
+ {x}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem dirac_apply [MeasurableSingletonClass α] (a : α) (s : Set α) :
     dirac a s = s.indicator 1 a := by
-  by_cases h : a in s; · rw [dirac_apply_of_mem h, indicator_of_mem h, Pi.one_apply]
-  rw [indicator_of_notMem h]; rw [← nonpos_iff_eq_zero]
+  by_cases h : a ∈ s; · rw [dirac_apply_of_mem h, indicator_of_mem h, Pi.one_apply]
+  rw [indicator_of_notMem h, ← nonpos_iff_eq_zero]
   calc
-    dirac a s <= dirac a {a}ᶜ := measure_mono (subset_compl_comm.1 <| singleton_subset_iff.2 h)
+    dirac a s ≤ dirac a {a}ᶜ := measure_mono (subset_compl_comm.1 <| singleton_subset_iff.2 h)
     _ = 0 := by simp [dirac_apply' _ (measurableSet_singleton _).compl]
-
-/--
-lemma `dirac_ne_zero` / 引理 `dirac_ne_zero`
-
-English:
-lemma dirac_ne_zero
-  statement: dirac a != 0
-  proof: fun h => by simpa [h] using dirac_apply_of_mem (mem_univ a)
-
-@[simp]
-
-中文:
-引理 dirac_ne_zero
-  结论: dirac a != 0
-  证明: fun h => by simpa [h] using dirac_apply_of_mem (mem_univ a)
-
-@[simp]
+/-
+**MeasureTheory.Measure.dirac_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {a : α}, MeasureTheory.Measure
+.dirac a ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `MeasureTheory.Measure.dirac_apply_of_mem`：dirac_apply_of_mem {a : α} (h 
+: a in s) : dirac a s = 1
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-@[simp] lemma dirac_ne_zero : dirac a != 0 :=
-  fun h => by simpa [h] using dirac_apply_of_mem (mem_univ a)
+@[simp] lemma dirac_ne_zero : dirac a ≠ 0 :=
+  fun h ↦ by simpa [h] using dirac_apply_of_mem (mem_univ a)
 
 @[simp]
-/--
-theorem `map_dirac'` / 定理 `map_dirac'`
-
-English:
-theorem map_dirac'
-  given: {f : α -> β} (hf : Measurable f) (a : α)
-  statement: (dirac a).map f = dirac (f a)
-  proof: by
+/-
+**MeasureTheory.Measure.map_dirac'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：map_dirac' {f : α -> β} (hf : Measurable f) (a : α) : (dirac a).map f = di
+rac (f a)
+参数：hf : Measurable f；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `Set.indicator_apply`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] (s 
+: Set α) (f : α → M) (a : α) [inst_1 : Decidable (a ∈ s)],   s.indicator f a = i
+f a ∈ s t…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem map_dirac' {f : α → β} (hf : Measurable f) (a : α) : (dirac a).map f = dirac (f a) := by
   classical
   exact ext fun s hs => by simp [hs, map_apply hf hs, hf hs, indicator_apply]
 
 @[simp]
-
-中文:
-定理 map_dirac'
-  条件: {f : α -> β} (hf : 可测 f) (a : α)
-  结论: (dirac a).map f = dirac (f a)
-  证明: by
-  classical
-  exact ext fun s hs => by simp [hs, map_apply hf hs, hf hs, indicator_apply]
-
-@[simp]
-
-Depends on / 依赖: classical, indicator_apply, map_apply
+/-
+**MeasureTheory.Measure.map_const** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.Measu
+re`。
+形式化陈述：map_const (μ : Measure α) (c : β) : μ.map (fun _ => c) = (μ Set.univ) • di
+rac c
+参数：μ : Measure α；c : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `Set.preimage_const`：preimage_const (b : β) (s : Set β) [Decidable (b in 
+s)] : (fun _ : α => b) ⁻¹' s = if b in s then univ else ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.indicator_eq_one_iff_mem`：indicator_eq_one_iff_mem : indicator s 1 i
+ = (1 : M₀) ↔ i in s
+· 使用定理 `ENNReal.instNontrivial`：Nontrivial ENNReal
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用引理 `Set.indicator_eq_zero_iff_notMem`：indicator_eq_zero_iff_notMem : indicat
+or s 1 i = (0 : M₀) ↔ i ∉ s
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem map_dirac' {f : α -> β} (hf : Measurable f) (a : α) : (dirac a).map f = dirac (f a) := by
-  classical
-  exact ext fun s hs => by simp [hs, map_apply hf hs, hf hs, indicator_apply]
-
-@[simp]
-/--
-lemma `map_const` / 引理 `map_const`
-
-English:
-lemma map_const
-  given: (μ : Measure α) (c : β)
-  statement: μ.map (fun _ => c) = (μ Set.univ) • dirac c
-  proof: by
+lemma map_const (μ : Measure α) (c : β) : μ.map (fun _ ↦ c) = (μ Set.univ) • dirac c := by
   ext s hs
   simp only [Measure.coe_smul, Pi.smul_apply,
     dirac_apply' _ hs, smul_eq_mul]
   classical
-  rw [Measure.map_apply measurable_const hs]; rw [Set.preimage_const]
-  by_cases hsc : c in s
+  rw [Measure.map_apply measurable_const hs, Set.preimage_const]
+  by_cases hsc : c ∈ s
   · rw [(Set.indicator_eq_one_iff_mem _).mpr hsc, mul_one, if_pos hsc]
   · rw [if_neg hsc, (Set.indicator_eq_zero_iff_notMem _).mpr hsc, measure_empty, mul_zero]
 
 @[simp]
-
-中文:
-引理 map_const
-  条件: (μ : 测度 α) (c : β)
-  结论: μ.map (fun _ => c) = (μ 集合.univ) • dirac c
-  证明: by
-  ext s hs
-  simp only [Measure.coe_smul, Pi.smul_apply,
-    dirac_apply' _ hs, smul_eq_mul]
-  classical
-  rw [Measure.map_apply measurable_const hs]; rw [Set.preimage_const]
-  by_cases hsc : c in s
-  · rw [(Set.indicator_eq_one_iff_mem _).mpr hsc, mul_one, if_pos hsc]
-  · rw [if_neg hsc, (Set.indicator_eq_zero_iff_notMem _).mpr hsc, measure_empty, mul_zero]
-
-@[simp]
-
-Depends on / 依赖: Measure, Measure.coe_smul, Measure.map_apply, Pi.smul_apply, Set.indicator_eq_one_iff_mem, Set.indicator_eq_zero_iff_notMem, Set.preimage_const, classical, coe_smul, dirac_apply, if_neg, if_pos, indicator_eq_one_iff_mem, indicator_eq_zero_iff_notMem, map_apply, measurable_const, measure_empty, mul_one, mul_zero, preimage_const
--/
-lemma map_const (μ : Measure α) (c : β) : μ.map (fun _ => c) = (μ Set.univ) • dirac c := by
-  ext s hs
-  simp only [Measure.coe_smul, Pi.smul_apply,
-    dirac_apply' _ hs, smul_eq_mul]
-  classical
-  rw [Measure.map_apply measurable_const hs]; rw [Set.preimage_const]
-  by_cases hsc : c in s
-  · rw [(Set.indicator_eq_one_iff_mem _).mpr hsc, mul_one, if_pos hsc]
-  · rw [if_neg hsc, (Set.indicator_eq_zero_iff_notMem _).mpr hsc, measure_empty, mul_zero]
-
-@[simp]
-/--
-theorem `restrict_singleton` / 定理 `restrict_singleton`
-
-English:
-theorem restrict_singleton
-  given: (μ : Measure α) (a : α)
-  statement: μ.restrict {a} = μ {a} • dirac a
-  proof: by
-  ext1 s hs
-  by_cases ha : a in s
-  · have : s inter {a} = {a} := by simpa
-    simp [*]
-  · have : s inter {a} = ∅ := inter_singleton_eq_empty.2 ha
-    simp [*]
-
-中文:
-定理 restrict_singleton
-  条件: (μ : 测度 α) (a : α)
-  结论: μ.restrict {a} = μ {a} • dirac a
-  证明: by
-  ext1 s hs
-  by_cases ha : a in s
-  · have : s inter {a} = {a} := by simpa
-    simp [*]
-  · have : s inter {a} = ∅ := inter_singleton_eq_empty.2 ha
-    simp [*]
-
-Depends on / 依赖: inter_singleton_eq_empty
+/-
+**MeasureTheory.Measure.restrict_singleton** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.Measure`。
+形式化陈述：restrict_singleton (μ : Measure α) (a : α) : μ.restrict {a} = μ {a} • dira
+c a
+参数：μ : Measure α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.restrict_apply`：restrict_apply (ht : MeasurableSet
+ t) : μ.restrict s t = μ (t inter s)
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_singleton_eq_empty`：inter_singleton_eq_empty : s inter {a} = ∅
+ ↔ a ∉ s
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 theorem restrict_singleton (μ : Measure α) (a : α) : μ.restrict {a} = μ {a} • dirac a := by
   ext1 s hs
-  by_cases ha : a in s
-  · have : s inter {a} = {a} := by simpa
+  by_cases ha : a ∈ s
+  · have : s ∩ {a} = {a} := by simpa
     simp [*]
-  · have : s inter {a} = ∅ := inter_singleton_eq_empty.2 ha
+  · have : s ∩ {a} = ∅ := inter_singleton_eq_empty.2 ha
     simp [*]
 
-/--
-theorem `ext_of_singleton` / 定理 `ext_of_singleton`
+/-- Two measures on a countable space are equal if they agree on singletons. -/
+/-
+**MeasureTheory.Measure.ext_of_singleton** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：ext_of_singleton [Countable α] {μ ν : Measure α} (h : forall a, μ {a} = ν 
+{a}) : μ = ν
+参数：h : forall a, μ {a} = ν {a}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_sUnion_eq_univ`：∀ {α : Type u_2} {m0 : Meas
+urableSpace α} {μ ν : MeasureTheory.Measure α} {S : Set (Set α)},   S.Countable 
+→ ⋃₀ S = Set.univ → (∀ s ∈ S, μ.r…
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.Measure.restrict_singleton`：restrict_singleton (μ : Measur
+e α) (a : α) : μ.restrict {a} = μ {a} • dirac a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem ext_of_singleton
-  given: [Countable α] {μ ν : Measure α} (h : forall a, μ {a} = ν {a})
-  statement: μ = ν
-  proof: ext_of_sUnion_eq_univ (countable_range singleton) (by aesop) (by simp_all)
-
-中文:
-定理 ext_of_singleton
-  条件: [可数 α] {μ ν : 测度 α} (h : 对任意 a, μ {a} = ν {a})
-  结论: μ = ν
-  证明: ext_of_sUnion_eq_univ (countable_range singleton) (by aesop) (by simp_all)
-
-Depends on / 依赖: countable_range, ext_of_sUnion_eq_univ, singleton
+--- 原说明 ---
+Two measures on a countable space are equal if they agree on singletons.
 -/
-theorem ext_of_singleton [Countable α] {μ ν : Measure α} (h : forall a, μ {a} = ν {a}) : μ = ν :=
+theorem ext_of_singleton [Countable α] {μ ν : Measure α} (h : ∀ a, μ {a} = ν {a}) : μ = ν :=
   ext_of_sUnion_eq_univ (countable_range singleton) (by aesop) (by simp_all)
 
-/--
-theorem `ext_iff_singleton` / 定理 `ext_iff_singleton`
+/-- Two measures on a countable space are equal if and only if they agree on singletons. -/
+/-
+**MeasureTheory.Measure.ext_iff_singleton** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：ext_iff_singleton [Countable α] {μ ν : Measure α} : μ = ν ↔ forall a, μ {a
+} = ν {a}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext_of_singleton`：ext_of_singleton [Countable α] {
+μ ν : Measure α} (h : forall a, μ {a} = ν {a}) : μ = ν
 
-English:
-theorem ext_iff_singleton
-  given: [Countable α] {μ ν : Measure α}
-  statement: μ = ν ↔ forall a, μ {a} = ν {a}
-  proof: ⟨fun h _ => h ▸ rfl, ext_of_singleton⟩
-
-中文:
-定理 ext_iff_singleton
-  条件: [可数 α] {μ ν : 测度 α}
-  结论: μ = ν ↔ 对任意 a, μ {a} = ν {a}
-  证明: ⟨fun h _ => h ▸ rfl, ext_of_singleton⟩
-
-Depends on / 依赖: ext_of_singleton
+--- 原说明 ---
+Two measures on a countable space are equal if and only if they agree on singlet
+ons.
 -/
-theorem ext_iff_singleton [Countable α] {μ ν : Measure α} : μ = ν ↔ forall a, μ {a} = ν {a} :=
-  ⟨fun h _ => h ▸ rfl, ext_of_singleton⟩
-
-/--
-theorem `_root_.MeasureTheory.ext_iff_measureReal_singleton` / 定理 `_root_.MeasureTheory.ext_iff_measureReal_singleton`
-
-English:
-theorem _root_.MeasureTheory.ext_iff_measureReal_singleton
-  statement: [Countable α]
-  proof: by
-  rw [Measure.ext_iff_singleton]
-  congr! with x
-  rw [measureReal_def]; rw [measureReal_def]; rw [ENNReal.toReal_eq_toReal_iff]
-  simp [measure_singleton_lt_top, ne_of_lt]
-
-alias ⟨_, ext_of_measureReal_singleton⟩ := MeasureTheory.ext_iff_measureReal_singleton
-
-中文:
-定理 _root_.测度论.ext_iff_measure实数_singleton
-  结论: [可数 α]
-  证明: by
-  rw [Measure.ext_iff_singleton]
-  congr! with x
-  rw [measureReal_def]; rw [measureReal_def]; rw [ENNReal.toReal_eq_toReal_iff]
-  simp [measure_singleton_lt_top, ne_of_lt]
-
-alias ⟨_, ext_of_measureReal_singleton⟩ := MeasureTheory.ext_iff_measureReal_singleton
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_eq_toReal_iff, Measure, Measure.ext_iff_singleton, ext_iff_singleton, measureReal_def, measure_singleton_lt_top, ne_of_lt, toReal_eq_toReal_iff
+theorem ext_iff_singleton [Countable α] {μ ν : Measure α} : μ = ν ↔ ∀ a, μ {a} = ν {a} :=
+  ⟨fun h _ ↦ h ▸ rfl, ext_of_singleton⟩
+/-
+**MeasureTheory.Measure._root_.MeasureTheory.ext_iff_measureReal_singleton** 是 M
+athlib 中的一个定理，位于命名空间 `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.ext_iff_measureReal_singleton [Countable α]
     {μ1 μ2 : Measure α} [SigmaFinite μ1] [SigmaFinite μ2] :
-    μ1 = μ2 ↔ forall x, μ1.real {x} = μ2.real {x} := by
+    μ1 = μ2 ↔ ∀ x, μ1.real {x} = μ2.real {x} := by
   rw [Measure.ext_iff_singleton]
   congr! with x
-  rw [measureReal_def]; rw [measureReal_def]; rw [ENNReal.toReal_eq_toReal_iff]
+  rw [measureReal_def, measureReal_def, ENNReal.toReal_eq_toReal_iff]
   simp [measure_singleton_lt_top, ne_of_lt]
 
 alias ⟨_, ext_of_measureReal_singleton⟩ := MeasureTheory.ext_iff_measureReal_singleton
 
-/--
-theorem `map_eq_sum` / 定理 `map_eq_sum`
+/-- If `f` is a map with countable codomain, then `μ.map f` is a sum of Dirac measures. -/
+/-
+**MeasureTheory.Measure.map_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：map_eq_sum [Countable β] [MeasurableSingletonClass β] (μ : Measure α) (f :
+ α -> β) (hf : Measurable f) : μ.map f = sum fun b : β => μ (f ⁻¹' {b}) • dirac 
+b
+参数：μ : Measure α；f : α -> β；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasurableSingletonClass.measurableSet_singleton`：∀ {α : Type u_7} {inst
+ : MeasurableSpace α} [self : MeasurableSingletonClass α] (x : α), MeasurableSet
+ {x}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.tsum_measure_preimage_singleton`：tsum_measure_preimage_sin
+gleton {s : Set β} (hs : s.Countable) {f : α -> β} (hf : forall y in s, Measurab
+leSet (f ⁻¹' {y})) : (∑' b : s, μ (…
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `tsum_subtype`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [
+inst_1 : TopologicalSpace α] (s : Set β) (f : β → α),   ∑' (x : ↑s), f ↑x = ∑' (
+x …
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用引理 `Set.indicator_mul_right`：indicator_mul_right (s : Set ι) (f g : ι -> M₀)
+ : indicator s (fun j => f j * g j) i = f i * indicator s g i
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem map_eq_sum
-  statement: [Countable β] [MeasurableSingletonClass β] (μ : Measure α) (f : α -> β)
-  proof: by
-  ext s
-  have : forall y in s, MeasurableSet (f ⁻¹' {y}) := fun y _ => hf (measurableSet_singleton _)
-  simp [← tsum_measure_preimage_singleton (to_countable s) this, *,
-    tsum_subtype s fun b => μ (f ⁻¹' {b}), ← indicator_mul_right s fun b => μ (f ⁻¹' {b})]
-
-中文:
-定理 map_eq_sum
-  结论: [可数 β] [MeasurableSingleton类 β] (μ : 测度 α) (f : α -> β)
-  证明: by
-  ext s
-  have : forall y in s, MeasurableSet (f ⁻¹' {y}) := fun y _ => hf (measurableSet_singleton _)
-  simp [← tsum_measure_preimage_singleton (to_countable s) this, *,
-    tsum_subtype s fun b => μ (f ⁻¹' {b}), ← indicator_mul_right s fun b => μ (f ⁻¹' {b})]
-
-Depends on / 依赖: MeasurableSet, indicator_mul_right, measurableSet_singleton, to_countable, tsum_measure_preimage_singleton, tsum_subtype
+--- 原说明 ---
+If `f` is a map with countable codomain, then `μ.map f` is a sum of Dirac measur
+es.
 -/
-theorem map_eq_sum [Countable β] [MeasurableSingletonClass β] (μ : Measure α) (f : α -> β)
+theorem map_eq_sum [Countable β] [MeasurableSingletonClass β] (μ : Measure α) (f : α → β)
     (hf : Measurable f) : μ.map f = sum fun b : β => μ (f ⁻¹' {b}) • dirac b := by
   ext s
-  have : forall y in s, MeasurableSet (f ⁻¹' {y}) := fun y _ => hf (measurableSet_singleton _)
+  have : ∀ y ∈ s, MeasurableSet (f ⁻¹' {y}) := fun y _ => hf (measurableSet_singleton _)
   simp [← tsum_measure_preimage_singleton (to_countable s) this, *,
     tsum_subtype s fun b => μ (f ⁻¹' {b}), ← indicator_mul_right s fun b => μ (f ⁻¹' {b})]
 
 /-- A measure on a countable type is a sum of Dirac measures. -/
 @[simp]
-/--
-theorem `sum_smul_dirac` / 定理 `sum_smul_dirac`
+/-
+**MeasureTheory.Measure.sum_smul_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Measure`。
+形式化陈述：sum_smul_dirac [Countable α] [MeasurableSingletonClass α] (μ : Measure α) 
+: (sum fun a => μ {a} • dirac a) = μ
+参数：μ : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_id`：map_id : map id μ = μ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.map_eq_sum`：map_eq_sum [Countable β] [MeasurableSi
+ngletonClass β] (μ : Measure α) (f : α -> β) (hf : Measurable f) : μ.map f = sum
+ fun b : β => μ (f ⁻¹'…
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 
-English:
-theorem sum_smul_dirac
-  given: [Countable α] [MeasurableSingletonClass α] (μ : Measure α)
-  proof: by simpa using (map_eq_sum μ id measurable_id).symm
-
-中文:
-定理 sum_smul_dirac
-  条件: [可数 α] [MeasurableSingleton类 α] (μ : 测度 α)
-  证明: by simpa using (map_eq_sum μ id measurable_id).symm
-
-Depends on / 依赖: map_eq_sum, measurable_id
+--- 原说明 ---
+A measure on a countable type is a sum of Dirac measures.
 -/
 theorem sum_smul_dirac [Countable α] [MeasurableSingletonClass α] (μ : Measure α) :
     (sum fun a => μ {a} • dirac a) = μ := by simpa using (map_eq_sum μ id measurable_id).symm
 
-/--
-lemma `sum_smul_dirac_singleton` / 引理 `sum_smul_dirac_singleton`
+/-- The sum of scaled Dirac measures applied to a singleton is the coefficient of that singleton. -/
+/-
+**MeasureTheory.Measure.sum_smul_dirac_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Meas
+ureTheory.Measure`。
+形式化陈述：sum_smul_dirac_singleton [MeasurableSingletonClass α] {f : α -> Real>=0∞} 
+{a : α} : sum (fun b : α => f b • dirac b) {a} = f a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `tsum_eq_single`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] {f : β → α}
+ (b …
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 
-English:
-lemma sum_smul_dirac_singleton
-  given: [MeasurableSingletonClass α] {f : α -> Real>=0∞} {a : α}
-  proof: by
-  simp +contextual [tsum_eq_single a]
-
-中文:
-引理 sum_smul_dirac_singleton
-  条件: [MeasurableSingleton类 α] {f : α -> 实数>=0∞} {a : α}
-  证明: by
-  simp +contextual [tsum_eq_single a]
-
-Depends on / 依赖: contextual, tsum_eq_single
+--- 原说明 ---
+The sum of scaled Dirac measures applied to a singleton is the coefficient of th
+at singleton.
 -/
-lemma sum_smul_dirac_singleton [MeasurableSingletonClass α] {f : α -> Real>=0∞} {a : α} :
-    sum (fun b : α => f b • dirac b) {a} = f a := by
+lemma sum_smul_dirac_singleton [MeasurableSingletonClass α] {f : α → ℝ≥0∞} {a : α} :
+    sum (fun b : α ↦ f b • dirac b) {a} = f a := by
   simp +contextual [tsum_eq_single a]
 
-/--
-lemma `exists_sum_smul_dirac` / 引理 `exists_sum_smul_dirac`
+/-- A measure on a countable type is a sum of Dirac measures.
+If `α` has measurable singletons, `sum_smul_dirac` gives a simpler sum. -/
+/-
+**MeasureTheory.Measure.exists_sum_smul_dirac** 是 Mathlib 中的一个引理，位于命名空间 `Measure
+Theory.Measure`。
+形式化陈述：exists_sum_smul_dirac [Countable α] (μ : Measure α) : exists s : Set α, μ 
+= Measure.sum (fun x : s => μ (measurableAtom x) • dirac (x : α))
+参数：μ : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mem_measurableAtom_self`：∀ {β : Type u_2} [inst : MeasurableSpace β] (x 
+: β), x ∈ measurableAtom x
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `MeasureTheory.ext_of_measurableAtoms`：ext_of_measurableAtoms [Countable 
+α] {μ ν : Measure α} (h : forall x, μ (measurableAtom x) = ν (measurableAtom x))
+ : μ = ν
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用引理 `MeasurableSet.measurableAtom_of_countable`：MeasurableSet.measurableAtom_
+of_countable [Countable β] (x : β) : MeasurableSet (measurableAtom x)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `tsum_eq_single`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] {f : β → α}
+ (b …
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ENNReal.instNoZeroDivisors`：NoZeroDivisors ENNReal
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用引理 `measurableAtom_eq_of_mem`：measurableAtom_eq_of_mem {x y : β} (hx : x in 
+measurableAtom y) : measurableAtom x = measurableAtom y
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
 
-English:
-lemma exists_sum_smul_dirac
-  given: [Countable α] (μ : Measure α)
-  proof: by
-  let measurableAtoms := measurableAtom '' (Set.univ : Set α)
-  have h_nonempty (s : measurableAtoms) : Set.Nonempty s.1 := by
-    obtain ⟨y, _, hy⟩ := s.2
-    rw [← hy]
-    exact ⟨y, mem_measurableAtom_self y⟩
-  let points : measurableAtoms -> α := fun s => (h_nonempty s).some
-  have h_points_mem (s : measurableAtoms) : points s in s.1 := (h_nonempty s).some_mem
-  refine ⟨Set.range points, ext_of_measurableAtoms fun x => ?_⟩
-  rw [sum_apply _ (MeasurableSet.measurableAtom_of_countable x)]
-  simp only [Measure.smul_apply, smul_eq_mul]
-  simp_rw [dirac_apply' _ (MeasurableSet.measurableAtom_of_countable x)]
-  rw [tsum_eq_single ⟨points ⟨measurableAtom x]; rw [by simp [measurableAtoms]⟩, by simp⟩]
-  · rw [indicator_of_mem]
-    · simp only [Pi.one_apply, mul_one]
-      congr 1
-      refine (measurableAtom_eq_of_mem ?_).symm
-      convert! h_points_mem _
-      simp
-    · convert! h_points_mem _
-      simp
-  · simp only [ne_eq, mul_eq_zero, indicator_apply_eq_zero, Pi.one_apply, one_ne_zero, imp_false,
-      Subtype.forall, Set.mem_range, Subtype.exists, Subtype.mk.injEq, forall_exists_index]
-    refine fun y s hs hsy hyx => .inr fun hyx' => hyx ?_
-    rw [← hsy]
-    congr
-    have h1 : measurableAtom y = measurableAtom x := measurableAtom_eq_of_mem hyx'
-    have h2 : measurableAtom y = s := by
-      specialize h_points_mem ⟨s, hs⟩
-      obtain ⟨z, _, hz⟩ := hs
-      simp only at h_points_mem
-      rw [← hz]; rw [← hsy]
-      refine measurableAtom_eq_of_mem ?_
-      convert! h_points_mem
-    rw [← h2]; rw [h1]
-
-中文:
-引理 存在_sum_smul_dirac
-  条件: [可数 α] (μ : 测度 α)
-  证明: by
-  let measurableAtoms := measurableAtom '' (Set.univ : Set α)
-  have h_nonempty (s : measurableAtoms) : Set.Nonempty s.1 := by
-    obtain ⟨y, _, hy⟩ := s.2
-    rw [← hy]
-    exact ⟨y, mem_measurableAtom_self y⟩
-  let points : measurableAtoms -> α := fun s => (h_nonempty s).some
-  have h_points_mem (s : measurableAtoms) : points s in s.1 := (h_nonempty s).some_mem
-  refine ⟨Set.range points, ext_of_measurableAtoms fun x => ?_⟩
-  rw [sum_apply _ (MeasurableSet.measurableAtom_of_countable x)]
-  simp only [Measure.smul_apply, smul_eq_mul]
-  simp_rw [dirac_apply' _ (MeasurableSet.measurableAtom_of_countable x)]
-  rw [tsum_eq_single ⟨points ⟨measurableAtom x]; rw [by simp [measurableAtoms]⟩, by simp⟩]
-  · rw [indicator_of_mem]
-    · simp only [Pi.one_apply, mul_one]
-      congr 1
-      refine (measurableAtom_eq_of_mem ?_).symm
-      convert! h_points_mem _
-      simp
-    · convert! h_points_mem _
-      simp
-  · simp only [ne_eq, mul_eq_zero, indicator_apply_eq_zero, Pi.one_apply, one_ne_zero, imp_false,
-      Subtype.forall, Set.mem_range, Subtype.exists, Subtype.mk.injEq, forall_exists_index]
-    refine fun y s hs hsy hyx => .inr fun hyx' => hyx ?_
-    rw [← hsy]
-    congr
-    have h1 : measurableAtom y = measurableAtom x := measurableAtom_eq_of_mem hyx'
-    have h2 : measurableAtom y = s := by
-      specialize h_points_mem ⟨s, hs⟩
-      obtain ⟨z, _, hz⟩ := hs
-      simp only at h_points_mem
-      rw [← hz]; rw [← hsy]
-      refine measurableAtom_eq_of_mem ?_
-      convert! h_points_mem
-    rw [← h2]; rw [h1]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.measurableAtom_of_countable, Measure, Measure.smul_ap, Nonempty, Set.Nonempty, Set.range, Set.univ, ext_of_measurableAtoms, h_nonempty, h_points_mem, measurableAtom, measurableAtom_of_countable, measurableAtoms, mem_measurableAtom_self, points, smul_ap, some_mem, sum_apply
+--- 原说明 ---
+A measure on a countable type is a sum of Dirac measures.
+If `α` has measurable singletons, `sum_smul_dirac` gives a simpler sum.
 -/
 lemma exists_sum_smul_dirac [Countable α] (μ : Measure α) :
-    exists s : Set α, μ = Measure.sum (fun x : s => μ (measurableAtom x) • dirac (x : α)) := by
+    ∃ s : Set α, μ = Measure.sum (fun x : s ↦ μ (measurableAtom x) • dirac (x : α)) := by
   let measurableAtoms := measurableAtom '' (Set.univ : Set α)
   have h_nonempty (s : measurableAtoms) : Set.Nonempty s.1 := by
     obtain ⟨y, _, hy⟩ := s.2
     rw [← hy]
     exact ⟨y, mem_measurableAtom_self y⟩
-  let points : measurableAtoms -> α := fun s => (h_nonempty s).some
-  have h_points_mem (s : measurableAtoms) : points s in s.1 := (h_nonempty s).some_mem
-  refine ⟨Set.range points, ext_of_measurableAtoms fun x => ?_⟩
+  let points : measurableAtoms → α := fun s ↦ (h_nonempty s).some
+  have h_points_mem (s : measurableAtoms) : points s ∈ s.1 := (h_nonempty s).some_mem
+  refine ⟨Set.range points, ext_of_measurableAtoms fun x ↦ ?_⟩
   rw [sum_apply _ (MeasurableSet.measurableAtom_of_countable x)]
   simp only [Measure.smul_apply, smul_eq_mul]
   simp_rw [dirac_apply' _ (MeasurableSet.measurableAtom_of_countable x)]
-  rw [tsum_eq_single ⟨points ⟨measurableAtom x]; rw [by simp [measurableAtoms]⟩, by simp⟩]
+  rw [tsum_eq_single ⟨points ⟨measurableAtom x, by simp [measurableAtoms]⟩, by simp⟩]
   · rw [indicator_of_mem]
     · simp only [Pi.one_apply, mul_one]
       congr 1
@@ -654,7 +689,7 @@ lemma exists_sum_smul_dirac [Countable α] (μ : Measure α) :
       simp
   · simp only [ne_eq, mul_eq_zero, indicator_apply_eq_zero, Pi.one_apply, one_ne_zero, imp_false,
       Subtype.forall, Set.mem_range, Subtype.exists, Subtype.mk.injEq, forall_exists_index]
-    refine fun y s hs hsy hyx => .inr fun hyx' => hyx ?_
+    refine fun y s hs hsy hyx ↦ .inr fun hyx' ↦ hyx ?_
     rw [← hsy]
     congr
     have h1 : measurableAtom y = measurableAtom x := measurableAtom_eq_of_mem hyx'
@@ -662,39 +697,57 @@ lemma exists_sum_smul_dirac [Countable α] (μ : Measure α) :
       specialize h_points_mem ⟨s, hs⟩
       obtain ⟨z, _, hz⟩ := hs
       simp only at h_points_mem
-      rw [← hz]; rw [← hsy]
+      rw [← hz, ← hsy]
       refine measurableAtom_eq_of_mem ?_
       convert! h_points_mem
-    rw [← h2]; rw [h1]
+    rw [← h2, h1]
 
-/--
-theorem `tsum_indicator_apply_singleton` / 定理 `tsum_indicator_apply_singleton`
+/-- Given that `α` is a countable, measurable space with all singleton sets measurable,
+write the measure of a set `s` as the sum of the measure of `{x}` for all `x ∈ s`. -/
+/-
+**MeasureTheory.Measure.tsum_indicator_apply_singleton** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Measure`。
+形式化陈述：tsum_indicator_apply_singleton [Countable α] [MeasurableSingletonClass α] 
+(μ : Measure α) (s : Set α) (hs : MeasurableSet s) : (∑' x : α, s.indicator (fun
+ x => μ {x}) x) = μ s
+参数：μ : Measure α；s : Set α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.indicator_apply`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] (s 
+: Set α) (f : α → M) (a : α) [inst_1 : Decidable (a ∈ s)],   s.indicator f a = i
+f a ∈ s t…
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `MeasureTheory.Measure.dirac_apply`：dirac_apply [MeasurableSingletonClass
+ α] (a : α) (s : Set α) : dirac a s = s.indicator 1 a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.Measure.sum_smul_dirac`：sum_smul_dirac [Countable α] [Meas
+urableSingletonClass α] (μ : Measure α) : (sum fun a => μ {a} • dirac a) = μ
 
-English:
-theorem tsum_indicator_apply_singleton
-  statement: [Countable α] [MeasurableSingletonClass α] (μ : Measure α)
-  proof: by
-  classical
-  calc
-    (∑' x : α, s.indicator (fun x => μ {x}) x) =
-      Measure.sum (fun a => μ {a} • Measure.dirac a) s := by
-      simp only [Measure.sum_apply _ hs, Measure.smul_apply, smul_eq_mul, Measure.dirac_apply,
-        Set.indicator_apply, mul_ite, Pi.one_apply, mul_one, mul_zero]
-    _ = μ s := by rw [μ.sum_smul_dirac]
-
-中文:
-定理 tsum_indicator_apply_singleton
-  结论: [可数 α] [MeasurableSingleton类 α] (μ : 测度 α)
-  证明: by
-  classical
-  calc
-    (∑' x : α, s.indicator (fun x => μ {x}) x) =
-      Measure.sum (fun a => μ {a} • Measure.dirac a) s := by
-      simp only [Measure.sum_apply _ hs, Measure.smul_apply, smul_eq_mul, Measure.dirac_apply,
-        Set.indicator_apply, mul_ite, Pi.one_apply, mul_one, mul_zero]
-    _ = μ s := by rw [μ.sum_smul_dirac]
-
-Depends on / 依赖: Measure, Measure.dirac, Measure.dirac_apply, Measure.smul_apply, Measure.sum, Measure.sum_apply, Pi.one_apply, Set.indicator_apply, classical, dirac_apply, indicator, indicator_apply, mul_ite, mul_one, mul_zero, one_apply, s.indicator, smul_apply, smul_eq_mul, sum_apply
+--- 原说明 ---
+Given that `α` is a countable, measurable space with all singleton sets measurab
+le,
+write the measure of a set `s` as the sum of the measure of `{x}` for all `x ∈ s
+`.
 -/
 theorem tsum_indicator_apply_singleton [Countable α] [MeasurableSingletonClass α] (μ : Measure α)
     (s : Set α) (hs : MeasurableSet s) : (∑' x : α, s.indicator (fun x => μ {x}) x) = μ s := by
@@ -710,421 +763,407 @@ end Measure
 
 open Measure
 
-/--
-theorem `mem_ae_dirac_iff` / 定理 `mem_ae_dirac_iff`
-
-English:
-theorem mem_ae_dirac_iff
-  given: {a : α} (hs : MeasurableSet s)
-  statement: s in ae (dirac a) ↔ a in s
-  proof: by
-  by_cases a in s <;> simp [mem_ae_iff, dirac_apply', hs.compl, *]
-
-中文:
-定理 mem_ae_dirac_iff
-  条件: {a : α} (hs : 可测集 s)
-  结论: s in ae (dirac a) ↔ a in s
-  证明: by
-  by_cases a in s <;> simp [mem_ae_iff, dirac_apply', hs.compl, *]
-
-Depends on / 依赖: dirac_apply, hs.compl, mem_ae_iff
+/-
+**MeasureTheory.mem_ae_dirac_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：mem_ae_dirac_iff {a : α} (hs : MeasurableSet s) : s in ae (dirac a) ↔ a in
+ s
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
 -/
-theorem mem_ae_dirac_iff {a : α} (hs : MeasurableSet s) : s in ae (dirac a) ↔ a in s := by
-  by_cases a in s <;> simp [mem_ae_iff, dirac_apply', hs.compl, *]
-
-/--
-theorem `ae_dirac_iff` / 定理 `ae_dirac_iff`
-
-English:
-theorem ae_dirac_iff
-  given: {a : α} {p : α -> Prop} (hp : MeasurableSet { x | p x })
-  proof: mem_ae_dirac_iff hp
-
-@[simp]
-
-中文:
-定理 ae_dirac_iff
-  条件: {a : α} {p : α -> 命题} (hp : 可测集 { x | p x })
-  证明: mem_ae_dirac_iff hp
-
-@[simp]
+theorem mem_ae_dirac_iff {a : α} (hs : MeasurableSet s) : s ∈ ae (dirac a) ↔ a ∈ s := by
+  by_cases a ∈ s <;> simp [mem_ae_iff, dirac_apply', hs.compl, *]
+/-
+**MeasureTheory.ae_dirac_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {a : α} {p : α → Prop},   Meas
+urableSet {x | p x} → ((∀ᵐ (x : α) ∂MeasureTheory.Measure.dirac a, p x) ↔ p a)
+参数：(∀ᵐ (x : α) ∂MeasureTheory.Measure.dirac a, p x) ↔ p a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.mem_ae_dirac_iff`：mem_ae_dirac_iff {a : α} (hs : Measurabl
+eSet s) : s in ae (dirac a) ↔ a in s
 -/
-@[simp] theorem ae_dirac_iff {a : α} {p : α -> Prop} (hp : MeasurableSet { x | p x }) :
-    (forallᵐ x ∂dirac a, p x) ↔ p a :=
+@[simp] theorem ae_dirac_iff {a : α} {p : α → Prop} (hp : MeasurableSet { x | p x }) :
+    (∀ᵐ x ∂dirac a, p x) ↔ p a :=
   mem_ae_dirac_iff hp
 
 @[simp]
-/--
-theorem `ae_dirac_eq` / 定理 `ae_dirac_eq`
-
-English:
-theorem ae_dirac_eq
-  given: [MeasurableSingletonClass α] (a : α)
-  statement: ae (dirac a) = pure a
-  proof: by
-  ext s
-  simp [mem_ae_iff, imp_false]
-
-中文:
-定理 ae_dirac_eq
-  条件: [MeasurableSingleton类 α] (a : α)
-  结论: ae (dirac a) = pure a
-  证明: by
-  ext s
-  simp [mem_ae_iff, imp_false]
-
-Depends on / 依赖: imp_false, mem_ae_iff
+/-
+**MeasureTheory.ae_dirac_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：ae_dirac_eq [MeasurableSingletonClass α] (a : α) : ae (dirac a) = pure a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.ext`：∀ {α : Type u_1} {f g : Filter α}, (∀ (s : Set α), s ∈ f ↔ s
+ ∈ g) → f = g
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.Measure.dirac_apply`：dirac_apply [MeasurableSingletonClass
+ α] (a : α) (s : Set α) : dirac a s = s.indicator 1 a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem ae_dirac_eq [MeasurableSingletonClass α] (a : α) : ae (dirac a) = pure a := by
   ext s
   simp [mem_ae_iff, imp_false]
-
-/--
-theorem `ae_eq_dirac'` / 定理 `ae_eq_dirac'`
-
-English:
-theorem ae_eq_dirac'
-  given: [MeasurableSingletonClass β] {a : α} {f : α -> β} (hf : Measurable f)
-  proof: (ae_dirac_iff <| show MeasurableSet (f ⁻¹' {f a}) from hf <| measurableSet_singleton _).2 rfl
-
-中文:
-定理 ae_eq_dirac'
-  条件: [MeasurableSingleton类 β] {a : α} {f : α -> β} (hf : 可测 f)
-  证明: (ae_dirac_iff <| show MeasurableSet (f ⁻¹' {f a}) from hf <| measurableSet_singleton _).2 rfl
-
-Depends on / 依赖: MeasurableSet, ae_dirac_iff, measurableSet_singleton
+/-
+**MeasureTheory.ae_eq_dirac'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：ae_eq_dirac' [MeasurableSingletonClass β] {a : α} {f : α -> β} (hf : Measu
+rable f) : f =ᵐ[dirac a] const α (f a)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_dirac_iff`：∀ {α : Type u_1} [inst : MeasurableSpace α] 
+{a : α} {p : α → Prop},   MeasurableSet {x | p x} → ((∀ᵐ (x : α) ∂MeasureTheory.
+Measure.dirac a,…
+· 使用定理 `MeasurableSingletonClass.measurableSet_singleton`：∀ {α : Type u_7} {inst
+ : MeasurableSpace α} [self : MeasurableSingletonClass α] (x : α), MeasurableSet
+ {x}
 -/
-theorem ae_eq_dirac' [MeasurableSingletonClass β] {a : α} {f : α -> β} (hf : Measurable f) :
+theorem ae_eq_dirac' [MeasurableSingletonClass β] {a : α} {f : α → β} (hf : Measurable f) :
     f =ᵐ[dirac a] const α (f a) :=
   (ae_dirac_iff <| show MeasurableSet (f ⁻¹' {f a}) from hf <| measurableSet_singleton _).2 rfl
-
-/--
-theorem `ae_eq_dirac` / 定理 `ae_eq_dirac`
-
-English:
-theorem ae_eq_dirac
-  given: [MeasurableSingletonClass α] {a : α} (f : α -> δ)
-  proof: by simp [Filter.EventuallyEq]
-
-@[fun_prop]
-
-中文:
-定理 ae_eq_dirac
-  条件: [MeasurableSingleton类 α] {a : α} (f : α -> δ)
-  证明: by simp [Filter.EventuallyEq]
-
-@[fun_prop]
-
-Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq
+/-
+**MeasureTheory.ae_eq_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：ae_eq_dirac [MeasurableSingletonClass α] {a : α} (f : α -> δ) : f =ᵐ[dirac
+ a] const α (f a)
+参数：f : α -> δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.ae_dirac_eq`：ae_dirac_eq [MeasurableSingletonClass α] (a :
+ α) : ae (dirac a) = pure a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ae_eq_dirac [MeasurableSingletonClass α] {a : α} (f : α -> δ) :
+theorem ae_eq_dirac [MeasurableSingletonClass α] {a : α} (f : α → δ) :
     f =ᵐ[dirac a] const α (f a) := by simp [Filter.EventuallyEq]
 
 @[fun_prop]
-/--
-lemma `aemeasurable_dirac` / 引理 `aemeasurable_dirac`
-
-English:
-lemma aemeasurable_dirac
-  given: [MeasurableSingletonClass α] {a : α} {f : α -> β}
-  proof: ⟨fun _ => f a, measurable_const, ae_eq_dirac f⟩
-
-@[simp]
-
-中文:
-引理 aemeasurable_dirac
-  条件: [MeasurableSingleton类 α] {a : α} {f : α -> β}
-  证明: ⟨fun _ => f a, measurable_const, ae_eq_dirac f⟩
-
-@[simp]
-
-Depends on / 依赖: ae_eq_dirac, measurable_const
+/-
+**MeasureTheory.aemeasurable_dirac** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：aemeasurable_dirac [MeasurableSingletonClass α] {a : α} {f : α -> β} : AEM
+easurable f (Measure.dirac a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `MeasureTheory.ae_eq_dirac`：ae_eq_dirac [MeasurableSingletonClass α] {a :
+ α} (f : α -> δ) : f =ᵐ[dirac a] const α (f a)
 -/
-lemma aemeasurable_dirac [MeasurableSingletonClass α] {a : α} {f : α -> β} :
+lemma aemeasurable_dirac [MeasurableSingletonClass α] {a : α} {f : α → β} :
     AEMeasurable f (Measure.dirac a) :=
-  ⟨fun _ => f a, measurable_const, ae_eq_dirac f⟩
+  ⟨fun _ ↦ f a, measurable_const, ae_eq_dirac f⟩
 
 @[simp]
-/--
-theorem `Measure.map_dirac` / 定理 `Measure.map_dirac`
-
-English:
-theorem Measure.map_dirac
-  statement: [MeasurableSingletonClass α] [MeasurableSingletonClass β]
-  proof: by
-  classical
-  ext s hs
-  rw [map_apply_of_aemeasurable (by fun_prop) hs]
-  simp [indicator_apply]
-
-中文:
-定理 测度.map_dirac
-  结论: [MeasurableSingleton类 α] [MeasurableSingleton类 β]
-  证明: by
-  classical
-  ext s hs
-  rw [map_apply_of_aemeasurable (by fun_prop) hs]
-  simp [indicator_apply]
-
-Depends on / 依赖: classical, fun_prop, indicator_apply, map_apply_of_aemeasurable
+/-
+**MeasureTheory.Measure.map_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Measu
+re`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : Measu
+rableSpace β] [MeasurableSingletonClass α]   [MeasurableSingletonClass β] {f : α
+ → β} (a : α),   MeasureTheory.Measure.map f (MeasureTheory.Measure.dirac a) = M
+easureTheory.Measure.dirac (f a)
+参数：a : α；MeasureTheory.Measure.dirac a；f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply_of_aemeasurable`：map_apply_of_aemeasurab
+le (hf : AEMeasurable f μ) {s : Set β} (hs : MeasurableSet s) : μ.map f s = μ (f
+ ⁻¹' s)
+· 使用引理 `MeasureTheory.aemeasurable_dirac`：aemeasurable_dirac [MeasurableSingleto
+nClass α] {a : α} {f : α -> β} : AEMeasurable f (Measure.dirac a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.Measure.dirac_apply`：dirac_apply [MeasurableSingletonClass
+ α] (a : α) (s : Set α) : dirac a s = s.indicator 1 a
+· 使用定理 `Set.indicator_apply`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] (s 
+: Set α) (f : α → M) (a : α) [inst_1 : Decidable (a ∈ s)],   s.indicator f a = i
+f a ∈ s t…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Measure.map_dirac [MeasurableSingletonClass α] [MeasurableSingletonClass β]
-    {f : α -> β} (a : α) : (dirac a).map f = dirac (f a) := by
+    {f : α → β} (a : α) : (dirac a).map f = dirac (f a) := by
   classical
   ext s hs
   rw [map_apply_of_aemeasurable (by fun_prop) hs]
   simp [indicator_apply]
-
-/--
-Instance `Measure.dirac.isProbabilityMeasure` / 实例 `Measure.dirac.isProbabilityMeasure`
-
-English:
-instance Measure.dirac.isProbabilityMeasure
-  signature: {x : α}
-  body: ⟨dirac_apply_of_mem mem_univ x⟩
-
-中文:
-实例 测度.dirac.isProbabilityMeasure
-  签名: {x : α}
-  定义体: ⟨dirac_apply_of_mem mem_univ x⟩
-
-Depends on / 依赖: dirac_apply_of_mem, mem_univ
+/-
+**MeasureTheory.Measure.dirac.isProbabilityMeasure** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure.dirac`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {x : α}, MeasureTheory.IsProba
+bilityMeasure (MeasureTheory.Measure.dirac x)
+参数：MeasureTheory.Measure.dirac x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.dirac_apply_of_mem`：dirac_apply_of_mem {a : α} (h 
+: a in s) : dirac a s = 1
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 instance Measure.dirac.isProbabilityMeasure {x : α} : IsProbabilityMeasure (dirac x) :=
-⟨dirac_apply_of_mem mem_univ x⟩
-
-/--
-lemma `_root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal` / 引理 `_root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal`
-
-English:
-lemma _root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal
-  statement: {ι : Type*} {mδ : MeasurableSpace δ}
-  proof: by simp [h.tsum_eq]
-
-中文:
-引理 _root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal
-  结论: {ι : 类型} {mδ : 可测空间 δ}
-  证明: by simp [h.tsum_eq]
-
-Depends on / 依赖: h.tsum_eq, tsum_eq
+  ⟨dirac_apply_of_mem <| mem_univ x⟩
+/-
+**MeasureTheory._root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal** 是 Mathlib
+ 中的一个引理，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal {ι : Type*} {mδ : MeasurableSpace δ}
-    {c : ι -> Real>=0∞} {d : ι -> δ} (h : HasSum c 1) :
-    IsProbabilityMeasure (Measure.sum fun i => c i • .dirac (d i)) where
+    {c : ι → ℝ≥0∞} {d : ι → δ} (h : HasSum c 1) :
+    IsProbabilityMeasure (Measure.sum fun i ↦ c i • .dirac (d i)) where
   measure_univ := by simp [h.tsum_eq]
-
-/--
-lemma `_root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal` / 引理 `_root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal`
-
-English:
-lemma _root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal
-  statement: {ι : Type*} {mδ : MeasurableSpace δ}
-  proof: (ENNReal.hasSum_coe.2 h).isProbabilityMeasure_sum_dirac_ennreal
-
-中文:
-引理 _root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal
-  结论: {ι : 类型} {mδ : 可测空间 δ}
-  证明: (ENNReal.hasSum_coe.2 h).isProbabilityMeasure_sum_dirac_ennreal
-
-Depends on / 依赖: ENNReal, ENNReal.hasSum_coe, hasSum_coe, isProbabilityMeasure_sum_dirac_ennreal
+/-
+**MeasureTheory._root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal** 是 Mathlib 
+中的一个引理，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal {ι : Type*} {mδ : MeasurableSpace δ}
-    {c : ι -> Real>=0} {d : ι -> δ} (h : HasSum c 1) :
-    IsProbabilityMeasure (Measure.sum fun i => c i • .dirac (d i)) :=
+    {c : ι → ℝ≥0} {d : ι → δ} (h : HasSum c 1) :
+    IsProbabilityMeasure (Measure.sum fun i ↦ c i • .dirac (d i)) :=
   (ENNReal.hasSum_coe.2 h).isProbabilityMeasure_sum_dirac_ennreal
-
-/--
-lemma `_root_.HasSum.isProbabilityMeasure_sum_dirac` / 引理 `_root_.HasSum.isProbabilityMeasure_sum_dirac`
-
-English:
-lemma _root_.HasSum.isProbabilityMeasure_sum_dirac
-  statement: {ι : Type*} {mδ : MeasurableSpace δ}
-  proof: HasSum.isProbabilityMeasure_sum_dirac_nnreal (by simpa using h2.toNNReal h1)
-
-中文:
-引理 _root_.HasSum.isProbabilityMeasure_sum_dirac
-  结论: {ι : 类型} {mδ : 可测空间 δ}
-  证明: HasSum.isProbabilityMeasure_sum_dirac_nnreal (by simpa using h2.toNNReal h1)
-
-Depends on / 依赖: HasSum, HasSum.isProbabilityMeasure_sum_dirac_nnreal, h2.toNNReal, isProbabilityMeasure_sum_dirac_nnreal, toNNReal
+/-
+**MeasureTheory._root_.HasSum.isProbabilityMeasure_sum_dirac** 是 Mathlib 中的一个引理，
+位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.HasSum.isProbabilityMeasure_sum_dirac {ι : Type*} {mδ : MeasurableSpace δ}
-    {c : ι -> Real} {d : ι -> δ} (h1 : forall i, 0 <= c i) (h2 : HasSum c 1) :
-    IsProbabilityMeasure (Measure.sum fun i => ENNReal.ofReal (c i) • .dirac (d i)) :=
+    {c : ι → ℝ} {d : ι → δ} (h1 : ∀ i, 0 ≤ c i) (h2 : HasSum c 1) :
+    IsProbabilityMeasure (Measure.sum fun i ↦ ENNReal.ofReal (c i) • .dirac (d i)) :=
   HasSum.isProbabilityMeasure_sum_dirac_nnreal (by simpa using h2.toNNReal h1)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [hα
-  signature: : Nonempty α] : Nonempty {μ : Measure α // IsProbabilityMeasure μ}
-  body: ⟨Measure.dirac hα.some, inferInstance⟩
-
-中文:
-实例 [hα
-  签名: : 非空 α] : 非空 {μ : 测度 α // 是概率测度 μ}
-  定义体: ⟨Measure.dirac hα.some, inferInstance⟩
-
-Depends on / 依赖: Measure, Measure.dirac
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [hα : Nonempty α] : Nonempty {μ : Measure α // IsProbabilityMeasure μ} :=
   ⟨Measure.dirac hα.some, inferInstance⟩
 
+/-! Extra instances to short-circuit type class resolution -/
 
-/--
-Instance `Measure.dirac.instIsFiniteMeasure` / 实例 `Measure.dirac.instIsFiniteMeasure`
+/-
+**MeasureTheory.Measure.dirac.instIsFiniteMeasure** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.Measure.dirac`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {a : α}, MeasureTheory.IsFinit
+eMeasure (MeasureTheory.Measure.dirac a)
+参数：MeasureTheory.Measure.dirac a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `MeasureTheory.Measure.dirac.isProbabilityMeasure`：∀ {α : Type u_1} [inst
+ : MeasurableSpace α] {x : α}, MeasureTheory.IsProbabilityMeasure (MeasureTheory
+.Measure.dirac x)
 
-English:
-instance Measure.dirac.instIsFiniteMeasure
-  signature: {a : α}
-  body: inferInstance
-
-中文:
-实例 测度.dirac.instIsFiniteMeasure
-  签名: {a : α}
-  定义体: inferInstance
+--- 原说明 ---
+Extra instances to short-circuit type class resolution
 -/
 instance Measure.dirac.instIsFiniteMeasure {a : α} : IsFiniteMeasure (dirac a) := inferInstance
-/--
-Instance `Measure.dirac.instSigmaFinite` / 实例 `Measure.dirac.instSigmaFinite`
-
-English:
-instance Measure.dirac.instSigmaFinite
-  signature: {a : α}
-  body: inferInstance
-
-中文:
-实例 测度.dirac.instSigmaFinite
-  签名: {a : α}
-  定义体: inferInstance
+/-
+**MeasureTheory.Measure.dirac.instSigmaFinite** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.Measure.dirac`。
+形式化陈述：∀ {α : Type u_1} [inst : MeasurableSpace α] {a : α}, MeasureTheory.SigmaFi
+nite (MeasureTheory.Measure.dirac a)
+参数：MeasureTheory.Measure.dirac a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.Measure.dirac.instIsFiniteMeasure`：∀ {α : Type u_1} [inst 
+: MeasurableSpace α] {a : α}, MeasureTheory.IsFiniteMeasure (MeasureTheory.Measu
+re.dirac a)
 -/
 instance Measure.dirac.instSigmaFinite {a : α} : SigmaFinite (dirac a) := inferInstance
-
-/--
-theorem `dirac_eq_one_iff_mem` / 定理 `dirac_eq_one_iff_mem`
-
-English:
-theorem dirac_eq_one_iff_mem
-  given: (hs : MeasurableSet s)
-  statement: dirac a s = 1 ↔ a in s
-  proof: by
-  rw [← prob_compl_eq_zero_iff hs]; rw [← mem_ae_iff]
-  apply mem_ae_dirac_iff hs
-
-中文:
-定理 dirac_eq_one_iff_mem
-  条件: (hs : 可测集 s)
-  结论: dirac a s = 1 ↔ a in s
-  证明: by
-  rw [← prob_compl_eq_zero_iff hs]; rw [← mem_ae_iff]
-  apply mem_ae_dirac_iff hs
-
-Depends on / 依赖: mem_ae_dirac_iff, mem_ae_iff, prob_compl_eq_zero_iff
+/-
+**MeasureTheory.dirac_eq_one_iff_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：dirac_eq_one_iff_mem (hs : MeasurableSet s) : dirac a s = 1 ↔ a in s
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.prob_compl_eq_zero_iff`：prob_compl_eq_zero_iff (hs : Measu
+rableSet s) : μ sᶜ = 0 ↔ μ s = 1
+· 使用定理 `MeasureTheory.Measure.dirac.isProbabilityMeasure`：∀ {α : Type u_1} [inst
+ : MeasurableSpace α] {x : α}, MeasureTheory.IsProbabilityMeasure (MeasureTheory
+.Measure.dirac x)
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.mem_ae_iff`：mem_ae_iff {s : Set α} : s in ae μ ↔ μ sᶜ = 0
+· 使用定理 `MeasureTheory.mem_ae_dirac_iff`：mem_ae_dirac_iff {a : α} (hs : Measurabl
+eSet s) : s in ae (dirac a) ↔ a in s
 -/
-theorem dirac_eq_one_iff_mem (hs : MeasurableSet s) : dirac a s = 1 ↔ a in s := by
-  rw [← prob_compl_eq_zero_iff hs]; rw [← mem_ae_iff]
+theorem dirac_eq_one_iff_mem (hs : MeasurableSet s) : dirac a s = 1 ↔ a ∈ s := by
+  rw [← prob_compl_eq_zero_iff hs, ← mem_ae_iff]
   apply mem_ae_dirac_iff hs
-
-/--
-theorem `dirac_eq_zero_iff_not_mem` / 定理 `dirac_eq_zero_iff_not_mem`
-
-English:
-theorem dirac_eq_zero_iff_not_mem
-  given: (hs : MeasurableSet s)
-  statement: dirac a s = 0 ↔ a ∉ s
-  proof: by
-  rw [← compl_compl s]; rw [← mem_ae_iff]; rw [notMem_compl_iff]
-  apply mem_ae_dirac_iff (MeasurableSet.compl_iff.mpr hs)
-
-中文:
-定理 dirac_eq_zero_iff_not_mem
-  条件: (hs : 可测集 s)
-  结论: dirac a s = 0 ↔ a ∉ s
-  证明: by
-  rw [← compl_compl s]; rw [← mem_ae_iff]; rw [notMem_compl_iff]
-  apply mem_ae_dirac_iff (MeasurableSet.compl_iff.mpr hs)
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.compl_iff.mpr, compl_compl, compl_iff, mem_ae_dirac_iff, mem_ae_iff, notMem_compl_iff
+/-
+**MeasureTheory.dirac_eq_zero_iff_not_mem** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：dirac_eq_zero_iff_not_mem (hs : MeasurableSet s) : dirac a s = 0 ↔ a ∉ s
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.mem_ae_iff`：mem_ae_iff {s : Set α} : s in ae μ ↔ μ sᶜ = 0
+· 使用定理 `Set.notMem_compl_iff`：notMem_compl_iff {x : α} : x ∉ sᶜ ↔ x in s
+· 使用定理 `MeasureTheory.mem_ae_dirac_iff`：mem_ae_dirac_iff {a : α} (hs : Measurabl
+eSet s) : s in ae (dirac a) ↔ a in s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasurableSet.compl_iff`：MeasurableSet.compl_iff : MeasurableSet sᶜ ↔ Me
+asurableSet s
 -/
 theorem dirac_eq_zero_iff_not_mem (hs : MeasurableSet s) : dirac a s = 0 ↔ a ∉ s := by
-  rw [← compl_compl s]; rw [← mem_ae_iff]; rw [notMem_compl_iff]
+  rw [← compl_compl s, ← mem_ae_iff, notMem_compl_iff]
   apply mem_ae_dirac_iff (MeasurableSet.compl_iff.mpr hs)
-
-/--
-theorem `restrict_dirac'` / 定理 `restrict_dirac'`
-
-English:
-theorem restrict_dirac'
-  given: (hs : MeasurableSet s) [Decidable (a in s)]
-  proof: by
-  split_ifs with has
-  · apply restrict_eq_self_of_ae_mem
-    rw [ae_dirac_iff] <;> assumption
-  · rw [restrict_eq_zero, dirac_apply' _ hs, indicator_of_notMem has]
-
-中文:
-定理 restrict_dirac'
-  条件: (hs : 可测集 s) [可判定 (a in s)]
-  证明: by
-  split_ifs with has
-  · apply restrict_eq_self_of_ae_mem
-    rw [ae_dirac_iff] <;> assumption
-  · rw [restrict_eq_zero, dirac_apply' _ hs, indicator_of_notMem has]
-
-Depends on / 依赖: ae_dirac_iff, dirac_apply, indicator_of_notMem, restrict_eq_self_of_ae_mem, restrict_eq_zero, split_ifs
+/-
+**MeasureTheory.restrict_dirac'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：restrict_dirac' (hs : MeasurableSet s) [Decidable (a in s)] : (Measure.dir
+ac a).restrict s = if a in s then Measure.dirac a else 0
+参数：hs : MeasurableSet s；a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `MeasureTheory.Measure.restrict_eq_self_of_ae_mem`：restrict_eq_self_of_ae
+_mem {_m0 : MeasurableSpace α} ⦃s : Set α⦄ ⦃μ : Measure α⦄ (hs : forallᵐ x ∂μ, x
+ in s) : μ.restrict s = μ
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_dirac_iff`：∀ {α : Type u_1} [inst : MeasurableSpace α] 
+{a : α} {p : α → Prop},   MeasurableSet {x | p x} → ((∀ᵐ (x : α) ∂MeasureTheory.
+Measure.dirac a,…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `MeasureTheory.Measure.restrict_eq_zero`：restrict_eq_zero : μ.restrict s 
+= 0 ↔ μ s = 0
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
 -/
-theorem restrict_dirac' (hs : MeasurableSet s) [Decidable (a in s)] :
-    (Measure.dirac a).restrict s = if a in s then Measure.dirac a else 0 := by
+theorem restrict_dirac' (hs : MeasurableSet s) [Decidable (a ∈ s)] :
+    (Measure.dirac a).restrict s = if a ∈ s then Measure.dirac a else 0 := by
   split_ifs with has
   · apply restrict_eq_self_of_ae_mem
     rw [ae_dirac_iff] <;> assumption
   · rw [restrict_eq_zero, dirac_apply' _ hs, indicator_of_notMem has]
-
-/--
-theorem `restrict_dirac` / 定理 `restrict_dirac`
-
-English:
-theorem restrict_dirac
-  given: [MeasurableSingletonClass α] [Decidable (a in s)]
-  proof: by
-  split_ifs with has
-  · apply restrict_eq_self_of_ae_mem
-    rwa [ae_dirac_eq]
-  · rw [restrict_eq_zero, dirac_apply, indicator_of_notMem has]
-
-中文:
-定理 restrict_dirac
-  条件: [MeasurableSingleton类 α] [可判定 (a in s)]
-  证明: by
-  split_ifs with has
-  · apply restrict_eq_self_of_ae_mem
-    rwa [ae_dirac_eq]
-  · rw [restrict_eq_zero, dirac_apply, indicator_of_notMem has]
-
-Depends on / 依赖: ae_dirac_eq, dirac_apply, indicator_of_notMem, restrict_eq_self_of_ae_mem, restrict_eq_zero, split_ifs
+/-
+**MeasureTheory.restrict_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：restrict_dirac [MeasurableSingletonClass α] [Decidable (a in s)] : (Measur
+e.dirac a).restrict s = if a in s then Measure.dirac a else 0
+参数：a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `MeasureTheory.Measure.restrict_eq_self_of_ae_mem`：restrict_eq_self_of_ae
+_mem {_m0 : MeasurableSpace α} ⦃s : Set α⦄ ⦃μ : Measure α⦄ (hs : forallᵐ x ∂μ, x
+ in s) : μ.restrict s = μ
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_dirac_eq`：ae_dirac_eq [MeasurableSingletonClass α] (a :
+ α) : ae (dirac a) = pure a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `MeasureTheory.Measure.restrict_eq_zero`：restrict_eq_zero : μ.restrict s 
+= 0 ↔ μ s = 0
+· 使用定理 `MeasureTheory.Measure.dirac_apply`：dirac_apply [MeasurableSingletonClass
+ α] (a : α) (s : Set α) : dirac a s = s.indicator 1 a
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
 -/
-theorem restrict_dirac [MeasurableSingletonClass α] [Decidable (a in s)] :
-    (Measure.dirac a).restrict s = if a in s then Measure.dirac a else 0 := by
+theorem restrict_dirac [MeasurableSingletonClass α] [Decidable (a ∈ s)] :
+    (Measure.dirac a).restrict s = if a ∈ s then Measure.dirac a else 0 := by
   split_ifs with has
   · apply restrict_eq_self_of_ae_mem
     rwa [ae_dirac_eq]
   · rw [restrict_eq_zero, dirac_apply, indicator_of_notMem has]
-
-/--
-lemma `mutuallySingular_dirac` / 引理 `mutuallySingular_dirac`
-
-English:
-lemma mutuallySingular_dirac
-  statement: [MeasurableSingletonClass α] (x : α) (μ : Measure α)
-  proof: ⟨{x}ᶜ, (MeasurableSet.singleton x).compl, by simp, by simp⟩
-
-中文:
-引理 mutuallySingular_dirac
-  结论: [MeasurableSingleton类 α] (x : α) (μ : 测度 α)
-  证明: ⟨{x}ᶜ, (MeasurableSet.singleton x).compl, by simp, by simp⟩
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.singleton, singleton
+/-
+**MeasureTheory.mutuallySingular_dirac** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：mutuallySingular_dirac [MeasurableSingletonClass α] (x : α) (μ : Measure α
+) [NullSingletonClass μ] : Measure.dirac x ⟂ₘ μ
+参数：x : α；μ : Measure α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用引理 `MeasurableSet.singleton`：MeasurableSet.singleton [MeasurableSpace α] [Me
+asurableSingletonClass α] (a : α) : MeasurableSet {a}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `MeasureTheory.NullSingletonClass.measure_singleton`：∀ {α : Type u_1} {m0
+ : MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.NullSi
+ngletonClass μ]   (x : α), μ {x} = 0
 -/
 lemma mutuallySingular_dirac [MeasurableSingletonClass α] (x : α) (μ : Measure α)
     [NullSingletonClass μ] :
@@ -1133,190 +1172,206 @@ lemma mutuallySingular_dirac [MeasurableSingletonClass α] (x : α) (μ : Measur
 
 section dirac_injective
 
-/--
-lemma `dirac_eq_dirac_iff_forall_mem_iff_mem` / 引理 `dirac_eq_dirac_iff_forall_mem_iff_mem`
+/-- Dirac delta measures at two points are equal if every measurable set contains either both or
+neither of the points. -/
+/-
+**MeasureTheory.dirac_eq_dirac_iff_forall_mem_iff_mem** 是 Mathlib 中的一个引理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：dirac_eq_dirac_iff_forall_mem_iff_mem {x y : α} : Measure.dirac x = Measur
+e.dirac y ↔ forall A, MeasurableSet A -> (x in A ↔ y in A)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `Eq.comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `ENNReal.instNontrivial`：Nontrivial ENNReal
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma dirac_eq_dirac_iff_forall_mem_iff_mem
-  given: {x y : α}
-  proof: by
-  constructor
-  · intro h A A_mble
-    have obs := congr_arg (fun μ => μ A) h
-    simp only [Measure.dirac_apply' _ A_mble] at obs
-    by_cases x_in_A : x in A
-    · simpa only [x_in_A, indicator_of_mem, Pi.one_apply, true_iff, Eq.comm (a := (1 : Real>=0∞)),
-                  indicator_eq_one_iff_mem] using obs
-    · simpa only [x_in_A, indicator_of_notMem, Eq.comm (a := (0 : Real>=0∞)), indicator_apply_eq_zero,
-                  false_iff, not_false_eq_true, Pi.one_apply, one_ne_zero, imp_false] using obs
-  · intro h
-    ext A A_mble
-    by_cases x_in_A : x in A
-    · simp only [Measure.dirac_apply' _ A_mble, x_in_A, indicator_of_mem, Pi.one_apply,
-                 (h A A_mble).mp x_in_A]
-    · have y_notin_A : y ∉ A := by simp_all only [not_false_eq_true]
-      simp only [Measure.dirac_apply' _ A_mble, x_in_A, y_notin_A,
-                 not_false_eq_true, indicator_of_notMem]
-
-中文:
-引理 dirac_eq_dirac_iff_对任意_mem_iff_mem
-  条件: {x y : α}
-  证明: by
-  constructor
-  · intro h A A_mble
-    have obs := congr_arg (fun μ => μ A) h
-    simp only [Measure.dirac_apply' _ A_mble] at obs
-    by_cases x_in_A : x in A
-    · simpa only [x_in_A, indicator_of_mem, Pi.one_apply, true_iff, Eq.comm (a := (1 : Real>=0∞)),
-                  indicator_eq_one_iff_mem] using obs
-    · simpa only [x_in_A, indicator_of_notMem, Eq.comm (a := (0 : Real>=0∞)), indicator_apply_eq_zero,
-                  false_iff, not_false_eq_true, Pi.one_apply, one_ne_zero, imp_false] using obs
-  · intro h
-    ext A A_mble
-    by_cases x_in_A : x in A
-    · simp only [Measure.dirac_apply' _ A_mble, x_in_A, indicator_of_mem, Pi.one_apply,
-                 (h A A_mble).mp x_in_A]
-    · have y_notin_A : y ∉ A := by simp_all only [not_false_eq_true]
-      simp only [Measure.dirac_apply' _ A_mble, x_in_A, y_notin_A,
-                 not_false_eq_true, indicator_of_notMem]
-
-Depends on / 依赖: A_mble, Eq.comm, Measure, Measure.dirac_apply, Pi.one_apply, congr_arg, dirac_apply, false_iff, imp_false, indicator_apply_eq_zero, indicator_eq_one_iff_mem, indicator_of_mem, indicator_of_notMem, not_false_eq_true, one_apply, one_ne_zero, true_iff, x_in_A
+--- 原说明 ---
+Dirac delta measures at two points are equal if every measurable set contains ei
+ther both or
+neither of the points.
 -/
 lemma dirac_eq_dirac_iff_forall_mem_iff_mem {x y : α} :
-    Measure.dirac x = Measure.dirac y ↔ forall A, MeasurableSet A -> (x in A ↔ y in A) := by
+    Measure.dirac x = Measure.dirac y ↔ ∀ A, MeasurableSet A → (x ∈ A ↔ y ∈ A) := by
   constructor
   · intro h A A_mble
-    have obs := congr_arg (fun μ => μ A) h
+    have obs := congr_arg (fun μ ↦ μ A) h
     simp only [Measure.dirac_apply' _ A_mble] at obs
-    by_cases x_in_A : x in A
-    · simpa only [x_in_A, indicator_of_mem, Pi.one_apply, true_iff, Eq.comm (a := (1 : Real>=0∞)),
+    by_cases x_in_A : x ∈ A
+    · simpa only [x_in_A, indicator_of_mem, Pi.one_apply, true_iff, Eq.comm (a := (1 : ℝ≥0∞)),
                   indicator_eq_one_iff_mem] using obs
-    · simpa only [x_in_A, indicator_of_notMem, Eq.comm (a := (0 : Real>=0∞)), indicator_apply_eq_zero,
+    · simpa only [x_in_A, indicator_of_notMem, Eq.comm (a := (0 : ℝ≥0∞)), indicator_apply_eq_zero,
                   false_iff, not_false_eq_true, Pi.one_apply, one_ne_zero, imp_false] using obs
   · intro h
     ext A A_mble
-    by_cases x_in_A : x in A
+    by_cases x_in_A : x ∈ A
     · simp only [Measure.dirac_apply' _ A_mble, x_in_A, indicator_of_mem, Pi.one_apply,
                  (h A A_mble).mp x_in_A]
     · have y_notin_A : y ∉ A := by simp_all only [not_false_eq_true]
       simp only [Measure.dirac_apply' _ A_mble, x_in_A, y_notin_A,
                  not_false_eq_true, indicator_of_notMem]
 
-/--
-lemma `dirac_ne_dirac_iff_exists_measurableSet` / 引理 `dirac_ne_dirac_iff_exists_measurableSet`
+/-- Dirac delta measures at two points are different if and only if there is a measurable set
+containing one of the points but not the other. -/
+/-
+**MeasureTheory.dirac_ne_dirac_iff_exists_measurableSet** 是 Mathlib 中的一个引理，位于命名空
+间 `MeasureTheory`。
+形式化陈述：dirac_ne_dirac_iff_exists_measurableSet {x y : α} : Measure.dirac x != Mea
+sure.dirac y ↔ exists A, MeasurableSet A ∧ x in A ∧ y ∉ A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasurableSet.compl_iff`：MeasurableSet.compl_iff : MeasurableSet sᶜ ↔ Me
+asurableSet s
 
-English:
-lemma dirac_ne_dirac_iff_exists_measurableSet
-  given: {x y : α}
-  proof: by
-  apply not_iff_not.mp
-  simp only [ne_eq, not_not, not_exists, not_and, dirac_eq_dirac_iff_forall_mem_iff_mem]
-  refine ⟨fun h A A_mble => by simp only [h A A_mble, imp_self], fun h A A_mble => ?_⟩
-  by_cases x_in_A : x in A
-  · simp only [x_in_A, h A A_mble x_in_A]
-  · simpa only [x_in_A, false_iff] using! h Aᶜ (MeasurableSet.compl_iff.mpr A_mble) x_in_A
-
-中文:
-引理 dirac_ne_dirac_iff_存在_measurableSet
-  条件: {x y : α}
-  证明: by
-  apply not_iff_not.mp
-  simp only [ne_eq, not_not, not_exists, not_and, dirac_eq_dirac_iff_forall_mem_iff_mem]
-  refine ⟨fun h A A_mble => by simp only [h A A_mble, imp_self], fun h A A_mble => ?_⟩
-  by_cases x_in_A : x in A
-  · simp only [x_in_A, h A A_mble x_in_A]
-  · simpa only [x_in_A, false_iff] using! h Aᶜ (MeasurableSet.compl_iff.mpr A_mble) x_in_A
-
-Depends on / 依赖: A_mble, MeasurableSet, MeasurableSet.compl_iff.mpr, compl_iff, dirac_eq_dirac_iff_forall_mem_iff_mem, false_iff, imp_self, ne_eq, not_and, not_exists, not_iff_not, not_iff_not.mp, not_not, x_in_A
+--- 原说明 ---
+Dirac delta measures at two points are different if and only if there is a measu
+rable set
+containing one of the points but not the other.
 -/
 lemma dirac_ne_dirac_iff_exists_measurableSet {x y : α} :
-    Measure.dirac x != Measure.dirac y ↔ exists A, MeasurableSet A ∧ x in A ∧ y ∉ A := by
+    Measure.dirac x ≠ Measure.dirac y ↔ ∃ A, MeasurableSet A ∧ x ∈ A ∧ y ∉ A := by
   apply not_iff_not.mp
   simp only [ne_eq, not_not, not_exists, not_and, dirac_eq_dirac_iff_forall_mem_iff_mem]
-  refine ⟨fun h A A_mble => by simp only [h A A_mble, imp_self], fun h A A_mble => ?_⟩
-  by_cases x_in_A : x in A
+  refine ⟨fun h A A_mble ↦ by simp only [h A A_mble, imp_self], fun h A A_mble ↦ ?_⟩
+  by_cases x_in_A : x ∈ A
   · simp only [x_in_A, h A A_mble x_in_A]
   · simpa only [x_in_A, false_iff] using! h Aᶜ (MeasurableSet.compl_iff.mpr A_mble) x_in_A
 
 open MeasurableSpace
-/--
-lemma `dirac_ne_dirac` / 引理 `dirac_ne_dirac`
+/-- Dirac delta measures at two different points are different, assuming the measurable space
+separates points. -/
+/-
+**MeasureTheory.dirac_ne_dirac** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：dirac_ne_dirac [SeparatesPoints α] {x y : α} (x_ne_y : x != y) : Measure.d
+irac x != Measure.dirac y
+参数：x_ne_y : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.exists_measurableSet_of_ne`：exists_measurableSet_of_ne [
+MeasurableSpace α] [SeparatesPoints α] {x y : α} (h : x != y) : exists s, Measur
+ableSet s ∧ x in s ∧ y ∉ s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `MeasureTheory.dirac_ne_dirac_iff_exists_measurableSet`：dirac_ne_dirac_if
+f_exists_measurableSet {x y : α} : Measure.dirac x != Measure.dirac y ↔ exists A
+, MeasurableSet A ∧ x in A ∧ y ∉ A
 
-English:
-lemma dirac_ne_dirac
-  given: [SeparatesPoints α] {x y : α} (x_ne_y : x != y)
-  proof: by
-  obtain ⟨A, A_mble, x_in_A, y_notin_A⟩ := exists_measurableSet_of_ne x_ne_y
-  exact dirac_ne_dirac_iff_exists_measurableSet.mpr ⟨A, A_mble, x_in_A, y_notin_A⟩
-
-中文:
-引理 dirac_ne_dirac
-  条件: [SeparatesPoints α] {x y : α} (x_ne_y : x != y)
-  证明: by
-  obtain ⟨A, A_mble, x_in_A, y_notin_A⟩ := exists_measurableSet_of_ne x_ne_y
-  exact dirac_ne_dirac_iff_exists_measurableSet.mpr ⟨A, A_mble, x_in_A, y_notin_A⟩
-
-Depends on / 依赖: A_mble, dirac_ne_dirac_iff_exists_measurableSet, dirac_ne_dirac_iff_exists_measurableSet.mpr, exists_measurableSet_of_ne, x_in_A, x_ne_y, y_notin_A
+--- 原说明 ---
+Dirac delta measures at two different points are different, assuming the measura
+ble space
+separates points.
 -/
-lemma dirac_ne_dirac [SeparatesPoints α] {x y : α} (x_ne_y : x != y) :
-    Measure.dirac x != Measure.dirac y := by
+lemma dirac_ne_dirac [SeparatesPoints α] {x y : α} (x_ne_y : x ≠ y) :
+    Measure.dirac x ≠ Measure.dirac y := by
   obtain ⟨A, A_mble, x_in_A, y_notin_A⟩ := exists_measurableSet_of_ne x_ne_y
   exact dirac_ne_dirac_iff_exists_measurableSet.mpr ⟨A, A_mble, x_in_A, y_notin_A⟩
 
-/--
-lemma `dirac_ne_dirac_iff` / 引理 `dirac_ne_dirac_iff`
+/-- Dirac delta measures at two points are different if and only if the two points are different,
+assuming the measurable space separates points. -/
+/-
+**MeasureTheory.dirac_ne_dirac_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：dirac_ne_dirac_iff [SeparatesPoints α] {x y : α} : Measure.dirac x != Meas
+ure.dirac y ↔ x != y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.dirac_ne_dirac`：dirac_ne_dirac [SeparatesPoints α] {x y : 
+α} (x_ne_y : x != y) : Measure.dirac x != Measure.dirac y
 
-English:
-lemma dirac_ne_dirac_iff
-  given: [SeparatesPoints α] {x y : α}
-  proof: ⟨fun h x_eq_y => h congrArg dirac x_eq_y, fun h => dirac_ne_dirac h⟩
-
-中文:
-引理 dirac_ne_dirac_iff
-  条件: [SeparatesPoints α] {x y : α}
-  证明: ⟨fun h x_eq_y => h congrArg dirac x_eq_y, fun h => dirac_ne_dirac h⟩
-
-Depends on / 依赖: dirac_ne_dirac, x_eq_y
+--- 原说明 ---
+Dirac delta measures at two points are different if and only if the two points a
+re different,
+assuming the measurable space separates points.
 -/
 lemma dirac_ne_dirac_iff [SeparatesPoints α] {x y : α} :
-    Measure.dirac x != Measure.dirac y ↔ x != y :=
-⟨fun h x_eq_y => h congrArg dirac x_eq_y, fun h => dirac_ne_dirac h⟩
+    Measure.dirac x ≠ Measure.dirac y ↔ x ≠ y :=
+  ⟨fun h x_eq_y ↦ h <| congrArg dirac x_eq_y, fun h ↦ dirac_ne_dirac h⟩
 
-/--
-lemma `dirac_eq_dirac_iff` / 引理 `dirac_eq_dirac_iff`
+/-- Dirac delta measures at two points are equal if and only if the two points are equal,
+assuming the measurable space separates points. -/
+/-
+**MeasureTheory.dirac_eq_dirac_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：dirac_eq_dirac_iff [SeparatesPoints α] {x y : α} : Measure.dirac x = Measu
+re.dirac y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用引理 `MeasureTheory.dirac_ne_dirac_iff`：dirac_ne_dirac_iff [SeparatesPoints α]
+ {x y : α} : Measure.dirac x != Measure.dirac y ↔ x != y
 
-English:
-lemma dirac_eq_dirac_iff
-  given: [SeparatesPoints α] {x y : α}
-  proof: not_iff_not.mp dirac_ne_dirac_iff
-
-中文:
-引理 dirac_eq_dirac_iff
-  条件: [SeparatesPoints α] {x y : α}
-  证明: not_iff_not.mp dirac_ne_dirac_iff
-
-Depends on / 依赖: dirac_ne_dirac_iff, not_iff_not, not_iff_not.mp
+--- 原说明 ---
+Dirac delta measures at two points are equal if and only if the two points are e
+qual,
+assuming the measurable space separates points.
 -/
 lemma dirac_eq_dirac_iff [SeparatesPoints α] {x y : α} :
     Measure.dirac x = Measure.dirac y ↔ x = y := not_iff_not.mp dirac_ne_dirac_iff
 
-/--
-lemma `injective_dirac` / 引理 `injective_dirac`
+/-- The assignment `x ↦ dirac x` is injective, assuming the measurable space separates points. -/
+/-
+**MeasureTheory.injective_dirac** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：injective_dirac [SeparatesPoints α] : Function.Injective (fun (x : α) => d
+irac x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.dirac_eq_dirac_iff`：dirac_eq_dirac_iff [SeparatesPoints α]
+ {x y : α} : Measure.dirac x = Measure.dirac y ↔ x = y
 
-English:
-lemma injective_dirac
-  given: [SeparatesPoints α]
-  proof: fun x y x_ne_y => by rwa [← dirac_eq_dirac_iff]
-
-中文:
-引理 injective_dirac
-  条件: [SeparatesPoints α]
-  证明: fun x y x_ne_y => by rwa [← dirac_eq_dirac_iff]
-
-Depends on / 依赖: dirac_eq_dirac_iff, x_ne_y
+--- 原说明 ---
+The assignment `x ↦ dirac x` is injective, assuming the measurable space separat
+es points.
 -/
 lemma injective_dirac [SeparatesPoints α] :
-    Function.Injective (fun (x : α) => dirac x) := fun x y x_ne_y => by rwa [← dirac_eq_dirac_iff]
+    Function.Injective (fun (x : α) ↦ dirac x) := fun x y x_ne_y ↦ by rwa [← dirac_eq_dirac_iff]
 
 end dirac_injective
 
@@ -1324,130 +1379,197 @@ end MeasureTheory
 
 namespace MeasureTheory.Measure
 variable {α β : Type*} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
-  [MeasurableSingletonClass α] {f : β -> α} {μ : Measure α} {s : Finset α} {a₁ a₂ : α}
+  [MeasurableSingletonClass α] {f : β → α} {μ : Measure α} {s : Finset α} {a₁ a₂ : α}
 
-/--
-lemma `ae_mem_finset_iff` / 引理 `ae_mem_finset_iff`
-
-English:
-lemma ae_mem_finset_iff
-  statement: (forallᵐ a ∂μ, a in s) ↔ μ = ∑ a in s, μ {a} • .dirac a where
-  proof: by
-    ext t ht
-    rw [← measure_sdiff_null (s := t) hμ]
-    dsimp
-    rw [Set.sdiff_compl]; rw [← (s : Set α).biUnion_of_singleton]
-    simp_rw [Finset.mem_coe, Set.inter_iUnion]
-    rw [measure_biUnion_finset (fun i hi j hj hij => .inter_left' _ <| .inter_right' _ ?_)
-      (by measurability)]
-    · simp only [coe_finsetSum, Finset.sum_apply, smul_apply]
-      congr with a
-      by_cases ha : a in t <;> simp [*]
-    simpa
-  mpr hμ := by rw [hμ, ae_finsetSum_measure_iff]; exact fun i hi => ae_smul_measure (by simpa) _
-
-中文:
-引理 ae_mem_finset_iff
-  结论: (对任意ᵐ a ∂μ, a in s) ↔ μ = ∑ a in s, μ {a} • .dirac a where
-  证明: by
-    ext t ht
-    rw [← measure_sdiff_null (s := t) hμ]
-    dsimp
-    rw [Set.sdiff_compl]; rw [← (s : Set α).biUnion_of_singleton]
-    simp_rw [Finset.mem_coe, Set.inter_iUnion]
-    rw [measure_biUnion_finset (fun i hi j hj hij => .inter_left' _ <| .inter_right' _ ?_)
-      (by measurability)]
-    · simp only [coe_finsetSum, Finset.sum_apply, smul_apply]
-      congr with a
-      by_cases ha : a in t <;> simp [*]
-    simpa
-  mpr hμ := by rw [hμ, ae_finsetSum_measure_iff]; exact fun i hi => ae_smul_measure (by simpa) _
-
-Depends on / 依赖: Finset, Finset.mem_coe, Finset.sum_apply, Set.inter_iUnion, Set.sdiff_compl, ae_finsetSum_measure_iff, ae_smul_measure, biUnion_of_singleton, coe_finsetSum, inter_iUnion, inter_left, inter_right, measurability, measure_biUnion_finset, measure_sdiff_null, mem_coe, sdiff_compl, simp_rw, smul_apply, sum_apply
+/-
+**MeasureTheory.Measure.ae_mem_finset_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：ae_mem_finset_iff : (forallᵐ a ∂μ, a in s) ↔ μ = ∑ a in s, μ {a} • .dirac 
+a where mp hμ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.measure_sdiff_null`：measure_sdiff_null (ht : μ t = 0) : μ 
+(s \ t) = μ s
+· 使用定理 `Set.sdiff_compl`：sdiff_compl : s \ tᶜ = s inter t
+· 使用定理 `Set.biUnion_of_singleton`：biUnion_of_singleton (s : Set α) : ⋃ x in s, {
+x} = s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.inter_iUnion`：inter_iUnion (s : Set β) (t : ι -> Set β) : (s inter ⋃
+ i, t i) = ⋃ i, s inter t i
+· 使用定理 `MeasureTheory.measure_biUnion_finset`：measure_biUnion_finset {s : Finset
+ ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f) (hm : forall b in s, Measura
+bleSet (f b)) : μ (⋃ b in …
+· 使用定理 `Disjoint.inter_left'`：inter_left' (u : Set α) (h : Disjoint s t) : Disjo
+int (u inter s) t
+· 使用定理 `Disjoint.inter_right'`：inter_right' (u : Set α) (h : Disjoint s t) : Dis
+joint s (u inter t)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `MeasureTheory.Measure.coe_finsetSum`：coe_finsetSum {_m : MeasurableSpace
+ α} (I : Finset ι) (μ : ι -> Measure α) : ⇑(∑ i in I, μ i) = ∑ i in I, ⇑(μ i)
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.inter_singleton_of_mem`：∀ {α : Type u_1} {s : Set α} {a : α}, a ∈ s 
+→ s ∩ {a} = {a}
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.inter_singleton_of_notMem`：∀ {α : Type u_1} {s : Set α} {a : α}, a ∉
+ s → s ∩ {a} = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+（共 37 条，此处仅展示前 30 条）
 -/
-lemma ae_mem_finset_iff : (forallᵐ a ∂μ, a in s) ↔ μ = ∑ a in s, μ {a} • .dirac a where
+lemma ae_mem_finset_iff : (∀ᵐ a ∂μ, a ∈ s) ↔ μ = ∑ a ∈ s, μ {a} • .dirac a where
   mp hμ := by
     ext t ht
     rw [← measure_sdiff_null (s := t) hμ]
     dsimp
-    rw [Set.sdiff_compl]; rw [← (s : Set α).biUnion_of_singleton]
+    rw [Set.sdiff_compl, ← (s : Set α).biUnion_of_singleton]
     simp_rw [Finset.mem_coe, Set.inter_iUnion]
-    rw [measure_biUnion_finset (fun i hi j hj hij => .inter_left' _ <| .inter_right' _ ?_)
+    rw [measure_biUnion_finset (fun i hi j hj hij ↦ .inter_left' _ <| .inter_right' _ ?_)
       (by measurability)]
     · simp only [coe_finsetSum, Finset.sum_apply, smul_apply]
       congr with a
-      by_cases ha : a in t <;> simp [*]
+      by_cases ha : a ∈ t <;> simp [*]
     simpa
-  mpr hμ := by rw [hμ, ae_finsetSum_measure_iff]; exact fun i hi => ae_smul_measure (by simpa) _
-
-/--
-lemma `ae_eq_or_eq_iff_eq_dirac_add_dirac` / 引理 `ae_eq_or_eq_iff_eq_dirac_add_dirac`
-
-English:
-lemma ae_eq_or_eq_iff_eq_dirac_add_dirac
-  given: (ha : a₁ != a₂)
-  proof: by
-  -- FIXME: Why does `simpa using ...` not work?
-  convert! ae_mem_finset_iff (s := .cons a₁ { a₂ } <| by simpa) <;> simp
-
-中文:
-引理 ae_eq_or_eq_iff_eq_dirac_add_dirac
-  条件: (ha : a₁ != a₂)
-  证明: by
-  -- FIXME: Why does `simpa using ...` not work?
-  convert! ae_mem_finset_iff (s := .cons a₁ { a₂ } <| by simpa) <;> simp
+  mpr hμ := by rw [hμ, ae_finsetSum_measure_iff]; exact fun i hi ↦ ae_smul_measure (by simpa) _
+/-
+**MeasureTheory.Measure.ae_eq_or_eq_iff_eq_dirac_add_dirac** 是 Mathlib 中的一个引理，位于
+命名空间 `MeasureTheory.Measure`。
+形式化陈述：ae_eq_or_eq_iff_eq_dirac_add_dirac (ha : a₁ != a₂) : (forallᵐ a ∂μ, a = a₁
+ ∨ a = a₂) ↔ μ = μ {a₁} • .dirac a₁ + μ {a₂} • .dirac a₂
+参数：ha : a₁ != a₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `MeasureTheory.Measure.ae_mem_finset_iff`：ae_mem_finset_iff : (forallᵐ a 
+∂μ, a in s) ↔ μ = ∑ a in s, μ {a} • .dirac a where mp hμ
 -/
-lemma ae_eq_or_eq_iff_eq_dirac_add_dirac (ha : a₁ != a₂) :
-    (forallᵐ a ∂μ, a = a₁ ∨ a = a₂) ↔ μ = μ {a₁} • .dirac a₁ + μ {a₂} • .dirac a₂ := by
+lemma ae_eq_or_eq_iff_eq_dirac_add_dirac (ha : a₁ ≠ a₂) :
+    (∀ᵐ a ∂μ, a = a₁ ∨ a = a₂) ↔ μ = μ {a₁} • .dirac a₁ + μ {a₂} • .dirac a₂ := by
   -- FIXME: Why does `simpa using ...` not work?
   convert! ae_mem_finset_iff (s := .cons a₁ { a₂ } <| by simpa) <;> simp
-
-/--
-lemma `ae_mem_finset_iff_map_eq_sum_dirac` / 引理 `ae_mem_finset_iff_map_eq_sum_dirac`
-
-English:
-lemma ae_mem_finset_iff_map_eq_sum_dirac
-  given: {μ : Measure β} (hf : AEMeasurable f μ)
-  proof: by
-  rw [← ae_map_iff hf (by measurability)]; rw [ae_mem_finset_iff]
-  simp [map_apply₀ hf]
-
-中文:
-引理 ae_mem_finset_iff_map_eq_sum_dirac
-  条件: {μ : 测度 β} (hf : 几乎处处可测 f μ)
-  证明: by
-  rw [← ae_map_iff hf (by measurability)]; rw [ae_mem_finset_iff]
-  simp [map_apply₀ hf]
-
-Depends on / 依赖: ae_map_iff, ae_mem_finset_iff, measurability
+/-
+**MeasureTheory.Measure.ae_mem_finset_iff_map_eq_sum_dirac** 是 Mathlib 中的一个引理，位于
+命名空间 `MeasureTheory.Measure`。
+形式化陈述：ae_mem_finset_iff_map_eq_sum_dirac {μ : Measure β} (hf : AEMeasurable f μ)
+ : (forallᵐ b ∂μ, f b in s) ↔ μ.map f = ∑ a in s, μ (f ⁻¹' {a}) • .dirac a
+参数：hf : AEMeasurable f μ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.ae_map_iff`：ae_map_iff {f : α -> β} (hf : AEMeasurable f μ
+) {p : β -> Prop} (hp : MeasurableSet { x | p x }) : (forallᵐ y ∂μ.map f, p y) ↔
+ forallᵐ x ∂μ,…
+· 使用定理 `Finset.measurableSet`：∀ {α : Type u_1} [inst : MeasurableSpace α] [Measu
+rableSingletonClass α] (s : Finset α), MeasurableSet ↑s
+· 使用引理 `MeasureTheory.Measure.ae_mem_finset_iff`：ae_mem_finset_iff : (forallᵐ a 
+∂μ, a in s) ↔ μ = ∑ a in s, μ {a} • .dirac a where mp hμ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `MeasureTheory.Measure.map_apply₀`：map_apply₀ {f : α -> β} (hf : AEMeasur
+able f μ) {s : Set β} (hs : NullMeasurableSet s (map f μ)) : μ.map f s = μ (f ⁻¹
+' s)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma ae_mem_finset_iff_map_eq_sum_dirac {μ : Measure β} (hf : AEMeasurable f μ) :
-    (forallᵐ b ∂μ, f b in s) ↔ μ.map f = ∑ a in s, μ (f ⁻¹' {a}) • .dirac a := by
-  rw [← ae_map_iff hf (by measurability)]; rw [ae_mem_finset_iff]
+    (∀ᵐ b ∂μ, f b ∈ s) ↔ μ.map f = ∑ a ∈ s, μ (f ⁻¹' {a}) • .dirac a := by
+  rw [← ae_map_iff hf (by measurability), ae_mem_finset_iff]
   simp [map_apply₀ hf]
-
-/--
-lemma `ae_eq_or_eq_iff_map_eq_dirac_add_dirac` / 引理 `ae_eq_or_eq_iff_map_eq_dirac_add_dirac`
-
-English:
-lemma ae_eq_or_eq_iff_map_eq_dirac_add_dirac
-  statement: {μ : Measure β} (hf : AEMeasurable f μ)
-  proof: by
-  -- FIXME: Why does `simpa using ...` not work?
-  convert! ae_mem_finset_iff_map_eq_sum_dirac (s := .cons a₁ { a₂ } <| by simpa) hf <;> simp
-
-中文:
-引理 ae_eq_or_eq_iff_map_eq_dirac_add_dirac
-  结论: {μ : 测度 β} (hf : 几乎处处可测 f μ)
-  证明: by
-  -- FIXME: Why does `simpa using ...` not work?
-  convert! ae_mem_finset_iff_map_eq_sum_dirac (s := .cons a₁ { a₂ } <| by simpa) hf <;> simp
+/-
+**MeasureTheory.Measure.ae_eq_or_eq_iff_map_eq_dirac_add_dirac** 是 Mathlib 中的一个引
+理，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：ae_eq_or_eq_iff_map_eq_dirac_add_dirac {μ : Measure β} (hf : AEMeasurable 
+f μ) (ha : a₁ != a₂) : (forallᵐ b ∂μ, f b = a₁ ∨ f b = a₂) ↔ μ.map f = μ (f ⁻¹' 
+{a₁}) • .dirac a₁ + μ (f ⁻¹' {a₂}) • .dirac a₂
+参数：hf : AEMeasurable f μ；ha : a₁ != a₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `MeasureTheory.Measure.ae_mem_finset_iff_map_eq_sum_dirac`：ae_mem_finset_
+iff_map_eq_sum_dirac {μ : Measure β} (hf : AEMeasurable f μ) : (forallᵐ b ∂μ, f 
+b in s) ↔ μ.map f = ∑ a in s, μ (f ⁻¹' {a}) • …
 -/
 lemma ae_eq_or_eq_iff_map_eq_dirac_add_dirac {μ : Measure β} (hf : AEMeasurable f μ)
-    (ha : a₁ != a₂) :
-    (forallᵐ b ∂μ, f b = a₁ ∨ f b = a₂) ↔
+    (ha : a₁ ≠ a₂) :
+    (∀ᵐ b ∂μ, f b = a₁ ∨ f b = a₂) ↔
       μ.map f = μ (f ⁻¹' {a₁}) • .dirac a₁ + μ (f ⁻¹' {a₂}) • .dirac a₂ := by
   -- FIXME: Why does `simpa using ...` not work?
   convert! ae_mem_finset_iff_map_eq_sum_dirac (s := .cons a₁ { a₂ } <| by simpa) hf <;> simp
 
 end MeasureTheory.Measure
+

@@ -47,68 +47,54 @@ variable {F : J ⥤ C}
 /-- A cone `t` on `F` is a limit cone if each cone on `F` admits a unique
 cone morphism to `t`. -/
 @[stacks 002E]
-/--
-Definition of `IsLimit` / `IsLimit` 的定义
+/-
+**CategoryTheory.Limits.IsLimit** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Limits
+`。
+形式化陈述：IsLimit (t : Cone F) where /-- There is a morphism from any cone point to 
+`t.pt` -/ lift : forall s : Cone F, s.pt ⟶ t.pt /-- The map makes the triangle w
+ith the two natural transformations commute -/ fac : forall (s : Cone F) (j : J)
+, lift s ≫ t.π.app j = s.π.app j
+参数：t : Cone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsLimit
-  parameters: (t : Cone F)
-  axioms and operations (3):
-    - lift : forall s : Cone F, s.pt ⟶ t.pt
-    - fac : forall (s : Cone F) (j : J), lift s ≫ t.π.app j = s.π.app j  [default: by cat_disch]
-    - uniq : forall (s : Cone F) (m : s.pt ⟶ t.pt) (_ : forall j : J, m ≫ t.π.app j = s.π.app j), m = lift s  [default: by cat_disch]
-
-中文:
-结构 是极限
-  参数: (t : 锥 F)
-  公理与运算 (3 个):
-    - lift : 对任意 s : 锥 F, s.pt ⟶ t.pt
-    - fac : 对任意 (s : 锥 F) (j : J), lift s ≫ t.π.app j = s.π.app j  [默认: by cat_disch]
-    - uniq : 对任意 (s : 锥 F) (m : s.pt ⟶ t.pt) (_ : 对任意 j : J, m ≫ t.π.app j = s.π.app j), m = lift s  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A cone `t` on `F` is a limit cone if each cone on `F` admits a unique
+cone morphism to `t`.
 -/
 structure IsLimit (t : Cone F) where
   /-- There is a morphism from any cone point to `t.pt` -/
-  lift : forall s : Cone F, s.pt ⟶ t.pt
+  lift : ∀ s : Cone F, s.pt ⟶ t.pt
   /-- The map makes the triangle with the two natural transformations commute -/
-  fac : forall (s : Cone F) (j : J), lift s ≫ t.π.app j = s.π.app j := by cat_disch
+  fac : ∀ (s : Cone F) (j : J), lift s ≫ t.π.app j = s.π.app j := by cat_disch
   /-- It is the unique such map to do this -/
-  uniq : forall (s : Cone F) (m : s.pt ⟶ t.pt) (_ : forall j : J, m ≫ t.π.app j = s.π.app j), m = lift s := by
+  uniq : ∀ (s : Cone F) (m : s.pt ⟶ t.pt) (_ : ∀ j : J, m ≫ t.π.app j = s.π.app j), m = lift s := by
     cat_disch
 
 /-- A cocone `t` on `F` is a colimit cocone if each cocone on `F` admits a unique
 cocone morphism from `t`. -/
 @[stacks 002F, to_dual]
-/--
-Definition of `IsColimit` / `IsColimit` 的定义
+/-
+**CategoryTheory.Limits.IsColimit** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：IsColimit (t : Cocone F) where /-- `t.pt` maps to all other cocone coverti
+ces -/ desc : forall s : Cocone F, t.pt ⟶ s.pt /-- The map `desc` makes the diag
+ram with the natural transformations commute -/ fac : forall (s : Cocone F) (j :
+ J), dsimp% t.ι.app j ≫ desc s = s.ι.app j
+参数：t : Cocone F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsColimit
-  parameters: (t : Cocone F)
-  axioms and operations (3):
-    - desc : forall s : Cocone F, t.pt ⟶ s.pt
-    - fac : forall (s : Cocone F) (j : J), dsimp% t.ι.app j ≫ desc s = s.ι.app j  [default: by cat_disch]
-    - uniq : dsimp% forall (s : Cocone F) (m : t.pt ⟶ s.pt) (_ : forall j : J, t.ι.app j ≫ m = s.ι.app j), m = desc s  [default: by cat_disch]
-
-中文:
-结构 是余极限
-  参数: (t : 余锥 F)
-  公理与运算 (3 个):
-    - desc : 对任意 s : 余锥 F, t.pt ⟶ s.pt
-    - fac : 对任意 (s : 余锥 F) (j : J), dsimp% t.ι.app j ≫ desc s = s.ι.app j  [默认: by cat_disch]
-    - uniq : dsimp% 对任意 (s : 余锥 F) (m : t.pt ⟶ s.pt) (_ : 对任意 j : J, t.ι.app j ≫ m = s.ι.app j), m = desc s  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A cocone `t` on `F` is a colimit cocone if each cocone on `F` admits a unique
+cocone morphism from `t`.
 -/
 structure IsColimit (t : Cocone F) where
   /-- `t.pt` maps to all other cocone covertices -/
-  desc : forall s : Cocone F, t.pt ⟶ s.pt
+  desc : ∀ s : Cocone F, t.pt ⟶ s.pt
   /-- The map `desc` makes the diagram with the natural transformations commute -/
-  fac : forall (s : Cocone F) (j : J), dsimp% t.ι.app j ≫ desc s = s.ι.app j := by cat_disch
+  fac : ∀ (s : Cocone F) (j : J), dsimp% t.ι.app j ≫ desc s = s.ι.app j := by cat_disch
   /-- `desc` is the unique such map -/
   uniq : dsimp%
-    forall (s : Cocone F) (m : t.pt ⟶ s.pt) (_ : forall j : J, t.ι.app j ≫ m = s.ι.app j), m = desc s := by
+    ∀ (s : Cocone F) (m : t.pt ⟶ s.pt) (_ : ∀ j : J, t.ι.app j ≫ m = s.ι.app j), m = desc s := by
     cat_disch
 
 attribute [reassoc (attr := simp)] IsLimit.fac IsColimit.fac
@@ -118,20 +104,25 @@ to_dual_name_hint Lift Desc, Left Right
 namespace IsLimit
 
 @[to_dual]
-/--
-Instance `subsingleton` / 实例 `subsingleton`
-
-English:
-instance subsingleton
-  signature: {t : Cone F}
-  body: ⟨by intro P Q; cases P; cases Q; congr; cat_disch⟩
-
-中文:
-实例 subsingleton
-  签名: {t : 锥 F}
-  定义体: ⟨by intro P Q; cases P; cases Q; congr; cat_disch⟩
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Limits.IsLimit.subsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Limits.IsLimit`。
+形式化陈述：subsingleton {t : Cone F} : Subsingleton (IsLimit t)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 instance subsingleton {t : Cone F} : Subsingleton (IsLimit t) :=
   ⟨by intro P Q; cases P; cases Q; congr; cat_disch⟩
@@ -141,67 +132,43 @@ of any cone over `F` to the cone point of a limit cone over `G`. -/
 @[implicit_reducible, to_dual (reorder := s P t)
 /-- Given a natural transformation `α : F ⟶ G`, we give a morphism from the cocone point
 of a colimit cocone over `F` to the cocone point of any cocone over `G`. -/]
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: {F G : J ⥤ C} (s : Cone F) {t : Cone G} (P : IsLimit t) (α : F ⟶ G)
-  body: P.lift ((Cone.postcompose α).obj s)
-
-@[to_dual (attr := reassoc (attr := simp)) (reorder := c hd d) ι_map]
-
-中文:
-定义 map
-  签名: {F G : J ⥤ C} (s : 锥 F) {t : 锥 G} (P : 是极限 t) (α : F ⟶ G)
-  定义体: P.lift ((Cone.postcompose α).obj s)
-
-@[to_dual (attr := reassoc (attr := simp)) (reorder := c hd d) ι_map]
-
-Depends on / 依赖: Cone.postcompose, P.lift, postcompose
+/-
+**CategoryTheory.Limits.IsLimit.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits.IsLimit`。
+形式化陈述：map {F G : J ⥤ C} (s : Cone F) {t : Cone G} (P : IsLimit t) (α : F ⟶ G) : 
+s.pt ⟶ t.pt
+参数：s : Cone F；P : IsLimit t；α : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def map {F G : J ⥤ C} (s : Cone F) {t : Cone G} (P : IsLimit t) (α : F ⟶ G) : s.pt ⟶ t.pt :=
   P.lift ((Cone.postcompose α).obj s)
 
 @[to_dual (attr := reassoc (attr := simp)) (reorder := c hd d) ι_map]
-/--
-theorem `map_π` / 定理 `map_π`
-
-English:
-theorem map_π
-  given: {F G : J ⥤ C} (c : Cone F) {d : Cone G} (hd : IsLimit d) (α : F ⟶ G) (j : J)
-  proof: fac _ _ _
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 map_π
-  条件: {F G : J ⥤ C} (c : 锥 F) {d : 锥 G} (hd : 是极限 d) (α : F ⟶ G) (j : J)
-  证明: fac _ _ _
-
-@[to_dual (attr := simp)]
+/-
+**CategoryTheory.Limits.IsLimit.map_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.IsLimit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_π {F G : J ⥤ C} (c : Cone F) {d : Cone G} (hd : IsLimit d) (α : F ⟶ G) (j : J) :
     hd.map c α ≫ d.π.app j = c.π.app j ≫ α.app j :=
   fac _ _ _
 
 @[to_dual (attr := simp)]
-/--
-theorem `lift_self` / 定理 `lift_self`
-
-English:
-theorem lift_self
-  given: {c : Cone F} (t : IsLimit c)
-  statement: t.lift c = 𝟙 c.pt
-  proof: (t.uniq _ _ fun _ => id_comp _).symm
-
-中文:
-定理 lift_self
-  条件: {c : 锥 F} (t : 是极限 c)
-  结论: t.lift c = 𝟙 c.pt
-  证明: (t.uniq _ _ fun _ => id_comp _).symm
-
-Depends on / 依赖: id_comp, t.uniq
+/-
+**CategoryTheory.Limits.IsLimit.lift_self** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.IsLimit`。
+形式化陈述：lift_self {c : Cone F} (t : IsLimit c) : t.lift c = 𝟙 c.pt
+参数：t : IsLimit c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem lift_self {c : Cone F} (t : IsLimit c) : t.lift c = 𝟙 c.pt :=
   (t.uniq _ _ fun _ => id_comp _).symm
@@ -210,96 +177,83 @@ theorem lift_self {c : Cone F} (t : IsLimit c) : t.lift c = 𝟙 c.pt :=
 /-- The universal morphism from any other cone to a limit cone. -/
 @[to_dual (attr := simps)
 /-- The universal morphism from a colimit cocone to any other cocone. -/]
-/--
-Definition of `liftConeMorphism` / `liftConeMorphism` 的定义
-
-English:
-definition liftConeMorphism
-  signature: {t : Cone F} (h : IsLimit t) (s : Cone F)
-  body: h.lift s
-
-@[to_dual]
-
-中文:
-定义 liftConeMorphism
-  签名: {t : 锥 F} (h : 是极限 t) (s : 锥 F)
-  定义体: h.lift s
-
-@[to_dual]
-
-Depends on / 依赖: h.lift
+/-
+**CategoryTheory.Limits.IsLimit.liftConeMorphism** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.IsLimit`。
+形式化陈述：liftConeMorphism {t : Cone F} (h : IsLimit t) (s : Cone F) : s ⟶ t where h
+om
+参数：h : IsLimit t；s : Cone F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def liftConeMorphism {t : Cone F} (h : IsLimit t) (s : Cone F) : s ⟶ t where hom := h.lift s
 
 @[to_dual]
-/--
-theorem `uniq_cone_morphism` / 定理 `uniq_cone_morphism`
-
-English:
-theorem uniq_cone_morphism
-  given: {s t : Cone F} (h : IsLimit t) {f f' : s ⟶ t}
-  statement: f = f'
-  proof: have : forall {g : s ⟶ t}, g = h.liftConeMorphism s := by
-    intro g; apply ConeMorphism.ext; exact h.uniq _ _ g.w
-  this.trans this.symm
-
-中文:
-定理 uniq_cone_morphism
-  条件: {s t : 锥 F} (h : 是极限 t) {f f' : s ⟶ t}
-  结论: f = f'
-  证明: have : forall {g : s ⟶ t}, g = h.liftConeMorphism s := by
-    intro g; apply ConeMorphism.ext; exact h.uniq _ _ g.w
-  this.trans this.symm
-
-Depends on / 依赖: ConeMorphism, ConeMorphism.ext, h.liftConeMorphism, h.uniq, liftConeMorphism, this.symm, this.trans
+/-
+**CategoryTheory.Limits.IsLimit.uniq_cone_morphism** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits.IsLimit`。
+形式化陈述：uniq_cone_morphism {s t : Cone F} (h : IsLimit t) {f f' : s ⟶ t} : f = f'
+参数：h : IsLimit t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.ConeMorphism.ext`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃,
+ u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.ConeMorphism.w`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem uniq_cone_morphism {s t : Cone F} (h : IsLimit t) {f f' : s ⟶ t} : f = f' :=
-  have : forall {g : s ⟶ t}, g = h.liftConeMorphism s := by
+  have : ∀ {g : s ⟶ t}, g = h.liftConeMorphism s := by
     intro g; apply ConeMorphism.ext; exact h.uniq _ _ g.w
   this.trans this.symm
 
 /-- Restating the definition of a limit cone in terms of the ∃! operator. -/
 @[to_dual /-- Restating the definition of a colimit cocone in terms of the ∃! operator. -/]
-/--
-theorem `existsUnique` / 定理 `existsUnique`
+/-
+**CategoryTheory.Limits.IsLimit.existsUnique** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsLimit`。
+形式化陈述：existsUnique {t : Cone F} (h : IsLimit t) (s : Cone F) : exists! l : s.pt 
+⟶ t.pt, forall j, l ≫ t.π.app j = s.π.app j
+参数：h : IsLimit t；s : Cone F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
 
-English:
-theorem existsUnique
-  given: {t : Cone F} (h : IsLimit t) (s : Cone F)
-  proof: ⟨h.lift s, h.fac s, h.uniq s⟩
-
-中文:
-定理 存在Unique
-  条件: {t : 锥 F} (h : 是极限 t) (s : 锥 F)
-  证明: ⟨h.lift s, h.fac s, h.uniq s⟩
-
-Depends on / 依赖: h.fac, h.lift, h.uniq
+--- 原说明 ---
+Restating the definition of a limit cone in terms of the ∃! operator.
 -/
 theorem existsUnique {t : Cone F} (h : IsLimit t) (s : Cone F) :
-    exists! l : s.pt ⟶ t.pt, forall j, l ≫ t.π.app j = s.π.app j :=
+    ∃! l : s.pt ⟶ t.pt, ∀ j, l ≫ t.π.app j = s.π.app j :=
   ⟨h.lift s, h.fac s, h.uniq s⟩
 
 /-- Noncomputably make a limit cone from the existence of unique factorizations. -/
 @[to_dual /-- Noncomputably make a colimit cocone from the existence of unique factorizations. -/]
-/--
-Definition of `ofExistsUnique` / `ofExistsUnique` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.ofExistsUnique** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.IsLimit`。
+形式化陈述：ofExistsUnique {t : Cone F} (ht : forall s : Cone F, exists! l : s.pt ⟶ t.
+pt, forall j, l ≫ t.π.app j = s.π.app j) : IsLimit t
+参数：ht : forall s : Cone F, exists! l : s.pt ⟶ t.pt, forall j, l ≫ t.π.app j = s.
+π.app j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofExistsUnique
-  signature: {t : Cone F}
-  body: by
-  choose s hs hs' using ht
-  exact ⟨s, hs, hs'⟩
-
-中文:
-定义 ofExistsUnique
-  签名: {t : 锥 F}
-  定义体: by
-  choose s hs hs' using ht
-  exact ⟨s, hs, hs'⟩
+--- 原说明 ---
+Noncomputably make a limit cone from the existence of unique factorizations.
 -/
 def ofExistsUnique {t : Cone F}
-    (ht : forall s : Cone F, exists! l : s.pt ⟶ t.pt, forall j, l ≫ t.π.app j = s.π.app j) : IsLimit t := by
+    (ht : ∀ s : Cone F, ∃! l : s.pt ⟶ t.pt, ∀ j, l ≫ t.π.app j = s.π.app j) : IsLimit t := by
   choose s hs hs' using ht
   exact ⟨s, hs, hs'⟩
 
@@ -312,27 +266,18 @@ and separately the factorisation condition.
 providing a morphism of cocones rather than a morphism between the cocone points
 and separately the factorisation condition.
 -/]
-/--
-Definition of `mkConeMorphism` / `mkConeMorphism` 的定义
-
-English:
-definition mkConeMorphism
-  signature: {t : Cone F} (lift : forall s : Cone F, s ⟶ t)
-  body: (lift s).hom
-  uniq s m w :=
-    have : ConeMorphism.mk m w = lift s := by apply uniq
-    congrArg ConeMorphism.hom this
-
-中文:
-定义 mkConeMorphism
-  签名: {t : 锥 F} (lift : 对任意 s : 锥 F, s ⟶ t)
-  定义体: (lift s).hom
-  uniq s m w :=
-    have : ConeMorphism.mk m w = lift s := by apply uniq
-    congrArg ConeMorphism.hom this
+/-
+**CategoryTheory.Limits.IsLimit.mkConeMorphism** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.IsLimit`。
+形式化陈述：mkConeMorphism {t : Cone F} (lift : forall s : Cone F, s ⟶ t) (uniq : fora
+ll (s : Cone F) (m : s ⟶ t), m = lift s) : IsLimit t where lift s
+参数：lift : forall s : Cone F, s ⟶ t；uniq : forall (s : Cone F) (m : s ⟶ t), m = l
+ift s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mkConeMorphism {t : Cone F} (lift : forall s : Cone F, s ⟶ t)
-    (uniq : forall (s : Cone F) (m : s ⟶ t), m = lift s) : IsLimit t where
+def mkConeMorphism {t : Cone F} (lift : ∀ s : Cone F, s ⟶ t)
+    (uniq : ∀ (s : Cone F) (m : s ⟶ t), m = lift s) : IsLimit t where
   lift s := (lift s).hom
   uniq s m w :=
     have : ConeMorphism.mk m w = lift s := by apply uniq
@@ -341,26 +286,17 @@ def mkConeMorphism {t : Cone F} (lift : forall s : Cone F, s ⟶ t)
 set_option linter.translate.warnInvalid false in
 /-- Limit cones on `F` are unique up to isomorphism. -/
 @[to_dual (attr := simps) /-- Colimit cocones on `F` are unique up to isomorphism. -/]
-/--
-Definition of `uniqueUpToIso` / `uniqueUpToIso` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.uniqueUpToIso** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.IsLimit`。
+形式化陈述：uniqueUpToIso {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) : s ≅ t where
+ hom
+参数：P : IsLimit s；Q : IsLimit t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueUpToIso
-  signature: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
-  body: Q.liftConeMorphism s
-  inv := P.liftConeMorphism t
-  hom_inv_id := P.uniq_cone_morphism
-  inv_hom_id := Q.uniq_cone_morphism
-
-中文:
-定义 uniqueUpToIso
-  签名: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
-  定义体: Q.liftConeMorphism s
-  inv := P.liftConeMorphism t
-  hom_inv_id := P.uniq_cone_morphism
-  inv_hom_id := Q.uniq_cone_morphism
-
-Depends on / 依赖: Localization, Localization.inverts, Q.liftConeMorphism, inverts, liftConeMorphism, z.hs
+--- 原说明 ---
+Limit cones on `F` are unique up to isomorphism.
 -/
 def uniqueUpToIso {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) : s ≅ t where
   hom := Q.liftConeMorphism s
@@ -373,137 +309,141 @@ attribute [to_dual existing uniqueUpToIso_hom] uniqueUpToIso_inv
 
 /-- Any cone morphism between limit cones is an isomorphism. -/
 @[to_dual (reorder := P Q) /-- Any cocone morphism between colimit cocones is an isomorphism. -/]
-/--
-theorem `hom_isIso` / 定理 `hom_isIso`
+/-
+**CategoryTheory.Limits.IsLimit.hom_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.IsLimit`。
+形式化陈述：hom_isIso {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (f : s ⟶ t) : IsI
+so f
+参数：P : IsLimit s；Q : IsLimit t；f : s ⟶ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq_cone_morphism`：uniq_cone_morphism {s 
+t : Cone F} (h : IsLimit t) {f f' : s ⟶ t} : f = f'
 
-English:
-theorem hom_isIso
-  given: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (f : s ⟶ t)
-  statement: IsIso f
-  proof: ⟨⟨P.liftConeMorphism t, ⟨P.uniq_cone_morphism, Q.uniq_cone_morphism⟩⟩⟩
-
-中文:
-定理 hom_isIso
-  条件: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t) (f : s ⟶ t)
-  结论: 是同构 f
-  证明: ⟨⟨P.liftConeMorphism t, ⟨P.uniq_cone_morphism, Q.uniq_cone_morphism⟩⟩⟩
-
-Depends on / 依赖: Localization, Localization.inverts, P.liftConeMorphism, P.uniq_cone_morphism, Q.uniq_cone_morphism, inverts, liftConeMorphism, uniq_cone_morphism, z.hs
+--- 原说明 ---
+Any cone morphism between limit cones is an isomorphism.
 -/
 theorem hom_isIso {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (f : s ⟶ t) : IsIso f :=
   ⟨⟨P.liftConeMorphism t, ⟨P.uniq_cone_morphism, Q.uniq_cone_morphism⟩⟩⟩
 
 /-- Limits of `F` are unique up to isomorphism. -/
 @[to_dual /-- Colimits of `F` are unique up to isomorphism. -/]
-/--
-Definition of `conePointUniqueUpToIso` / `conePointUniqueUpToIso` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.IsLimit`。
+形式化陈述：conePointUniqueUpToIso {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) : s.
+pt ≅ t.pt
+参数：P : IsLimit s；Q : IsLimit t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conePointUniqueUpToIso
-  signature: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
-  body: (Cone.forget F).mapIso (uniqueUpToIso P Q)
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
-
-中文:
-定义 conePointUniqueUpToIso
-  签名: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
-  定义体: (Cone.forget F).mapIso (uniqueUpToIso P Q)
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
-
-Depends on / 依赖: Cone.forget, Localization, Localization.inverts, forget, inverts, mapIso, uniqueUpToIso, z.hs
+--- 原说明 ---
+Limits of `F` are unique up to isomorphism.
 -/
 def conePointUniqueUpToIso {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) : s.pt ≅ t.pt :=
   (Cone.forget F).mapIso (uniqueUpToIso P Q)
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
-/--
-theorem `conePointUniqueUpToIso_hom_comp` / 定理 `conePointUniqueUpToIso_hom_comp`
-
-English:
-theorem conePointUniqueUpToIso_hom_comp
-  given: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J)
-  proof: (uniqueUpToIso P Q).hom.w _
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
-
-中文:
-定理 conePointUniqueUpToIso_hom_comp
-  条件: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t) (j : J)
-  证明: (uniqueUpToIso P Q).hom.w _
-
-@[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
-
-Depends on / 依赖: hom.w, uniqueUpToIso
+/-
+**CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：conePointUniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimi
+t t) (j : J) : (conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.app j
+参数：P : IsLimit s；Q : IsLimit t；j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.ConeMorphism.w`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
 -/
 theorem conePointUniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) :
     (conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.app j :=
   (uniqueUpToIso P Q).hom.w _
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
-/--
-theorem `conePointUniqueUpToIso_inv_comp` / 定理 `conePointUniqueUpToIso_inv_comp`
-
-English:
-theorem conePointUniqueUpToIso_inv_comp
-  given: {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J)
-  proof: (uniqueUpToIso P Q).inv.w _
-
-@[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_inv_desc]
-
-中文:
-定理 conePointUniqueUpToIso_inv_comp
-  条件: {s t : 锥 F} (P : 是极限 s) (Q : 是极限 t) (j : J)
-  证明: (uniqueUpToIso P Q).inv.w _
-
-@[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_inv_desc]
-
-Depends on / 依赖: inv.w, uniqueUpToIso
+/-
+**CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：conePointUniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimi
+t t) (j : J) : (conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.app j
+参数：P : IsLimit s；Q : IsLimit t；j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.ConeMorphism.w`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
 -/
 theorem conePointUniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) :
     (conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.app j :=
   (uniqueUpToIso P Q).inv.w _
 
 @[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_inv_desc]
-/--
-theorem `lift_comp_conePointUniqueUpToIso_hom` / 定理 `lift_comp_conePointUniqueUpToIso_hom`
-
-English:
-theorem lift_comp_conePointUniqueUpToIso_hom
-  given: {r s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
-  proof: Q.uniq _ _ (by simp)
-
-@[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_hom_desc]
-
-中文:
-定理 lift_comp_conePointUniqueUpToIso_hom
-  条件: {r s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
-  证明: Q.uniq _ _ (by simp)
-
-@[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_hom_desc]
-
-Depends on / 依赖: Q.uniq
+/-
+**CategoryTheory.Limits.IsLimit.lift_comp_conePointUniqueUpToIso_hom** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：lift_comp_conePointUniqueUpToIso_hom {r s t : Cone F} (P : IsLimit s) (Q :
+ IsLimit t) : P.lift r ≫ (conePointUniqueUpToIso P Q).hom = Q.lift r
+参数：P : IsLimit s；Q : IsLimit t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem lift_comp_conePointUniqueUpToIso_hom {r s t : Cone F} (P : IsLimit s) (Q : IsLimit t) :
     P.lift r ≫ (conePointUniqueUpToIso P Q).hom = Q.lift r :=
   Q.uniq _ _ (by simp)
 
 @[to_dual (attr := reassoc (attr := simp)) coconePointUniqueUpToIso_hom_desc]
-/--
-theorem `lift_comp_conePointUniqueUpToIso_inv` / 定理 `lift_comp_conePointUniqueUpToIso_inv`
-
-English:
-theorem lift_comp_conePointUniqueUpToIso_inv
-  given: {r s t : Cone F} (P : IsLimit s) (Q : IsLimit t)
-  proof: P.uniq _ _ (by simp)
-
-中文:
-定理 lift_comp_conePointUniqueUpToIso_inv
-  条件: {r s t : 锥 F} (P : 是极限 s) (Q : 是极限 t)
-  证明: P.uniq _ _ (by simp)
-
-Depends on / 依赖: P.uniq
+/-
+**CategoryTheory.Limits.IsLimit.lift_comp_conePointUniqueUpToIso_inv** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：lift_comp_conePointUniqueUpToIso_inv {r s t : Cone F} (P : IsLimit s) (Q :
+ IsLimit t) : Q.lift r ≫ (conePointUniqueUpToIso P Q).inv = P.lift r
+参数：P : IsLimit s；Q : IsLimit t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem lift_comp_conePointUniqueUpToIso_inv {r s t : Cone F} (P : IsLimit s) (Q : IsLimit t) :
     Q.lift r ≫ (conePointUniqueUpToIso P Q).inv = P.lift r :=
@@ -512,44 +452,27 @@ theorem lift_comp_conePointUniqueUpToIso_inv {r s t : Cone F} (P : IsLimit s) (Q
 /-- Transport evidence that a cone is a limit cone across an isomorphism of cones. -/
 @[to_dual
 /-- Transport evidence that a cocone is a colimit cocone across an isomorphism of cocones. -/]
-/--
-Definition of `ofIsoLimit` / `ofIsoLimit` 的定义
-
-English:
-definition ofIsoLimit
-  signature: {r t : Cone F} (P : IsLimit r) (i : r ≅ t)
-  body: IsLimit.mkConeMorphism (fun s => P.liftConeMorphism s ≫ i.hom) fun s m => by
-    rw [← i.comp_inv_eq]; apply P.uniq_cone_morphism
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 ofIsoLimit
-  签名: {r t : 锥 F} (P : 是极限 r) (i : r ≅ t)
-  定义体: IsLimit.mkConeMorphism (fun s => P.liftConeMorphism s ≫ i.hom) fun s m => by
-    rw [← i.comp_inv_eq]; apply P.uniq_cone_morphism
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.mkConeMorphism, P.liftConeMorphism, P.uniq_cone_morphism, comp_inv_eq, i.comp_inv_eq, i.hom, liftConeMorphism, mkConeMorphism, uniq_cone_morphism
+/-
+**CategoryTheory.Limits.IsLimit.ofIsoLimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.IsLimit`。
+形式化陈述：ofIsoLimit {r t : Cone F} (P : IsLimit r) (i : r ≅ t) : IsLimit t
+参数：P : IsLimit r；i : r ≅ t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofIsoLimit {r t : Cone F} (P : IsLimit r) (i : r ≅ t) : IsLimit t :=
   IsLimit.mkConeMorphism (fun s => P.liftConeMorphism s ≫ i.hom) fun s m => by
     rw [← i.comp_inv_eq]; apply P.uniq_cone_morphism
 
 @[to_dual (attr := simp)]
-/--
-theorem `ofIsoLimit_lift` / 定理 `ofIsoLimit_lift`
-
-English:
-theorem ofIsoLimit_lift
-  given: {r t : Cone F} (P : IsLimit r) (i : r ≅ t) (s)
-  proof: rfl
-
-中文:
-定理 ofIsoLimit_lift
-  条件: {r t : 锥 F} (P : 是极限 r) (i : r ≅ t) (s)
-  证明: rfl
+/-
+**CategoryTheory.Limits.IsLimit.ofIsoLimit_lift** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.IsLimit`。
+形式化陈述：ofIsoLimit_lift {r t : Cone F} (P : IsLimit r) (i : r ≅ t) (s) : (P.ofIsoL
+imit i).lift s = P.lift s ≫ i.hom.hom
+参数：P : IsLimit r；i : r ≅ t；s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofIsoLimit_lift {r t : Cone F} (P : IsLimit r) (i : r ≅ t) (s) :
     (P.ofIsoLimit i).lift s = P.lift s ≫ i.hom.hom :=
@@ -557,30 +480,17 @@ theorem ofIsoLimit_lift {r t : Cone F} (P : IsLimit r) (i : r ≅ t) (s) :
 
 /-- Isomorphism of cones preserves whether or not they are limiting cones. -/
 @[to_dual /-- Isomorphism of cocones preserves whether or not they are colimiting cocones. -/]
-/--
-Definition of `equivIsoLimit` / `equivIsoLimit` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.equivIsoLimit** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.IsLimit`。
+形式化陈述：equivIsoLimit {r t : Cone F} (i : r ≅ t) : IsLimit r ≃ IsLimit t where toF
+un h
+参数：i : r ≅ t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivIsoLimit
-  signature: {r t : Cone F} (i : r ≅ t)
-  body: h.ofIsoLimit i
-  invFun h := h.ofIsoLimit i.symm
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 equivIsoLimit
-  签名: {r t : 锥 F} (i : r ≅ t)
-  定义体: h.ofIsoLimit i
-  invFun h := h.ofIsoLimit i.symm
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: h.ofIsoLimit, ofIsoLimit
+--- 原说明 ---
+Isomorphism of cones preserves whether or not they are limiting cones.
 -/
 def equivIsoLimit {r t : Cone F} (i : r ≅ t) : IsLimit r ≃ IsLimit t where
   toFun h := h.ofIsoLimit i
@@ -589,40 +499,29 @@ def equivIsoLimit {r t : Cone F} (i : r ≅ t) : IsLimit r ≃ IsLimit t where
   right_inv := by cat_disch
 
 @[to_dual (attr := simp)]
-/--
-theorem `equivIsoLimit_apply` / 定理 `equivIsoLimit_apply`
-
-English:
-theorem equivIsoLimit_apply
-  given: {r t : Cone F} (i : r ≅ t) (P : IsLimit r)
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 equivIsoLimit_apply
-  条件: {r t : 锥 F} (i : r ≅ t) (P : 是极限 r)
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**CategoryTheory.Limits.IsLimit.equivIsoLimit_apply** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits.IsLimit`。
+形式化陈述：equivIsoLimit_apply {r t : Cone F} (i : r ≅ t) (P : IsLimit r) : equivIsoL
+imit i P = P.ofIsoLimit i
+参数：i : r ≅ t；P : IsLimit r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivIsoLimit_apply {r t : Cone F} (i : r ≅ t) (P : IsLimit r) :
     equivIsoLimit i P = P.ofIsoLimit i :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `equivIsoLimit_symm_apply` / 定理 `equivIsoLimit_symm_apply`
-
-English:
-theorem equivIsoLimit_symm_apply
-  given: {r t : Cone F} (i : r ≅ t) (P : IsLimit t)
-  proof: rfl
-
-中文:
-定理 equivIsoLimit_symm_apply
-  条件: {r t : 锥 F} (i : r ≅ t) (P : 是极限 t)
-  证明: rfl
+/-
+**CategoryTheory.Limits.IsLimit.equivIsoLimit_symm_apply** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：equivIsoLimit_symm_apply {r t : Cone F} (i : r ≅ t) (P : IsLimit t) : (equ
+ivIsoLimit i).symm P = P.ofIsoLimit i.symm
+参数：i : r ≅ t；P : IsLimit t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equivIsoLimit_symm_apply {r t : Cone F} (i : r ≅ t) (P : IsLimit t) :
     (equivIsoLimit i).symm P = P.ofIsoLimit i.symm :=
@@ -635,28 +534,14 @@ first cone was limiting also.
 /-- If the canonical morphism to a cocone point from a colimiting cocone point is an iso, then the
 first cocone was colimiting also.
 -/]
-/--
-Definition of `ofPointIso` / `ofPointIso` 的定义
-
-English:
-definition ofPointIso
-  signature: {r t : Cone F} (P : IsLimit r) [i : IsIso (P.lift t)]
-  body: ofIsoLimit P (by
-    haveI : IsIso (P.liftConeMorphism t).hom := i
-    haveI : IsIso (P.liftConeMorphism t) := Cone.cone_iso_of_hom_iso _
-    symm
-    apply asIso (P.liftConeMorphism t))
-
-中文:
-定义 ofPointIso
-  签名: {r t : 锥 F} (P : 是极限 r) [i : 是同构 (P.lift t)]
-  定义体: ofIsoLimit P (by
-    haveI : IsIso (P.liftConeMorphism t).hom := i
-    haveI : IsIso (P.liftConeMorphism t) := Cone.cone_iso_of_hom_iso _
-    symm
-    apply asIso (P.liftConeMorphism t))
-
-Depends on / 依赖: Cone.cone_iso_of_hom_iso, P.liftConeMorphism, cone_iso_of_hom_iso, liftConeMorphism, ofIsoLimit
+/-
+**CategoryTheory.Limits.IsLimit.ofPointIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.IsLimit`。
+形式化陈述：ofPointIso {r t : Cone F} (P : IsLimit r) [i : IsIso (P.lift t)] : IsLimit
+ t
+参数：P : IsLimit r；P.lift t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofPointIso {r t : Cone F} (P : IsLimit r) [i : IsIso (P.lift t)] : IsLimit t :=
   ofIsoLimit P (by
@@ -668,18 +553,32 @@ def ofPointIso {r t : Cone F} (P : IsLimit r) [i : IsIso (P.lift t)] : IsLimit t
 variable {t : Cone F}
 
 @[to_dual]
-/--
-theorem `hom_lift` / 定理 `hom_lift`
-
-English:
-theorem hom_lift
-  given: (h : IsLimit t) {W : C} (m : W ⟶ t.pt)
-  proof: h.uniq { pt := W, π := { app := fun b => m ≫ t.π.app b } } m fun _ => rfl
-
-中文:
-定理 hom_lift
-  条件: (h : 是极限 t) {W : C} (m : W ⟶ t.pt)
-  证明: h.uniq { pt := W, π := { app := fun b => m ≫ t.π.app b } } m fun _ => rfl
+/-
+**CategoryTheory.Limits.IsLimit.hom_lift** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.IsLimit`。
+形式化陈述：hom_lift (h : IsLimit t) {W : C} (m : W ⟶ t.pt) : m = h.lift { pt
+参数：h : IsLimit t；m : W ⟶ t.pt。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem hom_lift (h : IsLimit t) {W : C} (m : W ⟶ t.pt) :
     m = h.lift { pt := W, π := { app := fun b => m ≫ t.π.app b } } :=
@@ -689,51 +588,62 @@ theorem hom_lift (h : IsLimit t) {W : C} (m : W ⟶ t.pt) :
 each cone morphism are equal. -/
 @[to_dual /-- Two morphisms out of a colimit are equal if their compositions with
 each cocone morphism are equal. -/]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  statement: (h : IsLimit t) {W : C} {f f' : W ⟶ t.pt}
-  proof: by
-  rw [h.hom_lift f]; rw [h.hom_lift f']; congr; exact funext w
-
-@[to_dual]
-
-中文:
-定理 hom_ext
-  结论: (h : 是极限 t) {W : C} {f f' : W ⟶ t.pt}
-  证明: by
-  rw [h.hom_lift f]; rw [h.hom_lift f']; congr; exact funext w
-
-@[to_dual]
-
-Depends on / 依赖: h.hom_lift, hom_lift
+/-
+**CategoryTheory.Limits.IsLimit.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.IsLimit`。
+形式化陈述：hom_ext (h : IsLimit t) {W : C} {f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.a
+pp j = f' ≫ t.π.app j) : f = f'
+参数：h : IsLimit t；w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_lift`：hom_lift (h : IsLimit t) {W : C}
+ (m : W ⟶ t.pt) : m = h.lift { pt
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem hom_ext (h : IsLimit t) {W : C} {f f' : W ⟶ t.pt}
-    (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) :
+    (w : ∀ j, f ≫ t.π.app j = f' ≫ t.π.app j) :
     f = f' := by
-  rw [h.hom_lift f]; rw [h.hom_lift f']; congr; exact funext w
+  rw [h.hom_lift f, h.hom_lift f']; congr; exact funext w
 
 @[to_dual]
-/--
-lemma `nonempty_isLimit_iff_isIso_lift` / 引理 `nonempty_isLimit_iff_isIso_lift`
-
-English:
-lemma nonempty_isLimit_iff_isIso_lift
-  given: {s t : Cone F} (hs : IsLimit s)
-  proof: ⟨fun ⟨ht⟩ => ⟨ht.lift s, ht.hom_ext (by simp), hs.hom_ext (by simp)⟩, fun h => ⟨hs.ofPointIso⟩⟩
-
-中文:
-引理 nonempty_isLimit_iff_isIso_lift
-  条件: {s t : 锥 F} (hs : 是极限 s)
-  证明: ⟨fun ⟨ht⟩ => ⟨ht.lift s, ht.hom_ext (by simp), hs.hom_ext (by simp)⟩, fun h => ⟨hs.ofPointIso⟩⟩
-
-Depends on / 依赖: hom_ext, hs.hom_ext, hs.ofPointIso, ht.hom_ext, ht.lift, ofPointIso
+/-
+**CategoryTheory.Limits.IsLimit.nonempty_isLimit_iff_isIso_lift** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：nonempty_isLimit_iff_isIso_lift {s t : Cone F} (hs : IsLimit s) : Nonempty
+ (IsLimit t) ↔ IsIso (hs.lift t)
+参数：hs : IsLimit s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma nonempty_isLimit_iff_isIso_lift {s t : Cone F} (hs : IsLimit s) :
     Nonempty (IsLimit t) ↔ IsIso (hs.lift t) :=
-  ⟨fun ⟨ht⟩ => ⟨ht.lift s, ht.hom_ext (by simp), hs.hom_ext (by simp)⟩, fun h => ⟨hs.ofPointIso⟩⟩
+  ⟨fun ⟨ht⟩ ↦ ⟨ht.lift s, ht.hom_ext (by simp), hs.hom_ext (by simp)⟩, fun h ↦ ⟨hs.ofPointIso⟩⟩
 
 /-- Given a right adjoint functor between categories of cones,
 the image of a limit cone is a limit cone.
@@ -742,22 +652,15 @@ the image of a limit cone is a limit cone.
 /-- Given a left adjoint functor between categories of cocones,
 the image of a colimit cocone is a colimit cocone.
 -/]
-/--
-Definition of `ofRightAdjoint` / `ofRightAdjoint` 的定义
-
-English:
-definition ofRightAdjoint
-  signature: {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} {left : Cone F ⥤ Cone G}
-  body: mkConeMorphism (fun s => adj.homEquiv s c (t.liftConeMorphism _))
-    fun _ _ => (Adjunction.eq_homEquiv_apply _ _ _).2 t.uniq_cone_morphism
-
-中文:
-定义 ofRightAdjoint
-  签名: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D} {left : 锥 F ⥤ 锥 G}
-  定义体: mkConeMorphism (fun s => adj.homEquiv s c (t.liftConeMorphism _))
-    fun _ _ => (Adjunction.eq_homEquiv_apply _ _ _).2 t.uniq_cone_morphism
-
-Depends on / 依赖: Adjunction, Adjunction.eq_homEquiv_apply, adj.homEquiv, eq_homEquiv_apply, homEquiv, liftConeMorphism, mkConeMorphism, t.liftConeMorphism, t.uniq_cone_morphism, uniq_cone_morphism
+/-
+**CategoryTheory.Limits.IsLimit.ofRightAdjoint** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.IsLimit`。
+形式化陈述：ofRightAdjoint {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} {left : Cone F 
+⥤ Cone G} {right : Cone G ⥤ Cone F} (adj : left ⊣ right) {c : Cone G} (t : IsLim
+it c) : IsLimit (right.obj c)
+参数：adj : left ⊣ right；t : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofRightAdjoint {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} {left : Cone F ⥤ Cone G}
     {right : Cone G ⥤ Cone F}
@@ -765,26 +668,22 @@ def ofRightAdjoint {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} {left : Con
   mkConeMorphism (fun s => adj.homEquiv s c (t.liftConeMorphism _))
     fun _ _ => (Adjunction.eq_homEquiv_apply _ _ _).2 t.uniq_cone_morphism
 
-/--
-Definition of `ofConeEquiv` / `ofConeEquiv` 的定义
+/-- Given two functors which have equivalent categories of cones, we can transport a limiting cone
+across the equivalence.
+-/
+/-
+**CategoryTheory.Limits.IsLimit.ofConeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.IsLimit`。
+形式化陈述：ofConeEquiv {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G ≌ Cone
+ F) {c : Cone G} : IsLimit (h.functor.obj c) ≃ IsLimit c where toFun P
+参数：h : Cone G ≌ Cone F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofConeEquiv
-  signature: {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G ≌ Cone F) {c : Cone G}
-  body: ofIsoLimit (ofRightAdjoint h.toAdjunction P) (h.unitIso.symm.app c)
-  invFun := ofRightAdjoint h.symm.toAdjunction
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-中文:
-定义 ofConeEquiv
-  签名: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D} (h : 锥 G ≌ 锥 F) {c : 锥 G}
-  定义体: ofIsoLimit (ofRightAdjoint h.toAdjunction P) (h.unitIso.symm.app c)
-  invFun := ofRightAdjoint h.symm.toAdjunction
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-Depends on / 依赖: h.toAdjunction, h.unitIso.symm.app, ofIsoLimit, ofRightAdjoint, toAdjunction, unitIso
+--- 原说明 ---
+Given two functors which have equivalent categories of cones, we can transport a
+ limiting cone
+across the equivalence.
 -/
 def ofConeEquiv {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G ≌ Cone F) {c : Cone G} :
     IsLimit (h.functor.obj c) ≃ IsLimit c where
@@ -797,32 +696,14 @@ def ofConeEquiv {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G �
 we can transport a colimiting cocone across the equivalence.
 -/
 @[to_dual existing]
-/--
-Definition of `_root_.CategoryTheory.Limits.IsColimit.ofCoconeEquiv` / `_root_.CategoryTheory.Limits.IsColimit.ofCoconeEquiv` 的定义
+/-
+**CategoryTheory.Limits.IsLimit._root_.CategoryTheory.Limits.IsColimit.ofCoconeE
+quiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.CategoryTheory.Limits.IsColimit.ofCoconeEquiv
-  signature: {D : Type u₄} [Category.{v₄} D]
-  body: IsColimit.ofIsoColimit (IsColimit.ofLeftAdjoint h.symm.toAdjunction P)
-    (h.unitIso.symm.app c)
-  invFun := IsColimit.ofLeftAdjoint h.toAdjunction
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 _root_.范畴论.Limits.是余极限.ofCoconeEquiv
-  签名: {D : 类型u₄} [范畴.{v₄} D]
-  定义体: IsColimit.ofIsoColimit (IsColimit.ofLeftAdjoint h.symm.toAdjunction P)
-    (h.unitIso.symm.app c)
-  invFun := IsColimit.ofLeftAdjoint h.toAdjunction
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, IsColimit.ofLeftAdjoint, h.symm.toAdjunction, ofIsoColimit, ofLeftAdjoint, toAdjunction
+--- 原说明 ---
+Given two functors which have equivalent categories of cocones,
+we can transport a colimiting cocone across the equivalence.
 -/
 def _root_.CategoryTheory.Limits.IsColimit.ofCoconeEquiv {D : Type u₄} [Category.{v₄} D]
     {G : K ⥤ D} (h : Cocone G ≌ Cocone F) {c : Cocone G} :
@@ -834,22 +715,16 @@ def _root_.CategoryTheory.Limits.IsColimit.ofCoconeEquiv {D : Type u₄} [Catego
   right_inv := by cat_disch
 
 @[to_dual (attr := simp)]
-/--
-theorem `ofConeEquiv_apply_lift` / 定理 `ofConeEquiv_apply_lift`
-
-English:
-theorem ofConeEquiv_apply_lift
-  statement: {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G ≌ Cone F)
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 ofConeEquiv_apply_lift
-  结论: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D} (h : 锥 G ≌ 锥 F)
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**CategoryTheory.Limits.IsLimit.ofConeEquiv_apply_lift** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits.IsLimit`。
+形式化陈述：ofConeEquiv_apply_lift {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Co
+ne G ≌ Cone F) {c : Cone G} (P : IsLimit (h.functor.obj c)) (s) : (ofConeEquiv h
+ P).lift s = ((h.unitIso.hom.app s).hom ≫ (h.inverse.map (P.liftConeMorphism (h.
+functor.obj s))).hom) ≫ (h.unitIso.inv.app c).hom
+参数：h : Cone G ≌ Cone F；P : IsLimit (h.functor.obj c)；s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofConeEquiv_apply_lift {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h : Cone G ≌ Cone F)
     {c : Cone G} (P : IsLimit (h.functor.obj c)) (s) :
@@ -859,26 +734,17 @@ theorem ofConeEquiv_apply_lift {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D}
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `ofConeEquiv_symm_apply_lift` / 定理 `ofConeEquiv_symm_apply_lift`
-
-English:
-theorem ofConeEquiv_symm_apply_lift
-  statement: {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D}
-  proof: rfl
-
-@[deprecated (since := "2026-06-21")] alias ofConeEquiv_apply_desc := ofConeEquiv_apply_lift
-@[deprecated (since := "2026-06-21")]
-alias ofConeEquiv_symm_apply_desc := ofConeEquiv_symm_apply_lift
-
-中文:
-定理 ofConeEquiv_symm_apply_lift
-  结论: {D : 类型u₄} [范畴.{v₄} D] {G : K ⥤ D}
-  证明: rfl
-
-@[deprecated (since := "2026-06-21")] alias ofConeEquiv_apply_desc := ofConeEquiv_apply_lift
-@[deprecated (since := "2026-06-21")]
-alias ofConeEquiv_symm_apply_desc := ofConeEquiv_symm_apply_lift
+/-
+**CategoryTheory.Limits.IsLimit.ofConeEquiv_symm_apply_lift** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：ofConeEquiv_symm_apply_lift {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D} (h
+ : Cone G ≌ Cone F) {c : Cone G} (P : IsLimit c) (s) : ((ofConeEquiv h).symm P).
+lift s = (h.counitIso.inv.app s).hom ≫ (h.functor.map (P.liftConeMorphism (h.inv
+erse.obj s))).hom
+参数：h : Cone G ≌ Cone F；P : IsLimit c；s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofConeEquiv_symm_apply_lift {D : Type u₄} [Category.{v₄} D] {G : K ⥤ D}
     (h : Cone G ≌ Cone F) {c : Cone G} (P : IsLimit c) (s) :
@@ -897,20 +763,14 @@ if and only if the original cone is.
 /-- A cocone precomposed with the inverse of a natural isomorphism is a colimit cocone
 if and only if the original cocone is.
 -/]
-/--
-Definition of `postcomposeHomEquiv` / `postcomposeHomEquiv` 的定义
-
-English:
-definition postcomposeHomEquiv
-  signature: {F G : J ⥤ C} (α : F ≅ G) (c : Cone F)
-  body: ofConeEquiv (Cone.postcomposeEquivalence α)
-
-中文:
-定义 postcomposeHomEquiv
-  签名: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 F)
-  定义体: ofConeEquiv (Cone.postcomposeEquivalence α)
-
-Depends on / 依赖: Cone.postcomposeEquivalence, ofConeEquiv, postcomposeEquivalence
+/-
+**CategoryTheory.Limits.IsLimit.postcomposeHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.IsLimit`。
+形式化陈述：postcomposeHomEquiv {F G : J ⥤ C} (α : F ≅ G) (c : Cone F) : IsLimit ((Con
+e.postcompose α.hom).obj c) ≃ IsLimit c
+参数：α : F ≅ G；c : Cone F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def postcomposeHomEquiv {F G : J ⥤ C} (α : F ≅ G) (c : Cone F) :
     IsLimit ((Cone.postcompose α.hom).obj c) ≃ IsLimit c :=
@@ -923,20 +783,14 @@ if and only if the original cone is.
 /-- A cocone precomposed with a natural isomorphism is a colimit cocone
 if and only if the original cocone is.
 -/]
-/--
-Definition of `postcomposeInvEquiv` / `postcomposeInvEquiv` 的定义
-
-English:
-definition postcomposeInvEquiv
-  signature: {F G : J ⥤ C} (α : F ≅ G) (c : Cone G)
-  body: postcomposeHomEquiv α.symm c
-
-中文:
-定义 postcomposeInvEquiv
-  签名: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 G)
-  定义体: postcomposeHomEquiv α.symm c
-
-Depends on / 依赖: postcomposeHomEquiv
+/-
+**CategoryTheory.Limits.IsLimit.postcomposeInvEquiv** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.IsLimit`。
+形式化陈述：postcomposeInvEquiv {F G : J ⥤ C} (α : F ≅ G) (c : Cone G) : IsLimit ((Con
+e.postcompose α.inv).obj c) ≃ IsLimit c
+参数：α : F ≅ G；c : Cone G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def postcomposeInvEquiv {F G : J ⥤ C} (α : F ≅ G) (c : Cone G) :
     IsLimit ((Cone.postcompose α.inv).obj c) ≃ IsLimit c :=
@@ -949,20 +803,17 @@ between the underlying functors, and then an isomorphism between `c` transported
 /-- Constructing an equivalence `isColimit c ≃ isColimit d` from a natural isomorphism
 between the underlying functors, and then an isomorphism between `c` transported along this and `d`.
 -/]
-/--
-Definition of `equivOfNatIsoOfIso` / `equivOfNatIsoOfIso` 的定义
-
-English:
-definition equivOfNatIsoOfIso
-  signature: {F G : J ⥤ C} (α : F ≅ G) (c : Cone F) (d : Cone G)
-  body: (postcomposeHomEquiv α _).symm.trans (equivIsoLimit w)
-
-中文:
-定义 equivOf自然数IsoOfIso
-  签名: {F G : J ⥤ C} (α : F ≅ G) (c : 锥 F) (d : 锥 G)
-  定义体: (postcomposeHomEquiv α _).symm.trans (equivIsoLimit w)
-
-Depends on / 依赖: equivIsoLimit, postcomposeHomEquiv, symm.trans
+/-
+**CategoryTheory.Limits.IsLimit.equivOfNatIsoOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.IsLimit`。
+形式化陈述：equivOfNatIsoOfIso {F G : J ⥤ C} (α : F ≅ G) (c : Cone F) (d : Cone G) (w 
+: (Cone.postcompose α.hom).obj c ≅ d) : IsLimit c ≃ IsLimit d
+参数：α : F ≅ G；c : Cone F；d : Cone G；w : (Cone.postcompose α.hom).obj c ≅ d。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def equivOfNatIsoOfIso {F G : J ⥤ C} (α : F ≅ G) (c : Cone F) (d : Cone G)
     (w : (Cone.postcompose α.hom).obj c ≅ d) : IsLimit c ≃ IsLimit d :=
@@ -976,26 +827,14 @@ are themselves isomorphic.
 /-- The cocone points of two colimit cocones for naturally isomorphic functors
 are themselves isomorphic.
 -/]
-/--
-Definition of `conePointsIsoOfNatIso` / `conePointsIsoOfNatIso` 的定义
-
-English:
-definition conePointsIsoOfNatIso
-  signature: {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s) (Q : IsLimit t)
-  body: Q.map s w.hom
-  inv := P.map t w.inv
-  hom_inv_id := P.hom_ext (by simp)
-  inv_hom_id := Q.hom_ext (by simp)
-
-中文:
-定义 conePointsIsoOf自然数Iso
-  签名: {F G : J ⥤ C} {s : 锥 F} {t : 锥 G} (P : 是极限 s) (Q : 是极限 t)
-  定义体: Q.map s w.hom
-  inv := P.map t w.inv
-  hom_inv_id := P.hom_ext (by simp)
-  inv_hom_id := Q.hom_ext (by simp)
-
-Depends on / 依赖: Q.map, w.hom
+/-
+**CategoryTheory.Limits.IsLimit.conePointsIsoOfNatIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits.IsLimit`。
+形式化陈述：conePointsIsoOfNatIso {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit
+ s) (Q : IsLimit t) (w : F ≅ G) : s.pt ≅ t.pt where hom
+参数：P : IsLimit s；Q : IsLimit t；w : F ≅ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def conePointsIsoOfNatIso {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s) (Q : IsLimit t)
     (w : F ≅ G) : s.pt ≅ t.pt where
@@ -1010,22 +849,31 @@ attribute [to_dual existing coconePointsIsoOfNatIso_hom] conePointsIsoOfNatIso_i
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 @[to_dual (attr := reassoc) comp_coconePointsIsoOfNatIso_inv]
-/--
-theorem `conePointsIsoOfNatIso_hom_comp` / 定理 `conePointsIsoOfNatIso_hom_comp`
+/-
+**CategoryTheory.Limits.IsLimit.conePointsIsoOfNatIso_hom_comp** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：conePointsIsoOfNatIso_hom_comp {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P 
+: IsLimit s) (Q : IsLimit t) (w : F ≅ G) (j : J) : (conePointsIsoOfNatIso P Q w)
+.hom ≫ t.π.app j = s.π.app j ≫ w.hom.app j
+参数：P : IsLimit s；Q : IsLimit t；w : F ≅ G；j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointsIsoOfNatIso_hom`：∀ {J : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryThe
+ory.Category.{v₃, u₃} C]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.IsLimit.map_π`：map_π {F G : J ⥤ C} (c : Cone F) {d
+ : Cone G} (hd : IsLimit d) (α : F ⟶ G) (j : J) : hd.map c α ≫ d.π.app j = c.π.a
+pp j ≫ α.app j
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem conePointsIsoOfNatIso_hom_comp
-  statement: {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s)
-  proof: by simp
-
-#adaptation_note
-
-中文:
-定理 conePointsIsoOf自然数Iso_hom_comp
-  结论: {F G : J ⥤ C} {s : 锥 F} {t : 锥 G} (P : 是极限 s)
-  证明: by simp
-
-#adaptation_note
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem conePointsIsoOfNatIso_hom_comp {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s)
     (Q : IsLimit t) (w : F ≅ G) (j : J) :
@@ -1034,46 +882,72 @@ theorem conePointsIsoOfNatIso_hom_comp {F G : J ⥤ C} {s : Cone F} {t : Cone G}
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 @[to_dual (attr := reassoc) comp_coconePointsIsoOfNatIso_hom]
-/--
-theorem `conePointsIsoOfNatIso_inv_comp` / 定理 `conePointsIsoOfNatIso_inv_comp`
+/-
+**CategoryTheory.Limits.IsLimit.conePointsIsoOfNatIso_inv_comp** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：conePointsIsoOfNatIso_inv_comp {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P 
+: IsLimit s) (Q : IsLimit t) (w : F ≅ G) (j : J) : (conePointsIsoOfNatIso P Q w)
+.inv ≫ s.π.app j = t.π.app j ≫ w.inv.app j
+参数：P : IsLimit s；Q : IsLimit t；w : F ≅ G；j : J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointsIsoOfNatIso_inv`：∀ {J : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryThe
+ory.Category.{v₃, u₃} C]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Limits.IsLimit.map_π`：map_π {F G : J ⥤ C} (c : Cone F) {d
+ : Cone G} (hd : IsLimit d) (α : F ⟶ G) (j : J) : hd.map c α ≫ d.π.app j = c.π.a
+pp j ≫ α.app j
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem conePointsIsoOfNatIso_inv_comp
-  statement: {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s)
-  proof: by simp
-
-@[to_dual (attr := reassoc) coconePointsIsoOfNatIso_inv_desc]
-
-中文:
-定理 conePointsIsoOf自然数Iso_inv_comp
-  结论: {F G : J ⥤ C} {s : 锥 F} {t : 锥 G} (P : 是极限 s)
-  证明: by simp
-
-@[to_dual (attr := reassoc) coconePointsIsoOfNatIso_inv_desc]
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem conePointsIsoOfNatIso_inv_comp {F G : J ⥤ C} {s : Cone F} {t : Cone G} (P : IsLimit s)
     (Q : IsLimit t) (w : F ≅ G) (j : J) :
     (conePointsIsoOfNatIso P Q w).inv ≫ s.π.app j = t.π.app j ≫ w.inv.app j := by simp
 
 @[to_dual (attr := reassoc) coconePointsIsoOfNatIso_inv_desc]
-/--
-theorem `lift_comp_conePointsIsoOfNatIso_hom` / 定理 `lift_comp_conePointsIsoOfNatIso_hom`
-
-English:
-theorem lift_comp_conePointsIsoOfNatIso_hom
-  statement: {F G : J ⥤ C} {r s : Cone F} {t : Cone G}
-  proof: Q.hom_ext (by simp)
-
-@[to_dual (attr := reassoc) coconePointsIsoOfNatIso_hom_desc]
-
-中文:
-定理 lift_comp_conePointsIsoOf自然数Iso_hom
-  结论: {F G : J ⥤ C} {r s : 锥 F} {t : 锥 G}
-  证明: Q.hom_ext (by simp)
-
-@[to_dual (attr := reassoc) coconePointsIsoOfNatIso_hom_desc]
-
-Depends on / 依赖: Q.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.IsLimit.lift_comp_conePointsIsoOfNatIso_hom** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：lift_comp_conePointsIsoOfNatIso_hom {F G : J ⥤ C} {r s : Cone F} {t : Cone
+ G} (P : IsLimit s) (Q : IsLimit t) (w : F ≅ G) : P.lift r ≫ (conePointsIsoOfNat
+Iso P Q w).hom = Q.map r w.hom
+参数：P : IsLimit s；Q : IsLimit t；w : F ≅ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointsIsoOfNatIso_hom`：∀ {J : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryThe
+ory.Category.{v₃, u₃} C]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.map_π`：map_π {F G : J ⥤ C} (c : Cone F) {d
+ : Cone G} (hd : IsLimit d) (α : F ⟶ G) (j : J) : hd.map c α ≫ d.π.app j = c.π.a
+pp j ≫ α.app j
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac_assoc`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem lift_comp_conePointsIsoOfNatIso_hom {F G : J ⥤ C} {r s : Cone F} {t : Cone G}
     (P : IsLimit s) (Q : IsLimit t) (w : F ≅ G) :
@@ -1081,20 +955,41 @@ theorem lift_comp_conePointsIsoOfNatIso_hom {F G : J ⥤ C} {r s : Cone F} {t : 
   Q.hom_ext (by simp)
 
 @[to_dual (attr := reassoc) coconePointsIsoOfNatIso_hom_desc]
-/--
-theorem `lift_comp_conePointsIsoOfNatIso_inv` / 定理 `lift_comp_conePointsIsoOfNatIso_inv`
-
-English:
-theorem lift_comp_conePointsIsoOfNatIso_inv
-  statement: {F G : J ⥤ C} {r s : Cone G} {t : Cone F}
-  proof: P.hom_ext (by simp)
-
-中文:
-定理 lift_comp_conePointsIsoOf自然数Iso_inv
-  结论: {F G : J ⥤ C} {r s : 锥 G} {t : 锥 F}
-  证明: P.hom_ext (by simp)
-
-Depends on / 依赖: P.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.IsLimit.lift_comp_conePointsIsoOfNatIso_inv** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：lift_comp_conePointsIsoOfNatIso_inv {F G : J ⥤ C} {r s : Cone G} {t : Cone
+ F} (P : IsLimit t) (Q : IsLimit s) (w : F ≅ G) : Q.lift r ≫ (conePointsIsoOfNat
+Iso P Q w).inv = P.map r w.inv
+参数：P : IsLimit t；Q : IsLimit s；w : F ≅ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointsIsoOfNatIso_inv`：∀ {J : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryThe
+ory.Category.{v₃, u₃} C]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsLimit.map_π`：map_π {F G : J ⥤ C} (c : Cone F) {d
+ : Cone G} (hd : IsLimit d) (α : F ⟶ G) (j : J) : hd.map c α ≫ d.π.app j = c.π.a
+pp j ≫ α.app j
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac_assoc`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem lift_comp_conePointsIsoOfNatIso_inv {F G : J ⥤ C} {r s : Cone G} {t : Cone F}
     (P : IsLimit t) (Q : IsLimit s) (w : F ≅ G) :
@@ -1105,61 +1000,49 @@ section Equivalence
 
 open CategoryTheory.Equivalence
 
-/--
-Definition of `whiskerEquivalence` / `whiskerEquivalence` 的定义
+/-- If `s : Cone F` is a limit cone, so is `s` whiskered by an equivalence `e`. -/
+/-
+**CategoryTheory.Limits.IsLimit.whiskerEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.IsLimit`。
+形式化陈述：whiskerEquivalence {s : Cone F} (P : IsLimit s) (e : K ≌ J) : IsLimit (s.w
+hisker e.functor)
+参数：P : IsLimit s；e : K ≌ J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerEquivalence
-  signature: {s : Cone F} (P : IsLimit s) (e : K ≌ J)
-  body: ofRightAdjoint (Cone.whiskeringEquivalence e).symm.toAdjunction P
-
-中文:
-定义 whiskerEquivalence
-  签名: {s : 锥 F} (P : 是极限 s) (e : K ≌ J)
-  定义体: ofRightAdjoint (Cone.whiskeringEquivalence e).symm.toAdjunction P
-
-Depends on / 依赖: Cone.whiskeringEquivalence, ofRightAdjoint, symm.toAdjunction, toAdjunction, whiskeringEquivalence
+--- 原说明 ---
+If `s : Cone F` is a limit cone, so is `s` whiskered by an equivalence `e`.
 -/
 def whiskerEquivalence {s : Cone F} (P : IsLimit s) (e : K ≌ J) : IsLimit (s.whisker e.functor) :=
   ofRightAdjoint (Cone.whiskeringEquivalence e).symm.toAdjunction P
 
 /-- If `s : Cocone F` is a colimit cocone, so is `s` whiskered by an equivalence `e`. -/
 @[to_dual existing]
-/--
-Definition of `_root_.CategoryTheory.Limits.IsColimit.whiskerEquivalence` / `_root_.CategoryTheory.Limits.IsColimit.whiskerEquivalence` 的定义
+/-
+**CategoryTheory.Limits.IsLimit._root_.CategoryTheory.Limits.IsColimit.whiskerEq
+uivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.CategoryTheory.Limits.IsColimit.whiskerEquivalence
-  signature: {s : Cocone F}
-  body: IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).toAdjunction P
-
-中文:
-定义 _root_.范畴论.Limits.是余极限.whiskerEquivalence
-  签名: {s : 余锥 F}
-  定义体: IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).toAdjunction P
-
-Depends on / 依赖: Cocone, Cocone.whiskeringEquivalence, IsColimit, IsColimit.ofLeftAdjoint, ofLeftAdjoint, toAdjunction, whiskeringEquivalence
+--- 原说明 ---
+If `s : Cocone F` is a colimit cocone, so is `s` whiskered by an equivalence `e`
+.
 -/
 def _root_.CategoryTheory.Limits.IsColimit.whiskerEquivalence {s : Cocone F}
     (P : IsColimit s) (e : K ≌ J) : IsColimit (s.whisker e.functor) :=
   IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).toAdjunction P
 
-/--
-Definition of `ofWhiskerEquivalence` / `ofWhiskerEquivalence` 的定义
+/-- If `s : Cone F` whiskered by an equivalence `e` is a limit cone, so is `s`. -/
+/-
+**CategoryTheory.Limits.IsLimit.ofWhiskerEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.IsLimit`。
+形式化陈述：ofWhiskerEquivalence {s : Cone F} (e : K ≌ J) (P : IsLimit (s.whisker e.fu
+nctor)) : IsLimit s
+参数：e : K ≌ J；P : IsLimit (s.whisker e.functor)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofWhiskerEquivalence
-  signature: {s : Cone F} (e : K ≌ J) (P : IsLimit (s.whisker e.functor))
-  body: equivIsoLimit ((Cone.whiskeringEquivalence e).unitIso.app s).symm
-    (ofRightAdjoint (Cone.whiskeringEquivalence e).toAdjunction P)
-
-中文:
-定义 ofWhiskerEquivalence
-  签名: {s : 锥 F} (e : K ≌ J) (P : 是极限 (s.whisker e.functor))
-  定义体: equivIsoLimit ((Cone.whiskeringEquivalence e).unitIso.app s).symm
-    (ofRightAdjoint (Cone.whiskeringEquivalence e).toAdjunction P)
-
-Depends on / 依赖: Cone.whiskeringEquivalence, equivIsoLimit, ofRightAdjoint, toAdjunction, unitIso, unitIso.app, whiskeringEquivalence
+--- 原说明 ---
+If `s : Cone F` whiskered by an equivalence `e` is a limit cone, so is `s`.
 -/
 def ofWhiskerEquivalence {s : Cone F} (e : K ≌ J) (P : IsLimit (s.whisker e.functor)) : IsLimit s :=
   equivIsoLimit ((Cone.whiskeringEquivalence e).unitIso.app s).symm
@@ -1167,22 +1050,14 @@ def ofWhiskerEquivalence {s : Cone F} (e : K ≌ J) (P : IsLimit (s.whisker e.fu
 
 /-- If `s : Cocone F` whiskered by an equivalence `e` is a colimit cocone, so is `s`. -/
 @[to_dual existing]
-/--
-Definition of `_root_.CategoryTheory.Limits.IsColimit.ofWhiskerEquivalence` / `_root_.CategoryTheory.Limits.IsColimit.ofWhiskerEquivalence` 的定义
+/-
+**CategoryTheory.Limits.IsLimit._root_.CategoryTheory.Limits.IsColimit.ofWhisker
+Equivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.IsLimit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.CategoryTheory.Limits.IsColimit.ofWhiskerEquivalence
-  signature: {s : Cocone F} (e : K ≌ J)
-  body: IsColimit.equivIsoColimit ((Cocone.whiskeringEquivalence e).unitIso.app s).symm
-    (IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).symm.toAdjunction P)
-
-中文:
-定义 _root_.范畴论.Limits.是余极限.ofWhiskerEquivalence
-  签名: {s : 余锥 F} (e : K ≌ J)
-  定义体: IsColimit.equivIsoColimit ((Cocone.whiskeringEquivalence e).unitIso.app s).symm
-    (IsColimit.ofLeftAdjoint (Cocone.whiskeringEquivalence e).symm.toAdjunction P)
-
-Depends on / 依赖: Cocone, Cocone.whiskeringEquivalence, IsColimit, IsColimit.equivIsoColimit, IsColimit.ofLeftAdjoint, equivIsoColimit, ofLeftAdjoint, symm.toAdjunction, toAdjunction, unitIso, unitIso.app, whiskeringEquivalence
+--- 原说明 ---
+If `s : Cocone F` whiskered by an equivalence `e` is a colimit cocone, so is `s`
+.
 -/
 def _root_.CategoryTheory.Limits.IsColimit.ofWhiskerEquivalence {s : Cocone F} (e : K ≌ J)
     (P : IsColimit (s.whisker e.functor)) : IsColimit s :=
@@ -1192,40 +1067,31 @@ def _root_.CategoryTheory.Limits.IsColimit.ofWhiskerEquivalence {s : Cocone F} (
 /-- Given an equivalence of diagrams `e`, `s` is a limit cone iff `s.whisker e.functor` is. -/
 @[to_dual
 /-- Given an equivalence of diagrams `e`, `s` is a colimit cocone iff `s.whisker e.functor` is. -/]
-/--
-Definition of `whiskerEquivalenceEquiv` / `whiskerEquivalenceEquiv` 的定义
-
-English:
-definition whiskerEquivalenceEquiv
-  signature: {s : Cone F} (e : K ≌ J)
-  body: ⟨fun h => h.whiskerEquivalence e, ofWhiskerEquivalence e, by cat_disch, by cat_disch⟩
-
-中文:
-定义 whiskerEquivalenceEquiv
-  签名: {s : 锥 F} (e : K ≌ J)
-  定义体: ⟨fun h => h.whiskerEquivalence e, ofWhiskerEquivalence e, by cat_disch, by cat_disch⟩
-
-Depends on / 依赖: cat_disch, h.whiskerEquivalence, ofWhiskerEquivalence, whiskerEquivalence
+/-
+**CategoryTheory.Limits.IsLimit.whiskerEquivalenceEquiv** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：whiskerEquivalenceEquiv {s : Cone F} (e : K ≌ J) : IsLimit s ≃ IsLimit (s.
+whisker e.functor)
+参数：e : K ≌ J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def whiskerEquivalenceEquiv {s : Cone F} (e : K ≌ J) : IsLimit s ≃ IsLimit (s.whisker e.functor) :=
   ⟨fun h => h.whiskerEquivalence e, ofWhiskerEquivalence e, by cat_disch, by cat_disch⟩
 
 /-- A limit cone extended by an isomorphism is a limit cone. -/
 @[to_dual /-- A colimit cocone extended by an isomorphism is a colimit cocone. -/]
-/--
-Definition of `extendIso` / `extendIso` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.extendIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits.IsLimit`。
+形式化陈述：extendIso {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit s) :
+ IsLimit (s.extend i)
+参数：i : X ⟶ s.pt；hs : IsLimit s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendIso
-  signature: {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit s)
-  body: IsLimit.ofIsoLimit hs (Cone.extendIso s (asIso' i))
-
-中文:
-定义 extendIso
-  签名: {s : 锥 F} {X : C} (i : X ⟶ s.pt) [是同构 i] (hs : 是极限 s)
-  定义体: IsLimit.ofIsoLimit hs (Cone.extendIso s (asIso' i))
-
-Depends on / 依赖: Cone.extendIso, IsLimit, IsLimit.ofIsoLimit, extendIso, ofIsoLimit
+--- 原说明 ---
+A limit cone extended by an isomorphism is a limit cone.
 -/
 def extendIso {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit s) :
     IsLimit (s.extend i) :=
@@ -1233,20 +1099,17 @@ def extendIso {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit s) :
 
 /-- A cone is a limit cone if its extension by an isomorphism is. -/
 @[to_dual /-- A cocone is a colimit cocone if its extension by an isomorphism is. -/]
-/--
-Definition of `ofExtendIso` / `ofExtendIso` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.ofExtendIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.IsLimit`。
+形式化陈述：ofExtendIso {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit (s
+.extend i)) : IsLimit s
+参数：i : X ⟶ s.pt；hs : IsLimit (s.extend i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofExtendIso
-  signature: {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit (s.extend i))
-  body: IsLimit.ofIsoLimit hs (Cone.extendIso s (asIso' i)).symm
-
-中文:
-定义 ofExtendIso
-  签名: {s : 锥 F} {X : C} (i : X ⟶ s.pt) [是同构 i] (hs : 是极限 (s.extend i))
-  定义体: IsLimit.ofIsoLimit hs (Cone.extendIso s (asIso' i)).symm
-
-Depends on / 依赖: Cone.extendIso, IsLimit, IsLimit.ofIsoLimit, extendIso, ofIsoLimit
+--- 原说明 ---
+A cone is a limit cone if its extension by an isomorphism is.
 -/
 def ofExtendIso {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit (s.extend i)) :
     IsLimit s :=
@@ -1254,20 +1117,17 @@ def ofExtendIso {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] (hs : IsLimit (s
 
 /-- A cone is a limit cone iff its extension by an isomorphism is. -/
 @[to_dual /-- A cocone is a colimit cocone iff its extension by an isomorphism is. -/]
-/--
-Definition of `extendIsoEquiv` / `extendIsoEquiv` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.extendIsoEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.IsLimit`。
+形式化陈述：extendIsoEquiv {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] : IsLimit s ≃
+ IsLimit (s.extend i)
+参数：i : X ⟶ s.pt。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendIsoEquiv
-  signature: {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i]
-  body: equivOfSubsingletonOfSubsingleton (extendIso i) (ofExtendIso i)
-
-中文:
-定义 extendIsoEquiv
-  签名: {s : 锥 F} {X : C} (i : X ⟶ s.pt) [是同构 i]
-  定义体: equivOfSubsingletonOfSubsingleton (extendIso i) (ofExtendIso i)
-
-Depends on / 依赖: equivOfSubsingletonOfSubsingleton, extendIso, ofExtendIso
+--- 原说明 ---
+A cone is a limit cone iff its extension by an isomorphism is.
 -/
 def extendIsoEquiv {s : Cone F} {X : C} (i : X ⟶ s.pt) [IsIso i] :
     IsLimit s ≃ IsLimit (s.extend i) :=
@@ -1294,44 +1154,15 @@ This is the most general form of uniqueness of cocone points,
 allowing relabelling of both the indexing category (up to equivalence)
 and the functor (up to natural isomorphism).
 -/]
-/--
-Definition of `conePointsIsoOfEquivalence` / `conePointsIsoOfEquivalence` 的定义
-
-English:
-definition conePointsIsoOfEquivalence
-  signature: {F : J ⥤ C} {s : Cone F} {G : K ⥤ C} {t : Cone G} (P : IsLimit s)
-  body: let w' : e.inverse ⋙ F ≅ G := (isoWhiskerLeft e.inverse w).symm ≪≫ invFunIdAssoc e G
-  { hom := Q.lift ((Cone.equivalenceOfReindexing e.symm w').functor.obj s)
-    inv := P.lift ((Cone.equivalenceOfReindexing e w).functor.obj t)
-    hom_inv_id := by
-      apply hom_ext P; intro j
-      dsimp [w']
-      simp only [Limits.Cone.whisker_π, Limits.Cone.postcompose_obj_π, fac, whiskerLeft_app,
-        assoc, id_comp, invFunIdAssoc_hom_app, fac_assoc, NatTrans.comp_app]
-      rw [counit_app_functor]; rw [← Functor.comp_map]; rw [← w.inv.naturality_assoc]
-      simp
-    inv_hom_id := by
-      apply hom_ext Q
-      cat_disch }
-
-中文:
-定义 conePointsIsoOfEquivalence
-  签名: {F : J ⥤ C} {s : 锥 F} {G : K ⥤ C} {t : 锥 G} (P : 是极限 s)
-  定义体: let w' : e.inverse ⋙ F ≅ G := (isoWhiskerLeft e.inverse w).symm ≪≫ invFunIdAssoc e G
-  { hom := Q.lift ((Cone.equivalenceOfReindexing e.symm w').functor.obj s)
-    inv := P.lift ((Cone.equivalenceOfReindexing e w).functor.obj t)
-    hom_inv_id := by
-      apply hom_ext P; intro j
-      dsimp [w']
-      simp only [Limits.Cone.whisker_π, Limits.Cone.postcompose_obj_π, fac, whiskerLeft_app,
-        assoc, id_comp, invFunIdAssoc_hom_app, fac_assoc, NatTrans.comp_app]
-      rw [counit_app_functor]; rw [← Functor.comp_map]; rw [← w.inv.naturality_assoc]
-      simp
-    inv_hom_id := by
-      apply hom_ext Q
-      cat_disch }
-
-Depends on / 依赖: Cone.equivalenceOfReindexing, Functor, Functor.comp_map, L.map, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s_assoc, Limits, Limits.Cone.postcompose_obj_, Limits.Cone.whisker_, MorphismProperty, MorphismProperty.LeftFraction.map_eq_iff, NatTrans, NatTrans.comp_app, P.lift, Q.lift, W.LeftFraction, cancel_mono, choose_spec, comp_app
+/-
+**CategoryTheory.Limits.IsLimit.conePointsIsoOfEquivalence** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：conePointsIsoOfEquivalence {F : J ⥤ C} {s : Cone F} {G : K ⥤ C} {t : Cone 
+G} (P : IsLimit s) (Q : IsLimit t) (e : J ≌ K) (w : e.functor ⋙ G ≅ F) : s.pt ≅ 
+t.pt
+参数：P : IsLimit s；Q : IsLimit t；e : J ≌ K；w : e.functor ⋙ G ≅ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def conePointsIsoOfEquivalence {F : J ⥤ C} {s : Cone F} {G : K ⥤ C} {t : Cone G} (P : IsLimit s)
     (Q : IsLimit t) (e : J ≌ K) (w : e.functor ⋙ G ≅ F) : s.pt ≅ t.pt :=
@@ -1343,7 +1174,7 @@ def conePointsIsoOfEquivalence {F : J ⥤ C} {s : Cone F} {G : K ⥤ C} {t : Con
       dsimp [w']
       simp only [Limits.Cone.whisker_π, Limits.Cone.postcompose_obj_π, fac, whiskerLeft_app,
         assoc, id_comp, invFunIdAssoc_hom_app, fac_assoc, NatTrans.comp_app]
-      rw [counit_app_functor]; rw [← Functor.comp_map]; rw [← w.inv.naturality_assoc]
+      rw [counit_app_functor, ← Functor.comp_map, ← w.inv.naturality_assoc]
       simp
     inv_hom_id := by
       apply hom_ext Q
@@ -1359,30 +1190,14 @@ a cone on `F` with cone point `W`. -/
 @[to_dual (attr := simps apply)
 /-- The universal property of a colimit cocone: a map `X ⟶ W` is the same as
 a cocone on `F` with cone point `W`. -/]
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
-
-English:
-definition homEquiv
-  signature: (h : IsLimit t) {W : C}
-  body: (t.extend f).π
-  invFun π := h.lift (Cone.mk _ π)
-  left_inv f := h.hom_ext (by simp)
-  right_inv π := by cat_disch
-
-@[to_dual (attr := reassoc (attr := simp)) ι_app_homEquiv_symm]
-
-中文:
-定义 homEquiv
-  签名: (h : 是极限 t) {W : C}
-  定义体: (t.extend f).π
-  invFun π := h.lift (Cone.mk _ π)
-  left_inv f := h.hom_ext (by simp)
-  right_inv π := by cat_disch
-
-@[to_dual (attr := reassoc (attr := simp)) ι_app_homEquiv_symm]
-
-Depends on / 依赖: extend, t.extend
+/-
+**CategoryTheory.Limits.IsLimit.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.IsLimit`。
+形式化陈述：homEquiv (h : IsLimit t) {W : C} : (W ⟶ t.pt) ≃ ((Functor.const J).obj W ⟶
+ F) where toFun f
+参数：h : IsLimit t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def homEquiv (h : IsLimit t) {W : C} : (W ⟶ t.pt) ≃ ((Functor.const J).obj W ⟶ F) where
   toFun f := (t.extend f).π
@@ -1391,26 +1206,10 @@ def homEquiv (h : IsLimit t) {W : C} : (W ⟶ t.pt) ≃ ((Functor.const J).obj W
   right_inv π := by cat_disch
 
 @[to_dual (attr := reassoc (attr := simp)) ι_app_homEquiv_symm]
-/--
-lemma `homEquiv_symm_π_app` / 引理 `homEquiv_symm_π_app`
-
-English:
-lemma homEquiv_symm_π_app
-  statement: (h : IsLimit t) {W : C}
-  proof: by
-  simp [homEquiv]
-
-@[to_dual]
-
-中文:
-引理 homEquiv_symm_π_app
-  结论: (h : 是极限 t) {W : C}
-  证明: by
-  simp [homEquiv]
-
-@[to_dual]
-
-Depends on / 依赖: L.map, W.LeftFraction, add.map, cancel_mono, choose_spec, fst.map, homEquiv, inverts, map_eq_iff, nth_, snd.map
+/-
+**CategoryTheory.Limits.IsLimit.homEquiv_symm_** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Limits.IsLimit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homEquiv_symm_π_app (h : IsLimit t) {W : C}
     (f : (const J).obj W ⟶ F) (j : J) :
@@ -1418,20 +1217,45 @@ lemma homEquiv_symm_π_app (h : IsLimit t) {W : C}
   simp [homEquiv]
 
 @[to_dual]
-/--
-lemma `homEquiv_symm_naturality` / 引理 `homEquiv_symm_naturality`
-
-English:
-lemma homEquiv_symm_naturality
-  statement: (h : IsLimit t) {W W' : C}
-  proof: h.homEquiv.injective (by aesop)
-
-中文:
-引理 homEquiv_symm_naturality
-  结论: (h : 是极限 t) {W W' : C}
-  证明: h.homEquiv.injective (by aesop)
-
-Depends on / 依赖: h.homEquiv.injective, homEquiv, injective, symm_add
+/-
+**CategoryTheory.Limits.IsLimit.homEquiv_symm_naturality** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Limits.IsLimit`。
+形式化陈述：homEquiv_symm_naturality (h : IsLimit t) {W W' : C} (f : (const J).obj W ⟶
+ F) (g : W' ⟶ W) : h.homEquiv.symm ((Functor.const _).map g ≫ f) = g ≫ h.homEqui
+v.symm f
+参数：h : IsLimit t；f : (const J).obj W ⟶ F；g : W' ⟶ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.IsLimit.homEquiv_apply`：∀ {J : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Categor
+y.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.Limits.IsLimit.homEquiv_symm_π_app`：homEquiv_symm_π_app (
+h : IsLimit t) {W : C} (f : (const J).obj W ⟶ F) (j : J) : h.homEquiv.symm f ≫ t
+.π.app j = f.app j
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homEquiv_symm_naturality (h : IsLimit t) {W W' : C}
     (f : (const J).obj W ⟶ F) (g : W' ⟶ W) :
@@ -1443,92 +1267,71 @@ a cone on `F` with cone point `W`. -/
 @[to_dual
 /-- The universal property of a colimit cocone: a map `X ⟶ W` is the same as
 a cocone on `F` with cone point `W`. -/]
-/--
-Definition of `homIso` / `homIso` 的定义
-
-English:
-definition homIso
-  signature: (h : IsLimit t) (W : C)
-  body: Equiv.toIso (Equiv.ulift.trans h.homEquiv)
-
-中文:
-定义 homIso
-  签名: (h : 是极限 t) (W : C)
-  定义体: Equiv.toIso (Equiv.ulift.trans h.homEquiv)
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.trans, L.map, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s, Limits, Limits.zero_comp, add_zero, cancel_mono, exists_leftFraction, h.homEquiv, homEquiv, map_comp, map_comp_map_s, zero_comp
+/-
+**CategoryTheory.Limits.IsLimit.homIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.IsLimit`。
+形式化陈述：homIso (h : IsLimit t) (W : C) : ULift.{u₁} (W ⟶ t.pt : Type v₃) ≅ (const 
+J).obj W ⟶ F
+参数：h : IsLimit t；W : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 def homIso (h : IsLimit t) (W : C) : ULift.{u₁} (W ⟶ t.pt : Type v₃) ≅ (const J).obj W ⟶ F :=
   Equiv.toIso (Equiv.ulift.trans h.homEquiv)
 
 -- TODO: `to_dual` doesn't yet know that it shouldn't translate the category on `Type _`.
 @[simp]
-/--
-theorem `homIso_hom` / 定理 `homIso_hom`
-
-English:
-theorem homIso_hom
-  given: (h : IsLimit t) {W : C}
-  proof: rfl
-
-中文:
-定理 homIso_hom
-  条件: (h : 是极限 t) {W : C}
-  证明: rfl
+/-
+**CategoryTheory.Limits.IsLimit.homIso_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.IsLimit`。
+形式化陈述：homIso_hom (h : IsLimit t) {W : C} : (IsLimit.homIso h W).hom = ↾fun f => 
+(t.extend f.down).π
+参数：h : IsLimit t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem homIso_hom (h : IsLimit t) {W : C} :
-    (IsLimit.homIso h W).hom = ↾fun f => (t.extend f.down).π :=
+    (IsLimit.homIso h W).hom = ↾fun f ↦ (t.extend f.down).π :=
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `natIso` / `natIso` 的定义
+/-- The limit of `F` represents the functor taking `W` to
+  the set of cones on `F` with cone point `W`. -/
+/-
+**CategoryTheory.Limits.IsLimit.natIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.IsLimit`。
+形式化陈述：natIso (h : IsLimit t) : yoneda.obj t.pt ⋙ uliftFunctor.{u₁} ≅ F.cones
+参数：h : IsLimit t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natIso
-  signature: (h : IsLimit t)
-  body: by
-  refine NatIso.ofComponents (fun W => IsLimit.homIso h (unop W))
-
-中文:
-定义 natIso
-  签名: (h : 是极限 t)
-  定义体: by
-  refine NatIso.ofComponents (fun W => IsLimit.homIso h (unop W))
-
-Depends on / 依赖: IsLimit, IsLimit.homIso, L.map, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s, Limits, Limits.zero_comp, NatIso, NatIso.ofComponents, cancel_mono, exists_leftFraction, homIso, map_comp, map_comp_map_s, neg_add_cancel, ofComponents, zero_comp
+--- 原说明 ---
+The limit of `F` represents the functor taking `W` to
+  the set of cones on `F` with cone point `W`.
 -/
 def natIso (h : IsLimit t) : yoneda.obj t.pt ⋙ uliftFunctor.{u₁} ≅ F.cones := by
   refine NatIso.ofComponents (fun W => IsLimit.homIso h (unop W))
 
-/--
-Definition of `homIso'` / `homIso'` 的定义
+/-- Another, more explicit, formulation of the universal property of a limit cone.
+See also `homIso`. -/
+/-
+**CategoryTheory.Limits.IsLimit.homIso'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.IsLimit`。
+形式化陈述：homIso' (h : IsLimit t) (W : C) : (ULift.{u₁} (W ⟶ t.pt : Type v₃)) ≅ { p 
+: forall j, W ⟶ F.obj j // forall {j j'} (f : j ⟶ j'), p j ≫ F.map f = p j' }
+参数：h : IsLimit t；W : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homIso'
-  signature: (h : IsLimit t) (W : C)
-  body: h.homIso W ≪≫
-    { hom := ↾fun π =>
-        ⟨fun j => π.app j, fun f => by convert! ← (π.naturality f).symm; apply id_comp⟩
-      inv := ↾fun p =>
-        { app := fun j => p.1 j
-          naturality := fun j j' f => by dsimp; rw [id_comp]; exact (p.2 f).symm } }
-
-中文:
-定义 homIso'
-  签名: (h : 是极限 t) (W : C)
-  定义体: h.homIso W ≪≫
-    { hom := ↾fun π =>
-        ⟨fun j => π.app j, fun f => by convert! ← (π.naturality f).symm; apply id_comp⟩
-      inv := ↾fun p =>
-        { app := fun j => p.1 j
-          naturality := fun j j' f => by dsimp; rw [id_comp]; exact (p.2 f).symm } }
-
-Depends on / 依赖: add_assoc, convert, forgetFst, forgetThd, h.homIso, homIso, id_comp, naturality
+--- 原说明 ---
+Another, more explicit, formulation of the universal property of a limit cone.
+See also `homIso`.
 -/
 def homIso' (h : IsLimit t) (W : C) :
     (ULift.{u₁} (W ⟶ t.pt : Type v₃)) ≅
-      { p : forall j, W ⟶ F.obj j // forall {j j'} (f : j ⟶ j'), p j ≫ F.map f = p j' } :=
+      { p : ∀ j, W ⟶ F.obj j // ∀ {j j'} (f : j ⟶ j'), p j ≫ F.map f = p j' } :=
   h.homIso W ≪≫
     { hom := ↾fun π =>
         ⟨fun j => π.app j, fun f => by convert! ← (π.naturality f).symm; apply id_comp⟩
@@ -1542,36 +1345,20 @@ can be lifted to maps of `C`. -/
 @[to_dual /-- If `G : C → D` is a faithful functor which sends t to a colimit cocone,
 then it suffices to check that the induced maps for the image of t
 can be lifted to maps of `C`. -/]
-/--
-Definition of `ofFaithful` / `ofFaithful` 的定义
-
-English:
-definition ofFaithful
-  signature: {t : Cone F} {D : Type u₄} [Category.{v₄} D] (G : C ⥤ D) [G.Faithful]
-  body: { lift
-    fac := fun s j => by apply G.map_injective; rw [G.map_comp, h]; apply ht.fac
-    uniq := fun s m w => by
-      apply G.map_injective; rw [h]
-      refine ht.uniq (mapCone G s) _ fun j => ?_
-      convert! ← congrArg (fun f => G.map f) (w j)
-      apply G.map_comp }
-
-中文:
-定义 ofFaithful
-  签名: {t : 锥 F} {D : 类型u₄} [范畴.{v₄} D] (G : C ⥤ D) [G.忠实]
-  定义体: { lift
-    fac := fun s j => by apply G.map_injective; rw [G.map_comp, h]; apply ht.fac
-    uniq := fun s m w => by
-      apply G.map_injective; rw [h]
-      refine ht.uniq (mapCone G s) _ fun j => ?_
-      convert! ← congrArg (fun f => G.map f) (w j)
-      apply G.map_comp }
-
-Depends on / 依赖: G.map, G.map_comp, G.map_injective, LeftFraction, LeftFraction.map_com, LeftFraction.map_comp_map_eq_map, RightFraction, RightFraction.mk, W.comp_mem, comp_mem, convert, exists_leftFraction, ht.fac, ht.uniq, mapCone, map_com, map_comp, map_comp_map_eq_map, map_injective, rotate_left
+/-
+**CategoryTheory.Limits.IsLimit.ofFaithful** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.IsLimit`。
+形式化陈述：ofFaithful {t : Cone F} {D : Type u₄} [Category.{v₄} D] (G : C ⥤ D) [G.Fai
+thful] (ht : IsLimit (mapCone G t)) (lift : forall s : Cone F, s.pt ⟶ t.pt) (h :
+ forall s, G.map (lift s) = ht.lift (mapCone G s)) : IsLimit t
+参数：G : C ⥤ D；ht : IsLimit (mapCone G t)；lift : forall s : Cone F, s.pt ⟶ t.pt；h 
+: forall s, G.map (lift s) = ht.lift (mapCone G s)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofFaithful {t : Cone F} {D : Type u₄} [Category.{v₄} D] (G : C ⥤ D) [G.Faithful]
-    (ht : IsLimit (mapCone G t)) (lift : forall s : Cone F, s.pt ⟶ t.pt)
-    (h : forall s, G.map (lift s) = ht.lift (mapCone G s)) : IsLimit t :=
+    (ht : IsLimit (mapCone G t)) (lift : ∀ s : Cone F, s.pt ⟶ t.pt)
+    (h : ∀ s, G.map (lift s) = ht.lift (mapCone G s)) : IsLimit t :=
   { lift
     fac := fun s j => by apply G.map_injective; rw [G.map_comp, h]; apply ht.fac
     uniq := fun s m w => by
@@ -1587,24 +1374,14 @@ def ofFaithful {t : Cone F} {D : Type u₄} [Category.{v₄} D] (G : C ⥤ D) [G
 /-- If `F` and `G` are naturally isomorphic, then `F.mapCocone c` being a colimit implies
 `G.mapCocone c` is also a colimit.
 -/]
-/--
-Definition of `mapConeEquiv` / `mapConeEquiv` 的定义
-
-English:
-definition mapConeEquiv
-  signature: {D : Type u₄} [Category.{v₄} D] {K : J ⥤ C} {F G : C ⥤ D} (h : F ≅ G) {c : Cone K}
-  body: by
-  apply postcomposeInvEquiv (isoWhiskerLeft K h :) (mapCone G c) _
-  apply t.ofIsoLimit (postcomposeWhiskerLeftMapCone h.symm c).symm
-
-中文:
-定义 mapConeEquiv
-  签名: {D : 类型u₄} [范畴.{v₄} D] {K : J ⥤ C} {F G : C ⥤ D} (h : F ≅ G) {c : 锥 K}
-  定义体: by
-  apply postcomposeInvEquiv (isoWhiskerLeft K h :) (mapCone G c) _
-  apply t.ofIsoLimit (postcomposeWhiskerLeftMapCone h.symm c).symm
-
-Depends on / 依赖: h.symm, isoWhiskerLeft, mapCone, ofIsoLimit, postcomposeInvEquiv, postcomposeWhiskerLeftMapCone, t.ofIsoLimit
+/-
+**CategoryTheory.Limits.IsLimit.mapConeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.IsLimit`。
+形式化陈述：mapConeEquiv {D : Type u₄} [Category.{v₄} D] {K : J ⥤ C} {F G : C ⥤ D} (h 
+: F ≅ G) {c : Cone K} (t : IsLimit (mapCone F c)) : IsLimit (mapCone G c)
+参数：h : F ≅ G；t : IsLimit (mapCone F c)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mapConeEquiv {D : Type u₄} [Category.{v₄} D] {K : J ⥤ C} {F G : C ⥤ D} (h : F ≅ G) {c : Cone K}
     (t : IsLimit (mapCone F c)) : IsLimit (mapCone G c) := by
@@ -1612,34 +1389,24 @@ def mapConeEquiv {D : Type u₄} [Category.{v₄} D] {K : J ⥤ C} {F G : C ⥤ 
   apply t.ofIsoLimit (postcomposeWhiskerLeftMapCone h.symm c).symm
 
 -- TODO: `to_dual` doesn't yet know that it shouldn't translate the category on `Type _`.
-/--
-Definition of `isoUniqueConeMorphism` / `isoUniqueConeMorphism` 的定义
+/-- A cone is a limit cone exactly if
+there is a unique cone morphism from any other cone.
+-/
+/-
+**CategoryTheory.Limits.IsLimit.isoUniqueConeMorphism** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits.IsLimit`。
+形式化陈述：isoUniqueConeMorphism {t : Cone F} : IsLimit t ≅ forall s, Unique (s ⟶ t) 
+where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoUniqueConeMorphism
-  signature: {t : Cone F}
-  body: ↾fun h s =>
-    { default := h.liftConeMorphism s
-      uniq := fun _ => h.uniq_cone_morphism }
-  inv := ↾fun h =>
-    { lift := fun s => (h s).default.hom
-      uniq := fun s f w => congrArg ConeMorphism.hom ((h s).uniq ⟨f, w⟩) }
-
-中文:
-定义 isoUniqueConeMorphism
-  签名: {t : 锥 F}
-  定义体: ↾fun h s =>
-    { default := h.liftConeMorphism s
-      uniq := fun _ => h.uniq_cone_morphism }
-  inv := ↾fun h =>
-    { lift := fun s => (h s).default.hom
-      uniq := fun s f w => congrArg ConeMorphism.hom ((h s).uniq ⟨f, w⟩) }
-
-Depends on / 依赖: L.map, LeftFraction, LeftFraction.map_ofHom, W.id_mem, id_mem, map_ofHom
+--- 原说明 ---
+A cone is a limit cone exactly if
+there is a unique cone morphism from any other cone.
 -/
 def isoUniqueConeMorphism {t : Cone F} :
-    IsLimit t ≅ forall s, Unique (s ⟶ t) where
-  hom := ↾fun h s =>
+    IsLimit t ≅ ∀ s, Unique (s ⟶ t) where
+  hom := ↾fun h s ↦
     { default := h.liftConeMorphism s
       uniq := fun _ => h.uniq_cone_morphism }
   inv := ↾fun h =>
@@ -1653,78 +1420,50 @@ variable {X : C} (h : F.cones.RepresentableBy X)
 /-- If `F.cones` is represented by `X`, each morphism `f : Y ⟶ X` gives a cone with cone point
 `Y`. -/
 @[implicit_reducible]
-/--
-Definition of `coneOfHom` / `coneOfHom` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.OfNatIso.coneOfHom** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.IsLimit.OfNatIso`。
+形式化陈述：coneOfHom {Y : C} (f : Y ⟶ X) : Cone F where pt
+参数：f : Y ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneOfHom
-  signature: {Y : C} (f : Y ⟶ X)
-  body: Y
-  π := h.homEquiv f
-
-中文:
-定义 coneOfHom
-  签名: {Y : C} (f : Y ⟶ X)
-  定义体: Y
-  π := h.homEquiv f
+--- 原说明 ---
+If `F.cones` is represented by `X`, each morphism `f : Y ⟶ X` gives a cone with 
+cone point
+`Y`.
 -/
 def coneOfHom {Y : C} (f : Y ⟶ X) : Cone F where
   pt := Y
   π := h.homEquiv f
 
-/--
-Definition of `homOfCone` / `homOfCone` 的定义
+/-- If `F.cones` is represented by `X`, each cone `s` gives a morphism `s.pt ⟶ X`. -/
+/-
+**CategoryTheory.Limits.IsLimit.OfNatIso.homOfCone** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.IsLimit.OfNatIso`。
+形式化陈述：homOfCone (s : Cone F) : s.pt ⟶ X
+参数：s : Cone F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition homOfCone
-  signature: (s : Cone F)
-  body: h.homEquiv.symm s.π
-
-@[simp]
-
-中文:
-定义 homOfCone
-  签名: (s : 锥 F)
-  定义体: h.homEquiv.symm s.π
-
-@[simp]
-
-Depends on / 依赖: h.homEquiv.symm, homEquiv
+--- 原说明 ---
+If `F.cones` is represented by `X`, each cone `s` gives a morphism `s.pt ⟶ X`.
 -/
 def homOfCone (s : Cone F) : s.pt ⟶ X :=
   h.homEquiv.symm s.π
 
 @[simp]
-/--
-theorem `coneOfHom_homOfCone` / 定理 `coneOfHom_homOfCone`
-
-English:
-theorem coneOfHom_homOfCone
-  given: (s : Cone F)
-  statement: coneOfHom h (homOfCone h s) = s
-  proof: by
-  dsimp [coneOfHom, homOfCone]
-  match s with
-  | .mk s_pt s_π =>
-    congr
-    exact h.homEquiv.apply_symm_apply s_π
-
-@[simp]
-
-中文:
-定理 coneOfHom_homOfCone
-  条件: (s : 锥 F)
-  结论: coneOfHom h (homOfCone h s) = s
-  证明: by
-  dsimp [coneOfHom, homOfCone]
-  match s with
-  | .mk s_pt s_π =>
-    congr
-    exact h.homEquiv.apply_symm_apply s_π
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, coneOfHom, h.homEquiv.apply_symm_apply, homEquiv, homOfCone, s_pt
+/-
+**CategoryTheory.Limits.IsLimit.OfNatIso.coneOfHom_homOfCone** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits.IsLimit.OfNatIso`。
+形式化陈述：coneOfHom_homOfCone (s : Cone F) : coneOfHom h (homOfCone h s) = s
+参数：s : Cone F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 theorem coneOfHom_homOfCone (s : Cone F) : coneOfHom h (homOfCone h s) = s := by
   dsimp [coneOfHom, homOfCone]
@@ -1734,24 +1473,22 @@ theorem coneOfHom_homOfCone (s : Cone F) : coneOfHom h (homOfCone h s) = s := by
     exact h.homEquiv.apply_symm_apply s_π
 
 @[simp]
-/--
-theorem `homOfCone_coneOfHom` / 定理 `homOfCone_coneOfHom`
-
-English:
-theorem homOfCone_coneOfHom
-  given: {Y : C} (f : Y ⟶ X)
-  statement: homOfCone h (coneOfHom h f) = f
-  proof: by
-  simp [coneOfHom, homOfCone]
-
-中文:
-定理 homOfCone_coneOfHom
-  条件: {Y : C} (f : Y ⟶ X)
-  结论: homOfCone h (coneOfHom h f) = f
-  证明: by
-  simp [coneOfHom, homOfCone]
-
-Depends on / 依赖: coneOfHom, homOfCone
+/-
+**CategoryTheory.Limits.IsLimit.OfNatIso.homOfCone_coneOfHom** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits.IsLimit.OfNatIso`。
+形式化陈述：homOfCone_coneOfHom {Y : C} (f : Y ⟶ X) : homOfCone h (coneOfHom h f) = f
+参数：f : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homOfCone_coneOfHom {Y : C} (f : Y ⟶ X) : homOfCone h (coneOfHom h f) = f := by
   simp [coneOfHom, homOfCone]
@@ -1759,48 +1496,45 @@ theorem homOfCone_coneOfHom {Y : C} (f : Y ⟶ X) : homOfCone h (coneOfHom h f) 
 /-- If `F.cones` is represented by `X`, the cone corresponding to the identity morphism on `X`
 will be a limit cone. -/
 @[implicit_reducible]
-/--
-Definition of `limitCone` / `limitCone` 的定义
+/-
+**CategoryTheory.Limits.IsLimit.OfNatIso.limitCone** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.IsLimit.OfNatIso`。
+形式化陈述：limitCone : Cone F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitCone
-  signature: : Cone F
-  body: coneOfHom h (𝟙 X)
-
-中文:
-定义 limitCone
-  签名: : 锥 F
-  定义体: coneOfHom h (𝟙 X)
-
-Depends on / 依赖: coneOfHom
+--- 原说明 ---
+If `F.cones` is represented by `X`, the cone corresponding to the identity morph
+ism on `X`
+will be a limit cone.
 -/
 def limitCone : Cone F :=
   coneOfHom h (𝟙 X)
 
-/--
-theorem `coneOfHom_fac` / 定理 `coneOfHom_fac`
+/-- If `F.cones` is represented by `X`, the cone corresponding to a morphism `f : Y ⟶ X` is
+the limit cone extended by `f`. -/
+/-
+**CategoryTheory.Limits.IsLimit.OfNatIso.coneOfHom_fac** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits.IsLimit.OfNatIso`。
+形式化陈述：coneOfHom_fac {Y : C} (f : Y ⟶ X) : coneOfHom h f = (limitCone h).extend f
+参数：f : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_comp`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type 
+v)} {Y : C}   (self : F.RepresentableBy Y)…
 
-English:
-theorem coneOfHom_fac
-  given: {Y : C} (f : Y ⟶ X)
-  statement: coneOfHom h f = (limitCone h).extend f
-  proof: by
-  dsimp [coneOfHom, limitCone, Cone.extend]
-  congr
-  conv_lhs => rw [← Category.comp_id f]
-  exact h.homEquiv_comp f (𝟙 X)
-
-中文:
-定理 coneOfHom_fac
-  条件: {Y : C} (f : Y ⟶ X)
-  结论: coneOfHom h f = (limitCone h).extend f
-  证明: by
-  dsimp [coneOfHom, limitCone, Cone.extend]
-  congr
-  conv_lhs => rw [← Category.comp_id f]
-  exact h.homEquiv_comp f (𝟙 X)
-
-Depends on / 依赖: Category, Category.comp_id, Cone.extend, comp_id, coneOfHom, conv_lhs, extend, h.homEquiv_comp, homEquiv_comp, limitCone
+--- 原说明 ---
+If `F.cones` is represented by `X`, the cone corresponding to a morphism `f : Y 
+⟶ X` is
+the limit cone extended by `f`.
 -/
 theorem coneOfHom_fac {Y : C} (f : Y ⟶ X) : coneOfHom h f = (limitCone h).extend f := by
   dsimp [coneOfHom, limitCone, Cone.extend]
@@ -1808,28 +1542,30 @@ theorem coneOfHom_fac {Y : C} (f : Y ⟶ X) : coneOfHom h f = (limitCone h).exte
   conv_lhs => rw [← Category.comp_id f]
   exact h.homEquiv_comp f (𝟙 X)
 
-/--
-theorem `cone_fac` / 定理 `cone_fac`
+/-- If `F.cones` is represented by `X`, any cone is the extension of the limit cone by the
+corresponding morphism. -/
+/-
+**CategoryTheory.Limits.IsLimit.OfNatIso.cone_fac** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits.IsLimit.OfNatIso`。
+形式化陈述：cone_fac (s : Cone F) : (limitCone h).extend (homOfCone h s) = s
+参数：s : Cone F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsLimit.OfNatIso.coneOfHom_homOfCone`：coneOfHom_ho
+mOfCone (s : Cone F) : coneOfHom h (homOfCone h s) = s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.IsLimit.OfNatIso.homOfCone_coneOfHom`：homOfCone_co
+neOfHom {Y : C} (f : Y ⟶ X) : homOfCone h (coneOfHom h f) = f
+· 使用定理 `CategoryTheory.Limits.IsLimit.OfNatIso.coneOfHom_fac`：coneOfHom_fac {Y :
+ C} (f : Y ⟶ X) : coneOfHom h f = (limitCone h).extend f
 
-English:
-theorem cone_fac
-  given: (s : Cone F)
-  statement: (limitCone h).extend (homOfCone h s) = s
-  proof: by
-  rw [← coneOfHom_homOfCone h s]
-  conv_lhs => simp only [homOfCone_coneOfHom]
-  apply (coneOfHom_fac _ _).symm
-
-中文:
-定理 cone_fac
-  条件: (s : 锥 F)
-  结论: (limitCone h).extend (homOfCone h s) = s
-  证明: by
-  rw [← coneOfHom_homOfCone h s]
-  conv_lhs => simp only [homOfCone_coneOfHom]
-  apply (coneOfHom_fac _ _).symm
-
-Depends on / 依赖: coneOfHom_fac, coneOfHom_homOfCone, conv_lhs, homOfCone_coneOfHom
+--- 原说明 ---
+If `F.cones` is represented by `X`, any cone is the extension of the limit cone 
+by the
+corresponding morphism.
 -/
 theorem cone_fac (s : Cone F) : (limitCone h).extend (homOfCone h s) = s := by
   rw [← coneOfHom_homOfCone h s]
@@ -1842,44 +1578,22 @@ section
 
 open OfNatIso
 
-/--
-Definition of `ofRepresentableBy` / `ofRepresentableBy` 的定义
+/-- If `F.cones` is representable, then the cone corresponding to the identity morphism on
+the representing object is a limit cone.
+-/
+/-
+**CategoryTheory.Limits.IsLimit.ofRepresentableBy** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.IsLimit`。
+形式化陈述：ofRepresentableBy {X : C} (h : F.cones.RepresentableBy X) : IsLimit (limit
+Cone h) where lift s
+参数：h : F.cones.RepresentableBy X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRepresentableBy
-  signature: {X : C} (h : F.cones.RepresentableBy X)
-  body: homOfCone h s
-  fac s j := by
-    have h := cone_fac h s
-    cases s
-    injection h with h₁ h₂
-    simp only at h₂
-    conv_rhs => rw [← h₂]
-    rfl
-  uniq s m w := by
-    rw [← homOfCone_coneOfHom h m]
-    congr
-    rw [coneOfHom_fac]
-    dsimp [Cone.extend]; cases s; congr with j; exact w j
-
-中文:
-定义 ofRepresentableBy
-  签名: {X : C} (h : F.cones.可表示 X)
-  定义体: homOfCone h s
-  fac s j := by
-    have h := cone_fac h s
-    cases s
-    injection h with h₁ h₂
-    simp only at h₂
-    conv_rhs => rw [← h₂]
-    rfl
-  uniq s m w := by
-    rw [← homOfCone_coneOfHom h m]
-    congr
-    rw [coneOfHom_fac]
-    dsimp [Cone.extend]; cases s; congr with j; exact w j
-
-Depends on / 依赖: homOfCone
+--- 原说明 ---
+If `F.cones` is representable, then the cone corresponding to the identity morph
+ism on
+the representing object is a limit cone.
 -/
 def ofRepresentableBy {X : C} (h : F.cones.RepresentableBy X) : IsLimit (limitCone h) where
   lift s := homOfCone h s
@@ -1898,26 +1612,22 @@ def ofRepresentableBy {X : C} (h : F.cones.RepresentableBy X) : IsLimit (limitCo
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `representableBy` / `representableBy` 的定义
+/-- Given a limit cone, `F.cones` is representable by the point of the cone. -/
+/-
+**CategoryTheory.Limits.IsLimit.representableBy** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.IsLimit`。
+形式化陈述：representableBy (hc : IsLimit t) : F.cones.RepresentableBy t.pt where homE
+quiv
+参数：hc : IsLimit t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition representableBy
-  signature: (hc : IsLimit t)
-  body: hc.homEquiv
-homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
-
-中文:
-定义 representableBy
-  签名: (hc : 是极限 t)
-  定义体: hc.homEquiv
-homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
-
-Depends on / 依赖: hc.homEquiv, homEquiv
+--- 原说明 ---
+Given a limit cone, `F.cones` is representable by the point of the cone.
 -/
 def representableBy (hc : IsLimit t) : F.cones.RepresentableBy t.pt where
   homEquiv := hc.homEquiv
-homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
+  homEquiv_comp {X X'} f g := NatTrans.ext <| funext fun j ↦ by simp
 
 end
 
@@ -1931,70 +1641,58 @@ variable {t : Cocone F}
 
 
 @[simp]
-/--
-theorem `homIso_hom` / 定理 `homIso_hom`
-
-English:
-theorem homIso_hom
-  given: (h : IsColimit t) {W : C}
-  proof: rfl
-
-中文:
-定理 homIso_hom
-  条件: (h : 是余极限 t) {W : C}
-  证明: rfl
+/-
+**CategoryTheory.Limits.IsColimit.homIso_hom** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.IsColimit`。
+形式化陈述：homIso_hom (h : IsColimit t) {W : C} : (IsColimit.homIso h W).hom = ↾fun f
+ => (t.extend f.down).ι
+参数：h : IsColimit t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem homIso_hom (h : IsColimit t) {W : C} :
-    (IsColimit.homIso h W).hom = ↾fun f => (t.extend f.down).ι :=
+    (IsColimit.homIso h W).hom = ↾fun f ↦ (t.extend f.down).ι :=
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `natIso` / `natIso` 的定义
+/-- The colimit of `F` represents the functor taking `W` to
+  the set of cocones on `F` with cone point `W`. -/
+/-
+**CategoryTheory.Limits.IsColimit.natIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.IsColimit`。
+形式化陈述：natIso (h : IsColimit t) : coyoneda.obj (op t.pt) ⋙ uliftFunctor.{u₁} ≅ F.
+cocones
+参数：h : IsColimit t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natIso
-  signature: (h : IsColimit t)
-  body: NatIso.ofComponents (IsColimit.homIso h)
-
-中文:
-定义 natIso
-  签名: (h : 是余极限 t)
-  定义体: NatIso.ofComponents (IsColimit.homIso h)
-
-Depends on / 依赖: IsColimit, IsColimit.homIso, NatIso, NatIso.ofComponents, homIso, ofComponents
+--- 原说明 ---
+The colimit of `F` represents the functor taking `W` to
+  the set of cocones on `F` with cone point `W`.
 -/
 def natIso (h : IsColimit t) : coyoneda.obj (op t.pt) ⋙ uliftFunctor.{u₁} ≅ F.cocones :=
   NatIso.ofComponents (IsColimit.homIso h)
 
-/--
-Definition of `homIso'` / `homIso'` 的定义
+/-- Another, more explicit, formulation of the universal property of a colimit cocone.
+See also `homIso`. -/
+/-
+**CategoryTheory.Limits.IsColimit.homIso'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits.IsColimit`。
+形式化陈述：homIso' (h : IsColimit t) (W : C) : (ULift.{u₁} (t.pt ⟶ W : Type v₃)) ≅ { 
+p : forall j, F.obj j ⟶ W // forall {j j' : J} (f : j ⟶ j'), F.map f ≫ p j' = p 
+j }
+参数：h : IsColimit t；W : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homIso'
-  signature: (h : IsColimit t) (W : C)
-  body: h.homIso W ≪≫
-    { hom := ↾fun ι =>
-        ⟨fun j => ι.app j, fun {j} {j'} f => by convert! ← ι.naturality f; apply comp_id⟩
-      inv := ↾fun p =>
-        { app := fun j => p.1 j
-          naturality := fun j j' f => by dsimp; rw [comp_id]; exact p.2 f } }
-
-中文:
-定义 homIso'
-  签名: (h : 是余极限 t) (W : C)
-  定义体: h.homIso W ≪≫
-    { hom := ↾fun ι =>
-        ⟨fun j => ι.app j, fun {j} {j'} f => by convert! ← ι.naturality f; apply comp_id⟩
-      inv := ↾fun p =>
-        { app := fun j => p.1 j
-          naturality := fun j j' f => by dsimp; rw [comp_id]; exact p.2 f } }
-
-Depends on / 依赖: comp_id, convert, h.homIso, homIso, naturality
+--- 原说明 ---
+Another, more explicit, formulation of the universal property of a colimit cocon
+e.
+See also `homIso`.
 -/
 def homIso' (h : IsColimit t) (W : C) :
     (ULift.{u₁} (t.pt ⟶ W : Type v₃)) ≅
-      { p : forall j, F.obj j ⟶ W // forall {j j' : J} (f : j ⟶ j'), F.map f ≫ p j' = p j } :=
+      { p : ∀ j, F.obj j ⟶ W // ∀ {j j' : J} (f : j ⟶ j'), F.map f ≫ p j' = p j } :=
   h.homIso W ≪≫
     { hom := ↾fun ι =>
         ⟨fun j => ι.app j, fun {j} {j'} f => by convert! ← ι.naturality f; apply comp_id⟩
@@ -2003,35 +1701,27 @@ def homIso' (h : IsColimit t) (W : C) :
           naturality := fun j j' f => by dsimp; rw [comp_id]; exact p.2 f } }
 
 
-/--
-Definition of `isoUniqueCoconeMorphism` / `isoUniqueCoconeMorphism` 的定义
+/-- A cocone is a colimit cocone exactly if
+there is a unique cocone morphism from any other cocone.
+-/
+/-
+**CategoryTheory.Limits.IsColimit.isoUniqueCoconeMorphism** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Limits.IsColimit`。
+形式化陈述：isoUniqueCoconeMorphism {t : Cocone F} : IsColimit t ≅ forall s, Unique (t
+ ⟶ s) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoUniqueCoconeMorphism
-  signature: {t : Cocone F}
-  body: ↾fun h s =>
-    { default := h.descCoconeMorphism s
-      uniq := fun _ => h.uniq_cocone_morphism }
-  inv := ↾fun h =>
-    { desc := fun s => (h s).default.hom
-      uniq := fun s f w => congrArg CoconeMorphism.hom ((h s).uniq ⟨f, w⟩) }
-
-中文:
-定义 isoUniqueCoconeMorphism
-  签名: {t : 余锥 F}
-  定义体: ↾fun h s =>
-    { default := h.descCoconeMorphism s
-      uniq := fun _ => h.uniq_cocone_morphism }
-  inv := ↾fun h =>
-    { desc := fun s => (h s).default.hom
-      uniq := fun s f w => congrArg CoconeMorphism.hom ((h s).uniq ⟨f, w⟩) }
+--- 原说明 ---
+A cocone is a colimit cocone exactly if
+there is a unique cocone morphism from any other cocone.
 -/
 def isoUniqueCoconeMorphism {t : Cocone F} :
-    IsColimit t ≅ forall s, Unique (t ⟶ s) where
-  hom := ↾fun h s =>
+    IsColimit t ≅ ∀ s, Unique (t ⟶ s) where
+  hom := ↾fun h s ↦
     { default := h.descCoconeMorphism s
       uniq := fun _ => h.uniq_cocone_morphism }
-  inv := ↾fun h =>
+  inv := ↾fun h ↦
     { desc := fun s => (h s).default.hom
       uniq := fun s f w => congrArg CoconeMorphism.hom ((h s).uniq ⟨f, w⟩) }
 
@@ -2042,78 +1732,52 @@ variable {X : C} (h : F.cocones.CorepresentableBy X)
 /-- If `F.cocones` is corepresented by `X`, each morphism `f : X ⟶ Y` gives a cocone with cone
 point `Y`. -/
 @[implicit_reducible]
-/--
-Definition of `coconeOfHom` / `coconeOfHom` 的定义
+/-
+**CategoryTheory.Limits.IsColimit.OfNatIso.coconeOfHom** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.IsColimit.OfNatIso`。
+形式化陈述：coconeOfHom {Y : C} (f : X ⟶ Y) : Cocone F where pt
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeOfHom
-  signature: {Y : C} (f : X ⟶ Y)
-  body: Y
-  ι := h.homEquiv f
-
-中文:
-定义 coconeOfHom
-  签名: {Y : C} (f : X ⟶ Y)
-  定义体: Y
-  ι := h.homEquiv f
+--- 原说明 ---
+If `F.cocones` is corepresented by `X`, each morphism `f : X ⟶ Y` gives a cocone
+ with cone
+point `Y`.
 -/
 def coconeOfHom {Y : C} (f : X ⟶ Y) : Cocone F where
   pt := Y
   ι := h.homEquiv f
 
-/--
-Definition of `homOfCocone` / `homOfCocone` 的定义
+/-- If `F.cocones` is corepresented by `X`, each cocone `s` gives a morphism `X ⟶ s.pt`. -/
+/-
+**CategoryTheory.Limits.IsColimit.OfNatIso.homOfCocone** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.IsColimit.OfNatIso`。
+形式化陈述：homOfCocone (s : Cocone F) : X ⟶ s.pt
+参数：s : Cocone F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition homOfCocone
-  signature: (s : Cocone F)
-  body: h.homEquiv.symm s.ι
-
-@[simp]
-
-中文:
-定义 homOfCocone
-  签名: (s : 余锥 F)
-  定义体: h.homEquiv.symm s.ι
-
-@[simp]
-
-Depends on / 依赖: h.homEquiv.symm, homEquiv
+--- 原说明 ---
+If `F.cocones` is corepresented by `X`, each cocone `s` gives a morphism `X ⟶ s.
+pt`.
 -/
 def homOfCocone (s : Cocone F) : X ⟶ s.pt :=
   h.homEquiv.symm s.ι
 
 @[simp]
-/--
-theorem `coconeOfHom_homOfCocone` / 定理 `coconeOfHom_homOfCocone`
-
-English:
-theorem coconeOfHom_homOfCocone
-  given: (s : Cocone F)
-  statement: coconeOfHom h (homOfCocone h s) = s
-  proof: by
-  dsimp [coconeOfHom, homOfCocone]
-  match s with
-  | .mk s_pt s_ι =>
-    congr
-    exact h.homEquiv.apply_symm_apply s_ι
-
-@[simp]
-
-中文:
-定理 coconeOfHom_homOfCocone
-  条件: (s : 余锥 F)
-  结论: coconeOfHom h (homOfCocone h s) = s
-  证明: by
-  dsimp [coconeOfHom, homOfCocone]
-  match s with
-  | .mk s_pt s_ι =>
-    congr
-    exact h.homEquiv.apply_symm_apply s_ι
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, coconeOfHom, h.homEquiv.apply_symm_apply, homEquiv, homOfCocone, s_pt
+/-
+**CategoryTheory.Limits.IsColimit.OfNatIso.coconeOfHom_homOfCocone** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Limits.IsColimit.OfNatIso`。
+形式化陈述：coconeOfHom_homOfCocone (s : Cocone F) : coconeOfHom h (homOfCocone h s) =
+ s
+参数：s : Cocone F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 theorem coconeOfHom_homOfCocone (s : Cocone F) : coconeOfHom h (homOfCocone h s) = s := by
   dsimp [coconeOfHom, homOfCocone]
@@ -2123,24 +1787,23 @@ theorem coconeOfHom_homOfCocone (s : Cocone F) : coconeOfHom h (homOfCocone h s)
     exact h.homEquiv.apply_symm_apply s_ι
 
 @[simp]
-/--
-theorem `homOfCocone_coconeOfHom` / 定理 `homOfCocone_coconeOfHom`
-
-English:
-theorem homOfCocone_coconeOfHom
-  given: {Y : C} (f : X ⟶ Y)
-  statement: homOfCocone h (coconeOfHom h f) = f
-  proof: by
-  simp [homOfCocone, coconeOfHom]
-
-中文:
-定理 homOfCocone_coconeOfHom
-  条件: {Y : C} (f : X ⟶ Y)
-  结论: homOfCocone h (coconeOfHom h f) = f
-  证明: by
-  simp [homOfCocone, coconeOfHom]
-
-Depends on / 依赖: coconeOfHom, homOfCocone
+/-
+**CategoryTheory.Limits.IsColimit.OfNatIso.homOfCocone_coconeOfHom** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Limits.IsColimit.OfNatIso`。
+形式化陈述：homOfCocone_coconeOfHom {Y : C} (f : X ⟶ Y) : homOfCocone h (coconeOfHom h
+ f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem homOfCocone_coconeOfHom {Y : C} (f : X ⟶ Y) : homOfCocone h (coconeOfHom h f) = f := by
   simp [homOfCocone, coconeOfHom]
@@ -2148,48 +1811,46 @@ theorem homOfCocone_coconeOfHom {Y : C} (f : X ⟶ Y) : homOfCocone h (coconeOfH
 /-- If `F.cocones` is corepresented by `X`, the cocone corresponding to the identity morphism on `X`
 will be a colimit cocone. -/
 @[implicit_reducible]
-/--
-Definition of `colimitCocone` / `colimitCocone` 的定义
+/-
+**CategoryTheory.Limits.IsColimit.OfNatIso.colimitCocone** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Limits.IsColimit.OfNatIso`。
+形式化陈述：colimitCocone : Cocone F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitCocone
-  signature: : Cocone F
-  body: coconeOfHom h (𝟙 X)
-
-中文:
-定义 colimitCocone
-  签名: : 余锥 F
-  定义体: coconeOfHom h (𝟙 X)
-
-Depends on / 依赖: coconeOfHom
+--- 原说明 ---
+If `F.cocones` is corepresented by `X`, the cocone corresponding to the identity
+ morphism on `X`
+will be a colimit cocone.
 -/
 def colimitCocone : Cocone F :=
   coconeOfHom h (𝟙 X)
 
-/--
-theorem `coconeOfHom_fac` / 定理 `coconeOfHom_fac`
+/-- If `F.cocones` is corepresented by `X`, the cocone corresponding to a morphism `f : Y ⟶ X` is
+the colimit cocone extended by `f`. -/
+/-
+**CategoryTheory.Limits.IsColimit.OfNatIso.coconeOfHom_fac** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Limits.IsColimit.OfNatIso`。
+形式化陈述：coconeOfHom_fac {Y : C} (f : X ⟶ Y) : coconeOfHom h f = (colimitCocone h).
+extend f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_comp`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type 
+v)} {X : C}   (self : F.CorepresentableBy X)…
 
-English:
-theorem coconeOfHom_fac
-  given: {Y : C} (f : X ⟶ Y)
-  statement: coconeOfHom h f = (colimitCocone h).extend f
-  proof: by
-  dsimp [coconeOfHom, colimitCocone, Cocone.extend]
-  congr
-  conv_lhs => rw [← Category.id_comp f]
-  exact h.homEquiv_comp f (𝟙 X)
-
-中文:
-定理 coconeOfHom_fac
-  条件: {Y : C} (f : X ⟶ Y)
-  结论: coconeOfHom h f = (colimitCocone h).extend f
-  证明: by
-  dsimp [coconeOfHom, colimitCocone, Cocone.extend]
-  congr
-  conv_lhs => rw [← Category.id_comp f]
-  exact h.homEquiv_comp f (𝟙 X)
-
-Depends on / 依赖: Category, Category.id_comp, Cocone, Cocone.extend, coconeOfHom, colimitCocone, conv_lhs, extend, h.homEquiv_comp, homEquiv_comp, id_comp
+--- 原说明 ---
+If `F.cocones` is corepresented by `X`, the cocone corresponding to a morphism `
+f : Y ⟶ X` is
+the colimit cocone extended by `f`.
 -/
 theorem coconeOfHom_fac {Y : C} (f : X ⟶ Y) : coconeOfHom h f = (colimitCocone h).extend f := by
   dsimp [coconeOfHom, colimitCocone, Cocone.extend]
@@ -2197,28 +1858,30 @@ theorem coconeOfHom_fac {Y : C} (f : X ⟶ Y) : coconeOfHom h f = (colimitCocone
   conv_lhs => rw [← Category.id_comp f]
   exact h.homEquiv_comp f (𝟙 X)
 
-/--
-theorem `cocone_fac` / 定理 `cocone_fac`
+/-- If `F.cocones` is corepresented by `X`, any cocone is the extension of the colimit cocone by the
+corresponding morphism. -/
+/-
+**CategoryTheory.Limits.IsColimit.OfNatIso.cocone_fac** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits.IsColimit.OfNatIso`。
+形式化陈述：cocone_fac (s : Cocone F) : (colimitCocone h).extend (homOfCocone h s) = s
+参数：s : Cocone F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsColimit.OfNatIso.coconeOfHom_homOfCocone`：cocone
+OfHom_homOfCocone (s : Cocone F) : coconeOfHom h (homOfCocone h s) = s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.IsColimit.OfNatIso.homOfCocone_coconeOfHom`：homOfC
+ocone_coconeOfHom {Y : C} (f : X ⟶ Y) : homOfCocone h (coconeOfHom h f) = f
+· 使用定理 `CategoryTheory.Limits.IsColimit.OfNatIso.coconeOfHom_fac`：coconeOfHom_fa
+c {Y : C} (f : X ⟶ Y) : coconeOfHom h f = (colimitCocone h).extend f
 
-English:
-theorem cocone_fac
-  given: (s : Cocone F)
-  statement: (colimitCocone h).extend (homOfCocone h s) = s
-  proof: by
-  rw [← coconeOfHom_homOfCocone h s]
-  conv_lhs => simp only [homOfCocone_coconeOfHom]
-  apply (coconeOfHom_fac _ _).symm
-
-中文:
-定理 cocone_fac
-  条件: (s : 余锥 F)
-  结论: (colimitCocone h).extend (homOfCocone h s) = s
-  证明: by
-  rw [← coconeOfHom_homOfCocone h s]
-  conv_lhs => simp only [homOfCocone_coconeOfHom]
-  apply (coconeOfHom_fac _ _).symm
-
-Depends on / 依赖: coconeOfHom_fac, coconeOfHom_homOfCocone, conv_lhs, homOfCocone_coconeOfHom
+--- 原说明 ---
+If `F.cocones` is corepresented by `X`, any cocone is the extension of the colim
+it cocone by the
+corresponding morphism.
 -/
 theorem cocone_fac (s : Cocone F) : (colimitCocone h).extend (homOfCocone h s) = s := by
   rw [← coconeOfHom_homOfCocone h s]
@@ -2231,44 +1894,22 @@ section
 
 open OfNatIso
 
-/--
-Definition of `ofCorepresentableBy` / `ofCorepresentableBy` 的定义
+/-- If `F.cocones` is corepresentable, then the cocone corresponding to the identity morphism on
+the representing object is a colimit cocone.
+-/
+/-
+**CategoryTheory.Limits.IsColimit.ofCorepresentableBy** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits.IsColimit`。
+形式化陈述：ofCorepresentableBy {X : C} (h : F.cocones.CorepresentableBy X) : IsColimi
+t (colimitCocone h) where desc s
+参数：h : F.cocones.CorepresentableBy X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCorepresentableBy
-  signature: {X : C} (h : F.cocones.CorepresentableBy X)
-  body: homOfCocone h s
-  fac s j := by
-    have h := cocone_fac h s
-    cases s
-    injection h with h₁ h₂
-    simp only at h₂
-    conv_rhs => rw [← h₂]
-    rfl
-  uniq s m w := by
-    rw [← homOfCocone_coconeOfHom h m]
-    congr
-    rw [coconeOfHom_fac]
-    dsimp [Cocone.extend]; cases s; congr with j; exact w j
-
-中文:
-定义 ofCorepresentableBy
-  签名: {X : C} (h : F.cocones.余representableBy X)
-  定义体: homOfCocone h s
-  fac s j := by
-    have h := cocone_fac h s
-    cases s
-    injection h with h₁ h₂
-    simp only at h₂
-    conv_rhs => rw [← h₂]
-    rfl
-  uniq s m w := by
-    rw [← homOfCocone_coconeOfHom h m]
-    congr
-    rw [coconeOfHom_fac]
-    dsimp [Cocone.extend]; cases s; congr with j; exact w j
-
-Depends on / 依赖: homOfCocone
+--- 原说明 ---
+If `F.cocones` is corepresentable, then the cocone corresponding to the identity
+ morphism on
+the representing object is a colimit cocone.
 -/
 def ofCorepresentableBy {X : C} (h : F.cocones.CorepresentableBy X) :
     IsColimit (colimitCocone h) where
@@ -2288,29 +1929,27 @@ def ofCorepresentableBy {X : C} (h : F.cocones.CorepresentableBy X) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `corepresentableBy` / `corepresentableBy` 的定义
+/-- Given a colimit cocone, `F.cocones` is corepresentable by the point of the cocone. -/
+/-
+**CategoryTheory.Limits.IsColimit.corepresentableBy** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.IsColimit`。
+形式化陈述：corepresentableBy (hc : IsColimit t) : F.cocones.CorepresentableBy t.pt wh
+ere homEquiv
+参数：hc : IsColimit t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition corepresentableBy
-  signature: (hc : IsColimit t)
-  body: hc.homEquiv
-homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
-
-中文:
-定义 corepresentableBy
-  签名: (hc : 是余极限 t)
-  定义体: hc.homEquiv
-homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
-
-Depends on / 依赖: hc.homEquiv, homEquiv
+--- 原说明 ---
+Given a colimit cocone, `F.cocones` is corepresentable by the point of the cocon
+e.
 -/
 def corepresentableBy (hc : IsColimit t) : F.cocones.CorepresentableBy t.pt where
   homEquiv := hc.homEquiv
-homEquiv_comp {X X'} f g := NatTrans.ext funext fun j => by simp
+  homEquiv_comp {X X'} f g := NatTrans.ext <| funext fun j ↦ by simp
 
 end
 
 end IsColimit
 
 end CategoryTheory.Limits
+

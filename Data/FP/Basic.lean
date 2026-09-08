@@ -21,267 +21,159 @@ public import Mathlib.Algebra.Order.Group.Unbundled.Basic
 -- TODO add docs and remove `@[nolint docBlame]`
 
 @[nolint docBlame]
-/--
-Definition of `Int.shift2` / `Int.shift2` 的定义
-
-English:
-definition Int.shift2
-  signature: (a b : Nat)
-
-中文:
-定义 整数.shift2
-  签名: (a b : 自然数)
+/-
+**Int.shift2** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：ℕ → ℕ → ℤ → ℕ × ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Int.shift2 (a b : Nat) : Int -> Nat × Nat
+def Int.shift2 (a b : ℕ) : ℤ → ℕ × ℕ
   | Int.ofNat e => (a <<< e, b)
   | Int.negSucc e => (a, b <<< e.succ)
 
 namespace FP
 
 @[nolint docBlame]
-/--
-Inductive type `RMode` / 归纳类型 `RMode`
-
-English:
-inductive RMode
-  constructors (1):
-    - NE: -- round to nearest even
-
-中文:
-归纳类型 RMode
-  构造子 (1 个):
-    - NE: -- round to nearest even
+/-
+**FP.RMode** 是 Mathlib 中的一个归纳类型，位于命名空间 `FP`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 inductive RMode
   | NE -- round to nearest even
   deriving Inhabited
 
 @[nolint docBlame]
-/--
-Definition of `FloatCfg` / `FloatCfg` 的定义
-
-English:
-class FloatCfg
-  parameters: where
-  axioms and operations (3):
-    - (prec(emax) : Nat)
-    - precPos : 0 < prec
-    - precMax : prec <= emax
-
-中文:
-类 FloatCfg
-  参数: where
-  公理与运算 (3 个):
-    - (prec(emax) : 自然数)
-    - precPos : 0 < prec
-    - precMax : prec <= emax
+/-
+**FP.FloatCfg** 是 Mathlib 中的一个归纳类型，位于命名空间 `FP`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class FloatCfg where
-  (prec emax : Nat)
+  (prec emax : ℕ)
   precPos : 0 < prec
-  precMax : prec <= emax
+  precMax : prec ≤ emax
 attribute [nolint docBlame] FloatCfg.prec FloatCfg.emax FloatCfg.precPos FloatCfg.precMax
 
 variable [C : FloatCfg]
 
 @[nolint docBlame]
-/--
-Definition of `prec` / `prec` 的定义
-
-English:
-definition prec
-  body: C.prec
-
-@[nolint docBlame]
-
-中文:
-定义 prec
-  定义体: C.prec
-
-@[nolint docBlame]
-
-Depends on / 依赖: C.prec
+/-
+**FP.prec** 是 Mathlib 中的一个定义，位于命名空间 `FP`。
+形式化陈述：prec
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def prec :=
   C.prec
 
 @[nolint docBlame]
-/--
-Definition of `emax` / `emax` 的定义
-
-English:
-definition emax
-  body: C.emax
-
-@[nolint docBlame]
-
-中文:
-定义 emax
-  定义体: C.emax
-
-@[nolint docBlame]
-
-Depends on / 依赖: C.emax
+/-
+**FP.emax** 是 Mathlib 中的一个定义，位于命名空间 `FP`。
+形式化陈述：emax
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def emax :=
   C.emax
 
 @[nolint docBlame]
-/--
-Definition of `emin` / `emin` 的定义
-
-English:
-definition emin
-  signature: : Int
-  body: 1 - C.emax
-
-@[nolint docBlame]
-
-中文:
-定义 emin
-  签名: : 整数
-  定义体: 1 - C.emax
-
-@[nolint docBlame]
-
-Depends on / 依赖: C.emax
+/-
+**FP.emin** 是 Mathlib 中的一个定义，位于命名空间 `FP`。
+形式化陈述：emin : Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def emin : Int :=
+def emin : ℤ :=
   1 - C.emax
 
 @[nolint docBlame]
-/--
-Definition of `ValidFinite` / `ValidFinite` 的定义
-
-English:
-definition ValidFinite
-  signature: (e : Int) (m : Nat)
-  body: emin <= e + prec - 1 ∧ e + prec - 1 <= emax ∧ e = max (e + m.size - prec) emin
-deriving Decidable
-
-@[nolint docBlame]
-
-中文:
-定义 ValidFinite
-  签名: (e : 整数) (m : 自然数)
-  定义体: emin <= e + prec - 1 ∧ e + prec - 1 <= emax ∧ e = max (e + m.size - prec) emin
-deriving Decidable
-
-@[nolint docBlame]
-
-Depends on / 依赖: m.size
+/-
+**FP.ValidFinite** 是 Mathlib 中的一个定义，位于命名空间 `FP`。
+形式化陈述：ValidFinite (e : Int) (m : Nat) : Prop
+参数：e : Int；m : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ValidFinite (e : Int) (m : Nat) : Prop :=
-  emin <= e + prec - 1 ∧ e + prec - 1 <= emax ∧ e = max (e + m.size - prec) emin
+def ValidFinite (e : ℤ) (m : ℕ) : Prop :=
+  emin ≤ e + prec - 1 ∧ e + prec - 1 ≤ emax ∧ e = max (e + m.size - prec) emin
 deriving Decidable
 
 @[nolint docBlame]
-/--
-Inductive type `Float` / 归纳类型 `Float`
-
-English:
-inductive Float
-  constructors (3):
-    - inf: Bool -> Float
-    - nan: Float
-    - finite: Bool -> forall e m, ValidFinite e m -> Float
-
-中文:
-归纳类型 Float
-  构造子 (3 个):
-    - inf: 布尔值 -> Float
-    - nan: Float
-    - finite: 布尔值 -> 对任意 e m, ValidFinite e m -> Float
+/-
+**FP.Float** 是 Mathlib 中的一个归纳类型，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 inductive Float
-  | inf : Bool -> Float
+  | inf : Bool → Float
   | nan : Float
-  | finite : Bool -> forall e m, ValidFinite e m -> Float
+  | finite : Bool → ∀ e m, ValidFinite e m → Float
 
 @[nolint docBlame]
-/--
-Definition of `Float.isFinite` / `Float.isFinite` 的定义
-
-English:
-definition Float.isFinite
-  signature: : Float -> Bool
-
-中文:
-定义 Float.isFinite
-  签名: : Float -> 布尔值
+/-
+**FP.Float.isFinite** 是 Mathlib 中的一个定义，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.Float → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Float.isFinite : Float -> Bool
+def Float.isFinite : Float → Bool
   | Float.finite _ _ _ _ => true
   | _ => false
 
 @[nolint docBlame]
-/--
-Definition of `toRat` / `toRat` 的定义
-
-English:
-definition toRat
-  signature: : forall f : Float, f.isFinite -> Rat
-  body: Int.shift2 m 1 e
-    let r := mkRat n d
-    if s then -r else r
-
-中文:
-定义 toRat
-  签名: : 对任意 f : Float, f.isFinite -> 有理数
-  定义体: Int.shift2 m 1 e
-    let r := mkRat n d
-    if s then -r else r
-
-Depends on / 依赖: Int.shift2, shift2
+/-
+**FP.toRat** 是 Mathlib 中的一个定义，位于命名空间 `FP`。
+形式化陈述：toRat : forall f : Float, f.isFinite -> Rat | Float.finite s e m _, _ => l
+et (n, d)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def toRat : forall f : Float, f.isFinite -> Rat
+def toRat : ∀ f : Float, f.isFinite → ℚ
   | Float.finite s e m _, _ =>
     let (n, d) := Int.shift2 m 1 e
     let r := mkRat n d
     if s then -r else r
-
-/--
-theorem `Float.Zero.valid` / 定理 `Float.Zero.valid`
-
-English:
-theorem Float.Zero.valid
-  statement: ValidFinite emin 0
-  proof: ⟨by
-    rw [add_sub_assoc]
-    apply le_add_of_nonneg_right
-    apply sub_nonneg_of_le
-    apply Int.ofNat_le_ofNat_of_le
-    exact C.precPos,
-    suffices prec <= 2 * emax by
-      rw [← Int.ofNat_le] at this
-      rw [← sub_nonneg] at *
-      simp only [emin, emax] at *
-      lia
-    le_trans C.precMax (Nat.le_mul_of_pos_left _ Nat.zero_lt_two),
-    by (simp [sub_eq_add_neg, Int.natCast_nonneg])⟩
-
-@[nolint docBlame]
-
-中文:
-定理 Float.零.valid
-  结论: ValidFinite emin 0
-  证明: ⟨by
-    rw [add_sub_assoc]
-    apply le_add_of_nonneg_right
-    apply sub_nonneg_of_le
-    apply Int.ofNat_le_ofNat_of_le
-    exact C.precPos,
-    suffices prec <= 2 * emax by
-      rw [← Int.ofNat_le] at this
-      rw [← sub_nonneg] at *
-      simp only [emin, emax] at *
-      lia
-    le_trans C.precMax (Nat.le_mul_of_pos_left _ Nat.zero_lt_two),
-    by (simp [sub_eq_add_neg, Int.natCast_nonneg])⟩
-
-@[nolint docBlame]
-
-Depends on / 依赖: C.precMax, C.precPos, Int.natCast_nonneg, Int.ofNat_le, Int.ofNat_le_ofNat_of_le, Nat.le_mul_of_pos_left, Nat.zero_lt_two, add_sub_assoc, le_add_of_nonneg_right, le_mul_of_pos_left, le_trans, natCast_nonneg, ofNat_le, ofNat_le_ofNat_of_le, precMax, precPos, sub_eq_add_neg, sub_nonneg, sub_nonneg_of_le, zero_lt_two
+/-
+**FP.Float.Zero.valid** 是 Mathlib 中的一个定理，位于命名空间 `FP.Float.Zero`。
+形式化陈述：∀ [C : FP.FloatCfg], FP.ValidFinite FP.emin 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_assoc`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b c : G), a +
+ b - c = a + (b - c)
+· 使用定理 `le_add_of_nonneg_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : LE α] [AddLeftMono α] {a b : α}, 0 ≤ b → a ≤ a + b
+· 使用定理 `sub_nonneg_of_le`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [Ad
+dRightMono α] {a b : α}, b ≤ a → 0 ≤ a - b
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Int.ofNat_le_ofNat_of_le`：∀ {m n : ℕ}, m ≤ n → ↑m ≤ ↑n
+· 使用定理 `FP.FloatCfg.precPos`：∀ [self : FP.FloatCfg], 0 < FP.FloatCfg.prec
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `FP.FloatCfg.precMax`：∀ [self : FP.FloatCfg], FP.FloatCfg.prec ≤ FP.Float
+Cfg.emax
+· 使用定理 `Nat.le_mul_of_pos_left`：∀ {n : ℕ} (m : ℕ), 0 < n → m ≤ n * m
+· 使用定理 `Nat.zero_lt_two`：0 < 2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `Int.ofNat_le`：∀ {m n : ℕ}, ↑m ≤ ↑n ↔ m ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Float.Zero.valid : ValidFinite emin 0 :=
   ⟨by
@@ -290,7 +182,7 @@ theorem Float.Zero.valid : ValidFinite emin 0 :=
     apply sub_nonneg_of_le
     apply Int.ofNat_le_ofNat_of_le
     exact C.precPos,
-    suffices prec <= 2 * emax by
+    suffices prec ≤ 2 * emax by
       rw [← Int.ofNat_le] at this
       rw [← sub_nonneg] at *
       simp only [emin, emax] at *
@@ -299,134 +191,84 @@ theorem Float.Zero.valid : ValidFinite emin 0 :=
     by (simp [sub_eq_add_neg, Int.natCast_nonneg])⟩
 
 @[nolint docBlame]
-/--
-Definition of `Float.zero` / `Float.zero` 的定义
-
-English:
-definition Float.zero
-  signature: (s : Bool)
-  body: Float.finite s emin 0 Float.Zero.valid
-
-中文:
-定义 Float.zero
-  签名: (s : 布尔值)
-  定义体: Float.finite s emin 0 Float.Zero.valid
-
-Depends on / 依赖: Float.Zero.valid, Float.finite, finite
+/-
+**FP.Float.zero** 是 Mathlib 中的一个定义，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → Bool → FP.Float
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FP.Float.Zero.valid`：∀ [C : FP.FloatCfg], FP.ValidFinite FP.emin 0
 -/
 def Float.zero (s : Bool) : Float :=
   Float.finite s emin 0 Float.Zero.valid
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Float
-  body: ⟨Float.zero true⟩
-
-@[nolint docBlame]
-
-中文:
-实例 :
-  签名: 可居 Float
-  定义体: ⟨Float.zero true⟩
-
-@[nolint docBlame]
-
-Depends on / 依赖: Float.zero
+/-
+**FP.** 是 Mathlib 中的一个实例，位于命名空间 `FP`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Float :=
   ⟨Float.zero true⟩
 
 @[nolint docBlame]
-/--
-Definition of `Float.sign'` / `Float.sign'` 的定义
-
-English:
-definition Float.sign'
-  signature: : Float -> Semiquot Bool
-
-中文:
-定义 Float.sign'
-  签名: : Float -> 半商 布尔值
+/-
+**FP.Float.sign'** 是 Mathlib 中的一个定义，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.Float → Semiquot Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def Float.sign' : Float -> Semiquot Bool
+protected def Float.sign' : Float → Semiquot Bool
   | Float.inf s => pure s
   | Float.nan => ⊤
   | Float.finite s _ _ _ => pure s
 
 @[nolint docBlame]
-/--
-Definition of `Float.sign` / `Float.sign` 的定义
-
-English:
-definition Float.sign
-  signature: : Float -> Bool
-
-中文:
-定义 Float.sign
-  签名: : Float -> 布尔值
+/-
+**FP.Float.sign** 是 Mathlib 中的一个定义，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.Float → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def Float.sign : Float -> Bool
+protected def Float.sign : Float → Bool
   | Float.inf s => s
   | Float.nan => false
   | Float.finite s _ _ _ => s
 
 @[nolint docBlame]
-/--
-Definition of `Float.isZero` / `Float.isZero` 的定义
-
-English:
-definition Float.isZero
-  signature: : Float -> Bool
-
-中文:
-定义 Float.isZero
-  签名: : Float -> 布尔值
+/-
+**FP.Float.isZero** 是 Mathlib 中的一个定义，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.Float → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def Float.isZero : Float -> Bool
+protected def Float.isZero : Float → Bool
   | Float.finite _ _ 0 _ => true
   | _ => false
 
 @[nolint docBlame]
-/--
-Definition of `Float.neg` / `Float.neg` 的定义
-
-English:
-definition Float.neg
-  signature: : Float -> Float
-
-中文:
-定义 Float.neg
-  签名: : Float -> Float
+/-
+**FP.Float.neg** 是 Mathlib 中的一个定义，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.Float → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def Float.neg : Float -> Float
+protected def Float.neg : Float → Float
   | Float.inf s => Float.inf (not s)
   | Float.nan => Float.nan
   | Float.finite s e m f => Float.finite (not s) e m f
 
 @[nolint docBlame]
-/--
-Definition of `divNatLtTwoPow` / `divNatLtTwoPow` 的定义
-
-English:
-definition divNatLtTwoPow
-  signature: (n d : Nat)
-
-中文:
-定义 div自然数LtTwoPow
-  签名: (n d : 自然数)
+/-
+**FP.divNatLtTwoPow** 是 Mathlib 中的一个定义，位于命名空间 `FP`。
+形式化陈述：ℕ → ℕ → ℤ → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def divNatLtTwoPow (n d : Nat) : Int -> Bool
+def divNatLtTwoPow (n d : ℕ) : ℤ → Bool
   | Int.ofNat e => n < d <<< e
   | Int.negSucc e => n <<< e.succ < d
 
 
 -- TODO(Mario): Prove these and drop 'unsafe'
 @[nolint docBlame]
-unsafe def ofPosRatDn (n : Nat+) (d : Nat+) : Float × Bool := by
-  let e₁ : Int := n.1.size - d.1.size - prec
+/-
+**FP.ofPosRatDn** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → ℕ+ → ℕ+ → FP.Float × Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def ofPosRatDn (n : ℕ+) (d : ℕ+) : Float × Bool := by
+  let e₁ : ℤ := n.1.size - d.1.size - prec
   obtain ⟨d₁, n₁⟩ := Int.shift2 d.1 n.1 (e₁ + prec)
   let e₂ := if n₁ < d₁ then e₁ - 1 else e₁
   let e₃ := max e₂ emin
@@ -437,6 +279,12 @@ unsafe def ofPosRatDn (n : Nat+) (d : Nat+) : Float × Bool := by
   exact lcProof
 
 @[nolint docBlame]
+/-
+**FP.nextUpPos** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → (e : ℤ) → (m : ℕ) → FP.ValidFinite e m → FP.Float
+参数：e : ℤ；m : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 unsafe def nextUpPos (e m) (v : ValidFinite e m) : Float :=
   let m' := m.succ
   if ss : m'.size = m.size then
@@ -444,6 +292,13 @@ unsafe def nextUpPos (e m) (v : ValidFinite e m) : Float :=
   else if h : e = emax then Float.inf false else Float.finite false e.succ (Nat.div2 m') lcProof
 
 @[nolint docBlame]
+/-
+**FP.nextDnPos** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → (e : ℤ) → (m : ℕ) → FP.ValidFinite e m → FP.Float
+参数：e : ℤ；m : ℕ。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FP.Float.Zero.valid`：∀ [C : FP.FloatCfg], FP.ValidFinite FP.emin 0
+-/
 unsafe def nextDnPos (e m) (v : ValidFinite e m) : Float :=
   match h : m with
   | 0 => nextUpPos _ _ Float.Zero.valid
@@ -455,19 +310,35 @@ unsafe def nextDnPos (e m) (v : ValidFinite e m) : Float :=
       else Float.finite false e.pred (2 * m' + 1) lcProof
 
 @[nolint docBlame]
-unsafe def nextUp : Float -> Float
+/-
+**FP.nextUp** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → FP.Float → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def nextUp : Float → Float
   | Float.finite Bool.false e m f => nextUpPos e m f
-| Float.finite Bool.true e m f => Float.neg nextDnPos e m f
+  | Float.finite Bool.true e m f => Float.neg <| nextDnPos e m f
   | f => f
 
 @[nolint docBlame]
-unsafe def nextDn : Float -> Float
+/-
+**FP.nextDn** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → FP.Float → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def nextDn : Float → Float
   | Float.finite Bool.false e m f => nextDnPos e m f
-| Float.finite Bool.true e m f => Float.neg nextUpPos e m f
+  | Float.finite Bool.true e m f => Float.neg <| nextUpPos e m f
   | f => f
 
 @[nolint docBlame]
-unsafe def ofRatUp : Rat -> Float
+/-
+**FP.ofRatUp** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → ℚ → FP.Float
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+-/
+unsafe def ofRatUp : ℚ → Float
   | ⟨0, _, _, _⟩ => Float.zero false
   | ⟨Nat.succ n, d, h, _⟩ =>
     let (f, exact) := ofPosRatDn n.succPNat ⟨d, Nat.pos_of_ne_zero h⟩
@@ -475,11 +346,21 @@ unsafe def ofRatUp : Rat -> Float
   | ⟨Int.negSucc n, d, h, _⟩ => Float.neg (ofPosRatDn n.succPNat ⟨d, Nat.pos_of_ne_zero h⟩).1
 
 @[nolint docBlame]
-unsafe def ofRatDn (r : Rat) : Float :=
-Float.neg ofRatUp (-r)
+/-
+**FP.ofRatDn** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → ℚ → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def ofRatDn (r : ℚ) : Float :=
+  Float.neg <| ofRatUp (-r)
 
 @[nolint docBlame]
-unsafe def ofRat : RMode -> Rat -> Float
+/-
+**FP.ofRat** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP`。
+形式化陈述：[C : FP.FloatCfg] → FP.RMode → ℚ → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def ofRat : RMode → ℚ → Float
   | RMode.NE, r =>
     let low := ofRatDn r
     let high := ofRatUp r
@@ -498,118 +379,20 @@ unsafe def ofRat : RMode -> Rat -> Float
 
 namespace Float
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg Float
-  body: ⟨Float.neg⟩
-
-@[nolint docBlame]
-unsafe def add (mode : RMode) : Float -> Float -> Float
-  | nan, _ => nan
-  | _, nan => nan
-  | inf Bool.true, inf Bool.false => nan
-  | inf Bool.false, inf Bool.true => nan
-  | inf s₁, _ => inf s₁
-  | _, inf s₂ => inf s₂
-  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
-    let f₁ := finite s₁ e₁ m₁ v₁
-    let f₂ := finite s₂ e₂ m₂ v₂
-    ofRat mode (toRat f₁ rfl + toRat f₂ rfl)
-
-unsafe instance : Add Float :=
-  ⟨Float.add RMode.NE⟩
-
-@[nolint docBlame]
-unsafe def sub (mode : RMode) (f1 f2 : Float) : Float :=
-  add mode f1 (-f2)
-
-unsafe instance : Sub Float :=
-  ⟨Float.sub RMode.NE⟩
-
-@[nolint docBlame]
-unsafe def mul (mode : RMode) : Float -> Float -> Float
-  | nan, _ => nan
-  | _, nan => nan
-  | inf s₁, f₂ => if f₂.isZero then nan else inf (xor s₁ f₂.sign)
-  | f₁, inf s₂ => if f₁.isZero then nan else inf (xor f₁.sign s₂)
-  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
-    let f₁ := finite s₁ e₁ m₁ v₁
-    let f₂ := finite s₂ e₂ m₂ v₂
-    ofRat mode (toRat f₁ rfl * toRat f₂ rfl)
-
-@[nolint docBlame]
-unsafe def div (mode : RMode) : Float -> Float -> Float
-  | nan, _ => nan
-  | _, nan => nan
-  | inf _, inf _ => nan
-  | inf s₁, f₂ => inf (xor s₁ f₂.sign)
-  | f₁, inf s₂ => zero (xor f₁.sign s₂)
-  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
-    let f₁ := finite s₁ e₁ m₁ v₁
-    let f₂ := finite s₂ e₂ m₂ v₂
-    if f₂.isZero then inf (xor s₁ s₂) else ofRat mode (toRat f₁ rfl / toRat f₂ rfl)
-
-中文:
-实例 :
-  签名: 取负 Float
-  定义体: ⟨Float.neg⟩
-
-@[nolint docBlame]
-unsafe def add (mode : RMode) : Float -> Float -> Float
-  | nan, _ => nan
-  | _, nan => nan
-  | inf Bool.true, inf Bool.false => nan
-  | inf Bool.false, inf Bool.true => nan
-  | inf s₁, _ => inf s₁
-  | _, inf s₂ => inf s₂
-  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
-    let f₁ := finite s₁ e₁ m₁ v₁
-    let f₂ := finite s₂ e₂ m₂ v₂
-    ofRat mode (toRat f₁ rfl + toRat f₂ rfl)
-
-unsafe instance : Add Float :=
-  ⟨Float.add RMode.NE⟩
-
-@[nolint docBlame]
-unsafe def sub (mode : RMode) (f1 f2 : Float) : Float :=
-  add mode f1 (-f2)
-
-unsafe instance : Sub Float :=
-  ⟨Float.sub RMode.NE⟩
-
-@[nolint docBlame]
-unsafe def mul (mode : RMode) : Float -> Float -> Float
-  | nan, _ => nan
-  | _, nan => nan
-  | inf s₁, f₂ => if f₂.isZero then nan else inf (xor s₁ f₂.sign)
-  | f₁, inf s₂ => if f₁.isZero then nan else inf (xor f₁.sign s₂)
-  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
-    let f₁ := finite s₁ e₁ m₁ v₁
-    let f₂ := finite s₂ e₂ m₂ v₂
-    ofRat mode (toRat f₁ rfl * toRat f₂ rfl)
-
-@[nolint docBlame]
-unsafe def div (mode : RMode) : Float -> Float -> Float
-  | nan, _ => nan
-  | _, nan => nan
-  | inf _, inf _ => nan
-  | inf s₁, f₂ => inf (xor s₁ f₂.sign)
-  | f₁, inf s₂ => zero (xor f₁.sign s₂)
-  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
-    let f₁ := finite s₁ e₁ m₁ v₁
-    let f₂ := finite s₂ e₂ m₂ v₂
-    if f₂.isZero then inf (xor s₁ s₂) else ofRat mode (toRat f₁ rfl / toRat f₂ rfl)
-
-Depends on / 依赖: Float.neg
+/-
+**FP.Float.** 是 Mathlib 中的一个实例，位于命名空间 `FP.Float`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg Float :=
   ⟨Float.neg⟩
 
 @[nolint docBlame]
-unsafe def add (mode : RMode) : Float -> Float -> Float
+/-
+**FP.Float.add** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.RMode → FP.Float → FP.Float → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def add (mode : RMode) : Float → Float → Float
   | nan, _ => nan
   | _, nan => nan
   | inf Bool.true, inf Bool.false => nan
@@ -620,19 +403,35 @@ unsafe def add (mode : RMode) : Float -> Float -> Float
     let f₁ := finite s₁ e₁ m₁ v₁
     let f₂ := finite s₂ e₂ m₂ v₂
     ofRat mode (toRat f₁ rfl + toRat f₂ rfl)
-
+/-
+**FP.Float.** 是 Mathlib 中的一个实例，位于命名空间 `FP.Float`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 unsafe instance : Add Float :=
   ⟨Float.add RMode.NE⟩
 
 @[nolint docBlame]
+/-
+**FP.Float.sub** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.RMode → FP.Float → FP.Float → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 unsafe def sub (mode : RMode) (f1 f2 : Float) : Float :=
   add mode f1 (-f2)
-
+/-
+**FP.Float.** 是 Mathlib 中的一个实例，位于命名空间 `FP.Float`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 unsafe instance : Sub Float :=
   ⟨Float.sub RMode.NE⟩
 
 @[nolint docBlame]
-unsafe def mul (mode : RMode) : Float -> Float -> Float
+/-
+**FP.Float.mul** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.RMode → FP.Float → FP.Float → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def mul (mode : RMode) : Float → Float → Float
   | nan, _ => nan
   | _, nan => nan
   | inf s₁, f₂ => if f₂.isZero then nan else inf (xor s₁ f₂.sign)
@@ -643,7 +442,12 @@ unsafe def mul (mode : RMode) : Float -> Float -> Float
     ofRat mode (toRat f₁ rfl * toRat f₂ rfl)
 
 @[nolint docBlame]
-unsafe def div (mode : RMode) : Float -> Float -> Float
+/-
+**FP.Float.div** 是 Mathlib 中的一个unsafe-def，位于命名空间 `FP.Float`。
+形式化陈述：[C : FP.FloatCfg] → FP.RMode → FP.Float → FP.Float → FP.Float
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def div (mode : RMode) : Float → Float → Float
   | nan, _ => nan
   | _, nan => nan
   | inf _, inf _ => nan
@@ -657,3 +461,4 @@ unsafe def div (mode : RMode) : Float -> Float -> Float
 end Float
 
 end FP
+

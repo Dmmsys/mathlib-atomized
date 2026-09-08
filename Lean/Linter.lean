@@ -9,7 +9,7 @@ public meta import Lean.Elab.Command
 public meta import Lean.Linter.Basic
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-import Mathlib.Tactic.Linter.Header -- shake: keep
+import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # Additional utilities and boilerplate for the `Linter` API
@@ -21,7 +21,7 @@ open Lean Elab Command Linter
 
 namespace Lean.Linter
 
-variable {m : Type -> Type} [Monad m] [MonadOptions m] [MonadEnv m]
+variable {m : Type → Type} [Monad m] [MonadOptions m] [MonadEnv m]
 
 /--
 Runs a `CommandElabM` action when the provided linter option is `true`.
@@ -34,20 +34,25 @@ Note: this definition is marked as `@[macro_inline]`, so it is okay to supply it
 option which has been registered in the same module.
 -/
 @[expose, macro_inline]
-/--
-Definition of `whenLinterOption` / `whenLinterOption` 的定义
+/-
+**Lean.Linter.whenLinterOption** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Linter`。
+形式化陈述：whenLinterOption (opt : Lean.Option Bool) (x : m Unit) : m Unit
+参数：opt : Lean.Option Bool；x : m Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whenLinterOption
-  signature: (opt : Lean.Option Bool) (x : m Unit)
-  body: do
-  if getLinterValue opt (← getLinterOptions) then x
+--- 原说明 ---
+Runs a `CommandElabM` action when the provided linter option is `true`.
 
-中文:
-定义 whenLinterOption
-  签名: (opt : Lean.选项类型 布尔值) (x : m 单元)
-  定义体: do
-  if getLinterValue opt (← getLinterOptions) then x
+This function assumes you have already called `withSetOptionIn`; use `whenLinter
+Activated`
+to do so automatically. At the start of linter code, `whenLinterActivated` shoul
+d be preferred when
+possible.
+
+Note: this definition is marked as `@[macro_inline]`, so it is okay to supply it
+ with a linter
+option which has been registered in the same module.
 -/
 def whenLinterOption (opt : Lean.Option Bool) (x : m Unit) : m Unit := do
   if getLinterValue opt (← getLinterOptions) then x
@@ -59,20 +64,19 @@ Note: this definition is marked as `@[macro_inline]`, so it is okay to supply it
 option which has been registered in the same module.
 -/
 @[expose, macro_inline]
-/--
-Definition of `whenNotLinterOption` / `whenNotLinterOption` 的定义
+/-
+**Lean.Linter.whenNotLinterOption** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Linter`。
+形式化陈述：whenNotLinterOption (opt : Lean.Option Bool) (x : m Unit) : m Unit
+参数：opt : Lean.Option Bool；x : m Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whenNotLinterOption
-  signature: (opt : Lean.Option Bool) (x : m Unit)
-  body: do
-  unless getLinterValue opt (← getLinterOptions) do x
+--- 原说明 ---
+Runs a `CommandElabM` action when the provided linter option is `false`.
 
-中文:
-定义 whenNotLinterOption
-  签名: (opt : Lean.选项类型 布尔值) (x : m 单元)
-  定义体: do
-  unless getLinterValue opt (← getLinterOptions) do x
+Note: this definition is marked as `@[macro_inline]`, so it is okay to supply it
+ with a linter
+option which has been registered in the same module.
 -/
 def whenNotLinterOption (opt : Lean.Option Bool) (x : m Unit) : m Unit := do
   unless getLinterValue opt (← getLinterOptions) do x
@@ -94,22 +98,31 @@ Note: this definition is marked as `@[macro_inline]`, so it is okay to supply it
 option which has been registered in the same module.
 -/
 @[expose, macro_inline]
-/--
-Definition of `whenLinterActivated` / `whenLinterActivated` 的定义
+/-
+**Lean.Linter.whenLinterActivated** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Linter`。
+形式化陈述：whenLinterActivated (opt : Lean.Option Bool) (x : CommandElab) (breakOnErr
+or
+参数：opt : Lean.Option Bool；x : CommandElab。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whenLinterActivated
-  signature: (opt : Lean.Option Bool) (x : CommandElab) (breakOnError := true)
-  body: withSetOptionIn fun stx => whenLinterOption opt do
-    unless ← pure breakOnError <&&> MonadLog.hasErrors do
-      x stx
+--- 原说明 ---
+Processes `set_option ... in`s that wrap the input `stx`, then acts on the inner
+ syntax with
+`x` after checking that the provided linter option is `true`.
 
-中文:
-定义 whenLinterActivated
-  签名: (opt : Lean.选项类型 布尔值) (x : CommandElab) (breakOnError := true)
-  定义体: withSetOptionIn fun stx => whenLinterOption opt do
-    unless ← pure breakOnError <&&> MonadLog.hasErrors do
-      x stx
+If `breakOnError` is `true` (the default), avoids running the linter when errors
+ are present.
+
+This is typically used to start off linter code:
+```
+def myLinter : Linter where
+  run := whenLinterActivated linter.myLinter fun stx ↦ do
+    ...
+```
+
+Note: this definition is marked as `@[macro_inline]`, so it is okay to supply it
+ with a linter
+option which has been registered in the same module.
 -/
 def whenLinterActivated (opt : Lean.Option Bool) (x : CommandElab) (breakOnError := true) :
     CommandElab :=
@@ -118,3 +131,4 @@ def whenLinterActivated (opt : Lean.Option Bool) (x : CommandElab) (breakOnError
       x stx
 
 end Lean.Linter
+

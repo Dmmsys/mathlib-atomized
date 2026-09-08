@@ -59,115 +59,121 @@ variable (M N : Submodule R S)
 -- can't use `LinearMap.mul' R S ∘ₗ TensorProduct.mapIncl M N` since it is not defeq to
 -- `Subalgebra.mulMap` which is `(Algebra.TensorProduct.productMap A.val B.val).toLinearMap`
 
-/--
-Definition of `mulMap` / `mulMap` 的定义
+/-- If `M` and `N` are submodules in an algebra `S` over `R`, there is the natural `R`-linear map
+`M ⊗[R] N →ₗ[R] S` induced by multiplication in `S`. -/
+/-
+**Submodule.mulMap** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：mulMap : M otimes[R] N ->ₗ[R] S
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-definition mulMap
-  signature: : M otimes[R] N ->ₗ[R] S
-  body: TensorProduct.lift ((LinearMap.mul R S).domRestrict₁₂ M N)
-
-@[simp]
-
-中文:
-定义 mulMap
-  签名: : M otimes[R] N ->ₗ[R] S
-  定义体: TensorProduct.lift ((LinearMap.mul R S).domRestrict₁₂ M N)
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.mul, Substructure, Substructure.FG.of_finite, TensorProduct, TensorProduct.lift, fg_def, of_finite
+--- 原说明 ---
+If `M` and `N` are submodules in an algebra `S` over `R`, there is the natural `
+R`-linear map
+`M ⊗[R] N →ₗ[R] S` induced by multiplication in `S`.
 -/
-def mulMap : M otimes[R] N ->ₗ[R] S := TensorProduct.lift ((LinearMap.mul R S).domRestrict₁₂ M N)
+def mulMap : M ⊗[R] N →ₗ[R] S := TensorProduct.lift ((LinearMap.mul R S).domRestrict₁₂ M N)
 
 @[simp]
-/--
-theorem `mulMap_tmul` / 定理 `mulMap_tmul`
-
-English:
-theorem mulMap_tmul
-  given: (m : M) (n : N)
-  statement: mulMap M N (m otimesₜ[R] n) = m.1 * n.1
-  proof: rfl
-
-中文:
-定理 mulMap_tmul
-  条件: (m : M) (n : N)
-  结论: mulMap M N (m otimesₜ[R] n) = m.1 * n.1
-  证明: rfl
-
-Depends on / 依赖: Finite, Finite.of_finite_univ, Substructure, Substructure.FG.finite, fg_def, finite, of_finite_univ
+/-
+**Submodule.mulMap_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_tmul (m : M) (n : N) : mulMap M N (m otimesₜ[R] n) = m.1 * n.1
+参数：m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mulMap_tmul (m : M) (n : N) : mulMap M N (m otimesₜ[R] n) = m.1 * n.1 := rfl
-
-/--
-theorem `mulMap_map_comp_eq` / 定理 `mulMap_map_comp_eq`
-
-English:
-theorem mulMap_map_comp_eq
-  given: {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T)
-  proof: by
+theorem mulMap_tmul (m : M) (n : N) : mulMap M N (m ⊗ₜ[R] n) = m.1 * n.1 := rfl
+/-
+**Submodule.mulMap_map_comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_map_comp_eq {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T
+) : mulMap (M.map (f : S ->ₗ[R] T)) (N.map (f : S ->ₗ[R] T)) ∘ₗ TensorProduct.ma
+p ((f : S ->ₗ[R] T).submoduleMap M) ((f : S ->ₗ[R] T).submoduleMap N) = (f : S -
+>ₗ[R] T) ∘ₗ mulMap M N
+参数：f : S ->ₐ[R] T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+-/
+theorem mulMap_map_comp_eq {T : Type w} [Semiring T] [Algebra R T] (f : S →ₐ[R] T) :
+    mulMap (M.map (f : S →ₗ[R] T)) (N.map (f : S →ₗ[R] T)) ∘ₗ
+      TensorProduct.map ((f : S →ₗ[R] T).submoduleMap M) ((f : S →ₗ[R] T).submoduleMap N)
+        = (f : S →ₗ[R] T) ∘ₗ mulMap M N := by
   ext
   simp only [TensorProduct.AlgebraTensorModule.curry_apply,
     TensorProduct.curry_apply, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
     Function.comp_apply, TensorProduct.map_tmul, mulMap_tmul, LinearMap.coe_coe, map_mul]
   rfl
-
-中文:
-定理 mulMap_map_comp_eq
-  条件: {T : 类型 w} [半环 T] [代数 R T] (f : S ->ₐ[R] T)
-  证明: by
-  ext
-  simp only [TensorProduct.AlgebraTensorModule.curry_apply,
-    TensorProduct.curry_apply, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
-    Function.comp_apply, TensorProduct.map_tmul, mulMap_tmul, LinearMap.coe_coe, map_mul]
-  rfl
-
-Depends on / 依赖: AlgebraTensorModule, Function, Function.comp_apply, LinearMap, LinearMap.coe_coe, LinearMap.coe_comp, LinearMap.coe_restrictScalars, TensorProduct, TensorProduct.AlgebraTensorModule.curry_apply, TensorProduct.curry_apply, TensorProduct.map_tmul, coe_coe, coe_comp, coe_restrictScalars, comp_apply, curry_apply, map_mul, map_tmul, mulMap_tmul
+/-
+**Submodule.coe_mulMap_comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_mulMap_comp_eq {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T
+) : mulMap (M.map (f : S ->ₗ[R] T)) (N.map (f : S ->ₗ[R] T)) ∘ TensorProduct.map
+ ((f : S ->ₗ[R] T).submoduleMap M) ((f : S ->ₗ[R] T).submoduleMap N) = f ∘ mulMa
+p M N
+参数：f : S ->ₐ[R] T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mulMap_map_comp_eq`：mulMap_map_comp_eq {T : Type w} [Semiring 
+T] [Algebra R T] (f : S ->ₐ[R] T) : mulMap (M.map (f : S ->ₗ[R] T)) (N.map (f : 
+S ->ₗ[R] T)) ∘ₗ Te…
 -/
-theorem mulMap_map_comp_eq {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T) :
-    mulMap (M.map (f : S ->ₗ[R] T)) (N.map (f : S ->ₗ[R] T)) ∘ₗ
-      TensorProduct.map ((f : S ->ₗ[R] T).submoduleMap M) ((f : S ->ₗ[R] T).submoduleMap N)
-        = (f : S ->ₗ[R] T) ∘ₗ mulMap M N := by
-  ext
-  simp only [TensorProduct.AlgebraTensorModule.curry_apply,
-    TensorProduct.curry_apply, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
-    Function.comp_apply, TensorProduct.map_tmul, mulMap_tmul, LinearMap.coe_coe, map_mul]
-  rfl
-
-/--
-theorem `coe_mulMap_comp_eq` / 定理 `coe_mulMap_comp_eq`
-
-English:
-theorem coe_mulMap_comp_eq
-  given: {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T)
-  proof: congr(⇑($(mulMap_map_comp_eq M N f)))
-
-中文:
-定理 coe_mulMap_comp_eq
-  条件: {T : 类型 w} [半环 T] [代数 R T] (f : S ->ₐ[R] T)
-  证明: congr(⇑($(mulMap_map_comp_eq M N f)))
-
-Depends on / 依赖: mulMap_map_comp_eq
--/
-theorem coe_mulMap_comp_eq {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T) :
-    mulMap (M.map (f : S ->ₗ[R] T)) (N.map (f : S ->ₗ[R] T)) ∘
-      TensorProduct.map ((f : S ->ₗ[R] T).submoduleMap M) ((f : S ->ₗ[R] T).submoduleMap N)
+theorem coe_mulMap_comp_eq {T : Type w} [Semiring T] [Algebra R T] (f : S →ₐ[R] T) :
+    mulMap (M.map (f : S →ₗ[R] T)) (N.map (f : S →ₗ[R] T)) ∘
+      TensorProduct.map ((f : S →ₗ[R] T).submoduleMap M) ((f : S →ₗ[R] T).submoduleMap N)
         = f ∘ mulMap M N :=
   congr(⇑($(mulMap_map_comp_eq M N f)))
-
-/--
-theorem `mulMap_op` / 定理 `mulMap_op`
-
-English:
-theorem mulMap_op
-  proof: TensorProduct.ext' fun _ _ => rfl
-
-中文:
-定理 mulMap_op
-  证明: TensorProduct.ext' fun _ _ => rfl
-
-Depends on / 依赖: TensorProduct, TensorProduct.ext
+/-
+**Submodule.mulMap_op** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_op : mulMap (equivOpposite.symm (MulOpposite.op M)) (equivOpposite.
+symm (MulOpposite.op N)) = (MulOpposite.opLinearEquiv R).toLinearMap ∘ₗ mulMap N
+ M ∘ₗ (TensorProduct.congr (LinearEquiv.ofSubmodule' (MulOpposite.opLinearEquiv 
+R).symm M) (LinearEquiv.ofSubmodule' (MulOpposite.opLinearEquiv R).symm N) ≪≫ₗ T
+ensorProduct.comm R M N).toLinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 theorem mulMap_op :
     mulMap (equivOpposite.symm (MulOpposite.op M)) (equivOpposite.symm (MulOpposite.op N)) =
@@ -176,685 +182,682 @@ theorem mulMap_op :
       (LinearEquiv.ofSubmodule' (MulOpposite.opLinearEquiv R).symm M)
       (LinearEquiv.ofSubmodule' (MulOpposite.opLinearEquiv R).symm N) ≪≫ₗ
     TensorProduct.comm R M N).toLinearMap :=
-  TensorProduct.ext' fun _ _ => rfl
-
-/--
-theorem `mulMap_comm_of_commute` / 定理 `mulMap_comm_of_commute`
-
-English:
-theorem mulMap_comm_of_commute
-  given: (hc : forall (m : M) (n : N), Commute m.1 n.1)
-  proof: by
-  refine TensorProduct.ext' fun n m => ?_
-  simp_rw [LinearMap.comp_apply, LinearEquiv.coe_coe, TensorProduct.comm_tmul, mulMap_tmul]
-  exact (hc m n).symm
-
-中文:
-定理 mulMap_comm_of_commute
-  条件: (hc : 对任意 (m : M) (n : N), Commute m.1 n.1)
-  证明: by
-  refine TensorProduct.ext' fun n m => ?_
-  simp_rw [LinearMap.comp_apply, LinearEquiv.coe_coe, TensorProduct.comm_tmul, mulMap_tmul]
-  exact (hc m n).symm
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.comp_apply, TensorProduct, TensorProduct.comm_tmul, TensorProduct.ext, coe_coe, comm_tmul, comp_apply, mulMap_tmul, simp_rw
+  TensorProduct.ext' fun _ _ ↦ rfl
+/-
+**Submodule.mulMap_comm_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_comm_of_commute (hc : forall (m : M) (n : N), Commute m.1 n.1) : mu
+lMap N M = mulMap M N ∘ₗ TensorProduct.comm R N M
+参数：hc : forall (m : M) (n : N), Commute m.1 n.1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `Commute.symm`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → C
+ommute b a
 -/
-theorem mulMap_comm_of_commute (hc : forall (m : M) (n : N), Commute m.1 n.1) :
+theorem mulMap_comm_of_commute (hc : ∀ (m : M) (n : N), Commute m.1 n.1) :
     mulMap N M = mulMap M N ∘ₗ TensorProduct.comm R N M := by
-  refine TensorProduct.ext' fun n m => ?_
+  refine TensorProduct.ext' fun n m ↦ ?_
   simp_rw [LinearMap.comp_apply, LinearEquiv.coe_coe, TensorProduct.comm_tmul, mulMap_tmul]
   exact (hc m n).symm
 
 variable {M} in
-/--
-theorem `mulMap_comp_rTensor` / 定理 `mulMap_comp_rTensor`
-
-English:
-theorem mulMap_comp_rTensor
-  given: {M' : Submodule R S} (hM : M' <= M)
-  proof: TensorProduct.ext' fun _ _ => rfl
-
-中文:
-定理 mulMap_comp_rTensor
-  条件: {M' : 子模 R S} (hM : M' <= M)
-  证明: TensorProduct.ext' fun _ _ => rfl
-
-Depends on / 依赖: TensorProduct, TensorProduct.ext
+/-
+**Submodule.mulMap_comp_rTensor** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_comp_rTensor {M' : Submodule R S} (hM : M' <= M) : mulMap M N ∘ₗ (i
+nclusion hM).rTensor N = mulMap M' N
+参数：hM : M' <= M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
 -/
-theorem mulMap_comp_rTensor {M' : Submodule R S} (hM : M' <= M) :
+theorem mulMap_comp_rTensor {M' : Submodule R S} (hM : M' ≤ M) :
     mulMap M N ∘ₗ (inclusion hM).rTensor N = mulMap M' N :=
-  TensorProduct.ext' fun _ _ => rfl
+  TensorProduct.ext' fun _ _ ↦ rfl
 
 variable {N} in
-/--
-theorem `mulMap_comp_lTensor` / 定理 `mulMap_comp_lTensor`
-
-English:
-theorem mulMap_comp_lTensor
-  given: {N' : Submodule R S} (hN : N' <= N)
-  proof: TensorProduct.ext' fun _ _ => rfl
-
-中文:
-定理 mulMap_comp_lTensor
-  条件: {N' : 子模 R S} (hN : N' <= N)
-  证明: TensorProduct.ext' fun _ _ => rfl
-
-Depends on / 依赖: TensorProduct, TensorProduct.ext
+/-
+**Submodule.mulMap_comp_lTensor** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_comp_lTensor {N' : Submodule R S} (hN : N' <= N) : mulMap M N ∘ₗ (i
+nclusion hN).lTensor M = mulMap M N'
+参数：hN : N' <= N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
 -/
-theorem mulMap_comp_lTensor {N' : Submodule R S} (hN : N' <= N) :
+theorem mulMap_comp_lTensor {N' : Submodule R S} (hN : N' ≤ N) :
     mulMap M N ∘ₗ (inclusion hN).lTensor M = mulMap M N' :=
-  TensorProduct.ext' fun _ _ => rfl
+  TensorProduct.ext' fun _ _ ↦ rfl
 
 variable {M N} in
-/--
-theorem `mulMap_comp_map_inclusion` / 定理 `mulMap_comp_map_inclusion`
-
-English:
-theorem mulMap_comp_map_inclusion
-  given: {M' N' : Submodule R S} (hM : M' <= M) (hN : N' <= N)
-  proof: TensorProduct.ext' fun _ _ => rfl
-
-中文:
-定理 mulMap_comp_map_inclusion
-  条件: {M' N' : 子模 R S} (hM : M' <= M) (hN : N' <= N)
-  证明: TensorProduct.ext' fun _ _ => rfl
-
-Depends on / 依赖: TensorProduct, TensorProduct.ext
+/-
+**Submodule.mulMap_comp_map_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_comp_map_inclusion {M' N' : Submodule R S} (hM : M' <= M) (hN : N' 
+<= N) : mulMap M N ∘ₗ TensorProduct.map (inclusion hM) (inclusion hN) = mulMap M
+' N'
+参数：hM : M' <= M；hN : N' <= N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
 -/
-theorem mulMap_comp_map_inclusion {M' N' : Submodule R S} (hM : M' <= M) (hN : N' <= N) :
+theorem mulMap_comp_map_inclusion {M' N' : Submodule R S} (hM : M' ≤ M) (hN : N' ≤ N) :
     mulMap M N ∘ₗ TensorProduct.map (inclusion hM) (inclusion hN) = mulMap M' N' :=
-  TensorProduct.ext' fun _ _ => rfl
-
-/--
-theorem `mulMap_eq_mul'_comp_mapIncl` / 定理 `mulMap_eq_mul'_comp_mapIncl`
-
-English:
-theorem mulMap_eq_mul'_comp_mapIncl
-  statement: mulMap M N = .mul' R S ∘ₗ TensorProduct.mapIncl M N
-  proof: TensorProduct.ext' fun _ _ => rfl
-
-中文:
-定理 mulMap_eq_mul'_comp_mapIncl
-  结论: mulMap M N = .mul' R S ∘ₗ 张量积.mapIncl M N
-  证明: TensorProduct.ext' fun _ _ => rfl
-
-Depends on / 依赖: TensorProduct, TensorProduct.ext, cg_def, fg_def
+  TensorProduct.ext' fun _ _ ↦ rfl
+/-
+**Submodule.mulMap_eq_mul'_comp_mapIncl** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : Semiring S] 
+[inst_2 : Algebra R S] (M N : Submodule R S),   M.mulMap N = LinearMap.mul' R S 
+∘ₗ TensorProduct.mapIncl M N
+参数：M N : Submodule R S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 theorem mulMap_eq_mul'_comp_mapIncl : mulMap M N = .mul' R S ∘ₗ TensorProduct.mapIncl M N :=
-  TensorProduct.ext' fun _ _ => rfl
-
-/--
-theorem `mulMap_range` / 定理 `mulMap_range`
-
-English:
-theorem mulMap_range
-  statement: LinearMap.range (mulMap M N) = M * N
-  proof: by
-  refine le_antisymm ?_ (mul_le.2 fun m hm n hn => ⟨⟨m, hm⟩ otimesₜ[R] ⟨n, hn⟩, rfl⟩)
-  rintro _ ⟨x, rfl⟩
-  induction x with
-  | zero => rw [map_zero]; exact zero_mem _
-  | tmul a b => exact mul_mem_mul a.2 b.2
-  | add a b ha hb => rw [map_add]; exact add_mem ha hb
-
-中文:
-定理 mulMap_range
-  结论: 线性映射.range (mulMap M N) = M * N
-  证明: by
-  refine le_antisymm ?_ (mul_le.2 fun m hm n hn => ⟨⟨m, hm⟩ otimesₜ[R] ⟨n, hn⟩, rfl⟩)
-  rintro _ ⟨x, rfl⟩
-  induction x with
-  | zero => rw [map_zero]; exact zero_mem _
-  | tmul a b => exact mul_mem_mul a.2 b.2
-  | add a b ha hb => rw [map_add]; exact add_mem ha hb
-
-Depends on / 依赖: add_mem, cg_of_fg, le_antisymm, map_add, map_zero, mul_le, mul_mem_mul, zero_mem
+  TensorProduct.ext' fun _ _ ↦ rfl
+/-
+**Submodule.mulMap_range** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_range : LinearMap.range (mulMap M N) = M * N
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `Submodule.mul_mem_mul`：mul_mem_mul (hm : m in M) (hn : n in N) : m * n i
+n M * N
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.mul_le`：mul_le : M * N <= P ↔ forall m in M, forall n in N, m 
+* n in P
 -/
 theorem mulMap_range : LinearMap.range (mulMap M N) = M * N := by
-  refine le_antisymm ?_ (mul_le.2 fun m hm n hn => ⟨⟨m, hm⟩ otimesₜ[R] ⟨n, hn⟩, rfl⟩)
+  refine le_antisymm ?_ (mul_le.2 fun m hm n hn ↦ ⟨⟨m, hm⟩ ⊗ₜ[R] ⟨n, hn⟩, rfl⟩)
   rintro _ ⟨x, rfl⟩
   induction x with
   | zero => rw [map_zero]; exact zero_mem _
   | tmul a b => exact mul_mem_mul a.2 b.2
   | add a b ha hb => rw [map_add]; exact add_mem ha hb
 
-/--
-Definition of `mulMap'` / `mulMap'` 的定义
+/-- If `M` and `N` are submodules in an algebra `S` over `R`, there is the natural `R`-linear map
+`M ⊗[R] N →ₗ[R] M * N` induced by multiplication in `S`,
+which is surjective (`Submodule.mulMap'_surjective`). -/
+/-
+**Submodule.mulMap'** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：mulMap' : M otimes[R] N ->ₗ[R] ↥(M * N)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Submodule.mulMap_range`：mulMap_range : LinearMap.range (mulMap M N) = M 
+* N
 
-English:
-definition mulMap'
-  signature: : M otimes[R] N ->ₗ[R] ↥(M * N)
-  body: (LinearEquiv.ofEq _ _ (mulMap_range M N)).toLinearMap ∘ₗ (mulMap M N).rangeRestrict
-
-中文:
-定义 mulMap'
-  签名: : M otimes[R] N ->ₗ[R] ↥(M * N)
-  定义体: (LinearEquiv.ofEq _ _ (mulMap_range M N)).toLinearMap ∘ₗ (mulMap M N).rangeRestrict
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofEq, mulMap, mulMap_range, rangeRestrict, toLinearMap
+--- 原说明 ---
+If `M` and `N` are submodules in an algebra `S` over `R`, there is the natural `
+R`-linear map
+`M ⊗[R] N →ₗ[R] M * N` induced by multiplication in `S`,
+which is surjective (`Submodule.mulMap'_surjective`).
 -/
-def mulMap' : M otimes[R] N ->ₗ[R] ↥(M * N) :=
+def mulMap' : M ⊗[R] N →ₗ[R] ↥(M * N) :=
   (LinearEquiv.ofEq _ _ (mulMap_range M N)).toLinearMap ∘ₗ (mulMap M N).rangeRestrict
 
 variable {M N} in
 @[simp]
-/--
-theorem `val_mulMap'_tmul` / 定理 `val_mulMap'_tmul`
-
-English:
-theorem val_mulMap'_tmul
-  given: (m : M) (n : N)
-  statement: (mulMap' M N (m otimesₜ[R] n) : S) = m.1 * n.1
-  proof: rfl
-
-中文:
-定理 val_mulMap'_tmul
-  条件: (m : M) (n : N)
-  结论: (mulMap' M N (m otimesₜ[R] n) : S) = m.1 * n.1
-  证明: rfl
+/-
+**Submodule.val_mulMap'_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : Semiring S] 
+[inst_2 : Algebra R S] {M N : Submodule R S}   (m : ↥M) (n : ↥N), ↑((M.mulMap' N
+) (m ⊗ₜ[R] n)) = ↑m * ↑n
+参数：m : ↥M；n : ↥N；(M.mulMap' N) (m ⊗ₜ[R] n)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
-theorem val_mulMap'_tmul (m : M) (n : N) : (mulMap' M N (m otimesₜ[R] n) : S) = m.1 * n.1 := rfl
-
-/--
-theorem `mulMap'_surjective` / 定理 `mulMap'_surjective`
-
-English:
-theorem mulMap'_surjective
-  statement: Function.Surjective (mulMap' M N)
-  proof: by
-  simp_rw [mulMap', LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.comp_surjective,
-    LinearMap.surjective_rangeRestrict]
-
-中文:
-定理 mulMap'_surjective
-  结论: 函数.满射 (mulMap' M N)
-  证明: by
-  simp_rw [mulMap', LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.comp_surjective,
-    LinearMap.surjective_rangeRestrict]
+theorem val_mulMap'_tmul (m : M) (n : N) : (mulMap' M N (m ⊗ₜ[R] n) : S) = m.1 * n.1 := rfl
+/-
+**Submodule.mulMap'_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : Semiring S] 
+[inst_2 : Algebra R S] (M N : Submodule R S),   Function.Surjective ⇑(M.mulMap' 
+N)
+参数：M N : Submodule R S；M.mulMap' N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Submodule.mulMap_range`：mulMap_range : LinearMap.range (mulMap M N) = M 
+* N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 theorem mulMap'_surjective : Function.Surjective (mulMap' M N) := by
   simp_rw [mulMap', LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.comp_surjective,
     LinearMap.surjective_rangeRestrict]
 
-/--
-Definition of `lTensorOne'` / `lTensorOne'` 的定义
+/-- If `N` is a submodule in an algebra `S` over `R`, there is the natural `R`-linear map
+`i(R) ⊗[R] N →ₗ[R] N` induced by multiplication in `S`, here `i : R → S` is the structure map.
+This is promoted to an isomorphism of `R`-modules as `Submodule.lTensorOne`. Use that instead. -/
+/-
+**Submodule.lTensorOne'** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：lTensorOne' : (⊥ : Subalgebra R S) otimes[R] N ->ₗ[R] N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lTensorOne'
-  signature: : (⊥ : Subalgebra R S) otimes[R] N ->ₗ[R] N
-  body: show Subalgebra.toSubmodule ⊥ otimes[R] N ->ₗ[R] N from
-    (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, one_mul])).toLinearMap ∘ₗ
-      (mulMap _ N).rangeRestrict
-
-中文:
-定义 lTensorOne'
-  签名: : (⊥ : 子代数 R S) otimes[R] N ->ₗ[R] N
-  定义体: show Subalgebra.toSubmodule ⊥ otimes[R] N ->ₗ[R] N from
-    (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, one_mul])).toLinearMap ∘ₗ
-      (mulMap _ N).rangeRestrict
-
-Depends on / 依赖: Algebra, Algebra.toSubmodule_bot, LinearEquiv, LinearEquiv.ofEq, Subalgebra, Subalgebra.toSubmodule, mulMap, mulMap_range, one_mul, otimes, rangeRestrict, toLinearMap, toSubmodule, toSubmodule_bot
+--- 原说明 ---
+If `N` is a submodule in an algebra `S` over `R`, there is the natural `R`-linea
+r map
+`i(R) ⊗[R] N →ₗ[R] N` induced by multiplication in `S`, here `i : R → S` is the 
+structure map.
+This is promoted to an isomorphism of `R`-modules as `Submodule.lTensorOne`. Use
+ that instead.
 -/
-def lTensorOne' : (⊥ : Subalgebra R S) otimes[R] N ->ₗ[R] N :=
-  show Subalgebra.toSubmodule ⊥ otimes[R] N ->ₗ[R] N from
+def lTensorOne' : (⊥ : Subalgebra R S) ⊗[R] N →ₗ[R] N :=
+  show Subalgebra.toSubmodule ⊥ ⊗[R] N →ₗ[R] N from
     (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, one_mul])).toLinearMap ∘ₗ
       (mulMap _ N).rangeRestrict
 
 variable {N} in
 @[simp]
-/--
-theorem `lTensorOne'_tmul` / 定理 `lTensorOne'_tmul`
-
-English:
-theorem lTensorOne'_tmul
-  given: (y : R) (n : N)
-  proof: Subtype.val_injective by
-  simp_rw [lTensorOne', LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
-    LinearEquiv.coe_ofEq_apply, LinearMap.codRestrict_apply, SetLike.val_smul, Algebra.smul_def]
-  exact mulMap_tmul _ N _ _
-
-中文:
-定理 lTensorOne'_tmul
-  条件: (y : R) (n : N)
-  证明: Subtype.val_injective by
-  simp_rw [lTensorOne', LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
-    LinearEquiv.coe_ofEq_apply, LinearMap.codRestrict_apply, SetLike.val_smul, Algebra.smul_def]
-  exact mulMap_tmul _ N _ _
+/-
+**Submodule.lTensorOne'_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : Semiring S] 
+[inst_2 : Algebra R S] {N : Submodule R S}   (y : R) (n : ↥N), N.lTensorOne' ((a
+lgebraMap R ↥⊥) y ⊗ₜ[R] n) = y • n
+参数：y : R；n : ↥N；(algebraMap R ↥⊥) y ⊗ₜ[R] n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `Submodule.mulMap_tmul`：mulMap_tmul (m : M) (n : N) : mulMap M N (m otime
+sₜ[R] n) = m.1 * n.1
 -/
 theorem lTensorOne'_tmul (y : R) (n : N) :
-N.lTensorOne' (algebraMap R _ y otimesₜ[R] n) = y • n := Subtype.val_injective by
+    N.lTensorOne' (algebraMap R _ y ⊗ₜ[R] n) = y • n := Subtype.val_injective <| by
   simp_rw [lTensorOne', LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
     LinearEquiv.coe_ofEq_apply, LinearMap.codRestrict_apply, SetLike.val_smul, Algebra.smul_def]
   exact mulMap_tmul _ N _ _
 
 variable {N} in
 @[simp]
-/--
-theorem `lTensorOne'_one_tmul` / 定理 `lTensorOne'_one_tmul`
-
-English:
-theorem lTensorOne'_one_tmul
-  given: (n : N)
-  statement: N.lTensorOne' (1 otimesₜ[R] n) = n
-  proof: by
-  simpa using lTensorOne'_tmul 1 n
-
-中文:
-定理 lTensorOne'_one_tmul
-  条件: (n : N)
-  结论: N.lTensorOne' (1 otimesₜ[R] n) = n
-  证明: by
-  simpa using lTensorOne'_tmul 1 n
+/-
+**Submodule.lTensorOne'_one_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : Semiring S] 
+[inst_2 : Algebra R S] {N : Submodule R S}   (n : ↥N), N.lTensorOne' (1 ⊗ₜ[R] n)
+ = n
+参数：n : ↥N；1 ⊗ₜ[R] n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidWithOneClass.toOneMemClass`：∀ {S : Type u_1} {R : outParam (
+Type u_2)} {inst : AddMonoidWithOne R} {inst_1 : SetLike S R}   [self : AddSubmo
+noidWithOneClass S R], OneMe…
+· 使用定理 `SubsemiringClass.addSubmonoidWithOneClass`：∀ (S : Type u_1) (R : Type u)
+ {x : NonAssocSemiring R} [inst : SetLike S R] [h : SubsemiringClass S R],   Add
+SubmonoidWithOneClass S R
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Submodule.lTensorOne'_tmul`：∀ {R : Type u} {S : Type v} [inst : CommSemi
+ring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {N : Submodule R S}   (y : 
+R) (n : ↥N), N.l…
 -/
-theorem lTensorOne'_one_tmul (n : N) : N.lTensorOne' (1 otimesₜ[R] n) = n := by
+theorem lTensorOne'_one_tmul (n : N) : N.lTensorOne' (1 ⊗ₜ[R] n) = n := by
   simpa using lTensorOne'_tmul 1 n
 
-/--
-Definition of `lTensorOne` / `lTensorOne` 的定义
+/-- If `N` is a submodule in an algebra `S` over `R`,
+there is the natural isomorphism of `R`-modules between
+`i(R) ⊗[R] N` and `N` induced by multiplication in `S`, here `i : R → S` is the structure map.
+This generalizes `TensorProduct.lid` as `i(R)` is not necessarily isomorphic to `R`. -/
+/-
+**Submodule.lTensorOne** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：lTensorOne : (⊥ : Subalgebra R S) otimes[R] N ≃ₗ[R] N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lTensorOne
-  signature: : (⊥ : Subalgebra R S) otimes[R] N ≃ₗ[R] N
-  body: LinearEquiv.ofLinearMap N.lTensorOne' (TensorProduct.mk R (⊥ : Subalgebra R S) N 1)
-(by ext; simp) TensorProduct.ext' fun r n => by
-  change 1 otimesₜ[R] lTensorOne' N _ = r otimesₜ[R] n
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; rw [lTensorOne'_tmul]; rw [← TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
-
-中文:
-定义 lTensorOne
-  签名: : (⊥ : 子代数 R S) otimes[R] N ≃ₗ[R] N
-  定义体: LinearEquiv.ofLinearMap N.lTensorOne' (TensorProduct.mk R (⊥ : Subalgebra R S) N 1)
-(by ext; simp) TensorProduct.ext' fun r n => by
-  change 1 otimesₜ[R] lTensorOne' N _ = r otimesₜ[R] n
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; rw [lTensorOne'_tmul]; rw [← TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
-
-Depends on / 依赖: Algebra, Algebra.mem_bot, Algebra.smul_def, LinearEquiv, LinearEquiv.ofLinearMap, N.lTensorOne, Subalgebra, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.ext, TensorProduct.mk, TensorProduct.smul_tmul, _tmul, algebraMap, lTensorOne, mem_bot, mul_one, ofLinearMap, replace
+--- 原说明 ---
+If `N` is a submodule in an algebra `S` over `R`,
+there is the natural isomorphism of `R`-modules between
+`i(R) ⊗[R] N` and `N` induced by multiplication in `S`, here `i : R → S` is the 
+structure map.
+This generalizes `TensorProduct.lid` as `i(R)` is not necessarily isomorphic to 
+`R`.
 -/
-def lTensorOne : (⊥ : Subalgebra R S) otimes[R] N ≃ₗ[R] N :=
+def lTensorOne : (⊥ : Subalgebra R S) ⊗[R] N ≃ₗ[R] N :=
   LinearEquiv.ofLinearMap N.lTensorOne' (TensorProduct.mk R (⊥ : Subalgebra R S) N 1)
-(by ext; simp) TensorProduct.ext' fun r n => by
-  change 1 otimesₜ[R] lTensorOne' N _ = r otimesₜ[R] n
+    (by ext; simp) <| TensorProduct.ext' fun r n ↦ by
+  change 1 ⊗ₜ[R] lTensorOne' N _ = r ⊗ₜ[R] n
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
   replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; rw [lTensorOne'_tmul]; rw [← TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
+  rw [← h, lTensorOne'_tmul, ← TensorProduct.smul_tmul, Algebra.smul_def, mul_one]
 
 variable {N} in
 @[simp]
-/--
-theorem `lTensorOne_tmul` / 定理 `lTensorOne_tmul`
-
-English:
-theorem lTensorOne_tmul
-  given: (y : R) (n : N)
-  statement: N.lTensorOne (algebraMap R _ y otimesₜ[R] n) = y • n
-  proof: N.lTensorOne'_tmul y n
-
-中文:
-定理 lTensorOne_tmul
-  条件: (y : R) (n : N)
-  结论: N.lTensorOne (algebraMap R _ y otimesₜ[R] n) = y • n
-  证明: N.lTensorOne'_tmul y n
-
-Depends on / 依赖: N.lTensorOne, _tmul, lTensorOne
+/-
+**Submodule.lTensorOne_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：lTensorOne_tmul (y : R) (n : N) : N.lTensorOne (algebraMap R _ y otimesₜ[R
+] n) = y • n
+参数：y : R；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.lTensorOne'_tmul`：∀ {R : Type u} {S : Type v} [inst : CommSemi
+ring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {N : Submodule R S}   (y : 
+R) (n : ↥N), N.l…
 -/
-theorem lTensorOne_tmul (y : R) (n : N) : N.lTensorOne (algebraMap R _ y otimesₜ[R] n) = y • n :=
+theorem lTensorOne_tmul (y : R) (n : N) : N.lTensorOne (algebraMap R _ y ⊗ₜ[R] n) = y • n :=
   N.lTensorOne'_tmul y n
 
 variable {N} in
 @[simp]
-/--
-theorem `lTensorOne_one_tmul` / 定理 `lTensorOne_one_tmul`
-
-English:
-theorem lTensorOne_one_tmul
-  given: (n : N)
-  statement: N.lTensorOne (1 otimesₜ[R] n) = n
-  proof: N.lTensorOne'_one_tmul n
-
-中文:
-定理 lTensorOne_one_tmul
-  条件: (n : N)
-  结论: N.lTensorOne (1 otimesₜ[R] n) = n
-  证明: N.lTensorOne'_one_tmul n
-
-Depends on / 依赖: N.lTensorOne, _one_tmul, lTensorOne
+/-
+**Submodule.lTensorOne_one_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：lTensorOne_one_tmul (n : N) : N.lTensorOne (1 otimesₜ[R] n) = n
+参数：n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.lTensorOne'_one_tmul`：∀ {R : Type u} {S : Type v} [inst : Comm
+Semiring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {N : Submodule R S}   (
+n : ↥N), N.lTensorOn…
 -/
-theorem lTensorOne_one_tmul (n : N) : N.lTensorOne (1 otimesₜ[R] n) = n :=
+theorem lTensorOne_one_tmul (n : N) : N.lTensorOne (1 ⊗ₜ[R] n) = n :=
   N.lTensorOne'_one_tmul n
 
 variable {N} in
 @[simp]
-/--
-theorem `lTensorOne_symm_apply` / 定理 `lTensorOne_symm_apply`
-
-English:
-theorem lTensorOne_symm_apply
-  given: (n : N)
-  statement: N.lTensorOne.symm n = 1 otimesₜ[R] n
-  proof: rfl
-
-中文:
-定理 lTensorOne_symm_apply
-  条件: (n : N)
-  结论: N.lTensorOne.symm n = 1 otimesₜ[R] n
-  证明: rfl
+/-
+**Submodule.lTensorOne_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：lTensorOne_symm_apply (n : N) : N.lTensorOne.symm n = 1 otimesₜ[R] n
+参数：n : N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lTensorOne_symm_apply (n : N) : N.lTensorOne.symm n = 1 otimesₜ[R] n := rfl
-
-/--
-theorem `mulMap_one_left_eq` / 定理 `mulMap_one_left_eq`
-
-English:
-theorem mulMap_one_left_eq
-  proof: TensorProduct.ext' fun _ _ => rfl
-
-中文:
-定理 mulMap_one_left_eq
-  证明: TensorProduct.ext' fun _ _ => rfl
-
-Depends on / 依赖: TensorProduct, TensorProduct.ext
+theorem lTensorOne_symm_apply (n : N) : N.lTensorOne.symm n = 1 ⊗ₜ[R] n := rfl
+/-
+**Submodule.mulMap_one_left_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_one_left_eq : mulMap (Subalgebra.toSubmodule ⊥) N = N.subtype ∘ₗ N.
+lTensorOne.toLinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
 -/
 theorem mulMap_one_left_eq :
     mulMap (Subalgebra.toSubmodule ⊥) N = N.subtype ∘ₗ N.lTensorOne.toLinearMap :=
-  TensorProduct.ext' fun _ _ => rfl
+  TensorProduct.ext' fun _ _ ↦ rfl
 
-/--
-Definition of `rTensorOne'` / `rTensorOne'` 的定义
+/-- If `M` is a submodule in an algebra `S` over `R`, there is the natural `R`-linear map
+`M ⊗[R] i(R) →ₗ[R] M` induced by multiplication in `S`, here `i : R → S` is the structure map.
+This is promoted to an isomorphism of `R`-modules as `Submodule.rTensorOne`. Use that instead. -/
+/-
+**Submodule.rTensorOne'** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：rTensorOne' : M otimes[R] (⊥ : Subalgebra R S) ->ₗ[R] M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rTensorOne'
-  signature: : M otimes[R] (⊥ : Subalgebra R S) ->ₗ[R] M
-  body: show M otimes[R] Subalgebra.toSubmodule ⊥ ->ₗ[R] M from
-    (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, mul_one])).toLinearMap ∘ₗ
-      (mulMap M _).rangeRestrict
-
-中文:
-定义 rTensorOne'
-  签名: : M otimes[R] (⊥ : 子代数 R S) ->ₗ[R] M
-  定义体: show M otimes[R] Subalgebra.toSubmodule ⊥ ->ₗ[R] M from
-    (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, mul_one])).toLinearMap ∘ₗ
-      (mulMap M _).rangeRestrict
-
-Depends on / 依赖: Algebra, Algebra.toSubmodule_bot, LinearEquiv, LinearEquiv.ofEq, Subalgebra, Subalgebra.toSubmodule, mulMap, mulMap_range, mul_one, otimes, rangeRestrict, toLinearMap, toSubmodule, toSubmodule_bot
+--- 原说明 ---
+If `M` is a submodule in an algebra `S` over `R`, there is the natural `R`-linea
+r map
+`M ⊗[R] i(R) →ₗ[R] M` induced by multiplication in `S`, here `i : R → S` is the 
+structure map.
+This is promoted to an isomorphism of `R`-modules as `Submodule.rTensorOne`. Use
+ that instead.
 -/
-def rTensorOne' : M otimes[R] (⊥ : Subalgebra R S) ->ₗ[R] M :=
-  show M otimes[R] Subalgebra.toSubmodule ⊥ ->ₗ[R] M from
+def rTensorOne' : M ⊗[R] (⊥ : Subalgebra R S) →ₗ[R] M :=
+  show M ⊗[R] Subalgebra.toSubmodule ⊥ →ₗ[R] M from
     (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, mul_one])).toLinearMap ∘ₗ
       (mulMap M _).rangeRestrict
 
 variable {M} in
 @[simp]
-/--
-theorem `rTensorOne'_tmul` / 定理 `rTensorOne'_tmul`
-
-English:
-theorem rTensorOne'_tmul
-  given: (y : R) (m : M)
-  proof: Subtype.val_injective by
-  simp_rw [rTensorOne', LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
-    LinearEquiv.coe_ofEq_apply, LinearMap.codRestrict_apply, SetLike.val_smul]
-  rw [Algebra.smul_def]; rw [Algebra.commutes]
-  exact mulMap_tmul M _ _ _
-
-中文:
-定理 rTensorOne'_tmul
-  条件: (y : R) (m : M)
-  证明: Subtype.val_injective by
-  simp_rw [rTensorOne', LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
-    LinearEquiv.coe_ofEq_apply, LinearMap.codRestrict_apply, SetLike.val_smul]
-  rw [Algebra.smul_def]; rw [Algebra.commutes]
-  exact mulMap_tmul M _ _ _
+/-
+**Submodule.rTensorOne'_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : Semiring S] 
+[inst_2 : Algebra R S] {M : Submodule R S}   (y : R) (m : ↥M), M.rTensorOne' (m 
+⊗ₜ[R] (algebraMap R ↥⊥) y) = y • m
+参数：y : R；m : ↥M；m ⊗ₜ[R] (algebraMap R ↥⊥) y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `Algebra.commutes`：commutes (r : R) (x : A) : algebraMap R A r * x = x * 
+algebraMap R A r
+· 使用定理 `Submodule.mulMap_tmul`：mulMap_tmul (m : M) (n : N) : mulMap M N (m otime
+sₜ[R] n) = m.1 * n.1
 -/
 theorem rTensorOne'_tmul (y : R) (m : M) :
-M.rTensorOne' (m otimesₜ[R] algebraMap R _ y) = y • m := Subtype.val_injective by
+    M.rTensorOne' (m ⊗ₜ[R] algebraMap R _ y) = y • m := Subtype.val_injective <| by
   simp_rw [rTensorOne', LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
     LinearEquiv.coe_ofEq_apply, LinearMap.codRestrict_apply, SetLike.val_smul]
-  rw [Algebra.smul_def]; rw [Algebra.commutes]
+  rw [Algebra.smul_def, Algebra.commutes]
   exact mulMap_tmul M _ _ _
 
 variable {M} in
 @[simp]
-/--
-theorem `rTensorOne'_tmul_one` / 定理 `rTensorOne'_tmul_one`
-
-English:
-theorem rTensorOne'_tmul_one
-  given: (m : M)
-  statement: M.rTensorOne' (m otimesₜ[R] 1) = m
-  proof: by
-  simpa using rTensorOne'_tmul 1 m
-
-中文:
-定理 rTensorOne'_tmul_one
-  条件: (m : M)
-  结论: M.rTensorOne' (m otimesₜ[R] 1) = m
-  证明: by
-  simpa using rTensorOne'_tmul 1 m
+/-
+**Submodule.rTensorOne'_tmul_one** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : Semiring S] 
+[inst_2 : Algebra R S] {M : Submodule R S}   (m : ↥M), M.rTensorOne' (m ⊗ₜ[R] 1)
+ = m
+参数：m : ↥M；m ⊗ₜ[R] 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidWithOneClass.toOneMemClass`：∀ {S : Type u_1} {R : outParam (
+Type u_2)} {inst : AddMonoidWithOne R} {inst_1 : SetLike S R}   [self : AddSubmo
+noidWithOneClass S R], OneMe…
+· 使用定理 `SubsemiringClass.addSubmonoidWithOneClass`：∀ (S : Type u_1) (R : Type u)
+ {x : NonAssocSemiring R} [inst : SetLike S R] [h : SubsemiringClass S R],   Add
+SubmonoidWithOneClass S R
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Submodule.rTensorOne'_tmul`：∀ {R : Type u} {S : Type v} [inst : CommSemi
+ring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {M : Submodule R S}   (y : 
+R) (m : ↥M), M.r…
 -/
-theorem rTensorOne'_tmul_one (m : M) : M.rTensorOne' (m otimesₜ[R] 1) = m := by
+theorem rTensorOne'_tmul_one (m : M) : M.rTensorOne' (m ⊗ₜ[R] 1) = m := by
   simpa using rTensorOne'_tmul 1 m
 
-/--
-Definition of `rTensorOne` / `rTensorOne` 的定义
+/-- If `M` is a submodule in an algebra `S` over `R`,
+there is the natural isomorphism of `R`-modules between
+`M ⊗[R] i(R)` and `M` induced by multiplication in `S`, here `i : R → S` is the structure map.
+This generalizes `TensorProduct.rid` as `i(R)` is not necessarily isomorphic to `R`. -/
+/-
+**Submodule.rTensorOne** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：rTensorOne : M otimes[R] (⊥ : Subalgebra R S) ≃ₗ[R] M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rTensorOne
-  signature: : M otimes[R] (⊥ : Subalgebra R S) ≃ₗ[R] M
-  body: LinearEquiv.ofLinearMap M.rTensorOne' ((TensorProduct.comm R _ _).toLinearMap ∘ₗ
-    TensorProduct.mk R (⊥ : Subalgebra R S) M 1) (by ext; simp) <| TensorProduct.ext' fun n r => by
-  change rTensorOne' M _ otimesₜ[R] 1 = n otimesₜ[R] r
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; rw [rTensorOne'_tmul]; rw [TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
-
-中文:
-定义 rTensorOne
-  签名: : M otimes[R] (⊥ : 子代数 R S) ≃ₗ[R] M
-  定义体: LinearEquiv.ofLinearMap M.rTensorOne' ((TensorProduct.comm R _ _).toLinearMap ∘ₗ
-    TensorProduct.mk R (⊥ : Subalgebra R S) M 1) (by ext; simp) <| TensorProduct.ext' fun n r => by
-  change rTensorOne' M _ otimesₜ[R] 1 = n otimesₜ[R] r
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; rw [rTensorOne'_tmul]; rw [TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
-
-Depends on / 依赖: Algebra, Algebra.mem_bot, Algebra.smul_def, LinearEquiv, LinearEquiv.ofLinearMap, M.rTensorOne, Subalgebra, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.comm, TensorProduct.ext, TensorProduct.mk, TensorProduct.smul_tmul, _tmul, algebraMap, mem_bot, mul_one, ofLinearMap, rTensorOne
+--- 原说明 ---
+If `M` is a submodule in an algebra `S` over `R`,
+there is the natural isomorphism of `R`-modules between
+`M ⊗[R] i(R)` and `M` induced by multiplication in `S`, here `i : R → S` is the 
+structure map.
+This generalizes `TensorProduct.rid` as `i(R)` is not necessarily isomorphic to 
+`R`.
 -/
-def rTensorOne : M otimes[R] (⊥ : Subalgebra R S) ≃ₗ[R] M :=
+def rTensorOne : M ⊗[R] (⊥ : Subalgebra R S) ≃ₗ[R] M :=
   LinearEquiv.ofLinearMap M.rTensorOne' ((TensorProduct.comm R _ _).toLinearMap ∘ₗ
-    TensorProduct.mk R (⊥ : Subalgebra R S) M 1) (by ext; simp) <| TensorProduct.ext' fun n r => by
-  change rTensorOne' M _ otimesₜ[R] 1 = n otimesₜ[R] r
+    TensorProduct.mk R (⊥ : Subalgebra R S) M 1) (by ext; simp) <| TensorProduct.ext' fun n r ↦ by
+  change rTensorOne' M _ ⊗ₜ[R] 1 = n ⊗ₜ[R] r
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
   replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; rw [rTensorOne'_tmul]; rw [TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
+  rw [← h, rTensorOne'_tmul, TensorProduct.smul_tmul, Algebra.smul_def, mul_one]
 
 variable {M} in
 @[simp]
-/--
-theorem `rTensorOne_tmul` / 定理 `rTensorOne_tmul`
-
-English:
-theorem rTensorOne_tmul
-  given: (y : R) (m : M)
-  statement: M.rTensorOne (m otimesₜ[R] algebraMap R _ y) = y • m
-  proof: M.rTensorOne'_tmul y m
-
-中文:
-定理 rTensorOne_tmul
-  条件: (y : R) (m : M)
-  结论: M.rTensorOne (m otimesₜ[R] algebraMap R _ y) = y • m
-  证明: M.rTensorOne'_tmul y m
-
-Depends on / 依赖: M.rTensorOne, _tmul, rTensorOne
+/-
+**Submodule.rTensorOne_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：rTensorOne_tmul (y : R) (m : M) : M.rTensorOne (m otimesₜ[R] algebraMap R 
+_ y) = y • m
+参数：y : R；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.rTensorOne'_tmul`：∀ {R : Type u} {S : Type v} [inst : CommSemi
+ring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {M : Submodule R S}   (y : 
+R) (m : ↥M), M.r…
 -/
-theorem rTensorOne_tmul (y : R) (m : M) : M.rTensorOne (m otimesₜ[R] algebraMap R _ y) = y • m :=
+theorem rTensorOne_tmul (y : R) (m : M) : M.rTensorOne (m ⊗ₜ[R] algebraMap R _ y) = y • m :=
   M.rTensorOne'_tmul y m
 
 variable {M} in
 @[simp]
-/--
-theorem `rTensorOne_tmul_one` / 定理 `rTensorOne_tmul_one`
-
-English:
-theorem rTensorOne_tmul_one
-  given: (m : M)
-  statement: M.rTensorOne (m otimesₜ[R] 1) = m
-  proof: M.rTensorOne'_tmul_one m
-
-中文:
-定理 rTensorOne_tmul_one
-  条件: (m : M)
-  结论: M.rTensorOne (m otimesₜ[R] 1) = m
-  证明: M.rTensorOne'_tmul_one m
-
-Depends on / 依赖: M.rTensorOne, _tmul_one, rTensorOne
+/-
+**Submodule.rTensorOne_tmul_one** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：rTensorOne_tmul_one (m : M) : M.rTensorOne (m otimesₜ[R] 1) = m
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.rTensorOne'_tmul_one`：∀ {R : Type u} {S : Type v} [inst : Comm
+Semiring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {M : Submodule R S}   (
+m : ↥M), M.rTensorOn…
 -/
-theorem rTensorOne_tmul_one (m : M) : M.rTensorOne (m otimesₜ[R] 1) = m :=
+theorem rTensorOne_tmul_one (m : M) : M.rTensorOne (m ⊗ₜ[R] 1) = m :=
   M.rTensorOne'_tmul_one m
 
 variable {M} in
 @[simp]
-/--
-theorem `rTensorOne_symm_apply` / 定理 `rTensorOne_symm_apply`
-
-English:
-theorem rTensorOne_symm_apply
-  given: (m : M)
-  statement: M.rTensorOne.symm m = m otimesₜ[R] 1
-  proof: rfl
-
-中文:
-定理 rTensorOne_symm_apply
-  条件: (m : M)
-  结论: M.rTensorOne.symm m = m otimesₜ[R] 1
-  证明: rfl
+/-
+**Submodule.rTensorOne_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：rTensorOne_symm_apply (m : M) : M.rTensorOne.symm m = m otimesₜ[R] 1
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem rTensorOne_symm_apply (m : M) : M.rTensorOne.symm m = m otimesₜ[R] 1 := rfl
-
-/--
-theorem `mulMap_one_right_eq` / 定理 `mulMap_one_right_eq`
-
-English:
-theorem mulMap_one_right_eq
-  proof: TensorProduct.ext' fun _ _ => rfl
-
-@[simp]
-
-中文:
-定理 mulMap_one_right_eq
-  证明: TensorProduct.ext' fun _ _ => rfl
-
-@[simp]
-
-Depends on / 依赖: TensorProduct, TensorProduct.ext
+theorem rTensorOne_symm_apply (m : M) : M.rTensorOne.symm m = m ⊗ₜ[R] 1 := rfl
+/-
+**Submodule.mulMap_one_right_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_one_right_eq : mulMap M (Subalgebra.toSubmodule ⊥) = M.subtype ∘ₗ M
+.rTensorOne.toLinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
 -/
 theorem mulMap_one_right_eq :
     mulMap M (Subalgebra.toSubmodule ⊥) = M.subtype ∘ₗ M.rTensorOne.toLinearMap :=
-  TensorProduct.ext' fun _ _ => rfl
+  TensorProduct.ext' fun _ _ ↦ rfl
 
 @[simp]
-/--
-theorem `comm_trans_lTensorOne` / 定理 `comm_trans_lTensorOne`
-
-English:
-theorem comm_trans_lTensorOne
-  proof: by
-refine LinearEquiv.toLinearMap_injective TensorProduct.ext' fun m r => ?_
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; simp
-
-@[simp]
-
-中文:
-定理 comm_trans_lTensorOne
-  证明: by
-refine LinearEquiv.toLinearMap_injective TensorProduct.ext' fun m r => ?_
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; simp
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.mem_bot, LinearEquiv, LinearEquiv.toLinearMap_injective, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.ext, algebraMap, mem_bot, replace, toLinearMap_injective, val_injective
+/-
+**Submodule.comm_trans_lTensorOne** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：comm_trans_lTensorOne : (TensorProduct.comm R _ _).trans M.lTensorOne = M.
+rTensorOne
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.toLinearMap_injective`：toLinearMap_injective : Injective (to
+LinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.mem_bot`：mem_bot {x : A} : x in (⊥ : Subalgebra R A) ↔ x in Set.
+range (algebraMap R A)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.lTensorOne_tmul`：lTensorOne_tmul (y : R) (n : N) : N.lTensorOn
+e (algebraMap R _ y otimesₜ[R] n) = y • n
+· 使用定理 `Submodule.rTensorOne_tmul`：rTensorOne_tmul (y : R) (m : M) : M.rTensorOn
+e (m otimesₜ[R] algebraMap R _ y) = y • m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comm_trans_lTensorOne :
     (TensorProduct.comm R _ _).trans M.lTensorOne = M.rTensorOne := by
-refine LinearEquiv.toLinearMap_injective TensorProduct.ext' fun m r => ?_
+  refine LinearEquiv.toLinearMap_injective <| TensorProduct.ext' fun m r ↦ ?_
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
   replace h : algebraMap R _ x = r := Subtype.val_injective h
   rw [← h]; simp
 
 @[simp]
-/--
-theorem `comm_trans_rTensorOne` / 定理 `comm_trans_rTensorOne`
-
-English:
-theorem comm_trans_rTensorOne
-  proof: by
-refine LinearEquiv.toLinearMap_injective TensorProduct.ext' fun r m => ?_
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; simp
-
-中文:
-定理 comm_trans_rTensorOne
-  证明: by
-refine LinearEquiv.toLinearMap_injective TensorProduct.ext' fun r m => ?_
-  obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]; simp
-
-Depends on / 依赖: Algebra, Algebra.mem_bot, LinearEquiv, LinearEquiv.toLinearMap_injective, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.ext, algebraMap, mem_bot, replace, toLinearMap_injective, val_injective
+/-
+**Submodule.comm_trans_rTensorOne** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：comm_trans_rTensorOne : (TensorProduct.comm R _ _).trans M.rTensorOne = M.
+lTensorOne
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.toLinearMap_injective`：toLinearMap_injective : Injective (to
+LinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
+· 使用定理 `TensorProduct.ext'`：ext' {g h : M otimes[R] N ->ₛₗ[σ₁₂] P₂} (H : forall 
+x y, g (x otimesₜ y) = h (x otimesₜ y)) : g = h
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.mem_bot`：mem_bot {x : A} : x in (⊥ : Subalgebra R A) ↔ x in Set.
+range (algebraMap R A)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.rTensorOne_tmul`：rTensorOne_tmul (y : R) (m : M) : M.rTensorOn
+e (m otimesₜ[R] algebraMap R _ y) = y • m
+· 使用定理 `Submodule.lTensorOne_tmul`：lTensorOne_tmul (y : R) (n : N) : N.lTensorOn
+e (algebraMap R _ y otimesₜ[R] n) = y • n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comm_trans_rTensorOne :
     (TensorProduct.comm R _ _).trans M.rTensorOne = M.lTensorOne := by
-refine LinearEquiv.toLinearMap_injective TensorProduct.ext' fun r m => ?_
+  refine LinearEquiv.toLinearMap_injective <| TensorProduct.ext' fun r m ↦ ?_
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
   replace h : algebraMap R _ x = r := Subtype.val_injective h
   rw [← h]; simp
 
 variable {M} in
-/--
-theorem `mulLeftMap_eq_mulMap_comp` / 定理 `mulLeftMap_eq_mulMap_comp`
-
-English:
-theorem mulLeftMap_eq_mulMap_comp
-  given: {ι : Type*} [DecidableEq ι] (m : ι -> M)
-  proof: by
-  ext; simp
-
-中文:
-定理 mulLeftMap_eq_mulMap_comp
-  条件: {ι : 类型} [DecidableEq ι] (m : ι -> M)
-  证明: by
-  ext; simp
+/-
+**Submodule.mulLeftMap_eq_mulMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulLeftMap_eq_mulMap_comp {ι : Type*} [DecidableEq ι] (m : ι -> M) : mulLe
+ftMap N m = mulMap M N ∘ₗ LinearMap.rTensor N (Finsupp.linearCombination R m) ∘ₗ
+ (TensorProduct.finsuppScalarLeft R N ι).symm.toLinearMap
+参数：m : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mulLeftMap_apply_single`：mulLeftMap_apply_single {M N : Submod
+ule R S} {ι : Type*} (m : ι -> M) (i : ι) (n : N) : mulLeftMap N m (Finsupp.sing
+le i n) = (m i).1 * n.1
+· 使用引理 `TensorProduct.finsuppScalarLeft_symm_apply_single`：finsuppScalarLeft_sym
+m_apply_single (i : ι) (n : N) : (finsuppScalarLeft R N ι).symm (Finsupp.single 
+i n) = (Finsupp.single i 1) otimesₜ[R] …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mulLeftMap_eq_mulMap_comp {ι : Type*} [DecidableEq ι] (m : ι -> M) :
+theorem mulLeftMap_eq_mulMap_comp {ι : Type*} [DecidableEq ι] (m : ι → M) :
     mulLeftMap N m = mulMap M N ∘ₗ LinearMap.rTensor N (Finsupp.linearCombination R m) ∘ₗ
       (TensorProduct.finsuppScalarLeft R N ι).symm.toLinearMap := by
   ext; simp
 
 variable {N} in
-/--
-theorem `mulRightMap_eq_mulMap_comp` / 定理 `mulRightMap_eq_mulMap_comp`
-
-English:
-theorem mulRightMap_eq_mulMap_comp
-  given: {ι : Type*} [DecidableEq ι] (n : ι -> N)
-  proof: by
-  ext; simp
-
-中文:
-定理 mulRightMap_eq_mulMap_comp
-  条件: {ι : 类型} [DecidableEq ι] (n : ι -> N)
-  证明: by
-  ext; simp
+/-
+**Submodule.mulRightMap_eq_mulMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulRightMap_eq_mulMap_comp {ι : Type*} [DecidableEq ι] (n : ι -> N) : mulR
+ightMap M n = mulMap M N ∘ₗ LinearMap.lTensor M (Finsupp.linearCombination R n) 
+∘ₗ (TensorProduct.finsuppScalarRight R R M ι).symm.toLinearMap
+参数：n : ι -> N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext'`：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a
+, φ.comp (lsingle a) = ψ.comp (lsingle a)) : φ = ψ
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mulRightMap_apply_single`：mulRightMap_apply_single {M N : Subm
+odule R S} {ι : Type*} (n : ι -> N) (i : ι) (m : M) : mulRightMap M n (Finsupp.s
+ingle i m) = m.1 * (n i)…
+· 使用引理 `TensorProduct.finsuppScalarRight_symm_apply_single`：finsuppScalarRight_s
+ymm_apply_single (i : ι) (m : M) : (finsuppScalarRight R S M ι).symm (Finsupp.si
+ngle i m) = m otimesₜ[R] (Finsupp.single…
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mulRightMap_eq_mulMap_comp {ι : Type*} [DecidableEq ι] (n : ι -> N) :
+theorem mulRightMap_eq_mulMap_comp {ι : Type*} [DecidableEq ι] (n : ι → N) :
     mulRightMap M n = mulMap M N ∘ₗ LinearMap.lTensor M (Finsupp.linearCombination R n) ∘ₗ
       (TensorProduct.finsuppScalarRight R R M ι).symm.toLinearMap := by
   ext; simp
@@ -867,24 +870,21 @@ variable [CommSemiring R] [CommSemiring S] [Algebra R S]
 
 variable (M N : Submodule R S)
 
-/--
-theorem `mulMap_comm` / 定理 `mulMap_comm`
-
-English:
-theorem mulMap_comm
-  statement: mulMap N M = (mulMap M N).comp (TensorProduct.comm R N M).toLinearMap
-  proof: mulMap_comm_of_commute M N fun _ _ => mul_comm _ _
-
-中文:
-定理 mulMap_comm
-  结论: mulMap N M = (mulMap M N).comp (张量积.comm R N M).toLinearMap
-  证明: mulMap_comm_of_commute M N fun _ _ => mul_comm _ _
-
-Depends on / 依赖: mulMap_comm_of_commute, mul_comm
+/-
+**Submodule.mulMap_comm** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mulMap_comm : mulMap N M = (mulMap M N).comp (TensorProduct.comm R N M).to
+LinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.mulMap_comm_of_commute`：mulMap_comm_of_commute (hc : forall (m
+ : M) (n : N), Commute m.1 n.1) : mulMap N M = mulMap M N ∘ₗ TensorProduct.comm 
+R N M
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem mulMap_comm : mulMap N M = (mulMap M N).comp (TensorProduct.comm R N M).toLinearMap :=
-  mulMap_comm_of_commute M N fun _ _ => mul_comm _ _
+  mulMap_comm_of_commute M N fun _ _ ↦ mul_comm _ _
 
 end CommSemiring
 
 end Submodule
+

@@ -19,29 +19,28 @@ public meta section
 namespace Lean.MVarId
 
 /--
-Definition of `casesMatching` / `casesMatching` 的定义
-
-English:
-definition casesMatching
-  signature: (matcher : Expr -> MetaM Bool) (recursive := false) (allowSplit := true)
-  body: do
-  let result := (← go g).toList
-  if throwOnNoMatch && result == [g] then
-    throwError "no match"
-  else
-    return result
-
-中文:
-定义 casesMatching
-  签名: (matcher : Expr -> MetaM 布尔值) (recursive := false) (allowSplit := true)
-  定义体: do
-  let result := (← go g).toList
-  if throwOnNoMatch && result == [g] then
-    throwError "no match"
-  else
-    return result
+Core tactic for `casesm` and `cases_type`. Calls `cases` on all fvars in `g` for which
+`matcher ldecl.type` returns true.
+* `recursive`: if true, it calls itself repeatedly on the resulting subgoals
+* `allowSplit`: if false, it will skip any hypotheses where `cases` returns more than one subgoal.
+* `throwOnNoMatch`: if true, then throws an error if no match is found
 -/
-partial def casesMatching (matcher : Expr -> MetaM Bool) (recursive := false) (allowSplit := true)
+/-
+**Lean.MVarId.casesMatching** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MVarId`。
+形式化陈述：(Expr → MetaM Bool) → optParam Bool false → optParam Bool true → optParam 
+Bool true → MVarId → MetaM (List MVarId)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Core tactic for `casesm` and `cases_type`. Calls `cases` on all fvars in `g` for
+ which
+`matcher ldecl.type` returns true.
+* `recursive`: if true, it calls itself repeatedly on the resulting subgoals
+* `allowSplit`: if false, it will skip any hypotheses where `cases` returns more
+ than one subgoal.
+* `throwOnNoMatch`: if true, then throws an error if no match is found
+-/
+partial def casesMatching (matcher : Expr → MetaM Bool) (recursive := false) (allowSplit := true)
     (throwOnNoMatch := true) (g : MVarId) : MetaM (List MVarId) := do
   let result := (← go g).toList
   if throwOnNoMatch && result == [g] then
@@ -77,29 +76,15 @@ where
               acc := acc.push g
           return acc
       return (acc.push g)
-
-/--
-Definition of `casesType` / `casesType` 的定义
-
-English:
-definition casesType
-  signature: (heads : Array Name) (recursive := false) (allowSplit := true)
-  body: let matcher ty := pure
-    if let .const n .. := ty.headBeta.getAppFn then heads.contains n else false
-  casesMatching matcher recursive allowSplit
-
-中文:
-定义 casesType
-  签名: (heads : 数组 Name) (recursive := false) (allowSplit := true)
-  定义体: let matcher ty := pure
-    if let .const n .. := ty.headBeta.getAppFn then heads.contains n else false
-  casesMatching matcher recursive allowSplit
-
-Depends on / 依赖: allowSplit
+/-
+**Lean.MVarId.casesType** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MVarId`。
+形式化陈述：casesType (heads : Array Name) (recursive
+参数：heads : Array Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def casesType (heads : Array Name) (recursive := false) (allowSplit := true) :
-    MVarId -> MetaM (List MVarId) :=
-let matcher ty := pure
+    MVarId → MetaM (List MVarId) :=
+  let matcher ty := pure <|
     if let .const n .. := ty.headBeta.getAppFn then heads.contains n else false
   casesMatching matcher recursive allowSplit
 
@@ -108,70 +93,49 @@ end Lean.MVarId
 namespace Mathlib.Tactic
 open Lean Meta Elab Tactic MVarId
 
-/--
-Definition of `elabPatterns` / `elabPatterns` 的定义
+/-- Elaborate a list of terms with holes into a list of patterns. -/
+/-
+**Mathlib.Tactic.elabPatterns** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：elabPatterns (pats : Array Term) : TermElabM (Array AbstractMVarsResult)
+参数：pats : Array Term。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabPatterns
-  signature: (pats : Array Term)
-  body: withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true })
-Term.withoutErrToSorry
-  pats.mapM fun p => Term.withoutModifyingElabMetaStateWithInfo do
-withRef p abstractMVars (← Term.elabTerm p none)
-
-中文:
-定义 elabPatterns
-  签名: (pats : 数组 项)
-  定义体: withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true })
-Term.withoutErrToSorry
-  pats.mapM fun p => Term.withoutModifyingElabMetaStateWithInfo do
-withRef p abstractMVars (← Term.elabTerm p none)
-
-Depends on / 依赖: Context, Term.Context, Term.elabTerm, Term.withoutErrToSorry, Term.withoutModifyingElabMetaStateWithInfo, abstractMVars, elabTerm, ignoreTCFailures, pats.mapM, withRef, withTheReader, withoutErrToSorry, withoutModifyingElabMetaStateWithInfo
+--- 原说明 ---
+Elaborate a list of terms with holes into a list of patterns.
 -/
 def elabPatterns (pats : Array Term) : TermElabM (Array AbstractMVarsResult) :=
-withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true })
-Term.withoutErrToSorry
-  pats.mapM fun p => Term.withoutModifyingElabMetaStateWithInfo do
-withRef p abstractMVars (← Term.elabTerm p none)
+  withTheReader Term.Context (fun ctx ↦ { ctx with ignoreTCFailures := true }) <|
+  Term.withoutErrToSorry <|
+  pats.mapM fun p ↦ Term.withoutModifyingElabMetaStateWithInfo do
+    withRef p <| abstractMVars (← Term.elabTerm p none)
 
-/--
-Definition of `matchPatterns` / `matchPatterns` 的定义
+/-- Returns true if any of the patterns match the expression. -/
+/-
+**Mathlib.Tactic.matchPatterns** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：matchPatterns (pats : Array AbstractMVarsResult) (e : Expr) : MetaM Bool
+参数：pats : Array AbstractMVarsResult；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchPatterns
-  signature: (pats : Array AbstractMVarsResult) (e : Expr)
-  body: do
-  let e ← instantiateMVars e
-  pats.anyM fun p => return (← Conv.matchPattern? p e) matches some (_, #[])
-
-中文:
-定义 matchPatterns
-  签名: (pats : 数组 AbstractMVarsResult) (e : Expr)
-  定义体: do
-  let e ← instantiateMVars e
-  pats.anyM fun p => return (← Conv.matchPattern? p e) matches some (_, #[])
+--- 原说明 ---
+Returns true if any of the patterns match the expression.
 -/
 def matchPatterns (pats : Array AbstractMVarsResult) (e : Expr) : MetaM Bool := do
   let e ← instantiateMVars e
-  pats.anyM fun p => return (← Conv.matchPattern? p e) matches some (_, #[])
+  pats.anyM fun p ↦ return (← Conv.matchPattern? p e) matches some (_, #[])
 
-/--
-Definition of `elabCasesM` / `elabCasesM` 的定义
+/-- Common implementation of `casesm` and `casesm!`. -/
+/-
+**Mathlib.Tactic.elabCasesM** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：elabCasesM (pats : Array Term) (recursive allowSplit : Bool) : TacticM Uni
+t
+参数：pats : Array Term；recursive allowSplit : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabCasesM
-  signature: (pats : Array Term) (recursive allowSplit : Bool)
-  body: do
-  let pats ← elabPatterns pats
-  liftMetaTactic (casesMatching (matchPatterns pats) recursive allowSplit)
-
-中文:
-定义 elabCasesM
-  签名: (pats : 数组 项) (recursive allowSplit : 布尔值)
-  定义体: do
-  let pats ← elabPatterns pats
-  liftMetaTactic (casesMatching (matchPatterns pats) recursive allowSplit)
+--- 原说明 ---
+Common implementation of `casesm` and `casesm!`.
 -/
 def elabCasesM (pats : Array Term) (recursive allowSplit : Bool) : TacticM Unit := do
   let pats ← elabPatterns pats
@@ -207,24 +171,15 @@ elab (name := casesM) "casesm" recursive:"*"? ppSpace pats:term,+ : tactic => do
 elab (name := casesm!) "casesm!" recursive:"*"? ppSpace pats:term,+ : tactic => do
   elabCasesM pats recursive.isSome false
 
-/--
-Definition of `elabCasesType` / `elabCasesType` 的定义
+/-- Common implementation of `cases_type` and `cases_type!`. -/
+/-
+**Mathlib.Tactic.elabCasesType** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：elabCasesType (heads : Array Ident) (recursive
+参数：heads : Array Ident。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabCasesType
-  signature: (heads : Array Ident)
-  body: do
-  let heads ← heads.mapM (fun stx => realizeGlobalConstNoOverloadWithInfo stx)
-  liftMetaTactic (casesType heads recursive allowSplit)
-
-中文:
-定义 elabCasesType
-  签名: (heads : 数组 Ident)
-  定义体: do
-  let heads ← heads.mapM (fun stx => realizeGlobalConstNoOverloadWithInfo stx)
-  liftMetaTactic (casesType heads recursive allowSplit)
-
-Depends on / 依赖: TacticM, allowSplit
+--- 原说明 ---
+Common implementation of `cases_type` and `cases_type!`.
 -/
 def elabCasesType (heads : Array Ident)
     (recursive := false) (allowSplit := true) : TacticM Unit := do
@@ -260,41 +215,25 @@ elab (name := casesType!) "cases_type!" recursive:"*"? heads:(ppSpace colGt iden
   elabCasesType heads recursive.isSome false
 
 /--
-Definition of `constructorMatching` / `constructorMatching` 的定义
-
-English:
-definition constructorMatching
-  signature: (g : MVarId) (matcher : Expr -> MetaM Bool)
-  body: do
-  let result ←
-    (if recursive then (do
-      let result ← go g
-      pure result.toList)
-     else
-      (g.withContext do
-          if ← matcher (← g.getType) then g.constructor else pure [g]))
-  if throwOnNoMatch && [g] == result then
-    throwError "no match"
-  else
-    return result
-
-中文:
-定义 constructorMatching
-  签名: (g : MVarId) (matcher : Expr -> MetaM 布尔值)
-  定义体: do
-  let result ←
-    (if recursive then (do
-      let result ← go g
-      pure result.toList)
-     else
-      (g.withContext do
-          if ← matcher (← g.getType) then g.constructor else pure [g]))
-  if throwOnNoMatch && [g] == result then
-    throwError "no match"
-  else
-    return result
+Core tactic for `constructorm`. Calls `constructor` on all subgoals for which
+`matcher ldecl.type` returns true.
+* `recursive`: if true, it calls itself repeatedly on the resulting subgoals
+* `throwOnNoMatch`: if true, throws an error if no match is found
 -/
-partial def constructorMatching (g : MVarId) (matcher : Expr -> MetaM Bool)
+/-
+**Mathlib.Tactic.constructorMatching** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：MVarId → (Expr → MetaM Bool) → optParam Bool false → optParam Bool true → 
+MetaM (List MVarId)
+参数：Expr → MetaM Bool；List MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Core tactic for `constructorm`. Calls `constructor` on all subgoals for which
+`matcher ldecl.type` returns true.
+* `recursive`: if true, it calls itself repeatedly on the resulting subgoals
+* `throwOnNoMatch`: if true, throws an error if no match is found
+-/
+partial def constructorMatching (g : MVarId) (matcher : Expr → MetaM Bool)
     (recursive := false) (throwOnNoMatch := true) : MetaM (List MVarId) := do
   let result ←
     (if recursive then (do
@@ -338,3 +277,4 @@ elab (name := constructorM) "constructorm" recursive:"*"? ppSpace pats:term,+ : 
   liftMetaTactic (constructorMatching · (matchPatterns pats) recursive.isSome)
 
 end Mathlib.Tactic
+

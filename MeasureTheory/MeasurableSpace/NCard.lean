@@ -22,46 +22,41 @@ open Set
 variable {α : Type*} [Countable α]
 
 @[fun_prop]
-/--
-theorem `measurable_encard` / 定理 `measurable_encard`
-
-English:
-theorem measurable_encard
-  statement: Measurable (Set.encard : Set α -> Nat∞)
-  proof: ENat.measurable_iff.2 fun _n => Countable.measurableSet Countable.ofPred_finite.mono fun _s hs =>
-    finite_of_encard_eq_coe hs
-
-@[fun_prop]
-
-中文:
-定理 measurable_encard
-  结论: 可测 (集合.encard : 集合 α -> 自然数∞)
-  证明: ENat.measurable_iff.2 fun _n => Countable.measurableSet Countable.ofPred_finite.mono fun _s hs =>
-    finite_of_encard_eq_coe hs
-
-@[fun_prop]
-
-Depends on / 依赖: Countable, Countable.measurableSet, Countable.ofPred_finite.mono, ENat.measurable_iff, finite_of_encard_eq_coe, measurableSet, measurable_iff, ofPred_finite
+/-
+**measurable_encard** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_encard : Measurable (Set.encard : Set α -> Nat∞)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENat.measurable_iff`：ENat.measurable_iff {α : Type*} [MeasurableSpace α]
+ {f : α -> Nat∞} : Measurable f ↔ forall n : Nat, MeasurableSet (f ⁻¹' {↑n})
+· 使用定理 `Set.Countable.measurableSet`：Set.Countable.measurableSet {s : Set α} (hs
+ : s.Countable) : MeasurableSet s
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `Set.finite_of_encard_eq_coe`：finite_of_encard_eq_coe {k : Nat} (h : s.en
+card = k) : s.Finite
+· 使用定理 `Set.Countable.ofPred_finite`：∀ {α : Type u} [Countable α], {s | s.Finite
+}.Countable
 -/
-theorem measurable_encard : Measurable (Set.encard : Set α -> Nat∞) :=
-ENat.measurable_iff.2 fun _n => Countable.measurableSet Countable.ofPred_finite.mono fun _s hs =>
+theorem measurable_encard : Measurable (Set.encard : Set α → ℕ∞) :=
+  ENat.measurable_iff.2 fun _n ↦ Countable.measurableSet <| Countable.ofPred_finite.mono fun _s hs ↦
     finite_of_encard_eq_coe hs
 
 @[fun_prop]
-/--
-theorem `measurable_ncard` / 定理 `measurable_ncard`
-
-English:
-theorem measurable_ncard
-  statement: Measurable (Set.ncard : Set α -> Nat)
-  proof: Measurable.of_discrete.comp measurable_encard
-
-中文:
-定理 measurable_ncard
-  结论: 可测 (集合.ncard : 集合 α -> 自然数)
-  证明: Measurable.of_discrete.comp measurable_encard
-
-Depends on / 依赖: Measurable, Measurable.of_discrete.comp, measurable_encard, of_discrete
+/-
+**measurable_ncard** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_ncard : Measurable (Set.ncard : Set α -> Nat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `Measurable.of_discrete`：∀ {α : Type u_1} {β : Type u_2} [inst : Measurab
+leSpace α] [inst_1 : MeasurableSpace β] [DiscreteMeasurableSpace α]   {f : α → β
+}, Measurabl…
+· 使用定理 `measurable_encard`：measurable_encard : Measurable (Set.encard : Set α ->
+ Nat∞)
 -/
-theorem measurable_ncard : Measurable (Set.ncard : Set α -> Nat) :=
+theorem measurable_ncard : Measurable (Set.ncard : Set α → ℕ) :=
   Measurable.of_discrete.comp measurable_encard

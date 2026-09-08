@@ -44,23 +44,20 @@ namespace Mathlib.Tactic.ClickSuggestions
 
 open Lean Meta RefinedDiscrTree
 
-/--
-Definition of `isMVarSwap` / `isMVarSwap` 的定义
+/-- Return `true` if `s` and `t` are equal up to swapping the `MVarId`s. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.isMVarSwap** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.ClickSuggestions`。
+形式化陈述：isMVarSwap (t s : Expr) : Bool
+参数：t s : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isMVarSwap
-  signature: (t s : Expr)
-  body: .isSome go t s {}
-
-中文:
-定义 isMVarSwap
-  签名: (t s : Expr)
-  定义体: .isSome go t s {}
-
-Depends on / 依赖: isSome
+--- 原说明 ---
+Return `true` if `s` and `t` are equal up to swapping the `MVarId`s.
 -/
 def isMVarSwap (t s : Expr) : Bool :=
-.isSome go t s {}
+  go t s {} |>.isSome
 where
   /-- The main loop of `isMVarSwap`. Returning `none` corresponds to a failure. -/
   go (t s : Expr) (swaps : List (MVarId × MVarId)) : Option (List (MVarId × MVarId)) := do
@@ -69,18 +66,18 @@ where
     guard (isTricky s)
     match t, s with
     -- Note we don't bother keeping track of universe level metavariables.
-    | .const n₁ _ , .const n₂ _ => guard (n₁ == n₂); some swaps
-    | .sort _ , .sort _ => some swaps
+    | .const n₁ _       , .const n₂ _        => guard (n₁ == n₂); some swaps
+    | .sort _           , .sort _            => some swaps
     | .forallE _ d₁ b₁ _, .forallE _ d₂ b₂ _ => go d₁ d₂ swaps >>= go b₁ b₂
-    | .lam _ d₁ b₁ _ , .lam _ d₂ b₂ _ => go d₁ d₂ swaps >>= go b₁ b₂
-    | .mdata d₁ e₁ , .mdata d₂ e₂ => guard (d₁ == d₂); go e₁ e₂ swaps
+    | .lam _ d₁ b₁ _    , .lam _ d₂ b₂ _     => go d₁ d₂ swaps >>= go b₁ b₂
+    | .mdata d₁ e₁      , .mdata d₂ e₂       => guard (d₁ == d₂); go e₁ e₂ swaps
     | .letE _ t₁ v₁ b₁ _, .letE _ t₂ v₂ b₂ _ => go t₁ t₂ swaps >>= go v₁ v₂ >>= go b₁ b₂
-    | .app f₁ a₁ , .app f₂ a₂ => go f₁ f₂ swaps >>= go a₁ a₂
-    | .proj n₁ i₁ e₁ , .proj n₂ i₂ e₂ => guard (n₁ == n₂ && i₁ == i₂); go e₁ e₂ swaps
-    | .fvar fvarId₁ , .fvar fvarId₂ => guard (fvarId₁ == fvarId₂); some swaps
-    | .lit v₁ , .lit v₂ => guard (v₁ == v₂); some swaps
-    | .bvar i₁ , .bvar i₂ => guard (i₁ == i₂); some swaps
-    | .mvar mvarId₁ , .mvar mvarId₂ =>
+    | .app f₁ a₁        , .app f₂ a₂         => go f₁ f₂ swaps >>= go a₁ a₂
+    | .proj n₁ i₁ e₁    , .proj n₂ i₂ e₂     => guard (n₁ == n₂ && i₁ == i₂); go e₁ e₂ swaps
+    | .fvar fvarId₁     , .fvar fvarId₂      => guard (fvarId₁ == fvarId₂); some swaps
+    | .lit v₁           , .lit v₂            => guard (v₁ == v₂); some swaps
+    | .bvar i₁          , .bvar i₂           => guard (i₁ == i₂); some swaps
+    | .mvar mvarId₁     , .mvar mvarId₂      =>
       match swaps.find? (·.1 == mvarId₁) with
       | none =>
         guard (swaps.all (·.2 != mvarId₂))
@@ -88,32 +85,22 @@ where
         if mvarId₁ == mvarId₂ then
           some swaps
         else
-some (mvarId₂, mvarId₁) :: swaps
+          some <| (mvarId₂, mvarId₁) :: swaps
       | some (_, mvarId) => guard (mvarId == mvarId₂); some swaps
-    | _ , _ => none
+    | _                 , _                  => none
   else
     guard (t == s); some swaps
 
-/--
-Definition of `Entries` / `Entries` 的定义
+/-- A collection of entries that will be inserted into the discrimination trees. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.Entries** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tac
+tic.ClickSuggestions`。
+形式化陈述：Entries where /-- Entries for the `rw` discrimination tree. -/ rw : Array 
+(Key × LazyEntry × RwLemma)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Entries
-  parameters: where
-  axioms and operations (4):
-    - rw : Array (Key × LazyEntry × RwLemma)  [default: #[]]
-    - grw : Array (Key × LazyEntry × GrwLemma)  [default: #[]]
-    - app : Array (Key × LazyEntry × ApplyLemma)  [default: #[]]
-    - appAt : Array (Key × LazyEntry × ApplyAtLemma)  [default: #[]]
-
-中文:
-结构 Entries
-  参数: where
-  公理与运算 (4 个):
-    - rw : 数组 (Key × LazyEntry × RwLemma)  [默认: #[]]
-    - grw : 数组 (Key × LazyEntry × GrwLemma)  [默认: #[]]
-    - app : 数组 (Key × LazyEntry × ApplyLemma)  [默认: #[]]
-    - appAt : 数组 (Key × LazyEntry × ApplyAtLemma)  [默认: #[]]
+--- 原说明 ---
+A collection of entries that will be inserted into the discrimination trees.
 -/
 structure Entries where
   /-- Entries for the `rw` discrimination tree. -/
@@ -127,52 +114,36 @@ structure Entries where
 
 /-- Push the discrimination tree entry `key => a` onto the array. -/
 @[inline]
-/--
-Definition of `pushEntry` / `pushEntry` 的定义
+/-
+**Mathlib.Tactic.ClickSuggestions.pushEntry** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.ClickSuggestions`。
+形式化陈述：pushEntry {α} (arr : Array (Key × LazyEntry × α)) (key : Expr) (a : α) : M
+etaM (Array (Key × LazyEntry × α))
+参数：arr : Array (Key × LazyEntry × α)；key : Expr；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushEntry
-  signature: {α} (arr : Array (Key × LazyEntry × α)) (key : Expr) (a : α)
-  body: do
-  let entries ← initializeLazyEntryWithEta key
-  return entries.foldl (init := arr) fun arr (key, lazy) => arr.push (key, lazy, a)
-
-中文:
-定义 pushEntry
-  签名: {α} (arr : 数组 (Key × LazyEntry × α)) (key : Expr) (a : α)
-  定义体: do
-  let entries ← initializeLazyEntryWithEta key
-  return entries.foldl (init := arr) fun arr (key, lazy) => arr.push (key, lazy, a)
+--- 原说明 ---
+Push the discrimination tree entry `key => a` onto the array.
 -/
 def pushEntry {α} (arr : Array (Key × LazyEntry × α)) (key : Expr) (a : α) :
     MetaM (Array (Key × LazyEntry × α)) := do
   let entries ← initializeLazyEntryWithEta key
-  return entries.foldl (init := arr) fun arr (key, lazy) => arr.push (key, lazy, a)
+  return entries.foldl (init := arr) fun arr (key, lazy) ↦ arr.push (key, lazy, a)
 
-/--
-Definition of `isBadMatch` / `isBadMatch` 的定义
+/-- Determine whether the match `e` is too generic to be useful for insertion in
+a discrimination tree of all imported theorems. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.isBadMatch** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.ClickSuggestions`。
+形式化陈述：isBadMatch (e : Expr) : Bool
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isBadMatch
-  signature: (e : Expr)
-  body: e.getAppFn.isMVar ||
-  -- This extra check excludes lemmas that match a general equality
-  -- these are almost never useful, and there are very many of them.
-  -- We could consider removing this check.
-  e.eq?.any fun (α, l, r) =>
-    α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
-
-中文:
-定义 isBadMatch
-  签名: (e : Expr)
-  定义体: e.getAppFn.isMVar ||
-  -- This extra check excludes lemmas that match a general equality
-  -- these are almost never useful, and there are very many of them.
-  -- We could consider removing this check.
-  e.eq?.any fun (α, l, r) =>
-    α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
-
-Depends on / 依赖: e.getAppFn.isMVar, getAppFn, isMVar
+--- 原说明 ---
+Determine whether the match `e` is too generic to be useful for insertion in
+a discrimination tree of all imported theorems.
 -/
 def isBadMatch (e : Expr) : Bool :=
   e.getAppFn.isMVar ||
@@ -193,43 +164,30 @@ public structure Choice where
   /-- Build the `apply at` discrimination tree? -/
   appAt : Bool
 
-/--
-Definition of `Choice.any` / `Choice.any` 的定义
+/-- Is the choice non-empty? -/
+/-
+**Mathlib.Tactic.ClickSuggestions.Choice.any** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Choice.any
-  signature: (c : Choice)
-  body: c.rw || c.grw || c.app || c.appAt
-
-中文:
-定义 选择.any
-  签名: (c : 选择)
-  定义体: c.rw || c.grw || c.app || c.appAt
-
-Depends on / 依赖: c.app, c.appAt, c.grw, c.rw
+--- 原说明 ---
+Is the choice non-empty?
 -/
 def Choice.any (c : Choice) : Bool := c.rw || c.grw || c.app || c.appAt
 
-/--
-Definition of `blacklist` / `blacklist` 的定义
+/-- Return true if `declName` is automatically generated,
+or otherwise unsuitable as a lemma suggestion. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.blacklist** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.ClickSuggestions`。
+形式化陈述：blacklist (env : Environment) (declName : Name) : Bool
+参数：env : Environment；declName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition blacklist
-  signature: (env : Environment) (declName : Name)
-  body: LazyDiscrTree.blacklistInsertion env declName ||
-  declName.isMetaprogramming ||
-  Linter.isDeprecated env declName ||
-  match declName with | .str _ s => s == "eq_def" | _ => false
-
-中文:
-定义 blacklist
-  签名: (env : Environment) (declName : Name)
-  定义体: LazyDiscrTree.blacklistInsertion env declName ||
-  declName.isMetaprogramming ||
-  Linter.isDeprecated env declName ||
-  match declName with | .str _ s => s == "eq_def" | _ => false
-
-Depends on / 依赖: LazyDiscrTree, LazyDiscrTree.blacklistInsertion, Linter, Linter.isDeprecated, blacklistInsertion, declName, declName.isMetaprogramming, eq_def, isDeprecated, isMetaprogramming
+--- 原说明 ---
+Return true if `declName` is automatically generated,
+or otherwise unsuitable as a lemma suggestion.
 -/
 def blacklist (env : Environment) (declName : Name) : Bool :=
   LazyDiscrTree.blacklistInsertion env declName ||
@@ -237,84 +195,15 @@ def blacklist (env : Environment) (declName : Name) : Bool :=
   Linter.isDeprecated env declName ||
   match declName with | .str _ s => s == "eq_def" | _ => false
 
-/--
-Definition of `Entries.addConst` / `Entries.addConst` 的定义
+/-- Given a constant, compute what needs to be added to the various discrimination trees. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.Entries.addConst** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entries.addConst
-  signature: (choice : Choice) (env : Environment) (entries : Entries)
-  body: do
-  if cinfo.isUnsafe then return entries
-  if blacklist env name then return entries
-  setMCtx {}
-  let (xs, _, e) ← forallMetaTelescope cinfo.type
-  let mut { rw, grw, app, appAt } := entries
-  -- apply
-  if choice.app then
-    if !isBadMatch e then
-      app ← pushEntry app e ⟨.const name⟩
-  -- apply at
-  if choice.appAt then
-    if let some x := xs.back? then
-      let e ← inferType x
-      if !isBadMatch e then
-        appAt ← pushEntry appAt e ⟨.const name⟩
-  if choice.rw || choice.grw then
-    let mkApp2 rel lhs rhs := e | pure ()
-    let .const relName _ := rel.getAppFn | pure ()
-    -- rw
-    if relName matches ``Iff | ``Eq then
-      if choice.rw then
-        if !isBadMatch lhs then
-          rw ← pushEntry rw lhs ⟨.const name, false⟩
-        if !isBadMatch rhs && (isBadMatch lhs || !isMVarSwap lhs rhs) then
-          rw ← pushEntry rw rhs ⟨.const name, true⟩
-    -- grw
-    else
-      if choice.grw then
-        if !isBadMatch lhs then
-          grw ← pushEntry grw lhs ⟨.const name, false, relName⟩
-        if !isBadMatch rhs then
-          grw ← pushEntry grw rhs ⟨.const name, true, relName⟩
-  return { rw, grw, app, appAt }
-
-中文:
-定义 Entries.addConst
-  签名: (choice : 选择) (env : Environment) (entries : Entries)
-  定义体: do
-  if cinfo.isUnsafe then return entries
-  if blacklist env name then return entries
-  setMCtx {}
-  let (xs, _, e) ← forallMetaTelescope cinfo.type
-  let mut { rw, grw, app, appAt } := entries
-  -- apply
-  if choice.app then
-    if !isBadMatch e then
-      app ← pushEntry app e ⟨.const name⟩
-  -- apply at
-  if choice.appAt then
-    if let some x := xs.back? then
-      let e ← inferType x
-      if !isBadMatch e then
-        appAt ← pushEntry appAt e ⟨.const name⟩
-  if choice.rw || choice.grw then
-    let mkApp2 rel lhs rhs := e | pure ()
-    let .const relName _ := rel.getAppFn | pure ()
-    -- rw
-    if relName matches ``Iff | ``Eq then
-      if choice.rw then
-        if !isBadMatch lhs then
-          rw ← pushEntry rw lhs ⟨.const name, false⟩
-        if !isBadMatch rhs && (isBadMatch lhs || !isMVarSwap lhs rhs) then
-          rw ← pushEntry rw rhs ⟨.const name, true⟩
-    -- grw
-    else
-      if choice.grw then
-        if !isBadMatch lhs then
-          grw ← pushEntry grw lhs ⟨.const name, false, relName⟩
-        if !isBadMatch rhs then
-          grw ← pushEntry grw rhs ⟨.const name, true, relName⟩
-  return { rw, grw, app, appAt }
+--- 原说明 ---
+Given a constant, compute what needs to be added to the various discrimination t
+rees.
 -/
 def Entries.addConst (choice : Choice) (env : Environment) (entries : Entries)
     (name : Name) (cinfo : ConstantInfo) : MetaM Entries := do
@@ -352,66 +241,15 @@ def Entries.addConst (choice : Choice) (env : Environment) (entries : Entries)
           grw ← pushEntry grw rhs ⟨.const name, true, relName⟩
   return { rw, grw, app, appAt }
 
-/--
-Definition of `Entries.addFVar` / `Entries.addFVar` 的定义
+/-- Given a free variable, compute what needs to be added to the various discrimination trees. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.Entries.addFVar** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entries.addFVar
-  signature: (choice : Choice) (entries : Entries) (decl : LocalDecl)
-  body: do
-  let (xs, _, e) ← forallMetaTelescopeReducing (← instantiateMVars decl.type)
-  let mut { rw, grw, app, appAt } := entries
-  -- apply
-  if choice.app then
-    app ← pushEntry app e ⟨.fvar decl.fvarId⟩
-  -- apply at
-  if choice.appAt then
-    if let some x := xs.back? then
-      let e ← inferType x
-      appAt ← pushEntry appAt e ⟨.fvar decl.fvarId⟩
-  -- rw
-  if choice.rw then
-    if let mkApp2 rel lhs rhs ← whnf e then
-      if rel.getAppFn matches .const ``Iff _ | .const ``Eq _ then
-        rw ← pushEntry rw lhs ⟨.fvar decl.fvarId, false⟩
-        if !isMVarSwap lhs rhs then
-          rw ← pushEntry rw rhs ⟨.fvar decl.fvarId, true⟩
-  -- grw
-  if choice.grw then
-    if let mkApp2 rel lhs rhs := e.cleanupAnnotations then
-      if let .const relName _ := rel.getAppFn then
-        grw ← pushEntry grw lhs ⟨.fvar decl.fvarId, false, relName⟩
-        grw ← pushEntry grw rhs ⟨.fvar decl.fvarId, true, relName⟩
-  return { rw, grw, app, appAt }
-
-中文:
-定义 Entries.addFVar
-  签名: (choice : 选择) (entries : Entries) (decl : LocalDecl)
-  定义体: do
-  let (xs, _, e) ← forallMetaTelescopeReducing (← instantiateMVars decl.type)
-  let mut { rw, grw, app, appAt } := entries
-  -- apply
-  if choice.app then
-    app ← pushEntry app e ⟨.fvar decl.fvarId⟩
-  -- apply at
-  if choice.appAt then
-    if let some x := xs.back? then
-      let e ← inferType x
-      appAt ← pushEntry appAt e ⟨.fvar decl.fvarId⟩
-  -- rw
-  if choice.rw then
-    if let mkApp2 rel lhs rhs ← whnf e then
-      if rel.getAppFn matches .const ``Iff _ | .const ``Eq _ then
-        rw ← pushEntry rw lhs ⟨.fvar decl.fvarId, false⟩
-        if !isMVarSwap lhs rhs then
-          rw ← pushEntry rw rhs ⟨.fvar decl.fvarId, true⟩
-  -- grw
-  if choice.grw then
-    if let mkApp2 rel lhs rhs := e.cleanupAnnotations then
-      if let .const relName _ := rel.getAppFn then
-        grw ← pushEntry grw lhs ⟨.fvar decl.fvarId, false, relName⟩
-        grw ← pushEntry grw rhs ⟨.fvar decl.fvarId, true, relName⟩
-  return { rw, grw, app, appAt }
+--- 原说明 ---
+Given a free variable, compute what needs to be added to the various discriminat
+ion trees.
 -/
 def Entries.addFVar (choice : Choice) (entries : Entries) (decl : LocalDecl) : MetaM Entries := do
   let (xs, _, e) ← forallMetaTelescopeReducing (← instantiateMVars decl.type)
@@ -450,49 +288,44 @@ public structure PreDiscrTrees where
   /-- The `apply at` discrimination tree root. -/
   appAt : PreDiscrTree ApplyAtLemma := {}
 
-/--
-Definition of `PreDiscrTrees.append` / `PreDiscrTrees.append` 的定义
+/-- Insert the entries `maps` into the pre-discrimination trees `pres`. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.PreDiscrTrees.append** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PreDiscrTrees.append
-  signature: (pres : PreDiscrTrees) (maps : Entries)
-  body: maps.rw.foldl (init := pres.rw) fun pre (key, e) => pre.push key e
-  grw := maps.grw.foldl (init := pres.grw) fun pre (key, e) => pre.push key e
-  app := maps.app.foldl (init := pres.app) fun pre (key, e) => pre.push key e
-  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) => pre.push key e
-
-中文:
-定义 PreDiscrTrees.append
-  签名: (pres : PreDiscrTrees) (maps : Entries)
-  定义体: maps.rw.foldl (init := pres.rw) fun pre (key, e) => pre.push key e
-  grw := maps.grw.foldl (init := pres.grw) fun pre (key, e) => pre.push key e
-  app := maps.app.foldl (init := pres.app) fun pre (key, e) => pre.push key e
-  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) => pre.push key e
-
-Depends on / 依赖: maps.rw.foldl, pre.push, pres.rw
+--- 原说明 ---
+Insert the entries `maps` into the pre-discrimination trees `pres`.
 -/
 def PreDiscrTrees.append (pres : PreDiscrTrees) (maps : Entries) : PreDiscrTrees where
-  rw := maps.rw.foldl (init := pres.rw) fun pre (key, e) => pre.push key e
-  grw := maps.grw.foldl (init := pres.grw) fun pre (key, e) => pre.push key e
-  app := maps.app.foldl (init := pres.app) fun pre (key, e) => pre.push key e
-  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) => pre.push key e
+  rw := maps.rw.foldl (init := pres.rw) fun pre (key, e) ↦ pre.push key e
+  grw := maps.grw.foldl (init := pres.grw) fun pre (key, e) ↦ pre.push key e
+  app := maps.app.foldl (init := pres.app) fun pre (key, e) ↦ pre.push key e
+  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) ↦ pre.push key e
 
-/--
-Definition of `librarySearchIndexConfig` / `librarySearchIndexConfig` 的定义
+/-- The configuration used when indexing into the discrimination tree, and when looking up in it.
 
-English:
-definition librarySearchIndexConfig
-  signature: : Config where
-  body: .reducible
-  proj := .no
+We do not reduce projections so that e.g. `Fin.val_mk : ⟨m, h⟩.val = m` can be indexed properly.
 
-中文:
-定义 librarySearchIndexConfig
-  签名: : 余nfig where
-  定义体: .reducible
-  proj := .no
+TODO?: projections should be reduced inside implicit arguments,
+because otherwise we may reject some valid matches.
+-/
+/-
+**Mathlib.Tactic.ClickSuggestions.librarySearchIndexConfig** 是 Mathlib 中的一个定义，位于
+命名空间 `Mathlib.Tactic.ClickSuggestions`。
+形式化陈述：librarySearchIndexConfig : Config where transparency
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: reducible
+--- 原说明 ---
+The configuration used when indexing into the discrimination tree, and when look
+ing up in it.
+
+We do not reduce projections so that e.g. `Fin.val_mk : ⟨m, h⟩.val = m` can be i
+ndexed properly.
+
+TODO?: projections should be reduced inside implicit arguments,
+because otherwise we may reject some valid matches.
 -/
 def librarySearchIndexConfig : Config where
   transparency := .reducible
@@ -521,8 +354,8 @@ public def computeImportDiscrTrees (choice : Choice) : CoreM Unit := do
   unless choice.any do return
   let (tasks, errors) ←
     foldImportedDecls {} librarySearchIndexConfig (Entries.addConst choice (← getEnv))
-let pre : PreDiscrTrees ← MonadExcept.ofExcept
-    tasks.foldlM (fun pre task => pre.append <$> task.get) {}
+  let pre : PreDiscrTrees ← MonadExcept.ofExcept <|
+    tasks.foldlM (fun pre task ↦ pre.append <$> task.get) {}
   if choice.rw then setIfNone rwRef pre.rw.toRefinedDiscrTree
   if choice.grw then setIfNone grwRef pre.grw.toRefinedDiscrTree
   if choice.app then setIfNone appRef pre.app.toRefinedDiscrTree
@@ -537,7 +370,7 @@ where
 public def computeModuleDiscrTrees (choice : Choice) (parentDecl? : Option Name) :
     CoreM PreDiscrTrees := do
   let env ← getEnv
-  let (pre, errors) ← foldCurrFileDecls {} librarySearchIndexConfig fun entries name cinfo => do
+  let (pre, errors) ← foldCurrFileDecls {} librarySearchIndexConfig fun entries name cinfo ↦ do
     if name == parentDecl? then return entries
     entries.addConst choice env name cinfo
   (← errors.get).forM logError
@@ -558,7 +391,7 @@ public def getImportMatches {α} (ref : IO.Ref (Option (RefinedDiscrTree α)))
     (e : Expr) : MetaM (MatchResult α) := do
   let some tree ← ref.get |
     throwError "Internal click_suggestions error: discrimination tree was not computed."
-  let (result, newTree) ← withConfig (fun _ => librarySearchIndexConfig) do
+  let (result, newTree) ← withConfig (fun _ ↦ librarySearchIndexConfig) do
     getMatch tree e false false
   Core.checkInterrupted
   ref.set newTree
@@ -566,7 +399,8 @@ public def getImportMatches {α} (ref : IO.Ref (Option (RefinedDiscrTree α)))
 
 /-- Get the discrimination tree matches from `tree`. -/
 public def getMatches {α} (tree : RefinedDiscrTree α) (e : Expr) : MetaM (MatchResult α) := do
-  withConfig (fun _ => librarySearchIndexConfig) do
+  withConfig (fun _ ↦ librarySearchIndexConfig) do
     return (← getMatch tree e false false).1
 
 end Mathlib.Tactic.ClickSuggestions
+

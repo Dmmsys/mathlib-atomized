@@ -72,562 +72,311 @@ variable {α : Type*} {β : Type*} {γ : Type*}
 /-- `Finset α` is the type of finite sets of elements of `α`. It is implemented
   as a multiset (a list up to permutation) which has no duplicate elements. -/
 @[use_set_notation_for_order, to_dual_dont_translate]
-/--
-Definition of `Finset` / `Finset` 的定义
+/-
+**Finset** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_4 → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Finset
-  parameters: (α : Type*)
-  axioms and operations (2):
-    - val : Multiset α
-    - nodup : Nodup val
-
-中文:
-结构 有限集
-  参数: (α : 类型)
-  公理与运算 (2 个):
-    - val : Multiset α
-    - nodup : Nodup val
+--- 原说明 ---
+`Finset α` is the type of finite sets of elements of `α`. It is implemented
+  as a multiset (a list up to permutation) which has no duplicate elements.
 -/
 structure Finset (α : Type*) where
   /-- The underlying multiset -/
   val : Multiset α
   /-- `val` contains no duplicates -/
   nodup : Nodup val
-
-/--
-Instance `Multiset.canLiftFinset` / 实例 `Multiset.canLiftFinset`
-
-English:
-instance Multiset.canLiftFinset
-  signature: {α}
-  body: ⟨fun m hm => ⟨⟨m, hm⟩, rfl⟩⟩
-
-中文:
-实例 Multiset.canLiftFinset
-  签名: {α}
-  定义体: ⟨fun m hm => ⟨⟨m, hm⟩, rfl⟩⟩
+/-
+**Multiset.canLiftFinset** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiset.canLiftFinset {α} : CanLift (Multiset α) (Finset α) Finset.val Mu
+ltiset.Nodup
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiset.canLiftFinset {α} : CanLift (Multiset α) (Finset α) Finset.val Multiset.Nodup :=
   ⟨fun m hm => ⟨⟨m, hm⟩, rfl⟩⟩
 
 namespace Finset
 
-/--
-theorem `eq_of_veq` / 定理 `eq_of_veq`
-
-English:
-theorem eq_of_veq
-  statement: forall {s t : Finset α}, s.1 = t.1 -> s = t
-
-中文:
-定理 eq_of_veq
-  结论: 对任意 {s t : 有限集 α}, s.1 = t.1 -> s = t
+/-
+**Finset.eq_of_veq** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem eq_of_veq : forall {s t : Finset α}, s.1 = t.1 -> s = t
+theorem eq_of_veq : ∀ {s t : Finset α}, s.1 = t.1 → s = t
   | ⟨s, _⟩, ⟨t, _⟩, h => by cases h; rfl
-
-/--
-theorem `val_injective` / 定理 `val_injective`
-
-English:
-theorem val_injective
-  statement: Injective (val : Finset α -> Multiset α)
-  proof: fun _ _ => eq_of_veq
-
-@[simp]
-
-中文:
-定理 val_injective
-  结论: 单射 (val : 有限集 α -> Multiset α)
-  证明: fun _ _ => eq_of_veq
-
-@[simp]
-
-Depends on / 依赖: eq_of_veq
+/-
+**Finset.val_injective** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_injective : Injective (val : Finset α -> Multiset α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
 -/
-theorem val_injective : Injective (val : Finset α -> Multiset α) := fun _ _ => eq_of_veq
+theorem val_injective : Injective (val : Finset α → Multiset α) := fun _ _ => eq_of_veq
 
 @[simp]
-/--
-theorem `val_inj` / 定理 `val_inj`
-
-English:
-theorem val_inj
-  given: {s t : Finset α}
-  statement: s.1 = t.1 ↔ s = t
-  proof: val_injective.eq_iff
-
-中文:
-定理 val_inj
-  条件: {s t : 有限集 α}
-  结论: s.1 = t.1 ↔ s = t
-  证明: val_injective.eq_iff
-
-Depends on / 依赖: eq_iff, val_injective, val_injective.eq_iff
+/-
+**Finset.val_inj** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Finset.val_injective`：val_injective : Injective (val : Finset α -> Multi
+set α)
 -/
 theorem val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t :=
   val_injective.eq_iff
-
-/--
-Instance `decidableEq` / 实例 `decidableEq`
-
-English:
-instance decidableEq
-  signature: [DecidableEq α]
-
-中文:
-实例 decidableEq
-  签名: [DecidableEq α]
+/-
+**Finset.decidableEq** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：{α : Type u_1} → [DecidableEq α] → DecidableEq (Finset α)
+参数：Finset α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.val_inj`：val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t
 -/
 instance decidableEq [DecidableEq α] : DecidableEq (Finset α)
   | _, _ => decidable_of_iff _ val_inj
 
 /-! ### set coercion -/
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Convert a finset to a set in the natural way. -/
+/-
+**Finset.** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: SetLike (Finset α) α
-  body: {a | a in s.1}
-coe_injective s₁ s₂ h := (val_inj.symm.trans <| s₁.nodup.ext s₂.nodup).2 Set.ext_iff.mp h
-
-中文:
-实例 :
-  签名: 集合状 (有限集 α) α
-  定义体: {a | a in s.1}
-coe_injective s₁ s₂ h := (val_inj.symm.trans <| s₁.nodup.ext s₂.nodup).2 Set.ext_iff.mp h
+--- 原说明 ---
+Convert a finset to a set in the natural way.
 -/
 instance : SetLike (Finset α) α where
-  coe s := {a | a in s.1}
-coe_injective s₁ s₂ h := (val_inj.symm.trans <| s₁.nodup.ext s₂.nodup).2 Set.ext_iff.mp h
-
-/--
-theorem `mem_def` / 定理 `mem_def`
-
-English:
-theorem mem_def
-  given: {a : α} {s : Finset α}
-  statement: a in s ↔ a in s.1
-  proof: Iff.rfl
-
-中文:
-定理 mem_def
-  条件: {a : α} {s : 有限集 α}
-  结论: a in s ↔ a in s.1
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+  coe s := {a | a ∈ s.1}
+  coe_injective s₁ s₂ h := (val_inj.symm.trans <| s₁.nodup.ext s₂.nodup).2 <| Set.ext_iff.mp h
+/-
+**Finset.mem_def** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1 :=
+theorem mem_def {a : α} {s : Finset α} : a ∈ s ↔ a ∈ s.1 :=
   Iff.rfl
 
 -- If https://github.com/leanprover/lean4/issues/2678 is resolved-
 -- this can be changed back to an `Iff`, but for now we would like `dsimp` to use it.
 @[simp, grind =]
-/--
-theorem `mem_val` / 定理 `mem_val`
-
-English:
-theorem mem_val
-  given: {a : α} {s : Finset α}
-  statement: (a in s.1) = (a in s)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 mem_val
-  条件: {a : α} {s : 有限集 α}
-  结论: (a in s.1) = (a in s)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Finset.mem_val** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_val {a : α} {s : Finset α} : (a in s.1) = (a in s)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_val {a : α} {s : Finset α} : (a in s.1) = (a in s) := rfl
+theorem mem_val {a : α} {s : Finset α} : (a ∈ s.1) = (a ∈ s) := rfl
 
 @[simp, grind =]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: {a : α} {s nd}
-  statement: a in @Finset.mk α s nd ↔ a in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_mk
-  条件: {a : α} {s nd}
-  结论: a in @有限集.mk α s nd ↔ a in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_mk {a : α} {s nd} : a in @Finset.mk α s nd ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mk {a : α} {s nd} : a in @Finset.mk α s nd ↔ a in s :=
+theorem mem_mk {a : α} {s nd} : a ∈ @Finset.mk α s nd ↔ a ∈ s :=
   Iff.rfl
-
-/--
-Instance `decidableMem` / 实例 `decidableMem`
-
-English:
-instance decidableMem
-  signature: [_h : DecidableEq α] (a : α) (s : Finset α)
-  body: Multiset.decidableMem _ _
-
-中文:
-实例 decidableMem
-  签名: [_h : DecidableEq α] (a : α) (s : 有限集 α)
-  定义体: Multiset.decidableMem _ _
-
-Depends on / 依赖: Multiset, Multiset.decidableMem, decidableMem
+/-
+**Finset.decidableMem** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableMem [_h : DecidableEq α] (a : α) (s : Finset α) : Decidable (a in
+ s)
+参数：a : α；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableMem [_h : DecidableEq α] (a : α) (s : Finset α) : Decidable (a in s) :=
+instance decidableMem [_h : DecidableEq α] (a : α) (s : Finset α) : Decidable (a ∈ s) :=
   Multiset.decidableMem _ _
-
-/--
-lemma `forall_mem_not_eq` / 引理 `forall_mem_not_eq`
-
-English:
-lemma forall_mem_not_eq
-  given: {s : Finset α} {a : α}
-  statement: (forall b in s, ¬ a = b) ↔ a ∉ s
-  proof: by grind
-
-中文:
-引理 对任意_mem_not_eq
-  条件: {s : 有限集 α} {a : α}
-  结论: (对任意 b in s, ¬ a = b) ↔ a ∉ s
-  证明: by grind
+/-
+**Finset.forall_mem_not_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α} {a : α}, (∀ b ∈ s, ¬a = b) ↔ a ∉ s
+参数：∀ b ∈ s, ¬a = b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma forall_mem_not_eq {s : Finset α} {a : α} : (forall b in s, ¬ a = b) ↔ a ∉ s := by grind
-/--
-lemma `forall_mem_not_eq'` / 引理 `forall_mem_not_eq'`
-
-English:
-lemma forall_mem_not_eq'
-  given: {s : Finset α} {a : α}
-  statement: (forall b in s, ¬ b = a) ↔ a ∉ s
-  proof: by grind
-
-中文:
-引理 对任意_mem_not_eq'
-  条件: {s : 有限集 α} {a : α}
-  结论: (对任意 b in s, ¬ b = a) ↔ a ∉ s
-  证明: by grind
+@[simp] lemma forall_mem_not_eq {s : Finset α} {a : α} : (∀ b ∈ s, ¬ a = b) ↔ a ∉ s := by grind
+/-
+**Finset.forall_mem_not_eq'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α} {a : α}, (∀ b ∈ s, ¬b = a) ↔ a ∉ s
+参数：∀ b ∈ s, ¬b = a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma forall_mem_not_eq' {s : Finset α} {a : α} : (forall b in s, ¬ b = a) ↔ a ∉ s := by grind
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Finset α)
-  body: .ofSetLike (Finset α) α
-
-@[norm_cast, grind =]
-
-中文:
-实例 :
-  签名: 偏序 (有限集 α)
-  定义体: .ofSetLike (Finset α) α
-
-@[norm_cast, grind =]
-
-Depends on / 依赖: Finset, ofSetLike
+@[simp] lemma forall_mem_not_eq' {s : Finset α} {a : α} : (∀ b ∈ s, ¬ b = a) ↔ a ∉ s := by grind
+/-
+**Finset.** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Finset α) := .ofSetLike (Finset α) α
 
 @[norm_cast, grind =]
-/--
-theorem `mem_coe` / 定理 `mem_coe`
-
-English:
-theorem mem_coe
-  given: {a : α} {s : Finset α}
-  statement: a in (s : Set α) ↔ a in (s : Finset α)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_coe
-  条件: {a : α} {s : 有限集 α}
-  结论: a in (s : 集合 α) ↔ a in (s : 有限集 α)
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.mem_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_coe {a : α} {s : Finset α} : a in (s : Set α) ↔ a in (s : Finset α)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_coe {a : α} {s : Finset α} : a in (s : Set α) ↔ a in (s : Finset α) :=
+theorem mem_coe {a : α} {s : Finset α} : a ∈ (s : Set α) ↔ a ∈ (s : Finset α) :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `setOfPred_mem` / 定理 `setOfPred_mem`
-
-English:
-theorem setOfPred_mem
-  given: {α} {s : Finset α}
-  statement: { a | a in s } = s
-  proof: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_mem := setOfPred_mem
-
-中文:
-定理 setOfPred_mem
-  条件: {α} {s : 有限集 α}
-  结论: { a | a in s } = s
-  证明: rfl
-
-@[deprecated (since := "2026-07-09")] alias setOf_mem := setOfPred_mem
+/-
+**Finset.setOfPred_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：setOfPred_mem {α} {s : Finset α} : { a | a in s } = s
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem setOfPred_mem {α} {s : Finset α} : { a | a in s } = s :=
+theorem setOfPred_mem {α} {s : Finset α} : { a | a ∈ s } = s :=
   rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_mem := setOfPred_mem
-
-/--
-theorem `coe_mem` / 定理 `coe_mem`
-
-English:
-theorem coe_mem
-  given: {s : Finset α} (x : (s : Set α))
-  statement: ↑x in s
-  proof: x.2
-
-中文:
-定理 coe_mem
-  条件: {s : 有限集 α} (x : (s : 集合 α))
-  结论: ↑x in s
-  证明: x.2
+/-
+**Finset.coe_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_mem {s : Finset α} (x : (s : Set α)) : ↑x in s
+参数：x : (s : Set α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem coe_mem {s : Finset α} (x : (s : Set α)) : ↑x in s :=
+theorem coe_mem {s : Finset α} (x : (s : Set α)) : ↑x ∈ s :=
   x.2
-
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: {s : Finset α} (x : (s : Set α)) {h}
-  statement: (⟨x, h⟩ : (s : Set α)) = x
-  proof: Subtype.coe_eta _ _
-
-中文:
-定理 mk_coe
-  条件: {s : 有限集 α} (x : (s : 集合 α)) {h}
-  结论: (⟨x, h⟩ : (s : 集合 α)) = x
-  证明: Subtype.coe_eta _ _
-
-Depends on / 依赖: Subtype, Subtype.coe_eta, coe_eta
+/-
+**Finset.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mk_coe {s : Finset α} (x : (s : Set α)) {h} : (⟨x, h⟩ : (s : Set α)) = x
+参数：x : (s : Set α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
 -/
 theorem mk_coe {s : Finset α} (x : (s : Set α)) {h} : (⟨x, h⟩ : (s : Set α)) = x :=
   Subtype.coe_eta _ _
-
-/--
-Instance `decidableMem'` / 实例 `decidableMem'`
-
-English:
-instance decidableMem'
-  signature: [DecidableEq α] (a : α) (s : Finset α)
-  body: s.decidableMem _
-
-中文:
-实例 decidableMem'
-  签名: [DecidableEq α] (a : α) (s : 有限集 α)
-  定义体: s.decidableMem _
-
-Depends on / 依赖: decidableMem, s.decidableMem
+/-
+**Finset.decidableMem'** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableMem' [DecidableEq α] (a : α) (s : Finset α) : Decidable (a in (s 
+: Set α))
+参数：a : α；s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableMem' [DecidableEq α] (a : α) (s : Finset α) : Decidable (a in (s : Set α)) :=
+instance decidableMem' [DecidableEq α] (a : α) (s : Finset α) : Decidable (a ∈ (s : Set α)) :=
   s.decidableMem _
 
 /-! ### extensionality -/
 
 @[ext, grind ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**Finset.ext** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s₁ = s₂
+参数：h : forall a, a in s₁ ↔ a in s₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
 
-English:
-theorem ext
-  given: {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂)
-  statement: s₁ = s₂
-  proof: SetLike.ext h
-
-@[norm_cast]
-
-中文:
-定理 ext
-  条件: {s₁ s₂ : 有限集 α} (h : 对任意 a, a in s₁ ↔ a in s₂)
-  结论: s₁ = s₂
-  证明: SetLike.ext h
-
-@[norm_cast]
-
-Depends on / 依赖: SetLike, SetLike.ext
+--- 原说明 ---
+### extensionality
 -/
-theorem ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s₁ = s₂ :=
+theorem ext {s₁ s₂ : Finset α} (h : ∀ a, a ∈ s₁ ↔ a ∈ s₂) : s₁ = s₂ :=
   SetLike.ext h
 
 @[norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {s₁ s₂ : Finset α}
-  statement: (s₁ : Set α) = s₂ ↔ s₁ = s₂
-  proof: SetLike.coe_set_eq
-
-@[grind inj]
-
-中文:
-定理 coe_inj
-  条件: {s₁ s₂ : 有限集 α}
-  结论: (s₁ : 集合 α) = s₂ ↔ s₁ = s₂
-  证明: SetLike.coe_set_eq
-
-@[grind inj]
-
-Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
+/-
+**Finset.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_set_eq`：coe_set_eq : (p : Set B) = q ↔ p = q
 -/
 theorem coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂ :=
   SetLike.coe_set_eq
 
 @[grind inj]
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  given: {α}
-  statement: Injective ((↑) : Finset α -> Set α)
-  proof: fun _s _t => coe_inj.1
-
-中文:
-定理 coe_injective
-  条件: {α}
-  结论: 单射 ((↑) : 有限集 α -> 集合 α)
-  证明: fun _s _t => coe_inj.1
-
-Depends on / 依赖: coe_inj
+/-
+**Finset.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_injective {α} : Injective ((↑) : Finset α -> Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
 -/
-theorem coe_injective {α} : Injective ((↑) : Finset α -> Set α) := fun _s _t => coe_inj.1
+theorem coe_injective {α} : Injective ((↑) : Finset α → Set α) := fun _s _t => coe_inj.1
+
+/-! ### type coercion -/
 
 
+/-
+**Finset.forall_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_4} (s : Finset α) (p : ↥s → Prop), (∀ (x : ↥s), p x) ↔ ∀ (x 
+: α) (h : x ∈ s), p ⟨x, h⟩
+参数：s : Finset α；p : ↥s → Prop；∀ (x : ↥s), p x；x : α；h : x ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
 
-/--
-theorem `forall_coe` / 定理 `forall_coe`
-
-English:
-theorem forall_coe
-  given: {α : Type*} (s : Finset α) (p : s -> Prop)
-  proof: Subtype.forall
-
-中文:
-定理 对任意_coe
-  条件: {α : 类型} (s : 有限集 α) (p : s -> 命题)
-  证明: Subtype.forall
+--- 原说明 ---
+### type coercion
 -/
-protected theorem forall_coe {α : Type*} (s : Finset α) (p : s -> Prop) :
-    (forall x : s, p x) ↔ forall (x : α) (h : x in s), p ⟨x, h⟩ :=
+protected theorem forall_coe {α : Type*} (s : Finset α) (p : s → Prop) :
+    (∀ x : s, p x) ↔ ∀ (x : α) (h : x ∈ s), p ⟨x, h⟩ :=
   Subtype.forall
-
-/--
-theorem `exists_coe` / 定理 `exists_coe`
-
-English:
-theorem exists_coe
-  given: {α : Type*} (s : Finset α) (p : s -> Prop)
-  proof: Subtype.exists
-
-中文:
-定理 存在_coe
-  条件: {α : 类型} (s : 有限集 α) (p : s -> 命题)
-  证明: Subtype.exists
+/-
+**Finset.exists_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_4} (s : Finset α) (p : ↥s → Prop), (∃ x, p x) ↔ ∃ x, ∃ (h : 
+x ∈ s), p ⟨x, h⟩
+参数：s : Finset α；p : ↥s → Prop；∃ x, p x；h : x ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.exists`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∃ x, q x) ↔ ∃ a, ∃ (b : p a), q ⟨a, b⟩
 -/
-protected theorem exists_coe {α : Type*} (s : Finset α) (p : s -> Prop) :
-    (exists x : s, p x) ↔ exists (x : α) (h : x in s), p ⟨x, h⟩ :=
+protected theorem exists_coe {α : Type*} (s : Finset α) (p : s → Prop) :
+    (∃ x : s, p x) ↔ ∃ (x : α) (h : x ∈ s), p ⟨x, h⟩ :=
   Subtype.exists
-
-/--
-Instance `PiFinsetCoe.canLift` / 实例 `PiFinsetCoe.canLift`
-
-English:
-instance PiFinsetCoe.canLift
-  signature: (ι : Type*) (α : ι -> Type*) [_ne : forall i, Nonempty (α i)]
-  body: PiSubtype.canLift ι α (· in s)
-
-中文:
-实例 PiFinsetCoe.canLift
-  签名: (ι : 类型) (α : ι -> 类型) [_ne : 对任意 i, 非空 (α i)]
-  定义体: PiSubtype.canLift ι α (· in s)
-
-Depends on / 依赖: PiSubtype, PiSubtype.canLift, canLift
+/-
+**Finset.PiFinsetCoe.canLift** 是 Mathlib 中的一个定理，位于命名空间 `Finset.PiFinsetCoe`。
+形式化陈述：∀ (ι : Type u_4) (α : ι → Type u_5) [_ne : ∀ (i : ι), Nonempty (α i)] (s :
+ Finset ι),   CanLift ((i : ↥s) → α ↑i) ((i : ι) → α i) (fun f i => f ↑i) fun x 
+=> True
+参数：ι : Type u_4；α : ι → Type u_5；i : ι；α i；s : Finset ι；(i : ↥s) → α ↑i；(i : ι) 
+→ α i；fun f i => f ↑i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance PiFinsetCoe.canLift (ι : Type*) (α : ι -> Type*) [_ne : forall i, Nonempty (α i)]
-    (s : Finset ι) : CanLift (forall i : s, α i) (forall i, α i) (fun f i => f i) fun _ => True :=
-  PiSubtype.canLift ι α (· in s)
-
-/--
-Instance `PiFinsetCoe.canLift'` / 实例 `PiFinsetCoe.canLift'`
-
-English:
-instance PiFinsetCoe.canLift'
-  signature: (ι α : Type*) [_ne : Nonempty α] (s : Finset ι)
-  body: PiFinsetCoe.canLift ι (fun _ => α) s
-
-中文:
-实例 PiFinsetCoe.canLift'
-  签名: (ι α : 类型) [_ne : 非空 α] (s : 有限集 ι)
-  定义体: PiFinsetCoe.canLift ι (fun _ => α) s
-
-Depends on / 依赖: PiFinsetCoe, PiFinsetCoe.canLift, canLift
+instance PiFinsetCoe.canLift (ι : Type*) (α : ι → Type*) [_ne : ∀ i, Nonempty (α i)]
+    (s : Finset ι) : CanLift (∀ i : s, α i) (∀ i, α i) (fun f i => f i) fun _ => True :=
+  PiSubtype.canLift ι α (· ∈ s)
+/-
+**Finset.PiFinsetCoe.canLift'** 是 Mathlib 中的一个定理，位于命名空间 `Finset.PiFinsetCoe`。
+形式化陈述：∀ (ι : Type u_4) (α : Type u_5) [_ne : Nonempty α] (s : Finset ι),   CanLi
+ft (↥s → α) (ι → α) (fun f i => f ↑i) fun x => True
+参数：ι : Type u_4；α : Type u_5；s : Finset ι；↥s → α；ι → α；fun f i => f ↑i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.PiFinsetCoe.canLift`：∀ (ι : Type u_4) (α : ι → Type u_5) [_ne : ∀
+ (i : ι), Nonempty (α i)] (s : Finset ι),   CanLift ((i : ↥s) → α ↑i) ((i : ι) →
+ α i) (fun f i =…
 -/
 instance PiFinsetCoe.canLift' (ι α : Type*) [_ne : Nonempty α] (s : Finset ι) :
-    CanLift (s -> α) (ι -> α) (fun f i => f i) fun _ => True :=
+    CanLift (s → α) (ι → α) (fun f i => f i) fun _ => True :=
   PiFinsetCoe.canLift ι (fun _ => α) s
-
-/--
-Instance `FinsetCoe.canLift` / 实例 `FinsetCoe.canLift`
-
-English:
-instance FinsetCoe.canLift
-  signature: (s : Finset α)
-  body: ⟨⟨a, ha⟩, rfl⟩
-
-@[norm_cast]
-
-中文:
-实例 FinsetCoe.canLift
-  签名: (s : 有限集 α)
-  定义体: ⟨⟨a, ha⟩, rfl⟩
-
-@[norm_cast]
+/-
+**Finset.FinsetCoe.canLift** 是 Mathlib 中的一个定理，位于命名空间 `Finset.FinsetCoe`。
+形式化陈述：∀ {α : Type u_1} (s : Finset α), CanLift α (↥s) Subtype.val fun a => a ∈ s
+参数：s : Finset α；↥s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance FinsetCoe.canLift (s : Finset α) : CanLift α s (↑) fun a => a in s where
+instance FinsetCoe.canLift (s : Finset α) : CanLift α s (↑) fun a => a ∈ s where
   prf a ha := ⟨⟨a, ha⟩, rfl⟩
 
 @[norm_cast]
-/--
-theorem `coe_sort_coe` / 定理 `coe_sort_coe`
-
-English:
-theorem coe_sort_coe
-  given: (s : Finset α)
-  statement: ((s : Set α) : Sort _) = s
-  proof: rfl
-
-中文:
-定理 coe_sort_coe
-  条件: (s : 有限集 α)
-  结论: ((s : 集合 α) : 类型层 _) = s
-  证明: rfl
+/-
+**Finset.coe_sort_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_sort_coe (s : Finset α) : ((s : Set α) : Sort _) = s
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sort_coe (s : Finset α) : ((s : Set α) : Sort _) = s :=
   rfl
@@ -640,641 +389,350 @@ section Subset
 variable {s t : Finset α}
 
 @[deprecated "This is now a syntactic identity" (since := "2026-05-24")]
-/--
-theorem `subset_of_le` / 定理 `subset_of_le`
-
-English:
-theorem subset_of_le
-  statement: s <= t -> s subseteq t
-  proof: id
-
-中文:
-定理 subset_of_le
-  结论: s <= t -> s subseteq t
-  证明: id
+/-
+**Finset.subset_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_of_le : s <= t -> s subseteq t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_of_le : s <= t -> s subseteq t := id
-
-/--
-theorem `subset_def` / 定理 `subset_def`
-
-English:
-theorem subset_def
-  statement: s subseteq t ↔ s.1 subseteq t.1
-  proof: Iff.rfl
-
-中文:
-定理 subset_def
-  结论: s subseteq t ↔ s.1 subseteq t.1
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+theorem subset_of_le : s ≤ t → s ⊆ t := id
+/-
+**Finset.subset_def** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_def : s subseteq t ↔ s.1 subseteq t.1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem subset_def : s subseteq t ↔ s.1 subseteq t.1 :=
+theorem subset_def : s ⊆ t ↔ s.1 ⊆ t.1 :=
   Iff.rfl
-
-/--
-theorem `ssubset_def` / 定理 `ssubset_def`
-
-English:
-theorem ssubset_def
-  statement: s ⊂ t ↔ s subseteq t ∧ ¬t subseteq s
-  proof: Iff.rfl
-
-中文:
-定理 ssubset_def
-  结论: s ⊂ t ↔ s subseteq t ∧ ¬t subseteq s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.ssubset_def** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ssubset_def : s ⊂ t ↔ s subseteq t ∧ ¬t subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ssubset_def : s ⊂ t ↔ s subseteq t ∧ ¬t subseteq s :=
+theorem ssubset_def : s ⊂ t ↔ s ⊆ t ∧ ¬t ⊆ s :=
   Iff.rfl
-
-/--
-theorem `Subset.refl` / 定理 `Subset.refl`
-
-English:
-theorem Subset.refl
-  given: (s : Finset α)
-  statement: s subseteq s
-  proof: Multiset.Subset.refl _
-
-中文:
-定理 子集.refl
-  条件: (s : 有限集 α)
-  结论: s subseteq s
-  证明: Multiset.Subset.refl _
-
-Depends on / 依赖: Multiset, Multiset.Subset.refl, Subset
+/-
+**Finset.Subset.refl** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Subset`。
+形式化陈述：∀ {α : Type u_1} (s : Finset α), s ⊆ s
+参数：s : Finset α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Subset.refl`：∀ {α : Type u_1} (s : Multiset α), s ⊆ s
 -/
-theorem Subset.refl (s : Finset α) : s subseteq s :=
+theorem Subset.refl (s : Finset α) : s ⊆ s :=
   Multiset.Subset.refl _
-
-/--
-theorem `Subset.rfl` / 定理 `Subset.rfl`
-
-English:
-theorem Subset.rfl
-  given: {s : Finset α}
-  statement: s subseteq s
-  proof: Subset.refl _
-
-中文:
-定理 子集.rfl
-  条件: {s : 有限集 α}
-  结论: s subseteq s
-  证明: Subset.refl _
+/-
+**Finset.Subset.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Subset`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α}, s ⊆ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Subset.refl`：∀ {α : Type u_1} (s : Finset α), s ⊆ s
 -/
-protected theorem Subset.rfl {s : Finset α} : s subseteq s :=
+protected theorem Subset.rfl {s : Finset α} : s ⊆ s :=
   Subset.refl _
-
-/--
-theorem `subset_of_eq` / 定理 `subset_of_eq`
-
-English:
-theorem subset_of_eq
-  given: {s t : Finset α} (h : s = t)
-  statement: s subseteq t
-  proof: h ▸ Subset.refl _
-
-中文:
-定理 subset_of_eq
-  条件: {s t : 有限集 α} (h : s = t)
-  结论: s subseteq t
-  证明: h ▸ Subset.refl _
+/-
+**Finset.subset_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {s t : Finset α}, s = t → s ⊆ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Subset.refl`：∀ {α : Type u_1} (s : Finset α), s ⊆ s
 -/
-protected theorem subset_of_eq {s t : Finset α} (h : s = t) : s subseteq t :=
+protected theorem subset_of_eq {s t : Finset α} (h : s = t) : s ⊆ t :=
   h ▸ Subset.refl _
-
-/--
-theorem `Subset.trans` / 定理 `Subset.trans`
-
-English:
-theorem Subset.trans
-  given: {s₁ s₂ s₃ : Finset α}
-  statement: s₁ subseteq s₂ -> s₂ subseteq s₃ -> s₁ subseteq s₃
-  proof: Multiset.Subset.trans
-
-中文:
-定理 子集.trans
-  条件: {s₁ s₂ s₃ : 有限集 α}
-  结论: s₁ subseteq s₂ -> s₂ subseteq s₃ -> s₁ subseteq s₃
-  证明: Multiset.Subset.trans
-
-Depends on / 依赖: Multiset, Multiset.Subset.trans, Subset
+/-
+**Finset.Subset.trans** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Subset`。
+形式化陈述：∀ {α : Type u_1} {s₁ s₂ s₃ : Finset α}, s₁ ⊆ s₂ → s₂ ⊆ s₃ → s₁ ⊆ s₃
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Subset.trans`：∀ {α : Type u_1} {s t u : Multiset α}, s ⊆ t → t 
+⊆ u → s ⊆ u
 -/
-theorem Subset.trans {s₁ s₂ s₃ : Finset α} : s₁ subseteq s₂ -> s₂ subseteq s₃ -> s₁ subseteq s₃ :=
+theorem Subset.trans {s₁ s₂ s₃ : Finset α} : s₁ ⊆ s₂ → s₂ ⊆ s₃ → s₁ ⊆ s₃ :=
   Multiset.Subset.trans
-
-/--
-theorem `Superset.trans` / 定理 `Superset.trans`
-
-English:
-theorem Superset.trans
-  given: {s₁ s₂ s₃ : Finset α}
-  statement: s₁ ⊇ s₂ -> s₂ ⊇ s₃ -> s₁ ⊇ s₃
-  proof: fun h' h =>
-  Subset.trans h h'
-
-中文:
-定理 Superset.trans
-  条件: {s₁ s₂ s₃ : 有限集 α}
-  结论: s₁ ⊇ s₂ -> s₂ ⊇ s₃ -> s₁ ⊇ s₃
-  证明: fun h' h =>
-  Subset.trans h h'
+/-
+**Finset.Superset.trans** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Superset`。
+形式化陈述：∀ {α : Type u_1} {s₁ s₂ s₃ : Finset α}, s₁ ⊇ s₂ → s₂ ⊇ s₃ → s₁ ⊇ s₃
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Subset.trans`：∀ {α : Type u_1} {s₁ s₂ s₃ : Finset α}, s₁ ⊆ s₂ → s
+₂ ⊆ s₃ → s₁ ⊆ s₃
 -/
-theorem Superset.trans {s₁ s₂ s₃ : Finset α} : s₁ ⊇ s₂ -> s₂ ⊇ s₃ -> s₁ ⊇ s₃ := fun h' h =>
+theorem Superset.trans {s₁ s₂ s₃ : Finset α} : s₁ ⊇ s₂ → s₂ ⊇ s₃ → s₁ ⊇ s₃ := fun h' h =>
   Subset.trans h h'
-
-/--
-theorem `mem_of_subset` / 定理 `mem_of_subset`
-
-English:
-theorem mem_of_subset
-  given: {s₁ s₂ : Finset α} {a : α}
-  statement: s₁ subseteq s₂ -> a in s₁ -> a in s₂
-  proof: Multiset.mem_of_subset
-
-中文:
-定理 mem_of_subset
-  条件: {s₁ s₂ : 有限集 α} {a : α}
-  结论: s₁ subseteq s₂ -> a in s₁ -> a in s₂
-  证明: Multiset.mem_of_subset
-
-Depends on / 依赖: Multiset, Multiset.mem_of_subset, mem_of_subset
+/-
+**Finset.mem_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_of_subset {s₁ s₂ : Finset α} {a : α} : s₁ subseteq s₂ -> a in s₁ -> a 
+in s₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_of_subset`：mem_of_subset {s t : Multiset α} {a : α} (h : s 
+subseteq t) : a in s -> a in t
 -/
-theorem mem_of_subset {s₁ s₂ : Finset α} {a : α} : s₁ subseteq s₂ -> a in s₁ -> a in s₂ :=
+theorem mem_of_subset {s₁ s₂ : Finset α} {a : α} : s₁ ⊆ s₂ → a ∈ s₁ → a ∈ s₂ :=
   Multiset.mem_of_subset
-
-/--
-theorem `notMem_mono` / 定理 `notMem_mono`
-
-English:
-theorem notMem_mono
-  given: {s t : Finset α} (h : s subseteq t) {a : α}
-  statement: a ∉ t -> a ∉ s
-  proof: mt @h _
-
-alias not_mem_subset := notMem_mono
-
-中文:
-定理 notMem_mono
-  条件: {s t : 有限集 α} (h : s subseteq t) {a : α}
-  结论: a ∉ t -> a ∉ s
-  证明: mt @h _
-
-alias not_mem_subset := notMem_mono
+/-
+**Finset.notMem_mono** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：notMem_mono {s t : Finset α} (h : s subseteq t) {a : α} : a ∉ t -> a ∉ s
+参数：h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
 -/
-theorem notMem_mono {s t : Finset α} (h : s subseteq t) {a : α} : a ∉ t -> a ∉ s :=
-mt @h _
+theorem notMem_mono {s t : Finset α} (h : s ⊆ t) {a : α} : a ∉ t → a ∉ s :=
+  mt <| @h _
 
 alias not_mem_subset := notMem_mono
-
-/--
-theorem `Subset.antisymm` / 定理 `Subset.antisymm`
-
-English:
-theorem Subset.antisymm
-  given: {s₁ s₂ : Finset α} (H₁ : s₁ subseteq s₂) (H₂ : s₂ subseteq s₁)
-  statement: s₁ = s₂
-  proof: ext fun a => ⟨@H₁ a, @H₂ a⟩
-
-@[grind =]
-
-中文:
-定理 子集.antisymm
-  条件: {s₁ s₂ : 有限集 α} (H₁ : s₁ subseteq s₂) (H₂ : s₂ subseteq s₁)
-  结论: s₁ = s₂
-  证明: ext fun a => ⟨@H₁ a, @H₂ a⟩
-
-@[grind =]
+/-
+**Finset.Subset.antisymm** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Subset`。
+形式化陈述：∀ {α : Type u_1} {s₁ s₂ : Finset α}, s₁ ⊆ s₂ → s₂ ⊆ s₁ → s₁ = s₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
 -/
-theorem Subset.antisymm {s₁ s₂ : Finset α} (H₁ : s₁ subseteq s₂) (H₂ : s₂ subseteq s₁) : s₁ = s₂ :=
+theorem Subset.antisymm {s₁ s₂ : Finset α} (H₁ : s₁ ⊆ s₂) (H₂ : s₂ ⊆ s₁) : s₁ = s₂ :=
   ext fun a => ⟨@H₁ a, @H₂ a⟩
 
 @[grind =]
-/--
-theorem `subset_iff` / 定理 `subset_iff`
-
-English:
-theorem subset_iff
-  given: {s₁ s₂ : Finset α}
-  statement: s₁ subseteq s₂ ↔ forall ⦃x⦄, x in s₁ -> x in s₂
-  proof: Iff.rfl
-
-中文:
-定理 subset_iff
-  条件: {s₁ s₂ : 有限集 α}
-  结论: s₁ subseteq s₂ ↔ 对任意 ⦃x⦄, x in s₁ -> x in s₂
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_iff {s₁ s₂ : Finset α} : s₁ subseteq s₂ ↔ forall ⦃x⦄, x in s₁ -> x 
+in s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem subset_iff {s₁ s₂ : Finset α} : s₁ subseteq s₂ ↔ forall ⦃x⦄, x in s₁ -> x in s₂ :=
+theorem subset_iff {s₁ s₂ : Finset α} : s₁ ⊆ s₂ ↔ ∀ ⦃x⦄, x ∈ s₁ → x ∈ s₂ :=
   Iff.rfl
-
-/--
-theorem `subset_iff_notMem` / 定理 `subset_iff_notMem`
-
-English:
-theorem subset_iff_notMem
-  statement: s subseteq t ↔ forall ⦃a⦄, a ∉ t -> a ∉ s
-  proof: by
-  simp only [subset_iff, not_imp_not]
-
-@[norm_cast, gcongr]
-
-中文:
-定理 subset_iff_notMem
-  结论: s subseteq t ↔ 对任意 ⦃a⦄, a ∉ t -> a ∉ s
-  证明: by
-  simp only [subset_iff, not_imp_not]
-
-@[norm_cast, gcongr]
-
-Depends on / 依赖: not_imp_not, subset_iff
+/-
+**Finset.subset_iff_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：subset_iff_notMem : s subseteq t ↔ forall ⦃a⦄, a ∉ t -> a ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem subset_iff_notMem : s subseteq t ↔ forall ⦃a⦄, a ∉ t -> a ∉ s := by
+theorem subset_iff_notMem : s ⊆ t ↔ ∀ ⦃a⦄, a ∉ t → a ∉ s := by
   simp only [subset_iff, not_imp_not]
 
 @[norm_cast, gcongr]
-/--
-theorem `coe_subset` / 定理 `coe_subset`
-
-English:
-theorem coe_subset
-  given: {s₁ s₂ : Finset α}
-  statement: (s₁ : Set α) subseteq s₂ ↔ s₁ subseteq s₂
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 coe_subset
-  条件: {s₁ s₂ : 有限集 α}
-  结论: (s₁ : 集合 α) subseteq s₂ ↔ s₁ subseteq s₂
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.coe_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq s₂ ↔ s₁ subseteq s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq s₂ ↔ s₁ subseteq s₂ :=
+theorem coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) ⊆ s₂ ↔ s₁ ⊆ s₂ :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `val_le_iff` / 定理 `val_le_iff`
-
-English:
-theorem val_le_iff
-  given: {s₁ s₂ : Finset α}
-  statement: s₁.1 <= s₂.1 ↔ s₁ subseteq s₂
-  proof: le_iff_subset s₁.2
-
-中文:
-定理 val_le_iff
-  条件: {s₁ s₂ : 有限集 α}
-  结论: s₁.1 <= s₂.1 ↔ s₁ subseteq s₂
-  证明: le_iff_subset s₁.2
-
-Depends on / 依赖: le_iff_subset
+/-
+**Finset.val_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_le_iff {s₁ s₂ : Finset α} : s₁.1 <= s₂.1 ↔ s₁ subseteq s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.le_iff_subset`：le_iff_subset {s t : Multiset α} : Nodup s -> (s
+ <= t ↔ s subseteq t)
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
-theorem val_le_iff {s₁ s₂ : Finset α} : s₁.1 <= s₂.1 ↔ s₁ subseteq s₂ :=
+theorem val_le_iff {s₁ s₂ : Finset α} : s₁.1 ≤ s₂.1 ↔ s₁ ⊆ s₂ :=
   le_iff_subset s₁.2
-
-/--
-theorem `Subset.antisymm_iff` / 定理 `Subset.antisymm_iff`
-
-English:
-theorem Subset.antisymm_iff
-  given: {s₁ s₂ : Finset α}
-  statement: s₁ = s₂ ↔ s₁ subseteq s₂ ∧ s₂ subseteq s₁
-  proof: le_antisymm_iff
-
-中文:
-定理 子集.antisymm_iff
-  条件: {s₁ s₂ : 有限集 α}
-  结论: s₁ = s₂ ↔ s₁ subseteq s₂ ∧ s₂ subseteq s₁
-  证明: le_antisymm_iff
-
-Depends on / 依赖: le_antisymm_iff
+/-
+**Finset.Subset.antisymm_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Subset`。
+形式化陈述：∀ {α : Type u_1} {s₁ s₂ : Finset α}, s₁ = s₂ ↔ s₁ ⊆ s₂ ∧ s₂ ⊆ s₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm_iff`：le_antisymm_iff : a = b ↔ a <= b ∧ b <= a
 -/
-theorem Subset.antisymm_iff {s₁ s₂ : Finset α} : s₁ = s₂ ↔ s₁ subseteq s₂ ∧ s₂ subseteq s₁ :=
+theorem Subset.antisymm_iff {s₁ s₂ : Finset α} : s₁ = s₂ ↔ s₁ ⊆ s₂ ∧ s₂ ⊆ s₁ :=
   le_antisymm_iff
-
-/--
-theorem `not_subset` / 定理 `not_subset`
-
-English:
-theorem not_subset
-  statement: ¬s subseteq t ↔ exists x in s, x ∉ t
-  proof: by simp only [← coe_subset, Set.not_subset, mem_coe]
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 not_subset
-  结论: ¬s subseteq t ↔ 存在 x in s, x ∉ t
-  证明: by simp only [← coe_subset, Set.not_subset, mem_coe]
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-Depends on / 依赖: Set.not_subset, coe_subset, mem_coe, not_subset
+/-
+**Finset.not_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：not_subset : ¬s subseteq t ↔ exists x in s, x ∉ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem not_subset : ¬s subseteq t ↔ exists x in s, x ∉ t := by simp only [← coe_subset, Set.not_subset, mem_coe]
+theorem not_subset : ¬s ⊆ t ↔ ∃ x ∈ s, x ∉ t := by simp only [← coe_subset, Set.not_subset, mem_coe]
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `le_eq_subset` / 定理 `le_eq_subset`
-
-English:
-theorem le_eq_subset
-  statement: ((· <= ·) : Finset α -> Finset α -> Prop) = (· subseteq ·)
-  proof: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 le_eq_subset
-  结论: ((· <= ·) : 有限集 α -> 有限集 α -> 命题) = (· subseteq ·)
-  证明: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
+/-
+**Finset.le_eq_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：le_eq_subset : ((· <= ·) : Finset α -> Finset α -> Prop) = (· subseteq ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem le_eq_subset : ((· <= ·) : Finset α -> Finset α -> Prop) = (· subseteq ·) :=
+theorem le_eq_subset : ((· ≤ ·) : Finset α → Finset α → Prop) = (· ⊆ ·) :=
   rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `lt_eq_subset` / 定理 `lt_eq_subset`
-
-English:
-theorem lt_eq_subset
-  statement: ((· < ·) : Finset α -> Finset α -> Prop) = (· ⊂ ·)
-  proof: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 lt_eq_subset
-  结论: ((· < ·) : 有限集 α -> 有限集 α -> 命题) = (· ⊂ ·)
-  证明: rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
+/-
+**Finset.lt_eq_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：lt_eq_subset : ((· < ·) : Finset α -> Finset α -> Prop) = (· ⊂ ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lt_eq_subset : ((· < ·) : Finset α -> Finset α -> Prop) = (· ⊂ ·) :=
+theorem lt_eq_subset : ((· < ·) : Finset α → Finset α → Prop) = (· ⊂ ·) :=
   rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `le_iff_subset` / 定理 `le_iff_subset`
-
-English:
-theorem le_iff_subset
-  given: {s₁ s₂ : Finset α}
-  statement: s₁ <= s₂ ↔ s₁ subseteq s₂
-  proof: Iff.rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-中文:
-定理 le_iff_subset
-  条件: {s₁ s₂ : 有限集 α}
-  结论: s₁ <= s₂ ↔ s₁ subseteq s₂
-  证明: Iff.rfl
-
-@[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.le_iff_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：le_iff_subset {s₁ s₂ : Finset α} : s₁ <= s₂ ↔ s₁ subseteq s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_iff_subset {s₁ s₂ : Finset α} : s₁ <= s₂ ↔ s₁ subseteq s₂ :=
+theorem le_iff_subset {s₁ s₂ : Finset α} : s₁ ≤ s₂ ↔ s₁ ⊆ s₂ :=
   Iff.rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
-/--
-theorem `lt_iff_ssubset` / 定理 `lt_iff_ssubset`
-
-English:
-theorem lt_iff_ssubset
-  given: {s₁ s₂ : Finset α}
-  statement: s₁ < s₂ ↔ s₁ ⊂ s₂
-  proof: Iff.rfl
-
-@[norm_cast]
-
-中文:
-定理 lt_iff_ssubset
-  条件: {s₁ s₂ : 有限集 α}
-  结论: s₁ < s₂ ↔ s₁ ⊂ s₂
-  证明: Iff.rfl
-
-@[norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.lt_iff_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：lt_iff_ssubset {s₁ s₂ : Finset α} : s₁ < s₂ ↔ s₁ ⊂ s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_iff_ssubset {s₁ s₂ : Finset α} : s₁ < s₂ ↔ s₁ ⊂ s₂ :=
   Iff.rfl
 
 @[norm_cast]
-/--
-theorem `coe_ssubset` / 定理 `coe_ssubset`
-
-English:
-theorem coe_ssubset
-  given: {s₁ s₂ : Finset α}
-  statement: (s₁ : Set α) ⊂ s₂ ↔ s₁ ⊂ s₂
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-定理 coe_ssubset
-  条件: {s₁ s₂ : 有限集 α}
-  结论: (s₁ : 集合 α) ⊂ s₂ ↔ s₁ ⊂ s₂
-  证明: by
-  simp
-
-@[simp]
+/-
+**Finset.coe_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_ssubset {s₁ s₂ : Finset α} : (s₁ : Set α) ⊂ s₂ ↔ s₁ ⊂ s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem coe_ssubset {s₁ s₂ : Finset α} : (s₁ : Set α) ⊂ s₂ ↔ s₁ ⊂ s₂ := by
   simp
 
 @[simp]
-/--
-theorem `val_lt_iff` / 定理 `val_lt_iff`
-
-English:
-theorem val_lt_iff
-  given: {s₁ s₂ : Finset α}
-  statement: s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
-  proof: and_congr val_le_iff not_congr val_le_iff
-
-中文:
-定理 val_lt_iff
-  条件: {s₁ s₂ : 有限集 α}
-  结论: s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
-  证明: and_congr val_le_iff not_congr val_le_iff
-
-Depends on / 依赖: and_congr, not_congr, val_le_iff
+/-
+**Finset.val_lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_lt_iff {s₁ s₂ : Finset α} : s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Finset.val_le_iff`：val_le_iff {s₁ s₂ : Finset α} : s₁.1 <= s₂.1 ↔ s₁ sub
+seteq s₂
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
 -/
 theorem val_lt_iff {s₁ s₂ : Finset α} : s₁.1 < s₂.1 ↔ s₁ ⊂ s₂ :=
-and_congr val_le_iff not_congr val_le_iff
-
-/--
-lemma `val_strictMono` / 引理 `val_strictMono`
-
-English:
-lemma val_strictMono
-  statement: StrictMono (val : Finset α -> Multiset α)
-  proof: fun _ _ => val_lt_iff.2
-
-@[grind =]
-
-中文:
-引理 val_strictMono
-  结论: 严格递增 (val : 有限集 α -> Multiset α)
-  证明: fun _ _ => val_lt_iff.2
-
-@[grind =]
-
-Depends on / 依赖: val_lt_iff
+  and_congr val_le_iff <| not_congr val_le_iff
+/-
+**Finset.val_strictMono** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：val_strictMono : StrictMono (val : Finset α -> Multiset α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.val_lt_iff`：val_lt_iff {s₁ s₂ : Finset α} : s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
 -/
-lemma val_strictMono : StrictMono (val : Finset α -> Multiset α) := fun _ _ => val_lt_iff.2
+lemma val_strictMono : StrictMono (val : Finset α → Multiset α) := fun _ _ ↦ val_lt_iff.2
 
 @[grind =]
-/--
-theorem `ssubset_iff_subset_ne` / 定理 `ssubset_iff_subset_ne`
-
-English:
-theorem ssubset_iff_subset_ne
-  given: {s t : Finset α}
-  statement: s ⊂ t ↔ s subseteq t ∧ s != t
-  proof: @lt_iff_le_and_ne _ _ s t
-
-中文:
-定理 ssubset_iff_subset_ne
-  条件: {s t : 有限集 α}
-  结论: s ⊂ t ↔ s subseteq t ∧ s != t
-  证明: @lt_iff_le_and_ne _ _ s t
-
-Depends on / 依赖: lt_iff_le_and_ne
+/-
+**Finset.ssubset_iff_subset_ne** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ssubset_iff_subset_ne {s t : Finset α} : s ⊂ t ↔ s subseteq t ∧ s != t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
 -/
-theorem ssubset_iff_subset_ne {s t : Finset α} : s ⊂ t ↔ s subseteq t ∧ s != t :=
+theorem ssubset_iff_subset_ne {s t : Finset α} : s ⊂ t ↔ s ⊆ t ∧ s ≠ t :=
   @lt_iff_le_and_ne _ _ s t
-
-/--
-theorem `ssubset_iff_of_subset` / 定理 `ssubset_iff_of_subset`
-
-English:
-theorem ssubset_iff_of_subset
-  given: {s₁ s₂ : Finset α} (h : s₁ subseteq s₂)
-  statement: s₁ ⊂ s₂ ↔ exists x in s₂, x ∉ s₁
-  proof: Set.ssubset_iff_of_subset h
-
-中文:
-定理 ssubset_iff_of_subset
-  条件: {s₁ s₂ : 有限集 α} (h : s₁ subseteq s₂)
-  结论: s₁ ⊂ s₂ ↔ 存在 x in s₂, x ∉ s₁
-  证明: Set.ssubset_iff_of_subset h
-
-Depends on / 依赖: Set.ssubset_iff_of_subset, ssubset_iff_of_subset
+/-
+**Finset.ssubset_iff_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ssubset_iff_of_subset {s₁ s₂ : Finset α} (h : s₁ subseteq s₂) : s₁ ⊂ s₂ ↔ 
+exists x in s₂, x ∉ s₁
+参数：h : s₁ subseteq s₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ssubset_iff_of_subset`：ssubset_iff_of_subset {s t : Set α} (h : s su
+bseteq t) : s ⊂ t ↔ exists x in t, x ∉ s
 -/
-theorem ssubset_iff_of_subset {s₁ s₂ : Finset α} (h : s₁ subseteq s₂) : s₁ ⊂ s₂ ↔ exists x in s₂, x ∉ s₁ :=
+theorem ssubset_iff_of_subset {s₁ s₂ : Finset α} (h : s₁ ⊆ s₂) : s₁ ⊂ s₂ ↔ ∃ x ∈ s₂, x ∉ s₁ :=
   Set.ssubset_iff_of_subset h
-
-/--
-theorem `ssubset_of_ssubset_of_subset` / 定理 `ssubset_of_ssubset_of_subset`
-
-English:
-theorem ssubset_of_ssubset_of_subset
-  given: {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s₃ : s₂ subseteq s₃)
-  proof: Set.ssubset_of_ssubset_of_subset hs₁s₂ hs₂s₃
-
-中文:
-定理 ssubset_of_ssubset_of_subset
-  条件: {s₁ s₂ s₃ : 有限集 α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s₃ : s₂ subseteq s₃)
-  证明: Set.ssubset_of_ssubset_of_subset hs₁s₂ hs₂s₃
-
-Depends on / 依赖: Set.ssubset_of_ssubset_of_subset, ssubset_of_ssubset_of_subset
+/-
+**Finset.ssubset_of_ssubset_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ssubset_of_ssubset_of_subset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s
+₃ : s₂ subseteq s₃) : s₁ ⊂ s₃
+参数：hs₁s₂ : s₁ ⊂ s₂；hs₂s₃ : s₂ subseteq s₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ssubset_of_ssubset_of_subset`：∀ {α : Type u} {s₁ s₂ s₃ : Set α}, s₁ 
+⊂ s₂ → s₂ ⊆ s₃ → s₁ ⊂ s₃
 -/
-theorem ssubset_of_ssubset_of_subset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s₃ : s₂ subseteq s₃) :
+theorem ssubset_of_ssubset_of_subset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s₃ : s₂ ⊆ s₃) :
     s₁ ⊂ s₃ :=
   Set.ssubset_of_ssubset_of_subset hs₁s₂ hs₂s₃
-
-/--
-theorem `ssubset_of_subset_of_ssubset` / 定理 `ssubset_of_subset_of_ssubset`
-
-English:
-theorem ssubset_of_subset_of_ssubset
-  given: {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ subseteq s₂) (hs₂s₃ : s₂ ⊂ s₃)
-  proof: Set.ssubset_of_subset_of_ssubset hs₁s₂ hs₂s₃
-
-中文:
-定理 ssubset_of_subset_of_ssubset
-  条件: {s₁ s₂ s₃ : 有限集 α} (hs₁s₂ : s₁ subseteq s₂) (hs₂s₃ : s₂ ⊂ s₃)
-  证明: Set.ssubset_of_subset_of_ssubset hs₁s₂ hs₂s₃
-
-Depends on / 依赖: Set.ssubset_of_subset_of_ssubset, ssubset_of_subset_of_ssubset
+/-
+**Finset.ssubset_of_subset_of_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ssubset_of_subset_of_ssubset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ subseteq s₂
+) (hs₂s₃ : s₂ ⊂ s₃) : s₁ ⊂ s₃
+参数：hs₁s₂ : s₁ subseteq s₂；hs₂s₃ : s₂ ⊂ s₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ssubset_of_subset_of_ssubset`：∀ {α : Type u} {s₁ s₂ s₃ : Set α}, s₁ 
+⊆ s₂ → s₂ ⊂ s₃ → s₁ ⊂ s₃
 -/
-theorem ssubset_of_subset_of_ssubset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ subseteq s₂) (hs₂s₃ : s₂ ⊂ s₃) :
+theorem ssubset_of_subset_of_ssubset {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊆ s₂) (hs₂s₃ : s₂ ⊂ s₃) :
     s₁ ⊂ s₃ :=
   Set.ssubset_of_subset_of_ssubset hs₁s₂ hs₂s₃
-
-/--
-theorem `exists_of_ssubset` / 定理 `exists_of_ssubset`
-
-English:
-theorem exists_of_ssubset
-  given: {s₁ s₂ : Finset α} (h : s₁ ⊂ s₂)
-  statement: exists x in s₂, x ∉ s₁
-  proof: Set.exists_of_ssubset h
-
-中文:
-定理 存在_of_ssubset
-  条件: {s₁ s₂ : 有限集 α} (h : s₁ ⊂ s₂)
-  结论: 存在 x in s₂, x ∉ s₁
-  证明: Set.exists_of_ssubset h
-
-Depends on / 依赖: Set.exists_of_ssubset, exists_of_ssubset
+/-
+**Finset.exists_of_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：exists_of_ssubset {s₁ s₂ : Finset α} (h : s₁ ⊂ s₂) : exists x in s₂, x ∉ s
+₁
+参数：h : s₁ ⊂ s₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.exists_of_ssubset`：exists_of_ssubset {s t : Set α} (h : s ⊂ t) : exi
+sts x in t, x ∉ s
 -/
-theorem exists_of_ssubset {s₁ s₂ : Finset α} (h : s₁ ⊂ s₂) : exists x in s₂, x ∉ s₁ :=
+theorem exists_of_ssubset {s₁ s₂ : Finset α} (h : s₁ ⊂ s₂) : ∃ x ∈ s₂, x ∉ s₁ :=
   Set.exists_of_ssubset h
-
-/--
-Instance `isWellFounded_ssubset` / 实例 `isWellFounded_ssubset`
-
-English:
-instance isWellFounded_ssubset
-  signature: : IsWellFounded (Finset α) (· ⊂ ·)
-  body: Subrelation.isWellFounded (InvImage _ _) val_lt_iff.2
-
-中文:
-实例 isWellFounded_ssubset
-  签名: : 是良基 (有限集 α) (· ⊂ ·)
-  定义体: Subrelation.isWellFounded (InvImage _ _) val_lt_iff.2
-
-Depends on / 依赖: InvImage, Subrelation, Subrelation.isWellFounded, isWellFounded, val_lt_iff
+/-
+**Finset.isWellFounded_ssubset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：isWellFounded_ssubset : IsWellFounded (Finset α) (· ⊂ ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subrelation.isWellFounded`：Subrelation.isWellFounded (r : α -> α -> Prop
+) [IsWellFounded α r] {s : α -> α -> Prop} (h : Subrelation s r) : IsWellFounded
+ α s
+· 使用定理 `instIsWellFoundedInvImage`：∀ {α : Type u} {β : Type v} (r : α → α → Prop
+) [IsWellFounded α r] (f : β → α), IsWellFounded β (InvImage r f)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.val_lt_iff`：val_lt_iff {s₁ s₂ : Finset α} : s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
 -/
 instance isWellFounded_ssubset : IsWellFounded (Finset α) (· ⊂ ·) :=
   Subrelation.isWellFounded (InvImage _ _) val_lt_iff.2
-
-/--
-Instance `wellFoundedLT` / 实例 `wellFoundedLT`
-
-English:
-instance wellFoundedLT
-  signature: : WellFoundedLT (Finset α)
-  body: Finset.isWellFounded_ssubset
-
-中文:
-实例 wellFoundedLT
-  签名: : WellFoundedLT (有限集 α)
-  定义体: Finset.isWellFounded_ssubset
-
-Depends on / 依赖: Finset, Finset.isWellFounded_ssubset, isWellFounded_ssubset
+/-
+**Finset.wellFoundedLT** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：wellFoundedLT : WellFoundedLT (Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance wellFoundedLT : WellFoundedLT (Finset α) :=
   Finset.isWellFounded_ssubset
@@ -1287,43 +745,31 @@ attribute [local trans] Subset.trans Superset.trans
 /-! ### Order embedding from `Finset α` to `Set α` -/
 
 
-/--
-Definition of `coeEmb` / `coeEmb` 的定义
+/-- Coercion to `Set α` as an `OrderEmbedding`. -/
+/-
+**Finset.coeEmb** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：coeEmb : Finset α ↪o Set α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
 
-English:
-definition coeEmb
-  signature: : Finset α ↪o Set α
-  body: ⟨⟨(↑), coe_injective⟩, coe_subset⟩
-
-@[simp]
-
-中文:
-定义 coeEmb
-  签名: : 有限集 α ↪o 集合 α
-  定义体: ⟨⟨(↑), coe_injective⟩, coe_subset⟩
-
-@[simp]
-
-Depends on / 依赖: coe_injective, coe_subset
+--- 原说明 ---
+Coercion to `Set α` as an `OrderEmbedding`.
 -/
 def coeEmb : Finset α ↪o Set α :=
   ⟨⟨(↑), coe_injective⟩, coe_subset⟩
 
 @[simp]
-/--
-theorem `coe_coeEmb` / 定理 `coe_coeEmb`
-
-English:
-theorem coe_coeEmb
-  statement: ⇑(coeEmb : Finset α ↪o Set α) = ((↑) : Finset α -> Set α)
-  proof: rfl
-
-中文:
-定理 coe_coeEmb
-  结论: ⇑(coeEmb : 有限集 α ↪o 集合 α) = ((↑) : 有限集 α -> 集合 α)
-  证明: rfl
+/-
+**Finset.coe_coeEmb** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_coeEmb : ⇑(coeEmb : Finset α ↪o Set α) = ((↑) : Finset α -> Set α)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coeEmb : ⇑(coeEmb : Finset α ↪o Set α) = ((↑) : Finset α -> Set α) :=
+theorem coe_coeEmb : ⇑(coeEmb : Finset α ↪o Set α) = ((↑) : Finset α → Set α) :=
   rfl
 
 /-! ### Assorted results
@@ -1336,171 +782,97 @@ section DecidablePiExists
 variable {s : Finset α}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `decidableDforallFinset` / 实例 `decidableDforallFinset`
-
-English:
-instance decidableDforallFinset
-  signature: {p : forall a in s, Prop} [_hp : forall (a) (h : a in s), Decidable (p a h)]
-  body: Multiset.decidableDforallMultiset
-
-中文:
-实例 decidableD对任意Finset
-  签名: {p : 对任意 a in s, 命题} [_hp : 对任意 (a) (h : a in s), 可判定 (p a h)]
-  定义体: Multiset.decidableDforallMultiset
-
-Depends on / 依赖: Multiset, Multiset.decidableDforallMultiset, decidableDforallMultiset
+/-
+**Finset.decidableDforallFinset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableDforallFinset {p : forall a in s, Prop} [_hp : forall (a) (h : a 
+in s), Decidable (p a h)] : Decidable (forall (a) (h : a in s), p a h)
+参数：a；h : a in s；p a h。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableDforallFinset {p : forall a in s, Prop} [_hp : forall (a) (h : a in s), Decidable (p a h)] :
-    Decidable (forall (a) (h : a in s), p a h) :=
+instance decidableDforallFinset {p : ∀ a ∈ s, Prop} [_hp : ∀ (a) (h : a ∈ s), Decidable (p a h)] :
+    Decidable (∀ (a) (h : a ∈ s), p a h) :=
   Multiset.decidableDforallMultiset
-
-/--
-Instance `instDecidableRelSubset` / 实例 `instDecidableRelSubset`
-
-English:
-instance instDecidableRelSubset
-  signature: [DecidableEq α]
-  body: fun _ _ => decidableDforallFinset
-
-中文:
-实例 instDecidableRelSubset
-  签名: [DecidableEq α]
-  定义体: fun _ _ => decidableDforallFinset
-
-Depends on / 依赖: Finset, subseteq
+/-
+**Finset.instDecidableRelSubset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：instDecidableRelSubset [DecidableEq α] : DecidableRel (α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instDecidableRelSubset [DecidableEq α] : DecidableRel (α := Finset α) (· subseteq ·) :=
-  fun _ _ => decidableDforallFinset
-
-/--
-Instance `instDecidableRelSSubset` / 实例 `instDecidableRelSSubset`
-
-English:
-instance instDecidableRelSSubset
-  signature: [DecidableEq α]
-  body: fun _ _ => instDecidableAnd
-
-中文:
-实例 instDecidableRelSSubset
-  签名: [DecidableEq α]
-  定义体: fun _ _ => instDecidableAnd
-
-Depends on / 依赖: Finset
+instance instDecidableRelSubset [DecidableEq α] : DecidableRel (α := Finset α) (· ⊆ ·) :=
+  fun _ _ ↦ decidableDforallFinset
+/-
+**Finset.instDecidableRelSSubset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：instDecidableRelSSubset [DecidableEq α] : DecidableRel (α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDecidableRelSSubset [DecidableEq α] : DecidableRel (α := Finset α) (· ⊂ ·) :=
-  fun _ _ => instDecidableAnd
-
-/--
-Instance `instDecidableLE` / 实例 `instDecidableLE`
-
-English:
-instance instDecidableLE
-  signature: [DecidableEq α]
-  body: instDecidableRelSubset
-
-中文:
-实例 instDecidableLE
-  签名: [DecidableEq α]
-  定义体: instDecidableRelSubset
-
-Depends on / 依赖: instDecidableRelSubset
+  fun _ _ ↦ instDecidableAnd
+/-
+**Finset.instDecidableLE** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：instDecidableLE [DecidableEq α] : DecidableLE (Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDecidableLE [DecidableEq α] : DecidableLE (Finset α) :=
   instDecidableRelSubset
-
-/--
-Instance `instDecidableLT` / 实例 `instDecidableLT`
-
-English:
-instance instDecidableLT
-  signature: [DecidableEq α]
-  body: instDecidableRelSSubset
-
-中文:
-实例 instDecidableLT
-  签名: [DecidableEq α]
-  定义体: instDecidableRelSSubset
-
-Depends on / 依赖: instDecidableRelSSubset
+/-
+**Finset.instDecidableLT** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：instDecidableLT [DecidableEq α] : DecidableLT (Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDecidableLT [DecidableEq α] : DecidableLT (Finset α) :=
   instDecidableRelSSubset
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `decidableDExistsFinset` / 实例 `decidableDExistsFinset`
-
-English:
-instance decidableDExistsFinset
-  signature: {p : forall a in s, Prop} [_hp : forall (a) (h : a in s), Decidable (p a h)]
-  body: Multiset.decidableDexistsMultiset
-
-中文:
-实例 decidableDExistsFinset
-  签名: {p : 对任意 a in s, 命题} [_hp : 对任意 (a) (h : a in s), 可判定 (p a h)]
-  定义体: Multiset.decidableDexistsMultiset
-
-Depends on / 依赖: Multiset, Multiset.decidableDexistsMultiset, decidableDexistsMultiset
+/-
+**Finset.decidableDExistsFinset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableDExistsFinset {p : forall a in s, Prop} [_hp : forall (a) (h : a 
+in s), Decidable (p a h)] : Decidable (exists (a : _) (h : a in s), p a h)
+参数：a；h : a in s；p a h。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableDExistsFinset {p : forall a in s, Prop} [_hp : forall (a) (h : a in s), Decidable (p a h)] :
-    Decidable (exists (a : _) (h : a in s), p a h) :=
+instance decidableDExistsFinset {p : ∀ a ∈ s, Prop} [_hp : ∀ (a) (h : a ∈ s), Decidable (p a h)] :
+    Decidable (∃ (a : _) (h : a ∈ s), p a h) :=
   Multiset.decidableDexistsMultiset
-
-/--
-Instance `decidableExistsAndFinset` / 实例 `decidableExistsAndFinset`
-
-English:
-instance decidableExistsAndFinset
-  signature: {p : α -> Prop} [_hp : forall (a), Decidable (p a)]
-  body: decidable_of_iff (exists (a : _) (_ : a in s), p a) (by simp)
-
-中文:
-实例 decidableExistsAndFinset
-  签名: {p : α -> 命题} [_hp : 对任意 (a), 可判定 (p a)]
-  定义体: decidable_of_iff (exists (a : _) (_ : a in s), p a) (by simp)
-
-Depends on / 依赖: decidable_of_iff
+/-
+**Finset.decidableExistsAndFinset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableExistsAndFinset {p : α -> Prop} [_hp : forall (a), Decidable (p a
+)] : Decidable (exists a in s, p a)
+参数：a；p a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableExistsAndFinset {p : α -> Prop} [_hp : forall (a), Decidable (p a)] :
-    Decidable (exists a in s, p a) :=
-  decidable_of_iff (exists (a : _) (_ : a in s), p a) (by simp)
-
-/--
-Instance `decidableExistsAndFinsetCoe` / 实例 `decidableExistsAndFinsetCoe`
-
-English:
-instance decidableExistsAndFinsetCoe
-  signature: {p : α -> Prop} [DecidablePred p]
-  body: decidableExistsAndFinset
-
-中文:
-实例 decidableExistsAndFinsetCoe
-  签名: {p : α -> 命题} [DecidablePred p]
-  定义体: decidableExistsAndFinset
-
-Depends on / 依赖: decidableExistsAndFinset
+instance decidableExistsAndFinset {p : α → Prop} [_hp : ∀ (a), Decidable (p a)] :
+    Decidable (∃ a ∈ s, p a) :=
+  decidable_of_iff (∃ (a : _) (_ : a ∈ s), p a) (by simp)
+/-
+**Finset.decidableExistsAndFinsetCoe** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableExistsAndFinsetCoe {p : α -> Prop} [DecidablePred p] : Decidable 
+(exists a in (s : Set α), p a)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableExistsAndFinsetCoe {p : α -> Prop} [DecidablePred p] :
-    Decidable (exists a in (s : Set α), p a) := decidableExistsAndFinset
+instance decidableExistsAndFinsetCoe {p : α → Prop} [DecidablePred p] :
+    Decidable (∃ a ∈ (s : Set α), p a) := decidableExistsAndFinset
 
-/--
-Instance `decidableEqPiFinset` / 实例 `decidableEqPiFinset`
+/-- decidable equality for functions whose domain is bounded by finsets -/
+/-
+**Finset.decidableEqPiFinset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableEqPiFinset {β : α -> Type*} [_h : forall a, DecidableEq (β a)] : 
+DecidableEq (forall a in s, β a)
+参数：β a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance decidableEqPiFinset
-  signature: {β : α -> Type*} [_h : forall a, DecidableEq (β a)]
-  body: Multiset.decidableEqPiMultiset
-
-中文:
-实例 decidableEqPiFinset
-  签名: {β : α -> 类型} [_h : 对任意 a, DecidableEq (β a)]
-  定义体: Multiset.decidableEqPiMultiset
-
-Depends on / 依赖: Multiset, Multiset.decidableEqPiMultiset, decidableEqPiMultiset
+--- 原说明 ---
+decidable equality for functions whose domain is bounded by finsets
 -/
-instance decidableEqPiFinset {β : α -> Type*} [_h : forall a, DecidableEq (β a)] :
-    DecidableEq (forall a in s, β a) :=
+instance decidableEqPiFinset {β : α → Type*} [_h : ∀ a, DecidableEq (β a)] :
+    DecidableEq (∀ a ∈ s, β a) :=
   Multiset.decidableEqPiMultiset
 
 end DecidablePiExists
@@ -1509,43 +881,20 @@ end Finset
 
 namespace List
 
-variable [DecidableEq α] {a : α} {f : α -> β} {s : Finset α} {t : Set β} {t' : Finset β}
+variable [DecidableEq α] {a : α} {f : α → β} {s : Finset α} {t : Set β} {t' : Finset β}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidablePred
-  signature: (· in t)] : Decidable (Set.MapsTo f s t)
-  body: inferInstanceAs (Decidable (forall x in s, f x in t))
-
-中文:
-实例 [DecidablePred
-  签名: (· in t)] : 可判定 (集合.映射到 f s t)
-  定义体: inferInstanceAs (Decidable (forall x in s, f x in t))
-
-Depends on / 依赖: Decidable
+/-
+**List.** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DecidablePred (· in t)] : Decidable (Set.MapsTo f s t) :=
-  inferInstanceAs (Decidable (forall x in s, f x in t))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: β] : Decidable (Set.SurjOn f s t')
-  body: inferInstanceAs (Decidable (forall x in t', exists y in s, f y = x))
-
-中文:
-实例 [DecidableEq
-  签名: β] : 可判定 (集合.满射限制 f s t')
-  定义体: inferInstanceAs (Decidable (forall x in t', exists y in s, f y = x))
-
-Depends on / 依赖: Decidable
+instance [DecidablePred (· ∈ t)] : Decidable (Set.MapsTo f s t) :=
+  inferInstanceAs (Decidable (∀ x ∈ s, f x ∈ t))
+/-
+**List.** 是 Mathlib 中的一个实例，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq β] : Decidable (Set.SurjOn f s t') :=
-  inferInstanceAs (Decidable (forall x in t', exists y in s, f y = x))
+  inferInstanceAs (Decidable (∀ x ∈ t', ∃ y ∈ s, f y = x))
 
 end List
 
@@ -1555,44 +904,38 @@ section Pairwise
 
 variable {s : Finset α}
 
-/--
-theorem `pairwise_subtype_iff_pairwise_finset'` / 定理 `pairwise_subtype_iff_pairwise_finset'`
-
-English:
-theorem pairwise_subtype_iff_pairwise_finset'
-  given: (r : β -> β -> Prop) (f : α -> β)
-  proof: pairwise_subtype_iff_pairwise_set (s : Set α) (r on f)
-
-中文:
-定理 pairwise_subtype_iff_pairwise_finset'
-  条件: (r : β -> β -> 命题) (f : α -> β)
-  证明: pairwise_subtype_iff_pairwise_set (s : Set α) (r on f)
-
-Depends on / 依赖: pairwise_subtype_iff_pairwise_set
+/-
+**Finset.pairwise_subtype_iff_pairwise_finset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset
+`。
+形式化陈述：pairwise_subtype_iff_pairwise_finset' (r : β -> β -> Prop) (f : α -> β) : 
+Pairwise (r on fun x : s => f x) ↔ (s : Set α).Pairwise (r on f)
+参数：r : β -> β -> Prop；f : α -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pairwise_subtype_iff_pairwise_set`：pairwise_subtype_iff_pairwise_set (s 
+: Set α) (r : α -> α -> Prop) : (Pairwise fun (x : s) (y : s) => r x y) ↔ s.Pair
+wise r
 -/
-theorem pairwise_subtype_iff_pairwise_finset' (r : β -> β -> Prop) (f : α -> β) :
+theorem pairwise_subtype_iff_pairwise_finset' (r : β → β → Prop) (f : α → β) :
     Pairwise (r on fun x : s => f x) ↔ (s : Set α).Pairwise (r on f) :=
   pairwise_subtype_iff_pairwise_set (s : Set α) (r on f)
-
-/--
-theorem `pairwise_subtype_iff_pairwise_finset` / 定理 `pairwise_subtype_iff_pairwise_finset`
-
-English:
-theorem pairwise_subtype_iff_pairwise_finset
-  given: (r : α -> α -> Prop)
-  proof: pairwise_subtype_iff_pairwise_finset' r id
-
-中文:
-定理 pairwise_subtype_iff_pairwise_finset
-  条件: (r : α -> α -> 命题)
-  证明: pairwise_subtype_iff_pairwise_finset' r id
-
-Depends on / 依赖: pairwise_subtype_iff_pairwise_finset
+/-
+**Finset.pairwise_subtype_iff_pairwise_finset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`
+。
+形式化陈述：pairwise_subtype_iff_pairwise_finset (r : α -> α -> Prop) : Pairwise (r on
+ fun x : s => x) ↔ (s : Set α).Pairwise r
+参数：r : α -> α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.pairwise_subtype_iff_pairwise_finset'`：pairwise_subtype_iff_pairw
+ise_finset' (r : β -> β -> Prop) (f : α -> β) : Pairwise (r on fun x : s => f x)
+ ↔ (s : Set α).Pairwise (r on f)
 -/
-theorem pairwise_subtype_iff_pairwise_finset (r : α -> α -> Prop) :
+theorem pairwise_subtype_iff_pairwise_finset (r : α → α → Prop) :
     Pairwise (r on fun x : s => x) ↔ (s : Set α).Pairwise r :=
   pairwise_subtype_iff_pairwise_finset' r id
 
 end Pairwise
 
 end Finset
+

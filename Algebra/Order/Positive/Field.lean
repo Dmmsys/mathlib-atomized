@@ -22,112 +22,50 @@ variable {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
 
 namespace Positive
 
-/--
-Instance `Subtype.inv` / 实例 `Subtype.inv`
-
-English:
-instance Subtype.inv
-  signature: : Inv { x : K // 0 < x }
-  body: ⟨fun x => ⟨x⁻¹, inv_pos.2 x.2⟩⟩
-
-@[simp]
-
-中文:
-实例 子类型.inv
-  签名: : 取逆 { x : K // 0 < x }
-  定义体: ⟨fun x => ⟨x⁻¹, inv_pos.2 x.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: inv_pos
+/-
+**Positive.Subtype.inv** 是 Mathlib 中的一个定义，位于命名空间 `Positive.Subtype`。
+形式化陈述：{K : Type u_1} → [inst : Field K] → [inst_1 : LinearOrder K] → [IsStrictOr
+deredRing K] → Inv { x // 0 < x }
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Subtype.inv : Inv { x : K // 0 < x } := ⟨fun x => ⟨x⁻¹, inv_pos.2 x.2⟩⟩
 
 @[simp]
-/--
-theorem `coe_inv` / 定理 `coe_inv`
-
-English:
-theorem coe_inv
-  given: (x : { x : K // 0 < x })
-  statement: ↑x⁻¹ = (x⁻¹ : K)
-  proof: rfl
-
-中文:
-定理 coe_inv
-  条件: (x : { x : K // 0 < x })
-  结论: ↑x⁻¹ = (x⁻¹ : K)
-  证明: rfl
+/-
+**Positive.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `Positive`。
+形式化陈述：coe_inv (x : { x : K // 0 < x }) : ↑x⁻¹ = (x⁻¹ : K)
+参数：x : { x : K // 0 < x }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_inv (x : { x : K // 0 < x }) : ↑x⁻¹ = (x⁻¹ : K) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow { x : K // 0 < x } Int
-  body: ⟨fun x n => ⟨(x : K) ^ n, zpow_pos x.2 _⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幂 { x : K // 0 < x } 整数
-  定义体: ⟨fun x n => ⟨(x : K) ^ n, zpow_pos x.2 _⟩⟩
-
-@[simp]
-
-Depends on / 依赖: zpow_pos
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow { x : K // 0 < x } Int :=
+instance : Pow { x : K // 0 < x } ℤ :=
   ⟨fun x n => ⟨(x : K) ^ n, zpow_pos x.2 _⟩⟩
 
 @[simp]
-/--
-theorem `coe_zpow` / 定理 `coe_zpow`
-
-English:
-theorem coe_zpow
-  given: (x : { x : K // 0 < x }) (n : Int)
-  statement: ↑(x ^ n) = (x : K) ^ n
-  proof: rfl
-
-中文:
-定理 coe_zpow
-  条件: (x : { x : K // 0 < x }) (n : 整数)
-  结论: ↑(x ^ n) = (x : K) ^ n
-  证明: rfl
+/-
+**Positive.coe_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Positive`。
+形式化陈述：coe_zpow (x : { x : K // 0 < x }) (n : Int) : ↑(x ^ n) = (x : K) ^ n
+参数：x : { x : K // 0 < x }；n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zpow (x : { x : K // 0 < x }) (n : Int) : ↑(x ^ n) = (x : K) ^ n :=
+theorem coe_zpow (x : { x : K // 0 < x }) (n : ℤ) : ↑(x ^ n) = (x : K) ^ n :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommGroup { x : K // 0 < x }
-  body: Subtype.ext inv_mul_cancel₀ a.2.ne'
-zpow_zero' x := Subtype.ext zpow_zero _
-zpow_succ' n x := Subtype.ext DivInvMonoid.zpow_succ' _ _
-zpow_neg' n x := Subtype.ext DivInvMonoid.zpow_neg' _ _
-
-中文:
-实例 :
-  签名: 交换群 { x : K // 0 < x }
-  定义体: Subtype.ext inv_mul_cancel₀ a.2.ne'
-zpow_zero' x := Subtype.ext zpow_zero _
-zpow_succ' n x := Subtype.ext DivInvMonoid.zpow_succ' _ _
-zpow_neg' n x := Subtype.ext DivInvMonoid.zpow_neg' _ _
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommGroup { x : K // 0 < x } where
-inv_mul_cancel a := Subtype.ext inv_mul_cancel₀ a.2.ne'
-zpow_zero' x := Subtype.ext zpow_zero _
-zpow_succ' n x := Subtype.ext DivInvMonoid.zpow_succ' _ _
-zpow_neg' n x := Subtype.ext DivInvMonoid.zpow_neg' _ _
+  inv_mul_cancel a := Subtype.ext <| inv_mul_cancel₀ a.2.ne'
+  zpow_zero' x := Subtype.ext <| zpow_zero _
+  zpow_succ' n x := Subtype.ext <| DivInvMonoid.zpow_succ' _ _
+  zpow_neg' n x := Subtype.ext <| DivInvMonoid.zpow_neg' _ _
 
 end Positive
+

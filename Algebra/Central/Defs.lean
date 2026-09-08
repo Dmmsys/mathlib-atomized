@@ -61,18 +61,20 @@ public section
 universe u v
 
 /--
-Definition of `Algebra.IsCentral` / `Algebra.IsCentral` 的定义
+For a commutative ring `K` and a `K`-algebra `D`, we say that `D` is a central algebra over `K` if
+the center of `D` is the image of `K` in `D`.
+-/
+/-
+**Algebra.IsCentral** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra`。
+形式化陈述：(K : Type u) → [inst : CommSemiring K] → (D : Type v) → [inst_1 : Semiring
+ D] → [Algebra K D] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Algebra.IsCentral
-  axioms and operations (1):
-    - out : Subalgebra.center K D <= ⊥
-
-中文:
-类 代数.是中心
-  公理与运算 (1 个):
-    - out : 子代数.center K D <= ⊥
+--- 原说明 ---
+For a commutative ring `K` and a `K`-algebra `D`, we say that `D` is a central a
+lgebra over `K` if
+the center of `D` is the image of `K` in `D`.
 -/
 class Algebra.IsCentral
     (K : Type u) [CommSemiring K] (D : Type v) [Semiring D] [Algebra K D] : Prop where
-  out : Subalgebra.center K D <= ⊥
+  out : Subalgebra.center K D ≤ ⊥

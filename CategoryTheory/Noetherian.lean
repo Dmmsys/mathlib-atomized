@@ -33,48 +33,34 @@ open CategoryTheory.Limits
 
 variable (C : Type*) [Category* C]
 
-/--
-Definition of `Noetherian` / `Noetherian` 的定义
+/-- A category is Noetherian if it is essentially small and all objects are Noetherian. -/
+/-
+**CategoryTheory.Noetherian** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u_1) → [CategoryTheory.Category.{v_1, u_1} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Noetherian
-  parameters: : Prop extends EssentiallySmall C where
-  extends: EssentiallySmall C
-  axioms and operations (1):
-    - isNoetherianObject : forall X : C, IsNoetherianObject X
-
-中文:
-类 Noether
-  参数: : 命题 extends EssentiallySmall C where
-  继承: EssentiallySmall C
-  公理与运算 (1 个):
-    - isNoetherianObject : 对任意 X : C, IsNoetherianObject X
+--- 原说明 ---
+A category is Noetherian if it is essentially small and all objects are Noetheri
+an.
 -/
 class Noetherian : Prop extends EssentiallySmall C where
-  isNoetherianObject : forall X : C, IsNoetherianObject X
+  isNoetherianObject : ∀ X : C, IsNoetherianObject X
 
 attribute [instance] Noetherian.isNoetherianObject
 
-/--
-Definition of `Artinian` / `Artinian` 的定义
+/-- A category is Artinian if it is essentially small and all objects are Artinian. -/
+/-
+**CategoryTheory.Artinian** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u_1) → [CategoryTheory.Category.{v_1, u_1} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Artinian
-  parameters: : Prop extends EssentiallySmall C where
-  extends: EssentiallySmall C
-  axioms and operations (1):
-    - isArtinianObject : forall X : C, IsArtinianObject X
-
-中文:
-类 Artin
-  参数: : 命题 extends EssentiallySmall C where
-  继承: EssentiallySmall C
-  公理与运算 (1 个):
-    - isArtinianObject : 对任意 X : C, IsArtinianObject X
+--- 原说明 ---
+A category is Artinian if it is essentially small and all objects are Artinian.
 -/
 class Artinian : Prop extends EssentiallySmall C where
-  isArtinianObject : forall X : C, IsArtinianObject X
+  isArtinianObject : ∀ X : C, IsArtinianObject X
 
 attribute [instance] Artinian.isArtinianObject
 
 end CategoryTheory
+

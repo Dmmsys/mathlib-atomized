@@ -66,7 +66,7 @@ example (a b c x y z : ℕ) (h : ¬ x*y*z < 0) : c < a + 3*b := by
   -/
   sorry
 
-example (a b c : Int) (h : a / b = c) (hab : b ∣ a) (hb : b != 0) : a = c * b := by
+example (a b c : ℤ) (h : a / b = c) (hab : b ∣ a) (hb : b ≠ 0) : a = c * b := by
   -- Divisibility hypothesis allows pushing `· / ·`.
   qify [hab] at h hb ⊢
   exact (div_eq_iff hb).1 h
@@ -76,79 +76,66 @@ syntax (name := qify) "qify" (simpArgs)? (location)? : tactic
 
 macro_rules
 | `(tactic| qify $[[$simpArgs,*]]? $[at $location]?) =>
-.getD #[] let args := simpArgs.map (·.getElems)
+  let args := simpArgs.map (·.getElems) |>.getD #[]
   `(tactic|
     simp -decide only [zify_simps, qify_simps, push_cast, $args,*]
- [at $location]?)
+      $[at $location]?)
 
-/--
-lemma `intCast_eq` / 引理 `intCast_eq`
-
-English:
-lemma intCast_eq
-  given: (a b : Int)
-  statement: a = b ↔ (a : Rat) = (b : Rat)
-  proof: by simp only [Int.cast_inj]
-
-中文:
-引理 intCast_eq
-  条件: (a b : 整数)
-  结论: a = b ↔ (a : 有理数) = (b : 有理数)
-  证明: by simp only [Int.cast_inj]
+/-
+**Mathlib.Tactic.Qify.intCast_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qify`
+。
+形式化陈述：∀ (a b : ℤ), a = b ↔ ↑a = ↑b
+参数：a b : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[qify_simps] lemma intCast_eq (a b : Int) : a = b ↔ (a : Rat) = (b : Rat) := by simp only [Int.cast_inj]
-/--
-lemma `intCast_le` / 引理 `intCast_le`
-
-English:
-lemma intCast_le
-  given: (a b : Int)
-  statement: a <= b ↔ (a : Rat) <= (b : Rat)
-  proof: Int.cast_le.symm
-
-中文:
-引理 intCast_le
-  条件: (a b : 整数)
-  结论: a <= b ↔ (a : 有理数) <= (b : 有理数)
-  证明: Int.cast_le.symm
+@[qify_simps] lemma intCast_eq (a b : ℤ) : a = b ↔ (a : ℚ) = (b : ℚ) := by simp only [Int.cast_inj]
+/-
+**Mathlib.Tactic.Qify.intCast_le** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qify`
+。
+形式化陈述：∀ (a b : ℤ), a ≤ b ↔ ↑a ≤ ↑b
+参数：a b : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Int.cast_le`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_1 : P
+artialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {m n : ℤ}, ↑m ≤ ↑
+n…
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
 -/
-@[qify_simps] lemma intCast_le (a b : Int) : a <= b ↔ (a : Rat) <= (b : Rat) := Int.cast_le.symm
-/--
-lemma `intCast_lt` / 引理 `intCast_lt`
-
-English:
-lemma intCast_lt
-  given: (a b : Int)
-  statement: a < b ↔ (a : Rat) < (b : Rat)
-  proof: Int.cast_lt.symm
-
-中文:
-引理 intCast_lt
-  条件: (a b : 整数)
-  结论: a < b ↔ (a : 有理数) < (b : 有理数)
-  证明: Int.cast_lt.symm
+@[qify_simps] lemma intCast_le (a b : ℤ) : a ≤ b ↔ (a : ℚ) ≤ (b : ℚ) := Int.cast_le.symm
+/-
+**Mathlib.Tactic.Qify.intCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qify`
+。
+形式化陈述：∀ (a b : ℤ), a < b ↔ ↑a < ↑b
+参数：a b : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Int.cast_lt`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_1 : P
+artialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {m n : ℤ}, ↑m < ↑
+n…
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
 -/
-@[qify_simps] lemma intCast_lt (a b : Int) : a < b ↔ (a : Rat) < (b : Rat) := Int.cast_lt.symm
-/--
-lemma `intCast_ne` / 引理 `intCast_ne`
-
-English:
-lemma intCast_ne
-  given: (a b : Int)
-  statement: a != b ↔ (a : Rat) != (b : Rat)
-  proof: by
-  simp only [ne_eq, Int.cast_inj]
-
-中文:
-引理 intCast_ne
-  条件: (a b : 整数)
-  结论: a != b ↔ (a : 有理数) != (b : 有理数)
-  证明: by
-  simp only [ne_eq, Int.cast_inj]
+@[qify_simps] lemma intCast_lt (a b : ℤ) : a < b ↔ (a : ℚ) < (b : ℚ) := Int.cast_lt.symm
+/-
+**Mathlib.Tactic.Qify.intCast_ne** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qify`
+。
+形式化陈述：∀ (a b : ℤ), a ≠ b ↔ ↑a ≠ ↑b
+参数：a b : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[qify_simps] lemma intCast_ne (a b : Int) : a != b ↔ (a : Rat) != (b : Rat) := by
+@[qify_simps] lemma intCast_ne (a b : ℤ) : a ≠ b ↔ (a : ℚ) ≠ (b : ℚ) := by
   simp only [ne_eq, Int.cast_inj]
 
 end Qify
 
 end Mathlib.Tactic
+

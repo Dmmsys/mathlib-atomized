@@ -45,9 +45,9 @@ variable [Semiring R] [Semiring R₂] [Semiring R₃] [Semiring S]
 variable [AddCommMonoid M] [Module R M]
 variable [AddCommMonoid N] [Module R₂ N]
 variable [AddCommMonoid P] [Module R₃ P]
-variable {σ₁₂ : R ->+* R₂} {σ₂₁ : R₂ ->+* R}
-variable {σ₂₃ : R₂ ->+* R₃} {σ₃₂ : R₃ ->+* R₂}
-variable {σ₁₃ : R ->+* R₃} {σ₃₁ : R₃ ->+* R}
+variable {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R}
+variable {σ₂₃ : R₂ →+* R₃} {σ₃₂ : R₃ →+* R₂}
+variable {σ₁₃ : R →+* R₃} {σ₃₁ : R₃ →+* R}
 variable [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [RingHomCompTriple σ₃₂ σ₂₁ σ₃₁]
 
 section LinearEquivFunOnFinite
@@ -58,168 +58,116 @@ variable [Finite α] [AddCommMonoid M] [Semiring R] [Module R M]
 /-- Given `Finite α`, `linearEquivFunOnFinite R` is the natural `R`-linear equivalence between
 `α →₀ β` and `α → β`. -/
 @[simps apply]
-/--
-Definition of `linearEquivFunOnFinite` / `linearEquivFunOnFinite` 的定义
+/-
+**Finsupp.linearEquivFunOnFinite** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：linearEquivFunOnFinite : (α ->₀ M) ≃ₗ[R] α -> M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearEquivFunOnFinite
-  signature: : (α ->₀ M) ≃ₗ[R] α -> M
-  body: { equivFunOnFinite with
-    toFun := (⇑)
-    map_add' := fun _ _ => rfl
-    map_smul' := fun _ _ => rfl }
-
-@[simp]
-
-中文:
-定义 linearEquivFunOnFinite
-  签名: : (α ->₀ M) ≃ₗ[R] α -> M
-  定义体: { equivFunOnFinite with
-    toFun := (⇑)
-    map_add' := fun _ _ => rfl
-    map_smul' := fun _ _ => rfl }
-
-@[simp]
-
-Depends on / 依赖: equivFunOnFinite, map_add, map_smul
+--- 原说明 ---
+Given `Finite α`, `linearEquivFunOnFinite R` is the natural `R`-linear equivalen
+ce between
+`α →₀ β` and `α → β`.
 -/
-noncomputable def linearEquivFunOnFinite : (α ->₀ M) ≃ₗ[R] α -> M :=
+noncomputable def linearEquivFunOnFinite : (α →₀ M) ≃ₗ[R] α → M :=
   { equivFunOnFinite with
     toFun := (⇑)
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl }
 
 @[simp]
-/--
-theorem `linearEquivFunOnFinite_single` / 定理 `linearEquivFunOnFinite_single`
-
-English:
-theorem linearEquivFunOnFinite_single
-  given: [DecidableEq α] (x : α) (m : M)
-  proof: equivFunOnFinite_single x m
-
-@[simp]
-
-中文:
-定理 linearEquivFunOnFinite_single
-  条件: [DecidableEq α] (x : α) (m : M)
-  证明: equivFunOnFinite_single x m
-
-@[simp]
-
-Depends on / 依赖: equivFunOnFinite_single
+/-
+**Finsupp.linearEquivFunOnFinite_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearEquivFunOnFinite_single [DecidableEq α] (x : α) (m : M) : (linearEqu
+ivFunOnFinite R M α) (single x m) = Pi.single x m
+参数：x : α；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.equivFunOnFinite_single`：equivFunOnFinite_single [DecidableEq α]
+ [Finite α] (x : α) (m : M) : Finsupp.equivFunOnFinite (Finsupp.single x m) = Pi
+.single x m
 -/
 theorem linearEquivFunOnFinite_single [DecidableEq α] (x : α) (m : M) :
     (linearEquivFunOnFinite R M α) (single x m) = Pi.single x m :=
   equivFunOnFinite_single x m
 
 @[simp]
-/--
-theorem `linearEquivFunOnFinite_symm_single` / 定理 `linearEquivFunOnFinite_symm_single`
-
-English:
-theorem linearEquivFunOnFinite_symm_single
-  given: [DecidableEq α] (x : α) (m : M)
-  proof: equivFunOnFinite_symm_single x m
-
-@[simp]
-
-中文:
-定理 linearEquivFunOnFinite_symm_single
-  条件: [DecidableEq α] (x : α) (m : M)
-  证明: equivFunOnFinite_symm_single x m
-
-@[simp]
-
-Depends on / 依赖: equivFunOnFinite_symm_single
+/-
+**Finsupp.linearEquivFunOnFinite_symm_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`
+。
+形式化陈述：linearEquivFunOnFinite_symm_single [DecidableEq α] (x : α) (m : M) : (line
+arEquivFunOnFinite R M α).symm (Pi.single x m) = single x m
+参数：x : α；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.equivFunOnFinite_symm_single`：equivFunOnFinite_symm_single [Deci
+dableEq α] [Finite α] (x : α) (m : M) : Finsupp.equivFunOnFinite.symm (Pi.single
+ x m) = Finsupp.single x m
 -/
 theorem linearEquivFunOnFinite_symm_single [DecidableEq α] (x : α) (m : M) :
     (linearEquivFunOnFinite R M α).symm (Pi.single x m) = single x m :=
   equivFunOnFinite_symm_single x m
 
 @[simp]
-/--
-theorem `linearEquivFunOnFinite_symm_coe` / 定理 `linearEquivFunOnFinite_symm_coe`
-
-English:
-theorem linearEquivFunOnFinite_symm_coe
-  given: (f : α ->₀ M)
-  statement: (linearEquivFunOnFinite R M α).symm f = f
-  proof: (linearEquivFunOnFinite R M α).symm_apply_apply f
-
-@[simp]
-
-中文:
-定理 linearEquivFunOnFinite_symm_coe
-  条件: (f : α ->₀ M)
-  结论: (linearEquivFunOnFinite R M α).symm f = f
-  证明: (linearEquivFunOnFinite R M α).symm_apply_apply f
-
-@[simp]
-
-Depends on / 依赖: linearEquivFunOnFinite, symm_apply_apply
+/-
+**Finsupp.linearEquivFunOnFinite_symm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearEquivFunOnFinite_symm_coe (f : α ->₀ M) : (linearEquivFunOnFinite R 
+M α).symm f = f
+参数：f : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
 -/
-theorem linearEquivFunOnFinite_symm_coe (f : α ->₀ M) : (linearEquivFunOnFinite R M α).symm f = f :=
+theorem linearEquivFunOnFinite_symm_coe (f : α →₀ M) : (linearEquivFunOnFinite R M α).symm f = f :=
   (linearEquivFunOnFinite R M α).symm_apply_apply f
 
 @[simp]
-/--
-theorem `linearEquivFunOnFinite_symm_apply` / 定理 `linearEquivFunOnFinite_symm_apply`
-
-English:
-theorem linearEquivFunOnFinite_symm_apply
-  given: (f : α -> M)
-  statement: (linearEquivFunOnFinite R M α).symm f = f
-  proof: rfl
-
-中文:
-定理 linearEquivFunOnFinite_symm_apply
-  条件: (f : α -> M)
-  结论: (linearEquivFunOnFinite R M α).symm f = f
-  证明: rfl
+/-
+**Finsupp.linearEquivFunOnFinite_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：linearEquivFunOnFinite_symm_apply (f : α -> M) : (linearEquivFunOnFinite R
+ M α).symm f = f
+参数：f : α -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem linearEquivFunOnFinite_symm_apply (f : α -> M) : (linearEquivFunOnFinite R M α).symm f = f :=
+theorem linearEquivFunOnFinite_symm_apply (f : α → M) : (linearEquivFunOnFinite R M α).symm f = f :=
   rfl
 
 end LinearEquivFunOnFinite
 
-/--
-Definition of `lsingle` / `lsingle` 的定义
+/-- Interpret `Finsupp.single a` as a linear map. -/
+/-
+**Finsupp.lsingle** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：lsingle (a : α) : M ->ₗ[R] α ->₀ M
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lsingle
-  signature: (a : α)
-  body: { Finsupp.singleAddHom a with map_smul' := fun _ _ => (smul_single _ _ _).symm }
-
-中文:
-定义 lsingle
-  签名: (a : α)
-  定义体: { Finsupp.singleAddHom a with map_smul' := fun _ _ => (smul_single _ _ _).symm }
-
-Depends on / 依赖: Finsupp, Finsupp.singleAddHom, map_smul, singleAddHom, smul_single
+--- 原说明 ---
+Interpret `Finsupp.single a` as a linear map.
 -/
-def lsingle (a : α) : M ->ₗ[R] α ->₀ M :=
+def lsingle (a : α) : M →ₗ[R] α →₀ M :=
   { Finsupp.singleAddHom a with map_smul' := fun _ _ => (smul_single _ _ _).symm }
 
-/--
-theorem `lhom_ext` / 定理 `lhom_ext`
+/-- Two `R`-linear maps from `Finsupp X M` which agree on each `single x y` agree everywhere. -/
+/-
+**Finsupp.lhom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lhom_ext ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a b, φ (single a b) = ψ
+ (single a b)) : φ = ψ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.toAddMonoidHom_injective`：toAddMonoidHom_injective : Function.
+Injective (toAddMonoidHom : (M ->ₛₗ[σ] M₃) -> M ->+ M₃)
+· 使用定理 `Finsupp.addHom_ext`：addHom_ext [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄ 
+(H : forall x y, f (single x y) = g (single x y)) : f = g
 
-English:
-theorem lhom_ext
-  given: ⦃φ ψ
-  statement: (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a b, φ (single a b) = ψ (single a b)) : φ = ψ
-  proof: LinearMap.toAddMonoidHom_injective addHom_ext h
-
-中文:
-定理 lhom_ext
-  条件: ⦃φ ψ
-  结论: (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : 对任意 a b, φ (single a b) = ψ (single a b)) : φ = ψ
-  证明: LinearMap.toAddMonoidHom_injective addHom_ext h
-
-Depends on / 依赖: LinearMap, LinearMap.toAddMonoidHom_injective, addHom_ext, toAddMonoidHom_injective
+--- 原说明 ---
+Two `R`-linear maps from `Finsupp X M` which agree on each `single x y` agree ev
+erywhere.
 -/
-theorem lhom_ext ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a b, φ (single a b) = ψ (single a b)) : φ = ψ :=
-LinearMap.toAddMonoidHom_injective addHom_ext h
+theorem lhom_ext ⦃φ ψ : (α →₀ M) →ₛₗ[σ₁₂] N⦄ (h : ∀ a b, φ (single a b) = ψ (single a b)) : φ = ψ :=
+  LinearMap.toAddMonoidHom_injective <| addHom_ext h
 
 /-- Two `R`-linear maps from `Finsupp X M` which agree on each `single x y` agree everywhere.
 
@@ -228,384 +176,269 @@ so that the `ext` tactic can apply a type-specific extensionality lemma to prove
 maps. E.g., if `M = R`, then it suffices to verify `φ (single a 1) = ψ (single a 1)`. -/
 -- The priority should be higher than `LinearMap.ext`.
 @[ext high]
-/--
-theorem `lhom_ext'` / 定理 `lhom_ext'`
-
-English:
-theorem lhom_ext'
-  given: ⦃φ ψ
-  statement: (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a, φ.comp (lsingle a) = ψ.comp (lsingle a)) :
-  proof: lhom_ext fun a => LinearMap.congr_fun (h a)
-
-中文:
-定理 lhom_ext'
-  条件: ⦃φ ψ
-  结论: (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : 对任意 a, φ.comp (lsingle a) = ψ.comp (lsingle a)) :
-  证明: lhom_ext fun a => LinearMap.congr_fun (h a)
-
-Depends on / 依赖: LinearMap, LinearMap.congr_fun, congr_fun, lhom_ext
+/-
+**Finsupp.lhom_ext'** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a, φ.comp (lsingle a) 
+= ψ.comp (lsingle a)) : φ = ψ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.lhom_ext`：lhom_ext ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a b
+, φ (single a b) = ψ (single a b)) : φ = ψ
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
 -/
-theorem lhom_ext' ⦃φ ψ : (α ->₀ M) ->ₛₗ[σ₁₂] N⦄ (h : forall a, φ.comp (lsingle a) = ψ.comp (lsingle a)) :
+theorem lhom_ext' ⦃φ ψ : (α →₀ M) →ₛₗ[σ₁₂] N⦄ (h : ∀ a, φ.comp (lsingle a) = ψ.comp (lsingle a)) :
     φ = ψ :=
   lhom_ext fun a => LinearMap.congr_fun (h a)
 
-/--
-Definition of `lapply` / `lapply` 的定义
+/-- Interpret `fun f : α →₀ M ↦ f a` as a linear map. -/
+/-
+**Finsupp.lapply** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：lapply (a : α) : (α ->₀ M) ->ₗ[R] M
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lapply
-  signature: (a : α)
-  body: { Finsupp.applyAddHom a with map_smul' := fun _ _ => rfl }
-
-中文:
-定义 lapply
-  签名: (a : α)
-  定义体: { Finsupp.applyAddHom a with map_smul' := fun _ _ => rfl }
-
-Depends on / 依赖: Finsupp, Finsupp.applyAddHom, applyAddHom, map_smul, toMeasurableMul
+--- 原说明 ---
+Interpret `fun f : α →₀ M ↦ f a` as a linear map.
 -/
-def lapply (a : α) : (α ->₀ M) ->ₗ[R] M :=
+def lapply (a : α) : (α →₀ M) →ₗ[R] M :=
   { Finsupp.applyAddHom a with map_smul' := fun _ _ => rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] [FaithfulSMul R M] : FaithfulSMul R (α ->₀ M)
-  body: .of_injective (Finsupp.lsingle <| Classical.arbitrary _) (Finsupp.single_injective _)
-
-中文:
-实例 [非空
-  签名: α] [忠实标量乘法 R M] : 忠实标量乘法 R (α ->₀ M)
-  定义体: .of_injective (Finsupp.lsingle <| Classical.arbitrary _) (Finsupp.single_injective _)
-
-Depends on / 依赖: Classical, Classical.arbitrary, Finsupp, Finsupp.lsingle, Finsupp.single_injective, arbitrary, lsingle, of_injective, single_injective
+/-
+**Finsupp.** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Nonempty α] [FaithfulSMul R M] : FaithfulSMul R (α ->₀ M) :=
+instance [Nonempty α] [FaithfulSMul R M] : FaithfulSMul R (α →₀ M) :=
   .of_injective (Finsupp.lsingle <| Classical.arbitrary _) (Finsupp.single_injective _)
 
 section LSubtypeDomain
 
 variable (s : Set α)
 
-/--
-Definition of `lsubtypeDomain` / `lsubtypeDomain` 的定义
+/-- Interpret `Finsupp.subtypeDomain s` as a linear map. -/
+/-
+**Finsupp.lsubtypeDomain** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：lsubtypeDomain : (α ->₀ M) ->ₗ[R] s ->₀ M where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lsubtypeDomain
-  signature: : (α ->₀ M) ->ₗ[R] s ->₀ M where
-  body: subtypeDomain fun x => x in s
-  map_add' _ _ := subtypeDomain_add
-  map_smul' _ _ := ext fun _ => rfl
-
-中文:
-定义 lsubtypeDomain
-  签名: : (α ->₀ M) ->ₗ[R] s ->₀ M where
-  定义体: subtypeDomain fun x => x in s
-  map_add' _ _ := subtypeDomain_add
-  map_smul' _ _ := ext fun _ => rfl
-
-Depends on / 依赖: subtypeDomain
+--- 原说明 ---
+Interpret `Finsupp.subtypeDomain s` as a linear map.
 -/
-def lsubtypeDomain : (α ->₀ M) ->ₗ[R] s ->₀ M where
-  toFun := subtypeDomain fun x => x in s
+def lsubtypeDomain : (α →₀ M) →ₗ[R] s →₀ M where
+  toFun := subtypeDomain fun x => x ∈ s
   map_add' _ _ := subtypeDomain_add
   map_smul' _ _ := ext fun _ => rfl
-
-/--
-theorem `lsubtypeDomain_apply` / 定理 `lsubtypeDomain_apply`
-
-English:
-theorem lsubtypeDomain_apply
-  given: (f : α ->₀ M)
-  proof: rfl
-
-中文:
-定理 lsubtypeDomain_apply
-  条件: (f : α ->₀ M)
-  证明: rfl
+/-
+**Finsupp.lsubtypeDomain_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lsubtypeDomain_apply (f : α ->₀ M) : (lsubtypeDomain s : (α ->₀ M) ->ₗ[R] 
+s ->₀ M) f = subtypeDomain (fun x => x in s) f
+参数：f : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lsubtypeDomain_apply (f : α ->₀ M) :
-    (lsubtypeDomain s : (α ->₀ M) ->ₗ[R] s ->₀ M) f = subtypeDomain (fun x => x in s) f :=
+theorem lsubtypeDomain_apply (f : α →₀ M) :
+    (lsubtypeDomain s : (α →₀ M) →ₗ[R] s →₀ M) f = subtypeDomain (fun x => x ∈ s) f :=
   rfl
 
 end LSubtypeDomain
 
 @[simp]
-/--
-theorem `lsingle_apply` / 定理 `lsingle_apply`
-
-English:
-theorem lsingle_apply
-  given: (a : α) (b : M)
-  statement: (lsingle a : M ->ₗ[R] α ->₀ M) b = single a b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lsingle_apply
-  条件: (a : α) (b : M)
-  结论: (lsingle a : M ->ₗ[R] α ->₀ M) b = single a b
-  证明: rfl
-
-@[simp]
+/-
+**Finsupp.lsingle_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lsingle_apply (a : α) (b : M) : (lsingle a : M ->ₗ[R] α ->₀ M) b = single 
+a b
+参数：a : α；b : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lsingle_apply (a : α) (b : M) : (lsingle a : M ->ₗ[R] α ->₀ M) b = single a b :=
+theorem lsingle_apply (a : α) (b : M) : (lsingle a : M →ₗ[R] α →₀ M) b = single a b :=
   rfl
 
 @[simp]
-/--
-theorem `lapply_apply` / 定理 `lapply_apply`
-
-English:
-theorem lapply_apply
-  given: (a : α) (f : α ->₀ M)
-  statement: (lapply a : (α ->₀ M) ->ₗ[R] M) f = f a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lapply_apply
-  条件: (a : α) (f : α ->₀ M)
-  结论: (lapply a : (α ->₀ M) ->ₗ[R] M) f = f a
-  证明: rfl
-
-@[simp]
+/-
+**Finsupp.lapply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lapply_apply (a : α) (f : α ->₀ M) : (lapply a : (α ->₀ M) ->ₗ[R] M) f = f
+ a
+参数：a : α；f : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lapply_apply (a : α) (f : α ->₀ M) : (lapply a : (α ->₀ M) ->ₗ[R] M) f = f a :=
+theorem lapply_apply (a : α) (f : α →₀ M) : (lapply a : (α →₀ M) →ₗ[R] M) f = f a :=
   rfl
 
 @[simp]
-/--
-theorem `lapply_comp_lsingle_same` / 定理 `lapply_comp_lsingle_same`
-
-English:
-theorem lapply_comp_lsingle_same
-  given: (a : α)
-  statement: lapply a ∘ₗ lsingle a = (.id : M ->ₗ[R] M)
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-定理 lapply_comp_lsingle_same
-  条件: (a : α)
-  结论: lapply a ∘ₗ lsingle a = (.id : M ->ₗ[R] M)
-  证明: by ext; simp
-
-@[simp]
+/-
+**Finsupp.lapply_comp_lsingle_same** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lapply_comp_lsingle_same (a : α) : lapply a ∘ₗ lsingle a = (.id : M ->ₗ[R]
+ M)
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lapply_comp_lsingle_same (a : α) : lapply a ∘ₗ lsingle a = (.id : M ->ₗ[R] M) := by ext; simp
+theorem lapply_comp_lsingle_same (a : α) : lapply a ∘ₗ lsingle a = (.id : M →ₗ[R] M) := by ext; simp
 
 @[simp]
-/--
-theorem `lapply_comp_lsingle_of_ne` / 定理 `lapply_comp_lsingle_of_ne`
-
-English:
-theorem lapply_comp_lsingle_of_ne
-  given: (a a' : α) (h : a != a')
-  proof: by ext; simp [h.symm]
-
-中文:
-定理 lapply_comp_lsingle_of_ne
-  条件: (a a' : α) (h : a != a')
-  证明: by ext; simp [h.symm]
-
-Depends on / 依赖: h.symm
+/-
+**Finsupp.lapply_comp_lsingle_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lapply_comp_lsingle_of_ne (a a' : α) (h : a != a') : lapply a ∘ₗ lsingle a
+' = (0 : M ->ₗ[R] M)
+参数：a a' : α；h : a != a'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.single_eq_of_ne'`：single_eq_of_ne' (h : a != a') : (single a b :
+ α ->₀ M) a' = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lapply_comp_lsingle_of_ne (a a' : α) (h : a != a') :
-    lapply a ∘ₗ lsingle a' = (0 : M ->ₗ[R] M) := by ext; simp [h.symm]
+theorem lapply_comp_lsingle_of_ne (a a' : α) (h : a ≠ a') :
+    lapply a ∘ₗ lsingle a' = (0 : M →ₗ[R] M) := by ext; simp [h.symm]
 
 section LMapDomain
 
 variable {α' : Type*} {α'' : Type*} (M R)
 
-/--
-Definition of `lmapDomain` / `lmapDomain` 的定义
+/-- Interpret `Finsupp.mapDomain` as a linear map. -/
+/-
+**Finsupp.lmapDomain** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：lmapDomain (f : α -> α') : (α ->₀ M) ->ₗ[R] α' ->₀ M where toFun
+参数：f : α -> α'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.mapDomain_add`：mapDomain_add {f : α -> β} : mapDomain f (v₁ + v₂
+) = mapDomain f v₁ + mapDomain f v₂
 
-English:
-definition lmapDomain
-  signature: (f : α -> α')
-  body: mapDomain f
-  map_add' _ _ := mapDomain_add
-  map_smul' := mapDomain_smul
-
-@[simp]
-
-中文:
-定义 lmapDomain
-  签名: (f : α -> α')
-  定义体: mapDomain f
-  map_add' _ _ := mapDomain_add
-  map_smul' := mapDomain_smul
-
-@[simp]
-
-Depends on / 依赖: mapDomain
+--- 原说明 ---
+Interpret `Finsupp.mapDomain` as a linear map.
 -/
-def lmapDomain (f : α -> α') : (α ->₀ M) ->ₗ[R] α' ->₀ M where
+def lmapDomain (f : α → α') : (α →₀ M) →ₗ[R] α' →₀ M where
   toFun := mapDomain f
   map_add' _ _ := mapDomain_add
   map_smul' := mapDomain_smul
 
 @[simp]
-/--
-theorem `lmapDomain_apply` / 定理 `lmapDomain_apply`
-
-English:
-theorem lmapDomain_apply
-  given: (f : α -> α') (l : α ->₀ M)
-  proof: rfl
-
-中文:
-定理 lmapDomain_apply
-  条件: (f : α -> α') (l : α ->₀ M)
-  证明: rfl
+/-
+**Finsupp.lmapDomain_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lmapDomain_apply (f : α -> α') (l : α ->₀ M) : (lmapDomain M R f : (α ->₀ 
+M) ->ₗ[R] α' ->₀ M) l = mapDomain f l
+参数：f : α -> α'；l : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lmapDomain_apply (f : α -> α') (l : α ->₀ M) :
-    (lmapDomain M R f : (α ->₀ M) ->ₗ[R] α' ->₀ M) l = mapDomain f l :=
+theorem lmapDomain_apply (f : α → α') (l : α →₀ M) :
+    (lmapDomain M R f : (α →₀ M) →ₗ[R] α' →₀ M) l = mapDomain f l :=
   rfl
-
-/--
-lemma `coe_lmapDomain` / 引理 `coe_lmapDomain`
-
-English:
-lemma coe_lmapDomain
-  given: (f : α -> α')
-  statement: ⇑(lmapDomain M R f) = Finsupp.mapDomain f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_lmapDomain
-  条件: (f : α -> α')
-  结论: ⇑(lmapDomain M R f) = 有限支撑.mapDomain f
-  证明: rfl
-
-@[simp]
+/-
+**Finsupp.coe_lmapDomain** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：coe_lmapDomain (f : α -> α') : ⇑(lmapDomain M R f) = Finsupp.mapDomain f
+参数：f : α -> α'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_lmapDomain (f : α -> α') : ⇑(lmapDomain M R f) = Finsupp.mapDomain f :=
+lemma coe_lmapDomain (f : α → α') : ⇑(lmapDomain M R f) = Finsupp.mapDomain f :=
   rfl
 
 @[simp]
-/--
-theorem `lmapDomain_id` / 定理 `lmapDomain_id`
-
-English:
-theorem lmapDomain_id
-  statement: (lmapDomain M R _root_.id : (α ->₀ M) ->ₗ[R] α ->₀ M) = LinearMap.id
-  proof: LinearMap.ext fun _ => mapDomain_id
-
-中文:
-定理 lmapDomain_id
-  结论: (lmapDomain M R _root_.id : (α ->₀ M) ->ₗ[R] α ->₀ M) = 线性映射.id
-  证明: LinearMap.ext fun _ => mapDomain_id
-
-Depends on / 依赖: LinearMap, LinearMap.ext, mapDomain_id
+/-
+**Finsupp.lmapDomain_id** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lmapDomain_id : (lmapDomain M R _root_.id : (α ->₀ M) ->ₗ[R] α ->₀ M) = Li
+nearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Finsupp.mapDomain_id`：mapDomain_id : mapDomain id v = v
 -/
-theorem lmapDomain_id : (lmapDomain M R _root_.id : (α ->₀ M) ->ₗ[R] α ->₀ M) = LinearMap.id :=
+theorem lmapDomain_id : (lmapDomain M R _root_.id : (α →₀ M) →ₗ[R] α →₀ M) = LinearMap.id :=
   LinearMap.ext fun _ => mapDomain_id
-
-/--
-theorem `lmapDomain_comp` / 定理 `lmapDomain_comp`
-
-English:
-theorem lmapDomain_comp
-  given: (f : α -> α') (g : α' -> α'')
-  proof: LinearMap.ext fun _ => mapDomain_comp
-
-中文:
-定理 lmapDomain_comp
-  条件: (f : α -> α') (g : α' -> α'')
-  证明: LinearMap.ext fun _ => mapDomain_comp
-
-Depends on / 依赖: LinearMap, LinearMap.ext, mapDomain_comp
+/-
+**Finsupp.lmapDomain_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lmapDomain_comp (f : α -> α') (g : α' -> α'') : lmapDomain M R (g ∘ f) = (
+lmapDomain M R g).comp (lmapDomain M R f)
+参数：f : α -> α'；g : α' -> α''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Finsupp.mapDomain_comp`：mapDomain_comp {f : α -> β} {g : β -> γ} : mapDo
+main (g ∘ f) v = mapDomain g (mapDomain f v)
 -/
-theorem lmapDomain_comp (f : α -> α') (g : α' -> α'') :
+theorem lmapDomain_comp (f : α → α') (g : α' → α'') :
     lmapDomain M R (g ∘ f) = (lmapDomain M R g).comp (lmapDomain M R f) :=
   LinearMap.ext fun _ => mapDomain_comp
 
-/--
-Definition of `mapDomain.linearEquiv` / `mapDomain.linearEquiv` 的定义
+/-- `Finsupp.mapDomain` as a `LinearEquiv`. -/
+/-
+**Finsupp.mapDomain.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.mapDomain`。
+形式化陈述：{α : Type u_1} →   (M : Type u_2) →     (R : Type u_5) →       [inst : Sem
+iring R] →         [inst_1 : AddCommMonoid M] → [inst_2 : _root_.Module R M] → {
+α' : Type u_9} → α ≃ α' → (α →₀ M) ≃ₗ[R] α' →₀ M
+参数：M : Type u_2；R : Type u_5；α →₀ M。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mapDomain.linearEquiv
-  signature: (f : α ≃ α')
-  body: lmapDomain M R f.toFun
-  invFun := mapDomain f.symm
-  left_inv _ := by
-    simp [← mapDomain_comp]
-  right_inv _ := by
-    simp [← mapDomain_comp]
-
-中文:
-定义 mapDomain.linearEquiv
-  签名: (f : α ≃ α')
-  定义体: lmapDomain M R f.toFun
-  invFun := mapDomain f.symm
-  left_inv _ := by
-    simp [← mapDomain_comp]
-  right_inv _ := by
-    simp [← mapDomain_comp]
-
-Depends on / 依赖: f.toFun, lmapDomain
+--- 原说明 ---
+`Finsupp.mapDomain` as a `LinearEquiv`.
 -/
-def mapDomain.linearEquiv (f : α ≃ α') : (α ->₀ M) ≃ₗ[R] (α' ->₀ M) where
+def mapDomain.linearEquiv (f : α ≃ α') : (α →₀ M) ≃ₗ[R] (α' →₀ M) where
   __ := lmapDomain M R f.toFun
   invFun := mapDomain f.symm
   left_inv _ := by
     simp [← mapDomain_comp]
   right_inv _ := by
     simp [← mapDomain_comp]
-
-/--
-theorem `mapDomain.coe_linearEquiv` / 定理 `mapDomain.coe_linearEquiv`
-
-English:
-theorem mapDomain.coe_linearEquiv
-  given: (f : α ≃ α')
-  proof: rfl
-
-中文:
-定理 mapDomain.coe_linearEquiv
-  条件: (f : α ≃ α')
-  证明: rfl
+/-
+**Finsupp.mapDomain.coe_linearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapDomain
+`。
+形式化陈述：∀ {α : Type u_1} (M : Type u_2) (R : Type u_5) [inst : Semiring R] [inst_1
+ : AddCommMonoid M]   [inst_2 : _root_.Module R M] {α' : Type u_9} (f : α ≃ α'),
+   ⇑(Finsupp.mapDomain.linearEquiv M R f) = Finsupp.mapDomain ⇑f
+参数：M : Type u_2；R : Type u_5；f : α ≃ α'；Finsupp.mapDomain.linearEquiv M R f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mapDomain.coe_linearEquiv (f : α ≃ α') :
     ⇑(linearEquiv M R f) = mapDomain f := rfl
-
-/--
-theorem `mapDomain.toLinearMap_linearEquiv` / 定理 `mapDomain.toLinearMap_linearEquiv`
-
-English:
-theorem mapDomain.toLinearMap_linearEquiv
-  given: (f : α ≃ α')
-  proof: rfl
-
-中文:
-定理 mapDomain.toLinearMap_linearEquiv
-  条件: (f : α ≃ α')
-  证明: rfl
+/-
+**Finsupp.mapDomain.toLinearMap_linearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.m
+apDomain`。
+形式化陈述：∀ {α : Type u_1} (M : Type u_2) (R : Type u_5) [inst : Semiring R] [inst_1
+ : AddCommMonoid M]   [inst_2 : _root_.Module R M] {α' : Type u_9} (f : α ≃ α'),
+   ↑(Finsupp.mapDomain.linearEquiv M R f) = Finsupp.lmapDomain M R ⇑f
+参数：M : Type u_2；R : Type u_5；f : α ≃ α'；Finsupp.mapDomain.linearEquiv M R f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mapDomain.toLinearMap_linearEquiv (f : α ≃ α') :
-    (linearEquiv M R f : _ ->ₗ[R] _) = lmapDomain M R f := rfl
-
-/--
-theorem `mapDomain.linearEquiv_symm` / 定理 `mapDomain.linearEquiv_symm`
-
-English:
-theorem mapDomain.linearEquiv_symm
-  given: (f : α ≃ α')
-  proof: rfl
-
-中文:
-定理 mapDomain.linearEquiv_symm
-  条件: (f : α ≃ α')
-  证明: rfl
+    (linearEquiv M R f : _ →ₗ[R] _) = lmapDomain M R f := rfl
+/-
+**Finsupp.mapDomain.linearEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapDomai
+n`。
+形式化陈述：∀ {α : Type u_1} (M : Type u_2) (R : Type u_5) [inst : Semiring R] [inst_1
+ : AddCommMonoid M]   [inst_2 : _root_.Module R M] {α' : Type u_9} (f : α ≃ α'),
+   (Finsupp.mapDomain.linearEquiv M R f).symm = Finsupp.mapDomain.linearEquiv M 
+R f.symm
+参数：M : Type u_2；R : Type u_5；f : α ≃ α'；Finsupp.mapDomain.linearEquiv M R f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mapDomain.linearEquiv_symm (f : α ≃ α') :
     (linearEquiv M R f).symm = linearEquiv M R f.symm := rfl
@@ -622,46 +455,39 @@ sending `l : β →₀ M` to the finitely supported function from `α` to `M` gi
 
 This is the linear version of `Finsupp.comapDomain`. -/
 @[simps]
-/--
-Definition of `lcomapDomain` / `lcomapDomain` 的定义
+/-
+**Finsupp.lcomapDomain** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：lcomapDomain (f : α -> β) (hf : Function.Injective f) : (β ->₀ M) ->ₗ[R] α
+ ->₀ M where toFun l
+参数：f : α -> β；hf : Function.Injective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lcomapDomain
-  signature: (f : α -> β) (hf : Function.Injective f)
-  body: Finsupp.comapDomain f l hf.injOn
-  map_add' x y := by ext; simp
-  map_smul' c x := by ext; simp
+--- 原说明 ---
+Given `f : α → β` and a proof `hf` that `f` is injective, `lcomapDomain f hf` is
+ the linear map
+sending `l : β →₀ M` to the finitely supported function from `α` to `M` given by
+ composing
+`l` with `f`.
 
-中文:
-定义 lcomapDomain
-  签名: (f : α -> β) (hf : 函数.单射 f)
-  定义体: Finsupp.comapDomain f l hf.injOn
-  map_add' x y := by ext; simp
-  map_smul' c x := by ext; simp
-
-Depends on / 依赖: Finsupp, Finsupp.comapDomain, comapDomain, hf.injOn
+This is the linear version of `Finsupp.comapDomain`.
 -/
-def lcomapDomain (f : α -> β) (hf : Function.Injective f) : (β ->₀ M) ->ₗ[R] α ->₀ M where
+def lcomapDomain (f : α → β) (hf : Function.Injective f) : (β →₀ M) →ₗ[R] α →₀ M where
   toFun l := Finsupp.comapDomain f l hf.injOn
   map_add' x y := by ext; simp
   map_smul' c x := by ext; simp
-
-/--
-theorem `leftInverse_lcomapDomain_mapDomain` / 定理 `leftInverse_lcomapDomain_mapDomain`
-
-English:
-theorem leftInverse_lcomapDomain_mapDomain
-  given: (f : α -> β) (hf : Function.Injective f)
-  proof: comapDomain_mapDomain f hf
-
-中文:
-定理 leftInverse_lcomapDomain_mapDomain
-  条件: (f : α -> β) (hf : 函数.单射 f)
-  证明: comapDomain_mapDomain f hf
-
-Depends on / 依赖: mapDomain
+/-
+**Finsupp.leftInverse_lcomapDomain_mapDomain** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`
+。
+形式化陈述：leftInverse_lcomapDomain_mapDomain (f : α -> β) (hf : Function.Injective f
+) : Function.LeftInverse (lcomapDomain (R
+参数：f : α -> β；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.comapDomain_mapDomain`：comapDomain_mapDomain (hf : Function.Inje
+ctive f) (l : α ->₀ M) : comapDomain f (mapDomain f l) hf.injOn = l
 -/
-theorem leftInverse_lcomapDomain_mapDomain (f : α -> β) (hf : Function.Injective f) :
+theorem leftInverse_lcomapDomain_mapDomain (f : α → β) (hf : Function.Injective f) :
     Function.LeftInverse (lcomapDomain (R := R) (M := M) f hf) (mapDomain f) :=
   comapDomain_mapDomain f hf
 
@@ -669,91 +495,85 @@ end LComapDomain
 
 /-- `Finsupp.mapRange` as a `LinearMap`. -/
 @[simps apply]
-/--
-Definition of `mapRange.linearMap` / `mapRange.linearMap` 的定义
+/-
+**Finsupp.mapRange.linearMap** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：{α : Type u_1} →   {M : Type u_2} →     {N : Type u_3} →       {R : Type u
+_5} →         {R₂ : Type u_6} →           [inst : Semiring R] →             [ins
+t_1 : Semiring R₂] →               [inst_2 : AddCommMonoid M] →                 
+[inst_3 : _root_.Module R M] →                   [inst_4 : AddCommMonoid N] →   
+                  [inst_5 : _root_.Module R₂ N] → {σ₁₂ : R →+* R₂} → (M →ₛₗ[σ₁₂]
+ N) → (α →₀ M) →ₛₗ[σ₁₂] α →₀ N
+参数：M →ₛₗ[σ₁₂] N；α →₀ M。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
 
-English:
-definition mapRange.linearMap
-  signature: (f : M ->ₛₗ[σ₁₂] N)
-  body: { mapRange.addMonoidHom f.toAddMonoidHom with
-    toFun := (mapRange f f.map_zero : (α ->₀ M) -> α ->₀ N)
-    map_smul' := fun c v => mapRange_smul' c (σ₁₂ c) v (f.map_smulₛₗ c) }
-
-@[simp]
-
-中文:
-定义 mapRange.linearMap
-  签名: (f : M ->ₛₗ[σ₁₂] N)
-  定义体: { mapRange.addMonoidHom f.toAddMonoidHom with
-    toFun := (mapRange f f.map_zero : (α ->₀ M) -> α ->₀ N)
-    map_smul' := fun c v => mapRange_smul' c (σ₁₂ c) v (f.map_smulₛₗ c) }
-
-@[simp]
+--- 原说明 ---
+`Finsupp.mapRange` as a `LinearMap`.
 -/
-def mapRange.linearMap (f : M ->ₛₗ[σ₁₂] N) : (α ->₀ M) ->ₛₗ[σ₁₂] α ->₀ N :=
+def mapRange.linearMap (f : M →ₛₗ[σ₁₂] N) : (α →₀ M) →ₛₗ[σ₁₂] α →₀ N :=
   { mapRange.addMonoidHom f.toAddMonoidHom with
-    toFun := (mapRange f f.map_zero : (α ->₀ M) -> α ->₀ N)
+    toFun := (mapRange f f.map_zero : (α →₀ M) → α →₀ N)
     map_smul' := fun c v => mapRange_smul' c (σ₁₂ c) v (f.map_smulₛₗ c) }
 
 @[simp]
-/--
-theorem `mapRange.linearMap_id` / 定理 `mapRange.linearMap_id`
-
-English:
-theorem mapRange.linearMap_id
-  proof: LinearMap.ext mapRange_id
-
-中文:
-定理 mapRange.linearMap_id
-  证明: LinearMap.ext mapRange_id
-
-Depends on / 依赖: toMeasurableDiv
+/-
+**Finsupp.mapRange.linearMap_id** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {R : Type u_5} [inst : Semiring R] [inst_1
+ : AddCommMonoid M]   [inst_2 : _root_.Module R M], Finsupp.mapRange.linearMap L
+inearMap.id = LinearMap.id
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Finsupp.mapRange_id`：mapRange_id (g : α ->₀ M) : mapRange id rfl g = g
 -/
 theorem mapRange.linearMap_id :
-    mapRange.linearMap LinearMap.id = (LinearMap.id : (α ->₀ M) ->ₗ[R] _) :=
+    mapRange.linearMap LinearMap.id = (LinearMap.id : (α →₀ M) →ₗ[R] _) :=
   LinearMap.ext mapRange_id
-
-/--
-theorem `mapRange.linearMap_comp` / 定理 `mapRange.linearMap_comp`
-
-English:
-theorem mapRange.linearMap_comp
-  given: (f : N ->ₛₗ[σ₂₃] P) (f₂ : M ->ₛₗ[σ₁₂] N)
-  proof: LinearMap.ext mapRange_comp f f.map_zero f₂ f₂.map_zero (comp f f₂).map_zero
-
-@[simp]
-
-中文:
-定理 mapRange.linearMap_comp
-  条件: (f : N ->ₛₗ[σ₂₃] P) (f₂ : M ->ₛₗ[σ₁₂] N)
-  证明: LinearMap.ext mapRange_comp f f.map_zero f₂ f₂.map_zero (comp f f₂).map_zero
-
-@[simp]
+/-
+**Finsupp.mapRange.linearMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {N : Type u_3} {P : Type u_4} {R : Type u_
+5} {R₂ : Type u_6} {R₃ : Type u_7}   [inst : Semiring R] [inst_1 : Semiring R₂] 
+[inst_2 : Semiring R₃] [inst_3 : AddCommMonoid M]   [inst_4 : _root_.Module R M]
+ [inst_5 : AddCommMonoid N] [inst_6 : _root_.Module R₂ N] [inst_7 : AddCommMonoi
+d P]   [inst_8 : _root_.Module R₃ P] {σ₁₂ : R →+* R₂} {σ₂₃ : R₂ →+* R₃} {σ₁₃ : R
+ →+* R₃}   [inst_9 : RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] (f : N →ₛₗ[σ₂₃] P) (f₂ : M →
+ₛₗ[σ₁₂] N),   Finsupp.mapRange.linearMap (f ∘ₛₗ f₂) = Finsupp.mapRange.linearMap
+ f ∘ₛₗ Finsupp.mapRange.linearMap f₂
+参数：f : N →ₛₗ[σ₂₃] P；f₂ : M →ₛₗ[σ₁₂] N；f ∘ₛₗ f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Finsupp.mapRange_comp`：mapRange_comp (f : N -> O) (hf : f 0 = 0) (f₂ : M
+ -> N) (hf₂ : f₂ 0 = 0) (h : (f ∘ f₂) 0 = 0) (g : α ->₀ M) : mapRange (f ∘ f₂) h
+ g = mapRan…
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
 -/
-theorem mapRange.linearMap_comp (f : N ->ₛₗ[σ₂₃] P) (f₂ : M ->ₛₗ[σ₁₂] N) :
-    (mapRange.linearMap (f.comp f₂) : (α ->₀ _) ->ₛₗ[σ₁₃] _) =
+theorem mapRange.linearMap_comp (f : N →ₛₗ[σ₂₃] P) (f₂ : M →ₛₗ[σ₁₂] N) :
+    (mapRange.linearMap (f.comp f₂) : (α →₀ _) →ₛₗ[σ₁₃] _) =
       (mapRange.linearMap f).comp (mapRange.linearMap f₂) :=
-LinearMap.ext mapRange_comp f f.map_zero f₂ f₂.map_zero (comp f f₂).map_zero
+  LinearMap.ext <| mapRange_comp f f.map_zero f₂ f₂.map_zero (comp f f₂).map_zero
 
 @[simp]
-/--
-theorem `mapRange.linearMap_toAddMonoidHom` / 定理 `mapRange.linearMap_toAddMonoidHom`
-
-English:
-theorem mapRange.linearMap_toAddMonoidHom
-  given: (f : M ->ₛₗ[σ₁₂] N)
-  proof: AddMonoidHom.ext fun _ => rfl
-
-中文:
-定理 mapRange.linearMap_toAddMonoidHom
-  条件: (f : M ->ₛₗ[σ₁₂] N)
-  证明: AddMonoidHom.ext fun _ => rfl
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext
+/-
+**Finsupp.mapRange.linearMap_toAddMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.m
+apRange`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {N : Type u_3} {R : Type u_5} {R₂ : Type u
+_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M] [ins
+t_3 : _root_.Module R M] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N
+]   {σ₁₂ : R →+* R₂} (f : M →ₛₗ[σ₁₂] N),   (Finsupp.mapRange.linearMap f).toAddM
+onoidHom = Finsupp.mapRange.addMonoidHom f.toAddMonoidHom
+参数：f : M →ₛₗ[σ₁₂] N；Finsupp.mapRange.linearMap f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
 -/
-theorem mapRange.linearMap_toAddMonoidHom (f : M ->ₛₗ[σ₁₂] N) :
+theorem mapRange.linearMap_toAddMonoidHom (f : M →ₛₗ[σ₁₂] N) :
     (mapRange.linearMap f).toAddMonoidHom =
-      (mapRange.addMonoidHom f.toAddMonoidHom : (α ->₀ M) ->+ _) :=
+      (mapRange.addMonoidHom f.toAddMonoidHom : (α →₀ M) →+ _) :=
   AddMonoidHom.ext fun _ => rfl
 
 section Equiv
@@ -764,144 +584,132 @@ variable [RingHomInvPair σ₁₃ σ₃₁] [RingHomInvPair σ₃₁ σ₁₃]
 
 /-- `Finsupp.mapRange` as a `LinearEquiv`. -/
 @[simps apply]
-/--
-Definition of `mapRange.linearEquiv` / `mapRange.linearEquiv` 的定义
+/-
+**Finsupp.mapRange.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：{α : Type u_1} →   {M : Type u_2} →     {N : Type u_3} →       {R : Type u
+_5} →         {R₂ : Type u_6} →           [inst : Semiring R] →             [ins
+t_1 : Semiring R₂] →               [inst_2 : AddCommMonoid M] →                 
+[inst_3 : _root_.Module R M] →                   [inst_4 : AddCommMonoid N] →   
+                  [inst_5 : _root_.Module R₂ N] →                       {σ₁₂ : R
+ →+* R₂} →                         {σ₂₁ : R₂ →+* R} →                           
+[inst_6 : RingHomInvPair σ₁₂ σ₂₁] →                             [inst_7 : RingHo
+mInvPair σ₂₁ σ₁₂] → (M ≃ₛₗ[σ₁₂] N) → (α →₀ M) ≃ₛₗ[σ₁₂] α →₀ N
+参数：M ≃ₛₗ[σ₁₂] N；α →₀ M。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.map_zero`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂
+ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst_…
 
-English:
-definition mapRange.linearEquiv
-  signature: (e : M ≃ₛₗ[σ₁₂] N)
-  body: { mapRange.linearMap e.toLinearMap,
-    mapRange.addEquiv e.toAddEquiv with
-    toFun := mapRange e e.map_zero
-    invFun := mapRange e.symm e.symm.map_zero }
-
-@[simp]
-
-中文:
-定义 mapRange.linearEquiv
-  签名: (e : M ≃ₛₗ[σ₁₂] N)
-  定义体: { mapRange.linearMap e.toLinearMap,
-    mapRange.addEquiv e.toAddEquiv with
-    toFun := mapRange e e.map_zero
-    invFun := mapRange e.symm e.symm.map_zero }
-
-@[simp]
-
-Depends on / 依赖: Set.diagonal, diagonal, measurability, simp_rw, singlePass, sub_eq_zero
+--- 原说明 ---
+`Finsupp.mapRange` as a `LinearEquiv`.
 -/
-def mapRange.linearEquiv (e : M ≃ₛₗ[σ₁₂] N) : (α ->₀ M) ≃ₛₗ[σ₁₂] α ->₀ N :=
+def mapRange.linearEquiv (e : M ≃ₛₗ[σ₁₂] N) : (α →₀ M) ≃ₛₗ[σ₁₂] α →₀ N :=
   { mapRange.linearMap e.toLinearMap,
     mapRange.addEquiv e.toAddEquiv with
     toFun := mapRange e e.map_zero
     invFun := mapRange e.symm e.symm.map_zero }
 
 @[simp]
-/--
-theorem `mapRange.linearEquiv_refl` / 定理 `mapRange.linearEquiv_refl`
-
-English:
-theorem mapRange.linearEquiv_refl
-  proof: LinearEquiv.ext mapRange_id
-
-中文:
-定理 mapRange.linearEquiv_refl
-  证明: LinearEquiv.ext mapRange_id
-
-Depends on / 依赖: Set.diagonal, diagonal, le_antisymm_iff, measurability, simp_rw, tsub_eq_zero_iff_le
+/-
+**Finsupp.mapRange.linearEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`
+。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {R : Type u_5} [inst : Semiring R] [inst_1
+ : AddCommMonoid M]   [inst_2 : _root_.Module R M], Finsupp.mapRange.linearEquiv
+ (LinearEquiv.refl R M) = LinearEquiv.refl R (α →₀ M)
+参数：LinearEquiv.refl R M；α →₀ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `Finsupp.mapRange_id`：mapRange_id (g : α ->₀ M) : mapRange id rfl g = g
 -/
 theorem mapRange.linearEquiv_refl :
-    mapRange.linearEquiv (LinearEquiv.refl R M) = LinearEquiv.refl R (α ->₀ M) :=
+    mapRange.linearEquiv (LinearEquiv.refl R M) = LinearEquiv.refl R (α →₀ M) :=
   LinearEquiv.ext mapRange_id
-
-/--
-theorem `mapRange.linearEquiv_trans` / 定理 `mapRange.linearEquiv_trans`
-
-English:
-theorem mapRange.linearEquiv_trans
-  given: (f : M ≃ₛₗ[σ₁₂] N) (f₂ : N ≃ₛₗ[σ₂₃] P)
-  proof: LinearEquiv.ext mapRange_comp f₂ f₂.map_zero f f.map_zero (f.trans f₂).map_zero
-
-@[simp]
-
-中文:
-定理 mapRange.linearEquiv_trans
-  条件: (f : M ≃ₛₗ[σ₁₂] N) (f₂ : N ≃ₛₗ[σ₂₃] P)
-  证明: LinearEquiv.ext mapRange_comp f₂ f₂.map_zero f f.map_zero (f.trans f₂).map_zero
-
-@[simp]
-
-Depends on / 依赖: MeasurableSpace, measurableDiv_of_mul_inv
+/-
+**Finsupp.mapRange.linearEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange
+`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {N : Type u_3} {P : Type u_4} {R : Type u_
+5} {R₂ : Type u_6} {R₃ : Type u_7}   [inst : Semiring R] [inst_1 : Semiring R₂] 
+[inst_2 : Semiring R₃] [inst_3 : AddCommMonoid M]   [inst_4 : _root_.Module R M]
+ [inst_5 : AddCommMonoid N] [inst_6 : _root_.Module R₂ N] [inst_7 : AddCommMonoi
+d P]   [inst_8 : _root_.Module R₃ P] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} {σ₂₃ : R₂
+ →+* R₃} {σ₃₂ : R₃ →+* R₂} {σ₁₃ : R →+* R₃}   {σ₃₁ : R₃ →+* R} [inst_9 : RingHom
+CompTriple σ₁₂ σ₂₃ σ₁₃] [inst_10 : RingHomCompTriple σ₃₂ σ₂₁ σ₃₁]   [inst_11 : R
+ingHomInvPair σ₁₂ σ₂₁] [inst_12 : RingHomInvPair σ₂₁ σ₁₂] [inst_13 : RingHomInvP
+air σ₂₃ σ₃₂]   [inst_14 : RingHomInvPair σ₃₂ σ₂₃] [inst_15 : RingHomInvPair σ₁₃ 
+σ₃₁] [inst_16 : RingHomInvPair σ₃₁ σ₁₃]   (f : M ≃ₛₗ[σ₁₂] N) (f₂ : N ≃ₛₗ[σ₂₃] P)
+,   Finsupp.mapRange.linearEquiv (f.trans f₂) = (Finsupp.mapRange.linearEquiv f)
+.trans (Finsupp.mapRange.linearEquiv f₂)
+参数：f : M ≃ₛₗ[σ₁₂] N；f₂ : N ≃ₛₗ[σ₂₃] P；f.trans f₂；Finsupp.mapRange.linearEquiv f；
+Finsupp.mapRange.linearEquiv f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `Finsupp.mapRange_comp`：mapRange_comp (f : N -> O) (hf : f 0 = 0) (f₂ : M
+ -> N) (hf₂ : f₂ 0 = 0) (h : (f ∘ f₂) 0 = 0) (g : α ->₀ M) : mapRange (f ∘ f₂) h
+ g = mapRan…
+· 使用定理 `LinearEquiv.map_zero`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂
+ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst_…
 -/
 theorem mapRange.linearEquiv_trans (f : M ≃ₛₗ[σ₁₂] N) (f₂ : N ≃ₛₗ[σ₂₃] P) :
-    (mapRange.linearEquiv (f.trans f₂) : (α ->₀ _) ≃ₛₗ[σ₁₃] _) =
+    (mapRange.linearEquiv (f.trans f₂) : (α →₀ _) ≃ₛₗ[σ₁₃] _) =
       (mapRange.linearEquiv f).trans (mapRange.linearEquiv f₂) :=
-LinearEquiv.ext mapRange_comp f₂ f₂.map_zero f f.map_zero (f.trans f₂).map_zero
+  LinearEquiv.ext <| mapRange_comp f₂ f₂.map_zero f f.map_zero (f.trans f₂).map_zero
 
 @[simp]
-/--
-theorem `mapRange.linearEquiv_symm` / 定理 `mapRange.linearEquiv_symm`
-
-English:
-theorem mapRange.linearEquiv_symm
-  given: (f : M ≃ₛₗ[σ₁₂] N)
-  proof: LinearEquiv.ext fun _x => rfl
-
-@[simp]
-
-中文:
-定理 mapRange.linearEquiv_symm
-  条件: (f : M ≃ₛₗ[σ₁₂] N)
-  证明: LinearEquiv.ext fun _x => rfl
-
-@[simp]
+/-
+**Finsupp.mapRange.linearEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`
+。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {N : Type u_3} {R : Type u_5} {R₂ : Type u
+_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M] [ins
+t_3 : _root_.Module R M] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N
+]   {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [inst_6 : RingHomInvPair σ₁₂ σ₂₁] [inst_7 
+: RingHomInvPair σ₂₁ σ₁₂]   (f : M ≃ₛₗ[σ₁₂] N), (Finsupp.mapRange.linearEquiv f)
+.symm = Finsupp.mapRange.linearEquiv f.symm
+参数：f : M ≃ₛₗ[σ₁₂] N；Finsupp.mapRange.linearEquiv f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
 -/
 theorem mapRange.linearEquiv_symm (f : M ≃ₛₗ[σ₁₂] N) :
-    ((mapRange.linearEquiv f).symm : (α ->₀ _) ≃ₛₗ[σ₂₁] _) = mapRange.linearEquiv f.symm :=
+    ((mapRange.linearEquiv f).symm : (α →₀ _) ≃ₛₗ[σ₂₁] _) = mapRange.linearEquiv f.symm :=
   LinearEquiv.ext fun _x => rfl
 
 @[simp]
-/--
-theorem `mapRange.linearEquiv_toAddEquiv` / 定理 `mapRange.linearEquiv_toAddEquiv`
-
-English:
-theorem mapRange.linearEquiv_toAddEquiv
-  given: (f : M ≃ₛₗ[σ₁₂] N)
-  proof: AddEquiv.ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 mapRange.linearEquiv_toAddEquiv
-  条件: (f : M ≃ₛₗ[σ₁₂] N)
-  证明: AddEquiv.ext fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.ext
+/-
+**Finsupp.mapRange.linearEquiv_toAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.map
+Range`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {N : Type u_3} {R : Type u_5} {R₂ : Type u
+_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M] [ins
+t_3 : _root_.Module R M] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N
+]   {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [inst_6 : RingHomInvPair σ₁₂ σ₂₁] [inst_7 
+: RingHomInvPair σ₂₁ σ₁₂]   (f : M ≃ₛₗ[σ₁₂] N), (Finsupp.mapRange.linearEquiv f)
+.toAddEquiv = Finsupp.mapRange.addEquiv f.toAddEquiv
+参数：f : M ≃ₛₗ[σ₁₂] N；Finsupp.mapRange.linearEquiv f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst_1 : A
+dd N] {f g : M ≃+ N}, (∀ (x : M), f x = g x) → f = g
 -/
 theorem mapRange.linearEquiv_toAddEquiv (f : M ≃ₛₗ[σ₁₂] N) :
-    (mapRange.linearEquiv f).toAddEquiv = (mapRange.addEquiv f.toAddEquiv : (α ->₀ M) ≃+ _) :=
+    (mapRange.linearEquiv f).toAddEquiv = (mapRange.addEquiv f.toAddEquiv : (α →₀ M) ≃+ _) :=
   AddEquiv.ext fun _ => rfl
 
 @[simp]
-/--
-theorem `mapRange.linearEquiv_toLinearMap` / 定理 `mapRange.linearEquiv_toLinearMap`
-
-English:
-theorem mapRange.linearEquiv_toLinearMap
-  given: (f : M ≃ₛₗ[σ₁₂] N)
-  proof: LinearMap.ext fun _ => rfl
-
-中文:
-定理 mapRange.linearEquiv_toLinearMap
-  条件: (f : M ≃ₛₗ[σ₁₂] N)
-  证明: LinearMap.ext fun _ => rfl
-
-Depends on / 依赖: LinearMap, LinearMap.ext
+/-
+**Finsupp.mapRange.linearEquiv_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.ma
+pRange`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} {N : Type u_3} {R : Type u_5} {R₂ : Type u
+_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M] [ins
+t_3 : _root_.Module R M] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N
+]   {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [inst_6 : RingHomInvPair σ₁₂ σ₂₁] [inst_7 
+: RingHomInvPair σ₂₁ σ₁₂]   (f : M ≃ₛₗ[σ₁₂] N), ↑(Finsupp.mapRange.linearEquiv f
+) = Finsupp.mapRange.linearMap ↑f
+参数：f : M ≃ₛₗ[σ₁₂] N；Finsupp.mapRange.linearEquiv f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
 theorem mapRange.linearEquiv_toLinearMap (f : M ≃ₛₗ[σ₁₂] N) :
     (mapRange.linearEquiv f).toLinearMap =
-    (mapRange.linearMap f.toLinearMap : (α ->₀ M) ->ₛₗ[σ₁₂] _) :=
+    (mapRange.linearMap f.toLinearMap : (α →₀ M) →ₛₗ[σ₁₂] _) :=
   LinearMap.ext fun _ => rfl
 
 end Equiv
@@ -915,53 +723,31 @@ variable (R) in
 
 This is the `LinearEquiv` version of `Finsupp.curryEquiv`. -/
 @[simps +simpRhs]
-/--
-Definition of `curryLinearEquiv` / `curryLinearEquiv` 的定义
+/-
+**Finsupp.curryLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：curryLinearEquiv : (α × β ->₀ M) ≃ₗ[R] α ->₀ β ->₀ M where toAddEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curryLinearEquiv
-  signature: : (α × β ->₀ M) ≃ₗ[R] α ->₀ β ->₀ M where
-  body: curryAddEquiv
-  map_smul' c f := by ext; simp
+--- 原说明 ---
+The linear equivalence between `α × β →₀ M` and `α →₀ β →₀ M`.
 
-@[deprecated (since := "2026-01-03")] alias finsuppProdLEquiv := curryLinearEquiv
-
-中文:
-定义 curryLinearEquiv
-  签名: : (α × β ->₀ M) ≃ₗ[R] α ->₀ β ->₀ M where
-  定义体: curryAddEquiv
-  map_smul' c f := by ext; simp
-
-@[deprecated (since := "2026-01-03")] alias finsuppProdLEquiv := curryLinearEquiv
-
-Depends on / 依赖: curryAddEquiv
+This is the `LinearEquiv` version of `Finsupp.curryEquiv`.
 -/
-noncomputable def curryLinearEquiv : (α × β ->₀ M) ≃ₗ[R] α ->₀ β ->₀ M where
+noncomputable def curryLinearEquiv : (α × β →₀ M) ≃ₗ[R] α →₀ β →₀ M where
   toAddEquiv := curryAddEquiv
   map_smul' c f := by ext; simp
 
 @[deprecated (since := "2026-01-03")] alias finsuppProdLEquiv := curryLinearEquiv
-
-/--
-theorem `curryLinearEquiv_symm_apply_apply` / 定理 `curryLinearEquiv_symm_apply_apply`
-
-English:
-theorem curryLinearEquiv_symm_apply_apply
-  given: (f : α ->₀ β ->₀ M) (xy)
-  proof: rfl
-
-@[deprecated (since := "2026-01-03")]
-alias finsuppProdLEquiv_symm_apply_apply := curryLinearEquiv_symm_apply_apply
-
-中文:
-定理 curryLinearEquiv_symm_apply_apply
-  条件: (f : α ->₀ β ->₀ M) (xy)
-  证明: rfl
-
-@[deprecated (since := "2026-01-03")]
-alias finsuppProdLEquiv_symm_apply_apply := curryLinearEquiv_symm_apply_apply
+/-
+**Finsupp.curryLinearEquiv_symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：curryLinearEquiv_symm_apply_apply (f : α ->₀ β ->₀ M) (xy) : (curryLinearE
+quiv R).symm f xy = f xy.1 xy.2
+参数：f : α ->₀ β ->₀ M；xy。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem curryLinearEquiv_symm_apply_apply (f : α ->₀ β ->₀ M) (xy) :
+theorem curryLinearEquiv_symm_apply_apply (f : α →₀ β →₀ M) (xy) :
     (curryLinearEquiv R).symm f xy = f xy.1 xy.2 :=
   rfl
 
@@ -983,35 +769,19 @@ variable (R)
 
 /-- If `Subsingleton R`, then `M ≃ₗ[R] ι →₀ R` for any type `ι`. -/
 @[simps]
-/--
-Definition of `Module.subsingletonEquiv` / `Module.subsingletonEquiv` 的定义
+/-
+**Module.subsingletonEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Module.subsingletonEquiv (R M ι : Type*) [Semiring R] [Subsingleton R] [Ad
+dCommMonoid M] [Module R M] : M ≃ₗ[R] ι ->₀ R where toFun _
+参数：R M ι : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Module.subsingletonEquiv
-  signature: (R M ι : Type*) [Semiring R] [Subsingleton R] [AddCommMonoid M]
-  body: 0
-  invFun _ := 0
-  left_inv m :=
-    have := Module.subsingleton R M
-    Subsingleton.elim _ _
-  right_inv f := by simp only [eq_iff_true_of_subsingleton]
-  map_add' _ _ := (add_zero 0).symm
-  map_smul' r _ := (smul_zero r).symm
-
-中文:
-定义 模.subsingletonEquiv
-  签名: (R M ι : 类型) [半环 R] [子单例 R] [加法交换幺半群 M]
-  定义体: 0
-  invFun _ := 0
-  left_inv m :=
-    have := Module.subsingleton R M
-    Subsingleton.elim _ _
-  right_inv f := by simp only [eq_iff_true_of_subsingleton]
-  map_add' _ _ := (add_zero 0).symm
-  map_smul' r _ := (smul_zero r).symm
+--- 原说明 ---
+If `Subsingleton R`, then `M ≃ₗ[R] ι →₀ R` for any type `ι`.
 -/
 def Module.subsingletonEquiv (R M ι : Type*) [Semiring R] [Subsingleton R] [AddCommMonoid M]
-    [Module R M] : M ≃ₗ[R] ι ->₀ R where
+    [Module R M] : M ≃ₗ[R] ι →₀ R where
   toFun _ := 0
   invFun _ := 0
   left_inv m :=
@@ -1027,48 +797,32 @@ namespace Module.End
 
 variable (ι : Type*) {R M : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Definition of `ringHomEndFinsupp` / `ringHomEndFinsupp` 的定义
+/-- If `M` is an `R`-module and `ι` is a type, then an additive endomorphism of `M` that
+commutes with all `R`-endomorphisms of `M` gives rise to an additive endomorphism of `ι →₀ M`
+that commutes with all `R`-endomorphisms of `ι →₀ M`. -/
+/-
+**Module.End.ringHomEndFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `Module.End`。
+形式化陈述：(ι : Type u_4) →   {R : Type u_5} →     {M : Type u_6} →       [inst : Sem
+iring R] →         [inst_1 : AddCommMonoid M] →           [inst_2 : _root_.Modul
+e R M] → Module.End (Module.End R M) M →+* Module.End (Module.End R (ι →₀ M)) (ι
+ →₀ M)
+参数：ι →₀ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringHomEndFinsupp
-  signature: :
-  body: { toFun := Finsupp.mapRange.addMonoidHom f
-    map_add' := map_add _
-    map_smul' g x := x.induction_linear (by simp)
-      (fun _ _ h h' => by rw [smul_add, map_add, h, h', map_add, smul_add]) fun i m => by
-        ext j
-        change f (Finsupp.lapply j ∘ₗ g ∘ₗ Finsupp.lsingle i • m) = _
-        rw [map_smul]
-        simp }
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp
-  map_zero' := by ext; simp
-  map_add' _ _ := by ext; simp
-
-中文:
-定义 ringHomEndFinsupp
-  签名: :
-  定义体: { toFun := Finsupp.mapRange.addMonoidHom f
-    map_add' := map_add _
-    map_smul' g x := x.induction_linear (by simp)
-      (fun _ _ h h' => by rw [smul_add, map_add, h, h', map_add, smul_add]) fun i m => by
-        ext j
-        change f (Finsupp.lapply j ∘ₗ g ∘ₗ Finsupp.lsingle i • m) = _
-        rw [map_smul]
-        simp }
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp
-  map_zero' := by ext; simp
-  map_add' _ _ := by ext; simp
+--- 原说明 ---
+If `M` is an `R`-module and `ι` is a type, then an additive endomorphism of `M` 
+that
+commutes with all `R`-endomorphisms of `M` gives rise to an additive endomorphis
+m of `ι →₀ M`
+that commutes with all `R`-endomorphisms of `ι →₀ M`.
 -/
 @[simps] noncomputable def ringHomEndFinsupp :
-    End (End R M) M ->+* End (End R (ι ->₀ M)) (ι ->₀ M) where
+    End (End R M) M →+* End (End R (ι →₀ M)) (ι →₀ M) where
   toFun f :=
   { toFun := Finsupp.mapRange.addMonoidHom f
     map_add' := map_add _
     map_smul' g x := x.induction_linear (by simp)
-      (fun _ _ h h' => by rw [smul_add, map_add, h, h', map_add, smul_add]) fun i m => by
+      (fun _ _ h h' ↦ by rw [smul_add, map_add, h, h', map_add, smul_add]) fun i m ↦ by
         ext j
         change f (Finsupp.lapply j ∘ₗ g ∘ₗ Finsupp.lsingle i • m) = _
         rw [map_smul]
@@ -1080,43 +834,29 @@ definition ringHomEndFinsupp
 
 variable {ι}
 
-/--
-Definition of `ringEquivEndFinsupp` / `ringEquivEndFinsupp` 的定义
+/-- If `M` is an `R`-module and `ι` is a nonempty type, then every additive endomorphism
+of `ι →₀ M` that commutes with all `R`-endomorphisms of `ι →₀ M` comes from an additive
+endomorphism of `M` that commutes with all `R`-endomorphisms of `M`.
+See (15) in F4 of §28 on p.131 of [Lorenz2008]. -/
+/-
+**Module.End.ringEquivEndFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `Module.End`。
+形式化陈述：{ι : Type u_4} →   {R : Type u_5} →     {M : Type u_6} →       [inst : Sem
+iring R] →         [inst_1 : AddCommMonoid M] →           [inst_2 : _root_.Modul
+e R M] →             ι → Module.End (Module.End R M) M ≃+* Module.End (Module.En
+d R (ι →₀ M)) (ι →₀ M)
+参数：Module.End R M；Module.End R (ι →₀ M)；ι →₀ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringEquivEndFinsupp
-  signature: (i : ι)
-  body: ringHomEndFinsupp ι
-  invFun f :=
-  { toFun m := f (Finsupp.single i m) i
-    map_add' _ _ := by simp
-    map_smul' g m := let g := Finsupp.mapRange.linearMap g
-      show _ = g _ i by rw [← End.smul_def g, ← map_smul]; simp [g] }
-  left_inv _ := by ext; simp
-  right_inv f := by
-    ext x j
-    change f (Finsupp.lsingle (R := R) (M := M) i ∘ₗ Finsupp.lapply j • x) i = _
-    rw [map_smul]
-    simp
-
-中文:
-定义 ringEquivEndFinsupp
-  签名: (i : ι)
-  定义体: ringHomEndFinsupp ι
-  invFun f :=
-  { toFun m := f (Finsupp.single i m) i
-    map_add' _ _ := by simp
-    map_smul' g m := let g := Finsupp.mapRange.linearMap g
-      show _ = g _ i by rw [← End.smul_def g, ← map_smul]; simp [g] }
-  left_inv _ := by ext; simp
-  right_inv f := by
-    ext x j
-    change f (Finsupp.lsingle (R := R) (M := M) i ∘ₗ Finsupp.lapply j • x) i = _
-    rw [map_smul]
-    simp
+--- 原说明 ---
+If `M` is an `R`-module and `ι` is a nonempty type, then every additive endomorp
+hism
+of `ι →₀ M` that commutes with all `R`-endomorphisms of `ι →₀ M` comes from an a
+dditive
+endomorphism of `M` that commutes with all `R`-endomorphisms of `M`.
+See (15) in F4 of §28 on p.131 of [Lorenz2008].
 -/
 @[simps!] noncomputable def ringEquivEndFinsupp (i : ι) :
-    End (End R M) M ≃+* End (End R (ι ->₀ M)) (ι ->₀ M) where
+    End (End R M) M ≃+* End (End R (ι →₀ M)) (ι →₀ M) where
   __ := ringHomEndFinsupp ι
   invFun f :=
   { toFun m := f (Finsupp.single i m) i
@@ -1131,27 +871,17 @@ definition ringEquivEndFinsupp
     simp
 
 variable (R M ι)
-
-/--
-theorem `ringHomEndFinsupp_surjective` / 定理 `ringHomEndFinsupp_surjective`
-
-English:
-theorem ringHomEndFinsupp_surjective
-  proof: by
-  intro f
-  obtain _ | ⟨⟨i⟩⟩ := isEmpty_or_nonempty ι
-  · exact ⟨0, Subsingleton.elim ..⟩
-  · exact ⟨_, (ringEquivEndFinsupp i).right_inv f⟩
-
-中文:
-定理 ringHomEndFinsupp_surjective
-  证明: by
-  intro f
-  obtain _ | ⟨⟨i⟩⟩ := isEmpty_or_nonempty ι
-  · exact ⟨0, Subsingleton.elim ..⟩
-  · exact ⟨_, (ringEquivEndFinsupp i).right_inv f⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, isEmpty_or_nonempty, right_inv, ringEquivEndFinsupp
+/-
+**Module.End.ringHomEndFinsupp_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Module.End`
+。
+形式化陈述：ringHomEndFinsupp_surjective : Function.Surjective (ringHomEndFinsupp (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 theorem ringHomEndFinsupp_surjective :
     Function.Surjective (ringHomEndFinsupp (R := R) (M := M) ι) := by
@@ -1161,3 +891,4 @@ theorem ringHomEndFinsupp_surjective :
   · exact ⟨_, (ringEquivEndFinsupp i).right_inv f⟩
 
 end Module.End
+

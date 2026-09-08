@@ -20,56 +20,35 @@ public section
 
 variable {R : Type*} [CommRing R] [IsSimpleRing R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSimpleOrder (Ideal R)
-  body: TwoSidedIdeal.orderIsoIdeal.symm.isSimpleOrder
-
-中文:
-实例 :
-  签名: 是单序 (理想 R)
-  定义体: TwoSidedIdeal.orderIsoIdeal.symm.isSimpleOrder
-
-Depends on / 依赖: TwoSidedIdeal, TwoSidedIdeal.orderIsoIdeal.symm.isSimpleOrder, isSimpleOrder, orderIsoIdeal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsSimpleOrder (Ideal R) := TwoSidedIdeal.orderIsoIdeal.symm.isSimpleOrder
-
-/--
-Instance `IsPrincipalIdealRing.of_isSimpleRing` / 实例 `IsPrincipalIdealRing.of_isSimpleRing`
-
-English:
-instance IsPrincipalIdealRing.of_isSimpleRing
-  signature: :
-  body: ((isSimpleRing_iff_isField _).mp ‹_›).isPrincipalIdealRing
-
-中文:
-实例 是主理想环.of_isSimpleRing
-  签名: :
-  定义体: ((isSimpleRing_iff_isField _).mp ‹_›).isPrincipalIdealRing
-
-Depends on / 依赖: isPrincipalIdealRing, isSimpleRing_iff_isField
+/-
+**IsPrincipalIdealRing.of_isSimpleRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsPrincipalIdealRing.of_isSimpleRing : IsPrincipalIdealRing R
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsField.isPrincipalIdealRing`：IsField.isPrincipalIdealRing {R : Type*} [
+Ring R] (h : IsField R) : IsPrincipalIdealRing R
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `isSimpleRing_iff_isField`：isSimpleRing_iff_isField (A : Type*) [CommRing
+ A] : IsSimpleRing A ↔ IsField A
 -/
 instance IsPrincipalIdealRing.of_isSimpleRing :
     IsPrincipalIdealRing R :=
   ((isSimpleRing_iff_isField _).mp ‹_›).isPrincipalIdealRing
-
-/--
-Instance `IsDomain.of_isSimpleRing` / 实例 `IsDomain.of_isSimpleRing`
-
-English:
-instance IsDomain.of_isSimpleRing
-  signature: :
-  body: ((isSimpleRing_iff_isField _).mp ‹_›).isDomain
-
-中文:
-实例 是整环.of_isSimpleRing
-  签名: :
-  定义体: ((isSimpleRing_iff_isField _).mp ‹_›).isDomain
-
-Depends on / 依赖: Countable, Countable.LindelofSpace, LindelofSpace, isDomain, isSimpleRing_iff_isField
+/-
+**IsDomain.of_isSimpleRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsDomain.of_isSimpleRing : IsDomain R
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsField.isDomain`：IsField.isDomain {R : Type u} [Semiring R] (h : IsFiel
+d R) : IsDomain R where mul_left_cancel_of_ne_zero ha _ _ hb
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `isSimpleRing_iff_isField`：isSimpleRing_iff_isField (A : Type*) [CommRing
+ A] : IsSimpleRing A ↔ IsField A
 -/
 instance IsDomain.of_isSimpleRing :
     IsDomain R :=

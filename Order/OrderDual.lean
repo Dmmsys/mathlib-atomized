@@ -31,24 +31,19 @@ assert_not_exists Lex
 
 variable {α : Type*}
 
-/--
-Definition of `OrderDual` / `OrderDual` 的定义
+/-- Type synonym to equip a type with the dual order: `≤` means `≥` and `<` means `>`. `αᵒᵈ` is
+notation for `OrderDual α`. -/
+/-
+**OrderDual** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderDual (α : Type*) : Type _
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderDual
-  signature: (α : Type*)
-  body: α
-
-@[inherit_doc]
-notation:max α "ᵒᵈ" => OrderDual α
-
-中文:
-定义 OrderDual
-  签名: (α : 类型)
-  定义体: α
-
-@[inherit_doc]
-notation:max α "ᵒᵈ" => OrderDual α
+--- 原说明 ---
+Type synonym to equip a type with the dual order: `≤` means `≥` and `<` means `>
+`. `αᵒᵈ` is
+notation for `OrderDual α`.
 -/
 def OrderDual (α : Type*) : Type _ :=
   α
@@ -58,96 +53,99 @@ notation:max α "ᵒᵈ" => OrderDual α
 
 namespace OrderDual
 
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [h : Nonempty α] : Nonempty αᵒᵈ :=
   h
-
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [h : Subsingleton α] : Subsingleton αᵒᵈ :=
   h
-
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [h : LE α] : LE αᵒᵈ :=
-  ⟨fun a b => h.le b a⟩
-
+  ⟨fun a b ↦ h.le b a⟩
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [h : LT α] : LT αᵒᵈ :=
-  ⟨fun a b => h.lt b a⟩
-
+  ⟨fun a b ↦ h.lt b a⟩
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [h : Ord α] : Ord αᵒᵈ :=
-  ⟨fun a b => h.compare b a⟩
+  ⟨fun a b ↦ h.compare b a⟩
 
 @[to_dual]
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [h : Min α] : Max αᵒᵈ :=
-  ⟨fun a b => h.min a b⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LE
-  signature: α] [T
-  body: T.trans _ _ _ hbc hab
-
-中文:
-实例 [LE
-  签名: α] [T
-  定义体: T.trans _ _ _ hbc hab
-
-Depends on / 依赖: T.trans
+  ⟨fun a b ↦ h.min a b⟩
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LE α] [T : IsTrans α LE.le] : IsTrans αᵒᵈ LE.le where
   trans _ _ _ hab hbc := T.trans _ _ _ hbc hab
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: α] [T
-  body: T.trans _ _ _ hbc hab
-
-中文:
-实例 [LT
-  签名: α] [T
-  定义体: T.trans _ _ _ hbc hab
-
-Depends on / 依赖: T.trans
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LT α] [T : IsTrans α LT.lt] : IsTrans αᵒᵈ LT.lt where
   trans _ _ _ hab hbc := T.trans _ _ _ hbc hab
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: α] [T
-  body: by rw [eq_comm]; exact T.trichotomous b a
-
-中文:
-实例 [LT
-  签名: α] [T
-  定义体: by rw [eq_comm]; exact T.trichotomous b a
-
-Depends on / 依赖: T.trichotomous, eq_comm, trichotomous
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LT α] [T : @Std.Trichotomous α LT.lt] : @Std.Trichotomous αᵒᵈ LT.lt where
   trichotomous a b := by rw [eq_comm]; exact T.trichotomous b a
-
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [Preorder α] : Preorder αᵒᵈ where
   le_refl _ := le_refl _
   le_trans _ _ _ hab hbc := hbc.trans hab
   lt_iff_le_not_ge _ _ := lt_iff_le_not_ge
-
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [PartialOrder α] : PartialOrder αᵒᵈ where
   le_antisymm a b hab hba := @le_antisymm α _ a b hba hab
-
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [DecidableEq α] : DecidableEq αᵒᵈ := ‹DecidableEq α›
-
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [LT α] [h : DecidableLT α] : DecidableLT (αᵒᵈ) :=
-  fun a b => h b a
-
+  fun a b ↦ h b a
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [LE α] [h : DecidableLE α] : DecidableLE (αᵒᵈ) :=
-  fun a b => h b a
+  fun a b ↦ h b a
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [LinearOrder α] : LinearOrder αᵒᵈ where
   le_total a b := le_total (α := α) b a
   min_def := max_def' (α := α)
@@ -160,542 +158,278 @@ instance (α : Type*) [LinearOrder α] : LinearOrder αᵒᵈ where
     rfl
 
 set_option linter.style.setOption false in
-set_option backward.inferInstanceAs.wrap.reuseSubInstances false in -- otherwise we get an identity!
+set_option backward.inferInstanceAs.wrap.reuseSubInstances false in  -- otherwise we get an identity!
 /-- The opposite linear order to a given linear order -/
 @[instance_reducible, deprecated "This declaration shouldn't have existed" (since := "2026-04-08")]
-/--
-Definition of `_root_.LinearOrder.swap` / `_root_.LinearOrder.swap` 的定义
+/-
+**OrderDual._root_.LinearOrder.swap** 是 Mathlib 中的一个定义，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearOrder.swap
-  signature: (α : Type*) (_ : LinearOrder α)
-  body: inferInstanceAs LinearOrder (OrderDual α)
-
-中文:
-定义 _root_.线性序.swap
-  签名: (α : 类型) (_ : 线性序 α)
-  定义体: inferInstanceAs LinearOrder (OrderDual α)
-
-Depends on / 依赖: LinearOrder, OrderDual, mem_sInf, mem_sInf.mpr, smul_mem
+--- 原说明 ---
+The opposite linear order to a given linear order
 -/
 def _root_.LinearOrder.swap (α : Type*) (_ : LinearOrder α) : LinearOrder α :=
-inferInstanceAs LinearOrder (OrderDual α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : Inhabited α] : Inhabited αᵒᵈ
-  body: ⟨h.default⟩
-
-中文:
-实例 [h
-  签名: : 可居 α] : 可居 αᵒᵈ
-  定义体: ⟨h.default⟩
-
-Depends on / 依赖: h.default
+  inferInstanceAs <| LinearOrder (OrderDual α)
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : Inhabited α] : Inhabited αᵒᵈ := ⟨h.default⟩
-
-/--
-theorem `Ord.dual_dual` / 定理 `Ord.dual_dual`
-
-English:
-theorem Ord.dual_dual
-  given: (α : Type*) [H : Ord α]
-  statement: OrderDual.instOrd αᵒᵈ = H
-  proof: rfl
-
-中文:
-定理 序.dual_dual
-  条件: (α : 类型) [H : 序 α]
-  结论: OrderDual.instOrd αᵒᵈ = H
-  证明: rfl
+/-
+**OrderDual.Ord.dual_dual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual.Ord`。
+形式化陈述：∀ (α : Type u_2) [H : Ord α], OrderDual.instOrd αᵒᵈ = H
+参数：α : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ord.dual_dual (α : Type*) [H : Ord α] : OrderDual.instOrd αᵒᵈ = H :=
   rfl
-
-/--
-theorem `Preorder.dual_dual` / 定理 `Preorder.dual_dual`
-
-English:
-theorem Preorder.dual_dual
-  given: (α : Type*) [H : Preorder α]
-  statement: OrderDual.instPreorder αᵒᵈ = H
-  proof: rfl
-
-中文:
-定理 预序.dual_dual
-  条件: (α : 类型) [H : 预序 α]
-  结论: OrderDual.instPreorder αᵒᵈ = H
-  证明: rfl
+/-
+**OrderDual.Preorder.dual_dual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual.Preorder`。
+形式化陈述：∀ (α : Type u_2) [H : Preorder α], OrderDual.instPreorder αᵒᵈ = H
+参数：α : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Preorder.dual_dual (α : Type*) [H : Preorder α] : OrderDual.instPreorder αᵒᵈ = H :=
   rfl
-
-/--
-theorem `instPartialOrder.dual_dual` / 定理 `instPartialOrder.dual_dual`
-
-English:
-theorem instPartialOrder.dual_dual
-  given: (α : Type*) [H : PartialOrder α]
-  proof: rfl
-
-中文:
-定理 instPartialOrder.dual_dual
-  条件: (α : 类型) [H : 偏序 α]
-  证明: rfl
+/-
+**OrderDual.instPartialOrder.dual_dual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual.inst
+PartialOrder`。
+形式化陈述：∀ (α : Type u_2) [H : PartialOrder α], OrderDual.instPartialOrder αᵒᵈ = H
+参数：α : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem instPartialOrder.dual_dual (α : Type*) [H : PartialOrder α] :
     OrderDual.instPartialOrder αᵒᵈ = H :=
   rfl
-
-/--
-theorem `instLinearOrder.dual_dual` / 定理 `instLinearOrder.dual_dual`
-
-English:
-theorem instLinearOrder.dual_dual
-  given: (α : Type*) [H : LinearOrder α]
-  proof: rfl
-
-中文:
-定理 instLinearOrder.dual_dual
-  条件: (α : 类型) [H : 线性序 α]
-  证明: rfl
+/-
+**OrderDual.instLinearOrder.dual_dual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual.instL
+inearOrder`。
+形式化陈述：∀ (α : Type u_2) [H : LinearOrder α], OrderDual.instLinearOrder αᵒᵈ = H
+参数：α : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem instLinearOrder.dual_dual (α : Type*) [H : LinearOrder α] :
     OrderDual.instLinearOrder αᵒᵈ = H :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : Nontrivial α] : Nontrivial αᵒᵈ
-  body: h
-
-中文:
-实例 [h
-  签名: : 非平凡 α] : 非平凡 αᵒᵈ
-  定义体: h
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : Nontrivial α] : Nontrivial αᵒᵈ := h
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : Unique α] : Unique αᵒᵈ where
-  body: h.uniq
-
-中文:
-实例 [h
-  签名: : 唯一 α] : 唯一 αᵒᵈ where
-  定义体: h.uniq
-
-Depends on / 依赖: h.uniq
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : Unique α] : Unique αᵒᵈ where
   uniq := h.uniq
 
-/--
-Definition of `toDual` / `toDual` 的定义
+/-- `toDual` is the identity function to the `OrderDual` of a linear order. -/
+/-
+**OrderDual.toDual** 是 Mathlib 中的一个定义，位于命名空间 `OrderDual`。
+形式化陈述：toDual : α ≃ αᵒᵈ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toDual
-  signature: : α ≃ αᵒᵈ
-  body: Equiv.refl _
-
-中文:
-定义 toDual
-  签名: : α ≃ αᵒᵈ
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`toDual` is the identity function to the `OrderDual` of a linear order.
 -/
 def toDual : α ≃ αᵒᵈ :=
   Equiv.refl _
 
-/--
-Definition of `ofDual` / `ofDual` 的定义
+/-- `ofDual` is the identity function from the `OrderDual` of a linear order. -/
+/-
+**OrderDual.ofDual** 是 Mathlib 中的一个定义，位于命名空间 `OrderDual`。
+形式化陈述：ofDual : αᵒᵈ ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofDual
-  signature: : αᵒᵈ ≃ α
-  body: Equiv.refl _
-
-中文:
-定义 ofDual
-  签名: : αᵒᵈ ≃ α
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`ofDual` is the identity function from the `OrderDual` of a linear order.
 -/
 def ofDual : αᵒᵈ ≃ α :=
   Equiv.refl _
-
-/--
-theorem `toDual_symm_eq` / 定理 `toDual_symm_eq`
-
-English:
-theorem toDual_symm_eq
-  statement: (@toDual α).symm = ofDual
-  proof: rfl
-
-中文:
-定理 toDual_symm_eq
-  结论: (@toDual α).symm = ofDual
-  证明: rfl
+/-
+**OrderDual.toDual_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1}, OrderDual.toDual.symm = OrderDual.ofDual
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] theorem toDual_symm_eq : (@toDual α).symm = ofDual := rfl
-/--
-theorem `ofDual_symm_eq` / 定理 `ofDual_symm_eq`
-
-English:
-theorem ofDual_symm_eq
-  statement: (@ofDual α).symm = toDual
-  proof: rfl
-
-中文:
-定理 ofDual_symm_eq
-  结论: (@ofDual α).symm = toDual
-  证明: rfl
+/-
+**OrderDual.ofDual_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1}, OrderDual.ofDual.symm = OrderDual.toDual
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] theorem ofDual_symm_eq : (@ofDual α).symm = toDual := rfl
-/--
-theorem `toDual_ofDual` / 定理 `toDual_ofDual`
-
-English:
-theorem toDual_ofDual
-  given: (a : αᵒᵈ)
-  statement: toDual (ofDual a) = a
-  proof: rfl
-
-中文:
-定理 toDual_ofDual
-  条件: (a : αᵒᵈ)
-  结论: toDual (ofDual a) = a
-  证明: rfl
+/-
+**OrderDual.toDual_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1} (a : αᵒᵈ), OrderDual.toDual (OrderDual.ofDual a) = a
+参数：a : αᵒᵈ；OrderDual.ofDual a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toDual_ofDual (a : αᵒᵈ) : toDual (ofDual a) = a := rfl
-/--
-theorem `ofDual_toDual` / 定理 `ofDual_toDual`
-
-English:
-theorem ofDual_toDual
-  given: (a : α)
-  statement: ofDual (toDual a) = a
-  proof: rfl
-
-中文:
-定理 ofDual_toDual
-  条件: (a : α)
-  结论: ofDual (toDual a) = a
-  证明: rfl
+/-
+**OrderDual.ofDual_toDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1} (a : α), OrderDual.ofDual (OrderDual.toDual a) = a
+参数：a : α；OrderDual.toDual a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofDual_toDual (a : α) : ofDual (toDual a) = a := rfl
-
-/--
-theorem `toDual_trans_ofDual` / 定理 `toDual_trans_ofDual`
-
-English:
-theorem toDual_trans_ofDual
-  statement: (toDual (α := α)).trans ofDual = Equiv.refl _
-  proof: rfl
-
-中文:
-定理 toDual_trans_ofDual
-  结论: (toDual (α := α)).trans ofDual = 等价.refl _
-  证明: rfl
+/-
+**OrderDual.toDual_trans_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1}, OrderDual.toDual.trans OrderDual.ofDual = Equiv.refl α
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 @[simp] theorem toDual_trans_ofDual : (toDual (α := α)).trans ofDual = Equiv.refl _ := rfl
-/--
-theorem `ofDual_trans_toDual` / 定理 `ofDual_trans_toDual`
-
-English:
-theorem ofDual_trans_toDual
-  statement: (ofDual (α := α)).trans toDual = Equiv.refl _
-  proof: rfl
-
-中文:
-定理 ofDual_trans_toDual
-  结论: (ofDual (α := α)).trans toDual = 等价.refl _
-  证明: rfl
+/-
+**OrderDual.ofDual_trans_toDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1}, OrderDual.ofDual.trans OrderDual.toDual = Equiv.refl αᵒᵈ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 @[simp] theorem ofDual_trans_toDual : (ofDual (α := α)).trans toDual = Equiv.refl _ := rfl
-/--
-theorem `toDual_comp_ofDual` / 定理 `toDual_comp_ofDual`
-
-English:
-theorem toDual_comp_ofDual
-  statement: (toDual (α := α)) ∘ ofDual = id
-  proof: rfl
-
-中文:
-定理 toDual_comp_ofDual
-  结论: (toDual (α := α)) ∘ ofDual = id
-  证明: rfl
+/-
+**OrderDual.toDual_comp_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1}, ⇑OrderDual.toDual ∘ ⇑OrderDual.ofDual = id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toDual_comp_ofDual : (toDual (α := α)) ∘ ofDual = id := rfl
-/--
-theorem `ofDual_comp_toDual` / 定理 `ofDual_comp_toDual`
-
-English:
-theorem ofDual_comp_toDual
-  statement: (ofDual (α := α)) ∘ toDual = id
-  proof: rfl
-
-中文:
-定理 ofDual_comp_toDual
-  结论: (ofDual (α := α)) ∘ toDual = id
-  证明: rfl
+/-
+**OrderDual.ofDual_comp_toDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1}, ⇑OrderDual.ofDual ∘ ⇑OrderDual.toDual = id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofDual_comp_toDual : (ofDual (α := α)) ∘ toDual = id := rfl
-
-/--
-theorem `toDual_inj` / 定理 `toDual_inj`
-
-English:
-theorem toDual_inj
-  given: {a b : α}
-  statement: toDual a = toDual b ↔ a = b
-  proof: by simp
-
-中文:
-定理 toDual_inj
-  条件: {a b : α}
-  结论: toDual a = toDual b ↔ a = b
-  证明: by simp
+/-
+**OrderDual.toDual_inj** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：toDual_inj {a b : α} : toDual a = toDual b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toDual_inj {a b : α} : toDual a = toDual b ↔ a = b := by simp
-/--
-theorem `ofDual_inj` / 定理 `ofDual_inj`
-
-English:
-theorem ofDual_inj
-  given: {a b : αᵒᵈ}
-  statement: ofDual a = ofDual b ↔ a = b
-  proof: by simp
-
-中文:
-定理 ofDual_inj
-  条件: {a b : αᵒᵈ}
-  结论: ofDual a = ofDual b ↔ a = b
-  证明: by simp
+/-
+**OrderDual.ofDual_inj** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：ofDual_inj {a b : αᵒᵈ} : ofDual a = ofDual b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem ofDual_inj {a b : αᵒᵈ} : ofDual a = ofDual b ↔ a = b := by simp
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {a b : αᵒᵈ} (h : ofDual a = ofDual b)
-  statement: a = b
-  proof: h
-
-@[to_dual self, simp]
-
-中文:
-引理 ext
-  条件: {a b : αᵒᵈ} (h : ofDual a = ofDual b)
-  结论: a = b
-  证明: h
-
-@[to_dual self, simp]
+/-
+**OrderDual.ext** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：∀ {α : Type u_1} {a b : αᵒᵈ}, OrderDual.ofDual a = OrderDual.ofDual b → a 
+= b
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[ext] lemma ext {a b : αᵒᵈ} (h : ofDual a = ofDual b) : a = b := h
 
 @[to_dual self, simp]
-/--
-theorem `toDual_le_toDual` / 定理 `toDual_le_toDual`
-
-English:
-theorem toDual_le_toDual
-  given: [LE α] {a b : α}
-  statement: toDual a <= toDual b ↔ b <= a
-  proof: .rfl
-
-@[to_dual self, simp]
-
-中文:
-定理 toDual_le_toDual
-  条件: [LE α] {a b : α}
-  结论: toDual a <= toDual b ↔ b <= a
-  证明: .rfl
-
-@[to_dual self, simp]
+/-
+**OrderDual.toDual_le_toDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：toDual_le_toDual [LE α] {a b : α} : toDual a <= toDual b ↔ b <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toDual_le_toDual [LE α] {a b : α} : toDual a <= toDual b ↔ b <= a := .rfl
+theorem toDual_le_toDual [LE α] {a b : α} : toDual a ≤ toDual b ↔ b ≤ a := .rfl
 
 @[to_dual self, simp]
-/--
-theorem `toDual_lt_toDual` / 定理 `toDual_lt_toDual`
-
-English:
-theorem toDual_lt_toDual
-  given: [LT α] {a b : α}
-  statement: toDual a < toDual b ↔ b < a
-  proof: .rfl
-
-@[to_dual self, simp]
-
-中文:
-定理 toDual_lt_toDual
-  条件: [LT α] {a b : α}
-  结论: toDual a < toDual b ↔ b < a
-  证明: .rfl
-
-@[to_dual self, simp]
+/-
+**OrderDual.toDual_lt_toDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：toDual_lt_toDual [LT α] {a b : α} : toDual a < toDual b ↔ b < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toDual_lt_toDual [LT α] {a b : α} : toDual a < toDual b ↔ b < a := .rfl
 
 @[to_dual self, simp]
-/--
-theorem `ofDual_le_ofDual` / 定理 `ofDual_le_ofDual`
-
-English:
-theorem ofDual_le_ofDual
-  given: [LE α] {a b : αᵒᵈ}
-  statement: ofDual a <= ofDual b ↔ b <= a
-  proof: .rfl
-
-@[to_dual self, simp]
-
-中文:
-定理 ofDual_le_ofDual
-  条件: [LE α] {a b : αᵒᵈ}
-  结论: ofDual a <= ofDual b ↔ b <= a
-  证明: .rfl
-
-@[to_dual self, simp]
+/-
+**OrderDual.ofDual_le_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：ofDual_le_ofDual [LE α] {a b : αᵒᵈ} : ofDual a <= ofDual b ↔ b <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ofDual_le_ofDual [LE α] {a b : αᵒᵈ} : ofDual a <= ofDual b ↔ b <= a := .rfl
+theorem ofDual_le_ofDual [LE α] {a b : αᵒᵈ} : ofDual a ≤ ofDual b ↔ b ≤ a := .rfl
 
 @[to_dual self, simp]
-/--
-theorem `ofDual_lt_ofDual` / 定理 `ofDual_lt_ofDual`
-
-English:
-theorem ofDual_lt_ofDual
-  given: [LT α] {a b : αᵒᵈ}
-  statement: ofDual a < ofDual b ↔ b < a
-  proof: .rfl
-
-@[to_dual toDual_le]
-
-中文:
-定理 ofDual_lt_ofDual
-  条件: [LT α] {a b : αᵒᵈ}
-  结论: ofDual a < ofDual b ↔ b < a
-  证明: .rfl
-
-@[to_dual toDual_le]
+/-
+**OrderDual.ofDual_lt_ofDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：ofDual_lt_ofDual [LT α] {a b : αᵒᵈ} : ofDual a < ofDual b ↔ b < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofDual_lt_ofDual [LT α] {a b : αᵒᵈ} : ofDual a < ofDual b ↔ b < a := .rfl
 
 @[to_dual toDual_le]
-/--
-theorem `le_toDual` / 定理 `le_toDual`
-
-English:
-theorem le_toDual
-  given: [LE α] {a : αᵒᵈ} {b : α}
-  statement: a <= toDual b ↔ b <= ofDual a
-  proof: .rfl
-
-@[to_dual toDual_lt]
-
-中文:
-定理 le_toDual
-  条件: [LE α] {a : αᵒᵈ} {b : α}
-  结论: a <= toDual b ↔ b <= ofDual a
-  证明: .rfl
-
-@[to_dual toDual_lt]
+/-
+**OrderDual.le_toDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：le_toDual [LE α] {a : αᵒᵈ} {b : α} : a <= toDual b ↔ b <= ofDual a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_toDual [LE α] {a : αᵒᵈ} {b : α} : a <= toDual b ↔ b <= ofDual a := .rfl
+theorem le_toDual [LE α] {a : αᵒᵈ} {b : α} : a ≤ toDual b ↔ b ≤ ofDual a := .rfl
 
 @[to_dual toDual_lt]
-/--
-theorem `lt_toDual` / 定理 `lt_toDual`
-
-English:
-theorem lt_toDual
-  given: [LT α] {a : αᵒᵈ} {b : α}
-  statement: a < toDual b ↔ b < ofDual a
-  proof: .rfl
-
-中文:
-定理 lt_toDual
-  条件: [LT α] {a : αᵒᵈ} {b : α}
-  结论: a < toDual b ↔ b < ofDual a
-  证明: .rfl
+/-
+**OrderDual.lt_toDual** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+形式化陈述：lt_toDual [LT α] {a : αᵒᵈ} {b : α} : a < toDual b ↔ b < ofDual a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_toDual [LT α] {a : αᵒᵈ} {b : α} : a < toDual b ↔ b < ofDual a := .rfl
 
 /-- Recursor for `αᵒᵈ`. -/
 @[elab_as_elim]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**OrderDual.rec** 是 Mathlib 中的一个定义，位于命名空间 `OrderDual`。
+形式化陈述：{α : Type u_1} → {motive : αᵒᵈ → Sort u_2} → ((a : α) → motive (OrderDual.
+toDual a)) → (a : αᵒᵈ) → motive a
+参数：(a : α) → motive (OrderDual.toDual a)；a : αᵒᵈ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: {motive : αᵒᵈ -> Sort*} (toDual : forall a : α, motive (toDual a))
-  body: toDual
-
-中文:
-定义 rec
-  签名: {motive : αᵒᵈ -> 类型层*} (toDual : 对任意 a : α, motive (toDual a))
-  定义体: toDual
+--- 原说明 ---
+Recursor for `αᵒᵈ`.
 -/
-protected def rec {motive : αᵒᵈ -> Sort*} (toDual : forall a : α, motive (toDual a)) :
-    forall a : αᵒᵈ, motive a := toDual
-
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: {p : αᵒᵈ -> Prop}
-  statement: (forall a, p a) ↔ forall a, p (toDual a)
-  proof: .rfl
-
-中文:
-定理 «对任意»
-  条件: {p : αᵒᵈ -> 命题}
-  结论: (对任意 a, p a) ↔ 对任意 a, p (toDual a)
-  证明: .rfl
+protected def rec {motive : αᵒᵈ → Sort*} (toDual : ∀ a : α, motive (toDual a)) :
+    ∀ a : αᵒᵈ, motive a := toDual
+/-
+**OrderDual.** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] protected theorem «forall» {p : αᵒᵈ -> Prop} : (forall a, p a) ↔ forall a, p (toDual a) := .rfl
-/--
-theorem `«exists»` / 定理 `«exists»`
-
-English:
-theorem «exists»
-  given: {p : αᵒᵈ -> Prop}
-  statement: (exists a, p a) ↔ exists a, p (toDual a)
-  proof: .rfl
-
-@[to_dual self] alias ⟨_, _root_.LE.le.dual⟩ := toDual_le_toDual
-@[to_dual self] alias ⟨_, _root_.LT.lt.dual⟩ := toDual_lt_toDual
-@[to_dual self] alias ⟨_, _root_.LE.le.ofDual⟩ := ofDual_le_ofDual
-@[to_dual self] alias ⟨_, _root_.LT.lt.ofDual⟩ := ofDual_lt_ofDual
-
-中文:
-定理 «存在»
-  条件: {p : αᵒᵈ -> 命题}
-  结论: (存在 a, p a) ↔ 存在 a, p (toDual a)
-  证明: .rfl
-
-@[to_dual self] alias ⟨_, _root_.LE.le.dual⟩ := toDual_le_toDual
-@[to_dual self] alias ⟨_, _root_.LT.lt.dual⟩ := toDual_lt_toDual
-@[to_dual self] alias ⟨_, _root_.LE.le.ofDual⟩ := ofDual_le_ofDual
-@[to_dual self] alias ⟨_, _root_.LT.lt.ofDual⟩ := ofDual_lt_ofDual
+@[simp] protected theorem «forall» {p : αᵒᵈ → Prop} : (∀ a, p a) ↔ ∀ a, p (toDual a) := .rfl
+/-
+**OrderDual.** 是 Mathlib 中的一个定理，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] protected theorem «exists» {p : αᵒᵈ -> Prop} : (exists a, p a) ↔ exists a, p (toDual a) := .rfl
+@[simp] protected theorem «exists» {p : αᵒᵈ → Prop} : (∃ a, p a) ↔ ∃ a, p (toDual a) := .rfl
 
 @[to_dual self] alias ⟨_, _root_.LE.le.dual⟩ := toDual_le_toDual
 @[to_dual self] alias ⟨_, _root_.LT.lt.dual⟩ := toDual_lt_toDual
@@ -704,47 +438,39 @@ theorem «exists»
 
 end OrderDual
 
+/-! ### `DenselyOrdered` for `OrderDual` -/
 
-/--
-Instance `OrderDual.denselyOrdered` / 实例 `OrderDual.denselyOrdered`
+/-
+**OrderDual.denselyOrdered** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：OrderDual.denselyOrdered (α : Type*) [LT α] [h : DenselyOrdered α] : Dense
+lyOrdered αᵒᵈ
+参数：α : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.symm`：∀ {a b : Prop}, a ∧ b → b ∧ a
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
 
-English:
-instance OrderDual.denselyOrdered
-  signature: (α : Type*) [LT α] [h : DenselyOrdered α]
-  body: ⟨fun _ _ ha => (@exists_between α _ h _ _ ha).imp fun _ => And.symm⟩
-
-@[simp]
-
-中文:
-实例 OrderDual.denselyOrdered
-  签名: (α : 类型) [LT α] [h : 稠密序 α]
-  定义体: ⟨fun _ _ ha => (@exists_between α _ h _ _ ha).imp fun _ => And.symm⟩
-
-@[simp]
-
-Depends on / 依赖: And.symm, exists_between
+--- 原说明 ---
+### `DenselyOrdered` for `OrderDual`
 -/
 instance OrderDual.denselyOrdered (α : Type*) [LT α] [h : DenselyOrdered α] :
     DenselyOrdered αᵒᵈ :=
-  ⟨fun _ _ ha => (@exists_between α _ h _ _ ha).imp fun _ => And.symm⟩
+  ⟨fun _ _ ha ↦ (@exists_between α _ h _ _ ha).imp fun _ ↦ And.symm⟩
 
 @[simp]
-/--
-theorem `denselyOrdered_orderDual` / 定理 `denselyOrdered_orderDual`
-
-English:
-theorem denselyOrdered_orderDual
-  given: [LT α]
-  statement: DenselyOrdered αᵒᵈ ↔ DenselyOrdered α
-  proof: ⟨by convert! @OrderDual.denselyOrdered αᵒᵈ _, @OrderDual.denselyOrdered α _⟩
-
-中文:
-定理 denselyOrdered_orderDual
-  条件: [LT α]
-  结论: 稠密序 αᵒᵈ ↔ 稠密序 α
-  证明: ⟨by convert! @OrderDual.denselyOrdered αᵒᵈ _, @OrderDual.denselyOrdered α _⟩
-
-Depends on / 依赖: OrderDual, OrderDual.denselyOrdered, convert, denselyOrdered
+/-
+**denselyOrdered_orderDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：denselyOrdered_orderDual [LT α] : DenselyOrdered αᵒᵈ ↔ DenselyOrdered α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
 -/
 theorem denselyOrdered_orderDual [LT α] : DenselyOrdered αᵒᵈ ↔ DenselyOrdered α :=
   ⟨by convert! @OrderDual.denselyOrdered αᵒᵈ _, @OrderDual.denselyOrdered α _⟩
@@ -755,226 +481,141 @@ namespace Equiv
 
 variable {β : Type*} (e : α ≃ β)
 
-/--
-Definition of `top` / `top` 的定义
+/-- Transfer `Top` across an `Equiv`. -/
+/-
+**Equiv.top** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Top β] → Top α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation top
-  signature: [Top β]
-  body: e.symm ⊤
-
-中文:
-缩写 top
-  签名: [顶元素 β]
-  定义体: e.symm ⊤
+--- 原说明 ---
+Transfer `Top` across an `Equiv`.
 -/
 protected abbrev top [Top β] : Top α where
   top := e.symm ⊤
-
-/--
-lemma `top_def` / 引理 `top_def`
-
-English:
-lemma top_def
-  given: [Top β]
-  proof: e.top
-    ⊤ = e.symm ⊤ := rfl
-
-中文:
-引理 top_def
-  条件: [顶元素 β]
-  证明: e.top
-    ⊤ = e.symm ⊤ := rfl
-
-Depends on / 依赖: e.top
+/-
+**Equiv.top_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：top_def [Top β] : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma top_def [Top β] :
     letI := e.top
     ⊤ = e.symm ⊤ := rfl
 
-/--
-Definition of `bot` / `bot` 的定义
+/-- Transfer `Bot` across an `Equiv`. -/
+/-
+**Equiv.bot** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Bot β] → Bot α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation bot
-  signature: [Bot β]
-  body: e.symm ⊥
-
-中文:
-缩写 bot
-  签名: [底元素 β]
-  定义体: e.symm ⊥
+--- 原说明 ---
+Transfer `Bot` across an `Equiv`.
 -/
 protected abbrev bot [Bot β] : Bot α where
   bot := e.symm ⊥
-
-/--
-lemma `bot_def` / 引理 `bot_def`
-
-English:
-lemma bot_def
-  given: [Bot β]
-  proof: e.bot
-    ⊥ = e.symm ⊥ := rfl
-
-中文:
-引理 bot_def
-  条件: [底元素 β]
-  证明: e.bot
-    ⊥ = e.symm ⊥ := rfl
-
-Depends on / 依赖: e.bot
+/-
+**Equiv.bot_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：bot_def [Bot β] : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma bot_def [Bot β] :
     letI := e.bot
     ⊥ = e.symm ⊥ := rfl
 
-/--
-Definition of `compl` / `compl` 的定义
+/-- Transfer `Compl` across an `Equiv`. -/
+/-
+**Equiv.compl** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Compl β] → Compl α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation compl
-  signature: [Compl β]
-  body: e.symm (e a)ᶜ
-
-中文:
-缩写 compl
-  签名: [补集 β]
-  定义体: e.symm (e a)ᶜ
+--- 原说明 ---
+Transfer `Compl` across an `Equiv`.
 -/
 protected abbrev compl [Compl β] : Compl α where
   compl a := e.symm (e a)ᶜ
-
-/--
-lemma `compl_def` / 引理 `compl_def`
-
-English:
-lemma compl_def
-  given: [Compl β] (a : α)
-  proof: e.compl
-    aᶜ = e.symm (e a)ᶜ := rfl
-
-中文:
-引理 compl_def
-  条件: [补集 β] (a : α)
-  证明: e.compl
-    aᶜ = e.symm (e a)ᶜ := rfl
-
-Depends on / 依赖: e.compl
+/-
+**Equiv.compl_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：compl_def [Compl β] (a : α) : letI
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma compl_def [Compl β] (a : α) :
     letI := e.compl
     aᶜ = e.symm (e a)ᶜ := rfl
 
-/--
-Definition of `sdiff` / `sdiff` 的定义
+/-- Transfer `SDiff` across an `Equiv`. -/
+/-
+**Equiv.sdiff** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [SDiff β] → SDiff α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation sdiff
-  signature: [SDiff β]
-  body: e.symm (e a \ e b)
-
-中文:
-缩写 sdiff
-  签名: [对称差 β]
-  定义体: e.symm (e a \ e b)
+--- 原说明 ---
+Transfer `SDiff` across an `Equiv`.
 -/
 protected abbrev sdiff [SDiff β] : SDiff α where
   sdiff a b := e.symm (e a \ e b)
-
-/--
-lemma `sdiff_def` / 引理 `sdiff_def`
-
-English:
-lemma sdiff_def
-  given: [SDiff β] (a b : α)
-  proof: e.sdiff
-    a \ b = e.symm (e a \ e b) := rfl
-
-中文:
-引理 sdiff_def
-  条件: [对称差 β] (a b : α)
-  证明: e.sdiff
-    a \ b = e.symm (e a \ e b) := rfl
-
-Depends on / 依赖: e.sdiff
+/-
+**Equiv.sdiff_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：sdiff_def [SDiff β] (a b : α) : letI
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sdiff_def [SDiff β] (a b : α) :
     letI := e.sdiff
     a \ b = e.symm (e a \ e b) := rfl
 
-/--
-Definition of `himp` / `himp` 的定义
+/-- Transfer `HImp` across an `Equiv`. -/
+/-
+**Equiv.himp** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [HImp β] → HImp α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation himp
-  signature: [HImp β]
-  body: e.symm (e a ⇨ e b)
-
-中文:
-缩写 himp
-  签名: [HImp β]
-  定义体: e.symm (e a ⇨ e b)
+--- 原说明 ---
+Transfer `HImp` across an `Equiv`.
 -/
 protected abbrev himp [HImp β] : HImp α where
   himp a b := e.symm (e a ⇨ e b)
-
-/--
-lemma `himp_def` / 引理 `himp_def`
-
-English:
-lemma himp_def
-  given: [HImp β] (a b : α)
-  proof: e.himp
-    a ⇨ b = e.symm (e a ⇨ e b) := rfl
-
-中文:
-引理 himp_def
-  条件: [HImp β] (a b : α)
-  证明: e.himp
-    a ⇨ b = e.symm (e a ⇨ e b) := rfl
-
-Depends on / 依赖: e.himp
+/-
+**Equiv.himp_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：himp_def [HImp β] (a b : α) : letI
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma himp_def [HImp β] (a b : α) :
     letI := e.himp
     a ⇨ b = e.symm (e a ⇨ e b) := rfl
 
-/--
-Definition of `hnot` / `hnot` 的定义
+/-- Transfer `HNot` across an `Equiv`. -/
+/-
+**Equiv.hnot** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [HNot β] → HNot α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation hnot
-  signature: [HNot β]
-  body: e.symm (￢e a)
-
-中文:
-缩写 hnot
-  签名: [HNot β]
-  定义体: e.symm (￢e a)
+--- 原说明 ---
+Transfer `HNot` across an `Equiv`.
 -/
 protected abbrev hnot [HNot β] : HNot α where
   hnot a := e.symm (￢e a)
-
-/--
-lemma `hnot_def` / 引理 `hnot_def`
-
-English:
-lemma hnot_def
-  given: [HNot β] (a : α)
-  proof: e.hnot
-    ￢a = e.symm (￢e a) := rfl
-
-中文:
-引理 hnot_def
-  条件: [HNot β] (a : α)
-  证明: e.hnot
-    ￢a = e.symm (￢e a) := rfl
-
-Depends on / 依赖: e.hnot
+/-
+**Equiv.hnot_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：hnot_def [HNot β] (a : α) : letI
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hnot_def [HNot β] (a : α) :
     letI := e.hnot
     ￢a = e.symm (￢e a) := rfl
 
 end Equiv
+

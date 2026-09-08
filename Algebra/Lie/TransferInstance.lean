@@ -27,26 +27,15 @@ section
 
 variable {R M L : Type*} [CommRing R] [AddCommGroup M] [Module R M] [LieRing L] [LieAlgebra R L]
 
-/--
-Definition of `AddEquiv.lieRing` / `AddEquiv.lieRing` 的定义
+/-- Transfer `LieRing` across an `AddEquiv` -/
+/-
+**AddEquiv.lieRing** 是 Mathlib 中的一个定义，位于命名空间 `AddEquiv`。
+形式化陈述：{M : Type u_2} → {L : Type u_3} → [inst : AddCommGroup M] → [inst_1 : LieR
+ing L] → M ≃+ L → LieRing M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation AddEquiv.lieRing
-  signature: (e : M ≃+ L)
-  body: e.symm ⁅e x, e y⁆
-  add_lie _ _ _ := by simp
-  lie_add _ _ _ := by simp
-  lie_self _ := by simp
-  leibniz_lie _ _ _ := by simp
-
-中文:
-缩写 加法等价.lieRing
-  签名: (e : M ≃+ L)
-  定义体: e.symm ⁅e x, e y⁆
-  add_lie _ _ _ := by simp
-  lie_add _ _ _ := by simp
-  lie_self _ := by simp
-  leibniz_lie _ _ _ := by simp
+--- 原说明 ---
+Transfer `LieRing` across an `AddEquiv`
 -/
 protected abbrev AddEquiv.lieRing (e : M ≃+ L) : LieRing M where
   bracket x y := e.symm ⁅e x, e y⁆
@@ -54,46 +43,29 @@ protected abbrev AddEquiv.lieRing (e : M ≃+ L) : LieRing M where
   lie_add _ _ _ := by simp
   lie_self _ := by simp
   leibniz_lie _ _ _ := by simp
-
-/--
-lemma `AddEquiv.bracket_def` / 引理 `AddEquiv.bracket_def`
-
-English:
-lemma AddEquiv.bracket_def
-  given: (e : M ≃+ L) (x y : M)
-  proof: e.lieRing
-    ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
-
-中文:
-引理 加法等价.bracket_def
-  条件: (e : M ≃+ L) (x y : M)
-  证明: e.lieRing
-    ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
-
-Depends on / 依赖: e.lieRing, lieRing
+/-
+**AddEquiv.bracket_def** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddEquiv.bracket_def (e : M ≃+ L) (x y : M) : letI
+参数：e : M ≃+ L；x y : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma AddEquiv.bracket_def (e : M ≃+ L) (x y : M) :
     letI := e.lieRing
     ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
 
-/--
-Definition of `LinearEquiv.lieAlgebra` / `LinearEquiv.lieAlgebra` 的定义
+/-- Transfer `LieAlgebra` across a `LinearEquiv` -/
+/-
+**LinearEquiv.lieAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     {L : Type u_3} →       [inst : Com
+mRing R] →         [inst_1 : AddCommGroup M] →           [inst_2 : _root_.Module
+ R M] →             [inst_3 : LieRing L] → [inst_4 : LieAlgebra R L] → (e : M ≃ₗ
+[R] L) → LieAlgebra R M
+参数：e : M ≃ₗ[R] L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LinearEquiv.lieAlgebra
-  signature: (e : M ≃ₗ[R] L)
-  body: e.toAddEquiv.lieRing
-    LieAlgebra R M :=
-  letI := e.toAddEquiv.lieRing
-  { lie_smul _ _ _ := by simp [AddEquiv.bracket_def] }
-
-中文:
-缩写 线性等价.lieAlgebra
-  签名: (e : M ≃ₗ[R] L)
-  定义体: e.toAddEquiv.lieRing
-    LieAlgebra R M :=
-  letI := e.toAddEquiv.lieRing
-  { lie_smul _ _ _ := by simp [AddEquiv.bracket_def] }
+--- 原说明 ---
+Transfer `LieAlgebra` across a `LinearEquiv`
 -/
 protected abbrev LinearEquiv.lieAlgebra (e : M ≃ₗ[R] L) :
     letI := e.toAddEquiv.lieRing
@@ -102,34 +74,19 @@ protected abbrev LinearEquiv.lieAlgebra (e : M ≃ₗ[R] L) :
   { lie_smul _ _ _ := by simp [AddEquiv.bracket_def] }
 
 variable (R) in
-/--
-Definition of `LinearEquiv.lieEquiv` / `LinearEquiv.lieEquiv` 的定义
+/-- An equivalence `e : M ≃ₗ[R] L` gives a Lie algebra equivalence `M ≃ₗ⁅R⁆ L` where the Lie bracket
+on `M` is the one obtained by transporting a Lie Bracket on `L` back along `e`. -/
+/-
+**LinearEquiv.lieEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LinearEquiv.lieEquiv (e : M ≃ₗ[R] L) : letI
+参数：e : M ≃ₗ[R] L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LinearEquiv.lieEquiv
-  signature: (e : M ≃ₗ[R] L)
-  body: e.toAddEquiv.lieRing
-    letI := e.lieAlgebra
-    M ≃ₗ⁅R⁆ L :=
-  letI := e.toAddEquiv.lieRing
-  letI := e.lieAlgebra
-  { e with map_lie' := by simp [AddEquiv.bracket_def] }
-
-@[simp]
-
-中文:
-定义 线性等价.lieEquiv
-  签名: (e : M ≃ₗ[R] L)
-  定义体: e.toAddEquiv.lieRing
-    letI := e.lieAlgebra
-    M ≃ₗ⁅R⁆ L :=
-  letI := e.toAddEquiv.lieRing
-  letI := e.lieAlgebra
-  { e with map_lie' := by simp [AddEquiv.bracket_def] }
-
-@[simp]
-
-Depends on / 依赖: e.toAddEquiv.lieRing, lieRing, toAddEquiv
+--- 原说明 ---
+An equivalence `e : M ≃ₗ[R] L` gives a Lie algebra equivalence `M ≃ₗ⁅R⁆ L` where
+ the Lie bracket
+on `M` is the one obtained by transporting a Lie Bracket on `L` back along `e`.
 -/
 def LinearEquiv.lieEquiv (e : M ≃ₗ[R] L) :
     letI := e.toAddEquiv.lieRing
@@ -140,45 +97,23 @@ def LinearEquiv.lieEquiv (e : M ≃ₗ[R] L) :
   { e with map_lie' := by simp [AddEquiv.bracket_def] }
 
 @[simp]
-/--
-lemma `LinearEquiv.lieEquiv_apply` / 引理 `LinearEquiv.lieEquiv_apply`
-
-English:
-lemma LinearEquiv.lieEquiv_apply
-  given: (e : M ≃ₗ[R] L) (a : M)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 线性等价.lieEquiv_apply
-  条件: (e : M ≃ₗ[R] L) (a : M)
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.lieEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LinearEquiv.lieEquiv_apply (e : M ≃ₗ[R] L) (a : M) : e.lieEquiv R a = e a
+参数：e : M ≃ₗ[R] L；a : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LinearEquiv.lieEquiv_apply (e : M ≃ₗ[R] L) (a : M) :
     e.lieEquiv R a = e a := rfl
 
 @[simp]
-/--
-lemma `LinearEquiv.lieEquiv_symm_apply` / 引理 `LinearEquiv.lieEquiv_symm_apply`
-
-English:
-lemma LinearEquiv.lieEquiv_symm_apply
-  given: (e : M ≃ₗ[R] L) (b : L)
-  proof: e.toAddEquiv.lieRing
-    letI := e.lieAlgebra
-    (e.lieEquiv R).symm b = e.symm b := rfl
-
-中文:
-引理 线性等价.lieEquiv_symm_apply
-  条件: (e : M ≃ₗ[R] L) (b : L)
-  证明: e.toAddEquiv.lieRing
-    letI := e.lieAlgebra
-    (e.lieEquiv R).symm b = e.symm b := rfl
-
-Depends on / 依赖: e.toAddEquiv.lieRing, lieRing, toAddEquiv
+/-
+**LinearEquiv.lieEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LinearEquiv.lieEquiv_symm_apply (e : M ≃ₗ[R] L) (b : L) : letI
+参数：e : M ≃ₗ[R] L；b : L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma LinearEquiv.lieEquiv_symm_apply (e : M ≃ₗ[R] L) (b : L) :
     letI := e.toAddEquiv.lieRing
@@ -191,67 +126,39 @@ namespace Equiv
 
 variable {R L' L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L] (e : L' ≃ L)
 
-/--
-Definition of `lieRing` / `lieRing` 的定义
+/-- Transfer `LieRing` across an `Equiv` -/
+/-
+**Equiv.lieRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{L' : Type u_2} → {L : Type u_3} → [LieRing L] → L' ≃ L → LieRing L'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lieRing
-  signature: : LieRing L'
-  body: letI := e.addCommGroup
-  e.addEquiv.lieRing
-
-中文:
-缩写 lieRing
-  签名: : Lie环 L'
-  定义体: letI := e.addCommGroup
-  e.addEquiv.lieRing
+--- 原说明 ---
+Transfer `LieRing` across an `Equiv`
 -/
 protected abbrev lieRing : LieRing L' :=
   letI := e.addCommGroup
   e.addEquiv.lieRing
-
-/--
-lemma `bracket_def` / 引理 `bracket_def`
-
-English:
-lemma bracket_def
-  given: (x y : L')
-  proof: e.lieRing
-    ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
-
-中文:
-引理 bracket_def
-  条件: (x y : L')
-  证明: e.lieRing
-    ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
-
-Depends on / 依赖: e.lieRing, lieRing
+/-
+**Equiv.bracket_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：bracket_def (x y : L') : letI
+参数：x y : L'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma bracket_def (x y : L') :
     letI := e.lieRing
     ⁅x, y⁆ = e.symm ⁅e x, e y⁆ := rfl
 
 variable (R) in
-/--
-Definition of `lieAlgebra` / `lieAlgebra` 的定义
+/-- Transfer `LieAlgebra` across an `Equiv` -/
+/-
+**Equiv.lieAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：(R : Type u_1) →   {L' : Type u_2} →     {L : Type u_3} → [inst : CommRing
+ R] → [inst_1 : LieRing L] → [LieAlgebra R L] → (e : L' ≃ L) → LieAlgebra R L'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lieAlgebra
-  signature: :
-  body: e.lieRing
-    LieAlgebra R L' :=
-  letI := e.lieRing
-  letI := e.module R
-  { lie_smul _ _ _ := by simp [Equiv.smul_def, AddEquiv.bracket_def] }
-
-中文:
-缩写 lieAlgebra
-  签名: :
-  定义体: e.lieRing
-    LieAlgebra R L' :=
-  letI := e.lieRing
-  letI := e.module R
-  { lie_smul _ _ _ := by simp [Equiv.smul_def, AddEquiv.bracket_def] }
+--- 原说明 ---
+Transfer `LieAlgebra` across an `Equiv`
 -/
 protected abbrev lieAlgebra :
     letI := e.lieRing
@@ -261,30 +168,19 @@ protected abbrev lieAlgebra :
   { lie_smul _ _ _ := by simp [Equiv.smul_def, AddEquiv.bracket_def] }
 
 variable (R) in
-/--
-Definition of `lieEquiv` / `lieEquiv` 的定义
+/-- An equivalence `e : L' ≃ L` gives a Lie algebra equivalence `L' ≃ₗ⁅R⁆ L` where the algebraic
+structures on `L'` are obtained by transporting the structures on `L` back along `e`. -/
+/-
+**Equiv.lieEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：lieEquiv : letI
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lieEquiv
-  signature: :
-  body: e.lieRing
-    letI := e.lieAlgebra R
-    L' ≃ₗ⁅R⁆ L :=
-  letI := e.lieRing
-  letI := e.lieAlgebra R
-  { e.linearEquiv R with map_lie' {x y} := by simp [AddEquiv.bracket_def] }
-
-中文:
-定义 lieEquiv
-  签名: :
-  定义体: e.lieRing
-    letI := e.lieAlgebra R
-    L' ≃ₗ⁅R⁆ L :=
-  letI := e.lieRing
-  letI := e.lieAlgebra R
-  { e.linearEquiv R with map_lie' {x y} := by simp [AddEquiv.bracket_def] }
-
-Depends on / 依赖: e.lieRing, lieRing
+--- 原说明 ---
+An equivalence `e : L' ≃ L` gives a Lie algebra equivalence `L' ≃ₗ⁅R⁆ L` where t
+he algebraic
+structures on `L'` are obtained by transporting the structures on `L` back along
+ `e`.
 -/
 def lieEquiv :
     letI := e.lieRing
@@ -293,40 +189,22 @@ def lieEquiv :
   letI := e.lieRing
   letI := e.lieAlgebra R
   { e.linearEquiv R with map_lie' {x y} := by simp [AddEquiv.bracket_def] }
-
-/--
-lemma `lieEquiv_apply` / 引理 `lieEquiv_apply`
-
-English:
-lemma lieEquiv_apply
-  given: (a : L')
-  statement: e.lieEquiv R a = e a
-  proof: rfl
-
-中文:
-引理 lieEquiv_apply
-  条件: (a : L')
-  结论: e.lieEquiv R a = e a
-  证明: rfl
+/-
+**Equiv.lieEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {R : Type u_1} {L' : Type u_2} {L : Type u_3} [inst : CommRing R] [inst_
+1 : LieRing L] [inst_2 : LieAlgebra R L]   (e : L' ≃ L) (a : L'), (Equiv.lieEqui
+v R e) a = e a
+参数：e : L' ≃ L；a : L'；Equiv.lieEquiv R e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lieEquiv_apply (a : L') : e.lieEquiv R a = e a := rfl
-
-/--
-lemma `lieEquiv_symm_apply` / 引理 `lieEquiv_symm_apply`
-
-English:
-lemma lieEquiv_symm_apply
-  given: (b : L)
-  proof: e.lieRing
-    letI := e.lieAlgebra R
-    (e.lieEquiv R).symm b = e.symm b := rfl
-
-中文:
-引理 lieEquiv_symm_apply
-  条件: (b : L)
-  证明: e.lieRing
-    letI := e.lieAlgebra R
-    (e.lieEquiv R).symm b = e.symm b := rfl
+/-
+**Equiv.lieEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {R : Type u_1} {L' : Type u_2} {L : Type u_3} [inst : CommRing R] [inst_
+1 : LieRing L] [inst_2 : LieAlgebra R L]   (e : L' ≃ L) (b : L), (Equiv.lieEquiv
+ R e).symm b = e.symm b
+参数：e : L' ≃ L；b : L；Equiv.lieEquiv R e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lieEquiv_symm_apply (b : L) :
     letI := e.lieRing
@@ -334,3 +212,4 @@ lemma lieEquiv_symm_apply
     (e.lieEquiv R).symm b = e.symm b := rfl
 
 end Equiv
+

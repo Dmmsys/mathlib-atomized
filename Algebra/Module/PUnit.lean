@@ -22,262 +22,112 @@ namespace PUnit
 variable {R S : Type*}
 
 @[to_additive]
-/--
-Instance `smul` / 实例 `smul`
-
-English:
-instance smul
-  signature: : SMul R PUnit
-  body: ⟨fun _ _ => unit⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 smul
-  签名: : 标量乘法 R 命题单元
-  定义体: ⟨fun _ _ => unit⟩
-
-@[to_additive (attr := simp)]
+/-
+**PUnit.smul** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：smul : SMul R PUnit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smul : SMul R PUnit :=
   ⟨fun _ _ => unit⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_eq` / 定理 `smul_eq`
-
-English:
-theorem smul_eq
-  given: {R : Type*} (y : PUnit) (r : R)
-  statement: r • y = unit
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 smul_eq
-  条件: {R : 类型} (y : 命题单元) (r : R)
-  结论: r • y = unit
-  证明: rfl
-
-@[to_additive]
+/-
+**PUnit.smul_eq** 是 Mathlib 中的一个定理，位于命名空间 `PUnit`。
+形式化陈述：smul_eq {R : Type*} (y : PUnit) (r : R) : r • y = unit
+参数：y : PUnit；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_eq {R : Type*} (y : PUnit) (r : R) : r • y = unit :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsCentralScalar R PUnit
-  body: ⟨fun _ _ => rfl⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 中心标量 R 命题单元
-  定义体: ⟨fun _ _ => rfl⟩
-
-@[to_additive]
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsCentralScalar R PUnit :=
   ⟨fun _ _ => rfl⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulCommClass R S PUnit
-  body: ⟨fun _ _ _ => rfl⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 标量交换类 R S 命题单元
-  定义体: ⟨fun _ _ _ => rfl⟩
-
-@[to_additive]
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulCommClass R S PUnit :=
   ⟨fun _ _ _ => rfl⟩
 
 @[to_additive]
-/--
-Instance `instIsScalarTowerOfSMul` / 实例 `instIsScalarTowerOfSMul`
-
-English:
-instance instIsScalarTowerOfSMul
-  signature: [SMul R S]
-  body: ⟨fun _ _ _ => rfl⟩
-
-中文:
-实例 instIsScalarTowerOfSMul
-  签名: [标量乘法 R S]
-  定义体: ⟨fun _ _ _ => rfl⟩
+/-
+**PUnit.instIsScalarTowerOfSMul** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：instIsScalarTowerOfSMul [SMul R S] : IsScalarTower R S PUnit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIsScalarTowerOfSMul [SMul R S] : IsScalarTower R S PUnit :=
   ⟨fun _ _ _ => rfl⟩
-
-/--
-Instance `smulWithZero` / 实例 `smulWithZero`
-
-English:
-instance smulWithZero
-  signature: [Zero R]
-  body: PUnit.smul
-  smul_zero := by subsingleton
-  zero_smul := by subsingleton
-
-中文:
-实例 smulWithZero
-  签名: [零 R]
-  定义体: PUnit.smul
-  smul_zero := by subsingleton
-  zero_smul := by subsingleton
-
-Depends on / 依赖: PUnit.smul
+/-
+**PUnit.smulWithZero** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：smulWithZero [Zero R] : SMulWithZero R PUnit where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulWithZero [Zero R] : SMulWithZero R PUnit where
   __ := PUnit.smul
   smul_zero := by subsingleton
   zero_smul := by subsingleton
-
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: [Monoid R]
-  body: PUnit.smul
-  one_smul := by subsingleton
-  mul_smul := by subsingleton
-
-中文:
-实例 mulAction
-  签名: [幺半群 R]
-  定义体: PUnit.smul
-  one_smul := by subsingleton
-  mul_smul := by subsingleton
-
-Depends on / 依赖: PUnit.smul
+/-
+**PUnit.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：mulAction [Monoid R] : MulAction R PUnit where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction [Monoid R] : MulAction R PUnit where
   __ := PUnit.smul
   one_smul := by subsingleton
   mul_smul := by subsingleton
-
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
-
-English:
-instance distribMulAction
-  signature: [Monoid R]
-  body: PUnit.mulAction
-  smul_zero := by subsingleton
-  smul_add := by subsingleton
-
-中文:
-实例 distribMulAction
-  签名: [幺半群 R]
-  定义体: PUnit.mulAction
-  smul_zero := by subsingleton
-  smul_add := by subsingleton
-
-Depends on / 依赖: PUnit.mulAction, mulAction
+/-
+**PUnit.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：distribMulAction [Monoid R] : DistribMulAction R PUnit where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction [Monoid R] : DistribMulAction R PUnit where
   __ := PUnit.mulAction
   smul_zero := by subsingleton
   smul_add := by subsingleton
-
-/--
-Instance `mulDistribMulAction` / 实例 `mulDistribMulAction`
-
-English:
-instance mulDistribMulAction
-  signature: [Monoid R]
-  body: PUnit.mulAction
-  smul_mul := by subsingleton
-  smul_one := by subsingleton
-
-中文:
-实例 mulDistribMulAction
-  签名: [幺半群 R]
-  定义体: PUnit.mulAction
-  smul_mul := by subsingleton
-  smul_one := by subsingleton
-
-Depends on / 依赖: PUnit.mulAction, mulAction
+/-
+**PUnit.mulDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：mulDistribMulAction [Monoid R] : MulDistribMulAction R PUnit where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulDistribMulAction [Monoid R] : MulDistribMulAction R PUnit where
   __ := PUnit.mulAction
   smul_mul := by subsingleton
   smul_one := by subsingleton
-
-/--
-Instance `mulSemiringAction` / 实例 `mulSemiringAction`
-
-English:
-instance mulSemiringAction
-  signature: [Semiring R]
-  body: { PUnit.distribMulAction, PUnit.mulDistribMulAction with }
-
-中文:
-实例 mulSemiringAction
-  签名: [半环 R]
-  定义体: { PUnit.distribMulAction, PUnit.mulDistribMulAction with }
-
-Depends on / 依赖: PUnit.distribMulAction, PUnit.mulDistribMulAction, distribMulAction, mulDistribMulAction
+/-
+**PUnit.mulSemiringAction** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：mulSemiringAction [Semiring R] : MulSemiringAction R PUnit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulSemiringAction [Semiring R] : MulSemiringAction R PUnit :=
   { PUnit.distribMulAction, PUnit.mulDistribMulAction with }
-
-/--
-Instance `mulActionWithZero` / 实例 `mulActionWithZero`
-
-English:
-instance mulActionWithZero
-  signature: [MonoidWithZero R]
-  body: { PUnit.mulAction, PUnit.smulWithZero with }
-
-中文:
-实例 mulActionWithZero
-  签名: [带零幺半群 R]
-  定义体: { PUnit.mulAction, PUnit.smulWithZero with }
-
-Depends on / 依赖: PUnit.mulAction, PUnit.smulWithZero, mulAction, smulWithZero
+/-
+**PUnit.mulActionWithZero** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：mulActionWithZero [MonoidWithZero R] : MulActionWithZero R PUnit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulActionWithZero [MonoidWithZero R] : MulActionWithZero R PUnit :=
   { PUnit.mulAction, PUnit.smulWithZero with }
-
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: [Semiring R]
-  body: PUnit.distribMulAction
-  add_smul := by subsingleton
-  zero_smul := by subsingleton
-
-@[to_additive]
-
-中文:
-实例 module
-  签名: [半环 R]
-  定义体: PUnit.distribMulAction
-  add_smul := by subsingleton
-  zero_smul := by subsingleton
-
-@[to_additive]
-
-Depends on / 依赖: PUnit.distribMulAction, distribMulAction
+/-
+**PUnit.module** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：module [Semiring R] : Module R PUnit where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module [Semiring R] : Module R PUnit where
   __ := PUnit.distribMulAction
@@ -285,128 +135,53 @@ instance module [Semiring R] : Module R PUnit where
   zero_smul := by subsingleton
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul PUnit R
-  body: x
-
-中文:
-实例 :
-  签名: 标量乘法 命题单元 R
-  定义体: x
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul PUnit R where smul _ x := x
 
 /-- The one-element type acts trivially on every element. -/
 @[to_additive (attr := simp)]
-/--
-lemma `smul_eq'` / 引理 `smul_eq'`
+/-
+**PUnit.smul_eq'** 是 Mathlib 中的一个引理，位于命名空间 `PUnit`。
+形式化陈述：smul_eq' (r : PUnit) (a : R) : r • a = a
+参数：r : PUnit；a : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma smul_eq'
-  given: (r : PUnit) (a : R)
-  statement: r • a = a
-  proof: rfl
-
-中文:
-引理 smul_eq'
-  条件: (r : 命题单元) (a : R)
-  结论: r • a = a
-  证明: rfl
+--- 原说明 ---
+The one-element type acts trivially on every element.
 -/
 lemma smul_eq' (r : PUnit) (a : R) : r • a = a := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R S] : SMulCommClass PUnit R S
-  body: ⟨by simp⟩
-
-中文:
-实例 [标量乘法
-  签名: R S] : 标量交换类 命题单元 R S
-  定义体: ⟨by simp⟩
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [SMul R S] : SMulCommClass PUnit R S := ⟨by simp⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R S] : IsScalarTower PUnit R S
-  body: ⟨by simp⟩
-
-中文:
-实例 [标量乘法
-  签名: R S] : 标量塔 命题单元 R S
-  定义体: ⟨by simp⟩
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul R S] : IsScalarTower PUnit R S := ⟨by simp⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction PUnit R
-  body: (inferInstance : SMul PUnit R)
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-
-中文:
-实例 :
-  签名: 乘法作用 命题单元 R
-  定义体: (inferInstance : SMul PUnit R)
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction PUnit R where
   __ := (inferInstance : SMul PUnit R)
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: R] : SMulZeroClass PUnit R where
-  body: (inferInstance : SMul PUnit R)
-  smul_zero _ := rfl
-
-中文:
-实例 [零
-  签名: R] : SMulZero类 命题单元 R where
-  定义体: (inferInstance : SMul PUnit R)
-  smul_zero _ := rfl
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero R] : SMulZeroClass PUnit R where
   __ := (inferInstance : SMul PUnit R)
   smul_zero _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: R] : DistribMulAction PUnit R where
-  body: (inferInstance : MulAction PUnit R)
-  __ := (inferInstance : SMulZeroClass PUnit R)
-  smul_add _ _ _ := rfl
-
-中文:
-实例 [加法幺半群
-  签名: R] : 分配乘法作用 命题单元 R where
-  定义体: (inferInstance : MulAction PUnit R)
-  __ := (inferInstance : SMulZeroClass PUnit R)
-  smul_add _ _ _ := rfl
-
-Depends on / 依赖: MulAction
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid R] : DistribMulAction PUnit R where
   __ := (inferInstance : MulAction PUnit R)
@@ -414,3 +189,4 @@ instance [AddMonoid R] : DistribMulAction PUnit R where
   smul_add _ _ _ := rfl
 
 end PUnit
+

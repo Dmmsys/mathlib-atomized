@@ -19,73 +19,55 @@ open Lean Meta
 
 namespace Lean.MVarId
 
-/--
-Definition of `«let»` / `«let»` 的定义
+/-- Add the hypothesis `h : t`, given `v : t`, and return the new `FVarId`. -/
+/-
+**Lean.MVarId.** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MVarId`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition «let»
-  signature: (g : MVarId) (h : Name) (v : Expr) (t : Option Expr := none)
-  body: do
-  (← g.define h (← t.getDM (inferType v)) v).intro1P
-
-中文:
-定义 «let»
-  签名: (g : MVarId) (h : Name) (v : Expr) (t : 选项类型 Expr := none)
-  定义体: do
-  (← g.define h (← t.getDM (inferType v)) v).intro1P
+--- 原说明 ---
+Add the hypothesis `h : t`, given `v : t`, and return the new `FVarId`.
 -/
 def «let» (g : MVarId) (h : Name) (v : Expr) (t : Option Expr := none) :
     MetaM (FVarId × MVarId) := do
   (← g.define h (← t.getDM (inferType v)) v).intro1P
 
-/--
-Definition of `existsi` / `existsi` 的定义
+/-- Has the effect of `refine ⟨e₁,e₂,⋯, ?_⟩`.
+-/
+/-
+**Lean.MVarId.existsi** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MVarId`。
+形式化陈述：existsi (mvar : MVarId) (es : List Expr) : MetaM MVarId
+参数：mvar : MVarId；es : List Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition existsi
-  signature: (mvar : MVarId) (es : List Expr)
-  body: do
-  es.foldlM (fun mv e => do
-let (subgoals,_) ← Elab.Term.TermElabM.run Elab.Tactic.run mv do
-        Elab.Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
-      let [sg1, sg2] := subgoals | throwError "expected two subgoals"
-      sg1.assign e
-      pure sg2)
-    mvar
-
-中文:
-定义 存在i
-  签名: (mvar : MVarId) (es : 列表 Expr)
-  定义体: do
-  es.foldlM (fun mv e => do
-let (subgoals,_) ← Elab.Term.TermElabM.run Elab.Tactic.run mv do
-        Elab.Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
-      let [sg1, sg2] := subgoals | throwError "expected two subgoals"
-      sg1.assign e
-      pure sg2)
-    mvar
+--- 原说明 ---
+Has the effect of `refine ⟨e₁,e₂,⋯, ?_⟩`.
 -/
 def existsi (mvar : MVarId) (es : List Expr) : MetaM MVarId := do
-  es.foldlM (fun mv e => do
-let (subgoals,_) ← Elab.Term.TermElabM.run Elab.Tactic.run mv do
+  es.foldlM (fun mv e ↦ do
+      let (subgoals,_) ← Elab.Term.TermElabM.run <| Elab.Tactic.run mv do
         Elab.Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
       let [sg1, sg2] := subgoals | throwError "expected two subgoals"
       sg1.assign e
       pure sg2)
     mvar
 
-/--
-Definition of `intros!` / `intros!` 的定义
+/-- Applies `intro` repeatedly until it fails. We use this instead of
+`Lean.MVarId.intros` to allowing unfolding.
+For example, if we want to do introductions for propositions like `¬p`,
+the `¬` needs to be unfolded into `→ False`, and `intros` does not do such unfolding. -/
+/-
+**Lean.MVarId.intros** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MVarId`。
+形式化陈述：MVarId → MetaM (Array FVarId × MVarId)
+参数：Array FVarId × MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition intros!
-  signature: (mvarId : MVarId)
-  body: run #[] mvarId
-
-中文:
-定义 intros!
-  签名: (mvarId : MVarId)
-  定义体: run #[] mvarId
+--- 原说明 ---
+Applies `intro` repeatedly until it fails. We use this instead of
+`Lean.MVarId.intros` to allowing unfolding.
+For example, if we want to do introductions for propositions like `¬p`,
+the `¬` needs to be unfolded into `→ False`, and `intros` does not do such unfol
+ding.
 -/
 partial def intros! (mvarId : MVarId) : MetaM (Array FVarId × MVarId) :=
   run #[] mvarId
@@ -102,20 +84,16 @@ end Lean.MVarId
 
 namespace Lean.Meta
 
-/--
-Definition of `_root_.Lean.MVarId.getType''` / `_root_.Lean.MVarId.getType''` 的定义
+/-- Get the type the given metavariable after instantiating metavariables and cleaning up
+annotations. -/
+/-
+**Lean.Meta._root_.Lean.MVarId.getType''** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Lean.MVarId.getType''
-  signature: (mvarId : MVarId)
-  body: return (← instantiateMVars (← mvarId.getType)).cleanupAnnotations
-
-中文:
-定义 _root_.Lean.MVarId.getType''
-  签名: (mvarId : MVarId)
-  定义体: return (← instantiateMVars (← mvarId.getType)).cleanupAnnotations
-
-Depends on / 依赖: cleanupAnnotations, getType, instantiateMVars, mvarId, mvarId.getType, return
+--- 原说明 ---
+Get the type the given metavariable after instantiating metavariables and cleani
+ng up
+annotations.
 -/
 def _root_.Lean.MVarId.getType'' (mvarId : MVarId) : MetaM Expr :=
   return (← instantiateMVars (← mvarId.getType)).cleanupAnnotations
@@ -124,115 +102,45 @@ end Lean.Meta
 
 namespace Lean.Elab.Tactic
 
+/-- Analogue of `liftMetaTactic` for tactics that return a single goal. -/
 -- I'd prefer to call that `liftMetaTactic1`,
 -- but that is taken in core by a function that lifts a `tac : MVarId → MetaM (Option MVarId)`.
-/--
-Definition of `liftMetaTactic'` / `liftMetaTactic'` 的定义
-
-English:
-definition liftMetaTactic'
-  signature: (tac : MVarId -> MetaM MVarId)
-  body: liftMetaTactic fun g => do pure [← tac g]
-
-中文:
-定义 liftMetaTactic'
-  签名: (tac : MVarId -> MetaM MVarId)
-  定义体: liftMetaTactic fun g => do pure [← tac g]
-
-Depends on / 依赖: liftMetaTactic
+/-
+**Lean.Elab.Tactic.liftMetaTactic'** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：liftMetaTactic' (tac : MVarId -> MetaM MVarId) : TacticM Unit
+参数：tac : MVarId -> MetaM MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def liftMetaTactic' (tac : MVarId -> MetaM MVarId) : TacticM Unit :=
+def liftMetaTactic' (tac : MVarId → MetaM MVarId) : TacticM Unit :=
   liftMetaTactic fun g => do pure [← tac g]
 
 variable {α : Type}
-
-/--
-Definition of `TacticM.runCore` / `TacticM.runCore` 的定义
-
-English:
-definition TacticM.runCore
-  signature: (x : TacticM α) (ctx : Context) (s : State)
-  body: .run s x ctx
-
-中文:
-定义 TacticM.runCore
-  签名: (x : TacticM α) (ctx : 余ntext) (s : State)
-  定义体: .run s x ctx
+/-
+**Lean.Elab.Tactic.TacticM.runCore** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[inline] private def TacticM.runCore (x : TacticM α) (ctx : Context) (s : State) :
     TermElabM (α × State) :=
-.run s x ctx
-
-/--
-Definition of `TacticM.runCore'` / `TacticM.runCore'` 的定义
-
-English:
-definition TacticM.runCore'
-  signature: (x : TacticM α) (ctx : Context) (s : State)
-  body: Prod.fst < > x.runCore ctx s
-
-中文:
-定义 TacticM.runCore'
-  签名: (x : TacticM α) (ctx : 余ntext) (s : State)
-  定义体: Prod.fst < > x.runCore ctx s
+  x ctx |>.run s
+/-
+**Lean.Elab.Tactic.TacticM.runCore'** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[inline] private def TacticM.runCore' (x : TacticM α) (ctx : Context) (s : State) : TermElabM α :=
-Prod.fst < > x.runCore ctx s
+  Prod.fst <$> x.runCore ctx s
 
+/-- Copy of `Lean.Elab.Tactic.run` that can return a value. -/
 -- We need this because Lean 4 core only provides `TacticM` functions for building simp contexts,
 -- making it quite painful to call `simp` from `MetaM`.
-/--
-Definition of `run_for` / `run_for` 的定义
-
-English:
-definition run_for
-  signature: (mvarId : MVarId) (x : TacticM α)
-  body: mvarId.withContext do
-    let pendingMVarsSaved := (← get).pendingMVars
-    modify fun s => { s with pendingMVars := [] }
-    let aux : TacticM (Option α × List MVarId) :=
-      /- Important: the following `try` does not backtrack the state.
-          This is intentional because we don't want to backtrack the error message
-          when we catch the "abort internal exception"
-          We must define `run` here because we define `MonadExcept` instance for `TacticM` -/
-      try
-        let a ← x
-        pure (a, ← getUnsolvedGoals)
-      catch ex =>
-        if isAbortTacticException ex then
-          pure (none, ← getUnsolvedGoals)
-        else
-          throw ex
-    try
-      aux.runCore' { elaborator := .anonymous } { goals := [mvarId] }
-    finally
-      modify fun s => { s with pendingMVars := pendingMVarsSaved }
-
-中文:
-定义 run_for
-  签名: (mvarId : MVarId) (x : TacticM α)
-  定义体: mvarId.withContext do
-    let pendingMVarsSaved := (← get).pendingMVars
-    modify fun s => { s with pendingMVars := [] }
-    let aux : TacticM (Option α × List MVarId) :=
-      /- Important: the following `try` does not backtrack the state.
-          This is intentional because we don't want to backtrack the error message
-          when we catch the "abort internal exception"
-          We must define `run` here because we define `MonadExcept` instance for `TacticM` -/
-      try
-        let a ← x
-        pure (a, ← getUnsolvedGoals)
-      catch ex =>
-        if isAbortTacticException ex then
-          pure (none, ← getUnsolvedGoals)
-        else
-          throw ex
-    try
-      aux.runCore' { elaborator := .anonymous } { goals := [mvarId] }
-    finally
-      modify fun s => { s with pendingMVars := pendingMVarsSaved }
-
-Depends on / 依赖: MVarId, TacticM, modify, mvarId, mvarId.withContext, pendingMVars, pendingMVarsSaved, withContext
+/-
+**Lean.Elab.Tactic.run_for** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：run_for (mvarId : MVarId) (x : TacticM α) : TermElabM (Option α × List MVa
+rId)
+参数：mvarId : MVarId；x : TacticM α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def run_for (mvarId : MVarId) (x : TacticM α) : TermElabM (Option α × List MVarId) :=
   mvarId.withContext do
@@ -257,3 +165,4 @@ def run_for (mvarId : MVarId) (x : TacticM α) : TermElabM (Option α × List MV
       modify fun s => { s with pendingMVars := pendingMVarsSaved }
 
 end Lean.Elab.Tactic
+

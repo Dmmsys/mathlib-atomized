@@ -48,173 +48,187 @@ public section
 open Set Filter
 open scoped ContDiff
 
-/--
-Definition of `AbsolutelyMonotoneOn` / `AbsolutelyMonotoneOn` 的定义
+/-- A function `f : ℝ → ℝ` is **absolutely monotone on a set `s`** if, heuristically, all
+iterated derivatives of `f` on `s` are nonnegative. For technical reasons related to unique
+differentiability, the precise definition is phrased as the existence of a Taylor series for
+`f` on `s` whose `n`th term, evaluated at the all-ones tuple, is nonnegative for every `n` and
+every `x ∈ s`. See `AbsolutelyMonotoneOn.iff_iteratedDerivWithin_nonneg` for the equivalence
+under `UniqueDiffOn`. -/
+/-
+**AbsolutelyMonotoneOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AbsolutelyMonotoneOn (f : Real -> Real) (s : Set Real) : Prop
+参数：f : Real -> Real；s : Set Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AbsolutelyMonotoneOn
-  signature: (f : Real -> Real) (s : Set Real)
-  body: exists p : Real -> FormalMultilinearSeries Real Real Real,
-    HasFTaylorSeriesUpToOn ∞ f p s ∧
-    forall (n : Nat) ⦃x : Real⦄, x in s -> 0 <= p x n fun _ => (1 : Real)
-
-中文:
-定义 AbsolutelyMonotoneOn
-  签名: (f : 实数 -> 实数) (s : 集合 实数)
-  定义体: exists p : Real -> FormalMultilinearSeries Real Real Real,
-    HasFTaylorSeriesUpToOn ∞ f p s ∧
-    forall (n : Nat) ⦃x : Real⦄, x in s -> 0 <= p x n fun _ => (1 : Real)
-
-Depends on / 依赖: FormalMultilinearSeries, HasFTaylorSeriesUpToOn
+--- 原说明 ---
+A function `f : ℝ → ℝ` is **absolutely monotone on a set `s`** if, heuristically
+, all
+iterated derivatives of `f` on `s` are nonnegative. For technical reasons relate
+d to unique
+differentiability, the precise definition is phrased as the existence of a Taylo
+r series for
+`f` on `s` whose `n`th term, evaluated at the all-ones tuple, is nonnegative for
+ every `n` and
+every `x ∈ s`. See `AbsolutelyMonotoneOn.iff_iteratedDerivWithin_nonneg` for the
+ equivalence
+under `UniqueDiffOn`.
 -/
-def AbsolutelyMonotoneOn (f : Real -> Real) (s : Set Real) : Prop :=
-  exists p : Real -> FormalMultilinearSeries Real Real Real,
+def AbsolutelyMonotoneOn (f : ℝ → ℝ) (s : Set ℝ) : Prop :=
+  ∃ p : ℝ → FormalMultilinearSeries ℝ ℝ ℝ,
     HasFTaylorSeriesUpToOn ∞ f p s ∧
-    forall (n : Nat) ⦃x : Real⦄, x in s -> 0 <= p x n fun _ => (1 : Real)
+    ∀ (n : ℕ) ⦃x : ℝ⦄, x ∈ s → 0 ≤ p x n fun _ ↦ (1 : ℝ)
 
 namespace AbsolutelyMonotoneOn
 
-variable {f g : Real -> Real} {s : Set Real}
+variable {f g : ℝ → ℝ} {s : Set ℝ}
 
-/--
-theorem `contDiffOn` / 定理 `contDiffOn`
+/-- An absolutely monotone function on `s` is `C^∞` on `s`. -/
+/-
+**AbsolutelyMonotoneOn.contDiffOn** 是 Mathlib 中的一个定理，位于命名空间 `AbsolutelyMonotoneO
+n`。
+形式化陈述：contDiffOn (hf : AbsolutelyMonotoneOn f s) : ContDiffOn Real ∞ f s
+参数：hf : AbsolutelyMonotoneOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFTaylorSeriesUpToOn.contDiffOn`：HasFTaylorSeriesUpToOn.contDiffOn {n 
+: Nat∞} {f' : E -> FormalMultilinearSeries 𝕜 E F} (hf : HasFTaylorSeriesUpToOn n
+ f f' s) : ContDiffOn 𝕜…
 
-English:
-theorem contDiffOn
-  given: (hf : AbsolutelyMonotoneOn f s)
-  statement: ContDiffOn Real ∞ f s
-  proof: by
-  obtain ⟨_, hp, _⟩ := hf
-  exact hp.contDiffOn
-
-中文:
-定理 contDiffOn
-  条件: (hf : AbsolutelyMonotoneOn f s)
-  结论: ContDiffOn 实数 ∞ f s
-  证明: by
-  obtain ⟨_, hp, _⟩ := hf
-  exact hp.contDiffOn
-
-Depends on / 依赖: contDiffOn, hp.contDiffOn
+--- 原说明 ---
+An absolutely monotone function on `s` is `C^∞` on `s`.
 -/
-theorem contDiffOn (hf : AbsolutelyMonotoneOn f s) : ContDiffOn Real ∞ f s := by
+theorem contDiffOn (hf : AbsolutelyMonotoneOn f s) : ContDiffOn ℝ ∞ f s := by
   obtain ⟨_, hp, _⟩ := hf
   exact hp.contDiffOn
 
-/--
-theorem `of_contDiff` / 定理 `of_contDiff`
+/-- A globally `C^∞` function whose iterated derivatives are nonnegative on `s` is absolutely
+monotone on `s`. The set `s` need *not* satisfy `UniqueDiffOn`. -/
+/-
+**AbsolutelyMonotoneOn.of_contDiff** 是 Mathlib 中的一个定理，位于命名空间 `AbsolutelyMonotone
+On`。
+形式化陈述：of_contDiff (hf : ContDiff Real ∞ f) (h : forall n : Nat, forall x in s, 0
+ <= iteratedDeriv n f x) : AbsolutelyMonotoneOn f s
+参数：hf : ContDiff Real ∞ f；h : forall n : Nat, forall x in s, 0 <= iteratedDeriv 
+n f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn`：HasFTaylorSeriesUpTo.hasFTa
+ylorSeriesUpToOn (h : HasFTaylorSeriesUpTo n f p) (s : Set E) : HasFTaylorSeries
+UpToOn n f p s
+· 使用定理 `ContDiff.ftaylorSeries`：ContDiff.ftaylorSeries (hf : ContDiff 𝕜 n f) : H
+asFTaylorSeriesUpTo n f (ftaylorSeries 𝕜 f)
+· 使用定理 `iteratedDeriv_eq_iteratedFDeriv`：iteratedDeriv_eq_iteratedFDeriv : itera
+tedDeriv n f x = (iteratedFDeriv 𝕜 n f x : (Fin n -> 𝕜) -> F) fun _ : Fin n => 1
 
-English:
-theorem of_contDiff
-  given: (hf : ContDiff Real ∞ f) (h : forall n : Nat, forall x in s, 0 <= iteratedDeriv n f x)
-  proof: by
-  refine ⟨ftaylorSeries Real f, (hf.ftaylorSeries).hasFTaylorSeriesUpToOn s, fun n x hx => ?_⟩
-  exact iteratedDeriv_eq_iteratedFDeriv (𝕜 := Real) (f := f) ▸ h n x hx
-
-中文:
-定理 of_contDiff
-  条件: (hf : 连续可微 实数 ∞ f) (h : 对任意 n : 自然数, 对任意 x in s, 0 <= iteratedDeriv n f x)
-  证明: by
-  refine ⟨ftaylorSeries Real f, (hf.ftaylorSeries).hasFTaylorSeriesUpToOn s, fun n x hx => ?_⟩
-  exact iteratedDeriv_eq_iteratedFDeriv (𝕜 := Real) (f := f) ▸ h n x hx
-
-Depends on / 依赖: ftaylorSeries, hasFTaylorSeriesUpToOn, hf.ftaylorSeries, iteratedDeriv_eq_iteratedFDeriv
+--- 原说明 ---
+A globally `C^∞` function whose iterated derivatives are nonnegative on `s` is a
+bsolutely
+monotone on `s`. The set `s` need *not* satisfy `UniqueDiffOn`.
 -/
-theorem of_contDiff (hf : ContDiff Real ∞ f) (h : forall n : Nat, forall x in s, 0 <= iteratedDeriv n f x) :
+theorem of_contDiff (hf : ContDiff ℝ ∞ f) (h : ∀ n : ℕ, ∀ x ∈ s, 0 ≤ iteratedDeriv n f x) :
     AbsolutelyMonotoneOn f s := by
-  refine ⟨ftaylorSeries Real f, (hf.ftaylorSeries).hasFTaylorSeriesUpToOn s, fun n x hx => ?_⟩
-  exact iteratedDeriv_eq_iteratedFDeriv (𝕜 := Real) (f := f) ▸ h n x hx
+  refine ⟨ftaylorSeries ℝ f, (hf.ftaylorSeries).hasFTaylorSeriesUpToOn s, fun n x hx => ?_⟩
+  exact iteratedDeriv_eq_iteratedFDeriv (𝕜 := ℝ) (f := f) ▸ h n x hx
 
-/--
-theorem `iteratedDerivWithin_nonneg` / 定理 `iteratedDerivWithin_nonneg`
+/-- Under `UniqueDiffOn`, a Taylor witness for an absolutely monotone function agrees with
+`iteratedDerivWithin`, so the latter is nonnegative on `s`. -/
+/-
+**AbsolutelyMonotoneOn.iteratedDerivWithin_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Abs
+olutelyMonotoneOn`。
+形式化陈述：iteratedDerivWithin_nonneg (hf : AbsolutelyMonotoneOn f s) (hs : UniqueDif
+fOn Real s) (n : Nat) {x : Real} (hx : x in s) : 0 <= iteratedDerivWithin n f s 
+x
+参数：hf : AbsolutelyMonotoneOn f s；hs : UniqueDiffOn Real s；n : Nat；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn`：HasFTayl
+orSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn (h : HasFTaylorSeriesUpTo
+On n f p s) {m : Nat} (hmn : m <= n) (hs : UniqueDif…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedDerivWithin_eq_iteratedFDerivWithin`：iteratedDerivWithin_eq_iter
+atedFDerivWithin : iteratedDerivWithin n f s x = (iteratedFDerivWithin 𝕜 n f s x
+ : (Fin n -> 𝕜) -> F) fun _ : Fin…
 
-English:
-theorem iteratedDerivWithin_nonneg
-  statement: (hf : AbsolutelyMonotoneOn f s) (hs : UniqueDiffOn Real s)
-  proof: by
-  obtain ⟨p, hp, hp_nn⟩ := hf
-  have heq : p x n = iteratedFDerivWithin Real n f s x :=
-    hp.eq_iteratedFDerivWithin_of_uniqueDiffOn (mod_cast le_top) hs hx
-  rw [iteratedDerivWithin_eq_iteratedFDerivWithin]; rw [← heq]
-  exact hp_nn n hx
-
-中文:
-定理 iteratedDerivWithin_nonneg
-  结论: (hf : AbsolutelyMonotoneOn f s) (hs : UniqueDiffOn 实数 s)
-  证明: by
-  obtain ⟨p, hp, hp_nn⟩ := hf
-  have heq : p x n = iteratedFDerivWithin Real n f s x :=
-    hp.eq_iteratedFDerivWithin_of_uniqueDiffOn (mod_cast le_top) hs hx
-  rw [iteratedDerivWithin_eq_iteratedFDerivWithin]; rw [← heq]
-  exact hp_nn n hx
-
-Depends on / 依赖: eq_iteratedFDerivWithin_of_uniqueDiffOn, hp.eq_iteratedFDerivWithin_of_uniqueDiffOn, hp_nn, iteratedDerivWithin_eq_iteratedFDerivWithin, iteratedFDerivWithin, le_top, mod_cast
+--- 原说明 ---
+Under `UniqueDiffOn`, a Taylor witness for an absolutely monotone function agree
+s with
+`iteratedDerivWithin`, so the latter is nonnegative on `s`.
 -/
-theorem iteratedDerivWithin_nonneg (hf : AbsolutelyMonotoneOn f s) (hs : UniqueDiffOn Real s)
-    (n : Nat) {x : Real} (hx : x in s) : 0 <= iteratedDerivWithin n f s x := by
+theorem iteratedDerivWithin_nonneg (hf : AbsolutelyMonotoneOn f s) (hs : UniqueDiffOn ℝ s)
+    (n : ℕ) {x : ℝ} (hx : x ∈ s) : 0 ≤ iteratedDerivWithin n f s x := by
   obtain ⟨p, hp, hp_nn⟩ := hf
-  have heq : p x n = iteratedFDerivWithin Real n f s x :=
+  have heq : p x n = iteratedFDerivWithin ℝ n f s x :=
     hp.eq_iteratedFDerivWithin_of_uniqueDiffOn (mod_cast le_top) hs hx
-  rw [iteratedDerivWithin_eq_iteratedFDerivWithin]; rw [← heq]
+  rw [iteratedDerivWithin_eq_iteratedFDerivWithin, ← heq]
   exact hp_nn n hx
 
-/--
-theorem `iff_iteratedDerivWithin_nonneg` / 定理 `iff_iteratedDerivWithin_nonneg`
+/-- Under `UniqueDiffOn`, a function is absolutely monotone on `s` iff it is `C^∞` on `s` with
+every iterated derivative within `s` nonnegative. -/
+/-
+**AbsolutelyMonotoneOn.iff_iteratedDerivWithin_nonneg** 是 Mathlib 中的一个定理，位于命名空间 
+`AbsolutelyMonotoneOn`。
+形式化陈述：iff_iteratedDerivWithin_nonneg (hs : UniqueDiffOn Real s) : AbsolutelyMono
+toneOn f s ↔ ContDiffOn Real ∞ f s ∧ forall n : Nat, forall x in s, 0 <= iterate
+dDerivWithin n f s x
+参数：hs : UniqueDiffOn Real s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbsolutelyMonotoneOn.contDiffOn`：contDiffOn (hf : AbsolutelyMonotoneOn f
+ s) : ContDiffOn Real ∞ f s
+· 使用定理 `AbsolutelyMonotoneOn.iteratedDerivWithin_nonneg`：iteratedDerivWithin_non
+neg (hf : AbsolutelyMonotoneOn f s) (hs : UniqueDiffOn Real s) (n : Nat) {x : Re
+al} (hx : x in s) : 0 <= iteratedDeri…
+· 使用定理 `ContDiffOn.ftaylorSeriesWithin`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `iteratedDerivWithin_eq_iteratedFDerivWithin`：iteratedDerivWithin_eq_iter
+atedFDerivWithin : iteratedDerivWithin n f s x = (iteratedFDerivWithin 𝕜 n f s x
+ : (Fin n -> 𝕜) -> F) fun _ : Fin…
 
-English:
-theorem iff_iteratedDerivWithin_nonneg
-  given: (hs : UniqueDiffOn Real s)
-  proof: by
-  refine ⟨fun hf => ⟨hf.contDiffOn, fun n x hx => hf.iteratedDerivWithin_nonneg hs n hx⟩, ?_⟩
-  rintro ⟨hcont, hnn⟩
-  refine ⟨ftaylorSeriesWithin Real f s, hcont.ftaylorSeriesWithin hs, fun n x hx => ?_⟩
-  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := Real) (f := f) (s := s) ▸ hnn n x hx
-
-中文:
-定理 iff_iteratedDerivWithin_nonneg
-  条件: (hs : UniqueDiffOn 实数 s)
-  证明: by
-  refine ⟨fun hf => ⟨hf.contDiffOn, fun n x hx => hf.iteratedDerivWithin_nonneg hs n hx⟩, ?_⟩
-  rintro ⟨hcont, hnn⟩
-  refine ⟨ftaylorSeriesWithin Real f s, hcont.ftaylorSeriesWithin hs, fun n x hx => ?_⟩
-  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := Real) (f := f) (s := s) ▸ hnn n x hx
-
-Depends on / 依赖: contDiffOn, ftaylorSeriesWithin, hcont.ftaylorSeriesWithin, hf.contDiffOn, hf.iteratedDerivWithin_nonneg, iteratedDerivWithin_eq_iteratedFDerivWithin, iteratedDerivWithin_nonneg
+--- 原说明 ---
+Under `UniqueDiffOn`, a function is absolutely monotone on `s` iff it is `C^∞` o
+n `s` with
+every iterated derivative within `s` nonnegative.
 -/
-theorem iff_iteratedDerivWithin_nonneg (hs : UniqueDiffOn Real s) :
+theorem iff_iteratedDerivWithin_nonneg (hs : UniqueDiffOn ℝ s) :
     AbsolutelyMonotoneOn f s ↔
-      ContDiffOn Real ∞ f s ∧ forall n : Nat, forall x in s, 0 <= iteratedDerivWithin n f s x := by
+      ContDiffOn ℝ ∞ f s ∧ ∀ n : ℕ, ∀ x ∈ s, 0 ≤ iteratedDerivWithin n f s x := by
   refine ⟨fun hf => ⟨hf.contDiffOn, fun n x hx => hf.iteratedDerivWithin_nonneg hs n hx⟩, ?_⟩
   rintro ⟨hcont, hnn⟩
-  refine ⟨ftaylorSeriesWithin Real f s, hcont.ftaylorSeriesWithin hs, fun n x hx => ?_⟩
-  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := Real) (f := f) (s := s) ▸ hnn n x hx
+  refine ⟨ftaylorSeriesWithin ℝ f s, hcont.ftaylorSeriesWithin hs, fun n x hx => ?_⟩
+  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := ℝ) (f := f) (s := s) ▸ hnn n x hx
 
 /-! ### Closure properties -/
 
-/--
-theorem `add` / 定理 `add`
+/-- The sum of two absolutely monotone functions is absolutely monotone. -/
+/-
+**AbsolutelyMonotoneOn.add** 是 Mathlib 中的一个定理，位于命名空间 `AbsolutelyMonotoneOn`。
+形式化陈述：add (hf : AbsolutelyMonotoneOn f s) (hg : AbsolutelyMonotoneOn g s) : Abso
+lutelyMonotoneOn (f + g) s
+参数：hf : AbsolutelyMonotoneOn f s；hg : AbsolutelyMonotoneOn g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFTaylorSeriesUpToOn.add`：HasFTaylorSeriesUpToOn.add {n : Nat∞ω} {q g}
+ (hf : HasFTaylorSeriesUpToOn n f p s) (hg : HasFTaylorSeriesUpToOn n g q s) : H
+asFTaylorSeriesU…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `ContinuousMultilinearMap.instIsAddApplyForall`：∀ {R : Type u} {ι : Type 
+v} {M₁ : ι → Type w₁} {M₂ : Type w₂} [inst : Semiring R]   [inst_1 : (i : ι) → A
+ddCommMonoid (M₁ i)] [inst_2 : AddC…
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 
-English:
-theorem add
-  given: (hf : AbsolutelyMonotoneOn f s) (hg : AbsolutelyMonotoneOn g s)
-  proof: by
-  obtain ⟨p, hp, hp_nn⟩ := hf
-  obtain ⟨q, hq, hq_nn⟩ := hg
-  refine ⟨p + q, hp.add hq, fun n x hx => ?_⟩
-  simp only [Pi.add_apply, FormalMultilinearSeries.add_apply, add_apply]
-  exact add_nonneg (hp_nn n hx) (hq_nn n hx)
-
-中文:
-定理 add
-  条件: (hf : AbsolutelyMonotoneOn f s) (hg : AbsolutelyMonotoneOn g s)
-  证明: by
-  obtain ⟨p, hp, hp_nn⟩ := hf
-  obtain ⟨q, hq, hq_nn⟩ := hg
-  refine ⟨p + q, hp.add hq, fun n x hx => ?_⟩
-  simp only [Pi.add_apply, FormalMultilinearSeries.add_apply, add_apply]
-  exact add_nonneg (hp_nn n hx) (hq_nn n hx)
-
-Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.add_apply, Pi.add_apply, add_apply, add_nonneg, hp.add, hp_nn, hq_nn
+--- 原说明 ---
+The sum of two absolutely monotone functions is absolutely monotone.
 -/
 theorem add (hf : AbsolutelyMonotoneOn f s) (hg : AbsolutelyMonotoneOn g s) :
     AbsolutelyMonotoneOn (f + g) s := by
@@ -224,42 +238,65 @@ theorem add (hf : AbsolutelyMonotoneOn f s) (hg : AbsolutelyMonotoneOn g s) :
   simp only [Pi.add_apply, FormalMultilinearSeries.add_apply, add_apply]
   exact add_nonneg (hp_nn n hx) (hq_nn n hx)
 
-/--
-theorem `smul` / 定理 `smul`
+/-- A nonnegative scalar multiple of an absolutely monotone function is absolutely monotone. -/
+/-
+**AbsolutelyMonotoneOn.smul** 是 Mathlib 中的一个定理，位于命名空间 `AbsolutelyMonotoneOn`。
+形式化陈述：smul {c : Real} (hf : AbsolutelyMonotoneOn f s) (hc : 0 <= c) : Absolutely
+MonotoneOn (c • f) s
+参数：hf : AbsolutelyMonotoneOn f s；hc : 0 <= c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FunLike.coe_smul`：coe_smul [SMul M F] [SMul M β] [IsSMulApply M F α β] (
+n : M) (f : F) : ↑(n • f) = n • (f : α -> β)
+· 使用定理 `ContinuousLinearMap.instIsSMulApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `HasFTaylorSeriesUpToOn.continuousLinearMap_comp`：HasFTaylorSeriesUpToOn.
+continuousLinearMap_comp {n : Nat∞ω} (g : F ->L[𝕜] G) (hf : HasFTaylorSeriesUpTo
+On n f p s) : HasFTaylorSeriesUpToOn …
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `ContinuousLinearMap.compContinuousMultilinearMap_coe`：∀ {R : Type u} {ι 
+: Type v} {M₁ : ι → Type w₁} {M₂ : Type w₂} {M₃ : Type w₃} [inst : Semiring R]  
+ [inst_1 : (i : ι) → AddCommMonoid (M₁ i)]…
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
 
-English:
-theorem smul
-  given: {c : Real} (hf : AbsolutelyMonotoneOn f s) (hc : 0 <= c)
-  proof: by
-  obtain ⟨p, hp, hp_nn⟩ := hf
-  -- Witness: post-composition by the CLM `y ↦ c * y`.
-  set T : Real ->L[Real] Real := c • ContinuousLinearMap.id Real Real with hT
-  have hcomp : (T ∘ f) = c • f := by ext x; simp [hT, smul_eq_mul]
-  refine ⟨_, hcomp ▸ hp.continuousLinearMap_comp T, fun n x hx => ?_⟩
-  simp only [ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply, hT,
-    smul_apply, ContinuousLinearMap.id_apply, smul_eq_mul]
-  exact mul_nonneg hc (hp_nn n hx)
-
-中文:
-定理 smul
-  条件: {c : 实数} (hf : AbsolutelyMonotoneOn f s) (hc : 0 <= c)
-  证明: by
-  obtain ⟨p, hp, hp_nn⟩ := hf
-  -- Witness: post-composition by the CLM `y ↦ c * y`.
-  set T : Real ->L[Real] Real := c • ContinuousLinearMap.id Real Real with hT
-  have hcomp : (T ∘ f) = c • f := by ext x; simp [hT, smul_eq_mul]
-  refine ⟨_, hcomp ▸ hp.continuousLinearMap_comp T, fun n x hx => ?_⟩
-  simp only [ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply, hT,
-    smul_apply, ContinuousLinearMap.id_apply, smul_eq_mul]
-  exact mul_nonneg hc (hp_nn n hx)
-
-Depends on / 依赖: hp_nn
+--- 原说明 ---
+A nonnegative scalar multiple of an absolutely monotone function is absolutely m
+onotone.
 -/
-theorem smul {c : Real} (hf : AbsolutelyMonotoneOn f s) (hc : 0 <= c) :
+theorem smul {c : ℝ} (hf : AbsolutelyMonotoneOn f s) (hc : 0 ≤ c) :
     AbsolutelyMonotoneOn (c • f) s := by
   obtain ⟨p, hp, hp_nn⟩ := hf
   -- Witness: post-composition by the CLM `y ↦ c * y`.
-  set T : Real ->L[Real] Real := c • ContinuousLinearMap.id Real Real with hT
+  set T : ℝ →L[ℝ] ℝ := c • ContinuousLinearMap.id ℝ ℝ with hT
   have hcomp : (T ∘ f) = c • f := by ext x; simp [hT, smul_eq_mul]
   refine ⟨_, hcomp ▸ hp.continuousLinearMap_comp T, fun n x hx => ?_⟩
   simp only [ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply, hT,
@@ -267,3 +304,4 @@ theorem smul {c : Real} (hf : AbsolutelyMonotoneOn f s) (hc : 0 <= c) :
   exact mul_nonneg hc (hp_nn n hx)
 
 end AbsolutelyMonotoneOn
+

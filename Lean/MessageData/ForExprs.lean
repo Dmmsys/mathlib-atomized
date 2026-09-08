@@ -26,29 +26,30 @@ namespace Lean.MessageData
 
 universe u
 
-variable {m : Type -> Type u} [Monad m] [MonadLiftT BaseIO m]
+variable {m : Type → Type u} [Monad m] [MonadLiftT BaseIO m]
 
-/--
-Definition of `forExprsIn` / `forExprsIn` 的定义
+/-- Iterate over all the expressions in a `MessageData`. Used to implement
+`for (ppCtx, e) in msg.exprs do` notation, which should be preferred over using this declaration
+directly. -/
+/-
+**Lean.MessageData.forExprsIn** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MessageData`。
+形式化陈述：{m : Type → Type u} →   [Monad m] → [MonadLiftT BaseIO m] → {σ : Type} → M
+essageData → σ → (PPContext × Expr → σ → m (ForInStep σ)) → m σ
+参数：PPContext × Expr → σ → m (ForInStep σ)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forExprsIn
-  signature: {σ} (msg : MessageData) (s : σ)
-  body: do
-  return (← go ⟨.anonymous, []⟩ none s msg).value
-
-中文:
-定义 forExprsIn
-  签名: {σ} (msg : MessageData) (s : σ)
-  定义体: do
-  return (← go ⟨.anonymous, []⟩ none s msg).value
+--- 原说明 ---
+Iterate over all the expressions in a `MessageData`. Used to implement
+`for (ppCtx, e) in msg.exprs do` notation, which should be preferred over using 
+this declaration
+directly.
 -/
 partial def forExprsIn {σ} (msg : MessageData) (s : σ)
-    (f : PPContext × Expr -> σ -> m (ForInStep σ)) : m σ := do
+    (f : PPContext × Expr → σ → m (ForInStep σ)) : m σ := do
   return (← go ⟨.anonymous, []⟩ none s msg).value
 where
   go (nctx : NamingContext) (ctx? : Option MessageDataContext) (s : σ) :
-      MessageData -> m (ForInStep σ)
+      MessageData → m (ForInStep σ)
     | .withContext ctx m => go nctx (some ctx) s m
     | .withNamingContext nctx m => go nctx ctx? s m
     | .compose a b => do
@@ -82,7 +83,7 @@ where
       goFmt ppCtx fwi.infos s fwi.fmt
     | .ofOriginatingSyntax _ m => go nctx ctx? s m
   /-- Iterate over the tags of a `Format` using `f`. -/
-  goFmt (ppCtx : PPContext) (infos) (s : σ) : Format -> m (ForInStep σ)
+  goFmt (ppCtx : PPContext) (infos) (s : σ) : Format → m (ForInStep σ)
     | .tag n fmt => do
       match infos.get? n with
       | some (.ofTermInfo { expr, lctx .. })
@@ -108,106 +109,86 @@ where
       goFmt ppCtx infos s fmt2
     | .text _ | .align _ | .line | .nil => return .yield s
 
-/--
-Definition of `Exprs` / `Exprs` 的定义
+/-- A wrapper structure for `MessageData` to enable `for (ppCtx, e) in msg.exprs do` notation. -/
+/-
+**Lean.MessageData.Exprs** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lean.MessageData`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Exprs
-  parameters: where
-  axioms and operations (1):
-    - msg : MessageData
-
-中文:
-结构 Exprs
-  参数: where
-  公理与运算 (1 个):
-    - msg : MessageData
+--- 原说明 ---
+A wrapper structure for `MessageData` to enable `for (ppCtx, e) in msg.exprs do`
+ notation.
 -/
 protected structure Exprs where
   /-- The `MessageData` whose expressions will be iterated over. -/
   msg : MessageData
 
-/--
-Definition of `exprs` / `exprs` 的定义
+/-- `for (ppCtx, e) in msg.exprs do` iterates through the expressions in `MessageData` together
+with their `ppCtx : PPContext`. The `ppCtx` can be used to interpret the expression in a valid
+`MetaM` context via `ppCtx.runMetaM`.
 
-English:
-definition exprs
-  signature: (msg : MessageData)
-  body: ⟨msg⟩
+The monad must support `BaseIO` in order to interpret `.ofLazy` nodes in `MessageData`.
 
-中文:
-定义 exprs
-  签名: (msg : MessageData)
-  定义体: ⟨msg⟩
+Expressions without a valid `ppCtx` are skipped. -/
+/-
+**Lean.MessageData.exprs** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MessageData`。
+形式化陈述：exprs (msg : MessageData) : MessageData.Exprs
+参数：msg : MessageData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`for (ppCtx, e) in msg.exprs do` iterates through the expressions in `MessageDat
+a` together
+with their `ppCtx : PPContext`. The `ppCtx` can be used to interpret the express
+ion in a valid
+`MetaM` context via `ppCtx.runMetaM`.
+
+The monad must support `BaseIO` in order to interpret `.ofLazy` nodes in `Messag
+eData`.
+
+Expressions without a valid `ppCtx` are skipped.
 -/
 def exprs (msg : MessageData) : MessageData.Exprs := ⟨msg⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ForIn m MessageData.Exprs (PPContext × Expr)
-  body: exprs.msg.forExprsIn
-
-中文:
-实例 :
-  签名: ForIn m MessageData.Exprs (PPContext × Expr)
-  定义体: exprs.msg.forExprsIn
-
-Depends on / 依赖: exprs.msg.forExprsIn, forExprsIn
+/-
+**Lean.MessageData.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.MessageData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ForIn m MessageData.Exprs (PPContext × Expr) where
   forIn exprs := exprs.msg.forExprsIn
 
-/--
-Definition of `firstExpr?` / `firstExpr?` 的定义
+/-- Find the expression in a message on which `f` does not return `none`. -/
+/-
+**Lean.MessageData.firstExpr** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MessageData`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstExpr?
-  signature: {α} (msg : MessageData) (f : Expr -> MetaM (Option α))
-  body: do
-  for (ppCtx, e) in msg.exprs do
-    let a@(some _) ← ppCtx.runMetaM (f e) | continue
-    return a
-  return none
-
-中文:
-定义 firstExpr?
-  签名: {α} (msg : MessageData) (f : Expr -> MetaM (选项类型 α))
-  定义体: do
-  for (ppCtx, e) in msg.exprs do
-    let a@(some _) ← ppCtx.runMetaM (f e) | continue
-    return a
-  return none
+--- 原说明 ---
+Find the expression in a message on which `f` does not return `none`.
 -/
-partial def firstExpr? {α} (msg : MessageData) (f : Expr -> MetaM (Option α)) :
+partial def firstExpr? {α} (msg : MessageData) (f : Expr → MetaM (Option α)) :
     IO (Option α) := do
   for (ppCtx, e) in msg.exprs do
     let a@(some _) ← ppCtx.runMetaM (f e) | continue
     return a
   return none
 
-/--
-Definition of `getExprs` / `getExprs` 的定义
+/-- Get all the expressions in a message, in order.
 
-English:
-definition getExprs
-  signature: (msg : MessageData)
-  body: do
-  let mut arr := #[]
-  for (_, e) in msg.exprs do
-    arr := arr.push e
-  return arr
+If you need the context of the expressions, prefer iterating over the expressions via
+`for (ppCtx, e) in msg.exprs do` directly. -/
+/-
+**Lean.MessageData.getExprs** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MessageData`。
+形式化陈述：{m : Type → Type u} → [Monad m] → [MonadLiftT BaseIO m] → MessageData → m 
+(Array Expr)
+参数：Array Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getExprs
-  签名: (msg : MessageData)
-  定义体: do
-  let mut arr := #[]
-  for (_, e) in msg.exprs do
-    arr := arr.push e
-  return arr
+--- 原说明 ---
+Get all the expressions in a message, in order.
+
+If you need the context of the expressions, prefer iterating over the expression
+s via
+`for (ppCtx, e) in msg.exprs do` directly.
 -/
 partial def getExprs (msg : MessageData) : m (Array Expr) := do
   let mut arr := #[]
@@ -216,3 +197,4 @@ partial def getExprs (msg : MessageData) : m (Array Expr) := do
   return arr
 
 end Lean.MessageData
+

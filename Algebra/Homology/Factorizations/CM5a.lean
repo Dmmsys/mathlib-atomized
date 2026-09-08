@@ -55,68 +55,70 @@ variable {C : Type*} [Category* C] [Abelian C]
 
 namespace CochainComplex.Plus.modelCategoryQuillen
 
-variable {K L : CochainComplex C Int} (f : K ⟶ L)
+variable {K L : CochainComplex C ℤ} (f : K ⟶ L)
 
 namespace cm5a_cof
 
-/--
-Definition of `cofFib` / `cofFib` 的定义
+/-- Given a morphism `f : K ⟶ L`, this is the property of factorisations
+of `f` consisting of a monomorphism followed by a degreewise epimorphism
+with injective kernel. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.cofFib** 是 Mathlib 中的一个定义，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：cofFib : ObjectProperty (Factorisation f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cofFib
-  signature: : ObjectProperty (Factorisation f)
-  body: fun F => Mono F.ι ∧ degreewiseEpiWithInjectiveKernel F.π
-
-中文:
-定义 cofFib
-  签名: : ObjectProperty (分解 f)
-  定义体: fun F => Mono F.ι ∧ degreewiseEpiWithInjectiveKernel F.π
-
-Depends on / 依赖: degreewiseEpiWithInjectiveKernel
+--- 原说明 ---
+Given a morphism `f : K ⟶ L`, this is the property of factorisations
+of `f` consisting of a monomorphism followed by a degreewise epimorphism
+with injective kernel.
 -/
 def cofFib : ObjectProperty (Factorisation f) :=
-  fun F => Mono F.ι ∧ degreewiseEpiWithInjectiveKernel F.π
-
+  fun F ↦ Mono F.ι ∧ degreewiseEpiWithInjectiveKernel F.π
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个实例，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : (cofFib f).FullSubcategory) : Mono F.obj.ι :=
   F.property.1
 
 variable {f} in
-/--
-Definition of `quasiIsoLE` / `quasiIsoLE` 的定义
+/-- The property that the first morphism of a factorisation is
+a quasi-isomorphisms in degrees `≤ n`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.quasiIsoLE** 是 Mathlib 中的一个定
+义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：quasiIsoLE (n : Int) : ObjectProperty (cofFib f).FullSubcategory
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quasiIsoLE
-  signature: (n : Int)
-  body: fun F => forall i <= n, QuasiIsoAt F.obj.ι i
-
-中文:
-定义 quasiIsoLE
-  签名: (n : 整数)
-  定义体: fun F => forall i <= n, QuasiIsoAt F.obj.ι i
-
-Depends on / 依赖: F.obj, QuasiIsoAt
+--- 原说明 ---
+The property that the first morphism of a factorisation is
+a quasi-isomorphisms in degrees `≤ n`.
 -/
-def quasiIsoLE (n : Int) : ObjectProperty (cofFib f).FullSubcategory :=
-  fun F => forall i <= n, QuasiIsoAt F.obj.ι i
+def quasiIsoLE (n : ℤ) : ObjectProperty (cofFib f).FullSubcategory :=
+  fun F ↦ ∀ i ≤ n, QuasiIsoAt F.obj.ι i
 
 variable {f} in
-/--
-Definition of `isIsoLE` / `isIsoLE` 的定义
+/-- The property that the second morphism of a factorisation is
+an isomorphism in degrees `≤ n`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.isIsoLE** 是 Mathlib 中的一个定义，位
+于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：isIsoLE (n : Int) : ObjectProperty (cofFib f).FullSubcategory
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isIsoLE
-  signature: (n : Int)
-  body: fun F => forall i <= n, IsIso (F.obj.π.f i)
-
-中文:
-定义 isIsoLE
-  签名: (n : 整数)
-  定义体: fun F => forall i <= n, IsIso (F.obj.π.f i)
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+The property that the second morphism of a factorisation is
+an isomorphism in degrees `≤ n`.
 -/
-def isIsoLE (n : Int) : ObjectProperty (cofFib f).FullSubcategory :=
-  fun F => forall i <= n, IsIso (F.obj.π.f i)
+def isIsoLE (n : ℤ) : ObjectProperty (cofFib f).FullSubcategory :=
+  fun F ↦ ∀ i ≤ n, IsIso (F.obj.π.f i)
 
 namespace step₁
 
@@ -135,170 +137,109 @@ induces a monomorphism in homology in degree `n₀`,
 and that `π K L n₁` is an isomorphism in degrees `≤ n₀` that is
 also a degreewise epimorphism with an injective kernel. -/
 
-variable (n₀ n₁ : Int) (hn₁ : n₀ + 1 = n₁)
+variable (n₀ n₁ : ℤ) (hn₁ : n₀ + 1 = n₁)
 
 variable (K) in
-/--
-Definition of `S` / `S` 的定义
+/-- The single complex in degree `n₁` that is given by an injective
+object containing `K.opcycles n₁`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.S** 是 Mathlib 中的一个缩写定义
+，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+形式化陈述：S : CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation S
-  signature: : CochainComplex C Int
-  body: ((single C _ n₁).obj (Injective.under (K.opcycles n₁)))
-
-中文:
-缩写 S
-  签名: : 上链复形 C 整数
-  定义体: ((single C _ n₁).obj (Injective.under (K.opcycles n₁)))
-
-Depends on / 依赖: Injective, Injective.under, K.opcycles, opcycles, single
+--- 原说明 ---
+The single complex in degree `n₁` that is given by an injective
+object containing `K.opcycles n₁`.
 -/
-noncomputable abbrev S : CochainComplex C Int :=
+noncomputable abbrev S : CochainComplex C ℤ :=
     ((single C _ n₁).obj (Injective.under (K.opcycles n₁)))
 
 variable (K L) in
-/--
-Definition of `mid` / `mid` 的定义
+/-- The intermediate object in the factorization. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.mid** 是 Mathlib 中的一个缩写
+定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+形式化陈述：mid
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mid
-  body: S K n₁ ⊞ L
-
-中文:
-缩写 mid
-  定义体: S K n₁ ⊞ L
+--- 原说明 ---
+The intermediate object in the factorization.
 -/
 noncomputable abbrev mid := S K n₁ ⊞ L
 
 variable (K) in
-/--
-Definition of `i` / `i` 的定义
+/-- The morphim `K ⟶ S K n₁` which in degree `n₁` corresponds to
+the composition `K.X n₁ ⟶ K.opcycles n₁ ⟶ Injective.under (K.opcycles n₁)`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.i** 是 Mathlib 中的一个定义，位
+于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+形式化陈述：i : K ⟶ S K n₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition i
-  signature: : K ⟶ S K n₁
-  body: mkHomToSingle (K.pOpcycles n₁ ≫ Injective.ι _) (by simp)
-
-中文:
-定义 i
-  签名: : K ⟶ S K n₁
-  定义体: mkHomToSingle (K.pOpcycles n₁ ≫ Injective.ι _) (by simp)
-
-Depends on / 依赖: Injective, K.pOpcycles, mkHomToSingle, pOpcycles
+--- 原说明 ---
+The morphim `K ⟶ S K n₁` which in degree `n₁` corresponds to
+the composition `K.X n₁ ⟶ K.opcycles n₁ ⟶ Injective.under (K.opcycles n₁)`.
 -/
 noncomputable def i : K ⟶ S K n₁ := mkHomToSingle (K.pOpcycles n₁ ≫ Injective.ι _) (by simp)
 
-/--
-Definition of `ι` / `ι` 的定义
+/-- The first morphism in the factorization. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.** 是 Mathlib 中的一个缩写定义，
+位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ι
-  signature: : K ⟶ mid K L n₁
-  body: biprod.lift (i K n₁) f
-
-中文:
-缩写 ι
-  签名: : K ⟶ mid K L n₁
-  定义体: biprod.lift (i K n₁) f
-
-Depends on / 依赖: biprod, biprod.lift
+--- 原说明 ---
+The first morphism in the factorization.
 -/
 noncomputable abbrev ι : K ⟶ mid K L n₁ := biprod.lift (i K n₁) f
 
 variable (K L) in
-/--
-Definition of `π` / `π` 的定义
+/-- The second morphism in the factorization. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.** 是 Mathlib 中的一个缩写定义，
+位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation π
-  signature: : mid K L n₁ ⟶ L
-  body: biprod.snd
-
-中文:
-缩写 π
-  签名: : mid K L n₁ ⟶ L
-  定义体: biprod.snd
-
-Depends on / 依赖: biprod, biprod.snd
+--- 原说明 ---
+The second morphism in the factorization.
 -/
 noncomputable abbrev π : mid K L n₁ ⟶ L := biprod.snd
 
 variable (K L) in
-/--
-Definition of `σ` / `σ` 的定义
+/-- A section of `π K L n₁` -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.** 是 Mathlib 中的一个缩写定义，
+位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation σ
-  signature: : L ⟶ mid K L n₁
-  body: biprod.inr
-
-@[reassoc]
-
-中文:
-缩写 σ
-  签名: : L ⟶ mid K L n₁
-  定义体: biprod.inr
-
-@[reassoc]
-
-Depends on / 依赖: biprod, biprod.inr
+--- 原说明 ---
+A section of `π K L n₁`
 -/
 noncomputable abbrev σ : L ⟶ mid K L n₁ := biprod.inr
 
 @[reassoc]
-/--
-lemma `ι_π` / 引理 `ι_π`
-
-English:
-lemma ι_π
-  statement: ι f n₁ ≫ π K L n₁ = f
-  proof: by simp
-
-中文:
-引理 ι_π
-  结论: ι f n₁ ≫ π K L n₁ = f
-  证明: by simp
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.** 是 Mathlib 中的一个引理，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_π : ι f n₁ ≫ π K L n₁ = f := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] : Mono (ι f n₁)
-  body: mono_of_mono_fac (ι_π f n₁)
-
-中文:
-实例 [单态射
-  签名: f] : 单态射 (ι f n₁)
-  定义体: mono_of_mono_fac (ι_π f n₁)
-
-Depends on / 依赖: mono_of_mono_fac
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.** 是 Mathlib 中的一个实例，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] : Mono (ι f n₁) := mono_of_mono_fac (ι_π f n₁)
 
 variable (K L) in
-/--
-lemma `degreewiseEpiWithInjectiveKernel_π` / 引理 `degreewiseEpiWithInjectiveKernel_π`
-
-English:
-lemma degreewiseEpiWithInjectiveKernel_π
-  proof: by
-  intro q
-  rw [Abelian.epiWithInjectiveKernel_iff]
-  exact ⟨(S K n₁).X q, inferInstance, (biprod.inl : _ ⟶ mid K L n₁).f q, by simp,
-    ⟨{ r := (biprod.fst : mid K L n₁ ⟶ _).f q, s := (biprod.inr : _ ⟶ mid K L n₁).f q }⟩⟩
-
-中文:
-引理 degreewiseEpiWithInjectiveKernel_π
-  证明: by
-  intro q
-  rw [Abelian.epiWithInjectiveKernel_iff]
-  exact ⟨(S K n₁).X q, inferInstance, (biprod.inl : _ ⟶ mid K L n₁).f q, by simp,
-    ⟨{ r := (biprod.fst : mid K L n₁ ⟶ _).f q, s := (biprod.inr : _ ⟶ mid K L n₁).f q }⟩⟩
-
-Depends on / 依赖: Abelian, Abelian.epiWithInjectiveKernel_iff, biprod, biprod.fst, biprod.inl, biprod.inr, epiWithInjectiveKernel_iff
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.degreewiseEpiWithInjec
+tiveKernel_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.
+cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma degreewiseEpiWithInjectiveKernel_π :
     degreewiseEpiWithInjectiveKernel (π K L n₁) := by
@@ -308,89 +249,27 @@ lemma degreewiseEpiWithInjectiveKernel_π :
     ⟨{ r := (biprod.fst : mid K L n₁ ⟶ _).f q, s := (biprod.inr : _ ⟶ mid K L n₁).f q }⟩⟩
 
 variable (K L) in
-/--
-lemma `isIso_π_f` / 引理 `isIso_π_f`
-
-English:
-lemma isIso_π_f
-  given: (i : Int) (hi : i != n₁ := by lia)
-  proof: by
-  refine ⟨(biprod.inr : _ ⟶ mid K L n₁).f i, ?_, by simp⟩
-  rw [biprodX_ext_to_iff]
-  constructor
-  · apply (isZero_single_obj_X (.up Int) _ _ _ hi).eq_of_tgt
-  · simp
-
-include hn₁ in
-
-中文:
-引理 isIso_π_f
-  条件: (i : 整数) (hi : i != n₁ := by lia)
-  证明: by
-  refine ⟨(biprod.inr : _ ⟶ mid K L n₁).f i, ?_, by simp⟩
-  rw [biprodX_ext_to_iff]
-  constructor
-  · apply (isZero_single_obj_X (.up Int) _ _ _ hi).eq_of_tgt
-  · simp
-
-include hn₁ in
-
-Depends on / 依赖: biprod, biprod.inr, biprodX_ext_to_iff, eq_of_tgt, isZero_single_obj_X
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.isIso_** 是 Mathlib 中的一
+个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso_π_f (i : Int) (hi : i != n₁ := by lia) :
+lemma isIso_π_f (i : ℤ) (hi : i ≠ n₁ := by lia) :
     IsIso ((π K L n₁).f i) := by
   refine ⟨(biprod.inr : _ ⟶ mid K L n₁).f i, ?_, by simp⟩
   rw [biprodX_ext_to_iff]
   constructor
-  · apply (isZero_single_obj_X (.up Int) _ _ _ hi).eq_of_tgt
+  · apply (isZero_single_obj_X (.up ℤ) _ _ _ hi).eq_of_tgt
   · simp
 
 include hn₁ in
 variable (K L) in
-/--
-lemma `quasiIsoAt_π` / 引理 `quasiIsoAt_π`
-
-English:
-lemma quasiIsoAt_π
-  given: (i : Int) (hi : i <= n₀ := by lia)
-  proof: by
-  obtain (hi | rfl) := hi.lt_or_eq
-  · rw [quasiIsoAt_iff' _ (i - 1) i (i + 1) (by simp) (by simp)]
-    let φ := (shortComplexFunctor' C _ (i - 1) i (i + 1)).map (π K L n₁)
-    have : IsIso φ.τ₁ := isIso_π_f ..
-    have : IsIso φ.τ₂ := isIso_π_f ..
-    have : IsIso φ.τ₃ := isIso_π_f ..
-    exact ShortComplex.quasiIso_of_epi_of_isIso_of_mono φ
-  · rw [quasiIsoAt_iff_isIso_homologyMap]
-    have : homologyMap (biprod.inl : _ ⟶ mid K L n₁) i = 0 :=
-      (ShortComplex.isZero_homology_of_isZero_X₂ _
-        (isZero_single_obj_X (.up Int) _ _ _ (by lia))).eq_of_src _ _
-    refine ⟨homologyMap (σ K L n₁) i, ?_, ?_⟩
-    · simp [← homologyMap_id, ← biprod.total, homologyMap_comp, this]
-    · simp [← homologyMap_comp, homologyMap_id]
-
-中文:
-引理 quasiIsoAt_π
-  条件: (i : 整数) (hi : i <= n₀ := by lia)
-  证明: by
-  obtain (hi | rfl) := hi.lt_or_eq
-  · rw [quasiIsoAt_iff' _ (i - 1) i (i + 1) (by simp) (by simp)]
-    let φ := (shortComplexFunctor' C _ (i - 1) i (i + 1)).map (π K L n₁)
-    have : IsIso φ.τ₁ := isIso_π_f ..
-    have : IsIso φ.τ₂ := isIso_π_f ..
-    have : IsIso φ.τ₃ := isIso_π_f ..
-    exact ShortComplex.quasiIso_of_epi_of_isIso_of_mono φ
-  · rw [quasiIsoAt_iff_isIso_homologyMap]
-    have : homologyMap (biprod.inl : _ ⟶ mid K L n₁) i = 0 :=
-      (ShortComplex.isZero_homology_of_isZero_X₂ _
-        (isZero_single_obj_X (.up Int) _ _ _ (by lia))).eq_of_src _ _
-    refine ⟨homologyMap (σ K L n₁) i, ?_, ?_⟩
-    · simp [← homologyMap_id, ← biprod.total, homologyMap_comp, this]
-    · simp [← homologyMap_comp, homologyMap_id]
-
-Depends on / 依赖: QuasiIsoAt, ShortComplex, ShortComplex.isZero_homology_of_isZero_X, ShortComplex.quasiIso_of_epi_of_isIso_of_mono, biprod, biprod.inl, hi.lt_or_eq, homologyMap, isZero_homology_of_isZero_X, lt_or_eq, quasiIsoAt_iff, quasiIsoAt_iff_isIso_homologyMap, quasiIso_of_epi_of_isIso_of_mono, shortComplexFunctor
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.quasiIsoAt_** 是 Mathli
+b 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma quasiIsoAt_π (i : Int) (hi : i <= n₀ := by lia) :
+lemma quasiIsoAt_π (i : ℤ) (hi : i ≤ n₀ := by lia) :
     QuasiIsoAt (π K L n₁) i := by
   obtain (hi | rfl) := hi.lt_or_eq
   · rw [quasiIsoAt_iff' _ (i - 1) i (i + 1) (by simp) (by simp)]
@@ -402,100 +281,37 @@ lemma quasiIsoAt_π (i : Int) (hi : i <= n₀ := by lia) :
   · rw [quasiIsoAt_iff_isIso_homologyMap]
     have : homologyMap (biprod.inl : _ ⟶ mid K L n₁) i = 0 :=
       (ShortComplex.isZero_homology_of_isZero_X₂ _
-        (isZero_single_obj_X (.up Int) _ _ _ (by lia))).eq_of_src _ _
+        (isZero_single_obj_X (.up ℤ) _ _ _ (by lia))).eq_of_src _ _
     refine ⟨homologyMap (σ K L n₁) i, ?_, ?_⟩
     · simp [← homologyMap_id, ← biprod.total, homologyMap_comp, this]
     · simp [← homologyMap_comp, homologyMap_id]
 
-variable (hf : forall i <= n₀, QuasiIsoAt f i)
+variable (hf : ∀ i ≤ n₀, QuasiIsoAt f i)
 
 include hn₁ hf in
-/--
-lemma `quasiIsoAt_ι` / 引理 `quasiIsoAt_ι`
-
-English:
-lemma quasiIsoAt_ι
-  given: (i : Int) (hi : i <= n₀)
-  proof: by
-  have := quasiIsoAt_π K L n₀ n₁ hn₁ i hi
-  rw [← quasiIsoAt_iff_comp_right _ (π K L n₁)]; rw [ι_π]
-  exact hf i hi
-
-中文:
-引理 quasiIsoAt_ι
-  条件: (i : 整数) (hi : i <= n₀)
-  证明: by
-  have := quasiIsoAt_π K L n₀ n₁ hn₁ i hi
-  rw [← quasiIsoAt_iff_comp_right _ (π K L n₁)]; rw [ι_π]
-  exact hf i hi
-
-Depends on / 依赖: quasiIsoAt_iff_comp_right
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.quasiIsoAt_** 是 Mathli
+b 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma quasiIsoAt_ι (i : Int) (hi : i <= n₀) :
+lemma quasiIsoAt_ι (i : ℤ) (hi : i ≤ n₀) :
     QuasiIsoAt (ι f n₁) i := by
   have := quasiIsoAt_π K L n₀ n₁ hn₁ i hi
-  rw [← quasiIsoAt_iff_comp_right _ (π K L n₁)]; rw [ι_π]
+  rw [← quasiIsoAt_iff_comp_right _ (π K L n₁), ι_π]
   exact hf i hi
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono (homologyMap (ι f n₁) n₁)
-  body: by
-  let n₀ := n₁ - 1
-  rw [mono_homologyMap_iff_up_to_refinements _ n₀ n₁ (n₁ + 1) (by simp; lia) (by simp)]
-  intro A x₁ _ y₀ hy₀
-  obtain ⟨y₀, rfl⟩ : exists (z₁ : A ⟶ L.X n₀), z₁ ≫ (σ K L n₁).f n₀ = y₀ := by
-    refine ⟨y₀ ≫ (π K L n₁).f n₀, Eq.trans ?_ (Category.comp_id _)⟩
-    have : (biprod.inl : _ ⟶ mid K L n₁).f n₀ = 0 :=
-      (isZero_single_obj_X (.up Int) _ _ _ (by lia)).eq_of_src _ _
-    simp [this, ← biprod_total_f]
-  simp only [Category.assoc, Hom.comm, biprodX_ext_to_iff, biprod_lift_fst_f,
-    biprod_inr_fst_f, comp_zero, biprod_lift_snd_f, biprod_inr_snd_f,
-    Category.comp_id] at hy₀
-  obtain ⟨h₁, h₂⟩ := hy₀
-  replace h₁ : x₁ ≫ K.pOpcycles n₁ = 0 := by
-    rw [← cancel_mono (Injective.ι _)]
-    simpa [i, ← cancel_mono (singleObjXSelf (.up Int) n₁ _).hom] using h₁
-  obtain ⟨A₁, π, _, x₀, hx₀⟩ :=
-    (K.comp_pOpcycles_eq_zero_iff_up_to_refinements x₁ n₀ (by simp; lia)).1 h₁
-  exact ⟨A₁, π, inferInstance, x₀, hx₀⟩
-
-中文:
-实例 :
-  签名: 单态射 (homologyMap (ι f n₁) n₁)
-  定义体: by
-  let n₀ := n₁ - 1
-  rw [mono_homologyMap_iff_up_to_refinements _ n₀ n₁ (n₁ + 1) (by simp; lia) (by simp)]
-  intro A x₁ _ y₀ hy₀
-  obtain ⟨y₀, rfl⟩ : exists (z₁ : A ⟶ L.X n₀), z₁ ≫ (σ K L n₁).f n₀ = y₀ := by
-    refine ⟨y₀ ≫ (π K L n₁).f n₀, Eq.trans ?_ (Category.comp_id _)⟩
-    have : (biprod.inl : _ ⟶ mid K L n₁).f n₀ = 0 :=
-      (isZero_single_obj_X (.up Int) _ _ _ (by lia)).eq_of_src _ _
-    simp [this, ← biprod_total_f]
-  simp only [Category.assoc, Hom.comm, biprodX_ext_to_iff, biprod_lift_fst_f,
-    biprod_inr_fst_f, comp_zero, biprod_lift_snd_f, biprod_inr_snd_f,
-    Category.comp_id] at hy₀
-  obtain ⟨h₁, h₂⟩ := hy₀
-  replace h₁ : x₁ ≫ K.pOpcycles n₁ = 0 := by
-    rw [← cancel_mono (Injective.ι _)]
-    simpa [i, ← cancel_mono (singleObjXSelf (.up Int) n₁ _).hom] using h₁
-  obtain ⟨A₁, π, _, x₀, hx₀⟩ :=
-    (K.comp_pOpcycles_eq_zero_iff_up_to_refinements x₁ n₀ (by simp; lia)).1 h₁
-  exact ⟨A₁, π, inferInstance, x₀, hx₀⟩
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Eq.trans, Hom.comm, biprod, biprod.inl, biprodX_ext_to_iff, biprod_inr_fst_f, biprod_lift_fst_f, biprod_total_f, comp_id, eq_of_src, isZero_single_obj_X, mono_homologyMap_iff_up_to_refinements
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁.** 是 Mathlib 中的一个实例，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₁`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono (homologyMap (ι f n₁) n₁) := by
   let n₀ := n₁ - 1
   rw [mono_homologyMap_iff_up_to_refinements _ n₀ n₁ (n₁ + 1) (by simp; lia) (by simp)]
   intro A x₁ _ y₀ hy₀
-  obtain ⟨y₀, rfl⟩ : exists (z₁ : A ⟶ L.X n₀), z₁ ≫ (σ K L n₁).f n₀ = y₀ := by
+  obtain ⟨y₀, rfl⟩ : ∃ (z₁ : A ⟶ L.X n₀), z₁ ≫ (σ K L n₁).f n₀ = y₀ := by
     refine ⟨y₀ ≫ (π K L n₁).f n₀, Eq.trans ?_ (Category.comp_id _)⟩
     have : (biprod.inl : _ ⟶ mid K L n₁).f n₀ = 0 :=
-      (isZero_single_obj_X (.up Int) _ _ _ (by lia)).eq_of_src _ _
+      (isZero_single_obj_X (.up ℤ) _ _ _ (by lia)).eq_of_src _ _
     simp [this, ← biprod_total_f]
   simp only [Category.assoc, Hom.comm, biprodX_ext_to_iff, biprod_lift_fst_f,
     biprod_inr_fst_f, comp_zero, biprod_lift_snd_f, biprod_inr_snd_f,
@@ -503,7 +319,7 @@ instance : Mono (homologyMap (ι f n₁) n₁) := by
   obtain ⟨h₁, h₂⟩ := hy₀
   replace h₁ : x₁ ≫ K.pOpcycles n₁ = 0 := by
     rw [← cancel_mono (Injective.ι _)]
-    simpa [i, ← cancel_mono (singleObjXSelf (.up Int) n₁ _).hom] using h₁
+    simpa [i, ← cancel_mono (singleObjXSelf (.up ℤ) n₁ _).hom] using h₁
   obtain ⟨A₁, π, _, x₀, hx₀⟩ :=
     (K.comp_pOpcycles_eq_zero_iff_up_to_refinements x₁ n₀ (by simp; lia)).1 h₁
   exact ⟨A₁, π, inferInstance, x₀, hx₀⟩
@@ -511,37 +327,22 @@ instance : Mono (homologyMap (ι f n₁) n₁) := by
 end step₁
 
 open step₁ in
-/--
-lemma `step₁` / 引理 `step₁`
-
-English:
-lemma step₁
-  statement: [EnoughInjectives C] [Mono f] (n₀ n₁ : Int)
-  proof: ⟨.mk { mid := mid K L n₁, ι := ι f n₁, π := π K L n₁ }
-    ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π K L n₁⟩,
-    fun i hi => quasiIsoAt_ι f n₀ n₁ hn₁ hf i hi,
-    fun i hi => isIso_π_f K L n₁ i (by lia),
-    inferInstance⟩
-
-中文:
-引理 step₁
-  结论: [有足够单射 C] [单态射 f] (n₀ n₁ : 整数)
-  证明: ⟨.mk { mid := mid K L n₁, ι := ι f n₁, π := π K L n₁ }
-    ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π K L n₁⟩,
-    fun i hi => quasiIsoAt_ι f n₀ n₁ hn₁ hf i hi,
-    fun i hi => isIso_π_f K L n₁ i (by lia),
-    inferInstance⟩
-
-Depends on / 依赖: F.obj, FullSubcategory, cofFib, homologyMap, isIsoLE, quasiIsoLE
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step** 是 Mathlib 中的一个引理，位于命名
+空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：step [EnoughInjectives C] [Mono f] (n₀ n₁ : Int) (hf : forall i <= n₀, Qua
+siIsoAt f i) (hn₁ : n₀ + 1 = n₁
+参数：n₀ n₁ : Int；hf : forall i <= n₀, QuasiIsoAt f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma step₁ [EnoughInjectives C] [Mono f] (n₀ n₁ : Int)
-    (hf : forall i <= n₀, QuasiIsoAt f i) (hn₁ : n₀ + 1 = n₁ := by lia) :
-    exists (F : (cofFib f).FullSubcategory), quasiIsoLE n₀ F ∧ isIsoLE n₀ F ∧
+lemma step₁ [EnoughInjectives C] [Mono f] (n₀ n₁ : ℤ)
+    (hf : ∀ i ≤ n₀, QuasiIsoAt f i) (hn₁ : n₀ + 1 = n₁ := by lia) :
+    ∃ (F : (cofFib f).FullSubcategory), quasiIsoLE n₀ F ∧ isIsoLE n₀ F ∧
       Mono (homologyMap F.obj.ι n₁) :=
   ⟨.mk { mid := mid K L n₁, ι := ι f n₁, π := π K L n₁ }
     ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π K L n₁⟩,
-    fun i hi => quasiIsoAt_ι f n₀ n₁ hn₁ hf i hi,
-    fun i hi => isIso_π_f K L n₁ i (by lia),
+    fun i hi ↦ quasiIsoAt_ι f n₀ n₁ hn₁ hf i hi,
+    fun i hi ↦ isIso_π_f K L n₁ i (by lia),
     inferInstance⟩
 
 namespace step₂
@@ -558,242 +359,131 @@ which also induces isomorphisms in degrees `≤ n`.
 
 open HomComplex
 
-variable [EnoughInjectives C] (n : Int)
+variable [EnoughInjectives C] (n : ℤ)
 
-/--
-Definition of `S` / `S` 的定义
+/-- Given a morphism `f : K ⟶ L`, this is the single cochain complex in degree `n`
+which is given an injective object which contains `((cokernel f).truncGE n).X n`,
+i.e. the object in degree `n` of the canonical truncation `≥ n` of `cokernel f`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.S** 是 Mathlib 中的一个缩写定义
+，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+形式化陈述：S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation S
-  body: (single C (.up Int) n).obj (Injective.under (((cokernel f).truncGE n).X n))
-
-中文:
-缩写 S
-  定义体: (single C (.up Int) n).obj (Injective.under (((cokernel f).truncGE n).X n))
-
-Depends on / 依赖: Injective, Injective.under, cokernel, single, truncGE
+--- 原说明 ---
+Given a morphism `f : K ⟶ L`, this is the single cochain complex in degree `n`
+which is given an injective object which contains `((cokernel f).truncGE n).X n`
+,
+i.e. the object in degree `n` of the canonical truncation `≥ n` of `cokernel f`.
 -/
 noncomputable abbrev S :=
-  (single C (.up Int) n).obj (Injective.under (((cokernel f).truncGE n).X n))
+  (single C (.up ℤ) n).obj (Injective.under (((cokernel f).truncGE n).X n))
 
-/--
-Definition of `p` / `p` 的定义
+/-- The morphism `(cokernel f).truncGE n ⟶ S f n` which in degree `n` is
+given by `Injective.ι _`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.p** 是 Mathlib 中的一个定义，位
+于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+形式化陈述：p : (cokernel f).truncGE n ⟶ S f n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition p
-  signature: : (cokernel f).truncGE n ⟶ S f n
-  body: mkHomToSingle (Injective.ι _) (fun i hi => by
-    simp only [ComplexShape.up_Rel] at hi
-    exact (isZero_of_isStrictlyGE _ n _).eq_of_src _ _)
-
-中文:
-定义 p
-  签名: : (cokernel f).truncGE n ⟶ S f n
-  定义体: mkHomToSingle (Injective.ι _) (fun i hi => by
-    simp only [ComplexShape.up_Rel] at hi
-    exact (isZero_of_isStrictlyGE _ n _).eq_of_src _ _)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up_Rel, Injective, eq_of_src, isZero_of_isStrictlyGE, mkHomToSingle, up_Rel
+--- 原说明 ---
+The morphism `(cokernel f).truncGE n ⟶ S f n` which in degree `n` is
+given by `Injective.ι _`.
 -/
 noncomputable def p : (cokernel f).truncGE n ⟶ S f n :=
-  mkHomToSingle (Injective.ι _) (fun i hi => by
+  mkHomToSingle (Injective.ι _) (fun i hi ↦ by
     simp only [ComplexShape.up_Rel] at hi
     exact (isZero_of_isStrictlyGE _ n _).eq_of_src _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono ((p f n).f n)
-  body: by
-  simp only [p, mkHomToSingle_f, mono_comp_iff_of_mono]
-  infer_instance
-
-中文:
-实例 :
-  签名: 单态射 ((p f n).f n)
-  定义体: by
-  simp only [p, mkHomToSingle_f, mono_comp_iff_of_mono]
-  infer_instance
-
-Depends on / 依赖: infer_instance, mkHomToSingle_f, mono_comp_iff_of_mono
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个实例，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono ((p f n).f n) := by
   simp only [p, mkHomToSingle_f, mono_comp_iff_of_mono]
   infer_instance
 
-/--
-Definition of `α` / `α` 的定义
+/-- The obvious morphism `L ⟶ S f n`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个定义，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition α
-  signature: : L ⟶ S f n
-  body: cokernel.π f ≫ (cokernel f).πTruncGE n ≫ p f n
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 α
-  签名: : L ⟶ S f n
-  定义体: cokernel.π f ≫ (cokernel f).πTruncGE n ≫ p f n
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cokernel
+--- 原说明 ---
+The obvious morphism `L ⟶ S f n`.
 -/
 noncomputable def α : L ⟶ S f n := cokernel.π f ≫ (cokernel f).πTruncGE n ≫ p f n
 
 @[reassoc (attr := simp)]
-/--
-lemma `comp_α` / 引理 `comp_α`
-
-English:
-lemma comp_α
-  statement: f ≫ α f n = 0
-  proof: by simp [α]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 comp_α
-  结论: f ≫ α f n = 0
-  证明: by simp [α]
-
-@[reassoc (attr := simp)]
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.comp_** 是 Mathlib 中的一个
+引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_α : f ≫ α f n = 0 := by simp [α]
 
 @[reassoc (attr := simp)]
-/--
-lemma `comp_α_f` / 引理 `comp_α_f`
-
-English:
-lemma comp_α_f
-  given: (i : Int)
-  statement: f.f i ≫ (α f n).f i = 0
-  proof: by simp [← comp_f]
-
-中文:
-引理 comp_α_f
-  条件: (i : 整数)
-  结论: f.f i ≫ (α f n).f i = 0
-  证明: by simp [← comp_f]
-
-Depends on / 依赖: comp_f
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.comp_** 是 Mathlib 中的一个
+引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comp_α_f (i : Int) : f.f i ≫ (α f n).f i = 0 := by simp [← comp_f]
+lemma comp_α_f (i : ℤ) : f.f i ≫ (α f n).f i = 0 := by simp [← comp_f]
 
-/--
-Definition of `mid` / `mid` 的定义
+/-- The intermediate object in the factorisation. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.mid** 是 Mathlib 中的一个缩写
+定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+形式化陈述：mid
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mid
-  body: mappingCocone (α f n)
-
-中文:
-缩写 mid
-  定义体: mappingCocone (α f n)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, Functor, Functor.IsHomological.mk, HomologicalComplex, HomologicalComplex.shortExact_of_degreewise_shortExact, IsHomological, S.mapNatIso, ShortComplex, ShortComplex.exact_iff_of_iso, distinguished_iff_iso_trianglehOfDegreewiseSplit, exact_iff_of_iso, hS.homology_exact, homologyFunctorFactors, mapNatIso, mappingCocone, shortExact, shortExact_of_degreewise_shortExact
+--- 原说明 ---
+The intermediate object in the factorisation.
 -/
 noncomputable abbrev mid := mappingCocone (α f n)
 
-/--
-Definition of `ι` / `ι` 的定义
+/-- The first morphism of the factorisation. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个缩写定义，
+位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ι
-  signature: : K ⟶ mid f n
-  body: mappingCocone.lift (α f n) f 0 (by simp)
-
-中文:
-缩写 ι
-  签名: : K ⟶ mid f n
-  定义体: mappingCocone.lift (α f n) f 0 (by simp)
-
-Depends on / 依赖: mappingCocone, mappingCocone.lift
+--- 原说明 ---
+The first morphism of the factorisation.
 -/
 noncomputable abbrev ι : K ⟶ mid f n := mappingCocone.lift (α f n) f 0 (by simp)
 
-/--
-Definition of `π` / `π` 的定义
+/-- The second morphism of the factorisation. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个缩写定义，
+位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation π
-  signature: : mid f n ⟶ L
-  body: mappingCocone.fst (α f n)
-
-@[reassoc]
-
-中文:
-缩写 π
-  签名: : mid f n ⟶ L
-  定义体: mappingCocone.fst (α f n)
-
-@[reassoc]
-
-Depends on / 依赖: mappingCocone, mappingCocone.fst
+--- 原说明 ---
+The second morphism of the factorisation.
 -/
 noncomputable abbrev π : mid f n ⟶ L := mappingCocone.fst (α f n)
 
 @[reassoc]
-/--
-lemma `ι_π` / 引理 `ι_π`
-
-English:
-lemma ι_π
-  statement: ι f n ≫ π f n = f
-  proof: by simp
-
-中文:
-引理 ι_π
-  结论: ι f n ≫ π f n = f
-  证明: by simp
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个引理，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_π : ι f n ≫ π f n = f := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] : Mono (ι f n)
-  body: mono_of_mono_fac (ι_π f n)
-
-中文:
-实例 [单态射
-  签名: f] : 单态射 (ι f n)
-  定义体: mono_of_mono_fac (ι_π f n)
-
-Depends on / 依赖: mono_of_mono_fac
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个实例，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] : Mono (ι f n) := mono_of_mono_fac (ι_π f n)
-
-/--
-lemma `degreewiseEpiWithInjectiveKernel_π` / 引理 `degreewiseEpiWithInjectiveKernel_π`
-
-English:
-lemma degreewiseEpiWithInjectiveKernel_π
-  proof: by
-  intro i
-  rw [epiWithInjectiveKernel_iff]
-  exact ⟨_, inferInstance, (mappingCocone.inr (α f n)).1.v (i - 1) i (by lia), by simp,
-    ⟨{r := (mappingCocone.snd (α f n)).v _ _ (by lia)
-      s := (mappingCocone.inl (α f n)).v _ _ (by lia)
-      id := (add_comm _ _).trans (by simp [mappingCocone.id_X]) }⟩⟩
-
-中文:
-引理 degreewiseEpiWithInjectiveKernel_π
-  证明: by
-  intro i
-  rw [epiWithInjectiveKernel_iff]
-  exact ⟨_, inferInstance, (mappingCocone.inr (α f n)).1.v (i - 1) i (by lia), by simp,
-    ⟨{r := (mappingCocone.snd (α f n)).v _ _ (by lia)
-      s := (mappingCocone.inl (α f n)).v _ _ (by lia)
-      id := (add_comm _ _).trans (by simp [mappingCocone.id_X]) }⟩⟩
-
-Depends on / 依赖: add_comm, epiWithInjectiveKernel_iff, id_X, mappingCocone, mappingCocone.id_X, mappingCocone.inl, mappingCocone.inr, mappingCocone.snd
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.degreewiseEpiWithInjec
+tiveKernel_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.
+cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma degreewiseEpiWithInjectiveKernel_π :
     degreewiseEpiWithInjectiveKernel (π f n) := by
@@ -803,33 +493,12 @@ lemma degreewiseEpiWithInjectiveKernel_π :
     ⟨{r := (mappingCocone.snd (α f n)).v _ _ (by lia)
       s := (mappingCocone.inl (α f n)).v _ _ (by lia)
       id := (add_comm _ _).trans (by simp [mappingCocone.id_X]) }⟩⟩
-
-/--
-lemma `isIso_π_f` / 引理 `isIso_π_f`
-
-English:
-lemma isIso_π_f
-  given: (i : Int) (hi : i <= n)
-  statement: IsIso ((π f n).f i)
-  proof: by
-  refine ⟨(mappingCocone.inl (α f n)).v i i (add_zero i), ?_, by simp⟩
-  simp [← mappingCocone.id_X (α f n) i (i - 1) (by lia),
-    (isZero_single_obj_X _ _ _ _ (by lia)).eq_of_src
-      ((mappingCocone.inr (α f n)).1.v (i - 1) i (by lia)) 0]
-
-中文:
-引理 isIso_π_f
-  条件: (i : 整数) (hi : i <= n)
-  结论: 是同构 ((π f n).f i)
-  证明: by
-  refine ⟨(mappingCocone.inl (α f n)).v i i (add_zero i), ?_, by simp⟩
-  simp [← mappingCocone.id_X (α f n) i (i - 1) (by lia),
-    (isZero_single_obj_X _ _ _ _ (by lia)).eq_of_src
-      ((mappingCocone.inr (α f n)).1.v (i - 1) i (by lia)) 0]
-
-Depends on / 依赖: add_zero, eq_of_src, id_X, isZero_single_obj_X, mappingCocone, mappingCocone.id_X, mappingCocone.inl, mappingCocone.inr
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.isIso_** 是 Mathlib 中的一
+个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso_π_f (i : Int) (hi : i <= n) : IsIso ((π f n).f i) := by
+lemma isIso_π_f (i : ℤ) (hi : i ≤ n) : IsIso ((π f n).f i) := by
   refine ⟨(mappingCocone.inl (α f n)).v i i (add_zero i), ?_, by simp⟩
   simp [← mappingCocone.id_X (α f n) i (i - 1) (by lia),
     (isZero_single_obj_X _ _ _ _ (by lia)).eq_of_src
@@ -839,86 +508,33 @@ section
 
 attribute [local instance] HasDerivedCategory.standard
 
-/--
-lemma `mono_homologyMap_π` / 引理 `mono_homologyMap_π`
-
-English:
-lemma mono_homologyMap_π
-  given: (q : Int) (hq : q <= n)
-  statement: Mono (homologyMap (π f n) q)
-  proof: (CochainComplex.homologyMap_exact₁_of_distTriang _
-    (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) (q - 1) q (by lia)).mono_g
-      ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_src _ _)
-
-中文:
-引理 mono_homologyMap_π
-  条件: (q : 整数) (hq : q <= n)
-  结论: 单态射 (homologyMap (π f n) q)
-  证明: (CochainComplex.homologyMap_exact₁_of_distTriang _
-    (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) (q - 1) q (by lia)).mono_g
-      ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_src _ _)
-
-Depends on / 依赖: CochainComplex, CochainComplex.homologyMap_exact, DerivedCategory, DerivedCategory.mappingCocone_triangle_distinguished, ExactAt, ExactAt.isZero_homology, HomotopyCategory, HomotopyCategory.quotient, HomotopyCategory.subcategoryAcyclic, ObjectProperty, ObjectProperty.prop_of_iso, commShiftIso, eq_of_src, exactAt_single_obj, isKInjective_iff_rightOrthogonal, isZero_homology, le_shift, mappingCocone_triangle_distinguished, mono_g, prop_of_iso
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.mono_homologyMap_** 是 
+Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mono_homologyMap_π (q : Int) (hq : q <= n) : Mono (homologyMap (π f n) q) :=
+lemma mono_homologyMap_π (q : ℤ) (hq : q ≤ n) : Mono (homologyMap (π f n) q) :=
   (CochainComplex.homologyMap_exact₁_of_distTriang _
     (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) (q - 1) q (by lia)).mono_g
       ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_src _ _)
-
-/--
-lemma `epi_homologyMap_π` / 引理 `epi_homologyMap_π`
-
-English:
-lemma epi_homologyMap_π
-  given: (q : Int) (hq : q < n)
-  statement: Epi (homologyMap (π f n) q)
-  proof: (CochainComplex.homologyMap_exact₂_of_distTriang _
-    (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) q).epi_f
-      ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_tgt _ _)
-
-中文:
-引理 epi_homologyMap_π
-  条件: (q : 整数) (hq : q < n)
-  结论: 满态射 (homologyMap (π f n) q)
-  证明: (CochainComplex.homologyMap_exact₂_of_distTriang _
-    (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) q).epi_f
-      ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_tgt _ _)
-
-Depends on / 依赖: CochainComplex, CochainComplex.homologyMap_exact, DerivedCategory, DerivedCategory.mappingCocone_triangle_distinguished, ExactAt, ExactAt.isZero_homology, epi_f, eq_of_tgt, exactAt_single_obj, isZero_homology, mappingCocone_triangle_distinguished
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.epi_homologyMap_** 是 M
+athlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma epi_homologyMap_π (q : Int) (hq : q < n) : Epi (homologyMap (π f n) q) :=
+lemma epi_homologyMap_π (q : ℤ) (hq : q < n) : Epi (homologyMap (π f n) q) :=
   (CochainComplex.homologyMap_exact₂_of_distTriang _
     (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) q).epi_f
       ((ExactAt.isZero_homology (exactAt_single_obj _ _ _ _ (by lia))).eq_of_tgt _ _)
 
 end
 
-/--
-lemma `quasiIsoAt_π` / 引理 `quasiIsoAt_π`
-
-English:
-lemma quasiIsoAt_π
-  given: (q : Int) (hq : q < n)
-  statement: QuasiIsoAt (π f n) q
-  proof: by
-  have := mono_homologyMap_π f n q (by lia)
-  have := epi_homologyMap_π f n q hq
-  rw [quasiIsoAt_iff_isIso_homologyMap]
-  apply Balanced.isIso_of_mono_of_epi
-
-中文:
-引理 quasiIsoAt_π
-  条件: (q : 整数) (hq : q < n)
-  结论: 在处拟同构 (π f n) q
-  证明: by
-  have := mono_homologyMap_π f n q (by lia)
-  have := epi_homologyMap_π f n q hq
-  rw [quasiIsoAt_iff_isIso_homologyMap]
-  apply Balanced.isIso_of_mono_of_epi
-
-Depends on / 依赖: Balanced, Balanced.isIso_of_mono_of_epi, isIso_of_mono_of_epi, quasiIsoAt_iff_isIso_homologyMap
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.quasiIsoAt_** 是 Mathli
+b 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma quasiIsoAt_π (q : Int) (hq : q < n) : QuasiIsoAt (π f n) q := by
+lemma quasiIsoAt_π (q : ℤ) (hq : q < n) : QuasiIsoAt (π f n) q := by
   have := mono_homologyMap_π f n q (by lia)
   have := epi_homologyMap_π f n q hq
   rw [quasiIsoAt_iff_isIso_homologyMap]
@@ -926,82 +542,32 @@ lemma quasiIsoAt_π (q : Int) (hq : q < n) : QuasiIsoAt (π f n) q := by
 
 /-- The (exact) short complex `K.homology n ⟶ L.homology n ⟶ (S f n).homology n`. -/
 @[simps]
-/--
-Definition of `homologyShortComplex` / `homologyShortComplex` 的定义
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.homologyShortComplex**
+ 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step
+₂`。
+形式化陈述：homologyShortComplex : ShortComplex C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyShortComplex
-  signature: : ShortComplex C
-  body: ShortComplex.mk (homologyMap f n) (homologyMap (α f n) n) (by
-    rw [← homologyMap_comp]; rw [comp_α]; rw [homologyMap_zero])
-
-中文:
-定义 homologyShortComplex
-  签名: : 短复形 C
-  定义体: ShortComplex.mk (homologyMap f n) (homologyMap (α f n) n) (by
-    rw [← homologyMap_comp]; rw [comp_α]; rw [homologyMap_zero])
-
-Depends on / 依赖: ShortComplex, ShortComplex.mk, homologyMap, homologyMap_comp, homologyMap_zero
+--- 原说明 ---
+The (exact) short complex `K.homology n ⟶ L.homology n ⟶ (S f n).homology n`.
 -/
 noncomputable def homologyShortComplex : ShortComplex C :=
   ShortComplex.mk (homologyMap f n) (homologyMap (α f n) n) (by
-    rw [← homologyMap_comp]; rw [comp_α]; rw [homologyMap_zero])
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: (homologyMap f n)] :
-  body: by
-  assumption
-
-中文:
-实例 [单态射
-  签名: (homologyMap f n)] :
-  定义体: by
-  assumption
-
-Depends on / 依赖: isKInjective_of_injective
+    rw [← homologyMap_comp, comp_α, homologyMap_zero])
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个实例，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono (homologyMap f n)] :
     Mono (homologyShortComplex f n).f := by
   assumption
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono (homologyMap (p f n) n)
-  body: by
-  have := (S f n).isIso_homologyπ (n - 1) n (by simp) (by simp)
-  have : Mono ((truncGE (cokernel f) n).homologyπ n ≫ homologyMap (p f n) n) := by
-    rw [homologyπ_naturality (p f n) n]
-    infer_instance
-  have := (truncGE (cokernel f) n).isIso_homologyπ (n - 1) n (by simp)
-    ((isZero_of_isStrictlyGE _ n _ (by lia)).eq_of_src _ _)
-  rw [← IsIso.inv_hom_id_assoc ((truncGE (cokernel f) n).homologyπ n) (homologyMap (p f n) n)]
-  infer_instance
-
-omit [EnoughInjectives C] in
-
-中文:
-实例 :
-  签名: 单态射 (homologyMap (p f n) n)
-  定义体: by
-  have := (S f n).isIso_homologyπ (n - 1) n (by simp) (by simp)
-  have : Mono ((truncGE (cokernel f) n).homologyπ n ≫ homologyMap (p f n) n) := by
-    rw [homologyπ_naturality (p f n) n]
-    infer_instance
-  have := (truncGE (cokernel f) n).isIso_homologyπ (n - 1) n (by simp)
-    ((isZero_of_isStrictlyGE _ n _ (by lia)).eq_of_src _ _)
-  rw [← IsIso.inv_hom_id_assoc ((truncGE (cokernel f) n).homologyπ n) (homologyMap (p f n) n)]
-  infer_instance
-
-omit [EnoughInjectives C] in
-
-Depends on / 依赖: IsIso.inv_hom_id_assoc, cokernel, eq_of_src, homologyMap, infer_instance, inv_hom_id_assoc, isZero_of_isStrictlyGE, truncGE
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.** 是 Mathlib 中的一个实例，位于
+命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono (homologyMap (p f n) n) := by
   have := (S f n).isIso_homologyπ (n - 1) n (by simp) (by simp)
@@ -1014,71 +580,25 @@ instance : Mono (homologyMap (p f n) n) := by
   infer_instance
 
 omit [EnoughInjectives C] in
-/--
-lemma `shortExact` / 引理 `shortExact`
-
-English:
-lemma shortExact
-  given: [Mono f]
-  statement: (ShortComplex.mk _ _ (cokernel.condition f)).ShortExact where
-  proof: ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel f)
-
-中文:
-引理 shortExact
-  条件: [单态射 f]
-  结论: (短复形.mk _ _ (cokernel.condition f)).短正合 where
-  证明: ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel f)
-
-Depends on / 依赖: ShortComplex, ShortComplex.exact_of_g_is_cokernel, cokernelIsCokernel, exact_of_g_is_cokernel
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.shortExact** 是 Mathlib
+ 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+形式化陈述：shortExact [Mono f] : (ShortComplex.mk _ _ (cokernel.condition f)).ShortEx
+act where exact
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma shortExact [Mono f] : (ShortComplex.mk _ _ (cokernel.condition f)).ShortExact where
   exact := ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel f)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `exact_homologyShortComplex` / 引理 `exact_homologyShortComplex`
-
-English:
-lemma exact_homologyShortComplex
-  given: [Mono f]
-  proof: by
-  let T := ShortComplex.mk (homologyMap f n) (homologyMap (cokernel.π f) n)
-    (by rw [← homologyMap_comp, cokernel.condition, homologyMap_zero])
-  let φ : T ⟶ homologyShortComplex f n :=
-    { τ₁ := 𝟙 _
-      τ₂ := 𝟙 _
-      τ₃ := homologyMap ((cokernel f).πTruncGE n ≫ p f n) n
-      comm₂₃ := by
-        dsimp
-        rw [Category.id_comp]; rw [← homologyMap_comp]; rw [α] }
-  obtain ⟨_, _, _⟩ : Mono φ.τ₃ ∧ IsIso φ.τ₂ ∧ Epi φ.τ₁ := by
-    dsimp [φ]
-    rw [homologyMap_comp]
-    exact ⟨inferInstance, inferInstance, inferInstance⟩
-  rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ]
-  exact (shortExact f).homology_exact₂ n
-
-中文:
-引理 exact_homologyShortComplex
-  条件: [单态射 f]
-  证明: by
-  let T := ShortComplex.mk (homologyMap f n) (homologyMap (cokernel.π f) n)
-    (by rw [← homologyMap_comp, cokernel.condition, homologyMap_zero])
-  let φ : T ⟶ homologyShortComplex f n :=
-    { τ₁ := 𝟙 _
-      τ₂ := 𝟙 _
-      τ₃ := homologyMap ((cokernel f).πTruncGE n ≫ p f n) n
-      comm₂₃ := by
-        dsimp
-        rw [Category.id_comp]; rw [← homologyMap_comp]; rw [α] }
-  obtain ⟨_, _, _⟩ : Mono φ.τ₃ ∧ IsIso φ.τ₂ ∧ Epi φ.τ₁ := by
-    dsimp [φ]
-    rw [homologyMap_comp]
-    exact ⟨inferInstance, inferInstance, inferInstance⟩
-  rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ]
-  exact (shortExact f).homology_exact₂ n
-
-Depends on / 依赖: Category, Category.id_comp, ShortComplex, ShortComplex.ex, ShortComplex.mk, cokernel, cokernel.condition, condition, homologyMap, homologyMap_comp, homologyMap_zero, homologyShortComplex, id_comp
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.exact_homologyShortCom
+plex** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_co
+f.step₂`。
+形式化陈述：exact_homologyShortComplex [Mono f] : (homologyShortComplex f n).Exact
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exact_homologyShortComplex [Mono f] :
     (homologyShortComplex f n).Exact := by
@@ -1090,7 +610,7 @@ lemma exact_homologyShortComplex [Mono f] :
       τ₃ := homologyMap ((cokernel f).πTruncGE n ≫ p f n) n
       comm₂₃ := by
         dsimp
-        rw [Category.id_comp]; rw [← homologyMap_comp]; rw [α] }
+        rw [Category.id_comp, ← homologyMap_comp, α] }
   obtain ⟨_, _, _⟩ : Mono φ.τ₃ ∧ IsIso φ.τ₂ ∧ Epi φ.τ₁ := by
     dsimp [φ]
     rw [homologyMap_comp]
@@ -1098,57 +618,18 @@ lemma exact_homologyShortComplex [Mono f] :
   rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ]
   exact (shortExact f).homology_exact₂ n
 
-variable (hf : forall i < n, QuasiIsoAt f i)
+variable (hf : ∀ i < n, QuasiIsoAt f i)
 
 include hf
 
 omit [EnoughInjectives C] in
-/--
-lemma `isGE_cokernel` / 引理 `isGE_cokernel`
-
-English:
-lemma isGE_cokernel
-  given: [Mono f] [Mono (homologyMap f n)]
-  statement: (cokernel f).IsGE n
-  proof: by
-  rw [isGE_iff]
-  intro i hi
-  rw [exactAt_iff_isZero_homology]
-  refine ((shortExact f).homology_exact₃ i (i + 1) (by simp)).isZero_X₂ ?_ ?_
-  · have := hf i hi
-    rw [← ((shortExact f).homology_exact₂ i).epi_f_iff]
-    infer_instance
-  · rw [← ((shortExact f).homology_exact₁ i (i + 1) (by simp)).mono_g_iff]
-    by_cases hi' : i + 1 < n
-    · have := hf (i + 1) (by lia)
-      infer_instance
-    · obtain rfl : n = i + 1 := by lia
-      infer_instance
-
-omit [EnoughInjectives C] in
-
-中文:
-引理 isGE_cokernel
-  条件: [单态射 f] [单态射 (homologyMap f n)]
-  结论: (cokernel f).是GE n
-  证明: by
-  rw [isGE_iff]
-  intro i hi
-  rw [exactAt_iff_isZero_homology]
-  refine ((shortExact f).homology_exact₃ i (i + 1) (by simp)).isZero_X₂ ?_ ?_
-  · have := hf i hi
-    rw [← ((shortExact f).homology_exact₂ i).epi_f_iff]
-    infer_instance
-  · rw [← ((shortExact f).homology_exact₁ i (i + 1) (by simp)).mono_g_iff]
-    by_cases hi' : i + 1 < n
-    · have := hf (i + 1) (by lia)
-      infer_instance
-    · obtain rfl : n = i + 1 := by lia
-      infer_instance
-
-omit [EnoughInjectives C] in
-
-Depends on / 依赖: epi_f_iff, exactAt_iff_isZero_homology, infer_instance, isGE_iff, mono_g_iff, shortExact
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.isGE_cokernel** 是 Math
+lib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+形式化陈述：isGE_cokernel [Mono f] [Mono (homologyMap f n)] : (cokernel f).IsGE n
+参数：homologyMap f n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isGE_cokernel [Mono f] [Mono (homologyMap f n)] : (cokernel f).IsGE n := by
   rw [isGE_iff]
@@ -1166,24 +647,10 @@ lemma isGE_cokernel [Mono f] [Mono (homologyMap f n)] : (cokernel f).IsGE n := b
       infer_instance
 
 omit [EnoughInjectives C] in
-/--
-lemma `quasiIso_truncGEπ` / 引理 `quasiIso_truncGEπ`
-
-English:
-lemma quasiIso_truncGEπ
-  given: [Mono f] [Mono (homologyMap f n)]
-  proof: by
-  rw [quasiIso_πTruncGE_iff]
-  exact isGE_cokernel f n hf
-
-中文:
-引理 quasiIso_truncGEπ
-  条件: [单态射 f] [单态射 (homologyMap f n)]
-  证明: by
-  rw [quasiIso_πTruncGE_iff]
-  exact isGE_cokernel f n hf
-
-Depends on / 依赖: isGE_cokernel
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.quasiIso_truncGE** 是 M
+athlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma quasiIso_truncGEπ [Mono f] [Mono (homologyMap f n)] :
     QuasiIso ((cokernel f).πTruncGE n) := by
@@ -1193,58 +660,16 @@ lemma quasiIso_truncGEπ [Mono f] [Mono (homologyMap f n)] :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 attribute [local instance] HasDerivedCategory.standard in
-/--
-lemma `quasiIsoAt_ι` / 引理 `quasiIsoAt_ι`
-
-English:
-lemma quasiIsoAt_ι
-  given: [Mono f] [Mono (homologyMap f n)] (q : Int) (hq : q <= n)
-  proof: by
-  obtain hq | rfl := hq.lt_or_eq'
-  · have := quasiIsoAt_π f n q hq
-    rw [← quasiIsoAt_iff_comp_right _ (π f n)]; rw [mappingCocone.lift_fst]
-    exact hf q hq
-  · have := mono_homologyMap_π f n n (by lia)
-    have : Mono (homologyMap (mappingCocone.triangle (α f n)).mor₁ n) := by
-      dsimp; infer_instance
-    have h₁ := (exact_homologyShortComplex f n).fIsKernel
-    have h₂ := (CochainComplex.homologyMap_exact₂_of_distTriang _
-      (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) n).fIsKernel
-    have : homologyMap (ι f n) n = (IsLimit.conePointUniqueUpToIso h₁ h₂).hom := by
-      simp [← cancel_mono (homologyMap (π f n) n),
-        dsimp% IsLimit.conePointUniqueUpToIso_hom_comp h₁ h₂ .zero,
-        ← homologyMap_comp, mappingCocone.lift_fst]
-    rw [quasiIsoAt_iff_isIso_homologyMap]; rw [this]
-    infer_instance
-
-中文:
-引理 quasiIsoAt_ι
-  条件: [单态射 f] [单态射 (homologyMap f n)] (q : 整数) (hq : q <= n)
-  证明: by
-  obtain hq | rfl := hq.lt_or_eq'
-  · have := quasiIsoAt_π f n q hq
-    rw [← quasiIsoAt_iff_comp_right _ (π f n)]; rw [mappingCocone.lift_fst]
-    exact hf q hq
-  · have := mono_homologyMap_π f n n (by lia)
-    have : Mono (homologyMap (mappingCocone.triangle (α f n)).mor₁ n) := by
-      dsimp; infer_instance
-    have h₁ := (exact_homologyShortComplex f n).fIsKernel
-    have h₂ := (CochainComplex.homologyMap_exact₂_of_distTriang _
-      (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) n).fIsKernel
-    have : homologyMap (ι f n) n = (IsLimit.conePointUniqueUpToIso h₁ h₂).hom := by
-      simp [← cancel_mono (homologyMap (π f n) n),
-        dsimp% IsLimit.conePointUniqueUpToIso_hom_comp h₁ h₂ .zero,
-        ← homologyMap_comp, mappingCocone.lift_fst]
-    rw [quasiIsoAt_iff_isIso_homologyMap]; rw [this]
-    infer_instance
-
-Depends on / 依赖: CochainComplex, CochainComplex.homologyMap_exact, DerivedCategory, DerivedCategory.mappingCocone_triangle_distinguished, exact_homologyShortComplex, fIsKernel, homologyMa, homologyMap, hq.lt_or_eq, infer_instance, lift_fst, lt_or_eq, mappingCocone, mappingCocone.lift_fst, mappingCocone.triangle, mappingCocone_triangle_distinguished, quasiIsoAt_iff_comp_right, triangle
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂.quasiIsoAt_** 是 Mathli
+b 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma quasiIsoAt_ι [Mono f] [Mono (homologyMap f n)] (q : Int) (hq : q <= n) :
+lemma quasiIsoAt_ι [Mono f] [Mono (homologyMap f n)] (q : ℤ) (hq : q ≤ n) :
     QuasiIsoAt (ι f n) q := by
   obtain hq | rfl := hq.lt_or_eq'
   · have := quasiIsoAt_π f n q hq
-    rw [← quasiIsoAt_iff_comp_right _ (π f n)]; rw [mappingCocone.lift_fst]
+    rw [← quasiIsoAt_iff_comp_right _ (π f n), mappingCocone.lift_fst]
     exact hf q hq
   · have := mono_homologyMap_π f n n (by lia)
     have : Mono (homologyMap (mappingCocone.triangle (α f n)).mor₁ n) := by
@@ -1256,144 +681,94 @@ lemma quasiIsoAt_ι [Mono f] [Mono (homologyMap f n)] (q : Int) (hq : q <= n) :
       simp [← cancel_mono (homologyMap (π f n) n),
         dsimp% IsLimit.conePointUniqueUpToIso_hom_comp h₁ h₂ .zero,
         ← homologyMap_comp, mappingCocone.lift_fst]
-    rw [quasiIsoAt_iff_isIso_homologyMap]; rw [this]
+    rw [quasiIsoAt_iff_isIso_homologyMap, this]
     infer_instance
 
 end step₂
 
 open step₂ in
-/--
-lemma `step₂` / 引理 `step₂`
-
-English:
-lemma step₂
-  statement: [EnoughInjectives C] [Mono f] (n₀ n₁ : Int)
-  proof: ⟨.mk { mid := mid f n₁, ι := ι f n₁, π := π f n₁}
-    ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π f n₁⟩,
-    fun i hi => quasiIsoAt_ι f n₁ (fun j hj => hf j (by lia)) _ hi,
-    isIso_π_f f n₁⟩
-
-中文:
-引理 step₂
-  结论: [有足够单射 C] [单态射 f] (n₀ n₁ : 整数)
-  证明: ⟨.mk { mid := mid f n₁, ι := ι f n₁, π := π f n₁}
-    ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π f n₁⟩,
-    fun i hi => quasiIsoAt_ι f n₁ (fun j hj => hf j (by lia)) _ hi,
-    isIso_π_f f n₁⟩
-
-Depends on / 依赖: FullSubcategory, cofFib, isIsoLE, quasiIsoLE
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step** 是 Mathlib 中的一个引理，位于命名
+空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：step [EnoughInjectives C] [Mono f] (n₀ n₁ : Int) (hf : forall i <= n₀, Qua
+siIsoAt f i) (hn₁ : n₀ + 1 = n₁
+参数：n₀ n₁ : Int；hf : forall i <= n₀, QuasiIsoAt f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma step₂ [EnoughInjectives C] [Mono f] (n₀ n₁ : Int)
-    (hf : forall i <= n₀, QuasiIsoAt f i) [Mono (homologyMap f n₁)] (hn₁ : n₀ + 1 = n₁ := by lia) :
-    exists (F : (cofFib f).FullSubcategory), quasiIsoLE n₁ F ∧ isIsoLE n₁ F :=
+lemma step₂ [EnoughInjectives C] [Mono f] (n₀ n₁ : ℤ)
+    (hf : ∀ i ≤ n₀, QuasiIsoAt f i) [Mono (homologyMap f n₁)] (hn₁ : n₀ + 1 = n₁ := by lia) :
+    ∃ (F : (cofFib f).FullSubcategory), quasiIsoLE n₁ F ∧ isIsoLE n₁ F :=
   ⟨.mk { mid := mid f n₁, ι := ι f n₁, π := π f n₁}
     ⟨inferInstance, degreewiseEpiWithInjectiveKernel_π f n₁⟩,
-    fun i hi => quasiIsoAt_ι f n₁ (fun j hj => hf j (by lia)) _ hi,
+    fun i hi ↦ quasiIsoAt_ι f n₁ (fun j hj ↦ hf j (by lia)) _ hi,
     isIso_π_f f n₁⟩
-
-/--
-lemma `step` / 引理 `step`
-
-English:
-lemma step
-  statement: [EnoughInjectives C] [Mono f] (n₀ n₁ : Int)
-  proof: by
-  obtain ⟨F₁, h₁, h₂, _⟩ := step₁ f n₀ n₁ hf
-  obtain ⟨F₂, h₃, h₄⟩ := step₂ F₁.obj.ι n₀ n₁ h₁
-  refine ⟨.mk { mid := F₂.obj.mid, ι := F₂.obj.ι, π := F₂.obj.π ≫ F₁.obj.π }
-    ⟨by dsimp; infer_instance, MorphismProperty.comp_mem _ _ _ F₂.property.2 F₁.property.2⟩,
-    ⟨h₃, fun i hi => ?_⟩⟩
-  have := h₂ i hi
-  have := h₄ i (by lia)
-  dsimp
-  infer_instance
-
-中文:
-引理 step
-  结论: [有足够单射 C] [单态射 f] (n₀ n₁ : 整数)
-  证明: by
-  obtain ⟨F₁, h₁, h₂, _⟩ := step₁ f n₀ n₁ hf
-  obtain ⟨F₂, h₃, h₄⟩ := step₂ F₁.obj.ι n₀ n₁ h₁
-  refine ⟨.mk { mid := F₂.obj.mid, ι := F₂.obj.ι, π := F₂.obj.π ≫ F₁.obj.π }
-    ⟨by dsimp; infer_instance, MorphismProperty.comp_mem _ _ _ F₂.property.2 F₁.property.2⟩,
-    ⟨h₃, fun i hi => ?_⟩⟩
-  have := h₂ i hi
-  have := h₄ i (by lia)
-  dsimp
-  infer_instance
-
-Depends on / 依赖: FullSubcategory, MorphismProperty, MorphismProperty.comp_mem, cofFib, comp_mem, infer_instance, isIsoLE, obj.mid, property, quasiIsoLE
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.step** 是 Mathlib 中的一个引理，位于命名
+空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：step [EnoughInjectives C] [Mono f] (n₀ n₁ : Int) (hf : forall i <= n₀, Qua
+siIsoAt f i) (hn₁ : n₀ + 1 = n₁
+参数：n₀ n₁ : Int；hf : forall i <= n₀, QuasiIsoAt f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma step [EnoughInjectives C] [Mono f] (n₀ n₁ : Int)
-    (hf : forall i <= n₀, QuasiIsoAt f i) (hn₁ : n₀ + 1 = n₁ := by lia) :
-    exists (F : (cofFib f).FullSubcategory), quasiIsoLE n₁ F ∧ isIsoLE n₀ F := by
+lemma step [EnoughInjectives C] [Mono f] (n₀ n₁ : ℤ)
+    (hf : ∀ i ≤ n₀, QuasiIsoAt f i) (hn₁ : n₀ + 1 = n₁ := by lia) :
+    ∃ (F : (cofFib f).FullSubcategory), quasiIsoLE n₁ F ∧ isIsoLE n₀ F := by
   obtain ⟨F₁, h₁, h₂, _⟩ := step₁ f n₀ n₁ hf
   obtain ⟨F₂, h₃, h₄⟩ := step₂ F₁.obj.ι n₀ n₁ h₁
   refine ⟨.mk { mid := F₂.obj.mid, ι := F₂.obj.ι, π := F₂.obj.π ≫ F₁.obj.π }
     ⟨by dsimp; infer_instance, MorphismProperty.comp_mem _ _ _ F₂.property.2 F₁.property.2⟩,
-    ⟨h₃, fun i hi => ?_⟩⟩
+    ⟨h₃, fun i hi ↦ ?_⟩⟩
   have := h₂ i hi
   have := h₄ i (by lia)
   dsimp
   infer_instance
 
-/--
-Definition of `CofFibFactorizationQuasiIsoLE` / `CofFibFactorizationQuasiIsoLE` 的定义
+/-- The category of factorisations of `f` as a monomorphism that is a quasi-isomorphism
+in degrees `≤ n` followed by a degreewise epimorphism with an injective kernel. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof
+`。
+形式化陈述：CofFibFactorizationQuasiIsoLE (n : Int)
+参数：n : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CofFibFactorizationQuasiIsoLE
-  signature: (n : Int)
-  body: (quasiIsoLE (f := f) n).FullSubcategory
-
-中文:
-缩写 CofFibFactorizationQuasiIsoLE
-  签名: (n : 整数)
-  定义体: (quasiIsoLE (f := f) n).FullSubcategory
-
-Depends on / 依赖: FullSubcategory, HomotopyCategory, HomotopyCategory.quotient, HomotopyCategory.subcategoryAcyclic, ObjectProperty, ObjectProperty.prop_of_iso, commShiftIso, isKProjective_iff_leftOrthogonal, le_shift, leftOrthogonal, leftOrthogonal.le_shift, prop_of_iso, quasiIsoLE, quotient, subcategoryAcyclic, symm.app
+--- 原说明 ---
+The category of factorisations of `f` as a monomorphism that is a quasi-isomorph
+ism
+in degrees `≤ n` followed by a degreewise epimorphism with an injective kernel.
 -/
-abbrev CofFibFactorizationQuasiIsoLE (n : Int) := (quasiIsoLE (f := f) n).FullSubcategory
+abbrev CofFibFactorizationQuasiIsoLE (n : ℤ) := (quasiIsoLE (f := f) n).FullSubcategory
 
 variable [EnoughInjectives C]
 
 namespace CofFibFactorizationQuasiIsoLE
 
-/--
-Definition of `zero` / `zero` 的定义
+/-- When `K` and `L` are both strictly `≥ n + 1`, this is the factorization `f ≫ 𝟙 L = f`
+of a monomorphism `f : K ⟶ L` as a monomorphism that is a quasi-isomorphism in degrees `≤ n`
+followed by a degreewise epimorphism with an injective kernel. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E.zero** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_
+cof.CofFibFactorizationQuasiIsoLE`。
+形式化陈述：zero [Mono f] (n : Int) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)] 
+: CofFibFactorizationQuasiIsoLE f (n + (0 : Nat))
+参数：n : Int；n + 1；n + 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zero
-  signature: [Mono f] (n : Int) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)]
-  body: .mk (.mk { mid := L, ι := f, π := 𝟙 L }
-    ⟨by assumption, fun i => epiWithInjectiveKernel_of_iso (𝟙 (L.X i))⟩)
-    (fun i hi => by
-      dsimp
-      rw [quasiIsoAt_iff_isIso_homologyMap]
-      apply IsZero.isIso
-      all_goals
-      · rw [← exactAt_iff_isZero_homology]
-        exact exactAt_of_isGE _ (n + 1) i)
-
-中文:
-定义 zero
-  签名: [单态射 f] (n : 整数) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)]
-  定义体: .mk (.mk { mid := L, ι := f, π := 𝟙 L }
-    ⟨by assumption, fun i => epiWithInjectiveKernel_of_iso (𝟙 (L.X i))⟩)
-    (fun i hi => by
-      dsimp
-      rw [quasiIsoAt_iff_isIso_homologyMap]
-      apply IsZero.isIso
-      all_goals
-      · rw [← exactAt_iff_isZero_homology]
-        exact exactAt_of_isGE _ (n + 1) i)
-
-Depends on / 依赖: IsZero, IsZero.isIso, all_goals, epiWithInjectiveKernel_of_iso, exactAt_iff_isZero_homology, exactAt_of_isGE, quasiIsoAt_iff_isIso_homologyMap
+--- 原说明 ---
+When `K` and `L` are both strictly `≥ n + 1`, this is the factorization `f ≫ 𝟙 L
+ = f`
+of a monomorphism `f : K ⟶ L` as a monomorphism that is a quasi-isomorphism in d
+egrees `≤ n`
+followed by a degreewise epimorphism with an injective kernel.
 -/
-def zero [Mono f] (n : Int) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)] :
-    CofFibFactorizationQuasiIsoLE f (n + (0 : Nat)) :=
+def zero [Mono f] (n : ℤ) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)] :
+    CofFibFactorizationQuasiIsoLE f (n + (0 : ℕ)) :=
   .mk (.mk { mid := L, ι := f, π := 𝟙 L }
-    ⟨by assumption, fun i => epiWithInjectiveKernel_of_iso (𝟙 (L.X i))⟩)
-    (fun i hi => by
+    ⟨by assumption, fun i ↦ epiWithInjectiveKernel_of_iso (𝟙 (L.X i))⟩)
+    (fun i hi ↦ by
       dsimp
       rw [quasiIsoAt_iff_isIso_homologyMap]
       apply IsZero.isIso
@@ -1402,35 +777,21 @@ def zero [Mono f] (n : Int) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE (n + 1)] :
         exact exactAt_of_isGE _ (n + 1) i)
 
 variable {f} in
-/--
-lemma `exists_next` / 引理 `exists_next`
-
-English:
-lemma exists_next
-  statement: {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  proof: by
-  obtain ⟨F₁₂, h₁, h₂⟩ := step F.obj.obj.ι n₀ n₁ F.property
-  exact ⟨.mk (.mk { mid := F₁₂.obj.mid, ι := F₁₂.obj.ι, π := F₁₂.obj.π ≫ F.obj.obj.π }
-    ⟨by dsimp; infer_instance,
-      MorphismProperty.comp_mem _ _ _ F₁₂.property.2 F.obj.property.2⟩) h₁,
-      ObjectProperty.homMk { h := F₁₂.obj.π }, h₂⟩
-
-中文:
-引理 存在_next
-  结论: {n₀ : 整数} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  证明: by
-  obtain ⟨F₁₂, h₁, h₂⟩ := step F.obj.obj.ι n₀ n₁ F.property
-  exact ⟨.mk (.mk { mid := F₁₂.obj.mid, ι := F₁₂.obj.ι, π := F₁₂.obj.π ≫ F.obj.obj.π }
-    ⟨by dsimp; infer_instance,
-      MorphismProperty.comp_mem _ _ _ F₁₂.property.2 F.obj.property.2⟩) h₁,
-      ObjectProperty.homMk { h := F₁₂.obj.π }, h₂⟩
-
-Depends on / 依赖: F.obj.obj, F.obj.property, F.property, MorphismProperty, MorphismProperty.comp_mem, ObjectProperty, ObjectProperty.homMk, comp_mem, infer_instance, obj.mid, property
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E.exists_next** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuille
+n.cm5a_cof.CofFibFactorizationQuasiIsoLE`。
+形式化陈述：exists_next {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀) (n₁ : Int)
+ (hn₁ : n₀ + 1 = n₁) : exists (F' : CofFibFactorizationQuasiIsoLE f n₁) (g : F'.
+1 ⟶ F.1), forall (i : Int) (_ : i <= n₀), IsIso (g.hom.h.f i)
+参数：F : CofFibFactorizationQuasiIsoLE f n₀；n₁ : Int；hn₁ : n₀ + 1 = n₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma exists_next {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-    (n₁ : Int) (hn₁ : n₀ + 1 = n₁) :
-    exists (F' : CofFibFactorizationQuasiIsoLE f n₁) (g : F'.1 ⟶ F.1),
-      forall (i : Int) (_ : i <= n₀), IsIso (g.hom.h.f i) := by
+lemma exists_next {n₀ : ℤ} (F : CofFibFactorizationQuasiIsoLE f n₀)
+    (n₁ : ℤ) (hn₁ : n₀ + 1 = n₁) :
+    ∃ (F' : CofFibFactorizationQuasiIsoLE f n₁) (g : F'.1 ⟶ F.1),
+      ∀ (i : ℤ) (_ : i ≤ n₀), IsIso (g.hom.h.f i) := by
   obtain ⟨F₁₂, h₁, h₂⟩ := step F.obj.obj.ι n₀ n₁ F.property
   exact ⟨.mk (.mk { mid := F₁₂.obj.mid, ι := F₁₂.obj.ι, π := F₁₂.obj.π ≫ F.obj.obj.π }
     ⟨by dsimp; infer_instance,
@@ -1438,175 +799,146 @@ lemma exists_next {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
       ObjectProperty.homMk { h := F₁₂.obj.π }, h₂⟩
 
 variable {f} in
-/--
-Definition of `next` / `next` 的定义
+/-- Given `F : CofFibFactorizationQuasiIsoLE f n₀`, this is term in
+`CofFibFactorizationQuasiIsoLE f n₁` with `n₀ + 1 = n₁` that is given
+by the lemma `exists_next`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E.next** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_
+cof.CofFibFactorizationQuasiIsoLE`。
+形式化陈述：next {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀) (n₁ : Int) (hn₁ :
+ n₀ + 1 = n₁) : CofFibFactorizationQuasiIsoLE f n₁
+参数：F : CofFibFactorizationQuasiIsoLE f n₀；n₁ : Int；hn₁ : n₀ + 1 = n₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition next
-  signature: {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  body: (F.exists_next n₁ hn₁).choose
-
-中文:
-定义 next
-  签名: {n₀ : 整数} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  定义体: (F.exists_next n₁ hn₁).choose
-
-Depends on / 依赖: F.exists_next, exists_next
+--- 原说明 ---
+Given `F : CofFibFactorizationQuasiIsoLE f n₀`, this is term in
+`CofFibFactorizationQuasiIsoLE f n₁` with `n₀ + 1 = n₁` that is given
+by the lemma `exists_next`.
 -/
-noncomputable def next {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-    (n₁ : Int) (hn₁ : n₀ + 1 = n₁) :
+noncomputable def next {n₀ : ℤ} (F : CofFibFactorizationQuasiIsoLE f n₀)
+    (n₁ : ℤ) (hn₁ : n₀ + 1 = n₁) :
     CofFibFactorizationQuasiIsoLE f n₁ :=
   (F.exists_next n₁ hn₁).choose
 
 variable {f} in
-/--
-Definition of `fromNext` / `fromNext` 的定义
+/-- Given `F : CofFibFactorizationQuasiIsoLE f n₀`, this is the morphism which relates
+the intermediate objects in the factorisations `F.next n₁ _` and `F`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E.fromNext** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.c
+m5a_cof.CofFibFactorizationQuasiIsoLE`。
+形式化陈述：fromNext {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀) (n₁ : Int) (h
+n₁ : n₀ + 1 = n₁) : (F.next n₁ hn₁).obj ⟶ F.obj
+参数：F : CofFibFactorizationQuasiIsoLE f n₀；n₁ : Int；hn₁ : n₀ + 1 = n₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromNext
-  signature: {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  body: (F.exists_next n₁ hn₁).choose_spec.choose
-
-中文:
-定义 fromNext
-  签名: {n₀ : 整数} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  定义体: (F.exists_next n₁ hn₁).choose_spec.choose
-
-Depends on / 依赖: CochainComplex, CochainComplex.isKProjective_of_projective, F.exists_next, choose_spec, choose_spec.choose, exists_next, isKProjective_of_projective
+--- 原说明 ---
+Given `F : CofFibFactorizationQuasiIsoLE f n₀`, this is the morphism which relat
+es
+the intermediate objects in the factorisations `F.next n₁ _` and `F`.
 -/
-noncomputable def fromNext {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-    (n₁ : Int) (hn₁ : n₀ + 1 = n₁) :
+noncomputable def fromNext {n₀ : ℤ} (F : CofFibFactorizationQuasiIsoLE f n₀)
+    (n₁ : ℤ) (hn₁ : n₀ + 1 = n₁) :
     (F.next n₁ hn₁).obj ⟶ F.obj :=
   (F.exists_next n₁ hn₁).choose_spec.choose
 
 variable {f} in
-/--
-lemma `isIso_fromNext_hom_h_f` / 引理 `isIso_fromNext_hom_h_f`
-
-English:
-lemma isIso_fromNext_hom_h_f
-  statement: {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  proof: (F.exists_next n₁ hn₁).choose_spec.choose_spec i hi
-
-中文:
-引理 isIso_fromNext_hom_h_f
-  结论: {n₀ : 整数} (F : CofFibFactorizationQuasiIsoLE f n₀)
-  证明: (F.exists_next n₁ hn₁).choose_spec.choose_spec i hi
-
-Depends on / 依赖: F.exists_next, choose_spec, choose_spec.choose_spec, exists_next
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E.isIso_fromNext_hom_h_f** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCat
+egoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoLE`。
+形式化陈述：isIso_fromNext_hom_h_f {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
+ (n₁ : Int) (hn₁ : n₀ + 1 = n₁) (i : Int) (hi : i <= n₀) : IsIso ((F.fromNext n₁
+ hn₁).hom.h.f i)
+参数：F : CofFibFactorizationQuasiIsoLE f n₀；n₁ : Int；hn₁ : n₀ + 1 = n₁；i : Int；hi 
+: i <= n₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso_fromNext_hom_h_f {n₀ : Int} (F : CofFibFactorizationQuasiIsoLE f n₀)
-    (n₁ : Int) (hn₁ : n₀ + 1 = n₁) (i : Int) (hi : i <= n₀) :
+lemma isIso_fromNext_hom_h_f {n₀ : ℤ} (F : CofFibFactorizationQuasiIsoLE f n₀)
+    (n₁ : ℤ) (hn₁ : n₀ + 1 = n₁) (i : ℤ) (hi : i ≤ n₀) :
     IsIso ((F.fromNext n₁ hn₁).hom.h.f i) :=
   (F.exists_next n₁ hn₁).choose_spec.choose_spec i hi
 
-/--
-Definition of `sequence` / `sequence` 的定义
+/-- Assuming `f : K ⟶ L` is a monomorphism between complexes that are strictly `≥ n₀ + 1`,
+this is a dependent sequence of terms in `CofFibFactorizationQuasiIsoLE f (n₀ + q)`
+for all `q : ℕ`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E.sequence** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.c
+m5a_cof.CofFibFactorizationQuasiIsoLE`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sequence
-
-中文:
-定义 sequence
+--- 原说明 ---
+Assuming `f : K ⟶ L` is a monomorphism between complexes that are strictly `≥ n₀
+ + 1`,
+this is a dependent sequence of terms in `CofFibFactorizationQuasiIsoLE f (n₀ + 
+q)`
+for all `q : ℕ`.
 -/
 noncomputable def sequence
-    [Mono f] (n₀ : Int) [K.IsStrictlyGE (n₀ + 1)] [L.IsStrictlyGE (n₀ + 1)] :
-    forall (q : Nat), CofFibFactorizationQuasiIsoLE f (n₀ + q)
+    [Mono f] (n₀ : ℤ) [K.IsStrictlyGE (n₀ + 1)] [L.IsStrictlyGE (n₀ + 1)] :
+    ∀ (q : ℕ), CofFibFactorizationQuasiIsoLE f (n₀ + q)
   | 0 => zero f n₀
   | q + 1 => (sequence n₀ q).next _ (by lia)
 
-variable [Mono f] (n₀ : Int) [K.IsStrictlyGE (n₀ + 1)] [L.IsStrictlyGE (n₀ + 1)]
+variable [Mono f] (n₀ : ℤ) [K.IsStrictlyGE (n₀ + 1)] [L.IsStrictlyGE (n₀ + 1)]
 
-/--
-Definition of `toSequenceNext` / `toSequenceNext` 的定义
+/-- The morphism `(sequence f n₀ (q + 1)).obj ⟶ (sequence f n₀ q).obj` given by `fromNext`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.CofFibFactorizationQuasiIsoL
+E.toSequenceNext** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex.Plus.modelCategoryQui
+llen.cm5a_cof.CofFibFactorizationQuasiIsoLE`。
+形式化陈述：toSequenceNext (q : Nat) : (sequence f n₀ (q + 1)).obj ⟶ (sequence f n₀ q)
+.obj
+参数：q : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSequenceNext
-  signature: (q : Nat)
-  body: (sequence f n₀ q).fromNext _ (by lia)
-
-中文:
-定义 toSequenceNext
-  签名: (q : 自然数)
-  定义体: (sequence f n₀ q).fromNext _ (by lia)
-
-Depends on / 依赖: fromNext, sequence
+--- 原说明 ---
+The morphism `(sequence f n₀ (q + 1)).obj ⟶ (sequence f n₀ q).obj` given by `fro
+mNext`.
 -/
-noncomputable def toSequenceNext (q : Nat) :
+noncomputable def toSequenceNext (q : ℕ) :
     (sequence f n₀ (q + 1)).obj ⟶ (sequence f n₀ q).obj :=
   (sequence f n₀ q).fromNext _ (by lia)
 
 end CofFibFactorizationQuasiIsoLE
 
-variable [Mono f] (n₀ : Int) [K.IsStrictlyGE (n₀ + 1)] [L.IsStrictlyGE (n₀ + 1)]
+variable [Mono f] (n₀ : ℤ) [K.IsStrictlyGE (n₀ + 1)] [L.IsStrictlyGE (n₀ + 1)]
 
-/--
-Definition of `functor` / `functor` 的定义
+/-- Given a monomorphism `f : K ⟶ L` between complexes that are strictly `≥ n₀ + 1`,
+this is a projective system in `(cofFib f).FullSubcategory` given by the
+sequence of morphisms `CofFibFactorizationQuasiIsoLE.toSequenceNext`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.functor** 是 Mathlib 中的一个定义，位
+于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：functor : Natᵒᵖ ⥤ (cofFib f).FullSubcategory
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : Natᵒᵖ ⥤ (cofFib f).FullSubcategory
-  body: (Functor.ofSequence (fun q => (CofFibFactorizationQuasiIsoLE.toSequenceNext f n₀ q).op)).leftOp
-
-中文:
-定义 functor
-  签名: : 自然数ᵒᵖ ⥤ (cofFib f).满子范畴
-  定义体: (Functor.ofSequence (fun q => (CofFibFactorizationQuasiIsoLE.toSequenceNext f n₀ q).op)).leftOp
-
-Depends on / 依赖: CofFibFactorizationQuasiIsoLE, CofFibFactorizationQuasiIsoLE.toSequenceNext, Functor, Functor.ofSequence, leftOp, ofSequence, toSequenceNext
+--- 原说明 ---
+Given a monomorphism `f : K ⟶ L` between complexes that are strictly `≥ n₀ + 1`,
+this is a projective system in `(cofFib f).FullSubcategory` given by the
+sequence of morphisms `CofFibFactorizationQuasiIsoLE.toSequenceNext`.
 -/
-noncomputable def functor : Natᵒᵖ ⥤ (cofFib f).FullSubcategory :=
-  (Functor.ofSequence (fun q => (CofFibFactorizationQuasiIsoLE.toSequenceNext f n₀ q).op)).leftOp
+noncomputable def functor : ℕᵒᵖ ⥤ (cofFib f).FullSubcategory :=
+  (Functor.ofSequence (fun q ↦ (CofFibFactorizationQuasiIsoLE.toSequenceNext f n₀ q).op)).leftOp
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isIso_functor_map_hom_h_f` / 引理 `isIso_functor_map_hom_h_f`
-
-English:
-lemma isIso_functor_map_hom_h_f
-  given: {q₁ q₂ : Nat} (hq : q₁ <= q₂) (i : Int) (hi : i <= n₀ + q₁)
-  proof: by
-  wlog hq' : q₁ + 1 = q₂ generalizing q₁ q₂
-  · clear hq'
-    obtain ⟨k, hk⟩ := Nat.le.dest hq
-    induction k generalizing q₁ q₂ with
-    | zero =>
-      obtain rfl : q₁ = q₂ := by simpa using hk
-      simp only [homOfLE_refl, op_id, CategoryTheory.Functor.map_id,
-        ObjectProperty.FullSubcategory.id_hom, Factorisation.id_h, id_f]
-      infer_instance
-    | succ k h =>
-      rw [← homOfLE_comp (show q₁ <= q₁ + k by lia) (show q₁ + k <= q₂ by lia)]; rw [op_comp]; rw [Functor.map_comp]
-      exact IsIso.comp_isIso' (this _ (by lia) (by lia)) (h _ (by lia) rfl)
-  subst hq'
-  dsimp [functor]
-  rw [Functor.ofSequence_map_homOfLE_succ]
-  exact CofFibFactorizationQuasiIsoLE.isIso_fromNext_hom_h_f _ _ _ _ hi
-
-中文:
-引理 isIso_functor_map_hom_h_f
-  条件: {q₁ q₂ : 自然数} (hq : q₁ <= q₂) (i : 整数) (hi : i <= n₀ + q₁)
-  证明: by
-  wlog hq' : q₁ + 1 = q₂ generalizing q₁ q₂
-  · clear hq'
-    obtain ⟨k, hk⟩ := Nat.le.dest hq
-    induction k generalizing q₁ q₂ with
-    | zero =>
-      obtain rfl : q₁ = q₂ := by simpa using hk
-      simp only [homOfLE_refl, op_id, CategoryTheory.Functor.map_id,
-        ObjectProperty.FullSubcategory.id_hom, Factorisation.id_h, id_f]
-      infer_instance
-    | succ k h =>
-      rw [← homOfLE_comp (show q₁ <= q₁ + k by lia) (show q₁ + k <= q₂ by lia)]; rw [op_comp]; rw [Functor.map_comp]
-      exact IsIso.comp_isIso' (this _ (by lia) (by lia)) (h _ (by lia) rfl)
-  subst hq'
-  dsimp [functor]
-  rw [Functor.ofSequence_map_homOfLE_succ]
-  exact CofFibFactorizationQuasiIsoLE.isIso_fromNext_hom_h_f _ _ _ _ hi
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Factorisation, Factorisation.id_h, FullSubcategory, Functor, Functor.map_comp, IsIso.comp_isIso, Nat.le.dest, ObjectProperty, ObjectProperty.FullSubcategory.id_hom, comp_isIso, generalizing, homOfLE_comp, homOfLE_refl, id_f, id_h, id_hom, infer_instance, map_comp
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.isIso_functor_map_hom_h_f** 
+是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：isIso_functor_map_hom_h_f {q₁ q₂ : Nat} (hq : q₁ <= q₂) (i : Int) (hi : i 
+<= n₀ + q₁) : IsIso (((functor f n₀).map (homOfLE hq).op).hom.h.f i)
+参数：hq : q₁ <= q₂；i : Int；hi : i <= n₀ + q₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso_functor_map_hom_h_f {q₁ q₂ : Nat} (hq : q₁ <= q₂) (i : Int) (hi : i <= n₀ + q₁) :
+lemma isIso_functor_map_hom_h_f {q₁ q₂ : ℕ} (hq : q₁ ≤ q₂) (i : ℤ) (hi : i ≤ n₀ + q₁) :
     IsIso (((functor f n₀).map (homOfLE hq).op).hom.h.f i) := by
   wlog hq' : q₁ + 1 = q₂ generalizing q₁ q₂
   · clear hq'
@@ -1618,185 +950,123 @@ lemma isIso_functor_map_hom_h_f {q₁ q₂ : Nat} (hq : q₁ <= q₂) (i : Int) 
         ObjectProperty.FullSubcategory.id_hom, Factorisation.id_h, id_f]
       infer_instance
     | succ k h =>
-      rw [← homOfLE_comp (show q₁ <= q₁ + k by lia) (show q₁ + k <= q₂ by lia)]; rw [op_comp]; rw [Functor.map_comp]
+      rw [← homOfLE_comp (show q₁ ≤ q₁ + k by lia) (show q₁ + k ≤ q₂ by lia),
+        op_comp, Functor.map_comp]
       exact IsIso.comp_isIso' (this _ (by lia) (by lia)) (h _ (by lia) rfl)
   subst hq'
   dsimp [functor]
   rw [Functor.ofSequence_map_homOfLE_succ]
   exact CofFibFactorizationQuasiIsoLE.isIso_fromNext_hom_h_f _ _ _ _ hi
 
-/--
-Definition of `cochainComplexFunctor` / `cochainComplexFunctor` 的定义
+/-- Given a monomorphism `f : K ⟶ L` between complexes that are strictly `≥ n₀ + 1`,
+this is a projective system in `CochainComplex C ℤ`, whose limit shall give
+the intermediate object in the factorization lemma `cm5a_cof`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.cochainComplexFunctor** 是 Ma
+thlib 中的一个缩写定义，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：cochainComplexFunctor : Natᵒᵖ ⥤ CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation cochainComplexFunctor
-  signature: : Natᵒᵖ ⥤ CochainComplex C Int
-  body: functor f n₀ ⋙ ObjectProperty.ι _ ⋙ Factorisation.forget
-
-中文:
-缩写 cochainComplexFunctor
-  签名: : 自然数ᵒᵖ ⥤ 上链复形 C 整数
-  定义体: functor f n₀ ⋙ ObjectProperty.ι _ ⋙ Factorisation.forget
-
-Depends on / 依赖: Factorisation, Factorisation.forget, ObjectProperty, forget, functor
+--- 原说明 ---
+Given a monomorphism `f : K ⟶ L` between complexes that are strictly `≥ n₀ + 1`,
+this is a projective system in `CochainComplex C ℤ`, whose limit shall give
+the intermediate object in the factorization lemma `cm5a_cof`.
 -/
-noncomputable abbrev cochainComplexFunctor : Natᵒᵖ ⥤ CochainComplex C Int :=
+noncomputable abbrev cochainComplexFunctor : ℕᵒᵖ ⥤ CochainComplex C ℤ :=
   functor f n₀ ⋙ ObjectProperty.ι _ ⋙ Factorisation.forget
-
-/--
-lemma `isEventuallyConstantTo` / 引理 `isEventuallyConstantTo`
-
-English:
-lemma isEventuallyConstantTo
-  given: (i : Int) (q : Nat) (h : i <= n₀ + q := by lia)
-  proof: fun _ _ => isIso_functor_map_hom_h_f _ _ _ _ (by lia)
-
-中文:
-引理 isEventuallyConstantTo
-  条件: (i : 整数) (q : 自然数) (h : i <= n₀ + q := by lia)
-  证明: fun _ _ => isIso_functor_map_hom_h_f _ _ _ _ (by lia)
-
-Depends on / 依赖: IsEventuallyConstantTo, cochainComplexFunctor, isIso_functor_map_hom_h_f
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.isEventuallyConstantTo** 是 M
+athlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：isEventuallyConstantTo (i : Int) (q : Nat) (h : i <= n₀ + q
+参数：i : Int；q : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isEventuallyConstantTo (i : Int) (q : Nat) (h : i <= n₀ + q := by lia) :
+lemma isEventuallyConstantTo (i : ℤ) (q : ℕ) (h : i ≤ n₀ + q := by lia) :
     (cochainComplexFunctor f n₀ ⋙ eval _ _ i).IsEventuallyConstantTo (op q) :=
-  fun _ _ => isIso_functor_map_hom_h_f _ _ _ _ (by lia)
-
-instance (i : Int) : HasLimit (cochainComplexFunctor f n₀ ⋙ eval _ _ i) :=
+  fun _ _ ↦ isIso_functor_map_hom_h_f _ _ _ _ (by lia)
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个实例，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (i : ℤ) : HasLimit (cochainComplexFunctor f n₀ ⋙ eval _ _ i) :=
   (isEventuallyConstantTo f n₀ i (n₀ - i).natAbs).hasLimit
 
-/--
-Definition of `mid` / `mid` 的定义
+/-- Given a monomorphism `f : K ⟶ L` between complexes that are strictly `≥ n₀ + 1`,
+this is the limit of the projective system
+`cochainComplexFunctor f n₀ : Nᵒᵖ ⥤ CochainComplex C ℤ`: this is the
+intermediate object in the factorization lemma `cm5a_cof`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.mid** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：mid : CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mid
-  signature: : CochainComplex C Int
-  body: limit (cochainComplexFunctor f n₀)
-
-中文:
-缩写 mid
-  签名: : 上链复形 C 整数
-  定义体: limit (cochainComplexFunctor f n₀)
-
-Depends on / 依赖: cochainComplexFunctor
+--- 原说明 ---
+Given a monomorphism `f : K ⟶ L` between complexes that are strictly `≥ n₀ + 1`,
+this is the limit of the projective system
+`cochainComplexFunctor f n₀ : Nᵒᵖ ⥤ CochainComplex C ℤ`: this is the
+intermediate object in the factorization lemma `cm5a_cof`.
 -/
-noncomputable abbrev mid : CochainComplex C Int := limit (cochainComplexFunctor f n₀)
+noncomputable abbrev mid : CochainComplex C ℤ := limit (cochainComplexFunctor f n₀)
 
-/--
-Definition of `midπ` / `midπ` 的定义
+/-- The projections from `mid f n₀`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.mid** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：mid : CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition midπ
-  signature: (q : Nat)
-  body: limit.π _ (op q)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 midπ
-  签名: (q : 自然数)
-  定义体: limit.π _ (op q)
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+The projections from `mid f n₀`.
 -/
-noncomputable def midπ (q : Nat) : mid f n₀ ⟶ ((functor f n₀).obj (op q)).obj.mid :=
+noncomputable def midπ (q : ℕ) : mid f n₀ ⟶ ((functor f n₀).obj (op q)).obj.mid :=
   limit.π _ (op q)
 
 @[reassoc (attr := simp)]
-/--
-lemma `midπ_w` / 引理 `midπ_w`
-
-English:
-lemma midπ_w
-  given: (q₁ q₂ : Nat) (hq : q₁ <= q₂)
-  proof: limit.w _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 midπ_w
-  条件: (q₁ q₂ : 自然数) (hq : q₁ <= q₂)
-  证明: limit.w _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: limit.w
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.mid** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：mid : CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma midπ_w (q₁ q₂ : Nat) (hq : q₁ <= q₂) :
+lemma midπ_w (q₁ q₂ : ℕ) (hq : q₁ ≤ q₂) :
     midπ f n₀ q₂ ≫ ((functor f n₀).map (homOfLE hq).op).hom.h =
       midπ f n₀ q₁ :=
   limit.w _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `midπ_w_f` / 引理 `midπ_w_f`
-
-English:
-lemma midπ_w_f
-  given: (q₁ q₂ : Nat) (hq : q₁ <= q₂) (i : Int)
-  proof: by
-  rw [← midπ_w f n₀ q₁ q₂ hq]
-  dsimp
-
-中文:
-引理 midπ_w_f
-  条件: (q₁ q₂ : 自然数) (hq : q₁ <= q₂) (i : 整数)
-  证明: by
-  rw [← midπ_w f n₀ q₁ q₂ hq]
-  dsimp
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.mid** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：mid : CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma midπ_w_f (q₁ q₂ : Nat) (hq : q₁ <= q₂) (i : Int) :
+lemma midπ_w_f (q₁ q₂ : ℕ) (hq : q₁ ≤ q₂) (i : ℤ) :
     (midπ f n₀ q₂).f i ≫ ((functor f n₀).map (homOfLE hq).op).hom.h.f i =
       (midπ f n₀ q₁).f i := by
   rw [← midπ_w f n₀ q₁ q₂ hq]
   dsimp
-
-/--
-lemma `isIso_midπ_f` / 引理 `isIso_midπ_f`
-
-English:
-lemma isIso_midπ_f
-  given: (q : Nat) (i : Int) (h : i <= n₀ + q := by lia)
-  proof: isIso_π_f_of_isLimit_of_isEventuallyConstantTo _ (limit.isLimit _) _ _
-    (isEventuallyConstantTo f n₀ _ _)
-
-中文:
-引理 isIso_midπ_f
-  条件: (q : 自然数) (i : 整数) (h : i <= n₀ + q := by lia)
-  证明: isIso_π_f_of_isLimit_of_isEventuallyConstantTo _ (limit.isLimit _) _ _
-    (isEventuallyConstantTo f n₀ _ _)
-
-Depends on / 依赖: isEventuallyConstantTo, isLimit, limit.isLimit
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.isIso_mid** 是 Mathlib 中的一个引理
+，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso_midπ_f (q : Nat) (i : Int) (h : i <= n₀ + q := by lia) :
+lemma isIso_midπ_f (q : ℕ) (i : ℤ) (h : i ≤ n₀ + q := by lia) :
     IsIso ((midπ f n₀ q).f i) :=
   isIso_π_f_of_isLimit_of_isEventuallyConstantTo _ (limit.isLimit _) _ _
     (isEventuallyConstantTo f n₀ _ _)
-
-/--
-lemma `quasiIsoAt_midπ` / 引理 `quasiIsoAt_midπ`
-
-English:
-lemma quasiIsoAt_midπ
-  given: (q : Nat) (i : Int) (h : i + 1 <= n₀ + q)
-  proof: quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo _ (limit.isLimit _)
-    (i - 1) i (i + 1) (by simp) (by simp) _
-    (isEventuallyConstantTo f n₀ _ _)
-    (isEventuallyConstantTo f n₀ _ _)
-    (isEventuallyConstantTo f n₀ _ _)
-
-中文:
-引理 quasiIsoAt_midπ
-  条件: (q : 自然数) (i : 整数) (h : i + 1 <= n₀ + q)
-  证明: quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo _ (limit.isLimit _)
-    (i - 1) i (i + 1) (by simp) (by simp) _
-    (isEventuallyConstantTo f n₀ _ _)
-    (isEventuallyConstantTo f n₀ _ _)
-    (isEventuallyConstantTo f n₀ _ _)
-
-Depends on / 依赖: isEventuallyConstantTo, isLimit, limit.isLimit
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.quasiIsoAt_mid** 是 Mathlib 中
+的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma quasiIsoAt_midπ (q : Nat) (i : Int) (h : i + 1 <= n₀ + q) :
+lemma quasiIsoAt_midπ (q : ℕ) (i : ℤ) (h : i + 1 ≤ n₀ + q) :
     QuasiIsoAt (midπ f n₀ q) i :=
   quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo _ (limit.isLimit _)
     (i - 1) i (i + 1) (by simp) (by simp) _
@@ -1805,286 +1075,126 @@ lemma quasiIsoAt_midπ (q : Nat) (i : Int) (h : i + 1 <= n₀ + q) :
     (isEventuallyConstantTo f n₀ _ _)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `ι` / `ι` 的定义
+/-- The first morphism `ι f n₀ : K ⟶ mid f n₀` of the factorization lemma `cm5a_cof`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个定义，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι
-  signature: : K ⟶ mid f n₀
-  body: limit.lift _ (Cone.mk _ { app q := ((functor f n₀).obj q).obj.ι })
-
-中文:
-定义 ι
-  签名: : K ⟶ mid f n₀
-  定义体: limit.lift _ (Cone.mk _ { app q := ((functor f n₀).obj q).obj.ι })
-
-Depends on / 依赖: Cone.mk, functor, limit.lift
+--- 原说明 ---
+The first morphism `ι f n₀ : K ⟶ mid f n₀` of the factorization lemma `cm5a_cof`
+.
 -/
 noncomputable def ι : K ⟶ mid f n₀ :=
   limit.lift _ (Cone.mk _ { app q := ((functor f n₀).obj q).obj.ι })
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `ι_midπ` / 引理 `ι_midπ`
-
-English:
-lemma ι_midπ
-  given: (q : Nat)
-  statement: ι f n₀ ≫ midπ f n₀ q = ((functor f n₀).obj (op q)).obj.ι
-  proof: by
-  simp [ι, midπ]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 ι_midπ
-  条件: (q : 自然数)
-  结论: ι f n₀ ≫ midπ f n₀ q = ((functor f n₀).obj (op q)).obj.ι
-  证明: by
-  simp [ι, midπ]
-
-@[reassoc (attr := simp)]
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ι_midπ (q : Nat) : ι f n₀ ≫ midπ f n₀ q = ((functor f n₀).obj (op q)).obj.ι := by
+lemma ι_midπ (q : ℕ) : ι f n₀ ≫ midπ f n₀ q = ((functor f n₀).obj (op q)).obj.ι := by
   simp [ι, midπ]
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι_midπ_f` / 引理 `ι_midπ_f`
-
-English:
-lemma ι_midπ_f
-  given: (q : Nat) (i : Int)
-  statement: (ι f n₀).f i ≫ (midπ f n₀ q).f i =
-  proof: by
-  rw [← ι_midπ]
-  dsimp
-
-中文:
-引理 ι_midπ_f
-  条件: (q : 自然数) (i : 整数)
-  结论: (ι f n₀).f i ≫ (midπ f n₀ q).f i =
-  证明: by
-  rw [← ι_midπ]
-  dsimp
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ι_midπ_f (q : Nat) (i : Int) : (ι f n₀).f i ≫ (midπ f n₀ q).f i =
+lemma ι_midπ_f (q : ℕ) (i : ℤ) : (ι f n₀).f i ≫ (midπ f n₀ q).f i =
     ((functor f n₀).obj (op q)).obj.ι.f i := by
   rw [← ι_midπ]
   dsimp
 
-/--
-Definition of `π` / `π` 的定义
+/-- The second morphism `π f n₀ : mid f n₀ ⟶ L` of the factorization lemma `cm5a_cof`. -/
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个定义，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π
-  signature: : mid f n₀ ⟶ L
-  body: midπ f n₀ 0 ≫ ((functor f n₀).obj (op 0)).obj.π
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 π
-  签名: : mid f n₀ ⟶ L
-  定义体: midπ f n₀ 0 ≫ ((functor f n₀).obj (op 0)).obj.π
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: functor
+--- 原说明 ---
+The second morphism `π f n₀ : mid f n₀ ⟶ L` of the factorization lemma `cm5a_cof
+`.
 -/
 noncomputable def π : mid f n₀ ⟶ L := midπ f n₀ 0 ≫ ((functor f n₀).obj (op 0)).obj.π
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι_π` / 引理 `ι_π`
-
-English:
-lemma ι_π
-  statement: ι f n₀ ≫ π f n₀ = f
-  proof: by
-  simp [π]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 ι_π
-  结论: ι f n₀ ≫ π f n₀ = f
-  证明: by
-  simp [π]
-
-@[reassoc (attr := simp)]
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_π : ι f n₀ ≫ π f n₀ = f := by
   simp [π]
 
 @[reassoc (attr := simp)]
-/--
-lemma `midπ_π` / 引理 `midπ_π`
-
-English:
-lemma midπ_π
-  given: (q : Nat)
-  statement: midπ f n₀ q ≫ ((functor f n₀).obj (op q)).obj.π = π f n₀
-  proof: by
-  simp [π, ← midπ_w_assoc f n₀ 0 q (by lia)]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 midπ_π
-  条件: (q : 自然数)
-  结论: midπ f n₀ q ≫ ((functor f n₀).obj (op q)).obj.π = π f n₀
-  证明: by
-  simp [π, ← midπ_w_assoc f n₀ 0 q (by lia)]
-
-@[reassoc (attr := simp)]
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.mid** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：mid : CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma midπ_π (q : Nat) : midπ f n₀ q ≫ ((functor f n₀).obj (op q)).obj.π = π f n₀ := by
+lemma midπ_π (q : ℕ) : midπ f n₀ q ≫ ((functor f n₀).obj (op q)).obj.π = π f n₀ := by
   simp [π, ← midπ_w_assoc f n₀ 0 q (by lia)]
 
 @[reassoc (attr := simp)]
-/--
-lemma `midπ_π_f` / 引理 `midπ_π_f`
-
-English:
-lemma midπ_π_f
-  given: (q : Nat) (i : Int)
-  proof: by
-  rw [← midπ_π f n₀ q]
-  dsimp
-
-中文:
-引理 midπ_π_f
-  条件: (q : 自然数) (i : 整数)
-  证明: by
-  rw [← midπ_π f n₀ q]
-  dsimp
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.mid** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+形式化陈述：mid : CochainComplex C Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma midπ_π_f (q : Nat) (i : Int) :
+lemma midπ_π_f (q : ℕ) (i : ℤ) :
     (midπ f n₀ q).f i ≫ ((functor f n₀).obj (op q)).obj.π.f i = (π f n₀).f i := by
   rw [← midπ_π f n₀ q]
   dsimp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (mid f n₀).IsStrictlyGE (n₀ + 1)
-  body: by
-  rw [isStrictlyGE_iff]
-  intro i hi
-  have := isIso_midπ_f f n₀ 0 i
-  exact (L.isZero_of_isStrictlyGE (n₀ + 1) i).of_iso (asIso ((midπ f n₀ 0).f i))
-
-中文:
-实例 :
-  签名: (mid f n₀).IsStrictlyGE (n₀ + 1)
-  定义体: by
-  rw [isStrictlyGE_iff]
-  intro i hi
-  have := isIso_midπ_f f n₀ 0 i
-  exact (L.isZero_of_isStrictlyGE (n₀ + 1) i).of_iso (asIso ((midπ f n₀ 0).f i))
-
-Depends on / 依赖: L.isZero_of_isStrictlyGE, isStrictlyGE_iff, isZero_of_isStrictlyGE, of_iso
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个实例，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (mid f n₀).IsStrictlyGE (n₀ + 1) := by
   rw [isStrictlyGE_iff]
   intro i hi
   have := isIso_midπ_f f n₀ 0 i
   exact (L.isZero_of_isStrictlyGE (n₀ + 1) i).of_iso (asIso ((midπ f n₀ 0).f i))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono (ι f n₀)
-  body: HomologicalComplex.mono_of_mono_f _ (fun i => by
-    obtain ⟨q, _⟩ : exists (q : Nat), IsIso ((midπ f n₀ q).f i) :=
-      ⟨(i - n₀).natAbs, isIso_midπ_f f n₀ _ i⟩
-    exact mono_of_mono_fac (ι_midπ_f f n₀ q i))
-
-中文:
-实例 :
-  签名: 单态射 (ι f n₀)
-  定义体: HomologicalComplex.mono_of_mono_f _ (fun i => by
-    obtain ⟨q, _⟩ : exists (q : Nat), IsIso ((midπ f n₀ q).f i) :=
-      ⟨(i - n₀).natAbs, isIso_midπ_f f n₀ _ i⟩
-    exact mono_of_mono_fac (ι_midπ_f f n₀ q i))
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.mono_of_mono_f, mono_of_mono_f, mono_of_mono_fac, natAbs
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个实例，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono (ι f n₀) :=
-  HomologicalComplex.mono_of_mono_f _ (fun i => by
-    obtain ⟨q, _⟩ : exists (q : Nat), IsIso ((midπ f n₀ q).f i) :=
+  HomologicalComplex.mono_of_mono_f _ (fun i ↦ by
+    obtain ⟨q, _⟩ : ∃ (q : ℕ), IsIso ((midπ f n₀ q).f i) :=
       ⟨(i - n₀).natAbs, isIso_midπ_f f n₀ _ i⟩
     exact mono_of_mono_fac (ι_midπ_f f n₀ q i))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: QuasiIso (ι f n₀)
-  body: by
-    obtain ⟨q, hq⟩ : exists (q : Nat), i + 1 <= n₀ + q := ⟨(i + 1 - n₀).natAbs, by lia⟩
-    have := quasiIsoAt_midπ f n₀ q i hq
-    rw [← quasiIsoAt_iff_comp_right _ (midπ f n₀ q)]; rw [ι_midπ]
-    exact (CofFibFactorizationQuasiIsoLE.sequence f n₀ q).property i (by lia)
-
-中文:
-实例 :
-  签名: 拟同构 (ι f n₀)
-  定义体: by
-    obtain ⟨q, hq⟩ : exists (q : Nat), i + 1 <= n₀ + q := ⟨(i + 1 - n₀).natAbs, by lia⟩
-    have := quasiIsoAt_midπ f n₀ q i hq
-    rw [← quasiIsoAt_iff_comp_right _ (midπ f n₀ q)]; rw [ι_midπ]
-    exact (CofFibFactorizationQuasiIsoLE.sequence f n₀ q).property i (by lia)
-
-Depends on / 依赖: CofFibFactorizationQuasiIsoLE, CofFibFactorizationQuasiIsoLE.sequence, natAbs, property, quasiIsoAt_iff_comp_right, sequence
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.** 是 Mathlib 中的一个实例，位于命名空间 `
+CochainComplex.Plus.modelCategoryQuillen.cm5a_cof`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : QuasiIso (ι f n₀) where
   quasiIsoAt i := by
-    obtain ⟨q, hq⟩ : exists (q : Nat), i + 1 <= n₀ + q := ⟨(i + 1 - n₀).natAbs, by lia⟩
+    obtain ⟨q, hq⟩ : ∃ (q : ℕ), i + 1 ≤ n₀ + q := ⟨(i + 1 - n₀).natAbs, by lia⟩
     have := quasiIsoAt_midπ f n₀ q i hq
-    rw [← quasiIsoAt_iff_comp_right _ (midπ f n₀ q)]; rw [ι_midπ]
+    rw [← quasiIsoAt_iff_comp_right _ (midπ f n₀ q), ι_midπ]
     exact (CofFibFactorizationQuasiIsoLE.sequence f n₀ q).property i (by lia)
-
-/--
-lemma `degreewiseEpiWithInjectiveKernel_π` / 引理 `degreewiseEpiWithInjectiveKernel_π`
-
-English:
-lemma degreewiseEpiWithInjectiveKernel_π
-  statement: degreewiseEpiWithInjectiveKernel (π f n₀)
-  proof: by
-  intro i
-  obtain ⟨q, hq⟩ : exists (q : Nat), i <= n₀ + q := ⟨(i - n₀).natAbs, by lia⟩
-  rw [← midπ_π_f f n₀ q]
-  have := isIso_midπ_f f n₀ q i
-  exact MorphismProperty.comp_mem _ _ _
-    (epiWithInjectiveKernel_of_iso _)
-    ((CofFibFactorizationQuasiIsoLE.sequence f n₀ q).obj.property.2 i)
-
-中文:
-引理 degreewiseEpiWithInjectiveKernel_π
-  结论: degreewiseEpiWithInjectiveKernel (π f n₀)
-  证明: by
-  intro i
-  obtain ⟨q, hq⟩ : exists (q : Nat), i <= n₀ + q := ⟨(i - n₀).natAbs, by lia⟩
-  rw [← midπ_π_f f n₀ q]
-  have := isIso_midπ_f f n₀ q i
-  exact MorphismProperty.comp_mem _ _ _
-    (epiWithInjectiveKernel_of_iso _)
-    ((CofFibFactorizationQuasiIsoLE.sequence f n₀ q).obj.property.2 i)
-
-Depends on / 依赖: CofFibFactorizationQuasiIsoLE, CofFibFactorizationQuasiIsoLE.sequence, MorphismProperty, MorphismProperty.comp_mem, comp_mem, epiWithInjectiveKernel_of_iso, natAbs, obj.property, property, sequence
+/-
+**CochainComplex.Plus.modelCategoryQuillen.cm5a_cof.degreewiseEpiWithInjectiveKe
+rnel_** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.Plus.modelCategoryQuillen.cm5a_c
+of`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma degreewiseEpiWithInjectiveKernel_π : degreewiseEpiWithInjectiveKernel (π f n₀) := by
   intro i
-  obtain ⟨q, hq⟩ : exists (q : Nat), i <= n₀ + q := ⟨(i - n₀).natAbs, by lia⟩
+  obtain ⟨q, hq⟩ : ∃ (q : ℕ), i ≤ n₀ + q := ⟨(i - n₀).natAbs, by lia⟩
   rw [← midπ_π_f f n₀ q]
   have := isIso_midπ_f f n₀ q i
   exact MorphismProperty.comp_mem _ _ _
@@ -2096,15 +1206,15 @@ end cm5a_cof
 variable [EnoughInjectives C]
 
 open cm5a_cof in
-public lemma cm5a_cof (n : Int) [K.IsStrictlyGE n] [L.IsStrictlyGE n] [Mono f] :
-    exists (K' : CochainComplex C Int) (_hK' : K'.IsStrictlyGE n) (ι : K ⟶ K') (π : K' ⟶ L),
+public lemma cm5a_cof (n : ℤ) [K.IsStrictlyGE n] [L.IsStrictlyGE n] [Mono f] :
+    ∃ (K' : CochainComplex C ℤ) (_hK' : K'.IsStrictlyGE n) (ι : K ⟶ K') (π : K' ⟶ L),
       Mono ι ∧ QuasiIso ι ∧ degreewiseEpiWithInjectiveKernel π ∧ ι ≫ π = f := by
-  obtain ⟨n, rfl⟩ : exists (q : Int), n = q + 1 := ⟨n - 1, by simp⟩
+  obtain ⟨n, rfl⟩ : ∃ (q : ℤ), n = q + 1 := ⟨n - 1, by simp⟩
   exact ⟨mid f n, inferInstance, ι f n, π f n, inferInstance,
     inferInstance, degreewiseEpiWithInjectiveKernel_π f n, ι_π f n⟩
 
-public lemma cm5a (n : Int) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE n] :
-    exists (K' : CochainComplex C Int) (_hK' : K'.IsStrictlyGE n) (ι : K ⟶ K') (π : K' ⟶ L),
+public lemma cm5a (n : ℤ) [K.IsStrictlyGE (n + 1)] [L.IsStrictlyGE n] :
+    ∃ (K' : CochainComplex C ℤ) (_hK' : K'.IsStrictlyGE n) (ι : K ⟶ K') (π : K' ⟶ L),
       Mono ι ∧ QuasiIso ι ∧ degreewiseEpiWithInjectiveKernel π ∧ ι ≫ π = f := by
   have : K.IsStrictlyGE n := K.isStrictlyGE_of_ge n (n + 1) (by lia)
   obtain ⟨L', _, i, p, _, hp, _, rfl⟩ := cm5b f n
@@ -2116,18 +1226,18 @@ open ZeroObject
 
 variable (K)
 
-public lemma exists_mono_quasiIso_injective (n₀ n₁ : Int) (h : n₀ + 1 = n₁ := by lia)
+public lemma exists_mono_quasiIso_injective (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁ := by lia)
     [K.IsStrictlyGE n₁] :
-    exists (L : CochainComplex C Int) (i : K ⟶ L) (_hi : Mono i) (_hi' : QuasiIso i)
-      (_ : forall (n : Int), Injective (L.X n)), L.IsStrictlyGE n₀ := by
+    ∃ (L : CochainComplex C ℤ) (i : K ⟶ L) (_hi : Mono i) (_hi' : QuasiIso i)
+      (_ : ∀ (n : ℤ), Injective (L.X n)), L.IsStrictlyGE n₀ := by
   have : K.IsStrictlyGE (n₀ + 1) := by rw [h]; infer_instance
   obtain ⟨L, hL, i, p, hi, hi', hp, _⟩ := cm5a (0 : K ⟶ 0) n₀
   exact ⟨L, i, hi, hi', (degreewiseEpiWithInjectiveKernel_iff_of_isZero p
     (Limits.isZero_zero _)).1 hp, hL⟩
 
-public lemma exists_quasiIso_injective (n : Int) [K.IsStrictlyGE n] :
-    exists (L : CochainComplex C Int) (i : K ⟶ L) (_hi' : QuasiIso i)
-      (_hL : forall (n : Int), Injective (L.X n)), L.IsStrictlyGE n := by
+public lemma exists_quasiIso_injective (n : ℤ) [K.IsStrictlyGE n] :
+    ∃ (L : CochainComplex C ℤ) (i : K ⟶ L) (_hi' : QuasiIso i)
+      (_hL : ∀ (n : ℤ), Injective (L.X n)), L.IsStrictlyGE n := by
   /- The proof proceeds by first applying `exists_mono_quasiIso_injective` in order to
   obtain a monomorphism `K ⟶ L` that is also a quasi-isomorphism
   with `L` consisting of injective objects and `L` lying in degrees `≥ n - 1`.
@@ -2145,10 +1255,11 @@ public lemma exists_quasiIso_injective (n : Int) [K.IsStrictlyGE n] :
   have : Injective (L.opcycles n) :=
     L.injective_opcycles (n - 1) n (L.exactAt_of_isGE n (n - 1))
   -- note: this `i ≫ L.πTruncGE n` is a mono in degrees > n, but it may not be in degree n
-  refine ⟨L.truncGE n, i ≫ L.πTruncGE n, inferInstance, fun q => ?_, inferInstance⟩
+  refine ⟨L.truncGE n, i ≫ L.πTruncGE n, inferInstance, fun q ↦ ?_, inferInstance⟩
   obtain h | rfl | h := lt_trichotomy q n
   · exact (isZero_of_isStrictlyGE _ n _ h).injective
   · exact Injective.of_iso (L.truncGEXIsoOpcycles q).symm inferInstance
   · exact Injective.of_iso (L.truncGEXIso n q h).symm (hL q)
 
 end CochainComplex.Plus.modelCategoryQuillen
+

@@ -33,45 +33,37 @@ assert_not_exists Finset Module Submonoid FloorRing
 /-- The type `ℝ` of real numbers constructed as equivalence classes of Cauchy sequences of rational
 numbers. -/
 @[wikidata Q12916, wikidata Q2584477]
-/--
-Definition of `Real` / `Real` 的定义
+/-
+**Real** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Real
-  parameters: where ofCauchy
-  (no additional axioms)
-
-中文:
-结构 实数
-  参数: where ofCauchy
-  (无附加公理)
+--- 原说明 ---
+The type `ℝ` of real numbers constructed as equivalence classes of Cauchy sequen
+ces of rational
+numbers.
 -/
 structure Real where ofCauchy ::
   /-- The underlying Cauchy completion -/
-  cauchy : CauSeq.Completion.Cauchy (abs : Rat -> Rat)
+  cauchy : CauSeq.Completion.Cauchy (abs : ℚ → ℚ)
 
 @[inherit_doc]
-notation "Real" => Real
+notation "ℝ" => Real
 
 namespace CauSeq.Completion
 
 -- this can't go in `Data.Real.CauSeqCompletion` as the structure on `ℚ` isn't available
 @[simp]
-/--
-theorem `ofRat_rat` / 定理 `ofRat_rat`
-
-English:
-theorem ofRat_rat
-  given: {abv : Rat -> Rat} [IsAbsoluteValue abv] (q : Rat)
-  proof: rfl
-
-中文:
-定理 ofRat_rat
-  条件: {abv : 有理数 -> 有理数} [是绝对值 abv] (q : 有理数)
-  证明: rfl
+/-
+**CauSeq.Completion.ofRat_rat** 是 Mathlib 中的一个定理，位于命名空间 `CauSeq.Completion`。
+形式化陈述：ofRat_rat {abv : Rat -> Rat} [IsAbsoluteValue abv] (q : Rat) : ofRat (q : 
+Rat) = (q : Cauchy abv)
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofRat_rat {abv : Rat -> Rat} [IsAbsoluteValue abv] (q : Rat) :
-    ofRat (q : Rat) = (q : Cauchy abv) :=
+theorem ofRat_rat {abv : ℚ → ℚ} [IsAbsoluteValue abv] (q : ℚ) :
+    ofRat (q : ℚ) = (q : Cauchy abv) :=
   rfl
 
 end CauSeq.Completion
@@ -80,702 +72,412 @@ namespace Real
 
 open CauSeq CauSeq.Completion
 
-variable {x : Real}
+variable {x : ℝ}
 
-/--
-theorem `ext_cauchy_iff` / 定理 `ext_cauchy_iff`
-
-English:
-theorem ext_cauchy_iff
-  statement: forall {x y : Real}, x = y ↔ x.cauchy = y.cauchy
-
-中文:
-定理 ext_cauchy_iff
-  结论: 对任意 {x y : 实数}, x = y ↔ x.cauchy = y.cauchy
+/-
+**Real.ext_cauchy_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ {x y : ℝ}, x = y ↔ x.cauchy = y.cauchy
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.ofCauchy.injEq`：∀ (cauchy cauchy_1 : CauSeq.Completion.Cauchy abs),
+   ({ cauchy := cauchy } = { cauchy := cauchy_1 }) = (cauchy = cauchy_1)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ext_cauchy_iff : forall {x y : Real}, x = y ↔ x.cauchy = y.cauchy
+theorem ext_cauchy_iff : ∀ {x y : Real}, x = y ↔ x.cauchy = y.cauchy
   | ⟨a⟩, ⟨b⟩ => by rw [ofCauchy.injEq]
-
-/--
-theorem `ext_cauchy` / 定理 `ext_cauchy`
-
-English:
-theorem ext_cauchy
-  given: {x y : Real}
-  statement: x.cauchy = y.cauchy -> x = y
-  proof: ext_cauchy_iff.2
-
-中文:
-定理 ext_cauchy
-  条件: {x y : 实数}
-  结论: x.cauchy = y.cauchy -> x = y
-  证明: ext_cauchy_iff.2
-
-Depends on / 依赖: ext_cauchy_iff
+/-
+**Real.ext_cauchy** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ext_cauchy {x y : Real} : x.cauchy = y.cauchy -> x = y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.ext_cauchy_iff`：∀ {x y : ℝ}, x = y ↔ x.cauchy = y.cauchy
 -/
-theorem ext_cauchy {x y : Real} : x.cauchy = y.cauchy -> x = y :=
+theorem ext_cauchy {x y : Real} : x.cauchy = y.cauchy → x = y :=
   ext_cauchy_iff.2
 
-/--
-Definition of `equivCauchy` / `equivCauchy` 的定义
+/-- The real numbers are isomorphic to the quotient of Cauchy sequences on the rationals. -/
+/-
+**Real.equivCauchy** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：equivCauchy : Real ≃ CauSeq.Completion.Cauchy (abs : Rat -> Rat)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivCauchy
-  signature: : Real ≃ CauSeq.Completion.Cauchy (abs : Rat -> Rat)
-  body: ⟨Real.cauchy, Real.ofCauchy, fun ⟨_⟩ => rfl, fun _ => rfl⟩
-
-中文:
-定义 equivCauchy
-  签名: : 实数 ≃ CauSeq.完备化.Cauchy (abs : 有理数 -> 有理数)
-  定义体: ⟨Real.cauchy, Real.ofCauchy, fun ⟨_⟩ => rfl, fun _ => rfl⟩
-
-Depends on / 依赖: Real.cauchy, Real.ofCauchy, cauchy, ofCauchy
+--- 原说明 ---
+The real numbers are isomorphic to the quotient of Cauchy sequences on the ratio
+nals.
 -/
-def equivCauchy : Real ≃ CauSeq.Completion.Cauchy (abs : Rat -> Rat) :=
+def equivCauchy : ℝ ≃ CauSeq.Completion.Cauchy (abs : ℚ → ℚ) :=
   ⟨Real.cauchy, Real.ofCauchy, fun ⟨_⟩ => rfl, fun _ => rfl⟩
 
 set_option backward.privateInPublic true in
 -- irreducible doesn't work for instances: https://github.com/leanprover-community/lean/issues/511
-private irreducible_def zero : Real :=
+private irreducible_def zero : ℝ :=
   ⟨0⟩
 
 set_option backward.privateInPublic true in
-private irreducible_def one : Real :=
+private irreducible_def one : ℝ :=
   ⟨1⟩
 
 set_option backward.privateInPublic true in
-private irreducible_def add : Real -> Real -> Real
+private irreducible_def add : ℝ → ℝ → ℝ
   | ⟨a⟩, ⟨b⟩ => ⟨a + b⟩
 
 set_option backward.privateInPublic true in
-private irreducible_def neg : Real -> Real
+private irreducible_def neg : ℝ → ℝ
   | ⟨a⟩ => ⟨-a⟩
 
 set_option backward.privateInPublic true in
-private irreducible_def mul : Real -> Real -> Real
+private irreducible_def mul : ℝ → ℝ → ℝ
   | ⟨a⟩, ⟨b⟩ => ⟨a * b⟩
 
 set_option backward.privateInPublic true in
-private noncomputable irreducible_def inv' : Real -> Real
+private noncomputable irreducible_def inv' : ℝ → ℝ
   | ⟨a⟩ => ⟨a⁻¹⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero Real
-  body: ⟨zero⟩
-
-中文:
-实例 :
-  签名: 零 实数
-  定义体: ⟨zero⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Zero Real :=
+instance : Zero ℝ :=
   ⟨zero⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One Real
-  body: ⟨one⟩
-
-中文:
-实例 :
-  签名: 幺 实数
-  定义体: ⟨one⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : One Real :=
+instance : One ℝ :=
   ⟨one⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add Real
-  body: ⟨add⟩
-
-中文:
-实例 :
-  签名: 加法 实数
-  定义体: ⟨add⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Add Real :=
+instance : Add ℝ :=
   ⟨add⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg Real
-  body: ⟨neg⟩
-
-中文:
-实例 :
-  签名: 取负 实数
-  定义体: ⟨neg⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Neg Real :=
+instance : Neg ℝ :=
   ⟨neg⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul Real
-  body: ⟨mul⟩
-
-中文:
-实例 :
-  签名: 乘法 实数
-  定义体: ⟨mul⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Mul Real :=
+instance : Mul ℝ :=
   ⟨mul⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub Real
-  body: ⟨fun a b => a + -b⟩
-
-中文:
-实例 :
-  签名: 减法 实数
-  定义体: ⟨fun a b => a + -b⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Sub Real :=
+instance : Sub ℝ :=
   ⟨fun a b => a + -b⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inv Real
-  body: ⟨inv'⟩
-
-中文:
-实例 :
-  签名: 取逆 实数
-  定义体: ⟨inv'⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : Inv Real :=
+noncomputable instance : Inv ℝ :=
   ⟨inv'⟩
-
-/--
-theorem `ofCauchy_zero` / 定理 `ofCauchy_zero`
-
-English:
-theorem ofCauchy_zero
-  statement: (⟨0⟩ : Real) = 0
-  proof: zero_def.symm
-
-中文:
-定理 ofCauchy_zero
-  结论: (⟨0⟩ : 实数) = 0
-  证明: zero_def.symm
-
-Depends on / 依赖: zero_def, zero_def.symm
+/-
+**Real.ofCauchy_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_zero : (⟨0⟩ : Real) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.zero_def`：Real.zero✝ = { cauchy 
+:= 0 }
 -/
-theorem ofCauchy_zero : (⟨0⟩ : Real) = 0 :=
+theorem ofCauchy_zero : (⟨0⟩ : ℝ) = 0 :=
   zero_def.symm
-
-/--
-theorem `ofCauchy_one` / 定理 `ofCauchy_one`
-
-English:
-theorem ofCauchy_one
-  statement: (⟨1⟩ : Real) = 1
-  proof: one_def.symm
-
-中文:
-定理 ofCauchy_one
-  结论: (⟨1⟩ : 实数) = 1
-  证明: one_def.symm
-
-Depends on / 依赖: one_def, one_def.symm
+/-
+**Real.ofCauchy_one** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_one : (⟨1⟩ : Real) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.one_def`：Real.one✝ = { cauchy :=
+ 1 }
 -/
-theorem ofCauchy_one : (⟨1⟩ : Real) = 1 :=
+theorem ofCauchy_one : (⟨1⟩ : ℝ) = 1 :=
   one_def.symm
-
-/--
-theorem `ofCauchy_add` / 定理 `ofCauchy_add`
-
-English:
-theorem ofCauchy_add
-  given: (a b)
-  statement: (⟨a + b⟩ : Real) = ⟨a⟩ + ⟨b⟩
-  proof: (add_def _ _).symm
-
-中文:
-定理 ofCauchy_add
-  条件: (a b)
-  结论: (⟨a + b⟩ : 实数) = ⟨a⟩ + ⟨b⟩
-  证明: (add_def _ _).symm
-
-Depends on / 依赖: add_def
+/-
+**Real.ofCauchy_add** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_add (a b) : (⟨a + b⟩ : Real) = ⟨a⟩ + ⟨b⟩
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.add_def`：∀ (x x_1 : ℝ),   Real.a
+dd✝ x x_1 =     match x, x_1 with     | { cauchy := a }, { cauchy := b } => { ca
+uchy := a + b }
 -/
-theorem ofCauchy_add (a b) : (⟨a + b⟩ : Real) = ⟨a⟩ + ⟨b⟩ :=
+theorem ofCauchy_add (a b) : (⟨a + b⟩ : ℝ) = ⟨a⟩ + ⟨b⟩ :=
   (add_def _ _).symm
-
-/--
-theorem `ofCauchy_neg` / 定理 `ofCauchy_neg`
-
-English:
-theorem ofCauchy_neg
-  given: (a)
-  statement: (⟨-a⟩ : Real) = -⟨a⟩
-  proof: (neg_def _).symm
-
-中文:
-定理 ofCauchy_neg
-  条件: (a)
-  结论: (⟨-a⟩ : 实数) = -⟨a⟩
-  证明: (neg_def _).symm
-
-Depends on / 依赖: neg_def
+/-
+**Real.ofCauchy_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_neg (a) : (⟨-a⟩ : Real) = -⟨a⟩
+参数：a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.neg_def`：∀ (x : ℝ),   Real.neg✝ 
+x =     match x with     | { cauchy := a } => { cauchy := -a }
 -/
-theorem ofCauchy_neg (a) : (⟨-a⟩ : Real) = -⟨a⟩ :=
+theorem ofCauchy_neg (a) : (⟨-a⟩ : ℝ) = -⟨a⟩ :=
   (neg_def _).symm
-
-/--
-theorem `ofCauchy_sub` / 定理 `ofCauchy_sub`
-
-English:
-theorem ofCauchy_sub
-  given: (a b)
-  statement: (⟨a - b⟩ : Real) = ⟨a⟩ - ⟨b⟩
-  proof: by
-  rw [sub_eq_add_neg]; rw [ofCauchy_add]; rw [ofCauchy_neg]
-  rfl
-
-中文:
-定理 ofCauchy_sub
-  条件: (a b)
-  结论: (⟨a - b⟩ : 实数) = ⟨a⟩ - ⟨b⟩
-  证明: by
-  rw [sub_eq_add_neg]; rw [ofCauchy_add]; rw [ofCauchy_neg]
-  rfl
-
-Depends on / 依赖: ofCauchy_add, ofCauchy_neg, sub_eq_add_neg
+/-
+**Real.ofCauchy_sub** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_sub (a b) : (⟨a - b⟩ : Real) = ⟨a⟩ - ⟨b⟩
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Real.ofCauchy_add`：ofCauchy_add (a b) : (⟨a + b⟩ : Real) = ⟨a⟩ + ⟨b⟩
+· 使用定理 `Real.ofCauchy_neg`：ofCauchy_neg (a) : (⟨-a⟩ : Real) = -⟨a⟩
 -/
-theorem ofCauchy_sub (a b) : (⟨a - b⟩ : Real) = ⟨a⟩ - ⟨b⟩ := by
-  rw [sub_eq_add_neg]; rw [ofCauchy_add]; rw [ofCauchy_neg]
+theorem ofCauchy_sub (a b) : (⟨a - b⟩ : ℝ) = ⟨a⟩ - ⟨b⟩ := by
+  rw [sub_eq_add_neg, ofCauchy_add, ofCauchy_neg]
   rfl
-
-/--
-theorem `ofCauchy_mul` / 定理 `ofCauchy_mul`
-
-English:
-theorem ofCauchy_mul
-  given: (a b)
-  statement: (⟨a * b⟩ : Real) = ⟨a⟩ * ⟨b⟩
-  proof: (mul_def _ _).symm
-
-中文:
-定理 ofCauchy_mul
-  条件: (a b)
-  结论: (⟨a * b⟩ : 实数) = ⟨a⟩ * ⟨b⟩
-  证明: (mul_def _ _).symm
-
-Depends on / 依赖: mul_def
+/-
+**Real.ofCauchy_mul** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_mul (a b) : (⟨a * b⟩ : Real) = ⟨a⟩ * ⟨b⟩
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.mul_def`：∀ (x x_1 : ℝ),   Real.m
+ul✝ x x_1 =     match x, x_1 with     | { cauchy := a }, { cauchy := b } => { ca
+uchy := a * b }
 -/
-theorem ofCauchy_mul (a b) : (⟨a * b⟩ : Real) = ⟨a⟩ * ⟨b⟩ :=
+theorem ofCauchy_mul (a b) : (⟨a * b⟩ : ℝ) = ⟨a⟩ * ⟨b⟩ :=
   (mul_def _ _).symm
-
-/--
-theorem `ofCauchy_inv` / 定理 `ofCauchy_inv`
-
-English:
-theorem ofCauchy_inv
-  given: {f}
-  statement: (⟨f⁻¹⟩ : Real) = ⟨f⟩⁻¹
-  proof: show _ = inv' _ by rw [inv']
-
-中文:
-定理 ofCauchy_inv
-  条件: {f}
-  结论: (⟨f⁻¹⟩ : 实数) = ⟨f⟩⁻¹
-  证明: show _ = inv' _ by rw [inv']
+/-
+**Real.ofCauchy_inv** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_inv {f} : (⟨f⁻¹⟩ : Real) = ⟨f⟩⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.inv'_def`：∀ (x : ℝ),   Real.inv'
+✝ x =     match x with     | { cauchy := a } => { cauchy := a⁻¹ }
 -/
-theorem ofCauchy_inv {f} : (⟨f⁻¹⟩ : Real) = ⟨f⟩⁻¹ :=
+theorem ofCauchy_inv {f} : (⟨f⁻¹⟩ : ℝ) = ⟨f⟩⁻¹ :=
   show _ = inv' _ by rw [inv']
-
-/--
-theorem `cauchy_zero` / 定理 `cauchy_zero`
-
-English:
-theorem cauchy_zero
-  statement: (0 : Real).cauchy = 0
-  proof: show zero.cauchy = 0 by rw [zero_def]
-
-中文:
-定理 cauchy_zero
-  结论: (0 : 实数).cauchy = 0
-  证明: show zero.cauchy = 0 by rw [zero_def]
-
-Depends on / 依赖: cauchy, zero.cauchy, zero_def
+/-
+**Real.cauchy_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：cauchy_zero : (0 : Real).cauchy = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.zero_def`：Real.zero✝ = { cauchy 
+:= 0 }
 -/
-theorem cauchy_zero : (0 : Real).cauchy = 0 :=
+theorem cauchy_zero : (0 : ℝ).cauchy = 0 :=
   show zero.cauchy = 0 by rw [zero_def]
-
-/--
-theorem `cauchy_one` / 定理 `cauchy_one`
-
-English:
-theorem cauchy_one
-  statement: (1 : Real).cauchy = 1
-  proof: show one.cauchy = 1 by rw [one_def]
-
-中文:
-定理 cauchy_one
-  结论: (1 : 实数).cauchy = 1
-  证明: show one.cauchy = 1 by rw [one_def]
-
-Depends on / 依赖: cauchy, one.cauchy, one_def
+/-
+**Real.cauchy_one** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：cauchy_one : (1 : Real).cauchy = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.one_def`：Real.one✝ = { cauchy :=
+ 1 }
 -/
-theorem cauchy_one : (1 : Real).cauchy = 1 :=
+theorem cauchy_one : (1 : ℝ).cauchy = 1 :=
   show one.cauchy = 1 by rw [one_def]
-
-/--
-theorem `cauchy_add` / 定理 `cauchy_add`
-
-English:
-theorem cauchy_add
-  statement: forall a b, (a + b : Real).cauchy = a.cauchy + b.cauchy
-
-中文:
-定理 cauchy_add
-  结论: 对任意 a b, (a + b : 实数).cauchy = a.cauchy + b.cauchy
+/-
+**Real.cauchy_add** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (a b : ℝ), (a + b).cauchy = a.cauchy + b.cauchy
+参数：a b : ℝ；a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.add_def`：∀ (x x_1 : ℝ),   Real.a
+dd✝ x x_1 =     match x, x_1 with     | { cauchy := a }, { cauchy := b } => { ca
+uchy := a + b }
 -/
-theorem cauchy_add : forall a b, (a + b : Real).cauchy = a.cauchy + b.cauchy
+theorem cauchy_add : ∀ a b, (a + b : ℝ).cauchy = a.cauchy + b.cauchy
   | ⟨a⟩, ⟨b⟩ => show (add _ _).cauchy = _ by rw [add_def]
-
-/--
-theorem `cauchy_neg` / 定理 `cauchy_neg`
-
-English:
-theorem cauchy_neg
-  statement: forall a, (-a : Real).cauchy = -a.cauchy
-
-中文:
-定理 cauchy_neg
-  结论: 对任意 a, (-a : 实数).cauchy = -a.cauchy
+/-
+**Real.cauchy_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (a : ℝ), (-a).cauchy = -a.cauchy
+参数：a : ℝ；-a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.neg_def`：∀ (x : ℝ),   Real.neg✝ 
+x =     match x with     | { cauchy := a } => { cauchy := -a }
 -/
-theorem cauchy_neg : forall a, (-a : Real).cauchy = -a.cauchy
+theorem cauchy_neg : ∀ a, (-a : ℝ).cauchy = -a.cauchy
   | ⟨a⟩ => show (neg _).cauchy = _ by rw [neg_def]
-
-/--
-theorem `cauchy_mul` / 定理 `cauchy_mul`
-
-English:
-theorem cauchy_mul
-  statement: forall a b, (a * b : Real).cauchy = a.cauchy * b.cauchy
-
-中文:
-定理 cauchy_mul
-  结论: 对任意 a b, (a * b : 实数).cauchy = a.cauchy * b.cauchy
+/-
+**Real.cauchy_mul** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (a b : ℝ), (a * b).cauchy = a.cauchy * b.cauchy
+参数：a b : ℝ；a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.mul_def`：∀ (x x_1 : ℝ),   Real.m
+ul✝ x x_1 =     match x, x_1 with     | { cauchy := a }, { cauchy := b } => { ca
+uchy := a * b }
 -/
-theorem cauchy_mul : forall a b, (a * b : Real).cauchy = a.cauchy * b.cauchy
+theorem cauchy_mul : ∀ a b, (a * b : ℝ).cauchy = a.cauchy * b.cauchy
   | ⟨a⟩, ⟨b⟩ => show (mul _ _).cauchy = _ by rw [mul_def]
-
-/--
-theorem `cauchy_sub` / 定理 `cauchy_sub`
-
-English:
-theorem cauchy_sub
-  statement: forall a b, (a - b : Real).cauchy = a.cauchy - b.cauchy
-
-中文:
-定理 cauchy_sub
-  结论: 对任意 a b, (a - b : 实数).cauchy = a.cauchy - b.cauchy
+/-
+**Real.cauchy_sub** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (a b : ℝ), (a - b).cauchy = a.cauchy - b.cauchy
+参数：a b : ℝ；a - b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.cauchy_neg`：∀ (a : ℝ), (-a).cauchy = -a.cauchy
+· 使用定理 `Real.cauchy_add`：∀ (a b : ℝ), (a + b).cauchy = a.cauchy + b.cauchy
 -/
-theorem cauchy_sub : forall a b, (a - b : Real).cauchy = a.cauchy - b.cauchy
+theorem cauchy_sub : ∀ a b, (a - b : ℝ).cauchy = a.cauchy - b.cauchy
   | ⟨a⟩, ⟨b⟩ => by
-    rw [sub_eq_add_neg]; rw [← cauchy_neg]; rw [← cauchy_add]
+    rw [sub_eq_add_neg, ← cauchy_neg, ← cauchy_add]
     rfl
-
-/--
-theorem `cauchy_inv` / 定理 `cauchy_inv`
-
-English:
-theorem cauchy_inv
-  statement: forall f, (f⁻¹ : Real).cauchy = f.cauchy⁻¹
-
-中文:
-定理 cauchy_inv
-  结论: 对任意 f, (f⁻¹ : 实数).cauchy = f.cauchy⁻¹
+/-
+**Real.cauchy_inv** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ (f : ℝ), f⁻¹.cauchy = f.cauchy⁻¹
+参数：f : ℝ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.inv'_def`：∀ (x : ℝ),   Real.inv'
+✝ x =     match x with     | { cauchy := a } => { cauchy := a⁻¹ }
 -/
-theorem cauchy_inv : forall f, (f⁻¹ : Real).cauchy = f.cauchy⁻¹
+theorem cauchy_inv : ∀ f, (f⁻¹ : ℝ).cauchy = f.cauchy⁻¹
   | ⟨f⟩ => show (inv' _).cauchy = _ by rw [inv']
-
-/--
-Instance `instNatCast` / 实例 `instNatCast`
-
-English:
-instance instNatCast
-  signature: : NatCast Real where natCast n
-  body: ⟨n⟩
-
-中文:
-实例 inst自然数Cast
-  签名: : 自然数嵌入 实数 where natCast n
-  定义体: ⟨n⟩
+/-
+**Real.instNatCast** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instNatCast : NatCast Real where natCast n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNatCast : NatCast Real where natCast n := ⟨n⟩
-/--
-Instance `instIntCast` / 实例 `instIntCast`
-
-English:
-instance instIntCast
-  signature: : IntCast Real where intCast z
-  body: ⟨z⟩
-
-中文:
-实例 inst整数Cast
-  签名: : 整数嵌入 实数 where intCast z
-  定义体: ⟨z⟩
+instance instNatCast : NatCast ℝ where natCast n := ⟨n⟩
+/-
+**Real.instIntCast** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instIntCast : IntCast Real where intCast z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instIntCast : IntCast Real where intCast z := ⟨z⟩
-/--
-Instance `instNNRatCast` / 实例 `instNNRatCast`
-
-English:
-instance instNNRatCast
-  signature: : NNRatCast Real where nnratCast q
-  body: ⟨q⟩
-
-中文:
-实例 instNNRatCast
-  签名: : 非负有理数嵌入 实数 where nnratCast q
-  定义体: ⟨q⟩
+instance instIntCast : IntCast ℝ where intCast z := ⟨z⟩
+/-
+**Real.instNNRatCast** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instNNRatCast : NNRatCast Real where nnratCast q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNNRatCast : NNRatCast Real where nnratCast q := ⟨q⟩
-/--
-Instance `instRatCast` / 实例 `instRatCast`
-
-English:
-instance instRatCast
-  signature: : RatCast Real where ratCast q
-  body: ⟨q⟩
-
-中文:
-实例 instRatCast
-  签名: : 有理数嵌入 实数 where ratCast q
-  定义体: ⟨q⟩
+instance instNNRatCast : NNRatCast ℝ where nnratCast q := ⟨q⟩
+/-
+**Real.instRatCast** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instRatCast : RatCast Real where ratCast q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instRatCast : RatCast Real where ratCast q := ⟨q⟩
-
-/--
-lemma `ofCauchy_natCast` / 引理 `ofCauchy_natCast`
-
-English:
-lemma ofCauchy_natCast
-  given: (n : Nat)
-  statement: (⟨n⟩ : Real) = n
-  proof: rfl
-
-中文:
-引理 ofCauchy_natCast
-  条件: (n : 自然数)
-  结论: (⟨n⟩ : 实数) = n
-  证明: rfl
+instance instRatCast : RatCast ℝ where ratCast q := ⟨q⟩
+/-
+**Real.ofCauchy_natCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_natCast (n : Nat) : (⟨n⟩ : Real) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofCauchy_natCast (n : Nat) : (⟨n⟩ : Real) = n := rfl
-/--
-lemma `ofCauchy_intCast` / 引理 `ofCauchy_intCast`
-
-English:
-lemma ofCauchy_intCast
-  given: (z : Int)
-  statement: (⟨z⟩ : Real) = z
-  proof: rfl
-
-中文:
-引理 ofCauchy_intCast
-  条件: (z : 整数)
-  结论: (⟨z⟩ : 实数) = z
-  证明: rfl
+lemma ofCauchy_natCast (n : ℕ) : (⟨n⟩ : ℝ) = n := rfl
+/-
+**Real.ofCauchy_intCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_intCast (z : Int) : (⟨z⟩ : Real) = z
+参数：z : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofCauchy_intCast (z : Int) : (⟨z⟩ : Real) = z := rfl
-/--
-lemma `ofCauchy_nnratCast` / 引理 `ofCauchy_nnratCast`
-
-English:
-lemma ofCauchy_nnratCast
-  given: (q : Rat>=0)
-  statement: (⟨q⟩ : Real) = q
-  proof: rfl
-
-中文:
-引理 ofCauchy_nnratCast
-  条件: (q : 有理数>=0)
-  结论: (⟨q⟩ : 实数) = q
-  证明: rfl
+lemma ofCauchy_intCast (z : ℤ) : (⟨z⟩ : ℝ) = z := rfl
+/-
+**Real.ofCauchy_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_nnratCast (q : Rat>=0) : (⟨q⟩ : Real) = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofCauchy_nnratCast (q : Rat>=0) : (⟨q⟩ : Real) = q := rfl
-/--
-lemma `ofCauchy_ratCast` / 引理 `ofCauchy_ratCast`
-
-English:
-lemma ofCauchy_ratCast
-  given: (q : Rat)
-  statement: (⟨q⟩ : Real) = q
-  proof: rfl
-
-中文:
-引理 ofCauchy_ratCast
-  条件: (q : 有理数)
-  结论: (⟨q⟩ : 实数) = q
-  证明: rfl
+lemma ofCauchy_nnratCast (q : ℚ≥0) : (⟨q⟩ : ℝ) = q := rfl
+/-
+**Real.ofCauchy_ratCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_ratCast (q : Rat) : (⟨q⟩ : Real) = q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofCauchy_ratCast (q : Rat) : (⟨q⟩ : Real) = q := rfl
-
-/--
-lemma `cauchy_natCast` / 引理 `cauchy_natCast`
-
-English:
-lemma cauchy_natCast
-  given: (n : Nat)
-  statement: (n : Real).cauchy = n
-  proof: rfl
-
-中文:
-引理 cauchy_natCast
-  条件: (n : 自然数)
-  结论: (n : 实数).cauchy = n
-  证明: rfl
+lemma ofCauchy_ratCast (q : ℚ) : (⟨q⟩ : ℝ) = q := rfl
+/-
+**Real.cauchy_natCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：cauchy_natCast (n : Nat) : (n : Real).cauchy = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma cauchy_natCast (n : Nat) : (n : Real).cauchy = n := rfl
-/--
-lemma `cauchy_intCast` / 引理 `cauchy_intCast`
-
-English:
-lemma cauchy_intCast
-  given: (z : Int)
-  statement: (z : Real).cauchy = z
-  proof: rfl
-
-中文:
-引理 cauchy_intCast
-  条件: (z : 整数)
-  结论: (z : 实数).cauchy = z
-  证明: rfl
+lemma cauchy_natCast (n : ℕ) : (n : ℝ).cauchy = n := rfl
+/-
+**Real.cauchy_intCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：cauchy_intCast (z : Int) : (z : Real).cauchy = z
+参数：z : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma cauchy_intCast (z : Int) : (z : Real).cauchy = z := rfl
-/--
-lemma `cauchy_nnratCast` / 引理 `cauchy_nnratCast`
-
-English:
-lemma cauchy_nnratCast
-  given: (q : Rat>=0)
-  statement: (q : Real).cauchy = q
-  proof: rfl
-
-中文:
-引理 cauchy_nnratCast
-  条件: (q : 有理数>=0)
-  结论: (q : 实数).cauchy = q
-  证明: rfl
+lemma cauchy_intCast (z : ℤ) : (z : ℝ).cauchy = z := rfl
+/-
+**Real.cauchy_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：cauchy_nnratCast (q : Rat>=0) : (q : Real).cauchy = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma cauchy_nnratCast (q : Rat>=0) : (q : Real).cauchy = q := rfl
-/--
-lemma `cauchy_ratCast` / 引理 `cauchy_ratCast`
-
-English:
-lemma cauchy_ratCast
-  given: (q : Rat)
-  statement: (q : Real).cauchy = q
-  proof: rfl
-
-中文:
-引理 cauchy_ratCast
-  条件: (q : 有理数)
-  结论: (q : 实数).cauchy = q
-  证明: rfl
+lemma cauchy_nnratCast (q : ℚ≥0) : (q : ℝ).cauchy = q := rfl
+/-
+**Real.cauchy_ratCast** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：cauchy_ratCast (q : Rat) : (q : Real).cauchy = q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma cauchy_ratCast (q : Rat) : (q : Real).cauchy = q := rfl
-
-/--
-Instance `commRing` / 实例 `commRing`
-
-English:
-instance commRing
-  signature: : CommRing Real where
-  body: ⟨n⟩
-  intCast z := ⟨z⟩
-  npow := @npowRec Real ⟨1⟩ ⟨(· * ·)⟩
-  nsmul := @nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩
-  zsmul := @zsmulRec Real ⟨0⟩ ⟨(· + ·)⟩ ⟨@Neg.neg Real _⟩ (@nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩)
-  add_zero a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
-  zero_add a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
-  add_comm a b := by apply ext_cauchy; simp only [cauchy_add, add_comm]
-  add_assoc a b c := by apply ext_cauchy; simp only [cauchy_add, add_assoc]
-  mul_zero a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
-  zero_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
-  mul_one a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
-  one_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
-  mul_comm a b := by apply ext_cauchy; simp only [cauchy_mul, mul_comm]
-  mul_assoc a b c := by apply ext_cauchy; simp only [cauchy_mul, mul_assoc]
-  left_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, mul_add]
-  right_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, add_mul]
-  neg_add_cancel a := by apply ext_cauchy; simp [cauchy_add, cauchy_neg, cauchy_zero]
-  natCast_zero := by apply ext_cauchy; simp [cauchy_zero]
-  natCast_succ n := by apply ext_cauchy; simp [cauchy_one, cauchy_add]
-  intCast_negSucc z := by apply ext_cauchy; simp [cauchy_neg, cauchy_natCast]
-
-中文:
-实例 commRing
-  签名: : 交换环 实数 where
-  定义体: ⟨n⟩
-  intCast z := ⟨z⟩
-  npow := @npowRec Real ⟨1⟩ ⟨(· * ·)⟩
-  nsmul := @nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩
-  zsmul := @zsmulRec Real ⟨0⟩ ⟨(· + ·)⟩ ⟨@Neg.neg Real _⟩ (@nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩)
-  add_zero a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
-  zero_add a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
-  add_comm a b := by apply ext_cauchy; simp only [cauchy_add, add_comm]
-  add_assoc a b c := by apply ext_cauchy; simp only [cauchy_add, add_assoc]
-  mul_zero a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
-  zero_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
-  mul_one a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
-  one_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
-  mul_comm a b := by apply ext_cauchy; simp only [cauchy_mul, mul_comm]
-  mul_assoc a b c := by apply ext_cauchy; simp only [cauchy_mul, mul_assoc]
-  left_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, mul_add]
-  right_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, add_mul]
-  neg_add_cancel a := by apply ext_cauchy; simp [cauchy_add, cauchy_neg, cauchy_zero]
-  natCast_zero := by apply ext_cauchy; simp [cauchy_zero]
-  natCast_succ n := by apply ext_cauchy; simp [cauchy_one, cauchy_add]
-  intCast_negSucc z := by apply ext_cauchy; simp [cauchy_neg, cauchy_natCast]
+lemma cauchy_ratCast (q : ℚ) : (q : ℝ).cauchy = q := rfl
+/-
+**Real.commRing** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：commRing : CommRing Real where natCast n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance commRing : CommRing Real where
+instance commRing : CommRing ℝ where
   natCast n := ⟨n⟩
   intCast z := ⟨z⟩
-  npow := @npowRec Real ⟨1⟩ ⟨(· * ·)⟩
-  nsmul := @nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩
-  zsmul := @zsmulRec Real ⟨0⟩ ⟨(· + ·)⟩ ⟨@Neg.neg Real _⟩ (@nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩)
+  npow := @npowRec ℝ ⟨1⟩ ⟨(· * ·)⟩
+  nsmul := @nsmulRec ℝ ⟨0⟩ ⟨(· + ·)⟩
+  zsmul := @zsmulRec ℝ ⟨0⟩ ⟨(· + ·)⟩ ⟨@Neg.neg ℝ _⟩ (@nsmulRec ℝ ⟨0⟩ ⟨(· + ·)⟩)
   add_zero a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
   zero_add a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
   add_comm a b := by apply ext_cauchy; simp only [cauchy_add, add_comm]
@@ -795,733 +497,347 @@ instance commRing : CommRing Real where
 
 /-- `Real.equivCauchy` as a ring equivalence. -/
 @[simps]
-/--
-Definition of `ringEquivCauchy` / `ringEquivCauchy` 的定义
+/-
+**Real.ringEquivCauchy** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：ringEquivCauchy : Real ≃+* CauSeq.Completion.Cauchy (abs : Rat -> Rat)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.cauchy_mul`：∀ (a b : ℝ), (a * b).cauchy = a.cauchy * b.cauchy
+· 使用定理 `Real.cauchy_add`：∀ (a b : ℝ), (a + b).cauchy = a.cauchy + b.cauchy
 
-English:
-definition ringEquivCauchy
-  signature: : Real ≃+* CauSeq.Completion.Cauchy (abs : Rat -> Rat)
-  body: { equivCauchy with
-    toFun := cauchy
-    invFun := ofCauchy
-    map_add' := cauchy_add
-    map_mul' := cauchy_mul }
-
-中文:
-定义 ringEquivCauchy
-  签名: : 实数 ≃+* CauSeq.完备化.Cauchy (abs : 有理数 -> 有理数)
-  定义体: { equivCauchy with
-    toFun := cauchy
-    invFun := ofCauchy
-    map_add' := cauchy_add
-    map_mul' := cauchy_mul }
-
-Depends on / 依赖: cauchy, cauchy_add, cauchy_mul, equivCauchy, invFun, map_add, map_mul, ofCauchy
+--- 原说明 ---
+`Real.equivCauchy` as a ring equivalence.
 -/
-def ringEquivCauchy : Real ≃+* CauSeq.Completion.Cauchy (abs : Rat -> Rat) :=
+def ringEquivCauchy : ℝ ≃+* CauSeq.Completion.Cauchy (abs : ℚ → ℚ) :=
   { equivCauchy with
     toFun := cauchy
     invFun := ofCauchy
     map_add' := cauchy_add
     map_mul' := cauchy_mul }
 
+/-! Extra instances to short-circuit type class resolution.
 
-/--
-Instance `instRing` / 实例 `instRing`
+These short-circuits have an additional property of ensuring that a computable path is found; if
+`Field ℝ` is found first, then decaying it to these typeclasses would result in a `noncomputable`
+version of them. -/
 
-English:
-instance instRing
-  signature: : Ring Real
-  body: by infer_instance
+/-
+**Real.instRing** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instRing : Ring Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 instRing
-  签名: : 环 实数
-  定义体: by infer_instance
+--- 原说明 ---
+Extra instances to short-circuit type class resolution.
 
-Depends on / 依赖: infer_instance
+These short-circuits have an additional property of ensuring that a computable p
+ath is found; if
+`Field ℝ` is found first, then decaying it to these typeclasses would result in 
+a `noncomputable`
+version of them.
 -/
-instance instRing : Ring Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommSemiring Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 交换半环 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance instRing : Ring ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommSemiring Real := by infer_instance
-
-/--
-Instance `semiring` / 实例 `semiring`
-
-English:
-instance semiring
-  signature: : Semiring Real
-  body: by infer_instance
-
-中文:
-实例 semiring
-  签名: : 半环 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : CommSemiring ℝ := by infer_instance
+/-
+**Real.semiring** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：semiring : Semiring Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance semiring : Semiring Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommMonoidWithZero Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 带零交换幺半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance semiring : Semiring ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommMonoidWithZero Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidWithZero Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 带零幺半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : CommMonoidWithZero ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MonoidWithZero Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法交换群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : MonoidWithZero ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddCommGroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddGroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddCommGroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddGroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommMonoid Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法交换幺半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddGroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddCommMonoid Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddMonoid Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法幺半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddCommMonoid ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddMonoid Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddLeftCancelSemigroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法左消去半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddMonoid ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddLeftCancelSemigroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddRightCancelSemigroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法右消去半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddLeftCancelSemigroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddRightCancelSemigroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommSemigroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法交换半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddRightCancelSemigroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddCommSemigroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddSemigroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddCommSemigroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddSemigroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommMonoid Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 交换幺半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddSemigroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommMonoid Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 幺半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : CommMonoid ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Monoid Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommSemigroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 交换半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : Monoid ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommSemigroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Semigroup Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 半群 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : CommSemigroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Semigroup Real := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Real
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 实数
-  定义体: ⟨0⟩
+instance : Semigroup ℝ := by infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited Real :=
+instance : Inhabited ℝ :=
   ⟨0⟩
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Make a real number from a Cauchy sequence of rationals (by taking the equivalence class). -/
+/-
+**Real.mk** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：mk (x : CauSeq Rat abs) : Real
+参数：x : CauSeq Rat abs。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (x : CauSeq Rat abs)
-  body: ⟨CauSeq.Completion.mk x⟩
-
-中文:
-定义 mk
-  签名: (x : CauSeq 有理数 abs)
-  定义体: ⟨CauSeq.Completion.mk x⟩
-
-Depends on / 依赖: CauSeq, CauSeq.Completion.mk, Completion
+--- 原说明 ---
+Make a real number from a Cauchy sequence of rationals (by taking the equivalenc
+e class).
 -/
-def mk (x : CauSeq Rat abs) : Real :=
+def mk (x : CauSeq ℚ abs) : ℝ :=
   ⟨CauSeq.Completion.mk x⟩
-
-/--
-theorem `mk_eq` / 定理 `mk_eq`
-
-English:
-theorem mk_eq
-  given: {f g : CauSeq Rat abs}
-  statement: mk f = mk g ↔ f ≈ g
-  proof: ext_cauchy_iff.trans CauSeq.Completion.mk_eq
-
-中文:
-定理 mk_eq
-  条件: {f g : CauSeq 有理数 abs}
-  结论: mk f = mk g ↔ f ≈ g
-  证明: ext_cauchy_iff.trans CauSeq.Completion.mk_eq
-
-Depends on / 依赖: CauSeq, CauSeq.Completion.mk_eq, Completion, ext_cauchy_iff, ext_cauchy_iff.trans, mk_eq
+/-
+**Real.mk_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_eq {f g : CauSeq Rat abs} : mk f = mk g ↔ f ≈ g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Real.ext_cauchy_iff`：∀ {x y : ℝ}, x = y ↔ x.cauchy = y.cauchy
+· 使用定理 `CauSeq.Completion.mk_eq`：mk_eq {f g : CauSeq _ abv} : mk f = mk g ↔ LimZ
+ero (f - g)
 -/
-theorem mk_eq {f g : CauSeq Rat abs} : mk f = mk g ↔ f ≈ g :=
+theorem mk_eq {f g : CauSeq ℚ abs} : mk f = mk g ↔ f ≈ g :=
   ext_cauchy_iff.trans CauSeq.Completion.mk_eq
 
 set_option backward.privateInPublic true in
-private irreducible_def lt : Real -> Real -> Prop
+private irreducible_def lt : ℝ → ℝ → Prop
   | ⟨x⟩, ⟨y⟩ =>
     (Quotient.liftOn₂ x y (· < ·)) fun _ _ _ _ hf hg =>
-propext
+      propext <|
         ⟨fun h => lt_of_eq_of_lt (Setoid.symm hf) (lt_of_lt_of_eq h hg), fun h =>
           lt_of_eq_of_lt hf (lt_of_lt_of_eq h (Setoid.symm hg))⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT Real
-  body: ⟨lt⟩
-
-中文:
-实例 :
-  签名: LT 实数
-  定义体: ⟨lt⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LT Real :=
+instance : LT ℝ :=
   ⟨lt⟩
-
-/--
-theorem `lt_cauchy` / 定理 `lt_cauchy`
-
-English:
-theorem lt_cauchy
-  given: {f g}
-  statement: (⟨⟦f⟧⟩ : Real) < ⟨⟦g⟧⟩ ↔ f < g
-  proof: show lt _ _ ↔ _ by rw [lt_def]; rfl
-
-@[simp]
-
-中文:
-定理 lt_cauchy
-  条件: {f g}
-  结论: (⟨⟦f⟧⟩ : 实数) < ⟨⟦g⟧⟩ ↔ f < g
-  证明: show lt _ _ ↔ _ by rw [lt_def]; rfl
-
-@[simp]
-
-Depends on / 依赖: lt_def
+/-
+**Real.lt_cauchy** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：lt_cauchy {f g} : (⟨⟦f⟧⟩ : Real) < ⟨⟦g⟧⟩ ↔ f < g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.lt_def`：∀ (x x_1 : ℝ),   Real.lt
+✝ x x_1 =     match x, x_1 with     | { cauchy := x }, { cauchy := y } => Quotie
+nt.liftOn₂ x y (fun x1 x2 => x1 < x2…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lt_cauchy {f g} : (⟨⟦f⟧⟩ : Real) < ⟨⟦g⟧⟩ ↔ f < g :=
+theorem lt_cauchy {f g} : (⟨⟦f⟧⟩ : ℝ) < ⟨⟦g⟧⟩ ↔ f < g :=
   show lt _ _ ↔ _ by rw [lt_def]; rfl
 
 @[simp]
-/--
-theorem `mk_lt` / 定理 `mk_lt`
-
-English:
-theorem mk_lt
-  given: {f g : CauSeq Rat abs}
-  statement: mk f < mk g ↔ f < g
-  proof: lt_cauchy
-
-中文:
-定理 mk_lt
-  条件: {f g : CauSeq 有理数 abs}
-  结论: mk f < mk g ↔ f < g
-  证明: lt_cauchy
-
-Depends on / 依赖: lt_cauchy
+/-
+**Real.mk_lt** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_lt {f g : CauSeq Rat abs} : mk f < mk g ↔ f < g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.lt_cauchy`：lt_cauchy {f g} : (⟨⟦f⟧⟩ : Real) < ⟨⟦g⟧⟩ ↔ f < g
 -/
-theorem mk_lt {f g : CauSeq Rat abs} : mk f < mk g ↔ f < g :=
+theorem mk_lt {f g : CauSeq ℚ abs} : mk f < mk g ↔ f < g :=
   lt_cauchy
-
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  statement: mk 0 = 0
-  proof: by rw [← ofCauchy_zero]; rfl
-
-中文:
-定理 mk_zero
-  结论: mk 0 = 0
-  证明: by rw [← ofCauchy_zero]; rfl
-
-Depends on / 依赖: ofCauchy_zero
+/-
+**Real.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_zero : mk 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.ofCauchy_zero`：ofCauchy_zero : (⟨0⟩ : Real) = 0
 -/
 theorem mk_zero : mk 0 = 0 := by rw [← ofCauchy_zero]; rfl
-
-/--
-theorem `mk_one` / 定理 `mk_one`
-
-English:
-theorem mk_one
-  statement: mk 1 = 1
-  proof: by rw [← ofCauchy_one]; rfl
-
-中文:
-定理 mk_one
-  结论: mk 1 = 1
-  证明: by rw [← ofCauchy_one]; rfl
-
-Depends on / 依赖: ofCauchy_one
+/-
+**Real.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_one : mk 1 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.ofCauchy_one`：ofCauchy_one : (⟨1⟩ : Real) = 1
 -/
 theorem mk_one : mk 1 = 1 := by rw [← ofCauchy_one]; rfl
-
-/--
-theorem `mk_add` / 定理 `mk_add`
-
-English:
-theorem mk_add
-  given: {f g : CauSeq Rat abs}
-  statement: mk (f + g) = mk f + mk g
-  proof: by simp [mk, ← ofCauchy_add]
-
-中文:
-定理 mk_add
-  条件: {f g : CauSeq 有理数 abs}
-  结论: mk (f + g) = mk f + mk g
-  证明: by simp [mk, ← ofCauchy_add]
-
-Depends on / 依赖: ofCauchy_add
+/-
+**Real.mk_add** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_add {f g : CauSeq Rat abs} : mk (f + g) = mk f + mk g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mk_add {f g : CauSeq Rat abs} : mk (f + g) = mk f + mk g := by simp [mk, ← ofCauchy_add]
-
-/--
-theorem `mk_mul` / 定理 `mk_mul`
-
-English:
-theorem mk_mul
-  given: {f g : CauSeq Rat abs}
-  statement: mk (f * g) = mk f * mk g
-  proof: by simp [mk, ← ofCauchy_mul]
-
-中文:
-定理 mk_mul
-  条件: {f g : CauSeq 有理数 abs}
-  结论: mk (f * g) = mk f * mk g
-  证明: by simp [mk, ← ofCauchy_mul]
-
-Depends on / 依赖: ofCauchy_mul
+theorem mk_add {f g : CauSeq ℚ abs} : mk (f + g) = mk f + mk g := by simp [mk, ← ofCauchy_add]
+/-
+**Real.mk_mul** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_mul {f g : CauSeq Rat abs} : mk (f * g) = mk f * mk g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mk_mul {f g : CauSeq Rat abs} : mk (f * g) = mk f * mk g := by simp [mk, ← ofCauchy_mul]
-
-/--
-theorem `mk_neg` / 定理 `mk_neg`
-
-English:
-theorem mk_neg
-  given: {f : CauSeq Rat abs}
-  statement: mk (-f) = -mk f
-  proof: by simp [mk, ← ofCauchy_neg]
+theorem mk_mul {f g : CauSeq ℚ abs} : mk (f * g) = mk f * mk g := by simp [mk, ← ofCauchy_mul]
+/-
+**Real.mk_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_neg {f : CauSeq Rat abs} : mk (-f) = -mk f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem mk_neg {f : CauSeq ℚ abs} : mk (-f) = -mk f := by simp [mk, ← ofCauchy_neg]
 
 @[simp]
-
-中文:
-定理 mk_neg
-  条件: {f : CauSeq 有理数 abs}
-  结论: mk (-f) = -mk f
-  证明: by simp [mk, ← ofCauchy_neg]
-
-@[simp]
-
-Depends on / 依赖: ofCauchy_neg
+/-
+**Real.mk_pos** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_pos {f : CauSeq Rat abs} : 0 < mk f ↔ Pos f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.mk_zero`：mk_zero : mk 0 = 0
+· 使用定理 `Real.mk_lt`：mk_lt {f g : CauSeq Rat abs} : mk f < mk g ↔ f < g
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
-theorem mk_neg {f : CauSeq Rat abs} : mk (-f) = -mk f := by simp [mk, ← ofCauchy_neg]
-
-@[simp]
-/--
-theorem `mk_pos` / 定理 `mk_pos`
-
-English:
-theorem mk_pos
-  given: {f : CauSeq Rat abs}
-  statement: 0 < mk f ↔ Pos f
-  proof: by
-  rw [← mk_zero]; rw [mk_lt]
+theorem mk_pos {f : CauSeq ℚ abs} : 0 < mk f ↔ Pos f := by
+  rw [← mk_zero, mk_lt]
   exact iff_of_eq (congr_arg Pos (sub_zero f))
-
-中文:
-定理 mk_pos
-  条件: {f : CauSeq 有理数 abs}
-  结论: 0 < mk f ↔ Pos f
-  证明: by
-  rw [← mk_zero]; rw [mk_lt]
-  exact iff_of_eq (congr_arg Pos (sub_zero f))
-
-Depends on / 依赖: congr_arg, iff_of_eq, mk_lt, mk_zero, sub_zero
+/-
+**Real.mk_const** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：mk_const {x : Rat} : mk (const abs x) = x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_pos {f : CauSeq Rat abs} : 0 < mk f ↔ Pos f := by
-  rw [← mk_zero]; rw [mk_lt]
-  exact iff_of_eq (congr_arg Pos (sub_zero f))
-
-/--
-lemma `mk_const` / 引理 `mk_const`
-
-English:
-lemma mk_const
-  given: {x : Rat}
-  statement: mk (const abs x) = x
-  proof: rfl
-
-中文:
-引理 mk_const
-  条件: {x : 有理数}
-  结论: mk (const abs x) = x
-  证明: rfl
--/
-lemma mk_const {x : Rat} : mk (const abs x) = x := rfl
+lemma mk_const {x : ℚ} : mk (const abs x) = x := rfl
 
 set_option backward.privateInPublic true in
-private irreducible_def le (x y : Real) : Prop :=
+private irreducible_def le (x y : ℝ) : Prop :=
   x < y ∨ x = y
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE Real
-  body: ⟨le⟩
-
-中文:
-实例 :
-  签名: LE 实数
-  定义体: ⟨le⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LE Real :=
+instance : LE ℝ :=
   ⟨le⟩
-
-/--
-theorem `le_def'` / 定理 `le_def'`
-
-English:
-theorem le_def'
-  given: {x y : Real}
-  statement: x <= y ↔ x < y ∨ x = y
-  proof: iff_of_eq le_def _ _
-
-@[simp]
-
-中文:
-定理 le_def'
-  条件: {x y : 实数}
-  结论: x <= y ↔ x < y ∨ x = y
-  证明: iff_of_eq le_def _ _
-
-@[simp]
+/-
+**Real.le_def'** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem le_def' {x y : Real} : x <= y ↔ x < y ∨ x = y :=
-iff_of_eq le_def _ _
+private theorem le_def' {x y : ℝ} : x ≤ y ↔ x < y ∨ x = y :=
+  iff_of_eq <| le_def _ _
 
 @[simp]
-/--
-theorem `mk_le` / 定理 `mk_le`
-
-English:
-theorem mk_le
-  given: {f g : CauSeq Rat abs}
-  statement: mk f <= mk g ↔ f <= g
-  proof: by
+/-
+**Real.mk_le** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_le {f g : CauSeq Rat abs} : mk f <= mk g ↔ f <= g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem mk_le {f g : CauSeq ℚ abs} : mk f ≤ mk g ↔ f ≤ g := by
   simp only [le_def', mk_lt, mk_eq]; rfl
 
 @[elab_as_elim]
-
-中文:
-定理 mk_le
-  条件: {f g : CauSeq 有理数 abs}
-  结论: mk f <= mk g ↔ f <= g
-  证明: by
-  simp only [le_def', mk_lt, mk_eq]; rfl
-
-@[elab_as_elim]
-
-Depends on / 依赖: le_def, mk_eq, mk_lt
+/-
+**Real.ind_mk** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ {C : ℝ → Prop} (x : ℝ), (∀ (y : CauSeq ℚ abs), C (Real.mk y)) → C x
+参数：x : ℝ；∀ (y : CauSeq ℚ abs), C (Real.mk y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
 -/
-theorem mk_le {f g : CauSeq Rat abs} : mk f <= mk g ↔ f <= g := by
-  simp only [le_def', mk_lt, mk_eq]; rfl
-
-@[elab_as_elim]
-/--
-theorem `ind_mk` / 定理 `ind_mk`
-
-English:
-theorem ind_mk
-  given: {C : Real -> Prop} (x : Real) (h : forall y, C (mk y))
-  statement: C x
-  proof: by
+protected theorem ind_mk {C : Real → Prop} (x : Real) (h : ∀ y, C (mk y)) : C x := by
   obtain ⟨x⟩ := x
   induction x using Quot.induction_on
   exact h _
-
-中文:
-定理 ind_mk
-  条件: {C : 实数 -> 命题} (x : 实数) (h : 对任意 y, C (mk y))
-  结论: C x
-  证明: by
-  obtain ⟨x⟩ := x
-  induction x using Quot.induction_on
-  exact h _
+/-
+**Real.partialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：partialOrder : PartialOrder Real where lt_iff_le_not_ge a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem ind_mk {C : Real -> Prop} (x : Real) (h : forall y, C (mk y)) : C x := by
-  obtain ⟨x⟩ := x
-  induction x using Quot.induction_on
-  exact h _
-
-/--
-Instance `partialOrder` / 实例 `partialOrder`
-
-English:
-instance partialOrder
-  signature: : PartialOrder Real where
-  body: by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa using lt_iff_le_not_ge
-  le_refl a := by
-    induction a using Real.ind_mk
-    rw [mk_le]
-  le_trans a b c := by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    simpa using le_trans
-  le_antisymm a b := by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa [mk_eq] using CauSeq.le_antisymm
-
-中文:
-实例 partialOrder
-  签名: : 偏序 实数 where
-  定义体: by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa using lt_iff_le_not_ge
-  le_refl a := by
-    induction a using Real.ind_mk
-    rw [mk_le]
-  le_trans a b c := by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    simpa using le_trans
-  le_antisymm a b := by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa [mk_eq] using CauSeq.le_antisymm
-
-Depends on / 依赖: CauSeq, CauSeq.le_antisymm, Real.ind_mk, ind_mk, le_antisymm, le_refl, le_trans, lt_iff_le_not_ge, mk_eq, mk_le
--/
-instance partialOrder : PartialOrder Real where
+instance partialOrder : PartialOrder ℝ where
   lt_iff_le_not_ge a b := by
     induction a using Real.ind_mk
     induction b using Real.ind_mk
@@ -1538,139 +854,94 @@ instance partialOrder : PartialOrder Real where
     induction a using Real.ind_mk
     induction b using Real.ind_mk
     simpa [mk_eq] using CauSeq.le_antisymm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preorder Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 预序 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Preorder Real := by infer_instance
-
-/--
-theorem `ratCast_lt` / 定理 `ratCast_lt`
-
-English:
-theorem ratCast_lt
-  given: {x y : Rat}
-  statement: (x : Real) < (y : Real) ↔ x < y
-  proof: by
-  rw [← mk_const]; rw [← mk_const]; rw [mk_lt]
+instance : Preorder ℝ := by infer_instance
+/-
+**Real.ratCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ratCast_lt {x y : Rat} : (x : Real) < (y : Real) ↔ x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Real.mk_const`：mk_const {x : Rat} : mk (const abs x) = x
+· 使用定理 `Real.mk_lt`：mk_lt {f g : CauSeq Rat abs} : mk f < mk g ↔ f < g
+· 使用定理 `CauSeq.const_lt`：const_lt {x y : α} : const x < const y ↔ x < y
+-/
+theorem ratCast_lt {x y : ℚ} : (x : ℝ) < (y : ℝ) ↔ x < y := by
+  rw [← mk_const, ← mk_const, mk_lt]
   exact const_lt
-
-中文:
-定理 ratCast_lt
-  条件: {x y : 有理数}
-  结论: (x : 实数) < (y : 实数) ↔ x < y
-  证明: by
-  rw [← mk_const]; rw [← mk_const]; rw [mk_lt]
-  exact const_lt
-
-Depends on / 依赖: const_lt, mk_const, mk_lt
+/-
+**Real.zero_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：0 < 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `Real.ofCauchy_zero`：ofCauchy_zero : (⟨0⟩ : Real) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Rat.cast_one`：cast_one : ((1 : Rat) : α) = 1
+· 使用定理 `Real.ofCauchy_one`：ofCauchy_one : (⟨1⟩ : Real) = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.ratCast_lt`：ratCast_lt {x y : Rat} : (x : Real) < (y : Real) ↔ x < 
+y
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
 -/
-theorem ratCast_lt {x y : Rat} : (x : Real) < (y : Real) ↔ x < y := by
-  rw [← mk_const]; rw [← mk_const]; rw [mk_lt]
-  exact const_lt
-
-/--
-theorem `zero_lt_one` / 定理 `zero_lt_one`
-
-English:
-theorem zero_lt_one
-  statement: (0 : Real) < 1
-  proof: by
+protected theorem zero_lt_one : (0 : ℝ) < 1 := by
   convert! ratCast_lt.2 zero_lt_one <;> simp [← ofCauchy_ratCast, ofCauchy_one, ofCauchy_zero]
-
-中文:
-定理 zero_lt_one
-  结论: (0 : 实数) < 1
-  证明: by
-  convert! ratCast_lt.2 zero_lt_one <;> simp [← ofCauchy_ratCast, ofCauchy_one, ofCauchy_zero]
+/-
+**Real.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instNontrivial : Nontrivial Real where exists_pair_ne
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Real.zero_lt_one`：0 < 1
 -/
-protected theorem zero_lt_one : (0 : Real) < 1 := by
-  convert! ratCast_lt.2 zero_lt_one <;> simp [← ofCauchy_ratCast, ofCauchy_one, ofCauchy_zero]
-
-/--
-Instance `instNontrivial` / 实例 `instNontrivial`
-
-English:
-instance instNontrivial
-  signature: : Nontrivial Real where
-  body: ⟨0, 1, Real.zero_lt_one.ne⟩
-
-中文:
-实例 instNontrivial
-  签名: : 非平凡 实数 where
-  定义体: ⟨0, 1, Real.zero_lt_one.ne⟩
-
-Depends on / 依赖: Real.zero_lt_one.ne, zero_lt_one
--/
-instance instNontrivial : Nontrivial Real where
+instance instNontrivial : Nontrivial ℝ where
   exists_pair_ne := ⟨0, 1, Real.zero_lt_one.ne⟩
-
-/--
-Instance `instZeroLEOneClass` / 实例 `instZeroLEOneClass`
-
-English:
-instance instZeroLEOneClass
-  signature: : ZeroLEOneClass Real where
-  body: le_of_lt Real.zero_lt_one
-
-中文:
-实例 instZeroLEOneClass
-  签名: : ZeroLEOne类 实数 where
-  定义体: le_of_lt Real.zero_lt_one
-
-Depends on / 依赖: Real.zero_lt_one, le_of_lt, zero_lt_one
+/-
+**Real.instZeroLEOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instZeroLEOneClass : ZeroLEOneClass Real where zero_le_one
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.zero_lt_one`：0 < 1
 -/
-instance instZeroLEOneClass : ZeroLEOneClass Real where
+instance instZeroLEOneClass : ZeroLEOneClass ℝ where
   zero_le_one := le_of_lt Real.zero_lt_one
-
-/--
-Instance `instIsOrderedAddMonoid` / 实例 `instIsOrderedAddMonoid`
-
-English:
-instance instIsOrderedAddMonoid
-  signature: : IsOrderedAddMonoid Real where
-  body: by
-    simp only [le_iff_eq_or_lt]
-    rintro a b ⟨rfl, h⟩
-    · simp only [lt_self_iff_false, or_false, forall_const]
-    · refine fun c => Or.inr ?_
-      induction a using Real.ind_mk with | _ a =>
-      induction b using Real.ind_mk with | _ b =>
-      induction c using Real.ind_mk with | _ c =>
-      simp only [mk_lt, ← mk_add] at *
-      change Pos _ at *
-      rwa [add_sub_add_right_eq_sub]
-
-中文:
-实例 instIsOrderedAddMonoid
-  签名: : 是OrderedAdd幺半群 实数 where
-  定义体: by
-    simp only [le_iff_eq_or_lt]
-    rintro a b ⟨rfl, h⟩
-    · simp only [lt_self_iff_false, or_false, forall_const]
-    · refine fun c => Or.inr ?_
-      induction a using Real.ind_mk with | _ a =>
-      induction b using Real.ind_mk with | _ b =>
-      induction c using Real.ind_mk with | _ c =>
-      simp only [mk_lt, ← mk_add] at *
-      change Pos _ at *
-      rwa [add_sub_add_right_eq_sub]
-
-Depends on / 依赖: Or.inr, Real.ind_mk, add_sub_add_right_eq_sub, forall_const, ind_mk, le_iff_eq_or_lt, lt_self_iff_false, mk_add, mk_lt, or_false
+/-
+**Real.instIsOrderedAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instIsOrderedAddMonoid : IsOrderedAddMonoid Real where add_le_add_left
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.ind_mk`：∀ {C : ℝ → Prop} (x : ℝ), (∀ (y : CauSeq ℚ abs), C (Real.mk
+ y)) → C x
+· 使用定理 `add_sub_add_right_eq_sub`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : 
+G), a + c - (b + c) = a - b
 -/
-instance instIsOrderedAddMonoid : IsOrderedAddMonoid Real where
+instance instIsOrderedAddMonoid : IsOrderedAddMonoid ℝ where
   add_le_add_left := by
     simp only [le_iff_eq_or_lt]
     rintro a b ⟨rfl, h⟩
@@ -1682,332 +953,156 @@ instance instIsOrderedAddMonoid : IsOrderedAddMonoid Real where
       simp only [mk_lt, ← mk_add] at *
       change Pos _ at *
       rwa [add_sub_add_right_eq_sub]
-
-/--
-Instance `instIsStrictOrderedRing` / 实例 `instIsStrictOrderedRing`
-
-English:
-instance instIsStrictOrderedRing
-  signature: : IsStrictOrderedRing Real
-  body: .of_mul_pos fun a b => by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa only [mk_lt, mk_pos, ← mk_mul] using CauSeq.mul_pos
-
-中文:
-实例 instIsStrictOrderedRing
-  签名: : 是StrictOrdered环 实数
-  定义体: .of_mul_pos fun a b => by
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa only [mk_lt, mk_pos, ← mk_mul] using CauSeq.mul_pos
-
-Depends on / 依赖: CauSeq, CauSeq.mul_pos, Real.ind_mk, ind_mk, mk_lt, mk_mul, mk_pos, mul_pos, of_mul_pos
+/-
+**Real.instIsStrictOrderedRing** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instIsStrictOrderedRing : IsStrictOrderedRing Real
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsStrictOrderedRing.of_mul_pos`：IsStrictOrderedRing.of_mul_pos [Ring R] 
+[PartialOrder R] [IsOrderedAddMonoid R] [ZeroLEOneClass R] [Nontrivial R] (mul_p
+os : forall a b : R,…
+· 使用定理 `Real.ind_mk`：∀ {C : ℝ → Prop} (x : ℝ), (∀ (y : CauSeq ℚ abs), C (Real.mk
+ y)) → C x
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CauSeq.mul_pos`：∀ {α : Type u_1} [inst : Field α] [inst_1 : LinearOrder 
+α] [inst_2 : IsStrictOrderedRing α] {f g : CauSeq α abs},   f.Pos → g.Pos → (f *
+ g).…
 -/
-instance instIsStrictOrderedRing : IsStrictOrderedRing Real :=
-  .of_mul_pos fun a b => by
+instance instIsStrictOrderedRing : IsStrictOrderedRing ℝ :=
+  .of_mul_pos fun a b ↦ by
     induction a using Real.ind_mk
     induction b using Real.ind_mk
     simpa only [mk_lt, mk_pos, ← mk_mul] using CauSeq.mul_pos
-
-/--
-Instance `instIsOrderedRing` / 实例 `instIsOrderedRing`
-
-English:
-instance instIsOrderedRing
-  signature: : IsOrderedRing Real
-  body: inferInstance
-
-中文:
-实例 instIsOrderedRing
-  签名: : 是Ordered环 实数
-  定义体: inferInstance
+/-
+**Real.instIsOrderedRing** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instIsOrderedRing : IsOrderedRing Real
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
 -/
-instance instIsOrderedRing : IsOrderedRing Real :=
+instance instIsOrderedRing : IsOrderedRing ℝ :=
   inferInstance
-
-/--
-Instance `instIsOrderedCancelAddMonoid` / 实例 `instIsOrderedCancelAddMonoid`
-
-English:
-instance instIsOrderedCancelAddMonoid
-  signature: : IsOrderedCancelAddMonoid Real
-  body: inferInstance
-
-中文:
-实例 instIsOrderedCancelAddMonoid
-  签名: : 是OrderedCancelAdd幺半群 实数
-  定义体: inferInstance
+/-
+**Real.instIsOrderedCancelAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instIsOrderedCancelAddMonoid : IsOrderedCancelAddMonoid Real
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
 -/
-instance instIsOrderedCancelAddMonoid : IsOrderedCancelAddMonoid Real :=
+instance instIsOrderedCancelAddMonoid : IsOrderedCancelAddMonoid ℝ :=
   inferInstance
 
 set_option backward.privateInPublic true in
-private irreducible_def sup : Real -> Real -> Real
+private irreducible_def sup : ℝ → ℝ → ℝ
   | ⟨x⟩, ⟨y⟩ => ⟨Quotient.map₂ (· ⊔ ·) (fun _ _ hx _ _ hy => sup_equiv_sup hx hy) x y⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max Real
-  body: ⟨sup⟩
-
-中文:
-实例 :
-  签名: 最大值 实数
-  定义体: ⟨sup⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Max Real :=
+instance : Max ℝ :=
   ⟨sup⟩
-
-/--
-theorem `ofCauchy_sup` / 定理 `ofCauchy_sup`
-
-English:
-theorem ofCauchy_sup
-  given: (a b)
-  statement: (⟨⟦a ⊔ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊔ ⟨⟦b⟧⟩
-  proof: show _ = sup _ _ by
-    rw [sup_def]
-    rfl
-
-@[simp]
-
-中文:
-定理 ofCauchy_sup
-  条件: (a b)
-  结论: (⟨⟦a ⊔ b⟧⟩ : 实数) = ⟨⟦a⟧⟩ ⊔ ⟨⟦b⟧⟩
-  证明: show _ = sup _ _ by
-    rw [sup_def]
-    rfl
-
-@[simp]
-
-Depends on / 依赖: sup_def
+/-
+**Real.ofCauchy_sup** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_sup (a b) : (⟨⟦a ⊔ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊔ ⟨⟦b⟧⟩
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CauSeq.sup_equiv_sup`：sup_equiv_sup {a₁ b₁ a₂ b₂ : CauSeq α abs} (ha : a
+₁ ≈ a₂) (hb : b₁ ≈ b₂) : a₁ ⊔ b₁ ≈ a₂ ⊔ b₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.sup_def`：∀ (x x_1 : ℝ),   Real.s
+up✝ x x_1 =     match x, x_1 with     | { cauchy := x }, { cauchy := y } => { ca
+uchy := Quotient.map₂ (fun x1 x2 => x…
 -/
-theorem ofCauchy_sup (a b) : (⟨⟦a ⊔ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊔ ⟨⟦b⟧⟩ :=
+theorem ofCauchy_sup (a b) : (⟨⟦a ⊔ b⟧⟩ : ℝ) = ⟨⟦a⟧⟩ ⊔ ⟨⟦b⟧⟩ :=
   show _ = sup _ _ by
     rw [sup_def]
     rfl
 
 @[simp]
-/--
-theorem `mk_sup` / 定理 `mk_sup`
-
-English:
-theorem mk_sup
-  given: (a b)
-  statement: (mk (a ⊔ b) : Real) = mk a ⊔ mk b
-  proof: ofCauchy_sup _ _
-
-中文:
-定理 mk_sup
-  条件: (a b)
-  结论: (mk (a ⊔ b) : 实数) = mk a ⊔ mk b
-  证明: ofCauchy_sup _ _
-
-Depends on / 依赖: ofCauchy_sup
+/-
+**Real.mk_sup** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_sup (a b) : (mk (a ⊔ b) : Real) = mk a ⊔ mk b
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.ofCauchy_sup`：ofCauchy_sup (a b) : (⟨⟦a ⊔ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊔ ⟨⟦b
+⟧⟩
 -/
-theorem mk_sup (a b) : (mk (a ⊔ b) : Real) = mk a ⊔ mk b :=
+theorem mk_sup (a b) : (mk (a ⊔ b) : ℝ) = mk a ⊔ mk b :=
   ofCauchy_sup _ _
 
 set_option backward.privateInPublic true in
-private irreducible_def inf : Real -> Real -> Real
+private irreducible_def inf : ℝ → ℝ → ℝ
   | ⟨x⟩, ⟨y⟩ => ⟨Quotient.map₂ (· ⊓ ·) (fun _ _ hx _ _ hy => inf_equiv_inf hx hy) x y⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min Real
-  body: ⟨inf⟩
-
-中文:
-实例 :
-  签名: 最小值 实数
-  定义体: ⟨inf⟩
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Min Real :=
+instance : Min ℝ :=
   ⟨inf⟩
-
-/--
-theorem `ofCauchy_inf` / 定理 `ofCauchy_inf`
-
-English:
-theorem ofCauchy_inf
-  given: (a b)
-  statement: (⟨⟦a ⊓ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊓ ⟨⟦b⟧⟩
-  proof: show _ = inf _ _ by
-    rw [inf_def]
-    rfl
-
-@[simp]
-
-中文:
-定理 ofCauchy_inf
-  条件: (a b)
-  结论: (⟨⟦a ⊓ b⟧⟩ : 实数) = ⟨⟦a⟧⟩ ⊓ ⟨⟦b⟧⟩
-  证明: show _ = inf _ _ by
-    rw [inf_def]
-    rfl
-
-@[simp]
-
-Depends on / 依赖: inf_def
+/-
+**Real.ofCauchy_inf** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_inf (a b) : (⟨⟦a ⊓ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊓ ⟨⟦b⟧⟩
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CauSeq.inf_equiv_inf`：inf_equiv_inf {a₁ b₁ a₂ b₂ : CauSeq α abs} (ha : a
+₁ ≈ a₂) (hb : b₁ ≈ b₂) : a₁ ⊓ b₁ ≈ a₂ ⊓ b₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Real.Basic.0.Real.inf_def`：∀ (x x_1 : ℝ),   Real.i
+nf✝ x x_1 =     match x, x_1 with     | { cauchy := x }, { cauchy := y } => { ca
+uchy := Quotient.map₂ (fun x1 x2 => x…
 -/
-theorem ofCauchy_inf (a b) : (⟨⟦a ⊓ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊓ ⟨⟦b⟧⟩ :=
+theorem ofCauchy_inf (a b) : (⟨⟦a ⊓ b⟧⟩ : ℝ) = ⟨⟦a⟧⟩ ⊓ ⟨⟦b⟧⟩ :=
   show _ = inf _ _ by
     rw [inf_def]
     rfl
 
 @[simp]
-/--
-theorem `mk_inf` / 定理 `mk_inf`
-
-English:
-theorem mk_inf
-  given: (a b)
-  statement: (mk (a ⊓ b) : Real) = mk a ⊓ mk b
-  proof: ofCauchy_inf _ _
-
-中文:
-定理 mk_inf
-  条件: (a b)
-  结论: (mk (a ⊓ b) : 实数) = mk a ⊓ mk b
-  证明: ofCauchy_inf _ _
-
-Depends on / 依赖: ofCauchy_inf
+/-
+**Real.mk_inf** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_inf (a b) : (mk (a ⊓ b) : Real) = mk a ⊓ mk b
+参数：a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.ofCauchy_inf`：ofCauchy_inf (a b) : (⟨⟦a ⊓ b⟧⟩ : Real) = ⟨⟦a⟧⟩ ⊓ ⟨⟦b
+⟧⟩
 -/
-theorem mk_inf (a b) : (mk (a ⊓ b) : Real) = mk a ⊓ mk b :=
+theorem mk_inf (a b) : (mk (a ⊓ b) : ℝ) = mk a ⊓ mk b :=
   ofCauchy_inf _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DistribLattice Real
-  body: (· ⊔ ·)
-  le_sup_left := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le]
-    exact CauSeq.le_sup_left
-  le_sup_right := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le]
-    exact CauSeq.le_sup_right
-  sup_le := by
-    intro a b c
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    simp_rw [← mk_sup, mk_le]
-    exact CauSeq.sup_le
-  inf := (· ⊓ ·)
-  inf_le_left := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_inf]; rw [mk_le]
-    exact CauSeq.inf_le_left
-  inf_le_right := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_inf]; rw [mk_le]
-    exact CauSeq.inf_le_right
-  le_inf := by
-    intro a b c
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    simp_rw [← mk_inf, mk_le]
-    exact CauSeq.le_inf
-  le_sup_inf := by
-    intro a b c
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    apply Eq.le
-    simp only [← mk_sup, ← mk_inf]
-    exact congr_arg mk (CauSeq.sup_inf_distrib_left ..).symm
-
-中文:
-实例 :
-  签名: Distrib格 实数
-  定义体: (· ⊔ ·)
-  le_sup_left := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le]
-    exact CauSeq.le_sup_left
-  le_sup_right := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le]
-    exact CauSeq.le_sup_right
-  sup_le := by
-    intro a b c
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    simp_rw [← mk_sup, mk_le]
-    exact CauSeq.sup_le
-  inf := (· ⊓ ·)
-  inf_le_left := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_inf]; rw [mk_le]
-    exact CauSeq.inf_le_left
-  inf_le_right := by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    rw [← mk_inf]; rw [mk_le]
-    exact CauSeq.inf_le_right
-  le_inf := by
-    intro a b c
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    simp_rw [← mk_inf, mk_le]
-    exact CauSeq.le_inf
-  le_sup_inf := by
-    intro a b c
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    induction c using Real.ind_mk
-    apply Eq.le
-    simp only [← mk_sup, ← mk_inf]
-    exact congr_arg mk (CauSeq.sup_inf_distrib_left ..).symm
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : DistribLattice Real where
+instance : DistribLattice ℝ where
   sup := (· ⊔ ·)
   le_sup_left := by
     intro a b
     induction a using Real.ind_mk
     induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le]
+    rw [← mk_sup, mk_le]
     exact CauSeq.le_sup_left
   le_sup_right := by
     intro a b
     induction a using Real.ind_mk
     induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le]
+    rw [← mk_sup, mk_le]
     exact CauSeq.le_sup_right
   sup_le := by
     intro a b c
@@ -2021,13 +1116,13 @@ instance : DistribLattice Real where
     intro a b
     induction a using Real.ind_mk
     induction b using Real.ind_mk
-    rw [← mk_inf]; rw [mk_le]
+    rw [← mk_inf, mk_le]
     exact CauSeq.inf_le_left
   inf_le_right := by
     intro a b
     induction a using Real.ind_mk
     induction b using Real.ind_mk
-    rw [← mk_inf]; rw [mk_le]
+    rw [← mk_inf, mk_le]
     exact CauSeq.inf_le_right
   le_inf := by
     intro a b c
@@ -2046,78 +1141,40 @@ instance : DistribLattice Real where
     exact congr_arg mk (CauSeq.sup_inf_distrib_left ..).symm
 
 -- Extra instances to short-circuit type class resolution
-/--
-Instance `lattice` / 实例 `lattice`
-
-English:
-instance lattice
-  signature: : Lattice Real
-  body: inferInstance
-
-中文:
-实例 lattice
-  签名: : 格 实数
-  定义体: inferInstance
+/-
+**Real.lattice** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：lattice : Lattice Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance lattice : Lattice Real :=
+instance lattice : Lattice ℝ :=
   inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeInf Real
-  body: inferInstance
-
-中文:
-实例 :
-  签名: SemilatticeInf 实数
-  定义体: inferInstance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SemilatticeInf Real :=
+instance : SemilatticeInf ℝ :=
   inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeSup Real
-  body: inferInstance
-
-中文:
-实例 :
-  签名: SemilatticeSup 实数
-  定义体: inferInstance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SemilatticeSup Real :=
+instance : SemilatticeSup ℝ :=
   inferInstance
-
-/--
-Instance `leTotal_R` / 实例 `leTotal_R`
-
-English:
-instance leTotal_R
-  signature: : @Std.Total Real (· <= ·)
-  body: ⟨by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa using CauSeq.le_total ..⟩
-
-中文:
-实例 leTotal_R
-  签名: : @Std.全 实数 (· <= ·)
-  定义体: ⟨by
-    intro a b
-    induction a using Real.ind_mk
-    induction b using Real.ind_mk
-    simpa using CauSeq.le_total ..⟩
-
-Depends on / 依赖: CauSeq, CauSeq.le_total, Real.ind_mk, ind_mk, le_total
+/-
+**Real.leTotal_R** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：leTotal_R : @Std.Total Real (· <= ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.ind_mk`：∀ {C : ℝ → Prop} (x : ℝ), (∀ (y : CauSeq ℚ abs), C (Real.mk
+ y)) → C x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CauSeq.le_total`：le_total (f g : CauSeq α abs) : f <= g ∨ g <= f
 -/
-instance leTotal_R : @Std.Total Real (· <= ·) :=
+instance leTotal_R : @Std.Total ℝ (· ≤ ·) :=
   ⟨by
     intro a b
     induction a using Real.ind_mk
@@ -2125,120 +1182,61 @@ instance leTotal_R : @Std.Total Real (· <= ·) :=
     simpa using CauSeq.le_total ..⟩
 
 open scoped Classical in
-/--
-Instance `linearOrder` / 实例 `linearOrder`
-
-English:
-instance linearOrder
-  signature: : LinearOrder Real
-  body: Lattice.toLinearOrder Real
-
-中文:
-实例 linearOrder
-  签名: : 线性序 实数
-  定义体: Lattice.toLinearOrder Real
-
-Depends on / 依赖: Lattice, Lattice.toLinearOrder, toLinearOrder
+/-
+**Real.linearOrder** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：linearOrder : LinearOrder Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance linearOrder : LinearOrder Real :=
-  Lattice.toLinearOrder Real
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsDomain Real
-  body: IsStrictOrderedRing.isDomain
-
-中文:
-实例 :
-  签名: 是整环 实数
-  定义体: IsStrictOrderedRing.isDomain
-
-Depends on / 依赖: IsStrictOrderedRing, IsStrictOrderedRing.isDomain, isDomain
+noncomputable instance linearOrder : LinearOrder ℝ :=
+  Lattice.toLinearOrder ℝ
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsDomain Real := IsStrictOrderedRing.isDomain
-
-/--
-Instance `instDivInvMonoid` / 实例 `instDivInvMonoid`
-
-English:
-instance instDivInvMonoid
-  signature: : DivInvMonoid Real where
-
-中文:
-实例 instDivInvMonoid
-  签名: : 除逆幺半群 实数 where
+instance : IsDomain ℝ := IsStrictOrderedRing.isDomain
+/-
+**Real.instDivInvMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：DivInvMonoid ℝ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance instDivInvMonoid : DivInvMonoid Real where
-
-/--
-lemma `ofCauchy_div` / 引理 `ofCauchy_div`
-
-English:
-lemma ofCauchy_div
-  given: (f g)
-  statement: (⟨f / g⟩ : Real) = (⟨f⟩ : Real) / (⟨g⟩ : Real)
-  proof: by
+noncomputable instance instDivInvMonoid : DivInvMonoid ℝ where
+/-
+**Real.ofCauchy_div** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：ofCauchy_div (f g) : (⟨f / g⟩ : Real) = (⟨f⟩ : Real) / (⟨g⟩ : Real)
+参数：f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.ofCauchy_mul`：ofCauchy_mul (a b) : (⟨a * b⟩ : Real) = ⟨a⟩ * ⟨b⟩
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.ofCauchy_inv`：ofCauchy_inv {f} : (⟨f⁻¹⟩ : Real) = ⟨f⟩⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma ofCauchy_div (f g) : (⟨f / g⟩ : ℝ) = (⟨f⟩ : ℝ) / (⟨g⟩ : ℝ) := by
   simp_rw [div_eq_mul_inv, ofCauchy_mul, ofCauchy_inv]
-
-中文:
-引理 ofCauchy_div
-  条件: (f g)
-  结论: (⟨f / g⟩ : 实数) = (⟨f⟩ : 实数) / (⟨g⟩ : 实数)
-  证明: by
-  simp_rw [div_eq_mul_inv, ofCauchy_mul, ofCauchy_inv]
-
-Depends on / 依赖: div_eq_mul_inv, ofCauchy_inv, ofCauchy_mul, simp_rw
+/-
+**Real.instField** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：instField : Field Real where mul_inv_cancel
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `DivInvMonoid.div_eq_mul_inv`：∀ {G : Type u} [self : DivInvMonoid G] (a b
+ : G), a / b = a * b⁻¹
+· 使用定理 `DivInvMonoid.zpow_zero'`：∀ {G : Type u} [self : DivInvMonoid G] (a : G),
+ a ^ 0 = 1
+· 使用定理 `DivInvMonoid.zpow_succ'`：∀ {G : Type u} [self : DivInvMonoid G] (n : ℕ) 
+(a : G), a ^ ↑n.succ = a ^ ↑n * a
+· 使用定理 `DivInvMonoid.zpow_neg'`：∀ {G : Type u} [self : DivInvMonoid G] (n : ℕ) (
+a : G), a ^ Int.negSucc n = (a ^ ↑n.succ)⁻¹
 -/
-lemma ofCauchy_div (f g) : (⟨f / g⟩ : Real) = (⟨f⟩ : Real) / (⟨g⟩ : Real) := by
-  simp_rw [div_eq_mul_inv, ofCauchy_mul, ofCauchy_inv]
-
-/--
-Instance `instField` / 实例 `instField`
-
-English:
-instance instField
-  signature: : Field Real where
-  body: by
-    rintro ⟨a⟩ h
-    rw [mul_comm]
-    simp only [← ofCauchy_inv, ← ofCauchy_mul, ← ofCauchy_one, ← ofCauchy_zero,
-      Ne, ofCauchy.injEq] at *
-    exact CauSeq.Completion.inv_mul_cancel h
-  inv_zero := by simp [← ofCauchy_zero, ← ofCauchy_inv]
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-  nnratCast_def q := by
-    rw [← ofCauchy_nnratCast]; rw [NNRat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_natCast]
-  ratCast_def q := by
-    rw [← ofCauchy_ratCast]; rw [Rat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_intCast]
-
-中文:
-实例 instField
-  签名: : 域 实数 where
-  定义体: by
-    rintro ⟨a⟩ h
-    rw [mul_comm]
-    simp only [← ofCauchy_inv, ← ofCauchy_mul, ← ofCauchy_one, ← ofCauchy_zero,
-      Ne, ofCauchy.injEq] at *
-    exact CauSeq.Completion.inv_mul_cancel h
-  inv_zero := by simp [← ofCauchy_zero, ← ofCauchy_inv]
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-  nnratCast_def q := by
-    rw [← ofCauchy_nnratCast]; rw [NNRat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_natCast]
-  ratCast_def q := by
-    rw [← ofCauchy_ratCast]; rw [Rat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_intCast]
-
-Depends on / 依赖: CauSeq, CauSeq.Completion.inv_mul_cancel, Completion, NNRat.cast_def, Rat.cast_, cast_, cast_def, inv_mul_cancel, inv_zero, mul_comm, nnqsmul, nnqsmul_def, nnratCast_def, ofCauchy, ofCauchy.injEq, ofCauchy_div, ofCauchy_inv, ofCauchy_mul, ofCauchy_natCast, ofCauchy_nnratCast
--/
-noncomputable instance instField : Field Real where
+noncomputable instance instField : Field ℝ where
   mul_inv_cancel := by
     rintro ⟨a⟩ h
     rw [mul_comm]
@@ -2251,95 +1249,112 @@ noncomputable instance instField : Field Real where
   qsmul := _
   qsmul_def := fun _ _ => rfl
   nnratCast_def q := by
-    rw [← ofCauchy_nnratCast]; rw [NNRat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_natCast]
+    rw [← ofCauchy_nnratCast, NNRat.cast_def, ofCauchy_div, ofCauchy_natCast, ofCauchy_natCast]
   ratCast_def q := by
-    rw [← ofCauchy_ratCast]; rw [Rat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_intCast]
+    rw [← ofCauchy_ratCast, Rat.cast_def, ofCauchy_div, ofCauchy_natCast, ofCauchy_intCast]
 
 -- Extra instances to short-circuit type class resolution
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DivisionRing Real
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 除环 实数
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : DivisionRing Real := by infer_instance
-
-/--
-Instance `decidableLT` / 实例 `decidableLT`
-
-English:
-instance decidableLT
-  signature: (a b : Real)
-  body: by infer_instance
-
-中文:
-实例 decidableLT
-  签名: (a b : 实数)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+noncomputable instance : DivisionRing ℝ := by infer_instance
+/-
+**Real.decidableLT** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：decidableLT (a b : Real) : Decidable (a < b)
+参数：a b : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance decidableLT (a b : Real) : Decidable (a < b) := by infer_instance
-
-/--
-Instance `decidableLE` / 实例 `decidableLE`
-
-English:
-instance decidableLE
-  signature: (a b : Real)
-  body: by infer_instance
-
-中文:
-实例 decidableLE
-  签名: (a b : 实数)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+noncomputable instance decidableLT (a b : ℝ) : Decidable (a < b) := by infer_instance
+/-
+**Real.decidableLE** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：decidableLE (a b : Real) : Decidable (a <= b)
+参数：a b : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance decidableLE (a b : Real) : Decidable (a <= b) := by infer_instance
-
-/--
-Instance `decidableEq` / 实例 `decidableEq`
-
-English:
-instance decidableEq
-  signature: (a b : Real)
-  body: by infer_instance
-
-中文:
-实例 decidableEq
-  签名: (a b : 实数)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+noncomputable instance decidableLE (a b : ℝ) : Decidable (a ≤ b) := by infer_instance
+/-
+**Real.decidableEq** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+形式化陈述：decidableEq (a b : Real) : Decidable (a = b)
+参数：a b : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance decidableEq (a b : Real) : Decidable (a = b) := by infer_instance
+noncomputable instance decidableEq (a b : ℝ) : Decidable (a = b) := by infer_instance
 
 /-- Show an underlying Cauchy sequence for real numbers.
 
 The representative chosen is the one passed in the VM to `Quot.mk`, so two Cauchy sequences
 converging to the same number may be printed differently.
 -/
-unsafe instance : Repr Real where
+/-
+**Real.** 是 Mathlib 中的一个实例，位于命名空间 `Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Show an underlying Cauchy sequence for real numbers.
+
+The representative chosen is the one passed in the VM to `Quot.mk`, so two Cauch
+y sequences
+converging to the same number may be printed differently.
+-/
+unsafe instance : Repr ℝ where
   reprPrec r p := Repr.addAppParen ("Real.ofCauchy " ++ repr r.cauchy) p
-
-/--
-theorem `le_mk_of_forall_le` / 定理 `le_mk_of_forall_le`
-
-English:
-theorem le_mk_of_forall_le
-  given: {f : CauSeq Rat abs}
-  statement: (exists i, forall j >= i, x <= f j) -> x <= mk f
-  proof: by
+/-
+**Real.le_mk_of_forall_le** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：le_mk_of_forall_le {f : CauSeq Rat abs} : (exists i, forall j >= i, x <= f
+ j) -> x <= mk f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.ind_mk`：∀ {C : ℝ → Prop} (x : ℝ), (∀ (y : CauSeq ℚ abs), C (Real.mk
+ y)) → C x
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.mk_lt`：mk_lt {f g : CauSeq Rat abs} : mk f < mk g ↔ f < g
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `exists_forall_ge_and`：exists_forall_ge_and {p q : α -> Prop} : (exists i
+, forall j >= i, p j) -> (exists i, forall j >= i, q j) -> exists i, forall j >=
+ i, p j ∧ …
+· 使用定理 `CauSeq.cauchy₃`：cauchy₃ (f : CauSeq β abv) {ε} : 0 < ε -> exists i, fora
+ll j >= i, forall k >= j, abv (f k - f j) < ε
+· 使用定理 `half_pos`：half_pos (h : 0 < a) : 0 < a / 2
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Real.mk_const`：mk_const {x : Rat} : mk (const abs x) = x
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `abs_lt`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder α] [A
+ddLeftMono α] {a b : α} [AddRightMono α],   |a| < b ↔ -b < a ∧ a < b
+· 使用定理 `sub_add_sub_cancel`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : G), a 
+- b + (b - c) = a - c
+· 使用定理 `CauSeq.sub_apply`：sub_apply (f g : CauSeq β abv) (i : Nat) : (f - g) i =
+ f i - g i
+· 使用定理 `sub_self_div_two`：sub_self_div_two (a : α) : a - a / 2 = a / 2
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+-/
+theorem le_mk_of_forall_le {f : CauSeq ℚ abs} : (∃ i, ∀ j ≥ i, x ≤ f j) → x ≤ mk f := by
   intro h
   induction x using Real.ind_mk
   apply le_of_not_gt
@@ -2347,150 +1362,135 @@ theorem le_mk_of_forall_le
   rintro ⟨K, K0, hK⟩
   obtain ⟨i, H⟩ := exists_forall_ge_and h (exists_forall_ge_and hK (f.cauchy₃ <| half_pos K0))
   apply not_lt_of_ge (H _ le_rfl).1
-  rw [← mk_const]; rw [mk_lt]
+  rw [← mk_const, mk_lt]
   refine ⟨_, half_pos K0, i, fun j ij => ?_⟩
   have := add_le_add (H _ ij).2.1 (le_of_lt (abs_lt.1 <| (H _ le_rfl).2.2 _ ij).1)
   rwa [← sub_eq_add_neg, sub_self_div_two, sub_apply, sub_add_sub_cancel] at this
-
-中文:
-定理 le_mk_of_对任意_le
-  条件: {f : CauSeq 有理数 abs}
-  结论: (存在 i, 对任意 j >= i, x <= f j) -> x <= mk f
-  证明: by
-  intro h
-  induction x using Real.ind_mk
-  apply le_of_not_gt
-  rw [mk_lt]
-  rintro ⟨K, K0, hK⟩
-  obtain ⟨i, H⟩ := exists_forall_ge_and h (exists_forall_ge_and hK (f.cauchy₃ <| half_pos K0))
-  apply not_lt_of_ge (H _ le_rfl).1
-  rw [← mk_const]; rw [mk_lt]
-  refine ⟨_, half_pos K0, i, fun j ij => ?_⟩
-  have := add_le_add (H _ ij).2.1 (le_of_lt (abs_lt.1 <| (H _ le_rfl).2.2 _ ij).1)
-  rwa [← sub_eq_add_neg, sub_self_div_two, sub_apply, sub_add_sub_cancel] at this
-
-Depends on / 依赖: Real.ind_mk, abs_lt, add_le_add, exists_forall_ge_and, f.cauchy, half_pos, ind_mk, le_of_lt, le_of_not_gt, le_rfl, mk_const, mk_lt, not_lt_of_ge, sub_add_sub_cancel, sub_apply, sub_eq_add_neg, sub_self_div_two
+/-
+**Real.mk_le_of_forall_le** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_le_of_forall_le {f : CauSeq Rat abs} {x : Real} (h : exists i, forall j
+ >= i, (f j : Real) <= x) : mk f <= x
+参数：h : exists i, forall j >= i, (f j : Real) <= x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_le_neg_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddL
+eftMono α] {a b : α} [AddRightMono α], -a ≤ -b ↔ b ≤ a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Real.mk_neg`：mk_neg {f : CauSeq Rat abs} : mk (-f) = -mk f
+· 使用定理 `Real.le_mk_of_forall_le`：le_mk_of_forall_le {f : CauSeq Rat abs} : (exis
+ts i, forall j >= i, x <= f j) -> x <= mk f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Rat.cast_neg`：∀ {α : Type u_3} [inst : DivisionRing α] (q : ℚ), ↑(-q) = 
+-↑q
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem le_mk_of_forall_le {f : CauSeq Rat abs} : (exists i, forall j >= i, x <= f j) -> x <= mk f := by
-  intro h
-  induction x using Real.ind_mk
-  apply le_of_not_gt
-  rw [mk_lt]
-  rintro ⟨K, K0, hK⟩
-  obtain ⟨i, H⟩ := exists_forall_ge_and h (exists_forall_ge_and hK (f.cauchy₃ <| half_pos K0))
-  apply not_lt_of_ge (H _ le_rfl).1
-  rw [← mk_const]; rw [mk_lt]
-  refine ⟨_, half_pos K0, i, fun j ij => ?_⟩
-  have := add_le_add (H _ ij).2.1 (le_of_lt (abs_lt.1 <| (H _ le_rfl).2.2 _ ij).1)
-  rwa [← sub_eq_add_neg, sub_self_div_two, sub_apply, sub_add_sub_cancel] at this
-
-/--
-theorem `mk_le_of_forall_le` / 定理 `mk_le_of_forall_le`
-
-English:
-theorem mk_le_of_forall_le
-  given: {f : CauSeq Rat abs} {x : Real} (h : exists i, forall j >= i, (f j : Real) <= x)
-  proof: by
+theorem mk_le_of_forall_le {f : CauSeq ℚ abs} {x : ℝ} (h : ∃ i, ∀ j ≥ i, (f j : ℝ) ≤ x) :
+    mk f ≤ x := by
   obtain ⟨i, H⟩ := h
-  rw [← neg_le_neg_iff]; rw [← mk_neg]
+  rw [← neg_le_neg_iff, ← mk_neg]
   exact le_mk_of_forall_le ⟨i, fun j ij => by simp [H _ ij]⟩
-
-中文:
-定理 mk_le_of_对任意_le
-  条件: {f : CauSeq 有理数 abs} {x : 实数} (h : 存在 i, 对任意 j >= i, (f j : 实数) <= x)
-  证明: by
-  obtain ⟨i, H⟩ := h
-  rw [← neg_le_neg_iff]; rw [← mk_neg]
-  exact le_mk_of_forall_le ⟨i, fun j ij => by simp [H _ ij]⟩
-
-Depends on / 依赖: le_mk_of_forall_le, mk_neg, neg_le_neg_iff
+/-
+**Real.mk_near_of_forall_near** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：mk_near_of_forall_near {f : CauSeq Rat abs} {x : Real} {ε : Real} (H : exi
+sts i, forall j >= i, |(f j : Real) - x| <= ε) : |mk f - x| <= ε
+参数：H : exists i, forall j >= i, |(f j : Real) - x| <= ε。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_sub_le_iff`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : Linea
+rOrder G] [IsOrderedAddMonoid G] {a b c : G},   |a - b| ≤ c ↔ a - b ≤ c ∧ b - a 
+≤ c
+· 使用定理 `sub_le_iff_le_add'`：∀ {α : Type u} [inst : AddCommGroup α] [inst_1 : LE 
+α] [AddLeftMono α] {a b c : α}, a - b ≤ c ↔ a ≤ b + c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.mk_le_of_forall_le`：mk_le_of_forall_le {f : CauSeq Rat abs} {x : Re
+al} (h : exists i, forall j >= i, (f j : Real) <= x) : mk f <= x
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `sub_le_comm`：∀ {α : Type u} [inst : AddCommGroup α] [inst_1 : LE α] [Add
+LeftMono α] {a b c : α}, a - b ≤ c ↔ a - c ≤ b
+· 使用定理 `Real.le_mk_of_forall_le`：le_mk_of_forall_le {f : CauSeq Rat abs} : (exis
+ts i, forall j >= i, x <= f j) -> x <= mk f
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mk_le_of_forall_le {f : CauSeq Rat abs} {x : Real} (h : exists i, forall j >= i, (f j : Real) <= x) :
-    mk f <= x := by
-  obtain ⟨i, H⟩ := h
-  rw [← neg_le_neg_iff]; rw [← mk_neg]
-  exact le_mk_of_forall_le ⟨i, fun j ij => by simp [H _ ij]⟩
-
-/--
-theorem `mk_near_of_forall_near` / 定理 `mk_near_of_forall_near`
-
-English:
-theorem mk_near_of_forall_near
-  statement: {f : CauSeq Rat abs} {x : Real} {ε : Real}
-  proof: abs_sub_le_iff.2
-⟨sub_le_iff_le_add'.2
-mk_le_of_forall_le
-          H.imp fun _ h j ij => sub_le_iff_le_add'.1 (abs_sub_le_iff.1 <| h j ij).1,
-sub_le_comm.1
-le_mk_of_forall_le H.imp fun _ h j ij => sub_le_comm.1 (abs_sub_le_iff.1 <| h j ij).2⟩
-
-中文:
-定理 mk_near_of_对任意_near
-  结论: {f : CauSeq 有理数 abs} {x : 实数} {ε : 实数}
-  证明: abs_sub_le_iff.2
-⟨sub_le_iff_le_add'.2
-mk_le_of_forall_le
-          H.imp fun _ h j ij => sub_le_iff_le_add'.1 (abs_sub_le_iff.1 <| h j ij).1,
-sub_le_comm.1
-le_mk_of_forall_le H.imp fun _ h j ij => sub_le_comm.1 (abs_sub_le_iff.1 <| h j ij).2⟩
-
-Depends on / 依赖: H.imp, abs_sub_le_iff, le_mk_of_forall_le, mk_le_of_forall_le, sub_le_comm, sub_le_iff_le_add
--/
-theorem mk_near_of_forall_near {f : CauSeq Rat abs} {x : Real} {ε : Real}
-    (H : exists i, forall j >= i, |(f j : Real) - x| <= ε) : |mk f - x| <= ε :=
+theorem mk_near_of_forall_near {f : CauSeq ℚ abs} {x : ℝ} {ε : ℝ}
+    (H : ∃ i, ∀ j ≥ i, |(f j : ℝ) - x| ≤ ε) : |mk f - x| ≤ ε :=
   abs_sub_le_iff.2
-⟨sub_le_iff_le_add'.2
-mk_le_of_forall_le
+    ⟨sub_le_iff_le_add'.2 <|
+        mk_le_of_forall_le <|
           H.imp fun _ h j ij => sub_le_iff_le_add'.1 (abs_sub_le_iff.1 <| h j ij).1,
-sub_le_comm.1
-le_mk_of_forall_le H.imp fun _ h j ij => sub_le_comm.1 (abs_sub_le_iff.1 <| h j ij).2⟩
-
-/--
-lemma `mul_add_one_le_add_one_pow` / 引理 `mul_add_one_le_add_one_pow`
-
-English:
-lemma mul_add_one_le_add_one_pow
-  given: {a : Real} (ha : 0 <= a) (b : Nat)
-  statement: a * b + 1 <= (a + 1) ^ b
-  proof: by
-  rcases ha.eq_or_lt with rfl | ha'
-  · simp
-  clear ha
-  induction b generalizing a with
-  | zero => simp
-  | succ b hb =>
-    calc
-      a * ↑(b + 1) + 1 = (0 + 1) ^ b * a + (a * b + 1) := by
-        simp [mul_add, add_assoc, add_left_comm]
-      _ <= (a + 1) ^ b * a + (a + 1) ^ b := by
-        gcongr
-        · norm_num
-        · exact hb ha'
-      _ = (a + 1) ^ (b + 1) := by simp [pow_succ, mul_add]
-
-中文:
-引理 mul_add_one_le_add_one_pow
-  条件: {a : 实数} (ha : 0 <= a) (b : 自然数)
-  结论: a * b + 1 <= (a + 1) ^ b
-  证明: by
-  rcases ha.eq_or_lt with rfl | ha'
-  · simp
-  clear ha
-  induction b generalizing a with
-  | zero => simp
-  | succ b hb =>
-    calc
-      a * ↑(b + 1) + 1 = (0 + 1) ^ b * a + (a * b + 1) := by
-        simp [mul_add, add_assoc, add_left_comm]
-      _ <= (a + 1) ^ b * a + (a + 1) ^ b := by
-        gcongr
-        · norm_num
-        · exact hb ha'
-      _ = (a + 1) ^ (b + 1) := by simp [pow_succ, mul_add]
-
-Depends on / 依赖: add_assoc, add_left_comm, eq_or_lt, generalizing, ha.eq_or_lt, mul_add, pow_succ
+      sub_le_comm.1 <|
+        le_mk_of_forall_le <| H.imp fun _ h j ij => sub_le_comm.1 (abs_sub_le_iff.1 <| h j ij).2⟩
+/-
+**Real.mul_add_one_le_add_one_pow** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：mul_add_one_le_add_one_pow {a : Real} (ha : 0 <= a) (b : Nat) : a * b + 1 
+<= (a + 1) ^ b
+参数：ha : 0 <= a；b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `pow_le_pow_left₀`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 :
+ Preorder M₀] {a b : M₀} [PosMulMono M₀] [MulPosMono M₀],   0 ≤ a → a ≤ b → ∀ (n
+ : ℕ),…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+（共 31 条，此处仅展示前 30 条）
 -/
-lemma mul_add_one_le_add_one_pow {a : Real} (ha : 0 <= a) (b : Nat) : a * b + 1 <= (a + 1) ^ b := by
+lemma mul_add_one_le_add_one_pow {a : ℝ} (ha : 0 ≤ a) (b : ℕ) : a * b + 1 ≤ (a + 1) ^ b := by
   rcases ha.eq_or_lt with rfl | ha'
   · simp
   clear ha
@@ -2500,7 +1500,7 @@ lemma mul_add_one_le_add_one_pow {a : Real} (ha : 0 <= a) (b : Nat) : a * b + 1 
     calc
       a * ↑(b + 1) + 1 = (0 + 1) ^ b * a + (a * b + 1) := by
         simp [mul_add, add_assoc, add_left_comm]
-      _ <= (a + 1) ^ b * a + (a + 1) ^ b := by
+      _ ≤ (a + 1) ^ b * a + (a + 1) ^ b := by
         gcongr
         · norm_num
         · exact hb ha'
@@ -2508,62 +1508,74 @@ lemma mul_add_one_le_add_one_pow {a : Real} (ha : 0 <= a) (b : Nat) : a * b + 1 
 
 end Real
 
-/--
-Definition of `IsPowMul` / `IsPowMul` 的定义
+/-- A function `f : R → ℝ` is power-multiplicative if for all `r ∈ R` and all positive `n ∈ ℕ`,
+`f (r ^ n) = (f r) ^ n`. -/
+/-
+**IsPowMul** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsPowMul {R : Type*} [Pow R Nat] (f : R -> Real)
+参数：f : R -> Real。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPowMul
-  signature: {R : Type*} [Pow R Nat] (f : R -> Real)
-  body: forall (a : R) {n : Nat}, 1 <= n -> f (a ^ n) = f a ^ n
-
-中文:
-定义 IsPowMul
-  签名: {R : 类型} [幂 R 自然数] (f : R -> 实数)
-  定义体: forall (a : R) {n : Nat}, 1 <= n -> f (a ^ n) = f a ^ n
+--- 原说明 ---
+A function `f : R → ℝ` is power-multiplicative if for all `r ∈ R` and all positi
+ve `n ∈ ℕ`,
+`f (r ^ n) = (f r) ^ n`.
 -/
-def IsPowMul {R : Type*} [Pow R Nat] (f : R -> Real) :=
-  forall (a : R) {n : Nat}, 1 <= n -> f (a ^ n) = f a ^ n
-
-/--
-lemma `IsPowMul.map_one_le_one` / 引理 `IsPowMul.map_one_le_one`
-
-English:
-lemma IsPowMul.map_one_le_one
-  given: {R : Type*} [Monoid R] {f : R -> Real} (hf : IsPowMul f)
-  proof: by
+def IsPowMul {R : Type*} [Pow R ℕ] (f : R → ℝ) :=
+  ∀ (a : R) {n : ℕ}, 1 ≤ n → f (a ^ n) = f a ^ n
+/-
+**IsPowMul.map_one_le_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsPowMul.map_one_le_one {R : Type*} [Monoid R] {f : R -> Real} (hf : IsPow
+Mul f) : f 1 <= 1
+参数：hf : IsPowMul f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用引理 `one_le_two`：one_le_two [LE α] [ZeroLEOneClass α] [AddLeftMono α] : (1 : 
+α) <= 2
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `eq_zero_or_one_of_sq_eq_self`：eq_zero_or_one_of_sq_eq_self [MonoidWithZe
+ro M₀] [IsRightCancelMulZero M₀] {x : M₀} (hx : x ^ 2 = x) : x = 0 ∨ x = 1
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+-/
+lemma IsPowMul.map_one_le_one {R : Type*} [Monoid R] {f : R → ℝ} (hf : IsPowMul f) :
+    f 1 ≤ 1 := by
   have hf1 : (f 1) ^ 2 = f 1 := by conv_rhs => rw [← one_pow 2, hf _ one_le_two]
   rcases eq_zero_or_one_of_sq_eq_self hf1 with h | h <;> rw [h]
   exact zero_le_one
 
-中文:
-引理 IsPowMul.map_one_le_one
-  条件: {R : 类型} [幺半群 R] {f : R -> 实数} (hf : IsPowMul f)
-  证明: by
-  have hf1 : (f 1) ^ 2 = f 1 := by conv_rhs => rw [← one_pow 2, hf _ one_le_two]
-  rcases eq_zero_or_one_of_sq_eq_self hf1 with h | h <;> rw [h]
-  exact zero_le_one
+/-- A ring homomorphism `f : α →+* β` is bounded with respect to the functions `nα : α → ℝ` and
+  `nβ : β → ℝ` if there exists a positive constant `C` such that for all `x` in `α`,
+  `nβ (f x) ≤ C * nα x`. -/
+/-
+**RingHom.IsBoundedWrt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingHom.IsBoundedWrt {α : Type*} [Ring α] {β : Type*} [Ring β] (nα : α -> 
+Real) (nβ : β -> Real) (f : α ->+* β) : Prop
+参数：nα : α -> Real；nβ : β -> Real；f : α ->+* β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: conv_rhs, eq_zero_or_one_of_sq_eq_self, one_le_two, one_pow, zero_le_one
+--- 原说明 ---
+A ring homomorphism `f : α →+* β` is bounded with respect to the functions `nα :
+ α → ℝ` and
+  `nβ : β → ℝ` if there exists a positive constant `C` such that for all `x` in 
+`α`,
+  `nβ (f x) ≤ C * nα x`.
 -/
-lemma IsPowMul.map_one_le_one {R : Type*} [Monoid R] {f : R -> Real} (hf : IsPowMul f) :
-    f 1 <= 1 := by
-  have hf1 : (f 1) ^ 2 = f 1 := by conv_rhs => rw [← one_pow 2, hf _ one_le_two]
-  rcases eq_zero_or_one_of_sq_eq_self hf1 with h | h <;> rw [h]
-  exact zero_le_one
-
-/--
-Definition of `RingHom.IsBoundedWrt` / `RingHom.IsBoundedWrt` 的定义
-
-English:
-definition RingHom.IsBoundedWrt
-  signature: {α : Type*} [Ring α] {β : Type*} [Ring β] (nα : α -> Real) (nβ : β -> Real)
-  body: exists C : Real, 0 < C ∧ forall x : α, nβ (f x) <= C * nα x
-
-中文:
-定义 环态射.IsBoundedWrt
-  签名: {α : 类型} [环 α] {β : 类型} [环 β] (nα : α -> 实数) (nβ : β -> 实数)
-  定义体: exists C : Real, 0 < C ∧ forall x : α, nβ (f x) <= C * nα x
--/
-def RingHom.IsBoundedWrt {α : Type*} [Ring α] {β : Type*} [Ring β] (nα : α -> Real) (nβ : β -> Real)
-    (f : α ->+* β) : Prop :=
-  exists C : Real, 0 < C ∧ forall x : α, nβ (f x) <= C * nα x
+def RingHom.IsBoundedWrt {α : Type*} [Ring α] {β : Type*} [Ring β] (nα : α → ℝ) (nβ : β → ℝ)
+    (f : α →+* β) : Prop :=
+  ∃ C : ℝ, 0 < C ∧ ∀ x : α, nβ (f x) ≤ C * nα x

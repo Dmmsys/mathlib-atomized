@@ -24,42 +24,33 @@ public section
 
 universe u v
 
-/--
-Definition of `Module.ofMinimalAxioms` / `Module.ofMinimalAxioms` 的定义
+/-- Define a `Module` structure on a Type by proving a minimized set of axioms. -/
+/-
+**Module.ofMinimalAxioms** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Module.ofMinimalAxioms {R : Type u} {M : Type v} [Semiring R] [AddCommGrou
+p M] [SMul R M] -- Scalar multiplication distributes over addition from the left
+. (smul_add : forall (r : R) (x y : M), r • (x + y) = r • x + r • y) -- Scalar m
+ultiplication distributes over addition from the right. (add_smul : forall (r s 
+: R) (x : M), (r + s) • x = r • x + s • x) -- Scalar multiplication distributes 
+over multiplication from the right. (mul_smul : forall (r s : R) (x : M), (r * s
+) • x = r • s • x) -- Scal
+参数：smul_add : forall (r : R) (x y : M), r • (x + y) = r • x + r • y；add_smul : f
+orall (r s : R) (x : M), (r + s) • x = r • x + s • x；mul_smul : forall (r s : R)
+ (x : M), (r * s) • x = r • s • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Module.ofMinimalAxioms
-  signature: {R : Type u} {M : Type v} [Semiring R] [AddCommGroup M] [SMul R M]
-  body: { smul_add := smul_add,
-    add_smul := add_smul,
-    mul_smul := mul_smul,
-    one_smul := one_smul,
-    zero_smul := fun x =>
-      (AddMonoidHom.mk' (· • x) fun r s => add_smul r s x).map_zero
-    smul_zero := fun r => (AddMonoidHom.mk' (r • ·) (smul_add r)).map_zero }
-
-中文:
-缩写 模.ofMinimalAxioms
-  签名: {R : 类型u} {M : 类型v} [半环 R] [加法交换群 M] [标量乘法 R M]
-  定义体: { smul_add := smul_add,
-    add_smul := add_smul,
-    mul_smul := mul_smul,
-    one_smul := one_smul,
-    zero_smul := fun x =>
-      (AddMonoidHom.mk' (· • x) fun r s => add_smul r s x).map_zero
-    smul_zero := fun r => (AddMonoidHom.mk' (r • ·) (smul_add r)).map_zero }
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, add_smul, map_zero, mul_smul, one_smul, smul_add, smul_zero, zero_smul
+--- 原说明 ---
+Define a `Module` structure on a Type by proving a minimized set of axioms.
 -/
 abbrev Module.ofMinimalAxioms {R : Type u} {M : Type v} [Semiring R] [AddCommGroup M] [SMul R M]
     -- Scalar multiplication distributes over addition from the left.
-    (smul_add : forall (r : R) (x y : M), r • (x + y) = r • x + r • y)
+    (smul_add : ∀ (r : R) (x y : M), r • (x + y) = r • x + r • y)
     -- Scalar multiplication distributes over addition from the right.
-    (add_smul : forall (r s : R) (x : M), (r + s) • x = r • x + s • x)
+    (add_smul : ∀ (r s : R) (x : M), (r + s) • x = r • x + s • x)
     -- Scalar multiplication distributes over multiplication from the right.
-    (mul_smul : forall (r s : R) (x : M), (r * s) • x = r • s • x)
+    (mul_smul : ∀ (r s : R) (x : M), (r * s) • x = r • s • x)
     -- Scalar multiplication by one is the identity.
-    (one_smul : forall x : M, (1 : R) • x = x) : Module R M :=
+    (one_smul : ∀ x : M, (1 : R) • x = x) : Module R M :=
   { smul_add := smul_add,
     add_smul := add_smul,
     mul_smul := mul_smul,

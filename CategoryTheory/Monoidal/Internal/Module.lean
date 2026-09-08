@@ -44,130 +44,91 @@ namespace MonModuleEquivalenceAlgebra
 This instance is dangerous as it doesn't round trip from a ring to a monoid object and then back
 to a ring, since the `npow` field is lost in the middle. Therefore, it is scoped. -/
 @[instance_reducible]
-/--
-Definition of `MonObj.toRing` / `MonObj.toRing` 的定义
+/-
+**ModuleCat.MonModuleEquivalenceAlgebra.MonObj.toRing** 是 Mathlib 中的一个定义，位于命名空间 
+`ModuleCat.MonModuleEquivalenceAlgebra.MonObj`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → (A : ModuleCat R) → [CategoryTheory.M
+onObj A] → Ring ↑A
+参数：A : ModuleCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MonObj.toRing
-  signature: (A : ModuleCat.{u} R) [MonObj A]
-  body: { (inferInstance : AddCommGroup A) with
-    one := η[A] (1 : R)
-    mul := fun x y => μ[A] (x otimesₜ y)
-    one_mul := fun x => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) ((1 : R) otimesₜ x)
-      rw [MonoidalCategory.leftUnitor_hom_apply]; rw [one_smul]
-    mul_one := fun x => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (x otimesₜ (1 : R))
-      rw [MonoidalCategory.rightUnitor_hom_apply]; rw [one_smul]
-    mul_assoc := fun x y z => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_assoc A)) (x otimesₜ y otimesₜ z)
-    left_distrib := fun x y z => by
-      convert! μ[A].hom.map_add (x otimesₜ y) (x otimesₜ z)
-      rw [← TensorProduct.tmul_add]
-      rfl
-    right_distrib := fun x y z => by
-      convert! μ[A].hom.map_add (x otimesₜ z) (y otimesₜ z)
-      rw [← TensorProduct.add_tmul]
-      rfl
-    zero_mul := fun x => show μ[A] _ = 0 by
-      rw [TensorProduct.zero_tmul]; rw [map_zero]
-    mul_zero := fun x => show μ[A] _ = 0 by
-      rw [TensorProduct.tmul_zero]; rw [map_zero] }
-
-scoped[ModuleCat.MonModuleEquivalenceAlgebra] attribute [instance] MonObj.toRing
-
-中文:
-定义 MonObj.toRing
-  签名: (A : 模范畴.{u} R) [MonObj A]
-  定义体: { (inferInstance : AddCommGroup A) with
-    one := η[A] (1 : R)
-    mul := fun x y => μ[A] (x otimesₜ y)
-    one_mul := fun x => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) ((1 : R) otimesₜ x)
-      rw [MonoidalCategory.leftUnitor_hom_apply]; rw [one_smul]
-    mul_one := fun x => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (x otimesₜ (1 : R))
-      rw [MonoidalCategory.rightUnitor_hom_apply]; rw [one_smul]
-    mul_assoc := fun x y z => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_assoc A)) (x otimesₜ y otimesₜ z)
-    left_distrib := fun x y z => by
-      convert! μ[A].hom.map_add (x otimesₜ y) (x otimesₜ z)
-      rw [← TensorProduct.tmul_add]
-      rfl
-    right_distrib := fun x y z => by
-      convert! μ[A].hom.map_add (x otimesₜ z) (y otimesₜ z)
-      rw [← TensorProduct.add_tmul]
-      rfl
-    zero_mul := fun x => show μ[A] _ = 0 by
-      rw [TensorProduct.zero_tmul]; rw [map_zero]
-    mul_zero := fun x => show μ[A] _ = 0 by
-      rw [TensorProduct.tmul_zero]; rw [map_zero] }
-
-scoped[ModuleCat.MonModuleEquivalenceAlgebra] attribute [instance] MonObj.toRing
-
-Depends on / 依赖: AddCommGroup, LinearMap, LinearMap.congr_fun, ModuleCat, ModuleCat.hom_ext_iff.mp, MonoidalCategory, MonoidalCategory.leftUnitor_hom_apply, MonoidalCategory.rightUnitor_hom_apply, congr_fun, convert, hom_ext_iff, leftUnitor_hom_apply, mul_assoc, mul_one, one_mul, one_smul, rightUnitor_hom_apply
+--- 原说明 ---
+The ring structure on a monoid object.
+This instance is dangerous as it doesn't round trip from a ring to a monoid obje
+ct and then back
+to a ring, since the `npow` field is lost in the middle. Therefore, it is scoped
+.
 -/
 def MonObj.toRing (A : ModuleCat.{u} R) [MonObj A] : Ring A :=
   { (inferInstance : AddCommGroup A) with
     one := η[A] (1 : R)
-    mul := fun x y => μ[A] (x otimesₜ y)
+    mul := fun x y => μ[A] (x ⊗ₜ y)
     one_mul := fun x => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) ((1 : R) otimesₜ x)
-      rw [MonoidalCategory.leftUnitor_hom_apply]; rw [one_smul]
+      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) ((1 : R) ⊗ₜ x)
+      rw [MonoidalCategory.leftUnitor_hom_apply, one_smul]
     mul_one := fun x => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (x otimesₜ (1 : R))
-      rw [MonoidalCategory.rightUnitor_hom_apply]; rw [one_smul]
+      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (x ⊗ₜ (1 : R))
+      rw [MonoidalCategory.rightUnitor_hom_apply, one_smul]
     mul_assoc := fun x y z => by
-      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_assoc A)) (x otimesₜ y otimesₜ z)
+      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_assoc A)) (x ⊗ₜ y ⊗ₜ z)
     left_distrib := fun x y z => by
-      convert! μ[A].hom.map_add (x otimesₜ y) (x otimesₜ z)
+      convert! μ[A].hom.map_add (x ⊗ₜ y) (x ⊗ₜ z)
       rw [← TensorProduct.tmul_add]
       rfl
     right_distrib := fun x y z => by
-      convert! μ[A].hom.map_add (x otimesₜ z) (y otimesₜ z)
+      convert! μ[A].hom.map_add (x ⊗ₜ z) (y ⊗ₜ z)
       rw [← TensorProduct.add_tmul]
       rfl
     zero_mul := fun x => show μ[A] _ = 0 by
-      rw [TensorProduct.zero_tmul]; rw [map_zero]
+      rw [TensorProduct.zero_tmul, map_zero]
     mul_zero := fun x => show μ[A] _ = 0 by
-      rw [TensorProduct.tmul_zero]; rw [map_zero] }
+      rw [TensorProduct.tmul_zero, map_zero] }
 
 scoped[ModuleCat.MonModuleEquivalenceAlgebra] attribute [instance] MonObj.toRing
 
 /-- The algebra structure on a monoid object.
 This instance is dangerous as it doesn't round trip from a ring to a monoid object and then back
 to a ring, since the `npow` field is lost in the middle. Therefore, it is scoped. -/
+/-
+**ModuleCat.MonModuleEquivalenceAlgebra.Algebra_of_Mon_** 是 Mathlib 中的一个定义，位于命名空
+间 `ModuleCat.MonModuleEquivalenceAlgebra`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → (A : ModuleCat R) → [inst_1 : Categor
+yTheory.MonObj A] → Algebra R ↑A
+参数：A : ModuleCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The algebra structure on a monoid object.
+This instance is dangerous as it doesn't round trip from a ring to a monoid obje
+ct and then back
+to a ring, since the `npow` field is lost in the middle. Therefore, it is scoped
+.
+-/
 scoped instance Algebra_of_Mon_ (A : ModuleCat.{u} R) [MonObj A] : Algebra R A where
   algebraMap :=
   { η[A].hom with
     map_zero' := η[A].hom.map_zero
     map_one' := rfl
     map_mul' := fun x y => by
-      have h := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A).symm) (x otimesₜ η[A] y)
+      have h := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A).symm) (x ⊗ₜ η[A] y)
       rwa [MonoidalCategory.leftUnitor_hom_apply, ← η[A].hom.map_smul] at h }
   commutes' := fun r a => by
     dsimp
-    have h₁ := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) (r otimesₜ a)
-    have h₂ := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (a otimesₜ r)
+    have h₁ := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) (r ⊗ₜ a)
+    have h₂ := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (a ⊗ₜ r)
     exact h₁.trans h₂.symm
   smul_def' := fun r a =>
-    (LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) (r otimesₜ a)).symm
+    (LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) (r ⊗ₜ a)).symm
 
 @[simp]
-/--
-theorem `algebraMap` / 定理 `algebraMap`
-
-English:
-theorem algebraMap
-  given: (A : ModuleCat.{u} R) [MonObj A] (r : R)
-  statement: algebraMap R A r = η[A] r
-  proof: rfl
-
-中文:
-定理 algebraMap
-  条件: (A : 模范畴.{u} R) [MonObj A] (r : R)
-  结论: algebraMap R A r = η[A] r
-  证明: rfl
+/-
+**ModuleCat.MonModuleEquivalenceAlgebra.algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Mo
+duleCat.MonModuleEquivalenceAlgebra`。
+形式化陈述：algebraMap (A : ModuleCat.{u} R) [MonObj A] (r : R) : algebraMap R A r = η
+[A] r
+参数：A : ModuleCat.{u} R；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap (A : ModuleCat.{u} R) [MonObj A] (r : R) : algebraMap R A r = η[A] r :=
   rfl
@@ -175,36 +136,15 @@ theorem algebraMap (A : ModuleCat.{u} R) [MonObj A] (r : R) : algebraMap R A r =
 /-- Converting a monoid object in `ModuleCat R` to a bundled algebra.
 -/
 @[simps!]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**ModuleCat.MonModuleEquivalenceAlgebra.functor** 是 Mathlib 中的一个定义，位于命名空间 `Modul
+eCat.MonModuleEquivalenceAlgebra`。
+形式化陈述：functor : Mon (ModuleCat.{u} R) ⥤ AlgCat R where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : Mon (ModuleCat.{u} R) ⥤ AlgCat R where
-  body: AlgCat.of R A.X
-  map {_ _} f := AlgCat.ofHom
-    { f.hom.hom.toAddMonoidHom with
-      toFun := f.hom
-      map_one' := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) (1 : R)
-      map_mul' := fun x y =>
-        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_hom f.hom)) (x otimesₜ y)
-      commutes' := fun r =>
-        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) r }
-
-中文:
-定义 functor
-  签名: : 幺半群 (模范畴.{u} R) ⥤ Alg范畴 R where
-  定义体: AlgCat.of R A.X
-  map {_ _} f := AlgCat.ofHom
-    { f.hom.hom.toAddMonoidHom with
-      toFun := f.hom
-      map_one' := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) (1 : R)
-      map_mul' := fun x y =>
-        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_hom f.hom)) (x otimesₜ y)
-      commutes' := fun r =>
-        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) r }
-
-Depends on / 依赖: AlgCat, AlgCat.of
+--- 原说明 ---
+Converting a monoid object in `ModuleCat R` to a bundled algebra.
 -/
 def functor : Mon (ModuleCat.{u} R) ⥤ AlgCat R where
   obj A := AlgCat.of R A.X
@@ -213,121 +153,37 @@ def functor : Mon (ModuleCat.{u} R) ⥤ AlgCat R where
       toFun := f.hom
       map_one' := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) (1 : R)
       map_mul' := fun x y =>
-        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_hom f.hom)) (x otimesₜ y)
+        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_hom f.hom)) (x ⊗ₜ y)
       commutes' := fun r =>
         LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) r }
 
 /-- Converting a bundled algebra to a monoid object in `ModuleCat R`.
 -/
 @[instance_reducible, simps]
-/--
-Definition of `inverseObj` / `inverseObj` 的定义
+/-
+**ModuleCat.MonModuleEquivalenceAlgebra.inverseObj** 是 Mathlib 中的一个定义，位于命名空间 `Mo
+duleCat.MonModuleEquivalenceAlgebra`。
+形式化陈述：inverseObj (A : AlgCat.{u} R) : MonObj (ModuleCat.of R A) where one
+参数：A : AlgCat.{u} R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverseObj
-  signature: (A : AlgCat.{u} R)
-  body: ofHom Algebra.linearMap R A
-mul := ofHom LinearMap.mul' R A
-  one_mul := by
-    ext : 1
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext LinearMap.ext_ring LinearMap.ext fun x => ?_
-    rw [compr₂ₛₗ_apply]; rw [compr₂ₛₗ_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
-    -- Porting note: this `dsimp` does nothing
-    -- dsimp [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
-    -- LinearMap.compr₂_apply, Function.comp_apply, RingHom.map_one,
-    -- ModuleCat.MonoidalCategory.tensorHom_tmul, AlgCat.hom_comp,
-    -- ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
-    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
-    dsimp
-    erw [LinearMap.mul'_apply, MonoidalCategory.leftUnitor_hom_apply, ← Algebra.smul_def]
-    dsimp
-  mul_one := by
-    ext : 1
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext LinearMap.ext fun x => LinearMap.ext_ring ?_
-    -- Porting note: this `dsimp` does nothing
-    -- dsimp only [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
-    -- LinearMap.compr₂_apply, Function.comp_apply, ModuleCat.MonoidalCategory.hom_apply,
-    -- AlgCat.coe_comp]
-    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
-    erw [compr₂_apply, compr₂ₛₗ_apply]
-    simp only [hom_comp, hom_ofHom, id_coe, id_eq, LinearMap.comp_apply]
-    erw [LinearMap.mul'_apply, ModuleCat.MonoidalCategory.rightUnitor_hom_apply, ← Algebra.commutes,
-      ← Algebra.smul_def]
-    dsimp
-  mul_assoc := by
-    ext : 1
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext TensorProduct.ext LinearMap.ext fun x => LinearMap.ext fun y =>
-      LinearMap.ext fun z => ?_
-    dsimp only [compr₂ₛₗ_apply, TensorProduct.mk_apply]
-    rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
-    erw [LinearMap.mul'_apply, LinearMap.mul'_apply]
-    dsimp only [id_coe, id_eq]
-    erw [TensorProduct.mk_apply, TensorProduct.mk_apply, mul'_apply, LinearMap.id_apply, mul'_apply]
-    simp only [_root_.mul_assoc]
-
-中文:
-定义 inverseObj
-  签名: (A : Alg范畴.{u} R)
-  定义体: ofHom Algebra.linearMap R A
-mul := ofHom LinearMap.mul' R A
-  one_mul := by
-    ext : 1
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext LinearMap.ext_ring LinearMap.ext fun x => ?_
-    rw [compr₂ₛₗ_apply]; rw [compr₂ₛₗ_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
-    -- Porting note: this `dsimp` does nothing
-    -- dsimp [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
-    -- LinearMap.compr₂_apply, Function.comp_apply, RingHom.map_one,
-    -- ModuleCat.MonoidalCategory.tensorHom_tmul, AlgCat.hom_comp,
-    -- ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
-    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
-    dsimp
-    erw [LinearMap.mul'_apply, MonoidalCategory.leftUnitor_hom_apply, ← Algebra.smul_def]
-    dsimp
-  mul_one := by
-    ext : 1
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext LinearMap.ext fun x => LinearMap.ext_ring ?_
-    -- Porting note: this `dsimp` does nothing
-    -- dsimp only [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
-    -- LinearMap.compr₂_apply, Function.comp_apply, ModuleCat.MonoidalCategory.hom_apply,
-    -- AlgCat.coe_comp]
-    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
-    erw [compr₂_apply, compr₂ₛₗ_apply]
-    simp only [hom_comp, hom_ofHom, id_coe, id_eq, LinearMap.comp_apply]
-    erw [LinearMap.mul'_apply, ModuleCat.MonoidalCategory.rightUnitor_hom_apply, ← Algebra.commutes,
-      ← Algebra.smul_def]
-    dsimp
-  mul_assoc := by
-    ext : 1
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext TensorProduct.ext LinearMap.ext fun x => LinearMap.ext fun y =>
-      LinearMap.ext fun z => ?_
-    dsimp only [compr₂ₛₗ_apply, TensorProduct.mk_apply]
-    rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
-    erw [LinearMap.mul'_apply, LinearMap.mul'_apply]
-    dsimp only [id_coe, id_eq]
-    erw [TensorProduct.mk_apply, TensorProduct.mk_apply, mul'_apply, LinearMap.id_apply, mul'_apply]
-    simp only [_root_.mul_assoc]
-
-Depends on / 依赖: Algebra, Algebra.linearMap, linearMap
+--- 原说明 ---
+Converting a bundled algebra to a monoid object in `ModuleCat R`.
 -/
 def inverseObj (A : AlgCat.{u} R) : MonObj (ModuleCat.of R A) where
-one := ofHom Algebra.linearMap R A
-mul := ofHom LinearMap.mul' R A
+  one := ofHom <| Algebra.linearMap R A
+  mul := ofHom <| LinearMap.mul' R A
   one_mul := by
     ext : 1
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext LinearMap.ext_ring LinearMap.ext fun x => ?_
-    rw [compr₂ₛₗ_apply]; rw [compr₂ₛₗ_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
+    refine TensorProduct.ext <| LinearMap.ext_ring <| LinearMap.ext fun x => ?_
+    rw [compr₂ₛₗ_apply, compr₂ₛₗ_apply, hom_comp, LinearMap.comp_apply]
     -- Porting note: this `dsimp` does nothing
     -- dsimp [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
-    -- LinearMap.compr₂_apply, Function.comp_apply, RingHom.map_one,
-    -- ModuleCat.MonoidalCategory.tensorHom_tmul, AlgCat.hom_comp,
-    -- ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
+    --    LinearMap.compr₂_apply, Function.comp_apply, RingHom.map_one,
+    --    ModuleCat.MonoidalCategory.tensorHom_tmul, AlgCat.hom_comp,
+    --    ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
     -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
     dsimp
     erw [LinearMap.mul'_apply, MonoidalCategory.leftUnitor_hom_apply, ← Algebra.smul_def]
@@ -335,11 +191,11 @@ refine TensorProduct.ext LinearMap.ext_ring LinearMap.ext fun x => ?_
   mul_one := by
     ext : 1
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext LinearMap.ext fun x => LinearMap.ext_ring ?_
+    refine TensorProduct.ext <| LinearMap.ext fun x => LinearMap.ext_ring ?_
     -- Porting note: this `dsimp` does nothing
     -- dsimp only [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
-    -- LinearMap.compr₂_apply, Function.comp_apply, ModuleCat.MonoidalCategory.hom_apply,
-    -- AlgCat.coe_comp]
+    --   LinearMap.compr₂_apply, Function.comp_apply, ModuleCat.MonoidalCategory.hom_apply,
+    --   AlgCat.coe_comp]
     -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
     erw [compr₂_apply, compr₂ₛₗ_apply]
     simp only [hom_comp, hom_ofHom, id_coe, id_eq, LinearMap.comp_apply]
@@ -349,10 +205,11 @@ refine TensorProduct.ext LinearMap.ext fun x => LinearMap.ext_ring ?_
   mul_assoc := by
     ext : 1
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-refine TensorProduct.ext TensorProduct.ext LinearMap.ext fun x => LinearMap.ext fun y =>
+    refine TensorProduct.ext <| TensorProduct.ext <| LinearMap.ext fun x => LinearMap.ext fun y =>
       LinearMap.ext fun z => ?_
     dsimp only [compr₂ₛₗ_apply, TensorProduct.mk_apply]
-    rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
+    rw [hom_comp, LinearMap.comp_apply, hom_comp, LinearMap.comp_apply, hom_comp,
+        LinearMap.comp_apply]
     erw [LinearMap.mul'_apply, LinearMap.mul'_apply]
     dsimp only [id_coe, id_eq]
     erw [TensorProduct.mk_apply, TensorProduct.mk_apply, mul'_apply, LinearMap.id_apply, mul'_apply]
@@ -363,130 +220,40 @@ attribute [local instance] inverseObj
 /-- Converting a bundled algebra to a monoid object in `ModuleCat R`.
 -/
 @[simps]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**ModuleCat.MonModuleEquivalenceAlgebra.inverse** 是 Mathlib 中的一个定义，位于命名空间 `Modul
+eCat.MonModuleEquivalenceAlgebra`。
+形式化陈述：inverse : AlgCat.{u} R ⥤ Mon (ModuleCat.{u} R) where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: : AlgCat.{u} R ⥤ Mon (ModuleCat.{u} R) where
-  body: { X := ModuleCat.of R A, mon := inverseObj A }
-  map f :=
-    { hom := ofHom <| f.hom.toLinearMap
-isMonHom_hom.one_hom := hom_ext LinearMap.ext f.hom.commutes
-isMonHom_hom.mul_hom := hom_ext TensorProduct.ext LinearMap.ext₂ map_mul f.hom }
-
-中文:
-定义 inverse
-  签名: : Alg范畴.{u} R ⥤ 幺半群 (模范畴.{u} R) where
-  定义体: { X := ModuleCat.of R A, mon := inverseObj A }
-  map f :=
-    { hom := ofHom <| f.hom.toLinearMap
-isMonHom_hom.one_hom := hom_ext LinearMap.ext f.hom.commutes
-isMonHom_hom.mul_hom := hom_ext TensorProduct.ext LinearMap.ext₂ map_mul f.hom }
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, inverseObj
+--- 原说明 ---
+Converting a bundled algebra to a monoid object in `ModuleCat R`.
 -/
 def inverse : AlgCat.{u} R ⥤ Mon (ModuleCat.{u} R) where
   obj A := { X := ModuleCat.of R A, mon := inverseObj A }
   map f :=
     { hom := ofHom <| f.hom.toLinearMap
-isMonHom_hom.one_hom := hom_ext LinearMap.ext f.hom.commutes
-isMonHom_hom.mul_hom := hom_ext TensorProduct.ext LinearMap.ext₂ map_mul f.hom }
+      isMonHom_hom.one_hom := hom_ext <| LinearMap.ext f.hom.commutes
+      isMonHom_hom.mul_hom := hom_ext <| TensorProduct.ext <| LinearMap.ext₂ <| map_mul f.hom }
 
 end MonModuleEquivalenceAlgebra
 
 open MonModuleEquivalenceAlgebra
 
-/--
-Definition of `monModuleEquivalenceAlgebra` / `monModuleEquivalenceAlgebra` 的定义
+/-- The category of internal monoid objects in `ModuleCat R`
+is equivalent to the category of "native" bundled `R`-algebras.
+-/
+/-
+**ModuleCat.monModuleEquivalenceAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：monModuleEquivalenceAlgebra : Mon (ModuleCat.{u} R) ≌ AlgCat R where funct
+or
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monModuleEquivalenceAlgebra
-  signature: : Mon (ModuleCat.{u} R) ≌ AlgCat R where
-  body: functor
-  inverse := inverse
-  unitIso :=
-    NatIso.ofComponents
-      (fun A =>
-        { hom.hom := ofHom
-            { toFun := _root_.id
-              map_add' _ _ := rfl
-              map_smul' _ _ := rfl }
-          hom.isMonHom_hom.mul_hom := by
-            ext : 1
-            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-            exact TensorProduct.ext rfl
-          inv.hom := ofHom
-            { toFun := _root_.id
-              map_add' := fun _ _ => rfl
-              map_smul' := fun _ _ => rfl }
-          inv.isMonHom_hom.mul_hom := by
-            ext : 1
-            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-            refine TensorProduct.ext ?_
-            rfl })
-  counitIso :=
-    NatIso.ofComponents
-      (fun A =>
-        { hom := AlgCat.ofHom
-            { toFun := _root_.id
-              map_zero' := rfl
-              map_add' := fun _ _ => rfl
-              map_one' := (algebraMap R A).map_one
-              map_mul' := fun x y => @LinearMap.mul'_apply R _ _ _ _ _ _ x y
-              commutes' := fun _ => rfl }
-          inv := AlgCat.ofHom
-            { toFun := _root_.id
-              map_zero' := rfl
-              map_add' := fun _ _ => rfl
-              map_one' := (algebraMap R A).map_one.symm
-              map_mul' := fun x y => (@LinearMap.mul'_apply R _ _ _ _ _ _ x y).symm
-              commutes' := fun _ => rfl } })
-
-中文:
-定义 monModuleEquivalenceAlgebra
-  签名: : 幺半群 (模范畴.{u} R) ≌ Alg范畴 R where
-  定义体: functor
-  inverse := inverse
-  unitIso :=
-    NatIso.ofComponents
-      (fun A =>
-        { hom.hom := ofHom
-            { toFun := _root_.id
-              map_add' _ _ := rfl
-              map_smul' _ _ := rfl }
-          hom.isMonHom_hom.mul_hom := by
-            ext : 1
-            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-            exact TensorProduct.ext rfl
-          inv.hom := ofHom
-            { toFun := _root_.id
-              map_add' := fun _ _ => rfl
-              map_smul' := fun _ _ => rfl }
-          inv.isMonHom_hom.mul_hom := by
-            ext : 1
-            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
-            refine TensorProduct.ext ?_
-            rfl })
-  counitIso :=
-    NatIso.ofComponents
-      (fun A =>
-        { hom := AlgCat.ofHom
-            { toFun := _root_.id
-              map_zero' := rfl
-              map_add' := fun _ _ => rfl
-              map_one' := (algebraMap R A).map_one
-              map_mul' := fun x y => @LinearMap.mul'_apply R _ _ _ _ _ _ x y
-              commutes' := fun _ => rfl }
-          inv := AlgCat.ofHom
-            { toFun := _root_.id
-              map_zero' := rfl
-              map_add' := fun _ _ => rfl
-              map_one' := (algebraMap R A).map_one.symm
-              map_mul' := fun x y => (@LinearMap.mul'_apply R _ _ _ _ _ _ x y).symm
-              commutes' := fun _ => rfl } })
-
-Depends on / 依赖: functor
+--- 原说明 ---
+The category of internal monoid objects in `ModuleCat R`
+is equivalent to the category of "native" bundled `R`-algebras.
 -/
 def monModuleEquivalenceAlgebra : Mon (ModuleCat.{u} R) ≌ AlgCat R where
   functor := functor
@@ -529,38 +296,20 @@ def monModuleEquivalenceAlgebra : Mon (ModuleCat.{u} R) ≌ AlgCat R where
               map_mul' := fun x y => (@LinearMap.mul'_apply R _ _ _ _ _ _ x y).symm
               commutes' := fun _ => rfl } })
 
-/--
-Definition of `monModuleEquivalenceAlgebraForget` / `monModuleEquivalenceAlgebraForget` 的定义
+/-- The equivalence `Mon (ModuleCat R) ≌ AlgCat R`
+is naturally compatible with the forgetful functors to `ModuleCat R`.
+-/
+/-
+**ModuleCat.monModuleEquivalenceAlgebraForget** 是 Mathlib 中的一个定义，位于命名空间 `ModuleC
+at`。
+形式化陈述：monModuleEquivalenceAlgebraForget : MonModuleEquivalenceAlgebra.functor ⋙ 
+forget₂ (AlgCat.{u} R) (ModuleCat.{u} R) ≅ Mon.forget (ModuleCat.{u} R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monModuleEquivalenceAlgebraForget
-  signature: :
-  body: NatIso.ofComponents
-    (fun A =>
-      { hom := ofHom
-          { toFun := _root_.id
-            map_add' := fun _ _ => rfl
-            map_smul' := fun _ _ => rfl }
-        inv := ofHom
-          { toFun := _root_.id
-            map_add' := fun _ _ => rfl
-            map_smul' := fun _ _ => rfl } })
-
-中文:
-定义 monModuleEquivalenceAlgebraForget
-  签名: :
-  定义体: NatIso.ofComponents
-    (fun A =>
-      { hom := ofHom
-          { toFun := _root_.id
-            map_add' := fun _ _ => rfl
-            map_smul' := fun _ _ => rfl }
-        inv := ofHom
-          { toFun := _root_.id
-            map_add' := fun _ _ => rfl
-            map_smul' := fun _ _ => rfl } })
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, _root_, _root_.id, map_add, map_smul, ofComponents
+--- 原说明 ---
+The equivalence `Mon (ModuleCat R) ≌ AlgCat R`
+is naturally compatible with the forgetful functors to `ModuleCat R`.
 -/
 def monModuleEquivalenceAlgebraForget :
     MonModuleEquivalenceAlgebra.functor ⋙ forget₂ (AlgCat.{u} R) (ModuleCat.{u} R) ≅
@@ -577,3 +326,4 @@ def monModuleEquivalenceAlgebraForget :
             map_smul' := fun _ _ => rfl } })
 
 end ModuleCat
+

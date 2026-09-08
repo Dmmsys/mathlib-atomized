@@ -24,32 +24,18 @@ public section
 
 universe u v w
 
-/--
-Instance `Module.Free.ChooseBasisIndex.fintype` / 实例 `Module.Free.ChooseBasisIndex.fintype`
+/-- If a free module is finite, then the arbitrary basis is finite. -/
+/-
+**Module.Free.ChooseBasisIndex.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Free.ChooseBasisIndex.fintype (R : Type u) (M : Type v) [Semiring R
+] [AddCommMonoid M] [Module R M] [Module.Free R M] [Module.Finite R M] : Fintype
+ (Module.Free.ChooseBasisIndex R M)
+参数：R : Type u；M : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Module.Free.ChooseBasisIndex.fintype
-  signature: (R : Type u) (M : Type v)
-  body: by
-  refine @Fintype.ofFinite _ ?_
-  cases subsingleton_or_nontrivial R
-  · have := Module.subsingleton R M
-    rw [ChooseBasisIndex]
-    infer_instance
-  · exact Module.Finite.finite_basis (chooseBasis _ _)
-
-中文:
-实例 模.自由.ChooseBasisIndex.fintype
-  签名: (R : 类型u) (M : 类型v)
-  定义体: by
-  refine @Fintype.ofFinite _ ?_
-  cases subsingleton_or_nontrivial R
-  · have := Module.subsingleton R M
-    rw [ChooseBasisIndex]
-    infer_instance
-  · exact Module.Finite.finite_basis (chooseBasis _ _)
-
-Depends on / 依赖: ChooseBasisIndex, Finite, Fintype, Fintype.ofFinite, Module, Module.Finite.finite_basis, Module.subsingleton, chooseBasis, finite_basis, infer_instance, ofFinite, subsingleton, subsingleton_or_nontrivial
+--- 原说明 ---
+If a free module is finite, then the arbitrary basis is finite.
 -/
 noncomputable instance Module.Free.ChooseBasisIndex.fintype (R : Type u) (M : Type v)
     [Semiring R] [AddCommMonoid M] [Module R M] [Module.Free R M] [Module.Finite R M] :
@@ -61,28 +47,32 @@ noncomputable instance Module.Free.ChooseBasisIndex.fintype (R : Type u) (M : Ty
     infer_instance
   · exact Module.Finite.finite_basis (chooseBasis _ _)
 
-/--
-theorem `Module.Finite.of_basis` / 定理 `Module.Finite.of_basis`
+/-- A free module with a basis indexed by a `Fintype` is finite. -/
+/-
+**Module.Finite.of_basis** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Module.Finite.of_basis {R M ι : Type*} [Semiring R] [AddCommMonoid M] [Mod
+ule R M] [_root_.Finite ι] (b : Basis ι R M) : Module.Finite R M
+参数：b : Basis ι R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem Module.Finite.of_basis
-  statement: {R M ι : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
-  proof: by
-  cases nonempty_fintype ι
-  classical
-    refine ⟨⟨Finset.univ.image b, ?_⟩⟩
-    simp only [Set.image_univ, Finset.coe_univ, Finset.coe_image, Basis.span_eq]
-
-中文:
-定理 模.有限.of_basis
-  结论: {R M ι : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
-  证明: by
-  cases nonempty_fintype ι
-  classical
-    refine ⟨⟨Finset.univ.image b, ?_⟩⟩
-    simp only [Set.image_univ, Finset.coe_univ, Finset.coe_image, Basis.span_eq]
-
-Depends on / 依赖: Basis.span_eq, Finset, Finset.coe_image, Finset.coe_univ, Finset.univ.image, Set.image_univ, classical, coe_image, coe_univ, image_univ, nonempty_fintype, span_eq
+--- 原说明 ---
+A free module with a basis indexed by a `Fintype` is finite.
 -/
 theorem Module.Finite.of_basis {R M ι : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
     [_root_.Finite ι] (b : Basis ι R M) : Module.Finite R M := by
@@ -90,33 +80,21 @@ theorem Module.Finite.of_basis {R M ι : Type*} [Semiring R] [AddCommMonoid M] [
   classical
     refine ⟨⟨Finset.univ.image b, ?_⟩⟩
     simp only [Set.image_univ, Finset.coe_univ, Finset.coe_image, Basis.span_eq]
-
-/--
-Instance `Module.Finite.matrix` / 实例 `Module.Finite.matrix`
-
-English:
-instance Module.Finite.matrix
-  signature: {R ι₁ ι₂ M : Type*}
-  body: by
-  cases nonempty_fintype ι₁
-  cases nonempty_fintype ι₂
-exact Module.Finite.of_basis (Free.chooseBasis _ _).matrix _ _
-
-example {ι₁ ι₂ R : Type*} [Semiring R] [Finite ι₁] [Finite ι₂] :
-    Module.Finite R (Matrix ι₁ ι₂ R) := inferInstance
-
-中文:
-实例 模.有限.matrix
-  签名: {R ι₁ ι₂ M : 类型}
-  定义体: by
-  cases nonempty_fintype ι₁
-  cases nonempty_fintype ι₂
-exact Module.Finite.of_basis (Free.chooseBasis _ _).matrix _ _
-
-example {ι₁ ι₂ R : Type*} [Semiring R] [Finite ι₁] [Finite ι₂] :
-    Module.Finite R (Matrix ι₁ ι₂ R) := inferInstance
-
-Depends on / 依赖: Finite, Free.chooseBasis, Module, Module.Finite.of_basis, chooseBasis, matrix, nonempty_fintype, of_basis
+/-
+**Module.Finite.matrix** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Finite.matrix {R ι₁ ι₂ M : Type*} [Semiring R] [AddCommMonoid M] [M
+odule R M] [Module.Free R M] [Module.Finite R M] [_root_.Finite ι₁] [_root_.Fini
+te ι₂] : Module.Finite R (Matrix ι₁ ι₂ M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Module.Finite.of_basis`：Module.Finite.of_basis {R M ι : Type*} [Semiring
+ R] [AddCommMonoid M] [Module R M] [_root_.Finite ι] (b : Basis ι R M) : Module.
+Finite R M
+· 使用定理 `Finite.instProd`：∀ {α : Type u_1} {β : Type u_2} [Finite α] [Finite β], 
+Finite (α × β)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 instance Module.Finite.matrix {R ι₁ ι₂ M : Type*}
     [Semiring R] [AddCommMonoid M] [Module R M] [Module.Free R M] [Module.Finite R M]
@@ -124,7 +102,10 @@ instance Module.Finite.matrix {R ι₁ ι₂ M : Type*}
     Module.Finite R (Matrix ι₁ ι₂ M) := by
   cases nonempty_fintype ι₁
   cases nonempty_fintype ι₂
-exact Module.Finite.of_basis (Free.chooseBasis _ _).matrix _ _
-
+  exact Module.Finite.of_basis <| (Free.chooseBasis _ _).matrix _ _
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example {ι₁ ι₂ R : Type*} [Semiring R] [Finite ι₁] [Finite ι₂] :
     Module.Finite R (Matrix ι₁ ι₂ R) := inferInstance

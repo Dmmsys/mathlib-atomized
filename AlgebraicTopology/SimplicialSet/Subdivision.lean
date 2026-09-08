@@ -33,20 +33,21 @@ universe v u
 
 open CategoryTheory
 
-/--
-Definition of `SimplexCategory.sd` / `SimplexCategory.sd` 的定义
+/-- The functor `SimplexCategory ⥤ SSet` which sends `⦋n⦌` to the nerve of the
+partially ordered type of nonempty finite chains in `{0, ..., n}` (ulifted to `Type u`).
+Vertices in `SimplexCategory.sd.obj ⦋n⦌` identify to nonempty subsets of `{0, ..., n}`. -/
+/-
+**SimplexCategory.sd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SimplexCategory.sd : SimplexCategory ⥤ SSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SimplexCategory.sd
-  signature: : SimplexCategory ⥤ SSet.{u}
-  body: toPartOrd ⋙ PartOrd.nonemptyFiniteChainsFunctor ⋙ PartOrd.nerveFunctor
-
-中文:
-定义 单纯形范畴.sd
-  签名: : 单纯形范畴 ⥤ SSet.{u}
-  定义体: toPartOrd ⋙ PartOrd.nonemptyFiniteChainsFunctor ⋙ PartOrd.nerveFunctor
-
-Depends on / 依赖: PartOrd, PartOrd.nerveFunctor, PartOrd.nonemptyFiniteChainsFunctor, nerveFunctor, nonemptyFiniteChainsFunctor, toPartOrd
+--- 原说明 ---
+The functor `SimplexCategory ⥤ SSet` which sends `⦋n⦌` to the nerve of the
+partially ordered type of nonempty finite chains in `{0, ..., n}` (ulifted to `T
+ype u`).
+Vertices in `SimplexCategory.sd.obj ⦋n⦌` identify to nonempty subsets of `{0, ..
+., n}`.
 -/
 noncomputable def SimplexCategory.sd : SimplexCategory ⥤ SSet.{u} :=
   toPartOrd ⋙ PartOrd.nonemptyFiniteChainsFunctor ⋙ PartOrd.nerveFunctor
@@ -54,118 +55,70 @@ noncomputable def SimplexCategory.sd : SimplexCategory ⥤ SSet.{u} :=
 namespace SSet
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `sd` / `sd` 的定义
+/-- The subdivision functor on simplicial sets. -/
+/-
+**SSet.sd** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：sd : SSet.{u} ⥤ SSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sd
-  signature: : SSet.{u} ⥤ SSet.{u}
-  body: stdSimplex.leftKanExtension SimplexCategory.sd
-
-中文:
-定义 sd
-  签名: : SSet.{u} ⥤ SSet.{u}
-  定义体: stdSimplex.leftKanExtension SimplexCategory.sd
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.sd, leftKanExtension, stdSimplex, stdSimplex.leftKanExtension
+--- 原说明 ---
+The subdivision functor on simplicial sets.
 -/
 noncomputable def sd : SSet.{u} ⥤ SSet.{u} :=
   stdSimplex.leftKanExtension SimplexCategory.sd
 
-/--
-Definition of `ex` / `ex` 的定义
+/-- The right adjoint to the subdivision functor on simplicial sets. -/
+/-
+**SSet.ex** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：ex : SSet.{u} ⥤ SSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ex
-  signature: : SSet.{u} ⥤ SSet.{u}
-  body: Presheaf.restrictedULiftYoneda.{0} SimplexCategory.sd
-
-中文:
-定义 ex
-  签名: : SSet.{u} ⥤ SSet.{u}
-  定义体: Presheaf.restrictedULiftYoneda.{0} SimplexCategory.sd
-
-Depends on / 依赖: Presheaf, Presheaf.restrictedULiftYoneda, SimplexCategory, SimplexCategory.sd, restrictedULiftYoneda
+--- 原说明 ---
+The right adjoint to the subdivision functor on simplicial sets.
 -/
 noncomputable def ex : SSet.{u} ⥤ SSet.{u} :=
   Presheaf.restrictedULiftYoneda.{0} SimplexCategory.sd
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `sdExAdjunction` / `sdExAdjunction` 的定义
+/-- The adjunction between the subdivision functor `sd` and `ex`. -/
+/-
+**SSet.sdExAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：sdExAdjunction : sd.{u} ⊣ ex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sdExAdjunction
-  signature: : sd.{u} ⊣ ex
-  body: Presheaf.uliftYonedaAdjunction.{0}
-    (SSet.stdSimplex.{u}.leftKanExtension SimplexCategory.sd)
-    (SSet.stdSimplex.{u}.leftKanExtensionUnit SimplexCategory.sd)
-
-中文:
-定义 sdExAdjunction
-  签名: : sd.{u} ⊣ ex
-  定义体: Presheaf.uliftYonedaAdjunction.{0}
-    (SSet.stdSimplex.{u}.leftKanExtension SimplexCategory.sd)
-    (SSet.stdSimplex.{u}.leftKanExtensionUnit SimplexCategory.sd)
-
-Depends on / 依赖: Presheaf, Presheaf.uliftYonedaAdjunction, SSet.stdSimplex, SimplexCategory, SimplexCategory.sd, leftKanExtension, leftKanExtensionUnit, stdSimplex, uliftYonedaAdjunction
+--- 原说明 ---
+The adjunction between the subdivision functor `sd` and `ex`.
 -/
 noncomputable def sdExAdjunction : sd.{u} ⊣ ex :=
   Presheaf.uliftYonedaAdjunction.{0}
     (SSet.stdSimplex.{u}.leftKanExtension SimplexCategory.sd)
     (SSet.stdSimplex.{u}.leftKanExtensionUnit SimplexCategory.sd)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: sd.{u}.IsLeftAdjoint
-  body: sdExAdjunction.isLeftAdjoint
-
-中文:
-实例 :
-  签名: sd.{u}.是左伴随
-  定义体: sdExAdjunction.isLeftAdjoint
-
-Depends on / 依赖: isLeftAdjoint, sdExAdjunction, sdExAdjunction.isLeftAdjoint
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : sd.{u}.IsLeftAdjoint := sdExAdjunction.isLeftAdjoint
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ex.{u}.IsRightAdjoint
-  body: sdExAdjunction.isRightAdjoint
-
-中文:
-实例 :
-  签名: ex.{u}.是右伴随
-  定义体: sdExAdjunction.isRightAdjoint
-
-Depends on / 依赖: isRightAdjoint, sdExAdjunction, sdExAdjunction.isRightAdjoint
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ex.{u}.IsRightAdjoint := sdExAdjunction.isRightAdjoint
 
 namespace stdSimplex
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `sdIso` / `sdIso` 的定义
+/-- The natural isomorphism `stdSimplex ⋙ sd ≅ SimplexCategory.sd`. -/
+/-
+**SSet.stdSimplex.sdIso** 是 Mathlib 中的一个定义，位于命名空间 `SSet.stdSimplex`。
+形式化陈述：sdIso : stdSimplex.{u} ⋙ sd ≅ SimplexCategory.sd
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sdIso
-  signature: : stdSimplex.{u} ⋙ sd ≅ SimplexCategory.sd
-  body: Presheaf.isExtensionAlongULiftYoneda _
-
-中文:
-定义 sdIso
-  签名: : stdSimplex.{u} ⋙ sd ≅ 单纯形范畴.sd
-  定义体: Presheaf.isExtensionAlongULiftYoneda _
-
-Depends on / 依赖: Presheaf, Presheaf.isExtensionAlongULiftYoneda, isExtensionAlongULiftYoneda
+--- 原说明 ---
+The natural isomorphism `stdSimplex ⋙ sd ≅ SimplexCategory.sd`.
 -/
 noncomputable def sdIso : stdSimplex.{u} ⋙ sd ≅ SimplexCategory.sd :=
   Presheaf.isExtensionAlongULiftYoneda _
@@ -173,25 +126,13 @@ noncomputable def sdIso : stdSimplex.{u} ⋙ sd ≅ SimplexCategory.sd :=
 end stdSimplex
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: sd.{u}.IsLeftKanExtension stdSimplex.sdIso.inv
-  body: inferInstanceAs (Functor.IsLeftKanExtension _
-    (SSet.stdSimplex.leftKanExtensionUnit SimplexCategory.sd.{u}))
-
-中文:
-实例 :
-  签名: sd.{u}.是LeftKanExtension stdSimplex.sdIso.inv
-  定义体: inferInstanceAs (Functor.IsLeftKanExtension _
-    (SSet.stdSimplex.leftKanExtensionUnit SimplexCategory.sd.{u}))
-
-Depends on / 依赖: Functor, Functor.IsLeftKanExtension, IsLeftKanExtension, SSet.stdSimplex.leftKanExtensionUnit, SimplexCategory, SimplexCategory.sd, leftKanExtensionUnit, stdSimplex
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : sd.{u}.IsLeftKanExtension stdSimplex.sdIso.inv :=
   inferInstanceAs (Functor.IsLeftKanExtension _
     (SSet.stdSimplex.leftKanExtensionUnit SimplexCategory.sd.{u}))
 
 end SSet
+

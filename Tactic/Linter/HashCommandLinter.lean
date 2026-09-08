@@ -8,7 +8,7 @@ module
 public meta import Lean.Elab.Command
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Lean.Parser.Command
 
 /-!
@@ -43,36 +43,18 @@ namespace HashCommandLinter
 open Lean Elab Linter
 
 open Command in
-/--
-Definition of `withSetOptionIn'` / `withSetOptionIn'` 的定义
+/-- Exactly like `withSetOptionIn`, but recursively discards nested uses of `in`.
+Intended to be used in the `hashCommand` linter, where we want to enter `set_option` `in` commands.
+-/
+/-
+**Mathlib.Linter.HashCommandLinter.withSetOptionIn'** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Linter.HashCommandLinter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withSetOptionIn'
-  signature: (cmd : CommandElab)
-  body: fun stx => do
-  if stx.getKind == ``Lean.Parser.Command.in then
-    if stx[0].getKind == ``Lean.Parser.Command.set_option then
-      let (opts, _) ← Elab.elabSetOption stx[0][1] stx[0][3]
-      withScope (fun scope => { scope with opts }) do
-        withSetOptionIn' cmd stx[2]
-    else
-      withSetOptionIn' cmd stx[2]
-  else
-    cmd stx
-
-中文:
-定义 withSetOptionIn'
-  签名: (cmd : CommandElab)
-  定义体: fun stx => do
-  if stx.getKind == ``Lean.Parser.Command.in then
-    if stx[0].getKind == ``Lean.Parser.Command.set_option then
-      let (opts, _) ← Elab.elabSetOption stx[0][1] stx[0][3]
-      withScope (fun scope => { scope with opts }) do
-        withSetOptionIn' cmd stx[2]
-    else
-      withSetOptionIn' cmd stx[2]
-  else
-    cmd stx
+--- 原说明 ---
+Exactly like `withSetOptionIn`, but recursively discards nested uses of `in`.
+Intended to be used in the `hashCommand` linter, where we want to enter `set_opt
+ion` `in` commands.
 -/
 partial def withSetOptionIn' (cmd : CommandElab) : CommandElab := fun stx => do
   if stx.getKind == ``Lean.Parser.Command.in then
@@ -85,57 +67,47 @@ partial def withSetOptionIn' (cmd : CommandElab) : CommandElab := fun stx => do
   else
     cmd stx
 
-/--
-Definition of `allowed_commands` / `allowed_commands` 的定义
+/-- `allowed_commands` is the `HashSet` of `#`-commands that are allowed in 'Mathlib'. -/
+/-
+**Mathlib.Linter.HashCommandLinter.allowed_commands** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`Mathlib.Linter.HashCommandLinter`。
+形式化陈述：allowed_commands : Std.HashSet String
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation allowed_commands
-  signature: : Std.HashSet String
-  body: { "#adaptation_note" }
-
-中文:
-缩写 allowed_commands
-  签名: : Std.HashSet String
-  定义体: { "#adaptation_note" }
-
-Depends on / 依赖: adaptation_note
+--- 原说明 ---
+`allowed_commands` is the `HashSet` of `#`-commands that are allowed in 'Mathlib
+'.
 -/
 abbrev allowed_commands : Std.HashSet String := { "#adaptation_note" }
 
-/--
-Definition of `hashCommandLinter` / `hashCommandLinter` 的定义
+/-- Checks that no command beginning with `#` is present in 'Mathlib',
+except for the ones in `allowed_commands`.
 
-English:
-definition hashCommandLinter
-  signature: : Linter where run
-  body: withSetOptionIn' fun stx => do
-  if getLinterValue linter.hashCommand (← getLinterOptions) &&
-    ((← get).messages.reportedPlusUnreported.isEmpty || warningAsError.get (← getOptions))
-  then
-    if let some sa := stx.getHead? then
-      let a := sa.getAtomVal
-      if (a.front == '#' && ! allowed_commands.contains a) then
-        let msg := m!"`#`-commands, such as '{a}', are not allowed in 'Mathlib'"
-        if warningAsError.get (← getOptions) then
-          logInfoAt sa (msg ++ " [linter.hashCommand]")
-        else Linter.logLint linter.hashCommand sa msg
+If `warningAsError` is `true`, then the linter logs an info (rather than a warning).
+This means that CI will eventually fail on `#`-commands, but does not stop it from continuing.
 
-中文:
-定义 hashCommandLinter
-  签名: : Linter where run
-  定义体: withSetOptionIn' fun stx => do
-  if getLinterValue linter.hashCommand (← getLinterOptions) &&
-    ((← get).messages.reportedPlusUnreported.isEmpty || warningAsError.get (← getOptions))
-  then
-    if let some sa := stx.getHead? then
-      let a := sa.getAtomVal
-      if (a.front == '#' && ! allowed_commands.contains a) then
-        let msg := m!"`#`-commands, such as '{a}', are not allowed in 'Mathlib'"
-        if warningAsError.get (← getOptions) then
-          logInfoAt sa (msg ++ " [linter.hashCommand]")
-        else Linter.logLint linter.hashCommand sa msg
+However, in order to avoid local clutter, when `warningAsError` is `false`, the linter
+logs a warning only for the `#`-commands that do not already emit a message. -/
+/-
+**Mathlib.Linter.HashCommandLinter.hashCommandLinter** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Linter.HashCommandLinter`。
+形式化陈述：hashCommandLinter : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: withSetOptionIn
+--- 原说明 ---
+Checks that no command beginning with `#` is present in 'Mathlib',
+except for the ones in `allowed_commands`.
+
+If `warningAsError` is `true`, then the linter logs an info (rather than a warni
+ng).
+This means that CI will eventually fail on `#`-commands, but does not stop it fr
+om continuing.
+
+However, in order to avoid local clutter, when `warningAsError` is `false`, the 
+linter
+logs a warning only for the `#`-commands that do not already emit a message.
 -/
 def hashCommandLinter : Linter where run := withSetOptionIn' fun stx => do
   if getLinterValue linter.hashCommand (← getLinterOptions) &&
@@ -152,3 +124,4 @@ def hashCommandLinter : Linter where run := withSetOptionIn' fun stx => do
 initialize addLinter hashCommandLinter
 
 end HashCommandLinter
+

@@ -17,46 +17,38 @@ to `(-1) ^ |n|`. And Catalan's identity states that for any integers `x` and `a`
 
 namespace Int
 
-/--
-lemma `fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq` / 引理 `fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq`
+/-- Auxiliary for `Int.fib_succ_mul_fib_pred_sub_fib_sq` -/
+/-
+**Int.fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq** 是 Mathlib 中的一个引
+理，位于命名空间 `Int`。
+形式化陈述：fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq (n : Nat) : fib (
+n + 1) * fib (n - 1) - fib n ^ 2 = (-1) ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ _ _ => grind [fib_add_two]
-
-中文:
-引理 fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ _ _ => grind [fib_add_two]
-
-Depends on / 依赖: fib_add_two
+--- 原说明 ---
+Auxiliary for `Int.fib_succ_mul_fib_pred_sub_fib_sq`
 -/
-lemma fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq (n : Nat) :
+lemma fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq (n : ℕ) :
     fib (n + 1) * fib (n - 1) - fib n ^ 2 = (-1) ^ n := by
   induction n with
   | zero => simp
   | succ _ _ => grind [fib_add_two]
 
 /-- **Cassini's identity**: `fib (n + 1) * fib (n - 1) - fib n ^ 2 = (-1) ^ |n|`. -/
-public theorem fib_succ_mul_fib_pred_sub_fib_sq (n : Int) :
+public theorem fib_succ_mul_fib_pred_sub_fib_sq (n : ℤ) :
     fib (n + 1) * fib (n - 1) - fib n ^ 2 = (-1) ^ n.natAbs := by
   obtain ⟨n, (rfl | rfl)⟩ := n.eq_nat_or_neg
   · exact fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq n
   · if hn : n = 0 then simp [hn] else
     obtain ⟨i, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hn
-    simp_rw [show -((i + 1 : Nat) : Int) + 1 = -i by simp, sub_eq_add_neg, ← neg_add, fib_neg,
+    simp_rw [show -((i + 1 : ℕ) : ℤ) + 1 = -i by simp, sub_eq_add_neg, ← neg_add, fib_neg,
       natAbs_neg, natAbs_natCast, ← fib_natCast_succ_mul_fib_natCast_pred_sub_fib_natCast_sq]
     grind
 
 /-- **Catalan's identity**: `fib (x + a) ^ 2 - fib x * fib (x + 2 * a) = (-1) ^ |x| * fib a ^ 2`. -/
-public theorem fib_add_sq_sub_fib_mul_fib_add_two_mul (x a : Int) :
+public theorem fib_add_sq_sub_fib_mul_fib_add_two_mul (x a : ℤ) :
     fib (x + a) ^ 2 - fib x * fib (x + 2 * a) = (-1) ^ x.natAbs * fib a ^ 2 :=
   calc
     _ = (fib x * fib (a + 1) + fib (x - 1) * fib a) ^ 2 -
@@ -68,3 +60,4 @@ public theorem fib_add_sq_sub_fib_mul_fib_add_two_mul (x a : Int) :
     _ = _ := by grind [fib_succ_mul_fib_pred_sub_fib_sq, fib_add_two]
 
 end Int
+

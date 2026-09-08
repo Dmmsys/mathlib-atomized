@@ -46,36 +46,12 @@ public register_option linter.commandRanges : Bool := {
 namespace CommandRanges
 
 @[inherit_doc Mathlib.Linter.linter.commandRanges]
-/--
-Definition of `commandRangesLinter` / `commandRangesLinter` 的定义
-
-English:
-definition commandRangesLinter
-  signature: : Linter where run stx
-  body: do
-  unless Linter.getLinterValue linter.commandRanges (← getLinterOptions) do
-    return
-  if Parser.isTerminalCommand stx then
-    return
-  let ranges :=
-    if let some rg := stx.getRange? then #[rg.start, rg.stop] else #[]
-  let ranges : Array String.Pos.Raw :=
-    if let some rg := stx.getRangeWithTrailing? then ranges.push rg.stop else ranges
-  logInfo m!"{ranges}"
-
-中文:
-定义 commandRangesLinter
-  签名: : Linter where run stx
-  定义体: do
-  unless Linter.getLinterValue linter.commandRanges (← getLinterOptions) do
-    return
-  if Parser.isTerminalCommand stx then
-    return
-  let ranges :=
-    if let some rg := stx.getRange? then #[rg.start, rg.stop] else #[]
-  let ranges : Array String.Pos.Raw :=
-    if let some rg := stx.getRangeWithTrailing? then ranges.push rg.stop else ranges
-  logInfo m!"{ranges}"
+/-
+**Mathlib.Linter.CommandRanges.commandRangesLinter** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Linter.CommandRanges`。
+形式化陈述：commandRangesLinter : Linter where run stx
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def commandRangesLinter : Linter where run stx := do
   unless Linter.getLinterValue linter.commandRanges (← getLinterOptions) do
@@ -93,3 +69,4 @@ initialize addLinter commandRangesLinter
 end CommandRanges
 
 end Mathlib.Linter
+

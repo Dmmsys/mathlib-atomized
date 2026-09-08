@@ -73,34 +73,18 @@ variable (μ) in
 and scaled by the inverse of `μ s` (to make it a probability measure):
 `(μ s)⁻¹ • μ.restrict s`. -/
 @[wikidata Q327069]
-/--
-Definition of `cond` / `cond` 的定义
+/-
+**ProbabilityTheory.cond** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory`。
+形式化陈述：cond (s : Set Ω) : Measure Ω
+参数：s : Set Ω。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cond
-  signature: (s : Set Ω)
-  body: (μ s)⁻¹ • μ.restrict s
-
-@[inherit_doc ProbabilityTheory.cond]
-scoped macro:max μ:term noWs "[|" s:term "]" : term =>
-  `(ProbabilityTheory.cond $μ $s)
-@[inherit_doc cond]
-scoped macro:max μ:term noWs "[" t:term " | " s:term "]" : term =>
-  `(ProbabilityTheory.cond $μ $s $t)
-
-中文:
-定义 cond
-  签名: (s : 集合 Ω)
-  定义体: (μ s)⁻¹ • μ.restrict s
-
-@[inherit_doc ProbabilityTheory.cond]
-scoped macro:max μ:term noWs "[|" s:term "]" : term =>
-  `(ProbabilityTheory.cond $μ $s)
-@[inherit_doc cond]
-scoped macro:max μ:term noWs "[" t:term " | " s:term "]" : term =>
-  `(ProbabilityTheory.cond $μ $s $t)
-
-Depends on / 依赖: restrict
+--- 原说明 ---
+The conditional probability measure of measure `μ` on set `s` is `μ` restricted 
+to `s`
+and scaled by the inverse of `μ s` (to make it a probability measure):
+`(μ s)⁻¹ • μ.restrict s`.
 -/
 def cond (s : Set Ω) : Measure Ω :=
   (μ s)⁻¹ • μ.restrict s
@@ -133,12 +117,12 @@ meta def condUnexpander : Lean.PrettyPrinter.Unexpander
 /-- Delaborator for `μ[t | s]` notation. -/
 @[app_delab DFunLike.coe]
 meta def delabCondApplied : Delab :=
-whenNotPPOption getPPExplicit whenPPOption getPPNotation withOverApp 6 do
+  whenNotPPOption getPPExplicit <| whenPPOption getPPNotation <| withOverApp 6 do
     let e ← getExpr
-guard e.isAppOfArity' ``DFunLike.coe 6
-guard (e.getArg!' 4).isAppOf' ``ProbabilityTheory.cond
+    guard <| e.isAppOfArity' ``DFunLike.coe 6
+    guard <| (e.getArg!' 4).isAppOf' ``ProbabilityTheory.cond
     let t ← withAppArg delab
-withAppFn withAppArg do
+    withAppFn <| withAppArg do
       let μ ← withNaryArg 2 delab
       let s ← withNaryArg 3 delab
       `($μ[$t|$s])
@@ -178,30 +162,33 @@ It is `μ` restricted to `{ω | X ω = x}` and scaled by the inverse of `μ {ω 
 scoped macro:max μ:term noWs "[" s:term " | " X:term " ← " x:term "]" : term =>
   `($μ[$s | $X in {$x:term}])
 
-/--
-theorem `cond_isProbabilityMeasure_of_finite` / 定理 `cond_isProbabilityMeasure_of_finite`
+/-- The conditional probability measure of any measure on any set of finite positive measure
+is a probability measure. -/
+/-
+**ProbabilityTheory.cond_isProbabilityMeasure_of_finite** 是 Mathlib 中的一个定理，位于命名空
+间 `ProbabilityTheory`。
+形式化陈述：cond_isProbabilityMeasure_of_finite (hcs : μ s != 0) (hs : μ s != ∞) : IsP
+robabilityMeasure μ[|s]
+参数：hcs : μ s != 0；hs : μ s != ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.Measure.restrict_apply`：restrict_apply (ht : MeasurableSet
+ t) : μ.restrict s t = μ (t inter s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `ENNReal.inv_mul_cancel`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a⁻¹ * a = 1
 
-English:
-theorem cond_isProbabilityMeasure_of_finite
-  given: (hcs : μ s != 0) (hs : μ s != ∞)
-  proof: ⟨by
-    unfold ProbabilityTheory.cond
-    simp only [Measure.coe_smul, Pi.smul_apply, MeasurableSet.univ, Measure.restrict_apply,
-      Set.univ_inter, smul_eq_mul]
-    exact ENNReal.inv_mul_cancel hcs hs⟩
-
-中文:
-定理 cond_isProbabilityMeasure_of_finite
-  条件: (hcs : μ s != 0) (hs : μ s != ∞)
-  证明: ⟨by
-    unfold ProbabilityTheory.cond
-    simp only [Measure.coe_smul, Pi.smul_apply, MeasurableSet.univ, Measure.restrict_apply,
-      Set.univ_inter, smul_eq_mul]
-    exact ENNReal.inv_mul_cancel hcs hs⟩
-
-Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, MeasurableSet, MeasurableSet.univ, Measure, Measure.coe_smul, Measure.restrict_apply, Pi.smul_apply, ProbabilityTheory, ProbabilityTheory.cond, Set.univ_inter, coe_smul, inv_mul_cancel, restrict_apply, smul_apply, smul_eq_mul, univ_inter
+--- 原说明 ---
+The conditional probability measure of any measure on any set of finite positive
+ measure
+is a probability measure.
 -/
-theorem cond_isProbabilityMeasure_of_finite (hcs : μ s != 0) (hs : μ s != ∞) :
+theorem cond_isProbabilityMeasure_of_finite (hcs : μ s ≠ 0) (hs : μ s ≠ ∞) :
     IsProbabilityMeasure μ[|s] :=
   ⟨by
     unfold ProbabilityTheory.cond
@@ -209,54 +196,31 @@ theorem cond_isProbabilityMeasure_of_finite (hcs : μ s != 0) (hs : μ s != ∞)
       Set.univ_inter, smul_eq_mul]
     exact ENNReal.inv_mul_cancel hcs hs⟩
 
-/--
-theorem `cond_isProbabilityMeasure` / 定理 `cond_isProbabilityMeasure`
+/-- The conditional probability measure of any finite measure on any set of positive measure
+is a probability measure. -/
+/-
+**ProbabilityTheory.cond_isProbabilityMeasure** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory`。
+形式化陈述：cond_isProbabilityMeasure [IsFiniteMeasure μ] (hcs : μ s != 0) : IsProbabi
+lityMeasure μ[|s]
+参数：hcs : μ s != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.cond_isProbabilityMeasure_of_finite`：cond_isProbabilit
+yMeasure_of_finite (hcs : μ s != 0) (hs : μ s != ∞) : IsProbabilityMeasure μ[|s]
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 
-English:
-theorem cond_isProbabilityMeasure
-  given: [IsFiniteMeasure μ] (hcs : μ s != 0)
-  proof: cond_isProbabilityMeasure_of_finite hcs (measure_ne_top μ s)
-
-中文:
-定理 cond_isProbabilityMeasure
-  条件: [是有限测度 μ] (hcs : μ s != 0)
-  证明: cond_isProbabilityMeasure_of_finite hcs (measure_ne_top μ s)
-
-Depends on / 依赖: cond_isProbabilityMeasure_of_finite, measure_ne_top
+--- 原说明 ---
+The conditional probability measure of any finite measure on any set of positive
+ measure
+is a probability measure.
 -/
-theorem cond_isProbabilityMeasure [IsFiniteMeasure μ] (hcs : μ s != 0) :
+theorem cond_isProbabilityMeasure [IsFiniteMeasure μ] (hcs : μ s ≠ 0) :
     IsProbabilityMeasure μ[|s] := cond_isProbabilityMeasure_of_finite hcs (measure_ne_top μ s)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroOrProbabilityMeasure μ[|s]
-  body: by
-  constructor
-  simp only [cond, Measure.coe_smul, Pi.smul_apply, MeasurableSet.univ, Measure.restrict_apply,
-    univ_inter, smul_eq_mul, ← ENNReal.div_eq_inv_mul]
-  rcases eq_or_ne (μ s) 0 with h | h
-  · simp [h]
-  rcases eq_or_ne (μ s) ∞ with h' | h'
-  · simp [h']
-  simp [ENNReal.div_self h h']
-
-中文:
-实例 :
-  签名: 是ZeroOrProbabilityMeasure μ[|s]
-  定义体: by
-  constructor
-  simp only [cond, Measure.coe_smul, Pi.smul_apply, MeasurableSet.univ, Measure.restrict_apply,
-    univ_inter, smul_eq_mul, ← ENNReal.div_eq_inv_mul]
-  rcases eq_or_ne (μ s) 0 with h | h
-  · simp [h]
-  rcases eq_or_ne (μ s) ∞ with h' | h'
-  · simp [h']
-  simp [ENNReal.div_self h h']
-
-Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, ENNReal.div_self, MeasurableSet, MeasurableSet.univ, Measure, Measure.coe_smul, Measure.restrict_apply, Pi.smul_apply, coe_smul, div_eq_inv_mul, div_self, eq_or_ne, restrict_apply, smul_apply, smul_eq_mul, univ_inter
+/-
+**ProbabilityTheory.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZeroOrProbabilityMeasure μ[|s] := by
   constructor
@@ -269,26 +233,29 @@ instance : IsZeroOrProbabilityMeasure μ[|s] := by
   simp [ENNReal.div_self h h']
 
 variable (μ) in
-/--
-theorem `cond_toMeasurable_eq` / 定理 `cond_toMeasurable_eq`
-
-English:
-theorem cond_toMeasurable_eq
-  proof: by
-  unfold cond
-  by_cases hnt : μ s = ∞
-  · simp [hnt]
-  · simp [Measure.restrict_toMeasurable hnt]
-
-中文:
-定理 cond_toMeasurable_eq
-  证明: by
-  unfold cond
-  by_cases hnt : μ s = ∞
-  · simp [hnt]
-  · simp [Measure.restrict_toMeasurable hnt]
-
-Depends on / 依赖: Measure, Measure.restrict_toMeasurable, restrict_toMeasurable
+/-
+**ProbabilityTheory.cond_toMeasurable_eq** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：cond_toMeasurable_eq : μ[|(toMeasurable μ s)] = μ[|s]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.measure_toMeasurable`：measure_toMeasurable (s : Set α) : μ
+ (toMeasurable μ s) = μ s
+· 使用定理 `ENNReal.inv_top`：⊤⁻¹ = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.Measure.restrict_toMeasurable`：restrict_toMeasurable (h : 
+μ s != ∞) : μ.restrict (toMeasurable μ s) = μ.restrict s
 -/
 theorem cond_toMeasurable_eq :
     μ[|(toMeasurable μ s)] = μ[|s] := by
@@ -296,510 +263,558 @@ theorem cond_toMeasurable_eq :
   by_cases hnt : μ s = ∞
   · simp [hnt]
   · simp [Measure.restrict_toMeasurable hnt]
-
-/--
-lemma `cond_absolutelyContinuous` / 引理 `cond_absolutelyContinuous`
-
-English:
-lemma cond_absolutelyContinuous
-  statement: μ[|s] ≪ μ
-  proof: smul_absolutelyContinuous.trans restrict_le_self.absolutelyContinuous
-
-中文:
-引理 cond_absolutelyContinuous
-  结论: μ[|s] ≪ μ
-  证明: smul_absolutelyContinuous.trans restrict_le_self.absolutelyContinuous
-
-Depends on / 依赖: absolutelyContinuous, restrict_le_self, restrict_le_self.absolutelyContinuous, smul_absolutelyContinuous, smul_absolutelyContinuous.trans
+/-
+**ProbabilityTheory.cond_absolutelyContinuous** 是 Mathlib 中的一个引理，位于命名空间 `Probabi
+lityTheory`。
+形式化陈述：cond_absolutelyContinuous : μ[|s] ≪ μ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.AbsolutelyContinuous.trans`：∀ {α : Type u_1} {mα :
+ MeasurableSpace α} {μ₁ μ₂ μ₃ : MeasureTheory.Measure α},   μ₁.AbsolutelyContinu
+ous μ₂ → μ₂.AbsolutelyContinuous μ₃ → …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `MeasureTheory.Measure.smul_absolutelyContinuous`：smul_absolutelyContinuo
+us {c : Real>=0∞} : c • μ ≪ μ
+· 使用定理 `LE.le.absolutelyContinuous`：∀ {α : Type u_1} {mα : MeasurableSpace α} {μ
+ ν : MeasureTheory.Measure α}, μ ≤ ν → μ.AbsolutelyContinuous ν
+· 使用定理 `MeasureTheory.Measure.restrict_le_self`：restrict_le_self : μ.restrict s 
+<= μ
 -/
 lemma cond_absolutelyContinuous : μ[|s] ≪ μ :=
   smul_absolutelyContinuous.trans restrict_le_self.absolutelyContinuous
-
-/--
-lemma `absolutelyContinuous_cond_univ` / 引理 `absolutelyContinuous_cond_univ`
-
-English:
-lemma absolutelyContinuous_cond_univ
-  given: [IsFiniteMeasure μ]
-  statement: μ ≪ μ[|univ]
-  proof: by
-  rw [cond]; rw [restrict_univ]
-  refine absolutelyContinuous_smul ?_
-  simp [measure_ne_top]
-
-中文:
-引理 absolutelyContinuous_cond_univ
-  条件: [是有限测度 μ]
-  结论: μ ≪ μ[|univ]
-  证明: by
-  rw [cond]; rw [restrict_univ]
-  refine absolutelyContinuous_smul ?_
-  simp [measure_ne_top]
-
-Depends on / 依赖: absolutelyContinuous_smul, measure_ne_top, restrict_univ
+/-
+**ProbabilityTheory.absolutelyContinuous_cond_univ** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+obabilityTheory`。
+形式化陈述：absolutelyContinuous_cond_univ [IsFiniteMeasure μ] : μ ≪ μ[|univ]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond.eq_1`：∀ {Ω : Type u_1} {m : MeasurableSpace Ω} (μ
+ : MeasureTheory.Measure Ω) (s : Set Ω), μ[|s] = (μ s)⁻¹ • μ.restrict s
+· 使用定理 `MeasureTheory.Measure.restrict_univ`：restrict_univ : μ.restrict univ = μ
+· 使用引理 `MeasureTheory.Measure.absolutelyContinuous_smul`：absolutelyContinuous_sm
+ul {c : Real>=0∞} (hc : c != 0) : μ ≪ c • μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma absolutelyContinuous_cond_univ [IsFiniteMeasure μ] : μ ≪ μ[|univ] := by
-  rw [cond]; rw [restrict_univ]
+  rw [cond, restrict_univ]
   refine absolutelyContinuous_smul ?_
   simp [measure_ne_top]
-
-/--
-lemma `ae_cond_of_forall_mem` / 引理 `ae_cond_of_forall_mem`
-
-English:
-lemma ae_cond_of_forall_mem
-  given: (hs : MeasurableSet s) {p : Ω -> Prop} (h : forall x in s, p x)
-  proof: ae_smul_measure (ae_restrict_of_forall_mem hs h) _
-
-中文:
-引理 ae_cond_of_对任意_mem
-  条件: (hs : 可测集 s) {p : Ω -> 命题} (h : 对任意 x in s, p x)
-  证明: ae_smul_measure (ae_restrict_of_forall_mem hs h) _
-
-Depends on / 依赖: ae_restrict_of_forall_mem, ae_smul_measure
+/-
+**ProbabilityTheory.ae_cond_of_forall_mem** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory`。
+形式化陈述：ae_cond_of_forall_mem (hs : MeasurableSet s) {p : Ω -> Prop} (h : forall x
+ in s, p x) : forallᵐ x ∂μ[|s], p x
+参数：hs : MeasurableSet s；h : forall x in s, p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ae_smul_measure`：ae_smul_measure {p : α -> Prop} [
+SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (h : forallᵐ x ∂μ, p x) (c 
+: R) : forallᵐ x ∂c • μ, p …
+· 使用定理 `MeasureTheory.ae_restrict_of_forall_mem`：ae_restrict_of_forall_mem {μ : 
+Measure α} {s : Set α} (hs : MeasurableSet s) {p : α -> Prop} (h : forall x in s
+, p x) : forallᵐ (x : α) ∂μ.r…
 -/
-lemma ae_cond_of_forall_mem (hs : MeasurableSet s) {p : Ω -> Prop} (h : forall x in s, p x) :
-    forallᵐ x ∂μ[|s], p x := ae_smul_measure (ae_restrict_of_forall_mem hs h) _
-
-/--
-lemma `ae_cond_mem₀` / 引理 `ae_cond_mem₀`
-
-English:
-lemma ae_cond_mem₀
-  given: (hs : NullMeasurableSet s μ)
-  statement: forallᵐ x ∂μ[|s], x in s
-  proof: ae_smul_measure (ae_restrict_mem₀ hs) _
-
-中文:
-引理 ae_cond_mem₀
-  条件: (hs : NullMeasurableSet s μ)
-  结论: 对任意ᵐ x ∂μ[|s], x in s
-  证明: ae_smul_measure (ae_restrict_mem₀ hs) _
-
-Depends on / 依赖: ae_smul_measure
+lemma ae_cond_of_forall_mem (hs : MeasurableSet s) {p : Ω → Prop} (h : ∀ x ∈ s, p x) :
+    ∀ᵐ x ∂μ[|s], p x := ae_smul_measure (ae_restrict_of_forall_mem hs h) _
+/-
+**ProbabilityTheory.ae_cond_mem** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：ae_cond_mem (hs : MeasurableSet s) : forallᵐ x ∂μ[|s], x in s
+参数：hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ae_smul_measure`：ae_smul_measure {p : α -> Prop} [
+SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (h : forallᵐ x ∂μ, p x) (c 
+: R) : forallᵐ x ∂c • μ, p …
+· 使用定理 `MeasureTheory.ae_restrict_mem`：ae_restrict_mem (hs : MeasurableSet s) : 
+forallᵐ x ∂μ.restrict s, x in s
 -/
-lemma ae_cond_mem₀ (hs : NullMeasurableSet s μ) : forallᵐ x ∂μ[|s], x in s :=
+lemma ae_cond_mem₀ (hs : NullMeasurableSet s μ) : ∀ᵐ x ∂μ[|s], x ∈ s :=
   ae_smul_measure (ae_restrict_mem₀ hs) _
-
-/--
-lemma `ae_cond_mem` / 引理 `ae_cond_mem`
-
-English:
-lemma ae_cond_mem
-  given: (hs : MeasurableSet s)
-  statement: forallᵐ x ∂μ[|s], x in s
-  proof: ae_smul_measure (ae_restrict_mem hs) _
-
-中文:
-引理 ae_cond_mem
-  条件: (hs : 可测集 s)
-  结论: 对任意ᵐ x ∂μ[|s], x in s
-  证明: ae_smul_measure (ae_restrict_mem hs) _
-
-Depends on / 依赖: ae_restrict_mem, ae_smul_measure
+/-
+**ProbabilityTheory.ae_cond_mem** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：ae_cond_mem (hs : MeasurableSet s) : forallᵐ x ∂μ[|s], x in s
+参数：hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ae_smul_measure`：ae_smul_measure {p : α -> Prop} [
+SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞] (h : forallᵐ x ∂μ, p x) (c 
+: R) : forallᵐ x ∂c • μ, p …
+· 使用定理 `MeasureTheory.ae_restrict_mem`：ae_restrict_mem (hs : MeasurableSet s) : 
+forallᵐ x ∂μ.restrict s, x in s
 -/
-lemma ae_cond_mem (hs : MeasurableSet s) : forallᵐ x ∂μ[|s], x in s :=
+lemma ae_cond_mem (hs : MeasurableSet s) : ∀ᵐ x ∂μ[|s], x ∈ s :=
   ae_smul_measure (ae_restrict_mem hs) _
 
 section Bayes
 
 variable (μ) in
-/--
-lemma `cond_empty` / 引理 `cond_empty`
-
-English:
-lemma cond_empty
-  statement: μ[|∅] = 0
-  proof: by simp [cond]
-
-中文:
-引理 cond_empty
-  结论: μ[|∅] = 0
-  证明: by simp [cond]
+/-
+**ProbabilityTheory.cond_empty** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：∀ {Ω : Type u_1} {m : MeasurableSpace Ω} (μ : MeasureTheory.Measure Ω), μ[
+|∅] = 0
+参数：μ : MeasureTheory.Measure Ω。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `ENNReal.inv_zero`：0⁻¹ = ⊤
+· 使用定理 `MeasureTheory.Measure.restrict_empty`：restrict_empty : μ.restrict ∅ = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma cond_empty : μ[|∅] = 0 := by simp [cond]
 
 variable (μ) in
-/--
-lemma `cond_univ` / 引理 `cond_univ`
-
-English:
-lemma cond_univ
-  given: [IsProbabilityMeasure μ]
-  statement: μ[|Set.univ] = μ
-  proof: by
-  simp [cond, measure_univ, Measure.restrict_univ]
-
-中文:
-引理 cond_univ
-  条件: [是概率测度 μ]
-  结论: μ[|集合.univ] = μ
-  证明: by
-  simp [cond, measure_univ, Measure.restrict_univ]
+/-
+**ProbabilityTheory.cond_univ** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：∀ {Ω : Type u_1} {m : MeasurableSpace Ω} (μ : MeasureTheory.Measure Ω) [Me
+asureTheory.IsProbabilityMeasure μ],   μ[|Set.univ] = μ
+参数：μ : MeasureTheory.Measure Ω。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `MeasureTheory.Measure.restrict_univ`：restrict_univ : μ.restrict univ = μ
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma cond_univ [IsProbabilityMeasure μ] : μ[|Set.univ] = μ := by
   simp [cond, measure_univ, Measure.restrict_univ]
-
-/--
-lemma `cond_eq_zero` / 引理 `cond_eq_zero`
-
-English:
-lemma cond_eq_zero
-  statement: μ[|s] = 0 ↔ μ s = ∞ ∨ μ s = 0
-  proof: by simp [cond]
-
-中文:
-引理 cond_eq_zero
-  结论: μ[|s] = 0 ↔ μ s = ∞ ∨ μ s = 0
-  证明: by simp [cond]
+/-
+**ProbabilityTheory.cond_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：∀ {Ω : Type u_1} {m : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {s 
+: Set Ω}, μ[|s] = 0 ↔ μ s = ⊤ ∨ μ s = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma cond_eq_zero : μ[|s] = 0 ↔ μ s = ∞ ∨ μ s = 0 := by simp [cond]
-
-/--
-lemma `cond_eq_zero_of_meas_eq_zero` / 引理 `cond_eq_zero_of_meas_eq_zero`
-
-English:
-lemma cond_eq_zero_of_meas_eq_zero
-  given: (hμs : μ s = 0)
-  statement: μ[|s] = 0
-  proof: by simp [hμs]
-
-中文:
-引理 cond_eq_zero_of_meas_eq_zero
-  条件: (hμs : μ s = 0)
-  结论: μ[|s] = 0
-  证明: by simp [hμs]
+/-
+**ProbabilityTheory.cond_eq_zero_of_meas_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Prob
+abilityTheory`。
+形式化陈述：cond_eq_zero_of_meas_eq_zero (hμs : μ s = 0) : μ[|s] = 0
+参数：hμs : μ s = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
 lemma cond_eq_zero_of_meas_eq_zero (hμs : μ s = 0) : μ[|s] = 0 := by simp [hμs]
 
-/--
-theorem `cond_apply` / 定理 `cond_apply`
+/-- The axiomatic definition of conditional probability derived from a measure-theoretic one. -/
+/-
+**ProbabilityTheory.cond_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：cond_apply (hms : MeasurableSet s) (μ : Measure Ω) (t : Set Ω) : μ[t | s] 
+= (μ s)⁻¹ * μ (s inter t)
+参数：hms : MeasurableSet s；μ : Measure Ω；t : Set Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond.eq_1`：∀ {Ω : Type u_1} {m : MeasurableSpace Ω} (μ
+ : MeasureTheory.Measure Ω) (s : Set Ω), μ[|s] = (μ s)⁻¹ • μ.restrict s
+· 使用定理 `MeasureTheory.Measure.smul_apply`：smul_apply {_m : MeasurableSpace α} (c
+ : R) (μ : Measure α) (s : Set α) : (c • μ) s = c • μ s
+· 使用定理 `MeasureTheory.Measure.restrict_apply'`：restrict_apply' (hs : MeasurableS
+et s) : μ.restrict s t = μ (t inter s)
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
 
-English:
-theorem cond_apply
-  given: (hms : MeasurableSet s) (μ : Measure Ω) (t : Set Ω)
-  proof: by
-  rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply' hms]; rw [Set.inter_comm]; rw [smul_eq_mul]
-
-中文:
-定理 cond_apply
-  条件: (hms : 可测集 s) (μ : 测度 Ω) (t : 集合 Ω)
-  证明: by
-  rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply' hms]; rw [Set.inter_comm]; rw [smul_eq_mul]
-
-Depends on / 依赖: Measure, Measure.restrict_apply, Measure.smul_apply, Set.inter_comm, inter_comm, restrict_apply, smul_apply, smul_eq_mul
+--- 原说明 ---
+The axiomatic definition of conditional probability derived from a measure-theor
+etic one.
 -/
 theorem cond_apply (hms : MeasurableSet s) (μ : Measure Ω) (t : Set Ω) :
-    μ[t | s] = (μ s)⁻¹ * μ (s inter t) := by
-  rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply' hms]; rw [Set.inter_comm]; rw [smul_eq_mul]
-
-/--
-theorem `cond_apply'` / 定理 `cond_apply'`
-
-English:
-theorem cond_apply'
-  given: (ht : MeasurableSet t) (μ : Measure Ω)
-  statement: μ[t | s] = (μ s)⁻¹ * μ (s inter t)
-  proof: by
-  rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply ht]; rw [Set.inter_comm]; rw [smul_eq_mul]
-
-中文:
-定理 cond_apply'
-  条件: (ht : 可测集 t) (μ : 测度 Ω)
-  结论: μ[t | s] = (μ s)⁻¹ * μ (s inter t)
-  证明: by
-  rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply ht]; rw [Set.inter_comm]; rw [smul_eq_mul]
-
-Depends on / 依赖: Measure, Measure.restrict_apply, Measure.smul_apply, Set.inter_comm, inter_comm, restrict_apply, smul_apply, smul_eq_mul
+    μ[t | s] = (μ s)⁻¹ * μ (s ∩ t) := by
+  rw [cond, Measure.smul_apply, Measure.restrict_apply' hms, Set.inter_comm, smul_eq_mul]
+/-
+**ProbabilityTheory.cond_apply'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：cond_apply' (ht : MeasurableSet t) (μ : Measure Ω) : μ[t | s] = (μ s)⁻¹ * 
+μ (s inter t)
+参数：ht : MeasurableSet t；μ : Measure Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond.eq_1`：∀ {Ω : Type u_1} {m : MeasurableSpace Ω} (μ
+ : MeasureTheory.Measure Ω) (s : Set Ω), μ[|s] = (μ s)⁻¹ • μ.restrict s
+· 使用定理 `MeasureTheory.Measure.smul_apply`：smul_apply {_m : MeasurableSpace α} (c
+ : R) (μ : Measure α) (s : Set α) : (c • μ) s = c • μ s
+· 使用定理 `MeasureTheory.Measure.restrict_apply`：restrict_apply (ht : MeasurableSet
+ t) : μ.restrict s t = μ (t inter s)
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
 -/
-theorem cond_apply' (ht : MeasurableSet t) (μ : Measure Ω) : μ[t | s] = (μ s)⁻¹ * μ (s inter t) := by
-  rw [cond]; rw [Measure.smul_apply]; rw [Measure.restrict_apply ht]; rw [Set.inter_comm]; rw [smul_eq_mul]
-
-/--
-lemma `cond_apply_self` / 引理 `cond_apply_self`
-
-English:
-lemma cond_apply_self
-  given: (hs₀ : μ s != 0) (hs : μ s != ∞)
-  statement: μ[s | s] = 1
-  proof: by
-  simpa [cond] using ENNReal.inv_mul_cancel hs₀ hs
-
-中文:
-引理 cond_apply_self
-  条件: (hs₀ : μ s != 0) (hs : μ s != ∞)
-  结论: μ[s | s] = 1
-  证明: by
-  simpa [cond] using ENNReal.inv_mul_cancel hs₀ hs
+theorem cond_apply' (ht : MeasurableSet t) (μ : Measure Ω) : μ[t | s] = (μ s)⁻¹ * μ (s ∩ t) := by
+  rw [cond, Measure.smul_apply, Measure.restrict_apply ht, Set.inter_comm, smul_eq_mul]
+/-
+**ProbabilityTheory.cond_apply_self** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory
+`。
+形式化陈述：∀ {Ω : Type u_1} {m : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {s 
+: Set Ω}, μ s ≠ 0 → μ s ≠ ⊤ → μ[s | s] = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.restrict_apply_self`：restrict_apply_self (s : Set 
+α) : (μ.restrict s) s = μ s
+· 使用定理 `ENNReal.inv_mul_cancel`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a⁻¹ * a = 1
 -/
-@[simp] lemma cond_apply_self (hs₀ : μ s != 0) (hs : μ s != ∞) : μ[s | s] = 1 := by
+@[simp] lemma cond_apply_self (hs₀ : μ s ≠ 0) (hs : μ s ≠ ∞) : μ[s | s] = 1 := by
   simpa [cond] using ENNReal.inv_mul_cancel hs₀ hs
-
-/--
-theorem `cond_inter_self` / 定理 `cond_inter_self`
-
-English:
-theorem cond_inter_self
-  given: (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω)
-  proof: by
-  rw [cond_apply hms]; rw [← Set.inter_assoc]; rw [Set.inter_self]; rw [← cond_apply hms]
-
-中文:
-定理 cond_inter_self
-  条件: (hms : 可测集 s) (t : 集合 Ω) (μ : 测度 Ω)
-  证明: by
-  rw [cond_apply hms]; rw [← Set.inter_assoc]; rw [Set.inter_self]; rw [← cond_apply hms]
-
-Depends on / 依赖: Set.inter_assoc, Set.inter_self, cond_apply, inter_assoc, inter_self
+/-
+**ProbabilityTheory.cond_inter_self** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory
+`。
+形式化陈述：cond_inter_self (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω) : μ[s 
+inter t | s] = μ[t | s]
+参数：hms : MeasurableSet s；t : Set Ω；μ : Measure Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond_apply`：cond_apply (hms : MeasurableSet s) (μ : Me
+asure Ω) (t : Set Ω) : μ[t | s] = (μ s)⁻¹ * μ (s inter t)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `Set.inter_self`：inter_self (a : Set α) : a inter a = a
 -/
 theorem cond_inter_self (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω) :
-    μ[s inter t | s] = μ[t | s] := by
-  rw [cond_apply hms]; rw [← Set.inter_assoc]; rw [Set.inter_self]; rw [← cond_apply hms]
-
-/--
-theorem `inter_pos_of_cond_ne_zero` / 定理 `inter_pos_of_cond_ne_zero`
-
-English:
-theorem inter_pos_of_cond_ne_zero
-  given: (hms : MeasurableSet s) (hcst : μ[t | s] != 0)
-  proof: by
-  refine pos_iff_ne_zero.mpr (right_ne_zero_of_mul (a := (μ s)⁻¹) ?_)
-  convert! hcst
-  simp [hms, Set.inter_comm, cond]
-
-中文:
-定理 inter_pos_of_cond_ne_zero
-  条件: (hms : 可测集 s) (hcst : μ[t | s] != 0)
-  证明: by
-  refine pos_iff_ne_zero.mpr (right_ne_zero_of_mul (a := (μ s)⁻¹) ?_)
-  convert! hcst
-  simp [hms, Set.inter_comm, cond]
-
-Depends on / 依赖: Set.inter_comm, convert, inter_comm, pos_iff_ne_zero, pos_iff_ne_zero.mpr, right_ne_zero_of_mul
+    μ[s ∩ t | s] = μ[t | s] := by
+  rw [cond_apply hms, ← Set.inter_assoc, Set.inter_self, ← cond_apply hms]
+/-
+**ProbabilityTheory.inter_pos_of_cond_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory`。
+形式化陈述：inter_pos_of_cond_ne_zero (hms : MeasurableSet s) (hcst : μ[t | s] != 0) :
+ 0 < μ (s inter t)
+参数：hms : MeasurableSet s；hcst : μ[t | s] != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `right_ne_zero_of_mul`：right_ne_zero_of_mul : a * b != 0 -> b != 0
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.restrict_apply'`：restrict_apply' (hs : MeasurableS
+et s) : μ.restrict s t = μ (t inter s)
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem inter_pos_of_cond_ne_zero (hms : MeasurableSet s) (hcst : μ[t | s] != 0) :
-    0 < μ (s inter t) := by
+theorem inter_pos_of_cond_ne_zero (hms : MeasurableSet s) (hcst : μ[t | s] ≠ 0) :
+    0 < μ (s ∩ t) := by
   refine pos_iff_ne_zero.mpr (right_ne_zero_of_mul (a := (μ s)⁻¹) ?_)
   convert! hcst
   simp [hms, Set.inter_comm, cond]
-
-/--
-lemma `cond_pos_of_inter_ne_zero` / 引理 `cond_pos_of_inter_ne_zero`
-
-English:
-lemma cond_pos_of_inter_ne_zero
-  given: [IsFiniteMeasure μ] (hms : MeasurableSet s) (hci : μ (s inter t) != 0)
-  proof: by
-  rw [cond_apply hms]
-  refine ENNReal.mul_pos ?_ hci
-  exact ENNReal.inv_ne_zero.mpr (measure_ne_top _ _)
-
-中文:
-引理 cond_pos_of_inter_ne_zero
-  条件: [是有限测度 μ] (hms : 可测集 s) (hci : μ (s inter t) != 0)
-  证明: by
-  rw [cond_apply hms]
-  refine ENNReal.mul_pos ?_ hci
-  exact ENNReal.inv_ne_zero.mpr (measure_ne_top _ _)
-
-Depends on / 依赖: ENNReal, ENNReal.inv_ne_zero.mpr, ENNReal.mul_pos, cond_apply, inv_ne_zero, measure_ne_top, mul_pos
+/-
+**ProbabilityTheory.cond_pos_of_inter_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Probabi
+lityTheory`。
+形式化陈述：cond_pos_of_inter_ne_zero [IsFiniteMeasure μ] (hms : MeasurableSet s) (hci
+ : μ (s inter t) != 0) : 0 < μ[t | s]
+参数：hms : MeasurableSet s；hci : μ (s inter t) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond_apply`：cond_apply (hms : MeasurableSet s) (μ : Me
+asure Ω) (t : Set Ω) : μ[t | s] = (μ s)⁻¹ * μ (s inter t)
+· 使用定理 `ENNReal.mul_pos`：mul_pos (ha : a != 0) (hb : b != 0) : 0 < a * b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.inv_ne_zero`：∀ {a : ENNReal}, a⁻¹ ≠ 0 ↔ a ≠ ⊤
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
-lemma cond_pos_of_inter_ne_zero [IsFiniteMeasure μ] (hms : MeasurableSet s) (hci : μ (s inter t) != 0) :
+lemma cond_pos_of_inter_ne_zero [IsFiniteMeasure μ] (hms : MeasurableSet s) (hci : μ (s ∩ t) ≠ 0) :
     0 < μ[t | s] := by
   rw [cond_apply hms]
   refine ENNReal.mul_pos ?_ hci
   exact ENNReal.inv_ne_zero.mpr (measure_ne_top _ _)
-
-/--
-lemma `cond_cond_eq_cond_inter'` / 引理 `cond_cond_eq_cond_inter'`
-
-English:
-lemma cond_cond_eq_cond_inter'
-  given: (hms : MeasurableSet s) (hmt : MeasurableSet t) (hcs : μ s != ∞)
-  proof: by
-  ext u
-  obtain hst | hst := eq_or_ne (μ (s inter t)) 0
-  · have : μ (s inter t inter u) = 0 := measure_mono_null Set.inter_subset_left hst
-    simp [cond_apply, *, ← Set.inter_assoc]
-  · have hs : μ s != 0 := (measure_pos_of_superset Set.inter_subset_left hst).ne'
-    simp [*, hms.inter hmt, cond_apply, ← Set.inter_assoc, ENNReal.mul_inv, ← mul_assoc,
-      mul_comm _ (μ s)⁻¹, ENNReal.inv_mul_cancel]
-
-中文:
-引理 cond_cond_eq_cond_inter'
-  条件: (hms : 可测集 s) (hmt : 可测集 t) (hcs : μ s != ∞)
-  证明: by
-  ext u
-  obtain hst | hst := eq_or_ne (μ (s inter t)) 0
-  · have : μ (s inter t inter u) = 0 := measure_mono_null Set.inter_subset_left hst
-    simp [cond_apply, *, ← Set.inter_assoc]
-  · have hs : μ s != 0 := (measure_pos_of_superset Set.inter_subset_left hst).ne'
-    simp [*, hms.inter hmt, cond_apply, ← Set.inter_assoc, ENNReal.mul_inv, ← mul_assoc,
-      mul_comm _ (μ s)⁻¹, ENNReal.inv_mul_cancel]
-
-Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, ENNReal.mul_inv, Set.inter_assoc, Set.inter_subset_left, cond_apply, eq_or_ne, hms.inter, inter_assoc, inter_subset_left, inv_mul_cancel, measure_mono_null, measure_pos_of_superset, mul_assoc, mul_comm, mul_inv
+/-
+**ProbabilityTheory.cond_cond_eq_cond_inter'** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory`。
+形式化陈述：cond_cond_eq_cond_inter' (hms : MeasurableSet s) (hmt : MeasurableSet t) (
+hcs : μ s != ∞) : μ[|s][|t] = μ[|s inter t]
+参数：hms : MeasurableSet s；hmt : MeasurableSet t；hcs : μ s != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `MeasureTheory.measure_mono_null`：measure_mono_null (h : s subseteq t) (h
+t : μ t = 0) : μ s = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond_apply`：cond_apply (hms : MeasurableSet s) (μ : Me
+asure Ω) (t : Set Ω) : μ[t | s] = (μ s)⁻¹ * μ (s inter t)
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `ENNReal.inv_zero`：0⁻¹ = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `MeasureTheory.measure_pos_of_superset`：measure_pos_of_superset (h : s su
+bseteq t) (hs : μ s != 0) : 0 < μ t
+· 使用定理 `ENNReal.mul_inv`：∀ {a b : ENNReal}, a ≠ 0 ∨ b ≠ ⊤ → a ≠ ⊤ ∨ b ≠ 0 → (a *
+ b)⁻¹ = a⁻¹ * b⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `ENNReal.inv_mul_cancel`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a⁻¹ * a = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
 -/
-lemma cond_cond_eq_cond_inter' (hms : MeasurableSet s) (hmt : MeasurableSet t) (hcs : μ s != ∞) :
-    μ[|s][|t] = μ[|s inter t] := by
+lemma cond_cond_eq_cond_inter' (hms : MeasurableSet s) (hmt : MeasurableSet t) (hcs : μ s ≠ ∞) :
+    μ[|s][|t] = μ[|s ∩ t] := by
   ext u
-  obtain hst | hst := eq_or_ne (μ (s inter t)) 0
-  · have : μ (s inter t inter u) = 0 := measure_mono_null Set.inter_subset_left hst
+  obtain hst | hst := eq_or_ne (μ (s ∩ t)) 0
+  · have : μ (s ∩ t ∩ u) = 0 := measure_mono_null Set.inter_subset_left hst
     simp [cond_apply, *, ← Set.inter_assoc]
-  · have hs : μ s != 0 := (measure_pos_of_superset Set.inter_subset_left hst).ne'
+  · have hs : μ s ≠ 0 := (measure_pos_of_superset Set.inter_subset_left hst).ne'
     simp [*, hms.inter hmt, cond_apply, ← Set.inter_assoc, ENNReal.mul_inv, ← mul_assoc,
       mul_comm _ (μ s)⁻¹, ENNReal.inv_mul_cancel]
 
-/--
-theorem `cond_cond_eq_cond_inter` / 定理 `cond_cond_eq_cond_inter`
+/-- Conditioning first on `s` and then on `t` results in the same measure as conditioning
+on `s ∩ t`. -/
+/-
+**ProbabilityTheory.cond_cond_eq_cond_inter** 是 Mathlib 中的一个定理，位于命名空间 `Probabili
+tyTheory`。
+形式化陈述：cond_cond_eq_cond_inter (hms : MeasurableSet s) (hmt : MeasurableSet t) (μ
+ : Measure Ω) [IsFiniteMeasure μ] : μ[|s][|t] = μ[|s inter t]
+参数：hms : MeasurableSet s；hmt : MeasurableSet t；μ : Measure Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.cond_cond_eq_cond_inter'`：cond_cond_eq_cond_inter' (hm
+s : MeasurableSet s) (hmt : MeasurableSet t) (hcs : μ s != ∞) : μ[|s][|t] = μ[|s
+ inter t]
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 
-English:
-theorem cond_cond_eq_cond_inter
-  statement: (hms : MeasurableSet s) (hmt : MeasurableSet t) (μ : Measure Ω)
-  proof: cond_cond_eq_cond_inter' hms hmt (measure_ne_top μ s)
-
-中文:
-定理 cond_cond_eq_cond_inter
-  结论: (hms : 可测集 s) (hmt : 可测集 t) (μ : 测度 Ω)
-  证明: cond_cond_eq_cond_inter' hms hmt (measure_ne_top μ s)
-
-Depends on / 依赖: cond_cond_eq_cond_inter, measure_ne_top
+--- 原说明 ---
+Conditioning first on `s` and then on `t` results in the same measure as conditi
+oning
+on `s ∩ t`.
 -/
 theorem cond_cond_eq_cond_inter (hms : MeasurableSet s) (hmt : MeasurableSet t) (μ : Measure Ω)
-    [IsFiniteMeasure μ] : μ[|s][|t] = μ[|s inter t] :=
+    [IsFiniteMeasure μ] : μ[|s][|t] = μ[|s ∩ t] :=
   cond_cond_eq_cond_inter' hms hmt (measure_ne_top μ s)
-
-/--
-theorem `cond_mul_eq_inter'` / 定理 `cond_mul_eq_inter'`
-
-English:
-theorem cond_mul_eq_inter'
-  given: (hms : MeasurableSet s) (hcs' : μ s != ∞) (t : Set Ω)
-  proof: by
-  obtain hcs | hcs := eq_or_ne (μ s) 0
-  · simp [hcs, measure_inter_null_of_null_left]
-  · rw [cond_apply hms, mul_comm, ← mul_assoc, ENNReal.mul_inv_cancel hcs hcs', one_mul]
-
-中文:
-定理 cond_mul_eq_inter'
-  条件: (hms : 可测集 s) (hcs' : μ s != ∞) (t : 集合 Ω)
-  证明: by
-  obtain hcs | hcs := eq_or_ne (μ s) 0
-  · simp [hcs, measure_inter_null_of_null_left]
-  · rw [cond_apply hms, mul_comm, ← mul_assoc, ENNReal.mul_inv_cancel hcs hcs', one_mul]
-
-Depends on / 依赖: ENNReal, ENNReal.mul_inv_cancel, cond_apply, eq_or_ne, measure_inter_null_of_null_left, mul_assoc, mul_comm, mul_inv_cancel, one_mul
+/-
+**ProbabilityTheory.cond_mul_eq_inter'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory`。
+形式化陈述：cond_mul_eq_inter' (hms : MeasurableSet s) (hcs' : μ s != ∞) (t : Set Ω) :
+ μ[t | s] * μ s = μ (s inter t)
+参数：hms : MeasurableSet s；hcs' : μ s != ∞；t : Set Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MeasureTheory.measure_inter_null_of_null_left`：measure_inter_null_of_nul
+l_left {S : Set α} (T : Set α) (h : μ S = 0) : μ (S inter T) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ProbabilityTheory.cond_apply`：cond_apply (hms : MeasurableSet s) (μ : Me
+asure Ω) (t : Set Ω) : μ[t | s] = (μ s)⁻¹ * μ (s inter t)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `ENNReal.mul_inv_cancel`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a * a⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem cond_mul_eq_inter' (hms : MeasurableSet s) (hcs' : μ s != ∞) (t : Set Ω) :
-    μ[t | s] * μ s = μ (s inter t) := by
+theorem cond_mul_eq_inter' (hms : MeasurableSet s) (hcs' : μ s ≠ ∞) (t : Set Ω) :
+    μ[t | s] * μ s = μ (s ∩ t) := by
   obtain hcs | hcs := eq_or_ne (μ s) 0
   · simp [hcs, measure_inter_null_of_null_left]
   · rw [cond_apply hms, mul_comm, ← mul_assoc, ENNReal.mul_inv_cancel hcs hcs', one_mul]
-
-/--
-theorem `cond_mul_eq_inter` / 定理 `cond_mul_eq_inter`
-
-English:
-theorem cond_mul_eq_inter
-  given: (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω) [IsFiniteMeasure μ]
-  proof: cond_mul_eq_inter' hms (measure_ne_top _ s) t
-
-中文:
-定理 cond_mul_eq_inter
-  条件: (hms : 可测集 s) (t : 集合 Ω) (μ : 测度 Ω) [是有限测度 μ]
-  证明: cond_mul_eq_inter' hms (measure_ne_top _ s) t
-
-Depends on / 依赖: cond_mul_eq_inter, measure_ne_top
+/-
+**ProbabilityTheory.cond_mul_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry`。
+形式化陈述：cond_mul_eq_inter (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω) [IsF
+initeMeasure μ] : μ[t | s] * μ s = μ (s inter t)
+参数：hms : MeasurableSet s；t : Set Ω；μ : Measure Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.cond_mul_eq_inter'`：cond_mul_eq_inter' (hms : Measurab
+leSet s) (hcs' : μ s != ∞) (t : Set Ω) : μ[t | s] * μ s = μ (s inter t)
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
 theorem cond_mul_eq_inter (hms : MeasurableSet s) (t : Set Ω) (μ : Measure Ω) [IsFiniteMeasure μ] :
-    μ[t | s] * μ s = μ (s inter t) := cond_mul_eq_inter' hms (measure_ne_top _ s) t
+    μ[t | s] * μ s = μ (s ∩ t) := cond_mul_eq_inter' hms (measure_ne_top _ s) t
 
-/--
-theorem `cond_add_cond_compl_eq` / 定理 `cond_add_cond_compl_eq`
+/-- A version of the law of total probability. -/
+/-
+**ProbabilityTheory.cond_add_cond_compl_eq** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：cond_add_cond_compl_eq (hms : MeasurableSet s) (μ : Measure Ω) [IsFiniteMe
+asure μ] : μ[t | s] * μ s + μ[t | sᶜ] * μ sᶜ = μ t
+参数：hms : MeasurableSet s；μ : Measure Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond_mul_eq_inter`：cond_mul_eq_inter (hms : Measurable
+Set s) (t : Set Ω) (μ : Measure Ω) [IsFiniteMeasure μ] : μ[t | s] * μ s = μ (s i
+nter t)
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `MeasureTheory.measure_inter_add_sdiff`：measure_inter_add_sdiff (s : Set 
+α) (ht : MeasurableSet t) : μ (s inter t) + μ (s \ t) = μ s
 
-English:
-theorem cond_add_cond_compl_eq
-  given: (hms : MeasurableSet s) (μ : Measure Ω) [IsFiniteMeasure μ]
-  proof: by
-  rw [cond_mul_eq_inter hms]; rw [cond_mul_eq_inter hms.compl]; rw [Set.inter_comm _ t]; rw [Set.inter_comm _ t]
-  exact measure_inter_add_sdiff t hms
-
-中文:
-定理 cond_add_cond_compl_eq
-  条件: (hms : 可测集 s) (μ : 测度 Ω) [是有限测度 μ]
-  证明: by
-  rw [cond_mul_eq_inter hms]; rw [cond_mul_eq_inter hms.compl]; rw [Set.inter_comm _ t]; rw [Set.inter_comm _ t]
-  exact measure_inter_add_sdiff t hms
-
-Depends on / 依赖: Set.inter_comm, cond_mul_eq_inter, hms.compl, inter_comm, measure_inter_add_sdiff
+--- 原说明 ---
+A version of the law of total probability.
 -/
 theorem cond_add_cond_compl_eq (hms : MeasurableSet s) (μ : Measure Ω) [IsFiniteMeasure μ] :
     μ[t | s] * μ s + μ[t | sᶜ] * μ sᶜ = μ t := by
-  rw [cond_mul_eq_inter hms]; rw [cond_mul_eq_inter hms.compl]; rw [Set.inter_comm _ t]; rw [Set.inter_comm _ t]
+  rw [cond_mul_eq_inter hms, cond_mul_eq_inter hms.compl, Set.inter_comm _ t,
+    Set.inter_comm _ t]
   exact measure_inter_add_sdiff t hms
 
-/--
-theorem `cond_eq_inv_mul_cond_mul` / 定理 `cond_eq_inv_mul_cond_mul`
+/-- **Bayes' Theorem** -/
+/-
+**ProbabilityTheory.cond_eq_inv_mul_cond_mul** 是 Mathlib 中的一个定理，位于命名空间 `Probabil
+ityTheory`。
+形式化陈述：cond_eq_inv_mul_cond_mul (hms : MeasurableSet s) (hmt : MeasurableSet t) (
+μ : Measure Ω) [IsFiniteMeasure μ] : μ[t | s] = (μ s)⁻¹ * μ[s | t] * μ t
+参数：hms : MeasurableSet s；hmt : MeasurableSet t；μ : Measure Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `ProbabilityTheory.cond_mul_eq_inter`：cond_mul_eq_inter (hms : Measurable
+Set s) (t : Set Ω) (μ : Measure Ω) [IsFiniteMeasure μ] : μ[t | s] * μ s = μ (s i
+nter t)
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `ProbabilityTheory.cond_apply`：cond_apply (hms : MeasurableSet s) (μ : Me
+asure Ω) (t : Set Ω) : μ[t | s] = (μ s)⁻¹ * μ (s inter t)
 
-English:
-theorem cond_eq_inv_mul_cond_mul
-  statement: (hms : MeasurableSet s) (hmt : MeasurableSet t) (μ : Measure Ω)
-  proof: by
-  rw [mul_assoc]; rw [cond_mul_eq_inter hmt s]; rw [Set.inter_comm]; rw [cond_apply hms]
-
-中文:
-定理 cond_eq_inv_mul_cond_mul
-  结论: (hms : 可测集 s) (hmt : 可测集 t) (μ : 测度 Ω)
-  证明: by
-  rw [mul_assoc]; rw [cond_mul_eq_inter hmt s]; rw [Set.inter_comm]; rw [cond_apply hms]
-
-Depends on / 依赖: Set.inter_comm, cond_apply, cond_mul_eq_inter, inter_comm, mul_assoc
+--- 原说明 ---
+**Bayes' Theorem**
 -/
 theorem cond_eq_inv_mul_cond_mul (hms : MeasurableSet s) (hmt : MeasurableSet t) (μ : Measure Ω)
     [IsFiniteMeasure μ] : μ[t | s] = (μ s)⁻¹ * μ[s | t] * μ t := by
-  rw [mul_assoc]; rw [cond_mul_eq_inter hmt s]; rw [Set.inter_comm]; rw [cond_apply hms]
+  rw [mul_assoc, cond_mul_eq_inter hmt s, Set.inter_comm, cond_apply hms]
 
 end Bayes
 
-/--
-lemma `comap_cond` / 引理 `comap_cond`
-
-English:
-lemma comap_cond
-  statement: {i : Ω' -> Ω} (hi : MeasurableEmbedding i) (hi' : forallᵐ ω ∂μ, ω in range i)
-  proof: by
-  ext t ht
-  change μ (range i)ᶜ = 0 at hi'
-  rw [cond_apply]; rw [comap_apply]; rw [cond_apply]; rw [comap_apply]; rw [comap_apply]; rw [image_inter]; rw [image_preimage_eq_inter_range]; rw [inter_right_comm]; rw [measure_inter_conull hi']; rw [measure_inter_conull hi']
-  all_goals first
-  | exact hi.injective
-  | exact hi.measurableSet_image'
-  | exact hs
-  | exact ht
-  | exact hi.measurable hs
-  | exact (hi.measurable hs).inter ht
-
-中文:
-引理 comap_cond
-  结论: {i : Ω' -> Ω} (hi : 可测嵌入 i) (hi' : 对任意ᵐ ω ∂μ, ω in range i)
-  证明: by
-  ext t ht
-  change μ (range i)ᶜ = 0 at hi'
-  rw [cond_apply]; rw [comap_apply]; rw [cond_apply]; rw [comap_apply]; rw [comap_apply]; rw [image_inter]; rw [image_preimage_eq_inter_range]; rw [inter_right_comm]; rw [measure_inter_conull hi']; rw [measure_inter_conull hi']
-  all_goals first
-  | exact hi.injective
-  | exact hi.measurableSet_image'
-  | exact hs
-  | exact ht
-  | exact hi.measurable hs
-  | exact (hi.measurable hs).inter ht
-
-Depends on / 依赖: NonUnitalSubsemiringClass, NonUnitalSubsemiringClass.toNonUnitalNonAssocSemiring, Subsemigroup, Subsemigroup.center.commSemigroup, all_goals, center, comap_apply, commSemigroup, cond_apply, hi.injective, hi.measurable, hi.measurableSet_image, image_inter, image_preimage_eq_inter_range, injective, inter_right_comm, measurable, measurableSet_image, measure_inter_conull, toNonUnitalNonAssocSemiring
+/-
+**ProbabilityTheory.comap_cond** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：comap_cond {i : Ω' -> Ω} (hi : MeasurableEmbedding i) (hi' : forallᵐ ω ∂μ,
+ ω in range i) (hs : MeasurableSet s) : comap i μ[|s] = (comap i μ)[|i in s]
+参数：hi : MeasurableEmbedding i；hi' : forallᵐ ω ∂μ, ω in range i；hs : MeasurableSe
+t s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.cond_apply`：cond_apply (hms : MeasurableSet s) (μ : Me
+asure Ω) (t : Set Ω) : μ[t | s] = (μ s)⁻¹ * μ (s inter t)
+· 使用定理 `MeasurableEmbedding.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+MeasurableSpace α] [inst_1 : MeasurableSpace β] {f : α → β},   MeasurableEmbeddi
+ng f → Measurable f
+· 使用定理 `MeasureTheory.Measure.comap_apply`：comap_apply (f : α -> β) (hfi : Injec
+tive f) (hf : forall s, MeasurableSet s -> MeasurableSet (f '' s)) (μ : Measure 
+β) (hs : MeasurableSet …
+· 使用定理 `MeasurableEmbedding.injective`：∀ {α : Type u_1} {β : Type u_2} [inst : M
+easurableSpace α] [inst_1 : MeasurableSpace β] {f : α → β},   MeasurableEmbeddin
+g f → Function.Inje…
+· 使用定理 `MeasurableEmbedding.measurableSet_image'`：∀ {α : Type u_1} {β : Type u_2
+} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {f : α → β},   Measura
+bleEmbedding f → ∀ ⦃s : Set α⦄…
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `Set.image_inter`：image_inter {f : α -> β} {s t : Set α} (H : Injective f
+) : f '' (s inter t) = f '' s inter f '' t
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `Set.inter_right_comm`：inter_right_comm (s₁ s₂ s₃ : Set α) : s₁ inter s₂ 
+inter s₃ = s₁ inter s₃ inter s₂
+· 使用引理 `MeasureTheory.measure_inter_conull`：measure_inter_conull (ht : μ tᶜ = 0)
+ : μ (s inter t) = μ s
 -/
-lemma comap_cond {i : Ω' -> Ω} (hi : MeasurableEmbedding i) (hi' : forallᵐ ω ∂μ, ω in range i)
+lemma comap_cond {i : Ω' → Ω} (hi : MeasurableEmbedding i) (hi' : ∀ᵐ ω ∂μ, ω ∈ range i)
     (hs : MeasurableSet s) : comap i μ[|s] = (comap i μ)[|i in s] := by
   ext t ht
   change μ (range i)ᶜ = 0 at hi'
-  rw [cond_apply]; rw [comap_apply]; rw [cond_apply]; rw [comap_apply]; rw [comap_apply]; rw [image_inter]; rw [image_preimage_eq_inter_range]; rw [inter_right_comm]; rw [measure_inter_conull hi']; rw [measure_inter_conull hi']
+  rw [cond_apply, comap_apply, cond_apply, comap_apply, comap_apply, image_inter,
+    image_preimage_eq_inter_range, inter_right_comm, measure_inter_conull hi',
+    measure_inter_conull hi']
   all_goals first
   | exact hi.injective
   | exact hi.measurableSet_image'
@@ -810,52 +825,91 @@ lemma comap_cond {i : Ω' -> Ω} (hi : MeasurableEmbedding i) (hi' : forallᵐ �
 
 variable [Fintype α] [MeasurableSpace α] [DiscreteMeasurableSpace α]
 
-/--
-lemma `sum_meas_smul_cond_fiber` / 引理 `sum_meas_smul_cond_fiber`
+/-- The **law of total probability** for a random variable taking finitely many values: a measure
+`μ` can be expressed as a linear combination of its conditional measures `μ[|X ← x]` on fibers of a
+random variable `X` valued in a fintype. -/
+/-
+**ProbabilityTheory.sum_meas_smul_cond_fiber** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory`。
+形式化陈述：sum_meas_smul_cond_fiber {X : Ω -> α} (hX : Measurable X) (μ : Measure Ω) 
+[IsFiniteMeasure μ] : ∑ x, μ (X ⁻¹' {x}) • μ[|X ← x] = μ
+参数：hX : Measurable X；μ : Measure Ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `MeasureTheory.Measure.coe_finsetSum`：coe_finsetSum {_m : MeasurableSpace
+ α} (I : Finset ι) (μ : ι -> Measure α) : ⇑(∑ i in I, μ i) = ∑ i in I, ⇑(μ i)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `ProbabilityTheory.cond_mul_eq_inter`：cond_mul_eq_inter (hms : Measurable
+Set s) (t : Set Ω) (μ : Measure Ω) [IsFiniteMeasure μ] : μ[t | s] * μ s = μ (s i
+nter t)
+· 使用引理 `MeasurableSet.singleton`：MeasurableSet.singleton [MeasurableSpace α] [Me
+asurableSingletonClass α] (a : α) : MeasurableSet {a}
+· 使用定理 `DiscreteMeasurableSpace.toMeasurableSingletonClass`：∀ {α : Type u_1} [in
+st : MeasurableSpace α] [DiscreteMeasurableSpace α], MeasurableSingletonClass α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_true`：iUnion_true {s : True -> Set α} : iUnion s = s trivial
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.measure_biUnion_finset`：measure_biUnion_finset {s : Finset
+ ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f) (hm : forall b in s, Measura
+bleSet (f b)) : μ (⋃ b in …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+（共 35 条，此处仅展示前 30 条）
 
-English:
-lemma sum_meas_smul_cond_fiber
-  given: {X : Ω -> α} (hX : Measurable X) (μ : Measure Ω) [IsFiniteMeasure μ]
-  proof: by
-  ext E hE
-  calc
-    _ = ∑ x, μ (X ⁻¹' {x} inter E) := by
-      simp only [Measure.coe_finsetSum, Measure.coe_smul, Finset.sum_apply,
-        Pi.smul_apply, smul_eq_mul]
-      simp_rw [mul_comm (μ _), cond_mul_eq_inter (hX (.singleton _))]
-    _ = _ := by
-      have : ⋃ x in Finset.univ, X ⁻¹' {x} inter E = E := by ext; simp
-      rw [← measure_biUnion_finset _ fun _ _ => (hX (.singleton _)).inter hE]; rw [this]
-      aesop (add simp [PairwiseDisjoint, Set.Pairwise, Function.onFun, disjoint_left])
-
-中文:
-引理 sum_meas_smul_cond_fiber
-  条件: {X : Ω -> α} (hX : 可测 X) (μ : 测度 Ω) [是有限测度 μ]
-  证明: by
-  ext E hE
-  calc
-    _ = ∑ x, μ (X ⁻¹' {x} inter E) := by
-      simp only [Measure.coe_finsetSum, Measure.coe_smul, Finset.sum_apply,
-        Pi.smul_apply, smul_eq_mul]
-      simp_rw [mul_comm (μ _), cond_mul_eq_inter (hX (.singleton _))]
-    _ = _ := by
-      have : ⋃ x in Finset.univ, X ⁻¹' {x} inter E = E := by ext; simp
-      rw [← measure_biUnion_finset _ fun _ _ => (hX (.singleton _)).inter hE]; rw [this]
-      aesop (add simp [PairwiseDisjoint, Set.Pairwise, Function.onFun, disjoint_left])
-
-Depends on / 依赖: Finset, Finset.sum_apply, Finset.univ, Function, Function.onFun, Measure, Measure.coe_finsetSum, Measure.coe_smul, Pairwise, PairwiseDisjoint, Pi.smul_apply, Set.Pairwise, coe_finsetSum, coe_smul, cond_mul_eq_inter, disjoint_left, measure_biUnion_finset, mul_comm, simp_rw, singleton
+--- 原说明 ---
+The **law of total probability** for a random variable taking finitely many valu
+es: a measure
+`μ` can be expressed as a linear combination of its conditional measures `μ[|X ←
+ x]` on fibers of a
+random variable `X` valued in a fintype.
 -/
-lemma sum_meas_smul_cond_fiber {X : Ω -> α} (hX : Measurable X) (μ : Measure Ω) [IsFiniteMeasure μ] :
+lemma sum_meas_smul_cond_fiber {X : Ω → α} (hX : Measurable X) (μ : Measure Ω) [IsFiniteMeasure μ] :
     ∑ x, μ (X ⁻¹' {x}) • μ[|X ← x] = μ := by
   ext E hE
   calc
-    _ = ∑ x, μ (X ⁻¹' {x} inter E) := by
+    _ = ∑ x, μ (X ⁻¹' {x} ∩ E) := by
       simp only [Measure.coe_finsetSum, Measure.coe_smul, Finset.sum_apply,
         Pi.smul_apply, smul_eq_mul]
       simp_rw [mul_comm (μ _), cond_mul_eq_inter (hX (.singleton _))]
     _ = _ := by
-      have : ⋃ x in Finset.univ, X ⁻¹' {x} inter E = E := by ext; simp
-      rw [← measure_biUnion_finset _ fun _ _ => (hX (.singleton _)).inter hE]; rw [this]
+      have : ⋃ x ∈ Finset.univ, X ⁻¹' {x} ∩ E = E := by ext; simp
+      rw [← measure_biUnion_finset _ fun _ _ ↦ (hX (.singleton _)).inter hE, this]
       aesop (add simp [PairwiseDisjoint, Set.Pairwise, Function.onFun, disjoint_left])
 
 end ProbabilityTheory
+

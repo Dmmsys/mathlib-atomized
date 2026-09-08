@@ -36,68 +36,35 @@ equivalences), and that the three properties of morphisms (fibrations, cofibrati
 weak equivalences) in `C` coincide with the inverse images by `e.functor : C ⥤ D`
 of the corresponding properties of morphisms in `D`. -/
 @[instance_reducible]
-/--
-Definition of `ModelCategory.transport` / `ModelCategory.transport` 的定义
+/-
+**HomotopicalAlgebra.ModelCategory.transport** 是 Mathlib 中的一个定义，位于命名空间 `Homotopi
+calAlgebra.ModelCategory`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         [i
+nst_2 : HomotopicalAlgebra.ModelCategory D] →           [inst_3 : HomotopicalAlg
+ebra.CategoryWithCofibrations C] →             [inst_4 : HomotopicalAlgebra.Cate
+goryWithFibrations C] →               [inst_5 : HomotopicalAlgebra.CategoryWithW
+eakEquivalences C] →                 (e : C ≌ D) →                   Homotopical
+Algebra.cofibrations C = (HomotopicalAlgebra.cofibrations D).inverseImage e.func
+tor →                     HomotopicalAlgebra.fibrations C = (HomotopicalAlgebra.
+fibrations D).inverseImage e.functor →                       HomotopicalAlgebra.
+weakEquivalences C =                           (HomotopicalAlgebra.weakEquivalen
+ces D).inverseImage e.functor →                         HomotopicalAlgebra.Model
+Category C
+参数：e : C ≌ D；HomotopicalAlgebra.cofibrations D；HomotopicalAlgebra.fibrations D；H
+omotopicalAlgebra.weakEquivalences D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ModelCategory.transport
-  body: by
-  have h₁' : trivialCofibrations C = (trivialCofibrations D).inverseImage e.functor := by
-    simp [trivialCofibrations, h₁, h₃]
-  have h₂' : trivialFibrations C = (trivialFibrations D).inverseImage e.functor := by
-    simp [trivialFibrations, h₂, h₃]
-  have {X Y : C} (f : X ⟶ Y) [hf : Cofibration f] : Cofibration (e.functor.map f) := by
-    simpa [cofibration_iff, h₁] using hf
-  have {X Y : C} (f : X ⟶ Y) [hf : Fibration f] : Fibration (e.functor.map f) := by
-    simpa [fibration_iff, h₂] using hf
-  have {X Y : C} (f : X ⟶ Y) [hf : WeakEquivalence f] : WeakEquivalence (e.functor.map f) := by
-    simpa [weakEquivalence_iff, h₃] using hf
-  exact {
-    cm1a := ⟨fun _ _ _ => Adjunction.hasLimitsOfShape_of_equivalence e.functor⟩
-    cm1b := ⟨fun _ _ _ => Adjunction.hasColimitsOfShape_of_equivalence e.functor⟩
-    cm2 := by rw [h₃]; infer_instance
-    cm3a := by rw [h₃]; infer_instance
-    cm3b := by rw [h₂]; infer_instance
-    cm3c := by rw [h₁]; infer_instance
-    cm4a _ _ _ _ _ := by
-      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
-      infer_instance
-    cm4b _ _ _ _ _ := by
-      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
-      infer_instance
-    cm5a := by rw [h₁', h₂]; infer_instance
-    cm5b := by rw [h₁, h₂']; infer_instance }
-
-中文:
-定义 模型范畴.transport
-  定义体: by
-  have h₁' : trivialCofibrations C = (trivialCofibrations D).inverseImage e.functor := by
-    simp [trivialCofibrations, h₁, h₃]
-  have h₂' : trivialFibrations C = (trivialFibrations D).inverseImage e.functor := by
-    simp [trivialFibrations, h₂, h₃]
-  have {X Y : C} (f : X ⟶ Y) [hf : Cofibration f] : Cofibration (e.functor.map f) := by
-    simpa [cofibration_iff, h₁] using hf
-  have {X Y : C} (f : X ⟶ Y) [hf : Fibration f] : Fibration (e.functor.map f) := by
-    simpa [fibration_iff, h₂] using hf
-  have {X Y : C} (f : X ⟶ Y) [hf : WeakEquivalence f] : WeakEquivalence (e.functor.map f) := by
-    simpa [weakEquivalence_iff, h₃] using hf
-  exact {
-    cm1a := ⟨fun _ _ _ => Adjunction.hasLimitsOfShape_of_equivalence e.functor⟩
-    cm1b := ⟨fun _ _ _ => Adjunction.hasColimitsOfShape_of_equivalence e.functor⟩
-    cm2 := by rw [h₃]; infer_instance
-    cm3a := by rw [h₃]; infer_instance
-    cm3b := by rw [h₂]; infer_instance
-    cm3c := by rw [h₁]; infer_instance
-    cm4a _ _ _ _ _ := by
-      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
-      infer_instance
-    cm4b _ _ _ _ _ := by
-      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
-      infer_instance
-    cm5a := by rw [h₁', h₂]; infer_instance
-    cm5b := by rw [h₁, h₂']; infer_instance }
-
-Depends on / 依赖: Cofibration, Fibration, cofibration_iff, e.functor, e.functor.map, fibration_iff, functor, inverseImage, trivialCofibrations, trivialFibrations
+--- 原说明 ---
+Transport of a model category structure on a category `D` via an equivalence of
+categories `e : C ≌ D`. We assume that the category `C` is already endowed
+with a `CategoryWithFibrations` instance (and similarly for cofibrations and wea
+k
+equivalences), and that the three properties of morphisms (fibrations, cofibrati
+ons,
+weak equivalences) in `C` coincide with the inverse images by `e.functor : C ⥤ D
+`
+of the corresponding properties of morphisms in `D`.
 -/
 def ModelCategory.transport
     {C D : Type*} [Category* C] [Category* D] [ModelCategory D]
@@ -118,8 +85,8 @@ def ModelCategory.transport
   have {X Y : C} (f : X ⟶ Y) [hf : WeakEquivalence f] : WeakEquivalence (e.functor.map f) := by
     simpa [weakEquivalence_iff, h₃] using hf
   exact {
-    cm1a := ⟨fun _ _ _ => Adjunction.hasLimitsOfShape_of_equivalence e.functor⟩
-    cm1b := ⟨fun _ _ _ => Adjunction.hasColimitsOfShape_of_equivalence e.functor⟩
+    cm1a := ⟨fun _ _ _ ↦ Adjunction.hasLimitsOfShape_of_equivalence e.functor⟩
+    cm1b := ⟨fun _ _ _ ↦ Adjunction.hasColimitsOfShape_of_equivalence e.functor⟩
     cm2 := by rw [h₃]; infer_instance
     cm3a := by rw [h₃]; infer_instance
     cm3b := by rw [h₂]; infer_instance
@@ -134,3 +101,4 @@ def ModelCategory.transport
     cm5b := by rw [h₁, h₂']; infer_instance }
 
 end HomotopicalAlgebra
+

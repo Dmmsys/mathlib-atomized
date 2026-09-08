@@ -31,275 +31,200 @@ This file defines restrictions of affine maps.
 variable {k V₁ P₁ V₂ P₂ : Type*} [Ring k] [AddCommGroup V₁] [AddCommGroup V₂] [Module k V₁]
   [Module k V₂] [AddTorsor V₁ P₁] [AddTorsor V₂ P₂]
 
-/--
-Instance `AffineSubspace.nonempty_map` / 实例 `AffineSubspace.nonempty_map`
-
-English:
-instance AffineSubspace.nonempty_map
-  signature: {E : AffineSubspace k P₁} [Ene : Nonempty E]
-  body: by
-  obtain ⟨x, hx⟩ := id Ene
-  exact ⟨⟨φ x, AffineSubspace.mem_map.mpr ⟨x, hx, rfl⟩⟩⟩
-
-中文:
-实例 仿射子空间.nonempty_map
-  签名: {E : 仿射子空间 k P₁} [Ene : 非空 E]
-  定义体: by
-  obtain ⟨x, hx⟩ := id Ene
-  exact ⟨⟨φ x, AffineSubspace.mem_map.mpr ⟨x, hx, rfl⟩⟩⟩
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.mem_map.mpr, mem_map
+/-
+**AffineSubspace.nonempty_map** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AffineSubspace.nonempty_map {E : AffineSubspace k P₁} [Ene : Nonempty E] {
+φ : P₁ ->ᵃ[k] P₂} : Nonempty (E.map φ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AffineSubspace.mem_map`：mem_map {f : P₁ ->ᵃ[k] P₂} {x : P₂} {s : AffineS
+ubspace k P₁} : x in s.map f ↔ exists y in s, f y = x
 -/
 instance AffineSubspace.nonempty_map {E : AffineSubspace k P₁} [Ene : Nonempty E]
-    {φ : P₁ ->ᵃ[k] P₂} : Nonempty (E.map φ) := by
+    {φ : P₁ →ᵃ[k] P₂} : Nonempty (E.map φ) := by
   obtain ⟨x, hx⟩ := id Ene
   exact ⟨⟨φ x, AffineSubspace.mem_map.mpr ⟨x, hx, rfl⟩⟩⟩
 
-/--
-Definition of `AffineMap.restrict` / `AffineMap.restrict` 的定义
+/-- Restrict domain and codomain of an affine map to the given subspaces. -/
+/-
+**AffineMap.restrict** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AffineMap.restrict (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁} {F : Affin
+eSubspace k P₂} [Nonempty E] [Nonempty F] (hEF : E.map φ <= F) : E ->ᵃ[k] F
+参数：φ : P₁ ->ᵃ[k] P₂；hEF : E.map φ <= F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AffineMap.restrict
-  signature: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁} {F : AffineSubspace k P₂}
-  body: by
-  refine ⟨?_, ?_, ?_⟩
-· exact fun x => ⟨φ x, hEF AffineSubspace.mem_map.mpr ⟨x, x.property, rfl⟩⟩
-  · refine φ.linear.restrict (?_ : E.direction <= F.direction.comap φ.linear)
-    rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
-    exact AffineSubspace.direction_le hEF
-  · intro p v
-    simp only [Subtype.ext_iff, AffineSubspace.coe_vadd]
-    apply AffineMap.map_vadd
-
-中文:
-定义 仿射映射.restrict
-  签名: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁} {F : 仿射子空间 k P₂}
-  定义体: by
-  refine ⟨?_, ?_, ?_⟩
-· exact fun x => ⟨φ x, hEF AffineSubspace.mem_map.mpr ⟨x, x.property, rfl⟩⟩
-  · refine φ.linear.restrict (?_ : E.direction <= F.direction.comap φ.linear)
-    rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
-    exact AffineSubspace.direction_le hEF
-  · intro p v
-    simp only [Subtype.ext_iff, AffineSubspace.coe_vadd]
-    apply AffineMap.map_vadd
-
-Depends on / 依赖: AffineMap, AffineMap.map_vadd, AffineSubspace, AffineSubspace.coe_vadd, AffineSubspace.direction_le, AffineSubspace.map_direction, AffineSubspace.mem_map.mpr, E.direction, F.direction.comap, Submodule, Submodule.map_le_iff_le_comap, Subtype, Subtype.ext_iff, coe_vadd, direction, direction_le, ext_iff, linear, linear.restrict, map_direction
+--- 原说明 ---
+Restrict domain and codomain of an affine map to the given subspaces.
 -/
-def AffineMap.restrict (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁} {F : AffineSubspace k P₂}
-    [Nonempty E] [Nonempty F] (hEF : E.map φ <= F) : E ->ᵃ[k] F := by
+def AffineMap.restrict (φ : P₁ →ᵃ[k] P₂) {E : AffineSubspace k P₁} {F : AffineSubspace k P₂}
+    [Nonempty E] [Nonempty F] (hEF : E.map φ ≤ F) : E →ᵃ[k] F := by
   refine ⟨?_, ?_, ?_⟩
-· exact fun x => ⟨φ x, hEF AffineSubspace.mem_map.mpr ⟨x, x.property, rfl⟩⟩
-  · refine φ.linear.restrict (?_ : E.direction <= F.direction.comap φ.linear)
-    rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
+  · exact fun x => ⟨φ x, hEF <| AffineSubspace.mem_map.mpr ⟨x, x.property, rfl⟩⟩
+  · refine φ.linear.restrict (?_ : E.direction ≤ F.direction.comap φ.linear)
+    rw [← Submodule.map_le_iff_le_comap, ← AffineSubspace.map_direction]
     exact AffineSubspace.direction_le hEF
   · intro p v
     simp only [Subtype.ext_iff, AffineSubspace.coe_vadd]
     apply AffineMap.map_vadd
-
-/--
-theorem `AffineMap.restrict.coe_apply` / 定理 `AffineMap.restrict.coe_apply`
-
-English:
-theorem AffineMap.restrict.coe_apply
-  statement: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
-  proof: rfl
-
-中文:
-定理 仿射映射.restrict.coe_apply
-  结论: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁}
-  证明: rfl
+/-
+**AffineMap.restrict.coe_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AffineMap.restrict.coe_apply (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁} 
+{F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] (hEF : E.map φ <= F) (x : E)
+ : ↑(φ.restrict hEF x) = φ x
+参数：φ : P₁ ->ᵃ[k] P₂；hEF : E.map φ <= F；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AffineMap.restrict.coe_apply (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
-    {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] (hEF : E.map φ <= F) (x : E) :
+theorem AffineMap.restrict.coe_apply (φ : P₁ →ᵃ[k] P₂) {E : AffineSubspace k P₁}
+    {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] (hEF : E.map φ ≤ F) (x : E) :
     ↑(φ.restrict hEF x) = φ x :=
   rfl
-
-/--
-theorem `AffineMap.restrict.linear_aux` / 定理 `AffineMap.restrict.linear_aux`
-
-English:
-theorem AffineMap.restrict.linear_aux
-  statement: {φ : P₁ ->ᵃ[k] P₂} {E : AffineSubspace k P₁}
-  proof: by
-  rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
-  exact AffineSubspace.direction_le hEF
-
-中文:
-定理 仿射映射.restrict.linear_aux
-  结论: {φ : P₁ ->ᵃ[k] P₂} {E : 仿射子空间 k P₁}
-  证明: by
-  rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
-  exact AffineSubspace.direction_le hEF
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.direction_le, AffineSubspace.map_direction, Submodule, Submodule.map_le_iff_le_comap, direction_le, map_direction, map_le_iff_le_comap
+/-
+**AffineMap.restrict.linear_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AffineMap.restrict.linear_aux {φ : P₁ ->ᵃ[k] P₂} {E : AffineSubspace k P₁}
+ {F : AffineSubspace k P₂} (hEF : E.map φ <= F) : E.direction <= F.direction.com
+ap φ.linear
+参数：hEF : E.map φ <= F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.map_le_iff_le_comap`：map_le_iff_le_comap {f : M ->ₛₗ[σ₁₂] M₂} 
+{p : Submodule R M} {q : Submodule R₂ M₂} : map f p <= q ↔ p <= comap f q
+· 使用定理 `AffineSubspace.map_direction`：map_direction (s : AffineSubspace k P₁) : 
+(s.map f).direction = s.direction.map f.linear
+· 使用定理 `AffineSubspace.direction_le`：direction_le {s₁ s₂ : AffineSubspace k P} (
+h : s₁ <= s₂) : s₁.direction <= s₂.direction
 -/
-theorem AffineMap.restrict.linear_aux {φ : P₁ ->ᵃ[k] P₂} {E : AffineSubspace k P₁}
-    {F : AffineSubspace k P₂} (hEF : E.map φ <= F) : E.direction <= F.direction.comap φ.linear := by
-  rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
+theorem AffineMap.restrict.linear_aux {φ : P₁ →ᵃ[k] P₂} {E : AffineSubspace k P₁}
+    {F : AffineSubspace k P₂} (hEF : E.map φ ≤ F) : E.direction ≤ F.direction.comap φ.linear := by
+  rw [← Submodule.map_le_iff_le_comap, ← AffineSubspace.map_direction]
   exact AffineSubspace.direction_le hEF
-
-/--
-theorem `AffineMap.restrict.linear` / 定理 `AffineMap.restrict.linear`
-
-English:
-theorem AffineMap.restrict.linear
-  statement: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
-  proof: rfl
-
-中文:
-定理 仿射映射.restrict.linear
-  结论: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁}
-  证明: rfl
+/-
+**AffineMap.restrict.linear** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AffineMap.restrict.linear (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁} {F 
+: AffineSubspace k P₂} [Nonempty E] [Nonempty F] (hEF : E.map φ <= F) : (φ.restr
+ict hEF).linear = φ.linear.restrict (AffineMap.restrict.linear_aux hEF)
+参数：φ : P₁ ->ᵃ[k] P₂；hEF : E.map φ <= F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AffineMap.restrict.linear (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
-    {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] (hEF : E.map φ <= F) :
+theorem AffineMap.restrict.linear (φ : P₁ →ᵃ[k] P₂) {E : AffineSubspace k P₁}
+    {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] (hEF : E.map φ ≤ F) :
     (φ.restrict hEF).linear = φ.linear.restrict (AffineMap.restrict.linear_aux hEF) :=
   rfl
-
-/--
-theorem `AffineMap.restrict.injective` / 定理 `AffineMap.restrict.injective`
-
-English:
-theorem AffineMap.restrict.injective
-  statement: {φ : P₁ ->ᵃ[k] P₂} (hφ : Function.Injective φ)
-  proof: by
-  intro x y h
-  simp only [Subtype.ext_iff, AffineMap.restrict.coe_apply] at h ⊢
-  exact hφ h
-
-中文:
-定理 仿射映射.restrict.injective
-  结论: {φ : P₁ ->ᵃ[k] P₂} (hφ : 函数.单射 φ)
-  证明: by
-  intro x y h
-  simp only [Subtype.ext_iff, AffineMap.restrict.coe_apply] at h ⊢
-  exact hφ h
-
-Depends on / 依赖: AffineMap, AffineMap.restrict.coe_apply, Subtype, Subtype.ext_iff, coe_apply, ext_iff, restrict
+/-
+**AffineMap.restrict.injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AffineMap.restrict.injective {φ : P₁ ->ᵃ[k] P₂} (hφ : Function.Injective φ
+) {E : AffineSubspace k P₁} {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] 
+(hEF : E.map φ <= F) : Function.Injective (AffineMap.restrict φ hEF)
+参数：hφ : Function.Injective φ；hEF : E.map φ <= F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AffineMap.restrict.injective {φ : P₁ ->ᵃ[k] P₂} (hφ : Function.Injective φ)
+theorem AffineMap.restrict.injective {φ : P₁ →ᵃ[k] P₂} (hφ : Function.Injective φ)
     {E : AffineSubspace k P₁} {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F]
-    (hEF : E.map φ <= F) : Function.Injective (AffineMap.restrict φ hEF) := by
+    (hEF : E.map φ ≤ F) : Function.Injective (AffineMap.restrict φ hEF) := by
   intro x y h
   simp only [Subtype.ext_iff, AffineMap.restrict.coe_apply] at h ⊢
   exact hφ h
-
-/--
-theorem `AffineMap.restrict.surjective` / 定理 `AffineMap.restrict.surjective`
-
-English:
-theorem AffineMap.restrict.surjective
-  statement: (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
-  proof: by
-  rintro ⟨x, hx : x in F⟩
-  rw [← h]; rw [AffineSubspace.mem_map] at hx
-  obtain ⟨y, hy, rfl⟩ := hx
-  exact ⟨⟨y, hy⟩, rfl⟩
-
-中文:
-定理 仿射映射.restrict.surjective
-  结论: (φ : P₁ ->ᵃ[k] P₂) {E : 仿射子空间 k P₁}
-  证明: by
-  rintro ⟨x, hx : x in F⟩
-  rw [← h]; rw [AffineSubspace.mem_map] at hx
-  obtain ⟨y, hy, rfl⟩ := hx
-  exact ⟨⟨y, hy⟩, rfl⟩
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.mem_map, mem_map
+/-
+**AffineMap.restrict.surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AffineMap.restrict.surjective (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
+ {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] (h : E.map φ = F) : Functio
+n.Surjective (AffineMap.restrict φ (le_of_eq h))
+参数：φ : P₁ ->ᵃ[k] P₂；h : E.map φ = F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineSubspace.mem_map`：mem_map {f : P₁ ->ᵃ[k] P₂} {x : P₂} {s : AffineS
+ubspace k P₁} : x in s.map f ↔ exists y in s, f y = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem AffineMap.restrict.surjective (φ : P₁ ->ᵃ[k] P₂) {E : AffineSubspace k P₁}
+theorem AffineMap.restrict.surjective (φ : P₁ →ᵃ[k] P₂) {E : AffineSubspace k P₁}
     {F : AffineSubspace k P₂} [Nonempty E] [Nonempty F] (h : E.map φ = F) :
     Function.Surjective (AffineMap.restrict φ (le_of_eq h)) := by
-  rintro ⟨x, hx : x in F⟩
-  rw [← h]; rw [AffineSubspace.mem_map] at hx
+  rintro ⟨x, hx : x ∈ F⟩
+  rw [← h, AffineSubspace.mem_map] at hx
   obtain ⟨y, hy, rfl⟩ := hx
   exact ⟨⟨y, hy⟩, rfl⟩
-
-/--
-theorem `AffineMap.restrict.bijective` / 定理 `AffineMap.restrict.bijective`
-
-English:
-theorem AffineMap.restrict.bijective
-  statement: {E : AffineSubspace k P₁} [Nonempty E] {φ : P₁ ->ᵃ[k] P₂}
-  proof: ⟨AffineMap.restrict.injective hφ _, AffineMap.restrict.surjective _ rfl⟩
-
-中文:
-定理 仿射映射.restrict.bijective
-  结论: {E : 仿射子空间 k P₁} [非空 E] {φ : P₁ ->ᵃ[k] P₂}
-  证明: ⟨AffineMap.restrict.injective hφ _, AffineMap.restrict.surjective _ rfl⟩
-
-Depends on / 依赖: AffineMap, AffineMap.restrict.injective, AffineMap.restrict.surjective, injective, restrict, surjective
+/-
+**AffineMap.restrict.bijective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AffineMap.restrict.bijective {E : AffineSubspace k P₁} [Nonempty E] {φ : P
+₁ ->ᵃ[k] P₂} (hφ : Function.Injective φ) : Function.Bijective (φ.restrict (le_re
+fl (E.map φ)))
+参数：hφ : Function.Injective φ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `AffineMap.restrict.injective`：AffineMap.restrict.injective {φ : P₁ ->ᵃ[k
+] P₂} (hφ : Function.Injective φ) {E : AffineSubspace k P₁} {F : AffineSubspace 
+k P₂} [Nonempty E]…
+· 使用定理 `AffineMap.restrict.surjective`：AffineMap.restrict.surjective (φ : P₁ ->ᵃ
+[k] P₂) {E : AffineSubspace k P₁} {F : AffineSubspace k P₂} [Nonempty E] [Nonemp
+ty F] (h : E.map φ …
 -/
-theorem AffineMap.restrict.bijective {E : AffineSubspace k P₁} [Nonempty E] {φ : P₁ ->ᵃ[k] P₂}
+theorem AffineMap.restrict.bijective {E : AffineSubspace k P₁} [Nonempty E] {φ : P₁ →ᵃ[k] P₂}
     (hφ : Function.Injective φ) : Function.Bijective (φ.restrict (le_refl (E.map φ))) :=
   ⟨AffineMap.restrict.injective hφ _, AffineMap.restrict.surjective _ rfl⟩
 
 namespace AffineEquiv
 
-/--
-Definition of `affineSubspaceMap` / `affineSubspaceMap` 的定义
+/-- An affine equivalence restricts to an affine equivalence between an affine subspace and its
+image. -/
+/-
+**AffineEquiv.affineSubspaceMap** 是 Mathlib 中的一个定义，位于命名空间 `AffineEquiv`。
+形式化陈述：affineSubspaceMap (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁) [Nonempty s]
+ : s ≃ᵃ[k] s.map e.toAffineMap
+参数：e : P₁ ≃ᵃ[k] P₂；s : AffineSubspace k P₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition affineSubspaceMap
-  signature: (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
-  body: .ofBijective (AffineMap.restrict.bijective e.injective)
-
-@[simp]
-
-中文:
-定义 affineSubspaceMap
-  签名: (e : P₁ ≃ᵃ[k] P₂) (s : 仿射子空间 k P₁)
-  定义体: .ofBijective (AffineMap.restrict.bijective e.injective)
-
-@[simp]
-
-Depends on / 依赖: AffineMap, AffineMap.restrict.bijective, bijective, e.injective, injective, ofBijective, restrict
+--- 原说明 ---
+An affine equivalence restricts to an affine equivalence between an affine subsp
+ace and its
+image.
 -/
 noncomputable def affineSubspaceMap (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
     [Nonempty s] : s ≃ᵃ[k] s.map e.toAffineMap :=
   .ofBijective (AffineMap.restrict.bijective e.injective)
 
 @[simp]
-/--
-theorem `affineSubspaceMap_apply` / 定理 `affineSubspaceMap_apply`
-
-English:
-theorem affineSubspaceMap_apply
-  statement: (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 affineSubspaceMap_apply
-  结论: (e : P₁ ≃ᵃ[k] P₂) (s : 仿射子空间 k P₁)
-  证明: rfl
-
-@[simp]
+/-
+**AffineEquiv.affineSubspaceMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineEquiv`。
+形式化陈述：affineSubspaceMap_apply (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁) [Nonem
+pty s] (x : s) : e.affineSubspaceMap s x = e x
+参数：e : P₁ ≃ᵃ[k] P₂；s : AffineSubspace k P₁；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem affineSubspaceMap_apply (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
     [Nonempty s] (x : s) : e.affineSubspaceMap s x = e x :=
   rfl
 
 @[simp]
-/--
-theorem `affineSubspaceMap_apply_symm_apply` / 定理 `affineSubspaceMap_apply_symm_apply`
-
-English:
-theorem affineSubspaceMap_apply_symm_apply
-  statement: (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
-  proof: congrArg Subtype.val (e.affineSubspaceMap s).apply_symm_apply x
-
-中文:
-定理 affineSubspaceMap_apply_symm_apply
-  结论: (e : P₁ ≃ᵃ[k] P₂) (s : 仿射子空间 k P₁)
-  证明: congrArg Subtype.val (e.affineSubspaceMap s).apply_symm_apply x
-
-Depends on / 依赖: Subtype, Subtype.val, affineSubspaceMap, apply_symm_apply, e.affineSubspaceMap
+/-
+**AffineEquiv.affineSubspaceMap_apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Affi
+neEquiv`。
+形式化陈述：affineSubspaceMap_apply_symm_apply (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k
+ P₁) [Nonempty s] (x : s.map e.toAffineMap) : e ((e.affineSubspaceMap s).symm x)
+ = x
+参数：e : P₁ ≃ᵃ[k] P₂；s : AffineSubspace k P₁；x : s.map e.toAffineMap。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineEquiv.apply_symm_apply`：apply_symm_apply (e : P₁ ≃ᵃ[k] P₂) (p : P₂
+) : e (e.symm p) = p
 -/
 theorem affineSubspaceMap_apply_symm_apply (e : P₁ ≃ᵃ[k] P₂) (s : AffineSubspace k P₁)
     [Nonempty s] (x : s.map e.toAffineMap) : e ((e.affineSubspaceMap s).symm x) = x :=
-congrArg Subtype.val (e.affineSubspaceMap s).apply_symm_apply x
+  congrArg Subtype.val <| (e.affineSubspaceMap s).apply_symm_apply x
 
 end AffineEquiv
+

@@ -16,17 +16,17 @@ public import Mathlib.Tactic.Common
 ## Features
 
 * `TypeVec n` - n-tuples of types
-* `α ⟹ β` - n-tuples of maps
-* `f ⊚ g` - composition
+* `α ⟹ β`    - n-tuples of maps
+* `f ⊚ g`     - composition
 
 Also, support functions for operating with n-tuples of types, such as:
 
-* `append1 α β` - append type `β` to n-tuple `α` to obtain an (n+1)-tuple
-* `drop α` - drops the last element of an (n+1)-tuple
-* `last α` - returns the last element of an (n+1)-tuple
+* `append1 α β`    - append type `β` to n-tuple `α` to obtain an (n+1)-tuple
+* `drop α`         - drops the last element of an (n+1)-tuple
+* `last α`         - returns the last element of an (n+1)-tuple
 * `appendFun f g` - appends a function g to an n-tuple of functions
-* `dropFun f` - drops the last function from an n+1-tuple
-* `lastFun f` - returns the last function of a tuple.
+* `dropFun f`     - drops the last function from an n+1-tuple
+* `lastFun f`     - returns the last function of a tuple.
 
 Since e.g. `append1 α.drop α.last` is propositionally equal to `α` but not definitionally equal
 to it, we need support functions and lemmas to mediate between constructions.
@@ -38,48 +38,40 @@ universe u v w x
 
 /-- n-tuples of types, as a category -/
 @[pp_with_univ]
-/--
-Definition of `TypeVec` / `TypeVec` 的定义
+/-
+**TypeVec** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：TypeVec (n : Nat)
+参数：n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TypeVec
-  signature: (n : Nat)
-  body: Fin2 n -> Type*
-
-中文:
-定义 TypeVec
-  签名: (n : 自然数)
-  定义体: Fin2 n -> Type*
+--- 原说明 ---
+n-tuples of types, as a category
 -/
-def TypeVec (n : Nat) :=
-  Fin2 n -> Type*
-
+def TypeVec (n : ℕ) :=
+  Fin2 n → Type*
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n} : Inhabited (TypeVec.{u} n) :=
   ⟨fun _ => PUnit⟩
 
 namespace TypeVec
 
-variable {n : Nat}
+variable {n : ℕ}
 
-/--
-Definition of `Arrow` / `Arrow` 的定义
+/-- arrow in the category of `TypeVec` -/
+/-
+**TypeVec.Arrow** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：Arrow (α : TypeVec.{u} n) (β : TypeVec.{v} n)
+参数：α : TypeVec.{u} n；β : TypeVec.{v} n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Arrow
-  signature: (α : TypeVec.{u} n) (β : TypeVec.{v} n)
-  body: forall i : Fin2 n, α i -> β i
-
-@[inherit_doc] scoped[MvFunctor] infixl:40 " ⟹ " => TypeVec.Arrow
-
-中文:
-定义 箭头
-  签名: (α : TypeVec.{u} n) (β : TypeVec.{v} n)
-  定义体: forall i : Fin2 n, α i -> β i
-
-@[inherit_doc] scoped[MvFunctor] infixl:40 " ⟹ " => TypeVec.Arrow
+--- 原说明 ---
+arrow in the category of `TypeVec`
 -/
 def Arrow (α : TypeVec.{u} n) (β : TypeVec.{v} n) :=
-  forall i : Fin2 n, α i -> β i
+  ∀ i : Fin2 n, α i → β i
 
 @[inherit_doc] scoped[MvFunctor] infixl:40 " ⟹ " => TypeVec.Arrow
 open MvFunctor
@@ -89,77 +81,54 @@ section
 
 /-- Extensionality for arrows -/
 @[ext]
-/--
-theorem `Arrow.ext` / 定理 `Arrow.ext`
+/-
+**TypeVec.Arrow.ext** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec.Arrow`。
+形式化陈述：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f g : α.Arrow β), (∀ (i
+ : Fin2 n), f i = g i) → f = g
+参数：f g : α.Arrow β；∀ (i : Fin2 n), f i = g i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem Arrow.ext
-  given: (f g : α ⟹ β)
-  proof: by
-  intro h; funext i; apply h
-
-中文:
-定理 箭头.ext
-  条件: (f g : α ⟹ β)
-  证明: by
-  intro h; funext i; apply h
+--- 原说明 ---
+Extensionality for arrows
 -/
 theorem Arrow.ext (f g : α ⟹ β) :
-    (forall i, f i = g i) -> f = g := by
+    (∀ i, f i = g i) → f = g := by
   intro h; funext i; apply h
-
-/--
-Instance `Arrow.inhabited` / 实例 `Arrow.inhabited`
-
-English:
-instance Arrow.inhabited
-  signature: (α β : TypeVec n) [forall i, Inhabited (β i)]
-  body: ⟨fun _ _ => default⟩
-
-中文:
-实例 箭头.inhabited
-  签名: (α β : TypeVec n) [对任意 i, 可居 (β i)]
-  定义体: ⟨fun _ _ => default⟩
+/-
+**TypeVec.Arrow.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.Arrow`。
+形式化陈述：{n : ℕ} → (α : TypeVec.{u_1} n) → (β : TypeVec.{u_2} n) → [(i : Fin2 n) → 
+Inhabited (β i)] → Inhabited (α.Arrow β)
+参数：α : TypeVec.{u_1} n；β : TypeVec.{u_2} n；i : Fin2 n；β i；α.Arrow β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Arrow.inhabited (α β : TypeVec n) [forall i, Inhabited (β i)] : Inhabited (α ⟹ β) :=
+instance Arrow.inhabited (α β : TypeVec n) [∀ i, Inhabited (β i)] : Inhabited (α ⟹ β) :=
   ⟨fun _ _ => default⟩
 
-/--
-Definition of `id` / `id` 的定义
+/-- identity of arrow composition -/
+/-
+**TypeVec.id** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：id {α : TypeVec n} : α ⟹ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: {α : TypeVec n}
-  body: fun _ x => x
-
-中文:
-定义 id
-  签名: {α : TypeVec n}
-  定义体: fun _ x => x
+--- 原说明 ---
+identity of arrow composition
 -/
 def id {α : TypeVec n} : α ⟹ α := fun _ x => x
 
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- arrow composition in the category of `TypeVec` -/
+/-
+**TypeVec.comp** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：comp (g : β ⟹ γ) (f : α ⟹ β) : α ⟹ γ
+参数：g : β ⟹ γ；f : α ⟹ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : β ⟹ γ) (f : α ⟹ β)
-  body: fun i x => g i (f i x)
-
-@[inherit_doc] scoped[MvFunctor] infixr:80 " ⊚ " => TypeVec.comp -- type as \oo
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (g : β ⟹ γ) (f : α ⟹ β)
-  定义体: fun i x => g i (f i x)
-
-@[inherit_doc] scoped[MvFunctor] infixr:80 " ⊚ " => TypeVec.comp -- type as \oo
-
-@[simp]
+--- 原说明 ---
+arrow composition in the category of `TypeVec`
 -/
 def comp (g : β ⟹ γ) (f : α ⟹ β)
     : α ⟹ γ :=
@@ -168,61 +137,32 @@ def comp (g : β ⟹ γ) (f : α ⟹ β)
 @[inherit_doc] scoped[MvFunctor] infixr:80 " ⊚ " => TypeVec.comp -- type as \oo
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : α ⟹ β)
-  statement: id ⊚ f = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : α ⟹ β)
-  结论: id ⊚ f = f
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：id_comp (f : α ⟹ β) : id ⊚ f = f
+参数：f : α ⟹ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_comp (f : α ⟹ β) : id ⊚ f = f :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : α ⟹ β)
-  statement: f ⊚ id = f
-  proof: rfl
-
-中文:
-定理 comp_id
-  条件: (f : α ⟹ β)
-  结论: f ⊚ id = f
-  证明: rfl
-
-Depends on / 依赖: Quotient, c.Quotient
+/-
+**TypeVec.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：comp_id (f : α ⟹ β) : f ⊚ id = f
+参数：f : α ⟹ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_id (f : α ⟹ β) : f ⊚ id = f :=
   rfl
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  proof: rfl
-
-中文:
-定理 comp_assoc
-  证明: rfl
-
-Depends on / 依赖: Decidable, DecidableEq, Quotient, c.Quotient
+/-
+**TypeVec.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：comp_assoc (h : γ ⟹ δ) (g : β ⟹ γ) (f : α ⟹ β) : (h ⊚ g) ⊚ f = h ⊚ g ⊚ f
+参数：h : γ ⟹ δ；g : β ⟹ γ；f : α ⟹ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc
     (h : γ ⟹ δ) (g : β ⟹ γ) (f : α ⟹ β) :
@@ -230,16 +170,15 @@ theorem comp_assoc
   rfl
 end
 
-/--
-Definition of `append1` / `append1` 的定义
+/-- Support for extending a `TypeVec` by one element. -/
+/-
+**TypeVec.append1** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → TypeVec.{u_1} n → Type u_1 → TypeVec.{u_1} (n + 1)
+参数：n + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition append1
-  signature: (α : TypeVec n) (β : Type*)
-
-中文:
-定义 append1
-  签名: (α : TypeVec n) (β : 类型)
+--- 原说明 ---
+Support for extending a `TypeVec` by one element.
 -/
 def append1 (α : TypeVec n) (β : Type*) : TypeVec (n + 1)
   | Fin2.fs i => α i
@@ -247,300 +186,200 @@ def append1 (α : TypeVec n) (β : Type*) : TypeVec (n + 1)
 
 @[inherit_doc] infixl:67 " ::: " => append1
 
-/--
-Definition of `drop` / `drop` 的定义
+/-- retain only a `n-length` prefix of the argument -/
+/-
+**TypeVec.drop** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：drop (α : TypeVec.{u} (n + 1)) : TypeVec n
+参数：α : TypeVec.{u} (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition drop
-  signature: (α : TypeVec.{u} (n + 1))
-  body: fun i => α i.fs
-
-中文:
-定义 drop
-  签名: (α : TypeVec.{u} (n + 1))
-  定义体: fun i => α i.fs
-
-Depends on / 依赖: i.fs
+--- 原说明 ---
+retain only a `n-length` prefix of the argument
 -/
 def drop (α : TypeVec.{u} (n + 1)) : TypeVec n := fun i => α i.fs
 
-/--
-Definition of `last` / `last` 的定义
+/-- take the last value of a `(n+1)-length` vector -/
+/-
+**TypeVec.last** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：last (α : TypeVec.{u} (n + 1)) : Type _
+参数：α : TypeVec.{u} (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition last
-  signature: (α : TypeVec.{u} (n + 1))
-  body: α Fin2.fz
-
-中文:
-定义 last
-  签名: (α : TypeVec.{u} (n + 1))
-  定义体: α Fin2.fz
-
-Depends on / 依赖: Fin2.fz
+--- 原说明 ---
+take the last value of a `(n+1)-length` vector
 -/
 def last (α : TypeVec.{u} (n + 1)) : Type _ :=
   α Fin2.fz
-
-/--
-Instance `last.inhabited` / 实例 `last.inhabited`
-
-English:
-instance last.inhabited
-  signature: (α : TypeVec (n + 1)) [Inhabited (α Fin2.fz)]
-  body: ⟨show α Fin2.fz from default⟩
-
-中文:
-实例 last.inhabited
-  签名: (α : TypeVec (n + 1)) [可居 (α Fin2.fz)]
-  定义体: ⟨show α Fin2.fz from default⟩
-
-Depends on / 依赖: Fin2.fz
+/-
+**TypeVec.last.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.last`。
+形式化陈述：{n : ℕ} → (α : TypeVec.{u_1} (n + 1)) → [Inhabited (α Fin2.fz)] → Inhabite
+d α.last
+参数：α : TypeVec.{u_1} (n + 1)；α Fin2.fz。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance last.inhabited (α : TypeVec (n + 1)) [Inhabited (α Fin2.fz)] : Inhabited (last α) :=
   ⟨show α Fin2.fz from default⟩
-
-/--
-theorem `drop_append1` / 定理 `drop_append1`
-
-English:
-theorem drop_append1
-  given: {α : TypeVec n} {β : Type*} {i : Fin2 n}
-  statement: drop (append1 α β) i = α i
-  proof: rfl
-
-中文:
-定理 drop_append1
-  条件: {α : TypeVec n} {β : 类型} {i : Fin2 n}
-  结论: drop (append1 α β) i = α i
-  证明: rfl
+/-
+**TypeVec.drop_append1** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：drop_append1 {α : TypeVec n} {β : Type*} {i : Fin2 n} : drop (append1 α β)
+ i = α i
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem drop_append1 {α : TypeVec n} {β : Type*} {i : Fin2 n} : drop (append1 α β) i = α i :=
   rfl
-
-/--
-theorem `drop_append1'` / 定理 `drop_append1'`
-
-English:
-theorem drop_append1'
-  given: {α : TypeVec n} {β : Type*}
-  statement: drop (append1 α β) = α
-  proof: funext fun _ => drop_append1
-
-中文:
-定理 drop_append1'
-  条件: {α : TypeVec n} {β : 类型}
-  结论: drop (append1 α β) = α
-  证明: funext fun _ => drop_append1
-
-Depends on / 依赖: drop_append1
+/-
+**TypeVec.drop_append1'** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：drop_append1' {α : TypeVec n} {β : Type*} : drop (append1 α β) = α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `TypeVec.drop_append1`：drop_append1 {α : TypeVec n} {β : Type*} {i : Fin2
+ n} : drop (append1 α β) i = α i
 -/
 theorem drop_append1' {α : TypeVec n} {β : Type*} : drop (append1 α β) = α :=
   funext fun _ => drop_append1
-
-/--
-theorem `last_append1` / 定理 `last_append1`
-
-English:
-theorem last_append1
-  given: {α : TypeVec n} {β : Type*}
-  statement: last (append1 α β) = β
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 last_append1
-  条件: {α : TypeVec n} {β : 类型}
-  结论: last (append1 α β) = β
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.last_append1** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：last_append1 {α : TypeVec n} {β : Type*} : last (append1 α β) = β
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem last_append1 {α : TypeVec n} {β : Type*} : last (append1 α β) = β :=
   rfl
 
 @[simp]
-/--
-theorem `append1_drop_last` / 定理 `append1_drop_last`
-
-English:
-theorem append1_drop_last
-  given: (α : TypeVec (n + 1))
-  statement: append1 (drop α) (last α) = α
-  proof: funext fun i => by cases i <;> rfl
-
-中文:
-定理 append1_drop_last
-  条件: (α : TypeVec (n + 1))
-  结论: append1 (drop α) (last α) = α
-  证明: funext fun i => by cases i <;> rfl
+/-
+**TypeVec.append1_drop_last** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：append1_drop_last (α : TypeVec (n + 1)) : append1 (drop α) (last α) = α
+参数：α : TypeVec (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem append1_drop_last (α : TypeVec (n + 1)) : append1 (drop α) (last α) = α :=
   funext fun i => by cases i <;> rfl
 
 /-- cases on `(n+1)-length` vectors -/
 @[elab_as_elim]
-/--
-Definition of `append1Cases` / `append1Cases` 的定义
+/-
+**TypeVec.append1Cases** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：append1Cases {C : TypeVec (n + 1) -> Sort u} (H : forall α β, C (append1 α
+ β)) (γ) : C γ
+参数：n + 1；H : forall α β, C (append1 α β)；γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition append1Cases
-  signature: {C : TypeVec (n + 1) -> Sort u} (H : forall α β, C (append1 α β)) (γ)
-  body: by
-  rw [← @append1_drop_last _ γ]; apply H
-
-@[simp]
-
-中文:
-定义 append1Cases
-  签名: {C : TypeVec (n + 1) -> 类型层 u} (H : 对任意 α β, C (append1 α β)) (γ)
-  定义体: by
-  rw [← @append1_drop_last _ γ]; apply H
-
-@[simp]
-
-Depends on / 依赖: append1_drop_last
+--- 原说明 ---
+cases on `(n+1)-length` vectors
 -/
-def append1Cases {C : TypeVec (n + 1) -> Sort u} (H : forall α β, C (append1 α β)) (γ) : C γ := by
+def append1Cases {C : TypeVec (n + 1) → Sort u} (H : ∀ α β, C (append1 α β)) (γ) : C γ := by
   rw [← @append1_drop_last _ γ]; apply H
 
 @[simp]
-/--
-theorem `append1_cases_append1` / 定理 `append1_cases_append1`
-
-English:
-theorem append1_cases_append1
-  given: {C : TypeVec (n + 1) -> Sort u} (H : forall α β, C (append1 α β)) (α β)
-  proof: rfl
-
-中文:
-定理 append1_cases_append1
-  条件: {C : TypeVec (n + 1) -> 类型层 u} (H : 对任意 α β, C (append1 α β)) (α β)
-  证明: rfl
+/-
+**TypeVec.append1_cases_append1** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：append1_cases_append1 {C : TypeVec (n + 1) -> Sort u} (H : forall α β, C (
+append1 α β)) (α β) : @append1Cases _ C H (append1 α β) = H α β
+参数：n + 1；H : forall α β, C (append1 α β)；α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem append1_cases_append1 {C : TypeVec (n + 1) -> Sort u} (H : forall α β, C (append1 α β)) (α β) :
+theorem append1_cases_append1 {C : TypeVec (n + 1) → Sort u} (H : ∀ α β, C (append1 α β)) (α β) :
     @append1Cases _ C H (append1 α β) = H α β :=
   rfl
 
-/--
-Definition of `splitFun` / `splitFun` 的定义
+/-- append an arrow and a function for arbitrary source and target type vectors -/
+/-
+**TypeVec.splitFun** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} →   {α : TypeVec.{u_1} (n + 1)} → {α' : TypeVec.{u_2} (n + 1)} → α
+.drop.Arrow α'.drop → (α.last → α'.last) → α.Arrow α'
+参数：n + 1；n + 1；α.last → α'.last。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition splitFun
-  signature: {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α')
-
-中文:
-定义 splitFun
-  签名: {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α')
+--- 原说明 ---
+append an arrow and a function for arbitrary source and target type vectors
 -/
-def splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α') : α ⟹ α'
+def splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α → last α') : α ⟹ α'
   | Fin2.fs i => f i
   | Fin2.fz => g
 
-/--
-Definition of `appendFun` / `appendFun` 的定义
+/-- append an arrow and a function as well as their respective source and target types / typevecs -/
+/-
+**TypeVec.appendFun** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β -> β') : a
+ppend1 α β ⟹ append1 α' β'
+参数：f : α ⟹ α'；g : β -> β'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition appendFun
-  signature: {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β -> β')
-  body: splitFun f g
-
-@[inherit_doc] infixl:0 " ::: " => appendFun
-
-中文:
-定义 appendFun
-  签名: {α α' : TypeVec n} {β β' : 类型} (f : α ⟹ α') (g : β -> β')
-  定义体: splitFun f g
-
-@[inherit_doc] infixl:0 " ::: " => appendFun
-
-Depends on / 依赖: splitFun
+--- 原说明 ---
+append an arrow and a function as well as their respective source and target typ
+es / typevecs
 -/
-def appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β -> β') :
+def appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β → β') :
     append1 α β ⟹ append1 α' β' :=
   splitFun f g
 
 @[inherit_doc] infixl:0 " ::: " => appendFun
 
-/--
-Definition of `dropFun` / `dropFun` 的定义
+/-- split off the prefix of an arrow -/
+/-
+**TypeVec.dropFun** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：dropFun {α β : TypeVec (n + 1)} (f : α ⟹ β) : drop α ⟹ drop β
+参数：n + 1；f : α ⟹ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dropFun
-  signature: {α β : TypeVec (n + 1)} (f : α ⟹ β)
-  body: fun i => f i.fs
-
-中文:
-定义 dropFun
-  签名: {α β : TypeVec (n + 1)} (f : α ⟹ β)
-  定义体: fun i => f i.fs
-
-Depends on / 依赖: i.fs
+--- 原说明 ---
+split off the prefix of an arrow
 -/
 def dropFun {α β : TypeVec (n + 1)} (f : α ⟹ β) : drop α ⟹ drop β := fun i => f i.fs
 
-/--
-Definition of `lastFun` / `lastFun` 的定义
+/-- split off the last function of an arrow -/
+/-
+**TypeVec.lastFun** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：lastFun {α β : TypeVec (n + 1)} (f : α ⟹ β) : last α -> last β
+参数：n + 1；f : α ⟹ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lastFun
-  signature: {α β : TypeVec (n + 1)} (f : α ⟹ β)
-  body: f Fin2.fz
-
-中文:
-定义 lastFun
-  签名: {α β : TypeVec (n + 1)} (f : α ⟹ β)
-  定义体: f Fin2.fz
-
-Depends on / 依赖: Fin2.fz
+--- 原说明 ---
+split off the last function of an arrow
 -/
-def lastFun {α β : TypeVec (n + 1)} (f : α ⟹ β) : last α -> last β :=
+def lastFun {α β : TypeVec (n + 1)} (f : α ⟹ β) : last α → last β :=
   f Fin2.fz
 
-/--
-Definition of `nilFun` / `nilFun` 的定义
+/-- arrow in the category of `0-length` vectors -/
+/-
+**TypeVec.nilFun** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：nilFun {α : TypeVec 0} {β : TypeVec 0} : α ⟹ β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nilFun
-  signature: {α : TypeVec 0} {β : TypeVec 0}
-  body: fun i => by apply Fin2.elim0 i
-
-中文:
-定义 nilFun
-  签名: {α : TypeVec 0} {β : TypeVec 0}
-  定义体: fun i => by apply Fin2.elim0 i
-
-Depends on / 依赖: Fin2.elim0
+--- 原说明 ---
+arrow in the category of `0-length` vectors
 -/
 def nilFun {α : TypeVec 0} {β : TypeVec 0} : α ⟹ β := fun i => by apply Fin2.elim0 i
-
-/--
-theorem `eq_of_drop_last_eq` / 定理 `eq_of_drop_last_eq`
-
-English:
-theorem eq_of_drop_last_eq
-  statement: {α β : TypeVec (n + 1)} {f g : α ⟹ β} (h₀ : dropFun f = dropFun g)
-  proof: by
-  refine funext (fun x => ?_)
-  cases x
-  · apply h₁
-  · apply congr_fun h₀
-
-@[simp]
-
-中文:
-定理 eq_of_drop_last_eq
-  结论: {α β : TypeVec (n + 1)} {f g : α ⟹ β} (h₀ : dropFun f = dropFun g)
-  证明: by
-  refine funext (fun x => ?_)
-  cases x
-  · apply h₁
-  · apply congr_fun h₀
-
-@[simp]
-
-Depends on / 依赖: congr_fun
+/-
+**TypeVec.eq_of_drop_last_eq** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {f g : α ⟹ β} (h₀ : dropFun f =
+ dropFun g) (h₁ : lastFun f = lastFun g) : f = g
+参数：n + 1；h₀ : dropFun f = dropFun g；h₁ : lastFun f = lastFun g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
 -/
 theorem eq_of_drop_last_eq {α β : TypeVec (n + 1)} {f g : α ⟹ β} (h₀ : dropFun f = dropFun g)
     (h₁ : lastFun f = lastFun g) : f = g := by
@@ -550,697 +389,486 @@ theorem eq_of_drop_last_eq {α β : TypeVec (n + 1)} {f g : α ⟹ β} (h₀ : d
   · apply congr_fun h₀
 
 @[simp]
-/--
-theorem `dropFun_splitFun` / 定理 `dropFun_splitFun`
-
-English:
-theorem dropFun_splitFun
-  given: {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α')
-  proof: rfl
-
-中文:
-定理 dropFun_splitFun
-  条件: {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α')
-  证明: rfl
+/-
+**TypeVec.dropFun_splitFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last
+ α -> last α') : dropFun (splitFun f g) = f
+参数：n + 1；f : drop α ⟹ drop α'；g : last α -> last α'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dropFun_splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α') :
+theorem dropFun_splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α → last α') :
     dropFun (splitFun f g) = f :=
   rfl
 
-/--
-Definition of `Arrow.mp` / `Arrow.mp` 的定义
+/-- turn an equality into an arrow -/
+/-
+**TypeVec.Arrow.mp** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.Arrow`。
+形式化陈述：{n : ℕ} → {α β : TypeVec.{u_1} n} → α = β → α.Arrow β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Arrow.mp
-  signature: {α β : TypeVec n} (h : α = β)
-
-中文:
-定义 箭头.mp
-  签名: {α β : TypeVec n} (h : α = β)
+--- 原说明 ---
+turn an equality into an arrow
 -/
 def Arrow.mp {α β : TypeVec n} (h : α = β) : α ⟹ β
   | _ => Eq.mp (congr_fun h _)
 
-/--
-Definition of `Arrow.mpr` / `Arrow.mpr` 的定义
+/-- turn an equality into an arrow, with reverse direction -/
+/-
+**TypeVec.Arrow.mpr** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.Arrow`。
+形式化陈述：{n : ℕ} → {α β : TypeVec.{u_1} n} → α = β → β.Arrow α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Arrow.mpr
-  signature: {α β : TypeVec n} (h : α = β)
-
-中文:
-定义 箭头.mpr
-  签名: {α β : TypeVec n} (h : α = β)
+--- 原说明 ---
+turn an equality into an arrow, with reverse direction
 -/
 def Arrow.mpr {α β : TypeVec n} (h : α = β) : β ⟹ α
   | _ => Eq.mpr (congr_fun h _)
 
-/--
-Definition of `toAppend1DropLast` / `toAppend1DropLast` 的定义
+/-- decompose a vector into its prefix appended with its last element -/
+/-
+**TypeVec.toAppend1DropLast** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：toAppend1DropLast {α : TypeVec (n + 1)} : α ⟹ (drop α ::: last α)
+参数：n + 1。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.append1_drop_last`：append1_drop_last (α : TypeVec (n + 1)) : app
+end1 (drop α) (last α) = α
 
-English:
-definition toAppend1DropLast
-  signature: {α : TypeVec (n + 1)}
-  body: Arrow.mpr (append1_drop_last _)
-
-中文:
-定义 toAppend1DropLast
-  签名: {α : TypeVec (n + 1)}
-  定义体: Arrow.mpr (append1_drop_last _)
-
-Depends on / 依赖: Arrow.mpr, append1_drop_last
+--- 原说明 ---
+decompose a vector into its prefix appended with its last element
 -/
 def toAppend1DropLast {α : TypeVec (n + 1)} : α ⟹ (drop α ::: last α) :=
   Arrow.mpr (append1_drop_last _)
 
-/--
-Definition of `fromAppend1DropLast` / `fromAppend1DropLast` 的定义
+/-- stitch two bits of a vector back together -/
+/-
+**TypeVec.fromAppend1DropLast** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：fromAppend1DropLast {α : TypeVec (n + 1)} : (drop α ::: last α) ⟹ α
+参数：n + 1。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.append1_drop_last`：append1_drop_last (α : TypeVec (n + 1)) : app
+end1 (drop α) (last α) = α
 
-English:
-definition fromAppend1DropLast
-  signature: {α : TypeVec (n + 1)}
-  body: Arrow.mp (append1_drop_last _)
-
-@[simp]
-
-中文:
-定义 fromAppend1DropLast
-  签名: {α : TypeVec (n + 1)}
-  定义体: Arrow.mp (append1_drop_last _)
-
-@[simp]
-
-Depends on / 依赖: Arrow.mp, append1_drop_last
+--- 原说明 ---
+stitch two bits of a vector back together
 -/
 def fromAppend1DropLast {α : TypeVec (n + 1)} : (drop α ::: last α) ⟹ α :=
   Arrow.mp (append1_drop_last _)
 
 @[simp]
-/--
-theorem `lastFun_splitFun` / 定理 `lastFun_splitFun`
-
-English:
-theorem lastFun_splitFun
-  given: {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lastFun_splitFun
-  条件: {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α')
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.lastFun_splitFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last
+ α -> last α') : lastFun (splitFun f g) = g
+参数：n + 1；f : drop α ⟹ drop α'；g : last α -> last α'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lastFun_splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α -> last α') :
+theorem lastFun_splitFun {α α' : TypeVec (n + 1)} (f : drop α ⟹ drop α') (g : last α → last α') :
     lastFun (splitFun f g) = g :=
   rfl
 
 @[simp]
-/--
-theorem `dropFun_appendFun` / 定理 `dropFun_appendFun`
-
-English:
-theorem dropFun_appendFun
-  given: {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β -> β')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_appendFun
-  条件: {α α' : TypeVec n} {β β' : 类型} (f : α ⟹ α') (g : β -> β')
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.dropFun_appendFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β ->
+ β') : dropFun (f ::: g) = f
+参数：f : α ⟹ α'；g : β -> β'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dropFun_appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β -> β') :
+theorem dropFun_appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β → β') :
     dropFun (f ::: g) = f :=
   rfl
 
 @[simp]
-/--
-theorem `lastFun_appendFun` / 定理 `lastFun_appendFun`
-
-English:
-theorem lastFun_appendFun
-  given: {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β -> β')
-  proof: rfl
-
-中文:
-定理 lastFun_appendFun
-  条件: {α α' : TypeVec n} {β β' : 类型} (f : α ⟹ α') (g : β -> β')
-  证明: rfl
+/-
+**TypeVec.lastFun_appendFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β ->
+ β') : lastFun (f ::: g) = g
+参数：f : α ⟹ α'；g : β -> β'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lastFun_appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β -> β') :
+theorem lastFun_appendFun {α α' : TypeVec n} {β β' : Type*} (f : α ⟹ α') (g : β → β') :
     lastFun (f ::: g) = g :=
   rfl
-
-/--
-theorem `split_dropFun_lastFun` / 定理 `split_dropFun_lastFun`
-
-English:
-theorem split_dropFun_lastFun
-  given: {α α' : TypeVec (n + 1)} (f : α ⟹ α')
-  proof: eq_of_drop_last_eq rfl rfl
-
-中文:
-定理 split_dropFun_lastFun
-  条件: {α α' : TypeVec (n + 1)} (f : α ⟹ α')
-  证明: eq_of_drop_last_eq rfl rfl
-
-Depends on / 依赖: eq_of_drop_last_eq
+/-
+**TypeVec.split_dropFun_lastFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：split_dropFun_lastFun {α α' : TypeVec (n + 1)} (f : α ⟹ α') : splitFun (dr
+opFun f) (lastFun f) = f
+参数：n + 1；f : α ⟹ α'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
 -/
 theorem split_dropFun_lastFun {α α' : TypeVec (n + 1)} (f : α ⟹ α') :
     splitFun (dropFun f) (lastFun f) = f :=
   eq_of_drop_last_eq rfl rfl
-
-/--
-theorem `splitFun_inj` / 定理 `splitFun_inj`
-
-English:
-theorem splitFun_inj
-  statement: {α α' : TypeVec (n + 1)} {f f' : drop α ⟹ drop α'} {g g' : last α -> last α'}
-  proof: by
-  rw [← dropFun_splitFun f g]; rw [H]; rw [← lastFun_splitFun f g]; rw [H]; simp
-
-中文:
-定理 splitFun_inj
-  结论: {α α' : TypeVec (n + 1)} {f f' : drop α ⟹ drop α'} {g g' : last α -> last α'}
-  证明: by
-  rw [← dropFun_splitFun f g]; rw [H]; rw [← lastFun_splitFun f g]; rw [H]; simp
-
-Depends on / 依赖: dropFun_splitFun, lastFun_splitFun
+/-
+**TypeVec.splitFun_inj** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：splitFun_inj {α α' : TypeVec (n + 1)} {f f' : drop α ⟹ drop α'} {g g' : la
+st α -> last α'} (H : splitFun f g = splitFun f' g') : f = f' ∧ g = g'
+参数：n + 1；H : splitFun f g = splitFun f' g'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TypeVec.dropFun_splitFun`：dropFun_splitFun {α α' : TypeVec (n + 1)} (f :
+ drop α ⟹ drop α') (g : last α -> last α') : dropFun (splitFun f g) = f
+· 使用定理 `TypeVec.lastFun_splitFun`：lastFun_splitFun {α α' : TypeVec (n + 1)} (f :
+ drop α ⟹ drop α') (g : last α -> last α') : lastFun (splitFun f g) = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-theorem splitFun_inj {α α' : TypeVec (n + 1)} {f f' : drop α ⟹ drop α'} {g g' : last α -> last α'}
+theorem splitFun_inj {α α' : TypeVec (n + 1)} {f f' : drop α ⟹ drop α'} {g g' : last α → last α'}
     (H : splitFun f g = splitFun f' g') : f = f' ∧ g = g' := by
-  rw [← dropFun_splitFun f g]; rw [H]; rw [← lastFun_splitFun f g]; rw [H]; simp
-
-/--
-theorem `appendFun_inj` / 定理 `appendFun_inj`
-
-English:
-theorem appendFun_inj
-  given: {α α' : TypeVec n} {β β' : Type*} {f f' : α ⟹ α'} {g g' : β -> β'}
-  proof: splitFun_inj
-
-中文:
-定理 appendFun_inj
-  条件: {α α' : TypeVec n} {β β' : 类型} {f f' : α ⟹ α'} {g g' : β -> β'}
-  证明: splitFun_inj
-
-Depends on / 依赖: splitFun_inj
+  rw [← dropFun_splitFun f g, H, ← lastFun_splitFun f g, H]; simp
+/-
+**TypeVec.appendFun_inj** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：appendFun_inj {α α' : TypeVec n} {β β' : Type*} {f f' : α ⟹ α'} {g g' : β 
+-> β'} : (f ::: g : (α ::: β) ⟹ _) = (f' ::: g' : (α ::: β) ⟹ _) -> f = f' ∧ g =
+ g'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.splitFun_inj`：splitFun_inj {α α' : TypeVec (n + 1)} {f f' : drop
+ α ⟹ drop α'} {g g' : last α -> last α'} (H : splitFun f g = splitFun f' g') : f
+ = f' ∧ g …
 -/
-theorem appendFun_inj {α α' : TypeVec n} {β β' : Type*} {f f' : α ⟹ α'} {g g' : β -> β'} :
+theorem appendFun_inj {α α' : TypeVec n} {β β' : Type*} {f f' : α ⟹ α'} {g g' : β → β'} :
     (f ::: g : (α ::: β) ⟹ _) = (f' ::: g' : (α ::: β) ⟹ _)
-    -> f = f' ∧ g = g' :=
+    → f = f' ∧ g = g' :=
   splitFun_inj
-
-/--
-theorem `splitFun_comp` / 定理 `splitFun_comp`
-
-English:
-theorem splitFun_comp
-  statement: {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : drop α₀ ⟹ drop α₁)
-  proof: eq_of_drop_last_eq rfl rfl
-
-中文:
-定理 splitFun_comp
-  结论: {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : drop α₀ ⟹ drop α₁)
-  证明: eq_of_drop_last_eq rfl rfl
-
-Depends on / 依赖: eq_of_drop_last_eq
+/-
+**TypeVec.splitFun_comp** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：splitFun_comp {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : drop α₀ ⟹ drop α₁) (f₁ : 
+drop α₁ ⟹ drop α₂) (g₀ : last α₀ -> last α₁) (g₁ : last α₁ -> last α₂) : splitFu
+n (f₁ ⊚ f₀) (g₁ ∘ g₀) = splitFun f₁ g₁ ⊚ splitFun f₀ g₀
+参数：n + 1；f₀ : drop α₀ ⟹ drop α₁；f₁ : drop α₁ ⟹ drop α₂；g₀ : last α₀ -> last α₁；g
+₁ : last α₁ -> last α₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
 -/
 theorem splitFun_comp {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : drop α₀ ⟹ drop α₁)
-    (f₁ : drop α₁ ⟹ drop α₂) (g₀ : last α₀ -> last α₁) (g₁ : last α₁ -> last α₂) :
+    (f₁ : drop α₁ ⟹ drop α₂) (g₀ : last α₀ → last α₁) (g₁ : last α₁ → last α₂) :
     splitFun (f₁ ⊚ f₀) (g₁ ∘ g₀) = splitFun f₁ g₁ ⊚ splitFun f₀ g₀ :=
   eq_of_drop_last_eq rfl rfl
-
-/--
-theorem `appendFun_comp_splitFun` / 定理 `appendFun_comp_splitFun`
-
-English:
-theorem appendFun_comp_splitFun
-  statement: {α γ : TypeVec n} {β δ : Type*} {ε : TypeVec (n + 1)}
-  proof: (splitFun_comp _ _ _ _).symm
-
-中文:
-定理 appendFun_comp_splitFun
-  结论: {α γ : TypeVec n} {β δ : 类型} {ε : TypeVec (n + 1)}
-  证明: (splitFun_comp _ _ _ _).symm
-
-Depends on / 依赖: append1
+/-
+**TypeVec.appendFun_comp_splitFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：appendFun_comp_splitFun {α γ : TypeVec n} {β δ : Type*} {ε : TypeVec (n + 
+1)} (f₀ : drop ε ⟹ α) (f₁ : α ⟹ γ) (g₀ : last ε -> β) (g₁ : β -> δ) : appendFun 
+f₁ g₁ ⊚ splitFun f₀ g₀ = splitFun (α'
+参数：n + 1；f₀ : drop ε ⟹ α；f₁ : α ⟹ γ；g₀ : last ε -> β；g₁ : β -> δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TypeVec.splitFun_comp`：splitFun_comp {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : 
+drop α₀ ⟹ drop α₁) (f₁ : drop α₁ ⟹ drop α₂) (g₀ : last α₀ -> last α₁) (g₁ : last
+ α₁ -> last…
 -/
 theorem appendFun_comp_splitFun {α γ : TypeVec n} {β δ : Type*} {ε : TypeVec (n + 1)}
-    (f₀ : drop ε ⟹ α) (f₁ : α ⟹ γ) (g₀ : last ε -> β) (g₁ : β -> δ) :
+    (f₀ : drop ε ⟹ α) (f₁ : α ⟹ γ) (g₀ : last ε → β) (g₁ : β → δ) :
     appendFun f₁ g₁ ⊚ splitFun f₀ g₀ = splitFun (α' := γ.append1 δ) (f₁ ⊚ f₀) (g₁ ∘ g₀) :=
   (splitFun_comp _ _ _ _).symm
-
-/--
-theorem `appendFun_comp` / 定理 `appendFun_comp`
-
-English:
-theorem appendFun_comp
-  statement: {α₀ α₁ α₂ : TypeVec n}
-  proof: eq_of_drop_last_eq rfl rfl
-
-中文:
-定理 appendFun_comp
-  结论: {α₀ α₁ α₂ : TypeVec n}
-  证明: eq_of_drop_last_eq rfl rfl
-
-Depends on / 依赖: eq_of_drop_last_eq
+/-
+**TypeVec.appendFun_comp** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：appendFun_comp {α₀ α₁ α₂ : TypeVec n} {β₀ β₁ β₂ : Type*} (f₀ : α₀ ⟹ α₁) (f
+₁ : α₁ ⟹ α₂) (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂) : (f₁ ⊚ f₀ ::: g₁ ∘ g₀) = (f₁ ::: g
+₁) ⊚ (f₀ ::: g₀)
+参数：f₀ : α₀ ⟹ α₁；f₁ : α₁ ⟹ α₂；g₀ : β₀ -> β₁；g₁ : β₁ -> β₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
 -/
 theorem appendFun_comp {α₀ α₁ α₂ : TypeVec n}
     {β₀ β₁ β₂ : Type*}
     (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂)
-    (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂) :
+    (g₀ : β₀ → β₁) (g₁ : β₁ → β₂) :
     (f₁ ⊚ f₀ ::: g₁ ∘ g₀) = (f₁ ::: g₁) ⊚ (f₀ ::: g₀) :=
   eq_of_drop_last_eq rfl rfl
-
-/--
-theorem `appendFun_comp'` / 定理 `appendFun_comp'`
-
-English:
-theorem appendFun_comp'
-  statement: {α₀ α₁ α₂ : TypeVec n} {β₀ β₁ β₂ : Type*}
-  proof: eq_of_drop_last_eq rfl rfl
-
-中文:
-定理 appendFun_comp'
-  结论: {α₀ α₁ α₂ : TypeVec n} {β₀ β₁ β₂ : 类型}
-  证明: eq_of_drop_last_eq rfl rfl
-
-Depends on / 依赖: eq_of_drop_last_eq
+/-
+**TypeVec.appendFun_comp'** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：appendFun_comp' {α₀ α₁ α₂ : TypeVec n} {β₀ β₁ β₂ : Type*} (f₀ : α₀ ⟹ α₁) (
+f₁ : α₁ ⟹ α₂) (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂) : (f₁ ::: g₁) ⊚ (f₀ ::: g₀) = (f₁ 
+⊚ f₀ ::: g₁ ∘ g₀)
+参数：f₀ : α₀ ⟹ α₁；f₁ : α₁ ⟹ α₂；g₀ : β₀ -> β₁；g₁ : β₁ -> β₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
 -/
 theorem appendFun_comp' {α₀ α₁ α₂ : TypeVec n} {β₀ β₁ β₂ : Type*}
-    (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂) (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂) :
+    (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂) (g₀ : β₀ → β₁) (g₁ : β₁ → β₂) :
     (f₁ ::: g₁) ⊚ (f₀ ::: g₀) = (f₁ ⊚ f₀ ::: g₁ ∘ g₀) :=
   eq_of_drop_last_eq rfl rfl
-
-/--
-theorem `nilFun_comp` / 定理 `nilFun_comp`
-
-English:
-theorem nilFun_comp
-  given: {α₀ : TypeVec 0} (f₀ : α₀ ⟹ Fin2.elim0)
-  statement: nilFun ⊚ f₀ = f₀
-  proof: funext Fin2.elim0
-
-中文:
-定理 nilFun_comp
-  条件: {α₀ : TypeVec 0} (f₀ : α₀ ⟹ Fin2.elim0)
-  结论: nilFun ⊚ f₀ = f₀
-  证明: funext Fin2.elim0
-
-Depends on / 依赖: Fin2.elim0
+/-
+**TypeVec.nilFun_comp** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：nilFun_comp {α₀ : TypeVec 0} (f₀ : α₀ ⟹ Fin2.elim0) : nilFun ⊚ f₀ = f₀
+参数：f₀ : α₀ ⟹ Fin2.elim0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem nilFun_comp {α₀ : TypeVec 0} (f₀ : α₀ ⟹ Fin2.elim0) : nilFun ⊚ f₀ = f₀ :=
   funext Fin2.elim0
-
-/--
-theorem `appendFun_comp_id` / 定理 `appendFun_comp_id`
-
-English:
-theorem appendFun_comp_id
-  given: {α : TypeVec n} {β₀ β₁ β₂ : Type u} (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂)
-  proof: eq_of_drop_last_eq rfl rfl
-
-@[simp]
-
-中文:
-定理 appendFun_comp_id
-  条件: {α : TypeVec n} {β₀ β₁ β₂ : 类型u} (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂)
-  证明: eq_of_drop_last_eq rfl rfl
-
-@[simp]
-
-Depends on / 依赖: eq_of_drop_last_eq
+/-
+**TypeVec.appendFun_comp_id** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：appendFun_comp_id {α : TypeVec n} {β₀ β₁ β₂ : Type u} (g₀ : β₀ -> β₁) (g₁ 
+: β₁ -> β₂) : (@id _ α ::: g₁ ∘ g₀) = (id ::: g₁) ⊚ (id ::: g₀)
+参数：g₀ : β₀ -> β₁；g₁ : β₁ -> β₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
 -/
-theorem appendFun_comp_id {α : TypeVec n} {β₀ β₁ β₂ : Type u} (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂) :
+theorem appendFun_comp_id {α : TypeVec n} {β₀ β₁ β₂ : Type u} (g₀ : β₀ → β₁) (g₁ : β₁ → β₂) :
     (@id _ α ::: g₁ ∘ g₀) = (id ::: g₁) ⊚ (id ::: g₀) :=
   eq_of_drop_last_eq rfl rfl
 
 @[simp]
-/--
-theorem `dropFun_comp` / 定理 `dropFun_comp`
-
-English:
-theorem dropFun_comp
-  given: {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_comp
-  条件: {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂)
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.dropFun_comp** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_comp {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂) : 
+dropFun (f₁ ⊚ f₀) = dropFun f₁ ⊚ dropFun f₀
+参数：n + 1；f₀ : α₀ ⟹ α₁；f₁ : α₁ ⟹ α₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_comp {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂) :
     dropFun (f₁ ⊚ f₀) = dropFun f₁ ⊚ dropFun f₀ :=
   rfl
 
 @[simp]
-/--
-theorem `lastFun_comp` / 定理 `lastFun_comp`
-
-English:
-theorem lastFun_comp
-  given: {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂)
-  proof: rfl
-
-中文:
-定理 lastFun_comp
-  条件: {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂)
-  证明: rfl
+/-
+**TypeVec.lastFun_comp** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_comp {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂) : 
+lastFun (f₁ ⊚ f₀) = lastFun f₁ ∘ lastFun f₀
+参数：n + 1；f₀ : α₀ ⟹ α₁；f₁ : α₁ ⟹ α₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lastFun_comp {α₀ α₁ α₂ : TypeVec (n + 1)} (f₀ : α₀ ⟹ α₁) (f₁ : α₁ ⟹ α₂) :
     lastFun (f₁ ⊚ f₀) = lastFun f₁ ∘ lastFun f₀ :=
   rfl
-
-/--
-theorem `appendFun_aux` / 定理 `appendFun_aux`
-
-English:
-theorem appendFun_aux
-  given: {α α' : TypeVec n} {β β' : Type*} (f : (α ::: β) ⟹ (α' ::: β'))
-  proof: eq_of_drop_last_eq rfl rfl
-
-中文:
-定理 appendFun_aux
-  条件: {α α' : TypeVec n} {β β' : 类型} (f : (α ::: β) ⟹ (α' ::: β'))
-  证明: eq_of_drop_last_eq rfl rfl
-
-Depends on / 依赖: eq_of_drop_last_eq
+/-
+**TypeVec.appendFun_aux** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：appendFun_aux {α α' : TypeVec n} {β β' : Type*} (f : (α ::: β) ⟹ (α' ::: β
+')) : (dropFun f ::: lastFun f) = f
+参数：f : (α ::: β) ⟹ (α' ::: β')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
 -/
 theorem appendFun_aux {α α' : TypeVec n} {β β' : Type*} (f : (α ::: β) ⟹ (α' ::: β')) :
     (dropFun f ::: lastFun f) = f :=
   eq_of_drop_last_eq rfl rfl
-
-/--
-theorem `appendFun_id_id` / 定理 `appendFun_id_id`
-
-English:
-theorem appendFun_id_id
-  given: {α : TypeVec n} {β : Type*}
-  proof: eq_of_drop_last_eq rfl rfl
-
-中文:
-定理 appendFun_id_id
-  条件: {α : TypeVec n} {β : 类型}
-  证明: eq_of_drop_last_eq rfl rfl
-
-Depends on / 依赖: eq_of_drop_last_eq
+/-
+**TypeVec.appendFun_id_id** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：appendFun_id_id {α : TypeVec n} {β : Type*} : (@TypeVec.id n α ::: @_root_
+.id β) = TypeVec.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
 -/
 theorem appendFun_id_id {α : TypeVec n} {β : Type*} :
     (@TypeVec.id n α ::: @_root_.id β) = TypeVec.id :=
   eq_of_drop_last_eq rfl rfl
-
-/--
-Instance `subsingleton0` / 实例 `subsingleton0`
-
-English:
-instance subsingleton0
-  signature: : Subsingleton (TypeVec 0)
-  body: ⟨fun _ _ => funext Fin2.elim0⟩
-
-中文:
-实例 subsingleton0
-  签名: : 子单例 (TypeVec 0)
-  定义体: ⟨fun _ _ => funext Fin2.elim0⟩
-
-Depends on / 依赖: Fin2.elim0
+/-
+**TypeVec.subsingleton0** 是 Mathlib 中的一个实例，位于命名空间 `TypeVec`。
+形式化陈述：subsingleton0 : Subsingleton (TypeVec 0)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 instance subsingleton0 : Subsingleton (TypeVec 0) :=
   ⟨fun _ _ => funext Fin2.elim0⟩
 
 -- See `Mathlib/Tactic/Attr/Register.lean` for `register_simp_attr typevec`
 
-/--
-Definition of `casesNil` / `casesNil` 的定义
+/-- cases distinction for 0-length type vector -/
+/-
+**TypeVec.casesNil** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{β : TypeVec.{u_2} 0 → Sort u_1} → β Fin2.elim0 → (v : TypeVec.{u_2} 0) → 
+β v
+参数：v : TypeVec.{u_2} 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition casesNil
-  signature: {β : TypeVec 0 -> Sort*} (f : β Fin2.elim0)
-  body: fun v => cast (by congr; funext i; cases i) f
-
-中文:
-定义 casesNil
-  签名: {β : TypeVec 0 -> 类型层*} (f : β Fin2.elim0)
-  定义体: fun v => cast (by congr; funext i; cases i) f
+--- 原说明 ---
+cases distinction for 0-length type vector
 -/
-protected def casesNil {β : TypeVec 0 -> Sort*} (f : β Fin2.elim0) : forall v, β v :=
+protected def casesNil {β : TypeVec 0 → Sort*} (f : β Fin2.elim0) : ∀ v, β v :=
   fun v => cast (by congr; funext i; cases i) f
 
-/--
-Definition of `casesCons` / `casesCons` 的定义
+/-- cases distinction for (n+1)-length type vector -/
+/-
+**TypeVec.casesCons** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：(n : ℕ) →   {β : TypeVec.{u_2} (n + 1) → Sort u_1} →     ((t : Type u_2) →
+ (v : TypeVec.{u_2} n) → β (v ::: t)) → (v : TypeVec.{u_2} (n + 1)) → β v
+参数：t : Type u_2；v : TypeVec.{u_2} n；v ::: t；n + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition casesCons
-  signature: (n : Nat) {β : TypeVec (n + 1) -> Sort*}
-  body: fun v : TypeVec (n + 1) => cast (by simp) (f v.last v.drop)
-
-中文:
-定义 casesCons
-  签名: (n : 自然数) {β : TypeVec (n + 1) -> 类型层*}
-  定义体: fun v : TypeVec (n + 1) => cast (by simp) (f v.last v.drop)
+--- 原说明 ---
+cases distinction for (n+1)-length type vector
 -/
-protected def casesCons (n : Nat) {β : TypeVec (n + 1) -> Sort*}
-    (f : forall (t) (v : TypeVec n), β (v ::: t)) :
-    forall v, β v :=
+protected def casesCons (n : ℕ) {β : TypeVec (n + 1) → Sort*}
+    (f : ∀ (t) (v : TypeVec n), β (v ::: t)) :
+    ∀ v, β v :=
   fun v : TypeVec (n + 1) => cast (by simp) (f v.last v.drop)
-
-/--
-theorem `casesNil_append1` / 定理 `casesNil_append1`
-
-English:
-theorem casesNil_append1
-  given: {β : TypeVec 0 -> Sort*} (f : β Fin2.elim0)
-  proof: rfl
-
-中文:
-定理 casesNil_append1
-  条件: {β : TypeVec 0 -> 类型层*} (f : β Fin2.elim0)
-  证明: rfl
-
-Depends on / 依赖: Quotient, Quotient.map, c.pow
+/-
+**TypeVec.casesNil_append1** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：∀ {β : TypeVec.{u_2} 0 → Sort u_1} (f : β Fin2.elim0), TypeVec.casesNil f 
+Fin2.elim0 = f
+参数：f : β Fin2.elim0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem casesNil_append1 {β : TypeVec 0 -> Sort*} (f : β Fin2.elim0) :
+protected theorem casesNil_append1 {β : TypeVec 0 → Sort*} (f : β Fin2.elim0) :
     TypeVec.casesNil f Fin2.elim0 = f :=
   rfl
-
-/--
-theorem `casesCons_append1` / 定理 `casesCons_append1`
-
-English:
-theorem casesCons_append1
-  statement: (n : Nat) {β : TypeVec (n + 1) -> Sort*}
-  proof: rfl
-
-中文:
-定理 casesCons_append1
-  结论: (n : 自然数) {β : TypeVec (n + 1) -> 类型层*}
-  证明: rfl
+/-
+**TypeVec.casesCons_append1** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：∀ (n : ℕ) {β : TypeVec.{u_2} (n + 1) → Sort u_1} (f : (t : Type u_2) → (v 
+: TypeVec.{u_2} n) → β (v ::: t))   (v : TypeVec.{u_2} n) (α : Type u_2), TypeVe
+c.casesCons n f (v ::: α) = f α v
+参数：n : ℕ；n + 1；f : (t : Type u_2) → (v : TypeVec.{u_2} n) → β (v ::: t)；v : Type
+Vec.{u_2} n；α : Type u_2；v ::: α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem casesCons_append1 (n : Nat) {β : TypeVec (n + 1) -> Sort*}
-    (f : forall (t) (v : TypeVec n), β (v ::: t)) (v : TypeVec n) (α) :
+protected theorem casesCons_append1 (n : ℕ) {β : TypeVec (n + 1) → Sort*}
+    (f : ∀ (t) (v : TypeVec n), β (v ::: t)) (v : TypeVec n) (α) :
     TypeVec.casesCons n f (v ::: α) = f α v :=
   rfl
 
-/--
-Definition of `typevecCasesNil₃` / `typevecCasesNil₃` 的定义
+/-- cases distinction for an arrow in the category of 0-length type vectors -/
+/-
+**TypeVec.typevecCasesNil** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition typevecCasesNil₃
-  signature: {β : forall v v' : TypeVec 0, v ⟹ v' -> Sort*}
-  body: fun v v' fs => by
-  refine cast ?_ f
-  have eq₁ : v = Fin2.elim0 := by funext i; contradiction
-  have eq₂ : v' = Fin2.elim0 := by funext i; contradiction
-  have eq₃ : fs = nilFun := by funext i; contradiction
-  cases eq₁; cases eq₂; cases eq₃; rfl
-
-中文:
-定义 typevecCasesNil₃
-  签名: {β : 对任意 v v' : TypeVec 0, v ⟹ v' -> 类型层*}
-  定义体: fun v v' fs => by
-  refine cast ?_ f
-  have eq₁ : v = Fin2.elim0 := by funext i; contradiction
-  have eq₂ : v' = Fin2.elim0 := by funext i; contradiction
-  have eq₃ : fs = nilFun := by funext i; contradiction
-  cases eq₁; cases eq₂; cases eq₃; rfl
-
-Depends on / 依赖: Fin2.elim0, nilFun
+--- 原说明 ---
+cases distinction for an arrow in the category of 0-length type vectors
 -/
-def typevecCasesNil₃ {β : forall v v' : TypeVec 0, v ⟹ v' -> Sort*}
+def typevecCasesNil₃ {β : ∀ v v' : TypeVec 0, v ⟹ v' → Sort*}
     (f : β Fin2.elim0 Fin2.elim0 nilFun) :
-    forall v v' fs, β v v' fs := fun v v' fs => by
+    ∀ v v' fs, β v v' fs := fun v v' fs => by
   refine cast ?_ f
   have eq₁ : v = Fin2.elim0 := by funext i; contradiction
   have eq₂ : v' = Fin2.elim0 := by funext i; contradiction
   have eq₃ : fs = nilFun := by funext i; contradiction
   cases eq₁; cases eq₂; cases eq₃; rfl
 
-/--
-Definition of `typevecCasesCons₃` / `typevecCasesCons₃` 的定义
+/-- cases distinction for an arrow in the category of (n+1)-length type vectors -/
+/-
+**TypeVec.typevecCasesCons** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition typevecCasesCons₃
-  signature: (n : Nat) {β : forall v v' : TypeVec (n + 1), v ⟹ v' -> Sort*}
-  body: by
-  intro v v'
-  rw [← append1_drop_last v]; rw [← append1_drop_last v']
-  intro fs
-  rw [← split_dropFun_lastFun fs]
-  apply F
-
-中文:
-定义 typevecCasesCons₃
-  签名: (n : 自然数) {β : 对任意 v v' : TypeVec (n + 1), v ⟹ v' -> 类型层*}
-  定义体: by
-  intro v v'
-  rw [← append1_drop_last v]; rw [← append1_drop_last v']
-  intro fs
-  rw [← split_dropFun_lastFun fs]
-  apply F
-
-Depends on / 依赖: append1_drop_last, split_dropFun_lastFun
+--- 原说明 ---
+cases distinction for an arrow in the category of (n+1)-length type vectors
 -/
-def typevecCasesCons₃ (n : Nat) {β : forall v v' : TypeVec (n + 1), v ⟹ v' -> Sort*}
-    (F : forall (t t') (f : t -> t') (v v' : TypeVec n) (fs : v ⟹ v'),
+def typevecCasesCons₃ (n : ℕ) {β : ∀ v v' : TypeVec (n + 1), v ⟹ v' → Sort*}
+    (F : ∀ (t t') (f : t → t') (v v' : TypeVec n) (fs : v ⟹ v'),
     β (v ::: t) (v' ::: t') (fs ::: f)) :
-    forall v v' fs, β v v' fs := by
+    ∀ v v' fs, β v v' fs := by
   intro v v'
-  rw [← append1_drop_last v]; rw [← append1_drop_last v']
+  rw [← append1_drop_last v, ← append1_drop_last v']
   intro fs
   rw [← split_dropFun_lastFun fs]
   apply F
 
-/--
-Definition of `typevecCasesNil₂` / `typevecCasesNil₂` 的定义
+/-- specialized cases distinction for an arrow in the category of 0-length type vectors -/
+/-
+**TypeVec.typevecCasesNil** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition typevecCasesNil₂
-  signature: {β : Fin2.elim0 ⟹ Fin2.elim0 -> Sort*} (f : β nilFun)
-  body: by
+--- 原说明 ---
+specialized cases distinction for an arrow in the category of 0-length type vect
+ors
+-/
+def typevecCasesNil₂ {β : Fin2.elim0 ⟹ Fin2.elim0 → Sort*} (f : β nilFun) : ∀ f, β f := by
   intro g
   suffices g = nilFun by rwa [this]
   ext ⟨⟩
 
-中文:
-定义 typevecCasesNil₂
-  签名: {β : Fin2.elim0 ⟹ Fin2.elim0 -> 类型层*} (f : β nilFun)
-  定义体: by
-  intro g
-  suffices g = nilFun by rwa [this]
-  ext ⟨⟩
+/-- specialized cases distinction for an arrow in the category of (n+1)-length type vectors -/
+/-
+**TypeVec.typevecCasesCons** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: nilFun
+--- 原说明 ---
+specialized cases distinction for an arrow in the category of (n+1)-length type 
+vectors
 -/
-def typevecCasesNil₂ {β : Fin2.elim0 ⟹ Fin2.elim0 -> Sort*} (f : β nilFun) : forall f, β f := by
-  intro g
-  suffices g = nilFun by rwa [this]
-  ext ⟨⟩
-
-/--
-Definition of `typevecCasesCons₂` / `typevecCasesCons₂` 的定义
-
-English:
-definition typevecCasesCons₂
-  signature: (n : Nat) (t t' : Type*) (v v' : TypeVec n)
-  body: by
+def typevecCasesCons₂ (n : ℕ) (t t' : Type*) (v v' : TypeVec n)
+    {β : (v ::: t) ⟹ (v' ::: t') → Sort*}
+    (F : ∀ (f : t → t') (fs : v ⟹ v'), β (fs ::: f)) : ∀ fs, β fs := by
   intro fs
   rw [← split_dropFun_lastFun fs]
   apply F
-
-中文:
-定义 typevecCasesCons₂
-  签名: (n : 自然数) (t t' : 类型) (v v' : TypeVec n)
-  定义体: by
-  intro fs
-  rw [← split_dropFun_lastFun fs]
-  apply F
-
-Depends on / 依赖: split_dropFun_lastFun
+/-
+**TypeVec.typevecCasesNil** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def typevecCasesCons₂ (n : Nat) (t t' : Type*) (v v' : TypeVec n)
-    {β : (v ::: t) ⟹ (v' ::: t') -> Sort*}
-    (F : forall (f : t -> t') (fs : v ⟹ v'), β (fs ::: f)) : forall fs, β fs := by
-  intro fs
-  rw [← split_dropFun_lastFun fs]
-  apply F
-
-
-/--
-theorem `typevecCasesNil₂_appendFun` / 定理 `typevecCasesNil₂_appendFun`
-
-English:
-theorem typevecCasesNil₂_appendFun
-  given: {β : Fin2.elim0 ⟹ Fin2.elim0 -> Sort*} (f : β nilFun)
-  proof: rfl
-
-中文:
-定理 typevecCasesNil₂_appendFun
-  条件: {β : Fin2.elim0 ⟹ Fin2.elim0 -> 类型层*} (f : β nilFun)
-  证明: rfl
--/
-theorem typevecCasesNil₂_appendFun {β : Fin2.elim0 ⟹ Fin2.elim0 -> Sort*} (f : β nilFun) :
+theorem typevecCasesNil₂_appendFun {β : Fin2.elim0 ⟹ Fin2.elim0 → Sort*} (f : β nilFun) :
     typevecCasesNil₂ f nilFun = f :=
   rfl
-
-/--
-theorem `typevecCasesCons₂_appendFun` / 定理 `typevecCasesCons₂_appendFun`
-
-English:
-theorem typevecCasesCons₂_appendFun
-  statement: (n : Nat) (t t' : Type*) (v v' : TypeVec n)
-  proof: rfl
-
-中文:
-定理 typevecCasesCons₂_appendFun
-  结论: (n : 自然数) (t t' : 类型) (v v' : TypeVec n)
-  证明: rfl
+/-
+**TypeVec.typevecCasesCons** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem typevecCasesCons₂_appendFun (n : Nat) (t t' : Type*) (v v' : TypeVec n)
-    {β : (v ::: t) ⟹ (v' ::: t') -> Sort*}
-    (F : forall (f : t -> t') (fs : v ⟹ v'), β (fs ::: f))
+theorem typevecCasesCons₂_appendFun (n : ℕ) (t t' : Type*) (v v' : TypeVec n)
+    {β : (v ::: t) ⟹ (v' ::: t') → Sort*}
+    (F : ∀ (f : t → t') (fs : v ⟹ v'), β (fs ::: f))
     (f fs) :
     typevecCasesCons₂ n t t' v v' F (fs ::: f) = F f fs :=
   rfl
 
 -- for lifting predicates and relations
-/--
-Definition of `PredLast` / `PredLast` 的定义
+/-- `PredLast α p x` predicates `p` of the last element of `x : α.append1 β`. -/
+/-
+**TypeVec.PredLast** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → (α : TypeVec.{u_1} n) → {β : Type u_1} → (β → Prop) → ⦃i : Fin2 
+(n + 1)⦄ → (α ::: β) i → Prop
+参数：α : TypeVec.{u_1} n；β → Prop。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PredLast
-  signature: (α : TypeVec n) {β : Type*} (p : β -> Prop)
-
-中文:
-定义 PredLast
-  签名: (α : TypeVec n) {β : 类型} (p : β -> 命题)
+--- 原说明 ---
+`PredLast α p x` predicates `p` of the last element of `x : α.append1 β`.
 -/
-def PredLast (α : TypeVec n) {β : Type*} (p : β -> Prop) : forall ⦃i⦄, (α.append1 β) i -> Prop
+def PredLast (α : TypeVec n) {β : Type*} (p : β → Prop) : ∀ ⦃i⦄, (α.append1 β) i → Prop
   | Fin2.fs _ => fun _ => True
   | Fin2.fz => p
 
-/--
-Definition of `RelLast` / `RelLast` 的定义
+/-- `RelLast α r x y` says that `p` the last elements of `x y : α.append1 β` are related by `r` and
+all the other elements are equal. -/
+/-
+**TypeVec.RelLast** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → (α : TypeVec.{u} n) → {β γ : Type u} → (β → γ → Prop) → ⦃i : Fin
+2 (n + 1)⦄ → (α ::: β) i → (α ::: γ) i → Prop
+参数：α : TypeVec.{u} n；β → γ → Prop。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RelLast
-  signature: (α : TypeVec n) {β γ : Type u} (r : β -> γ -> Prop)
-
-中文:
-定义 RelLast
-  签名: (α : TypeVec n) {β γ : 类型u} (r : β -> γ -> 命题)
+--- 原说明 ---
+`RelLast α r x y` says that `p` the last elements of `x y : α.append1 β` are rel
+ated by `r` and
+all the other elements are equal.
 -/
-def RelLast (α : TypeVec n) {β γ : Type u} (r : β -> γ -> Prop) :
-    forall ⦃i⦄, (α.append1 β) i -> (α.append1 γ) i -> Prop
+def RelLast (α : TypeVec n) {β γ : Type u} (r : β → γ → Prop) :
+    ∀ ⦃i⦄, (α.append1 β) i → (α.append1 γ) i → Prop
   | Fin2.fs _ => Eq
   | Fin2.fz => r
 
@@ -1248,327 +876,254 @@ section Liftp'
 
 open Nat
 
-/--
-Definition of `«repeat»` / `«repeat»` 的定义
+/-- `repeat n t` is a `n-length` type vector that contains `n` occurrences of `t` -/
+/-
+**TypeVec.** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition «repeat»
-  signature: : forall (n : Nat), Type u -> TypeVec n
-
-中文:
-定义 «repeat»
-  签名: : 对任意 (n : 自然数), 类型u -> TypeVec n
+--- 原说明 ---
+`repeat n t` is a `n-length` type vector that contains `n` occurrences of `t`
 -/
-def «repeat» : forall (n : Nat), Type u -> TypeVec n
+def «repeat» : ∀ (n : ℕ), Type u → TypeVec n
   | 0, _ => Fin2.elim0
   | Nat.succ i, t => append1 («repeat» i t) t
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- `prod α β` is the pointwise product of the components of `α` and `β` -/
+/-
+**TypeVec.prod** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → TypeVec.{u} n → TypeVec.{u} n → TypeVec.{u} n
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: : forall {n}, TypeVec.{u} n -> TypeVec.{u} n -> TypeVec n
-
-中文:
-定义 乘积
-  签名: : 对任意 {n}, TypeVec.{u} n -> TypeVec.{u} n -> TypeVec n
+--- 原说明 ---
+`prod α β` is the pointwise product of the components of `α` and `β`
 -/
-def prod : forall {n}, TypeVec.{u} n -> TypeVec.{u} n -> TypeVec n
+def prod : ∀ {n}, TypeVec.{u} n → TypeVec.{u} n → TypeVec n
   | 0, _, _ => Fin2.elim0
   | n + 1, α, β => (@prod n (drop α) (drop β)) ::: (last α × last β)
 
-@[inherit_doc] scoped[MvFunctor] infixl:45 " otimes " => TypeVec.prod
+@[inherit_doc] scoped[MvFunctor] infixl:45 " ⊗ " => TypeVec.prod
 
-/--
-Definition of `const` / `const` 的定义
+/-- `const x α` is an arrow that ignores its source and constructs a `TypeVec` that
+contains nothing but `x` -/
+/-
+**TypeVec.const** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{β : Type u_1} → β → {n : ℕ} → (α : TypeVec.{u_2} n) → α.Arrow (TypeVec.re
+peat n β)
+参数：α : TypeVec.{u_2} n；TypeVec.repeat n β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: {β} (x : β)
-
-中文:
-定义 const
-  签名: {β} (x : β)
+--- 原说明 ---
+`const x α` is an arrow that ignores its source and constructs a `TypeVec` that
+contains nothing but `x`
 -/
-protected def const {β} (x : β) : forall {n} (α : TypeVec n), α ⟹ «repeat» _ β
+protected def const {β} (x : β) : ∀ {n} (α : TypeVec n), α ⟹ «repeat» _ β
   | succ _, α, Fin2.fs _ => TypeVec.const x (drop α) _
   | succ _, _, Fin2.fz => fun _ => x
 
 open Function (uncurry)
 
-/--
-Definition of `repeatEq` / `repeatEq` 的定义
+/-- vector of equality on a product of vectors -/
+/-
+**TypeVec.repeatEq** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → (α : TypeVec.{u_1} n) → (α.prod α).Arrow (TypeVec.repeat n Prop)
+参数：α : TypeVec.{u_1} n；α.prod α；TypeVec.repeat n Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition repeatEq
-  signature: : forall {n} (α : TypeVec n), (α otimes α) ⟹ «repeat» _ Prop
-
-中文:
-定义 repeatEq
-  签名: : 对任意 {n} (α : TypeVec n), (α otimes α) ⟹ «repeat» _ 命题
+--- 原说明 ---
+vector of equality on a product of vectors
 -/
-def repeatEq : forall {n} (α : TypeVec n), (α otimes α) ⟹ «repeat» _ Prop
+def repeatEq : ∀ {n} (α : TypeVec n), (α ⊗ α) ⟹ «repeat» _ Prop
   | 0, _ => nilFun
   | succ _, α => repeatEq (drop α) ::: uncurry Eq
-
-/--
-theorem `const_append1` / 定理 `const_append1`
-
-English:
-theorem const_append1
-  given: {β γ} (x : γ) {n} (α : TypeVec n)
-  proof: by
-  ext i : 1; cases i <;> rfl
-
-中文:
-定理 const_append1
-  条件: {β γ} (x : γ) {n} (α : TypeVec n)
-  证明: by
-  ext i : 1; cases i <;> rfl
+/-
+**TypeVec.const_append1** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：const_append1 {β γ} (x : γ) {n} (α : TypeVec n) : TypeVec.const x (α ::: β
+) = appendFun (TypeVec.const x α) fun _ => x
+参数：x : γ；α : TypeVec n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem const_append1 {β γ} (x : γ) {n} (α : TypeVec n) :
     TypeVec.const x (α ::: β) = appendFun (TypeVec.const x α) fun _ => x := by
   ext i : 1; cases i <;> rfl
-
-/--
-theorem `eq_nilFun` / 定理 `eq_nilFun`
-
-English:
-theorem eq_nilFun
-  given: {α β : TypeVec 0} (f : α ⟹ β)
-  statement: f = nilFun
-  proof: by
-  ext x; cases x
-
-中文:
-定理 eq_nilFun
-  条件: {α β : TypeVec 0} (f : α ⟹ β)
-  结论: f = nilFun
-  证明: by
-  ext x; cases x
+/-
+**TypeVec.eq_nilFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：eq_nilFun {α β : TypeVec 0} (f : α ⟹ β) : f = nilFun
+参数：f : α ⟹ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem eq_nilFun {α β : TypeVec 0} (f : α ⟹ β) : f = nilFun := by
   ext x; cases x
-
-/--
-theorem `id_eq_nilFun` / 定理 `id_eq_nilFun`
-
-English:
-theorem id_eq_nilFun
-  given: {α : TypeVec 0}
-  statement: @id _ α = nilFun
-  proof: by
-  ext x; cases x
-
-中文:
-定理 id_eq_nilFun
-  条件: {α : TypeVec 0}
-  结论: @id _ α = nilFun
-  证明: by
-  ext x; cases x
+/-
+**TypeVec.id_eq_nilFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：id_eq_nilFun {α : TypeVec 0} : @id _ α = nilFun
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem id_eq_nilFun {α : TypeVec 0} : @id _ α = nilFun := by
   ext x; cases x
-
-/--
-theorem `const_nil` / 定理 `const_nil`
-
-English:
-theorem const_nil
-  given: {β} (x : β) (α : TypeVec 0)
-  statement: TypeVec.const x α = nilFun
-  proof: by
-  ext i : 1; cases i
-
-@[typevec]
-
-中文:
-定理 const_nil
-  条件: {β} (x : β) (α : TypeVec 0)
-  结论: TypeVec.const x α = nilFun
-  证明: by
-  ext i : 1; cases i
-
-@[typevec]
+/-
+**TypeVec.const_nil** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：const_nil {β} (x : β) (α : TypeVec 0) : TypeVec.const x α = nilFun
+参数：x : β；α : TypeVec 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem const_nil {β} (x : β) (α : TypeVec 0) : TypeVec.const x α = nilFun := by
   ext i : 1; cases i
 
 @[typevec]
-/--
-theorem `repeat_eq_append1` / 定理 `repeat_eq_append1`
-
-English:
-theorem repeat_eq_append1
-  given: {β} {n} (α : TypeVec n)
-  proof: by
-  induction n <;> rfl
-
-@[typevec]
-
-中文:
-定理 repeat_eq_append1
-  条件: {β} {n} (α : TypeVec n)
-  证明: by
-  induction n <;> rfl
-
-@[typevec]
-
-Depends on / 依赖: otimes
+/-
+**TypeVec.repeat_eq_append1** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：repeat_eq_append1 {β} {n} (α : TypeVec n) : repeatEq (α ::: β) = splitFun 
+(α
+参数：α : TypeVec n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem repeat_eq_append1 {β} {n} (α : TypeVec n) :
-    repeatEq (α ::: β) = splitFun (α := (α otimes α) ::: _)
+    repeatEq (α ::: β) = splitFun (α := (α ⊗ α) ::: _)
     (α' := («repeat» n Prop) ::: _) (repeatEq α) (uncurry Eq) := by
   induction n <;> rfl
 
 @[typevec]
-/--
-theorem `repeat_eq_nil` / 定理 `repeat_eq_nil`
-
-English:
-theorem repeat_eq_nil
-  given: (α : TypeVec 0)
-  statement: repeatEq α = nilFun
-  proof: by ext i; cases i
-
-中文:
-定理 repeat_eq_nil
-  条件: (α : TypeVec 0)
-  结论: repeatEq α = nilFun
-  证明: by ext i; cases i
+/-
+**TypeVec.repeat_eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：repeat_eq_nil (α : TypeVec 0) : repeatEq α = nilFun
+参数：α : TypeVec 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem repeat_eq_nil (α : TypeVec 0) : repeatEq α = nilFun := by ext i; cases i
 
-/--
-Definition of `PredLast'` / `PredLast'` 的定义
+/-- predicate on a type vector to constrain only the last object -/
+/-
+**TypeVec.PredLast'** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：PredLast' (α : TypeVec n) {β : Type*} (p : β -> Prop) : (α ::: β) ⟹ «repea
+t» (n + 1) Prop
+参数：α : TypeVec n；p : β -> Prop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PredLast'
-  signature: (α : TypeVec n) {β : Type*} (p : β -> Prop)
-  body: splitFun (TypeVec.const True α) p
-
-中文:
-定义 PredLast'
-  签名: (α : TypeVec n) {β : 类型} (p : β -> 命题)
-  定义体: splitFun (TypeVec.const True α) p
-
-Depends on / 依赖: TypeVec, TypeVec.const, splitFun
+--- 原说明 ---
+predicate on a type vector to constrain only the last object
 -/
-def PredLast' (α : TypeVec n) {β : Type*} (p : β -> Prop) :
+def PredLast' (α : TypeVec n) {β : Type*} (p : β → Prop) :
     (α ::: β) ⟹ «repeat» (n + 1) Prop :=
   splitFun (TypeVec.const True α) p
 
-/--
-Definition of `RelLast'` / `RelLast'` 的定义
+/-- predicate on the product of two type vectors to constrain only their last object -/
+/-
+**TypeVec.RelLast'** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：RelLast' (α : TypeVec n) {β : Type*} (p : β -> β -> Prop) : (α ::: β) otim
+es (α ::: β) ⟹ «repeat» (n + 1) Prop
+参数：α : TypeVec n；p : β -> β -> Prop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RelLast'
-  signature: (α : TypeVec n) {β : Type*} (p : β -> β -> Prop)
-  body: splitFun (repeatEq α) (uncurry p)
-
-中文:
-定义 RelLast'
-  签名: (α : TypeVec n) {β : 类型} (p : β -> β -> 命题)
-  定义体: splitFun (repeatEq α) (uncurry p)
-
-Depends on / 依赖: repeatEq, splitFun, uncurry
+--- 原说明 ---
+predicate on the product of two type vectors to constrain only their last object
 -/
-def RelLast' (α : TypeVec n) {β : Type*} (p : β -> β -> Prop) :
-    (α ::: β) otimes (α ::: β) ⟹ «repeat» (n + 1) Prop :=
+def RelLast' (α : TypeVec n) {β : Type*} (p : β → β → Prop) :
+    (α ::: β) ⊗ (α ::: β) ⟹ «repeat» (n + 1) Prop :=
   splitFun (repeatEq α) (uncurry p)
 
-/--
-Definition of `Curry` / `Curry` 的定义
+/-- given `F : TypeVec.{u} (n+1) → Type u`, `curry F : Type u → TypeVec.{u} → Type u`,
+i.e. its first argument can be fed in separately from the rest of the vector of arguments -/
+/-
+**TypeVec.Curry** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：Curry (F : TypeVec.{u} (n + 1) -> Type*) (α : Type u) (β : TypeVec.{u} n) 
+: Type _
+参数：F : TypeVec.{u} (n + 1) -> Type*；α : Type u；β : TypeVec.{u} n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Curry
-  signature: (F : TypeVec.{u} (n + 1) -> Type*) (α : Type u) (β : TypeVec.{u} n)
-  body: F (β ::: α)
-
-中文:
-定义 Curry
-  签名: (F : TypeVec.{u} (n + 1) -> 类型) (α : 类型u) (β : TypeVec.{u} n)
-  定义体: F (β ::: α)
+--- 原说明 ---
+given `F : TypeVec.{u} (n+1) → Type u`, `curry F : Type u → TypeVec.{u} → Type u
+`,
+i.e. its first argument can be fed in separately from the rest of the vector of 
+arguments
 -/
-def Curry (F : TypeVec.{u} (n + 1) -> Type*) (α : Type u) (β : TypeVec.{u} n) : Type _ :=
+def Curry (F : TypeVec.{u} (n + 1) → Type*) (α : Type u) (β : TypeVec.{u} n) : Type _ :=
   F (β ::: α)
-
-/--
-Instance `Curry.inhabited` / 实例 `Curry.inhabited`
-
-English:
-instance Curry.inhabited
-  signature: (F : TypeVec.{u} (n + 1) -> Type*) (α : Type u) (β : TypeVec.{u} n)
-  body: I
-
-中文:
-实例 Curry.inhabited
-  签名: (F : TypeVec.{u} (n + 1) -> 类型) (α : 类型u) (β : TypeVec.{u} n)
-  定义体: I
+/-
+**TypeVec.Curry.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.Curry`。
+形式化陈述：{n : ℕ} →   (F : TypeVec.{u} (n + 1) → Type u_1) →     (α : Type u) → (β :
+ TypeVec.{u} n) → [I : Inhabited (F (β ::: α))] → Inhabited (TypeVec.Curry F α β
+)
+参数：F : TypeVec.{u} (n + 1) → Type u_1；α : Type u；β : TypeVec.{u} n；F (β ::: α)；T
+ypeVec.Curry F α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Curry.inhabited (F : TypeVec.{u} (n + 1) -> Type*) (α : Type u) (β : TypeVec.{u} n)
+instance Curry.inhabited (F : TypeVec.{u} (n + 1) → Type*) (α : Type u) (β : TypeVec.{u} n)
     [I : Inhabited (F <| (β ::: α))] : Inhabited (Curry F α β) :=
   I
 
-/--
-Definition of `dropRepeat` / `dropRepeat` 的定义
+/-- arrow to remove one element of a `repeat` vector -/
+/-
+**TypeVec.dropRepeat** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：(α : Type u_1) → {n : ℕ} → (TypeVec.repeat n.succ α).drop.Arrow (TypeVec.r
+epeat n α)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dropRepeat
-  signature: (α : Type*)
-
-中文:
-定义 dropRepeat
-  签名: (α : 类型)
+--- 原说明 ---
+arrow to remove one element of a `repeat` vector
 -/
-def dropRepeat (α : Type*) : forall {n}, drop («repeat» (succ n) α) ⟹ «repeat» n α
+def dropRepeat (α : Type*) : ∀ {n}, drop («repeat» (succ n) α) ⟹ «repeat» n α
   | succ _, Fin2.fs i => dropRepeat α i
   | succ _, Fin2.fz => fun (a : α) => a
 
-/--
-Definition of `ofRepeat` / `ofRepeat` 的定义
+/-- projection for a repeat vector -/
+/-
+**TypeVec.ofRepeat** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{α : Type u_1} → {n : ℕ} → {i : Fin2 n} → TypeVec.repeat n α i → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRepeat
-  signature: {α : Sort _}
-
-中文:
-定义 ofRepeat
-  签名: {α : 类型层 _}
-
-Depends on / 依赖: c.eq
+--- 原说明 ---
+projection for a repeat vector
 -/
-def ofRepeat {α : Sort _} : forall {n i}, «repeat» n α i -> α
+def ofRepeat {α : Sort _} : ∀ {n i}, «repeat» n α i → α
   | _, Fin2.fz => fun (a : α) => a
   | _, Fin2.fs i => @ofRepeat _ _ i
-
-/--
-theorem `const_iff_true` / 定理 `const_iff_true`
-
-English:
-theorem const_iff_true
-  given: {α : TypeVec n} {i x p}
-  statement: ofRepeat (TypeVec.const p α i x) ↔ p
-  proof: by
-  induction i with
-  | fz => rfl
-  | fs _ ih =>
-    rw [TypeVec.const]
-    exact ih
-
-中文:
-定理 const_iff_true
-  条件: {α : TypeVec n} {i x p}
-  结论: ofRepeat (TypeVec.const p α i x) ↔ p
-  证明: by
-  induction i with
-  | fz => rfl
-  | fs _ ih =>
-    rw [TypeVec.const]
-    exact ih
-
-Depends on / 依赖: Quotient, Quotient.mk, TypeVec, TypeVec.const, _surjective
+/-
+**TypeVec.const_iff_true** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：const_iff_true {α : TypeVec n} {i x p} : ofRepeat (TypeVec.const p α i x) 
+↔ p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TypeVec.const.eq_1`：∀ {β : Type u_1} (x : β) (n : ℕ) (α : TypeVec.{u_2} 
+n.succ) (a : Fin2 n),   TypeVec.const x α a.fs =     match (motive := (x : ℕ) → 
+(x_1 : T…
 -/
 theorem const_iff_true {α : TypeVec n} {i x p} : ofRepeat (TypeVec.const p α i x) ↔ p := by
   induction i with
@@ -1579,65 +1134,59 @@ theorem const_iff_true {α : TypeVec n} {i x p} : ofRepeat (TypeVec.const p α i
 
 section
 
-/--
-Definition of `prod.fst` / `prod.fst` 的定义
+/-- left projection of a `prod` vector -/
+/-
+**TypeVec.prod.fst** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.prod`。
+形式化陈述：{n : ℕ} → {α β : TypeVec.{u} n} → (α.prod β).Arrow α
+参数：α.prod β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.fst
-  signature: : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ α
-
-中文:
-定义 乘积.fst
-  签名: : 对任意 {n} {α β : TypeVec.{u} n}, α otimes β ⟹ α
+--- 原说明 ---
+left projection of a `prod` vector
 -/
-def prod.fst : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ α
+def prod.fst : ∀ {n} {α β : TypeVec.{u} n}, α ⊗ β ⟹ α
   | succ _, α, β, Fin2.fs i => @prod.fst _ (drop α) (drop β) i
   | succ _, _, _, Fin2.fz => Prod.fst
 
-/--
-Definition of `prod.snd` / `prod.snd` 的定义
+/-- right projection of a `prod` vector -/
+/-
+**TypeVec.prod.snd** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.prod`。
+形式化陈述：{n : ℕ} → {α β : TypeVec.{u} n} → (α.prod β).Arrow β
+参数：α.prod β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.snd
-  signature: : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ β
-
-中文:
-定义 乘积.snd
-  签名: : 对任意 {n} {α β : TypeVec.{u} n}, α otimes β ⟹ β
+--- 原说明 ---
+right projection of a `prod` vector
 -/
-def prod.snd : forall {n} {α β : TypeVec.{u} n}, α otimes β ⟹ β
+def prod.snd : ∀ {n} {α β : TypeVec.{u} n}, α ⊗ β ⟹ β
   | succ _, α, β, Fin2.fs i => @prod.snd _ (drop α) (drop β) i
   | succ _, _, _, Fin2.fz => Prod.snd
 
-/--
-Definition of `prod.diag` / `prod.diag` 的定义
+/-- introduce a product where both components are the same -/
+/-
+**TypeVec.prod.diag** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.prod`。
+形式化陈述：{n : ℕ} → {α : TypeVec.{u} n} → α.Arrow (α.prod α)
+参数：α.prod α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.diag
-  signature: : forall {n} {α : TypeVec.{u} n}, α ⟹ α otimes α
-
-中文:
-定义 乘积.diag
-  签名: : 对任意 {n} {α : TypeVec.{u} n}, α ⟹ α otimes α
+--- 原说明 ---
+introduce a product where both components are the same
 -/
-def prod.diag : forall {n} {α : TypeVec.{u} n}, α ⟹ α otimes α
+def prod.diag : ∀ {n} {α : TypeVec.{u} n}, α ⟹ α ⊗ α
   | succ _, α, Fin2.fs _, x => @prod.diag _ (drop α) _ x
   | succ _, _, Fin2.fz, x => (x, x)
 
-/--
-Definition of `prod.mk` / `prod.mk` 的定义
+/-- constructor for `prod` -/
+/-
+**TypeVec.prod.mk** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.prod`。
+形式化陈述：{n : ℕ} → {α β : TypeVec.{u} n} → (i : Fin2 n) → α i → β i → α.prod β i
+参数：i : Fin2 n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.mk
-  signature: : forall {n} {α β : TypeVec.{u} n} (i : Fin2 n), α i -> β i -> (α otimes β) i
-
-中文:
-定义 乘积.mk
-  签名: : 对任意 {n} {α β : TypeVec.{u} n} (i : Fin2 n), α i -> β i -> (α otimes β) i
-
-Depends on / 依赖: i.fs
+--- 原说明 ---
+constructor for `prod`
 -/
-def prod.mk : forall {n} {α β : TypeVec.{u} n} (i : Fin2 n), α i -> β i -> (α otimes β) i
+def prod.mk : ∀ {n} {α β : TypeVec.{u} n} (i : Fin2 n), α i → β i → (α ⊗ β) i
   | succ _, α, β, Fin2.fs i => mk (α := fun i => α i.fs) (β := fun i => β i.fs) i
   | succ _, _, _, Fin2.fz => Prod.mk
 
@@ -1646,26 +1195,26 @@ end
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `prod_fst_mk` / 定理 `prod_fst_mk`
-
-English:
-theorem prod_fst_mk
-  given: {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i)
-  proof: by
-  induction i with
-  | fz => simp_all only [prod.fst, prod.mk]
-  | fs _ i_ih => apply i_ih
-
-中文:
-定理 prod_fst_mk
-  条件: {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i)
-  证明: by
-  induction i with
-  | fz => simp_all only [prod.fst, prod.mk]
-  | fs _ i_ih => apply i_ih
-
-Depends on / 依赖: i_ih, prod.fst, prod.mk
+/-
+**TypeVec.prod_fst_mk** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：prod_fst_mk {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i) : TypeVec.p
+rod.fst i (prod.mk i a b) = a
+参数：i : Fin2 n；a : α i；b : β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TypeVec.prod.mk.eq_2`：∀ (n : ℕ) (x_4 x_5 : TypeVec.{u} n.succ), TypeVec.
+prod.mk Fin2.fz = Prod.mk
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `TypeVec.prod.fst.eq_2`：∀ (n : ℕ) (x_4 x_5 : TypeVec.{u} n.succ), TypeVec
+.prod.fst Fin2.fz = Prod.fst
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prod_fst_mk {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i) :
     TypeVec.prod.fst i (prod.mk i a b) = a := by
@@ -1675,26 +1224,26 @@ theorem prod_fst_mk {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `prod_snd_mk` / 定理 `prod_snd_mk`
-
-English:
-theorem prod_snd_mk
-  given: {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i)
-  proof: by
-  induction i with
-  | fz => simp_all [prod.snd, prod.mk]
-  | fs _ i_ih => apply i_ih
-
-中文:
-定理 prod_snd_mk
-  条件: {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i)
-  证明: by
-  induction i with
-  | fz => simp_all [prod.snd, prod.mk]
-  | fs _ i_ih => apply i_ih
-
-Depends on / 依赖: i_ih, prod.mk, prod.snd
+/-
+**TypeVec.prod_snd_mk** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：prod_snd_mk {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i) : TypeVec.p
+rod.snd i (prod.mk i a b) = b
+参数：i : Fin2 n；a : α i；b : β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TypeVec.prod.mk.eq_2`：∀ (n : ℕ) (x_4 x_5 : TypeVec.{u} n.succ), TypeVec.
+prod.mk Fin2.fz = Prod.mk
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `TypeVec.prod.snd.eq_2`：∀ (n : ℕ) (x_4 x_5 : TypeVec.{u} n.succ), TypeVec
+.prod.snd Fin2.fz = Prod.snd
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prod_snd_mk {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i) :
     TypeVec.prod.snd i (prod.mk i a b) = b := by
@@ -1702,160 +1251,90 @@ theorem prod_snd_mk {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i) :
   | fz => simp_all [prod.snd, prod.mk]
   | fs _ i_ih => apply i_ih
 
-/--
-Definition of `prod.map` / `prod.map` 的定义
+/-- `prod` is functorial -/
+/-
+**TypeVec.prod.map** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec.prod`。
+形式化陈述：{n : ℕ} → {α α' β β' : TypeVec.{u} n} → α.Arrow β → α'.Arrow β' → (α.prod 
+α').Arrow (β.prod β')
+参数：α.prod α'；β.prod β'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.map
-  signature: : forall {n} {α α' β β' : TypeVec.{u} n}, α ⟹ β -> α' ⟹ β' -> α otimes α' ⟹ β otimes β'
-
-中文:
-定义 乘积.map
-  签名: : 对任意 {n} {α α' β β' : TypeVec.{u} n}, α ⟹ β -> α' ⟹ β' -> α otimes α' ⟹ β otimes β'
+--- 原说明 ---
+`prod` is functorial
 -/
-protected def prod.map : forall {n} {α α' β β' : TypeVec.{u} n}, α ⟹ β -> α' ⟹ β' -> α otimes α' ⟹ β otimes β'
+protected def prod.map : ∀ {n} {α α' β β' : TypeVec.{u} n}, α ⟹ β → α' ⟹ β' → α ⊗ α' ⟹ β ⊗ β'
   | succ _, α, α', β, β', x, y, Fin2.fs _, a =>
     @prod.map _ (drop α) (drop α') (drop β) (drop β') (dropFun x) (dropFun y) _ a
   | succ _, _, _, _, _, x, y, Fin2.fz, a => (x _ a.1, y _ a.2)
 
 
 
-@[inherit_doc] scoped[MvFunctor] infixl:45 " otimes' " => TypeVec.prod.map
-
-/--
-theorem `fst_prod_mk` / 定理 `fst_prod_mk`
-
-English:
-theorem fst_prod_mk
-  given: {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β')
-  proof: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-中文:
-定理 fst_prod_mk
-  条件: {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β')
-  证明: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-Depends on / 依赖: i_ih
+@[inherit_doc] scoped[MvFunctor] infixl:45 " ⊗' " => TypeVec.prod.map
+/-
+**TypeVec.fst_prod_mk** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：fst_prod_mk {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β') : TypeVec.pr
+od.fst ⊚ (f otimes' g) = f ⊚ TypeVec.prod.fst
+参数：f : α ⟹ β；g : α' ⟹ β'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem fst_prod_mk {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β') :
-    TypeVec.prod.fst ⊚ (f otimes' g) = f ⊚ TypeVec.prod.fst := by
+    TypeVec.prod.fst ⊚ (f ⊗' g) = f ⊚ TypeVec.prod.fst := by
   funext i; induction i with
   | fz => rfl
   | fs _ i_ih => apply i_ih
-
-/--
-theorem `snd_prod_mk` / 定理 `snd_prod_mk`
-
-English:
-theorem snd_prod_mk
-  given: {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β')
-  proof: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-中文:
-定理 snd_prod_mk
-  条件: {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β')
-  证明: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-Depends on / 依赖: i_ih
+/-
+**TypeVec.snd_prod_mk** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：snd_prod_mk {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β') : TypeVec.pr
+od.snd ⊚ (f otimes' g) = g ⊚ TypeVec.prod.snd
+参数：f : α ⟹ β；g : α' ⟹ β'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem snd_prod_mk {α α' β β' : TypeVec n} (f : α ⟹ β) (g : α' ⟹ β') :
-    TypeVec.prod.snd ⊚ (f otimes' g) = g ⊚ TypeVec.prod.snd := by
+    TypeVec.prod.snd ⊚ (f ⊗' g) = g ⊚ TypeVec.prod.snd := by
   funext i; induction i with
   | fz => rfl
   | fs _ i_ih => apply i_ih
-
-/--
-theorem `fst_diag` / 定理 `fst_diag`
-
-English:
-theorem fst_diag
-  given: {α : TypeVec n}
-  statement: TypeVec.prod.fst ⊚ (prod.diag : α ⟹ _) = id
-  proof: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-中文:
-定理 fst_diag
-  条件: {α : TypeVec n}
-  结论: TypeVec.乘积.fst ⊚ (乘积.diag : α ⟹ _) = id
-  证明: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-Depends on / 依赖: i_ih
+/-
+**TypeVec.fst_diag** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：fst_diag {α : TypeVec n} : TypeVec.prod.fst ⊚ (prod.diag : α ⟹ _) = id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem fst_diag {α : TypeVec n} : TypeVec.prod.fst ⊚ (prod.diag : α ⟹ _) = id := by
   funext i; induction i with
   | fz => rfl
   | fs _ i_ih => apply i_ih
-
-/--
-theorem `snd_diag` / 定理 `snd_diag`
-
-English:
-theorem snd_diag
-  given: {α : TypeVec n}
-  statement: TypeVec.prod.snd ⊚ (prod.diag : α ⟹ _) = id
-  proof: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-中文:
-定理 snd_diag
-  条件: {α : TypeVec n}
-  结论: TypeVec.乘积.snd ⊚ (乘积.diag : α ⟹ _) = id
-  证明: by
-  funext i; induction i with
-  | fz => rfl
-  | fs _ i_ih => apply i_ih
-
-Depends on / 依赖: i_ih
+/-
+**TypeVec.snd_diag** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：snd_diag {α : TypeVec n} : TypeVec.prod.snd ⊚ (prod.diag : α ⟹ _) = id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem snd_diag {α : TypeVec n} : TypeVec.prod.snd ⊚ (prod.diag : α ⟹ _) = id := by
   funext i; induction i with
   | fz => rfl
   | fs _ i_ih => apply i_ih
-
-/--
-theorem `repeatEq_iff_eq` / 定理 `repeatEq_iff_eq`
-
-English:
-theorem repeatEq_iff_eq
-  given: {α : TypeVec n} {i x y}
-  proof: by
-  induction i with
-  | fz => rfl
-  | fs _ i_ih =>
-    rw [repeatEq]
-    exact i_ih
-
-中文:
-定理 repeatEq_iff_eq
-  条件: {α : TypeVec n} {i x y}
-  证明: by
-  induction i with
-  | fz => rfl
-  | fs _ i_ih =>
-    rw [repeatEq]
-    exact i_ih
-
-Depends on / 依赖: i_ih, repeatEq
+/-
+**TypeVec.repeatEq_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：repeatEq_iff_eq {α : TypeVec n} {i x y} : ofRepeat (repeatEq α i (prod.mk 
+_ x y)) ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TypeVec.repeatEq.eq_2`：∀ (n : ℕ) (α : TypeVec.{u_1} n.succ), α.repeatEq 
+= (α.drop.repeatEq ::: Function.uncurry Eq)
 -/
 theorem repeatEq_iff_eq {α : TypeVec n} {i x y} :
     ofRepeat (repeatEq α i (prod.mk _ x y)) ↔ x = y := by
@@ -1865,224 +1344,211 @@ theorem repeatEq_iff_eq {α : TypeVec n} {i x y} :
     rw [repeatEq]
     exact i_ih
 
-/--
-Definition of `Subtype_` / `Subtype_` 的定义
+/-- given a predicate vector `p` over vector `α`, `Subtype_ p` is the type of vectors
+that contain an `α` that satisfies `p` -/
+/-
+**TypeVec.Subtype_** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → {α : TypeVec.{u} n} → α.Arrow (TypeVec.repeat n Prop) → TypeVec.
+{u} n
+参数：TypeVec.repeat n Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Subtype_
-  signature: : forall {n} {α : TypeVec.{u} n}, (α ⟹ «repeat» n Prop) -> TypeVec n
-
-中文:
-定义 Subtype_
-  签名: : 对任意 {n} {α : TypeVec.{u} n}, (α ⟹ «repeat» n 命题) -> TypeVec n
+--- 原说明 ---
+given a predicate vector `p` over vector `α`, `Subtype_ p` is the type of vector
+s
+that contain an `α` that satisfies `p`
 -/
-def Subtype_ : forall {n} {α : TypeVec.{u} n}, (α ⟹ «repeat» n Prop) -> TypeVec n
+def Subtype_ : ∀ {n} {α : TypeVec.{u} n}, (α ⟹ «repeat» n Prop) → TypeVec n
   | _, _, p, Fin2.fz => Subtype fun x => p Fin2.fz x
   | _, _, p, Fin2.fs i => Subtype_ (dropFun p) i
 
-/--
-Definition of `subtypeVal` / `subtypeVal` 的定义
+/-- projection on `Subtype_` -/
+/-
+**TypeVec.subtypeVal** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → {α : TypeVec.{u} n} → (p : α.Arrow (TypeVec.repeat n Prop)) → (T
+ypeVec.Subtype_ p).Arrow α
+参数：p : α.Arrow (TypeVec.repeat n Prop)；TypeVec.Subtype_ p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtypeVal
-  signature: : forall {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n Prop), Subtype_ p ⟹ α
-
-中文:
-定义 subtypeVal
-  签名: : 对任意 {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n 命题), Subtype_ p ⟹ α
+--- 原说明 ---
+projection on `Subtype_`
 -/
-def subtypeVal : forall {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n Prop), Subtype_ p ⟹ α
+def subtypeVal : ∀ {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n Prop), Subtype_ p ⟹ α
   | succ n, _, _, Fin2.fs i => @subtypeVal n _ _ i
   | succ _, _, _, Fin2.fz => Subtype.val
 
-/--
-Definition of `toSubtype` / `toSubtype` 的定义
+/-- arrow that rearranges the type of `Subtype_` to turn a subtype of vector into
+a vector of subtypes -/
+/-
+**TypeVec.toSubtype** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} →   {α : TypeVec.{u} n} →     (p : α.Arrow (TypeVec.repeat n Prop)
+) →       TypeVec.Arrow (fun i => { x // TypeVec.ofRepeat (p i x) }) (TypeVec.Su
+btype_ p)
+参数：p : α.Arrow (TypeVec.repeat n Prop)；fun i => { x // TypeVec.ofRepeat (p i x) 
+}；TypeVec.Subtype_ p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSubtype
-  signature: :
-
-中文:
-定义 toSubtype
-  签名: :
+--- 原说明 ---
+arrow that rearranges the type of `Subtype_` to turn a subtype of vector into
+a vector of subtypes
 -/
 def toSubtype :
-    forall {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n Prop),
+    ∀ {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n Prop),
       (fun i : Fin2 n => { x // ofRepeat <| p i x }) ⟹ Subtype_ p
   | succ _, _, p, Fin2.fs i, x => toSubtype (dropFun p) i x
   | succ _, _, _, Fin2.fz, x => x
 
-/--
-Definition of `ofSubtype` / `ofSubtype` 的定义
+/-- arrow that rearranges the type of `Subtype_` to turn a vector of subtypes
+into a subtype of vector -/
+/-
+**TypeVec.ofSubtype** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} →   {α : TypeVec.{u} n} →     (p : α.Arrow (TypeVec.repeat n Prop)
+) → (TypeVec.Subtype_ p).Arrow fun i => { x // TypeVec.ofRepeat (p i x) }
+参数：p : α.Arrow (TypeVec.repeat n Prop)；TypeVec.Subtype_ p；p i x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubtype
-  signature: {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n Prop)
-
-中文:
-定义 ofSubtype
-  签名: {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n 命题)
+--- 原说明 ---
+arrow that rearranges the type of `Subtype_` to turn a vector of subtypes
+into a subtype of vector
 -/
 def ofSubtype {n} {α : TypeVec.{u} n} (p : α ⟹ «repeat» n Prop) :
     Subtype_ p ⟹ fun i : Fin2 n => { x // ofRepeat <| p i x }
   | Fin2.fs i, x => ofSubtype _ i x
   | Fin2.fz, x => x
 
-/--
-Definition of `toSubtype'` / `toSubtype'` 的定义
+/-- similar to `toSubtype` adapted to relations (i.e. predicate on product) -/
+/-
+**TypeVec.toSubtype'** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：toSubtype'_of_subtype' {α : TypeVec n} (r : α otimes α ⟹ «repeat» n Prop) 
+: toSubtype' r ⊚ ofSubtype' r = id
+参数：r : α otimes α ⟹ «repeat» n Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSubtype'
-  signature: {n} {α : TypeVec.{u} n} (p : α otimes α ⟹ «repeat» n Prop)
-
-中文:
-定义 toSubtype'
-  签名: {n} {α : TypeVec.{u} n} (p : α otimes α ⟹ «repeat» n 命题)
+--- 原说明 ---
+similar to `toSubtype` adapted to relations (i.e. predicate on product)
 -/
-def toSubtype' {n} {α : TypeVec.{u} n} (p : α otimes α ⟹ «repeat» n Prop) :
+def toSubtype' {n} {α : TypeVec.{u} n} (p : α ⊗ α ⟹ «repeat» n Prop) :
     (fun i : Fin2 n => { x : α i × α i // ofRepeat <| p i (prod.mk _ x.1 x.2) }) ⟹ Subtype_ p
   | Fin2.fs i, x => toSubtype' (dropFun p) i x
   | Fin2.fz, x => ⟨x.val, cast (by congr) x.property⟩
 
-/--
-Definition of `ofSubtype'` / `ofSubtype'` 的定义
+/-- similar to `of_subtype` adapted to relations (i.e. predicate on product) -/
+/-
+**TypeVec.ofSubtype'** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} →   {α : TypeVec.{u} n} →     (p : (α.prod α).Arrow (TypeVec.repea
+t n Prop)) →       (TypeVec.Subtype_ p).Arrow fun i => { x // TypeVec.ofRepeat (
+p i (TypeVec.prod.mk i x.1 x.2)) }
+参数：p : (α.prod α).Arrow (TypeVec.repeat n Prop)；TypeVec.Subtype_ p；p i (TypeVec.
+prod.mk i x.1 x.2)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubtype'
-  signature: {n} {α : TypeVec.{u} n} (p : α otimes α ⟹ «repeat» n Prop)
-
-中文:
-定义 ofSubtype'
-  签名: {n} {α : TypeVec.{u} n} (p : α otimes α ⟹ «repeat» n 命题)
+--- 原说明 ---
+similar to `of_subtype` adapted to relations (i.e. predicate on product)
 -/
-def ofSubtype' {n} {α : TypeVec.{u} n} (p : α otimes α ⟹ «repeat» n Prop) :
+def ofSubtype' {n} {α : TypeVec.{u} n} (p : α ⊗ α ⟹ «repeat» n Prop) :
     Subtype_ p ⟹ fun i : Fin2 n => { x : α i × α i // ofRepeat <| p i (prod.mk _ x.1 x.2) }
   | Fin2.fs i, x => ofSubtype' _ i x
   | Fin2.fz, x => ⟨x.val, cast (by congr) x.property⟩
 
-/--
-Definition of `diagSub` / `diagSub` 的定义
+/-- similar to `diag` but the target vector is a `Subtype_`
+guaranteeing the equality of the components -/
+/-
+**TypeVec.diagSub** 是 Mathlib 中的一个定义，位于命名空间 `TypeVec`。
+形式化陈述：{n : ℕ} → {α : TypeVec.{u} n} → α.Arrow (TypeVec.Subtype_ α.repeatEq)
+参数：TypeVec.Subtype_ α.repeatEq。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagSub
-  signature: {n} {α : TypeVec.{u} n}
-
-中文:
-定义 diagSub
-  签名: {n} {α : TypeVec.{u} n}
+--- 原说明 ---
+similar to `diag` but the target vector is a `Subtype_`
+guaranteeing the equality of the components
 -/
 def diagSub {n} {α : TypeVec.{u} n} : α ⟹ Subtype_ (repeatEq α)
   | Fin2.fs _, x => @diagSub _ (drop α) _ x
   | Fin2.fz, x => ⟨(x, x), rfl⟩
-
-/--
-theorem `subtypeVal_nil` / 定理 `subtypeVal_nil`
-
-English:
-theorem subtypeVal_nil
-  given: {α : TypeVec.{u} 0} (ps : α ⟹ «repeat» 0 Prop)
-  proof: funext by rintro ⟨⟩
-
-中文:
-定理 subtypeVal_nil
-  条件: {α : TypeVec.{u} 0} (ps : α ⟹ «repeat» 0 命题)
-  证明: funext by rintro ⟨⟩
+/-
+**TypeVec.subtypeVal_nil** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：subtypeVal_nil {α : TypeVec.{u} 0} (ps : α ⟹ «repeat» 0 Prop) : TypeVec.su
+btypeVal ps = nilFun
+参数：ps : α ⟹ «repeat» 0 Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem subtypeVal_nil {α : TypeVec.{u} 0} (ps : α ⟹ «repeat» 0 Prop) :
     TypeVec.subtypeVal ps = nilFun :=
-funext by rintro ⟨⟩
+  funext <| by rintro ⟨⟩
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `diag_sub_val` / 定理 `diag_sub_val`
-
-English:
-theorem diag_sub_val
-  given: {n} {α : TypeVec.{u} n}
-  statement: subtypeVal (repeatEq α) ⊚ diagSub = prod.diag
-  proof: by
-  ext i x
-  induction i with
-  | fz => simp only [comp, subtypeVal, diagSub, prod.diag]
-  | fs _ i_ih => apply @i_ih (drop α)
-
-中文:
-定理 diag_sub_val
-  条件: {n} {α : TypeVec.{u} n}
-  结论: subtypeVal (repeatEq α) ⊚ diagSub = 乘积.diag
-  证明: by
-  ext i x
-  induction i with
-  | fz => simp only [comp, subtypeVal, diagSub, prod.diag]
-  | fs _ i_ih => apply @i_ih (drop α)
-
-Depends on / 依赖: diagSub, i_ih, prod.diag, subtypeVal
+/-
+**TypeVec.diag_sub_val** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：diag_sub_val {n} {α : TypeVec.{u} n} : subtypeVal (repeatEq α) ⊚ diagSub =
+ prod.diag
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `TypeVec.subtypeVal.eq_2`：∀ (n : ℕ) (x_4 : TypeVec.{u} n.succ) (x_5 : x_4
+.Arrow (TypeVec.repeat n.succ Prop)),   TypeVec.subtypeVal x_5 Fin2.fz = Subtype
+.val
+· 使用定理 `TypeVec.prod.diag.eq_2`：∀ (n : ℕ) (x_4 : TypeVec.{u} n.succ) (x_5 : x_4 
+Fin2.fz), TypeVec.prod.diag Fin2.fz x_5 = (x_5, x_5)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem diag_sub_val {n} {α : TypeVec.{u} n} : subtypeVal (repeatEq α) ⊚ diagSub = prod.diag := by
   ext i x
   induction i with
   | fz => simp only [comp, subtypeVal, diagSub, prod.diag]
   | fs _ i_ih => apply @i_ih (drop α)
-
-/--
-theorem `prod_id` / 定理 `prod_id`
-
-English:
-theorem prod_id
-  statement: forall {n} {α β : TypeVec.{u} n}, (id otimes' id) = (id : α otimes β ⟹ _)
-  proof: by
-  intros
-  ext i a
-  induction i with
-  | fz => cases a; rfl
-  | fs _ i_ih => apply i_ih
-
-中文:
-定理 prod_id
-  结论: 对任意 {n} {α β : TypeVec.{u} n}, (id otimes' id) = (id : α otimes β ⟹ _)
-  证明: by
-  intros
-  ext i a
-  induction i with
-  | fz => cases a; rfl
-  | fs _ i_ih => apply i_ih
-
-Depends on / 依赖: i_ih, intros
+/-
+**TypeVec.prod_id** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：prod_id : forall {n} {α β : TypeVec.{u} n}, (id otimes' id) = (id : α otim
+es β ⟹ _)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem prod_id : forall {n} {α β : TypeVec.{u} n}, (id otimes' id) = (id : α otimes β ⟹ _) := by
+theorem prod_id : ∀ {n} {α β : TypeVec.{u} n}, (id ⊗' id) = (id : α ⊗ β ⟹ _) := by
   intros
   ext i a
   induction i with
   | fz => cases a; rfl
   | fs _ i_ih => apply i_ih
-
-/--
-theorem `append_prod_appendFun` / 定理 `append_prod_appendFun`
-
-English:
-theorem append_prod_appendFun
-  statement: {n} {α α' β β' : TypeVec.{u} n} {φ φ' ψ ψ' : Type u}
-  proof: by
-  ext i a
-  cases i
-  · cases a
-    rfl
-  · rfl
-
-中文:
-定理 append_prod_appendFun
-  结论: {n} {α α' β β' : TypeVec.{u} n} {φ φ' ψ ψ' : 类型u}
-  证明: by
-  ext i a
-  cases i
-  · cases a
-    rfl
-  · rfl
+/-
+**TypeVec.append_prod_appendFun** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：append_prod_appendFun {n} {α α' β β' : TypeVec.{u} n} {φ φ' ψ ψ' : Type u}
+ {f₀ : α ⟹ α'} {g₀ : β ⟹ β'} {f₁ : φ -> φ'} {g₁ : ψ -> ψ'} : ((f₀ otimes' g₀) ::
+: (_root_.Prod.map f₁ g₁)) = ((f₀ ::: f₁) otimes' (g₀ ::: g₁))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem append_prod_appendFun {n} {α α' β β' : TypeVec.{u} n} {φ φ' ψ ψ' : Type u}
-    {f₀ : α ⟹ α'} {g₀ : β ⟹ β'} {f₁ : φ -> φ'} {g₁ : ψ -> ψ'} :
-    ((f₀ otimes' g₀) ::: (_root_.Prod.map f₁ g₁)) = ((f₀ ::: f₁) otimes' (g₀ ::: g₁)) := by
+    {f₀ : α ⟹ α'} {g₀ : β ⟹ β'} {f₁ : φ → φ'} {g₁ : ψ → ψ'} :
+    ((f₀ ⊗' g₀) ::: (_root_.Prod.map f₁ g₁)) = ((f₀ ::: f₁) ⊗' (g₀ ::: g₁)) := by
   ext i a
   cases i
   · cases a
@@ -2092,332 +1558,202 @@ theorem append_prod_appendFun {n} {α α' β β' : TypeVec.{u} n} {φ φ' ψ ψ'
 end Liftp'
 
 @[simp]
-/--
-theorem `dropFun_diag` / 定理 `dropFun_diag`
-
-English:
-theorem dropFun_diag
-  given: {α}
-  statement: dropFun (@prod.diag (n + 1) α) = prod.diag
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_diag
-  条件: {α}
-  结论: dropFun (@乘积.diag (n + 1) α) = 乘积.diag
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: CoprodI, Monoid, Monoid.CoprodI
+/-
+**TypeVec.dropFun_diag** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_diag {α} : dropFun (@prod.diag (n + 1) α) = prod.diag
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_diag {α} : dropFun (@prod.diag (n + 1) α) = prod.diag := rfl
 
 @[simp]
-/--
-theorem `dropFun_subtypeVal` / 定理 `dropFun_subtypeVal`
-
-English:
-theorem dropFun_subtypeVal
-  given: {α} (p : α ⟹ «repeat» (n + 1) Prop)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_subtypeVal
-  条件: {α} (p : α ⟹ «repeat» (n + 1) 命题)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: CoprodI, Monoid, Monoid.CoprodI
+/-
+**TypeVec.dropFun_subtypeVal** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_subtypeVal {α} (p : α ⟹ «repeat» (n + 1) Prop) : dropFun (subtypeV
+al p) = subtypeVal _
+参数：p : α ⟹ «repeat» (n + 1) Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_subtypeVal {α} (p : α ⟹ «repeat» (n + 1) Prop) :
     dropFun (subtypeVal p) = subtypeVal _ :=
   rfl
 
 @[simp]
-/--
-theorem `lastFun_subtypeVal` / 定理 `lastFun_subtypeVal`
-
-English:
-theorem lastFun_subtypeVal
-  given: {α} (p : α ⟹ «repeat» (n + 1) Prop)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lastFun_subtypeVal
-  条件: {α} (p : α ⟹ «repeat» (n + 1) 命题)
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.lastFun_subtypeVal** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_subtypeVal {α} (p : α ⟹ «repeat» (n + 1) Prop) : lastFun (subtypeV
+al p) = Subtype.val
+参数：p : α ⟹ «repeat» (n + 1) Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lastFun_subtypeVal {α} (p : α ⟹ «repeat» (n + 1) Prop) :
     lastFun (subtypeVal p) = Subtype.val :=
   rfl
 
 @[simp]
-/--
-theorem `dropFun_toSubtype` / 定理 `dropFun_toSubtype`
-
-English:
-theorem dropFun_toSubtype
-  given: {α} (p : α ⟹ «repeat» (n + 1) Prop)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_toSubtype
-  条件: {α} (p : α ⟹ «repeat» (n + 1) 命题)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Quotient, coprodCon
+/-
+**TypeVec.dropFun_toSubtype** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_toSubtype {α} (p : α ⟹ «repeat» (n + 1) Prop) : dropFun (toSubtype
+ p) = toSubtype _
+参数：p : α ⟹ «repeat» (n + 1) Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_toSubtype {α} (p : α ⟹ «repeat» (n + 1) Prop) :
     dropFun (toSubtype p) = toSubtype _ := rfl
 
 @[simp]
-/--
-theorem `lastFun_toSubtype` / 定理 `lastFun_toSubtype`
-
-English:
-theorem lastFun_toSubtype
-  given: {α} (p : α ⟹ «repeat» (n + 1) Prop)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lastFun_toSubtype
-  条件: {α} (p : α ⟹ «repeat» (n + 1) 命题)
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.lastFun_toSubtype** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_toSubtype {α} (p : α ⟹ «repeat» (n + 1) Prop) : lastFun (toSubtype
+ p) = _root_.id
+参数：p : α ⟹ «repeat» (n + 1) Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lastFun_toSubtype {α} (p : α ⟹ «repeat» (n + 1) Prop) :
     lastFun (toSubtype p) = _root_.id := rfl
 
 @[simp]
-/--
-theorem `dropFun_of_subtype` / 定理 `dropFun_of_subtype`
-
-English:
-theorem dropFun_of_subtype
-  given: {α} (p : α ⟹ «repeat» (n + 1) Prop)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_of_subtype
-  条件: {α} (p : α ⟹ «repeat» (n + 1) 命题)
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.dropFun_of_subtype** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_of_subtype {α} (p : α ⟹ «repeat» (n + 1) Prop) : dropFun (ofSubtyp
+e p) = ofSubtype _
+参数：p : α ⟹ «repeat» (n + 1) Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_of_subtype {α} (p : α ⟹ «repeat» (n + 1) Prop) :
     dropFun (ofSubtype p) = ofSubtype _ := rfl
 
 @[simp]
-/--
-theorem `lastFun_of_subtype` / 定理 `lastFun_of_subtype`
-
-English:
-theorem lastFun_of_subtype
-  given: {α} (p : α ⟹ «repeat» (n + 1) Prop)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lastFun_of_subtype
-  条件: {α} (p : α ⟹ «repeat» (n + 1) 命题)
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.lastFun_of_subtype** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_of_subtype {α} (p : α ⟹ «repeat» (n + 1) Prop) : lastFun (ofSubtyp
+e p) = _root_.id
+参数：p : α ⟹ «repeat» (n + 1) Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lastFun_of_subtype {α} (p : α ⟹ «repeat» (n + 1) Prop) :
     lastFun (ofSubtype p) = _root_.id := rfl
 
 @[simp]
-/--
-theorem `dropFun_RelLast'` / 定理 `dropFun_RelLast'`
-
-English:
-theorem dropFun_RelLast'
-  given: {α : TypeVec n} {β} (R : β -> β -> Prop)
-  proof: rfl
-
-中文:
-定理 dropFun_RelLast'
-  条件: {α : TypeVec n} {β} (R : β -> β -> 命题)
-  证明: rfl
+/-
+**TypeVec.dropFun_RelLast'** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_RelLast' {α : TypeVec n} {β} (R : β -> β -> Prop) : dropFun (RelLa
+st' α R) = repeatEq α
+参数：R : β -> β -> Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dropFun_RelLast' {α : TypeVec n} {β} (R : β -> β -> Prop) :
+theorem dropFun_RelLast' {α : TypeVec n} {β} (R : β → β → Prop) :
     dropFun (RelLast' α R) = repeatEq α :=
   rfl
 
 attribute [simp] drop_append1'
 
 @[simp]
-/--
-theorem `dropFun_prod` / 定理 `dropFun_prod`
-
-English:
-theorem dropFun_prod
-  given: {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_prod
-  条件: {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β')
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.dropFun_prod** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_prod {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β') : dr
+opFun (f otimes' f') = (dropFun f otimes' dropFun f')
+参数：n + 1；f : α ⟹ β；f' : α' ⟹ β'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_prod {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β') :
-    dropFun (f otimes' f') = (dropFun f otimes' dropFun f') := rfl
+    dropFun (f ⊗' f') = (dropFun f ⊗' dropFun f') := rfl
 
 @[simp]
-/--
-theorem `lastFun_prod` / 定理 `lastFun_prod`
-
-English:
-theorem lastFun_prod
-  given: {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lastFun_prod
-  条件: {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β')
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.lastFun_prod** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_prod {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β') : la
+stFun (f otimes' f') = Prod.map (lastFun f) (lastFun f')
+参数：n + 1；f : α ⟹ β；f' : α' ⟹ β'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lastFun_prod {α α' β β' : TypeVec (n + 1)} (f : α ⟹ β) (f' : α' ⟹ β') :
-    lastFun (f otimes' f') = Prod.map (lastFun f) (lastFun f') := rfl
+    lastFun (f ⊗' f') = Prod.map (lastFun f) (lastFun f') := rfl
 
 @[simp]
-/--
-theorem `dropFun_from_append1_drop_last` / 定理 `dropFun_from_append1_drop_last`
-
-English:
-theorem dropFun_from_append1_drop_last
-  given: {α : TypeVec (n + 1)}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_from_append1_drop_last
-  条件: {α : TypeVec (n + 1)}
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.dropFun_from_append1_drop_last** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_from_append1_drop_last {α : TypeVec (n + 1)} : dropFun (@fromAppen
+d1DropLast _ α) = id
+参数：n + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_from_append1_drop_last {α : TypeVec (n + 1)} :
     dropFun (@fromAppend1DropLast _ α) = id :=
   rfl
 
 @[simp]
-/--
-theorem `lastFun_from_append1_drop_last` / 定理 `lastFun_from_append1_drop_last`
-
-English:
-theorem lastFun_from_append1_drop_last
-  given: {α : TypeVec (n + 1)}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lastFun_from_append1_drop_last
-  条件: {α : TypeVec (n + 1)}
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.lastFun_from_append1_drop_last** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：lastFun_from_append1_drop_last {α : TypeVec (n + 1)} : lastFun (@fromAppen
+d1DropLast _ α) = _root_.id
+参数：n + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lastFun_from_append1_drop_last {α : TypeVec (n + 1)} :
     lastFun (@fromAppend1DropLast _ α) = _root_.id :=
   rfl
 
 @[simp]
-/--
-theorem `dropFun_id` / 定理 `dropFun_id`
-
-English:
-theorem dropFun_id
-  given: {α : TypeVec (n + 1)}
-  statement: dropFun (@TypeVec.id _ α) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dropFun_id
-  条件: {α : TypeVec (n + 1)}
-  结论: dropFun (@TypeVec.id _ α) = id
-  证明: rfl
-
-@[simp]
+/-
+**TypeVec.dropFun_id** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：dropFun_id {α : TypeVec (n + 1)} : dropFun (@TypeVec.id _ α) = id
+参数：n + 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dropFun_id {α : TypeVec (n + 1)} : dropFun (@TypeVec.id _ α) = id :=
   rfl
 
 @[simp]
-/--
-theorem `prod_map_id` / 定理 `prod_map_id`
-
-English:
-theorem prod_map_id
-  given: {α β : TypeVec n}
-  statement: (@TypeVec.id _ α otimes' @TypeVec.id _ β) = id
-  proof: prod_id
-
-中文:
-定理 prod_map_id
-  条件: {α β : TypeVec n}
-  结论: (@TypeVec.id _ α otimes' @TypeVec.id _ β) = id
-  证明: prod_id
-
-Depends on / 依赖: prod_id
+/-
+**TypeVec.prod_map_id** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：prod_map_id {α β : TypeVec n} : (@TypeVec.id _ α otimes' @TypeVec.id _ β) 
+= id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.prod_id`：prod_id : forall {n} {α β : TypeVec.{u} n}, (id otimes'
+ id) = (id : α otimes β ⟹ _)
 -/
-theorem prod_map_id {α β : TypeVec n} : (@TypeVec.id _ α otimes' @TypeVec.id _ β) = id := prod_id
+theorem prod_map_id {α β : TypeVec n} : (@TypeVec.id _ α ⊗' @TypeVec.id _ β) = id := prod_id
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toSubtype_of_subtype` / 定理 `toSubtype_of_subtype`
-
-English:
-theorem toSubtype_of_subtype
-  given: {α : TypeVec n} (p : α ⟹ «repeat» n Prop)
-  proof: by
-  ext i x
-  induction i <;> simp only [id, toSubtype, comp, ofSubtype] at *
-  simp [*]
-
-中文:
-定理 toSubtype_of_subtype
-  条件: {α : TypeVec n} (p : α ⟹ «repeat» n 命题)
-  证明: by
-  ext i x
-  induction i <;> simp only [id, toSubtype, comp, ofSubtype] at *
-  simp [*]
-
-Depends on / 依赖: ofSubtype, toSubtype
+/-
+**TypeVec.toSubtype_of_subtype** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：toSubtype_of_subtype {α : TypeVec n} (p : α ⟹ «repeat» n Prop) : toSubtype
+ p ⊚ ofSubtype p = id
+参数：p : α ⟹ «repeat» n Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TypeVec.toSubtype.eq_2`：∀ (n : ℕ) (x_5 : TypeVec.{u} n.succ) (x_6 : x_5.
+Arrow (TypeVec.repeat n.succ Prop))   (x_7 : { x // TypeVec.ofRepeat (x_6 Fin2.f
+z x) }), Typ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TypeVec.toSubtype.eq_1`：∀ (n : ℕ) (x_5 : TypeVec.{u} n.succ) (p : x_5.Ar
+row (TypeVec.repeat n.succ Prop)) (i : Fin2 n)   (x_6 : { x // TypeVec.ofRepeat 
+(p i.fs x) }…
 -/
 theorem toSubtype_of_subtype {α : TypeVec n} (p : α ⟹ «repeat» n Prop) :
     toSubtype p ⊚ ofSubtype p = id := by
@@ -2427,26 +1763,38 @@ theorem toSubtype_of_subtype {α : TypeVec n} (p : α ⟹ «repeat» n Prop) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `subtypeVal_toSubtype` / 定理 `subtypeVal_toSubtype`
-
-English:
-theorem subtypeVal_toSubtype
-  given: {α : TypeVec n} (p : α ⟹ «repeat» n Prop)
-  proof: by
-  ext i x
-  induction i <;> simp only [toSubtype, comp, subtypeVal] at *
-  simp [*]
-
-中文:
-定理 subtypeVal_toSubtype
-  条件: {α : TypeVec n} (p : α ⟹ «repeat» n 命题)
-  证明: by
-  ext i x
-  induction i <;> simp only [toSubtype, comp, subtypeVal] at *
-  simp [*]
-
-Depends on / 依赖: subtypeVal, toSubtype
+/-
+**TypeVec.subtypeVal_toSubtype** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：subtypeVal_toSubtype {α : TypeVec n} (p : α ⟹ «repeat» n Prop) : subtypeVa
+l p ⊚ toSubtype p = fun _ => Subtype.val
+参数：p : α ⟹ «repeat» n Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TypeVec.toSubtype.eq_2`：∀ (n : ℕ) (x_5 : TypeVec.{u} n.succ) (x_6 : x_5.
+Arrow (TypeVec.repeat n.succ Prop))   (x_7 : { x // TypeVec.ofRepeat (x_6 Fin2.f
+z x) }), Typ…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `TypeVec.subtypeVal.eq_2`：∀ (n : ℕ) (x_4 : TypeVec.{u} n.succ) (x_5 : x_4
+.Arrow (TypeVec.repeat n.succ Prop)),   TypeVec.subtypeVal x_5 Fin2.fz = Subtype
+.val
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TypeVec.toSubtype.eq_1`：∀ (n : ℕ) (x_5 : TypeVec.{u} n.succ) (p : x_5.Ar
+row (TypeVec.repeat n.succ Prop)) (i : Fin2 n)   (x_6 : { x // TypeVec.ofRepeat 
+(p i.fs x) }…
+· 使用定理 `TypeVec.subtypeVal.eq_1`：∀ (n : ℕ) (x_4 : TypeVec.{u} n.succ) (x_5 : x_4
+.Arrow (TypeVec.repeat n.succ Prop)) (i : Fin2 n),   TypeVec.subtypeVal x_5 i.fs
+ = TypeVec.su…
 -/
 theorem subtypeVal_toSubtype {α : TypeVec n} (p : α ⟹ «repeat» n Prop) :
     subtypeVal p ⊚ toSubtype p = fun _ => Subtype.val := by
@@ -2456,52 +1804,53 @@ theorem subtypeVal_toSubtype {α : TypeVec n} (p : α ⟹ «repeat» n Prop) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toSubtype_of_subtype_assoc` / 定理 `toSubtype_of_subtype_assoc`
-
-English:
-theorem toSubtype_of_subtype_assoc
-  proof: by
-  rw [← comp_assoc]; rw [toSubtype_of_subtype]; simp
-
-中文:
-定理 toSubtype_of_subtype_assoc
-  证明: by
-  rw [← comp_assoc]; rw [toSubtype_of_subtype]; simp
-
-Depends on / 依赖: comp_assoc, toSubtype_of_subtype
+/-
+**TypeVec.toSubtype_of_subtype_assoc** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：toSubtype_of_subtype_assoc {α β : TypeVec n} (p : α ⟹ «repeat» n Prop) (f 
+: β ⟹ Subtype_ p) : @toSubtype n _ p ⊚ ofSubtype _ ⊚ f = f
+参数：p : α ⟹ «repeat» n Prop；f : β ⟹ Subtype_ p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TypeVec.comp_assoc`：comp_assoc (h : γ ⟹ δ) (g : β ⟹ γ) (f : α ⟹ β) : (h 
+⊚ g) ⊚ f = h ⊚ g ⊚ f
+· 使用定理 `TypeVec.toSubtype_of_subtype`：toSubtype_of_subtype {α : TypeVec n} (p : 
+α ⟹ «repeat» n Prop) : toSubtype p ⊚ ofSubtype p = id
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toSubtype_of_subtype_assoc
     {α β : TypeVec n} (p : α ⟹ «repeat» n Prop) (f : β ⟹ Subtype_ p) :
     @toSubtype n _ p ⊚ ofSubtype _ ⊚ f = f := by
-  rw [← comp_assoc]; rw [toSubtype_of_subtype]; simp
+  rw [← comp_assoc, toSubtype_of_subtype]; simp
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toSubtype'_of_subtype'` / 定理 `toSubtype'_of_subtype'`
-
-English:
-theorem toSubtype'_of_subtype'
-  given: {α : TypeVec n} (r : α otimes α ⟹ «repeat» n Prop)
-  proof: by
-  ext i x
-  induction i
-  <;> dsimp only [id, toSubtype', comp, ofSubtype'] at *
-  <;> simp [*]
-
-中文:
-定理 toSubtype'_of_subtype'
-  条件: {α : TypeVec n} (r : α otimes α ⟹ «repeat» n 命题)
-  证明: by
-  ext i x
-  induction i
-  <;> dsimp only [id, toSubtype', comp, ofSubtype'] at *
-  <;> simp [*]
-
-Depends on / 依赖: ofSubtype, toSubtype
+/-
+**TypeVec.toSubtype'_of_subtype'** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：∀ {n : ℕ} {α : TypeVec.{u_1} n} (r : (α.prod α).Arrow (TypeVec.repeat n Pr
+op)),   TypeVec.comp (TypeVec.toSubtype' r) (TypeVec.ofSubtype' r) = TypeVec.id
+参数：r : (α.prod α).Arrow (TypeVec.repeat n Prop)；TypeVec.toSubtype' r；TypeVec.ofS
+ubtype' r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `TypeVec.toSubtype'`：toSubtype'_of_subtype' {α : TypeVec n} (r : α otimes
+ α ⟹ «repeat» n Prop) : toSubtype' r ⊚ ofSubtype' r = id
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toSubtype'_of_subtype' {α : TypeVec n} (r : α otimes α ⟹ «repeat» n Prop) :
+theorem toSubtype'_of_subtype' {α : TypeVec n} (r : α ⊗ α ⟹ «repeat» n Prop) :
     toSubtype' r ⊚ ofSubtype' r = id := by
   ext i x
   induction i
@@ -2509,31 +1858,46 @@ theorem toSubtype'_of_subtype' {α : TypeVec n} (r : α otimes α ⟹ «repeat»
   <;> simp [*]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `subtypeVal_toSubtype'` / 定理 `subtypeVal_toSubtype'`
-
-English:
-theorem subtypeVal_toSubtype'
-  given: {α : TypeVec n} (r : α otimes α ⟹ «repeat» n Prop)
-  proof: by
-  ext i x
-  induction i <;> simp only [toSubtype', comp, subtypeVal, prod.mk] at *
-  simp [*]
-
-中文:
-定理 subtypeVal_toSubtype'
-  条件: {α : TypeVec n} (r : α otimes α ⟹ «repeat» n 命题)
-  证明: by
-  ext i x
-  induction i <;> simp only [toSubtype', comp, subtypeVal, prod.mk] at *
-  simp [*]
-
-Depends on / 依赖: prod.mk, subtypeVal, toSubtype
+/-
+**TypeVec.subtypeVal_toSubtype'** 是 Mathlib 中的一个定理，位于命名空间 `TypeVec`。
+形式化陈述：subtypeVal_toSubtype' {α : TypeVec n} (r : α otimes α ⟹ «repeat» n Prop) :
+ subtypeVal r ⊚ toSubtype' r = fun i x => prod.mk i x.1.fst x.1.snd
+参数：r : α otimes α ⟹ «repeat» n Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `TypeVec.toSubtype'`：toSubtype'_of_subtype' {α : TypeVec n} (r : α otimes
+ α ⟹ «repeat» n Prop) : toSubtype' r ⊚ ofSubtype' r = id
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `TypeVec.subtypeVal.eq_2`：∀ (n : ℕ) (x_4 : TypeVec.{u} n.succ) (x_5 : x_4
+.Arrow (TypeVec.repeat n.succ Prop)),   TypeVec.subtypeVal x_5 Fin2.fz = Subtype
+.val
+· 使用定理 `TypeVec.prod.mk.eq_2`：∀ (n : ℕ) (x_4 x_5 : TypeVec.{u} n.succ), TypeVec.
+prod.mk Fin2.fz = Prod.mk
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TypeVec.subtypeVal.eq_1`：∀ (n : ℕ) (x_4 : TypeVec.{u} n.succ) (x_5 : x_4
+.Arrow (TypeVec.repeat n.succ Prop)) (i : Fin2 n),   TypeVec.subtypeVal x_5 i.fs
+ = TypeVec.su…
+· 使用定理 `TypeVec.prod.mk.eq_1`：∀ (n : ℕ) (α β : TypeVec.{u} n.succ) (i : Fin2 n),
+ TypeVec.prod.mk i.fs = TypeVec.prod.mk i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem subtypeVal_toSubtype' {α : TypeVec n} (r : α otimes α ⟹ «repeat» n Prop) :
+theorem subtypeVal_toSubtype' {α : TypeVec n} (r : α ⊗ α ⟹ «repeat» n Prop) :
     subtypeVal r ⊚ toSubtype' r = fun i x => prod.mk i x.1.fst x.1.snd := by
   ext i x
   induction i <;> simp only [toSubtype', comp, subtypeVal, prod.mk] at *
   simp [*]
 
 end TypeVec
+

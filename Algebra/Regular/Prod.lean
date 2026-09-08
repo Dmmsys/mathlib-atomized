@@ -20,141 +20,93 @@ section
 variable [Mul R] [Mul S]
 
 @[to_additive (attr := simp)]
-/--
-theorem `Prod.isLeftRegular_mk` / 定理 `Prod.isLeftRegular_mk`
-
-English:
-theorem Prod.isLeftRegular_mk
-  given: {a : R} {b : S}
-  proof: have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Prod.map_injective
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 积类型.isLeftRegular_mk
-  条件: {a : R} {b : S}
-  证明: have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Prod.map_injective
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Nonempty, Prod.map_injective, map_injective
+/-
+**Prod.isLeftRegular_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Prod.isLeftRegular_mk {a : R} {b : S} : IsLeftRegular (a, b) ↔ IsLeftRegul
+ar a ∧ IsLeftRegular b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.map_injective`：map_injective [Nonempty α] [Nonempty β] {f : α -> γ}
+ {g : β -> δ} : Injective (map f g) ↔ Injective f ∧ Injective g
 -/
 theorem Prod.isLeftRegular_mk {a : R} {b : S} :
     IsLeftRegular (a, b) ↔ IsLeftRegular a ∧ IsLeftRegular b :=
   have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Prod.map_injective
 
 @[to_additive (attr := simp)]
-/--
-theorem `Prod.isRightRegular_mk` / 定理 `Prod.isRightRegular_mk`
-
-English:
-theorem Prod.isRightRegular_mk
-  given: {a : R} {b : S}
-  proof: have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Iff.symm .symm Prod.map_injective
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 积类型.isRightRegular_mk
-  条件: {a : R} {b : S}
-  证明: have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Iff.symm .symm Prod.map_injective
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Iff.symm, Nonempty, Prod.map_injective, map_injective
+/-
+**Prod.isRightRegular_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Prod.isRightRegular_mk {a : R} {b : S} : IsRightRegular (a, b) ↔ IsRightRe
+gular a ∧ IsRightRegular b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Prod.map_injective`：map_injective [Nonempty α] [Nonempty β] {f : α -> γ}
+ {g : β -> δ} : Injective (map f g) ↔ Injective f ∧ Injective g
 -/
 theorem Prod.isRightRegular_mk {a : R} {b : S} :
     IsRightRegular (a, b) ↔ IsRightRegular a ∧ IsRightRegular b :=
-have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Iff.symm .symm Prod.map_injective
+  have : Nonempty R := ⟨a⟩; have : Nonempty S := ⟨b⟩; Iff.symm <| Prod.map_injective |>.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `Prod.isRegular_mk` / 定理 `Prod.isRegular_mk`
-
-English:
-theorem Prod.isRegular_mk
-  given: {a : R} {b : S}
-  statement: IsRegular (a, b) ↔ IsRegular a ∧ IsRegular b
-  proof: by
-  simp [isRegular_iff, and_and_and_comm]
-
-@[to_additive]
-
-中文:
-定理 积类型.isRegular_mk
-  条件: {a : R} {b : S}
-  结论: 是正则 (a, b) ↔ 是正则 a ∧ 是正则 b
-  证明: by
-  simp [isRegular_iff, and_and_and_comm]
-
-@[to_additive]
-
-Depends on / 依赖: and_and_and_comm, isRegular_iff
+/-
+**Prod.isRegular_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Prod.isRegular_mk {a : R} {b : S} : IsRegular (a, b) ↔ IsRegular a ∧ IsReg
+ular b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Prod.isRegular_mk {a : R} {b : S} : IsRegular (a, b) ↔ IsRegular a ∧ IsRegular b := by
   simp [isRegular_iff, and_and_and_comm]
 
 @[to_additive]
-/--
-theorem `IsLeftRegular.prodMk` / 定理 `IsLeftRegular.prodMk`
-
-English:
-theorem IsLeftRegular.prodMk
-  given: {a : R} {b : S} (ha : IsLeftRegular a) (hb : IsLeftRegular b)
-  proof: Prod.isLeftRegular_mk.2 ⟨ha, hb⟩
-
-@[to_additive]
-
-中文:
-定理 IsLeftRegular.prodMk
-  条件: {a : R} {b : S} (ha : IsLeftRegular a) (hb : IsLeftRegular b)
-  证明: Prod.isLeftRegular_mk.2 ⟨ha, hb⟩
-
-@[to_additive]
-
-Depends on / 依赖: Prod.isLeftRegular_mk, isLeftRegular_mk
+/-
+**IsLeftRegular.prodMk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLeftRegular.prodMk {a : R} {b : S} (ha : IsLeftRegular a) (hb : IsLeftRe
+gular b) : IsLeftRegular (a, b)
+参数：ha : IsLeftRegular a；hb : IsLeftRegular b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Prod.isLeftRegular_mk`：Prod.isLeftRegular_mk {a : R} {b : S} : IsLeftReg
+ular (a, b) ↔ IsLeftRegular a ∧ IsLeftRegular b
 -/
 theorem IsLeftRegular.prodMk {a : R} {b : S} (ha : IsLeftRegular a) (hb : IsLeftRegular b) :
     IsLeftRegular (a, b) := Prod.isLeftRegular_mk.2 ⟨ha, hb⟩
 
 @[to_additive]
-/--
-theorem `IsRightRegular.prodMk` / 定理 `IsRightRegular.prodMk`
-
-English:
-theorem IsRightRegular.prodMk
-  given: {a : R} {b : S} (ha : IsRightRegular a) (hb : IsRightRegular b)
-  proof: Prod.isRightRegular_mk.2 ⟨ha, hb⟩
-
-@[to_additive]
-
-中文:
-定理 IsRightRegular.prodMk
-  条件: {a : R} {b : S} (ha : IsRightRegular a) (hb : IsRightRegular b)
-  证明: Prod.isRightRegular_mk.2 ⟨ha, hb⟩
-
-@[to_additive]
-
-Depends on / 依赖: Prod.isRightRegular_mk, isRightRegular_mk
+/-
+**IsRightRegular.prodMk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsRightRegular.prodMk {a : R} {b : S} (ha : IsRightRegular a) (hb : IsRigh
+tRegular b) : IsRightRegular (a, b)
+参数：ha : IsRightRegular a；hb : IsRightRegular b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Prod.isRightRegular_mk`：Prod.isRightRegular_mk {a : R} {b : S} : IsRight
+Regular (a, b) ↔ IsRightRegular a ∧ IsRightRegular b
 -/
 theorem IsRightRegular.prodMk {a : R} {b : S} (ha : IsRightRegular a) (hb : IsRightRegular b) :
     IsRightRegular (a, b) := Prod.isRightRegular_mk.2 ⟨ha, hb⟩
 
 @[to_additive]
-/--
-theorem `IsRegular.prodMk` / 定理 `IsRegular.prodMk`
-
-English:
-theorem IsRegular.prodMk
-  given: {a : R} {b : S} (ha : IsRegular a) (hb : IsRegular b)
-  proof: Prod.isRegular_mk.2 ⟨ha, hb⟩
-
-中文:
-定理 是正则.prodMk
-  条件: {a : R} {b : S} (ha : 是正则 a) (hb : 是正则 b)
-  证明: Prod.isRegular_mk.2 ⟨ha, hb⟩
-
-Depends on / 依赖: Prod.isRegular_mk, isRegular_mk
+/-
+**IsRegular.prodMk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsRegular.prodMk {a : R} {b : S} (ha : IsRegular a) (hb : IsRegular b) : I
+sRegular (a, b)
+参数：ha : IsRegular a；hb : IsRegular b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Prod.isRegular_mk`：Prod.isRegular_mk {a : R} {b : S} : IsRegular (a, b) 
+↔ IsRegular a ∧ IsRegular b
 -/
 theorem IsRegular.prodMk {a : R} {b : S} (ha : IsRegular a) (hb : IsRegular b) :
     IsRegular (a, b) := Prod.isRegular_mk.2 ⟨ha, hb⟩
@@ -162,20 +114,14 @@ theorem IsRegular.prodMk {a : R} {b : S} (ha : IsRegular a) (hb : IsRegular b) :
 end
 
 @[simp]
-/--
-theorem `Prod.isSMulRegular_iff` / 定理 `Prod.isSMulRegular_iff`
-
-English:
-theorem Prod.isSMulRegular_iff
-  given: [SMul α R] [SMul α S] {r : α} [Nonempty R] [Nonempty S]
-  proof: Prod.map_injective
-
-中文:
-定理 积类型.isSMulRegular_iff
-  条件: [标量乘法 α R] [标量乘法 α S] {r : α} [非空 R] [非空 S]
-  证明: Prod.map_injective
-
-Depends on / 依赖: Prod.map_injective, map_injective
+/-
+**Prod.isSMulRegular_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Prod.isSMulRegular_iff [SMul α R] [SMul α S] {r : α} [Nonempty R] [Nonempt
+y S] : IsSMulRegular (R × S) r ↔ IsSMulRegular R r ∧ IsSMulRegular S r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.map_injective`：map_injective [Nonempty α] [Nonempty β] {f : α -> γ}
+ {g : β -> δ} : Injective (map f g) ↔ Injective f ∧ Injective g
 -/
 theorem Prod.isSMulRegular_iff [SMul α R] [SMul α S] {r : α} [Nonempty R] [Nonempty S] :
     IsSMulRegular (R × S) r ↔ IsSMulRegular R r ∧ IsSMulRegular S r :=

@@ -57,54 +57,78 @@ noncomputable section
 variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-variable {ε : Real}
+variable {ε : ℝ}
 
 open Filter Metric Set
 
 open ContinuousLinearMap (id)
 
-/--
-Definition of `ApproximatesLinearOn` / `ApproximatesLinearOn` 的定义
+/-- We say that `f` approximates a continuous linear map `f'` on `s` with constant `c`,
+if `‖f x - f y - f' (x - y)‖ ≤ c * ‖x - y‖` whenever `x, y ∈ s`.
 
-English:
-definition ApproximatesLinearOn
-  signature: (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (c : Real>=0)
-  body: forall x in s, forall y in s, ‖f x - f y - f' (x - y)‖ <= c * ‖x - y‖
+This predicate is defined to facilitate the splitting of the inverse function theorem into small
+lemmas. Some of these lemmas can be useful, e.g., to prove that the inverse function is defined
+on a specific set. -/
+/-
+**ApproximatesLinearOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ApproximatesLinearOn (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (c : Real>
+=0) : Prop
+参数：f : E -> F；f' : E ->L[𝕜] F；s : Set E；c : Real>=0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+We say that `f` approximates a continuous linear map `f'` on `s` with constant `
+c`,
+if `‖f x - f y - f' (x - y)‖ ≤ c * ‖x - y‖` whenever `x, y ∈ s`.
 
-中文:
-定义 ApproximatesLinearOn
-  签名: (f : E -> F) (f' : E ->L[𝕜] F) (s : 集合 E) (c : 实数>=0)
-  定义体: forall x in s, forall y in s, ‖f x - f y - f' (x - y)‖ <= c * ‖x - y‖
-
-@[simp]
+This predicate is defined to facilitate the splitting of the inverse function th
+eorem into small
+lemmas. Some of these lemmas can be useful, e.g., to prove that the inverse func
+tion is defined
+on a specific set.
 -/
-def ApproximatesLinearOn (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (c : Real>=0) : Prop :=
-  forall x in s, forall y in s, ‖f x - f y - f' (x - y)‖ <= c * ‖x - y‖
+def ApproximatesLinearOn (f : E → F) (f' : E →L[𝕜] F) (s : Set E) (c : ℝ≥0) : Prop :=
+  ∀ x ∈ s, ∀ y ∈ s, ‖f x - f y - f' (x - y)‖ ≤ c * ‖x - y‖
 
 @[simp]
-/--
-theorem `approximatesLinearOn_empty` / 定理 `approximatesLinearOn_empty`
-
-English:
-theorem approximatesLinearOn_empty
-  given: (f : E -> F) (f' : E ->L[𝕜] F) (c : Real>=0)
-  proof: by simp [ApproximatesLinearOn]
-
-中文:
-定理 approximatesLinearOn_empty
-  条件: (f : E -> F) (f' : E ->L[𝕜] F) (c : 实数>=0)
-  证明: by simp [ApproximatesLinearOn]
-
-Depends on / 依赖: ApproximatesLinearOn
+/-
+**approximatesLinearOn_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：approximatesLinearOn_empty (f : E -> F) (f' : E ->L[𝕜] F) (c : Real>=0) : 
+ApproximatesLinearOn f f' ∅ c
+参数：f : E -> F；f' : E ->L[𝕜] F；c : Real>=0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem approximatesLinearOn_empty (f : E -> F) (f' : E ->L[𝕜] F) (c : Real>=0) :
+theorem approximatesLinearOn_empty (f : E → F) (f' : E →L[𝕜] F) (c : ℝ≥0) :
     ApproximatesLinearOn f f' ∅ c := by simp [ApproximatesLinearOn]
 
 namespace ApproximatesLinearOn
 
-variable {f : E -> F}
+variable {f : E → F}
 
 /-! First we prove some properties of a function that `ApproximatesLinearOn` a (not necessarily
 invertible) continuous linear map. -/
@@ -112,152 +136,166 @@ invertible) continuous linear map. -/
 
 section
 
-variable {f' : E ->L[𝕜] F} {s t : Set E} {c c' : Real>=0}
+variable {f' : E →L[𝕜] F} {s t : Set E} {c c' : ℝ≥0}
 
-/--
-theorem `mono_num` / 定理 `mono_num`
-
-English:
-theorem mono_num
-  given: (hc : c <= c') (hf : ApproximatesLinearOn f f' s c)
-  proof: fun x hx y hy => le_trans (hf x hx y hy) (by gcongr)
-
-中文:
-定理 mono_num
-  条件: (hc : c <= c') (hf : ApproximatesLinearOn f f' s c)
-  证明: fun x hx y hy => le_trans (hf x hx y hy) (by gcongr)
-
-Depends on / 依赖: le_trans
+/-
+**ApproximatesLinearOn.mono_num** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearOn`
+。
+形式化陈述：mono_num (hc : c <= c') (hf : ApproximatesLinearOn f f' s c) : Approximate
+sLinearOn f f' s c'
+参数：hc : c <= c'；hf : ApproximatesLinearOn f f' s c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `NNReal.coe_mono`：Monotone NNReal.toReal
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 -/
-theorem mono_num (hc : c <= c') (hf : ApproximatesLinearOn f f' s c) :
+theorem mono_num (hc : c ≤ c') (hf : ApproximatesLinearOn f f' s c) :
     ApproximatesLinearOn f f' s c' :=
-  fun x hx y hy => le_trans (hf x hx y hy) (by gcongr)
-
-/--
-theorem `mono_set` / 定理 `mono_set`
-
-English:
-theorem mono_set
-  given: (hst : s subseteq t) (hf : ApproximatesLinearOn f f' t c)
-  proof: fun x hx y hy => hf x (hst hx) y (hst hy)
-
-中文:
-定理 mono_set
-  条件: (hst : s subseteq t) (hf : ApproximatesLinearOn f f' t c)
-  证明: fun x hx y hy => hf x (hst hx) y (hst hy)
+  fun x hx y hy ↦ le_trans (hf x hx y hy) (by gcongr)
+/-
+**ApproximatesLinearOn.mono_set** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearOn`
+。
+形式化陈述：mono_set (hst : s subseteq t) (hf : ApproximatesLinearOn f f' t c) : Appro
+ximatesLinearOn f f' s c
+参数：hst : s subseteq t；hf : ApproximatesLinearOn f f' t c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mono_set (hst : s subseteq t) (hf : ApproximatesLinearOn f f' t c) :
-    ApproximatesLinearOn f f' s c := fun x hx y hy => hf x (hst hx) y (hst hy)
-
-/--
-theorem `approximatesLinearOn_iff_lipschitzOnWith` / 定理 `approximatesLinearOn_iff_lipschitzOnWith`
-
-English:
-theorem approximatesLinearOn_iff_lipschitzOnWith
-  statement: {f : E -> F} {f' : E ->L[𝕜] F} {s : Set E}
-  proof: by
-  have : forall x y, f x - f y - f' (x - y) = (f - f') x - (f - f') y := fun x y => by
-    simp only [map_sub, Pi.sub_apply]; abel
-  simp only [this, lipschitzOnWith_iff_norm_sub_le, ApproximatesLinearOn]
-
-alias ⟨lipschitzOnWith, _root_.LipschitzOnWith.approximatesLinearOn⟩ :=
-  approximatesLinearOn_iff_lipschitzOnWith
-
-中文:
-定理 approximatesLinearOn_iff_lipschitzOnWith
-  结论: {f : E -> F} {f' : E ->L[𝕜] F} {s : 集合 E}
-  证明: by
-  have : forall x y, f x - f y - f' (x - y) = (f - f') x - (f - f') y := fun x y => by
-    simp only [map_sub, Pi.sub_apply]; abel
-  simp only [this, lipschitzOnWith_iff_norm_sub_le, ApproximatesLinearOn]
-
-alias ⟨lipschitzOnWith, _root_.LipschitzOnWith.approximatesLinearOn⟩ :=
-  approximatesLinearOn_iff_lipschitzOnWith
-
-Depends on / 依赖: ApproximatesLinearOn, Pi.sub_apply, lipschitzOnWith_iff_norm_sub_le, map_sub, sub_apply
+theorem mono_set (hst : s ⊆ t) (hf : ApproximatesLinearOn f f' t c) :
+    ApproximatesLinearOn f f' s c := fun x hx y hy ↦ hf x (hst hx) y (hst hy)
+/-
+**ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith** 是 Mathlib 中的一个
+定理，位于命名空间 `ApproximatesLinearOn`。
+形式化陈述：approximatesLinearOn_iff_lipschitzOnWith {f : E -> F} {f' : E ->L[𝕜] F} {s
+ : Set E} {c : Real>=0} : ApproximatesLinearOn f f' s c ↔ LipschitzOnWith c (f -
+ ⇑f') s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `_private.Mathlib.Analysis.Calculus.InverseFunctionTheorem.ApproximatesLi
+nearOn.0.ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith._abel_1_1
+`：∀ {𝕜 : Type u_3} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1 : N
+ormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem approximatesLinearOn_iff_lipschitzOnWith {f : E -> F} {f' : E ->L[𝕜] F} {s : Set E}
-    {c : Real>=0} : ApproximatesLinearOn f f' s c ↔ LipschitzOnWith c (f - ⇑f') s := by
-  have : forall x y, f x - f y - f' (x - y) = (f - f') x - (f - f') y := fun x y => by
+theorem approximatesLinearOn_iff_lipschitzOnWith {f : E → F} {f' : E →L[𝕜] F} {s : Set E}
+    {c : ℝ≥0} : ApproximatesLinearOn f f' s c ↔ LipschitzOnWith c (f - ⇑f') s := by
+  have : ∀ x y, f x - f y - f' (x - y) = (f - f') x - (f - f') y := fun x y ↦ by
     simp only [map_sub, Pi.sub_apply]; abel
   simp only [this, lipschitzOnWith_iff_norm_sub_le, ApproximatesLinearOn]
 
 alias ⟨lipschitzOnWith, _root_.LipschitzOnWith.approximatesLinearOn⟩ :=
   approximatesLinearOn_iff_lipschitzOnWith
-
-/--
-theorem `lipschitz_sub` / 定理 `lipschitz_sub`
-
-English:
-theorem lipschitz_sub
-  given: (hf : ApproximatesLinearOn f f' s c)
-  proof: hf.lipschitzOnWith.to_restrict
-
-中文:
-定理 lipschitz_sub
-  条件: (hf : ApproximatesLinearOn f f' s c)
-  证明: hf.lipschitzOnWith.to_restrict
-
-Depends on / 依赖: hf.lipschitzOnWith.to_restrict, lipschitzOnWith, to_restrict
+/-
+**ApproximatesLinearOn.lipschitz_sub** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLine
+arOn`。
+形式化陈述：lipschitz_sub (hf : ApproximatesLinearOn f f' s c) : LipschitzWith c fun x
+ : s => f x - f' x
+参数：hf : ApproximatesLinearOn f f' s c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LipschitzOnWith.to_restrict`：∀ {α : Type u} {β : Type v} [inst : PseudoE
+MetricSpace α] [inst_1 : PseudoEMetricSpace β] {K : NNReal} {s : Set α}   {f : α
+ → β}, LipschitzO…
+· 使用定理 `ApproximatesLinearOn.lipschitzOnWith`：∀ {𝕜 : Type u_1} [inst : Nontrivia
+llyNormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : Nor
+medSpace 𝕜 E] {F : Type u_…
 -/
 theorem lipschitz_sub (hf : ApproximatesLinearOn f f' s c) :
     LipschitzWith c fun x : s => f x - f' x :=
   hf.lipschitzOnWith.to_restrict
-
-/--
-theorem `lipschitz` / 定理 `lipschitz`
-
-English:
-theorem lipschitz
-  given: (hf : ApproximatesLinearOn f f' s c)
-  proof: by
-  simpa only [domRestrict_apply, add_sub_cancel] using!
-    (f'.lipschitz.restrict s).add hf.lipschitz_sub
-
-中文:
-定理 lipschitz
-  条件: (hf : ApproximatesLinearOn f f' s c)
-  证明: by
-  simpa only [domRestrict_apply, add_sub_cancel] using!
-    (f'.lipschitz.restrict s).add hf.lipschitz_sub
+/-
+**ApproximatesLinearOn.lipschitz** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearOn
+`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_3} [inst_3 : N
+ormedAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {f' : E →L[𝕜] F} {
+s : Set E} {c : NNReal}, ApproximatesLinearOn f f' s c → LipschitzWith (‖f'‖₊ + 
+c) (s.domRestrict f)
+参数：‖f'‖₊ + c；s.domRestrict f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `LipschitzWith.add`：∀ {α : Type u_4} {E : Type u_5} [inst : SeminormedAdd
+CommGroup E] [inst_1 : PseudoEMetricSpace α] {Kf Kg : NNReal}   {f g : α → E}, L
+ipschit…
+· 使用定理 `LipschitzWith.restrict`：∀ {α : Type u} {β : Type v} [inst : PseudoEMetri
+cSpace α] [inst_1 : PseudoEMetricSpace β] {K : NNReal} {f : α → β},   LipschitzW
+ith K f → ∀ …
+· 使用定理 `ContinuousLinearMap.lipschitz`：lipschitz (f : E ->SL[σ₁₂] F) : Lipschitz
+With ‖f‖₊ f
+· 使用定理 `ApproximatesLinearOn.lipschitz_sub`：lipschitz_sub (hf : ApproximatesLine
+arOn f f' s c) : LipschitzWith c fun x : s => f x - f' x
 -/
 protected theorem lipschitz (hf : ApproximatesLinearOn f f' s c) :
     LipschitzWith (‖f'‖₊ + c) (s.domRestrict f) := by
   simpa only [domRestrict_apply, add_sub_cancel] using!
     (f'.lipschitz.restrict s).add hf.lipschitz_sub
-
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  given: (hf : ApproximatesLinearOn f f' s c)
-  statement: Continuous (s.domRestrict f)
-  proof: hf.lipschitz.continuous
-
-中文:
-定理 continuous
-  条件: (hf : ApproximatesLinearOn f f' s c)
-  结论: 连续 (s.domRestrict f)
-  证明: hf.lipschitz.continuous
+/-
+**ApproximatesLinearOn.continuous** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearO
+n`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_3} [inst_3 : N
+ormedAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {f' : E →L[𝕜] F} {
+s : Set E} {c : NNReal}, ApproximatesLinearOn f f' s c → Continuous (s.domRestri
+ct f)
+参数：s.domRestrict f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LipschitzWith.continuous`：∀ {α : Type u} {β : Type v} [inst : PseudoEMet
+ricSpace α] [inst_1 : PseudoEMetricSpace β] {K : NNReal} {f : α → β},   Lipschit
+zWith K f → Co…
+· 使用定理 `ApproximatesLinearOn.lipschitz`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpa
+ce 𝕜 E] {F : Type u_…
 -/
 protected theorem continuous (hf : ApproximatesLinearOn f f' s c) : Continuous (s.domRestrict f) :=
   hf.lipschitz.continuous
-
-/--
-theorem `continuousOn` / 定理 `continuousOn`
-
-English:
-theorem continuousOn
-  given: (hf : ApproximatesLinearOn f f' s c)
-  statement: ContinuousOn f s
-  proof: continuousOn_iff_continuous_domRestrict.2 hf.continuous
-
-中文:
-定理 continuousOn
-  条件: (hf : ApproximatesLinearOn f f' s c)
-  结论: ContinuousOn f s
-  证明: continuousOn_iff_continuous_domRestrict.2 hf.continuous
+/-
+**ApproximatesLinearOn.continuousOn** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinea
+rOn`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_3} [inst_3 : N
+ormedAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {f' : E →L[𝕜] F} {
+s : Set E} {c : NNReal}, ApproximatesLinearOn f f' s c → ContinuousOn f s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousOn_iff_continuous_domRestrict`：continuousOn_iff_continuous_dom
+Restrict : ContinuousOn f s ↔ Continuous (s.domRestrict f)
+· 使用定理 `ApproximatesLinearOn.continuous`：∀ {𝕜 : Type u_1} [inst : NontriviallyNo
+rmedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSp
+ace 𝕜 E] {F : Type u_…
 -/
 protected theorem continuousOn (hf : ApproximatesLinearOn f f' s c) : ContinuousOn f s :=
   continuousOn_iff_continuous_domRestrict.2 hf.continuous
@@ -273,299 +311,101 @@ equivalence, for the local inverse theorem, but also whenever the approximating 
 by Banach's open mapping theorem. -/
 
 
-variable [CompleteSpace E] {s : Set E} {c : Real>=0} {f' : E ->L[𝕜] F}
+variable [CompleteSpace E] {s : Set E} {c : ℝ≥0} {f' : E →L[𝕜] F}
 
-/--
-theorem `surjOn_closedBall_of_nonlinearRightInverse` / 定理 `surjOn_closedBall_of_nonlinearRightInverse`
+/-- If a function is linearly approximated by a continuous linear map with a (possibly nonlinear)
+right inverse, then it is locally onto: a ball of an explicit radius is included in the image
+of the map. -/
+/-
+**ApproximatesLinearOn.surjOn_closedBall_of_nonlinearRightInverse** 是 Mathlib 中的
+一个定理，位于命名空间 `ApproximatesLinearOn`。
+形式化陈述：surjOn_closedBall_of_nonlinearRightInverse (hf : ApproximatesLinearOn f f'
+ s c) (f'symm : f'.NonlinearRightInverse) {ε : Real} {b : E} (ε0 : 0 <= ε) (hε :
+ closedBall b ε subseteq s) : SurjOn f (closedBall b ε) (closedBall (f b) (((f's
+ymm.nnnorm : Real)⁻¹ - c) * ε))
+参数：hf : ApproximatesLinearOn f f' s c；f'symm : f'.NonlinearRightInverse；ε0 : 0 <
+= ε；hε : closedBall b ε subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_self`：dist_self (x : α) : dist x x = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.mem_closedBall`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x y 
+: α} {ε : ℝ}, y ∈ Metric.closedBall x ε ↔ dist y x ≤ ε
+· 使用定理 `mul_nonpos_of_nonpos_of_nonneg`：mul_nonpos_of_nonpos_of_nonneg [MulPosMo
+no α] (ha : a <= 0) (hb : 0 <= b) : a * b <= 0
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_congr`：∀ {R : Type u_2} [inst : Semifield
+ R] {a a' b : R}, a = a' → a'⁻¹ = b → a⁻¹ = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_single`：∀ {R : Type u_2} [inst : Semifiel
+d R] {a b : R}, a⁻¹ = b → (a + 0)⁻¹ = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_mul`：∀ {R : Type u_2} [inst : Semifield R
+] {a₁ : R} {a₂ : ℕ} {a₃ b₁ b₃ c : R},   a₁⁻¹ = b₁ → a₃⁻¹ = b₃ → b₃ * (b₁ ^ a₂ * 
+Nat.rawCast 1) = c → (a₁…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.IsNNRat.to_isNat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNNRat a n 1 → Mathlib.Meta.NormNum
+.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_inv_pos`：isNNRat_inv_pos {α} [DivisionSemir
+ing α] [CharZero α] {a : α} {n d : Nat} : IsNNRat a (Nat.succ n) d -> IsNNRat a⁻
+¹ d (Nat.succ n)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+（共 184 条，此处仅展示前 30 条）
 
-English:
-theorem surjOn_closedBall_of_nonlinearRightInverse
-  proof: by
-  intro y hy
-  rcases le_or_gt (f'symm.nnnorm : Real)⁻¹ c with hc | hc
-  · refine ⟨b, by simp [ε0], ?_⟩
-    have : dist y (f b) <= 0 :=
-      (mem_closedBall.1 hy).trans (mul_nonpos_of_nonpos_of_nonneg (by linarith) ε0)
-    simp only [dist_le_zero] at this
-    rw [this]
-  have If' : (0 : Real) < f'symm.nnnorm := by rw [← inv_pos]; exact (NNReal.coe_nonneg _).trans_lt hc
-  have Icf' : (c : Real) * f'symm.nnnorm < 1 := by rwa [inv_eq_one_div, lt_div_iff₀ If'] at hc
-  have Jcf' : (1 : Real) - c * f'symm.nnnorm != 0 := by apply ne_of_gt; linarith
-  /- We have to show that `y` can be written as `f x` for some `x ∈ closedBall b ε`.
-    The idea of the proof is to apply the Banach contraction principle to the map
-    `g : x ↦ x + f'symm (y - f x)`, as a fixed point of this map satisfies `f x = y`.
-    When `f'symm` is a genuine linear inverse, `g` is a contracting map. In our case, since `f'symm`
-    is nonlinear, this map is not contracting (it is not even continuous), but still the proof of
-    the contraction theorem holds: `uₙ = gⁿ b` is a Cauchy sequence, converging exponentially fast
-    to the desired point `x`. Instead of appealing to general results, we check this by hand.
-
-    The main point is that `f (u n)` becomes exponentially close to `y`, and therefore
-    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
-    bound on `dist (u n) b`, from which one checks that `u n` stays in the ball on which one has a
-    control. Therefore, the bound can be checked at the next step, and so on inductively.
-    -/
-  set g := fun x => x + f'symm (y - f x) with hg
-  set u := fun n : Nat => g^[n] b with hu
-  have usucc : forall n, u (n + 1) = g (u n) := by simp [hu, ← iterate_succ_apply' g _ b]
-  -- First bound: if `f z` is close to `y`, then `g z` is close to `z` (i.e., almost a fixed point).
-  have A : forall z, dist (g z) z <= f'symm.nnnorm * dist (f z) y := by
-    intro z
-    rw [dist_eq_norm]; rw [hg]; rw [add_sub_cancel_left]; rw [dist_eq_norm']
-    exact f'symm.bound _
-  -- Second bound: if `z` and `g z` are in the set with good control, then `f (g z)` becomes closer
-  -- to `y` than `f z` was (this uses the linear approximation property, and is the reason for the
-  -- choice of the formula for `g`).
-  have B :
-    forall z in closedBall b ε,
-      g z in closedBall b ε -> dist (f (g z)) y <= c * f'symm.nnnorm * dist (f z) y := by
-    intro z hz hgz
-    set v := f'symm (y - f z)
-    calc
-      dist (f (g z)) y = ‖f (z + v) - y‖ := by rw [dist_eq_norm]
-      _ = ‖f (z + v) - f z - f' v + f' v - (y - f z)‖ := by congr 1; abel
-      _ = ‖f (z + v) - f z - f' (z + v - z)‖ := by
-        simp only [v, ContinuousLinearMap.NonlinearRightInverse.right_inv, add_sub_cancel_left,
-          sub_add_cancel]
-      _ <= c * ‖z + v - z‖ := hf _ (hε hgz) _ (hε hz)
-      _ <= c * (f'symm.nnnorm * dist (f z) y) := by
-        gcongr
-        simpa [dist_eq_norm'] using f'symm.bound (y - f z)
-      _ = c * f'symm.nnnorm * dist (f z) y := by ring
-  -- Third bound: a complicated bound on `dist w b` (that will show up in the induction) is enough
-  -- to check that `w` is in the ball on which one has controls. Will be used to check that `u n`
-  -- belongs to this ball for all `n`.
-  have C : forall (n : Nat) (w : E), dist w b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
-      (1 - c * f'symm.nnnorm) * dist (f b) y -> w in closedBall b ε := fun n w hw => by
-    apply hw.trans
-    rw [div_mul_eq_mul_div]; rw [div_le_iff₀]; swap; · linarith
-    calc
-      (f'symm.nnnorm : Real) * (1 - ((c : Real) * f'symm.nnnorm) ^ n) * dist (f b) y =
-          f'symm.nnnorm * dist (f b) y * (1 - ((c : Real) * f'symm.nnnorm) ^ n) := by
-        ring
-      _ <= f'symm.nnnorm * dist (f b) y * 1 := by
-        gcongr
-        rw [sub_le_self_iff]
-        positivity
-      _ <= f'symm.nnnorm * (((f'symm.nnnorm : Real)⁻¹ - c) * ε) := by
-        rw [mul_one]
-        gcongr
-        exact mem_closedBall'.1 hy
-      _ = ε * (1 - c * f'symm.nnnorm) := by field
-  /- Main inductive control: `f (u n)` becomes exponentially close to `y`, and therefore
-    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
-    bound on `dist (u n) b`, from which one checks that `u n` remains in the ball on which we
-    have estimates. -/
-  have D : forall n : Nat, dist (f (u n)) y <= ((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y ∧
-      dist (u n) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
-        (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := fun n => by
-    induction n with
-    | zero => simp [hu]
-    | succ n IH => ?_
-    rw [usucc]
-    have Ign : dist (g (u n)) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
-        (1 - c * f'symm.nnnorm) * dist (f b) y :=
-      calc
-        dist (g (u n)) b <= dist (g (u n)) (u n) + dist (u n) b := dist_triangle _ _ _
-        _ <= f'symm.nnnorm * dist (f (u n)) y + dist (u n) b := add_le_add (A _) le_rfl
-        _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) +
-              f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) / (1 - c * f'symm.nnnorm) *
-                dist (f b) y := by
-                  gcongr
-                  · exact IH.1
-                  · exact IH.2
-        _ = f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
-              (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := by
-          replace Jcf' : (1 : Real) - f'symm.nnnorm * c != 0 := by convert! Jcf' using 1; ring
-          simp [field, pow_succ, -mul_eq_mul_left_iff]
-          ring
-    refine ⟨?_, Ign⟩
-    calc
-      dist (f (g (u n))) y <= c * f'symm.nnnorm * dist (f (u n)) y :=
-        B _ (C n _ IH.2) (C n.succ _ Ign)
-      _ <= (c : Real) * f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
-        gcongr
-        apply IH.1
-      _ = ((c : Real) * f'symm.nnnorm) ^ n.succ * dist (f b) y := by simp only [pow_succ']; ring
-  -- Deduce from the inductive bound that `uₙ` is a Cauchy sequence, therefore converging.
-  have : CauchySeq u := by
-    refine cauchySeq_of_le_geometric _ (↑f'symm.nnnorm * dist (f b) y) Icf' fun n => ?_
-    calc
-      dist (u n) (u (n + 1)) = dist (g (u n)) (u n) := by rw [usucc, dist_comm]
-      _ <= f'symm.nnnorm * dist (f (u n)) y := A _
-      _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
-        gcongr
-        exact (D n).1
-      _ = f'symm.nnnorm * dist (f b) y * ((c : Real) * f'symm.nnnorm) ^ n := by ring
-  obtain ⟨x, hx⟩ : exists x, Tendsto u atTop (𝓝 x) := cauchySeq_tendsto_of_complete this
-  -- As all the `uₙ` belong to the ball `closedBall b ε`, so does their limit `x`.
-  have xmem : x in closedBall b ε :=
-    isClosed_closedBall.mem_of_tendsto hx (Eventually.of_forall fun n => C n _ (D n).2)
-  refine ⟨x, xmem, ?_⟩
-  -- It remains to check that `f x = y`. This follows from continuity of `f` on `closedBall b ε`
-  -- and from the fact that `f uₙ` is converging to `y` by construction.
-  have hx' : Tendsto u atTop (𝓝[closedBall b ε] x) := by
-    simp only [nhdsWithin, tendsto_inf, hx, true_and, tendsto_principal]
-    exact Eventually.of_forall fun n => C n _ (D n).2
-  have T1 : Tendsto (f ∘ u) atTop (𝓝 (f x)) :=
-    (hf.continuousOn.mono hε x xmem).tendsto.comp hx'
-  have T2 : Tendsto (f ∘ u) atTop (𝓝 y) := by
-    rw [tendsto_iff_dist_tendsto_zero]
-    refine squeeze_zero (fun _ => dist_nonneg) (fun n => (D n).1) ?_
-    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) Icf').mul tendsto_const_nhds
-  exact tendsto_nhds_unique T1 T2
-
-中文:
-定理 surjOn_closedBall_of_nonlinearRightInverse
-  证明: by
-  intro y hy
-  rcases le_or_gt (f'symm.nnnorm : Real)⁻¹ c with hc | hc
-  · refine ⟨b, by simp [ε0], ?_⟩
-    have : dist y (f b) <= 0 :=
-      (mem_closedBall.1 hy).trans (mul_nonpos_of_nonpos_of_nonneg (by linarith) ε0)
-    simp only [dist_le_zero] at this
-    rw [this]
-  have If' : (0 : Real) < f'symm.nnnorm := by rw [← inv_pos]; exact (NNReal.coe_nonneg _).trans_lt hc
-  have Icf' : (c : Real) * f'symm.nnnorm < 1 := by rwa [inv_eq_one_div, lt_div_iff₀ If'] at hc
-  have Jcf' : (1 : Real) - c * f'symm.nnnorm != 0 := by apply ne_of_gt; linarith
-  /- We have to show that `y` can be written as `f x` for some `x ∈ closedBall b ε`.
-    The idea of the proof is to apply the Banach contraction principle to the map
-    `g : x ↦ x + f'symm (y - f x)`, as a fixed point of this map satisfies `f x = y`.
-    When `f'symm` is a genuine linear inverse, `g` is a contracting map. In our case, since `f'symm`
-    is nonlinear, this map is not contracting (it is not even continuous), but still the proof of
-    the contraction theorem holds: `uₙ = gⁿ b` is a Cauchy sequence, converging exponentially fast
-    to the desired point `x`. Instead of appealing to general results, we check this by hand.
-
-    The main point is that `f (u n)` becomes exponentially close to `y`, and therefore
-    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
-    bound on `dist (u n) b`, from which one checks that `u n` stays in the ball on which one has a
-    control. Therefore, the bound can be checked at the next step, and so on inductively.
-    -/
-  set g := fun x => x + f'symm (y - f x) with hg
-  set u := fun n : Nat => g^[n] b with hu
-  have usucc : forall n, u (n + 1) = g (u n) := by simp [hu, ← iterate_succ_apply' g _ b]
-  -- First bound: if `f z` is close to `y`, then `g z` is close to `z` (i.e., almost a fixed point).
-  have A : forall z, dist (g z) z <= f'symm.nnnorm * dist (f z) y := by
-    intro z
-    rw [dist_eq_norm]; rw [hg]; rw [add_sub_cancel_left]; rw [dist_eq_norm']
-    exact f'symm.bound _
-  -- Second bound: if `z` and `g z` are in the set with good control, then `f (g z)` becomes closer
-  -- to `y` than `f z` was (this uses the linear approximation property, and is the reason for the
-  -- choice of the formula for `g`).
-  have B :
-    forall z in closedBall b ε,
-      g z in closedBall b ε -> dist (f (g z)) y <= c * f'symm.nnnorm * dist (f z) y := by
-    intro z hz hgz
-    set v := f'symm (y - f z)
-    calc
-      dist (f (g z)) y = ‖f (z + v) - y‖ := by rw [dist_eq_norm]
-      _ = ‖f (z + v) - f z - f' v + f' v - (y - f z)‖ := by congr 1; abel
-      _ = ‖f (z + v) - f z - f' (z + v - z)‖ := by
-        simp only [v, ContinuousLinearMap.NonlinearRightInverse.right_inv, add_sub_cancel_left,
-          sub_add_cancel]
-      _ <= c * ‖z + v - z‖ := hf _ (hε hgz) _ (hε hz)
-      _ <= c * (f'symm.nnnorm * dist (f z) y) := by
-        gcongr
-        simpa [dist_eq_norm'] using f'symm.bound (y - f z)
-      _ = c * f'symm.nnnorm * dist (f z) y := by ring
-  -- Third bound: a complicated bound on `dist w b` (that will show up in the induction) is enough
-  -- to check that `w` is in the ball on which one has controls. Will be used to check that `u n`
-  -- belongs to this ball for all `n`.
-  have C : forall (n : Nat) (w : E), dist w b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
-      (1 - c * f'symm.nnnorm) * dist (f b) y -> w in closedBall b ε := fun n w hw => by
-    apply hw.trans
-    rw [div_mul_eq_mul_div]; rw [div_le_iff₀]; swap; · linarith
-    calc
-      (f'symm.nnnorm : Real) * (1 - ((c : Real) * f'symm.nnnorm) ^ n) * dist (f b) y =
-          f'symm.nnnorm * dist (f b) y * (1 - ((c : Real) * f'symm.nnnorm) ^ n) := by
-        ring
-      _ <= f'symm.nnnorm * dist (f b) y * 1 := by
-        gcongr
-        rw [sub_le_self_iff]
-        positivity
-      _ <= f'symm.nnnorm * (((f'symm.nnnorm : Real)⁻¹ - c) * ε) := by
-        rw [mul_one]
-        gcongr
-        exact mem_closedBall'.1 hy
-      _ = ε * (1 - c * f'symm.nnnorm) := by field
-  /- Main inductive control: `f (u n)` becomes exponentially close to `y`, and therefore
-    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
-    bound on `dist (u n) b`, from which one checks that `u n` remains in the ball on which we
-    have estimates. -/
-  have D : forall n : Nat, dist (f (u n)) y <= ((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y ∧
-      dist (u n) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
-        (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := fun n => by
-    induction n with
-    | zero => simp [hu]
-    | succ n IH => ?_
-    rw [usucc]
-    have Ign : dist (g (u n)) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
-        (1 - c * f'symm.nnnorm) * dist (f b) y :=
-      calc
-        dist (g (u n)) b <= dist (g (u n)) (u n) + dist (u n) b := dist_triangle _ _ _
-        _ <= f'symm.nnnorm * dist (f (u n)) y + dist (u n) b := add_le_add (A _) le_rfl
-        _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) +
-              f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) / (1 - c * f'symm.nnnorm) *
-                dist (f b) y := by
-                  gcongr
-                  · exact IH.1
-                  · exact IH.2
-        _ = f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
-              (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := by
-          replace Jcf' : (1 : Real) - f'symm.nnnorm * c != 0 := by convert! Jcf' using 1; ring
-          simp [field, pow_succ, -mul_eq_mul_left_iff]
-          ring
-    refine ⟨?_, Ign⟩
-    calc
-      dist (f (g (u n))) y <= c * f'symm.nnnorm * dist (f (u n)) y :=
-        B _ (C n _ IH.2) (C n.succ _ Ign)
-      _ <= (c : Real) * f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
-        gcongr
-        apply IH.1
-      _ = ((c : Real) * f'symm.nnnorm) ^ n.succ * dist (f b) y := by simp only [pow_succ']; ring
-  -- Deduce from the inductive bound that `uₙ` is a Cauchy sequence, therefore converging.
-  have : CauchySeq u := by
-    refine cauchySeq_of_le_geometric _ (↑f'symm.nnnorm * dist (f b) y) Icf' fun n => ?_
-    calc
-      dist (u n) (u (n + 1)) = dist (g (u n)) (u n) := by rw [usucc, dist_comm]
-      _ <= f'symm.nnnorm * dist (f (u n)) y := A _
-      _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
-        gcongr
-        exact (D n).1
-      _ = f'symm.nnnorm * dist (f b) y * ((c : Real) * f'symm.nnnorm) ^ n := by ring
-  obtain ⟨x, hx⟩ : exists x, Tendsto u atTop (𝓝 x) := cauchySeq_tendsto_of_complete this
-  -- As all the `uₙ` belong to the ball `closedBall b ε`, so does their limit `x`.
-  have xmem : x in closedBall b ε :=
-    isClosed_closedBall.mem_of_tendsto hx (Eventually.of_forall fun n => C n _ (D n).2)
-  refine ⟨x, xmem, ?_⟩
-  -- It remains to check that `f x = y`. This follows from continuity of `f` on `closedBall b ε`
-  -- and from the fact that `f uₙ` is converging to `y` by construction.
-  have hx' : Tendsto u atTop (𝓝[closedBall b ε] x) := by
-    simp only [nhdsWithin, tendsto_inf, hx, true_and, tendsto_principal]
-    exact Eventually.of_forall fun n => C n _ (D n).2
-  have T1 : Tendsto (f ∘ u) atTop (𝓝 (f x)) :=
-    (hf.continuousOn.mono hε x xmem).tendsto.comp hx'
-  have T2 : Tendsto (f ∘ u) atTop (𝓝 y) := by
-    rw [tendsto_iff_dist_tendsto_zero]
-    refine squeeze_zero (fun _ => dist_nonneg) (fun n => (D n).1) ?_
-    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) Icf').mul tendsto_const_nhds
-  exact tendsto_nhds_unique T1 T2
-
-Depends on / 依赖: NNReal, NNReal.coe_nonneg, coe_nonneg, dist_le_zero, inv_eq_one_div, inv_pos, le_or_gt, mem_closedBall, mul_nonpos_of_nonpos_of_nonneg, nnnorm, symm.nnnorm, trans_lt
+--- 原说明 ---
+If a function is linearly approximated by a continuous linear map with a (possib
+ly nonlinear)
+right inverse, then it is locally onto: a ball of an explicit radius is included
+ in the image
+of the map.
 -/
 theorem surjOn_closedBall_of_nonlinearRightInverse
     (hf : ApproximatesLinearOn f f' s c)
-    (f'symm : f'.NonlinearRightInverse) {ε : Real} {b : E} (ε0 : 0 <= ε) (hε : closedBall b ε subseteq s) :
-    SurjOn f (closedBall b ε) (closedBall (f b) (((f'symm.nnnorm : Real)⁻¹ - c) * ε)) := by
+    (f'symm : f'.NonlinearRightInverse) {ε : ℝ} {b : E} (ε0 : 0 ≤ ε) (hε : closedBall b ε ⊆ s) :
+    SurjOn f (closedBall b ε) (closedBall (f b) (((f'symm.nnnorm : ℝ)⁻¹ - c) * ε)) := by
   intro y hy
-  rcases le_or_gt (f'symm.nnnorm : Real)⁻¹ c with hc | hc
+  rcases le_or_gt (f'symm.nnnorm : ℝ)⁻¹ c with hc | hc
   · refine ⟨b, by simp [ε0], ?_⟩
-    have : dist y (f b) <= 0 :=
+    have : dist y (f b) ≤ 0 :=
       (mem_closedBall.1 hy).trans (mul_nonpos_of_nonpos_of_nonneg (by linarith) ε0)
     simp only [dist_le_zero] at this
     rw [this]
-  have If' : (0 : Real) < f'symm.nnnorm := by rw [← inv_pos]; exact (NNReal.coe_nonneg _).trans_lt hc
-  have Icf' : (c : Real) * f'symm.nnnorm < 1 := by rwa [inv_eq_one_div, lt_div_iff₀ If'] at hc
-  have Jcf' : (1 : Real) - c * f'symm.nnnorm != 0 := by apply ne_of_gt; linarith
+  have If' : (0 : ℝ) < f'symm.nnnorm := by rw [← inv_pos]; exact (NNReal.coe_nonneg _).trans_lt hc
+  have Icf' : (c : ℝ) * f'symm.nnnorm < 1 := by rwa [inv_eq_one_div, lt_div_iff₀ If'] at hc
+  have Jcf' : (1 : ℝ) - c * f'symm.nnnorm ≠ 0 := by apply ne_of_gt; linarith
   /- We have to show that `y` can be written as `f x` for some `x ∈ closedBall b ε`.
     The idea of the proof is to apply the Banach contraction principle to the map
     `g : x ↦ x + f'symm (y - f x)`, as a fixed point of this map satisfies `f x = y`.
@@ -580,19 +420,19 @@ theorem surjOn_closedBall_of_nonlinearRightInverse
     control. Therefore, the bound can be checked at the next step, and so on inductively.
     -/
   set g := fun x => x + f'symm (y - f x) with hg
-  set u := fun n : Nat => g^[n] b with hu
-  have usucc : forall n, u (n + 1) = g (u n) := by simp [hu, ← iterate_succ_apply' g _ b]
+  set u := fun n : ℕ => g^[n] b with hu
+  have usucc : ∀ n, u (n + 1) = g (u n) := by simp [hu, ← iterate_succ_apply' g _ b]
   -- First bound: if `f z` is close to `y`, then `g z` is close to `z` (i.e., almost a fixed point).
-  have A : forall z, dist (g z) z <= f'symm.nnnorm * dist (f z) y := by
+  have A : ∀ z, dist (g z) z ≤ f'symm.nnnorm * dist (f z) y := by
     intro z
-    rw [dist_eq_norm]; rw [hg]; rw [add_sub_cancel_left]; rw [dist_eq_norm']
+    rw [dist_eq_norm, hg, add_sub_cancel_left, dist_eq_norm']
     exact f'symm.bound _
   -- Second bound: if `z` and `g z` are in the set with good control, then `f (g z)` becomes closer
   -- to `y` than `f z` was (this uses the linear approximation property, and is the reason for the
   -- choice of the formula for `g`).
   have B :
-    forall z in closedBall b ε,
-      g z in closedBall b ε -> dist (f (g z)) y <= c * f'symm.nnnorm * dist (f z) y := by
+    ∀ z ∈ closedBall b ε,
+      g z ∈ closedBall b ε → dist (f (g z)) y ≤ c * f'symm.nnnorm * dist (f z) y := by
     intro z hz hgz
     set v := f'symm (y - f z)
     calc
@@ -601,27 +441,27 @@ theorem surjOn_closedBall_of_nonlinearRightInverse
       _ = ‖f (z + v) - f z - f' (z + v - z)‖ := by
         simp only [v, ContinuousLinearMap.NonlinearRightInverse.right_inv, add_sub_cancel_left,
           sub_add_cancel]
-      _ <= c * ‖z + v - z‖ := hf _ (hε hgz) _ (hε hz)
-      _ <= c * (f'symm.nnnorm * dist (f z) y) := by
+      _ ≤ c * ‖z + v - z‖ := hf _ (hε hgz) _ (hε hz)
+      _ ≤ c * (f'symm.nnnorm * dist (f z) y) := by
         gcongr
         simpa [dist_eq_norm'] using f'symm.bound (y - f z)
       _ = c * f'symm.nnnorm * dist (f z) y := by ring
   -- Third bound: a complicated bound on `dist w b` (that will show up in the induction) is enough
   -- to check that `w` is in the ball on which one has controls. Will be used to check that `u n`
   -- belongs to this ball for all `n`.
-  have C : forall (n : Nat) (w : E), dist w b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
-      (1 - c * f'symm.nnnorm) * dist (f b) y -> w in closedBall b ε := fun n w hw => by
+  have C : ∀ (n : ℕ) (w : E), dist w b ≤ f'symm.nnnorm * (1 - ((c : ℝ) * f'symm.nnnorm) ^ n) /
+      (1 - c * f'symm.nnnorm) * dist (f b) y → w ∈ closedBall b ε := fun n w hw ↦ by
     apply hw.trans
-    rw [div_mul_eq_mul_div]; rw [div_le_iff₀]; swap; · linarith
+    rw [div_mul_eq_mul_div, div_le_iff₀]; swap; · linarith
     calc
-      (f'symm.nnnorm : Real) * (1 - ((c : Real) * f'symm.nnnorm) ^ n) * dist (f b) y =
-          f'symm.nnnorm * dist (f b) y * (1 - ((c : Real) * f'symm.nnnorm) ^ n) := by
+      (f'symm.nnnorm : ℝ) * (1 - ((c : ℝ) * f'symm.nnnorm) ^ n) * dist (f b) y =
+          f'symm.nnnorm * dist (f b) y * (1 - ((c : ℝ) * f'symm.nnnorm) ^ n) := by
         ring
-      _ <= f'symm.nnnorm * dist (f b) y * 1 := by
+      _ ≤ f'symm.nnnorm * dist (f b) y * 1 := by
         gcongr
         rw [sub_le_self_iff]
         positivity
-      _ <= f'symm.nnnorm * (((f'symm.nnnorm : Real)⁻¹ - c) * ε) := by
+      _ ≤ f'symm.nnnorm * (((f'symm.nnnorm : ℝ)⁻¹ - c) * ε) := by
         rw [mul_one]
         gcongr
         exact mem_closedBall'.1 hy
@@ -630,50 +470,50 @@ theorem surjOn_closedBall_of_nonlinearRightInverse
     `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
     bound on `dist (u n) b`, from which one checks that `u n` remains in the ball on which we
     have estimates. -/
-  have D : forall n : Nat, dist (f (u n)) y <= ((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y ∧
-      dist (u n) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
-        (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := fun n => by
+  have D : ∀ n : ℕ, dist (f (u n)) y ≤ ((c : ℝ) * f'symm.nnnorm) ^ n * dist (f b) y ∧
+      dist (u n) b ≤ f'symm.nnnorm * (1 - ((c : ℝ) * f'symm.nnnorm) ^ n) /
+        (1 - (c : ℝ) * f'symm.nnnorm) * dist (f b) y := fun n ↦ by
     induction n with
     | zero => simp [hu]
     | succ n IH => ?_
     rw [usucc]
-    have Ign : dist (g (u n)) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
+    have Ign : dist (g (u n)) b ≤ f'symm.nnnorm * (1 - ((c : ℝ) * f'symm.nnnorm) ^ n.succ) /
         (1 - c * f'symm.nnnorm) * dist (f b) y :=
       calc
-        dist (g (u n)) b <= dist (g (u n)) (u n) + dist (u n) b := dist_triangle _ _ _
-        _ <= f'symm.nnnorm * dist (f (u n)) y + dist (u n) b := add_le_add (A _) le_rfl
-        _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) +
-              f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) / (1 - c * f'symm.nnnorm) *
+        dist (g (u n)) b ≤ dist (g (u n)) (u n) + dist (u n) b := dist_triangle _ _ _
+        _ ≤ f'symm.nnnorm * dist (f (u n)) y + dist (u n) b := add_le_add (A _) le_rfl
+        _ ≤ f'symm.nnnorm * (((c : ℝ) * f'symm.nnnorm) ^ n * dist (f b) y) +
+              f'symm.nnnorm * (1 - ((c : ℝ) * f'symm.nnnorm) ^ n) / (1 - c * f'symm.nnnorm) *
                 dist (f b) y := by
                   gcongr
                   · exact IH.1
                   · exact IH.2
-        _ = f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
-              (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := by
-          replace Jcf' : (1 : Real) - f'symm.nnnorm * c != 0 := by convert! Jcf' using 1; ring
+        _ = f'symm.nnnorm * (1 - ((c : ℝ) * f'symm.nnnorm) ^ n.succ) /
+              (1 - (c : ℝ) * f'symm.nnnorm) * dist (f b) y := by
+          replace Jcf' : (1 : ℝ) - f'symm.nnnorm * c ≠ 0 := by convert! Jcf' using 1; ring
           simp [field, pow_succ, -mul_eq_mul_left_iff]
           ring
     refine ⟨?_, Ign⟩
     calc
-      dist (f (g (u n))) y <= c * f'symm.nnnorm * dist (f (u n)) y :=
+      dist (f (g (u n))) y ≤ c * f'symm.nnnorm * dist (f (u n)) y :=
         B _ (C n _ IH.2) (C n.succ _ Ign)
-      _ <= (c : Real) * f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
+      _ ≤ (c : ℝ) * f'symm.nnnorm * (((c : ℝ) * f'symm.nnnorm) ^ n * dist (f b) y) := by
         gcongr
         apply IH.1
-      _ = ((c : Real) * f'symm.nnnorm) ^ n.succ * dist (f b) y := by simp only [pow_succ']; ring
+      _ = ((c : ℝ) * f'symm.nnnorm) ^ n.succ * dist (f b) y := by simp only [pow_succ']; ring
   -- Deduce from the inductive bound that `uₙ` is a Cauchy sequence, therefore converging.
   have : CauchySeq u := by
-    refine cauchySeq_of_le_geometric _ (↑f'symm.nnnorm * dist (f b) y) Icf' fun n => ?_
+    refine cauchySeq_of_le_geometric _ (↑f'symm.nnnorm * dist (f b) y) Icf' fun n ↦ ?_
     calc
       dist (u n) (u (n + 1)) = dist (g (u n)) (u n) := by rw [usucc, dist_comm]
-      _ <= f'symm.nnnorm * dist (f (u n)) y := A _
-      _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
+      _ ≤ f'symm.nnnorm * dist (f (u n)) y := A _
+      _ ≤ f'symm.nnnorm * (((c : ℝ) * f'symm.nnnorm) ^ n * dist (f b) y) := by
         gcongr
         exact (D n).1
-      _ = f'symm.nnnorm * dist (f b) y * ((c : Real) * f'symm.nnnorm) ^ n := by ring
-  obtain ⟨x, hx⟩ : exists x, Tendsto u atTop (𝓝 x) := cauchySeq_tendsto_of_complete this
+      _ = f'symm.nnnorm * dist (f b) y * ((c : ℝ) * f'symm.nnnorm) ^ n := by ring
+  obtain ⟨x, hx⟩ : ∃ x, Tendsto u atTop (𝓝 x) := cauchySeq_tendsto_of_complete this
   -- As all the `uₙ` belong to the ball `closedBall b ε`, so does their limit `x`.
-  have xmem : x in closedBall b ε :=
+  have xmem : x ∈ closedBall b ε :=
     isClosed_closedBall.mem_of_tendsto hx (Eventually.of_forall fun n => C n _ (D n).2)
   refine ⟨x, xmem, ?_⟩
   -- It remains to check that `f x = y`. This follows from continuity of `f` on `closedBall b ε`
@@ -688,35 +528,68 @@ theorem surjOn_closedBall_of_nonlinearRightInverse
     refine squeeze_zero (fun _ => dist_nonneg) (fun n => (D n).1) ?_
     simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) Icf').mul tendsto_const_nhds
   exact tendsto_nhds_unique T1 T2
-
-/--
-theorem `open_image` / 定理 `open_image`
-
-English:
-theorem open_image
-  statement: (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse)
-  proof: by
-  rcases hc with hE | hc
-  · exact isOpen_discrete _
-  simp only [isOpen_iff_mem_nhds, nhds_basis_closedBall.mem_iff, forall_mem_image] at hs ⊢
-  intro x hx
-  rcases hs x hx with ⟨ε, ε0, hε⟩
-  refine ⟨(f'symm.nnnorm⁻¹ - c) * ε, mul_pos (sub_pos.2 hc) ε0, ?_⟩
-  exact (hf.surjOn_closedBall_of_nonlinearRightInverse f'symm (le_of_lt ε0) hε).mono hε Subset.rfl
-
-中文:
-定理 open_image
-  结论: (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse)
-  证明: by
-  rcases hc with hE | hc
-  · exact isOpen_discrete _
-  simp only [isOpen_iff_mem_nhds, nhds_basis_closedBall.mem_iff, forall_mem_image] at hs ⊢
-  intro x hx
-  rcases hs x hx with ⟨ε, ε0, hε⟩
-  refine ⟨(f'symm.nnnorm⁻¹ - c) * ε, mul_pos (sub_pos.2 hc) ε0, ?_⟩
-  exact (hf.surjOn_closedBall_of_nonlinearRightInverse f'symm (le_of_lt ε0) hε).mono hε Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, forall_mem_image, hf.surjOn_closedBall_of_nonlinearRightInverse, isOpen_discrete, isOpen_iff_mem_nhds, le_of_lt, mem_iff, mul_pos, nhds_basis_closedBall, nhds_basis_closedBall.mem_iff, nnnorm, sub_pos, surjOn_closedBall_of_nonlinearRightInverse, symm.nnnorm
+/-
+**ApproximatesLinearOn.open_image** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearO
+n`。
+形式化陈述：open_image (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRigh
+tInverse) (hs : IsOpen s) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹) : IsOpen (
+f '' s)
+参数：hf : ApproximatesLinearOn f f' s c；f'symm : f'.NonlinearRightInverse；hs : IsO
+pen s；hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_discrete`：isOpen_discrete (s : Set α) : IsOpen s
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Finite.of_subsingleton`：Finite.of_subsingleton [Subsingleton α] (s : Set
+ α) : s.Finite
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `Metric.nhds_basis_closedBall`：nhds_basis_closedBall : (𝓝 x).HasBasis (fu
+n ε : Real => 0 < ε) (closedBall x)
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_pos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddRightStr
+ictMono α] {a b : α}, 0 < a - b ↔ b < a
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Set.SurjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂
+ t₁
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `ApproximatesLinearOn.surjOn_closedBall_of_nonlinearRightInverse`：surjOn_
+closedBall_of_nonlinearRightInverse (hf : ApproximatesLinearOn f f' s c) (f'symm
+ : f'.NonlinearRightInverse) {ε : Real} {b : E} (ε0 :…
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem open_image (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse)
     (hs : IsOpen s) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹) : IsOpen (f '' s) := by
@@ -727,64 +600,75 @@ theorem open_image (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRi
   rcases hs x hx with ⟨ε, ε0, hε⟩
   refine ⟨(f'symm.nnnorm⁻¹ - c) * ε, mul_pos (sub_pos.2 hc) ε0, ?_⟩
   exact (hf.surjOn_closedBall_of_nonlinearRightInverse f'symm (le_of_lt ε0) hε).mono hε Subset.rfl
-
-/--
-theorem `image_mem_nhds` / 定理 `image_mem_nhds`
-
-English:
-theorem image_mem_nhds
-  statement: (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse)
-  proof: by
-  obtain ⟨t, hts, ht, xt⟩ : exists t, t subseteq s ∧ IsOpen t ∧ x in t := _root_.mem_nhds_iff.1 hs
-  grw [← hts]
-  exact IsOpen.mem_nhds ((hf.mono_set hts).open_image f'symm ht hc) (mem_image_of_mem _ xt)
-
-中文:
-定理 image_mem_nhds
-  结论: (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse)
-  证明: by
-  obtain ⟨t, hts, ht, xt⟩ : exists t, t subseteq s ∧ IsOpen t ∧ x in t := _root_.mem_nhds_iff.1 hs
-  grw [← hts]
-  exact IsOpen.mem_nhds ((hf.mono_set hts).open_image f'symm ht hc) (mem_image_of_mem _ xt)
-
-Depends on / 依赖: IsOpen, IsOpen.mem_nhds, _root_, _root_.mem_nhds_iff, hf.mono_set, mem_image_of_mem, mem_nhds, mem_nhds_iff, mono_set, open_image, subseteq
+/-
+**ApproximatesLinearOn.image_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLin
+earOn`。
+形式化陈述：image_mem_nhds (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.Nonlinear
+RightInverse) {x : E} (hs : s in 𝓝 x) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹
+) : f '' s in 𝓝 (f x)
+参数：hf : ApproximatesLinearOn f f' s c；f'symm : f'.NonlinearRightInverse；hs : s i
+n 𝓝 x；hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhds_iff`：mem_nhds_iff : s in 𝓝 x ↔ exists t subseteq s, IsOpen t ∧ 
+x in t
+· 使用定理 `Filter.mem_of_superset._gcongr_1`：∀ {α : Type u_1} {f : Filter α} {x y :
+ Set α}, x ⊆ y → x ∈ f → y ∈ f
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `ApproximatesLinearOn.open_image`：open_image (hf : ApproximatesLinearOn f
+ f' s c) (f'symm : f'.NonlinearRightInverse) (hs : IsOpen s) (hc : Subsingleton 
+F ∨ c < f'symm.nnnorm…
+· 使用定理 `ApproximatesLinearOn.mono_set`：mono_set (hst : s subseteq t) (hf : Appro
+ximatesLinearOn f f' t c) : ApproximatesLinearOn f f' s c
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem image_mem_nhds (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse)
-    {x : E} (hs : s in 𝓝 x) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹) : f '' s in 𝓝 (f x) := by
-  obtain ⟨t, hts, ht, xt⟩ : exists t, t subseteq s ∧ IsOpen t ∧ x in t := _root_.mem_nhds_iff.1 hs
+    {x : E} (hs : s ∈ 𝓝 x) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹) : f '' s ∈ 𝓝 (f x) := by
+  obtain ⟨t, hts, ht, xt⟩ : ∃ t, t ⊆ s ∧ IsOpen t ∧ x ∈ t := _root_.mem_nhds_iff.1 hs
   grw [← hts]
   exact IsOpen.mem_nhds ((hf.mono_set hts).open_image f'symm ht hc) (mem_image_of_mem _ xt)
-
-/--
-theorem `map_nhds_eq` / 定理 `map_nhds_eq`
-
-English:
-theorem map_nhds_eq
-  statement: (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse) {x : E}
-  proof: by
-  refine
-    le_antisymm ((hf.continuousOn x (mem_of_mem_nhds hs)).continuousAt hs) (le_map fun t ht => ?_)
-  have : f '' (s inter t) in 𝓝 (f x) :=
-    (hf.mono_set inter_subset_left).image_mem_nhds f'symm (inter_mem hs ht) hc
-  exact mem_of_superset this (image_mono inter_subset_right)
-
-中文:
-定理 map_nhds_eq
-  结论: (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse) {x : E}
-  证明: by
-  refine
-    le_antisymm ((hf.continuousOn x (mem_of_mem_nhds hs)).continuousAt hs) (le_map fun t ht => ?_)
-  have : f '' (s inter t) in 𝓝 (f x) :=
-    (hf.mono_set inter_subset_left).image_mem_nhds f'symm (inter_mem hs ht) hc
-  exact mem_of_superset this (image_mono inter_subset_right)
-
-Depends on / 依赖: continuousAt, continuousOn, hf.continuousOn, hf.mono_set, image_mem_nhds, image_mono, inter_mem, inter_subset_left, inter_subset_right, le_antisymm, le_map, mem_of_mem_nhds, mem_of_superset, mono_set
+/-
+**ApproximatesLinearOn.map_nhds_eq** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinear
+On`。
+形式化陈述：map_nhds_eq (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRig
+htInverse) {x : E} (hs : s in 𝓝 x) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹) :
+ map f (𝓝 x) = 𝓝 (f x)
+参数：hf : ApproximatesLinearOn f f' s c；f'symm : f'.NonlinearRightInverse；hs : s i
+n 𝓝 x；hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `ContinuousWithinAt.continuousAt`：ContinuousWithinAt.continuousAt (h : Co
+ntinuousWithinAt f s x) (hs : s in 𝓝 x) : ContinuousAt f x
+· 使用定理 `ApproximatesLinearOn.continuousOn`：∀ {𝕜 : Type u_1} [inst : Nontrivially
+NormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : Normed
+Space 𝕜 E] {F : Type u_…
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+· 使用定理 `Filter.le_map`：le_map {f : Filter α} {m : α -> β} {g : Filter β} (h : fo
+rall s in f, m '' s in g) : g <= f.map m
+· 使用定理 `ApproximatesLinearOn.image_mem_nhds`：image_mem_nhds (hf : ApproximatesLi
+nearOn f f' s c) (f'symm : f'.NonlinearRightInverse) {x : E} (hs : s in 𝓝 x) (hc
+ : Subsingleton F ∨ c < f…
+· 使用定理 `ApproximatesLinearOn.mono_set`：mono_set (hst : s subseteq t) (hf : Appro
+ximatesLinearOn f f' t c) : ApproximatesLinearOn f f' s c
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
 theorem map_nhds_eq (hf : ApproximatesLinearOn f f' s c) (f'symm : f'.NonlinearRightInverse) {x : E}
-    (hs : s in 𝓝 x) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹) : map f (𝓝 x) = 𝓝 (f x) := by
+    (hs : s ∈ 𝓝 x) (hc : Subsingleton F ∨ c < f'symm.nnnorm⁻¹) : map f (𝓝 x) = 𝓝 (f x) := by
   refine
     le_antisymm ((hf.continuousOn x (mem_of_mem_nhds hs)).continuousAt hs) (le_map fun t ht => ?_)
-  have : f '' (s inter t) in 𝓝 (f x) :=
+  have : f '' (s ∩ t) ∈ 𝓝 (f x) :=
     (hf.mono_set inter_subset_left).image_mem_nhds f'symm (inter_mem hs ht) hc
   exact mem_of_superset this (image_mono inter_subset_right)
 
@@ -797,247 +681,347 @@ We also assume that either `E = {0}`, or `c < ‖f'⁻¹‖⁻¹`. We use `N` as
 -/
 
 
-variable {f' : E ≃L[𝕜] F} {s : Set E} {c : Real>=0}
+variable {f' : E ≃L[𝕜] F} {s : Set E} {c : ℝ≥0}
 
-local notation "N" => ‖(f'.symm : F ->L[𝕜] E)‖₊
+local notation "N" => ‖(f'.symm : F →L[𝕜] E)‖₊
 
-/--
-theorem `antilipschitz` / 定理 `antilipschitz`
-
-English:
-theorem antilipschitz
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: by
-  rcases hc with hE | hc
-  · exact AntilipschitzWith.of_subsingleton
-  convert! (f'.antilipschitz.domRestrict s).add_lipschitzWith hf.lipschitz_sub hc
-  simp [domRestrict]
-
-中文:
-定理 antilipschitz
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: by
-  rcases hc with hE | hc
-  · exact AntilipschitzWith.of_subsingleton
-  convert! (f'.antilipschitz.domRestrict s).add_lipschitzWith hf.lipschitz_sub hc
-  simp [domRestrict]
+/-
+**ApproximatesLinearOn.antilipschitz** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLine
+arOn`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_3} [inst_3 : N
+ormedAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {f' : E ≃L[𝕜] F} {
+s : Set E} {c : NNReal},   ApproximatesLinearOn f (↑f') s c →     Subsingleton E
+ ∨ c < ‖↑f'.symm‖₊⁻¹ → AntilipschitzWith (‖↑f'.symm‖₊⁻¹ - c)⁻¹ (s.domRestrict f)
+参数：↑f'；‖↑f'.symm‖₊⁻¹ - c；s.domRestrict f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntilipschitzWith.of_subsingleton`：of_subsingleton [Subsingleton α] {K :
+ Real>=0} : AntilipschitzWith K f
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AntilipschitzWith.add_lipschitzWith`：∀ {α : Type u_4} {E : Type u_5} [in
+st : SeminormedAddCommGroup E] [inst_1 : PseudoEMetricSpace α] {Kf Kg : NNReal} 
+  {f g : α → E},   Antili…
+· 使用定理 `AntilipschitzWith.domRestrict`：domRestrict (hf : AntilipschitzWith K f) 
+(s : Set α) : AntilipschitzWith K (s.domRestrict f)
+· 使用定理 `ContinuousLinearEquiv.antilipschitz`：∀ {𝕜 : Type u_1} {𝕜₂ : Type u_3} {E
+ : Type u_5} {F : Type u_6} [inst : NormedAddCommGroup E]   [inst_1 : NormedAddC
+ommGroup F] [inst_2 : Non…
+· 使用定理 `ApproximatesLinearOn.lipschitz_sub`：lipschitz_sub (hf : ApproximatesLine
+arOn f f' s c) : LipschitzWith c fun x : s => f x - f' x
 -/
-protected theorem antilipschitz (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+protected theorem antilipschitz (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) : AntilipschitzWith (N⁻¹ - c)⁻¹ (s.domRestrict f) := by
   rcases hc with hE | hc
   · exact AntilipschitzWith.of_subsingleton
   convert! (f'.antilipschitz.domRestrict s).add_lipschitzWith hf.lipschitz_sub hc
   simp [domRestrict]
-
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: (hf.antilipschitz hc).injective
-
-中文:
-定理 injective
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: (hf.antilipschitz hc).injective
+/-
+**ApproximatesLinearOn.injective** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearOn
+`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_3} [inst_3 : N
+ormedAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {f' : E ≃L[𝕜] F} {
+s : Set E} {c : NNReal},   ApproximatesLinearOn f (↑f') s c → Subsingleton E ∨ c
+ < ‖↑f'.symm‖₊⁻¹ → Function.Injective (s.domRestrict f)
+参数：↑f'；s.domRestrict f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntilipschitzWith.injective`：∀ {α : Type u_4} {β : Type u_5} [inst : EMe
+tricSpace α] [inst_1 : PseudoEMetricSpace β] {K : NNReal} {f : α → β},   Antilip
+schitzWith K f → …
+· 使用定理 `ApproximatesLinearOn.antilipschitz`：∀ {𝕜 : Type u_1} [inst : Nontriviall
+yNormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : Norme
+dSpace 𝕜 E] {F : Type u_…
 -/
-protected theorem injective (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+protected theorem injective (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) : Injective (s.domRestrict f) :=
   (hf.antilipschitz hc).injective
-
-/--
-theorem `injOn` / 定理 `injOn`
-
-English:
-theorem injOn
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: injOn_iff_injective.2 hf.injective hc
-
-中文:
-定理 injOn
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: injOn_iff_injective.2 hf.injective hc
+/-
+**ApproximatesLinearOn.injOn** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearOn`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_3} [inst_3 : N
+ormedAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {f' : E ≃L[𝕜] F} {
+s : Set E} {c : NNReal},   ApproximatesLinearOn f (↑f') s c → Subsingleton E ∨ c
+ < ‖↑f'.symm‖₊⁻¹ → Set.InjOn f s
+参数：↑f'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.injOn_iff_injective`：injOn_iff_injective : InjOn f s ↔ Injective (s.
+domRestrict f)
+· 使用定理 `ApproximatesLinearOn.injective`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpa
+ce 𝕜 E] {F : Type u_…
 -/
-protected theorem injOn (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+protected theorem injOn (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) : InjOn f s :=
-injOn_iff_injective.2 hf.injective hc
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  statement: [CompleteSpace E] (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
-  proof: by
-  rcases hc with hE | hc
-  · have : Subsingleton F := (Equiv.subsingleton_congr f'.toEquiv).1 hE
-    exact surjective_to_subsingleton _
-  · apply forall_of_forall_mem_closedBall (fun y : F => exists a, f a = y) (f 0) _
-    have hc' : (0 : Real) < N⁻¹ - c := by rw [sub_pos]; exact hc
-    let p : Real -> Prop := fun R => closedBall (f 0) R subseteq Set.range f
-    have hp : forallᶠ r : Real in atTop, p ((N⁻¹ - c) * r) := by
-      have hr : forallᶠ r : Real in atTop, 0 <= r := eventually_ge_atTop 0
-      refine hr.mono fun r hr => Subset.trans ?_ (image_subset_range f (closedBall 0 r))
-      refine hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse hr ?_
-      exact subset_univ _
-    refine ((tendsto_id.const_mul_atTop hc').frequently hp.frequently).mono ?_
-    exact fun R h y hy => h hy
-
-中文:
-定理 surjective
-  结论: [完备空间 E] (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
-  证明: by
-  rcases hc with hE | hc
-  · have : Subsingleton F := (Equiv.subsingleton_congr f'.toEquiv).1 hE
-    exact surjective_to_subsingleton _
-  · apply forall_of_forall_mem_closedBall (fun y : F => exists a, f a = y) (f 0) _
-    have hc' : (0 : Real) < N⁻¹ - c := by rw [sub_pos]; exact hc
-    let p : Real -> Prop := fun R => closedBall (f 0) R subseteq Set.range f
-    have hp : forallᶠ r : Real in atTop, p ((N⁻¹ - c) * r) := by
-      have hr : forallᶠ r : Real in atTop, 0 <= r := eventually_ge_atTop 0
-      refine hr.mono fun r hr => Subset.trans ?_ (image_subset_range f (closedBall 0 r))
-      refine hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse hr ?_
-      exact subset_univ _
-    refine ((tendsto_id.const_mul_atTop hc').frequently hp.frequently).mono ?_
-    exact fun R h y hy => h hy
+  injOn_iff_injective.2 <| hf.injective hc
+/-
+**ApproximatesLinearOn.surjective** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearO
+n`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type u_3} [inst_3 : N
+ormedAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {f' : E ≃L[𝕜] F} {
+c : NNReal} [CompleteSpace E],   ApproximatesLinearOn f (↑f') Set.univ c → Subsi
+ngleton E ∨ c < ‖↑f'.symm‖₊⁻¹ → Function.Surjective f
+参数：↑f'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.subsingleton_congr`：subsingleton_congr (e : α ≃ β) : Subsingleton 
+α ↔ Subsingleton β
+· 使用定理 `Function.surjective_to_subsingleton`：surjective_to_subsingleton [na : No
+nempty α] [Subsingleton β] (f : α -> β) : Surjective f
+· 使用定理 `AddTorsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : A
+ddGroup G} [self : AddTorsor G P], Nonempty P
+· 使用定理 `Metric.forall_of_forall_mem_closedBall`：forall_of_forall_mem_closedBall 
+(p : α -> Prop) (x : α) (H : existsᶠ R : Real in atTop, forall y in closedBall x
+ R, p y) (y : α) : p y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_pos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddRightStr
+ictMono α] {a b : α}, 0 < a - b ↔ b < a
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Filter.eventually_ge_atTop`：eventually_ge_atTop [Preorder α] (a : α) : f
+orallᶠ x in atTop, a <= x
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `ApproximatesLinearOn.surjOn_closedBall_of_nonlinearRightInverse`：surjOn_
+closedBall_of_nonlinearRightInverse (hf : ApproximatesLinearOn f f' s c) (f'symm
+ : f'.NonlinearRightInverse) {ε : Real} {b : E} (ε0 :…
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Tendsto.frequently`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∃ᶠ (x
+ : α) in l₁, p …
+· 使用定理 `Filter.Tendsto.const_mul_atTop`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+Semifield α] [inst_1 : LinearOrder α] [IsStrictOrderedRing α] {l : Filter β}   {
+f : β → α} {r : α}, …
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
+· 使用定理 `Filter.Eventually.frequently`：∀ {α : Type u} {f : Filter α} [f.NeBot] {p
+ : α → Prop}, (∀ᶠ (x : α) in f, p x) → ∃ᶠ (x : α) in f, p x
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-protected theorem surjective [CompleteSpace E] (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
+protected theorem surjective [CompleteSpace E] (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) univ c)
     (hc : Subsingleton E ∨ c < N⁻¹) : Surjective f := by
   rcases hc with hE | hc
   · have : Subsingleton F := (Equiv.subsingleton_congr f'.toEquiv).1 hE
     exact surjective_to_subsingleton _
-  · apply forall_of_forall_mem_closedBall (fun y : F => exists a, f a = y) (f 0) _
-    have hc' : (0 : Real) < N⁻¹ - c := by rw [sub_pos]; exact hc
-    let p : Real -> Prop := fun R => closedBall (f 0) R subseteq Set.range f
-    have hp : forallᶠ r : Real in atTop, p ((N⁻¹ - c) * r) := by
-      have hr : forallᶠ r : Real in atTop, 0 <= r := eventually_ge_atTop 0
+  · apply forall_of_forall_mem_closedBall (fun y : F => ∃ a, f a = y) (f 0) _
+    have hc' : (0 : ℝ) < N⁻¹ - c := by rw [sub_pos]; exact hc
+    let p : ℝ → Prop := fun R => closedBall (f 0) R ⊆ Set.range f
+    have hp : ∀ᶠ r : ℝ in atTop, p ((N⁻¹ - c) * r) := by
+      have hr : ∀ᶠ r : ℝ in atTop, 0 ≤ r := eventually_ge_atTop 0
       refine hr.mono fun r hr => Subset.trans ?_ (image_subset_range f (closedBall 0 r))
       refine hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse hr ?_
       exact subset_univ _
     refine ((tendsto_id.const_mul_atTop hc').frequently hp.frequently).mono ?_
     exact fun R h y hy => h hy
 
-/--
-Definition of `toPartialEquiv` / `toPartialEquiv` 的定义
+/-- A map approximating a linear equivalence on a set defines a partial equivalence on this set.
+Should not be used outside of this file, because it is superseded by `toOpenPartialHomeomorph`
+below.
 
-English:
-definition toPartialEquiv
-  signature: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  body: (hf.injOn hc).toPartialEquiv _ _
+This is a first step towards the inverse function. -/
+/-
+**ApproximatesLinearOn.toPartialEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ApproximatesLin
+earOn`。
+形式化陈述：toPartialEquiv (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : S
+ubsingleton E ∨ c < N⁻¹) : PartialEquiv E F
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ApproximatesLinearOn.injOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {F : Type u_…
 
-中文:
-定义 toPartialEquiv
-  签名: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  定义体: (hf.injOn hc).toPartialEquiv _ _
+--- 原说明 ---
+A map approximating a linear equivalence on a set defines a partial equivalence 
+on this set.
+Should not be used outside of this file, because it is superseded by `toOpenPart
+ialHomeomorph`
+below.
 
-Depends on / 依赖: hf.injOn, toPartialEquiv
+This is a first step towards the inverse function.
 -/
-def toPartialEquiv (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+def toPartialEquiv (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) : PartialEquiv E F :=
   (hf.injOn hc).toPartialEquiv _ _
 
-/--
-theorem `inverse_continuousOn` / 定理 `inverse_continuousOn`
+/-- The inverse function is continuous on `f '' s`.
+Use properties of `OpenPartialHomeomorph` instead. -/
+/-
+**ApproximatesLinearOn.inverse_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 `Approxima
+tesLinearOn`。
+形式化陈述：inverse_continuousOn (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (
+hc : Subsingleton E ∨ c < N⁻¹) : ContinuousOn (hf.toPartialEquiv hc).symm (f '' 
+s)
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousOn_iff_continuous_domRestrict`：continuousOn_iff_continuous_dom
+Restrict : ContinuousOn f s ↔ Continuous (s.domRestrict f)
+· 使用定理 `LipschitzWith.continuous`：∀ {α : Type u} {β : Type v} [inst : PseudoEMet
+ricSpace α] [inst_1 : PseudoEMetricSpace β] {K : NNReal} {f : α → β},   Lipschit
+zWith K f → Co…
+· 使用定理 `AntilipschitzWith.to_rightInvOn'`：to_rightInvOn' {s : Set α} (hf : Antil
+ipschitzWith K (s.domRestrict f)) {g : β -> α} {t : Set β} (g_maps : MapsTo g t 
+s) (g_inv : RightInvOn…
+· 使用定理 `ApproximatesLinearOn.antilipschitz`：∀ {𝕜 : Type u_1} [inst : Nontriviall
+yNormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : Norme
+dSpace 𝕜 E] {F : Type u_…
+· 使用定理 `PartialEquiv.map_target`：map_target {x : β} (h : x in e.target) : e.symm
+ x in e.source
+· 使用定理 `PartialEquiv.right_inv'`：∀ {α : Type u_5} {β : Type u_6} (self : Partial
+Equiv α β) ⦃x : β⦄, x ∈ self.target → ↑self (self.invFun x) = x
 
-English:
-theorem inverse_continuousOn
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: by
-  apply continuousOn_iff_continuous_domRestrict.2
-  refine ((hf.antilipschitz hc).to_rightInvOn' ?_ (hf.toPartialEquiv hc).right_inv').continuous
-  exact fun x hx => (hf.toPartialEquiv hc).map_target hx
-
-中文:
-定理 inverse_continuousOn
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: by
-  apply continuousOn_iff_continuous_domRestrict.2
-  refine ((hf.antilipschitz hc).to_rightInvOn' ?_ (hf.toPartialEquiv hc).right_inv').continuous
-  exact fun x hx => (hf.toPartialEquiv hc).map_target hx
-
-Depends on / 依赖: antilipschitz, continuous, continuousOn_iff_continuous_domRestrict, hf.antilipschitz, hf.toPartialEquiv, map_target, right_inv, toPartialEquiv, to_rightInvOn
+--- 原说明 ---
+The inverse function is continuous on `f '' s`.
+Use properties of `OpenPartialHomeomorph` instead.
 -/
-theorem inverse_continuousOn (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+theorem inverse_continuousOn (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) : ContinuousOn (hf.toPartialEquiv hc).symm (f '' s) := by
   apply continuousOn_iff_continuous_domRestrict.2
   refine ((hf.antilipschitz hc).to_rightInvOn' ?_ (hf.toPartialEquiv hc).right_inv').continuous
   exact fun x hx => (hf.toPartialEquiv hc).map_target hx
 
-/--
-theorem `to_inv` / 定理 `to_inv`
+/-- The inverse function is approximated linearly on `f '' s` by `f'.symm`. -/
+/-
+**ApproximatesLinearOn.to_inv** 是 Mathlib 中的一个定理，位于命名空间 `ApproximatesLinearOn`。
+形式化陈述：to_inv (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : Subsingle
+ton E ∨ c < N⁻¹) : ApproximatesLinearOn (hf.toPartialEquiv hc).symm (f'.symm : F
+ ->L[𝕜] E) (f '' s) (N * (N⁻¹ - c)⁻¹ * c)
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PartialEquiv.left_inv`：left_inv {x : α} (h : x in e.source) : e.symm (e 
+x) = x
+· 使用定理 `ContinuousLinearMap.bound_of_antilipschitz`：bound_of_antilipschitz (f : 
+E ->SL[σ] F) {K : Real>=0} (h : AntilipschitzWith K f) (x) : ‖x‖ <= K * ‖f x‖
+· 使用定理 `ContinuousLinearEquiv.antilipschitz`：∀ {𝕜 : Type u_1} {𝕜₂ : Type u_3} {E
+ : Type u_5} {F : Type u_6} [inst : NormedAddCommGroup E]   [inst_1 : NormedAddC
+ommGroup F] [inst_2 : Non…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousSemilinearEquivClass.continuousSemilinearMapClass`：∀ (F : Type
+ u_1) {R : Type u_2} {S : Type u_3} [inst : Semiring R] [inst_1 : Semiring S] (σ
+ : R →+* S) {σ' : S →+* R}   [inst_2 : RingHomInv…
+· 使用定理 `ContinuousLinearEquiv.apply_symm_apply`：apply_symm_apply (e : M₁ ≃SL[σ₁₂
+] M₂) (c : M₂) : e (e.symm c) = c
+· 使用定理 `_private.Mathlib.Analysis.Calculus.InverseFunctionTheorem.ApproximatesLi
+nearOn.0.ApproximatesLinearOn.to_inv._abel_1_1`：∀ {𝕜 : Type u_3} [inst : Nontriv
+iallyNormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : N
+ormedSpace 𝕜 E] {F : Type u_…
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+· 使用定理 `AntilipschitzWith.le_mul_dist`：∀ {α : Type u_1} {β : Type u_2} [inst : P
+seudoMetricSpace α] [inst_1 : PseudoMetricSpace β] {K : NNReal} {f : α → β},   A
+ntilipschitzWith K …
+· 使用定理 `ApproximatesLinearOn.antilipschitz`：∀ {𝕜 : Type u_1} [inst : Nontriviall
+yNormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : Norme
+dSpace 𝕜 E] {F : Type u_…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_sub_rev`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a b : E), 
+‖a - b‖ = ‖b - a‖
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+（共 37 条，此处仅展示前 30 条）
 
-English:
-theorem to_inv
-  given: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : Subsingleton E ∨ c < N⁻¹)
-  proof: fun x hx y hy => by
-  set A := hf.toPartialEquiv hc
-  have Af : forall z, A z = f z := fun z => rfl
-  rcases (mem_image _ _ _).1 hx with ⟨x', x's, rfl⟩
-  rcases (mem_image _ _ _).1 hy with ⟨y', y's, rfl⟩
-  rw [← Af x']; rw [← Af y']; rw [A.left_inv x's]; rw [A.left_inv y's]
-  calc
-    ‖x' - y' - f'.symm (A x' - A y')‖ <= N * ‖f' (x' - y' - f'.symm (A x' - A y'))‖ :=
-      (f' : E ->L[𝕜] F).bound_of_antilipschitz f'.antilipschitz _
-    _ = N * ‖A y' - A x' - f' (y' - x')‖ := by
-      congr 2
-      simp only [ContinuousLinearEquiv.apply_symm_apply, map_sub]
-      abel
-    _ <= N * (c * ‖y' - x'‖) := by gcongr; exact hf _ y's _ x's
-    _ <= N * (c * (((N⁻¹ - c)⁻¹ : Real>=0) * ‖A y' - A x'‖)) := by
-      gcongr
-      rw [← dist_eq_norm]; rw [← dist_eq_norm]
-      exact (hf.antilipschitz hc).le_mul_dist ⟨y', y's⟩ ⟨x', x's⟩
-    _ = (N * (N⁻¹ - c)⁻¹ * c : Real>=0) * ‖A x' - A y'‖ := by
-      simp only [norm_sub_rev, NNReal.coe_mul]; ring
-
-中文:
-定理 to_inv
-  条件: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : 子单例 E ∨ c < N⁻¹)
-  证明: fun x hx y hy => by
-  set A := hf.toPartialEquiv hc
-  have Af : forall z, A z = f z := fun z => rfl
-  rcases (mem_image _ _ _).1 hx with ⟨x', x's, rfl⟩
-  rcases (mem_image _ _ _).1 hy with ⟨y', y's, rfl⟩
-  rw [← Af x']; rw [← Af y']; rw [A.left_inv x's]; rw [A.left_inv y's]
-  calc
-    ‖x' - y' - f'.symm (A x' - A y')‖ <= N * ‖f' (x' - y' - f'.symm (A x' - A y'))‖ :=
-      (f' : E ->L[𝕜] F).bound_of_antilipschitz f'.antilipschitz _
-    _ = N * ‖A y' - A x' - f' (y' - x')‖ := by
-      congr 2
-      simp only [ContinuousLinearEquiv.apply_symm_apply, map_sub]
-      abel
-    _ <= N * (c * ‖y' - x'‖) := by gcongr; exact hf _ y's _ x's
-    _ <= N * (c * (((N⁻¹ - c)⁻¹ : Real>=0) * ‖A y' - A x'‖)) := by
-      gcongr
-      rw [← dist_eq_norm]; rw [← dist_eq_norm]
-      exact (hf.antilipschitz hc).le_mul_dist ⟨y', y's⟩ ⟨x', x's⟩
-    _ = (N * (N⁻¹ - c)⁻¹ * c : Real>=0) * ‖A x' - A y'‖ := by
-      simp only [norm_sub_rev, NNReal.coe_mul]; ring
-
-Depends on / 依赖: A.left_inv, ContinuousLinearEquiv, ContinuousLinearEquiv.app, antilipschitz, bound_of_antilipschitz, hf.toPartialEquiv, left_inv, mem_image, toPartialEquiv
+--- 原说明 ---
+The inverse function is approximated linearly on `f '' s` by `f'.symm`.
 -/
-theorem to_inv (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : Subsingleton E ∨ c < N⁻¹) :
-    ApproximatesLinearOn (hf.toPartialEquiv hc).symm (f'.symm : F ->L[𝕜] E) (f '' s)
-      (N * (N⁻¹ - c)⁻¹ * c) := fun x hx y hy => by
+theorem to_inv (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c) (hc : Subsingleton E ∨ c < N⁻¹) :
+    ApproximatesLinearOn (hf.toPartialEquiv hc).symm (f'.symm : F →L[𝕜] E) (f '' s)
+      (N * (N⁻¹ - c)⁻¹ * c) := fun x hx y hy ↦ by
   set A := hf.toPartialEquiv hc
-  have Af : forall z, A z = f z := fun z => rfl
+  have Af : ∀ z, A z = f z := fun z => rfl
   rcases (mem_image _ _ _).1 hx with ⟨x', x's, rfl⟩
   rcases (mem_image _ _ _).1 hy with ⟨y', y's, rfl⟩
-  rw [← Af x']; rw [← Af y']; rw [A.left_inv x's]; rw [A.left_inv y's]
+  rw [← Af x', ← Af y', A.left_inv x's, A.left_inv y's]
   calc
-    ‖x' - y' - f'.symm (A x' - A y')‖ <= N * ‖f' (x' - y' - f'.symm (A x' - A y'))‖ :=
-      (f' : E ->L[𝕜] F).bound_of_antilipschitz f'.antilipschitz _
+    ‖x' - y' - f'.symm (A x' - A y')‖ ≤ N * ‖f' (x' - y' - f'.symm (A x' - A y'))‖ :=
+      (f' : E →L[𝕜] F).bound_of_antilipschitz f'.antilipschitz _
     _ = N * ‖A y' - A x' - f' (y' - x')‖ := by
       congr 2
       simp only [ContinuousLinearEquiv.apply_symm_apply, map_sub]
       abel
-    _ <= N * (c * ‖y' - x'‖) := by gcongr; exact hf _ y's _ x's
-    _ <= N * (c * (((N⁻¹ - c)⁻¹ : Real>=0) * ‖A y' - A x'‖)) := by
+    _ ≤ N * (c * ‖y' - x'‖) := by gcongr; exact hf _ y's _ x's
+    _ ≤ N * (c * (((N⁻¹ - c)⁻¹ : ℝ≥0) * ‖A y' - A x'‖)) := by
       gcongr
-      rw [← dist_eq_norm]; rw [← dist_eq_norm]
+      rw [← dist_eq_norm, ← dist_eq_norm]
       exact (hf.antilipschitz hc).le_mul_dist ⟨y', y's⟩ ⟨x', x's⟩
-    _ = (N * (N⁻¹ - c)⁻¹ * c : Real>=0) * ‖A x' - A y'‖ := by
+    _ = (N * (N⁻¹ - c)⁻¹ * c : ℝ≥0) * ‖A x' - A y'‖ := by
       simp only [norm_sub_rev, NNReal.coe_mul]; ring
 
 variable [CompleteSpace E]
@@ -1046,164 +1030,134 @@ section
 
 variable (f s)
 
-/--
-Definition of `toOpenPartialHomeomorph` / `toOpenPartialHomeomorph` 的定义
+/-- Given a function `f` that approximates a linear equivalence on an open set `s`,
+returns an open partial homeomorphism with `toFun = f` and `source = s`. -/
+/-
+**ApproximatesLinearOn.toOpenPartialHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Approx
+imatesLinearOn`。
+形式化陈述：toOpenPartialHomeomorph (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c
+) (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) : OpenPartialHomeomorph E F wh
+ere toPartialEquiv
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹；hs : IsOpen s。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ApproximatesLinearOn.inverse_continuousOn`：inverse_continuousOn (hf : Ap
+proximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : Subsingleton E ∨ c < N⁻¹) : Co
+ntinuousOn (hf.toPartialEquiv h…
 
-English:
-definition toOpenPartialHomeomorph
-  signature: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  body: hf.toPartialEquiv hc
-  open_source := hs
-open_target := hf.open_image f'.toNonlinearRightInverse hs by
-    rwa [f'.toEquiv.subsingleton_congr] at hc
-  continuousOn_toFun := hf.continuousOn
-  continuousOn_invFun := hf.inverse_continuousOn hc
-
-@[simp]
-
-中文:
-定义 toOpenPartialHomeomorph
-  签名: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  定义体: hf.toPartialEquiv hc
-  open_source := hs
-open_target := hf.open_image f'.toNonlinearRightInverse hs by
-    rwa [f'.toEquiv.subsingleton_congr] at hc
-  continuousOn_toFun := hf.continuousOn
-  continuousOn_invFun := hf.inverse_continuousOn hc
-
-@[simp]
-
-Depends on / 依赖: hf.toPartialEquiv, toPartialEquiv
+--- 原说明 ---
+Given a function `f` that approximates a linear equivalence on an open set `s`,
+returns an open partial homeomorphism with `toFun = f` and `source = s`.
 -/
-def toOpenPartialHomeomorph (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+def toOpenPartialHomeomorph (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) : OpenPartialHomeomorph E F where
   toPartialEquiv := hf.toPartialEquiv hc
   open_source := hs
-open_target := hf.open_image f'.toNonlinearRightInverse hs by
+  open_target := hf.open_image f'.toNonlinearRightInverse hs <| by
     rwa [f'.toEquiv.subsingleton_congr] at hc
   continuousOn_toFun := hf.continuousOn
   continuousOn_invFun := hf.inverse_continuousOn hc
 
 @[simp]
-/--
-theorem `toOpenPartialHomeomorph_coe` / 定理 `toOpenPartialHomeomorph_coe`
-
-English:
-theorem toOpenPartialHomeomorph_coe
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toOpenPartialHomeomorph_coe
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: StrictConvexSpace, UniformConvexSpace, UniformConvexSpace.toStrictConvexSpace, toStrictConvexSpace
+/-
+**ApproximatesLinearOn.toOpenPartialHomeomorph_coe** 是 Mathlib 中的一个定理，位于命名空间 `Ap
+proximatesLinearOn`。
+形式化陈述：toOpenPartialHomeomorph_coe (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F)
+ s c) (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) : (hf.toOpenPartialHomeomo
+rph f s hc hs : E -> F) = f
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹；hs : IsOpen s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOpenPartialHomeomorph_coe (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+theorem toOpenPartialHomeomorph_coe (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) :
-    (hf.toOpenPartialHomeomorph f s hc hs : E -> F) = f :=
+    (hf.toOpenPartialHomeomorph f s hc hs : E → F) = f :=
   rfl
 
 @[simp]
-/--
-theorem `toOpenPartialHomeomorph_source` / 定理 `toOpenPartialHomeomorph_source`
-
-English:
-theorem toOpenPartialHomeomorph_source
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toOpenPartialHomeomorph_source
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: rfl
-
-@[simp]
+/-
+**ApproximatesLinearOn.toOpenPartialHomeomorph_source** 是 Mathlib 中的一个定理，位于命名空间 
+`ApproximatesLinearOn`。
+形式化陈述：toOpenPartialHomeomorph_source (hf : ApproximatesLinearOn f (f' : E ->L[𝕜]
+ F) s c) (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) : (hf.toOpenPartialHome
+omorph f s hc hs).source = s
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹；hs : IsOpen s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOpenPartialHomeomorph_source (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+theorem toOpenPartialHomeomorph_source (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) :
     (hf.toOpenPartialHomeomorph f s hc hs).source = s :=
   rfl
 
 @[simp]
-/--
-theorem `toOpenPartialHomeomorph_target` / 定理 `toOpenPartialHomeomorph_target`
-
-English:
-theorem toOpenPartialHomeomorph_target
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: rfl
-
-中文:
-定理 toOpenPartialHomeomorph_target
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: rfl
+/-
+**ApproximatesLinearOn.toOpenPartialHomeomorph_target** 是 Mathlib 中的一个定理，位于命名空间 
+`ApproximatesLinearOn`。
+形式化陈述：toOpenPartialHomeomorph_target (hf : ApproximatesLinearOn f (f' : E ->L[𝕜]
+ F) s c) (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) : (hf.toOpenPartialHome
+omorph f s hc hs).target = f '' s
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹；hs : IsOpen s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOpenPartialHomeomorph_target (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
+theorem toOpenPartialHomeomorph_target (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
     (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) :
     (hf.toOpenPartialHomeomorph f s hc hs).target = f '' s :=
   rfl
 
-/--
-Definition of `toHomeomorph` / `toHomeomorph` 的定义
+/-- A function `f` that approximates a linear equivalence on the whole space is a homeomorphism. -/
+/-
+**ApproximatesLinearOn.toHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `ApproximatesLinea
+rOn`。
+形式化陈述：toHomeomorph (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c) (hc : 
+Subsingleton E ∨ c < N⁻¹) : E ≃ₜ F
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c；hc : Subsingleton E ∨ c 
+< N⁻¹。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toHomeomorph
-  signature: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
-  body: by
-  refine
-    (hf.toOpenPartialHomeomorph _ _ hc isOpen_univ).toHomeomorphOfSourceEqUnivTargetEqUniv rfl ?_
-  rw [toOpenPartialHomeomorph_target]; rw [image_univ]; rw [range_eq_univ]
-  exact hf.surjective hc
-
-中文:
-定义 toHomeomorph
-  签名: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
-  定义体: by
-  refine
-    (hf.toOpenPartialHomeomorph _ _ hc isOpen_univ).toHomeomorphOfSourceEqUnivTargetEqUniv rfl ?_
-  rw [toOpenPartialHomeomorph_target]; rw [image_univ]; rw [range_eq_univ]
-  exact hf.surjective hc
-
-Depends on / 依赖: hf.surjective, hf.toOpenPartialHomeomorph, image_univ, isOpen_univ, range_eq_univ, surjective, toHomeomorphOfSourceEqUnivTargetEqUniv, toOpenPartialHomeomorph, toOpenPartialHomeomorph_target
+--- 原说明 ---
+A function `f` that approximates a linear equivalence on the whole space is a ho
+meomorphism.
 -/
-def toHomeomorph (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
+def toHomeomorph (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) univ c)
     (hc : Subsingleton E ∨ c < N⁻¹) : E ≃ₜ F := by
   refine
     (hf.toOpenPartialHomeomorph _ _ hc isOpen_univ).toHomeomorphOfSourceEqUnivTargetEqUniv rfl ?_
-  rw [toOpenPartialHomeomorph_target]; rw [image_univ]; rw [range_eq_univ]
+  rw [toOpenPartialHomeomorph_target, image_univ, range_eq_univ]
   exact hf.surjective hc
 
 end
 
-/--
-theorem `closedBall_subset_target` / 定理 `closedBall_subset_target`
-
-English:
-theorem closedBall_subset_target
-  statement: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  proof: (hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse ε0 hε).mono hε
-    Subset.rfl
-
-中文:
-定理 closedBall_subset_target
-  结论: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-  证明: (hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse ε0 hε).mono hε
-    Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, hf.surjOn_closedBall_of_nonlinearRightInverse, surjOn_closedBall_of_nonlinearRightInverse, toNonlinearRightInverse
+/-
+**ApproximatesLinearOn.closedBall_subset_target** 是 Mathlib 中的一个定理，位于命名空间 `Appro
+ximatesLinearOn`。
+形式化陈述：closedBall_subset_target (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s 
+c) (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) {b : E} (ε0 : 0 <= ε) (hε : c
+losedBall b ε subseteq s) : closedBall (f b) ((N⁻¹ - c) * ε) subseteq (hf.toOpen
+PartialHomeomorph f s hc hs).target
+参数：hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c；hc : Subsingleton E ∨ c < N
+⁻¹；hs : IsOpen s；ε0 : 0 <= ε；hε : closedBall b ε subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.SurjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂
+ t₁
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `ApproximatesLinearOn.surjOn_closedBall_of_nonlinearRightInverse`：surjOn_
+closedBall_of_nonlinearRightInverse (hf : ApproximatesLinearOn f f' s c) (f'symm
+ : f'.NonlinearRightInverse) {ε : Real} {b : E} (ε0 :…
 -/
-theorem closedBall_subset_target (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c)
-    (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) {b : E} (ε0 : 0 <= ε) (hε : closedBall b ε subseteq s) :
-    closedBall (f b) ((N⁻¹ - c) * ε) subseteq (hf.toOpenPartialHomeomorph f s hc hs).target :=
+theorem closedBall_subset_target (hf : ApproximatesLinearOn f (f' : E →L[𝕜] F) s c)
+    (hc : Subsingleton E ∨ c < N⁻¹) (hs : IsOpen s) {b : E} (ε0 : 0 ≤ ε) (hε : closedBall b ε ⊆ s) :
+    closedBall (f b) ((N⁻¹ - c) * ε) ⊆ (hf.toOpenPartialHomeomorph f s hc hs).target :=
   (hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse ε0 hε).mono hε
     Subset.rfl
 
 end ApproximatesLinearOn
+

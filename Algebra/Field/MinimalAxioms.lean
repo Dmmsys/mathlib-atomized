@@ -24,49 +24,44 @@ a minimum number of equalities.
 
 universe u
 
-/--
-Definition of `Field.ofMinimalAxioms` / `Field.ofMinimalAxioms` 的定义
+/-- Define a `Field` structure on a Type by proving a minimal set of axioms.
+Note that this uses the default definitions for `npow`, `nsmul`, `zsmul`, `div` and `sub`.
+See note [reducible non-instances]. -/
+/-
+**Field.ofMinimalAxioms** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Field.ofMinimalAxioms (K : Type u) [Add K] [Mul K] [Neg K] [Inv K] [Zero K
+] [One K] (add_assoc : forall a b c : K, a + b + c = a + (b + c)) (zero_add : fo
+rall a : K, 0 + a = a) (neg_add_cancel : forall a : K, -a + a = 0) (mul_assoc : 
+forall a b c : K, a * b * c = a * (b * c)) (mul_comm : forall a b : K, a * b = b
+ * a) (one_mul : forall a : K, 1 * a = a) (mul_inv_cancel : forall a : K, a != 0
+ -> a * a⁻¹ = 1) (inv_zero : (0 : K)⁻¹ = 0) (left_distrib : forall a b c : K, a 
+* (b + c) = a * b + a * c)
+参数：K : Type u；add_assoc : forall a b c : K, a + b + c = a + (b + c)；zero_add : f
+orall a : K, 0 + a = a；neg_add_cancel : forall a : K, -a + a = 0；mul_assoc : for
+all a b c : K, a * b * c = a * (b * c)；mul_comm : forall a b : K, a * b = b * a；
+one_mul : forall a : K, 1 * a = a；mul_inv_cancel : forall a : K, a != 0 -> a * a
+⁻¹ = 1；inv_zero : (0 : K)⁻¹ = 0；left_distrib : forall a b c : K, a * (b + c) = a
+ * b + a * c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Field.ofMinimalAxioms
-  signature: (K : Type u)
-  body: letI := CommRing.ofMinimalAxioms add_assoc zero_add
-    neg_add_cancel mul_assoc mul_comm one_mul left_distrib
-  { exists_pair_ne := exists_pair_ne
-    mul_inv_cancel := mul_inv_cancel
-    inv_zero := inv_zero
-    nnqsmul := _
-    nnqsmul_def := fun _ _ => rfl
-    qsmul := _
-    qsmul_def := fun _ _ => rfl }
-
-中文:
-缩写 域.ofMinimalAxioms
-  签名: (K : 类型u)
-  定义体: letI := CommRing.ofMinimalAxioms add_assoc zero_add
-    neg_add_cancel mul_assoc mul_comm one_mul left_distrib
-  { exists_pair_ne := exists_pair_ne
-    mul_inv_cancel := mul_inv_cancel
-    inv_zero := inv_zero
-    nnqsmul := _
-    nnqsmul_def := fun _ _ => rfl
-    qsmul := _
-    qsmul_def := fun _ _ => rfl }
-
-Depends on / 依赖: CommRing, CommRing.ofMinimalAxioms, add_assoc, exists_pair_ne, inv_zero, left_distrib, mul_assoc, mul_comm, mul_inv_cancel, neg_add_cancel, nnqsmul, nnqsmul_def, ofMinimalAxioms, one_mul, qsmul_def, zero_add
+--- 原说明 ---
+Define a `Field` structure on a Type by proving a minimal set of axioms.
+Note that this uses the default definitions for `npow`, `nsmul`, `zsmul`, `div` 
+and `sub`.
+See note [reducible non-instances].
 -/
 abbrev Field.ofMinimalAxioms (K : Type u)
     [Add K] [Mul K] [Neg K] [Inv K] [Zero K] [One K]
-    (add_assoc : forall a b c : K, a + b + c = a + (b + c))
-    (zero_add : forall a : K, 0 + a = a)
-    (neg_add_cancel : forall a : K, -a + a = 0)
-    (mul_assoc : forall a b c : K, a * b * c = a * (b * c))
-    (mul_comm : forall a b : K, a * b = b * a)
-    (one_mul : forall a : K, 1 * a = a)
-    (mul_inv_cancel : forall a : K, a != 0 -> a * a⁻¹ = 1)
+    (add_assoc : ∀ a b c : K, a + b + c = a + (b + c))
+    (zero_add : ∀ a : K, 0 + a = a)
+    (neg_add_cancel : ∀ a : K, -a + a = 0)
+    (mul_assoc : ∀ a b c : K, a * b * c = a * (b * c))
+    (mul_comm : ∀ a b : K, a * b = b * a)
+    (one_mul : ∀ a : K, 1 * a = a)
+    (mul_inv_cancel : ∀ a : K, a ≠ 0 → a * a⁻¹ = 1)
     (inv_zero : (0 : K)⁻¹ = 0)
-    (left_distrib : forall a b c : K, a * (b + c) = a * b + a * c)
-    (exists_pair_ne : exists x y : K, x != y) : Field K :=
+    (left_distrib : ∀ a b c : K, a * (b + c) = a * b + a * c)
+    (exists_pair_ne : ∃ x y : K, x ≠ y) : Field K :=
   letI := CommRing.ofMinimalAxioms add_assoc zero_add
     neg_add_cancel mul_assoc mul_comm one_mul left_distrib
   { exists_pair_ne := exists_pair_ne

@@ -34,216 +34,237 @@ variable {α : Type u} {β : Type v} {ι : Sort w} {γ : Type x}
 
 namespace Set
 
+/-! ### Properties -/
 
-/--
-theorem `Finite.fin_embedding` / 定理 `Finite.fin_embedding`
+/-
+**Set.Finite.fin_embedding** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Finite → ∃ n f, Set.range ⇑f = s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.asEmbedding_range`：Equiv.asEmbedding_range {α β : Sort _} {p : β -
+> Prop} (e : α ≃ Subtype p) : Set.range e.asEmbedding = Set.ofPred p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem Finite.fin_embedding
-  given: {s : Set α} (h : s.Finite)
-  proof: ⟨_, (Fintype.equivFin (h.toFinset : Set α)).symm.asEmbedding, by
-    simp only [Finset.coe_sort_coe, Equiv.asEmbedding_range, Finite.coe_toFinset, ofPred_mem_eq]⟩
-
-中文:
-定理 有限.fin_embedding
-  条件: {s : 集合 α} (h : s.有限)
-  证明: ⟨_, (Fintype.equivFin (h.toFinset : Set α)).symm.asEmbedding, by
-    simp only [Finset.coe_sort_coe, Equiv.asEmbedding_range, Finite.coe_toFinset, ofPred_mem_eq]⟩
-
-Depends on / 依赖: Equiv.asEmbedding_range, Finite, Finite.coe_toFinset, Finset, Finset.coe_sort_coe, Fintype, Fintype.equivFin, asEmbedding, asEmbedding_range, coe_sort_coe, coe_toFinset, equivFin, h.toFinset, ofPred_mem_eq, symm.asEmbedding, toFinset
+--- 原说明 ---
+### Properties
 -/
 theorem Finite.fin_embedding {s : Set α} (h : s.Finite) :
-    exists (n : Nat) (f : Fin n ↪ α), range f = s :=
+    ∃ (n : ℕ) (f : Fin n ↪ α), range f = s :=
   ⟨_, (Fintype.equivFin (h.toFinset : Set α)).symm.asEmbedding, by
     simp only [Finset.coe_sort_coe, Equiv.asEmbedding_range, Finite.coe_toFinset, ofPred_mem_eq]⟩
-
-/--
-theorem `Finite.fin_param` / 定理 `Finite.fin_param`
-
-English:
-theorem Finite.fin_param
-  given: {s : Set α} (h : s.Finite)
-  proof: let ⟨n, f, hf⟩ := h.fin_embedding
-  ⟨n, f, f.injective, hf⟩
-
-中文:
-定理 有限.fin_param
-  条件: {s : 集合 α} (h : s.有限)
-  证明: let ⟨n, f, hf⟩ := h.fin_embedding
-  ⟨n, f, f.injective, hf⟩
-
-Depends on / 依赖: f.injective, fin_embedding, h.fin_embedding, injective
+/-
+**Set.Finite.fin_param** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Finite → ∃ n f, Function.Injective f ∧ Set.r
+ange f = s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.fin_embedding`：∀ {α : Type u} {s : Set α}, s.Finite → ∃ n f, 
+Set.range ⇑f = s
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
 -/
 theorem Finite.fin_param {s : Set α} (h : s.Finite) :
-    exists (n : Nat) (f : Fin n -> α), Injective f ∧ range f = s :=
+    ∃ (n : ℕ) (f : Fin n → α), Injective f ∧ range f = s :=
   let ⟨n, f, hf⟩ := h.fin_embedding
   ⟨n, f, f.injective, hf⟩
 
-/--
-theorem `Finite.induction_to` / 定理 `Finite.induction_to`
+/-- Induction up to a finite set `S`. -/
+/-
+**Set.Finite.induction_to** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u} {C : Set α → Prop} {S : Set α},   S.Finite → ∀ S0 ⊆ S, C S0
+ → (∀ s ⊂ S, C s → ∃ a ∈ S \ s, C (insert a s)) → C S
+参数：∀ s ⊂ S, C s → ∃ a ∈ S \ s, C (insert a s)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Finite → Finite ↑s
+· 使用定理 `Finite.of_equiv`：Finite.of_equiv (α : Sort*) [h : Finite α] (f : α ≃ β) 
+: Finite β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `WellFounded.induction_bot'`：WellFounded.induction_bot' {α β} {r : α -> α
+ -> Prop} (hwf : WellFounded r) {a bot : α} {C : β -> Prop} {f : α -> β} (ih : f
+orall b, f b != …
+· 使用定理 `IsWellFounded.wf`：∀ {α : Type u} {r : α → α → Prop} [self : IsWellFounde
+d α r], WellFounded r
+· 使用定理 `Finite.to_wellFoundedGT`：∀ {α : Type u_1} [Finite α] [inst : Preorder α]
+, WellFoundedGT α
+· 使用定理 `ssubset_of_ne_of_subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [i
+nst : PartialOrder α] {a b : α}, a ≠ b → a ⊆ b → a ⊂ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.insert_subset`：insert_subset (ha : a in t) (hs : s subseteq t) : ins
+ert a s subseteq t
+· 使用定理 `Set.ssubset_insert`：ssubset_insert {s : Set α} {a : α} (h : a ∉ s) : s ⊂
+ insert a s
 
-English:
-theorem Finite.induction_to
-  statement: {C : Set α -> Prop} {S : Set α} (h : S.Finite)
-  proof: by
-  have : Finite S := Finite.to_subtype h
-  have : Finite {T : Set α // T subseteq S} := Finite.of_equiv (Set S) (Equiv.Set.powerset S).symm
-  rw [← Subtype.coe_mk (p := (· subseteq S)) _ le_rfl]
-  rw [← Subtype.coe_mk (p := (· subseteq S)) _ hS0] at H0
-  refine Finite.to_wellFoundedGT.wf.induction_bot' (fun s hs hs' => ?_) H0
-  obtain ⟨a, ⟨ha1, ha2⟩, ha'⟩ := H1 s (ssubset_of_ne_of_subset hs s.2) hs'
-  exact ⟨⟨insert a s.1, insert_subset ha1 s.2⟩, Set.ssubset_insert ha2, ha'⟩
-
-中文:
-定理 有限.induction_to
-  结论: {C : 集合 α -> 命题} {S : 集合 α} (h : S.有限)
-  证明: by
-  have : Finite S := Finite.to_subtype h
-  have : Finite {T : Set α // T subseteq S} := Finite.of_equiv (Set S) (Equiv.Set.powerset S).symm
-  rw [← Subtype.coe_mk (p := (· subseteq S)) _ le_rfl]
-  rw [← Subtype.coe_mk (p := (· subseteq S)) _ hS0] at H0
-  refine Finite.to_wellFoundedGT.wf.induction_bot' (fun s hs hs' => ?_) H0
-  obtain ⟨a, ⟨ha1, ha2⟩, ha'⟩ := H1 s (ssubset_of_ne_of_subset hs s.2) hs'
-  exact ⟨⟨insert a s.1, insert_subset ha1 s.2⟩, Set.ssubset_insert ha2, ha'⟩
-
-Depends on / 依赖: Equiv.Set.powerset, Finite, Finite.of_equiv, Finite.to_subtype, Finite.to_wellFoundedGT.wf.induction_bot, Set.ssubset_insert, Subtype, Subtype.coe_mk, coe_mk, induction_bot, insert, insert_subset, le_rfl, of_equiv, powerset, ssubset_insert, ssubset_of_ne_of_subset, subseteq, to_subtype, to_wellFoundedGT
+--- 原说明 ---
+Induction up to a finite set `S`.
 -/
-theorem Finite.induction_to {C : Set α -> Prop} {S : Set α} (h : S.Finite)
-    (S0 : Set α) (hS0 : S0 subseteq S) (H0 : C S0) (H1 : forall s ⊂ S, C s -> exists a in S \ s, C (insert a s)) :
+theorem Finite.induction_to {C : Set α → Prop} {S : Set α} (h : S.Finite)
+    (S0 : Set α) (hS0 : S0 ⊆ S) (H0 : C S0) (H1 : ∀ s ⊂ S, C s → ∃ a ∈ S \ s, C (insert a s)) :
     C S := by
   have : Finite S := Finite.to_subtype h
-  have : Finite {T : Set α // T subseteq S} := Finite.of_equiv (Set S) (Equiv.Set.powerset S).symm
-  rw [← Subtype.coe_mk (p := (· subseteq S)) _ le_rfl]
-  rw [← Subtype.coe_mk (p := (· subseteq S)) _ hS0] at H0
-  refine Finite.to_wellFoundedGT.wf.induction_bot' (fun s hs hs' => ?_) H0
+  have : Finite {T : Set α // T ⊆ S} := Finite.of_equiv (Set S) (Equiv.Set.powerset S).symm
+  rw [← Subtype.coe_mk (p := (· ⊆ S)) _ le_rfl]
+  rw [← Subtype.coe_mk (p := (· ⊆ S)) _ hS0] at H0
+  refine Finite.to_wellFoundedGT.wf.induction_bot' (fun s hs hs' ↦ ?_) H0
   obtain ⟨a, ⟨ha1, ha2⟩, ha'⟩ := H1 s (ssubset_of_ne_of_subset hs s.2) hs'
   exact ⟨⟨insert a s.1, insert_subset ha1 s.2⟩, Set.ssubset_insert ha2, ha'⟩
 
-/--
-theorem `Finite.induction_to_univ` / 定理 `Finite.induction_to_univ`
+/-- Induction up to `univ`. -/
+/-
+**Set.Finite.induction_to_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u} [Finite α] {C : Set α → Prop} (S0 : Set α),   C S0 → (∀ (S 
+: Set α), S ≠ Set.univ → C S → ∃ a ∉ S, C (insert a S)) → C Set.univ
+参数：S0 : Set α；∀ (S : Set α), S ≠ Set.univ → C S → ∃ a ∉ S, C (insert a S)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.induction_to`：∀ {α : Type u} {C : Set α → Prop} {S : Set α}, 
+  S.Finite → ∀ S0 ⊆ S, C S0 → (∀ s ⊂ S, C s → ∃ a ∈ S \ s, C (insert a s)) → C S
+· 使用定理 `Set.finite_univ`：∀ {α : Type u} [Finite α], Set.univ.Finite
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 
-English:
-theorem Finite.induction_to_univ
-  statement: [Finite α] {C : Set α -> Prop} (S0 : Set α)
-  proof: finite_univ.induction_to S0 (subset_univ S0) H0 (by simpa [ssubset_univ_iff])
-
-中文:
-定理 有限.induction_to_univ
-  结论: [有限 α] {C : 集合 α -> 命题} (S0 : 集合 α)
-  证明: finite_univ.induction_to S0 (subset_univ S0) H0 (by simpa [ssubset_univ_iff])
-
-Depends on / 依赖: finite_univ, finite_univ.induction_to, induction_to, ssubset_univ_iff, subset_univ
+--- 原说明 ---
+Induction up to `univ`.
 -/
-theorem Finite.induction_to_univ [Finite α] {C : Set α -> Prop} (S0 : Set α)
-    (H0 : C S0) (H1 : forall S != univ, C S -> exists a ∉ S, C (insert a S)) : C univ :=
+theorem Finite.induction_to_univ [Finite α] {C : Set α → Prop} (S0 : Set α)
+    (H0 : C S0) (H1 : ∀ S ≠ univ, C S → ∃ a ∉ S, C (insert a S)) : C univ :=
   finite_univ.induction_to S0 (subset_univ S0) H0 (by simpa [ssubset_univ_iff])
-
-/--
-theorem `sUnion_finite_eq_univ` / 定理 `sUnion_finite_eq_univ`
-
-English:
-theorem sUnion_finite_eq_univ
-  given: {X : Type*}
-  statement: ⋃₀ {(s : Set X) | Set.Finite s} = Set.univ
-  proof: sUnion_eq_univ_iff.mpr fun x => ⟨{x}, finite_singleton x, rfl⟩
-
-中文:
-定理 sUnion_finite_eq_univ
-  条件: {X : 类型}
-  结论: ⋃₀ {(s : 集合 X) | 集合.有限 s} = 集合.univ
-  证明: sUnion_eq_univ_iff.mpr fun x => ⟨{x}, finite_singleton x, rfl⟩
-
-Depends on / 依赖: finite_singleton, sUnion_eq_univ_iff, sUnion_eq_univ_iff.mpr
+/-
+**Set.sUnion_finite_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：sUnion_finite_eq_univ {X : Type*} : ⋃₀ {(s : Set X) | Set.Finite s} = Set.
+univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.sUnion_eq_univ_iff`：sUnion_eq_univ_iff {c : Set (Set α)} : ⋃₀ c = un
+iv ↔ forall a, exists b in c, a in b
+· 使用定理 `Set.finite_singleton`：finite_singleton (a : α) : ({a} : Set α).Finite
 -/
 theorem sUnion_finite_eq_univ {X : Type*} : ⋃₀ {(s : Set X) | Set.Finite s} = Set.univ :=
-  sUnion_eq_univ_iff.mpr fun x => ⟨{x}, finite_singleton x, rfl⟩
+  sUnion_eq_univ_iff.mpr fun x ↦ ⟨{x}, finite_singleton x, rfl⟩
 
 /-! ### Infinite sets -/
 
 variable {s t : Set α}
 
+/-! ### Order properties -/
 
-/--
-theorem `exists_min_image` / 定理 `exists_min_image`
+/-
+**Set.exists_min_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : LinearOrder β] (s : Set α) (f : α → β)
+,   s.Finite → s.Nonempty → ∃ a ∈ s, ∀ b ∈ s, f a ≤ f b
+参数：s : Set α；f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.exists_min_image`：exists_min_image (s : Finset β) (f : β -> α) (h
+ : s.Nonempty) : exists x in s, forall x' in s, f x <= f x'
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Finite.mem_toFinset`：∀ {α : Type u} {s : Set α} {a : α} (hs : s.Fini
+te), a ∈ hs.toFinset ↔ a ∈ s
 
-English:
-theorem exists_min_image
-  given: [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite)
-
-中文:
-定理 存在_min_image
-  条件: [线性序 β] (s : 集合 α) (f : α -> β) (h1 : s.有限)
+--- 原说明 ---
+### Order properties
 -/
-theorem exists_min_image [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite) :
-    s.Nonempty -> exists a in s, forall b in s, f a <= f b
+theorem exists_min_image [LinearOrder β] (s : Set α) (f : α → β) (h1 : s.Finite) :
+    s.Nonempty → ∃ a ∈ s, ∀ b ∈ s, f a ≤ f b
   | ⟨x, hx⟩ => by
     simpa only [exists_prop, Finite.mem_toFinset] using
       h1.toFinset.exists_min_image f ⟨x, h1.mem_toFinset.2 hx⟩
-
-/--
-theorem `exists_max_image` / 定理 `exists_max_image`
-
-English:
-theorem exists_max_image
-  given: [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite)
-
-中文:
-定理 存在_max_image
-  条件: [线性序 β] (s : 集合 α) (f : α -> β) (h1 : s.有限)
+/-
+**Set.exists_max_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : LinearOrder β] (s : Set α) (f : α → β)
+,   s.Finite → s.Nonempty → ∃ a ∈ s, ∀ b ∈ s, f b ≤ f a
+参数：s : Set α；f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.exists_max_image`：exists_max_image (s : Finset β) (f : β -> α) (h
+ : s.Nonempty) : exists x in s, forall x' in s, f x' <= f x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Finite.mem_toFinset`：∀ {α : Type u} {s : Set α} {a : α} (hs : s.Fini
+te), a ∈ hs.toFinset ↔ a ∈ s
 -/
-theorem exists_max_image [LinearOrder β] (s : Set α) (f : α -> β) (h1 : s.Finite) :
-    s.Nonempty -> exists a in s, forall b in s, f b <= f a
+theorem exists_max_image [LinearOrder β] (s : Set α) (f : α → β) (h1 : s.Finite) :
+    s.Nonempty → ∃ a ∈ s, ∀ b ∈ s, f b ≤ f a
   | ⟨x, hx⟩ => by
     simpa only [exists_prop, Finite.mem_toFinset] using
       h1.toFinset.exists_max_image f ⟨x, h1.mem_toFinset.2 hx⟩
-
-/--
-theorem `exists_lower_bound_image` / 定理 `exists_lower_bound_image`
-
-English:
-theorem exists_lower_bound_image
-  statement: [Nonempty α] [LinearOrder β] (s : Set α) (f : α -> β)
-  proof: by
-  rcases s.eq_empty_or_nonempty with rfl | hs
-  · exact ‹Nonempty α›.elim fun a => ⟨a, fun _ => False.elim⟩
-  · rcases Set.exists_min_image s f h hs with ⟨x₀, _, hx₀⟩
-    exact ⟨x₀, fun x hx => hx₀ x hx⟩
-
-中文:
-定理 存在_lower_bound_image
-  结论: [非空 α] [线性序 β] (s : 集合 α) (f : α -> β)
-  证明: by
-  rcases s.eq_empty_or_nonempty with rfl | hs
-  · exact ‹Nonempty α›.elim fun a => ⟨a, fun _ => False.elim⟩
-  · rcases Set.exists_min_image s f h hs with ⟨x₀, _, hx₀⟩
-    exact ⟨x₀, fun x hx => hx₀ x hx⟩
-
-Depends on / 依赖: False.elim, Nonempty, Set.exists_min_image, eq_empty_or_nonempty, exists_min_image, s.eq_empty_or_nonempty
+/-
+**Set.exists_lower_bound_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_lower_bound_image [Nonempty α] [LinearOrder β] (s : Set α) (f : α -
+> β) (h : s.Finite) : exists a : α, forall b in s, f a <= f b
+参数：s : Set α；f : α -> β；h : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.exists_min_image`：∀ {α : Type u} {β : Type v} [inst : LinearOrder β]
+ (s : Set α) (f : α → β),   s.Finite → s.Nonempty → ∃ a ∈ s, ∀ b ∈ s, f a ≤ f b
 -/
-theorem exists_lower_bound_image [Nonempty α] [LinearOrder β] (s : Set α) (f : α -> β)
-    (h : s.Finite) : exists a : α, forall b in s, f a <= f b := by
+theorem exists_lower_bound_image [Nonempty α] [LinearOrder β] (s : Set α) (f : α → β)
+    (h : s.Finite) : ∃ a : α, ∀ b ∈ s, f a ≤ f b := by
   rcases s.eq_empty_or_nonempty with rfl | hs
   · exact ‹Nonempty α›.elim fun a => ⟨a, fun _ => False.elim⟩
   · rcases Set.exists_min_image s f h hs with ⟨x₀, _, hx₀⟩
     exact ⟨x₀, fun x hx => hx₀ x hx⟩
-
-/--
-theorem `exists_upper_bound_image` / 定理 `exists_upper_bound_image`
-
-English:
-theorem exists_upper_bound_image
-  statement: [Nonempty α] [LinearOrder β] (s : Set α) (f : α -> β)
-  proof: exists_lower_bound_image (β := βᵒᵈ) s f h
-
-中文:
-定理 存在_upper_bound_image
-  结论: [非空 α] [线性序 β] (s : 集合 α) (f : α -> β)
-  证明: exists_lower_bound_image (β := βᵒᵈ) s f h
-
-Depends on / 依赖: exists_lower_bound_image
+/-
+**Set.exists_upper_bound_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_upper_bound_image [Nonempty α] [LinearOrder β] (s : Set α) (f : α -
+> β) (h : s.Finite) : exists a : α, forall b in s, f b <= f a
+参数：s : Set α；f : α -> β；h : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.exists_lower_bound_image`：exists_lower_bound_image [Nonempty α] [Lin
+earOrder β] (s : Set α) (f : α -> β) (h : s.Finite) : exists a : α, forall b in 
+s, f a <= f b
 -/
-theorem exists_upper_bound_image [Nonempty α] [LinearOrder β] (s : Set α) (f : α -> β)
-    (h : s.Finite) : exists a : α, forall b in s, f b <= f a :=
+theorem exists_upper_bound_image [Nonempty α] [LinearOrder β] (s : Set α) (f : α → β)
+    (h : s.Finite) : ∃ a : α, ∀ b ∈ s, f b ≤ f a :=
   exists_lower_bound_image (β := βᵒᵈ) s f h
 
 end Set
+

@@ -30,188 +30,136 @@ assert_not_exists IsOrderedMonoid Field Finset Set.Icc GaloisConnection
 
 namespace Rat
 
-variable {a b c p q : Rat}
+variable {a b c p q : ℚ}
 
-/--
-lemma `mkRat_nonneg` / 引理 `mkRat_nonneg`
-
-English:
-lemma mkRat_nonneg
-  given: {a : Int} (ha : 0 <= a) (b : Nat)
-  statement: 0 <= mkRat a b
-  proof: by
-  simpa using divInt_nonneg ha (Int.natCast_nonneg _)
-
-中文:
-引理 mkRat_nonneg
-  条件: {a : 整数} (ha : 0 <= a) (b : 自然数)
-  结论: 0 <= mkRat a b
-  证明: by
-  simpa using divInt_nonneg ha (Int.natCast_nonneg _)
+/-
+**Rat.mkRat_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a : ℤ}, 0 ≤ a → ∀ (b : ℕ), 0 ≤ mkRat a b
+参数：b : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.divInt_ofNat`：∀ (num : ℤ) (den : ℕ), Rat.divInt num ↑den = mkRat num
+ den
+· 使用定理 `Rat.divInt_nonneg`：∀ {a b : ℤ}, 0 ≤ a → 0 ≤ b → 0 ≤ Rat.divInt a b
+· 使用定理 `Int.natCast_nonneg`：∀ (n : ℕ), 0 ≤ ↑n
 -/
-@[simp] lemma mkRat_nonneg {a : Int} (ha : 0 <= a) (b : Nat) : 0 <= mkRat a b := by
+@[simp] lemma mkRat_nonneg {a : ℤ} (ha : 0 ≤ a) (b : ℕ) : 0 ≤ mkRat a b := by
   simpa using divInt_nonneg ha (Int.natCast_nonneg _)
-
-/--
-theorem `ofScientific_nonneg` / 定理 `ofScientific_nonneg`
-
-English:
-theorem ofScientific_nonneg
-  given: (m : Nat) (s : Bool) (e : Nat)
-  statement: 0 <= Rat.ofScientific m s e
-  proof: by
-  rw [Rat.ofScientific]
-  cases s
-  · rw [if_neg (by decide)]
-exact num_nonneg.mp Int.natCast_nonneg _
-  · grind [normalize_eq_mkRat, Rat.mkRat_nonneg]
-
-中文:
-定理 ofScientific_nonneg
-  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
-  结论: 0 <= 有理数.ofScientific m s e
-  证明: by
-  rw [Rat.ofScientific]
-  cases s
-  · rw [if_neg (by decide)]
-exact num_nonneg.mp Int.natCast_nonneg _
-  · grind [normalize_eq_mkRat, Rat.mkRat_nonneg]
-
-Depends on / 依赖: Int.natCast_nonneg, Rat.mkRat_nonneg, Rat.ofScientific, if_neg, mkRat_nonneg, natCast_nonneg, normalize_eq_mkRat, num_nonneg, num_nonneg.mp, ofScientific
+/-
+**Rat.ofScientific_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：ofScientific_nonneg (m : Nat) (s : Bool) (e : Nat) : 0 <= Rat.ofScientific
+ m s e
+参数：m : Nat；s : Bool；e : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.ofScientific.eq_1`：∀ (m : ℕ) (s : Bool) (e : ℕ), Rat.ofScientific m 
+s e = if s = true then Rat.normalize (↑m) (10 ^ e) ⋯ else ↑(m * 10 ^ e)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Rat.num_nonneg`：∀ {q : ℚ}, 0 ≤ q.num ↔ 0 ≤ q
+· 使用定理 `Int.natCast_nonneg`：∀ (n : ℕ), 0 ≤ ↑n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ofScientific_nonneg (m : Nat) (s : Bool) (e : Nat) : 0 <= Rat.ofScientific m s e := by
+theorem ofScientific_nonneg (m : ℕ) (s : Bool) (e : ℕ) : 0 ≤ Rat.ofScientific m s e := by
   rw [Rat.ofScientific]
   cases s
   · rw [if_neg (by decide)]
-exact num_nonneg.mp Int.natCast_nonneg _
+    exact num_nonneg.mp <| Int.natCast_nonneg _
   · grind [normalize_eq_mkRat, Rat.mkRat_nonneg]
-
-/--
-Instance `_root_.NNRatCast.toOfScientific` / 实例 `_root_.NNRatCast.toOfScientific`
-
-English:
-instance _root_.NNRatCast.toOfScientific
-  signature: {K} [NNRatCast K]
-  body: NNRat.cast ⟨Rat.ofScientific m b d, ofScientific_nonneg m b d⟩
-
-中文:
-实例 _root_.非负有理数嵌入.toOfScientific
-  签名: {K} [非负有理数嵌入 K]
-  定义体: NNRat.cast ⟨Rat.ofScientific m b d, ofScientific_nonneg m b d⟩
-
-Depends on / 依赖: NNRat.cast, Rat.ofScientific, ofScientific, ofScientific_nonneg
+/-
+**Rat._root_.NNRatCast.toOfScientific** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.NNRatCast.toOfScientific {K} [NNRatCast K] : OfScientific K where
-  ofScientific (m : Nat) (b : Bool) (d : Nat) :=
+  ofScientific (m : ℕ) (b : Bool) (d : ℕ) :=
     NNRat.cast ⟨Rat.ofScientific m b d, ofScientific_nonneg m b d⟩
-
-/--
-theorem `_root_.NNRatCast.toOfScientific_def` / 定理 `_root_.NNRatCast.toOfScientific_def`
-
-English:
-theorem _root_.NNRatCast.toOfScientific_def
-  given: {K} [NNRatCast K] (m : Nat) (b : Bool) (d : Nat)
-  proof: rfl
-
-中文:
-定理 _root_.非负有理数嵌入.toOfScientific_def
-  条件: {K} [非负有理数嵌入 K] (m : 自然数) (b : 布尔值) (d : 自然数)
-  证明: rfl
+/-
+**Rat._root_.NNRatCast.toOfScientific_def** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.NNRatCast.toOfScientific_def {K} [NNRatCast K] (m : Nat) (b : Bool) (d : Nat) :
+theorem _root_.NNRatCast.toOfScientific_def {K} [NNRatCast K] (m : ℕ) (b : Bool) (d : ℕ) :
     (OfScientific.ofScientific m b d : K) =
-      NNRat.cast ⟨(OfScientific.ofScientific m b d : Rat), ofScientific_nonneg m b d⟩ :=
+      NNRat.cast ⟨(OfScientific.ofScientific m b d : ℚ), ofScientific_nonneg m b d⟩ :=
   rfl
 
 /-- Casting a scientific literal via `ℚ≥0` is the same as casting directly. -/
 @[simp, norm_cast]
-/--
-theorem `_root_.NNRat.cast_ofScientific` / 定理 `_root_.NNRat.cast_ofScientific`
+/-
+**Rat._root_.NNRat.cast_ofScientific** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.NNRat.cast_ofScientific
-  given: {K} [NNRatCast K] (m : Nat) (s : Bool) (e : Nat)
-  proof: rfl
-
-中文:
-定理 _root_.NNRat.cast_ofScientific
-  条件: {K} [非负有理数嵌入 K] (m : 自然数) (s : 布尔值) (e : 自然数)
-  证明: rfl
+--- 原说明 ---
+Casting a scientific literal via `ℚ≥0` is the same as casting directly.
 -/
-theorem _root_.NNRat.cast_ofScientific {K} [NNRatCast K] (m : Nat) (s : Bool) (e : Nat) :
-    (OfScientific.ofScientific m s e : Rat>=0) = (OfScientific.ofScientific m s e : K) :=
+theorem _root_.NNRat.cast_ofScientific {K} [NNRatCast K] (m : ℕ) (s : Bool) (e : ℕ) :
+    (OfScientific.ofScientific m s e : ℚ≥0) = (OfScientific.ofScientific m s e : K) :=
   rfl
-
-/--
-lemma `divInt_le_divInt` / 引理 `divInt_le_divInt`
-
-English:
-lemma divInt_le_divInt
-  given: {a b c d : Int} (b0 : 0 < b) (d0 : 0 < d)
-  proof: by
-  rw [Rat.le_iff_sub_nonneg]; rw [← Int.sub_nonneg]
-  simp [sub_eq_add_neg, ne_of_gt b0, ne_of_gt d0, Int.mul_pos d0 b0]
-
-中文:
-引理 div整数_le_div整数
-  条件: {a b c d : 整数} (b0 : 0 < b) (d0 : 0 < d)
-  证明: by
-  rw [Rat.le_iff_sub_nonneg]; rw [← Int.sub_nonneg]
-  simp [sub_eq_add_neg, ne_of_gt b0, ne_of_gt d0, Int.mul_pos d0 b0]
+/-
+**Rat.divInt_le_divInt** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a b c d : ℤ}, 0 < b → 0 < d → (Rat.divInt a b ≤ Rat.divInt c d ↔ a * d 
+≤ c * b)
+参数：Rat.divInt a b ≤ Rat.divInt c d ↔ a * d ≤ c * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.le_iff_sub_nonneg`：∀ (a b : ℚ), a ≤ b ↔ 0 ≤ b - a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.sub_nonneg`：∀ {a b : ℤ}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Rat.neg_divInt`：∀ (n d : ℤ), -Rat.divInt n d = Rat.divInt (-n) d
+· 使用定理 `Rat.divInt_add_divInt`：∀ (n₁ n₂ : ℤ) {d₁ d₂ : ℤ},   d₁ ≠ 0 → d₂ ≠ 0 → Ra
+t.divInt n₁ d₁ + Rat.divInt n₂ d₂ = Rat.divInt (n₁ * d₂ + n₂ * d₁) (d₁ * d₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `Int.mul_pos`：∀ {a b : ℤ}, 0 < a → 0 < b → 0 < a * b
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected lemma divInt_le_divInt {a b c d : Int} (b0 : 0 < b) (d0 : 0 < d) :
-    a /. b <= c /. d ↔ a * d <= c * b := by
-  rw [Rat.le_iff_sub_nonneg]; rw [← Int.sub_nonneg]
+protected lemma divInt_le_divInt {a b c d : ℤ} (b0 : 0 < b) (d0 : 0 < d) :
+    a /. b ≤ c /. d ↔ a * d ≤ c * b := by
+  rw [Rat.le_iff_sub_nonneg, ← Int.sub_nonneg]
   simp [sub_eq_add_neg, ne_of_gt b0, ne_of_gt d0, Int.mul_pos d0 b0]
-
-/--
-lemma `lt_iff_le_not_ge` / 引理 `lt_iff_le_not_ge`
-
-English:
-lemma lt_iff_le_not_ge
-  given: (a b : Rat)
-  statement: a < b ↔ a <= b ∧ ¬b <= a
-  proof: Std.LawfulOrderLT.lt_iff a b
-
-中文:
-引理 lt_iff_le_not_ge
-  条件: (a b : 有理数)
-  结论: a < b ↔ a <= b ∧ ¬b <= a
-  证明: Std.LawfulOrderLT.lt_iff a b
+/-
+**Rat.lt_iff_le_not_ge** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ (a b : ℚ), a < b ↔ a ≤ b ∧ ¬b ≤ a
+参数：a b : ℚ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.LawfulOrderLT.lt_iff`：∀ {α : Type u} {inst : LT α} {inst_1 : LE α} [
+self : Std.LawfulOrderLT α] (a b : α), a < b ↔ a ≤ b ∧ ¬b ≤ a
+· 使用定理 `Lean.Grind.instLawfulOrderLTRat`：Std.LawfulOrderLT ℚ
 -/
-protected lemma lt_iff_le_not_ge (a b : Rat) : a < b ↔ a <= b ∧ ¬b <= a :=
+protected lemma lt_iff_le_not_ge (a b : ℚ) : a < b ↔ a ≤ b ∧ ¬b ≤ a :=
   Std.LawfulOrderLT.lt_iff a b
-
-/--
-Instance `linearOrder` / 实例 `linearOrder`
-
-English:
-instance linearOrder
-  signature: : LinearOrder Rat where
-  body: Rat.le_refl
-  le_trans _ _ _ := Rat.le_trans
-  le_antisymm _ _ := Rat.le_antisymm
-  le_total _ _ := Rat.le_total
-  toDecidableEq := inferInstance
-  toDecidableLE := inferInstance
-  toDecidableLT := inferInstance
-  lt_iff_le_not_ge := Rat.lt_iff_le_not_ge
-
-中文:
-实例 linearOrder
-  签名: : 线性序 有理数 where
-  定义体: Rat.le_refl
-  le_trans _ _ _ := Rat.le_trans
-  le_antisymm _ _ := Rat.le_antisymm
-  le_total _ _ := Rat.le_total
-  toDecidableEq := inferInstance
-  toDecidableLE := inferInstance
-  toDecidableLT := inferInstance
-  lt_iff_le_not_ge := Rat.lt_iff_le_not_ge
-
-Depends on / 依赖: Rat.le_refl, le_refl
+/-
+**Rat.linearOrder** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：linearOrder : LinearOrder Rat where le_refl _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.le_refl`：∀ {a : ℚ}, a ≤ a
+· 使用定理 `Rat.le_trans`：∀ {a b c : ℚ}, a ≤ b → b ≤ c → a ≤ c
+· 使用定理 `Rat.lt_iff_le_not_ge`：∀ (a b : ℚ), a < b ↔ a ≤ b ∧ ¬b ≤ a
+· 使用定理 `Rat.le_antisymm`：∀ {a b : ℚ}, a ≤ b → b ≤ a → a = b
+· 使用定理 `Rat.le_total`：∀ {a b : ℚ}, a ≤ b ∨ b ≤ a
 -/
-instance linearOrder : LinearOrder Rat where
+instance linearOrder : LinearOrder ℚ where
   le_refl _ := Rat.le_refl
   le_trans _ _ _ := Rat.le_trans
   le_antisymm _ _ := Rat.le_antisymm
@@ -220,518 +168,388 @@ instance linearOrder : LinearOrder Rat where
   toDecidableLE := inferInstance
   toDecidableLT := inferInstance
   lt_iff_le_not_ge := Rat.lt_iff_le_not_ge
-
-/--
-theorem `mkRat_nonneg_iff` / 定理 `mkRat_nonneg_iff`
-
-English:
-theorem mkRat_nonneg_iff
-  given: (a : Int) {b : Nat} (hb : b != 0)
-  statement: 0 <= mkRat a b ↔ 0 <= a
-  proof: divInt_nonneg_iff_of_pos_right (show 0 < (b : Int) by simpa using Nat.pos_of_ne_zero hb)
-
-中文:
-定理 mkRat_nonneg_iff
-  条件: (a : 整数) {b : 自然数} (hb : b != 0)
-  结论: 0 <= mkRat a b ↔ 0 <= a
-  证明: divInt_nonneg_iff_of_pos_right (show 0 < (b : Int) by simpa using Nat.pos_of_ne_zero hb)
-
-Depends on / 依赖: Nat.pos_of_ne_zero, divInt_nonneg_iff_of_pos_right, pos_of_ne_zero
+/-
+**Rat.mkRat_nonneg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：mkRat_nonneg_iff (a : Int) {b : Nat} (hb : b != 0) : 0 <= mkRat a b ↔ 0 <=
+ a
+参数：a : Int；hb : b != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.divInt_nonneg_iff_of_pos_right`：∀ {a b : ℤ}, 0 < b → (0 ≤ Rat.divInt
+ a b ↔ 0 ≤ a)
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
 -/
-theorem mkRat_nonneg_iff (a : Int) {b : Nat} (hb : b != 0) : 0 <= mkRat a b ↔ 0 <= a :=
-  divInt_nonneg_iff_of_pos_right (show 0 < (b : Int) by simpa using Nat.pos_of_ne_zero hb)
-
-/--
-theorem `mkRat_pos_iff` / 定理 `mkRat_pos_iff`
-
-English:
-theorem mkRat_pos_iff
-  given: (a : Int) {b : Nat} (hb : b != 0)
-  statement: 0 < mkRat a b ↔ 0 < a
-  proof: by
-  grind [mkRat_nonneg_iff, Rat.mkRat_eq_zero]
-
-中文:
-定理 mkRat_pos_iff
-  条件: (a : 整数) {b : 自然数} (hb : b != 0)
-  结论: 0 < mkRat a b ↔ 0 < a
-  证明: by
-  grind [mkRat_nonneg_iff, Rat.mkRat_eq_zero]
-
-Depends on / 依赖: Rat.mkRat_eq_zero, mkRat_eq_zero, mkRat_nonneg_iff
+theorem mkRat_nonneg_iff (a : ℤ) {b : ℕ} (hb : b ≠ 0) : 0 ≤ mkRat a b ↔ 0 ≤ a :=
+  divInt_nonneg_iff_of_pos_right (show 0 < (b : ℤ) by simpa using Nat.pos_of_ne_zero hb)
+/-
+**Rat.mkRat_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：mkRat_pos_iff (a : Int) {b : Nat} (hb : b != 0) : 0 < mkRat a b ↔ 0 < a
+参数：a : Int；hb : b != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mkRat_pos_iff (a : Int) {b : Nat} (hb : b != 0) : 0 < mkRat a b ↔ 0 < a := by
+theorem mkRat_pos_iff (a : ℤ) {b : ℕ} (hb : b ≠ 0) : 0 < mkRat a b ↔ 0 < a := by
   grind [mkRat_nonneg_iff, Rat.mkRat_eq_zero]
-
-/--
-theorem `mkRat_pos` / 定理 `mkRat_pos`
-
-English:
-theorem mkRat_pos
-  given: {a : Int} (ha : 0 < a) {b : Nat} (hb : b != 0)
-  statement: 0 < mkRat a b
-  proof: (mkRat_pos_iff a hb).mpr ha
-
-中文:
-定理 mkRat_pos
-  条件: {a : 整数} (ha : 0 < a) {b : 自然数} (hb : b != 0)
-  结论: 0 < mkRat a b
-  证明: (mkRat_pos_iff a hb).mpr ha
-
-Depends on / 依赖: mkRat_pos_iff
+/-
+**Rat.mkRat_pos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：mkRat_pos {a : Int} (ha : 0 < a) {b : Nat} (hb : b != 0) : 0 < mkRat a b
+参数：ha : 0 < a；hb : b != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.mkRat_pos_iff`：mkRat_pos_iff (a : Int) {b : Nat} (hb : b != 0) : 0 <
+ mkRat a b ↔ 0 < a
 -/
-theorem mkRat_pos {a : Int} (ha : 0 < a) {b : Nat} (hb : b != 0) : 0 < mkRat a b :=
+theorem mkRat_pos {a : ℤ} (ha : 0 < a) {b : ℕ} (hb : b ≠ 0) : 0 < mkRat a b :=
   (mkRat_pos_iff a hb).mpr ha
-
-/--
-theorem `mkRat_nonpos_iff` / 定理 `mkRat_nonpos_iff`
-
-English:
-theorem mkRat_nonpos_iff
-  given: (a : Int) {b : Nat} (hb : b != 0)
-  statement: mkRat a b <= 0 ↔ a <= 0
-  proof: by
-  grind [mkRat_pos_iff]
-
-中文:
-定理 mkRat_nonpos_iff
-  条件: (a : 整数) {b : 自然数} (hb : b != 0)
-  结论: mkRat a b <= 0 ↔ a <= 0
-  证明: by
-  grind [mkRat_pos_iff]
-
-Depends on / 依赖: mkRat_pos_iff
+/-
+**Rat.mkRat_nonpos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：mkRat_nonpos_iff (a : Int) {b : Nat} (hb : b != 0) : mkRat a b <= 0 ↔ a <=
+ 0
+参数：a : Int；hb : b != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mkRat_nonpos_iff (a : Int) {b : Nat} (hb : b != 0) : mkRat a b <= 0 ↔ a <= 0 := by
+theorem mkRat_nonpos_iff (a : ℤ) {b : ℕ} (hb : b ≠ 0) : mkRat a b ≤ 0 ↔ a ≤ 0 := by
   grind [mkRat_pos_iff]
-
-/--
-theorem `mkRat_nonpos` / 定理 `mkRat_nonpos`
-
-English:
-theorem mkRat_nonpos
-  given: {a : Int} (ha : a <= 0) (b : Nat)
-  statement: mkRat a b <= 0
-  proof: by
+/-
+**Rat.mkRat_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：mkRat_nonpos {a : Int} (ha : a <= 0) (b : Nat) : mkRat a b <= 0
+参数：ha : a <= 0；b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.mkRat_zero`：∀ (n : ℤ), mkRat n 0 = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.mkRat_nonpos_iff`：mkRat_nonpos_iff (a : Int) {b : Nat} (hb : b != 0)
+ : mkRat a b <= 0 ↔ a <= 0
+-/
+theorem mkRat_nonpos {a : ℤ} (ha : a ≤ 0) (b : ℕ) : mkRat a b ≤ 0 := by
   obtain rfl | hb := eq_or_ne b 0
   · simp
   · exact (mkRat_nonpos_iff a hb).mpr ha
-
-中文:
-定理 mkRat_nonpos
-  条件: {a : 整数} (ha : a <= 0) (b : 自然数)
-  结论: mkRat a b <= 0
-  证明: by
-  obtain rfl | hb := eq_or_ne b 0
-  · simp
-  · exact (mkRat_nonpos_iff a hb).mpr ha
-
-Depends on / 依赖: eq_or_ne, mkRat_nonpos_iff
+/-
+**Rat.mkRat_neg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：mkRat_neg_iff (a : Int) {b : Nat} (hb : b != 0) : mkRat a b < 0 ↔ a < 0
+参数：a : Int；hb : b != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mkRat_nonpos {a : Int} (ha : a <= 0) (b : Nat) : mkRat a b <= 0 := by
-  obtain rfl | hb := eq_or_ne b 0
-  · simp
-  · exact (mkRat_nonpos_iff a hb).mpr ha
-
-/--
-theorem `mkRat_neg_iff` / 定理 `mkRat_neg_iff`
-
-English:
-theorem mkRat_neg_iff
-  given: (a : Int) {b : Nat} (hb : b != 0)
-  statement: mkRat a b < 0 ↔ a < 0
-  proof: by
+theorem mkRat_neg_iff (a : ℤ) {b : ℕ} (hb : b ≠ 0) : mkRat a b < 0 ↔ a < 0 := by
   grind [mkRat_nonneg_iff]
-
-中文:
-定理 mkRat_neg_iff
-  条件: (a : 整数) {b : 自然数} (hb : b != 0)
-  结论: mkRat a b < 0 ↔ a < 0
-  证明: by
-  grind [mkRat_nonneg_iff]
-
-Depends on / 依赖: mkRat_nonneg_iff
+/-
+**Rat.mkRat_neg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：mkRat_neg {a : Int} (ha : a < 0) {b : Nat} (hb : b != 0) : mkRat a b < 0
+参数：ha : a < 0；hb : b != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.mkRat_neg_iff`：mkRat_neg_iff (a : Int) {b : Nat} (hb : b != 0) : mkR
+at a b < 0 ↔ a < 0
 -/
-theorem mkRat_neg_iff (a : Int) {b : Nat} (hb : b != 0) : mkRat a b < 0 ↔ a < 0 := by
-  grind [mkRat_nonneg_iff]
-
-/--
-theorem `mkRat_neg` / 定理 `mkRat_neg`
-
-English:
-theorem mkRat_neg
-  given: {a : Int} (ha : a < 0) {b : Nat} (hb : b != 0)
-  statement: mkRat a b < 0
-  proof: (mkRat_neg_iff a hb).mpr ha
-
-中文:
-定理 mkRat_neg
-  条件: {a : 整数} (ha : a < 0) {b : 自然数} (hb : b != 0)
-  结论: mkRat a b < 0
-  证明: (mkRat_neg_iff a hb).mpr ha
-
-Depends on / 依赖: mkRat_neg_iff
--/
-theorem mkRat_neg {a : Int} (ha : a < 0) {b : Nat} (hb : b != 0) : mkRat a b < 0 :=
+theorem mkRat_neg {a : ℤ} (ha : a < 0) {b : ℕ} (hb : b ≠ 0) : mkRat a b < 0 :=
   (mkRat_neg_iff a hb).mpr ha
 
+/-!
+### Extra instances to short-circuit type class resolution
 
-/--
-Instance `instDistribLattice` / 实例 `instDistribLattice`
-
-English:
-instance instDistribLattice
-  signature: : DistribLattice Rat
-  body: inferInstance
-
-中文:
-实例 instDistribLattice
-  签名: : Distrib格 有理数
-  定义体: inferInstance
+These also prevent non-computable instances being used to construct these instances non-computably.
 -/
-instance instDistribLattice : DistribLattice Rat := inferInstance
-/--
-Instance `instLattice` / 实例 `instLattice`
 
-English:
-instance instLattice
-  signature: : Lattice Rat
-  body: inferInstance
+/-
+**Rat.instDistribLattice** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instDistribLattice : DistribLattice Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 instLattice
-  签名: : 格 有理数
-  定义体: inferInstance
+--- 原说明 ---
+### Extra instances to short-circuit type class resolution
+
+These also prevent non-computable instances being used to construct these instan
+ces non-computably.
 -/
-instance instLattice : Lattice Rat := inferInstance
-/--
-Instance `instSemilatticeInf` / 实例 `instSemilatticeInf`
-
-English:
-instance instSemilatticeInf
-  signature: : SemilatticeInf Rat
-  body: inferInstance
-
-中文:
-实例 instSemilatticeInf
-  签名: : SemilatticeInf 有理数
-  定义体: inferInstance
+instance instDistribLattice : DistribLattice ℚ := inferInstance
+/-
+**Rat.instLattice** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instLattice : Lattice Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSemilatticeInf : SemilatticeInf Rat := inferInstance
-/--
-Instance `instSemilatticeSup` / 实例 `instSemilatticeSup`
-
-English:
-instance instSemilatticeSup
-  signature: : SemilatticeSup Rat
-  body: inferInstance
-
-中文:
-实例 instSemilatticeSup
-  签名: : SemilatticeSup 有理数
-  定义体: inferInstance
+instance instLattice : Lattice ℚ := inferInstance
+/-
+**Rat.instSemilatticeInf** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instSemilatticeInf : SemilatticeInf Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSemilatticeSup : SemilatticeSup Rat := inferInstance
-/--
-Instance `instInf` / 实例 `instInf`
-
-English:
-instance instInf
-  signature: : Min Rat
-  body: inferInstance
-
-中文:
-实例 instInf
-  签名: : 最小值 有理数
-  定义体: inferInstance
+instance instSemilatticeInf : SemilatticeInf ℚ := inferInstance
+/-
+**Rat.instSemilatticeSup** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instSemilatticeSup : SemilatticeSup Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instInf : Min Rat := inferInstance
-/--
-Instance `instSup` / 实例 `instSup`
-
-English:
-instance instSup
-  signature: : Max Rat
-  body: inferInstance
-
-中文:
-实例 instSup
-  签名: : 最大值 有理数
-  定义体: inferInstance
+instance instSemilatticeSup : SemilatticeSup ℚ := inferInstance
+/-
+**Rat.instInf** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instInf : Min Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSup : Max Rat := inferInstance
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: : PartialOrder Rat
-  body: inferInstance
-
-中文:
-实例 instPartialOrder
-  签名: : 偏序 有理数
-  定义体: inferInstance
+instance instInf : Min ℚ := inferInstance
+/-
+**Rat.instSup** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instSup : Max Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instPartialOrder : PartialOrder Rat := inferInstance
-/--
-Instance `instPreorder` / 实例 `instPreorder`
-
-English:
-instance instPreorder
-  signature: : Preorder Rat
-  body: inferInstance
-
-中文:
-实例 instPreorder
-  签名: : 预序 有理数
-  定义体: inferInstance
+instance instSup : Max ℚ := inferInstance
+/-
+**Rat.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instPartialOrder : PartialOrder Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instPreorder : Preorder Rat := inferInstance
-
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddLeftMono Rat
-  body: fun _ _ _ h => Rat.add_le_add_left.2 h
-
-中文:
-实例 :
-  签名: AddLeftMono 有理数
-  定义体: fun _ _ _ h => Rat.add_le_add_left.2 h
-
-Depends on / 依赖: Rat.add_le_add_left, add_le_add_left
+instance instPartialOrder : PartialOrder ℚ := inferInstance
+/-
+**Rat.instPreorder** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instPreorder : Preorder Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddLeftMono Rat where
+instance instPreorder : Preorder ℚ := inferInstance
+
+/-! ### Miscellaneous lemmas -/
+
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+### Miscellaneous lemmas
+-/
+instance : AddLeftMono ℚ where
   elim := fun _ _ _ h => Rat.add_le_add_left.2 h
-
-/--
-lemma `num_nonpos` / 引理 `num_nonpos`
-
-English:
-lemma num_nonpos
-  given: {a : Rat}
-  statement: a.num <= 0 ↔ a <= 0
-  proof: by
-  simp +instances [Int.le_iff_lt_or_eq, instLE, Rat.blt]
-
-中文:
-引理 num_nonpos
-  条件: {a : 有理数}
-  结论: a.num <= 0 ↔ a <= 0
-  证明: by
-  simp +instances [Int.le_iff_lt_or_eq, instLE, Rat.blt]
+/-
+**Rat.num_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a : ℚ}, a.num ≤ 0 ↔ a ≤ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Decidable.decide.congr_simp`：∀ (p p_1 : Prop), p = p_1 → ∀ {h : Decidabl
+e p} [h_1 : Decidable p_1], decide p = decide p_1
+· 使用定理 `Bool.decide_or`：∀ (p q : Prop) [dpq : Decidable (p ∨ q)] [dp : Decidable
+ p] [dq : Decidable q], decide (p ∨ q) = (decide p || decide q)
+· 使用定理 `Bool.and_eq_true`：∀ (a b : Bool), ((a && b) = true) = (a = true ∧ b = tr
+ue)
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用定理 `Bool.or_eq_true`：∀ (a b : Bool), ((a || b) = true) = (a = true ∨ b = tru
+e)
+· 使用定理 `Bool.if_false_left`：∀ (p : Prop) [h : Decidable p] (f : Bool), (if p the
+n false else f) = (!decide p && f)
+· 使用定理 `Bool.decide_and`：∀ (p q : Prop) [dpq : Decidable (p ∧ q)] [dp : Decidabl
+e p] [dq : Decidable q], decide (p ∧ q) = (decide p && decide q)
+· 使用定理 `Bool.not_and`：∀ (x y : Bool), (!(x && y)) = (!x || !y)
+· 使用定理 `Bool.not_or`：∀ (x y : Bool), (!(x || y)) = (!x && !y)
+· 使用定理 `Bool.if_true_left`：∀ (p : Prop) [h : Decidable p] (f : Bool), (if p then
+ true else f) = (decide p || f)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Bool.ite_eq_false_distrib`：∀ (p : Prop) [h : Decidable p] (t f : Bool), 
+((if p then t else f) = false) = if p then t = false else f = false
+· 使用定理 `Bool.not_true`：(!true) = false
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma num_nonpos {a : Rat} : a.num <= 0 ↔ a <= 0 := by
+@[simp] lemma num_nonpos {a : ℚ} : a.num ≤ 0 ↔ a ≤ 0 := by
   simp +instances [Int.le_iff_lt_or_eq, instLE, Rat.blt]
-/--
-lemma `num_pos` / 引理 `num_pos`
-
-English:
-lemma num_pos
-  given: {a : Rat}
-  statement: 0 < a.num ↔ 0 < a
-  proof: lt_iff_lt_of_le_iff_le num_nonpos
-
-中文:
-引理 num_pos
-  条件: {a : 有理数}
-  结论: 0 < a.num ↔ 0 < a
-  证明: lt_iff_lt_of_le_iff_le num_nonpos
+/-
+**Rat.num_pos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a : ℚ}, 0 < a.num ↔ 0 < a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Rat.num_nonpos`：∀ {a : ℚ}, a.num ≤ 0 ↔ a ≤ 0
 -/
-@[simp] lemma num_pos {a : Rat} : 0 < a.num ↔ 0 < a := lt_iff_lt_of_le_iff_le num_nonpos
-/--
-lemma `num_neg` / 引理 `num_neg`
-
-English:
-lemma num_neg
-  given: {a : Rat}
-  statement: a.num < 0 ↔ a < 0
-  proof: lt_iff_lt_of_le_iff_le num_nonneg
-
-中文:
-引理 num_neg
-  条件: {a : 有理数}
-  结论: a.num < 0 ↔ a < 0
-  证明: lt_iff_lt_of_le_iff_le num_nonneg
+@[simp] lemma num_pos {a : ℚ} : 0 < a.num ↔ 0 < a := lt_iff_lt_of_le_iff_le num_nonpos
+/-
+**Rat.num_neg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a : ℚ}, a.num < 0 ↔ a < 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Rat.num_nonneg`：∀ {q : ℚ}, 0 ≤ q.num ↔ 0 ≤ q
 -/
-@[simp] lemma num_neg {a : Rat} : a.num < 0 ↔ a < 0 := lt_iff_lt_of_le_iff_le num_nonneg
-
-/--
-theorem `div_lt_div_iff_mul_lt_mul` / 定理 `div_lt_div_iff_mul_lt_mul`
-
-English:
-theorem div_lt_div_iff_mul_lt_mul
-  proof: by
-  simp only [lt_iff_le_not_ge]
-  apply and_congr
-  · simp [div_def', Rat.divInt_le_divInt b_pos d_pos]
-  · simp [div_def', Rat.divInt_le_divInt d_pos b_pos]
-
-中文:
-定理 div_lt_div_iff_mul_lt_mul
-  证明: by
-  simp only [lt_iff_le_not_ge]
-  apply and_congr
-  · simp [div_def', Rat.divInt_le_divInt b_pos d_pos]
-  · simp [div_def', Rat.divInt_le_divInt d_pos b_pos]
+@[simp] lemma num_neg {a : ℚ} : a.num < 0 ↔ a < 0 := lt_iff_lt_of_le_iff_le num_nonneg
+/-
+**Rat.div_lt_div_iff_mul_lt_mul** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a b c d : ℤ}, 0 < b → 0 < d → (↑a / ↑b < ↑c / ↑d ↔ a * d < c * b)
+参数：↑a / ↑b < ↑c / ↑d ↔ a * d < c * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Rat.div_def'`：div_def' (q r : Rat) : q / r = (q.num * r.den) /. (q.den *
+ r.num)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Rat.divInt_le_divInt`：∀ {a b c d : ℤ}, 0 < b → 0 < d → (Rat.divInt a b ≤
+ Rat.divInt c d ↔ a * d ≤ c * b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[deprecated "use `div_lt_div_iff₀`" (since := "2026-03-20")] theorem div_lt_div_iff_mul_lt_mul
-    {a b c d : Int} (b_pos : 0 < b) (d_pos : 0 < d) :
-    (a : Rat) / b < c / d ↔ a * d < c * b := by
+    {a b c d : ℤ} (b_pos : 0 < b) (d_pos : 0 < d) :
+    (a : ℚ) / b < c / d ↔ a * d < c * b := by
   simp only [lt_iff_le_not_ge]
   apply and_congr
   · simp [div_def', Rat.divInt_le_divInt b_pos d_pos]
   · simp [div_def', Rat.divInt_le_divInt d_pos b_pos]
-
-/--
-theorem `num_le_denom_iff` / 定理 `num_le_denom_iff`
-
-English:
-theorem num_le_denom_iff
-  given: {q : Rat}
-  statement: q.num <= q.den ↔ q <= 1
-  proof: by simp [Rat.le_iff]
-
-中文:
-定理 num_le_denom_iff
-  条件: {q : 有理数}
-  结论: q.num <= q.den ↔ q <= 1
-  证明: by simp [Rat.le_iff]
-
-Depends on / 依赖: Rat.le_iff, le_iff
+/-
+**Rat.num_le_denom_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：num_le_denom_iff {q : Rat} : q.num <= q.den ↔ q <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem num_le_denom_iff {q : Rat} : q.num <= q.den ↔ q <= 1 := by simp [Rat.le_iff]
-
-/--
-theorem `num_lt_denom_iff` / 定理 `num_lt_denom_iff`
-
-English:
-theorem num_lt_denom_iff
-  given: {q : Rat}
-  statement: q.num < q.den ↔ q < 1
-  proof: by simp [Rat.lt_iff]
+theorem num_le_denom_iff {q : ℚ} : q.num ≤ q.den ↔ q ≤ 1 := by simp [Rat.le_iff]
+/-
+**Rat.num_lt_denom_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：num_lt_denom_iff {q : Rat} : q.num < q.den ↔ q < 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem num_lt_denom_iff {q : ℚ} : q.num < q.den ↔ q < 1 := by simp [Rat.lt_iff]
 
 @[deprecated (since := "2026-02-24")] alias lt_one_iff_num_lt_denom := Rat.num_lt_denom_iff
-
-中文:
-定理 num_lt_denom_iff
-  条件: {q : 有理数}
-  结论: q.num < q.den ↔ q < 1
-  证明: by simp [Rat.lt_iff]
-
-@[deprecated (since := "2026-02-24")] alias lt_one_iff_num_lt_denom := Rat.num_lt_denom_iff
-
-Depends on / 依赖: Rat.lt_iff, lt_iff
+/-
+**Rat.abs_def** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：abs_def (q : Rat) : |q| = q.num.natAbs /. q.den
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem num_lt_denom_iff {q : Rat} : q.num < q.den ↔ q < 1 := by simp [Rat.lt_iff]
-
-@[deprecated (since := "2026-02-24")] alias lt_one_iff_num_lt_denom := Rat.num_lt_denom_iff
-
-/--
-theorem `abs_def` / 定理 `abs_def`
-
-English:
-theorem abs_def
-  given: (q : Rat)
-  statement: |q| = q.num.natAbs /. q.den
-  proof: by
+theorem abs_def (q : ℚ) : |q| = q.num.natAbs /. q.den := by
   grind [abs_of_nonpos, neg_def, Rat.num_nonneg, abs_of_nonneg, num_divInt_den]
-
-中文:
-定理 abs_def
-  条件: (q : 有理数)
-  结论: |q| = q.num.natAbs /. q.den
-  证明: by
-  grind [abs_of_nonpos, neg_def, Rat.num_nonneg, abs_of_nonneg, num_divInt_den]
-
-Depends on / 依赖: Rat.num_nonneg, abs_of_nonneg, abs_of_nonpos, neg_def, num_divInt_den, num_nonneg
+/-
+**Rat.abs_def'** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：abs_def' (q : Rat) : |q| = ⟨|q.num|, q.den, q.den_ne_zero, q.num.abs_eq_na
+tAbs ▸ q.reduced⟩
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.ext`：∀ {p q : ℚ}, p.num = q.num → p.den = q.den → p = q
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `Rat.den_ne_zero`：∀ (q : ℚ), q.den ≠ 0
+· 使用定理 `Rat.reduced`：∀ (self : ℚ), self.num.natAbs.Coprime self.den
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.abs_eq_natAbs`：∀ (a : ℤ), |a| = ↑a.natAbs
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.abs_def`：abs_def (q : Rat) : |q| = q.num.natAbs /. q.den
+· 使用定理 `Rat.mk_eq_divInt`：∀ {num : ℤ} {den : ℕ} {nz : den ≠ 0} {c : num.natAbs.C
+oprime den},   { num := num, den := den, den_nz := nz, reduced := c } = Rat.divI
+nt num…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem abs_def (q : Rat) : |q| = q.num.natAbs /. q.den := by
-  grind [abs_of_nonpos, neg_def, Rat.num_nonneg, abs_of_nonneg, num_divInt_den]
-
-/--
-theorem `abs_def'` / 定理 `abs_def'`
-
-English:
-theorem abs_def'
-  given: (q : Rat)
-  proof: by
-  refine ext ?_ ?_ <;>
-    simp [Int.abs_eq_natAbs, abs_def,
-      ← Rat.mk_eq_divInt (num := q.num.natAbs) (nz := q.den_ne_zero) (c := q.reduced)]
-
-@[simp]
-
-中文:
-定理 abs_def'
-  条件: (q : 有理数)
-  证明: by
-  refine ext ?_ ?_ <;>
-    simp [Int.abs_eq_natAbs, abs_def,
-      ← Rat.mk_eq_divInt (num := q.num.natAbs) (nz := q.den_ne_zero) (c := q.reduced)]
-
-@[simp]
-
-Depends on / 依赖: Int.abs_eq_natAbs, Rat.mk_eq_divInt, abs_def, abs_eq_natAbs, den_ne_zero, mk_eq_divInt, natAbs, q.den_ne_zero, q.num.natAbs, q.reduced, reduced
--/
-theorem abs_def' (q : Rat) :
+theorem abs_def' (q : ℚ) :
     |q| = ⟨|q.num|, q.den, q.den_ne_zero, q.num.abs_eq_natAbs ▸ q.reduced⟩ := by
   refine ext ?_ ?_ <;>
     simp [Int.abs_eq_natAbs, abs_def,
       ← Rat.mk_eq_divInt (num := q.num.natAbs) (nz := q.den_ne_zero) (c := q.reduced)]
 
 @[simp]
-/--
-theorem `num_abs_eq_abs_num` / 定理 `num_abs_eq_abs_num`
-
-English:
-theorem num_abs_eq_abs_num
-  given: (q : Rat)
-  statement: |q|.num = |q.num|
-  proof: by
-  rw [abs_def']
-
-@[simp]
-
-中文:
-定理 num_abs_eq_abs_num
-  条件: (q : 有理数)
-  结论: |q|.num = |q.num|
-  证明: by
-  rw [abs_def']
-
-@[simp]
-
-Depends on / 依赖: abs_def
+/-
+**Rat.num_abs_eq_abs_num** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：num_abs_eq_abs_num (q : Rat) : |q|.num = |q.num|
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `Rat.den_ne_zero`：∀ (q : ℚ), q.den ≠ 0
+· 使用定理 `Rat.reduced`：∀ (self : ℚ), self.num.natAbs.Coprime self.den
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.abs_eq_natAbs`：∀ (a : ℤ), |a| = ↑a.natAbs
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.abs_def'`：abs_def' (q : Rat) : |q| = ⟨|q.num|, q.den, q.den_ne_zero,
+ q.num.abs_eq_natAbs ▸ q.reduced⟩
 -/
-theorem num_abs_eq_abs_num (q : Rat) : |q|.num = |q.num| := by
+theorem num_abs_eq_abs_num (q : ℚ) : |q|.num = |q.num| := by
   rw [abs_def']
 
 @[simp]
-/--
-theorem `den_abs_eq_den` / 定理 `den_abs_eq_den`
-
-English:
-theorem den_abs_eq_den
-  given: (q : Rat)
-  statement: |q|.den = q.den
-  proof: by
-  rw [abs_def']
-
-中文:
-定理 den_abs_eq_den
-  条件: (q : 有理数)
-  结论: |q|.den = q.den
-  证明: by
-  rw [abs_def']
-
-Depends on / 依赖: abs_def
+/-
+**Rat.den_abs_eq_den** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：den_abs_eq_den (q : Rat) : |q|.den = q.den
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `Rat.den_ne_zero`：∀ (q : ℚ), q.den ≠ 0
+· 使用定理 `Rat.reduced`：∀ (self : ℚ), self.num.natAbs.Coprime self.den
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.abs_eq_natAbs`：∀ (a : ℤ), |a| = ↑a.natAbs
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.abs_def'`：abs_def' (q : Rat) : |q| = ⟨|q.num|, q.den, q.den_ne_zero,
+ q.num.abs_eq_natAbs ▸ q.reduced⟩
 -/
-theorem den_abs_eq_den (q : Rat) : |q|.den = q.den := by
+theorem den_abs_eq_den (q : ℚ) : |q|.den = q.den := by
   rw [abs_def']
 
 end Rat
+

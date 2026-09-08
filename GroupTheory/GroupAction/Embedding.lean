@@ -29,175 +29,81 @@ variable {G G' α β : Type*}
 namespace Function.Embedding
 
 @[to_additive]
-/--
-Instance `smul` / 实例 `smul`
-
-English:
-instance smul
-  signature: [Group G] [MulAction G β]
-  body: ⟨fun g f => f.trans (MulAction.toPerm g).toEmbedding⟩
-
-@[to_additive]
-
-中文:
-实例 smul
-  签名: [群 G] [乘法作用 G β]
-  定义体: ⟨fun g f => f.trans (MulAction.toPerm g).toEmbedding⟩
-
-@[to_additive]
-
-Depends on / 依赖: MulAction, MulAction.toPerm, f.trans, toEmbedding, toPerm
+/-
+**Function.Embedding.smul** 是 Mathlib 中的一个实例，位于命名空间 `Function.Embedding`。
+形式化陈述：smul [Group G] [MulAction G β] : SMul G (α ↪ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smul [Group G] [MulAction G β] : SMul G (α ↪ β) :=
   ⟨fun g f => f.trans (MulAction.toPerm g).toEmbedding⟩
 
 @[to_additive]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: [Group G] [MulAction G β] (g : G) (f : α ↪ β)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_def
-  条件: [群 G] [乘法作用 G β] (g : G) (f : α ↪ β)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Function.Embedding.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Function.Embedding`。
+形式化陈述：smul_def [Group G] [MulAction G β] (g : G) (f : α ↪ β) : g • f = f.trans (
+MulAction.toPerm g).toEmbedding
+参数：g : G；f : α ↪ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_def [Group G] [MulAction G β] (g : G) (f : α ↪ β) :
     g • f = f.trans (MulAction.toPerm g).toEmbedding :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: [Group G] [MulAction G β] (g : G) (f : α ↪ β) (a : α)
-  statement: (g • f) a = g • f a
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 smul_apply
-  条件: [群 G] [乘法作用 G β] (g : G) (f : α ↪ β) (a : α)
-  结论: (g • f) a = g • f a
-  证明: rfl
-
-@[to_additive]
+/-
+**Function.Embedding.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Function.Embedding`。
+形式化陈述：smul_apply [Group G] [MulAction G β] (g : G) (f : α ↪ β) (a : α) : (g • f)
+ a = g • f a
+参数：g : G；f : α ↪ β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply [Group G] [MulAction G β] (g : G) (f : α ↪ β) (a : α) : (g • f) a = g • f a :=
   rfl
 
 @[to_additive]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: [Group G] [MulAction G β] (g : G) (f : α ↪ β)
-  statement: ⇑(g • f) = g • ⇑f
-  proof: rfl
-
-中文:
-定理 coe_smul
-  条件: [群 G] [乘法作用 G β] (g : G) (f : α ↪ β)
-  结论: ⇑(g • f) = g • ⇑f
-  证明: rfl
+/-
+**Function.Embedding.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `Function.Embedding`。
+形式化陈述：coe_smul [Group G] [MulAction G β] (g : G) (f : α ↪ β) : ⇑(g • f) = g • ⇑f
+参数：g : G；f : α ↪ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smul [Group G] [MulAction G β] (g : G) (f : α ↪ β) : ⇑(g • f) = g • ⇑f :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: G] [Group G'] [SMul G G'] [MulAction G β] [MulAction G' β]
-  body: ⟨fun x y z => Function.Embedding.ext fun i => smul_assoc x y (z i)⟩
-
-@[to_additive]
-
-中文:
-实例 [群
-  签名: G] [群 G'] [标量乘法 G G'] [乘法作用 G β] [乘法作用 G' β]
-  定义体: ⟨fun x y z => Function.Embedding.ext fun i => smul_assoc x y (z i)⟩
-
-@[to_additive]
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.ext, smul_assoc
+/-
+**Function.Embedding.** 是 Mathlib 中的一个实例，位于命名空间 `Function.Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group G] [Group G'] [SMul G G'] [MulAction G β] [MulAction G' β]
     [IsScalarTower G G' β] : IsScalarTower G G' (α ↪ β) :=
   ⟨fun x y z => Function.Embedding.ext fun i => smul_assoc x y (z i)⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: G] [Group G'] [MulAction G β] [MulAction G' β] [SMulCommClass G G' β] :
-  body: ⟨fun x y z => Function.Embedding.ext fun i => smul_comm x y (z i)⟩
-
-中文:
-实例 [群
-  签名: G] [群 G'] [乘法作用 G β] [乘法作用 G' β] [标量交换类 G G' β] :
-  定义体: ⟨fun x y z => Function.Embedding.ext fun i => smul_comm x y (z i)⟩
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.ext, smul_comm
+/-
+**Function.Embedding.** 是 Mathlib 中的一个实例，位于命名空间 `Function.Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group G] [Group G'] [MulAction G β] [MulAction G' β] [SMulCommClass G G' β] :
     SMulCommClass G G' (α ↪ β) :=
   ⟨fun x y z => Function.Embedding.ext fun i => smul_comm x y (z i)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: G] [MulAction G β] [MulAction Gᵐᵒᵖ β] [IsCentralScalar G β] :
-  body: ⟨fun _ _ => Function.Embedding.ext fun _ => op_smul_eq_smul _ _⟩
-
-@[to_additive]
-
-中文:
-实例 [群
-  签名: G] [乘法作用 G β] [乘法作用 Gᵐᵒᵖ β] [中心标量 G β] :
-  定义体: ⟨fun _ _ => Function.Embedding.ext fun _ => op_smul_eq_smul _ _⟩
-
-@[to_additive]
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.ext, op_smul_eq_smul
+/-
+**Function.Embedding.** 是 Mathlib 中的一个实例，位于命名空间 `Function.Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group G] [MulAction G β] [MulAction Gᵐᵒᵖ β] [IsCentralScalar G β] :
     IsCentralScalar G (α ↪ β) :=
   ⟨fun _ _ => Function.Embedding.ext fun _ => op_smul_eq_smul _ _⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: G] [MulAction G β] : MulAction G (α ↪ β)
-  body: DFunLike.coe_injective.mulAction _ coe_smul
-
-中文:
-实例 [群
-  签名: G] [乘法作用 G β] : 乘法作用 G (α ↪ β)
-  定义体: DFunLike.coe_injective.mulAction _ coe_smul
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, coe_smul, mulAction
+/-
+**Function.Embedding.** 是 Mathlib 中的一个实例，位于命名空间 `Function.Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group G] [MulAction G β] : MulAction G (α ↪ β) :=
   DFunLike.coe_injective.mulAction _ coe_smul
 
 end Function.Embedding
+

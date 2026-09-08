@@ -40,115 +40,80 @@ universe v u
 
 open CategoryTheory CompHausLike
 
-/--
-Definition of `CompHaus` / `CompHaus` 的定义
+/-- The category of compact Hausdorff spaces. -/
+/-
+**CompHaus** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：CompHaus
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CompHaus
-  body: CompHausLike (fun _ => True)
-
-中文:
-缩写 CompHaus
-  定义体: CompHausLike (fun _ => True)
-
-Depends on / 依赖: CompHausLike
+--- 原说明 ---
+The category of compact Hausdorff spaces.
 -/
-abbrev CompHaus := CompHausLike (fun _ => True)
+abbrev CompHaus := CompHausLike (fun _ ↦ True)
 
 namespace CompHaus
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited CompHaus
-  body: ⟨{ toTop := TopCat.of PEmpty, prop := trivial}⟩
-
-中文:
-实例 :
-  签名: 可居 CompHaus
-  定义体: ⟨{ toTop := TopCat.of PEmpty, prop := trivial}⟩
-
-Depends on / 依赖: PEmpty, TopCat, TopCat.of
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited CompHaus :=
   ⟨{ toTop := TopCat.of PEmpty, prop := trivial}⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort CompHaus Type*
-  body: ⟨fun X => X.toTop⟩
-
-中文:
-实例 :
-  签名: CoeSort CompHaus 类型
-  定义体: ⟨fun X => X.toTop⟩
-
-Depends on / 依赖: X.toTop
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort CompHaus Type* :=
   ⟨fun X => X.toTop⟩
-
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : CompHaus} : CompactSpace X :=
   X.is_compact
-
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : CompHaus} : T2Space X :=
   X.is_hausdorff
 
 variable (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasProp (fun _ => True) X
-  body: ⟨trivial⟩
-
-中文:
-实例 :
-  签名: 有命题 (fun _ => 真) X
-  定义体: ⟨trivial⟩
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : HasProp (fun _ => True) X := ⟨trivial⟩
+instance : HasProp (fun _ ↦ True) X := ⟨trivial⟩
 
-/--
-Definition of `of` / `of` 的定义
+/-- A constructor for objects of the category `CompHaus`,
+taking a type, and bundling the compact Hausdorff topology
+found by typeclass inference. -/
+/-
+**CompHaus.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `CompHaus`。
+形式化陈述：of : CompHaus
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instHasPropTrue`：∀ (X : Type u_1) [inst : TopologicalSpace X], 
+CompHausLike.HasProp (fun x => True) X
 
-English:
-abbreviation of
-  signature: : CompHaus
-  body: CompHausLike.of _ X
-
-中文:
-缩写 of
-  签名: : CompHaus
-  定义体: CompHausLike.of _ X
-
-Depends on / 依赖: CompHausLike, CompHausLike.of
+--- 原说明 ---
+A constructor for objects of the category `CompHaus`,
+taking a type, and bundling the compact Hausdorff topology
+found by typeclass inference.
 -/
 abbrev of : CompHaus := CompHausLike.of _ X
 
 end CompHaus
 
-/--
-Definition of `compHausToTop` / `compHausToTop` 的定义
+/-- The fully faithful embedding of `CompHaus` in `TopCat`. -/
+/-
+**compHausToTop** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：compHausToTop : CompHaus.{u} ⥤ TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation compHausToTop
-  signature: : CompHaus.{u} ⥤ TopCat.{u}
-  body: CompHausLike.compHausLikeToTop _
-
-中文:
-缩写 compHausToTop
-  签名: : CompHaus.{u} ⥤ 顶元素范畴.{u}
-  定义体: CompHausLike.compHausLikeToTop _
-
-Depends on / 依赖: CompHausLike, CompHausLike.compHausLikeToTop, compHausLikeToTop
+--- 原说明 ---
+The fully faithful embedding of `CompHaus` in `TopCat`.
 -/
 abbrev compHausToTop : CompHaus.{u} ⥤ TopCat.{u} :=
   CompHausLike.compHausLikeToTop _
@@ -157,73 +122,40 @@ abbrev compHausToTop : CompHaus.{u} ⥤ TopCat.{u} :=
 compact Hausdorff spaces.
 -/
 @[simps!]
-/--
-Definition of `stoneCechObj` / `stoneCechObj` 的定义
+/-
+**stoneCechObj** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：stoneCechObj (X : TopCat) : CompHaus
+参数：X : TopCat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stoneCechObj
-  signature: (X : TopCat)
-  body: CompHaus.of (StoneCech X)
-
-中文:
-定义 stoneCechObj
-  签名: (X : 顶元素范畴)
-  定义体: CompHaus.of (StoneCech X)
-
-Depends on / 依赖: CompHaus, CompHaus.of, StoneCech
+--- 原说明 ---
+(Implementation) The object part of the compactification functor from topologica
+l spaces to
+compact Hausdorff spaces.
 -/
 def stoneCechObj (X : TopCat) : CompHaus :=
   CompHaus.of (StoneCech X)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `stoneCechEquivalence` / `stoneCechEquivalence` 的定义
+/-- (Implementation) The bijection of homsets to establish the reflective adjunction of compact
+Hausdorff spaces in topological spaces.
+-/
+/-
+**stoneCechEquivalence** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：stoneCechEquivalence (X : TopCat.{u}) (Y : CompHaus.{u}) : (stoneCechObj X
+ ⟶ Y) ≃ (X ⟶ compHausToTop.obj Y) where toFun f
+参数：X : TopCat.{u}；Y : CompHaus.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instT2SpaceCarrierToTopTrue`：∀ {X : CompHaus}, T2Space ↑X.toTop
+· 使用定理 `CompHaus.instCompactSpaceCarrierToTopTrue`：∀ {X : CompHaus}, CompactSpac
+e ↑X.toTop
 
-English:
-definition stoneCechEquivalence
-  signature: (X : TopCat.{u}) (Y : CompHaus.{u})
-  body: TopCat.ofHom
-    { toFun := f ∘ stoneCechUnit
-      continuous_toFun := f.hom.hom.2.comp (@continuous_stoneCechUnit X _) }
-  invFun f := CompHausLike.ofHom _
-    { toFun := stoneCechExtend f.hom.2
-      continuous_toFun := continuous_stoneCechExtend f.hom.2 }
-  left_inv := by
-    rintro ⟨f, hf : Continuous f⟩
-    ext x
-    refine congr_fun ?_ x
-    apply Continuous.ext_on denseRange_stoneCechUnit (continuous_stoneCechExtend _) hf
-    · rintro _ ⟨y, rfl⟩
-      apply congr_fun (stoneCechExtend_extends (hf.comp _)) y
-      apply continuous_stoneCechUnit
-  right_inv := by
-    rintro ⟨f, hf : Continuous f⟩
-    ext
-    exact congr_fun (stoneCechExtend_extends hf) _
-
-中文:
-定义 stoneCechEquivalence
-  签名: (X : 顶元素范畴.{u}) (Y : CompHaus.{u})
-  定义体: TopCat.ofHom
-    { toFun := f ∘ stoneCechUnit
-      continuous_toFun := f.hom.hom.2.comp (@continuous_stoneCechUnit X _) }
-  invFun f := CompHausLike.ofHom _
-    { toFun := stoneCechExtend f.hom.2
-      continuous_toFun := continuous_stoneCechExtend f.hom.2 }
-  left_inv := by
-    rintro ⟨f, hf : Continuous f⟩
-    ext x
-    refine congr_fun ?_ x
-    apply Continuous.ext_on denseRange_stoneCechUnit (continuous_stoneCechExtend _) hf
-    · rintro _ ⟨y, rfl⟩
-      apply congr_fun (stoneCechExtend_extends (hf.comp _)) y
-      apply continuous_stoneCechUnit
-  right_inv := by
-    rintro ⟨f, hf : Continuous f⟩
-    ext
-    exact congr_fun (stoneCechExtend_extends hf) _
-
-Depends on / 依赖: TopCat, TopCat.ofHom
+--- 原说明 ---
+(Implementation) The bijection of homsets to establish the reflective adjunction
+ of compact
+Hausdorff spaces in topological spaces.
 -/
 noncomputable def stoneCechEquivalence (X : TopCat.{u}) (Y : CompHaus.{u}) :
     (stoneCechObj X ⟶ Y) ≃ (X ⟶ compHausToTop.obj Y) where
@@ -246,208 +178,104 @@ noncomputable def stoneCechEquivalence (X : TopCat.{u}) (Y : CompHaus.{u}) :
     ext
     exact congr_fun (stoneCechExtend_extends hf) _
 
-/--
-Definition of `topToCompHaus` / `topToCompHaus` 的定义
+/-- The Stone-Cech compactification functor from topological spaces to compact Hausdorff spaces,
+left adjoint to the inclusion functor.
+-/
+/-
+**topToCompHaus** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：topToCompHaus : TopCat.{u} ⥤ CompHaus.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topToCompHaus
-  signature: : TopCat.{u} ⥤ CompHaus.{u}
-  body: Adjunction.leftAdjointOfEquiv stoneCechEquivalence.{u} fun _ _ _ _ _ => rfl
-
-中文:
-定义 topToCompHaus
-  签名: : 顶元素范畴.{u} ⥤ CompHaus.{u}
-  定义体: Adjunction.leftAdjointOfEquiv stoneCechEquivalence.{u} fun _ _ _ _ _ => rfl
-
-Depends on / 依赖: Adjunction, Adjunction.leftAdjointOfEquiv, leftAdjointOfEquiv, stoneCechEquivalence
+--- 原说明 ---
+The Stone-Cech compactification functor from topological spaces to compact Hausd
+orff spaces,
+left adjoint to the inclusion functor.
 -/
 noncomputable def topToCompHaus : TopCat.{u} ⥤ CompHaus.{u} :=
   Adjunction.leftAdjointOfEquiv stoneCechEquivalence.{u} fun _ _ _ _ _ => rfl
-
-/--
-theorem `topToCompHaus_obj` / 定理 `topToCompHaus_obj`
-
-English:
-theorem topToCompHaus_obj
-  given: (X : TopCat)
-  statement: ↥(topToCompHaus.obj X) = StoneCech X
-  proof: rfl
-
-中文:
-定理 topToCompHaus_obj
-  条件: (X : 顶元素范畴)
-  结论: ↥(topToCompHaus.obj X) = StoneCech X
-  证明: rfl
+/-
+**topToCompHaus_obj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：topToCompHaus_obj (X : TopCat) : ↥(topToCompHaus.obj X) = StoneCech X
+参数：X : TopCat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem topToCompHaus_obj (X : TopCat) : ↥(topToCompHaus.obj X) = StoneCech X :=
   rfl
 
-/--
-Instance `compHausToTop.reflective` / 实例 `compHausToTop.reflective`
+/-- The category of compact Hausdorff spaces is reflective in the category of topological spaces.
+-/
+/-
+**compHausToTop.reflective** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：compHausToTop.reflective : Reflective compHausToTop where L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance compHausToTop.reflective
-  signature: : Reflective compHausToTop where
-  body: topToCompHaus
-  adj := Adjunction.adjunctionOfEquivLeft _ _
-
-中文:
-实例 compHausToTop.reflective
-  签名: : 反射 compHausToTop where
-  定义体: topToCompHaus
-  adj := Adjunction.adjunctionOfEquivLeft _ _
-
-Depends on / 依赖: topToCompHaus
+--- 原说明 ---
+The category of compact Hausdorff spaces is reflective in the category of topolo
+gical spaces.
 -/
 noncomputable instance compHausToTop.reflective : Reflective compHausToTop where
   L := topToCompHaus
   adj := Adjunction.adjunctionOfEquivLeft _ _
-
-/--
-Instance `compHausToTop.createsLimits` / 实例 `compHausToTop.createsLimits`
-
-English:
-instance compHausToTop.createsLimits
-  signature: : CreatesLimits compHausToTop
-  body: monadicCreatesLimits _
-
-中文:
-实例 compHausToTop.createsLimits
-  签名: : CreatesLimits compHausToTop
-  定义体: monadicCreatesLimits _
-
-Depends on / 依赖: monadicCreatesLimits
+/-
+**compHausToTop.createsLimits** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：compHausToTop.createsLimits : CreatesLimits compHausToTop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance compHausToTop.createsLimits : CreatesLimits compHausToTop :=
   monadicCreatesLimits _
-
-/--
-Instance `CompHaus.hasLimits` / 实例 `CompHaus.hasLimits`
-
-English:
-instance CompHaus.hasLimits
-  signature: : Limits.HasLimits CompHaus
-  body: hasLimits_of_hasLimits_createsLimits compHausToTop
-
-中文:
-实例 CompHaus.hasLimits
-  签名: : Limits.有极限 CompHaus
-  定义体: hasLimits_of_hasLimits_createsLimits compHausToTop
-
-Depends on / 依赖: compHausToTop, hasLimits_of_hasLimits_createsLimits
+/-
+**CompHaus.hasLimits** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CompHaus.hasLimits : Limits.HasLimits CompHaus
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasLimits_of_hasLimits_createsLimits`：hasLimits_of_hasLim
+its_createsLimits (F : C ⥤ D) [HasLimitsOfSize.{w, w'} D] [CreatesLimitsOfSize.{
+w, w'} F] : HasLimitsOfSize.{w, w'} C
 -/
 instance CompHaus.hasLimits : Limits.HasLimits CompHaus :=
   hasLimits_of_hasLimits_createsLimits compHausToTop
-
-/--
-Instance `CompHaus.hasColimits` / 实例 `CompHaus.hasColimits`
-
-English:
-instance CompHaus.hasColimits
-  signature: : Limits.HasColimits CompHaus
-  body: hasColimits_of_reflective compHausToTop
-
-中文:
-实例 CompHaus.hasColimits
-  签名: : Limits.有余极限 CompHaus
-  定义体: hasColimits_of_reflective compHausToTop
-
-Depends on / 依赖: compHausToTop, hasColimits_of_reflective
+/-
+**CompHaus.hasColimits** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CompHaus.hasColimits : Limits.HasColimits CompHaus
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasColimits_of_reflective`：hasColimits_of_reflective (R :
+ D ⥤ C) [Reflective R] [HasColimitsOfSize.{v, u} C] : HasColimitsOfSize.{v, u} D
 -/
 instance CompHaus.hasColimits : Limits.HasColimits CompHaus :=
   hasColimits_of_reflective compHausToTop
 
 namespace CompHaus
 
-/--
-Definition of `limitCone` / `limitCone` 的定义
+/-- An explicit limit cone for a functor `F : J ⥤ CompHaus`, defined in terms of
+`TopCat.limitCone`. -/
+/-
+**CompHaus.limitCone** 是 Mathlib 中的一个定义，位于命名空间 `CompHaus`。
+形式化陈述：limitCone {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u}) : Li
+mits.Cone F
+参数：F : J ⥤ CompHaus.{max v u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition limitCone
-  signature: {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u})
-  body: letI FF : J ⥤ TopCat := F ⋙ compHausToTop
-  { pt := {
-      toTop := (TopCat.limitCone FF).pt
-      is_compact := by
-        change CompactSpace { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j }
-        rw [← isCompact_iff_compactSpace]
-        apply IsClosed.isCompact
-        have :
-          { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), F.map f (u i) = u j } =
-            ⋂ (i : J) (j : J) (f : i ⟶ j), { u | F.map f (u i) = u j } := by
-          ext1
-          simp only [Set.mem_iInter, Set.mem_ofPred_eq]
-        rw [this]
-        apply isClosed_iInter
-        intro i
-        apply isClosed_iInter
-        intro j
-        apply isClosed_iInter
-        intro f
-        apply isClosed_eq
-        · exact ((F.map f).hom.hom.continuous).comp (continuous_apply i)
-        · exact continuous_apply j
-      is_hausdorff :=
-        show T2Space { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j } from
-          inferInstance
-      prop := trivial }
-    π := {
-      app := fun j => InducedCategory.homMk ((TopCat.limitCone FF).π.app j)
-      naturality := by
-        intro _ _ f
-        ext ⟨x, hx⟩
-        simp only [Functor.const_obj_map]
-        exact (hx f).symm } }
-
-中文:
-定义 limitCone
-  签名: {J : 类型v} [小范畴 J] (F : J ⥤ CompHaus.{最大值 v u})
-  定义体: letI FF : J ⥤ TopCat := F ⋙ compHausToTop
-  { pt := {
-      toTop := (TopCat.limitCone FF).pt
-      is_compact := by
-        change CompactSpace { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j }
-        rw [← isCompact_iff_compactSpace]
-        apply IsClosed.isCompact
-        have :
-          { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), F.map f (u i) = u j } =
-            ⋂ (i : J) (j : J) (f : i ⟶ j), { u | F.map f (u i) = u j } := by
-          ext1
-          simp only [Set.mem_iInter, Set.mem_ofPred_eq]
-        rw [this]
-        apply isClosed_iInter
-        intro i
-        apply isClosed_iInter
-        intro j
-        apply isClosed_iInter
-        intro f
-        apply isClosed_eq
-        · exact ((F.map f).hom.hom.continuous).comp (continuous_apply i)
-        · exact continuous_apply j
-      is_hausdorff :=
-        show T2Space { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j } from
-          inferInstance
-      prop := trivial }
-    π := {
-      app := fun j => InducedCategory.homMk ((TopCat.limitCone FF).π.app j)
-      naturality := by
-        intro _ _ f
-        ext ⟨x, hx⟩
-        simp only [Functor.const_obj_map]
-        exact (hx f).symm } }
-
-Depends on / 依赖: CompactSpace, F.map, F.obj, IsClosed, IsClosed.isCompact, Set.mem_iInter, Set.mem_ofPred_eq, TopCat, TopCat.limitCone, compHausToTop, isClosed_iInter, isCompact, isCompact_iff_compactSpace, is_compact, limitCone, mem_iInter, mem_ofPred_eq
+--- 原说明 ---
+An explicit limit cone for a functor `F : J ⥤ CompHaus`, defined in terms of
+`TopCat.limitCone`.
 -/
 def limitCone {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u}) : Limits.Cone F :=
   letI FF : J ⥤ TopCat := F ⋙ compHausToTop
   { pt := {
       toTop := (TopCat.limitCone FF).pt
       is_compact := by
-        change CompactSpace { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j }
+        change CompactSpace { u : ∀ j, F.obj j | ∀ {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j }
         rw [← isCompact_iff_compactSpace]
         apply IsClosed.isCompact
         have :
-          { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), F.map f (u i) = u j } =
+          { u : ∀ j, F.obj j | ∀ {i j : J} (f : i ⟶ j), F.map f (u i) = u j } =
             ⋂ (i : J) (j : J) (f : i ⟶ j), { u | F.map f (u i) = u j } := by
           ext1
           simp only [Set.mem_iInter, Set.mem_ofPred_eq]
@@ -462,7 +290,7 @@ def limitCone {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u}) : Li
         · exact ((F.map f).hom.hom.continuous).comp (continuous_apply i)
         · exact continuous_apply j
       is_hausdorff :=
-        show T2Space { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j } from
+        show T2Space { u : ∀ j, F.obj j | ∀ {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j } from
           inferInstance
       prop := trivial }
     π := {
@@ -473,32 +301,17 @@ def limitCone {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u}) : Li
         simp only [Functor.const_obj_map]
         exact (hx f).symm } }
 
-/--
-Definition of `limitConeIsLimit` / `limitConeIsLimit` 的定义
+/-- The limit cone `CompHaus.limitCone F` is indeed a limit cone. -/
+/-
+**CompHaus.limitConeIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CompHaus`。
+形式化陈述：limitConeIsLimit {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u
+}) : Limits.IsLimit.{v} (limitCone.{v, u} F)
+参数：F : J ⥤ CompHaus.{max v u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeIsLimit
-  signature: {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u})
-  body: letI FF : J ⥤ TopCat := F ⋙ compHausToTop
-  { lift := fun S => InducedCategory.homMk
-      ((TopCat.limitConeIsLimit FF).lift (compHausToTop.mapCone S))
-    uniq := fun S m hm => InducedCategory.hom_ext
-      ((TopCat.limitConeIsLimit FF).uniq (compHausToTop.mapCone S) _ (fun j => by
-        simp [← hm]
-        rfl)) }
-
-中文:
-定义 limitConeIsLimit
-  签名: {J : 类型v} [小范畴 J] (F : J ⥤ CompHaus.{最大值 v u})
-  定义体: letI FF : J ⥤ TopCat := F ⋙ compHausToTop
-  { lift := fun S => InducedCategory.homMk
-      ((TopCat.limitConeIsLimit FF).lift (compHausToTop.mapCone S))
-    uniq := fun S m hm => InducedCategory.hom_ext
-      ((TopCat.limitConeIsLimit FF).uniq (compHausToTop.mapCone S) _ (fun j => by
-        simp [← hm]
-        rfl)) }
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk, InducedCategory.hom_ext, TopCat, TopCat.limitConeIsLimit, compHausToTop, compHausToTop.mapCone, hom_ext, limitConeIsLimit, mapCone
+--- 原说明 ---
+The limit cone `CompHaus.limitCone F` is indeed a limit cone.
 -/
 def limitConeIsLimit {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u}) :
     Limits.IsLimit.{v} (limitCone.{v, u} F) :=
@@ -506,88 +319,78 @@ def limitConeIsLimit {J : Type v} [SmallCategory J] (F : J ⥤ CompHaus.{max v u
   { lift := fun S => InducedCategory.homMk
       ((TopCat.limitConeIsLimit FF).lift (compHausToTop.mapCone S))
     uniq := fun S m hm => InducedCategory.hom_ext
-      ((TopCat.limitConeIsLimit FF).uniq (compHausToTop.mapCone S) _ (fun j => by
+      ((TopCat.limitConeIsLimit FF).uniq (compHausToTop.mapCone S) _ (fun j ↦ by
         simp [← hm]
         rfl)) }
-
-/--
-theorem `epi_iff_surjective` / 定理 `epi_iff_surjective`
-
-English:
-theorem epi_iff_surjective
-  given: {X Y : CompHaus.{u}} (f : X ⟶ Y)
-  statement: Epi f ↔ Function.Surjective f
-  proof: by
-  constructor
-  · dsimp [Function.Surjective]
-    contrapose!
-    rintro ⟨y, hy⟩ hf
-    let C := Set.range f
-    have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
-    let D := ({y} : Set Y)
-    have hD : IsClosed D := isClosed_singleton
-    have hCD : Disjoint C D := by
-      rw [Set.disjoint_singleton_right]
-      rintro ⟨y', hy'⟩
-      exact hy y' hy'
-    obtain ⟨φ, hφ0, hφ1, hφ01⟩ := exists_continuous_zero_one_of_isClosed hC hD hCD
-    have : CompactSpace (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.compactSpace
-    have : T2Space (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.t2Space
-    let Z := of (ULift.{u} <| Set.Icc (0 : Real) 1)
-    let g : Y ⟶ Z := ofHom _
-      ⟨fun y' => ⟨⟨φ y', hφ01 y'⟩⟩,
-        continuous_uliftUp.comp (φ.continuous.subtype_mk fun y' => hφ01 y')⟩
-    let h : Y ⟶ Z := ofHom _
-      ⟨fun _ => ⟨⟨0, Set.left_mem_Icc.mpr zero_le_one⟩⟩, continuous_const⟩
-    have H : h = g := by
-      rw [← cancel_epi f]
-      ext x : 4
-      simp [g, h, Z, hφ0 (Set.mem_range_self x)]
-    apply_fun fun e => (e y).down.1 at H
-    dsimp [g, h, Z] at H
-    simp only [hφ1 (Set.mem_singleton y), Pi.one_apply] at H
-    exact zero_ne_one H
-  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
-    apply (forget CompHaus).epi_of_epi_map
-
-中文:
-定理 epi_iff_surjective
-  条件: {X Y : CompHaus.{u}} (f : X ⟶ Y)
-  结论: 满态射 f ↔ 函数.满射 f
-  证明: by
-  constructor
-  · dsimp [Function.Surjective]
-    contrapose!
-    rintro ⟨y, hy⟩ hf
-    let C := Set.range f
-    have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
-    let D := ({y} : Set Y)
-    have hD : IsClosed D := isClosed_singleton
-    have hCD : Disjoint C D := by
-      rw [Set.disjoint_singleton_right]
-      rintro ⟨y', hy'⟩
-      exact hy y' hy'
-    obtain ⟨φ, hφ0, hφ1, hφ01⟩ := exists_continuous_zero_one_of_isClosed hC hD hCD
-    have : CompactSpace (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.compactSpace
-    have : T2Space (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.t2Space
-    let Z := of (ULift.{u} <| Set.Icc (0 : Real) 1)
-    let g : Y ⟶ Z := ofHom _
-      ⟨fun y' => ⟨⟨φ y', hφ01 y'⟩⟩,
-        continuous_uliftUp.comp (φ.continuous.subtype_mk fun y' => hφ01 y')⟩
-    let h : Y ⟶ Z := ofHom _
-      ⟨fun _ => ⟨⟨0, Set.left_mem_Icc.mpr zero_le_one⟩⟩, continuous_const⟩
-    have H : h = g := by
-      rw [← cancel_epi f]
-      ext x : 4
-      simp [g, h, Z, hφ0 (Set.mem_range_self x)]
-    apply_fun fun e => (e y).down.1 at H
-    dsimp [g, h, Z] at H
-    simp only [hφ1 (Set.mem_singleton y), Pi.one_apply] at H
-    exact zero_ne_one H
-  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
-    apply (forget CompHaus).epi_of_epi_map
-
-Depends on / 依赖: CompactSpace, Disjoint, Function, Function.Surjective, Homeomorph, Homeomorph.ulift.symm.compactSp, IsClosed, Set.Icc, Set.disjoint_singleton_right, Set.range, Surjective, compactSp, continuous, contrapose, disjoint_singleton_right, exists_continuous_zero_one_of_isClosed, f.hom.hom.continuous, isClosed, isClosed_singleton, isCompact_range
+/-
+**CompHaus.epi_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `CompHaus`。
+形式化陈述：epi_iff_surjective {X Y : CompHaus.{u}} (f : X ⟶ Y) : Epi f ↔ Function.Sur
+jective f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `CompHaus.instT2SpaceCarrierToTopTrue`：∀ {X : CompHaus}, T2Space ↑X.toTop
+· 使用定理 `isCompact_range`：isCompact_range [CompactSpace X] {f : X -> Y} (hf : Con
+tinuous f) : IsCompact (range f)
+· 使用定理 `CompHaus.instCompactSpaceCarrierToTopTrue`：∀ {X : CompHaus}, CompactSpac
+e ↑X.toTop
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `isClosed_singleton`：isClosed_singleton [T1Space X] {x : X} : IsClosed ({
+x} : Set X)
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用引理 `Set.disjoint_singleton_right`：disjoint_singleton_right : Disjoint s {a} 
+↔ a ∉ s
+· 使用定理 `exists_continuous_zero_one_of_isClosed`：exists_continuous_zero_one_of_is
+Closed [NormalSpace X] {s t : Set X} (hs : IsClosed s) (ht : IsClosed t) (hd : D
+isjoint s t) : exists f : C(…
+· 使用定理 `NormalSpace.of_regularSpace_lindelofSpace`：∀ {X : Type u_1} [inst : Topo
+logicalSpace X] [RegularSpace X] [LindelofSpace X], NormalSpace X
+· 使用定理 `instRegularSpaceOfWeaklyLocallyCompactSpaceOfR1Space`：∀ {X : Type u_1} [
+inst : TopologicalSpace X] [WeaklyLocallyCompactSpace X] [R1Space X], RegularSpa
+ce X
+· 使用定理 `instWeaklyLocallyCompactSpaceOfCompactSpace`：∀ {X : Type u_1} [inst : To
+pologicalSpace X] [CompactSpace X], WeaklyLocallyCompactSpace X
+· 使用定理 `T2Space.r1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], R1Space X
+· 使用定理 `instLindelofSpaceOfSigmaCompactSpace`：∀ {X : Type u} [inst : Topological
+Space X] [SigmaCompactSpace X], LindelofSpace X
+· 使用定理 `CompactSpace.sigmaCompact`：∀ {X : Type u_1} [inst : TopologicalSpace X] 
+[CompactSpace X], SigmaCompactSpace X
+· 使用定理 `Homeomorph.compactSpace`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] [CompactSpace X] (h : X ≃ₜ Y),   Comp
+actSpace Y
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Homeomorph.t2Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T2Space X] (h : X ≃ₜ Y),   T2Space Y
+· 使用定理 `instT2SpaceSubtype`：∀ {X : Type u_1} [inst : TopologicalSpace X] {p : X 
+→ Prop} [T2Space X], T2Space (Subtype p)
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+（共 60 条，此处仅展示前 30 条）
 -/
 theorem epi_iff_surjective {X Y : CompHaus.{u}} (f : X ⟶ Y) : Epi f ↔ Function.Surjective f := by
   constructor
@@ -603,9 +406,9 @@ theorem epi_iff_surjective {X Y : CompHaus.{u}} (f : X ⟶ Y) : Epi f ↔ Functi
       rintro ⟨y', hy'⟩
       exact hy y' hy'
     obtain ⟨φ, hφ0, hφ1, hφ01⟩ := exists_continuous_zero_one_of_isClosed hC hD hCD
-    have : CompactSpace (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.compactSpace
-    have : T2Space (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.t2Space
-    let Z := of (ULift.{u} <| Set.Icc (0 : Real) 1)
+    have : CompactSpace (ULift.{u} <| Set.Icc (0 : ℝ) 1) := Homeomorph.ulift.symm.compactSpace
+    have : T2Space (ULift.{u} <| Set.Icc (0 : ℝ) 1) := Homeomorph.ulift.symm.t2Space
+    let Z := of (ULift.{u} <| Set.Icc (0 : ℝ) 1)
     let g : Y ⟶ Z := ofHom _
       ⟨fun y' => ⟨⟨φ y', hφ01 y'⟩⟩,
         continuous_uliftUp.comp (φ.continuous.subtype_mk fun y' => hφ01 y')⟩
@@ -624,20 +427,16 @@ theorem epi_iff_surjective {X Y : CompHaus.{u}} (f : X ⟶ Y) : Epi f ↔ Functi
 
 end CompHaus
 
-/--
-Definition of `compHausLikeToCompHaus` / `compHausLikeToCompHaus` 的定义
+/-- Every `CompHausLike` admits a functor to `CompHaus`. -/
+/-
+**compHausLikeToCompHaus** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：compHausLikeToCompHaus (P : TopCat -> Prop) : CompHausLike P ⥤ CompHaus
+参数：P : TopCat -> Prop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation compHausLikeToCompHaus
-  signature: (P : TopCat -> Prop)
-  body: CompHausLike.toCompHausLike (by simp only [implies_true])
-
-中文:
-缩写 compHausLikeToCompHaus
-  签名: (P : 顶元素范畴 -> 命题)
-  定义体: CompHausLike.toCompHausLike (by simp only [implies_true])
-
-Depends on / 依赖: CompHausLike, CompHausLike.toCompHausLike, implies_true, toCompHausLike
+--- 原说明 ---
+Every `CompHausLike` admits a functor to `CompHaus`.
 -/
-abbrev compHausLikeToCompHaus (P : TopCat -> Prop) : CompHausLike P ⥤ CompHaus :=
+abbrev compHausLikeToCompHaus (P : TopCat → Prop) : CompHausLike P ⥤ CompHaus :=
   CompHausLike.toCompHausLike (by simp only [implies_true])

@@ -37,26 +37,10 @@ set_option backward.defeqAttrib.useBackward true in
 `S.ι □ T.ι`. -/
 @[simps! -isSimp]
 noncomputable
-/--
-Definition of `ιIso` / `ιIso` 的定义
-
-English:
-definition ιIso
-  signature: : Arrow.mk (S.unionProd T).ι ≅ S.ι □ T.ι
-  body: Arrow.isoMk' _ _ (isPushout S T).isoPushout (Iso.refl _)
-    (by
-      apply (unionProd.isPushout S T).hom_ext <;>
-      simp [Limits.pushout.inl_desc, Limits.pushout.inr_desc])
-
-中文:
-定义 ιIso
-  签名: : 箭头.mk (S.unionProd T).ι ≅ S.ι □ T.ι
-  定义体: Arrow.isoMk' _ _ (isPushout S T).isoPushout (Iso.refl _)
-    (by
-      apply (unionProd.isPushout S T).hom_ext <;>
-      simp [Limits.pushout.inl_desc, Limits.pushout.inr_desc])
-
-Depends on / 依赖: Arrow.isoMk, Iso.refl, Limits, Limits.pushout.inl_desc, Limits.pushout.inr_desc, hom_ext, inl_desc, inr_desc, isPushout, isoPushout, pushout, unionProd, unionProd.isPushout
+/-
+**SSet.Subcomplex.unionProd.** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.unionPro
+d`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ιIso : Arrow.mk (S.unionProd T).ι ≅ S.ι □ T.ι :=
   Arrow.isoMk' _ _ (isPushout S T).isoPushout (Iso.refl _)
@@ -65,30 +49,26 @@ def ιIso : Arrow.mk (S.unionProd T).ι ≅ S.ι □ T.ι :=
       simp [Limits.pushout.inl_desc, Limits.pushout.inr_desc])
 
 /-- Given subcomplexes `S` and `T` of simplicial sets, this if a `Functor.PushoutObjObj`
+/-
+**SSet.Subcomplex.unionProd.for** 是 Mathlib 中的一个结构，位于命名空间 `SSet.Subcomplex.union
+Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure for the chosen binary products on `SSet`, with point `S.unionProd T`. -/
 @[simps]
-/--
-Definition of `pushoutObjObj` / `pushoutObjObj` 的定义
+/-
+**SSet.Subcomplex.unionProd.pushoutObjObj** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcom
+plex.unionProd`。
+形式化陈述：pushoutObjObj : (curriedTensor _).PushoutObjObj S.ι T.ι where pt
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.unionProd.isPushout`：isPushout : IsPushout (S.ι ▷ (T : S
+Set)) ((S : SSet) ◁ T.ι) (unionProd.ι₁ S T) (unionProd.ι₂ S T)
 
-English:
-definition pushoutObjObj
-  signature: : (curriedTensor _).PushoutObjObj S.ι T.ι where
-  body: S.unionProd T
-  inl := unionProd.ι₁ S T
-  inr := unionProd.ι₂ S T
-  isPushout := unionProd.isPushout S T
-  ι := (S.unionProd T).ι
-
-中文:
-定义 pushoutObjObj
-  签名: : (curriedTensor _).PushoutObjObj S.ι T.ι where
-  定义体: S.unionProd T
-  inl := unionProd.ι₁ S T
-  inr := unionProd.ι₂ S T
-  isPushout := unionProd.isPushout S T
-  ι := (S.unionProd T).ι
-
-Depends on / 依赖: S.unionProd, unionProd
+--- 原说明 ---
+Given subcomplexes `S` and `T` of simplicial sets, this if a `Functor.PushoutObj
+Obj`
+structure for the chosen binary products on `SSet`, with point `S.unionProd T`.
 -/
 noncomputable def pushoutObjObj : (curriedTensor _).PushoutObjObj S.ι T.ι where
   pt := S.unionProd T
@@ -102,3 +82,4 @@ end unionProd
 end Subcomplex
 
 end SSet
+

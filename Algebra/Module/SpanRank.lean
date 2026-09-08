@@ -60,169 +60,167 @@ variable {R : Type*} {M : Type u} [Semiring R] [AddCommMonoid M] [Module R M]
 
 open Cardinal
 
-/--
-Definition of `spanRank` / `spanRank` 的定义
+/-- The minimum cardinality of a generating set of a submodule as a cardinal. -/
+/-
+**Submodule.spanRank** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：spanRank (p : Submodule R M) : Cardinal
+参数：p : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanRank
-  signature: (p : Submodule R M)
-  body: ⨅ (s : {s : Set M // span R s = p}), #s
-
-中文:
-定义 spanRank
-  签名: (p : 子模 R M)
-  定义体: ⨅ (s : {s : Set M // span R s = p}), #s
+--- 原说明 ---
+The minimum cardinality of a generating set of a submodule as a cardinal.
 -/
 noncomputable def spanRank (p : Submodule R M) : Cardinal := ⨅ (s : {s : Set M // span R s = p}), #s
 
-/--
-Definition of `spanFinrank` / `spanFinrank` 的定义
+/-- The minimum cardinality of a generating set of a submodule as a natural number. If no finite
+  generating set exists, the span rank is defined to be `0`. -/
+/-
+**Submodule.spanFinrank** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank (p : Submodule R M) : Nat
+参数：p : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanFinrank
-  signature: (p : Submodule R M)
-  body: (spanRank p).toNat
-
-中文:
-定义 spanFinrank
-  签名: (p : 子模 R M)
-  定义体: (spanRank p).toNat
-
-Depends on / 依赖: spanRank
+--- 原说明 ---
+The minimum cardinality of a generating set of a submodule as a natural number. 
+If no finite
+  generating set exists, the span rank is defined to be `0`.
 -/
-noncomputable def spanFinrank (p : Submodule R M) : Nat := (spanRank p).toNat
-
+noncomputable def spanFinrank (p : Submodule R M) : ℕ := (spanRank p).toNat
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (p : Submodule R M) : Nonempty {s : Set M // span R s = p} := ⟨⟨p, by simp⟩⟩
-
-/--
-lemma `spanRank_toENat_eq_iInf_encard` / 引理 `spanRank_toENat_eq_iInf_encard`
-
-English:
-lemma spanRank_toENat_eq_iInf_encard
-  given: (p : Submodule R M)
-  statement: p.spanRank.toENat =
-  proof: by
-  rw [spanRank]
-  apply le_antisymm
-  · refine le_iInf₂ (fun s hs => ?_)
-    rw [Set.encard]; rw [ENat.card]
-    exact toENat.monotone' (ciInf_le' _ (⟨s, hs⟩ : {s : Set M // span R s = p}))
-  · have := congrFun toENat_comp_ofENat.{u}.symm (⨅ (s : Set M) (_ : span R s = p), s.encard)
-    rw [id_eq] at this; rw [this]
-    refine toENat.monotone' (le_ciInf fun s => ?_)
-    have : ofENat.{u} (⨅ (s' : Set M), ⨅ (_ : span R s' = p), s'.encard) <= ofENat s.1.encard :=
-      ofENatHom.monotone' (le_trans (ciInf_le' _ s.1) (ciInf_le' _ s.2))
-    apply le_trans this
-    rw [Set.encard]; rw [ENat.card]
-    exact Cardinal.ofENat_toENat_le _
-
-中文:
-引理 spanRank_toE自然数_eq_iInf_encard
-  条件: (p : 子模 R M)
-  结论: p.spanRank.toE自然数 =
-  证明: by
-  rw [spanRank]
-  apply le_antisymm
-  · refine le_iInf₂ (fun s hs => ?_)
-    rw [Set.encard]; rw [ENat.card]
-    exact toENat.monotone' (ciInf_le' _ (⟨s, hs⟩ : {s : Set M // span R s = p}))
-  · have := congrFun toENat_comp_ofENat.{u}.symm (⨅ (s : Set M) (_ : span R s = p), s.encard)
-    rw [id_eq] at this; rw [this]
-    refine toENat.monotone' (le_ciInf fun s => ?_)
-    have : ofENat.{u} (⨅ (s' : Set M), ⨅ (_ : span R s' = p), s'.encard) <= ofENat s.1.encard :=
-      ofENatHom.monotone' (le_trans (ciInf_le' _ s.1) (ciInf_le' _ s.2))
-    apply le_trans this
-    rw [Set.encard]; rw [ENat.card]
-    exact Cardinal.ofENat_toENat_le _
-
-Depends on / 依赖: ENat.card, Set.encard, ciInf_le, encard, id_eq, le_antisymm, le_ciInf, le_trans, monotone, ofENat, ofENatHom, ofENatHom.monotone, s.encard, spanRank, toENat, toENat.monotone, toENat_comp_ofENat
+/-
+**Submodule.spanRank_toENat_eq_iInf_encard** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`
+。
+形式化陈述：spanRank_toENat_eq_iInf_encard (p : Submodule R M) : p.spanRank.toENat = (
+⨅ (s : Set M) (_ : span R s = p), s.encard)
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanRank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M)
+, p.spanRank …
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `Set.encard.eq_1`：∀ {α : Type u_1} (s : Set α), s.encard = ENat.card ↑s
+· 使用定理 `ENat.card.eq_1`：∀ (α : Type u_3), ENat.card α = Cardinal.toENat (Cardina
+l.mk α)
+· 使用定理 `OrderRingHom.monotone'`：∀ {α : Type u_6} {β : Type u_7} [inst : NonAssoc
+Semiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3 : Preo
+rder β] (sel…
+· 使用定理 `ciInf_le'`：ciInf_le' (f : ι -> α) (i : ι) : iInf f <= f i
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.toENat_comp_ofENat`：⇑Cardinal.toENat ∘ Cardinal.ofENat = id
+· 使用定理 `id_eq`：∀ {α : Sort u_1} (a : α), id a = a
+· 使用定理 `le_ciInf`：le_ciInf [Nonempty ι] {f : ι -> α} {c : α} (H : forall x, c <=
+ f x) : c <= iInf f
+· 使用定理 `Submodule.instNonemptySubtypeSetEqSpan`：∀ {R : Type u_1} {M : Type u} [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p :
+ Submodule R M), Nonempty { …
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用引理 `Cardinal.ofENat_toENat_le`：ofENat_toENat_le (a : Cardinal) : ↑(toENat a)
+ <= a
 -/
 lemma spanRank_toENat_eq_iInf_encard (p : Submodule R M) : p.spanRank.toENat =
     (⨅ (s : Set M) (_ : span R s = p), s.encard) := by
   rw [spanRank]
   apply le_antisymm
-  · refine le_iInf₂ (fun s hs => ?_)
-    rw [Set.encard]; rw [ENat.card]
+  · refine le_iInf₂ (fun s hs ↦ ?_)
+    rw [Set.encard, ENat.card]
     exact toENat.monotone' (ciInf_le' _ (⟨s, hs⟩ : {s : Set M // span R s = p}))
   · have := congrFun toENat_comp_ofENat.{u}.symm (⨅ (s : Set M) (_ : span R s = p), s.encard)
     rw [id_eq] at this; rw [this]
-    refine toENat.monotone' (le_ciInf fun s => ?_)
-    have : ofENat.{u} (⨅ (s' : Set M), ⨅ (_ : span R s' = p), s'.encard) <= ofENat s.1.encard :=
+    refine toENat.monotone' (le_ciInf fun s ↦ ?_)
+    have : ofENat.{u} (⨅ (s' : Set M), ⨅ (_ : span R s' = p), s'.encard) ≤ ofENat s.1.encard :=
       ofENatHom.monotone' (le_trans (ciInf_le' _ s.1) (ciInf_le' _ s.2))
     apply le_trans this
-    rw [Set.encard]; rw [ENat.card]
+    rw [Set.encard, ENat.card]
     exact Cardinal.ofENat_toENat_le _
-
-/--
-lemma `spanRank_toENat_eq_iInf_finset_card` / 引理 `spanRank_toENat_eq_iInf_finset_card`
-
-English:
-lemma spanRank_toENat_eq_iInf_finset_card
-  given: (p : Submodule R M)
-  proof: by
-  rw [spanRank_toENat_eq_iInf_encard]
-  rcases eq_or_ne (⨅ (s : Set M) (_ : span R s = p), s.encard) ⊤ with (h1 | h2)
-  · rw [h1, eq_comm]; simp_rw [iInf_eq_top] at h1 ⊢
-    exact fun s => False.elim (Set.encard_ne_top_iff.mpr s.1.finite_toSet (h1 s.1 s.2))
-  · simp_rw [← Set.encard_coe_eq_coe_finsetCard]
-    apply le_antisymm
-    · exact le_iInf fun s => iInf₂_le (s.1 : Set M) s.2
-    · refine le_iInf fun s => le_iInf fun h => ?_
-      by_cases hs : s.Finite
-      · exact iInf_le_of_le ⟨hs.toFinset, by simpa⟩ (by simp)
-      · rw [Set.Infinite.encard_eq hs]
-        exact OrderTop.le_top _
-
-中文:
-引理 spanRank_toE自然数_eq_iInf_finset_card
-  条件: (p : 子模 R M)
-  证明: by
-  rw [spanRank_toENat_eq_iInf_encard]
-  rcases eq_or_ne (⨅ (s : Set M) (_ : span R s = p), s.encard) ⊤ with (h1 | h2)
-  · rw [h1, eq_comm]; simp_rw [iInf_eq_top] at h1 ⊢
-    exact fun s => False.elim (Set.encard_ne_top_iff.mpr s.1.finite_toSet (h1 s.1 s.2))
-  · simp_rw [← Set.encard_coe_eq_coe_finsetCard]
-    apply le_antisymm
-    · exact le_iInf fun s => iInf₂_le (s.1 : Set M) s.2
-    · refine le_iInf fun s => le_iInf fun h => ?_
-      by_cases hs : s.Finite
-      · exact iInf_le_of_le ⟨hs.toFinset, by simpa⟩ (by simp)
-      · rw [Set.Infinite.encard_eq hs]
-        exact OrderTop.le_top _
-
-Depends on / 依赖: False.elim, Finite, Set.encard_coe_eq_coe_finsetCard, Set.encard_ne_top_iff.mpr, encard, encard_coe_eq_coe_finsetCard, encard_ne_top_iff, eq_comm, eq_or_ne, finite_toSet, hs.toFinset, iInf_eq_top, iInf_le_of_le, le_antisymm, le_iInf, s.Finite, s.encard, simp_rw, spanRank_toENat_eq_iInf_encard, toFinset
+/-
+**Submodule.spanRank_toENat_eq_iInf_finset_card** 是 Mathlib 中的一个引理，位于命名空间 `Submo
+dule`。
+形式化陈述：spanRank_toENat_eq_iInf_finset_card (p : Submodule R M) : p.spanRank.toENa
+t = ⨅ (s : {s : Finset M // span R s = p}), (s.1.card : Nat∞)
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.spanRank_toENat_eq_iInf_encard`：spanRank_toENat_eq_iInf_encard
+ (p : Submodule R M) : p.spanRank.toENat = (⨅ (s : Set M) (_ : span R s = p), s.
+encard)
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.encard_ne_top_iff`：encard_ne_top_iff : s.encard != ⊤ ↔ s.Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `iInf₂_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {f : (i : ι) → κ i → α} (i : ι) (j : κ i),   ⨅ i, ⨅ j, f i j ≤…
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.Infinite.encard_eq`：∀ {α : Type u_1} {s : Set α}, s.Infinite → s.enc
+ard = ⊤
+· 使用定理 `OrderTop.le_top`：∀ {α : Type u} {inst : LE α} [self : OrderTop α] (a : α
+), a ≤ ⊤
 -/
 lemma spanRank_toENat_eq_iInf_finset_card (p : Submodule R M) :
-    p.spanRank.toENat = ⨅ (s : {s : Finset M // span R s = p}), (s.1.card : Nat∞) := by
+    p.spanRank.toENat = ⨅ (s : {s : Finset M // span R s = p}), (s.1.card : ℕ∞) := by
   rw [spanRank_toENat_eq_iInf_encard]
   rcases eq_or_ne (⨅ (s : Set M) (_ : span R s = p), s.encard) ⊤ with (h1 | h2)
   · rw [h1, eq_comm]; simp_rw [iInf_eq_top] at h1 ⊢
-    exact fun s => False.elim (Set.encard_ne_top_iff.mpr s.1.finite_toSet (h1 s.1 s.2))
+    exact fun s ↦ False.elim (Set.encard_ne_top_iff.mpr s.1.finite_toSet (h1 s.1 s.2))
   · simp_rw [← Set.encard_coe_eq_coe_finsetCard]
     apply le_antisymm
-    · exact le_iInf fun s => iInf₂_le (s.1 : Set M) s.2
-    · refine le_iInf fun s => le_iInf fun h => ?_
+    · exact le_iInf fun s ↦ iInf₂_le (s.1 : Set M) s.2
+    · refine le_iInf fun s ↦ le_iInf fun h ↦ ?_
       by_cases hs : s.Finite
       · exact iInf_le_of_le ⟨hs.toFinset, by simpa⟩ (by simp)
       · rw [Set.Infinite.encard_eq hs]
         exact OrderTop.le_top _
-
-/--
-lemma `spanFinrank_eq_iInf` / 引理 `spanFinrank_eq_iInf`
-
-English:
-lemma spanFinrank_eq_iInf
-  given: (p : Submodule R M)
-  proof: by
-  simp [spanFinrank, Cardinal.toNat, spanRank_toENat_eq_iInf_finset_card, ENat.iInf_toNat]
-
-中文:
-引理 spanFinrank_eq_iInf
-  条件: (p : 子模 R M)
-  证明: by
-  simp [spanFinrank, Cardinal.toNat, spanRank_toENat_eq_iInf_finset_card, ENat.iInf_toNat]
-
-Depends on / 依赖: Cardinal, Cardinal.toNat, ENat.iInf_toNat, iInf_toNat, spanFinrank, spanRank_toENat_eq_iInf_finset_card
+/-
+**Submodule.spanFinrank_eq_iInf** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_eq_iInf (p : Submodule R M) : p.spanFinrank = ⨅ (s : {s : Fins
+et M // span R s = p}), s.1.card
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.spanRank_toENat_eq_iInf_finset_card`：spanRank_toENat_eq_iInf_f
+inset_card (p : Submodule R M) : p.spanRank.toENat = ⨅ (s : {s : Finset M // spa
+n R s = p}), (s.1.card : Nat∞)
+· 使用引理 `ENat.iInf_toNat`：iInf_toNat : (⨅ i, (f i : Nat∞)).toNat = ⨅ i, f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma spanFinrank_eq_iInf (p : Submodule R M) :
     p.spanFinrank = ⨅ (s : {s : Finset M // span R s = p}), s.1.card := by
@@ -230,76 +228,63 @@ lemma spanFinrank_eq_iInf (p : Submodule R M) :
 
 /-- A submodule's `spanRank` is finite if and only if it is finitely generated. -/
 @[simp]
-/--
-lemma `spanRank_finite_iff_fg` / 引理 `spanRank_finite_iff_fg`
+/-
+**Submodule.spanRank_finite_iff_fg** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_finite_iff_fg {p : Submodule R M} : p.spanRank < aleph0 ↔ p.FG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanRank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M)
+, p.spanRank …
+· 使用定理 `Submodule.fg_def`：fg_def {N : Submodule R M} : N.FG ↔ exists S : Set M, 
+S.Finite ∧ span R S = N
+· 使用定理 `csInf_mem`：csInf_mem (hs : s.Nonempty) : sInf s in s
+· 使用定理 `Cardinal.instWellFoundedLT`：WellFoundedLT Cardinal.{u}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.span_coe_eq_restrictScalars`：span_coe_eq_restrictScalars [Semi
+ring S] [SMul S R] [Module S M] [IsScalarTower S R M] : span S (p : Set M) = p.r
+estrictScalars S
+· 使用定理 `Submodule.restrictScalars_self`：restrictScalars_self (V : Submodule R M)
+ : V.restrictScalars R = V
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `ciInf_le'`：ciInf_le' (f : ι -> α) (i : ι) : iInf f <= f i
 
-English:
-lemma spanRank_finite_iff_fg
-  given: {p : Submodule R M}
-  statement: p.spanRank < aleph0 ↔ p.FG
-  proof: by
-  rw [spanRank]; rw [Submodule.fg_def]
-  constructor
-  · rintro h
-    obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s in
-      Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
-    refine ⟨s.1, ?_, s.2⟩
-    simpa [← hs] using h
-  · rintro ⟨s, hs₁, hs₂⟩
-    exact (ciInf_le' _ ⟨s, hs₂⟩).trans_lt (by simpa)
-
-中文:
-引理 spanRank_finite_iff_fg
-  条件: {p : 子模 R M}
-  结论: p.spanRank < aleph0 ↔ p.FG
-  证明: by
-  rw [spanRank]; rw [Submodule.fg_def]
-  constructor
-  · rintro h
-    obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s in
-      Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
-    refine ⟨s.1, ?_, s.2⟩
-    simpa [← hs] using h
-  · rintro ⟨s, hs₁, hs₂⟩
-    exact (ciInf_le' _ ⟨s, hs₂⟩).trans_lt (by simpa)
-
-Depends on / 依赖: Set.range, Submodule, Submodule.fg_def, ciInf_le, csInf_mem, fg_def, spanRank, trans_lt
+--- 原说明 ---
+A submodule's `spanRank` is finite if and only if it is finitely generated.
 -/
 lemma spanRank_finite_iff_fg {p : Submodule R M} : p.spanRank < aleph0 ↔ p.FG := by
-  rw [spanRank]; rw [Submodule.fg_def]
+  rw [spanRank, Submodule.fg_def]
   constructor
   · rintro h
-    obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s in
-      Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
+    obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s ∈
+      Set.range (fun (s : {s : Set M // span R s = p}) ↦ #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
     refine ⟨s.1, ?_, s.2⟩
     simpa [← hs] using h
   · rintro ⟨s, hs₁, hs₂⟩
     exact (ciInf_le' _ ⟨s, hs₂⟩).trans_lt (by simpa)
-
-/--
-lemma `spanFinrank_of_not_fg` / 引理 `spanFinrank_of_not_fg`
-
-English:
-lemma spanFinrank_of_not_fg
-  given: {p : Submodule R M} (hp : ¬p.FG)
-  statement: p.spanFinrank = 0
-  proof: by
-  refine toNat_eq_zero.2 ?_
-  right
-  by_contra! h
-  exact hp (spanRank_finite_iff_fg.1 h)
-
-中文:
-引理 spanFinrank_of_not_fg
-  条件: {p : 子模 R M} (hp : ¬p.FG)
-  结论: p.spanFinrank = 0
-  证明: by
-  refine toNat_eq_zero.2 ?_
-  right
-  by_contra! h
-  exact hp (spanRank_finite_iff_fg.1 h)
-
-Depends on / 依赖: spanRank_finite_iff_fg, toNat_eq_zero
+/-
+**Submodule.spanFinrank_of_not_fg** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_of_not_fg {p : Submodule R M} (hp : ¬p.FG) : p.spanFinrank = 0
+参数：hp : ¬p.FG。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Cardinal.toNat_eq_zero`：toNat_eq_zero : toNat c = 0 ↔ c = 0 ∨ ℵ₀ <= c
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Submodule.spanRank_finite_iff_fg`：spanRank_finite_iff_fg {p : Submodule 
+R M} : p.spanRank < aleph0 ↔ p.FG
 -/
 lemma spanFinrank_of_not_fg {p : Submodule R M} (hp : ¬p.FG) : p.spanFinrank = 0 := by
   refine toNat_eq_zero.2 ?_
@@ -307,155 +292,160 @@ lemma spanFinrank_of_not_fg {p : Submodule R M} (hp : ¬p.FG) : p.spanFinrank = 
   by_contra! h
   exact hp (spanRank_finite_iff_fg.1 h)
 
-/--
-lemma `fg_iff_spanRank_eq_spanFinrank` / 引理 `fg_iff_spanRank_eq_spanFinrank`
+/-- A submodule is finitely generated if and only if its `spanRank` is equal to its `spanFinrank`.
+-/
+/-
+**Submodule.fg_iff_spanRank_eq_spanFinrank** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`
+。
+形式化陈述：fg_iff_spanRank_eq_spanFinrank {p : Submodule R M} : p.spanRank = p.spanFi
+nrank ↔ p.FG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanFinrank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R
+ M), p.spanFinra…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.spanRank_finite_iff_fg`：spanRank_finite_iff_fg {p : Submodule 
+R M} : p.spanRank < aleph0 ↔ p.FG
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Cardinal.cast_toNat_eq_iff_lt_aleph0`：cast_toNat_eq_iff_lt_aleph0 {c : C
+ardinal} : toNat c = c ↔ c < ℵ₀ where mp h
 
-English:
-lemma fg_iff_spanRank_eq_spanFinrank
-  given: {p : Submodule R M}
-  statement: p.spanRank = p.spanFinrank ↔ p.FG
-  proof: by
-  rw [spanFinrank]; rw [← spanRank_finite_iff_fg]; rw [eq_comm]
-  exact cast_toNat_eq_iff_lt_aleph0
-
-中文:
-引理 fg_iff_spanRank_eq_spanFinrank
-  条件: {p : 子模 R M}
-  结论: p.spanRank = p.spanFinrank ↔ p.FG
-  证明: by
-  rw [spanFinrank]; rw [← spanRank_finite_iff_fg]; rw [eq_comm]
-  exact cast_toNat_eq_iff_lt_aleph0
-
-Depends on / 依赖: cast_toNat_eq_iff_lt_aleph0, eq_comm, spanFinrank, spanRank_finite_iff_fg
+--- 原说明 ---
+A submodule is finitely generated if and only if its `spanRank` is equal to its 
+`spanFinrank`.
 -/
 lemma fg_iff_spanRank_eq_spanFinrank {p : Submodule R M} : p.spanRank = p.spanFinrank ↔ p.FG := by
-  rw [spanFinrank]; rw [← spanRank_finite_iff_fg]; rw [eq_comm]
+  rw [spanFinrank, ← spanRank_finite_iff_fg, eq_comm]
   exact cast_toNat_eq_iff_lt_aleph0
-
-/--
-lemma `FG.spanRank_eq_spanFinrank` / 引理 `FG.spanRank_eq_spanFinrank`
-
-English:
-lemma FG.spanRank_eq_spanFinrank
-  given: {p : Submodule R M} (fg : p.FG)
-  statement: p.spanRank = p.spanFinrank
-  proof: fg_iff_spanRank_eq_spanFinrank.mpr fg
-
-中文:
-引理 FG.spanRank_eq_spanFinrank
-  条件: {p : 子模 R M} (fg : p.FG)
-  结论: p.spanRank = p.spanFinrank
-  证明: fg_iff_spanRank_eq_spanFinrank.mpr fg
-
-Depends on / 依赖: fg_iff_spanRank_eq_spanFinrank, fg_iff_spanRank_eq_spanFinrank.mpr
+/-
+**Submodule.FG.spanRank_eq_spanFinrank** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   {p : Submodule R M}, p.FG → p.spanRank = ↑p.sp
+anFinrank
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.fg_iff_spanRank_eq_spanFinrank`：fg_iff_spanRank_eq_spanFinrank
+ {p : Submodule R M} : p.spanRank = p.spanFinrank ↔ p.FG
 -/
 lemma FG.spanRank_eq_spanFinrank {p : Submodule R M} (fg : p.FG) : p.spanRank = p.spanFinrank :=
   fg_iff_spanRank_eq_spanFinrank.mpr fg
-
-/--
-lemma `FG.spanRank_le_iff` / 引理 `FG.spanRank_le_iff`
-
-English:
-lemma FG.spanRank_le_iff
-  given: {p : Submodule R M} (hp : p.FG) (n : Nat)
-  proof: (Cardinal.toNat_le_iff_of_lt_aleph0 n (by simpa)).symm
-
-中文:
-引理 FG.spanRank_le_iff
-  条件: {p : 子模 R M} (hp : p.FG) (n : 自然数)
-  证明: (Cardinal.toNat_le_iff_of_lt_aleph0 n (by simpa)).symm
-
-Depends on / 依赖: Cardinal, Cardinal.toNat_le_iff_of_lt_aleph0, toNat_le_iff_of_lt_aleph0
+/-
+**Submodule.FG.spanRank_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   {p : Submodule R M}, p.FG → ∀ (n : ℕ), p.spanR
+ank ≤ ↑n ↔ p.spanFinrank ≤ n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Cardinal.toNat_le_iff_of_lt_aleph0`：toNat_le_iff_of_lt_aleph0 {a : Cardi
+nal.{u}} (n : Nat) (lt : a < Cardinal.aleph0) : a.toNat <= n ↔ a <= n
 -/
-lemma FG.spanRank_le_iff {p : Submodule R M} (hp : p.FG) (n : Nat) :
-    p.spanRank <= n ↔ p.spanFinrank <= n :=
+lemma FG.spanRank_le_iff {p : Submodule R M} (hp : p.FG) (n : ℕ) :
+    p.spanRank ≤ n ↔ p.spanFinrank ≤ n :=
   (Cardinal.toNat_le_iff_of_lt_aleph0 n (by simpa)).symm
-
-/--
-lemma `FG.spanRank_eq_iff` / 引理 `FG.spanRank_eq_iff`
-
-English:
-lemma FG.spanRank_eq_iff
-  given: {p : Submodule R M} (hp : p.FG) (n : Nat)
-  proof: (Cardinal.toNat_eq_iff_of_lt_aleph0 n (by simpa)).symm
-
-中文:
-引理 FG.spanRank_eq_iff
-  条件: {p : 子模 R M} (hp : p.FG) (n : 自然数)
-  证明: (Cardinal.toNat_eq_iff_of_lt_aleph0 n (by simpa)).symm
-
-Depends on / 依赖: Cardinal, Cardinal.toNat_eq_iff_of_lt_aleph0, toNat_eq_iff_of_lt_aleph0
+/-
+**Submodule.FG.spanRank_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   {p : Submodule R M}, p.FG → ∀ (n : ℕ), p.spanR
+ank = ↑n ↔ p.spanFinrank = n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Cardinal.toNat_eq_iff_of_lt_aleph0`：toNat_eq_iff_of_lt_aleph0 {a : Cardi
+nal.{u}} (n : Nat) (lt : a < Cardinal.aleph0) : a.toNat = n ↔ a = n
 -/
-lemma FG.spanRank_eq_iff {p : Submodule R M} (hp : p.FG) (n : Nat) :
+lemma FG.spanRank_eq_iff {p : Submodule R M} (hp : p.FG) (n : ℕ) :
     p.spanRank = n ↔ p.spanFinrank = n :=
   (Cardinal.toNat_eq_iff_of_lt_aleph0 n (by simpa)).symm
-
-/--
-lemma `spanRank_span_le_card` / 引理 `spanRank_span_le_card`
-
-English:
-lemma spanRank_span_le_card
-  given: (s : Set M)
-  statement: (Submodule.span R s).spanRank <= #s
-  proof: by
-  rw [spanRank]
-  let s' : {s1 : Set M // span R s1 = span R s} := ⟨s, rfl⟩
-  exact ciInf_le' _ s'
-
-中文:
-引理 spanRank_span_le_card
-  条件: (s : 集合 M)
-  结论: (子模.span R s).spanRank <= #s
-  证明: by
-  rw [spanRank]
-  let s' : {s1 : Set M // span R s1 = span R s} := ⟨s, rfl⟩
-  exact ciInf_le' _ s'
-
-Depends on / 依赖: ciInf_le, spanRank
+/-
+**Submodule.spanRank_span_le_card** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_span_le_card (s : Set M) : (Submodule.span R s).spanRank <= #s
+参数：s : Set M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanRank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M)
+, p.spanRank …
+· 使用定理 `ciInf_le'`：ciInf_le' (f : ι -> α) (i : ι) : iInf f <= f i
 -/
-lemma spanRank_span_le_card (s : Set M) : (Submodule.span R s).spanRank <= #s := by
+lemma spanRank_span_le_card (s : Set M) : (Submodule.span R s).spanRank ≤ #s := by
   rw [spanRank]
   let s' : {s1 : Set M // span R s1 = span R s} := ⟨s, rfl⟩
   exact ciInf_le' _ s'
-
-/--
-lemma `spanRank_span_range_of_linearIndependent` / 引理 `spanRank_span_range_of_linearIndependent`
-
-English:
-lemma spanRank_span_range_of_linearIndependent
-  statement: [RankCondition R] {ι : Type u} {v : ι -> M}
-  proof: by
-  refine le_antisymm (le_trans (spanRank_span_le_card _) mk_range_le) (le_ciInf fun x => ?_)
-  have : #x.1 = #((Subtype.val : span R (.range v) -> _) ⁻¹' x.1) :=
-    (mk_preimage_of_injective_of_subset_range _ _ Subtype.val_injective (by simp [← x.2])).symm
-  rw [this]
-  refine le_trans ?_ ((Module.Basis.span hs).le_span (R := R) (J := Subtype.val ⁻¹' x.1) ?_)
-  · rw [mk_range_eq]
-    exact .of_comp (f := Subtype.val) (by convert! hv; ext; simp [Module.Basis.span_apply])
-  · apply map_injective_of_injective (f := (span R _).subtype) (injective_subtype _)
-    simp [map_span, Set.image_preimage_eq_inter_range, Set.inter_eq_self_of_subset_left, ← x.2]
-
-中文:
-引理 spanRank_span_range_of_linearIndependent
-  结论: [RankCondition R] {ι : 类型u} {v : ι -> M}
-  证明: by
-  refine le_antisymm (le_trans (spanRank_span_le_card _) mk_range_le) (le_ciInf fun x => ?_)
-  have : #x.1 = #((Subtype.val : span R (.range v) -> _) ⁻¹' x.1) :=
-    (mk_preimage_of_injective_of_subset_range _ _ Subtype.val_injective (by simp [← x.2])).symm
-  rw [this]
-  refine le_trans ?_ ((Module.Basis.span hs).le_span (R := R) (J := Subtype.val ⁻¹' x.1) ?_)
-  · rw [mk_range_eq]
-    exact .of_comp (f := Subtype.val) (by convert! hv; ext; simp [Module.Basis.span_apply])
-  · apply map_injective_of_injective (f := (span R _).subtype) (injective_subtype _)
-    simp [map_span, Set.image_preimage_eq_inter_range, Set.inter_eq_self_of_subset_left, ← x.2]
-
-Depends on / 依赖: Module, Module.Basis.span, Module.Basis.span_apply, Subtype, Subtype.val, Subtype.val_injective, convert, le_antisymm, le_ciInf, le_span, le_trans, map_injective_of_injective, mk_preimage_of_injective_of_subset_range, mk_range_eq, mk_range_le, of_comp, spanRank_span_le_card, span_apply, val_injective
+/-
+**Submodule.spanRank_span_range_of_linearIndependent** 是 Mathlib 中的一个引理，位于命名空间 `
+Submodule`。
+形式化陈述：spanRank_span_range_of_linearIndependent [RankCondition R] {ι : Type u} {v
+ : ι -> M} (hv : v.Injective) (hs : LinearIndependent R v) : (span R (.range v))
+.spanRank = #ι
+参数：hv : v.Injective；hs : LinearIndependent R v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `Submodule.spanRank_span_le_card`：spanRank_span_le_card (s : Set M) : (Su
+bmodule.span R s).spanRank <= #s
+· 使用定理 `Cardinal.mk_range_le`：mk_range_le {α β : Type u} {f : α -> β} : #(range 
+f) <= #α
+· 使用定理 `le_ciInf`：le_ciInf [Nonempty ι] {f : ι -> α} {c : α} (H : forall x, c <=
+ f x) : c <= iInf f
+· 使用定理 `Submodule.instNonemptySubtypeSetEqSpan`：∀ {R : Type u_1} {M : Type u} [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p :
+ Submodule R M), Nonempty { …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_preimage_of_injective_of_subset_range`：mk_preimage_of_inject
+ive_of_subset_range (f : α -> β) (s : Set β) (h : Injective f) (h2 : s subseteq 
+range f) : #(f ⁻¹' s) = #s
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Cardinal.mk_range_eq`：mk_range_eq (f : α -> β) (h : Injective f) : #(ran
+ge f) = #α
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Module.Basis.span_apply`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} 
+[inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] {v
+ : ι → M} (hl…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Module.Basis.le_span`：Module.Basis.le_span {J : Set M} (v : Basis ι R M)
+ (hJ : span R J = ⊤) : #(range v) <= #J
+· 使用定理 `Submodule.map_injective_of_injective`：map_injective_of_injective : Funct
+ion.Injective (map f)
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+（共 33 条，此处仅展示前 30 条）
 -/
-lemma spanRank_span_range_of_linearIndependent [RankCondition R] {ι : Type u} {v : ι -> M}
+lemma spanRank_span_range_of_linearIndependent [RankCondition R] {ι : Type u} {v : ι → M}
     (hv : v.Injective) (hs : LinearIndependent R v) :
     (span R (.range v)).spanRank = #ι := by
-  refine le_antisymm (le_trans (spanRank_span_le_card _) mk_range_le) (le_ciInf fun x => ?_)
-  have : #x.1 = #((Subtype.val : span R (.range v) -> _) ⁻¹' x.1) :=
+  refine le_antisymm (le_trans (spanRank_span_le_card _) mk_range_le) (le_ciInf fun x ↦ ?_)
+  have : #x.1 = #((Subtype.val : span R (.range v) → _) ⁻¹' x.1) :=
     (mk_preimage_of_injective_of_subset_range _ _ Subtype.val_injective (by simp [← x.2])).symm
   rw [this]
   refine le_trans ?_ ((Module.Basis.span hs).le_span (R := R) (J := Subtype.val ⁻¹' x.1) ?_)
@@ -463,265 +453,317 @@ lemma spanRank_span_range_of_linearIndependent [RankCondition R] {ι : Type u} {
     exact .of_comp (f := Subtype.val) (by convert! hv; ext; simp [Module.Basis.span_apply])
   · apply map_injective_of_injective (f := (span R _).subtype) (injective_subtype _)
     simp [map_span, Set.image_preimage_eq_inter_range, Set.inter_eq_self_of_subset_left, ← x.2]
-
-/--
-lemma `spanRank_span_of_linearIndepOn` / 引理 `spanRank_span_of_linearIndepOn`
-
-English:
-lemma spanRank_span_of_linearIndepOn
-  given: [RankCondition R] (s : Set M) (hs : LinearIndepOn R id s)
-  proof: by
-  simp [← spanRank_span_range_of_linearIndependent Subtype.val_injective hs]
-
-中文:
-引理 spanRank_span_of_linearIndepOn
-  条件: [RankCondition R] (s : 集合 M) (hs : LinearIndepOn R id s)
-  证明: by
-  simp [← spanRank_span_range_of_linearIndependent Subtype.val_injective hs]
-
-Depends on / 依赖: Subtype, Subtype.val_injective, spanRank_span_range_of_linearIndependent, val_injective
+/-
+**Submodule.spanRank_span_of_linearIndepOn** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`
+。
+形式化陈述：spanRank_span_of_linearIndepOn [RankCondition R] (s : Set M) (hs : LinearI
+ndepOn R id s) : (span R s).spanRank = #s
+参数：s : Set M；hs : LinearIndepOn R id s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.spanRank_span_range_of_linearIndependent`：spanRank_span_range_
+of_linearIndependent [RankCondition R] {ι : Type u} {v : ι -> M} (hv : v.Injecti
+ve) (hs : LinearIndependent R v) : (span…
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma spanRank_span_of_linearIndepOn [RankCondition R] (s : Set M) (hs : LinearIndepOn R id s) :
     (span R s).spanRank = #s := by
   simp [← spanRank_span_range_of_linearIndependent Subtype.val_injective hs]
-
-/--
-lemma `spanFinrank_span_le_encard` / 引理 `spanFinrank_span_le_encard`
-
-English:
-lemma spanFinrank_span_le_encard
-  given: (s : Set M)
-  statement: (span R s).spanFinrank <= s.encard
-  proof: by
-  rw [spanFinrank]; rw [Set.encard]; rw [ENat.card]
-  exact le_trans (by simp) (toENat.monotone' (spanRank_span_le_card (R := R) s))
-
-中文:
-引理 spanFinrank_span_le_encard
-  条件: (s : 集合 M)
-  结论: (span R s).spanFinrank <= s.encard
-  证明: by
-  rw [spanFinrank]; rw [Set.encard]; rw [ENat.card]
-  exact le_trans (by simp) (toENat.monotone' (spanRank_span_le_card (R := R) s))
-
-Depends on / 依赖: ENat.card, Set.encard, encard, le_trans, monotone, spanFinrank, spanRank_span_le_card, toENat, toENat.monotone
+/-
+**Submodule.spanFinrank_span_le_encard** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_span_le_encard (s : Set M) : (span R s).spanFinrank <= s.encar
+d
+参数：s : Set M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanFinrank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R
+ M), p.spanFinra…
+· 使用定理 `Set.encard.eq_1`：∀ {α : Type u_1} (s : Set α), s.encard = ENat.card ↑s
+· 使用定理 `ENat.card.eq_1`：∀ (α : Type u_3), ENat.card α = Cardinal.toENat (Cardina
+l.mk α)
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `OrderRingHom.instRingHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : N
+onAssocSemiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3
+ : Preorder β], Rin…
+· 使用定理 `OrderRingHom.toRingHom_eq_coe`：toRingHom_eq_coe (f : α ->+*o β) : f.toRi
+ngHom = f
+· 使用定理 `OrderRingHom.monotone'`：∀ {α : Type u_6} {β : Type u_7} [inst : NonAssoc
+Semiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3 : Preo
+rder β] (sel…
+· 使用引理 `Submodule.spanRank_span_le_card`：spanRank_span_le_card (s : Set M) : (Su
+bmodule.span R s).spanRank <= #s
 -/
-lemma spanFinrank_span_le_encard (s : Set M) : (span R s).spanFinrank <= s.encard := by
-  rw [spanFinrank]; rw [Set.encard]; rw [ENat.card]
+lemma spanFinrank_span_le_encard (s : Set M) : (span R s).spanFinrank ≤ s.encard := by
+  rw [spanFinrank, Set.encard, ENat.card]
   exact le_trans (by simp) (toENat.monotone' (spanRank_span_le_card (R := R) s))
-
-/--
-lemma `spanFinrank_span_le_ncard_of_finite` / 引理 `spanFinrank_span_le_ncard_of_finite`
-
-English:
-lemma spanFinrank_span_le_ncard_of_finite
-  given: {s : Set M} (hs : s.Finite)
-  proof: by
-  rw [← Nat.cast_le (α := Nat∞)]
-  exact le_trans (spanFinrank_span_le_encard _) hs.cast_ncard_eq.ge
-
-中文:
-引理 spanFinrank_span_le_ncard_of_finite
-  条件: {s : 集合 M} (hs : s.有限)
-  证明: by
-  rw [← Nat.cast_le (α := Nat∞)]
-  exact le_trans (spanFinrank_span_le_encard _) hs.cast_ncard_eq.ge
-
-Depends on / 依赖: Nat.cast_le, cast_le, cast_ncard_eq, hs.cast_ncard_eq.ge, le_trans, spanFinrank_span_le_encard
+/-
+**Submodule.spanFinrank_span_le_ncard_of_finite** 是 Mathlib 中的一个引理，位于命名空间 `Submo
+dule`。
+形式化陈述：spanFinrank_span_le_ncard_of_finite {s : Set M} (hs : s.Finite) : (span R 
+s).spanFinrank <= s.ncard
+参数：hs : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `Submodule.spanFinrank_span_le_encard`：spanFinrank_span_le_encard (s : Se
+t M) : (span R s).spanFinrank <= s.encard
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Set.Finite.cast_ncard_eq`：∀ {α : Type u_1} {s : Set α}, s.Finite → ↑s.nc
+ard = s.encard
 -/
 lemma spanFinrank_span_le_ncard_of_finite {s : Set M} (hs : s.Finite) :
-    (span R s).spanFinrank <= s.ncard := by
-  rw [← Nat.cast_le (α := Nat∞)]
+    (span R s).spanFinrank ≤ s.ncard := by
+  rw [← Nat.cast_le (α := ℕ∞)]
   exact le_trans (spanFinrank_span_le_encard _) hs.cast_ncard_eq.ge
 
-/--
-theorem `exists_span_set_card_eq_spanRank` / 定理 `exists_span_set_card_eq_spanRank`
+/-- Constructs a generating set with cardinality equal to the `spanRank` of the submodule -/
+/-
+**Submodule.exists_span_set_card_eq_spanRank** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：exists_span_set_card_eq_spanRank (p : Submodule R M) : exists s : Set M, #
+s = p.spanRank ∧ span R s = p
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanRank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M)
+, p.spanRank …
+· 使用定理 `csInf_mem`：csInf_mem (hs : s.Nonempty) : sInf s in s
+· 使用定理 `Cardinal.instWellFoundedLT`：WellFoundedLT Cardinal.{u}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.span_coe_eq_restrictScalars`：span_coe_eq_restrictScalars [Semi
+ring S] [SMul S R] [Module S M] [IsScalarTower S R M] : span S (p : Set M) = p.r
+estrictScalars S
+· 使用定理 `Submodule.restrictScalars_self`：restrictScalars_self (V : Submodule R M)
+ : V.restrictScalars R = V
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem exists_span_set_card_eq_spanRank
-  given: (p : Submodule R M)
-  proof: by
-  rw [spanRank]
-  obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s in
-    Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
-  exact ⟨s.1, ⟨hs, s.2⟩⟩
-
-中文:
-定理 存在_span_set_card_eq_spanRank
-  条件: (p : 子模 R M)
-  证明: by
-  rw [spanRank]
-  obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s in
-    Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
-  exact ⟨s.1, ⟨hs, s.2⟩⟩
-
-Depends on / 依赖: Set.range, csInf_mem, spanRank
+--- 原说明 ---
+Constructs a generating set with cardinality equal to the `spanRank` of the subm
+odule
 -/
 theorem exists_span_set_card_eq_spanRank (p : Submodule R M) :
-    exists s : Set M, #s = p.spanRank ∧ span R s = p := by
+    ∃ s : Set M, #s = p.spanRank ∧ span R s = p := by
   rw [spanRank]
-  obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s in
-    Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
+  obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s ∈
+    Set.range (fun (s : {s : Set M // span R s = p}) ↦ #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
   exact ⟨s.1, ⟨hs, s.2⟩⟩
 
-/--
-theorem `FG.exists_span_set_encard_eq_spanFinrank` / 定理 `FG.exists_span_set_encard_eq_spanFinrank`
+/-- Constructs a generating set with cardinality equal to the `spanFinrank` of the submodule when
+  the submodule is finitely generated. -/
+/-
+**Submodule.FG.exists_span_set_encard_eq_spanFinrank** 是 Mathlib 中的一个定理，位于命名空间 `
+Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   {p : Submodule R M}, p.FG → ∃ s, s.encard = ↑p
+.spanFinrank ∧ Submodule.span R s = p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.fg_iff_spanRank_eq_spanFinrank`：fg_iff_spanRank_eq_spanFinrank
+ {p : Submodule R M} : p.spanRank = p.spanFinrank ↔ p.FG
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.encard.eq_1`：∀ {α : Type u_1} (s : Set α), s.encard = ENat.card ↑s
+· 使用定理 `ENat.card.eq_1`：∀ (α : Type u_3), ENat.card α = Cardinal.toENat (Cardina
+l.mk α)
+· 使用定理 `Submodule.spanFinrank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R
+ M), p.spanFinra…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `OrderRingHom.instRingHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : N
+onAssocSemiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3
+ : Preorder β], Rin…
+· 使用定理 `Cardinal.toNat_natCast`：∀ (n : ℕ), Cardinal.toNat ↑n = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem FG.exists_span_set_encard_eq_spanFinrank
-  given: {p : Submodule R M} (h : p.FG)
-  proof: by
-  obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_card_eq_spanRank p
-  refine ⟨s, ⟨?_, hs₂⟩⟩
-  have := fg_iff_spanRank_eq_spanFinrank.mpr h
-  rw [Set.encard]; rw [ENat.card]; rw [spanFinrank]; rw [hs₁]; rw [this]
-  simp
-
-中文:
-定理 FG.存在_span_set_encard_eq_spanFinrank
-  条件: {p : 子模 R M} (h : p.FG)
-  证明: by
-  obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_card_eq_spanRank p
-  refine ⟨s, ⟨?_, hs₂⟩⟩
-  have := fg_iff_spanRank_eq_spanFinrank.mpr h
-  rw [Set.encard]; rw [ENat.card]; rw [spanFinrank]; rw [hs₁]; rw [this]
-  simp
-
-Depends on / 依赖: ENat.card, Set.encard, encard, exists_span_set_card_eq_spanRank, fg_iff_spanRank_eq_spanFinrank, fg_iff_spanRank_eq_spanFinrank.mpr, spanFinrank
+--- 原说明 ---
+Constructs a generating set with cardinality equal to the `spanFinrank` of the s
+ubmodule when
+  the submodule is finitely generated.
 -/
 theorem FG.exists_span_set_encard_eq_spanFinrank {p : Submodule R M} (h : p.FG) :
-    exists s : Set M, s.encard = p.spanFinrank ∧ span R s = p := by
+    ∃ s : Set M, s.encard = p.spanFinrank ∧ span R s = p := by
   obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_card_eq_spanRank p
   refine ⟨s, ⟨?_, hs₂⟩⟩
   have := fg_iff_spanRank_eq_spanFinrank.mpr h
-  rw [Set.encard]; rw [ENat.card]; rw [spanFinrank]; rw [hs₁]; rw [this]
+  rw [Set.encard, ENat.card, spanFinrank, hs₁, this]
   simp
 
-/--
-theorem `FG.exists_span_finset_card_eq_spanFinrank` / 定理 `FG.exists_span_finset_card_eq_spanFinrank`
+/-- Constructs a generating finset with cardinality equal to the `spanFinrank` of the submodule
+  when the submodule is finitely generated. -/
+/-
+**Submodule.FG.exists_span_finset_card_eq_spanFinrank** 是 Mathlib 中的一个定理，位于命名空间 
+`Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   {p : Submodule R M}, p.FG → ∃ s, s.card = p.sp
+anFinrank ∧ Submodule.span R ↑s = p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.FG.exists_span_set_encard_eq_spanFinrank`：∀ {R : Type u_1} {M 
+: Type u} [inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module
+ R M]   {p : Submodule R M}, p.FG → ∃ s,…
+· 使用定理 `Set.finite_of_encard_eq_coe`：finite_of_encard_eq_coe {k : Nat} (h : s.en
+card = k) : s.Finite
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Finite.encard_eq_coe_toFinset_card`：∀ {α : Type u_1} {s : Set α} (h 
+: s.Finite), s.encard = ↑h.toFinset.card
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
 
-English:
-theorem FG.exists_span_finset_card_eq_spanFinrank
-  given: {p : Submodule R M} (h : p.FG)
-  proof: by
-  obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_encard_eq_spanFinrank h
-  have s_f := Set.finite_of_encard_eq_coe hs₁
-  refine ⟨s_f.toFinset, ⟨?_, by simpa using hs₂⟩⟩
-  simpa [s_f.encard_eq_coe_toFinset_card, ENat.natCast_inj] using hs₁
-
-中文:
-定理 FG.存在_span_finset_card_eq_spanFinrank
-  条件: {p : 子模 R M} (h : p.FG)
-  证明: by
-  obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_encard_eq_spanFinrank h
-  have s_f := Set.finite_of_encard_eq_coe hs₁
-  refine ⟨s_f.toFinset, ⟨?_, by simpa using hs₂⟩⟩
-  simpa [s_f.encard_eq_coe_toFinset_card, ENat.natCast_inj] using hs₁
-
-Depends on / 依赖: ENat.natCast_inj, Set.finite_of_encard_eq_coe, encard_eq_coe_toFinset_card, exists_span_set_encard_eq_spanFinrank, finite_of_encard_eq_coe, natCast_inj, s_f.encard_eq_coe_toFinset_card, s_f.toFinset, toFinset
+--- 原说明 ---
+Constructs a generating finset with cardinality equal to the `spanFinrank` of th
+e submodule
+  when the submodule is finitely generated.
 -/
 theorem FG.exists_span_finset_card_eq_spanFinrank {p : Submodule R M} (h : p.FG) :
-    exists s : Finset M, s.card = p.spanFinrank ∧ span R s = p := by
+    ∃ s : Finset M, s.card = p.spanFinrank ∧ span R s = p := by
   obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_encard_eq_spanFinrank h
   have s_f := Set.finite_of_encard_eq_coe hs₁
   refine ⟨s_f.toFinset, ⟨?_, by simpa using hs₂⟩⟩
   simpa [s_f.encard_eq_coe_toFinset_card, ENat.natCast_inj] using hs₁
-
-/--
-lemma `lift_spanRank_le_iff_exists_span_set_card_le` / 引理 `lift_spanRank_le_iff_exists_span_set_card_le`
-
-English:
-lemma lift_spanRank_le_iff_exists_span_set_card_le
-  given: (p : Submodule R M) {a : Cardinal.{max u v}}
-  proof: by
-  constructor
-  · intro h
-    obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_card_eq_spanRank p
-    exact ⟨s, ⟨hs₁ ▸ h, hs₂⟩⟩
-  · exact fun ⟨s, ⟨h₁, h₂⟩⟩ => h₂.symm ▸ (Cardinal.lift_le.mpr (spanRank_span_le_card s)).trans h₁
-
-中文:
-引理 lift_spanRank_le_iff_存在_span_set_card_le
-  条件: (p : 子模 R M) {a : 基数.{最大值 u v}}
-  证明: by
-  constructor
-  · intro h
-    obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_card_eq_spanRank p
-    exact ⟨s, ⟨hs₁ ▸ h, hs₂⟩⟩
-  · exact fun ⟨s, ⟨h₁, h₂⟩⟩ => h₂.symm ▸ (Cardinal.lift_le.mpr (spanRank_span_le_card s)).trans h₁
-
-Depends on / 依赖: Cardinal, Cardinal.lift_le.mpr, exists_span_set_card_eq_spanRank, lift_le, spanRank_span_le_card
+/-
+**Submodule.lift_spanRank_le_iff_exists_span_set_card_le** 是 Mathlib 中的一个引理，位于命名
+空间 `Submodule`。
+形式化陈述：lift_spanRank_le_iff_exists_span_set_card_le (p : Submodule R M) {a : Card
+inal.{max u v}} : Cardinal.lift.{v} p.spanRank <= a ↔ exists s : Set M, Cardinal
+.lift.{v} #s <= a ∧ span R s = p
+参数：p : Submodule R M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用引理 `Submodule.spanRank_span_le_card`：spanRank_span_le_card (s : Set M) : (Su
+bmodule.span R s).spanRank <= #s
 -/
 lemma lift_spanRank_le_iff_exists_span_set_card_le (p : Submodule R M) {a : Cardinal.{max u v}} :
-    Cardinal.lift.{v} p.spanRank <= a ↔ exists s : Set M, Cardinal.lift.{v} #s <= a ∧ span R s = p := by
+    Cardinal.lift.{v} p.spanRank ≤ a ↔ ∃ s : Set M, Cardinal.lift.{v} #s ≤ a ∧ span R s = p := by
   constructor
   · intro h
     obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_card_eq_spanRank p
     exact ⟨s, ⟨hs₁ ▸ h, hs₂⟩⟩
-  · exact fun ⟨s, ⟨h₁, h₂⟩⟩ => h₂.symm ▸ (Cardinal.lift_le.mpr (spanRank_span_le_card s)).trans h₁
+  · exact fun ⟨s, ⟨h₁, h₂⟩⟩ ↦ h₂.symm ▸ (Cardinal.lift_le.mpr (spanRank_span_le_card s)).trans h₁
 
-/--
-lemma `FG.spanRank_le_iff_exists_span_set_card_le` / 引理 `FG.spanRank_le_iff_exists_span_set_card_le`
+/-- For a finitely generated submodule, its spanRank is less than or equal to a cardinal `a`
+  if and only if there is a generating subset with cardinality less than or equal to `a`. -/
+/-
+**Submodule.FG.spanRank_le_iff_exists_span_set_card_le** 是 Mathlib 中的一个定理，位于命名空间
+ `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   (p : Submodule R M) {a : Cardinal.{u}}, p.span
+Rank ≤ a ↔ ∃ s, Cardinal.mk ↑s ≤ a ∧ Submodule.span R s = p
+参数：p : Submodule R M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Submodule.lift_spanRank_le_iff_exists_span_set_card_le`：lift_spanRank_le
+_iff_exists_span_set_card_le (p : Submodule R M) {a : Cardinal.{max u v}} : Card
+inal.lift.{v} p.spanRank <= a ↔ exists s : S…
 
-English:
-lemma FG.spanRank_le_iff_exists_span_set_card_le
-  given: (p : Submodule R M) {a : Cardinal}
-  proof: by
-  convert! lift_spanRank_le_iff_exists_span_set_card_le p (a := a) <;> simp
-
-@[simp]
-
-中文:
-引理 FG.spanRank_le_iff_存在_span_set_card_le
-  条件: (p : 子模 R M) {a : 基数}
-  证明: by
-  convert! lift_spanRank_le_iff_exists_span_set_card_le p (a := a) <;> simp
-
-@[simp]
-
-Depends on / 依赖: convert, lift_spanRank_le_iff_exists_span_set_card_le
+--- 原说明 ---
+For a finitely generated submodule, its spanRank is less than or equal to a card
+inal `a`
+  if and only if there is a generating subset with cardinality less than or equa
+l to `a`.
 -/
 lemma FG.spanRank_le_iff_exists_span_set_card_le (p : Submodule R M) {a : Cardinal} :
-    p.spanRank <= a ↔ exists s : Set M, #s <= a ∧ span R s = p := by
+    p.spanRank ≤ a ↔ ∃ s : Set M, #s ≤ a ∧ span R s = p := by
   convert! lift_spanRank_le_iff_exists_span_set_card_le p (a := a) <;> simp
 
 @[simp]
-/--
-lemma `spanRank_eq_zero_iff_eq_bot` / 引理 `spanRank_eq_zero_iff_eq_bot`
-
-English:
-lemma spanRank_eq_zero_iff_eq_bot
-  given: {I : Submodule R M}
-  statement: I.spanRank = 0 ↔ I = ⊥
-  proof: by
-  constructor
-  · intro h
-    obtain ⟨s, ⟨hs₁, hs₂⟩⟩ :=
-      (FG.spanRank_le_iff_exists_span_set_card_le I (a := 0)).mp (by rw [h])
-    simp only [nonpos_iff_eq_zero, mk_eq_zero_iff, Set.isEmpty_coe_sort] at hs₁
-    simp_all
-  · rintro rfl; rw [spanRank]
-    exact Cardinal.iInf_eq_zero_iff.mpr (Or.inr ⟨⟨∅, by simp⟩, by simp⟩)
-
-@[simp]
-
-中文:
-引理 spanRank_eq_zero_iff_eq_bot
-  条件: {I : 子模 R M}
-  结论: I.spanRank = 0 ↔ I = ⊥
-  证明: by
-  constructor
-  · intro h
-    obtain ⟨s, ⟨hs₁, hs₂⟩⟩ :=
-      (FG.spanRank_le_iff_exists_span_set_card_le I (a := 0)).mp (by rw [h])
-    simp only [nonpos_iff_eq_zero, mk_eq_zero_iff, Set.isEmpty_coe_sort] at hs₁
-    simp_all
-  · rintro rfl; rw [spanRank]
-    exact Cardinal.iInf_eq_zero_iff.mpr (Or.inr ⟨⟨∅, by simp⟩, by simp⟩)
-
-@[simp]
-
-Depends on / 依赖: Cardinal, Cardinal.iInf_eq_zero_iff.mpr, FG.spanRank_le_iff_exists_span_set_card_le, Or.inr, Set.isEmpty_coe_sort, iInf_eq_zero_iff, isEmpty_coe_sort, mk_eq_zero_iff, nonpos_iff_eq_zero, spanRank, spanRank_le_iff_exists_span_set_card_le
+/-
+**Submodule.spanRank_eq_zero_iff_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_eq_zero_iff_eq_bot {I : Submodule R M} : I.spanRank = 0 ↔ I = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.FG.spanRank_le_iff_exists_span_set_card_le`：∀ {R : Type u_1} {
+M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Modu
+le R M]   (p : Submodule R M) {a : Cardina…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Submodule.span_empty`：span_empty : span R (∅ : Set M) = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Submodule.spanRank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M)
+, p.spanRank …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Cardinal.iInf_eq_zero_iff`：iInf_eq_zero_iff {ι : Sort*} {f : ι -> Cardin
+al} : (⨅ i, f i) = 0 ↔ IsEmpty ι ∨ exists i, f i = 0
+· 使用定理 `Cardinal.mk_eq_zero`：mk_eq_zero (α : Type u) [IsEmpty α] : #α = 0
+· 使用定理 `Set.instIsEmptyElemEmptyCollection`：∀ (α : Type u), IsEmpty ↑∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma spanRank_eq_zero_iff_eq_bot {I : Submodule R M} : I.spanRank = 0 ↔ I = ⊥ := by
   constructor
@@ -734,353 +776,331 @@ lemma spanRank_eq_zero_iff_eq_bot {I : Submodule R M} : I.spanRank = 0 ↔ I = �
     exact Cardinal.iInf_eq_zero_iff.mpr (Or.inr ⟨⟨∅, by simp⟩, by simp⟩)
 
 @[simp]
-/--
-lemma `spanRank_bot` / 引理 `spanRank_bot`
-
-English:
-lemma spanRank_bot
-  statement: (⊥ : Ideal R).spanRank = 0
-  proof: Submodule.spanRank_eq_zero_iff_eq_bot.mpr rfl
-
-@[simp]
-
-中文:
-引理 spanRank_bot
-  结论: (⊥ : 理想 R).spanRank = 0
-  证明: Submodule.spanRank_eq_zero_iff_eq_bot.mpr rfl
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.spanRank_eq_zero_iff_eq_bot.mpr, spanRank_eq_zero_iff_eq_bot
+/-
+**Submodule.spanRank_bot** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_bot : (⊥ : Ideal R).spanRank = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.spanRank_eq_zero_iff_eq_bot`：spanRank_eq_zero_iff_eq_bot {I : 
+Submodule R M} : I.spanRank = 0 ↔ I = ⊥
 -/
 lemma spanRank_bot : (⊥ : Ideal R).spanRank = 0 := Submodule.spanRank_eq_zero_iff_eq_bot.mpr rfl
 
 @[simp]
-/--
-lemma `spanFinrank_bot` / 引理 `spanFinrank_bot`
-
-English:
-lemma spanFinrank_bot
-  statement: (⊥ : Submodule R M).spanFinrank = 0
-  proof: by simp [spanFinrank]
-
-@[nontriviality]
-
-中文:
-引理 spanFinrank_bot
-  结论: (⊥ : 子模 R M).spanFinrank = 0
-  证明: by simp [spanFinrank]
-
-@[nontriviality]
-
-Depends on / 依赖: spanFinrank
+/-
+**Submodule.spanFinrank_bot** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_bot : (⊥ : Submodule R M).spanFinrank = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
 lemma spanFinrank_bot : (⊥ : Submodule R M).spanFinrank = 0 := by simp [spanFinrank]
 
 @[nontriviality]
-/--
-lemma `spanRank_subsingleton` / 引理 `spanRank_subsingleton`
-
-English:
-lemma spanRank_subsingleton
-  given: [Subsingleton R] (p : Submodule R M)
-  statement: p.spanRank = 0
-  proof: by
-  simp [nontriviality]
-
-@[nontriviality]
-
-中文:
-引理 spanRank_subsingleton
-  条件: [子单例 R] (p : 子模 R M)
-  结论: p.spanRank = 0
-  证明: by
-  simp [nontriviality]
-
-@[nontriviality]
-
-Depends on / 依赖: nontriviality
+/-
+**Submodule.spanRank_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_subsingleton [Subsingleton R] (p : Submodule R M) : p.spanRank = 
+0
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 lemma spanRank_subsingleton [Subsingleton R] (p : Submodule R M) : p.spanRank = 0 := by
   simp [nontriviality]
 
 @[nontriviality]
-/--
-lemma `spanFinrank_subsingleton` / 引理 `spanFinrank_subsingleton`
-
-English:
-lemma spanFinrank_subsingleton
-  given: [Subsingleton R] (p : Submodule R M)
-  statement: p.spanFinrank = 0
-  proof: by
-  have := Module.subsingleton R M
-  simp [Submodule.eq_bot_of_subsingleton]
-
-中文:
-引理 spanFinrank_subsingleton
-  条件: [子单例 R] (p : 子模 R M)
-  结论: p.spanFinrank = 0
-  证明: by
-  have := Module.subsingleton R M
-  simp [Submodule.eq_bot_of_subsingleton]
-
-Depends on / 依赖: Module, Module.subsingleton, Submodule, Submodule.eq_bot_of_subsingleton, eq_bot_of_subsingleton, subsingleton
+/-
+**Submodule.spanFinrank_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_subsingleton [Subsingleton R] (p : Submodule R M) : p.spanFinr
+ank = 0
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.subsingleton`：∀ (R : Type u_5) (M : Type u_6) [inst : MonoidWithZ
+ero R] [Subsingleton R] [inst_2 : Zero M] [MulActionWithZero R M],   Subsingleto
+n M
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.eq_bot_of_subsingleton`：eq_bot_of_subsingleton [Subsingleton p
+] : p = ⊥
+· 使用定理 `instSubsingletonSubtype_mathlib`：∀ {α : Sort u_1} [Subsingleton α] (p : 
+α → Prop), Subsingleton (Subtype p)
+· 使用引理 `Submodule.spanFinrank_bot`：spanFinrank_bot : (⊥ : Submodule R M).spanFin
+rank = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma spanFinrank_subsingleton [Subsingleton R] (p : Submodule R M) : p.spanFinrank = 0 := by
   have := Module.subsingleton R M
   simp [Submodule.eq_bot_of_subsingleton]
 
-/--
-Definition of `generators` / `generators` 的定义
+/-- Generating elements for the submodule of minimum cardinality. -/
+/-
+**Submodule.generators** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：generators (p : Submodule R M) : Set M
+参数：p : Submodule R M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
 
-English:
-definition generators
-  signature: (p : Submodule R M)
-  body: Classical.choose (exists_span_set_card_eq_spanRank p)
-
-中文:
-定义 generators
-  签名: (p : 子模 R M)
-  定义体: Classical.choose (exists_span_set_card_eq_spanRank p)
-
-Depends on / 依赖: Classical, Classical.choose, exists_span_set_card_eq_spanRank
+--- 原说明 ---
+Generating elements for the submodule of minimum cardinality.
 -/
 noncomputable def generators (p : Submodule R M) : Set M :=
   Classical.choose (exists_span_set_card_eq_spanRank p)
-
-/--
-lemma `generators_card` / 引理 `generators_card`
-
-English:
-lemma generators_card
-  given: (p : Submodule R M)
-  statement: #(generators p) = spanRank p
-  proof: (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).1
-
-中文:
-引理 generators_card
-  条件: (p : 子模 R M)
-  结论: #(generators p) = spanRank p
-  证明: (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).1
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_span_set_card_eq_spanRank
+/-
+**Submodule.generators_card** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：generators_card (p : Submodule R M) : #(generators p) = spanRank p
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma generators_card (p : Submodule R M) : #(generators p) = spanRank p :=
   (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).1
-
-/--
-lemma `FG.generators_ncard` / 引理 `FG.generators_ncard`
-
-English:
-lemma FG.generators_ncard
-  given: {p : Submodule R M} (h : p.FG)
-  proof: by
-  rw [← Nat.cast_inj (R := Cardinal)]; rw [← fg_iff_spanRank_eq_spanFinrank.mpr h]; rw [Set.ncard]; rw [Set.encard]; rw [ENat.card]; rw [generators_card]; rw [toNat_toENat]; rw [← spanFinrank]
-  exact (fg_iff_spanRank_eq_spanFinrank.mpr h).symm
-
-中文:
-引理 FG.generators_ncard
-  条件: {p : 子模 R M} (h : p.FG)
-  证明: by
-  rw [← Nat.cast_inj (R := Cardinal)]; rw [← fg_iff_spanRank_eq_spanFinrank.mpr h]; rw [Set.ncard]; rw [Set.encard]; rw [ENat.card]; rw [generators_card]; rw [toNat_toENat]; rw [← spanFinrank]
-  exact (fg_iff_spanRank_eq_spanFinrank.mpr h).symm
-
-Depends on / 依赖: Cardinal, ENat.card, Nat.cast_inj, Set.encard, Set.ncard, cast_inj, encard, fg_iff_spanRank_eq_spanFinrank, fg_iff_spanRank_eq_spanFinrank.mpr, generators_card, spanFinrank, toNat_toENat
+/-
+**Submodule.FG.generators_ncard** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   {p : Submodule R M}, p.FG → p.generators.ncard
+ = p.spanFinrank
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_inj`：cast_inj {m n : Nat} : (m : R) = n ↔ m = n
+· 使用定理 `Cardinal.instCharZero`：CharZero Cardinal.{u_1}
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.fg_iff_spanRank_eq_spanFinrank`：fg_iff_spanRank_eq_spanFinrank
+ {p : Submodule R M} : p.spanRank = p.spanFinrank ↔ p.FG
+· 使用定理 `Set.ncard.eq_1`：∀ {α : Type u_1} (s : Set α), s.ncard = s.encard.toNat
+· 使用定理 `Set.encard.eq_1`：∀ {α : Type u_1} (s : Set α), s.encard = ENat.card ↑s
+· 使用定理 `ENat.card.eq_1`：∀ (α : Type u_3), ENat.card α = Cardinal.toENat (Cardina
+l.mk α)
+· 使用引理 `Submodule.generators_card`：generators_card (p : Submodule R M) : #(gener
+ators p) = spanRank p
+· 使用定理 `Cardinal.toNat_toENat`：∀ (a : Cardinal.{u_1}), (Cardinal.toENat a).toNat
+ = Cardinal.toNat a
+· 使用定理 `Submodule.spanFinrank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R
+ M), p.spanFinra…
 -/
 lemma FG.generators_ncard {p : Submodule R M} (h : p.FG) :
     (generators p).ncard = spanFinrank p := by
-  rw [← Nat.cast_inj (R := Cardinal)]; rw [← fg_iff_spanRank_eq_spanFinrank.mpr h]; rw [Set.ncard]; rw [Set.encard]; rw [ENat.card]; rw [generators_card]; rw [toNat_toENat]; rw [← spanFinrank]
+  rw [← Nat.cast_inj (R := Cardinal), ← fg_iff_spanRank_eq_spanFinrank.mpr h, Set.ncard, Set.encard,
+     ENat.card, generators_card, toNat_toENat, ← spanFinrank]
   exact (fg_iff_spanRank_eq_spanFinrank.mpr h).symm
-
-/--
-lemma `FG.finite_generators` / 引理 `FG.finite_generators`
-
-English:
-lemma FG.finite_generators
-  given: {p : Submodule R M} (hp : p.FG)
-  proof: by
-  rw [← Cardinal.lt_aleph0_iff_set_finite]; rw [Submodule.generators_card]
-  exact spanRank_finite_iff_fg.mpr hp
-
-中文:
-引理 FG.finite_generators
-  条件: {p : 子模 R M} (hp : p.FG)
-  证明: by
-  rw [← Cardinal.lt_aleph0_iff_set_finite]; rw [Submodule.generators_card]
-  exact spanRank_finite_iff_fg.mpr hp
-
-Depends on / 依赖: Cardinal, Cardinal.lt_aleph0_iff_set_finite, Submodule, Submodule.generators_card, generators_card, lt_aleph0_iff_set_finite, spanRank_finite_iff_fg, spanRank_finite_iff_fg.mpr
+/-
+**Submodule.FG.finite_generators** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   {p : Submodule R M}, p.FG → p.generators.Finit
+e
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lt_aleph0_iff_set_finite`：lt_aleph0_iff_set_finite {S : Set α} 
+: #S < ℵ₀ ↔ S.Finite
+· 使用引理 `Submodule.generators_card`：generators_card (p : Submodule R M) : #(gener
+ators p) = spanRank p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.spanRank_finite_iff_fg`：spanRank_finite_iff_fg {p : Submodule 
+R M} : p.spanRank < aleph0 ↔ p.FG
 -/
 lemma FG.finite_generators {p : Submodule R M} (hp : p.FG) :
     p.generators.Finite := by
-  rw [← Cardinal.lt_aleph0_iff_set_finite]; rw [Submodule.generators_card]
+  rw [← Cardinal.lt_aleph0_iff_set_finite, Submodule.generators_card]
   exact spanRank_finite_iff_fg.mpr hp
 
-/--
-lemma `span_generators` / 引理 `span_generators`
+/-- The span of the generators equals the submodule. -/
+/-
+**Submodule.span_generators** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：span_generators (p : Submodule R M) : span R (generators p) = p
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-lemma span_generators
-  given: (p : Submodule R M)
-  statement: span R (generators p) = p
-  proof: (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).2
-
-中文:
-引理 span_generators
-  条件: (p : 子模 R M)
-  结论: span R (generators p) = p
-  证明: (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).2
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_span_set_card_eq_spanRank
+--- 原说明 ---
+The span of the generators equals the submodule.
 -/
 lemma span_generators (p : Submodule R M) : span R (generators p) = p :=
   (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).2
 
-/--
-lemma `FG.generators_mem` / 引理 `FG.generators_mem`
+/-- The elements of the generators are in the submodule. -/
+/-
+**Submodule.FG.generators_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.FG`。
+形式化陈述：∀ {R : Type u_1} {M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid 
+M] [inst_2 : _root_.Module R M]   (p : Submodule R M), p.generators ⊆ ↑p
+参数：p : Submodule R M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.span_generators`：span_generators (p : Submodule R M) : span R 
+(generators p) = p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 
-English:
-lemma FG.generators_mem
-  given: (p : Submodule R M)
-  statement: generators p subseteq p
-  proof: by
-  nth_rw 2 [← span_generators p]
-  exact subset_span (s := generators p)
-
-中文:
-引理 FG.generators_mem
-  条件: (p : 子模 R M)
-  结论: generators p subseteq p
-  证明: by
-  nth_rw 2 [← span_generators p]
-  exact subset_span (s := generators p)
-
-Depends on / 依赖: generators, nth_rw, span_generators, subset_span
+--- 原说明 ---
+The elements of the generators are in the submodule.
 -/
-lemma FG.generators_mem (p : Submodule R M) : generators p subseteq p := by
+lemma FG.generators_mem (p : Submodule R M) : generators p ⊆ p := by
   nth_rw 2 [← span_generators p]
   exact subset_span (s := generators p)
-
-/--
-lemma `spanRank_sup_le_sum_spanRank` / 引理 `spanRank_sup_le_sum_spanRank`
-
-English:
-lemma spanRank_sup_le_sum_spanRank
-  given: {p q : Submodule R M}
-  proof: by
-  apply (FG.spanRank_le_iff_exists_span_set_card_le (p ⊔ q)).mpr
-  obtain ⟨sp, ⟨hp₁, rfl⟩⟩ := exists_span_set_card_eq_spanRank p
-  obtain ⟨sq, ⟨hq₁, rfl⟩⟩ := exists_span_set_card_eq_spanRank q
-  exact ⟨sp union sq, ⟨hp₁ ▸ hq₁ ▸ (Cardinal.mk_union_le sp sq), span_union sp sq⟩⟩
-
-中文:
-引理 spanRank_sup_le_sum_spanRank
-  条件: {p q : 子模 R M}
-  证明: by
-  apply (FG.spanRank_le_iff_exists_span_set_card_le (p ⊔ q)).mpr
-  obtain ⟨sp, ⟨hp₁, rfl⟩⟩ := exists_span_set_card_eq_spanRank p
-  obtain ⟨sq, ⟨hq₁, rfl⟩⟩ := exists_span_set_card_eq_spanRank q
-  exact ⟨sp union sq, ⟨hp₁ ▸ hq₁ ▸ (Cardinal.mk_union_le sp sq), span_union sp sq⟩⟩
-
-Depends on / 依赖: Cardinal, Cardinal.mk_union_le, FG.spanRank_le_iff_exists_span_set_card_le, exists_span_set_card_eq_spanRank, mk_union_le, spanRank_le_iff_exists_span_set_card_le, span_union
+/-
+**Submodule.spanRank_sup_le_sum_spanRank** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_sup_le_sum_spanRank {p q : Submodule R M} : (p ⊔ q).spanRank <= p
+.spanRank + q.spanRank
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.FG.spanRank_le_iff_exists_span_set_card_le`：∀ {R : Type u_1} {
+M : Type u} [inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Modu
+le R M]   (p : Submodule R M) {a : Cardina…
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `Cardinal.mk_union_le`：mk_union_le {α : Type u} (S T : Set α) : #(S union
+ T : Set α) <= #S + #T
+· 使用定理 `Submodule.span_union`：span_union (s t : Set M) : span R (s union t) = sp
+an R s ⊔ span R t
 -/
 lemma spanRank_sup_le_sum_spanRank {p q : Submodule R M} :
-    (p ⊔ q).spanRank <= p.spanRank + q.spanRank := by
+    (p ⊔ q).spanRank ≤ p.spanRank + q.spanRank := by
   apply (FG.spanRank_le_iff_exists_span_set_card_le (p ⊔ q)).mpr
   obtain ⟨sp, ⟨hp₁, rfl⟩⟩ := exists_span_set_card_eq_spanRank p
   obtain ⟨sq, ⟨hq₁, rfl⟩⟩ := exists_span_set_card_eq_spanRank q
-  exact ⟨sp union sq, ⟨hp₁ ▸ hq₁ ▸ (Cardinal.mk_union_le sp sq), span_union sp sq⟩⟩
-
-/--
-lemma `spanFinrank_eq_zero_iff_eq_bot` / 引理 `spanFinrank_eq_zero_iff_eq_bot`
-
-English:
-lemma spanFinrank_eq_zero_iff_eq_bot
-  given: {p : Submodule R M} (h : p.FG)
-  proof: by
-  refine ⟨fun heq => ?_, fun h => by simp [h]⟩
-  rw [← Submodule.FG.generators_ncard h]; rw [Set.ncard_eq_zero h.finite_generators] at heq
-  rw [← p.span_generators]; rw [heq]; rw [span_empty]
-
-中文:
-引理 spanFinrank_eq_zero_iff_eq_bot
-  条件: {p : 子模 R M} (h : p.FG)
-  证明: by
-  refine ⟨fun heq => ?_, fun h => by simp [h]⟩
-  rw [← Submodule.FG.generators_ncard h]; rw [Set.ncard_eq_zero h.finite_generators] at heq
-  rw [← p.span_generators]; rw [heq]; rw [span_empty]
-
-Depends on / 依赖: Set.ncard_eq_zero, Submodule, Submodule.FG.generators_ncard, finite_generators, generators_ncard, h.finite_generators, ncard_eq_zero, p.span_generators, span_empty, span_generators
+  exact ⟨sp ∪ sq, ⟨hp₁ ▸ hq₁ ▸ (Cardinal.mk_union_le sp sq), span_union sp sq⟩⟩
+/-
+**Submodule.spanFinrank_eq_zero_iff_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`
+。
+形式化陈述：spanFinrank_eq_zero_iff_eq_bot {p : Submodule R M} (h : p.FG) : p.spanFinr
+ank = 0 ↔ p = ⊥
+参数：h : p.FG。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.span_generators`：span_generators (p : Submodule R M) : span R 
+(generators p) = p
+· 使用定理 `Set.ncard_eq_zero`：∀ {α : Type u_1} {s : Set α}, autoParam s.Finite Set.
+ncard_eq_zero._auto_1 → (s.ncard = 0 ↔ s = ∅)
+· 使用定理 `Submodule.FG.finite_generators`：∀ {R : Type u_1} {M : Type u} [inst : Se
+miring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodu
+le R M}, p.FG → p.ge…
+· 使用定理 `Submodule.FG.generators_ncard`：∀ {R : Type u_1} {M : Type u} [inst : Sem
+iring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodul
+e R M}, p.FG → p.ge…
+· 使用定理 `Submodule.span_empty`：span_empty : span R (∅ : Set M) = ⊥
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Submodule.spanFinrank_bot`：spanFinrank_bot : (⊥ : Submodule R M).spanFin
+rank = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma spanFinrank_eq_zero_iff_eq_bot {p : Submodule R M} (h : p.FG) :
     p.spanFinrank = 0 ↔ p = ⊥ := by
-  refine ⟨fun heq => ?_, fun h => by simp [h]⟩
-  rw [← Submodule.FG.generators_ncard h]; rw [Set.ncard_eq_zero h.finite_generators] at heq
-  rw [← p.span_generators]; rw [heq]; rw [span_empty]
-
-/--
-lemma `spanFinrank_singleton` / 引理 `spanFinrank_singleton`
-
-English:
-lemma spanFinrank_singleton
-  given: {m : M} (hm : m != 0)
-  statement: (span R {m}).spanFinrank = 1
-  proof: by
-  apply le_antisymm ?_ ?_
-  · exact le_trans (Submodule.spanFinrank_span_le_ncard_of_finite (by simp)) (by simp)
-  · by_contra!
-    simp [Submodule.spanFinrank_eq_zero_iff_eq_bot (fg_span_singleton m), hm] at this
-
-中文:
-引理 spanFinrank_singleton
-  条件: {m : M} (hm : m != 0)
-  结论: (span R {m}).spanFinrank = 1
-  证明: by
-  apply le_antisymm ?_ ?_
-  · exact le_trans (Submodule.spanFinrank_span_le_ncard_of_finite (by simp)) (by simp)
-  · by_contra!
-    simp [Submodule.spanFinrank_eq_zero_iff_eq_bot (fg_span_singleton m), hm] at this
-
-Depends on / 依赖: Submodule, Submodule.spanFinrank_eq_zero_iff_eq_bot, Submodule.spanFinrank_span_le_ncard_of_finite, fg_span_singleton, le_antisymm, le_trans, spanFinrank_eq_zero_iff_eq_bot, spanFinrank_span_le_ncard_of_finite
+  refine ⟨fun heq ↦ ?_, fun h ↦ by simp [h]⟩
+  rw [← Submodule.FG.generators_ncard h, Set.ncard_eq_zero h.finite_generators] at heq
+  rw [← p.span_generators, heq, span_empty]
+/-
+**Submodule.spanFinrank_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_singleton {m : M} (hm : m != 0) : (span R {m}).spanFinrank = 1
+参数：hm : m != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `Submodule.spanFinrank_span_le_ncard_of_finite`：spanFinrank_span_le_ncard
+_of_finite {s : Set M} (hs : s.Finite) : (span R s).spanFinrank <= s.ncard
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.ncard_singleton`：∀ {α : Type u_1} (a : α), {a}.ncard = 1
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `Submodule.spanFinrank_eq_zero_iff_eq_bot`：spanFinrank_eq_zero_iff_eq_bot
+ {p : Submodule R M} (h : p.FG) : p.spanFinrank = 0 ↔ p = ⊥
+· 使用定理 `Submodule.fg_span_singleton`：fg_span_singleton (x : M) : FG (R ∙ x)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
-lemma spanFinrank_singleton {m : M} (hm : m != 0) : (span R {m}).spanFinrank = 1 := by
+lemma spanFinrank_singleton {m : M} (hm : m ≠ 0) : (span R {m}).spanFinrank = 1 := by
   apply le_antisymm ?_ ?_
   · exact le_trans (Submodule.spanFinrank_span_le_ncard_of_finite (by simp)) (by simp)
   · by_contra!
     simp [Submodule.spanFinrank_eq_zero_iff_eq_bot (fg_span_singleton m), hm] at this
-
-/--
-lemma `spanFinrank_eq_one_iff` / 引理 `spanFinrank_eq_one_iff`
-
-English:
-lemma spanFinrank_eq_one_iff
-  given: (p : Submodule R M)
-  statement: p.spanFinrank = 1 ↔ p.IsPrincipal ∧ p != ⊥
-  proof: by
-  refine ⟨fun h => ⟨?_, (by grind [spanFinrank_bot])⟩,
-    fun ⟨⟨a, ha⟩, _⟩ => ha ▸ spanFinrank_singleton (by simp_all)⟩
-  have fg : p.FG := spanRank_finite_iff_fg.1 (by simp_all [spanFinrank])
-  obtain ⟨a, ha⟩ : exists a, p.generators = {a} := by simpa [← fg.generators_ncard] using h
-  exact ⟨a, ha ▸ (p.span_generators).symm⟩
-
-中文:
-引理 spanFinrank_eq_one_iff
-  条件: (p : 子模 R M)
-  结论: p.spanFinrank = 1 ↔ p.是Principal ∧ p != ⊥
-  证明: by
-  refine ⟨fun h => ⟨?_, (by grind [spanFinrank_bot])⟩,
-    fun ⟨⟨a, ha⟩, _⟩ => ha ▸ spanFinrank_singleton (by simp_all)⟩
-  have fg : p.FG := spanRank_finite_iff_fg.1 (by simp_all [spanFinrank])
-  obtain ⟨a, ha⟩ : exists a, p.generators = {a} := by simpa [← fg.generators_ncard] using h
-  exact ⟨a, ha ▸ (p.span_generators).symm⟩
-
-Depends on / 依赖: fg.generators_ncard, generators, generators_ncard, p.FG, p.generators, p.span_generators, spanFinrank, spanFinrank_bot, spanFinrank_singleton, spanRank_finite_iff_fg, span_generators
+/-
+**Submodule.spanFinrank_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_eq_one_iff (p : Submodule R M) : p.spanFinrank = 1 ↔ p.IsPrinc
+ipal ∧ p != ⊥
+参数：p : Submodule R M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Submodule.spanRank_finite_iff_fg`：spanRank_finite_iff_fg {p : Submodule 
+R M} : p.spanRank < aleph0 ↔ p.FG
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.FG.generators_ncard`：∀ {R : Type u_1} {M : Type u} [inst : Sem
+iring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodul
+e R M}, p.FG → p.ge…
+· 使用引理 `Submodule.span_generators`：span_generators (p : Submodule R M) : span R 
+(generators p) = p
+· 使用引理 `Submodule.spanFinrank_singleton`：spanFinrank_singleton {m : M} (hm : m !
+= 0) : (span R {m}).spanFinrank = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma spanFinrank_eq_one_iff (p : Submodule R M) : p.spanFinrank = 1 ↔ p.IsPrincipal ∧ p != ⊥ := by
-  refine ⟨fun h => ⟨?_, (by grind [spanFinrank_bot])⟩,
-    fun ⟨⟨a, ha⟩, _⟩ => ha ▸ spanFinrank_singleton (by simp_all)⟩
+lemma spanFinrank_eq_one_iff (p : Submodule R M) : p.spanFinrank = 1 ↔ p.IsPrincipal ∧ p ≠ ⊥ := by
+  refine ⟨fun h ↦ ⟨?_, (by grind [spanFinrank_bot])⟩,
+    fun ⟨⟨a, ha⟩, _⟩ ↦ ha ▸ spanFinrank_singleton (by simp_all)⟩
   have fg : p.FG := spanRank_finite_iff_fg.1 (by simp_all [spanFinrank])
-  obtain ⟨a, ha⟩ : exists a, p.generators = {a} := by simpa [← fg.generators_ncard] using h
+  obtain ⟨a, ha⟩ : ∃ a, p.generators = {a} := by simpa [← fg.generators_ncard] using h
   exact ⟨a, ha ▸ (p.span_generators).symm⟩
 
 end Defs
@@ -1094,251 +1114,290 @@ namespace Submodule
 
 section Semilinear
 
-variable {R S : Type*} {M N : Type u} [Semiring R] [Semiring S] {σ : R ->+* S}
+variable {R S : Type*} {M N : Type u} [Semiring R] [Semiring S] {σ : R →+* S}
   [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module S N]
   {L : Type v} [AddCommMonoid L] [Module S L]
 
-/--
-lemma `lift_spanRank_map_le` / 引理 `lift_spanRank_map_le`
-
-English:
-lemma lift_spanRank_map_le
-  given: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (p : Submodule R M)
-  proof: by
-  rw [← generators_card p]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
-  exact ⟨f '' p.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun n ⟨m, hm, h⟩ =>
+/-
+**Submodule.lift_spanRank_map_le** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：lift_spanRank_map_le [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (p : Submodul
+e R M) : Cardinal.lift.{u} (p.map f).spanRank <= Cardinal.lift.{v} p.spanRank
+参数：f : M ->ₛₗ[σ] L；p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.generators_card`：generators_card (p : Submodule R M) : #(gener
+ators p) = spanRank p
+· 使用引理 `Submodule.lift_spanRank_le_iff_exists_span_set_card_le`：lift_spanRank_le
+_iff_exists_span_set_card_le (p : Submodule R M) {a : Cardinal.{max u v}} : Card
+inal.lift.{v} p.spanRank <= a ↔ exists s : S…
+· 使用定理 `Cardinal.mk_image_le_lift`：mk_image_le_lift {α : Type u} {β : Type v} {f
+ : α -> β} {s : Set α} : lift.{u} #(f '' s) <= lift.{v} #s
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用引理 `Submodule.span_generators`：span_generators (p : Submodule R M) : span R 
+(generators p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.span_image`：span_image [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂
+] M₂) : span R₂ (f '' s) = map f (span R s)
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+-/
+lemma lift_spanRank_map_le [RingHomSurjective σ] (f : M →ₛₗ[σ] L) (p : Submodule R M) :
+    Cardinal.lift.{u} (p.map f).spanRank ≤ Cardinal.lift.{v} p.spanRank := by
+  rw [← generators_card p, lift_spanRank_le_iff_exists_span_set_card_le]
+  exact ⟨f '' p.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun n ⟨m, hm, h⟩ ↦
     ⟨m, span_generators p ▸ subset_span hm, h⟩)) (by simp [span_generators])⟩
-
-中文:
-引理 lift_spanRank_map_le
-  条件: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (p : 子模 R M)
-  证明: by
-  rw [← generators_card p]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
-  exact ⟨f '' p.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun n ⟨m, hm, h⟩ =>
-    ⟨m, span_generators p ▸ subset_span hm, h⟩)) (by simp [span_generators])⟩
-
-Depends on / 依赖: Cardinal, Cardinal.mk_image_le_lift, generators, generators_card, le_antisymm, lift_spanRank_le_iff_exists_span_set_card_le, mk_image_le_lift, p.generators, span_generators, span_le, subset_span
+/-
+**Submodule.spanRank_map_le** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_map_le [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) (p : Submodule R M
+) : (p.map f).spanRank <= p.spanRank
+参数：f : M ->ₛₗ[σ] N；p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用引理 `Submodule.lift_spanRank_map_le`：lift_spanRank_map_le [RingHomSurjective 
+σ] (f : M ->ₛₗ[σ] L) (p : Submodule R M) : Cardinal.lift.{u} (p.map f).spanRank 
+<= Cardinal.lift.{v}…
 -/
-lemma lift_spanRank_map_le [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (p : Submodule R M) :
-    Cardinal.lift.{u} (p.map f).spanRank <= Cardinal.lift.{v} p.spanRank := by
-  rw [← generators_card p]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
-  exact ⟨f '' p.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun n ⟨m, hm, h⟩ =>
-    ⟨m, span_generators p ▸ subset_span hm, h⟩)) (by simp [span_generators])⟩
-
-/--
-lemma `spanRank_map_le` / 引理 `spanRank_map_le`
-
-English:
-lemma spanRank_map_le
-  given: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) (p : Submodule R M)
-  proof: by
+lemma spanRank_map_le [RingHomSurjective σ] (f : M →ₛₗ[σ] N) (p : Submodule R M) :
+    (p.map f).spanRank ≤ p.spanRank := by
   simpa using lift_spanRank_map_le f p
-
-中文:
-引理 spanRank_map_le
-  条件: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) (p : 子模 R M)
-  证明: by
-  simpa using lift_spanRank_map_le f p
-
-Depends on / 依赖: lift_spanRank_map_le
+/-
+**Submodule.spanFinrank_map_le_of_fg** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_map_le_of_fg [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) {p : Subm
+odule R M} (hp : p.FG) : (p.map f).spanFinrank <= p.spanFinrank
+参数：f : M ->ₛₗ[σ] L；hp : p.FG。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.FG.spanRank_le_iff`：∀ {R : Type u_1} {M : Type u} [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodule
+ R M}, p.FG → ∀ (n…
+· 使用定理 `Submodule.FG.map`：∀ {R : Type u_1} {M : Type u_2} [inst : Semiring R] [i
+nst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {S : Type u_3} {P : Type
+ u_4} …
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `Cardinal.lift_natCast`：lift_natCast (n : Nat) : lift.{u} (n : Cardinal.{
+v}) = n
+· 使用定理 `Submodule.FG.spanRank_eq_spanFinrank`：∀ {R : Type u_1} {M : Type u} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : S
+ubmodule R M}, p.FG → p.sp…
+· 使用引理 `Submodule.lift_spanRank_map_le`：lift_spanRank_map_le [RingHomSurjective 
+σ] (f : M ->ₛₗ[σ] L) (p : Submodule R M) : Cardinal.lift.{u} (p.map f).spanRank 
+<= Cardinal.lift.{v}…
 -/
-lemma spanRank_map_le [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) (p : Submodule R M) :
-    (p.map f).spanRank <= p.spanRank := by
-  simpa using lift_spanRank_map_le f p
-
-/--
-lemma `spanFinrank_map_le_of_fg` / 引理 `spanFinrank_map_le_of_fg`
-
-English:
-lemma spanFinrank_map_le_of_fg
-  statement: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) {p : Submodule R M}
-  proof: by
-  rw [← (hp.map f).spanRank_le_iff]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← hp.spanRank_eq_spanFinrank]
+lemma spanFinrank_map_le_of_fg [RingHomSurjective σ] (f : M →ₛₗ[σ] L) {p : Submodule R M}
+    (hp : p.FG) : (p.map f).spanFinrank ≤ p.spanFinrank := by
+  rw [← (hp.map f).spanRank_le_iff, ← Cardinal.lift_le.{u}, Cardinal.lift_natCast,
+    ← Cardinal.lift_natCast.{v}, ← hp.spanRank_eq_spanFinrank]
   exact p.lift_spanRank_map_le f
-
-中文:
-引理 spanFinrank_map_le_of_fg
-  结论: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) {p : 子模 R M}
-  证明: by
-  rw [← (hp.map f).spanRank_le_iff]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← hp.spanRank_eq_spanFinrank]
-  exact p.lift_spanRank_map_le f
-
-Depends on / 依赖: Cardinal, Cardinal.lift_le, Cardinal.lift_natCast, hp.map, hp.spanRank_eq_spanFinrank, lift_le, lift_natCast, lift_spanRank_map_le, p.lift_spanRank_map_le, spanRank_eq_spanFinrank, spanRank_le_iff
+/-
+**Submodule.lift_spanRank_map_eq_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `Submodu
+le`。
+形式化陈述：lift_spanRank_map_eq_of_injective [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) 
+(hf : Function.Injective f) (p : Submodule R M) : Cardinal.lift.{u} (p.map f).sp
+anRank = Cardinal.lift.{v} p.spanRank
+参数：f : M ->ₛₗ[σ] L；hf : Function.Injective f；p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用引理 `Submodule.lift_spanRank_map_le`：lift_spanRank_map_le [RingHomSurjective 
+σ] (f : M ->ₛₗ[σ] L) (p : Submodule R M) : Cardinal.lift.{u} (p.map f).spanRank 
+<= Cardinal.lift.{v}…
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_range_iff_exists_image_eq`：subset_range_iff_exists_image_eq {
+f : α -> β} {s : Set β} : s subseteq range f ↔ exists t, f '' t = s
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `LinearMap.map_le_range`：map_le_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} {p : Submodule R M} : map f p <= range f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_image_eq_lift`：mk_image_eq_lift {α : Type u} {β : Type v} (f
+ : α -> β) (s : Set α) (h : Injective f) : lift.{u} #(f '' s) = lift.{v} #s
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用引理 `Submodule.spanRank_span_le_card`：spanRank_span_le_card (s : Set M) : (Su
+bmodule.span R s).spanRank <= #s
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.span_image`：span_image [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂
+] M₂) : span R₂ (f '' s) = map f (span R s)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Submodule.map_injective_of_injective`：map_injective_of_injective : Funct
+ion.Injective (map f)
 -/
-lemma spanFinrank_map_le_of_fg [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) {p : Submodule R M}
-    (hp : p.FG) : (p.map f).spanFinrank <= p.spanFinrank := by
-  rw [← (hp.map f).spanRank_le_iff]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← hp.spanRank_eq_spanFinrank]
-  exact p.lift_spanRank_map_le f
-
-/--
-lemma `lift_spanRank_map_eq_of_injective` / 引理 `lift_spanRank_map_eq_of_injective`
-
-English:
-lemma lift_spanRank_map_eq_of_injective
-  statement: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L)
-  proof: by
-  refine (lift_spanRank_map_le f p).antisymm ?_
-  obtain ⟨s, hs, e⟩ := (p.map f).exists_span_set_card_eq_spanRank
-  obtain ⟨s, rfl⟩ : exists y, f '' y = s := Set.subset_range_iff_exists_image_eq.mp
-    ((subset_span.trans e.le).trans LinearMap.map_le_range)
-  obtain rfl : span R s = p := by simpa [(map_injective_of_injective hf).eq_iff] using e
-  grw [← hs, Cardinal.mk_image_eq_lift _ _ hf, Cardinal.lift_le, spanRank_span_le_card]
-
-中文:
-引理 lift_spanRank_map_eq_of_injective
-  结论: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L)
-  证明: by
-  refine (lift_spanRank_map_le f p).antisymm ?_
-  obtain ⟨s, hs, e⟩ := (p.map f).exists_span_set_card_eq_spanRank
-  obtain ⟨s, rfl⟩ : exists y, f '' y = s := Set.subset_range_iff_exists_image_eq.mp
-    ((subset_span.trans e.le).trans LinearMap.map_le_range)
-  obtain rfl : span R s = p := by simpa [(map_injective_of_injective hf).eq_iff] using e
-  grw [← hs, Cardinal.mk_image_eq_lift _ _ hf, Cardinal.lift_le, spanRank_span_le_card]
-
-Depends on / 依赖: Cardinal, Cardinal.lift_le, Cardinal.mk_image_eq_lift, LinearMap, LinearMap.map_le_range, Set.subset_range_iff_exists_image_eq.mp, antisymm, e.le, eq_iff, exists_span_set_card_eq_spanRank, lift_le, lift_spanRank_map_le, map_injective_of_injective, map_le_range, mk_image_eq_lift, p.map, spanRank_span_le_card, subset_range_iff_exists_image_eq, subset_span, subset_span.trans
--/
-lemma lift_spanRank_map_eq_of_injective [RingHomSurjective σ] (f : M ->ₛₗ[σ] L)
+lemma lift_spanRank_map_eq_of_injective [RingHomSurjective σ] (f : M →ₛₗ[σ] L)
     (hf : Function.Injective f) (p : Submodule R M) :
     Cardinal.lift.{u} (p.map f).spanRank = Cardinal.lift.{v} p.spanRank := by
   refine (lift_spanRank_map_le f p).antisymm ?_
   obtain ⟨s, hs, e⟩ := (p.map f).exists_span_set_card_eq_spanRank
-  obtain ⟨s, rfl⟩ : exists y, f '' y = s := Set.subset_range_iff_exists_image_eq.mp
+  obtain ⟨s, rfl⟩ : ∃ y, f '' y = s := Set.subset_range_iff_exists_image_eq.mp
     ((subset_span.trans e.le).trans LinearMap.map_le_range)
   obtain rfl : span R s = p := by simpa [(map_injective_of_injective hf).eq_iff] using e
   grw [← hs, Cardinal.mk_image_eq_lift _ _ hf, Cardinal.lift_le, spanRank_span_le_card]
-
-/--
-lemma `spanRank_map_eq_of_injective` / 引理 `spanRank_map_eq_of_injective`
-
-English:
-lemma spanRank_map_eq_of_injective
-  statement: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N)
-  proof: by
-  simpa using lift_spanRank_map_eq_of_injective f hf p
-
-中文:
-引理 spanRank_map_eq_of_injective
-  结论: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N)
-  证明: by
-  simpa using lift_spanRank_map_eq_of_injective f hf p
-
-Depends on / 依赖: lift_spanRank_map_eq_of_injective
+/-
+**Submodule.spanRank_map_eq_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_map_eq_of_injective [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) (hf :
+ Function.Injective f) (p : Submodule R M) : (p.map f).spanRank = p.spanRank
+参数：f : M ->ₛₗ[σ] N；hf : Function.Injective f；p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用引理 `Submodule.lift_spanRank_map_eq_of_injective`：lift_spanRank_map_eq_of_inj
+ective [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (hf : Function.Injective f) (p : 
+Submodule R M) : Cardinal.lift.{u…
 -/
-lemma spanRank_map_eq_of_injective [RingHomSurjective σ] (f : M ->ₛₗ[σ] N)
+lemma spanRank_map_eq_of_injective [RingHomSurjective σ] (f : M →ₛₗ[σ] N)
     (hf : Function.Injective f) (p : Submodule R M) : (p.map f).spanRank = p.spanRank := by
   simpa using lift_spanRank_map_eq_of_injective f hf p
-
-/--
-lemma `spanFinrank_map_eq_of_injective` / 引理 `spanFinrank_map_eq_of_injective`
-
-English:
-lemma spanFinrank_map_eq_of_injective
-  statement: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L)
-  proof: by
-  rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [lift_spanRank_map_eq_of_injective f hf p]
-
-中文:
-引理 spanFinrank_map_eq_of_injective
-  结论: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L)
-  证明: by
-  rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [lift_spanRank_map_eq_of_injective f hf p]
-
-Depends on / 依赖: Cardinal, Cardinal.toNat_lift, Submodule, Submodule.spanFinrank, lift_spanRank_map_eq_of_injective, spanFinrank, toNat_lift
+/-
+**Submodule.spanFinrank_map_eq_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `Submodule
+`。
+形式化陈述：spanFinrank_map_eq_of_injective [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (h
+f : Function.Injective f) {p : Submodule R M} : (p.map f).spanFinrank = p.spanFi
+nrank
+参数：f : M ->ₛₗ[σ] L；hf : Function.Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanFinrank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R
+ M), p.spanFinra…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.toNat_lift`：toNat_lift (c : Cardinal.{v}) : toNat (lift.{u, v} 
+c) = toNat c
+· 使用引理 `Submodule.lift_spanRank_map_eq_of_injective`：lift_spanRank_map_eq_of_inj
+ective [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (hf : Function.Injective f) (p : 
+Submodule R M) : Cardinal.lift.{u…
 -/
-lemma spanFinrank_map_eq_of_injective [RingHomSurjective σ] (f : M ->ₛₗ[σ] L)
+lemma spanFinrank_map_eq_of_injective [RingHomSurjective σ] (f : M →ₛₗ[σ] L)
     (hf : Function.Injective f) {p : Submodule R M} :
     (p.map f).spanFinrank = p.spanFinrank := by
-  rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [lift_spanRank_map_eq_of_injective f hf p]
-
-/--
-lemma `spanRank_range_le` / 引理 `spanRank_range_le`
-
-English:
-lemma spanRank_range_le
-  given: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N)
-  proof: by
-  simpa using spanRank_map_le f ⊤
-
-@[simp]
-
-中文:
-引理 spanRank_range_le
-  条件: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N)
-  证明: by
-  simpa using spanRank_map_le f ⊤
-
-@[simp]
-
-Depends on / 依赖: spanRank_map_le
+  rw [Submodule.spanFinrank, Submodule.spanFinrank, ← Cardinal.toNat_lift.{u, v},
+    ← Cardinal.toNat_lift.{v, u}, lift_spanRank_map_eq_of_injective f hf p]
+/-
+**Submodule.spanRank_range_le** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_range_le [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) : (LinearMap.ran
+ge f).spanRank <= (⊤ : Submodule R M).spanRank
+参数：f : M ->ₛₗ[σ] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用引理 `Submodule.spanRank_map_le`：spanRank_map_le [RingHomSurjective σ] (f : M 
+->ₛₗ[σ] N) (p : Submodule R M) : (p.map f).spanRank <= p.spanRank
 -/
-lemma spanRank_range_le [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) :
-    (LinearMap.range f).spanRank <= (⊤ : Submodule R M).spanRank := by
+lemma spanRank_range_le [RingHomSurjective σ] (f : M →ₛₗ[σ] N) :
+    (LinearMap.range f).spanRank ≤ (⊤ : Submodule R M).spanRank := by
   simpa using spanRank_map_le f ⊤
 
 @[simp]
-/--
-lemma `spanRank_top` / 引理 `spanRank_top`
-
-English:
-lemma spanRank_top
-  given: (p : Submodule R M)
-  statement: (⊤ : Submodule R p).spanRank = p.spanRank
-  proof: by
-  simpa using (spanRank_map_eq_of_injective _ p.subtype_injective ⊤).symm
-
-中文:
-引理 spanRank_top
-  条件: (p : 子模 R M)
-  结论: (⊤ : 子模 R p).spanRank = p.spanRank
-  证明: by
-  simpa using (spanRank_map_eq_of_injective _ p.subtype_injective ⊤).symm
-
-Depends on / 依赖: p.subtype_injective, spanRank_map_eq_of_injective, subtype_injective
+/-
+**Submodule.spanRank_top** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_top (p : Submodule R M) : (⊤ : Submodule R p).spanRank = p.spanRa
+nk
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.spanRank_map_eq_of_injective`：spanRank_map_eq_of_injective [Ri
+ngHomSurjective σ] (f : M ->ₛₗ[σ] N) (hf : Function.Injective f) (p : Submodule 
+R M) : (p.map f).spanRank = …
+· 使用引理 `Submodule.subtype_injective`：subtype_injective : Function.Injective p.su
+btype
 -/
 lemma spanRank_top (p : Submodule R M) : (⊤ : Submodule R p).spanRank = p.spanRank := by
   simpa using (spanRank_map_eq_of_injective _ p.subtype_injective ⊤).symm
-
-/--
-lemma `spanFinrank_top` / 引理 `spanFinrank_top`
-
-English:
-lemma spanFinrank_top
-  given: (p : Submodule R M)
-  statement: (⊤ : Submodule R p).spanFinrank = p.spanFinrank
-  proof: by
-  simp [Submodule.spanFinrank]
-
-中文:
-引理 spanFinrank_top
-  条件: (p : 子模 R M)
-  结论: (⊤ : 子模 R p).spanFinrank = p.spanFinrank
-  证明: by
-  simp [Submodule.spanFinrank]
-
-Depends on / 依赖: Submodule, Submodule.spanFinrank, spanFinrank
+/-
+**Submodule.spanFinrank_top** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanFinrank_top (p : Submodule R M) : (⊤ : Submodule R p).spanFinrank = p.
+spanFinrank
+参数：p : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.spanRank_top`：spanRank_top (p : Submodule R M) : (⊤ : Submodul
+e R p).spanRank = p.spanRank
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma spanFinrank_top (p : Submodule R M) : (⊤ : Submodule R p).spanFinrank = p.spanFinrank := by
   simp [Submodule.spanFinrank]
-
-/--
-lemma `spanRank_eq_of_equiv` / 引理 `spanRank_eq_of_equiv`
-
-English:
-lemma spanRank_eq_of_equiv
-  proof: by
-  rw [← spanRank_map_eq_of_injective e.toLinearMap e.injective ⊤]; rw [map_top]; rw [LinearEquiv.range]
-
-中文:
-引理 spanRank_eq_of_equiv
-  证明: by
-  rw [← spanRank_map_eq_of_injective e.toLinearMap e.injective ⊤]; rw [map_top]; rw [LinearEquiv.range]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.range, e.injective, e.toLinearMap, injective, map_top, spanRank_map_eq_of_injective, toLinearMap
+/-
+**Submodule.spanRank_eq_of_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_eq_of_equiv {σ' : S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair
+ σ' σ] (e : M ≃ₛₗ[σ] N) : (⊤ : Submodule R M).spanRank = (⊤ : Submodule S N).spa
+nRank
+参数：e : M ≃ₛₗ[σ] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.spanRank_map_eq_of_injective`：spanRank_map_eq_of_injective [Ri
+ngHomSurjective σ] (f : M ->ₛₗ[σ] N) (hf : Function.Injective f) (p : Submodule 
+R M) : (p.map f).spanRank = …
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `LinearEquiv.range`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ :
+ Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid 
+M] [ins…
 -/
 lemma spanRank_eq_of_equiv
-    {σ' : S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+    {σ' : S →+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
     (e : M ≃ₛₗ[σ] N) : (⊤ : Submodule R M).spanRank = (⊤ : Submodule S N).spanRank := by
-  rw [← spanRank_map_eq_of_injective e.toLinearMap e.injective ⊤]; rw [map_top]; rw [LinearEquiv.range]
+  rw [← spanRank_map_eq_of_injective e.toLinearMap e.injective ⊤, map_top, LinearEquiv.range]
 
 end Semilinear
 
@@ -1347,56 +1406,63 @@ section RestrictScalars
 variable {R S : Type*} {M : Type u} [CommSemiring R] [Semiring S] [AddCommMonoid M]
   [Algebra R S] [Module R M] [Module S M] [IsScalarTower R S M]
 
-/--
-lemma `le_spanRank_restrictScalars` / 引理 `le_spanRank_restrictScalars`
-
-English:
-lemma le_spanRank_restrictScalars
-  given: (N : Submodule S M)
-  proof: by
-  obtain ⟨s, hs, e⟩ := (N.restrictScalars R).exists_span_set_card_eq_spanRank
-  obtain rfl : span S s = N :=
-    le_antisymm (span_le.mpr (span_le.mp e.le :)) (e.ge.trans (span_le_restrictScalars R S s))
-  grw [← hs, spanRank_span_le_card]
-
-中文:
-引理 le_spanRank_restrictScalars
-  条件: (N : 子模 S M)
-  证明: by
-  obtain ⟨s, hs, e⟩ := (N.restrictScalars R).exists_span_set_card_eq_spanRank
-  obtain rfl : span S s = N :=
-    le_antisymm (span_le.mpr (span_le.mp e.le :)) (e.ge.trans (span_le_restrictScalars R S s))
-  grw [← hs, spanRank_span_le_card]
-
-Depends on / 依赖: N.restrictScalars, e.ge.trans, e.le, exists_span_set_card_eq_spanRank, le_antisymm, restrictScalars, spanRank_span_le_card, span_le, span_le.mp, span_le.mpr, span_le_restrictScalars
+/-
+**Submodule.le_spanRank_restrictScalars** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：le_spanRank_restrictScalars (N : Submodule S M) : N.spanRank <= (N.restric
+tScalars R).spanRank
+参数：N : Submodule S M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用引理 `Submodule.spanRank_span_le_card`：spanRank_span_le_card (s : Set M) : (Su
+bmodule.span R s).spanRank <= #s
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Submodule.span_le_restrictScalars`：span_le_restrictScalars : span R s <=
+ (span S s).restrictScalars R
 -/
 lemma le_spanRank_restrictScalars (N : Submodule S M) :
-    N.spanRank <= (N.restrictScalars R).spanRank := by
+    N.spanRank ≤ (N.restrictScalars R).spanRank := by
   obtain ⟨s, hs, e⟩ := (N.restrictScalars R).exists_span_set_card_eq_spanRank
   obtain rfl : span S s = N :=
     le_antisymm (span_le.mpr (span_le.mp e.le :)) (e.ge.trans (span_le_restrictScalars R S s))
   grw [← hs, spanRank_span_le_card]
-
-/--
-lemma `spanRank_restrictScalars_eq` / 引理 `spanRank_restrictScalars_eq`
-
-English:
-lemma spanRank_restrictScalars_eq
-  statement: (H : Function.Surjective (algebraMap R S))
-  proof: by
-  refine N.le_spanRank_restrictScalars.antisymm' ?_
-  obtain ⟨s, hs, rfl⟩ := N.exists_span_set_card_eq_spanRank
-  grw [restrictScalars_span R S H s, ← hs, spanRank_span_le_card]
-
-中文:
-引理 spanRank_restrictScalars_eq
-  结论: (H : 函数.满射 (algebraMap R S))
-  证明: by
-  refine N.le_spanRank_restrictScalars.antisymm' ?_
-  obtain ⟨s, hs, rfl⟩ := N.exists_span_set_card_eq_spanRank
-  grw [restrictScalars_span R S H s, ← hs, spanRank_span_le_card]
-
-Depends on / 依赖: N.exists_span_set_card_eq_spanRank, N.le_spanRank_restrictScalars.antisymm, antisymm, exists_span_set_card_eq_spanRank, le_spanRank_restrictScalars, restrictScalars_span, spanRank_span_le_card
+/-
+**Submodule.spanRank_restrictScalars_eq** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：spanRank_restrictScalars_eq (H : Function.Surjective (algebraMap R S)) (N 
+: Submodule S M) : (N.restrictScalars R).spanRank = N.spanRank
+参数：H : Function.Surjective (algebraMap R S)；N : Submodule S M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用引理 `Submodule.le_spanRank_restrictScalars`：le_spanRank_restrictScalars (N : 
+Submodule S M) : N.spanRank <= (N.restrictScalars R).spanRank
+· 使用定理 `Submodule.exists_span_set_card_eq_spanRank`：exists_span_set_card_eq_span
+Rank (p : Submodule R M) : exists s : Set M, #s = p.spanRank ∧ span R s = p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.restrictScalars_span`：restrictScalars_span (hsur : Function.Su
+rjective (algebraMap R A)) (X : Set M) : restrictScalars R (span A X) = span R X
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用引理 `Submodule.spanRank_span_le_card`：spanRank_span_le_card (s : Set M) : (Su
+bmodule.span R s).spanRank <= #s
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 lemma spanRank_restrictScalars_eq (H : Function.Surjective (algebraMap R S))
     (N : Submodule S M) : (N.restrictScalars R).spanRank = N.spanRank := by
@@ -1413,169 +1479,176 @@ section Ideal
 variable {R S : Type u} [Semiring R] [Semiring S] {T : Type v} [Semiring T]
 
 open Submodule in
-/--
-lemma `Ideal.lift_spanRank_map_le` / 引理 `Ideal.lift_spanRank_map_le`
-
-English:
-lemma Ideal.lift_spanRank_map_le
-  given: (f : R ->+* T) (I : Ideal R)
-  proof: by
-  rw [← generators_card I]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
-  refine ⟨f '' I.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun s ⟨r, hr, hfr⟩ =>
-hfr ▸ mem_map_of_mem _ span_generators I ▸ subset_span hr)) ?_⟩
-  refine map_le_of_le_comap (fun r hr => ?_)
-  simp only [submodule_span_eq, mem_comap]
-  rw [← map_span]; rw [← submodule_span_eq]; rw [span_generators]
-  exact mem_map_of_mem f hr
-
-中文:
-引理 理想.lift_spanRank_map_le
-  条件: (f : R ->+* T) (I : 理想 R)
-  证明: by
-  rw [← generators_card I]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
-  refine ⟨f '' I.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun s ⟨r, hr, hfr⟩ =>
-hfr ▸ mem_map_of_mem _ span_generators I ▸ subset_span hr)) ?_⟩
-  refine map_le_of_le_comap (fun r hr => ?_)
-  simp only [submodule_span_eq, mem_comap]
-  rw [← map_span]; rw [← submodule_span_eq]; rw [span_generators]
-  exact mem_map_of_mem f hr
-
-Depends on / 依赖: Cardinal, Cardinal.mk_image_le_lift, I.generators, generators, generators_card, le_antisymm, lift_spanRank_le_iff_exists_span_set_card_le, map_le_of_le_comap, map_span, mem_comap, mem_map_of_mem, mk_image_le_lift, span_generators, span_le, submodule_span_eq, subset_span
+/-
+**Ideal.lift_spanRank_map_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.lift_spanRank_map_le (f : R ->+* T) (I : Ideal R) : Cardinal.lift.{u
+} (I.map f).spanRank <= Cardinal.lift.{v} I.spanRank
+参数：f : R ->+* T；I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.generators_card`：generators_card (p : Submodule R M) : #(gener
+ators p) = spanRank p
+· 使用引理 `Submodule.lift_spanRank_le_iff_exists_span_set_card_le`：lift_spanRank_le
+_iff_exists_span_set_card_le (p : Submodule R M) {a : Cardinal.{max u v}} : Card
+inal.lift.{v} p.spanRank <= a ↔ exists s : S…
+· 使用定理 `Cardinal.mk_image_le_lift`：mk_image_le_lift {α : Type u} {β : Type v} {f
+ : α -> β} {s : Set α} : lift.{u} #(f '' s) <= lift.{v} #s
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `Ideal.mem_map_of_mem`：mem_map_of_mem (f : F) {I : Ideal R} {x : R} (h : 
+x in I) : f x in map f I
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用引理 `Submodule.span_generators`：span_generators (p : Submodule R M) : span R 
+(generators p) = p
+· 使用定理 `Ideal.map_le_of_le_comap`：map_le_of_le_comap : I <= K.comap f -> I.map f
+ <= K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Ideal.comap.congr_simp`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst
+ : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   (f f_1 : F),   f
+ = f_1 → ∀ […
+· 使用定理 `Ideal.submodule_span_eq`：submodule_span_eq {s : Set α} : Submodule.span 
+α s = Ideal.span s
+· 使用定理 `Ideal.map_span`：map_span (s : Set R) : map f (span s) = span (f '' s)
 -/
-lemma Ideal.lift_spanRank_map_le (f : R ->+* T) (I : Ideal R) :
-    Cardinal.lift.{u} (I.map f).spanRank <= Cardinal.lift.{v} I.spanRank := by
-  rw [← generators_card I]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
-  refine ⟨f '' I.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun s ⟨r, hr, hfr⟩ =>
-hfr ▸ mem_map_of_mem _ span_generators I ▸ subset_span hr)) ?_⟩
-  refine map_le_of_le_comap (fun r hr => ?_)
+lemma Ideal.lift_spanRank_map_le (f : R →+* T) (I : Ideal R) :
+    Cardinal.lift.{u} (I.map f).spanRank ≤ Cardinal.lift.{v} I.spanRank := by
+  rw [← generators_card I, lift_spanRank_le_iff_exists_span_set_card_le]
+  refine ⟨f '' I.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun s ⟨r, hr, hfr⟩ ↦
+    hfr ▸ mem_map_of_mem _ <| span_generators I ▸ subset_span hr)) ?_⟩
+  refine map_le_of_le_comap (fun r hr ↦ ?_)
   simp only [submodule_span_eq, mem_comap]
-  rw [← map_span]; rw [← submodule_span_eq]; rw [span_generators]
+  rw [← map_span, ← submodule_span_eq, span_generators]
   exact mem_map_of_mem f hr
-
-/--
-lemma `Ideal.lift_spanRank_map_eq_of_ringEquiv` / 引理 `Ideal.lift_spanRank_map_eq_of_ringEquiv`
-
-English:
-lemma Ideal.lift_spanRank_map_eq_of_ringEquiv
-  given: (f : R ≃+* T) (I : Ideal R)
-  proof: by
-  apply (I.lift_spanRank_map_le (f : R ->+* T)).antisymm
-  nth_rw 1 [← Ideal.map_of_equiv f (I := I)]
-  exact Ideal.lift_spanRank_map_le (f.symm : T ->+* R) _
-
-中文:
-引理 理想.lift_spanRank_map_eq_of_ringEquiv
-  条件: (f : R ≃+* T) (I : 理想 R)
-  证明: by
-  apply (I.lift_spanRank_map_le (f : R ->+* T)).antisymm
-  nth_rw 1 [← Ideal.map_of_equiv f (I := I)]
-  exact Ideal.lift_spanRank_map_le (f.symm : T ->+* R) _
-
-Depends on / 依赖: I.lift_spanRank_map_le, Ideal.lift_spanRank_map_le, Ideal.map_of_equiv, antisymm, f.symm, lift_spanRank_map_le, map_of_equiv, nth_rw
+/-
+**Ideal.lift_spanRank_map_eq_of_ringEquiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.lift_spanRank_map_eq_of_ringEquiv (f : R ≃+* T) (I : Ideal R) : Card
+inal.lift.{u} (I.map f).spanRank = Cardinal.lift.{v} I.spanRank
+参数：f : R ≃+* T；I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用引理 `Ideal.lift_spanRank_map_le`：Ideal.lift_spanRank_map_le (f : R ->+* T) (I
+ : Ideal R) : Cardinal.lift.{u} (I.map f).spanRank <= Cardinal.lift.{v} I.spanRa
+nk
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.map_of_equiv`：map_of_equiv {I : Ideal R} (f : R ≃+* S) : (I.map (f
+ : R ->+* S)).map (f.symm : S ->+* R) = I
 -/
 lemma Ideal.lift_spanRank_map_eq_of_ringEquiv (f : R ≃+* T) (I : Ideal R) :
     Cardinal.lift.{u} (I.map f).spanRank = Cardinal.lift.{v} I.spanRank := by
-  apply (I.lift_spanRank_map_le (f : R ->+* T)).antisymm
+  apply (I.lift_spanRank_map_le (f : R →+* T)).antisymm
   nth_rw 1 [← Ideal.map_of_equiv f (I := I)]
-  exact Ideal.lift_spanRank_map_le (f.symm : T ->+* R) _
-
-/--
-lemma `Ideal.spanRank_map_le` / 引理 `Ideal.spanRank_map_le`
-
-English:
-lemma Ideal.spanRank_map_le
-  given: (f : R ->+* S) (I : Ideal R)
-  statement: (I.map f).spanRank <= I.spanRank
-  proof: by
-  simpa using I.lift_spanRank_map_le f
-
-@[simp]
-
-中文:
-引理 理想.spanRank_map_le
-  条件: (f : R ->+* S) (I : 理想 R)
-  结论: (I.map f).spanRank <= I.spanRank
-  证明: by
-  simpa using I.lift_spanRank_map_le f
-
-@[simp]
-
-Depends on / 依赖: I.lift_spanRank_map_le, lift_spanRank_map_le
+  exact Ideal.lift_spanRank_map_le (f.symm : T →+* R) _
+/-
+**Ideal.spanRank_map_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.spanRank_map_le (f : R ->+* S) (I : Ideal R) : (I.map f).spanRank <=
+ I.spanRank
+参数：f : R ->+* S；I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用引理 `Ideal.lift_spanRank_map_le`：Ideal.lift_spanRank_map_le (f : R ->+* T) (I
+ : Ideal R) : Cardinal.lift.{u} (I.map f).spanRank <= Cardinal.lift.{v} I.spanRa
+nk
 -/
-lemma Ideal.spanRank_map_le (f : R ->+* S) (I : Ideal R) : (I.map f).spanRank <= I.spanRank := by
+lemma Ideal.spanRank_map_le (f : R →+* S) (I : Ideal R) : (I.map f).spanRank ≤ I.spanRank := by
   simpa using I.lift_spanRank_map_le f
 
 @[simp]
-/--
-lemma `Ideal.spanRank_map_eq_of_ringEquiv` / 引理 `Ideal.spanRank_map_eq_of_ringEquiv`
-
-English:
-lemma Ideal.spanRank_map_eq_of_ringEquiv
-  given: (f : R ≃+* S) (I : Ideal R)
-  proof: by
-  simpa using I.lift_spanRank_map_eq_of_ringEquiv f
-
-中文:
-引理 理想.spanRank_map_eq_of_ringEquiv
-  条件: (f : R ≃+* S) (I : 理想 R)
-  证明: by
-  simpa using I.lift_spanRank_map_eq_of_ringEquiv f
-
-Depends on / 依赖: I.lift_spanRank_map_eq_of_ringEquiv, lift_spanRank_map_eq_of_ringEquiv
+/-
+**Ideal.spanRank_map_eq_of_ringEquiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.spanRank_map_eq_of_ringEquiv (f : R ≃+* S) (I : Ideal R) : (I.map f)
+.spanRank = I.spanRank
+参数：f : R ≃+* S；I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用引理 `Ideal.lift_spanRank_map_eq_of_ringEquiv`：Ideal.lift_spanRank_map_eq_of_r
+ingEquiv (f : R ≃+* T) (I : Ideal R) : Cardinal.lift.{u} (I.map f).spanRank = Ca
+rdinal.lift.{v} I.spanRank
 -/
 lemma Ideal.spanRank_map_eq_of_ringEquiv (f : R ≃+* S) (I : Ideal R) :
     (I.map f).spanRank = I.spanRank := by
   simpa using I.lift_spanRank_map_eq_of_ringEquiv f
-
-/--
-lemma `Ideal.spanFinrank_map_le_of_fg` / 引理 `Ideal.spanFinrank_map_le_of_fg`
-
-English:
-lemma Ideal.spanFinrank_map_le_of_fg
-  given: (f : R ->+* T) {I : Ideal R} (hI : I.FG)
-  proof: by
-  rw [← Submodule.FG.spanRank_le_iff (hI.map f)]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← Submodule.FG.spanRank_eq_spanFinrank hI]
-  exact I.lift_spanRank_map_le f
-
-@[simp]
-
-中文:
-引理 理想.spanFinrank_map_le_of_fg
-  条件: (f : R ->+* T) {I : 理想 R} (hI : I.FG)
-  证明: by
-  rw [← Submodule.FG.spanRank_le_iff (hI.map f)]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← Submodule.FG.spanRank_eq_spanFinrank hI]
-  exact I.lift_spanRank_map_le f
-
-@[simp]
-
-Depends on / 依赖: Cardinal, Cardinal.lift_le, Cardinal.lift_natCast, I.lift_spanRank_map_le, Submodule, Submodule.FG.spanRank_eq_spanFinrank, Submodule.FG.spanRank_le_iff, hI.map, lift_le, lift_natCast, lift_spanRank_map_le, spanRank_eq_spanFinrank, spanRank_le_iff
+/-
+**Ideal.spanFinrank_map_le_of_fg** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.spanFinrank_map_le_of_fg (f : R ->+* T) {I : Ideal R} (hI : I.FG) : 
+(I.map f).spanFinrank <= I.spanFinrank
+参数：f : R ->+* T；hI : I.FG。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.FG.spanRank_le_iff`：∀ {R : Type u_1} {M : Type u} [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodule
+ R M}, p.FG → ∀ (n…
+· 使用定理 `Ideal.FG.map`：∀ {R : Type u_3} {S : Type u_4} [inst : Semiring R] [inst_
+1 : Semiring S] {I : Ideal R},   I.FG → ∀ (f : R →+* S), (Ideal.map f I).FG
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `Cardinal.lift_natCast`：lift_natCast (n : Nat) : lift.{u} (n : Cardinal.{
+v}) = n
+· 使用定理 `Submodule.FG.spanRank_eq_spanFinrank`：∀ {R : Type u_1} {M : Type u} [ins
+t : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : S
+ubmodule R M}, p.FG → p.sp…
+· 使用引理 `Ideal.lift_spanRank_map_le`：Ideal.lift_spanRank_map_le (f : R ->+* T) (I
+ : Ideal R) : Cardinal.lift.{u} (I.map f).spanRank <= Cardinal.lift.{v} I.spanRa
+nk
 -/
-lemma Ideal.spanFinrank_map_le_of_fg (f : R ->+* T) {I : Ideal R} (hI : I.FG) :
-    (I.map f).spanFinrank <= I.spanFinrank := by
-  rw [← Submodule.FG.spanRank_le_iff (hI.map f)]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← Submodule.FG.spanRank_eq_spanFinrank hI]
+lemma Ideal.spanFinrank_map_le_of_fg (f : R →+* T) {I : Ideal R} (hI : I.FG) :
+    (I.map f).spanFinrank ≤ I.spanFinrank := by
+  rw [← Submodule.FG.spanRank_le_iff (hI.map f), ← Cardinal.lift_le.{u}, Cardinal.lift_natCast,
+    ← Cardinal.lift_natCast.{v}, ← Submodule.FG.spanRank_eq_spanFinrank hI]
   exact I.lift_spanRank_map_le f
 
 @[simp]
-/--
-lemma `Ideal.spanFinrank_map_eq_of_ringEquiv` / 引理 `Ideal.spanFinrank_map_eq_of_ringEquiv`
-
-English:
-lemma Ideal.spanFinrank_map_eq_of_ringEquiv
-  given: (f : R ≃+* T) (I : Ideal R)
-  proof: by
-  rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [I.lift_spanRank_map_eq_of_ringEquiv f]
-
-中文:
-引理 理想.spanFinrank_map_eq_of_ringEquiv
-  条件: (f : R ≃+* T) (I : 理想 R)
-  证明: by
-  rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [I.lift_spanRank_map_eq_of_ringEquiv f]
-
-Depends on / 依赖: Cardinal, Cardinal.toNat_lift, I.lift_spanRank_map_eq_of_ringEquiv, Submodule, Submodule.spanFinrank, lift_spanRank_map_eq_of_ringEquiv, spanFinrank, toNat_lift
+/-
+**Ideal.spanFinrank_map_eq_of_ringEquiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.spanFinrank_map_eq_of_ringEquiv (f : R ≃+* T) (I : Ideal R) : (I.map
+ f).spanFinrank = I.spanFinrank
+参数：f : R ≃+* T；I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.spanFinrank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiri
+ng R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R
+ M), p.spanFinra…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.toNat_lift`：toNat_lift (c : Cardinal.{v}) : toNat (lift.{u, v} 
+c) = toNat c
+· 使用引理 `Ideal.lift_spanRank_map_eq_of_ringEquiv`：Ideal.lift_spanRank_map_eq_of_r
+ingEquiv (f : R ≃+* T) (I : Ideal R) : Cardinal.lift.{u} (I.map f).spanRank = Ca
+rdinal.lift.{v} I.spanRank
 -/
 lemma Ideal.spanFinrank_map_eq_of_ringEquiv (f : R ≃+* T) (I : Ideal R) :
     (I.map f).spanFinrank = I.spanFinrank := by
-  rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [I.lift_spanRank_map_eq_of_ringEquiv f]
+  rw [Submodule.spanFinrank, Submodule.spanFinrank, ← Cardinal.toNat_lift.{u, v},
+    ← Cardinal.toNat_lift.{v, u}, I.lift_spanRank_map_eq_of_ringEquiv f]
 
 end Ideal
 
@@ -1587,106 +1660,117 @@ open Cardinal Module Submodule
 
 variable {R M : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-lemma `Module.Basis.mk_eq_spanRank` / 引理 `Module.Basis.mk_eq_spanRank`
-
-English:
-lemma Module.Basis.mk_eq_spanRank
-  given: [RankCondition R] {ι : Type*} (v : Basis ι R M)
-  proof: by
-  rw [← v.span_eq]; rw [spanRank_span_of_linearIndepOn]
-  exact v.linearIndependent.linearIndepOn_id
-
-中文:
-引理 模.基.mk_eq_spanRank
-  条件: [RankCondition R] {ι : 类型} (v : 基 ι R M)
-  证明: by
-  rw [← v.span_eq]; rw [spanRank_span_of_linearIndepOn]
-  exact v.linearIndependent.linearIndepOn_id
-
-Depends on / 依赖: linearIndepOn_id, linearIndependent, spanRank_span_of_linearIndepOn, span_eq, v.linearIndependent.linearIndepOn_id, v.span_eq
+/-
+**Module.Basis.mk_eq_spanRank** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Module.Basis.mk_eq_spanRank [RankCondition R] {ι : Type*} (v : Basis ι R M
+) : #(Set.range v) = (⊤ : Submodule R M).spanRank
+参数：v : Basis ι R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
+· 使用引理 `Submodule.spanRank_span_of_linearIndepOn`：spanRank_span_of_linearIndepOn
+ [RankCondition R] (s : Set M) (hs : LinearIndepOn R id s) : (span R s).spanRank
+ = #s
+· 使用定理 `LinearIndependent.linearIndepOn_id`：LinearIndependent.linearIndepOn_id (
+i : LinearIndependent R v) : LinearIndepOn R id (range v)
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
 -/
 lemma Module.Basis.mk_eq_spanRank [RankCondition R] {ι : Type*} (v : Basis ι R M) :
     #(Set.range v) = (⊤ : Submodule R M).spanRank := by
-  rw [← v.span_eq]; rw [spanRank_span_of_linearIndepOn]
+  rw [← v.span_eq, spanRank_span_of_linearIndepOn]
   exact v.linearIndependent.linearIndepOn_id
-
-/--
-theorem `Submodule.rank_eq_spanRank_of_free` / 定理 `Submodule.rank_eq_spanRank_of_free`
-
-English:
-theorem Submodule.rank_eq_spanRank_of_free
-  given: [Module.Free R M] [StrongRankCondition R]
-  proof: by
-  have := nontrivial_of_invariantBasisNumber R
-  obtain ⟨I, B⟩ := ‹Module.Free R M›
-  rw [← Basis.mk_eq_rank'' B]; rw [← Basis.mk_eq_spanRank B]; rw [← Cardinal.lift_id #(Set.range B)]; rw [Cardinal.mk_range_eq_of_injective B.injective]; rw [Cardinal.lift_id _]
-
-中文:
-定理 子模.rank_eq_spanRank_of_free
-  条件: [模.自由 R M] [StrongRankCondition R]
-  证明: by
-  have := nontrivial_of_invariantBasisNumber R
-  obtain ⟨I, B⟩ := ‹Module.Free R M›
-  rw [← Basis.mk_eq_rank'' B]; rw [← Basis.mk_eq_spanRank B]; rw [← Cardinal.lift_id #(Set.range B)]; rw [Cardinal.mk_range_eq_of_injective B.injective]; rw [Cardinal.lift_id _]
-
-Depends on / 依赖: B.injective, Basis.mk_eq_rank, Basis.mk_eq_spanRank, Cardinal, Cardinal.lift_id, Cardinal.mk_range_eq_of_injective, Module, Module.Free, Set.range, injective, lift_id, mk_eq_rank, mk_eq_spanRank, mk_range_eq_of_injective, nontrivial_of_invariantBasisNumber
+/-
+**Submodule.rank_eq_spanRank_of_free** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.rank_eq_spanRank_of_free [Module.Free R M] [StrongRankCondition 
+R] : Module.rank R M = (⊤ : Submodule R M).spanRank
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nontrivial_of_invariantBasisNumber`：nontrivial_of_invariantBasisNumber :
+ Nontrivial R
+· 使用定理 `invariantBasisNumber_of_rankCondition`：∀ (R : Type u) [inst : Semiring R
+] [RankCondition R], InvariantBasisNumber R
+· 使用定理 `rankCondition_of_strongRankCondition`：∀ (R : Type u) [inst : Semiring R]
+ [StrongRankCondition R], RankCondition R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.mk_eq_rank''`：Module.Basis.mk_eq_rank'' {ι : Type v} (v : B
+asis ι R M) : #ι = Module.rank R M
+· 使用引理 `Module.Basis.mk_eq_spanRank`：Module.Basis.mk_eq_spanRank [RankCondition 
+R] {ι : Type*} (v : Basis ι R M) : #(Set.range v) = (⊤ : Submodule R M).spanRank
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Cardinal.mk_range_eq_of_injective`：mk_range_eq_of_injective {α : Type u}
+ {β : Type v} {f : α -> β} (hf : Injective f) : lift.{u} #(range f) = lift.{v} #
+α
+· 使用定理 `Module.Basis.injective`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_6} [
+inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b 
+: Module.Bas…
 -/
 theorem Submodule.rank_eq_spanRank_of_free [Module.Free R M] [StrongRankCondition R] :
     Module.rank R M = (⊤ : Submodule R M).spanRank := by
   have := nontrivial_of_invariantBasisNumber R
   obtain ⟨I, B⟩ := ‹Module.Free R M›
-  rw [← Basis.mk_eq_rank'' B]; rw [← Basis.mk_eq_spanRank B]; rw [← Cardinal.lift_id #(Set.range B)]; rw [Cardinal.mk_range_eq_of_injective B.injective]; rw [Cardinal.lift_id _]
-
-/--
-lemma `Module.finrank_eq_spanFinrank_of_free` / 引理 `Module.finrank_eq_spanFinrank_of_free`
-
-English:
-lemma Module.finrank_eq_spanFinrank_of_free
-  given: [StrongRankCondition R] [Module.Free R M]
-  proof: by
-  simp [Module.finrank, Submodule.spanFinrank, Submodule.rank_eq_spanRank_of_free]
-
-中文:
-引理 模.finrank_eq_spanFinrank_of_free
-  条件: [StrongRankCondition R] [模.自由 R M]
-  证明: by
-  simp [Module.finrank, Submodule.spanFinrank, Submodule.rank_eq_spanRank_of_free]
-
-Depends on / 依赖: Module, Module.finrank, Submodule, Submodule.rank_eq_spanRank_of_free, Submodule.spanFinrank, finrank, rank_eq_spanRank_of_free, spanFinrank
+  rw [← Basis.mk_eq_rank'' B, ← Basis.mk_eq_spanRank B, ← Cardinal.lift_id #(Set.range B),
+    Cardinal.mk_range_eq_of_injective B.injective, Cardinal.lift_id _]
+/-
+**Module.finrank_eq_spanFinrank_of_free** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Module.finrank_eq_spanFinrank_of_free [StrongRankCondition R] [Module.Free
+ R M] : Module.finrank R M = (⊤ : Submodule R M).spanFinrank
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.rank_eq_spanRank_of_free`：Submodule.rank_eq_spanRank_of_free [
+Module.Free R M] [StrongRankCondition R] : Module.rank R M = (⊤ : Submodule R M)
+.spanRank
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Module.finrank_eq_spanFinrank_of_free [StrongRankCondition R] [Module.Free R M] :
     Module.finrank R M = (⊤ : Submodule R M).spanFinrank := by
   simp [Module.finrank, Submodule.spanFinrank, Submodule.rank_eq_spanRank_of_free]
-
-/--
-theorem `Submodule.rank_le_spanRank` / 定理 `Submodule.rank_le_spanRank`
-
-English:
-theorem Submodule.rank_le_spanRank
-  given: [StrongRankCondition R]
-  proof: by
-  rw [Module.rank]; rw [Submodule.spanRank]
-  refine ciSup_le' (fun ι => (le_ciInf fun s => ?_))
-  have := linearIndependent_le_span'' ι.2 s.1 s.2
-  simpa
-
-中文:
-定理 子模.rank_le_spanRank
-  条件: [StrongRankCondition R]
-  证明: by
-  rw [Module.rank]; rw [Submodule.spanRank]
-  refine ciSup_le' (fun ι => (le_ciInf fun s => ?_))
-  have := linearIndependent_le_span'' ι.2 s.1 s.2
-  simpa
-
-Depends on / 依赖: Module, Module.rank, Submodule, Submodule.spanRank, ciSup_le, le_ciInf, linearIndependent_le_span, spanRank
+/-
+**Submodule.rank_le_spanRank** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.rank_le_spanRank [StrongRankCondition R] : Module.rank R M <= (⊤
+ : Submodule R M).spanRank
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.rank_def`：∀ (R : Type u_1) (M : Type u_2) [inst : Semiring R] [in
+st_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   Module.rank R M = ⨆ ι, C
+ardin…
+· 使用定理 `Submodule.spanRank.eq_1`：∀ {R : Type u_1} {M : Type u} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M)
+, p.spanRank …
+· 使用定理 `ciSup_le'`：ciSup_le' {f : ι -> α} {a : α} (h : forall i, f i <= a) : ⨆ i
+, f i <= a
+· 使用定理 `le_ciInf`：le_ciInf [Nonempty ι] {f : ι -> α} {c : α} (H : forall x, c <=
+ f x) : c <= iInf f
+· 使用定理 `Submodule.instNonemptySubtypeSetEqSpan`：∀ {R : Type u_1} {M : Type u} [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p :
+ Submodule R M), Nonempty { …
+· 使用定理 `linearIndependent_le_span''`：linearIndependent_le_span'' {ι : Type v} {v
+ : ι -> M} (i : LinearIndependent R v) (w : Set M) (s : span R w = ⊤) : #ι <= #w
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem Submodule.rank_le_spanRank [StrongRankCondition R] :
-    Module.rank R M <= (⊤ : Submodule R M).spanRank := by
-  rw [Module.rank]; rw [Submodule.spanRank]
-  refine ciSup_le' (fun ι => (le_ciInf fun s => ?_))
+    Module.rank R M ≤ (⊤ : Submodule R M).spanRank := by
+  rw [Module.rank, Submodule.spanRank]
+  refine ciSup_le' (fun ι ↦ (le_ciInf fun s ↦ ?_))
   have := linearIndependent_le_span'' ι.2 s.1 s.2
   simpa
 
 end rank
+

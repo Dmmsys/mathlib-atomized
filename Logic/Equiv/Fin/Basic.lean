@@ -21,7 +21,7 @@ assert_not_exists MonoidWithZero
 
 universe u
 
-variable {m n : Nat}
+variable {m n : ℕ}
 
 /-!
 ### Miscellaneous
@@ -30,113 +30,114 @@ This is currently not very sorted. PRs welcome!
 -/
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Fin.preimage_apply_01_prod` / 定理 `Fin.preimage_apply_01_prod`
+/-
+**Fin.preimage_apply_01_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fin.preimage_apply_01_prod {α : Fin 2 -> Type u} (s : Set (α 0)) (t : Set 
+(α 1)) : (fun f : forall i, α i => (f 0, f 1)) ⁻¹' s ×ˢ t = Set.pi Set.univ (Fin
+.cons s <| Fin.cons t finZeroElim)
+参数：s : Set (α 0)；t : Set (α 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fin.cons_zero`：cons_zero : cons x p 0 = x
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Fin.cons_one`：cons_one {α : Fin (n + 2) -> Sort*} (x : α 0) (p : forall 
+i : Fin n.succ, α i.succ) : cons x p 1 = p 0
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem Fin.preimage_apply_01_prod
-  given: {α : Fin 2 -> Type u} (s : Set (α 0)) (t : Set (α 1))
-  proof: by
-  ext f
-  simp [Fin.forall_fin_two]
+--- 原说明 ---
+### Miscellaneous
 
-中文:
-定理 有限集.preimage_apply_01_prod
-  条件: {α : 有限集 2 -> 类型u} (s : 集合 (α 0)) (t : 集合 (α 1))
-  证明: by
-  ext f
-  simp [Fin.forall_fin_two]
-
-Depends on / 依赖: Fin.forall_fin_two, forall_fin_two
+This is currently not very sorted. PRs welcome!
 -/
-theorem Fin.preimage_apply_01_prod {α : Fin 2 -> Type u} (s : Set (α 0)) (t : Set (α 1)) :
-    (fun f : forall i, α i => (f 0, f 1)) ⁻¹' s ×ˢ t =
+theorem Fin.preimage_apply_01_prod {α : Fin 2 → Type u} (s : Set (α 0)) (t : Set (α 1)) :
+    (fun f : ∀ i, α i => (f 0, f 1)) ⁻¹' s ×ˢ t =
       Set.pi Set.univ (Fin.cons s <| Fin.cons t finZeroElim) := by
   ext f
   simp [Fin.forall_fin_two]
-
-/--
-theorem `Fin.preimage_apply_01_prod'` / 定理 `Fin.preimage_apply_01_prod'`
-
-English:
-theorem Fin.preimage_apply_01_prod'
-  given: {α : Type u} (s t : Set α)
-  proof: @Fin.preimage_apply_01_prod (fun _ => α) s t
-
-中文:
-定理 有限集.preimage_apply_01_prod'
-  条件: {α : 类型u} (s t : 集合 α)
-  证明: @Fin.preimage_apply_01_prod (fun _ => α) s t
-
-Depends on / 依赖: Fin.preimage_apply_01_prod, preimage_apply_01_prod
+/-
+**Fin.preimage_apply_01_prod'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fin.preimage_apply_01_prod' {α : Type u} (s t : Set α) : (fun f : Fin 2 ->
+ α => (f 0, f 1)) ⁻¹' s ×ˢ t = Set.pi Set.univ ![s, t]
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.preimage_apply_01_prod`：Fin.preimage_apply_01_prod {α : Fin 2 -> Typ
+e u} (s : Set (α 0)) (t : Set (α 1)) : (fun f : forall i, α i => (f 0, f 1)) ⁻¹'
+ s ×ˢ t = Set.pi…
 -/
 theorem Fin.preimage_apply_01_prod' {α : Type u} (s t : Set α) :
-    (fun f : Fin 2 -> α => (f 0, f 1)) ⁻¹' s ×ˢ t = Set.pi Set.univ ![s, t] :=
+    (fun f : Fin 2 → α => (f 0, f 1)) ⁻¹' s ×ˢ t = Set.pi Set.univ ![s, t] :=
   @Fin.preimage_apply_01_prod (fun _ => α) s t
 
 /-- A product space `α × β` is equivalent to the space `Π i : Fin 2, γ i`, where
 `γ = Fin.cons α (Fin.cons β finZeroElim)`. See also `piFinTwoEquiv` and
 `finTwoArrowEquiv`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `prodEquivPiFinTwo` / `prodEquivPiFinTwo` 的定义
+/-
+**prodEquivPiFinTwo** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：prodEquivPiFinTwo (α β : Type u) : α × β ≃ forall i : Fin 2, ![α, β] i
+参数：α β : Type u。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition prodEquivPiFinTwo
-  signature: (α β : Type u)
-  body: (piFinTwoEquiv (Fin.cons α (Fin.cons β finZeroElim))).symm
-
-中文:
-定义 prodEquivPiFinTwo
-  签名: (α β : 类型u)
-  定义体: (piFinTwoEquiv (Fin.cons α (Fin.cons β finZeroElim))).symm
-
-Depends on / 依赖: Fin.cons, finZeroElim, piFinTwoEquiv
+--- 原说明 ---
+A product space `α × β` is equivalent to the space `Π i : Fin 2, γ i`, where
+`γ = Fin.cons α (Fin.cons β finZeroElim)`. See also `piFinTwoEquiv` and
+`finTwoArrowEquiv`.
 -/
-def prodEquivPiFinTwo (α β : Type u) : α × β ≃ forall i : Fin 2, ![α, β] i :=
+def prodEquivPiFinTwo (α β : Type u) : α × β ≃ ∀ i : Fin 2, ![α, β] i :=
   (piFinTwoEquiv (Fin.cons α (Fin.cons β finZeroElim))).symm
 
 /-- The space of functions `Fin 2 → α` is equivalent to `α × α`. See also `piFinTwoEquiv` and
 `prodEquivPiFinTwo`. -/
 @[simps -fullyApplied]
-/--
-Definition of `finTwoArrowEquiv` / `finTwoArrowEquiv` 的定义
+/-
+**finTwoArrowEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finTwoArrowEquiv (α : Type*) : (Fin 2 -> α) ≃ α × α
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finTwoArrowEquiv
-  signature: (α : Type*)
-  body: { piFinTwoEquiv fun _ => α with invFun := fun x => ![x.1, x.2] }
-
-中文:
-定义 finTwoArrowEquiv
-  签名: (α : 类型)
-  定义体: { piFinTwoEquiv fun _ => α with invFun := fun x => ![x.1, x.2] }
-
-Depends on / 依赖: invFun, piFinTwoEquiv
+--- 原说明 ---
+The space of functions `Fin 2 → α` is equivalent to `α × α`. See also `piFinTwoE
+quiv` and
+`prodEquivPiFinTwo`.
 -/
-def finTwoArrowEquiv (α : Type*) : (Fin 2 -> α) ≃ α × α :=
+def finTwoArrowEquiv (α : Type*) : (Fin 2 → α) ≃ α × α :=
   { piFinTwoEquiv fun _ => α with invFun := fun x => ![x.1, x.2] }
 
-/--
-Definition of `finSuccEquiv'` / `finSuccEquiv'` 的定义
+/-- An equivalence that removes `i` and maps it to `none`.
+This is a version of `Fin.predAbove` that produces `Option (Fin n)` instead of
+mapping both `i.castSucc` and `i.succ` to `i`. -/
+/-
+**finSuccEquiv'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSuccEquiv' (i : Fin (n + 1)) : Fin (n + 1) ≃ Option (Fin n) where toFun
+参数：i : Fin (n + 1)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.casesOn'`：casesOn'_none (x : β) (f : α -> β) : casesOn' none x f 
+= x
 
-English:
-definition finSuccEquiv'
-  signature: (i : Fin (n + 1))
-  body: i.insertNth none some
-  invFun x := x.casesOn' i (Fin.succAbove i)
-  left_inv x := Fin.succAboveCases i (by simp) (fun j => by simp) x
-  right_inv x := by cases x <;> simp
-
-中文:
-定义 finSuccEquiv'
-  签名: (i : 有限集 (n + 1))
-  定义体: i.insertNth none some
-  invFun x := x.casesOn' i (Fin.succAbove i)
-  left_inv x := Fin.succAboveCases i (by simp) (fun j => by simp) x
-  right_inv x := by cases x <;> simp
-
-Depends on / 依赖: i.insertNth, insertNth
+--- 原说明 ---
+An equivalence that removes `i` and maps it to `none`.
+This is a version of `Fin.predAbove` that produces `Option (Fin n)` instead of
+mapping both `i.castSucc` and `i.succ` to `i`.
 -/
 def finSuccEquiv' (i : Fin (n + 1)) : Fin (n + 1) ≃ Option (Fin n) where
   toFun := i.insertNth none some
@@ -146,1333 +147,1005 @@ def finSuccEquiv' (i : Fin (n + 1)) : Fin (n + 1) ≃ Option (Fin n) where
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `finSuccEquiv'_at` / 定理 `finSuccEquiv'_at`
-
-English:
-theorem finSuccEquiv'_at
-  given: (i : Fin (n + 1))
-  statement: (finSuccEquiv' i) i = none
-  proof: by
-  simp [finSuccEquiv']
-
-@[simp]
-
-中文:
-定理 finSuccEquiv'_at
-  条件: (i : 有限集 (n + 1))
-  结论: (finSuccEquiv' i) i = none
-  证明: by
-  simp [finSuccEquiv']
-
-@[simp]
+/-
+**finSuccEquiv'_at** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : Fin (n + 1)), (finSuccEquiv' i) i = none
+参数：i : Fin (n + 1)；finSuccEquiv' i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.insertNth_apply_same`：insertNth_apply_same (i : Fin (n + 1)) (x : α 
+i) (p : forall j, α (i.succAbove j)) : insertNth i x p i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finSuccEquiv'_at (i : Fin (n + 1)) : (finSuccEquiv' i) i = none := by
   simp [finSuccEquiv']
 
 @[simp]
-/--
-theorem `finSuccEquiv'_succAbove` / 定理 `finSuccEquiv'_succAbove`
-
-English:
-theorem finSuccEquiv'_succAbove
-  given: (i : Fin (n + 1)) (j : Fin n)
-  proof: @Fin.insertNth_apply_succAbove n (fun _ => Option (Fin n)) i _ _ _
-
-中文:
-定理 finSuccEquiv'_succAbove
-  条件: (i : 有限集 (n + 1)) (j : 有限集 n)
-  证明: @Fin.insertNth_apply_succAbove n (fun _ => Option (Fin n)) i _ _ _
+/-
+**finSuccEquiv'_succAbove** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : Fin (n + 1)) (j : Fin n), (finSuccEquiv' i) (i.succAbove j)
+ = some j
+参数：i : Fin (n + 1)；j : Fin n；finSuccEquiv' i；i.succAbove j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.insertNth_apply_succAbove`：insertNth_apply_succAbove (i : Fin (n + 1
+)) (x : α i) (p : forall j, α (i.succAbove j)) (j : Fin n) : insertNth i x p (i.
+succAbove j) = p j
 -/
 theorem finSuccEquiv'_succAbove (i : Fin (n + 1)) (j : Fin n) :
     finSuccEquiv' i (i.succAbove j) = some j :=
   @Fin.insertNth_apply_succAbove n (fun _ => Option (Fin n)) i _ _ _
-
-/--
-theorem `finSuccEquiv'_below` / 定理 `finSuccEquiv'_below`
-
-English:
-theorem finSuccEquiv'_below
-  given: {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i)
-  proof: by
-  rw [← Fin.succAbove_of_castSucc_lt _ _ h]; rw [finSuccEquiv'_succAbove]
-
-中文:
-定理 finSuccEquiv'_below
-  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : 有限集.castSucc m < i)
-  证明: by
-  rw [← Fin.succAbove_of_castSucc_lt _ _ h]; rw [finSuccEquiv'_succAbove]
+/-
+**finSuccEquiv'_below** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, m.castSucc < i → (finSuccEquiv' i
+) m.castSucc = some m
+参数：n + 1；finSuccEquiv' i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Fin.succAbove_of_castSucc_lt`：succAbove_of_castSucc_lt (p : Fin (n + 1))
+ (i : Fin n) (h : castSucc i < p) : p.succAbove i = castSucc i
+· 使用定理 `finSuccEquiv'_succAbove`：∀ {n : ℕ} (i : Fin (n + 1)) (j : Fin n), (finSu
+ccEquiv' i) (i.succAbove j) = some j
 -/
 theorem finSuccEquiv'_below {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i) :
     (finSuccEquiv' i) (Fin.castSucc m) = m := by
-  rw [← Fin.succAbove_of_castSucc_lt _ _ h]; rw [finSuccEquiv'_succAbove]
-
-/--
-theorem `finSuccEquiv'_above` / 定理 `finSuccEquiv'_above`
-
-English:
-theorem finSuccEquiv'_above
-  given: {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m)
-  proof: by
-  rw [← Fin.succAbove_of_le_castSucc _ _ h]; rw [finSuccEquiv'_succAbove]
-
-@[simp]
-
-中文:
-定理 finSuccEquiv'_above
-  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : i <= 有限集.castSucc m)
-  证明: by
-  rw [← Fin.succAbove_of_le_castSucc _ _ h]; rw [finSuccEquiv'_succAbove]
-
-@[simp]
+  rw [← Fin.succAbove_of_castSucc_lt _ _ h, finSuccEquiv'_succAbove]
+/-
+**finSuccEquiv'_above** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, i ≤ m.castSucc → (finSuccEquiv' i
+) m.succ = some m
+参数：n + 1；finSuccEquiv' i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Fin.succAbove_of_le_castSucc`：succAbove_of_le_castSucc (p : Fin (n + 1))
+ (i : Fin n) (h : p <= castSucc i) : p.succAbove i = i.succ
+· 使用定理 `finSuccEquiv'_succAbove`：∀ {n : ℕ} (i : Fin (n + 1)) (j : Fin n), (finSu
+ccEquiv' i) (i.succAbove j) = some j
 -/
-theorem finSuccEquiv'_above {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m) :
+theorem finSuccEquiv'_above {i : Fin (n + 1)} {m : Fin n} (h : i ≤ Fin.castSucc m) :
     (finSuccEquiv' i) m.succ = some m := by
-  rw [← Fin.succAbove_of_le_castSucc _ _ h]; rw [finSuccEquiv'_succAbove]
+  rw [← Fin.succAbove_of_le_castSucc _ _ h, finSuccEquiv'_succAbove]
 
 @[simp]
-/--
-theorem `finSuccEquiv'_symm_none` / 定理 `finSuccEquiv'_symm_none`
-
-English:
-theorem finSuccEquiv'_symm_none
-  given: (i : Fin (n + 1))
-  statement: (finSuccEquiv' i).symm none = i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finSuccEquiv'_symm_none
-  条件: (i : 有限集 (n + 1))
-  结论: (finSuccEquiv' i).symm none = i
-  证明: rfl
-
-@[simp]
+/-
+**finSuccEquiv'_symm_none** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : Fin (n + 1)), (finSuccEquiv' i).symm none = i
+参数：i : Fin (n + 1)；finSuccEquiv' i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem finSuccEquiv'_symm_none (i : Fin (n + 1)) : (finSuccEquiv' i).symm none = i :=
   rfl
 
 @[simp]
-/--
-theorem `finSuccEquiv'_symm_some` / 定理 `finSuccEquiv'_symm_some`
-
-English:
-theorem finSuccEquiv'_symm_some
-  given: (i : Fin (n + 1)) (j : Fin n)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finSuccEquiv'_symm_some
-  条件: (i : 有限集 (n + 1)) (j : 有限集 n)
-  证明: rfl
-
-@[simp]
+/-
+**finSuccEquiv'_symm_some** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : Fin (n + 1)) (j : Fin n), (finSuccEquiv' i).symm (some j) =
+ i.succAbove j
+参数：i : Fin (n + 1)；j : Fin n；finSuccEquiv' i；some j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem finSuccEquiv'_symm_some (i : Fin (n + 1)) (j : Fin n) :
     (finSuccEquiv' i).symm (some j) = i.succAbove j :=
   rfl
 
 @[simp]
-/--
-theorem `finSuccEquiv'_eq_some` / 定理 `finSuccEquiv'_eq_some`
-
-English:
-theorem finSuccEquiv'_eq_some
-  given: {i j : Fin (n + 1)} {k : Fin n}
-  proof: (finSuccEquiv' i).eq_symm_apply.symm
-
-@[simp]
-
-中文:
-定理 finSuccEquiv'_eq_some
-  条件: {i j : 有限集 (n + 1)} {k : 有限集 n}
-  证明: (finSuccEquiv' i).eq_symm_apply.symm
-
-@[simp]
+/-
+**finSuccEquiv'_eq_some** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i j : Fin (n + 1)} {k : Fin n}, (finSuccEquiv' i) j = some k ↔ 
+j = i.succAbove k
+参数：n + 1；finSuccEquiv' i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem finSuccEquiv'_eq_some {i j : Fin (n + 1)} {k : Fin n} :
     finSuccEquiv' i j = k ↔ j = i.succAbove k :=
   (finSuccEquiv' i).eq_symm_apply.symm
 
 @[simp]
-/--
-theorem `finSuccEquiv'_eq_none` / 定理 `finSuccEquiv'_eq_none`
-
-English:
-theorem finSuccEquiv'_eq_none
-  given: {i j : Fin (n + 1)}
-  statement: finSuccEquiv' i j = none ↔ i = j
-  proof: (finSuccEquiv' i).eq_symm_apply.symm.trans eq_comm
-
-中文:
-定理 finSuccEquiv'_eq_none
-  条件: {i j : 有限集 (n + 1)}
-  结论: finSuccEquiv' i j = none ↔ i = j
-  证明: (finSuccEquiv' i).eq_symm_apply.symm.trans eq_comm
+/-
+**finSuccEquiv'_eq_none** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i j : Fin (n + 1)}, (finSuccEquiv' i) j = none ↔ i = j
+参数：n + 1；finSuccEquiv' i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
 -/
 theorem finSuccEquiv'_eq_none {i j : Fin (n + 1)} : finSuccEquiv' i j = none ↔ i = j :=
   (finSuccEquiv' i).eq_symm_apply.symm.trans eq_comm
-
-/--
-theorem `finSuccEquiv'_symm_some_below` / 定理 `finSuccEquiv'_symm_some_below`
-
-English:
-theorem finSuccEquiv'_symm_some_below
-  given: {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i)
-  proof: Fin.succAbove_of_castSucc_lt i m h
-
-中文:
-定理 finSuccEquiv'_symm_some_below
-  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : 有限集.castSucc m < i)
-  证明: Fin.succAbove_of_castSucc_lt i m h
+/-
+**finSuccEquiv'_symm_some_below** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, m.castSucc < i → (finSuccEquiv' i
+).symm (some m) = m.castSucc
+参数：n + 1；finSuccEquiv' i；some m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fin.succAbove_of_castSucc_lt`：succAbove_of_castSucc_lt (p : Fin (n + 1))
+ (i : Fin n) (h : castSucc i < p) : p.succAbove i = castSucc i
 -/
 theorem finSuccEquiv'_symm_some_below {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i) :
     (finSuccEquiv' i).symm (some m) = Fin.castSucc m :=
   Fin.succAbove_of_castSucc_lt i m h
-
-/--
-theorem `finSuccEquiv'_symm_some_above` / 定理 `finSuccEquiv'_symm_some_above`
-
-English:
-theorem finSuccEquiv'_symm_some_above
-  given: {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m)
-  proof: Fin.succAbove_of_le_castSucc i m h
-
-中文:
-定理 finSuccEquiv'_symm_some_above
-  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : i <= 有限集.castSucc m)
-  证明: Fin.succAbove_of_le_castSucc i m h
+/-
+**finSuccEquiv'_symm_some_above** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, i ≤ m.castSucc → (finSuccEquiv' i
+).symm (some m) = m.succ
+参数：n + 1；finSuccEquiv' i；some m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fin.succAbove_of_le_castSucc`：succAbove_of_le_castSucc (p : Fin (n + 1))
+ (i : Fin n) (h : p <= castSucc i) : p.succAbove i = i.succ
 -/
-theorem finSuccEquiv'_symm_some_above {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m) :
+theorem finSuccEquiv'_symm_some_above {i : Fin (n + 1)} {m : Fin n} (h : i ≤ Fin.castSucc m) :
     (finSuccEquiv' i).symm (some m) = m.succ :=
   Fin.succAbove_of_le_castSucc i m h
-
-/--
-theorem `finSuccEquiv'_symm_coe_below` / 定理 `finSuccEquiv'_symm_coe_below`
-
-English:
-theorem finSuccEquiv'_symm_coe_below
-  given: {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i)
-  proof: finSuccEquiv'_symm_some_below h
-
-中文:
-定理 finSuccEquiv'_symm_coe_below
-  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : 有限集.castSucc m < i)
-  证明: finSuccEquiv'_symm_some_below h
+/-
+**finSuccEquiv'_symm_coe_below** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, m.castSucc < i → (finSuccEquiv' i
+).symm (some m) = m.castSucc
+参数：n + 1；finSuccEquiv' i；some m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSuccEquiv'_symm_some_below`：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, 
+m.castSucc < i → (finSuccEquiv' i).symm (some m) = m.castSucc
 -/
 theorem finSuccEquiv'_symm_coe_below {i : Fin (n + 1)} {m : Fin n} (h : Fin.castSucc m < i) :
     (finSuccEquiv' i).symm m = Fin.castSucc m :=
   finSuccEquiv'_symm_some_below h
-
-/--
-theorem `finSuccEquiv'_symm_coe_above` / 定理 `finSuccEquiv'_symm_coe_above`
-
-English:
-theorem finSuccEquiv'_symm_coe_above
-  given: {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m)
-  proof: finSuccEquiv'_symm_some_above h
-
-中文:
-定理 finSuccEquiv'_symm_coe_above
-  条件: {i : 有限集 (n + 1)} {m : 有限集 n} (h : i <= 有限集.castSucc m)
-  证明: finSuccEquiv'_symm_some_above h
+/-
+**finSuccEquiv'_symm_coe_above** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, i ≤ m.castSucc → (finSuccEquiv' i
+).symm (some m) = m.succ
+参数：n + 1；finSuccEquiv' i；some m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSuccEquiv'_symm_some_above`：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, 
+i ≤ m.castSucc → (finSuccEquiv' i).symm (some m) = m.succ
 -/
-theorem finSuccEquiv'_symm_coe_above {i : Fin (n + 1)} {m : Fin n} (h : i <= Fin.castSucc m) :
+theorem finSuccEquiv'_symm_coe_above {i : Fin (n + 1)} {m : Fin n} (h : i ≤ Fin.castSucc m) :
     (finSuccEquiv' i).symm m = m.succ :=
   finSuccEquiv'_symm_some_above h
 
-/--
-Definition of `finSuccEquiv` / `finSuccEquiv` 的定义
+/-- Equivalence between `Fin (n + 1)` and `Option (Fin n)`.
+This is a version of `Fin.pred` that produces `Option (Fin n)` instead of
+requiring a proof that the input is not `0`. -/
+/-
+**finSuccEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSuccEquiv (n : Nat) : Fin (n + 1) ≃ Option (Fin n)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finSuccEquiv
-  signature: (n : Nat)
-  body: finSuccEquiv' 0
-
-@[simp]
-
-中文:
-定义 finSuccEquiv
-  签名: (n : 自然数)
-  定义体: finSuccEquiv' 0
-
-@[simp]
-
-Depends on / 依赖: finSuccEquiv
+--- 原说明 ---
+Equivalence between `Fin (n + 1)` and `Option (Fin n)`.
+This is a version of `Fin.pred` that produces `Option (Fin n)` instead of
+requiring a proof that the input is not `0`.
 -/
-def finSuccEquiv (n : Nat) : Fin (n + 1) ≃ Option (Fin n) :=
+def finSuccEquiv (n : ℕ) : Fin (n + 1) ≃ Option (Fin n) :=
   finSuccEquiv' 0
 
 @[simp]
-/--
-theorem `finSuccEquiv_zero` / 定理 `finSuccEquiv_zero`
-
-English:
-theorem finSuccEquiv_zero
-  statement: (finSuccEquiv n) 0 = none
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finSuccEquiv_zero
-  结论: (finSuccEquiv n) 0 = none
-  证明: rfl
-
-@[simp]
+/-
+**finSuccEquiv_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquiv_zero : (finSuccEquiv n) 0 = none
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem finSuccEquiv_zero : (finSuccEquiv n) 0 = none :=
   rfl
 
 @[simp]
-/--
-theorem `finSuccEquiv_succ` / 定理 `finSuccEquiv_succ`
-
-English:
-theorem finSuccEquiv_succ
-  given: (m : Fin n)
-  statement: (finSuccEquiv n) m.succ = some m
-  proof: finSuccEquiv'_above (Fin.zero_le _)
-
-@[simp]
-
-中文:
-定理 finSuccEquiv_succ
-  条件: (m : 有限集 n)
-  结论: (finSuccEquiv n) m.succ = some m
-  证明: finSuccEquiv'_above (Fin.zero_le _)
-
-@[simp]
-
-Depends on / 依赖: Fin.zero_le, _above, finSuccEquiv, zero_le
+/-
+**finSuccEquiv_succ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquiv_succ (m : Fin n) : (finSuccEquiv n) m.succ = some m
+参数：m : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSuccEquiv'_above`：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, i ≤ m.cast
+Succ → (finSuccEquiv' i) m.succ = some m
+· 使用定理 `Fin.zero_le`：∀ {n : ℕ} [inst : NeZero n] (a : Fin n), 0 ≤ a
 -/
 theorem finSuccEquiv_succ (m : Fin n) : (finSuccEquiv n) m.succ = some m :=
   finSuccEquiv'_above (Fin.zero_le _)
 
 @[simp]
-/--
-theorem `finSuccEquiv_last` / 定理 `finSuccEquiv_last`
-
-English:
-theorem finSuccEquiv_last
-  given: (n : Nat)
-  statement: finSuccEquiv (n + 1) (Fin.last (n + 1)) = Fin.last n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finSuccEquiv_last
-  条件: (n : 自然数)
-  结论: finSuccEquiv (n + 1) (有限集.last (n + 1)) = 有限集.last n
-  证明: rfl
-
-@[simp]
+/-
+**finSuccEquiv_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquiv_last (n : Nat) : finSuccEquiv (n + 1) (Fin.last (n + 1)) = Fi
+n.last n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem finSuccEquiv_last (n : Nat) : finSuccEquiv (n + 1) (Fin.last (n + 1)) = Fin.last n := rfl
+theorem finSuccEquiv_last (n : ℕ) : finSuccEquiv (n + 1) (Fin.last (n + 1)) = Fin.last n := rfl
 
 @[simp]
-/--
-theorem `finSuccEquiv_symm_none` / 定理 `finSuccEquiv_symm_none`
-
-English:
-theorem finSuccEquiv_symm_none
-  statement: (finSuccEquiv n).symm none = 0
-  proof: finSuccEquiv'_symm_none _
-
-@[simp]
-
-中文:
-定理 finSuccEquiv_symm_none
-  结论: (finSuccEquiv n).symm none = 0
-  证明: finSuccEquiv'_symm_none _
-
-@[simp]
-
-Depends on / 依赖: _symm_none, finSuccEquiv
+/-
+**finSuccEquiv_symm_none** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquiv_symm_none : (finSuccEquiv n).symm none = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSuccEquiv'_symm_none`：∀ {n : ℕ} (i : Fin (n + 1)), (finSuccEquiv' i).
+symm none = i
 -/
 theorem finSuccEquiv_symm_none : (finSuccEquiv n).symm none = 0 :=
   finSuccEquiv'_symm_none _
 
 @[simp]
-/--
-theorem `finSuccEquiv_symm_some` / 定理 `finSuccEquiv_symm_some`
-
-English:
-theorem finSuccEquiv_symm_some
-  given: (m : Fin n)
-  statement: (finSuccEquiv n).symm (some m) = m.succ
-  proof: congr_fun Fin.succAbove_zero m
-
-@[simp]
-
-中文:
-定理 finSuccEquiv_symm_some
-  条件: (m : 有限集 n)
-  结论: (finSuccEquiv n).symm (some m) = m.succ
-  证明: congr_fun Fin.succAbove_zero m
-
-@[simp]
-
-Depends on / 依赖: Fin.succAbove_zero, congr_fun, succAbove_zero
+/-
+**finSuccEquiv_symm_some** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquiv_symm_some (m : Fin n) : (finSuccEquiv n).symm (some m) = m.su
+cc
+参数：m : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Fin.succAbove_zero`：∀ {n : ℕ}, Fin.succAbove 0 = Fin.succ
 -/
 theorem finSuccEquiv_symm_some (m : Fin n) : (finSuccEquiv n).symm (some m) = m.succ :=
   congr_fun Fin.succAbove_zero m
 
 @[simp]
-/--
-theorem `finSuccEquiv_eq_some` / 定理 `finSuccEquiv_eq_some`
-
-English:
-theorem finSuccEquiv_eq_some
-  given: {i : Fin (n + 1)} {j : Fin n}
-  proof: (finSuccEquiv n).eq_symm_apply.symm
-
-@[simp]
-
-中文:
-定理 finSuccEquiv_eq_some
-  条件: {i : 有限集 (n + 1)} {j : 有限集 n}
-  证明: (finSuccEquiv n).eq_symm_apply.symm
-
-@[simp]
-
-Depends on / 依赖: eq_symm_apply, eq_symm_apply.symm, finSuccEquiv
+/-
+**finSuccEquiv_eq_some** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquiv_eq_some {i : Fin (n + 1)} {j : Fin n} : finSuccEquiv n i = j 
+↔ i = j.succ
+参数：n + 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem finSuccEquiv_eq_some {i : Fin (n + 1)} {j : Fin n} :
     finSuccEquiv n i = j ↔ i = j.succ :=
   (finSuccEquiv n).eq_symm_apply.symm
 
 @[simp]
-/--
-theorem `finSuccEquiv_eq_none` / 定理 `finSuccEquiv_eq_none`
-
-English:
-theorem finSuccEquiv_eq_none
-  given: {i : Fin (n + 1)}
-  statement: finSuccEquiv n i = none ↔ i = 0
-  proof: (finSuccEquiv n).eq_symm_apply.symm
-
-中文:
-定理 finSuccEquiv_eq_none
-  条件: {i : 有限集 (n + 1)}
-  结论: finSuccEquiv n i = none ↔ i = 0
-  证明: (finSuccEquiv n).eq_symm_apply.symm
-
-Depends on / 依赖: eq_symm_apply, eq_symm_apply.symm, finSuccEquiv
+/-
+**finSuccEquiv_eq_none** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquiv_eq_none {i : Fin (n + 1)} : finSuccEquiv n i = none ↔ i = 0
+参数：n + 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem finSuccEquiv_eq_none {i : Fin (n + 1)} : finSuccEquiv n i = none ↔ i = 0 :=
   (finSuccEquiv n).eq_symm_apply.symm
 
-/--
-theorem `finSuccEquiv'_zero` / 定理 `finSuccEquiv'_zero`
+/-- The equiv version of `Fin.predAbove_zero`. -/
+/-
+**finSuccEquiv'_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ}, finSuccEquiv' 0 = finSuccEquiv n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-theorem finSuccEquiv'_zero
-  statement: finSuccEquiv' (0 : Fin (n + 1)) = finSuccEquiv n
-  proof: rfl
-
-中文:
-定理 finSuccEquiv'_zero
-  结论: finSuccEquiv' (0 : 有限集 (n + 1)) = finSuccEquiv n
-  证明: rfl
+--- 原说明 ---
+The equiv version of `Fin.predAbove_zero`.
 -/
 theorem finSuccEquiv'_zero : finSuccEquiv' (0 : Fin (n + 1)) = finSuccEquiv n :=
   rfl
-
-/--
-theorem `finSuccEquiv'_last_apply_castSucc` / 定理 `finSuccEquiv'_last_apply_castSucc`
-
-English:
-theorem finSuccEquiv'_last_apply_castSucc
-  given: (i : Fin n)
-  proof: by
-  rw [← Fin.succAbove_last]; rw [finSuccEquiv'_succAbove]
-
-中文:
-定理 finSuccEquiv'_last_apply_castSucc
-  条件: (i : 有限集 n)
-  证明: by
-  rw [← Fin.succAbove_last]; rw [finSuccEquiv'_succAbove]
+/-
+**finSuccEquiv'_last_apply_castSucc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : Fin n), (finSuccEquiv' (Fin.last n)) i.castSucc = some i
+参数：i : Fin n；finSuccEquiv' (Fin.last n)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.succAbove_last`：∀ {n : ℕ}, (Fin.last n).succAbove = Fin.castSucc
+· 使用定理 `finSuccEquiv'_succAbove`：∀ {n : ℕ} (i : Fin (n + 1)) (j : Fin n), (finSu
+ccEquiv' i) (i.succAbove j) = some j
 -/
 theorem finSuccEquiv'_last_apply_castSucc (i : Fin n) :
     finSuccEquiv' (Fin.last n) (Fin.castSucc i) = i := by
-  rw [← Fin.succAbove_last]; rw [finSuccEquiv'_succAbove]
-
-/--
-theorem `finSuccEquiv'_last_apply` / 定理 `finSuccEquiv'_last_apply`
-
-English:
-theorem finSuccEquiv'_last_apply
-  given: {i : Fin (n + 1)} (h : i != Fin.last n)
-  proof: by
-  simp
-
-中文:
-定理 finSuccEquiv'_last_apply
-  条件: {i : 有限集 (n + 1)} (h : i != 有限集.last n)
-  证明: by
-  simp
+  rw [← Fin.succAbove_last, finSuccEquiv'_succAbove]
+/-
+**finSuccEquiv'_last_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i : Fin (n + 1)} (h : i ≠ Fin.last n), (finSuccEquiv' (Fin.last
+ n)) i = some (i.castLT ⋯)
+参数：n + 1；h : i ≠ Fin.last n；finSuccEquiv' (Fin.last n)；i.castLT ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Fin.val_lt_last`：∀ {n : ℕ} {i : Fin (n + 1)}, i ≠ Fin.last n → ↑i < n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Fin.succAbove_last`：∀ {n : ℕ}, (Fin.last n).succAbove = Fin.castSucc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finSuccEquiv'_last_apply {i : Fin (n + 1)} (h : i != Fin.last n) :
+theorem finSuccEquiv'_last_apply {i : Fin (n + 1)} (h : i ≠ Fin.last n) :
     finSuccEquiv' (Fin.last n) i = Fin.castLT i (Fin.val_lt_last h) := by
   simp
-
-/--
-theorem `finSuccEquiv'_ne_last_apply` / 定理 `finSuccEquiv'_ne_last_apply`
-
-English:
-theorem finSuccEquiv'_ne_last_apply
-  given: {i j : Fin (n + 1)} (hi : i != Fin.last n) (hj : j != i)
-  proof: by
-  rcases Fin.exists_succAbove_eq hj with ⟨j, rfl⟩
-  rcases Fin.exists_castSucc_eq.2 hi with ⟨i, rfl⟩
-  simp
-
-中文:
-定理 finSuccEquiv'_ne_last_apply
-  条件: {i j : 有限集 (n + 1)} (hi : i != 有限集.last n) (hj : j != i)
-  证明: by
-  rcases Fin.exists_succAbove_eq hj with ⟨j, rfl⟩
-  rcases Fin.exists_castSucc_eq.2 hi with ⟨i, rfl⟩
-  simp
+/-
+**finSuccEquiv'_ne_last_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} {i j : Fin (n + 1)} (hi : i ≠ Fin.last n), j ≠ i → (finSuccEquiv
+' i) j = some ((i.castLT ⋯).predAbove j)
+参数：n + 1；hi : i ≠ Fin.last n；finSuccEquiv' i；(i.castLT ⋯).predAbove j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.val_lt_last`：∀ {n : ℕ} {i : Fin (n + 1)}, i ≠ Fin.last n → ↑i < n
+· 使用引理 `Fin.exists_succAbove_eq`：exists_succAbove_eq {x y : Fin (n + 1)} (h : x 
+!= y) : exists z, y.succAbove z = x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fin.exists_castSucc_eq`：∀ {n : ℕ} {i : Fin (n + 1)}, (∃ j, j.castSucc = 
+i) ↔ i ≠ Fin.last n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finSuccEquiv'_succAbove`：∀ {n : ℕ} (i : Fin (n + 1)) (j : Fin n), (finSu
+ccEquiv' i) (i.succAbove j) = some j
+· 使用引理 `Fin.predAbove_succAbove`：predAbove_succAbove (p : Fin n) (i : Fin n) : p
+.predAbove ((castSucc p).succAbove i) = i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finSuccEquiv'_ne_last_apply {i j : Fin (n + 1)} (hi : i != Fin.last n) (hj : j != i) :
+theorem finSuccEquiv'_ne_last_apply {i j : Fin (n + 1)} (hi : i ≠ Fin.last n) (hj : j ≠ i) :
     finSuccEquiv' i j = (i.castLT (Fin.val_lt_last hi)).predAbove j := by
   rcases Fin.exists_succAbove_eq hj with ⟨j, rfl⟩
   rcases Fin.exists_castSucc_eq.2 hi with ⟨i, rfl⟩
   simp
 
-/--
-Definition of `finSuccAboveEquiv` / `finSuccAboveEquiv` 的定义
+/-- `Fin.succAbove` as a bijection between `Fin n` and `{x : Fin (n + 1) // x ≠ p}`. -/
+/-
+**finSuccAboveEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSuccAboveEquiv (p : Fin (n + 1)) : Fin n ≃ { x : Fin (n + 1) // x != p 
+}
+参数：p : Fin (n + 1)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition finSuccAboveEquiv
-  signature: (p : Fin (n + 1))
-  body: .optionSubtype p ⟨(finSuccEquiv' p).symm, rfl⟩
-
-中文:
-定义 finSuccAboveEquiv
-  签名: (p : 有限集 (n + 1))
-  定义体: .optionSubtype p ⟨(finSuccEquiv' p).symm, rfl⟩
-
-Depends on / 依赖: finSuccEquiv, optionSubtype
+--- 原说明 ---
+`Fin.succAbove` as a bijection between `Fin n` and `{x : Fin (n + 1) // x ≠ p}`.
 -/
-def finSuccAboveEquiv (p : Fin (n + 1)) : Fin n ≃ { x : Fin (n + 1) // x != p } :=
+def finSuccAboveEquiv (p : Fin (n + 1)) : Fin n ≃ { x : Fin (n + 1) // x ≠ p } :=
   .optionSubtype p ⟨(finSuccEquiv' p).symm, rfl⟩
-
-/--
-theorem `finSuccAboveEquiv_apply` / 定理 `finSuccAboveEquiv_apply`
-
-English:
-theorem finSuccAboveEquiv_apply
-  given: (p : Fin (n + 1)) (i : Fin n)
-  proof: rfl
-
-中文:
-定理 finSuccAboveEquiv_apply
-  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
-  证明: rfl
-
-Depends on / 依赖: preNormEDS
+/-
+**finSuccAboveEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccAboveEquiv_apply (p : Fin (n + 1)) (i : Fin n) : finSuccAboveEquiv 
+p i = ⟨p.succAbove i, p.succAbove_ne i⟩
+参数：p : Fin (n + 1)；i : Fin n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finSuccAboveEquiv_apply (p : Fin (n + 1)) (i : Fin n) :
     finSuccAboveEquiv p i = ⟨p.succAbove i, p.succAbove_ne i⟩ :=
   rfl
-
-/--
-theorem `finSuccAboveEquiv_symm_apply_last` / 定理 `finSuccAboveEquiv_symm_apply_last`
-
-English:
-theorem finSuccAboveEquiv_symm_apply_last
-  given: (x : { x : Fin (n + 1) // x != Fin.last n })
-  proof: by
-  rw [← Option.some_inj]
-  simp [finSuccAboveEquiv]
-
-中文:
-定理 finSuccAboveEquiv_symm_apply_last
-  条件: (x : { x : 有限集 (n + 1) // x != 有限集.last n })
-  证明: by
-  rw [← Option.some_inj]
-  simp [finSuccAboveEquiv]
-
-Depends on / 依赖: Option.some_inj, finSuccAboveEquiv, preNormEDS, some_inj
+/-
+**finSuccAboveEquiv_symm_apply_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccAboveEquiv_symm_apply_last (x : { x : Fin (n + 1) // x != Fin.last 
+n }) : (finSuccAboveEquiv (Fin.last n)).symm x = Fin.castLT x.1 (Fin.val_lt_last
+ x.2)
+参数：x : { x : Fin (n + 1) // x != Fin.last n }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Fin.val_lt_last`：∀ {n : ℕ} {i : Fin (n + 1)}, i ≠ Fin.last n → ↑i < n
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Option.some_inj`：∀ {α : Type u_1} {a b : α}, some a = some b ↔ a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.optionSubtype_apply_symm_apply`：optionSubtype_apply_symm_apply [De
+cidableEq β] (x : β) (e : { e : Option α ≃ β // e none = x }) (b : { y : β // y 
+!= x }) : ↑((optionSubtype…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Fin.succAbove_last`：∀ {n : ℕ}, (Fin.last n).succAbove = Fin.castSucc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finSuccAboveEquiv_symm_apply_last (x : { x : Fin (n + 1) // x != Fin.last n }) :
+theorem finSuccAboveEquiv_symm_apply_last (x : { x : Fin (n + 1) // x ≠ Fin.last n }) :
     (finSuccAboveEquiv (Fin.last n)).symm x = Fin.castLT x.1 (Fin.val_lt_last x.2) := by
   rw [← Option.some_inj]
   simp [finSuccAboveEquiv]
-
-/--
-theorem `finSuccAboveEquiv_symm_apply_ne_last` / 定理 `finSuccAboveEquiv_symm_apply_ne_last`
-
-English:
-theorem finSuccAboveEquiv_symm_apply_ne_last
-  statement: {p : Fin (n + 1)} (h : p != Fin.last n)
-  proof: by
-  rw [← Option.some_inj]
-  simpa [finSuccAboveEquiv] using finSuccEquiv'_ne_last_apply h x.property
-
-中文:
-定理 finSuccAboveEquiv_symm_apply_ne_last
-  结论: {p : 有限集 (n + 1)} (h : p != 有限集.last n)
-  证明: by
-  rw [← Option.some_inj]
-  simpa [finSuccAboveEquiv] using finSuccEquiv'_ne_last_apply h x.property
-
-Depends on / 依赖: Option.some_inj, _ne_last_apply, finSuccAboveEquiv, finSuccEquiv, preNormEDS, property, some_inj, x.property
+/-
+**finSuccAboveEquiv_symm_apply_ne_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccAboveEquiv_symm_apply_ne_last {p : Fin (n + 1)} (h : p != Fin.last 
+n) (x : { x : Fin (n + 1) // x != p }) : (finSuccAboveEquiv p).symm x = (p.castL
+T (Fin.val_lt_last h)).predAbove x
+参数：n + 1；h : p != Fin.last n；x : { x : Fin (n + 1) // x != p }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Fin.val_lt_last`：∀ {n : ℕ} {i : Fin (n + 1)}, i ≠ Fin.last n → ↑i < n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Option.some_inj`：∀ {α : Type u_1} {a b : α}, some a = some b ↔ a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.optionSubtype_apply_symm_apply`：optionSubtype_apply_symm_apply [De
+cidableEq β] (x : β) (e : { e : Option α ≃ β // e none = x }) (b : { y : β // y 
+!= x }) : ↑((optionSubtype…
+· 使用定理 `finSuccEquiv'_ne_last_apply`：∀ {n : ℕ} {i j : Fin (n + 1)} (hi : i ≠ Fin
+.last n), j ≠ i → (finSuccEquiv' i) j = some ((i.castLT ⋯).predAbove j)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem finSuccAboveEquiv_symm_apply_ne_last {p : Fin (n + 1)} (h : p != Fin.last n)
-    (x : { x : Fin (n + 1) // x != p }) :
+theorem finSuccAboveEquiv_symm_apply_ne_last {p : Fin (n + 1)} (h : p ≠ Fin.last n)
+    (x : { x : Fin (n + 1) // x ≠ p }) :
     (finSuccAboveEquiv p).symm x = (p.castLT (Fin.val_lt_last h)).predAbove x := by
   rw [← Option.some_inj]
   simpa [finSuccAboveEquiv] using finSuccEquiv'_ne_last_apply h x.property
 
-/--
-Definition of `finSuccEquivLast` / `finSuccEquivLast` 的定义
+/-- `Equiv` between `Fin (n + 1)` and `Option (Fin n)` sending `Fin.last n` to `none` -/
+/-
+**finSuccEquivLast** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSuccEquivLast : Fin (n + 1) ≃ Option (Fin n)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finSuccEquivLast
-  signature: : Fin (n + 1) ≃ Option (Fin n)
-  body: finSuccEquiv' (Fin.last n)
-
-@[simp]
-
-中文:
-定义 finSuccEquivLast
-  签名: : 有限集 (n + 1) ≃ 选项类型 (有限集 n)
-  定义体: finSuccEquiv' (Fin.last n)
-
-@[simp]
-
-Depends on / 依赖: Fin.last, finSuccEquiv, preNormEDS
+--- 原说明 ---
+`Equiv` between `Fin (n + 1)` and `Option (Fin n)` sending `Fin.last n` to `none
+`
 -/
 def finSuccEquivLast : Fin (n + 1) ≃ Option (Fin n) :=
   finSuccEquiv' (Fin.last n)
 
 @[simp]
-/--
-theorem `finSuccEquivLast_castSucc` / 定理 `finSuccEquivLast_castSucc`
-
-English:
-theorem finSuccEquivLast_castSucc
-  given: (i : Fin n)
-  statement: finSuccEquivLast (Fin.castSucc i) = some i
-  proof: finSuccEquiv'_below i.2
-
-@[simp]
-
-中文:
-定理 finSuccEquivLast_castSucc
-  条件: (i : 有限集 n)
-  结论: finSuccEquivLast (有限集.castSucc i) = some i
-  证明: finSuccEquiv'_below i.2
-
-@[simp]
-
-Depends on / 依赖: _below, finSuccEquiv, preNormEDS
+/-
+**finSuccEquivLast_castSucc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquivLast_castSucc (i : Fin n) : finSuccEquivLast (Fin.castSucc i) 
+= some i
+参数：i : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSuccEquiv'_below`：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, m.castSucc
+ < i → (finSuccEquiv' i) m.castSucc = some m
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
 -/
 theorem finSuccEquivLast_castSucc (i : Fin n) : finSuccEquivLast (Fin.castSucc i) = some i :=
   finSuccEquiv'_below i.2
 
 @[simp]
-/--
-theorem `finSuccEquivLast_last` / 定理 `finSuccEquivLast_last`
-
-English:
-theorem finSuccEquivLast_last
-  statement: finSuccEquivLast (Fin.last n) = none
-  proof: by
-  simp [finSuccEquivLast]
-
-@[simp]
-
-中文:
-定理 finSuccEquivLast_last
-  结论: finSuccEquivLast (有限集.last n) = none
-  证明: by
-  simp [finSuccEquivLast]
-
-@[simp]
-
-Depends on / 依赖: Nat.mul_add_div, dif_neg, finSuccEquivLast, m.not_even_two_mul_add_one, mul_add_div, not_even_two_mul_add_one, preNormEDS, two_pos
+/-
+**finSuccEquivLast_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquivLast_last : finSuccEquivLast (Fin.last n) = none
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finSuccEquiv'_at`：∀ {n : ℕ} (i : Fin (n + 1)), (finSuccEquiv' i) i = non
+e
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finSuccEquivLast_last : finSuccEquivLast (Fin.last n) = none := by
   simp [finSuccEquivLast]
 
 @[simp]
-/--
-theorem `finSuccEquivLast_symm_some` / 定理 `finSuccEquivLast_symm_some`
-
-English:
-theorem finSuccEquivLast_symm_some
-  given: (i : Fin n)
-  proof: finSuccEquiv'_symm_some_below i.2
-
-中文:
-定理 finSuccEquivLast_symm_some
-  条件: (i : 有限集 n)
-  证明: finSuccEquiv'_symm_some_below i.2
-
-Depends on / 依赖: _symm_some_below, dif_pos, even_two_mul, finSuccEquiv, m.mul_div_cancel_left, mul_div_cancel_left, preNormEDS, two_pos
+/-
+**finSuccEquivLast_symm_some** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSuccEquivLast_symm_some (i : Fin n) : finSuccEquivLast.symm (some i) = 
+Fin.castSucc i
+参数：i : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSuccEquiv'_symm_some_below`：∀ {n : ℕ} {i : Fin (n + 1)} {m : Fin n}, 
+m.castSucc < i → (finSuccEquiv' i).symm (some m) = m.castSucc
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
 -/
 theorem finSuccEquivLast_symm_some (i : Fin n) :
     finSuccEquivLast.symm (some i) = Fin.castSucc i :=
   finSuccEquiv'_symm_some_below i.2
-
-/--
-theorem `finSuccEquivLast_symm_none` / 定理 `finSuccEquivLast_symm_none`
-
-English:
-theorem finSuccEquivLast_symm_none
-  statement: finSuccEquivLast.symm none = Fin.last n
-  proof: finSuccEquiv'_symm_none _
-
-中文:
-定理 finSuccEquivLast_symm_none
-  结论: finSuccEquivLast.symm none = 有限集.last n
-  证明: finSuccEquiv'_symm_none _
+/-
+**finSuccEquivLast_symm_none** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ}, finSuccEquivLast.symm none = Fin.last n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSuccEquiv'_symm_none`：∀ {n : ℕ} (i : Fin (n + 1)), (finSuccEquiv' i).
+symm none = i
 -/
 @[simp] theorem finSuccEquivLast_symm_none : finSuccEquivLast.symm none = Fin.last n :=
   finSuccEquiv'_symm_none _
 
-/--
-Definition of `Equiv.embeddingFinSucc` / `Equiv.embeddingFinSucc` 的定义
+/-- An embedding `e : Fin (n+1) ↪ ι` corresponds to an embedding `f : Fin n ↪ ι` (corresponding
+the last `n` coordinates of `e`) together with a value not taken by `f` (corresponding to `e 0`). -/
+/-
+**Equiv.embeddingFinSucc** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.embeddingFinSucc (n : Nat) (ι : Type*) : (Fin (n + 1) ↪ ι) ≃ (Σ (e :
+ Fin n ↪ ι), {i // i ∉ Set.range e})
+参数：n : Nat；ι : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition Equiv.embeddingFinSucc
-  signature: (n : Nat) (ι : Type*)
-  body: ((finSuccEquiv n).embeddingCongr (Equiv.refl ι)).trans
-    (Function.Embedding.optionEmbeddingEquiv (Fin n) ι)
-
-中文:
-定义 等价.embeddingFinSucc
-  签名: (n : 自然数) (ι : 类型)
-  定义体: ((finSuccEquiv n).embeddingCongr (Equiv.refl ι)).trans
-    (Function.Embedding.optionEmbeddingEquiv (Fin n) ι)
-
-Depends on / 依赖: Embedding, Equiv.refl, Function, Function.Embedding.optionEmbeddingEquiv, embeddingCongr, finSuccEquiv, optionEmbeddingEquiv
+--- 原说明 ---
+An embedding `e : Fin (n+1) ↪ ι` corresponds to an embedding `f : Fin n ↪ ι` (co
+rresponding
+the last `n` coordinates of `e`) together with a value not taken by `f` (corresp
+onding to `e 0`).
 -/
-def Equiv.embeddingFinSucc (n : Nat) (ι : Type*) :
+def Equiv.embeddingFinSucc (n : ℕ) (ι : Type*) :
     (Fin (n + 1) ↪ ι) ≃ (Σ (e : Fin n ↪ ι), {i // i ∉ Set.range e}) :=
   ((finSuccEquiv n).embeddingCongr (Equiv.refl ι)).trans
     (Function.Embedding.optionEmbeddingEquiv (Fin n) ι)
-
-/--
-lemma `Equiv.embeddingFinSucc_fst` / 引理 `Equiv.embeddingFinSucc_fst`
-
-English:
-lemma Equiv.embeddingFinSucc_fst
-  given: {n : Nat} {ι : Type*} (e : Fin (n + 1) ↪ ι)
-  proof: rfl
-
-中文:
-引理 等价.embeddingFinSucc_fst
-  条件: {n : 自然数} {ι : 类型} (e : 有限集 (n + 1) ↪ ι)
-  证明: rfl
+/-
+**Equiv.embeddingFinSucc_fst** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {n : ℕ} {ι : Type u_1} (e : Fin (n + 1) ↪ ι), ⇑((Equiv.embeddingFinSucc 
+n ι) e).fst = ⇑e ∘ Fin.succ
+参数：e : Fin (n + 1) ↪ ι；(Equiv.embeddingFinSucc n ι) e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma Equiv.embeddingFinSucc_fst {n : Nat} {ι : Type*} (e : Fin (n + 1) ↪ ι) :
-    ((Equiv.embeddingFinSucc n ι e).1 : Fin n -> ι) = e ∘ Fin.succ := rfl
-
-/--
-lemma `Equiv.embeddingFinSucc_snd` / 引理 `Equiv.embeddingFinSucc_snd`
-
-English:
-lemma Equiv.embeddingFinSucc_snd
-  given: {n : Nat} {ι : Type*} (e : Fin (n + 1) ↪ ι)
-  proof: rfl
-
-中文:
-引理 等价.embeddingFinSucc_snd
-  条件: {n : 自然数} {ι : 类型} (e : 有限集 (n + 1) ↪ ι)
-  证明: rfl
+@[simp] lemma Equiv.embeddingFinSucc_fst {n : ℕ} {ι : Type*} (e : Fin (n + 1) ↪ ι) :
+    ((Equiv.embeddingFinSucc n ι e).1 : Fin n → ι) = e ∘ Fin.succ := rfl
+/-
+**Equiv.embeddingFinSucc_snd** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {n : ℕ} {ι : Type u_1} (e : Fin (n + 1) ↪ ι), ↑((Equiv.embeddingFinSucc 
+n ι) e).snd = e 0
+参数：e : Fin (n + 1) ↪ ι；(Equiv.embeddingFinSucc n ι) e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma Equiv.embeddingFinSucc_snd {n : Nat} {ι : Type*} (e : Fin (n + 1) ↪ ι) :
+@[simp] lemma Equiv.embeddingFinSucc_snd {n : ℕ} {ι : Type*} (e : Fin (n + 1) ↪ ι) :
     ((Equiv.embeddingFinSucc n ι e).2 : ι) = e 0 := rfl
-
-/--
-lemma `Equiv.coe_embeddingFinSucc_symm` / 引理 `Equiv.coe_embeddingFinSucc_symm`
-
-English:
-lemma Equiv.coe_embeddingFinSucc_symm
-  statement: {n : Nat} {ι : Type*}
-  proof: by
-  ext i
-  exact Fin.cases rfl (fun j => rfl) i
-
-中文:
-引理 等价.coe_embeddingFinSucc_symm
-  结论: {n : 自然数} {ι : 类型}
-  证明: by
-  ext i
-  exact Fin.cases rfl (fun j => rfl) i
+/-
+**Equiv.coe_embeddingFinSucc_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {n : ℕ} {ι : Type u_1} (f : (e : Fin n ↪ ι) × { i // i ∉ Set.range ⇑e })
+,   ⇑((Equiv.embeddingFinSucc n ι).symm f) = Fin.cons ↑f.snd ⇑f.fst
+参数：f : (e : Fin n ↪ ι) × { i // i ∉ Set.range ⇑e }；(Equiv.embeddingFinSucc n ι).
+symm f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-@[simp] lemma Equiv.coe_embeddingFinSucc_symm {n : Nat} {ι : Type*}
+@[simp] lemma Equiv.coe_embeddingFinSucc_symm {n : ℕ} {ι : Type*}
     (f : Σ (e : Fin n ↪ ι), {i // i ∉ Set.range e}) :
-    ((Equiv.embeddingFinSucc n ι).symm f : Fin (n + 1) -> ι) = Fin.cons f.2.1 f.1 := by
+    ((Equiv.embeddingFinSucc n ι).symm f : Fin (n + 1) → ι) = Fin.cons f.2.1 f.1 := by
   ext i
-  exact Fin.cases rfl (fun j => rfl) i
+  exact Fin.cases rfl (fun j ↦ rfl) i
 
-/--
-Definition of `finSumFinEquiv` / `finSumFinEquiv` 的定义
+/-- Equivalence between `Fin m ⊕ Fin n` and `Fin (m + n)` -/
+/-
+**finSumFinEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSumFinEquiv : Fin m oplus Fin n ≃ Fin (m + n) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finSumFinEquiv
-  signature: : Fin m oplus Fin n ≃ Fin (m + n) where
-  body: Sum.elim (Fin.castAdd n) (Fin.natAdd m)
-  invFun i := @Fin.addCases m n (fun _ => Fin m oplus Fin n) Sum.inl Sum.inr i
-  left_inv x := by rcases x with y | y <;> simp
-  right_inv x := by refine Fin.addCases (fun i => ?_) (fun i => ?_) x <;> simp
-
-@[simp]
-
-中文:
-定义 finSumFinEquiv
-  签名: : 有限集 m oplus 有限集 n ≃ 有限集 (m + n) where
-  定义体: Sum.elim (Fin.castAdd n) (Fin.natAdd m)
-  invFun i := @Fin.addCases m n (fun _ => Fin m oplus Fin n) Sum.inl Sum.inr i
-  left_inv x := by rcases x with y | y <;> simp
-  right_inv x := by refine Fin.addCases (fun i => ?_) (fun i => ?_) x <;> simp
-
-@[simp]
-
-Depends on / 依赖: Fin.castAdd, Fin.natAdd, Sum.elim, castAdd, natAdd
+--- 原说明 ---
+Equivalence between `Fin m ⊕ Fin n` and `Fin (m + n)`
 -/
-def finSumFinEquiv : Fin m oplus Fin n ≃ Fin (m + n) where
+def finSumFinEquiv : Fin m ⊕ Fin n ≃ Fin (m + n) where
   toFun := Sum.elim (Fin.castAdd n) (Fin.natAdd m)
-  invFun i := @Fin.addCases m n (fun _ => Fin m oplus Fin n) Sum.inl Sum.inr i
+  invFun i := @Fin.addCases m n (fun _ => Fin m ⊕ Fin n) Sum.inl Sum.inr i
   left_inv x := by rcases x with y | y <;> simp
   right_inv x := by refine Fin.addCases (fun i => ?_) (fun i => ?_) x <;> simp
 
 @[simp]
-/--
-theorem `finSumFinEquiv_apply_left` / 定理 `finSumFinEquiv_apply_left`
-
-English:
-theorem finSumFinEquiv_apply_left
-  given: (i : Fin m)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finSumFinEquiv_apply_left
-  条件: (i : 有限集 m)
-  证明: rfl
-
-@[simp]
+/-
+**finSumFinEquiv_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumFinEquiv_apply_left (i : Fin m) : (finSumFinEquiv (Sum.inl i) : Fin 
+(m + n)) = Fin.castAdd n i
+参数：i : Fin m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finSumFinEquiv_apply_left (i : Fin m) :
     (finSumFinEquiv (Sum.inl i) : Fin (m + n)) = Fin.castAdd n i :=
   rfl
 
 @[simp]
-/--
-theorem `finSumFinEquiv_apply_right` / 定理 `finSumFinEquiv_apply_right`
-
-English:
-theorem finSumFinEquiv_apply_right
-  given: (i : Fin n)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finSumFinEquiv_apply_right
-  条件: (i : 有限集 n)
-  证明: rfl
-
-@[simp]
+/-
+**finSumFinEquiv_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumFinEquiv_apply_right (i : Fin n) : (finSumFinEquiv (Sum.inr i) : Fin
+ (m + n)) = Fin.natAdd m i
+参数：i : Fin n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finSumFinEquiv_apply_right (i : Fin n) :
     (finSumFinEquiv (Sum.inr i) : Fin (m + n)) = Fin.natAdd m i :=
   rfl
 
 @[simp]
-/--
-theorem `finSumFinEquiv_symm_apply_castAdd` / 定理 `finSumFinEquiv_symm_apply_castAdd`
-
-English:
-theorem finSumFinEquiv_symm_apply_castAdd
-  given: (x : Fin m)
-  proof: finSumFinEquiv.symm_apply_apply (Sum.inl x)
-
-@[simp]
-
-中文:
-定理 finSumFinEquiv_symm_apply_castAdd
-  条件: (x : 有限集 m)
-  证明: finSumFinEquiv.symm_apply_apply (Sum.inl x)
-
-@[simp]
-
-Depends on / 依赖: Sum.inl, finSumFinEquiv, finSumFinEquiv.symm_apply_apply, symm_apply_apply
+/-
+**finSumFinEquiv_symm_apply_castAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumFinEquiv_symm_apply_castAdd (x : Fin m) : finSumFinEquiv.symm (Fin.c
+astAdd n x) = Sum.inl x
+参数：x : Fin m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 theorem finSumFinEquiv_symm_apply_castAdd (x : Fin m) :
     finSumFinEquiv.symm (Fin.castAdd n x) = Sum.inl x :=
   finSumFinEquiv.symm_apply_apply (Sum.inl x)
 
 @[simp]
-/--
-theorem `finSumFinEquiv_symm_apply_castSucc` / 定理 `finSumFinEquiv_symm_apply_castSucc`
-
-English:
-theorem finSumFinEquiv_symm_apply_castSucc
-  given: (x : Fin m)
-  proof: finSumFinEquiv_symm_apply_castAdd x
-
-@[simp]
-
-中文:
-定理 finSumFinEquiv_symm_apply_castSucc
-  条件: (x : 有限集 m)
-  证明: finSumFinEquiv_symm_apply_castAdd x
-
-@[simp]
-
-Depends on / 依赖: finSumFinEquiv_symm_apply_castAdd
+/-
+**finSumFinEquiv_symm_apply_castSucc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumFinEquiv_symm_apply_castSucc (x : Fin m) : finSumFinEquiv.symm (Fin.
+castSucc x) = Sum.inl x
+参数：x : Fin m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSumFinEquiv_symm_apply_castAdd`：finSumFinEquiv_symm_apply_castAdd (x 
+: Fin m) : finSumFinEquiv.symm (Fin.castAdd n x) = Sum.inl x
 -/
 theorem finSumFinEquiv_symm_apply_castSucc (x : Fin m) :
     finSumFinEquiv.symm (Fin.castSucc x) = Sum.inl x :=
   finSumFinEquiv_symm_apply_castAdd x
 
 @[simp]
-/--
-theorem `finSumFinEquiv_symm_apply_natAdd` / 定理 `finSumFinEquiv_symm_apply_natAdd`
-
-English:
-theorem finSumFinEquiv_symm_apply_natAdd
-  given: (x : Fin n)
-  proof: finSumFinEquiv.symm_apply_apply (Sum.inr x)
-
-@[simp]
-
-中文:
-定理 finSumFinEquiv_symm_apply_natAdd
-  条件: (x : 有限集 n)
-  证明: finSumFinEquiv.symm_apply_apply (Sum.inr x)
-
-@[simp]
-
-Depends on / 依赖: Sum.inr, finSumFinEquiv, finSumFinEquiv.symm_apply_apply, symm_apply_apply
+/-
+**finSumFinEquiv_symm_apply_natAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumFinEquiv_symm_apply_natAdd (x : Fin n) : finSumFinEquiv.symm (Fin.na
+tAdd m x) = Sum.inr x
+参数：x : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 theorem finSumFinEquiv_symm_apply_natAdd (x : Fin n) :
     finSumFinEquiv.symm (Fin.natAdd m x) = Sum.inr x :=
   finSumFinEquiv.symm_apply_apply (Sum.inr x)
 
 @[simp]
-/--
-theorem `finSumFinEquiv_symm_last` / 定理 `finSumFinEquiv_symm_last`
-
-English:
-theorem finSumFinEquiv_symm_last
-  statement: finSumFinEquiv.symm (Fin.last n) = Sum.inr 0
-  proof: finSumFinEquiv_symm_apply_natAdd 0
-
-中文:
-定理 finSumFinEquiv_symm_last
-  结论: finSumFinEquiv.symm (有限集.last n) = 和.inr 0
-  证明: finSumFinEquiv_symm_apply_natAdd 0
-
-Depends on / 依赖: finSumFinEquiv_symm_apply_natAdd
+/-
+**finSumFinEquiv_symm_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumFinEquiv_symm_last : finSumFinEquiv.symm (Fin.last n) = Sum.inr 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finSumFinEquiv_symm_apply_natAdd`：finSumFinEquiv_symm_apply_natAdd (x : 
+Fin n) : finSumFinEquiv.symm (Fin.natAdd m x) = Sum.inr x
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem finSumFinEquiv_symm_last : finSumFinEquiv.symm (Fin.last n) = Sum.inr 0 :=
   finSumFinEquiv_symm_apply_natAdd 0
 
-/--
-Definition of `finSumNatEquiv` / `finSumNatEquiv` 的定义
+/-- Equivalence between `Fin n ⊕ ℕ` and `ℕ` that sends `inl (a : Fin n)` to
+`(a : ℕ)` and `inr a` to `n + a`. -/
+/-
+**finSumNatEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSumNatEquiv (n : Nat) : Fin n oplus Nat ≃ Nat where toFun
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finSumNatEquiv
-  signature: (n : Nat)
-  body: Sum.elim Fin.val (n + ·)
-  invFun i := if hi : i < n then .inl ⟨i, hi⟩ else .inr (i - n)
-  left_inv i := (i.casesOn
-    (fun _ => dif_pos (Fin.is_lt _))
-    (fun _ => (dif_neg (Nat.le_add_right _ _).not_gt).trans <|
-      congrArg _ (Nat.add_sub_cancel_left _ _)))
-right_inv i := (apply_dite _ _ _ _).trans (i.lt_or_ge n).by_cases
-    (fun hi => dif_pos hi)
-    (fun hi => (dif_neg hi.not_gt).trans <| Nat.add_sub_cancel' hi)
-
-中文:
-定义 finSum自然数Equiv
-  签名: (n : 自然数)
-  定义体: Sum.elim Fin.val (n + ·)
-  invFun i := if hi : i < n then .inl ⟨i, hi⟩ else .inr (i - n)
-  left_inv i := (i.casesOn
-    (fun _ => dif_pos (Fin.is_lt _))
-    (fun _ => (dif_neg (Nat.le_add_right _ _).not_gt).trans <|
-      congrArg _ (Nat.add_sub_cancel_left _ _)))
-right_inv i := (apply_dite _ _ _ _).trans (i.lt_or_ge n).by_cases
-    (fun hi => dif_pos hi)
-    (fun hi => (dif_neg hi.not_gt).trans <| Nat.add_sub_cancel' hi)
-
-Depends on / 依赖: Fin.val, Sum.elim
+--- 原说明 ---
+Equivalence between `Fin n ⊕ ℕ` and `ℕ` that sends `inl (a : Fin n)` to
+`(a : ℕ)` and `inr a` to `n + a`.
 -/
-def finSumNatEquiv (n : Nat) : Fin n oplus Nat ≃ Nat where
+def finSumNatEquiv (n : ℕ) : Fin n ⊕ ℕ ≃ ℕ where
   toFun := Sum.elim Fin.val (n + ·)
   invFun i := if hi : i < n then .inl ⟨i, hi⟩ else .inr (i - n)
   left_inv i := (i.casesOn
     (fun _ => dif_pos (Fin.is_lt _))
     (fun _ => (dif_neg (Nat.le_add_right _ _).not_gt).trans <|
       congrArg _ (Nat.add_sub_cancel_left _ _)))
-right_inv i := (apply_dite _ _ _ _).trans (i.lt_or_ge n).by_cases
+  right_inv i := (apply_dite _ _ _ _).trans <| (i.lt_or_ge n).by_cases
     (fun hi => dif_pos hi)
     (fun hi => (dif_neg hi.not_gt).trans <| Nat.add_sub_cancel' hi)
-
-/--
-theorem `finSumNatEquiv_apply_left` / 定理 `finSumNatEquiv_apply_left`
-
-English:
-theorem finSumNatEquiv_apply_left
-  given: (i : Fin n)
-  proof: rfl
-
-中文:
-定理 finSum自然数Equiv_apply_left
-  条件: (i : 有限集 n)
-  证明: rfl
+/-
+**finSumNatEquiv_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : Fin n), (finSumNatEquiv n) (Sum.inl i) = ↑i
+参数：i : Fin n；finSumNatEquiv n；Sum.inl i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem finSumNatEquiv_apply_left (i : Fin n) :
     finSumNatEquiv n (.inl i) = i := rfl
-
-/--
-theorem `finSumNatEquiv_apply_right` / 定理 `finSumNatEquiv_apply_right`
-
-English:
-theorem finSumNatEquiv_apply_right
-  given: (i : Nat)
-  proof: rfl
-
-中文:
-定理 finSum自然数Equiv_apply_right
-  条件: (i : 自然数)
-  证明: rfl
+/-
+**finSumNatEquiv_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : ℕ), (finSumNatEquiv n) (Sum.inr i) = n + i
+参数：i : ℕ；finSumNatEquiv n；Sum.inr i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem finSumNatEquiv_apply_right (i : Nat) :
+@[simp] theorem finSumNatEquiv_apply_right (i : ℕ) :
     finSumNatEquiv n (.inr i) = n + i := rfl
-
-/--
-theorem `finSumNatEquiv_symm_apply_of_lt` / 定理 `finSumNatEquiv_symm_apply_of_lt`
-
-English:
-theorem finSumNatEquiv_symm_apply_of_lt
-  given: {i : Nat} (hi : i < n)
-  proof: dif_pos hi
-
-中文:
-定理 finSum自然数Equiv_symm_apply_of_lt
-  条件: {i : 自然数} (hi : i < n)
-  证明: dif_pos hi
+/-
+**finSumNatEquiv_symm_apply_of_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n i : ℕ} (hi : i < n), (finSumNatEquiv n).symm i = Sum.inl ⟨i, hi⟩
+参数：hi : i < n；finSumNatEquiv n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-@[simp] theorem finSumNatEquiv_symm_apply_of_lt {i : Nat} (hi : i < n) :
+@[simp] theorem finSumNatEquiv_symm_apply_of_lt {i : ℕ} (hi : i < n) :
     (finSumNatEquiv n).symm i = .inl ⟨i, hi⟩ := dif_pos hi
-
-/--
-theorem `finSumNatEquiv_symm_apply_of_ge` / 定理 `finSumNatEquiv_symm_apply_of_ge`
-
-English:
-theorem finSumNatEquiv_symm_apply_of_ge
-  given: {i : Nat} (hi : n <= i)
-  proof: dif_neg (Nat.not_lt_of_ge hi)
-
-中文:
-定理 finSum自然数Equiv_symm_apply_of_ge
-  条件: {i : 自然数} (hi : n <= i)
-  证明: dif_neg (Nat.not_lt_of_ge hi)
+/-
+**finSumNatEquiv_symm_apply_of_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n i : ℕ}, n ≤ i → (finSumNatEquiv n).symm i = Sum.inr (i - n)
+参数：finSumNatEquiv n；i - n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Nat.not_lt_of_ge`：∀ {a b : ℕ}, b ≥ a → ¬b < a
 -/
-@[simp] theorem finSumNatEquiv_symm_apply_of_ge {i : Nat} (hi : n <= i) :
+@[simp] theorem finSumNatEquiv_symm_apply_of_ge {i : ℕ} (hi : n ≤ i) :
     (finSumNatEquiv n).symm i = .inr (i - n) := dif_neg (Nat.not_lt_of_ge hi)
-
-/--
-theorem `finSumNatEquiv_symm_apply_fin` / 定理 `finSumNatEquiv_symm_apply_fin`
-
-English:
-theorem finSumNatEquiv_symm_apply_fin
-  given: (i : Fin n)
-  proof: by simp
-
-中文:
-定理 finSum自然数Equiv_symm_apply_fin
-  条件: (i : 有限集 n)
-  证明: by simp
+/-
+**finSumNatEquiv_symm_apply_fin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumNatEquiv_symm_apply_fin (i : Fin n) : (finSumNatEquiv n).symm i = .i
+nl i
+参数：i : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finSumNatEquiv_symm_apply_of_lt`：∀ {n i : ℕ} (hi : i < n), (finSumNatEqu
+iv n).symm i = Sum.inl ⟨i, hi⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finSumNatEquiv_symm_apply_fin (i : Fin n) :
     (finSumNatEquiv n).symm i = .inl i := by simp
-
-/--
-theorem `finSumNatEquiv_symm_apply_add_left` / 定理 `finSumNatEquiv_symm_apply_add_left`
-
-English:
-theorem finSumNatEquiv_symm_apply_add_left
-  given: (i : Nat)
-  proof: by simp
-
-中文:
-定理 finSum自然数Equiv_symm_apply_add_left
-  条件: (i : 自然数)
-  证明: by simp
+/-
+**finSumNatEquiv_symm_apply_add_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumNatEquiv_symm_apply_add_left (i : Nat) : (finSumNatEquiv n).symm (i 
++ n) = .inr i
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finSumNatEquiv_symm_apply_of_ge`：∀ {n i : ℕ}, n ≤ i → (finSumNatEquiv n)
+.symm i = Sum.inr (i - n)
+· 使用定理 `Nat.add_sub_cancel`：∀ (n m : ℕ), n + m - m = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finSumNatEquiv_symm_apply_add_left (i : Nat) :
+theorem finSumNatEquiv_symm_apply_add_left (i : ℕ) :
     (finSumNatEquiv n).symm (i + n) = .inr i := by simp
-
-/--
-theorem `finSumNatEquiv_symm_apply_add_right` / 定理 `finSumNatEquiv_symm_apply_add_right`
-
-English:
-theorem finSumNatEquiv_symm_apply_add_right
-  given: (i : Nat)
-  proof: by simp
-
-中文:
-定理 finSum自然数Equiv_symm_apply_add_right
-  条件: (i : 自然数)
-  证明: by simp
+/-
+**finSumNatEquiv_symm_apply_add_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumNatEquiv_symm_apply_add_right (i : Nat) : (finSumNatEquiv n).symm (n
+ + i) = .inr i
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finSumNatEquiv_symm_apply_of_ge`：∀ {n i : ℕ}, n ≤ i → (finSumNatEquiv n)
+.symm i = Sum.inr (i - n)
+· 使用定理 `Nat.add_sub_cancel_left`：∀ (n m : ℕ), n + m - n = m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finSumNatEquiv_symm_apply_add_right (i : Nat) :
+theorem finSumNatEquiv_symm_apply_add_right (i : ℕ) :
     (finSumNatEquiv n).symm (n + i) = .inr i := by simp
-
-/--
-theorem `isLeft_finSumNatEquiv_symm_apply` / 定理 `isLeft_finSumNatEquiv_symm_apply`
-
-English:
-theorem isLeft_finSumNatEquiv_symm_apply
-  given: (i : Nat)
-  proof: by
-  rcases i.lt_or_ge n with hi | hi
-  · simp_rw [finSumNatEquiv_symm_apply_of_lt hi, hi, Sum.isLeft_inl, decide_true]
-  · simp_rw [finSumNatEquiv_symm_apply_of_ge hi, hi.not_gt, Sum.isLeft_inr, decide_false]
-
-中文:
-定理 isLeft_finSum自然数Equiv_symm_apply
-  条件: (i : 自然数)
-  证明: by
-  rcases i.lt_or_ge n with hi | hi
-  · simp_rw [finSumNatEquiv_symm_apply_of_lt hi, hi, Sum.isLeft_inl, decide_true]
-  · simp_rw [finSumNatEquiv_symm_apply_of_ge hi, hi.not_gt, Sum.isLeft_inr, decide_false]
+/-
+**isLeft_finSumNatEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : ℕ), ((finSumNatEquiv n).symm i).isLeft = decide (i < n)
+参数：i : ℕ；(finSumNatEquiv n).symm i；i < n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Nat.lt_or_ge`：∀ (n m : ℕ), n < m ∨ n ≥ m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finSumNatEquiv_symm_apply_of_lt`：∀ {n i : ℕ} (hi : i < n), (finSumNatEqu
+iv n).symm i = Sum.inl ⟨i, hi⟩
+· 使用定理 `Decidable.decide.congr_simp`：∀ (p p_1 : Prop), p = p_1 → ∀ {h : Decidabl
+e p} [h_1 : Decidable p_1], decide p = decide p_1
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `decide_true`：∀ (h : Decidable True), decide True = true
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `finSumNatEquiv_symm_apply_of_ge`：∀ {n i : ℕ}, n ≤ i → (finSumNatEquiv n)
+.symm i = Sum.inr (i - n)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `decide_false`：∀ (h : Decidable False), decide False = false
 -/
-@[simp] theorem isLeft_finSumNatEquiv_symm_apply (i : Nat) :
+@[simp] theorem isLeft_finSumNatEquiv_symm_apply (i : ℕ) :
     ((finSumNatEquiv n).symm i).isLeft = decide (i < n) := by
   rcases i.lt_or_ge n with hi | hi
   · simp_rw [finSumNatEquiv_symm_apply_of_lt hi, hi, Sum.isLeft_inl, decide_true]
   · simp_rw [finSumNatEquiv_symm_apply_of_ge hi, hi.not_gt, Sum.isLeft_inr, decide_false]
-
-/--
-theorem `isRight_finSumNatEquiv_symm_apply` / 定理 `isRight_finSumNatEquiv_symm_apply`
-
-English:
-theorem isRight_finSumNatEquiv_symm_apply
-  given: (i : Nat)
-  proof: by
-  simp_rw [← not_lt, decide_not, ← isLeft_finSumNatEquiv_symm_apply]
-  cases (finSumNatEquiv n).symm i <;> rfl
-
-中文:
-定理 isRight_finSum自然数Equiv_symm_apply
-  条件: (i : 自然数)
-  证明: by
-  simp_rw [← not_lt, decide_not, ← isLeft_finSumNatEquiv_symm_apply]
-  cases (finSumNatEquiv n).symm i <;> rfl
+/-
+**isRight_finSumNatEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {n : ℕ} (i : ℕ), ((finSumNatEquiv n).symm i).isRight = decide (n ≤ i)
+参数：i : ℕ；(finSumNatEquiv n).symm i；n ≤ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Decidable.decide.congr_simp`：∀ (p p_1 : Prop), p = p_1 → ∀ {h : Decidabl
+e p} [h_1 : Decidable p_1], decide p = decide p_1
+· 使用定理 `decide_not`：∀ {p : Prop} [g : Decidable p] [h : Decidable ¬p], (decide ¬
+p) = !decide p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-@[simp] theorem isRight_finSumNatEquiv_symm_apply (i : Nat) :
-    ((finSumNatEquiv n).symm i).isRight = decide (n <= i) := by
+@[simp] theorem isRight_finSumNatEquiv_symm_apply (i : ℕ) :
+    ((finSumNatEquiv n).symm i).isRight = decide (n ≤ i) := by
   simp_rw [← not_lt, decide_not, ← isLeft_finSumNatEquiv_symm_apply]
   cases (finSumNatEquiv n).symm i <;> rfl
 
-/--
-Definition of `finAddFlip` / `finAddFlip` 的定义
+/-- The equivalence between `Fin (m + n)` and `Fin (n + m)` which rotates by `n`. -/
+/-
+**finAddFlip** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finAddFlip : Fin (m + n) ≃ Fin (n + m)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition finAddFlip
-  signature: : Fin (m + n) ≃ Fin (n + m)
-  body: (finSumFinEquiv.symm.trans (Equiv.sumComm _ _)).trans finSumFinEquiv
-
-@[simp]
-
-中文:
-定义 finAddFlip
-  签名: : 有限集 (m + n) ≃ 有限集 (n + m)
-  定义体: (finSumFinEquiv.symm.trans (Equiv.sumComm _ _)).trans finSumFinEquiv
-
-@[simp]
-
-Depends on / 依赖: Equiv.sumComm, finSumFinEquiv, finSumFinEquiv.symm.trans, sumComm
+--- 原说明 ---
+The equivalence between `Fin (m + n)` and `Fin (n + m)` which rotates by `n`.
 -/
 def finAddFlip : Fin (m + n) ≃ Fin (n + m) :=
   (finSumFinEquiv.symm.trans (Equiv.sumComm _ _)).trans finSumFinEquiv
 
 @[simp]
-/--
-theorem `finAddFlip_apply_castAdd` / 定理 `finAddFlip_apply_castAdd`
-
-English:
-theorem finAddFlip_apply_castAdd
-  given: (k : Fin m) (n : Nat)
-  proof: by simp [finAddFlip]
-
-@[simp]
-
-中文:
-定理 finAddFlip_apply_castAdd
-  条件: (k : 有限集 m) (n : 自然数)
-  证明: by simp [finAddFlip]
-
-@[simp]
-
-Depends on / 依赖: finAddFlip
+/-
+**finAddFlip_apply_castAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finAddFlip_apply_castAdd (k : Fin m) (n : Nat) : finAddFlip (Fin.castAdd n
+ k) = Fin.natAdd n k
+参数：k : Fin m；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `finSumFinEquiv_symm_apply_castAdd`：finSumFinEquiv_symm_apply_castAdd (x 
+: Fin m) : finSumFinEquiv.symm (Fin.castAdd n x) = Sum.inl x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.sumComm_apply`：∀ (α : Type u_9) (β : Type u_10), ⇑(Equiv.sumComm α
+ β) = Sum.swap
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finAddFlip_apply_castAdd (k : Fin m) (n : Nat) :
+theorem finAddFlip_apply_castAdd (k : Fin m) (n : ℕ) :
     finAddFlip (Fin.castAdd n k) = Fin.natAdd n k := by simp [finAddFlip]
 
 @[simp]
-/--
-theorem `finAddFlip_apply_natAdd` / 定理 `finAddFlip_apply_natAdd`
-
-English:
-theorem finAddFlip_apply_natAdd
-  given: (k : Fin n) (m : Nat)
-  proof: by simp [finAddFlip]
-
-@[simp]
-
-中文:
-定理 finAddFlip_apply_natAdd
-  条件: (k : 有限集 n) (m : 自然数)
-  证明: by simp [finAddFlip]
-
-@[simp]
-
-Depends on / 依赖: finAddFlip
+/-
+**finAddFlip_apply_natAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finAddFlip_apply_natAdd (k : Fin n) (m : Nat) : finAddFlip (Fin.natAdd m k
+) = Fin.castAdd m k
+参数：k : Fin n；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `finSumFinEquiv_symm_apply_natAdd`：finSumFinEquiv_symm_apply_natAdd (x : 
+Fin n) : finSumFinEquiv.symm (Fin.natAdd m x) = Sum.inr x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.sumComm_apply`：∀ (α : Type u_9) (β : Type u_10), ⇑(Equiv.sumComm α
+ β) = Sum.swap
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finAddFlip_apply_natAdd (k : Fin n) (m : Nat) :
+theorem finAddFlip_apply_natAdd (k : Fin n) (m : ℕ) :
     finAddFlip (Fin.natAdd m k) = Fin.castAdd m k := by simp [finAddFlip]
 
 @[simp]
-/--
-theorem `finAddFlip_apply_mk_left` / 定理 `finAddFlip_apply_mk_left`
-
-English:
-theorem finAddFlip_apply_mk_left
-  statement: {k : Nat} (h : k < m) (hk : k < m + n := Nat.lt_add_right n h)
-  proof: by
-  convert! finAddFlip_apply_castAdd ⟨k, h⟩ n
-
-@[simp]
-
-中文:
-定理 finAddFlip_apply_mk_left
-  结论: {k : 自然数} (h : k < m) (hk : k < m + n := 自然数.lt_add_right n h)
-  证明: by
-  convert! finAddFlip_apply_castAdd ⟨k, h⟩ n
-
-@[simp]
-
-Depends on / 依赖: Nat.lt_add_right, lt_add_right
+/-
+**finAddFlip_apply_mk_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finAddFlip_apply_mk_left {k : Nat} (h : k < m) (hk : k < m + n
+参数：h : k < m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `finAddFlip_apply_castAdd`：finAddFlip_apply_castAdd (k : Fin m) (n : Nat)
+ : finAddFlip (Fin.castAdd n k) = Fin.natAdd n k
 -/
-theorem finAddFlip_apply_mk_left {k : Nat} (h : k < m) (hk : k < m + n := Nat.lt_add_right n h)
+theorem finAddFlip_apply_mk_left {k : ℕ} (h : k < m) (hk : k < m + n := Nat.lt_add_right n h)
     (hnk : n + k < n + m := Nat.add_lt_add_left h n) :
     finAddFlip (⟨k, hk⟩ : Fin (m + n)) = ⟨n + k, hnk⟩ := by
   convert! finAddFlip_apply_castAdd ⟨k, h⟩ n
 
 @[simp]
-/--
-theorem `finAddFlip_apply_mk_right` / 定理 `finAddFlip_apply_mk_right`
-
-English:
-theorem finAddFlip_apply_mk_right
-  given: {k : Nat} (h₁ : m <= k) (h₂ : k < m + n)
-  proof: by
-  convert! @finAddFlip_apply_natAdd n ⟨k - m, by lia⟩ m
-  simp [Nat.add_sub_cancel' h₁]
-
-中文:
-定理 finAddFlip_apply_mk_right
-  条件: {k : 自然数} (h₁ : m <= k) (h₂ : k < m + n)
-  证明: by
-  convert! @finAddFlip_apply_natAdd n ⟨k - m, by lia⟩ m
-  simp [Nat.add_sub_cancel' h₁]
-
-Depends on / 依赖: Nat.add_sub_cancel, add_sub_cancel, convert, finAddFlip_apply_natAdd
+/-
+**finAddFlip_apply_mk_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finAddFlip_apply_mk_right {k : Nat} (h₁ : m <= k) (h₂ : k < m + n) : finAd
+dFlip (⟨k, h₂⟩ : Fin (m + n)) = ⟨k - m, by lia⟩
+参数：h₁ : m <= k；h₂ : k < m + n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.add_lt_add_left`：∀ {n m : ℕ}, n < m → ∀ (k : ℕ), k + n < k + m
+· 使用定理 `Nat.add_sub_cancel'`：∀ {n m : ℕ}, m ≤ n → m + (n - m) = n
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `finAddFlip_apply_natAdd`：finAddFlip_apply_natAdd (k : Fin n) (m : Nat) :
+ finAddFlip (Fin.natAdd m k) = Fin.castAdd m k
 -/
-theorem finAddFlip_apply_mk_right {k : Nat} (h₁ : m <= k) (h₂ : k < m + n) :
+theorem finAddFlip_apply_mk_right {k : ℕ} (h₁ : m ≤ k) (h₂ : k < m + n) :
     finAddFlip (⟨k, h₂⟩ : Fin (m + n)) = ⟨k - m, by lia⟩ := by
   convert! @finAddFlip_apply_natAdd n ⟨k - m, by lia⟩ m
   simp [Nat.add_sub_cancel' h₁]
 
 /-- Equivalence between `Fin m × Fin n` and `Fin (m * n)` -/
 @[simps]
-/--
-Definition of `finProdFinEquiv` / `finProdFinEquiv` 的定义
+/-
+**finProdFinEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finProdFinEquiv : Fin m × Fin n ≃ Fin (m * n) where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finProdFinEquiv
-  signature: : Fin m × Fin n ≃ Fin (m * n) where
-  body: ⟨x.2 + n * x.1,
-      calc
-        x.2.1 + n * x.1.1 + 1 = x.1.1 * n + x.2.1 + 1 := by ac_rfl
-        _ <= x.1.1 * n + n := Nat.add_le_add_left x.2.2 _
-_ = (x.1.1 + 1) * n := Eq.symm Nat.succ_mul _ _
-        _ <= m * n := Nat.mul_le_mul_right _ x.1.2
-        ⟩
-  invFun x := (x.divNat, x.modNat)
-  left_inv := fun ⟨x, y⟩ =>
-have H : 0 < n := Nat.pos_of_ne_zero fun H => Nat.not_lt_zero y.1 H ▸ y.2
-    Prod.ext
-      (Fin.eq_of_val_eq <|
-        calc
-          (y.1 + n * x.1) / n = y.1 / n + x.1 := Nat.add_mul_div_left _ _ H
-          _ = 0 + x.1 := by rw [Nat.div_eq_of_lt y.2]
-          _ = x.1 := Nat.zero_add x.1)
-      (Fin.eq_of_val_eq <|
-        calc
-          (y.1 + n * x.1) % n = y.1 % n := Nat.add_mul_mod_self_left _ _ _
-          _ = y.1 := Nat.mod_eq_of_lt y.2)
-right_inv _ := Fin.eq_of_val_eq Nat.mod_add_div _ _
-
-中文:
-定义 finProdFinEquiv
-  签名: : 有限集 m × 有限集 n ≃ 有限集 (m * n) where
-  定义体: ⟨x.2 + n * x.1,
-      calc
-        x.2.1 + n * x.1.1 + 1 = x.1.1 * n + x.2.1 + 1 := by ac_rfl
-        _ <= x.1.1 * n + n := Nat.add_le_add_left x.2.2 _
-_ = (x.1.1 + 1) * n := Eq.symm Nat.succ_mul _ _
-        _ <= m * n := Nat.mul_le_mul_right _ x.1.2
-        ⟩
-  invFun x := (x.divNat, x.modNat)
-  left_inv := fun ⟨x, y⟩ =>
-have H : 0 < n := Nat.pos_of_ne_zero fun H => Nat.not_lt_zero y.1 H ▸ y.2
-    Prod.ext
-      (Fin.eq_of_val_eq <|
-        calc
-          (y.1 + n * x.1) / n = y.1 / n + x.1 := Nat.add_mul_div_left _ _ H
-          _ = 0 + x.1 := by rw [Nat.div_eq_of_lt y.2]
-          _ = x.1 := Nat.zero_add x.1)
-      (Fin.eq_of_val_eq <|
-        calc
-          (y.1 + n * x.1) % n = y.1 % n := Nat.add_mul_mod_self_left _ _ _
-          _ = y.1 := Nat.mod_eq_of_lt y.2)
-right_inv _ := Fin.eq_of_val_eq Nat.mod_add_div _ _
-
-Depends on / 依赖: Eq.symm, Fin.eq_of_val_eq, Nat.add_le_add_left, Nat.add_mul_div_left, Nat.div_eq_of_lt, Nat.mul_le_mul_right, Nat.not_lt_zero, Nat.pos_of_ne_zero, Nat.succ_mul, Prod.ext, add_le_add_left, add_mul_div_left, divNat, div_eq_of_lt, eq_of_val_eq, invFun, left_inv, modNat, mul_le_mul_right, not_lt_zero
+--- 原说明 ---
+Equivalence between `Fin m × Fin n` and `Fin (m * n)`
 -/
 def finProdFinEquiv : Fin m × Fin n ≃ Fin (m * n) where
   toFun x :=
     ⟨x.2 + n * x.1,
       calc
         x.2.1 + n * x.1.1 + 1 = x.1.1 * n + x.2.1 + 1 := by ac_rfl
-        _ <= x.1.1 * n + n := Nat.add_le_add_left x.2.2 _
-_ = (x.1.1 + 1) * n := Eq.symm Nat.succ_mul _ _
-        _ <= m * n := Nat.mul_le_mul_right _ x.1.2
+        _ ≤ x.1.1 * n + n := Nat.add_le_add_left x.2.2 _
+        _ = (x.1.1 + 1) * n := Eq.symm <| Nat.succ_mul _ _
+        _ ≤ m * n := Nat.mul_le_mul_right _ x.1.2
         ⟩
   invFun x := (x.divNat, x.modNat)
   left_inv := fun ⟨x, y⟩ =>
-have H : 0 < n := Nat.pos_of_ne_zero fun H => Nat.not_lt_zero y.1 H ▸ y.2
+    have H : 0 < n := Nat.pos_of_ne_zero fun H => Nat.not_lt_zero y.1 <| H ▸ y.2
     Prod.ext
       (Fin.eq_of_val_eq <|
         calc
@@ -1483,42 +1156,26 @@ have H : 0 < n := Nat.pos_of_ne_zero fun H => Nat.not_lt_zero y.1 H ▸ y.2
         calc
           (y.1 + n * x.1) % n = y.1 % n := Nat.add_mul_mod_self_left _ _ _
           _ = y.1 := Nat.mod_eq_of_lt y.2)
-right_inv _ := Fin.eq_of_val_eq Nat.mod_add_div _ _
+  right_inv _ := Fin.eq_of_val_eq <| Nat.mod_add_div _ _
 
 /-- The equivalence induced by `a ↦ (a / n, a % n)` for nonzero `n`.
 This is like `finProdFinEquiv.symm` but with `m` infinite.
 See `Nat.div_mod_unique` for a similar propositional statement. -/
 @[simps]
-/--
-Definition of `Nat.divModEquiv` / `Nat.divModEquiv` 的定义
+/-
+**Nat.divModEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Nat.divModEquiv (n : Nat) [NeZero n] : Nat ≃ Nat × Fin n where toFun a
+参数：n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.div_add_mod'`：∀ (a b : ℕ), a / b * b + a % b = a
 
-English:
-definition Nat.divModEquiv
-  signature: (n : Nat) [NeZero n]
-  body: (a / n, Fin.ofNat n a)
-  invFun p := p.1 * n + ↑p.2
-  -- TODO: is there a canonical order of `*` and `+` here?
-  left_inv _ := Nat.div_add_mod' _ _
-  right_inv p := by
-    refine Prod.ext ?_ (Fin.ext <| Nat.mul_add_mod_of_lt p.2.is_lt)
-    dsimp only
-    rw [Nat.add_comm]; rw [Nat.add_mul_div_right _ _ n.pos_of_neZero]; rw [Nat.div_eq_of_lt p.2.is_lt]; rw [Nat.zero_add]
-
-中文:
-定义 自然数.divModEquiv
-  签名: (n : 自然数) [NeZero n]
-  定义体: (a / n, Fin.ofNat n a)
-  invFun p := p.1 * n + ↑p.2
-  -- TODO: is there a canonical order of `*` and `+` here?
-  left_inv _ := Nat.div_add_mod' _ _
-  right_inv p := by
-    refine Prod.ext ?_ (Fin.ext <| Nat.mul_add_mod_of_lt p.2.is_lt)
-    dsimp only
-    rw [Nat.add_comm]; rw [Nat.add_mul_div_right _ _ n.pos_of_neZero]; rw [Nat.div_eq_of_lt p.2.is_lt]; rw [Nat.zero_add]
-
-Depends on / 依赖: Fin.ofNat
+--- 原说明 ---
+The equivalence induced by `a ↦ (a / n, a % n)` for nonzero `n`.
+This is like `finProdFinEquiv.symm` but with `m` infinite.
+See `Nat.div_mod_unique` for a similar propositional statement.
 -/
-def Nat.divModEquiv (n : Nat) [NeZero n] : Nat ≃ Nat × Fin n where
+def Nat.divModEquiv (n : ℕ) [NeZero n] : ℕ ≃ ℕ × Fin n where
   toFun a := (a / n, Fin.ofNat n a)
   invFun p := p.1 * n + ↑p.2
   -- TODO: is there a canonical order of `*` and `+` here?
@@ -1526,47 +1183,26 @@ def Nat.divModEquiv (n : Nat) [NeZero n] : Nat ≃ Nat × Fin n where
   right_inv p := by
     refine Prod.ext ?_ (Fin.ext <| Nat.mul_add_mod_of_lt p.2.is_lt)
     dsimp only
-    rw [Nat.add_comm]; rw [Nat.add_mul_div_right _ _ n.pos_of_neZero]; rw [Nat.div_eq_of_lt p.2.is_lt]; rw [Nat.zero_add]
+    rw [Nat.add_comm, Nat.add_mul_div_right _ _ n.pos_of_neZero, Nat.div_eq_of_lt p.2.is_lt,
+      Nat.zero_add]
 
 /-- The equivalence induced by `a ↦ (a / n, a % n)` for nonzero `n`.
 See `Int.ediv_emod_unique` for a similar propositional statement. -/
 @[simps]
-/--
-Definition of `Int.divModEquiv` / `Int.divModEquiv` 的定义
+/-
+**Int.divModEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Int.divModEquiv (n : Nat) [NeZero n] : Int ≃ Int × Fin n where -- TODO: co
+uld cast from int directly if we import `Data.ZMod.Defs`, though there are few l
+emmas -- about that coercion. toFun a
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Int.divModEquiv
-  signature: (n : Nat) [NeZero n]
-  body: (a / n, Fin.ofNat n (a.natMod n))
-  invFun p := p.1 * n + ↑p.2
-  left_inv a := by
-    simp_rw [Fin.val_ofNat, natCast_mod, natMod,
-      toNat_of_nonneg (emod_nonneg _ <| natCast_eq_zero.not.2 (NeZero.ne n)), emod_emod,
-      ediv_mul_add_emod]
-  right_inv := fun ⟨q, r, hrn⟩ => by
-    simp only [Prod.mk_inj, Fin.ext_iff]
-    obtain ⟨h1, h2⟩ := Int.natCast_nonneg r, Int.ofNat_lt.2 hrn
-    rw [Int.add_comm]; rw [add_mul_ediv_right _ _ (natCast_eq_zero.not.2 (NeZero.ne n))]; rw [ediv_eq_zero_of_lt h1 h2]; rw [natMod]; rw [add_mul_emod_self_right]; rw [emod_eq_of_lt h1 h2]; rw [toNat_natCast]
-    exact ⟨q.zero_add, Fin.val_cast_of_lt hrn⟩
-
-中文:
-定义 整数.divModEquiv
-  签名: (n : 自然数) [NeZero n]
-  定义体: (a / n, Fin.ofNat n (a.natMod n))
-  invFun p := p.1 * n + ↑p.2
-  left_inv a := by
-    simp_rw [Fin.val_ofNat, natCast_mod, natMod,
-      toNat_of_nonneg (emod_nonneg _ <| natCast_eq_zero.not.2 (NeZero.ne n)), emod_emod,
-      ediv_mul_add_emod]
-  right_inv := fun ⟨q, r, hrn⟩ => by
-    simp only [Prod.mk_inj, Fin.ext_iff]
-    obtain ⟨h1, h2⟩ := Int.natCast_nonneg r, Int.ofNat_lt.2 hrn
-    rw [Int.add_comm]; rw [add_mul_ediv_right _ _ (natCast_eq_zero.not.2 (NeZero.ne n))]; rw [ediv_eq_zero_of_lt h1 h2]; rw [natMod]; rw [add_mul_emod_self_right]; rw [emod_eq_of_lt h1 h2]; rw [toNat_natCast]
-    exact ⟨q.zero_add, Fin.val_cast_of_lt hrn⟩
-
-Depends on / 依赖: Fin.ofNat, a.natMod, natMod
+--- 原说明 ---
+The equivalence induced by `a ↦ (a / n, a % n)` for nonzero `n`.
+See `Int.ediv_emod_unique` for a similar propositional statement.
 -/
-def Int.divModEquiv (n : Nat) [NeZero n] : Int ≃ Int × Fin n where
+def Int.divModEquiv (n : ℕ) [NeZero n] : ℤ ≃ ℤ × Fin n where
   -- TODO: could cast from int directly if we import `Data.ZMod.Defs`, though there are few lemmas
   -- about that coercion.
   toFun a := (a / n, Fin.ofNat n (a.natMod n))
@@ -1578,7 +1214,8 @@ def Int.divModEquiv (n : Nat) [NeZero n] : Int ≃ Int × Fin n where
   right_inv := fun ⟨q, r, hrn⟩ => by
     simp only [Prod.mk_inj, Fin.ext_iff]
     obtain ⟨h1, h2⟩ := Int.natCast_nonneg r, Int.ofNat_lt.2 hrn
-    rw [Int.add_comm]; rw [add_mul_ediv_right _ _ (natCast_eq_zero.not.2 (NeZero.ne n))]; rw [ediv_eq_zero_of_lt h1 h2]; rw [natMod]; rw [add_mul_emod_self_right]; rw [emod_eq_of_lt h1 h2]; rw [toNat_natCast]
+    rw [Int.add_comm, add_mul_ediv_right _ _ (natCast_eq_zero.not.2 (NeZero.ne n)),
+      ediv_eq_zero_of_lt h1 h2, natMod, add_mul_emod_self_right, emod_eq_of_lt h1 h2, toNat_natCast]
     exact ⟨q.zero_add, Fin.val_cast_of_lt hrn⟩
 
 /-- Promote a `Fin n` into a larger `Fin m`, as a subtype where the underlying
@@ -1586,28 +1223,21 @@ values are retained.
 
 This is the `Equiv` version of `Fin.castLE`. -/
 @[simps apply symm_apply]
-/--
-Definition of `Fin.castLEquiv` / `Fin.castLEquiv` 的定义
+/-
+**Fin.castLEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Fin.castLEquiv {n m : Nat} (h : n <= m) : Fin n ≃ { i : Fin m // (i : Nat)
+ < n } where toFun i
+参数：h : n <= m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fin.castLEquiv
-  signature: {n m : Nat} (h : n <= m)
-  body: ⟨Fin.castLE h i, by simp⟩
-  invFun i := ⟨i, i.prop⟩
-  left_inv _ := by simp
-  right_inv _ := by simp
+--- 原说明 ---
+Promote a `Fin n` into a larger `Fin m`, as a subtype where the underlying
+values are retained.
 
-中文:
-定义 有限集.castLEquiv
-  签名: {n m : 自然数} (h : n <= m)
-  定义体: ⟨Fin.castLE h i, by simp⟩
-  invFun i := ⟨i, i.prop⟩
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-Depends on / 依赖: Fin.castLE, castLE
+This is the `Equiv` version of `Fin.castLE`.
 -/
-def Fin.castLEquiv {n m : Nat} (h : n <= m) : Fin n ≃ { i : Fin m // (i : Nat) < n } where
+def Fin.castLEquiv {n m : ℕ} (h : n ≤ m) : Fin n ≃ { i : Fin m // (i : ℕ) < n } where
   toFun i := ⟨Fin.castLE h i, by simp⟩
   invFun i := ⟨i, i.prop⟩
   left_inv _ := by simp
@@ -1615,50 +1245,39 @@ def Fin.castLEquiv {n m : Nat} (h : n <= m) : Fin n ≃ { i : Fin m // (i : Nat)
 
 /-- The natural `Equiv` between `(Fin m → α) × (Fin n → α)` and `Fin (m + n) → α` -/
 @[simps]
-/--
-Definition of `Fin.appendEquiv` / `Fin.appendEquiv` 的定义
+/-
+**Fin.appendEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Fin.appendEquiv {α : Type*} (m n : Nat) : (Fin m -> α) × (Fin n -> α) ≃ (F
+in (m + n) -> α) where toFun fg
+参数：m n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fin.appendEquiv
-  signature: {α : Type*} (m n : Nat)
-  body: Fin.append fg.1 fg.2
-  invFun f := ⟨fun i => f (Fin.castAdd n i), fun i => f (Fin.natAdd m i)⟩
-  left_inv fg := by simp
-  right_inv f := by simp [Fin.append_castAdd_natAdd]
-
-中文:
-定义 有限集.appendEquiv
-  签名: {α : 类型} (m n : 自然数)
-  定义体: Fin.append fg.1 fg.2
-  invFun f := ⟨fun i => f (Fin.castAdd n i), fun i => f (Fin.natAdd m i)⟩
-  left_inv fg := by simp
-  right_inv f := by simp [Fin.append_castAdd_natAdd]
-
-Depends on / 依赖: Fin.append, append
+--- 原说明 ---
+The natural `Equiv` between `(Fin m → α) × (Fin n → α)` and `Fin (m + n) → α`
 -/
-def Fin.appendEquiv {α : Type*} (m n : Nat) :
-    (Fin m -> α) × (Fin n -> α) ≃ (Fin (m + n) -> α) where
+def Fin.appendEquiv {α : Type*} (m n : ℕ) :
+    (Fin m → α) × (Fin n → α) ≃ (Fin (m + n) → α) where
   toFun fg := Fin.append fg.1 fg.2
-  invFun f := ⟨fun i => f (Fin.castAdd n i), fun i => f (Fin.natAdd m i)⟩
+  invFun f := ⟨fun i ↦ f (Fin.castAdd n i), fun i ↦ f (Fin.natAdd m i)⟩
   left_inv fg := by simp
   right_inv f := by simp [Fin.append_castAdd_natAdd]
 
 /-- `Fin (n + 1) → α` and `(Fin n → α) × α` are equivalent. -/
 @[simps!]
-/--
-Definition of `Fin.succFunEquiv` / `Fin.succFunEquiv` 的定义
+/-
+**Fin.succFunEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Fin.succFunEquiv (α : Type*) (n : Nat) : (Fin (n + 1) -> α) ≃ (Fin n -> α)
+ × α
+参数：α : Type*；n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Fin.succFunEquiv
-  signature: (α : Type*) (n : Nat)
-  body: (appendEquiv n 1).symm.trans (Equiv.prodCongrRight fun _ => Equiv.funUnique (Fin 1) α)
-
-中文:
-定义 有限集.succFunEquiv
-  签名: (α : 类型) (n : 自然数)
-  定义体: (appendEquiv n 1).symm.trans (Equiv.prodCongrRight fun _ => Equiv.funUnique (Fin 1) α)
-
-Depends on / 依赖: Equiv.funUnique, Equiv.prodCongrRight, appendEquiv, funUnique, prodCongrRight, symm.trans
+--- 原说明 ---
+`Fin (n + 1) → α` and `(Fin n → α) × α` are equivalent.
 -/
-def Fin.succFunEquiv (α : Type*) (n : Nat) : (Fin (n + 1) -> α) ≃ (Fin n -> α) × α :=
-  (appendEquiv n 1).symm.trans (Equiv.prodCongrRight fun _ => Equiv.funUnique (Fin 1) α)
+def Fin.succFunEquiv (α : Type*) (n : ℕ) : (Fin (n + 1) → α) ≃ (Fin n → α) × α :=
+  (appendEquiv n 1).symm.trans (Equiv.prodCongrRight fun _ ↦ Equiv.funUnique (Fin 1) α)

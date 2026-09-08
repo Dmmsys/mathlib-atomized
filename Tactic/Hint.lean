@@ -37,38 +37,29 @@ initialize hintExtension :
     addImportedFn := mkStateFromImportedEntries (·.cons) {}
   }
 
-/--
-Definition of `addHint` / `addHint` 的定义
+/-- Register a new hint tactic. -/
+/-
+**Mathlib.Tactic.Hint.addHint** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Hint`。
+形式化陈述：addHint (prio : Nat) (stx : TSyntax `tactic) : CoreM Unit
+参数：prio : Nat；stx : TSyntax `tactic。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addHint
-  signature: (prio : Nat) (stx : TSyntax `tactic)
-  body: do
-  modifyEnv fun env => hintExtension.addEntry env (prio, stx)
-
-中文:
-定义 addHint
-  签名: (prio : 自然数) (stx : TSyntax `tactic)
-  定义体: do
-  modifyEnv fun env => hintExtension.addEntry env (prio, stx)
+--- 原说明 ---
+Register a new hint tactic.
 -/
 def addHint (prio : Nat) (stx : TSyntax `tactic) : CoreM Unit := do
   modifyEnv fun env => hintExtension.addEntry env (prio, stx)
 
-/--
-Definition of `getHints` / `getHints` 的定义
+/-- Return the list of registered hint tactics. -/
+/-
+**Mathlib.Tactic.Hint.getHints** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Hint`。
+形式化陈述：getHints : CoreM (List (Nat × TSyntax `tactic))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getHints
-  signature: : CoreM (List (Nat × TSyntax `tactic))
-  body: return hintExtension.getState (← getEnv)
-
-中文:
-定义 getHints
-  签名: : CoreM (列表 (自然数 × TSyntax `tactic))
-  定义体: return hintExtension.getState (← getEnv)
-
-Depends on / 依赖: getEnv, getState, hintExtension, hintExtension.getState, return
+--- 原说明 ---
+Return the list of registered hint tactics.
 -/
 def getHints : CoreM (List (Nat × TSyntax `tactic)) :=
   return hintExtension.getState (← getEnv)
@@ -91,59 +82,27 @@ initialize
   Batteries.Linter.UnreachableTactic.ignoreTacticKindsRef.modify fun s => s.insert ``registerHintStx
 
 /--
-Definition of `suggestion` / `suggestion` 的定义
+Construct a suggestion for a tactic.
+* Check the passed `MessageLog` for an info message beginning with "Try this: ".
+* If found, use that as the suggestion.
+* Otherwise use the provided syntax.
+* Also, look for remaining goals and pretty print them after the suggestion.
+-/
+/-
+**Mathlib.Tactic.Hint.suggestion** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Hint`
+。
+形式化陈述：suggestion (tac : TSyntax `tactic) (trees : PersistentArray InfoTree) : Ta
+cticM Suggestion
+参数：tac : TSyntax `tactic；trees : PersistentArray InfoTree。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition suggestion
-  signature: (tac : TSyntax `tactic) (trees : PersistentArray InfoTree)
-  body: do
-  -- TODO `addExactSuggestion` has an option to construct `postInfo?`
-  -- Factor that out so we can use it here instead of copying and pasting?
-  let goals ← getGoals
-  let postInfo? ← if goals.isEmpty then pure none else
-    let mut str := "\nRemaining subgoals:"
-    for g in goals do
-      let e ← PrettyPrinter.ppExpr (← instantiateMVars (← g.getType))
-      str := str ++ Format.pretty ("\n⊢ " ++ e)
-    pure (some str)
-  /-
-  #adaptation_note 2025-08-27
-  Suggestion styling was deprecated in lean4#9966.
-  We use emojis for now instead.
-  -/
-  -- let style? := if goals.isEmpty then some .success else none
-  let preInfo? := if goals.isEmpty then some "🎉️ " else none
-  let suggestions := collectTryThisSuggestions trees
-  let suggestion := match suggestions[0]? with
-  | some s => s.suggestion
-  | none => SuggestionText.tsyntax tac
-  return { preInfo?, suggestion, postInfo? }
-
-中文:
-定义 suggestion
-  签名: (tac : TSyntax `tactic) (trees : PersistentArray InfoTree)
-  定义体: do
-  -- TODO `addExactSuggestion` has an option to construct `postInfo?`
-  -- Factor that out so we can use it here instead of copying and pasting?
-  let goals ← getGoals
-  let postInfo? ← if goals.isEmpty then pure none else
-    let mut str := "\nRemaining subgoals:"
-    for g in goals do
-      let e ← PrettyPrinter.ppExpr (← instantiateMVars (← g.getType))
-      str := str ++ Format.pretty ("\n⊢ " ++ e)
-    pure (some str)
-  /-
-  #adaptation_note 2025-08-27
-  Suggestion styling was deprecated in lean4#9966.
-  We use emojis for now instead.
-  -/
-  -- let style? := if goals.isEmpty then some .success else none
-  let preInfo? := if goals.isEmpty then some "🎉️ " else none
-  let suggestions := collectTryThisSuggestions trees
-  let suggestion := match suggestions[0]? with
-  | some s => s.suggestion
-  | none => SuggestionText.tsyntax tac
-  return { preInfo?, suggestion, postInfo? }
+--- 原说明 ---
+Construct a suggestion for a tactic.
+* Check the passed `MessageLog` for an info message beginning with "Try this: ".
+* If found, use that as the suggestion.
+* Otherwise use the provided syntax.
+* Also, look for remaining goals and pretty print them after the suggestion.
 -/
 def suggestion (tac : TSyntax `tactic) (trees : PersistentArray InfoTree) : TacticM Suggestion := do
   -- TODO `addExactSuggestion` has an option to construct `postInfo?`
@@ -168,62 +127,24 @@ def suggestion (tac : TSyntax `tactic) (trees : PersistentArray InfoTree) : Tact
   | none => SuggestionText.tsyntax tac
   return { preInfo?, suggestion, postInfo? }
 
+/--
+Run all tactics registered using `register_hint`.
+Print a "Try these:" suggestion for each of the successful tactics.
+
+If one tactic succeeds and closes the goal, we don't look at subsequent tactics.
+-/
 -- TODO We could run the tactics in parallel.
 -- TODO With widget support, could we run the tactics in parallel
--- and do live updates of the widget as results come in?
-/--
-Definition of `hint` / `hint` 的定义
-
-English:
-definition hint
-  signature: (stx : Syntax)
-  body: withMainContext do
-.toList.map (·.2) let tacs := (← getHints).toArray.qsort (·.1 > ·.1)
-  let tacs := Nondet.ofList tacs
-  let results := tacs.filterMapM fun t : TSyntax `tactic => do
-    if let some { msgs, trees, .. } ← observing? (withResetServerInfo (evalTactic t)) then
-      if msgs.hasErrors then
-        return none
-      else
-        return some (← getGoals, ← suggestion t trees)
-    else
-      return none
-  let results ← (results.toMLList.takeUpToFirst fun r => r.1.1.isEmpty).asArray
-  let results := results.qsort (·.1.1.length < ·.1.1.length)
-  addSuggestions stx (results.map (·.1.2))
-  match results.find? (·.1.1.isEmpty) with
-  | some r =>
-    -- We don't restore the entire state, as that would delete the suggestion messages.
-    setMCtx r.2.term.meta.meta.mctx
-  | none => admitGoal (← getMainGoal)
-
-中文:
-定义 hint
-  签名: (stx : Syntax)
-  定义体: withMainContext do
-.toList.map (·.2) let tacs := (← getHints).toArray.qsort (·.1 > ·.1)
-  let tacs := Nondet.ofList tacs
-  let results := tacs.filterMapM fun t : TSyntax `tactic => do
-    if let some { msgs, trees, .. } ← observing? (withResetServerInfo (evalTactic t)) then
-      if msgs.hasErrors then
-        return none
-      else
-        return some (← getGoals, ← suggestion t trees)
-    else
-      return none
-  let results ← (results.toMLList.takeUpToFirst fun r => r.1.1.isEmpty).asArray
-  let results := results.qsort (·.1.1.length < ·.1.1.length)
-  addSuggestions stx (results.map (·.1.2))
-  match results.find? (·.1.1.isEmpty) with
-  | some r =>
-    -- We don't restore the entire state, as that would delete the suggestion messages.
-    setMCtx r.2.term.meta.meta.mctx
-  | none => admitGoal (← getMainGoal)
-
-Depends on / 依赖: withMainContext
+--      and do live updates of the widget as results come in?
+/-
+**Mathlib.Tactic.Hint.hint** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Hint`。
+形式化陈述：hint (stx : Syntax) : TacticM Unit
+参数：stx : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def hint (stx : Syntax) : TacticM Unit := withMainContext do
-.toList.map (·.2) let tacs := (← getHints).toArray.qsort (·.1 > ·.1)
+  let tacs := (← getHints).toArray.qsort (·.1 > ·.1) |>.toList.map (·.2)
   let tacs := Nondet.ofList tacs
   let results := tacs.filterMapM fun t : TSyntax `tactic => do
     if let some { msgs, trees, .. } ← observing? (withResetServerInfo (evalTactic t)) then
@@ -253,3 +174,4 @@ elab_rules : tactic
   | `(tactic| hint%$tk) => hint tk
 
 end Mathlib.Tactic.Hint
+

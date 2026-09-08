@@ -21,24 +21,14 @@ namespace Mathlib.Tactic.Push
 
 open Lean Meta
 
-/--
-Inductive type `Head` / 归纳类型 `Head`
+/-- The type for a constant to be pushed by `push`. -/
+/-
+**Mathlib.Tactic.Push.Head** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Head
-  parameters: where
-  constructors (3):
-    - const: (c : Name)
-    - lambda: 
-    - forall: 
-
-中文:
-归纳类型 Head
-  参数: where
-  构造子 (3 个):
-    - const: (c : Name)
-    - lambda: 
-    - forall: 
+--- 原说明 ---
+The type for a constant to be pushed by `push`.
 -/
 inductive Head where
 | const (c : Name)
@@ -46,51 +36,36 @@ inductive Head where
 | forall
 deriving Inhabited, BEq
 
-/--
-Definition of `Head.toString` / `Head.toString` 的定义
+/-- Converts a `Head` to a string. -/
+/-
+**Mathlib.Tactic.Push.Head.toString** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Pu
+sh.Head`。
+形式化陈述：Mathlib.Tactic.Push.Head → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Head.toString
-  signature: : Head -> String
-
-中文:
-定义 Head.toString
-  签名: : Head -> String
+--- 原说明 ---
+Converts a `Head` to a string.
 -/
-def Head.toString : Head -> String
+def Head.toString : Head → String
   | .const c => c.toString
   | .lambda => "fun"
   | .forall => "Forall"
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToString Head
-  body: ⟨Head.toString⟩
-
-中文:
-实例 :
-  签名: ToString Head
-  定义体: ⟨Head.toString⟩
-
-Depends on / 依赖: Head.toString, toString
+/-
+**Mathlib.Tactic.Push.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Push`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToString Head := ⟨Head.toString⟩
 
-/--
-Definition of `Head.ofExpr?` / `Head.ofExpr?` 的定义
+/-- Returns the head of an expression. -/
+/-
+**Mathlib.Tactic.Push.Head.ofExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Head.ofExpr?
-  signature: : Expr -> Option Head
-
-中文:
-定义 Head.ofExpr?
-  签名: : Expr -> 选项类型 Head
+--- 原说明 ---
+Returns the head of an expression.
 -/
-def Head.ofExpr? : Expr -> Option Head
+def Head.ofExpr? : Expr → Option Head
   | .app f _ => f.getAppFn.constName?.map .const
   | .lam .. => some .lambda
   | .forallE .. => some .forall
@@ -99,38 +74,26 @@ def Head.ofExpr? : Expr -> Option Head
 /-- The `push` environment extension -/
 initialize pushExt : SimpleScopedEnvExtension SimpTheorem (DiscrTree SimpTheorem) ←
   registerSimpleScopedEnvExtension {
-    initial := {}
+    initial  := {}
     addEntry := fun d e => d.insertKeyValue e.keys e
   }
 
 /--
-Definition of `isPullThm` / `isPullThm` 的定义
+Checks if the theorem is suitable for the `pull` tactic. That is,
+check if it is of the form `x = f ...` where `x` contains the head `f`,
+but `f` is not the head of `x`.
+-/
+/-
+**Mathlib.Tactic.Push.isPullThm** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Push`。
+形式化陈述：isPullThm (declName : Name) (inv : Bool) : MetaM (Option Head)
+参数：declName : Name；inv : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isPullThm
-  signature: (declName : Name) (inv : Bool)
-  body: do
-  let cinfo ← getConstInfo declName
-  forallTelescope cinfo.type fun _ type => do
-    let some (lhs, rhs) := type.eqOrIff? | return none
-    let (lhs, rhs) := if inv then (rhs, lhs) else (lhs, rhs)
-    let some head := Head.ofExpr? rhs | return none
-    if Head.ofExpr? lhs != some head && containsHead lhs head then
-      return head
-    return none
-
-中文:
-定义 isPullThm
-  签名: (declName : Name) (inv : 布尔值)
-  定义体: do
-  let cinfo ← getConstInfo declName
-  forallTelescope cinfo.type fun _ type => do
-    let some (lhs, rhs) := type.eqOrIff? | return none
-    let (lhs, rhs) := if inv then (rhs, lhs) else (lhs, rhs)
-    let some head := Head.ofExpr? rhs | return none
-    if Head.ofExpr? lhs != some head && containsHead lhs head then
-      return head
-    return none
+--- 原说明 ---
+Checks if the theorem is suitable for the `pull` tactic. That is,
+check if it is of the form `x = f ...` where `x` contains the head `f`,
+but `f` is not the head of `x`.
 -/
 def isPullThm (declName : Name) (inv : Bool) : MetaM (Option Head) := do
   let cinfo ← getConstInfo declName
@@ -145,30 +108,27 @@ where
   /-- Checks if the expression has the head in any subexpression.
   We don't need to check this for `.lambda`, because the term being a function
   is sufficient for `pull fun _ ↦ _` to be applicable. -/
-  containsHead (e : Expr) : Head -> Bool
+  containsHead (e : Expr) : Head → Bool
   | .const c => e.containsConst (· == c)
   | .lambda => true
   | .forall => (e.find? (· matches .forallE ..)).isSome
 
-/--
-Definition of `PullTheorem` / `PullTheorem` 的定义
+/-- A theorem for the `pull` tactic -/
+/-
+**Mathlib.Tactic.Push.PullTheorem** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.Pu
+sh`。
+形式化陈述：PullTheorem
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PullTheorem
-  body: SimpTheorem × Head
-
-中文:
-缩写 PullTheorem
-  定义体: SimpTheorem × Head
-
-Depends on / 依赖: SimpTheorem
+--- 原说明 ---
+A theorem for the `pull` tactic
 -/
 abbrev PullTheorem := SimpTheorem × Head
 
 /-- The `pull` environment extension -/
 initialize pullExt : SimpleScopedEnvExtension PullTheorem (DiscrTree PullTheorem) ←
   registerSimpleScopedEnvExtension {
-    initial := {}
+    initial  := {}
     addEntry := fun d e => d.insertKeyValue e.1.keys e
   }
 
@@ -218,3 +178,4 @@ initialize registerBuiltinAttribute {
 }
 
 end Mathlib.Tactic.Push
+

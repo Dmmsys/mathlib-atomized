@@ -42,32 +42,19 @@ variable {i₀ i₁ i₂ i₃ i₄ i₅ : ι} (f₁ : i₀ ⟶ i₁) (f₂ : i�
   (f₂₃ : i₁ ⟶ i₃) (h₂₃ : f₂ ≫ f₃ = f₂₃)
   (f₃₄ : i₂ ⟶ i₄) (h₃₄ : f₃ ≫ f₄ = f₃₄)
   (f₄₅ : i₃ ⟶ i₅) (h₄₅ : f₄ ≫ f₅ = f₄₅)
-  (n₀ n₁ n₂ n₃ : Int)
+  (n₀ n₁ n₂ n₃ : ℤ)
 
-/--
-Definition of `d` / `d` 的定义
+/-- The differential `E^{n}(f₃, f₄, f₅) ⟶ E^{n+1}(f₁, f₂, f₃)` that is
+attached to a family of five composable morphisms `f₁`, `f₂`, `f₃`, `f₄`, `f₅`. -/
+/-
+**CategoryTheory.Abelian.SpectralObject.d** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Abelian.SpectralObject`。
+形式化陈述：d (hn₁ : n₀ + 1 = n₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition d
-  body: X.descE f₃ f₄ f₅ _ rfl n₀ n₁ n₂ (X.δ (f₁ ≫ f₂) (f₃ ≫ f₄) n₁ n₂ hn₂ ≫
-    X.toCycles f₁ f₂ _ rfl n₂ ≫ X.πE f₁ f₂ f₃ n₁ n₂ n₃ hn₂ hn₃) (by
-      rw [X.δ_naturality_assoc (f₁ ≫ f₂) f₃ (f₁ ≫ f₂) (f₃ ≫ f₄)
-        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]; rw [δ_toCycles_assoc ..]; rw [δToCycles_πE ..]) hn₁
-          (by rw [δ_δ_assoc .., zero_comp])
-
-@[reassoc]
-
-中文:
-定义 d
-  定义体: X.descE f₃ f₄ f₅ _ rfl n₀ n₁ n₂ (X.δ (f₁ ≫ f₂) (f₃ ≫ f₄) n₁ n₂ hn₂ ≫
-    X.toCycles f₁ f₂ _ rfl n₂ ≫ X.πE f₁ f₂ f₃ n₁ n₂ n₃ hn₂ hn₃) (by
-      rw [X.δ_naturality_assoc (f₁ ≫ f₂) f₃ (f₁ ≫ f₂) (f₃ ≫ f₄)
-        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]; rw [δ_toCycles_assoc ..]; rw [δToCycles_πE ..]) hn₁
-          (by rw [δ_δ_assoc .., zero_comp])
-
-@[reassoc]
-
-Depends on / 依赖: Functor, Functor.map_id, X.descE, X.toCycles, id_comp, map_id, toCycles, zero_comp
+--- 原说明 ---
+The differential `E^{n}(f₃, f₄, f₅) ⟶ E^{n+1}(f₁, f₂, f₃)` that is
+attached to a family of five composable morphisms `f₁`, `f₂`, `f₃`, `f₄`, `f₅`.
 -/
 noncomputable def d
     (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia) (hn₃ : n₂ + 1 = n₃ := by lia) :
@@ -75,26 +62,15 @@ noncomputable def d
   X.descE f₃ f₄ f₅ _ rfl n₀ n₁ n₂ (X.δ (f₁ ≫ f₂) (f₃ ≫ f₄) n₁ n₂ hn₂ ≫
     X.toCycles f₁ f₂ _ rfl n₂ ≫ X.πE f₁ f₂ f₃ n₁ n₂ n₃ hn₂ hn₃) (by
       rw [X.δ_naturality_assoc (f₁ ≫ f₂) f₃ (f₁ ≫ f₂) (f₃ ≫ f₄)
-        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]; rw [δ_toCycles_assoc ..]; rw [δToCycles_πE ..]) hn₁
+        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂, Functor.map_id, id_comp,
+        δ_toCycles_assoc .., δToCycles_πE ..]) hn₁
           (by rw [δ_δ_assoc .., zero_comp])
 
 @[reassoc]
-/--
-lemma `toCycles_πE_d` / 引理 `toCycles_πE_d`
-
-English:
-lemma toCycles_πE_d
-  proof: by
-  subst h₁₂ h₃₄
-  simp only [d, δ_toCycles_assoc, toCycles_πE_descE]
-
-中文:
-引理 toCycles_πE_d
-  证明: by
-  subst h₁₂ h₃₄
-  simp only [d, δ_toCycles_assoc, toCycles_πE_descE]
-
-Depends on / 依赖: X.toCycles, toCycles
+/-
+**CategoryTheory.Abelian.SpectralObject.toCycles_** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toCycles_πE_d
     (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia) (hn₃ : n₂ + 1 = n₃ := by lia) :
@@ -108,24 +84,10 @@ lemma toCycles_πE_d
 set_option backward.defeqAttrib.useBackward true in
 include h₃₄ in
 @[reassoc]
-/--
-lemma `d_ιE_fromOpcycles` / 引理 `d_ιE_fromOpcycles`
-
-English:
-lemma d_ιE_fromOpcycles
-  proof: by
-  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁)]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]; rw [fromOpcyles_δ ..]; rw [πE_ιE_assoc ..]; rw [pOpcycles_δFromOpcycles]; rw [toCycles_i_assoc]; rw [← Functor.map_comp]; rw [Eq.comm]
-  apply δ_naturality
-  simp
-
-中文:
-引理 d_ιE_fromOpcycles
-  证明: by
-  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁)]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]; rw [fromOpcyles_δ ..]; rw [πE_ιE_assoc ..]; rw [pOpcycles_δFromOpcycles]; rw [toCycles_i_assoc]; rw [← Functor.map_comp]; rw [Eq.comm]
-  apply δ_naturality
-  simp
-
-Depends on / 依赖: X.fromOpcycles, X.toCycles, X.toCycles_, cancel_epi, fromOpcycles, p_fromOpcycles, toCycles
+/-
+**CategoryTheory.Abelian.SpectralObject.d_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma d_ιE_fromOpcycles
     (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia) (hn₃ : n₂ + 1 = n₃ := by lia) :
@@ -133,7 +95,11 @@ lemma d_ιE_fromOpcycles
       X.fromOpcycles f₂ f₃ f₂₃ h₂₃ n₂ =
       X.ιE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂ ≫ X.fromOpcycles f₄ f₅ f₄₅ h₄₅ n₁ ≫
         X.δ f₂₃ f₄₅ n₁ n₂ hn₂ := by
-  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁)]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]; rw [fromOpcyles_δ ..]; rw [πE_ιE_assoc ..]; rw [pOpcycles_δFromOpcycles]; rw [toCycles_i_assoc]; rw [← Functor.map_comp]; rw [Eq.comm]
+  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂),
+    ← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁),
+    X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃,
+    πE_ιE_assoc .., p_fromOpcycles, toCycles_i_assoc, fromOpcyles_δ ..,
+    πE_ιE_assoc .., pOpcycles_δFromOpcycles, toCycles_i_assoc, ← Functor.map_comp, Eq.comm]
   apply δ_naturality
   simp
 
@@ -143,31 +109,47 @@ section
 
 variable {i₀ i₁ i₂ i₃ i₄ i₅ i₆ i₇ : ι} (f₁ : i₀ ⟶ i₁) (f₂ : i₁ ⟶ i₂) (f₃ : i₂ ⟶ i₃)
   (f₄ : i₃ ⟶ i₄) (f₅ : i₄ ⟶ i₅) (f₆ : i₅ ⟶ i₆) (f₇ : i₆ ⟶ i₇)
-  (n₀ n₁ n₂ n₃ n₄ : Int)
+  (n₀ n₁ n₂ n₃ n₄ : ℤ)
 
 @[reassoc (attr := simp)]
-/--
-lemma `d_d` / 引理 `d_d`
-
-English:
-lemma d_d
-  statement: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
-  proof: by
-  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁)]; rw [comp_zero]; rw [comp_zero]; rw [X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄]; rw [δ_δ_assoc ..]; rw [zero_comp]
-
-中文:
-引理 d_d
-  结论: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
-  证明: by
-  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁)]; rw [comp_zero]; rw [comp_zero]; rw [X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄]; rw [δ_δ_assoc ..]; rw [zero_comp]
-
-Depends on / 依赖: X.toCycles, X.toCycles_, cancel_epi, comp_zero, toCycles
+/-
+**CategoryTheory.Abelian.SpectralObject.d_d** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Abelian.SpectralObject`。
+形式化陈述：d_d (hn₁ : n₀ + 1 = n₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.instEpiπE`：∀ {C : Type u_2} {ι : T
+ype u_4} [inst : CategoryTheory.Category.{u_1, u_2} C]   [inst_1 : CategoryTheor
+y.Category.{u_3, u_4} ι] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.instEpiToCycles`：∀ {C : Type u_1} 
+{ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Categor
+yTheory.Category.{v_2, u_2} ι] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.toCycles_πE_d_assoc`：∀ {C : Type u
+_1} {ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} ι] [inst_2 : Ca…
+· 使用引理 `CategoryTheory.Abelian.SpectralObject.toCycles_πE_d`：toCycles_πE_d (hn₁ 
+: n₀ + 1 = n₁
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.δ_δ_assoc`：∀ {C : Type u_1} {ι : T
+ype u_2} [inst : CategoryTheory.Category.{u_4, u_1} C]   [inst_1 : CategoryTheor
+y.Category.{u_3, u_2} ι] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 lemma d_d (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
     (hn₃ : n₂ + 1 = n₃ := by lia) (hn₄ : n₃ + 1 = n₄ := by lia) :
     X.d f₃ f₄ f₅ f₆ f₇ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃ ≫
       X.d f₁ f₂ f₃ f₄ f₅ n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄ = 0 := by
-  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁)]; rw [comp_zero]; rw [comp_zero]; rw [X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄]; rw [δ_δ_assoc ..]; rw [zero_comp]
+  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂),
+    ← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁), comp_zero, comp_zero,
+    X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃,
+    X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄,
+    δ_δ_assoc .., zero_comp]
 
 end
 
@@ -175,60 +157,39 @@ section
 
 variable {i j k l : ι} (f₁ : i ⟶ j) (f₂ : j ⟶ k) (f₃ : k ⟶ l)
   (f₁₂ : i ⟶ k) (h₁₂ : f₁ ≫ f₂ = f₁₂) (f₂₃ : j ⟶ l) (h₂₃ : f₂ ≫ f₃ = f₂₃)
-  (n₀ n₁ : Int)
+  (n₀ n₁ : ℤ)
 
-/--
-Definition of `Ψ` / `Ψ` 的定义
+/-- When `f₁`, `f₂` and `f₃` are composable morphisms, this is the canonical
+morphism `Z^n(f₂, f₃) ⟶ opZ^{n+1}(f₁, f₂)` that is induced both
+by `δ : H^n(f₂ ≫ f₃) ⟶ H^{n+1}(f₁)` (see `toCycles_Ψ`) and
+by `δ : H^n(f₃) ⟶ H^{n+1}(f₁ ≫ f₂)` (see `Ψ_fromOpcycles`).
+See the lemma `πE_d_ιE` for the relation between this definition
+and the differentials `d`. -/
+/-
+**CategoryTheory.Abelian.SpectralObject.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ψ
-  signature: (hn₁ : n₀ + 1 = n₁ := by lia)
-  body: X.descCycles f₂ f₃ _ rfl
-    (X.δ f₁ (f₂ ≫ f₃) n₀ n₁ hn₁ ≫ X.pOpcycles f₁ f₂ n₁) (by
-      rw [X.δ_naturality_assoc f₁ f₂ f₁ (f₂ ≫ f₃) (𝟙 _) (twoδ₂Toδ₁ f₂ f₃ _ rfl) _ _ rfl]; rw [Functor.map_id]; rw [id_comp]; rw [δ_pOpcycles ..])
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 Ψ
-  签名: (hn₁ : n₀ + 1 = n₁ := by lia)
-  定义体: X.descCycles f₂ f₃ _ rfl
-    (X.δ f₁ (f₂ ≫ f₃) n₀ n₁ hn₁ ≫ X.pOpcycles f₁ f₂ n₁) (by
-      rw [X.δ_naturality_assoc f₁ f₂ f₁ (f₂ ≫ f₃) (𝟙 _) (twoδ₂Toδ₁ f₂ f₃ _ rfl) _ _ rfl]; rw [Functor.map_id]; rw [id_comp]; rw [δ_pOpcycles ..])
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_id, X.cycles, X.descCycles, X.opcycles, X.pOpcycles, cycles, descCycles, id_comp, map_id, opcycles, pOpcycles
+--- 原说明 ---
+When `f₁`, `f₂` and `f₃` are composable morphisms, this is the canonical
+morphism `Z^n(f₂, f₃) ⟶ opZ^{n+1}(f₁, f₂)` that is induced both
+by `δ : H^n(f₂ ≫ f₃) ⟶ H^{n+1}(f₁)` (see `toCycles_Ψ`) and
+by `δ : H^n(f₃) ⟶ H^{n+1}(f₁ ≫ f₂)` (see `Ψ_fromOpcycles`).
+See the lemma `πE_d_ιE` for the relation between this definition
+and the differentials `d`.
 -/
 noncomputable def Ψ (hn₁ : n₀ + 1 = n₁ := by lia) :
     X.cycles f₂ f₃ n₀ ⟶ X.opcycles f₁ f₂ n₁ :=
   X.descCycles f₂ f₃ _ rfl
     (X.δ f₁ (f₂ ≫ f₃) n₀ n₁ hn₁ ≫ X.pOpcycles f₁ f₂ n₁) (by
-      rw [X.δ_naturality_assoc f₁ f₂ f₁ (f₂ ≫ f₃) (𝟙 _) (twoδ₂Toδ₁ f₂ f₃ _ rfl) _ _ rfl]; rw [Functor.map_id]; rw [id_comp]; rw [δ_pOpcycles ..])
+      rw [X.δ_naturality_assoc f₁ f₂ f₁ (f₂ ≫ f₃) (𝟙 _) (twoδ₂Toδ₁ f₂ f₃ _ rfl) _ _ rfl,
+        Functor.map_id, id_comp, δ_pOpcycles ..])
 
 @[reassoc (attr := simp)]
-/--
-lemma `toCycles_Ψ` / 引理 `toCycles_Ψ`
-
-English:
-lemma toCycles_Ψ
-  given: (hn₁ : n₀ + 1 = n₁ := by lia)
-  proof: by
-  subst h₂₃
-  simp only [Ψ, toCycles_descCycles]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 toCycles_Ψ
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia)
-  证明: by
-  subst h₂₃
-  simp only [Ψ, toCycles_descCycles]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: X.pOpcycles, X.toCycles, pOpcycles, toCycles, toCycles_descCycles
+/-
+**CategoryTheory.Abelian.SpectralObject.toCycles_** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toCycles_Ψ (hn₁ : n₀ + 1 = n₁ := by lia) :
     X.toCycles f₂ f₃ f₂₃ h₂₃ n₀ ≫ X.Ψ f₁ f₂ f₃ n₀ n₁ hn₁ =
@@ -237,69 +198,24 @@ lemma toCycles_Ψ (hn₁ : n₀ + 1 = n₁ := by lia) :
   simp only [Ψ, toCycles_descCycles]
 
 @[reassoc (attr := simp)]
-/--
-lemma `Ψ_fromOpcycles` / 引理 `Ψ_fromOpcycles`
-
-English:
-lemma Ψ_fromOpcycles
-  given: (hn₁ : n₀ + 1 = n₁ := by lia)
-  proof: by
-  rw [← cancel_epi (X.toCycles f₂ f₃ _ rfl n₀)]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]
-  exact (X.δ_naturality _ _ _ _ _ _ _ _ rfl).symm
-
-include h₂₃ in
-@[reassoc (attr := simp)]
-
-中文:
-引理 Ψ_fromOpcycles
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia)
-  证明: by
-  rw [← cancel_epi (X.toCycles f₂ f₃ _ rfl n₀)]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]
-  exact (X.δ_naturality _ _ _ _ _ _ _ _ rfl).symm
-
-include h₂₃ in
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: X.fromOpcycles, X.iCycles, X.toCycles, cancel_epi, fromOpcycles, iCycles, p_fromOpcycles, toCycles, toCycles_i_assoc
+/-
+**CategoryTheory.Abelian.SpectralObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Ψ_fromOpcycles (hn₁ : n₀ + 1 = n₁ := by lia) :
     X.Ψ f₁ f₂ f₃ n₀ n₁ hn₁ ≫ X.fromOpcycles f₁ f₂ f₁₂ h₁₂ n₁ =
       X.iCycles f₂ f₃ n₀ ≫ X.δ f₁₂ f₃ n₀ n₁ hn₁ := by
-  rw [← cancel_epi (X.toCycles f₂ f₃ _ rfl n₀)]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]
+  rw [← cancel_epi (X.toCycles f₂ f₃ _ rfl n₀),
+    toCycles_Ψ_assoc .., p_fromOpcycles, toCycles_i_assoc]
   exact (X.δ_naturality _ _ _ _ _ _ _ _ rfl).symm
 
 include h₂₃ in
 @[reassoc (attr := simp)]
-/--
-lemma `cyclesMap_Ψ` / 引理 `cyclesMap_Ψ`
-
-English:
-lemma cyclesMap_Ψ
-  given: (hn₁ : n₀ + 1 = n₁ := by lia)
-  proof: by
-  rw [← cancel_epi (X.toCycles f₁₂ f₃ (f₁ ≫ f₂ ≫ f₃)
-    (by rw [reassoc_of% h₁₂]) n₀), comp_zero,
-    X.toCycles_cyclesMap_assoc f₁₂ f₃ f₂ f₃ (f₁ ≫ f₂ ≫ f₃)
-    (by rw [reassoc_of% h₁₂]) f₂₃ h₂₃ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂)
-    (twoδ₁Toδ₀ f₁ f₂₃ (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃])) n₀ rfl rfl,
-    toCycles_Ψ .., zero₃_assoc .., zero_comp]
-
-include h₁₂ in
-
-中文:
-引理 cyclesMap_Ψ
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia)
-  证明: by
-  rw [← cancel_epi (X.toCycles f₁₂ f₃ (f₁ ≫ f₂ ≫ f₃)
-    (by rw [reassoc_of% h₁₂]) n₀), comp_zero,
-    X.toCycles_cyclesMap_assoc f₁₂ f₃ f₂ f₃ (f₁ ≫ f₂ ≫ f₃)
-    (by rw [reassoc_of% h₁₂]) f₂₃ h₂₃ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂)
-    (twoδ₁Toδ₀ f₁ f₂₃ (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃])) n₀ rfl rfl,
-    toCycles_Ψ .., zero₃_assoc .., zero_comp]
-
-include h₁₂ in
-
-Depends on / 依赖: X.cyclesMap, X.toCycles, X.toCycles_cyclesMap_assoc, cancel_epi, comp_zero, cyclesMap, reassoc_of, toCycles, toCycles_cyclesMap_assoc, zero_comp
+/-
+**CategoryTheory.Abelian.SpectralObject.cyclesMap_** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cyclesMap_Ψ (hn₁ : n₀ + 1 = n₁ := by lia) :
     X.cyclesMap _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) n₀ ≫
@@ -312,30 +228,10 @@ lemma cyclesMap_Ψ (hn₁ : n₀ + 1 = n₁ := by lia) :
     toCycles_Ψ .., zero₃_assoc .., zero_comp]
 
 include h₁₂ in
-/--
-lemma `Ψ_opcyclesMap` / 引理 `Ψ_opcyclesMap`
-
-English:
-lemma Ψ_opcyclesMap
-  given: (hn₁ : n₀ + 1 = n₁ := by lia)
-  proof: by
-  rw [← cancel_mono (X.fromOpcycles f₁ f₂₃ (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃]) n₁),
-    zero_comp, assoc, X.opcyclesMap_fromOpcycles f₁ f₂ f₁ f₂₃ f₁₂ h₁₂
-    (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃]) (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃)
-    (twoδ₂Toδ₁ f₁₂ f₃ (f₁ ≫ f₂ ≫ f₃) (by rw [reassoc_of% h₁₂])) n₁ rfl rfl,
-    Ψ_fromOpcycles_assoc .., zero₁ .., comp_zero]
-
-中文:
-引理 Ψ_opcyclesMap
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia)
-  证明: by
-  rw [← cancel_mono (X.fromOpcycles f₁ f₂₃ (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃]) n₁),
-    zero_comp, assoc, X.opcyclesMap_fromOpcycles f₁ f₂ f₁ f₂₃ f₁₂ h₁₂
-    (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃]) (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃)
-    (twoδ₂Toδ₁ f₁₂ f₃ (f₁ ≫ f₂ ≫ f₃) (by rw [reassoc_of% h₁₂])) n₁ rfl rfl,
-    Ψ_fromOpcycles_assoc .., zero₁ .., comp_zero]
-
-Depends on / 依赖: X.fromOpcycles, X.opcyclesMap, X.opcyclesMap_fromOpcycles, cancel_mono, comp_zero, fromOpcycles, opcyclesMap, opcyclesMap_fromOpcycles, reassoc_of, zero_comp
+/-
+**CategoryTheory.Abelian.SpectralObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Ψ_opcyclesMap (hn₁ : n₀ + 1 = n₁ := by lia) :
     X.Ψ f₁ f₂ f₃ n₀ n₁ hn₁ ≫
@@ -346,61 +242,26 @@ lemma Ψ_opcyclesMap (hn₁ : n₀ + 1 = n₁ := by lia) :
     (twoδ₂Toδ₁ f₁₂ f₃ (f₁ ≫ f₂ ≫ f₃) (by rw [reassoc_of% h₁₂])) n₁ rfl rfl,
     Ψ_fromOpcycles_assoc .., zero₁ .., comp_zero]
 
-/--
-Definition of `sequenceΨ` / `sequenceΨ` 的定义
+/-- When `f₁`, `f₂` and `f₃` are composable morphisms, this is the exact sequence
+`Z^n(f₁ ≫ f₂, f₃) ⟶ Z^n(f₂, f₃) ⟶ opZ^{n+1}(f₁, f₂) ⟶ opZ^{n+1}(f₁, f₂ ≫ f₃)`. -/
+/-
+**CategoryTheory.Abelian.SpectralObject.sequence** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sequenceΨ
-  signature: (hn₁ : n₀ + 1 = n₁ := by lia)
-  body: mk₃ (X.cyclesMap _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) n₀)
-    (X.Ψ f₁ f₂ f₃ n₀ n₁ hn₁)
-    (X.opcyclesMap _ _ _ _ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) n₁)
-
-中文:
-定义 sequenceΨ
-  签名: (hn₁ : n₀ + 1 = n₁ := by lia)
-  定义体: mk₃ (X.cyclesMap _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) n₀)
-    (X.Ψ f₁ f₂ f₃ n₀ n₁ hn₁)
-    (X.opcyclesMap _ _ _ _ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) n₁)
-
-Depends on / 依赖: ComposableArrows, X.cyclesMap, X.opcyclesMap, cyclesMap, opcyclesMap
+--- 原说明 ---
+When `f₁`, `f₂` and `f₃` are composable morphisms, this is the exact sequence
+`Z^n(f₁ ≫ f₂, f₃) ⟶ Z^n(f₂, f₃) ⟶ opZ^{n+1}(f₁, f₂) ⟶ opZ^{n+1}(f₁, f₂ ≫ f₃)`.
 -/
 noncomputable def sequenceΨ (hn₁ : n₀ + 1 = n₁ := by lia) :
     ComposableArrows C 3 :=
   mk₃ (X.cyclesMap _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) n₀)
     (X.Ψ f₁ f₂ f₃ n₀ n₁ hn₁)
     (X.opcyclesMap _ _ _ _ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) n₁)
-
-/--
-lemma `cyclesMap_Ψ_exact` / 引理 `cyclesMap_Ψ_exact`
-
-English:
-lemma cyclesMap_Ψ_exact
-  given: (hn₁ : n₀ + 1 = n₁ := by lia)
-  proof: by
-  rw [ShortComplex.exact_iff_exact_up_to_refinements]
-  intro A z hz
-  refine ⟨A, 𝟙 _, inferInstance,
-    X.liftCycles f₁₂ f₃ n₀ n₁ hn₁ (z ≫ X.iCycles f₂ f₃ n₀) ?_, ?_⟩ <;> dsimp
-  · rw [assoc, ← X.Ψ_fromOpcycles f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ hn₁, reassoc_of% hz, zero_comp]
-  · rw [← cancel_mono (X.iCycles f₂ f₃ n₀), id_comp, assoc,
-      X.cyclesMap_i _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) (𝟙 _) n₀ (by cat_disch),
-      Functor.map_id, comp_id, liftCycles_i]
-
-中文:
-引理 cyclesMap_Ψ_exact
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia)
-  证明: by
-  rw [ShortComplex.exact_iff_exact_up_to_refinements]
-  intro A z hz
-  refine ⟨A, 𝟙 _, inferInstance,
-    X.liftCycles f₁₂ f₃ n₀ n₁ hn₁ (z ≫ X.iCycles f₂ f₃ n₀) ?_, ?_⟩ <;> dsimp
-  · rw [assoc, ← X.Ψ_fromOpcycles f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ hn₁, reassoc_of% hz, zero_comp]
-  · rw [← cancel_mono (X.iCycles f₂ f₃ n₀), id_comp, assoc,
-      X.cyclesMap_i _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) (𝟙 _) n₀ (by cat_disch),
-      Functor.map_id, comp_id, liftCycles_i]
-
-Depends on / 依赖: Functor, Functor.map_i, ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, ShortComplex.mk, X.cyclesMap_, X.cyclesMap_i, X.iCycles, X.liftCycles, cancel_mono, cat_disch, cyclesMap_i, exact_iff_exact_up_to_refinements, iCycles, id_comp, liftCycles, map_i, reassoc_of, zero_comp
+/-
+**CategoryTheory.Abelian.SpectralObject.cyclesMap_** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cyclesMap_Ψ_exact (hn₁ : n₀ + 1 = n₁ := by lia) :
     (ShortComplex.mk _ _ (X.cyclesMap_Ψ f₁ f₂ f₃ f₁₂ h₁₂ f₂₃ h₂₃ n₀ n₁ hn₁)).Exact := by
@@ -415,42 +276,10 @@ lemma cyclesMap_Ψ_exact (hn₁ : n₀ + 1 = n₁ := by lia) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Ψ_opcyclesMap_exact` / 引理 `Ψ_opcyclesMap_exact`
-
-English:
-lemma Ψ_opcyclesMap_exact
-  given: (hn₁ : n₀ + 1 = n₁ := by lia)
-  proof: by
-  rw [ShortComplex.exact_iff_exact_up_to_refinements]
-  intro _ z₀ hz₀
-  obtain ⟨A₁, π₁, _, z₁, hz₁⟩ := surjective_up_to_refinements_of_epi (X.pOpcycles f₁ f₂ n₁) z₀
-  obtain ⟨A₂, π₂, _, z₂, hz₂⟩ :=
-      (X.cokernelSequenceOpcycles_exact f₁ f₂₃ n₀ n₁ hn₁).exact_up_to_refinements z₁ (by
-    dsimp
-    have H := X.p_opcyclesMap f₁ f₂ f₁ f₂₃ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) (𝟙 _) n₁ (by cat_disch)
-    rw [Functor.map_id]; rw [id_comp] at H
-    rw [← H]; rw [← reassoc_of% hz₁]; rw [hz₀]; rw [comp_zero])
-  refine ⟨A₂, π₂ ≫ π₁, inferInstance, z₂ ≫ X.toCycles f₂ f₃ f₂₃ h₂₃ n₀, ?_⟩
-  rw [← cancel_mono (X.fromOpcycles f₁ f₂ f₁₂ h₁₂ n₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [← reassoc_of% dsimp% hz₂]; rw [reassoc_of% hz₁]; rw [p_fromOpcycles]
-
-中文:
-引理 Ψ_opcyclesMap_exact
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia)
-  证明: by
-  rw [ShortComplex.exact_iff_exact_up_to_refinements]
-  intro _ z₀ hz₀
-  obtain ⟨A₁, π₁, _, z₁, hz₁⟩ := surjective_up_to_refinements_of_epi (X.pOpcycles f₁ f₂ n₁) z₀
-  obtain ⟨A₂, π₂, _, z₂, hz₂⟩ :=
-      (X.cokernelSequenceOpcycles_exact f₁ f₂₃ n₀ n₁ hn₁).exact_up_to_refinements z₁ (by
-    dsimp
-    have H := X.p_opcyclesMap f₁ f₂ f₁ f₂₃ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) (𝟙 _) n₁ (by cat_disch)
-    rw [Functor.map_id]; rw [id_comp] at H
-    rw [← H]; rw [← reassoc_of% hz₁]; rw [hz₀]; rw [comp_zero])
-  refine ⟨A₂, π₂ ≫ π₁, inferInstance, z₂ ≫ X.toCycles f₂ f₃ f₂₃ h₂₃ n₀, ?_⟩
-  rw [← cancel_mono (X.fromOpcycles f₁ f₂ f₁₂ h₁₂ n₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [← reassoc_of% dsimp% hz₂]; rw [reassoc_of% hz₁]; rw [p_fromOpcycles]
-
-Depends on / 依赖: Functor, Functor.map_id, ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, ShortComplex.mk, X.cokernelSequenceOpcycles_exact, X.pOpcycles, X.p_opcyclesMap, cat_disch, cokernelSequenceOpcycles_exact, exact_iff_exact_up_to_refinements, exact_up_to_refinements, id_c, map_id, pOpcycles, p_opcyclesMap, surjective_up_to_refinements_of_epi
+/-
+**CategoryTheory.Abelian.SpectralObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Ψ_opcyclesMap_exact (hn₁ : n₀ + 1 = n₁ := by lia) :
     (ShortComplex.mk _ _ (X.Ψ_opcyclesMap f₁ f₂ f₃ f₁₂ h₁₂ f₂₃ h₂₃ n₀ n₁ hn₁)).Exact := by
@@ -461,27 +290,16 @@ lemma Ψ_opcyclesMap_exact (hn₁ : n₀ + 1 = n₁ := by lia) :
       (X.cokernelSequenceOpcycles_exact f₁ f₂₃ n₀ n₁ hn₁).exact_up_to_refinements z₁ (by
     dsimp
     have H := X.p_opcyclesMap f₁ f₂ f₁ f₂₃ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) (𝟙 _) n₁ (by cat_disch)
-    rw [Functor.map_id]; rw [id_comp] at H
-    rw [← H]; rw [← reassoc_of% hz₁]; rw [hz₀]; rw [comp_zero])
+    rw [Functor.map_id, id_comp] at H
+    rw [← H, ← reassoc_of% hz₁, hz₀, comp_zero])
   refine ⟨A₂, π₂ ≫ π₁, inferInstance, z₂ ≫ X.toCycles f₂ f₃ f₂₃ h₂₃ n₀, ?_⟩
-  rw [← cancel_mono (X.fromOpcycles f₁ f₂ f₁₂ h₁₂ n₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [← reassoc_of% dsimp% hz₂]; rw [reassoc_of% hz₁]; rw [p_fromOpcycles]
-
-/--
-lemma `sequenceΨ_exact` / 引理 `sequenceΨ_exact`
-
-English:
-lemma sequenceΨ_exact
-  given: (hn₁ : n₀ + 1 = n₁ := by lia)
-  proof: exact_of_δ₀ (X.cyclesMap_Ψ_exact f₁ f₂ f₃ f₁₂ h₁₂ f₂₃ h₂₃ n₀ n₁ hn₁).exact_toComposableArrows
-    (X.Ψ_opcyclesMap_exact f₁ f₂ f₃ f₁₂ h₁₂ f₂₃ h₂₃ n₀ n₁ hn₁).exact_toComposableArrows
-
-中文:
-引理 sequenceΨ_exact
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia)
-  证明: exact_of_δ₀ (X.cyclesMap_Ψ_exact f₁ f₂ f₃ f₁₂ h₁₂ f₂₃ h₂₃ n₀ n₁ hn₁).exact_toComposableArrows
-    (X.Ψ_opcyclesMap_exact f₁ f₂ f₃ f₁₂ h₁₂ f₂₃ h₂₃ n₀ n₁ hn₁).exact_toComposableArrows
-
-Depends on / 依赖: X.cyclesMap_, X.sequence, exact_toComposableArrows
+  rw [← cancel_mono (X.fromOpcycles f₁ f₂ f₁₂ h₁₂ n₁), assoc, assoc,
+    assoc, assoc, toCycles_Ψ_assoc .., p_fromOpcycles, ← reassoc_of% dsimp% hz₂,
+    reassoc_of% hz₁, p_fromOpcycles]
+/-
+**CategoryTheory.Abelian.SpectralObject.sequence** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sequenceΨ_exact (hn₁ : n₀ + 1 = n₁ := by lia) :
     (X.sequenceΨ f₁ f₂ f₃ f₁₂ h₁₂ f₂₃ h₂₃ n₀ n₁ hn₁).Exact :=
@@ -491,62 +309,34 @@ lemma sequenceΨ_exact (hn₁ : n₀ + 1 = n₁ := by lia) :
 end
 
 @[reassoc (attr := simp)]
-/--
-lemma `πE_d_ιE` / 引理 `πE_d_ιE`
-
-English:
-lemma πE_d_ιE
-  proof: by
-  rw [← cancel_epi (X.toCycles f₃ f₄ _ rfl n₁)]; rw [toCycles_Ψ ..]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE ..]; rw [toCycles_i_assoc]; rw [← X.δ_naturality_assoc (f₁ ≫ f₂) (f₃ ≫ f₄) f₂ (f₃ ≫ f₄)
-      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]
-
-中文:
-引理 πE_d_ιE
-  证明: by
-  rw [← cancel_epi (X.toCycles f₃ f₄ _ rfl n₁)]; rw [toCycles_Ψ ..]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE ..]; rw [toCycles_i_assoc]; rw [← X.δ_naturality_assoc (f₁ ≫ f₂) (f₃ ≫ f₄) f₂ (f₃ ≫ f₄)
-      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]
-
-Depends on / 依赖: X.toCycles, X.toCycles_, cancel_epi, isNoetherian_submodule, toCycles, toCycles_i_assoc
+/-
+**CategoryTheory.Abelian.SpectralObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma πE_d_ιE
     {i₀ i₁ i₂ i₃ i₄ i₅ : ι} (f₁ : i₀ ⟶ i₁) (f₂ : i₁ ⟶ i₂) (f₃ : i₂ ⟶ i₃)
-    (f₄ : i₃ ⟶ i₄) (f₅ : i₄ ⟶ i₅) (n₀ n₁ n₂ n₃ : Int)
+    (f₄ : i₃ ⟶ i₄) (f₅ : i₄ ⟶ i₅) (n₀ n₁ n₂ n₃ : ℤ)
     (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia) (hn₃ : n₂ + 1 = n₃ := by lia) :
     X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂ ≫ X.d f₁ f₂ f₃ f₄ f₅ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃ ≫
       X.ιE f₁ f₂ f₃ n₁ n₂ n₃ hn₂ hn₃ = X.Ψ f₂ f₃ f₄ n₁ n₂ hn₂ := by
-  rw [← cancel_epi (X.toCycles f₃ f₄ _ rfl n₁)]; rw [toCycles_Ψ ..]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE ..]; rw [toCycles_i_assoc]; rw [← X.δ_naturality_assoc (f₁ ≫ f₂) (f₃ ≫ f₄) f₂ (f₃ ≫ f₄)
-      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]
+  rw [← cancel_epi (X.toCycles f₃ f₄ _ rfl n₁), toCycles_Ψ ..,
+    X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃,
+    πE_ιE .., toCycles_i_assoc, ← X.δ_naturality_assoc (f₁ ≫ f₂) (f₃ ≫ f₄) f₂ (f₃ ≫ f₄)
+      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂, Functor.map_id, id_comp]
 
 section
 
 variable {i₀ i₁ i₂ : ι} (f₁ : i₀ ⟶ i₁) (f₂ : i₁ ⟶ i₂)
-  (n₀ n₁ n₂ n₃ : Int)
+  (n₀ n₁ n₂ n₃ : ℤ)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `πE_EIsoH_hom` / 引理 `πE_EIsoH_hom`
-
-English:
-lemma πE_EIsoH_hom
-  given: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
-  proof: by
-  obtain rfl : n₀ = n₁ - 1 := by lia
-  simp [πE, cyclesIsoH, EIsoH]
-
-@[reassoc]
-
-中文:
-引理 πE_EIsoH_hom
-  条件: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
-  证明: by
-  obtain rfl : n₀ = n₁ - 1 := by lia
-  simp [πE, cyclesIsoH, EIsoH]
-
-@[reassoc]
-
-Depends on / 依赖: X.EIsoH, X.cyclesIsoH, cyclesIsoH, isArtinian_submodule
+/-
+**CategoryTheory.Abelian.SpectralObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Abelian.SpectralObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma πE_EIsoH_hom (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia) :
     X.πE (𝟙 i₀) f₁ (𝟙 i₁) n₀ n₁ n₂ hn₁ hn₂ ≫ (X.EIsoH f₁ n₀ n₁ n₂ hn₁ hn₂).hom =
@@ -555,29 +345,57 @@ lemma πE_EIsoH_hom (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂
   simp [πE, cyclesIsoH, EIsoH]
 
 @[reassoc]
-/--
-lemma `d_EIsoH_hom` / 引理 `d_EIsoH_hom`
-
-English:
-lemma d_EIsoH_hom
-  statement: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
-  proof: by
-  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁)]; rw [X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_EIsoH_hom ..]; rw [πE_EIsoH_hom_assoc ..]; rw [cyclesIsoH_inv_hom_id ..]; rw [comp_id]; rw [cyclesIsoH_inv_hom_id_assoc ..]
-
-中文:
-引理 d_EIsoH_hom
-  结论: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
-  证明: by
-  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁)]; rw [X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_EIsoH_hom ..]; rw [πE_EIsoH_hom_assoc ..]; rw [cyclesIsoH_inv_hom_id ..]; rw [comp_id]; rw [cyclesIsoH_inv_hom_id_assoc ..]
-
-Depends on / 依赖: X.EIsoH, X.toCycles, X.toCycles_, cancel_epi, cyclesI, toCycles
+/-
+**CategoryTheory.Abelian.SpectralObject.d_EIsoH_hom** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Abelian.SpectralObject`。
+形式化陈述：d_EIsoH_hom (hn₁ : n₀ + 1 = n₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.instEpiπE`：∀ {C : Type u_2} {ι : T
+ype u_4} [inst : CategoryTheory.Category.{u_1, u_2} C]   [inst_1 : CategoryTheor
+y.Category.{u_3, u_4} ι] [inst_2 : Ca…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.instEpiToCycles`：∀ {C : Type u_1} 
+{ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Categor
+yTheory.Category.{v_2, u_2} ι] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.toCycles_πE_d_assoc`：∀ {C : Type u
+_1} {ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} ι] [inst_2 : Ca…
+· 使用引理 `CategoryTheory.Abelian.SpectralObject.πE_EIsoH_hom`：πE_EIsoH_hom (hn₁ : 
+n₀ + 1 = n₁
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.πE_EIsoH_hom_assoc`：∀ {C : Type u_
+1} {ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} ι] [inst_2 : Ca…
+· 使用引理 `CategoryTheory.Abelian.SpectralObject.cyclesIsoH_inv_hom_id`：cyclesIsoH_
+inv_hom_id (hn₁ : n₀ + 1 = n₁
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Abelian.SpectralObject.cyclesIsoH_inv_hom_id_assoc`：∀ {C 
+: Type u_1} {ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst
+_1 : CategoryTheory.Category.{v_2, u_2} ι] [inst_2 : Ca…
 -/
 lemma d_EIsoH_hom (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
     (hn₃ : n₂ + 1 = n₃ := by lia) :
     X.d (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃ ≫
       (X.EIsoH f₁ n₁ n₂ n₃ hn₂ hn₃).hom =
     (X.EIsoH f₂ n₀ n₁ n₂ hn₁ hn₂).hom ≫ X.δ f₁ f₂ n₁ n₂ hn₂ := by
-  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁)]; rw [X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_EIsoH_hom ..]; rw [πE_EIsoH_hom_assoc ..]; rw [cyclesIsoH_inv_hom_id ..]; rw [comp_id]; rw [cyclesIsoH_inv_hom_id_assoc ..]
+  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂),
+    ← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁),
+    X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃,
+    πE_EIsoH_hom .., πE_EIsoH_hom_assoc .., cyclesIsoH_inv_hom_id ..,
+    comp_id, cyclesIsoH_inv_hom_id_assoc ..]
 
 end
 
@@ -586,3 +404,4 @@ end SpectralObject
 end Abelian
 
 end CategoryTheory
+

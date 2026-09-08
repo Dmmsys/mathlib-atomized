@@ -41,32 +41,23 @@ variable {C : Type u} [Category.{v} C] {D : Type u'} [Category.{v'} D]
   (J : Type w) [LinearOrder J] [OrderBot J]
   {X Y : C} (f : X ⟶ Y)
 
-/--
-Definition of `TransfiniteCompositionOfShape` / `TransfiniteCompositionOfShape` 的定义
+/-- Given a well-ordered type `J`, a morphism `f : X ⟶ Y` in a category `C`
+is a transfinite composition of shape `J` if we have a well order continuous
+functor `F : J ⥤ C`, an isomorphism `F.obj ⊥ ≅ X`, a colimit cocone for `F`
+whose point is `Y`, such that the composition `X ⟶ F.obj ⊥ ⟶ Y` is `f`. -/
+/-
+**CategoryTheory.TransfiniteCompositionOfShape** 是 Mathlib 中的一个结构，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：TransfiniteCompositionOfShape [SuccOrder J] [WellFoundedLT J] where /-- a 
+well order continuous functor `F : J ⥤ C` -/ F : J ⥤ C /-- the isomorphism `F.ob
+j ⊥ ≅ X` -/ isoBot : F.obj ⊥ ≅ X isWellOrderContinuous : F.IsWellOrderContinuous
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TransfiniteCompositionOfShape
-  parameters: [SuccOrder J] [WellFoundedLT J]
-  axioms and operations (6):
-    - F : J ⥤ C
-    - isoBot : F.obj ⊥ ≅ X
-    - isWellOrderContinuous : F.IsWellOrderContinuous  [default: by infer_instance]
-    - incl : F ⟶ (Functor.const _).obj Y
-    - isColimit : IsColimit (Cocone.mk Y incl)
-    - fac : isoBot.inv ≫ incl.app ⊥ = f  [default: by cat_disch]
-
-中文:
-结构 TransfiniteCompositionOfShape
-  参数: [Succ序 J] [WellFoundedLT J]
-  公理与运算 (6 个):
-    - F : J ⥤ C
-    - isoBot : F.obj ⊥ ≅ X
-    - isWellOrderContinuous : F.是WellOrderContinuous  [默认: by infer_instance]
-    - incl : F ⟶ (函子.const _).obj Y
-    - isColimit : 是余极限 (余锥.mk Y incl)
-    - fac : isoBot.inv ≫ incl.app ⊥ = f  [默认: by cat_disch]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+Given a well-ordered type `J`, a morphism `f : X ⟶ Y` in a category `C`
+is a transfinite composition of shape `J` if we have a well order continuous
+functor `F : J ⥤ C`, an isomorphism `F.obj ⊥ ≅ X`, a colimit cocone for `F`
+whose point is `Y`, such that the composition `X ⟶ F.obj ⊥ ⟶ Y` is `f`.
 -/
 structure TransfiniteCompositionOfShape [SuccOrder J] [WellFoundedLT J] where
   /-- a well order continuous functor `F : J ⥤ C` -/
@@ -94,26 +85,19 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `f` and `f'` are two isomorphic morphisms, and `f` is a transfinite composition
 of shape `J`, then `f'` also is. -/
 @[simps]
-/--
-Definition of `ofArrowIso` / `ofArrowIso` 的定义
+/-
+**CategoryTheory.TransfiniteCompositionOfShape.ofArrowIso** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.TransfiniteCompositionOfShape`。
+形式化陈述：ofArrowIso {X' Y' : C} {f' : X' ⟶ Y'} (e : Arrow.mk f ≅ Arrow.mk f') : Tra
+nsfiniteCompositionOfShape J f' where F
+参数：e : Arrow.mk f ≅ Arrow.mk f'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofArrowIso
-  signature: {X' Y' : C} {f' : X' ⟶ Y'} (e : Arrow.mk f ≅ Arrow.mk f')
-  body: c.F
-  isoBot := c.isoBot ≪≫ Arrow.leftFunc.mapIso e
-  incl := c.incl ≫ (Functor.const J).map e.hom.right
-  isColimit := IsColimit.ofIsoColimit c.isColimit
-    (Cocone.ext (Arrow.rightFunc.mapIso e))
-
-中文:
-定义 ofArrowIso
-  签名: {X' Y' : C} {f' : X' ⟶ Y'} (e : 箭头.mk f ≅ 箭头.mk f')
-  定义体: c.F
-  isoBot := c.isoBot ≪≫ Arrow.leftFunc.mapIso e
-  incl := c.incl ≫ (Functor.const J).map e.hom.right
-  isColimit := IsColimit.ofIsoColimit c.isColimit
-    (Cocone.ext (Arrow.rightFunc.mapIso e))
+--- 原说明 ---
+If `f` and `f'` are two isomorphic morphisms, and `f` is a transfinite compositi
+on
+of shape `J`, then `f'` also is.
 -/
 def ofArrowIso {X' Y' : C} {f' : X' ⟶ Y'} (e : Arrow.mk f ≅ Arrow.mk f') :
     TransfiniteCompositionOfShape J f' where
@@ -126,28 +110,20 @@ def ofArrowIso {X' Y' : C} {f' : X' ⟶ Y'} (e : Arrow.mk f ≅ Arrow.mk f') :
 /-- If `G : ComposableArrows C n`, then `G.hom : G.left ⟶ G.right` is a
 transfinite composition of shape `Fin (n + 1)`. -/
 @[simps]
-/--
-Definition of `ofComposableArrows` / `ofComposableArrows` 的定义
+/-
+**CategoryTheory.TransfiniteCompositionOfShape.ofComposableArrows** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.TransfiniteCompositionOfShape`。
+形式化陈述：ofComposableArrows {n : Nat} (G : ComposableArrows C n) : TransfiniteCompo
+sitionOfShape (Fin (n + 1)) G.hom where F
+参数：G : ComposableArrows C n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofComposableArrows
-  signature: {n : Nat} (G : ComposableArrows C n)
-  body: G
-  isoBot := Iso.refl _
-  incl := _
-  isColimit := colimitOfDiagramTerminal (Fin.isTerminalLast n) G
-  fac := Category.id_comp _
-
-中文:
-定义 ofComposableArrows
-  签名: {n : 自然数} (G : ComposableArrows C n)
-  定义体: G
-  isoBot := Iso.refl _
-  incl := _
-  isColimit := colimitOfDiagramTerminal (Fin.isTerminalLast n) G
-  fac := Category.id_comp _
+--- 原说明 ---
+If `G : ComposableArrows C n`, then `G.hom : G.left ⟶ G.right` is a
+transfinite composition of shape `Fin (n + 1)`.
 -/
-def ofComposableArrows {n : Nat} (G : ComposableArrows C n) :
+def ofComposableArrows {n : ℕ} (G : ComposableArrows C n) :
     TransfiniteCompositionOfShape (Fin (n + 1)) G.hom where
   F := G
   isoBot := Iso.refl _
@@ -160,26 +136,18 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `f` is a transfinite composition of shape `J`, then it is
 also a transfinite composition of shape `J'` if `J' ≃o J`. -/
 @[simps]
-/--
-Definition of `ofOrderIso` / `ofOrderIso` 的定义
+/-
+**CategoryTheory.TransfiniteCompositionOfShape.ofOrderIso** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.TransfiniteCompositionOfShape`。
+形式化陈述：ofOrderIso {J' : Type w'} [LinearOrder J'] [OrderBot J'] [SuccOrder J'] [W
+ellFoundedLT J'] (e : J' ≃o J) : TransfiniteCompositionOfShape J' f where F
+参数：e : J' ≃o J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofOrderIso
-  signature: {J' : Type w'} [LinearOrder J'] [OrderBot J']
-  body: e.equivalence.functor ⋙ c.F
-  isoBot := c.F.mapIso (eqToIso e.map_bot) ≪≫ c.isoBot
-  incl := Functor.whiskerLeft e.equivalence.functor c.incl
-  isColimit := IsColimit.whiskerEquivalence (c.isColimit) e.equivalence
-
-中文:
-定义 ofOrderIso
-  签名: {J' : 类型 w'} [线性序 J'] [有底序 J']
-  定义体: e.equivalence.functor ⋙ c.F
-  isoBot := c.F.mapIso (eqToIso e.map_bot) ≪≫ c.isoBot
-  incl := Functor.whiskerLeft e.equivalence.functor c.incl
-  isColimit := IsColimit.whiskerEquivalence (c.isColimit) e.equivalence
-
-Depends on / 依赖: e.equivalence.functor, equivalence, functor
+--- 原说明 ---
+If `f` is a transfinite composition of shape `J`, then it is
+also a transfinite composition of shape `J'` if `J' ≃o J`.
 -/
 def ofOrderIso {J' : Type w'} [LinearOrder J'] [OrderBot J']
     [SuccOrder J'] [WellFoundedLT J'] (e : J' ≃o J) :
@@ -193,30 +161,18 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `f` is a transfinite composition of shape `J`, then `F.map f` also is
 provided `F` preserves suitable colimits. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.TransfiniteCompositionOfShape.map** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.TransfiniteCompositionOfShape`。
+形式化陈述：map (F : C ⥤ D) [PreservesWellOrderContinuousOfShape J F] [PreservesColimi
+tsOfShape J F] : TransfiniteCompositionOfShape J (F.map f) where F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (F : C ⥤ D) [PreservesWellOrderContinuousOfShape J F]
-  body: c.F ⋙ F
-  isoBot := F.mapIso c.isoBot
-  incl := Functor.whiskerRight c.incl F ≫ (Functor.constComp _ _ _).hom
-  isColimit :=
-    IsColimit.ofIsoColimit (isColimitOfPreserves F c.isColimit)
-      (Cocone.ext (Iso.refl _))
-  fac := by simp [← Functor.map_comp]
-
-中文:
-定义 map
-  签名: (F : C ⥤ D) [保持WellOrderContinuousOfShape J F]
-  定义体: c.F ⋙ F
-  isoBot := F.mapIso c.isoBot
-  incl := Functor.whiskerRight c.incl F ≫ (Functor.constComp _ _ _).hom
-  isColimit :=
-    IsColimit.ofIsoColimit (isColimitOfPreserves F c.isColimit)
-      (Cocone.ext (Iso.refl _))
-  fac := by simp [← Functor.map_comp]
+--- 原说明 ---
+If `f` is a transfinite composition of shape `J`, then `F.map f` also is
+provided `F` preserves suitable colimits.
 -/
 noncomputable def map (F : C ⥤ D) [PreservesWellOrderContinuousOfShape J F]
     [PreservesColimitsOfShape J F] :
@@ -234,36 +190,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A transfinite composition of shape `J` induces a transfinite composition
 of shape `Set.Iic j` for any `j : J`. -/
 @[simps]
-/--
-Definition of `iic` / `iic` 的定义
+/-
+**CategoryTheory.TransfiniteCompositionOfShape.iic** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.TransfiniteCompositionOfShape`。
+形式化陈述：iic (j : J) : TransfiniteCompositionOfShape (Set.Iic j) (c.F.map (homOfLE 
+bot_le : ⊥ ⟶ j)) where F
+参数：j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iic
-  signature: (j : J)
-  body: (Set.initialSegIic j).monotone.functor ⋙ c.F
-  isoBot := Iso.refl _
-  incl :=
-    { app i := c.F.map (homOfLE i.2)
-      naturality i i' φ := by
-        dsimp
-        rw [← Functor.map_comp]; rw [Category.comp_id]
-        rfl }
-  isColimit := colimitOfDiagramTerminal isTerminalTop _
-
-中文:
-定义 iic
-  签名: (j : J)
-  定义体: (Set.initialSegIic j).monotone.functor ⋙ c.F
-  isoBot := Iso.refl _
-  incl :=
-    { app i := c.F.map (homOfLE i.2)
-      naturality i i' φ := by
-        dsimp
-        rw [← Functor.map_comp]; rw [Category.comp_id]
-        rfl }
-  isColimit := colimitOfDiagramTerminal isTerminalTop _
-
-Depends on / 依赖: Set.initialSegIic, functor, initialSegIic, monotone, monotone.functor
+--- 原说明 ---
+A transfinite composition of shape `J` induces a transfinite composition
+of shape `Set.Iic j` for any `j : J`.
 -/
 noncomputable def iic (j : J) :
     TransfiniteCompositionOfShape (Set.Iic j) (c.F.map (homOfLE bot_le : ⊥ ⟶ j)) where
@@ -273,7 +211,7 @@ noncomputable def iic (j : J) :
     { app i := c.F.map (homOfLE i.2)
       naturality i i' φ := by
         dsimp
-        rw [← Functor.map_comp]; rw [Category.comp_id]
+        rw [← Functor.map_comp, Category.comp_id]
         rfl }
   isColimit := colimitOfDiagramTerminal isTerminalTop _
 
@@ -281,40 +219,29 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A transfinite composition of shape `J` induces a transfinite composition
 of shape `Set.Ici j` for any `j : J`. -/
 @[simps]
-/--
-Definition of `ici` / `ici` 的定义
+/-
+**CategoryTheory.TransfiniteCompositionOfShape.ici** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.TransfiniteCompositionOfShape`。
+形式化陈述：ici (j : J) : TransfiniteCompositionOfShape (Set.Ici j) (c.incl.app j) whe
+re F
+参数：j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ici
-  signature: (j : J)
-  body: (Subtype.mono_coe (· in Set.Ici j)).functor ⋙ c.F
-  isWellOrderContinuous := Functor.IsWellOrderContinuous.restriction_setIci _
-  isoBot := Iso.refl _
-  incl := Functor.whiskerLeft _ c.incl
-  isColimit := (Functor.Final.isColimitWhiskerEquiv
-    (Subtype.mono_coe (· in Set.Ici j)).functor _).2 c.isColimit
-
-中文:
-定义 ici
-  签名: (j : J)
-  定义体: (Subtype.mono_coe (· in Set.Ici j)).functor ⋙ c.F
-  isWellOrderContinuous := Functor.IsWellOrderContinuous.restriction_setIci _
-  isoBot := Iso.refl _
-  incl := Functor.whiskerLeft _ c.incl
-  isColimit := (Functor.Final.isColimitWhiskerEquiv
-    (Subtype.mono_coe (· in Set.Ici j)).functor _).2 c.isColimit
-
-Depends on / 依赖: Set.Ici, Subtype, Subtype.mono_coe, functor, mono_coe
+--- 原说明 ---
+A transfinite composition of shape `J` induces a transfinite composition
+of shape `Set.Ici j` for any `j : J`.
 -/
 noncomputable def ici (j : J) :
     TransfiniteCompositionOfShape (Set.Ici j) (c.incl.app j) where
-  F := (Subtype.mono_coe (· in Set.Ici j)).functor ⋙ c.F
+  F := (Subtype.mono_coe (· ∈ Set.Ici j)).functor ⋙ c.F
   isWellOrderContinuous := Functor.IsWellOrderContinuous.restriction_setIci _
   isoBot := Iso.refl _
   incl := Functor.whiskerLeft _ c.incl
   isColimit := (Functor.Final.isColimitWhiskerEquiv
-    (Subtype.mono_coe (· in Set.Ici j)).functor _).2 c.isColimit
+    (Subtype.mono_coe (· ∈ Set.Ici j)).functor _).2 c.isColimit
 
 end TransfiniteCompositionOfShape
 
 end CategoryTheory
+

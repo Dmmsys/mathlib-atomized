@@ -37,16 +37,15 @@ variable [CategoryStruct.{v₁} C] [Quiver.IsThin C]
 /-- Construct a category instance from a `CategoryStruct`, using the fact that
     hom spaces are subsingletons to prove the axioms. -/
 @[instance_reducible]
-/--
-Definition of `thin_category` / `thin_category` 的定义
+/-
+**CategoryTheory.thin_category** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.CategoryStruct.{v₁, u₁} C] → [Qui
+ver.IsThin C] → CategoryTheory.Category.{v₁, u₁} C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition thin_category
-  signature: : Category C where
-
-中文:
-定义 thin_category
-  签名: : 范畴 C where
+--- 原说明 ---
+Construct a category instance from a `CategoryStruct`, using the fact that
+    hom spaces are subsingletons to prove the axioms.
 -/
 def thin_category : Category C where
 
@@ -58,64 +57,48 @@ end
 variable [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 variable [Quiver.IsThin C]
 
-/--
-Instance `functor_thin` / 实例 `functor_thin`
+/-- If `C` is a thin category, then `D ⥤ C` is a thin category. -/
+/-
+**CategoryTheory.functor_thin** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：functor_thin : Quiver.IsThin (D ⥤ C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {
+F G : CategoryThe…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Pi.instSubsingleton`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Subsing
+leton (β a)], Subsingleton ((a : α) → β a)
 
-English:
-instance functor_thin
-  signature: : Quiver.IsThin (D ⥤ C)
-  body: fun _ _ =>
-  ⟨fun α β => NatTrans.ext (by subsingleton)⟩
-
-中文:
-实例 functor_thin
-  签名: : 箭图.IsThin (D ⥤ C)
-  定义体: fun _ _ =>
-  ⟨fun α β => NatTrans.ext (by subsingleton)⟩
+--- 原说明 ---
+If `C` is a thin category, then `D ⥤ C` is a thin category.
 -/
 instance functor_thin : Quiver.IsThin (D ⥤ C) := fun _ _ =>
   ⟨fun α β => NatTrans.ext (by subsingleton)⟩
 
-/--
-Definition of `iso_of_both_ways` / `iso_of_both_ways` 的定义
+/-- To show `X ≅ Y` in a thin category, it suffices to just give any morphism in each direction. -/
+/-
+**CategoryTheory.iso_of_both_ways** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：iso_of_both_ways {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X) : X ≅ Y where hom
+参数：f : X ⟶ Y；g : Y ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iso_of_both_ways
-  signature: {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X)
-  body: f
-  inv := g
-
-中文:
-定义 iso_of_both_ways
-  签名: {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X)
-  定义体: f
-  inv := g
+--- 原说明 ---
+To show `X ≅ Y` in a thin category, it suffices to just give any morphism in eac
+h direction.
 -/
 def iso_of_both_ways {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X) :
     X ≅ Y where
   hom := f
   inv := g
-
-/--
-Instance `subsingleton_iso` / 实例 `subsingleton_iso`
-
-English:
-instance subsingleton_iso
-  signature: {X Y : C}
-  body: ⟨by
-    intro i₁ i₂
-    ext1
-    subsingleton⟩
-
-中文:
-实例 subsingleton_iso
-  签名: {X Y : C}
-  定义体: ⟨by
-    intro i₁ i₂
-    ext1
-    subsingleton⟩
-
-Depends on / 依赖: subsingleton
+/-
+**CategoryTheory.subsingleton_iso** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：subsingleton_iso {X Y : C} : Subsingleton (X ≅ Y)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 instance subsingleton_iso {X Y : C} : Subsingleton (X ≅ Y) :=
   ⟨by
@@ -124,3 +107,4 @@ instance subsingleton_iso {X Y : C} : Subsingleton (X ≅ Y) :=
     subsingleton⟩
 
 end CategoryTheory
+

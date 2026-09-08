@@ -24,24 +24,17 @@ public section
 
 open Filter Topology
 
-/--
-Definition of `Filter.IsApproximateUnit` / `Filter.IsApproximateUnit` 的定义
+/-- An *approximate unit* is a proper filter (i.e., `≠ ⊥`) such that multiplication on the left
+(and separately on the right) by `m : α` tends to `𝓝 m` along the filter. -/
+/-
+**Filter.IsApproximateUnit** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → [TopologicalSpace α] → [Mul α] → Filter α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Filter.IsApproximateUnit
-  parameters: {α : Type*} [TopologicalSpace α] [Mul α]
-  axioms and operations (3):
-    - tendsto_mul_left(m) : Tendsto (m * ·) l (𝓝 m)
-    - tendsto_mul_right(m) : Tendsto (· * m) l (𝓝 m)
-    - [neBot : NeBot l]
-
-中文:
-结构 滤子.是ApproximateUnit
-  参数: {α : 类型} [拓扑空间 α] [乘法 α]
-  公理与运算 (3 个):
-    - tendsto_mul_left(m) : 收敛 (m * ·) l (𝓝 m)
-    - tendsto_mul_right(m) : 收敛 (· * m) l (𝓝 m)
-    - [neBot : NeBot l]
+--- 原说明 ---
+An *approximate unit* is a proper filter (i.e., `≠ ⊥`) such that multiplication 
+on the left
+(and separately on the right) by `m : α` tends to `𝓝 m` along the filter.
 -/
 structure Filter.IsApproximateUnit {α : Type*} [TopologicalSpace α] [Mul α]
     (l : Filter α) : Prop where
@@ -59,117 +52,141 @@ section TopologicalMonoid
 variable {α : Type*} [TopologicalSpace α] [MulOneClass α]
 
 variable (α) in
-/--
-lemma `pure_one` / 引理 `pure_one`
+/-- A unital magma with a topology and bornology has the trivial approximate unit `pure 1`. -/
+/-
+**Filter.IsApproximateUnit.pure_one** 是 Mathlib 中的一个引理，位于命名空间 `Filter.IsApproxim
+ateUnit`。
+形式化陈述：pure_one : IsApproximateUnit (pure (1 : α)) where tendsto_mul_left m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `tendsto_pure_nhds`：tendsto_pure_nhds (f : α -> X) (a : α) : Tendsto f (p
+ure a) (𝓝 (f a))
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 
-English:
-lemma pure_one
-  statement: IsApproximateUnit (pure (1 : α)) where
-  proof: by simpa using tendsto_pure_nhds (m * ·) (1 : α)
-  tendsto_mul_right m := by simpa using tendsto_pure_nhds (· * m) (1 : α)
-
-中文:
-引理 pure_one
-  结论: 是ApproximateUnit (pure (1 : α)) where
-  证明: by simpa using tendsto_pure_nhds (m * ·) (1 : α)
-  tendsto_mul_right m := by simpa using tendsto_pure_nhds (· * m) (1 : α)
-
-Depends on / 依赖: tendsto_mul_right, tendsto_pure_nhds
+--- 原说明 ---
+A unital magma with a topology and bornology has the trivial approximate unit `p
+ure 1`.
 -/
 lemma pure_one : IsApproximateUnit (pure (1 : α)) where
   tendsto_mul_left m := by simpa using tendsto_pure_nhds (m * ·) (1 : α)
   tendsto_mul_right m := by simpa using tendsto_pure_nhds (· * m) (1 : α)
 
-/--
-lemma `mono` / 引理 `mono`
+/-- If `l` is an approximate unit and `⊥ < l' ≤ l`, then `l'` is also an approximate unit. -/
+/-
+**Filter.IsApproximateUnit.mono** 是 Mathlib 中的一个引理，位于命名空间 `Filter.IsApproximateU
+nit`。
+形式化陈述：mono {l l' : Filter α} (hl : l.IsApproximateUnit) (hle : l' <= l) [hl' : l
+'.NeBot] : l'.IsApproximateUnit where .mono_left hle tendsto_mul_left m
+参数：hl : l.IsApproximateUnit；hle : l' <= l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
+· 使用定理 `Filter.IsApproximateUnit.tendsto_mul_left`：∀ {α : Type u_1} [inst : Topo
+logicalSpace α] [inst_1 : Mul α] {l : Filter α},   l.IsApproximateUnit → ∀ (m : 
+α), Filter.Tendsto (fun x => m …
+· 使用定理 `Filter.IsApproximateUnit.tendsto_mul_right`：∀ {α : Type u_1} [inst : Top
+ologicalSpace α] [inst_1 : Mul α] {l : Filter α},   l.IsApproximateUnit → ∀ (m :
+ α), Filter.Tendsto (fun x => x …
 
-English:
-lemma mono
-  given: {l l' : Filter α} (hl : l.IsApproximateUnit) (hle : l' <= l) [hl' : l'.NeBot]
-  proof: hl.tendsto_mul_left m
-.mono_left hle tendsto_mul_right m := hl.tendsto_mul_right m
-
-中文:
-引理 mono
-  条件: {l l' : 滤子 α} (hl : l.是ApproximateUnit) (hle : l' <= l) [hl' : l'.NeBot]
-  证明: hl.tendsto_mul_left m
-.mono_left hle tendsto_mul_right m := hl.tendsto_mul_right m
-
-Depends on / 依赖: hl.tendsto_mul_left, tendsto_mul_left
+--- 原说明 ---
+If `l` is an approximate unit and `⊥ < l' ≤ l`, then `l'` is also an approximate
+ unit.
 -/
-lemma mono {l l' : Filter α} (hl : l.IsApproximateUnit) (hle : l' <= l) [hl' : l'.NeBot] :
+lemma mono {l l' : Filter α} (hl : l.IsApproximateUnit) (hle : l' ≤ l) [hl' : l'.NeBot] :
     l'.IsApproximateUnit where
-.mono_left hle tendsto_mul_left m := hl.tendsto_mul_left m
-.mono_left hle tendsto_mul_right m := hl.tendsto_mul_right m
+  tendsto_mul_left m := hl.tendsto_mul_left m |>.mono_left hle
+  tendsto_mul_right m := hl.tendsto_mul_right m |>.mono_left hle
 
 variable (α) in
-/--
-lemma `nhds_one` / 引理 `nhds_one`
+/-- In a topological unital magma, `𝓝 1` is an approximate unit. -/
+/-
+**Filter.IsApproximateUnit.nhds_one** 是 Mathlib 中的一个引理，位于命名空间 `Filter.IsApproxim
+ateUnit`。
+形式化陈述：nhds_one [SeparatelyContinuousMul α] : IsApproximateUnit (𝓝 (1 : α)) where
+ .const_mul m tendsto_mul_left m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Filter.Tendsto.const_mul`：Filter.Tendsto.const_mul {α : Type*} {f : α ->
+ M} {x : Filter α} {a : M} (b : M) (hf : Tendsto f x (𝓝 a)) : Tendsto (b * f ·) 
+x (𝓝 (b * a))
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Filter.Tendsto.mul_const`：Filter.Tendsto.mul_const {α : Type*} {f : α ->
+ M} {x : Filter α} {a : M} (b : M) (hf : Tendsto f x (𝓝 a)) : Tendsto (f · * b) 
+x (𝓝 (a * b))
 
-English:
-lemma nhds_one
-  given: [SeparatelyContinuousMul α]
-  statement: IsApproximateUnit (𝓝 (1 : α)) where
-  proof: by simpa using tendsto_id (x := 𝓝 1)
-.mul_const m tendsto_mul_right m := by simpa using tendsto_id (x := 𝓝 1)
-
-中文:
-引理 nhds_one
-  条件: [SeparatelyContinuousMul α]
-  结论: 是ApproximateUnit (𝓝 (1 : α)) where
-  证明: by simpa using tendsto_id (x := 𝓝 1)
-.mul_const m tendsto_mul_right m := by simpa using tendsto_id (x := 𝓝 1)
-
-Depends on / 依赖: mul_const, tendsto_id, tendsto_mul_right
+--- 原说明 ---
+In a topological unital magma, `𝓝 1` is an approximate unit.
 -/
 lemma nhds_one [SeparatelyContinuousMul α] : IsApproximateUnit (𝓝 (1 : α)) where
-.const_mul m tendsto_mul_left m := by simpa using tendsto_id (x := 𝓝 1)
-.mul_const m tendsto_mul_right m := by simpa using tendsto_id (x := 𝓝 1)
+  tendsto_mul_left m := by simpa using tendsto_id (x := 𝓝 1) |>.const_mul m
+  tendsto_mul_right m := by simpa using tendsto_id (x := 𝓝 1) |>.mul_const m
 
-/--
-lemma `iff_neBot_and_le_nhds_one` / 引理 `iff_neBot_and_le_nhds_one`
+/-- In a topological unital magma, `𝓝 1` is the largest approximate unit. -/
+/-
+**Filter.IsApproximateUnit.iff_neBot_and_le_nhds_one** 是 Mathlib 中的一个引理，位于命名空间 `
+Filter.IsApproximateUnit`。
+形式化陈述：iff_neBot_and_le_nhds_one [SeparatelyContinuousMul α] {l : Filter α} : IsA
+pproximateUnit l ↔ l.NeBot ∧ l <= 𝓝 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsApproximateUnit.neBot`：∀ {α : Type u_1} [inst : TopologicalSpac
+e α] [inst_1 : Mul α] {l : Filter α}, l.IsApproximateUnit → l.NeBot
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Filter.IsApproximateUnit.tendsto_mul_left`：∀ {α : Type u_1} [inst : Topo
+logicalSpace α] [inst_1 : Mul α] {l : Filter α},   l.IsApproximateUnit → ∀ (m : 
+α), Filter.Tendsto (fun x => m …
+· 使用引理 `Filter.IsApproximateUnit.mono`：mono {l l' : Filter α} (hl : l.IsApproxim
+ateUnit) (hle : l' <= l) [hl' : l'.NeBot] : l'.IsApproximateUnit where .mono_lef
+t hle tendsto_mul_l…
+· 使用引理 `Filter.IsApproximateUnit.nhds_one`：nhds_one [SeparatelyContinuousMul α] 
+: IsApproximateUnit (𝓝 (1 : α)) where .const_mul m tendsto_mul_left m
 
-English:
-lemma iff_neBot_and_le_nhds_one
-  given: [SeparatelyContinuousMul α] {l : Filter α}
-  proof: ⟨fun hl => ⟨hl.neBot, by simpa using! hl.tendsto_mul_left 1⟩,
-.mono hl⟩ And.elim fun _ hl => nhds_one α
-
-中文:
-引理 iff_neBot_and_le_nhds_one
-  条件: [SeparatelyContinuousMul α] {l : 滤子 α}
-  证明: ⟨fun hl => ⟨hl.neBot, by simpa using! hl.tendsto_mul_left 1⟩,
-.mono hl⟩ And.elim fun _ hl => nhds_one α
-
-Depends on / 依赖: And.elim, hl.neBot, hl.tendsto_mul_left, nhds_one, tendsto_mul_left
+--- 原说明 ---
+In a topological unital magma, `𝓝 1` is the largest approximate unit.
 -/
 lemma iff_neBot_and_le_nhds_one [SeparatelyContinuousMul α] {l : Filter α} :
-    IsApproximateUnit l ↔ l.NeBot ∧ l <= 𝓝 1 :=
-  ⟨fun hl => ⟨hl.neBot, by simpa using! hl.tendsto_mul_left 1⟩,
-.mono hl⟩ And.elim fun _ hl => nhds_one α
+    IsApproximateUnit l ↔ l.NeBot ∧ l ≤ 𝓝 1 :=
+  ⟨fun hl ↦ ⟨hl.neBot, by simpa using! hl.tendsto_mul_left 1⟩,
+    And.elim fun _ hl ↦ nhds_one α |>.mono hl⟩
 
-/--
-lemma `iff_le_nhds_one` / 引理 `iff_le_nhds_one`
+/-- In a topological unital magma, `𝓝 1` is the largest approximate unit. -/
+/-
+**Filter.IsApproximateUnit.iff_le_nhds_one** 是 Mathlib 中的一个引理，位于命名空间 `Filter.IsA
+pproximateUnit`。
+形式化陈述：iff_le_nhds_one [SeparatelyContinuousMul α] {l : Filter α} [l.NeBot] : IsA
+pproximateUnit l ↔ l <= 𝓝 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma iff_le_nhds_one
-  given: [SeparatelyContinuousMul α] {l : Filter α} [l.NeBot]
-  proof: by
-  simpa [iff_neBot_and_le_nhds_one] using fun _ => ‹_›
-
-中文:
-引理 iff_le_nhds_one
-  条件: [SeparatelyContinuousMul α] {l : 滤子 α} [l.NeBot]
-  证明: by
-  simpa [iff_neBot_and_le_nhds_one] using fun _ => ‹_›
-
-Depends on / 依赖: iff_neBot_and_le_nhds_one
+--- 原说明 ---
+In a topological unital magma, `𝓝 1` is the largest approximate unit.
 -/
 lemma iff_le_nhds_one [SeparatelyContinuousMul α] {l : Filter α} [l.NeBot] :
-    IsApproximateUnit l ↔ l <= 𝓝 1 := by
-  simpa [iff_neBot_and_le_nhds_one] using fun _ => ‹_›
+    IsApproximateUnit l ↔ l ≤ 𝓝 1 := by
+  simpa [iff_neBot_and_le_nhds_one] using fun _ ↦ ‹_›
 
 
 end TopologicalMonoid
 
 end Filter.IsApproximateUnit
+

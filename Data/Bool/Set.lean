@@ -21,63 +21,33 @@ open Set
 namespace Bool
 
 @[simp]
-/--
-theorem `univ_eq` / 定理 `univ_eq`
-
-English:
-theorem univ_eq
-  statement: (univ : Set Bool) = {false, true}
-  proof: by grind
-
-@[simp, grind =]
-
-中文:
-定理 univ_eq
-  结论: (univ : 集合 布尔值) = {false, true}
-  证明: by grind
-
-@[simp, grind =]
+/-
+**Bool.univ_eq** 是 Mathlib 中的一个定理，位于命名空间 `Bool`。
+形式化陈述：univ_eq : (univ : Set Bool) = {false, true}
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem univ_eq : (univ : Set Bool) = {false, true} := by grind
 
 @[simp, grind =]
-/--
-theorem `range_eq` / 定理 `range_eq`
-
-English:
-theorem range_eq
-  given: {α : Type*} (f : Bool -> α)
-  statement: range f = {f false, f true}
-  proof: by grind [cases Bool]
-
-@[simp, grind =]
-
-中文:
-定理 range_eq
-  条件: {α : 类型} (f : 布尔值 -> α)
-  结论: range f = {f false, f true}
-  证明: by grind [cases Bool]
-
-@[simp, grind =]
+/-
+**Bool.range_eq** 是 Mathlib 中的一个定理，位于命名空间 `Bool`。
+形式化陈述：range_eq {α : Type*} (f : Bool -> α) : range f = {f false, f true}
+参数：f : Bool -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem range_eq {α : Type*} (f : Bool -> α) : range f = {f false, f true} := by grind [cases Bool]
+theorem range_eq {α : Type*} (f : Bool → α) : range f = {f false, f true} := by grind [cases Bool]
 
 @[simp, grind =]
-/--
-theorem `compl_singleton` / 定理 `compl_singleton`
-
-English:
-theorem compl_singleton
-  given: (b : Bool)
-  statement: ({b}ᶜ : Set Bool) = {!b}
-  proof: by grind [cases Bool]
-
-中文:
-定理 compl_singleton
-  条件: (b : 布尔值)
-  结论: ({b}ᶜ : 集合 布尔值) = {!b}
-  证明: by grind [cases Bool]
+/-
+**Bool.compl_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Bool`。
+形式化陈述：compl_singleton (b : Bool) : ({b}ᶜ : Set Bool) = {!b}
+参数：b : Bool。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compl_singleton (b : Bool) : ({b}ᶜ : Set Bool) = {!b} := by grind [cases Bool]
 
 end Bool
+

@@ -21,138 +21,65 @@ universe u
 
 variable {α : Type u}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: α] : Finite (Additive α)
-  body: Finite.of_equiv α (by rfl)
-
-中文:
-实例 [有限
-  签名: α] : 有限 (加性 α)
-  定义体: Finite.of_equiv α (by rfl)
-
-Depends on / 依赖: Finite, Finite.of_equiv, of_equiv
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite α] : Finite (Additive α) :=
   Finite.of_equiv α (by rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: α] : Finite (Multiplicative α)
-  body: Finite.of_equiv α (by rfl)
-
-中文:
-实例 [有限
-  签名: α] : 有限 (Multiplicative α)
-  定义体: Finite.of_equiv α (by rfl)
-
-Depends on / 依赖: Finite, Finite.of_equiv, of_equiv
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite α] : Finite (Multiplicative α) :=
   Finite.of_equiv α (by rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : Infinite α] : Infinite (Additive α)
-  body: h
-
-中文:
-实例 [h
-  签名: : 无限 α] : 无限 (加性 α)
-  定义体: h
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : Infinite α] : Infinite (Additive α) := h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h
-  signature: : Infinite α] : Infinite (Multiplicative α)
-  body: h
-
-中文:
-实例 [h
-  签名: : 无限 α] : 无限 (Multiplicative α)
-  定义体: h
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h : Infinite α] : Infinite (Multiplicative α) := h
-
-/--
-Instance `Additive.fintype` / 实例 `Additive.fintype`
-
-English:
-instance Additive.fintype
-  signature: : forall [Fintype α], Fintype (Additive α)
-  body: Fintype.ofEquiv α Additive.ofMul
-
-中文:
-实例 加性.fintype
-  签名: : 对任意 [有限类型 α], 有限类型 (加性 α)
-  定义体: Fintype.ofEquiv α Additive.ofMul
-
-Depends on / 依赖: Additive, Additive.ofMul, Fintype, Fintype.ofEquiv, ofEquiv
+/-
+**Additive.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.fintype : forall [Fintype α], Fintype (Additive α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Additive.fintype : forall [Fintype α], Fintype (Additive α) :=
+instance Additive.fintype : ∀ [Fintype α], Fintype (Additive α) :=
   Fintype.ofEquiv α Additive.ofMul
-
-/--
-Instance `Multiplicative.fintype` / 实例 `Multiplicative.fintype`
-
-English:
-instance Multiplicative.fintype
-  signature: : forall [Fintype α], Fintype (Multiplicative α)
-  body: Fintype.ofEquiv α Multiplicative.ofAdd
-
-中文:
-实例 Multiplicative.fintype
-  签名: : 对任意 [有限类型 α], 有限类型 (Multiplicative α)
-  定义体: Fintype.ofEquiv α Multiplicative.ofAdd
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, Multiplicative, Multiplicative.ofAdd, ofEquiv
+/-
+**Multiplicative.fintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.fintype : forall [Fintype α], Fintype (Multiplicative α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Multiplicative.fintype : forall [Fintype α], Fintype (Multiplicative α) :=
+instance Multiplicative.fintype : ∀ [Fintype α], Fintype (Multiplicative α) :=
   Fintype.ofEquiv α Multiplicative.ofAdd
-
-/--
-lemma `Fintype.card_multiplicative` / 引理 `Fintype.card_multiplicative`
-
-English:
-lemma Fintype.card_multiplicative
-  given: (α : Type*) [Fintype α]
-  proof: Finset.card_map _
-
-中文:
-引理 有限类型.card_multiplicative
-  条件: (α : 类型) [有限类型 α]
-  证明: Finset.card_map _
+/-
+**Fintype.card_multiplicative** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：∀ (α : Type u_1) [inst : Fintype α], Fintype.card (Multiplicative α) = Fin
+type.card α
+参数：α : Type u_1；Multiplicative α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 @[simp] lemma Fintype.card_multiplicative (α : Type*) [Fintype α] :
     card (Multiplicative α) = card α := Finset.card_map _
-
-/--
-lemma `Fintype.card_additive` / 引理 `Fintype.card_additive`
-
-English:
-lemma Fintype.card_additive
-  given: (α : Type*) [Fintype α]
-  statement: card (Additive α) = card α
-  proof: Finset.card_map _
-
-中文:
-引理 有限类型.card_additive
-  条件: (α : 类型) [有限类型 α]
-  结论: card (加性 α) = card α
-  证明: Finset.card_map _
+/-
+**Fintype.card_additive** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：∀ (α : Type u_1) [inst : Fintype α], Fintype.card (Additive α) = Fintype.c
+ard α
+参数：α : Type u_1；Additive α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 @[simp] lemma Fintype.card_additive (α : Type*) [Fintype α] : card (Additive α) = card α :=
   Finset.card_map _

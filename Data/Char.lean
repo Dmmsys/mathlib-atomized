@@ -19,49 +19,25 @@ Provides an additional definition to truncate a `Char` to `UInt8` and a theorem 
 public section
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+Provides a `LinearOrder` instance on `Char`. `Char` is the type of Unicode scalar values.
+-/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: LinearOrder Char
-  body: fun _ => @le_refl Nat _ _
-  le_trans := fun _ _ _ => @le_trans Nat _ _ _ _
-le_antisymm := fun _ _ h₁ h₂ => Char.ext UInt32.eq_of_toBitVec_eq
-    BitVec.le_antisymm h₁ h₂
-  lt_iff_le_not_ge := fun _ _ => @lt_iff_le_not_ge Nat _ _ _
-  le_total := fun _ _ => @le_total Nat _ _ _
-  min := fun a b => if a <= b then a else b
-  max := fun a b => if a <= b then b else a
-  toDecidableLE := inferInstance
-  toDecidableEq := inferInstance
-  toDecidableLT := inferInstance
-
-中文:
-实例 :
-  签名: 线性序 Char
-  定义体: fun _ => @le_refl Nat _ _
-  le_trans := fun _ _ _ => @le_trans Nat _ _ _ _
-le_antisymm := fun _ _ h₁ h₂ => Char.ext UInt32.eq_of_toBitVec_eq
-    BitVec.le_antisymm h₁ h₂
-  lt_iff_le_not_ge := fun _ _ => @lt_iff_le_not_ge Nat _ _ _
-  le_total := fun _ _ => @le_total Nat _ _ _
-  min := fun a b => if a <= b then a else b
-  max := fun a b => if a <= b then b else a
-  toDecidableLE := inferInstance
-  toDecidableEq := inferInstance
-  toDecidableLT := inferInstance
-
-Depends on / 依赖: le_refl
+--- 原说明 ---
+Provides a `LinearOrder` instance on `Char`. `Char` is the type of Unicode scala
+r values.
 -/
 instance : LinearOrder Char where
-  le_refl := fun _ => @le_refl Nat _ _
-  le_trans := fun _ _ _ => @le_trans Nat _ _ _ _
-le_antisymm := fun _ _ h₁ h₂ => Char.ext UInt32.eq_of_toBitVec_eq
+  le_refl := fun _ => @le_refl ℕ _ _
+  le_trans := fun _ _ _ => @le_trans ℕ _ _ _ _
+  le_antisymm := fun _ _ h₁ h₂ => Char.ext <| UInt32.eq_of_toBitVec_eq <|
     BitVec.le_antisymm h₁ h₂
-  lt_iff_le_not_ge := fun _ _ => @lt_iff_le_not_ge Nat _ _ _
-  le_total := fun _ _ => @le_total Nat _ _ _
-  min := fun a b => if a <= b then a else b
-  max := fun a b => if a <= b then b else a
+  lt_iff_le_not_ge := fun _ _ => @lt_iff_le_not_ge ℕ _ _ _
+  le_total := fun _ _ => @le_total ℕ _ _ _
+  min := fun a b => if a ≤ b then a else b
+  max := fun a b => if a ≤ b then b else a
   toDecidableLE := inferInstance
   toDecidableEq := inferInstance
   toDecidableLT := inferInstance

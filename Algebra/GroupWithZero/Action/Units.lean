@@ -49,228 +49,157 @@ namespace Units
 variable [GroupWithZero G₀]
 
 @[simp]
-/--
-lemma `smul_mk0` / 引理 `smul_mk0`
-
-English:
-lemma smul_mk0
-  given: {α : Type*} [SMul G₀ α] {g : G₀} (hg : g != 0) (a : α)
-  statement: mk0 g hg • a = g • a
-  proof: rfl
-
-中文:
-引理 smul_mk0
-  条件: {α : 类型} [标量乘法 G₀ α] {g : G₀} (hg : g != 0) (a : α)
-  结论: mk0 g hg • a = g • a
-  证明: rfl
+/-
+**Units.smul_mk0** 是 Mathlib 中的一个引理，位于命名空间 `Units`。
+形式化陈述：smul_mk0 {α : Type*} [SMul G₀ α] {g : G₀} (hg : g != 0) (a : α) : mk0 g hg
+ • a = g • a
+参数：hg : g != 0；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma smul_mk0 {α : Type*} [SMul G₀ α] {g : G₀} (hg : g != 0) (a : α) : mk0 g hg • a = g • a := rfl
+lemma smul_mk0 {α : Type*} [SMul G₀ α] {g : G₀} (hg : g ≠ 0) (a : α) : mk0 g hg • a = g • a := rfl
 
 end Units
 
 section GroupWithZero
 variable [GroupWithZero α] [MulAction α β] {a : α}
 
-/--
-lemma `inv_smul_smul₀` / 引理 `inv_smul_smul₀`
-
-English:
-lemma inv_smul_smul₀
-  given: (ha : a != 0) (x : β)
-  statement: a⁻¹ • a • x = x
-  proof: inv_smul_smul (Units.mk0 a ha) x
-
-@[simp]
-
-中文:
-引理 inv_smul_smul₀
-  条件: (ha : a != 0) (x : β)
-  结论: a⁻¹ • a • x = x
-  证明: inv_smul_smul (Units.mk0 a ha) x
-
-@[simp]
+/-
+**inv_smul_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+参数：g : G；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-@[simp] lemma inv_smul_smul₀ (ha : a != 0) (x : β) : a⁻¹ • a • x = x :=
+@[simp] lemma inv_smul_smul₀ (ha : a ≠ 0) (x : β) : a⁻¹ • a • x = x :=
   inv_smul_smul (Units.mk0 a ha) x
 
 @[simp]
-/--
-lemma `smul_inv_smul₀` / 引理 `smul_inv_smul₀`
-
-English:
-lemma smul_inv_smul₀
-  given: (ha : a != 0) (x : β)
-  statement: a • a⁻¹ • x = x
-  proof: smul_inv_smul (Units.mk0 a ha) x
-
-中文:
-引理 smul_inv_smul₀
-  条件: (ha : a != 0) (x : β)
-  结论: a • a⁻¹ • x = x
-  证明: smul_inv_smul (Units.mk0 a ha) x
-
-Depends on / 依赖: Units.mk0, smul_inv_smul
+/-
+**smul_inv_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+参数：g : G；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-lemma smul_inv_smul₀ (ha : a != 0) (x : β) : a • a⁻¹ • x = x := smul_inv_smul (Units.mk0 a ha) x
-
-/--
-lemma `inv_smul_eq_iff₀` / 引理 `inv_smul_eq_iff₀`
-
-English:
-lemma inv_smul_eq_iff₀
-  given: (ha : a != 0) {x y : β}
-  statement: a⁻¹ • x = y ↔ x = a • y
-  proof: inv_smul_eq_iff (g := Units.mk0 a ha)
-
-中文:
-引理 inv_smul_eq_iff₀
-  条件: (ha : a != 0) {x y : β}
-  结论: a⁻¹ • x = y ↔ x = a • y
-  证明: inv_smul_eq_iff (g := Units.mk0 a ha)
-
-Depends on / 依赖: Units.mk0, inv_smul_eq_iff
+lemma smul_inv_smul₀ (ha : a ≠ 0) (x : β) : a • a⁻¹ • x = x := smul_inv_smul (Units.mk0 a ha) x
+/-
+**inv_smul_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_1 : MulAction G α] 
+{g : G} {a b : α}, g⁻¹ • a = b ↔ a = g • b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
 -/
-lemma inv_smul_eq_iff₀ (ha : a != 0) {x y : β} : a⁻¹ • x = y ↔ x = a • y :=
+lemma inv_smul_eq_iff₀ (ha : a ≠ 0) {x y : β} : a⁻¹ • x = y ↔ x = a • y :=
   inv_smul_eq_iff (g := Units.mk0 a ha)
-
-/--
-lemma `eq_inv_smul_iff₀` / 引理 `eq_inv_smul_iff₀`
-
-English:
-lemma eq_inv_smul_iff₀
-  given: (ha : a != 0) {x y : β}
-  statement: x = a⁻¹ • y ↔ a • x = y
-  proof: eq_inv_smul_iff (g := Units.mk0 a ha)
-
-@[simp]
-
-中文:
-引理 eq_inv_smul_iff₀
-  条件: (ha : a != 0) {x y : β}
-  结论: x = a⁻¹ • y ↔ a • x = y
-  证明: eq_inv_smul_iff (g := Units.mk0 a ha)
-
-@[simp]
-
-Depends on / 依赖: Units.mk0, eq_inv_smul_iff
+/-
+**eq_inv_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_1 : MulAction G α] 
+{g : G} {a b : α}, a = g⁻¹ • b ↔ g • a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
 -/
-lemma eq_inv_smul_iff₀ (ha : a != 0) {x y : β} : x = a⁻¹ • y ↔ a • x = y :=
+lemma eq_inv_smul_iff₀ (ha : a ≠ 0) {x y : β} : x = a⁻¹ • y ↔ a • x = y :=
   eq_inv_smul_iff (g := Units.mk0 a ha)
 
 @[simp]
-/--
-lemma `SemiconjBy.smul_right_iff₀` / 引理 `SemiconjBy.smul_right_iff₀`
-
-English:
-lemma SemiconjBy.smul_right_iff₀
-  statement: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y z : β}
-  proof: smul_right_iff (r := Units.mk0 a ha)
-
-@[simp]
-
-中文:
-引理 SemiconjBy.smul_right_iff₀
-  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y z : β}
-  证明: smul_right_iff (r := Units.mk0 a ha)
-
-@[simp]
-
-Depends on / 依赖: Units.mk0, smul_right_iff
+/-
+**SemiconjBy.smul_right_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SemiconjBy.smul_right_iff {a b x : H} {r : G} : SemiconjBy x (r • a) (r • 
+b) ↔ SemiconjBy x a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用引理 `SemiconjBy.smul_right`：SemiconjBy.smul_right [Mul α] [SMulCommClass M α 
+α] [IsScalarTower M α α] {x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy
+ x (r • a) …
 -/
 lemma SemiconjBy.smul_right_iff₀ [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y z : β}
-    (ha : a != 0) : SemiconjBy x (a • y) (a • z) ↔ SemiconjBy x y z :=
+    (ha : a ≠ 0) : SemiconjBy x (a • y) (a • z) ↔ SemiconjBy x y z :=
   smul_right_iff (r := Units.mk0 a ha)
 
 @[simp]
-/--
-lemma `SemiconjBy.smul_left_iff₀` / 引理 `SemiconjBy.smul_left_iff₀`
-
-English:
-lemma SemiconjBy.smul_left_iff₀
-  statement: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y z : β}
-  proof: smul_left_iff (r := Units.mk0 a ha)
-
-@[simp]
-
-中文:
-引理 SemiconjBy.smul_left_iff₀
-  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y z : β}
-  证明: smul_left_iff (r := Units.mk0 a ha)
-
-@[simp]
-
-Depends on / 依赖: Units.mk0, smul_left_iff
+/-
+**SemiconjBy.smul_left_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SemiconjBy.smul_left_iff {a b x : H} {r : G} : SemiconjBy (r • x) a b ↔ Se
+miconjBy x a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用引理 `SemiconjBy.smul_left`：SemiconjBy.smul_left [Mul α] [SMulCommClass M α α]
+ [IsScalarTower M α α] {x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy (
+r • x) a b
 -/
 lemma SemiconjBy.smul_left_iff₀ [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y z : β}
-    (ha : a != 0) : SemiconjBy (a • x) y z ↔ SemiconjBy x y z :=
+    (ha : a ≠ 0) : SemiconjBy (a • x) y z ↔ SemiconjBy x y z :=
   smul_left_iff (r := Units.mk0 a ha)
 
 @[simp]
-/--
-lemma `Commute.smul_right_iff₀` / 引理 `Commute.smul_right_iff₀`
-
-English:
-lemma Commute.smul_right_iff₀
-  statement: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y : β}
-  proof: SemiconjBy.smul_right_iff₀ ha
-
-@[simp]
-
-中文:
-引理 Commute.smul_right_iff₀
-  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y : β}
-  证明: SemiconjBy.smul_right_iff₀ ha
-
-@[simp]
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.smul_right_iff
+/-
+**Commute.smul_right_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Commute.smul_right_iff : Commute a (g • b) ↔ Commute a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SemiconjBy.smul_right_iff`：SemiconjBy.smul_right_iff {a b x : H} {r : G}
+ : SemiconjBy x (r • a) (r • b) ↔ SemiconjBy x a b
 -/
 lemma Commute.smul_right_iff₀ [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y : β}
-    (ha : a != 0) : Commute x (a • y) ↔ Commute x y :=
+    (ha : a ≠ 0) : Commute x (a • y) ↔ Commute x y :=
   SemiconjBy.smul_right_iff₀ ha
 
 @[simp]
-/--
-lemma `Commute.smul_left_iff₀` / 引理 `Commute.smul_left_iff₀`
-
-English:
-lemma Commute.smul_left_iff₀
-  statement: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y : β}
-  proof: SemiconjBy.smul_left_iff₀ ha
-
-中文:
-引理 Commute.smul_left_iff₀
-  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y : β}
-  证明: SemiconjBy.smul_left_iff₀ ha
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.smul_left_iff
+/-
+**Commute.smul_left_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Commute.smul_left_iff : Commute (g • a) b ↔ Commute a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SemiconjBy.smul_left_iff`：SemiconjBy.smul_left_iff {a b x : H} {r : G} :
+ SemiconjBy (r • x) a b ↔ SemiconjBy x a b
 -/
 lemma Commute.smul_left_iff₀ [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y : β}
-    (ha : a != 0) : Commute (a • x) y ↔ Commute x y :=
+    (ha : a ≠ 0) : Commute (a • x) y ↔ Commute x y :=
   SemiconjBy.smul_left_iff₀ ha
 
-/--
-Definition of `Equiv.smulRight` / `Equiv.smulRight` 的定义
+/-- Right scalar multiplication as a bijection. -/
+/-
+**Equiv.smulRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_4} → {β : Type u_5} → [inst : GroupWithZero α] → [MulAction α 
+β] → {a : α} → a ≠ 0 → β ≃ β
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
+· 使用引理 `smul_inv_smul₀`：smul_inv_smul₀ (ha : a != 0) (x : β) : a • a⁻¹ • x = x
 
-English:
-definition Equiv.smulRight
-  signature: (ha : a != 0)
-  body: a • b
-  invFun b := a⁻¹ • b
-  left_inv := inv_smul_smul₀ ha
-  right_inv := smul_inv_smul₀ ha
-
-中文:
-定义 等价.smulRight
-  签名: (ha : a != 0)
-  定义体: a • b
-  invFun b := a⁻¹ • b
-  left_inv := inv_smul_smul₀ ha
-  right_inv := smul_inv_smul₀ ha
-
-Depends on / 依赖: CochainComplex, CochainComplex.mapBifunctorShift, CochainComplex.shiftFunctorZero_eq, NatIso, NatIso.ofComponents, commShiftIso_add, commShiftIso_zero, ofComponents, shiftFunctorZero_eq
+--- 原说明 ---
+Right scalar multiplication as a bijection.
 -/
-@[simps] def Equiv.smulRight (ha : a != 0) : β ≃ β where
+@[simps] def Equiv.smulRight (ha : a ≠ 0) : β ≃ β where
   toFun b := a • b
   invFun b := a⁻¹ • b
   left_inv := inv_smul_smul₀ ha
@@ -280,84 +209,47 @@ end GroupWithZero
 
 namespace Units
 
+/-! ### Action of the units of `M` on a type `α` -/
 
-/--
-Instance `instSMulZeroClass` / 实例 `instSMulZeroClass`
+/-
+**Units.instSMulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：instSMulZeroClass [Monoid M] [Zero α] [SMulZeroClass M α] : SMulZeroClass 
+Mˣ α where smul_zero m
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSMulZeroClass
-  signature: [Monoid M] [Zero α] [SMulZeroClass M α]
-  body: smul_zero (m : M)
-
-中文:
-实例 instSMulZeroClass
-  签名: [幺半群 M] [零 α] [SMulZero类 M α]
-  定义体: smul_zero (m : M)
-
-Depends on / 依赖: smul_zero
+--- 原说明 ---
+### Action of the units of `M` on a type `α`
 -/
 instance instSMulZeroClass [Monoid M] [Zero α] [SMulZeroClass M α] : SMulZeroClass Mˣ α where
   smul_zero m := smul_zero (m : M)
-
-/--
-Instance `instDistribSMulUnits` / 实例 `instDistribSMulUnits`
-
-English:
-instance instDistribSMulUnits
-  signature: [Monoid M] [AddZeroClass α] [DistribSMul M α]
-  body: smul_add (m : M)
-
-中文:
-实例 instDistribSMulUnits
-  签名: [幺半群 M] [加法零类 α] [分配标量乘法 M α]
-  定义体: smul_add (m : M)
-
-Depends on / 依赖: smul_add
+/-
+**Units.instDistribSMulUnits** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：instDistribSMulUnits [Monoid M] [AddZeroClass α] [DistribSMul M α] : Distr
+ibSMul Mˣ α where smul_add m
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribSMulUnits [Monoid M] [AddZeroClass α] [DistribSMul M α] :
     DistribSMul Mˣ α where smul_add m := smul_add (m : M)
-
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [Monoid M] [AddMonoid α] [DistribMulAction M α]
-  body: instDistribSMulUnits
-  one_smul := fun b => one_smul M b
-  mul_smul := fun x y b => mul_smul (x : M) y b
-
-中文:
-实例 instDistribMulAction
-  签名: [幺半群 M] [加法幺半群 α] [分配乘法作用 M α]
-  定义体: instDistribSMulUnits
-  one_smul := fun b => one_smul M b
-  mul_smul := fun x y b => mul_smul (x : M) y b
-
-Depends on / 依赖: CochainComplex, instDistribSMulUnits
+/-
+**Units.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：instDistribMulAction [Monoid M] [AddMonoid α] [DistribMulAction M α] : Dis
+tribMulAction Mˣ α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction [Monoid M] [AddMonoid α] [DistribMulAction M α] :
     DistribMulAction Mˣ α where
   __ := instDistribSMulUnits
   one_smul := fun b => one_smul M b
   mul_smul := fun x y b => mul_smul (x : M) y b
-
-/--
-Instance `instMulDistribMulAction` / 实例 `instMulDistribMulAction`
-
-English:
-instance instMulDistribMulAction
-  signature: [Monoid M] [Monoid α] [MulDistribMulAction M α]
-  body: smul_mul' (m : M)
-  smul_one m := smul_one (m : M)
-
-中文:
-实例 instMulDistribMulAction
-  签名: [幺半群 M] [幺半群 α] [MulDistribMul作用 M α]
-  定义体: smul_mul' (m : M)
-  smul_one m := smul_one (m : M)
-
-Depends on / 依赖: CochainComplex, CochainComplex.mapBifunctorShift, CochainComplex.shiftFunctorZero_eq, NatIso, NatIso.ofComponents, commShiftIso_add, commShiftIso_zero, ofComponents, shiftFunctorZero_eq, smul_mul
+/-
+**Units.instMulDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：instMulDistribMulAction [Monoid M] [Monoid α] [MulDistribMulAction M α] : 
+MulDistribMulAction Mˣ α where smul_mul m
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulDistribMulAction [Monoid M] [Monoid α] [MulDistribMulAction M α] :
     MulDistribMulAction Mˣ α where
@@ -369,21 +261,16 @@ end Units
 section Monoid
 variable [Monoid G] [AddMonoid M] [DistribMulAction G M] {u : G} {x : M}
 
-/--
-lemma `IsUnit.smul_eq_zero` / 引理 `IsUnit.smul_eq_zero`
-
-English:
-lemma IsUnit.smul_eq_zero
-  given: (hu : IsUnit u)
-  statement: u • x = 0 ↔ x = 0
-  proof: smul_eq_zero_iff_eq hu.unit
-
-中文:
-引理 是单位.smul_eq_zero
-  条件: (hu : 是单位 u)
-  结论: u • x = 0 ↔ x = 0
-  证明: smul_eq_zero_iff_eq hu.unit
+/-
+**IsUnit.smul_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsUnit`。
+形式化陈述：∀ {G : Type u_2} {M : Type u_3} [inst : Monoid G] [inst_1 : AddMonoid M] [
+inst_2 : DistribMulAction G M] {u : G}   {x : M}, IsUnit u → (u • x = 0 ↔ x = 0)
+参数：u • x = 0 ↔ x = 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_eq_zero_iff_eq`：smul_eq_zero_iff_eq (a : α) {x : β} : a • x = 0 ↔ x
+ = 0
 -/
 @[simp] lemma IsUnit.smul_eq_zero (hu : IsUnit u) : u • x = 0 ↔ x = 0 := smul_eq_zero_iff_eq hu.unit
 
 end Monoid
+

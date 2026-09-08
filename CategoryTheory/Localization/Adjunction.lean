@@ -44,28 +44,15 @@ variable (L₁ : C₁ ⥤ D₁) (W₁ : MorphismProperty C₁) [L₁.IsLocalizat
 
 namespace Localization
 
-/--
-Definition of `ε` / `ε` 的定义
+/-- Auxiliary definition of the unit morphism for the adjunction `Adjunction.localization` -/
+/-
+**CategoryTheory.Adjunction.Localization.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Adjunction.Localization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ε
-  signature: : 𝟭 D₁ ⟶ G' ⋙ F'
-  body: by
-  letI : Lifting L₁ W₁ ((G ⋙ F) ⋙ L₁) (G' ⋙ F') :=
-    Lifting.mk (CatCommSq.hComp G F L₁ L₂ L₁ G' F').iso.symm
-  exact Localization.liftNatTrans L₁ W₁ L₁ ((G ⋙ F) ⋙ L₁) (𝟭 D₁) (G' ⋙ F')
-    (whiskerRight adj.unit L₁)
-
-中文:
-定义 ε
-  签名: : 𝟭 D₁ ⟶ G' ⋙ F'
-  定义体: by
-  letI : Lifting L₁ W₁ ((G ⋙ F) ⋙ L₁) (G' ⋙ F') :=
-    Lifting.mk (CatCommSq.hComp G F L₁ L₂ L₁ G' F').iso.symm
-  exact Localization.liftNatTrans L₁ W₁ L₁ ((G ⋙ F) ⋙ L₁) (𝟭 D₁) (G' ⋙ F')
-    (whiskerRight adj.unit L₁)
-
-Depends on / 依赖: CatCommSq, CatCommSq.hComp, Lifting, Lifting.mk, Localization, Localization.liftNatTrans, adj.unit, iso.symm, liftNatTrans, whiskerRight
+--- 原说明 ---
+Auxiliary definition of the unit morphism for the adjunction `Adjunction.localiz
+ation`
 -/
 noncomputable def ε : 𝟭 D₁ ⟶ G' ⋙ F' := by
   letI : Lifting L₁ W₁ ((G ⋙ F) ⋙ L₁) (G' ⋙ F') :=
@@ -74,30 +61,10 @@ noncomputable def ε : 𝟭 D₁ ⟶ G' ⋙ F' := by
     (whiskerRight adj.unit L₁)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `ε_app` / 引理 `ε_app`
-
-English:
-lemma ε_app
-  given: (X₁ : C₁)
-  proof: by
-  let : Lifting L₁ W₁ ((G ⋙ F) ⋙ L₁) (G' ⋙ F') :=
-    Lifting.mk (CatCommSq.hComp G F L₁ L₂ L₁ G' F').iso.symm
-  simp only [ε, liftNatTrans_app, Lifting.iso, Iso.symm,
-    Functor.id_obj, Functor.comp_obj, Functor.rightUnitor_hom_app,
-      whiskerRight_app, CatCommSq.hComp_iso_hom_app, id_comp]
-
-中文:
-引理 ε_app
-  条件: (X₁ : C₁)
-  证明: by
-  let : Lifting L₁ W₁ ((G ⋙ F) ⋙ L₁) (G' ⋙ F') :=
-    Lifting.mk (CatCommSq.hComp G F L₁ L₂ L₁ G' F').iso.symm
-  simp only [ε, liftNatTrans_app, Lifting.iso, Iso.symm,
-    Functor.id_obj, Functor.comp_obj, Functor.rightUnitor_hom_app,
-      whiskerRight_app, CatCommSq.hComp_iso_hom_app, id_comp]
-
-Depends on / 依赖: CatCommSq, CatCommSq.hComp, CatCommSq.hComp_iso_hom_app, Functor, Functor.comp_obj, Functor.id_obj, Functor.rightUnitor_hom_app, Iso.symm, Lifting, Lifting.iso, Lifting.mk, comp_obj, hComp_iso_hom_app, id_comp, id_obj, iso.symm, liftNatTrans_app, rightUnitor_hom_app, whiskerRight_app
+/-
+**CategoryTheory.Adjunction.Localization.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Adjunction.Localization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ε_app (X₁ : C₁) :
     (ε adj L₁ W₁ L₂ G' F').app (L₁.obj X₁) =
@@ -109,54 +76,24 @@ lemma ε_app (X₁ : C₁) :
     Functor.id_obj, Functor.comp_obj, Functor.rightUnitor_hom_app,
       whiskerRight_app, CatCommSq.hComp_iso_hom_app, id_comp]
 
-/--
-Definition of `η` / `η` 的定义
+/-- Auxiliary definition of the counit morphism for the adjunction `Adjunction.localization` -/
+/-
+**CategoryTheory.Adjunction.Localization.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Adjunction.Localization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition η
-  signature: : F' ⋙ G' ⟶ 𝟭 D₂
-  body: by
-  letI : Lifting L₂ W₂ ((F ⋙ G) ⋙ L₂) (F' ⋙ G') :=
-    Lifting.mk (CatCommSq.hComp F G L₂ L₁ L₂ F' G').iso.symm
-  exact liftNatTrans L₂ W₂ ((F ⋙ G) ⋙ L₂) L₂ (F' ⋙ G') (𝟭 D₂) (whiskerRight adj.counit L₂)
-
-中文:
-定义 η
-  签名: : F' ⋙ G' ⟶ 𝟭 D₂
-  定义体: by
-  letI : Lifting L₂ W₂ ((F ⋙ G) ⋙ L₂) (F' ⋙ G') :=
-    Lifting.mk (CatCommSq.hComp F G L₂ L₁ L₂ F' G').iso.symm
-  exact liftNatTrans L₂ W₂ ((F ⋙ G) ⋙ L₂) L₂ (F' ⋙ G') (𝟭 D₂) (whiskerRight adj.counit L₂)
-
-Depends on / 依赖: CatCommSq, CatCommSq.hComp, Lifting, Lifting.mk, adj.counit, counit, iso.symm, liftNatTrans, whiskerRight
+--- 原说明 ---
+Auxiliary definition of the counit morphism for the adjunction `Adjunction.local
+ization`
 -/
 noncomputable def η : F' ⋙ G' ⟶ 𝟭 D₂ := by
   letI : Lifting L₂ W₂ ((F ⋙ G) ⋙ L₂) (F' ⋙ G') :=
     Lifting.mk (CatCommSq.hComp F G L₂ L₁ L₂ F' G').iso.symm
   exact liftNatTrans L₂ W₂ ((F ⋙ G) ⋙ L₂) L₂ (F' ⋙ G') (𝟭 D₂) (whiskerRight adj.counit L₂)
-
-/--
-lemma `η_app` / 引理 `η_app`
-
-English:
-lemma η_app
-  given: (X₂ : C₂)
-  proof: by
-  let : Lifting L₂ W₂ ((F ⋙ G) ⋙ L₂) (F' ⋙ G') :=
-    Lifting.mk (CatCommSq.hComp F G L₂ L₁ L₂ F' G').iso.symm
-  simp only [η, liftNatTrans_app, Lifting.iso, Iso.symm, CatCommSq.hComp_iso_inv_app,
-    whiskerRight_app, Functor.rightUnitor_inv_app, comp_id, assoc]
-
-中文:
-引理 η_app
-  条件: (X₂ : C₂)
-  证明: by
-  let : Lifting L₂ W₂ ((F ⋙ G) ⋙ L₂) (F' ⋙ G') :=
-    Lifting.mk (CatCommSq.hComp F G L₂ L₁ L₂ F' G').iso.symm
-  simp only [η, liftNatTrans_app, Lifting.iso, Iso.symm, CatCommSq.hComp_iso_inv_app,
-    whiskerRight_app, Functor.rightUnitor_inv_app, comp_id, assoc]
-
-Depends on / 依赖: CatCommSq, CatCommSq.hComp, CatCommSq.hComp_iso_inv_app, Functor, Functor.rightUnitor_inv_app, Iso.symm, Lifting, Lifting.iso, Lifting.mk, comp_id, hComp_iso_inv_app, iso.symm, liftNatTrans_app, rightUnitor_inv_app, whiskerRight_app
+/-
+**CategoryTheory.Adjunction.Localization.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Adjunction.Localization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma η_app (X₂ : C₂) :
     (η adj L₁ L₂ W₂ G' F').app (L₂.obj X₂) =
@@ -170,68 +107,26 @@ lemma η_app (X₂ : C₂) :
 
 end Localization
 
-/--
-Definition of `localization` / `localization` 的定义
+/-- If `adj : G ⊣ F` is an adjunction between two categories `C₁` and `C₂` that
+are equipped with localization functors `L₁ : C₁ ⥤ D₁` and `L₂ : C₂ ⥤ D₂` with
+respect to `W₁ : MorphismProperty C₁` and `W₂ : MorphismProperty C₂`, and that
+the functors `F : C₂ ⥤ C₁` and `G : C₁ ⥤ C₂` induce functors `F' : D₂ ⥤ D₁`
+and `G' : D₁ ⥤ D₂` on the localized categories, then the adjunction `adj`
+induces an adjunction `G' ⊣ F'`. -/
+/-
+**CategoryTheory.Adjunction.localization** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Adjunction`。
+形式化陈述：localization : G' ⊣ F'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition localization
-  signature: : G' ⊣ F'
-  body: Adjunction.mkOfUnitCounit
-    { unit := Localization.ε adj L₁ W₁ L₂ G' F'
-      counit := Localization.η adj L₁ L₂ W₂ G' F'
-      left_triangle := by
-        apply natTrans_ext L₁ W₁
-        intro X₁
-        have eq := adj.left_triangle_components X₁
-        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerRight_app]; rw [Localization.ε_app]; rw [Functor.associator_hom_app]; rw [id_comp]; rw [whiskerLeft_app]; rw [G'.map_comp]; rw [G'.map_comp]; rw [assoc]; rw [assoc]
-        erw [(Localization.η adj L₁ L₂ W₂ G' F').naturality, Localization.η_app,
-          assoc, assoc, ← G'.map_comp_assoc, ← G'.map_comp_assoc, assoc, Iso.hom_inv_id_app,
-          comp_id, (CatCommSq.iso G L₁ L₂ G').inv.naturality_assoc, ← L₂.map_comp_assoc, eq,
-          L₂.map_id, id_comp, Iso.inv_hom_id_app]
-        rfl
-      right_triangle := by
-        apply natTrans_ext L₂ W₂
-        intro X₂
-        have eq := adj.right_triangle_components X₂
-        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerLeft_app]; rw [whiskerRight_app]; rw [Localization.η_app]; rw [Functor.associator_inv_app]; rw [id_comp]; rw [F'.map_comp]; rw [F'.map_comp]
-        erw [← (Localization.ε _ _ _ _ _ _).naturality_assoc, Localization.ε_app,
-          assoc, assoc, ← F'.map_comp_assoc, Iso.hom_inv_id_app, F'.map_id, id_comp,
-          ← NatTrans.naturality, ← L₁.map_comp_assoc, eq, L₁.map_id, id_comp,
-          Iso.inv_hom_id_app]
-        rfl }
-
-@[simp]
-
-中文:
-定义 localization
-  签名: : G' ⊣ F'
-  定义体: Adjunction.mkOfUnitCounit
-    { unit := Localization.ε adj L₁ W₁ L₂ G' F'
-      counit := Localization.η adj L₁ L₂ W₂ G' F'
-      left_triangle := by
-        apply natTrans_ext L₁ W₁
-        intro X₁
-        have eq := adj.left_triangle_components X₁
-        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerRight_app]; rw [Localization.ε_app]; rw [Functor.associator_hom_app]; rw [id_comp]; rw [whiskerLeft_app]; rw [G'.map_comp]; rw [G'.map_comp]; rw [assoc]; rw [assoc]
-        erw [(Localization.η adj L₁ L₂ W₂ G' F').naturality, Localization.η_app,
-          assoc, assoc, ← G'.map_comp_assoc, ← G'.map_comp_assoc, assoc, Iso.hom_inv_id_app,
-          comp_id, (CatCommSq.iso G L₁ L₂ G').inv.naturality_assoc, ← L₂.map_comp_assoc, eq,
-          L₂.map_id, id_comp, Iso.inv_hom_id_app]
-        rfl
-      right_triangle := by
-        apply natTrans_ext L₂ W₂
-        intro X₂
-        have eq := adj.right_triangle_components X₂
-        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerLeft_app]; rw [whiskerRight_app]; rw [Localization.η_app]; rw [Functor.associator_inv_app]; rw [id_comp]; rw [F'.map_comp]; rw [F'.map_comp]
-        erw [← (Localization.ε _ _ _ _ _ _).naturality_assoc, Localization.ε_app,
-          assoc, assoc, ← F'.map_comp_assoc, Iso.hom_inv_id_app, F'.map_id, id_comp,
-          ← NatTrans.naturality, ← L₁.map_comp_assoc, eq, L₁.map_id, id_comp,
-          Iso.inv_hom_id_app]
-        rfl }
-
-@[simp]
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfUnitCounit, Functor, Functor.associator_hom_app, Localization, NatTrans, NatTrans.comp_app, adj.left_triangle_components, associator_hom_app, comp_app, counit, id_comp, left_triangle, left_triangle_components, map_comp, mkOfUnitCounit, natTrans_ext, naturality, whiskerLeft_app, whiskerRight_app
+--- 原说明 ---
+If `adj : G ⊣ F` is an adjunction between two categories `C₁` and `C₂` that
+are equipped with localization functors `L₁ : C₁ ⥤ D₁` and `L₂ : C₂ ⥤ D₂` with
+respect to `W₁ : MorphismProperty C₁` and `W₂ : MorphismProperty C₂`, and that
+the functors `F : C₂ ⥤ C₁` and `G : C₁ ⥤ C₂` induce functors `F' : D₂ ⥤ D₁`
+and `G' : D₁ ⥤ D₂` on the localized categories, then the adjunction `adj`
+induces an adjunction `G' ⊣ F'`.
 -/
 noncomputable def localization : G' ⊣ F' :=
   Adjunction.mkOfUnitCounit
@@ -241,7 +136,9 @@ noncomputable def localization : G' ⊣ F' :=
         apply natTrans_ext L₁ W₁
         intro X₁
         have eq := adj.left_triangle_components X₁
-        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerRight_app]; rw [Localization.ε_app]; rw [Functor.associator_hom_app]; rw [id_comp]; rw [whiskerLeft_app]; rw [G'.map_comp]; rw [G'.map_comp]; rw [assoc]; rw [assoc]
+        rw [NatTrans.comp_app, NatTrans.comp_app, whiskerRight_app, Localization.ε_app,
+          Functor.associator_hom_app, id_comp, whiskerLeft_app, G'.map_comp, G'.map_comp,
+          assoc, assoc]
         erw [(Localization.η adj L₁ L₂ W₂ G' F').naturality, Localization.η_app,
           assoc, assoc, ← G'.map_comp_assoc, ← G'.map_comp_assoc, assoc, Iso.hom_inv_id_app,
           comp_id, (CatCommSq.iso G L₁ L₂ G').inv.naturality_assoc, ← L₂.map_comp_assoc, eq,
@@ -251,7 +148,8 @@ noncomputable def localization : G' ⊣ F' :=
         apply natTrans_ext L₂ W₂
         intro X₂
         have eq := adj.right_triangle_components X₂
-        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerLeft_app]; rw [whiskerRight_app]; rw [Localization.η_app]; rw [Functor.associator_inv_app]; rw [id_comp]; rw [F'.map_comp]; rw [F'.map_comp]
+        rw [NatTrans.comp_app, NatTrans.comp_app, whiskerLeft_app, whiskerRight_app,
+          Localization.η_app, Functor.associator_inv_app, id_comp, F'.map_comp, F'.map_comp]
         erw [← (Localization.ε _ _ _ _ _ _).naturality_assoc, Localization.ε_app,
           assoc, assoc, ← F'.map_comp_assoc, Iso.hom_inv_id_app, F'.map_id, id_comp,
           ← NatTrans.naturality, ← L₁.map_comp_assoc, eq, L₁.map_id, id_comp,
@@ -259,26 +157,18 @@ noncomputable def localization : G' ⊣ F' :=
         rfl }
 
 @[simp]
-/--
-lemma `localization_unit_app` / 引理 `localization_unit_app`
-
-English:
-lemma localization_unit_app
-  given: (X₁ : C₁)
-  proof: by
-  apply Localization.ε_app
-
-@[simp]
-
-中文:
-引理 localization_unit_app
-  条件: (X₁ : C₁)
-  证明: by
-  apply Localization.ε_app
-
-@[simp]
-
-Depends on / 依赖: Localization
+/-
+**CategoryTheory.Adjunction.localization_unit_app** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Adjunction`。
+形式化陈述：localization_unit_app (X₁ : C₁) : (adj.localization L₁ W₁ L₂ W₂ G' F').uni
+t.app (L₁.obj X₁) = L₁.map (adj.unit.app X₁) ≫ (CatCommSq.iso F L₂ L₁ F').hom.ap
+p (G.obj X₁) ≫ F'.map ((CatCommSq.iso G L₁ L₂ G').hom.app X₁)
+参数：X₁ : C₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.Localization.ε_app`：ε_app (X₁ : C₁) : (ε adj L
+₁ W₁ L₂ G' F').app (L₁.obj X₁) = L₁.map (adj.unit.app X₁) ≫ (CatCommSq.iso F L₂ 
+L₁ F').hom.app (G.obj X₁) ≫ F'.map…
 -/
 lemma localization_unit_app (X₁ : C₁) :
     (adj.localization L₁ W₁ L₂ W₂ G' F').unit.app (L₁.obj X₁) =
@@ -287,22 +177,18 @@ lemma localization_unit_app (X₁ : C₁) :
   apply Localization.ε_app
 
 @[simp]
-/--
-lemma `localization_counit_app` / 引理 `localization_counit_app`
-
-English:
-lemma localization_counit_app
-  given: (X₂ : C₂)
-  proof: by
-  apply Localization.η_app
-
-中文:
-引理 localization_counit_app
-  条件: (X₂ : C₂)
-  证明: by
-  apply Localization.η_app
-
-Depends on / 依赖: Localization
+/-
+**CategoryTheory.Adjunction.localization_counit_app** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Adjunction`。
+形式化陈述：localization_counit_app (X₂ : C₂) : (adj.localization L₁ W₁ L₂ W₂ G' F').c
+ounit.app (L₂.obj X₂) = G'.map ((CatCommSq.iso F L₂ L₁ F').inv.app X₂) ≫ (CatCom
+mSq.iso G L₁ L₂ G').inv.app (F.obj X₂) ≫ L₂.map (adj.counit.app X₂)
+参数：X₂ : C₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.Localization.η_app`：η_app (X₂ : C₂) : (η adj L
+₁ L₂ W₂ G' F').app (L₂.obj X₂) = G'.map ((CatCommSq.iso F L₂ L₁ F').inv.app X₂) 
+≫ (CatCommSq.iso G L₁ L₂ G').inv.a…
 -/
 lemma localization_counit_app (X₂ : C₂) :
     (adj.localization L₁ W₁ L₂ W₂ G' F').counit.app (L₂.obj X₂) =
@@ -314,58 +200,29 @@ lemma localization_counit_app (X₂ : C₂) :
 end
 
 include adj in
-/--
-lemma `isLocalization` / 引理 `isLocalization`
-
-English:
-lemma isLocalization
-  given: [F.Full] [F.Faithful]
-  proof: by
-  let W := ((MorphismProperty.isomorphisms C₂).inverseImage G)
-  have hG : W.IsInvertedBy G := fun _ _ _ hf => hf
-  have : forall (X : C₁), IsIso ((whiskerRight adj.unit W.Q).app X) := fun X =>
-    Localization.inverts W.Q W _ (by
-      change IsIso _
-      infer_instance)
-  have : IsIso (whiskerRight adj.unit W.Q) := NatIso.isIso_of_isIso_app _
-  let e : W.Localization ≌ C₂ := Equivalence.mk (Localization.lift G hG W.Q) (F ⋙ W.Q)
-    (liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
-    (W.Q.leftUnitor.symm ≪≫ asIso (whiskerRight adj.unit W.Q)))
-    (Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Localization.fac G hG W.Q) ≪≫
-      asIso adj.counit)
-  apply Functor.IsLocalization.of_equivalence_target W.Q W G e
-    (Localization.fac G hG W.Q)
-
-include adj in
-
-中文:
-引理 isLocalization
-  条件: [F.满] [F.忠实]
-  证明: by
-  let W := ((MorphismProperty.isomorphisms C₂).inverseImage G)
-  have hG : W.IsInvertedBy G := fun _ _ _ hf => hf
-  have : forall (X : C₁), IsIso ((whiskerRight adj.unit W.Q).app X) := fun X =>
-    Localization.inverts W.Q W _ (by
-      change IsIso _
-      infer_instance)
-  have : IsIso (whiskerRight adj.unit W.Q) := NatIso.isIso_of_isIso_app _
-  let e : W.Localization ≌ C₂ := Equivalence.mk (Localization.lift G hG W.Q) (F ⋙ W.Q)
-    (liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
-    (W.Q.leftUnitor.symm ≪≫ asIso (whiskerRight adj.unit W.Q)))
-    (Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Localization.fac G hG W.Q) ≪≫
-      asIso adj.counit)
-  apply Functor.IsLocalization.of_equivalence_target W.Q W G e
-    (Localization.fac G hG W.Q)
-
-include adj in
-
-Depends on / 依赖: Equivalence, Equivalence.mk, IsInvertedBy, Localization, Localization.inverts, Localization.lift, MorphismProperty, MorphismProperty.isomorphisms, NatIso, NatIso.isIso_of_isIso_app, W.IsInvertedBy, W.Localization, W.Q.leftUnitor.symm, adj.unit, infer_instance, inverseImage, inverts, isIso_of_isIso_app, isomorphisms, leftUnitor
+/-
+**CategoryTheory.Adjunction.isLocalization** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Adjunction`。
+形式化陈述：isLocalization [F.Full] [F.Faithful] : G.IsLocalization ((MorphismProperty
+.isomorphisms C₂).inverseImage G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoMapAppUnitOfFaithfulOfFull`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.NatIso.isIso_of_isIso_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.IsLocalization.of_equivalence_target`：of_equivale
+nce_target {E : Type*} [Category* E] (L' : C ⥤ E) (eq : D ≌ E) [L.IsLocalization
+ W] (e : L ⋙ eq.functor ≅ L') : L'.IsLocalization…
 -/
 lemma isLocalization [F.Full] [F.Faithful] :
     G.IsLocalization ((MorphismProperty.isomorphisms C₂).inverseImage G) := by
   let W := ((MorphismProperty.isomorphisms C₂).inverseImage G)
   have hG : W.IsInvertedBy G := fun _ _ _ hf => hf
-  have : forall (X : C₁), IsIso ((whiskerRight adj.unit W.Q).app X) := fun X =>
+  have : ∀ (X : C₁), IsIso ((whiskerRight adj.unit W.Q).app X) := fun X =>
     Localization.inverts W.Q W _ (by
       change IsIso _
       infer_instance)
@@ -379,30 +236,43 @@ lemma isLocalization [F.Full] [F.Faithful] :
     (Localization.fac G hG W.Q)
 
 include adj in
-/--
-lemma `isLocalization'` / 引理 `isLocalization'`
+/-- This is the dual statement to `Adjunction.isLocalization`. -/
+/-
+**CategoryTheory.Adjunction.isLocalization'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Adjunction`。
+形式化陈述：isLocalization' [G.Full] [G.Faithful] : F.IsLocalization ((MorphismPropert
+y.isomorphisms C₁).inverseImage F)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.IsLocalization.op_iff`：∀ {C : Type u_1} {D : Type
+ u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.C
+ategory.{v_2, u_2} D] (L : Categor…
+· 使用引理 `CategoryTheory.MorphismProperty.op_inverseImage`：op_inverseImage (P : Mo
+rphismProperty D) (F : C ⥤ D) : (P.inverseImage F).op = P.op.inverseImage F.op
+· 使用引理 `CategoryTheory.MorphismProperty.op_isomorphisms`：op_isomorphisms : (isom
+orphisms C).op = isomorphisms Cᵒᵖ
+· 使用引理 `CategoryTheory.Adjunction.isLocalization`：isLocalization [F.Full] [F.Fai
+thful] : G.IsLocalization ((MorphismProperty.isomorphisms C₂).inverseImage G)
+· 使用定理 `CategoryTheory.Functor.instFullOppositeOp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instFaithfulOppositeOp`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {F : CategoryTheor…
 
-English:
-lemma isLocalization'
-  given: [G.Full] [G.Faithful]
-  proof: by
-  rw [← Functor.IsLocalization.op_iff]; rw [MorphismProperty.op_inverseImage]; rw [MorphismProperty.op_isomorphisms]
-  exact adj.op.isLocalization
-
-中文:
-引理 isLocalization'
-  条件: [G.满] [G.忠实]
-  证明: by
-  rw [← Functor.IsLocalization.op_iff]; rw [MorphismProperty.op_inverseImage]; rw [MorphismProperty.op_isomorphisms]
-  exact adj.op.isLocalization
-
-Depends on / 依赖: Functor, Functor.IsLocalization.op_iff, IsLocalization, MorphismProperty, MorphismProperty.op_inverseImage, MorphismProperty.op_isomorphisms, adj.op.isLocalization, isLocalization, op_iff, op_inverseImage, op_isomorphisms
+--- 原说明 ---
+This is the dual statement to `Adjunction.isLocalization`.
 -/
 lemma isLocalization' [G.Full] [G.Faithful] :
     F.IsLocalization ((MorphismProperty.isomorphisms C₁).inverseImage F) := by
-  rw [← Functor.IsLocalization.op_iff]; rw [MorphismProperty.op_inverseImage]; rw [MorphismProperty.op_isomorphisms]
+  rw [← Functor.IsLocalization.op_iff, MorphismProperty.op_inverseImage,
+    MorphismProperty.op_isomorphisms]
   exact adj.op.isLocalization
 
 end Adjunction
 
 end CategoryTheory
+

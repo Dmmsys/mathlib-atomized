@@ -28,30 +28,9 @@ variable [p.IsMaximal] [q.IsMaximal] [Algebra (Localization.AtPrime p) (Localiza
 attribute [local instance] Ideal.Quotient.field
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Algebra.IsSeparable
-  signature: (A ⧸ p) (B ⧸ q)] :
-  body: by
-  refine Algebra.IsSeparable.of_equiv_equiv
-    (.ofBijective _ p.bijective_algebraMap_quotient_residueField)
-    (.ofBijective _ q.bijective_algebraMap_quotient_residueField) ?_
-  ext x
-  simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
-
-中文:
-实例 [代数.是可分
-  签名: (A ⧸ p) (B ⧸ q)] :
-  定义体: by
-  refine Algebra.IsSeparable.of_equiv_equiv
-    (.ofBijective _ p.bijective_algebraMap_quotient_residueField)
-    (.ofBijective _ q.bijective_algebraMap_quotient_residueField) ?_
-  ext x
-  simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
-
-Depends on / 依赖: Algebra, Algebra.IsSeparable.of_equiv_equiv, IsScalarTower, IsScalarTower.algebraMap_apply, IsSeparable, RingHom, RingHom.algebraMap_toAlgebra, algebraMap_apply, algebraMap_toAlgebra, bijective_algebraMap_quotient_residueField, ofBijective, of_equiv_equiv, p.bijective_algebraMap_quotient_residueField, q.bijective_algebraMap_quotient_residueField
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Algebra.IsSeparable (A ⧸ p) (B ⧸ q)] :
     Algebra.IsSeparable p.ResidueField q.ResidueField := by
@@ -62,49 +41,16 @@ instance [Algebra.IsSeparable (A ⧸ p) (B ⧸ q)] :
   simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Algebra.IsSeparable
-  signature: p.ResidueField q.ResidueField] :
-  body: by
-  refine Algebra.IsSeparable.of_equiv_equiv
-    (.symm <| .ofBijective _ p.bijective_algebraMap_quotient_residueField)
-    (.symm <| .ofBijective _ q.bijective_algebraMap_quotient_residueField) ?_
-  apply RingHom.ext fun x => ?_
-  obtain ⟨x, rfl⟩ :=
-    (RingEquiv.ofBijective _ p.bijective_algebraMap_quotient_residueField).surjective x
-  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-  apply (RingEquiv.ofBijective _ q.bijective_algebraMap_quotient_residueField).injective
-  simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, RingEquiv.symm_apply_apply,
-    RingEquiv.apply_symm_apply]
-  simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
-
-中文:
-实例 [代数.是可分
-  签名: p.ResidueField q.ResidueField] :
-  定义体: by
-  refine Algebra.IsSeparable.of_equiv_equiv
-    (.symm <| .ofBijective _ p.bijective_algebraMap_quotient_residueField)
-    (.symm <| .ofBijective _ q.bijective_algebraMap_quotient_residueField) ?_
-  apply RingHom.ext fun x => ?_
-  obtain ⟨x, rfl⟩ :=
-    (RingEquiv.ofBijective _ p.bijective_algebraMap_quotient_residueField).surjective x
-  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-  apply (RingEquiv.ofBijective _ q.bijective_algebraMap_quotient_residueField).injective
-  simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, RingEquiv.symm_apply_apply,
-    RingEquiv.apply_symm_apply]
-  simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
-
-Depends on / 依赖: Algebra, Algebra.IsSeparable.of_equiv_equiv, Ideal.Quotient.mk_surjective, IsSeparable, Quotient, RingEquiv, RingEquiv.ofBijective, RingHom, RingHom.coe, RingHom.coe_comp, RingHom.ext, bijective_algebraMap_quotient_residueField, coe_comp, injective, mk_surjective, ofBijective, of_equiv_equiv, p.bijective_algebraMap_quotient_residueField, q.bijective_algebraMap_quotient_residueField, surjective
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Algebra.IsSeparable p.ResidueField q.ResidueField] :
     Algebra.IsSeparable (A ⧸ p) (B ⧸ q) := by
   refine Algebra.IsSeparable.of_equiv_equiv
     (.symm <| .ofBijective _ p.bijective_algebraMap_quotient_residueField)
     (.symm <| .ofBijective _ q.bijective_algebraMap_quotient_residueField) ?_
-  apply RingHom.ext fun x => ?_
+  apply RingHom.ext fun x ↦ ?_
   obtain ⟨x, rfl⟩ :=
     (RingEquiv.ofBijective _ p.bijective_algebraMap_quotient_residueField).surjective x
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
@@ -114,20 +60,27 @@ instance [Algebra.IsSeparable p.ResidueField q.ResidueField] :
   simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
 
 variable {p q} in
-/--
-lemma `Algebra.isSeparable_residueField_iff` / 引理 `Algebra.isSeparable_residueField_iff`
-
-English:
-lemma Algebra.isSeparable_residueField_iff
-  proof: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
-
-中文:
-引理 代数.isSeparable_residueField_iff
-  证明: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
+/-
+**Algebra.isSeparable_residueField_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Algebra.isSeparable_residueField_iff : Algebra.IsSeparable p.ResidueField 
+q.ResidueField ↔ Algebra.IsSeparable (A ⧸ p) (B ⧸ q)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.IsMaximal.isPrime'`：∀ {α : Type u} [inst : CommSemiring α] (I : Id
+eal α) [_H : I.IsMaximal], I.IsPrime
+· 使用定理 `instIsLocalHomAtPrimeRingHomAlgebraMap`：∀ {R : Type u_1} {A : Type u_3} 
+[inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] (I : Ideal R)  
+ [inst_3 : I.IsPrime] (J : I…
+· 使用定理 `instIsSeparableQuotientIdealOfResidueField`：∀ {A : Type u_2} {B : Type u
+_3} [inst : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B] (p : Ideal 
+A)   (q : Ideal B) [inst_3 : q.L…
+· 使用定理 `instIsSeparableResidueFieldOfQuotientIdeal`：∀ {A : Type u_2} {B : Type u
+_3} [inst : CommRing A] [inst_1 : CommRing B] [inst_2 : Algebra A B] (p : Ideal 
+A)   (q : Ideal B) [inst_3 : q.L…
 -/
 lemma Algebra.isSeparable_residueField_iff :
     Algebra.IsSeparable p.ResidueField q.ResidueField ↔ Algebra.IsSeparable (A ⧸ p) (B ⧸ q) :=
-  ⟨fun _ => inferInstance, fun _ => inferInstance⟩
+  ⟨fun _ ↦ inferInstance, fun _ ↦ inferInstance⟩
 
 end maximal
 
@@ -136,59 +89,17 @@ section prime
 variable [p.IsPrime] [q.IsPrime] [Algebra (Localization.AtPrime p) (Localization.AtPrime q)]
   [Localization.AtPrime.IsLiesOverAlgebra p q]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra.IsAlgebraic (A ⧸ p) p.ResidueField
-  body: IsLocalization.isAlgebraic _ (nonZeroDivisors (A ⧸ p))
-
-中文:
-实例 :
-  签名: 代数.是代数 (A ⧸ p) p.ResidueField
-  定义体: IsLocalization.isAlgebraic _ (nonZeroDivisors (A ⧸ p))
-
-Depends on / 依赖: IsLocalization, IsLocalization.isAlgebraic, isAlgebraic, nonZeroDivisors
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra.IsAlgebraic (A ⧸ p) p.ResidueField :=
   IsLocalization.isAlgebraic _ (nonZeroDivisors (A ⧸ p))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Algebra.IsIntegral
-  signature: A B] :
-  body: by
-  have : Algebra.IsIntegral (A ⧸ p) (B ⧸ q) :=
-    .tower_top A
-  let := ((algebraMap (B ⧸ q) q.ResidueField).comp (algebraMap (A ⧸ p) (B ⧸ q))).toAlgebra
-  have : IsScalarTower (A ⧸ p) (B ⧸ q) q.ResidueField := .of_algebraMap_eq' rfl
-  have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans _ (B ⧸ q) _
-  have : IsScalarTower (A ⧸ p) p.ResidueField q.ResidueField := by
-    refine .of_algebraMap_eq fun x => ?_
-    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-    simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
-  refine .extendScalars (Ideal.injective_algebraMap_quotient_residueField p)
-
-中文:
-实例 [代数.是整
-  签名: A B] :
-  定义体: by
-  have : Algebra.IsIntegral (A ⧸ p) (B ⧸ q) :=
-    .tower_top A
-  let := ((algebraMap (B ⧸ q) q.ResidueField).comp (algebraMap (A ⧸ p) (B ⧸ q))).toAlgebra
-  have : IsScalarTower (A ⧸ p) (B ⧸ q) q.ResidueField := .of_algebraMap_eq' rfl
-  have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans _ (B ⧸ q) _
-  have : IsScalarTower (A ⧸ p) p.ResidueField q.ResidueField := by
-    refine .of_algebraMap_eq fun x => ?_
-    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-    simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
-  refine .extendScalars (Ideal.injective_algebraMap_quotient_residueField p)
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsIntegral, Ideal.Quotient.mk_surjective, IsAlgebraic, IsIntegral, IsScalarTo, IsScalarTower, Quotient, ResidueField, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_toAlgebra, mk_surjective, of_algebraMap_eq, p.ResidueField, q.ResidueField, toAlgebra, tower_top
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Algebra.IsIntegral A B] :
     Algebra.IsAlgebraic p.ResidueField q.ResidueField := by
@@ -198,7 +109,7 @@ instance [Algebra.IsIntegral A B] :
   have : IsScalarTower (A ⧸ p) (B ⧸ q) q.ResidueField := .of_algebraMap_eq' rfl
   have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans _ (B ⧸ q) _
   have : IsScalarTower (A ⧸ p) p.ResidueField q.ResidueField := by
-    refine .of_algebraMap_eq fun x => ?_
+    refine .of_algebraMap_eq fun x ↦ ?_
     obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
     simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
   refine .extendScalars (Ideal.injective_algebraMap_quotient_residueField p)
@@ -209,70 +120,41 @@ namespace IsLocalRing
 
 variable {R k : Type*} [CommRing R] [IsLocalRing R] [Field k] [Algebra R k]
 
-/--
-Instance `ResidueField.algebraOfIsIntegral` / 实例 `ResidueField.algebraOfIsIntegral`
-
-English:
-instance ResidueField.algebraOfIsIntegral
-  signature: [Algebra.IsIntegral R k]
-  body: fast_instance% (Ideal.Quotient.lift (maximalIdeal R) (algebraMap R k)
-    (by simp [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)])).toAlgebra
-
-中文:
-实例 ResidueField.algebraOfIs整数egral
-  签名: [代数.是整 R k]
-  定义体: fast_instance% (Ideal.Quotient.lift (maximalIdeal R) (algebraMap R k)
-    (by simp [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)])).toAlgebra
-
-Depends on / 依赖: Algebra, Algebra.ker_algebraMap_isMaximal_of_isIntegral, Ideal.Quotient.lift, Quotient, algebraMap, eq_maximalIdeal, fast_instance, ker_algebraMap_isMaximal_of_isIntegral, maximalIdeal, toAlgebra
+/-
+**IsLocalRing.ResidueField.algebraOfIsIntegral** 是 Mathlib 中的一个定义，位于命名空间 `IsLoca
+lRing.ResidueField`。
+形式化陈述：{R : Type u_4} →   {k : Type u_5} →     [inst : CommRing R] →       [inst_
+1 : IsLocalRing R] →         [inst_2 : Field k] → [inst_3 : Algebra R k] → [Alge
+bra.IsIntegral R k] → Algebra (IsLocalRing.ResidueField R) k
+参数：IsLocalRing.ResidueField R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ResidueField.algebraOfIsIntegral [Algebra.IsIntegral R k] : Algebra (ResidueField R) k :=
   fast_instance% (Ideal.Quotient.lift (maximalIdeal R) (algebraMap R k)
     (by simp [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)])).toAlgebra
-
-/--
-Instance `ResidueField.isScalarTowerOfIsIntegral` / 实例 `ResidueField.isScalarTowerOfIsIntegral`
-
-English:
-instance ResidueField.isScalarTowerOfIsIntegral
-  signature: [Algebra.IsIntegral R k]
-  body: .of_algebraMap_eq fun _ => rfl
-
-中文:
-实例 ResidueField.isScalarTowerOfIs整数egral
-  签名: [代数.是整 R k]
-  定义体: .of_algebraMap_eq fun _ => rfl
-
-Depends on / 依赖: of_algebraMap_eq
+/-
+**IsLocalRing.ResidueField.isScalarTowerOfIsIntegral** 是 Mathlib 中的一个定理，位于命名空间 `
+IsLocalRing.ResidueField`。
+形式化陈述：∀ {R : Type u_4} {k : Type u_5} [inst : CommRing R] [inst_1 : IsLocalRing 
+R] [inst_2 : Field k] [inst_3 : Algebra R k]   [inst_4 : Algebra.IsIntegral R k]
+, IsScalarTower R (IsLocalRing.ResidueField R) k
+参数：IsLocalRing.ResidueField R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq`：of_algebraMap_eq [Algebra R A] (h : fora
+ll x, algebraMap R A x = algebraMap S A (algebraMap R S x)) : IsScalarTower R S 
+A
 -/
 instance ResidueField.isScalarTowerOfIsIntegral [Algebra.IsIntegral R k] :
     IsScalarTower R (ResidueField R) k :=
-  .of_algebraMap_eq fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Module.Finite
-  signature: R k] : Module.Finite (ResidueField R) k
-  body: .of_equiv_equiv
-  (Ideal.quotEquivOfEq (show Ideal.comap (algebraMap R k) ⊥ = maximalIdeal R by
-    rw [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)]; rw [RingHom.ker]))
-  (RingEquiv.quotientBot k) (by ext; rfl)
-
-中文:
-实例 [模.有限
-  签名: R k] : 模.有限 (ResidueField R) k
-  定义体: .of_equiv_equiv
-  (Ideal.quotEquivOfEq (show Ideal.comap (algebraMap R k) ⊥ = maximalIdeal R by
-    rw [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)]; rw [RingHom.ker]))
-  (RingEquiv.quotientBot k) (by ext; rfl)
-
-Depends on / 依赖: of_equiv_equiv
+  .of_algebraMap_eq fun _ ↦ rfl
+/-
+**IsLocalRing.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Module.Finite R k] : Module.Finite (ResidueField R) k := .of_equiv_equiv
   (Ideal.quotEquivOfEq (show Ideal.comap (algebraMap R k) ⊥ = maximalIdeal R by
-    rw [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)]; rw [RingHom.ker]))
+    rw [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k), RingHom.ker]))
   (RingEquiv.quotientBot k) (by ext; rfl)
 
 end IsLocalRing
+

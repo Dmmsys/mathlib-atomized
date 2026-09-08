@@ -28,20 +28,17 @@ namespace Finsupp
 section Zero
 variable [Zero M] [Zero N] [Zero O]
 
-/--
-lemma `apply_single` / 引理 `apply_single`
-
-English:
-lemma apply_single
-  given: [FunLike F M N] [ZeroHomClass F M N] (e : F) (i : ι) (m : M) (b : ι)
-  proof: apply_single' e (map_zero e) i m b
-
-中文:
-引理 apply_single
-  条件: [函数状 F M N] [保零态射类 F M N] (e : F) (i : ι) (m : M) (b : ι)
-  证明: apply_single' e (map_zero e) i m b
-
-Depends on / 依赖: apply_single, map_zero
+/-
+**Finsupp.apply_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：apply_single [FunLike F M N] [ZeroHomClass F M N] (e : F) (i : ι) (m : M) 
+(b : ι) : e (single i m b) = single i (e m) b
+参数：e : F；i : ι；m : M；b : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.apply_single'`：apply_single' [Zero N] [Zero P] (e : N -> P) (he 
+: e 0 = 0) (a : α) (n : N) (b : α) : e ((single a n) b) = single a (e n) b
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
 -/
 lemma apply_single [FunLike F M N] [ZeroHomClass F M N] (e : F) (i : ι) (m : M) (b : ι) :
     e (single i m b) = single i (e m) b := apply_single' e (map_zero e) i m b
@@ -49,58 +46,80 @@ lemma apply_single [FunLike F M N] [ZeroHomClass F M N] (e : F) (i : ι) (m : M)
 /-- Composition with a fixed zero-preserving homomorphism is itself a zero-preserving homomorphism
 on functions. -/
 @[simps]
-/--
-Definition of `mapRange.zeroHom` / `mapRange.zeroHom` 的定义
+/-
+**Finsupp.mapRange.zeroHom** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：{ι : Type u_1} →   {M : Type u_3} → {N : Type u_4} → [inst : Zero M] → [in
+st_1 : Zero N] → ZeroHom M N → ZeroHom (ι →₀ M) (ι →₀ N)
+参数：ι →₀ M；ι →₀ N。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroHom.map_zero`：∀ {M : Type u_4} {N : Type u_5} [inst : Zero M] [inst_
+1 : Zero N] (f : ZeroHom M N), f 0 = 0
 
-English:
-definition mapRange.zeroHom
-  signature: (f : ZeroHom M N)
-  body: Finsupp.mapRange f f.map_zero
-  map_zero' := mapRange_zero
-
-中文:
-定义 mapRange.zeroHom
-  签名: (f : 保零态射 M N)
-  定义体: Finsupp.mapRange f f.map_zero
-  map_zero' := mapRange_zero
-
-Depends on / 依赖: Finsupp, Finsupp.mapRange, f.map_zero, mapRange, map_zero
+--- 原说明 ---
+Composition with a fixed zero-preserving homomorphism is itself a zero-preservin
+g homomorphism
+on functions.
 -/
-def mapRange.zeroHom (f : ZeroHom M N) : ZeroHom (ι ->₀ M) (ι ->₀ N) where
+def mapRange.zeroHom (f : ZeroHom M N) : ZeroHom (ι →₀ M) (ι →₀ N) where
   toFun := Finsupp.mapRange f f.map_zero
   map_zero' := mapRange_zero
-
-/--
-lemma `mapRange.zeroHom_id` / 引理 `mapRange.zeroHom_id`
-
-English:
-lemma mapRange.zeroHom_id
-  statement: mapRange.zeroHom (.id M) = .id (ι ->₀ M)
-  proof: by ext; simp
-
-中文:
-引理 mapRange.zeroHom_id
-  结论: mapRange.zeroHom (.id M) = .id (ι ->₀ M)
-  证明: by ext; simp
+/-
+**Finsupp.mapRange.zeroHom_id** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : Zero M], Finsupp.mapRange.zeroHom 
+(ZeroHom.id M) = ZeroHom.id (ι →₀ M)
+参数：ZeroHom.id M；ι →₀ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : Zero M] [inst_1 : Z
+ero N] ⦃f g : ZeroHom M N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ZeroHom.map_zero`：∀ {M : Type u_4} {N : Type u_5} [inst : Zero M] [inst_
+1 : Zero N] (f : ZeroHom M N), f 0 = 0
+· 使用定理 `Finsupp.mapRange.zeroHom_apply`：∀ {ι : Type u_1} {M : Type u_3} {N : Typ
+e u_4} [inst : Zero M] [inst_1 : Zero N] (f : ZeroHom M N) (g : ι →₀ M),   (Fins
+upp.mapRange.zeroHom…
+· 使用定理 `Finsupp.mapRange_id`：mapRange_id (g : α ->₀ M) : mapRange id rfl g = g
+· 使用定理 `ZeroHom.id_apply`：∀ (M : Type u_10) [inst : Zero M] (x : M), (ZeroHom.id
+ M) x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma mapRange.zeroHom_id : mapRange.zeroHom (.id M) = .id (ι ->₀ M) := by ext; simp
-
-/--
-lemma `mapRange.zeroHom_comp` / 引理 `mapRange.zeroHom_comp`
-
-English:
-lemma mapRange.zeroHom_comp
-  given: (f : ZeroHom N O) (f₂ : ZeroHom M N)
-  proof: by
-  ext; simp
-
-中文:
-引理 mapRange.zeroHom_comp
-  条件: (f : 保零态射 N O) (f₂ : 保零态射 M N)
-  证明: by
-  ext; simp
-
-Depends on / 依赖: f.comp, mapRange, mapRange.zeroHom, zeroHom
+@[simp] lemma mapRange.zeroHom_id : mapRange.zeroHom (.id M) = .id (ι →₀ M) := by ext; simp
+/-
+**Finsupp.mapRange.zeroHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} {O : Type u_5} [inst : Zero
+ M] [inst_1 : Zero N] [inst_2 : Zero O]   (f : ZeroHom N O) (f₂ : ZeroHom M N), 
+  Finsupp.mapRange.zeroHom (f.comp f₂) = (Finsupp.mapRange.zeroHom f).comp (Fins
+upp.mapRange.zeroHom f₂)
+参数：f : ZeroHom N O；f₂ : ZeroHom M N；f.comp f₂；Finsupp.mapRange.zeroHom f；Finsupp
+.mapRange.zeroHom f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : Zero M] [inst_1 : Z
+ero N] ⦃f g : ZeroHom M N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ZeroHom.map_zero`：∀ {M : Type u_4} {N : Type u_5} [inst : Zero M] [inst_
+1 : Zero N] (f : ZeroHom M N), f 0 = 0
+· 使用定理 `Finsupp.mapRange.zeroHom_apply`：∀ {ι : Type u_1} {M : Type u_3} {N : Typ
+e u_4} [inst : Zero M] [inst_1 : Zero N] (f : ZeroHom M N) (g : ι →₀ M),   (Fins
+upp.mapRange.zeroHom…
+· 使用引理 `Finsupp.mapRange_mapRange`：mapRange_mapRange (e₁ : N -> O) (e₂ : M -> N)
+ (he₁ he₂) (f : α ->₀ M) : mapRange e₁ he₁ (mapRange e₂ he₂ f) = mapRange (e₁ ∘ 
+e₂) (by simp [*…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapRange.zeroHom_comp (f : ZeroHom N O) (f₂ : ZeroHom M N) :
     mapRange.zeroHom (ι := ι) (f.comp f₂) = (mapRange.zeroHom f).comp (mapRange.zeroHom f₂) := by
@@ -109,195 +128,167 @@ lemma mapRange.zeroHom_comp (f : ZeroHom N O) (f₂ : ZeroHom M N) :
 end Zero
 
 section AddZeroClass
-variable [AddZeroClass M] [AddZeroClass N] {f : M -> N} {g₁ g₂ : ι ->₀ M}
+variable [AddZeroClass M] [AddZeroClass N] {f : M → N} {g₁ g₂ : ι →₀ M}
 
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: : Add (ι ->₀ M) where add
-  body: zipWith (· + ·) (add_zero 0)
-
-中文:
-实例 instAdd
-  签名: : 加法 (ι ->₀ M) where add
-  定义体: zipWith (· + ·) (add_zero 0)
-
-Depends on / 依赖: add_zero, zipWith
+/-
+**Finsupp.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instAdd : Add (ι ->₀ M) where add
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAdd : Add (ι ->₀ M) where add := zipWith (· + ·) (add_zero 0)
-
-/--
-lemma `coe_add` / 引理 `coe_add`
-
-English:
-lemma coe_add
-  given: (f g : ι ->₀ M)
-  statement: ⇑(f + g) = f + g
-  proof: rfl
-
-中文:
-引理 coe_add
-  条件: (f g : ι ->₀ M)
-  结论: ⇑(f + g) = f + g
-  证明: rfl
+instance instAdd : Add (ι →₀ M) where add := zipWith (· + ·) (add_zero 0)
+/-
+**Finsupp.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass M] (f g : ι →₀ M), ⇑(
+f + g) = ⇑f + ⇑g
+参数：f g : ι →₀ M；f + g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_add (f g : ι ->₀ M) : ⇑(f + g) = f + g := rfl
-
-/--
-lemma `add_apply` / 引理 `add_apply`
-
-English:
-lemma add_apply
-  given: (g₁ g₂ : ι ->₀ M) (a : ι)
-  statement: (g₁ + g₂) a = g₁ a + g₂ a
-  proof: rfl
-
-中文:
-引理 add_apply
-  条件: (g₁ g₂ : ι ->₀ M) (a : ι)
-  结论: (g₁ + g₂) a = g₁ a + g₂ a
-  证明: rfl
+@[simp, norm_cast] lemma coe_add (f g : ι →₀ M) : ⇑(f + g) = f + g := rfl
+/-
+**Finsupp.add_apply** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：add_apply (g₁ g₂ : ι ->₀ M) (a : ι) : (g₁ + g₂) a = g₁ a + g₂ a
+参数：g₁ g₂ : ι ->₀ M；a : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma add_apply (g₁ g₂ : ι ->₀ M) (a : ι) : (g₁ + g₂) a = g₁ a + g₂ a := rfl
-
-/--
-lemma `support_add` / 引理 `support_add`
-
-English:
-lemma support_add
-  given: [DecidableEq ι]
-  statement: (g₁ + g₂).support subseteq g₁.support union g₂.support
-  proof: support_zipWith
-
-中文:
-引理 support_add
-  条件: [DecidableEq ι]
-  结论: (g₁ + g₂).support subseteq g₁.support union g₂.support
-  证明: support_zipWith
-
-Depends on / 依赖: support_zipWith
+lemma add_apply (g₁ g₂ : ι →₀ M) (a : ι) : (g₁ + g₂) a = g₁ a + g₂ a := rfl
+/-
+**Finsupp.support_add** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_add [DecidableEq ι] : (g₁ + g₂).support subseteq g₁.support union 
+g₂.support
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.support_zipWith`：support_zipWith [D : DecidableEq α] {f : M -> N
+ -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M} {g₂ : α ->₀ N} : (zipWith f hf g₁ g₂).sup
+port subseteq…
 -/
-lemma support_add [DecidableEq ι] : (g₁ + g₂).support subseteq g₁.support union g₂.support := support_zipWith
+lemma support_add [DecidableEq ι] : (g₁ + g₂).support ⊆ g₁.support ∪ g₂.support := support_zipWith
 
-/--
-lemma `support_add_eq` / 引理 `support_add_eq`
+/-- The support of a sum is the union of the supports when the supports are disjoint.
 
-English:
-lemma support_add_eq
-  given: [DecidableEq ι] (h : Disjoint g₁.support g₂.support)
-  proof: le_antisymm support_zipWith fun a ha => by
-    cases (Finset.mem_union_of_disjoint h).mp ha <;> simp_all
+In the case where the coefficients satisfy `CanonicallyOrderedAdd`, there is also
+`Finsupp.support_add_eq_union`, which holds without any disjointness assumption. -/
+/-
+**Finsupp.support_add_eq** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_add_eq [DecidableEq ι] (h : Disjoint g₁.support g₂.support) : (g₁ 
++ g₂).support = g₁.support union g₂.support
+参数：h : Disjoint g₁.support g₂.support。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Finsupp.support_zipWith`：support_zipWith [D : DecidableEq α] {f : M -> N
+ -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M} {g₂ : α ->₀ N} : (zipWith f hf g₁ g₂).sup
+port subseteq…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_union_of_disjoint`：mem_union_of_disjoint [DecidableEq α] {s t
+ : Finset α} (h : Disjoint s t) {x : α} : x in s union t ↔ Xor (x in s) (x in t)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 
-中文:
-引理 support_add_eq
-  条件: [DecidableEq ι] (h : Disjoint g₁.support g₂.support)
-  证明: le_antisymm support_zipWith fun a ha => by
-    cases (Finset.mem_union_of_disjoint h).mp ha <;> simp_all
+--- 原说明 ---
+The support of a sum is the union of the supports when the supports are disjoint
+.
 
-Depends on / 依赖: Finset, Finset.mem_union_of_disjoint, le_antisymm, mem_union_of_disjoint, support_zipWith
+In the case where the coefficients satisfy `CanonicallyOrderedAdd`, there is als
+o
+`Finsupp.support_add_eq_union`, which holds without any disjointness assumption.
 -/
 lemma support_add_eq [DecidableEq ι] (h : Disjoint g₁.support g₂.support) :
-    (g₁ + g₂).support = g₁.support union g₂.support :=
+    (g₁ + g₂).support = g₁.support ∪ g₂.support :=
   le_antisymm support_zipWith fun a ha => by
     cases (Finset.mem_union_of_disjoint h).mp ha <;> simp_all
-
-/--
-Instance `instAddZeroClass` / 实例 `instAddZeroClass`
-
-English:
-instance instAddZeroClass
-  signature: : AddZeroClass (ι ->₀ M)
-  body: fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-中文:
-实例 instAddZeroClass
-  签名: : 加法零类 (ι ->₀ M)
-  定义体: fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addZeroClass, addZeroClass, coe_add, coe_injective, coe_zero, fast_instance
+/-
+**Finsupp.instAddZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instAddZeroClass : AddZeroClass (ι ->₀ M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddZeroClass : AddZeroClass (ι ->₀ M) :=
+instance instAddZeroClass : AddZeroClass (ι →₀ M) :=
   fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-/--
-Instance `instIsLeftCancelAdd` / 实例 `instIsLeftCancelAdd`
-
-English:
-instance instIsLeftCancelAdd
-  signature: [IsLeftCancelAdd M]
-  body: ext fun x => add_left_cancel DFunLike.congr_fun h x
-
-中文:
-实例 instIsLeftCancelAdd
-  签名: [是左消去加法 M]
-  定义体: ext fun x => add_left_cancel DFunLike.congr_fun h x
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, add_left_cancel, congr_fun
+/-
+**Finsupp.instIsLeftCancelAdd** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instIsLeftCancelAdd [IsLeftCancelAdd M] : IsLeftCancelAdd (ι ->₀ M) where 
+add_left_cancel _ _ _ h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `add_left_cancel`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] {a 
+b c : G}, a + b = a + c → b = c
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-instance instIsLeftCancelAdd [IsLeftCancelAdd M] : IsLeftCancelAdd (ι ->₀ M) where
-add_left_cancel _ _ _ h := ext fun x => add_left_cancel DFunLike.congr_fun h x
+instance instIsLeftCancelAdd [IsLeftCancelAdd M] : IsLeftCancelAdd (ι →₀ M) where
+  add_left_cancel _ _ _ h := ext fun x => add_left_cancel <| DFunLike.congr_fun h x
 
-/--
-Definition of `addEquivFunOnFinite` / `addEquivFunOnFinite` 的定义
+/-- When ι is finite and M is an AddMonoid,
+  then Finsupp.equivFunOnFinite gives an AddEquiv -/
+/-
+**Finsupp.addEquivFunOnFinite** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：addEquivFunOnFinite {ι : Type*} [Finite ι] : (ι ->₀ M) ≃+ (ι -> M) where _
+_
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addEquivFunOnFinite
-  signature: {ι : Type*} [Finite ι]
-  body: Finsupp.equivFunOnFinite
-  map_add' _ _ := rfl
-
-中文:
-定义 addEquivFunOnFinite
-  签名: {ι : 类型} [有限 ι]
-  定义体: Finsupp.equivFunOnFinite
-  map_add' _ _ := rfl
-
-Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite, equivFunOnFinite
+--- 原说明 ---
+When ι is finite and M is an AddMonoid,
+  then Finsupp.equivFunOnFinite gives an AddEquiv
 -/
 noncomputable def addEquivFunOnFinite {ι : Type*} [Finite ι] :
-    (ι ->₀ M) ≃+ (ι -> M) where
+    (ι →₀ M) ≃+ (ι → M) where
   __ := Finsupp.equivFunOnFinite
   map_add' _ _ := rfl
 
 /-- If `M` is the trivial monoid, then the monoid of finitely supported functions `ι →₀ M` is
 is isomorphic to `M`. -/
 @[simps! apply symm_apply]
-/--
-Definition of `uniqueAddEquiv` / `uniqueAddEquiv` 的定义
+/-
+**Finsupp.uniqueAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：uniqueAddEquiv (i : ι) [Subsingleton ι] : (ι ->₀ M) ≃+ M where toEquiv
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueAddEquiv
-  signature: (i : ι) [Subsingleton ι]
-  body: uniqueEquiv i
-  map_add' _ _ := rfl
-
-中文:
-定义 uniqueAddEquiv
-  签名: (i : ι) [子单例 ι]
-  定义体: uniqueEquiv i
-  map_add' _ _ := rfl
-
-Depends on / 依赖: uniqueEquiv
+--- 原说明 ---
+If `M` is the trivial monoid, then the monoid of finitely supported functions `ι
+ →₀ M` is
+is isomorphic to `M`.
 -/
-noncomputable def uniqueAddEquiv (i : ι) [Subsingleton ι] : (ι ->₀ M) ≃+ M where
+noncomputable def uniqueAddEquiv (i : ι) [Subsingleton ι] : (ι →₀ M) ≃+ M where
   toEquiv := uniqueEquiv i
   map_add' _ _ := rfl
 
 -- We want this lemma to fire before `uniqueAddEquiv_symm_apply`.
-/--
-lemma `uniqueAddEquiv_symm_apply_apply` / 引理 `uniqueAddEquiv_symm_apply_apply`
-
-English:
-lemma uniqueAddEquiv_symm_apply_apply
-  given: (i : ι) [Subsingleton ι] (m : M) (j : ι)
-  proof: by simp [Subsingleton.elim j i]
-
-中文:
-引理 uniqueAddEquiv_symm_apply_apply
-  条件: (i : ι) [子单例 ι] (m : M) (j : ι)
-  证明: by simp [Subsingleton.elim j i]
+/-
+**Finsupp.uniqueAddEquiv_symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass M] (i : ι) [inst_1 : 
+Subsingleton ι] (m : M) (j : ι),   ((Finsupp.uniqueAddEquiv i).symm m) j = m
+参数：i : ι；m : M；j : ι；(Finsupp.uniqueAddEquiv i).symm m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.uniqueAddEquiv_symm_apply`：∀ {ι : Type u_1} {M : Type u_3} [inst
+ : AddZeroClass M] (i : ι) [inst_1 : Subsingleton ι] (b : M),   (Finsupp.uniqueA
+ddEquiv i).symm b = fun…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp↓ high] lemma uniqueAddEquiv_symm_apply_apply (i : ι) [Subsingleton ι] (m : M) (j : ι) :
     (uniqueAddEquiv i).symm m j = m := by simp [Subsingleton.elim j i]
@@ -305,442 +296,379 @@ lemma uniqueAddEquiv_symm_apply_apply
 /-- If `M` is the trivial monoid, then the monoid of finitely supported functions `ι →₀ M` is
 is isomorphic to `M`. -/
 @[simps!, deprecated uniqueAddEquiv (since := "2026-05-06")]
-/--
-Definition of `_root_.AddEquiv.finsuppUnique` / `_root_.AddEquiv.finsuppUnique` 的定义
+/-
+**Finsupp._root_.AddEquiv.finsuppUnique** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.AddEquiv.finsuppUnique
-  signature: {ι : Type*} [Unique ι]
-  body: .finsuppUnique
-  map_add' _ _ := rfl
-
-中文:
-定义 _root_.加法等价.finsuppUnique
-  签名: {ι : 类型} [唯一 ι]
-  定义体: .finsuppUnique
-  map_add' _ _ := rfl
-
-Depends on / 依赖: finsuppUnique
+--- 原说明 ---
+If `M` is the trivial monoid, then the monoid of finitely supported functions `ι
+ →₀ M` is
+is isomorphic to `M`.
 -/
-noncomputable def _root_.AddEquiv.finsuppUnique {ι : Type*} [Unique ι] : (ι ->₀ M) ≃+ M where
+noncomputable def _root_.AddEquiv.finsuppUnique {ι : Type*} [Unique ι] : (ι →₀ M) ≃+ M where
   toEquiv := .finsuppUnique
   map_add' _ _ := rfl
-
-/--
-Instance `instIsRightCancelAdd` / 实例 `instIsRightCancelAdd`
-
-English:
-instance instIsRightCancelAdd
-  signature: [IsRightCancelAdd M]
-  body: ext fun x => add_right_cancel DFunLike.congr_fun h x
-
-中文:
-实例 instIsRightCancelAdd
-  签名: [是右消去加法 M]
-  定义体: ext fun x => add_right_cancel DFunLike.congr_fun h x
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, add_right_cancel, congr_fun
+/-
+**Finsupp.instIsRightCancelAdd** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instIsRightCancelAdd [IsRightCancelAdd M] : IsRightCancelAdd (ι ->₀ M) whe
+re add_right_cancel _ _ _ h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `add_right_cancel`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] {
+a b c : G}, a + b = c + b → a = c
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-instance instIsRightCancelAdd [IsRightCancelAdd M] : IsRightCancelAdd (ι ->₀ M) where
-add_right_cancel _ _ _ h := ext fun x => add_right_cancel DFunLike.congr_fun h x
-
-/--
-Instance `instIsCancelAdd` / 实例 `instIsCancelAdd`
-
-English:
-instance instIsCancelAdd
-  signature: [IsCancelAdd M]
-
-中文:
-实例 instIsCancelAdd
-  签名: [是消去加法 M]
+instance instIsRightCancelAdd [IsRightCancelAdd M] : IsRightCancelAdd (ι →₀ M) where
+  add_right_cancel _ _ _ h := ext fun x => add_right_cancel <| DFunLike.congr_fun h x
+/-
+**Finsupp.instIsCancelAdd** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass M] [IsCancelAdd M], I
+sCancelAdd (ι →₀ M)
+参数：ι →₀ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsCancelAdd.toIsRightCancelAdd`：∀ {G : Type u} {inst : Add G} [self : Is
+CancelAdd G], IsRightCancelAdd G
 -/
-instance instIsCancelAdd [IsCancelAdd M] : IsCancelAdd (ι ->₀ M) where
+instance instIsCancelAdd [IsCancelAdd M] : IsCancelAdd (ι →₀ M) where
 
 /-- Evaluation of a function `f : ι →₀ M` at a point as an additive monoid homomorphism.
 
 See `Finsupp.lapply` in `Mathlib/LinearAlgebra/Finsupp/Defs.lean` for the stronger version as a
 linear map. -/
 @[simps apply]
-/--
-Definition of `applyAddHom` / `applyAddHom` 的定义
+/-
+**Finsupp.applyAddHom** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：applyAddHom (a : ι) : (ι ->₀ M) ->+ M where toFun g
+参数：a : ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.add_apply`：add_apply (g₁ g₂ : ι ->₀ M) (a : ι) : (g₁ + g₂) a = g
+₁ a + g₂ a
 
-English:
-definition applyAddHom
-  signature: (a : ι)
-  body: g a
-  map_zero' := zero_apply
-  map_add' _ _ := add_apply _ _ _
+--- 原说明 ---
+Evaluation of a function `f : ι →₀ M` at a point as an additive monoid homomorph
+ism.
 
-中文:
-定义 applyAddHom
-  签名: (a : ι)
-  定义体: g a
-  map_zero' := zero_apply
-  map_add' _ _ := add_apply _ _ _
+See `Finsupp.lapply` in `Mathlib/LinearAlgebra/Finsupp/Defs.lean` for the strong
+er version as a
+linear map.
 -/
-def applyAddHom (a : ι) : (ι ->₀ M) ->+ M where
+def applyAddHom (a : ι) : (ι →₀ M) →+ M where
   toFun g := g a
   map_zero' := zero_apply
   map_add' _ _ := add_apply _ _ _
 
 /-- Coercion from a `Finsupp` to a function type is an `AddMonoidHom`. -/
 @[simps]
-/--
-Definition of `coeFnAddHom` / `coeFnAddHom` 的定义
+/-
+**Finsupp.coeFnAddHom** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：coeFnAddHom : (ι ->₀ M) ->+ ι -> M where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.coe_add`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass M]
+ (f g : ι →₀ M), ⇑(f + g) = ⇑f + ⇑g
 
-English:
-definition coeFnAddHom
-  signature: : (ι ->₀ M) ->+ ι -> M where
-  body: (⇑)
-  map_zero' := coe_zero
-  map_add' := coe_add
-
-中文:
-定义 coeFnAddHom
-  签名: : (ι ->₀ M) ->+ ι -> M where
-  定义体: (⇑)
-  map_zero' := coe_zero
-  map_add' := coe_add
+--- 原说明 ---
+Coercion from a `Finsupp` to a function type is an `AddMonoidHom`.
 -/
-noncomputable def coeFnAddHom : (ι ->₀ M) ->+ ι -> M where
+noncomputable def coeFnAddHom : (ι →₀ M) →+ ι → M where
   toFun := (⇑)
   map_zero' := coe_zero
   map_add' := coe_add
-
-/--
-lemma `mapRange_add` / 引理 `mapRange_add`
-
-English:
-lemma mapRange_add
-  given: {hf : f 0 = 0} (hf' : forall x y, f (x + y) = f x + f y) (v₁ v₂ : ι ->₀ M)
-  proof: ext fun _ => by simp only [hf', add_apply, mapRange_apply]
-
-中文:
-引理 mapRange_add
-  条件: {hf : f 0 = 0} (hf' : 对任意 x y, f (x + y) = f x + f y) (v₁ v₂ : ι ->₀ M)
-  证明: ext fun _ => by simp only [hf', add_apply, mapRange_apply]
-
-Depends on / 依赖: add_apply, mapRange_apply
+/-
+**Finsupp.mapRange_add** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_add {hf : f 0 = 0} (hf' : forall x y, f (x + y) = f x + f y) (v₁ 
+v₂ : ι ->₀ M) : mapRange f hf (v₁ + v₂) = mapRange f hf v₁ + mapRange f hf v₂
+参数：hf' : forall x y, f (x + y) = f x + f y；v₁ v₂ : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapRange_add {hf : f 0 = 0} (hf' : forall x y, f (x + y) = f x + f y) (v₁ v₂ : ι ->₀ M) :
+lemma mapRange_add {hf : f 0 = 0} (hf' : ∀ x y, f (x + y) = f x + f y) (v₁ v₂ : ι →₀ M) :
     mapRange f hf (v₁ + v₂) = mapRange f hf v₁ + mapRange f hf v₂ :=
   ext fun _ => by simp only [hf', add_apply, mapRange_apply]
-
-/--
-lemma `mapRange_add'` / 引理 `mapRange_add'`
-
-English:
-lemma mapRange_add'
-  given: [FunLike F M N] [AddMonoidHomClass F M N] {f : F} (g₁ g₂ : ι ->₀ M)
-  proof: mapRange_add (map_add f) g₁ g₂
-
-中文:
-引理 mapRange_add'
-  条件: [函数状 F M N] [加法幺半群态射类 F M N] {f : F} (g₁ g₂ : ι ->₀ M)
-  证明: mapRange_add (map_add f) g₁ g₂
-
-Depends on / 依赖: mapRange_add, map_add
+/-
+**Finsupp.mapRange_add'** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_add' [FunLike F M N] [AddMonoidHomClass F M N] {f : F} (g₁ g₂ : ι
+ ->₀ M) : mapRange f (map_zero f) (g₁ + g₂) = mapRange f (map_zero f) g₁ + mapRa
+nge f (map_zero f) g₂
+参数：g₁ g₂ : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.mapRange_add`：mapRange_add {hf : f 0 = 0} (hf' : forall x y, f (
+x + y) = f x + f y) (v₁ v₂ : ι ->₀ M) : mapRange f hf (v₁ + v₂) = mapRange f hf 
+v₁ + mapRa…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
 -/
-lemma mapRange_add' [FunLike F M N] [AddMonoidHomClass F M N] {f : F} (g₁ g₂ : ι ->₀ M) :
+lemma mapRange_add' [FunLike F M N] [AddMonoidHomClass F M N] {f : F} (g₁ g₂ : ι →₀ M) :
     mapRange f (map_zero f) (g₁ + g₂) = mapRange f (map_zero f) g₁ + mapRange f (map_zero f) g₂ :=
   mapRange_add (map_add f) g₁ g₂
 
 /-- Bundle `Finsupp.embDomain f` as an additive map from `ι →₀ M` to `F →₀ M`. -/
 @[simps]
-/--
-Definition of `embDomain.addMonoidHom` / `embDomain.addMonoidHom` 的定义
+/-
+**Finsupp.embDomain.addMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.embDomain`。
+形式化陈述：{ι : Type u_1} → {F : Type u_2} → {M : Type u_3} → [inst : AddZeroClass M]
+ → (ι ↪ F) → (ι →₀ M) →+ F →₀ M
+参数：ι ↪ F；ι →₀ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embDomain.addMonoidHom
-  signature: (f : ι ↪ F)
-  body: embDomain f v
-  map_zero' := by simp
-  map_add' v w := by
-    ext b
-    by_cases h : b in Set.range f
-    · rcases h with ⟨a, rfl⟩
-      simp
-    · simp only [coe_add, Pi.add_apply, embDomain_of_notMem_range _ _ _ h, add_zero]
-
-@[simp]
-
-中文:
-定义 embDomain.addMonoidHom
-  签名: (f : ι ↪ F)
-  定义体: embDomain f v
-  map_zero' := by simp
-  map_add' v w := by
-    ext b
-    by_cases h : b in Set.range f
-    · rcases h with ⟨a, rfl⟩
-      simp
-    · simp only [coe_add, Pi.add_apply, embDomain_of_notMem_range _ _ _ h, add_zero]
-
-@[simp]
-
-Depends on / 依赖: congr_fun, embDomain, eq_id, h.eq_id
+--- 原说明 ---
+Bundle `Finsupp.embDomain f` as an additive map from `ι →₀ M` to `F →₀ M`.
 -/
-def embDomain.addMonoidHom (f : ι ↪ F) : (ι ->₀ M) ->+ F ->₀ M where
+def embDomain.addMonoidHom (f : ι ↪ F) : (ι →₀ M) →+ F →₀ M where
   toFun v := embDomain f v
   map_zero' := by simp
   map_add' v w := by
     ext b
-    by_cases h : b in Set.range f
+    by_cases h : b ∈ Set.range f
     · rcases h with ⟨a, rfl⟩
       simp
     · simp only [coe_add, Pi.add_apply, embDomain_of_notMem_range _ _ _ h, add_zero]
 
 @[simp]
-/--
-lemma `embDomain_add` / 引理 `embDomain_add`
-
-English:
-lemma embDomain_add
-  given: (f : ι ↪ F) (v w : ι ->₀ M)
-  proof: (embDomain.addMonoidHom f).map_add v w
-
-@[simp]
-
-中文:
-引理 embDomain_add
-  条件: (f : ι ↪ F) (v w : ι ->₀ M)
-  证明: (embDomain.addMonoidHom f).map_add v w
-
-@[simp]
-
-Depends on / 依赖: addMonoidHom, embDomain, embDomain.addMonoidHom, map_add
+/-
+**Finsupp.embDomain_add** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_add (f : ι ↪ F) (v w : ι ->₀ M) : embDomain f (v + w) = embDomai
+n f v + embDomain f w
+参数：f : ι ↪ F；v w : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_add`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M]
+ [inst_1 : AddZero N] (f : M →+ N) (a b : M), f (a + b) = f a + f b
 -/
-lemma embDomain_add (f : ι ↪ F) (v w : ι ->₀ M) :
+lemma embDomain_add (f : ι ↪ F) (v w : ι →₀ M) :
     embDomain f (v + w) = embDomain f v + embDomain f w := (embDomain.addMonoidHom f).map_add v w
 
 @[simp]
-/--
-lemma `single_add` / 引理 `single_add`
-
-English:
-lemma single_add
-  given: (a : ι) (b₁ b₂ : M)
-  statement: single a (b₁ + b₂) = single a b₁ + single a b₂
-  proof: (zipWith_single_single _ _ _ _ _).symm
-
-中文:
-引理 single_add
-  条件: (a : ι) (b₁ b₂ : M)
-  结论: single a (b₁ + b₂) = single a b₁ + single a b₂
-  证明: (zipWith_single_single _ _ _ _ _).symm
-
-Depends on / 依赖: zipWith_single_single
+/-
+**Finsupp.single_add** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：single_add (a : ι) (b₁ b₂ : M) : single a (b₁ + b₂) = single a b₁ + single
+ a b₂
+参数：a : ι；b₁ b₂ : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.zipWith_single_single`：zipWith_single_single (f : M -> N -> P) (
+hf : f 0 0 = 0) (a : α) (m : M) (n : N) : zipWith f hf (single a m) (single a n)
+ = single a (f m n)
 -/
 lemma single_add (a : ι) (b₁ b₂ : M) : single a (b₁ + b₂) = single a b₁ + single a b₂ :=
   (zipWith_single_single _ _ _ _ _).symm
-
-/--
-lemma `single_add_apply` / 引理 `single_add_apply`
-
-English:
-lemma single_add_apply
-  given: (a : ι) (m₁ m₂ : M) (b : ι)
-  proof: by simp
-
-中文:
-引理 single_add_apply
-  条件: (a : ι) (m₁ m₂ : M) (b : ι)
-  证明: by simp
+/-
+**Finsupp.single_add_apply** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：single_add_apply (a : ι) (m₁ m₂ : M) (b : ι) : single a (m₁ + m₂) b = sing
+le a m₁ b + single a m₂ b
+参数：a : ι；m₁ m₂ : M；b : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.single_add`：single_add (a : ι) (b₁ b₂ : M) : single a (b₁ + b₂) 
+= single a b₁ + single a b₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma single_add_apply (a : ι) (m₁ m₂ : M) (b : ι) :
     single a (m₁ + m₂) b = single a m₁ b + single a m₂ b := by simp
-
-/--
-lemma `support_single_add` / 引理 `support_single_add`
-
-English:
-lemma support_single_add
-  given: {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb : b != 0)
-  proof: by
-  classical
-  have H := support_single a hb
-  rw [support_add_eq]; rw [H]; rw [cons_eq_insert]; rw [insert_eq]
-  rwa [H, disjoint_singleton_left]
-
-中文:
-引理 support_single_add
-  条件: {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb : b != 0)
-  证明: by
-  classical
-  have H := support_single a hb
-  rw [support_add_eq]; rw [H]; rw [cons_eq_insert]; rw [insert_eq]
-  rwa [H, disjoint_singleton_left]
-
-Depends on / 依赖: classical, cons_eq_insert, disjoint_singleton_left, insert_eq, support_add_eq, support_single
+/-
+**Finsupp.support_single_add** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_single_add {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb 
+: b != 0) : support (single a b + f) = cons a f.support ha
+参数：ha : a ∉ f.support；hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.support_single`：∀ {α : Type u_1} {M : Type u_5} [inst : Zero M] 
+{b : M} (a : α), b ≠ 0 → (fun₀ | a => b).support = {a}
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.support_add_eq`：support_add_eq [DecidableEq ι] (h : Disjoint g₁.
+support g₂.support) : (g₁ + g₂).support = g₁.support union g₂.support
+· 使用定理 `Finset.disjoint_singleton_left`：disjoint_singleton_left : Disjoint (sing
+leton a) s ↔ a ∉ s
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `Finset.insert_eq`：insert_eq (a : α) (s : Finset α) : insert a s = {a} un
+ion s
 -/
-lemma support_single_add {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb : b != 0) :
+lemma support_single_add {a : ι} {b : M} {f : ι →₀ M} (ha : a ∉ f.support) (hb : b ≠ 0) :
     support (single a b + f) = cons a f.support ha := by
   classical
   have H := support_single a hb
-  rw [support_add_eq]; rw [H]; rw [cons_eq_insert]; rw [insert_eq]
+  rw [support_add_eq, H, cons_eq_insert, insert_eq]
   rwa [H, disjoint_singleton_left]
-
-/--
-lemma `support_add_single` / 引理 `support_add_single`
-
-English:
-lemma support_add_single
-  given: {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb : b != 0)
-  proof: by
-  classical
-  have H := support_single a hb
-  rw [support_add_eq]; rw [H]; rw [union_comm]; rw [cons_eq_insert]; rw [insert_eq]
-  rwa [H, disjoint_singleton_right]
-
-中文:
-引理 support_add_single
-  条件: {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb : b != 0)
-  证明: by
-  classical
-  have H := support_single a hb
-  rw [support_add_eq]; rw [H]; rw [union_comm]; rw [cons_eq_insert]; rw [insert_eq]
-  rwa [H, disjoint_singleton_right]
-
-Depends on / 依赖: classical, cons_eq_insert, disjoint_singleton_right, insert_eq, support_add_eq, support_single, union_comm
+/-
+**Finsupp.support_add_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_add_single {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb 
+: b != 0) : support (f + single a b) = cons a f.support ha
+参数：ha : a ∉ f.support；hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.support_single`：∀ {α : Type u_1} {M : Type u_5} [inst : Zero M] 
+{b : M} (a : α), b ≠ 0 → (fun₀ | a => b).support = {a}
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.support_add_eq`：support_add_eq [DecidableEq ι] (h : Disjoint g₁.
+support g₂.support) : (g₁ + g₂).support = g₁.support union g₂.support
+· 使用定理 `Finset.disjoint_singleton_right`：disjoint_singleton_right : Disjoint s (
+singleton a) ↔ a ∉ s
+· 使用定理 `Finset.union_comm`：union_comm (s₁ s₂ : Finset α) : s₁ union s₂ = s₂ unio
+n s₁
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `Finset.insert_eq`：insert_eq (a : α) (s : Finset α) : insert a s = {a} un
+ion s
 -/
-lemma support_add_single {a : ι} {b : M} {f : ι ->₀ M} (ha : a ∉ f.support) (hb : b != 0) :
+lemma support_add_single {a : ι} {b : M} {f : ι →₀ M} (ha : a ∉ f.support) (hb : b ≠ 0) :
     support (f + single a b) = cons a f.support ha := by
   classical
   have H := support_single a hb
-  rw [support_add_eq]; rw [H]; rw [union_comm]; rw [cons_eq_insert]; rw [insert_eq]
+  rw [support_add_eq, H, union_comm, cons_eq_insert, insert_eq]
   rwa [H, disjoint_singleton_right]
-
-/--
-lemma `support_single_add_single` / 引理 `support_single_add_single`
-
-English:
-lemma support_single_add_single
-  statement: [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M}
-  proof: by
-  rw [support_add_eq]; rw [support_single _ hg₁]; rw [support_single _ hg₂]
-  · simp
-  · simp [support_single, *]
-
-中文:
-引理 support_single_add_single
-  结论: [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M}
-  证明: by
-  rw [support_add_eq]; rw [support_single _ hg₁]; rw [support_single _ hg₂]
-  · simp
-  · simp [support_single, *]
-
-Depends on / 依赖: support_add_eq, support_single
+/-
+**Finsupp.support_single_add_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_single_add_single [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M} (H : f₁ 
+!= f₂) (hg₁ : g₁ != 0) (hg₂ : g₂ != 0) : (single f₁ g₁ + single f₂ g₂).support =
+ {f₁, f₂}
+参数：H : f₁ != f₂；hg₁ : g₁ != 0；hg₂ : g₂ != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.support_add_eq`：support_add_eq [DecidableEq ι] (h : Disjoint g₁.
+support g₂.support) : (g₁ + g₂).support = g₁.support union g₂.support
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.support_single`：∀ {α : Type u_1} {M : Type u_5} [inst : Zero M] 
+{b : M} (a : α), b ≠ 0 → (fun₀ | a => b).support = {a}
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma support_single_add_single [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M}
-    (H : f₁ != f₂) (hg₁ : g₁ != 0) (hg₂ : g₂ != 0) :
+    (H : f₁ ≠ f₂) (hg₁ : g₁ ≠ 0) (hg₂ : g₂ ≠ 0) :
     (single f₁ g₁ + single f₂ g₂).support = {f₁, f₂} := by
-  rw [support_add_eq]; rw [support_single _ hg₁]; rw [support_single _ hg₂]
+  rw [support_add_eq, support_single _ hg₁, support_single _ hg₂]
   · simp
   · simp [support_single, *]
-
-/--
-lemma `support_single_add_single_subset` / 引理 `support_single_add_single_subset`
-
-English:
-lemma support_single_add_single_subset
-  given: [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M}
-  proof: by
-refine subset_trans Finsupp.support_add union_subset_iff.mpr ⟨?_, ?_⟩ <;>
-  exact subset_trans Finsupp.support_single_subset (by simp)
-
-中文:
-引理 support_single_add_single_subset
-  条件: [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M}
-  证明: by
-refine subset_trans Finsupp.support_add union_subset_iff.mpr ⟨?_, ?_⟩ <;>
-  exact subset_trans Finsupp.support_single_subset (by simp)
-
-Depends on / 依赖: Finsupp, Finsupp.support_add, Finsupp.support_single_subset, subset_trans, support_add, support_single_subset, union_subset_iff, union_subset_iff.mpr
+/-
+**Finsupp.support_single_add_single_subset** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_single_add_single_subset [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M} :
+ (single f₁ g₁ + single f₂ g₂).support subseteq {f₁, f₂}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用引理 `Finsupp.support_add`：support_add [DecidableEq ι] : (g₁ + g₂).support sub
+seteq g₁.support union g₂.support
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.union_subset_iff`：union_subset_iff : s union t subseteq u ↔ s sub
+seteq u ∧ t subseteq u
+· 使用定理 `Finsupp.support_single_subset`：support_single_subset : (single a b).supp
+ort subseteq {a}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
 lemma support_single_add_single_subset [DecidableEq ι] {f₁ f₂ : ι} {g₁ g₂ : M} :
-    (single f₁ g₁ + single f₂ g₂).support subseteq {f₁, f₂} := by
-refine subset_trans Finsupp.support_add union_subset_iff.mpr ⟨?_, ?_⟩ <;>
+    (single f₁ g₁ + single f₂ g₂).support ⊆ {f₁, f₂} := by
+  refine subset_trans Finsupp.support_add <| union_subset_iff.mpr ⟨?_, ?_⟩ <;>
   exact subset_trans Finsupp.support_single_subset (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
 @[deprecated uniqueAddEquiv_symm_apply (since := "2026-05-06")]
-/--
-lemma `_root_.AddEquiv.finsuppUnique_symm` / 引理 `_root_.AddEquiv.finsuppUnique_symm`
-
-English:
-lemma _root_.AddEquiv.finsuppUnique_symm
-  given: {M : Type*} [AddZeroClass M] (d : M)
-  proof: by ext; simp [AddEquiv.finsuppUnique]
-
-中文:
-引理 _root_.加法等价.finsuppUnique_symm
-  条件: {M : 类型} [加法零类 M] (d : M)
-  证明: by ext; simp [AddEquiv.finsuppUnique]
-
-Depends on / 依赖: AddEquiv, AddEquiv.finsuppUnique, finsuppUnique
+/-
+**Finsupp._root_.AddEquiv.finsuppUnique_symm** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.AddEquiv.finsuppUnique_symm {M : Type*} [AddZeroClass M] (d : M) :
     AddEquiv.finsuppUnique.symm d = single () d := by ext; simp [AddEquiv.finsuppUnique]
-
-/--
-theorem `addCommute_iff_inter` / 定理 `addCommute_iff_inter`
-
-English:
-theorem addCommute_iff_inter
-  given: [DecidableEq ι] {f g : ι ->₀ M}
-  proof: fun x _ => Finsupp.ext_iff.1 h x
-  mpr h := by
-    ext x
-    by_cases hf : x in f.support
-    · by_cases hg : x in g.support
-      · exact h _ (mem_inter_of_mem hf hg)
-      · simp_all
-    · simp_all
-
-中文:
-定理 addCommute_iff_inter
-  条件: [DecidableEq ι] {f g : ι ->₀ M}
-  证明: fun x _ => Finsupp.ext_iff.1 h x
-  mpr h := by
-    ext x
-    by_cases hf : x in f.support
-    · by_cases hg : x in g.support
-      · exact h _ (mem_inter_of_mem hf hg)
-      · simp_all
-    · simp_all
-
-Depends on / 依赖: Finsupp, Finsupp.ext_iff, ext_iff
+/-
+**Finsupp.addCommute_iff_inter** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：addCommute_iff_inter [DecidableEq ι] {f g : ι ->₀ M} : AddCommute f g ↔ fo
+rall x in f.support inter g.support, AddCommute (f x) (g x) where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.ext_iff`：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M] {f g : 
+α →₀ M}, f = g ↔ ∀ (a : α), f a = g a
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `Finset.mem_inter_of_mem`：mem_inter_of_mem {a : α} {s₁ s₂ : Finset α} : a
+ in s₁ -> a in s₂ -> a in s₁ inter s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem addCommute_iff_inter [DecidableEq ι] {f g : ι ->₀ M} :
-    AddCommute f g ↔ forall x in f.support inter g.support, AddCommute (f x) (g x) where
-  mp h := fun x _ => Finsupp.ext_iff.1 h x
+theorem addCommute_iff_inter [DecidableEq ι] {f g : ι →₀ M} :
+    AddCommute f g ↔ ∀ x ∈ f.support ∩ g.support, AddCommute (f x) (g x) where
+  mp h := fun x _ ↦ Finsupp.ext_iff.1 h x
   mpr h := by
     ext x
-    by_cases hf : x in f.support
-    · by_cases hg : x in g.support
+    by_cases hf : x ∈ f.support
+    · by_cases hg : x ∈ g.support
       · exact h _ (mem_inter_of_mem hf hg)
       · simp_all
     · simp_all
-
-/--
-theorem `addCommute_of_disjoint` / 定理 `addCommute_of_disjoint`
-
-English:
-theorem addCommute_of_disjoint
-  given: {f g : ι ->₀ M} (h : Disjoint f.support g.support)
-  proof: by
-  classical simp_all [addCommute_iff_inter, Finset.disjoint_iff_inter_eq_empty]
-
-中文:
-定理 addCommute_of_disjoint
-  条件: {f g : ι ->₀ M} (h : Disjoint f.support g.support)
-  证明: by
-  classical simp_all [addCommute_iff_inter, Finset.disjoint_iff_inter_eq_empty]
-
-Depends on / 依赖: Finset, Finset.disjoint_iff_inter_eq_empty, addCommute_iff_inter, classical, disjoint_iff_inter_eq_empty, map_mul, map_one
+/-
+**Finsupp.addCommute_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：addCommute_of_disjoint {f g : ι ->₀ M} (h : Disjoint f.support g.support) 
+: AddCommute f g
+参数：h : Disjoint f.support g.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem addCommute_of_disjoint {f g : ι ->₀ M} (h : Disjoint f.support g.support) :
+theorem addCommute_of_disjoint {f g : ι →₀ M} (h : Disjoint f.support g.support) :
     AddCommute f g := by
   classical simp_all [addCommute_iff_inter, Finset.disjoint_iff_inter_eq_empty]
 
@@ -749,251 +677,255 @@ theorem addCommute_of_disjoint {f g : ι ->₀ M} (h : Disjoint f.support g.supp
 See `Finsupp.lsingle` in `Mathlib/LinearAlgebra/Finsupp/Defs.lean` for the stronger version as a
 linear map. -/
 @[simps]
-/--
-Definition of `singleAddHom` / `singleAddHom` 的定义
+/-
+**Finsupp.singleAddHom** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：singleAddHom (a : ι) : M ->+ ι ->₀ M where toFun
+参数：a : ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.single_add`：single_add (a : ι) (b₁ b₂ : M) : single a (b₁ + b₂) 
+= single a b₁ + single a b₂
 
-English:
-definition singleAddHom
-  signature: (a : ι)
-  body: single a
-  map_zero' := single_zero a
-  map_add' := single_add a
+--- 原说明 ---
+`Finsupp.single` as an `AddMonoidHom`.
 
-中文:
-定义 singleAddHom
-  签名: (a : ι)
-  定义体: single a
-  map_zero' := single_zero a
-  map_add' := single_add a
-
-Depends on / 依赖: single
+See `Finsupp.lsingle` in `Mathlib/LinearAlgebra/Finsupp/Defs.lean` for the stron
+ger version as a
+linear map.
 -/
-def singleAddHom (a : ι) : M ->+ ι ->₀ M where
+def singleAddHom (a : ι) : M →+ ι →₀ M where
   toFun := single a
   map_zero' := single_zero a
   map_add' := single_add a
-
-/--
-lemma `update_eq_single_add_erase` / 引理 `update_eq_single_add_erase`
-
-English:
-lemma update_eq_single_add_erase
-  given: (f : ι ->₀ M) (a : ι) (b : M)
-  proof: by
-  classical
-    ext j
-    rcases eq_or_ne j a with (rfl | h)
-    · simp
-    · simp [h, erase_ne]
-
-中文:
-引理 update_eq_single_add_erase
-  条件: (f : ι ->₀ M) (a : ι) (b : M)
-  证明: by
-  classical
-    ext j
-    rcases eq_or_ne j a with (rfl | h)
-    · simp
-    · simp [h, erase_ne]
-
-Depends on / 依赖: classical, eq_or_ne, erase_ne
+/-
+**Finsupp.update_eq_single_add_erase** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：update_eq_single_add_erase (f : ι ->₀ M) (a : ι) (b : M) : f.update a b = 
+single a b + f.erase a
+参数：f : ι ->₀ M；a : ι；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Finsupp.coe_update`：coe_update [DecidableEq α] : (f.update a b : α -> M)
+ = Function.update f a b
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `Finsupp.erase_same`：erase_same {a : α} {f : α ->₀ M} : (f.erase a) a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finsupp.single_eq_of_ne`：single_eq_of_ne (h : a' != a) : (single a b : α
+ ->₀ M) a' = 0
+· 使用定理 `Finsupp.erase_ne`：erase_ne {a a' : α} {f : α ->₀ M} (h : a' != a) : (f.e
+rase a) a' = f a'
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-lemma update_eq_single_add_erase (f : ι ->₀ M) (a : ι) (b : M) :
+lemma update_eq_single_add_erase (f : ι →₀ M) (a : ι) (b : M) :
     f.update a b = single a b + f.erase a := by
   classical
     ext j
     rcases eq_or_ne j a with (rfl | h)
     · simp
     · simp [h, erase_ne]
-
-/--
-lemma `update_eq_erase_add_single` / 引理 `update_eq_erase_add_single`
-
-English:
-lemma update_eq_erase_add_single
-  given: (f : ι ->₀ M) (a : ι) (b : M)
-  proof: by
-  classical
-    ext j
-    rcases eq_or_ne j a with (rfl | h)
-    · simp
-    · simp [h, erase_ne]
-
-中文:
-引理 update_eq_erase_add_single
-  条件: (f : ι ->₀ M) (a : ι) (b : M)
-  证明: by
-  classical
-    ext j
-    rcases eq_or_ne j a with (rfl | h)
-    · simp
-    · simp [h, erase_ne]
-
-Depends on / 依赖: classical, eq_or_ne, erase_ne
+/-
+**Finsupp.update_eq_erase_add_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：update_eq_erase_add_single (f : ι ->₀ M) (a : ι) (b : M) : f.update a b = 
+f.erase a + single a b
+参数：f : ι ->₀ M；a : ι；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Finsupp.coe_update`：coe_update [DecidableEq α] : (f.update a b : α -> M)
+ = Function.update f a b
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `Finsupp.erase_same`：erase_same {a : α} {f : α ->₀ M} : (f.erase a) a = 0
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finsupp.erase_ne`：erase_ne {a a' : α} {f : α ->₀ M} (h : a' != a) : (f.e
+rase a) a' = f a'
+· 使用定理 `Finsupp.single_eq_of_ne`：single_eq_of_ne (h : a' != a) : (single a b : α
+ ->₀ M) a' = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
-lemma update_eq_erase_add_single (f : ι ->₀ M) (a : ι) (b : M) :
+lemma update_eq_erase_add_single (f : ι →₀ M) (a : ι) (b : M) :
     f.update a b = f.erase a + single a b := by
   classical
     ext j
     rcases eq_or_ne j a with (rfl | h)
     · simp
     · simp [h, erase_ne]
-
-/--
-lemma `update_eq_single_add` / 引理 `update_eq_single_add`
-
-English:
-lemma update_eq_single_add
-  given: {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M)
-  proof: by
-  rw [update_eq_single_add_erase]; rw [erase_of_notMem_support (by simpa)]
-
-中文:
-引理 update_eq_single_add
-  条件: {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M)
-  证明: by
-  rw [update_eq_single_add_erase]; rw [erase_of_notMem_support (by simpa)]
-
-Depends on / 依赖: erase_of_notMem_support, update_eq_single_add_erase
+/-
+**Finsupp.update_eq_single_add** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：update_eq_single_add {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M) : f.updat
+e a b = single a b + f
+参数：h : f a = 0；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.update_eq_single_add_erase`：update_eq_single_add_erase (f : ι ->
+₀ M) (a : ι) (b : M) : f.update a b = single a b + f.erase a
+· 使用定理 `Finsupp.erase_of_notMem_support`：erase_of_notMem_support {f : α ->₀ M} {
+a} (haf : a ∉ f.support) : erase a f = f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-lemma update_eq_single_add {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M) :
+lemma update_eq_single_add {f : ι →₀ M} {a : ι} (h : f a = 0) (b : M) :
     f.update a b = single a b + f := by
-  rw [update_eq_single_add_erase]; rw [erase_of_notMem_support (by simpa)]
-
-/--
-lemma `update_eq_add_single` / 引理 `update_eq_add_single`
-
-English:
-lemma update_eq_add_single
-  given: {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M)
-  proof: by
-  rw [update_eq_erase_add_single]; rw [erase_of_notMem_support (by simpa)]
-
-中文:
-引理 update_eq_add_single
-  条件: {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M)
-  证明: by
-  rw [update_eq_erase_add_single]; rw [erase_of_notMem_support (by simpa)]
-
-Depends on / 依赖: erase_of_notMem_support, update_eq_erase_add_single
+  rw [update_eq_single_add_erase, erase_of_notMem_support (by simpa)]
+/-
+**Finsupp.update_eq_add_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：update_eq_add_single {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M) : f.updat
+e a b = f + single a b
+参数：h : f a = 0；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.update_eq_erase_add_single`：update_eq_erase_add_single (f : ι ->
+₀ M) (a : ι) (b : M) : f.update a b = f.erase a + single a b
+· 使用定理 `Finsupp.erase_of_notMem_support`：erase_of_notMem_support {f : α ->₀ M} {
+a} (haf : a ∉ f.support) : erase a f = f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-lemma update_eq_add_single {f : ι ->₀ M} {a : ι} (h : f a = 0) (b : M) :
+lemma update_eq_add_single {f : ι →₀ M} {a : ι} (h : f a = 0) (b : M) :
     f.update a b = f + single a b := by
-  rw [update_eq_erase_add_single]; rw [erase_of_notMem_support (by simpa)]
-
-/--
-lemma `single_add_erase` / 引理 `single_add_erase`
-
-English:
-lemma single_add_erase
-  given: (a : ι) (f : ι ->₀ M)
-  statement: single a (f a) + f.erase a = f
-  proof: by
-  rw [← update_eq_single_add_erase]; rw [update_self]
-
-中文:
-引理 single_add_erase
-  条件: (a : ι) (f : ι ->₀ M)
-  结论: single a (f a) + f.erase a = f
-  证明: by
-  rw [← update_eq_single_add_erase]; rw [update_self]
-
-Depends on / 依赖: update_eq_single_add_erase, update_self
+  rw [update_eq_erase_add_single, erase_of_notMem_support (by simpa)]
+/-
+**Finsupp.single_add_erase** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：single_add_erase (a : ι) (f : ι ->₀ M) : single a (f a) + f.erase a = f
+参数：a : ι；f : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finsupp.update_eq_single_add_erase`：update_eq_single_add_erase (f : ι ->
+₀ M) (a : ι) (b : M) : f.update a b = single a b + f.erase a
+· 使用定理 `Finsupp.update_self`：update_self : f.update a (f a) = f
 -/
-lemma single_add_erase (a : ι) (f : ι ->₀ M) : single a (f a) + f.erase a = f := by
-  rw [← update_eq_single_add_erase]; rw [update_self]
-
-/--
-lemma `erase_add_single` / 引理 `erase_add_single`
-
-English:
-lemma erase_add_single
-  given: (a : ι) (f : ι ->₀ M)
-  statement: f.erase a + single a (f a) = f
-  proof: by
-  rw [← update_eq_erase_add_single]; rw [update_self]
+lemma single_add_erase (a : ι) (f : ι →₀ M) : single a (f a) + f.erase a = f := by
+  rw [← update_eq_single_add_erase, update_self]
+/-
+**Finsupp.erase_add_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：erase_add_single (a : ι) (f : ι ->₀ M) : f.erase a + single a (f a) = f
+参数：a : ι；f : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finsupp.update_eq_erase_add_single`：update_eq_erase_add_single (f : ι ->
+₀ M) (a : ι) (b : M) : f.update a b = f.erase a + single a b
+· 使用定理 `Finsupp.update_self`：update_self : f.update a (f a) = f
+-/
+lemma erase_add_single (a : ι) (f : ι →₀ M) : f.erase a + single a (f a) = f := by
+  rw [← update_eq_erase_add_single, update_self]
 
 @[simp]
-
-中文:
-引理 erase_add_single
-  条件: (a : ι) (f : ι ->₀ M)
-  结论: f.erase a + single a (f a) = f
-  证明: by
-  rw [← update_eq_erase_add_single]; rw [update_self]
-
-@[simp]
-
-Depends on / 依赖: update_eq_erase_add_single, update_self
+/-
+**Finsupp.erase_add** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：erase_add (a : ι) (f f' : ι ->₀ M) : erase a (f + f') = erase a f + erase 
+a f'
+参数：a : ι；f f' : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.add_apply`：add_apply (g₁ g₂ : ι ->₀ M) (a : ι) : (g₁ + g₂) a = g
+₁ a + g₂ a
+· 使用定理 `Finsupp.erase_same`：erase_same {a : α} {f : α ->₀ M} : (f.erase a) a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Finsupp.erase_ne`：erase_ne {a a' : α} {f : α ->₀ M} (h : a' != a) : (f.e
+rase a) a' = f a'
 -/
-lemma erase_add_single (a : ι) (f : ι ->₀ M) : f.erase a + single a (f a) = f := by
-  rw [← update_eq_erase_add_single]; rw [update_self]
-
-@[simp]
-/--
-lemma `erase_add` / 引理 `erase_add`
-
-English:
-lemma erase_add
-  given: (a : ι) (f f' : ι ->₀ M)
-  statement: erase a (f + f') = erase a f + erase a f'
-  proof: by
+lemma erase_add (a : ι) (f f' : ι →₀ M) : erase a (f + f') = erase a f + erase a f' := by
   ext s; by_cases hs : s = a
   · rw [hs, add_apply, erase_same, erase_same, erase_same, add_zero]
-  rw [add_apply]; rw [erase_ne hs]; rw [erase_ne hs]; rw [erase_ne hs]; rw [add_apply]
-
-中文:
-引理 erase_add
-  条件: (a : ι) (f f' : ι ->₀ M)
-  结论: erase a (f + f') = erase a f + erase a f'
-  证明: by
-  ext s; by_cases hs : s = a
-  · rw [hs, add_apply, erase_same, erase_same, erase_same, add_zero]
-  rw [add_apply]; rw [erase_ne hs]; rw [erase_ne hs]; rw [erase_ne hs]; rw [add_apply]
-
-Depends on / 依赖: add_apply, add_zero, erase_ne, erase_same
--/
-lemma erase_add (a : ι) (f f' : ι ->₀ M) : erase a (f + f') = erase a f + erase a f' := by
-  ext s; by_cases hs : s = a
-  · rw [hs, add_apply, erase_same, erase_same, erase_same, add_zero]
-  rw [add_apply]; rw [erase_ne hs]; rw [erase_ne hs]; rw [erase_ne hs]; rw [add_apply]
+  rw [add_apply, erase_ne hs, erase_ne hs, erase_ne hs, add_apply]
 
 /-- `Finsupp.erase` as an `AddMonoidHom`. -/
 @[simps]
-/--
-Definition of `eraseAddHom` / `eraseAddHom` 的定义
+/-
+**Finsupp.eraseAddHom** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：eraseAddHom (a : ι) : (ι ->₀ M) ->+ ι ->₀ M where toFun
+参数：a : ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.erase_add`：erase_add (a : ι) (f f' : ι ->₀ M) : erase a (f + f')
+ = erase a f + erase a f'
 
-English:
-definition eraseAddHom
-  signature: (a : ι)
-  body: erase a
-  map_zero' := erase_zero a
-  map_add' := erase_add a
-
-@[elab_as_elim]
-
-中文:
-定义 eraseAddHom
-  签名: (a : ι)
-  定义体: erase a
-  map_zero' := erase_zero a
-  map_add' := erase_add a
-
-@[elab_as_elim]
+--- 原说明 ---
+`Finsupp.erase` as an `AddMonoidHom`.
 -/
-def eraseAddHom (a : ι) : (ι ->₀ M) ->+ ι ->₀ M where
+def eraseAddHom (a : ι) : (ι →₀ M) →+ ι →₀ M where
   toFun := erase a
   map_zero' := erase_zero a
   map_add' := erase_add a
 
 @[elab_as_elim]
-/--
-lemma `induction` / 引理 `induction`
-
-English:
-lemma induction
-  statement: {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive 0)
-  proof: suffices forall (s) (f : ι ->₀ M), f.support = s -> motive f from this _ _ rfl
+/-
+**Finsupp.induction** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass M] {motive : (ι →₀ M)
+ → Prop} (f : ι →₀ M),   motive 0 →     (∀ (a : ι) (b : M) (f : ι →₀ M), a ∉ f.s
+upport → b ≠ 0 → motive f → motive ((fun₀ | a => b) + f)) → motive f
+参数：ι →₀ M；f : ι →₀ M；∀ (a : ι) (b : M) (f : ι →₀ M), a ∉ f.support → b ≠ 0 → mot
+ive f → motive ((fun₀ | a => b) + f)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction_on`：cons_induction_on {α : Type*} {motive : Finset
+ α -> Prop} (s : Finset α) (empty : motive ∅) (cons : forall (a : α) (s : Finset
+ α) (h : a ∉ s…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.support_eq_empty`：support_eq_empty {f : α ->₀ M} : f.support = ∅
+ ↔ f = 0
+· 使用定理 `Finsupp.support_erase`：support_erase [DecidableEq α] {a : α} {f : α ->₀ 
+M} : (f.erase a).support = f.support.erase a
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `Finset.mem_cons_self`：mem_cons_self (a : α) (s : Finset α) {h} : a in co
+ns a s h
+· 使用定理 `Finset.erase_cons`：erase_cons {s : Finset α} {a : α} (h : a ∉ s) : (s.co
+ns a h).erase a = s
+· 使用引理 `Finsupp.single_add_erase`：single_add_erase (a : ι) (f : ι ->₀ M) : singl
+e a (f a) + f.erase a = f
+-/
+protected lemma induction {motive : (ι →₀ M) → Prop} (f : ι →₀ M) (zero : motive 0)
+    (single_add : ∀ (a b) (f : ι →₀ M),
+      a ∉ f.support → b ≠ 0 → motive f → motive (single a b + f)) : motive f :=
+  suffices ∀ (s) (f : ι →₀ M), f.support = s → motive f from this _ _ rfl
   fun s =>
   Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
     suffices motive (single a (f a) + f.erase a) by rwa [single_add_erase] at this
@@ -1004,223 +936,223 @@ lemma induction
       · rw [← mem_support_iff, hf]
         exact mem_cons_self _ _
       · apply ih _ _
-        rw [support_erase]; rw [hf]; rw [Finset.erase_cons]
+        rw [support_erase, hf, Finset.erase_cons]
 
 @[elab_as_elim]
-
-中文:
-引理 induction
-  结论: {motive : (ι ->₀ M) -> 命题} (f : ι ->₀ M) (zero : motive 0)
-  证明: suffices forall (s) (f : ι ->₀ M), f.support = s -> motive f from this _ _ rfl
-  fun s =>
-  Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
-    suffices motive (single a (f a) + f.erase a) by rwa [single_add_erase] at this
-    classical
-      apply single_add
-      · rw [support_erase, mem_erase]
-        exact fun H => H.1 rfl
-      · rw [← mem_support_iff, hf]
-        exact mem_cons_self _ _
-      · apply ih _ _
-        rw [support_erase]; rw [hf]; rw [Finset.erase_cons]
-
-@[elab_as_elim]
+/-
+**Finsupp.induction** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass M] {motive : (ι →₀ M)
+ → Prop} (f : ι →₀ M),   motive 0 →     (∀ (a : ι) (b : M) (f : ι →₀ M), a ∉ f.s
+upport → b ≠ 0 → motive f → motive ((fun₀ | a => b) + f)) → motive f
+参数：ι →₀ M；f : ι →₀ M；∀ (a : ι) (b : M) (f : ι →₀ M), a ∉ f.support → b ≠ 0 → mot
+ive f → motive ((fun₀ | a => b) + f)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction_on`：cons_induction_on {α : Type*} {motive : Finset
+ α -> Prop} (s : Finset α) (empty : motive ∅) (cons : forall (a : α) (s : Finset
+ α) (h : a ∉ s…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.support_eq_empty`：support_eq_empty {f : α ->₀ M} : f.support = ∅
+ ↔ f = 0
+· 使用定理 `Finsupp.support_erase`：support_erase [DecidableEq α] {a : α} {f : α ->₀ 
+M} : (f.erase a).support = f.support.erase a
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `Finset.mem_cons_self`：mem_cons_self (a : α) (s : Finset α) {h} : a in co
+ns a s h
+· 使用定理 `Finset.erase_cons`：erase_cons {s : Finset α} {a : α} (h : a ∉ s) : (s.co
+ns a h).erase a = s
+· 使用引理 `Finsupp.single_add_erase`：single_add_erase (a : ι) (f : ι ->₀ M) : singl
+e a (f a) + f.erase a = f
 -/
-protected lemma induction {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive 0)
-    (single_add : forall (a b) (f : ι ->₀ M),
-      a ∉ f.support -> b != 0 -> motive f -> motive (single a b + f)) : motive f :=
-  suffices forall (s) (f : ι ->₀ M), f.support = s -> motive f from this _ _ rfl
-  fun s =>
-  Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
-    suffices motive (single a (f a) + f.erase a) by rwa [single_add_erase] at this
-    classical
-      apply single_add
-      · rw [support_erase, mem_erase]
-        exact fun H => H.1 rfl
-      · rw [← mem_support_iff, hf]
-        exact mem_cons_self _ _
-      · apply ih _ _
-        rw [support_erase]; rw [hf]; rw [Finset.erase_cons]
-
-@[elab_as_elim]
-/--
-lemma `induction₂` / 引理 `induction₂`
-
-English:
-lemma induction₂
-  statement: {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive 0)
-  proof: by
+lemma induction₂ {motive : (ι →₀ M) → Prop} (f : ι →₀ M) (zero : motive 0)
+    (add_single : ∀ (a b) (f : ι →₀ M),
+      a ∉ f.support → b ≠ 0 → motive f → motive (f + single a b)) : motive f := by
   refine f.induction zero ?_
   convert! add_single using 7
   apply (addCommute_of_disjoint _).eq
   simp_all
 
 @[elab_as_elim]
-
-中文:
-引理 induction₂
-  结论: {motive : (ι ->₀ M) -> 命题} (f : ι ->₀ M) (zero : motive 0)
-  证明: by
-  refine f.induction zero ?_
-  convert! add_single using 7
-  apply (addCommute_of_disjoint _).eq
-  simp_all
-
-@[elab_as_elim]
-
-Depends on / 依赖: addCommute_of_disjoint, add_single, convert, f.induction
+/-
+**Finsupp.induction_linear** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：induction_linear {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive
+ 0) (add : forall f g : ι ->₀ M, motive f -> motive g -> motive (f + g)) (single
+ : forall a b, motive (single a b)) : motive f
+参数：ι ->₀ M；f : ι ->₀ M；zero : motive 0；add : forall f g : ι ->₀ M, motive f -> m
+otive g -> motive (f + g)；single : forall a b, motive (single a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.induction₂`：induction₂ {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M
+) (zero : motive 0) (add_single : forall (a b) (f : ι ->₀ M), a ∉ f.support -> b
+ != 0 ->…
 -/
-lemma induction₂ {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive 0)
-    (add_single : forall (a b) (f : ι ->₀ M),
-      a ∉ f.support -> b != 0 -> motive f -> motive (f + single a b)) : motive f := by
-  refine f.induction zero ?_
-  convert! add_single using 7
-  apply (addCommute_of_disjoint _).eq
-  simp_all
-
-@[elab_as_elim]
-/--
-lemma `induction_linear` / 引理 `induction_linear`
-
-English:
-lemma induction_linear
-  statement: {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive 0)
-  proof: induction₂ f zero fun _a _b _f _ _ w => add _ _ w (single _ _)
-
-中文:
-引理 induction_linear
-  结论: {motive : (ι ->₀ M) -> 命题} (f : ι ->₀ M) (zero : motive 0)
-  证明: induction₂ f zero fun _a _b _f _ _ w => add _ _ w (single _ _)
-
-Depends on / 依赖: single
--/
-lemma induction_linear {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive 0)
-    (add : forall f g : ι ->₀ M, motive f -> motive g -> motive (f + g))
-    (single : forall a b, motive (single a b)) : motive f :=
+lemma induction_linear {motive : (ι →₀ M) → Prop} (f : ι →₀ M) (zero : motive 0)
+    (add : ∀ f g : ι →₀ M, motive f → motive g → motive (f + g))
+    (single : ∀ a b, motive (single a b)) : motive f :=
   induction₂ f zero fun _a _b _f _ _ w => add _ _ w (single _ _)
 
 section LinearOrder
 
-variable [LinearOrder ι] {motive : (ι ->₀ M) -> Prop}
+variable [LinearOrder ι] {motive : (ι →₀ M) → Prop}
 
-/--
-lemma `induction_on_max` / 引理 `induction_on_max`
+/-- A finitely supported function can be built by adding up `single a b` for increasing `a`.
 
-English:
-lemma induction_on_max
-  statement: (f : ι ->₀ M) (zero : motive 0)
-  proof: by
-  suffices forall (s) (f : ι ->₀ M), f.support = s -> motive f from this _ _ rfl
-  refine fun s => s.induction_on_max (fun f h => ?_) (fun a s hm hf f hs => ?_)
-  · rwa [support_eq_empty.1 h]
-  · have hs' : (erase a f).support = s := by
-      rw [support_erase]; rw [hs]; rw [erase_insert (fun ha => (hm a ha).false)]
-    rw [← single_add_erase a f]
-    refine single_add _ _ _ (fun c hc => hm _ <| hs'.symm ▸ hc) ?_ (hf _ hs')
-    rw [← mem_support_iff]; rw [hs]
-    exact mem_insert_self a s
+The lemma `induction_on_max₂` swaps the argument order in the sum. -/
+/-
+**Finsupp.induction_on_max** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：induction_on_max (f : ι ->₀ M) (zero : motive 0) (single_add : forall a b 
+(f : ι ->₀ M), (forall c in f.support, c < a) -> b != 0 -> motive f -> motive (s
+ingle a b + f)) : motive f
+参数：f : ι ->₀ M；zero : motive 0；single_add : forall a b (f : ι ->₀ M), (forall c 
+in f.support, c < a) -> b != 0 -> motive f -> motive (single a b + f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on_max`：induction_on_max [DecidableEq α] {motive : Fins
+et α -> Prop} (s : Finset α) (empty : motive ∅) (insert : forall a s, (forall x 
+in s, x < a) …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.support_eq_empty`：support_eq_empty {f : α ->₀ M} : f.support = ∅
+ ↔ f = 0
+· 使用定理 `Finsupp.support_erase`：support_erase [DecidableEq α] {a : α} {f : α ->₀ 
+M} : (f.erase a).support = f.support.erase a
+· 使用定理 `Finset.erase_insert`：erase_insert {a : α} {s : Finset α} (h : a ∉ s) : (
+insert a s).erase a = s
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finsupp.single_add_erase`：single_add_erase (a : ι) (f : ι ->₀ M) : singl
+e a (f a) + f.erase a = f
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
 
-中文:
-引理 induction_on_max
-  结论: (f : ι ->₀ M) (zero : motive 0)
-  证明: by
-  suffices forall (s) (f : ι ->₀ M), f.support = s -> motive f from this _ _ rfl
-  refine fun s => s.induction_on_max (fun f h => ?_) (fun a s hm hf f hs => ?_)
-  · rwa [support_eq_empty.1 h]
-  · have hs' : (erase a f).support = s := by
-      rw [support_erase]; rw [hs]; rw [erase_insert (fun ha => (hm a ha).false)]
-    rw [← single_add_erase a f]
-    refine single_add _ _ _ (fun c hc => hm _ <| hs'.symm ▸ hc) ?_ (hf _ hs')
-    rw [← mem_support_iff]; rw [hs]
-    exact mem_insert_self a s
+--- 原说明 ---
+A finitely supported function can be built by adding up `single a b` for increas
+ing `a`.
 
-Depends on / 依赖: erase_insert, f.support, induction_on_max, mem_insert_self, mem_support_iff, motive, s.induction_on_max, single_add, single_add_erase, support, support_eq_empty, support_erase
+The lemma `induction_on_max₂` swaps the argument order in the sum.
 -/
-lemma induction_on_max (f : ι ->₀ M) (zero : motive 0)
-    (single_add : forall a b (f : ι ->₀ M), (forall c in f.support, c < a) -> b != 0 ->
-      motive f -> motive (single a b + f)) : motive f := by
-  suffices forall (s) (f : ι ->₀ M), f.support = s -> motive f from this _ _ rfl
+lemma induction_on_max (f : ι →₀ M) (zero : motive 0)
+    (single_add : ∀ a b (f : ι →₀ M), (∀ c ∈ f.support, c < a) → b ≠ 0 →
+      motive f → motive (single a b + f)) : motive f := by
+  suffices ∀ (s) (f : ι →₀ M), f.support = s → motive f from this _ _ rfl
   refine fun s => s.induction_on_max (fun f h => ?_) (fun a s hm hf f hs => ?_)
   · rwa [support_eq_empty.1 h]
   · have hs' : (erase a f).support = s := by
-      rw [support_erase]; rw [hs]; rw [erase_insert (fun ha => (hm a ha).false)]
+      rw [support_erase, hs, erase_insert (fun ha => (hm a ha).false)]
     rw [← single_add_erase a f]
     refine single_add _ _ _ (fun c hc => hm _ <| hs'.symm ▸ hc) ?_ (hf _ hs')
-    rw [← mem_support_iff]; rw [hs]
+    rw [← mem_support_iff, hs]
     exact mem_insert_self a s
 
-/--
-lemma `induction_on_min` / 引理 `induction_on_min`
+/-- A finitely supported function can be built by adding up `single a b` for decreasing `a`.
 
-English:
-lemma induction_on_min
-  statement: (f : ι ->₀ M) (zero : motive 0)
-  proof: induction_on_max (ι := ιᵒᵈ) f zero single_add
+The lemma `induction_on_min₂` swaps the argument order in the sum. -/
+/-
+**Finsupp.induction_on_min** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：induction_on_min (f : ι ->₀ M) (zero : motive 0) (single_add : forall a b 
+(f : ι ->₀ M), (forall c in f.support, a < c) -> b != 0 -> motive f -> motive (s
+ingle a b + f)) : motive f
+参数：f : ι ->₀ M；zero : motive 0；single_add : forall a b (f : ι ->₀ M), (forall c 
+in f.support, a < c) -> b != 0 -> motive f -> motive (single a b + f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.induction_on_max`：induction_on_max (f : ι ->₀ M) (zero : motive 
+0) (single_add : forall a b (f : ι ->₀ M), (forall c in f.support, c < a) -> b !
+= 0 -> motive …
 
-中文:
-引理 induction_on_min
-  结论: (f : ι ->₀ M) (zero : motive 0)
-  证明: induction_on_max (ι := ιᵒᵈ) f zero single_add
+--- 原说明 ---
+A finitely supported function can be built by adding up `single a b` for decreas
+ing `a`.
 
-Depends on / 依赖: induction_on_max, single_add
+The lemma `induction_on_min₂` swaps the argument order in the sum.
 -/
-lemma induction_on_min (f : ι ->₀ M) (zero : motive 0)
-    (single_add : forall a b (f : ι ->₀ M), (forall c in f.support, a < c) -> b != 0 ->
-      motive f -> motive (single a b + f)) : motive f :=
+lemma induction_on_min (f : ι →₀ M) (zero : motive 0)
+    (single_add : ∀ a b (f : ι →₀ M), (∀ c ∈ f.support, a < c) → b ≠ 0 →
+      motive f → motive (single a b + f)) : motive f :=
   induction_on_max (ι := ιᵒᵈ) f zero single_add
 
-/--
-lemma `induction_on_max₂` / 引理 `induction_on_max₂`
+/-- A finitely supported function can be built by adding up `single a b` for increasing `a`.
 
-English:
-lemma induction_on_max₂
-  statement: (f : ι ->₀ M) (zero : motive 0)
-  proof: by
-  refine f.induction_on_max zero ?_
-  convert! add_single using 7 with _ _ _ H
-  have := fun c hc => (H c hc).ne
-  apply (addCommute_of_disjoint _).eq
-  simp_all [not_imp_not]
+The lemma `induction_on_max` swaps the argument order in the sum. -/
+/-
+**Finsupp.induction_on_max** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：induction_on_max (f : ι ->₀ M) (zero : motive 0) (single_add : forall a b 
+(f : ι ->₀ M), (forall c in f.support, c < a) -> b != 0 -> motive f -> motive (s
+ingle a b + f)) : motive f
+参数：f : ι ->₀ M；zero : motive 0；single_add : forall a b (f : ι ->₀ M), (forall c 
+in f.support, c < a) -> b != 0 -> motive f -> motive (single a b + f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on_max`：induction_on_max [DecidableEq α] {motive : Fins
+et α -> Prop} (s : Finset α) (empty : motive ∅) (insert : forall a s, (forall x 
+in s, x < a) …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.support_eq_empty`：support_eq_empty {f : α ->₀ M} : f.support = ∅
+ ↔ f = 0
+· 使用定理 `Finsupp.support_erase`：support_erase [DecidableEq α] {a : α} {f : α ->₀ 
+M} : (f.erase a).support = f.support.erase a
+· 使用定理 `Finset.erase_insert`：erase_insert {a : α} {s : Finset α} (h : a ∉ s) : (
+insert a s).erase a = s
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finsupp.single_add_erase`：single_add_erase (a : ι) (f : ι ->₀ M) : singl
+e a (f a) + f.erase a = f
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
 
-中文:
-引理 induction_on_max₂
-  结论: (f : ι ->₀ M) (zero : motive 0)
-  证明: by
-  refine f.induction_on_max zero ?_
-  convert! add_single using 7 with _ _ _ H
-  have := fun c hc => (H c hc).ne
-  apply (addCommute_of_disjoint _).eq
-  simp_all [not_imp_not]
+--- 原说明 ---
+A finitely supported function can be built by adding up `single a b` for increas
+ing `a`.
 
-Depends on / 依赖: addCommute_of_disjoint, add_single, convert, f.induction_on_max, induction_on_max, not_imp_not
+The lemma `induction_on_max` swaps the argument order in the sum.
 -/
-lemma induction_on_max₂ (f : ι ->₀ M) (zero : motive 0)
-    (add_single : forall a b (f : ι ->₀ M), (forall c in f.support, c < a) -> b != 0 ->
-      motive f -> motive (f + single a b)) : motive f := by
+lemma induction_on_max₂ (f : ι →₀ M) (zero : motive 0)
+    (add_single : ∀ a b (f : ι →₀ M), (∀ c ∈ f.support, c < a) → b ≠ 0 →
+      motive f → motive (f + single a b)) : motive f := by
   refine f.induction_on_max zero ?_
   convert! add_single using 7 with _ _ _ H
-  have := fun c hc => (H c hc).ne
+  have := fun c hc ↦ (H c hc).ne
   apply (addCommute_of_disjoint _).eq
   simp_all [not_imp_not]
 
-/--
-lemma `induction_on_min₂` / 引理 `induction_on_min₂`
+/-- A finitely supported function can be built by adding up `single a b` for decreasing `a`.
 
-English:
-lemma induction_on_min₂
-  statement: (f : ι ->₀ M) (zero : motive 0)
-  proof: induction_on_max₂ (ι := ιᵒᵈ) f zero add_single
+The lemma `induction_on_min` swaps the argument order in the sum. -/
+/-
+**Finsupp.induction_on_min** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：induction_on_min (f : ι ->₀ M) (zero : motive 0) (single_add : forall a b 
+(f : ι ->₀ M), (forall c in f.support, a < c) -> b != 0 -> motive f -> motive (s
+ingle a b + f)) : motive f
+参数：f : ι ->₀ M；zero : motive 0；single_add : forall a b (f : ι ->₀ M), (forall c 
+in f.support, a < c) -> b != 0 -> motive f -> motive (single a b + f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.induction_on_max`：induction_on_max (f : ι ->₀ M) (zero : motive 
+0) (single_add : forall a b (f : ι ->₀ M), (forall c in f.support, c < a) -> b !
+= 0 -> motive …
 
-中文:
-引理 induction_on_min₂
-  结论: (f : ι ->₀ M) (zero : motive 0)
-  证明: induction_on_max₂ (ι := ιᵒᵈ) f zero add_single
+--- 原说明 ---
+A finitely supported function can be built by adding up `single a b` for decreas
+ing `a`.
 
-Depends on / 依赖: add_single
+The lemma `induction_on_min` swaps the argument order in the sum.
 -/
-lemma induction_on_min₂ (f : ι ->₀ M) (zero : motive 0)
-    (add_single : forall a b (f : ι ->₀ M), (forall c in f.support, a < c) -> b != 0 ->
-      motive f -> motive (f + single a b)) : motive f :=
+lemma induction_on_min₂ (f : ι →₀ M) (zero : motive 0)
+    (add_single : ∀ a b (f : ι →₀ M), (∀ c ∈ f.support, a < c) → b ≠ 0 →
+      motive f → motive (f + single a b)) : motive f :=
   induction_on_max₂ (ι := ιᵒᵈ) f zero add_single
 
 end LinearOrder
@@ -1230,91 +1162,61 @@ end AddZeroClass
 section AddMonoid
 variable [AddMonoid M]
 
-/--
-Instance `instNatSMul` / 实例 `instNatSMul`
+/-- Note the general `SMul` instance for `Finsupp` doesn't apply as `ℕ` is not distributive
+unless `F i`'s addition is commutative. -/
+/-
+**Finsupp.instNatSMul** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instNatSMul : SMul Nat (ι ->₀ M) where smul n v
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `nsmul_zero`：∀ {M : Type u_2} [inst : AddMonoid M] (n : ℕ), n • 0 = 0
 
-English:
-instance instNatSMul
-  signature: : SMul Nat (ι ->₀ M) where smul n v
-  body: v.mapRange (n • ·) (nsmul_zero _)
-
-中文:
-实例 inst自然数SMul
-  签名: : 标量乘法 自然数 (ι ->₀ M) where smul n v
-  定义体: v.mapRange (n • ·) (nsmul_zero _)
-
-Depends on / 依赖: mapRange, nsmul_zero, v.mapRange
+--- 原说明 ---
+Note the general `SMul` instance for `Finsupp` doesn't apply as `ℕ` is not distr
+ibutive
+unless `F i`'s addition is commutative.
 -/
-instance instNatSMul : SMul Nat (ι ->₀ M) where smul n v := v.mapRange (n • ·) (nsmul_zero _)
-
-/--
-lemma `coe_nsmul` / 引理 `coe_nsmul`
-
-English:
-lemma coe_nsmul
-  given: (n : Nat) (f : ι ->₀ M)
-  statement: ⇑(n • f) = n • ⇑f
-  proof: rfl
-
-中文:
-引理 coe_nsmul
-  条件: (n : 自然数) (f : ι ->₀ M)
-  结论: ⇑(n • f) = n • ⇑f
-  证明: rfl
+instance instNatSMul : SMul ℕ (ι →₀ M) where smul n v := v.mapRange (n • ·) (nsmul_zero _)
+/-
+**Finsupp.coe_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddMonoid M] (n : ℕ) (f : ι →₀ M),
+ ⇑(n • f) = n • ⇑f
+参数：n : ℕ；f : ι →₀ M；n • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_nsmul (n : Nat) (f : ι ->₀ M) : ⇑(n • f) = n • ⇑f := rfl
-
-/--
-lemma `nsmul_apply` / 引理 `nsmul_apply`
-
-English:
-lemma nsmul_apply
-  given: (n : Nat) (f : ι ->₀ M) (x : ι)
-  statement: (n • f) x = n • f x
-  proof: rfl
-
-中文:
-引理 nsmul_apply
-  条件: (n : 自然数) (f : ι ->₀ M) (x : ι)
-  结论: (n • f) x = n • f x
-  证明: rfl
+@[simp, norm_cast] lemma coe_nsmul (n : ℕ) (f : ι →₀ M) : ⇑(n • f) = n • ⇑f := rfl
+/-
+**Finsupp.nsmul_apply** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：nsmul_apply (n : Nat) (f : ι ->₀ M) (x : ι) : (n • f) x = n • f x
+参数：n : Nat；f : ι ->₀ M；x : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma nsmul_apply (n : Nat) (f : ι ->₀ M) (x : ι) : (n • f) x = n • f x := rfl
-
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: : AddMonoid (ι ->₀ M)
-  body: fast_instance% DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-中文:
-实例 instAddMonoid
-  签名: : 加法幺半群 (ι ->₀ M)
-  定义体: fast_instance% DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addMonoid, addMonoid, coe_add, coe_injective, coe_zero, fast_instance
+lemma nsmul_apply (n : ℕ) (f : ι →₀ M) (x : ι) : (n • f) x = n • f x := rfl
+/-
+**Finsupp.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instAddMonoid : AddMonoid (ι ->₀ M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddMonoid : AddMonoid (ι ->₀ M) :=
+instance instAddMonoid : AddMonoid (ι →₀ M) :=
   fast_instance% DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-/--
-Instance `instIsAddTorsionFree` / 实例 `instIsAddTorsionFree`
-
-English:
-instance instIsAddTorsionFree
-  signature: [IsAddTorsionFree M]
-  body: DFunLike.coe_injective.isAddTorsionFree coeFnAddHom
-
-中文:
-实例 instIsAddTorsionFree
-  签名: [是加法无挠 M]
-  定义体: DFunLike.coe_injective.isAddTorsionFree coeFnAddHom
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.isAddTorsionFree, coeFnAddHom, coe_injective, isAddTorsionFree
+/-
+**Finsupp.instIsAddTorsionFree** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instIsAddTorsionFree [IsAddTorsionFree M] : IsAddTorsionFree (ι ->₀ M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isAddTorsionFree`：∀ {M : Type u_4} {N : Type u_5} [in
+st : AddMonoid M] [inst_1 : AddMonoid N] [IsAddTorsionFree N] (f : M →+ N),   Fu
+nction.Injective ⇑f → IsA…
+· 使用定理 `Pi.instIsAddTorsionFree`：∀ {ι : Type u_1} {M : ι → Type u_3} [inst : (i 
+: ι) → AddMonoid (M i)] [∀ (i : ι), IsAddTorsionFree (M i)],   IsAddTorsionFree 
+((i : ι) → M …
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-instance instIsAddTorsionFree [IsAddTorsionFree M] : IsAddTorsionFree (ι ->₀ M) :=
+instance instIsAddTorsionFree [IsAddTorsionFree M] : IsAddTorsionFree (ι →₀ M) :=
   DFunLike.coe_injective.isAddTorsionFree coeFnAddHom
 
 end AddMonoid
@@ -1322,49 +1224,39 @@ end AddMonoid
 section AddCommMonoid
 variable [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid O]
 
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: : AddCommMonoid (ι ->₀ M)
-  body: fast_instance% DFunLike.coe_injective.addCommMonoid
-    DFunLike.coe coe_zero coe_add (fun _ _ => rfl)
-
-中文:
-实例 instAddCommMonoid
-  签名: : 加法交换幺半群 (ι ->₀ M)
-  定义体: fast_instance% DFunLike.coe_injective.addCommMonoid
-    DFunLike.coe coe_zero coe_add (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective.addCommMonoid, addCommMonoid, coe_add, coe_injective, coe_zero, fast_instance
+/-
+**Finsupp.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instAddCommMonoid : AddCommMonoid (ι ->₀ M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddCommMonoid : AddCommMonoid (ι ->₀ M) :=
+instance instAddCommMonoid : AddCommMonoid (ι →₀ M) :=
   fast_instance% DFunLike.coe_injective.addCommMonoid
     DFunLike.coe coe_zero coe_add (fun _ _ => rfl)
-
-/--
-lemma `single_add_single_eq_single_add_single` / 引理 `single_add_single_eq_single_add_single`
-
-English:
-lemma single_add_single_eq_single_add_single
-  given: {k l m n : ι} {u v : M} (hu : u != 0) (hv : v != 0)
-  proof: by
-  classical
-    simp_rw [DFunLike.ext_iff, coe_add, single_eq_pi_single, ← funext_iff]
-    exact Pi.single_add_single_eq_single_add_single hu hv
-
-中文:
-引理 single_add_single_eq_single_add_single
-  条件: {k l m n : ι} {u v : M} (hu : u != 0) (hv : v != 0)
-  证明: by
-  classical
-    simp_rw [DFunLike.ext_iff, coe_add, single_eq_pi_single, ← funext_iff]
-    exact Pi.single_add_single_eq_single_add_single hu hv
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, Pi.single_add_single_eq_single_add_single, classical, coe_add, ext_iff, funext_iff, simp_rw, single_add_single_eq_single_add_single, single_eq_pi_single
+/-
+**Finsupp.single_add_single_eq_single_add_single** 是 Mathlib 中的一个引理，位于命名空间 `Fins
+upp`。
+形式化陈述：single_add_single_eq_single_add_single {k l m n : ι} {u v : M} (hu : u != 
+0) (hv : v != 0) : single k u + single l v = single m u + single n v ↔ (k = m ∧ 
+l = n) ∨ (u = v ∧ k = n ∧ l = m) ∨ (u + v = 0 ∧ k = l ∧ m = n)
+参数：hu : u != 0；hv : v != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.single_eq_pi_single`：single_eq_pi_single [DecidableEq α] (a : α)
+ (b : M) : ⇑(single a b) = Pi.single a b
+· 使用定理 `Pi.single_add_single_eq_single_add_single`：∀ {I : Type u} [inst : Decida
+bleEq I] {M : Type u_5} [inst_1 : AddCommMonoid M] {k l m n : I} {u v : M},   u 
+≠ 0 →     v ≠ 0 →       (Pi.sin…
 -/
-lemma single_add_single_eq_single_add_single {k l m n : ι} {u v : M} (hu : u != 0) (hv : v != 0) :
+lemma single_add_single_eq_single_add_single {k l m n : ι} {u v : M} (hu : u ≠ 0) (hv : v ≠ 0) :
     single k u + single l v = single m u + single n v ↔
       (k = m ∧ l = n) ∨ (u = v ∧ k = n ∧ l = m) ∨ (u + v = 0 ∧ k = l ∧ m = n) := by
   classical
@@ -1374,682 +1266,521 @@ lemma single_add_single_eq_single_add_single {k l m n : ι} {u v : M} (hu : u !=
 /-- Composition with a fixed additive homomorphism is itself an additive homomorphism on functions.
 -/
 @[simps]
-/--
-Definition of `mapRange.addMonoidHom` / `mapRange.addMonoidHom` 的定义
+/-
+**Finsupp.mapRange.addMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：{ι : Type u_1} →   {M : Type u_3} →     {N : Type u_4} → [inst : AddCommMo
+noid M] → [inst_1 : AddCommMonoid N] → (M →+ N) → (ι →₀ M) →+ ι →₀ N
+参数：M →+ N；ι →₀ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRange.addMonoidHom
-  signature: (f : M ->+ N)
-  body: mapRange f f.map_zero
-  map_zero' := mapRange_zero
-  map_add' := mapRange_add f.map_add
-
-@[simp]
-
-中文:
-定义 mapRange.addMonoidHom
-  签名: (f : M ->+ N)
-  定义体: mapRange f f.map_zero
-  map_zero' := mapRange_zero
-  map_add' := mapRange_add f.map_add
-
-@[simp]
-
-Depends on / 依赖: f.map_zero, mapRange, map_zero
+--- 原说明 ---
+Composition with a fixed additive homomorphism is itself an additive homomorphis
+m on functions.
 -/
-def mapRange.addMonoidHom (f : M ->+ N) : (ι ->₀ M) ->+ ι ->₀ N where
+def mapRange.addMonoidHom (f : M →+ N) : (ι →₀ M) →+ ι →₀ N where
   toFun := mapRange f f.map_zero
   map_zero' := mapRange_zero
   map_add' := mapRange_add f.map_add
 
 @[simp]
-/--
-lemma `mapRange.addMonoidHom_id` / 引理 `mapRange.addMonoidHom_id`
-
-English:
-lemma mapRange.addMonoidHom_id
-  proof: AddMonoidHom.ext mapRange_id
-
-中文:
-引理 mapRange.addMonoidHom_id
-  证明: AddMonoidHom.ext mapRange_id
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, mapRange_id
+/-
+**Finsupp.mapRange.addMonoidHom_id** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M],   Finsupp.mapRan
+ge.addMonoidHom (AddMonoidHom.id M) = AddMonoidHom.id (ι →₀ M)
+参数：AddMonoidHom.id M；ι →₀ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Finsupp.mapRange_id`：mapRange_id (g : α ->₀ M) : mapRange id rfl g = g
 -/
 lemma mapRange.addMonoidHom_id :
-    mapRange.addMonoidHom (AddMonoidHom.id M) = AddMonoidHom.id (ι ->₀ M) :=
+    mapRange.addMonoidHom (AddMonoidHom.id M) = AddMonoidHom.id (ι →₀ M) :=
   AddMonoidHom.ext mapRange_id
-
-/--
-lemma `mapRange.addMonoidHom_comp` / 引理 `mapRange.addMonoidHom_comp`
-
-English:
-lemma mapRange.addMonoidHom_comp
-  given: (f : N ->+ O) (g : M ->+ N)
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 mapRange.addMonoidHom_comp
-  条件: (f : N ->+ O) (g : M ->+ N)
-  证明: by ext; simp
-
-@[simp]
-
-Depends on / 依赖: f.comp
+/-
+**Finsupp.mapRange.addMonoidHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange
+`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} {O : Type u_5} [inst : AddC
+ommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : AddCommMonoid O] (f : N →+ O
+) (g : M →+ N),   Finsupp.mapRange.addMonoidHom (f.comp g) = (Finsupp.mapRange.a
+ddMonoidHom f).comp (Finsupp.mapRange.addMonoidHom g)
+参数：f : N →+ O；g : M →+ N；f.comp g；Finsupp.mapRange.addMonoidHom f；Finsupp.mapRan
+ge.addMonoidHom g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.mapRange.addMonoidHom_apply`：∀ {ι : Type u_1} {M : Type u_3} {N 
+: Type u_4} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid N] (f : M →+ N)   (
+g : ι →₀ M), (Finsupp.map…
+· 使用引理 `Finsupp.mapRange_mapRange`：mapRange_mapRange (e₁ : N -> O) (e₂ : M -> N)
+ (he₁ he₂) (f : α ->₀ M) : mapRange e₁ he₁ (mapRange e₂ he₂ f) = mapRange (e₁ ∘ 
+e₂) (by simp [*…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapRange.addMonoidHom_comp (f : N ->+ O) (g : M ->+ N) :
+lemma mapRange.addMonoidHom_comp (f : N →+ O) (g : M →+ N) :
     mapRange.addMonoidHom (ι := ι) (f.comp g) =
       (mapRange.addMonoidHom f).comp (mapRange.addMonoidHom g) := by ext; simp
 
 @[simp]
-/--
-lemma `mapRange.addMonoidHom_toZeroHom` / 引理 `mapRange.addMonoidHom_toZeroHom`
-
-English:
-lemma mapRange.addMonoidHom_toZeroHom
-  given: (f : M ->+ N)
-  proof: rfl
-
-中文:
-引理 mapRange.addMonoidHom_toZeroHom
-  条件: (f : M ->+ N)
-  证明: rfl
-
-Depends on / 依赖: f.toZeroHom, toZeroHom
+/-
+**Finsupp.mapRange.addMonoidHom_toZeroHom** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.map
+Range`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommMonoid M] [i
+nst_1 : AddCommMonoid N] (f : M →+ N),   ↑(Finsupp.mapRange.addMonoidHom f) = Fi
+nsupp.mapRange.zeroHom ↑f
+参数：f : M →+ N；Finsupp.mapRange.addMonoidHom f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mapRange.addMonoidHom_toZeroHom (f : M ->+ N) :
+lemma mapRange.addMonoidHom_toZeroHom (f : M →+ N) :
     (mapRange.addMonoidHom f).toZeroHom = mapRange.zeroHom (ι := ι) f.toZeroHom := rfl
 
 /-- `Finsupp.mapRange.AddMonoidHom` as an equiv. -/
 @[simps! apply]
-/--
-Definition of `mapRange.addEquiv` / `mapRange.addEquiv` 的定义
+/-
+**Finsupp.mapRange.addEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：{ι : Type u_1} →   {M : Type u_3} →     {N : Type u_4} → [inst : AddCommMo
+noid M] → [inst_1 : AddCommMonoid N] → M ≃+ N → (ι →₀ M) ≃+ (ι →₀ N)
+参数：ι →₀ M；ι →₀ N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRange.addEquiv
-  signature: (em' : M ≃+ N)
-  body: mapRange.equiv em' em'.map_zero
-  __ := mapRange.addMonoidHom em'.toAddMonoidHom
-
-@[simp]
-
-中文:
-定义 mapRange.addEquiv
-  签名: (em' : M ≃+ N)
-  定义体: mapRange.equiv em' em'.map_zero
-  __ := mapRange.addMonoidHom em'.toAddMonoidHom
-
-@[simp]
-
-Depends on / 依赖: mapRange, mapRange.equiv, map_zero
+--- 原说明 ---
+`Finsupp.mapRange.AddMonoidHom` as an equiv.
 -/
-def mapRange.addEquiv (em' : M ≃+ N) : (ι ->₀ M) ≃+ (ι ->₀ N) where
+def mapRange.addEquiv (em' : M ≃+ N) : (ι →₀ M) ≃+ (ι →₀ N) where
   toEquiv := mapRange.equiv em' em'.map_zero
   __ := mapRange.addMonoidHom em'.toAddMonoidHom
 
 @[simp]
-/--
-lemma `mapRange.addEquiv_refl` / 引理 `mapRange.addEquiv_refl`
-
-English:
-lemma mapRange.addEquiv_refl
-  statement: mapRange.addEquiv (.refl M) = .refl (ι ->₀ M)
-  proof: by ext; simp
-
-中文:
-引理 mapRange.addEquiv_refl
-  结论: mapRange.addEquiv (.refl M) = .refl (ι ->₀ M)
-  证明: by ext; simp
+/-
+**Finsupp.mapRange.addEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M],   Finsupp.mapRan
+ge.addEquiv (AddEquiv.refl M) = AddEquiv.refl (ι →₀ M)
+参数：AddEquiv.refl M；ι →₀ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst_1 : A
+dd N] {f g : M ≃+ N}, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.mapRange.addEquiv_apply`：∀ {ι : Type u_1} {M : Type u_3} {N : Ty
+pe u_4} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid N] (em' : M ≃+ N)   (g 
+: ι →₀ M), (Finsupp.m…
+· 使用定理 `Finsupp.mapRange_id`：mapRange_id (g : α ->₀ M) : mapRange id rfl g = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapRange.addEquiv_refl : mapRange.addEquiv (.refl M) = .refl (ι ->₀ M) := by ext; simp
-
-/--
-lemma `mapRange.addEquiv_trans` / 引理 `mapRange.addEquiv_trans`
-
-English:
-lemma mapRange.addEquiv_trans
-  given: (e₁ : M ≃+ N) (e₂ : N ≃+ O)
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 mapRange.addEquiv_trans
-  条件: (e₁ : M ≃+ N) (e₂ : N ≃+ O)
-  证明: by ext; simp
-
-@[simp]
+lemma mapRange.addEquiv_refl : mapRange.addEquiv (.refl M) = .refl (ι →₀ M) := by ext; simp
+/-
+**Finsupp.mapRange.addEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} {O : Type u_5} [inst : AddC
+ommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : AddCommMonoid O] (e₁ : M ≃+ 
+N) (e₂ : N ≃+ O),   Finsupp.mapRange.addEquiv (e₁.trans e₂) = (Finsupp.mapRange.
+addEquiv e₁).trans (Finsupp.mapRange.addEquiv e₂)
+参数：e₁ : M ≃+ N；e₂ : N ≃+ O；e₁.trans e₂；Finsupp.mapRange.addEquiv e₁；Finsupp.mapR
+ange.addEquiv e₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst_1 : A
+dd N] {f g : M ≃+ N}, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.mapRange.addEquiv_apply`：∀ {ι : Type u_1} {M : Type u_3} {N : Ty
+pe u_4} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid N] (em' : M ≃+ N)   (g 
+: ι →₀ M), (Finsupp.m…
+· 使用引理 `Finsupp.mapRange_mapRange`：mapRange_mapRange (e₁ : N -> O) (e₂ : M -> N)
+ (he₁ he₂) (f : α ->₀ M) : mapRange e₁ he₁ (mapRange e₂ he₂ f) = mapRange (e₁ ∘ 
+e₂) (by simp [*…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapRange.addEquiv_trans (e₁ : M ≃+ N) (e₂ : N ≃+ O) :
     mapRange.addEquiv (ι := ι) (e₁.trans e₂) =
       (mapRange.addEquiv e₁).trans (mapRange.addEquiv e₂) := by ext; simp
 
 @[simp]
-/--
-lemma `mapRange.addEquiv_symm` / 引理 `mapRange.addEquiv_symm`
-
-English:
-lemma mapRange.addEquiv_symm
-  given: (e : M ≃+ N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapRange.addEquiv_symm
-  条件: (e : M ≃+ N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: addEquiv, e.symm, mapRange, mapRange.addEquiv
+/-
+**Finsupp.mapRange.addEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommMonoid M] [i
+nst_1 : AddCommMonoid N] (e : M ≃+ N),   (Finsupp.mapRange.addEquiv e).symm = Fi
+nsupp.mapRange.addEquiv e.symm
+参数：e : M ≃+ N；Finsupp.mapRange.addEquiv e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapRange.addEquiv_symm (e : M ≃+ N) :
     (mapRange.addEquiv (ι := ι) e).symm = mapRange.addEquiv e.symm := rfl
 
 @[simp]
-/--
-lemma `mapRange.addEquiv_toAddMonoidHom` / 引理 `mapRange.addEquiv_toAddMonoidHom`
-
-English:
-lemma mapRange.addEquiv_toAddMonoidHom
-  given: (e : M ≃+ N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapRange.addEquiv_toAddMonoidHom
-  条件: (e : M ≃+ N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: addMonoidHom, e.toAddMonoidHom, mapRange, mapRange.addMonoidHom, toAddMonoidHom
+/-
+**Finsupp.mapRange.addEquiv_toAddMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.ma
+pRange`。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommMonoid M] [i
+nst_1 : AddCommMonoid N] (e : M ≃+ N),   ↑(Finsupp.mapRange.addEquiv e) = Finsup
+p.mapRange.addMonoidHom e.toAddMonoidHom
+参数：e : M ≃+ N；Finsupp.mapRange.addEquiv e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 lemma mapRange.addEquiv_toAddMonoidHom (e : M ≃+ N) :
     mapRange.addEquiv (ι := ι) e = mapRange.addMonoidHom (ι := ι) e.toAddMonoidHom := rfl
 
 @[simp]
-/--
-lemma `mapRange.addEquiv_toEquiv` / 引理 `mapRange.addEquiv_toEquiv`
-
-English:
-lemma mapRange.addEquiv_toEquiv
-  given: (e : M ≃+ N)
-  proof: rfl
-
-中文:
-引理 mapRange.addEquiv_toEquiv
-  条件: (e : M ≃+ N)
-  证明: rfl
-
-Depends on / 依赖: e.map_zero, mapRange, mapRange.equiv, map_zero
+/-
+**Finsupp.mapRange.addEquiv_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`
+。
+形式化陈述：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommMonoid M] [i
+nst_1 : AddCommMonoid N] (e : M ≃+ N),   ↑(Finsupp.mapRange.addEquiv e) = Finsup
+p.mapRange.equiv ↑e ⋯
+参数：e : M ≃+ N；Finsupp.mapRange.addEquiv e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapRange.addEquiv_toEquiv (e : M ≃+ N) :
     mapRange.addEquiv (ι := ι) e = mapRange.equiv (ι := ι) (e : M ≃ N) e.map_zero := rfl
 
 end AddCommMonoid
 
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: [NegZeroClass G]
-  body: mapRange Neg.neg neg_zero
-
-中文:
-实例 instNeg
-  签名: [NegZero类 G]
-  定义体: mapRange Neg.neg neg_zero
-
-Depends on / 依赖: Neg.neg, mapRange, neg_zero
+/-
+**Finsupp.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instNeg [NegZeroClass G] : Neg (ι ->₀ G) where neg
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
-instance instNeg [NegZeroClass G] : Neg (ι ->₀ G) where neg := mapRange Neg.neg neg_zero
-
-/--
-lemma `coe_neg` / 引理 `coe_neg`
-
-English:
-lemma coe_neg
-  given: [NegZeroClass G] (g : ι ->₀ G)
-  statement: ⇑(-g) = -g
-  proof: rfl
-
-中文:
-引理 coe_neg
-  条件: [NegZero类 G] (g : ι ->₀ G)
-  结论: ⇑(-g) = -g
-  证明: rfl
+instance instNeg [NegZeroClass G] : Neg (ι →₀ G) where neg := mapRange Neg.neg neg_zero
+/-
+**Finsupp.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {G : Type u_6} [inst : NegZeroClass G] (g : ι →₀ G), ⇑(-g
+) = -⇑g
+参数：g : ι →₀ G；-g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_neg [NegZeroClass G] (g : ι ->₀ G) : ⇑(-g) = -g := rfl
-
-/--
-lemma `neg_apply` / 引理 `neg_apply`
-
-English:
-lemma neg_apply
-  given: [NegZeroClass G] (g : ι ->₀ G) (a : ι)
-  statement: (-g) a = -g a
-  proof: rfl
-
-中文:
-引理 neg_apply
-  条件: [NegZero类 G] (g : ι ->₀ G) (a : ι)
-  结论: (-g) a = -g a
-  证明: rfl
+@[simp, norm_cast] lemma coe_neg [NegZeroClass G] (g : ι →₀ G) : ⇑(-g) = -g := rfl
+/-
+**Finsupp.neg_apply** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：neg_apply [NegZeroClass G] (g : ι ->₀ G) (a : ι) : (-g) a = -g a
+参数：g : ι ->₀ G；a : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma neg_apply [NegZeroClass G] (g : ι ->₀ G) (a : ι) : (-g) a = -g a :=
+lemma neg_apply [NegZeroClass G] (g : ι →₀ G) (a : ι) : (-g) a = -g a :=
   rfl
-
-/--
-lemma `mapRange_neg` / 引理 `mapRange_neg`
-
-English:
-lemma mapRange_neg
-  statement: [NegZeroClass G] [NegZeroClass H] {f : G -> H} {hf : f 0 = 0}
-  proof: ext fun _ => by simp only [hf', neg_apply, mapRange_apply]
-
-中文:
-引理 mapRange_neg
-  结论: [NegZero类 G] [NegZero类 H] {f : G -> H} {hf : f 0 = 0}
-  证明: ext fun _ => by simp only [hf', neg_apply, mapRange_apply]
-
-Depends on / 依赖: mapRange_apply, neg_apply
+/-
+**Finsupp.mapRange_neg** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_neg [NegZeroClass G] [NegZeroClass H] {f : G -> H} {hf : f 0 = 0}
+ (hf' : forall x, f (-x) = -f x) (v : ι ->₀ G) : mapRange f hf (-v) = -mapRange 
+f hf v
+参数：hf' : forall x, f (-x) = -f x；v : ι ->₀ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapRange_neg [NegZeroClass G] [NegZeroClass H] {f : G -> H} {hf : f 0 = 0}
-    (hf' : forall x, f (-x) = -f x) (v : ι ->₀ G) : mapRange f hf (-v) = -mapRange f hf v :=
+lemma mapRange_neg [NegZeroClass G] [NegZeroClass H] {f : G → H} {hf : f 0 = 0}
+    (hf' : ∀ x, f (-x) = -f x) (v : ι →₀ G) : mapRange f hf (-v) = -mapRange f hf v :=
   ext fun _ => by simp only [hf', neg_apply, mapRange_apply]
-
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: [SubNegZeroMonoid G]
-  body: ⟨zipWith Sub.sub (sub_zero _)⟩
-
-中文:
-实例 instSub
-  签名: [SubNegZero幺半群 G]
-  定义体: ⟨zipWith Sub.sub (sub_zero _)⟩
-
-Depends on / 依赖: Sub.sub, sub_zero, zipWith
+/-
+**Finsupp.instSub** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instSub [SubNegZeroMonoid G] : Sub (ι ->₀ G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSub [SubNegZeroMonoid G] : Sub (ι ->₀ G) :=
+instance instSub [SubNegZeroMonoid G] : Sub (ι →₀ G) :=
   ⟨zipWith Sub.sub (sub_zero _)⟩
-
-/--
-lemma `coe_sub` / 引理 `coe_sub`
-
-English:
-lemma coe_sub
-  given: [SubNegZeroMonoid G] (g₁ g₂ : ι ->₀ G)
-  statement: ⇑(g₁ - g₂) = g₁ - g₂
-  proof: rfl
-
-中文:
-引理 coe_sub
-  条件: [SubNegZero幺半群 G] (g₁ g₂ : ι ->₀ G)
-  结论: ⇑(g₁ - g₂) = g₁ - g₂
-  证明: rfl
+/-
+**Finsupp.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {ι : Type u_1} {G : Type u_6} [inst : SubNegZeroMonoid G] (g₁ g₂ : ι →₀ 
+G), ⇑(g₁ - g₂) = ⇑g₁ - ⇑g₂
+参数：g₁ g₂ : ι →₀ G；g₁ - g₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_sub [SubNegZeroMonoid G] (g₁ g₂ : ι ->₀ G) : ⇑(g₁ - g₂) = g₁ - g₂ := rfl
-
-/--
-lemma `sub_apply` / 引理 `sub_apply`
-
-English:
-lemma sub_apply
-  given: [SubNegZeroMonoid G] (g₁ g₂ : ι ->₀ G) (a : ι)
-  statement: (g₁ - g₂) a = g₁ a - g₂ a
-  proof: rfl
-
-中文:
-引理 sub_apply
-  条件: [SubNegZero幺半群 G] (g₁ g₂ : ι ->₀ G) (a : ι)
-  结论: (g₁ - g₂) a = g₁ a - g₂ a
-  证明: rfl
+@[simp, norm_cast] lemma coe_sub [SubNegZeroMonoid G] (g₁ g₂ : ι →₀ G) : ⇑(g₁ - g₂) = g₁ - g₂ := rfl
+/-
+**Finsupp.sub_apply** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：sub_apply [SubNegZeroMonoid G] (g₁ g₂ : ι ->₀ G) (a : ι) : (g₁ - g₂) a = g
+₁ a - g₂ a
+参数：g₁ g₂ : ι ->₀ G；a : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma sub_apply [SubNegZeroMonoid G] (g₁ g₂ : ι ->₀ G) (a : ι) : (g₁ - g₂) a = g₁ a - g₂ a := rfl
-
-/--
-lemma `mapRange_sub` / 引理 `mapRange_sub`
-
-English:
-lemma mapRange_sub
-  statement: [SubNegZeroMonoid G] [SubNegZeroMonoid H] {f : G -> H} {hf : f 0 = 0}
-  proof: ext fun _ => by simp only [hf', sub_apply, mapRange_apply]
-
-中文:
-引理 mapRange_sub
-  结论: [SubNegZero幺半群 G] [SubNegZero幺半群 H] {f : G -> H} {hf : f 0 = 0}
-  证明: ext fun _ => by simp only [hf', sub_apply, mapRange_apply]
-
-Depends on / 依赖: mapRange_apply, sub_apply
+lemma sub_apply [SubNegZeroMonoid G] (g₁ g₂ : ι →₀ G) (a : ι) : (g₁ - g₂) a = g₁ a - g₂ a := rfl
+/-
+**Finsupp.mapRange_sub** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_sub [SubNegZeroMonoid G] [SubNegZeroMonoid H] {f : G -> H} {hf : 
+f 0 = 0} (hf' : forall x y, f (x - y) = f x - f y) (v₁ v₂ : ι ->₀ G) : mapRange 
+f hf (v₁ - v₂) = mapRange f hf v₁ - mapRange f hf v₂
+参数：hf' : forall x y, f (x - y) = f x - f y；v₁ v₂ : ι ->₀ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapRange_sub [SubNegZeroMonoid G] [SubNegZeroMonoid H] {f : G -> H} {hf : f 0 = 0}
-    (hf' : forall x y, f (x - y) = f x - f y) (v₁ v₂ : ι ->₀ G) :
+lemma mapRange_sub [SubNegZeroMonoid G] [SubNegZeroMonoid H] {f : G → H} {hf : f 0 = 0}
+    (hf' : ∀ x y, f (x - y) = f x - f y) (v₁ v₂ : ι →₀ G) :
     mapRange f hf (v₁ - v₂) = mapRange f hf v₁ - mapRange f hf v₂ :=
   ext fun _ => by simp only [hf', sub_apply, mapRange_apply]
 
 section AddGroup
-variable [AddGroup G] {p : ι -> Prop} {v v' : ι ->₀ G}
+variable [AddGroup G] {p : ι → Prop} {v v' : ι →₀ G}
 
-/--
-lemma `mapRange_neg'` / 引理 `mapRange_neg'`
-
-English:
-lemma mapRange_neg'
-  statement: [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G H]
-  proof: mapRange_neg (map_neg f) v
-
-中文:
-引理 mapRange_neg'
-  结论: [Subtraction幺半群 H] [函数状 F G H] [加法幺半群态射类 F G H]
-  证明: mapRange_neg (map_neg f) v
-
-Depends on / 依赖: mapRange_neg, map_neg
+/-
+**Finsupp.mapRange_neg'** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_neg' [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G
+ H] {f : F} (v : ι ->₀ G) : mapRange f (map_zero f) (-v) = -mapRange f (map_zero
+ f) v
+参数：v : ι ->₀ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.mapRange_neg`：mapRange_neg [NegZeroClass G] [NegZeroClass H] {f 
+: G -> H} {hf : f 0 = 0} (hf' : forall x, f (-x) = -f x) (v : ι ->₀ G) : mapRang
+e f hf (-v…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
 -/
 lemma mapRange_neg' [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G H]
-    {f : F} (v : ι ->₀ G) :
+    {f : F} (v : ι →₀ G) :
     mapRange f (map_zero f) (-v) = -mapRange f (map_zero f) v :=
   mapRange_neg (map_neg f) v
-
-/--
-lemma `mapRange_sub'` / 引理 `mapRange_sub'`
-
-English:
-lemma mapRange_sub'
-  statement: [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G H]
-  proof: mapRange_sub (map_sub f) v₁ v₂
-
-中文:
-引理 mapRange_sub'
-  结论: [Subtraction幺半群 H] [函数状 F G H] [加法幺半群态射类 F G H]
-  证明: mapRange_sub (map_sub f) v₁ v₂
-
-Depends on / 依赖: mapRange_sub, map_sub
+/-
+**Finsupp.mapRange_sub'** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_sub' [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G
+ H] {f : F} (v₁ v₂ : ι ->₀ G) : mapRange f (map_zero f) (v₁ - v₂) = mapRange f (
+map_zero f) v₁ - mapRange f (map_zero f) v₂
+参数：v₁ v₂ : ι ->₀ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.mapRange_sub`：mapRange_sub [SubNegZeroMonoid G] [SubNegZeroMonoi
+d H] {f : G -> H} {hf : f 0 = 0} (hf' : forall x y, f (x - y) = f x - f y) (v₁ v
+₂ : ι ->₀ …
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
 -/
 lemma mapRange_sub' [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G H]
-    {f : F} (v₁ v₂ : ι ->₀ G) :
+    {f : F} (v₁ v₂ : ι →₀ G) :
     mapRange f (map_zero f) (v₁ - v₂) = mapRange f (map_zero f) v₁ - mapRange f (map_zero f) v₂ :=
   mapRange_sub (map_sub f) v₁ v₂
 
-/--
-Instance `instIntSMul` / 实例 `instIntSMul`
+/-- Note the general `SMul` instance for `Finsupp` doesn't apply as `ℤ` is not distributive
+unless `F i`'s addition is commutative. -/
+/-
+**Finsupp.instIntSMul** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instIntSMul : SMul Int (ι ->₀ G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instIntSMul
-  signature: : SMul Int (ι ->₀ G)
-  body: ⟨fun n v => v.mapRange (n • ·) (zsmul_zero _)⟩
-
-中文:
-实例 inst整数SMul
-  签名: : 标量乘法 整数 (ι ->₀ G)
-  定义体: ⟨fun n v => v.mapRange (n • ·) (zsmul_zero _)⟩
-
-Depends on / 依赖: mapRange, v.mapRange, zsmul_zero
+--- 原说明 ---
+Note the general `SMul` instance for `Finsupp` doesn't apply as `ℤ` is not distr
+ibutive
+unless `F i`'s addition is commutative.
 -/
-instance instIntSMul : SMul Int (ι ->₀ G) :=
+instance instIntSMul : SMul ℤ (ι →₀ G) :=
   ⟨fun n v => v.mapRange (n • ·) (zsmul_zero _)⟩
-
-/--
-Instance `instAddGroup` / 实例 `instAddGroup`
-
-English:
-instance instAddGroup
-  signature: : AddGroup (ι ->₀ G)
-  body: fast_instance% DFunLike.coe_injective.addGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[simp]
-
-中文:
-实例 instAddGroup
-  签名: : 加法群 (ι ->₀ G)
-  定义体: fast_instance% DFunLike.coe_injective.addGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective.addGroup, addGroup, coe_add, coe_injective, coe_neg, coe_sub, coe_zero, fast_instance
+/-
+**Finsupp.instAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instAddGroup : AddGroup (ι ->₀ G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddGroup : AddGroup (ι ->₀ G) :=
+instance instAddGroup : AddGroup (ι →₀ G) :=
   fast_instance% DFunLike.coe_injective.addGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
 
 @[simp]
-/--
-lemma `support_neg` / 引理 `support_neg`
-
-English:
-lemma support_neg
-  given: (f : ι ->₀ G)
-  statement: support (-f) = support f
-  proof: Finset.Subset.antisymm support_mapRange
-    (calc
-      support f = support (- -f) := congr_arg support (neg_neg _).symm
-      _ subseteq support (-f) := support_mapRange)
-
-中文:
-引理 support_neg
-  条件: (f : ι ->₀ G)
-  结论: support (-f) = support f
-  证明: Finset.Subset.antisymm support_mapRange
-    (calc
-      support f = support (- -f) := congr_arg support (neg_neg _).symm
-      _ subseteq support (-f) := support_mapRange)
-
-Depends on / 依赖: Finset, Finset.Subset.antisymm, Subset, antisymm, congr_arg, neg_neg, subseteq, support, support_mapRange
+/-
+**Finsupp.support_neg** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_neg (f : ι ->₀ G) : support (-f) = support f
+参数：f : ι ->₀ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Subset.antisymm`：∀ {α : Type u_1} {s₁ s₂ : Finset α}, s₁ ⊆ s₂ → s
+₂ ⊆ s₁ → s₁ = s₂
+· 使用定理 `Finsupp.support_mapRange`：support_mapRange {f : M -> N} {hf : f 0 = 0} {
+g : α ->₀ M} : (mapRange f hf g).support subseteq g.support
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
-lemma support_neg (f : ι ->₀ G) : support (-f) = support f :=
+lemma support_neg (f : ι →₀ G) : support (-f) = support f :=
   Finset.Subset.antisymm support_mapRange
     (calc
       support f = support (- -f) := congr_arg support (neg_neg _).symm
-      _ subseteq support (-f) := support_mapRange)
-
-/--
-lemma `support_sub` / 引理 `support_sub`
-
-English:
-lemma support_sub
-  given: [DecidableEq ι] {f g : ι ->₀ G}
-  statement: support (f - g) subseteq support f union support g
-  proof: by
-  rw [sub_eq_add_neg]; rw [← support_neg g]
-  exact support_add
-
-中文:
-引理 support_sub
-  条件: [DecidableEq ι] {f g : ι ->₀ G}
-  结论: support (f - g) subseteq support f union support g
-  证明: by
-  rw [sub_eq_add_neg]; rw [← support_neg g]
-  exact support_add
-
-Depends on / 依赖: sub_eq_add_neg, support_add, support_neg
+      _ ⊆ support (-f) := support_mapRange)
+/-
+**Finsupp.support_sub** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：support_sub [DecidableEq ι] {f g : ι ->₀ G} : support (f - g) subseteq sup
+port f union support g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finsupp.support_neg`：support_neg (f : ι ->₀ G) : support (-f) = support 
+f
+· 使用引理 `Finsupp.support_add`：support_add [DecidableEq ι] : (g₁ + g₂).support sub
+seteq g₁.support union g₂.support
 -/
-lemma support_sub [DecidableEq ι] {f g : ι ->₀ G} : support (f - g) subseteq support f union support g := by
-  rw [sub_eq_add_neg]; rw [← support_neg g]
+lemma support_sub [DecidableEq ι] {f g : ι →₀ G} : support (f - g) ⊆ support f ∪ support g := by
+  rw [sub_eq_add_neg, ← support_neg g]
   exact support_add
-
-/--
-lemma `erase_eq_sub_single` / 引理 `erase_eq_sub_single`
-
-English:
-lemma erase_eq_sub_single
-  given: (f : ι ->₀ G) (a : ι)
-  statement: f.erase a = f - single a (f a)
-  proof: by
+/-
+**Finsupp.erase_eq_sub_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：erase_eq_sub_single (f : ι ->₀ G) (a : ι) : f.erase a = f - single a (f a)
+参数：f : ι ->₀ G；a : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.erase_same`：erase_same {a : α} {f : α ->₀ M} : (f.erase a) a = 0
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finsupp.erase_ne`：erase_ne {a a' : α} {f : α ->₀ M} (h : a' != a) : (f.e
+rase a) a' = f a'
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finsupp.single_eq_of_ne`：single_eq_of_ne (h : a' != a) : (single a b : α
+ ->₀ M) a' = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+-/
+lemma erase_eq_sub_single (f : ι →₀ G) (a : ι) : f.erase a = f - single a (f a) := by
   ext a'
   rcases eq_or_ne a' a with (rfl | h)
   · simp
   · simp [h]
-
-中文:
-引理 erase_eq_sub_single
-  条件: (f : ι ->₀ G) (a : ι)
-  结论: f.erase a = f - single a (f a)
-  证明: by
-  ext a'
-  rcases eq_or_ne a' a with (rfl | h)
-  · simp
-  · simp [h]
-
-Depends on / 依赖: eq_or_ne
+/-
+**Finsupp.update_eq_sub_add_single** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：update_eq_sub_add_single (f : ι ->₀ G) (a : ι) (b : G) : f.update a b = f 
+- single a (f a) + single a b
+参数：f : ι ->₀ G；a : ι；b : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.update_eq_erase_add_single`：update_eq_erase_add_single (f : ι ->
+₀ M) (a : ι) (b : M) : f.update a b = f.erase a + single a b
+· 使用引理 `Finsupp.erase_eq_sub_single`：erase_eq_sub_single (f : ι ->₀ G) (a : ι) :
+ f.erase a = f - single a (f a)
 -/
-lemma erase_eq_sub_single (f : ι ->₀ G) (a : ι) : f.erase a = f - single a (f a) := by
-  ext a'
-  rcases eq_or_ne a' a with (rfl | h)
-  · simp
-  · simp [h]
-
-/--
-lemma `update_eq_sub_add_single` / 引理 `update_eq_sub_add_single`
-
-English:
-lemma update_eq_sub_add_single
-  given: (f : ι ->₀ G) (a : ι) (b : G)
-  proof: by
-  rw [update_eq_erase_add_single]; rw [erase_eq_sub_single]
-
-@[simp]
-
-中文:
-引理 update_eq_sub_add_single
-  条件: (f : ι ->₀ G) (a : ι) (b : G)
-  证明: by
-  rw [update_eq_erase_add_single]; rw [erase_eq_sub_single]
-
-@[simp]
-
-Depends on / 依赖: erase_eq_sub_single, update_eq_erase_add_single
--/
-lemma update_eq_sub_add_single (f : ι ->₀ G) (a : ι) (b : G) :
+lemma update_eq_sub_add_single (f : ι →₀ G) (a : ι) (b : G) :
     f.update a b = f - single a (f a) + single a b := by
-  rw [update_eq_erase_add_single]; rw [erase_eq_sub_single]
+  rw [update_eq_erase_add_single, erase_eq_sub_single]
 
 @[simp]
-/--
-lemma `single_neg` / 引理 `single_neg`
-
-English:
-lemma single_neg
-  given: (a : ι) (b : G)
-  statement: single a (-b) = -single a b
-  proof: (singleAddHom a : G ->+ _).map_neg b
-
-@[simp]
-
-中文:
-引理 single_neg
-  条件: (a : ι) (b : G)
-  结论: single a (-b) = -single a b
-  证明: (singleAddHom a : G ->+ _).map_neg b
-
-@[simp]
-
-Depends on / 依赖: map_neg, singleAddHom
+/-
+**Finsupp.single_neg** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：single_neg (a : ι) (b : G) : single a (-b) = -single a b
+参数：a : ι；b : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_neg`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup α
+] [inst_1 : SubtractionMonoid β] (f : α →+ β) (a : α), f (-a) = -f a
 -/
 lemma single_neg (a : ι) (b : G) : single a (-b) = -single a b :=
-  (singleAddHom a : G ->+ _).map_neg b
+  (singleAddHom a : G →+ _).map_neg b
 
 @[simp]
-/--
-lemma `single_sub` / 引理 `single_sub`
-
-English:
-lemma single_sub
-  given: (a : ι) (b₁ b₂ : G)
-  statement: single a (b₁ - b₂) = single a b₁ - single a b₂
-  proof: (singleAddHom a : G ->+ _).map_sub b₁ b₂
-
-@[simp]
-
-中文:
-引理 single_sub
-  条件: (a : ι) (b₁ b₂ : G)
-  结论: single a (b₁ - b₂) = single a b₁ - single a b₂
-  证明: (singleAddHom a : G ->+ _).map_sub b₁ b₂
-
-@[simp]
-
-Depends on / 依赖: map_sub, singleAddHom
+/-
+**Finsupp.single_sub** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：single_sub (a : ι) (b₁ b₂ : G) : single a (b₁ - b₂) = single a b₁ - single
+ a b₂
+参数：a : ι；b₁ b₂ : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_sub`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup α
+] [inst_1 : SubtractionMonoid β] (f : α →+ β) (g h : α),   f (g - h) = f g - f h
 -/
 lemma single_sub (a : ι) (b₁ b₂ : G) : single a (b₁ - b₂) = single a b₁ - single a b₂ :=
-  (singleAddHom a : G ->+ _).map_sub b₁ b₂
+  (singleAddHom a : G →+ _).map_sub b₁ b₂
 
 @[simp]
-/--
-lemma `erase_neg` / 引理 `erase_neg`
-
-English:
-lemma erase_neg
-  given: (a : ι) (f : ι ->₀ G)
-  statement: erase a (-f) = -erase a f
-  proof: (eraseAddHom a : (_ ->₀ G) ->+ _).map_neg f
-
-@[simp]
-
-中文:
-引理 erase_neg
-  条件: (a : ι) (f : ι ->₀ G)
-  结论: erase a (-f) = -erase a f
-  证明: (eraseAddHom a : (_ ->₀ G) ->+ _).map_neg f
-
-@[simp]
-
-Depends on / 依赖: eraseAddHom, map_neg
+/-
+**Finsupp.erase_neg** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：erase_neg (a : ι) (f : ι ->₀ G) : erase a (-f) = -erase a f
+参数：a : ι；f : ι ->₀ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_neg`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup α
+] [inst_1 : SubtractionMonoid β] (f : α →+ β) (a : α), f (-a) = -f a
 -/
-lemma erase_neg (a : ι) (f : ι ->₀ G) : erase a (-f) = -erase a f :=
-  (eraseAddHom a : (_ ->₀ G) ->+ _).map_neg f
+lemma erase_neg (a : ι) (f : ι →₀ G) : erase a (-f) = -erase a f :=
+  (eraseAddHom a : (_ →₀ G) →+ _).map_neg f
 
 @[simp]
-/--
-lemma `erase_sub` / 引理 `erase_sub`
-
-English:
-lemma erase_sub
-  given: (a : ι) (f₁ f₂ : ι ->₀ G)
-  statement: erase a (f₁ - f₂) = erase a f₁ - erase a f₂
-  proof: (eraseAddHom a : (_ ->₀ G) ->+ _).map_sub f₁ f₂
-
-中文:
-引理 erase_sub
-  条件: (a : ι) (f₁ f₂ : ι ->₀ G)
-  结论: erase a (f₁ - f₂) = erase a f₁ - erase a f₂
-  证明: (eraseAddHom a : (_ ->₀ G) ->+ _).map_sub f₁ f₂
-
-Depends on / 依赖: eraseAddHom, map_sub
+/-
+**Finsupp.erase_sub** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：erase_sub (a : ι) (f₁ f₂ : ι ->₀ G) : erase a (f₁ - f₂) = erase a f₁ - era
+se a f₂
+参数：a : ι；f₁ f₂ : ι ->₀ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_sub`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup α
+] [inst_1 : SubtractionMonoid β] (f : α →+ β) (g h : α),   f (g - h) = f g - f h
 -/
-lemma erase_sub (a : ι) (f₁ f₂ : ι ->₀ G) : erase a (f₁ - f₂) = erase a f₁ - erase a f₂ :=
-  (eraseAddHom a : (_ ->₀ G) ->+ _).map_sub f₁ f₂
+lemma erase_sub (a : ι) (f₁ f₂ : ι →₀ G) : erase a (f₁ - f₂) = erase a f₁ - erase a f₂ :=
+  (eraseAddHom a : (_ →₀ G) →+ _).map_sub f₁ f₂
 
 end AddGroup
 
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup G]
-  body: fast_instance% DFunLike.coe_injective.addCommGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 G]
-  定义体: fast_instance% DFunLike.coe_injective.addCommGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective.addCommGroup, addCommGroup, coe_add, coe_injective, coe_neg, coe_sub, coe_zero, fast_instance
+/-
+**Finsupp.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instAddCommGroup [AddCommGroup G] : AddCommGroup (ι ->₀ G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddCommGroup [AddCommGroup G] : AddCommGroup (ι ->₀ G) :=
+instance instAddCommGroup [AddCommGroup G] : AddCommGroup (ι →₀ G) :=
   fast_instance% DFunLike.coe_injective.addCommGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
 
 end Finsupp
+

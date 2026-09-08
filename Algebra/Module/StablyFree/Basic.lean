@@ -30,206 +30,158 @@ The underlying constructor is marked as private. The intended constructor of `Is
 `IsStablyFree.of_free_prod`, and use `IsStablyFree.exist_free_prod` to extract the property from
 `IsStablyFree`. -/
 @[stacks 0BC3 "(2)"]
-/--
-Definition of `IsStablyFree` / `IsStablyFree` 的定义
+/-
+**Module.IsStablyFree** 是 Mathlib 中的一个归纳类型，位于命名空间 `Module`。
+形式化陈述：(R : Type u) → [inst : Ring R] → (M : Type u_1) → [inst_1 : AddCommGroup M
+] → [_root_.Module R M] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStablyFree
-  parameters: (R : Type u) [Ring R] (M : Type*) [AddCommGroup M] [Module R M]
-  axioms and operations (1):
-    - private(exist_free_prod') : exists (N : Type u) (_ : AddCommGroup N) (_ : Module R N) (_ : Module.Finite R N) (_ : Free R N), Free R (M × N)
+--- 原说明 ---
+A module `M` over a ring `R` is called stably free if there exists a finite free
+ `R`-module `N`
+such that `M ⊕ N` is free.
 
-中文:
-类 是StablyFree
-  参数: (R : 类型u) [环 R] (M : 类型) [加法交换群 M] [模 R M]
-  公理与运算 (1 个):
-    - private(exist_free_prod') : 存在 (N : 类型u) (_ : 加法交换群 N) (_ : 模 R N) (_ : 模.有限 R N) (_ : 自由 R N), 自由 R (M × N)
+The underlying constructor is marked as private. The intended constructor of `Is
+StablyFree` is
+`IsStablyFree.of_free_prod`, and use `IsStablyFree.exist_free_prod` to extract t
+he property from
+`IsStablyFree`.
 -/
 class IsStablyFree (R : Type u) [Ring R] (M : Type*) [AddCommGroup M] [Module R M] : Prop where
-  private exist_free_prod' : exists (N : Type u) (_ : AddCommGroup N) (_ : Module R N)
+  private exist_free_prod' : ∃ (N : Type u) (_ : AddCommGroup N) (_ : Module R N)
     (_ : Module.Finite R N) (_ : Free R N), Free R (M × N)
 
 variable (R : Type u) [Ring R] (M : Type v) [AddCommGroup M] [Module R M]
   (N : Type w) [AddCommGroup N] [Module R N]
-
-/--
-theorem `IsStablyFree.exist_free_prod` / 定理 `IsStablyFree.exist_free_prod`
-
-English:
-theorem IsStablyFree.exist_free_prod
-  given: [IsStablyFree R M]
-  proof: IsStablyFree.exist_free_prod'
-
-中文:
-定理 是StablyFree.exist_free_prod
-  条件: [是StablyFree R M]
-  证明: IsStablyFree.exist_free_prod'
-
-Depends on / 依赖: IsStablyFree, IsStablyFree.exist_free_prod, exist_free_prod
+/-
+**Module.IsStablyFree.exist_free_prod** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStably
+Free`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (M : Type v) [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M]   [Module.IsStablyFree R M], ∃ N x x_1, ∃ (_ : Module.F
+inite R N) (_ : Module.Free R N), Module.Free R (M × N)
+参数：R : Type u；M : Type v；_ : Module.Finite R N；_ : Module.Free R N；M × N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Algebra.Module.StablyFree.Basic.0.Module.IsStablyFree.e
+xist_free_prod'`：∀ {R : Type u} {inst : Ring R} {M : Type u_1} {inst_1 : AddComm
+Group M} {inst_2 : _root_.Module R M}   [self : Module.IsStablyFree R M], ∃ N…
 -/
 theorem IsStablyFree.exist_free_prod [IsStablyFree R M] :
-    exists (N : Type u) (_ : AddCommGroup N) (_ : Module R N) (_ : Module.Finite R N) (_ : Free R N),
+    ∃ (N : Type u) (_ : AddCommGroup N) (_ : Module R N) (_ : Module.Finite R N) (_ : Free R N),
       Free R (M × N) :=
   IsStablyFree.exist_free_prod'
 
 variable {R M N} in
-/--
-theorem `IsStablyFree.equiv` / 定理 `IsStablyFree.equiv`
-
-English:
-theorem IsStablyFree.equiv
-  given: (e : M ≃ₗ[R] N) [IsStablyFree R M]
-  statement: IsStablyFree R N
-  proof: by
-  obtain ⟨P, hPc, hPm, hPfin, hPfree, _⟩ := IsStablyFree.exist_free_prod R M
-  exact ⟨P, hPc, hPm, hPfin, hPfree, Free.of_equiv (e.prodCongr (LinearEquiv.refl R P))⟩
-
-中文:
-定理 是StablyFree.equiv
-  条件: (e : M ≃ₗ[R] N) [是StablyFree R M]
-  结论: 是StablyFree R N
-  证明: by
-  obtain ⟨P, hPc, hPm, hPfin, hPfree, _⟩ := IsStablyFree.exist_free_prod R M
-  exact ⟨P, hPc, hPm, hPfin, hPfree, Free.of_equiv (e.prodCongr (LinearEquiv.refl R P))⟩
-
-Depends on / 依赖: Free.of_equiv, IsStablyFree, IsStablyFree.exist_free_prod, LinearEquiv, LinearEquiv.refl, e.prodCongr, exist_free_prod, hPfree, of_equiv, prodCongr
+/-
+**Module.IsStablyFree.equiv** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFree`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M : Type v} [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M] {N : Type w}   [inst_3 : AddCommGroup N] [inst_4 : _roo
+t_.Module R N] (e : M ≃ₗ[R] N) [Module.IsStablyFree R M],   Module.IsStablyFree 
+R N
+参数：e : M ≃ₗ[R] N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.IsStablyFree.exist_free_prod`：∀ (R : Type u) [inst : Ring R] (M :
+ Type v) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [Module.IsStab
+lyFree R M], ∃ N x x_1, ∃…
+· 使用引理 `Module.Free.of_equiv`：of_equiv {R R' M M' : Type*} [Semiring R] [AddComm
+Monoid M] [Module R M] [Semiring R'] [AddCommMonoid M'] [Module R' M'] {σ : R ->
++* R'} {σ'…
 -/
 theorem IsStablyFree.equiv (e : M ≃ₗ[R] N) [IsStablyFree R M] : IsStablyFree R N := by
   obtain ⟨P, hPc, hPm, hPfin, hPfree, _⟩ := IsStablyFree.exist_free_prod R M
   exact ⟨P, hPc, hPm, hPfin, hPfree, Free.of_equiv (e.prodCongr (LinearEquiv.refl R P))⟩
 
 variable {R M N} in
-/--
-theorem `IsStablyFree.equiv_iff` / 定理 `IsStablyFree.equiv_iff`
-
-English:
-theorem IsStablyFree.equiv_iff
-  given: (e : M ≃ₗ[R] N)
-  statement: IsStablyFree R M ↔ IsStablyFree R N
-  proof: ⟨fun h => h.equiv e, fun h => h.equiv e.symm⟩
-
-中文:
-定理 是StablyFree.equiv_iff
-  条件: (e : M ≃ₗ[R] N)
-  结论: 是StablyFree R M ↔ 是StablyFree R N
-  证明: ⟨fun h => h.equiv e, fun h => h.equiv e.symm⟩
-
-Depends on / 依赖: e.symm, h.equiv
+/-
+**Module.IsStablyFree.equiv_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFree`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M : Type v} [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M] {N : Type w}   [inst_3 : AddCommGroup N] [inst_4 : _roo
+t_.Module R N] (e : M ≃ₗ[R] N),   Module.IsStablyFree R M ↔ Module.IsStablyFree 
+R N
+参数：e : M ≃ₗ[R] N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.IsStablyFree.equiv`：∀ {R : Type u} [inst : Ring R] {M : Type v} [
+inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] {N : Type w}   [inst_3 : A
+ddCommGroup N] …
 -/
 theorem IsStablyFree.equiv_iff (e : M ≃ₗ[R] N) : IsStablyFree R M ↔ IsStablyFree R N :=
-  ⟨fun h => h.equiv e, fun h => h.equiv e.symm⟩
-
-/--
-Instance `IsStablyFree.ulift` / 实例 `IsStablyFree.ulift`
-
-English:
-instance IsStablyFree.ulift
-  signature: [IsStablyFree R M]
-  body: IsStablyFree.equiv ULift.moduleEquiv.symm
-
-中文:
-实例 是StablyFree.ulift
-  签名: [是StablyFree R M]
-  定义体: IsStablyFree.equiv ULift.moduleEquiv.symm
-
-Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, ULift.moduleEquiv.symm, moduleEquiv
+  ⟨fun h ↦ h.equiv e, fun h ↦ h.equiv e.symm⟩
+/-
+**Module.IsStablyFree.ulift** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFree`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (M : Type v) [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M]   [Module.IsStablyFree R M], Module.IsStablyFree R (ULi
+ft.{w, v} M)
+参数：R : Type u；M : Type v；ULift.{w, v} M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.IsStablyFree.equiv`：∀ {R : Type u} [inst : Ring R] {M : Type v} [
+inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] {N : Type w}   [inst_3 : A
+ddCommGroup N] …
 -/
 instance IsStablyFree.ulift [IsStablyFree R M] : IsStablyFree R (ULift.{w} M) :=
   IsStablyFree.equiv ULift.moduleEquiv.symm
-
-/--
-theorem `IsStablyFree.of_ulift` / 定理 `IsStablyFree.of_ulift`
-
-English:
-theorem IsStablyFree.of_ulift
-  given: [IsStablyFree R (ULift.{w} M)]
-  statement: IsStablyFree R M
-  proof: IsStablyFree.equiv ULift.moduleEquiv
-
-中文:
-定理 是StablyFree.of_ulift
-  条件: [是StablyFree R (类型层提升.{w} M)]
-  结论: 是StablyFree R M
-  证明: IsStablyFree.equiv ULift.moduleEquiv
-
-Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, ULift.moduleEquiv, moduleEquiv
+/-
+**Module.IsStablyFree.of_ulift** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFree`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (M : Type v) [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M]   [Module.IsStablyFree R (ULift.{w, v} M)], Module.IsSt
+ablyFree R M
+参数：R : Type u；M : Type v；ULift.{w, v} M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.IsStablyFree.equiv`：∀ {R : Type u} [inst : Ring R] {M : Type v} [
+inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] {N : Type w}   [inst_3 : A
+ddCommGroup N] …
 -/
 theorem IsStablyFree.of_ulift [IsStablyFree R (ULift.{w} M)] : IsStablyFree R M :=
   IsStablyFree.equiv ULift.moduleEquiv
-
-/--
-Instance `IsStablyFree.shrink` / 实例 `IsStablyFree.shrink`
-
-English:
-instance IsStablyFree.shrink
-  signature: [Small.{w, v} M] [IsStablyFree R M]
-  body: IsStablyFree.equiv (Shrink.linearEquiv R M).symm
-
-中文:
-实例 是StablyFree.shrink
-  签名: [Small.{w, v} M] [是StablyFree R M]
-  定义体: IsStablyFree.equiv (Shrink.linearEquiv R M).symm
-
-Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, Shrink, Shrink.linearEquiv, linearEquiv
+/-
+**Module.IsStablyFree.shrink** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFree`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (M : Type v) [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M]   [inst_3 : Small.{w, v} M] [Module.IsStablyFree R M], 
+Module.IsStablyFree R (Shrink.{w, v} M)
+参数：R : Type u；M : Type v；Shrink.{w, v} M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.IsStablyFree.equiv`：∀ {R : Type u} [inst : Ring R] {M : Type v} [
+inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] {N : Type w}   [inst_3 : A
+ddCommGroup N] …
 -/
 instance IsStablyFree.shrink [Small.{w, v} M] [IsStablyFree R M] : IsStablyFree R (Shrink.{w} M) :=
   IsStablyFree.equiv (Shrink.linearEquiv R M).symm
-
-/--
-theorem `IsStablyFree.of_shrink` / 定理 `IsStablyFree.of_shrink`
-
-English:
-theorem IsStablyFree.of_shrink
-  given: [Small.{w, v} M] [IsStablyFree R (Shrink.{w} M)]
-  proof: IsStablyFree.equiv (Shrink.linearEquiv R M)
-
-中文:
-定理 是StablyFree.of_shrink
-  条件: [Small.{w, v} M] [是StablyFree R (Shrink.{w} M)]
-  证明: IsStablyFree.equiv (Shrink.linearEquiv R M)
-
-Depends on / 依赖: IsStablyFree, IsStablyFree.equiv, Shrink, Shrink.linearEquiv, linearEquiv
+/-
+**Module.IsStablyFree.of_shrink** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFree`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (M : Type v) [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M]   [inst_3 : Small.{w, v} M] [Module.IsStablyFree R (Shr
+ink.{w, v} M)], Module.IsStablyFree R M
+参数：R : Type u；M : Type v；Shrink.{w, v} M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.IsStablyFree.equiv`：∀ {R : Type u} [inst : Ring R] {M : Type v} [
+inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] {N : Type w}   [inst_3 : A
+ddCommGroup N] …
 -/
 theorem IsStablyFree.of_shrink [Small.{w, v} M] [IsStablyFree R (Shrink.{w} M)] :
     IsStablyFree R M :=
   IsStablyFree.equiv (Shrink.linearEquiv R M)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Free
-  signature: R M] : IsStablyFree R M
-  body: ⟨PUnit, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance⟩
-
-中文:
-实例 [自由
-  签名: R M] : 是StablyFree R M
-  定义体: ⟨PUnit, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance⟩
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Free R M] : IsStablyFree R M :=
   ⟨PUnit, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance⟩
-
-/--
-theorem `IsStablyFree.of_free_prod` / 定理 `IsStablyFree.of_free_prod`
-
-English:
-theorem IsStablyFree.of_free_prod
-  given: [Module.Finite R N] [Free R N] [Free R (M × N)]
-  proof: have : Small.{u} N := Module.Finite.small.{u} R N
-  let +nondep eN : N ≃ₗ[R] Shrink.{u} N := (Shrink.linearEquiv R N).symm
-  ⟨Shrink.{u} N, inferInstance, inferInstance, Module.Finite.equiv eN,
-    Free.of_equiv eN, Free.of_equiv ((LinearEquiv.refl R M).prodCongr eN)⟩
-
-中文:
-定理 是StablyFree.of_free_prod
-  条件: [模.有限 R N] [自由 R N] [自由 R (M × N)]
-  证明: have : Small.{u} N := Module.Finite.small.{u} R N
-  let +nondep eN : N ≃ₗ[R] Shrink.{u} N := (Shrink.linearEquiv R N).symm
-  ⟨Shrink.{u} N, inferInstance, inferInstance, Module.Finite.equiv eN,
-    Free.of_equiv eN, Free.of_equiv ((LinearEquiv.refl R M).prodCongr eN)⟩
-
-Depends on / 依赖: Finite, Free.of_equiv, LinearEquiv, LinearEquiv.refl, Module, Module.Finite.equiv, Module.Finite.small, Shrink, Shrink.linearEquiv, linearEquiv, nondep, of_equiv, prodCongr
+/-
+**Module.IsStablyFree.of_free_prod** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFre
+e`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (M : Type v) [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M] (N : Type w)   [inst_3 : AddCommGroup N] [inst_4 : _roo
+t_.Module R N] [Module.Finite R N] [Module.Free R N] [Module.Free R (M × N)],   
+Module.IsStablyFree R M
+参数：R : Type u；M : Type v；N : Type w；M × N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.small`：∀ (R : Type u_1) (M : Type u_2) [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Small.{u, u_1} R] [M
+odule.Fin…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
+· 使用引理 `Module.Free.of_equiv`：of_equiv {R R' M M' : Type*} [Semiring R] [AddComm
+Monoid M] [Module R M] [Semiring R'] [AddCommMonoid M'] [Module R' M'] {σ : R ->
++* R'} {σ'…
 -/
 theorem IsStablyFree.of_free_prod [Module.Finite R N] [Free R N] [Free R (M × N)] :
     IsStablyFree R M :=
@@ -237,31 +189,33 @@ theorem IsStablyFree.of_free_prod [Module.Finite R N] [Free R N] [Free R (M × N
   let +nondep eN : N ≃ₗ[R] Shrink.{u} N := (Shrink.linearEquiv R N).symm
   ⟨Shrink.{u} N, inferInstance, inferInstance, Module.Finite.equiv eN,
     Free.of_equiv eN, Free.of_equiv ((LinearEquiv.refl R M).prodCongr eN)⟩
-
-/--
-theorem `IsStablyFree.of_free_prod'` / 定理 `IsStablyFree.of_free_prod'`
-
-English:
-theorem IsStablyFree.of_free_prod'
-  given: [Module.Finite R N] [Free R N] [Free R (N × M)]
-  proof: have : Free R (M × N) := Free.of_equiv (LinearEquiv.prodComm R N M)
-  .of_free_prod R M N
-
-中文:
-定理 是StablyFree.of_free_prod'
-  条件: [模.有限 R N] [自由 R N] [自由 R (N × M)]
-  证明: have : Free R (M × N) := Free.of_equiv (LinearEquiv.prodComm R N M)
-  .of_free_prod R M N
-
-Depends on / 依赖: Free.of_equiv, LinearEquiv, LinearEquiv.prodComm, of_equiv, of_free_prod, prodComm
+/-
+**Module.IsStablyFree.of_free_prod'** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsStablyFr
+ee`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (M : Type v) [inst_1 : AddCommGroup M] [ins
+t_2 : _root_.Module R M] (N : Type w)   [inst_3 : AddCommGroup N] [inst_4 : _roo
+t_.Module R N] [Module.Finite R N] [Module.Free R N] [Module.Free R (N × M)],   
+Module.IsStablyFree R M
+参数：R : Type u；M : Type v；N : Type w；N × M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Free.of_equiv`：of_equiv {R R' M M' : Type*} [Semiring R] [AddComm
+Monoid M] [Module R M] [Semiring R'] [AddCommMonoid M'] [Module R' M'] {σ : R ->
++* R'} {σ'…
+· 使用定理 `Module.IsStablyFree.of_free_prod`：∀ (R : Type u) [inst : Ring R] (M : Ty
+pe v) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] (N : Type w)   [ins
+t_3 : AddCommGroup N] …
 -/
 theorem IsStablyFree.of_free_prod' [Module.Finite R N] [Free R N] [Free R (N × M)] :
     IsStablyFree R M :=
   have : Free R (M × N) := Free.of_equiv (LinearEquiv.prodComm R N M)
   .of_free_prod R M N
-
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [IsStablyFree R M] : Projective R M := by
   obtain ⟨N, _, _, _, _, _⟩ := IsStablyFree.exist_free_prod R M
-  exact Projective.of_split (LinearMap.inl R M N) (LinearMap.fst R M N) (LinearMap.ext fun _ => rfl)
+  exact Projective.of_split (LinearMap.inl R M N) (LinearMap.fst R M N) (LinearMap.ext fun _ ↦ rfl)
 
 end Module
+

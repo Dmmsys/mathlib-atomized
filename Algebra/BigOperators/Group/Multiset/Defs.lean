@@ -33,437 +33,317 @@ namespace Multiset
 
 section CommMonoid
 
-variable [CommMonoid M] [CommMonoid N] {s t : Multiset M} {a : M} {m : Multiset ι} {f g : ι -> M}
+variable [CommMonoid M] [CommMonoid N] {s t : Multiset M} {a : M} {m : Multiset ι} {f g : ι → M}
 
 /-- Product of a multiset given a commutative monoid structure on `M`.
   `prod {a, b, c} = a * b * c` -/
 @[to_additive
       /-- Sum of a multiset given a commutative additive monoid structure on `M`.
       `sum {a, b, c} = a + b + c` -/]
-/--
-Definition of `prod` / `prod` 的定义
-
-English:
-definition prod
-  signature: : Multiset M -> M
-  body: foldr (· * ·) 1
-
-@[to_additive]
-
-中文:
-定义 乘积
-  签名: : Multiset M -> M
-  定义体: foldr (· * ·) 1
-
-@[to_additive]
+/-
+**Multiset.prod** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：prod : Multiset M -> M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def prod : Multiset M -> M :=
+def prod : Multiset M → M :=
   foldr (· * ·) 1
 
 @[to_additive]
-/--
-theorem `prod_eq_foldr` / 定理 `prod_eq_foldr`
-
-English:
-theorem prod_eq_foldr
-  given: (s : Multiset M)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 prod_eq_foldr
-  条件: (s : Multiset M)
-  证明: rfl
-
-@[to_additive]
+/-
+**Multiset.prod_eq_foldr** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_eq_foldr (s : Multiset M) : prod s = foldr (· * ·) 1 s
+参数：s : Multiset M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_eq_foldr (s : Multiset M) :
     prod s = foldr (· * ·) 1 s :=
   rfl
 
 @[to_additive]
-/--
-theorem `prod_eq_foldl` / 定理 `prod_eq_foldl`
-
-English:
-theorem prod_eq_foldl
-  given: (s : Multiset M)
-  proof: (foldr_swap _ _ _).trans (by simp [mul_comm])
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 prod_eq_foldl
-  条件: (s : Multiset M)
-  证明: (foldr_swap _ _ _).trans (by simp [mul_comm])
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: foldr_swap, mul_comm
+/-
+**Multiset.prod_eq_foldl** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_eq_foldl (s : Multiset M) : prod s = foldl (· * ·) 1 s
+参数：s : Multiset M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instRightCommutativeOfLeftCommutative`：∀ {α : Sort u} {β : Sort v} {f : 
+α → β → β} [h : LeftCommutative f], RightCommutative fun x y => f y x
+· 使用定理 `instRightCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → 
+α → α} [hc : Std.Commutative f] [ha : Std.Associative f], RightCommutative f
+· 使用定理 `IsMulCommutative.is_comm`：∀ {M : Type u_2} {inst : Mul M} [self : IsMulC
+ommutative M], Std.Commutative fun x1 x2 => x1 * x2
+· 使用定理 `Multiset.foldr_swap`：foldr_swap (f : α -> β -> β) [LeftCommutative f] (b
+ : β) (s : Multiset α) : foldr f b s = foldl (fun x y => f y x) b s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.foldl.congr_simp`：∀ {α : Type u_1} {β : Type v} (f f_1 : β → α 
+→ β) (e_f : f = f_1) [inst : RightCommutative f] (b b_1 : β),   b = b_1 → ∀ (s s
+_1 : Multiset α…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prod_eq_foldl (s : Multiset M) :
     prod s = foldl (· * ·) 1 s :=
   (foldr_swap _ _ _).trans (by simp [mul_comm])
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `prod_coe` / 定理 `prod_coe`
-
-English:
-theorem prod_coe
-  given: (l : List M)
-  statement: prod ↑l = l.prod
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_coe
-  条件: (l : 列表 M)
-  结论: 乘积 ↑l = l.乘积
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Multiset.prod_coe** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_coe (l : List M) : prod ↑l = l.prod
+参数：l : List M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_coe (l : List M) : prod ↑l = l.prod := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_toList` / 定理 `prod_toList`
-
-English:
-theorem prod_toList
-  given: (s : Multiset M)
-  statement: s.toList.prod = s.prod
-  proof: by
-  conv_rhs => rw [← coe_toList s]
-  rw [prod_coe]
-
-@[to_additive (attr := simp, grind =)]
-
-中文:
-定理 prod_toList
-  条件: (s : Multiset M)
-  结论: s.toList.乘积 = s.乘积
-  证明: by
-  conv_rhs => rw [← coe_toList s]
-  rw [prod_coe]
-
-@[to_additive (attr := simp, grind =)]
-
-Depends on / 依赖: coe_toList, conv_rhs, prod_coe
+/-
+**Multiset.prod_toList** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_toList (s : Multiset M) : s.toList.prod = s.prod
+参数：s : Multiset M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
+· 使用定理 `Multiset.prod_coe`：prod_coe (l : List M) : prod ↑l = l.prod
 -/
 theorem prod_toList (s : Multiset M) : s.toList.prod = s.prod := by
   conv_rhs => rw [← coe_toList s]
   rw [prod_coe]
 
 @[to_additive (attr := simp, grind =)]
-/--
-theorem `prod_map_toList` / 定理 `prod_map_toList`
-
-English:
-theorem prod_map_toList
-  given: (s : Multiset ι) (f : ι -> M)
-  statement: (s.toList.map f).prod = (s.map f).prod
-  proof: by
-  rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [coe_toList]
-
-@[to_additive (attr := simp, grind =)]
-
-中文:
-定理 prod_map_toList
-  条件: (s : Multiset ι) (f : ι -> M)
-  结论: (s.toList.map f).乘积 = (s.map f).乘积
-  证明: by
-  rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [coe_toList]
-
-@[to_additive (attr := simp, grind =)]
-
-Depends on / 依赖: Multiset, Multiset.map_coe, Multiset.prod_coe, coe_toList, map_coe, prod_coe
+/-
+**Multiset.prod_map_toList** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_map_toList (s : Multiset ι) (f : ι -> M) : (s.toList.map f).prod = (s
+.map f).prod
+参数：s : Multiset ι；f : ι -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.prod_coe`：prod_coe (l : List M) : prod ↑l = l.prod
+· 使用定理 `Multiset.map_coe`：∀ {α : Type u_1} {β : Type v} (f : α → β) (l : List α)
+, Multiset.map f ↑l = ↑(List.map f l)
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
 -/
-theorem prod_map_toList (s : Multiset ι) (f : ι -> M) : (s.toList.map f).prod = (s.map f).prod := by
-  rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [coe_toList]
+theorem prod_map_toList (s : Multiset ι) (f : ι → M) : (s.toList.map f).prod = (s.map f).prod := by
+  rw [← Multiset.prod_coe, ← Multiset.map_coe, coe_toList]
 
 @[to_additive (attr := simp, grind =)]
-/--
-theorem `prod_zero` / 定理 `prod_zero`
-
-English:
-theorem prod_zero
-  statement: @prod M _ 0 = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_zero
-  结论: @乘积 M _ 0 = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Multiset.prod_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_zero : @prod M _ 0 = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_zero : @prod M _ 0 = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_cons` / 定理 `prod_cons`
-
-English:
-theorem prod_cons
-  given: (a : M) (s)
-  statement: prod (a ::ₘ s) = a * prod s
-  proof: foldr_cons _ _ _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_cons
-  条件: (a : M) (s)
-  结论: 乘积 (a ::ₘ s) = a * 乘积 s
-  证明: foldr_cons _ _ _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: foldr_cons
+/-
+**Multiset.prod_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_cons (a : M) (s) : prod (a ::ₘ s) = a * prod s
+参数：a : M；s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.foldr_cons`：foldr_cons (b a s) : foldr f b (a ::ₘ s) = f a (fol
+dr f b s)
 -/
 theorem prod_cons (a : M) (s) : prod (a ::ₘ s) = a * prod s :=
   foldr_cons _ _ _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_singleton` / 定理 `prod_singleton`
-
-English:
-theorem prod_singleton
-  given: (a : M)
-  statement: prod {a} = a
-  proof: by
-  simp only [mul_one, prod_cons, ← cons_zero, prod_zero]
-
-@[to_additive]
-
-中文:
-定理 prod_singleton
-  条件: (a : M)
-  结论: 乘积 {a} = a
-  证明: by
-  simp only [mul_one, prod_cons, ← cons_zero, prod_zero]
-
-@[to_additive]
-
-Depends on / 依赖: cons_zero, mul_one, prod_cons, prod_zero
+/-
+**Multiset.prod_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_singleton (a : M) : prod {a} = a
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.prod_cons`：prod_cons (a : M) (s) : prod (a ::ₘ s) = a * prod s
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prod_singleton (a : M) : prod {a} = a := by
   simp only [mul_one, prod_cons, ← cons_zero, prod_zero]
 
 @[to_additive]
-/--
-theorem `prod_pair` / 定理 `prod_pair`
-
-English:
-theorem prod_pair
-  given: (a b : M)
-  statement: ({a, b} : Multiset M).prod = a * b
-  proof: by
-  rw [insert_eq_cons]; rw [prod_cons]; rw [prod_singleton]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_pair
-  条件: (a b : M)
-  结论: ({a, b} : Multiset M).乘积 = a * b
-  证明: by
-  rw [insert_eq_cons]; rw [prod_cons]; rw [prod_singleton]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: insert_eq_cons, prod_cons, prod_singleton
+/-
+**Multiset.prod_pair** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_pair (a b : M) : ({a, b} : Multiset M).prod = a * b
+参数：a b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.insert_eq_cons`：insert_eq_cons (a : α) (s : Multiset α) : inser
+t a s = a ::ₘ s
+· 使用定理 `Multiset.prod_cons`：prod_cons (a : M) (s) : prod (a ::ₘ s) = a * prod s
+· 使用定理 `Multiset.prod_singleton`：prod_singleton (a : M) : prod {a} = a
 -/
 theorem prod_pair (a b : M) : ({a, b} : Multiset M).prod = a * b := by
-  rw [insert_eq_cons]; rw [prod_cons]; rw [prod_singleton]
+  rw [insert_eq_cons, prod_cons, prod_singleton]
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_replicate` / 定理 `prod_replicate`
-
-English:
-theorem prod_replicate
-  given: (n : Nat) (a : M)
-  statement: (replicate n a).prod = a ^ n
-  proof: by
-  simp [replicate, List.prod_replicate]
-
-@[to_additive]
-
-中文:
-定理 prod_replicate
-  条件: (n : 自然数) (a : M)
-  结论: (replicate n a).乘积 = a ^ n
-  证明: by
-  simp [replicate, List.prod_replicate]
-
-@[to_additive]
-
-Depends on / 依赖: List.prod_replicate, prod_replicate, replicate
+/-
+**Multiset.prod_replicate** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_replicate (n : Nat) (a : M) : (replicate n a).prod = a ^ n
+参数：n : Nat；a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.prod_replicate`：prod_replicate (n : Nat) (a : M) : (replicate n a).
+prod = a ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_replicate (n : Nat) (a : M) : (replicate n a).prod = a ^ n := by
+theorem prod_replicate (n : ℕ) (a : M) : (replicate n a).prod = a ^ n := by
   simp [replicate, List.prod_replicate]
 
 @[to_additive]
-/--
-theorem `pow_count` / 定理 `pow_count`
-
-English:
-theorem pow_count
-  given: [DecidableEq M] (a : M)
-  statement: a ^ s.count a = (s.filter (Eq a)).prod
-  proof: by
-  rw [filter_eq]; rw [prod_replicate]
-
-@[to_additive]
-
-中文:
-定理 pow_count
-  条件: [DecidableEq M] (a : M)
-  结论: a ^ s.count a = (s.filter (相等 a)).乘积
-  证明: by
-  rw [filter_eq]; rw [prod_replicate]
-
-@[to_additive]
-
-Depends on / 依赖: filter_eq, prod_replicate
+/-
+**Multiset.pow_count** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：pow_count [DecidableEq M] (a : M) : a ^ s.count a = (s.filter (Eq a)).prod
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.filter_eq`：filter_eq (s : Multiset α) (b : α) : s.filter (Eq b)
+ = replicate (count b s) b
+· 使用定理 `Multiset.prod_replicate`：prod_replicate (n : Nat) (a : M) : (replicate n
+ a).prod = a ^ n
 -/
 theorem pow_count [DecidableEq M] (a : M) : a ^ s.count a = (s.filter (Eq a)).prod := by
-  rw [filter_eq]; rw [prod_replicate]
+  rw [filter_eq, prod_replicate]
 
 @[to_additive]
-/--
-theorem `prod_hom_rel` / 定理 `prod_hom_rel`
-
-English:
-theorem prod_hom_rel
-  statement: (s : Multiset ι) {r : M -> N -> Prop} {f : ι -> M} {g : ι -> N}
-  proof: Quotient.inductionOn s fun l => by
-    simp only [l.prod_hom_rel h₁ h₂, quot_mk_to_coe, map_coe, prod_coe]
-
-@[to_additive]
-
-中文:
-定理 prod_hom_rel
-  结论: (s : Multiset ι) {r : M -> N -> 命题} {f : ι -> M} {g : ι -> N}
-  证明: Quotient.inductionOn s fun l => by
-    simp only [l.prod_hom_rel h₁ h₂, quot_mk_to_coe, map_coe, prod_coe]
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, l.prod_hom_rel, map_coe, prod_coe, prod_hom_rel, quot_mk_to_coe
+/-
+**Multiset.prod_hom_rel** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_hom_rel (s : Multiset ι) {r : M -> N -> Prop} {f : ι -> M} {g : ι -> 
+N} (h₁ : r 1 1) (h₂ : forall ⦃a b c⦄, r b c -> r (f a * b) (g a * c)) : r (s.map
+ f).prod (s.map g).prod
+参数：s : Multiset ι；h₁ : r 1 1；h₂ : forall ⦃a b c⦄, r b c -> r (f a * b) (g a * c)
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `List.prod_hom_rel`：prod_hom_rel (l : List ι) {r : M -> N -> Prop} {f : ι
+ -> M} {g : ι -> N} (h₁ : r 1 1) (h₂ : forall ⦃i a b⦄, r a b -> r (f i * a) (g i
+ * b)) …
 -/
-theorem prod_hom_rel (s : Multiset ι) {r : M -> N -> Prop} {f : ι -> M} {g : ι -> N}
-    (h₁ : r 1 1) (h₂ : forall ⦃a b c⦄, r b c -> r (f a * b) (g a * c)) :
+theorem prod_hom_rel (s : Multiset ι) {r : M → N → Prop} {f : ι → M} {g : ι → N}
+    (h₁ : r 1 1) (h₂ : ∀ ⦃a b c⦄, r b c → r (f a * b) (g a * c)) :
     r (s.map f).prod (s.map g).prod :=
   Quotient.inductionOn s fun l => by
     simp only [l.prod_hom_rel h₁ h₂, quot_mk_to_coe, map_coe, prod_coe]
 
 @[to_additive]
-/--
-theorem `prod_map_one` / 定理 `prod_map_one`
-
-English:
-theorem prod_map_one
-  statement: prod (m.map fun _ => (1 : M)) = 1
-  proof: by
-  rw [map_const']; rw [prod_replicate]; rw [one_pow]
-
-@[to_additive]
-
-中文:
-定理 prod_map_one
-  结论: 乘积 (m.map fun _ => (1 : M)) = 1
-  证明: by
-  rw [map_const']; rw [prod_replicate]; rw [one_pow]
-
-@[to_additive]
-
-Depends on / 依赖: map_const, one_pow, prod_replicate
+/-
+**Multiset.prod_map_one** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_map_one : prod (m.map fun _ => (1 : M)) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_const'`：∀ {α : Type u_1} {β : Type v} (s : Multiset α) (b :
+ β), Multiset.map (fun x => b) s = Multiset.replicate s.card b
+· 使用定理 `Multiset.prod_replicate`：prod_replicate (n : Nat) (a : M) : (replicate n
+ a).prod = a ^ n
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
 -/
 theorem prod_map_one : prod (m.map fun _ => (1 : M)) = 1 := by
-  rw [map_const']; rw [prod_replicate]; rw [one_pow]
+  rw [map_const', prod_replicate, one_pow]
 
 @[to_additive]
-/--
-theorem `prod_induction` / 定理 `prod_induction`
-
-English:
-theorem prod_induction
-  statement: (p : M -> Prop) (s : Multiset M) (p_mul : forall a b, p a -> p b -> p (a * b))
-  proof: by
-  rw [prod_eq_foldr]
-  exact foldr_induction (· * ·) 1 p s p_mul p_one p_s
-
-@[to_additive]
-
-中文:
-定理 prod_induction
-  结论: (p : M -> 命题) (s : Multiset M) (p_mul : 对任意 a b, p a -> p b -> p (a * b))
-  证明: by
-  rw [prod_eq_foldr]
-  exact foldr_induction (· * ·) 1 p s p_mul p_one p_s
-
-@[to_additive]
-
-Depends on / 依赖: foldr_induction, p_mul, p_one, prod_eq_foldr
+/-
+**Multiset.prod_induction** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_induction (p : M -> Prop) (s : Multiset M) (p_mul : forall a b, p a -
+> p b -> p (a * b)) (p_one : p 1) (p_s : forall a in s, p a) : p s.prod
+参数：p : M -> Prop；s : Multiset M；p_mul : forall a b, p a -> p b -> p (a * b)；p_on
+e : p 1；p_s : forall a in s, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instLeftCommutativeOfCommutativeOfAssociative`：∀ {α : Sort u} {f : α → α
+ → α} [hc : Std.Commutative f] [ha : Std.Associative f], LeftCommutative f
+· 使用定理 `IsMulCommutative.is_comm`：∀ {M : Type u_2} {inst : Mul M} [self : IsMulC
+ommutative M], Std.Commutative fun x1 x2 => x1 * x2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.prod_eq_foldr`：prod_eq_foldr (s : Multiset M) : prod s = foldr 
+(· * ·) 1 s
+· 使用定理 `Multiset.foldr_induction`：foldr_induction (f : α -> α -> α) [LeftCommuta
+tive f] (x : α) (p : α -> Prop) (s : Multiset α) (p_f : forall a b, p a -> p b -
+> p (f a b)) (…
 -/
-theorem prod_induction (p : M -> Prop) (s : Multiset M) (p_mul : forall a b, p a -> p b -> p (a * b))
-    (p_one : p 1) (p_s : forall a in s, p a) : p s.prod := by
+theorem prod_induction (p : M → Prop) (s : Multiset M) (p_mul : ∀ a b, p a → p b → p (a * b))
+    (p_one : p 1) (p_s : ∀ a ∈ s, p a) : p s.prod := by
   rw [prod_eq_foldr]
   exact foldr_induction (· * ·) 1 p s p_mul p_one p_s
 
 @[to_additive]
-/--
-theorem `prod_induction_nonempty` / 定理 `prod_induction_nonempty`
-
-English:
-theorem prod_induction_nonempty
-  statement: (p : M -> Prop) (p_mul : forall a b, p a -> p b -> p (a * b)) (hs : s != ∅)
-  proof: by
-  induction s using Multiset.induction_on with
-  | empty => simp at hs
-  | cons a s hsa =>
-    rw [prod_cons]
-    by_cases hs_empty : s = ∅
-    · simp [hs_empty, p_s a]
-    have hps : forall x, x in s -> p x := fun x hxs => p_s x (mem_cons_of_mem hxs)
-    exact p_mul a s.prod (p_s a (mem_cons_self a s)) (hsa hs_empty hps)
-
-中文:
-定理 prod_induction_nonempty
-  结论: (p : M -> 命题) (p_mul : 对任意 a b, p a -> p b -> p (a * b)) (hs : s != ∅)
-  证明: by
-  induction s using Multiset.induction_on with
-  | empty => simp at hs
-  | cons a s hsa =>
-    rw [prod_cons]
-    by_cases hs_empty : s = ∅
-    · simp [hs_empty, p_s a]
-    have hps : forall x, x in s -> p x := fun x hxs => p_s x (mem_cons_of_mem hxs)
-    exact p_mul a s.prod (p_s a (mem_cons_self a s)) (hsa hs_empty hps)
-
-Depends on / 依赖: Multiset, Multiset.induction_on, hs_empty, induction_on, mem_cons_of_mem, mem_cons_self, p_mul, prod_cons, s.prod
+/-
+**Multiset.prod_induction_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：prod_induction_nonempty (p : M -> Prop) (p_mul : forall a b, p a -> p b ->
+ p (a * b)) (hs : s != ∅) (p_s : forall a in s, p a) : p s.prod
+参数：p : M -> Prop；p_mul : forall a b, p a -> p b -> p (a * b)；hs : s != ∅；p_s : f
+orall a in s, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Multiset.prod_cons`：prod_cons (a : M) (s) : prod (a ::ₘ s) = a * prod s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Multiset α} (h 
+: a in s) : a in b ::ₘ s
+· 使用定理 `Multiset.mem_cons_self`：mem_cons_self (a : α) (s : Multiset α) : a in a 
+::ₘ s
 -/
-theorem prod_induction_nonempty (p : M -> Prop) (p_mul : forall a b, p a -> p b -> p (a * b)) (hs : s != ∅)
-    (p_s : forall a in s, p a) : p s.prod := by
+theorem prod_induction_nonempty (p : M → Prop) (p_mul : ∀ a b, p a → p b → p (a * b)) (hs : s ≠ ∅)
+    (p_s : ∀ a ∈ s, p a) : p s.prod := by
   induction s using Multiset.induction_on with
   | empty => simp at hs
   | cons a s hsa =>
     rw [prod_cons]
     by_cases hs_empty : s = ∅
     · simp [hs_empty, p_s a]
-    have hps : forall x, x in s -> p x := fun x hxs => p_s x (mem_cons_of_mem hxs)
+    have hps : ∀ x, x ∈ s → p x := fun x hxs => p_s x (mem_cons_of_mem hxs)
     exact p_mul a s.prod (p_s a (mem_cons_self a s)) (hsa hs_empty hps)
 
 end CommMonoid
 
 end Multiset
+

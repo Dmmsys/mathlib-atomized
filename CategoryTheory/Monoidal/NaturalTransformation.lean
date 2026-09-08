@@ -41,85 +41,137 @@ namespace NatTrans
 
 open Functor.LaxMonoidal
 
-/--
-Definition of `IsMonoidal` / `IsMonoidal` 的定义
+/-- A natural transformation between (lax) monoidal functors is monoidal if it satisfies
+`ε F ≫ τ.app (𝟙_ C) = ε G` and `μ F X Y ≫ app (X ⊗ Y) = (app X ⊗ₘ app Y) ≫ μ G X Y`. -/
+/-
+**CategoryTheory.NatTrans.IsMonoidal** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory.Na
+tTrans`。
+形式化陈述：IsMonoidal : Prop where unit : ε F₁ ≫ τ.app (𝟙_ C) = ε F₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsMonoidal
-  parameters: : Prop where
-  axioms and operations (2):
-    - unit : ε F₁ ≫ τ.app (𝟙_ C) = ε F₂  [default: by cat_disch]
-    - tensor((X Y : C)) : μ F₁ _ _ ≫ τ.app (X otimes Y) = (τ.app X otimesₘ τ.app Y) ≫ μ F₂ _ _  [default: by cat_disch]
-
-中文:
-类 是幺半群
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - unit : ε F₁ ≫ τ.app (𝟙_ C) = ε F₂  [默认: by cat_disch]
-    - tensor((X Y : C)) : μ F₁ _ _ ≫ τ.app (X otimes Y) = (τ.app X otimesₘ τ.app Y) ≫ μ F₂ _ _  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, otimes, tensor
+--- 原说明 ---
+A natural transformation between (lax) monoidal functors is monoidal if it satis
+fies
+`ε F ≫ τ.app (𝟙_ C) = ε G` and `μ F X Y ≫ app (X ⊗ Y) = (app X ⊗ₘ app Y) ≫ μ G X
+ Y`.
 -/
 class IsMonoidal : Prop where
   unit : ε F₁ ≫ τ.app (𝟙_ C) = ε F₂ := by cat_disch
-  tensor (X Y : C) : μ F₁ _ _ ≫ τ.app (X otimes Y) = (τ.app X otimesₘ τ.app Y) ≫ μ F₂ _ _ := by cat_disch
+  tensor (X Y : C) : μ F₁ _ _ ≫ τ.app (X ⊗ Y) = (τ.app X ⊗ₘ τ.app Y) ≫ μ F₂ _ _ := by cat_disch
 
 namespace IsMonoidal
 
 attribute [reassoc (attr := simp)] unit tensor
 
-/--
-Instance `id` / 实例 `id`
-
-English:
-instance id
-  signature: : IsMonoidal (𝟙 F₁) where
-
-中文:
-实例 id
-  签名: : 是幺半群 (𝟙 F₁) where
+/-
+**CategoryTheory.NatTrans.IsMonoidal.id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.NatTrans.IsMonoidal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C] {D : Type u₂}   [inst_2 : CategoryTheory.Category
+.{v₂, u₂} D] [inst_3 : CategoryTheory.MonoidalCategory D]   {F₁ : CategoryTheory
+.Functor C D} [inst_4 : F₁.LaxMonoidal],   CategoryTheory.NatTrans.IsMonoidal (C
+ategoryTheory.CategoryStruct.id F₁)
+参数：CategoryTheory.CategoryStruct.id F₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_id`：tensorHom_id {X₁ X₂ : C} (
+f : X₁ ⟶ X₂) (Y : C) : f otimesₘ 𝟙 Y = f ▷ Y
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 instance id : IsMonoidal (𝟙 F₁) where
-
-/--
-Instance `comp` / 实例 `comp`
-
-English:
-instance comp
-  signature: (τ' : F₂ ⟶ F₃) [IsMonoidal τ] [IsMonoidal τ']
-
-中文:
-实例 comp
-  签名: (τ' : F₂ ⟶ F₃) [是幺半群 τ] [是幺半群 τ']
+/-
+**CategoryTheory.NatTrans.IsMonoidal.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.NatTrans.IsMonoidal`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C] {D : Type u₂}   [inst_2 : CategoryTheory.Category
+.{v₂, u₂} D] [inst_3 : CategoryTheory.MonoidalCategory D]   {F₁ F₂ F₃ : Category
+Theory.Functor C D} (τ : F₁ ⟶ F₂) [inst_4 : F₁.LaxMonoidal] [inst_5 : F₂.LaxMono
+idal]   [inst_6 : F₃.LaxMonoidal] (τ' : F₂ ⟶ F₃) [CategoryTheory.NatTrans.IsMono
+idal τ]   [CategoryTheory.NatTrans.IsMonoidal τ'], CategoryTheory.NatTrans.IsMon
+oidal (CategoryTheory.CategoryStruct.comp τ τ')
+参数：τ : F₁ ⟶ F₂；τ' : F₂ ⟶ F₃；CategoryTheory.CategoryStruct.comp τ τ'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.unit_assoc`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} 
+{D : Type u₂}   {inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.unit`：∀ {C : Type u₁} {inst : Categor
+yTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D : T
+ype u₂}   {inst_2 : CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.tensor_assoc`：∀ {C : Type u₁} {inst :
+ CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C
+} {D : Type u₂}   {inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.tensor`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D :
+ Type u₂}   {inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_comp_tensorHom_assoc`：∀ {C : T
+ype u} {𝒞 : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCat
+egory C] {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : C}   (f₁ : X₁ ⟶ Y₁) (f…
 -/
 instance comp (τ' : F₂ ⟶ F₃) [IsMonoidal τ] [IsMonoidal τ'] :
     IsMonoidal (τ ≫ τ') where
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `hcomp` / 实例 `hcomp`
-
-English:
-instance hcomp
-  signature: {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal] (τ' : G₁ ⟶ G₂)
-  body: by
-    simp only [comp_obj, comp_ε, hcomp_app, assoc, naturality_assoc, unit_assoc, ← map_comp, unit]
-  tensor X Y := by
-    simp only [comp_obj, comp_μ, hcomp_app, assoc, naturality_assoc,
-      tensor_assoc, ← tensorHom_comp_tensorHom, μ_natural_assoc]
-    simp only [← map_comp, tensor]
-
-中文:
-实例 hcomp
-  签名: {G₁ G₂ : D ⥤ E} [G₁.松弛幺半群] [G₂.松弛幺半群] (τ' : G₁ ⟶ G₂)
-  定义体: by
-    simp only [comp_obj, comp_ε, hcomp_app, assoc, naturality_assoc, unit_assoc, ← map_comp, unit]
-  tensor X Y := by
-    simp only [comp_obj, comp_μ, hcomp_app, assoc, naturality_assoc,
-      tensor_assoc, ← tensorHom_comp_tensorHom, μ_natural_assoc]
-    simp only [← map_comp, tensor]
-
-Depends on / 依赖: comp_obj, hcomp_app, map_comp, naturality_assoc, tensor, tensorHom_comp_tensorHom, tensor_assoc, unit_assoc
+/-
+**CategoryTheory.NatTrans.IsMonoidal.hcomp** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.NatTrans.IsMonoidal`。
+形式化陈述：hcomp {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal] (τ' : G₁ ⟶ G₂) [Is
+Monoidal τ] [IsMonoidal τ'] : IsMonoidal (τ ◫ τ') where unit
+参数：τ' : G₁ ⟶ G₂。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.unit`：∀ {C : Type u₁} {inst : Categor
+yTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D : T
+ype u₂}   {inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.unit_assoc`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} 
+{D : Type u₂}   {inst_2 : CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.tensor_assoc`：∀ {C : Type u₁} {inst :
+ CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C
+} {D : Type u₂}   {inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.Functor.LaxMonoidal.μ_natural_assoc`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategor
+y C] {D : Type u₂}   [inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.tensor`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {D :
+ Type u₂}   {inst_2 : CategoryT…
 -/
 instance hcomp {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal] (τ' : G₁ ⟶ G₂)
     [IsMonoidal τ] [IsMonoidal τ'] : IsMonoidal (τ ◫ τ') where
@@ -129,49 +181,42 @@ instance hcomp {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal] (τ' 
     simp only [comp_obj, comp_μ, hcomp_app, assoc, naturality_assoc,
       tensor_assoc, ← tensorHom_comp_tensorHom, μ_natural_assoc]
     simp only [← map_comp, tensor]
-
-/--
-Instance `whiskerRight` / 实例 `whiskerRight`
-
-English:
-instance whiskerRight
-  signature: {G₁ : D ⥤ E} [G₁.LaxMonoidal] [IsMonoidal τ]
-  body: by
-  rw [← Functor.hcomp_id]
-  infer_instance
-
-中文:
-实例 whiskerRight
-  签名: {G₁ : D ⥤ E} [G₁.松弛幺半群] [是幺半群 τ]
-  定义体: by
-  rw [← Functor.hcomp_id]
-  infer_instance
-
-Depends on / 依赖: Functor, Functor.hcomp_id, hcomp_id, infer_instance
+/-
+**CategoryTheory.NatTrans.IsMonoidal.whiskerRight** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.NatTrans.IsMonoidal`。
+形式化陈述：whiskerRight {G₁ : D ⥤ E} [G₁.LaxMonoidal] [IsMonoidal τ] : IsMonoidal (Fu
+nctor.whiskerRight τ G₁)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.hcomp_id`：hcomp_id {G H : C ⥤ D} (α : G ⟶ H) (F :
+ D ⥤ E) : α ◫ 𝟙 F = whiskerRight α F
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.id`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {D : Typ
+e u₂}   [inst_2 : CategoryT…
 -/
 instance whiskerRight {G₁ : D ⥤ E} [G₁.LaxMonoidal] [IsMonoidal τ] :
     IsMonoidal (Functor.whiskerRight τ G₁) := by
   rw [← Functor.hcomp_id]
   infer_instance
-
-/--
-Instance `whiskerLeft` / 实例 `whiskerLeft`
-
-English:
-instance whiskerLeft
-  signature: {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal]
-  body: by
-  rw [← Functor.id_hcomp]
-  infer_instance
-
-中文:
-实例 whiskerLeft
-  签名: {G₁ G₂ : D ⥤ E} [G₁.松弛幺半群] [G₂.松弛幺半群]
-  定义体: by
-  rw [← Functor.id_hcomp]
-  infer_instance
-
-Depends on / 依赖: Functor, Functor.id_hcomp, id_hcomp, infer_instance
+/-
+**CategoryTheory.NatTrans.IsMonoidal.whiskerLeft** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.NatTrans.IsMonoidal`。
+形式化陈述：whiskerLeft {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal] (τ' : G₁ ⟶ G
+₂) [IsMonoidal τ'] : IsMonoidal (Functor.whiskerLeft F₁ τ')
+参数：τ' : G₁ ⟶ G₂。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.id_hcomp`：id_hcomp (F : C ⥤ D) {G H : D ⥤ E} (α :
+ G ⟶ H) : 𝟙 F ◫ α = whiskerLeft F α
+· 使用定理 `CategoryTheory.NatTrans.IsMonoidal.id`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {D : Typ
+e u₂}   [inst_2 : CategoryT…
 -/
 instance whiskerLeft {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal]
     (τ' : G₁ ⟶ G₂) [IsMonoidal τ'] :
@@ -180,12 +225,27 @@ instance whiskerLeft {G₁ G₂ : D ⥤ E} [G₁.LaxMonoidal] [G₂.LaxMonoidal]
   infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.NatTrans.IsMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+NatTrans.IsMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) [F.LaxMonoidal] : NatTrans.IsMonoidal F.leftUnitor.hom where
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.NatTrans.IsMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+NatTrans.IsMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) [F.LaxMonoidal] : NatTrans.IsMonoidal F.rightUnitor.hom where
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.NatTrans.IsMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+NatTrans.IsMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) (G : D ⥤ E) (H : E ⥤ E') [F.LaxMonoidal] [G.LaxMonoidal] [H.LaxMonoidal] :
     NatTrans.IsMonoidal (Functor.associator F G H).hom where
   unit := by
@@ -198,6 +258,10 @@ instance (F : C ⥤ D) (G : D ⥤ E) (H : E ⥤ E') [F.LaxMonoidal] [G.LaxMonoid
 end IsMonoidal
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.NatTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.NatTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F G : C ⥤ D} {H K : C ⥤ E} (α : F ⟶ G) (β : H ⟶ K)
     [F.LaxMonoidal] [G.LaxMonoidal] [IsMonoidal α]
     [H.LaxMonoidal] [K.LaxMonoidal] [IsMonoidal β] :
@@ -219,29 +283,16 @@ namespace Iso
 
 variable (e : F₁ ≅ F₂) [NatTrans.IsMonoidal e.hom]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatTrans.IsMonoidal e.inv
-  body: by rw [← NatTrans.IsMonoidal.unit (τ := e.hom), assoc, hom_inv_id_app, comp_id]
-  tensor X Y := by
-    rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [inv_hom_id_app]; rw [inv_hom_id_app]; rw [tensorHom_id]; rw [id_whiskerRight]; rw [id_comp]
-
-中文:
-实例 :
-  签名: 自然变换.是幺半群 e.inv
-  定义体: by rw [← NatTrans.IsMonoidal.unit (τ := e.hom), assoc, hom_inv_id_app, comp_id]
-  tensor X Y := by
-    rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [inv_hom_id_app]; rw [inv_hom_id_app]; rw [tensorHom_id]; rw [id_whiskerRight]; rw [id_comp]
-
-Depends on / 依赖: IsMonoidal, MonoidalCategory, MonoidalCategory.tensorHom_comp_tensorHom_assoc, NatTrans, NatTrans.IsMonoidal.tensor, NatTrans.IsMonoidal.unit, cancel_mono, comp_id, e.hom, e.hom.app, hom_inv_id_app, id_comp, id_whiskerRight, inv_hom_id_app, otimes, tensor, tensorHom_comp_tensorHom_assoc, tensorHom_id
+/-
+**CategoryTheory.Iso.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Iso`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatTrans.IsMonoidal e.inv where
   unit := by rw [← NatTrans.IsMonoidal.unit (τ := e.hom), assoc, hom_inv_id_app, comp_id]
   tensor X Y := by
-    rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [inv_hom_id_app]; rw [inv_hom_id_app]; rw [tensorHom_id]; rw [id_whiskerRight]; rw [id_comp]
+    rw [← cancel_mono (e.hom.app (X ⊗ Y)), assoc, assoc, inv_hom_id_app, comp_id,
+      NatTrans.IsMonoidal.tensor, MonoidalCategory.tensorHom_comp_tensorHom_assoc,
+      inv_hom_id_app, inv_hom_id_app, tensorHom_id, id_whiskerRight, id_comp]
 
 end Iso
 
@@ -256,77 +307,32 @@ namespace IsMonoidal
 variable [F.Monoidal] [G.LaxMonoidal] [adj.IsMonoidal]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatTrans.IsMonoidal adj.unit
-  body: by
-    dsimp
-    rw [id_comp]; rw [← unit_app_unit_comp_map_η adj]; rw [assoc]; rw [Monoidal.map_η_ε]
-    dsimp
-    rw [comp_id]
-  tensor X Y := by
-    dsimp
-    rw [← unit_app_tensor_comp_map_δ_assoc]; rw [id_comp]; rw [Monoidal.map_δ_μ]; rw [comp_id]
-
-中文:
-实例 :
-  签名: 自然变换.是幺半群 adj.unit
-  定义体: by
-    dsimp
-    rw [id_comp]; rw [← unit_app_unit_comp_map_η adj]; rw [assoc]; rw [Monoidal.map_η_ε]
-    dsimp
-    rw [comp_id]
-  tensor X Y := by
-    dsimp
-    rw [← unit_app_tensor_comp_map_δ_assoc]; rw [id_comp]; rw [Monoidal.map_δ_μ]; rw [comp_id]
-
-Depends on / 依赖: Monoidal, Monoidal.map_, comp_id, id_comp, tensor
+/-
+**CategoryTheory.Adjunction.IsMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Adjunction.IsMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatTrans.IsMonoidal adj.unit where
   unit := by
     dsimp
-    rw [id_comp]; rw [← unit_app_unit_comp_map_η adj]; rw [assoc]; rw [Monoidal.map_η_ε]
+    rw [id_comp, ← unit_app_unit_comp_map_η adj, assoc, Monoidal.map_η_ε]
     dsimp
     rw [comp_id]
   tensor X Y := by
     dsimp
-    rw [← unit_app_tensor_comp_map_δ_assoc]; rw [id_comp]; rw [Monoidal.map_δ_μ]; rw [comp_id]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatTrans.IsMonoidal adj.counit
-  body: by
-    dsimp
-    rw [assoc]; rw [map_ε_comp_counit_app_unit adj]; rw [ε_η]
-  tensor X Y := by
-    dsimp
-    rw [assoc]; rw [map_μ_comp_counit_app_tensor]; rw [μ_δ_assoc]; rw [comp_id]
-
-中文:
-实例 :
-  签名: 自然变换.是幺半群 adj.counit
-  定义体: by
-    dsimp
-    rw [assoc]; rw [map_ε_comp_counit_app_unit adj]; rw [ε_η]
-  tensor X Y := by
-    dsimp
-    rw [assoc]; rw [map_μ_comp_counit_app_tensor]; rw [μ_δ_assoc]; rw [comp_id]
-
-Depends on / 依赖: comp_id, tensor
+    rw [← unit_app_tensor_comp_map_δ_assoc, id_comp, Monoidal.map_δ_μ, comp_id]
+/-
+**CategoryTheory.Adjunction.IsMonoidal.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Adjunction.IsMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatTrans.IsMonoidal adj.counit where
   unit := by
     dsimp
-    rw [assoc]; rw [map_ε_comp_counit_app_unit adj]; rw [ε_η]
+    rw [assoc, map_ε_comp_counit_app_unit adj, ε_η]
   tensor X Y := by
     dsimp
-    rw [assoc]; rw [map_μ_comp_counit_app_tensor]; rw [μ_δ_assoc]; rw [comp_id]
+    rw [assoc, map_μ_comp_counit_app_tensor, μ_δ_assoc, comp_id]
 
 end IsMonoidal
 
@@ -334,38 +340,17 @@ namespace Equivalence
 
 variable (e : C ≌ D) [e.functor.Monoidal] [e.inverse.Monoidal] [e.IsMonoidal]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatTrans.IsMonoidal e.unit
-  body: inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.unit)
-
-中文:
-实例 :
-  签名: 自然变换.是幺半群 e.unit
-  定义体: inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.unit)
-
-Depends on / 依赖: IsMonoidal, NatTrans, NatTrans.IsMonoidal, e.toAdjunction.unit, toAdjunction
+/-
+**CategoryTheory.Adjunction.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Adjunction.Equivalence`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatTrans.IsMonoidal e.unit :=
   inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.unit)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatTrans.IsMonoidal e.counit
-  body: inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.counit)
-
-中文:
-实例 :
-  签名: 自然变换.是幺半群 e.counit
-  定义体: inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.counit)
-
-Depends on / 依赖: IsMonoidal, NatTrans, NatTrans.IsMonoidal, counit, e.toAdjunction.counit, toAdjunction
+/-
+**CategoryTheory.Adjunction.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Adjunction.Equivalence`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatTrans.IsMonoidal e.counit :=
   inferInstanceAs (NatTrans.IsMonoidal e.toAdjunction.counit)
@@ -376,24 +361,19 @@ end Adjunction
 
 namespace LaxMonoidalFunctor
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- The type of monoidal natural transformations between (bundled) lax monoidal functors. -/
+/-
+**CategoryTheory.LaxMonoidalFunctor.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheor
+y.LaxMonoidalFunctor`。
+形式化陈述：Hom (F G : LaxMonoidalFunctor C D) where /-- the natural transformation be
+tween the underlying functors -/ hom : F.toFunctor ⟶ G.toFunctor isMonoidal : Na
+tTrans.IsMonoidal hom
+参数：F G : LaxMonoidalFunctor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (F G : LaxMonoidalFunctor C D)
-  axioms and operations (2):
-    - hom : F.toFunctor ⟶ G.toFunctor
-    - isMonoidal : NatTrans.IsMonoidal hom  [default: by infer_instance]
-
-中文:
-结构 态射
-  参数: (F G : 松弛幺半群函子 C D)
-  公理与运算 (2 个):
-    - hom : F.toFunctor ⟶ G.toFunctor
-    - isMonoidal : 自然变换.是幺半群 hom  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+The type of monoidal natural transformations between (bundled) lax monoidal func
+tors.
 -/
 structure Hom (F G : LaxMonoidalFunctor C D) where
   /-- the natural transformation between the underlying functors -/
@@ -401,27 +381,10 @@ structure Hom (F G : LaxMonoidalFunctor C D) where
   isMonoidal : NatTrans.IsMonoidal hom := by infer_instance
 
 attribute [instance] Hom.isMonoidal
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (LaxMonoidalFunctor C D)
-  body: Hom
-  comp α β := ⟨α.1 ≫ β.1, by have := α.2; have := β.2; infer_instance⟩
-  id _ := ⟨𝟙 _, inferInstance⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 范畴 (松弛幺半群函子 C D)
-  定义体: Hom
-  comp α β := ⟨α.1 ≫ β.1, by have := α.2; have := β.2; infer_instance⟩
-  id _ := ⟨𝟙 _, inferInstance⟩
-
-@[simp]
+/-
+**CategoryTheory.LaxMonoidalFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.L
+axMonoidalFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (LaxMonoidalFunctor C D) where
   Hom := Hom
@@ -429,107 +392,73 @@ instance : Category (LaxMonoidalFunctor C D) where
   id _ := ⟨𝟙 _, inferInstance⟩
 
 @[simp]
-/--
-lemma `id_hom` / 引理 `id_hom`
-
-English:
-lemma id_hom
-  given: (F : LaxMonoidalFunctor C D)
-  statement: Hom.hom (𝟙 F) = 𝟙 _
-  proof: rfl
-
-@[reassoc, simp]
-
-中文:
-引理 id_hom
-  条件: (F : 松弛幺半群函子 C D)
-  结论: 态射.hom (𝟙 F) = 𝟙 _
-  证明: rfl
-
-@[reassoc, simp]
+/-
+**CategoryTheory.LaxMonoidalFunctor.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.LaxMonoidalFunctor`。
+形式化陈述：id_hom (F : LaxMonoidalFunctor C D) : Hom.hom (𝟙 F) = 𝟙 _
+参数：F : LaxMonoidalFunctor C D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom (F : LaxMonoidalFunctor C D) : Hom.hom (𝟙 F) = 𝟙 _ := rfl
 
 @[reassoc, simp]
-/--
-lemma `comp_hom` / 引理 `comp_hom`
-
-English:
-lemma comp_hom
-  given: {F G H : LaxMonoidalFunctor C D} (α : F ⟶ G) (β : G ⟶ H)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 comp_hom
-  条件: {F G H : 松弛幺半群函子 C D} (α : F ⟶ G) (β : G ⟶ H)
-  证明: rfl
-
-@[ext]
+/-
+**CategoryTheory.LaxMonoidalFunctor.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.LaxMonoidalFunctor`。
+形式化陈述：comp_hom {F G H : LaxMonoidalFunctor C D} (α : F ⟶ G) (β : G ⟶ H) : (α ≫ β
+).hom = α.hom ≫ β.hom
+参数：α : F ⟶ G；β : G ⟶ H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom {F G H : LaxMonoidalFunctor C D} (α : F ⟶ G) (β : G ⟶ H) :
     (α ≫ β).hom = α.hom ≫ β.hom := rfl
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {F G : LaxMonoidalFunctor C D} {α β : F ⟶ G} (h : α.hom = β.hom)
-  statement: α = β
-  proof: by
-  cases α; cases β; subst h; rfl
-
-中文:
-引理 hom_ext
-  条件: {F G : 松弛幺半群函子 C D} {α β : F ⟶ G} (h : α.hom = β.hom)
-  结论: α = β
-  证明: by
-  cases α; cases β; subst h; rfl
-
-Depends on / 依赖: Subtype, Subtype.val
+/-
+**CategoryTheory.LaxMonoidalFunctor.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.LaxMonoidalFunctor`。
+形式化陈述：hom_ext {F G : LaxMonoidalFunctor C D} {α β : F ⟶ G} (h : α.hom = β.hom) :
+ α = β
+参数：h : α.hom = β.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma hom_ext {F G : LaxMonoidalFunctor C D} {α β : F ⟶ G} (h : α.hom = β.hom) : α = β := by
   cases α; cases β; subst h; rfl
 
 /-- Constructor for morphisms in the category `LaxMonoidalFunctor C D`. -/
 @[simps]
-/--
-Definition of `homMk` / `homMk` 的定义
+/-
+**CategoryTheory.LaxMonoidalFunctor.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.LaxMonoidalFunctor`。
+形式化陈述：homMk {F G : LaxMonoidalFunctor C D} (f : F.toFunctor ⟶ G.toFunctor) [NatT
+rans.IsMonoidal f] : F ⟶ G
+参数：f : F.toFunctor ⟶ G.toFunctor。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: {F G : LaxMonoidalFunctor C D} (f : F.toFunctor ⟶ G.toFunctor) [NatTrans.IsMonoidal f]
-  body: ⟨f, inferInstance⟩
-
-中文:
-定义 homMk
-  签名: {F G : 松弛幺半群函子 C D} (f : F.toFunctor ⟶ G.toFunctor) [自然变换.是幺半群 f]
-  定义体: ⟨f, inferInstance⟩
+--- 原说明 ---
+Constructor for morphisms in the category `LaxMonoidalFunctor C D`.
 -/
 def homMk {F G : LaxMonoidalFunctor C D} (f : F.toFunctor ⟶ G.toFunctor) [NatTrans.IsMonoidal f] :
     F ⟶ G := ⟨f, inferInstance⟩
 
 /-- Constructor for isomorphisms in the category `LaxMonoidalFunctor C D`. -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.LaxMonoidalFunctor.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.LaxMonoidalFunctor`。
+形式化陈述：isoMk {F G : LaxMonoidalFunctor C D} (e : F.toFunctor ≅ G.toFunctor) [NatT
+rans.IsMonoidal e.hom] : F ≅ G where hom
+参数：e : F.toFunctor ≅ G.toFunctor。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {F G : LaxMonoidalFunctor C D} (e : F.toFunctor ≅ G.toFunctor)
-  body: homMk e.hom
-  inv := homMk e.inv
-
-中文:
-定义 isoMk
-  签名: {F G : 松弛幺半群函子 C D} (e : F.toFunctor ≅ G.toFunctor)
-  定义体: homMk e.hom
-  inv := homMk e.inv
-
-Depends on / 依赖: e.hom
+--- 原说明 ---
+Constructor for isomorphisms in the category `LaxMonoidalFunctor C D`.
 -/
 def isoMk {F G : LaxMonoidalFunctor C D} (e : F.toFunctor ≅ G.toFunctor)
     [NatTrans.IsMonoidal e.hom] :
@@ -541,27 +470,24 @@ open Functor.LaxMonoidal
 
 /-- Constructor for isomorphisms between lax monoidal functors. -/
 @[simps!]
-/--
-Definition of `isoOfComponents` / `isoOfComponents` 的定义
+/-
+**CategoryTheory.LaxMonoidalFunctor.isoOfComponents** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.LaxMonoidalFunctor`。
+形式化陈述：isoOfComponents {F G : LaxMonoidalFunctor C D} (e : forall X, F.obj X ≅ G.
+obj X) (naturality : forall {X Y : C} (f : X ⟶ Y), F.map f ≫ (e Y).hom = (e X).h
+om ≫ G.map f
+参数：e : forall X, F.obj X ≅ G.obj X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfComponents
-  signature: {F G : LaxMonoidalFunctor C D} (e : forall X, F.obj X ≅ G.obj X)
-  body: @isoMk _ _ _ _ _ _ _ _ (NatIso.ofComponents e naturality) (by constructor <;> assumption)
-
-中文:
-定义 isoOfComponents
-  签名: {F G : 松弛幺半群函子 C D} (e : 对任意 X, F.obj X ≅ G.obj X)
-  定义体: @isoMk _ _ _ _ _ _ _ _ (NatIso.ofComponents e naturality) (by constructor <;> assumption)
-
-Depends on / 依赖: F.toFunctor, G.toFunctor, NatIso, NatIso.ofComponents, cat_disch, naturality, ofComponents, otimes, tensor, toFunctor
+--- 原说明 ---
+Constructor for isomorphisms between lax monoidal functors.
 -/
-def isoOfComponents {F G : LaxMonoidalFunctor C D} (e : forall X, F.obj X ≅ G.obj X)
-    (naturality : forall {X Y : C} (f : X ⟶ Y), F.map f ≫ (e Y).hom = (e X).hom ≫ G.map f := by
+def isoOfComponents {F G : LaxMonoidalFunctor C D} (e : ∀ X, F.obj X ≅ G.obj X)
+    (naturality : ∀ {X Y : C} (f : X ⟶ Y), F.map f ≫ (e Y).hom = (e X).hom ≫ G.map f := by
       cat_disch)
     (unit : ε F.toFunctor ≫ (e (𝟙_ C)).hom = ε G.toFunctor := by cat_disch)
-    (tensor : forall X Y, μ F.toFunctor X Y ≫ (e (X otimes Y)).hom =
-      ((e X).hom otimesₘ (e Y).hom) ≫ μ G.toFunctor X Y := by cat_disch) :
+    (tensor : ∀ X Y, μ F.toFunctor X Y ≫ (e (X ⊗ Y)).hom =
+      ((e X).hom ⊗ₘ (e Y).hom) ≫ μ G.toFunctor X Y := by cat_disch) :
     F ≅ G :=
   @isoMk _ _ _ _ _ _ _ _ (NatIso.ofComponents e naturality) (by constructor <;> assumption)
 
@@ -570,35 +496,54 @@ end LaxMonoidalFunctor
 namespace Functor.Monoidal
 
 /--
-lemma `natTransIsMonoidal_of_transport` / 引理 `natTransIsMonoidal_of_transport`
+Transporting a monoidal structure along a natural isomorphism of functors makes the isomorphism
+a monoidal natural transformation.
+-/
+/-
+**CategoryTheory.Functor.Monoidal.natTransIsMonoidal_of_transport** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Functor.Monoidal`。
+形式化陈述：natTransIsMonoidal_of_transport {F G : C ⥤ D} [F.Monoidal] (e : F ≅ G) : l
+etI : G.Monoidal
+参数：e : F ≅ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_comp_tensorHom_assoc`：∀ {C : T
+ype u} {𝒞 : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCat
+egory C] {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : C}   (f₁ : X₁ ⟶ Y₁) (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_id`：tensorHom_id {X₁ X₂ : C} (
+f : X₁ ⟶ X₂) (Y : C) : f otimesₘ 𝟙 Y = f ▷ Y
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma natTransIsMonoidal_of_transport
-  given: {F G : C ⥤ D} [F.Monoidal] (e : F ≅ G)
-  proof: transport e
-    e.hom.IsMonoidal := by
-  let : G.Monoidal := transport e
-  refine ⟨rfl, fun X Y => ?_⟩
-  simp [transport_μ, tensorHom_comp_tensorHom_assoc]
-
-中文:
-引理 natTransIsMonoidal_of_transport
-  条件: {F G : C ⥤ D} [F.幺半群] (e : F ≅ G)
-  证明: transport e
-    e.hom.IsMonoidal := by
-  let : G.Monoidal := transport e
-  refine ⟨rfl, fun X Y => ?_⟩
-  simp [transport_μ, tensorHom_comp_tensorHom_assoc]
-
-Depends on / 依赖: NatTrans, NatTrans.ext, Subtype, Subtype.ext, Subtype.val, congr_app, congr_arg, congr_hom, hom_ext, transport
+--- 原说明 ---
+Transporting a monoidal structure along a natural isomorphism of functors makes 
+the isomorphism
+a monoidal natural transformation.
 -/
 lemma natTransIsMonoidal_of_transport {F G : C ⥤ D} [F.Monoidal] (e : F ≅ G) :
     letI : G.Monoidal := transport e
     e.hom.IsMonoidal := by
   let : G.Monoidal := transport e
-  refine ⟨rfl, fun X Y => ?_⟩
+  refine ⟨rfl, fun X Y ↦ ?_⟩
   simp [transport_μ, tensorHom_comp_tensorHom_assoc]
 
 end Functor.Monoidal
 
 end CategoryTheory
+

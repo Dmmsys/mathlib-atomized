@@ -19,65 +19,38 @@ This file defines the harmonic numbers.
 
 @[expose] public section
 
-/--
-Definition of `harmonic` / `harmonic` 的定义
+/-- The nth-harmonic number defined as a finset sum of consecutive reciprocals. -/
+/-
+**harmonic** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：harmonic : Nat -> Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition harmonic
-  signature: : Nat -> Rat
-  body: fun n => ∑ i in Finset.range n, (↑(i + 1))⁻¹
-
-@[simp]
-
-中文:
-定义 harmonic
-  签名: : 自然数 -> 有理数
-  定义体: fun n => ∑ i in Finset.range n, (↑(i + 1))⁻¹
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.range
+--- 原说明 ---
+The nth-harmonic number defined as a finset sum of consecutive reciprocals.
 -/
-def harmonic : Nat -> Rat := fun n => ∑ i in Finset.range n, (↑(i + 1))⁻¹
+def harmonic : ℕ → ℚ := fun n => ∑ i ∈ Finset.range n, (↑(i + 1))⁻¹
 
 @[simp]
-/--
-lemma `harmonic_zero` / 引理 `harmonic_zero`
-
-English:
-lemma harmonic_zero
-  statement: harmonic 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 harmonic_zero
-  结论: harmonic 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**harmonic_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：harmonic_zero : harmonic 0 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma harmonic_zero : harmonic 0 = 0 :=
   rfl
 
 @[simp]
-/--
-lemma `harmonic_succ` / 引理 `harmonic_succ`
-
-English:
-lemma harmonic_succ
-  given: (n : Nat)
-  statement: harmonic (n + 1) = harmonic n + (↑(n + 1))⁻¹
-  proof: Finset.sum_range_succ ..
-
-中文:
-引理 harmonic_succ
-  条件: (n : 自然数)
-  结论: harmonic (n + 1) = harmonic n + (↑(n + 1))⁻¹
-  证明: Finset.sum_range_succ ..
-
-Depends on / 依赖: Finset, Finset.sum_range_succ, sum_range_succ
+/-
+**harmonic_succ** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：harmonic_succ (n : Nat) : harmonic (n + 1) = harmonic n + (↑(n + 1))⁻¹
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
 -/
-lemma harmonic_succ (n : Nat) : harmonic (n + 1) = harmonic n + (↑(n + 1))⁻¹ :=
+lemma harmonic_succ (n : ℕ) : harmonic (n + 1) = harmonic n + (↑(n + 1))⁻¹ :=
   Finset.sum_range_succ ..

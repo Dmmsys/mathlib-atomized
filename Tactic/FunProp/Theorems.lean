@@ -26,26 +26,17 @@ open Std (TreeMap)
 
 namespace Meta.FunProp
 
-/--
-Inductive type `LambdaTheoremArgs` / 归纳类型 `LambdaTheoremArgs`
+/-- Tag for one of the 5 basic lambda theorems, that also hold extra data for composition theorem
+-/
+/-
+**Mathlib.Meta.FunProp.LambdaTheoremArgs** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Me
+ta.FunProp`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive LambdaTheoremArgs
-  constructors (5):
-    - id: 
-    - const: 
-    - apply: 
-    - comp: (fArgId gArgId : Nat)
-    - pi: 
-
-中文:
-归纳类型 LambdaTheoremArgs
-  构造子 (5 个):
-    - id: 
-    - const: 
-    - apply: 
-    - comp: (fArgId gArgId : 自然数)
-    - pi: 
+--- 原说明 ---
+Tag for one of the 5 basic lambda theorems, that also hold extra data for compos
+ition theorem
 -/
 inductive LambdaTheoremArgs
   /-- Identity theorem e.g. `Continuous fun x ↦ x` -/
@@ -63,28 +54,15 @@ inductive LambdaTheoremArgs
   | pi
   deriving Inhabited, BEq, Repr, Hashable
 
-/--
-Inductive type `LambdaTheoremType` / 归纳类型 `LambdaTheoremType`
+/-- Tag for one of the 5 basic lambda theorems -/
+/-
+**Mathlib.Meta.FunProp.LambdaTheoremType** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Me
+ta.FunProp`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive LambdaTheoremType
-  constructors (5):
-    - id: 
-    - const: 
-    - apply: 
-    - comp: 
-    - pi: 
-
-中文:
-归纳类型 LambdaTheoremType
-  构造子 (5 个):
-    - id: 
-    - const: 
-    - apply: 
-    - comp: 
-    - pi: 
-
-Depends on / 依赖: Pi.le_def, continuous_apply, isClosed_iInter, isClosed_le, le_def, ofPred_forall
+--- 原说明 ---
+Tag for one of the 5 basic lambda theorems
 -/
 inductive LambdaTheoremType
   /-- Identity theorem e.g. `Continuous fun x ↦ x` -/
@@ -99,89 +77,37 @@ inductive LambdaTheoremType
   | pi
   deriving Inhabited, BEq, Repr, Hashable
 
-/--
-Definition of `LambdaTheoremArgs.type` / `LambdaTheoremArgs.type` 的定义
+/-- Convert `LambdaTheoremArgs` to `LambdaTheoremType`. -/
+/-
+**Mathlib.Meta.FunProp.LambdaTheoremArgs.type** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Meta.FunProp.LambdaTheoremArgs`。
+形式化陈述：Mathlib.Meta.FunProp.LambdaTheoremArgs → Mathlib.Meta.FunProp.LambdaTheore
+mType
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LambdaTheoremArgs.type
-  signature: (t : LambdaTheoremArgs)
-  body: match t with
-  | .id => .id
-  | .const => .const
-  | .comp .. => .comp
-  | .apply => .apply
-  | .pi => .pi
-
-中文:
-定义 LambdaTheoremArgs.type
-  签名: (t : LambdaTheoremArgs)
-  定义体: match t with
-  | .id => .id
-  | .const => .const
-  | .comp .. => .comp
-  | .apply => .apply
-  | .pi => .pi
+--- 原说明 ---
+Convert `LambdaTheoremArgs` to `LambdaTheoremType`.
 -/
 def LambdaTheoremArgs.type (t : LambdaTheoremArgs) : LambdaTheoremType :=
   match t with
   | .id => .id
   | .const => .const
   | .comp .. => .comp
-  | .apply => .apply
+  | .apply  => .apply
   | .pi => .pi
 
-/--
-Definition of `detectLambdaTheoremArgs` / `detectLambdaTheoremArgs` 的定义
+/-- Decides whether `f` is a function corresponding to one of the lambda theorems. -/
+/-
+**Mathlib.Meta.FunProp.detectLambdaTheoremArgs** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Meta.FunProp`。
+形式化陈述：detectLambdaTheoremArgs (f : Expr) (ctxVars : Array Expr) : MetaM (Option 
+LambdaTheoremArgs)
+参数：f : Expr；ctxVars : Array Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition detectLambdaTheoremArgs
-  signature: (f : Expr) (ctxVars : Array Expr)
-  body: do
-
-  -- eta expand but beta reduce body
-  let f ← forallTelescope (← inferType f) fun xs _ =>
-    mkLambdaFVars xs (mkAppN f xs).headBeta
-
-  match f with
-  | .lam _ _ xBody _ =>
-    unless xBody.hasLooseBVars do return some .const
-    match xBody with
-    | .bvar 0 => return some .id
-    | .app (.bvar 0) (.fvar _) => return some .apply
-    | .app (.fvar fId) (.app (.fvar gId) (.bvar 0)) =>
-      -- fun x => f (g x)
-      let some argId_f := ctxVars.findIdx? (fun x => x == (.fvar fId)) | return none
-      let some argId_g := ctxVars.findIdx? (fun x => x == (.fvar gId)) | return none
-return some .comp argId_f argId_g
-    | .lam _ _ (.app (.app (.fvar _) (.bvar 1)) (.bvar 0)) _ =>
-      return some .pi
-    | _ => return none
-  | _ => return none
-
-中文:
-定义 detectLambdaTheoremArgs
-  签名: (f : Expr) (ctxVars : 数组 Expr)
-  定义体: do
-
-  -- eta expand but beta reduce body
-  let f ← forallTelescope (← inferType f) fun xs _ =>
-    mkLambdaFVars xs (mkAppN f xs).headBeta
-
-  match f with
-  | .lam _ _ xBody _ =>
-    unless xBody.hasLooseBVars do return some .const
-    match xBody with
-    | .bvar 0 => return some .id
-    | .app (.bvar 0) (.fvar _) => return some .apply
-    | .app (.fvar fId) (.app (.fvar gId) (.bvar 0)) =>
-      -- fun x => f (g x)
-      let some argId_f := ctxVars.findIdx? (fun x => x == (.fvar fId)) | return none
-      let some argId_g := ctxVars.findIdx? (fun x => x == (.fvar gId)) | return none
-return some .comp argId_f argId_g
-    | .lam _ _ (.app (.app (.fvar _) (.bvar 1)) (.bvar 0)) _ =>
-      return some .pi
-    | _ => return none
-  | _ => return none
+--- 原说明 ---
+Decides whether `f` is a function corresponding to one of the lambda theorems.
 -/
 def detectLambdaTheoremArgs (f : Expr) (ctxVars : Array Expr) :
     MetaM (Option LambdaTheoremArgs) := do
@@ -195,36 +121,27 @@ def detectLambdaTheoremArgs (f : Expr) (ctxVars : Array Expr) :
     unless xBody.hasLooseBVars do return some .const
     match xBody with
     | .bvar 0 => return some .id
-    | .app (.bvar 0) (.fvar _) => return some .apply
+    | .app (.bvar 0) (.fvar _) =>  return some .apply
     | .app (.fvar fId) (.app (.fvar gId) (.bvar 0)) =>
       -- fun x => f (g x)
       let some argId_f := ctxVars.findIdx? (fun x => x == (.fvar fId)) | return none
       let some argId_g := ctxVars.findIdx? (fun x => x == (.fvar gId)) | return none
-return some .comp argId_f argId_g
+      return some <| .comp argId_f argId_g
     | .lam _ _ (.app (.app (.fvar _) (.bvar 1)) (.bvar 0)) _ =>
       return some .pi
     | _ => return none
   | _ => return none
 
 
-/--
-Definition of `LambdaTheorem` / `LambdaTheorem` 的定义
+/-- Structure holding information about lambda theorem. -/
+/-
+**Mathlib.Meta.FunProp.LambdaTheorem** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Meta.F
+unProp`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LambdaTheorem
-  parameters: where
-  axioms and operations (3):
-    - funPropName : Name
-    - thmName : Name
-    - thmArgs : LambdaTheoremArgs
-
-中文:
-结构 LambdaTheorem
-  参数: where
-  公理与运算 (3 个):
-    - funPropName : Name
-    - thmName : Name
-    - thmArgs : LambdaTheoremArgs
+--- 原说明 ---
+Structure holding information about lambda theorem.
 -/
 structure LambdaTheorem where
   /-- Name of function property -/
@@ -235,20 +152,17 @@ structure LambdaTheorem where
   thmArgs : LambdaTheoremArgs
   deriving Inhabited, BEq
 
-/--
-Definition of `LambdaTheorems` / `LambdaTheorems` 的定义
+/-- Collection of lambda theorems -/
+/-
+**Mathlib.Meta.FunProp.LambdaTheorems** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.Fu
+nProp`。
+形式化陈述：LambdaTheorems where /-- map: function property name × theorem type → lamb
+da theorem -/ theorems : Std.HashMap (Name × LambdaTheoremType) (Array LambdaThe
+orem)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LambdaTheorems
-  parameters: where
-  axioms and operations (1):
-    - theorems : Std.HashMap (Name × LambdaTheoremType) (Array LambdaTheorem)  [default: {}]
-
-中文:
-结构 LambdaTheorems
-  参数: where
-  公理与运算 (1 个):
-    - theorems : Std.HashMap (Name × LambdaTheoremType) (数组 LambdaTheorem)  [默认: {}]
+--- 原说明 ---
+Collection of lambda theorems
 -/
 structure LambdaTheorems where
   /-- map: function property name × theorem type → lambda theorem -/
@@ -256,36 +170,28 @@ structure LambdaTheorems where
   deriving Inhabited
 
 
-/--
-Definition of `LambdaTheorem.getProof` / `LambdaTheorem.getProof` 的定义
+/-- Return proof of lambda theorem -/
+/-
+**Mathlib.Meta.FunProp.LambdaTheorem.getProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Meta.FunProp.LambdaTheorem`。
+形式化陈述：Mathlib.Meta.FunProp.LambdaTheorem → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LambdaTheorem.getProof
-  signature: (thm : LambdaTheorem)
-  body: do
-  mkConstWithFreshMVarLevels thm.thmName
-
-中文:
-定义 LambdaTheorem.getProof
-  签名: (thm : LambdaTheorem)
-  定义体: do
-  mkConstWithFreshMVarLevels thm.thmName
+--- 原说明 ---
+Return proof of lambda theorem
 -/
 def LambdaTheorem.getProof (thm : LambdaTheorem) : MetaM Expr := do
   mkConstWithFreshMVarLevels thm.thmName
 
-/--
-Definition of `LambdaTheoremsExt` / `LambdaTheoremsExt` 的定义
+/-- Environment extension storing lambda theorems. -/
+/-
+**Mathlib.Meta.FunProp.LambdaTheoremsExt** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Me
+ta.FunProp`。
+形式化陈述：LambdaTheoremsExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LambdaTheoremsExt
-  body: SimpleScopedEnvExtension LambdaTheorem LambdaTheorems
-
-中文:
-缩写 LambdaTheoremsExt
-  定义体: SimpleScopedEnvExtension LambdaTheorem LambdaTheorems
-
-Depends on / 依赖: LambdaTheorem, LambdaTheorems, SimpleScopedEnvExtension
+--- 原说明 ---
+Environment extension storing lambda theorems.
 -/
 abbrev LambdaTheoremsExt := SimpleScopedEnvExtension LambdaTheorem LambdaTheorems
 
@@ -300,22 +206,18 @@ initialize lambdaTheoremsExt : LambdaTheoremsExt ←
         d.theorems.insert (e.funPropName, e.thmArgs.type) (es.push e)}
   }
 
-/--
-Definition of `getLambdaTheorems` / `getLambdaTheorems` 的定义
+/-- Get lambda theorems for particular function property `funPropName`. -/
+/-
+**Mathlib.Meta.FunProp.getLambdaTheorems** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta
+.FunProp`。
+形式化陈述：getLambdaTheorems (funPropName : Name) (type : LambdaTheoremType) : CoreM 
+(Array LambdaTheorem)
+参数：funPropName : Name；type : LambdaTheoremType。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getLambdaTheorems
-  signature: (funPropName : Name) (type : LambdaTheoremType)
-  body: do
-  return (lambdaTheoremsExt.getState (← getEnv)).theorems.getD (funPropName,type) #[]
-
-中文:
-定义 getLambdaTheorems
-  签名: (funPropName : Name) (type : LambdaTheoremType)
-  定义体: do
-  return (lambdaTheoremsExt.getState (← getEnv)).theorems.getD (funPropName,type) #[]
-
-Depends on / 依赖: PriestleySpace, PriestleySpace.toTotallySeparatedSpace, TotallySeparatedSpace, toTotallySeparatedSpace
+--- 原说明 ---
+Get lambda theorems for particular function property `funPropName`.
 -/
 def getLambdaTheorems (funPropName : Name) (type : LambdaTheoremType) :
     CoreM (Array LambdaTheorem) := do
@@ -324,119 +226,118 @@ def getLambdaTheorems (funPropName : Name) (type : LambdaTheoremType) :
 
 --------------------------------------------------------------------------------
 
-/--
-Inductive type `TheoremForm` / 归纳类型 `TheoremForm`
+/-- Function theorems are stated in uncurried or compositional form.
 
-English:
-inductive TheoremForm
-  parameters: where
-  constructors (1):
-    - uncurried: | comp
+uncurried
+```
+theorem Continuous_add : Continuous (fun x ↦ x.1 + x.2)
+```
 
-中文:
-归纳类型 TheoremForm
-  参数: where
-  构造子 (1 个):
-    - uncurried: | comp
+compositional
+```
+theorem Continuous_add (hf : Continuous f) (hg : Continuous g) : Continuous (fun x ↦ (f x) + (g x))
+```
+-/
+/-
+**Mathlib.Meta.FunProp.TheoremForm** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Meta.Fun
+Prop`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Function theorems are stated in uncurried or compositional form.
+
+uncurried
+```
+theorem Continuous_add : Continuous (fun x ↦ x.1 + x.2)
+```
+
+compositional
+```
+theorem Continuous_add (hf : Continuous f) (hg : Continuous g) : Continuous (fun
+ x ↦ (f x) + (g x))
+```
 -/
 inductive TheoremForm where
   | uncurried | comp
   deriving Inhabited, BEq, Repr
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- TheoremForm to string -/
+/-
+**Mathlib.Meta.FunProp.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Meta.FunProp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: ToString TheoremForm
-  body: ⟨fun x => match x with | .uncurried => "simple" | .comp => "compositional"⟩
-
-中文:
-实例 :
-  签名: ToString TheoremForm
-  定义体: ⟨fun x => match x with | .uncurried => "simple" | .comp => "compositional"⟩
-
-Depends on / 依赖: compositional, simple, uncurried
+--- 原说明 ---
+TheoremForm to string
 -/
 instance : ToString TheoremForm :=
   ⟨fun x => match x with | .uncurried => "simple" | .comp => "compositional"⟩
 
-/--
-Definition of `DecompositionResult.toTheoremForm` / `DecompositionResult.toTheoremForm` 的定义
+/-- Gives the theorem form using the result of `FunctionData.decomposition`.
 
-English:
-definition DecompositionResult.toTheoremForm
-  signature: : DecompositionResult -> TheoremForm
+Note that this returns `TheoremForm.comp` even when the decomposition failed (usually due to
+dependent types). This means that the theorem will be applied directly without trying to write the
+goal as a composition. -/
+/-
+**Mathlib.Meta.FunProp.DecompositionResult.toTheoremForm** 是 Mathlib 中的一个定义，位于命名
+空间 `Mathlib.Meta.FunProp.DecompositionResult`。
+形式化陈述：Mathlib.Meta.FunProp.DecompositionResult → Mathlib.Meta.FunProp.TheoremFor
+m
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 DecompositionResult.toTheoremForm
-  签名: : DecompositionResult -> TheoremForm
+--- 原说明 ---
+Gives the theorem form using the result of `FunctionData.decomposition`.
+
+Note that this returns `TheoremForm.comp` even when the decomposition failed (us
+ually due to
+dependent types). This means that the theorem will be applied directly without t
+rying to write the
+goal as a composition.
 -/
-def DecompositionResult.toTheoremForm : DecompositionResult -> TheoremForm
+def DecompositionResult.toTheoremForm : DecompositionResult → TheoremForm
 | .uncurried => .uncurried
 | _ => .comp
 
-/--
-Definition of `FunctionTheorem` / `FunctionTheorem` 的定义
+/-- theorem about specific function (either declared constant or free variable) -/
+/-
+**Mathlib.Meta.FunProp.FunctionTheorem** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.F
+unProp`。
+形式化陈述：FunctionTheorem where /-- function property name -/ funPropName : Name /--
+ theorem name -/ thmOrigin : Origin /-- function name -/ funOrigin : Origin /-- 
+array of argument indices about which this theorem is about -/ mainArgs : Array 
+Nat /-- total number of arguments applied to the function -/ appliedArgs : Nat /
+-- priority -/ priority : Nat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FunctionTheorem
-  parameters: where
-  axioms and operations (7):
-    - funPropName : Name
-    - thmOrigin : Origin
-    - funOrigin : Origin
-    - mainArgs : Array Nat
-    - appliedArgs : Nat
-    - priority : Nat  [default: eval_prio default]
-    - form : TheoremForm
-
-中文:
-结构 FunctionTheorem
-  参数: where
-  公理与运算 (7 个):
-    - funPropName : Name
-    - thmOrigin : Origin
-    - funOrigin : Origin
-    - mainArgs : 数组 自然数
-    - appliedArgs : 自然数
-    - priority : 自然数  [默认: eval_prio default]
-    - form : TheoremForm
-
-Depends on / 依赖: eval_prio
+--- 原说明 ---
+theorem about specific function (either declared constant or free variable)
 -/
 structure FunctionTheorem where
   /-- function property name -/
   funPropName : Name
   /-- theorem name -/
-  thmOrigin : Origin
+  thmOrigin   : Origin
   /-- function name -/
-  funOrigin : Origin
+  funOrigin   : Origin
   /-- array of argument indices about which this theorem is about -/
-  mainArgs : Array Nat
+  mainArgs    : Array Nat
   /-- total number of arguments applied to the function -/
   appliedArgs : Nat
   /-- priority -/
-  priority : Nat := eval_prio default
+  priority    : Nat  := eval_prio default
   /-- form of the theorem, see documentation of TheoremForm -/
   form : TheoremForm
   deriving Inhabited, BEq
 
 set_option linter.style.docString.empty false in
-/--
-Definition of `FunctionTheorems` / `FunctionTheorems` 的定义
-
-English:
-structure FunctionTheorems
-  parameters: where
-  axioms and operations (1):
-    - theorems : TreeMap Name (TreeMap Name (Array FunctionTheorem) Name.quickCmp) Name.quickCmp  [default: {}]
-
-中文:
-结构 FunctionTheorems
-  参数: where
-  公理与运算 (1 个):
-    - theorems : TreeMap Name (TreeMap Name (数组 FunctionTheorem) Name.quickCmp) Name.quickCmp  [默认: {}]
+/-- -/
+/-
+**Mathlib.Meta.FunProp.FunctionTheorems** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.
+FunProp`。
+形式化陈述：FunctionTheorems where /-- map: function name → function property → functi
+on theorem -/ theorems : TreeMap Name (TreeMap Name (Array FunctionTheorem) Name
+.quickCmp) Name.quickCmp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 structure FunctionTheorems where
   /-- map: function name → function property → function theorem -/
@@ -445,24 +346,15 @@ structure FunctionTheorems where
   deriving Inhabited
 
 
-/--
-Definition of `FunctionTheorem.getProof` / `FunctionTheorem.getProof` 的定义
+/-- return proof of function theorem -/
+/-
+**Mathlib.Meta.FunProp.FunctionTheorem.getProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Meta.FunProp.FunctionTheorem`。
+形式化陈述：Mathlib.Meta.FunProp.FunctionTheorem → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FunctionTheorem.getProof
-  signature: (thm : FunctionTheorem)
-  body: do
-  match thm.thmOrigin with
-  | .decl name => mkConstWithFreshMVarLevels name
-  | .fvar id => return .fvar id
-
-中文:
-定义 FunctionTheorem.getProof
-  签名: (thm : FunctionTheorem)
-  定义体: do
-  match thm.thmOrigin with
-  | .decl name => mkConstWithFreshMVarLevels name
-  | .fvar id => return .fvar id
+--- 原说明 ---
+return proof of function theorem
 -/
 def FunctionTheorem.getProof (thm : FunctionTheorem) : MetaM Expr := do
   match thm.thmOrigin with
@@ -470,26 +362,20 @@ def FunctionTheorem.getProof (thm : FunctionTheorem) : MetaM Expr := do
   | .fvar id => return .fvar id
 
 set_option linter.style.docString.empty false in
-/--
-Definition of `FunctionTheoremsExt` / `FunctionTheoremsExt` 的定义
-
-English:
-abbreviation FunctionTheoremsExt
-  body: SimpleScopedEnvExtension FunctionTheorem FunctionTheorems
-
-中文:
-缩写 FunctionTheoremsExt
-  定义体: SimpleScopedEnvExtension FunctionTheorem FunctionTheorems
-
-Depends on / 依赖: FunctionTheorem, FunctionTheorems, SimpleScopedEnvExtension
+/-- -/
+/-
+**Mathlib.Meta.FunProp.FunctionTheoremsExt** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.
+Meta.FunProp`。
+形式化陈述：FunctionTheoremsExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev FunctionTheoremsExt := SimpleScopedEnvExtension FunctionTheorem FunctionTheorems
 
 /-- Extension storing all function theorems. -/
 initialize functionTheoremsExt : FunctionTheoremsExt ←
   registerSimpleScopedEnvExtension {
-    name := by exact decl_name%
-    initial := {}
+    name     := by exact decl_name%
+    initial  := {}
     addEntry := fun d e =>
       {d with
         theorems :=
@@ -501,100 +387,81 @@ initialize functionTheoremsExt : FunctionTheoremsExt ←
   }
 
 set_option linter.style.docString.empty false in
-/--
-Definition of `getTheoremsForFunction` / `getTheoremsForFunction` 的定义
-
-English:
-definition getTheoremsForFunction
-  signature: (funName : Name) (funPropName : Name)
-  body: do
-  return (functionTheoremsExt.getState (← getEnv)).theorems.getD funName {}
-.getD funPropName #[]
-
-中文:
-定义 getTheoremsForFunction
-  签名: (funName : Name) (funPropName : Name)
-  定义体: do
-  return (functionTheoremsExt.getState (← getEnv)).theorems.getD funName {}
-.getD funPropName #[]
+/-- -/
+/-
+**Mathlib.Meta.FunProp.getTheoremsForFunction** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Meta.FunProp`。
+形式化陈述：getTheoremsForFunction (funName : Name) (funPropName : Name) : CoreM (Arra
+y FunctionTheorem)
+参数：funName : Name；funPropName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def getTheoremsForFunction (funName : Name) (funPropName : Name) :
     CoreM (Array FunctionTheorem) := do
   return (functionTheoremsExt.getState (← getEnv)).theorems.getD funName {}
-.getD funPropName #[]
+    |>.getD funPropName #[]
 
 
 --------------------------------------------------------------------------------
 
-/--
-Definition of `GeneralTheorem.getProof` / `GeneralTheorem.getProof` 的定义
+/-- Get proof of a theorem. -/
+/-
+**Mathlib.Meta.FunProp.GeneralTheorem.getProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Meta.FunProp.GeneralTheorem`。
+形式化陈述：Mathlib.Meta.FunProp.GeneralTheorem → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GeneralTheorem.getProof
-  signature: (thm : GeneralTheorem)
-  body: do
-  mkConstWithFreshMVarLevels thm.thmName
-
-中文:
-定义 GeneralTheorem.getProof
-  签名: (thm : GeneralTheorem)
-  定义体: do
-  mkConstWithFreshMVarLevels thm.thmName
+--- 原说明 ---
+Get proof of a theorem.
 -/
 def GeneralTheorem.getProof (thm : GeneralTheorem) : MetaM Expr := do
   mkConstWithFreshMVarLevels thm.thmName
 
-/--
-Definition of `GeneralTheoremsExt` / `GeneralTheoremsExt` 的定义
+/-- Extensions for transition or morphism theorems -/
+/-
+**Mathlib.Meta.FunProp.GeneralTheoremsExt** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.M
+eta.FunProp`。
+形式化陈述：GeneralTheoremsExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation GeneralTheoremsExt
-  body: SimpleScopedEnvExtension GeneralTheorem GeneralTheorems
-
-中文:
-缩写 GeneralTheoremsExt
-  定义体: SimpleScopedEnvExtension GeneralTheorem GeneralTheorems
-
-Depends on / 依赖: GeneralTheorem, GeneralTheorems, SimpleScopedEnvExtension
+--- 原说明 ---
+Extensions for transition or morphism theorems
 -/
 abbrev GeneralTheoremsExt := SimpleScopedEnvExtension GeneralTheorem GeneralTheorems
 
 /-- Environment extension for transition theorems. -/
 initialize transitionTheoremsExt : GeneralTheoremsExt ←
   registerSimpleScopedEnvExtension {
-    name := by exact decl_name%
-    initial := {}
+    name     := by exact decl_name%
+    initial  := {}
     addEntry := fun d e =>
       {d with theorems := e.keys.foldl (fun thms (key, entry) =>
         RefinedDiscrTree.insert thms key (entry, e)) d.theorems}
   }
 
-/--
-Definition of `getTransitionTheorems` / `getTransitionTheorems` 的定义
+/-- Get transition theorems applicable to `e`.
 
-English:
-definition getTransitionTheorems
-  signature: (e : Expr)
-  body: do
-  let thms := (← get).transitionTheorems.theorems
-let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false })
-    thms.getMatch e false true
-  modify ({ · with transitionTheorems := ⟨thms⟩ })
-  return candidates.toArray
+For example calling on `e` equal to `Continuous f` might return theorems implying continuity
+from linearity over finite-dimensional spaces or differentiability. -/
+/-
+**Mathlib.Meta.FunProp.getTransitionTheorems** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Meta.FunProp`。
+形式化陈述：getTransitionTheorems (e : Expr) : FunPropM (Array GeneralTheorem)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getTransitionTheorems
-  签名: (e : Expr)
-  定义体: do
-  let thms := (← get).transitionTheorems.theorems
-let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false })
-    thms.getMatch e false true
-  modify ({ · with transitionTheorems := ⟨thms⟩ })
-  return candidates.toArray
+--- 原说明 ---
+Get transition theorems applicable to `e`.
+
+For example calling on `e` equal to `Continuous f` might return theorems implyin
+g continuity
+from linearity over finite-dimensional spaces or differentiability.
 -/
 def getTransitionTheorems (e : Expr) : FunPropM (Array GeneralTheorem) := do
   let thms := (← get).transitionTheorems.theorems
-let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false })
+  let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false }) <|
     thms.getMatch e false true
   modify ({ · with transitionTheorems := ⟨thms⟩ })
   return candidates.toArray
@@ -602,40 +469,36 @@ let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta
 /-- Environment extension for morphism theorems. -/
 initialize morTheoremsExt : GeneralTheoremsExt ←
   registerSimpleScopedEnvExtension {
-    name := by exact decl_name%
-    initial := {}
+    name     := by exact decl_name%
+    initial  := {}
     addEntry := fun d e =>
       {d with theorems := e.keys.foldl (fun thms (key, entry) =>
         RefinedDiscrTree.insert thms key (entry, e)) d.theorems}
   }
 
 
-/--
-Definition of `getMorphismTheorems` / `getMorphismTheorems` 的定义
+/-- Get morphism theorems applicable to `e`.
 
-English:
-definition getMorphismTheorems
-  signature: (e : Expr)
-  body: do
-  let thms := (← get).morTheorems.theorems
-let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false })
-    thms.getMatch e false true
-  modify ({ · with morTheorems := ⟨thms⟩ })
-  return candidates.toArray
+For example calling on `e` equal to `Continuous f` for `f : X→L[ℝ] Y` would return theorem
+inferring continuity from the bundled morphism. -/
+/-
+**Mathlib.Meta.FunProp.getMorphismTheorems** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Me
+ta.FunProp`。
+形式化陈述：getMorphismTheorems (e : Expr) : FunPropM (Array GeneralTheorem)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getMorphismTheorems
-  签名: (e : Expr)
-  定义体: do
-  let thms := (← get).morTheorems.theorems
-let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false })
-    thms.getMatch e false true
-  modify ({ · with morTheorems := ⟨thms⟩ })
-  return candidates.toArray
+--- 原说明 ---
+Get morphism theorems applicable to `e`.
+
+For example calling on `e` equal to `Continuous f` for `f : X→L[ℝ] Y` would retu
+rn theorem
+inferring continuity from the bundled morphism.
 -/
 def getMorphismTheorems (e : Expr) : FunPropM (Array GeneralTheorem) := do
   let thms := (← get).morTheorems.theorems
-let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false })
+  let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta := false }) <|
     thms.getMatch e false true
   modify ({ · with morTheorems := ⟨thms⟩ })
   return candidates.toArray
@@ -644,94 +507,99 @@ let (candidates, thms) ← withConfig (fun cfg => { cfg with iota := false, zeta
 --------------------------------------------------------------------------------
 
 
-/--
-Inductive type `Theorem` / 归纳类型 `Theorem`
+/-- There are four types of theorems:
+- lam - theorem about basic lambda calculus terms
+- function - theorem about a specific function(declared or free variable) in specific arguments
+- mor - special theorems talking about bundled morphisms/DFunLike.coe
+- transition - theorems inferring one function property from another
 
-English:
-inductive Theorem
-  parameters: where
-  constructors (4):
-    - lam: (thm : LambdaTheorem)
-    - function: (thm : FunctionTheorem)
-    - mor: (thm : GeneralTheorem)
-    - transition: (thm : GeneralTheorem)
+Examples:
+- lam
+  ```
+  theorem Continuous_id : Continuous fun x ↦ x
+  theorem Continuous_comp (hf : Continuous f) (hg : Continuous g) : Continuous fun x ↦ f (g x)
+  ```
+- function
+  ```
+  theorem Continuous_add : Continuous (fun x ↦ x.1 + x.2)
+  theorem Continuous_add (hf : Continuous f) (hg : Continuous g) :
+      Continuous (fun x ↦ (f x) + (g x))
+  ```
+- mor - the head of function body has to be `DFunLike.coe`
+  ```
+  theorem ContDiff.clm_apply {f : E → F →L[𝕜] G} {g : E → F}
+      (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g) :
+      ContDiff 𝕜 n fun x ↦ (f x) (g x)
+  theorem clm_linear {f : E →L[𝕜] F} : IsLinearMap 𝕜 f
+  ```
+- transition - the conclusion has to be in the form `P f` where `f` is a free variable
+  ```
+  theorem linear_is_continuous [FiniteDimensional ℝ E] {f : E → F} (hf : IsLinearMap 𝕜 f) :
+      Continuous f
+  ```
+-/
+/-
+**Mathlib.Meta.FunProp.Theorem** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Meta.FunProp
+`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-归纳类型 定理
-  参数: where
-  构造子 (4 个):
-    - lam: (thm : LambdaTheorem)
-    - function: (thm : FunctionTheorem)
-    - mor: (thm : GeneralTheorem)
-    - transition: (thm : GeneralTheorem)
+--- 原说明 ---
+There are four types of theorems:
+- lam - theorem about basic lambda calculus terms
+- function - theorem about a specific function(declared or free variable) in spe
+cific arguments
+- mor - special theorems talking about bundled morphisms/DFunLike.coe
+- transition - theorems inferring one function property from another
+
+Examples:
+- lam
+  ```
+  theorem Continuous_id : Continuous fun x ↦ x
+  theorem Continuous_comp (hf : Continuous f) (hg : Continuous g) : Continuous f
+un x ↦ f (g x)
+  ```
+- function
+  ```
+  theorem Continuous_add : Continuous (fun x ↦ x.1 + x.2)
+  theorem Continuous_add (hf : Continuous f) (hg : Continuous g) :
+      Continuous (fun x ↦ (f x) + (g x))
+  ```
+- mor - the head of function body has to be `DFunLike.coe`
+  ```
+  theorem ContDiff.clm_apply {f : E → F →L[𝕜] G} {g : E → F}
+      (hf : ContDiff 𝕜 n f) (hg : ContDiff 𝕜 n g) :
+      ContDiff 𝕜 n fun x ↦ (f x) (g x)
+  theorem clm_linear {f : E →L[𝕜] F} : IsLinearMap 𝕜 f
+  ```
+- transition - the conclusion has to be in the form `P f` where `f` is a free va
+riable
+  ```
+  theorem linear_is_continuous [FiniteDimensional ℝ E] {f : E → F} (hf : IsLinea
+rMap 𝕜 f) :
+      Continuous f
+  ```
 -/
 inductive Theorem where
-  | lam (thm : LambdaTheorem)
-  | function (thm : FunctionTheorem)
-  | mor (thm : GeneralTheorem)
+  | lam        (thm : LambdaTheorem)
+  | function   (thm : FunctionTheorem)
+  | mor        (thm : GeneralTheorem)
   | transition (thm : GeneralTheorem)
 
 
-/--
-Definition of `getTheoremFromConst` / `getTheoremFromConst` 的定义
+/-- For a theorem declaration `declName` return `fun_prop` theorem. It correctly detects which
+type of theorem it is. -/
+/-
+**Mathlib.Meta.FunProp.getTheoremFromConst** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Me
+ta.FunProp`。
+形式化陈述：getTheoremFromConst (declName : Name) (prio : Nat
+参数：declName : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getTheoremFromConst
-  signature: (declName : Name) (prio : Nat := eval_prio default)
-  body: do
-  let info ← getConstInfo declName
-  forallTelescope info.type fun xs b => do
-    let some (decl,f) ← getFunProp? b
-      | throwError "unrecognized function property `{← ppExpr b}`"
-    let funPropName := decl.funPropName
-    let fData? ←
-withConfig (fun cfg => { cfg with zeta := false}) getFunctionData? f defaultUnfoldPred
-    if let some thmArgs ← detectLambdaTheoremArgs (← fData?.get) xs then
-      return .lam {
-        funPropName := funPropName
-        thmName := declName
-        thmArgs := thmArgs
-      }
-
-    let .data fData := fData?
-      | throwError s!"function in invalid form {← ppExpr f}"
-
-    match fData.fn with
-    | .const funName _ =>
-
-      let dec ← fData.decomposition
-
-      return .function {
-
-中文:
-定义 getTheoremFromConst
-  签名: (declName : Name) (prio : 自然数 := eval_prio default)
-  定义体: do
-  let info ← getConstInfo declName
-  forallTelescope info.type fun xs b => do
-    let some (decl,f) ← getFunProp? b
-      | throwError "unrecognized function property `{← ppExpr b}`"
-    let funPropName := decl.funPropName
-    let fData? ←
-withConfig (fun cfg => { cfg with zeta := false}) getFunctionData? f defaultUnfoldPred
-    if let some thmArgs ← detectLambdaTheoremArgs (← fData?.get) xs then
-      return .lam {
-        funPropName := funPropName
-        thmName := declName
-        thmArgs := thmArgs
-      }
-
-    let .data fData := fData?
-      | throwError s!"function in invalid form {← ppExpr f}"
-
-    match fData.fn with
-    | .const funName _ =>
-
-      let dec ← fData.decomposition
-
-      return .function {
-
-Depends on / 依赖: Theorem, eval_prio
+--- 原说明 ---
+For a theorem declaration `declName` return `fun_prop` theorem. It correctly det
+ects which
+type of theorem it is.
 -/
 def getTheoremFromConst (declName : Name) (prio : Nat := eval_prio default) : MetaM Theorem := do
   let info ← getConstInfo declName
@@ -740,7 +608,7 @@ def getTheoremFromConst (declName : Name) (prio : Nat := eval_prio default) : Me
       | throwError "unrecognized function property `{← ppExpr b}`"
     let funPropName := decl.funPropName
     let fData? ←
-withConfig (fun cfg => { cfg with zeta := false}) getFunctionData? f defaultUnfoldPred
+      withConfig (fun cfg => { cfg with zeta := false}) <| getFunctionData? f defaultUnfoldPred
     if let some thmArgs ← detectLambdaTheoremArgs (← fData?.get) xs then
       return .lam {
         funPropName := funPropName
@@ -772,8 +640,8 @@ withConfig (fun cfg => { cfg with zeta := false}) getFunctionData? f defaultUnfo
       let thm : GeneralTheorem := {
         funPropName := funPropName
         thmName := declName
-        keys := keys
-        priority := prio
+        keys    := keys
+        priority  := prio
       }
       -- todo: maybe do a little bit more careful detection of morphism and transition theorems
       match (← fData.isMorApplication) with
@@ -790,72 +658,16 @@ withConfig (fun cfg => { cfg with zeta := false}) getFunctionData? f defaultUnfo
       throwError "unrecognized theoremType `{← ppExpr b}`"
 
 
-/--
-Definition of `addTheorem` / `addTheorem` 的定义
+/-- Register theorem `declName` with `fun_prop`. -/
+/-
+**Mathlib.Meta.FunProp.addTheorem** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPro
+p`。
+形式化陈述：addTheorem (declName : Name) (attrKind : AttributeKind
+参数：declName : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addTheorem
-  signature: (declName : Name) (attrKind : AttributeKind := .global)
-  body: do
-  match (← getTheoremFromConst declName prio) with
-  | .lam thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-lambda theorem: {thm.thmName}
-function property: {thm.funPropName}
-type: {repr thm.thmArgs.type}"
-    lambdaTheoremsExt.add thm attrKind
-  | .function thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-function theorem: {thm.thmOrigin.name}
-function property: {thm.funPropName}
-function name: {thm.funOrigin.name}
-main arguments: {thm.mainArgs}
-applied arguments: {thm.appliedArgs}
-form: {toString thm.form} form"
-    functionTheoremsExt.add thm attrKind
-  | .mor thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-morphism theorem: {thm.thmName}
-function property: {thm.funPropName}"
-    morTheoremsExt.add thm attrKind
-  | .transition thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-transition theorem: {thm.thmName}
-function property: {thm.funPropName}"
-    transitionTheoremsExt.add thm attrKind
-
-中文:
-定义 addTheorem
-  签名: (declName : Name) (attrKind : AttributeKind := .global)
-  定义体: do
-  match (← getTheoremFromConst declName prio) with
-  | .lam thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-lambda theorem: {thm.thmName}
-function property: {thm.funPropName}
-type: {repr thm.thmArgs.type}"
-    lambdaTheoremsExt.add thm attrKind
-  | .function thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-function theorem: {thm.thmOrigin.name}
-function property: {thm.funPropName}
-function name: {thm.funOrigin.name}
-main arguments: {thm.mainArgs}
-applied arguments: {thm.appliedArgs}
-form: {toString thm.form} form"
-    functionTheoremsExt.add thm attrKind
-  | .mor thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-morphism theorem: {thm.thmName}
-function property: {thm.funPropName}"
-    morTheoremsExt.add thm attrKind
-  | .transition thm =>
-    trace[Meta.Tactic.fun_prop.attr] "\
-transition theorem: {thm.thmName}
-function property: {thm.funPropName}"
-    transitionTheoremsExt.add thm attrKind
-
-Depends on / 依赖: global
+--- 原说明 ---
+Register theorem `declName` with `fun_prop`.
 -/
 def addTheorem (declName : Name) (attrKind : AttributeKind := .global)
     (prio : Nat := eval_prio default) : MetaM Unit := do
@@ -889,3 +701,4 @@ function property: {thm.funPropName}"
 end Meta.FunProp
 
 end Mathlib
+

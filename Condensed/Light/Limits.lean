@@ -21,15 +21,8 @@ open CategoryTheory Limits
 
 variable (R : Type u) [Ring R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasCountableLimits (LightCondMod.{u} R)
-
-中文:
-实例 :
-  签名: 有余untableLimits (LightCondMod.{u} R)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasCountableLimits (LightCondMod.{u} R) where

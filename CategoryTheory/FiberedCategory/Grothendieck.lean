@@ -35,52 +35,37 @@ section
 
 variable {R S : 𝒮} (a : F.obj ⟨op S⟩) (f : R ⟶ S)
 
-/--
-Definition of `domainCartesianLift` / `domainCartesianLift` 的定义
+/-- The domain of the Cartesian lift of `f`. -/
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.domainCartesianLift** 是 Mathlib 中的
+一个缩写定义，位于命名空间 `CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：domainCartesianLift : ∫ᶜ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation domainCartesianLift
-  signature: : ∫ᶜ F
-  body: ⟨R, (F.map f.op.toLoc).toFunctor.obj a⟩
-
-中文:
-缩写 domainCartesianLift
-  签名: : ∫ᶜ F
-  定义体: ⟨R, (F.map f.op.toLoc).toFunctor.obj a⟩
-
-Depends on / 依赖: F.map, f.op.toLoc, toFunctor, toFunctor.obj
+--- 原说明 ---
+The domain of the Cartesian lift of `f`.
 -/
 abbrev domainCartesianLift : ∫ᶜ F := ⟨R, (F.map f.op.toLoc).toFunctor.obj a⟩
 
-/--
-Definition of `cartesianLift` / `cartesianLift` 的定义
+/-- The Cartesian lift of `f`. -/
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.cartesianLift** 是 Mathlib 中的一个缩写定义
+，位于命名空间 `CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：cartesianLift : domainCartesianLift a f ⟶ ⟨S, a⟩
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation cartesianLift
-  signature: : domainCartesianLift a f ⟶ ⟨S, a⟩
-  body: ⟨f, 𝟙 _⟩
-
-中文:
-缩写 cartesianLift
-  签名: : domainCartesianLift a f ⟶ ⟨S, a⟩
-  定义体: ⟨f, 𝟙 _⟩
+--- 原说明 ---
+The Cartesian lift of `f`.
 -/
 abbrev cartesianLift : domainCartesianLift a f ⟶ ⟨S, a⟩ := ⟨f, 𝟙 _⟩
-
-/--
-Instance `isHomLift_cartesianLift` / 实例 `isHomLift_cartesianLift`
-
-English:
-instance isHomLift_cartesianLift
-  signature: : IsHomLift (forget F) f (cartesianLift a f)
-  body: IsHomLift.map (forget F) (cartesianLift a f)
-
-中文:
-实例 isHomLift_cartesianLift
-  签名: : IsHomLift (forget F) f (cartesianLift a f)
-  定义体: IsHomLift.map (forget F) (cartesianLift a f)
-
-Depends on / 依赖: HasBiproduct, HasProduct, IsHomLift, IsHomLift.map, cartesianLift, forget, hasProduct_of_hasBiproduct
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.isHomLift_cartesianLift** 是 Mathli
+b 中的一个实例，位于命名空间 `CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：isHomLift_cartesianLift : IsHomLift (forget F) f (cartesianLift a f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isHomLift_cartesianLift : IsHomLift (forget F) f (cartesianLift a f) :=
   IsHomLift.map (forget F) (cartesianLift a f)
@@ -88,26 +73,21 @@ instance isHomLift_cartesianLift : IsHomLift (forget F) f (cartesianLift a f) :=
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 variable {a} in
-/--
-Definition of `homCartesianLift` / `homCartesianLift` 的定义
+/-- Given some lift `φ'` of `g ≫ f`, the canonical map from the domain of `φ'` to the domain of
+the Cartesian lift of `f`. -/
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.homCartesianLift** 是 Mathlib 中的一个缩
+写定义，位于命名空间 `CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：homCartesianLift {a' : ∫ᶜ F} (g : a'.1 ⟶ R) (φ' : a' ⟶ ⟨S, a⟩) [IsHomLift 
+(forget F) (g ≫ f) φ'] : a' ⟶ domainCartesianLift a f where base
+参数：g : a'.1 ⟶ R；φ' : a' ⟶ ⟨S, a⟩；forget F；g ≫ f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation homCartesianLift
-  signature: {a' : ∫ᶜ F} (g : a'.1 ⟶ R) (φ' : a' ⟶ ⟨S, a⟩)
-  body: g
-  fiber :=
-    have : φ'.base = g ≫ f := by simpa using IsHomLift.fac' (forget F) (g ≫ f) φ'
-    φ'.fiber ≫ eqToHom (by simp [this]) ≫ (F.mapComp f.op.toLoc g.op.toLoc).hom.toNatTrans.app a
-
-中文:
-缩写 homCartesianLift
-  签名: {a' : ∫ᶜ F} (g : a'.1 ⟶ R) (φ' : a' ⟶ ⟨S, a⟩)
-  定义体: g
-  fiber :=
-    have : φ'.base = g ≫ f := by simpa using IsHomLift.fac' (forget F) (g ≫ f) φ'
-    φ'.fiber ≫ eqToHom (by simp [this]) ≫ (F.mapComp f.op.toLoc g.op.toLoc).hom.toNatTrans.app a
-
-Depends on / 依赖: HasBiproduct, HasCoproduct, hasCoproduct_of_hasBiproduct
+--- 原说明 ---
+Given some lift `φ'` of `g ≫ f`, the canonical map from the domain of `φ'` to th
+e domain of
+the Cartesian lift of `f`.
 -/
 abbrev homCartesianLift {a' : ∫ᶜ F} (g : a'.1 ⟶ R) (φ' : a' ⟶ ⟨S, a⟩)
     [IsHomLift (forget F) (g ≫ f) φ'] : a' ⟶ domainCartesianLift a f where
@@ -117,20 +97,15 @@ abbrev homCartesianLift {a' : ∫ᶜ F} (g : a'.1 ⟶ R) (φ' : a' ⟶ ⟨S, a�
     φ'.fiber ≫ eqToHom (by simp [this]) ≫ (F.mapComp f.op.toLoc g.op.toLoc).hom.toNatTrans.app a
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isHomLift_homCartesianLift` / 实例 `isHomLift_homCartesianLift`
-
-English:
-instance isHomLift_homCartesianLift
-  signature: {a' : ∫ᶜ F} {φ' : a' ⟶ ⟨S, a⟩} {g : a'.1 ⟶ R}
-  body: IsHomLift.map (forget F) (homCartesianLift f g φ')
-
-中文:
-实例 isHomLift_homCartesianLift
-  签名: {a' : ∫ᶜ F} {φ' : a' ⟶ ⟨S, a⟩} {g : a'.1 ⟶ R}
-  定义体: IsHomLift.map (forget F) (homCartesianLift f g φ')
-
-Depends on / 依赖: IsHomLift, IsHomLift.map, forget, homCartesianLift
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.isHomLift_homCartesianLift** 是 Mat
+hlib 中的一个实例，位于命名空间 `CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：isHomLift_homCartesianLift {a' : ∫ᶜ F} {φ' : a' ⟶ ⟨S, a⟩} {g : a'.1 ⟶ R} [
+IsHomLift (forget F) (g ≫ f) φ'] : IsHomLift (forget F) g (homCartesianLift f g 
+φ')
+参数：forget F；g ≫ f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isHomLift_homCartesianLift {a' : ∫ᶜ F} {φ' : a' ⟶ ⟨S, a⟩} {g : a'.1 ⟶ R}
     [IsHomLift (forget F) (g ≫ f) φ'] : IsHomLift (forget F) g (homCartesianLift f g φ') :=
@@ -138,30 +113,52 @@ instance isHomLift_homCartesianLift {a' : ∫ᶜ F} {φ' : a' ⟶ ⟨S, a⟩} {g
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isStronglyCartesian_homCartesianLift` / 引理 `isStronglyCartesian_homCartesianLift`
-
-English:
-lemma isStronglyCartesian_homCartesianLift
-  proof: by
-    refine ⟨homCartesianLift f g φ', ⟨inferInstance, ?_⟩, ?_⟩
-    · exact Hom.ext _ _ (by simpa using IsHomLift.fac (forget F) (g ≫ f) φ')
-        (by simp [← Cat.Hom₂.comp_app])
-    rintro χ' ⟨hχ'.symm, rfl⟩
-    obtain ⟨rfl⟩ : g = χ'.1 := by simpa using IsHomLift.fac (forget F) g χ'
-    ext <;> simp [← Cat.Hom₂.comp_app]
-
-中文:
-引理 isStronglyCartesian_homCartesianLift
-  证明: by
-    refine ⟨homCartesianLift f g φ', ⟨inferInstance, ?_⟩, ?_⟩
-    · exact Hom.ext _ _ (by simpa using IsHomLift.fac (forget F) (g ≫ f) φ')
-        (by simp [← Cat.Hom₂.comp_app])
-    rintro χ' ⟨hχ'.symm, rfl⟩
-    obtain ⟨rfl⟩ : g = χ'.1 := by simpa using IsHomLift.fac (forget F) g χ'
-    ext <;> simp [← Cat.Hom₂.comp_app]
-
-Depends on / 依赖: Cat.Hom, Finite, HasFiniteBiproducts, Hom.ext, IsHomLift, IsHomLift.fac, comp_app, forget, hasBiproductsOfShape_finite, homCartesianLift
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.isStronglyCartesian_homCartesianLi
+ft** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：isStronglyCartesian_homCartesianLift : IsStronglyCartesian (forget F) f (c
+artesianLift a f) where universal_property' {a'} g φ' hφ'
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pseudofunctor.CoGrothendieck.Hom.ext`：∀ {𝒮 : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} 𝒮]   {F : CategoryTheory.Pseudofunctor (Ca
+tegoryTheory.LocallyDiscrete 𝒮ᵒᵖ) Categor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.IsHomLift.domain_eq`：domain_eq (f : R ⟶ S) (φ : a ⟶ b) [p
+.IsHomLift f φ] : p.obj a = R
+· 使用引理 `CategoryTheory.IsHomLift.codomain_eq`：codomain_eq (f : R ⟶ S) (φ : a ⟶ b
+) [p.IsHomLift f φ] : p.obj b = S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.IsHomLift.fac`：fac : f = eqToHom (domain_eq p f φ).symm ≫
+ p.map φ ≫ eqToHom (codomain_eq p f φ)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
 -/
 lemma isStronglyCartesian_homCartesianLift :
     IsStronglyCartesian (forget F) f (cartesianLift a f) where
@@ -175,25 +172,17 @@ lemma isStronglyCartesian_homCartesianLift :
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `forget F : ∫ᶜ F ⥤ 𝒮` is a fibered category. -/
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Pseudofunctor.CoGrothendieck`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: IsFibered (forget F)
-  body: IsFibered.of_exists_isStronglyCartesian (fun a _ f =>
-    ⟨domainCartesianLift a.2 f, cartesianLift a.2 f, isStronglyCartesian_homCartesianLift a.2 f⟩)
-
-中文:
-实例 :
-  签名: 是Fibered (forget F)
-  定义体: IsFibered.of_exists_isStronglyCartesian (fun a _ f =>
-    ⟨domainCartesianLift a.2 f, cartesianLift a.2 f, isStronglyCartesian_homCartesianLift a.2 f⟩)
-
-Depends on / 依赖: HasFiniteBiproducts, IsFibered, IsFibered.of_exists_isStronglyCartesian, cartesianLift, domainCartesianLift, hasFiniteProducts_of_hasFiniteBiproducts, isStronglyCartesian_homCartesianLift, of_exists_isStronglyCartesian
+--- 原说明 ---
+`forget F : ∫ᶜ F ⥤ 𝒮` is a fibered category.
 -/
 instance : IsFibered (forget F) :=
-  IsFibered.of_exists_isStronglyCartesian (fun a _ f =>
+  IsFibered.of_exists_isStronglyCartesian (fun a _ f ↦
     ⟨domainCartesianLift a.2 f, cartesianLift a.2 f, isStronglyCartesian_homCartesianLift a.2 f⟩)
 
 variable (F) (S : 𝒮)
@@ -202,36 +191,13 @@ set_option backward.isDefEq.respectTransparency false in
 attribute [local simp] PrelaxFunctor.map₂_eqToHom in
 /-- The inclusion map from `F(S)` into `∫ᶜ F`. -/
 @[simps]
-/--
-Definition of `ι` / `ι` 的定义
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Pseudofunctor.CoGrothendieck`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι
-  signature: : F.obj ⟨op S⟩ ⥤ ∫ᶜ F where
-  body: { base := S, fiber := a }
-  map {a b} φ := { base := 𝟙 S, fiber := φ ≫ (F.mapId ⟨op S⟩).inv.toNatTrans.app b }
-  map_comp {a b c} φ ψ := by
-    ext
-    · simp
-    · simp [← (F.mapId ⟨op S⟩).inv.toNatTrans.naturality_assoc ψ, F.whiskerRight_mapId_inv_app,
-        Strict.leftUnitor_eqToIso, ← Cat.Hom₂.comp_app]
-
-#adaptation_note
-
-中文:
-定义 ι
-  签名: : F.obj ⟨op S⟩ ⥤ ∫ᶜ F where
-  定义体: { base := S, fiber := a }
-  map {a b} φ := { base := 𝟙 S, fiber := φ ≫ (F.mapId ⟨op S⟩).inv.toNatTrans.app b }
-  map_comp {a b c} φ ψ := by
-    ext
-    · simp
-    · simp [← (F.mapId ⟨op S⟩).inv.toNatTrans.naturality_assoc ψ, F.whiskerRight_mapId_inv_app,
-        Strict.leftUnitor_eqToIso, ← Cat.Hom₂.comp_app]
-
-#adaptation_note
-
-Depends on / 依赖: HasFiniteBiproducts, hasFiniteCoproducts_of_hasFiniteBiproducts
+--- 原说明 ---
+The inclusion map from `F(S)` into `∫ᶜ F`.
 -/
 def ι : F.obj ⟨op S⟩ ⥤ ∫ᶜ F where
   obj a := { base := S, fiber := a }
@@ -247,68 +213,37 @@ def ι : F.obj ⟨op S⟩ ⥤ ∫ᶜ F where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The natural isomorphism encoding `comp_const`. -/
 @[simps!]
-/--
-Definition of `compIso` / `compIso` 的定义
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.compIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：compIso : (ι F S) ⋙ forget F ≅ (const (F.obj ⟨op S⟩)).obj S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compIso
-  signature: : (ι F S) ⋙ forget F ≅ (const (F.obj ⟨op S⟩)).obj S
-  body: NatIso.ofComponents (fun a => eqToIso rfl)
-
-中文:
-定义 compIso
-  签名: : (ι F S) ⋙ forget F ≅ (const (F.obj ⟨op S⟩)).obj S
-  定义体: NatIso.ofComponents (fun a => eqToIso rfl)
-
-Depends on / 依赖: HasBiproductsOfShape, NatIso, NatIso.ofComponents, eqToIso, hasProductsOfShape_of_hasBiproductsOfShape, ofComponents
+--- 原说明 ---
+The natural isomorphism encoding `comp_const`.
 -/
 def compIso : (ι F S) ⋙ forget F ≅ (const (F.obj ⟨op S⟩)).obj S :=
   NatIso.ofComponents (fun a => eqToIso rfl)
-
-/--
-lemma `comp_const` / 引理 `comp_const`
-
-English:
-lemma comp_const
-  statement: (ι F S) ⋙ forget F = (const (F.obj ⟨op S⟩)).obj S
-  proof: Functor.ext_of_iso (compIso F S) (fun _ => rfl) (fun _ => rfl)
-
-中文:
-引理 comp_const
-  结论: (ι F S) ⋙ forget F = (const (F.obj ⟨op S⟩)).obj S
-  证明: Functor.ext_of_iso (compIso F S) (fun _ => rfl) (fun _ => rfl)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, HasBiproductsOfShape, compIso, ext_of_iso, hasCoproductsOfShape_of_hasBiproductsOfShape
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.comp_const** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Pseudofunctor.CoGrothendieck`。
+形式化陈述：comp_const : (ι F S) ⋙ forget F = (const (F.obj ⟨op S⟩)).obj S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
 -/
 lemma comp_const : (ι F S) ⋙ forget F = (const (F.obj ⟨op S⟩)).obj S :=
-  Functor.ext_of_iso (compIso F S) (fun _ => rfl) (fun _ => rfl)
+  Functor.ext_of_iso (compIso F S) (fun _ ↦ rfl) (fun _ => rfl)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Fiber.inducedFunctor (comp_const F S)).Full
-  body: by
-    have hf : (fiberInclusion.map f).base = 𝟙 S := by
-      simpa using (IsHomLift.fac (forget F) (𝟙 S) (fiberInclusion.map f)).symm
-    use (fiberInclusion.map f).fiber ≫ eqToHom (by simp [hf]) ≫
-      (F.mapId ⟨op S⟩).hom.toNatTrans.app Y
-    ext <;> simp [hf, ← Cat.Hom₂.comp_app]
-
-中文:
-实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).满
-  定义体: by
-    have hf : (fiberInclusion.map f).base = 𝟙 S := by
-      simpa using (IsHomLift.fac (forget F) (𝟙 S) (fiberInclusion.map f)).symm
-    use (fiberInclusion.map f).fiber ≫ eqToHom (by simp [hf]) ≫
-      (F.mapId ⟨op S⟩).hom.toNatTrans.app Y
-    ext <;> simp [hf, ← Cat.Hom₂.comp_app]
-
-Depends on / 依赖: Cat.Hom, F.mapId, IsHomLift, IsHomLift.fac, comp_app, eqToHom, fiberInclusion, fiberInclusion.map, forget, hom.toNatTrans.app, toNatTrans
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Pseudofunctor.CoGrothendieck`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (Fiber.inducedFunctor (comp_const F S)).Full where
   map_surjective {X Y} f := by
@@ -319,28 +254,10 @@ noncomputable instance : (Fiber.inducedFunctor (comp_const F S)).Full where
     ext <;> simp [hf, ← Cat.Hom₂.comp_app]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Fiber.inducedFunctor (comp_const F S)).Faithful
-  body: by
-    intro f g heq
-    replace heq := fiberInclusion.congr_map heq
-    simpa [cancel_mono, ← Cat.Hom.toNatIso_hom,
-      ← Cat.Hom.toNatIso_inv] using ((Hom.ext_iff _ _).mp heq).2
-
-中文:
-实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).忠实
-  定义体: by
-    intro f g heq
-    replace heq := fiberInclusion.congr_map heq
-    simpa [cancel_mono, ← Cat.Hom.toNatIso_hom,
-      ← Cat.Hom.toNatIso_inv] using ((Hom.ext_iff _ _).mp heq).2
-
-Depends on / 依赖: Cat.Hom.toNatIso_hom, Cat.Hom.toNatIso_inv, Hom.ext_iff, cancel_mono, congr_map, ext_iff, fiberInclusion, fiberInclusion.congr_map, replace, toNatIso_hom, toNatIso_inv
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Pseudofunctor.CoGrothendieck`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (Fiber.inducedFunctor (comp_const F S)).Faithful where
   map_injective {a b} := by
@@ -350,32 +267,10 @@ instance : (Fiber.inducedFunctor (comp_const F S)).Faithful where
       ← Cat.Hom.toNatIso_inv] using ((Hom.ext_iff _ _).mp heq).2
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Fiber.inducedFunctor (comp_const F S)).EssSurj
-  body: by
-  apply essSurj_of_surj
-  intro Y
-  have hYS : (fiberInclusion.obj Y).base = S := by simpa using! Y.2
-  use hYS ▸ (fiberInclusion.obj Y).fiber
-  apply fiberInclusion_obj_inj
-  ext <;> simp [hYS]
-
-中文:
-实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).本质满射
-  定义体: by
-  apply essSurj_of_surj
-  intro Y
-  have hYS : (fiberInclusion.obj Y).base = S := by simpa using! Y.2
-  use hYS ▸ (fiberInclusion.obj Y).fiber
-  apply fiberInclusion_obj_inj
-  ext <;> simp [hYS]
-
-Depends on / 依赖: essSurj_of_surj, fiberInclusion, fiberInclusion.obj, fiberInclusion_obj_inj
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Pseudofunctor.CoGrothendieck`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (Fiber.inducedFunctor (comp_const F S)).EssSurj := by
   apply essSurj_of_surj
@@ -384,38 +279,21 @@ noncomputable instance : (Fiber.inducedFunctor (comp_const F S)).EssSurj := by
   use hYS ▸ (fiberInclusion.obj Y).fiber
   apply fiberInclusion_obj_inj
   ext <;> simp [hYS]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Fiber.inducedFunctor (comp_const F S)).IsEquivalence
-
-中文:
-实例 :
-  签名: (Fiber.inducedFunctor (comp_const F S)).是等价
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Pseudofunctor.CoGrothendieck`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (Fiber.inducedFunctor (comp_const F S)).IsEquivalence where
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `HasFibers` instance for `∫ᶜ F`, where the fiber over `S` is `F.obj ⟨op S⟩`. -/
+/-
+**CategoryTheory.Pseudofunctor.CoGrothendieck.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Pseudofunctor.CoGrothendieck`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: HasFibers (forget F)
-  body: F.obj ⟨op S⟩
-  ι := ι F
-  comp_const := comp_const F
-
-中文:
-实例 :
-  签名: 有Fibers (forget F)
-  定义体: F.obj ⟨op S⟩
-  ι := ι F
-  comp_const := comp_const F
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+`HasFibers` instance for `∫ᶜ F`, where the fiber over `S` is `F.obj ⟨op S⟩`.
 -/
 noncomputable instance : HasFibers (forget F) where
   Fib S := F.obj ⟨op S⟩
@@ -423,3 +301,4 @@ noncomputable instance : HasFibers (forget F) where
   comp_const := comp_const F
 
 end CategoryTheory.Pseudofunctor.CoGrothendieck
+

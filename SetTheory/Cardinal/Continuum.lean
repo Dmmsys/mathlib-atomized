@@ -27,26 +27,15 @@ universe u v
 
 open Cardinal
 
-/--
-Definition of `continuum` / `continuum` 的定义
+/-- Cardinality of the continuum. -/
+/-
+**Cardinal.continuum** 是 Mathlib 中的一个定义，位于命名空间 `Cardinal`。
+形式化陈述：continuum : Cardinal.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition continuum
-  signature: : Cardinal.{u}
-  body: 2 ^ ℵ₀
-
-@[inherit_doc] scoped notation "𝔠" => Cardinal.continuum
-
-@[simp]
-
-中文:
-定义 continuum
-  签名: : 基数.{u}
-  定义体: 2 ^ ℵ₀
-
-@[inherit_doc] scoped notation "𝔠" => Cardinal.continuum
-
-@[simp]
+--- 原说明 ---
+Cardinality of the continuum.
 -/
 def continuum : Cardinal.{u} :=
   2 ^ ℵ₀
@@ -54,351 +43,243 @@ def continuum : Cardinal.{u} :=
 @[inherit_doc] scoped notation "𝔠" => Cardinal.continuum
 
 @[simp]
-/--
-theorem `two_power_aleph0` / 定理 `two_power_aleph0`
-
-English:
-theorem two_power_aleph0
-  statement: 2 ^ ℵ₀ = 𝔠
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 two_power_aleph0
-  结论: 2 ^ ℵ₀ = 𝔠
-  证明: rfl
-
-@[simp]
+/-
+**Cardinal.two_power_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：two_power_aleph0 : 2 ^ ℵ₀ = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem two_power_aleph0 : 2 ^ ℵ₀ = 𝔠 :=
   rfl
 
 @[simp]
-/--
-theorem `lift_continuum` / 定理 `lift_continuum`
-
-English:
-theorem lift_continuum
-  statement: lift.{v} 𝔠 = 𝔠
-  proof: by
-  rw [← two_power_aleph0]; rw [lift_two_power]; rw [lift_aleph0]; rw [two_power_aleph0]
-
-@[simp]
-
-中文:
-定理 lift_continuum
-  结论: lift.{v} 𝔠 = 𝔠
-  证明: by
-  rw [← two_power_aleph0]; rw [lift_two_power]; rw [lift_aleph0]; rw [two_power_aleph0]
-
-@[simp]
-
-Depends on / 依赖: lift_aleph0, lift_two_power, two_power_aleph0
+/-
+**Cardinal.lift_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_continuum : lift.{v} 𝔠 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.two_power_aleph0`：two_power_aleph0 : 2 ^ ℵ₀ = 𝔠
+· 使用定理 `Cardinal.lift_two_power`：lift_two_power (a : Cardinal) : lift.{v} (2 ^ a
+) = 2 ^ lift.{v} a
+· 使用定理 `Cardinal.lift_aleph0`：lift_aleph0 : lift ℵ₀ = ℵ₀
 -/
 theorem lift_continuum : lift.{v} 𝔠 = 𝔠 := by
-  rw [← two_power_aleph0]; rw [lift_two_power]; rw [lift_aleph0]; rw [two_power_aleph0]
+  rw [← two_power_aleph0, lift_two_power, lift_aleph0, two_power_aleph0]
 
 @[simp]
-/--
-theorem `continuum_le_lift` / 定理 `continuum_le_lift`
-
-English:
-theorem continuum_le_lift
-  given: {c : Cardinal.{u}}
-  statement: 𝔠 <= lift.{v} c ↔ 𝔠 <= c
-  proof: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
-
-@[simp]
-
-中文:
-定理 continuum_le_lift
-  条件: {c : 基数.{u}}
-  结论: 𝔠 <= lift.{v} c ↔ 𝔠 <= c
-  证明: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
-
-@[simp]
-
-Depends on / 依赖: lift_continuum, lift_le
+/-
+**Cardinal.continuum_le_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_le_lift {c : Cardinal.{u}} : 𝔠 <= lift.{v} c ↔ 𝔠 <= c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_continuum`：lift_continuum : lift.{v} 𝔠 = 𝔠
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem continuum_le_lift {c : Cardinal.{u}} : 𝔠 <= lift.{v} c ↔ 𝔠 <= c := by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
+theorem continuum_le_lift {c : Cardinal.{u}} : 𝔠 ≤ lift.{v} c ↔ 𝔠 ≤ c := by
+  rw [← lift_continuum.{v, u}, lift_le]
 
 @[simp]
-/--
-theorem `lift_le_continuum` / 定理 `lift_le_continuum`
-
-English:
-theorem lift_le_continuum
-  given: {c : Cardinal.{u}}
-  statement: lift.{v} c <= 𝔠 ↔ c <= 𝔠
-  proof: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
-
-@[simp]
-
-中文:
-定理 lift_le_continuum
-  条件: {c : 基数.{u}}
-  结论: lift.{v} c <= 𝔠 ↔ c <= 𝔠
-  证明: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
-
-@[simp]
-
-Depends on / 依赖: lift_continuum, lift_le
+/-
+**Cardinal.lift_le_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_le_continuum {c : Cardinal.{u}} : lift.{v} c <= 𝔠 ↔ c <= 𝔠
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_continuum`：lift_continuum : lift.{v} 𝔠 = 𝔠
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lift_le_continuum {c : Cardinal.{u}} : lift.{v} c <= 𝔠 ↔ c <= 𝔠 := by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_le]
+theorem lift_le_continuum {c : Cardinal.{u}} : lift.{v} c ≤ 𝔠 ↔ c ≤ 𝔠 := by
+  rw [← lift_continuum.{v, u}, lift_le]
 
 @[simp]
-/--
-theorem `continuum_lt_lift` / 定理 `continuum_lt_lift`
-
-English:
-theorem continuum_lt_lift
-  given: {c : Cardinal.{u}}
-  statement: 𝔠 < lift.{v} c ↔ 𝔠 < c
-  proof: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
-
-@[simp]
-
-中文:
-定理 continuum_lt_lift
-  条件: {c : 基数.{u}}
-  结论: 𝔠 < lift.{v} c ↔ 𝔠 < c
-  证明: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
-
-@[simp]
-
-Depends on / 依赖: lift_continuum, lift_lt
+/-
+**Cardinal.continuum_lt_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_lt_lift {c : Cardinal.{u}} : 𝔠 < lift.{v} c ↔ 𝔠 < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_continuum`：lift_continuum : lift.{v} 𝔠 = 𝔠
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem continuum_lt_lift {c : Cardinal.{u}} : 𝔠 < lift.{v} c ↔ 𝔠 < c := by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
+  rw [← lift_continuum.{v, u}, lift_lt]
 
 @[simp]
-/--
-theorem `lift_lt_continuum` / 定理 `lift_lt_continuum`
-
-English:
-theorem lift_lt_continuum
-  given: {c : Cardinal.{u}}
-  statement: lift.{v} c < 𝔠 ↔ c < 𝔠
-  proof: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
-
-中文:
-定理 lift_lt_continuum
-  条件: {c : 基数.{u}}
-  结论: lift.{v} c < 𝔠 ↔ c < 𝔠
-  证明: by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
-
-Depends on / 依赖: lift_continuum, lift_lt
+/-
+**Cardinal.lift_lt_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：lift_lt_continuum {c : Cardinal.{u}} : lift.{v} c < 𝔠 ↔ c < 𝔠
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_continuum`：lift_continuum : lift.{v} 𝔠 = 𝔠
+· 使用定理 `Cardinal.lift_lt`：lift_lt {a b : Cardinal.{u}} : lift.{v, u} a < lift.{v
+, u} b ↔ a < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lift_lt_continuum {c : Cardinal.{u}} : lift.{v} c < 𝔠 ↔ c < 𝔠 := by
-  rw [← lift_continuum.{v]; rw [u}]; rw [lift_lt]
+  rw [← lift_continuum.{v, u}, lift_lt]
+
+/-!
+### Inequalities
+-/
 
 
+/-
+**Cardinal.aleph0_lt_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph0_lt_continuum : ℵ₀ < 𝔠
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.cantor`：cantor (a : Cardinal.{u}) : a < 2 ^ a
 
-/--
-theorem `aleph0_lt_continuum` / 定理 `aleph0_lt_continuum`
-
-English:
-theorem aleph0_lt_continuum
-  statement: ℵ₀ < 𝔠
-  proof: cantor ℵ₀
-
-中文:
-定理 aleph0_lt_continuum
-  结论: ℵ₀ < 𝔠
-  证明: cantor ℵ₀
-
-Depends on / 依赖: cantor
+--- 原说明 ---
+### Inequalities
 -/
 theorem aleph0_lt_continuum : ℵ₀ < 𝔠 :=
   cantor ℵ₀
-
-/--
-theorem `aleph0_le_continuum` / 定理 `aleph0_le_continuum`
-
-English:
-theorem aleph0_le_continuum
-  statement: ℵ₀ <= 𝔠
-  proof: aleph0_lt_continuum.le
-
-@[simp]
-
-中文:
-定理 aleph0_le_continuum
-  结论: ℵ₀ <= 𝔠
-  证明: aleph0_lt_continuum.le
-
-@[simp]
-
-Depends on / 依赖: aleph0_lt_continuum, aleph0_lt_continuum.le
+/-
+**Cardinal.aleph0_le_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph0_le_continuum : ℵ₀ <= 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Cardinal.aleph0_lt_continuum`：aleph0_lt_continuum : ℵ₀ < 𝔠
 -/
-theorem aleph0_le_continuum : ℵ₀ <= 𝔠 :=
+theorem aleph0_le_continuum : ℵ₀ ≤ 𝔠 :=
   aleph0_lt_continuum.le
 
 @[simp]
-/--
-theorem `beth_one` / 定理 `beth_one`
-
-English:
-theorem beth_one
-  statement: ℶ_ 1 = 𝔠
-  proof: by simpa using beth_succ 0
-
-中文:
-定理 beth_one
-  结论: ℶ_ 1 = 𝔠
-  证明: by simpa using beth_succ 0
-
-Depends on / 依赖: beth_succ
+/-
+**Cardinal.beth_one** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：beth_one : ℶ_ 1 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Cardinal.beth_zero`：beth_zero : ℶ_ 0 = ℵ₀
+· 使用定理 `Cardinal.beth_succ`：beth_succ (o : Ordinal) : ℶ_ (succ o) = 2 ^ ℶ_ o
 -/
 theorem beth_one : ℶ_ 1 = 𝔠 := by simpa using beth_succ 0
-
-/--
-theorem `nat_lt_continuum` / 定理 `nat_lt_continuum`
-
-English:
-theorem nat_lt_continuum
-  given: (n : Nat)
-  statement: ↑n < 𝔠
-  proof: natCast_lt_aleph0.trans aleph0_lt_continuum
-
-中文:
-定理 nat_lt_continuum
-  条件: (n : 自然数)
-  结论: ↑n < 𝔠
-  证明: natCast_lt_aleph0.trans aleph0_lt_continuum
-
-Depends on / 依赖: aleph0_lt_continuum, natCast_lt_aleph0, natCast_lt_aleph0.trans
+/-
+**Cardinal.nat_lt_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：nat_lt_continuum (n : Nat) : ↑n < 𝔠
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Cardinal.natCast_lt_aleph0`：∀ {n : ℕ}, ↑n < Cardinal.aleph0
+· 使用定理 `Cardinal.aleph0_lt_continuum`：aleph0_lt_continuum : ℵ₀ < 𝔠
 -/
-theorem nat_lt_continuum (n : Nat) : ↑n < 𝔠 :=
+theorem nat_lt_continuum (n : ℕ) : ↑n < 𝔠 :=
   natCast_lt_aleph0.trans aleph0_lt_continuum
-
-/--
-theorem `mk_set_nat` / 定理 `mk_set_nat`
-
-English:
-theorem mk_set_nat
-  statement: #(Set Nat) = 𝔠
-  proof: by simp
-
-中文:
-定理 mk_set_nat
-  结论: #(集合 自然数) = 𝔠
-  证明: by simp
+/-
+**Cardinal.mk_set_nat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：mk_set_nat : #(Set Nat) = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Cardinal.mk_set`：mk_set {α : Type u} : #(Set α) = 2 ^ #α
+· 使用定理 `Cardinal.mk_eq_aleph0`：mk_eq_aleph0 (α : Type*) [Countable α] [Infinite 
+α] : #α = ℵ₀
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `instInfiniteNat`：Infinite ℕ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mk_set_nat : #(Set Nat) = 𝔠 := by simp
-
-/--
-theorem `continuum_pos` / 定理 `continuum_pos`
-
-English:
-theorem continuum_pos
-  statement: 0 < 𝔠
-  proof: nat_lt_continuum 0
-
-中文:
-定理 continuum_pos
-  结论: 0 < 𝔠
-  证明: nat_lt_continuum 0
-
-Depends on / 依赖: nat_lt_continuum
+theorem mk_set_nat : #(Set ℕ) = 𝔠 := by simp
+/-
+**Cardinal.continuum_pos** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_pos : 0 < 𝔠
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.nat_lt_continuum`：nat_lt_continuum (n : Nat) : ↑n < 𝔠
 -/
 theorem continuum_pos : 0 < 𝔠 :=
   nat_lt_continuum 0
-
-/--
-theorem `continuum_ne_zero` / 定理 `continuum_ne_zero`
-
-English:
-theorem continuum_ne_zero
-  statement: 𝔠 != 0
-  proof: continuum_pos.ne'
-
-中文:
-定理 continuum_ne_zero
-  结论: 𝔠 != 0
-  证明: continuum_pos.ne'
-
-Depends on / 依赖: continuum_pos, continuum_pos.ne
+/-
+**Cardinal.continuum_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_ne_zero : 𝔠 != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Cardinal.continuum_pos`：continuum_pos : 0 < 𝔠
 -/
-theorem continuum_ne_zero : 𝔠 != 0 :=
+theorem continuum_ne_zero : 𝔠 ≠ 0 :=
   continuum_pos.ne'
-
-/--
-theorem `aleph_one_le_continuum` / 定理 `aleph_one_le_continuum`
-
-English:
-theorem aleph_one_le_continuum
-  statement: ℵ₁ <= 𝔠
-  proof: by
-  rw [← succ_aleph0]
-  exact Order.succ_le_of_lt aleph0_lt_continuum
-
-@[simp]
-
-中文:
-定理 aleph_one_le_continuum
-  结论: ℵ₁ <= 𝔠
-  证明: by
-  rw [← succ_aleph0]
-  exact Order.succ_le_of_lt aleph0_lt_continuum
-
-@[simp]
-
-Depends on / 依赖: Order.succ_le_of_lt, aleph0_lt_continuum, succ_aleph0, succ_le_of_lt
+/-
+**Cardinal.aleph_one_le_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph_one_le_continuum : ℵ₁ <= 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.succ_aleph0`：succ_aleph0 : succ ℵ₀ = ℵ₁
+· 使用定理 `Order.succ_le_of_lt`：succ_le_of_lt {a b : α} : a < b -> succ a <= b
+· 使用定理 `Cardinal.aleph0_lt_continuum`：aleph0_lt_continuum : ℵ₀ < 𝔠
 -/
-theorem aleph_one_le_continuum : ℵ₁ <= 𝔠 := by
+theorem aleph_one_le_continuum : ℵ₁ ≤ 𝔠 := by
   rw [← succ_aleph0]
   exact Order.succ_le_of_lt aleph0_lt_continuum
 
 @[simp]
-/--
-theorem `continuum_toNat` / 定理 `continuum_toNat`
-
-English:
-theorem continuum_toNat
-  statement: toNat continuum = 0
-  proof: toNat_apply_of_aleph0_le aleph0_le_continuum
-
-@[simp]
-
-中文:
-定理 continuum_to自然数
-  结论: to自然数 continuum = 0
-  证明: toNat_apply_of_aleph0_le aleph0_le_continuum
-
-@[simp]
-
-Depends on / 依赖: aleph0_le_continuum, toNat_apply_of_aleph0_le
+/-
+**Cardinal.continuum_toNat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_toNat : toNat continuum = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.toNat_apply_of_aleph0_le`：toNat_apply_of_aleph0_le {c : Cardina
+l} (h : ℵ₀ <= c) : toNat c = 0
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
 -/
 theorem continuum_toNat : toNat continuum = 0 :=
   toNat_apply_of_aleph0_le aleph0_le_continuum
 
 @[simp]
-/--
-theorem `continuum_toENat` / 定理 `continuum_toENat`
-
-English:
-theorem continuum_toENat
-  statement: toENat continuum = ⊤
-  proof: (toENat_eq_top.2 aleph0_le_continuum)
-
-中文:
-定理 continuum_toE自然数
-  结论: toE自然数 continuum = ⊤
-  证明: (toENat_eq_top.2 aleph0_le_continuum)
-
-Depends on / 依赖: aleph0_le_continuum, toENat_eq_top
+/-
+**Cardinal.continuum_toENat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_toENat : toENat continuum = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.toENat_eq_top`：∀ {c : Cardinal.{u}}, Cardinal.toENat c = ⊤ ↔ Ca
+rdinal.aleph0 ≤ c
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
 -/
 theorem continuum_toENat : toENat continuum = ⊤ :=
   (toENat_eq_top.2 aleph0_le_continuum)
@@ -409,168 +290,97 @@ theorem continuum_toENat : toENat continuum = ⊤ :=
 
 
 @[simp]
-/--
-theorem `aleph0_add_continuum` / 定理 `aleph0_add_continuum`
+/-
+**Cardinal.aleph0_add_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph0_add_continuum : ℵ₀ + 𝔠 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.add_eq_right`：add_eq_right {a b : Cardinal} (hb : ℵ₀ <= b) (ha 
+: a <= b) : a + b = b
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
 
-English:
-theorem aleph0_add_continuum
-  statement: ℵ₀ + 𝔠 = 𝔠
-  proof: add_eq_right aleph0_le_continuum aleph0_le_continuum
-
-@[simp]
-
-中文:
-定理 aleph0_add_continuum
-  结论: ℵ₀ + 𝔠 = 𝔠
-  证明: add_eq_right aleph0_le_continuum aleph0_le_continuum
-
-@[simp]
-
-Depends on / 依赖: add_eq_right, aleph0_le_continuum
+--- 原说明 ---
+### Addition
 -/
 theorem aleph0_add_continuum : ℵ₀ + 𝔠 = 𝔠 :=
   add_eq_right aleph0_le_continuum aleph0_le_continuum
 
 @[simp]
-/--
-theorem `continuum_add_aleph0` / 定理 `continuum_add_aleph0`
-
-English:
-theorem continuum_add_aleph0
-  statement: 𝔠 + ℵ₀ = 𝔠
-  proof: (add_comm _ _).trans aleph0_add_continuum
-
-@[simp]
-
-中文:
-定理 continuum_add_aleph0
-  结论: 𝔠 + ℵ₀ = 𝔠
-  证明: (add_comm _ _).trans aleph0_add_continuum
-
-@[simp]
-
-Depends on / 依赖: add_comm, aleph0_add_continuum
+/-
+**Cardinal.continuum_add_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_add_aleph0 : 𝔠 + ℵ₀ = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Cardinal.aleph0_add_continuum`：aleph0_add_continuum : ℵ₀ + 𝔠 = 𝔠
 -/
 theorem continuum_add_aleph0 : 𝔠 + ℵ₀ = 𝔠 :=
   (add_comm _ _).trans aleph0_add_continuum
 
 @[simp]
-/--
-theorem `continuum_add_self` / 定理 `continuum_add_self`
-
-English:
-theorem continuum_add_self
-  statement: 𝔠 + 𝔠 = 𝔠
-  proof: add_eq_self aleph0_le_continuum
-
-@[simp]
-
-中文:
-定理 continuum_add_self
-  结论: 𝔠 + 𝔠 = 𝔠
-  证明: add_eq_self aleph0_le_continuum
-
-@[simp]
-
-Depends on / 依赖: add_eq_self, aleph0_le_continuum
+/-
+**Cardinal.continuum_add_self** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_add_self : 𝔠 + 𝔠 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.add_eq_self`：add_eq_self {c : Cardinal} (h : ℵ₀ <= c) : c + c =
+ c
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
 -/
 theorem continuum_add_self : 𝔠 + 𝔠 = 𝔠 :=
   add_eq_self aleph0_le_continuum
 
 @[simp]
-/--
-theorem `nat_add_continuum` / 定理 `nat_add_continuum`
-
-English:
-theorem nat_add_continuum
-  given: (n : Nat)
-  statement: ↑n + 𝔠 = 𝔠
-  proof: nat_add_eq n aleph0_le_continuum
-
-@[simp]
-
-中文:
-定理 nat_add_continuum
-  条件: (n : 自然数)
-  结论: ↑n + 𝔠 = 𝔠
-  证明: nat_add_eq n aleph0_le_continuum
-
-@[simp]
-
-Depends on / 依赖: aleph0_le_continuum, nat_add_eq
+/-
+**Cardinal.nat_add_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：nat_add_continuum (n : Nat) : ↑n + 𝔠 = 𝔠
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.nat_add_eq`：nat_add_eq {a : Cardinal} (n : Nat) (ha : ℵ₀ <= a) 
+: n + a = a
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
 -/
-theorem nat_add_continuum (n : Nat) : ↑n + 𝔠 = 𝔠 :=
+theorem nat_add_continuum (n : ℕ) : ↑n + 𝔠 = 𝔠 :=
   nat_add_eq n aleph0_le_continuum
 
 @[simp]
-/--
-theorem `continuum_add_nat` / 定理 `continuum_add_nat`
-
-English:
-theorem continuum_add_nat
-  given: (n : Nat)
-  statement: 𝔠 + n = 𝔠
-  proof: (add_comm _ _).trans (nat_add_continuum n)
-
-@[simp]
-
-中文:
-定理 continuum_add_nat
-  条件: (n : 自然数)
-  结论: 𝔠 + n = 𝔠
-  证明: (add_comm _ _).trans (nat_add_continuum n)
-
-@[simp]
-
-Depends on / 依赖: add_comm, nat_add_continuum
+/-
+**Cardinal.continuum_add_nat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_add_nat (n : Nat) : 𝔠 + n = 𝔠
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Cardinal.nat_add_continuum`：nat_add_continuum (n : Nat) : ↑n + 𝔠 = 𝔠
 -/
-theorem continuum_add_nat (n : Nat) : 𝔠 + n = 𝔠 :=
+theorem continuum_add_nat (n : ℕ) : 𝔠 + n = 𝔠 :=
   (add_comm _ _).trans (nat_add_continuum n)
 
 @[simp]
-/--
-theorem `ofNat_add_continuum` / 定理 `ofNat_add_continuum`
-
-English:
-theorem ofNat_add_continuum
-  given: {n : Nat} [Nat.AtLeastTwo n]
-  statement: ofNat(n) + 𝔠 = 𝔠
-  proof: nat_add_continuum n
-
-@[simp]
-
-中文:
-定理 of自然数_add_continuum
-  条件: {n : 自然数} [自然数.AtLeastTwo n]
-  结论: of自然数(n) + 𝔠 = 𝔠
-  证明: nat_add_continuum n
-
-@[simp]
-
-Depends on / 依赖: nat_add_continuum
+/-
+**Cardinal.ofNat_add_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：ofNat_add_continuum {n : Nat} [Nat.AtLeastTwo n] : ofNat(n) + 𝔠 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.nat_add_continuum`：nat_add_continuum (n : Nat) : ↑n + 𝔠 = 𝔠
 -/
-theorem ofNat_add_continuum {n : Nat} [Nat.AtLeastTwo n] : ofNat(n) + 𝔠 = 𝔠 :=
+theorem ofNat_add_continuum {n : ℕ} [Nat.AtLeastTwo n] : ofNat(n) + 𝔠 = 𝔠 :=
   nat_add_continuum n
 
 @[simp]
-/--
-theorem `continuum_add_ofNat` / 定理 `continuum_add_ofNat`
-
-English:
-theorem continuum_add_ofNat
-  given: {n : Nat} [Nat.AtLeastTwo n]
-  statement: 𝔠 + ofNat(n) = 𝔠
-  proof: continuum_add_nat n
-
-中文:
-定理 continuum_add_of自然数
-  条件: {n : 自然数} [自然数.AtLeastTwo n]
-  结论: 𝔠 + of自然数(n) = 𝔠
-  证明: continuum_add_nat n
-
-Depends on / 依赖: continuum_add_nat
+/-
+**Cardinal.continuum_add_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_add_ofNat {n : Nat} [Nat.AtLeastTwo n] : 𝔠 + ofNat(n) = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.continuum_add_nat`：continuum_add_nat (n : Nat) : 𝔠 + n = 𝔠
 -/
-theorem continuum_add_ofNat {n : Nat} [Nat.AtLeastTwo n] : 𝔠 + ofNat(n) = 𝔠 :=
+theorem continuum_add_ofNat {n : ℕ} [Nat.AtLeastTwo n] : 𝔠 + ofNat(n) = 𝔠 :=
   continuum_add_nat n
 
 /-!
@@ -579,168 +389,110 @@ theorem continuum_add_ofNat {n : Nat} [Nat.AtLeastTwo n] : 𝔠 + ofNat(n) = �
 
 
 @[simp]
-/--
-theorem `continuum_mul_self` / 定理 `continuum_mul_self`
+/-
+**Cardinal.continuum_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_mul_self : 𝔠 * 𝔠 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mul_eq_left`：mul_eq_left {a b : Cardinal} (ha : ℵ₀ <= a) (hb : 
+b <= a) (hb' : b != 0) : a * b = a
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Cardinal.continuum_ne_zero`：continuum_ne_zero : 𝔠 != 0
 
-English:
-theorem continuum_mul_self
-  statement: 𝔠 * 𝔠 = 𝔠
-  proof: mul_eq_left aleph0_le_continuum le_rfl continuum_ne_zero
-
-@[simp]
-
-中文:
-定理 continuum_mul_self
-  结论: 𝔠 * 𝔠 = 𝔠
-  证明: mul_eq_left aleph0_le_continuum le_rfl continuum_ne_zero
-
-@[simp]
-
-Depends on / 依赖: aleph0_le_continuum, continuum_ne_zero, le_rfl, mul_eq_left
+--- 原说明 ---
+### Multiplication
 -/
 theorem continuum_mul_self : 𝔠 * 𝔠 = 𝔠 :=
   mul_eq_left aleph0_le_continuum le_rfl continuum_ne_zero
 
 @[simp]
-/--
-theorem `continuum_mul_aleph0` / 定理 `continuum_mul_aleph0`
-
-English:
-theorem continuum_mul_aleph0
-  statement: 𝔠 * ℵ₀ = 𝔠
-  proof: mul_eq_left aleph0_le_continuum aleph0_le_continuum aleph0_ne_zero
-
-@[simp]
-
-中文:
-定理 continuum_mul_aleph0
-  结论: 𝔠 * ℵ₀ = 𝔠
-  证明: mul_eq_left aleph0_le_continuum aleph0_le_continuum aleph0_ne_zero
-
-@[simp]
-
-Depends on / 依赖: aleph0_le_continuum, aleph0_ne_zero, mul_eq_left
+/-
+**Cardinal.continuum_mul_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_mul_aleph0 : 𝔠 * ℵ₀ = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mul_eq_left`：mul_eq_left {a b : Cardinal} (ha : ℵ₀ <= a) (hb : 
+b <= a) (hb' : b != 0) : a * b = a
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
+· 使用定理 `Cardinal.aleph0_ne_zero`：aleph0_ne_zero : ℵ₀ != 0
 -/
 theorem continuum_mul_aleph0 : 𝔠 * ℵ₀ = 𝔠 :=
   mul_eq_left aleph0_le_continuum aleph0_le_continuum aleph0_ne_zero
 
 @[simp]
-/--
-theorem `aleph0_mul_continuum` / 定理 `aleph0_mul_continuum`
-
-English:
-theorem aleph0_mul_continuum
-  statement: ℵ₀ * 𝔠 = 𝔠
-  proof: (mul_comm _ _).trans continuum_mul_aleph0
-
-@[simp]
-
-中文:
-定理 aleph0_mul_continuum
-  结论: ℵ₀ * 𝔠 = 𝔠
-  证明: (mul_comm _ _).trans continuum_mul_aleph0
-
-@[simp]
-
-Depends on / 依赖: continuum_mul_aleph0, mul_comm
+/-
+**Cardinal.aleph0_mul_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph0_mul_continuum : ℵ₀ * 𝔠 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Cardinal.continuum_mul_aleph0`：continuum_mul_aleph0 : 𝔠 * ℵ₀ = 𝔠
 -/
 theorem aleph0_mul_continuum : ℵ₀ * 𝔠 = 𝔠 :=
   (mul_comm _ _).trans continuum_mul_aleph0
 
 @[simp]
-/--
-theorem `nat_mul_continuum` / 定理 `nat_mul_continuum`
-
-English:
-theorem nat_mul_continuum
-  given: {n : Nat} (hn : n != 0)
-  statement: ↑n * 𝔠 = 𝔠
-  proof: mul_eq_right aleph0_le_continuum (nat_lt_continuum n).le (Nat.cast_ne_zero.2 hn)
-
-@[simp]
-
-中文:
-定理 nat_mul_continuum
-  条件: {n : 自然数} (hn : n != 0)
-  结论: ↑n * 𝔠 = 𝔠
-  证明: mul_eq_right aleph0_le_continuum (nat_lt_continuum n).le (Nat.cast_ne_zero.2 hn)
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_ne_zero, aleph0_le_continuum, cast_ne_zero, mul_eq_right, nat_lt_continuum
+/-
+**Cardinal.nat_mul_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：nat_mul_continuum {n : Nat} (hn : n != 0) : ↑n * 𝔠 = 𝔠
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.mul_eq_right`：mul_eq_right {a b : Cardinal} (hb : ℵ₀ <= b) (ha 
+: a <= b) (ha' : a != 0) : a * b = b
+· 使用定理 `Cardinal.aleph0_le_continuum`：aleph0_le_continuum : ℵ₀ <= 𝔠
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Cardinal.nat_lt_continuum`：nat_lt_continuum (n : Nat) : ↑n < 𝔠
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+· 使用定理 `Cardinal.instCharZero`：CharZero Cardinal.{u_1}
 -/
-theorem nat_mul_continuum {n : Nat} (hn : n != 0) : ↑n * 𝔠 = 𝔠 :=
+theorem nat_mul_continuum {n : ℕ} (hn : n ≠ 0) : ↑n * 𝔠 = 𝔠 :=
   mul_eq_right aleph0_le_continuum (nat_lt_continuum n).le (Nat.cast_ne_zero.2 hn)
 
 @[simp]
-/--
-theorem `continuum_mul_nat` / 定理 `continuum_mul_nat`
-
-English:
-theorem continuum_mul_nat
-  given: {n : Nat} (hn : n != 0)
-  statement: 𝔠 * n = 𝔠
-  proof: (mul_comm _ _).trans (nat_mul_continuum hn)
-
-@[simp]
-
-中文:
-定理 continuum_mul_nat
-  条件: {n : 自然数} (hn : n != 0)
-  结论: 𝔠 * n = 𝔠
-  证明: (mul_comm _ _).trans (nat_mul_continuum hn)
-
-@[simp]
-
-Depends on / 依赖: mul_comm, nat_mul_continuum
+/-
+**Cardinal.continuum_mul_nat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_mul_nat {n : Nat} (hn : n != 0) : 𝔠 * n = 𝔠
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Cardinal.nat_mul_continuum`：nat_mul_continuum {n : Nat} (hn : n != 0) : 
+↑n * 𝔠 = 𝔠
 -/
-theorem continuum_mul_nat {n : Nat} (hn : n != 0) : 𝔠 * n = 𝔠 :=
+theorem continuum_mul_nat {n : ℕ} (hn : n ≠ 0) : 𝔠 * n = 𝔠 :=
   (mul_comm _ _).trans (nat_mul_continuum hn)
 
 @[simp]
-/--
-theorem `ofNat_mul_continuum` / 定理 `ofNat_mul_continuum`
-
-English:
-theorem ofNat_mul_continuum
-  given: {n : Nat} [Nat.AtLeastTwo n]
-  statement: ofNat(n) * 𝔠 = 𝔠
-  proof: nat_mul_continuum (OfNat.ofNat_ne_zero n)
-
-@[simp]
-
-中文:
-定理 of自然数_mul_continuum
-  条件: {n : 自然数} [自然数.AtLeastTwo n]
-  结论: of自然数(n) * 𝔠 = 𝔠
-  证明: nat_mul_continuum (OfNat.ofNat_ne_zero n)
-
-@[simp]
-
-Depends on / 依赖: OfNat.ofNat_ne_zero, nat_mul_continuum, ofNat_ne_zero
+/-
+**Cardinal.ofNat_mul_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：ofNat_mul_continuum {n : Nat} [Nat.AtLeastTwo n] : ofNat(n) * 𝔠 = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.nat_mul_continuum`：nat_mul_continuum {n : Nat} (hn : n != 0) : 
+↑n * 𝔠 = 𝔠
+· 使用定理 `OfNat.ofNat_ne_zero`：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZ
+ero R] (n : ℕ) [inst_2 : n.AtLeastTwo], OfNat.ofNat n ≠ 0
 -/
-theorem ofNat_mul_continuum {n : Nat} [Nat.AtLeastTwo n] : ofNat(n) * 𝔠 = 𝔠 :=
+theorem ofNat_mul_continuum {n : ℕ} [Nat.AtLeastTwo n] : ofNat(n) * 𝔠 = 𝔠 :=
   nat_mul_continuum (OfNat.ofNat_ne_zero n)
 
 @[simp]
-/--
-theorem `continuum_mul_ofNat` / 定理 `continuum_mul_ofNat`
-
-English:
-theorem continuum_mul_ofNat
-  given: {n : Nat} [Nat.AtLeastTwo n]
-  statement: 𝔠 * ofNat(n) = 𝔠
-  proof: continuum_mul_nat (OfNat.ofNat_ne_zero n)
-
-中文:
-定理 continuum_mul_of自然数
-  条件: {n : 自然数} [自然数.AtLeastTwo n]
-  结论: 𝔠 * of自然数(n) = 𝔠
-  证明: continuum_mul_nat (OfNat.ofNat_ne_zero n)
-
-Depends on / 依赖: OfNat.ofNat_ne_zero, continuum_mul_nat, ofNat_ne_zero
+/-
+**Cardinal.continuum_mul_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_mul_ofNat {n : Nat} [Nat.AtLeastTwo n] : 𝔠 * ofNat(n) = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.continuum_mul_nat`：continuum_mul_nat {n : Nat} (hn : n != 0) : 
+𝔠 * n = 𝔠
+· 使用定理 `OfNat.ofNat_ne_zero`：∀ {R : Type u_1} [inst : AddMonoidWithOne R] [CharZ
+ero R] (n : ℕ) [inst_2 : n.AtLeastTwo], OfNat.ofNat n ≠ 0
 -/
-theorem continuum_mul_ofNat {n : Nat} [Nat.AtLeastTwo n] : 𝔠 * ofNat(n) = 𝔠 :=
+theorem continuum_mul_ofNat {n : ℕ} [Nat.AtLeastTwo n] : 𝔠 * ofNat(n) = 𝔠 :=
   continuum_mul_nat (OfNat.ofNat_ne_zero n)
 
 /-!
@@ -749,102 +501,75 @@ theorem continuum_mul_ofNat {n : Nat} [Nat.AtLeastTwo n] : 𝔠 * ofNat(n) = �
 
 
 @[simp]
-/--
-theorem `aleph0_power_aleph0` / 定理 `aleph0_power_aleph0`
+/-
+**Cardinal.aleph0_power_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：aleph0_power_aleph0 : ℵ₀ ^ ℵ₀ = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.power_self_eq`：power_self_eq {c : Cardinal} (h : ℵ₀ <= c) : c ^
+ c = 2 ^ c
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem aleph0_power_aleph0
-  statement: ℵ₀ ^ ℵ₀ = 𝔠
-  proof: power_self_eq le_rfl
-
-@[simp]
-
-中文:
-定理 aleph0_power_aleph0
-  结论: ℵ₀ ^ ℵ₀ = 𝔠
-  证明: power_self_eq le_rfl
-
-@[simp]
-
-Depends on / 依赖: le_rfl, power_self_eq
+--- 原说明 ---
+### Power
 -/
 theorem aleph0_power_aleph0 : ℵ₀ ^ ℵ₀ = 𝔠 :=
   power_self_eq le_rfl
 
 @[simp]
-/--
-theorem `nat_power_aleph0` / 定理 `nat_power_aleph0`
-
-English:
-theorem nat_power_aleph0
-  given: {n : Nat} (hn : 2 <= n)
-  statement: n ^ ℵ₀ = 𝔠
-  proof: nat_power_eq le_rfl hn
-
-@[simp]
-
-中文:
-定理 nat_power_aleph0
-  条件: {n : 自然数} (hn : 2 <= n)
-  结论: n ^ ℵ₀ = 𝔠
-  证明: nat_power_eq le_rfl hn
-
-@[simp]
-
-Depends on / 依赖: le_rfl, nat_power_eq
+/-
+**Cardinal.nat_power_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：nat_power_aleph0 {n : Nat} (hn : 2 <= n) : n ^ ℵ₀ = 𝔠
+参数：hn : 2 <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.nat_power_eq`：nat_power_eq {c : Cardinal.{u}} (h : ℵ₀ <= c) {n 
+: Nat} (hn : 2 <= n) : (n : Cardinal.{u}) ^ c = 2 ^ c
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem nat_power_aleph0 {n : Nat} (hn : 2 <= n) : n ^ ℵ₀ = 𝔠 :=
+theorem nat_power_aleph0 {n : ℕ} (hn : 2 ≤ n) : n ^ ℵ₀ = 𝔠 :=
   nat_power_eq le_rfl hn
 
 @[simp]
-/--
-theorem `continuum_power_aleph0` / 定理 `continuum_power_aleph0`
-
-English:
-theorem continuum_power_aleph0
-  statement: 𝔠 ^ ℵ₀ = 𝔠
-  proof: by
-  rw [← two_power_aleph0]; rw [← power_mul]; rw [mul_eq_left le_rfl le_rfl aleph0_ne_zero]
-
-中文:
-定理 continuum_power_aleph0
-  结论: 𝔠 ^ ℵ₀ = 𝔠
-  证明: by
-  rw [← two_power_aleph0]; rw [← power_mul]; rw [mul_eq_left le_rfl le_rfl aleph0_ne_zero]
-
-Depends on / 依赖: aleph0_ne_zero, le_rfl, mul_eq_left, power_mul, two_power_aleph0
+/-
+**Cardinal.continuum_power_aleph0** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：continuum_power_aleph0 : 𝔠 ^ ℵ₀ = 𝔠
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.two_power_aleph0`：two_power_aleph0 : 2 ^ ℵ₀ = 𝔠
+· 使用定理 `Cardinal.power_mul`：power_mul {a b c : Cardinal} : a ^ (b * c) = (a ^ b)
+ ^ c
+· 使用定理 `Cardinal.mul_eq_left`：mul_eq_left {a b : Cardinal} (ha : ℵ₀ <= a) (hb : 
+b <= a) (hb' : b != 0) : a * b = a
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Cardinal.aleph0_ne_zero`：aleph0_ne_zero : ℵ₀ != 0
 -/
 theorem continuum_power_aleph0 : 𝔠 ^ ℵ₀ = 𝔠 := by
-  rw [← two_power_aleph0]; rw [← power_mul]; rw [mul_eq_left le_rfl le_rfl aleph0_ne_zero]
-
-/--
-theorem `power_aleph0_of_le_continuum` / 定理 `power_aleph0_of_le_continuum`
-
-English:
-theorem power_aleph0_of_le_continuum
-  given: {x : Cardinal} (h₁ : 2 <= x) (h₂ : x <= 𝔠)
-  statement: x ^ ℵ₀ = 𝔠
-  proof: by
-  apply le_antisymm
-  · rw [← continuum_power_aleph0]
-    exact power_le_power_right h₂
-  · rw [← two_power_aleph0]
-    exact power_le_power_right h₁
-
-中文:
-定理 power_aleph0_of_le_continuum
-  条件: {x : 基数} (h₁ : 2 <= x) (h₂ : x <= 𝔠)
-  结论: x ^ ℵ₀ = 𝔠
-  证明: by
-  apply le_antisymm
-  · rw [← continuum_power_aleph0]
-    exact power_le_power_right h₂
-  · rw [← two_power_aleph0]
-    exact power_le_power_right h₁
-
-Depends on / 依赖: continuum_power_aleph0, le_antisymm, power_le_power_right, two_power_aleph0
+  rw [← two_power_aleph0, ← power_mul, mul_eq_left le_rfl le_rfl aleph0_ne_zero]
+/-
+**Cardinal.power_aleph0_of_le_continuum** 是 Mathlib 中的一个定理，位于命名空间 `Cardinal`。
+形式化陈述：power_aleph0_of_le_continuum {x : Cardinal} (h₁ : 2 <= x) (h₂ : x <= 𝔠) : 
+x ^ ℵ₀ = 𝔠
+参数：h₁ : 2 <= x；h₂ : x <= 𝔠。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.continuum_power_aleph0`：continuum_power_aleph0 : 𝔠 ^ ℵ₀ = 𝔠
+· 使用定理 `Cardinal.power_le_power_right`：power_le_power_right {a b c : Cardinal} :
+ a <= b -> a ^ c <= b ^ c
+· 使用定理 `Cardinal.two_power_aleph0`：two_power_aleph0 : 2 ^ ℵ₀ = 𝔠
 -/
-theorem power_aleph0_of_le_continuum {x : Cardinal} (h₁ : 2 <= x) (h₂ : x <= 𝔠) : x ^ ℵ₀ = 𝔠 := by
+theorem power_aleph0_of_le_continuum {x : Cardinal} (h₁ : 2 ≤ x) (h₂ : x ≤ 𝔠) : x ^ ℵ₀ = 𝔠 := by
   apply le_antisymm
   · rw [← continuum_power_aleph0]
     exact power_le_power_right h₂
@@ -852,3 +577,4 @@ theorem power_aleph0_of_le_continuum {x : Cardinal} (h₁ : 2 <= x) (h₂ : x <=
     exact power_le_power_right h₁
 
 end Cardinal
+

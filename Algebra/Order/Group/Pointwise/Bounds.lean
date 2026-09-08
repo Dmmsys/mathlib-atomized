@@ -27,154 +27,100 @@ variable {ι G M : Type*}
 
 section Mul
 variable [Mul M] [Preorder M] [MulLeftMono M]
-  [MulRightMono M] {f g : ι -> M} {s t : Set M} {a b : M}
+  [MulRightMono M] {f g : ι → M} {s t : Set M} {a b : M}
 
 @[to_additive]
-/--
-lemma `mul_mem_upperBounds_mul` / 引理 `mul_mem_upperBounds_mul`
-
-English:
-lemma mul_mem_upperBounds_mul
-  given: (ha : a in upperBounds s) (hb : b in upperBounds t)
-  proof: forall_mem_image2.2 fun _ hx _ hy => mul_le_mul' (ha hx) (hb hy)
-
-@[to_additive]
-
-中文:
-引理 mul_mem_upperBounds_mul
-  条件: (ha : a in upperBounds s) (hb : b in upperBounds t)
-  证明: forall_mem_image2.2 fun _ hx _ hy => mul_le_mul' (ha hx) (hb hy)
-
-@[to_additive]
-
-Depends on / 依赖: PosSMulStrictMono, PosSMulStrictMono.toPosSMulReflectLE, forall_mem_image2, mul_le_mul, toPosSMulReflectLE
+/-
+**mul_mem_upperBounds_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_mem_upperBounds_mul (ha : a in upperBounds s) (hb : b in upperBounds t
+) : a * b in upperBounds (s * t)
+参数：ha : a in upperBounds s；hb : b in upperBounds t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.forall_mem_image2`：forall_mem_image2 {p : γ -> Prop} : (forall z in 
+image2 f s t, p z) ↔ forall x in s, forall y in t, p (f x y)
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
 -/
-lemma mul_mem_upperBounds_mul (ha : a in upperBounds s) (hb : b in upperBounds t) :
-    a * b in upperBounds (s * t) := forall_mem_image2.2 fun _ hx _ hy => mul_le_mul' (ha hx) (hb hy)
+lemma mul_mem_upperBounds_mul (ha : a ∈ upperBounds s) (hb : b ∈ upperBounds t) :
+    a * b ∈ upperBounds (s * t) := forall_mem_image2.2 fun _ hx _ hy => mul_le_mul' (ha hx) (hb hy)
 
 @[to_additive]
-/--
-lemma `subset_upperBounds_mul` / 引理 `subset_upperBounds_mul`
-
-English:
-lemma subset_upperBounds_mul
-  given: (s t : Set M)
-  statement: upperBounds s * upperBounds t subseteq upperBounds (s * t)
-  proof: image2_subset_iff.2 fun _ hx _ hy => mul_mem_upperBounds_mul hx hy
-
-@[to_additive]
-
-中文:
-引理 subset_upperBounds_mul
-  条件: (s t : 集合 M)
-  结论: upperBounds s * upperBounds t subseteq upperBounds (s * t)
-  证明: image2_subset_iff.2 fun _ hx _ hy => mul_mem_upperBounds_mul hx hy
-
-@[to_additive]
-
-Depends on / 依赖: image2_subset_iff, mul_mem_upperBounds_mul
+/-
+**subset_upperBounds_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：subset_upperBounds_mul (s t : Set M) : upperBounds s * upperBounds t subse
+teq upperBounds (s * t)
+参数：s t : Set M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.image2_subset_iff`：image2_subset_iff {u : Set γ} : image2 f s t subs
+eteq u ↔ forall x in s, forall y in t, f x y in u
+· 使用引理 `mul_mem_upperBounds_mul`：mul_mem_upperBounds_mul (ha : a in upperBounds 
+s) (hb : b in upperBounds t) : a * b in upperBounds (s * t)
 -/
-lemma subset_upperBounds_mul (s t : Set M) : upperBounds s * upperBounds t subseteq upperBounds (s * t) :=
+lemma subset_upperBounds_mul (s t : Set M) : upperBounds s * upperBounds t ⊆ upperBounds (s * t) :=
   image2_subset_iff.2 fun _ hx _ hy => mul_mem_upperBounds_mul hx hy
 
 @[to_additive]
-/--
-lemma `mul_mem_lowerBounds_mul` / 引理 `mul_mem_lowerBounds_mul`
-
-English:
-lemma mul_mem_lowerBounds_mul
-  given: (ha : a in lowerBounds s) (hb : b in lowerBounds t)
-  proof: mul_mem_upperBounds_mul (M := Mᵒᵈ) ha hb
-
-@[to_additive]
-
-中文:
-引理 mul_mem_lowerBounds_mul
-  条件: (ha : a in lowerBounds s) (hb : b in lowerBounds t)
-  证明: mul_mem_upperBounds_mul (M := Mᵒᵈ) ha hb
-
-@[to_additive]
-
-Depends on / 依赖: mul_mem_upperBounds_mul
+/-
+**mul_mem_lowerBounds_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_mem_lowerBounds_mul (ha : a in lowerBounds s) (hb : b in lowerBounds t
+) : a * b in lowerBounds (s * t)
+参数：ha : a in lowerBounds s；hb : b in lowerBounds t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `mul_mem_upperBounds_mul`：mul_mem_upperBounds_mul (ha : a in upperBounds 
+s) (hb : b in upperBounds t) : a * b in upperBounds (s * t)
 -/
-lemma mul_mem_lowerBounds_mul (ha : a in lowerBounds s) (hb : b in lowerBounds t) :
-    a * b in lowerBounds (s * t) := mul_mem_upperBounds_mul (M := Mᵒᵈ) ha hb
+lemma mul_mem_lowerBounds_mul (ha : a ∈ lowerBounds s) (hb : b ∈ lowerBounds t) :
+    a * b ∈ lowerBounds (s * t) := mul_mem_upperBounds_mul (M := Mᵒᵈ) ha hb
 
 @[to_additive]
-/--
-lemma `subset_lowerBounds_mul` / 引理 `subset_lowerBounds_mul`
-
-English:
-lemma subset_lowerBounds_mul
-  given: (s t : Set M)
-  statement: lowerBounds s * lowerBounds t subseteq lowerBounds (s * t)
-  proof: subset_upperBounds_mul (M := Mᵒᵈ) _ _
-
-@[to_additive]
-
-中文:
-引理 subset_lowerBounds_mul
-  条件: (s t : 集合 M)
-  结论: lowerBounds s * lowerBounds t subseteq lowerBounds (s * t)
-  证明: subset_upperBounds_mul (M := Mᵒᵈ) _ _
-
-@[to_additive]
-
-Depends on / 依赖: subset_upperBounds_mul
+/-
+**subset_lowerBounds_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：subset_lowerBounds_mul (s t : Set M) : lowerBounds s * lowerBounds t subse
+teq lowerBounds (s * t)
+参数：s t : Set M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `subset_upperBounds_mul`：subset_upperBounds_mul (s t : Set M) : upperBoun
+ds s * upperBounds t subseteq upperBounds (s * t)
 -/
-lemma subset_lowerBounds_mul (s t : Set M) : lowerBounds s * lowerBounds t subseteq lowerBounds (s * t) :=
+lemma subset_lowerBounds_mul (s t : Set M) : lowerBounds s * lowerBounds t ⊆ lowerBounds (s * t) :=
   subset_upperBounds_mul (M := Mᵒᵈ) _ _
 
 @[to_additive]
-/--
-lemma `BddAbove.mul` / 引理 `BddAbove.mul`
-
-English:
-lemma BddAbove.mul
-  given: (hs : BddAbove s) (ht : BddAbove t)
-  statement: BddAbove (s * t)
-  proof: (Nonempty.mul hs ht).mono (subset_upperBounds_mul s t)
-
-@[to_additive]
-
-中文:
-引理 BddAbove.mul
-  条件: (hs : BddAbove s) (ht : BddAbove t)
-  结论: BddAbove (s * t)
-  证明: (Nonempty.mul hs ht).mono (subset_upperBounds_mul s t)
-
-@[to_additive]
-
-Depends on / 依赖: Nonempty, Nonempty.mul, subset_upperBounds_mul
+/-
+**BddAbove.mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddAbove.mul (hs : BddAbove s) (ht : BddAbove t) : BddAbove (s * t)
+参数：hs : BddAbove s；ht : BddAbove t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用引理 `subset_upperBounds_mul`：subset_upperBounds_mul (s t : Set M) : upperBoun
+ds s * upperBounds t subseteq upperBounds (s * t)
+· 使用定理 `Set.Nonempty.mul`：∀ {α : Type u_2} [inst : Mul α] {s t : Set α}, s.Nonem
+pty → t.Nonempty → (s * t).Nonempty
 -/
 lemma BddAbove.mul (hs : BddAbove s) (ht : BddAbove t) : BddAbove (s * t) :=
   (Nonempty.mul hs ht).mono (subset_upperBounds_mul s t)
 
 @[to_additive]
-/--
-lemma `BddBelow.mul` / 引理 `BddBelow.mul`
-
-English:
-lemma BddBelow.mul
-  given: (hs : BddBelow s) (ht : BddBelow t)
-  statement: BddBelow (s * t)
-  proof: (Nonempty.mul hs ht).mono (subset_lowerBounds_mul s t)
-
-@[to_additive] alias Set.BddAbove.mul := BddAbove.mul
-
-@[to_additive]
-
-中文:
-引理 BddBelow.mul
-  条件: (hs : BddBelow s) (ht : BddBelow t)
-  结论: BddBelow (s * t)
-  证明: (Nonempty.mul hs ht).mono (subset_lowerBounds_mul s t)
-
-@[to_additive] alias Set.BddAbove.mul := BddAbove.mul
-
-@[to_additive]
-
-Depends on / 依赖: Nonempty, Nonempty.mul, subset_lowerBounds_mul
+/-
+**BddBelow.mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddBelow.mul (hs : BddBelow s) (ht : BddBelow t) : BddBelow (s * t)
+参数：hs : BddBelow s；ht : BddBelow t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用引理 `subset_lowerBounds_mul`：subset_lowerBounds_mul (s t : Set M) : lowerBoun
+ds s * lowerBounds t subseteq lowerBounds (s * t)
+· 使用定理 `Set.Nonempty.mul`：∀ {α : Type u_2} [inst : Mul α] {s t : Set α}, s.Nonem
+pty → t.Nonempty → (s * t).Nonempty
 -/
 lemma BddBelow.mul (hs : BddBelow s) (ht : BddBelow t) : BddBelow (s * t) :=
   (Nonempty.mul hs ht).mono (subset_lowerBounds_mul s t)
@@ -182,50 +128,42 @@ lemma BddBelow.mul (hs : BddBelow s) (ht : BddBelow t) : BddBelow (s * t) :=
 @[to_additive] alias Set.BddAbove.mul := BddAbove.mul
 
 @[to_additive]
-/--
-lemma `BddAbove.range_mul` / 引理 `BddAbove.range_mul`
-
-English:
-lemma BddAbove.range_mul
-  given: (hf : BddAbove (range f)) (hg : BddAbove (range g))
-  proof: .range_comp_left (f := fun i => (f i, g i)) (bddAbove_range_prod.2 ⟨hf, hg⟩)
-    (monotone_fst.mul' monotone_snd)
-
-@[to_additive]
-
-中文:
-引理 BddAbove.range_mul
-  条件: (hf : BddAbove (range f)) (hg : BddAbove (range g))
-  证明: .range_comp_left (f := fun i => (f i, g i)) (bddAbove_range_prod.2 ⟨hf, hg⟩)
-    (monotone_fst.mul' monotone_snd)
-
-@[to_additive]
-
-Depends on / 依赖: bddAbove_range_prod, monotone_fst, monotone_fst.mul, monotone_snd, range_comp_left
+/-
+**BddAbove.range_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddAbove.range_mul (hf : BddAbove (range f)) (hg : BddAbove (range g)) : B
+ddAbove (range fun i => f i * g i)
+参数：hf : BddAbove (range f)；hg : BddAbove (range g)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BddAbove.range_comp_left`：BddAbove.range_comp_left {γ : Type*} [Preorder
+ β] [Preorder γ] {f : α -> β} {g : β -> γ} (hf : BddAbove (range f)) (hg : Monot
+one g) : BddAb…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `bddAbove_range_prod`：bddAbove_range_prod {F : ι -> α × β} : BddAbove (ra
+nge F) ↔ BddAbove (range <| Prod.fst ∘ F) ∧ BddAbove (range <| Prod.snd ∘ F)
+· 使用定理 `Monotone.mul'`：Monotone.mul' [MulLeftMono α] [MulRightMono α] (hf : Mono
+tone f) (hg : Monotone g) : Monotone fun x => f x * g x
+· 使用定理 `monotone_fst`：monotone_fst : Monotone (@Prod.fst α β)
+· 使用定理 `monotone_snd`：monotone_snd : Monotone (@Prod.snd α β)
 -/
 lemma BddAbove.range_mul (hf : BddAbove (range f)) (hg : BddAbove (range g)) :
-    BddAbove (range fun i => f i * g i) :=
-  .range_comp_left (f := fun i => (f i, g i)) (bddAbove_range_prod.2 ⟨hf, hg⟩)
+    BddAbove (range fun i ↦ f i * g i) :=
+  .range_comp_left (f := fun i ↦ (f i, g i)) (bddAbove_range_prod.2 ⟨hf, hg⟩)
     (monotone_fst.mul' monotone_snd)
 
 @[to_additive]
-/--
-lemma `BddBelow.range_mul` / 引理 `BddBelow.range_mul`
-
-English:
-lemma BddBelow.range_mul
-  given: (hf : BddBelow (range f)) (hg : BddBelow (range g))
-  proof: BddAbove.range_mul (M := Mᵒᵈ) hf hg
-
-中文:
-引理 BddBelow.range_mul
-  条件: (hf : BddBelow (range f)) (hg : BddBelow (range g))
-  证明: BddAbove.range_mul (M := Mᵒᵈ) hf hg
-
-Depends on / 依赖: BddAbove, BddAbove.range_mul, range_mul
+/-
+**BddBelow.range_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddBelow.range_mul (hf : BddBelow (range f)) (hg : BddBelow (range g)) : B
+ddBelow (range fun i => f i * g i)
+参数：hf : BddBelow (range f)；hg : BddBelow (range g)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BddAbove.range_mul`：BddAbove.range_mul (hf : BddAbove (range f)) (hg : B
+ddAbove (range g)) : BddAbove (range fun i => f i * g i)
 -/
 lemma BddBelow.range_mul (hf : BddBelow (range f)) (hg : BddBelow (range g)) :
-    BddBelow (range fun i => f i * g i) := BddAbove.range_mul (M := Mᵒᵈ) hf hg
+    BddBelow (range fun i ↦ f i * g i) := BddAbove.range_mul (M := Mᵒᵈ) hf hg
 
 end Mul
 
@@ -234,312 +172,175 @@ variable [Group G] [Preorder G] [MulLeftMono G]
   [MulRightMono G] {s t : Set G} {a b : G}
 
 @[to_additive (attr := simp)]
-/--
-theorem `bddAbove_inv` / 定理 `bddAbove_inv`
-
-English:
-theorem bddAbove_inv
-  statement: BddAbove s⁻¹ ↔ BddBelow s
-  proof: (OrderIso.inv G).bddAbove_preimage
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 bddAbove_inv
-  结论: BddAbove s⁻¹ ↔ BddBelow s
-  证明: (OrderIso.inv G).bddAbove_preimage
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, bddAbove_preimage
+/-
+**bddAbove_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bddAbove_inv : BddAbove s⁻¹ ↔ BddBelow s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.bddAbove_preimage`：bddAbove_preimage (e : α ≃o β) {s : Set β} :
+ BddAbove (e ⁻¹' s) ↔ BddAbove s
 -/
 theorem bddAbove_inv : BddAbove s⁻¹ ↔ BddBelow s :=
   (OrderIso.inv G).bddAbove_preimage
 
 @[to_additive (attr := simp)]
-/--
-theorem `bddBelow_inv` / 定理 `bddBelow_inv`
-
-English:
-theorem bddBelow_inv
-  statement: BddBelow s⁻¹ ↔ BddAbove s
-  proof: (OrderIso.inv G).bddBelow_preimage
-
-@[to_additive]
-
-中文:
-定理 bddBelow_inv
-  结论: BddBelow s⁻¹ ↔ BddAbove s
-  证明: (OrderIso.inv G).bddBelow_preimage
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, bddBelow_preimage
+/-
+**bddBelow_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bddBelow_inv : BddBelow s⁻¹ ↔ BddAbove s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.bddBelow_preimage`：∀ {α : Type u} {β : Type v} [inst : Preorder
+ α] [inst_1 : Preorder β] (e : α ≃o β) {s : Set β},   BddBelow (⇑e ⁻¹' s) ↔ BddB
+elow s
 -/
 theorem bddBelow_inv : BddBelow s⁻¹ ↔ BddAbove s :=
   (OrderIso.inv G).bddBelow_preimage
 
 @[to_additive]
-/--
-theorem `BddAbove.inv` / 定理 `BddAbove.inv`
-
-English:
-theorem BddAbove.inv
-  given: (h : BddAbove s)
-  statement: BddBelow s⁻¹
-  proof: bddBelow_inv.2 h
-
-@[to_additive]
-
-中文:
-定理 BddAbove.inv
-  条件: (h : BddAbove s)
-  结论: BddBelow s⁻¹
-  证明: bddBelow_inv.2 h
-
-@[to_additive]
-
-Depends on / 依赖: SMulPosStrictMono, SMulPosStrictMono.toSMulPosReflectLE, bddBelow_inv, toSMulPosReflectLE
+/-
+**BddAbove.inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：BddAbove.inv (h : BddAbove s) : BddBelow s⁻¹
+参数：h : BddAbove s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `bddBelow_inv`：bddBelow_inv : BddBelow s⁻¹ ↔ BddAbove s
 -/
 theorem BddAbove.inv (h : BddAbove s) : BddBelow s⁻¹ :=
   bddBelow_inv.2 h
 
 @[to_additive]
-/--
-theorem `BddBelow.inv` / 定理 `BddBelow.inv`
-
-English:
-theorem BddBelow.inv
-  given: (h : BddBelow s)
-  statement: BddAbove s⁻¹
-  proof: bddAbove_inv.2 h
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 BddBelow.inv
-  条件: (h : BddBelow s)
-  结论: BddAbove s⁻¹
-  证明: bddAbove_inv.2 h
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: bddAbove_inv
+/-
+**BddBelow.inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：BddBelow.inv (h : BddBelow s) : BddAbove s⁻¹
+参数：h : BddBelow s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `bddAbove_inv`：bddAbove_inv : BddAbove s⁻¹ ↔ BddBelow s
 -/
 theorem BddBelow.inv (h : BddBelow s) : BddAbove s⁻¹ :=
   bddAbove_inv.2 h
 
 @[to_additive (attr := simp)]
-/--
-theorem `isLUB_inv` / 定理 `isLUB_inv`
-
-English:
-theorem isLUB_inv
-  statement: IsLUB s⁻¹ a ↔ IsGLB s a⁻¹
-  proof: (OrderIso.inv G).isLUB_preimage
-
-@[to_additive]
-
-中文:
-定理 isLUB_inv
-  结论: IsLUB s⁻¹ a ↔ IsGLB s a⁻¹
-  证明: (OrderIso.inv G).isLUB_preimage
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, isLUB_preimage
+/-
+**isLUB_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLUB_inv : IsLUB s⁻¹ a ↔ IsGLB s a⁻¹
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isLUB_preimage`：isLUB_preimage {s : Set β} {x : α} : IsLUB (f ⁻
+¹' s) x ↔ IsLUB s (f x)
 -/
 theorem isLUB_inv : IsLUB s⁻¹ a ↔ IsGLB s a⁻¹ :=
   (OrderIso.inv G).isLUB_preimage
 
 @[to_additive]
-/--
-theorem `isLUB_inv'` / 定理 `isLUB_inv'`
-
-English:
-theorem isLUB_inv'
-  statement: IsLUB s⁻¹ a⁻¹ ↔ IsGLB s a
-  proof: (OrderIso.inv G).isLUB_preimage'
-
-@[to_additive]
-
-中文:
-定理 isLUB_inv'
-  结论: IsLUB s⁻¹ a⁻¹ ↔ IsGLB s a
-  证明: (OrderIso.inv G).isLUB_preimage'
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, isLUB_preimage
+/-
+**isLUB_inv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLUB_inv' : IsLUB s⁻¹ a⁻¹ ↔ IsGLB s a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isLUB_preimage'`：isLUB_preimage' {s : Set β} {x : β} : IsLUB (f
+ ⁻¹' s) (f.symm x) ↔ IsLUB s x
 -/
 theorem isLUB_inv' : IsLUB s⁻¹ a⁻¹ ↔ IsGLB s a :=
   (OrderIso.inv G).isLUB_preimage'
 
 @[to_additive]
-/--
-theorem `IsGLB.inv` / 定理 `IsGLB.inv`
-
-English:
-theorem IsGLB.inv
-  given: (h : IsGLB s a)
-  statement: IsLUB s⁻¹ a⁻¹
-  proof: isLUB_inv'.2 h
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 IsGLB.inv
-  条件: (h : IsGLB s a)
-  结论: IsLUB s⁻¹ a⁻¹
-  证明: isLUB_inv'.2 h
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: isLUB_inv
+/-
+**IsGLB.inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsGLB.inv (h : IsGLB s a) : IsLUB s⁻¹ a⁻¹
+参数：h : IsGLB s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isLUB_inv'`：isLUB_inv' : IsLUB s⁻¹ a⁻¹ ↔ IsGLB s a
 -/
 theorem IsGLB.inv (h : IsGLB s a) : IsLUB s⁻¹ a⁻¹ :=
   isLUB_inv'.2 h
 
 @[to_additive (attr := simp)]
-/--
-theorem `isGLB_inv` / 定理 `isGLB_inv`
-
-English:
-theorem isGLB_inv
-  statement: IsGLB s⁻¹ a ↔ IsLUB s a⁻¹
-  proof: (OrderIso.inv G).isGLB_preimage
-
-@[to_additive]
-
-中文:
-定理 isGLB_inv
-  结论: IsGLB s⁻¹ a ↔ IsLUB s a⁻¹
-  证明: (OrderIso.inv G).isGLB_preimage
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, isGLB_preimage
+/-
+**isGLB_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isGLB_inv : IsGLB s⁻¹ a ↔ IsLUB s a⁻¹
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isGLB_preimage`：isGLB_preimage {s : Set β} {x : α} : IsGLB (f ⁻
+¹' s) x ↔ IsGLB s (f x)
 -/
 theorem isGLB_inv : IsGLB s⁻¹ a ↔ IsLUB s a⁻¹ :=
   (OrderIso.inv G).isGLB_preimage
 
 @[to_additive]
-/--
-theorem `isGLB_inv'` / 定理 `isGLB_inv'`
-
-English:
-theorem isGLB_inv'
-  statement: IsGLB s⁻¹ a⁻¹ ↔ IsLUB s a
-  proof: (OrderIso.inv G).isGLB_preimage'
-
-@[to_additive]
-
-中文:
-定理 isGLB_inv'
-  结论: IsGLB s⁻¹ a⁻¹ ↔ IsLUB s a
-  证明: (OrderIso.inv G).isGLB_preimage'
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, isGLB_preimage
+/-
+**isGLB_inv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isGLB_inv' : IsGLB s⁻¹ a⁻¹ ↔ IsLUB s a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isGLB_preimage'`：isGLB_preimage' {s : Set β} {x : β} : IsGLB (f
+ ⁻¹' s) (f.symm x) ↔ IsGLB s x
 -/
 theorem isGLB_inv' : IsGLB s⁻¹ a⁻¹ ↔ IsLUB s a :=
   (OrderIso.inv G).isGLB_preimage'
 
 @[to_additive]
-/--
-theorem `IsLUB.inv` / 定理 `IsLUB.inv`
-
-English:
-theorem IsLUB.inv
-  given: (h : IsLUB s a)
-  statement: IsGLB s⁻¹ a⁻¹
-  proof: isGLB_inv'.2 h
-
-@[to_additive]
-
-中文:
-定理 IsLUB.inv
-  条件: (h : IsLUB s a)
-  结论: IsGLB s⁻¹ a⁻¹
-  证明: isGLB_inv'.2 h
-
-@[to_additive]
-
-Depends on / 依赖: isGLB_inv
+/-
+**IsLUB.inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLUB.inv (h : IsLUB s a) : IsGLB s⁻¹ a⁻¹
+参数：h : IsLUB s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isGLB_inv'`：isGLB_inv' : IsGLB s⁻¹ a⁻¹ ↔ IsLUB s a
 -/
 theorem IsLUB.inv (h : IsLUB s a) : IsGLB s⁻¹ a⁻¹ :=
   isGLB_inv'.2 h
 
 @[to_additive]
-/--
-lemma `BddBelow.range_inv` / 引理 `BddBelow.range_inv`
-
-English:
-lemma BddBelow.range_inv
-  given: {α : Type*} {f : α -> G} (hf : BddBelow (range f))
-  proof: hf.range_comp_left (OrderIso.inv G).monotone
-
-@[to_additive]
-
-中文:
-引理 BddBelow.range_inv
-  条件: {α : 类型} {f : α -> G} (hf : BddBelow (range f))
-  证明: hf.range_comp_left (OrderIso.inv G).monotone
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, hf.range_comp_left, monotone, range_comp_left
+/-
+**BddBelow.range_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddBelow.range_inv {α : Type*} {f : α -> G} (hf : BddBelow (range f)) : Bd
+dAbove (range (fun x => (f x)⁻¹))
+参数：hf : BddBelow (range f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BddBelow.range_comp_left`：∀ {α : Type u} {β : Type v} {γ : Type u_1} [in
+st : Preorder β] [inst_1 : Preorder γ] {f : α → β} {g : β → γ},   BddBelow (Set.
+range f) → Mon…
+· 使用定理 `OrderIso.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (e : α ≃o β), Monotone ⇑e
 -/
-lemma BddBelow.range_inv {α : Type*} {f : α -> G} (hf : BddBelow (range f)) :
+lemma BddBelow.range_inv {α : Type*} {f : α → G} (hf : BddBelow (range f)) :
     BddAbove (range (fun x => (f x)⁻¹)) :=
   hf.range_comp_left (OrderIso.inv G).monotone
 
 @[to_additive]
-/--
-lemma `BddAbove.range_inv` / 引理 `BddAbove.range_inv`
-
-English:
-lemma BddAbove.range_inv
-  given: {α : Type*} {f : α -> G} (hf : BddAbove (range f))
-  proof: BddBelow.range_inv (G := Gᵒᵈ) hf
-
-@[to_additive]
-
-中文:
-引理 BddAbove.range_inv
-  条件: {α : 类型} {f : α -> G} (hf : BddAbove (range f))
-  证明: BddBelow.range_inv (G := Gᵒᵈ) hf
-
-@[to_additive]
-
-Depends on / 依赖: BddBelow, BddBelow.range_inv, range_inv
+/-
+**BddAbove.range_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddAbove.range_inv {α : Type*} {f : α -> G} (hf : BddAbove (range f)) : Bd
+dBelow (range (fun x => (f x)⁻¹))
+参数：hf : BddAbove (range f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BddBelow.range_inv`：BddBelow.range_inv {α : Type*} {f : α -> G} (hf : Bd
+dBelow (range f)) : BddAbove (range (fun x => (f x)⁻¹))
 -/
-lemma BddAbove.range_inv {α : Type*} {f : α -> G} (hf : BddAbove (range f)) :
+lemma BddAbove.range_inv {α : Type*} {f : α → G} (hf : BddAbove (range f)) :
     BddBelow (range (fun x => (f x)⁻¹)) :=
   BddBelow.range_inv (G := Gᵒᵈ) hf
 
 @[to_additive]
-/--
-lemma `IsLUB.mul` / 引理 `IsLUB.mul`
-
-English:
-lemma IsLUB.mul
-  given: (hs : IsLUB s a) (ht : IsLUB t b)
-  proof: isLUB_image2_of_isLUB_isLUB (fun _ => (OrderIso.mulRight _).to_galoisConnection)
-    (fun _ => (OrderIso.mulLeft _).to_galoisConnection) hs ht
-
-@[to_additive]
-
-中文:
-引理 IsLUB.mul
-  条件: (hs : IsLUB s a) (ht : IsLUB t b)
-  证明: isLUB_image2_of_isLUB_isLUB (fun _ => (OrderIso.mulRight _).to_galoisConnection)
-    (fun _ => (OrderIso.mulLeft _).to_galoisConnection) hs ht
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, OrderIso.mulRight, isLUB_image2_of_isLUB_isLUB, mulLeft, mulRight, to_galoisConnection
+/-
+**IsLUB.mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsLUB.mul (hs : IsLUB s a) (ht : IsLUB t b) : IsLUB (s * t) (a * b)
+参数：hs : IsLUB s a；ht : IsLUB t b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isLUB_image2_of_isLUB_isLUB`：isLUB_image2_of_isLUB_isLUB (h₁ : forall b,
+ GaloisConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ 
+a)) (ha₀ : IsLUB …
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 -/
 lemma IsLUB.mul (hs : IsLUB s a) (ht : IsLUB t b) :
     IsLUB (s * t) (a * b) :=
@@ -547,76 +348,51 @@ lemma IsLUB.mul (hs : IsLUB s a) (ht : IsLUB t b) :
     (fun _ => (OrderIso.mulLeft _).to_galoisConnection) hs ht
 
 @[to_additive]
-/--
-lemma `IsGLB.mul` / 引理 `IsGLB.mul`
-
-English:
-lemma IsGLB.mul
-  given: (hs : IsGLB s a) (ht : IsGLB t b)
-  proof: IsLUB.mul (G := Gᵒᵈ) hs ht
-
-@[to_additive]
-
-中文:
-引理 IsGLB.mul
-  条件: (hs : IsGLB s a) (ht : IsGLB t b)
-  证明: IsLUB.mul (G := Gᵒᵈ) hs ht
-
-@[to_additive]
-
-Depends on / 依赖: IsLUB.mul
+/-
+**IsGLB.mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGLB.mul (hs : IsGLB s a) (ht : IsGLB t b) : IsGLB (s * t) (a * b)
+参数：hs : IsGLB s a；ht : IsGLB t b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLUB.mul`：IsLUB.mul (hs : IsLUB s a) (ht : IsLUB t b) : IsLUB (s * t) (
+a * b)
 -/
 lemma IsGLB.mul (hs : IsGLB s a) (ht : IsGLB t b) :
     IsGLB (s * t) (a * b) :=
   IsLUB.mul (G := Gᵒᵈ) hs ht
 
 @[to_additive]
-/--
-lemma `IsLUB.div` / 引理 `IsLUB.div`
-
-English:
-lemma IsLUB.div
-  given: (hs : IsLUB s a) (ht : IsGLB t b)
-  proof: by
-  rw [div_eq_mul_inv]; rw [div_eq_mul_inv]
-  exact hs.mul ht.inv
-
-@[to_additive]
-
-中文:
-引理 IsLUB.div
-  条件: (hs : IsLUB s a) (ht : IsGLB t b)
-  证明: by
-  rw [div_eq_mul_inv]; rw [div_eq_mul_inv]
-  exact hs.mul ht.inv
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, hs.mul, ht.inv
+/-
+**IsLUB.div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsLUB.div (hs : IsLUB s a) (ht : IsGLB t b) : IsLUB (s / t) (a / b)
+参数：hs : IsLUB s a；ht : IsGLB t b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用引理 `IsLUB.mul`：IsLUB.mul (hs : IsLUB s a) (ht : IsLUB t b) : IsLUB (s * t) (
+a * b)
+· 使用定理 `IsGLB.inv`：IsGLB.inv (h : IsGLB s a) : IsLUB s⁻¹ a⁻¹
 -/
 lemma IsLUB.div (hs : IsLUB s a) (ht : IsGLB t b) :
     IsLUB (s / t) (a / b) := by
-  rw [div_eq_mul_inv]; rw [div_eq_mul_inv]
+  rw [div_eq_mul_inv, div_eq_mul_inv]
   exact hs.mul ht.inv
 
 @[to_additive]
-/--
-lemma `IsGLB.div` / 引理 `IsGLB.div`
-
-English:
-lemma IsGLB.div
-  given: (hs : IsGLB s a) (ht : IsLUB t b)
-  proof: IsLUB.div (G := Gᵒᵈ) hs ht
-
-中文:
-引理 IsGLB.div
-  条件: (hs : IsGLB s a) (ht : IsLUB t b)
-  证明: IsLUB.div (G := Gᵒᵈ) hs ht
-
-Depends on / 依赖: IsLUB.div
+/-
+**IsGLB.div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGLB.div (hs : IsGLB s a) (ht : IsLUB t b) : IsGLB (s / t) (a / b)
+参数：hs : IsGLB s a；ht : IsLUB t b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLUB.div`：IsLUB.div (hs : IsLUB s a) (ht : IsGLB t b) : IsLUB (s / t) (
+a / b)
 -/
 lemma IsGLB.div (hs : IsGLB s a) (ht : IsLUB t b) :
     IsGLB (s / t) (a / b) :=
   IsLUB.div (G := Gᵒᵈ) hs ht
 
 end Group
+

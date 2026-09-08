@@ -22,24 +22,16 @@ open MonObj
 namespace CategoryTheory
 variable (C : Type u₁) [Category.{v₁} C] [CartesianMonoidalCategory.{v₁} C] [BraidedCategory C]
 
-/--
-Definition of `CommGrp` / `CommGrp` 的定义
+/-- A commutative group object internal to a Cartesian monoidal category. -/
+/-
+**CategoryTheory.CommGrp** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] → [CategoryTheory.BraidedCategor
+y C] → Type (max u₁ v₁)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommGrp
-  parameters: where
-  axioms and operations (3):
-    - X : C
-    - [grp : GrpObj X]
-    - [comm : IsCommMonObj X]
-
-中文:
-结构 交换群
-  参数: where
-  公理与运算 (3 个):
-    - X : C
-    - [grp : GrpObj X]
-    - [comm : 是交换MonObj X]
+--- 原说明 ---
+A commutative group object internal to a Cartesian monoidal category.
 -/
 structure CommGrp where
   /-- The underlying object in the ambient monoidal category -/
@@ -55,173 +47,117 @@ variable {C}
 
 /-- A commutative group object is a group object. -/
 @[simps -isSimp X]
-/--
-Definition of `toGrp` / `toGrp` 的定义
+/-
+**CategoryTheory.CommGrp.toGrp** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.CommG
+rp`。
+形式化陈述：toGrp (A : CommGrp C) : Grp C
+参数：A : CommGrp C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toGrp
-  signature: (A : CommGrp C)
-  body: ⟨A.X⟩
-
-中文:
-缩写 toGrp
-  签名: (A : 交换群 C)
-  定义体: ⟨A.X⟩
+--- 原说明 ---
+A commutative group object is a group object.
 -/
 abbrev toGrp (A : CommGrp C) : Grp C := ⟨A.X⟩
 
 /-- A commutative group object is a commutative monoid object. -/
 @[simps X]
-/--
-Definition of `toCommMon` / `toCommMon` 的定义
+/-
+**CategoryTheory.CommGrp.toCommMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Com
+mGrp`。
+形式化陈述：toCommMon (A : CommGrp C) : CommMon C
+参数：A : CommGrp C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommGrp.comm`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2
+ : CategoryTheory…
 
-English:
-definition toCommMon
-  signature: (A : CommGrp C)
-  body: ⟨A.X⟩
-
-中文:
-定义 toCommMon
-  签名: (A : 交换群 C)
-  定义体: ⟨A.X⟩
+--- 原说明 ---
+A commutative group object is a commutative monoid object.
 -/
 def toCommMon (A : CommGrp C) : CommMon C := ⟨A.X⟩
 
-/--
-Definition of `toMon` / `toMon` 的定义
+/-- A commutative group object is a monoid object. -/
+/-
+**CategoryTheory.CommGrp.toMon** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.CommG
+rp`。
+形式化陈述：toMon (A : CommGrp C) : Mon C
+参数：A : CommGrp C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toMon
-  signature: (A : CommGrp C)
-  body: (toCommMon A).toMon
-
-中文:
-缩写 toMon
-  签名: (A : 交换群 C)
-  定义体: (toCommMon A).toMon
-
-Depends on / 依赖: toCommMon
+--- 原说明 ---
+A commutative group object is a monoid object.
 -/
 abbrev toMon (A : CommGrp C) : Mon C := (toCommMon A).toMon
 
 variable (C) in
 /-- The trivial commutative group object. -/
 @[simps!]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.CommGrp.trivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommG
+rp`。
+形式化陈述：trivial : CommGrp C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: : CommGrp C
-  body: { X := 𝟙_ C }
-
-中文:
-定义 trivial
-  签名: : 交换群 C
-  定义体: { X := 𝟙_ C }
+--- 原说明 ---
+The trivial commutative group object.
 -/
 def trivial : CommGrp C := { X := 𝟙_ C }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (CommGrp C)
-  body: trivial C
-
-中文:
-实例 :
-  签名: 可居 (交换群 C)
-  定义体: trivial C
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (CommGrp C) where
   default := trivial C
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (CommGrp C)
-  body: inferInstanceAs (Category (InducedCategory _ CommGrp.toGrp))
-
-@[simp]
-
-中文:
-实例 :
-  签名: 范畴 (交换群 C)
-  定义体: inferInstanceAs (Category (InducedCategory _ CommGrp.toGrp))
-
-@[simp]
-
-Depends on / 依赖: Category, CommGrp, CommGrp.toGrp, InducedCategory
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (CommGrp C) :=
   inferInstanceAs (Category (InducedCategory _ CommGrp.toGrp))
 
 @[simp]
-/--
-theorem `id_hom` / 定理 `id_hom`
-
-English:
-theorem id_hom
-  given: (A : CommGrp C)
-  statement: (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.toGrp
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_hom
-  条件: (A : 交换群 C)
-  结论: (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.toGrp
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommGrp.id_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：id_hom (A : CommGrp C) : (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.toGrp
+参数：A : CommGrp C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom (A : CommGrp C) : (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.toGrp :=
   rfl
 
 @[simp]
-/--
-theorem `comp_hom` / 定理 `comp_hom`
-
-English:
-theorem comp_hom
-  given: {R S T : CommGrp C} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 comp_hom
-  条件: {R S T : 交换群 C} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
-
-@[ext]
+/-
+**CategoryTheory.CommGrp.comp_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comm
+Grp`。
+形式化陈述：comp_hom {R S T : CommGrp C} (f : R ⟶ S) (g : S ⟶ T) : (f ≫ g).hom = f.hom
+ ≫ g.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom {R S T : CommGrp C} (f : R ⟶ S) (g : S ⟶ T) :
     (f ≫ g).hom = f.hom ≫ g.hom :=
   rfl
 
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  given: {A B : CommGrp C} (f g : A ⟶ B) (h : f.hom.hom.hom = g.hom.hom.hom)
-  statement: f = g
-  proof: InducedCategory.hom_ext (Grp.hom_ext _ _ h)
-
-中文:
-定理 hom_ext
-  条件: {A B : 交换群 C} (f g : A ⟶ B) (h : f.hom.hom.hom = g.hom.hom.hom)
-  结论: f = g
-  证明: InducedCategory.hom_ext (Grp.hom_ext _ _ h)
-
-Depends on / 依赖: Grp.hom_ext, InducedCategory, InducedCategory.hom_ext, hom_ext
+/-
+**CategoryTheory.CommGrp.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommG
+rp`。
+形式化陈述：hom_ext {A B : CommGrp C} (f g : A ⟶ B) (h : f.hom.hom.hom = g.hom.hom.hom
+) : f = g
+参数：f g : A ⟶ B；h : f.hom.hom.hom = g.hom.hom.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `CategoryTheory.Grp.hom_ext`：hom_ext {A B : Grp C} (f g : A ⟶ B) (h : f.h
+om.hom = g.hom.hom) : f = g
 -/
 theorem hom_ext {A B : CommGrp C} (f g : A ⟶ B) (h : f.hom.hom.hom = g.hom.hom.hom) : f = g :=
   InducedCategory.hom_ext (Grp.hom_ext _ _ h)
@@ -232,276 +168,146 @@ variable (C)
 
 /-- The forgetful functor from commutative group objects to group objects. -/
 @[simps! obj_X]
-/--
-Definition of `forget₂Grp` / `forget₂Grp` 的定义
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂Grp
-  signature: : CommGrp C ⥤ Grp C
-  body: inducedFunctor CommGrp.toGrp
-
-中文:
-定义 forget₂Grp
-  签名: : 交换群 C ⥤ 群 C
-  定义体: inducedFunctor CommGrp.toGrp
-
-Depends on / 依赖: CommGrp, CommGrp.toGrp, inducedFunctor
+--- 原说明 ---
+The forgetful functor from commutative group objects to group objects.
 -/
 def forget₂Grp : CommGrp C ⥤ Grp C :=
   inducedFunctor CommGrp.toGrp
 
-/--
-Definition of `fullyFaithfulForget₂Grp` / `fullyFaithfulForget₂Grp` 的定义
+/-- The forgetful functor from commutative group objects to group objects is fully faithful. -/
+/-
+**CategoryTheory.CommGrp.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget₂Grp
-  signature: : (forget₂Grp C).FullyFaithful
-  body: fullyFaithfulInducedFunctor _
-
-中文:
-定义 fullyFaithfulForget₂Grp
-  签名: : (forget₂Grp C).满忠实
-  定义体: fullyFaithfulInducedFunctor _
-
-Depends on / 依赖: fullyFaithfulInducedFunctor
+--- 原说明 ---
+The forgetful functor from commutative group objects to group objects is fully f
+aithful.
 -/
 def fullyFaithfulForget₂Grp : (forget₂Grp C).FullyFaithful :=
   fullyFaithfulInducedFunctor _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂Grp C).Full
-  body: InducedCategory.full _
-
-中文:
-实例 :
-  签名: (forget₂Grp C).满
-  定义体: InducedCategory.full _
-
-Depends on / 依赖: InducedCategory, InducedCategory.full
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂Grp C).Full := InducedCategory.full _
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂Grp C).Faithful
-  body: InducedCategory.faithful _
-
-@[simp]
-
-中文:
-实例 :
-  签名: (forget₂Grp C).忠实
-  定义体: InducedCategory.faithful _
-
-@[simp]
-
-Depends on / 依赖: InducedCategory, InducedCategory.faithful, faithful
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂Grp C).Faithful := InducedCategory.faithful _
 
 @[simp]
-/--
-theorem `forget₂Grp_obj_one` / 定理 `forget₂Grp_obj_one`
-
-English:
-theorem forget₂Grp_obj_one
-  given: (A : CommGrp C)
-  statement: η[((forget₂Grp C).obj A).X] = η[A.X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂Grp_obj_one
-  条件: (A : 交换群 C)
-  结论: η[((forget₂Grp C).obj A).X] = η[A.X]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Grp_obj_one (A : CommGrp C) : η[((forget₂Grp C).obj A).X] = η[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂Grp_obj_mul` / 定理 `forget₂Grp_obj_mul`
-
-English:
-theorem forget₂Grp_obj_mul
-  given: (A : CommGrp C)
-  statement: μ[((forget₂Grp C).obj A).X] = μ[A.X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂Grp_obj_mul
-  条件: (A : 交换群 C)
-  结论: μ[((forget₂Grp C).obj A).X] = μ[A.X]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Grp_obj_mul (A : CommGrp C) : μ[((forget₂Grp C).obj A).X] = μ[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂Grp_map_hom` / 定理 `forget₂Grp_map_hom`
-
-English:
-theorem forget₂Grp_map_hom
-  given: {A B : CommGrp C} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-定理 forget₂Grp_map_hom
-  条件: {A B : 交换群 C} (f : A ⟶ B)
-  证明: rfl
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Grp_map_hom {A B : CommGrp C} (f : A ⟶ B) :
     ((forget₂Grp C).map f).hom = f.hom.hom :=
   rfl
 
-/--
-Definition of `forget₂CommMon` / `forget₂CommMon` 的定义
+/-- The forgetful functor from commutative group objects to commutative monoid objects. -/
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂CommMon
-  signature: : CommGrp C ⥤ CommMon C where
-  body: CommMon.mk G.X
-  map f := CommMon.homMk f.hom.hom
-
-中文:
-定义 forget₂CommMon
-  签名: : 交换群 C ⥤ 交换幺半群 C where
-  定义体: CommMon.mk G.X
-  map f := CommMon.homMk f.hom.hom
-
-Depends on / 依赖: CommMon, CommMon.mk
+--- 原说明 ---
+The forgetful functor from commutative group objects to commutative monoid objec
+ts.
 -/
 def forget₂CommMon : CommGrp C ⥤ CommMon C where
   obj G := CommMon.mk G.X
   map f := CommMon.homMk f.hom.hom
 
-/--
-Definition of `fullyFaithfulForget₂CommMon` / `fullyFaithfulForget₂CommMon` 的定义
+/-- The forgetful functor from commutative group objects to commutative monoid objects is fully
+faithful. -/
+/-
+**CategoryTheory.CommGrp.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget₂CommMon
-  signature: : (forget₂CommMon C).FullyFaithful where
-  body: InducedCategory.homMk (Grp.homMk' f.hom)
-
-中文:
-定义 fullyFaithfulForget₂CommMon
-  签名: : (forget₂CommMon C).满忠实 where
-  定义体: InducedCategory.homMk (Grp.homMk' f.hom)
-
-Depends on / 依赖: Grp.homMk, InducedCategory, InducedCategory.homMk, f.hom
+--- 原说明 ---
+The forgetful functor from commutative group objects to commutative monoid objec
+ts is fully
+faithful.
 -/
 def fullyFaithfulForget₂CommMon : (forget₂CommMon C).FullyFaithful where
   preimage f := InducedCategory.homMk (Grp.homMk' f.hom)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂CommMon C).Full
-  body: (fullyFaithfulForget₂CommMon _).full
-
-中文:
-实例 :
-  签名: (forget₂CommMon C).满
-  定义体: (fullyFaithfulForget₂CommMon _).full
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂CommMon C).Full := (fullyFaithfulForget₂CommMon _).full
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂CommMon C).Faithful
-  body: (fullyFaithfulForget₂CommMon _).faithful
-
-@[simp]
-
-中文:
-实例 :
-  签名: (forget₂CommMon C).忠实
-  定义体: (fullyFaithfulForget₂CommMon _).faithful
-
-@[simp]
-
-Depends on / 依赖: faithful
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂CommMon C).Faithful := (fullyFaithfulForget₂CommMon _).faithful
 
 @[simp]
-/--
-theorem `forget₂CommMon_obj_one` / 定理 `forget₂CommMon_obj_one`
-
-English:
-theorem forget₂CommMon_obj_one
-  given: (A : CommGrp C)
-  statement: η[((forget₂CommMon C).obj A).X] = η[A.X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂CommMon_obj_one
-  条件: (A : 交换群 C)
-  结论: η[((forget₂CommMon C).obj A).X] = η[A.X]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂CommMon_obj_one (A : CommGrp C) : η[((forget₂CommMon C).obj A).X] = η[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂CommMon_obj_mul` / 定理 `forget₂CommMon_obj_mul`
-
-English:
-theorem forget₂CommMon_obj_mul
-  given: (A : CommGrp C)
-  statement: μ[((forget₂CommMon C).obj A).X] = μ[A.X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂CommMon_obj_mul
-  条件: (A : 交换群 C)
-  结论: μ[((forget₂CommMon C).obj A).X] = μ[A.X]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂CommMon_obj_mul (A : CommGrp C) : μ[((forget₂CommMon C).obj A).X] = μ[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂CommMon_map_hom` / 定理 `forget₂CommMon_map_hom`
-
-English:
-theorem forget₂CommMon_map_hom
-  given: {A B : CommGrp C} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-定理 forget₂CommMon_map_hom
-  条件: {A B : 交换群 C} (f : A ⟶ B)
-  证明: rfl
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂CommMon_map_hom {A B : CommGrp C} (f : A ⟶ B) :
     ((forget₂CommMon C).map f).hom = f.hom.hom :=
@@ -509,76 +315,53 @@ theorem forget₂CommMon_map_hom {A B : CommGrp C} (f : A ⟶ B) :
 
 /-- The forgetful functor from commutative group objects to the ambient category. -/
 @[simps!]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : CommGrp C ⥤ C
-  body: forget₂Grp C ⋙ Grp.forget C
-
-中文:
-定义 forget
-  签名: : 交换群 C ⥤ C
-  定义体: forget₂Grp C ⋙ Grp.forget C
-
-Depends on / 依赖: Grp.forget, forget
+--- 原说明 ---
+The forgetful functor from commutative group objects to the ambient category.
 -/
 def forget : CommGrp C ⥤ C :=
   forget₂Grp C ⋙ Grp.forget C
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget C).Faithful
-
-中文:
-实例 :
-  签名: (forget C).忠实
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget C).Faithful where
 
 @[simp]
-/--
-theorem `forget₂Grp_comp_forget` / 定理 `forget₂Grp_comp_forget`
-
-English:
-theorem forget₂Grp_comp_forget
-  statement: forget₂Grp C ⋙ Grp.forget C = forget C
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂Grp_comp_forget
-  结论: forget₂Grp C ⋙ 群.forget C = forget C
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Grp_comp_forget : forget₂Grp C ⋙ Grp.forget C = forget C := rfl
 
 @[simp]
-/--
-theorem `forget₂CommMon_comp_forget` / 定理 `forget₂CommMon_comp_forget`
-
-English:
-theorem forget₂CommMon_comp_forget
-  statement: forget₂CommMon C ⋙ CommMon.forget C = forget C
-  proof: rfl
-
-中文:
-定理 forget₂CommMon_comp_forget
-  结论: forget₂CommMon C ⋙ 交换幺半群.forget C = forget C
-  证明: rfl
+/-
+**CategoryTheory.CommGrp.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：forget : CommGrp C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂CommMon_comp_forget : forget₂CommMon C ⋙ CommMon.forget C = forget C := rfl
-
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G H : CommGrp C} {f : G ⟶ H} [IsIso f] : IsIso f.hom :=
   inferInstanceAs (IsIso ((forget₂Grp C).map f))
-
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G H : CommGrp C} {f : G ⟶ H} [IsIso f] : IsIso f.hom.hom :=
   inferInstanceAs (IsIso ((forget₂Grp C ⋙ Grp.forget₂Mon C).map f))
 
@@ -587,20 +370,19 @@ end
 /-- Construct an isomorphism of commutative group objects by giving a monoid isomorphism between the
 underlying objects. -/
 @[simps!]
-/--
-Definition of `mkIso'` / `mkIso'` 的定义
+/-
+**CategoryTheory.CommGrp.mkIso'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommGr
+p`。
+形式化陈述：mkIso' {G H : C} (e : G ≅ H) [GrpObj G] [IsCommMonObj G] [GrpObj H] [IsCom
+mMonObj H] [IsMonHom e.hom] : mk G ≅ mk H
+参数：e : G ≅ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIso'
-  signature: {G H : C} (e : G ≅ H) [GrpObj G] [IsCommMonObj G] [GrpObj H] [IsCommMonObj H]
-  body: (fullyFaithfulForget₂Grp C).preimageIso (Grp.mkIso' e)
-
-中文:
-定义 mkIso'
-  签名: {G H : C} (e : G ≅ H) [GrpObj G] [是交换MonObj G] [GrpObj H] [是交换MonObj H]
-  定义体: (fullyFaithfulForget₂Grp C).preimageIso (Grp.mkIso' e)
-
-Depends on / 依赖: Grp.mkIso, preimageIso
+--- 原说明 ---
+Construct an isomorphism of commutative group objects by giving a monoid isomorp
+hism between the
+underlying objects.
 -/
 def mkIso' {G H : C} (e : G ≅ H) [GrpObj G] [IsCommMonObj G] [GrpObj H] [IsCommMonObj H]
     [IsMonHom e.hom] : mk G ≅ mk H :=
@@ -609,98 +391,92 @@ def mkIso' {G H : C} (e : G ≅ H) [GrpObj G] [IsCommMonObj G] [GrpObj H] [IsCom
 section
 
 variable {G H : CommGrp C} (e : G.X ≅ H.X) (one_f : η[G.X] ≫ e.hom = η[H.X] := by cat_disch)
-  (mul_f : μ[G.X] ≫ e.hom = (e.hom otimesₘ e.hom) ≫ μ[H.X] := by cat_disch)
+  (mul_f : μ[G.X] ≫ e.hom = (e.hom ⊗ₘ e.hom) ≫ μ[H.X] := by cat_disch)
 
 set_option backward.privateInPublic true in
-/--
-Definition of `mkIso` / `mkIso` 的定义
+/-- Construct an isomorphism of group objects by giving an isomorphism between the underlying
+objects and checking compatibility with unit and multiplication only in the forward direction. -/
+/-
+**CategoryTheory.CommGrp.mkIso** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.CommG
+rp`。
+形式化陈述：mkIso : G ≅ H
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommGrp.comm`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2
+ : CategoryTheory…
 
-English:
-abbreviation mkIso
-  signature: : G ≅ H
-  body: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
-  mkIso' e
-
-中文:
-缩写 mkIso
-  签名: : G ≅ H
-  定义体: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
-  mkIso' e
-
-Depends on / 依赖: IsMonHom, e.hom, mul_f, one_f
+--- 原说明 ---
+Construct an isomorphism of group objects by giving an isomorphism between the u
+nderlying
+objects and checking compatibility with unit and multiplication only in the forw
+ard direction.
 -/
 abbrev mkIso : G ≅ H :=
   have : IsMonHom e.hom := ⟨one_f, mul_f⟩
   mkIso' e
 
 set_option backward.privateInPublic true in
-/--
-lemma `mkIso_hom_hom_hom_hom` / 引理 `mkIso_hom_hom_hom_hom`
-
-English:
-lemma mkIso_hom_hom_hom_hom
-  statement: (mkIso e one_f mul_f).hom.hom.hom.hom = e.hom
-  proof: rfl
-
-中文:
-引理 mkIso_hom_hom_hom_hom
-  结论: (mkIso e one_f mul_f).hom.hom.hom.hom = e.hom
-  证明: rfl
+/-
+**CategoryTheory.CommGrp.mkIso_hom_hom_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.CommGrp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] {G H : CategoryTheory.CommGrp C} (e : G.X ≅ H.X)   (one_f :     autoParam 
+(CategoryTheory.CategoryStruct.comp CategoryTheory.MonObj.one e.hom = CategoryTh
+eory.MonObj.one)       _auto_100✝)   (mul_f :     autoParam       (CategoryTheor
+y.CategoryStruct.comp CategoryTheory.MonObj.mul e.hom =         CategoryTheory.C
+ategoryStruct.comp (CategoryTheory.MonoidalCategoryStruct.tensorHom e.hom e.hom)
+           CategoryTheory.MonObj.mul)       _auto_102✝),   (CategoryTheory.CommG
+rp.mkIso e one_f mul_f).hom.hom.hom.hom = e.hom
+参数：e : G.X ≅ H.X；one_f :     autoParam (CategoryTheory.CategoryStruct.comp Categ
+oryTheory.MonObj.one e.hom = CategoryTheory.MonObj.one)       _auto_100✝；mul_f :
+     autoParam       (CategoryTheory.CategoryStruct.comp CategoryTheory.MonObj.m
+ul e.hom =         CategoryTheory.CategoryStruct.comp (CategoryTheory.MonoidalCa
+tegoryStruct.tensorHom e.hom e.hom)           CategoryTheory.MonObj.mul)       _
+auto_102✝；CategoryTheory.CommGrp.mkIso e one_f mul_f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mkIso_hom_hom_hom_hom : (mkIso e one_f mul_f).hom.hom.hom.hom = e.hom := rfl
 set_option backward.privateInPublic true in
-/--
-lemma `mkIso_inv_hom_hom_hom` / 引理 `mkIso_inv_hom_hom_hom`
-
-English:
-lemma mkIso_inv_hom_hom_hom
-  statement: (mkIso e one_f mul_f).inv.hom.hom.hom = e.inv
-  proof: rfl
-
-中文:
-引理 mkIso_inv_hom_hom_hom
-  结论: (mkIso e one_f mul_f).inv.hom.hom.hom = e.inv
-  证明: rfl
+/-
+**CategoryTheory.CommGrp.mkIso_inv_hom_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.CommGrp`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] {G H : CategoryTheory.CommGrp C} (e : G.X ≅ H.X)   (one_f :     autoParam 
+(CategoryTheory.CategoryStruct.comp CategoryTheory.MonObj.one e.hom = CategoryTh
+eory.MonObj.one)       _auto_105✝)   (mul_f :     autoParam       (CategoryTheor
+y.CategoryStruct.comp CategoryTheory.MonObj.mul e.hom =         CategoryTheory.C
+ategoryStruct.comp (CategoryTheory.MonoidalCategoryStruct.tensorHom e.hom e.hom)
+           CategoryTheory.MonObj.mul)       _auto_107✝),   (CategoryTheory.CommG
+rp.mkIso e one_f mul_f).inv.hom.hom.hom = e.inv
+参数：e : G.X ≅ H.X；one_f :     autoParam (CategoryTheory.CategoryStruct.comp Categ
+oryTheory.MonObj.one e.hom = CategoryTheory.MonObj.one)       _auto_105✝；mul_f :
+     autoParam       (CategoryTheory.CategoryStruct.comp CategoryTheory.MonObj.m
+ul e.hom =         CategoryTheory.CategoryStruct.comp (CategoryTheory.MonoidalCa
+tegoryStruct.tensorHom e.hom e.hom)           CategoryTheory.MonObj.mul)       _
+auto_107✝；CategoryTheory.CommGrp.mkIso e one_f mul_f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mkIso_inv_hom_hom_hom : (mkIso e one_f mul_f).inv.hom.hom.hom = e.inv := rfl
 
 end
 
-/--
-Instance `uniqueHomFromTrivial` / 实例 `uniqueHomFromTrivial`
-
-English:
-instance uniqueHomFromTrivial
-  signature: (A : CommGrp C)
-  body: Equiv.unique (show _ ≃ (Grp.trivial C ⟶ A.toGrp) from
-    InducedCategory.homEquiv)
-
-中文:
-实例 uniqueHomFromTrivial
-  签名: (A : 交换群 C)
-  定义体: Equiv.unique (show _ ≃ (Grp.trivial C ⟶ A.toGrp) from
-    InducedCategory.homEquiv)
-
-Depends on / 依赖: A.toGrp, Equiv.unique, Grp.trivial, InducedCategory, InducedCategory.homEquiv, homEquiv, unique
+/-
+**CategoryTheory.CommGrp.uniqueHomFromTrivial** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.CommGrp`。
+形式化陈述：uniqueHomFromTrivial (A : CommGrp C) : Unique (trivial C ⟶ A)
+参数：A : CommGrp C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance uniqueHomFromTrivial (A : CommGrp C) : Unique (trivial C ⟶ A) :=
   Equiv.unique (show _ ≃ (Grp.trivial C ⟶ A.toGrp) from
     InducedCategory.homEquiv)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasInitial (CommGrp C)
-  body: hasInitial_of_unique (trivial C)
-
-中文:
-实例 :
-  签名: HasInitial (交换群 C)
-  定义体: hasInitial_of_unique (trivial C)
-
-Depends on / 依赖: hasInitial_of_unique
+/-
+**CategoryTheory.CommGrp.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommGrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasInitial (CommGrp C) :=
   hasInitial_of_unique (trivial C)
@@ -722,30 +498,17 @@ variable (F) in
 /-- A finite-product-preserving functor takes commutative group objects to commutative group
 objects. -/
 @[simps!]
-/--
-Definition of `mapCommGrp` / `mapCommGrp` 的定义
+/-
+**CategoryTheory.Functor.mapCommGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：mapCommGrp : CommGrp C ⥤ CommGrp D where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrp
-  signature: : CommGrp C ⥤ CommGrp D where
-  body: { F.mapGrp.obj A.toGrp with
-      comm :=
-        { mul_comm := by
-            dsimp
-            rw [← Functor.LaxBraided.braided_assoc]; rw [← Functor.map_comp]; rw [IsCommMonObj.mul_comm] } }
-  map f := InducedCategory.homMk (F.mapGrp.map f.hom)
-
-中文:
-定义 mapCommGrp
-  签名: : 交换群 C ⥤ 交换群 D where
-  定义体: { F.mapGrp.obj A.toGrp with
-      comm :=
-        { mul_comm := by
-            dsimp
-            rw [← Functor.LaxBraided.braided_assoc]; rw [← Functor.map_comp]; rw [IsCommMonObj.mul_comm] } }
-  map f := InducedCategory.homMk (F.mapGrp.map f.hom)
-
-Depends on / 依赖: A.toGrp, F.mapGrp.map, F.mapGrp.obj, Functor, Functor.LaxBraided.braided_assoc, Functor.map_comp, InducedCategory, InducedCategory.homMk, IsCommMonObj, IsCommMonObj.mul_comm, LaxBraided, braided_assoc, f.hom, mapGrp, map_comp, mul_comm
+--- 原说明 ---
+A finite-product-preserving functor takes commutative group objects to commutati
+ve group
+objects.
 -/
 def mapCommGrp : CommGrp C ⥤ CommGrp D where
   obj A :=
@@ -753,21 +516,28 @@ def mapCommGrp : CommGrp C ⥤ CommGrp D where
       comm :=
         { mul_comm := by
             dsimp
-            rw [← Functor.LaxBraided.braided_assoc]; rw [← Functor.map_comp]; rw [IsCommMonObj.mul_comm] } }
+            rw [← Functor.LaxBraided.braided_assoc, ← Functor.map_comp, IsCommMonObj.mul_comm] } }
   map f := InducedCategory.homMk (F.mapGrp.map f.hom)
-
-/--
-Instance `Faithful.mapCommGrp` / 实例 `Faithful.mapCommGrp`
-
-English:
-instance Faithful.mapCommGrp
-  signature: [F.Faithful]
-  body: (CommGrp.forget _ ⋙ F).map_injective ((CommGrp.forget _).congr_map hfg)
-
-中文:
-实例 忠实.mapCommGrp
-  签名: [F.忠实]
-  定义体: (CommGrp.forget _ ⋙ F).map_injective ((CommGrp.forget _).congr_map hfg)
+/-
+**CategoryTheory.Functor.Faithful.mapCommGrp** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] {D : Type u₂} [inst_3 : CategoryTheory.Category.{v₂, u₂} D]   [inst_4 : Ca
+tegoryTheory.CartesianMonoidalCategory D] [inst_5 : CategoryTheory.BraidedCatego
+ry D]   {F : CategoryTheory.Functor C D} [inst_6 : F.Braided] [F.Faithful], F.ma
+pCommGrp.Faithful
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.Functor.Faithful.comp`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.CommGrp.instFaithfulForget`：∀ (C : Type u₁) [inst : Categ
+oryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategor
+y C]   [inst_2 : CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
 -/
 protected instance Faithful.mapCommGrp [F.Faithful] : F.mapCommGrp.Faithful where
   map_injective hfg :=
@@ -777,121 +547,91 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- If `F : C ⥤ D` is a fully faithful monoidal functor, then
 `CommGrpCat(F) : CommGrpCat C ⥤ CommGrpCat D` is fully faithful too. -/
 @[simps]
-/--
-Definition of `FullyFaithful.mapCommGrp` / `FullyFaithful.mapCommGrp` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.mapCommGrp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.FullyFaithful`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory
+.BraidedCategory C] →         {D : Type u₂} →           [inst_3 : CategoryTheory
+.Category.{v₂, u₂} D] →             [inst_4 : CategoryTheory.CartesianMonoidalCa
+tegory D] →               [inst_5 : CategoryTheory.BraidedCategory D] →         
+        {F : CategoryTheory.Functor C D} → [inst_6 : F.Braided] → F.FullyFaithfu
+l → F.mapCommGrp.FullyFaithful
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FullyFaithful.mapCommGrp
-  signature: (hF : F.FullyFaithful)
-  body: InducedCategory.homMk (Grp.homMk' (hF.mapMon.preimage f.hom.hom))
-
-中文:
-定义 满忠实.mapCommGrp
-  签名: (hF : F.满忠实)
-  定义体: InducedCategory.homMk (Grp.homMk' (hF.mapMon.preimage f.hom.hom))
+--- 原说明 ---
+If `F : C ⥤ D` is a fully faithful monoidal functor, then
+`CommGrpCat(F) : CommGrpCat C ⥤ CommGrpCat D` is fully faithful too.
 -/
 protected def FullyFaithful.mapCommGrp (hF : F.FullyFaithful) : F.mapCommGrp.FullyFaithful where
   preimage f := InducedCategory.homMk (Grp.homMk' (hF.mapMon.preimage f.hom.hom))
-
-/--
-Instance `Full.mapCommGrp` / 实例 `Full.mapCommGrp`
-
-English:
-instance Full.mapCommGrp
-  signature: [F.Full] [F.Faithful]
-  body: (FullyFaithful.ofFullyFaithful F).mapCommGrp.full
-
-@[simp]
-
-中文:
-实例 满.mapCommGrp
-  签名: [F.满] [F.忠实]
-  定义体: (FullyFaithful.ofFullyFaithful F).mapCommGrp.full
-
-@[simp]
+/-
+**CategoryTheory.Functor.Full.mapCommGrp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCatego
+ry C] {D : Type u₂} [inst_3 : CategoryTheory.Category.{v₂, u₂} D]   [inst_4 : Ca
+tegoryTheory.CartesianMonoidalCategory D] [inst_5 : CategoryTheory.BraidedCatego
+ry D]   {F : CategoryTheory.Functor C D} [inst_6 : F.Braided] [F.Full] [F.Faithf
+ul], F.mapCommGrp.Full
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 protected instance Full.mapCommGrp [F.Full] [F.Faithful] : F.mapCommGrp.Full :=
   (FullyFaithful.ofFullyFaithful F).mapCommGrp.full
 
 @[simp]
-/--
-theorem `mapCommGrp_id_one` / 定理 `mapCommGrp_id_one`
-
-English:
-theorem mapCommGrp_id_one
-  given: (A : CommGrp C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapCommGrp_id_one
-  条件: (A : 交换群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.mapCommGrp_id_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：mapCommGrp_id_one (A : CommGrp C) : η[((𝟭 C).mapCommGrp.obj A).X] = 𝟙 _ ≫ 
+η[A.X]
+参数：A : CommGrp C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapCommGrp_id_one (A : CommGrp C) :
     η[((𝟭 C).mapCommGrp.obj A).X] = 𝟙 _ ≫ η[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `mapCommpGrp_id_mul` / 定理 `mapCommpGrp_id_mul`
-
-English:
-theorem mapCommpGrp_id_mul
-  given: (A : CommGrp C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapCommpGrp_id_mul
-  条件: (A : 交换群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.mapCommpGrp_id_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：mapCommpGrp_id_mul (A : CommGrp C) : μ[((𝟭 C).mapCommGrp.obj A).X] = 𝟙 _ ≫
+ μ[A.X]
+参数：A : CommGrp C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapCommpGrp_id_mul (A : CommGrp C) :
     μ[((𝟭 C).mapCommGrp.obj A).X] = 𝟙 _ ≫ μ[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `comp_mapCommGrp_one` / 定理 `comp_mapCommGrp_one`
-
-English:
-theorem comp_mapCommGrp_one
-  given: (A : CommGrp C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_mapCommGrp_one
-  条件: (A : 交换群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.comp_mapCommGrp_one** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：comp_mapCommGrp_one (A : CommGrp C) : η[((F ⋙ G).mapCommGrp.obj A).X] = La
+xMonoidal.ε (F ⋙ G) ≫ (F ⋙ G).map η[A.X]
+参数：A : CommGrp C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_mapCommGrp_one (A : CommGrp C) :
     η[((F ⋙ G).mapCommGrp.obj A).X] = LaxMonoidal.ε (F ⋙ G) ≫ (F ⋙ G).map η[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `comp_mapCommGrp_mul` / 定理 `comp_mapCommGrp_mul`
-
-English:
-theorem comp_mapCommGrp_mul
-  given: (A : CommGrp C)
-  proof: rfl
-
-中文:
-定理 comp_mapCommGrp_mul
-  条件: (A : 交换群 C)
-  证明: rfl
+/-
+**CategoryTheory.Functor.comp_mapCommGrp_mul** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：comp_mapCommGrp_mul (A : CommGrp C) : μ[((F ⋙ G).mapCommGrp.obj A).X] = La
+xMonoidal.μ (F ⋙ G) _ _ ≫ (F ⋙ G).map μ[A.X]
+参数：A : CommGrp C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_mapCommGrp_mul (A : CommGrp C) :
     μ[((F ⋙ G).mapCommGrp.obj A).X] = LaxMonoidal.μ (F ⋙ G) _ _ ≫ (F ⋙ G).map μ[A.X] :=
@@ -900,66 +640,50 @@ theorem comp_mapCommGrp_mul (A : CommGrp C) :
 set_option backward.isDefEq.respectTransparency false in
 /-- The identity functor is also the identity on commutative group objects. -/
 @[simps!]
-/--
-Definition of `mapCommGrpIdIso` / `mapCommGrpIdIso` 的定义
+/-
+**CategoryTheory.Functor.mapCommGrpIdIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：mapCommGrpIdIso : mapCommGrp (𝟭 C) ≅ 𝟭 (CommGrp C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrpIdIso
-  signature: : mapCommGrp (𝟭 C) ≅ 𝟭 (CommGrp C)
-  body: NatIso.ofComponents (fun X => CommGrp.mkIso (.refl _) (by simp)
-    (by simp))
-
-中文:
-定义 mapCommGrpIdIso
-  签名: : mapCommGrp (𝟭 C) ≅ 𝟭 (交换群 C)
-  定义体: NatIso.ofComponents (fun X => CommGrp.mkIso (.refl _) (by simp)
-    (by simp))
-
-Depends on / 依赖: CommGrp, CommGrp.mkIso, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The identity functor is also the identity on commutative group objects.
 -/
 def mapCommGrpIdIso : mapCommGrp (𝟭 C) ≅ 𝟭 (CommGrp C) :=
-  NatIso.ofComponents (fun X => CommGrp.mkIso (.refl _) (by simp)
+  NatIso.ofComponents (fun X ↦ CommGrp.mkIso (.refl _) (by simp)
     (by simp))
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The composition functor is also the composition on commutative group objects. -/
 @[simps!]
-/--
-Definition of `mapCommGrpCompIso` / `mapCommGrpCompIso` 的定义
+/-
+**CategoryTheory.Functor.mapCommGrpCompIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：mapCommGrpCompIso : (F ⋙ G).mapCommGrp ≅ F.mapCommGrp ⋙ G.mapCommGrp
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrpCompIso
-  signature: : (F ⋙ G).mapCommGrp ≅ F.mapCommGrp ⋙ G.mapCommGrp
-  body: NatIso.ofComponents fun X => CommGrp.mkIso (.refl _)
-
-中文:
-定义 mapCommGrpCompIso
-  签名: : (F ⋙ G).mapCommGrp ≅ F.mapCommGrp ⋙ G.mapCommGrp
-  定义体: NatIso.ofComponents fun X => CommGrp.mkIso (.refl _)
-
-Depends on / 依赖: CommGrp, CommGrp.mkIso, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The composition functor is also the composition on commutative group objects.
 -/
 def mapCommGrpCompIso : (F ⋙ G).mapCommGrp ≅ F.mapCommGrp ⋙ G.mapCommGrp :=
-  NatIso.ofComponents fun X => CommGrp.mkIso (.refl _)
+  NatIso.ofComponents fun X ↦ CommGrp.mkIso (.refl _)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Natural transformations between functors lift to commutative group objects. -/
 @[simps!]
-/--
-Definition of `mapCommGrpNatTrans` / `mapCommGrpNatTrans` 的定义
+/-
+**CategoryTheory.Functor.mapCommGrpNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：mapCommGrpNatTrans (f : F ⟶ F') : F.mapCommGrp ⟶ F'.mapCommGrp where app X
+参数：f : F ⟶ F'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrpNatTrans
-  signature: (f : F ⟶ F')
-  body: InducedCategory.homMk ((mapGrpNatTrans f).app X.toGrp)
-
-中文:
-定义 mapCommGrp自然数Trans
-  签名: (f : F ⟶ F')
-  定义体: InducedCategory.homMk ((mapGrpNatTrans f).app X.toGrp)
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk, X.toGrp, mapGrpNatTrans
+--- 原说明 ---
+Natural transformations between functors lift to commutative group objects.
 -/
 def mapCommGrpNatTrans (f : F ⟶ F') : F.mapCommGrp ⟶ F'.mapCommGrp where
   app X := InducedCategory.homMk ((mapGrpNatTrans f).app X.toGrp)
@@ -967,43 +691,32 @@ def mapCommGrpNatTrans (f : F ⟶ F') : F.mapCommGrp ⟶ F'.mapCommGrp where
 set_option backward.isDefEq.respectTransparency false in
 /-- Natural isomorphisms between functors lift to commutative group objects. -/
 @[simps!]
-/--
-Definition of `mapCommGrpNatIso` / `mapCommGrpNatIso` 的定义
+/-
+**CategoryTheory.Functor.mapCommGrpNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：mapCommGrpNatIso (e : F ≅ F') : F.mapCommGrp ≅ F'.mapCommGrp
+参数：e : F ≅ F'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrpNatIso
-  signature: (e : F ≅ F')
-  body: NatIso.ofComponents fun X => CommGrp.mkIso (e.app _)
-
-中文:
-定义 mapCommGrp自然数Iso
-  签名: (e : F ≅ F')
-  定义体: NatIso.ofComponents fun X => CommGrp.mkIso (e.app _)
-
-Depends on / 依赖: CommGrp, CommGrp.mkIso, NatIso, NatIso.ofComponents, e.app, ofComponents
+--- 原说明 ---
+Natural isomorphisms between functors lift to commutative group objects.
 -/
 def mapCommGrpNatIso (e : F ≅ F') : F.mapCommGrp ≅ F'.mapCommGrp :=
-  NatIso.ofComponents fun X => CommGrp.mkIso (e.app _)
+  NatIso.ofComponents fun X ↦ CommGrp.mkIso (e.app _)
 
 attribute [local instance] Functor.Braided.ofChosenFiniteProducts in
 /-- `mapCommGrp` is functorial in the left-exact functor. -/
 @[simps]
-/--
-Definition of `mapCommGrpFunctor` / `mapCommGrpFunctor` 的定义
+/-
+**CategoryTheory.Functor.mapCommGrpFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：mapCommGrpFunctor : (C ⥤ₗ D) ⥤ CommGrp C ⥤ CommGrp D where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrpFunctor
-  signature: : (C ⥤ₗ D) ⥤ CommGrp C ⥤ CommGrp D where
-  body: F.1.mapCommGrp
-  map α := mapCommGrpNatTrans α.hom
-
-中文:
-定义 mapCommGrpFunctor
-  签名: : (C ⥤ₗ D) ⥤ 交换群 C ⥤ 交换群 D where
-  定义体: F.1.mapCommGrp
-  map α := mapCommGrpNatTrans α.hom
-
-Depends on / 依赖: mapCommGrp
+--- 原说明 ---
+`mapCommGrp` is functorial in the left-exact functor.
 -/
 noncomputable def mapCommGrpFunctor : (C ⥤ₗ D) ⥤ CommGrp C ⥤ CommGrp D where
   obj F := F.1.mapCommGrp
@@ -1018,20 +731,26 @@ variable {F : C ⥤ D} {G : D ⥤ C} (a : F ⊣ G) [F.Braided] [G.Braided]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `mapCommGrp` / `mapCommGrp` 的定义
+/-- An adjunction of braided functors lifts to an adjunction of their lifts to commutative group
+objects. -/
+/-
+**CategoryTheory.Adjunction.mapCommGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Adjunction`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory
+.BraidedCategory C] →         {D : Type u₂} →           [inst_3 : CategoryTheory
+.Category.{v₂, u₂} D] →             [inst_4 : CategoryTheory.CartesianMonoidalCa
+tegory D] →               [inst_5 : CategoryTheory.BraidedCategory D] →         
+        {F : CategoryTheory.Functor C D} →                   {G : CategoryTheory
+.Functor D C} →                     (F ⊣ G) → [inst_6 : F.Braided] → [inst_7 : G
+.Braided] → F.mapCommGrp ⊣ G.mapCommGrp
+参数：F ⊣ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrp
-  signature: : F.mapCommGrp ⊣ G.mapCommGrp where
-  body: mapCommGrpIdIso.inv ≫ mapCommGrpNatTrans a.unit ≫ mapCommGrpCompIso.hom
-  counit := mapCommGrpCompIso.inv ≫ mapCommGrpNatTrans a.counit ≫ mapCommGrpIdIso.hom
-
-中文:
-定义 mapCommGrp
-  签名: : F.mapCommGrp ⊣ G.mapCommGrp where
-  定义体: mapCommGrpIdIso.inv ≫ mapCommGrpNatTrans a.unit ≫ mapCommGrpCompIso.hom
-  counit := mapCommGrpCompIso.inv ≫ mapCommGrpNatTrans a.counit ≫ mapCommGrpIdIso.hom
+--- 原说明 ---
+An adjunction of braided functors lifts to an adjunction of their lifts to commu
+tative group
+objects.
 -/
 @[simps] noncomputable def mapCommGrp : F.mapCommGrp ⊣ G.mapCommGrp where
   unit := mapCommGrpIdIso.inv ≫ mapCommGrpNatTrans a.unit ≫ mapCommGrpCompIso.hom
@@ -1043,24 +762,23 @@ namespace Equivalence
 variable (e : C ≌ D) [e.functor.Braided] [e.inverse.Braided]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `mapCommGrp` / `mapCommGrp` 的定义
+/-- An equivalence of categories lifts to an equivalence of their commutative group objects. -/
+/-
+**CategoryTheory.Equivalence.mapCommGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Equivalence`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory
+.BraidedCategory C] →         {D : Type u₂} →           [inst_3 : CategoryTheory
+.Category.{v₂, u₂} D] →             [inst_4 : CategoryTheory.CartesianMonoidalCa
+tegory D] →               [inst_5 : CategoryTheory.BraidedCategory D] →         
+        (e : C ≌ D) →                   [e.functor.Braided] → [e.inverse.Braided
+] → CategoryTheory.CommGrp C ≌ CategoryTheory.CommGrp D
+参数：e : C ≌ D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommGrp
-  signature: : CommGrp C ≌ CommGrp D where
-  body: e.functor.mapCommGrp
-  inverse := e.inverse.mapCommGrp
-  unitIso := mapCommGrpIdIso.symm ≪≫ mapCommGrpNatIso e.unitIso ≪≫ mapCommGrpCompIso
-  counitIso := mapCommGrpCompIso.symm ≪≫ mapCommGrpNatIso e.counitIso ≪≫ mapCommGrpIdIso
-
-中文:
-定义 mapCommGrp
-  签名: : 交换群 C ≌ 交换群 D where
-  定义体: e.functor.mapCommGrp
-  inverse := e.inverse.mapCommGrp
-  unitIso := mapCommGrpIdIso.symm ≪≫ mapCommGrpNatIso e.unitIso ≪≫ mapCommGrpCompIso
-  counitIso := mapCommGrpCompIso.symm ≪≫ mapCommGrpNatIso e.counitIso ≪≫ mapCommGrpIdIso
+--- 原说明 ---
+An equivalence of categories lifts to an equivalence of their commutative group 
+objects.
 -/
 @[simps] noncomputable def mapCommGrp : CommGrp C ≌ CommGrp D where
   functor := e.functor.mapCommGrp
@@ -1069,3 +787,4 @@ definition mapCommGrp
   counitIso := mapCommGrpCompIso.symm ≪≫ mapCommGrpNatIso e.counitIso ≪≫ mapCommGrpIdIso
 
 end CategoryTheory.Equivalence
+

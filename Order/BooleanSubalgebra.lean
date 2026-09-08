@@ -20,1015 +20,650 @@ open Function Set
 variable {ι : Sort*} {α β γ : Type*}
 
 variable (α) in
-/--
-Definition of `BooleanSubalgebra` / `BooleanSubalgebra` 的定义
+/-- A Boolean subalgebra of a Boolean algebra is a set containing the bottom and top elements, and
+closed under suprema, infima and complements. -/
+/-
+**BooleanSubalgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_2) → [BooleanAlgebra α] → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BooleanSubalgebra
-  parameters: [BooleanAlgebra α]
-  extends: Sublattice α
-  axioms and operations (2):
-    - compl_mem'({a}) : a in carrier -> aᶜ in carrier
-    - bot_mem' : ⊥ in carrier
-
-中文:
-结构 布尔ean子代数
-  参数: [布尔代数 α]
-  继承: 子格 α
-  公理与运算 (2 个):
-    - compl_mem'({a}) : a in carrier -> aᶜ in carrier
-    - bot_mem' : ⊥ in carrier
+--- 原说明 ---
+A Boolean subalgebra of a Boolean algebra is a set containing the bottom and top
+ elements, and
+closed under suprema, infima and complements.
 -/
 structure BooleanSubalgebra [BooleanAlgebra α] extends Sublattice α where
-  compl_mem' {a} : a in carrier -> aᶜ in carrier
-  bot_mem' : ⊥ in carrier
+  compl_mem' {a} : a ∈ carrier → aᶜ ∈ carrier
+  bot_mem' : ⊥ ∈ carrier
 
 namespace BooleanSubalgebra
 section BooleanAlgebra
 variable [BooleanAlgebra α] [BooleanAlgebra β] [BooleanAlgebra γ] {L M : BooleanSubalgebra α}
   {f : BoundedLatticeHom α β} {s t : Set α} {a b : α}
 
-initialize_simps_projections BooleanSubalgebra (carrier -> coe, as_prefix coe)
+initialize_simps_projections BooleanSubalgebra (carrier → coe, as_prefix coe)
 
-/--
-Instance `instSetLike` / 实例 `instSetLike`
-
-English:
-instance instSetLike
-  signature: : SetLike (BooleanSubalgebra α) α where
-  body: L.carrier
-  coe_injective L M h := by obtain ⟨⟨_, _⟩, _⟩ := L; congr
-
-中文:
-实例 instSetLike
-  签名: : 集合状 (布尔ean子代数 α) α where
-  定义体: L.carrier
-  coe_injective L M h := by obtain ⟨⟨_, _⟩, _⟩ := L; congr
-
-Depends on / 依赖: L.carrier, carrier
+/-
+**BooleanSubalgebra.instSetLike** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instSetLike : SetLike (BooleanSubalgebra α) α where coe L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSetLike : SetLike (BooleanSubalgebra α) α where
   coe L := L.carrier
   coe_injective L M h := by obtain ⟨⟨_, _⟩, _⟩ := L; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (BooleanSubalgebra α)
-  body: .ofSetLike (BooleanSubalgebra α) α
-
-中文:
-实例 :
-  签名: 偏序 (布尔ean子代数 α)
-  定义体: .ofSetLike (BooleanSubalgebra α) α
-
-Depends on / 依赖: BooleanSubalgebra, ofSetLike
+/-
+**BooleanSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (BooleanSubalgebra α) := .ofSetLike (BooleanSubalgebra α) α
-
-/--
-lemma `coe_inj` / 引理 `coe_inj`
-
-English:
-lemma coe_inj
-  statement: (L : Set α) = M ↔ L = M
-  proof: SetLike.coe_set_eq
-
-中文:
-引理 coe_inj
-  结论: (L : 集合 α) = M ↔ L = M
-  证明: SetLike.coe_set_eq
-
-Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
+/-
+**BooleanSubalgebra.coe_inj** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：coe_inj : (L : Set α) = M ↔ L = M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_set_eq`：coe_set_eq : (p : Set B) = q ↔ p = q
 -/
 lemma coe_inj : (L : Set α) = M ↔ L = M := SetLike.coe_set_eq
-
-/--
-lemma `supClosed` / 引理 `supClosed`
-
-English:
-lemma supClosed
-  given: (L : BooleanSubalgebra α)
-  statement: SupClosed (L : Set α)
-  proof: L.supClosed'
-
-中文:
-引理 supClosed
-  条件: (L : 布尔ean子代数 α)
-  结论: SupClosed (L : 集合 α)
-  证明: L.supClosed'
+/-
+**BooleanSubalgebra.supClosed** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (L : BooleanSubalgebra α), SupC
+losed ↑L
+参数：L : BooleanSubalgebra α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sublattice.supClosed'`：∀ {α : Type u_2} [inst : Lattice α] (self : Subla
+ttice α), SupClosed self.carrier
 -/
 @[simp] lemma supClosed (L : BooleanSubalgebra α) : SupClosed (L : Set α) := L.supClosed'
-/--
-lemma `infClosed` / 引理 `infClosed`
-
-English:
-lemma infClosed
-  given: (L : BooleanSubalgebra α)
-  statement: InfClosed (L : Set α)
-  proof: L.infClosed'
-
-中文:
-引理 infClosed
-  条件: (L : 布尔ean子代数 α)
-  结论: InfClosed (L : 集合 α)
-  证明: L.infClosed'
+/-
+**BooleanSubalgebra.infClosed** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (L : BooleanSubalgebra α), InfC
+losed ↑L
+参数：L : BooleanSubalgebra α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sublattice.infClosed'`：∀ {α : Type u_2} [inst : Lattice α] (self : Subla
+ttice α), InfClosed self.carrier
 -/
 @[simp] lemma infClosed (L : BooleanSubalgebra α) : InfClosed (L : Set α) := L.infClosed'
-
-/--
-lemma `compl_mem` / 引理 `compl_mem`
-
-English:
-lemma compl_mem
-  given: (ha : a in L)
-  statement: aᶜ in L
-  proof: L.compl_mem' ha
-
-中文:
-引理 compl_mem
-  条件: (ha : a in L)
-  结论: aᶜ in L
-  证明: L.compl_mem' ha
-
-Depends on / 依赖: L.compl_mem, compl_mem
+/-
+**BooleanSubalgebra.compl_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：compl_mem (ha : a in L) : aᶜ in L
+参数：ha : a in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.compl_mem'`：∀ {α : Type u_2} [inst : BooleanAlgebra α]
+ (self : BooleanSubalgebra α) {a : α}, a ∈ self.carrier → aᶜ ∈ self.carrier
 -/
-lemma compl_mem (ha : a in L) : aᶜ in L := L.compl_mem' ha
-/--
-lemma `compl_mem_iff` / 引理 `compl_mem_iff`
-
-English:
-lemma compl_mem_iff
-  statement: aᶜ in L ↔ a in L
-  proof: ⟨fun ha => by simpa using compl_mem ha, compl_mem⟩
-
-中文:
-引理 compl_mem_iff
-  结论: aᶜ in L ↔ a in L
-  证明: ⟨fun ha => by simpa using compl_mem ha, compl_mem⟩
+lemma compl_mem (ha : a ∈ L) : aᶜ ∈ L := L.compl_mem' ha
+/-
+**BooleanSubalgebra.compl_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} {a : 
+α}, aᶜ ∈ L ↔ a ∈ L
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用引理 `BooleanSubalgebra.compl_mem`：compl_mem (ha : a in L) : aᶜ in L
 -/
-@[simp] lemma compl_mem_iff : aᶜ in L ↔ a in L := ⟨fun ha => by simpa using compl_mem ha, compl_mem⟩
-/--
-lemma `bot_mem` / 引理 `bot_mem`
-
-English:
-lemma bot_mem
-  statement: ⊥ in L
-  proof: L.bot_mem'
-
-中文:
-引理 bot_mem
-  结论: ⊥ in L
-  证明: L.bot_mem'
+@[simp] lemma compl_mem_iff : aᶜ ∈ L ↔ a ∈ L := ⟨fun ha ↦ by simpa using compl_mem ha, compl_mem⟩
+/-
+**BooleanSubalgebra.bot_mem** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α}, ⊥ ∈ 
+L
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.bot_mem'`：∀ {α : Type u_2} [inst : BooleanAlgebra α] (
+self : BooleanSubalgebra α), ⊥ ∈ self.carrier
 -/
-@[simp] lemma bot_mem : ⊥ in L := L.bot_mem'
-/--
-lemma `top_mem` / 引理 `top_mem`
-
-English:
-lemma top_mem
-  statement: ⊤ in L
-  proof: by simpa using compl_mem L.bot_mem
-
-中文:
-引理 top_mem
-  结论: ⊤ in L
-  证明: by simpa using compl_mem L.bot_mem
+@[simp] lemma bot_mem : ⊥ ∈ L := L.bot_mem'
+/-
+**BooleanSubalgebra.top_mem** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α}, ⊤ ∈ 
+L
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_bot`：compl_bot : (⊥ : α)ᶜ = ⊤
+· 使用引理 `BooleanSubalgebra.compl_mem`：compl_mem (ha : a in L) : aᶜ in L
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
 -/
-@[simp] lemma top_mem : ⊤ in L := by simpa using compl_mem L.bot_mem
-/--
-lemma `sup_mem` / 引理 `sup_mem`
-
-English:
-lemma sup_mem
-  given: (ha : a in L) (hb : b in L)
-  statement: a ⊔ b in L
-  proof: L.supClosed ha hb
-
-中文:
-引理 sup_mem
-  条件: (ha : a in L) (hb : b in L)
-  结论: a ⊔ b in L
-  证明: L.supClosed ha hb
-
-Depends on / 依赖: L.supClosed, supClosed
+@[simp] lemma top_mem : ⊤ ∈ L := by simpa using compl_mem L.bot_mem
+/-
+**BooleanSubalgebra.sup_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：sup_mem (ha : a in L) (hb : b in L) : a ⊔ b in L
+参数：ha : a in L；hb : b in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.supClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), SupClosed ↑L
 -/
-lemma sup_mem (ha : a in L) (hb : b in L) : a ⊔ b in L := L.supClosed ha hb
-/--
-lemma `inf_mem` / 引理 `inf_mem`
-
-English:
-lemma inf_mem
-  given: (ha : a in L) (hb : b in L)
-  statement: a ⊓ b in L
-  proof: L.infClosed ha hb
-
-中文:
-引理 inf_mem
-  条件: (ha : a in L) (hb : b in L)
-  结论: a ⊓ b in L
-  证明: L.infClosed ha hb
-
-Depends on / 依赖: L.infClosed, infClosed
+lemma sup_mem (ha : a ∈ L) (hb : b ∈ L) : a ⊔ b ∈ L := L.supClosed ha hb
+/-
+**BooleanSubalgebra.inf_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：inf_mem (ha : a in L) (hb : b in L) : a ⊓ b in L
+参数：ha : a in L；hb : b in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.infClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), InfClosed ↑L
 -/
-lemma inf_mem (ha : a in L) (hb : b in L) : a ⊓ b in L := L.infClosed ha hb
-/--
-lemma `sdiff_mem` / 引理 `sdiff_mem`
-
-English:
-lemma sdiff_mem
-  given: (ha : a in L) (hb : b in L)
-  statement: a \ b in L
-  proof: by
+lemma inf_mem (ha : a ∈ L) (hb : b ∈ L) : a ⊓ b ∈ L := L.infClosed ha hb
+/-
+**BooleanSubalgebra.sdiff_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：sdiff_mem (ha : a in L) (hb : b in L) : a \ b in L
+参数：ha : a in L；hb : b in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sdiff_eq`：sdiff_eq : x \ y = x ⊓ yᶜ
+· 使用定理 `BooleanSubalgebra.infClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), InfClosed ↑L
+· 使用引理 `BooleanSubalgebra.compl_mem`：compl_mem (ha : a in L) : aᶜ in L
+-/
+lemma sdiff_mem (ha : a ∈ L) (hb : b ∈ L) : a \ b ∈ L := by
   rw [_root_.sdiff_eq]; exact L.infClosed ha (compl_mem hb)
-
-中文:
-引理 sdiff_mem
-  条件: (ha : a in L) (hb : b in L)
-  结论: a \ b in L
-  证明: by
-  rw [_root_.sdiff_eq]; exact L.infClosed ha (compl_mem hb)
-
-Depends on / 依赖: L.infClosed, _root_, _root_.sdiff_eq, compl_mem, infClosed, sdiff_eq
+/-
+**BooleanSubalgebra.himp_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：himp_mem (ha : a in L) (hb : b in L) : a ⇨ b in L
+参数：ha : a in L；hb : b in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `himp_eq`：himp_eq : x ⇨ y = y ⊔ xᶜ
+· 使用定理 `BooleanSubalgebra.supClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), SupClosed ↑L
+· 使用引理 `BooleanSubalgebra.compl_mem`：compl_mem (ha : a in L) : aᶜ in L
 -/
-lemma sdiff_mem (ha : a in L) (hb : b in L) : a \ b in L := by
-  rw [_root_.sdiff_eq]; exact L.infClosed ha (compl_mem hb)
-/--
-lemma `himp_mem` / 引理 `himp_mem`
-
-English:
-lemma himp_mem
-  given: (ha : a in L) (hb : b in L)
-  statement: a ⇨ b in L
-  proof: by
+lemma himp_mem (ha : a ∈ L) (hb : b ∈ L) : a ⇨ b ∈ L := by
   rw [himp_eq]; exact L.supClosed hb (compl_mem ha)
-
-中文:
-引理 himp_mem
-  条件: (ha : a in L) (hb : b in L)
-  结论: a ⇨ b in L
-  证明: by
-  rw [himp_eq]; exact L.supClosed hb (compl_mem ha)
-
-Depends on / 依赖: L.supClosed, compl_mem, himp_eq, supClosed
+/-
+**BooleanSubalgebra.mem_carrier** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：mem_carrier : a in L.carrier ↔ a in L
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma himp_mem (ha : a in L) (hb : b in L) : a ⇨ b in L := by
-  rw [himp_eq]; exact L.supClosed hb (compl_mem ha)
-
-/--
-lemma `mem_carrier` / 引理 `mem_carrier`
-
-English:
-lemma mem_carrier
-  statement: a in L.carrier ↔ a in L
-  proof: .rfl
-
-中文:
-引理 mem_carrier
-  结论: a in L.carrier ↔ a in L
-  证明: .rfl
+lemma mem_carrier : a ∈ L.carrier ↔ a ∈ L := .rfl
+/-
+**BooleanSubalgebra.mem_toSublattice** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebr
+a`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} {a : 
+α}, a ∈ L.toSublattice ↔ a ∈ L
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_carrier : a in L.carrier ↔ a in L := .rfl
-/--
-lemma `mem_toSublattice` / 引理 `mem_toSublattice`
-
-English:
-lemma mem_toSublattice
-  statement: a in L.toSublattice ↔ a in L
-  proof: .rfl
-
-中文:
-引理 mem_toSublattice
-  结论: a in L.toSublattice ↔ a in L
-  证明: .rfl
+@[simp] lemma mem_toSublattice : a ∈ L.toSublattice ↔ a ∈ L := .rfl
+/-
+**BooleanSubalgebra.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {a : α} {L : Sublattice α}   (h
+_compl : ∀ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier) (h_bot : ⊥ ∈ L.carrier),   a
+ ∈ { toSublattice := L, compl_mem' := h_compl, bot_mem' := h_bot } ↔ a ∈ L
+参数：h_compl : ∀ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier；h_bot : ⊥ ∈ L.carrier。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_toSublattice : a in L.toSublattice ↔ a in L := .rfl
-/--
-lemma `mem_mk` / 引理 `mem_mk`
-
-English:
-lemma mem_mk
-  given: {L : Sublattice α} (h_compl h_bot)
-  statement: a in mk L h_compl h_bot ↔ a in L
-  proof: .rfl
-
-中文:
-引理 mem_mk
-  条件: {L : 子格 α} (h_compl h_bot)
-  结论: a in mk L h_compl h_bot ↔ a in L
-  证明: .rfl
--/
-@[simp] lemma mem_mk {L : Sublattice α} (h_compl h_bot) : a in mk L h_compl h_bot ↔ a in L := .rfl
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (L : Sublattice α) (h_compl h_bot)
-  statement: (mk L h_compl h_bot : Set α) = L
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (L : 子格 α) (h_compl h_bot)
-  结论: (mk L h_compl h_bot : 集合 α) = L
-  证明: rfl
+@[simp] lemma mem_mk {L : Sublattice α} (h_compl h_bot) : a ∈ mk L h_compl h_bot ↔ a ∈ L := .rfl
+/-
+**BooleanSubalgebra.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (L : Sublattice α) (h_compl : ∀
+ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier)   (h_bot : ⊥ ∈ L.carrier), ↑{ toSublat
+tice := L, compl_mem' := h_compl, bot_mem' := h_bot } = ↑L
+参数：L : Sublattice α；h_compl : ∀ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier；h_bot : 
+⊥ ∈ L.carrier。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_mk (L : Sublattice α) (h_compl h_bot) : (mk L h_compl h_bot : Set α) = L := rfl
-/--
-lemma `mk_le_mk` / 引理 `mk_le_mk`
-
-English:
-lemma mk_le_mk
-  given: {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot)
-  proof: .rfl
-
-中文:
-引理 mk_le_mk
-  条件: {L M : 子格 α} (hL_compl hL_bot hM_compl hM_bot)
-  证明: .rfl
+/-
+**BooleanSubalgebra.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L M : Sublattice α} (hL_compl 
+: ∀ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier)   (hL_bot : ⊥ ∈ L.carrier) (hM_comp
+l : ∀ {a : α}, a ∈ M.carrier → aᶜ ∈ M.carrier) (hM_bot : ⊥ ∈ M.carrier),   { toS
+ublattice := L, compl_mem' := hL_compl, bot_mem' := hL_bot } ≤       { toSublatt
+ice := M, compl_mem' := hM_compl, bot_mem' := hM_bot } ↔     L ≤ M
+参数：hL_compl : ∀ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier；hL_bot : ⊥ ∈ L.carrier；h
+M_compl : ∀ {a : α}, a ∈ M.carrier → aᶜ ∈ M.carrier；hM_bot : ⊥ ∈ M.carrier。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma mk_le_mk {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot) :
-    mk L hL_compl hL_bot <= mk M hM_compl hM_bot ↔ L <= M := .rfl
-/--
-lemma `mk_lt_mk` / 引理 `mk_lt_mk`
-
-English:
-lemma mk_lt_mk
-  given: {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot)
-  proof: .rfl
-
-中文:
-引理 mk_lt_mk
-  条件: {L M : 子格 α} (hL_compl hL_bot hM_compl hM_bot)
-  证明: .rfl
+    mk L hL_compl hL_bot ≤ mk M hM_compl hM_bot ↔ L ≤ M := .rfl
+/-
+**BooleanSubalgebra.mk_lt_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L M : Sublattice α} (hL_compl 
+: ∀ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier)   (hL_bot : ⊥ ∈ L.carrier) (hM_comp
+l : ∀ {a : α}, a ∈ M.carrier → aᶜ ∈ M.carrier) (hM_bot : ⊥ ∈ M.carrier),   { toS
+ublattice := L, compl_mem' := hL_compl, bot_mem' := hL_bot } <       { toSublatt
+ice := M, compl_mem' := hM_compl, bot_mem' := hM_bot } ↔     L < M
+参数：hL_compl : ∀ {a : α}, a ∈ L.carrier → aᶜ ∈ L.carrier；hL_bot : ⊥ ∈ L.carrier；h
+M_compl : ∀ {a : α}, a ∈ M.carrier → aᶜ ∈ M.carrier；hM_bot : ⊥ ∈ M.carrier。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma mk_lt_mk {L M : Sublattice α} (hL_compl hL_bot hM_compl hM_bot) :
     mk L hL_compl hL_bot < mk M hM_compl hM_bot ↔ L < M := .rfl
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a Boolean subalgebra with a new `carrier` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**BooleanSubalgebra.copy** 是 Mathlib 中的一个定义，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：{α : Type u_2} → [inst : BooleanAlgebra α] → (L : BooleanSubalgebra α) → (
+s : Set α) → s = ↑L → BooleanSubalgebra α
+参数：L : BooleanSubalgebra α；s : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (L : BooleanSubalgebra α) (s : Set α) (hs : s = L)
-  body: L.toSublattice.copy s by subst hs; rfl
-  compl_mem' := by subst hs; exact L.compl_mem'
-  bot_mem' := by subst hs; exact L.bot_mem'
-
-@[simp, norm_cast]
-
-中文:
-定义 copy
-  签名: (L : 布尔ean子代数 α) (s : 集合 α) (hs : s = L)
-  定义体: L.toSublattice.copy s by subst hs; rfl
-  compl_mem' := by subst hs; exact L.compl_mem'
-  bot_mem' := by subst hs; exact L.bot_mem'
-
-@[simp, norm_cast]
+--- 原说明 ---
+Copy of a Boolean subalgebra with a new `carrier` equal to the old one. Useful t
+o fix
+definitional equalities.
 -/
 protected def copy (L : BooleanSubalgebra α) (s : Set α) (hs : s = L) : BooleanSubalgebra α where
-toSublattice := L.toSublattice.copy s by subst hs; rfl
+  toSublattice := L.toSublattice.copy s <| by subst hs; rfl
   compl_mem' := by subst hs; exact L.compl_mem'
   bot_mem' := by subst hs; exact L.bot_mem'
 
 @[simp, norm_cast]
-/--
-lemma `coe_copy` / 引理 `coe_copy`
-
-English:
-lemma coe_copy
-  given: (L : BooleanSubalgebra α) (s : Set α) (hs)
-  statement: L.copy s hs = s
-  proof: rfl
-
-中文:
-引理 coe_copy
-  条件: (L : 布尔ean子代数 α) (s : 集合 α) (hs)
-  结论: L.copy s hs = s
-  证明: rfl
+/-
+**BooleanSubalgebra.coe_copy** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：coe_copy (L : BooleanSubalgebra α) (s : Set α) (hs) : L.copy s hs = s
+参数：L : BooleanSubalgebra α；s : Set α；hs。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_copy (L : BooleanSubalgebra α) (s : Set α) (hs) : L.copy s hs = s := rfl
-
-/--
-lemma `copy_eq` / 引理 `copy_eq`
-
-English:
-lemma copy_eq
-  given: (L : BooleanSubalgebra α) (s : Set α) (hs)
-  statement: L.copy s hs = L
-  proof: SetLike.coe_injective hs
-
-中文:
-引理 copy_eq
-  条件: (L : 布尔ean子代数 α) (s : 集合 α) (hs)
-  结论: L.copy s hs = L
-  证明: SetLike.coe_injective hs
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**BooleanSubalgebra.copy_eq** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：copy_eq (L : BooleanSubalgebra α) (s : Set α) (hs) : L.copy s hs = L
+参数：L : BooleanSubalgebra α；s : Set α；hs。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 lemma copy_eq (L : BooleanSubalgebra α) (s : Set α) (hs) : L.copy s hs = L :=
   SetLike.coe_injective hs
 
-/--
-lemma `ext` / 引理 `ext`
+/-- Two Boolean subalgebras are equal if they have the same elements. -/
+/-
+**BooleanSubalgebra.ext** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：ext : (forall a, a in L ↔ a in M) -> L = M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
 
-English:
-lemma ext
-  statement: (forall a, a in L ↔ a in M) -> L = M
-  proof: SetLike.ext
-
-中文:
-引理 ext
-  结论: (对任意 a, a in L ↔ a in M) -> L = M
-  证明: SetLike.ext
-
-Depends on / 依赖: SetLike, SetLike.ext
+--- 原说明 ---
+Two Boolean subalgebras are equal if they have the same elements.
 -/
-lemma ext : (forall a, a in L ↔ a in M) -> L = M := SetLike.ext
+lemma ext : (∀ a, a ∈ L ↔ a ∈ M) → L = M := SetLike.ext
 
-/--
-Instance `instBotCoe` / 实例 `instBotCoe`
+/-- A Boolean subalgebra of a lattice inherits a bottom element. -/
+/-
+**BooleanSubalgebra.instBotCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instBotCoe : Bot L where bot
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
 
-English:
-instance instBotCoe
-  signature: : Bot L where bot
-  body: ⟨⊥, bot_mem⟩
-
-中文:
-实例 instBotCoe
-  签名: : 底元素 L where bot
-  定义体: ⟨⊥, bot_mem⟩
-
-Depends on / 依赖: bot_mem
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits a bottom element.
 -/
 instance instBotCoe : Bot L where bot := ⟨⊥, bot_mem⟩
 
-/--
-Instance `instTopCoe` / 实例 `instTopCoe`
+/-- A Boolean subalgebra of a lattice inherits a top element. -/
+/-
+**BooleanSubalgebra.instTopCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instTopCoe : Top L where top
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.top_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊤ ∈ L
 
-English:
-instance instTopCoe
-  signature: : Top L where top
-  body: ⟨⊤, top_mem⟩
-
-中文:
-实例 instTopCoe
-  签名: : 顶元素 L where top
-  定义体: ⟨⊤, top_mem⟩
-
-Depends on / 依赖: top_mem
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits a top element.
 -/
 instance instTopCoe : Top L where top := ⟨⊤, top_mem⟩
 
-/--
-Instance `instSupCoe` / 实例 `instSupCoe`
+/-- A Boolean subalgebra of a lattice inherits a supremum. -/
+/-
+**BooleanSubalgebra.instSupCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instSupCoe : Max L where max a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSupCoe
-  signature: : Max L where max a b
-  body: ⟨a ⊔ b, L.supClosed a.2 b.2⟩
-
-中文:
-实例 instSupCoe
-  签名: : 最大值 L where 最大值 a b
-  定义体: ⟨a ⊔ b, L.supClosed a.2 b.2⟩
-
-Depends on / 依赖: L.supClosed, supClosed
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits a supremum.
 -/
 instance instSupCoe : Max L where max a b := ⟨a ⊔ b, L.supClosed a.2 b.2⟩
 
-/--
-Instance `instInfCoe` / 实例 `instInfCoe`
+/-- A Boolean subalgebra of a lattice inherits an infimum. -/
+/-
+**BooleanSubalgebra.instInfCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instInfCoe : Min L where min a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instInfCoe
-  signature: : Min L where min a b
-  body: ⟨a ⊓ b, L.infClosed a.2 b.2⟩
-
-中文:
-实例 instInfCoe
-  签名: : 最小值 L where 最小值 a b
-  定义体: ⟨a ⊓ b, L.infClosed a.2 b.2⟩
-
-Depends on / 依赖: L.infClosed, infClosed
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits an infimum.
 -/
 instance instInfCoe : Min L where min a b := ⟨a ⊓ b, L.infClosed a.2 b.2⟩
 
-/--
-Instance `instComplCoe` / 实例 `instComplCoe`
+/-- A Boolean subalgebra of a lattice inherits a complement. -/
+/-
+**BooleanSubalgebra.instComplCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instComplCoe : Compl L where compl a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instComplCoe
-  signature: : Compl L where compl a
-  body: ⟨aᶜ, compl_mem a.2⟩
-
-中文:
-实例 instComplCoe
-  签名: : 补集 L where compl a
-  定义体: ⟨aᶜ, compl_mem a.2⟩
-
-Depends on / 依赖: compl_mem
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits a complement.
 -/
 instance instComplCoe : Compl L where compl a := ⟨aᶜ, compl_mem a.2⟩
 
-/--
-Instance `instSDiffCoe` / 实例 `instSDiffCoe`
+/-- A Boolean subalgebra of a lattice inherits a difference. -/
+/-
+**BooleanSubalgebra.instSDiffCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instSDiffCoe : SDiff L where sdiff a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSDiffCoe
-  signature: : SDiff L where sdiff a b
-  body: ⟨a \ b, sdiff_mem a.2 b.2⟩
-
-中文:
-实例 instSDiffCoe
-  签名: : 对称差 L where sdiff a b
-  定义体: ⟨a \ b, sdiff_mem a.2 b.2⟩
-
-Depends on / 依赖: sdiff_mem
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits a difference.
 -/
 instance instSDiffCoe : SDiff L where sdiff a b := ⟨a \ b, sdiff_mem a.2 b.2⟩
 
-/--
-Instance `instHImpCoe` / 实例 `instHImpCoe`
+/-- A Boolean subalgebra of a lattice inherits a Heyting implication. -/
+/-
+**BooleanSubalgebra.instHImpCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instHImpCoe : HImp L where himp a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instHImpCoe
-  signature: : HImp L where himp a b
-  body: ⟨a ⇨ b, himp_mem a.2 b.2⟩
-
-中文:
-实例 instHImpCoe
-  签名: : HImp L where himp a b
-  定义体: ⟨a ⇨ b, himp_mem a.2 b.2⟩
-
-Depends on / 依赖: himp_mem
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits a Heyting implication.
 -/
 instance instHImpCoe : HImp L where himp a b := ⟨a ⇨ b, himp_mem a.2 b.2⟩
-
-/--
-lemma `val_bot` / 引理 `val_bot`
-
-English:
-lemma val_bot
-  statement: (⊥ : L) = (⊥ : α)
-  proof: rfl
-
-中文:
-引理 val_bot
-  结论: (⊥ : L) = (⊥ : α)
-  证明: rfl
+/-
+**BooleanSubalgebra.val_bot** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α}, ↑⊥ =
+ ⊥
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma val_bot : (⊥ : L) = (⊥ : α) := rfl
-/--
-lemma `val_top` / 引理 `val_top`
-
-English:
-lemma val_top
-  statement: (⊤ : L) = (⊤ : α)
-  proof: rfl
-
-中文:
-引理 val_top
-  结论: (⊤ : L) = (⊤ : α)
-  证明: rfl
+/-
+**BooleanSubalgebra.val_top** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α}, ↑⊤ =
+ ⊤
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma val_top : (⊤ : L) = (⊤ : α) := rfl
-/--
-lemma `val_sup` / 引理 `val_sup`
-
-English:
-lemma val_sup
-  given: (a b : L)
-  statement: a ⊔ b = (a : α) ⊔ b
-  proof: rfl
-
-中文:
-引理 val_sup
-  条件: (a b : L)
-  结论: a ⊔ b = (a : α) ⊔ b
-  证明: rfl
+/-
+**BooleanSubalgebra.val_sup** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: ↥L), ↑(a ⊔ b) = ↑a ⊔ ↑b
+参数：a b : ↥L；a ⊔ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma val_sup (a b : L) : a ⊔ b = (a : α) ⊔ b := rfl
-/--
-lemma `val_inf` / 引理 `val_inf`
-
-English:
-lemma val_inf
-  given: (a b : L)
-  statement: a ⊓ b = (a : α) ⊓ b
-  proof: rfl
-
-中文:
-引理 val_inf
-  条件: (a b : L)
-  结论: a ⊓ b = (a : α) ⊓ b
-  证明: rfl
+/-
+**BooleanSubalgebra.val_inf** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: ↥L), ↑(a ⊓ b) = ↑a ⊓ ↑b
+参数：a b : ↥L；a ⊓ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma val_inf (a b : L) : a ⊓ b = (a : α) ⊓ b := rfl
-/--
-lemma `val_compl` / 引理 `val_compl`
-
-English:
-lemma val_compl
-  given: (a : L)
-  statement: aᶜ = (a : α)ᶜ
-  proof: rfl
-
-中文:
-引理 val_compl
-  条件: (a : L)
-  结论: aᶜ = (a : α)ᶜ
-  证明: rfl
+/-
+**BooleanSubalgebra.val_compl** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a : 
+↥L), ↑aᶜ = (↑a)ᶜ
+参数：a : ↥L；↑a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma val_compl (a : L) : aᶜ = (a : α)ᶜ := rfl
-/--
-lemma `val_sdiff` / 引理 `val_sdiff`
-
-English:
-lemma val_sdiff
-  given: (a b : L)
-  statement: a \ b = (a : α) \ b
-  proof: rfl
-
-中文:
-引理 val_sdiff
-  条件: (a b : L)
-  结论: a \ b = (a : α) \ b
-  证明: rfl
+/-
+**BooleanSubalgebra.val_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: ↥L), ↑(a \ b) = ↑a \ ↑b
+参数：a b : ↥L；a \ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma val_sdiff (a b : L) : a \ b = (a : α) \ b := rfl
-/--
-lemma `val_himp` / 引理 `val_himp`
-
-English:
-lemma val_himp
-  given: (a b : L)
-  statement: a ⇨ b = (a : α) ⇨ b
-  proof: rfl
-
-中文:
-引理 val_himp
-  条件: (a b : L)
-  结论: a ⇨ b = (a : α) ⇨ b
-  证明: rfl
+/-
+**BooleanSubalgebra.val_himp** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: ↥L), ↑(a ⇨ b) = ↑a ⇨ ↑b
+参数：a b : ↥L；a ⇨ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma val_himp (a b : L) : a ⇨ b = (a : α) ⇨ b := rfl
-
-/--
-lemma `mk_bot` / 引理 `mk_bot`
-
-English:
-lemma mk_bot
-  statement: (⟨⊥, bot_mem⟩ : L) = ⊥
-  proof: rfl
-
-中文:
-引理 mk_bot
-  结论: (⟨⊥, bot_mem⟩ : L) = ⊥
-  证明: rfl
+/-
+**BooleanSubalgebra.mk_bot** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α}, ⟨⊥, 
+⋯⟩ = ⊥
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
 -/
 @[simp] lemma mk_bot : (⟨⊥, bot_mem⟩ : L) = ⊥ := rfl
-/--
-lemma `mk_top` / 引理 `mk_top`
-
-English:
-lemma mk_top
-  statement: (⟨⊤, top_mem⟩ : L) = ⊤
-  proof: rfl
-
-中文:
-引理 mk_top
-  结论: (⟨⊤, top_mem⟩ : L) = ⊤
-  证明: rfl
+/-
+**BooleanSubalgebra.mk_top** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α}, ⟨⊤, 
+⋯⟩ = ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.top_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊤ ∈ L
 -/
 @[simp] lemma mk_top : (⟨⊤, top_mem⟩ : L) = ⊤ := rfl
-/--
-lemma `mk_sup_mk` / 引理 `mk_sup_mk`
-
-English:
-lemma mk_sup_mk
-  given: (a b : α) (ha hb)
-  statement: (⟨a, ha⟩ ⊔ ⟨b, hb⟩ : L) = ⟨a ⊔ b, L.supClosed ha hb⟩
-  proof: rfl
-
-中文:
-引理 mk_sup_mk
-  条件: (a b : α) (ha hb)
-  结论: (⟨a, ha⟩ ⊔ ⟨b, hb⟩ : L) = ⟨a ⊔ b, L.supClosed ha hb⟩
-  证明: rfl
+/-
+**BooleanSubalgebra.mk_sup_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: α) (ha : a ∈ L) (hb : b ∈ L),   ⟨a, ha⟩ ⊔ ⟨b, hb⟩ = ⟨a ⊔ b, ⋯⟩
+参数：a b : α；ha : a ∈ L；hb : b ∈ L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_sup_mk (a b : α) (ha hb) : (⟨a, ha⟩ ⊔ ⟨b, hb⟩ : L) = ⟨a ⊔ b, L.supClosed ha hb⟩ :=
   rfl
-/--
-lemma `mk_inf_mk` / 引理 `mk_inf_mk`
-
-English:
-lemma mk_inf_mk
-  given: (a b : α) (ha hb)
-  statement: (⟨a, ha⟩ ⊓ ⟨b, hb⟩ : L) = ⟨a ⊓ b, L.infClosed ha hb⟩
-  proof: rfl
-
-中文:
-引理 mk_inf_mk
-  条件: (a b : α) (ha hb)
-  结论: (⟨a, ha⟩ ⊓ ⟨b, hb⟩ : L) = ⟨a ⊓ b, L.infClosed ha hb⟩
-  证明: rfl
+/-
+**BooleanSubalgebra.mk_inf_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: α) (ha : a ∈ L) (hb : b ∈ L),   ⟨a, ha⟩ ⊓ ⟨b, hb⟩ = ⟨a ⊓ b, ⋯⟩
+参数：a b : α；ha : a ∈ L；hb : b ∈ L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_inf_mk (a b : α) (ha hb) : (⟨a, ha⟩ ⊓ ⟨b, hb⟩ : L) = ⟨a ⊓ b, L.infClosed ha hb⟩ :=
   rfl
-/--
-lemma `compl_mk` / 引理 `compl_mk`
-
-English:
-lemma compl_mk
-  given: (a : α) (ha)
-  statement: (⟨a, ha⟩ : L)ᶜ = ⟨aᶜ, compl_mem ha⟩
-  proof: rfl
-
-中文:
-引理 compl_mk
-  条件: (a : α) (ha)
-  结论: (⟨a, ha⟩ : L)ᶜ = ⟨aᶜ, compl_mem ha⟩
-  证明: rfl
+/-
+**BooleanSubalgebra.compl_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a : 
+α) (ha : a ∈ L), ⟨a, ha⟩ᶜ = ⟨aᶜ, ⋯⟩
+参数：a : α；ha : a ∈ L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma compl_mk (a : α) (ha) : (⟨a, ha⟩ : L)ᶜ = ⟨aᶜ, compl_mem ha⟩ := rfl
-/--
-lemma `mk_sdiff_mk` / 引理 `mk_sdiff_mk`
-
-English:
-lemma mk_sdiff_mk
-  given: (a b : α) (ha hb)
-  statement: (⟨a, ha⟩ \ ⟨b, hb⟩ : L) = ⟨a \ b, sdiff_mem ha hb⟩
-  proof: rfl
-
-中文:
-引理 mk_sdiff_mk
-  条件: (a b : α) (ha hb)
-  结论: (⟨a, ha⟩ \ ⟨b, hb⟩ : L) = ⟨a \ b, sdiff_mem ha hb⟩
-  证明: rfl
+/-
+**BooleanSubalgebra.mk_sdiff_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: α) (ha : a ∈ L) (hb : b ∈ L),   ⟨a, ha⟩ \ ⟨b, hb⟩ = ⟨a \ b, ⋯⟩
+参数：a b : α；ha : a ∈ L；hb : b ∈ L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_sdiff_mk (a b : α) (ha hb) : (⟨a, ha⟩ \ ⟨b, hb⟩ : L) = ⟨a \ b, sdiff_mem ha hb⟩ :=
   rfl
-/--
-lemma `mk_himp_mk` / 引理 `mk_himp_mk`
-
-English:
-lemma mk_himp_mk
-  given: (a b : α) (ha hb)
-  statement: (⟨a, ha⟩ ⇨ ⟨b, hb⟩ : L) = ⟨a ⇨ b, himp_mem ha hb⟩
-  proof: rfl
-
-中文:
-引理 mk_himp_mk
-  条件: (a b : α) (ha hb)
-  结论: (⟨a, ha⟩ ⇨ ⟨b, hb⟩ : L) = ⟨a ⇨ b, himp_mem ha hb⟩
-  证明: rfl
+/-
+**BooleanSubalgebra.mk_himp_mk** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} (a b 
+: α) (ha : a ∈ L) (hb : b ∈ L),   ⟨a, ha⟩ ⇨ ⟨b, hb⟩ = ⟨a ⇨ b, ⋯⟩
+参数：a b : α；ha : a ∈ L；hb : b ∈ L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mk_himp_mk (a b : α) (ha hb) : (⟨a, ha⟩ ⇨ ⟨b, hb⟩ : L) = ⟨a ⇨ b, himp_mem ha hb⟩ :=
   rfl
-
+/-
+**BooleanSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L : BooleanSubalgebra α) : PartialOrder L :=
   PartialOrder.lift _ Subtype.coe_injective
 
-/--
-Instance `instBooleanAlgebraCoe` / 实例 `instBooleanAlgebraCoe`
+/-- A Boolean subalgebra of a lattice inherits a Boolean algebra structure. -/
+/-
+**BooleanSubalgebra.instBooleanAlgebraCoe** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSuba
+lgebra`。
+形式化陈述：instBooleanAlgebraCoe (L : BooleanSubalgebra α) : BooleanAlgebra L
+参数：L : BooleanSubalgebra α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.val_sup`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α} (a b : ↥L), ↑(a ⊔ b) = ↑a ⊔ ↑b
+· 使用定理 `BooleanSubalgebra.val_inf`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α} (a b : ↥L), ↑(a ⊓ b) = ↑a ⊓ ↑b
+· 使用定理 `BooleanSubalgebra.val_top`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ↑⊤ = ⊤
+· 使用定理 `BooleanSubalgebra.val_bot`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ↑⊥ = ⊥
+· 使用定理 `BooleanSubalgebra.val_compl`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+{L : BooleanSubalgebra α} (a : ↥L), ↑aᶜ = (↑a)ᶜ
+· 使用定理 `BooleanSubalgebra.val_sdiff`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+{L : BooleanSubalgebra α} (a b : ↥L), ↑(a \ b) = ↑a \ ↑b
+· 使用定理 `BooleanSubalgebra.val_himp`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {
+L : BooleanSubalgebra α} (a b : ↥L), ↑(a ⇨ b) = ↑a ⇨ ↑b
 
-English:
-instance instBooleanAlgebraCoe
-  signature: (L : BooleanSubalgebra α)
-  body: Subtype.coe_injective.booleanAlgebra _ .rfl .rfl val_sup val_inf val_top val_bot val_compl
-    val_sdiff val_himp
-
-中文:
-实例 inst布尔eanAlgebraCoe
-  签名: (L : 布尔ean子代数 α)
-  定义体: Subtype.coe_injective.booleanAlgebra _ .rfl .rfl val_sup val_inf val_top val_bot val_compl
-    val_sdiff val_himp
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.booleanAlgebra, booleanAlgebra, coe_injective, val_bot, val_compl, val_himp, val_inf, val_sdiff, val_sup, val_top
+--- 原说明 ---
+A Boolean subalgebra of a lattice inherits a Boolean algebra structure.
 -/
 instance instBooleanAlgebraCoe (L : BooleanSubalgebra α) : BooleanAlgebra L :=
   Subtype.coe_injective.booleanAlgebra _ .rfl .rfl val_sup val_inf val_top val_bot val_compl
     val_sdiff val_himp
 
-/--
-Definition of `subtype` / `subtype` 的定义
+/-- The natural lattice hom from a Boolean subalgebra to the original lattice. -/
+/-
+**BooleanSubalgebra.subtype** 是 Mathlib 中的一个定义，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：subtype (L : BooleanSubalgebra α) : BoundedLatticeHom L α where toFun
+参数：L : BooleanSubalgebra α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.val_sup`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α} (a b : ↥L), ↑(a ⊔ b) = ↑a ⊔ ↑b
+· 使用定理 `BooleanSubalgebra.val_inf`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α} (a b : ↥L), ↑(a ⊓ b) = ↑a ⊓ ↑b
+· 使用定理 `BooleanSubalgebra.val_top`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ↑⊤ = ⊤
+· 使用定理 `BooleanSubalgebra.val_bot`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ↑⊥ = ⊥
 
-English:
-definition subtype
-  signature: (L : BooleanSubalgebra α)
-  body: ((↑) : L -> α)
-  map_bot' := L.val_bot
-  map_top' := L.val_top
-  map_sup' := val_sup
-  map_inf' := val_inf
-
-中文:
-定义 subtype
-  签名: (L : 布尔ean子代数 α)
-  定义体: ((↑) : L -> α)
-  map_bot' := L.val_bot
-  map_top' := L.val_top
-  map_sup' := val_sup
-  map_inf' := val_inf
+--- 原说明 ---
+The natural lattice hom from a Boolean subalgebra to the original lattice.
 -/
 def subtype (L : BooleanSubalgebra α) : BoundedLatticeHom L α where
-  toFun := ((↑) : L -> α)
+  toFun := ((↑) : L → α)
   map_bot' := L.val_bot
   map_top' := L.val_top
   map_sup' := val_sup
   map_inf' := val_inf
-
-/--
-lemma `coe_subtype` / 引理 `coe_subtype`
-
-English:
-lemma coe_subtype
-  given: (L : BooleanSubalgebra α)
-  statement: L.subtype = ((↑) : L -> α)
-  proof: rfl
-
-中文:
-引理 coe_subtype
-  条件: (L : 布尔ean子代数 α)
-  结论: L.subtype = ((↑) : L -> α)
-  证明: rfl
+/-
+**BooleanSubalgebra.coe_subtype** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (L : BooleanSubalgebra α), ⇑L.s
+ubtype = Subtype.val
+参数：L : BooleanSubalgebra α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_subtype (L : BooleanSubalgebra α) : L.subtype = ((↑) : L -> α) := rfl
-/--
-lemma `subtype_apply` / 引理 `subtype_apply`
-
-English:
-lemma subtype_apply
-  given: (L : BooleanSubalgebra α) (a : L)
-  statement: L.subtype a = a
-  proof: rfl
-
-中文:
-引理 subtype_apply
-  条件: (L : 布尔ean子代数 α) (a : L)
-  结论: L.subtype a = a
-  证明: rfl
+@[simp, norm_cast] lemma coe_subtype (L : BooleanSubalgebra α) : L.subtype = ((↑) : L → α) := rfl
+/-
+**BooleanSubalgebra.subtype_apply** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：subtype_apply (L : BooleanSubalgebra α) (a : L) : L.subtype a = a
+参数：L : BooleanSubalgebra α；a : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma subtype_apply (L : BooleanSubalgebra α) (a : L) : L.subtype a = a := rfl
-
-/--
-lemma `subtype_injective` / 引理 `subtype_injective`
-
-English:
-lemma subtype_injective
-  given: (L : BooleanSubalgebra α)
-  statement: Injective subtype L
-  proof: Subtype.coe_injective
-
-中文:
-引理 subtype_injective
-  条件: (L : 布尔ean子代数 α)
-  结论: 单射 subtype L
-  证明: Subtype.coe_injective
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**BooleanSubalgebra.subtype_injective** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgeb
+ra`。
+形式化陈述：subtype_injective (L : BooleanSubalgebra α) : Injective subtype L
+参数：L : BooleanSubalgebra α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-lemma subtype_injective (L : BooleanSubalgebra α) : Injective subtype L := Subtype.coe_injective
+lemma subtype_injective (L : BooleanSubalgebra α) : Injective <| subtype L := Subtype.coe_injective
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- The inclusion homomorphism from a Boolean subalgebra `L` to a bigger Boolean subalgebra `M`. -/
+/-
+**BooleanSubalgebra.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：inclusion (h : L <= M) : BoundedLatticeHom L M where toFun
+参数：h : L <= M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: (h : L <= M)
-  body: Set.inclusion h
-  map_bot' := rfl
-  map_top' := rfl
-  map_sup' _ _ := rfl
-  map_inf' _ _ := rfl
-
-中文:
-定义 inclusion
-  签名: (h : L <= M)
-  定义体: Set.inclusion h
-  map_bot' := rfl
-  map_top' := rfl
-  map_sup' _ _ := rfl
-  map_inf' _ _ := rfl
-
-Depends on / 依赖: Set.inclusion, inclusion
+--- 原说明 ---
+The inclusion homomorphism from a Boolean subalgebra `L` to a bigger Boolean sub
+algebra `M`.
 -/
-def inclusion (h : L <= M) : BoundedLatticeHom L M where
+def inclusion (h : L ≤ M) : BoundedLatticeHom L M where
   toFun := Set.inclusion h
   map_bot' := rfl
   map_top' := rfl
   map_sup' _ _ := rfl
   map_inf' _ _ := rfl
-
-/--
-lemma `coe_inclusion` / 引理 `coe_inclusion`
-
-English:
-lemma coe_inclusion
-  given: (h : L <= M)
-  statement: inclusion h = Set.inclusion h
-  proof: rfl
-
-中文:
-引理 coe_inclusion
-  条件: (h : L <= M)
-  结论: inclusion h = 集合.inclusion h
-  证明: rfl
+/-
+**BooleanSubalgebra.coe_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L M : BooleanSubalgebra α} (h 
+: L ≤ M),   ⇑(BooleanSubalgebra.inclusion h) = Set.inclusion h
+参数：h : L ≤ M；BooleanSubalgebra.inclusion h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_inclusion (h : L <= M) : inclusion h = Set.inclusion h := rfl
-/--
-lemma `inclusion_apply` / 引理 `inclusion_apply`
-
-English:
-lemma inclusion_apply
-  given: (h : L <= M) (a : L)
-  statement: inclusion h a = Set.inclusion h a
-  proof: rfl
-
-中文:
-引理 inclusion_apply
-  条件: (h : L <= M) (a : L)
-  结论: inclusion h a = 集合.inclusion h a
-  证明: rfl
+@[simp] lemma coe_inclusion (h : L ≤ M) : inclusion h = Set.inclusion h := rfl
+/-
+**BooleanSubalgebra.inclusion_apply** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra
+`。
+形式化陈述：inclusion_apply (h : L <= M) (a : L) : inclusion h a = Set.inclusion h a
+参数：h : L <= M；a : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma inclusion_apply (h : L <= M) (a : L) : inclusion h a = Set.inclusion h a := rfl
-
-/--
-lemma `inclusion_injective` / 引理 `inclusion_injective`
-
-English:
-lemma inclusion_injective
-  given: (h : L <= M)
-  statement: Injective inclusion h
-  proof: Set.inclusion_injective h
-
-中文:
-引理 inclusion_injective
-  条件: (h : L <= M)
-  结论: 单射 inclusion h
-  证明: Set.inclusion_injective h
-
-Depends on / 依赖: Set.inclusion_injective, inclusion_injective
+lemma inclusion_apply (h : L ≤ M) (a : L) : inclusion h a = Set.inclusion h a := rfl
+/-
+**BooleanSubalgebra.inclusion_injective** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalg
+ebra`。
+形式化陈述：inclusion_injective (h : L <= M) : Injective inclusion h
+参数：h : L <= M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inclusion_injective`：inclusion_injective (h : s subseteq t) : (inclu
+sion h).Injective
 -/
-lemma inclusion_injective (h : L <= M) : Injective inclusion h := Set.inclusion_injective h
-
-/--
-lemma `inclusion_rfl` / 引理 `inclusion_rfl`
-
-English:
-lemma inclusion_rfl
-  given: (L : BooleanSubalgebra α)
-  statement: inclusion le_rfl = .id L
-  proof: rfl
-
-中文:
-引理 inclusion_rfl
-  条件: (L : 布尔ean子代数 α)
-  结论: inclusion le_rfl = .id L
-  证明: rfl
+lemma inclusion_injective (h : L ≤ M) : Injective <| inclusion h := Set.inclusion_injective h
+/-
+**BooleanSubalgebra.inclusion_rfl** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (L : BooleanSubalgebra α),   Bo
+oleanSubalgebra.inclusion ⋯ = BoundedLatticeHom.id ↥L
+参数：L : BooleanSubalgebra α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 @[simp] lemma inclusion_rfl (L : BooleanSubalgebra α) : inclusion le_rfl = .id L := rfl
-/--
-lemma `subtype_comp_inclusion` / 引理 `subtype_comp_inclusion`
-
-English:
-lemma subtype_comp_inclusion
-  given: (h : L <= M)
-  statement: M.subtype.comp (inclusion h) = L.subtype
-  proof: rfl
-
-中文:
-引理 subtype_comp_inclusion
-  条件: (h : L <= M)
-  结论: M.subtype.comp (inclusion h) = L.subtype
-  证明: rfl
+/-
+**BooleanSubalgebra.subtype_comp_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSub
+algebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L M : BooleanSubalgebra α} (h 
+: L ≤ M),   M.subtype.comp (BooleanSubalgebra.inclusion h) = L.subtype
+参数：h : L ≤ M；BooleanSubalgebra.inclusion h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma subtype_comp_inclusion (h : L <= M) : M.subtype.comp (inclusion h) = L.subtype := rfl
+@[simp] lemma subtype_comp_inclusion (h : L ≤ M) : M.subtype.comp (inclusion h) = L.subtype := rfl
 
-/--
-Instance `instTop` / 实例 `instTop`
+/-- The maximum Boolean subalgebra of a lattice. -/
+/-
+**BooleanSubalgebra.instTop** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instTop : Top (BooleanSubalgebra α) where top.carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instTop
-  signature: : Top (BooleanSubalgebra α) where
-  body: univ
-  top.bot_mem' := mem_univ _
-  top.compl_mem' _ := mem_univ _
-  top.supClosed' := supClosed_univ
-  top.infClosed' := infClosed_univ
-
-中文:
-实例 instTop
-  签名: : 顶元素 (布尔ean子代数 α) where
-  定义体: univ
-  top.bot_mem' := mem_univ _
-  top.compl_mem' _ := mem_univ _
-  top.supClosed' := supClosed_univ
-  top.infClosed' := infClosed_univ
+--- 原说明 ---
+The maximum Boolean subalgebra of a lattice.
 -/
 instance instTop : Top (BooleanSubalgebra α) where
   top.carrier := univ
@@ -1037,26 +672,15 @@ instance instTop : Top (BooleanSubalgebra α) where
   top.supClosed' := supClosed_univ
   top.infClosed' := infClosed_univ
 
-/--
-Instance `instBot` / 实例 `instBot`
+/-- The trivial Boolean subalgebra of a lattice. -/
+/-
+**BooleanSubalgebra.instBot** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instBot : Bot (BooleanSubalgebra α) where bot.carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instBot
-  signature: : Bot (BooleanSubalgebra α) where
-  body: {⊥, ⊤}
-  bot.bot_mem' := by simp
-  bot.compl_mem' := by simp
-  bot.supClosed' _ := by simp
-  bot.infClosed' _ := by simp
-
-中文:
-实例 instBot
-  签名: : 底元素 (布尔ean子代数 α) where
-  定义体: {⊥, ⊤}
-  bot.bot_mem' := by simp
-  bot.compl_mem' := by simp
-  bot.supClosed' _ := by simp
-  bot.infClosed' _ := by simp
+--- 原说明 ---
+The trivial Boolean subalgebra of a lattice.
 -/
 instance instBot : Bot (BooleanSubalgebra α) where
   bot.carrier := {⊥, ⊤}
@@ -1065,323 +689,216 @@ instance instBot : Bot (BooleanSubalgebra α) where
   bot.supClosed' _ := by simp
   bot.infClosed' _ := by simp
 
-/--
-Instance `instInf` / 实例 `instInf`
+/-- The inf of two Boolean subalgebras is their intersection. -/
+/-
+**BooleanSubalgebra.instInf** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instInf : Min (BooleanSubalgebra α) where min L M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instInf
-  signature: : Min (BooleanSubalgebra α) where
-  body: { carrier := L inter M
-               bot_mem' := ⟨bot_mem, bot_mem⟩
-               compl_mem' := fun ha => ⟨compl_mem ha.1, compl_mem ha.2⟩
-               supClosed' := L.supClosed.inter M.supClosed
-               infClosed' := L.infClosed.inter M.infClosed }
-
-中文:
-实例 instInf
-  签名: : 最小值 (布尔ean子代数 α) where
-  定义体: { carrier := L inter M
-               bot_mem' := ⟨bot_mem, bot_mem⟩
-               compl_mem' := fun ha => ⟨compl_mem ha.1, compl_mem ha.2⟩
-               supClosed' := L.supClosed.inter M.supClosed
-               infClosed' := L.infClosed.inter M.infClosed }
-
-Depends on / 依赖: carrier
+--- 原说明 ---
+The inf of two Boolean subalgebras is their intersection.
 -/
 instance instInf : Min (BooleanSubalgebra α) where
-  min L M := { carrier := L inter M
+  min L M := { carrier := L ∩ M
                bot_mem' := ⟨bot_mem, bot_mem⟩
-               compl_mem' := fun ha => ⟨compl_mem ha.1, compl_mem ha.2⟩
+               compl_mem' := fun ha ↦ ⟨compl_mem ha.1, compl_mem ha.2⟩
                supClosed' := L.supClosed.inter M.supClosed
                infClosed' := L.infClosed.inter M.infClosed }
 
-/--
-Instance `instInfSet` / 实例 `instInfSet`
+/-- The inf of Boolean subalgebras is their intersection. -/
+/-
+**BooleanSubalgebra.instInfSet** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instInfSet : InfSet (BooleanSubalgebra α) where sInf S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instInfSet
-  signature: : InfSet (BooleanSubalgebra α) where
-  body: { carrier := ⋂ L in S, L
-              bot_mem' := mem_iInter₂.2 fun _ _ => bot_mem
-compl_mem' := fun ha => mem_iInter₂.2 fun L hL => compl_mem mem_iInter₂.1 ha L hL
-supClosed' := supClosed_sInter forall_mem_range.2 fun L => supClosed_sInter
-                forall_mem_range.2 fun _ => L.supClosed
-infClosed' := infClosed_sInter forall_mem_range.2 fun L => infClosed_sInter
-                forall_mem_range.2 fun _ => L.infClosed }
-
-中文:
-实例 instInfSet
-  签名: : 下确界集 (布尔ean子代数 α) where
-  定义体: { carrier := ⋂ L in S, L
-              bot_mem' := mem_iInter₂.2 fun _ _ => bot_mem
-compl_mem' := fun ha => mem_iInter₂.2 fun L hL => compl_mem mem_iInter₂.1 ha L hL
-supClosed' := supClosed_sInter forall_mem_range.2 fun L => supClosed_sInter
-                forall_mem_range.2 fun _ => L.supClosed
-infClosed' := infClosed_sInter forall_mem_range.2 fun L => infClosed_sInter
-                forall_mem_range.2 fun _ => L.infClosed }
-
-Depends on / 依赖: carrier
+--- 原说明 ---
+The inf of Boolean subalgebras is their intersection.
 -/
 instance instInfSet : InfSet (BooleanSubalgebra α) where
-  sInf S := { carrier := ⋂ L in S, L
-              bot_mem' := mem_iInter₂.2 fun _ _ => bot_mem
-compl_mem' := fun ha => mem_iInter₂.2 fun L hL => compl_mem mem_iInter₂.1 ha L hL
-supClosed' := supClosed_sInter forall_mem_range.2 fun L => supClosed_sInter
-                forall_mem_range.2 fun _ => L.supClosed
-infClosed' := infClosed_sInter forall_mem_range.2 fun L => infClosed_sInter
-                forall_mem_range.2 fun _ => L.infClosed }
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: : Inhabited (BooleanSubalgebra α)
-  body: ⟨⊥⟩
-
-中文:
-实例 instInhabited
-  签名: : 可居 (布尔ean子代数 α)
-  定义体: ⟨⊥⟩
+  sInf S := { carrier := ⋂ L ∈ S, L
+              bot_mem' := mem_iInter₂.2 fun _ _ ↦ bot_mem
+              compl_mem' := fun ha ↦ mem_iInter₂.2 fun L hL ↦ compl_mem <| mem_iInter₂.1 ha L hL
+              supClosed' := supClosed_sInter <| forall_mem_range.2 fun L ↦ supClosed_sInter <|
+                forall_mem_range.2 fun _ ↦ L.supClosed
+              infClosed' := infClosed_sInter <| forall_mem_range.2 fun L ↦ infClosed_sInter <|
+                forall_mem_range.2 fun _ ↦ L.infClosed }
+/-
+**BooleanSubalgebra.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：instInhabited : Inhabited (BooleanSubalgebra α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited : Inhabited (BooleanSubalgebra α) := ⟨⊥⟩
 
-/--
-Definition of `topEquiv` / `topEquiv` 的定义
+/-- The top Boolean subalgebra is isomorphic to the original Boolean algebra.
 
-English:
-definition topEquiv
-  signature: : (⊤ : BooleanSubalgebra α) ≃o α where
-  body: Equiv.Set.univ _
-  map_rel_iff' := .rfl
+This is the Boolean subalgebra version of `Equiv.Set.univ α`. -/
+/-
+**BooleanSubalgebra.topEquiv** 是 Mathlib 中的一个定义，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：topEquiv : (⊤ : BooleanSubalgebra α) ≃o α where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 topEquiv
-  签名: : (⊤ : 布尔ean子代数 α) ≃o α where
-  定义体: Equiv.Set.univ _
-  map_rel_iff' := .rfl
+--- 原说明 ---
+The top Boolean subalgebra is isomorphic to the original Boolean algebra.
 
-Depends on / 依赖: Equiv.Set.univ
+This is the Boolean subalgebra version of `Equiv.Set.univ α`.
 -/
 def topEquiv : (⊤ : BooleanSubalgebra α) ≃o α where
   toEquiv := Equiv.Set.univ _
   map_rel_iff' := .rfl
-
-/--
-lemma `coe_top` / 引理 `coe_top`
-
-English:
-lemma coe_top
-  statement: (⊤ : BooleanSubalgebra α) = (univ : Set α)
-  proof: rfl
-
-中文:
-引理 coe_top
-  结论: (⊤ : 布尔ean子代数 α) = (univ : 集合 α)
-  证明: rfl
+/-
+**BooleanSubalgebra.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α], ↑⊤ = Set.univ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_top : (⊤ : BooleanSubalgebra α) = (univ : Set α) := rfl
-/--
-lemma `coe_bot` / 引理 `coe_bot`
-
-English:
-lemma coe_bot
-  statement: (⊥ : BooleanSubalgebra α) = ({⊥, ⊤} : Set α)
-  proof: rfl
-
-中文:
-引理 coe_bot
-  结论: (⊥ : 布尔ean子代数 α) = ({⊥, ⊤} : 集合 α)
-  证明: rfl
+/-
+**BooleanSubalgebra.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α], ↑⊥ = {⊥, ⊤}
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_bot : (⊥ : BooleanSubalgebra α) = ({⊥, ⊤} : Set α) := rfl
-/--
-lemma `coe_inf` / 引理 `coe_inf`
-
-English:
-lemma coe_inf
-  given: (L M : BooleanSubalgebra α)
-  statement: L ⊓ M = (L : Set α) inter M
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_inf
-  条件: (L M : 布尔ean子代数 α)
-  结论: L ⊓ M = (L : 集合 α) inter M
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**BooleanSubalgebra.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (L M : BooleanSubalgebra α), ↑(
+L ⊓ M) = ↑L ∩ ↑M
+参数：L M : BooleanSubalgebra α；L ⊓ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_inf (L M : BooleanSubalgebra α) : L ⊓ M = (L : Set α) inter M := rfl
+@[simp, norm_cast] lemma coe_inf (L M : BooleanSubalgebra α) : L ⊓ M = (L : Set α) ∩ M := rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_sInf` / 引理 `coe_sInf`
-
-English:
-lemma coe_sInf
-  given: (S : Set (BooleanSubalgebra α))
-  statement: sInf S = ⋂ L in S, (L : Set α)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_sInf
-  条件: (S : 集合 (布尔ean子代数 α))
-  结论: sInf S = ⋂ L in S, (L : 集合 α)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**BooleanSubalgebra.coe_sInf** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：coe_sInf (S : Set (BooleanSubalgebra α)) : sInf S = ⋂ L in S, (L : Set α)
+参数：S : Set (BooleanSubalgebra α)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_sInf (S : Set (BooleanSubalgebra α)) : sInf S = ⋂ L in S, (L : Set α) := rfl
+lemma coe_sInf (S : Set (BooleanSubalgebra α)) : sInf S = ⋂ L ∈ S, (L : Set α) := rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_iInf` / 引理 `coe_iInf`
-
-English:
-lemma coe_iInf
-  given: (f : ι -> BooleanSubalgebra α)
-  statement: ⨅ i, f i = ⋂ i, (f i : Set α)
-  proof: by simp [iInf]
-
-中文:
-引理 coe_iInf
-  条件: (f : ι -> 布尔ean子代数 α)
-  结论: ⨅ i, f i = ⋂ i, (f i : 集合 α)
-  证明: by simp [iInf]
+/-
+**BooleanSubalgebra.coe_iInf** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：coe_iInf (f : ι -> BooleanSubalgebra α) : ⨅ i, f i = ⋂ i, (f i : Set α)
+参数：f : ι -> BooleanSubalgebra α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iInter_iInter_eq'`：iInter_iInter_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋂ (x) (y) (_ : f y = x), g x = ⋂ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma coe_iInf (f : ι -> BooleanSubalgebra α) : ⨅ i, f i = ⋂ i, (f i : Set α) := by simp [iInf]
-
-/--
-lemma `coe_eq_univ` / 引理 `coe_eq_univ`
-
-English:
-lemma coe_eq_univ
-  statement: L = (univ : Set α) ↔ L = ⊤
-  proof: by rw [← coe_top, coe_inj]
-
-中文:
-引理 coe_eq_univ
-  结论: L = (univ : 集合 α) ↔ L = ⊤
-  证明: by rw [← coe_top, coe_inj]
+lemma coe_iInf (f : ι → BooleanSubalgebra α) : ⨅ i, f i = ⋂ i, (f i : Set α) := by simp [iInf]
+/-
+**BooleanSubalgebra.coe_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α}, ↑L =
+ Set.univ ↔ L = ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `BooleanSubalgebra.coe_top`：∀ {α : Type u_2} [inst : BooleanAlgebra α], ↑
+⊤ = Set.univ
+· 使用引理 `BooleanSubalgebra.coe_inj`：coe_inj : (L : Set α) = M ↔ L = M
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp, norm_cast] lemma coe_eq_univ : L = (univ : Set α) ↔ L = ⊤ := by rw [← coe_top, coe_inj]
-
-/--
-lemma `mem_bot` / 引理 `mem_bot`
-
-English:
-lemma mem_bot
-  statement: a in (⊥ : BooleanSubalgebra α) ↔ a = ⊥ ∨ a = ⊤
-  proof: .rfl
-
-中文:
-引理 mem_bot
-  结论: a in (⊥ : 布尔ean子代数 α) ↔ a = ⊥ ∨ a = ⊤
-  证明: .rfl
+/-
+**BooleanSubalgebra.mem_bot** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {a : α}, a ∈ ⊥ ↔ a = ⊥ ∨ a = ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_bot : a in (⊥ : BooleanSubalgebra α) ↔ a = ⊥ ∨ a = ⊤ := .rfl
-/--
-lemma `mem_top` / 引理 `mem_top`
-
-English:
-lemma mem_top
-  statement: a in (⊤ : BooleanSubalgebra α)
-  proof: mem_univ _
-
-中文:
-引理 mem_top
-  结论: a in (⊤ : 布尔ean子代数 α)
-  证明: mem_univ _
+@[simp] lemma mem_bot : a ∈ (⊥ : BooleanSubalgebra α) ↔ a = ⊥ ∨ a = ⊤ := .rfl
+/-
+**BooleanSubalgebra.mem_top** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {a : α}, a ∈ ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-@[simp] lemma mem_top : a in (⊤ : BooleanSubalgebra α) := mem_univ _
-/--
-lemma `mem_inf` / 引理 `mem_inf`
-
-English:
-lemma mem_inf
-  statement: a in L ⊓ M ↔ a in L ∧ a in M
-  proof: .rfl
-
-中文:
-引理 mem_inf
-  结论: a in L ⊓ M ↔ a in L ∧ a in M
-  证明: .rfl
+@[simp] lemma mem_top : a ∈ (⊤ : BooleanSubalgebra α) := mem_univ _
+/-
+**BooleanSubalgebra.mem_inf** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L M : BooleanSubalgebra α} {a 
+: α}, a ∈ L ⊓ M ↔ a ∈ L ∧ a ∈ M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_inf : a in L ⊓ M ↔ a in L ∧ a in M := .rfl
-/--
-lemma `mem_sInf` / 引理 `mem_sInf`
-
-English:
-lemma mem_sInf
-  given: {S : Set (BooleanSubalgebra α)}
-  statement: a in sInf S ↔ forall L in S, a in L
-  proof: by
-  rw [← SetLike.mem_coe]; simp
-
-中文:
-引理 mem_sInf
-  条件: {S : 集合 (布尔ean子代数 α)}
-  结论: a in sInf S ↔ 对任意 L in S, a in L
-  证明: by
-  rw [← SetLike.mem_coe]; simp
+@[simp] lemma mem_inf : a ∈ L ⊓ M ↔ a ∈ L ∧ a ∈ M := .rfl
+/-
+**BooleanSubalgebra.mem_sInf** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {a : α} {S : Set (BooleanSubalg
+ebra α)}, a ∈ sInf S ↔ ∀ L ∈ S, a ∈ L
+参数：BooleanSubalgebra α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma mem_sInf {S : Set (BooleanSubalgebra α)} : a in sInf S ↔ forall L in S, a in L := by
+@[simp] lemma mem_sInf {S : Set (BooleanSubalgebra α)} : a ∈ sInf S ↔ ∀ L ∈ S, a ∈ L := by
   rw [← SetLike.mem_coe]; simp
-/--
-lemma `mem_iInf` / 引理 `mem_iInf`
-
-English:
-lemma mem_iInf
-  given: {f : ι -> BooleanSubalgebra α}
-  statement: a in ⨅ i, f i ↔ forall i, a in f i
-  proof: by
-  rw [← SetLike.mem_coe]; simp
-
-中文:
-引理 mem_iInf
-  条件: {f : ι -> 布尔ean子代数 α}
-  结论: a in ⨅ i, f i ↔ 对任意 i, a in f i
-  证明: by
-  rw [← SetLike.mem_coe]; simp
+/-
+**BooleanSubalgebra.mem_iInf** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} [inst : BooleanAlgebra α] {a : α} {f : ι →
+ BooleanSubalgebra α},   a ∈ ⨅ i, f i ↔ ∀ (i : ι), a ∈ f i
+参数：i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `BooleanSubalgebra.coe_iInf`：coe_iInf (f : ι -> BooleanSubalgebra α) : ⨅ 
+i, f i = ⋂ i, (f i : Set α)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma mem_iInf {f : ι -> BooleanSubalgebra α} : a in ⨅ i, f i ↔ forall i, a in f i := by
+@[simp] lemma mem_iInf {f : ι → BooleanSubalgebra α} : a ∈ ⨅ i, f i ↔ ∀ i, a ∈ f i := by
   rw [← SetLike.mem_coe]; simp
 
-/--
-Instance `instCompleteLattice` / 实例 `instCompleteLattice`
+/-- BooleanSubalgebras of a lattice form a complete lattice. -/
+/-
+**BooleanSubalgebra.instCompleteLattice** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalg
+ebra`。
+形式化陈述：instCompleteLattice : CompleteLattice (BooleanSubalgebra α) where bot
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.mem_top`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {a
+ : α}, a ∈ ⊤
 
-English:
-instance instCompleteLattice
-  signature: : CompleteLattice (BooleanSubalgebra α) where
-  body: ⊥
-  bot_le _S _a := by aesop
-  top := ⊤
-  le_top _S a _ha := mem_top
-  inf := (· ⊓ ·)
-  le_inf _L _M _N hM hN _a ha := ⟨hM ha, hN ha⟩
-  inf_le_left _L _M _a := And.left
-  inf_le_right _L _M _a := And.right
-  __ := completeLatticeOfInf (BooleanSubalgebra α)
-      fun _s => IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
-
-中文:
-实例 instCompleteLattice
-  签名: : 完备格 (布尔ean子代数 α) where
-  定义体: ⊥
-  bot_le _S _a := by aesop
-  top := ⊤
-  le_top _S a _ha := mem_top
-  inf := (· ⊓ ·)
-  le_inf _L _M _N hM hN _a ha := ⟨hM ha, hN ha⟩
-  inf_le_left _L _M _a := And.left
-  inf_le_right _L _M _a := And.right
-  __ := completeLatticeOfInf (BooleanSubalgebra α)
-      fun _s => IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
+--- 原说明 ---
+BooleanSubalgebras of a lattice form a complete lattice.
 -/
 instance instCompleteLattice : CompleteLattice (BooleanSubalgebra α) where
   bot := ⊥
@@ -1393,65 +910,29 @@ instance instCompleteLattice : CompleteLattice (BooleanSubalgebra α) where
   inf_le_left _L _M _a := And.left
   inf_le_right _L _M _a := And.right
   __ := completeLatticeOfInf (BooleanSubalgebra α)
-      fun _s => IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : Subsingleton (BooleanSubalgebra α)
-  body: SetLike.coe_injective.subsingleton
-
-中文:
-实例 [是空
-  签名: α] : 子单例 (布尔ean子代数 α)
-  定义体: SetLike.coe_injective.subsingleton
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.subsingleton, coe_injective, subsingleton
+      fun _s ↦ IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
+/-
+**BooleanSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] : Subsingleton (BooleanSubalgebra α) := SetLike.coe_injective.subsingleton
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : Unique (BooleanSubalgebra α)
-  body: uniqueOfSubsingleton ⊤
-
-中文:
-实例 [是空
-  签名: α] : 唯一 (布尔ean子代数 α)
-  定义体: uniqueOfSubsingleton ⊤
-
-Depends on / 依赖: uniqueOfSubsingleton
+/-
+**BooleanSubalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `BooleanSubalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] : Unique (BooleanSubalgebra α) := uniqueOfSubsingleton ⊤
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- The preimage of a Boolean subalgebra along a bounded lattice homomorphism. -/
+/-
+**BooleanSubalgebra.comap** 是 Mathlib 中的一个定义，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：comap (f : BoundedLatticeHom α β) (L : BooleanSubalgebra β) : BooleanSubal
+gebra α where carrier
+参数：f : BoundedLatticeHom α β；L : BooleanSubalgebra β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (f : BoundedLatticeHom α β) (L : BooleanSubalgebra β)
-  body: f ⁻¹' L
-  bot_mem' := by simp
-  compl_mem' := by simp [map_compl']
-  supClosed' := L.supClosed.preimage _
-  infClosed' := L.infClosed.preimage _
-
-@[simp, norm_cast]
-
-中文:
-定义 comap
-  签名: (f : 有界格态射 α β) (L : 布尔ean子代数 β)
-  定义体: f ⁻¹' L
-  bot_mem' := by simp
-  compl_mem' := by simp [map_compl']
-  supClosed' := L.supClosed.preimage _
-  infClosed' := L.infClosed.preimage _
-
-@[simp, norm_cast]
+--- 原说明 ---
+The preimage of a Boolean subalgebra along a bounded lattice homomorphism.
 -/
 def comap (f : BoundedLatticeHom α β) (L : BooleanSubalgebra β) : BooleanSubalgebra α where
   carrier := f ⁻¹' L
@@ -1461,110 +942,66 @@ def comap (f : BoundedLatticeHom α β) (L : BooleanSubalgebra β) : BooleanSuba
   infClosed' := L.infClosed.preimage _
 
 @[simp, norm_cast]
-/--
-lemma `coe_comap` / 引理 `coe_comap`
-
-English:
-lemma coe_comap
-  given: (L : BooleanSubalgebra β) (f : BoundedLatticeHom α β)
-  statement: L.comap f = f ⁻¹' L
-  proof: rfl
-
-中文:
-引理 coe_comap
-  条件: (L : 布尔ean子代数 β) (f : 有界格态射 α β)
-  结论: L.comap f = f ⁻¹' L
-  证明: rfl
+/-
+**BooleanSubalgebra.coe_comap** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：coe_comap (L : BooleanSubalgebra β) (f : BoundedLatticeHom α β) : L.comap 
+f = f ⁻¹' L
+参数：L : BooleanSubalgebra β；f : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_comap (L : BooleanSubalgebra β) (f : BoundedLatticeHom α β) : L.comap f = f ⁻¹' L := rfl
-
-/--
-lemma `mem_comap` / 引理 `mem_comap`
-
-English:
-lemma mem_comap
-  given: {L : BooleanSubalgebra β}
-  statement: a in L.comap f ↔ f a in L
-  proof: .rfl
-
-中文:
-引理 mem_comap
-  条件: {L : 布尔ean子代数 β}
-  结论: a in L.comap f ↔ f a in L
-  证明: .rfl
+/-
+**BooleanSubalgebra.mem_comap** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : BooleanAlgebra α] [inst_1 : Boolea
+nAlgebra β] {f : BoundedLatticeHom α β}   {a : α} {L : BooleanSubalgebra β}, a ∈
+ BooleanSubalgebra.comap f L ↔ f a ∈ L
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_comap {L : BooleanSubalgebra β} : a in L.comap f ↔ f a in L := .rfl
-
-/--
-lemma `comap_mono` / 引理 `comap_mono`
-
-English:
-lemma comap_mono
-  statement: Monotone (comap f)
-  proof: fun _ _ => preimage_mono
-
-中文:
-引理 comap_mono
-  结论: 递增 (comap f)
-  证明: fun _ _ => preimage_mono
-
-Depends on / 依赖: preimage_mono
+@[simp] lemma mem_comap {L : BooleanSubalgebra β} : a ∈ L.comap f ↔ f a ∈ L := .rfl
+/-
+**BooleanSubalgebra.comap_mono** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：comap_mono : Monotone (comap f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
 -/
-lemma comap_mono : Monotone (comap f) := fun _ _ => preimage_mono
-
-/--
-lemma `comap_id` / 引理 `comap_id`
-
-English:
-lemma comap_id
-  given: (L : BooleanSubalgebra α)
-  statement: L.comap (BoundedLatticeHom.id _) = L
-  proof: rfl
-
-中文:
-引理 comap_id
-  条件: (L : 布尔ean子代数 α)
-  结论: L.comap (有界格态射.id _) = L
-  证明: rfl
+lemma comap_mono : Monotone (comap f) := fun _ _ ↦ preimage_mono
+/-
+**BooleanSubalgebra.comap_id** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (L : BooleanSubalgebra α),   Bo
+oleanSubalgebra.comap (BoundedLatticeHom.id α) L = L
+参数：L : BooleanSubalgebra α；BoundedLatticeHom.id α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma comap_id (L : BooleanSubalgebra α) : L.comap (BoundedLatticeHom.id _) = L := rfl
-
-/--
-lemma `comap_comap` / 引理 `comap_comap`
-
-English:
-lemma comap_comap
-  statement: (L : BooleanSubalgebra γ) (g : BoundedLatticeHom β γ)
-  proof: rfl
-
-中文:
-引理 comap_comap
-  结论: (L : 布尔ean子代数 γ) (g : 有界格态射 β γ)
-  证明: rfl
+/-
+**BooleanSubalgebra.comap_comap** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : BooleanAlgebra α] [
+inst_1 : BooleanAlgebra β]   [inst_2 : BooleanAlgebra γ] (L : BooleanSubalgebra 
+γ) (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β),   BooleanSubalgebra.
+comap f (BooleanSubalgebra.comap g L) = BooleanSubalgebra.comap (g.comp f) L
+参数：L : BooleanSubalgebra γ；g : BoundedLatticeHom β γ；f : BoundedLatticeHom α β；B
+ooleanSubalgebra.comap g L；g.comp f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma comap_comap (L : BooleanSubalgebra γ) (g : BoundedLatticeHom β γ)
     (f : BoundedLatticeHom α β) : (L.comap g).comap f = L.comap (g.comp f) := rfl
 
-/--
-Definition of `map` / `map` 的定义
+/-- The image of a Boolean subalgebra along a monoid homomorphism is a Boolean subalgebra. -/
+/-
+**BooleanSubalgebra.map** 是 Mathlib 中的一个定义，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：map (f : BoundedLatticeHom α β) (L : BooleanSubalgebra α) : BooleanSubalge
+bra β where carrier
+参数：f : BoundedLatticeHom α β；L : BooleanSubalgebra α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : BoundedLatticeHom α β) (L : BooleanSubalgebra α)
-  body: f '' L
-  bot_mem' := ⟨⊥, by simp⟩
-  compl_mem' := by rintro _ ⟨a, ha, rfl⟩; exact ⟨aᶜ, by simpa [map_compl']⟩
-  supClosed' := L.supClosed.image f
-  infClosed' := L.infClosed.image f
-
-中文:
-定义 map
-  签名: (f : 有界格态射 α β) (L : 布尔ean子代数 α)
-  定义体: f '' L
-  bot_mem' := ⟨⊥, by simp⟩
-  compl_mem' := by rintro _ ⟨a, ha, rfl⟩; exact ⟨aᶜ, by simpa [map_compl']⟩
-  supClosed' := L.supClosed.image f
-  infClosed' := L.infClosed.image f
+--- 原说明 ---
+The image of a Boolean subalgebra along a monoid homomorphism is a Boolean subal
+gebra.
 -/
 def map (f : BoundedLatticeHom α β) (L : BooleanSubalgebra α) : BooleanSubalgebra β where
   carrier := f '' L
@@ -1572,622 +1009,479 @@ def map (f : BoundedLatticeHom α β) (L : BooleanSubalgebra α) : BooleanSubalg
   compl_mem' := by rintro _ ⟨a, ha, rfl⟩; exact ⟨aᶜ, by simpa [map_compl']⟩
   supClosed' := L.supClosed.image f
   infClosed' := L.infClosed.image f
-
-/--
-lemma `coe_map` / 引理 `coe_map`
-
-English:
-lemma coe_map
-  given: (f : BoundedLatticeHom α β) (L : BooleanSubalgebra α)
-  proof: rfl
-
-中文:
-引理 coe_map
-  条件: (f : 有界格态射 α β) (L : 布尔ean子代数 α)
-  证明: rfl
-
-Depends on / 依赖: Gaussian, Integrable, almost, condition, integrability, integrable_exp_mul, interesting, mgf_le, random, respect, results, stronger, variables, volume_tac, weaker
+/-
+**BooleanSubalgebra.coe_map** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : BooleanAlgebra α] [inst_1 : Boolea
+nAlgebra β] (f : BoundedLatticeHom α β)   (L : BooleanSubalgebra α), ↑(BooleanSu
+balgebra.map f L) = ⇑f '' ↑L
+参数：f : BoundedLatticeHom α β；L : BooleanSubalgebra α；BooleanSubalgebra.map f L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_map (f : BoundedLatticeHom α β) (L : BooleanSubalgebra α) :
     (L.map f : Set β) = f '' L := rfl
-
-/--
-lemma `mem_map` / 引理 `mem_map`
-
-English:
-lemma mem_map
-  given: {b : β}
-  statement: b in L.map f ↔ exists a in L, f a = b
-  proof: .rfl
-
-中文:
-引理 mem_map
-  条件: {b : β}
-  结论: b in L.map f ↔ 存在 a in L, f a = b
-  证明: .rfl
-
-Depends on / 依赖: Integrable, integrable_exp_mul, mgf_le, volume_tac
+/-
+**BooleanSubalgebra.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : BooleanAlgebra α] [inst_1 : Boolea
+nAlgebra β] {L : BooleanSubalgebra α}   {f : BoundedLatticeHom α β} {b : β}, b ∈
+ BooleanSubalgebra.map f L ↔ ∃ a ∈ L, f a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_map {b : β} : b in L.map f ↔ exists a in L, f a = b := .rfl
-
-/--
-lemma `mem_map_of_mem` / 引理 `mem_map_of_mem`
-
-English:
-lemma mem_map_of_mem
-  given: (f : BoundedLatticeHom α β) {a : α}
-  statement: a in L -> f a in L.map f
-  proof: mem_image_of_mem f
-
-中文:
-引理 mem_map_of_mem
-  条件: (f : 有界格态射 α β) {a : α}
-  结论: a in L -> f a in L.map f
-  证明: mem_image_of_mem f
-
-Depends on / 依赖: mem_image_of_mem
+@[simp] lemma mem_map {b : β} : b ∈ L.map f ↔ ∃ a ∈ L, f a = b := .rfl
+/-
+**BooleanSubalgebra.mem_map_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`
+。
+形式化陈述：mem_map_of_mem (f : BoundedLatticeHom α β) {a : α} : a in L -> f a in L.ma
+p f
+参数：f : BoundedLatticeHom α β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-lemma mem_map_of_mem (f : BoundedLatticeHom α β) {a : α} : a in L -> f a in L.map f :=
+lemma mem_map_of_mem (f : BoundedLatticeHom α β) {a : α} : a ∈ L → f a ∈ L.map f :=
   mem_image_of_mem f
-
-/--
-lemma `apply_coe_mem_map` / 引理 `apply_coe_mem_map`
-
-English:
-lemma apply_coe_mem_map
-  given: (f : BoundedLatticeHom α β) (a : L)
-  statement: f a in L.map f
-  proof: mem_map_of_mem f a.prop
-
-中文:
-引理 apply_coe_mem_map
-  条件: (f : 有界格态射 α β) (a : L)
-  结论: f a in L.map f
-  证明: mem_map_of_mem f a.prop
-
-Depends on / 依赖: a.prop, mem_map_of_mem
+/-
+**BooleanSubalgebra.apply_coe_mem_map** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgeb
+ra`。
+形式化陈述：apply_coe_mem_map (f : BoundedLatticeHom α β) (a : L) : f a in L.map f
+参数：f : BoundedLatticeHom α β；a : L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.mem_map_of_mem`：mem_map_of_mem (f : BoundedLatticeHom 
+α β) {a : α} : a in L -> f a in L.map f
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
-lemma apply_coe_mem_map (f : BoundedLatticeHom α β) (a : L) : f a in L.map f :=
+lemma apply_coe_mem_map (f : BoundedLatticeHom α β) (a : L) : f a ∈ L.map f :=
   mem_map_of_mem f a.prop
-
-/--
-lemma `map_mono` / 引理 `map_mono`
-
-English:
-lemma map_mono
-  statement: Monotone (map f)
-  proof: fun _ _ => image_mono
-
-中文:
-引理 map_mono
-  结论: 递增 (map f)
-  证明: fun _ _ => image_mono
-
-Depends on / 依赖: image_mono
+/-
+**BooleanSubalgebra.map_mono** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：map_mono : Monotone (map f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
-lemma map_mono : Monotone (map f) := fun _ _ => image_mono
-
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  statement: L.map (.id α) = L
-  proof: SetLike.coe_injective image_id _
-
-中文:
-引理 map_id
-  结论: L.map (.id α) = L
-  证明: SetLike.coe_injective image_id _
+lemma map_mono : Monotone (map f) := fun _ _ ↦ image_mono
+/-
+**BooleanSubalgebra.map_id** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α},   Bo
+oleanSubalgebra.map (BoundedLatticeHom.id α) L = L
+参数：BoundedLatticeHom.id α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.image_id`：image_id (s : Set α) : id '' s = s
 -/
-@[simp] lemma map_id : L.map (.id α) = L := SetLike.coe_injective image_id _
-
-/--
-lemma `map_map` / 引理 `map_map`
-
-English:
-lemma map_map
-  given: (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β)
-  proof: SetLike.coe_injective image_image _ _ _
-
-中文:
-引理 map_map
-  条件: (g : 有界格态射 β γ) (f : 有界格态射 α β)
-  证明: SetLike.coe_injective image_image _ _ _
+@[simp] lemma map_id : L.map (.id α) = L := SetLike.coe_injective <| image_id _
+/-
+**BooleanSubalgebra.map_map** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : BooleanAlgebra α] [
+inst_1 : BooleanAlgebra β]   [inst_2 : BooleanAlgebra γ] {L : BooleanSubalgebra 
+α} (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β),   BooleanSubalgebra.
+map g (BooleanSubalgebra.map f L) = BooleanSubalgebra.map (g.comp f) L
+参数：g : BoundedLatticeHom β γ；f : BoundedLatticeHom α β；BooleanSubalgebra.map f L
+；g.comp f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
 -/
 @[simp] lemma map_map (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β) :
-(L.map f).map g = L.map (g.comp f) := SetLike.coe_injective image_image _ _ _
-
-/--
-lemma `mem_map_equiv` / 引理 `mem_map_equiv`
-
-English:
-lemma mem_map_equiv
-  given: {f : α ≃o β} {a : β}
-  statement: a in L.map f ↔ f.symm a in L
-  proof: Set.mem_image_equiv
-
-中文:
-引理 mem_map_equiv
-  条件: {f : α ≃o β} {a : β}
-  结论: a in L.map f ↔ f.symm a in L
-  证明: Set.mem_image_equiv
-
-Depends on / 依赖: Set.mem_image_equiv, mem_image_equiv
+    (L.map f).map g = L.map (g.comp f) := SetLike.coe_injective <| image_image _ _ _
+/-
+**BooleanSubalgebra.mem_map_equiv** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：mem_map_equiv {f : α ≃o β} {a : β} : a in L.map f ↔ f.symm a in L
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image_equiv`：∀ {α : Type u_3} {β : Type u_4} {S : Set α} {f : α 
+≃ β} {x : β}, x ∈ ⇑f '' S ↔ f.symm x ∈ S
 -/
-lemma mem_map_equiv {f : α ≃o β} {a : β} : a in L.map f ↔ f.symm a in L := Set.mem_image_equiv
-
-/--
-lemma `apply_mem_map_iff` / 引理 `apply_mem_map_iff`
-
-English:
-lemma apply_mem_map_iff
-  given: (hf : Injective f)
-  statement: f a in L.map f ↔ a in L
-  proof: hf.mem_set_image
-
-中文:
-引理 apply_mem_map_iff
-  条件: (hf : 单射 f)
-  结论: f a in L.map f ↔ a in L
-  证明: hf.mem_set_image
-
-Depends on / 依赖: hf.mem_set_image, mem_set_image
+lemma mem_map_equiv {f : α ≃o β} {a : β} : a ∈ L.map f ↔ f.symm a ∈ L := Set.mem_image_equiv
+/-
+**BooleanSubalgebra.apply_mem_map_iff** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgeb
+ra`。
+形式化陈述：apply_mem_map_iff (hf : Injective f) : f a in L.map f ↔ a in L
+参数：hf : Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.mem_set_image`：∀ {α : Type u_1} {β : Type u_2} {f : α
+ → β}, Function.Injective f → ∀ {s : Set α} {a : α}, f a ∈ f '' s ↔ a ∈ s
 -/
-lemma apply_mem_map_iff (hf : Injective f) : f a in L.map f ↔ a in L := hf.mem_set_image
-
-/--
-lemma `map_equiv_eq_comap_symm` / 引理 `map_equiv_eq_comap_symm`
-
-English:
-lemma map_equiv_eq_comap_symm
-  given: (f : α ≃o β) (L : BooleanSubalgebra α)
-  proof: SetLike.coe_injective f.toEquiv.image_eq_preimage_symm L
-
-中文:
-引理 map_equiv_eq_comap_symm
-  条件: (f : α ≃o β) (L : 布尔ean子代数 α)
-  证明: SetLike.coe_injective f.toEquiv.image_eq_preimage_symm L
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, f.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
+lemma apply_mem_map_iff (hf : Injective f) : f a ∈ L.map f ↔ a ∈ L := hf.mem_set_image
+/-
+**BooleanSubalgebra.map_equiv_eq_comap_symm** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSu
+balgebra`。
+形式化陈述：map_equiv_eq_comap_symm (f : α ≃o β) (L : BooleanSubalgebra α) : L.map f =
+ L.comap (f.symm : BoundedLatticeHom β α)
+参数：f : α ≃o β；L : BooleanSubalgebra α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `OrderIsoClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u_2} 
+{β : Type u_3} [inst : EquivLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β
+]   [inst_3 : BoundedOrder α…
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `LatticeHom.map_inf'`：∀ {α : Type u_6} {β : Type u_7} [inst : Lattice α] 
+[inst_1 : Lattice β] (self : LatticeHom α β) (a b : α),   self.toFun (a ⊓ b) = s
+elf.toFun…
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 lemma map_equiv_eq_comap_symm (f : α ≃o β) (L : BooleanSubalgebra α) :
     L.map f = L.comap (f.symm : BoundedLatticeHom β α) :=
-SetLike.coe_injective f.toEquiv.image_eq_preimage_symm L
-
-/--
-lemma `comap_equiv_eq_map_symm` / 引理 `comap_equiv_eq_map_symm`
-
-English:
-lemma comap_equiv_eq_map_symm
-  given: (f : β ≃o α) (L : BooleanSubalgebra α)
-  proof: (map_equiv_eq_comap_symm f.symm L).symm
-
-中文:
-引理 comap_equiv_eq_map_symm
-  条件: (f : β ≃o α) (L : 布尔ean子代数 α)
-  证明: (map_equiv_eq_comap_symm f.symm L).symm
-
-Depends on / 依赖: f.symm, map_equiv_eq_comap_symm
+  SetLike.coe_injective <| f.toEquiv.image_eq_preimage_symm L
+/-
+**BooleanSubalgebra.comap_equiv_eq_map_symm** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSu
+balgebra`。
+形式化陈述：comap_equiv_eq_map_symm (f : β ≃o α) (L : BooleanSubalgebra α) : L.comap f
+ = L.map (f.symm : BoundedLatticeHom α β)
+参数：f : β ≃o α；L : BooleanSubalgebra α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIsoClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u_2} 
+{β : Type u_3} [inst : EquivLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β
+]   [inst_3 : BoundedOrder α…
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `LatticeHom.map_inf'`：∀ {α : Type u_6} {β : Type u_7} [inst : Lattice α] 
+[inst_1 : Lattice β] (self : LatticeHom α β) (a b : α),   self.toFun (a ⊓ b) = s
+elf.toFun…
+· 使用引理 `BooleanSubalgebra.map_equiv_eq_comap_symm`：map_equiv_eq_comap_symm (f : 
+α ≃o β) (L : BooleanSubalgebra α) : L.map f = L.comap (f.symm : BoundedLatticeHo
+m β α)
 -/
 lemma comap_equiv_eq_map_symm (f : β ≃o α) (L : BooleanSubalgebra α) :
     L.comap f = L.map (f.symm : BoundedLatticeHom α β) := (map_equiv_eq_comap_symm f.symm L).symm
-
-/--
-lemma `map_symm_eq_iff_eq_map` / 引理 `map_symm_eq_iff_eq_map`
-
-English:
-lemma map_symm_eq_iff_eq_map
-  given: {M : BooleanSubalgebra β} {e : β ≃o α}
-  proof: by
-  simp_rw [← coe_inj]; exact (Equiv.eq_image_iff_symm_image_eq _ _ _).symm
-
-中文:
-引理 map_symm_eq_iff_eq_map
-  条件: {M : 布尔ean子代数 β} {e : β ≃o α}
-  证明: by
-  simp_rw [← coe_inj]; exact (Equiv.eq_image_iff_symm_image_eq _ _ _).symm
-
-Depends on / 依赖: Equiv.eq_image_iff_symm_image_eq, coe_inj, eq_image_iff_symm_image_eq, simp_rw
+/-
+**BooleanSubalgebra.map_symm_eq_iff_eq_map** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSub
+algebra`。
+形式化陈述：map_symm_eq_iff_eq_map {M : BooleanSubalgebra β} {e : β ≃o α} : L.map ↑e.s
+ymm = M ↔ L = M.map ↑e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIsoClass.toBoundedLatticeHomClass`：∀ {F : Type u_1} {α : Type u_2} 
+{β : Type u_3} [inst : EquivLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β
+]   [inst_3 : BoundedOrder α…
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `LatticeHom.map_inf'`：∀ {α : Type u_6} {β : Type u_7} [inst : Lattice α] 
+[inst_1 : Lattice β] (self : LatticeHom α β) (a b : α),   self.toFun (a ⊓ b) = s
+elf.toFun…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.eq_image_iff_symm_image_eq`：eq_image_iff_symm_image_eq {α β} (e : 
+α ≃ β) (s : Set α) (t : Set β) : t = e '' s ↔ e.symm '' t = s
 -/
 lemma map_symm_eq_iff_eq_map {M : BooleanSubalgebra β} {e : β ≃o α} :
     L.map ↑e.symm = M ↔ L = M.map ↑e := by
   simp_rw [← coe_inj]; exact (Equiv.eq_image_iff_symm_image_eq _ _ _).symm
-
-/--
-lemma `map_le_iff_le_comap` / 引理 `map_le_iff_le_comap`
-
-English:
-lemma map_le_iff_le_comap
-  given: {f : BoundedLatticeHom α β} {M : BooleanSubalgebra β}
-  proof: image_subset_iff
-
-中文:
-引理 map_le_iff_le_comap
-  条件: {f : 有界格态射 α β} {M : 布尔ean子代数 β}
-  证明: image_subset_iff
-
-Depends on / 依赖: image_subset_iff
+/-
+**BooleanSubalgebra.map_le_iff_le_comap** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalg
+ebra`。
+形式化陈述：map_le_iff_le_comap {f : BoundedLatticeHom α β} {M : BooleanSubalgebra β} 
+: L.map f <= M ↔ L <= M.comap f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
 -/
 lemma map_le_iff_le_comap {f : BoundedLatticeHom α β} {M : BooleanSubalgebra β} :
-    L.map f <= M ↔ L <= M.comap f := image_subset_iff
-
-/--
-lemma `gc_map_comap` / 引理 `gc_map_comap`
-
-English:
-lemma gc_map_comap
-  given: (f : BoundedLatticeHom α β)
-  statement: GaloisConnection (map f) (comap f)
-  proof: fun _ _ => map_le_iff_le_comap
-
-中文:
-引理 gc_map_comap
-  条件: (f : 有界格态射 α β)
-  结论: GaloisConnection (map f) (comap f)
-  证明: fun _ _ => map_le_iff_le_comap
-
-Depends on / 依赖: map_le_iff_le_comap
+    L.map f ≤ M ↔ L ≤ M.comap f := image_subset_iff
+/-
+**BooleanSubalgebra.gc_map_comap** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：gc_map_comap (f : BoundedLatticeHom α β) : GaloisConnection (map f) (comap
+ f)
+参数：f : BoundedLatticeHom α β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.map_le_iff_le_comap`：map_le_iff_le_comap {f : BoundedL
+atticeHom α β} {M : BooleanSubalgebra β} : L.map f <= M ↔ L <= M.comap f
 -/
 lemma gc_map_comap (f : BoundedLatticeHom α β) : GaloisConnection (map f) (comap f) :=
-  fun _ _ => map_le_iff_le_comap
-
-/--
-lemma `map_bot` / 引理 `map_bot`
-
-English:
-lemma map_bot
-  given: (f : BoundedLatticeHom α β)
-  statement: (⊥ : BooleanSubalgebra α).map f = ⊥
-  proof: (gc_map_comap f).l_bot
-
-中文:
-引理 map_bot
-  条件: (f : 有界格态射 α β)
-  结论: (⊥ : 布尔ean子代数 α).map f = ⊥
-  证明: (gc_map_comap f).l_bot
+  fun _ _ ↦ map_le_iff_le_comap
+/-
+**BooleanSubalgebra.map_bot** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : BooleanAlgebra α] [inst_1 : Boolea
+nAlgebra β] (f : BoundedLatticeHom α β),   BooleanSubalgebra.map f ⊥ = ⊥
+参数：f : BoundedLatticeHom α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_bot`：∀ {α : Type u} {β : Type v} [inst : PartialOrder
+ α] [inst_1 : Preorder β] [inst_2 : OrderBot α] [inst_3 : OrderBot β]   {u : α →
+ β} {l : β →…
+· 使用引理 `BooleanSubalgebra.gc_map_comap`：gc_map_comap (f : BoundedLatticeHom α β)
+ : GaloisConnection (map f) (comap f)
 -/
 @[simp] lemma map_bot (f : BoundedLatticeHom α β) : (⊥ : BooleanSubalgebra α).map f = ⊥ :=
   (gc_map_comap f).l_bot
-
-/--
-lemma `map_sup` / 引理 `map_sup`
-
-English:
-lemma map_sup
-  given: (f : BoundedLatticeHom α β) (L M : BooleanSubalgebra α)
-  proof: (gc_map_comap f).l_sup
-
-中文:
-引理 map_sup
-  条件: (f : 有界格态射 α β) (L M : 布尔ean子代数 α)
-  证明: (gc_map_comap f).l_sup
-
-Depends on / 依赖: gc_map_comap, l_sup
+/-
+**BooleanSubalgebra.map_sup** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：map_sup (f : BoundedLatticeHom α β) (L M : BooleanSubalgebra α) : (L ⊔ M).
+map f = L.map f ⊔ M.map f
+参数：f : BoundedLatticeHom α β；L M : BooleanSubalgebra α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用引理 `BooleanSubalgebra.gc_map_comap`：gc_map_comap (f : BoundedLatticeHom α β)
+ : GaloisConnection (map f) (comap f)
 -/
 lemma map_sup (f : BoundedLatticeHom α β) (L M : BooleanSubalgebra α) :
     (L ⊔ M).map f = L.map f ⊔ M.map f := (gc_map_comap f).l_sup
-
-/--
-lemma `map_iSup` / 引理 `map_iSup`
-
-English:
-lemma map_iSup
-  given: (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra α)
-  proof: (gc_map_comap f).l_iSup
-
-中文:
-引理 map_iSup
-  条件: (f : 有界格态射 α β) (L : ι -> 布尔ean子代数 α)
-  证明: (gc_map_comap f).l_iSup
-
-Depends on / 依赖: gc_map_comap, l_iSup
+/-
+**BooleanSubalgebra.map_iSup** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：map_iSup (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra α) : (⨆ i
+, L i).map f = ⨆ i, (L i).map f
+参数：f : BoundedLatticeHom α β；L : ι -> BooleanSubalgebra α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用引理 `BooleanSubalgebra.gc_map_comap`：gc_map_comap (f : BoundedLatticeHom α β)
+ : GaloisConnection (map f) (comap f)
 -/
-lemma map_iSup (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra α) :
+lemma map_iSup (f : BoundedLatticeHom α β) (L : ι → BooleanSubalgebra α) :
     (⨆ i, L i).map f = ⨆ i, (L i).map f := (gc_map_comap f).l_iSup
-
-/--
-lemma `comap_top` / 引理 `comap_top`
-
-English:
-lemma comap_top
-  given: (f : BoundedLatticeHom α β)
-  statement: (⊤ : BooleanSubalgebra β).comap f = ⊤
-  proof: (gc_map_comap f).u_top
-
-中文:
-引理 comap_top
-  条件: (f : 有界格态射 α β)
-  结论: (⊤ : 布尔ean子代数 β).comap f = ⊤
-  证明: (gc_map_comap f).u_top
+/-
+**BooleanSubalgebra.comap_top** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : BooleanAlgebra α] [inst_1 : Boolea
+nAlgebra β] (f : BoundedLatticeHom α β),   BooleanSubalgebra.comap f ⊤ = ⊤
+参数：f : BoundedLatticeHom α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.u_top`：u_top [OrderTop β] {l : α -> β} {u : β -> α} (gc
+ : GaloisConnection l u) : u ⊤ = ⊤
+· 使用引理 `BooleanSubalgebra.gc_map_comap`：gc_map_comap (f : BoundedLatticeHom α β)
+ : GaloisConnection (map f) (comap f)
 -/
 @[simp] lemma comap_top (f : BoundedLatticeHom α β) : (⊤ : BooleanSubalgebra β).comap f = ⊤ :=
   (gc_map_comap f).u_top
-
-/--
-lemma `comap_inf` / 引理 `comap_inf`
-
-English:
-lemma comap_inf
-  given: (L M : BooleanSubalgebra β) (f : BoundedLatticeHom α β)
-  proof: (gc_map_comap f).u_inf
-
-中文:
-引理 comap_inf
-  条件: (L M : 布尔ean子代数 β) (f : 有界格态射 α β)
-  证明: (gc_map_comap f).u_inf
-
-Depends on / 依赖: gc_map_comap, u_inf
+/-
+**BooleanSubalgebra.comap_inf** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：comap_inf (L M : BooleanSubalgebra β) (f : BoundedLatticeHom α β) : (L ⊓ M
+).comap f = L.comap f ⊓ M.comap f
+参数：L M : BooleanSubalgebra β；f : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.u_inf`：∀ {β : Type u} {α : Type v} {b₁ b₂ : β} [inst : 
+SemilatticeInf β] [inst_1 : SemilatticeInf α] {u : β → α} {l : α → β},   GaloisC
+onnection l …
+· 使用引理 `BooleanSubalgebra.gc_map_comap`：gc_map_comap (f : BoundedLatticeHom α β)
+ : GaloisConnection (map f) (comap f)
 -/
 lemma comap_inf (L M : BooleanSubalgebra β) (f : BoundedLatticeHom α β) :
     (L ⊓ M).comap f = L.comap f ⊓ M.comap f := (gc_map_comap f).u_inf
-
-/--
-lemma `comap_iInf` / 引理 `comap_iInf`
-
-English:
-lemma comap_iInf
-  given: (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra β)
-  proof: (gc_map_comap f).u_iInf
-
-中文:
-引理 comap_iInf
-  条件: (f : 有界格态射 α β) (L : ι -> 布尔ean子代数 β)
-  证明: (gc_map_comap f).u_iInf
-
-Depends on / 依赖: gc_map_comap, u_iInf
+/-
+**BooleanSubalgebra.comap_iInf** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：comap_iInf (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra β) : (⨅
+ i, L i).comap f = ⨅ i, (L i).comap f
+参数：f : BoundedLatticeHom α β；L : ι -> BooleanSubalgebra β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.u_iInf`：∀ {α : Type u} {β : Type v} {ι : Sort x} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] {u : α → β}   {l : β → α}, Gal
+oisConnection…
+· 使用引理 `BooleanSubalgebra.gc_map_comap`：gc_map_comap (f : BoundedLatticeHom α β)
+ : GaloisConnection (map f) (comap f)
 -/
-lemma comap_iInf (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra β) :
+lemma comap_iInf (f : BoundedLatticeHom α β) (L : ι → BooleanSubalgebra β) :
     (⨅ i, L i).comap f = ⨅ i, (L i).comap f := (gc_map_comap f).u_iInf
-
-/--
-lemma `map_inf_le` / 引理 `map_inf_le`
-
-English:
-lemma map_inf_le
-  given: (L M : BooleanSubalgebra α) (f : BoundedLatticeHom α β)
-  proof: map_mono.map_inf_le _ _
-
-中文:
-引理 map_inf_le
-  条件: (L M : 布尔ean子代数 α) (f : 有界格态射 α β)
-  证明: map_mono.map_inf_le _ _
-
-Depends on / 依赖: map_inf_le, map_mono, map_mono.map_inf_le
+/-
+**BooleanSubalgebra.map_inf_le** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：map_inf_le (L M : BooleanSubalgebra α) (f : BoundedLatticeHom α β) : map f
+ (L ⊓ M) <= map f L ⊓ map f M
+参数：L M : BooleanSubalgebra α；f : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_inf_le`：∀ {α : Type u} {β : Type v} [inst : SemilatticeInf 
+α] [inst_1 : SemilatticeInf β] {f : α → β},   Monotone f → ∀ (x y : α), f (x ⊓ y
+) ≤ f x ⊓…
+· 使用引理 `BooleanSubalgebra.map_mono`：map_mono : Monotone (map f)
 -/
 lemma map_inf_le (L M : BooleanSubalgebra α) (f : BoundedLatticeHom α β) :
-    map f (L ⊓ M) <= map f L ⊓ map f M := map_mono.map_inf_le _ _
-
-/--
-lemma `le_comap_sup` / 引理 `le_comap_sup`
-
-English:
-lemma le_comap_sup
-  given: (L M : BooleanSubalgebra β) (f : BoundedLatticeHom α β)
-  proof: comap_mono.le_map_sup _ _
-
-中文:
-引理 le_comap_sup
-  条件: (L M : 布尔ean子代数 β) (f : 有界格态射 α β)
-  证明: comap_mono.le_map_sup _ _
-
-Depends on / 依赖: comap_mono, comap_mono.le_map_sup, le_map_sup
+    map f (L ⊓ M) ≤ map f L ⊓ map f M := map_mono.map_inf_le _ _
+/-
+**BooleanSubalgebra.le_comap_sup** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：le_comap_sup (L M : BooleanSubalgebra β) (f : BoundedLatticeHom α β) : com
+ap f L ⊔ comap f M <= comap f (L ⊔ M)
+参数：L M : BooleanSubalgebra β；f : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.le_map_sup`：le_map_sup [SemilatticeSup α] [SemilatticeSup β] {f
+ : α -> β} (h : Monotone f) (x y : α) : f x ⊔ f y <= f (x ⊔ y)
+· 使用引理 `BooleanSubalgebra.comap_mono`：comap_mono : Monotone (comap f)
 -/
 lemma le_comap_sup (L M : BooleanSubalgebra β) (f : BoundedLatticeHom α β) :
-    comap f L ⊔ comap f M <= comap f (L ⊔ M) := comap_mono.le_map_sup _ _
-
-/--
-lemma `le_comap_iSup` / 引理 `le_comap_iSup`
-
-English:
-lemma le_comap_iSup
-  given: (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra β)
-  proof: comap_mono.le_map_iSup
-
-中文:
-引理 le_comap_iSup
-  条件: (f : 有界格态射 α β) (L : ι -> 布尔ean子代数 β)
-  证明: comap_mono.le_map_iSup
-
-Depends on / 依赖: comap_mono, comap_mono.le_map_iSup, le_map_iSup
+    comap f L ⊔ comap f M ≤ comap f (L ⊔ M) := comap_mono.le_map_sup _ _
+/-
+**BooleanSubalgebra.le_comap_iSup** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：le_comap_iSup (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra β) :
+ ⨆ i, (L i).comap f <= (⨆ i, L i).comap f
+参数：f : BoundedLatticeHom α β；L : ι -> BooleanSubalgebra β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.le_map_iSup`：Monotone.le_map_iSup [CompleteLattice β] {f : α ->
+ β} (hf : Monotone f) : ⨆ i, f (s i) <= f (iSup s)
+· 使用引理 `BooleanSubalgebra.comap_mono`：comap_mono : Monotone (comap f)
 -/
-lemma le_comap_iSup (f : BoundedLatticeHom α β) (L : ι -> BooleanSubalgebra β) :
-    ⨆ i, (L i).comap f <= (⨆ i, L i).comap f := comap_mono.le_map_iSup
-
-/--
-lemma `map_inf` / 引理 `map_inf`
-
-English:
-lemma map_inf
-  given: (L M : BooleanSubalgebra α) (f : BoundedLatticeHom α β) (hf : Injective f)
-  proof: by
-  rw [← SetLike.coe_set_eq]
-  simp [Set.image_inter hf]
-
-中文:
-引理 map_inf
-  条件: (L M : 布尔ean子代数 α) (f : 有界格态射 α β) (hf : 单射 f)
-  证明: by
-  rw [← SetLike.coe_set_eq]
-  simp [Set.image_inter hf]
-
-Depends on / 依赖: Set.image_inter, SetLike, SetLike.coe_set_eq, coe_set_eq, image_inter
+lemma le_comap_iSup (f : BoundedLatticeHom α β) (L : ι → BooleanSubalgebra β) :
+    ⨆ i, (L i).comap f ≤ (⨆ i, L i).comap f := comap_mono.le_map_iSup
+/-
+**BooleanSubalgebra.map_inf** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：map_inf (L M : BooleanSubalgebra α) (f : BoundedLatticeHom α β) (hf : Inje
+ctive f) : map f (L ⊓ M) = map f L ⊓ map f M
+参数：L M : BooleanSubalgebra α；f : BoundedLatticeHom α β；hf : Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.coe_set_eq`：coe_set_eq : (p : Set B) = q ↔ p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_inter`：image_inter {f : α -> β} {s t : Set α} (H : Injective f
+) : f '' (s inter t) = f '' s inter f '' t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_inf (L M : BooleanSubalgebra α) (f : BoundedLatticeHom α β) (hf : Injective f) :
     map f (L ⊓ M) = map f L ⊓ map f M := by
   rw [← SetLike.coe_set_eq]
   simp [Set.image_inter hf]
-
-/--
-lemma `map_top` / 引理 `map_top`
-
-English:
-lemma map_top
-  given: (f : BoundedLatticeHom α β) (h : Surjective f)
-  statement: BooleanSubalgebra.map f ⊤ = ⊤
-  proof: SetLike.coe_injective by simp [h.range_eq]
-
-中文:
-引理 map_top
-  条件: (f : 有界格态射 α β) (h : 满射 f)
-  结论: 布尔ean子代数.map f ⊤ = ⊤
-  证明: SetLike.coe_injective by simp [h.range_eq]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, h.range_eq, range_eq
+/-
+**BooleanSubalgebra.map_top** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：map_top (f : BoundedLatticeHom α β) (h : Surjective f) : BooleanSubalgebra
+.map f ⊤ = ⊤
+参数：f : BoundedLatticeHom α β；h : Surjective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_top (f : BoundedLatticeHom α β) (h : Surjective f) : BooleanSubalgebra.map f ⊤ = ⊤ :=
-SetLike.coe_injective by simp [h.range_eq]
+  SetLike.coe_injective <| by simp [h.range_eq]
 
-/--
-Definition of `closure` / `closure` 的定义
+/-- The minimum Boolean subalgebra containing a given set. -/
+/-
+**BooleanSubalgebra.closure** 是 Mathlib 中的一个定义，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：closure (s : Set α) : BooleanSubalgebra α
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition closure
-  signature: (s : Set α)
-  body: sInf {L | s subseteq L}
-
-中文:
-定义 closure
-  签名: (s : 集合 α)
-  定义体: sInf {L | s subseteq L}
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+The minimum Boolean subalgebra containing a given set.
 -/
-def closure (s : Set α) : BooleanSubalgebra α := sInf {L | s subseteq L}
+def closure (s : Set α) : BooleanSubalgebra α := sInf {L | s ⊆ L}
 
 variable {s : Set α}
-
-/--
-lemma `mem_closure` / 引理 `mem_closure`
-
-English:
-lemma mem_closure
-  given: {x : α}
-  statement: x in closure s ↔ forall ⦃L : BooleanSubalgebra α⦄, s subseteq L -> x in L
-  proof: mem_sInf
+/-
+**BooleanSubalgebra.mem_closure** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：mem_closure {x : α} : x in closure s ↔ forall ⦃L : BooleanSubalgebra α⦄, s
+ subseteq L -> x in L
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.mem_sInf`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {
+a : α} {S : Set (BooleanSubalgebra α)}, a ∈ sInf S ↔ ∀ L ∈ S, a ∈ L
+-/
+lemma mem_closure {x : α} : x ∈ closure s ↔ ∀ ⦃L : BooleanSubalgebra α⦄, s ⊆ L → x ∈ L := mem_sInf
 
 @[simp, aesop safe 20 (rule_sets := [SetLike])]
-
-中文:
-引理 mem_closure
-  条件: {x : α}
-  结论: x in closure s ↔ 对任意 ⦃L : 布尔ean子代数 α⦄, s subseteq L -> x in L
-  证明: mem_sInf
-
-@[simp, aesop safe 20 (rule_sets := [SetLike])]
-
-Depends on / 依赖: mem_sInf
+/-
+**BooleanSubalgebra.subset_closure** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`
+。
+形式化陈述：subset_closure : s subseteq closure s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `BooleanSubalgebra.mem_closure`：mem_closure {x : α} : x in closure s ↔ fo
+rall ⦃L : BooleanSubalgebra α⦄, s subseteq L -> x in L
 -/
-lemma mem_closure {x : α} : x in closure s ↔ forall ⦃L : BooleanSubalgebra α⦄, s subseteq L -> x in L := mem_sInf
-
-@[simp, aesop safe 20 (rule_sets := [SetLike])]
-/--
-lemma `subset_closure` / 引理 `subset_closure`
-
-English:
-lemma subset_closure
-  statement: s subseteq closure s
-  proof: fun _ hx => mem_closure.2 fun _ hK => hK hx
+lemma subset_closure : s ⊆ closure s := fun _ hx ↦ mem_closure.2 fun _ hK ↦ hK hx
 
 @[aesop 80% (rule_sets := [SetLike])]
-
-中文:
-引理 subset_closure
-  结论: s subseteq closure s
-  证明: fun _ hx => mem_closure.2 fun _ hK => hK hx
-
-@[aesop 80% (rule_sets := [SetLike])]
-
-Depends on / 依赖: mem_closure
+/-
+**BooleanSubalgebra.mem_closure_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalge
+bra`。
+形式化陈述：mem_closure_of_mem {s : Set α} {x : α} (hx : x in s) : x in closure s
+参数：hx : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
 -/
-lemma subset_closure : s subseteq closure s := fun _ hx => mem_closure.2 fun _ hK => hK hx
-
-@[aesop 80% (rule_sets := [SetLike])]
-/--
-theorem `mem_closure_of_mem` / 定理 `mem_closure_of_mem`
-
-English:
-theorem mem_closure_of_mem
-  given: {s : Set α} {x : α} (hx : x in s)
-  statement: x in closure s
-  proof: subset_closure hx
-
-中文:
-定理 mem_closure_of_mem
-  条件: {s : 集合 α} {x : α} (hx : x in s)
-  结论: x in closure s
-  证明: subset_closure hx
-
-Depends on / 依赖: subset_closure
+theorem mem_closure_of_mem {s : Set α} {x : α} (hx : x ∈ s) : x ∈ closure s := subset_closure hx
+/-
+**BooleanSubalgebra.closure_le** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L : BooleanSubalgebra α} {s : 
+Set α},   BooleanSubalgebra.closure s ≤ L ↔ s ⊆ ↑L
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `sInf_le`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set α} 
+{a : α}, a ∈ s → sInf s ≤ a
 -/
-theorem mem_closure_of_mem {s : Set α} {x : α} (hx : x in s) : x in closure s := subset_closure hx
-
-/--
-lemma `closure_le` / 引理 `closure_le`
-
-English:
-lemma closure_le
-  statement: closure s <= L ↔ s subseteq L
-  proof: ⟨subset_closure.trans, fun h => sInf_le h⟩
-
-中文:
-引理 closure_le
-  结论: closure s <= L ↔ s subseteq L
-  证明: ⟨subset_closure.trans, fun h => sInf_le h⟩
+@[simp] lemma closure_le : closure s ≤ L ↔ s ⊆ L := ⟨subset_closure.trans, fun h ↦ sInf_le h⟩
+/-
+**BooleanSubalgebra.closure_mono** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：closure_mono (hst : s subseteq t) : closure s <= closure t
+参数：hst : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sInf_le_sInf`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s t : 
+Set α}, s ⊆ t → sInf t ≤ sInf s
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-@[simp] lemma closure_le : closure s <= L ↔ s subseteq L := ⟨subset_closure.trans, fun h => sInf_le h⟩
-
-/--
-lemma `closure_mono` / 引理 `closure_mono`
-
-English:
-lemma closure_mono
-  given: (hst : s subseteq t)
-  statement: closure s <= closure t
-  proof: sInf_le_sInf fun _L => hst.trans
-
-中文:
-引理 closure_mono
-  条件: (hst : s subseteq t)
-  结论: closure s <= closure t
-  证明: sInf_le_sInf fun _L => hst.trans
-
-Depends on / 依赖: hst.trans, sInf_le_sInf
+lemma closure_mono (hst : s ⊆ t) : closure s ≤ closure t := sInf_le_sInf fun _L ↦ hst.trans
+/-
+**BooleanSubalgebra.latticeClosure_subset_closure** 是 Mathlib 中的一个引理，位于命名空间 `Boo
+leanSubalgebra`。
+形式化陈述：latticeClosure_subset_closure : latticeClosure s subseteq closure s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `latticeClosure_min`：latticeClosure_min : s subseteq t -> IsSublattice t 
+-> latticeClosure s subseteq t
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Sublattice.isSublattice`：∀ {α : Type u_2} [inst : Lattice α] (L : Sublat
+tice α), IsSublattice ↑L
 -/
-lemma closure_mono (hst : s subseteq t) : closure s <= closure t := sInf_le_sInf fun _L => hst.trans
-
-/--
-lemma `latticeClosure_subset_closure` / 引理 `latticeClosure_subset_closure`
-
-English:
-lemma latticeClosure_subset_closure
-  statement: latticeClosure s subseteq closure s
-  proof: latticeClosure_min subset_closure (closure s).isSublattice
-
-中文:
-引理 latticeClosure_subset_closure
-  结论: latticeClosure s subseteq closure s
-  证明: latticeClosure_min subset_closure (closure s).isSublattice
-
-Depends on / 依赖: closure, isSublattice, latticeClosure_min, subset_closure
--/
-lemma latticeClosure_subset_closure : latticeClosure s subseteq closure s :=
+lemma latticeClosure_subset_closure : latticeClosure s ⊆ closure s :=
   latticeClosure_min subset_closure (closure s).isSublattice
-
-/--
-lemma `closure_latticeClosure` / 引理 `closure_latticeClosure`
-
-English:
-lemma closure_latticeClosure
-  given: (s : Set α)
-  statement: closure (latticeClosure s) = closure s
-  proof: le_antisymm (closure_le.2 latticeClosure_subset_closure) (closure_mono subset_latticeClosure)
-
-中文:
-引理 closure_latticeClosure
-  条件: (s : 集合 α)
-  结论: closure (latticeClosure s) = closure s
-  证明: le_antisymm (closure_le.2 latticeClosure_subset_closure) (closure_mono subset_latticeClosure)
+/-
+**BooleanSubalgebra.closure_latticeClosure** 是 Mathlib 中的一个定理，位于命名空间 `BooleanSub
+algebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] (s : Set α),   BooleanSubalgebr
+a.closure (latticeClosure s) = BooleanSubalgebra.closure s
+参数：s : Set α；latticeClosure s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `BooleanSubalgebra.closure_le`：∀ {α : Type u_2} [inst : BooleanAlgebra α]
+ {L : BooleanSubalgebra α} {s : Set α},   BooleanSubalgebra.closure s ≤ L ↔ s ⊆ 
+↑L
+· 使用引理 `BooleanSubalgebra.latticeClosure_subset_closure`：latticeClosure_subset_c
+losure : latticeClosure s subseteq closure s
+· 使用引理 `BooleanSubalgebra.closure_mono`：closure_mono (hst : s subseteq t) : clos
+ure s <= closure t
+· 使用定理 `subset_latticeClosure`：∀ {α : Type u_3} [inst : Lattice α] {s : Set α}, 
+s ⊆ latticeClosure s
 -/
 @[simp] lemma closure_latticeClosure (s : Set α) : closure (latticeClosure s) = closure s :=
   le_antisymm (closure_le.2 latticeClosure_subset_closure) (closure_mono subset_latticeClosure)
@@ -2195,157 +1489,193 @@ lemma closure_latticeClosure
 /-- An induction principle for closure membership. If `p` holds for `⊥` and all elements of `s`, and
 is preserved under suprema and complement, then `p` holds for all elements of the closure of `s`. -/
 @[elab_as_elim]
-/--
-lemma `closure_bot_sup_induction` / 引理 `closure_bot_sup_induction`
+/-
+**BooleanSubalgebra.closure_bot_sup_induction** 是 Mathlib 中的一个引理，位于命名空间 `Boolean
+Subalgebra`。
+形式化陈述：closure_bot_sup_induction {p : forall g in closure s, Prop} (mem : forall 
+x hx, p x (subset_closure hx)) (bot : p ⊥ bot_mem) (sup : forall x hx y hy, p x 
+hx -> p y hy -> p (x ⊔ y) (supClosed _ hx hy)) (compl : forall x hx, p x hx -> p
+ xᶜ (compl_mem hx)) {x} (hx : x in closure s) : p x hx
+参数：mem : forall x hx, p x (subset_closure hx)；bot : p ⊥ bot_mem；sup : forall x h
+x y hy, p x hx -> p y hy -> p (x ⊔ y) (supClosed _ hx hy)；compl : forall x hx, p
+ x hx -> p xᶜ (compl_mem hx)；hx : x in closure s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
+· 使用定理 `BooleanSubalgebra.supClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), SupClosed ↑L
+· 使用引理 `BooleanSubalgebra.compl_mem`：compl_mem (ha : a in L) : aᶜ in L
+· 使用定理 `BooleanSubalgebra.infClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), InfClosed ↑L
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `compl_sup`：compl_sup : (a ⊔ b)ᶜ = aᶜ ⊓ bᶜ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `BooleanSubalgebra.closure_le`：∀ {α : Type u_2} [inst : BooleanAlgebra α]
+ {L : BooleanSubalgebra α} {s : Set α},   BooleanSubalgebra.closure s ≤ L ↔ s ⊆ 
+↑L
 
-English:
-lemma closure_bot_sup_induction
-  statement: {p : forall g in closure s, Prop} (mem : forall x hx, p x (subset_closure hx))
-  proof: have inf ⦃x hx y hy⦄ (hx' : p x hx) (hy' : p y hy) : p (x ⊓ y) (infClosed _ hx hy) := by
-simpa using compl _ _ sup _ _ _ _ (compl _ _ hx') (compl _ _ hy')
-  let L : BooleanSubalgebra α :=
-    { carrier := { x | exists hx, p x hx }
-      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, sup _ _ _ _ ha hb⟩
-      infClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, inf ha hb⟩
-      bot_mem' := ⟨_, bot⟩
-      compl_mem' := fun ⟨_, hb⟩ => ⟨_, compl _ _ hb⟩ }
-.elim fun _ => id closure_le (L := L).mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx
-
-中文:
-引理 closure_bot_sup_induction
-  结论: {p : 对任意 g in closure s, 命题} (mem : 对任意 x hx, p x (subset_closure hx))
-  证明: have inf ⦃x hx y hy⦄ (hx' : p x hx) (hy' : p y hy) : p (x ⊓ y) (infClosed _ hx hy) := by
-simpa using compl _ _ sup _ _ _ _ (compl _ _ hx') (compl _ _ hy')
-  let L : BooleanSubalgebra α :=
-    { carrier := { x | exists hx, p x hx }
-      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, sup _ _ _ _ ha hb⟩
-      infClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, inf ha hb⟩
-      bot_mem' := ⟨_, bot⟩
-      compl_mem' := fun ⟨_, hb⟩ => ⟨_, compl _ _ hb⟩ }
-.elim fun _ => id closure_le (L := L).mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx
-
-Depends on / 依赖: BooleanSubalgebra, bot_mem, carrier, closure_le, compl_mem, infClosed, subset_closure, supClosed
+--- 原说明 ---
+An induction principle for closure membership. If `p` holds for `⊥` and all elem
+ents of `s`, and
+is preserved under suprema and complement, then `p` holds for all elements of th
+e closure of `s`.
 -/
-lemma closure_bot_sup_induction {p : forall g in closure s, Prop} (mem : forall x hx, p x (subset_closure hx))
+lemma closure_bot_sup_induction {p : ∀ g ∈ closure s, Prop} (mem : ∀ x hx, p x (subset_closure hx))
     (bot : p ⊥ bot_mem)
-    (sup : forall x hx y hy, p x hx -> p y hy -> p (x ⊔ y) (supClosed _ hx hy))
-    (compl : forall x hx, p x hx -> p xᶜ (compl_mem hx)) {x} (hx : x in closure s) : p x hx :=
+    (sup : ∀ x hx y hy, p x hx → p y hy → p (x ⊔ y) (supClosed _ hx hy))
+    (compl : ∀ x hx, p x hx → p xᶜ (compl_mem hx)) {x} (hx : x ∈ closure s) : p x hx :=
   have inf ⦃x hx y hy⦄ (hx' : p x hx) (hy' : p y hy) : p (x ⊓ y) (infClosed _ hx hy) := by
-simpa using compl _ _ sup _ _ _ _ (compl _ _ hx') (compl _ _ hy')
+    simpa using compl _ _ <| sup _ _ _ _ (compl _ _ hx') (compl _ _ hy')
   let L : BooleanSubalgebra α :=
-    { carrier := { x | exists hx, p x hx }
-      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, sup _ _ _ _ ha hb⟩
-      infClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, inf ha hb⟩
+    { carrier := { x | ∃ hx, p x hx }
+      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ ↦ ⟨_, sup _ _ _ _ ha hb⟩
+      infClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ ↦ ⟨_, inf ha hb⟩
       bot_mem' := ⟨_, bot⟩
-      compl_mem' := fun ⟨_, hb⟩ => ⟨_, compl _ _ hb⟩ }
-.elim fun _ => id closure_le (L := L).mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx
+      compl_mem' := fun ⟨_, hb⟩ ↦ ⟨_, compl _ _ hb⟩ }
+  closure_le (L := L).mpr (fun y hy ↦ ⟨subset_closure hy, mem y hy⟩) hx |>.elim fun _ ↦ id
 
 section sdiff_sup
 
-variable (isSublattice : IsSublattice s) (bot_mem : ⊥ in s) (top_mem : ⊤ in s)
+variable (isSublattice : IsSublattice s) (bot_mem : ⊥ ∈ s) (top_mem : ⊤ ∈ s)
 include isSublattice bot_mem top_mem
 
-/--
-theorem `mem_closure_iff_sup_sdiff` / 定理 `mem_closure_iff_sup_sdiff`
-
-English:
-theorem mem_closure_iff_sup_sdiff
-  given: {a : α}
-  proof: by
-  classical
-  refine ⟨closure_bot_sup_induction
-    (fun x h => ⟨{(⟨x, h⟩, ⟨⊥, bot_mem⟩)}, by simp⟩) ⟨∅, by simp⟩ ?_ ?_, ?_⟩
-  · rintro ⟨t, rfl⟩
-    exact t.sup_mem _ (subset_closure bot_mem) (fun _ h _ => sup_mem h) _
-      fun x hx => sdiff_mem (subset_closure x.1.2) (subset_closure x.2.2)
-  · rintro _ - _ - ⟨t₁, rfl⟩ ⟨t₂, rfl⟩
-    exact ⟨t₁ union t₂, by rw [Finset.sup_union]⟩
-  rintro x - ⟨t, rfl⟩
-  refine t.induction ⟨{(⟨⊤, top_mem⟩, ⟨⊥, bot_mem⟩)}, by simp⟩ fun ⟨x, y⟩ t _ ⟨tc, eq⟩ => ?_
-  simp_rw [Finset.sup_insert, compl_sup, eq]
-  refine tc.induction ⟨∅, by simp⟩ fun ⟨z, w⟩ tc _ ⟨t, eq⟩ => ?_
-  simp_rw [Finset.sup_insert, inf_sup_left, eq]
-  use {(z, ⟨_, isSublattice.supClosed x.2 w.2⟩), (⟨_, isSublattice.infClosed y.2 z.2⟩, w)} union t
-  simp_rw [Finset.sup_union, Finset.sup_insert, Finset.sup_singleton, _root_.sdiff_eq,
-    compl_sup, inf_left_comm z.1, compl_inf, compl_compl, inf_sup_right, inf_assoc]
-
-中文:
-定理 mem_closure_iff_sup_sdiff
-  条件: {a : α}
-  证明: by
-  classical
-  refine ⟨closure_bot_sup_induction
-    (fun x h => ⟨{(⟨x, h⟩, ⟨⊥, bot_mem⟩)}, by simp⟩) ⟨∅, by simp⟩ ?_ ?_, ?_⟩
-  · rintro ⟨t, rfl⟩
-    exact t.sup_mem _ (subset_closure bot_mem) (fun _ h _ => sup_mem h) _
-      fun x hx => sdiff_mem (subset_closure x.1.2) (subset_closure x.2.2)
-  · rintro _ - _ - ⟨t₁, rfl⟩ ⟨t₂, rfl⟩
-    exact ⟨t₁ union t₂, by rw [Finset.sup_union]⟩
-  rintro x - ⟨t, rfl⟩
-  refine t.induction ⟨{(⟨⊤, top_mem⟩, ⟨⊥, bot_mem⟩)}, by simp⟩ fun ⟨x, y⟩ t _ ⟨tc, eq⟩ => ?_
-  simp_rw [Finset.sup_insert, compl_sup, eq]
-  refine tc.induction ⟨∅, by simp⟩ fun ⟨z, w⟩ tc _ ⟨t, eq⟩ => ?_
-  simp_rw [Finset.sup_insert, inf_sup_left, eq]
-  use {(z, ⟨_, isSublattice.supClosed x.2 w.2⟩), (⟨_, isSublattice.infClosed y.2 z.2⟩, w)} union t
-  simp_rw [Finset.sup_union, Finset.sup_insert, Finset.sup_singleton, _root_.sdiff_eq,
-    compl_sup, inf_left_comm z.1, compl_inf, compl_compl, inf_sup_right, inf_assoc]
-
-Depends on / 依赖: Finset, Finset.sup_insert, Finset.sup_union, bot_mem, classical, closure_bot_sup_induction, sdiff_mem, simp_rw, subset_closure, sup_insert, sup_mem, sup_union, t.induction, t.sup_mem, top_mem
+/-
+**BooleanSubalgebra.mem_closure_iff_sup_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Boolean
+Subalgebra`。
+形式化陈述：mem_closure_iff_sup_sdiff {a : α} : a in closure s ↔ exists t : Finset (s 
+× s), a = t.sup fun x => x.1.1 \ x.2.1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.closure_bot_sup_induction`：closure_bot_sup_induction {
+p : forall g in closure s, Prop} (mem : forall x hx, p x (subset_closure hx)) (b
+ot : p ⊥ bot_mem) (sup : forall x…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_singleton`：sup_singleton {b : β} : ({b} : Finset β).sup f = f
+ b
+· 使用定理 `sdiff_bot`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a : 
+α}, a \ ⊥ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `Finset.sup_union`：sup_union [DecidableEq β] : (s₁ union s₂).sup f = s₁.s
+up f ⊔ s₂.sup f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `compl_bot`：compl_bot : (⊥ : α)ᶜ = ⊤
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+· 使用定理 `compl_sup`：compl_sup : (a ⊔ b)ᶜ = aᶜ ⊓ bᶜ
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `inf_sup_left`：inf_sup_left (a b c : α) : a ⊓ (b ⊔ c) = a ⊓ b ⊔ a ⊓ c
+· 使用定理 `IsSublattice.supClosed`：∀ {α : Type u_3} [inst : Lattice α] {s : Set α},
+ IsSublattice s → SupClosed s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `IsSublattice.infClosed`：∀ {α : Type u_3} [inst : Lattice α] {s : Set α},
+ IsSublattice s → InfClosed s
+· 使用定理 `sdiff_eq`：sdiff_eq : x \ y = x ⊓ yᶜ
+· 使用定理 `inf_left_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c : α), a ⊓
+ (b ⊓ c) = b ⊓ (a ⊓ c)
+· 使用定理 `compl_inf`：compl_inf : (x ⊓ y)ᶜ = xᶜ ⊔ yᶜ
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `inf_sup_right`：inf_sup_right (a b c : α) : (a ⊔ b) ⊓ c = a ⊓ c ⊔ b ⊓ c
+· 使用定理 `inf_assoc`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c : α), a ⊓ b ⊓
+ c = a ⊓ (b ⊓ c)
+· 使用定理 `Finset.sup_mem`：sup_mem (s : Set α) (w₁ : ⊥ in s) (w₂ : forallᵉ (x in s)
+ (y in s), x ⊔ y in s) {ι : Type*} (t : Finset ι) (p : ι -> α) (h : forall i in 
+t, p…
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
+（共 32 条，此处仅展示前 30 条）
 -/
 theorem mem_closure_iff_sup_sdiff {a : α} :
-    a in closure s ↔ exists t : Finset (s × s), a = t.sup fun x => x.1.1 \ x.2.1 := by
+    a ∈ closure s ↔ ∃ t : Finset (s × s), a = t.sup fun x ↦ x.1.1 \ x.2.1 := by
   classical
   refine ⟨closure_bot_sup_induction
-    (fun x h => ⟨{(⟨x, h⟩, ⟨⊥, bot_mem⟩)}, by simp⟩) ⟨∅, by simp⟩ ?_ ?_, ?_⟩
+    (fun x h ↦ ⟨{(⟨x, h⟩, ⟨⊥, bot_mem⟩)}, by simp⟩) ⟨∅, by simp⟩ ?_ ?_, ?_⟩
   · rintro ⟨t, rfl⟩
-    exact t.sup_mem _ (subset_closure bot_mem) (fun _ h _ => sup_mem h) _
-      fun x hx => sdiff_mem (subset_closure x.1.2) (subset_closure x.2.2)
+    exact t.sup_mem _ (subset_closure bot_mem) (fun _ h _ ↦ sup_mem h) _
+      fun x hx ↦ sdiff_mem (subset_closure x.1.2) (subset_closure x.2.2)
   · rintro _ - _ - ⟨t₁, rfl⟩ ⟨t₂, rfl⟩
-    exact ⟨t₁ union t₂, by rw [Finset.sup_union]⟩
+    exact ⟨t₁ ∪ t₂, by rw [Finset.sup_union]⟩
   rintro x - ⟨t, rfl⟩
-  refine t.induction ⟨{(⟨⊤, top_mem⟩, ⟨⊥, bot_mem⟩)}, by simp⟩ fun ⟨x, y⟩ t _ ⟨tc, eq⟩ => ?_
+  refine t.induction ⟨{(⟨⊤, top_mem⟩, ⟨⊥, bot_mem⟩)}, by simp⟩ fun ⟨x, y⟩ t _ ⟨tc, eq⟩ ↦ ?_
   simp_rw [Finset.sup_insert, compl_sup, eq]
-  refine tc.induction ⟨∅, by simp⟩ fun ⟨z, w⟩ tc _ ⟨t, eq⟩ => ?_
+  refine tc.induction ⟨∅, by simp⟩ fun ⟨z, w⟩ tc _ ⟨t, eq⟩ ↦ ?_
   simp_rw [Finset.sup_insert, inf_sup_left, eq]
-  use {(z, ⟨_, isSublattice.supClosed x.2 w.2⟩), (⟨_, isSublattice.infClosed y.2 z.2⟩, w)} union t
+  use {(z, ⟨_, isSublattice.supClosed x.2 w.2⟩), (⟨_, isSublattice.infClosed y.2 z.2⟩, w)} ∪ t
   simp_rw [Finset.sup_union, Finset.sup_insert, Finset.sup_singleton, _root_.sdiff_eq,
     compl_sup, inf_left_comm z.1, compl_inf, compl_compl, inf_sup_right, inf_assoc]
-
-/--
-theorem `closure_sdiff_sup_induction` / 定理 `closure_sdiff_sup_induction`
-
-English:
-theorem closure_sdiff_sup_induction
-  statement: {p : forall g in closure s, Prop}
-  proof: by
-  obtain ⟨t, rfl⟩ := (mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mp hx
-  revert hx
-  classical
-  refine t.induction (by simpa using sdiff _ bot_mem _ bot_mem) fun x t _ ih hxt => ?_
-  simp only [Finset.sup_insert] at hxt ⊢
-  exact sup _ _ _ ((mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mpr ⟨_, rfl⟩)
-    (sdiff _ x.1.2 _ x.2.2) (ih _)
-
-中文:
-定理 closure_sdiff_sup_induction
-  结论: {p : 对任意 g in closure s, 命题}
-  证明: by
-  obtain ⟨t, rfl⟩ := (mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mp hx
-  revert hx
-  classical
-  refine t.induction (by simpa using sdiff _ bot_mem _ bot_mem) fun x t _ ih hxt => ?_
-  simp only [Finset.sup_insert] at hxt ⊢
-  exact sup _ _ _ ((mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mpr ⟨_, rfl⟩)
-    (sdiff _ x.1.2 _ x.2.2) (ih _)
+/-
+**BooleanSubalgebra.closure_sdiff_sup_induction** 是 Mathlib 中的一个定理，位于命名空间 `Boole
+anSubalgebra`。
+形式化陈述：∀ {α : Type u_2} [inst : BooleanAlgebra α] {s : Set α},   IsSublattice s →
+     ⊥ ∈ s →       ⊤ ∈ s →         ∀ {p : (g : α) → g ∈ BooleanSubalgebra.closur
+e s → Prop},           (∀ (x : α) (hx : x ∈ s) (y : α) (hy : y ∈ s), p (x \ y) ⋯
+) →             (∀ (x : α) (hx : x ∈ BooleanSubalgebra.closure s) (y : α) (hy : 
+y ∈ BooleanSubalgebra.closure s),                 p x hx → p y hy → p (x ⊔ y) ⋯)
+ →               ∀ (x : α) (hx : x ∈ BooleanSubalgebra.closure s), p x hx
+参数：g : α；∀ (x : α) (hx : x ∈ s) (y : α) (hy : y ∈ s), p (x \ y) ⋯；∀ (x : α) (hx 
+: x ∈ BooleanSubalgebra.closure s) (y : α) (hy : y ∈ BooleanSubalgebra.closure s
+),                 p x hx → p y hy → p (x ⊔ y) ⋯；x : α；hx : x ∈ BooleanSubalgebr
+a.closure s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.sdiff_mem`：sdiff_mem (ha : a in L) (hb : b in L) : a \
+ b in L
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
+· 使用引理 `BooleanSubalgebra.sup_mem`：sup_mem (ha : a in L) (hb : b in L) : a ⊔ b i
+n L
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `BooleanSubalgebra.mem_closure_iff_sup_sdiff`：mem_closure_iff_sup_sdiff {
+a : α} : a in closure s ↔ exists t : Finset (s × s), a = t.sup fun x => x.1.1 \ 
+x.2.1
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `sdiff_self`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a :
+ α}, a \ a = ⊥
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-@[elab_as_elim] theorem closure_sdiff_sup_induction {p : forall g in closure s, Prop}
-    (sdiff : forall x hx y hy, p (x \ y) (sdiff_mem (subset_closure hx) (subset_closure hy)))
-    (sup : forall x hx y hy, p x hx -> p y hy -> p (x ⊔ y) (sup_mem hx hy))
-    (x) (hx : x in closure s) : p x hx := by
+@[elab_as_elim] theorem closure_sdiff_sup_induction {p : ∀ g ∈ closure s, Prop}
+    (sdiff : ∀ x hx y hy, p (x \ y) (sdiff_mem (subset_closure hx) (subset_closure hy)))
+    (sup : ∀ x hx y hy, p x hx → p y hy → p (x ⊔ y) (sup_mem hx hy))
+    (x) (hx : x ∈ closure s) : p x hx := by
   obtain ⟨t, rfl⟩ := (mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mp hx
   revert hx
   classical
-  refine t.induction (by simpa using sdiff _ bot_mem _ bot_mem) fun x t _ ih hxt => ?_
+  refine t.induction (by simpa using sdiff _ bot_mem _ bot_mem) fun x t _ ih hxt ↦ ?_
   simp only [Finset.sup_insert] at hxt ⊢
   exact sup _ _ _ ((mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mpr ⟨_, rfl⟩)
     (sdiff _ x.1.2 _ x.2.2) (ih _)
@@ -2355,116 +1685,100 @@ end sdiff_sup
 end BooleanAlgebra
 
 section CompleteBooleanAlgebra
-variable [CompleteBooleanAlgebra α] {L : BooleanSubalgebra α} {f : ι -> α} {s : Set α}
+variable [CompleteBooleanAlgebra α] {L : BooleanSubalgebra α} {f : ι → α} {s : Set α}
 
-/--
-lemma `iSup_mem` / 引理 `iSup_mem`
-
-English:
-lemma iSup_mem
-  given: [Finite ι] (hf : forall i, f i in L)
-  statement: ⨆ i, f i in L
-  proof: L.supClosed.iSup_mem bot_mem hf
-
-中文:
-引理 iSup_mem
-  条件: [有限 ι] (hf : 对任意 i, f i in L)
-  结论: ⨆ i, f i in L
-  证明: L.supClosed.iSup_mem bot_mem hf
-
-Depends on / 依赖: L.supClosed.iSup_mem, bot_mem, iSup_mem, supClosed
+/-
+**BooleanSubalgebra.iSup_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：iSup_mem [Finite ι] (hf : forall i, f i in L) : ⨆ i, f i in L
+参数：hf : forall i, f i in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.iSup_mem`：SupClosed.iSup_mem [Finite ι] (hs : SupClosed s) (hb
+ot : ⊥ in s) (hf : forall i, f i in s) : ⨆ i, f i in s
+· 使用定理 `BooleanSubalgebra.supClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), SupClosed ↑L
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
 -/
-lemma iSup_mem [Finite ι] (hf : forall i, f i in L) : ⨆ i, f i in L := L.supClosed.iSup_mem bot_mem hf
-/--
-lemma `iInf_mem` / 引理 `iInf_mem`
-
-English:
-lemma iInf_mem
-  given: [Finite ι] (hf : forall i, f i in L)
-  statement: ⨅ i, f i in L
-  proof: L.infClosed.iInf_mem top_mem hf
-
-中文:
-引理 iInf_mem
-  条件: [有限 ι] (hf : 对任意 i, f i in L)
-  结论: ⨅ i, f i in L
-  证明: L.infClosed.iInf_mem top_mem hf
-
-Depends on / 依赖: L.infClosed.iInf_mem, iInf_mem, infClosed, top_mem
+lemma iSup_mem [Finite ι] (hf : ∀ i, f i ∈ L) : ⨆ i, f i ∈ L := L.supClosed.iSup_mem bot_mem hf
+/-
+**BooleanSubalgebra.iInf_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：iInf_mem [Finite ι] (hf : forall i, f i in L) : ⨅ i, f i in L
+参数：hf : forall i, f i in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.iInf_mem`：∀ {ι : Sort u_1} {α : Type u_3} [inst : CompleteLatt
+ice α] {f : ι → α} {s : Set α} [Finite ι],   InfClosed s → ⊤ ∈ s → (∀ (i : ι), f
+ i ∈ s) …
+· 使用定理 `BooleanSubalgebra.infClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), InfClosed ↑L
+· 使用定理 `BooleanSubalgebra.top_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊤ ∈ L
 -/
-lemma iInf_mem [Finite ι] (hf : forall i, f i in L) : ⨅ i, f i in L := L.infClosed.iInf_mem top_mem hf
-/--
-lemma `sSup_mem` / 引理 `sSup_mem`
-
-English:
-lemma sSup_mem
-  given: (hs : s.Finite) (hsL : s subseteq L)
-  statement: sSup s in L
-  proof: L.supClosed.sSup_mem hs bot_mem hsL
-
-中文:
-引理 sSup_mem
-  条件: (hs : s.有限) (hsL : s subseteq L)
-  结论: sSup s in L
-  证明: L.supClosed.sSup_mem hs bot_mem hsL
-
-Depends on / 依赖: L.supClosed.sSup_mem, bot_mem, sSup_mem, supClosed
+lemma iInf_mem [Finite ι] (hf : ∀ i, f i ∈ L) : ⨅ i, f i ∈ L := L.infClosed.iInf_mem top_mem hf
+/-
+**BooleanSubalgebra.sSup_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：sSup_mem (hs : s.Finite) (hsL : s subseteq L) : sSup s in L
+参数：hs : s.Finite；hsL : s subseteq L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.sSup_mem`：SupClosed.sSup_mem (hs : SupClosed s) (ht : t.Finite
+) (hbot : ⊥ in s) (hts : t subseteq s) : sSup t in s
+· 使用定理 `BooleanSubalgebra.supClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), SupClosed ↑L
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
 -/
-lemma sSup_mem (hs : s.Finite) (hsL : s subseteq L) : sSup s in L := L.supClosed.sSup_mem hs bot_mem hsL
-/--
-lemma `sInf_mem` / 引理 `sInf_mem`
-
-English:
-lemma sInf_mem
-  given: (hs : s.Finite) (hsL : s subseteq L)
-  statement: sInf s in L
-  proof: L.infClosed.sInf_mem hs top_mem hsL
-
-中文:
-引理 sInf_mem
-  条件: (hs : s.有限) (hsL : s subseteq L)
-  结论: sInf s in L
-  证明: L.infClosed.sInf_mem hs top_mem hsL
-
-Depends on / 依赖: L.infClosed.sInf_mem, infClosed, sInf_mem, top_mem
+lemma sSup_mem (hs : s.Finite) (hsL : s ⊆ L) : sSup s ∈ L := L.supClosed.sSup_mem hs bot_mem hsL
+/-
+**BooleanSubalgebra.sInf_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：sInf_mem (hs : s.Finite) (hsL : s subseteq L) : sInf s in L
+参数：hs : s.Finite；hsL : s subseteq L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.sInf_mem`：∀ {α : Type u_3} [inst : CompleteLattice α] {s t : S
+et α}, InfClosed s → t.Finite → ⊤ ∈ s → t ⊆ s → sInf t ∈ s
+· 使用定理 `BooleanSubalgebra.infClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), InfClosed ↑L
+· 使用定理 `BooleanSubalgebra.top_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊤ ∈ L
 -/
-lemma sInf_mem (hs : s.Finite) (hsL : s subseteq L) : sInf s in L := L.infClosed.sInf_mem hs top_mem hsL
-
-/--
-lemma `biSup_mem` / 引理 `biSup_mem`
-
-English:
-lemma biSup_mem
-  given: {ι : Type*} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : forall i in t, f i in L)
-  proof: L.supClosed.biSup_mem ht bot_mem hf
-
-中文:
-引理 biSup_mem
-  条件: {ι : 类型} {t : 集合 ι} {f : ι -> α} (ht : t.有限) (hf : 对任意 i in t, f i in L)
-  证明: L.supClosed.biSup_mem ht bot_mem hf
-
-Depends on / 依赖: L.supClosed.biSup_mem, biSup_mem, bot_mem, supClosed
+lemma sInf_mem (hs : s.Finite) (hsL : s ⊆ L) : sInf s ∈ L := L.infClosed.sInf_mem hs top_mem hsL
+/-
+**BooleanSubalgebra.biSup_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：biSup_mem {ι : Type*} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : foral
+l i in t, f i in L) : ⨆ i in t, f i in L
+参数：ht : t.Finite；hf : forall i in t, f i in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.biSup_mem`：SupClosed.biSup_mem {ι : Type*} {t : Set ι} {f : ι 
+-> α} (hs : SupClosed s) (ht : t.Finite) (hbot : ⊥ in s) (hf : forall i in t, f 
+i in s) :…
+· 使用定理 `BooleanSubalgebra.supClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), SupClosed ↑L
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
 -/
-lemma biSup_mem {ι : Type*} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : forall i in t, f i in L) :
-    ⨆ i in t, f i in L := L.supClosed.biSup_mem ht bot_mem hf
-
-/--
-lemma `biInf_mem` / 引理 `biInf_mem`
-
-English:
-lemma biInf_mem
-  given: {ι : Type*} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : forall i in t, f i in L)
-  proof: L.infClosed.biInf_mem ht top_mem hf
-
-中文:
-引理 biInf_mem
-  条件: {ι : 类型} {t : 集合 ι} {f : ι -> α} (ht : t.有限) (hf : 对任意 i in t, f i in L)
-  证明: L.infClosed.biInf_mem ht top_mem hf
-
-Depends on / 依赖: L.infClosed.biInf_mem, biInf_mem, infClosed, top_mem
+lemma biSup_mem {ι : Type*} {t : Set ι} {f : ι → α} (ht : t.Finite) (hf : ∀ i ∈ t, f i ∈ L) :
+    ⨆ i ∈ t, f i ∈ L := L.supClosed.biSup_mem ht bot_mem hf
+/-
+**BooleanSubalgebra.biInf_mem** 是 Mathlib 中的一个引理，位于命名空间 `BooleanSubalgebra`。
+形式化陈述：biInf_mem {ι : Type*} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : foral
+l i in t, f i in L) : ⨅ i in t, f i in L
+参数：ht : t.Finite；hf : forall i in t, f i in L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.biInf_mem`：∀ {α : Type u_3} [inst : CompleteLattice α] {s : Se
+t α} {ι : Type u_5} {t : Set ι} {f : ι → α},   InfClosed s → t.Finite → ⊤ ∈ s → 
+(∀ i ∈ t,…
+· 使用定理 `BooleanSubalgebra.infClosed`：∀ {α : Type u_2} [inst : BooleanAlgebra α] 
+(L : BooleanSubalgebra α), InfClosed ↑L
+· 使用定理 `BooleanSubalgebra.top_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊤ ∈ L
 -/
-lemma biInf_mem {ι : Type*} {t : Set ι} {f : ι -> α} (ht : t.Finite) (hf : forall i in t, f i in L) :
-    ⨅ i in t, f i in L := L.infClosed.biInf_mem ht top_mem hf
+lemma biInf_mem {ι : Type*} {t : Set ι} {f : ι → α} (ht : t.Finite) (hf : ∀ i ∈ t, f i ∈ L) :
+    ⨅ i ∈ t, f i ∈ L := L.infClosed.biInf_mem ht top_mem hf
 
 end CompleteBooleanAlgebra
 end BooleanSubalgebra
+

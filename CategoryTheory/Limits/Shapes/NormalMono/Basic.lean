@@ -43,26 +43,16 @@ section
 
 variable [HasZeroMorphisms C]
 
-/--
-Definition of `NormalMono` / `NormalMono` 的定义
+/-- A normal monomorphism is a morphism which is the kernel of some morphism. -/
+/-
+**CategoryTheory.NormalMono** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → [CategoryTheory.Limits.HasZeroMorphisms C] → (X ⟶ Y) → Type (max u₁ v₁)
+参数：X ⟶ Y；max u₁ v₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NormalMono
-  parameters: (f : X ⟶ Y)
-  axioms and operations (4):
-    - Z : C
-    - g : Y ⟶ Z
-    - w : f ≫ g = 0
-    - isLimit : IsLimit (KernelFork.ofι f w)
-
-中文:
-类 正规单态射
-  参数: (f : X ⟶ Y)
-  公理与运算 (4 个):
-    - Z : C
-    - g : Y ⟶ Z
-    - w : f ≫ g = 0
-    - isLimit : 是极限 (核叉.ofι f w)
+--- 原说明 ---
+A normal monomorphism is a morphism which is the kernel of some morphism.
 -/
 class NormalMono (f : X ⟶ Y) where
   Z : C
@@ -78,98 +68,87 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- If `F` is an equivalence and `F.map f` is a normal mono, then `f` is a normal mono. -/
 @[instance_reducible]
-/--
-Definition of `equivalenceReflectsNormalMono` / `equivalenceReflectsNormalMono` 的定义
+/-
+**CategoryTheory.equivalenceReflectsNormalMono** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：equivalenceReflectsNormalMono {D : Type u₂} [Category.{v₁} D] [HasZeroMorp
+hisms D] (F : C ⥤ D) [F.IsEquivalence] {X Y : C} {f : X ⟶ Y} (hf : NormalMono (F
+.map f)) : NormalMono f where Z
+参数：F : C ⥤ D；hf : NormalMono (F.map f)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-definition equivalenceReflectsNormalMono
-  signature: {D : Type u₂} [Category.{v₁} D] [HasZeroMorphisms D] (F : C ⥤ D)
-  body: F.objPreimage hf.Z
-  g := F.preimage (hf.g ≫ (F.objObjPreimageIso hf.Z).inv)
-w := F.map_injective by
-    have reassoc' {W : D} (h : hf.Z ⟶ W) : F.map f ≫ hf.g ≫ h = 0 ≫ h := by
-      rw [← Category.assoc]; rw [eq_whisker hf.w]
-    simp [reassoc']
-isLimit := isLimitOfReflects F
-IsLimit.ofConeEquiv (Cone.postcomposeEquivalence (compNatIso F))
-      (IsLimit.ofIsoLimit (IsKernel.ofCompIso _ _ (F.objObjPreimageIso hf.Z) (by
-        simp only [Functor.map_preimage, Category.assoc, Iso.inv_hom_id, Category.comp_id])
-        hf.isLimit)) (Fork.ext (Iso.refl _) (by simp [compNatIso, Fork.ι]))
-
-中文:
-定义 equivalenceReflectsNormalMono
-  签名: {D : 类型u₂} [范畴.{v₁} D] [有ZeroMorphisms D] (F : C ⥤ D)
-  定义体: F.objPreimage hf.Z
-  g := F.preimage (hf.g ≫ (F.objObjPreimageIso hf.Z).inv)
-w := F.map_injective by
-    have reassoc' {W : D} (h : hf.Z ⟶ W) : F.map f ≫ hf.g ≫ h = 0 ≫ h := by
-      rw [← Category.assoc]; rw [eq_whisker hf.w]
-    simp [reassoc']
-isLimit := isLimitOfReflects F
-IsLimit.ofConeEquiv (Cone.postcomposeEquivalence (compNatIso F))
-      (IsLimit.ofIsoLimit (IsKernel.ofCompIso _ _ (F.objObjPreimageIso hf.Z) (by
-        simp only [Functor.map_preimage, Category.assoc, Iso.inv_hom_id, Category.comp_id])
-        hf.isLimit)) (Fork.ext (Iso.refl _) (by simp [compNatIso, Fork.ι]))
-
-Depends on / 依赖: F.objPreimage, hf.Z, objPreimage
+--- 原说明 ---
+If `F` is an equivalence and `F.map f` is a normal mono, then `f` is a normal mo
+no.
 -/
 def equivalenceReflectsNormalMono {D : Type u₂} [Category.{v₁} D] [HasZeroMorphisms D] (F : C ⥤ D)
     [F.IsEquivalence] {X Y : C} {f : X ⟶ Y} (hf : NormalMono (F.map f)) : NormalMono f where
   Z := F.objPreimage hf.Z
   g := F.preimage (hf.g ≫ (F.objObjPreimageIso hf.Z).inv)
-w := F.map_injective by
+  w := F.map_injective <| by
     have reassoc' {W : D} (h : hf.Z ⟶ W) : F.map f ≫ hf.g ≫ h = 0 ≫ h := by
-      rw [← Category.assoc]; rw [eq_whisker hf.w]
+      rw [← Category.assoc, eq_whisker hf.w]
     simp [reassoc']
-isLimit := isLimitOfReflects F
-IsLimit.ofConeEquiv (Cone.postcomposeEquivalence (compNatIso F))
+  isLimit := isLimitOfReflects F <|
+    IsLimit.ofConeEquiv (Cone.postcomposeEquivalence (compNatIso F)) <|
       (IsLimit.ofIsoLimit (IsKernel.ofCompIso _ _ (F.objObjPreimageIso hf.Z) (by
         simp only [Functor.map_preimage, Category.assoc, Iso.inv_hom_id, Category.comp_id])
         hf.isLimit)) (Fork.ext (Iso.refl _) (by simp [compNatIso, Fork.ι]))
 
 end
 
-/--
-Definition of `NormalMono.regularMono` / `NormalMono.regularMono` 的定义
+/-- Every normal monomorphism is a regular monomorphism. -/
+/-
+**CategoryTheory.NormalMono.regularMono** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.NormalMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} →       [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] →         (f : X
+ ⟶ Y) → [I : CategoryTheory.NormalMono f] → CategoryTheory.RegularMono f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalMono.regularMono
-  signature: (f : X ⟶ Y) [I : NormalMono f]
-  body: { I with
-    left := I.g
-    right := 0
-    w := by simpa using I.w }
-
-中文:
-定义 正规单态射.regularMono
-  签名: (f : X ⟶ Y) [I : 正规单态射 f]
-  定义体: { I with
-    left := I.g
-    right := 0
-    w := by simpa using I.w }
+--- 原说明 ---
+Every normal monomorphism is a regular monomorphism.
 -/
 def NormalMono.regularMono (f : X ⟶ Y) [I : NormalMono f] : RegularMono f :=
   { I with
     left := I.g
     right := 0
     w := by simpa using I.w }
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (f : X ⟶ Y) [I : NormalMono f] : IsRegularMono f := ⟨⟨I.regularMono⟩⟩
 
-/--
-Definition of `NormalMono.lift'` / `NormalMono.lift'` 的定义
+/-- If `f` is a normal mono, then any map `k : W ⟶ Y` such that `k ≫ normal_mono.g = 0` induces
+a morphism `l : W ⟶ X` such that `l ≫ f = k`. -/
+/-
+**CategoryTheory.NormalMono.lift'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Norm
+alMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} →       [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] →         {W : C
+} →           (f : X ⟶ Y) →             [hf : CategoryTheory.NormalMono f] →    
+           (k : W ⟶ Y) →                 CategoryTheory.CategoryStruct.comp k Ca
+tegoryTheory.NormalMono.g = 0 →                   { l // CategoryTheory.Category
+Struct.comp l f = k }
+参数：f : X ⟶ Y；k : W ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NormalMono.w`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {X Y : C}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C}
+ {f : X ⟶ Y} [sel…
 
-English:
-definition NormalMono.lift'
-  signature: {W : C} (f : X ⟶ Y) [hf : NormalMono f] (k : W ⟶ Y) (h : k ≫ hf.g = 0)
-  body: KernelFork.IsLimit.lift' NormalMono.isLimit _ h
-
-中文:
-定义 正规单态射.lift'
-  签名: {W : C} (f : X ⟶ Y) [hf : 正规单态射 f] (k : W ⟶ Y) (h : k ≫ hf.g = 0)
-  定义体: KernelFork.IsLimit.lift' NormalMono.isLimit _ h
-
-Depends on / 依赖: IsLimit, KernelFork, KernelFork.IsLimit.lift, NormalMono, NormalMono.isLimit, isLimit
+--- 原说明 ---
+If `f` is a normal mono, then any map `k : W ⟶ Y` such that `k ≫ normal_mono.g =
+ 0` induces
+a morphism `l : W ⟶ X` such that `l ≫ f = k`.
 -/
 def NormalMono.lift' {W : C} (f : X ⟶ Y) [hf : NormalMono f] (k : W ⟶ Y) (h : k ≫ hf.g = 0) :
     { l : W ⟶ X // l ≫ f = k } :=
@@ -181,38 +160,22 @@ See also `pullback.sndOfMono` for the basic monomorphism version, and
 `normalOfIsPullbackFstOfNormal` for the flipped version.
 -/
 @[instance_reducible]
-/--
-Definition of `normalOfIsPullbackSndOfNormal` / `normalOfIsPullbackSndOfNormal` 的定义
+/-
+**CategoryTheory.normalOfIsPullbackSndOfNormal** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：normalOfIsPullbackSndOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q
+ ⟶ S} {k : R ⟶ S} [hn : NormalMono h] (comm : f ≫ h = g ≫ k) (t : IsLimit (Pullb
+ackCone.mk _ _ comm)) : NormalMono g where Z
+参数：comm : f ≫ h = g ≫ k；t : IsLimit (PullbackCone.mk _ _ comm)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalOfIsPullbackSndOfNormal
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: hn.Z
-  g := k ≫ hn.g
-  w := by
-    have reassoc' {W : C} (h' : S ⟶ W) : f ≫ h ≫ h' = g ≫ k ≫ h' := by
-      simp only [← Category.assoc, eq_whisker comm]
-    rw [← reassoc']; rw [hn.w]; rw [HasZeroMorphisms.comp_zero]
-  isLimit := by
-    letI gr := regularOfIsPullbackSndOfRegular hn.regularMono comm t
-    have q := (HasZeroMorphisms.comp_zero k hn.Z).symm
-    convert! gr.isLimit
+--- 原说明 ---
+The second leg of a pullback cone is a normal monomorphism if the right componen
+t is too.
 
-中文:
-定义 normalOfIsPullbackSndOfNormal
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: hn.Z
-  g := k ≫ hn.g
-  w := by
-    have reassoc' {W : C} (h' : S ⟶ W) : f ≫ h ≫ h' = g ≫ k ≫ h' := by
-      simp only [← Category.assoc, eq_whisker comm]
-    rw [← reassoc']; rw [hn.w]; rw [HasZeroMorphisms.comp_zero]
-  isLimit := by
-    letI gr := regularOfIsPullbackSndOfRegular hn.regularMono comm t
-    have q := (HasZeroMorphisms.comp_zero k hn.Z).symm
-    convert! gr.isLimit
-
-Depends on / 依赖: hn.Z
+See also `pullback.sndOfMono` for the basic monomorphism version, and
+`normalOfIsPullbackFstOfNormal` for the flipped version.
 -/
 def normalOfIsPullbackSndOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     [hn : NormalMono h] (comm : f ≫ h = g ≫ k) (t : IsLimit (PullbackCone.mk _ _ comm)) :
@@ -222,7 +185,7 @@ def normalOfIsPullbackSndOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h :
   w := by
     have reassoc' {W : C} (h' : S ⟶ W) : f ≫ h ≫ h' = g ≫ k ≫ h' := by
       simp only [← Category.assoc, eq_whisker comm]
-    rw [← reassoc']; rw [hn.w]; rw [HasZeroMorphisms.comp_zero]
+    rw [← reassoc', hn.w, HasZeroMorphisms.comp_zero]
   isLimit := by
     letI gr := regularOfIsPullbackSndOfRegular hn.regularMono comm t
     have q := (HasZeroMorphisms.comp_zero k hn.Z).symm
@@ -234,20 +197,22 @@ See also `pullback.fstOfMono` for the basic monomorphism version, and
 `normalOfIsPullbackSndOfNormal` for the flipped version.
 -/
 @[instance_reducible]
-/--
-Definition of `normalOfIsPullbackFstOfNormal` / `normalOfIsPullbackFstOfNormal` 的定义
+/-
+**CategoryTheory.normalOfIsPullbackFstOfNormal** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：normalOfIsPullbackFstOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q
+ ⟶ S} {k : R ⟶ S} [NormalMono k] (comm : f ≫ h = g ≫ k) (t : IsLimit (PullbackCo
+ne.mk _ _ comm)) : NormalMono f
+参数：comm : f ≫ h = g ≫ k；t : IsLimit (PullbackCone.mk _ _ comm)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalOfIsPullbackFstOfNormal
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: normalOfIsPullbackSndOfNormal comm.symm (PullbackCone.flipIsLimit t)
+--- 原说明 ---
+The first leg of a pullback cone is a normal monomorphism if the left component 
+is too.
 
-中文:
-定义 normalOfIsPullbackFstOfNormal
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: normalOfIsPullbackSndOfNormal comm.symm (PullbackCone.flipIsLimit t)
-
-Depends on / 依赖: Discrete, Discrete.instSubsingletonDiscreteHom, PullbackCone, PullbackCone.flipIsLimit, comm.symm, flipIsLimit, instSubsingletonDiscreteHom, normalOfIsPullbackSndOfNormal
+See also `pullback.fstOfMono` for the basic monomorphism version, and
+`normalOfIsPullbackSndOfNormal` for the flipped version.
 -/
 def normalOfIsPullbackFstOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     [NormalMono k] (comm : f ≫ h = g ≫ k) (t : IsLimit (PullbackCone.mk _ _ comm)) :
@@ -258,38 +223,22 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Transport a `NormalMono` structure via an isomorphism of arrows. -/
 @[instance_reducible]
-/--
-Definition of `NormalMono.ofArrowIso` / `NormalMono.ofArrowIso` 的定义
+/-
+**CategoryTheory.NormalMono.ofArrowIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.NormalMono`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.Limits.HasZeroMorphisms C] →       {X Y : C} →         {f : X
+ ⟶ Y} →           CategoryTheory.NormalMono f →             {X' Y' : C} →       
+        {f' : X' ⟶ Y'} → (CategoryTheory.Arrow.mk f ≅ CategoryTheory.Arrow.mk f'
+) → CategoryTheory.NormalMono f'
+参数：CategoryTheory.Arrow.mk f ≅ CategoryTheory.Arrow.mk f'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NormalMono.w`：∀ {C : Type u₁} {inst : CategoryTheory.Cate
+gory.{v₁, u₁} C} {X Y : C}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C}
+ {f : X ⟶ Y} [sel…
 
-English:
-definition NormalMono.ofArrowIso
-  signature: {X Y : C} {f : X ⟶ Y}
-  body: hf.Z
-  g := e.inv.right ≫ hf.g
-  w := by
-    have := Arrow.w e.inv
-    dsimp at this
-    rw [← reassoc_of% this]; rw [hf.w]; rw [comp_zero]
-  isLimit := by
-    refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isLimit
-    · exact parallelPair.ext (Arrow.rightFunc.mapIso e) (Iso.refl _)
-    · exact Fork.ext (Arrow.leftFunc.mapIso e)
-
-中文:
-定义 正规单态射.ofArrowIso
-  签名: {X Y : C} {f : X ⟶ Y}
-  定义体: hf.Z
-  g := e.inv.right ≫ hf.g
-  w := by
-    have := Arrow.w e.inv
-    dsimp at this
-    rw [← reassoc_of% this]; rw [hf.w]; rw [comp_zero]
-  isLimit := by
-    refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isLimit
-    · exact parallelPair.ext (Arrow.rightFunc.mapIso e) (Iso.refl _)
-    · exact Fork.ext (Arrow.leftFunc.mapIso e)
-
-Depends on / 依赖: hf.Z
+--- 原说明 ---
+Transport a `NormalMono` structure via an isomorphism of arrows.
 -/
 def NormalMono.ofArrowIso {X Y : C} {f : X ⟶ Y}
     (hf : NormalMono f) {X' Y' : C} {f' : X' ⟶ Y'} (e : Arrow.mk f ≅ Arrow.mk f') :
@@ -299,7 +248,7 @@ def NormalMono.ofArrowIso {X Y : C} {f : X ⟶ Y}
   w := by
     have := Arrow.w e.inv
     dsimp at this
-    rw [← reassoc_of% this]; rw [hf.w]; rw [comp_zero]
+    rw [← reassoc_of% this, hf.w, comp_zero]
   isLimit := by
     refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isLimit
     · exact parallelPair.ext (Arrow.rightFunc.mapIso e) (Iso.refl _)
@@ -309,23 +258,19 @@ section
 
 variable (C)
 
-/--
-Definition of `IsNormalMonoCategory` / `IsNormalMonoCategory` 的定义
+/-- A normal mono category is a category in which every monomorphism is normal. -/
+/-
+**CategoryTheory.IsNormalMonoCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：(C : Type u₁) → [inst : CategoryTheory.Category.{v₁, u₁} C] → [CategoryThe
+ory.Limits.HasZeroMorphisms C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsNormalMonoCategory
-  parameters: : Prop where
-  axioms and operations (1):
-    - normalMonoOfMono : forall {X Y : C} (f : X ⟶ Y) [Mono f], Nonempty (NormalMono f)
-
-中文:
-类 是正规单态射范畴
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - normalMonoOfMono : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f], 非空 (正规单态射 f)
+--- 原说明 ---
+A normal mono category is a category in which every monomorphism is normal.
 -/
 class IsNormalMonoCategory : Prop where
-  normalMonoOfMono : forall {X Y : C} (f : X ⟶ Y) [Mono f], Nonempty (NormalMono f)
+  normalMonoOfMono : ∀ {X Y : C} (f : X ⟶ Y) [Mono f], Nonempty (NormalMono f)
 
 attribute [inherit_doc IsNormalMonoCategory] IsNormalMonoCategory.normalMonoOfMono
 
@@ -334,24 +279,28 @@ end
 /-- In a category in which every monomorphism is normal, we can express every monomorphism as
 a kernel. This is not an instance because it would create an instance loop. -/
 @[instance_reducible]
-/--
-Definition of `normalMonoOfMono` / `normalMonoOfMono` 的定义
+/-
+**CategoryTheory.normalMonoOfMono** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：normalMonoOfMono [IsNormalMonoCategory C] (f : X ⟶ Y) [Mono f] : NormalMon
+o f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsNormalMonoCategory.normalMonoOfMono`：∀ {C : Type u₁} {i
+nst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Limits.HasZer
+oMorphisms C}   [self : CategoryTheory.IsN…
 
-English:
-definition normalMonoOfMono
-  signature: [IsNormalMonoCategory C] (f : X ⟶ Y) [Mono f]
-  body: (IsNormalMonoCategory.normalMonoOfMono _).some
-
-中文:
-定义 normalMonoOfMono
-  签名: [是正规单态射范畴 C] (f : X ⟶ Y) [单态射 f]
-  定义体: (IsNormalMonoCategory.normalMonoOfMono _).some
-
-Depends on / 依赖: IsNormalMonoCategory, IsNormalMonoCategory.normalMonoOfMono, normalMonoOfMono
+--- 原说明 ---
+In a category in which every monomorphism is normal, we can express every monomo
+rphism as
+a kernel. This is not an instance because it would create an instance loop.
 -/
 def normalMonoOfMono [IsNormalMonoCategory C] (f : X ⟶ Y) [Mono f] : NormalMono f :=
   (IsNormalMonoCategory.normalMonoOfMono _).some
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) regularMonoCategoryOfNormalMonoCategory [IsNormalMonoCategory C] :
     IsRegularMonoCategory C where
   regularMonoOfMono f _ := by
@@ -364,26 +313,16 @@ section
 
 variable [HasZeroMorphisms C]
 
-/--
-Definition of `NormalEpi` / `NormalEpi` 的定义
+/-- A normal epimorphism is a morphism which is the cokernel of some morphism. -/
+/-
+**CategoryTheory.NormalEpi** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → [CategoryTheory.Limits.HasZeroMorphisms C] → (X ⟶ Y) → Type (max u₁ v₁)
+参数：X ⟶ Y；max u₁ v₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NormalEpi
-  parameters: (f : X ⟶ Y)
-  axioms and operations (4):
-    - W : C
-    - g : W ⟶ X
-    - w : g ≫ f = 0
-    - isColimit : IsColimit (CokernelCofork.ofπ f w)
-
-中文:
-类 正规满态射
-  参数: (f : X ⟶ Y)
-  公理与运算 (4 个):
-    - W : C
-    - g : W ⟶ X
-    - w : g ≫ f = 0
-    - isColimit : 是余极限 (余核余叉.ofπ f w)
+--- 原说明 ---
+A normal epimorphism is a morphism which is the cokernel of some morphism.
 -/
 class NormalEpi (f : X ⟶ Y) where
   W : C
@@ -399,89 +338,84 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- If `F` is an equivalence and `F.map f` is a normal epi, then `f` is a normal epi. -/
 @[instance_reducible]
-/--
-Definition of `equivalenceReflectsNormalEpi` / `equivalenceReflectsNormalEpi` 的定义
+/-
+**CategoryTheory.equivalenceReflectsNormalEpi** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory`。
+形式化陈述：equivalenceReflectsNormalEpi {D : Type u₂} [Category.{v₁} D] [HasZeroMorph
+isms D] (F : C ⥤ D) [F.IsEquivalence] {X Y : C} {f : X ⟶ Y} (hf : NormalEpi (F.m
+ap f)) : NormalEpi f where W
+参数：F : C ⥤ D；hf : NormalEpi (F.map f)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-definition equivalenceReflectsNormalEpi
-  signature: {D : Type u₂} [Category.{v₁} D] [HasZeroMorphisms D] (F : C ⥤ D)
-  body: F.objPreimage hf.W
-  g := F.preimage ((F.objObjPreimageIso hf.W).hom ≫ hf.g)
-w := F.map_injective by simp [hf.w]
-isColimit := isColimitOfReflects F
-IsColimit.ofCoconeEquiv (Cocone.precomposeEquivalence (compNatIso F))
-      (IsColimit.ofIsoColimit
-        (IsCokernel.ofIsoComp _ _ (F.objObjPreimageIso hf.W).symm (by simp) hf.isColimit)
-          (Cofork.ext (Iso.refl _) (by simp [compNatIso, Cofork.π])))
-
-中文:
-定义 equivalenceReflectsNormalEpi
-  签名: {D : 类型u₂} [范畴.{v₁} D] [有ZeroMorphisms D] (F : C ⥤ D)
-  定义体: F.objPreimage hf.W
-  g := F.preimage ((F.objObjPreimageIso hf.W).hom ≫ hf.g)
-w := F.map_injective by simp [hf.w]
-isColimit := isColimitOfReflects F
-IsColimit.ofCoconeEquiv (Cocone.precomposeEquivalence (compNatIso F))
-      (IsColimit.ofIsoColimit
-        (IsCokernel.ofIsoComp _ _ (F.objObjPreimageIso hf.W).symm (by simp) hf.isColimit)
-          (Cofork.ext (Iso.refl _) (by simp [compNatIso, Cofork.π])))
-
-Depends on / 依赖: F.objPreimage, hf.W, objPreimage
+--- 原说明 ---
+If `F` is an equivalence and `F.map f` is a normal epi, then `f` is a normal epi
+.
 -/
 def equivalenceReflectsNormalEpi {D : Type u₂} [Category.{v₁} D] [HasZeroMorphisms D] (F : C ⥤ D)
     [F.IsEquivalence] {X Y : C} {f : X ⟶ Y} (hf : NormalEpi (F.map f)) : NormalEpi f where
   W := F.objPreimage hf.W
   g := F.preimage ((F.objObjPreimageIso hf.W).hom ≫ hf.g)
-w := F.map_injective by simp [hf.w]
-isColimit := isColimitOfReflects F
-IsColimit.ofCoconeEquiv (Cocone.precomposeEquivalence (compNatIso F))
+  w := F.map_injective <| by simp [hf.w]
+  isColimit := isColimitOfReflects F <|
+    IsColimit.ofCoconeEquiv (Cocone.precomposeEquivalence (compNatIso F)) <|
       (IsColimit.ofIsoColimit
         (IsCokernel.ofIsoComp _ _ (F.objObjPreimageIso hf.W).symm (by simp) hf.isColimit)
           (Cofork.ext (Iso.refl _) (by simp [compNatIso, Cofork.π])))
 
 end
 
-/--
-Definition of `NormalEpi.regularEpi` / `NormalEpi.regularEpi` 的定义
+/-- Every normal epimorphism is a regular epimorphism. -/
+/-
+**CategoryTheory.NormalEpi.regularEpi** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+NormalEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} →       [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] →         (f : X
+ ⟶ Y) → [I : CategoryTheory.NormalEpi f] → CategoryTheory.RegularEpi f
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalEpi.regularEpi
-  signature: (f : X ⟶ Y) [I : NormalEpi f]
-  body: { I with
-    left := I.g
-    right := 0
-    w := by simpa using I.w }
-
-中文:
-定义 正规满态射.regularEpi
-  签名: (f : X ⟶ Y) [I : 正规满态射 f]
-  定义体: { I with
-    left := I.g
-    right := 0
-    w := by simpa using I.w }
+--- 原说明 ---
+Every normal epimorphism is a regular epimorphism.
 -/
 def NormalEpi.regularEpi (f : X ⟶ Y) [I : NormalEpi f] : RegularEpi f :=
   { I with
     left := I.g
     right := 0
     w := by simpa using I.w }
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (f : X ⟶ Y) [I : NormalEpi f] : IsRegularEpi f := ⟨⟨I.regularEpi⟩⟩
 
-/--
-Definition of `NormalEpi.desc'` / `NormalEpi.desc'` 的定义
+/-- If `f` is a normal epi, then every morphism `k : X ⟶ W` satisfying `NormalEpi.g ≫ k = 0`
+induces `l : Y ⟶ W` such that `f ≫ l = k`. -/
+/-
+**CategoryTheory.NormalEpi.desc'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Norma
+lEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} →       [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] →         {W : C
+} →           (f : X ⟶ Y) →             [nef : CategoryTheory.NormalEpi f] →    
+           (k : X ⟶ W) →                 CategoryTheory.CategoryStruct.comp Cate
+goryTheory.NormalEpi.g k = 0 →                   { l // CategoryTheory.CategoryS
+truct.comp f l = k }
+参数：f : X ⟶ Y；k : X ⟶ W。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NormalEpi.w`：∀ {C : Type u₁} {inst : CategoryTheory.Categ
+ory.{v₁, u₁} C} {X Y : C}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C} 
+{f : X ⟶ Y} [sel…
 
-English:
-definition NormalEpi.desc'
-  signature: {W : C} (f : X ⟶ Y) [nef : NormalEpi f] (k : X ⟶ W) (h : nef.g ≫ k = 0)
-  body: CokernelCofork.IsColimit.desc' NormalEpi.isColimit _ h
-
-中文:
-定义 正规满态射.desc'
-  签名: {W : C} (f : X ⟶ Y) [nef : 正规满态射 f] (k : X ⟶ W) (h : nef.g ≫ k = 0)
-  定义体: CokernelCofork.IsColimit.desc' NormalEpi.isColimit _ h
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, NormalEpi, NormalEpi.isColimit, isColimit
+--- 原说明 ---
+If `f` is a normal epi, then every morphism `k : X ⟶ W` satisfying `NormalEpi.g 
+≫ k = 0`
+induces `l : Y ⟶ W` such that `f ≫ l = k`.
 -/
 def NormalEpi.desc' {W : C} (f : X ⟶ Y) [nef : NormalEpi f] (k : X ⟶ W) (h : nef.g ≫ k = 0) :
     { l : Y ⟶ W // f ≫ l = k } :=
@@ -493,38 +427,22 @@ See also `pushout.sndOfEpi` for the basic epimorphism version, and
 `normalOfIsPushoutFstOfNormal` for the flipped version.
 -/
 @[instance_reducible]
-/--
-Definition of `normalOfIsPushoutSndOfNormal` / `normalOfIsPushoutSndOfNormal` 的定义
+/-
+**CategoryTheory.normalOfIsPushoutSndOfNormal** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory`。
+形式化陈述：normalOfIsPushoutSndOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q 
+⟶ S} {k : R ⟶ S} [gn : NormalEpi g] (comm : f ≫ h = g ≫ k) (t : IsColimit (Pusho
+utCocone.mk _ _ comm)) : NormalEpi h where W
+参数：comm : f ≫ h = g ≫ k；t : IsColimit (PushoutCocone.mk _ _ comm)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalOfIsPushoutSndOfNormal
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: gn.W
-  g := gn.g ≫ f
-  w := by
-    have reassoc' {W : C} (h' : R ⟶ W) : gn.g ≫ g ≫ h' = 0 ≫ h' := by
-      rw [← Category.assoc]; rw [eq_whisker gn.w]
-    rw [Category.assoc]; rw [comm]; rw [reassoc']; rw [zero_comp]
-  isColimit := by
-    letI hn := regularOfIsPushoutSndOfRegular gn.regularEpi comm t
-    have q := (@zero_comp _ _ _ gn.W _ _ f).symm
-    convert! hn.isColimit
+--- 原说明 ---
+The second leg of a pushout cocone is a normal epimorphism if the right componen
+t is too.
 
-中文:
-定义 normalOfIsPushoutSndOfNormal
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: gn.W
-  g := gn.g ≫ f
-  w := by
-    have reassoc' {W : C} (h' : R ⟶ W) : gn.g ≫ g ≫ h' = 0 ≫ h' := by
-      rw [← Category.assoc]; rw [eq_whisker gn.w]
-    rw [Category.assoc]; rw [comm]; rw [reassoc']; rw [zero_comp]
-  isColimit := by
-    letI hn := regularOfIsPushoutSndOfRegular gn.regularEpi comm t
-    have q := (@zero_comp _ _ _ gn.W _ _ f).symm
-    convert! hn.isColimit
-
-Depends on / 依赖: gn.W
+See also `pushout.sndOfEpi` for the basic epimorphism version, and
+`normalOfIsPushoutFstOfNormal` for the flipped version.
 -/
 def normalOfIsPushoutSndOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     [gn : NormalEpi g] (comm : f ≫ h = g ≫ k) (t : IsColimit (PushoutCocone.mk _ _ comm)) :
@@ -533,8 +451,8 @@ def normalOfIsPushoutSndOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : 
   g := gn.g ≫ f
   w := by
     have reassoc' {W : C} (h' : R ⟶ W) : gn.g ≫ g ≫ h' = 0 ≫ h' := by
-      rw [← Category.assoc]; rw [eq_whisker gn.w]
-    rw [Category.assoc]; rw [comm]; rw [reassoc']; rw [zero_comp]
+      rw [← Category.assoc, eq_whisker gn.w]
+    rw [Category.assoc, comm, reassoc', zero_comp]
   isColimit := by
     letI hn := regularOfIsPushoutSndOfRegular gn.regularEpi comm t
     have q := (@zero_comp _ _ _ gn.W _ _ f).symm
@@ -546,20 +464,22 @@ See also `pushout.fstOfEpi` for the basic epimorphism version, and
 `normalOfIsPushoutSndOfNormal` for the flipped version.
 -/
 @[instance_reducible]
-/--
-Definition of `normalOfIsPushoutFstOfNormal` / `normalOfIsPushoutFstOfNormal` 的定义
+/-
+**CategoryTheory.normalOfIsPushoutFstOfNormal** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory`。
+形式化陈述：normalOfIsPushoutFstOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q 
+⟶ S} {k : R ⟶ S} [NormalEpi f] (comm : f ≫ h = g ≫ k) (t : IsColimit (PushoutCoc
+one.mk _ _ comm)) : NormalEpi k
+参数：comm : f ≫ h = g ≫ k；t : IsColimit (PushoutCocone.mk _ _ comm)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalOfIsPushoutFstOfNormal
-  signature: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  body: normalOfIsPushoutSndOfNormal comm.symm (PushoutCocone.flipIsColimit t)
+--- 原说明 ---
+The first leg of a pushout cocone is a normal epimorphism if the left component 
+is too.
 
-中文:
-定义 normalOfIsPushoutFstOfNormal
-  签名: {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
-  定义体: normalOfIsPushoutSndOfNormal comm.symm (PushoutCocone.flipIsColimit t)
-
-Depends on / 依赖: PushoutCocone, PushoutCocone.flipIsColimit, comm.symm, flipIsColimit, normalOfIsPushoutSndOfNormal
+See also `pushout.fstOfEpi` for the basic epimorphism version, and
+`normalOfIsPushoutSndOfNormal` for the flipped version.
 -/
 def normalOfIsPushoutFstOfNormal {P Q R S : C} {f : P ⟶ Q} {g : P ⟶ R} {h : Q ⟶ S} {k : R ⟶ S}
     [NormalEpi f] (comm : f ≫ h = g ≫ k) (t : IsColimit (PushoutCocone.mk _ _ comm)) :
@@ -576,38 +496,22 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Transport a `NormalEpi` structure via an isomorphism of arrows. -/
 @[instance_reducible]
-/--
-Definition of `NormalEpi.ofArrowIso` / `NormalEpi.ofArrowIso` 的定义
+/-
+**CategoryTheory.NormalEpi.ofArrowIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+NormalEpi`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.Limits.HasZeroMorphisms C] →       {X Y : C} →         {f : X
+ ⟶ Y} →           CategoryTheory.NormalEpi f →             {X' Y' : C} →        
+       {f' : X' ⟶ Y'} → (CategoryTheory.Arrow.mk f ≅ CategoryTheory.Arrow.mk f')
+ → CategoryTheory.NormalEpi f'
+参数：CategoryTheory.Arrow.mk f ≅ CategoryTheory.Arrow.mk f'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NormalEpi.w`：∀ {C : Type u₁} {inst : CategoryTheory.Categ
+ory.{v₁, u₁} C} {X Y : C}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C} 
+{f : X ⟶ Y} [sel…
 
-English:
-definition NormalEpi.ofArrowIso
-  signature: {X Y : C} {f : X ⟶ Y}
-  body: hf.W
-  g := hf.g ≫ e.hom.left
-  w := by
-    have := Arrow.w e.hom
-    dsimp at this
-    rw [Category.assoc]; rw [this]; rw [reassoc_of% hf.w]; rw [zero_comp]
-  isColimit := by
-    refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isColimit
-    · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc.mapIso e)
-    · exact Cofork.ext (Arrow.rightFunc.mapIso e) (by simp [Cofork.π])
-
-中文:
-定义 正规满态射.ofArrowIso
-  签名: {X Y : C} {f : X ⟶ Y}
-  定义体: hf.W
-  g := hf.g ≫ e.hom.left
-  w := by
-    have := Arrow.w e.hom
-    dsimp at this
-    rw [Category.assoc]; rw [this]; rw [reassoc_of% hf.w]; rw [zero_comp]
-  isColimit := by
-    refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isColimit
-    · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc.mapIso e)
-    · exact Cofork.ext (Arrow.rightFunc.mapIso e) (by simp [Cofork.π])
-
-Depends on / 依赖: hf.W
+--- 原说明 ---
+Transport a `NormalEpi` structure via an isomorphism of arrows.
 -/
 def NormalEpi.ofArrowIso {X Y : C} {f : X ⟶ Y}
     (hf : NormalEpi f) {X' Y' : C} {f' : X' ⟶ Y'} (e : Arrow.mk f ≅ Arrow.mk f') :
@@ -617,7 +521,7 @@ def NormalEpi.ofArrowIso {X Y : C} {f : X ⟶ Y}
   w := by
     have := Arrow.w e.hom
     dsimp at this
-    rw [Category.assoc]; rw [this]; rw [reassoc_of% hf.w]; rw [zero_comp]
+    rw [Category.assoc, this, reassoc_of% hf.w, zero_comp]
   isColimit := by
     refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isColimit
     · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc.mapIso e)
@@ -627,46 +531,17 @@ def NormalEpi.ofArrowIso {X Y : C} {f : X ⟶ Y}
 set_option backward.defeqAttrib.useBackward true in
 /-- A normal mono becomes a normal epi in the opposite category. -/
 @[instance_reducible]
-/--
-Definition of `normalEpiOfNormalMonoUnop` / `normalEpiOfNormalMonoUnop` 的定义
+/-
+**CategoryTheory.normalEpiOfNormalMonoUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：normalEpiOfNormalMonoUnop {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalMono f.unop) 
+: NormalEpi f where W
+参数：f : X ⟶ Y；m : NormalMono f.unop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalEpiOfNormalMonoUnop
-  signature: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalMono f.unop)
-  body: op m.Z
-  g := m.g.op
-  w := congrArg Quiver.Hom.op m.w
-  isColimit :=
-    CokernelCofork.IsColimit.ofπ _ _
-      (fun g' w' =>
-        (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
-      (fun g' w' =>
-        congrArg Quiver.Hom.op
-          (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).2)
-      (by
-        rintro Z' g' w' m' rfl
-        apply Quiver.Hom.unop_inj
-        apply m.isLimit.uniq (KernelFork.ofι (m'.unop ≫ f.unop) _) m'.unop
-        rintro (⟨⟩ | ⟨⟩) <;> simp)
-
-中文:
-定义 normalEpiOfNormalMonoUnop
-  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : 正规单态射 f.unop)
-  定义体: op m.Z
-  g := m.g.op
-  w := congrArg Quiver.Hom.op m.w
-  isColimit :=
-    CokernelCofork.IsColimit.ofπ _ _
-      (fun g' w' =>
-        (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
-      (fun g' w' =>
-        congrArg Quiver.Hom.op
-          (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).2)
-      (by
-        rintro Z' g' w' m' rfl
-        apply Quiver.Hom.unop_inj
-        apply m.isLimit.uniq (KernelFork.ofι (m'.unop ≫ f.unop) _) m'.unop
-        rintro (⟨⟩ | ⟨⟩) <;> simp)
+--- 原说明 ---
+A normal mono becomes a normal epi in the opposite category.
 -/
 def normalEpiOfNormalMonoUnop {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalMono f.unop) : NormalEpi f where
   W := op m.Z
@@ -688,46 +563,17 @@ def normalEpiOfNormalMonoUnop {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalMono f.un
 set_option backward.defeqAttrib.useBackward true in
 /-- A normal epi becomes a normal mono in the opposite category. -/
 @[instance_reducible]
-/--
-Definition of `normalMonoOfNormalEpiUnop` / `normalMonoOfNormalEpiUnop` 的定义
+/-
+**CategoryTheory.normalMonoOfNormalEpiUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：normalMonoOfNormalEpiUnop {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalEpi f.unop) :
+ NormalMono f where Z
+参数：f : X ⟶ Y；m : NormalEpi f.unop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normalMonoOfNormalEpiUnop
-  signature: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalEpi f.unop)
-  body: op m.W
-  g := m.g.op
-  w := congrArg Quiver.Hom.op m.w
-  isLimit :=
-    KernelFork.IsLimit.ofι _ _
-      (fun g' w' =>
-        (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
-      (fun g' w' =>
-        congrArg Quiver.Hom.op
-          (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).2)
-      (by
-        rintro Z' g' w' m' rfl
-        apply Quiver.Hom.unop_inj
-        apply m.isColimit.uniq (CokernelCofork.ofπ (f.unop ≫ m'.unop) _) m'.unop
-        rintro (⟨⟩ | ⟨⟩) <;> simp)
-
-中文:
-定义 normalMonoOfNormalEpiUnop
-  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : 正规满态射 f.unop)
-  定义体: op m.W
-  g := m.g.op
-  w := congrArg Quiver.Hom.op m.w
-  isLimit :=
-    KernelFork.IsLimit.ofι _ _
-      (fun g' w' =>
-        (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
-      (fun g' w' =>
-        congrArg Quiver.Hom.op
-          (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).2)
-      (by
-        rintro Z' g' w' m' rfl
-        apply Quiver.Hom.unop_inj
-        apply m.isColimit.uniq (CokernelCofork.ofπ (f.unop ≫ m'.unop) _) m'.unop
-        rintro (⟨⟩ | ⟨⟩) <;> simp)
+--- 原说明 ---
+A normal epi becomes a normal mono in the opposite category.
 -/
 def normalMonoOfNormalEpiUnop {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalEpi f.unop) : NormalMono f where
   Z := op m.W
@@ -750,23 +596,19 @@ section
 
 variable (C)
 
-/--
-Definition of `IsNormalEpiCategory` / `IsNormalEpiCategory` 的定义
+/-- A normal epi category is a category in which every epimorphism is normal. -/
+/-
+**CategoryTheory.IsNormalEpiCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory
+`。
+形式化陈述：(C : Type u₁) → [inst : CategoryTheory.Category.{v₁, u₁} C] → [CategoryThe
+ory.Limits.HasZeroMorphisms C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsNormalEpiCategory
-  parameters: : Prop where
-  axioms and operations (1):
-    - normalEpiOfEpi : forall {X Y : C} (f : X ⟶ Y) [Epi f], Nonempty (NormalEpi f)
-
-中文:
-类 是正规满态射范畴
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - normalEpiOfEpi : 对任意 {X Y : C} (f : X ⟶ Y) [满态射 f], 非空 (正规满态射 f)
+--- 原说明 ---
+A normal epi category is a category in which every epimorphism is normal.
 -/
 class IsNormalEpiCategory : Prop where
-  normalEpiOfEpi : forall {X Y : C} (f : X ⟶ Y) [Epi f], Nonempty (NormalEpi f)
+  normalEpiOfEpi : ∀ {X Y : C} (f : X ⟶ Y) [Epi f], Nonempty (NormalEpi f)
 
 attribute [inherit_doc IsNormalEpiCategory] IsNormalEpiCategory.normalEpiOfEpi
 
@@ -775,24 +617,27 @@ end
 /-- In a category in which every epimorphism is normal, we can express every epimorphism as
 a kernel. This is not an instance because it would create an instance loop. -/
 @[instance_reducible]
-/--
-Definition of `normalEpiOfEpi` / `normalEpiOfEpi` 的定义
+/-
+**CategoryTheory.normalEpiOfEpi** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：normalEpiOfEpi [IsNormalEpiCategory C] (f : X ⟶ Y) [Epi f] : NormalEpi f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsNormalEpiCategory.normalEpiOfEpi`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Limits.HasZeroMo
+rphisms C}   [self : CategoryTheory.IsN…
 
-English:
-definition normalEpiOfEpi
-  signature: [IsNormalEpiCategory C] (f : X ⟶ Y) [Epi f]
-  body: (IsNormalEpiCategory.normalEpiOfEpi _).some
-
-中文:
-定义 normalEpiOfEpi
-  签名: [是正规满态射范畴 C] (f : X ⟶ Y) [满态射 f]
-  定义体: (IsNormalEpiCategory.normalEpiOfEpi _).some
-
-Depends on / 依赖: IsNormalEpiCategory, IsNormalEpiCategory.normalEpiOfEpi, normalEpiOfEpi
+--- 原说明 ---
+In a category in which every epimorphism is normal, we can express every epimorp
+hism as
+a kernel. This is not an instance because it would create an instance loop.
 -/
 def normalEpiOfEpi [IsNormalEpiCategory C] (f : X ⟶ Y) [Epi f] : NormalEpi f :=
   (IsNormalEpiCategory.normalEpiOfEpi _).some
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) regularEpiCategoryOfNormalEpiCategory [IsNormalEpiCategory C] :
     IsRegularEpiCategory C where
   regularEpiOfEpi f _ := by
@@ -800,3 +645,4 @@ instance (priority := 100) regularEpiCategoryOfNormalEpiCategory [IsNormalEpiCat
     infer_instance
 
 end CategoryTheory
+

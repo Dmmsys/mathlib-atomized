@@ -32,124 +32,108 @@ open Filter Topology
 variable {R : Type*} [CommRing R]
 
 /--
-Definition of `powMulProdOneSubPow` / `powMulProdOneSubPow` 的定义
+We define an auxiliary sequence
 
-English:
-definition powMulProdOneSubPow
-  signature: (k n : Nat) (x : R)
-  body: x ^ ((k + 1) * n) * ∏ i in Finset.range (n + 1), (1 - x ^ (k + i + 1))
+$$ a_{k, n} = x^{(k+1)n} \prod_{i=0}^{n} (1 - x^{k + i + 1}) $$
 
-中文:
-定义 powMulProdOneSubPow
-  签名: (k n : 自然数) (x : R)
-  定义体: x ^ ((k + 1) * n) * ∏ i in Finset.range (n + 1), (1 - x ^ (k + i + 1))
+We will also use its sum
 
-Depends on / 依赖: Finset, Finset.range
+$$ A_k = \sum_{n=0}^{\infty} a_{k, n} $$ -/
+/-
+**Pentagonal.powMulProdOneSubPow** 是 Mathlib 中的一个定义，位于命名空间 `Pentagonal`。
+形式化陈述：powMulProdOneSubPow (k n : Nat) (x : R) : R
+参数：k n : Nat；x : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We define an auxiliary sequence
+
+$$ a_{k, n} = x^{(k+1)n} \prod_{i=0}^{n} (1 - x^{k + i + 1}) $$
+
+We will also use its sum
+
+$$ A_k = \sum_{n=0}^{\infty} a_{k, n} $$
 -/
-def powMulProdOneSubPow (k n : Nat) (x : R) : R :=
-  x ^ ((k + 1) * n) * ∏ i in Finset.range (n + 1), (1 - x ^ (k + i + 1))
+def powMulProdOneSubPow (k n : ℕ) (x : R) : R :=
+  x ^ ((k + 1) * n) * ∏ i ∈ Finset.range (n + 1), (1 - x ^ (k + i + 1))
 
-/--
-Definition of `aux` / `aux` 的定义
+/-- And a second auxiliary sequence
 
-English:
-definition aux
-  signature: (k n : Nat) (x : R)
-  body: x ^ ((k + 1) * n) * (x ^ (2 * k + n + 3) - 1) * ∏ i in Finset.range n, (1 - x ^ (k + i + 2))
+$$ b_{k, n} = x^{(k+1)n} (x^{2k + n + 3} - 1) \prod_{i=0}^{n-1} (1 - x^{k + i + 2}) $$ -/
+/-
+**Pentagonal.aux** 是 Mathlib 中的一个定义，位于命名空间 `Pentagonal`。
+形式化陈述：aux (k n : Nat) (x : R) : R
+参数：k n : Nat；x : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 aux
-  签名: (k n : 自然数) (x : R)
-  定义体: x ^ ((k + 1) * n) * (x ^ (2 * k + n + 3) - 1) * ∏ i in Finset.range n, (1 - x ^ (k + i + 2))
+--- 原说明 ---
+And a second auxiliary sequence
 
-Depends on / 依赖: Finset, Finset.range
+$$ b_{k, n} = x^{(k+1)n} (x^{2k + n + 3} - 1) \prod_{i=0}^{n-1} (1 - x^{k + i + 
+2}) $$
 -/
-def aux (k n : Nat) (x : R) : R :=
-  x ^ ((k + 1) * n) * (x ^ (2 * k + n + 3) - 1) * ∏ i in Finset.range n, (1 - x ^ (k + i + 2))
+def aux (k n : ℕ) (x : R) : R :=
+  x ^ ((k + 1) * n) * (x ^ (2 * k + n + 3) - 1) * ∏ i ∈ Finset.range n, (1 - x ^ (k + i + 2))
 
-/--
-theorem `aux_sub_aux` / 定理 `aux_sub_aux`
+/-- `powMulProdOneSubPow` and `aux` have relation
 
-English:
-theorem aux_sub_aux
-  given: (k n : Nat) (x : R)
-  proof: by
-  simp_rw [aux, Finset.prod_range_succ, powMulProdOneSubPow]
-  rw [Finset.prod_range_succ']; rw [Finset.prod_range_succ]
-  ring_nf
+$$ a_{k,n} + x^{3k + 5}a_{k + 1, n} = b_{k, n+1} - b_{k, n} $$ -/
+/-
+**Pentagonal.aux_sub_aux** 是 Mathlib 中的一个定理，位于命名空间 `Pentagonal`。
+形式化陈述：aux_sub_aux (k n : Nat) (x : R) : powMulProdOneSubPow k n x + x ^ (3 * k +
+ 5) * powMulProdOneSubPow (k + 1) n x = aux k (n + 1) x - aux k n x
+参数：k n : Nat；x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 aux_sub_aux
-  条件: (k n : 自然数) (x : R)
-  证明: by
-  simp_rw [aux, Finset.prod_range_succ, powMulProdOneSubPow]
-  rw [Finset.prod_range_succ']; rw [Finset.prod_range_succ]
-  ring_nf
+--- 原说明 ---
+`powMulProdOneSubPow` and `aux` have relation
 
-Depends on / 依赖: Finset, Finset.prod_range_succ, powMulProdOneSubPow, prod_range_succ, ring_nf, simp_rw
+$$ a_{k,n} + x^{3k + 5}a_{k + 1, n} = b_{k, n+1} - b_{k, n} $$
 -/
-theorem aux_sub_aux (k n : Nat) (x : R) :
+theorem aux_sub_aux (k n : ℕ) (x : R) :
     powMulProdOneSubPow k n x + x ^ (3 * k + 5) * powMulProdOneSubPow (k + 1) n x =
     aux k (n + 1) x - aux k n x := by
   simp_rw [aux, Finset.prod_range_succ, powMulProdOneSubPow]
-  rw [Finset.prod_range_succ']; rw [Finset.prod_range_succ]
+  rw [Finset.prod_range_succ', Finset.prod_range_succ]
   ring_nf
 
 variable [TopologicalSpace R] [IsTopologicalRing R] [T2Space R]
 
-/--
-theorem `tsum_powMulProdOneSubPow` / 定理 `tsum_powMulProdOneSubPow`
+/-- By summing with telescoping, we get a recurrence formula for $A$
 
-English:
-theorem tsum_powMulProdOneSubPow
-  statement: (k : Nat) {x : R} (hx : IsTopologicallyNilpotent x)
-  proof: by
-  rw [eq_sub_iff_add_eq]; rw [show 1 - x ^ (2 * k + 3) = 0 - aux k 0 x by simp [aux]]
-  rw [← (hsum _).tsum_mul_left]; rw [← (hsum _).tsum_add ((hsum _).mul_left _)]
-  apply HasSum.tsum_eq
-  rw [((hsum _).add ((hsum _).mul_left _)).hasSum_iff_tendsto_nat]
-  simp_rw [aux_sub_aux, Finset.sum_range_sub (aux k · x)]
-  apply Tendsto.sub_const
-  rw [show 𝓝 0 = 𝓝 (0 * (0 - 1) * ∏' i]; rw [(1 - x ^ (k + i + 2))) by simp]
-  refine (Tendsto.mul ?_ ?_).mul ?_
-  · exact hx.comp (strictMono_mul_left_of_pos (by simp)).tendsto_atTop
-  · exact (hx.comp (add_right_strictMono.add_monotone monotone_const).tendsto_atTop).sub_const _
-  · apply Multipliable.tendsto_prod_tprod_nat
-    convert h (k + 1) using 4
-    ring
-
-中文:
-定理 tsum_powMulProdOneSubPow
-  结论: (k : 自然数) {x : R} (hx : IsTopologicallyNilpotent x)
-  证明: by
-  rw [eq_sub_iff_add_eq]; rw [show 1 - x ^ (2 * k + 3) = 0 - aux k 0 x by simp [aux]]
-  rw [← (hsum _).tsum_mul_left]; rw [← (hsum _).tsum_add ((hsum _).mul_left _)]
-  apply HasSum.tsum_eq
-  rw [((hsum _).add ((hsum _).mul_left _)).hasSum_iff_tendsto_nat]
-  simp_rw [aux_sub_aux, Finset.sum_range_sub (aux k · x)]
-  apply Tendsto.sub_const
-  rw [show 𝓝 0 = 𝓝 (0 * (0 - 1) * ∏' i]; rw [(1 - x ^ (k + i + 2))) by simp]
-  refine (Tendsto.mul ?_ ?_).mul ?_
-  · exact hx.comp (strictMono_mul_left_of_pos (by simp)).tendsto_atTop
-  · exact (hx.comp (add_right_strictMono.add_monotone monotone_const).tendsto_atTop).sub_const _
-  · apply Multipliable.tendsto_prod_tprod_nat
-    convert h (k + 1) using 4
-    ring
-
-Depends on / 依赖: Finset, Finset.sum_range_sub, HasSum, HasSum.tsum_eq, Tendsto, Tendsto.mul, Tendsto.sub_const, aux_sub_aux, eq_sub_iff_add_eq, hasSum_iff_tendsto_nat, hx.comp, mul_left, simp_rw, strictMono_mul_left_of_pos, sub_const, sum_range_sub, tsum_add, tsum_eq, tsum_mul_left
+$$ A_k = 1 - x^{2k + 3} - x^{3k + 5}A_{k + 1} $$
 -/
-theorem tsum_powMulProdOneSubPow (k : Nat) {x : R} (hx : IsTopologicallyNilpotent x)
-    (hsum : forall k, Summable (powMulProdOneSubPow k · x))
-    (h : forall k, Multipliable (fun n => 1 - x ^ (n + k + 1))) :
+/-
+**Pentagonal.tsum_powMulProdOneSubPow** 是 Mathlib 中的一个定理，位于命名空间 `Pentagonal`。
+形式化陈述：tsum_powMulProdOneSubPow (k : Nat) {x : R} (hx : IsTopologicallyNilpotent 
+x) (hsum : forall k, Summable (powMulProdOneSubPow k · x)) (h : forall k, Multip
+liable (fun n => 1 - x ^ (n + k + 1))) : ∑' n, powMulProdOneSubPow k n x = 1 - x
+ ^ (2 * k + 3) - x ^ (3 * k + 5) * ∑' n, powMulProdOneSubPow (k + 1) n x
+参数：k : Nat；hx : IsTopologicallyNilpotent x；hsum : forall k, Summable (powMulProd
+OneSubPow k · x)；h : forall k, Multipliable (fun n => 1 - x ^ (n + k + 1))。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+By summing with telescoping, we get a recurrence formula for $A$
+
+$$ A_k = 1 - x^{2k + 3} - x^{3k + 5}A_{k + 1} $$
+-/
+theorem tsum_powMulProdOneSubPow (k : ℕ) {x : R} (hx : IsTopologicallyNilpotent x)
+    (hsum : ∀ k, Summable (powMulProdOneSubPow k · x))
+    (h : ∀ k, Multipliable (fun n ↦ 1 - x ^ (n + k + 1))) :
     ∑' n, powMulProdOneSubPow k n x =
       1 - x ^ (2 * k + 3) - x ^ (3 * k + 5) * ∑' n, powMulProdOneSubPow (k + 1) n x := by
-  rw [eq_sub_iff_add_eq]; rw [show 1 - x ^ (2 * k + 3) = 0 - aux k 0 x by simp [aux]]
-  rw [← (hsum _).tsum_mul_left]; rw [← (hsum _).tsum_add ((hsum _).mul_left _)]
+  rw [eq_sub_iff_add_eq, show 1 - x ^ (2 * k + 3) = 0 - aux k 0 x by simp [aux]]
+  rw [← (hsum _).tsum_mul_left, ← (hsum _).tsum_add ((hsum _).mul_left _)]
   apply HasSum.tsum_eq
   rw [((hsum _).add ((hsum _).mul_left _)).hasSum_iff_tendsto_nat]
   simp_rw [aux_sub_aux, Finset.sum_range_sub (aux k · x)]
   apply Tendsto.sub_const
-  rw [show 𝓝 0 = 𝓝 (0 * (0 - 1) * ∏' i]; rw [(1 - x ^ (k + i + 2))) by simp]
+  rw [show 𝓝 0 = 𝓝 (0 * (0 - 1) * ∏' i, (1 - x ^ (k + i + 2))) by simp]
   refine (Tendsto.mul ?_ ?_).mul ?_
   · exact hx.comp (strictMono_mul_left_of_pos (by simp)).tendsto_atTop
   · exact (hx.comp (add_right_strictMono.add_monotone monotone_const).tendsto_atTop).sub_const _
@@ -157,121 +141,77 @@ theorem tsum_powMulProdOneSubPow (k : Nat) {x : R} (hx : IsTopologicallyNilpoten
     convert h (k + 1) using 4
     ring
 
-/--
-theorem `tprod_one_sub_pow_eq_powMulProdOneSubPow_zero` / 定理 `tprod_one_sub_pow_eq_powMulProdOneSubPow_zero`
+/-- The Euler function is related to $A_0$ by
 
-English:
-theorem tprod_one_sub_pow_eq_powMulProdOneSubPow_zero
-  statement: {x : R}
-  proof: by
-  have hsum := hsum 0
-  simp_rw [powMulProdOneSubPow, zero_add, one_mul] at hsum
-  have hsum' : Summable fun i => x ^ (i + 1) * ∏ n in Finset.range i, (1 - x ^ (n + 1)) := by
-    apply Summable.comp_nat_add (k := 1)
-    conv in fun k => _ =>
-      ext k
-      rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [mul_assoc (x ^ 1 * x ^ 1)]
-    exact hsum.mul_left _
-  rw [tprod_one_sub_ordered (by simpa [Nat.Iio_eq_range] using hsum') (by simpa using h 0)]
-  simp_rw [Nat.Iio_eq_range, sub_sub, sub_right_inj, hsum'.tsum_eq_zero_add]
-  conv in fun k => x ^ (k + 1 + 1) * _ =>
-    ext k
-    rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [← pow_add x 1 1]; rw [one_add_one_eq_two]; rw [mul_assoc (x ^ 2)]
-  simp [hsum.tsum_mul_left, powMulProdOneSubPow]
+$$ \prod_{n = 0}^{\infty} (1 - x^{n + 1}) = 1 - x - x^2 A_0 $$ -/
+/-
+**Pentagonal.tprod_one_sub_pow_eq_powMulProdOneSubPow_zero** 是 Mathlib 中的一个定理，位于
+命名空间 `Pentagonal`。
+形式化陈述：tprod_one_sub_pow_eq_powMulProdOneSubPow_zero {x : R} (hsum : forall k, Su
+mmable (powMulProdOneSubPow k · x)) (h : forall k, Multipliable fun n => 1 - x ^
+ (n + k + 1)) : ∏' n, (1 - x ^ (n + 1)) = 1 - x - x ^ 2 * ∑' n, powMulProdOneSub
+Pow 0 n x
+参数：hsum : forall k, Summable (powMulProdOneSubPow k · x)；h : forall k, Multiplia
+ble fun n => 1 - x ^ (n + k + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 tprod_one_sub_pow_eq_powMulProdOneSubPow_zero
-  结论: {x : R}
-  证明: by
-  have hsum := hsum 0
-  simp_rw [powMulProdOneSubPow, zero_add, one_mul] at hsum
-  have hsum' : Summable fun i => x ^ (i + 1) * ∏ n in Finset.range i, (1 - x ^ (n + 1)) := by
-    apply Summable.comp_nat_add (k := 1)
-    conv in fun k => _ =>
-      ext k
-      rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [mul_assoc (x ^ 1 * x ^ 1)]
-    exact hsum.mul_left _
-  rw [tprod_one_sub_ordered (by simpa [Nat.Iio_eq_range] using hsum') (by simpa using h 0)]
-  simp_rw [Nat.Iio_eq_range, sub_sub, sub_right_inj, hsum'.tsum_eq_zero_add]
-  conv in fun k => x ^ (k + 1 + 1) * _ =>
-    ext k
-    rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [← pow_add x 1 1]; rw [one_add_one_eq_two]; rw [mul_assoc (x ^ 2)]
-  simp [hsum.tsum_mul_left, powMulProdOneSubPow]
+--- 原说明 ---
+The Euler function is related to $A_0$ by
 
-Depends on / 依赖: Finset, Finset.range, Iio_eq_range, Nat.Iio_eq_range, Summable, Summable.comp_nat_add, comp_nat_add, hsum.mul_left, mul_assoc, mul_comm, mul_left, one_mul, powMulProdOneSubPow, pow_add, simp_rw, sub_right, sub_sub, tprod_one_sub_ordered, zero_add
+$$ \prod_{n = 0}^{\infty} (1 - x^{n + 1}) = 1 - x - x^2 A_0 $$
 -/
 theorem tprod_one_sub_pow_eq_powMulProdOneSubPow_zero {x : R}
-    (hsum : forall k, Summable (powMulProdOneSubPow k · x))
-    (h : forall k, Multipliable fun n => 1 - x ^ (n + k + 1)) :
+    (hsum : ∀ k, Summable (powMulProdOneSubPow k · x))
+    (h : ∀ k, Multipliable fun n ↦ 1 - x ^ (n + k + 1)) :
     ∏' n, (1 - x ^ (n + 1)) = 1 - x - x ^ 2 * ∑' n, powMulProdOneSubPow 0 n x := by
   have hsum := hsum 0
   simp_rw [powMulProdOneSubPow, zero_add, one_mul] at hsum
-  have hsum' : Summable fun i => x ^ (i + 1) * ∏ n in Finset.range i, (1 - x ^ (n + 1)) := by
+  have hsum' : Summable fun i ↦ x ^ (i + 1) * ∏ n ∈ Finset.range i, (1 - x ^ (n + 1)) := by
     apply Summable.comp_nat_add (k := 1)
-    conv in fun k => _ =>
+    conv in fun k ↦ _ =>
       ext k
-      rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [mul_assoc (x ^ 1 * x ^ 1)]
+      rw [pow_add, pow_add, mul_assoc (x ^ k), mul_comm (x ^ k), mul_assoc (x ^ 1 * x ^ 1)]
     exact hsum.mul_left _
   rw [tprod_one_sub_ordered (by simpa [Nat.Iio_eq_range] using hsum') (by simpa using h 0)]
   simp_rw [Nat.Iio_eq_range, sub_sub, sub_right_inj, hsum'.tsum_eq_zero_add]
-  conv in fun k => x ^ (k + 1 + 1) * _ =>
+  conv in fun k ↦ x ^ (k + 1 + 1) * _ =>
     ext k
-    rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [← pow_add x 1 1]; rw [one_add_one_eq_two]; rw [mul_assoc (x ^ 2)]
+    rw [pow_add, pow_add, mul_assoc (x ^ k), mul_comm (x ^ k),
+      ← pow_add x 1 1, one_add_one_eq_two, mul_assoc (x ^ 2)]
   simp [hsum.tsum_mul_left, powMulProdOneSubPow]
 
-/--
-theorem `tprod_one_sub_pow_eq_powMulProdOneSubPow` / 定理 `tprod_one_sub_pow_eq_powMulProdOneSubPow`
+/-- Applying the recurrence formula repeatedly, we get
 
-English:
-theorem tprod_one_sub_pow_eq_powMulProdOneSubPow
-  statement: (j : Nat) {x : R} (hx : IsTopologicallyNilpotent x)
-  proof: by
-  induction j with
-  | zero =>
-    simp [tprod_one_sub_pow_eq_powMulProdOneSubPow_zero hsum h, powMulProdOneSubPow,
-      ← sub_eq_add_neg]
-  | succ n ih =>
-    rw [ih]; rw [tsum_powMulProdOneSubPow _ hx hsum h]; rw [Finset.sum_range_succ _ (n + 1)]
-    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 2) / 2 =
-        (n + 1) * (3 * n + 4) / 2 + (2 * n + 3) := by
-      rw [← Nat.add_mul_div_left _ _ (by simp)]
-      ring_nf
-    simp_rw [h]
-    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 4) / 2 =
-        (n + 1) * (3 * n + 4) / 2 + (3 * n + 5) := by
-      rw [← Nat.add_mul_div_left _ _ (by simp)]
-      ring_nf
-    simp_rw [h]
-    ring_nf
+$$ \prod_{n = 0}^{\infty} (1 - x^{n + 1}) =
+\left(\sum_{k=0}^{j} (-1)^k \left(x^{k(3k+1)/2} - x^{(k+1)(3k+2)/2}\right) \right) +
+(-1)^{j+1}x^{(j+1)(3j+4)/2}A_j $$ -/
+/-
+**Pentagonal.tprod_one_sub_pow_eq_powMulProdOneSubPow** 是 Mathlib 中的一个定理，位于命名空间 
+`Pentagonal`。
+形式化陈述：tprod_one_sub_pow_eq_powMulProdOneSubPow (j : Nat) {x : R} (hx : IsTopolog
+icallyNilpotent x) (hsum : forall k, Summable (powMulProdOneSubPow k · x)) (h : 
+forall k, Multipliable (fun n => 1 - x ^ (n + k + 1))) : ∏' n, (1 - x ^ (n + 1))
+ = ∑ k in Finset.range (j + 1), (-1) ^ k * (x ^ (k * (3 * k + 1) / 2) - x ^ ((k 
++ 1) * (3 * k + 2) / 2)) + (-1) ^ (j + 1) * x ^ ((j + 1) * (3 * j + 4) / 2) * ∑'
+ n, powMulProdOneSubPow j n x
+参数：j : Nat；hx : IsTopologicallyNilpotent x；hsum : forall k, Summable (powMulProd
+OneSubPow k · x)；h : forall k, Multipliable (fun n => 1 - x ^ (n + k + 1))。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 tprod_one_sub_pow_eq_powMulProdOneSubPow
-  结论: (j : 自然数) {x : R} (hx : IsTopologicallyNilpotent x)
-  证明: by
-  induction j with
-  | zero =>
-    simp [tprod_one_sub_pow_eq_powMulProdOneSubPow_zero hsum h, powMulProdOneSubPow,
-      ← sub_eq_add_neg]
-  | succ n ih =>
-    rw [ih]; rw [tsum_powMulProdOneSubPow _ hx hsum h]; rw [Finset.sum_range_succ _ (n + 1)]
-    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 2) / 2 =
-        (n + 1) * (3 * n + 4) / 2 + (2 * n + 3) := by
-      rw [← Nat.add_mul_div_left _ _ (by simp)]
-      ring_nf
-    simp_rw [h]
-    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 4) / 2 =
-        (n + 1) * (3 * n + 4) / 2 + (3 * n + 5) := by
-      rw [← Nat.add_mul_div_left _ _ (by simp)]
-      ring_nf
-    simp_rw [h]
-    ring_nf
+--- 原说明 ---
+Applying the recurrence formula repeatedly, we get
 
-Depends on / 依赖: Finset, Finset.sum_range_succ, Nat.a, Nat.add_mul_div_left, add_mul_div_left, powMulProdOneSubPow, ring_nf, simp_rw, sub_eq_add_neg, sum_range_succ, tprod_one_sub_pow_eq_powMulProdOneSubPow_zero, tsum_powMulProdOneSubPow
+$$ \prod_{n = 0}^{\infty} (1 - x^{n + 1}) =
+\left(\sum_{k=0}^{j} (-1)^k \left(x^{k(3k+1)/2} - x^{(k+1)(3k+2)/2}\right) \righ
+t) +
+(-1)^{j+1}x^{(j+1)(3j+4)/2}A_j $$
 -/
-theorem tprod_one_sub_pow_eq_powMulProdOneSubPow (j : Nat) {x : R} (hx : IsTopologicallyNilpotent x)
-    (hsum : forall k, Summable (powMulProdOneSubPow k · x))
-    (h : forall k, Multipliable (fun n => 1 - x ^ (n + k + 1))) :
-    ∏' n, (1 - x ^ (n + 1)) = ∑ k in Finset.range (j + 1),
+theorem tprod_one_sub_pow_eq_powMulProdOneSubPow (j : ℕ) {x : R} (hx : IsTopologicallyNilpotent x)
+    (hsum : ∀ k, Summable (powMulProdOneSubPow k · x))
+    (h : ∀ k, Multipliable (fun n ↦ 1 - x ^ (n + k + 1))) :
+    ∏' n, (1 - x ^ (n + 1)) = ∑ k ∈ Finset.range (j + 1),
       (-1) ^ k * (x ^ (k * (3 * k + 1) / 2) - x ^ ((k + 1) * (3 * k + 2) / 2))
       + (-1) ^ (j + 1) * x ^ ((j + 1) * (3 * j + 4) / 2) * ∑' n, powMulProdOneSubPow j n x := by
   induction j with
@@ -279,7 +219,7 @@ theorem tprod_one_sub_pow_eq_powMulProdOneSubPow (j : Nat) {x : R} (hx : IsTopol
     simp [tprod_one_sub_pow_eq_powMulProdOneSubPow_zero hsum h, powMulProdOneSubPow,
       ← sub_eq_add_neg]
   | succ n ih =>
-    rw [ih]; rw [tsum_powMulProdOneSubPow _ hx hsum h]; rw [Finset.sum_range_succ _ (n + 1)]
+    rw [ih, tsum_powMulProdOneSubPow _ hx hsum h, Finset.sum_range_succ _ (n + 1)]
     have h (n) : (n + 1 + 1) * (3 * (n + 1) + 2) / 2 =
         (n + 1) * (3 * n + 4) / 2 + (2 * n + 3) := by
       rw [← Nat.add_mul_div_left _ _ (by simp)]
@@ -297,25 +237,26 @@ theorem tprod_one_sub_pow_eq_powMulProdOneSubPow (j : Nat) {x : R} (hx : IsTopol
 $$ \prod_{n = 0}^{\infty} (1 - x^{n + 1}) =
 \sum_{k=0}^{\infty} (-1)^k \left(x^{k(3k+1)/2} - x^{(k+1)(3k+2)/2}\right) $$ -/
 public theorem tprod_one_sub_pow {x : R} (hx : IsTopologicallyNilpotent x)
-    (hsum : forall k, Summable
-      (fun n => x ^ ((k + 1) * n) * ∏ i in Finset.range (n + 1), (1 - x ^ (k + i + 1))))
-    (hlhs : forall k, Multipliable (fun n => 1 - x ^ (n + k + 1)))
-    (hrhs : Summable fun k : Nat =>
+    (hsum : ∀ k, Summable
+      (fun n ↦ x ^ ((k + 1) * n) * ∏ i ∈ Finset.range (n + 1), (1 - x ^ (k + i + 1))))
+    (hlhs : ∀ k, Multipliable (fun n ↦ 1 - x ^ (n + k + 1)))
+    (hrhs : Summable fun k : ℕ ↦
       (-1) ^ k * (x ^ pentagonal (-k) - x ^ pentagonal (k + 1)))
-    (htail : Tendsto (fun k => (-1) ^ (k + 1) * x ^ ((k + 1) * (3 * k + 4) / 2) *
-      ∑' (n : Nat), x ^ ((k + 1) * n) * ∏ i in Finset.range (n + 1), (1 - x ^ (k + i + 1)))
+    (htail : Tendsto (fun k ↦ (-1) ^ (k + 1) * x ^ ((k + 1) * (3 * k + 4) / 2) *
+      ∑' (n : ℕ), x ^ ((k + 1) * n) * ∏ i ∈ Finset.range (n + 1), (1 - x ^ (k + i + 1)))
       atTop (𝓝 0)) :
     ∏' n, (1 - x ^ (n + 1)) =
-      ∑' (k : Nat), (-1) ^ k * (x ^ pentagonal (-k) - x ^ pentagonal (k + 1)) := by
-  have h := fun n => tprod_one_sub_pow_eq_powMulProdOneSubPow n hx hsum hlhs
+      ∑' (k : ℕ), (-1) ^ k * (x ^ pentagonal (-k) - x ^ pentagonal (k + 1)) := by
+  have h := fun n ↦ tprod_one_sub_pow_eq_powMulProdOneSubPow n hx hsum hlhs
   simp_rw [← sub_eq_iff_eq_add] at h
   refine (HasSum.tsum_eq ?_).symm
-  rw [hrhs.hasSum_iff_tendsto_nat]; rw [(map_add_atTop_eq_nat 1).symm]
+  rw [hrhs.hasSum_iff_tendsto_nat, (map_add_atTop_eq_nat 1).symm]
   apply tendsto_map'
-  have h1 (k : Nat) : pentagonal (k + 1) = ((k + 1) * (3 * k + 2) / 2) := by grind [pentagonal_def]
-  have h2 (k : Nat) : pentagonal (-k) = (k * (3 * k + 1) / 2) := by grind [pentagonal_neg]
+  have h1 (k : ℕ) : pentagonal (k + 1) = ((k + 1) * (3 * k + 2) / 2) := by grind [pentagonal_def]
+  have h2 (k : ℕ) : pentagonal (-k) = (k * (3 * k + 1) / 2) := by grind [pentagonal_neg]
   simp_rw [h1, h2, Function.comp_def, ← h]
   rw [← tendsto_sub_nhds_zero_iff]
   simpa [powMulProdOneSubPow] using htail.neg
 
 end Pentagonal
+

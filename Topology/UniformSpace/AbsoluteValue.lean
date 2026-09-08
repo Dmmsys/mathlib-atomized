@@ -37,45 +37,40 @@ variable {R : Type*} [CommRing R] (abv : AbsoluteValue R 𝕜)
 
 /-- The uniform structure coming from an absolute value. -/
 @[instance_reducible]
-/--
-Definition of `uniformSpace` / `uniformSpace` 的定义
+/-
+**AbsoluteValue.uniformSpace** 是 Mathlib 中的一个定义，位于命名空间 `AbsoluteValue`。
+形式化陈述：uniformSpace : UniformSpace R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniformSpace
-  signature: : UniformSpace R
-  body: .ofFun (fun x y => abv (y - x)) (by simp) (fun x y => abv.map_sub y x)
-    (fun _ _ _ => (abv.sub_le _ _ _).trans_eq (add_comm _ _))
-    fun ε ε0 => ⟨ε / 2, half_pos ε0, fun _ h₁ _ h₂ => (add_lt_add h₁ h₂).trans_eq (add_halves ε)⟩
-
-中文:
-定义 uniformSpace
-  签名: : 一致空间 R
-  定义体: .ofFun (fun x y => abv (y - x)) (by simp) (fun x y => abv.map_sub y x)
-    (fun _ _ _ => (abv.sub_le _ _ _).trans_eq (add_comm _ _))
-    fun ε ε0 => ⟨ε / 2, half_pos ε0, fun _ h₁ _ h₂ => (add_lt_add h₁ h₂).trans_eq (add_halves ε)⟩
-
-Depends on / 依赖: abv.map_sub, abv.sub_le, add_comm, add_halves, add_lt_add, half_pos, map_sub, sub_le, trans_eq
+--- 原说明 ---
+The uniform structure coming from an absolute value.
 -/
 def uniformSpace : UniformSpace R :=
   .ofFun (fun x y => abv (y - x)) (by simp) (fun x y => abv.map_sub y x)
     (fun _ _ _ => (abv.sub_le _ _ _).trans_eq (add_comm _ _))
     fun ε ε0 => ⟨ε / 2, half_pos ε0, fun _ h₁ _ h₂ => (add_lt_add h₁ h₂).trans_eq (add_halves ε)⟩
-
-/--
-theorem `hasBasis_uniformity` / 定理 `hasBasis_uniformity`
-
-English:
-theorem hasBasis_uniformity
-  proof: UniformSpace.hasBasis_ofFun (exists_gt _) _ _ _ _ _
-
-中文:
-定理 hasBasis_uniformity
-  证明: UniformSpace.hasBasis_ofFun (exists_gt _) _ _ _ _ _
-
-Depends on / 依赖: UniformSpace, UniformSpace.hasBasis_ofFun, exists_gt, hasBasis_ofFun
+/-
+**AbsoluteValue.hasBasis_uniformity** 是 Mathlib 中的一个定理，位于命名空间 `AbsoluteValue`。
+形式化陈述：hasBasis_uniformity : 𝓤[abv.uniformSpace].HasBasis ((0 : 𝕜) < ·) fun ε => 
+{ p : R × R | abv (p.2 - p.1) < ε }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.hasBasis_ofFun`：hasBasis_ofFun [AddCommMonoid M] [LinearOrd
+er M] (h₀ : exists x : M, 0 < x) (d : X -> X -> M) (refl : forall x, d x x = 0) 
+(symm : forall x …
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
 theorem hasBasis_uniformity :
     𝓤[abv.uniformSpace].HasBasis ((0 : 𝕜) < ·) fun ε => { p : R × R | abv (p.2 - p.1) < ε } :=
   UniformSpace.hasBasis_ofFun (exists_gt _) _ _ _ _ _
 
 end AbsoluteValue
+

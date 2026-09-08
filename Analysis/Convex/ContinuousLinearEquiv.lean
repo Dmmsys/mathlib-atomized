@@ -25,55 +25,57 @@ variable {𝕜 E F : Type*}
 namespace ContinuousLinearEquiv
 
 @[simp]
-/--
-lemma `strictConvex_preimage` / 引理 `strictConvex_preimage`
-
-English:
-lemma strictConvex_preimage
-  given: {s : Set F} (e : E ≃L[𝕜] F)
-  proof: ⟨fun h => Function.LeftInverse.preimage_preimage e.right_inv s ▸
-    h.linear_preimage e.symm.toLinearMap e.symm.continuous e.symm.injective,
-    fun h => h.linear_preimage e.toLinearMap e.continuous e.injective⟩
-
-@[simp]
-
-中文:
-引理 strictConvex_preimage
-  条件: {s : 集合 F} (e : E ≃L[𝕜] F)
-  证明: ⟨fun h => Function.LeftInverse.preimage_preimage e.right_inv s ▸
-    h.linear_preimage e.symm.toLinearMap e.symm.continuous e.symm.injective,
-    fun h => h.linear_preimage e.toLinearMap e.continuous e.injective⟩
-
-@[simp]
-
-Depends on / 依赖: Function, Function.LeftInverse.preimage_preimage, LeftInverse, continuous, e.continuous, e.injective, e.right_inv, e.symm.continuous, e.symm.injective, e.symm.toLinearMap, e.toLinearMap, h.linear_preimage, injective, linear_preimage, preimage_preimage, right_inv, toLinearMap
+/-
+**ContinuousLinearEquiv.strictConvex_preimage** 是 Mathlib 中的一个引理，位于命名空间 `Continu
+ousLinearEquiv`。
+形式化陈述：strictConvex_preimage {s : Set F} (e : E ≃L[𝕜] F) : StrictConvex 𝕜 (e ⁻¹' 
+s) ↔ StrictConvex 𝕜 s
+参数：e : E ≃L[𝕜] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictConvex.linear_preimage`：StrictConvex.linear_preimage {s : Set F} (
+hs : StrictConvex 𝕜 s) (f : E ->ₗ[𝕜] F) (hf : Continuous f) (hfinj : Injective f
+) : StrictConvex 𝕜…
+· 使用定理 `ContinuousLinearEquiv.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [ins
+t : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {σ₂₁ : R₂ →+* R₁}   [i
+nst_2 : RingHomInvPair…
+· 使用定理 `ContinuousLinearEquiv.injective`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst
+ : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {σ₂₁ : R₂ →+* R₁}   [in
+st_2 : RingHomInvPair…
+· 使用定理 `Function.LeftInverse.preimage_preimage`：∀ {α : Type u_1} {β : Type u_2} 
+{f : α → β} {g : β → α}, Function.LeftInverse g f → ∀ (s : Set α), f ⁻¹' g ⁻¹' s
+ = s
+· 使用定理 `LinearEquiv.right_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semirin
+g R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPa
+ir σ σ'] [i…
 -/
 lemma strictConvex_preimage {s : Set F} (e : E ≃L[𝕜] F) :
     StrictConvex 𝕜 (e ⁻¹' s) ↔ StrictConvex 𝕜 s :=
-  ⟨fun h => Function.LeftInverse.preimage_preimage e.right_inv s ▸
+  ⟨fun h ↦ Function.LeftInverse.preimage_preimage e.right_inv s ▸
     h.linear_preimage e.symm.toLinearMap e.symm.continuous e.symm.injective,
-    fun h => h.linear_preimage e.toLinearMap e.continuous e.injective⟩
+    fun h ↦ h.linear_preimage e.toLinearMap e.continuous e.injective⟩
 
 @[simp]
-/--
-lemma `strictConvex_image` / 引理 `strictConvex_image`
-
-English:
-lemma strictConvex_image
-  given: {s : Set E} (e : E ≃L[𝕜] F)
-  proof: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.strictConvex_preimage]
-
-中文:
-引理 strictConvex_image
-  条件: {s : 集合 E} (e : E ≃L[𝕜] F)
-  证明: by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.strictConvex_preimage]
-
-Depends on / 依赖: e.image_eq_preimage_symm, e.symm.strictConvex_preimage, image_eq_preimage_symm, strictConvex_preimage
+/-
+**ContinuousLinearEquiv.strictConvex_image** 是 Mathlib 中的一个引理，位于命名空间 `Continuous
+LinearEquiv`。
+形式化陈述：strictConvex_image {s : Set E} (e : E ≃L[𝕜] F) : StrictConvex 𝕜 (e '' s) ↔
+ StrictConvex 𝕜 s
+参数：e : E ≃L[𝕜] F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearEquiv.image_eq_preimage_symm`：∀ {R₁ : Type u_1} {R₂ : Ty
+pe u_2} [inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {σ₂₁ : R₂ 
+→+* R₁}   [inst_2 : RingHomInvPair…
+· 使用引理 `ContinuousLinearEquiv.strictConvex_preimage`：strictConvex_preimage {s : 
+Set F} (e : E ≃L[𝕜] F) : StrictConvex 𝕜 (e ⁻¹' s) ↔ StrictConvex 𝕜 s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma strictConvex_image {s : Set E} (e : E ≃L[𝕜] F) :
     StrictConvex 𝕜 (e '' s) ↔ StrictConvex 𝕜 s := by
-  rw [e.image_eq_preimage_symm]; rw [e.symm.strictConvex_preimage]
+  rw [e.image_eq_preimage_symm, e.symm.strictConvex_preimage]
 
 end ContinuousLinearEquiv
+

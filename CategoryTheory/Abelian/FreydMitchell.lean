@@ -88,117 +88,71 @@ variable {C : Type u} [Category.{v} C] [Abelian C]
 namespace FreydMitchell
 
 open ZeroObject in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nonempty (AsSmall.{max u v} C)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 非空 (AsSmall.{最大值 u v} C)
-  定义体: ⟨0⟩
+/-
+**CategoryTheory.Abelian.FreydMitchell.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nonempty (AsSmall.{max u v} C) := ⟨0⟩
 
 variable (C) in
-/--
-Definition of `EmbeddingRing` / `EmbeddingRing` 的定义
+/-- Given an abelian category `C`, this is a ring such that there is a full, faithful and exact
+embedding `C ⥤ ModuleCat (EmbeddingRing C)`.
 
-English:
-definition EmbeddingRing
-  signature: : Type (max u v)
-  body: IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
-    (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
+It is probably not a good idea to unfold this. -/
+/-
+**CategoryTheory.Abelian.FreydMitchell.EmbeddingRing** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Abelian.FreydMitchell`。
+形式化陈述：EmbeddingRing : Type (max u v)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 EmbeddingRing
-  签名: : 类型 (最大值 u v)
-  定义体: IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
-    (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
+--- 原说明 ---
+Given an abelian category `C`, this is a ring such that there is a full, faithfu
+l and exact
+embedding `C ⥤ ModuleCat (EmbeddingRing C)`.
 
-Depends on / 依赖: AsSmall, EmbeddingRing, Ind.yoneda, IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing, OppositeModuleEmbedding, rightOp, yoneda
+It is probably not a good idea to unfold this.
 -/
 def EmbeddingRing : Type (max u v) :=
   IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
     (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Ring (EmbeddingRing C)
-  body: inferInstanceAs Ring
-    IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
-      (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
-
-中文:
-实例 :
-  签名: 环 (EmbeddingRing C)
-  定义体: inferInstanceAs Ring
-    IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
-      (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
-
-Depends on / 依赖: AsSmall, EmbeddingRing, Ind.yoneda, IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing, OppositeModuleEmbedding, rightOp, yoneda
+/-
+**CategoryTheory.Abelian.FreydMitchell.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Ring (EmbeddingRing C) :=
-inferInstanceAs Ring
+  inferInstanceAs <| Ring <|
     IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
       (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
 
 set_option backward.privateInPublic true in
 variable (C) in
-/--
-Definition of `F` / `F` 的定义
-
-English:
-definition F
-  signature: : C ⥤ AsSmall.{max u v} C
-  body: AsSmall.equiv.functor
-
-中文:
-定义 F
-  签名: : C ⥤ AsSmall.{最大值 u v} C
-  定义体: AsSmall.equiv.functor
+/-
+**CategoryTheory.Abelian.FreydMitchell.F** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def F : C ⥤ AsSmall.{max u v} C :=
   AsSmall.equiv.functor
 
 set_option backward.privateInPublic true in
 variable (C) in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def G
-  body: Ind.yoneda.rightOp
-
-中文:
-定义 noncomputable
-  签名: def G
-  定义体: Ind.yoneda.rightOp
+/-
+**CategoryTheory.Abelian.FreydMitchell.G** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private noncomputable def G : AsSmall.{max u v} C ⥤ (Ind (AsSmall.{max u v} C)ᵒᵖ)ᵒᵖ :=
   Ind.yoneda.rightOp
 
 set_option backward.privateInPublic true in
 variable (C) in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def H
-  body: IsGrothendieckAbelian.OppositeModuleEmbedding.embedding (G C)
-
-中文:
-定义 noncomputable
-  签名: def H
-  定义体: IsGrothendieckAbelian.OppositeModuleEmbedding.embedding (G C)
+/-
+**CategoryTheory.Abelian.FreydMitchell.H** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private noncomputable def H :
     (Ind (AsSmall.{max u v} C)ᵒᵖ)ᵒᵖ ⥤ ModuleCat.{max u v} (EmbeddingRing C) :=
@@ -207,46 +161,30 @@ private noncomputable def H :
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 variable (C) in
-/--
-Definition of `functor` / `functor` 的定义
+/-- This is the full, faithful and exact embedding `C ⥤ ModuleCat (EmbeddingRing C)`. The fact that
+such a functor exists is called the Freyd-Mitchell embedding theorem.
 
-English:
-definition functor
-  signature: : C ⥤ ModuleCat.{max u v} (EmbeddingRing C)
-  body: F C ⋙ G C ⋙ H C
+It is probably not a good idea to unfold this. -/
+/-
+**CategoryTheory.Abelian.FreydMitchell.functor** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Abelian.FreydMitchell`。
+形式化陈述：functor : C ⥤ ModuleCat.{max u v} (EmbeddingRing C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 functor
-  签名: : C ⥤ 模范畴.{最大值 u v} (EmbeddingRing C)
-  定义体: F C ⋙ G C ⋙ H C
+--- 原说明 ---
+This is the full, faithful and exact embedding `C ⥤ ModuleCat (EmbeddingRing C)`
+. The fact that
+such a functor exists is called the Freyd-Mitchell embedding theorem.
+
+It is probably not a good idea to unfold this.
 -/
 noncomputable def functor : C ⥤ ModuleCat.{max u v} (EmbeddingRing C) :=
   F C ⋙ G C ⋙ H C
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (functor C).Faithful
-  body: by
-  rw [functor]
-  have : (F C).Faithful := by rw [F]; infer_instance
-  have : (G C).Faithful := by rw [G]; infer_instance
-  have : (H C).Faithful := IsGrothendieckAbelian.OppositeModuleEmbedding.faithful_embedding _
-  infer_instance
-
-中文:
-实例 :
-  签名: (functor C).忠实
-  定义体: by
-  rw [functor]
-  have : (F C).Faithful := by rw [F]; infer_instance
-  have : (G C).Faithful := by rw [G]; infer_instance
-  have : (H C).Faithful := IsGrothendieckAbelian.OppositeModuleEmbedding.faithful_embedding _
-  infer_instance
-
-Depends on / 依赖: Faithful, IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.faithful_embedding, OppositeModuleEmbedding, faithful_embedding, functor, infer_instance
+/-
+**CategoryTheory.Abelian.FreydMitchell.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (functor C).Faithful := by
   rw [functor]
@@ -254,31 +192,10 @@ instance : (functor C).Faithful := by
   have : (G C).Faithful := by rw [G]; infer_instance
   have : (H C).Faithful := IsGrothendieckAbelian.OppositeModuleEmbedding.faithful_embedding _
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (functor C).Full
-  body: by
-  rw [functor]
-  have : (F C).Full := by rw [F]; infer_instance
-  have : (G C).Full := by rw [G]; infer_instance
-  have : (G C ⋙ H C).Full := IsGrothendieckAbelian.OppositeModuleEmbedding.full_embedding _
-  infer_instance
-
-中文:
-实例 :
-  签名: (functor C).满
-  定义体: by
-  rw [functor]
-  have : (F C).Full := by rw [F]; infer_instance
-  have : (G C).Full := by rw [G]; infer_instance
-  have : (G C ⋙ H C).Full := IsGrothendieckAbelian.OppositeModuleEmbedding.full_embedding _
-  infer_instance
-
-Depends on / 依赖: IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.full_embedding, OppositeModuleEmbedding, full_embedding, functor, infer_instance
+/-
+**CategoryTheory.Abelian.FreydMitchell.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (functor C).Full := by
   rw [functor]
@@ -286,33 +203,10 @@ instance : (functor C).Full := by
   have : (G C).Full := by rw [G]; infer_instance
   have : (G C ⋙ H C).Full := IsGrothendieckAbelian.OppositeModuleEmbedding.full_embedding _
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteLimits (functor C)
-  body: by
-  rw [functor]
-  have : PreservesFiniteLimits (F C) := by rw [F]; infer_instance
-  have : PreservesFiniteLimits (G C) := by rw [G]; apply preservesFiniteLimits_rightOp
-  have : PreservesFiniteLimits (H C) :=
-    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteLimits_embedding _
-  infer_instance
-
-中文:
-实例 :
-  签名: 保持FiniteLimits (functor C)
-  定义体: by
-  rw [functor]
-  have : PreservesFiniteLimits (F C) := by rw [F]; infer_instance
-  have : PreservesFiniteLimits (G C) := by rw [G]; apply preservesFiniteLimits_rightOp
-  have : PreservesFiniteLimits (H C) :=
-    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteLimits_embedding _
-  infer_instance
-
-Depends on / 依赖: IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteLimits_embedding, OppositeModuleEmbedding, PreservesFiniteLimits, functor, infer_instance, preservesFiniteLimits_embedding, preservesFiniteLimits_rightOp
+/-
+**CategoryTheory.Abelian.FreydMitchell.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteLimits (functor C) := by
   rw [functor]
@@ -321,33 +215,10 @@ instance : PreservesFiniteLimits (functor C) := by
   have : PreservesFiniteLimits (H C) :=
     IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteLimits_embedding _
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteColimits (functor C)
-  body: by
-  rw [functor]
-  have : PreservesFiniteColimits (F C) := by rw [F]; infer_instance
-  have : PreservesFiniteColimits (G C) := by rw [G]; apply preservesFiniteColimits_rightOp
-  have : PreservesFiniteColimits (H C) :=
-    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embedding _
-  infer_instance
-
-中文:
-实例 :
-  签名: 保持FiniteColimits (functor C)
-  定义体: by
-  rw [functor]
-  have : PreservesFiniteColimits (F C) := by rw [F]; infer_instance
-  have : PreservesFiniteColimits (G C) := by rw [G]; apply preservesFiniteColimits_rightOp
-  have : PreservesFiniteColimits (H C) :=
-    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embedding _
-  infer_instance
-
-Depends on / 依赖: IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embedding, OppositeModuleEmbedding, PreservesFiniteColimits, functor, infer_instance, preservesFiniteColimits_embedding, preservesFiniteColimits_rightOp
+/-
+**CategoryTheory.Abelian.FreydMitchell.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Abelian.FreydMitchell`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteColimits (functor C) := by
   rw [functor]
@@ -362,24 +233,39 @@ end FreydMitchell
 /-- The Freyd-Mitchell embedding theorem. See also `FreydMitchell.functor` for a functor which
 has the relevant instances. -/
 @[stacks 05PP]
-/--
-theorem `freyd_mitchell` / 定理 `freyd_mitchell`
+/-
+**CategoryTheory.Abelian.freyd_mitchell** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Abelian`。
+形式化陈述：freyd_mitchell (C : Type u) [Category.{v} C] [Abelian C] : exists (R : Typ
+e (max u v)) (_ : Ring R) (F : C ⥤ ModuleCat.{max u v} R), F.Full ∧ F.Faithful ∧
+ PreservesFiniteLimits F ∧ PreservesFiniteColimits F
+参数：C : Type u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Abelian.FreydMitchell.instFullModuleCatEmbeddingRingFunct
+or`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryT
+heory.Abelian C],   (CategoryTheory.Abelian.FreydMitchell.functo…
+· 使用定理 `CategoryTheory.Abelian.FreydMitchell.instFaithfulModuleCatEmbeddingRingF
+unctor`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categ
+oryTheory.Abelian C],   (CategoryTheory.Abelian.FreydMitchell.functo…
+· 使用定理 `CategoryTheory.Abelian.FreydMitchell.instPreservesFiniteLimitsModuleCatE
+mbeddingRingFunctor`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [i
+nst_1 : CategoryTheory.Abelian C],   CategoryTheory.Limits.PreservesFiniteLimits
+ …
+· 使用定理 `CategoryTheory.Abelian.FreydMitchell.instPreservesFiniteColimitsModuleCa
+tEmbeddingRingFunctor`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] 
+[inst_1 : CategoryTheory.Abelian C],   CategoryTheory.Limits.PreservesFiniteColi
+mit…
 
-English:
-theorem freyd_mitchell
-  given: (C : Type u) [Category.{v} C] [Abelian C]
-  proof: ⟨_, _, FreydMitchell.functor C, inferInstance, inferInstance, inferInstance, inferInstance⟩
-
-中文:
-定理 freyd_mitchell
-  条件: (C : 类型u) [范畴.{v} C] [交换 C]
-  证明: ⟨_, _, FreydMitchell.functor C, inferInstance, inferInstance, inferInstance, inferInstance⟩
-
-Depends on / 依赖: FreydMitchell, FreydMitchell.functor, functor
+--- 原说明 ---
+The Freyd-Mitchell embedding theorem. See also `FreydMitchell.functor` for a fun
+ctor which
+has the relevant instances.
 -/
 theorem freyd_mitchell (C : Type u) [Category.{v} C] [Abelian C] :
-    exists (R : Type (max u v)) (_ : Ring R) (F : C ⥤ ModuleCat.{max u v} R),
+    ∃ (R : Type (max u v)) (_ : Ring R) (F : C ⥤ ModuleCat.{max u v} R),
       F.Full ∧ F.Faithful ∧ PreservesFiniteLimits F ∧ PreservesFiniteColimits F :=
   ⟨_, _, FreydMitchell.functor C, inferInstance, inferInstance, inferInstance, inferInstance⟩
 
 end CategoryTheory.Abelian
+

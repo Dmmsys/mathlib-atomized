@@ -22,125 +22,129 @@ namespace Polynomial
 
 universe u v
 
-variable {R : Type u} {S : Type v} {a b c d : R} {n m : Nat}
+variable {R : Type u} {S : Type v} {a b c d : R} {n m : ℕ}
 
 section Semiring
 
 variable [Semiring R] {p q r : R[X]}
 
-/--
-theorem `eq_X_add_C_of_degree_le_one` / 定理 `eq_X_add_C_of_degree_le_one`
-
-English:
-theorem eq_X_add_C_of_degree_le_one
-  given: (h : degree p <= 1)
-  statement: p = C (p.coeff 1) * X + C (p.coeff 0)
-  proof: ext fun n =>
-    Nat.casesOn n (by simp) fun n =>
-      Nat.casesOn n (by simp) fun m => by
-        have : degree p < m.succ.succ := lt_of_le_of_lt h Nat.one_lt_ofNat
-        simp [coeff_eq_zero_of_degree_lt this]
-
-中文:
-定理 eq_X_add_C_of_degree_le_one
-  条件: (h : degree p <= 1)
-  结论: p = C (p.coeff 1) * X + C (p.coeff 0)
-  证明: ext fun n =>
-    Nat.casesOn n (by simp) fun n =>
-      Nat.casesOn n (by simp) fun m => by
-        have : degree p < m.succ.succ := lt_of_le_of_lt h Nat.one_lt_ofNat
-        simp [coeff_eq_zero_of_degree_lt this]
-
-Depends on / 依赖: Nat.casesOn, Nat.one_lt_ofNat, casesOn, coeff_eq_zero_of_degree_lt, degree, lt_of_le_of_lt, m.succ.succ, one_lt_ofNat
+/-
+**Polynomial.eq_X_add_C_of_degree_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eq_X_add_C_of_degree_le_one (h : degree p <= 1) : p = C (p.coeff 1) * X + 
+C (p.coeff 0)
+参数：h : degree p <= 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.ext`：ext {p q : R[X]} : (forall n, coeff p n = coeff q n) -> 
+p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.coeff_add`：coeff_add (p q : R[X]) (n : Nat) : coeff (p + q) n
+ = coeff p n + coeff q n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.mul_coeff_zero`：mul_coeff_zero (p q : R[X]) : coeff (p * q) 0
+ = coeff p 0 * coeff q 0
+· 使用定理 `Polynomial.coeff_C_zero`：coeff_C_zero : coeff (C a) 0 = a
+· 使用定理 `Polynomial.coeff_X_zero`：coeff_X_zero : coeff (X : R[X]) 0 = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.coeff_mul_X`：coeff_mul_X (p : R[X]) (n : Nat) : coeff (p * X)
+ (n + 1) = coeff p n
+· 使用引理 `Polynomial.coeff_C_succ`：coeff_C_succ {r : R} {n : Nat} : coeff (C r) (n
+ + 1) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Nat.one_lt_ofNat`：one_lt_ofNat : 1 < (ofNat(n) : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Polynomial.coeff_eq_zero_of_degree_lt`：coeff_eq_zero_of_degree_lt (h : d
+egree p < n) : coeff p n = 0
 -/
-theorem eq_X_add_C_of_degree_le_one (h : degree p <= 1) : p = C (p.coeff 1) * X + C (p.coeff 0) :=
+theorem eq_X_add_C_of_degree_le_one (h : degree p ≤ 1) : p = C (p.coeff 1) * X + C (p.coeff 0) :=
   ext fun n =>
     Nat.casesOn n (by simp) fun n =>
       Nat.casesOn n (by simp) fun m => by
         have : degree p < m.succ.succ := lt_of_le_of_lt h Nat.one_lt_ofNat
         simp [coeff_eq_zero_of_degree_lt this]
-
-/--
-theorem `eq_X_add_C_of_degree_eq_one` / 定理 `eq_X_add_C_of_degree_eq_one`
-
-English:
-theorem eq_X_add_C_of_degree_eq_one
-  given: (h : degree p = 1)
-  proof: (eq_X_add_C_of_degree_le_one h.le).trans
-    (by rw [← Nat.cast_one] at h; rw [leadingCoeff, natDegree_eq_of_degree_eq_some h])
-
-中文:
-定理 eq_X_add_C_of_degree_eq_one
-  条件: (h : degree p = 1)
-  证明: (eq_X_add_C_of_degree_le_one h.le).trans
-    (by rw [← Nat.cast_one] at h; rw [leadingCoeff, natDegree_eq_of_degree_eq_some h])
-
-Depends on / 依赖: Nat.cast_one, cast_one, eq_X_add_C_of_degree_le_one, h.le, leadingCoeff, natDegree_eq_of_degree_eq_some
+/-
+**Polynomial.eq_X_add_C_of_degree_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eq_X_add_C_of_degree_eq_one (h : degree p = 1) : p = C p.leadingCoeff * X 
++ C (p.coeff 0)
+参数：h : degree p = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.eq_X_add_C_of_degree_le_one`：eq_X_add_C_of_degree_le_one (h :
+ degree p <= 1) : p = C (p.coeff 1) * X + C (p.coeff 0)
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.leadingCoeff.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Po
+lynomial R), p.leadingCoeff = p.coeff p.natDegree
+· 使用定理 `Polynomial.natDegree_eq_of_degree_eq_some`：natDegree_eq_of_degree_eq_som
+e {p : R[X]} {n : Nat} (h : degree p = n) : natDegree p = n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 -/
 theorem eq_X_add_C_of_degree_eq_one (h : degree p = 1) :
     p = C p.leadingCoeff * X + C (p.coeff 0) :=
   (eq_X_add_C_of_degree_le_one h.le).trans
     (by rw [← Nat.cast_one] at h; rw [leadingCoeff, natDegree_eq_of_degree_eq_some h])
-
-/--
-theorem `eq_X_add_C_of_natDegree_le_one` / 定理 `eq_X_add_C_of_natDegree_le_one`
-
-English:
-theorem eq_X_add_C_of_natDegree_le_one
-  given: (h : natDegree p <= 1)
-  proof: eq_X_add_C_of_degree_le_one degree_le_of_natDegree_le h
-
-中文:
-定理 eq_X_add_C_of_natDegree_le_one
-  条件: (h : natDegree p <= 1)
-  证明: eq_X_add_C_of_degree_le_one degree_le_of_natDegree_le h
-
-Depends on / 依赖: degree_le_of_natDegree_le, eq_X_add_C_of_degree_le_one
+/-
+**Polynomial.eq_X_add_C_of_natDegree_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomia
+l`。
+形式化陈述：eq_X_add_C_of_natDegree_le_one (h : natDegree p <= 1) : p = C (p.coeff 1) 
+* X + C (p.coeff 0)
+参数：h : natDegree p <= 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eq_X_add_C_of_degree_le_one`：eq_X_add_C_of_degree_le_one (h :
+ degree p <= 1) : p = C (p.coeff 1) * X + C (p.coeff 0)
+· 使用定理 `Polynomial.degree_le_of_natDegree_le`：∀ {R : Type u} [inst : Semiring R]
+ {p : Polynomial R} {n : ℕ}, p.natDegree ≤ n → p.degree ≤ ↑n
 -/
-theorem eq_X_add_C_of_natDegree_le_one (h : natDegree p <= 1) :
+theorem eq_X_add_C_of_natDegree_le_one (h : natDegree p ≤ 1) :
     p = C (p.coeff 1) * X + C (p.coeff 0) :=
-eq_X_add_C_of_degree_le_one degree_le_of_natDegree_le h
-
-/--
-theorem `Monic.eq_X_add_C` / 定理 `Monic.eq_X_add_C`
-
-English:
-theorem Monic.eq_X_add_C
-  given: (hm : p.Monic) (hnd : p.natDegree = 1)
-  statement: p = X + C (p.coeff 0)
-  proof: by
-  rw [← one_mul X]; rw [← C_1]; rw [← hm.coeff_natDegree]; rw [hnd]; rw [← eq_X_add_C_of_natDegree_le_one hnd.le]
-
-中文:
-定理 Monic.eq_X_add_C
-  条件: (hm : p.Monic) (hnd : p.natDegree = 1)
-  结论: p = X + C (p.coeff 0)
-  证明: by
-  rw [← one_mul X]; rw [← C_1]; rw [← hm.coeff_natDegree]; rw [hnd]; rw [← eq_X_add_C_of_natDegree_le_one hnd.le]
-
-Depends on / 依赖: coeff_natDegree, eq_X_add_C_of_natDegree_le_one, hm.coeff_natDegree, hnd.le, one_mul
+  eq_X_add_C_of_degree_le_one <| degree_le_of_natDegree_le h
+/-
+**Polynomial.Monic.eq_X_add_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial.Monic`。
+形式化陈述：∀ {R : Type u} [inst : Semiring R] {p : Polynomial R},   p.Monic → p.natDe
+gree = 1 → p = Polynomial.X + Polynomial.C (p.coeff 0)
+参数：p.coeff 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Polynomial.C_1`：C_1 : C (1 : R) = 1
+· 使用定理 `Polynomial.Monic.coeff_natDegree`：∀ {R : Type u} [inst : Semiring R] {p 
+: Polynomial R}, p.Monic → p.coeff p.natDegree = 1
+· 使用定理 `Polynomial.eq_X_add_C_of_natDegree_le_one`：eq_X_add_C_of_natDegree_le_on
+e (h : natDegree p <= 1) : p = C (p.coeff 1) * X + C (p.coeff 0)
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
 theorem Monic.eq_X_add_C (hm : p.Monic) (hnd : p.natDegree = 1) : p = X + C (p.coeff 0) := by
-  rw [← one_mul X]; rw [← C_1]; rw [← hm.coeff_natDegree]; rw [hnd]; rw [← eq_X_add_C_of_natDegree_le_one hnd.le]
-
-/--
-theorem `exists_eq_X_add_C_of_natDegree_le_one` / 定理 `exists_eq_X_add_C_of_natDegree_le_one`
-
-English:
-theorem exists_eq_X_add_C_of_natDegree_le_one
-  given: (h : natDegree p <= 1)
-  statement: exists a b, p = C a * X + C b
-  proof: ⟨p.coeff 1, p.coeff 0, eq_X_add_C_of_natDegree_le_one h⟩
-
-中文:
-定理 存在_eq_X_add_C_of_natDegree_le_one
-  条件: (h : natDegree p <= 1)
-  结论: 存在 a b, p = C a * X + C b
-  证明: ⟨p.coeff 1, p.coeff 0, eq_X_add_C_of_natDegree_le_one h⟩
-
-Depends on / 依赖: eq_X_add_C_of_natDegree_le_one, p.coeff
+  rw [← one_mul X, ← C_1, ← hm.coeff_natDegree, hnd, ← eq_X_add_C_of_natDegree_le_one hnd.le]
+/-
+**Polynomial.exists_eq_X_add_C_of_natDegree_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Po
+lynomial`。
+形式化陈述：exists_eq_X_add_C_of_natDegree_le_one (h : natDegree p <= 1) : exists a b,
+ p = C a * X + C b
+参数：h : natDegree p <= 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eq_X_add_C_of_natDegree_le_one`：eq_X_add_C_of_natDegree_le_on
+e (h : natDegree p <= 1) : p = C (p.coeff 1) * X + C (p.coeff 0)
 -/
-theorem exists_eq_X_add_C_of_natDegree_le_one (h : natDegree p <= 1) : exists a b, p = C a * X + C b :=
+theorem exists_eq_X_add_C_of_natDegree_le_one (h : natDegree p ≤ 1) : ∃ a b, p = C a * X + C b :=
   ⟨p.coeff 1, p.coeff 0, eq_X_add_C_of_natDegree_le_one h⟩
 
 end Semiring
@@ -149,518 +153,483 @@ section Semiring
 
 variable [Semiring R] {p q : R[X]} {ι : Type*}
 
-/--
-theorem `zero_le_degree_iff` / 定理 `zero_le_degree_iff`
-
-English:
-theorem zero_le_degree_iff
-  statement: 0 <= degree p ↔ p != 0
-  proof: by
-  rw [← not_lt]; rw [Nat.WithBot.lt_zero_iff]; rw [degree_eq_bot]
-
-中文:
-定理 zero_le_degree_iff
-  结论: 0 <= degree p ↔ p != 0
-  证明: by
-  rw [← not_lt]; rw [Nat.WithBot.lt_zero_iff]; rw [degree_eq_bot]
-
-Depends on / 依赖: Nat.WithBot.lt_zero_iff, WithBot, degree_eq_bot, lt_zero_iff, not_lt
+/-
+**Polynomial.zero_le_degree_iff** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：zero_le_degree_iff : 0 <= degree p ↔ p != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Nat.WithBot.lt_zero_iff`：lt_zero_iff {n : WithBot Nat} : n < 0 ↔ n = ⊥
+· 使用定理 `Polynomial.degree_eq_bot`：degree_eq_bot : degree p = ⊥ ↔ p = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem zero_le_degree_iff : 0 <= degree p ↔ p != 0 := by
-  rw [← not_lt]; rw [Nat.WithBot.lt_zero_iff]; rw [degree_eq_bot]
-
-/--
-theorem `ne_zero_of_coe_le_degree` / 定理 `ne_zero_of_coe_le_degree`
-
-English:
-theorem ne_zero_of_coe_le_degree
-  given: (hdeg : ↑n <= p.degree)
-  statement: p != 0
-  proof: zero_le_degree_iff.mp (WithBot.coe_le_coe.mpr n.zero_le).trans hdeg
-
-中文:
-定理 ne_zero_of_coe_le_degree
-  条件: (hdeg : ↑n <= p.degree)
-  结论: p != 0
-  证明: zero_le_degree_iff.mp (WithBot.coe_le_coe.mpr n.zero_le).trans hdeg
-
-Depends on / 依赖: WithBot, WithBot.coe_le_coe.mpr, coe_le_coe, n.zero_le, zero_le, zero_le_degree_iff, zero_le_degree_iff.mp
+theorem zero_le_degree_iff : 0 ≤ degree p ↔ p ≠ 0 := by
+  rw [← not_lt, Nat.WithBot.lt_zero_iff, degree_eq_bot]
+/-
+**Polynomial.ne_zero_of_coe_le_degree** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：ne_zero_of_coe_le_degree (hdeg : ↑n <= p.degree) : p != 0
+参数：hdeg : ↑n <= p.degree。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Polynomial.zero_le_degree_iff`：zero_le_degree_iff : 0 <= degree p ↔ p !=
+ 0
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_le_coe`：coe_le_coe : (a : WithBot α) <= b ↔ a <= b
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 -/
-theorem ne_zero_of_coe_le_degree (hdeg : ↑n <= p.degree) : p != 0 :=
-zero_le_degree_iff.mp (WithBot.coe_le_coe.mpr n.zero_le).trans hdeg
-
-/--
-theorem `le_natDegree_of_coe_le_degree` / 定理 `le_natDegree_of_coe_le_degree`
-
-English:
-theorem le_natDegree_of_coe_le_degree
-  given: (hdeg : ↑n <= p.degree)
-  statement: n <= p.natDegree
-  proof: WithBot.coe_le_coe.mp by
+theorem ne_zero_of_coe_le_degree (hdeg : ↑n ≤ p.degree) : p ≠ 0 :=
+  zero_le_degree_iff.mp <| (WithBot.coe_le_coe.mpr n.zero_le).trans hdeg
+/-
+**Polynomial.le_natDegree_of_coe_le_degree** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial
+`。
+形式化陈述：le_natDegree_of_coe_le_degree (hdeg : ↑n <= p.degree) : n <= p.natDegree
+参数：hdeg : ↑n <= p.degree。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WithBot.coe_le_coe`：coe_le_coe : (a : WithBot α) <= b ↔ a <= b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_eq_natDegree`：degree_eq_natDegree (hp : p != 0) : degr
+ee p = (natDegree p : WithBot Nat)
+· 使用定理 `Polynomial.ne_zero_of_coe_le_degree`：ne_zero_of_coe_le_degree (hdeg : ↑n
+ <= p.degree) : p != 0
+-/
+theorem le_natDegree_of_coe_le_degree (hdeg : ↑n ≤ p.degree) : n ≤ p.natDegree :=
+  WithBot.coe_le_coe.mp <| by
     rwa [degree_eq_natDegree <| ne_zero_of_coe_le_degree hdeg] at hdeg
-
-中文:
-定理 le_natDegree_of_coe_le_degree
-  条件: (hdeg : ↑n <= p.degree)
-  结论: n <= p.natDegree
-  证明: WithBot.coe_le_coe.mp by
-    rwa [degree_eq_natDegree <| ne_zero_of_coe_le_degree hdeg] at hdeg
-
-Depends on / 依赖: WithBot, WithBot.coe_le_coe.mp, coe_le_coe, degree_eq_natDegree, ne_zero_of_coe_le_degree
+/-
+**Polynomial.degree_linear_le** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_linear_le : degree (C a * X + C b) <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.degree_add_le_of_degree_le`：degree_add_le_of_degree_le {p q :
+ R[X]} {n : Nat} (hp : degree p <= n) (hq : degree q <= n) : degree (p + q) <= n
+· 使用定理 `Polynomial.degree_C_mul_X_le`：degree_C_mul_X_le (a : R) : degree (C a * 
+X) <= 1
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Polynomial.degree_C_le`：degree_C_le : degree (C a) <= 0
+· 使用定理 `Nat.WithBot.coe_nonneg`：coe_nonneg {n : Nat} : 0 <= (n : WithBot Nat)
 -/
-theorem le_natDegree_of_coe_le_degree (hdeg : ↑n <= p.degree) : n <= p.natDegree :=
-WithBot.coe_le_coe.mp by
-    rwa [degree_eq_natDegree <| ne_zero_of_coe_le_degree hdeg] at hdeg
-
-/--
-theorem `degree_linear_le` / 定理 `degree_linear_le`
-
-English:
-theorem degree_linear_le
-  statement: degree (C a * X + C b) <= 1
-  proof: degree_add_le_of_degree_le (degree_C_mul_X_le _) le_trans degree_C_le Nat.WithBot.coe_nonneg
-
-中文:
-定理 degree_linear_le
-  结论: degree (C a * X + C b) <= 1
-  证明: degree_add_le_of_degree_le (degree_C_mul_X_le _) le_trans degree_C_le Nat.WithBot.coe_nonneg
-
-Depends on / 依赖: Nat.WithBot.coe_nonneg, WithBot, coe_nonneg, degree_C_le, degree_C_mul_X_le, degree_add_le_of_degree_le, le_trans
--/
-theorem degree_linear_le : degree (C a * X + C b) <= 1 :=
-degree_add_le_of_degree_le (degree_C_mul_X_le _) le_trans degree_C_le Nat.WithBot.coe_nonneg
-
-/--
-theorem `degree_linear_lt` / 定理 `degree_linear_lt`
-
-English:
-theorem degree_linear_lt
-  statement: degree (C a * X + C b) < 2
-  proof: degree_linear_le.trans_lt WithBot.coe_lt_coe.mpr one_lt_two
-
-@[simp]
-
-中文:
-定理 degree_linear_lt
-  结论: degree (C a * X + C b) < 2
-  证明: degree_linear_le.trans_lt WithBot.coe_lt_coe.mpr one_lt_two
-
-@[simp]
-
-Depends on / 依赖: WithBot, WithBot.coe_lt_coe.mpr, coe_lt_coe, degree_linear_le, degree_linear_le.trans_lt, one_lt_two, trans_lt
+theorem degree_linear_le : degree (C a * X + C b) ≤ 1 :=
+  degree_add_le_of_degree_le (degree_C_mul_X_le _) <| le_trans degree_C_le Nat.WithBot.coe_nonneg
+/-
+**Polynomial.degree_linear_lt** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_linear_lt : degree (C a * X + C b) < 2
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Polynomial.degree_linear_le`：degree_linear_le : degree (C a * X + C b) <
+= 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_lt_coe`：coe_lt_coe : (a : WithBot α) < b ↔ a < b
+· 使用引理 `one_lt_two`：one_lt_two [AddLeftStrictMono α] : (1 : α) < 2
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem degree_linear_lt : degree (C a * X + C b) < 2 :=
-degree_linear_le.trans_lt WithBot.coe_lt_coe.mpr one_lt_two
+  degree_linear_le.trans_lt <| WithBot.coe_lt_coe.mpr one_lt_two
 
 @[simp]
-/--
-theorem `degree_linear` / 定理 `degree_linear`
-
-English:
-theorem degree_linear
-  given: (ha : a != 0)
-  statement: degree (C a * X + C b) = 1
-  proof: by
-  rw [degree_add_eq_left_of_degree_lt <| degree_C_lt_degree_C_mul_X ha]; rw [degree_C_mul_X ha]
-
-中文:
-定理 degree_linear
-  条件: (ha : a != 0)
-  结论: degree (C a * X + C b) = 1
-  证明: by
-  rw [degree_add_eq_left_of_degree_lt <| degree_C_lt_degree_C_mul_X ha]; rw [degree_C_mul_X ha]
-
-Depends on / 依赖: degree_C_lt_degree_C_mul_X, degree_C_mul_X, degree_add_eq_left_of_degree_lt
+/-
+**Polynomial.degree_linear** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_linear (ha : a != 0) : degree (C a * X + C b) = 1
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_add_eq_left_of_degree_lt`：degree_add_eq_left_of_degree
+_lt (h : degree q < degree p) : degree (p + q) = degree p
+· 使用定理 `Polynomial.degree_C_lt_degree_C_mul_X`：degree_C_lt_degree_C_mul_X (ha : 
+a != 0) : degree (C b) < degree (C a * X)
+· 使用定理 `Polynomial.degree_C_mul_X`：degree_C_mul_X (ha : a != 0) : degree (C a * 
+X) = 1
 -/
-theorem degree_linear (ha : a != 0) : degree (C a * X + C b) = 1 := by
-  rw [degree_add_eq_left_of_degree_lt <| degree_C_lt_degree_C_mul_X ha]; rw [degree_C_mul_X ha]
-
-/--
-theorem `natDegree_linear_le` / 定理 `natDegree_linear_le`
-
-English:
-theorem natDegree_linear_le
-  statement: natDegree (C a * X + C b) <= 1
-  proof: natDegree_le_of_degree_le degree_linear_le
-
-中文:
-定理 natDegree_linear_le
-  结论: natDegree (C a * X + C b) <= 1
-  证明: natDegree_le_of_degree_le degree_linear_le
-
-Depends on / 依赖: degree_linear_le, natDegree_le_of_degree_le
+theorem degree_linear (ha : a ≠ 0) : degree (C a * X + C b) = 1 := by
+  rw [degree_add_eq_left_of_degree_lt <| degree_C_lt_degree_C_mul_X ha, degree_C_mul_X ha]
+/-
+**Polynomial.natDegree_linear_le** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natDegree_linear_le : natDegree (C a * X + C b) <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_le_of_degree_le`：∀ {R : Type u} [inst : Semiring R]
+ {p : Polynomial R} {n : ℕ}, p.degree ≤ ↑n → p.natDegree ≤ n
+· 使用定理 `Polynomial.degree_linear_le`：degree_linear_le : degree (C a * X + C b) <
+= 1
 -/
-theorem natDegree_linear_le : natDegree (C a * X + C b) <= 1 :=
+theorem natDegree_linear_le : natDegree (C a * X + C b) ≤ 1 :=
   natDegree_le_of_degree_le degree_linear_le
-
-/--
-theorem `natDegree_linear` / 定理 `natDegree_linear`
-
-English:
-theorem natDegree_linear
-  given: (ha : a != 0)
-  statement: natDegree (C a * X + C b) = 1
-  proof: by
-  rw [natDegree_add_C]; rw [natDegree_C_mul_X a ha]
-
-@[simp]
-
-中文:
-定理 natDegree_linear
-  条件: (ha : a != 0)
-  结论: natDegree (C a * X + C b) = 1
-  证明: by
-  rw [natDegree_add_C]; rw [natDegree_C_mul_X a ha]
-
-@[simp]
-
-Depends on / 依赖: natDegree_C_mul_X, natDegree_add_C
+/-
+**Polynomial.natDegree_linear** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natDegree_linear (ha : a != 0) : natDegree (C a * X + C b) = 1
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.natDegree_add_C`：∀ {R : Type u} [inst : Semiring R] {p : Poly
+nomial R} {a : R}, (p + Polynomial.C a).natDegree = p.natDegree
+· 使用定理 `Polynomial.natDegree_C_mul_X`：natDegree_C_mul_X (a : R) (ha : a != 0) : 
+natDegree (C a * X) = 1
 -/
-theorem natDegree_linear (ha : a != 0) : natDegree (C a * X + C b) = 1 := by
-  rw [natDegree_add_C]; rw [natDegree_C_mul_X a ha]
+theorem natDegree_linear (ha : a ≠ 0) : natDegree (C a * X + C b) = 1 := by
+  rw [natDegree_add_C, natDegree_C_mul_X a ha]
 
 @[simp]
-/--
-theorem `leadingCoeff_linear` / 定理 `leadingCoeff_linear`
-
-English:
-theorem leadingCoeff_linear
-  given: (ha : a != 0)
-  statement: leadingCoeff (C a * X + C b) = a
-  proof: by
-  rw [add_comm]; rw [leadingCoeff_add_of_degree_lt (degree_C_lt_degree_C_mul_X ha)]; rw [leadingCoeff_C_mul_X]
-
-中文:
-定理 leadingCoeff_linear
-  条件: (ha : a != 0)
-  结论: leadingCoeff (C a * X + C b) = a
-  证明: by
-  rw [add_comm]; rw [leadingCoeff_add_of_degree_lt (degree_C_lt_degree_C_mul_X ha)]; rw [leadingCoeff_C_mul_X]
-
-Depends on / 依赖: add_comm, degree_C_lt_degree_C_mul_X, leadingCoeff_C_mul_X, leadingCoeff_add_of_degree_lt
+/-
+**Polynomial.leadingCoeff_linear** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：leadingCoeff_linear (ha : a != 0) : leadingCoeff (C a * X + C b) = a
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Polynomial.leadingCoeff_add_of_degree_lt`：leadingCoeff_add_of_degree_lt 
+(h : degree p < degree q) : leadingCoeff (p + q) = leadingCoeff q
+· 使用定理 `Polynomial.degree_C_lt_degree_C_mul_X`：degree_C_lt_degree_C_mul_X (ha : 
+a != 0) : degree (C b) < degree (C a * X)
+· 使用定理 `Polynomial.leadingCoeff_C_mul_X`：leadingCoeff_C_mul_X (a : R) : leadingC
+oeff (C a * X) = a
 -/
-theorem leadingCoeff_linear (ha : a != 0) : leadingCoeff (C a * X + C b) = a := by
-  rw [add_comm]; rw [leadingCoeff_add_of_degree_lt (degree_C_lt_degree_C_mul_X ha)]; rw [leadingCoeff_C_mul_X]
-
-/--
-theorem `degree_quadratic_le` / 定理 `degree_quadratic_le`
-
-English:
-theorem degree_quadratic_le
-  statement: degree (C a * X ^ 2 + C b * X + C c) <= 2
-  proof: by
+theorem leadingCoeff_linear (ha : a ≠ 0) : leadingCoeff (C a * X + C b) = a := by
+  rw [add_comm, leadingCoeff_add_of_degree_lt (degree_C_lt_degree_C_mul_X ha),
+    leadingCoeff_C_mul_X]
+/-
+**Polynomial.degree_quadratic_le** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_quadratic_le : degree (C a * X ^ 2 + C b * X + C c) <= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Polynomial.degree_add_le_of_degree_le`：degree_add_le_of_degree_le {p q :
+ R[X]} {n : Nat} (hp : degree p <= n) (hq : degree q <= n) : degree (p + q) <= n
+· 使用定理 `Polynomial.degree_C_mul_X_pow_le`：degree_C_mul_X_pow_le (n : Nat) (a : R
+) : degree (C a * X ^ n) <= n
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Polynomial.degree_linear_le`：degree_linear_le : degree (C a * X + C b) <
+= 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_le_coe`：coe_le_coe : (a : WithBot α) <= b ↔ a <= b
+· 使用引理 `one_le_two`：one_le_two [LE α] [ZeroLEOneClass α] [AddLeftMono α] : (1 : 
+α) <= 2
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+-/
+theorem degree_quadratic_le : degree (C a * X ^ 2 + C b * X + C c) ≤ 2 := by
   simpa only [add_assoc] using!
     degree_add_le_of_degree_le (degree_C_mul_X_pow_le 2 a)
       (le_trans degree_linear_le <| WithBot.coe_le_coe.mpr one_le_two)
-
-中文:
-定理 degree_quadratic_le
-  结论: degree (C a * X ^ 2 + C b * X + C c) <= 2
-  证明: by
-  simpa only [add_assoc] using!
-    degree_add_le_of_degree_le (degree_C_mul_X_pow_le 2 a)
-      (le_trans degree_linear_le <| WithBot.coe_le_coe.mpr one_le_two)
-
-Depends on / 依赖: WithBot, WithBot.coe_le_coe.mpr, add_assoc, coe_le_coe, degree_C_mul_X_pow_le, degree_add_le_of_degree_le, degree_linear_le, le_trans, one_le_two
--/
-theorem degree_quadratic_le : degree (C a * X ^ 2 + C b * X + C c) <= 2 := by
-  simpa only [add_assoc] using!
-    degree_add_le_of_degree_le (degree_C_mul_X_pow_le 2 a)
-      (le_trans degree_linear_le <| WithBot.coe_le_coe.mpr one_le_two)
-
-/--
-theorem `degree_quadratic_lt` / 定理 `degree_quadratic_lt`
-
-English:
-theorem degree_quadratic_lt
-  statement: degree (C a * X ^ 2 + C b * X + C c) < 3
-  proof: degree_quadratic_le.trans_lt WithBot.coe_lt_coe.mpr lt_add_one 2
-
-中文:
-定理 degree_quadratic_lt
-  结论: degree (C a * X ^ 2 + C b * X + C c) < 3
-  证明: degree_quadratic_le.trans_lt WithBot.coe_lt_coe.mpr lt_add_one 2
-
-Depends on / 依赖: WithBot, WithBot.coe_lt_coe.mpr, coe_lt_coe, degree_quadratic_le, degree_quadratic_le.trans_lt, lt_add_one, trans_lt
+/-
+**Polynomial.degree_quadratic_lt** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_quadratic_lt : degree (C a * X ^ 2 + C b * X + C c) < 3
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Polynomial.degree_quadratic_le`：degree_quadratic_le : degree (C a * X ^ 
+2 + C b * X + C c) <= 2
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_lt_coe`：coe_lt_coe : (a : WithBot α) < b ↔ a < b
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem degree_quadratic_lt : degree (C a * X ^ 2 + C b * X + C c) < 3 :=
-degree_quadratic_le.trans_lt WithBot.coe_lt_coe.mpr lt_add_one 2
-
-/--
-theorem `degree_linear_lt_degree_C_mul_X_sq` / 定理 `degree_linear_lt_degree_C_mul_X_sq`
-
-English:
-theorem degree_linear_lt_degree_C_mul_X_sq
-  given: (ha : a != 0)
-  proof: by
-  simpa only [degree_C_mul_X_pow 2 ha] using! degree_linear_lt
-
-@[simp]
-
-中文:
-定理 degree_linear_lt_degree_C_mul_X_sq
-  条件: (ha : a != 0)
-  证明: by
-  simpa only [degree_C_mul_X_pow 2 ha] using! degree_linear_lt
-
-@[simp]
-
-Depends on / 依赖: degree_C_mul_X_pow, degree_linear_lt
+  degree_quadratic_le.trans_lt <| WithBot.coe_lt_coe.mpr <| lt_add_one 2
+/-
+**Polynomial.degree_linear_lt_degree_C_mul_X_sq** 是 Mathlib 中的一个定理，位于命名空间 `Polyn
+omial`。
+形式化陈述：degree_linear_lt_degree_C_mul_X_sq (ha : a != 0) : degree (C b * X + C c) 
+< degree (C a * X ^ 2)
+参数：ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_C_mul_X_pow`：degree_C_mul_X_pow (n : Nat) (ha : a != 0
+) : degree (C a * X ^ n) = n
+· 使用定理 `Polynomial.degree_linear_lt`：degree_linear_lt : degree (C a * X + C b) <
+ 2
 -/
-theorem degree_linear_lt_degree_C_mul_X_sq (ha : a != 0) :
+theorem degree_linear_lt_degree_C_mul_X_sq (ha : a ≠ 0) :
     degree (C b * X + C c) < degree (C a * X ^ 2) := by
   simpa only [degree_C_mul_X_pow 2 ha] using! degree_linear_lt
 
 @[simp]
-/--
-theorem `degree_quadratic` / 定理 `degree_quadratic`
-
-English:
-theorem degree_quadratic
-  given: (ha : a != 0)
-  statement: degree (C a * X ^ 2 + C b * X + C c) = 2
-  proof: by
-  rw [add_assoc]; rw [degree_add_eq_left_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha]; rw [degree_C_mul_X_pow 2 ha]
-  rfl
-
-中文:
-定理 degree_quadratic
-  条件: (ha : a != 0)
-  结论: degree (C a * X ^ 2 + C b * X + C c) = 2
-  证明: by
-  rw [add_assoc]; rw [degree_add_eq_left_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha]; rw [degree_C_mul_X_pow 2 ha]
-  rfl
-
-Depends on / 依赖: add_assoc, degree_C_mul_X_pow, degree_add_eq_left_of_degree_lt, degree_linear_lt_degree_C_mul_X_sq
+/-
+**Polynomial.degree_quadratic** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_quadratic (ha : a != 0) : degree (C a * X ^ 2 + C b * X + C c) = 2
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Polynomial.degree_add_eq_left_of_degree_lt`：degree_add_eq_left_of_degree
+_lt (h : degree q < degree p) : degree (p + q) = degree p
+· 使用定理 `Polynomial.degree_linear_lt_degree_C_mul_X_sq`：degree_linear_lt_degree_C
+_mul_X_sq (ha : a != 0) : degree (C b * X + C c) < degree (C a * X ^ 2)
+· 使用定理 `Polynomial.degree_C_mul_X_pow`：degree_C_mul_X_pow (n : Nat) (ha : a != 0
+) : degree (C a * X ^ n) = n
 -/
-theorem degree_quadratic (ha : a != 0) : degree (C a * X ^ 2 + C b * X + C c) = 2 := by
-  rw [add_assoc]; rw [degree_add_eq_left_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha]; rw [degree_C_mul_X_pow 2 ha]
+theorem degree_quadratic (ha : a ≠ 0) : degree (C a * X ^ 2 + C b * X + C c) = 2 := by
+  rw [add_assoc, degree_add_eq_left_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha,
+    degree_C_mul_X_pow 2 ha]
   rfl
-
-/--
-theorem `natDegree_quadratic_le` / 定理 `natDegree_quadratic_le`
-
-English:
-theorem natDegree_quadratic_le
-  statement: natDegree (C a * X ^ 2 + C b * X + C c) <= 2
-  proof: natDegree_le_of_degree_le degree_quadratic_le
-
-中文:
-定理 natDegree_quadratic_le
-  结论: natDegree (C a * X ^ 2 + C b * X + C c) <= 2
-  证明: natDegree_le_of_degree_le degree_quadratic_le
-
-Depends on / 依赖: degree_quadratic_le, natDegree_le_of_degree_le
+/-
+**Polynomial.natDegree_quadratic_le** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natDegree_quadratic_le : natDegree (C a * X ^ 2 + C b * X + C c) <= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_le_of_degree_le`：∀ {R : Type u} [inst : Semiring R]
+ {p : Polynomial R} {n : ℕ}, p.degree ≤ ↑n → p.natDegree ≤ n
+· 使用定理 `Polynomial.degree_quadratic_le`：degree_quadratic_le : degree (C a * X ^ 
+2 + C b * X + C c) <= 2
 -/
-theorem natDegree_quadratic_le : natDegree (C a * X ^ 2 + C b * X + C c) <= 2 :=
+theorem natDegree_quadratic_le : natDegree (C a * X ^ 2 + C b * X + C c) ≤ 2 :=
   natDegree_le_of_degree_le degree_quadratic_le
-
-/--
-theorem `natDegree_quadratic` / 定理 `natDegree_quadratic`
-
-English:
-theorem natDegree_quadratic
-  given: (ha : a != 0)
-  statement: natDegree (C a * X ^ 2 + C b * X + C c) = 2
-  proof: natDegree_eq_of_degree_eq_some degree_quadratic ha
-
-@[simp]
-
-中文:
-定理 natDegree_quadratic
-  条件: (ha : a != 0)
-  结论: natDegree (C a * X ^ 2 + C b * X + C c) = 2
-  证明: natDegree_eq_of_degree_eq_some degree_quadratic ha
-
-@[simp]
-
-Depends on / 依赖: degree_quadratic, natDegree_eq_of_degree_eq_some
+/-
+**Polynomial.natDegree_quadratic** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natDegree_quadratic (ha : a != 0) : natDegree (C a * X ^ 2 + C b * X + C c
+) = 2
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_eq_of_degree_eq_some`：natDegree_eq_of_degree_eq_som
+e {p : R[X]} {n : Nat} (h : degree p = n) : natDegree p = n
+· 使用定理 `Polynomial.degree_quadratic`：degree_quadratic (ha : a != 0) : degree (C 
+a * X ^ 2 + C b * X + C c) = 2
 -/
-theorem natDegree_quadratic (ha : a != 0) : natDegree (C a * X ^ 2 + C b * X + C c) = 2 :=
-natDegree_eq_of_degree_eq_some degree_quadratic ha
+theorem natDegree_quadratic (ha : a ≠ 0) : natDegree (C a * X ^ 2 + C b * X + C c) = 2 :=
+  natDegree_eq_of_degree_eq_some <| degree_quadratic ha
 
 @[simp]
-/--
-theorem `leadingCoeff_quadratic` / 定理 `leadingCoeff_quadratic`
-
-English:
-theorem leadingCoeff_quadratic
-  given: (ha : a != 0)
-  statement: leadingCoeff (C a * X ^ 2 + C b * X + C c) = a
-  proof: by
-  rw [add_assoc]; rw [add_comm]; rw [leadingCoeff_add_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha]; rw [leadingCoeff_C_mul_X_pow]
-
-中文:
-定理 leadingCoeff_quadratic
-  条件: (ha : a != 0)
-  结论: leadingCoeff (C a * X ^ 2 + C b * X + C c) = a
-  证明: by
-  rw [add_assoc]; rw [add_comm]; rw [leadingCoeff_add_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha]; rw [leadingCoeff_C_mul_X_pow]
-
-Depends on / 依赖: add_assoc, add_comm, degree_linear_lt_degree_C_mul_X_sq, leadingCoeff_C_mul_X_pow, leadingCoeff_add_of_degree_lt
+/-
+**Polynomial.leadingCoeff_quadratic** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：leadingCoeff_quadratic (ha : a != 0) : leadingCoeff (C a * X ^ 2 + C b * X
+ + C c) = a
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Polynomial.leadingCoeff_add_of_degree_lt`：leadingCoeff_add_of_degree_lt 
+(h : degree p < degree q) : leadingCoeff (p + q) = leadingCoeff q
+· 使用定理 `Polynomial.degree_linear_lt_degree_C_mul_X_sq`：degree_linear_lt_degree_C
+_mul_X_sq (ha : a != 0) : degree (C b * X + C c) < degree (C a * X ^ 2)
+· 使用定理 `Polynomial.leadingCoeff_C_mul_X_pow`：leadingCoeff_C_mul_X_pow (a : R) (n
+ : Nat) : leadingCoeff (C a * X ^ n) = a
 -/
-theorem leadingCoeff_quadratic (ha : a != 0) : leadingCoeff (C a * X ^ 2 + C b * X + C c) = a := by
-  rw [add_assoc]; rw [add_comm]; rw [leadingCoeff_add_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha]; rw [leadingCoeff_C_mul_X_pow]
-
-/--
-theorem `degree_cubic_le` / 定理 `degree_cubic_le`
-
-English:
-theorem degree_cubic_le
-  statement: degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) <= 3
-  proof: by
+theorem leadingCoeff_quadratic (ha : a ≠ 0) : leadingCoeff (C a * X ^ 2 + C b * X + C c) = a := by
+  rw [add_assoc, add_comm, leadingCoeff_add_of_degree_lt <| degree_linear_lt_degree_C_mul_X_sq ha,
+    leadingCoeff_C_mul_X_pow]
+/-
+**Polynomial.degree_cubic_le** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_cubic_le : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) <= 3
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Polynomial.degree_add_le_of_degree_le`：degree_add_le_of_degree_le {p q :
+ R[X]} {n : Nat} (hp : degree p <= n) (hq : degree q <= n) : degree (p + q) <= n
+· 使用定理 `Polynomial.degree_C_mul_X_pow_le`：degree_C_mul_X_pow_le (n : Nat) (a : R
+) : degree (C a * X ^ n) <= n
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Polynomial.degree_quadratic_le`：degree_quadratic_le : degree (C a * X ^ 
+2 + C b * X + C c) <= 2
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_le_coe`：coe_le_coe : (a : WithBot α) <= b ↔ a <= b
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+-/
+theorem degree_cubic_le : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) ≤ 3 := by
   simpa only [add_assoc] using!
     degree_add_le_of_degree_le (degree_C_mul_X_pow_le 3 a)
       (le_trans degree_quadratic_le <| WithBot.coe_le_coe.mpr <| Nat.le_succ 2)
-
-中文:
-定理 degree_cubic_le
-  结论: degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) <= 3
-  证明: by
-  simpa only [add_assoc] using!
-    degree_add_le_of_degree_le (degree_C_mul_X_pow_le 3 a)
-      (le_trans degree_quadratic_le <| WithBot.coe_le_coe.mpr <| Nat.le_succ 2)
-
-Depends on / 依赖: Nat.le_succ, WithBot, WithBot.coe_le_coe.mpr, add_assoc, coe_le_coe, degree_C_mul_X_pow_le, degree_add_le_of_degree_le, degree_quadratic_le, le_succ, le_trans
--/
-theorem degree_cubic_le : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) <= 3 := by
-  simpa only [add_assoc] using!
-    degree_add_le_of_degree_le (degree_C_mul_X_pow_le 3 a)
-      (le_trans degree_quadratic_le <| WithBot.coe_le_coe.mpr <| Nat.le_succ 2)
-
-/--
-theorem `degree_cubic_lt` / 定理 `degree_cubic_lt`
-
-English:
-theorem degree_cubic_lt
-  statement: degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) < 4
-  proof: degree_cubic_le.trans_lt WithBot.coe_lt_coe.mpr lt_add_one 3
-
-中文:
-定理 degree_cubic_lt
-  结论: degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) < 4
-  证明: degree_cubic_le.trans_lt WithBot.coe_lt_coe.mpr lt_add_one 3
-
-Depends on / 依赖: WithBot, WithBot.coe_lt_coe.mpr, coe_lt_coe, degree_cubic_le, degree_cubic_le.trans_lt, lt_add_one, trans_lt
+/-
+**Polynomial.degree_cubic_lt** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_cubic_lt : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) < 4
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Polynomial.degree_cubic_le`：degree_cubic_le : degree (C a * X ^ 3 + C b 
+* X ^ 2 + C c * X + C d) <= 3
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_lt_coe`：coe_lt_coe : (a : WithBot α) < b ↔ a < b
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem degree_cubic_lt : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) < 4 :=
-degree_cubic_le.trans_lt WithBot.coe_lt_coe.mpr lt_add_one 3
-
-/--
-theorem `degree_quadratic_lt_degree_C_mul_X_cb` / 定理 `degree_quadratic_lt_degree_C_mul_X_cb`
-
-English:
-theorem degree_quadratic_lt_degree_C_mul_X_cb
-  given: (ha : a != 0)
-  proof: by
-  simpa only [degree_C_mul_X_pow 3 ha] using! degree_quadratic_lt
-
-@[simp]
-
-中文:
-定理 degree_quadratic_lt_degree_C_mul_X_cb
-  条件: (ha : a != 0)
-  证明: by
-  simpa only [degree_C_mul_X_pow 3 ha] using! degree_quadratic_lt
-
-@[simp]
-
-Depends on / 依赖: degree_C_mul_X_pow, degree_quadratic_lt
+  degree_cubic_le.trans_lt <| WithBot.coe_lt_coe.mpr <| lt_add_one 3
+/-
+**Polynomial.degree_quadratic_lt_degree_C_mul_X_cb** 是 Mathlib 中的一个定理，位于命名空间 `Po
+lynomial`。
+形式化陈述：degree_quadratic_lt_degree_C_mul_X_cb (ha : a != 0) : degree (C b * X ^ 2 
++ C c * X + C d) < degree (C a * X ^ 3)
+参数：ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_C_mul_X_pow`：degree_C_mul_X_pow (n : Nat) (ha : a != 0
+) : degree (C a * X ^ n) = n
+· 使用定理 `Polynomial.degree_quadratic_lt`：degree_quadratic_lt : degree (C a * X ^ 
+2 + C b * X + C c) < 3
 -/
-theorem degree_quadratic_lt_degree_C_mul_X_cb (ha : a != 0) :
+theorem degree_quadratic_lt_degree_C_mul_X_cb (ha : a ≠ 0) :
     degree (C b * X ^ 2 + C c * X + C d) < degree (C a * X ^ 3) := by
   simpa only [degree_C_mul_X_pow 3 ha] using! degree_quadratic_lt
 
 @[simp]
-/--
-theorem `degree_cubic` / 定理 `degree_cubic`
-
-English:
-theorem degree_cubic
-  given: (ha : a != 0)
-  statement: degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3
-  proof: by
-  rw [add_assoc]; rw [add_assoc]; rw [← add_assoc (C b * X ^ 2)]; rw [degree_add_eq_left_of_degree_lt degree_quadratic_lt_degree_C_mul_X_cb ha]; rw [degree_C_mul_X_pow 3 ha]
-  rfl
-
-中文:
-定理 degree_cubic
-  条件: (ha : a != 0)
-  结论: degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3
-  证明: by
-  rw [add_assoc]; rw [add_assoc]; rw [← add_assoc (C b * X ^ 2)]; rw [degree_add_eq_left_of_degree_lt degree_quadratic_lt_degree_C_mul_X_cb ha]; rw [degree_C_mul_X_pow 3 ha]
-  rfl
-
-Depends on / 依赖: add_assoc, degree_C_mul_X_pow, degree_add_eq_left_of_degree_lt, degree_quadratic_lt_degree_C_mul_X_cb
+/-
+**Polynomial.degree_cubic** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_cubic (ha : a != 0) : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X +
+ C d) = 3
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.degree_add_eq_left_of_degree_lt`：degree_add_eq_left_of_degree
+_lt (h : degree q < degree p) : degree (p + q) = degree p
+· 使用定理 `Polynomial.degree_quadratic_lt_degree_C_mul_X_cb`：degree_quadratic_lt_de
+gree_C_mul_X_cb (ha : a != 0) : degree (C b * X ^ 2 + C c * X + C d) < degree (C
+ a * X ^ 3)
+· 使用定理 `Polynomial.degree_C_mul_X_pow`：degree_C_mul_X_pow (n : Nat) (ha : a != 0
+) : degree (C a * X ^ n) = n
 -/
-theorem degree_cubic (ha : a != 0) : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3 := by
-  rw [add_assoc]; rw [add_assoc]; rw [← add_assoc (C b * X ^ 2)]; rw [degree_add_eq_left_of_degree_lt degree_quadratic_lt_degree_C_mul_X_cb ha]; rw [degree_C_mul_X_pow 3 ha]
+theorem degree_cubic (ha : a ≠ 0) : degree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3 := by
+  rw [add_assoc, add_assoc, ← add_assoc (C b * X ^ 2),
+    degree_add_eq_left_of_degree_lt <| degree_quadratic_lt_degree_C_mul_X_cb ha,
+    degree_C_mul_X_pow 3 ha]
   rfl
-
-/--
-theorem `natDegree_cubic_le` / 定理 `natDegree_cubic_le`
-
-English:
-theorem natDegree_cubic_le
-  statement: natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) <= 3
-  proof: natDegree_le_of_degree_le degree_cubic_le
-
-中文:
-定理 natDegree_cubic_le
-  结论: natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) <= 3
-  证明: natDegree_le_of_degree_le degree_cubic_le
-
-Depends on / 依赖: degree_cubic_le, natDegree_le_of_degree_le
+/-
+**Polynomial.natDegree_cubic_le** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natDegree_cubic_le : natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d)
+ <= 3
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_le_of_degree_le`：∀ {R : Type u} [inst : Semiring R]
+ {p : Polynomial R} {n : ℕ}, p.degree ≤ ↑n → p.natDegree ≤ n
+· 使用定理 `Polynomial.degree_cubic_le`：degree_cubic_le : degree (C a * X ^ 3 + C b 
+* X ^ 2 + C c * X + C d) <= 3
 -/
-theorem natDegree_cubic_le : natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) <= 3 :=
+theorem natDegree_cubic_le : natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) ≤ 3 :=
   natDegree_le_of_degree_le degree_cubic_le
-
-/--
-theorem `natDegree_cubic` / 定理 `natDegree_cubic`
-
-English:
-theorem natDegree_cubic
-  given: (ha : a != 0)
-  statement: natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3
-  proof: natDegree_eq_of_degree_eq_some degree_cubic ha
-
-@[simp]
-
-中文:
-定理 natDegree_cubic
-  条件: (ha : a != 0)
-  结论: natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3
-  证明: natDegree_eq_of_degree_eq_some degree_cubic ha
-
-@[simp]
-
-Depends on / 依赖: degree_cubic, natDegree_eq_of_degree_eq_some
+/-
+**Polynomial.natDegree_cubic** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natDegree_cubic (ha : a != 0) : natDegree (C a * X ^ 3 + C b * X ^ 2 + C c
+ * X + C d) = 3
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_eq_of_degree_eq_some`：natDegree_eq_of_degree_eq_som
+e {p : R[X]} {n : Nat} (h : degree p = n) : natDegree p = n
+· 使用定理 `Polynomial.degree_cubic`：degree_cubic (ha : a != 0) : degree (C a * X ^ 
+3 + C b * X ^ 2 + C c * X + C d) = 3
 -/
-theorem natDegree_cubic (ha : a != 0) : natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3 :=
-natDegree_eq_of_degree_eq_some degree_cubic ha
+theorem natDegree_cubic (ha : a ≠ 0) : natDegree (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3 :=
+  natDegree_eq_of_degree_eq_some <| degree_cubic ha
 
 @[simp]
-/--
-theorem `leadingCoeff_cubic` / 定理 `leadingCoeff_cubic`
-
-English:
-theorem leadingCoeff_cubic
-  given: (ha : a != 0)
-  proof: by
-  rw [add_assoc]; rw [add_assoc]; rw [← add_assoc (C b * X ^ 2)]; rw [add_comm]; rw [leadingCoeff_add_of_degree_lt degree_quadratic_lt_degree_C_mul_X_cb ha]; rw [leadingCoeff_C_mul_X_pow]
-
-中文:
-定理 leadingCoeff_cubic
-  条件: (ha : a != 0)
-  证明: by
-  rw [add_assoc]; rw [add_assoc]; rw [← add_assoc (C b * X ^ 2)]; rw [add_comm]; rw [leadingCoeff_add_of_degree_lt degree_quadratic_lt_degree_C_mul_X_cb ha]; rw [leadingCoeff_C_mul_X_pow]
-
-Depends on / 依赖: add_assoc, add_comm, degree_quadratic_lt_degree_C_mul_X_cb, leadingCoeff_C_mul_X_pow, leadingCoeff_add_of_degree_lt
+/-
+**Polynomial.leadingCoeff_cubic** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：leadingCoeff_cubic (ha : a != 0) : leadingCoeff (C a * X ^ 3 + C b * X ^ 2
+ + C c * X + C d) = a
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Polynomial.leadingCoeff_add_of_degree_lt`：leadingCoeff_add_of_degree_lt 
+(h : degree p < degree q) : leadingCoeff (p + q) = leadingCoeff q
+· 使用定理 `Polynomial.degree_quadratic_lt_degree_C_mul_X_cb`：degree_quadratic_lt_de
+gree_C_mul_X_cb (ha : a != 0) : degree (C b * X ^ 2 + C c * X + C d) < degree (C
+ a * X ^ 3)
+· 使用定理 `Polynomial.leadingCoeff_C_mul_X_pow`：leadingCoeff_C_mul_X_pow (a : R) (n
+ : Nat) : leadingCoeff (C a * X ^ n) = a
 -/
-theorem leadingCoeff_cubic (ha : a != 0) :
+theorem leadingCoeff_cubic (ha : a ≠ 0) :
     leadingCoeff (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = a := by
-  rw [add_assoc]; rw [add_assoc]; rw [← add_assoc (C b * X ^ 2)]; rw [add_comm]; rw [leadingCoeff_add_of_degree_lt degree_quadratic_lt_degree_C_mul_X_cb ha]; rw [leadingCoeff_C_mul_X_pow]
+  rw [add_assoc, add_assoc, ← add_assoc (C b * X ^ 2), add_comm,
+    leadingCoeff_add_of_degree_lt <| degree_quadratic_lt_degree_C_mul_X_cb ha,
+    leadingCoeff_C_mul_X_pow]
 
 end Semiring
 
 end Polynomial
+

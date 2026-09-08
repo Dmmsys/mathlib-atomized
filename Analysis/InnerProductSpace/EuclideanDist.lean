@@ -29,28 +29,26 @@ open scoped Topology
 open Set
 
 variable {E : Type*} [AddCommGroup E] [TopologicalSpace E] [IsTopologicalAddGroup E] [T2Space E]
-  [Module Real E] [ContinuousSMul Real E] [FiniteDimensional Real E]
+  [Module ℝ E] [ContinuousSMul ℝ E] [FiniteDimensional ℝ E]
 
 noncomputable section
 
 open Module
 
-/--
-Definition of `toEuclidean` / `toEuclidean` 的定义
+/-- If `E` is a finite-dimensional space over `ℝ`, then `toEuclidean` is a continuous `ℝ`-linear
+equivalence between `E` and the Euclidean space of the same dimension. -/
+/-
+**toEuclidean** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toEuclidean : E ≃L[Real] EuclideanSpace Real (Fin <| finrank Real E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toEuclidean
-  signature: : E ≃L[Real] EuclideanSpace Real (Fin <| finrank Real E)
-  body: ContinuousLinearEquiv.ofFinrankEq finrank_euclideanSpace_fin.symm
-
-中文:
-定义 toEuclidean
-  签名: : E ≃L[实数] EuclideanSpace 实数 (有限集 <| finrank 实数 E)
-  定义体: ContinuousLinearEquiv.ofFinrankEq finrank_euclideanSpace_fin.symm
-
-Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ofFinrankEq, finrank_euclideanSpace_fin, finrank_euclideanSpace_fin.symm, ofFinrankEq
+--- 原说明 ---
+If `E` is a finite-dimensional space over `ℝ`, then `toEuclidean` is a continuou
+s `ℝ`-linear
+equivalence between `E` and the Euclidean space of the same dimension.
 -/
-def toEuclidean : E ≃L[Real] EuclideanSpace Real (Fin <| finrank Real E) :=
+def toEuclidean : E ≃L[ℝ] EuclideanSpace ℝ (Fin <| finrank ℝ E) :=
   ContinuousLinearEquiv.ofFinrankEq finrank_euclideanSpace_fin.symm
 
 namespace Euclidean
@@ -58,336 +56,248 @@ namespace Euclidean
 /-- If `x` and `y` are two points in a finite-dimensional space over `ℝ`, then `Euclidean.dist x y`
 is the distance between these points in the metric defined by some inner product space structure on
 `E`. -/
-nonrec def dist (x y : E) : Real :=
+nonrec def dist (x y : E) : ℝ :=
   dist (toEuclidean x) (toEuclidean y)
 
-/--
-Definition of `closedBall` / `closedBall` 的定义
+/-- Closed ball w.r.t. the Euclidean distance. -/
+/-
+**Euclidean.closedBall** 是 Mathlib 中的一个定义，位于命名空间 `Euclidean`。
+形式化陈述：closedBall (x : E) (r : Real) : Set E
+参数：x : E；r : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition closedBall
-  signature: (x : E) (r : Real)
-  body: {y | dist y x <= r}
-
-中文:
-定义 closedBall
-  签名: (x : E) (r : 实数)
-  定义体: {y | dist y x <= r}
-
-Depends on / 依赖: NormSMulClass, NormedSpace, NormedSpace.toNormSMulClass, toNormSMulClass
+--- 原说明 ---
+Closed ball w.r.t. the Euclidean distance.
 -/
-def closedBall (x : E) (r : Real) : Set E :=
-  {y | dist y x <= r}
+def closedBall (x : E) (r : ℝ) : Set E :=
+  {y | dist y x ≤ r}
 
-/--
-Definition of `ball` / `ball` 的定义
+/-- Open ball w.r.t. the Euclidean distance. -/
+/-
+**Euclidean.ball** 是 Mathlib 中的一个定义，位于命名空间 `Euclidean`。
+形式化陈述：ball (x : E) (r : Real) : Set E
+参数：x : E；r : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ball
-  signature: (x : E) (r : Real)
-  body: {y | dist y x < r}
-
-中文:
-定义 ball
-  签名: (x : E) (r : 实数)
-  定义体: {y | dist y x < r}
+--- 原说明 ---
+Open ball w.r.t. the Euclidean distance.
 -/
-def ball (x : E) (r : Real) : Set E :=
+def ball (x : E) (r : ℝ) : Set E :=
   {y | dist y x < r}
-
-/--
-theorem `ball_eq_preimage` / 定理 `ball_eq_preimage`
-
-English:
-theorem ball_eq_preimage
-  given: (x : E) (r : Real)
-  proof: rfl
-
-中文:
-定理 ball_eq_preimage
-  条件: (x : E) (r : 实数)
-  证明: rfl
+/-
+**Euclidean.ball_eq_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：ball_eq_preimage (x : E) (r : Real) : ball x r = toEuclidean ⁻¹' Metric.ba
+ll (toEuclidean x) r
+参数：x : E；r : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ball_eq_preimage (x : E) (r : Real) :
+theorem ball_eq_preimage (x : E) (r : ℝ) :
     ball x r = toEuclidean ⁻¹' Metric.ball (toEuclidean x) r :=
   rfl
-
-/--
-theorem `closedBall_eq_preimage` / 定理 `closedBall_eq_preimage`
-
-English:
-theorem closedBall_eq_preimage
-  given: (x : E) (r : Real)
-  proof: rfl
-
-中文:
-定理 closedBall_eq_preimage
-  条件: (x : E) (r : 实数)
-  证明: rfl
+/-
+**Euclidean.closedBall_eq_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：closedBall_eq_preimage (x : E) (r : Real) : closedBall x r = toEuclidean ⁻
+¹' Metric.closedBall (toEuclidean x) r
+参数：x : E；r : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem closedBall_eq_preimage (x : E) (r : Real) :
+theorem closedBall_eq_preimage (x : E) (r : ℝ) :
     closedBall x r = toEuclidean ⁻¹' Metric.closedBall (toEuclidean x) r :=
   rfl
-
-/--
-theorem `ball_subset_closedBall` / 定理 `ball_subset_closedBall`
-
-English:
-theorem ball_subset_closedBall
-  given: {x : E} {r : Real}
-  statement: ball x r subseteq closedBall x r
-  proof: fun _ (hy : _ < r) =>
-  le_of_lt hy
-
-中文:
-定理 ball_subset_closedBall
-  条件: {x : E} {r : 实数}
-  结论: ball x r subseteq closedBall x r
-  证明: fun _ (hy : _ < r) =>
-  le_of_lt hy
+/-
+**Euclidean.ball_subset_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：ball_subset_closedBall {x : E} {r : Real} : ball x r subseteq closedBall x
+ r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-theorem ball_subset_closedBall {x : E} {r : Real} : ball x r subseteq closedBall x r := fun _ (hy : _ < r) =>
+theorem ball_subset_closedBall {x : E} {r : ℝ} : ball x r ⊆ closedBall x r := fun _ (hy : _ < r) =>
   le_of_lt hy
-
-/--
-theorem `isOpen_ball` / 定理 `isOpen_ball`
-
-English:
-theorem isOpen_ball
-  given: {x : E} {r : Real}
-  statement: IsOpen (ball x r)
-  proof: Metric.isOpen_ball.preimage toEuclidean.continuous
-
-中文:
-定理 isOpen_ball
-  条件: {x : E} {r : 实数}
-  结论: 是开集 (ball x r)
-  证明: Metric.isOpen_ball.preimage toEuclidean.continuous
+/-
+**Euclidean.isOpen_ball** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：∀ {E : Type u_1} [inst : AddCommGroup E] [inst_1 : TopologicalSpace E] [in
+st_2 : IsTopologicalAddGroup E]   [inst_3 : T2Space E] [inst_4 : _root_.Module ℝ
+ E] [inst_5 : ContinuousSMul ℝ E] [inst_6 : FiniteDimensional ℝ E]   {x : E} {r 
+: ℝ}, IsOpen (Euclidean.ball x r)
+参数：Euclidean.ball x r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `ContinuousLinearEquiv.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [ins
+t : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {σ₂₁ : R₂ →+* R₁}   [i
+nst_2 : RingHomInvPair…
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `Metric.isOpen_ball`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x : α} 
+{ε : ℝ}, IsOpen (Metric.ball x ε)
 -/
-@[simp] theorem isOpen_ball {x : E} {r : Real} : IsOpen (ball x r) :=
+@[simp] theorem isOpen_ball {x : E} {r : ℝ} : IsOpen (ball x r) :=
   Metric.isOpen_ball.preimage toEuclidean.continuous
-
-/--
-theorem `mem_ball_self` / 定理 `mem_ball_self`
-
-English:
-theorem mem_ball_self
-  given: {x : E} {r : Real} (hr : 0 < r)
-  statement: x in ball x r
-  proof: Metric.mem_ball_self hr
-
-中文:
-定理 mem_ball_self
-  条件: {x : E} {r : 实数} (hr : 0 < r)
-  结论: x in ball x r
-  证明: Metric.mem_ball_self hr
-
-Depends on / 依赖: Metric, Metric.mem_ball_self, mem_ball_self
+/-
+**Euclidean.mem_ball_self** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：mem_ball_self {x : E} {r : Real} (hr : 0 < r) : x in ball x r
+参数：hr : 0 < r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.mem_ball_self`：mem_ball_self (h : 0 < ε) : x in ball x ε
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
 -/
-theorem mem_ball_self {x : E} {r : Real} (hr : 0 < r) : x in ball x r :=
+theorem mem_ball_self {x : E} {r : ℝ} (hr : 0 < r) : x ∈ ball x r :=
   Metric.mem_ball_self hr
-
-/--
-theorem `closedBall_eq_image` / 定理 `closedBall_eq_image`
-
-English:
-theorem closedBall_eq_image
-  given: (x : E) (r : Real)
-  proof: by
-  rw [toEuclidean.image_symm_eq_preimage]; rw [closedBall_eq_preimage]
-
-nonrec theorem isCompact_closedBall {x : E} {r : Real} : IsCompact (closedBall x r) := by
-  rw [closedBall_eq_image]
-  exact (isCompact_closedBall _ _).image toEuclidean.symm.continuous
-
-中文:
-定理 closedBall_eq_image
-  条件: (x : E) (r : 实数)
-  证明: by
-  rw [toEuclidean.image_symm_eq_preimage]; rw [closedBall_eq_preimage]
-
-nonrec theorem isCompact_closedBall {x : E} {r : Real} : IsCompact (closedBall x r) := by
-  rw [closedBall_eq_image]
-  exact (isCompact_closedBall _ _).image toEuclidean.symm.continuous
-
-Depends on / 依赖: closedBall_eq_preimage, image_symm_eq_preimage, toEuclidean, toEuclidean.image_symm_eq_preimage
+/-
+**Euclidean.closedBall_eq_image** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：closedBall_eq_image (x : E) (r : Real) : closedBall x r = toEuclidean.symm
+ '' Metric.closedBall (toEuclidean x) r
+参数：x : E；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearEquiv.image_symm_eq_preimage`：∀ {R₁ : Type u_1} {R₂ : Ty
+pe u_2} [inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {σ₂₁ : R₂ 
+→+* R₁}   [inst_2 : RingHomInvPair…
+· 使用定理 `Euclidean.closedBall_eq_preimage`：closedBall_eq_preimage (x : E) (r : Re
+al) : closedBall x r = toEuclidean ⁻¹' Metric.closedBall (toEuclidean x) r
 -/
-theorem closedBall_eq_image (x : E) (r : Real) :
+theorem closedBall_eq_image (x : E) (r : ℝ) :
     closedBall x r = toEuclidean.symm '' Metric.closedBall (toEuclidean x) r := by
-  rw [toEuclidean.image_symm_eq_preimage]; rw [closedBall_eq_preimage]
+  rw [toEuclidean.image_symm_eq_preimage, closedBall_eq_preimage]
 
-nonrec theorem isCompact_closedBall {x : E} {r : Real} : IsCompact (closedBall x r) := by
+nonrec theorem isCompact_closedBall {x : E} {r : ℝ} : IsCompact (closedBall x r) := by
   rw [closedBall_eq_image]
   exact (isCompact_closedBall _ _).image toEuclidean.symm.continuous
-
-/--
-theorem `isClosed_closedBall` / 定理 `isClosed_closedBall`
-
-English:
-theorem isClosed_closedBall
-  given: {x : E} {r : Real}
-  statement: IsClosed (closedBall x r)
-  proof: isCompact_closedBall.isClosed
-
-nonrec theorem closure_ball (x : E) {r : Real} (h : r != 0) : closure (ball x r) = closedBall x r := by
-  rw [ball_eq_preimage]; rw [← toEuclidean.preimage_closure]; rw [closure_ball (toEuclidean x) h]; rw [closedBall_eq_preimage]
-
-nonrec theorem exists_pos_lt_subset_ball {R : Real} {s : Set E} {x : E} (hR : 0 < R) (hs : IsClosed s)
-    (h : s subseteq ball x R) : exists r in Ioo 0 R, s subseteq ball x r := by
-  rw [ball_eq_preimage]; rw [← image_subset_iff] at h
-  rcases exists_pos_lt_subset_ball hR (toEuclidean.isClosed_image.2 hs) h with ⟨r, hr, hsr⟩
-  exact ⟨r, hr, image_subset_iff.1 hsr⟩
-
-中文:
-定理 isClosed_closedBall
-  条件: {x : E} {r : 实数}
-  结论: 是闭集 (closedBall x r)
-  证明: isCompact_closedBall.isClosed
-
-nonrec theorem closure_ball (x : E) {r : Real} (h : r != 0) : closure (ball x r) = closedBall x r := by
-  rw [ball_eq_preimage]; rw [← toEuclidean.preimage_closure]; rw [closure_ball (toEuclidean x) h]; rw [closedBall_eq_preimage]
-
-nonrec theorem exists_pos_lt_subset_ball {R : Real} {s : Set E} {x : E} (hR : 0 < R) (hs : IsClosed s)
-    (h : s subseteq ball x R) : exists r in Ioo 0 R, s subseteq ball x r := by
-  rw [ball_eq_preimage]; rw [← image_subset_iff] at h
-  rcases exists_pos_lt_subset_ball hR (toEuclidean.isClosed_image.2 hs) h with ⟨r, hr, hsr⟩
-  exact ⟨r, hr, image_subset_iff.1 hsr⟩
-
-Depends on / 依赖: isClosed, isCompact_closedBall, isCompact_closedBall.isClosed
+/-
+**Euclidean.isClosed_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：isClosed_closedBall {x : E} {r : Real} : IsClosed (closedBall x r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `Euclidean.isCompact_closedBall`：∀ {E : Type u_1} [inst : AddCommGroup E]
+ [inst_1 : TopologicalSpace E] [inst_2 : IsTopologicalAddGroup E]   [inst_3 : T2
+Space E] [inst_4 : _…
 -/
-theorem isClosed_closedBall {x : E} {r : Real} : IsClosed (closedBall x r) :=
+theorem isClosed_closedBall {x : E} {r : ℝ} : IsClosed (closedBall x r) :=
   isCompact_closedBall.isClosed
 
-nonrec theorem closure_ball (x : E) {r : Real} (h : r != 0) : closure (ball x r) = closedBall x r := by
-  rw [ball_eq_preimage]; rw [← toEuclidean.preimage_closure]; rw [closure_ball (toEuclidean x) h]; rw [closedBall_eq_preimage]
+nonrec theorem closure_ball (x : E) {r : ℝ} (h : r ≠ 0) : closure (ball x r) = closedBall x r := by
+  rw [ball_eq_preimage, ← toEuclidean.preimage_closure, closure_ball (toEuclidean x) h,
+    closedBall_eq_preimage]
 
-nonrec theorem exists_pos_lt_subset_ball {R : Real} {s : Set E} {x : E} (hR : 0 < R) (hs : IsClosed s)
-    (h : s subseteq ball x R) : exists r in Ioo 0 R, s subseteq ball x r := by
-  rw [ball_eq_preimage]; rw [← image_subset_iff] at h
+nonrec theorem exists_pos_lt_subset_ball {R : ℝ} {s : Set E} {x : E} (hR : 0 < R) (hs : IsClosed s)
+    (h : s ⊆ ball x R) : ∃ r ∈ Ioo 0 R, s ⊆ ball x r := by
+  rw [ball_eq_preimage, ← image_subset_iff] at h
   rcases exists_pos_lt_subset_ball hR (toEuclidean.isClosed_image.2 hs) h with ⟨r, hr, hsr⟩
   exact ⟨r, hr, image_subset_iff.1 hsr⟩
-
-/--
-theorem `nhds_basis_closedBall` / 定理 `nhds_basis_closedBall`
-
-English:
-theorem nhds_basis_closedBall
-  given: {x : E}
-  statement: (𝓝 x).HasBasis (fun r : Real => 0 < r) (closedBall x)
-  proof: by
-  rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
-  exact Metric.nhds_basis_closedBall.comap _
-
-中文:
-定理 nhds_basis_closedBall
-  条件: {x : E}
-  结论: (𝓝 x).有基 (fun r : 实数 => 0 < r) (closedBall x)
-  证明: by
-  rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
-  exact Metric.nhds_basis_closedBall.comap _
-
-Depends on / 依赖: Metric, Metric.nhds_basis_closedBall.comap, nhds_basis_closedBall, nhds_eq_comap, toEuclidean, toEuclidean.toHomeomorph.nhds_eq_comap, toHomeomorph
+/-
+**Euclidean.nhds_basis_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：nhds_basis_closedBall {x : E} : (𝓝 x).HasBasis (fun r : Real => 0 < r) (cl
+osedBall x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Homeomorph.nhds_eq_comap`：nhds_eq_comap (h : X ≃ₜ Y) (x : X) : 𝓝 x = com
+ap h (𝓝 (h x))
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `Metric.nhds_basis_closedBall`：nhds_basis_closedBall : (𝓝 x).HasBasis (fu
+n ε : Real => 0 < ε) (closedBall x)
 -/
-theorem nhds_basis_closedBall {x : E} : (𝓝 x).HasBasis (fun r : Real => 0 < r) (closedBall x) := by
+theorem nhds_basis_closedBall {x : E} : (𝓝 x).HasBasis (fun r : ℝ => 0 < r) (closedBall x) := by
   rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
   exact Metric.nhds_basis_closedBall.comap _
-
-/--
-theorem `closedBall_mem_nhds` / 定理 `closedBall_mem_nhds`
-
-English:
-theorem closedBall_mem_nhds
-  given: {x : E} {r : Real} (hr : 0 < r)
-  statement: closedBall x r in 𝓝 x
-  proof: nhds_basis_closedBall.mem_of_mem hr
-
-中文:
-定理 closedBall_mem_nhds
-  条件: {x : E} {r : 实数} (hr : 0 < r)
-  结论: closedBall x r in 𝓝 x
-  证明: nhds_basis_closedBall.mem_of_mem hr
-
-Depends on / 依赖: mem_of_mem, nhds_basis_closedBall, nhds_basis_closedBall.mem_of_mem
+/-
+**Euclidean.closedBall_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：closedBall_mem_nhds {x : E} {r : Real} (hr : 0 < r) : closedBall x r in 𝓝 
+x
+参数：hr : 0 < r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.mem_of_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α} {i : ι}, l.HasBasis p s → p i → s i ∈ l
+· 使用定理 `Euclidean.nhds_basis_closedBall`：nhds_basis_closedBall {x : E} : (𝓝 x).H
+asBasis (fun r : Real => 0 < r) (closedBall x)
 -/
-theorem closedBall_mem_nhds {x : E} {r : Real} (hr : 0 < r) : closedBall x r in 𝓝 x :=
+theorem closedBall_mem_nhds {x : E} {r : ℝ} (hr : 0 < r) : closedBall x r ∈ 𝓝 x :=
   nhds_basis_closedBall.mem_of_mem hr
-
-/--
-theorem `nhds_basis_ball` / 定理 `nhds_basis_ball`
-
-English:
-theorem nhds_basis_ball
-  given: {x : E}
-  statement: (𝓝 x).HasBasis (fun r : Real => 0 < r) (ball x)
-  proof: by
-  rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
-  exact Metric.nhds_basis_ball.comap _
-
-中文:
-定理 nhds_basis_ball
-  条件: {x : E}
-  结论: (𝓝 x).有基 (fun r : 实数 => 0 < r) (ball x)
-  证明: by
-  rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
-  exact Metric.nhds_basis_ball.comap _
-
-Depends on / 依赖: Metric, Metric.nhds_basis_ball.comap, nhds_basis_ball, nhds_eq_comap, toEuclidean, toEuclidean.toHomeomorph.nhds_eq_comap, toHomeomorph
+/-
+**Euclidean.nhds_basis_ball** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：nhds_basis_ball {x : E} : (𝓝 x).HasBasis (fun r : Real => 0 < r) (ball x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Homeomorph.nhds_eq_comap`：nhds_eq_comap (h : X ≃ₜ Y) (x : X) : 𝓝 x = com
+ap h (𝓝 (h x))
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `Metric.nhds_basis_ball`：nhds_basis_ball : (𝓝 x).HasBasis (0 < ·) (ball x
+)
 -/
-theorem nhds_basis_ball {x : E} : (𝓝 x).HasBasis (fun r : Real => 0 < r) (ball x) := by
+theorem nhds_basis_ball {x : E} : (𝓝 x).HasBasis (fun r : ℝ => 0 < r) (ball x) := by
   rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
   exact Metric.nhds_basis_ball.comap _
-
-/--
-theorem `ball_mem_nhds` / 定理 `ball_mem_nhds`
-
-English:
-theorem ball_mem_nhds
-  given: {x : E} {r : Real} (hr : 0 < r)
-  statement: ball x r in 𝓝 x
-  proof: nhds_basis_ball.mem_of_mem hr
-
-中文:
-定理 ball_mem_nhds
-  条件: {x : E} {r : 实数} (hr : 0 < r)
-  结论: ball x r in 𝓝 x
-  证明: nhds_basis_ball.mem_of_mem hr
-
-Depends on / 依赖: mem_of_mem, nhds_basis_ball, nhds_basis_ball.mem_of_mem
+/-
+**Euclidean.ball_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 `Euclidean`。
+形式化陈述：ball_mem_nhds {x : E} {r : Real} (hr : 0 < r) : ball x r in 𝓝 x
+参数：hr : 0 < r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.mem_of_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α} {i : ι}, l.HasBasis p s → p i → s i ∈ l
+· 使用定理 `Euclidean.nhds_basis_ball`：nhds_basis_ball {x : E} : (𝓝 x).HasBasis (fun
+ r : Real => 0 < r) (ball x)
 -/
-theorem ball_mem_nhds {x : E} {r : Real} (hr : 0 < r) : ball x r in 𝓝 x :=
+theorem ball_mem_nhds {x : E} {r : ℝ} (hr : 0 < r) : ball x r ∈ 𝓝 x :=
   nhds_basis_ball.mem_of_mem hr
 
 end Euclidean
 
-variable {F : Type*} [NormedAddCommGroup F] [NormedSpace Real F] {G : Type*} [NormedAddCommGroup G]
-  [NormedSpace Real G] [FiniteDimensional Real G] {f g : F -> G} {n : Nat∞}
+variable {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] {G : Type*} [NormedAddCommGroup G]
+  [NormedSpace ℝ G] [FiniteDimensional ℝ G] {f g : F → G} {n : ℕ∞}
 
-/--
-theorem `ContDiff.euclidean_dist` / 定理 `ContDiff.euclidean_dist`
-
-English:
-theorem ContDiff.euclidean_dist
-  given: (hf : ContDiff Real n f) (hg : ContDiff Real n g) (h : forall x, f x != g x)
-  proof: by
-  simp only [Euclidean.dist]
-  apply ContDiff.dist Real
-  exacts [(toEuclidean (E := G)).contDiff.comp hf,
-    (toEuclidean (E := G)).contDiff.comp hg, fun x => toEuclidean.injective.ne (h x)]
-
-中文:
-定理 连续可微.euclidean_dist
-  条件: (hf : 连续可微 实数 n f) (hg : 连续可微 实数 n g) (h : 对任意 x, f x != g x)
-  证明: by
-  simp only [Euclidean.dist]
-  apply ContDiff.dist Real
-  exacts [(toEuclidean (E := G)).contDiff.comp hf,
-    (toEuclidean (E := G)).contDiff.comp hg, fun x => toEuclidean.injective.ne (h x)]
-
-Depends on / 依赖: ContDiff, ContDiff.dist, Euclidean, Euclidean.dist, contDiff, contDiff.comp, exacts, injective, toEuclidean, toEuclidean.injective.ne
+/-
+**ContDiff.euclidean_dist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiff.euclidean_dist (hf : ContDiff Real n f) (hg : ContDiff Real n g) 
+(h : forall x, f x != g x) : ContDiff Real n fun x => Euclidean.dist (f x) (g x)
+参数：hf : ContDiff Real n f；hg : ContDiff Real n g；h : forall x, f x != g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `ContDiff.dist`：ContDiff.dist (hf : ContDiff Real n f) (hg : ContDiff Rea
+l n g) (hne : forall x, f x != g x) : ContDiff Real n fun y => dist (f y) (g y)
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
+· 使用定理 `ContDiff.comp`：ContDiff.comp {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 
+n g) (hf : ContDiff 𝕜 n f) : ContDiff 𝕜 n (g ∘ f)
+· 使用定理 `ContinuousLinearEquiv.contDiff`：ContinuousLinearEquiv.contDiff (f : E ≃L
+[𝕜] F) : ContDiff 𝕜 n f
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `ContinuousLinearEquiv.injective`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst
+ : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {σ₂₁ : R₂ →+* R₁}   [in
+st_2 : RingHomInvPair…
 -/
-theorem ContDiff.euclidean_dist (hf : ContDiff Real n f) (hg : ContDiff Real n g) (h : forall x, f x != g x) :
-    ContDiff Real n fun x => Euclidean.dist (f x) (g x) := by
+theorem ContDiff.euclidean_dist (hf : ContDiff ℝ n f) (hg : ContDiff ℝ n g) (h : ∀ x, f x ≠ g x) :
+    ContDiff ℝ n fun x => Euclidean.dist (f x) (g x) := by
   simp only [Euclidean.dist]
-  apply ContDiff.dist Real
+  apply ContDiff.dist ℝ
   exacts [(toEuclidean (E := G)).contDiff.comp hf,
     (toEuclidean (E := G)).contDiff.comp hg, fun x => toEuclidean.injective.ne (h x)]

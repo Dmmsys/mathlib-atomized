@@ -21,64 +21,84 @@ public section
 
 open Set
 
-/--
-theorem `IsCoatomic.of_isChain_bounded` / 定理 `IsCoatomic.of_isChain_bounded`
+/-- **Zorn's lemma**: A partial order is coatomic if every nonempty chain `c`, `⊤ ∉ c`, has an upper
+bound not equal to `⊤`. -/
+/-
+**IsCoatomic.of_isChain_bounded** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCoatomic.of_isChain_bounded {α : Type*} [PartialOrder α] [OrderTop α] (h
+ : forall c : Set α, IsChain (· <= ·) c -> c.Nonempty -> ⊤ ∉ c -> exists x != ⊤,
+ x in upperBounds c) : IsCoatomic α
+参数：h : forall c : Set α, IsChain (· <= ·) c -> c.Nonempty -> ⊤ ∉ c -> exists x !
+= ⊤, x in upperBounds c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `zorn_le_nonempty₀`：zorn_le_nonempty₀ (s : Set α) (ih : forall c subseteq
+ s, IsChain (· <= ·) c -> forall y in c, exists ub in s, forall z in c, z <= ub)
+ (x : α…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Ne.lt_top`：Ne.lt_top (h : a != ⊤) : a < ⊤
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Ico`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Ico a b ↔ a < b
+· 使用定理 `Maximal.prop`：∀ {α : Type u_1} [inst : LE α] {P : α → Prop} {x : α}, Max
+imal P x → P x
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Maximal.eq_of_le`：∀ {α : Type u_2} {P : α → Prop} {x y : α} [inst : Part
+ialOrder α], Maximal P x → P y → x ≤ y → x = y
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-English:
-theorem IsCoatomic.of_isChain_bounded
-  statement: {α : Type*} [PartialOrder α] [OrderTop α]
-  proof: by
-  refine ⟨fun x => le_top.eq_or_lt.imp_right fun hx => ?_⟩
-  have := zorn_le_nonempty₀ (Ico x ⊤) (fun c hxc hc y hy => ?_) x (left_mem_Ico.2 hx)
-  · obtain ⟨y, hxy, hmax⟩ := this
-    refine ⟨y, ⟨hmax.prop.2.ne, fun z hyz => le_top.eq_or_lt.resolve_right fun hz => ?_⟩, hxy⟩
-exact hyz.ne hmax.eq_of_le ⟨hxy.trans hyz.le, hz⟩ hyz.le
-  rcases h c hc ⟨y, hy⟩ fun h => (hxc h).2.ne rfl with ⟨z, hz, hcz⟩
-  exact ⟨z, ⟨le_trans (hxc hy).1 (hcz hy), hz.lt_top⟩, hcz⟩
-
-中文:
-定理 是余原子的.of_isChain_bounded
-  结论: {α : 类型} [偏序 α] [有顶序 α]
-  证明: by
-  refine ⟨fun x => le_top.eq_or_lt.imp_right fun hx => ?_⟩
-  have := zorn_le_nonempty₀ (Ico x ⊤) (fun c hxc hc y hy => ?_) x (left_mem_Ico.2 hx)
-  · obtain ⟨y, hxy, hmax⟩ := this
-    refine ⟨y, ⟨hmax.prop.2.ne, fun z hyz => le_top.eq_or_lt.resolve_right fun hz => ?_⟩, hxy⟩
-exact hyz.ne hmax.eq_of_le ⟨hxy.trans hyz.le, hz⟩ hyz.le
-  rcases h c hc ⟨y, hy⟩ fun h => (hxc h).2.ne rfl with ⟨z, hz, hcz⟩
-  exact ⟨z, ⟨le_trans (hxc hy).1 (hcz hy), hz.lt_top⟩, hcz⟩
-
-Depends on / 依赖: eq_of_le, eq_or_lt, hmax.eq_of_le, hmax.prop, hxy.trans, hyz.le, hyz.ne, hz.lt_top, imp_right, le_top, le_top.eq_or_lt.imp_right, le_top.eq_or_lt.resolve_right, le_trans, left_mem_Ico, lt_top, resolve_right
+--- 原说明 ---
+**Zorn's lemma**: A partial order is coatomic if every nonempty chain `c`, `⊤ ∉ 
+c`, has an upper
+bound not equal to `⊤`.
 -/
 theorem IsCoatomic.of_isChain_bounded {α : Type*} [PartialOrder α] [OrderTop α]
-    (h : forall c : Set α, IsChain (· <= ·) c -> c.Nonempty -> ⊤ ∉ c -> exists x != ⊤, x in upperBounds c) :
+    (h : ∀ c : Set α, IsChain (· ≤ ·) c → c.Nonempty → ⊤ ∉ c → ∃ x ≠ ⊤, x ∈ upperBounds c) :
     IsCoatomic α := by
   refine ⟨fun x => le_top.eq_or_lt.imp_right fun hx => ?_⟩
   have := zorn_le_nonempty₀ (Ico x ⊤) (fun c hxc hc y hy => ?_) x (left_mem_Ico.2 hx)
   · obtain ⟨y, hxy, hmax⟩ := this
-    refine ⟨y, ⟨hmax.prop.2.ne, fun z hyz => le_top.eq_or_lt.resolve_right fun hz => ?_⟩, hxy⟩
-exact hyz.ne hmax.eq_of_le ⟨hxy.trans hyz.le, hz⟩ hyz.le
+    refine ⟨y, ⟨hmax.prop.2.ne, fun z hyz ↦ le_top.eq_or_lt.resolve_right fun hz => ?_⟩, hxy⟩
+    exact hyz.ne <| hmax.eq_of_le ⟨hxy.trans hyz.le, hz⟩ hyz.le
   rcases h c hc ⟨y, hy⟩ fun h => (hxc h).2.ne rfl with ⟨z, hz, hcz⟩
   exact ⟨z, ⟨le_trans (hxc hy).1 (hcz hy), hz.lt_top⟩, hcz⟩
 
-/--
-theorem `IsAtomic.of_isChain_bounded` / 定理 `IsAtomic.of_isChain_bounded`
+/-- **Zorn's lemma**: A partial order is atomic if every nonempty chain `c`, `⊥ ∉ c`, has a lower
+bound not equal to `⊥`. -/
+/-
+**IsAtomic.of_isChain_bounded** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsAtomic.of_isChain_bounded {α : Type*} [PartialOrder α] [OrderBot α] (h :
+ forall c : Set α, IsChain (· <= ·) c -> c.Nonempty -> ⊥ ∉ c -> exists x != ⊥, x
+ in lowerBounds c) : IsAtomic α
+参数：h : forall c : Set α, IsChain (· <= ·) c -> c.Nonempty -> ⊥ ∉ c -> exists x !
+= ⊥, x in lowerBounds c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCoatomic_dual_iff_isAtomic`：isCoatomic_dual_iff_isAtomic [OrderBot α] 
+: IsCoatomic αᵒᵈ ↔ IsAtomic α
+· 使用定理 `IsCoatomic.of_isChain_bounded`：IsCoatomic.of_isChain_bounded {α : Type*}
+ [PartialOrder α] [OrderTop α] (h : forall c : Set α, IsChain (· <= ·) c -> c.No
+nempty -> ⊤ ∉ c -> …
+· 使用定理 `IsChain.symm`：IsChain.symm (h : IsChain r s) : IsChain (flip r) s
 
-English:
-theorem IsAtomic.of_isChain_bounded
-  statement: {α : Type*} [PartialOrder α] [OrderBot α]
-  proof: isCoatomic_dual_iff_isAtomic.mp IsCoatomic.of_isChain_bounded fun c hc => h c hc.symm
-
-中文:
-定理 是原子的.of_isChain_bounded
-  结论: {α : 类型} [偏序 α] [有底序 α]
-  证明: isCoatomic_dual_iff_isAtomic.mp IsCoatomic.of_isChain_bounded fun c hc => h c hc.symm
-
-Depends on / 依赖: IsCoatomic, IsCoatomic.of_isChain_bounded, hc.symm, isCoatomic_dual_iff_isAtomic, isCoatomic_dual_iff_isAtomic.mp, of_isChain_bounded
+--- 原说明 ---
+**Zorn's lemma**: A partial order is atomic if every nonempty chain `c`, `⊥ ∉ c`
+, has a lower
+bound not equal to `⊥`.
 -/
 theorem IsAtomic.of_isChain_bounded {α : Type*} [PartialOrder α] [OrderBot α]
     (h :
-      forall c : Set α,
-        IsChain (· <= ·) c -> c.Nonempty -> ⊥ ∉ c -> exists x != ⊥, x in lowerBounds c) :
+      ∀ c : Set α,
+        IsChain (· ≤ ·) c → c.Nonempty → ⊥ ∉ c → ∃ x ≠ ⊥, x ∈ lowerBounds c) :
     IsAtomic α :=
-isCoatomic_dual_iff_isAtomic.mp IsCoatomic.of_isChain_bounded fun c hc => h c hc.symm
+  isCoatomic_dual_iff_isAtomic.mp <| IsCoatomic.of_isChain_bounded fun c hc => h c hc.symm

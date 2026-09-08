@@ -41,137 +41,82 @@ namespace TensorProduct
 
 section
 
-variable {ι} (M : ι -> Type*) [forall i, AddCommMonoid (M i)] [forall i, Module R (M i)]
+variable {ι} (M : ι → Type*) [∀ i, AddCommMonoid (M i)] [∀ i, Module R (M i)]
 
-/--
-Definition of `piRightHomBil` / `piRightHomBil` 的定义
+/-- (Implementation): Bilinear map for defining `TensorProduct.piRightHom`. -/
+/-
+**TensorProduct.piRightHomBil** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piRightHomBil : N ->ₗ[S] (forall i, M i) ->ₗ[R] forall i, N otimes[R] M i 
+where toFun n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piRightHomBil
-  signature: : N ->ₗ[S] (forall i, M i) ->ₗ[R] forall i, N otimes[R] M i where
-  body: LinearMap.pi (fun i => mk R N (M i) n ∘ₗ LinearMap.proj i)
+--- 原说明 ---
+(Implementation): Bilinear map for defining `TensorProduct.piRightHom`.
+-/
+def piRightHomBil : N →ₗ[S] (∀ i, M i) →ₗ[R] ∀ i, N ⊗[R] M i where
+  toFun n := LinearMap.pi (fun i ↦ mk R N (M i) n ∘ₗ LinearMap.proj i)
   map_add' _ _ := by
     ext
     simp
   map_smul' _ _ := rfl
 
-中文:
-定义 piRightHomBil
-  签名: : N ->ₗ[S] (对任意 i, M i) ->ₗ[R] 对任意 i, N otimes[R] M i where
-  定义体: LinearMap.pi (fun i => mk R N (M i) n ∘ₗ LinearMap.proj i)
-  map_add' _ _ := by
-    ext
-    simp
-  map_smul' _ _ := rfl
+/-- For any `R`-module `N`, index type `ι` and family of `R`-modules `Mᵢ`, there is a natural
+linear map `N ⊗[R] (∀ i, M i) →ₗ ∀ i, N ⊗[R] M i`. This map is an isomorphism if `ι` is finite. -/
+/-
+**TensorProduct.piRightHom** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piRightHom : N otimes[R] (forall i, M i) ->ₗ[S] forall i, N otimes[R] M i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: LinearMap, LinearMap.pi, LinearMap.proj
+--- 原说明 ---
+For any `R`-module `N`, index type `ι` and family of `R`-modules `Mᵢ`, there is 
+a natural
+linear map `N ⊗[R] (∀ i, M i) →ₗ ∀ i, N ⊗[R] M i`. This map is an isomorphism if
+ `ι` is finite.
 -/
-def piRightHomBil : N ->ₗ[S] (forall i, M i) ->ₗ[R] forall i, N otimes[R] M i where
-  toFun n := LinearMap.pi (fun i => mk R N (M i) n ∘ₗ LinearMap.proj i)
-  map_add' _ _ := by
-    ext
-    simp
-  map_smul' _ _ := rfl
-
-/--
-Definition of `piRightHom` / `piRightHom` 的定义
-
-English:
-definition piRightHom
-  signature: : N otimes[R] (forall i, M i) ->ₗ[S] forall i, N otimes[R] M i
-  body: AlgebraTensorModule.lift piRightHomBil R S N M
+def piRightHom : N ⊗[R] (∀ i, M i) →ₗ[S] ∀ i, N ⊗[R] M i :=
+  AlgebraTensorModule.lift <| piRightHomBil R S N M
 
 @[simp]
-
-中文:
-定义 piRightHom
-  签名: : N otimes[R] (对任意 i, M i) ->ₗ[S] 对任意 i, N otimes[R] M i
-  定义体: AlgebraTensorModule.lift piRightHomBil R S N M
-
-@[simp]
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lift, piRightHomBil
+/-
+**TensorProduct.piRightHom_tmul** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：piRightHom_tmul (x : N) (f : forall i, M i) : piRightHom R S N M (x otimes
+ₜ f) = (fun j => x otimesₜ f j)
+参数：x : N；f : forall i, M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-def piRightHom : N otimes[R] (forall i, M i) ->ₗ[S] forall i, N otimes[R] M i :=
-AlgebraTensorModule.lift piRightHomBil R S N M
-
-@[simp]
-/--
-lemma `piRightHom_tmul` / 引理 `piRightHom_tmul`
-
-English:
-lemma piRightHom_tmul
-  given: (x : N) (f : forall i, M i)
-  proof: rfl
-
-中文:
-引理 piRightHom_tmul
-  条件: (x : N) (f : 对任意 i, M i)
-  证明: rfl
--/
-lemma piRightHom_tmul (x : N) (f : forall i, M i) :
-    piRightHom R S N M (x otimesₜ f) = (fun j => x otimesₜ f j) :=
+lemma piRightHom_tmul (x : N) (f : ∀ i, M i) :
+    piRightHom R S N M (x ⊗ₜ f) = (fun j ↦ x ⊗ₜ f j) :=
   rfl
 
 variable [Fintype ι] [DecidableEq ι]
 
-/--
-Definition of `piRightInv` / `piRightInv` 的定义
+/-- (Implementation): Inverse for `TensorProduct.piRight`. -/
+/-
+**TensorProduct.piRightInv** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piRightInv : (forall i, N otimes[R] M i) ->ₗ[S] N otimes[R] forall i, M i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piRightInv
-  signature: : (forall i, N otimes[R] M i) ->ₗ[S] N otimes[R] forall i, M i
-  body: LinearMap.lsum S (fun i => N otimes[R] M i) S fun i =>
-    AlgebraTensorModule.map LinearMap.id (single R M i)
-
-@[simp]
-
-中文:
-定义 piRightInv
-  签名: : (对任意 i, N otimes[R] M i) ->ₗ[S] N otimes[R] 对任意 i, M i
-  定义体: LinearMap.lsum S (fun i => N otimes[R] M i) S fun i =>
-    AlgebraTensorModule.map LinearMap.id (single R M i)
-
-@[simp]
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, LinearMap, LinearMap.id, LinearMap.lsum, otimes, single
+--- 原说明 ---
+(Implementation): Inverse for `TensorProduct.piRight`.
 -/
-def piRightInv : (forall i, N otimes[R] M i) ->ₗ[S] N otimes[R] forall i, M i :=
-LinearMap.lsum S (fun i => N otimes[R] M i) S fun i =>
+def piRightInv : (∀ i, N ⊗[R] M i) →ₗ[S] N ⊗[R] ∀ i, M i :=
+  LinearMap.lsum S (fun i ↦ N ⊗[R] M i) S <| fun i ↦
     AlgebraTensorModule.map LinearMap.id (single R M i)
 
 @[simp]
-/--
-lemma `piRightInv_apply` / 引理 `piRightInv_apply`
-
-English:
-lemma piRightInv_apply
-  given: (x : N) (m : forall i, M i)
-  proof: by
-  simp only [piRightInv, lsum_apply, coe_sum, coe_comp, coe_proj, Finset.sum_apply,
-    Function.comp_apply, Function.eval, AlgebraTensorModule.map_tmul, id_coe, id_eq, coe_single]
-  rw [← tmul_sum]
-  congr
-  ext j
-  simp
-
-@[simp]
-
-中文:
-引理 piRightInv_apply
-  条件: (x : N) (m : 对任意 i, M i)
-  证明: by
-  simp only [piRightInv, lsum_apply, coe_sum, coe_comp, coe_proj, Finset.sum_apply,
-    Function.comp_apply, Function.eval, AlgebraTensorModule.map_tmul, id_coe, id_eq, coe_single]
-  rw [← tmul_sum]
-  congr
-  ext j
-  simp
-
-@[simp]
+/-
+**TensorProduct.piRightInv_apply** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma piRightInv_apply (x : N) (m : forall i, M i) :
-    piRightInv R S N M (fun i => x otimesₜ m i) = x otimesₜ m := by
+private lemma piRightInv_apply (x : N) (m : ∀ i, M i) :
+    piRightInv R S N M (fun i ↦ x ⊗ₜ m i) = x ⊗ₜ m := by
   simp only [piRightInv, lsum_apply, coe_sum, coe_comp, coe_proj, Finset.sum_apply,
     Function.comp_apply, Function.eval, AlgebraTensorModule.map_tmul, id_coe, id_eq, coe_single]
   rw [← tmul_sum]
@@ -180,65 +125,29 @@ private lemma piRightInv_apply (x : N) (m : forall i, M i) :
   simp
 
 @[simp]
-/--
-lemma `piRightInv_single` / 引理 `piRightInv_single`
-
-English:
-lemma piRightInv_single
-  given: (x : N) (i : ι) (m : M i)
-  proof: by
-  have : Pi.single i (x otimesₜ m) = fun j => x otimesₜ[R] (Pi.single i m j) := by
-    ext j
-    rw [← tmul_single]
-  rw [this]
-  simp
-
-中文:
-引理 piRightInv_single
-  条件: (x : N) (i : ι) (m : M i)
-  证明: by
-  have : Pi.single i (x otimesₜ m) = fun j => x otimesₜ[R] (Pi.single i m j) := by
-    ext j
-    rw [← tmul_single]
-  rw [this]
-  simp
+/-
+**TensorProduct.piRightInv_single** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma piRightInv_single (x : N) (i : ι) (m : M i) :
-    piRightInv R S N M (Pi.single i (x otimesₜ m)) = x otimesₜ Pi.single i m := by
-  have : Pi.single i (x otimesₜ m) = fun j => x otimesₜ[R] (Pi.single i m j) := by
+    piRightInv R S N M (Pi.single i (x ⊗ₜ m)) = x ⊗ₜ Pi.single i m := by
+  have : Pi.single i (x ⊗ₜ m) = fun j ↦ x ⊗ₜ[R] (Pi.single i m j) := by
     ext j
     rw [← tmul_single]
   rw [this]
   simp
 
-/--
-Definition of `piRight` / `piRight` 的定义
+/-- Tensor product commutes with finite products on the right. -/
+/-
+**TensorProduct.piRight** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piRight : N otimes[R] (forall i, M i) ≃ₗ[S] forall i, N otimes[R] M i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piRight
-  signature: : N otimes[R] (forall i, M i) ≃ₗ[S] forall i, N otimes[R] M i
-  body: LinearEquiv.ofLinearMap
-    (piRightHom R S N M)
-    (piRightInv R S N M)
-    (by ext i x m j; simp [tmul_single])
-    (by ext x j m; simp)
-
-@[simp]
-
-中文:
-定义 piRight
-  签名: : N otimes[R] (对任意 i, M i) ≃ₗ[S] 对任意 i, N otimes[R] M i
-  定义体: LinearEquiv.ofLinearMap
-    (piRightHom R S N M)
-    (piRightInv R S N M)
-    (by ext i x m j; simp [tmul_single])
-    (by ext x j m; simp)
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, ofLinearMap, piRightHom, piRightInv, tmul_single
+--- 原说明 ---
+Tensor product commutes with finite products on the right.
 -/
-def piRight : N otimes[R] (forall i, M i) ≃ₗ[S] forall i, N otimes[R] M i :=
+def piRight : N ⊗[R] (∀ i, M i) ≃ₗ[S] ∀ i, N ⊗[R] M i :=
   LinearEquiv.ofLinearMap
     (piRightHom R S N M)
     (piRightInv R S N M)
@@ -246,130 +155,107 @@ def piRight : N otimes[R] (forall i, M i) ≃ₗ[S] forall i, N otimes[R] M i :=
     (by ext x j m; simp)
 
 @[simp]
-/--
-lemma `piRight_apply` / 引理 `piRight_apply`
-
-English:
-lemma piRight_apply
-  given: (x : N otimes[R] (forall i, M i))
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 piRight_apply
-  条件: (x : N otimes[R] (对任意 i, M i))
-  证明: by
-  rfl
-
-@[simp]
+/-
+**TensorProduct.piRight_apply** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：piRight_apply (x : N otimes[R] (forall i, M i)) : piRight R S N M x = piRi
+ghtHom R S N M x
+参数：x : N otimes[R] (forall i, M i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-lemma piRight_apply (x : N otimes[R] (forall i, M i)) :
+lemma piRight_apply (x : N ⊗[R] (∀ i, M i)) :
     piRight R S N M x = piRightHom R S N M x := by
   rfl
 
 @[simp]
-/--
-lemma `piRight_symm_apply` / 引理 `piRight_symm_apply`
-
-English:
-lemma piRight_symm_apply
-  given: (x : N) (m : forall i, M i)
-  proof: by
-  simp [piRight]
-
-@[simp]
-
-中文:
-引理 piRight_symm_apply
-  条件: (x : N) (m : 对任意 i, M i)
-  证明: by
-  simp [piRight]
-
-@[simp]
-
-Depends on / 依赖: piRight
+/-
+**TensorProduct.piRight_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：piRight_symm_apply (x : N) (m : forall i, M i) : (piRight R S N M).symm (f
+un i => x otimesₜ m i) = x otimesₜ m
+参数：x : N；m : forall i, M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.LinearAlgebra.TensorProduct.Pi.0.TensorProduct.piRightI
+nv_apply`：∀ (R : Type u_1) [inst : CommSemiring R] (S : Type u_2) [inst_1 : Comm
+Semiring S] [inst_2 : Algebra R S] (N : Type u_3)   [inst_3 : AddCommM…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma piRight_symm_apply (x : N) (m : forall i, M i) :
-    (piRight R S N M).symm (fun i => x otimesₜ m i) = x otimesₜ m := by
+lemma piRight_symm_apply (x : N) (m : ∀ i, M i) :
+    (piRight R S N M).symm (fun i ↦ x ⊗ₜ m i) = x ⊗ₜ m := by
   simp [piRight]
 
 @[simp]
-/--
-lemma `piRight_symm_single` / 引理 `piRight_symm_single`
-
-English:
-lemma piRight_symm_single
-  given: (x : N) (i : ι) (m : M i)
-  proof: by
-  simp [piRight]
-
-中文:
-引理 piRight_symm_single
-  条件: (x : N) (i : ι) (m : M i)
-  证明: by
-  simp [piRight]
-
-Depends on / 依赖: piRight
+/-
+**TensorProduct.piRight_symm_single** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：piRight_symm_single (x : N) (i : ι) (m : M i) : (piRight R S N M).symm (Pi
+.single i (x otimesₜ m)) = x otimesₜ Pi.single i m
+参数：x : N；i : ι；m : M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.LinearAlgebra.TensorProduct.Pi.0.TensorProduct.piRightI
+nv_single`：∀ (R : Type u_1) [inst : CommSemiring R] (S : Type u_2) [inst_1 : Com
+mSemiring S] [inst_2 : Algebra R S] (N : Type u_3)   [inst_3 : AddCommM…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma piRight_symm_single (x : N) (i : ι) (m : M i) :
-    (piRight R S N M).symm (Pi.single i (x otimesₜ m)) = x otimesₜ Pi.single i m := by
+    (piRight R S N M).symm (Pi.single i (x ⊗ₜ m)) = x ⊗ₜ Pi.single i m := by
   simp [piRight]
 
-/--
-Definition of `piLeft` / `piLeft` 的定义
+/-- Tensor product commutes with finite products on the left.
+TODO: generalize to `S`-linear. -/
+/-
+**TensorProduct.piLeft** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：(R : Type u_1) →   [inst : CommSemiring R] →     (N : Type u_3) →       [i
+nst_1 : AddCommMonoid N] →         [inst_2 : _root_.Module R N] →           {ι :
+ Type u_4} →             (M : ι → Type u_5) →               [inst_3 : (i : ι) → 
+AddCommMonoid (M i)] →                 [inst_4 : (i : ι) → _root_.Module R (M i)
+] →                   [Fintype ι] →                     [DecidableEq ι] → Tensor
+Product R ((i : ι) → M i) N ≃ₗ[R] (i : ι) → TensorProduct R (M i) N
+参数：i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piLeft
-  signature: : (forall i, M i) otimes[R] N ≃ₗ[R] forall i, M i otimes[R] N
-  body: TensorProduct.comm .. ≪≫ₗ piRight .. ≪≫ₗ .piCongrRight fun _ => TensorProduct.comm ..
-
-中文:
-定义 piLeft
-  签名: : (对任意 i, M i) otimes[R] N ≃ₗ[R] 对任意 i, M i otimes[R] N
-  定义体: TensorProduct.comm .. ≪≫ₗ piRight .. ≪≫ₗ .piCongrRight fun _ => TensorProduct.comm ..
+--- 原说明 ---
+Tensor product commutes with finite products on the left.
+TODO: generalize to `S`-linear.
 -/
-@[simp] def piLeft : (forall i, M i) otimes[R] N ≃ₗ[R] forall i, M i otimes[R] N :=
-  TensorProduct.comm .. ≪≫ₗ piRight .. ≪≫ₗ .piCongrRight fun _ => TensorProduct.comm ..
+@[simp] def piLeft : (∀ i, M i) ⊗[R] N ≃ₗ[R] ∀ i, M i ⊗[R] N :=
+  TensorProduct.comm .. ≪≫ₗ piRight .. ≪≫ₗ .piCongrRight fun _ ↦ TensorProduct.comm ..
 
 end
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `piScalarRightHomBil` / `piScalarRightHomBil` 的定义
+/-- Internal implementation detail: we should make this `private`. -/
+/-
+**TensorProduct.piScalarRightHomBil** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piScalarRightHomBil : N ->ₗ[S] (ι -> R) ->ₗ[R] (ι -> N) where toFun n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piScalarRightHomBil
-  signature: : N ->ₗ[S] (ι -> R) ->ₗ[R] (ι -> N) where
-  body: LinearMap.compLeft (toSpanSingleton R N n) ι
-  map_add' x y := by
-    ext i j
-    simp
-  map_smul' s x := by
-    ext i j
-    dsimp only [coe_comp, coe_single, Function.comp_apply, compLeft_apply, toSpanSingleton_apply,
-      RingHom.id_apply, smul_apply, Pi.smul_apply]
-    rw [← IsScalarTower.smul_assoc]; rw [_root_.Algebra.smul_def]; rw [mul_comm]; rw [mul_smul]
-    simp
-
-中文:
-定义 piScalarRightHomBil
-  签名: : N ->ₗ[S] (ι -> R) ->ₗ[R] (ι -> N) where
-  定义体: LinearMap.compLeft (toSpanSingleton R N n) ι
-  map_add' x y := by
-    ext i j
-    simp
-  map_smul' s x := by
-    ext i j
-    dsimp only [coe_comp, coe_single, Function.comp_apply, compLeft_apply, toSpanSingleton_apply,
-      RingHom.id_apply, smul_apply, Pi.smul_apply]
-    rw [← IsScalarTower.smul_assoc]; rw [_root_.Algebra.smul_def]; rw [mul_comm]; rw [mul_smul]
-    simp
-
-Depends on / 依赖: LinearMap, LinearMap.compLeft, compLeft, toSpanSingleton
+--- 原说明 ---
+Internal implementation detail: we should make this `private`.
 -/
-def piScalarRightHomBil : N ->ₗ[S] (ι -> R) ->ₗ[R] (ι -> N) where
+def piScalarRightHomBil : N →ₗ[S] (ι → R) →ₗ[R] (ι → N) where
   toFun n := LinearMap.compLeft (toSpanSingleton R N n) ι
   map_add' x y := by
     ext i j
@@ -378,137 +264,101 @@ def piScalarRightHomBil : N ->ₗ[S] (ι -> R) ->ₗ[R] (ι -> N) where
     ext i j
     dsimp only [coe_comp, coe_single, Function.comp_apply, compLeft_apply, toSpanSingleton_apply,
       RingHom.id_apply, smul_apply, Pi.smul_apply]
-    rw [← IsScalarTower.smul_assoc]; rw [_root_.Algebra.smul_def]; rw [mul_comm]; rw [mul_smul]
+    rw [← IsScalarTower.smul_assoc, _root_.Algebra.smul_def, mul_comm, mul_smul]
     simp
 
-/--
-Definition of `piScalarRightHom` / `piScalarRightHom` 的定义
+/-- For any `R`-module `N` and index type `ι`, there is a natural
+linear map `N ⊗[R] (ι → R) →ₗ (ι → N)`. This map is an isomorphism if `ι` is finite. -/
+/-
+**TensorProduct.piScalarRightHom** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piScalarRightHom : N otimes[R] (ι -> R) ->ₗ[S] (ι -> N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piScalarRightHom
-  signature: : N otimes[R] (ι -> R) ->ₗ[S] (ι -> N)
-  body: AlgebraTensorModule.lift piScalarRightHomBil R S N ι
-
-@[simp]
-
-中文:
-定义 piScalarRightHom
-  签名: : N otimes[R] (ι -> R) ->ₗ[S] (ι -> N)
-  定义体: AlgebraTensorModule.lift piScalarRightHomBil R S N ι
-
-@[simp]
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lift, piScalarRightHomBil
+--- 原说明 ---
+For any `R`-module `N` and index type `ι`, there is a natural
+linear map `N ⊗[R] (ι → R) →ₗ (ι → N)`. This map is an isomorphism if `ι` is fin
+ite.
 -/
-def piScalarRightHom : N otimes[R] (ι -> R) ->ₗ[S] (ι -> N) :=
-AlgebraTensorModule.lift piScalarRightHomBil R S N ι
+def piScalarRightHom : N ⊗[R] (ι → R) →ₗ[S] (ι → N) :=
+  AlgebraTensorModule.lift <| piScalarRightHomBil R S N ι
 
 @[simp]
-/--
-lemma `piScalarRightHom_tmul` / 引理 `piScalarRightHom_tmul`
-
-English:
-lemma piScalarRightHom_tmul
-  given: (x : N) (f : ι -> R)
-  proof: by
-  ext j
-  simp [piScalarRightHom, piScalarRightHomBil]
-
-中文:
-引理 piScalarRightHom_tmul
-  条件: (x : N) (f : ι -> R)
-  证明: by
-  ext j
-  simp [piScalarRightHom, piScalarRightHomBil]
-
-Depends on / 依赖: piScalarRightHom, piScalarRightHomBil
+/-
+**TensorProduct.piScalarRightHom_tmul** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：piScalarRightHom_tmul (x : N) (f : ι -> R) : piScalarRightHom R S N ι (x o
+timesₜ f) = (fun j => f j • x)
+参数：x : N；f : ι -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.compLeft_apply`：∀ {R : Type u} {M₂ : Type w} {M₃ : Type y} [in
+st : Semiring R] [inst_1 : AddCommMonoid M₂] [inst_2 : _root_.Module R M₂]   [in
+st_3 : AddComm…
+· 使用定理 `LinearMap.toSpanSingleton_apply`：∀ (R : Type u_1) (M : Type u_4) [inst :
+ Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] (x : M)   (
+b : R), (LinearMap.to…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma piScalarRightHom_tmul (x : N) (f : ι -> R) :
-    piScalarRightHom R S N ι (x otimesₜ f) = (fun j => f j • x) := by
+lemma piScalarRightHom_tmul (x : N) (f : ι → R) :
+    piScalarRightHom R S N ι (x ⊗ₜ f) = (fun j ↦ f j • x) := by
   ext j
   simp [piScalarRightHom, piScalarRightHomBil]
 
 variable [Fintype ι] [DecidableEq ι]
 
-/--
-Definition of `piScalarRightInv` / `piScalarRightInv` 的定义
+/-- (Implementation): Inverse for `TensorProduct.piScalarRight`. -/
+/-
+**TensorProduct.piScalarRightInv** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piScalarRightInv : (ι -> N) ->ₗ[S] N otimes[R] (ι -> R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piScalarRightInv
-  signature: : (ι -> N) ->ₗ[S] N otimes[R] (ι -> R)
-  body: LinearMap.lsum S (fun _ => N) S fun i => {
-    toFun := fun n => n otimesₜ Pi.single i 1
-    map_add' := fun x y => by simp [add_tmul]
-    map_smul' := fun _ _ => rfl
-  }
-
-中文:
-定义 piScalarRightInv
-  签名: : (ι -> N) ->ₗ[S] N otimes[R] (ι -> R)
-  定义体: LinearMap.lsum S (fun _ => N) S fun i => {
-    toFun := fun n => n otimesₜ Pi.single i 1
-    map_add' := fun x y => by simp [add_tmul]
-    map_smul' := fun _ _ => rfl
-  }
-
-Depends on / 依赖: LinearMap, LinearMap.lsum, Pi.single, add_tmul, map_add, map_smul, single
+--- 原说明 ---
+(Implementation): Inverse for `TensorProduct.piScalarRight`.
 -/
-def piScalarRightInv : (ι -> N) ->ₗ[S] N otimes[R] (ι -> R) :=
-LinearMap.lsum S (fun _ => N) S fun i => {
-    toFun := fun n => n otimesₜ Pi.single i 1
-    map_add' := fun x y => by simp [add_tmul]
-    map_smul' := fun _ _ => rfl
+def piScalarRightInv : (ι → N) →ₗ[S] N ⊗[R] (ι → R) :=
+  LinearMap.lsum S (fun _ ↦ N) S <| fun i ↦ {
+    toFun := fun n ↦ n ⊗ₜ Pi.single i 1
+    map_add' := fun x y ↦ by simp [add_tmul]
+    map_smul' := fun _ _ ↦ rfl
   }
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `piScalarRightInv_single` / 引理 `piScalarRightInv_single`
-
-English:
-lemma piScalarRightInv_single
-  given: (x : N) (i : ι)
-  proof: by
-  simp [piScalarRightInv, Pi.single_apply, TensorProduct.ite_tmul]
-
-中文:
-引理 piScalarRightInv_single
-  条件: (x : N) (i : ι)
-  证明: by
-  simp [piScalarRightInv, Pi.single_apply, TensorProduct.ite_tmul]
+/-
+**TensorProduct.piScalarRightInv_single** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma piScalarRightInv_single (x : N) (i : ι) :
-    piScalarRightInv R S N ι (Pi.single i x) = x otimesₜ Pi.single i 1 := by
+    piScalarRightInv R S N ι (Pi.single i x) = x ⊗ₜ Pi.single i 1 := by
   simp [piScalarRightInv, Pi.single_apply, TensorProduct.ite_tmul]
 
-/--
-Definition of `piScalarRight` / `piScalarRight` 的定义
+/-- For any `R`-module `N` and finite index type `ι`, `N ⊗[R] (ι → R)` is canonically
+isomorphic to `ι → N`. -/
+/-
+**TensorProduct.piScalarRight** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：piScalarRight : N otimes[R] (ι -> R) ≃ₗ[S] (ι -> N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piScalarRight
-  signature: : N otimes[R] (ι -> R) ≃ₗ[S] (ι -> N)
-  body: LinearEquiv.ofLinearMap
-    (piScalarRightHom R S N ι)
-    (piScalarRightInv R S N ι)
-    (by ext i x j; simp [Pi.single_apply])
-    (by ext x i; simp [Pi.single_apply_smul])
-
-@[simp]
-
-中文:
-定义 piScalarRight
-  签名: : N otimes[R] (ι -> R) ≃ₗ[S] (ι -> N)
-  定义体: LinearEquiv.ofLinearMap
-    (piScalarRightHom R S N ι)
-    (piScalarRightInv R S N ι)
-    (by ext i x j; simp [Pi.single_apply])
-    (by ext x i; simp [Pi.single_apply_smul])
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, Pi.single_apply, Pi.single_apply_smul, ofLinearMap, piScalarRightHom, piScalarRightInv, single_apply, single_apply_smul
+--- 原说明 ---
+For any `R`-module `N` and finite index type `ι`, `N ⊗[R] (ι → R)` is canonicall
+y
+isomorphic to `ι → N`.
 -/
-def piScalarRight : N otimes[R] (ι -> R) ≃ₗ[S] (ι -> N) :=
+def piScalarRight : N ⊗[R] (ι → R) ≃ₗ[S] (ι → N) :=
   LinearEquiv.ofLinearMap
     (piScalarRightHom R S N ι)
     (piScalarRightInv R S N ι)
@@ -516,52 +366,50 @@ def piScalarRight : N otimes[R] (ι -> R) ≃ₗ[S] (ι -> N) :=
     (by ext x i; simp [Pi.single_apply_smul])
 
 @[simp]
-/--
-lemma `piScalarRight_apply` / 引理 `piScalarRight_apply`
-
-English:
-lemma piScalarRight_apply
-  given: (x : N otimes[R] (ι -> R))
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 piScalarRight_apply
-  条件: (x : N otimes[R] (ι -> R))
-  证明: by
-  rfl
-
-@[simp]
+/-
+**TensorProduct.piScalarRight_apply** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：piScalarRight_apply (x : N otimes[R] (ι -> R)) : piScalarRight R S N ι x =
+ piScalarRightHom R S N ι x
+参数：x : N otimes[R] (ι -> R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-lemma piScalarRight_apply (x : N otimes[R] (ι -> R)) :
+lemma piScalarRight_apply (x : N ⊗[R] (ι → R)) :
     piScalarRight R S N ι x = piScalarRightHom R S N ι x := by
   rfl
 
 @[simp]
-/--
-lemma `piScalarRight_symm_single` / 引理 `piScalarRight_symm_single`
-
-English:
-lemma piScalarRight_symm_single
-  given: (x : N) (i : ι)
-  proof: by
-  simp [piScalarRight]
-
-中文:
-引理 piScalarRight_symm_single
-  条件: (x : N) (i : ι)
-  证明: by
-  simp [piScalarRight]
-
-Depends on / 依赖: piScalarRight
+/-
+**TensorProduct.piScalarRight_symm_single** 是 Mathlib 中的一个引理，位于命名空间 `TensorProdu
+ct`。
+形式化陈述：piScalarRight_symm_single (x : N) (i : ι) : (piScalarRight R S N ι).symm (
+Pi.single i x) = x otimesₜ Pi.single i 1
+参数：x : N；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.LinearAlgebra.TensorProduct.Pi.0.TensorProduct.piScalar
+RightInv_single`：∀ (R : Type u_1) [inst : CommSemiring R] (S : Type u_2) [inst_1
+ : CommSemiring S] [inst_2 : Algebra R S] (N : Type u_3)   [inst_3 : AddCommM…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma piScalarRight_symm_single (x : N) (i : ι) :
-    (piScalarRight R S N ι).symm (Pi.single i x) = x otimesₜ Pi.single i 1 := by
+    (piScalarRight R S N ι).symm (Pi.single i x) = x ⊗ₜ Pi.single i 1 := by
   simp [piScalarRight]
 
 -- See also `TensorProduct.piScalarRight_symm_algebraMap` in
 -- `Mathlib/RingTheory/TensorProduct/Pi.lean`.
 
 end TensorProduct
+

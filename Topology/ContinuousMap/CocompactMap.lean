@@ -24,22 +24,34 @@ open Filter Set
 /-! ### Cocompact continuous maps -/
 
 
-/--
-Definition of `CocompactMap` / `CocompactMap` 的定义
+/-- A *cocompact continuous map* is a continuous function between topological spaces which
+tends to the cocompact filter along the cocompact filter. Functions for which preimages of compact
+sets are compact always satisfy this property, and the converse holds for cocompact continuous maps
+when the codomain is Hausdorff (see `CocompactMap.tendsto_of_forall_preimage` and
+`CocompactMap.isCompact_preimage`).
 
-English:
-structure CocompactMap
-  parameters: (α : Type u) (β : Type v) [TopologicalSpace α] [TopologicalSpace β]
-  extends: ContinuousMap α β
-  axioms and operations (1):
-    - cocompact_tendsto' : Tendsto toFun (cocompact α) (cocompact β)
+Cocompact maps thus generalise proper maps, with which they correspond when the codomain is
+Hausdorff. -/
+/-
+**CocompactMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u) → (β : Type v) → [TopologicalSpace α] → [TopologicalSpace β] 
+→ Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 余compact映射
-  参数: (α : 类型u) (β : 类型v) [拓扑空间 α] [拓扑空间 β]
-  继承: 连续映射 α β
-  公理与运算 (1 个):
-    - cocompact_tendsto' : 收敛 toFun (cocompact α) (cocompact β)
+--- 原说明 ---
+A *cocompact continuous map* is a continuous function between topological spaces
+ which
+tends to the cocompact filter along the cocompact filter. Functions for which pr
+eimages of compact
+sets are compact always satisfy this property, and the converse holds for cocomp
+act continuous maps
+when the codomain is Hausdorff (see `CocompactMap.tendsto_of_forall_preimage` an
+d
+`CocompactMap.isCompact_preimage`).
+
+Cocompact maps thus generalise proper maps, with which they correspond when the 
+codomain is
+Hausdorff.
 -/
 structure CocompactMap (α : Type u) (β : Type v) [TopologicalSpace α] [TopologicalSpace β] :
     Type max u v
@@ -49,22 +61,21 @@ structure CocompactMap (α : Type u) (β : Type v) [TopologicalSpace α] [Topolo
 
 section
 
-/--
-Definition of `CocompactMapClass` / `CocompactMapClass` 的定义
+/-- `CocompactMapClass F α β` states that `F` is a type of cocompact continuous maps.
 
-English:
-class CocompactMapClass
-  parameters: (F : Type*) (α β : outParam Type*) [TopologicalSpace α]
-  extends: ContinuousMapClass F α β
-  axioms and operations (1):
-    - cocompact_tendsto((f : F)) : Tendsto f (cocompact α) (cocompact β)
+You should also extend this typeclass when you extend `CocompactMap`. -/
+/-
+**CocompactMapClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (α : outParam (Type u_2)) →     (β : outParam (Type u_3
+)) → [TopologicalSpace α] → [TopologicalSpace β] → [FunLike F α β] → Prop
+参数：Type u_2；Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 余compact映射类
-  参数: (F : 类型) (α β : outParam 类型) [拓扑空间 α]
-  继承: 连续映射类 F α β
-  公理与运算 (1 个):
-    - cocompact_tendsto((f : F)) : 收敛 f (cocompact α) (cocompact β)
+--- 原说明 ---
+`CocompactMapClass F α β` states that `F` is a type of cocompact continuous maps
+.
+
+You should also extend this typeclass when you extend `CocompactMap`.
 -/
 class CocompactMapClass (F : Type*) (α β : outParam Type*) [TopologicalSpace α]
   [TopologicalSpace β] [FunLike F α β] : Prop extends ContinuousMapClass F α β where
@@ -81,41 +92,32 @@ variable [FunLike F α β] [CocompactMapClass F α β]
 /-- Turn an element of a type `F` satisfying `CocompactMapClass F α β` into an actual
 `CocompactMap`. This is declared as the default coercion from `F` to `CocompactMap α β`. -/
 @[coe]
-/--
-Definition of `toCocompactMap` / `toCocompactMap` 的定义
+/-
+**CocompactMapClass.toCocompactMap** 是 Mathlib 中的一个定义，位于命名空间 `CocompactMapClass`
+。
+形式化陈述：toCocompactMap (f : F) : CocompactMap α β
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CocompactMapClass.toContinuousMapClass`：∀ {F : Type u_1} {α : outParam (
+Type u_2)} {β : outParam (Type u_3)} {inst : TopologicalSpace α}   {inst_1 : Top
+ologicalSpace β} {inst_2 : F…
+· 使用定理 `CocompactMapClass.cocompact_tendsto`：∀ {F : Type u_1} {α : outParam (Typ
+e u_2)} {β : outParam (Type u_3)} {inst : TopologicalSpace α}   {inst_1 : Topolo
+gicalSpace β} {inst_2 : F…
 
-English:
-definition toCocompactMap
-  signature: (f : F)
-  body: { (f : C(α, β)) with
-    cocompact_tendsto' := cocompact_tendsto f }
-
-中文:
-定义 toCocompactMap
-  签名: (f : F)
-  定义体: { (f : C(α, β)) with
-    cocompact_tendsto' := cocompact_tendsto f }
-
-Depends on / 依赖: cocompact_tendsto
+--- 原说明 ---
+Turn an element of a type `F` satisfying `CocompactMapClass F α β` into an actua
+l
+`CocompactMap`. This is declared as the default coercion from `F` to `CocompactM
+ap α β`.
 -/
 def toCocompactMap (f : F) : CocompactMap α β :=
   { (f : C(α, β)) with
     cocompact_tendsto' := cocompact_tendsto f }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeTC F (CocompactMap α β)
-  body: ⟨toCocompactMap⟩
-
-中文:
-实例 :
-  签名: CoeTC F (余compact映射 α β)
-  定义体: ⟨toCocompactMap⟩
-
-Depends on / 依赖: toCocompactMap
+/-
+**CocompactMapClass.** 是 Mathlib 中的一个实例，位于命名空间 `CocompactMapClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeTC F (CocompactMap α β) :=
   ⟨toCocompactMap⟩
@@ -131,28 +133,9 @@ section Basics
 variable {α β γ δ : Type*} [TopologicalSpace α] [TopologicalSpace β] [TopologicalSpace γ]
   [TopologicalSpace δ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (CocompactMap α β) α β
-  body: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-中文:
-实例 :
-  签名: 函数状 (余compact映射 α β) α β
-  定义体: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-Depends on / 依赖: f.toFun
+/-
+**CocompactMap.** 是 Mathlib 中的一个实例，位于命名空间 `CocompactMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (CocompactMap α β) α β where
   coe f := f.toFun
@@ -160,106 +143,52 @@ instance : FunLike (CocompactMap α β) α β where
     obtain ⟨⟨_, _⟩, _⟩ := f
     obtain ⟨⟨_, _⟩, _⟩ := g
     congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CocompactMapClass (CocompactMap α β) α β
-  body: f.continuous_toFun
-  cocompact_tendsto f := f.cocompact_tendsto'
-
-@[simp]
-
-中文:
-实例 :
-  签名: 余compact映射类 (余compact映射 α β) α β
-  定义体: f.continuous_toFun
-  cocompact_tendsto f := f.cocompact_tendsto'
-
-@[simp]
-
-Depends on / 依赖: continuous_toFun, f.continuous_toFun
+/-
+**CocompactMap.** 是 Mathlib 中的一个实例，位于命名空间 `CocompactMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CocompactMapClass (CocompactMap α β) α β where
   map_continuous f := f.continuous_toFun
   cocompact_tendsto f := f.cocompact_tendsto'
 
 @[simp]
-/--
-theorem `coe_toContinuousMap` / 定理 `coe_toContinuousMap`
-
-English:
-theorem coe_toContinuousMap
-  given: {f : CocompactMap α β}
-  statement: (f.toContinuousMap : α -> β) = f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_toContinuousMap
-  条件: {f : 余compact映射 α β}
-  结论: (f.toContinuousMap : α -> β) = f
-  证明: rfl
-
-@[ext]
+/-
+**CocompactMap.coe_toContinuousMap** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：coe_toContinuousMap {f : CocompactMap α β} : (f.toContinuousMap : α -> β) 
+= f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toContinuousMap {f : CocompactMap α β} : (f.toContinuousMap : α -> β) = f :=
+theorem coe_toContinuousMap {f : CocompactMap α β} : (f.toContinuousMap : α → β) = f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : CocompactMap α β} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: {f g : 余compact映射 α β} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**CocompactMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：ext {f g : CocompactMap α β} (h : forall x, f x = g x) : f = g
+参数：h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : CocompactMap α β} (h : forall x, f x = g x) : f = g :=
+theorem ext {f g : CocompactMap α β} (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext _ _ h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `CocompactMap` with a new `toFun` equal to the old one. Useful
+to fix definitional equalities. -/
+/-
+**CocompactMap.copy** 是 Mathlib 中的一个定义，位于命名空间 `CocompactMap`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [inst : TopologicalSpace α] →     
+  [inst_1 : TopologicalSpace β] → (f : CocompactMap α β) → (f' : α → β) → f' = ⇑
+f → CocompactMap α β
+参数：f : CocompactMap α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : CocompactMap α β) (f' : α -> β) (h : f' = f)
-  body: f'
-  continuous_toFun := by
-    rw [h]
-    exact f.continuous_toFun
-  cocompact_tendsto' := by
-    simp_rw [h]
-    exact f.cocompact_tendsto'
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : 余compact映射 α β) (f' : α -> β) (h : f' = f)
-  定义体: f'
-  continuous_toFun := by
-    rw [h]
-    exact f.continuous_toFun
-  cocompact_tendsto' := by
-    simp_rw [h]
-    exact f.cocompact_tendsto'
-
-@[simp]
+--- 原说明 ---
+Copy of a `CocompactMap` with a new `toFun` equal to the old one. Useful
+to fix definitional equalities.
 -/
-protected def copy (f : CocompactMap α β) (f' : α -> β) (h : f' = f) : CocompactMap α β where
+protected def copy (f : CocompactMap α β) (f' : α → β) (h : f' = f) : CocompactMap α β where
   toFun := f'
   continuous_toFun := by
     rw [h]
@@ -269,61 +198,37 @@ protected def copy (f : CocompactMap α β) (f' : α -> β) (h : f' = f) : Cocom
     exact f.cocompact_tendsto'
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : CocompactMap α β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : 余compact映射 α β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**CocompactMap.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：coe_copy (f : CocompactMap α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h
+) = f'
+参数：f : CocompactMap α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : CocompactMap α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : CocompactMap α β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : CocompactMap α β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-@[simp]
-
-中文:
-定理 copy_eq
-  条件: (f : 余compact映射 α β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**CocompactMap.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：copy_eq (f : CocompactMap α β) (f' : α -> β) (h : f' = f) : f.copy f' h = 
+f
+参数：f : CocompactMap α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : CocompactMap α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : CocompactMap α β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : C(α, β)) (h : Tendsto f (cocompact α) (cocompact β))
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (f : C(α, β)) (h : 收敛 f (cocompact α) (cocompact β))
-  证明: rfl
+/-
+**CocompactMap.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：coe_mk (f : C(α, β)) (h : Tendsto f (cocompact α) (cocompact β)) : ⇑(⟨f, h
+⟩ : CocompactMap α β) = f
+参数：f : C(α, β)；h : Tendsto f (cocompact α) (cocompact β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (f : C(α, β)) (h : Tendsto f (cocompact α) (cocompact β)) :
     ⇑(⟨f, h⟩ : CocompactMap α β) = f :=
@@ -333,252 +238,181 @@ section
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity as a cocompact continuous map. -/
+/-
+**CocompactMap.id** 是 Mathlib 中的一个定义，位于命名空间 `CocompactMap`。
+形式化陈述：(α : Type u_1) → [inst : TopologicalSpace α] → CocompactMap α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : CocompactMap α α
-  body: ⟨ContinuousMap.id _, tendsto_id⟩
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : 余compact映射 α α
-  定义体: ⟨ContinuousMap.id _, tendsto_id⟩
-
-@[simp, norm_cast]
+--- 原说明 ---
+The identity as a cocompact continuous map.
 -/
 protected def id : CocompactMap α α :=
   ⟨ContinuousMap.id _, tendsto_id⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(CocompactMap.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(余compact映射.id α) = id
-  证明: rfl
+/-
+**CocompactMap.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：coe_id : ⇑(CocompactMap.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(CocompactMap.id α) = id :=
   rfl
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (CocompactMap α α)
-  body: ⟨CocompactMap.id α⟩
-
-中文:
-实例 :
-  签名: 可居 (余compact映射 α α)
-  定义体: ⟨CocompactMap.id α⟩
-
-Depends on / 依赖: CocompactMap, CocompactMap.id
+/-
+**CocompactMap.** 是 Mathlib 中的一个实例，位于命名空间 `CocompactMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (CocompactMap α α) :=
   ⟨CocompactMap.id α⟩
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of cocompact continuous maps, as a cocompact continuous map. -/
+/-
+**CocompactMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `CocompactMap`。
+形式化陈述：comp (f : CocompactMap β γ) (g : CocompactMap α β) : CocompactMap α γ
+参数：f : CocompactMap β γ；g : CocompactMap α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : CocompactMap β γ) (g : CocompactMap α β)
-  body: ⟨f.toContinuousMap.comp g, (cocompact_tendsto f).comp (cocompact_tendsto g)⟩
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : 余compact映射 β γ) (g : 余compact映射 α β)
-  定义体: ⟨f.toContinuousMap.comp g, (cocompact_tendsto f).comp (cocompact_tendsto g)⟩
-
-@[simp]
-
-Depends on / 依赖: cocompact_tendsto, f.toContinuousMap.comp, toContinuousMap
+--- 原说明 ---
+The composition of cocompact continuous maps, as a cocompact continuous map.
 -/
 def comp (f : CocompactMap β γ) (g : CocompactMap α β) : CocompactMap α γ :=
   ⟨f.toContinuousMap.comp g, (cocompact_tendsto f).comp (cocompact_tendsto g)⟩
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : CocompactMap β γ) (g : CocompactMap α β)
-  statement: ⇑(comp f g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : 余compact映射 β γ) (g : 余compact映射 α β)
-  结论: ⇑(comp f g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**CocompactMap.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：coe_comp (f : CocompactMap β γ) (g : CocompactMap α β) : ⇑(comp f g) = f ∘
+ g
+参数：f : CocompactMap β γ；g : CocompactMap α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp (f : CocompactMap β γ) (g : CocompactMap α β) : ⇑(comp f g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : CocompactMap β γ) (g : CocompactMap α β) (a : α)
-  statement: comp f g a = f (g a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : 余compact映射 β γ) (g : 余compact映射 α β) (a : α)
-  结论: comp f g a = f (g a)
-  证明: rfl
-
-@[simp]
+/-
+**CocompactMap.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：comp_apply (f : CocompactMap β γ) (g : CocompactMap α β) (a : α) : comp f 
+g a = f (g a)
+参数：f : CocompactMap β γ；g : CocompactMap α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : CocompactMap β γ) (g : CocompactMap α β) (a : α) : comp f g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : CocompactMap γ δ) (g : CocompactMap β γ) (h : CocompactMap α β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : 余compact映射 γ δ) (g : 余compact映射 β γ) (h : 余compact映射 α β)
-  证明: rfl
-
-@[simp]
+/-
+**CocompactMap.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：comp_assoc (f : CocompactMap γ δ) (g : CocompactMap β γ) (h : CocompactMap
+ α β) : (f.comp g).comp h = f.comp (g.comp h)
+参数：f : CocompactMap γ δ；g : CocompactMap β γ；h : CocompactMap α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : CocompactMap γ δ) (g : CocompactMap β γ) (h : CocompactMap α β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : CocompactMap α β)
-  statement: (CocompactMap.id _).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : 余compact映射 α β)
-  结论: (余compact映射.id _).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**CocompactMap.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：id_comp (f : CocompactMap α β) : (CocompactMap.id _).comp f = f
+参数：f : CocompactMap α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CocompactMap.ext`：ext {f g : CocompactMap α β} (h : forall x, f x = g x)
+ : f = g
 -/
 theorem id_comp (f : CocompactMap α β) : (CocompactMap.id _).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : CocompactMap α β)
-  statement: f.comp (CocompactMap.id _) = f
-  proof: ext fun _ => rfl
-
-中文:
-定理 comp_id
-  条件: (f : 余compact映射 α β)
-  结论: f.comp (余compact映射.id _) = f
-  证明: ext fun _ => rfl
+/-
+**CocompactMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：comp_id (f : CocompactMap α β) : f.comp (CocompactMap.id _) = f
+参数：f : CocompactMap α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CocompactMap.ext`：ext {f g : CocompactMap α β} (h : forall x, f x = g x)
+ : f = g
 -/
 theorem comp_id (f : CocompactMap α β) : f.comp (CocompactMap.id _) = f :=
   ext fun _ => rfl
-
-/--
-theorem `tendsto_of_forall_preimage` / 定理 `tendsto_of_forall_preimage`
-
-English:
-theorem tendsto_of_forall_preimage
-  given: {f : α -> β} (h : forall s, IsCompact s -> IsCompact (f ⁻¹' s))
-  proof: fun s hs =>
-  match mem_cocompact.mp hs with
-  | ⟨t, ht, hts⟩ =>
-    mem_map.mpr (mem_cocompact.mpr ⟨f ⁻¹' t, h t ht, by simpa using preimage_mono hts⟩)
-
-中文:
-定理 tendsto_of_对任意_preimage
-  条件: {f : α -> β} (h : 对任意 s, 是紧集 s -> 是紧集 (f ⁻¹' s))
-  证明: fun s hs =>
-  match mem_cocompact.mp hs with
-  | ⟨t, ht, hts⟩ =>
-    mem_map.mpr (mem_cocompact.mpr ⟨f ⁻¹' t, h t ht, by simpa using preimage_mono hts⟩)
+/-
+**CocompactMap.tendsto_of_forall_preimage** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMa
+p`。
+形式化陈述：tendsto_of_forall_preimage {f : α -> β} (h : forall s, IsCompact s -> IsCo
+mpact (f ⁻¹' s)) : Tendsto f (cocompact α) (cocompact β)
+参数：h : forall s, IsCompact s -> IsCompact (f ⁻¹' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.mem_cocompact`：mem_cocompact : s in cocompact X ↔ exists t, IsCom
+pact t ∧ tᶜ subseteq s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
 -/
-theorem tendsto_of_forall_preimage {f : α -> β} (h : forall s, IsCompact s -> IsCompact (f ⁻¹' s)) :
+theorem tendsto_of_forall_preimage {f : α → β} (h : ∀ s, IsCompact s → IsCompact (f ⁻¹' s)) :
     Tendsto f (cocompact α) (cocompact β) := fun s hs =>
   match mem_cocompact.mp hs with
   | ⟨t, ht, hts⟩ =>
     mem_map.mpr (mem_cocompact.mpr ⟨f ⁻¹' t, h t ht, by simpa using preimage_mono hts⟩)
 
-/--
-theorem `isCompact_preimage_of_isClosed` / 定理 `isCompact_preimage_of_isClosed`
+/-- Preimages of compact closed sets are compact under a cocompact continuous map. -/
+/-
+**CocompactMap.isCompact_preimage_of_isClosed** 是 Mathlib 中的一个定理，位于命名空间 `Cocompa
+ctMap`。
+形式化陈述：isCompact_preimage_of_isClosed (f : CocompactMap α β) ⦃s : Set β⦄ (hs : Is
+Compact s) (h's : IsClosed s) : IsCompact (f ⁻¹' s)
+参数：f : CocompactMap α β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.mem_cocompact'`：mem_cocompact' : s in cocompact X ↔ exists t, IsC
+ompact t ∧ sᶜ subseteq t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_image_preimage`：preimage_image_preimage {f : α -> β} {s : S
+et β} : f ⁻¹' f '' f ⁻¹' s = f ⁻¹' s
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `CocompactMapClass.cocompact_tendsto`：∀ {F : Type u_1} {α : outParam (Typ
+e u_2)} {β : outParam (Type u_3)} {inst : TopologicalSpace α}   {inst_1 : Topolo
+gicalSpace β} {inst_2 : F…
+· 使用定理 `CocompactMap.instCocompactMapClass`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : TopologicalSpace α] [inst_1 : TopologicalSpace β],   CocompactMapClass (Coco
+mpactMap α β) α β
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_cocompact`：mem_cocompact : s in cocompact X ↔ exists t, IsCom
+pact t ∧ tᶜ subseteq s
+· 使用定理 `Set.compl_subset_compl`：compl_subset_compl : sᶜ subseteq tᶜ ↔ t subseteq
+ s
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `IsCompact.of_isClosed_subset`：IsCompact.of_isClosed_subset (hs : IsCompa
+ct s) (ht : IsClosed t) (h : t subseteq s) : IsCompact t
+· 使用定理 `IsClosed.preimage`：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h 
+: IsClosed t) : IsClosed (f ⁻¹' t)
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `CocompactMapClass.toContinuousMapClass`：∀ {F : Type u_1} {α : outParam (
+Type u_2)} {β : outParam (Type u_3)} {inst : TopologicalSpace α}   {inst_1 : Top
+ologicalSpace β} {inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
 
-English:
-theorem isCompact_preimage_of_isClosed
-  statement: (f : CocompactMap α β)
-  proof: by
-  obtain ⟨t, ht, hts⟩ :=
-    mem_cocompact'.mp
-      (by
-        simpa only [preimage_image_preimage, preimage_compl] using
-          mem_map.mp
-            (cocompact_tendsto f <|
-              mem_cocompact.mpr ⟨s, hs, compl_subset_compl.mpr (image_preimage_subset f _)⟩))
-  exact
-    ht.of_isClosed_subset (h's.preimage <| map_continuous f) (by simpa using hts)
-
-中文:
-定理 isCompact_preimage_of_isClosed
-  结论: (f : 余compact映射 α β)
-  证明: by
-  obtain ⟨t, ht, hts⟩ :=
-    mem_cocompact'.mp
-      (by
-        simpa only [preimage_image_preimage, preimage_compl] using
-          mem_map.mp
-            (cocompact_tendsto f <|
-              mem_cocompact.mpr ⟨s, hs, compl_subset_compl.mpr (image_preimage_subset f _)⟩))
-  exact
-    ht.of_isClosed_subset (h's.preimage <| map_continuous f) (by simpa using hts)
-
-Depends on / 依赖: cocompact_tendsto, compl_subset_compl, compl_subset_compl.mpr, ht.of_isClosed_subset, image_preimage_subset, map_continuous, mem_cocompact, mem_cocompact.mpr, mem_map, mem_map.mp, of_isClosed_subset, preimage, preimage_compl, preimage_image_preimage, s.preimage
+--- 原说明 ---
+Preimages of compact closed sets are compact under a cocompact continuous map.
 -/
 theorem isCompact_preimage_of_isClosed (f : CocompactMap α β)
     ⦃s : Set β⦄ (hs : IsCompact s) (h's : IsClosed s) :
@@ -593,22 +427,25 @@ theorem isCompact_preimage_of_isClosed (f : CocompactMap α β)
   exact
     ht.of_isClosed_subset (h's.preimage <| map_continuous f) (by simpa using hts)
 
-/--
-theorem `isCompact_preimage` / 定理 `isCompact_preimage`
+/-- If the codomain is Hausdorff, preimages of compact sets are compact under a cocompact
+continuous map. -/
+/-
+**CocompactMap.isCompact_preimage** 是 Mathlib 中的一个定理，位于命名空间 `CocompactMap`。
+形式化陈述：isCompact_preimage [T2Space β] (f : CocompactMap α β) ⦃s : Set β⦄ (hs : Is
+Compact s) : IsCompact (f ⁻¹' s)
+参数：f : CocompactMap α β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CocompactMap.isCompact_preimage_of_isClosed`：isCompact_preimage_of_isClo
+sed (f : CocompactMap α β) ⦃s : Set β⦄ (hs : IsCompact s) (h's : IsClosed s) : I
+sCompact (f ⁻¹' s)
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
 
-English:
-theorem isCompact_preimage
-  given: [T2Space β] (f : CocompactMap α β) ⦃s
-  statement: Set β⦄ (hs : IsCompact s) :
-  proof: isCompact_preimage_of_isClosed f hs hs.isClosed
-
-中文:
-定理 isCompact_preimage
-  条件: [T2空间 β] (f : 余compact映射 α β) ⦃s
-  结论: 集合 β⦄ (hs : 是紧集 s) :
-  证明: isCompact_preimage_of_isClosed f hs hs.isClosed
-
-Depends on / 依赖: hs.isClosed, isClosed, isCompact_preimage_of_isClosed
+--- 原说明 ---
+If the codomain is Hausdorff, preimages of compact sets are compact under a coco
+mpact
+continuous map.
 -/
 theorem isCompact_preimage [T2Space β] (f : CocompactMap α β) ⦃s : Set β⦄ (hs : IsCompact s) :
     IsCompact (f ⁻¹' s) :=
@@ -620,32 +457,18 @@ end CocompactMap
 
 /-- A homeomorphism is a cocompact map. -/
 @[simps]
-/--
-Definition of `Homeomorph.toCocompactMap` / `Homeomorph.toCocompactMap` 的定义
+/-
+**Homeomorph.toCocompactMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Homeomorph.toCocompactMap {α β : Type*} [TopologicalSpace α] [TopologicalS
+pace β] (f : α ≃ₜ β) : CocompactMap α β where toFun
+参数：f : α ≃ₜ β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), Continuous ⇑h
 
-English:
-definition Homeomorph.toCocompactMap
-  signature: {α β : Type*} [TopologicalSpace α] [TopologicalSpace β]
-  body: f
-  continuous_toFun := f.continuous
-  cocompact_tendsto' := by
-    refine CocompactMap.tendsto_of_forall_preimage fun K hK => ?_
-    have := f.toEquiv.image_symm_eq_preimage K
-    simp only [coe_toEquiv] at this
-    rw [← this]
-    exact hK.image f.symm.continuous
-
-中文:
-定义 同胚.toCocompactMap
-  签名: {α β : 类型} [拓扑空间 α] [拓扑空间 β]
-  定义体: f
-  continuous_toFun := f.continuous
-  cocompact_tendsto' := by
-    refine CocompactMap.tendsto_of_forall_preimage fun K hK => ?_
-    have := f.toEquiv.image_symm_eq_preimage K
-    simp only [coe_toEquiv] at this
-    rw [← this]
-    exact hK.image f.symm.continuous
+--- 原说明 ---
+A homeomorphism is a cocompact map.
 -/
 def Homeomorph.toCocompactMap {α β : Type*} [TopologicalSpace α] [TopologicalSpace β]
     (f : α ≃ₜ β) : CocompactMap α β where

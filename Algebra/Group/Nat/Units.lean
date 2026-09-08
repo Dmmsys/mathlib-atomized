@@ -19,116 +19,86 @@ assert_not_exists MonoidWithZero DenselyOrdered
 
 namespace Nat
 
+/-! #### Units -/
 
-/--
-lemma `units_eq_one` / 引理 `units_eq_one`
+/-
+**Nat.units_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：units_eq_one (u : Natˣ) : u = 1
+参数：u : Natˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
+· 使用定理 `Nat.eq_one_of_dvd_one`：∀ {n : ℕ}, n ∣ 1 → n = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Units.val_inv`：∀ {α : Type u} [inst : Monoid α] (self : αˣ), ↑self * sel
+f.inv = 1
 
-English:
-lemma units_eq_one
-  given: (u : Natˣ)
-  statement: u = 1
-  proof: Units.ext Nat.eq_one_of_dvd_one ⟨u.inv, u.val_inv.symm⟩
-
-中文:
-引理 units_eq_one
-  条件: (u : 自然数ˣ)
-  结论: u = 1
-  证明: Units.ext Nat.eq_one_of_dvd_one ⟨u.inv, u.val_inv.symm⟩
-
-Depends on / 依赖: Nat.eq_one_of_dvd_one, Units.ext, eq_one_of_dvd_one, u.inv, u.val_inv.symm, val_inv
+--- 原说明 ---
+#### Units
 -/
-lemma units_eq_one (u : Natˣ) : u = 1 := Units.ext Nat.eq_one_of_dvd_one ⟨u.inv, u.val_inv.symm⟩
-
-/--
-lemma `addUnits_eq_zero` / 引理 `addUnits_eq_zero`
-
-English:
-lemma addUnits_eq_zero
-  given: (u : AddUnits Nat)
-  statement: u = 0
-  proof: AddUnits.ext (Nat.eq_zero_of_add_eq_zero u.val_neg).1
-
-中文:
-引理 addUnits_eq_zero
-  条件: (u : 加法单位群 自然数)
-  结论: u = 0
-  证明: AddUnits.ext (Nat.eq_zero_of_add_eq_zero u.val_neg).1
-
-Depends on / 依赖: AddUnits, AddUnits.ext, Nat.eq_zero_of_add_eq_zero, eq_zero_of_add_eq_zero, u.val_neg, val_neg
+lemma units_eq_one (u : ℕˣ) : u = 1 := Units.ext <| Nat.eq_one_of_dvd_one ⟨u.inv, u.val_inv.symm⟩
+/-
+**Nat.addUnits_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：addUnits_eq_zero (u : AddUnits Nat) : u = 0
+参数：u : AddUnits Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddUnits.ext`：∀ {α : Type u} [inst : AddMonoid α] {u v : AddUnits α}, ↑u
+ = ↑v → u = v
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Nat.eq_zero_of_add_eq_zero`：∀ {n m : ℕ}, n + m = 0 → n = 0 ∧ m = 0
+· 使用定理 `AddUnits.val_neg`：∀ {α : Type u} [inst : AddMonoid α] (self : AddUnits α
+), ↑self + self.neg = 0
 -/
-lemma addUnits_eq_zero (u : AddUnits Nat) : u = 0 :=
-AddUnits.ext (Nat.eq_zero_of_add_eq_zero u.val_neg).1
-
-/--
-Instance `unique_units` / 实例 `unique_units`
-
-English:
-instance unique_units
-  signature: : Unique Natˣ where
-  body: 1
-  uniq := Nat.units_eq_one
-
-中文:
-实例 unique_units
-  签名: : 唯一 自然数ˣ where
-  定义体: 1
-  uniq := Nat.units_eq_one
+lemma addUnits_eq_zero (u : AddUnits ℕ) : u = 0 :=
+  AddUnits.ext <| (Nat.eq_zero_of_add_eq_zero u.val_neg).1
+/-
+**Nat.unique_units** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：unique_units : Unique Natˣ where default
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.units_eq_one`：units_eq_one (u : Natˣ) : u = 1
 -/
-instance unique_units : Unique Natˣ where
+instance unique_units : Unique ℕˣ where
   default := 1
   uniq := Nat.units_eq_one
-
-/--
-Instance `unique_addUnits` / 实例 `unique_addUnits`
-
-English:
-instance unique_addUnits
-  signature: : Unique (AddUnits Nat) where
-  body: 0
-  uniq := Nat.addUnits_eq_zero
-
-中文:
-实例 unique_addUnits
-  签名: : 唯一 (加法单位群 自然数) where
-  定义体: 0
-  uniq := Nat.addUnits_eq_zero
+/-
+**Nat.unique_addUnits** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：unique_addUnits : Unique (AddUnits Nat) where default
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.addUnits_eq_zero`：addUnits_eq_zero (u : AddUnits Nat) : u = 0
 -/
-instance unique_addUnits : Unique (AddUnits Nat) where
+instance unique_addUnits : Unique (AddUnits ℕ) where
   default := 0
   uniq := Nat.addUnits_eq_zero
 
-/--
-lemma `isUnit_iff` / 引理 `isUnit_iff`
+/-- Alias of `isUnit_iff_eq_one` for discoverability. -/
+/-
+**Nat.isUnit_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n : ℕ}, IsUnit n ↔ n = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `isUnit_iff_eq_one`：isUnit_iff_eq_one : IsUnit a ↔ a = 1 where mp
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-lemma isUnit_iff
-  given: {n : Nat}
-  statement: IsUnit n ↔ n = 1
-  proof: isUnit_iff_eq_one
-
-中文:
-引理 isUnit_iff
-  条件: {n : 自然数}
-  结论: 是单位 n ↔ n = 1
-  证明: isUnit_iff_eq_one
+--- 原说明 ---
+Alias of `isUnit_iff_eq_one` for discoverability.
 -/
-protected lemma isUnit_iff {n : Nat} : IsUnit n ↔ n = 1 := isUnit_iff_eq_one
+protected lemma isUnit_iff {n : ℕ} : IsUnit n ↔ n = 1 := isUnit_iff_eq_one
 
-/--
-lemma `isAddUnit_iff` / 引理 `isAddUnit_iff`
+/-- Alias of `isAddUnit_iff_eq_zero` for discoverability. -/
+/-
+**Nat.isAddUnit_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n : ℕ}, IsAddUnit n ↔ n = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isAddUnit_iff_eq_zero`：∀ {M : Type u_1} [inst : AddMonoid M] {a : M} [Su
+bsingleton (AddUnits M)], IsAddUnit a ↔ a = 0
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-lemma isAddUnit_iff
-  given: {n : Nat}
-  statement: IsAddUnit n ↔ n = 0
-  proof: isAddUnit_iff_eq_zero
-
-中文:
-引理 isAddUnit_iff
-  条件: {n : 自然数}
-  结论: IsAddUnit n ↔ n = 0
-  证明: isAddUnit_iff_eq_zero
+--- 原说明 ---
+Alias of `isAddUnit_iff_eq_zero` for discoverability.
 -/
-protected lemma isAddUnit_iff {n : Nat} : IsAddUnit n ↔ n = 0 := isAddUnit_iff_eq_zero
+protected lemma isAddUnit_iff {n : ℕ} : IsAddUnit n ↔ n = 0 := isAddUnit_iff_eq_zero
 
 end Nat
+

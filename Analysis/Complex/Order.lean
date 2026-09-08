@@ -36,35 +36,18 @@ namespace Complex
 Complex numbers with different imaginary parts are incomparable.
 -/
 @[instance_reducible]
-/--
-Definition of `partialOrder` / `partialOrder` 的定义
+/-
+**Complex.partialOrder** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：PartialOrder ℂ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partialOrder
-  signature: : PartialOrder Complex where
-  body: z.re <= w.re ∧ z.im = w.im
-  lt z w := z.re < w.re ∧ z.im = w.im
-  lt_iff_le_not_ge z w := by
-    rw [lt_iff_le_not_ge]
-    tauto
-  le_refl _ := ⟨le_rfl, rfl⟩
-  le_trans _ _ _ h₁ h₂ := ⟨h₁.1.trans h₂.1, h₁.2.trans h₂.2⟩
-  le_antisymm _ _ h₁ h₂ := ext (h₁.1.antisymm h₂.1) h₁.2
-
-中文:
-定义 partialOrder
-  签名: : 偏序 复形 where
-  定义体: z.re <= w.re ∧ z.im = w.im
-  lt z w := z.re < w.re ∧ z.im = w.im
-  lt_iff_le_not_ge z w := by
-    rw [lt_iff_le_not_ge]
-    tauto
-  le_refl _ := ⟨le_rfl, rfl⟩
-  le_trans _ _ _ h₁ h₂ := ⟨h₁.1.trans h₂.1, h₁.2.trans h₂.2⟩
-  le_antisymm _ _ h₁ h₂ := ext (h₁.1.antisymm h₂.1) h₁.2
+--- 原说明 ---
+We put a partial order on ℂ so that `z ≤ w` exactly if `w - z` is real and nonne
+gative.
+Complex numbers with different imaginary parts are incomparable.
 -/
-protected def partialOrder : PartialOrder Complex where
-  le z w := z.re <= w.re ∧ z.im = w.im
+protected def partialOrder : PartialOrder ℂ where
+  le z w := z.re ≤ w.re ∧ z.im = w.im
   lt z w := z.re < w.re ∧ z.im = w.im
   lt_iff_le_not_ge z w := by
     rw [lt_iff_le_not_ge]
@@ -81,486 +64,390 @@ end _root_.ComplexOrder
 
 open ComplexOrder
 
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: {z w : Complex}
-  statement: z <= w ↔ z.re <= w.re ∧ z.im = w.im
-  proof: Iff.rfl
-
-中文:
-定理 le_def
-  条件: {z w : 复形}
-  结论: z <= w ↔ z.re <= w.re ∧ z.im = w.im
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Complex.le_def** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：le_def {z w : Complex} : z <= w ↔ z.re <= w.re ∧ z.im = w.im
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def {z w : Complex} : z <= w ↔ z.re <= w.re ∧ z.im = w.im :=
+theorem le_def {z w : ℂ} : z ≤ w ↔ z.re ≤ w.re ∧ z.im = w.im :=
   Iff.rfl
-
-/--
-theorem `lt_def` / 定理 `lt_def`
-
-English:
-theorem lt_def
-  given: {z w : Complex}
-  statement: z < w ↔ z.re < w.re ∧ z.im = w.im
-  proof: Iff.rfl
-
-中文:
-定理 lt_def
-  条件: {z w : 复形}
-  结论: z < w ↔ z.re < w.re ∧ z.im = w.im
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Complex.lt_def** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：lt_def {z w : Complex} : z < w ↔ z.re < w.re ∧ z.im = w.im
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lt_def {z w : Complex} : z < w ↔ z.re < w.re ∧ z.im = w.im :=
+theorem lt_def {z w : ℂ} : z < w ↔ z.re < w.re ∧ z.im = w.im :=
   Iff.rfl
-
-/--
-theorem `nonneg_iff` / 定理 `nonneg_iff`
-
-English:
-theorem nonneg_iff
-  given: {z : Complex}
-  statement: 0 <= z ↔ 0 <= z.re ∧ 0 = z.im
-  proof: le_def
-
-中文:
-定理 nonneg_iff
-  条件: {z : 复形}
-  结论: 0 <= z ↔ 0 <= z.re ∧ 0 = z.im
-  证明: le_def
-
-Depends on / 依赖: le_def
+/-
+**Complex.nonneg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：nonneg_iff {z : Complex} : 0 <= z ↔ 0 <= z.re ∧ 0 = z.im
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.le_def`：le_def {z w : Complex} : z <= w ↔ z.re <= w.re ∧ z.im = 
+w.im
 -/
-theorem nonneg_iff {z : Complex} : 0 <= z ↔ 0 <= z.re ∧ 0 = z.im :=
+theorem nonneg_iff {z : ℂ} : 0 ≤ z ↔ 0 ≤ z.re ∧ 0 = z.im :=
   le_def
-
-/--
-theorem `pos_iff` / 定理 `pos_iff`
-
-English:
-theorem pos_iff
-  given: {z : Complex}
-  statement: 0 < z ↔ 0 < z.re ∧ 0 = z.im
-  proof: lt_def
-
-中文:
-定理 pos_iff
-  条件: {z : 复形}
-  结论: 0 < z ↔ 0 < z.re ∧ 0 = z.im
-  证明: lt_def
-
-Depends on / 依赖: lt_def
+/-
+**Complex.pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：pos_iff {z : Complex} : 0 < z ↔ 0 < z.re ∧ 0 = z.im
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.lt_def`：lt_def {z w : Complex} : z < w ↔ z.re < w.re ∧ z.im = w.
+im
 -/
-theorem pos_iff {z : Complex} : 0 < z ↔ 0 < z.re ∧ 0 = z.im :=
+theorem pos_iff {z : ℂ} : 0 < z ↔ 0 < z.re ∧ 0 = z.im :=
   lt_def
-
-/--
-theorem `nonpos_iff` / 定理 `nonpos_iff`
-
-English:
-theorem nonpos_iff
-  given: {z : Complex}
-  statement: z <= 0 ↔ z.re <= 0 ∧ z.im = 0
-  proof: le_def
-
-中文:
-定理 nonpos_iff
-  条件: {z : 复形}
-  结论: z <= 0 ↔ z.re <= 0 ∧ z.im = 0
-  证明: le_def
-
-Depends on / 依赖: le_def
+/-
+**Complex.nonpos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：nonpos_iff {z : Complex} : z <= 0 ↔ z.re <= 0 ∧ z.im = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.le_def`：le_def {z w : Complex} : z <= w ↔ z.re <= w.re ∧ z.im = 
+w.im
 -/
-theorem nonpos_iff {z : Complex} : z <= 0 ↔ z.re <= 0 ∧ z.im = 0 :=
+theorem nonpos_iff {z : ℂ} : z ≤ 0 ↔ z.re ≤ 0 ∧ z.im = 0 :=
   le_def
-
-/--
-theorem `neg_iff` / 定理 `neg_iff`
-
-English:
-theorem neg_iff
-  given: {z : Complex}
-  statement: z < 0 ↔ z.re < 0 ∧ z.im = 0
-  proof: lt_def
-
-中文:
-定理 neg_iff
-  条件: {z : 复形}
-  结论: z < 0 ↔ z.re < 0 ∧ z.im = 0
-  证明: lt_def
-
-Depends on / 依赖: lt_def
+/-
+**Complex.neg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：neg_iff {z : Complex} : z < 0 ↔ z.re < 0 ∧ z.im = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.lt_def`：lt_def {z w : Complex} : z < w ↔ z.re < w.re ∧ z.im = w.
+im
 -/
-theorem neg_iff {z : Complex} : z < 0 ↔ z.re < 0 ∧ z.im = 0 :=
+theorem neg_iff {z : ℂ} : z < 0 ↔ z.re < 0 ∧ z.im = 0 :=
   lt_def
-
-/--
-theorem `sq_nonneg_iff` / 定理 `sq_nonneg_iff`
-
-English:
-theorem sq_nonneg_iff
-  given: {z : Complex}
-  statement: 0 <= z ^ 2 ↔ z.im = 0
-  proof: by
-  rw [nonneg_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [eq_comm]; rw [mul_eq_zero_iff_right two_ne_zero]; rw [← pow_two]; rw [← pow_two]; rw [mul_eq_zero]
-  exact ⟨by aesop, fun h => by simpa [h] using sq_nonneg z.re⟩
-
-中文:
-定理 sq_nonneg_iff
-  条件: {z : 复形}
-  结论: 0 <= z ^ 2 ↔ z.im = 0
-  证明: by
-  rw [nonneg_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [eq_comm]; rw [mul_eq_zero_iff_right two_ne_zero]; rw [← pow_two]; rw [← pow_two]; rw [mul_eq_zero]
-  exact ⟨by aesop, fun h => by simpa [h] using sq_nonneg z.re⟩
-
-Depends on / 依赖: eq_comm, mul_comm, mul_eq_zero, mul_eq_zero_iff_right, mul_im, mul_re, mul_two, nonneg_iff, pow_two, sq_nonneg, two_ne_zero, z.im, z.re
+/-
+**Complex.sq_nonneg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：sq_nonneg_iff {z : Complex} : 0 <= z ^ 2 ↔ z.im = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.nonneg_iff`：nonneg_iff {z : Complex} : 0 <= z ↔ 0 <= z.re ∧ 0 = 
+z.im
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Complex.mul_re`：mul_re (z w : Complex) : (z * w).re = z.re * w.re - z.im
+ * w.im
+· 使用定理 `Complex.mul_im`：mul_im (z w : Complex) : (z * w).im = z.re * w.im + z.im
+ * w.re
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_two`：mul_two (n : α) : n * 2 = n + n
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `mul_eq_zero_iff_right`：mul_eq_zero_iff_right (hb : b != 0) : a * b = 0 ↔
+ a = 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem sq_nonneg_iff {z : Complex} : 0 <= z ^ 2 ↔ z.im = 0 := by
-  rw [nonneg_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [eq_comm]; rw [mul_eq_zero_iff_right two_ne_zero]; rw [← pow_two]; rw [← pow_two]; rw [mul_eq_zero]
-  exact ⟨by aesop, fun h => by simpa [h] using sq_nonneg z.re⟩
-
-/--
-theorem `sq_nonpos_iff` / 定理 `sq_nonpos_iff`
-
-English:
-theorem sq_nonpos_iff
-  given: {z : Complex}
-  statement: z ^ 2 <= 0 ↔ z.re = 0
-  proof: by
-  rw [nonpos_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [mul_eq_zero_iff_right
-    two_ne_zero]; rw [← pow_two]; rw [← pow_two]; rw [mul_eq_zero]
-  exact ⟨by aesop, fun h => by simpa [h] using sq_nonneg z.im⟩
-
-@[simp, norm_cast]
-
-中文:
-定理 sq_nonpos_iff
-  条件: {z : 复形}
-  结论: z ^ 2 <= 0 ↔ z.re = 0
-  证明: by
-  rw [nonpos_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [mul_eq_zero_iff_right
-    two_ne_zero]; rw [← pow_two]; rw [← pow_two]; rw [mul_eq_zero]
-  exact ⟨by aesop, fun h => by simpa [h] using sq_nonneg z.im⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mul_comm, mul_eq_zero, mul_eq_zero_iff_right, mul_im, mul_re, mul_two, nonpos_iff, pow_two, sq_nonneg, two_ne_zero, z.im, z.re
+theorem sq_nonneg_iff {z : ℂ} : 0 ≤ z ^ 2 ↔ z.im = 0 := by
+  rw [nonneg_iff, pow_two, mul_re, mul_im, mul_comm z.im z.re, ← mul_two, eq_comm,
+    mul_eq_zero_iff_right two_ne_zero, ← pow_two, ← pow_two, mul_eq_zero]
+  exact ⟨by aesop, fun h ↦ by simpa [h] using sq_nonneg z.re⟩
+/-
+**Complex.sq_nonpos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：sq_nonpos_iff {z : Complex} : z ^ 2 <= 0 ↔ z.re = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.nonpos_iff`：nonpos_iff {z : Complex} : z <= 0 ↔ z.re <= 0 ∧ z.im
+ = 0
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Complex.mul_re`：mul_re (z w : Complex) : (z * w).re = z.re * w.re - z.im
+ * w.im
+· 使用定理 `Complex.mul_im`：mul_im (z w : Complex) : (z * w).im = z.re * w.im + z.im
+ * w.re
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_two`：mul_two (n : α) : n * 2 = n + n
+· 使用定理 `mul_eq_zero_iff_right`：mul_eq_zero_iff_right (hb : b != 0) : a * b = 0 ↔
+ a = 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+（共 32 条，此处仅展示前 30 条）
 -/
-theorem sq_nonpos_iff {z : Complex} : z ^ 2 <= 0 ↔ z.re = 0 := by
-  rw [nonpos_iff]; rw [pow_two]; rw [mul_re]; rw [mul_im]; rw [mul_comm z.im z.re]; rw [← mul_two]; rw [mul_eq_zero_iff_right
-    two_ne_zero]; rw [← pow_two]; rw [← pow_two]; rw [mul_eq_zero]
-  exact ⟨by aesop, fun h => by simpa [h] using sq_nonneg z.im⟩
+theorem sq_nonpos_iff {z : ℂ} : z ^ 2 ≤ 0 ↔ z.re = 0 := by
+  rw [nonpos_iff, pow_two, mul_re, mul_im, mul_comm z.im z.re, ← mul_two, mul_eq_zero_iff_right
+    two_ne_zero, ← pow_two, ← pow_two, mul_eq_zero]
+  exact ⟨by aesop, fun h ↦ by simpa [h] using sq_nonneg z.im⟩
 
 @[simp, norm_cast]
-/--
-theorem `real_le_real` / 定理 `real_le_real`
-
-English:
-theorem real_le_real
-  given: {x y : Real}
-  statement: (x : Complex) <= (y : Complex) ↔ x <= y
-  proof: by simp [le_def, ofReal]
-
-@[simp, norm_cast]
-
-中文:
-定理 real_le_real
-  条件: {x y : 实数}
-  结论: (x : 复形) <= (y : 复形) ↔ x <= y
-  证明: by simp [le_def, ofReal]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: le_def, ofReal
+/-
+**Complex.real_le_real** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：real_le_real {x y : Real} : (x : Complex) <= (y : Complex) ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem real_le_real {x y : Real} : (x : Complex) <= (y : Complex) ↔ x <= y := by simp [le_def, ofReal]
+theorem real_le_real {x y : ℝ} : (x : ℂ) ≤ (y : ℂ) ↔ x ≤ y := by simp [le_def, ofReal]
 
 @[simp, norm_cast]
-/--
-theorem `real_lt_real` / 定理 `real_lt_real`
-
-English:
-theorem real_lt_real
-  given: {x y : Real}
-  statement: (x : Complex) < (y : Complex) ↔ x < y
-  proof: by simp [lt_def, ofReal]
-
-@[simp, norm_cast]
-
-中文:
-定理 real_lt_real
-  条件: {x y : 实数}
-  结论: (x : 复形) < (y : 复形) ↔ x < y
-  证明: by simp [lt_def, ofReal]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: lt_def, ofReal
+/-
+**Complex.real_lt_real** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：real_lt_real {x y : Real} : (x : Complex) < (y : Complex) ↔ x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem real_lt_real {x y : Real} : (x : Complex) < (y : Complex) ↔ x < y := by simp [lt_def, ofReal]
+theorem real_lt_real {x y : ℝ} : (x : ℂ) < (y : ℂ) ↔ x < y := by simp [lt_def, ofReal]
 
 @[simp, norm_cast]
-/--
-theorem `zero_le_real` / 定理 `zero_le_real`
-
-English:
-theorem zero_le_real
-  given: {x : Real}
-  statement: (0 : Complex) <= (x : Complex) ↔ 0 <= x
-  proof: real_le_real
-
-@[simp, norm_cast]
-
-中文:
-定理 zero_le_real
-  条件: {x : 实数}
-  结论: (0 : 复形) <= (x : 复形) ↔ 0 <= x
-  证明: real_le_real
-
-@[simp, norm_cast]
-
-Depends on / 依赖: real_le_real
+/-
+**Complex.zero_le_real** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：zero_le_real {x : Real} : (0 : Complex) <= (x : Complex) ↔ 0 <= x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.real_le_real`：real_le_real {x y : Real} : (x : Complex) <= (y : 
+Complex) ↔ x <= y
 -/
-theorem zero_le_real {x : Real} : (0 : Complex) <= (x : Complex) ↔ 0 <= x :=
+theorem zero_le_real {x : ℝ} : (0 : ℂ) ≤ (x : ℂ) ↔ 0 ≤ x :=
   real_le_real
 
 @[simp, norm_cast]
-/--
-theorem `zero_lt_real` / 定理 `zero_lt_real`
-
-English:
-theorem zero_lt_real
-  given: {x : Real}
-  statement: (0 : Complex) < (x : Complex) ↔ 0 < x
-  proof: real_lt_real
-
-中文:
-定理 zero_lt_real
-  条件: {x : 实数}
-  结论: (0 : 复形) < (x : 复形) ↔ 0 < x
-  证明: real_lt_real
-
-Depends on / 依赖: real_lt_real
+/-
+**Complex.zero_lt_real** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：zero_lt_real {x : Real} : (0 : Complex) < (x : Complex) ↔ 0 < x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.real_lt_real`：real_lt_real {x y : Real} : (x : Complex) < (y : C
+omplex) ↔ x < y
 -/
-theorem zero_lt_real {x : Real} : (0 : Complex) < (x : Complex) ↔ 0 < x :=
+theorem zero_lt_real {x : ℝ} : (0 : ℂ) < (x : ℂ) ↔ 0 < x :=
   real_lt_real
-
-/--
-theorem `not_le_iff` / 定理 `not_le_iff`
-
-English:
-theorem not_le_iff
-  given: {z w : Complex}
-  statement: ¬z <= w ↔ w.re < z.re ∨ z.im != w.im
-  proof: by
-  rw [le_def]; rw [not_and_or]; rw [not_le]
-
-中文:
-定理 not_le_iff
-  条件: {z w : 复形}
-  结论: ¬z <= w ↔ w.re < z.re ∨ z.im != w.im
-  证明: by
-  rw [le_def]; rw [not_and_or]; rw [not_le]
-
-Depends on / 依赖: le_def, not_and_or, not_le
+/-
+**Complex.not_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：not_le_iff {z w : Complex} : ¬z <= w ↔ w.re < z.re ∨ z.im != w.im
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.le_def`：le_def {z w : Complex} : z <= w ↔ z.re <= w.re ∧ z.im = 
+w.im
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem not_le_iff {z w : Complex} : ¬z <= w ↔ w.re < z.re ∨ z.im != w.im := by
-  rw [le_def]; rw [not_and_or]; rw [not_le]
-
-/--
-theorem `not_lt_iff` / 定理 `not_lt_iff`
-
-English:
-theorem not_lt_iff
-  given: {z w : Complex}
-  statement: ¬z < w ↔ w.re <= z.re ∨ z.im != w.im
-  proof: by
-  rw [lt_def]; rw [not_and_or]; rw [not_lt]
-
-中文:
-定理 not_lt_iff
-  条件: {z w : 复形}
-  结论: ¬z < w ↔ w.re <= z.re ∨ z.im != w.im
-  证明: by
-  rw [lt_def]; rw [not_and_or]; rw [not_lt]
-
-Depends on / 依赖: lt_def, not_and_or, not_lt
+theorem not_le_iff {z w : ℂ} : ¬z ≤ w ↔ w.re < z.re ∨ z.im ≠ w.im := by
+  rw [le_def, not_and_or, not_le]
+/-
+**Complex.not_lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：not_lt_iff {z w : Complex} : ¬z < w ↔ w.re <= z.re ∨ z.im != w.im
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.lt_def`：lt_def {z w : Complex} : z < w ↔ z.re < w.re ∧ z.im = w.
+im
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem not_lt_iff {z w : Complex} : ¬z < w ↔ w.re <= z.re ∨ z.im != w.im := by
-  rw [lt_def]; rw [not_and_or]; rw [not_lt]
-
-/--
-theorem `not_le_zero_iff` / 定理 `not_le_zero_iff`
-
-English:
-theorem not_le_zero_iff
-  given: {z : Complex}
-  statement: ¬z <= 0 ↔ 0 < z.re ∨ z.im != 0
-  proof: not_le_iff
-
-中文:
-定理 not_le_zero_iff
-  条件: {z : 复形}
-  结论: ¬z <= 0 ↔ 0 < z.re ∨ z.im != 0
-  证明: not_le_iff
-
-Depends on / 依赖: not_le_iff
+theorem not_lt_iff {z w : ℂ} : ¬z < w ↔ w.re ≤ z.re ∨ z.im ≠ w.im := by
+  rw [lt_def, not_and_or, not_lt]
+/-
+**Complex.not_le_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：not_le_zero_iff {z : Complex} : ¬z <= 0 ↔ 0 < z.re ∨ z.im != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.not_le_iff`：not_le_iff {z w : Complex} : ¬z <= w ↔ w.re < z.re ∨
+ z.im != w.im
 -/
-theorem not_le_zero_iff {z : Complex} : ¬z <= 0 ↔ 0 < z.re ∨ z.im != 0 :=
+theorem not_le_zero_iff {z : ℂ} : ¬z ≤ 0 ↔ 0 < z.re ∨ z.im ≠ 0 :=
   not_le_iff
-
-/--
-theorem `not_lt_zero_iff` / 定理 `not_lt_zero_iff`
-
-English:
-theorem not_lt_zero_iff
-  given: {z : Complex}
-  statement: ¬z < 0 ↔ 0 <= z.re ∨ z.im != 0
-  proof: not_lt_iff
-
-中文:
-定理 not_lt_zero_iff
-  条件: {z : 复形}
-  结论: ¬z < 0 ↔ 0 <= z.re ∨ z.im != 0
-  证明: not_lt_iff
-
-Depends on / 依赖: not_lt_iff
+/-
+**Complex.not_lt_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：not_lt_zero_iff {z : Complex} : ¬z < 0 ↔ 0 <= z.re ∨ z.im != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.not_lt_iff`：not_lt_iff {z w : Complex} : ¬z < w ↔ w.re <= z.re ∨
+ z.im != w.im
 -/
-theorem not_lt_zero_iff {z : Complex} : ¬z < 0 ↔ 0 <= z.re ∨ z.im != 0 :=
+theorem not_lt_zero_iff {z : ℂ} : ¬z < 0 ↔ 0 ≤ z.re ∨ z.im ≠ 0 :=
   not_lt_iff
-
-/--
-theorem `eq_re_of_ofReal_le` / 定理 `eq_re_of_ofReal_le`
-
-English:
-theorem eq_re_of_ofReal_le
-  given: {r : Real} {z : Complex} (hz : (r : Complex) <= z)
-  statement: z = z.re
-  proof: by
-  rw [eq_comm]; rw [← conj_eq_iff_re]; rw [conj_eq_iff_im]; rw [← (Complex.le_def.1 hz).2]; rw [Complex.ofReal_im]
-
-@[simp]
-
-中文:
-定理 eq_re_of_of实数_le
-  条件: {r : 实数} {z : 复形} (hz : (r : 复形) <= z)
-  结论: z = z.re
-  证明: by
-  rw [eq_comm]; rw [← conj_eq_iff_re]; rw [conj_eq_iff_im]; rw [← (Complex.le_def.1 hz).2]; rw [Complex.ofReal_im]
-
-@[simp]
-
-Depends on / 依赖: Complex.le_def, Complex.ofReal_im, conj_eq_iff_im, conj_eq_iff_re, eq_comm, le_def, ofReal_im
+/-
+**Complex.eq_re_of_ofReal_le** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：eq_re_of_ofReal_le {r : Real} {z : Complex} (hz : (r : Complex) <= z) : z 
+= z.re
+参数：hz : (r : Complex) <= z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.conj_eq_iff_re`：conj_eq_iff_re {z : Complex} : conj z = z ↔ (z.r
+e : Complex) = z
+· 使用定理 `Complex.conj_eq_iff_im`：conj_eq_iff_im {z : Complex} : conj z = z ↔ z.im
+ = 0
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Complex.le_def`：le_def {z w : Complex} : z <= w ↔ z.re <= w.re ∧ z.im = 
+w.im
+· 使用定理 `Complex.ofReal_im`：ofReal_im (r : Real) : (r : Complex).im = 0
 -/
-theorem eq_re_of_ofReal_le {r : Real} {z : Complex} (hz : (r : Complex) <= z) : z = z.re := by
-  rw [eq_comm]; rw [← conj_eq_iff_re]; rw [conj_eq_iff_im]; rw [← (Complex.le_def.1 hz).2]; rw [Complex.ofReal_im]
+theorem eq_re_of_ofReal_le {r : ℝ} {z : ℂ} (hz : (r : ℂ) ≤ z) : z = z.re := by
+  rw [eq_comm, ← conj_eq_iff_re, conj_eq_iff_im, ← (Complex.le_def.1 hz).2, Complex.ofReal_im]
 
 @[simp]
-/--
-lemma `re_eq_norm` / 引理 `re_eq_norm`
-
-English:
-lemma re_eq_norm
-  given: {z : Complex}
-  statement: z.re = ‖z‖ ↔ 0 <= z
-  proof: have : 0 <= ‖z‖ := norm_nonneg z
-  ⟨fun h => ⟨h.symm ▸ this, (abs_re_eq_norm.1 <| h.symm ▸ abs_of_nonneg this).symm⟩,
-    fun ⟨h₁, h₂⟩ => by rw [← abs_re_eq_norm.2 h₂.symm, abs_of_nonneg h₁]⟩
-
-@[simp]
-
-中文:
-引理 re_eq_norm
-  条件: {z : 复形}
-  结论: z.re = ‖z‖ ↔ 0 <= z
-  证明: have : 0 <= ‖z‖ := norm_nonneg z
-  ⟨fun h => ⟨h.symm ▸ this, (abs_re_eq_norm.1 <| h.symm ▸ abs_of_nonneg this).symm⟩,
-    fun ⟨h₁, h₂⟩ => by rw [← abs_re_eq_norm.2 h₂.symm, abs_of_nonneg h₁]⟩
-
-@[simp]
-
-Depends on / 依赖: abs_of_nonneg, abs_re_eq_norm, h.symm, norm_nonneg
+/-
+**Complex.re_eq_norm** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：re_eq_norm {z : Complex} : z.re = ‖z‖ ↔ 0 <= z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Complex.abs_re_eq_norm`：abs_re_eq_norm {z : Complex} : |z.re| = ‖z‖ ↔ z.
+im = 0
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-lemma re_eq_norm {z : Complex} : z.re = ‖z‖ ↔ 0 <= z :=
-  have : 0 <= ‖z‖ := norm_nonneg z
-  ⟨fun h => ⟨h.symm ▸ this, (abs_re_eq_norm.1 <| h.symm ▸ abs_of_nonneg this).symm⟩,
-    fun ⟨h₁, h₂⟩ => by rw [← abs_re_eq_norm.2 h₂.symm, abs_of_nonneg h₁]⟩
+lemma re_eq_norm {z : ℂ} : z.re = ‖z‖ ↔ 0 ≤ z :=
+  have : 0 ≤ ‖z‖ := norm_nonneg z
+  ⟨fun h ↦ ⟨h.symm ▸ this, (abs_re_eq_norm.1 <| h.symm ▸ abs_of_nonneg this).symm⟩,
+    fun ⟨h₁, h₂⟩ ↦ by rw [← abs_re_eq_norm.2 h₂.symm, abs_of_nonneg h₁]⟩
 
 @[simp]
-/--
-lemma `neg_re_eq_norm` / 引理 `neg_re_eq_norm`
-
-English:
-lemma neg_re_eq_norm
-  given: {z : Complex}
-  statement: -z.re = ‖z‖ ↔ z <= 0
-  proof: by
-  rw [← neg_re]; rw [← norm_neg z]; rw [re_eq_norm]
-exact neg_nonneg.and eq_comm.trans neg_eq_zero
-
-@[simp]
-
-中文:
-引理 neg_re_eq_norm
-  条件: {z : 复形}
-  结论: -z.re = ‖z‖ ↔ z <= 0
-  证明: by
-  rw [← neg_re]; rw [← norm_neg z]; rw [re_eq_norm]
-exact neg_nonneg.and eq_comm.trans neg_eq_zero
-
-@[simp]
-
-Depends on / 依赖: eq_comm, eq_comm.trans, neg_eq_zero, neg_nonneg, neg_nonneg.and, neg_re, norm_neg, re_eq_norm
+/-
+**Complex.neg_re_eq_norm** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：neg_re_eq_norm {z : Complex} : -z.re = ‖z‖ ↔ z <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.neg_re`：neg_re (z : Complex) : (-z).re = -z.re
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用引理 `Complex.re_eq_norm`：re_eq_norm {z : Complex} : z.re = ‖z‖ ↔ 0 <= z
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `neg_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddLeftM
+ono α] {a : α}, 0 ≤ -a ↔ a ≤ 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `neg_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a =
+ 0 ↔ a = 0
 -/
-lemma neg_re_eq_norm {z : Complex} : -z.re = ‖z‖ ↔ z <= 0 := by
-  rw [← neg_re]; rw [← norm_neg z]; rw [re_eq_norm]
-exact neg_nonneg.and eq_comm.trans neg_eq_zero
+lemma neg_re_eq_norm {z : ℂ} : -z.re = ‖z‖ ↔ z ≤ 0 := by
+  rw [← neg_re, ← norm_neg z, re_eq_norm]
+  exact neg_nonneg.and <| eq_comm.trans neg_eq_zero
 
 @[simp]
-/--
-lemma `re_eq_neg_norm` / 引理 `re_eq_neg_norm`
-
-English:
-lemma re_eq_neg_norm
-  given: {z : Complex}
-  statement: z.re = -‖z‖ ↔ z <= 0
-  proof: by rw [← neg_eq_iff_eq_neg, neg_re_eq_norm]
-
-中文:
-引理 re_eq_neg_norm
-  条件: {z : 复形}
-  结论: z.re = -‖z‖ ↔ z <= 0
-  证明: by rw [← neg_eq_iff_eq_neg, neg_re_eq_norm]
-
-Depends on / 依赖: neg_eq_iff_eq_neg, neg_re_eq_norm
+/-
+**Complex.re_eq_neg_norm** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：re_eq_neg_norm {z : Complex} : z.re = -‖z‖ ↔ z <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_eq_iff_eq_neg`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, 
+-a = b ↔ a = -b
+· 使用引理 `Complex.neg_re_eq_norm`：neg_re_eq_norm {z : Complex} : -z.re = ‖z‖ ↔ z <
+= 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma re_eq_neg_norm {z : Complex} : z.re = -‖z‖ ↔ z <= 0 := by rw [← neg_eq_iff_eq_neg, neg_re_eq_norm]
-
-/--
-lemma `monotone_ofReal` / 引理 `monotone_ofReal`
-
-English:
-lemma monotone_ofReal
-  statement: Monotone ofReal
-  proof: by
-  intro x y hxy
-  simp only [real_le_real, hxy]
-
-中文:
-引理 monotone_of实数
-  结论: 递增 of实数
-  证明: by
-  intro x y hxy
-  simp only [real_le_real, hxy]
-
-Depends on / 依赖: real_le_real
+lemma re_eq_neg_norm {z : ℂ} : z.re = -‖z‖ ↔ z ≤ 0 := by rw [← neg_eq_iff_eq_neg, neg_re_eq_norm]
+/-
+**Complex.monotone_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：monotone_ofReal : Monotone ofReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 lemma monotone_ofReal : Monotone ofReal := by
   intro x y hxy
@@ -582,7 +469,7 @@ input is. -/
 meta def evalComplexOfReal : PositivityExt where eval {u α} _ pα? e :=
   match pα? with | none => pure .none | some _ => do
   match u, α, e with
-  | 0, ~q(Complex), ~q(Complex.ofReal $a) =>
+  | 0, ~q(ℂ), ~q(Complex.ofReal $a) =>
     assumeInstancesCommute
     match ← core q(inferInstance) (some q(inferInstance)) a with
     | .positive pa => return .positive q(ofReal_pos $pa)
@@ -591,8 +478,21 @@ meta def evalComplexOfReal : PositivityExt where eval {u α} _ pα? e :=
     | _ => return .none
   | _, _ => throwError "not Complex.ofReal"
 
-example (x : Real) (hx : 0 < x) : 0 < (x : Complex) := by positivity
-example (x : Real) (hx : 0 <= x) : 0 <= (x : Complex) := by positivity
-example (x : Real) (hx : x != 0) : (x : Complex) != 0 := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (x : ℝ) (hx : 0 < x) : 0 < (x : ℂ) := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (x : ℝ) (hx : 0 ≤ x) : 0 ≤ (x : ℂ) := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (x : ℝ) (hx : x ≠ 0) : (x : ℂ) ≠ 0 := by positivity
 
 end Mathlib.Meta.Positivity
+

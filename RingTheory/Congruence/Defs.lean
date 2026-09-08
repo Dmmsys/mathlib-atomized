@@ -33,20 +33,17 @@ Most of the time you likely want to use the `Ideal.Quotient` API that is built o
 
 open Function
 
-/--
-Definition of `RingCon` / `RingCon` 的定义
+/-- A congruence relation on a type with an addition and multiplication is an equivalence relation
+which preserves both. -/
+/-
+**RingCon** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [Add R] → [Mul R] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingCon
-  parameters: (R : Type*) [Add R] [Mul R]
-  extends: Con R, AddCon R
-  (no additional axioms)
-
-中文:
-结构 RingCon
-  参数: (R : 类型) [加法 R] [乘法 R]
-  继承: Con R, 加法Con R
-  (无附加公理)
+--- 原说明 ---
+A congruence relation on a type with an addition and multiplication is an equiva
+lence relation
+which preserves both.
 -/
 structure RingCon (R : Type*) [Add R] [Mul R] extends Con R, AddCon R where
 
@@ -58,63 +55,44 @@ add_decl_doc RingCon.toAddCon
 
 variable {R : Type*}
 
-/--
-Inductive type `RingConGen.Rel` / 归纳类型 `RingConGen.Rel`
+/-- The inductively defined smallest ring congruence relation containing a given binary
+relation. -/
+/-
+**RingConGen.Rel** 是 Mathlib 中的一个归纳类型，位于命名空间 `RingConGen`。
+形式化陈述：{R : Type u_1} → [Add R] → [Mul R] → (R → R → Prop) → R → R → Prop
+参数：R → R → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive RingConGen.Rel
-  parameters: [Add R] [Mul R] (r : R -> R -> Prop)
-  constructors (6):
-    - of: forall x y, r x y -> RingConGen.Rel r x y
-    - refl: forall x, RingConGen.Rel r x x
-    - symm: forall {x y}, RingConGen.Rel r x y -> RingConGen.Rel r y x
-    - trans: forall {x y z}, RingConGen.Rel r x y -> RingConGen.Rel r y z -> RingConGen.Rel r x z
-    - add: forall {w x y z}, RingConGen.Rel r w x -> RingConGen.Rel r y z -> RingConGen.Rel r (w + y) (x + z)
-    - mul: forall {w x y z}, RingConGen.Rel r w x -> RingConGen.Rel r y z -> RingConGen.Rel r (w * y) (x * z)
-
-中文:
-归纳类型 RingConGen.关系
-  参数: [加法 R] [乘法 R] (r : R -> R -> 命题)
-  构造子 (6 个):
-    - of: 对任意 x y, r x y -> RingConGen.关系 r x y
-    - refl: 对任意 x, RingConGen.关系 r x x
-    - symm: 对任意 {x y}, RingConGen.关系 r x y -> RingConGen.关系 r y x
-    - trans: 对任意 {x y z}, RingConGen.关系 r x y -> RingConGen.关系 r y z -> RingConGen.关系 r x z
-    - add: 对任意 {w x y z}, RingConGen.关系 r w x -> RingConGen.关系 r y z -> RingConGen.关系 r (w + y) (x + z)
-    - mul: 对任意 {w x y z}, RingConGen.关系 r w x -> RingConGen.关系 r y z -> RingConGen.关系 r (w * y) (x * z)
+--- 原说明 ---
+The inductively defined smallest ring congruence relation containing a given bin
+ary
+relation.
 -/
-inductive RingConGen.Rel [Add R] [Mul R] (r : R -> R -> Prop) : R -> R -> Prop
-  | of : forall x y, r x y -> RingConGen.Rel r x y
-  | refl : forall x, RingConGen.Rel r x x
-  | symm : forall {x y}, RingConGen.Rel r x y -> RingConGen.Rel r y x
-  | trans : forall {x y z}, RingConGen.Rel r x y -> RingConGen.Rel r y z -> RingConGen.Rel r x z
-  | add : forall {w x y z}, RingConGen.Rel r w x -> RingConGen.Rel r y z ->
+inductive RingConGen.Rel [Add R] [Mul R] (r : R → R → Prop) : R → R → Prop
+  | of : ∀ x y, r x y → RingConGen.Rel r x y
+  | refl : ∀ x, RingConGen.Rel r x x
+  | symm : ∀ {x y}, RingConGen.Rel r x y → RingConGen.Rel r y x
+  | trans : ∀ {x y z}, RingConGen.Rel r x y → RingConGen.Rel r y z → RingConGen.Rel r x z
+  | add : ∀ {w x y z}, RingConGen.Rel r w x → RingConGen.Rel r y z →
       RingConGen.Rel r (w + y) (x + z)
-  | mul : forall {w x y z}, RingConGen.Rel r w x -> RingConGen.Rel r y z ->
+  | mul : ∀ {w x y z}, RingConGen.Rel r w x → RingConGen.Rel r y z →
       RingConGen.Rel r (w * y) (x * z)
 
-/--
-Definition of `ringConGen` / `ringConGen` 的定义
+/-- The inductively defined smallest ring congruence relation containing a given binary
+relation. -/
+/-
+**ringConGen** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ringConGen [Add R] [Mul R] (r : R -> R -> Prop) : RingCon R where r
+参数：r : R -> R -> Prop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringConGen
-  signature: [Add R] [Mul R] (r : R -> R -> Prop)
-  body: RingConGen.Rel r
-  iseqv := ⟨RingConGen.Rel.refl, @RingConGen.Rel.symm _ _ _ _, @RingConGen.Rel.trans _ _ _ _⟩
-  add' := RingConGen.Rel.add
-  mul' := RingConGen.Rel.mul
-
-中文:
-定义 ringConGen
-  签名: [加法 R] [乘法 R] (r : R -> R -> 命题)
-  定义体: RingConGen.Rel r
-  iseqv := ⟨RingConGen.Rel.refl, @RingConGen.Rel.symm _ _ _ _, @RingConGen.Rel.trans _ _ _ _⟩
-  add' := RingConGen.Rel.add
-  mul' := RingConGen.Rel.mul
-
-Depends on / 依赖: RingConGen, RingConGen.Rel
+--- 原说明 ---
+The inductively defined smallest ring congruence relation containing a given bin
+ary
+relation.
 -/
-def ringConGen [Add R] [Mul R] (r : R -> R -> Prop) : RingCon R where
+def ringConGen [Add R] [Mul R] (r : R → R → Prop) : RingCon R where
   r := RingConGen.Rel r
   iseqv := ⟨RingConGen.Rel.refl, @RingConGen.Rel.symm _ _ _ _, @RingConGen.Rel.trans _ _ _ _⟩
   add' := RingConGen.Rel.add
@@ -126,382 +104,262 @@ section Basic
 
 variable [Add R] [Mul R] {c d : RingCon R}
 
-/--
-lemma `toCon_injective` / 引理 `toCon_injective`
-
-English:
-lemma toCon_injective
-  statement: Injective fun c : RingCon R => c.toCon
-  proof: fun c d => by cases c; congr!
-
-中文:
-引理 toCon_injective
-  结论: 单射 fun c : RingCon R => c.toCon
-  证明: fun c d => by cases c; congr!
+/-
+**RingCon.toCon_injective** 是 Mathlib 中的一个引理，位于命名空间 `RingCon`。
+形式化陈述：toCon_injective : Injective fun c : RingCon R => c.toCon
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `RingCon.add'`：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (self : R
+ingCon R) {w x y z : R},   self.toSetoid w x → self.toSetoid y z → self.toSetoid
+ (…
 -/
-lemma toCon_injective : Injective fun c : RingCon R => c.toCon := fun c d => by cases c; congr!
-
-/--
-lemma `toCon_inj` / 引理 `toCon_inj`
-
-English:
-lemma toCon_inj
-  statement: c.toCon = d.toCon ↔ c = d
-  proof: toCon_injective.eq_iff
-
-中文:
-引理 toCon_inj
-  结论: c.toCon = d.toCon ↔ c = d
-  证明: toCon_injective.eq_iff
+lemma toCon_injective : Injective fun c : RingCon R ↦ c.toCon := fun c d ↦ by cases c; congr!
+/-
+**RingCon.toCon_inj** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] {c d : RingCon R}, c.toCo
+n = d.toCon ↔ c = d
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `RingCon.toCon_injective`：toCon_injective : Injective fun c : RingCon R =
+> c.toCon
 -/
 @[simp] lemma toCon_inj : c.toCon = d.toCon ↔ c = d := toCon_injective.eq_iff
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A coercion from a congruence relation to its underlying binary relation. -/
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: FunLike (RingCon R) R (R -> Prop)
-  body: c.r
-  coe_injective := DFunLike.coe_injective.comp toCon_injective
-
-中文:
-实例 :
-  签名: 函数状 (RingCon R) R (R -> 命题)
-  定义体: c.r
-  coe_injective := DFunLike.coe_injective.comp toCon_injective
+--- 原说明 ---
+A coercion from a congruence relation to its underlying binary relation.
 -/
-instance : FunLike (RingCon R) R (R -> Prop) where
+instance : FunLike (RingCon R) R (R → Prop) where
   coe c := c.r
   coe_injective := DFunLike.coe_injective.comp toCon_injective
 
 variable (c)
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (s : Con R) (h)
-  statement: ⇑(mk s h) = s
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (s : Con R) (h)
-  结论: ⇑(mk s h) = s
-  证明: rfl
+/-
+**RingCon.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_mk (s : Con R) (h) : ⇑(mk s h) = s
+参数：s : Con R；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (s : Con R) (h) : ⇑(mk s h) = s := rfl
-
-/--
-theorem `rel_eq_coe` / 定理 `rel_eq_coe`
-
-English:
-theorem rel_eq_coe
-  statement: c.r = c
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rel_eq_coe
-  结论: c.r = c
-  证明: rfl
-
-@[simp]
+/-
+**RingCon.rel_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：rel_eq_coe : c.r = c
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rel_eq_coe : c.r = c :=
   rfl
 
 @[simp]
-/--
-theorem `toCon_coe_eq_coe` / 定理 `toCon_coe_eq_coe`
-
-English:
-theorem toCon_coe_eq_coe
-  statement: (c.toCon : R -> R -> Prop) = c
-  proof: rfl
-
-中文:
-定理 toCon_coe_eq_coe
-  结论: (c.toCon : R -> R -> 命题) = c
-  证明: rfl
+/-
+**RingCon.toCon_coe_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：toCon_coe_eq_coe : (c.toCon : R -> R -> Prop) = c
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toCon_coe_eq_coe : (c.toCon : R -> R -> Prop) = c :=
+theorem toCon_coe_eq_coe : (c.toCon : R → R → Prop) = c :=
   rfl
-
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: (x)
-  statement: c x x
-  proof: c.refl' x
-
-中文:
-定理 refl
-  条件: (x)
-  结论: c x x
-  证明: c.refl' x
+/-
+**RingCon.refl** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (c : RingCon R) (x : R), 
+c x x
+参数：c : RingCon R；x : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Setoid.refl'`：refl' (r : Setoid α) (x) : r x x
 -/
 protected theorem refl (x) : c x x :=
   c.refl' x
-
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: {x y}
-  statement: c x y -> c y x
-  proof: c.symm'
-
-中文:
-定理 symm
-  条件: {x y}
-  结论: c x y -> c y x
-  证明: c.symm'
+/-
+**RingCon.symm** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (c : RingCon R) {x y : R}
+, c x y → c y x
+参数：c : RingCon R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Setoid.symm'`：symm' (r : Setoid α) : forall {x y}, r x y -> r y x
 -/
-protected theorem symm {x y} : c x y -> c y x :=
+protected theorem symm {x y} : c x y → c y x :=
   c.symm'
-
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  given: {x y z}
-  statement: c x y -> c y z -> c x z
-  proof: c.trans'
-
-中文:
-定理 trans
-  条件: {x y z}
-  结论: c x y -> c y z -> c x z
-  证明: c.trans'
+/-
+**RingCon.trans** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (c : RingCon R) {x y z : 
+R}, c x y → c y z → c x z
+参数：c : RingCon R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Setoid.trans'`：trans' (r : Setoid α) : forall {x y z}, r x y -> r y z ->
+ r x z
 -/
-protected theorem trans {x y z} : c x y -> c y z -> c x z :=
+protected theorem trans {x y z} : c x y → c y z → c x z :=
   c.trans'
-
-/--
-theorem `add` / 定理 `add`
-
-English:
-theorem add
-  given: {w x y z}
-  statement: c w x -> c y z -> c (w + y) (x + z)
-  proof: c.add'
-
-中文:
-定理 add
-  条件: {w x y z}
-  结论: c w x -> c y z -> c (w + y) (x + z)
-  证明: c.add'
+/-
+**RingCon.add** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (c : RingCon R) {w x y z 
+: R}, c w x → c y z → c (w + y) (x + z)
+参数：c : RingCon R；w + y；x + z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingCon.add'`：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (self : R
+ingCon R) {w x y z : R},   self.toSetoid w x → self.toSetoid y z → self.toSetoid
+ (…
 -/
-protected theorem add {w x y z} : c w x -> c y z -> c (w + y) (x + z) :=
+protected theorem add {w x y z} : c w x → c y z → c (w + y) (x + z) :=
   c.add'
-
-/--
-theorem `mul` / 定理 `mul`
-
-English:
-theorem mul
-  given: {w x y z}
-  statement: c w x -> c y z -> c (w * y) (x * z)
-  proof: c.mul'
-
-中文:
-定理 mul
-  条件: {w x y z}
-  结论: c w x -> c y z -> c (w * y) (x * z)
-  证明: c.mul'
+/-
+**RingCon.mul** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (c : RingCon R) {w x y z 
+: R}, c w x → c y z → c (w * y) (x * z)
+参数：c : RingCon R；w * y；x * z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.mul'`：∀ {M : Type u_1} [inst : Mul M] (self : Con M) {w x y z : M}, 
+  self.toSetoid w x → self.toSetoid y z → self.toSetoid (w * y) (x * z)
 -/
-protected theorem mul {w x y z} : c w x -> c y z -> c (w * y) (x * z) :=
+protected theorem mul {w x y z} : c w x → c y z → c (w * y) (x * z) :=
   c.mul'
-
-/--
-theorem `sub` / 定理 `sub`
-
-English:
-theorem sub
-  statement: {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
-  proof: t.toAddCon.sub h h'
-
-中文:
-定理 sub
-  结论: {S : 类型} [加法群 S] [乘法 S] (t : RingCon S)
-  证明: t.toAddCon.sub h h'
+/-
+**RingCon.sub** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {S : Type u_2} [inst : AddGroup S] [inst_1 : Mul S] (t : RingCon S) {a b
+ c d : S}, t a b → t c d → t (a - c) (b - d)
+参数：t : RingCon S；a - c；b - d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCon.sub`：∀ {M : Type u_1} [inst : AddGroup M] (c : AddCon M) {w x y z
+ : M}, c w x → c y z → c (w - y) (x - z)
 -/
 protected theorem sub {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
     {a b c d : S} (h : t a b) (h' : t c d) : t (a - c) (b - d) := t.toAddCon.sub h h'
-
-/--
-theorem `neg` / 定理 `neg`
-
-English:
-theorem neg
-  statement: {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
-  proof: t.toAddCon.neg h
-
-中文:
-定理 neg
-  结论: {S : 类型} [加法群 S] [乘法 S] (t : RingCon S)
-  证明: t.toAddCon.neg h
+/-
+**RingCon.neg** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {S : Type u_2} [inst : AddGroup S] [inst_1 : Mul S] (t : RingCon S) {a b
+ : S}, t a b → t (-a) (-b)
+参数：t : RingCon S；-a；-b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCon.neg`：∀ {M : Type u_1} [inst : AddGroup M] (c : AddCon M) {x y : M
+}, c x y → c (-x) (-y)
 -/
 protected theorem neg {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
     {a b} (h : t a b) : t (-a) (-b) := t.toAddCon.neg h
-
-/--
-theorem `nsmul` / 定理 `nsmul`
-
-English:
-theorem nsmul
-  statement: {S : Type*} [AddMonoid S] [Mul S] (t : RingCon S)
-  proof: t.toAddCon.nsmul m hx
-
-中文:
-定理 nsmul
-  结论: {S : 类型} [加法幺半群 S] [乘法 S] (t : RingCon S)
-  证明: t.toAddCon.nsmul m hx
+/-
+**RingCon.nsmul** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {S : Type u_2} [inst : AddMonoid S] [inst_1 : Mul S] (t : RingCon S) (m 
+: ℕ) {x y : S}, t x y → t (m • x) (m • y)
+参数：t : RingCon S；m : ℕ；m • x；m • y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCon.nsmul`：∀ {M : Type u_4} [inst : AddMonoid M] (c : AddCon M) (n : 
+ℕ) {w x : M}, c w x → c (n • w) (n • x)
 -/
 protected theorem nsmul {S : Type*} [AddMonoid S] [Mul S] (t : RingCon S)
-    (m : Nat) {x y : S} (hx : t x y) : t (m • x) (m • y) := t.toAddCon.nsmul m hx
-
-/--
-theorem `zsmul` / 定理 `zsmul`
-
-English:
-theorem zsmul
-  statement: {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
-  proof: t.toAddCon.zsmul z hx
-
-中文:
-定理 zsmul
-  结论: {S : 类型} [加法群 S] [乘法 S] (t : RingCon S)
-  证明: t.toAddCon.zsmul z hx
+    (m : ℕ) {x y : S} (hx : t x y) : t (m • x) (m • y) := t.toAddCon.nsmul m hx
+/-
+**RingCon.zsmul** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {S : Type u_2} [inst : AddGroup S] [inst_1 : Mul S] (t : RingCon S) (z :
+ ℤ) {x y : S}, t x y → t (z • x) (z • y)
+参数：t : RingCon S；z : ℤ；z • x；z • y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCon.zsmul`：∀ {M : Type u_1} [inst : AddGroup M] (c : AddCon M) (n : ℤ
+) {w x : M}, c w x → c (n • w) (n • x)
 -/
 protected theorem zsmul {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
-    (z : Int) {x y : S} (hx : t x y) : t (z • x) (z • y) := t.toAddCon.zsmul z hx
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (RingCon R)
-  body: ⟨ringConGen emptyRelation⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 可居 (RingCon R)
-  定义体: ⟨ringConGen emptyRelation⟩
-
-@[simp]
-
-Depends on / 依赖: emptyRelation, ringConGen
+    (z : ℤ) {x y : S} (hx : t x y) : t (z • x) (z • y) := t.toAddCon.zsmul z hx
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (RingCon R) :=
   ⟨ringConGen emptyRelation⟩
 
 @[simp]
-/--
-theorem `rel_mk` / 定理 `rel_mk`
-
-English:
-theorem rel_mk
-  given: {s : Con R} {h a b}
-  statement: RingCon.mk s h a b ↔ s a b
-  proof: Iff.rfl
-
-中文:
-定理 rel_mk
-  条件: {s : Con R} {h a b}
-  结论: RingCon.mk s h a b ↔ s a b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**RingCon.rel_mk** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：rel_mk {s : Con R} {h a b} : RingCon.mk s h a b ↔ s a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem rel_mk {s : Con R} {h a b} : RingCon.mk s h a b ↔ s a b :=
   Iff.rfl
 
-/--
-theorem `ext'` / 定理 `ext'`
+/-- The map sending a congruence relation to its underlying binary relation is injective. -/
+/-
+**RingCon.ext'** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：ext' {c d : RingCon R} (H : ⇑c = ⇑d) : c = d
+参数：H : ⇑c = ⇑d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 
-English:
-theorem ext'
-  given: {c d : RingCon R} (H : ⇑c = ⇑d)
-  statement: c = d
-  proof: DFunLike.coe_injective H
-
-中文:
-定理 ext'
-  条件: {c d : RingCon R} (H : ⇑c = ⇑d)
-  结论: c = d
-  证明: DFunLike.coe_injective H
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+--- 原说明 ---
+The map sending a congruence relation to its underlying binary relation is injec
+tive.
 -/
 theorem ext' {c d : RingCon R} (H : ⇑c = ⇑d) : c = d := DFunLike.coe_injective H
 
 /-- Extensionality rule for congruence relations. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**RingCon.ext** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：ext {c d : RingCon R} (H : forall x y, c x y ↔ d x y) : c = d
+参数：H : forall x y, c x y ↔ d x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingCon.ext'`：ext' {c d : RingCon R} (H : ⇑c = ⇑d) : c = d
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem ext
-  given: {c d : RingCon R} (H : forall x y, c x y ↔ d x y)
-  statement: c = d
-  proof: ext' by ext; apply H
-
-中文:
-定理 ext
-  条件: {c d : RingCon R} (H : 对任意 x y, c x y ↔ d x y)
-  结论: c = d
-  证明: ext' by ext; apply H
+--- 原说明 ---
+Extensionality rule for congruence relations.
 -/
-theorem ext {c d : RingCon R} (H : forall x y, c x y ↔ d x y) : c = d :=
-ext' by ext; apply H
+theorem ext {c d : RingCon R} (H : ∀ x y, c x y ↔ d x y) : c = d :=
+  ext' <| by ext; apply H
 
-/--
-theorem `ext''` / 定理 `ext''`
+/-- The map sending a ring congruence relation to its underlying equivalence
+relation is injective. -/
+/-
+**RingCon.ext''** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：ext'' {c d : RingCon R} (H : c.toSetoid = d.toSetoid) : c = d
+参数：H : c.toSetoid = d.toSetoid。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingCon.ext`：ext {c d : RingCon R} (H : forall x y, c x y ↔ d x y) : c =
+ d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Setoid.ext_iff`：∀ {α : Sort u_3} {s t : Setoid α}, s = t ↔ ∀ (a b : α), 
+s a b ↔ t a b
 
-English:
-theorem ext''
-  given: {c d : RingCon R} (H : c.toSetoid = d.toSetoid)
-  statement: c = d
-  proof: ext Setoid.ext_iff.1 H
-
-中文:
-定理 ext''
-  条件: {c d : RingCon R} (H : c.toSetoid = d.toSetoid)
-  结论: c = d
-  证明: ext Setoid.ext_iff.1 H
-
-Depends on / 依赖: Setoid, Setoid.ext_iff, ext_iff
+--- 原说明 ---
+The map sending a ring congruence relation to its underlying equivalence
+relation is injective.
 -/
 theorem ext'' {c d : RingCon R} (H : c.toSetoid = d.toSetoid) : c = d :=
-ext Setoid.ext_iff.1 H
+  ext <| Setoid.ext_iff.1 H
 
-/--
-theorem `coe_inj` / 定理 `coe_inj`
+/-- Two ring congruence relations are equal iff their underlying binary
+relations are equal. -/
+/-
+**RingCon.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_inj {c d : RingCon R} : ⇑c = ⇑d ↔ c = d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem coe_inj
-  given: {c d : RingCon R}
-  statement: ⇑c = ⇑d ↔ c = d
-  proof: by simp
-
-中文:
-定理 coe_inj
-  条件: {c d : RingCon R}
-  结论: ⇑c = ⇑d ↔ c = d
-  证明: by simp
+--- 原说明 ---
+Two ring congruence relations are equal iff their underlying binary
+relations are equal.
 -/
 theorem coe_inj {c d : RingCon R} : ⇑c = ⇑d ↔ c = d := by simp
 
@@ -509,25 +367,23 @@ variable {R R' F : Type*} [Add R] [Add R']
     [FunLike F R R'] [AddHomClass F R R'] [Mul R] [Mul R'] [MulHomClass F R R']
 
 /--
-Definition of `comap` / `comap` 的定义
+Pulling back a `RingCon` across a ring homomorphism.
+-/
+/-
+**RingCon.comap** 是 Mathlib 中的一个定义，位于命名空间 `RingCon`。
+形式化陈述：comap (J : RingCon R') (f : F) : RingCon R where __
+参数：J : RingCon R'；f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddCon.add'`：∀ {M : Type u_1} [inst : Add M] (self : AddCon M) {w x y z 
+: M},   self.toSetoid w x → self.toSetoid y z → self.toSetoid (w + y) (x + z)
 
-English:
-definition comap
-  signature: (J : RingCon R') (f : F)
-  body: J.toCon.comap f (map_mul f)
-  __ := J.toAddCon.comap f (map_add f)
-
-@[simp]
-
-中文:
-定义 comap
-  签名: (J : RingCon R') (f : F)
-  定义体: J.toCon.comap f (map_mul f)
-  __ := J.toAddCon.comap f (map_add f)
-
-@[simp]
-
-Depends on / 依赖: J.toCon.comap, map_mul
+--- 原说明 ---
+Pulling back a `RingCon` across a ring homomorphism.
 -/
 def comap (J : RingCon R') (f : F) :
     RingCon R where
@@ -535,110 +391,117 @@ def comap (J : RingCon R') (f : F) :
   __ := J.toAddCon.comap f (map_add f)
 
 @[simp]
-/--
-theorem `comap_rel` / 定理 `comap_rel`
-
-English:
-theorem comap_rel
-  given: {J : RingCon R'} {f : F} {x y : R}
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 comap_rel
-  条件: {J : RingCon R'} {f : F} {x y : R}
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**RingCon.comap_rel** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：comap_rel {J : RingCon R'} {f : F} {x y : R} : J.comap f x y ↔ J (f x) (f 
+y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem comap_rel {J : RingCon R'} {f : F} {x y : R} :
     J.comap f x y ↔ J (f x) (f y) := Iff.rfl
 
 @[simp]
-/--
-theorem `comap_nonUnitalRingHomId` / 定理 `comap_nonUnitalRingHomId`
-
-English:
-theorem comap_nonUnitalRingHomId
-  given: {R} [NonUnitalNonAssocSemiring R] (J : RingCon R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comap_nonUnitalRingHomId
-  条件: {R} [非幺非结合半环 R] (J : RingCon R)
-  证明: rfl
-
-@[simp]
+/-
+**RingCon.comap_nonUnitalRingHomId** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：comap_nonUnitalRingHomId {R} [NonUnitalNonAssocSemiring R] (J : RingCon R)
+ : J.comap (NonUnitalRingHom.id _) = J
+参数：J : RingCon R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `NonUnitalRingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outPara
+m (Type u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {
+inst_1 : NonUnitalNonAssocSemir…
+· 使用定理 `NonUnitalRingHom.instNonUnitalRingHomClass`：∀ {α : Type u_2} {β : Type u
+_3} [inst : NonUnitalNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β],
+   NonUnitalRingHomClass (α →ₙ+*…
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
 -/
 theorem comap_nonUnitalRingHomId {R} [NonUnitalNonAssocSemiring R] (J : RingCon R) :
     J.comap (NonUnitalRingHom.id _) = J := rfl
 
 @[simp]
-/--
-theorem `comap_nonUnitalRingHomComp` / 定理 `comap_nonUnitalRingHomComp`
-
-English:
-theorem comap_nonUnitalRingHomComp
-  statement: {R R' R''}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comap_nonUnitalRingHomComp
-  结论: {R R' R''}
-  证明: rfl
-
-@[simp]
+/-
+**RingCon.comap_nonUnitalRingHomComp** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：comap_nonUnitalRingHomComp {R R' R''} [NonUnitalNonAssocSemiring R] [NonUn
+italNonAssocSemiring R'] [NonUnitalNonAssocSemiring R''] (J : RingCon R) (g : R'
+ ->ₙ+* R) (f : R'' ->ₙ+* R') : J.comap (g.comp f) = (J.comap g).comap f
+参数：J : RingCon R；g : R' ->ₙ+* R；f : R'' ->ₙ+* R'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `NonUnitalRingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outPara
+m (Type u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {
+inst_1 : NonUnitalNonAssocSemir…
+· 使用定理 `NonUnitalRingHom.instNonUnitalRingHomClass`：∀ {α : Type u_2} {β : Type u
+_3} [inst : NonUnitalNonAssocSemiring α] [inst_1 : NonUnitalNonAssocSemiring β],
+   NonUnitalRingHomClass (α →ₙ+*…
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
 -/
 theorem comap_nonUnitalRingHomComp {R R' R''}
     [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring R'] [NonUnitalNonAssocSemiring R'']
-    (J : RingCon R) (g : R' ->ₙ+* R) (f : R'' ->ₙ+* R') :
+    (J : RingCon R) (g : R' →ₙ+* R) (f : R'' →ₙ+* R') :
     J.comap (g.comp f) = (J.comap g).comap f := rfl
 
 @[simp]
-/--
-theorem `comap_ringHomId` / 定理 `comap_ringHomId`
-
-English:
-theorem comap_ringHomId
-  given: {R} [NonAssocSemiring R] (J : RingCon R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comap_ringHomId
-  条件: {R} [非结合半环 R] (J : RingCon R)
-  证明: rfl
-
-@[simp]
+/-
+**RingCon.comap_ringHomId** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：comap_ringHomId {R} [NonAssocSemiring R] (J : RingCon R) : J.comap (RingHo
+m.id _) = J
+参数：J : RingCon R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
 -/
 theorem comap_ringHomId {R} [NonAssocSemiring R] (J : RingCon R) :
     J.comap (RingHom.id _) = J := rfl
 
 @[simp]
-/--
-theorem `comap_ringHomComp` / 定理 `comap_ringHomComp`
-
-English:
-theorem comap_ringHomComp
-  statement: {R R' R''}
-  proof: rfl
-
-中文:
-定理 comap_ringHomComp
-  结论: {R R' R''}
-  证明: rfl
+/-
+**RingCon.comap_ringHomComp** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：comap_ringHomComp {R R' R''} [NonAssocSemiring R] [NonAssocSemiring R'] [N
+onAssocSemiring R''] (J : RingCon R) (g : R' ->+* R) (f : R'' ->+* R') : J.comap
+ (g.comp f) = (J.comap g).comap f
+参数：J : RingCon R；g : R' ->+* R；f : R'' ->+* R'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
 -/
 theorem comap_ringHomComp {R R' R''}
     [NonAssocSemiring R] [NonAssocSemiring R'] [NonAssocSemiring R'']
-    (J : RingCon R) (g : R' ->+* R) (f : R'' ->+* R') :
+    (J : RingCon R) (g : R' →+* R) (f : R'' →+* R') :
     J.comap (g.comp f) = (J.comap g).comap f := rfl
 
 end Basic
@@ -649,78 +512,73 @@ section Basic
 
 variable [Add R] [Mul R] (c : RingCon R)
 
-/--
-Definition of `Quotient` / `Quotient` 的定义
+/-- Defining the quotient by a congruence relation of a type with addition and multiplication. -/
+/-
+**RingCon.Quotient** 是 Mathlib 中的一个定义，位于命名空间 `RingCon`。
+形式化陈述：{R : Type u_1} → [inst : Add R] → [inst_1 : Mul R] → RingCon R → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient
-  body: Quotient c.toSetoid
-
-中文:
-定义 商
-  定义体: Quotient c.toSetoid
+--- 原说明 ---
+Defining the quotient by a congruence relation of a type with addition and multi
+plication.
 -/
 protected def Quotient :=
   Quotient c.toSetoid
 
 variable {c}
 
-/--
-Definition of `toQuotient` / `toQuotient` 的定义
+/-- The morphism into the quotient by a congruence relation -/
+/-
+**RingCon.toQuotient** 是 Mathlib 中的一个定义，位于命名空间 `RingCon`。
+形式化陈述：{R : Type u_1} → [inst : Add R] → [inst_1 : Mul R] → {c : RingCon R} → R →
+ c.Quotient
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 
-English:
-definition toQuotient
-  signature: (r : R)
-  body: @Quotient.mk'' _ c.toSetoid r
-
-中文:
-定义 toQuotient
-  签名: (r : R)
-  定义体: @Quotient.mk'' _ c.toSetoid r
+--- 原说明 ---
+The morphism into the quotient by a congruence relation
 -/
 @[coe] def toQuotient (r : R) : c.Quotient :=
   @Quotient.mk'' _ c.toSetoid r
 
 variable (c)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Coercion from a type with addition and multiplication to its quotient by a congruence relation.
 
-English:
-instance :
-  signature: CoeTC R c.Quotient
-  body: ⟨toQuotient⟩
+See Note [use has_coe_t]. -/
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 :
-  签名: CoeTC R c.商
-  定义体: ⟨toQuotient⟩
+--- 原说明 ---
+Coercion from a type with addition and multiplication to its quotient by a congr
+uence relation.
 
-Depends on / 依赖: toQuotient
+See Note [use has_coe_t].
 -/
 instance : CoeTC R c.Quotient :=
   ⟨toQuotient⟩
 
 -- Lower the priority since it unifies with any quotient type.
 /-- The quotient by a decidable congruence relation has decidable equality. -/
-instance (priority := 500) [_d : forall a b, Decidable (c a b)] : DecidableEq c.Quotient :=
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The quotient by a decidable congruence relation has decidable equality.
+-/
+instance (priority := 500) [_d : ∀ a b, Decidable (c a b)] : DecidableEq c.Quotient :=
   inferInstanceAs (DecidableEq (Quotient c.toSetoid))
 
 @[simp]
-/--
-theorem `quot_mk_eq_coe` / 定理 `quot_mk_eq_coe`
-
-English:
-theorem quot_mk_eq_coe
-  given: (x : R)
-  statement: Quot.mk c x = (x : c.Quotient)
-  proof: rfl
-
-中文:
-定理 quot_mk_eq_coe
-  条件: (x : R)
-  结论: 商.mk c x = (x : c.商)
-  证明: rfl
+/-
+**RingCon.quot_mk_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：quot_mk_eq_coe (x : R) : Quot.mk c x = (x : c.Quotient)
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quot_mk_eq_coe (x : R) : Quot.mk c x = (x : c.Quotient) :=
   rfl
@@ -728,20 +586,19 @@ theorem quot_mk_eq_coe (x : R) : Quot.mk c x = (x : c.Quotient) :=
 /-- Two elements are related by a congruence relation `c` iff they are represented by the same
 element of the quotient by `c`. -/
 @[simp]
-/--
-theorem `eq` / 定理 `eq`
+/-
+**RingCon.eq** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : Add R] [inst_1 : Mul R] (c : RingCon R) {a b : R}
+, ↑a = ↑b ↔ c a b
+参数：c : RingCon R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq''`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk''
+ a = Quotient.mk'' b ↔ s₁ a b
 
-English:
-theorem eq
-  given: {a b : R}
-  statement: (a : c.Quotient) = (b : c.Quotient) ↔ c a b
-  proof: Quotient.eq''
-
-中文:
-定理 eq
-  条件: {a b : R}
-  结论: (a : c.商) = (b : c.商) ↔ c a b
-  证明: Quotient.eq''
+--- 原说明 ---
+Two elements are related by a congruence relation `c` iff they are represented b
+y the same
+element of the quotient by `c`.
 -/
 protected theorem eq {a b : R} : (a : c.Quotient) = (b : c.Quotient) ↔ c a b :=
   Quotient.eq''
@@ -760,82 +617,35 @@ section add_mul
 
 variable [Add R] [Mul R] (c : RingCon R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add c.Quotient
-  body: inferInstanceAs (Add c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 加法 c.商
-  定义体: inferInstanceAs (Add c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add c.Quotient := inferInstanceAs (Add c.toAddCon.Quotient)
 
 @[simp, norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (x y : R)
-  statement: (↑(x + y) : c.Quotient) = ↑x + ↑y
-  proof: rfl
-
-中文:
-定理 coe_add
-  条件: (x y : R)
-  结论: (↑(x + y) : c.商) = ↑x + ↑y
-  证明: rfl
+/-
+**RingCon.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_add (x y : R) : (↑(x + y) : c.Quotient) = ↑x + ↑y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_add (x y : R) : (↑(x + y) : c.Quotient) = ↑x + ↑y :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul c.Quotient
-  body: inferInstanceAs (Mul c.toCon.Quotient)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 乘法 c.商
-  定义体: inferInstanceAs (Mul c.toCon.Quotient)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul c.Quotient := inferInstanceAs (Mul c.toCon.Quotient)
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (x y : R)
-  statement: (↑(x * y) : c.Quotient) = ↑x * ↑y
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: (x y : R)
-  结论: (↑(x * y) : c.商) = ↑x * ↑y
-  证明: rfl
+/-
+**RingCon.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_mul (x y : R) : (↑(x * y) : c.Quotient) = ↑x * ↑y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (x y : R) : (↑(x * y) : c.Quotient) = ↑x * ↑y :=
   rfl
@@ -846,40 +656,18 @@ section Zero
 
 variable [AddZeroClass R] [Mul R] (c : RingCon R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero c.Quotient
-  body: inferInstanceAs (Zero c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 零 c.商
-  定义体: inferInstanceAs (Zero c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero c.Quotient := inferInstanceAs (Zero c.toAddCon.Quotient)
 
 @[simp, norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: (↑(0 : R) : c.Quotient) = 0
-  proof: rfl
-
-中文:
-定理 coe_zero
-  结论: (↑(0 : R) : c.商) = 0
-  证明: rfl
+/-
+**RingCon.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_zero : (↑(0 : R) : c.Quotient) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero : (↑(0 : R) : c.Quotient) = 0 :=
   rfl
@@ -890,63 +678,46 @@ section One
 
 variable [Add R] [MulOneClass R] (c : RingCon R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One c.Quotient
-  body: inferInstanceAs (One c.toCon.Quotient)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 幺 c.商
-  定义体: inferInstanceAs (One c.toCon.Quotient)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One c.Quotient := inferInstanceAs (One c.toCon.Quotient)
 
 @[simp, norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: (↑(1 : R) : c.Quotient) = 1
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: (↑(1 : R) : c.商) = 1
-  证明: rfl
+/-
+**RingCon.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_one : (↑(1 : R) : c.Quotient) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : (↑(1 : R) : c.Quotient) = 1 :=
   rfl
 
 end One
 
-/--
-Definition of `smulAux` / `smulAux` 的定义
+/-- A function used to define scalar actions on `RingCon.Quotient`. To make sure such actions coming
+from different sources are reducibly defeq, they should all go through this function. -/
+/-
+**RingCon.smulAux** 是 Mathlib 中的一个定义，位于命名空间 `RingCon`。
+形式化陈述：smulAux [Add R] [Mul R] {α : Type*} [SMul α R] (c : RingCon R) (h : forall
+ (a : α) (x y : R), c x y -> c (a • x) (a • y)) (a : α) (x : c.Quotient) : c.Quo
+tient
+参数：c : RingCon R；h : forall (a : α) (x y : R), c x y -> c (a • x) (a • y)；a : α；
+x : c.Quotient。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
 
-English:
-definition smulAux
-  signature: [Add R] [Mul R] {α : Type*} [SMul α R]
-  body: Quotient.map' (a • ·) (h a) x
-
-中文:
-定义 smulAux
-  签名: [加法 R] [乘法 R] {α : 类型} [标量乘法 α R]
-  定义体: Quotient.map' (a • ·) (h a) x
-
-Depends on / 依赖: Quotient, Quotient.map
+--- 原说明 ---
+A function used to define scalar actions on `RingCon.Quotient`. To make sure suc
+h actions coming
+from different sources are reducibly defeq, they should all go through this func
+tion.
 -/
 def smulAux [Add R] [Mul R] {α : Type*} [SMul α R]
-    (c : RingCon R) (h : forall (a : α) (x y : R), c x y -> c (a • x) (a • y))
+    (c : RingCon R) (h : ∀ (a : α) (x y : R), c x y → c (a • x) (a • y))
     (a : α) (x : c.Quotient) : c.Quotient :=
   Quotient.map' (a • ·) (h a) x
 
@@ -954,124 +725,58 @@ section NegSubZSMul
 
 variable [AddGroup R] [Mul R] (c : RingCon R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg c.Quotient
-  body: inferInstanceAs (Neg c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 取负 c.商
-  定义体: inferInstanceAs (Neg c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg c.Quotient := inferInstanceAs (Neg c.toAddCon.Quotient)
 
 @[simp, norm_cast]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (x : R)
-  statement: (↑(-x) : c.Quotient) = -x
-  proof: rfl
-
-中文:
-定理 coe_neg
-  条件: (x : R)
-  结论: (↑(-x) : c.商) = -x
-  证明: rfl
+/-
+**RingCon.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_neg (x : R) : (↑(-x) : c.Quotient) = -x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg (x : R) : (↑(-x) : c.Quotient) = -x :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub c.Quotient
-  body: inferInstanceAs (Sub c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 减法 c.商
-  定义体: inferInstanceAs (Sub c.toAddCon.Quotient)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub c.Quotient := inferInstanceAs (Sub c.toAddCon.Quotient)
 
 @[simp, norm_cast]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (x y : R)
-  statement: (↑(x - y) : c.Quotient) = x - y
-  proof: rfl
-
-中文:
-定理 coe_sub
-  条件: (x y : R)
-  结论: (↑(x - y) : c.商) = x - y
-  证明: rfl
+/-
+**RingCon.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_sub (x y : R) : (↑(x - y) : c.Quotient) = x - y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sub (x y : R) : (↑(x - y) : c.Quotient) = x - y :=
   rfl
-
-/--
-Instance `hasZSMul` / 实例 `hasZSMul`
-
-English:
-instance hasZSMul
-  signature: : SMul Int c.Quotient
-  body: ⟨c.smulAux (RingCon.zsmul c)⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 hasZSMul
-  签名: : 标量乘法 整数 c.商
-  定义体: ⟨c.smulAux (RingCon.zsmul c)⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: RingCon, RingCon.zsmul, c.smulAux, smulAux
+/-
+**RingCon.hasZSMul** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+形式化陈述：hasZSMul : SMul Int c.Quotient
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingCon.zsmul`：∀ {S : Type u_2} [inst : AddGroup S] [inst_1 : Mul S] (t 
+: RingCon S) (z : ℤ) {x y : S}, t x y → t (z • x) (z • y)
 -/
-instance hasZSMul : SMul Int c.Quotient := ⟨c.smulAux (RingCon.zsmul c)⟩
+instance hasZSMul : SMul ℤ c.Quotient := ⟨c.smulAux (RingCon.zsmul c)⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_zsmul` / 定理 `coe_zsmul`
-
-English:
-theorem coe_zsmul
-  given: (z : Int) (x : R)
-  statement: (↑(z • x) : c.Quotient) = z • (x : c.Quotient)
-  proof: rfl
-
-中文:
-定理 coe_zsmul
-  条件: (z : 整数) (x : R)
-  结论: (↑(z • x) : c.商) = z • (x : c.商)
-  证明: rfl
+/-
+**RingCon.coe_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_zsmul (z : Int) (x : R) : (↑(z • x) : c.Quotient) = z • (x : c.Quotien
+t)
+参数：z : Int；x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zsmul (z : Int) (x : R) : (↑(z • x) : c.Quotient) = z • (x : c.Quotient) :=
+theorem coe_zsmul (z : ℤ) (x : R) : (↑(z • x) : c.Quotient) = z • (x : c.Quotient) :=
   rfl
 
 end NegSubZSMul
@@ -1080,44 +785,26 @@ section NSMul
 
 variable [AddMonoid R] [Mul R] (c : RingCon R)
 
-/--
-Instance `hasNSMul` / 实例 `hasNSMul`
-
-English:
-instance hasNSMul
-  signature: : SMul Nat c.Quotient
-  body: ⟨c.smulAux (RingCon.nsmul c)⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 hasNSMul
-  签名: : 标量乘法 自然数 c.商
-  定义体: ⟨c.smulAux (RingCon.nsmul c)⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: RingCon, RingCon.nsmul, c.smulAux, smulAux
+/-
+**RingCon.hasNSMul** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+形式化陈述：hasNSMul : SMul Nat c.Quotient
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingCon.nsmul`：∀ {S : Type u_2} [inst : AddMonoid S] [inst_1 : Mul S] (t
+ : RingCon S) (m : ℕ) {x y : S}, t x y → t (m • x) (m • y)
 -/
-instance hasNSMul : SMul Nat c.Quotient := ⟨c.smulAux (RingCon.nsmul c)⟩
+instance hasNSMul : SMul ℕ c.Quotient := ⟨c.smulAux (RingCon.nsmul c)⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_nsmul` / 定理 `coe_nsmul`
-
-English:
-theorem coe_nsmul
-  given: (n : Nat) (x : R)
-  statement: (↑(n • x) : c.Quotient) = n • (x : c.Quotient)
-  proof: rfl
-
-中文:
-定理 coe_nsmul
-  条件: (n : 自然数) (x : R)
-  结论: (↑(n • x) : c.商) = n • (x : c.商)
-  证明: rfl
+/-
+**RingCon.coe_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_nsmul (n : Nat) (x : R) : (↑(n • x) : c.Quotient) = n • (x : c.Quotien
+t)
+参数：n : Nat；x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_nsmul (n : Nat) (x : R) : (↑(n • x) : c.Quotient) = n • (x : c.Quotient) :=
+theorem coe_nsmul (n : ℕ) (x : R) : (↑(n • x) : c.Quotient) = n • (x : c.Quotient) :=
   rfl
 
 end NSMul
@@ -1126,44 +813,21 @@ section Pow
 
 variable [Add R] [Monoid R] (c : RingCon R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow c.Quotient Nat
-  body: inferInstanceAs (Pow c.toCon.Quotient Nat)
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 幂 c.商 自然数
-  定义体: inferInstanceAs (Pow c.toCon.Quotient Nat)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow c.Quotient Nat := inferInstanceAs (Pow c.toCon.Quotient Nat)
+instance : Pow c.Quotient ℕ := inferInstanceAs (Pow c.toCon.Quotient ℕ)
 
 @[simp, norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (x : R) (n : Nat)
-  statement: (↑(x ^ n) : c.Quotient) = (x : c.Quotient) ^ n
-  proof: rfl
-
-中文:
-定理 coe_pow
-  条件: (x : R) (n : 自然数)
-  结论: (↑(x ^ n) : c.商) = (x : c.商) ^ n
-  证明: rfl
+/-
+**RingCon.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_pow (x : R) (n : Nat) : (↑(x ^ n) : c.Quotient) = (x : c.Quotient) ^ n
+参数：x : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pow (x : R) (n : Nat) : (↑(x ^ n) : c.Quotient) = (x : c.Quotient) ^ n :=
+theorem coe_pow (x : R) (n : ℕ) : (↑(x ^ n) : c.Quotient) = (x : c.Quotient) ^ n :=
   rfl
 
 end Pow
@@ -1172,43 +836,22 @@ section NatCast
 
 variable [AddMonoidWithOne R] [Mul R] (c : RingCon R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatCast c.Quotient
-  body: ⟨fun n => ↑(n : R)⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 自然数嵌入 c.商
-  定义体: ⟨fun n => ↑(n : R)⟩
-
-@[simp, norm_cast]
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatCast c.Quotient :=
   ⟨fun n => ↑(n : R)⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_natCast` / 定理 `coe_natCast`
-
-English:
-theorem coe_natCast
-  given: (n : Nat)
-  statement: (↑(n : R) : c.Quotient) = n
-  proof: rfl
-
-中文:
-定理 coe_natCast
-  条件: (n : 自然数)
-  结论: (↑(n : R) : c.商) = n
-  证明: rfl
+/-
+**RingCon.coe_natCast** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_natCast (n : Nat) : (↑(n : R) : c.Quotient) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_natCast (n : Nat) : (↑(n : R) : c.Quotient) = n :=
+theorem coe_natCast (n : ℕ) : (↑(n : R) : c.Quotient) = n :=
   rfl
 
 end NatCast
@@ -1217,59 +860,29 @@ section IntCast
 
 variable [AddGroupWithOne R] [Mul R] (c : RingCon R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IntCast c.Quotient
-  body: ⟨fun z => ↑(z : R)⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 整数嵌入 c.商
-  定义体: ⟨fun z => ↑(z : R)⟩
-
-@[simp, norm_cast]
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IntCast c.Quotient :=
   ⟨fun z => ↑(z : R)⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_intCast` / 定理 `coe_intCast`
-
-English:
-theorem coe_intCast
-  given: (n : Nat)
-  statement: (↑(n : R) : c.Quotient) = n
-  proof: rfl
-
-中文:
-定理 coe_intCast
-  条件: (n : 自然数)
-  结论: (↑(n : R) : c.商) = n
-  证明: rfl
+/-
+**RingCon.coe_intCast** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_intCast (n : Nat) : (↑(n : R) : c.Quotient) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_intCast (n : Nat) : (↑(n : R) : c.Quotient) = n :=
+theorem coe_intCast (n : ℕ) : (↑(n : R) : c.Quotient) = n :=
   rfl
 
 end IntCast
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: R] [Add R] [Mul R] (c
-  body: ⟨↑(default : R)⟩
-
-中文:
-实例 [可居
-  签名: R] [加法 R] [乘法 R] (c
-  定义体: ⟨↑(default : R)⟩
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited R] [Add R] [Mul R] (c : RingCon R) : Inhabited c.Quotient :=
   ⟨↑(default : R)⟩
@@ -1286,654 +899,219 @@ section Algebraic
 
 section Add
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: R] [Mul R] (c
-  body: inferInstanceAs AddZeroClass c.toAddCon.Quotient
-
-中文:
-实例 [加法零类
-  签名: R] [乘法 R] (c
-  定义体: inferInstanceAs AddZeroClass c.toAddCon.Quotient
-
-Depends on / 依赖: AddZeroClass, Quotient, c.toAddCon.Quotient, toAddCon
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass R] [Mul R] (c : RingCon R) : AddZeroClass c.Quotient :=
-inferInstanceAs AddZeroClass c.toAddCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddSemigroup
-  signature: R] [Mul R] (c
-  body: inferInstanceAs AddSemigroup c.toAddCon.Quotient
-
-中文:
-实例 [加法半群
-  签名: R] [乘法 R] (c
-  定义体: inferInstanceAs AddSemigroup c.toAddCon.Quotient
-
-Depends on / 依赖: AddSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
+  inferInstanceAs <| AddZeroClass c.toAddCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddSemigroup R] [Mul R] (c : RingCon R) : AddSemigroup c.Quotient :=
-inferInstanceAs AddSemigroup c.toAddCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMagma
-  signature: R] [Mul R] (c
-  body: inferInstanceAs AddCommMagma c.toAddCon.Quotient
-
-中文:
-实例 [加法交换原群
-  签名: R] [乘法 R] (c
-  定义体: inferInstanceAs AddCommMagma c.toAddCon.Quotient
-
-Depends on / 依赖: AddCommMagma, Quotient, c.toAddCon.Quotient, toAddCon
+  inferInstanceAs <| AddSemigroup c.toAddCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMagma R] [Mul R] (c : RingCon R) : AddCommMagma c.Quotient :=
-inferInstanceAs AddCommMagma c.toAddCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommSemigroup
-  signature: R] [Mul R] (c
-  body: inferInstanceAs AddCommSemigroup c.toAddCon.Quotient
-
-中文:
-实例 [加法交换半群
-  签名: R] [乘法 R] (c
-  定义体: inferInstanceAs AddCommSemigroup c.toAddCon.Quotient
-
-Depends on / 依赖: AddCommSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
+  inferInstanceAs <| AddCommMagma c.toAddCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommSemigroup R] [Mul R] (c : RingCon R) : AddCommSemigroup c.Quotient :=
-inferInstanceAs AddCommSemigroup c.toAddCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: R] [Mul R] (c
-  body: n • x
-__ : AddMonoid c.Quotient := inferInstanceAs AddMonoid c.toAddCon.Quotient
-
-中文:
-实例 [加法幺半群
-  签名: R] [乘法 R] (c
-  定义体: n • x
-__ : AddMonoid c.Quotient := inferInstanceAs AddMonoid c.toAddCon.Quotient
+  inferInstanceAs <| AddCommSemigroup c.toAddCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid R] [Mul R] (c : RingCon R) : AddMonoid c.Quotient where
   nsmul n x := n • x
-__ : AddMonoid c.Quotient := inferInstanceAs AddMonoid c.toAddCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: R] [Mul R] (c
-  body: inferInstanceAs AddCommMonoid c.toAddCon.Quotient
-
-中文:
-实例 [加法交换幺半群
-  签名: R] [乘法 R] (c
-  定义体: inferInstanceAs AddCommMonoid c.toAddCon.Quotient
-
-Depends on / 依赖: AddCommMonoid, Quotient, bfamilyOfFamily, c.toAddCon.Quotient, enum_typein, toAddCon
+  __ : AddMonoid c.Quotient := inferInstanceAs <| AddMonoid c.toAddCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid R] [Mul R] (c : RingCon R) : AddCommMonoid c.Quotient :=
-inferInstanceAs AddCommMonoid c.toAddCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddGroup
-  signature: R] [Mul R] (c
-  body: n • x
-__ : AddGroup c.Quotient := inferInstanceAs AddGroup c.toAddCon.Quotient
-
-中文:
-实例 [加法群
-  签名: R] [乘法 R] (c
-  定义体: n • x
-__ : AddGroup c.Quotient := inferInstanceAs AddGroup c.toAddCon.Quotient
+  inferInstanceAs <| AddCommMonoid c.toAddCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddGroup R] [Mul R] (c : RingCon R) : AddGroup c.Quotient where
   zsmul n x := n • x
-__ : AddGroup c.Quotient := inferInstanceAs AddGroup c.toAddCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: R] [Mul R] (c
-  body: inferInstanceAs AddCommGroup c.toAddCon.Quotient
-
-中文:
-实例 [加法交换群
-  签名: R] [乘法 R] (c
-  定义体: inferInstanceAs AddCommGroup c.toAddCon.Quotient
-
-Depends on / 依赖: AddCommGroup, Quotient, c.toAddCon.Quotient, familyOfBFamily, toAddCon, typein_enum
+  __ : AddGroup c.Quotient := inferInstanceAs <| AddGroup c.toAddCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroup R] [Mul R] (c : RingCon R) : AddCommGroup c.Quotient :=
-inferInstanceAs AddCommGroup c.toAddCon.Quotient
+  inferInstanceAs <| AddCommGroup c.toAddCon.Quotient
 
 end Add
 
 section Mul
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: R] [MulOneClass R] (c
-  body: inferInstanceAs MulOneClass c.toCon.Quotient
-
-中文:
-实例 [加法
-  签名: R] [MulOne类 R] (c
-  定义体: inferInstanceAs MulOneClass c.toCon.Quotient
-
-Depends on / 依赖: MulOneClass, Quotient, c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add R] [MulOneClass R] (c : RingCon R) : MulOneClass c.Quotient :=
-inferInstanceAs MulOneClass c.toCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: R] [Semigroup R] (c
-  body: inferInstanceAs Semigroup c.toCon.Quotient
-
-中文:
-实例 [加法
-  签名: R] [半群 R] (c
-  定义体: inferInstanceAs Semigroup c.toCon.Quotient
-
-Depends on / 依赖: Quotient, Semigroup, c.toCon.Quotient
+  inferInstanceAs <| MulOneClass c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add R] [Semigroup R] (c : RingCon R) : Semigroup c.Quotient :=
-inferInstanceAs Semigroup c.toCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: R] [CommMagma R] (c
-  body: inferInstanceAs CommMagma c.toCon.Quotient
-
-中文:
-实例 [加法
-  签名: R] [交换原群 R] (c
-  定义体: inferInstanceAs CommMagma c.toCon.Quotient
-
-Depends on / 依赖: CommMagma, Quotient, c.toCon.Quotient
+  inferInstanceAs <| Semigroup c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add R] [CommMagma R] (c : RingCon R) : CommMagma c.Quotient :=
-inferInstanceAs CommMagma c.toCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: R] [CommSemigroup R] (c
-  body: inferInstanceAs CommSemigroup c.toCon.Quotient
-
-中文:
-实例 [加法
-  签名: R] [交换半群 R] (c
-  定义体: inferInstanceAs CommSemigroup c.toCon.Quotient
-
-Depends on / 依赖: CommSemigroup, Quotient, c.toCon.Quotient
+  inferInstanceAs <| CommMagma c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add R] [CommSemigroup R] (c : RingCon R) : CommSemigroup c.Quotient :=
-inferInstanceAs CommSemigroup c.toCon.Quotient
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: R] [Monoid R] (c
-  body: fast_instance%
-  { __ : Monoid c.toCon.Quotient := inferInstanceAs _
-    -- see https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/inferInstanceAs.20creates.20non-reducible.20diamonds/near/603969174
-    npow n x := x ^ n }
-
-中文:
-实例 [加法
-  签名: R] [幺半群 R] (c
-  定义体: fast_instance%
-  { __ : Monoid c.toCon.Quotient := inferInstanceAs _
-    -- see https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/inferInstanceAs.20creates.20non-reducible.20diamonds/near/603969174
-    npow n x := x ^ n }
-
-Depends on / 依赖: fast_instance
+  inferInstanceAs <| CommSemigroup c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add R] [Monoid R] (c : RingCon R) : Monoid c.Quotient := fast_instance%
   { __ : Monoid c.toCon.Quotient := inferInstanceAs _
     -- see https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/inferInstanceAs.20creates.20non-reducible.20diamonds/near/603969174
     npow n x := x ^ n }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: R] [CommMonoid R] (c
-  body: inferInstanceAs CommMonoid c.toCon.Quotient
-
-中文:
-实例 [加法
-  签名: R] [交换幺半群 R] (c
-  定义体: inferInstanceAs CommMonoid c.toCon.Quotient
-
-Depends on / 依赖: CommMonoid, Quotient, c.toCon.Quotient
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add R] [CommMonoid R] (c : RingCon R) : CommMonoid c.Quotient :=
-inferInstanceAs CommMonoid c.toCon.Quotient
+  inferInstanceAs <| CommMonoid c.toCon.Quotient
 
 end Mul
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocSemiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalNonAssocSemiring _ Quotient.mk''_surjective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺非结合半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalNonAssocSemiring _ Quotient.mk''_surjective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocSemiring R] (c : RingCon R) :
     NonUnitalNonAssocSemiring c.Quotient := fast_instance%
   Function.Surjective.nonUnitalNonAssocSemiring _ Quotient.mk''_surjective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocCommSemiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalNonAssocCommSemiring _ Quotient.mk''_surjective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺非结合交换半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalNonAssocCommSemiring _ Quotient.mk''_surjective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocCommSemiring R] (c : RingCon R) :
     NonUnitalNonAssocCommSemiring c.Quotient := fast_instance%
   Function.Surjective.nonUnitalNonAssocCommSemiring _ Quotient.mk''_surjective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocSemiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonAssocSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 [非结合半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonAssocSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonAssocSemiring R] (c : RingCon R) : NonAssocSemiring c.Quotient := fast_instance%
   Function.Surjective.nonAssocSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocCommSemiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonAssocCommSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 [非结合交换半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonAssocCommSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonAssocCommSemiring R] (c : RingCon R) :
     NonAssocCommSemiring c.Quotient := fast_instance%
   Function.Surjective.nonAssocCommSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalSemiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalSemiring R] (c : RingCon R) : NonUnitalSemiring c.Quotient := fast_instance%
   Function.Surjective.nonUnitalSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommSemiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalCommSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺交换半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalCommSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommSemiring R] (c : RingCon R) :
     NonUnitalCommSemiring c.Quotient := fast_instance%
   Function.Surjective.nonUnitalCommSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.semiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 [半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.semiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring R] (c : RingCon R) : Semiring c.Quotient := fast_instance%
   Function.Surjective.semiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommSemiring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.commSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 [交换半环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.commSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommSemiring R] (c : RingCon R) : CommSemiring c.Quotient := fast_instance%
   Function.Surjective.commSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocRing
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalNonAssocRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺非结合环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalNonAssocRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocRing R] (c : RingCon R) :
     NonUnitalNonAssocRing c.Quotient := fast_instance%
   Function.Surjective.nonUnitalNonAssocRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocCommRing
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalNonAssocCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺非结合交换环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalNonAssocCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocCommRing R] (c : RingCon R) :
     NonUnitalNonAssocCommRing c.Quotient := fast_instance%
   Function.Surjective.nonUnitalNonAssocCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocRing
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonAssocRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ => rfl) fun _ => rfl
-
-中文:
-实例 [非结合环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonAssocRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonAssocRing R] (c : RingCon R) : NonAssocRing c.Quotient := fast_instance%
   Function.Surjective.nonAssocRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocCommRing
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonAssocCommRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ => rfl) fun _ => rfl
-
-中文:
-实例 [非结合交换环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonAssocCommRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonAssocCommRing R] (c : RingCon R) : NonAssocCommRing c.Quotient := fast_instance%
   Function.Surjective.nonAssocCommRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalRing
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalRing R] (c : RingCon R) : NonUnitalRing c.Quotient := fast_instance%
   Function.Surjective.nonUnitalRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommRing
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.nonUnitalCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [非幺交换环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.nonUnitalCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommRing R] (c : RingCon R) : NonUnitalCommRing c.Quotient := fast_instance%
   Function.Surjective.nonUnitalCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.ring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-中文:
-实例 [环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.ring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring R] (c : RingCon R) : Ring c.Quotient := fast_instance%
   Function.Surjective.ring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommRing
-  signature: R] (c
-  body: fast_instance%
-  Function.Surjective.commRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-中文:
-实例 [交换环
-  签名: R] (c
-  定义体: fast_instance%
-  Function.Surjective.commRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**RingCon.** 是 Mathlib 中的一个实例，位于命名空间 `RingCon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommRing R] (c : RingCon R) : CommRing c.Quotient := fast_instance%
   Function.Surjective.commRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1944,73 +1122,46 @@ end Algebraic
 
 variable [NonAssocSemiring R] (c : RingCon R)
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- The natural homomorphism from a ring to its quotient by a ring congruence relation. -/
+/-
+**RingCon.mk'** 是 Mathlib 中的一个定义，位于命名空间 `RingCon`。
+形式化陈述：mk' : R ->+* c.Quotient where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: : R ->+* c.Quotient where
-  body: toQuotient
-  map_zero' := rfl
-  map_one' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 mk'
-  签名: : R ->+* c.商 where
-  定义体: toQuotient
-  map_zero' := rfl
-  map_one' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: toQuotient
+--- 原说明 ---
+The natural homomorphism from a ring to its quotient by a ring congruence relati
+on.
 -/
-def mk' : R ->+* c.Quotient where
+def mk' : R →+* c.Quotient where
   toFun := toQuotient
   map_zero' := rfl
   map_one' := rfl
   map_add' _ _ := rfl
   map_mul' _ _ := rfl
-
-/--
-theorem `mk'_surjective` / 定理 `mk'_surjective`
-
-English:
-theorem mk'_surjective
-  statement: Function.Surjective c.mk'
-  proof: Quotient.mk''_surjective
-
-@[simp]
-
-中文:
-定理 mk'_surjective
-  结论: 函数.满射 c.mk'
-  证明: Quotient.mk''_surjective
-
-@[simp]
+/-
+**RingCon.mk'_surjective** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：∀ {R : Type u_1} [inst : NonAssocSemiring R] (c : RingCon R), Function.Sur
+jective ⇑c.mk'
+参数：c : RingCon R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''_surjective`：∀ {α : Sort u_1} {s₁ : Setoid α}, Function.Sur
+jective Quotient.mk''
 -/
 theorem mk'_surjective : Function.Surjective c.mk' :=
   Quotient.mk''_surjective
 
 @[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  statement: (c.mk' : R -> c.Quotient) = ((↑) : R -> c.Quotient)
-  proof: rfl
-
-中文:
-定理 coe_mk'
-  结论: (c.mk' : R -> c.商) = ((↑) : R -> c.商)
-  证明: rfl
+/-
+**RingCon.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `RingCon`。
+形式化陈述：coe_mk' : (c.mk' : R -> c.Quotient) = ((↑) : R -> c.Quotient)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk' : (c.mk' : R -> c.Quotient) = ((↑) : R -> c.Quotient) :=
+theorem coe_mk' : (c.mk' : R → c.Quotient) = ((↑) : R → c.Quotient) :=
   rfl
 
 end Quotient
 
 end RingCon
+

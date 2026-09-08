@@ -14,21 +14,22 @@ public import Mathlib.RingTheory.Noetherian.Basic
 
 public section
 
-/--
-Instance `Ideal.Quotient.isNoetherianRing` / 实例 `Ideal.Quotient.isNoetherianRing`
-
-English:
-instance Ideal.Quotient.isNoetherianRing
-  signature: {R : Type*} [CommRing R] [IsNoetherianRing R]
-  body: isNoetherianRing_iff.mpr isNoetherian_of_tower R inferInstance
-
-中文:
-实例 理想.商.isNoetherianRing
-  签名: {R : 类型} [交换环 R] [是Noether环 R]
-  定义体: isNoetherianRing_iff.mpr isNoetherian_of_tower R inferInstance
-
-Depends on / 依赖: HasCountableBasis, HasCountableBasis.isCountablyGenerated, Set.to_countable, exists_antitone_basis, hb.nhds, isCountablyGenerated, isNoetherianRing_iff, isNoetherianRing_iff.mpr, isNoetherian_of_tower, l.exists_antitone_basis, to_countable
+/-
+**Ideal.Quotient.isNoetherianRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Ideal.Quotient.isNoetherianRing {R : Type*} [CommRing R] [IsNoetherianRing
+ R] (I : Ideal R) : IsNoetherianRing (R ⧸ I)
+参数：I : Ideal R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isNoetherianRing_iff`：isNoetherianRing_iff {R} [Semiring R] : IsNoetheri
+anRing R ↔ IsNoetherian R R
+· 使用定理 `isNoetherian_of_tower`：isNoetherian_of_tower (R) {S M} [Semiring R] [Sem
+iring S] [AddCommMonoid M] [SMul R S] [Module S M] [Module R M] [IsScalarTower R
+ S M] (h : …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 instance Ideal.Quotient.isNoetherianRing {R : Type*} [CommRing R] [IsNoetherianRing R]
     (I : Ideal R) : IsNoetherianRing (R ⧸ I) :=
-isNoetherianRing_iff.mpr isNoetherian_of_tower R inferInstance
+  isNoetherianRing_iff.mpr <| isNoetherian_of_tower R <| inferInstance

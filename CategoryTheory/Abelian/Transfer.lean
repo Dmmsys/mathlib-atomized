@@ -55,32 +55,59 @@ variable (F : C ⥤ D)
 variable (G : D ⥤ C) [Functor.PreservesZeroMorphisms G]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hasKernels` / 定理 `hasKernels`
+/-- No point making this an instance, as it requires `i`. -/
+/-
+**CategoryTheory.AbelianOfAdjunction.hasKernels** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.AbelianOfAdjunction`。
+形式化陈述：hasKernels [PreservesFiniteLimits G] (i : F ⋙ G ≅ 𝟭 C) : HasKernels C
+参数：i : F ⋙ G ≅ 𝟭 C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatIso.naturality_1`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.instHasKernelMapOfPreservesLimitWalkingParallelPai
+rParallelPairOfNatHom`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} 
+C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   {D : Type u₂} [inst_2 :
+ Ca…
+· 使用定理 `CategoryTheory.Limits.HasKernels.has_limit`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C}
+   [self : CategoryTheory.Limits…
+· 使用定理 `CategoryTheory.Abelian.has_kernels`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} [self : CategoryTheory.Abelian C],   CategoryTheory.Limits.
+HasKernels C
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteLimits.preservesFiniteLimits`：∀ {C 
+: Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.Functor.instIsSplitMonoApp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
 
-English:
-theorem hasKernels
-  given: [PreservesFiniteLimits G] (i : F ⋙ G ≅ 𝟭 C)
-  statement: HasKernels C
-  proof: { has_limit {X Y} f := by
-      have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
-        simpa using NatIso.naturality_1 i f
-      rw [← this]
-      have : HasKernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasKernel_comp_mono _ _
-      apply Limits.hasKernel_iso_comp }
-
-中文:
-定理 hasKernels
-  条件: [保持FiniteLimits G] (i : F ⋙ G ≅ 𝟭 C)
-  结论: 有Kernels C
-  证明: { has_limit {X Y} f := by
-      have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
-        simpa using NatIso.naturality_1 i f
-      rw [← this]
-      have : HasKernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasKernel_comp_mono _ _
-      apply Limits.hasKernel_iso_comp }
-
-Depends on / 依赖: F.map, F.obj, G.map, HasKernel, Limits, Limits.hasKernel_comp_mono, Limits.hasKernel_iso_comp, MulAction, NatIso, NatIso.naturality_1, hasKernel_comp_mono, hasKernel_iso_comp, has_limit, i.hom.app, i.inv.app, naturality_1
+--- 原说明 ---
+No point making this an instance, as it requires `i`.
 -/
 theorem hasKernels [PreservesFiniteLimits G] (i : F ⋙ G ≅ 𝟭 C) : HasKernels C :=
   { has_limit {X Y} f := by
@@ -91,34 +118,53 @@ theorem hasKernels [PreservesFiniteLimits G] (i : F ⋙ G ≅ 𝟭 C) : HasKerne
       apply Limits.hasKernel_iso_comp }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hasCokernels` / 定理 `hasCokernels`
+/-- No point making this an instance, as it requires `i` and `adj`. -/
+/-
+**CategoryTheory.AbelianOfAdjunction.hasCokernels** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.AbelianOfAdjunction`。
+形式化陈述：hasCokernels (i : F ⋙ G ≅ 𝟭 C) (adj : G ⊣ F) : HasCokernels C
+参数：i : F ⋙ G ≅ 𝟭 C；adj : G ⊣ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.leftAdjoint_preservesColimits`：leftAdjoint_pre
+servesColimits : PreservesColimitsOfSize.{v, u} F where preservesColimitsOfShape
+· 使用定理 `CategoryTheory.NatIso.naturality_1`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.instHasCokernelMapOfPreservesColimitWalkingParalle
+lPairParallelPairOfNatHom`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, 
+u₁} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   {D : Type u₂} [inst
+_2 : Ca…
+· 使用定理 `CategoryTheory.Limits.HasCokernels.has_colimit`：∀ {C : Type u} {inst : C
+ategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphism
+s C}   [self : CategoryTheory.Limits…
+· 使用定理 `CategoryTheory.Abelian.has_cokernels`：∀ {C : Type u} {inst : CategoryThe
+ory.Category.{v, u} C} [self : CategoryTheory.Abelian C],   CategoryTheory.Limit
+s.HasCokernels C
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteColimits.preservesFiniteColimits`：∀
+ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1
+ : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFiniteColimits`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
 
-English:
-theorem hasCokernels
-  given: (i : F ⋙ G ≅ 𝟭 C) (adj : G ⊣ F)
-  statement: HasCokernels C
-  proof: { has_colimit {X Y} f := by
-      have : PreservesColimits G := adj.leftAdjoint_preservesColimits
-      have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
-        simpa using NatIso.naturality_1 i f
-      rw [← this]
-      have : HasCokernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasCokernel_comp_iso _ _
-      apply Limits.hasCokernel_epi_comp }
-
-中文:
-定理 hasCokernels
-  条件: (i : F ⋙ G ≅ 𝟭 C) (adj : G ⊣ F)
-  结论: 有余kernels C
-  证明: { has_colimit {X Y} f := by
-      have : PreservesColimits G := adj.leftAdjoint_preservesColimits
-      have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
-        simpa using NatIso.naturality_1 i f
-      rw [← this]
-      have : HasCokernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasCokernel_comp_iso _ _
-      apply Limits.hasCokernel_epi_comp }
-
-Depends on / 依赖: F.map, G.map, HasCokernel, Limits, Limits.hasCokernel_comp_iso, Limits.hasCokernel_epi_comp, NatIso, NatIso.naturality_1, PreservesColimits, adj.leftAdjoint_preservesColimits, hasCokernel_comp_iso, hasCokernel_epi_comp, has_colimit, i.hom.app, i.inv.app, isPretransitive_of_isGalois, leftAdjoint_preservesColimits, naturality_1
+--- 原说明 ---
+No point making this an instance, as it requires `i` and `adj`.
 -/
 theorem hasCokernels (i : F ⋙ G ≅ 𝟭 C) (adj : G ⊣ F) : HasCokernels C :=
   { has_colimit {X Y} f := by
@@ -139,48 +185,26 @@ we have `F : C ⥤ D` `G : D ⥤ C` (with `G` preserving zero morphisms),
 and further we have `adj : G ⊣ F` and `i : F ⋙ G ≅ 𝟭 C`,
 then `C` is also abelian. -/
 @[stacks 03A3, instance_reducible]
-/--
-Definition of `abelianOfAdjunction` / `abelianOfAdjunction` 的定义
+/-
+**CategoryTheory.abelianOfAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：abelianOfAdjunction {C : Type u₁} [Category.{v₁} C] [Preadditive C] [HasFi
+niteProducts C] {D : Type u₂} [Category.{v₂} D] [Abelian D] (F : C ⥤ D) (G : D ⥤
+ C) [Functor.PreservesZeroMorphisms G] [PreservesFiniteLimits G] (i : F ⋙ G ≅ 𝟭 
+C) (adj : G ⊣ F) : Abelian C
+参数：F : C ⥤ D；G : D ⥤ C；i : F ⋙ G ≅ 𝟭 C；adj : G ⊣ F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.AbelianOfAdjunction.hasKernels`：hasKernels [PreservesFini
+teLimits G] (i : F ⋙ G ≅ 𝟭 C) : HasKernels C
+· 使用定理 `CategoryTheory.AbelianOfAdjunction.hasCokernels`：hasCokernels (i : F ⋙ G
+ ≅ 𝟭 C) (adj : G ⊣ F) : HasCokernels C
 
-English:
-definition abelianOfAdjunction
-  signature: {C : Type u₁} [Category.{v₁} C] [Preadditive C] [HasFiniteProducts C]
-  body: by
-  haveI := hasKernels F G i
-  haveI := hasCokernels F G i adj
-  have : forall {X Y : C} (f : X ⟶ Y), IsIso (Abelian.coimageImageComparison f) := by
-    intro X Y f
-    let arrowIso : Arrow.mk (G.map (F.map f)) ≅ Arrow.mk f :=
-      ((Functor.mapArrowFunctor _ _).mapIso i).app (Arrow.mk f)
-    have : PreservesColimits G := adj.leftAdjoint_preservesColimits
-    let iso : Arrow.mk (G.map (Abelian.coimageImageComparison (F.map f))) ≅
-        Arrow.mk (Abelian.coimageImageComparison f) :=
-      Abelian.PreservesCoimageImageComparison.iso G (F.map f) ≪≫
-        Abelian.coimageImageComparisonFunctor.mapIso arrowIso
-    rw [Arrow.isIso_iff_isIso_of_isIso iso.inv]
-    infer_instance
-  apply Abelian.ofCoimageImageComparisonIsIso
-
-中文:
-定义 abelianOfAdjunction
-  签名: {C : 类型u₁} [范畴.{v₁} C] [预加性 C] [有FiniteProducts C]
-  定义体: by
-  haveI := hasKernels F G i
-  haveI := hasCokernels F G i adj
-  have : forall {X Y : C} (f : X ⟶ Y), IsIso (Abelian.coimageImageComparison f) := by
-    intro X Y f
-    let arrowIso : Arrow.mk (G.map (F.map f)) ≅ Arrow.mk f :=
-      ((Functor.mapArrowFunctor _ _).mapIso i).app (Arrow.mk f)
-    have : PreservesColimits G := adj.leftAdjoint_preservesColimits
-    let iso : Arrow.mk (G.map (Abelian.coimageImageComparison (F.map f))) ≅
-        Arrow.mk (Abelian.coimageImageComparison f) :=
-      Abelian.PreservesCoimageImageComparison.iso G (F.map f) ≪≫
-        Abelian.coimageImageComparisonFunctor.mapIso arrowIso
-    rw [Arrow.isIso_iff_isIso_of_isIso iso.inv]
-    infer_instance
-  apply Abelian.ofCoimageImageComparisonIsIso
-
-Depends on / 依赖: Abelian, Abelian.PreservesCoimageImageComparison.iso, Abelian.coimageImageComparison, Arrow.mk, F.map, Functor, Functor.mapArrowFunctor, G.map, PreservesCoimageImageComparison, PreservesColimits, adj.leftAdjoint_preservesColimits, arrowIso, coimageImageComparison, hasCokernels, hasKernels, leftAdjoint_preservesColimits, mapArrowFunctor, mapIso
+--- 原说明 ---
+If `C` is an additive category, `D` is an abelian category,
+we have `F : C ⥤ D` `G : D ⥤ C` (with `G` preserving zero morphisms),
+`G` is left exact (that is, preserves finite limits),
+and further we have `adj : G ⊣ F` and `i : F ⋙ G ≅ 𝟭 C`,
+then `C` is also abelian.
 -/
 def abelianOfAdjunction {C : Type u₁} [Category.{v₁} C] [Preadditive C] [HasFiniteProducts C]
     {D : Type u₂} [Category.{v₂} D] [Abelian D] (F : C ⥤ D)
@@ -188,7 +212,7 @@ def abelianOfAdjunction {C : Type u₁} [Category.{v₁} C] [Preadditive C] [Has
     (adj : G ⊣ F) : Abelian C := by
   haveI := hasKernels F G i
   haveI := hasCokernels F G i adj
-  have : forall {X Y : C} (f : X ⟶ Y), IsIso (Abelian.coimageImageComparison f) := by
+  have : ∀ {X Y : C} (f : X ⟶ Y), IsIso (Abelian.coimageImageComparison f) := by
     intro X Y f
     let arrowIso : Arrow.mk (G.map (F.map f)) ≅ Arrow.mk f :=
       ((Functor.mapArrowFunctor _ _).mapIso i).app (Arrow.mk f)
@@ -206,20 +230,20 @@ via a functor that preserves zero morphisms,
 then `C` is also abelian.
 -/
 @[instance_reducible]
-/--
-Definition of `abelianOfEquivalence` / `abelianOfEquivalence` 的定义
+/-
+**CategoryTheory.abelianOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：abelianOfEquivalence {C : Type u₁} [Category.{v₁} C] [Preadditive C] [HasF
+initeProducts C] {D : Type u₂} [Category.{v₂} D] [Abelian D] (F : C ⥤ D) [F.IsEq
+uivalence] : Abelian C
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abelianOfEquivalence
-  signature: {C : Type u₁} [Category.{v₁} C] [Preadditive C] [HasFiniteProducts C]
-  body: abelianOfAdjunction F F.inv F.asEquivalence.unitIso.symm F.asEquivalence.symm.toAdjunction
-
-中文:
-定义 abelianOfEquivalence
-  签名: {C : 类型u₁} [范畴.{v₁} C] [预加性 C] [有FiniteProducts C]
-  定义体: abelianOfAdjunction F F.inv F.asEquivalence.unitIso.symm F.asEquivalence.symm.toAdjunction
-
-Depends on / 依赖: F.asEquivalence.symm.toAdjunction, F.asEquivalence.unitIso.symm, F.inv, abelianOfAdjunction, asEquivalence, toAdjunction, unitIso
+--- 原说明 ---
+If `C` is an additive category equivalent to an abelian category `D`
+via a functor that preserves zero morphisms,
+then `C` is also abelian.
 -/
 def abelianOfEquivalence {C : Type u₁} [Category.{v₁} C] [Preadditive C] [HasFiniteProducts C]
     {D : Type u₂} [Category.{v₂} D] [Abelian D] (F : C ⥤ D)
@@ -238,93 +262,56 @@ variable [Preadditive C]
 
 variable (C)
 
-/--
-Instance `preadditive` / 实例 `preadditive`
-
-English:
-instance preadditive
-  signature: : Preadditive.{w} (ShrinkHoms C)
-  body: .ofFullyFaithful (equivalence C).fullyFaithfulInverse
-
-中文:
-实例 preadditive
-  签名: : 预加性.{w} (ShrinkHoms C)
-  定义体: .ofFullyFaithful (equivalence C).fullyFaithfulInverse
-
-Depends on / 依赖: equivalence, fullyFaithfulInverse, ofFullyFaithful
+/-
+**CategoryTheory.ShrinkHoms.preadditive** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.ShrinkHoms`。
+形式化陈述：preadditive : Preadditive.{w} (ShrinkHoms C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance preadditive : Preadditive.{w} (ShrinkHoms C) :=
   .ofFullyFaithful (equivalence C).fullyFaithfulInverse
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (inverse C).Additive
-  body: (equivalence C).symm.fullyFaithfulFunctor.additive_ofFullyFaithful
-
-中文:
-实例 :
-  签名: (inverse C).加性
-  定义体: (equivalence C).symm.fullyFaithfulFunctor.additive_ofFullyFaithful
-
-Depends on / 依赖: additive_ofFullyFaithful, equivalence, fullyFaithfulFunctor, symm.fullyFaithfulFunctor.additive_ofFullyFaithful
+/-
+**CategoryTheory.ShrinkHoms.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShrinkHom
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (inverse C).Additive :=
   (equivalence C).symm.fullyFaithfulFunctor.additive_ofFullyFaithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (functor C).Additive
-  body: (equivalence C).symm.additive_inverse_of_FullyFaithful
-
-中文:
-实例 :
-  签名: (functor C).加性
-  定义体: (equivalence C).symm.additive_inverse_of_FullyFaithful
-
-Depends on / 依赖: additive_inverse_of_FullyFaithful, equivalence, symm.additive_inverse_of_FullyFaithful
+/-
+**CategoryTheory.ShrinkHoms.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ShrinkHom
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (functor C).Additive :=
   (equivalence C).symm.additive_inverse_of_FullyFaithful
-
-/--
-Instance `hasLimitsOfShape` / 实例 `hasLimitsOfShape`
-
-English:
-instance hasLimitsOfShape
-  signature: (J : Type*) [Category* J]
-  body: Adjunction.hasLimitsOfShape_of_equivalence (inverse C)
-
-中文:
-实例 hasLimitsOfShape
-  签名: (J : 类型) [范畴* J]
-  定义体: Adjunction.hasLimitsOfShape_of_equivalence (inverse C)
-
-Depends on / 依赖: Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, hasLimitsOfShape_of_equivalence, inverse
+/-
+**CategoryTheory.ShrinkHoms.hasLimitsOfShape** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.ShrinkHoms`。
+形式化陈述：hasLimitsOfShape (J : Type*) [Category* J] [HasLimitsOfShape J C] : HasLim
+itsOfShape.{_, _, w} J (ShrinkHoms C)
+参数：J : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.hasLimitsOfShape_of_equivalence`：hasLimitsOfSh
+ape_of_equivalence (E : D ⥤ C) [E.IsEquivalence] [HasLimitsOfShape J C] : HasLim
+itsOfShape J D
+· 使用定理 `CategoryTheory.ShrinkHoms.instIsEquivalenceInverse`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.LocallySmall.{w, v
+, u} C],   (CategoryTheory.ShrinkHoms.in…
 -/
 instance hasLimitsOfShape (J : Type*) [Category* J]
     [HasLimitsOfShape J C] : HasLimitsOfShape.{_, _, w} J (ShrinkHoms C) :=
   Adjunction.hasLimitsOfShape_of_equivalence (inverse C)
-
-/--
-Instance `hasFiniteLimits` / 实例 `hasFiniteLimits`
-
-English:
-instance hasFiniteLimits
-  signature: [HasFiniteLimits C]
-  body: ⟨fun _ => inferInstance⟩
-
-中文:
-实例 hasFiniteLimits
-  签名: [有有限极限 C]
-  定义体: ⟨fun _ => inferInstance⟩
-
-Depends on / 依赖: Action, Action.preservesColimitsOfShape_of_preserves, PreservesColimitsOfShape, SingleObj, preservesColimitsOfShape_of_preserves
+/-
+**CategoryTheory.ShrinkHoms.hasFiniteLimits** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.ShrinkHoms`。
+形式化陈述：hasFiniteLimits [HasFiniteLimits C] : HasFiniteLimits.{w} (ShrinkHoms C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
 -/
 instance hasFiniteLimits [HasFiniteLimits C] :
     HasFiniteLimits.{w} (ShrinkHoms C) := ⟨fun _ => inferInstance⟩
@@ -332,20 +319,15 @@ instance hasFiniteLimits [HasFiniteLimits C] :
 end Preadditive
 
 variable (C) in
-/--
-Instance `abelian` / 实例 `abelian`
-
-English:
-instance abelian
-  signature: [Abelian C]
-  body: abelianOfEquivalence (inverse C)
-
-中文:
-实例 abelian
-  签名: [交换 C]
-  定义体: abelianOfEquivalence (inverse C)
-
-Depends on / 依赖: abelianOfEquivalence, inverse
+/-
+**CategoryTheory.ShrinkHoms.abelian** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sh
+rinkHoms`。
+形式化陈述：abelian [Abelian C] : Abelian.{w} (ShrinkHoms C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShrinkHoms.instIsEquivalenceInverse`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.LocallySmall.{w, v
+, u} C],   (CategoryTheory.ShrinkHoms.in…
 -/
 noncomputable instance abelian [Abelian C] :
     Abelian.{w} (ShrinkHoms C) := abelianOfEquivalence (inverse C)
@@ -365,91 +347,54 @@ variable [Preadditive C]
 
 variable (C)
 
-/--
-Instance `preadditive` / 实例 `preadditive`
-
-English:
-instance preadditive
-  signature: : Preadditive (AsSmall.{w} C)
-  body: .ofFullyFaithful equiv.fullyFaithfulInverse
-
-中文:
-实例 preadditive
-  签名: : 预加性 (AsSmall.{w} C)
-  定义体: .ofFullyFaithful equiv.fullyFaithfulInverse
-
-Depends on / 依赖: equiv.fullyFaithfulInverse, fullyFaithfulInverse, ofFullyFaithful
+/-
+**CategoryTheory.AsSmall.preadditive** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+sSmall`。
+形式化陈述：preadditive : Preadditive (AsSmall.{w} C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance preadditive : Preadditive (AsSmall.{w} C) :=
   .ofFullyFaithful equiv.fullyFaithfulInverse
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (down (C := C)).Additive
-  body: equiv.symm.fullyFaithfulFunctor.additive_ofFullyFaithful
-
-中文:
-实例 :
-  签名: (down (C := C)).加性
-  定义体: equiv.symm.fullyFaithfulFunctor.additive_ofFullyFaithful
-
-Depends on / 依赖: Additive
+/-
+**CategoryTheory.AsSmall.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.AsSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (down (C := C)).Additive :=
   equiv.symm.fullyFaithfulFunctor.additive_ofFullyFaithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (up (C := C)).Additive
-  body: equiv.symm.additive_inverse_of_FullyFaithful
-
-中文:
-实例 :
-  签名: (up (C := C)).加性
-  定义体: equiv.symm.additive_inverse_of_FullyFaithful
-
-Depends on / 依赖: Additive
+/-
+**CategoryTheory.AsSmall.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.AsSmall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (up (C := C)).Additive :=
   equiv.symm.additive_inverse_of_FullyFaithful
-
-/--
-Instance `hasLimitsOfShape` / 实例 `hasLimitsOfShape`
-
-English:
-instance hasLimitsOfShape
-  signature: (J : Type*) [Category* J]
-  body: Adjunction.hasLimitsOfShape_of_equivalence equiv.inverse
-
-中文:
-实例 hasLimitsOfShape
-  签名: (J : 类型) [范畴* J]
-  定义体: Adjunction.hasLimitsOfShape_of_equivalence equiv.inverse
-
-Depends on / 依赖: Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, equiv.inverse, hasLimitsOfShape_of_equivalence, inverse
+/-
+**CategoryTheory.AsSmall.hasLimitsOfShape** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.AsSmall`。
+形式化陈述：hasLimitsOfShape (J : Type*) [Category* J] [HasLimitsOfShape J C] : HasLim
+itsOfShape.{_, _, max u v w} J (AsSmall.{w} C)
+参数：J : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.hasLimitsOfShape_of_equivalence`：hasLimitsOfSh
+ape_of_equivalence (E : D ⥤ C) [E.IsEquivalence] [HasLimitsOfShape J C] : HasLim
+itsOfShape J D
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 instance hasLimitsOfShape (J : Type*) [Category* J]
     [HasLimitsOfShape J C] : HasLimitsOfShape.{_, _, max u v w} J (AsSmall.{w} C) :=
   Adjunction.hasLimitsOfShape_of_equivalence equiv.inverse
-
-/--
-Instance `hasFiniteLimits` / 实例 `hasFiniteLimits`
-
-English:
-instance hasFiniteLimits
-  signature: [HasFiniteLimits C]
-  body: ⟨fun _ => inferInstance⟩
-
-中文:
-实例 hasFiniteLimits
-  签名: [有有限极限 C]
-  定义体: ⟨fun _ => inferInstance⟩
+/-
+**CategoryTheory.AsSmall.hasFiniteLimits** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.AsSmall`。
+形式化陈述：hasFiniteLimits [HasFiniteLimits C] : HasFiniteLimits (AsSmall.{w} C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
 -/
 instance hasFiniteLimits [HasFiniteLimits C] :
     HasFiniteLimits (AsSmall.{w} C) := ⟨fun _ => inferInstance⟩
@@ -457,20 +402,12 @@ instance hasFiniteLimits [HasFiniteLimits C] :
 end Preadditive
 
 variable (C) in
-/--
-Instance `abelian` / 实例 `abelian`
-
-English:
-instance abelian
-  signature: [Abelian C]
-  body: abelianOfEquivalence equiv.inverse
-
-中文:
-实例 abelian
-  签名: [交换 C]
-  定义体: abelianOfEquivalence equiv.inverse
-
-Depends on / 依赖: Finite, Finite.exists_type_univ_nonempty_mulEquiv, Limits, Limits.hasColimitsOfShape_of_equivalence, abelianOfEquivalence, e.toSingleObjEquiv.symm, equiv.inverse, exists_type_univ_nonempty_mulEquiv, hasColimitsOfShape_of_equivalence, inverse, toSingleObjEquiv
+/-
+**CategoryTheory.AsSmall.abelian** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.AsSma
+ll`。
+形式化陈述：abelian [Abelian C] : Abelian (AsSmall.{w} C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance abelian [Abelian C] :
     Abelian (AsSmall.{w} C) := abelianOfEquivalence equiv.inverse
@@ -478,3 +415,4 @@ noncomputable instance abelian [Abelian C] :
 end AsSmall
 
 end CategoryTheory
+

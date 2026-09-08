@@ -26,180 +26,141 @@ open Function Set Topology
 
 universe u v
 
-variable {α : Type u} {β : Type v} {ι : Type*} {X : ι -> Type*} [TopologicalSpace α]
+variable {α : Type u} {β : Type v} {ι : Type*} {X : ι → Type*} [TopologicalSpace α]
   {s t u v : Set α}
 
 section TotallyDisconnected
 
-/--
-Definition of `IsTotallyDisconnected` / `IsTotallyDisconnected` 的定义
+/-- A set `s` is called totally disconnected if every subset `t ⊆ s` which is preconnected is
+a subsingleton, i.e. either empty or a singleton. -/
+/-
+**IsTotallyDisconnected** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsTotallyDisconnected (s : Set α) : Prop
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTotallyDisconnected
-  signature: (s : Set α)
-  body: forall t, t subseteq s -> IsPreconnected t -> t.Subsingleton
-
-中文:
-定义 IsTotallyDisconnected
-  签名: (s : 集合 α)
-  定义体: forall t, t subseteq s -> IsPreconnected t -> t.Subsingleton
-
-Depends on / 依赖: IsPreconnected, Subsingleton, subseteq, t.Subsingleton
+--- 原说明 ---
+A set `s` is called totally disconnected if every subset `t ⊆ s` which is precon
+nected is
+a subsingleton, i.e. either empty or a singleton.
 -/
 def IsTotallyDisconnected (s : Set α) : Prop :=
-  forall t, t subseteq s -> IsPreconnected t -> t.Subsingleton
-
-/--
-theorem `isTotallyDisconnected_empty` / 定理 `isTotallyDisconnected_empty`
-
-English:
-theorem isTotallyDisconnected_empty
-  statement: IsTotallyDisconnected (∅ : Set α)
-  proof: fun _ ht _ _ x_in _ _ =>
-  (ht x_in).elim
-
-中文:
-定理 isTotallyDisconnected_empty
-  结论: IsTotallyDisconnected (∅ : 集合 α)
-  证明: fun _ ht _ _ x_in _ _ =>
-  (ht x_in).elim
-
-Depends on / 依赖: x_in
+  ∀ t, t ⊆ s → IsPreconnected t → t.Subsingleton
+/-
+**isTotallyDisconnected_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTotallyDisconnected_empty : IsTotallyDisconnected (∅ : Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isTotallyDisconnected_empty : IsTotallyDisconnected (∅ : Set α) := fun _ ht _ _ x_in _ _ =>
   (ht x_in).elim
-
-/--
-theorem `isTotallyDisconnected_singleton` / 定理 `isTotallyDisconnected_singleton`
-
-English:
-theorem isTotallyDisconnected_singleton
-  given: {x}
-  statement: IsTotallyDisconnected ({x} : Set α)
-  proof: fun _ ht _ =>
-  subsingleton_singleton.anti ht
-
-中文:
-定理 isTotallyDisconnected_singleton
-  条件: {x}
-  结论: IsTotallyDisconnected ({x} : 集合 α)
-  证明: fun _ ht _ =>
-  subsingleton_singleton.anti ht
+/-
+**isTotallyDisconnected_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTotallyDisconnected_singleton {x} : IsTotallyDisconnected ({x} : Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subsingleton.anti`：∀ {α : Type u} {s t : Set α}, t.Subsingleton → s 
+⊆ t → s.Subsingleton
+· 使用定理 `Set.subsingleton_singleton`：subsingleton_singleton {a} : ({a} : Set α).S
+ubsingleton
 -/
 theorem isTotallyDisconnected_singleton {x} : IsTotallyDisconnected ({x} : Set α) := fun _ ht _ =>
   subsingleton_singleton.anti ht
 
 /-- A space is totally disconnected if all of its connected components are singletons. -/
 @[mk_iff]
-/--
-Definition of `TotallyDisconnectedSpace` / `TotallyDisconnectedSpace` 的定义
+/-
+**TotallyDisconnectedSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u) → [TopologicalSpace α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class TotallyDisconnectedSpace
-  parameters: (α : Type u) [TopologicalSpace α]
-  axioms and operations (1):
-    - isTotallyDisconnected_univ : IsTotallyDisconnected (univ : Set α)
-
-中文:
-类 全不连通空间
-  参数: (α : 类型u) [拓扑空间 α]
-  公理与运算 (1 个):
-    - isTotallyDisconnected_univ : IsTotallyDisconnected (univ : 集合 α)
+--- 原说明 ---
+A space is totally disconnected if all of its connected components are singleton
+s.
 -/
 class TotallyDisconnectedSpace (α : Type u) [TopologicalSpace α] : Prop where
   /-- The universal set `Set.univ` in a totally disconnected space is totally disconnected. -/
   isTotallyDisconnected_univ : IsTotallyDisconnected (univ : Set α)
-
-/--
-theorem `IsPreconnected.subsingleton` / 定理 `IsPreconnected.subsingleton`
-
-English:
-theorem IsPreconnected.subsingleton
-  statement: [TotallyDisconnectedSpace α] {s : Set α}
-  proof: TotallyDisconnectedSpace.isTotallyDisconnected_univ s (subset_univ s) h
-
-中文:
-定理 是预连通.subsingleton
-  结论: [全不连通空间 α] {s : 集合 α}
-  证明: TotallyDisconnectedSpace.isTotallyDisconnected_univ s (subset_univ s) h
-
-Depends on / 依赖: TotallyDisconnectedSpace, TotallyDisconnectedSpace.isTotallyDisconnected_univ, isTotallyDisconnected_univ, subset_univ
+/-
+**IsPreconnected.subsingleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.subsingleton [TotallyDisconnectedSpace α] {s : Set α} (h : 
+IsPreconnected s) : s.Subsingleton
+参数：h : IsPreconnected s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyDisconnectedSpace.isTotallyDisconnected_univ`：∀ {α : Type u} {ins
+t : TopologicalSpace α} [self : TotallyDisconnectedSpace α], IsTotallyDisconnect
+ed Set.univ
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 -/
 theorem IsPreconnected.subsingleton [TotallyDisconnectedSpace α] {s : Set α}
     (h : IsPreconnected s) : s.Subsingleton :=
   TotallyDisconnectedSpace.isTotallyDisconnected_univ s (subset_univ s) h
 
 -- note: making this an instance breaks downstream files
-/--
-theorem `subsingleton_of_preconnected_totallyDisconnected` / 定理 `subsingleton_of_preconnected_totallyDisconnected`
-
-English:
-theorem subsingleton_of_preconnected_totallyDisconnected
-  proof: Set.subsingleton_of_univ_subsingleton isPreconnected_univ.subsingleton
-
-中文:
-定理 subsingleton_of_preconnected_totallyDisconnected
-  证明: Set.subsingleton_of_univ_subsingleton isPreconnected_univ.subsingleton
-
-Depends on / 依赖: Set.subsingleton_of_univ_subsingleton, isPreconnected_univ, isPreconnected_univ.subsingleton, subsingleton, subsingleton_of_univ_subsingleton
+/-
+**subsingleton_of_preconnected_totallyDisconnected** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subsingleton_of_preconnected_totallyDisconnected [PreconnectedSpace α] [To
+tallyDisconnectedSpace α] : Subsingleton α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subsingleton_of_univ_subsingleton`：subsingleton_of_univ_subsingleton
+ (h : (univ : Set α).Subsingleton) : Subsingleton α
+· 使用定理 `IsPreconnected.subsingleton`：IsPreconnected.subsingleton [TotallyDisconn
+ectedSpace α] {s : Set α} (h : IsPreconnected s) : s.Subsingleton
+· 使用定理 `PreconnectedSpace.isPreconnected_univ`：∀ {α : Type u} {inst : Topologica
+lSpace α} [self : PreconnectedSpace α], IsPreconnected Set.univ
 -/
 theorem subsingleton_of_preconnected_totallyDisconnected
     [PreconnectedSpace α] [TotallyDisconnectedSpace α] : Subsingleton α :=
   Set.subsingleton_of_univ_subsingleton isPreconnected_univ.subsingleton
-
-/--
-Instance `Pi.totallyDisconnectedSpace` / 实例 `Pi.totallyDisconnectedSpace`
-
-English:
-instance Pi.totallyDisconnectedSpace
-  signature: {α : Type*} {β : α -> Type*}
-  body: ⟨fun t _ h2 =>
-    have : forall a, IsPreconnected ((fun x : forall a, β a => x a) '' t) := fun a =>
-      h2.image (fun x => x a) (continuous_apply a).continuousOn
-    fun x x_in y y_in => funext fun a => (this a).subsingleton ⟨x, x_in, rfl⟩ ⟨y, y_in, rfl⟩⟩
-
-中文:
-实例 依赖函数类型.totallyDisconnectedSpace
-  签名: {α : 类型} {β : α -> 类型}
-  定义体: ⟨fun t _ h2 =>
-    have : forall a, IsPreconnected ((fun x : forall a, β a => x a) '' t) := fun a =>
-      h2.image (fun x => x a) (continuous_apply a).continuousOn
-    fun x x_in y y_in => funext fun a => (this a).subsingleton ⟨x, x_in, rfl⟩ ⟨y, y_in, rfl⟩⟩
-
-Depends on / 依赖: IsPreconnected, continuousOn, continuous_apply, h2.image, subsingleton, x_in, y_in
+/-
+**Pi.totallyDisconnectedSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.totallyDisconnectedSpace {α : Type*} {β : α -> Type*} [forall a, Topolo
+gicalSpace (β a)] [forall a, TotallyDisconnectedSpace (β a)] : TotallyDisconnect
+edSpace (forall a : α, β a)
+参数：β a；β a。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `continuous_apply`：continuous_apply (a : α) : Continuous (fun f : (α → X)
+ ↦ f a)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsPreconnected.subsingleton`：IsPreconnected.subsingleton [TotallyDisconn
+ectedSpace α] {s : Set α} (h : IsPreconnected s) : s.Subsingleton
 -/
-instance Pi.totallyDisconnectedSpace {α : Type*} {β : α -> Type*}
-    [forall a, TopologicalSpace (β a)] [forall a, TotallyDisconnectedSpace (β a)] :
-    TotallyDisconnectedSpace (forall a : α, β a) :=
+instance Pi.totallyDisconnectedSpace {α : Type*} {β : α → Type*}
+    [∀ a, TopologicalSpace (β a)] [∀ a, TotallyDisconnectedSpace (β a)] :
+    TotallyDisconnectedSpace (∀ a : α, β a) :=
   ⟨fun t _ h2 =>
-    have : forall a, IsPreconnected ((fun x : forall a, β a => x a) '' t) := fun a =>
+    have : ∀ a, IsPreconnected ((fun x : ∀ a, β a => x a) '' t) := fun a =>
       h2.image (fun x => x a) (continuous_apply a).continuousOn
     fun x x_in y y_in => funext fun a => (this a).subsingleton ⟨x, x_in, rfl⟩ ⟨y, y_in, rfl⟩⟩
-
-/--
-Instance `Prod.totallyDisconnectedSpace` / 实例 `Prod.totallyDisconnectedSpace`
-
-English:
-instance Prod.totallyDisconnectedSpace
-  signature: [TopologicalSpace β] [TotallyDisconnectedSpace α]
-  body: ⟨fun t _ h2 =>
-    have H1 : IsPreconnected (Prod.fst '' t) := h2.image Prod.fst continuous_fst.continuousOn
-    have H2 : IsPreconnected (Prod.snd '' t) := h2.image Prod.snd continuous_snd.continuousOn
-    fun x hx y hy =>
-    Prod.ext (H1.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)
-      (H2.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)⟩
-
-中文:
-实例 积类型.totallyDisconnectedSpace
-  签名: [拓扑空间 β] [全不连通空间 α]
-  定义体: ⟨fun t _ h2 =>
-    have H1 : IsPreconnected (Prod.fst '' t) := h2.image Prod.fst continuous_fst.continuousOn
-    have H2 : IsPreconnected (Prod.snd '' t) := h2.image Prod.snd continuous_snd.continuousOn
-    fun x hx y hy =>
-    Prod.ext (H1.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)
-      (H2.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)⟩
-
-Depends on / 依赖: H1.subsingleton, H2.subsingleton, IsPreconnected, Prod.ext, Prod.fst, Prod.snd, continuousOn, continuous_fst, continuous_fst.continuousOn, continuous_snd, continuous_snd.continuousOn, h2.image, subsingleton
+/-
+**Prod.totallyDisconnectedSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.totallyDisconnectedSpace [TopologicalSpace β] [TotallyDisconnectedSpa
+ce α] [TotallyDisconnectedSpace β] : TotallyDisconnectedSpace (α × β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `IsPreconnected.subsingleton`：IsPreconnected.subsingleton [TotallyDisconn
+ectedSpace α] {s : Set α} (h : IsPreconnected s) : s.Subsingleton
 -/
 instance Prod.totallyDisconnectedSpace [TopologicalSpace β] [TotallyDisconnectedSpace α]
     [TotallyDisconnectedSpace β] : TotallyDisconnectedSpace (α × β) :=
@@ -209,63 +170,21 @@ instance Prod.totallyDisconnectedSpace [TopologicalSpace β] [TotallyDisconnecte
     fun x hx y hy =>
     Prod.ext (H1.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)
       (H2.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TopologicalSpace
-  signature: β] [TotallyDisconnectedSpace α] [TotallyDisconnectedSpace β] :
-  body: by
-  refine ⟨fun s _ hs => ?_⟩
-  obtain ⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩ := Sum.isPreconnected_iff.1 hs
-  · exact ht.subsingleton.image _
-  · exact ht.subsingleton.image _
-
-中文:
-实例 [拓扑空间
-  签名: β] [全不连通空间 α] [全不连通空间 β] :
-  定义体: by
-  refine ⟨fun s _ hs => ?_⟩
-  obtain ⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩ := Sum.isPreconnected_iff.1 hs
-  · exact ht.subsingleton.image _
-  · exact ht.subsingleton.image _
-
-Depends on / 依赖: Sum.isPreconnected_iff, ht.subsingleton.image, isPreconnected_iff, subsingleton
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TopologicalSpace β] [TotallyDisconnectedSpace α] [TotallyDisconnectedSpace β] :
-    TotallyDisconnectedSpace (α oplus β) := by
+    TotallyDisconnectedSpace (α ⊕ β) := by
   refine ⟨fun s _ hs => ?_⟩
   obtain ⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩ := Sum.isPreconnected_iff.1 hs
   · exact ht.subsingleton.image _
   · exact ht.subsingleton.image _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, TopologicalSpace (X i)] [forall i, TotallyDisconnectedSpace (X i)] :
-  body: by
-  refine ⟨fun s _ hs => ?_⟩
-  obtain rfl | h := s.eq_empty_or_nonempty
-  · exact subsingleton_empty
-  · obtain ⟨a, t, ht, rfl⟩ := Sigma.isConnected_iff.1 ⟨h, hs⟩
-    exact ht.isPreconnected.subsingleton.image _
-
-中文:
-实例 [对任意
-  签名: i, 拓扑空间 (X i)] [对任意 i, 全不连通空间 (X i)] :
-  定义体: by
-  refine ⟨fun s _ hs => ?_⟩
-  obtain rfl | h := s.eq_empty_or_nonempty
-  · exact subsingleton_empty
-  · obtain ⟨a, t, ht, rfl⟩ := Sigma.isConnected_iff.1 ⟨h, hs⟩
-    exact ht.isPreconnected.subsingleton.image _
-
-Depends on / 依赖: Sigma.isConnected_iff, eq_empty_or_nonempty, ht.isPreconnected.subsingleton.image, isConnected_iff, isPreconnected, s.eq_empty_or_nonempty, subsingleton, subsingleton_empty
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, TopologicalSpace (X i)] [forall i, TotallyDisconnectedSpace (X i)] :
+instance [∀ i, TopologicalSpace (X i)] [∀ i, TotallyDisconnectedSpace (X i)] :
     TotallyDisconnectedSpace (Σ i, X i) := by
   refine ⟨fun s _ hs => ?_⟩
   obtain rfl | h := s.eq_empty_or_nonempty
@@ -273,41 +192,35 @@ instance [forall i, TopologicalSpace (X i)] [forall i, TotallyDisconnectedSpace 
   · obtain ⟨a, t, ht, rfl⟩ := Sigma.isConnected_iff.1 ⟨h, hs⟩
     exact ht.isPreconnected.subsingleton.image _
 
-/--
-theorem `totallyDisconnectedSpace_iff_connectedComponent_subsingleton` / 定理 `totallyDisconnectedSpace_iff_connectedComponent_subsingleton`
+/-- A space is totally disconnected iff its connected components are subsingletons. -/
+/-
+**totallyDisconnectedSpace_iff_connectedComponent_subsingleton** 是 Mathlib 中的一个定
+理，位于命名空间 ``。
+形式化陈述：totallyDisconnectedSpace_iff_connectedComponent_subsingleton : TotallyDisc
+onnectedSpace α ↔ forall x : α, (connectedComponent x).Subsingleton
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyDisconnectedSpace.isTotallyDisconnected_univ`：∀ {α : Type u} {ins
+t : TopologicalSpace α} [self : TotallyDisconnectedSpace α], IsTotallyDisconnect
+ed Set.univ
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `isPreconnected_connectedComponent`：isPreconnected_connectedComponent {x 
+: α} : IsPreconnected (connectedComponent x)
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Set.subsingleton_empty`：subsingleton_empty : (∅ : Set α).Subsingleton
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Subsingleton.anti`：∀ {α : Type u} {s t : Set α}, t.Subsingleton → s 
+⊆ t → s.Subsingleton
+· 使用定理 `IsPreconnected.subset_connectedComponent`：IsPreconnected.subset_connecte
+dComponent {x : α} {s : Set α} (H1 : IsPreconnected s) (H2 : x in s) : s subsete
+q connectedComponent x
 
-English:
-theorem totallyDisconnectedSpace_iff_connectedComponent_subsingleton
-  proof: by
-  constructor
-  · intro h x
-    apply h.1
-    · exact subset_univ _
-    exact isPreconnected_connectedComponent
-  intro h; constructor
-  intro s s_sub hs
-  rcases eq_empty_or_nonempty s with (rfl | ⟨x, x_in⟩)
-  · exact subsingleton_empty
-  · exact (h x).anti (hs.subset_connectedComponent x_in)
-
-中文:
-定理 totallyDisconnectedSpace_iff_connectedComponent_subsingleton
-  证明: by
-  constructor
-  · intro h x
-    apply h.1
-    · exact subset_univ _
-    exact isPreconnected_connectedComponent
-  intro h; constructor
-  intro s s_sub hs
-  rcases eq_empty_or_nonempty s with (rfl | ⟨x, x_in⟩)
-  · exact subsingleton_empty
-  · exact (h x).anti (hs.subset_connectedComponent x_in)
-
-Depends on / 依赖: eq_empty_or_nonempty, hs.subset_connectedComponent, isPreconnected_connectedComponent, s_sub, subset_connectedComponent, subset_univ, subsingleton_empty, x_in
+--- 原说明 ---
+A space is totally disconnected iff its connected components are subsingletons.
 -/
 theorem totallyDisconnectedSpace_iff_connectedComponent_subsingleton :
-    TotallyDisconnectedSpace α ↔ forall x : α, (connectedComponent x).Subsingleton := by
+    TotallyDisconnectedSpace α ↔ ∀ x : α, (connectedComponent x).Subsingleton := by
   constructor
   · intro h x
     apply h.1
@@ -319,46 +232,46 @@ theorem totallyDisconnectedSpace_iff_connectedComponent_subsingleton :
   · exact subsingleton_empty
   · exact (h x).anti (hs.subset_connectedComponent x_in)
 
-/--
-theorem `totallyDisconnectedSpace_iff_connectedComponent_singleton` / 定理 `totallyDisconnectedSpace_iff_connectedComponent_singleton`
+/-- A space is totally disconnected iff its connected components are singletons. -/
+/-
+**totallyDisconnectedSpace_iff_connectedComponent_singleton** 是 Mathlib 中的一个定理，位
+于命名空间 ``。
+形式化陈述：totallyDisconnectedSpace_iff_connectedComponent_singleton : TotallyDisconn
+ectedSpace α ↔ forall x : α, connectedComponent x = {x}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `totallyDisconnectedSpace_iff_connectedComponent_subsingleton`：totallyDis
+connectedSpace_iff_connectedComponent_subsingleton : TotallyDisconnectedSpace α 
+↔ forall x : α, (connectedComponent x).Subsingleto…
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Set.subsingleton_iff_singleton`：subsingleton_iff_singleton {x} (hx : x i
+n s) : s.Subsingleton ↔ s = {x}
+· 使用定理 `mem_connectedComponent`：mem_connectedComponent {x : α} : x in connectedC
+omponent x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem totallyDisconnectedSpace_iff_connectedComponent_singleton
-  proof: by
-  rw [totallyDisconnectedSpace_iff_connectedComponent_subsingleton]
-  refine forall_congr' fun x => ?_
-  rw [subsingleton_iff_singleton]
-  exact mem_connectedComponent
-
-中文:
-定理 totallyDisconnectedSpace_iff_connectedComponent_singleton
-  证明: by
-  rw [totallyDisconnectedSpace_iff_connectedComponent_subsingleton]
-  refine forall_congr' fun x => ?_
-  rw [subsingleton_iff_singleton]
-  exact mem_connectedComponent
-
-Depends on / 依赖: forall_congr, mem_connectedComponent, subsingleton_iff_singleton, totallyDisconnectedSpace_iff_connectedComponent_subsingleton
+--- 原说明 ---
+A space is totally disconnected iff its connected components are singletons.
 -/
 theorem totallyDisconnectedSpace_iff_connectedComponent_singleton :
-    TotallyDisconnectedSpace α ↔ forall x : α, connectedComponent x = {x} := by
+    TotallyDisconnectedSpace α ↔ ∀ x : α, connectedComponent x = {x} := by
   rw [totallyDisconnectedSpace_iff_connectedComponent_subsingleton]
   refine forall_congr' fun x => ?_
   rw [subsingleton_iff_singleton]
   exact mem_connectedComponent
-
-/--
-theorem `connectedComponent_eq_singleton` / 定理 `connectedComponent_eq_singleton`
-
-English:
-theorem connectedComponent_eq_singleton
-  given: [TotallyDisconnectedSpace α] (x : α)
-  proof: totallyDisconnectedSpace_iff_connectedComponent_singleton.1 ‹_› x
-
-中文:
-定理 connectedComponent_eq_singleton
-  条件: [全不连通空间 α] (x : α)
-  证明: totallyDisconnectedSpace_iff_connectedComponent_singleton.1 ‹_› x
+/-
+**connectedComponent_eq_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : TopologicalSpace α] [TotallyDisconnectedSpace α] (x
+ : α), connectedComponent x = {x}
+参数：x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `totallyDisconnectedSpace_iff_connectedComponent_singleton`：totallyDiscon
+nectedSpace_iff_connectedComponent_singleton : TotallyDisconnectedSpace α ↔ fora
+ll x : α, connectedComponent x = {x}
 -/
 @[simp] theorem connectedComponent_eq_singleton [TotallyDisconnectedSpace α] (x : α) :
     connectedComponent x = {x} :=
@@ -366,271 +279,254 @@ theorem connectedComponent_eq_singleton
 
 /-- The image of a connected component in a totally disconnected space is a singleton. -/
 @[simp]
-/--
-theorem `Continuous.image_connectedComponent_eq_singleton` / 定理 `Continuous.image_connectedComponent_eq_singleton`
+/-
+**Continuous.image_connectedComponent_eq_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.image_connectedComponent_eq_singleton {β : Type*} [TopologicalS
+pace β] [TotallyDisconnectedSpace β] {f : α -> β} (h : Continuous f) (a : α) : f
+ '' connectedComponent a = {f a}
+参数：h : Continuous f；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subsingleton_iff_singleton`：subsingleton_iff_singleton {x} (hx : x i
+n s) : s.Subsingleton ↔ s = {x}
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `mem_connectedComponent`：mem_connectedComponent {x : α} : x in connectedC
+omponent x
+· 使用定理 `IsPreconnected.subsingleton`：IsPreconnected.subsingleton [TotallyDisconn
+ectedSpace α] {s : Set α} (h : IsPreconnected s) : s.Subsingleton
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `isPreconnected_connectedComponent`：isPreconnected_connectedComponent {x 
+: α} : IsPreconnected (connectedComponent x)
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
 
-English:
-theorem Continuous.image_connectedComponent_eq_singleton
-  statement: {β : Type*} [TopologicalSpace β]
-  proof: (Set.subsingleton_iff_singleton <| mem_image_of_mem f mem_connectedComponent).mp
-    (isPreconnected_connectedComponent.image f h.continuousOn).subsingleton
-
-中文:
-定理 连续.image_connectedComponent_eq_singleton
-  结论: {β : 类型} [拓扑空间 β]
-  证明: (Set.subsingleton_iff_singleton <| mem_image_of_mem f mem_connectedComponent).mp
-    (isPreconnected_connectedComponent.image f h.continuousOn).subsingleton
-
-Depends on / 依赖: Set.subsingleton_iff_singleton, continuousOn, h.continuousOn, isPreconnected_connectedComponent, isPreconnected_connectedComponent.image, mem_connectedComponent, mem_image_of_mem, subsingleton, subsingleton_iff_singleton
+--- 原说明 ---
+The image of a connected component in a totally disconnected space is a singleto
+n.
 -/
 theorem Continuous.image_connectedComponent_eq_singleton {β : Type*} [TopologicalSpace β]
-    [TotallyDisconnectedSpace β] {f : α -> β} (h : Continuous f) (a : α) :
+    [TotallyDisconnectedSpace β] {f : α → β} (h : Continuous f) (a : α) :
     f '' connectedComponent a = {f a} :=
   (Set.subsingleton_iff_singleton <| mem_image_of_mem f mem_connectedComponent).mp
     (isPreconnected_connectedComponent.image f h.continuousOn).subsingleton
-
-/--
-theorem `isTotallyDisconnected_of_totallyDisconnectedSpace` / 定理 `isTotallyDisconnected_of_totallyDisconnectedSpace`
-
-English:
-theorem isTotallyDisconnected_of_totallyDisconnectedSpace
-  given: [TotallyDisconnectedSpace α] (s : Set α)
-  proof: fun t _ ht =>
-  TotallyDisconnectedSpace.isTotallyDisconnected_univ _ t.subset_univ ht
-
-中文:
-定理 isTotallyDisconnected_of_totallyDisconnectedSpace
-  条件: [全不连通空间 α] (s : 集合 α)
-  证明: fun t _ ht =>
-  TotallyDisconnectedSpace.isTotallyDisconnected_univ _ t.subset_univ ht
+/-
+**isTotallyDisconnected_of_totallyDisconnectedSpace** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：isTotallyDisconnected_of_totallyDisconnectedSpace [TotallyDisconnectedSpac
+e α] (s : Set α) : IsTotallyDisconnected s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyDisconnectedSpace.isTotallyDisconnected_univ`：∀ {α : Type u} {ins
+t : TopologicalSpace α} [self : TotallyDisconnectedSpace α], IsTotallyDisconnect
+ed Set.univ
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 -/
 theorem isTotallyDisconnected_of_totallyDisconnectedSpace [TotallyDisconnectedSpace α] (s : Set α) :
     IsTotallyDisconnected s := fun t _ ht =>
   TotallyDisconnectedSpace.isTotallyDisconnected_univ _ t.subset_univ ht
-
-/--
-lemma `TotallyDisconnectedSpace.eq_of_continuous` / 引理 `TotallyDisconnectedSpace.eq_of_continuous`
-
-English:
-lemma TotallyDisconnectedSpace.eq_of_continuous
-  statement: [TopologicalSpace β]
-  proof: (isPreconnected_univ.image f hf.continuousOn).subsingleton ⟨i, trivial, rfl⟩ ⟨j, trivial, rfl⟩
-
-中文:
-引理 全不连通空间.eq_of_continuous
-  结论: [拓扑空间 β]
-  证明: (isPreconnected_univ.image f hf.continuousOn).subsingleton ⟨i, trivial, rfl⟩ ⟨j, trivial, rfl⟩
-
-Depends on / 依赖: continuousOn, hf.continuousOn, isPreconnected_univ, isPreconnected_univ.image, subsingleton
+/-
+**TotallyDisconnectedSpace.eq_of_continuous** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：TotallyDisconnectedSpace.eq_of_continuous [TopologicalSpace β] [Preconnect
+edSpace α] [TotallyDisconnectedSpace β] (f : α -> β) (hf : Continuous f) (i j : 
+α) : f i = f j
+参数：f : α -> β；hf : Continuous f；i j : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.subsingleton`：IsPreconnected.subsingleton [TotallyDisconn
+ectedSpace α] {s : Set α} (h : IsPreconnected s) : s.Subsingleton
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `PreconnectedSpace.isPreconnected_univ`：∀ {α : Type u} {inst : Topologica
+lSpace α} [self : PreconnectedSpace α], IsPreconnected Set.univ
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `trivial`：True
 -/
 lemma TotallyDisconnectedSpace.eq_of_continuous [TopologicalSpace β]
-    [PreconnectedSpace α] [TotallyDisconnectedSpace β] (f : α -> β) (hf : Continuous f)
+    [PreconnectedSpace α] [TotallyDisconnectedSpace β] (f : α → β) (hf : Continuous f)
     (i j : α) : f i = f j :=
   (isPreconnected_univ.image f hf.continuousOn).subsingleton ⟨i, trivial, rfl⟩ ⟨j, trivial, rfl⟩
 
 /-- The bijection `C(X, Y) ≃ Y` when `Y` is totally disconnected and `X` is connected. -/
 @[simps! symm_apply_apply]
-/--
-Definition of `TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace` / `TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace` 的定义
+/-
+**TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace** 是 Mathlib 中的一个定义
+，位于命名空间 ``。
+形式化陈述：TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace (X Y : Type*) 
+[TopologicalSpace X] [TopologicalSpace Y] [TotallyDisconnectedSpace Y] [Connecte
+dSpace X] : C(X, Y) ≃ Y where toFun f
+参数：X Y : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ConnectedSpace.toNonempty`：∀ {α : Type u} {inst : TopologicalSpace α} [s
+elf : ConnectedSpace α], Nonempty α
 
-English:
-definition TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace
-  body: f (Classical.arbitrary _)
-  invFun y := ⟨fun _ => y, by fun_prop⟩
-  left_inv f := ContinuousMap.ext (TotallyDisconnectedSpace.eq_of_continuous _ f.2 _)
-  right_inv _ := rfl
-
-中文:
-定义 全不连通空间.continuousMapEquivOfConnectedSpace
-  定义体: f (Classical.arbitrary _)
-  invFun y := ⟨fun _ => y, by fun_prop⟩
-  left_inv f := ContinuousMap.ext (TotallyDisconnectedSpace.eq_of_continuous _ f.2 _)
-  right_inv _ := rfl
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary
+--- 原说明 ---
+The bijection `C(X, Y) ≃ Y` when `Y` is totally disconnected and `X` is connecte
+d.
 -/
 noncomputable def TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace
     (X Y : Type*) [TopologicalSpace X]
     [TopologicalSpace Y] [TotallyDisconnectedSpace Y] [ConnectedSpace X] :
     C(X, Y) ≃ Y where
   toFun f := f (Classical.arbitrary _)
-  invFun y := ⟨fun _ => y, by fun_prop⟩
+  invFun y := ⟨fun _ ↦ y, by fun_prop⟩
   left_inv f := ContinuousMap.ext (TotallyDisconnectedSpace.eq_of_continuous _ f.2 _)
   right_inv _ := rfl
-
-/--
-theorem `isTotallyDisconnected_of_image` / 定理 `isTotallyDisconnected_of_image`
-
-English:
-theorem isTotallyDisconnected_of_image
-  statement: [TopologicalSpace β] {f : α -> β} (hf : ContinuousOn f s)
-  proof: fun _t hts ht _x x_in _y y_in =>
-hf'
-    h _ (image_mono hts) (ht.image f <| hf.mono hts) (mem_image_of_mem f x_in)
-      (mem_image_of_mem f y_in)
-
-中文:
-定理 isTotallyDisconnected_of_image
-  结论: [拓扑空间 β] {f : α -> β} (hf : ContinuousOn f s)
-  证明: fun _t hts ht _x x_in _y y_in =>
-hf'
-    h _ (image_mono hts) (ht.image f <| hf.mono hts) (mem_image_of_mem f x_in)
-      (mem_image_of_mem f y_in)
-
-Depends on / 依赖: hf.mono, ht.image, image_mono, mem_image_of_mem, x_in, y_in
+/-
+**isTotallyDisconnected_of_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTotallyDisconnected_of_image [TopologicalSpace β] {f : α -> β} (hf : Con
+tinuousOn f s) (hf' : Injective f) (h : IsTotallyDisconnected (f '' s)) : IsTota
+llyDisconnected s
+参数：hf : ContinuousOn f s；hf' : Injective f；h : IsTotallyDisconnected (f '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-theorem isTotallyDisconnected_of_image [TopologicalSpace β] {f : α -> β} (hf : ContinuousOn f s)
+theorem isTotallyDisconnected_of_image [TopologicalSpace β] {f : α → β} (hf : ContinuousOn f s)
     (hf' : Injective f) (h : IsTotallyDisconnected (f '' s)) : IsTotallyDisconnected s :=
   fun _t hts ht _x x_in _y y_in =>
-hf'
+  hf' <|
     h _ (image_mono hts) (ht.image f <| hf.mono hts) (mem_image_of_mem f x_in)
       (mem_image_of_mem f y_in)
-
-/--
-lemma `Topology.IsEmbedding.isTotallyDisconnected` / 引理 `Topology.IsEmbedding.isTotallyDisconnected`
-
-English:
-lemma Topology.IsEmbedding.isTotallyDisconnected
-  statement: [TopologicalSpace β] {f : α -> β} {s : Set α}
-  proof: isTotallyDisconnected_of_image hf.continuous.continuousOn hf.injective h
-
-中文:
-引理 拓扑.是嵌入.isTotallyDisconnected
-  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
-  证明: isTotallyDisconnected_of_image hf.continuous.continuousOn hf.injective h
-
-Depends on / 依赖: continuous, continuousOn, hf.continuous.continuousOn, hf.injective, injective, isTotallyDisconnected_of_image
+/-
+**Topology.IsEmbedding.isTotallyDisconnected** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsEmbedding.isTotallyDisconnected [TopologicalSpace β] {f : α -> 
+β} {s : Set α} (hf : IsEmbedding f) (h : IsTotallyDisconnected (f '' s)) : IsTot
+allyDisconnected s
+参数：hf : IsEmbedding f；h : IsTotallyDisconnected (f '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isTotallyDisconnected_of_image`：isTotallyDisconnected_of_image [Topologi
+calSpace β] {f : α -> β} (hf : ContinuousOn f s) (hf' : Injective f) (h : IsTota
+llyDisconnected (f '…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
 -/
-lemma Topology.IsEmbedding.isTotallyDisconnected [TopologicalSpace β] {f : α -> β} {s : Set α}
+lemma Topology.IsEmbedding.isTotallyDisconnected [TopologicalSpace β] {f : α → β} {s : Set α}
     (hf : IsEmbedding f) (h : IsTotallyDisconnected (f '' s)) : IsTotallyDisconnected s :=
   isTotallyDisconnected_of_image hf.continuous.continuousOn hf.injective h
-
-/--
-lemma `Topology.IsEmbedding.isTotallyDisconnected_image` / 引理 `Topology.IsEmbedding.isTotallyDisconnected_image`
-
-English:
-lemma Topology.IsEmbedding.isTotallyDisconnected_image
-  statement: [TopologicalSpace β] {f : α -> β} {s : Set α}
-  proof: by
-  refine ⟨hf.isTotallyDisconnected, fun hs u hus hu => ?_⟩
-  obtain ⟨v, hvs, rfl⟩ : exists v, v subseteq s ∧ f '' v = u :=
-    ⟨f ⁻¹' u inter s, inter_subset_right, by rwa [image_preimage_inter, inter_eq_left]⟩
-  rw [hf.isInducing.isPreconnected_image] at hu
-  exact (hs v hvs hu).image _
-
-中文:
-引理 拓扑.是嵌入.isTotallyDisconnected_image
-  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
-  证明: by
-  refine ⟨hf.isTotallyDisconnected, fun hs u hus hu => ?_⟩
-  obtain ⟨v, hvs, rfl⟩ : exists v, v subseteq s ∧ f '' v = u :=
-    ⟨f ⁻¹' u inter s, inter_subset_right, by rwa [image_preimage_inter, inter_eq_left]⟩
-  rw [hf.isInducing.isPreconnected_image] at hu
-  exact (hs v hvs hu).image _
-
-Depends on / 依赖: hf.isInducing.isPreconnected_image, hf.isTotallyDisconnected, image_preimage_inter, inter_eq_left, inter_subset_right, isInducing, isPreconnected_image, isTotallyDisconnected, subseteq
+/-
+**Topology.IsEmbedding.isTotallyDisconnected_image** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsEmbedding.isTotallyDisconnected_image [TopologicalSpace β] {f :
+ α -> β} {s : Set α} (hf : IsEmbedding f) : IsTotallyDisconnected (f '' s) ↔ IsT
+otallyDisconnected s
+参数：hf : IsEmbedding f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsEmbedding.isTotallyDisconnected`：Topology.IsEmbedding.isTotal
+lyDisconnected [TopologicalSpace β] {f : α -> β} {s : Set α} (hf : IsEmbedding f
+) (h : IsTotallyDisconnected (f …
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_preimage_inter`：image_preimage_inter (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (f ⁻¹' t inter s) = t inter f '' s
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
+· 使用定理 `Set.Subsingleton.image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s.S
+ubsingleton → ∀ (f : α → β), (f '' s).Subsingleton
+· 使用定理 `Topology.IsInducing.isPreconnected_image`：Topology.IsInducing.isPreconne
+cted_image [TopologicalSpace β] {s : Set α} {f : α -> β} (hf : IsInducing f) : I
+sPreconnected (f '' s) ↔ IsPre…
+· 使用定理 `Topology.IsEmbedding.isInducing`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Topology.I…
 -/
-lemma Topology.IsEmbedding.isTotallyDisconnected_image [TopologicalSpace β] {f : α -> β} {s : Set α}
+lemma Topology.IsEmbedding.isTotallyDisconnected_image [TopologicalSpace β] {f : α → β} {s : Set α}
     (hf : IsEmbedding f) : IsTotallyDisconnected (f '' s) ↔ IsTotallyDisconnected s := by
-  refine ⟨hf.isTotallyDisconnected, fun hs u hus hu => ?_⟩
-  obtain ⟨v, hvs, rfl⟩ : exists v, v subseteq s ∧ f '' v = u :=
-    ⟨f ⁻¹' u inter s, inter_subset_right, by rwa [image_preimage_inter, inter_eq_left]⟩
+  refine ⟨hf.isTotallyDisconnected, fun hs u hus hu ↦ ?_⟩
+  obtain ⟨v, hvs, rfl⟩ : ∃ v, v ⊆ s ∧ f '' v = u :=
+    ⟨f ⁻¹' u ∩ s, inter_subset_right, by rwa [image_preimage_inter, inter_eq_left]⟩
   rw [hf.isInducing.isPreconnected_image] at hu
   exact (hs v hvs hu).image _
-
-/--
-lemma `Topology.IsEmbedding.isTotallyDisconnected_range` / 引理 `Topology.IsEmbedding.isTotallyDisconnected_range`
-
-English:
-lemma Topology.IsEmbedding.isTotallyDisconnected_range
-  statement: [TopologicalSpace β] {f : α -> β}
-  proof: by
-  rw [totallyDisconnectedSpace_iff]; rw [← image_univ]; rw [hf.isTotallyDisconnected_image]
-
-中文:
-引理 拓扑.是嵌入.isTotallyDisconnected_range
-  结论: [拓扑空间 β] {f : α -> β}
-  证明: by
-  rw [totallyDisconnectedSpace_iff]; rw [← image_univ]; rw [hf.isTotallyDisconnected_image]
-
-Depends on / 依赖: hf.isTotallyDisconnected_image, image_univ, isTotallyDisconnected_image, totallyDisconnectedSpace_iff
+/-
+**Topology.IsEmbedding.isTotallyDisconnected_range** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsEmbedding.isTotallyDisconnected_range [TopologicalSpace β] {f :
+ α -> β} (hf : IsEmbedding f) : IsTotallyDisconnected (range f) ↔ TotallyDisconn
+ectedSpace α
+参数：hf : IsEmbedding f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `totallyDisconnectedSpace_iff`：∀ (α : Type u) [inst : TopologicalSpace α]
+, TotallyDisconnectedSpace α ↔ IsTotallyDisconnected Set.univ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用引理 `Topology.IsEmbedding.isTotallyDisconnected_image`：Topology.IsEmbedding.i
+sTotallyDisconnected_image [TopologicalSpace β] {f : α -> β} {s : Set α} (hf : I
+sEmbedding f) : IsTotallyDisconnected …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma Topology.IsEmbedding.isTotallyDisconnected_range [TopologicalSpace β] {f : α -> β}
+lemma Topology.IsEmbedding.isTotallyDisconnected_range [TopologicalSpace β] {f : α → β}
     (hf : IsEmbedding f) : IsTotallyDisconnected (range f) ↔ TotallyDisconnectedSpace α := by
-  rw [totallyDisconnectedSpace_iff]; rw [← image_univ]; rw [hf.isTotallyDisconnected_image]
-
-/--
-lemma `totallyDisconnectedSpace_subtype_iff` / 引理 `totallyDisconnectedSpace_subtype_iff`
-
-English:
-lemma totallyDisconnectedSpace_subtype_iff
-  given: {s : Set α}
-  proof: by
-  rw [← IsEmbedding.subtypeVal.isTotallyDisconnected_range]; rw [Subtype.range_val]
-
-中文:
-引理 totallyDisconnectedSpace_subtype_iff
-  条件: {s : 集合 α}
-  证明: by
-  rw [← IsEmbedding.subtypeVal.isTotallyDisconnected_range]; rw [Subtype.range_val]
-
-Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isTotallyDisconnected_range, Subtype, Subtype.range_val, isTotallyDisconnected_range, range_val, subtypeVal
+  rw [totallyDisconnectedSpace_iff, ← image_univ, hf.isTotallyDisconnected_image]
+/-
+**totallyDisconnectedSpace_subtype_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：totallyDisconnectedSpace_subtype_iff {s : Set α} : TotallyDisconnectedSpac
+e s ↔ IsTotallyDisconnected s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Topology.IsEmbedding.isTotallyDisconnected_range`：Topology.IsEmbedding.i
+sTotallyDisconnected_range [TopologicalSpace β] {f : α -> β} (hf : IsEmbedding f
+) : IsTotallyDisconnected (range f) ↔ …
+· 使用引理 `Topology.IsEmbedding.subtypeVal`：Topology.IsEmbedding.subtypeVal : IsEmb
+edding ((↑) : Subtype p -> X)
+· 使用定理 `Subtype.range_val`：range_val {s : Set α} : range (Subtype.val : s -> α) 
+= s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma totallyDisconnectedSpace_subtype_iff {s : Set α} :
     TotallyDisconnectedSpace s ↔ IsTotallyDisconnected s := by
-  rw [← IsEmbedding.subtypeVal.isTotallyDisconnected_range]; rw [Subtype.range_val]
-
-/--
-Instance `Subtype.totallyDisconnectedSpace` / 实例 `Subtype.totallyDisconnectedSpace`
-
-English:
-instance Subtype.totallyDisconnectedSpace
-  signature: {α : Type*} {p : α -> Prop} [TopologicalSpace α]
-  body: totallyDisconnectedSpace_subtype_iff.2 (isTotallyDisconnected_of_totallyDisconnectedSpace _)
-
-中文:
-实例 子类型.totallyDisconnectedSpace
-  签名: {α : 类型} {p : α -> 命题} [拓扑空间 α]
-  定义体: totallyDisconnectedSpace_subtype_iff.2 (isTotallyDisconnected_of_totallyDisconnectedSpace _)
-
-Depends on / 依赖: isTotallyDisconnected_of_totallyDisconnectedSpace, totallyDisconnectedSpace_subtype_iff
+  rw [← IsEmbedding.subtypeVal.isTotallyDisconnected_range, Subtype.range_val]
+/-
+**Subtype.totallyDisconnectedSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Subtype.totallyDisconnectedSpace {α : Type*} {p : α -> Prop} [TopologicalS
+pace α] [TotallyDisconnectedSpace α] : TotallyDisconnectedSpace (Subtype p)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `totallyDisconnectedSpace_subtype_iff`：totallyDisconnectedSpace_subtype_i
+ff {s : Set α} : TotallyDisconnectedSpace s ↔ IsTotallyDisconnected s
+· 使用定理 `isTotallyDisconnected_of_totallyDisconnectedSpace`：isTotallyDisconnected
+_of_totallyDisconnectedSpace [TotallyDisconnectedSpace α] (s : Set α) : IsTotall
+yDisconnected s
 -/
-instance Subtype.totallyDisconnectedSpace {α : Type*} {p : α -> Prop} [TopologicalSpace α]
+instance Subtype.totallyDisconnectedSpace {α : Type*} {p : α → Prop} [TopologicalSpace α]
     [TotallyDisconnectedSpace α] : TotallyDisconnectedSpace (Subtype p) :=
   totallyDisconnectedSpace_subtype_iff.2 (isTotallyDisconnected_of_totallyDisconnectedSpace _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TotallyDisconnectedSpace
-  signature: α] : TotallyDisconnectedSpace (Additive α)
-  body: ‹TotallyDisconnectedSpace α›
-
-中文:
-实例 [全不连通空间
-  签名: α] : 全不连通空间 (加性 α)
-  定义体: ‹TotallyDisconnectedSpace α›
-
-Depends on / 依赖: TotallyDisconnectedSpace
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TotallyDisconnectedSpace α] : TotallyDisconnectedSpace (Additive α) :=
   ‹TotallyDisconnectedSpace α›
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TotallyDisconnectedSpace
-  signature: α] : TotallyDisconnectedSpace (Multiplicative α)
-  body: ‹TotallyDisconnectedSpace α›
-
-中文:
-实例 [全不连通空间
-  签名: α] : 全不连通空间 (Multiplicative α)
-  定义体: ‹TotallyDisconnectedSpace α›
-
-Depends on / 依赖: TotallyDisconnectedSpace
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TotallyDisconnectedSpace α] : TotallyDisconnectedSpace (Multiplicative α) :=
   ‹TotallyDisconnectedSpace α›
@@ -639,654 +535,621 @@ end TotallyDisconnected
 
 section TotallySeparated
 
-/--
-Definition of `IsTotallySeparated` / `IsTotallySeparated` 的定义
+/-- A set `s` is called totally separated if any two points of this set can be separated
+by two disjoint open sets covering `s`. -/
+/-
+**IsTotallySeparated** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsTotallySeparated (s : Set α) : Prop
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTotallySeparated
-  signature: (s : Set α)
-  body: Set.Pairwise s fun x y =>
-  exists u v : Set α, IsOpen u ∧ IsOpen v ∧ x in u ∧ y in v ∧ s subseteq u union v ∧ Disjoint u v
-
-中文:
-定义 IsTotallySeparated
-  签名: (s : 集合 α)
-  定义体: Set.Pairwise s fun x y =>
-  exists u v : Set α, IsOpen u ∧ IsOpen v ∧ x in u ∧ y in v ∧ s subseteq u union v ∧ Disjoint u v
-
-Depends on / 依赖: Disjoint, IsOpen, Pairwise, Set.Pairwise, subseteq
+--- 原说明 ---
+A set `s` is called totally separated if any two points of this set can be separ
+ated
+by two disjoint open sets covering `s`.
 -/
 def IsTotallySeparated (s : Set α) : Prop :=
   Set.Pairwise s fun x y =>
-  exists u v : Set α, IsOpen u ∧ IsOpen v ∧ x in u ∧ y in v ∧ s subseteq u union v ∧ Disjoint u v
-
-/--
-theorem `isTotallySeparated_empty` / 定理 `isTotallySeparated_empty`
-
-English:
-theorem isTotallySeparated_empty
-  statement: IsTotallySeparated (∅ : Set α)
-  proof: fun _ => False.elim
-
-中文:
-定理 isTotallySeparated_empty
-  结论: IsTotallySeparated (∅ : 集合 α)
-  证明: fun _ => False.elim
-
-Depends on / 依赖: False.elim
+  ∃ u v : Set α, IsOpen u ∧ IsOpen v ∧ x ∈ u ∧ y ∈ v ∧ s ⊆ u ∪ v ∧ Disjoint u v
+/-
+**isTotallySeparated_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTotallySeparated_empty : IsTotallySeparated (∅ : Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isTotallySeparated_empty : IsTotallySeparated (∅ : Set α) := fun _ => False.elim
-
-/--
-theorem `isTotallySeparated_singleton` / 定理 `isTotallySeparated_singleton`
-
-English:
-theorem isTotallySeparated_singleton
-  given: {x}
-  statement: IsTotallySeparated ({x} : Set α)
-  proof: fun _ hp _ hq hpq =>
-  (hpq <| (eq_of_mem_singleton hp).symm ▸ (eq_of_mem_singleton hq).symm).elim
-
-中文:
-定理 isTotallySeparated_singleton
-  条件: {x}
-  结论: IsTotallySeparated ({x} : 集合 α)
-  证明: fun _ hp _ hq hpq =>
-  (hpq <| (eq_of_mem_singleton hp).symm ▸ (eq_of_mem_singleton hq).symm).elim
+/-
+**isTotallySeparated_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTotallySeparated_singleton {x} : IsTotallySeparated ({x} : Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.eq_of_mem_singleton`：eq_of_mem_singleton {x y : α} (h : x in ({y} : 
+Set α)) : x = y
 -/
 theorem isTotallySeparated_singleton {x} : IsTotallySeparated ({x} : Set α) := fun _ hp _ hq hpq =>
   (hpq <| (eq_of_mem_singleton hp).symm ▸ (eq_of_mem_singleton hq).symm).elim
-
-/--
-theorem `isTotallyDisconnected_of_isTotallySeparated` / 定理 `isTotallyDisconnected_of_isTotallySeparated`
-
-English:
-theorem isTotallyDisconnected_of_isTotallySeparated
-  given: {s : Set α} (H : IsTotallySeparated s)
-  proof: by
-  intro t hts ht x x_in y y_in
-  by_contra h
-  obtain
-    ⟨u : Set α, v : Set α, hu : IsOpen u, hv : IsOpen v, hxu : x in u, hyv : y in v, hs : s subseteq u union v,
-      huv⟩ :=
-    H (hts x_in) (hts y_in) h
-  refine (ht _ _ hu hv (hts.trans hs) ⟨x, x_in, hxu⟩ ⟨y, y_in, hyv⟩).ne_empty ?_
-  rw [huv.inter_eq]; rw [inter_empty]
-
-alias IsTotallySeparated.isTotallyDisconnected := isTotallyDisconnected_of_isTotallySeparated
-
-中文:
-定理 isTotallyDisconnected_of_isTotallySeparated
-  条件: {s : 集合 α} (H : IsTotallySeparated s)
-  证明: by
-  intro t hts ht x x_in y y_in
-  by_contra h
-  obtain
-    ⟨u : Set α, v : Set α, hu : IsOpen u, hv : IsOpen v, hxu : x in u, hyv : y in v, hs : s subseteq u union v,
-      huv⟩ :=
-    H (hts x_in) (hts y_in) h
-  refine (ht _ _ hu hv (hts.trans hs) ⟨x, x_in, hxu⟩ ⟨y, y_in, hyv⟩).ne_empty ?_
-  rw [huv.inter_eq]; rw [inter_empty]
-
-alias IsTotallySeparated.isTotallyDisconnected := isTotallyDisconnected_of_isTotallySeparated
-
-Depends on / 依赖: IsOpen, hts.trans, huv.inter_eq, inter_empty, inter_eq, ne_empty, subseteq, x_in, y_in
+/-
+**isTotallyDisconnected_of_isTotallySeparated** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isTotallyDisconnected_of_isTotallySeparated {s : Set α} (H : IsTotallySepa
+rated s) : IsTotallyDisconnected s
+参数：H : IsTotallySeparated s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Set.Nonempty.ne_empty`：∀ {α : Type u} {s : Set α}, s.Nonempty → s ≠ ∅
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Disjoint.inter_eq`：∀ {α : Type u} {s t : Set α}, Disjoint s t → s ∩ t = 
+∅
+· 使用定理 `Set.inter_empty`：inter_empty (a : Set α) : a inter ∅ = ∅
 -/
 theorem isTotallyDisconnected_of_isTotallySeparated {s : Set α} (H : IsTotallySeparated s) :
     IsTotallyDisconnected s := by
   intro t hts ht x x_in y y_in
   by_contra h
   obtain
-    ⟨u : Set α, v : Set α, hu : IsOpen u, hv : IsOpen v, hxu : x in u, hyv : y in v, hs : s subseteq u union v,
+    ⟨u : Set α, v : Set α, hu : IsOpen u, hv : IsOpen v, hxu : x ∈ u, hyv : y ∈ v, hs : s ⊆ u ∪ v,
       huv⟩ :=
     H (hts x_in) (hts y_in) h
   refine (ht _ _ hu hv (hts.trans hs) ⟨x, x_in, hxu⟩ ⟨y, y_in, hyv⟩).ne_empty ?_
-  rw [huv.inter_eq]; rw [inter_empty]
+  rw [huv.inter_eq, inter_empty]
 
 alias IsTotallySeparated.isTotallyDisconnected := isTotallyDisconnected_of_isTotallySeparated
 
-/--
-Definition of `TotallySeparatedSpace` / `TotallySeparatedSpace` 的定义
+/-- A space is totally separated if any two points can be separated by two disjoint open sets
+covering the whole space. -/
+/-
+**TotallySeparatedSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u) → [TopologicalSpace α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class TotallySeparatedSpace
-  parameters: (α : Type u) [TopologicalSpace α]
-  axioms and operations (1):
-    - isTotallySeparated_univ : IsTotallySeparated (univ : Set α)
-
-中文:
-类 TotallySeparated空间
-  参数: (α : 类型u) [拓扑空间 α]
-  公理与运算 (1 个):
-    - isTotallySeparated_univ : IsTotallySeparated (univ : 集合 α)
+--- 原说明 ---
+A space is totally separated if any two points can be separated by two disjoint 
+open sets
+covering the whole space.
 -/
 @[mk_iff] class TotallySeparatedSpace (α : Type u) [TopologicalSpace α] : Prop where
   /-- The universal set `Set.univ` in a totally separated space is totally separated. -/
   isTotallySeparated_univ : IsTotallySeparated (univ : Set α)
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) TotallySeparatedSpace.totallyDisconnectedSpace (α : Type u)
     [TopologicalSpace α] [TotallySeparatedSpace α] : TotallyDisconnectedSpace α :=
   ⟨TotallySeparatedSpace.isTotallySeparated_univ.isTotallyDisconnected⟩
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) TotallySeparatedSpace.of_discrete (α : Type*) [TopologicalSpace α]
     [DiscreteTopology α] : TotallySeparatedSpace α :=
   ⟨fun _ _ b _ h => ⟨{b}ᶜ, {b}, isOpen_discrete _, isOpen_discrete _, h, rfl,
     (compl_union_self _).symm.subset, disjoint_compl_left⟩⟩
-
-/--
-theorem `totallySeparatedSpace_iff_exists_isClopen` / 定理 `totallySeparatedSpace_iff_exists_isClopen`
-
-English:
-theorem totallySeparatedSpace_iff_exists_isClopen
-  given: {α : Type*} [TopologicalSpace α]
-  proof: by
-  simp only [totallySeparatedSpace_iff, IsTotallySeparated, Set.Pairwise, mem_univ, true_implies]
-  refine forall₃_congr fun x y _ =>
-    ⟨fun ⟨U, V, hU, hV, Ux, Vy, f, disj⟩ => ?_, fun ⟨U, hU, Ux, Ucy⟩ => ?_⟩
-  · exact ⟨U, isClopen_of_disjoint_cover_open f hU hV disj,
-      Ux, fun Uy => Set.disjoint_iff.mp disj ⟨Uy, Vy⟩⟩
-  · exact ⟨U, Uᶜ, hU.2, hU.compl.2, Ux, Ucy, (Set.union_compl_self U).ge, disjoint_compl_right⟩
-
-中文:
-定理 totallySeparatedSpace_iff_存在_isClopen
-  条件: {α : 类型} [拓扑空间 α]
-  证明: by
-  simp only [totallySeparatedSpace_iff, IsTotallySeparated, Set.Pairwise, mem_univ, true_implies]
-  refine forall₃_congr fun x y _ =>
-    ⟨fun ⟨U, V, hU, hV, Ux, Vy, f, disj⟩ => ?_, fun ⟨U, hU, Ux, Ucy⟩ => ?_⟩
-  · exact ⟨U, isClopen_of_disjoint_cover_open f hU hV disj,
-      Ux, fun Uy => Set.disjoint_iff.mp disj ⟨Uy, Vy⟩⟩
-  · exact ⟨U, Uᶜ, hU.2, hU.compl.2, Ux, Ucy, (Set.union_compl_self U).ge, disjoint_compl_right⟩
-
-Depends on / 依赖: IsTotallySeparated, Pairwise, Set.Pairwise, Set.disjoint_iff.mp, Set.union_compl_self, disjoint_compl_right, disjoint_iff, hU.compl, isClopen_of_disjoint_cover_open, mem_univ, totallySeparatedSpace_iff, true_implies, union_compl_self
+/-
+**totallySeparatedSpace_iff_exists_isClopen** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：totallySeparatedSpace_iff_exists_isClopen {α : Type*} [TopologicalSpace α]
+ : TotallySeparatedSpace α ↔ Pairwise (exists U : Set α, IsClopen U ∧ · in U ∧ ·
+ in Uᶜ)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_implies`：∀ (p : Prop), (True → p) = p
+· 使用定理 `forall₃_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → 
+Sort u_3} {p q : (a : α) → (b : β a) → γ a b → Prop},   (∀ (a : α) (b : β a) (c 
+: γ…
+· 使用定理 `isClopen_of_disjoint_cover_open`：isClopen_of_disjoint_cover_open {a b : 
+Set X} (cover : univ subseteq a union b) (ha : IsOpen a) (hb : IsOpen b) (hab : 
+Disjoint a b) : IsClo…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.disjoint_iff`：∀ {α : Type u} {s t : Set α}, Disjoint s t ↔ s ∩ t ⊆ ∅
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsClopen.compl`：IsClopen.compl (hs : IsClopen s) : IsClopen sᶜ
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Set.union_compl_self`：union_compl_self (s : Set α) : s union sᶜ = univ
+· 使用定理 `disjoint_compl_right`：disjoint_compl_right : Disjoint a aᶜ
 -/
 theorem totallySeparatedSpace_iff_exists_isClopen {α : Type*} [TopologicalSpace α] :
-    TotallySeparatedSpace α ↔ Pairwise (exists U : Set α, IsClopen U ∧ · in U ∧ · in Uᶜ) := by
+    TotallySeparatedSpace α ↔ Pairwise (∃ U : Set α, IsClopen U ∧ · ∈ U ∧ · ∈ Uᶜ) := by
   simp only [totallySeparatedSpace_iff, IsTotallySeparated, Set.Pairwise, mem_univ, true_implies]
-  refine forall₃_congr fun x y _ =>
-    ⟨fun ⟨U, V, hU, hV, Ux, Vy, f, disj⟩ => ?_, fun ⟨U, hU, Ux, Ucy⟩ => ?_⟩
+  refine forall₃_congr fun x y _ ↦
+    ⟨fun ⟨U, V, hU, hV, Ux, Vy, f, disj⟩ ↦ ?_, fun ⟨U, hU, Ux, Ucy⟩ ↦ ?_⟩
   · exact ⟨U, isClopen_of_disjoint_cover_open f hU hV disj,
-      Ux, fun Uy => Set.disjoint_iff.mp disj ⟨Uy, Vy⟩⟩
+      Ux, fun Uy ↦ Set.disjoint_iff.mp disj ⟨Uy, Vy⟩⟩
   · exact ⟨U, Uᶜ, hU.2, hU.compl.2, Ux, Ucy, (Set.union_compl_self U).ge, disjoint_compl_right⟩
-
-/--
-theorem `exists_isClopen_of_totally_separated` / 定理 `exists_isClopen_of_totally_separated`
-
-English:
-theorem exists_isClopen_of_totally_separated
-  statement: {α : Type*} [TopologicalSpace α]
-  proof: totallySeparatedSpace_iff_exists_isClopen.mp ‹_›
-
-中文:
-定理 存在_isClopen_of_totally_separated
-  结论: {α : 类型} [拓扑空间 α]
-  证明: totallySeparatedSpace_iff_exists_isClopen.mp ‹_›
-
-Depends on / 依赖: totallySeparatedSpace_iff_exists_isClopen, totallySeparatedSpace_iff_exists_isClopen.mp
+/-
+**exists_isClopen_of_totally_separated** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_isClopen_of_totally_separated {α : Type*} [TopologicalSpace α] [Tot
+allySeparatedSpace α] : Pairwise (exists U : Set α, IsClopen U ∧ · in U ∧ · in U
+ᶜ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `totallySeparatedSpace_iff_exists_isClopen`：totallySeparatedSpace_iff_exi
+sts_isClopen {α : Type*} [TopologicalSpace α] : TotallySeparatedSpace α ↔ Pairwi
+se (exists U : Set α, IsClopen …
 -/
 theorem exists_isClopen_of_totally_separated {α : Type*} [TopologicalSpace α]
-    [TotallySeparatedSpace α] : Pairwise (exists U : Set α, IsClopen U ∧ · in U ∧ · in Uᶜ) :=
+    [TotallySeparatedSpace α] : Pairwise (∃ U : Set α, IsClopen U ∧ · ∈ U ∧ · ∈ Uᶜ) :=
   totallySeparatedSpace_iff_exists_isClopen.mp ‹_›
 
 end TotallySeparated
 
 
-variable [TopologicalSpace β] [TotallyDisconnectedSpace β] {f : α -> β}
+variable [TopologicalSpace β] [TotallyDisconnectedSpace β] {f : α → β}
 
-/--
-theorem `Continuous.image_eq_of_connectedComponent_eq` / 定理 `Continuous.image_eq_of_connectedComponent_eq`
-
-English:
-theorem Continuous.image_eq_of_connectedComponent_eq
-  statement: (h : Continuous f) (a b : α)
-  proof: singleton_eq_singleton_iff.1
-    h.image_connectedComponent_eq_singleton a ▸
-      h.image_connectedComponent_eq_singleton b ▸ hab ▸ rfl
-
-中文:
-定理 连续.image_eq_of_connectedComponent_eq
-  结论: (h : 连续 f) (a b : α)
-  证明: singleton_eq_singleton_iff.1
-    h.image_connectedComponent_eq_singleton a ▸
-      h.image_connectedComponent_eq_singleton b ▸ hab ▸ rfl
-
-Depends on / 依赖: h.image_connectedComponent_eq_singleton, image_connectedComponent_eq_singleton, singleton_eq_singleton_iff
+/-
+**Continuous.image_eq_of_connectedComponent_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.image_eq_of_connectedComponent_eq (h : Continuous f) (a b : α) 
+(hab : connectedComponent a = connectedComponent b) : f a = f b
+参数：h : Continuous f；a b : α；hab : connectedComponent a = connectedComponent b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.singleton_eq_singleton_iff`：singleton_eq_singleton_iff {x y : α} : {
+x} = ({y} : Set α) ↔ x = y
+· 使用定理 `Continuous.image_connectedComponent_eq_singleton`：Continuous.image_conne
+ctedComponent_eq_singleton {β : Type*} [TopologicalSpace β] [TotallyDisconnected
+Space β] {f : α -> β} (h : Continuous …
 -/
 theorem Continuous.image_eq_of_connectedComponent_eq (h : Continuous f) (a b : α)
     (hab : connectedComponent a = connectedComponent b) : f a = f b :=
-singleton_eq_singleton_iff.1
+  singleton_eq_singleton_iff.1 <|
     h.image_connectedComponent_eq_singleton a ▸
       h.image_connectedComponent_eq_singleton b ▸ hab ▸ rfl
 
 /--
-Definition of `Continuous.connectedComponentsLift` / `Continuous.connectedComponentsLift` 的定义
-
-English:
-definition Continuous.connectedComponentsLift
-  signature: (h : Continuous f)
-  body: fun x =>
-  Quotient.liftOn' x f h.image_eq_of_connectedComponent_eq
-
-@[continuity]
-
-中文:
-定义 连续.connectedComponentsLift
-  签名: (h : 连续 f)
-  定义体: fun x =>
-  Quotient.liftOn' x f h.image_eq_of_connectedComponent_eq
-
-@[continuity]
+The lift to `connectedComponents α` of a continuous map from `α` to a totally disconnected space
 -/
-def Continuous.connectedComponentsLift (h : Continuous f) : ConnectedComponents α -> β := fun x =>
+/-
+**Continuous.connectedComponentsLift** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsLift (h : Continuous f) : ConnectedComponent
+s α -> β
+参数：h : Continuous f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.image_eq_of_connectedComponent_eq`：Continuous.image_eq_of_con
+nectedComponent_eq (h : Continuous f) (a b : α) (hab : connectedComponent a = co
+nnectedComponent b) : f a = f b
+
+--- 原说明 ---
+The lift to `connectedComponents α` of a continuous map from `α` to a totally di
+sconnected space
+-/
+def Continuous.connectedComponentsLift (h : Continuous f) : ConnectedComponents α → β := fun x =>
   Quotient.liftOn' x f h.image_eq_of_connectedComponent_eq
 
 @[continuity]
-/--
-theorem `Continuous.connectedComponentsLift_continuous` / 定理 `Continuous.connectedComponentsLift_continuous`
-
-English:
-theorem Continuous.connectedComponentsLift_continuous
-  given: (h : Continuous f)
-  proof: h.quotient_liftOn' by convert! h.image_eq_of_connectedComponent_eq
-
-@[simp]
-
-中文:
-定理 连续.connectedComponentsLift_continuous
-  条件: (h : 连续 f)
-  证明: h.quotient_liftOn' by convert! h.image_eq_of_connectedComponent_eq
-
-@[simp]
-
-Depends on / 依赖: convert, h.image_eq_of_connectedComponent_eq, h.quotient_liftOn, image_eq_of_connectedComponent_eq, quotient_liftOn
+/-
+**Continuous.connectedComponentsLift_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsLift_continuous (h : Continuous f) : Continu
+ous h.connectedComponentsLift
+参数：h : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.quotient_liftOn'`：Continuous.quotient_liftOn' {f : X -> Y} (h
+ : Continuous f) (hs : forall a b, s a b -> f a = f b) : Continuous (fun x => Qu
+otient.liftOn' x …
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `Continuous.image_eq_of_connectedComponent_eq`：Continuous.image_eq_of_con
+nectedComponent_eq (h : Continuous f) (a b : α) (hab : connectedComponent a = co
+nnectedComponent b) : f a = f b
 -/
 theorem Continuous.connectedComponentsLift_continuous (h : Continuous f) :
     Continuous h.connectedComponentsLift :=
-h.quotient_liftOn' by convert! h.image_eq_of_connectedComponent_eq
+  h.quotient_liftOn' <| by convert! h.image_eq_of_connectedComponent_eq
 
 @[simp]
-/--
-theorem `Continuous.connectedComponentsLift_apply_coe` / 定理 `Continuous.connectedComponentsLift_apply_coe`
-
-English:
-theorem Continuous.connectedComponentsLift_apply_coe
-  given: (h : Continuous f) (x : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 连续.connectedComponentsLift_apply_coe
-  条件: (h : 连续 f) (x : α)
-  证明: rfl
-
-@[simp]
+/-
+**Continuous.connectedComponentsLift_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsLift_apply_coe (h : Continuous f) (x : α) : 
+h.connectedComponentsLift x = f x
+参数：h : Continuous f；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Continuous.connectedComponentsLift_apply_coe (h : Continuous f) (x : α) :
     h.connectedComponentsLift x = f x :=
   rfl
 
 @[simp]
-/--
-theorem `Continuous.connectedComponentsLift_comp_coe` / 定理 `Continuous.connectedComponentsLift_comp_coe`
-
-English:
-theorem Continuous.connectedComponentsLift_comp_coe
-  given: (h : Continuous f)
-  proof: rfl
-
-中文:
-定理 连续.connectedComponentsLift_comp_coe
-  条件: (h : 连续 f)
-  证明: rfl
+/-
+**Continuous.connectedComponentsLift_comp_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsLift_comp_coe (h : Continuous f) : h.connect
+edComponentsLift ∘ (↑) = f
+参数：h : Continuous f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Continuous.connectedComponentsLift_comp_coe (h : Continuous f) :
     h.connectedComponentsLift ∘ (↑) = f :=
   rfl
-
-/--
-theorem `connectedComponents_lift_unique'` / 定理 `connectedComponents_lift_unique'`
-
-English:
-theorem connectedComponents_lift_unique'
-  statement: {β : Sort*} {g₁ g₂ : ConnectedComponents α -> β}
-  proof: ConnectedComponents.surjective_coe.injective_comp_right hg
-
-中文:
-定理 connectedComponents_lift_unique'
-  结论: {β : 类型层*} {g₁ g₂ : ConnectedComponents α -> β}
-  证明: ConnectedComponents.surjective_coe.injective_comp_right hg
-
-Depends on / 依赖: ConnectedComponents, ConnectedComponents.surjective_coe.injective_comp_right, injective_comp_right, surjective_coe
+/-
+**connectedComponents_lift_unique'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：connectedComponents_lift_unique' {β : Sort*} {g₁ g₂ : ConnectedComponents 
+α -> β} (hg : g₁ ∘ ((↑) : α -> ConnectedComponents α) = g₂ ∘ (↑)) : g₁ = g₂
+参数：hg : g₁ ∘ ((↑) : α -> ConnectedComponents α) = g₂ ∘ (↑)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.injective_comp_right`：∀ {α : Sort u_1} {β : Sort u_2
+} {γ : Sort u_3} {f : α → β}, Function.Surjective f → Function.Injective fun g =
+> g ∘ f
+· 使用定理 `ConnectedComponents.surjective_coe`：surjective_coe : Surjective (mk : α 
+-> ConnectedComponents α)
 -/
-theorem connectedComponents_lift_unique' {β : Sort*} {g₁ g₂ : ConnectedComponents α -> β}
-    (hg : g₁ ∘ ((↑) : α -> ConnectedComponents α) = g₂ ∘ (↑)) : g₁ = g₂ :=
+theorem connectedComponents_lift_unique' {β : Sort*} {g₁ g₂ : ConnectedComponents α → β}
+    (hg : g₁ ∘ ((↑) : α → ConnectedComponents α) = g₂ ∘ (↑)) : g₁ = g₂ :=
   ConnectedComponents.surjective_coe.injective_comp_right hg
-
-/--
-theorem `Continuous.connectedComponentsLift_unique` / 定理 `Continuous.connectedComponentsLift_unique`
-
-English:
-theorem Continuous.connectedComponentsLift_unique
-  statement: (h : Continuous f) (g : ConnectedComponents α -> β)
-  proof: connectedComponents_lift_unique' hg.trans h.connectedComponentsLift_comp_coe.symm
-
-中文:
-定理 连续.connectedComponentsLift_unique
-  结论: (h : 连续 f) (g : ConnectedComponents α -> β)
-  证明: connectedComponents_lift_unique' hg.trans h.connectedComponentsLift_comp_coe.symm
-
-Depends on / 依赖: connectedComponentsLift_comp_coe, connectedComponents_lift_unique, h.connectedComponentsLift_comp_coe.symm, hg.trans
+/-
+**Continuous.connectedComponentsLift_unique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsLift_unique (h : Continuous f) (g : Connecte
+dComponents α -> β) (hg : g ∘ (↑) = f) : g = h.connectedComponentsLift
+参数：h : Continuous f；g : ConnectedComponents α -> β；hg : g ∘ (↑) = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `connectedComponents_lift_unique'`：connectedComponents_lift_unique' {β : 
+Sort*} {g₁ g₂ : ConnectedComponents α -> β} (hg : g₁ ∘ ((↑) : α -> ConnectedComp
+onents α) = g₂ ∘ (↑)) …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Continuous.connectedComponentsLift_comp_coe`：Continuous.connectedCompone
+ntsLift_comp_coe (h : Continuous f) : h.connectedComponentsLift ∘ (↑) = f
 -/
-theorem Continuous.connectedComponentsLift_unique (h : Continuous f) (g : ConnectedComponents α -> β)
+theorem Continuous.connectedComponentsLift_unique (h : Continuous f) (g : ConnectedComponents α → β)
     (hg : g ∘ (↑) = f) : g = h.connectedComponentsLift :=
-connectedComponents_lift_unique' hg.trans h.connectedComponentsLift_comp_coe.symm
-
-/--
-Instance `ConnectedComponents.totallyDisconnectedSpace` / 实例 `ConnectedComponents.totallyDisconnectedSpace`
-
-English:
-instance ConnectedComponents.totallyDisconnectedSpace
-  signature: :
-  body: by
-  rw [totallyDisconnectedSpace_iff_connectedComponent_singleton]
-  refine ConnectedComponents.surjective_coe.forall.2 fun x => ?_
-  rw [← ConnectedComponents.isQuotientMap_coe.image_connectedComponent]; rw [←
-    connectedComponents_preimage_singleton]; rw [image_preimage_eq _ ConnectedComponents.surjective_coe]
-  refine ConnectedComponents.surjective_coe.forall.2 fun y => ?_
-  rw [connectedComponents_preimage_singleton]
-  exact isConnected_connectedComponent
-
-中文:
-实例 ConnectedComponents.totallyDisconnectedSpace
-  签名: :
-  定义体: by
-  rw [totallyDisconnectedSpace_iff_connectedComponent_singleton]
-  refine ConnectedComponents.surjective_coe.forall.2 fun x => ?_
-  rw [← ConnectedComponents.isQuotientMap_coe.image_connectedComponent]; rw [←
-    connectedComponents_preimage_singleton]; rw [image_preimage_eq _ ConnectedComponents.surjective_coe]
-  refine ConnectedComponents.surjective_coe.forall.2 fun y => ?_
-  rw [connectedComponents_preimage_singleton]
-  exact isConnected_connectedComponent
-
-Depends on / 依赖: ConnectedComponents, ConnectedComponents.isQuotientMap_coe.image_connectedComponent, ConnectedComponents.surjective_coe, ConnectedComponents.surjective_coe.forall, connectedComponents_preimage_singleton, image_connectedComponent, image_preimage_eq, isConnected_connectedComponent, isQuotientMap_coe, surjective_coe, totallyDisconnectedSpace_iff_connectedComponent_singleton
+  connectedComponents_lift_unique' <| hg.trans h.connectedComponentsLift_comp_coe.symm
+/-
+**ConnectedComponents.totallyDisconnectedSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ConnectedComponents.totallyDisconnectedSpace : TotallyDisconnectedSpace (C
+onnectedComponents α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `totallyDisconnectedSpace_iff_connectedComponent_singleton`：totallyDiscon
+nectedSpace_iff_connectedComponent_singleton : TotallyDisconnectedSpace α ↔ fora
+ll x : α, connectedComponent x = {x}
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `ConnectedComponents.surjective_coe`：surjective_coe : Surjective (mk : α 
+-> ConnectedComponents α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Topology.IsCoinducing.image_connectedComponent`：Topology.IsCoinducing.im
+age_connectedComponent {f : α -> β} (hf : IsCoinducing f) (h_fibers : forall y :
+ β, IsConnected (f ⁻¹' {y})) (a : α)…
+· 使用定理 `Topology.IsQuotientMap.isCoinducing`：∀ {X : Type u_3} {Y : Type u_4} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.I
+sQuotientMap f → Topology…
+· 使用定理 `ConnectedComponents.isQuotientMap_coe`：isQuotientMap_coe : IsQuotientMap
+ (mk : α -> ConnectedComponents α)
+· 使用定理 `connectedComponents_preimage_singleton`：connectedComponents_preimage_sin
+gleton {x : α} : (↑) ⁻¹' ({↑x} : Set (ConnectedComponents α)) = connectedCompone
+nt x
+· 使用定理 `isConnected_connectedComponent`：isConnected_connectedComponent {x : α} :
+ IsConnected (connectedComponent x)
+· 使用定理 `Set.image_preimage_eq`：image_preimage_eq {f : α -> β} (s : Set β) (h : S
+urjective f) : f '' f ⁻¹' s = s
 -/
 instance ConnectedComponents.totallyDisconnectedSpace :
     TotallyDisconnectedSpace (ConnectedComponents α) := by
   rw [totallyDisconnectedSpace_iff_connectedComponent_singleton]
   refine ConnectedComponents.surjective_coe.forall.2 fun x => ?_
-  rw [← ConnectedComponents.isQuotientMap_coe.image_connectedComponent]; rw [←
-    connectedComponents_preimage_singleton]; rw [image_preimage_eq _ ConnectedComponents.surjective_coe]
+  rw [← ConnectedComponents.isQuotientMap_coe.image_connectedComponent, ←
+    connectedComponents_preimage_singleton, image_preimage_eq _ ConnectedComponents.surjective_coe]
   refine ConnectedComponents.surjective_coe.forall.2 fun y => ?_
   rw [connectedComponents_preimage_singleton]
   exact isConnected_connectedComponent
 
-/--
-Definition of `Continuous.connectedComponentsMap` / `Continuous.connectedComponentsMap` 的定义
+/-- Functoriality of `connectedComponents` -/
+/-
+**Continuous.connectedComponentsMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsMap {β : Type*} [TopologicalSpace β] {f : α 
+-> β} (h : Continuous f) : ConnectedComponents α -> ConnectedComponents β
+参数：h : Continuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Continuous.connectedComponentsMap
-  signature: {β : Type*} [TopologicalSpace β] {f : α -> β}
-  body: Continuous.connectedComponentsLift (ConnectedComponents.continuous_coe.comp h)
-
-@[simp]
-
-中文:
-定义 连续.connectedComponentsMap
-  签名: {β : 类型} [拓扑空间 β] {f : α -> β}
-  定义体: Continuous.connectedComponentsLift (ConnectedComponents.continuous_coe.comp h)
-
-@[simp]
-
-Depends on / 依赖: ConnectedComponents, ConnectedComponents.continuous_coe.comp, Continuous, Continuous.connectedComponentsLift, connectedComponentsLift, continuous_coe
+--- 原说明 ---
+Functoriality of `connectedComponents`
 -/
-def Continuous.connectedComponentsMap {β : Type*} [TopologicalSpace β] {f : α -> β}
-    (h : Continuous f) : ConnectedComponents α -> ConnectedComponents β :=
+def Continuous.connectedComponentsMap {β : Type*} [TopologicalSpace β] {f : α → β}
+    (h : Continuous f) : ConnectedComponents α → ConnectedComponents β :=
   Continuous.connectedComponentsLift (ConnectedComponents.continuous_coe.comp h)
 
 @[simp]
-/--
-lemma `Continuous.connectedComponentsMap_mk` / 引理 `Continuous.connectedComponentsMap_mk`
-
-English:
-lemma Continuous.connectedComponentsMap_mk
-  statement: {β : Type*} [TopologicalSpace β] {f : α -> β}
-  proof: rfl
-
-中文:
-引理 连续.connectedComponentsMap_mk
-  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
-  证明: rfl
+/-
+**Continuous.connectedComponentsMap_mk** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsMap_mk {β : Type*} [TopologicalSpace β] {f :
+ α -> β} (hf : Continuous f) (x : α) : hf.connectedComponentsMap (.mk x) = .mk (
+f x)
+参数：hf : Continuous f；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Continuous.connectedComponentsMap_mk {β : Type*} [TopologicalSpace β] {f : α -> β}
+lemma Continuous.connectedComponentsMap_mk {β : Type*} [TopologicalSpace β] {f : α → β}
     (hf : Continuous f) (x : α) :
     hf.connectedComponentsMap (.mk x) = .mk (f x) :=
   rfl
-
-/--
-theorem `Continuous.connectedComponentsMap_continuous` / 定理 `Continuous.connectedComponentsMap_continuous`
-
-English:
-theorem Continuous.connectedComponentsMap_continuous
-  statement: {β : Type*} [TopologicalSpace β] {f : α -> β}
-  proof: Continuous.connectedComponentsLift_continuous (ConnectedComponents.continuous_coe.comp h)
-
-中文:
-定理 连续.connectedComponentsMap_continuous
-  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
-  证明: Continuous.connectedComponentsLift_continuous (ConnectedComponents.continuous_coe.comp h)
-
-Depends on / 依赖: ConnectedComponents, ConnectedComponents.continuous_coe.comp, Continuous, Continuous.connectedComponentsLift_continuous, connectedComponentsLift_continuous, continuous_coe
+/-
+**Continuous.connectedComponentsMap_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsMap_continuous {β : Type*} [TopologicalSpace
+ β] {f : α -> β} (h : Continuous f) : Continuous h.connectedComponentsMap
+参数：h : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.connectedComponentsLift_continuous`：Continuous.connectedCompo
+nentsLift_continuous (h : Continuous f) : Continuous h.connectedComponentsLift
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `ConnectedComponents.continuous_coe`：continuous_coe : Continuous (mk : α 
+-> ConnectedComponents α)
 -/
-theorem Continuous.connectedComponentsMap_continuous {β : Type*} [TopologicalSpace β] {f : α -> β}
+theorem Continuous.connectedComponentsMap_continuous {β : Type*} [TopologicalSpace β] {f : α → β}
     (h : Continuous f) : Continuous h.connectedComponentsMap :=
   Continuous.connectedComponentsLift_continuous (ConnectedComponents.continuous_coe.comp h)
-
-/--
-lemma `Topology.IsCoinducing.connectedComponentsMap` / 引理 `Topology.IsCoinducing.connectedComponentsMap`
-
-English:
-lemma Topology.IsCoinducing.connectedComponentsMap
-  statement: {β : Type*} [TopologicalSpace β] {f : α -> β}
-  proof: by
-  rw [← ConnectedComponents.isQuotientMap_coe.isCoinducing.of_comp_iff]
-  exact ConnectedComponents.isQuotientMap_coe.isCoinducing.comp hf
-
-@[simp]
-
-中文:
-引理 拓扑.是余inducing.connectedComponentsMap
-  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
-  证明: by
-  rw [← ConnectedComponents.isQuotientMap_coe.isCoinducing.of_comp_iff]
-  exact ConnectedComponents.isQuotientMap_coe.isCoinducing.comp hf
-
-@[simp]
-
-Depends on / 依赖: ConnectedComponents, ConnectedComponents.isQuotientMap_coe.isCoinducing.comp, ConnectedComponents.isQuotientMap_coe.isCoinducing.of_comp_iff, isCoinducing, isQuotientMap_coe, of_comp_iff
+/-
+**Topology.IsCoinducing.connectedComponentsMap** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsCoinducing.connectedComponentsMap {β : Type*} [TopologicalSpace
+ β] {f : α -> β} (hf : IsCoinducing f) : IsCoinducing hf.continuous.connectedCom
+ponentsMap
+参数：hf : IsCoinducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsCoinducing.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X
+ → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsCo
+inducing f → Continuou…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsCoinducing.of_comp_iff`：∀ {X : Type u_1} {Y : Type u_2} {Z : 
+Type u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topolo
+gicalSpace Y] [inst_2 :…
+· 使用定理 `Topology.IsQuotientMap.isCoinducing`：∀ {X : Type u_3} {Y : Type u_4} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.I
+sQuotientMap f → Topology…
+· 使用定理 `ConnectedComponents.isQuotientMap_coe`：isQuotientMap_coe : IsQuotientMap
+ (mk : α -> ConnectedComponents α)
+· 使用定理 `Topology.IsCoinducing.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_
+3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalSp
+ace Y] [inst_2 :…
 -/
-lemma Topology.IsCoinducing.connectedComponentsMap {β : Type*} [TopologicalSpace β] {f : α -> β}
+lemma Topology.IsCoinducing.connectedComponentsMap {β : Type*} [TopologicalSpace β] {f : α → β}
     (hf : IsCoinducing f) :
     IsCoinducing hf.continuous.connectedComponentsMap := by
   rw [← ConnectedComponents.isQuotientMap_coe.isCoinducing.of_comp_iff]
   exact ConnectedComponents.isQuotientMap_coe.isCoinducing.comp hf
 
 @[simp]
-/--
-lemma `Continuous.connectedComponentsMap_surjective` / 引理 `Continuous.connectedComponentsMap_surjective`
-
-English:
-lemma Continuous.connectedComponentsMap_surjective
-  statement: {β : Type*} [TopologicalSpace β] {f : α -> β}
-  proof: Quotient.lift_surjective _ _ ConnectedComponents.surjective_coe.comp h
-
-中文:
-引理 连续.connectedComponentsMap_surjective
-  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
-  证明: Quotient.lift_surjective _ _ ConnectedComponents.surjective_coe.comp h
-
-Depends on / 依赖: ConnectedComponents, ConnectedComponents.surjective_coe.comp, Quotient, Quotient.lift_surjective, lift_surjective, surjective_coe
+/-
+**Continuous.connectedComponentsMap_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Continuous.connectedComponentsMap_surjective {β : Type*} [TopologicalSpace
+ β] {f : α -> β} (hf : Continuous f) (h : Surjective f) : Surjective hf.connecte
+dComponentsMap
+参数：hf : Continuous f；h : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.lift_surjective`：Quotient.lift_surjective {α β : Sort*} {s : Se
+toid α} (f : α -> β) (h : forall (a b : α), a ≈ b -> f a = f b) (hf : Function.S
+urjective f) :…
+· 使用定理 `Continuous.image_eq_of_connectedComponent_eq`：Continuous.image_eq_of_con
+nectedComponent_eq (h : Continuous f) (a b : α) (hab : connectedComponent a = co
+nnectedComponent b) : f a = f b
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `ConnectedComponents.surjective_coe`：surjective_coe : Surjective (mk : α 
+-> ConnectedComponents α)
 -/
-lemma Continuous.connectedComponentsMap_surjective {β : Type*} [TopologicalSpace β] {f : α -> β}
+lemma Continuous.connectedComponentsMap_surjective {β : Type*} [TopologicalSpace β] {f : α → β}
     (hf : Continuous f) (h : Surjective f) :
     Surjective hf.connectedComponentsMap :=
-Quotient.lift_surjective _ _ ConnectedComponents.surjective_coe.comp h
-
-/--
-lemma `Topology.IsCoinducing.connectedComponentsMap_bijective` / 引理 `Topology.IsCoinducing.connectedComponentsMap_bijective`
-
-English:
-lemma Topology.IsCoinducing.connectedComponentsMap_bijective
-  statement: {β : Type*} [TopologicalSpace β]
-  proof: by
-  refine ⟨fun x y h => ?_, Continuous.connectedComponentsMap_surjective _ fun y => (hf' y).nonempty⟩
-  obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
-  obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
-  simp_all [← hf.preimage_connectedComponent hf']
-
-中文:
-引理 拓扑.是余inducing.connectedComponentsMap_bijective
-  结论: {β : 类型} [拓扑空间 β]
-  证明: by
-  refine ⟨fun x y h => ?_, Continuous.connectedComponentsMap_surjective _ fun y => (hf' y).nonempty⟩
-  obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
-  obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
-  simp_all [← hf.preimage_connectedComponent hf']
-
-Depends on / 依赖: ConnectedComponents, ConnectedComponents.surjective_coe, Continuous, Continuous.connectedComponentsMap_surjective, connectedComponentsMap_surjective, hf.preimage_connectedComponent, nonempty, preimage_connectedComponent, surjective_coe
+  Quotient.lift_surjective _ _ <| ConnectedComponents.surjective_coe.comp h
+/-
+**Topology.IsCoinducing.connectedComponentsMap_bijective** 是 Mathlib 中的一个引理，位于命名
+空间 ``。
+形式化陈述：Topology.IsCoinducing.connectedComponentsMap_bijective {β : Type*} [Topolo
+gicalSpace β] {f : α -> β} (hf : IsCoinducing f) (hf' : forall y, IsConnected (f
+ ⁻¹' {y})) : hf.continuous.connectedComponentsMap.Bijective
+参数：hf : IsCoinducing f；hf' : forall y, IsConnected (f ⁻¹' {y})。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsCoinducing.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X
+ → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsCo
+inducing f → Continuou…
+· 使用定理 `ConnectedComponents.surjective_coe`：surjective_coe : Surjective (mk : α 
+-> ConnectedComponents α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsCoinducing.preimage_connectedComponent`：Topology.IsCoinducing
+.preimage_connectedComponent (hf : IsCoinducing f) (h_fibers : forall y : β, IsC
+onnected (f ⁻¹' {y})) (a : α) : f ⁻¹' c…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Continuous.connectedComponentsMap_surjective`：Continuous.connectedCompon
+entsMap_surjective {β : Type*} [TopologicalSpace β] {f : α -> β} (hf : Continuou
+s f) (h : Surjective f) : Surjecti…
+· 使用定理 `IsConnected.nonempty`：IsConnected.nonempty {s : Set α} (h : IsConnected 
+s) : s.Nonempty
 -/
 lemma Topology.IsCoinducing.connectedComponentsMap_bijective {β : Type*} [TopologicalSpace β]
-    {f : α -> β} (hf : IsCoinducing f) (hf' : forall y, IsConnected (f ⁻¹' {y})) :
+    {f : α → β} (hf : IsCoinducing f) (hf' : ∀ y, IsConnected (f ⁻¹' {y})) :
     hf.continuous.connectedComponentsMap.Bijective := by
-  refine ⟨fun x y h => ?_, Continuous.connectedComponentsMap_surjective _ fun y => (hf' y).nonempty⟩
+  refine ⟨fun x y h ↦ ?_, Continuous.connectedComponentsMap_surjective _ fun y ↦ (hf' y).nonempty⟩
   obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
   obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
   simp_all [← hf.preimage_connectedComponent hf']
 
-/--
-theorem `IsPreconnected.constant` / 定理 `IsPreconnected.constant`
+/-- A preconnected set `s` has the property that every map to a
+discrete space that is continuous on `s` is constant on `s` -/
+/-
+**IsPreconnected.constant** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.constant {Y : Type*} [TopologicalSpace Y] [DiscreteTopology
+ Y] {s : Set α} (hs : IsPreconnected s) {f : α -> Y} (hf : ContinuousOn f s) {x 
+y : α} (hx : x in s) (hy : y in s) : f x = f y
+参数：hs : IsPreconnected s；hf : ContinuousOn f s；hx : x in s；hy : y in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.subsingleton`：IsPreconnected.subsingleton [TotallyDisconn
+ectedSpace α] {s : Set α} (h : IsPreconnected s) : s.Subsingleton
+· 使用定理 `TotallySeparatedSpace.totallyDisconnectedSpace`：∀ (α : Type u) [inst : T
+opologicalSpace α] [TotallySeparatedSpace α], TotallyDisconnectedSpace α
+· 使用定理 `TotallySeparatedSpace.of_discrete`：∀ (α : Type u_3) [inst : TopologicalS
+pace α] [DiscreteTopology α], TotallySeparatedSpace α
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 
-English:
-theorem IsPreconnected.constant
-  statement: {Y : Type*} [TopologicalSpace Y] [DiscreteTopology Y] {s : Set α}
-  proof: (hs.image f hf).subsingleton (mem_image_of_mem f hx) (mem_image_of_mem f hy)
-
-中文:
-定理 是预连通.constant
-  结论: {Y : 类型} [拓扑空间 Y] [离散拓扑 Y] {s : 集合 α}
-  证明: (hs.image f hf).subsingleton (mem_image_of_mem f hx) (mem_image_of_mem f hy)
-
-Depends on / 依赖: hs.image, mem_image_of_mem, subsingleton
+--- 原说明 ---
+A preconnected set `s` has the property that every map to a
+discrete space that is continuous on `s` is constant on `s`
 -/
 theorem IsPreconnected.constant {Y : Type*} [TopologicalSpace Y] [DiscreteTopology Y] {s : Set α}
-    (hs : IsPreconnected s) {f : α -> Y} (hf : ContinuousOn f s) {x y : α} (hx : x in s)
-    (hy : y in s) : f x = f y :=
+    (hs : IsPreconnected s) {f : α → Y} (hf : ContinuousOn f s) {x y : α} (hx : x ∈ s)
+    (hy : y ∈ s) : f x = f y :=
   (hs.image f hf).subsingleton (mem_image_of_mem f hx) (mem_image_of_mem f hy)
 
-/--
-theorem `PreconnectedSpace.constant` / 定理 `PreconnectedSpace.constant`
+/-- A `PreconnectedSpace` version of `isPreconnected.constant` -/
+/-
+**PreconnectedSpace.constant** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PreconnectedSpace.constant {Y : Type*} [TopologicalSpace Y] [DiscreteTopol
+ogy Y] (hp : PreconnectedSpace α) {f : α -> Y} (hf : Continuous f) {x y : α} : f
+ x = f y
+参数：hp : PreconnectedSpace α；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.constant`：IsPreconnected.constant {Y : Type*} [Topologica
+lSpace Y] [DiscreteTopology Y] {s : Set α} (hs : IsPreconnected s) {f : α -> Y} 
+(hf : Continu…
+· 使用定理 `PreconnectedSpace.isPreconnected_univ`：∀ {α : Type u} {inst : Topologica
+lSpace α} [self : PreconnectedSpace α], IsPreconnected Set.univ
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `trivial`：True
 
-English:
-theorem PreconnectedSpace.constant
-  statement: {Y : Type*} [TopologicalSpace Y] [DiscreteTopology Y]
-  proof: IsPreconnected.constant hp.isPreconnected_univ (Continuous.continuousOn hf) trivial trivial
-
-中文:
-定理 预连通空间.constant
-  结论: {Y : 类型} [拓扑空间 Y] [离散拓扑 Y]
-  证明: IsPreconnected.constant hp.isPreconnected_univ (Continuous.continuousOn hf) trivial trivial
-
-Depends on / 依赖: Continuous, Continuous.continuousOn, IsPreconnected, IsPreconnected.constant, constant, continuousOn, hp.isPreconnected_univ, isPreconnected_univ
+--- 原说明 ---
+A `PreconnectedSpace` version of `isPreconnected.constant`
 -/
 theorem PreconnectedSpace.constant {Y : Type*} [TopologicalSpace Y] [DiscreteTopology Y]
-    (hp : PreconnectedSpace α) {f : α -> Y} (hf : Continuous f) {x y : α} : f x = f y :=
+    (hp : PreconnectedSpace α) {f : α → Y} (hf : Continuous f) {x y : α} : f x = f y :=
   IsPreconnected.constant hp.isPreconnected_univ (Continuous.continuousOn hf) trivial trivial
 
-/--
-theorem `IsPreconnected.constant_of_mapsTo` / 定理 `IsPreconnected.constant_of_mapsTo`
+/-- Refinement of `IsPreconnected.constant` only assuming the map factors through a
+discrete subset of the target. -/
+/-
+**IsPreconnected.constant_of_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.constant_of_mapsTo {S : Set α} (hS : IsPreconnected S) {β} 
+[TopologicalSpace β] {T : Set β} (hT : IsDiscrete T) {f : α -> β} (hc : Continuo
+usOn f S) (hTm : MapsTo f S T) {x y : α} (hx : x in S) (hy : y in S) : f x = f y
+参数：hS : IsPreconnected S；hT : IsDiscrete T；hc : ContinuousOn f S；hTm : MapsTo f 
+S T；hx : x in S；hy : y in S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PreconnectedSpace.constant`：PreconnectedSpace.constant {Y : Type*} [Topo
+logicalSpace Y] [DiscreteTopology Y] (hp : PreconnectedSpace α) {f : α -> Y} (hf
+ : Continuous f)…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `isDiscrete_iff_discreteTopology`：isDiscrete_iff_discreteTopology : IsDis
+crete s ↔ DiscreteTopology s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isPreconnected_iff_preconnectedSpace`：isPreconnected_iff_preconnectedSpa
+ce {s : Set α} : IsPreconnected s ↔ PreconnectedSpace s
+· 使用定理 `ContinuousOn.mapsToRestrict`：ContinuousOn.mapsToRestrict {t : Set β} (hf
+ : ContinuousOn f s) (ht : MapsTo f s t) : Continuous (ht.restrict f s t)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_inj`：coe_inj {a b : Subtype p} : (a : α) = b ↔ a = b
 
-English:
-theorem IsPreconnected.constant_of_mapsTo
-  statement: {S : Set α} (hS : IsPreconnected S)
-  proof: by
-  let F : S -> T := hTm.restrict f S T
-  suffices F ⟨x, hx⟩ = F ⟨y, hy⟩ by rwa [← Subtype.coe_inj] at this
-  rw [isDiscrete_iff_discreteTopology] at hT
-  exact (isPreconnected_iff_preconnectedSpace.mp hS).constant (hc.mapsToRestrict _)
-
-中文:
-定理 是预连通.constant_of_mapsTo
-  结论: {S : 集合 α} (hS : 是预连通 S)
-  证明: by
-  let F : S -> T := hTm.restrict f S T
-  suffices F ⟨x, hx⟩ = F ⟨y, hy⟩ by rwa [← Subtype.coe_inj] at this
-  rw [isDiscrete_iff_discreteTopology] at hT
-  exact (isPreconnected_iff_preconnectedSpace.mp hS).constant (hc.mapsToRestrict _)
-
-Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj, constant, hTm.restrict, hc.mapsToRestrict, isDiscrete_iff_discreteTopology, isPreconnected_iff_preconnectedSpace, isPreconnected_iff_preconnectedSpace.mp, mapsToRestrict, restrict
+--- 原说明 ---
+Refinement of `IsPreconnected.constant` only assuming the map factors through a
+discrete subset of the target.
 -/
 theorem IsPreconnected.constant_of_mapsTo {S : Set α} (hS : IsPreconnected S)
-    {β} [TopologicalSpace β] {T : Set β} (hT : IsDiscrete T) {f : α -> β} (hc : ContinuousOn f S)
-    (hTm : MapsTo f S T) {x y : α} (hx : x in S) (hy : y in S) : f x = f y := by
-  let F : S -> T := hTm.restrict f S T
+    {β} [TopologicalSpace β] {T : Set β} (hT : IsDiscrete T) {f : α → β} (hc : ContinuousOn f S)
+    (hTm : MapsTo f S T) {x y : α} (hx : x ∈ S) (hy : y ∈ S) : f x = f y := by
+  let F : S → T := hTm.restrict f S T
   suffices F ⟨x, hx⟩ = F ⟨y, hy⟩ by rwa [← Subtype.coe_inj] at this
   rw [isDiscrete_iff_discreteTopology] at hT
   exact (isPreconnected_iff_preconnectedSpace.mp hS).constant (hc.mapsToRestrict _)
 
-/--
-theorem `IsPreconnected.eqOn_const_of_mapsTo` / 定理 `IsPreconnected.eqOn_const_of_mapsTo`
+/-- A version of `IsPreconnected.constant_of_mapsTo` that assumes that the codomain is nonempty and
+proves that `f` is equal to `const α y` on `S` for some `y ∈ T`. -/
+/-
+**IsPreconnected.eqOn_const_of_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.eqOn_const_of_mapsTo {S : Set α} (hS : IsPreconnected S) {β
+} [TopologicalSpace β] {T : Set β} (hT : IsDiscrete T) {f : α -> β} (hc : Contin
+uousOn f S) (hTm : MapsTo f S T) (hne : T.Nonempty) : exists y in T, EqOn f (con
+st α y) S
+参数：hS : IsPreconnected S；hT : IsDiscrete T；hc : ContinuousOn f S；hTm : MapsTo f 
+S T；hne : T.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Set.eqOn_empty`：eqOn_empty (f₁ f₂ : α -> β) : EqOn f₁ f₂ ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPreconnected.constant_of_mapsTo`：IsPreconnected.constant_of_mapsTo {S 
+: Set α} (hS : IsPreconnected S) {β} [TopologicalSpace β] {T : Set β} (hT : IsDi
+screte T) {f : α -> β} …
 
-English:
-theorem IsPreconnected.eqOn_const_of_mapsTo
-  statement: {S : Set α} (hS : IsPreconnected S)
-  proof: by
-  rcases S.eq_empty_or_nonempty with (rfl | ⟨x, hx⟩)
-  · exact hne.imp fun _ hy => ⟨hy, eqOn_empty _ _⟩
-  · exact ⟨f x, hTm hx, fun x' hx' => hS.constant_of_mapsTo hT hc hTm hx' hx⟩
-
-中文:
-定理 是预连通.eqOn_const_of_mapsTo
-  结论: {S : 集合 α} (hS : 是预连通 S)
-  证明: by
-  rcases S.eq_empty_or_nonempty with (rfl | ⟨x, hx⟩)
-  · exact hne.imp fun _ hy => ⟨hy, eqOn_empty _ _⟩
-  · exact ⟨f x, hTm hx, fun x' hx' => hS.constant_of_mapsTo hT hc hTm hx' hx⟩
-
-Depends on / 依赖: S.eq_empty_or_nonempty, constant_of_mapsTo, eqOn_empty, eq_empty_or_nonempty, hS.constant_of_mapsTo, hne.imp
+--- 原说明 ---
+A version of `IsPreconnected.constant_of_mapsTo` that assumes that the codomain 
+is nonempty and
+proves that `f` is equal to `const α y` on `S` for some `y ∈ T`.
 -/
 theorem IsPreconnected.eqOn_const_of_mapsTo {S : Set α} (hS : IsPreconnected S)
-    {β} [TopologicalSpace β] {T : Set β} (hT : IsDiscrete T) {f : α -> β} (hc : ContinuousOn f S)
-    (hTm : MapsTo f S T) (hne : T.Nonempty) : exists y in T, EqOn f (const α y) S := by
+    {β} [TopologicalSpace β] {T : Set β} (hT : IsDiscrete T) {f : α → β} (hc : ContinuousOn f S)
+    (hTm : MapsTo f S T) (hne : T.Nonempty) : ∃ y ∈ T, EqOn f (const α y) S := by
   rcases S.eq_empty_or_nonempty with (rfl | ⟨x, hx⟩)
   · exact hne.imp fun _ hy => ⟨hy, eqOn_empty _ _⟩
   · exact ⟨f x, hTm hx, fun x' hx' => hS.constant_of_mapsTo hT hc hTm hx' hx⟩
-
-/--
-theorem `IsPreconnected.isDiscrete_iff_subsingleton` / 定理 `IsPreconnected.isDiscrete_iff_subsingleton`
-
-English:
-theorem IsPreconnected.isDiscrete_iff_subsingleton
-  given: {S : Set α} (hS : IsPreconnected S)
-  proof: by
-    have : DiscreteTopology S := isDiscrete_iff_discreteTopology.mp h
-    have : PreconnectedSpace S := isPreconnected_iff_preconnectedSpace.mp hS
-    have : Subsingleton S := subsingleton_of_preconnected_totallyDisconnected
-    simpa using this
-  mpr h := h.isDiscrete
-
-中文:
-定理 是预连通.isDiscrete_iff_subsingleton
-  条件: {S : 集合 α} (hS : 是预连通 S)
-  证明: by
-    have : DiscreteTopology S := isDiscrete_iff_discreteTopology.mp h
-    have : PreconnectedSpace S := isPreconnected_iff_preconnectedSpace.mp hS
-    have : Subsingleton S := subsingleton_of_preconnected_totallyDisconnected
-    simpa using this
-  mpr h := h.isDiscrete
-
-Depends on / 依赖: DiscreteTopology, PreconnectedSpace, Subsingleton, h.isDiscrete, isDiscrete, isDiscrete_iff_discreteTopology, isDiscrete_iff_discreteTopology.mp, isPreconnected_iff_preconnectedSpace, isPreconnected_iff_preconnectedSpace.mp, subsingleton_of_preconnected_totallyDisconnected
+/-
+**IsPreconnected.isDiscrete_iff_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.isDiscrete_iff_subsingleton {S : Set α} (hS : IsPreconnecte
+d S) : IsDiscrete S ↔ S.Subsingleton where mp h
+参数：hS : IsPreconnected S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `isDiscrete_iff_discreteTopology`：isDiscrete_iff_discreteTopology : IsDis
+crete s ↔ DiscreteTopology s
+· 使用定理 `isPreconnected_iff_preconnectedSpace`：isPreconnected_iff_preconnectedSpa
+ce {s : Set α} : IsPreconnected s ↔ PreconnectedSpace s
+· 使用定理 `subsingleton_of_preconnected_totallyDisconnected`：subsingleton_of_precon
+nected_totallyDisconnected [PreconnectedSpace α] [TotallyDisconnectedSpace α] : 
+Subsingleton α
+· 使用定理 `TotallySeparatedSpace.totallyDisconnectedSpace`：∀ (α : Type u) [inst : T
+opologicalSpace α] [TotallySeparatedSpace α], TotallyDisconnectedSpace α
+· 使用定理 `TotallySeparatedSpace.of_discrete`：∀ (α : Type u_3) [inst : TopologicalS
+pace α] [DiscreteTopology α], TotallySeparatedSpace α
+· 使用引理 `Set.Subsingleton.isDiscrete`：Set.Subsingleton.isDiscrete (hs : s.Subsing
+leton) : IsDiscrete s
 -/
 theorem IsPreconnected.isDiscrete_iff_subsingleton {S : Set α} (hS : IsPreconnected S) :
     IsDiscrete S ↔ S.Subsingleton where

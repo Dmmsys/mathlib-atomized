@@ -53,24 +53,22 @@ namespace LocalizerMorphism
 
 variable (Φ : LocalizerMorphism W₁ W₂)
 
-/--
-Definition of `RightResolution` / `RightResolution` 的定义
+/-- The category of right resolutions of an object in the target category
+of a localizer morphism. -/
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+CategoryTheory.LocalizerMorphism`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} → CategoryTheory.LocalizerMorphism W₁ W₂ → C₂ → Type (max u_1 
+v_2)
+参数：max u_1 v_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RightResolution
-  parameters: (X₂ : C₂)
-  axioms and operations (3):
-    - {X₁ : C₁}
-    - w : X₂ ⟶ Φ.functor.obj X₁
-    - hw : W₂ w
-
-中文:
-结构 RightResolution
-  参数: (X₂ : C₂)
-  公理与运算 (3 个):
-    - {X₁ : C₁}
-    - w : X₂ ⟶ Φ.functor.obj X₁
-    - hw : W₂ w
+--- 原说明 ---
+The category of right resolutions of an object in the target category
+of a localizer morphism.
 -/
 structure RightResolution (X₂ : C₂) where
   /-- an object in the source category -/
@@ -79,24 +77,22 @@ structure RightResolution (X₂ : C₂) where
   w : X₂ ⟶ Φ.functor.obj X₁
   hw : W₂ w
 
-/--
-Definition of `LeftResolution` / `LeftResolution` 的定义
+/-- The category of left resolutions of an object in the target category
+of a localizer morphism. -/
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution** 是 Mathlib 中的一个归纳类型，位于命名空间 `C
+ategoryTheory.LocalizerMorphism`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} → CategoryTheory.LocalizerMorphism W₁ W₂ → C₂ → Type (max u_1 
+v_2)
+参数：max u_1 v_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LeftResolution
-  parameters: (X₂ : C₂)
-  axioms and operations (3):
-    - {X₁ : C₁}
-    - w : Φ.functor.obj X₁ ⟶ X₂
-    - hw : W₂ w
-
-中文:
-结构 LeftResolution
-  参数: (X₂ : C₂)
-  公理与运算 (3 个):
-    - {X₁ : C₁}
-    - w : Φ.functor.obj X₁ ⟶ X₂
-    - hw : W₂ w
+--- 原说明 ---
+The category of left resolutions of an object in the target category
+of a localizer morphism.
 -/
 structure LeftResolution (X₂ : C₂) where
   /-- an object in the source category -/
@@ -106,74 +102,67 @@ structure LeftResolution (X₂ : C₂) where
   hw : W₂ w
 
 variable {Φ X₂} in
-/--
-lemma `RightResolution.mk_surjective` / 引理 `RightResolution.mk_surjective`
-
-English:
-lemma RightResolution.mk_surjective
-  given: (R : Φ.RightResolution X₂)
-  proof: ⟨_, R.w, R.hw, rfl⟩
-
-中文:
-引理 RightResolution.mk_surjective
-  条件: (R : Φ.RightResolution X₂)
-  证明: ⟨_, R.w, R.hw, rfl⟩
-
-Depends on / 依赖: R.hw
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.mk_surjective** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：∀ {C₁ : Type u_1} {C₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_
+1} C₁]   [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] {W₁ : CategoryTheory.M
+orphismProperty C₁}   {W₂ : CategoryTheory.MorphismProperty C₂} {Φ : CategoryThe
+ory.LocalizerMorphism W₁ W₂} {X₂ : C₂}   (R : Φ.RightResolution X₂), ∃ X₁ w, ∃ (
+hw : W₂ w), R = { X₁ := X₁, w := w, hw := hw }
+参数：R : Φ.RightResolution X₂；hw : W₂ w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.RightResolution.hw`：∀ {C₁ : Type u_1} {
+C₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Catego
+ryTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma RightResolution.mk_surjective (R : Φ.RightResolution X₂) :
-    exists (X₁ : C₁) (w : X₂ ⟶ Φ.functor.obj X₁) (hw : W₂ w), R = RightResolution.mk w hw :=
+    ∃ (X₁ : C₁) (w : X₂ ⟶ Φ.functor.obj X₁) (hw : W₂ w), R = RightResolution.mk w hw :=
   ⟨_, R.w, R.hw, rfl⟩
 
 variable {Φ X₂} in
-/--
-lemma `LeftResolution.mk_surjective` / 引理 `LeftResolution.mk_surjective`
-
-English:
-lemma LeftResolution.mk_surjective
-  given: (L : Φ.LeftResolution X₂)
-  proof: ⟨_, L.w, L.hw, rfl⟩
-
-中文:
-引理 LeftResolution.mk_surjective
-  条件: (L : Φ.LeftResolution X₂)
-  证明: ⟨_, L.w, L.hw, rfl⟩
-
-Depends on / 依赖: L.hw
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.mk_surjective** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：∀ {C₁ : Type u_1} {C₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_
+1} C₁]   [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] {W₁ : CategoryTheory.M
+orphismProperty C₁}   {W₂ : CategoryTheory.MorphismProperty C₂} {Φ : CategoryThe
+ory.LocalizerMorphism W₁ W₂} {X₂ : C₂}   (L : Φ.LeftResolution X₂), ∃ X₁ w, ∃ (h
+w : W₂ w), L = { X₁ := X₁, w := w, hw := hw }
+参数：L : Φ.LeftResolution X₂；hw : W₂ w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.LeftResolution.hw`：∀ {C₁ : Type u_1} {C
+₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Categor
+yTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma LeftResolution.mk_surjective (L : Φ.LeftResolution X₂) :
-    exists (X₁ : C₁) (w : Φ.functor.obj X₁ ⟶ X₂) (hw : W₂ w), L = LeftResolution.mk w hw :=
+    ∃ (X₁ : C₁) (w : Φ.functor.obj X₁ ⟶ X₂) (hw : W₂ w), L = LeftResolution.mk w hw :=
   ⟨_, L.w, L.hw, rfl⟩
 
-/--
-Definition of `HasRightResolutions` / `HasRightResolutions` 的定义
+/-- A localizer morphism has right resolutions when any object has a right resolution. -/
+/-
+**CategoryTheory.LocalizerMorphism.HasRightResolutions** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：HasRightResolutions
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasRightResolutions
-  body: forall (X₂ : C₂), Nonempty (Φ.RightResolution X₂)
-
-中文:
-缩写 HasRightResolutions
-  定义体: forall (X₂ : C₂), Nonempty (Φ.RightResolution X₂)
-
-Depends on / 依赖: Nonempty, RightResolution
+--- 原说明 ---
+A localizer morphism has right resolutions when any object has a right resolutio
+n.
 -/
-abbrev HasRightResolutions := forall (X₂ : C₂), Nonempty (Φ.RightResolution X₂)
+abbrev HasRightResolutions := ∀ (X₂ : C₂), Nonempty (Φ.RightResolution X₂)
 
-/--
-Definition of `HasLeftResolutions` / `HasLeftResolutions` 的定义
+/-- A localizer morphism has left resolutions when any object has a left resolution. -/
+/-
+**CategoryTheory.LocalizerMorphism.HasLeftResolutions** 是 Mathlib 中的一个缩写定义，位于命名空
+间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：HasLeftResolutions
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasLeftResolutions
-  body: forall (X₂ : C₂), Nonempty (Φ.LeftResolution X₂)
-
-中文:
-缩写 HasLeftResolutions
-  定义体: forall (X₂ : C₂), Nonempty (Φ.LeftResolution X₂)
-
-Depends on / 依赖: LeftResolution, Nonempty
+--- 原说明 ---
+A localizer morphism has left resolutions when any object has a left resolution.
 -/
-abbrev HasLeftResolutions := forall (X₂ : C₂), Nonempty (Φ.LeftResolution X₂)
+abbrev HasLeftResolutions := ∀ (X₂ : C₂), Nonempty (Φ.LeftResolution X₂)
 
 namespace RightResolution
 
@@ -181,24 +170,16 @@ variable {Φ} {X₂ : C₂}
 
 /-- The type of morphisms in the category `Φ.RightResolution X₂`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.Hom** 是 Mathlib 中的一个结构，位于命名空间
+ `CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：Hom (R R' : Φ.RightResolution X₂) where /-- a morphism in the source categ
+ory -/ f : R.X₁ ⟶ R'.X₁ comm : R.w ≫ Φ.functor.map f = R'.w
+参数：R R' : Φ.RightResolution X₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R R' : Φ.RightResolution X₂)
-  axioms and operations (2):
-    - f : R.X₁ ⟶ R'.X₁
-    - comm : R.w ≫ Φ.functor.map f = R'.w  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (R R' : Φ.RightResolution X₂)
-  公理与运算 (2 个):
-    - f : R.X₁ ⟶ R'.X₁
-    - comm : R.w ≫ Φ.functor.map f = R'.w  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The type of morphisms in the category `Φ.RightResolution X₂`.
 -/
 structure Hom (R R' : Φ.RightResolution X₂) where
   /-- a morphism in the source category -/
@@ -209,62 +190,47 @@ attribute [reassoc (attr := simp)] Hom.comm
 
 /-- The identity of an object in `Φ.RightResolution X₂`. -/
 @[simps]
-/--
-Definition of `Hom.id` / `Hom.id` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.Hom.id** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.LocalizerMorphism.RightResolution.Hom`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} → {
+X₂ : C₂} → (R : Φ.RightResolution X₂) → R.Hom R
+参数：R : Φ.RightResolution X₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.id
-  signature: (R : Φ.RightResolution X₂)
-  body: 𝟙 _
-
-中文:
-定义 态射.id
-  签名: (R : Φ.RightResolution X₂)
-  定义体: 𝟙 _
+--- 原说明 ---
+The identity of an object in `Φ.RightResolution X₂`.
 -/
 def Hom.id (R : Φ.RightResolution X₂) : Hom R R where
   f := 𝟙 _
 
 /-- The composition of morphisms in `Φ.RightResolution X₂`. -/
 @[simps]
-/--
-Definition of `Hom.comp` / `Hom.comp` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.Hom.comp** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.LocalizerMorphism.RightResolution.Hom`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} →  
+             {X₂ : C₂} → {R R' R'' : Φ.RightResolution X₂} → R.Hom R' → R'.Hom R
+'' → R.Hom R''
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.comp
-  signature: {R R' R'' : Φ.RightResolution X₂}
-  body: φ.f ≫ ψ.f
-
-中文:
-定义 态射.comp
-  签名: {R R' R'' : Φ.RightResolution X₂}
-  定义体: φ.f ≫ ψ.f
+--- 原说明 ---
+The composition of morphisms in `Φ.RightResolution X₂`.
 -/
 def Hom.comp {R R' R'' : Φ.RightResolution X₂}
     (φ : Hom R R') (ψ : Hom R' R'') :
     Hom R R'' where
   f := φ.f ≫ ψ.f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (Φ.RightResolution X₂)
-  body: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[simp]
-
-中文:
-实例 :
-  签名: 范畴 (Φ.RightResolution X₂)
-  定义体: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[simp]
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.** 是 Mathlib 中的一个实例，位于命名空间 `C
+ategoryTheory.LocalizerMorphism.RightResolution`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (Φ.RightResolution X₂) where
   Hom := Hom
@@ -272,63 +238,41 @@ instance : Category (Φ.RightResolution X₂) where
   comp := Hom.comp
 
 @[simp]
-/--
-lemma `id_f` / 引理 `id_f`
-
-English:
-lemma id_f
-  given: (R : Φ.RightResolution X₂)
-  statement: Hom.f (𝟙 R) = 𝟙 R.X₁
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-引理 id_f
-  条件: (R : Φ.RightResolution X₂)
-  结论: 态射.f (𝟙 R) = 𝟙 R.X₁
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.id_f** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：id_f (R : Φ.RightResolution X₂) : Hom.f (𝟙 R) = 𝟙 R.X₁
+参数：R : Φ.RightResolution X₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_f (R : Φ.RightResolution X₂) : Hom.f (𝟙 R) = 𝟙 R.X₁ := rfl
 
 @[simp, reassoc]
-/--
-lemma `comp_f` / 引理 `comp_f`
-
-English:
-lemma comp_f
-  given: {R R' R'' : Φ.RightResolution X₂} (φ : R ⟶ R') (ψ : R' ⟶ R'')
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 comp_f
-  条件: {R R' R'' : Φ.RightResolution X₂} (φ : R ⟶ R') (ψ : R' ⟶ R'')
-  证明: rfl
-
-@[ext]
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.comp_f** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：comp_f {R R' R'' : Φ.RightResolution X₂} (φ : R ⟶ R') (ψ : R' ⟶ R'') : (φ 
+≫ ψ).f = φ.f ≫ ψ.f
+参数：φ : R ⟶ R'；ψ : R' ⟶ R''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_f {R R' R'' : Φ.RightResolution X₂} (φ : R ⟶ R') (ψ : R' ⟶ R'') :
     (φ ≫ ψ).f = φ.f ≫ ψ.f := rfl
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R R' : Φ.RightResolution X₂} {φ₁ φ₂ : R ⟶ R'} (h : φ₁.f = φ₂.f)
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {R R' : Φ.RightResolution X₂} {φ₁ φ₂ : R ⟶ R'} (h : φ₁.f = φ₂.f)
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.hom_ext** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：hom_ext {R R' : Φ.RightResolution X₂} {φ₁ φ₂ : R ⟶ R'} (h : φ₁.f = φ₂.f) :
+ φ₁ = φ₂
+参数：h : φ₁.f = φ₂.f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.RightResolution.Hom.ext`：∀ {C₁ : Type u
+_1} {C₂ : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C₁}   {inst_1 : C
+ategoryTheory.Category.{v_2, u_2} C₂} {W₁ : Ca…
 -/
 lemma hom_ext {R R' : Φ.RightResolution X₂} {φ₁ φ₂ : R ⟶ R'} (h : φ₁.f = φ₂.f) :
     φ₁ = φ₂ :=
@@ -342,24 +286,16 @@ variable {Φ} {X₂ : C₂}
 
 /-- The type of morphisms in the category `Φ.LeftResolution X₂`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.Hom** 是 Mathlib 中的一个结构，位于命名空间 
+`CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：Hom (L L' : Φ.LeftResolution X₂) where /-- a morphism in the source catego
+ry -/ f : L.X₁ ⟶ L'.X₁ comm : Φ.functor.map f ≫ L'.w = L.w
+参数：L L' : Φ.LeftResolution X₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (L L' : Φ.LeftResolution X₂)
-  axioms and operations (2):
-    - f : L.X₁ ⟶ L'.X₁
-    - comm : Φ.functor.map f ≫ L'.w = L.w  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (L L' : Φ.LeftResolution X₂)
-  公理与运算 (2 个):
-    - f : L.X₁ ⟶ L'.X₁
-    - comm : Φ.functor.map f ≫ L'.w = L.w  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The type of morphisms in the category `Φ.LeftResolution X₂`.
 -/
 structure Hom (L L' : Φ.LeftResolution X₂) where
   /-- a morphism in the source category -/
@@ -370,62 +306,47 @@ attribute [reassoc (attr := simp)] Hom.comm
 
 /-- The identity of an object in `Φ.LeftResolution X₂`. -/
 @[simps]
-/--
-Definition of `Hom.id` / `Hom.id` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.Hom.id** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.LocalizerMorphism.LeftResolution.Hom`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} → {
+X₂ : C₂} → (L : Φ.LeftResolution X₂) → L.Hom L
+参数：L : Φ.LeftResolution X₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.id
-  signature: (L : Φ.LeftResolution X₂)
-  body: 𝟙 _
-
-中文:
-定义 态射.id
-  签名: (L : Φ.LeftResolution X₂)
-  定义体: 𝟙 _
+--- 原说明 ---
+The identity of an object in `Φ.LeftResolution X₂`.
 -/
 def Hom.id (L : Φ.LeftResolution X₂) : Hom L L where
   f := 𝟙 _
 
 /-- The composition of morphisms in `Φ.LeftResolution X₂`. -/
 @[simps]
-/--
-Definition of `Hom.comp` / `Hom.comp` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.Hom.comp** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.LocalizerMorphism.LeftResolution.Hom`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} →  
+             {X₂ : C₂} → {L L' L'' : Φ.LeftResolution X₂} → L.Hom L' → L'.Hom L'
+' → L.Hom L''
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.comp
-  signature: {L L' L'' : Φ.LeftResolution X₂}
-  body: φ.f ≫ ψ.f
-
-中文:
-定义 态射.comp
-  签名: {L L' L'' : Φ.LeftResolution X₂}
-  定义体: φ.f ≫ ψ.f
+--- 原说明 ---
+The composition of morphisms in `Φ.LeftResolution X₂`.
 -/
 def Hom.comp {L L' L'' : Φ.LeftResolution X₂}
     (φ : Hom L L') (ψ : Hom L' L'') :
     Hom L L'' where
   f := φ.f ≫ ψ.f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (Φ.LeftResolution X₂)
-  body: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[simp]
-
-中文:
-实例 :
-  签名: 范畴 (Φ.LeftResolution X₂)
-  定义体: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[simp]
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.** 是 Mathlib 中的一个实例，位于命名空间 `Ca
+tegoryTheory.LocalizerMorphism.LeftResolution`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (Φ.LeftResolution X₂) where
   Hom := Hom
@@ -433,63 +354,41 @@ instance : Category (Φ.LeftResolution X₂) where
   comp := Hom.comp
 
 @[simp]
-/--
-lemma `id_f` / 引理 `id_f`
-
-English:
-lemma id_f
-  given: (L : Φ.LeftResolution X₂)
-  statement: Hom.f (𝟙 L) = 𝟙 L.X₁
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-引理 id_f
-  条件: (L : Φ.LeftResolution X₂)
-  结论: 态射.f (𝟙 L) = 𝟙 L.X₁
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.id_f** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：id_f (L : Φ.LeftResolution X₂) : Hom.f (𝟙 L) = 𝟙 L.X₁
+参数：L : Φ.LeftResolution X₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_f (L : Φ.LeftResolution X₂) : Hom.f (𝟙 L) = 𝟙 L.X₁ := rfl
 
 @[simp, reassoc]
-/--
-lemma `comp_f` / 引理 `comp_f`
-
-English:
-lemma comp_f
-  given: {L L' L'' : Φ.LeftResolution X₂} (φ : L ⟶ L') (ψ : L' ⟶ L'')
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 comp_f
-  条件: {L L' L'' : Φ.LeftResolution X₂} (φ : L ⟶ L') (ψ : L' ⟶ L'')
-  证明: rfl
-
-@[ext]
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.comp_f** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：comp_f {L L' L'' : Φ.LeftResolution X₂} (φ : L ⟶ L') (ψ : L' ⟶ L'') : (φ ≫
+ ψ).f = φ.f ≫ ψ.f
+参数：φ : L ⟶ L'；ψ : L' ⟶ L''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_f {L L' L'' : Φ.LeftResolution X₂} (φ : L ⟶ L') (ψ : L' ⟶ L'') :
     (φ ≫ ψ).f = φ.f ≫ ψ.f := rfl
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {L L' : Φ.LeftResolution X₂} {φ₁ φ₂ : L ⟶ L'} (h : φ₁.f = φ₂.f)
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {L L' : Φ.LeftResolution X₂} {φ₁ φ₂ : L ⟶ L'} (h : φ₁.f = φ₂.f)
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.hom_ext** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：hom_ext {L L' : Φ.LeftResolution X₂} {φ₁ φ₂ : L ⟶ L'} (h : φ₁.f = φ₂.f) : 
+φ₁ = φ₂
+参数：h : φ₁.f = φ₂.f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.LeftResolution.Hom.ext`：∀ {C₁ : Type u_
+1} {C₂ : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C₁}   {inst_1 : Ca
+tegoryTheory.Category.{v_2, u_2} C₂} {W₁ : Ca…
 -/
 lemma hom_ext {L L' : Φ.LeftResolution X₂} {φ₁ φ₂ : L ⟶ L'} (h : φ₁.f = φ₂.f) :
     φ₁ = φ₂ :=
@@ -501,24 +400,23 @@ variable {Φ}
 
 /-- The canonical map `Φ.LeftResolution X₂ → Φ.op.RightResolution (Opposite.op X₂)`. -/
 @[simps]
-/--
-Definition of `LeftResolution.op` / `LeftResolution.op` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.op** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} →  
+             {X₂ : C₂} → Φ.LeftResolution X₂ → Φ.op.RightResolution (Opposite.op
+ X₂)
+参数：Opposite.op X₂。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.LeftResolution.hw`：∀ {C₁ : Type u_1} {C
+₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Categor
+yTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 
-English:
-definition LeftResolution.op
-  signature: {X₂ : C₂} (L : Φ.LeftResolution X₂)
-  body: Opposite.op L.X₁
-  w := L.w.op
-  hw := L.hw
-
-中文:
-定义 LeftResolution.op
-  签名: {X₂ : C₂} (L : Φ.LeftResolution X₂)
-  定义体: Opposite.op L.X₁
-  w := L.w.op
-  hw := L.hw
-
-Depends on / 依赖: Opposite, Opposite.op
+--- 原说明 ---
+The canonical map `Φ.LeftResolution X₂ → Φ.op.RightResolution (Opposite.op X₂)`.
 -/
 def LeftResolution.op {X₂ : C₂} (L : Φ.LeftResolution X₂) :
     Φ.op.RightResolution (Opposite.op X₂) where
@@ -528,24 +426,20 @@ def LeftResolution.op {X₂ : C₂} (L : Φ.LeftResolution X₂) :
 
 /-- The canonical map `Φ.op.LeftResolution X₂ → Φ.RightResolution X₂`. -/
 @[simps]
-/--
-Definition of `LeftResolution.unop` / `LeftResolution.unop` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.unop** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} →  
+             {X₂ : C₂ᵒᵖ} → Φ.op.LeftResolution X₂ → Φ.RightResolution (Opposite.
+unop X₂)
+参数：Opposite.unop X₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftResolution.unop
-  signature: {X₂ : C₂ᵒᵖ} (L : Φ.op.LeftResolution X₂)
-  body: Opposite.unop L.X₁
-  w := L.w.unop
-  hw := L.hw
-
-中文:
-定义 LeftResolution.unop
-  签名: {X₂ : C₂ᵒᵖ} (L : Φ.op.LeftResolution X₂)
-  定义体: Opposite.unop L.X₁
-  w := L.w.unop
-  hw := L.hw
-
-Depends on / 依赖: Opposite, Opposite.unop
+--- 原说明 ---
+The canonical map `Φ.op.LeftResolution X₂ → Φ.RightResolution X₂`.
 -/
 def LeftResolution.unop {X₂ : C₂ᵒᵖ} (L : Φ.op.LeftResolution X₂) :
     Φ.RightResolution X₂.unop where
@@ -555,24 +449,23 @@ def LeftResolution.unop {X₂ : C₂ᵒᵖ} (L : Φ.op.LeftResolution X₂) :
 
 /-- The canonical map `Φ.RightResolution X₂ → Φ.op.LeftResolution (Opposite.op X₂)`. -/
 @[simps]
-/--
-Definition of `RightResolution.op` / `RightResolution.op` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.op** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} →  
+             {X₂ : C₂} → Φ.RightResolution X₂ → Φ.op.LeftResolution (Opposite.op
+ X₂)
+参数：Opposite.op X₂。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.RightResolution.hw`：∀ {C₁ : Type u_1} {
+C₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Catego
+ryTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 
-English:
-definition RightResolution.op
-  signature: {X₂ : C₂} (L : Φ.RightResolution X₂)
-  body: Opposite.op L.X₁
-  w := L.w.op
-  hw := L.hw
-
-中文:
-定义 RightResolution.op
-  签名: {X₂ : C₂} (L : Φ.RightResolution X₂)
-  定义体: Opposite.op L.X₁
-  w := L.w.op
-  hw := L.hw
-
-Depends on / 依赖: Opposite, Opposite.op
+--- 原说明 ---
+The canonical map `Φ.RightResolution X₂ → Φ.op.LeftResolution (Opposite.op X₂)`.
 -/
 def RightResolution.op {X₂ : C₂} (L : Φ.RightResolution X₂) :
     Φ.op.LeftResolution (Opposite.op X₂) where
@@ -582,24 +475,20 @@ def RightResolution.op {X₂ : C₂} (L : Φ.RightResolution X₂) :
 
 /-- The canonical map `Φ.op.RightResolution X₂ → Φ.LeftResolution X₂`. -/
 @[simps]
-/--
-Definition of `RightResolution.unop` / `RightResolution.unop` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.unop** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             {Φ : CategoryTheory.LocalizerMorphism W₁ W₂} →  
+             {X₂ : C₂ᵒᵖ} → Φ.op.RightResolution X₂ → Φ.LeftResolution (Opposite.
+unop X₂)
+参数：Opposite.unop X₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RightResolution.unop
-  signature: {X₂ : C₂ᵒᵖ} (L : Φ.op.RightResolution X₂)
-  body: Opposite.unop L.X₁
-  w := L.w.unop
-  hw := L.hw
-
-中文:
-定义 RightResolution.unop
-  签名: {X₂ : C₂ᵒᵖ} (L : Φ.op.RightResolution X₂)
-  定义体: Opposite.unop L.X₁
-  w := L.w.unop
-  hw := L.hw
-
-Depends on / 依赖: Opposite, Opposite.unop
+--- 原说明 ---
+The canonical map `Φ.op.RightResolution X₂ → Φ.LeftResolution X₂`.
 -/
 def RightResolution.unop {X₂ : C₂ᵒᵖ} (L : Φ.op.RightResolution X₂) :
     Φ.LeftResolution X₂.unop where
@@ -608,161 +497,92 @@ def RightResolution.unop {X₂ : C₂ᵒᵖ} (L : Φ.op.RightResolution X₂) :
   hw := L.hw
 
 variable (Φ)
-
-/--
-lemma `nonempty_leftResolution_iff_op` / 引理 `nonempty_leftResolution_iff_op`
-
-English:
-lemma nonempty_leftResolution_iff_op
-  given: (X₂ : C₂)
-  proof: Equiv.nonempty_congr
-    { toFun := fun L => L.op
-      invFun := fun R => R.unop }
-
-中文:
-引理 nonempty_leftResolution_iff_op
-  条件: (X₂ : C₂)
-  证明: Equiv.nonempty_congr
-    { toFun := fun L => L.op
-      invFun := fun R => R.unop }
-
-Depends on / 依赖: Equiv.nonempty_congr, L.op, R.unop, invFun, nonempty_congr
+/-
+**CategoryTheory.LocalizerMorphism.nonempty_leftResolution_iff_op** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：nonempty_leftResolution_iff_op (X₂ : C₂) : Nonempty (Φ.LeftResolution X₂) 
+↔ Nonempty (Φ.op.RightResolution (Opposite.op X₂))
+参数：X₂ : C₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
 -/
 lemma nonempty_leftResolution_iff_op (X₂ : C₂) :
     Nonempty (Φ.LeftResolution X₂) ↔ Nonempty (Φ.op.RightResolution (Opposite.op X₂)) :=
   Equiv.nonempty_congr
     { toFun := fun L => L.op
       invFun := fun R => R.unop }
-
-/--
-lemma `nonempty_rightResolution_iff_op` / 引理 `nonempty_rightResolution_iff_op`
-
-English:
-lemma nonempty_rightResolution_iff_op
-  given: (X₂ : C₂)
-  proof: Equiv.nonempty_congr
-    { toFun := fun R => R.op
-      invFun := fun L => L.unop }
-
-中文:
-引理 nonempty_rightResolution_iff_op
-  条件: (X₂ : C₂)
-  证明: Equiv.nonempty_congr
-    { toFun := fun R => R.op
-      invFun := fun L => L.unop }
-
-Depends on / 依赖: Equiv.nonempty_congr, L.unop, R.op, invFun, nonempty_congr
+/-
+**CategoryTheory.LocalizerMorphism.nonempty_rightResolution_iff_op** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：nonempty_rightResolution_iff_op (X₂ : C₂) : Nonempty (Φ.RightResolution X₂
+) ↔ Nonempty (Φ.op.LeftResolution (Opposite.op X₂))
+参数：X₂ : C₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
 -/
 lemma nonempty_rightResolution_iff_op (X₂ : C₂) :
     Nonempty (Φ.RightResolution X₂) ↔ Nonempty (Φ.op.LeftResolution (Opposite.op X₂)) :=
   Equiv.nonempty_congr
     { toFun := fun R => R.op
       invFun := fun L => L.unop }
-
-/--
-lemma `hasLeftResolutions_iff_op` / 引理 `hasLeftResolutions_iff_op`
-
-English:
-lemma hasLeftResolutions_iff_op
-  statement: Φ.HasLeftResolutions ↔ Φ.op.HasRightResolutions
-  proof: ⟨fun _ X₂ => ⟨(Classical.arbitrary (Φ.LeftResolution X₂.unop)).op⟩,
-    fun _ X₂ => ⟨(Classical.arbitrary (Φ.op.RightResolution (Opposite.op X₂))).unop⟩⟩
-
-中文:
-引理 hasLeftResolutions_iff_op
-  结论: Φ.HasLeftResolutions ↔ Φ.op.HasRightResolutions
-  证明: ⟨fun _ X₂ => ⟨(Classical.arbitrary (Φ.LeftResolution X₂.unop)).op⟩,
-    fun _ X₂ => ⟨(Classical.arbitrary (Φ.op.RightResolution (Opposite.op X₂))).unop⟩⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, LeftResolution, Opposite, Opposite.op, RightResolution, arbitrary, op.RightResolution
+/-
+**CategoryTheory.LocalizerMorphism.hasLeftResolutions_iff_op** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasLeftResolutions_iff_op : Φ.HasLeftResolutions ↔ Φ.op.HasRightResolution
+s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasLeftResolutions_iff_op : Φ.HasLeftResolutions ↔ Φ.op.HasRightResolutions :=
   ⟨fun _ X₂ => ⟨(Classical.arbitrary (Φ.LeftResolution X₂.unop)).op⟩,
     fun _ X₂ => ⟨(Classical.arbitrary (Φ.op.RightResolution (Opposite.op X₂))).unop⟩⟩
-
-/--
-lemma `hasRightResolutions_iff_op` / 引理 `hasRightResolutions_iff_op`
-
-English:
-lemma hasRightResolutions_iff_op
-  statement: Φ.HasRightResolutions ↔ Φ.op.HasLeftResolutions
-  proof: ⟨fun _ X₂ => ⟨(Classical.arbitrary (Φ.RightResolution X₂.unop)).op⟩,
-    fun _ X₂ => ⟨(Classical.arbitrary (Φ.op.LeftResolution (Opposite.op X₂))).unop⟩⟩
-
-中文:
-引理 hasRightResolutions_iff_op
-  结论: Φ.HasRightResolutions ↔ Φ.op.HasLeftResolutions
-  证明: ⟨fun _ X₂ => ⟨(Classical.arbitrary (Φ.RightResolution X₂.unop)).op⟩,
-    fun _ X₂ => ⟨(Classical.arbitrary (Φ.op.LeftResolution (Opposite.op X₂))).unop⟩⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, LeftResolution, Opposite, Opposite.op, RightResolution, arbitrary, op.LeftResolution
+/-
+**CategoryTheory.LocalizerMorphism.hasRightResolutions_iff_op** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasRightResolutions_iff_op : Φ.HasRightResolutions ↔ Φ.op.HasLeftResolutio
+ns
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasRightResolutions_iff_op : Φ.HasRightResolutions ↔ Φ.op.HasLeftResolutions :=
   ⟨fun _ X₂ => ⟨(Classical.arbitrary (Φ.RightResolution X₂.unop)).op⟩,
     fun _ X₂ => ⟨(Classical.arbitrary (Φ.op.LeftResolution (Opposite.op X₂))).unop⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.HasRightResolutions]
-  signature: : Φ.op.HasLeftResolutions
-  body: by
-  rwa [← hasRightResolutions_iff_op]
-
-中文:
-实例 [Φ.HasRightResolutions]
-  签名: : Φ.op.HasLeftResolutions
-  定义体: by
-  rwa [← hasRightResolutions_iff_op]
-
-Depends on / 依赖: hasRightResolutions_iff_op
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.HasRightResolutions] : Φ.op.HasLeftResolutions := by
   rwa [← hasRightResolutions_iff_op]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.HasLeftResolutions]
-  signature: : Φ.op.HasRightResolutions
-  body: by
-  rwa [← hasLeftResolutions_iff_op]
-
-中文:
-实例 [Φ.HasLeftResolutions]
-  签名: : Φ.op.HasRightResolutions
-  定义体: by
-  rwa [← hasLeftResolutions_iff_op]
-
-Depends on / 依赖: hasLeftResolutions_iff_op
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.HasLeftResolutions] : Φ.op.HasRightResolutions := by
   rwa [← hasLeftResolutions_iff_op]
 
 /-- The functor `(Φ.LeftResolution X₂)ᵒᵖ ⥤ Φ.op.RightResolution (Opposite.op X₂)`. -/
 @[simps]
-/--
-Definition of `LeftResolution.opFunctor` / `LeftResolution.opFunctor` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.opFunctor** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             (Φ : CategoryTheory.LocalizerMorphism W₁ W₂) →  
+             (X₂ : C₂) → CategoryTheory.Functor (Φ.LeftResolution X₂)ᵒᵖ (Φ.op.Ri
+ghtResolution (Opposite.op X₂))
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；X₂ : C₂；Φ.LeftResolution X₂；Φ.op.R
+ightResolution (Opposite.op X₂)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftResolution.opFunctor
-  signature: (X₂ : C₂)
-  body: L.unop.op
-  map φ :=
-    { f := φ.unop.f.op
-      comm := Quiver.Hom.unop_inj φ.unop.comm }
-
-中文:
-定义 LeftResolution.opFunctor
-  签名: (X₂ : C₂)
-  定义体: L.unop.op
-  map φ :=
-    { f := φ.unop.f.op
-      comm := Quiver.Hom.unop_inj φ.unop.comm }
-
-Depends on / 依赖: L.unop.op
+--- 原说明 ---
+The functor `(Φ.LeftResolution X₂)ᵒᵖ ⥤ Φ.op.RightResolution (Opposite.op X₂)`.
 -/
 def LeftResolution.opFunctor (X₂ : C₂) :
     (Φ.LeftResolution X₂)ᵒᵖ ⥤ Φ.op.RightResolution (Opposite.op X₂) where
@@ -773,26 +593,21 @@ def LeftResolution.opFunctor (X₂ : C₂) :
 
 /-- The functor `(Φ.op.RightResolution X₂)ᵒᵖ ⥤ Φ.LeftResolution X₂.unop`. -/
 @[simps]
-/--
-Definition of `RightResolution.unopFunctor` / `RightResolution.unopFunctor` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.RightResolution.unopFunctor** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.LocalizerMorphism.RightResolution`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             (Φ : CategoryTheory.LocalizerMorphism W₁ W₂) →  
+             (X₂ : C₂ᵒᵖ) → CategoryTheory.Functor (Φ.op.RightResolution X₂)ᵒᵖ (Φ
+.LeftResolution (Opposite.unop X₂))
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；X₂ : C₂ᵒᵖ；Φ.op.RightResolution X₂；
+Φ.LeftResolution (Opposite.unop X₂)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RightResolution.unopFunctor
-  signature: (X₂ : C₂ᵒᵖ)
-  body: R.unop.unop
-  map φ :=
-    { f := φ.unop.f.unop
-      comm := Quiver.Hom.op_inj φ.unop.comm }
-
-中文:
-定义 RightResolution.unopFunctor
-  签名: (X₂ : C₂ᵒᵖ)
-  定义体: R.unop.unop
-  map φ :=
-    { f := φ.unop.f.unop
-      comm := Quiver.Hom.op_inj φ.unop.comm }
-
-Depends on / 依赖: R.unop.unop
+--- 原说明 ---
+The functor `(Φ.op.RightResolution X₂)ᵒᵖ ⥤ Φ.LeftResolution X₂.unop`.
 -/
 def RightResolution.unopFunctor (X₂ : C₂ᵒᵖ) :
     (Φ.op.RightResolution X₂)ᵒᵖ ⥤ Φ.LeftResolution X₂.unop where
@@ -806,26 +621,22 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The equivalence of categories
 `(Φ.LeftResolution X₂)ᵒᵖ ≌ Φ.op.RightResolution (Opposite.op X₂)`. -/
 @[simps]
-/--
-Definition of `LeftResolution.opEquivalence` / `LeftResolution.opEquivalence` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.LeftResolution.opEquivalence** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.LocalizerMorphism.LeftResolution`。
+形式化陈述：{C₁ : Type u_1} →   {C₂ : Type u_2} →     [inst : CategoryTheory.Category.
+{v_1, u_1} C₁] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] →       
+  {W₁ : CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.Mor
+phismProperty C₂} →             (Φ : CategoryTheory.LocalizerMorphism W₁ W₂) →  
+             (X₂ : C₂) → (Φ.LeftResolution X₂)ᵒᵖ ≌ Φ.op.RightResolution (Opposit
+e.op X₂)
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；X₂ : C₂；Φ.LeftResolution X₂；Opposi
+te.op X₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftResolution.opEquivalence
-  signature: (X₂ : C₂)
-  body: LeftResolution.opFunctor Φ X₂
-  inverse := (RightResolution.unopFunctor Φ (Opposite.op X₂)).rightOp
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 LeftResolution.opEquivalence
-  签名: (X₂ : C₂)
-  定义体: LeftResolution.opFunctor Φ X₂
-  inverse := (RightResolution.unopFunctor Φ (Opposite.op X₂)).rightOp
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: LeftResolution, LeftResolution.opFunctor, opFunctor
+--- 原说明 ---
+The equivalence of categories
+`(Φ.LeftResolution X₂)ᵒᵖ ≌ Φ.op.RightResolution (Opposite.op X₂)`.
 -/
 def LeftResolution.opEquivalence (X₂ : C₂) :
     (Φ.LeftResolution X₂)ᵒᵖ ≌ Φ.op.RightResolution (Opposite.op X₂) where
@@ -838,149 +649,107 @@ section
 
 variable (L₂ : C₂ ⥤ D₂) [L₂.IsLocalization W₂]
 
-/--
-lemma `essSurj_of_hasRightResolutions` / 引理 `essSurj_of_hasRightResolutions`
-
-English:
-lemma essSurj_of_hasRightResolutions
-  given: [Φ.HasRightResolutions]
-  statement: (Φ.functor ⋙ L₂).EssSurj where
-  proof: by
-    have := Localization.essSurj L₂ W₂
-    have R : Φ.RightResolution (L₂.objPreimage X₂) := Classical.arbitrary _
-    exact ⟨R.X₁, ⟨(Localization.isoOfHom L₂ W₂ _ R.hw).symm ≪≫ L₂.objObjPreimageIso X₂⟩⟩
-
-中文:
-引理 essSurj_of_hasRightResolutions
-  条件: [Φ.HasRightResolutions]
-  结论: (Φ.functor ⋙ L₂).本质满射 where
-  证明: by
-    have := Localization.essSurj L₂ W₂
-    have R : Φ.RightResolution (L₂.objPreimage X₂) := Classical.arbitrary _
-    exact ⟨R.X₁, ⟨(Localization.isoOfHom L₂ W₂ _ R.hw).symm ≪≫ L₂.objObjPreimageIso X₂⟩⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, Localization, Localization.essSurj, Localization.isoOfHom, R.hw, RightResolution, arbitrary, essSurj, isoOfHom, objObjPreimageIso, objPreimage
+/-
+**CategoryTheory.LocalizerMorphism.essSurj_of_hasRightResolutions** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：essSurj_of_hasRightResolutions [Φ.HasRightResolutions] : (Φ.functor ⋙ L₂).
+EssSurj where mem_essImage X₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.essSurj`：essSurj (W) [L.IsLocalization W] : 
+L.EssSurj
+· 使用定理 `CategoryTheory.LocalizerMorphism.RightResolution.hw`：∀ {C₁ : Type u_1} {
+C₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Catego
+ryTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma essSurj_of_hasRightResolutions [Φ.HasRightResolutions] : (Φ.functor ⋙ L₂).EssSurj where
   mem_essImage X₂ := by
     have := Localization.essSurj L₂ W₂
     have R : Φ.RightResolution (L₂.objPreimage X₂) := Classical.arbitrary _
     exact ⟨R.X₁, ⟨(Localization.isoOfHom L₂ W₂ _ R.hw).symm ≪≫ L₂.objObjPreimageIso X₂⟩⟩
-
-/--
-lemma `isIso_iff_of_hasRightResolutions` / 引理 `isIso_iff_of_hasRightResolutions`
-
-English:
-lemma isIso_iff_of_hasRightResolutions
-  given: [Φ.HasRightResolutions] {F G : D₂ ⥤ H} (α : F ⟶ G)
-  proof: by
-  constructor
-  · intros
-    infer_instance
-  · intro hα
-    have : forall (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
-      have := Φ.essSurj_of_hasRightResolutions L₂
-      rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
-      apply hα
-    exact NatIso.isIso_of_isIso_app α
-
-中文:
-引理 isIso_iff_of_hasRightResolutions
-  条件: [Φ.HasRightResolutions] {F G : D₂ ⥤ H} (α : F ⟶ G)
-  证明: by
-  constructor
-  · intros
-    infer_instance
-  · intro hα
-    have : forall (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
-      have := Φ.essSurj_of_hasRightResolutions L₂
-      rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
-      apply hα
-    exact NatIso.isIso_of_isIso_app α
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, NatTrans, NatTrans.isIso_app_iff_of_iso, essSurj_of_hasRightResolutions, functor, infer_instance, intros, isIso_app_iff_of_iso, isIso_of_isIso_app, objObjPreimageIso
+/-
+**CategoryTheory.LocalizerMorphism.isIso_iff_of_hasRightResolutions** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：isIso_iff_of_hasRightResolutions [Φ.HasRightResolutions] {F G : D₂ ⥤ H} (α
+ : F ⟶ G) : IsIso α ↔ forall (X₁ : C₁), IsIso (α.app (L₂.obj (Φ.functor.obj X₁))
+)
+参数：α : F ⟶ G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.LocalizerMorphism.essSurj_of_hasRightResolutions`：essSurj
+_of_hasRightResolutions [Φ.HasRightResolutions] : (Φ.functor ⋙ L₂).EssSurj where
+ mem_essImage X₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.NatTrans.isIso_app_iff_of_iso`：isIso_app_iff_of_iso {F G 
+: C ⥤ D} (α : F ⟶ G) {X Y : C} (e : X ≅ Y) : IsIso (α.app X) ↔ IsIso (α.app Y)
+· 使用定理 `CategoryTheory.NatIso.isIso_of_isIso_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
 -/
 lemma isIso_iff_of_hasRightResolutions [Φ.HasRightResolutions] {F G : D₂ ⥤ H} (α : F ⟶ G) :
-    IsIso α ↔ forall (X₁ : C₁), IsIso (α.app (L₂.obj (Φ.functor.obj X₁))) := by
+    IsIso α ↔ ∀ (X₁ : C₁), IsIso (α.app (L₂.obj (Φ.functor.obj X₁))) := by
   constructor
   · intros
     infer_instance
   · intro hα
-    have : forall (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
+    have : ∀ (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
       have := Φ.essSurj_of_hasRightResolutions L₂
       rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
       apply hα
     exact NatIso.isIso_of_isIso_app α
-
-/--
-lemma `essSurj_of_hasLeftResolutions` / 引理 `essSurj_of_hasLeftResolutions`
-
-English:
-lemma essSurj_of_hasLeftResolutions
-  given: [Φ.HasLeftResolutions]
-  statement: (Φ.functor ⋙ L₂).EssSurj where
-  proof: by
-    have := Localization.essSurj L₂ W₂
-    have L : Φ.LeftResolution (L₂.objPreimage X₂) := Classical.arbitrary _
-    exact ⟨L.X₁, ⟨Localization.isoOfHom L₂ W₂ _ L.hw ≪≫ L₂.objObjPreimageIso X₂⟩⟩
-
-中文:
-引理 essSurj_of_hasLeftResolutions
-  条件: [Φ.HasLeftResolutions]
-  结论: (Φ.functor ⋙ L₂).本质满射 where
-  证明: by
-    have := Localization.essSurj L₂ W₂
-    have L : Φ.LeftResolution (L₂.objPreimage X₂) := Classical.arbitrary _
-    exact ⟨L.X₁, ⟨Localization.isoOfHom L₂ W₂ _ L.hw ≪≫ L₂.objObjPreimageIso X₂⟩⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, L.hw, LeftResolution, Localization, Localization.essSurj, Localization.isoOfHom, arbitrary, essSurj, isoOfHom, objObjPreimageIso, objPreimage
+/-
+**CategoryTheory.LocalizerMorphism.essSurj_of_hasLeftResolutions** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：essSurj_of_hasLeftResolutions [Φ.HasLeftResolutions] : (Φ.functor ⋙ L₂).Es
+sSurj where mem_essImage X₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.essSurj`：essSurj (W) [L.IsLocalization W] : 
+L.EssSurj
+· 使用定理 `CategoryTheory.LocalizerMorphism.LeftResolution.hw`：∀ {C₁ : Type u_1} {C
+₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Categor
+yTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma essSurj_of_hasLeftResolutions [Φ.HasLeftResolutions] : (Φ.functor ⋙ L₂).EssSurj where
   mem_essImage X₂ := by
     have := Localization.essSurj L₂ W₂
     have L : Φ.LeftResolution (L₂.objPreimage X₂) := Classical.arbitrary _
     exact ⟨L.X₁, ⟨Localization.isoOfHom L₂ W₂ _ L.hw ≪≫ L₂.objObjPreimageIso X₂⟩⟩
-
-/--
-lemma `isIso_iff_of_hasLeftResolutions` / 引理 `isIso_iff_of_hasLeftResolutions`
-
-English:
-lemma isIso_iff_of_hasLeftResolutions
-  given: [Φ.HasLeftResolutions] {F G : D₂ ⥤ H} (α : F ⟶ G)
-  proof: by
-  constructor
-  · intros
-    infer_instance
-  · intro hα
-    have : forall (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
-      have := Φ.essSurj_of_hasLeftResolutions L₂
-      rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
-      apply hα
-    exact NatIso.isIso_of_isIso_app α
-
-中文:
-引理 isIso_iff_of_hasLeftResolutions
-  条件: [Φ.HasLeftResolutions] {F G : D₂ ⥤ H} (α : F ⟶ G)
-  证明: by
-  constructor
-  · intros
-    infer_instance
-  · intro hα
-    have : forall (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
-      have := Φ.essSurj_of_hasLeftResolutions L₂
-      rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
-      apply hα
-    exact NatIso.isIso_of_isIso_app α
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, NatTrans, NatTrans.isIso_app_iff_of_iso, essSurj_of_hasLeftResolutions, functor, infer_instance, intros, isIso_app_iff_of_iso, isIso_of_isIso_app, objObjPreimageIso
+/-
+**CategoryTheory.LocalizerMorphism.isIso_iff_of_hasLeftResolutions** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：isIso_iff_of_hasLeftResolutions [Φ.HasLeftResolutions] {F G : D₂ ⥤ H} (α :
+ F ⟶ G) : IsIso α ↔ forall (X₁ : C₁), IsIso (α.app (L₂.obj (Φ.functor.obj X₁)))
+参数：α : F ⟶ G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.LocalizerMorphism.essSurj_of_hasLeftResolutions`：essSurj_
+of_hasLeftResolutions [Φ.HasLeftResolutions] : (Φ.functor ⋙ L₂).EssSurj where me
+m_essImage X₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.NatTrans.isIso_app_iff_of_iso`：isIso_app_iff_of_iso {F G 
+: C ⥤ D} (α : F ⟶ G) {X Y : C} (e : X ≅ Y) : IsIso (α.app X) ↔ IsIso (α.app Y)
+· 使用定理 `CategoryTheory.NatIso.isIso_of_isIso_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
 -/
 lemma isIso_iff_of_hasLeftResolutions [Φ.HasLeftResolutions] {F G : D₂ ⥤ H} (α : F ⟶ G) :
-    IsIso α ↔ forall (X₁ : C₁), IsIso (α.app (L₂.obj (Φ.functor.obj X₁))) := by
+    IsIso α ↔ ∀ (X₁ : C₁), IsIso (α.app (L₂.obj (Φ.functor.obj X₁))) := by
   constructor
   · intros
     infer_instance
   · intro hα
-    have : forall (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
+    have : ∀ (X₂ : D₂), IsIso (α.app X₂) := fun X₂ => by
       have := Φ.essSurj_of_hasLeftResolutions L₂
       rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
       apply hα
@@ -994,32 +763,38 @@ variable {T : LocalizerMorphism W₁ W₂} {L : LocalizerMorphism W₁ W₁'}
   {R : LocalizerMorphism W₂ W₂'} {B : LocalizerMorphism W₁' W₂'}
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `hasRightResolutions_of_iso_of_essSurj` / 引理 `hasRightResolutions_of_iso_of_essSurj`
-
-English:
-lemma hasRightResolutions_of_iso_of_essSurj
-  proof: by
-  intro Y₂
-  obtain ⟨X₂, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage (F := R.functor) Y₂
-  let ρ : T.RightResolution X₂ := Classical.arbitrary _
-  exact ⟨{
-    X₁ := L.functor.obj ρ.X₁
-    w := e.inv ≫ R.functor.map ρ.w ≫ iso.hom.app _
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk e (iso.app _))).1 (R.map _ ρ.hw) }⟩
-
-中文:
-引理 hasRightResolutions_of_iso_of_essSurj
-  证明: by
-  intro Y₂
-  obtain ⟨X₂, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage (F := R.functor) Y₂
-  let ρ : T.RightResolution X₂ := Classical.arbitrary _
-  exact ⟨{
-    X₁ := L.functor.obj ρ.X₁
-    w := e.inv ≫ R.functor.map ρ.w ≫ iso.hom.app _
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk e (iso.app _))).1 (R.map _ ρ.hw) }⟩
-
-Depends on / 依赖: Arrow.isoMk, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, L.functor.obj, R.functor, R.functor.map, R.map, RightResolution, T.RightResolution, arbitrary, arrow_mk_iso_iff, e.inv, functor, iso.app, iso.hom.app, mem_essImage
+/-
+**CategoryTheory.LocalizerMorphism.hasRightResolutions_of_iso_of_essSurj** 是 Mat
+hlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasRightResolutions_of_iso_of_essSurj [R.functor.EssSurj] [W₂'.RespectsIso
+] (iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) [T.HasRightResolutions] 
+: B.HasRightResolutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EssSurj.mem_essImage`：∀ {C : Type u₁} {D : Type u
+₂} {inst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   (F : CategoryTheor…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.LocalizerMorphism.map`：∀ {C₁ : Type u₁} {C₂ : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{
+v₂, u₂} C₂] {W₁ : Category…
+· 使用定理 `CategoryTheory.LocalizerMorphism.RightResolution.hw`：∀ {C₁ : Type u_1} {
+C₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Catego
+ryTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma hasRightResolutions_of_iso_of_essSurj
     [R.functor.EssSurj] [W₂'.RespectsIso]
@@ -1034,32 +809,38 @@ lemma hasRightResolutions_of_iso_of_essSurj
     hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk e (iso.app _))).1 (R.map _ ρ.hw) }⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `hasLeftResolutions_of_iso_of_essSurj` / 引理 `hasLeftResolutions_of_iso_of_essSurj`
-
-English:
-lemma hasLeftResolutions_of_iso_of_essSurj
-  proof: by
-  intro Y₂
-  obtain ⟨X₂, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage (F := R.functor) Y₂
-  let ρ : T.LeftResolution X₂ := Classical.arbitrary _
-  exact ⟨{
-    X₁ := L.functor.obj ρ.X₁
-    w := iso.inv.app _ ≫ R.functor.map ρ.w ≫ e.hom
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e)).1 (R.map _ ρ.hw) }⟩
-
-中文:
-引理 hasLeftResolutions_of_iso_of_essSurj
-  证明: by
-  intro Y₂
-  obtain ⟨X₂, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage (F := R.functor) Y₂
-  let ρ : T.LeftResolution X₂ := Classical.arbitrary _
-  exact ⟨{
-    X₁ := L.functor.obj ρ.X₁
-    w := iso.inv.app _ ≫ R.functor.map ρ.w ≫ e.hom
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e)).1 (R.map _ ρ.hw) }⟩
-
-Depends on / 依赖: Arrow.isoMk, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, L.functor.obj, LeftResolution, R.functor, R.functor.map, R.map, T.LeftResolution, arbitrary, arrow_mk_iso_iff, e.hom, functor, iso.app, iso.inv.app, mem_essImage
+/-
+**CategoryTheory.LocalizerMorphism.hasLeftResolutions_of_iso_of_essSurj** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasLeftResolutions_of_iso_of_essSurj [R.functor.EssSurj] [W₂'.RespectsIso]
+ (iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) [T.HasLeftResolutions] : 
+B.HasLeftResolutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EssSurj.mem_essImage`：∀ {C : Type u₁} {D : Type u
+₂} {inst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   (F : CategoryTheor…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.LocalizerMorphism.map`：∀ {C₁ : Type u₁} {C₂ : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{
+v₂, u₂} C₂] {W₁ : Category…
+· 使用定理 `CategoryTheory.LocalizerMorphism.LeftResolution.hw`：∀ {C₁ : Type u_1} {C
+₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Categor
+yTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma hasLeftResolutions_of_iso_of_essSurj
     [R.functor.EssSurj] [W₂'.RespectsIso]
@@ -1074,38 +855,56 @@ lemma hasLeftResolutions_of_iso_of_essSurj
     hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e)).1 (R.map _ ρ.hw) }⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `hasRightResolutions_of_iso_of_essSurj_of_full` / 引理 `hasRightResolutions_of_iso_of_essSurj_of_full`
-
-English:
-lemma hasRightResolutions_of_iso_of_essSurj_of_full
-  proof: by
-  intro X₂
-  let ρ : B.RightResolution (R.functor.obj X₂) := Classical.arbitrary _
-  obtain ⟨X₁, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage L.functor ρ.X₁
-  exact ⟨{
-    X₁ := X₁
-    w := R.functor.preimage (ρ.w ≫ B.functor.map e.inv ≫ iso.inv.app X₁)
-    hw := by
-      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
-      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
-      exact Arrow.isoMk (Iso.refl _) (iso.app _ ≪≫ B.functor.mapIso e)}⟩
-
-中文:
-引理 hasRightResolutions_of_iso_of_essSurj_of_full
-  证明: by
-  intro X₂
-  let ρ : B.RightResolution (R.functor.obj X₂) := Classical.arbitrary _
-  obtain ⟨X₁, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage L.functor ρ.X₁
-  exact ⟨{
-    X₁ := X₁
-    w := R.functor.preimage (ρ.w ≫ B.functor.map e.inv ≫ iso.inv.app X₁)
-    hw := by
-      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
-      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
-      exact Arrow.isoMk (Iso.refl _) (iso.app _ ≪≫ B.functor.mapIso e)}⟩
-
-Depends on / 依赖: Arrow.isoMk, B.RightResolution, B.functor.map, B.functor.mapIso, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, Functor.map_preimage, Iso.refl, L.functor, MorphismProperty, MorphismProperty.inverseImage_iff, R.functor.obj, R.functor.preimage, R.inverseImage_eq, RightResolution, arbitrary, arrow_mk_iso_iff
+/-
+**CategoryTheory.LocalizerMorphism.hasRightResolutions_of_iso_of_essSurj_of_full
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasRightResolutions_of_iso_of_essSurj_of_full [L.functor.EssSurj] [R.funct
+or.Full] [R.IsInduced] [W₂'.RespectsIso] (iso : T.functor ⋙ R.functor ≅ L.functo
+r ⋙ B.functor) [B.HasRightResolutions] : T.HasRightResolutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EssSurj.mem_essImage`：∀ {C : Type u₁} {D : Type u
+₂} {inst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   (F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsInduced.inverseImage_eq`：∀ {C₁ : Type
+ u₁} {C₂ : Type u₂} {inst : CategoryTheory.Category.{v₁, u₁} C₁}   {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} C₂} {W₁ : Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.Iso.map_inv_hom_id`：map_inv_hom_id (F : C ⥤ D) : F.map e.
+inv ≫ F.map e.hom = 𝟙 _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.LocalizerMorphism.RightResolution.hw`：∀ {C₁ : Type u_1} {
+C₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Catego
+ryTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma hasRightResolutions_of_iso_of_essSurj_of_full
     [L.functor.EssSurj] [R.functor.Full] [R.IsInduced] [W₂'.RespectsIso]
@@ -1123,38 +922,48 @@ lemma hasRightResolutions_of_iso_of_essSurj_of_full
       exact Arrow.isoMk (Iso.refl _) (iso.app _ ≪≫ B.functor.mapIso e)}⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `hasLeftResolutions_of_iso_of_essSurj_of_full` / 引理 `hasLeftResolutions_of_iso_of_essSurj_of_full`
-
-English:
-lemma hasLeftResolutions_of_iso_of_essSurj_of_full
-  proof: by
-  intro X₂
-  let ρ : B.LeftResolution (R.functor.obj X₂) := Classical.arbitrary _
-  obtain ⟨X₁, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage L.functor ρ.X₁
-  exact ⟨{
-    X₁ := X₁
-    w := R.functor.preimage (iso.hom.app X₁ ≫ B.functor.map e.hom ≫ ρ.w)
-    hw := by
-      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
-      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
-      exact Arrow.isoMk (iso.app _ ≪≫ B.functor.mapIso e) (Iso.refl _) }⟩
-
-中文:
-引理 hasLeftResolutions_of_iso_of_essSurj_of_full
-  证明: by
-  intro X₂
-  let ρ : B.LeftResolution (R.functor.obj X₂) := Classical.arbitrary _
-  obtain ⟨X₁, ⟨e⟩⟩ := Functor.EssSurj.mem_essImage L.functor ρ.X₁
-  exact ⟨{
-    X₁ := X₁
-    w := R.functor.preimage (iso.hom.app X₁ ≫ B.functor.map e.hom ≫ ρ.w)
-    hw := by
-      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
-      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
-      exact Arrow.isoMk (iso.app _ ≪≫ B.functor.mapIso e) (Iso.refl _) }⟩
-
-Depends on / 依赖: Arrow.isoMk, B.LeftResolution, B.functor.map, B.functor.mapIso, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, Functor.map_comp, Functor.map_preimage, Iso.refl, L.functor, LeftResolution, MorphismProperty, MorphismProperty.inverseImage_iff, Opposite, Opposite.op, Quiver, Quiver.Hom.op_inj
+/-
+**CategoryTheory.LocalizerMorphism.hasLeftResolutions_of_iso_of_essSurj_of_full*
+* 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasLeftResolutions_of_iso_of_essSurj_of_full [L.functor.EssSurj] [R.functo
+r.Full] [R.IsInduced] [W₂'.RespectsIso] (iso : T.functor ⋙ R.functor ≅ L.functor
+ ⋙ B.functor) [B.HasLeftResolutions] : T.HasLeftResolutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EssSurj.mem_essImage`：∀ {C : Type u₁} {D : Type u
+₂} {inst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   (F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsInduced.inverseImage_eq`：∀ {C₁ : Type
+ u₁} {C₂ : Type u₂} {inst : CategoryTheory.Category.{v₁, u₁} C₁}   {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} C₂} {W₁ : Category…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.LocalizerMorphism.LeftResolution.hw`：∀ {C₁ : Type u_1} {C
+₂ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C₁]   [inst_1 : Categor
+yTheory.Category.{v_2, u_2} C₂] {W₁ : Ca…
 -/
 lemma hasLeftResolutions_of_iso_of_essSurj_of_full
     [L.functor.EssSurj] [R.functor.Full] [R.IsInduced] [W₂'.RespectsIso]
@@ -1170,69 +979,66 @@ lemma hasLeftResolutions_of_iso_of_essSurj_of_full
       simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
       refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
       exact Arrow.isoMk (iso.app _ ≪≫ B.functor.mapIso e) (Iso.refl _) }⟩
-
-/--
-lemma `hasRightResolutions_iff_iso_of_essSurj_of_full` / 引理 `hasRightResolutions_iff_iso_of_essSurj_of_full`
-
-English:
-lemma hasRightResolutions_iff_iso_of_essSurj_of_full
-  proof: ⟨fun _ => hasRightResolutions_of_iso_of_essSurj iso,
-    fun _ => hasRightResolutions_of_iso_of_essSurj_of_full iso⟩
-
-中文:
-引理 hasRightResolutions_iff_iso_of_essSurj_of_full
-  证明: ⟨fun _ => hasRightResolutions_of_iso_of_essSurj iso,
-    fun _ => hasRightResolutions_of_iso_of_essSurj_of_full iso⟩
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj, _symm_apply, hasRightResolutions_of_iso_of_essSurj, hasRightResolutions_of_iso_of_essSurj_of_full, opEquiv, opEquiv_symm_apply, op_inj
+/-
+**CategoryTheory.LocalizerMorphism.hasRightResolutions_iff_iso_of_essSurj_of_ful
+l** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasRightResolutions_iff_iso_of_essSurj_of_full [R.functor.EssSurj] [R.func
+tor.Full] [R.IsInduced] [L.functor.EssSurj] [W₂'.RespectsIso] (iso : T.functor ⋙
+ R.functor ≅ L.functor ⋙ B.functor) : T.HasRightResolutions ↔ B.HasRightResoluti
+ons
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasRightResolutions_of_iso_of_essSurj`：
+hasRightResolutions_of_iso_of_essSurj [R.functor.EssSurj] [W₂'.RespectsIso] (iso
+ : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) [T.HasRigh…
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasRightResolutions_of_iso_of_essSurj_o
+f_full`：hasRightResolutions_of_iso_of_essSurj_of_full [L.functor.EssSurj] [R.fun
+ctor.Full] [R.IsInduced] [W₂'.RespectsIso] (iso : T.functor ⋙ R.func…
 -/
 lemma hasRightResolutions_iff_iso_of_essSurj_of_full
     [R.functor.EssSurj] [R.functor.Full] [R.IsInduced] [L.functor.EssSurj] [W₂'.RespectsIso]
     (iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) :
     T.HasRightResolutions ↔ B.HasRightResolutions :=
-  ⟨fun _ => hasRightResolutions_of_iso_of_essSurj iso,
-    fun _ => hasRightResolutions_of_iso_of_essSurj_of_full iso⟩
-
-/--
-lemma `hasLeftResolutions_iff_iso_of_essSurj_of_full` / 引理 `hasLeftResolutions_iff_iso_of_essSurj_of_full`
-
-English:
-lemma hasLeftResolutions_iff_iso_of_essSurj_of_full
-  proof: ⟨fun _ => hasLeftResolutions_of_iso_of_essSurj iso,
-    fun _ => hasLeftResolutions_of_iso_of_essSurj_of_full iso⟩
-
-中文:
-引理 hasLeftResolutions_iff_iso_of_essSurj_of_full
-  证明: ⟨fun _ => hasLeftResolutions_of_iso_of_essSurj iso,
-    fun _ => hasLeftResolutions_of_iso_of_essSurj_of_full iso⟩
-
-Depends on / 依赖: _add_zero, _symm_apply, hasLeftResolutions_of_iso_of_essSurj, hasLeftResolutions_of_iso_of_essSurj_of_full, opEquiv, opEquiv_symm_apply, opShiftFunctorEquivalence_zero_unitIso_inv_app, shiftFunctorAdd
+  ⟨fun _ ↦ hasRightResolutions_of_iso_of_essSurj iso,
+    fun _ ↦ hasRightResolutions_of_iso_of_essSurj_of_full iso⟩
+/-
+**CategoryTheory.LocalizerMorphism.hasLeftResolutions_iff_iso_of_essSurj_of_full
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasLeftResolutions_iff_iso_of_essSurj_of_full [R.functor.EssSurj] [R.funct
+or.Full] [R.IsInduced] [L.functor.EssSurj] [W₂'.RespectsIso] (iso : T.functor ⋙ 
+R.functor ≅ L.functor ⋙ B.functor) : T.HasLeftResolutions ↔ B.HasLeftResolutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasLeftResolutions_of_iso_of_essSurj`：h
+asLeftResolutions_of_iso_of_essSurj [R.functor.EssSurj] [W₂'.RespectsIso] (iso :
+ T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) [T.HasLeftR…
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasLeftResolutions_of_iso_of_essSurj_of
+_full`：hasLeftResolutions_of_iso_of_essSurj_of_full [L.functor.EssSurj] [R.funct
+or.Full] [R.IsInduced] [W₂'.RespectsIso] (iso : T.functor ⋙ R.funct…
 -/
 lemma hasLeftResolutions_iff_iso_of_essSurj_of_full
     [R.functor.EssSurj] [R.functor.Full] [R.IsInduced] [L.functor.EssSurj] [W₂'.RespectsIso]
     (iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) :
     T.HasLeftResolutions ↔ B.HasLeftResolutions :=
-  ⟨fun _ => hasLeftResolutions_of_iso_of_essSurj iso,
-    fun _ => hasLeftResolutions_of_iso_of_essSurj_of_full iso⟩
-
-/--
-lemma `hasRightResolutions_arrow_of_essSurj_of_full` / 引理 `hasRightResolutions_arrow_of_essSurj_of_full`
-
-English:
-lemma hasRightResolutions_arrow_of_essSurj_of_full
-  proof: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasRightResolutions_of_iso_of_essSurj
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-中文:
-引理 hasRightResolutions_arrow_of_essSurj_of_full
-  证明: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasRightResolutions_of_iso_of_essSurj
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-Depends on / 依赖: B.arrow.functor, B.functor, CatCommSq, CatCommSq.iso, Functor, Functor.map_comp, L.arrow.functor, L.functor, NatTrans, NatTrans.naturality_assoc, R.arrow.functor, R.functor, T.arrow.functor, T.functor, _assoc_inv_app, _eq_shiftFunctorAdd, _symm_apply, add_comm, functor, hasRightResolutions_of_iso_of_essSurj
+  ⟨fun _ ↦ hasLeftResolutions_of_iso_of_essSurj iso,
+    fun _ ↦ hasLeftResolutions_of_iso_of_essSurj_of_full iso⟩
+/-
+**CategoryTheory.LocalizerMorphism.hasRightResolutions_arrow_of_essSurj_of_full*
+* 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasRightResolutions_arrow_of_essSurj_of_full [R.functor.EssSurj] [R.functo
+r.Full] [W₂'.RespectsIso] (iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) 
+[T.arrow.HasRightResolutions] : B.arrow.HasRightResolutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasRightResolutions_of_iso_of_essSurj`：
+hasRightResolutions_of_iso_of_essSurj [R.functor.EssSurj] [W₂'.RespectsIso] (iso
+ : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) [T.HasRigh…
+· 使用定理 `CategoryTheory.MorphismProperty.instRespectsIsoArrowArrow`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{v, u_1} C] (W : CategoryTheory.MorphismProp
+erty C) [W.RespectsIso],   W.arrow.RespectsIso
 -/
 lemma hasRightResolutions_arrow_of_essSurj_of_full
     [R.functor.EssSurj] [R.functor.Full] [W₂'.RespectsIso]
@@ -1241,25 +1047,21 @@ lemma hasRightResolutions_arrow_of_essSurj_of_full
   let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
   exact hasRightResolutions_of_iso_of_essSurj
     (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-/--
-lemma `hasLeftResolutions_arrow_of_essSurj_of_full` / 引理 `hasLeftResolutions_arrow_of_essSurj_of_full`
-
-English:
-lemma hasLeftResolutions_arrow_of_essSurj_of_full
-  proof: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasLeftResolutions_of_iso_of_essSurj
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-中文:
-引理 hasLeftResolutions_arrow_of_essSurj_of_full
-  证明: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasLeftResolutions_of_iso_of_essSurj
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-Depends on / 依赖: B.arrow.functor, B.functor, CatCommSq, CatCommSq.iso, L.arrow.functor, L.functor, R.arrow.functor, R.functor, T.arrow.functor, T.functor, functor, hasLeftResolutions_of_iso_of_essSurj
+/-
+**CategoryTheory.LocalizerMorphism.hasLeftResolutions_arrow_of_essSurj_of_full**
+ 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasLeftResolutions_arrow_of_essSurj_of_full [R.functor.EssSurj] [R.functor
+.Full] [W₂'.RespectsIso] (iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) [
+T.arrow.HasLeftResolutions] : B.arrow.HasLeftResolutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasLeftResolutions_of_iso_of_essSurj`：h
+asLeftResolutions_of_iso_of_essSurj [R.functor.EssSurj] [W₂'.RespectsIso] (iso :
+ T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor) [T.HasLeftR…
+· 使用定理 `CategoryTheory.MorphismProperty.instRespectsIsoArrowArrow`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{v, u_1} C] (W : CategoryTheory.MorphismProp
+erty C) [W.RespectsIso],   W.arrow.RespectsIso
 -/
 lemma hasLeftResolutions_arrow_of_essSurj_of_full
     [R.functor.EssSurj] [R.functor.Full] [W₂'.RespectsIso]
@@ -1268,25 +1070,31 @@ lemma hasLeftResolutions_arrow_of_essSurj_of_full
   let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
   exact hasLeftResolutions_of_iso_of_essSurj
     (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-/--
-lemma `hasRightResolutions_arrow_iff_of_equivalences` / 引理 `hasRightResolutions_arrow_iff_of_equivalences`
-
-English:
-lemma hasRightResolutions_arrow_iff_of_equivalences
-  proof: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasRightResolutions_iff_iso_of_essSurj_of_full
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-中文:
-引理 hasRightResolutions_arrow_iff_of_equivalences
-  证明: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasRightResolutions_iff_iso_of_essSurj_of_full
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-Depends on / 依赖: B.arrow.functor, B.functor, CatCommSq, CatCommSq.iso, L.arrow.functor, L.functor, Preadditive, Preadditive.add_comp, R.arrow.functor, R.functor, T.arrow.functor, T.functor, add_comp, functor, hasRightResolutions_iff_iso_of_essSurj_of_full, opEquiv, opEquiv_symm_add
+/-
+**CategoryTheory.LocalizerMorphism.hasRightResolutions_arrow_iff_of_equivalences
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasRightResolutions_arrow_iff_of_equivalences [R.functor.IsEquivalence] [R
+.IsInduced] [L.functor.IsEquivalence] [W₂'.RespectsIso] (iso : T.functor ⋙ R.fun
+ctor ≅ L.functor ⋙ B.functor) : T.arrow.HasRightResolutions ↔ B.arrow.HasRightRe
+solutions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasRightResolutions_iff_iso_of_essSurj_
+of_full`：hasRightResolutions_iff_iso_of_essSurj_of_full [R.functor.EssSurj] [R.f
+unctor.Full] [R.IsInduced] [L.functor.EssSurj] [W₂'.RespectsIso] (iso…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.LocalizerMorphism.instIsInducedArrowArrowArrow`：∀ {C₁ : T
+ype u₁} {C₂ : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : 
+CategoryTheory.Category.{v₂, u₂} C₂] {W₁ : Category…
+· 使用定理 `CategoryTheory.MorphismProperty.instRespectsIsoArrowArrow`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{v, u_1} C] (W : CategoryTheory.MorphismProp
+erty C) [W.RespectsIso],   W.arrow.RespectsIso
 -/
 lemma hasRightResolutions_arrow_iff_of_equivalences
     [R.functor.IsEquivalence] [R.IsInduced] [L.functor.IsEquivalence] [W₂'.RespectsIso]
@@ -1295,25 +1103,31 @@ lemma hasRightResolutions_arrow_iff_of_equivalences
   let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
   exact hasRightResolutions_iff_iso_of_essSurj_of_full
     (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-/--
-lemma `hasLeftResolutions_arrow_iff_of_equivalences` / 引理 `hasLeftResolutions_arrow_iff_of_equivalences`
-
-English:
-lemma hasLeftResolutions_arrow_iff_of_equivalences
-  proof: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasLeftResolutions_iff_iso_of_essSurj_of_full
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-中文:
-引理 hasLeftResolutions_arrow_iff_of_equivalences
-  证明: by
-  let : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
-  exact hasLeftResolutions_iff_iso_of_essSurj_of_full
-    (CatCommSq.iso T.arrow.functor L.arrow.functor R.arrow.functor B.arrow.functor)
-
-Depends on / 依赖: B.arrow.functor, B.functor, CatCommSq, CatCommSq.iso, L.arrow.functor, L.functor, R.arrow.functor, R.functor, T.arrow.functor, T.functor, functor, hasLeftResolutions_iff_iso_of_essSurj_of_full
+/-
+**CategoryTheory.LocalizerMorphism.hasLeftResolutions_arrow_iff_of_equivalences*
+* 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：hasLeftResolutions_arrow_iff_of_equivalences [R.functor.IsEquivalence] [R.
+IsInduced] [L.functor.IsEquivalence] [W₂'.RespectsIso] (iso : T.functor ⋙ R.func
+tor ≅ L.functor ⋙ B.functor) : T.arrow.HasLeftResolutions ↔ B.arrow.HasLeftResol
+utions
+参数：iso : T.functor ⋙ R.functor ≅ L.functor ⋙ B.functor。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.hasLeftResolutions_iff_iso_of_essSurj_o
+f_full`：hasLeftResolutions_iff_iso_of_essSurj_of_full [R.functor.EssSurj] [R.fun
+ctor.Full] [R.IsInduced] [L.functor.EssSurj] [W₂'.RespectsIso] (iso …
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.LocalizerMorphism.instIsInducedArrowArrowArrow`：∀ {C₁ : T
+ype u₁} {C₂ : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : 
+CategoryTheory.Category.{v₂, u₂} C₂] {W₁ : Category…
+· 使用定理 `CategoryTheory.MorphismProperty.instRespectsIsoArrowArrow`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{v, u_1} C] (W : CategoryTheory.MorphismProp
+erty C) [W.RespectsIso],   W.arrow.RespectsIso
 -/
 lemma hasLeftResolutions_arrow_iff_of_equivalences
     [R.functor.IsEquivalence] [R.IsInduced] [L.functor.IsEquivalence] [W₂'.RespectsIso]
@@ -1328,3 +1142,4 @@ end
 end LocalizerMorphism
 
 end CategoryTheory
+

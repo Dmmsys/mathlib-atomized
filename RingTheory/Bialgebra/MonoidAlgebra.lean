@@ -42,24 +42,29 @@ section Semiring
 variable [Semiring A] [Semiring B] [Bialgebra R A] [Bialgebra R B]
 
 @[to_additive (dont_translate := R A) (attr := simp) isGroupLikeElem_single_one]
-/--
-lemma `isGroupLikeElem_single_one` / 引理 `isGroupLikeElem_single_one`
-
-English:
-lemma isGroupLikeElem_single_one
-  given: (g : G)
-  statement: IsGroupLikeElem R (single g 1 : A[G]) where
-  proof: by simp
-  comul_eq_tmul_self := by simp [Algebra.TensorProduct.one_def]
-
-中文:
-引理 isGroupLikeElem_single_one
-  条件: (g : G)
-  结论: 是GroupLikeElem R (single g 1 : A[G]) where
-  证明: by simp
-  comul_eq_tmul_self := by simp [Algebra.TensorProduct.one_def]
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.one_def, TensorProduct, comul_eq_tmul_self, one_def
+/-
+**MonoidAlgebra.isGroupLikeElem_single_one** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlge
+bra`。
+形式化陈述：isGroupLikeElem_single_one (g : G) : IsGroupLikeElem R (single g 1 : A[G])
+ where counit_eq_one
+参数：g : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonoidAlgebra.counit_single`：counit_single (x : X) (a : A) : Coalgebra.c
+ounit (single x a) = Coalgebra.counit (R
+· 使用定理 `Bialgebra.counit_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R
+} {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.counit 1 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `MonoidAlgebra.comul_single`：comul_single (x : X) (a : A) : Coalgebra.com
+ul (R
+· 使用定理 `Bialgebra.comul_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R}
+ {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.comul 1 = 1
 -/
 lemma isGroupLikeElem_single_one (g : G) : IsGroupLikeElem R (single g 1 : A[G]) where
   counit_eq_one := by simp
@@ -67,75 +72,59 @@ lemma isGroupLikeElem_single_one (g : G) : IsGroupLikeElem R (single g 1 : A[G])
 
 /-- A group algebra is spanned by its group-like elements. -/
 @[to_additive (dont_translate := R A) (attr := simp) span_isGroupLikeElem]
-/--
-lemma `span_isGroupLikeElem` / 引理 `span_isGroupLikeElem`
+/-
+**MonoidAlgebra.span_isGroupLikeElem** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：span_isGroupLikeElem : Submodule.span A {a : A[G] | IsGroupLikeElem R a} =
+ ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_top_mono`：eq_top_mono (h : a <= b) (h₂ : a = ⊤) : b = ⊤
+· 使用定理 `Submodule.span_mono`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {s t : Set M}, s ⊆ t 
+→ Submodu…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用引理 `MonoidAlgebra.isGroupLikeElem_single_one`：isGroupLikeElem_single_one (g 
+: G) : IsGroupLikeElem R (single g 1 : A[G]) where counit_eq_one
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.range_linearCombination`：range_linearCombination : LinearMap.ran
+ge (linearCombination R v) = span R (range v)
+· 使用定理 `LinearMap.range_eq_top_of_surjective`：range_eq_top_of_surjective [RingHo
+mSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (hf : Surjective f) : range f = ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `MonoidAlgebra.smul_single`：smul_single (a : A) (m : M) (r : R) : a • sin
+gle m r = single m (a • r)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `MonoidAlgebra.sum_coeff_single`：sum_coeff_single (f : R[M]) : f.coeff.su
+m single = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma span_isGroupLikeElem
-  statement: Submodule.span A {a : A[G] | IsGroupLikeElem R a} = ⊤
-  proof: eq_top_mono (Submodule.span_mono <| Set.range_subset_iff.2 isGroupLikeElem_single_one) by
-    rw [← Finsupp.range_linearCombination]
-    exact LinearMap.range_eq_top_of_surjective _ fun x =>
-      ⟨x.coeff, by simp [Finsupp.linearCombination_apply]⟩
-
-中文:
-引理 span_isGroupLikeElem
-  结论: 子模.span A {a : A[G] | 是GroupLikeElem R a} = ⊤
-  证明: eq_top_mono (Submodule.span_mono <| Set.range_subset_iff.2 isGroupLikeElem_single_one) by
-    rw [← Finsupp.range_linearCombination]
-    exact LinearMap.range_eq_top_of_surjective _ fun x =>
-      ⟨x.coeff, by simp [Finsupp.linearCombination_apply]⟩
-
-Depends on / 依赖: Finsupp, Finsupp.linearCombination_apply, Finsupp.range_linearCombination, LinearMap, LinearMap.range_eq_top_of_surjective, Set.range_subset_iff, Submodule, Submodule.span_mono, eq_top_mono, isGroupLikeElem_single_one, linearCombination_apply, range_eq_top_of_surjective, range_linearCombination, range_subset_iff, span_mono, x.coeff
+--- 原说明 ---
+A group algebra is spanned by its group-like elements.
 -/
 lemma span_isGroupLikeElem : Submodule.span A {a : A[G] | IsGroupLikeElem R a} = ⊤ :=
-eq_top_mono (Submodule.span_mono <| Set.range_subset_iff.2 isGroupLikeElem_single_one) by
+  eq_top_mono (Submodule.span_mono <| Set.range_subset_iff.2 isGroupLikeElem_single_one) <| by
     rw [← Finsupp.range_linearCombination]
-    exact LinearMap.range_eq_top_of_surjective _ fun x =>
+    exact LinearMap.range_eq_top_of_surjective _ fun x ↦
       ⟨x.coeff, by simp [Finsupp.linearCombination_apply]⟩
 
 variable [Monoid M] [Monoid N] [Monoid O]
 
 variable (R A M) in
 @[to_additive (dont_translate := R A)]
-/--
-Instance `instBialgebra` / 实例 `instBialgebra`
-
-English:
-instance instBialgebra
-  signature: : Bialgebra R A[M] where
-  body: by simp only [one_def, counit_single, Bialgebra.counit_one]
-  mul_compr₂_counit := by ext; simp
-  comul_one := by
-    simp only [one_def, comul_single, Bialgebra.comul_one, Algebra.TensorProduct.one_def,
-      TensorProduct.map_tmul, lsingle_apply]
-  mul_compr₂_comul := by
-    ext a b c d
-    simp only [Function.comp_apply, LinearMap.coe_comp, LinearMap.compr₂_apply,
-      LinearMap.mul_apply', single_mul_single, comul_single, Bialgebra.comul_mul,
-      ← (Coalgebra.Repr.arbitrary R b).eq, ← (Coalgebra.Repr.arbitrary R d).eq, Finset.sum_mul_sum,
-      Algebra.TensorProduct.tmul_mul_tmul, map_sum, TensorProduct.map_tmul, lsingle_apply,
-      LinearMap.compl₁₂_apply, LinearMap.coe_sum, Finset.sum_apply,
-      Finset.sum_comm (s := (Coalgebra.Repr.arbitrary R b).index)]
-
-中文:
-实例 instBialgebra
-  签名: : 双代数 R A[M] where
-  定义体: by simp only [one_def, counit_single, Bialgebra.counit_one]
-  mul_compr₂_counit := by ext; simp
-  comul_one := by
-    simp only [one_def, comul_single, Bialgebra.comul_one, Algebra.TensorProduct.one_def,
-      TensorProduct.map_tmul, lsingle_apply]
-  mul_compr₂_comul := by
-    ext a b c d
-    simp only [Function.comp_apply, LinearMap.coe_comp, LinearMap.compr₂_apply,
-      LinearMap.mul_apply', single_mul_single, comul_single, Bialgebra.comul_mul,
-      ← (Coalgebra.Repr.arbitrary R b).eq, ← (Coalgebra.Repr.arbitrary R d).eq, Finset.sum_mul_sum,
-      Algebra.TensorProduct.tmul_mul_tmul, map_sum, TensorProduct.map_tmul, lsingle_apply,
-      LinearMap.compl₁₂_apply, LinearMap.coe_sum, Finset.sum_apply,
-      Finset.sum_comm (s := (Coalgebra.Repr.arbitrary R b).index)]
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.one_def, Bialgebra, Bialgebra.comul_mul, Bialgebra.comul_one, Bialgebra.counit_one, Coalgebra, Coalgebra.Repr.arbitrary, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.compr, LinearMap.mul_apply, TensorProduct, TensorProduct.map_tmul, arbitrary, coe_comp, comp_apply, comul_mul
+/-
+**MonoidAlgebra.instBialgebra** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+形式化陈述：instBialgebra : Bialgebra R A[M] where counit_one
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instBialgebra : Bialgebra R A[M] where
   counit_one := by simp only [one_def, counit_single, Bialgebra.counit_one]
@@ -159,115 +148,131 @@ their monoid algebras. -/
 @[expose, to_additive (attr := simps!) (dont_translate := R)
 /-- If `f : M → N` is an additive monoid hom, then `MonoidAlgebra.mapDomain f` is a bialgebra hom
 between their additive monoid algebras. -/]
-/--
-Definition of `mapDomainBialgHom` / `mapDomainBialgHom` 的定义
-
-English:
-definition mapDomainBialgHom
-  signature: (f : M ->* N)
-  body: .ofAlgHom (mapDomainAlgHom R R f) (by ext; simp) (by ext; simp)
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mapDomainBialgHom
-  签名: (f : M ->* N)
-  定义体: .ofAlgHom (mapDomainAlgHom R R f) (by ext; simp) (by ext; simp)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mapDomainAlgHom, ofAlgHom
+/-
+**MonoidAlgebra.mapDomainBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`。
+形式化陈述：mapDomainBialgHom (f : M ->* N) : R[M] ->ₐc[R] R[N]
+参数：f : M ->* N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mapDomainBialgHom (f : M ->* N) : R[M] ->ₐc[R] R[N] :=
+def mapDomainBialgHom (f : M →* N) : R[M] →ₐc[R] R[N] :=
   .ofAlgHom (mapDomainAlgHom R R f) (by ext; simp) (by ext; simp)
 
 @[to_additive (attr := simp)]
-/--
-lemma `mapDomainBialgHom_id` / 引理 `mapDomainBialgHom_id`
-
-English:
-lemma mapDomainBialgHom_id
-  statement: mapDomainBialgHom R (.id M) = .id R R[M]
-  proof: by ext; simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mapDomainBialgHom_id
-  结论: mapDomainBialgHom R (.id M) = .id R R[M]
-  证明: by ext; simp
-
-@[to_additive (attr := simp)]
+/-
+**MonoidAlgebra.mapDomainBialgHom_id** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：mapDomainBialgHom_id : mapDomainBialgHom R (.id M) = .id R R[M]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.ext`：ext {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁
+ = φ₂
+· 使用定理 `MonoidAlgebra.ext`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] {
+x y : MonoidAlgebra R M}, x.coeff = y.coeff → x = y
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidAlgebra.coeff_mapDomainBialgHom_apply`：∀ (R : Type u_1) {M : Type 
+u_8} {N : Type u_9} [inst : CommSemiring R] [inst_1 : Monoid M] [inst_2 : Monoid
+ N]   (f : M →* N) (a : MonoidAlg…
+· 使用定理 `Finsupp.mapDomain_id`：mapDomain_id : mapDomain id v = v
+· 使用定理 `BialgHom.id_apply`：∀ (R : Type u_1) (A : Type u_2) [inst : CommSemiring 
+R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : CoalgebraStruct R A]
+ (x : A…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapDomainBialgHom_id : mapDomainBialgHom R (.id M) = .id R R[M] := by ext; simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `mapDomainBialgHom_comp` / 引理 `mapDomainBialgHom_comp`
-
-English:
-lemma mapDomainBialgHom_comp
-  given: (f : N ->* O) (g : M ->* N)
-  proof: by
-  ext; simp [Finsupp.mapDomain_comp]
-
-@[to_additive]
-
-中文:
-引理 mapDomainBialgHom_comp
-  条件: (f : N ->* O) (g : M ->* N)
-  证明: by
-  ext; simp [Finsupp.mapDomain_comp]
-
-@[to_additive]
-
-Depends on / 依赖: Finsupp, Finsupp.mapDomain_comp, mapDomain_comp
+/-
+**MonoidAlgebra.mapDomainBialgHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`
+。
+形式化陈述：mapDomainBialgHom_comp (f : N ->* O) (g : M ->* N) : mapDomainBialgHom R (
+f.comp g) = (mapDomainBialgHom R f).comp (mapDomainBialgHom R g)
+参数：f : N ->* O；g : M ->* N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.ext`：ext {φ₁ φ₂ : A ->ₐc[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁
+ = φ₂
+· 使用定理 `MonoidAlgebra.ext`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] {
+x y : MonoidAlgebra R M}, x.coeff = y.coeff → x = y
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidAlgebra.coeff_mapDomainBialgHom_apply`：∀ (R : Type u_1) {M : Type 
+u_8} {N : Type u_9} [inst : CommSemiring R] [inst_1 : Monoid M] [inst_2 : Monoid
+ N]   (f : M →* N) (a : MonoidAlg…
+· 使用定理 `Finsupp.mapDomain_comp`：mapDomain_comp {f : α -> β} {g : β -> γ} : mapDo
+main (g ∘ f) v = mapDomain g (mapDomain f v)
+· 使用定理 `BialgHom.comp_apply`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} {C :
+ Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Semiring B]
+ [inst_3 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapDomainBialgHom_comp (f : N ->* O) (g : M ->* N) :
+lemma mapDomainBialgHom_comp (f : N →* O) (g : M →* N) :
     mapDomainBialgHom R (f.comp g) = (mapDomainBialgHom R f).comp (mapDomainBialgHom R g) := by
   ext; simp [Finsupp.mapDomain_comp]
 
 @[to_additive]
-/--
-lemma `mapDomainBialgHom_mapDomainBialgHom` / 引理 `mapDomainBialgHom_mapDomainBialgHom`
-
-English:
-lemma mapDomainBialgHom_mapDomainBialgHom
-  given: (f : N ->* O) (g : M ->* N) (x : R[M])
-  proof: by
-  ext; simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mapDomainBialgHom_mapDomainBialgHom
-  条件: (f : N ->* O) (g : M ->* N) (x : R[M])
-  证明: by
-  ext; simp
-
-@[to_additive (attr := simp)]
+/-
+**MonoidAlgebra.mapDomainBialgHom_mapDomainBialgHom** 是 Mathlib 中的一个引理，位于命名空间 `M
+onoidAlgebra`。
+形式化陈述：mapDomainBialgHom_mapDomainBialgHom (f : N ->* O) (g : M ->* N) (x : R[M])
+ : mapDomainBialgHom R f (mapDomainBialgHom R g x) = mapDomainBialgHom R (f.comp
+ g) x
+参数：f : N ->* O；g : M ->* N；x : R[M]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidAlgebra.ext`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] {
+x y : MonoidAlgebra R M}, x.coeff = y.coeff → x = y
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidAlgebra.coeff_mapDomainBialgHom_apply`：∀ (R : Type u_1) {M : Type 
+u_8} {N : Type u_9} [inst : CommSemiring R] [inst_1 : Monoid M] [inst_2 : Monoid
+ N]   (f : M →* N) (a : MonoidAlg…
+· 使用引理 `MonoidAlgebra.mapDomainBialgHom_comp`：mapDomainBialgHom_comp (f : N ->* 
+O) (g : M ->* N) : mapDomainBialgHom R (f.comp g) = (mapDomainBialgHom R f).comp
+ (mapDomainBialgHom R g)
+· 使用定理 `BialgHom.comp_apply`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} {C :
+ Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Semiring B]
+ [inst_3 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapDomainBialgHom_mapDomainBialgHom (f : N ->* O) (g : M ->* N) (x : R[M]) :
+lemma mapDomainBialgHom_mapDomainBialgHom (f : N →* O) (g : M →* N) (x : R[M]) :
     mapDomainBialgHom R f (mapDomainBialgHom R g x) = mapDomainBialgHom R (f.comp g) x := by
   ext; simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `mapDomainBialgHom_single` / 引理 `mapDomainBialgHom_single`
-
-English:
-lemma mapDomainBialgHom_single
-  given: (f : M ->* N) (m : M) (r : R)
-  proof: mapDomain_single
-
-中文:
-引理 mapDomainBialgHom_single
-  条件: (f : M ->* N) (m : M) (r : R)
-  证明: mapDomain_single
-
-Depends on / 依赖: mapDomain_single
+/-
+**MonoidAlgebra.mapDomainBialgHom_single** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebr
+a`。
+形式化陈述：mapDomainBialgHom_single (f : M ->* N) (m : M) (r : R) : mapDomainBialgHom
+ R f (single m r) = single (f m) r
+参数：f : M ->* N；m : M；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.mapDomain_single`：mapDomain_single : mapDomain f (single a
+ r) = single (f a) r
 -/
-lemma mapDomainBialgHom_single (f : M ->* N) (m : M) (r : R) :
+lemma mapDomainBialgHom_single (f : M →* N) (m : M) (r : R) :
     mapDomainBialgHom R f (single m r) = single (f m) r := mapDomain_single
 
 /-- A `R`-bialgebra homomorphism from `A[M]` is uniquely defined by its
@@ -281,75 +286,111 @@ values on the functions `single m 1` and `single 1 a`.
 
 See note [partially-applied ext lemmas]. Note that the first assumption isn't written as an
 equality of `AddMonoidHom`s because `of` doesn't multiplicativise. -/]
-/--
-lemma `bialgHom_ext` / 引理 `bialgHom_ext`
-
-English:
-lemma bialgHom_ext
-  given: ⦃φ₁ φ₂
-  statement: A[M] ->ₐc[R] B⦄
-  proof: BialgHom.coe_toAlgHom_injective algHom_ext single_one_right single_one_left
-
-中文:
-引理 bialgHom_ext
-  条件: ⦃φ₁ φ₂
-  结论: A[M] ->ₐc[R] B⦄
-  证明: BialgHom.coe_toAlgHom_injective algHom_ext single_one_right single_one_left
-
-Depends on / 依赖: BialgHom, BialgHom.coe_toAlgHom_injective, algHom_ext, coe_toAlgHom_injective, single_one_left, single_one_right
+/-
+**MonoidAlgebra.bialgHom_ext** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：bialgHom_ext ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄ (single_one_right : forall (m : M), 
+φ₁ (single m 1) = φ₂ (single m 1)) (single_one_left : (φ₁ : A[M] ->ₐ[R] B).comp 
+singleOneAlgHom = (φ₂ : A[M] ->ₐ[R] B).comp singleOneAlgHom) : φ₁ = φ₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.coe_toAlgHom_injective`：coe_toAlgHom_injective : Function.Injec
+tive ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
+· 使用引理 `MonoidAlgebra.algHom_ext`：algHom_ext ⦃φ₁ φ₂ : A[M] ->ₐ[R] B⦄ (single_one
+_right : forall m, φ₁ (single m 1) = φ₂ (single m 1)) (single_one_left : φ₁.comp
+ singleOneAlgH…
 -/
-lemma bialgHom_ext ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄
-  (single_one_right : forall (m : M), φ₁ (single m 1) = φ₂ (single m 1))
-  (single_one_left : (φ₁ : A[M] ->ₐ[R] B).comp singleOneAlgHom =
-    (φ₂ : A[M] ->ₐ[R] B).comp singleOneAlgHom) : φ₁ = φ₂ :=
-BialgHom.coe_toAlgHom_injective algHom_ext single_one_right single_one_left
+lemma bialgHom_ext ⦃φ₁ φ₂ : A[M] →ₐc[R] B⦄
+  (single_one_right : ∀ (m : M), φ₁ (single m 1) = φ₂ (single m 1))
+  (single_one_left : (φ₁ : A[M] →ₐ[R] B).comp singleOneAlgHom =
+    (φ₂ : A[M] →ₐ[R] B).comp singleOneAlgHom) : φ₁ = φ₂ :=
+  BialgHom.coe_toAlgHom_injective <| algHom_ext single_one_right single_one_left
 
-/--
-lemma `bialgHom_ext'` / 引理 `bialgHom_ext'`
+/-- Version of `bialgHom_ext` where both assumptions are written as equalities of bundled homs. -/
+/-
+**MonoidAlgebra.bialgHom_ext'** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：bialgHom_ext' ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄ (single_one_right : (φ₁ : A[M] ->* 
+B).comp (of A M) = (φ₂ : A[M] ->* B).comp (of A M)) (single_one_left : (φ₁ : A[M
+] ->ₐ[R] B).comp singleOneAlgHom = (φ₂ : A[M] ->ₐ[R] B).comp singleOneAlgHom) : 
+φ₁ = φ₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toMonoidHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2
+)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}  
+ {inst_1 : Semiring …
+· 使用定理 `BialgHom.coe_toAlgHom_injective`：coe_toAlgHom_injective : Function.Injec
+tive ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
+· 使用引理 `MonoidAlgebra.algHom_ext'`：algHom_ext' ⦃φ₁ φ₂ : A[M] ->ₐ[R] B⦄ (single_o
+ne_right : (φ₁ : A[M] ->* B).comp (of A M) = (φ₂ : A[M] ->* B).comp (of A M)) (s
+ingle_one_left …
 
-English:
-lemma bialgHom_ext'
-  given: ⦃φ₁ φ₂
-  statement: A[M] ->ₐc[R] B⦄
-  proof: BialgHom.coe_toAlgHom_injective algHom_ext' single_one_right single_one_left
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 bialgHom_ext'
-  条件: ⦃φ₁ φ₂
-  结论: A[M] ->ₐc[R] B⦄
-  证明: BialgHom.coe_toAlgHom_injective algHom_ext' single_one_right single_one_left
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: BialgHom, BialgHom.coe_toAlgHom_injective, algHom_ext, coe_toAlgHom_injective, single_one_left, single_one_right
+--- 原说明 ---
+Version of `bialgHom_ext` where both assumptions are written as equalities of bu
+ndled homs.
 -/
-lemma bialgHom_ext' ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄
-    (single_one_right : (φ₁ : A[M] ->* B).comp (of A M) = (φ₂ : A[M] ->* B).comp (of A M))
-    (single_one_left : (φ₁ : A[M] ->ₐ[R] B).comp singleOneAlgHom =
-      (φ₂ : A[M] ->ₐ[R] B).comp singleOneAlgHom) : φ₁ = φ₂ :=
-BialgHom.coe_toAlgHom_injective algHom_ext' single_one_right single_one_left
+lemma bialgHom_ext' ⦃φ₁ φ₂ : A[M] →ₐc[R] B⦄
+    (single_one_right : (φ₁ : A[M] →* B).comp (of A M) = (φ₂ : A[M] →* B).comp (of A M))
+    (single_one_left : (φ₁ : A[M] →ₐ[R] B).comp singleOneAlgHom =
+      (φ₂ : A[M] →ₐ[R] B).comp singleOneAlgHom) : φ₁ = φ₂ :=
+  BialgHom.coe_toAlgHom_injective <| algHom_ext' single_one_right single_one_left
 
 @[to_additive (attr := simp)]
-/--
-lemma `counit_domCongr` / 引理 `counit_domCongr`
-
-English:
-lemma counit_domCongr
-  given: (e : M ≃* N) (x : A[M])
-  statement: counit (R := R) (domCongr R A e x) = counit x
-  proof: by
-  induction x using MonoidAlgebra.induction_linear <;> simp [*]
-
-中文:
-引理 counit_domCongr
-  条件: (e : M ≃* N) (x : A[M])
-  结论: counit (R := R) (domCongr R A e x) = counit x
-  证明: by
-  induction x using MonoidAlgebra.induction_linear <;> simp [*]
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.induction_linear, counit, domCongr, induction_linear
+/-
+**MonoidAlgebra.counit_domCongr** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：counit_domCongr (e : M ≃* N) (x : A[M]) : counit (R
+参数：e : M ≃* N；x : A[M]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.induction_linear`：induction_linear {motive : R[M] -> Prop}
+ (x : R[M]) (zero : motive 0) (add : forall x y : R[M], motive x -> motive y -> 
+motive (x + y)) (sin…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MonoidAlgebra.domCongr_single`：domCongr_single (e : M ≃* N) (m : M) (a :
+ A) : domCongr R A e (single m a) = single (e m) a
+· 使用引理 `MonoidAlgebra.counit_single`：counit_single (x : X) (a : A) : Coalgebra.c
+ounit (single x a) = Coalgebra.counit (R
 -/
 lemma counit_domCongr (e : M ≃* N) (x : A[M]) : counit (R := R) (domCongr R A e x) = counit x := by
   induction x using MonoidAlgebra.induction_linear <;> simp [*]
@@ -359,29 +400,15 @@ variable (R A) in
 /-- Isomorphic monoids have isomorphic monoid algebras. -/
 @[expose, to_additive (attr := simps! -isSimp) (dont_translate := R A)
 /-- Isomorphic monoids have isomorphic monoid algebras. -/]
-/--
-Definition of `domCongrBialgEquiv` / `domCongrBialgEquiv` 的定义
-
-English:
-definition domCongrBialgEquiv
-  signature: (e : M ≃* N)
-  body: .ofAlgEquiv (domCongr R A e) (by ext <;> simp) by
-    ext a
-    · simp
-    · simp [← (Coalgebra.Repr.arbitrary R a).eq]
-
-中文:
-定义 domCongrBialgEquiv
-  签名: (e : M ≃* N)
-  定义体: .ofAlgEquiv (domCongr R A e) (by ext <;> simp) by
-    ext a
-    · simp
-    · simp [← (Coalgebra.Repr.arbitrary R a).eq]
-
-Depends on / 依赖: Coalgebra, Coalgebra.Repr.arbitrary, arbitrary, domCongr, ofAlgEquiv
+/-
+**MonoidAlgebra.domCongrBialgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`。
+形式化陈述：domCongrBialgEquiv (e : M ≃* N) : A[M] ≃ₐc[R] A[N]
+参数：e : M ≃* N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def domCongrBialgEquiv (e : M ≃* N) : A[M] ≃ₐc[R] A[N] :=
-.ofAlgEquiv (domCongr R A e) (by ext <;> simp) by
+  .ofAlgEquiv (domCongr R A e) (by ext <;> simp) <| by
     ext a
     · simp
     · simp [← (Coalgebra.Repr.arbitrary R a).eq]
@@ -390,34 +417,12 @@ variable (M) in
 /-- The trivial monoid algebra is isomorphic to the base ring. -/
 @[expose, to_additive (dont_translate := R)
 /-- The trivial monoid algebra is isomorphic to the base ring. -/]
-/--
-Definition of `bialgEquivOfSubsingleton` / `bialgEquivOfSubsingleton` 的定义
-
-English:
-definition bialgEquivOfSubsingleton
-  signature: [Subsingleton M]
-  body: counitBialgHom ..
-  invFun := algebraMap _ _
-  left_inv r := by
-    change (Algebra.ofId _ _).comp (Bialgebra.counitAlgHom R _) r = AlgHom.id R _ r
-    congr 1
-    ext g : 2
-    simp [Subsingleton.elim g 1]
-  right_inv := (Bialgebra.counitAlgHom R R[M]).commutes
-
-中文:
-定义 bialgEquivOfSubsingleton
-  签名: [子单例 M]
-  定义体: counitBialgHom ..
-  invFun := algebraMap _ _
-  left_inv r := by
-    change (Algebra.ofId _ _).comp (Bialgebra.counitAlgHom R _) r = AlgHom.id R _ r
-    congr 1
-    ext g : 2
-    simp [Subsingleton.elim g 1]
-  right_inv := (Bialgebra.counitAlgHom R R[M]).commutes
-
-Depends on / 依赖: LinearOrder, Subsingleton, WellFoundedLT, counitBialgHom
+/-
+**MonoidAlgebra.bialgEquivOfSubsingleton** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebr
+a`。
+形式化陈述：bialgEquivOfSubsingleton [Subsingleton M] : R[M] ≃ₐc[R] R where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def bialgEquivOfSubsingleton [Subsingleton M] : R[M] ≃ₐc[R] R where
   __ := counitBialgHom ..
@@ -428,46 +433,30 @@ def bialgEquivOfSubsingleton [Subsingleton M] : R[M] ≃ₐc[R] R where
     ext g : 2
     simp [Subsingleton.elim g 1]
   right_inv := (Bialgebra.counitAlgHom R R[M]).commutes
-
-/--
-lemma `isGroupLikeElem_of` / 引理 `isGroupLikeElem_of`
-
-English:
-lemma isGroupLikeElem_of
-  given: (m : M)
-  statement: IsGroupLikeElem R (of A M m)
-  proof: isGroupLikeElem_single_one ..
-
-中文:
-引理 isGroupLikeElem_of
-  条件: (m : M)
-  结论: 是GroupLikeElem R (of A M m)
-  证明: isGroupLikeElem_single_one ..
-
-Depends on / 依赖: isGroupLikeElem_single_one
+/-
+**MonoidAlgebra.isGroupLikeElem_of** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：isGroupLikeElem_of (m : M) : IsGroupLikeElem R (of A M m)
+参数：m : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.isGroupLikeElem_single_one`：isGroupLikeElem_single_one (g 
+: G) : IsGroupLikeElem R (single g 1 : A[G]) where counit_eq_one
 -/
 lemma isGroupLikeElem_of (m : M) : IsGroupLikeElem R (of A M m) := isGroupLikeElem_single_one ..
 
 /-- The `R`-bialgebra map from the group algebra on the group-like elements of `A` to `A`. -/
 @[expose, simps!]
-/--
-Definition of `liftGroupLikeBialgHom` / `liftGroupLikeBialgHom` 的定义
+/-
+**MonoidAlgebra.liftGroupLikeBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`。
+形式化陈述：liftGroupLikeBialgHom : R[GroupLike R A] ->ₐc[R] A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftGroupLikeBialgHom
-  signature: : R[GroupLike R A] ->ₐc[R] A
-  body: .ofAlgHom (lift R A (GroupLike R A) { toFun g := g.1, map_one' := by simp, map_mul' := by simp })
-    (by ext; simp) (by ext; simp)
-
-中文:
-定义 liftGroupLikeBialgHom
-  签名: : R[群状 R A] ->ₐc[R] A
-  定义体: .ofAlgHom (lift R A (GroupLike R A) { toFun g := g.1, map_one' := by simp, map_mul' := by simp })
-    (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: GroupLike, map_mul, map_one, ofAlgHom
+--- 原说明 ---
+The `R`-bialgebra map from the group algebra on the group-like elements of `A` t
+o `A`.
 -/
-def liftGroupLikeBialgHom : R[GroupLike R A] ->ₐc[R] A :=
+def liftGroupLikeBialgHom : R[GroupLike R A] →ₐc[R] A :=
   .ofAlgHom (lift R A (GroupLike R A) { toFun g := g.1, map_one' := by simp, map_mul' := by simp })
     (by ext; simp) (by ext; simp)
 
@@ -476,54 +465,39 @@ variable (R A M) in
 `Additive`. -/
 -- TODO: Make `BialgEquiv.toCoalgEquiv` the simp normal form so that this can be simp
 @[expose, simps! -isSimp]
-/--
-Definition of `toAdditiveBialgEquiv` / `toAdditiveBialgEquiv` 的定义
-
-English:
-definition toAdditiveBialgEquiv
-  signature: : A[M] ≃ₐc[R] AddMonoidAlgebra A (Additive M)
-  body: .ofAlgEquiv (toAdditiveAlgEquiv R A M) (by ext <;> simp) by
-    ext a
-    · simp
-    · simp [← (Coalgebra.Repr.arbitrary R a).eq]
-
-@[simp]
-
-中文:
-定义 toAdditiveBialgEquiv
-  签名: : A[M] ≃ₐc[R] 加法幺半群代数 A (加性 M)
-  定义体: .ofAlgEquiv (toAdditiveAlgEquiv R A M) (by ext <;> simp) by
-    ext a
-    · simp
-    · simp [← (Coalgebra.Repr.arbitrary R a).eq]
-
-@[simp]
-
-Depends on / 依赖: Coalgebra, Coalgebra.Repr.arbitrary, arbitrary, ofAlgEquiv, toAdditiveAlgEquiv
+/-
+**MonoidAlgebra.toAdditiveBialgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`。
+形式化陈述：toAdditiveBialgEquiv : A[M] ≃ₐc[R] AddMonoidAlgebra A (Additive M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def toAdditiveBialgEquiv : A[M] ≃ₐc[R] AddMonoidAlgebra A (Additive M) :=
-.ofAlgEquiv (toAdditiveAlgEquiv R A M) (by ext <;> simp) by
+  .ofAlgEquiv (toAdditiveAlgEquiv R A M) (by ext <;> simp) <| by
     ext a
     · simp
     · simp [← (Coalgebra.Repr.arbitrary R a).eq]
 
 @[simp]
-/--
-lemma `toAdditiveBialgEquiv_single` / 引理 `toAdditiveBialgEquiv_single`
-
-English:
-lemma toAdditiveBialgEquiv_single
-  given: (m : M) (a : A)
-  proof: by
-  simp [toAdditiveBialgEquiv]
-
-中文:
-引理 toAdditiveBialgEquiv_single
-  条件: (m : M) (a : A)
-  证明: by
-  simp [toAdditiveBialgEquiv]
-
-Depends on / 依赖: toAdditiveBialgEquiv
+/-
+**MonoidAlgebra.toAdditiveBialgEquiv_single** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlg
+ebra`。
+形式化陈述：toAdditiveBialgEquiv_single (m : M) (a : A) : toAdditiveBialgEquiv R A M (
+single m a) = .single (.ofMul m) a
+参数：m : M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BialgEquiv.ofAlgEquiv_apply`：∀ {R : Type u} {A : Type v} {B : Type w} [i
+nst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Bi
+algebra R A] [ins…
+· 使用引理 `MonoidAlgebra.toAdditiveAlgEquiv_single`：toAdditiveAlgEquiv_single (m : 
+M) (a : A) : toAdditiveAlgEquiv R A M (single m a) = .single (.ofMul m) a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toAdditiveBialgEquiv_single (m : M) (a : A) :
     toAdditiveBialgEquiv R A M (single m a) = .single (.ofMul m) a := by
@@ -538,48 +512,51 @@ section Algebra
 variable [Algebra R A] [Monoid M]
 
 variable (R M A) in
-/--
-Definition of `liftMulEquiv` / `liftMulEquiv` 的定义
+/-- `MonoidAlgebra.lift` as a `MulEquiv`. -/
+/-
+**MonoidAlgebra.liftMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`。
+形式化陈述：liftMulEquiv : (M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition liftMulEquiv
-  signature: : (M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where
-  body: (lift R A M).trans (WithConv.equiv _).symm
-  map_mul' f g := by ext; simp [AlgHom.convMul_apply]
-
-@[to_additive (dont_translate := R A) (attr := simp) convMul_algHom_single_one]
-
-中文:
-定义 liftMulEquiv
-  签名: : (M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where
-  定义体: (lift R A M).trans (WithConv.equiv _).symm
-  map_mul' f g := by ext; simp [AlgHom.convMul_apply]
-
-@[to_additive (dont_translate := R A) (attr := simp) convMul_algHom_single_one]
-
-Depends on / 依赖: WithConv, WithConv.equiv
+--- 原说明 ---
+`MonoidAlgebra.lift` as a `MulEquiv`.
 -/
-def liftMulEquiv : (M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where
+def liftMulEquiv : (M →* A) ≃* WithConv (R[M] →ₐ[R] A) where
   toEquiv := (lift R A M).trans (WithConv.equiv _).symm
   map_mul' f g := by ext; simp [AlgHom.convMul_apply]
 
 @[to_additive (dont_translate := R A) (attr := simp) convMul_algHom_single_one]
-/--
-lemma `convMul_algHom_single_one` / 引理 `convMul_algHom_single_one`
-
-English:
-lemma convMul_algHom_single_one
-  given: (f g : WithConv <| R[M] ->ₐ[R] A) (x : M)
-  proof: by simp [AlgHom.convMul_apply]
-
-中文:
-引理 convMul_algHom_single_one
-  条件: (f g : WithConv <| R[M] ->ₐ[R] A) (x : M)
-  证明: by simp [AlgHom.convMul_apply]
-
-Depends on / 依赖: AlgHom, AlgHom.convMul_apply, convMul_apply
+/-
+**MonoidAlgebra.convMul_algHom_single_one** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgeb
+ra`。
+形式化陈述：convMul_algHom_single_one (f g : WithConv <| R[M] ->ₐ[R] A) (x : M) : (f *
+ g) (single x 1) = f (single x 1) * g (single x 1)
+参数：f g : WithConv <| R[M] ->ₐ[R] A；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Commute.all`：∀ {S : Type u_3} [inst : CommMagma S] (a b : S), Commute a 
+b
+· 使用引理 `AlgHom.convMul_apply`：convMul_apply (f g : WithConv <| C ->ₐ[R] A) (c : 
+C) : (f * g) c = lift f.ofConv g.ofConv (fun _ _ => .all ..) (comul c)
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma convMul_algHom_single_one (f g : WithConv <| R[M] ->ₐ[R] A) (x : M) :
+lemma convMul_algHom_single_one (f g : WithConv <| R[M] →ₐ[R] A) (x : M) :
     (f * g) (single x 1) = f (single x 1) * g (single x 1) := by simp [AlgHom.convMul_apply]
 
 end Algebra
@@ -587,28 +564,33 @@ end Algebra
 variable [Bialgebra R A]
 
 @[to_additive (dont_translate := R A) (attr := simp) convMul_bialgHom_single_one]
-/--
-lemma `convMul_bialgHom_single_one` / 引理 `convMul_bialgHom_single_one`
-
-English:
-lemma convMul_bialgHom_single_one
-  given: [CommMonoid M] (f g : WithConv <| R[M] ->ₐc[R] A) (x : M)
-  proof: by
-  simp only [BialgHom.convMul_def, BialgHom.coe_comp, Function.comp_apply]
-  change mulBialgHom R A (Bialgebra.TensorProduct.map f.ofConv g.ofConv (comul (single x 1))) = _
-  simp [Bialgebra.TensorProduct.map_tmul]
-
-中文:
-引理 convMul_bialgHom_single_one
-  条件: [交换幺半群 M] (f g : WithConv <| R[M] ->ₐc[R] A) (x : M)
-  证明: by
-  simp only [BialgHom.convMul_def, BialgHom.coe_comp, Function.comp_apply]
-  change mulBialgHom R A (Bialgebra.TensorProduct.map f.ofConv g.ofConv (comul (single x 1))) = _
-  simp [Bialgebra.TensorProduct.map_tmul]
-
-Depends on / 依赖: BialgHom, BialgHom.coe_comp, BialgHom.convMul_def, Bialgebra, Bialgebra.TensorProduct.map, Bialgebra.TensorProduct.map_tmul, Function, Function.comp_apply, TensorProduct, coe_comp, comp_apply, convMul_def, f.ofConv, g.ofConv, map_tmul, mulBialgHom, ofConv, single
+/-
+**MonoidAlgebra.convMul_bialgHom_single_one** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlg
+ebra`。
+形式化陈述：convMul_bialgHom_single_one [CommMonoid M] (f g : WithConv <| R[M] ->ₐc[R]
+ A) (x : M) : (f * g) (single x 1) = f (single x 1) * g (single x 1)
+参数：f g : WithConv <| R[M] ->ₐc[R] A；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CommSemiring.instIsCocomm`：∀ (R : Type u) [inst : CommSemiring R], Coalg
+ebra.IsCocomm R R
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma convMul_bialgHom_single_one [CommMonoid M] (f g : WithConv <| R[M] ->ₐc[R] A) (x : M) :
+lemma convMul_bialgHom_single_one [CommMonoid M] (f g : WithConv <| R[M] →ₐc[R] A) (x : M) :
     (f * g) (single x 1) = f (single x 1) * g (single x 1) := by
   simp only [BialgHom.convMul_def, BialgHom.coe_comp, Function.comp_apply]
   change mulBialgHom R A (Bialgebra.TensorProduct.map f.ofConv g.ofConv (comul (single x 1))) = _
@@ -620,55 +602,159 @@ section CommMonoid
 variable [CommMonoid M] [CommMonoid N]
 
 @[to_additive (dont_translate := R) (attr := simp)]
-/--
-lemma `mapDomainBialgHom_mul` / 引理 `mapDomainBialgHom_mul`
-
-English:
-lemma mapDomainBialgHom_mul
-  given: (f g : M ->* N)
-  proof: by ext; simp
-
-中文:
-引理 mapDomainBialgHom_mul
-  条件: (f g : M ->* N)
-  证明: by ext; simp
+/-
+**MonoidAlgebra.mapDomainBialgHom_mul** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：mapDomainBialgHom_mul (f g : M ->* N) : mapDomainBialgHom R (f * g) = ofCo
+nv ((toConv <| mapDomainBialgHom R f) * (toConv <| mapDomainBialgHom R g))
+参数：f g : M ->* N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.bialgHom_ext`：bialgHom_ext ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄ (singl
+e_one_right : forall (m : M), φ₁ (single m 1) = φ₂ (single m 1)) (single_one_lef
+t : (φ₁ : A[M] -…
+· 使用定理 `CommSemiring.instIsCocomm`：∀ (R : Type u) [inst : CommSemiring R], Coalg
+ebra.IsCocomm R R
+· 使用定理 `MonoidAlgebra.ext`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R] {
+x y : MonoidAlgebra R M}, x.coeff = y.coeff → x = y
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `MonoidAlgebra.mapDomainBialgHom_single`：mapDomainBialgHom_single (f : M 
+->* N) (m : M) (r : R) : mapDomainBialgHom R f (single m r) = single (f m) r
+· 使用引理 `MonoidAlgebra.convMul_bialgHom_single_one`：convMul_bialgHom_single_one [
+CommMonoid M] (f g : WithConv <| R[M] ->ₐc[R] A) (x : M) : (f * g) (single x 1) 
+= f (single x 1) * g (single x …
+· 使用引理 `MonoidAlgebra.single_mul_single`：single_mul_single (m₁ m₂ : M) (r₁ r₂ : 
+R) : single m₁ r₁ * single m₂ r₂ = single (m₁ * m₂) (r₁ * r₂)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Algebra.ext_id`：ext_id (f g : R ->ₐ[R] A) : f = g
 -/
-lemma mapDomainBialgHom_mul (f g : M ->* N) :
+lemma mapDomainBialgHom_mul (f g : M →* N) :
     mapDomainBialgHom R (f * g) =
       ofConv ((toConv <| mapDomainBialgHom R f) * (toConv <| mapDomainBialgHom R g)) := by ext; simp
-
-/--
-lemma `comulAlgHom_comp_mapRingHom` / 引理 `comulAlgHom_comp_mapRingHom`
-
-English:
-lemma comulAlgHom_comp_mapRingHom
-  given: (f : R ->+* S)
-  proof: by ext <;> simp
-
-中文:
-引理 comulAlgHom_comp_mapRingHom
-  条件: (f : R ->+* S)
-  证明: by ext <;> simp
+/-
+**MonoidAlgebra.comulAlgHom_comp_mapRingHom** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlg
+ebra`。
+形式化陈述：comulAlgHom_comp_mapRingHom (f : R ->+* S) : (comulAlgHom S (MonoidAlgebra
+ S M)).toRingHom.comp (mapRingHom M f) = .comp (Algebra.TensorProduct.mapRingHom
+ f (mapRingHom M f) (mapRingHom M f) (by simp) (by simp)) (comulAlgHom R R[M]).t
+oRingHom
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.ringHom_ext'`：ringHom_ext' [Semiring S] {f g : R[M] ->+* S
+} (h₁ : f.comp singleOneRingHom = g.comp singleOneRingHom) (h_of : (f : R[M] ->*
+ S).comp (of R M…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidAlgebra.singleOneRingHom_apply`：∀ {R : Type u_1} {M : Type u_4} [i
+nst : Semiring R] [inst_1 : MulOneClass M] (a : R),   MonoidAlgebra.singleOneRin
+gHom a = (↑(MonoidAlgebra.…
+· 使用定理 `MonoidAlgebra.singleAddHom_apply`：∀ {R : Type u_1} {M : Type u_4} [inst 
+: Semiring R] (m : M) (r : R),   (MonoidAlgebra.singleAddHom m) r = MonoidAlgebr
+a.single m r
+· 使用引理 `MonoidAlgebra.mapRingHom_single`：mapRingHom_single (f : R ->+* S) (a : M
+) (b : R) : mapRingHom M f (single a b) = single a (f b)
+· 使用定理 `Bialgebra.comulAlgHom_apply`：∀ (R : Type u) (A : Type v) [inst : CommSem
+iring R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A] (a : A),   (Bialgebra.co
+mulAlgHom R A) a …
+· 使用引理 `MonoidAlgebra.comul_single`：comul_single (x : X) (a : A) : Coalgebra.com
+ul (R
+· 使用引理 `Algebra.TensorProduct.mapRingHom_tmul`：mapRingHom_tmul (s : S) (t : T) :
+ mapRingHom fR fS fT HS HT (s otimesₜ t) = fS s otimesₜ fT t
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `MonoidAlgebra.of_apply`：∀ (R : Type u_8) (M : Type u_9) [inst : Semiring
+ R] [inst_1 : MulOneClass M] (a : M),   (MonoidAlgebra.of R M) a = MonoidAlgebra
+.single a 1
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
 -/
-lemma comulAlgHom_comp_mapRingHom (f : R ->+* S) :
+lemma comulAlgHom_comp_mapRingHom (f : R →+* S) :
     (comulAlgHom S (MonoidAlgebra S M)).toRingHom.comp (mapRingHom M f) =
       .comp (Algebra.TensorProduct.mapRingHom f (mapRingHom M f) (mapRingHom M f) (by simp)
         (by simp)) (comulAlgHom R R[M]).toRingHom := by ext <;> simp
-
-/--
-lemma `counitAlgHom_comp_mapRingHom` / 引理 `counitAlgHom_comp_mapRingHom`
-
-English:
-lemma counitAlgHom_comp_mapRingHom
-  given: (f : R ->+* S)
-  proof: by ext <;> simp
-
-中文:
-引理 counitAlgHom_comp_mapRingHom
-  条件: (f : R ->+* S)
-  证明: by ext <;> simp
+/-
+**MonoidAlgebra.counitAlgHom_comp_mapRingHom** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAl
+gebra`。
+形式化陈述：counitAlgHom_comp_mapRingHom (f : R ->+* S) : (counitAlgHom S (MonoidAlgeb
+ra S M)).toRingHom.comp (mapRingHom M f) = f.comp (counitAlgHom R R[M]).toRingHo
+m
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.ringHom_ext'`：ringHom_ext' [Semiring S] {f g : R[M] ->+* S
+} (h₁ : f.comp singleOneRingHom = g.comp singleOneRingHom) (h_of : (f : R[M] ->*
+ S).comp (of R M…
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidAlgebra.singleOneRingHom_apply`：∀ {R : Type u_1} {M : Type u_4} [i
+nst : Semiring R] [inst_1 : MulOneClass M] (a : R),   MonoidAlgebra.singleOneRin
+gHom a = (↑(MonoidAlgebra.…
+· 使用定理 `MonoidAlgebra.singleAddHom_apply`：∀ {R : Type u_1} {M : Type u_4} [inst 
+: Semiring R] (m : M) (r : R),   (MonoidAlgebra.singleAddHom m) r = MonoidAlgebr
+a.single m r
+· 使用引理 `MonoidAlgebra.mapRingHom_single`：mapRingHom_single (f : R ->+* S) (a : M
+) (b : R) : mapRingHom M f (single a b) = single a (f b)
+· 使用定理 `Bialgebra.counitAlgHom_apply`：∀ (R : Type u) (A : Type v) [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A] (a : A),   (Bialgebra.c
+ounitAlgHom R A) a…
+· 使用引理 `MonoidAlgebra.counit_single`：counit_single (x : X) (a : A) : Coalgebra.c
+ounit (single x a) = Coalgebra.counit (R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MonoidAlgebra.of_apply`：∀ (R : Type u_8) (M : Type u_9) [inst : Semiring
+ R] [inst_1 : MulOneClass M] (a : M),   (MonoidAlgebra.of R M) a = MonoidAlgebra
+.single a 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `IsGroupLikeElem.counit_eq_one`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] {…
 -/
-lemma counitAlgHom_comp_mapRingHom (f : R ->+* S) :
+lemma counitAlgHom_comp_mapRingHom (f : R →+* S) :
     (counitAlgHom S (MonoidAlgebra S M)).toRingHom.comp (mapRingHom M f) =
       f.comp (counitAlgHom R R[M]).toRingHom := by ext <;> simp
 
@@ -680,71 +766,91 @@ variable [CommRing R] [IsDomain R]
 
 open Submodule in
 @[to_additive (dont_translate := R) isGroupLikeElem_iff_mem_range_single_one]
-/--
-lemma `isGroupLikeElem_iff_mem_range_single_one` / 引理 `isGroupLikeElem_iff_mem_range_single_one`
-
-English:
-lemma isGroupLikeElem_iff_mem_range_single_one
-  given: {x : R[M]}
-  proof: by
-    by_contra h
-    have : LinearIndepOn R id (insert x <| .range (single · 1)) :=
-linearIndepOn_isGroupLikeElem.mono by simp [Set.subset_def, hx]
-    have : x.coeff.sum single ∉ span R (.range (single · 1)) := by
-      simpa using this.notMem_span_of_insert h
-refine this sum_mem fun g hg => ?_
-    rw [← mul_one (x.coeff g)]; rw [← smul_eq_mul]; rw [← smul_single]
-exact smul_mem _ _ subset_span Set.mem_range_self _
-  mpr := by rintro ⟨g, rfl⟩; exact isGroupLikeElem_single_one _
-
-中文:
-引理 isGroupLikeElem_iff_mem_range_single_one
-  条件: {x : R[M]}
-  证明: by
-    by_contra h
-    have : LinearIndepOn R id (insert x <| .range (single · 1)) :=
-linearIndepOn_isGroupLikeElem.mono by simp [Set.subset_def, hx]
-    have : x.coeff.sum single ∉ span R (.range (single · 1)) := by
-      simpa using this.notMem_span_of_insert h
-refine this sum_mem fun g hg => ?_
-    rw [← mul_one (x.coeff g)]; rw [← smul_eq_mul]; rw [← smul_single]
-exact smul_mem _ _ subset_span Set.mem_range_self _
-  mpr := by rintro ⟨g, rfl⟩; exact isGroupLikeElem_single_one _
-
-Depends on / 依赖: LinearIndepOn, Set.mem_range_self, Set.subset_def, insert, isGroupLikeElem_single_one, linearIndepOn_isGroupLikeElem, linearIndepOn_isGroupLikeElem.mono, mem_range_self, mul_one, notMem_span_of_insert, single, smul_eq_mul, smul_mem, smul_single, subset_def, subset_span, sum_mem, this.notMem_span_of_insert, x.coeff, x.coeff.sum
+/-
+**MonoidAlgebra.isGroupLikeElem_iff_mem_range_single_one** 是 Mathlib 中的一个引理，位于命名
+空间 `MonoidAlgebra`。
+形式化陈述：isGroupLikeElem_iff_mem_range_single_one {x : R[M]} : IsGroupLikeElem R x 
+↔ x in Set.range (single · 1) where mp hx
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用引理 `LinearIndepOn.mono`：LinearIndepOn.mono {t s : Set ι} (hs : LinearIndepOn
+ R v s) (h : t subseteq s) : LinearIndepOn R v t
+· 使用引理 `linearIndepOn_isGroupLikeElem`：linearIndepOn_isGroupLikeElem : LinearInd
+epOn R id {a : A | IsGroupLikeElem R a}
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `NoZeroDivisors.toNoZeroSMulDivisors`：∀ {R : Type u_1} [inst : Zero R] [i
+nst_1 : Mul R] [NoZeroDivisors R], NoZeroSMulDivisors R R
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用引理 `MonoidAlgebra.sum_coeff_single`：sum_coeff_single (f : R[M]) : f.coeff.su
+m single = f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
+· 使用引理 `LinearIndepOn.notMem_span_of_insert`：LinearIndepOn.notMem_span_of_insert
+ (hv : LinearIndepOn R v (insert i s)) (hi : i ∉ s) : v i ∉ span R (v '' s)
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用引理 `MonoidAlgebra.smul_single`：smul_single (a : A) (m : M) (r : R) : a • sin
+gle m r = single m (a • r)
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用引理 `MonoidAlgebra.isGroupLikeElem_single_one`：isGroupLikeElem_single_one (g 
+: G) : IsGroupLikeElem R (single g 1 : A[G]) where counit_eq_one
 -/
 lemma isGroupLikeElem_iff_mem_range_single_one {x : R[M]} :
-    IsGroupLikeElem R x ↔ x in Set.range (single · 1) where
+    IsGroupLikeElem R x ↔ x ∈ Set.range (single · 1) where
   mp hx := by
     by_contra h
     have : LinearIndepOn R id (insert x <| .range (single · 1)) :=
-linearIndepOn_isGroupLikeElem.mono by simp [Set.subset_def, hx]
+      linearIndepOn_isGroupLikeElem.mono <| by simp [Set.subset_def, hx]
     have : x.coeff.sum single ∉ span R (.range (single · 1)) := by
       simpa using this.notMem_span_of_insert h
-refine this sum_mem fun g hg => ?_
-    rw [← mul_one (x.coeff g)]; rw [← smul_eq_mul]; rw [← smul_single]
-exact smul_mem _ _ subset_span Set.mem_range_self _
+    refine this <| sum_mem fun g hg ↦ ?_
+    rw [← mul_one (x.coeff g), ← smul_eq_mul, ← smul_single]
+    exact smul_mem _ _ <| subset_span <| Set.mem_range_self _
   mpr := by rintro ⟨g, rfl⟩; exact isGroupLikeElem_single_one _
 
 section MulOneClass
 variable [MulOneClass M] {x : R[M]}
 
-/--
-lemma `isGroupLikeElem_iff_mem_range_of` / 引理 `isGroupLikeElem_iff_mem_range_of`
-
-English:
-lemma isGroupLikeElem_iff_mem_range_of
-  statement: IsGroupLikeElem R x ↔ x in Set.range (of R M)
-  proof: isGroupLikeElem_iff_mem_range_single_one
-
-中文:
-引理 isGroupLikeElem_iff_mem_range_of
-  结论: 是GroupLikeElem R x ↔ x in 集合.range (of R M)
-  证明: isGroupLikeElem_iff_mem_range_single_one
-
-Depends on / 依赖: isGroupLikeElem_iff_mem_range_single_one
+/-
+**MonoidAlgebra.isGroupLikeElem_iff_mem_range_of** 是 Mathlib 中的一个引理，位于命名空间 `Mono
+idAlgebra`。
+形式化陈述：isGroupLikeElem_iff_mem_range_of : IsGroupLikeElem R x ↔ x in Set.range (o
+f R M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.isGroupLikeElem_iff_mem_range_single_one`：isGroupLikeElem_
+iff_mem_range_single_one {x : R[M]} : IsGroupLikeElem R x ↔ x in Set.range (sing
+le · 1) where mp hx
 -/
-lemma isGroupLikeElem_iff_mem_range_of : IsGroupLikeElem R x ↔ x in Set.range (of R M) :=
+lemma isGroupLikeElem_iff_mem_range_of : IsGroupLikeElem R x ↔ x ∈ Set.range (of R M) :=
   isGroupLikeElem_iff_mem_range_single_one
 
 end MulOneClass
@@ -753,41 +859,21 @@ section Group
 variable [Group G] [Group H] [Group I]
 
 @[to_additive (dont_translate := R)]
-/--
-Definition of `mapDomainOfBialgHomFun` / `mapDomainOfBialgHomFun` 的定义
-
-English:
-definition mapDomainOfBialgHomFun
-  signature: (f : R[G] ->ₐc[R] R[H]) (g : G)
-  body: (isGroupLikeElem_iff_mem_range_single_one.1 <| (isGroupLikeElem_single_one g).map f).choose
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-中文:
-定义 mapDomainOfBialgHomFun
-  签名: (f : R[G] ->ₐc[R] R[H]) (g : G)
-  定义体: (isGroupLikeElem_iff_mem_range_single_one.1 <| (isGroupLikeElem_single_one g).map f).choose
-
-@[to_additive (dont_translate := R) (attr := simp)]
+/-
+**MonoidAlgebra.mapDomainOfBialgHomFun** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def mapDomainOfBialgHomFun (f : R[G] ->ₐc[R] R[H]) (g : G) : H :=
+private def mapDomainOfBialgHomFun (f : R[G] →ₐc[R] R[H]) (g : G) : H :=
   (isGroupLikeElem_iff_mem_range_single_one.1 <| (isGroupLikeElem_single_one g).map f).choose
 
 @[to_additive (dont_translate := R) (attr := simp)]
-/--
-lemma `single_mapDomainOfBialgHomFun_one` / 引理 `single_mapDomainOfBialgHomFun_one`
-
-English:
-lemma single_mapDomainOfBialgHomFun_one
-  given: (f : R[G] ->ₐc[R] R[H]) (g : G)
-  proof: (isGroupLikeElem_iff_mem_range_single_one.1 <| (isGroupLikeElem_single_one g).map f).choose_spec
-
-中文:
-引理 single_mapDomainOfBialgHomFun_one
-  条件: (f : R[G] ->ₐc[R] R[H]) (g : G)
-  证明: (isGroupLikeElem_iff_mem_range_single_one.1 <| (isGroupLikeElem_single_one g).map f).choose_spec
+/-
+**MonoidAlgebra.single_mapDomainOfBialgHomFun_one** 是 Mathlib 中的一个引理，位于命名空间 `Mon
+oidAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma single_mapDomainOfBialgHomFun_one (f : R[G] ->ₐc[R] R[H]) (g : G) :
+private lemma single_mapDomainOfBialgHomFun_one (f : R[G] →ₐc[R] R[H]) (g : G) :
     single (mapDomainOfBialgHomFun f g) 1 = f (single g 1) :=
   (isGroupLikeElem_iff_mem_range_single_one.1 <| (isGroupLikeElem_single_one g).map f).choose_spec
 
@@ -800,104 +886,82 @@ See `MonoidAlgebra.mapDomainBialgHom` for the forward map. -/
 group hom `G → H`.
 
 See `MonoidAlgebra.mapDomainBialgHom` for the forward map. -/]
-/--
-Definition of `mapDomainOfBialgHom` / `mapDomainOfBialgHom` 的定义
-
-English:
-definition mapDomainOfBialgHom
-  signature: (f : R[G] ->ₐc[R] R[H])
-  body: mapDomainOfBialgHomFun f
-map_one' := single_left_injective (R := R) one_ne_zero by simp [← one_def]
-  map_mul' g₁ g₂ := by
-    refine single_left_injective (R := R) one_ne_zero ?_
-    simp only [single_mapDomainOfBialgHomFun_one]
-    rw [← mul_one (1 : R)]; rw [← single_mul_single]; rw [← single_mul_single]; rw [map_mul]
-    simp
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-中文:
-定义 mapDomainOfBialgHom
-  签名: (f : R[G] ->ₐc[R] R[H])
-  定义体: mapDomainOfBialgHomFun f
-map_one' := single_left_injective (R := R) one_ne_zero by simp [← one_def]
-  map_mul' g₁ g₂ := by
-    refine single_left_injective (R := R) one_ne_zero ?_
-    simp only [single_mapDomainOfBialgHomFun_one]
-    rw [← mul_one (1 : R)]; rw [← single_mul_single]; rw [← single_mul_single]; rw [map_mul]
-    simp
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-Depends on / 依赖: mapDomainOfBialgHomFun
+/-
+**MonoidAlgebra.mapDomainOfBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`。
+形式化陈述：mapDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) : G ->* H where toFun
+参数：f : R[G] ->ₐc[R] R[H]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mapDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) : G ->* H where
+def mapDomainOfBialgHom (f : R[G] →ₐc[R] R[H]) : G →* H where
   toFun := mapDomainOfBialgHomFun f
-map_one' := single_left_injective (R := R) one_ne_zero by simp [← one_def]
+  map_one' := single_left_injective (R := R) one_ne_zero <| by simp [← one_def]
   map_mul' g₁ g₂ := by
     refine single_left_injective (R := R) one_ne_zero ?_
     simp only [single_mapDomainOfBialgHomFun_one]
-    rw [← mul_one (1 : R)]; rw [← single_mul_single]; rw [← single_mul_single]; rw [map_mul]
+    rw [← mul_one (1 : R), ← single_mul_single, ← single_mul_single, map_mul]
     simp
 
 @[to_additive (dont_translate := R) (attr := simp)]
-/--
-lemma `single_mapDomainOfBialgHom` / 引理 `single_mapDomainOfBialgHom`
-
-English:
-lemma single_mapDomainOfBialgHom
-  given: (f : R[G] ->ₐc[R] R[H]) (g : G) (r : R)
-  proof: by
-  rw [← mul_one r]; rw [← smul_eq_mul]; rw [← smul_single]; rw [← smul_single]; rw [map_smul]
-  exact congr(r • $(single_mapDomainOfBialgHomFun_one f g))
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-中文:
-引理 single_mapDomainOfBialgHom
-  条件: (f : R[G] ->ₐc[R] R[H]) (g : G) (r : R)
-  证明: by
-  rw [← mul_one r]; rw [← smul_eq_mul]; rw [← smul_single]; rw [← smul_single]; rw [map_smul]
-  exact congr(r • $(single_mapDomainOfBialgHomFun_one f g))
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-Depends on / 依赖: map_smul, mul_one, single_mapDomainOfBialgHomFun_one, smul_eq_mul, smul_single
+/-
+**MonoidAlgebra.single_mapDomainOfBialgHom** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlge
+bra`。
+形式化陈述：single_mapDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) (g : G) (r : R) : singl
+e (mapDomainOfBialgHom f g) r = f (single g r)
+参数：f : R[G] ->ₐc[R] R[H]；g : G；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用引理 `MonoidAlgebra.smul_single`：smul_single (a : A) (m : M) (r : R) : a • sin
+gle m r = single m (a • r)
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `CoalgHomClass.toSemilinearMapClass`：∀ {F : Type u_1} {R : outParam (Type
+ u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring 
+R}   {inst_1 : AddCommMo…
+· 使用定理 `BialgHomClass.toCoalgHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)
+} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   
+{inst_1 : Semiring …
+· 使用定理 `_private.Mathlib.RingTheory.Bialgebra.MonoidAlgebra.0.MonoidAlgebra.sing
+le_mapDomainOfBialgHomFun_one`：∀ {R : Type u_1} {G : Type u_5} {H : Type u_6} [i
+nst : CommRing R] [inst_1 : IsDomain R] [inst_2 : Group G]   [inst_3 : Group H] 
+(f : Monoid…
 -/
-lemma single_mapDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) (g : G) (r : R) :
+lemma single_mapDomainOfBialgHom (f : R[G] →ₐc[R] R[H]) (g : G) (r : R) :
     single (mapDomainOfBialgHom f g) r = f (single g r) := by
-  rw [← mul_one r]; rw [← smul_eq_mul]; rw [← smul_single]; rw [← smul_single]; rw [map_smul]
+  rw [← mul_one r, ← smul_eq_mul, ← smul_single, ← smul_single, map_smul]
   exact congr(r • $(single_mapDomainOfBialgHomFun_one f g))
 
 @[to_additive (dont_translate := R) (attr := simp)]
-/--
-lemma `mapDomainBialgHom_mapDomainOfBialgHom` / 引理 `mapDomainBialgHom_mapDomainOfBialgHom`
-
-English:
-lemma mapDomainBialgHom_mapDomainOfBialgHom
-  given: (f : R[G] ->ₐc[R] R[H])
-  proof: by
-  ext x : 1
-  · rw [mapDomainBialgHom_single]
-    exact single_mapDomainOfBialgHomFun_one f x
-  · ext
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-中文:
-引理 mapDomainBialgHom_mapDomainOfBialgHom
-  条件: (f : R[G] ->ₐc[R] R[H])
-  证明: by
-  ext x : 1
-  · rw [mapDomainBialgHom_single]
-    exact single_mapDomainOfBialgHomFun_one f x
-  · ext
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-Depends on / 依赖: mapDomainBialgHom_single, single_mapDomainOfBialgHomFun_one
+/-
+**MonoidAlgebra.mapDomainBialgHom_mapDomainOfBialgHom** 是 Mathlib 中的一个引理，位于命名空间 
+`MonoidAlgebra`。
+形式化陈述：mapDomainBialgHom_mapDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) : mapDomainB
+ialgHom R (mapDomainOfBialgHom f) = f
+参数：f : R[G] ->ₐc[R] R[H]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.bialgHom_ext`：bialgHom_ext ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄ (singl
+e_one_right : forall (m : M), φ₁ (single m 1) = φ₂ (single m 1)) (single_one_lef
+t : (φ₁ : A[M] -…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonoidAlgebra.mapDomainBialgHom_single`：mapDomainBialgHom_single (f : M 
+->* N) (m : M) (r : R) : mapDomainBialgHom R f (single m r) = single (f m) r
+· 使用定理 `_private.Mathlib.RingTheory.Bialgebra.MonoidAlgebra.0.MonoidAlgebra.sing
+le_mapDomainOfBialgHomFun_one`：∀ {R : Type u_1} {G : Type u_5} {H : Type u_6} [i
+nst : CommRing R] [inst_1 : IsDomain R] [inst_2 : Group G]   [inst_3 : Group H] 
+(f : Monoid…
+· 使用定理 `Algebra.ext_id`：ext_id (f g : R ->ₐ[R] A) : f = g
 -/
-lemma mapDomainBialgHom_mapDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) :
+lemma mapDomainBialgHom_mapDomainOfBialgHom (f : R[G] →ₐc[R] R[H]) :
     mapDomainBialgHom R (mapDomainOfBialgHom f) = f := by
   ext x : 1
   · rw [mapDomainBialgHom_single]
@@ -905,108 +969,109 @@ lemma mapDomainBialgHom_mapDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) :
   · ext
 
 @[to_additive (dont_translate := R) (attr := simp)]
-/--
-lemma `mapDomainOfBialgHom_mapDomainBialgHom` / 引理 `mapDomainOfBialgHom_mapDomainBialgHom`
-
-English:
-lemma mapDomainOfBialgHom_mapDomainBialgHom
-  given: (f : G ->* H)
-  proof: by
-  ext g; refine single_left_injective (R := R) one_ne_zero ?_; simp [single_mapDomainOfBialgHom]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mapDomainOfBialgHom_mapDomainBialgHom
-  条件: (f : G ->* H)
-  证明: by
-  ext g; refine single_left_injective (R := R) one_ne_zero ?_; simp [single_mapDomainOfBialgHom]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: one_ne_zero, single_left_injective, single_mapDomainOfBialgHom
+/-
+**MonoidAlgebra.mapDomainOfBialgHom_mapDomainBialgHom** 是 Mathlib 中的一个引理，位于命名空间 
+`MonoidAlgebra`。
+形式化陈述：mapDomainOfBialgHom_mapDomainBialgHom (f : G ->* H) : mapDomainOfBialgHom 
+(mapDomainBialgHom (R
+参数：f : G ->* H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用引理 `MonoidAlgebra.single_left_injective`：single_left_injective (hr : r != 0)
+ : Function.Injective fun m : M => single m r
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonoidAlgebra.single_mapDomainOfBialgHom`：single_mapDomainOfBialgHom (f 
+: R[G] ->ₐc[R] R[H]) (g : G) (r : R) : single (mapDomainOfBialgHom f g) r = f (s
+ingle g r)
+· 使用引理 `MonoidAlgebra.mapDomainBialgHom_single`：mapDomainBialgHom_single (f : M 
+->* N) (m : M) (r : R) : mapDomainBialgHom R f (single m r) = single (f m) r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapDomainOfBialgHom_mapDomainBialgHom (f : G ->* H) :
+lemma mapDomainOfBialgHom_mapDomainBialgHom (f : G →* H) :
     mapDomainOfBialgHom (mapDomainBialgHom (R := R) f) = f := by
   ext g; refine single_left_injective (R := R) one_ne_zero ?_; simp [single_mapDomainOfBialgHom]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mapDomainOfBialgHom_id` / 引理 `mapDomainOfBialgHom_id`
-
-English:
-lemma mapDomainOfBialgHom_id
-  statement: mapDomainOfBialgHom (.id R R[G]) = .id _
-  proof: by
-  simp [← mapDomainBialgHom_id]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mapDomainOfBialgHom_id
-  结论: mapDomainOfBialgHom (.id R R[G]) = .id _
-  证明: by
-  simp [← mapDomainBialgHom_id]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mapDomainBialgHom_id
+/-
+**MonoidAlgebra.mapDomainOfBialgHom_id** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`
+。
+形式化陈述：mapDomainOfBialgHom_id : mapDomainOfBialgHom (.id R R[G]) = .id _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidAlgebra.mapDomainOfBialgHom.congr_simp`：∀ {R : Type u_1} {G : Type
+ u_5} {H : Type u_6} [inst : CommRing R] [inst_1 : IsDomain R] [inst_2 : Group G
+]   [inst_3 : Group H] (f f_1 : Mo…
+· 使用引理 `MonoidAlgebra.mapDomainOfBialgHom_mapDomainBialgHom`：mapDomainOfBialgHom
+_mapDomainBialgHom (f : G ->* H) : mapDomainOfBialgHom (mapDomainBialgHom (R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapDomainOfBialgHom_id : mapDomainOfBialgHom (.id R R[G]) = .id _ := by
   simp [← mapDomainBialgHom_id]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mapDomainOfBialgHom_comp` / 引理 `mapDomainOfBialgHom_comp`
-
-English:
-lemma mapDomainOfBialgHom_comp
-  given: (f : R[H] ->ₐc[R] R[I]) (g : R[G] ->ₐc[R] R[H])
-  proof: by
-  rw [← mapDomainOfBialgHom_mapDomainBialgHom (R := R)
-    ((mapDomainOfBialgHom f).comp (mapDomainOfBialgHom g))]; rw [mapDomainBialgHom_comp]; rw [mapDomainBialgHom_mapDomainOfBialgHom]; rw [mapDomainBialgHom_mapDomainOfBialgHom]
-
-中文:
-引理 mapDomainOfBialgHom_comp
-  条件: (f : R[H] ->ₐc[R] R[I]) (g : R[G] ->ₐc[R] R[H])
-  证明: by
-  rw [← mapDomainOfBialgHom_mapDomainBialgHom (R := R)
-    ((mapDomainOfBialgHom f).comp (mapDomainOfBialgHom g))]; rw [mapDomainBialgHom_comp]; rw [mapDomainBialgHom_mapDomainOfBialgHom]; rw [mapDomainBialgHom_mapDomainOfBialgHom]
-
-Depends on / 依赖: mapDomainBialgHom_comp, mapDomainBialgHom_mapDomainOfBialgHom, mapDomainOfBialgHom, mapDomainOfBialgHom_mapDomainBialgHom
+/-
+**MonoidAlgebra.mapDomainOfBialgHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebr
+a`。
+形式化陈述：mapDomainOfBialgHom_comp (f : R[H] ->ₐc[R] R[I]) (g : R[G] ->ₐc[R] R[H]) :
+ mapDomainOfBialgHom (f.comp g) = (mapDomainOfBialgHom f).comp (mapDomainOfBialg
+Hom g)
+参数：f : R[H] ->ₐc[R] R[I]；g : R[G] ->ₐc[R] R[H]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MonoidAlgebra.mapDomainOfBialgHom_mapDomainBialgHom`：mapDomainOfBialgHom
+_mapDomainBialgHom (f : G ->* H) : mapDomainOfBialgHom (mapDomainBialgHom (R
+· 使用引理 `MonoidAlgebra.mapDomainBialgHom_comp`：mapDomainBialgHom_comp (f : N ->* 
+O) (g : M ->* N) : mapDomainBialgHom R (f.comp g) = (mapDomainBialgHom R f).comp
+ (mapDomainBialgHom R g)
+· 使用引理 `MonoidAlgebra.mapDomainBialgHom_mapDomainOfBialgHom`：mapDomainBialgHom_m
+apDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) : mapDomainBialgHom R (mapDomainOfBia
+lgHom f) = f
 -/
-lemma mapDomainOfBialgHom_comp (f : R[H] ->ₐc[R] R[I]) (g : R[G] ->ₐc[R] R[H]) :
+lemma mapDomainOfBialgHom_comp (f : R[H] →ₐc[R] R[I]) (g : R[G] →ₐc[R] R[H]) :
     mapDomainOfBialgHom (f.comp g) = (mapDomainOfBialgHom f).comp (mapDomainOfBialgHom g) := by
   rw [← mapDomainOfBialgHom_mapDomainBialgHom (R := R)
-    ((mapDomainOfBialgHom f).comp (mapDomainOfBialgHom g))]; rw [mapDomainBialgHom_comp]; rw [mapDomainBialgHom_mapDomainOfBialgHom]; rw [mapDomainBialgHom_mapDomainOfBialgHom]
+    ((mapDomainOfBialgHom f).comp (mapDomainOfBialgHom g)),
+    mapDomainBialgHom_comp, mapDomainBialgHom_mapDomainOfBialgHom,
+    mapDomainBialgHom_mapDomainOfBialgHom]
 
 /-- The equivalence between group homs `G → H` and bialgebra homs `R[G] → R[H]` of group algebras
 over a domain. -/
 @[expose, to_additive (attr := simps)
 /-- The equivalence between group homs `G → H` and bialgebra homs `R[G] → R[H]` of group algebras
 over a domain. -/]
-/--
-Definition of `mapDomainBialgHomEquiv` / `mapDomainBialgHomEquiv` 的定义
-
-English:
-definition mapDomainBialgHomEquiv
-  signature: : (G ->* H) ≃ (R[G] ->ₐc[R] R[H]) where
-  body: mapDomainBialgHom R
-  invFun := mapDomainOfBialgHom
-  left_inv := mapDomainOfBialgHom_mapDomainBialgHom
-  right_inv := mapDomainBialgHom_mapDomainOfBialgHom
-
-中文:
-定义 mapDomainBialgHomEquiv
-  签名: : (G ->* H) ≃ (R[G] ->ₐc[R] R[H]) where
-  定义体: mapDomainBialgHom R
-  invFun := mapDomainOfBialgHom
-  left_inv := mapDomainOfBialgHom_mapDomainBialgHom
-  right_inv := mapDomainBialgHom_mapDomainOfBialgHom
-
-Depends on / 依赖: mapDomainBialgHom
+/-
+**MonoidAlgebra.mapDomainBialgHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgebra`
+。
+形式化陈述：mapDomainBialgHomEquiv : (G ->* H) ≃ (R[G] ->ₐc[R] R[H]) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.mapDomainOfBialgHom_mapDomainBialgHom`：mapDomainOfBialgHom
+_mapDomainBialgHom (f : G ->* H) : mapDomainOfBialgHom (mapDomainBialgHom (R
+· 使用引理 `MonoidAlgebra.mapDomainBialgHom_mapDomainOfBialgHom`：mapDomainBialgHom_m
+apDomainOfBialgHom (f : R[G] ->ₐc[R] R[H]) : mapDomainBialgHom R (mapDomainOfBia
+lgHom f) = f
 -/
-def mapDomainBialgHomEquiv : (G ->* H) ≃ (R[G] ->ₐc[R] R[H]) where
+def mapDomainBialgHomEquiv : (G →* H) ≃ (R[G] →ₐc[R] R[H]) where
   toFun := mapDomainBialgHom R
   invFun := mapDomainOfBialgHom
   left_inv := mapDomainOfBialgHom_mapDomainBialgHom
@@ -1020,24 +1085,23 @@ variable [CommGroup G] [CommGroup H]
 /-- The group isomorphism between group homs `G → H` and bialgebra homs `R[G] → R[H]` of group
 algebras over a domain. -/
 @[expose, simps!]
-/--
-Definition of `mapDomainBialgHomMulEquiv` / `mapDomainBialgHomMulEquiv` 的定义
+/-
+**MonoidAlgebra.mapDomainBialgHomMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MonoidAlgeb
+ra`。
+形式化陈述：mapDomainBialgHomMulEquiv : (G ->* H) ≃* WithConv (R[G] ->ₐc[R] R[H]) wher
+e toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mapDomainBialgHomMulEquiv
-  signature: : (G ->* H) ≃* WithConv (R[G] ->ₐc[R] R[H]) where
-  body: mapDomainBialgHomEquiv.trans (WithConv.equiv _).symm
-  map_mul' f g := by simp
-
-中文:
-定义 mapDomainBialgHomMulEquiv
-  签名: : (G ->* H) ≃* WithConv (R[G] ->ₐc[R] R[H]) where
-  定义体: mapDomainBialgHomEquiv.trans (WithConv.equiv _).symm
-  map_mul' f g := by simp
-
-Depends on / 依赖: WithConv, WithConv.equiv, mapDomainBialgHomEquiv, mapDomainBialgHomEquiv.trans
+--- 原说明 ---
+The group isomorphism between group homs `G → H` and bialgebra homs `R[G] → R[H]
+` of group
+algebras over a domain.
 -/
-def mapDomainBialgHomMulEquiv : (G ->* H) ≃* WithConv (R[G] ->ₐc[R] R[H]) where
+def mapDomainBialgHomMulEquiv : (G →* H) ≃* WithConv (R[G] →ₐc[R] R[H]) where
   toEquiv := mapDomainBialgHomEquiv.trans (WithConv.equiv _).symm
   map_mul' f g := by simp
 
@@ -1052,45 +1116,42 @@ variable [CommSemiring R] [CommSemiring S]
 section Semiring
 variable [Semiring A] [Semiring B] [Bialgebra R A] [Bialgebra R B] [AddMonoid M] [AddMonoid N]
 
-/--
-lemma `bialgHom_ext'` / 引理 `bialgHom_ext'`
+/-- See note [partially-applied ext lemmas]. -/
+/-
+**AddMonoidAlgebra.bialgHom_ext'** 是 Mathlib 中的一个引理，位于命名空间 `AddMonoidAlgebra`。
+形式化陈述：bialgHom_ext' ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄ (single_one_right : (φ₁ : A[M] ->* 
+B).comp (of A M) = (φ₂ : A[M] ->* B).comp (of A M)) (single_one_left : (φ₁ : A[M
+] ->ₐ[R] B).comp singleZeroAlgHom = (φ₂ : A[M] ->ₐ[R] B).comp singleZeroAlgHom) 
+: φ₁ = φ₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHomClass.toMonoidHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2
+)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}  
+ {inst_1 : Semiring …
+· 使用定理 `BialgHom.coe_toAlgHom_injective`：coe_toAlgHom_injective : Function.Injec
+tive ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
+· 使用引理 `AddMonoidAlgebra.algHom_ext'`：algHom_ext' ⦃φ₁ φ₂ : A[M] ->ₐ[R] B⦄ (singl
+e_one_right : (φ₁ : A[M] ->* B).comp (of A M) = (φ₂ : A[M] ->* B).comp (of A M))
+ (single_one_left …
 
-English:
-lemma bialgHom_ext'
-  given: ⦃φ₁ φ₂
-  statement: A[M] ->ₐc[R] B⦄
-  proof: BialgHom.coe_toAlgHom_injective algHom_ext' single_one_right single_one_left
-
-中文:
-引理 bialgHom_ext'
-  条件: ⦃φ₁ φ₂
-  结论: A[M] ->ₐc[R] B⦄
-  证明: BialgHom.coe_toAlgHom_injective algHom_ext' single_one_right single_one_left
-
-Depends on / 依赖: BialgHom, BialgHom.coe_toAlgHom_injective, algHom_ext, coe_toAlgHom_injective, single_one_left, single_one_right
+--- 原说明 ---
+See note [partially-applied ext lemmas].
 -/
-lemma bialgHom_ext' ⦃φ₁ φ₂ : A[M] ->ₐc[R] B⦄
-    (single_one_right : (φ₁ : A[M] ->* B).comp (of A M) = (φ₂ : A[M] ->* B).comp (of A M))
-    (single_one_left : (φ₁ : A[M] ->ₐ[R] B).comp singleZeroAlgHom =
-      (φ₂ : A[M] ->ₐ[R] B).comp singleZeroAlgHom) : φ₁ = φ₂ :=
-BialgHom.coe_toAlgHom_injective algHom_ext' single_one_right single_one_left
-
-/--
-lemma `isGroupLikeElem_of` / 引理 `isGroupLikeElem_of`
-
-English:
-lemma isGroupLikeElem_of
-  given: (m : M)
-  statement: IsGroupLikeElem R (of A M m)
-  proof: isGroupLikeElem_single_one ..
-
-中文:
-引理 isGroupLikeElem_of
-  条件: (m : M)
-  结论: 是GroupLikeElem R (of A M m)
-  证明: isGroupLikeElem_single_one ..
-
-Depends on / 依赖: isGroupLikeElem_single_one
+lemma bialgHom_ext' ⦃φ₁ φ₂ : A[M] →ₐc[R] B⦄
+    (single_one_right : (φ₁ : A[M] →* B).comp (of A M) = (φ₂ : A[M] →* B).comp (of A M))
+    (single_one_left : (φ₁ : A[M] →ₐ[R] B).comp singleZeroAlgHom =
+      (φ₂ : A[M] →ₐ[R] B).comp singleZeroAlgHom) : φ₁ = φ₂ :=
+  BialgHom.coe_toAlgHom_injective <| algHom_ext' single_one_right single_one_left
+/-
+**AddMonoidAlgebra.isGroupLikeElem_of** 是 Mathlib 中的一个引理，位于命名空间 `AddMonoidAlgebr
+a`。
+形式化陈述：isGroupLikeElem_of (m : M) : IsGroupLikeElem R (of A M m)
+参数：m : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.isGroupLikeElem_single_one`：∀ {R : Type u_1} {A : Type 
+u_3} {G : Type u_5} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Bial
+gebra R A]   (g : G), IsGroupLike…
 -/
 lemma isGroupLikeElem_of (m : M) : IsGroupLikeElem R (of A M m) := isGroupLikeElem_single_one ..
 
@@ -1099,54 +1160,42 @@ variable (R A M) in
 `Multiplicative`. -/
 -- TODO: Make `BialgEquiv.toCoalgEquiv` the simp normal form so that this can be simp
 @[expose, simps! -isSimp]
-/--
-Definition of `toMultiplicativeBialgEquiv` / `toMultiplicativeBialgEquiv` 的定义
-
-English:
-definition toMultiplicativeBialgEquiv
-  signature: : A[M] ≃ₐc[R] MonoidAlgebra A (Multiplicative M)
-  body: .ofAlgEquiv (toMultiplicativeAlgEquiv R A M) (by ext <;> simp) by
-    ext a
-    · simp
-    · simp [← (Coalgebra.Repr.arbitrary R a).eq]
-
-@[simp]
-
-中文:
-定义 toMultiplicativeBialgEquiv
-  签名: : A[M] ≃ₐc[R] 幺半群代数 A (Multiplicative M)
-  定义体: .ofAlgEquiv (toMultiplicativeAlgEquiv R A M) (by ext <;> simp) by
-    ext a
-    · simp
-    · simp [← (Coalgebra.Repr.arbitrary R a).eq]
-
-@[simp]
-
-Depends on / 依赖: Coalgebra, Coalgebra.Repr.arbitrary, arbitrary, ofAlgEquiv, toMultiplicativeAlgEquiv
+/-
+**AddMonoidAlgebra.toMultiplicativeBialgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddMono
+idAlgebra`。
+形式化陈述：toMultiplicativeBialgEquiv : A[M] ≃ₐc[R] MonoidAlgebra A (Multiplicative M
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def toMultiplicativeBialgEquiv : A[M] ≃ₐc[R] MonoidAlgebra A (Multiplicative M) :=
-.ofAlgEquiv (toMultiplicativeAlgEquiv R A M) (by ext <;> simp) by
+  .ofAlgEquiv (toMultiplicativeAlgEquiv R A M) (by ext <;> simp) <| by
     ext a
     · simp
     · simp [← (Coalgebra.Repr.arbitrary R a).eq]
 
 @[simp]
-/--
-lemma `toMultiplicativeBialgEquiv_single` / 引理 `toMultiplicativeBialgEquiv_single`
-
-English:
-lemma toMultiplicativeBialgEquiv_single
-  given: (m : M) (a : A)
-  proof: by
-  simp [toMultiplicativeBialgEquiv]
-
-中文:
-引理 toMultiplicativeBialgEquiv_single
-  条件: (m : M) (a : A)
-  证明: by
-  simp [toMultiplicativeBialgEquiv]
-
-Depends on / 依赖: toMultiplicativeBialgEquiv
+/-
+**AddMonoidAlgebra.toMultiplicativeBialgEquiv_single** 是 Mathlib 中的一个引理，位于命名空间 `
+AddMonoidAlgebra`。
+形式化陈述：toMultiplicativeBialgEquiv_single (m : M) (a : A) : toMultiplicativeBialgE
+quiv R A M (single m a) = .single (.ofAdd m) a
+参数：m : M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BialgEquiv.ofAlgEquiv_apply`：∀ {R : Type u} {A : Type v} {B : Type w} [i
+nst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Bi
+algebra R A] [ins…
+· 使用引理 `AddMonoidAlgebra.toMultiplicativeAlgEquiv_single`：toMultiplicativeAlgEqu
+iv_single (m : M) (a : A) : toMultiplicativeAlgEquiv R A M (single m a) = .singl
+e (.ofAdd m) a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toMultiplicativeBialgEquiv_single (m : M) (a : A) :
     toMultiplicativeBialgEquiv R A M (single m a) = .single (.ofAdd m) a := by
@@ -1158,24 +1207,21 @@ section CommSemiring
 variable [CommSemiring A] [Algebra R A] [AddMonoid M]
 
 variable (R M A) in
-/--
-Definition of `liftMulEquiv` / `liftMulEquiv` 的定义
+/-- `AddMonoidAlgebra.lift` as a `MulEquiv`. -/
+/-
+**AddMonoidAlgebra.liftMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddMonoidAlgebra`。
+形式化陈述：liftMulEquiv : (Multiplicative M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where 
+toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition liftMulEquiv
-  signature: : (Multiplicative M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where
-  body: (lift R A M).trans (WithConv.equiv _).symm
-  map_mul' f g := by ext; simp [AlgHom.convMul_apply]
-
-中文:
-定义 liftMulEquiv
-  签名: : (Multiplicative M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where
-  定义体: (lift R A M).trans (WithConv.equiv _).symm
-  map_mul' f g := by ext; simp [AlgHom.convMul_apply]
-
-Depends on / 依赖: WithConv, WithConv.equiv
+--- 原说明 ---
+`AddMonoidAlgebra.lift` as a `MulEquiv`.
 -/
-def liftMulEquiv : (Multiplicative M ->* A) ≃* WithConv (R[M] ->ₐ[R] A) where
+def liftMulEquiv : (Multiplicative M →* A) ≃* WithConv (R[M] →ₐ[R] A) where
   toEquiv := (lift R A M).trans (WithConv.equiv _).symm
   map_mul' f g := by ext; simp [AlgHom.convMul_apply]
 
@@ -1184,39 +1230,142 @@ end CommSemiring
 section AddCommMonoid
 variable [AddCommMonoid M] [AddCommMonoid N]
 
-/--
-lemma `comulAlgHom_comp_mapRingHom` / 引理 `comulAlgHom_comp_mapRingHom`
-
-English:
-lemma comulAlgHom_comp_mapRingHom
-  given: (f : R ->+* S)
-  proof: by ext <;> simp
-
-中文:
-引理 comulAlgHom_comp_mapRingHom
-  条件: (f : R ->+* S)
-  证明: by ext <;> simp
+/-
+**AddMonoidAlgebra.comulAlgHom_comp_mapRingHom** 是 Mathlib 中的一个引理，位于命名空间 `AddMon
+oidAlgebra`。
+形式化陈述：comulAlgHom_comp_mapRingHom (f : R ->+* S) : (comulAlgHom S S[M]).toRingHo
+m.comp (mapRingHom M f) = .comp (Algebra.TensorProduct.mapRingHom f (mapRingHom 
+M f) (mapRingHom M f) (by ext; simp) (by ext; simp)) (comulAlgHom R R[M]).toRing
+Hom
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.ringHom_ext'`：ringHom_ext' [Semiring S] [AddMonoid M] {
+f g : R[M] ->+* S} (h₁ : f.comp singleZeroRingHom = g.comp singleZeroRingHom) (h
+_of : (f : R[M] ->*…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.singleZeroRingHom_apply`：∀ {R : Type u_1} {M : Type u_4
+} [inst : Semiring R] [inst_1 : AddZeroClass M] (a : R),   AddMonoidAlgebra.sing
+leZeroRingHom a = (↑(AddMonoid…
+· 使用定理 `AddMonoidAlgebra.singleAddHom_apply`：∀ {R : Type u_1} {M : Type u_4} [in
+st : Semiring R] (m : M) (r : R),   (AddMonoidAlgebra.singleAddHom m) r = AddMon
+oidAlgebra.single m r
+· 使用定理 `AddMonoidAlgebra.mapRingHom_single`：∀ {R : Type u_3} {S : Type u_4} {M :
+ Type u_6} [inst : Semiring R] [inst_1 : Semiring S] [inst_2 : AddMonoid M]   (f
+ : R →+* S) (a : M) (b :…
+· 使用定理 `Bialgebra.comulAlgHom_apply`：∀ (R : Type u) (A : Type v) [inst : CommSem
+iring R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A] (a : A),   (Bialgebra.co
+mulAlgHom R A) a …
+· 使用定理 `AddMonoidAlgebra.comul_single`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{A : Type u_2} [inst_1 : Semiring A] {X : Type u_3}   [inst_2 : _root_.Module R 
+A] [inst_3 : Coalge…
+· 使用引理 `Algebra.TensorProduct.mapRingHom_tmul`：mapRingHom_tmul (s : S) (t : T) :
+ mapRingHom fR fS fT HS HT (s otimesₜ t) = fS s otimesₜ fT t
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Multiplicative.monoidHom_ext`：Multiplicative.monoidHom_ext [AddZeroClass
+ α] [MulOneClass β] (f g : Multiplicative α ->* β) (h : f.toAdditiveRight = g.to
+AdditiveRight) : f…
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Additive.ext`：∀ {α : Type u} {a b : Additive α}, Additive.toMul a = Addi
+tive.toMul b → a = b
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `MonoidHom.toAdditiveRight_apply_apply`：∀ {α : Type u_3} {β : Type u_4} [
+inst : AddZeroClass α] [inst_1 : MulOneClass β] (a : Multiplicative α →* β) (a_1
+ : α),   (MonoidHom.toAddit…
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
 -/
-lemma comulAlgHom_comp_mapRingHom (f : R ->+* S) :
+lemma comulAlgHom_comp_mapRingHom (f : R →+* S) :
     (comulAlgHom S S[M]).toRingHom.comp (mapRingHom M f) =
       .comp (Algebra.TensorProduct.mapRingHom f (mapRingHom M f) (mapRingHom M f)
         (by ext; simp) (by ext; simp))
         (comulAlgHom R R[M]).toRingHom := by ext <;> simp
-
-/--
-lemma `counitAlgHom_comp_mapRingHom` / 引理 `counitAlgHom_comp_mapRingHom`
-
-English:
-lemma counitAlgHom_comp_mapRingHom
-  given: (f : R ->+* S)
-  proof: by ext <;> simp
-
-中文:
-引理 counitAlgHom_comp_mapRingHom
-  条件: (f : R ->+* S)
-  证明: by ext <;> simp
+/-
+**AddMonoidAlgebra.counitAlgHom_comp_mapRingHom** 是 Mathlib 中的一个引理，位于命名空间 `AddMo
+noidAlgebra`。
+形式化陈述：counitAlgHom_comp_mapRingHom (f : R ->+* S) : (counitAlgHom S S[M]).toRing
+Hom.comp (mapRingHom M f) = f.comp (counitAlgHom R R[M]).toRingHom
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.ringHom_ext'`：ringHom_ext' [Semiring S] [AddMonoid M] {
+f g : R[M] ->+* S} (h₁ : f.comp singleZeroRingHom = g.comp singleZeroRingHom) (h
+_of : (f : R[M] ->*…
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.singleZeroRingHom_apply`：∀ {R : Type u_1} {M : Type u_4
+} [inst : Semiring R] [inst_1 : AddZeroClass M] (a : R),   AddMonoidAlgebra.sing
+leZeroRingHom a = (↑(AddMonoid…
+· 使用定理 `AddMonoidAlgebra.singleAddHom_apply`：∀ {R : Type u_1} {M : Type u_4} [in
+st : Semiring R] (m : M) (r : R),   (AddMonoidAlgebra.singleAddHom m) r = AddMon
+oidAlgebra.single m r
+· 使用定理 `AddMonoidAlgebra.mapRingHom_single`：∀ {R : Type u_3} {S : Type u_4} {M :
+ Type u_6} [inst : Semiring R] [inst_1 : Semiring S] [inst_2 : AddMonoid M]   (f
+ : R →+* S) (a : M) (b :…
+· 使用定理 `Bialgebra.counitAlgHom_apply`：∀ (R : Type u) (A : Type v) [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A] (a : A),   (Bialgebra.c
+ounitAlgHom R A) a…
+· 使用定理 `AddMonoidAlgebra.counit_single`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] {X : Type u_3}   [inst_2 : _root_.Module R
+ A] [inst_3 : Coalge…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Multiplicative.monoidHom_ext`：Multiplicative.monoidHom_ext [AddZeroClass
+ α] [MulOneClass β] (f g : Multiplicative α ->* β) (h : f.toAdditiveRight = g.to
+AdditiveRight) : f…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Additive.ext`：∀ {α : Type u} {a b : Additive α}, Additive.toMul a = Addi
+tive.toMul b → a = b
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `MonoidHom.toAdditiveRight_apply_apply`：∀ {α : Type u_3} {β : Type u_4} [
+inst : AddZeroClass α] [inst_1 : MulOneClass β] (a : Multiplicative α →* β) (a_1
+ : α),   (MonoidHom.toAddit…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `IsGroupLikeElem.counit_eq_one`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] {…
 -/
-lemma counitAlgHom_comp_mapRingHom (f : R ->+* S) :
+lemma counitAlgHom_comp_mapRingHom (f : R →+* S) :
     (counitAlgHom S S[M]).toRingHom.comp (mapRingHom M f) =
       f.comp (counitAlgHom R R[M]).toRingHom := by ext <;> simp
 
@@ -1229,22 +1378,18 @@ variable [CommRing R] [IsDomain R]
 section AddZeroClass
 variable [AddZeroClass M] {x : R[M]}
 
-/--
-lemma `isGroupLikeElem_iff_mem_range_of` / 引理 `isGroupLikeElem_iff_mem_range_of`
-
-English:
-lemma isGroupLikeElem_iff_mem_range_of
-  statement: IsGroupLikeElem R x ↔ x in Set.range (of R M)
-  proof: isGroupLikeElem_iff_mem_range_single_one
-
-中文:
-引理 isGroupLikeElem_iff_mem_range_of
-  结论: 是GroupLikeElem R x ↔ x in 集合.range (of R M)
-  证明: isGroupLikeElem_iff_mem_range_single_one
-
-Depends on / 依赖: isGroupLikeElem_iff_mem_range_single_one
+/-
+**AddMonoidAlgebra.isGroupLikeElem_iff_mem_range_of** 是 Mathlib 中的一个引理，位于命名空间 `A
+ddMonoidAlgebra`。
+形式化陈述：isGroupLikeElem_iff_mem_range_of : IsGroupLikeElem R x ↔ x in Set.range (o
+f R M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.isGroupLikeElem_iff_mem_range_single_one`：∀ {R : Type u
+_1} {M : Type u_8} [inst : CommRing R] [IsDomain R] {x : AddMonoidAlgebra R M}, 
+  IsGroupLikeElem R x ↔ x ∈ Set.range fun x => …
 -/
-lemma isGroupLikeElem_iff_mem_range_of : IsGroupLikeElem R x ↔ x in Set.range (of R M) :=
+lemma isGroupLikeElem_iff_mem_range_of : IsGroupLikeElem R x ↔ x ∈ Set.range (of R M) :=
   isGroupLikeElem_iff_mem_range_single_one
 
 end AddZeroClass
@@ -1252,25 +1397,26 @@ end AddZeroClass
 section AddCommGroup
 variable [AddCommGroup G] [AddCommGroup H]
 
-/--
-Definition of `mapDomainBialgHomAddEquiv` / `mapDomainBialgHomAddEquiv` 的定义
+/-- The group isomorphism between group homs `G → H` and bialgebra homs `R[G] → R[H]` of group
+algebras over a domain. -/
+/-
+**AddMonoidAlgebra.mapDomainBialgHomAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddMonoi
+dAlgebra`。
+形式化陈述：mapDomainBialgHomAddEquiv : (G ->+ H) ≃+ Additive (WithConv <| R[G] ->ₐc[R
+] R[H]) where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mapDomainBialgHomAddEquiv
-  signature: : (G ->+ H) ≃+ Additive (WithConv <| R[G] ->ₐc[R] R[H]) where
-  body: mapDomainBialgHomEquiv.trans (WithConv.equiv _).symm.trans Additive.ofMul
-  map_add' f g := by simp
-
-中文:
-定义 mapDomainBialgHomAddEquiv
-  签名: : (G ->+ H) ≃+ 加性 (WithConv <| R[G] ->ₐc[R] R[H]) where
-  定义体: mapDomainBialgHomEquiv.trans (WithConv.equiv _).symm.trans Additive.ofMul
-  map_add' f g := by simp
-
-Depends on / 依赖: Additive, Additive.ofMul, WithConv, WithConv.equiv, mapDomainBialgHomEquiv, mapDomainBialgHomEquiv.trans, symm.trans
+--- 原说明 ---
+The group isomorphism between group homs `G → H` and bialgebra homs `R[G] → R[H]
+` of group
+algebras over a domain.
 -/
-def mapDomainBialgHomAddEquiv : (G ->+ H) ≃+ Additive (WithConv <| R[G] ->ₐc[R] R[H]) where
-toEquiv := mapDomainBialgHomEquiv.trans (WithConv.equiv _).symm.trans Additive.ofMul
+def mapDomainBialgHomAddEquiv : (G →+ H) ≃+ Additive (WithConv <| R[G] →ₐc[R] R[H]) where
+  toEquiv := mapDomainBialgHomEquiv.trans <| (WithConv.equiv _).symm.trans Additive.ofMul
   map_add' f g := by simp
 
 end AddCommGroup
@@ -1283,72 +1429,56 @@ open AddMonoidAlgebra
 
 variable {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [Bialgebra R A]
 
-/--
-Instance `instBialgebra` / 实例 `instBialgebra`
-
-English:
-instance instBialgebra
-  signature: : Bialgebra R A[T;T⁻¹]
-  body: inferInstanceAs Bialgebra R A[Int]
-
-@[simp]
-
-中文:
-实例 instBialgebra
-  签名: : 双代数 R A[T;T⁻¹]
-  定义体: inferInstanceAs Bialgebra R A[Int]
-
-@[simp]
-
-Depends on / 依赖: Bialgebra
+/-
+**LaurentPolynomial.instBialgebra** 是 Mathlib 中的一个实例，位于命名空间 `LaurentPolynomial`。
+形式化陈述：instBialgebra : Bialgebra R A[T;T⁻¹]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instBialgebra : Bialgebra R A[T;T⁻¹] :=
-inferInstanceAs Bialgebra R A[Int]
+  inferInstanceAs <| Bialgebra R A[ℤ]
 
 @[simp]
-/--
-theorem `comul_T` / 定理 `comul_T`
-
-English:
-theorem comul_T
-  given: (n : Int)
-  statement: comul (T n : A[T;T⁻¹]) = T n otimesₜ[R] T n
-  proof: by simp [T, -single_eq_C_mul_T]
-
-@[simp]
-
-中文:
-定理 comul_T
-  条件: (n : 整数)
-  结论: comul (T n : A[T;T⁻¹]) = T n otimesₜ[R] T n
-  证明: by simp [T, -single_eq_C_mul_T]
-
-@[simp]
-
-Depends on / 依赖: single_eq_C_mul_T
+/-
+**LaurentPolynomial.comul_T** 是 Mathlib 中的一个定理，位于命名空间 `LaurentPolynomial`。
+形式化陈述：comul_T (n : Int) : comul (T n : A[T;T⁻¹]) = T n otimesₜ[R] T n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsGroupLikeElem.comul_eq_tmul_self`：∀ {R : Type u_2} {A : Type u_3} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [i
+nst_3 : Coalgebra R A] {…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comul_T (n : Int) : comul (T n : A[T;T⁻¹]) = T n otimesₜ[R] T n := by simp [T, -single_eq_C_mul_T]
+theorem comul_T (n : ℤ) : comul (T n : A[T;T⁻¹]) = T n ⊗ₜ[R] T n := by simp [T, -single_eq_C_mul_T]
 
 @[simp]
-/--
-theorem `counit_T` / 定理 `counit_T`
-
-English:
-theorem counit_T
-  given: (n : Int)
-  proof: by
-  simp [T, -single_eq_C_mul_T]
-
-中文:
-定理 counit_T
-  条件: (n : 整数)
-  证明: by
-  simp [T, -single_eq_C_mul_T]
-
-Depends on / 依赖: single_eq_C_mul_T
+/-
+**LaurentPolynomial.counit_T** 是 Mathlib 中的一个定理，位于命名空间 `LaurentPolynomial`。
+形式化陈述：counit_T (n : Int) : Coalgebra.counit (R
+参数：n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsGroupLikeElem.counit_eq_one`：∀ {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid A] [inst_2 : _root_.Module R A]   [inst_3
+ : Coalgebra R A] {…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem counit_T (n : Int) :
+theorem counit_T (n : ℤ) :
     Coalgebra.counit (R := R) (T n : A[T;T⁻¹]) = 1 := by
   simp [T, -single_eq_C_mul_T]
 
 end LaurentPolynomial
+

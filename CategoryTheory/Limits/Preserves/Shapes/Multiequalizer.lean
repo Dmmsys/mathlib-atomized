@@ -39,26 +39,18 @@ variable {J : MulticospanShape.{w, w'}} (d : MulticospanIndex J C)
 
 /-- The multicospan index obtained by applying a functor. -/
 @[simps]
-/--
-Definition of `MulticospanIndex.map` / `MulticospanIndex.map` 的定义
+/-
+**CategoryTheory.Limits.MulticospanIndex.map** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.MulticospanIndex`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MulticospanShape} →           CategoryTheory.Limits.Mul
+ticospanIndex J C →             CategoryTheory.Functor C D → CategoryTheory.Limi
+ts.MulticospanIndex J D
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulticospanIndex.map
-  signature: : MulticospanIndex J D where
-  body: F.obj (d.left i)
-  right i := F.obj (d.right i)
-  fst i := F.map (d.fst i)
-  snd i := F.map (d.snd i)
-
-中文:
-定义 MulticospanIndex.map
-  签名: : MulticospanIndex J D where
-  定义体: F.obj (d.left i)
-  right i := F.obj (d.right i)
-  fst i := F.map (d.fst i)
-  snd i := F.map (d.snd i)
-
-Depends on / 依赖: F.obj, d.left
+--- 原说明 ---
+The multicospan index obtained by applying a functor.
 -/
 def MulticospanIndex.map : MulticospanIndex J D where
   left i := F.obj (d.left i)
@@ -70,32 +62,25 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `d : MulticospanIndex J C` and `F : C ⥤ D`, this is the obvious isomorphism
 `(d.map F).multicospan ≅ d.multicospan ⋙ F`. -/
 @[simps!]
-/--
-Definition of `MulticospanIndex.multicospanMapIso` / `MulticospanIndex.multicospanMapIso` 的定义
+/-
+**CategoryTheory.Limits.MulticospanIndex.multicospanMapIso** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Limits.MulticospanIndex`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MulticospanShape} →           (d : CategoryTheory.Limit
+s.MulticospanIndex J C) →             (F : CategoryTheory.Functor C D) → (d.map 
+F).multicospan ≅ d.multicospan.comp F
+参数：d : CategoryTheory.Limits.MulticospanIndex J C；F : CategoryTheory.Functor C D
+；d.map F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulticospanIndex.multicospanMapIso
-  signature: : (d.map F).multicospan ≅ d.multicospan ⋙ F
-  body: NatIso.ofComponents
-    (fun i => match i with
-      | .left _ => Iso.refl _
-      | .right _ => Iso.refl _)
-    (by rintro a b (_ | _) <;> simp)
-
-中文:
-定义 MulticospanIndex.multicospanMapIso
-  签名: : (d.map F).multicospan ≅ d.multicospan ⋙ F
-  定义体: NatIso.ofComponents
-    (fun i => match i with
-      | .left _ => Iso.refl _
-      | .right _ => Iso.refl _)
-    (by rintro a b (_ | _) <;> simp)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+If `d : MulticospanIndex J C` and `F : C ⥤ D`, this is the obvious isomorphism
+`(d.map F).multicospan ≅ d.multicospan ⋙ F`.
 -/
 def MulticospanIndex.multicospanMapIso : (d.map F).multicospan ≅ d.multicospan ⋙ F :=
   NatIso.ofComponents
-    (fun i => match i with
+    (fun i ↦ match i with
       | .left _ => Iso.refl _
       | .right _ => Iso.refl _)
     (by rintro a b (_ | _) <;> simp)
@@ -106,69 +91,77 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `d : MulticospanIndex J C`, `c : Multifork d` and `F : C ⥤ D`,
 this is the induced multifork of `d.map F`. -/
 @[simps!]
-/--
-Definition of `Multifork.map` / `Multifork.map` 的定义
+/-
+**CategoryTheory.Limits.Multifork.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Multifork`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MulticospanShape} →           {d : CategoryTheory.Limit
+s.MulticospanIndex J C} →             CategoryTheory.Limits.Multifork d →       
+        (F : CategoryTheory.Functor C D) → CategoryTheory.Limits.Multifork (d.ma
+p F)
+参数：F : CategoryTheory.Functor C D；d.map F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Multifork.map
-  signature: : Multifork (d.map F)
-  body: Multifork.ofι _ (F.obj c.pt) (fun i => F.map (c.ι i)) (fun j => by
-    dsimp
-    rw [← F.map_comp]; rw [← F.map_comp]; rw [condition])
-
-中文:
-定义 Multifork.map
-  签名: : Multifork (d.map F)
-  定义体: Multifork.ofι _ (F.obj c.pt) (fun i => F.map (c.ι i)) (fun j => by
-    dsimp
-    rw [← F.map_comp]; rw [← F.map_comp]; rw [condition])
-
-Depends on / 依赖: F.map, F.map_comp, F.obj, Multifork, Multifork.of, c.pt, condition, map_comp
+--- 原说明 ---
+If `d : MulticospanIndex J C`, `c : Multifork d` and `F : C ⥤ D`,
+this is the induced multifork of `d.map F`.
 -/
 def Multifork.map : Multifork (d.map F) :=
-  Multifork.ofι _ (F.obj c.pt) (fun i => F.map (c.ι i)) (fun j => by
+  Multifork.ofι _ (F.obj c.pt) (fun i ↦ F.map (c.ι i)) (fun j ↦ by
     dsimp
-    rw [← F.map_comp]; rw [← F.map_comp]; rw [condition])
+    rw [← F.map_comp, ← F.map_comp, condition])
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Multifork.isLimitMapEquiv` / `Multifork.isLimitMapEquiv` 的定义
+/-- If `d : MulticospanIndex J C`, `c : Multifork d` and `F : C ⥤ D`,
+the cone `F.mapCone c` is limiting iff the multifork `c.map F` is. -/
+/-
+**CategoryTheory.Limits.Multifork.isLimitMapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.Multifork`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MulticospanShape} →           {d : CategoryTheory.Limit
+s.MulticospanIndex J C} →             (c : CategoryTheory.Limits.Multifork d) → 
+              (F : CategoryTheory.Functor C D) →                 CategoryTheory.
+Limits.IsLimit (F.mapCone c) ≃ CategoryTheory.Limits.IsLimit (c.map F)
+参数：c : CategoryTheory.Limits.Multifork d；F : CategoryTheory.Functor C D；F.mapCon
+e c；c.map F。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Multifork.isLimitMapEquiv
-  signature: :
-  body: Equiv.trans (IsLimit.postcomposeInvEquiv (d.multicospanMapIso F) (F.mapCone c)).symm
-    (IsLimit.equivIsoLimit
-      (Multifork.ext (Iso.refl _) (fun i => by dsimp only [Multifork.ι]; simp)))
-
-中文:
-定义 Multifork.isLimitMapEquiv
-  签名: :
-  定义体: Equiv.trans (IsLimit.postcomposeInvEquiv (d.multicospanMapIso F) (F.mapCone c)).symm
-    (IsLimit.equivIsoLimit
-      (Multifork.ext (Iso.refl _) (fun i => by dsimp only [Multifork.ι]; simp)))
-
-Depends on / 依赖: Equiv.trans, F.mapCone, IsLimit, IsLimit.equivIsoLimit, IsLimit.postcomposeInvEquiv, Iso.refl, Multifork, Multifork.ext, d.multicospanMapIso, equivIsoLimit, mapCone, multicospanMapIso, postcomposeInvEquiv
+--- 原说明 ---
+If `d : MulticospanIndex J C`, `c : Multifork d` and `F : C ⥤ D`,
+the cone `F.mapCone c` is limiting iff the multifork `c.map F` is.
 -/
 def Multifork.isLimitMapEquiv :
     IsLimit (F.mapCone c) ≃ IsLimit (c.map F) :=
   Equiv.trans (IsLimit.postcomposeInvEquiv (d.multicospanMapIso F) (F.mapCone c)).symm
     (IsLimit.equivIsoLimit
-      (Multifork.ext (Iso.refl _) (fun i => by dsimp only [Multifork.ι]; simp)))
+      (Multifork.ext (Iso.refl _) (fun i ↦ by dsimp only [Multifork.ι]; simp)))
 
-/--
-Definition of `Multifork.isLimitMapOfPreserves` / `Multifork.isLimitMapOfPreserves` 的定义
+/-- If `d : MulticospanIndex J C`, `c : Multifork d` is a limit multifork,
+and `F : C ⥤ D` is a functor which preserves the limit of `d.multicospan`,
+then the multifork `c.map F` is limiting. -/
+/-
+**CategoryTheory.Limits.Multifork.isLimitMapOfPreserves** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Limits.Multifork`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MulticospanShape} →           {d : CategoryTheory.Limit
+s.MulticospanIndex J C} →             (c : CategoryTheory.Limits.Multifork d) → 
+              (F : CategoryTheory.Functor C D) →                 [CategoryTheory
+.Limits.PreservesLimit d.multicospan F] →                   CategoryTheory.Limit
+s.IsLimit c → CategoryTheory.Limits.IsLimit (c.map F)
+参数：c : CategoryTheory.Limits.Multifork d；F : CategoryTheory.Functor C D；c.map F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Multifork.isLimitMapOfPreserves
-  body: (isLimitMapEquiv c F) (isLimitOfPreserves F hc)
-
-中文:
-定义 Multifork.isLimitMapOfPreserves
-  定义体: (isLimitMapEquiv c F) (isLimitOfPreserves F hc)
-
-Depends on / 依赖: isLimitMapEquiv, isLimitOfPreserves
+--- 原说明 ---
+If `d : MulticospanIndex J C`, `c : Multifork d` is a limit multifork,
+and `F : C ⥤ D` is a functor which preserves the limit of `d.multicospan`,
+then the multifork `c.map F` is limiting.
 -/
 noncomputable def Multifork.isLimitMapOfPreserves
     [PreservesLimit d.multicospan F] (hc : IsLimit c) : IsLimit (c.map F) :=
@@ -183,26 +176,18 @@ variable {J : MultispanShape.{w, w'}} (d : MultispanIndex J C)
 
 /-- The multispan index obtained by applying a functor. -/
 @[simps]
-/--
-Definition of `MultispanIndex.map` / `MultispanIndex.map` 的定义
+/-
+**CategoryTheory.Limits.MultispanIndex.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.MultispanIndex`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MultispanShape} →           CategoryTheory.Limits.Multi
+spanIndex J C →             CategoryTheory.Functor C D → CategoryTheory.Limits.M
+ultispanIndex J D
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MultispanIndex.map
-  signature: : MultispanIndex J D where
-  body: F.obj (d.left i)
-  right i := F.obj (d.right i)
-  fst i := F.map (d.fst i)
-  snd i := F.map (d.snd i)
-
-中文:
-定义 MultispanIndex.map
-  签名: : MultispanIndex J D where
-  定义体: F.obj (d.left i)
-  right i := F.obj (d.right i)
-  fst i := F.map (d.fst i)
-  snd i := F.map (d.snd i)
-
-Depends on / 依赖: F.obj, d.left
+--- 原说明 ---
+The multispan index obtained by applying a functor.
 -/
 def MultispanIndex.map : MultispanIndex J D where
   left i := F.obj (d.left i)
@@ -214,32 +199,25 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `d : MultispanIndex J C` and `F : C ⥤ D`, this is the obvious isomorphism
 `(d.map F).multispan ≅ d.multispan ⋙ F`. -/
 @[simps!]
-/--
-Definition of `MultispanIndex.multispanMapIso` / `MultispanIndex.multispanMapIso` 的定义
+/-
+**CategoryTheory.Limits.MultispanIndex.multispanMapIso** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.MultispanIndex`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MultispanShape} →           (d : CategoryTheory.Limits.
+MultispanIndex J C) →             (F : CategoryTheory.Functor C D) → (d.map F).m
+ultispan ≅ d.multispan.comp F
+参数：d : CategoryTheory.Limits.MultispanIndex J C；F : CategoryTheory.Functor C D；d
+.map F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MultispanIndex.multispanMapIso
-  signature: : (d.map F).multispan ≅ d.multispan ⋙ F
-  body: NatIso.ofComponents
-    (fun i => match i with
-      | .left _ => Iso.refl _
-      | .right _ => Iso.refl _)
-    (by rintro _ _ (_ | _) <;> simp)
-
-中文:
-定义 MultispanIndex.multispanMapIso
-  签名: : (d.map F).multispan ≅ d.multispan ⋙ F
-  定义体: NatIso.ofComponents
-    (fun i => match i with
-      | .left _ => Iso.refl _
-      | .right _ => Iso.refl _)
-    (by rintro _ _ (_ | _) <;> simp)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+If `d : MultispanIndex J C` and `F : C ⥤ D`, this is the obvious isomorphism
+`(d.map F).multispan ≅ d.multispan ⋙ F`.
 -/
 def MultispanIndex.multispanMapIso : (d.map F).multispan ≅ d.multispan ⋙ F :=
   NatIso.ofComponents
-    (fun i => match i with
+    (fun i ↦ match i with
       | .left _ => Iso.refl _
       | .right _ => Iso.refl _)
     (by rintro _ _ (_ | _) <;> simp)
@@ -250,69 +228,78 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `d : MultispanIndex J C`, `c : Multicofork d` and `F : C ⥤ D`,
 this is the induced multicofork of `d.map F`. -/
 @[simps!]
-/--
-Definition of `Multicofork.map` / `Multicofork.map` 的定义
+/-
+**CategoryTheory.Limits.Multicofork.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.Multicofork`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MultispanShape} →           {d : CategoryTheory.Limits.
+MultispanIndex J C} →             CategoryTheory.Limits.Multicofork d →         
+      (F : CategoryTheory.Functor C D) → CategoryTheory.Limits.Multicofork (d.ma
+p F)
+参数：F : CategoryTheory.Functor C D；d.map F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Multicofork.map
-  signature: : Multicofork (d.map F)
-  body: Multicofork.ofπ _ (F.obj c.pt) (fun i => F.map (c.π i)) (fun j => by
-    dsimp
-    rw [← F.map_comp]; rw [← F.map_comp]; rw [condition])
-
-中文:
-定义 Multicofork.map
-  签名: : Multicofork (d.map F)
-  定义体: Multicofork.ofπ _ (F.obj c.pt) (fun i => F.map (c.π i)) (fun j => by
-    dsimp
-    rw [← F.map_comp]; rw [← F.map_comp]; rw [condition])
-
-Depends on / 依赖: F.map, F.map_comp, F.obj, Multicofork, Multicofork.of, c.pt, condition, map_comp
+--- 原说明 ---
+If `d : MultispanIndex J C`, `c : Multicofork d` and `F : C ⥤ D`,
+this is the induced multicofork of `d.map F`.
 -/
 def Multicofork.map : Multicofork (d.map F) :=
-  Multicofork.ofπ _ (F.obj c.pt) (fun i => F.map (c.π i)) (fun j => by
+  Multicofork.ofπ _ (F.obj c.pt) (fun i ↦ F.map (c.π i)) (fun j ↦ by
     dsimp
-    rw [← F.map_comp]; rw [← F.map_comp]; rw [condition])
+    rw [← F.map_comp, ← F.map_comp, condition])
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Multicofork.isColimitMapEquiv` / `Multicofork.isColimitMapEquiv` 的定义
+/-- If `d : MultispanIndex J C`, `c : Multicofork d` and `F : C ⥤ D`,
+the cocone `F.mapCocone c` is colimit iff the multicofork `c.map F` is. -/
+/-
+**CategoryTheory.Limits.Multicofork.isColimitMapEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits.Multicofork`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MultispanShape} →           {d : CategoryTheory.Limits.
+MultispanIndex J C} →             (c : CategoryTheory.Limits.Multicofork d) →   
+            (F : CategoryTheory.Functor C D) →                 CategoryTheory.Li
+mits.IsColimit (F.mapCocone c) ≃ CategoryTheory.Limits.IsColimit (c.map F)
+参数：c : CategoryTheory.Limits.Multicofork d；F : CategoryTheory.Functor C D；F.mapC
+ocone c；c.map F。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Multicofork.isColimitMapEquiv
-  signature: :
-  body: (IsColimit.precomposeInvEquiv (d.multispanMapIso F).symm (F.mapCocone c)).symm.trans
-    (IsColimit.equivIsoColimit
-      (Multicofork.ext (Iso.refl _) (fun i => by dsimp only [Multicofork.π]; simp)))
-
-中文:
-定义 Multicofork.isColimitMapEquiv
-  签名: :
-  定义体: (IsColimit.precomposeInvEquiv (d.multispanMapIso F).symm (F.mapCocone c)).symm.trans
-    (IsColimit.equivIsoColimit
-      (Multicofork.ext (Iso.refl _) (fun i => by dsimp only [Multicofork.π]; simp)))
-
-Depends on / 依赖: F.mapCocone, IsColimit, IsColimit.equivIsoColimit, IsColimit.precomposeInvEquiv, Iso.refl, Multicofork, Multicofork.ext, d.multispanMapIso, equivIsoColimit, mapCocone, multispanMapIso, precomposeInvEquiv, symm.trans
+--- 原说明 ---
+If `d : MultispanIndex J C`, `c : Multicofork d` and `F : C ⥤ D`,
+the cocone `F.mapCocone c` is colimit iff the multicofork `c.map F` is.
 -/
 def Multicofork.isColimitMapEquiv :
     IsColimit (F.mapCocone c) ≃ IsColimit (c.map F) :=
   (IsColimit.precomposeInvEquiv (d.multispanMapIso F).symm (F.mapCocone c)).symm.trans
     (IsColimit.equivIsoColimit
-      (Multicofork.ext (Iso.refl _) (fun i => by dsimp only [Multicofork.π]; simp)))
+      (Multicofork.ext (Iso.refl _) (fun i ↦ by dsimp only [Multicofork.π]; simp)))
 
-/--
-Definition of `Multicofork.isColimitMapOfPreserves` / `Multicofork.isColimitMapOfPreserves` 的定义
+/-- If `d : MultispanIndex J C`, `c : Multicofork d` is a colimit multicofork,
+and `F : C ⥤ D` is a functor which preserves the colimit of `d.multispan`,
+then the multicofork `c.map F` is colimit. -/
+/-
+**CategoryTheory.Limits.Multicofork.isColimitMapOfPreserves** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Limits.Multicofork`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         {J
+ : CategoryTheory.Limits.MultispanShape} →           {d : CategoryTheory.Limits.
+MultispanIndex J C} →             (c : CategoryTheory.Limits.Multicofork d) →   
+            (F : CategoryTheory.Functor C D) →                 [CategoryTheory.L
+imits.PreservesColimit d.multispan F] →                   CategoryTheory.Limits.
+IsColimit c → CategoryTheory.Limits.IsColimit (c.map F)
+参数：c : CategoryTheory.Limits.Multicofork d；F : CategoryTheory.Functor C D；c.map 
+F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Multicofork.isColimitMapOfPreserves
-  body: (isColimitMapEquiv c F) (isColimitOfPreserves F hc)
-
-中文:
-定义 Multicofork.isColimitMapOfPreserves
-  定义体: (isColimitMapEquiv c F) (isColimitOfPreserves F hc)
-
-Depends on / 依赖: isColimitMapEquiv, isColimitOfPreserves
+--- 原说明 ---
+If `d : MultispanIndex J C`, `c : Multicofork d` is a colimit multicofork,
+and `F : C ⥤ D` is a functor which preserves the colimit of `d.multispan`,
+then the multicofork `c.map F` is colimit.
 -/
 noncomputable def Multicofork.isColimitMapOfPreserves
     [PreservesColimit d.multispan F] (hc : IsColimit c) : IsColimit (c.map F) :=
@@ -323,3 +310,4 @@ end Multicofork
 end Limits
 
 end CategoryTheory
+

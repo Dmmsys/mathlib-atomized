@@ -24,28 +24,15 @@ universe u
 open CategoryTheory
 
 
-/--
-Definition of `TopCommRingCat` / `TopCommRingCat` 的定义
+/-- A bundled topological commutative ring. -/
+/-
+**TopCommRingCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TopCommRingCat
-  parameters: where
-  axioms and operations (5):
-    - of : :
-    - α : Type u
-    - [isCommRing : CommRing α]
-    - [isTopologicalSpace : TopologicalSpace α]
-    - [isTopologicalRing : IsTopologicalRing α]
-
-中文:
-结构 TopComm环范畴
-  参数: where
-  公理与运算 (5 个):
-    - of : :
-    - α : 类型u
-    - [isCommRing : 交换环 α]
-    - [isTopologicalSpace : 拓扑空间 α]
-    - [isTopologicalRing : 是拓扑环 α]
+--- 原说明 ---
+A bundled topological commutative ring.
 -/
 structure TopCommRingCat where
   /-- Construct a bundled `TopCommRingCat` from the underlying type and the appropriate typeclasses.
@@ -70,75 +57,26 @@ end Notation
 
 namespace TopCommRingCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited TopCommRingCat
-  body: ⟨⟨PUnit⟩⟩
-
-中文:
-实例 :
-  签名: 可居 TopComm环范畴
-  定义体: ⟨⟨PUnit⟩⟩
+/-
+**TopCommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited TopCommRingCat :=
   ⟨⟨PUnit⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort TopCommRingCat (Type u)
-  body: ⟨TopCommRingCat.α⟩
-
-中文:
-实例 :
-  签名: CoeSort TopComm环范畴 (类型u)
-  定义体: ⟨TopCommRingCat.α⟩
-
-Depends on / 依赖: TopCommRingCat
+/-
+**TopCommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort TopCommRingCat (Type u) :=
   ⟨TopCommRingCat.α⟩
 
 attribute [instance] isCommRing isTopologicalSpace isTopologicalRing
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category TopCommRingCat.{u}
-  body: { f : R ->+* S // Continuous f }
-  id R := ⟨RingHom.id R, by rw [RingHom.id]; dsimp; fun_prop⟩
-  comp f g :=
-    ⟨g.val.comp f.val, by
-      -- TODO automate
-      cases f
-      cases g
-      dsimp
-      fun_prop⟩
-
-中文:
-实例 :
-  签名: 范畴 TopComm环范畴.{u}
-  定义体: { f : R ->+* S // Continuous f }
-  id R := ⟨RingHom.id R, by rw [RingHom.id]; dsimp; fun_prop⟩
-  comp f g :=
-    ⟨g.val.comp f.val, by
-      -- TODO automate
-      cases f
-      cases g
-      dsimp
-      fun_prop⟩
-
-Depends on / 依赖: Continuous
+/-
+**TopCommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category TopCommRingCat.{u} where
-  Hom R S := { f : R ->+* S // Continuous f }
+  Hom R S := { f : R →+* S // Continuous f }
   id R := ⟨RingHom.id R, by rw [RingHom.id]; dsimp; fun_prop⟩
   comp f g :=
     ⟨g.val.comp f.val, by
@@ -147,178 +85,102 @@ instance : Category TopCommRingCat.{u} where
       cases g
       dsimp
       fun_prop⟩
-
-instance (R S : TopCommRingCat.{u}) : FunLike { f : R ->+* S // Continuous f } R S where
+/-
+**TopCommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (R S : TopCommRingCat.{u}) : FunLike { f : R →+* S // Continuous f } R S where
   coe f := f.val
   coe_injective _ _ h := Subtype.ext (DFunLike.coe_injective h)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory TopCommRingCat.{u} fun R S => { f : R ->+* S // Continuous f }
-  body: f
-  ofHom f := f
-
-中文:
-实例 :
-  签名: 余ncrete范畴 TopComm环范畴.{u} fun R S => { f : R ->+* S // 连续 f }
-  定义体: f
-  ofHom f := f
+/-
+**TopCommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory TopCommRingCat.{u} fun R S => { f : R ->+* S // Continuous f } where
+instance : ConcreteCategory TopCommRingCat.{u} fun R S => { f : R →+* S // Continuous f } where
   hom f := f
   ofHom f := f
-
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [CommRing X] [TopologicalSpace X] [IsTopologicalRing X]
-  proof: rfl
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [交换环 X] [拓扑空间 X] [是拓扑环 X]
-  证明: rfl
+/-
+**TopCommRingCat.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `TopCommRingCat`。
+形式化陈述：coe_of (X : Type u) [CommRing X] [TopologicalSpace X] [IsTopologicalRing X
+] : (of X : Type u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [CommRing X] [TopologicalSpace X] [IsTopologicalRing X] :
     (of X : Type u) = X := rfl
-
-/--
-Instance `hasForgetToCommRingCat` / 实例 `hasForgetToCommRingCat`
-
-English:
-instance hasForgetToCommRingCat
-  signature: : HasForget₂ TopCommRingCat CommRingCat
-  body: HasForget₂.mk' (fun R => CommRingCat.of R) (fun _ => rfl)
-    (fun f => CommRingCat.ofHom f.val) HEq.rfl
-
-中文:
-实例 hasForgetToCommRingCat
-  签名: : 有Forget₂ TopComm环范畴 交换环范畴
-  定义体: HasForget₂.mk' (fun R => CommRingCat.of R) (fun _ => rfl)
-    (fun f => CommRingCat.ofHom f.val) HEq.rfl
-
-Depends on / 依赖: CommRingCat, CommRingCat.of, CommRingCat.ofHom, HEq.rfl, f.val
+/-
+**TopCommRingCat.hasForgetToCommRingCat** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCa
+t`。
+形式化陈述：hasForgetToCommRingCat : HasForget₂ TopCommRingCat CommRingCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToCommRingCat : HasForget₂ TopCommRingCat CommRingCat :=
   HasForget₂.mk' (fun R => CommRingCat.of R) (fun _ => rfl)
     (fun f => CommRingCat.ofHom f.val) HEq.rfl
-
-/--
-Instance `forgetToCommRingCatTopologicalSpace` / 实例 `forgetToCommRingCatTopologicalSpace`
-
-English:
-instance forgetToCommRingCatTopologicalSpace
-  signature: (R : TopCommRingCat)
-  body: R.isTopologicalSpace
-
-中文:
-实例 forgetToCommRingCatTopologicalSpace
-  签名: (R : TopComm环范畴)
-  定义体: R.isTopologicalSpace
-
-Depends on / 依赖: R.isTopologicalSpace, isTopologicalSpace
+/-
+**TopCommRingCat.forgetToCommRingCatTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `
+TopCommRingCat`。
+形式化陈述：forgetToCommRingCatTopologicalSpace (R : TopCommRingCat) : TopologicalSpac
+e ((forget₂ TopCommRingCat CommRingCat).obj R)
+参数：R : TopCommRingCat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forgetToCommRingCatTopologicalSpace (R : TopCommRingCat) :
     TopologicalSpace ((forget₂ TopCommRingCat CommRingCat).obj R) :=
   R.isTopologicalSpace
 
-/--
-Instance `hasForgetToTopCat` / 实例 `hasForgetToTopCat`
+/-- The forgetful functor to `TopCat`. -/
+/-
+**TopCommRingCat.hasForgetToTopCat** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCat`。
+形式化陈述：hasForgetToTopCat : HasForget₂ TopCommRingCat TopCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance hasForgetToTopCat
-  signature: : HasForget₂ TopCommRingCat TopCat
-  body: HasForget₂.mk' (fun R => TopCat.of R) (fun _ => rfl) (fun f => TopCat.ofHom ⟨⇑f.1, f.2⟩) HEq.rfl
-
-中文:
-实例 hasForgetToTopCat
-  签名: : 有Forget₂ TopComm环范畴 顶元素范畴
-  定义体: HasForget₂.mk' (fun R => TopCat.of R) (fun _ => rfl) (fun f => TopCat.ofHom ⟨⇑f.1, f.2⟩) HEq.rfl
-
-Depends on / 依赖: HEq.rfl, TopCat, TopCat.of, TopCat.ofHom
+--- 原说明 ---
+The forgetful functor to `TopCat`.
 -/
 instance hasForgetToTopCat : HasForget₂ TopCommRingCat TopCat :=
   HasForget₂.mk' (fun R => TopCat.of R) (fun _ => rfl) (fun f => TopCat.ofHom ⟨⇑f.1, f.2⟩) HEq.rfl
-
-/--
-Instance `forgetToTopCatCommRing` / 实例 `forgetToTopCatCommRing`
-
-English:
-instance forgetToTopCatCommRing
-  signature: (R : TopCommRingCat)
-  body: R.isCommRing
-
-中文:
-实例 forgetToTopCatCommRing
-  签名: (R : TopComm环范畴)
-  定义体: R.isCommRing
-
-Depends on / 依赖: R.isCommRing, isCommRing
+/-
+**TopCommRingCat.forgetToTopCatCommRing** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCa
+t`。
+形式化陈述：forgetToTopCatCommRing (R : TopCommRingCat) : CommRing ((forget₂ TopCommRi
+ngCat TopCat).obj R)
+参数：R : TopCommRingCat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forgetToTopCatCommRing (R : TopCommRingCat) :
     CommRing ((forget₂ TopCommRingCat TopCat).obj R) :=
   R.isCommRing
-
-/--
-Instance `forgetToTopCatTopologicalRing` / 实例 `forgetToTopCatTopologicalRing`
-
-English:
-instance forgetToTopCatTopologicalRing
-  signature: (R : TopCommRingCat)
-  body: R.isTopologicalRing
-
-中文:
-实例 forgetToTopCatTopologicalRing
-  签名: (R : TopComm环范畴)
-  定义体: R.isTopologicalRing
-
-Depends on / 依赖: R.isTopologicalRing, isTopologicalRing
+/-
+**TopCommRingCat.forgetToTopCatTopologicalRing** 是 Mathlib 中的一个实例，位于命名空间 `TopCom
+mRingCat`。
+形式化陈述：forgetToTopCatTopologicalRing (R : TopCommRingCat) : IsTopologicalRing ((f
+orget₂ TopCommRingCat TopCat).obj R)
+参数：R : TopCommRingCat。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCommRingCat.isTopologicalRing`：∀ (self : TopCommRingCat), IsTopologic
+alRing self.α
 -/
 instance forgetToTopCatTopologicalRing (R : TopCommRingCat) :
     IsTopologicalRing ((forget₂ TopCommRingCat TopCat).obj R) :=
   R.isTopologicalRing
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The forgetful functors to `Type` do not reflect isomorphisms,
+but the forgetful functor from `TopCommRingCat` to `TopCat` does.
+-/
+/-
+**TopCommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (forget₂ TopCommRingCat.{u} TopCat.{u}).ReflectsIsomorphisms
-  body: by
-    -- We have an isomorphism in `TopCat`,
-    let i_Top := asIso ((forget₂ TopCommRingCat TopCat).map f)
-    -- and a `RingEquiv`.
-    let e_Ring : X ≃+* Y := { f.1, ((forget TopCat).mapIso i_Top).toEquiv with }
-    -- Putting these together we obtain the isomorphism we're after:
-    exact
-      ⟨⟨⟨e_Ring.symm, i_Top.inv.hom.2⟩,
-          ⟨by
-            ext x
-            exact e_Ring.left_inv x, by
-            ext x
-            exact e_Ring.right_inv x⟩⟩⟩
-
-中文:
-实例 :
-  签名: (forget₂ TopComm环范畴.{u} 顶元素范畴.{u}).反映同构
-  定义体: by
-    -- We have an isomorphism in `TopCat`,
-    let i_Top := asIso ((forget₂ TopCommRingCat TopCat).map f)
-    -- and a `RingEquiv`.
-    let e_Ring : X ≃+* Y := { f.1, ((forget TopCat).mapIso i_Top).toEquiv with }
-    -- Putting these together we obtain the isomorphism we're after:
-    exact
-      ⟨⟨⟨e_Ring.symm, i_Top.inv.hom.2⟩,
-          ⟨by
-            ext x
-            exact e_Ring.left_inv x, by
-            ext x
-            exact e_Ring.right_inv x⟩⟩⟩
+--- 原说明 ---
+The forgetful functors to `Type` do not reflect isomorphisms,
+but the forgetful functor from `TopCommRingCat` to `TopCat` does.
 -/
 instance : (forget₂ TopCommRingCat.{u} TopCat.{u}).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
@@ -336,3 +198,4 @@ instance : (forget₂ TopCommRingCat.{u} TopCat.{u}).ReflectsIsomorphisms where
             exact e_Ring.right_inv x⟩⟩⟩
 
 end TopCommRingCat
+

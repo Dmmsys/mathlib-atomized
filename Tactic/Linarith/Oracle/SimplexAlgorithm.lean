@@ -21,86 +21,63 @@ public meta section
 
 namespace Mathlib.Tactic.Linarith.SimplexAlgorithm
 
-/--
-Definition of `preprocess` / `preprocess` 的定义
+/-- Preprocess the goal to pass it to `Linarith.SimplexAlgorithm.findPositiveVector`. -/
+/-
+**Mathlib.Tactic.Linarith.SimplexAlgorithm.preprocess** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Tactic.Linarith.SimplexAlgorithm`。
+形式化陈述：preprocess (matType : Nat -> Nat -> Type) [UsableInSimplexAlgorithm matTyp
+e] (hyps : List Comp) (maxVar : Nat) : matType (maxVar + 1) (hyps.length) × List
+ Nat
+参数：matType : Nat -> Nat -> Type；hyps : List Comp；maxVar : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preprocess
-  signature: (matType : Nat -> Nat -> Type) [UsableInSimplexAlgorithm matType] (hyps : List Comp)
-  body: let values : List (Nat × Nat × Rat) := hyps.foldlIdx (init := []) fun idx cur comp =>
-    cur ++ comp.coeffs.map fun (var, c) => (var, idx, c)
-
-  let strictIndexes := hyps.findIdxs (·.str == Ineq.lt)
-  (ofValues values, strictIndexes)
-
-中文:
-定义 preprocess
-  签名: (matType : 自然数 -> 自然数 -> 类型) [UsableInSimplexAlgorithm matType] (hyps : 列表 复合)
-  定义体: let values : List (Nat × Nat × Rat) := hyps.foldlIdx (init := []) fun idx cur comp =>
-    cur ++ comp.coeffs.map fun (var, c) => (var, idx, c)
-
-  let strictIndexes := hyps.findIdxs (·.str == Ineq.lt)
-  (ofValues values, strictIndexes)
-
-Depends on / 依赖: coeffs, comp.coeffs.map, foldlIdx, hyps.foldlIdx, values
+--- 原说明 ---
+Preprocess the goal to pass it to `Linarith.SimplexAlgorithm.findPositiveVector`
+.
 -/
-def preprocess (matType : Nat -> Nat -> Type) [UsableInSimplexAlgorithm matType] (hyps : List Comp)
-    (maxVar : Nat) : matType (maxVar + 1) (hyps.length) × List Nat :=
-  let values : List (Nat × Nat × Rat) := hyps.foldlIdx (init := []) fun idx cur comp =>
+def preprocess (matType : ℕ → ℕ → Type) [UsableInSimplexAlgorithm matType] (hyps : List Comp)
+    (maxVar : ℕ) : matType (maxVar + 1) (hyps.length) × List Nat :=
+  let values : List (ℕ × ℕ × ℚ) := hyps.foldlIdx (init := []) fun idx cur comp =>
     cur ++ comp.coeffs.map fun (var, c) => (var, idx, c)
 
   let strictIndexes := hyps.findIdxs (·.str == Ineq.lt)
   (ofValues values, strictIndexes)
 
 /--
-Definition of `postprocess` / `postprocess` 的定义
-
-English:
-definition postprocess
-  signature: (vec : Array Rat)
-  body: let common_den : Nat := vec.foldl (fun acc item => acc.lcm item.den) 1
-  let vecNat : Array Nat := vec.map (fun x : Rat => (x * common_den).floor.toNat)
-(∅ : Std.HashMap Nat Nat).insertMany vecNat.zipIdx.filterMap
-    fun ⟨item, idx⟩ => if item != 0 then some (idx, item) else none
-
-中文:
-定义 postprocess
-  签名: (vec : 数组 有理数)
-  定义体: let common_den : Nat := vec.foldl (fun acc item => acc.lcm item.den) 1
-  let vecNat : Array Nat := vec.map (fun x : Rat => (x * common_den).floor.toNat)
-(∅ : Std.HashMap Nat Nat).insertMany vecNat.zipIdx.filterMap
-    fun ⟨item, idx⟩ => if item != 0 then some (idx, item) else none
-
-Depends on / 依赖: HashMap, Std.HashMap, acc.lcm, common_den, filterMap, floor.toNat, insertMany, item.den, vec.foldl, vec.map, vecNat, vecNat.zipIdx.filterMap, zipIdx
+Extract the certificate from the `vec` found by `Linarith.SimplexAlgorithm.findPositiveVector`.
 -/
-def postprocess (vec : Array Rat) : Std.HashMap Nat Nat :=
-  let common_den : Nat := vec.foldl (fun acc item => acc.lcm item.den) 1
-  let vecNat : Array Nat := vec.map (fun x : Rat => (x * common_den).floor.toNat)
-(∅ : Std.HashMap Nat Nat).insertMany vecNat.zipIdx.filterMap
+/-
+**Mathlib.Tactic.Linarith.SimplexAlgorithm.postprocess** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Tactic.Linarith.SimplexAlgorithm`。
+形式化陈述：postprocess (vec : Array Rat) : Std.HashMap Nat Nat
+参数：vec : Array Rat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Extract the certificate from the `vec` found by `Linarith.SimplexAlgorithm.findP
+ositiveVector`.
+-/
+def postprocess (vec : Array ℚ) : Std.HashMap ℕ ℕ :=
+  let common_den : ℕ := vec.foldl (fun acc item => acc.lcm item.den) 1
+  let vecNat : Array ℕ := vec.map (fun x : ℚ => (x * common_den).floor.toNat)
+  (∅ : Std.HashMap Nat Nat).insertMany <| vecNat.zipIdx.filterMap
     fun ⟨item, idx⟩ => if item != 0 then some (idx, item) else none
 
 end SimplexAlgorithm
 
 open SimplexAlgorithm
 
-/--
-Definition of `CertificateOracle.simplexAlgorithmSparse` / `CertificateOracle.simplexAlgorithmSparse` 的定义
+/-- An oracle that uses the Simplex Algorithm. -/
+/-
+**Mathlib.Tactic.Linarith.CertificateOracle.simplexAlgorithmSparse** 是 Mathlib 中
+的一个定义，位于命名空间 `Mathlib.Tactic.Linarith.CertificateOracle`。
+形式化陈述：Mathlib.Tactic.Linarith.CertificateOracle
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CertificateOracle.simplexAlgorithmSparse
-  signature: : CertificateOracle where
-  body: do
-    let (A, strictIndexes) := preprocess SparseMatrix hyps maxVar
-    let vec ← findPositiveVector A strictIndexes
-    return postprocess vec
-
-中文:
-定义 CertificateOracle.simplexAlgorithmSparse
-  签名: : CertificateOracle where
-  定义体: do
-    let (A, strictIndexes) := preprocess SparseMatrix hyps maxVar
-    let vec ← findPositiveVector A strictIndexes
-    return postprocess vec
+--- 原说明 ---
+An oracle that uses the Simplex Algorithm.
 -/
 def CertificateOracle.simplexAlgorithmSparse : CertificateOracle where
   produceCertificate hyps maxVar := do
@@ -109,23 +86,19 @@ def CertificateOracle.simplexAlgorithmSparse : CertificateOracle where
     return postprocess vec
 
 /--
-Definition of `CertificateOracle.simplexAlgorithmDense` / `CertificateOracle.simplexAlgorithmDense` 的定义
+The same oracle as `CertificateOracle.simplexAlgorithmSparse`, but uses dense matrices. Works faster
+on dense states.
+-/
+/-
+**Mathlib.Tactic.Linarith.CertificateOracle.simplexAlgorithmDense** 是 Mathlib 中的
+一个定义，位于命名空间 `Mathlib.Tactic.Linarith.CertificateOracle`。
+形式化陈述：Mathlib.Tactic.Linarith.CertificateOracle
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CertificateOracle.simplexAlgorithmDense
-  signature: : CertificateOracle where
-  body: do
-    let (A, strictIndexes) := preprocess DenseMatrix hyps maxVar
-    let vec ← findPositiveVector A strictIndexes
-    return postprocess vec
-
-中文:
-定义 CertificateOracle.simplexAlgorithmDense
-  签名: : CertificateOracle where
-  定义体: do
-    let (A, strictIndexes) := preprocess DenseMatrix hyps maxVar
-    let vec ← findPositiveVector A strictIndexes
-    return postprocess vec
+--- 原说明 ---
+The same oracle as `CertificateOracle.simplexAlgorithmSparse`, but uses dense ma
+trices. Works faster
+on dense states.
 -/
 def CertificateOracle.simplexAlgorithmDense : CertificateOracle where
   produceCertificate hyps maxVar := do
@@ -134,3 +107,4 @@ def CertificateOracle.simplexAlgorithmDense : CertificateOracle where
     return postprocess vec
 
 end Mathlib.Tactic.Linarith
+

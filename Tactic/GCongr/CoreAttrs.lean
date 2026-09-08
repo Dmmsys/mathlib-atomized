@@ -20,42 +20,25 @@ namespace Mathlib.Tactic.GCongr
 
 variable {a b c d : Prop}
 
-/--
-lemma `imp_mono` / 引理 `imp_mono`
-
-English:
-lemma imp_mono
-  given: (h₁ : c -> a) (h₂ : c -> b -> d)
-  statement: (a -> b) -> c -> d
-  proof: fun h₃ hc => h₂ hc (h₃ (h₁ hc))
-
-中文:
-引理 imp_mono
-  条件: (h₁ : c -> a) (h₂ : c -> b -> d)
-  结论: (a -> b) -> c -> d
-  证明: fun h₃ hc => h₂ hc (h₃ (h₁ hc))
-
-Depends on / 依赖: OrderTopology, OrderTopology.t5Space, T5Space, T5Space.mk, t5Space
+/-
+**Mathlib.Tactic.GCongr.imp_mono** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tactic.GCong
+r`。
+形式化陈述：imp_mono (h₁ : c -> a) (h₂ : c -> b -> d) : (a -> b) -> c -> d
+参数：h₁ : c -> a；h₂ : c -> b -> d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma imp_mono (h₁ : c -> a) (h₂ : c -> b -> d) : (a -> b) -> c -> d :=
+lemma imp_mono (h₁ : c → a) (h₂ : c → b → d) : (a → b) → c → d :=
   fun h₃ hc => h₂ hc (h₃ (h₁ hc))
-
-/--
-lemma `and_mono` / 引理 `and_mono`
-
-English:
-lemma and_mono
-  given: (h₁ : a -> c) (h₂ : a -> b -> d)
-  statement: (a ∧ b) -> c ∧ d
-  proof: fun ⟨ha, hb⟩ => ⟨h₁ ha, h₂ ha hb⟩
-
-中文:
-引理 and_mono
-  条件: (h₁ : a -> c) (h₂ : a -> b -> d)
-  结论: (a ∧ b) -> c ∧ d
-  证明: fun ⟨ha, hb⟩ => ⟨h₁ ha, h₂ ha hb⟩
+/-
+**Mathlib.Tactic.GCongr.and_mono** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tactic.GCong
+r`。
+形式化陈述：and_mono (h₁ : a -> c) (h₂ : a -> b -> d) : (a ∧ b) -> c ∧ d
+参数：h₁ : a -> c；h₂ : a -> b -> d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma and_mono (h₁ : a -> c) (h₂ : a -> b -> d) : (a ∧ b) -> c ∧ d :=
+lemma and_mono (h₁ : a → c) (h₂ : a → b → d) : (a ∧ b) → c ∧ d :=
   fun ⟨ha, hb⟩ => ⟨h₁ ha, h₂ ha hb⟩
 
 attribute [gcongr] mt Or.imp and_mono imp_mono forall_imp Exists.imp
@@ -65,3 +48,4 @@ attribute [gcongr] mt Or.imp and_mono imp_mono forall_imp Exists.imp
   Nat.sub_le_sub_left Nat.sub_le_sub_right Nat.sub_lt_sub_left Nat.sub_lt_sub_right
 
 end Mathlib.Tactic.GCongr
+

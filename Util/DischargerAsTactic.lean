@@ -20,35 +20,25 @@ public meta section
 
 open Lean Meta Elab Tactic
 
-/--
-Definition of `wrapSimpDischarger` / `wrapSimpDischarger` 的定义
+/-- Wrap a simp discharger (a function `Expr → SimpM (Option Expr)`) as a tactic,
+so that it can be passed as an argument to `simp (discharger := foo)`.
+This is inverse to `mkDischargeWrapper`. -/
+/-
+**wrapSimpDischarger** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：wrapSimpDischarger (dis : Simp.Discharge) : TacticM Unit
+参数：dis : Simp.Discharge。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wrapSimpDischarger
-  signature: (dis : Simp.Discharge)
-  body: do
-  let eS : Lean.Meta.Simp.State := {}
-  let eC : Lean.Meta.Simp.Context ← Simp.mkContext {}
-  let eM : Lean.Meta.Simp.Methods := {}
-let (some a, _) ← liftM StateRefT'.run (ReaderT.run (ReaderT.run (dis <| ← getMainTarget)
-    eM.toMethodsRef) eC) eS | failure
-  (← getMainGoal).assignIfDefEq a
-
-中文:
-定义 wrapSimpDischarger
-  签名: (dis : Simp.Discharge)
-  定义体: do
-  let eS : Lean.Meta.Simp.State := {}
-  let eC : Lean.Meta.Simp.Context ← Simp.mkContext {}
-  let eM : Lean.Meta.Simp.Methods := {}
-let (some a, _) ← liftM StateRefT'.run (ReaderT.run (ReaderT.run (dis <| ← getMainTarget)
-    eM.toMethodsRef) eC) eS | failure
-  (← getMainGoal).assignIfDefEq a
+--- 原说明 ---
+Wrap a simp discharger (a function `Expr → SimpM (Option Expr)`) as a tactic,
+so that it can be passed as an argument to `simp (discharger := foo)`.
+This is inverse to `mkDischargeWrapper`.
 -/
 def wrapSimpDischarger (dis : Simp.Discharge) : TacticM Unit := do
   let eS : Lean.Meta.Simp.State := {}
   let eC : Lean.Meta.Simp.Context ← Simp.mkContext {}
   let eM : Lean.Meta.Simp.Methods := {}
-let (some a, _) ← liftM StateRefT'.run (ReaderT.run (ReaderT.run (dis <| ← getMainTarget)
+  let (some a, _) ← liftM <| StateRefT'.run (ReaderT.run (ReaderT.run (dis <| ← getMainTarget)
     eM.toMethodsRef) eC) eS | failure
   (← getMainGoal).assignIfDefEq a

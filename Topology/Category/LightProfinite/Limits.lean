@@ -24,88 +24,67 @@ universe u w
 
 open CategoryTheory Limits CompHausLike
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasExplicitPullbacks
-  body: {
-    hasProp := ⟨show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance,
-      show SecondCountableTopology {_xy : _ | _} from inferInstance⟩ }
-
-中文:
-实例 :
-  签名: 有ExplicitPullbacks
-  定义体: {
-    hasProp := ⟨show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance,
-      show SecondCountableTopology {_xy : _ | _} from inferInstance⟩ }
+/-
+**LightProfinite.** 是 Mathlib 中的一个实例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasExplicitPullbacks
-    (fun Y => TotallyDisconnectedSpace Y ∧ SecondCountableTopology Y) where
+    (fun Y ↦ TotallyDisconnectedSpace Y ∧ SecondCountableTopology Y) where
   hasProp _ _ := {
     hasProp := ⟨show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance,
       show SecondCountableTopology {_xy : _ | _} from inferInstance⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasExplicitFiniteCoproducts.{w, u}
-  body: { hasProp :=
-    ⟨show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance,
-      show SecondCountableTopology (Σ (_a : _), _) from inferInstance⟩ }
-
-中文:
-实例 :
-  签名: 有ExplicitFiniteCoproducts.{w, u}
-  定义体: { hasProp :=
-    ⟨show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance,
-      show SecondCountableTopology (Σ (_a : _), _) from inferInstance⟩ }
-
-Depends on / 依赖: hasProp
+/-
+**LightProfinite.** 是 Mathlib 中的一个实例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasExplicitFiniteCoproducts.{w, u}
-    (fun Y => TotallyDisconnectedSpace Y ∧ SecondCountableTopology Y) where
+    (fun Y ↦ TotallyDisconnectedSpace Y ∧ SecondCountableTopology Y) where
   hasProp _ := { hasProp :=
     ⟨show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance,
       show SecondCountableTopology (Σ (_a : _), _) from inferInstance⟩ }
 
-/--
-Definition of `isTerminalPUnit` / `isTerminalPUnit` 的定义
+/-- A one-element space is terminal in `Profinite` -/
+/-
+**LightProfinite.isTerminalPUnit** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightProfinite`。
+形式化陈述：isTerminalPUnit : IsTerminal (LightProfinite.of PUnit.{u + 1})
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation isTerminalPUnit
-  signature: : IsTerminal (LightProfinite.of PUnit.{u + 1})
-  body: CompHausLike.isTerminalPUnit
-
-中文:
-缩写 isTerminalPUnit
-  签名: : 是终止 (LightProfinite.of 命题单元.{u + 1})
-  定义体: CompHausLike.isTerminalPUnit
-
-Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit, isTerminalPUnit
+--- 原说明 ---
+A one-element space is terminal in `Profinite`
 -/
 abbrev isTerminalPUnit : IsTerminal (LightProfinite.of PUnit.{u + 1}) :=
   CompHausLike.isTerminalPUnit
-
+/-
+**LightProfinite.** 是 Mathlib 中的一个实例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : LightProfinite} (f : X ⟶ Z) (g : Y ⟶ Z) [h : Epi g] :
     Epi (CompHausLike.pullback.fst f g) := by
   rw [LightProfinite.epi_iff_surjective] at h ⊢
   intro x
   obtain ⟨y, hy⟩ := h (f x)
   exact ⟨⟨⟨x, y⟩, hy.symm⟩, rfl⟩
-
+/-
+**LightProfinite.** 是 Mathlib 中的一个实例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : LightProfinite} (f : X ⟶ Z) (g : Y ⟶ Z) [h : Epi f] :
     Epi (CompHausLike.pullback.snd f g) := by
   rw [LightProfinite.epi_iff_surjective] at h ⊢
   intro y
   obtain ⟨x, hx⟩ := h (g y)
   exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
-
+/-
+**LightProfinite.** 是 Mathlib 中的一个示例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : FinitaryExtensive LightProfinite.{u} := inferInstance
-
+/-
+**LightProfinite.** 是 Mathlib 中的一个示例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example : PreservesFiniteCoproducts lightProfiniteToCompHaus.{u} := inferInstance
 
 end LightProfinite
+

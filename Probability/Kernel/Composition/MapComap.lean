@@ -46,180 +46,187 @@ section MapComap
 /-! ### map, comap -/
 
 
-variable {γ δ : Type*} {mγ : MeasurableSpace γ} {mδ : MeasurableSpace δ} {f : β -> γ} {g : γ -> α}
+variable {γ δ : Type*} {mγ : MeasurableSpace γ} {mδ : MeasurableSpace δ} {f : β → γ} {g : γ → α}
 
-/--
-Definition of `mapOfMeasurable` / `mapOfMeasurable` 的定义
+/-- The pushforward of a kernel along a measurable function. This is an implementation detail,
+use `map κ f` instead. -/
+/-
+**ProbabilityTheory.Kernel.mapOfMeasurable** 是 Mathlib 中的一个定义，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：mapOfMeasurable (κ : Kernel α β) (f : β -> γ) (hf : Measurable f) : Kernel
+ α γ where toFun a
+参数：κ : Kernel α β；f : β -> γ；hf : Measurable f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapOfMeasurable
-  signature: (κ : Kernel α β) (f : β -> γ) (hf : Measurable f)
-  body: (κ a).map f
-  measurable' := by fun_prop
-
-中文:
-定义 mapOfMeasurable
-  签名: (κ : 核 α β) (f : β -> γ) (hf : 可测 f)
-  定义体: (κ a).map f
-  measurable' := by fun_prop
+--- 原说明 ---
+The pushforward of a kernel along a measurable function. This is an implementati
+on detail,
+use `map κ f` instead.
 -/
-noncomputable def mapOfMeasurable (κ : Kernel α β) (f : β -> γ) (hf : Measurable f) :
+noncomputable def mapOfMeasurable (κ : Kernel α β) (f : β → γ) (hf : Measurable f) :
     Kernel α γ where
   toFun a := (κ a).map f
   measurable' := by fun_prop
 
 open scoped Classical in
-/--
-Definition of `map` / `map` 的定义
+/-- The pushforward of a kernel along a function.
+If the function is not measurable, we use zero instead. This choice of junk
+value ensures that typeclass inference can infer that the `map` of a kernel
+satisfying `IsZeroOrMarkovKernel` again satisfies this property. -/
+/-
+**ProbabilityTheory.Kernel.map** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Kern
+el`。
+形式化陈述：map [MeasurableSpace γ] (κ : Kernel α β) (f : β -> γ) : Kernel α γ
+参数：κ : Kernel α β；f : β -> γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: [MeasurableSpace γ] (κ : Kernel α β) (f : β -> γ)
-  body: if hf : Measurable f then mapOfMeasurable κ f hf else 0
-
-中文:
-定义 map
-  签名: [可测空间 γ] (κ : 核 α β) (f : β -> γ)
-  定义体: if hf : Measurable f then mapOfMeasurable κ f hf else 0
-
-Depends on / 依赖: Measurable, mapOfMeasurable
+--- 原说明 ---
+The pushforward of a kernel along a function.
+If the function is not measurable, we use zero instead. This choice of junk
+value ensures that typeclass inference can infer that the `map` of a kernel
+satisfying `IsZeroOrMarkovKernel` again satisfies this property.
 -/
-noncomputable def map [MeasurableSpace γ] (κ : Kernel α β) (f : β -> γ) : Kernel α γ :=
+noncomputable def map [MeasurableSpace γ] (κ : Kernel α β) (f : β → γ) : Kernel α γ :=
   if hf : Measurable f then mapOfMeasurable κ f hf else 0
-
-/--
-theorem `map_of_not_measurable` / 定理 `map_of_not_measurable`
-
-English:
-theorem map_of_not_measurable
-  given: (κ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f))
-  proof: by
-  simp [map, hf]
-
-中文:
-定理 map_of_not_measurable
-  条件: (κ : 核 α β) {f : β -> γ} (hf : ¬(可测 f))
-  证明: by
-  simp [map, hf]
+/-
+**ProbabilityTheory.Kernel.map_of_not_measurable** 是 Mathlib 中的一个定理，位于命名空间 `Prob
+abilityTheory.Kernel`。
+形式化陈述：map_of_not_measurable (κ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f))
+ : map κ f = 0
+参数：κ : Kernel α β；hf : ¬(Measurable f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_of_not_measurable (κ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) :
+theorem map_of_not_measurable (κ : Kernel α β) {f : β → γ} (hf : ¬(Measurable f)) :
     map κ f = 0 := by
   simp [map, hf]
-
-/--
-theorem `mapOfMeasurable_eq_map` / 定理 `mapOfMeasurable_eq_map`
-
-English:
-theorem mapOfMeasurable_eq_map
-  given: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f)
-  proof: by
-  simp [map, hf]
-
-中文:
-定理 mapOfMeasurable_eq_map
-  条件: (κ : 核 α β) {f : β -> γ} (hf : 可测 f)
-  证明: by
-  simp [map, hf]
+/-
+**ProbabilityTheory.Kernel.mapOfMeasurable_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `Pro
+babilityTheory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) {f : β → γ} (hf : Measurable f),   κ.mapOfMeasurable f hf = κ.map f
+参数：κ : ProbabilityTheory.Kernel α β；hf : Measurable f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] theorem mapOfMeasurable_eq_map (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) :
+@[simp] theorem mapOfMeasurable_eq_map (κ : Kernel α β) {f : β → γ} (hf : Measurable f) :
     mapOfMeasurable κ f hf = map κ f := by
   simp [map, hf]
-
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: (κ : Kernel α β) (hf : Measurable f) (a : α)
-  statement: map κ f a = (κ a).map f
-  proof: by
-  simp only [map, hf, ↓reduceDIte, mapOfMeasurable, coe_mk]
-
-中文:
-定理 map_apply
-  条件: (κ : 核 α β) (hf : 可测 f) (a : α)
-  结论: map κ f a = (κ a).map f
-  证明: by
-  simp only [map, hf, ↓reduceDIte, mapOfMeasurable, coe_mk]
-
-Depends on / 依赖: coe_mk, mapOfMeasurable, reduceDIte
+/-
+**ProbabilityTheory.Kernel.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：map_apply (κ : Kernel α β) (hf : Measurable f) (a : α) : map κ f a = (κ a)
+.map f
+参数：κ : Kernel α β；hf : Measurable f；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_apply (κ : Kernel α β) (hf : Measurable f) (a : α) : map κ f a = (κ a).map f := by
   simp only [map, hf, ↓reduceDIte, mapOfMeasurable, coe_mk]
-
-/--
-theorem `map_apply'` / 定理 `map_apply'`
-
-English:
-theorem map_apply'
-  given: (κ : Kernel α β) (hf : Measurable f) (a : α) {s : Set γ} (hs : MeasurableSet s)
-  proof: by rw [map_apply _ hf, Measure.map_apply hf hs]
-
-中文:
-定理 map_apply'
-  条件: (κ : 核 α β) (hf : 可测 f) (a : α) {s : 集合 γ} (hs : 可测集 s)
-  证明: by rw [map_apply _ hf, Measure.map_apply hf hs]
-
-Depends on / 依赖: Measure, Measure.map_apply, map_apply
+/-
+**ProbabilityTheory.Kernel.map_apply'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：map_apply' (κ : Kernel α β) (hf : Measurable f) (a : α) {s : Set γ} (hs : 
+MeasurableSet s) : map κ f a s = κ a (f ⁻¹' s)
+参数：κ : Kernel α β；hf : Measurable f；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
 -/
 theorem map_apply' (κ : Kernel α β) (hf : Measurable f) (a : α) {s : Set γ} (hs : MeasurableSet s) :
     map κ f a s = κ a (f ⁻¹' s) := by rw [map_apply _ hf, Measure.map_apply hf hs]
-
-/--
-lemma `map_comp_right` / 引理 `map_comp_right`
-
-English:
-lemma map_comp_right
-  statement: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) {g : γ -> δ}
-  proof: by
-  ext1 x
-  rw [map_apply _ hg]; rw [map_apply _ hf]; rw [Measure.map_map hg hf]; rw [← map_apply _ (hg.comp hf)]
-
-@[simp]
-
-中文:
-引理 map_comp_right
-  结论: (κ : 核 α β) {f : β -> γ} (hf : 可测 f) {g : γ -> δ}
-  证明: by
-  ext1 x
-  rw [map_apply _ hg]; rw [map_apply _ hf]; rw [Measure.map_map hg hf]; rw [← map_apply _ (hg.comp hf)]
-
-@[simp]
-
-Depends on / 依赖: Measure, Measure.map_map, hg.comp, map_apply, map_map
+/-
+**ProbabilityTheory.Kernel.map_comp_right** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：map_comp_right (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) {g : γ ->
+ δ} (hg : Measurable g) : κ.map (g ∘ f) = (κ.map f).map g
+参数：κ : Kernel α β；hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
+· 使用定理 `MeasureTheory.Measure.map_map`：map_map {g : β -> γ} {f : α -> β} (hg : M
+easurable g) (hf : Measurable f) : (μ.map f).map g = μ.map (g ∘ f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
 -/
-lemma map_comp_right (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) {g : γ -> δ}
+lemma map_comp_right (κ : Kernel α β) {f : β → γ} (hf : Measurable f) {g : γ → δ}
     (hg : Measurable g) : κ.map (g ∘ f) = (κ.map f).map g := by
   ext1 x
-  rw [map_apply _ hg]; rw [map_apply _ hf]; rw [Measure.map_map hg hf]; rw [← map_apply _ (hg.comp hf)]
+  rw [map_apply _ hg, map_apply _ hf, Measure.map_map hg hf, ← map_apply _ (hg.comp hf)]
 
 @[simp]
-/--
-lemma `map_zero` / 引理 `map_zero`
-
-English:
-lemma map_zero
-  statement: Kernel.map (0 : Kernel α β) f = 0
-  proof: by
-  ext
-  by_cases hf : Measurable f
-  · simp [map_apply, hf]
-  · simp [map_of_not_measurable _ hf]
-
-@[simp]
-
-中文:
-引理 map_zero
-  结论: 核.map (0 : 核 α β) f = 0
-  证明: by
-  ext
-  by_cases hf : Measurable f
-  · simp [map_apply, hf]
-  · simp [map_of_not_measurable _ hf]
-
-@[simp]
-
-Depends on / 依赖: Measurable, map_apply, map_of_not_measurable
+/-
+**ProbabilityTheory.Kernel.map_zero** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：map_zero : Kernel.map (0 : Kernel α β) f = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `MeasureTheory.Measure.map_zero`：∀ {α : Type u_1} {β : Type u_2} {mα : Me
+asurableSpace α} {mβ : MeasurableSpace β} (f : α → β),   MeasureTheory.Measure.m
+ap f 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
 -/
 lemma map_zero : Kernel.map (0 : Kernel α β) f = 0 := by
   ext
@@ -228,2264 +235,2254 @@ lemma map_zero : Kernel.map (0 : Kernel α β) f = 0 := by
   · simp [map_of_not_measurable _ hf]
 
 @[simp]
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: (κ : Kernel α β)
-  statement: map κ id = κ
-  proof: by
-  ext a
-  simp [map_apply, measurable_id]
-
-@[simp]
-
-中文:
-引理 map_id
-  条件: (κ : 核 α β)
-  结论: map κ id = κ
-  证明: by
-  ext a
-  simp [map_apply, measurable_id]
-
-@[simp]
-
-Depends on / 依赖: map_apply, measurable_id
+/-
+**ProbabilityTheory.Kernel.map_id** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.K
+ernel`。
+形式化陈述：map_id (κ : Kernel α β) : map κ id = κ
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
+· 使用定理 `MeasureTheory.Measure.map_id`：map_id : map id μ = μ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_id (κ : Kernel α β) : map κ id = κ := by
   ext a
   simp [map_apply, measurable_id]
 
 @[simp]
-/--
-lemma `map_id'` / 引理 `map_id'`
-
-English:
-lemma map_id'
-  given: (κ : Kernel α β)
-  statement: map κ (fun a => a) = κ
-  proof: map_id κ
-
-nonrec theorem lintegral_map (κ : Kernel α β) (hf : Measurable f) (a : α) {g' : γ -> Real>=0∞}
-    (hg : Measurable g') : ∫⁻ b, g' b ∂map κ f a = ∫⁻ a, g' (f a) ∂κ a := by
-  rw [map_apply _ hf]; rw [lintegral_map hg hf]
-
-中文:
-引理 map_id'
-  条件: (κ : 核 α β)
-  结论: map κ (fun a => a) = κ
-  证明: map_id κ
-
-nonrec theorem lintegral_map (κ : Kernel α β) (hf : Measurable f) (a : α) {g' : γ -> Real>=0∞}
-    (hg : Measurable g') : ∫⁻ b, g' b ∂map κ f a = ∫⁻ a, g' (f a) ∂κ a := by
-  rw [map_apply _ hf]; rw [lintegral_map hg hf]
-
-Depends on / 依赖: map_id
+/-
+**ProbabilityTheory.Kernel.map_id'** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.
+Kernel`。
+形式化陈述：map_id' (κ : Kernel α β) : map κ (fun a => a) = κ
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.map_id`：map_id (κ : Kernel α β) : map κ id = κ
 -/
-lemma map_id' (κ : Kernel α β) : map κ (fun a => a) = κ := map_id κ
+lemma map_id' (κ : Kernel α β) : map κ (fun a ↦ a) = κ := map_id κ
 
-nonrec theorem lintegral_map (κ : Kernel α β) (hf : Measurable f) (a : α) {g' : γ -> Real>=0∞}
+nonrec theorem lintegral_map (κ : Kernel α β) (hf : Measurable f) (a : α) {g' : γ → ℝ≥0∞}
     (hg : Measurable g') : ∫⁻ b, g' b ∂map κ f a = ∫⁻ a, g' (f a) ∂κ a := by
-  rw [map_apply _ hf]; rw [lintegral_map hg hf]
-
-/--
-lemma `map_apply_eq_iff_map_symm_apply_eq` / 引理 `map_apply_eq_iff_map_symm_apply_eq`
-
-English:
-lemma map_apply_eq_iff_map_symm_apply_eq
-  given: (κ : Kernel α β) {f : β ≃ᵐ γ} (η : Kernel α γ)
-  proof: by
-  simp_rw [Kernel.ext_iff, map_apply _ f.measurable, map_apply _ f.symm.measurable,
-    f.map_apply_eq_iff_map_symm_apply_eq]
-
-中文:
-引理 map_apply_eq_iff_map_symm_apply_eq
-  条件: (κ : 核 α β) {f : β ≃ᵐ γ} (η : 核 α γ)
-  证明: by
-  simp_rw [Kernel.ext_iff, map_apply _ f.measurable, map_apply _ f.symm.measurable,
-    f.map_apply_eq_iff_map_symm_apply_eq]
-
-Depends on / 依赖: Kernel, Kernel.ext_iff, ext_iff, f.map_apply_eq_iff_map_symm_apply_eq, f.measurable, f.symm.measurable, map_apply, map_apply_eq_iff_map_symm_apply_eq, measurable, simp_rw
+  rw [map_apply _ hf, lintegral_map hg hf]
+/-
+**ProbabilityTheory.Kernel.map_apply_eq_iff_map_symm_apply_eq** 是 Mathlib 中的一个引理
+，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：map_apply_eq_iff_map_symm_apply_eq (κ : Kernel α β) {f : β ≃ᵐ γ} (η : Kern
+el α γ) : κ.map f = η ↔ κ = η.map f.symm
+参数：κ : Kernel α β；η : Kernel α γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq`：map_apply_eq_iff_map
+_symm_apply_eq (e : α ≃ᵐ β) : μ.map e = ν ↔ μ = ν.map e.symm
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma map_apply_eq_iff_map_symm_apply_eq (κ : Kernel α β) {f : β ≃ᵐ γ} (η : Kernel α γ) :
     κ.map f = η ↔ κ = η.map f.symm := by
   simp_rw [Kernel.ext_iff, map_apply _ f.measurable, map_apply _ f.symm.measurable,
     f.map_apply_eq_iff_map_symm_apply_eq]
-
-/--
-theorem `sum_map_seq` / 定理 `sum_map_seq`
-
-English:
-theorem sum_map_seq
-  given: (κ : Kernel α β) [IsSFiniteKernel κ] (f : β -> γ)
-  proof: by
-  by_cases hf : Measurable f
-  · ext a s hs
-    rw [Kernel.sum_apply]; rw [map_apply' κ hf a hs]; rw [Measure.sum_apply _ hs]; rw [← measure_sum_seq κ]; rw [Measure.sum_apply _ (hf hs)]
-    simp_rw [map_apply' _ hf _ hs]
-  · simp [map_of_not_measurable _ hf]
-
-中文:
-定理 sum_map_seq
-  条件: (κ : 核 α β) [是SFiniteKernel κ] (f : β -> γ)
-  证明: by
-  by_cases hf : Measurable f
-  · ext a s hs
-    rw [Kernel.sum_apply]; rw [map_apply' κ hf a hs]; rw [Measure.sum_apply _ hs]; rw [← measure_sum_seq κ]; rw [Measure.sum_apply _ (hf hs)]
-    simp_rw [map_apply' _ hf _ hs]
-  · simp [map_of_not_measurable _ hf]
-
-Depends on / 依赖: Kernel, Kernel.sum_apply, Measurable, Measure, Measure.sum_apply, map_apply, map_of_not_measurable, measure_sum_seq, simp_rw, sum_apply
+/-
+**ProbabilityTheory.Kernel.sum_map_seq** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：sum_map_seq (κ : Kernel α β) [IsSFiniteKernel κ] (f : β -> γ) : (Kernel.su
+m fun n => map (seq κ n) f) = map κ f
+参数：κ : Kernel α β；f : β -> γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum_apply`：sum_apply [Countable ι] (κ : ι -> Ke
+rnel α β) (a : α) : Kernel.sum κ a = Measure.sum fun n => κ n a
+· 使用定理 `ProbabilityTheory.Kernel.map_apply'`：map_apply' (κ : Kernel α β) (hf : M
+easurable f) (a : α) {s : Set γ} (hs : MeasurableSet s) : map κ f a s = κ a (f ⁻
+¹' s)
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.measure_sum_seq`：measure_sum_seq (κ : Kernel α 
+β) [h : IsSFiniteKernel κ] (a : α) : (Measure.sum fun n => seq κ n a) = κ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum.congr_simp`：∀ {α : Type u_1} {β : Type u_2}
+ {ι : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [inst : Counta
+ble ι]   (κ κ_1 : ι → Probabi…
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
+· 使用定理 `ProbabilityTheory.Kernel.sum_zero`：sum_zero [Countable ι] : (Kernel.sum 
+fun _ : ι => (0 : Kernel α β)) = 0
 -/
-theorem sum_map_seq (κ : Kernel α β) [IsSFiniteKernel κ] (f : β -> γ) :
+theorem sum_map_seq (κ : Kernel α β) [IsSFiniteKernel κ] (f : β → γ) :
     (Kernel.sum fun n => map (seq κ n) f) = map κ f := by
   by_cases hf : Measurable f
   · ext a s hs
-    rw [Kernel.sum_apply]; rw [map_apply' κ hf a hs]; rw [Measure.sum_apply _ hs]; rw [← measure_sum_seq κ]; rw [Measure.sum_apply _ (hf hs)]
+    rw [Kernel.sum_apply, map_apply' κ hf a hs, Measure.sum_apply _ hs, ← measure_sum_seq κ,
+      Measure.sum_apply _ (hf hs)]
     simp_rw [map_apply' _ hf _ hs]
   · simp [map_of_not_measurable _ hf]
-
-/--
-lemma `IsMarkovKernel.map` / 引理 `IsMarkovKernel.map`
-
-English:
-lemma IsMarkovKernel.map
-  given: (κ : Kernel α β) [IsMarkovKernel κ] (hf : Measurable f)
-  proof: ⟨fun a => ⟨by rw [map_apply' κ hf a MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩⟩
-
-中文:
-引理 是MarkovKernel.map
-  条件: (κ : 核 α β) [是MarkovKernel κ] (hf : 可测 f)
-  证明: ⟨fun a => ⟨by rw [map_apply' κ hf a MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩⟩
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, Set.preimage_univ, map_apply, measure_univ, preimage_univ
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.map** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} {f : β → γ} (κ : ProbabilityTh
+eory.Kernel α β) [ProbabilityTheory.IsMarkovKernel κ],   Measurable f → Probabil
+ityTheory.IsMarkovKernel (κ.map f)
+参数：κ : ProbabilityTheory.Kernel α β；κ.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_apply'`：map_apply' (κ : Kernel α β) (hf : M
+easurable f) (a : α) {s : Set γ} (hs : MeasurableSet s) : map κ f a s = κ a (f ⁻
+¹' s)
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `Set.preimage_univ`：preimage_univ : f ⁻¹' univ = univ
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.is_probability_measure'`：∀ {α : Type u_
+1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabi
+lityTheory.Kernel α β}   [ProbabilityTheory.Is…
 -/
 lemma IsMarkovKernel.map (κ : Kernel α β) [IsMarkovKernel κ] (hf : Measurable f) :
     IsMarkovKernel (map κ f) :=
   ⟨fun a => ⟨by rw [map_apply' κ hf a MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩⟩
-
-/--
-Instance `IsZeroOrMarkovKernel.map` / 实例 `IsZeroOrMarkovKernel.map`
-
-English:
-instance IsZeroOrMarkovKernel.map
-  signature: (κ : Kernel α β) [IsZeroOrMarkovKernel κ] (f : β -> γ)
-  body: by
-  by_cases hf : Measurable f
-  · rcases eq_zero_or_isMarkovKernel κ with rfl | h
-    · simp only [map_zero]; infer_instance
-    · have := IsMarkovKernel.map κ hf; infer_instance
-  · simp only [map_of_not_measurable _ hf]; infer_instance
-
-中文:
-实例 是ZeroOrMarkovKernel.map
-  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ] (f : β -> γ)
-  定义体: by
-  by_cases hf : Measurable f
-  · rcases eq_zero_or_isMarkovKernel κ with rfl | h
-    · simp only [map_zero]; infer_instance
-    · have := IsMarkovKernel.map κ hf; infer_instance
-  · simp only [map_of_not_measurable _ hf]; infer_instance
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Measurable, eq_zero_or_isMarkovKernel, infer_instance, map_of_not_measurable, map_zero
+/-
+**ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.map** 是 Mathlib 中的一个定理，位于命名空间 `P
+robabilityTheory.Kernel.IsZeroOrMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsZeroOrMarkovKernel κ] (f : β → γ),   ProbabilityTheory
+.IsZeroOrMarkovKernel (κ.map f)
+参数：κ : ProbabilityTheory.Kernel α β；f : β → γ；κ.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.eq_zero_or_isMarkovKernel`：eq_zero_or_isMarkovKernel (
+κ : Kernel α β) [h : IsZeroOrMarkovKernel κ] : κ = 0 ∨ IsMarkovKernel κ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.map_zero`：map_zero : Kernel.map (0 : Kernel α β
+) f = 0
+· 使用定理 `ProbabilityTheory.instIsZeroOrMarkovKernelOfNatKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   ProbabilityT
+heory.IsZeroOrMarkovKernel 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} {f : β → γ} (κ :…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
 -/
-instance IsZeroOrMarkovKernel.map (κ : Kernel α β) [IsZeroOrMarkovKernel κ] (f : β -> γ) :
+instance IsZeroOrMarkovKernel.map (κ : Kernel α β) [IsZeroOrMarkovKernel κ] (f : β → γ) :
     IsZeroOrMarkovKernel (map κ f) := by
   by_cases hf : Measurable f
   · rcases eq_zero_or_isMarkovKernel κ with rfl | h
     · simp only [map_zero]; infer_instance
     · have := IsMarkovKernel.map κ hf; infer_instance
   · simp only [map_of_not_measurable _ hf]; infer_instance
-
-/--
-Instance `IsFiniteKernel.map` / 实例 `IsFiniteKernel.map`
-
-English:
-instance IsFiniteKernel.map
-  signature: (κ : Kernel α β) [IsFiniteKernel κ] (f : β -> γ)
-  body: by
-  refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
-  by_cases hf : Measurable f
-  · rw [map_apply' κ hf a MeasurableSet.univ]
-    exact measure_le_bound κ a _
-  · simp [map_of_not_measurable _ hf]
-
-中文:
-实例 是FiniteKernel.map
-  签名: (κ : 核 α β) [是FiniteKernel κ] (f : β -> γ)
-  定义体: by
-  refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
-  by_cases hf : Measurable f
-  · rw [map_apply' κ hf a MeasurableSet.univ]
-    exact measure_le_bound κ a _
-  · simp [map_of_not_measurable _ hf]
-
-Depends on / 依赖: Measurable, MeasurableSet, MeasurableSet.univ, bound_lt_top, map_apply, map_of_not_measurable, measure_le_bound
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.map** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsFiniteKernel κ] (f : β → γ),   ProbabilityTheory.IsFin
+iteKernel (κ.map f)
+参数：κ : ProbabilityTheory.Kernel α β；f : β → γ；κ.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.bound_lt_top`：bound_lt_top (κ : Kernel α β) [h 
+: IsFiniteKernel κ] : κ.bound < ∞
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_apply'`：map_apply' (κ : Kernel α β) (hf : M
+easurable f) (a : α) {s : Set γ} (hs : MeasurableSet s) : map κ f a s = κ a (f ⁻
+¹' s)
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `ProbabilityTheory.Kernel.measure_le_bound`：measure_le_bound (κ : Kernel 
+α β) (a : α) (s : Set β) : κ a s <= κ.bound
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
 -/
-instance IsFiniteKernel.map (κ : Kernel α β) [IsFiniteKernel κ] (f : β -> γ) :
+instance IsFiniteKernel.map (κ : Kernel α β) [IsFiniteKernel κ] (f : β → γ) :
     IsFiniteKernel (map κ f) := by
   refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
   by_cases hf : Measurable f
   · rw [map_apply' κ hf a MeasurableSet.univ]
     exact measure_le_bound κ a _
   · simp [map_of_not_measurable _ hf]
-
-/--
-Instance `IsSFiniteKernel.map` / 实例 `IsSFiniteKernel.map`
-
-English:
-instance IsSFiniteKernel.map
-  signature: (κ : Kernel α β) [IsSFiniteKernel κ] (f : β -> γ)
-  body: ⟨⟨fun n => Kernel.map (seq κ n) f, inferInstance, (sum_map_seq κ f).symm⟩⟩
-
-@[simp]
-
-中文:
-实例 是SFiniteKernel.map
-  签名: (κ : 核 α β) [是SFiniteKernel κ] (f : β -> γ)
-  定义体: ⟨⟨fun n => Kernel.map (seq κ n) f, inferInstance, (sum_map_seq κ f).symm⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Kernel, Kernel.map, sum_map_seq
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.map** 是 Mathlib 中的一个定理，位于命名空间 `Probab
+ilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsSFiniteKernel κ] (f : β → γ),   ProbabilityTheory.IsSF
+initeKernel (κ.map f)
+参数：κ : ProbabilityTheory.Kernel α β；f : β → γ；κ.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} (κ : Probability…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.sum_map_seq`：sum_map_seq (κ : Kernel α β) [IsSF
+initeKernel κ] (f : β -> γ) : (Kernel.sum fun n => map (seq κ n) f) = map κ f
 -/
-instance IsSFiniteKernel.map (κ : Kernel α β) [IsSFiniteKernel κ] (f : β -> γ) :
+instance IsSFiniteKernel.map (κ : Kernel α β) [IsSFiniteKernel κ] (f : β → γ) :
     IsSFiniteKernel (map κ f) :=
   ⟨⟨fun n => Kernel.map (seq κ n) f, inferInstance, (sum_map_seq κ f).symm⟩⟩
 
 @[simp]
-/--
-lemma `map_const` / 引理 `map_const`
-
-English:
-lemma map_const
-  given: (μ : Measure α) {f : α -> β} (hf : Measurable f)
-  proof: by
-  ext x s hs
-  rw [map_apply' _ hf _ hs]; rw [const_apply]; rw [const_apply]; rw [Measure.map_apply hf hs]
-
-中文:
-引理 map_const
-  条件: (μ : 测度 α) {f : α -> β} (hf : 可测 f)
-  证明: by
-  ext x s hs
-  rw [map_apply' _ hf _ hs]; rw [const_apply]; rw [const_apply]; rw [Measure.map_apply hf hs]
-
-Depends on / 依赖: Measure, Measure.map_apply, const_apply, map_apply
+/-
+**ProbabilityTheory.Kernel.map_const** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：map_const (μ : Measure α) {f : α -> β} (hf : Measurable f) : map (const γ 
+μ) f = const γ (μ.map f)
+参数：μ : Measure α；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_apply'`：map_apply' (κ : Kernel α β) (hf : M
+easurable f) (a : α) {s : Set γ} (hs : MeasurableSet s) : map κ f a s = κ a (f ⁻
+¹' s)
+· 使用定理 `ProbabilityTheory.Kernel.const_apply`：const_apply (μβ : Measure β) (a : 
+α) : const α μβ a = μβ
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
 -/
-lemma map_const (μ : Measure α) {f : α -> β} (hf : Measurable f) :
+lemma map_const (μ : Measure α) {f : α → β} (hf : Measurable f) :
     map (const γ μ) f = const γ (μ.map f) := by
   ext x s hs
-  rw [map_apply' _ hf _ hs]; rw [const_apply]; rw [const_apply]; rw [Measure.map_apply hf hs]
+  rw [map_apply' _ hf _ hs, const_apply, const_apply, Measure.map_apply hf hs]
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- Pullback of a kernel, such that for each set s `comap κ g hg c s = κ (g c) s`.
+We include measurability in the assumptions instead of using junk values
+to make sure that typeclass inference can infer that the `comap` of a Markov kernel
+is again a Markov kernel. -/
+/-
+**ProbabilityTheory.Kernel.comap** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Ke
+rnel`。
+形式化陈述：comap (κ : Kernel α β) (g : γ -> α) (hg : Measurable g) : Kernel γ β where
+ toFun a
+参数：κ : Kernel α β；g : γ -> α；hg : Measurable g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (κ : Kernel α β) (g : γ -> α) (hg : Measurable g)
-  body: κ (g a)
-  measurable' := κ.measurable.comp hg
-
-@[simp, norm_cast]
-
-中文:
-定义 comap
-  签名: (κ : 核 α β) (g : γ -> α) (hg : 可测 g)
-  定义体: κ (g a)
-  measurable' := κ.measurable.comp hg
-
-@[simp, norm_cast]
+--- 原说明 ---
+Pullback of a kernel, such that for each set s `comap κ g hg c s = κ (g c) s`.
+We include measurability in the assumptions instead of using junk values
+to make sure that typeclass inference can infer that the `comap` of a Markov ker
+nel
+is again a Markov kernel.
 -/
-def comap (κ : Kernel α β) (g : γ -> α) (hg : Measurable g) : Kernel γ β where
+def comap (κ : Kernel α β) (g : γ → α) (hg : Measurable g) : Kernel γ β where
   toFun a := κ (g a)
   measurable' := κ.measurable.comp hg
 
 @[simp, norm_cast]
-/--
-lemma `coe_comap` / 引理 `coe_comap`
-
-English:
-lemma coe_comap
-  given: (κ : Kernel α β) (g : γ -> α) (hg : Measurable g)
-  statement: κ.comap g hg = κ ∘ g
-  proof: rfl
-
-中文:
-引理 coe_comap
-  条件: (κ : 核 α β) (g : γ -> α) (hg : 可测 g)
-  结论: κ.comap g hg = κ ∘ g
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.coe_comap** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：coe_comap (κ : Kernel α β) (g : γ -> α) (hg : Measurable g) : κ.comap g hg
+ = κ ∘ g
+参数：κ : Kernel α β；g : γ -> α；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_comap (κ : Kernel α β) (g : γ -> α) (hg : Measurable g) : κ.comap g hg = κ ∘ g := rfl
-
-/--
-theorem `comap_apply` / 定理 `comap_apply`
-
-English:
-theorem comap_apply
-  given: (κ : Kernel α β) (hg : Measurable g) (c : γ)
-  statement: comap κ g hg c = κ (g c)
-  proof: rfl
-
-中文:
-定理 comap_apply
-  条件: (κ : 核 α β) (hg : 可测 g) (c : γ)
-  结论: comap κ g hg c = κ (g c)
-  证明: rfl
+lemma coe_comap (κ : Kernel α β) (g : γ → α) (hg : Measurable g) : κ.comap g hg = κ ∘ g := rfl
+/-
+**ProbabilityTheory.Kernel.comap_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：comap_apply (κ : Kernel α β) (hg : Measurable g) (c : γ) : comap κ g hg c 
+= κ (g c)
+参数：κ : Kernel α β；hg : Measurable g；c : γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comap_apply (κ : Kernel α β) (hg : Measurable g) (c : γ) : comap κ g hg c = κ (g c) :=
   rfl
-
-/--
-theorem `comap_apply'` / 定理 `comap_apply'`
-
-English:
-theorem comap_apply'
-  given: (κ : Kernel α β) (hg : Measurable g) (c : γ) (s : Set β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comap_apply'
-  条件: (κ : 核 α β) (hg : 可测 g) (c : γ) (s : 集合 β)
-  证明: rfl
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.comap_apply'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：comap_apply' (κ : Kernel α β) (hg : Measurable g) (c : γ) (s : Set β) : co
+map κ g hg c s = κ (g c) s
+参数：κ : Kernel α β；hg : Measurable g；c : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comap_apply' (κ : Kernel α β) (hg : Measurable g) (c : γ) (s : Set β) :
     comap κ g hg c s = κ (g c) s :=
   rfl
 
 @[simp]
-/--
-lemma `comap_zero` / 引理 `comap_zero`
-
-English:
-lemma comap_zero
-  given: (hg : Measurable g)
-  statement: Kernel.comap (0 : Kernel α β) g hg = 0
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-引理 comap_zero
-  条件: (hg : 可测 g)
-  结论: 核.comap (0 : 核 α β) g hg = 0
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.comap_zero** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：comap_zero (hg : Measurable g) : Kernel.comap (0 : Kernel α β) g hg = 0
+参数：hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FunLike.coe_zero`：∀ {F : Type u_3} {α : Type u_5} {β : Type u_6} [inst :
+ FunLike F α β] [inst_1 : Zero F] [inst_2 : Zero β]   [IsZeroApply F α β], ⇑0 = 
+0
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comap_zero (hg : Measurable g) : Kernel.comap (0 : Kernel α β) g hg = 0 := by
   ext; simp
 
 @[simp]
-/--
-lemma `comap_id` / 引理 `comap_id`
-
-English:
-lemma comap_id
-  given: (κ : Kernel α β)
-  statement: comap κ id measurable_id = κ
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 comap_id
-  条件: (κ : 核 α β)
-  结论: comap κ id measurable_id = κ
-  证明: by ext; simp
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.comap_id** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：comap_id (κ : Kernel α β) : comap κ id measurable_id = κ
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comap_id (κ : Kernel α β) : comap κ id measurable_id = κ := by ext; simp
 
 @[simp]
-/--
-lemma `comap_id'` / 引理 `comap_id'`
-
-English:
-lemma comap_id'
-  given: (κ : Kernel α β)
-  statement: comap κ (fun a => a) measurable_id = κ
-  proof: comap_id κ
-
-中文:
-引理 comap_id'
-  条件: (κ : 核 α β)
-  结论: comap κ (fun a => a) measurable_id = κ
-  证明: comap_id κ
-
-Depends on / 依赖: comap_id
+/-
+**ProbabilityTheory.Kernel.comap_id'** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：comap_id' (κ : Kernel α β) : comap κ (fun a => a) measurable_id = κ
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.comap_id`：comap_id (κ : Kernel α β) : comap κ i
+d measurable_id = κ
 -/
-lemma comap_id' (κ : Kernel α β) : comap κ (fun a => a) measurable_id = κ := comap_id κ
-
-/--
-theorem `lintegral_comap` / 定理 `lintegral_comap`
-
-English:
-theorem lintegral_comap
-  given: (κ : Kernel α β) (hg : Measurable g) (c : γ) (g' : β -> Real>=0∞)
-  proof: rfl
-
-中文:
-定理 lintegral_comap
-  条件: (κ : 核 α β) (hg : 可测 g) (c : γ) (g' : β -> 实数>=0∞)
-  证明: rfl
+lemma comap_id' (κ : Kernel α β) : comap κ (fun a ↦ a) measurable_id = κ := comap_id κ
+/-
+**ProbabilityTheory.Kernel.lintegral_comap** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：lintegral_comap (κ : Kernel α β) (hg : Measurable g) (c : γ) (g' : β -> Re
+al>=0∞) : ∫⁻ b, g' b ∂comap κ g hg c = ∫⁻ b, g' b ∂κ (g c)
+参数：κ : Kernel α β；hg : Measurable g；c : γ；g' : β -> Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lintegral_comap (κ : Kernel α β) (hg : Measurable g) (c : γ) (g' : β -> Real>=0∞) :
+theorem lintegral_comap (κ : Kernel α β) (hg : Measurable g) (c : γ) (g' : β → ℝ≥0∞) :
     ∫⁻ b, g' b ∂comap κ g hg c = ∫⁻ b, g' b ∂κ (g c) :=
   rfl
-
-/--
-theorem `sum_comap_seq` / 定理 `sum_comap_seq`
-
-English:
-theorem sum_comap_seq
-  given: (κ : Kernel α β) [IsSFiniteKernel κ] (hg : Measurable g)
-  proof: by
-  ext a s hs
-  rw [Kernel.sum_apply]; rw [comap_apply' κ hg a s]; rw [Measure.sum_apply _ hs]; rw [← measure_sum_seq κ]; rw [Measure.sum_apply _ hs]
-  simp_rw [comap_apply' _ hg _ s]
-
-中文:
-定理 sum_comap_seq
-  条件: (κ : 核 α β) [是SFiniteKernel κ] (hg : 可测 g)
-  证明: by
-  ext a s hs
-  rw [Kernel.sum_apply]; rw [comap_apply' κ hg a s]; rw [Measure.sum_apply _ hs]; rw [← measure_sum_seq κ]; rw [Measure.sum_apply _ hs]
-  simp_rw [comap_apply' _ hg _ s]
-
-Depends on / 依赖: Kernel, Kernel.sum_apply, Measure, Measure.sum_apply, comap_apply, measure_sum_seq, simp_rw, sum_apply
+/-
+**ProbabilityTheory.Kernel.sum_comap_seq** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityT
+heory.Kernel`。
+形式化陈述：sum_comap_seq (κ : Kernel α β) [IsSFiniteKernel κ] (hg : Measurable g) : (
+Kernel.sum fun n => comap (seq κ n) g hg) = comap κ g hg
+参数：κ : Kernel α β；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum_apply`：sum_apply [Countable ι] (κ : ι -> Ke
+rnel α β) (a : α) : Kernel.sum κ a = Measure.sum fun n => κ n a
+· 使用定理 `ProbabilityTheory.Kernel.comap_apply'`：comap_apply' (κ : Kernel α β) (hg
+ : Measurable g) (c : γ) (s : Set β) : comap κ g hg c s = κ (g c) s
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.measure_sum_seq`：measure_sum_seq (κ : Kernel α 
+β) [h : IsSFiniteKernel κ] (a : α) : (Measure.sum fun n => seq κ n a) = κ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sum_comap_seq (κ : Kernel α β) [IsSFiniteKernel κ] (hg : Measurable g) :
     (Kernel.sum fun n => comap (seq κ n) g hg) = comap κ g hg := by
   ext a s hs
-  rw [Kernel.sum_apply]; rw [comap_apply' κ hg a s]; rw [Measure.sum_apply _ hs]; rw [← measure_sum_seq κ]; rw [Measure.sum_apply _ hs]
+  rw [Kernel.sum_apply, comap_apply' κ hg a s, Measure.sum_apply _ hs, ← measure_sum_seq κ,
+    Measure.sum_apply _ hs]
   simp_rw [comap_apply' _ hg _ s]
-
-/--
-Instance `IsMarkovKernel.comap` / 实例 `IsMarkovKernel.comap`
-
-English:
-instance IsMarkovKernel.comap
-  signature: (κ : Kernel α β) [IsMarkovKernel κ] (hg : Measurable g)
-  body: ⟨fun a => ⟨by rw [comap_apply' κ hg a Set.univ, measure_univ]⟩⟩
-
-中文:
-实例 是MarkovKernel.comap
-  签名: (κ : 核 α β) [是MarkovKernel κ] (hg : 可测 g)
-  定义体: ⟨fun a => ⟨by rw [comap_apply' κ hg a Set.univ, measure_univ]⟩⟩
-
-Depends on / 依赖: Set.univ, comap_apply, measure_univ
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.comap** 是 Mathlib 中的一个定理，位于命名空间 `Proba
+bilityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} {g : γ → α} (κ : ProbabilityTh
+eory.Kernel α β) [ProbabilityTheory.IsMarkovKernel κ]   (hg : Measurable g), Pro
+babilityTheory.IsMarkovKernel (κ.comap g hg)
+参数：κ : ProbabilityTheory.Kernel α β；hg : Measurable g；κ.comap g hg。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.comap_apply'`：comap_apply' (κ : Kernel α β) (hg
+ : Measurable g) (c : γ) (s : Set β) : comap κ g hg c s = κ (g c) s
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.is_probability_measure'`：∀ {α : Type u_
+1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabi
+lityTheory.Kernel α β}   [ProbabilityTheory.Is…
 -/
 instance IsMarkovKernel.comap (κ : Kernel α β) [IsMarkovKernel κ] (hg : Measurable g) :
     IsMarkovKernel (comap κ g hg) :=
   ⟨fun a => ⟨by rw [comap_apply' κ hg a Set.univ, measure_univ]⟩⟩
-
-/--
-Instance `IsZeroOrMarkovKernel.comap` / 实例 `IsZeroOrMarkovKernel.comap`
-
-English:
-instance IsZeroOrMarkovKernel.comap
-  signature: (κ : Kernel α β) [IsZeroOrMarkovKernel κ] (hg : Measurable g)
-  body: by
-  rcases eq_zero_or_isMarkovKernel κ with rfl | h
-  · simp only [comap_zero]; infer_instance
-  · have := IsMarkovKernel.comap κ hg; infer_instance
-
-中文:
-实例 是ZeroOrMarkovKernel.comap
-  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ] (hg : 可测 g)
-  定义体: by
-  rcases eq_zero_or_isMarkovKernel κ with rfl | h
-  · simp only [comap_zero]; infer_instance
-  · have := IsMarkovKernel.comap κ hg; infer_instance
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.comap, comap_zero, eq_zero_or_isMarkovKernel, infer_instance
+/-
+**ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.comap** 是 Mathlib 中的一个定理，位于命名空间 
+`ProbabilityTheory.Kernel.IsZeroOrMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} {g : γ → α} (κ : ProbabilityTh
+eory.Kernel α β) [ProbabilityTheory.IsZeroOrMarkovKernel κ]   (hg : Measurable g
+), ProbabilityTheory.IsZeroOrMarkovKernel (κ.comap g hg)
+参数：κ : ProbabilityTheory.Kernel α β；hg : Measurable g；κ.comap g hg。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.eq_zero_or_isMarkovKernel`：eq_zero_or_isMarkovKernel (
+κ : Kernel α β) [h : IsZeroOrMarkovKernel κ] : κ = 0 ∨ IsMarkovKernel κ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.comap_zero`：comap_zero (hg : Measurable g) : Ke
+rnel.comap (0 : Kernel α β) g hg = 0
+· 使用定理 `ProbabilityTheory.instIsZeroOrMarkovKernelOfNatKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   ProbabilityT
+heory.IsZeroOrMarkovKernel 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.IsZeroOrMarkovKernel`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [h : ProbabilityTheor…
 -/
 instance IsZeroOrMarkovKernel.comap (κ : Kernel α β) [IsZeroOrMarkovKernel κ] (hg : Measurable g) :
     IsZeroOrMarkovKernel (comap κ g hg) := by
   rcases eq_zero_or_isMarkovKernel κ with rfl | h
   · simp only [comap_zero]; infer_instance
   · have := IsMarkovKernel.comap κ hg; infer_instance
-
-/--
-Instance `IsFiniteKernel.comap` / 实例 `IsFiniteKernel.comap`
-
-English:
-instance IsFiniteKernel.comap
-  signature: (κ : Kernel α β) [IsFiniteKernel κ] (hg : Measurable g)
-  body: by
-  refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
-  rw [comap_apply' κ hg a Set.univ]
-  exact measure_le_bound κ _ _
-
-中文:
-实例 是FiniteKernel.comap
-  签名: (κ : 核 α β) [是FiniteKernel κ] (hg : 可测 g)
-  定义体: by
-  refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
-  rw [comap_apply' κ hg a Set.univ]
-  exact measure_le_bound κ _ _
-
-Depends on / 依赖: Set.univ, bound_lt_top, comap_apply, measure_le_bound
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.comap** 是 Mathlib 中的一个定理，位于命名空间 `Proba
+bilityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} {g : γ → α} (κ : ProbabilityTh
+eory.Kernel α β) [ProbabilityTheory.IsFiniteKernel κ]   (hg : Measurable g), Pro
+babilityTheory.IsFiniteKernel (κ.comap g hg)
+参数：κ : ProbabilityTheory.Kernel α β；hg : Measurable g；κ.comap g hg。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.bound_lt_top`：bound_lt_top (κ : Kernel α β) [h 
+: IsFiniteKernel κ] : κ.bound < ∞
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.comap_apply'`：comap_apply' (κ : Kernel α β) (hg
+ : Measurable g) (c : γ) (s : Set β) : comap κ g hg c s = κ (g c) s
+· 使用定理 `ProbabilityTheory.Kernel.measure_le_bound`：measure_le_bound (κ : Kernel 
+α β) (a : α) (s : Set β) : κ a s <= κ.bound
 -/
 instance IsFiniteKernel.comap (κ : Kernel α β) [IsFiniteKernel κ] (hg : Measurable g) :
     IsFiniteKernel (comap κ g hg) := by
   refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
   rw [comap_apply' κ hg a Set.univ]
   exact measure_le_bound κ _ _
-
-/--
-Instance `IsSFiniteKernel.comap` / 实例 `IsSFiniteKernel.comap`
-
-English:
-instance IsSFiniteKernel.comap
-  signature: (κ : Kernel α β) [IsSFiniteKernel κ] (hg : Measurable g)
-  body: ⟨⟨fun n => Kernel.comap (seq κ n) g hg, inferInstance, (sum_comap_seq κ hg).symm⟩⟩
-
-中文:
-实例 是SFiniteKernel.comap
-  签名: (κ : 核 α β) [是SFiniteKernel κ] (hg : 可测 g)
-  定义体: ⟨⟨fun n => Kernel.comap (seq κ n) g hg, inferInstance, (sum_comap_seq κ hg).symm⟩⟩
-
-Depends on / 依赖: Kernel, Kernel.comap, sum_comap_seq
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.comap** 是 Mathlib 中的一个定理，位于命名空间 `Prob
+abilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} {g : γ → α} (κ : ProbabilityTh
+eory.Kernel α β) [ProbabilityTheory.IsSFiniteKernel κ]   (hg : Measurable g), Pr
+obabilityTheory.IsSFiniteKernel (κ.comap g hg)
+参数：κ : ProbabilityTheory.Kernel α β；hg : Measurable g；κ.comap g hg。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.sum_comap_seq`：sum_comap_seq (κ : Kernel α β) [
+IsSFiniteKernel κ] (hg : Measurable g) : (Kernel.sum fun n => comap (seq κ n) g 
+hg) = comap κ g hg
 -/
 instance IsSFiniteKernel.comap (κ : Kernel α β) [IsSFiniteKernel κ] (hg : Measurable g) :
     IsSFiniteKernel (comap κ g hg) :=
   ⟨⟨fun n => Kernel.comap (seq κ n) g hg, inferInstance, (sum_comap_seq κ hg).symm⟩⟩
-
-/--
-lemma `comap_comp_right` / 引理 `comap_comp_right`
-
-English:
-lemma comap_comp_right
-  given: (κ : Kernel α β) {f : δ -> γ} (hf : Measurable f) (hg : Measurable g)
-  proof: by ext; simp
-
-中文:
-引理 comap_comp_right
-  条件: (κ : 核 α β) {f : δ -> γ} (hf : 可测 f) (hg : 可测 g)
-  证明: by ext; simp
+/-
+**ProbabilityTheory.Kernel.comap_comp_right** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：comap_comp_right (κ : Kernel α β) {f : δ -> γ} (hf : Measurable f) (hg : M
+easurable g) : comap κ (g ∘ f) (hg.comp hf) = (comap κ g hg).comap f hf
+参数：κ : Kernel α β；hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma comap_comp_right (κ : Kernel α β) {f : δ -> γ} (hf : Measurable f) (hg : Measurable g) :
+lemma comap_comp_right (κ : Kernel α β) {f : δ → γ} (hf : Measurable f) (hg : Measurable g) :
     comap κ (g ∘ f) (hg.comp hf) = (comap κ g hg).comap f hf := by ext; simp
-
-/--
-lemma `comap_map_comm` / 引理 `comap_map_comm`
-
-English:
-lemma comap_map_comm
-  statement: (κ : Kernel β γ) {f : α -> β} {g : γ -> δ}
-  proof: by
-  ext x s _
-  rw [comap_apply]; rw [map_apply _ hg]; rw [map_apply _ hg]; rw [comap_apply]
-
-中文:
-引理 comap_map_comm
-  结论: (κ : 核 β γ) {f : α -> β} {g : γ -> δ}
-  证明: by
-  ext x s _
-  rw [comap_apply]; rw [map_apply _ hg]; rw [map_apply _ hg]; rw [comap_apply]
-
-Depends on / 依赖: comap_apply, map_apply
+/-
+**ProbabilityTheory.Kernel.comap_map_comm** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：comap_map_comm (κ : Kernel β γ) {f : α -> β} {g : γ -> δ} (hf : Measurable
+ f) (hg : Measurable g) : comap (map κ g) f hf = map (comap κ f hf) g
+参数：κ : Kernel β γ；hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.comap_apply`：comap_apply (κ : Kernel α β) (hg :
+ Measurable g) (c : γ) : comap κ g hg c = κ (g c)
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
 -/
-lemma comap_map_comm (κ : Kernel β γ) {f : α -> β} {g : γ -> δ}
+lemma comap_map_comm (κ : Kernel β γ) {f : α → β} {g : γ → δ}
     (hf : Measurable f) (hg : Measurable g) :
     comap (map κ g) f hf = map (comap κ f hf) g := by
   ext x s _
-  rw [comap_apply]; rw [map_apply _ hg]; rw [map_apply _ hg]; rw [comap_apply]
+  rw [comap_apply, map_apply _ hg, map_apply _ hg, comap_apply]
 
 end MapComap
 
 @[simp]
-/--
-lemma `id_map` / 引理 `id_map`
-
-English:
-lemma id_map
-  given: {f : α -> β} (hf : Measurable f)
-  statement: Kernel.id.map f = deterministic f hf
-  proof: by
+/-
+**ProbabilityTheory.Kernel.id_map** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.K
+ernel`。
+形式化陈述：id_map {f : α -> β} (hf : Measurable f) : Kernel.id.map f = deterministic 
+f hf
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
+· 使用定理 `ProbabilityTheory.Kernel.deterministic_apply`：deterministic_apply {f : α
+ -> β} (hf : Measurable f) (a : α) : deterministic f hf a = Measure.dirac (f a)
+· 使用引理 `ProbabilityTheory.Kernel.id_apply`：id_apply (a : α) : Kernel.id a = Meas
+ure.dirac a
+· 使用定理 `MeasureTheory.Measure.map_dirac'`：map_dirac' {f : α -> β} (hf : Measurab
+le f) (a : α) : (dirac a).map f = dirac (f a)
+-/
+lemma id_map {f : α → β} (hf : Measurable f) : Kernel.id.map f = deterministic f hf := by
   ext
-  rw [Kernel.map_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]; rw [Measure.map_dirac' hf]
+  rw [Kernel.map_apply _ hf, Kernel.deterministic_apply, Kernel.id_apply, Measure.map_dirac' hf]
 
 @[simp]
-
-中文:
-引理 id_map
-  条件: {f : α -> β} (hf : 可测 f)
-  结论: 核.id.map f = deterministic f hf
-  证明: by
-  ext
-  rw [Kernel.map_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]; rw [Measure.map_dirac' hf]
-
-@[simp]
-
-Depends on / 依赖: Kernel, Kernel.deterministic_apply, Kernel.id_apply, Kernel.map_apply, Measure, Measure.map_dirac, deterministic_apply, id_apply, map_apply, map_dirac
+/-
+**ProbabilityTheory.Kernel.id_comap** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：id_comap {f : α -> β} (hf : Measurable f) : Kernel.id.comap f hf = determi
+nistic f hf
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.comap_apply`：comap_apply (κ : Kernel α β) (hg :
+ Measurable g) (c : γ) : comap κ g hg c = κ (g c)
+· 使用定理 `ProbabilityTheory.Kernel.deterministic_apply`：deterministic_apply {f : α
+ -> β} (hf : Measurable f) (a : α) : deterministic f hf a = Measure.dirac (f a)
+· 使用引理 `ProbabilityTheory.Kernel.id_apply`：id_apply (a : α) : Kernel.id a = Meas
+ure.dirac a
 -/
-lemma id_map {f : α -> β} (hf : Measurable f) : Kernel.id.map f = deterministic f hf := by
+lemma id_comap {f : α → β} (hf : Measurable f) : Kernel.id.comap f hf = deterministic f hf := by
   ext
-  rw [Kernel.map_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]; rw [Measure.map_dirac' hf]
-
-@[simp]
-/--
-lemma `id_comap` / 引理 `id_comap`
-
-English:
-lemma id_comap
-  given: {f : α -> β} (hf : Measurable f)
-  statement: Kernel.id.comap f hf = deterministic f hf
-  proof: by
-  ext
-  rw [Kernel.comap_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]
-
-中文:
-引理 id_comap
-  条件: {f : α -> β} (hf : 可测 f)
-  结论: 核.id.comap f hf = deterministic f hf
-  证明: by
-  ext
-  rw [Kernel.comap_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]
-
-Depends on / 依赖: Kernel, Kernel.comap_apply, Kernel.deterministic_apply, Kernel.id_apply, comap_apply, deterministic_apply, id_apply
+  rw [Kernel.comap_apply _ hf, Kernel.deterministic_apply, Kernel.id_apply]
+/-
+**ProbabilityTheory.Kernel.deterministic_map** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：deterministic_map {f : α -> β} (hf : Measurable f) {g : β -> γ} (hg : Meas
+urable g) : (deterministic f hf).map g = deterministic (g ∘ f) (hg.comp hf)
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ProbabilityTheory.Kernel.id_map`：id_map {f : α -> β} (hf : Measurable f)
+ : Kernel.id.map f = deterministic f hf
+· 使用引理 `ProbabilityTheory.Kernel.map_comp_right`：map_comp_right (κ : Kernel α β)
+ {f : β -> γ} (hf : Measurable f) {g : γ -> δ} (hg : Measurable g) : κ.map (g ∘ 
+f) = (κ.map f).map g
 -/
-lemma id_comap {f : α -> β} (hf : Measurable f) : Kernel.id.comap f hf = deterministic f hf := by
-  ext
-  rw [Kernel.comap_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]
-
-/--
-lemma `deterministic_map` / 引理 `deterministic_map`
-
-English:
-lemma deterministic_map
-  given: {f : α -> β} (hf : Measurable f) {g : β -> γ} (hg : Measurable g)
-  proof: by
-  rw [← id_map]; rw [← map_comp_right _ hf hg]; rw [id_map]
-
-中文:
-引理 deterministic_map
-  条件: {f : α -> β} (hf : 可测 f) {g : β -> γ} (hg : 可测 g)
-  证明: by
-  rw [← id_map]; rw [← map_comp_right _ hf hg]; rw [id_map]
-
-Depends on / 依赖: id_map, map_comp_right
--/
-lemma deterministic_map {f : α -> β} (hf : Measurable f) {g : β -> γ} (hg : Measurable g) :
+lemma deterministic_map {f : α → β} (hf : Measurable f) {g : β → γ} (hg : Measurable g) :
     (deterministic f hf).map g = deterministic (g ∘ f) (hg.comp hf) := by
-  rw [← id_map]; rw [← map_comp_right _ hf hg]; rw [id_map]
+  rw [← id_map, ← map_comp_right _ hf hg, id_map]
 
 section FstSnd
 
 variable {δ : Type*} {mδ : MeasurableSpace δ}
 
-/--
-Definition of `prodMkLeft` / `prodMkLeft` 的定义
+/-- Define a `Kernel (γ × α) β` from a `Kernel α β` by taking the comap of the projection. -/
+/-
+**ProbabilityTheory.Kernel.prodMkLeft** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：prodMkLeft (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) : Kernel (γ × 
+α) β
+参数：γ : Type*；κ : Kernel α β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
 
-English:
-definition prodMkLeft
-  signature: (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β)
-  body: comap κ Prod.snd measurable_snd
-
-中文:
-定义 prodMkLeft
-  签名: (γ : 类型) [可测空间 γ] (κ : 核 α β)
-  定义体: comap κ Prod.snd measurable_snd
-
-Depends on / 依赖: Prod.snd, measurable_snd
+--- 原说明 ---
+Define a `Kernel (γ × α) β` from a `Kernel α β` by taking the comap of the proje
+ction.
 -/
 def prodMkLeft (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) : Kernel (γ × α) β :=
   comap κ Prod.snd measurable_snd
 
-/--
-Definition of `prodMkRight` / `prodMkRight` 的定义
+/-- Define a `Kernel (α × γ) β` from a `Kernel α β` by taking the comap of the projection. -/
+/-
+**ProbabilityTheory.Kernel.prodMkRight** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：prodMkRight (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) : Kernel (α ×
+ γ) β
+参数：γ : Type*；κ : Kernel α β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
 
-English:
-definition prodMkRight
-  signature: (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β)
-  body: comap κ Prod.fst measurable_fst
-
-@[simp]
-
-中文:
-定义 prodMkRight
-  签名: (γ : 类型) [可测空间 γ] (κ : 核 α β)
-  定义体: comap κ Prod.fst measurable_fst
-
-@[simp]
-
-Depends on / 依赖: Prod.fst, measurable_fst
+--- 原说明 ---
+Define a `Kernel (α × γ) β` from a `Kernel α β` by taking the comap of the proje
+ction.
 -/
 def prodMkRight (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) : Kernel (α × γ) β :=
   comap κ Prod.fst measurable_fst
 
 @[simp]
-/--
-theorem `prodMkLeft_apply` / 定理 `prodMkLeft_apply`
-
-English:
-theorem prodMkLeft_apply
-  given: (κ : Kernel α β) (ca : γ × α)
-  statement: prodMkLeft γ κ ca = κ ca.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodMkLeft_apply
-  条件: (κ : 核 α β) (ca : γ × α)
-  结论: prodMkLeft γ κ ca = κ ca.snd
-  证明: rfl
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.prodMkLeft_apply** 是 Mathlib 中的一个定理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：prodMkLeft_apply (κ : Kernel α β) (ca : γ × α) : prodMkLeft γ κ ca = κ ca.
+snd
+参数：κ : Kernel α β；ca : γ × α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodMkLeft_apply (κ : Kernel α β) (ca : γ × α) : prodMkLeft γ κ ca = κ ca.snd :=
   rfl
 
 @[simp]
-/--
-theorem `prodMkRight_apply` / 定理 `prodMkRight_apply`
-
-English:
-theorem prodMkRight_apply
-  given: (κ : Kernel α β) (ca : α × γ)
-  statement: prodMkRight γ κ ca = κ ca.fst
-  proof: rfl
-
-中文:
-定理 prodMkRight_apply
-  条件: (κ : 核 α β) (ca : α × γ)
-  结论: prodMkRight γ κ ca = κ ca.fst
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.prodMkRight_apply** 是 Mathlib 中的一个定理，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：prodMkRight_apply (κ : Kernel α β) (ca : α × γ) : prodMkRight γ κ ca = κ c
+a.fst
+参数：κ : Kernel α β；ca : α × γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodMkRight_apply (κ : Kernel α β) (ca : α × γ) : prodMkRight γ κ ca = κ ca.fst := rfl
-
-/--
-theorem `prodMkLeft_apply'` / 定理 `prodMkLeft_apply'`
-
-English:
-theorem prodMkLeft_apply'
-  given: (κ : Kernel α β) (ca : γ × α) (s : Set β)
-  proof: rfl
-
-中文:
-定理 prodMkLeft_apply'
-  条件: (κ : 核 α β) (ca : γ × α) (s : 集合 β)
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.prodMkLeft_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：prodMkLeft_apply' (κ : Kernel α β) (ca : γ × α) (s : Set β) : prodMkLeft γ
+ κ ca s = κ ca.snd s
+参数：κ : Kernel α β；ca : γ × α；s : Set β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodMkLeft_apply' (κ : Kernel α β) (ca : γ × α) (s : Set β) :
     prodMkLeft γ κ ca s = κ ca.snd s :=
   rfl
-
-/--
-theorem `prodMkRight_apply'` / 定理 `prodMkRight_apply'`
-
-English:
-theorem prodMkRight_apply'
-  given: (κ : Kernel α β) (ca : α × γ) (s : Set β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodMkRight_apply'
-  条件: (κ : 核 α β) (ca : α × γ) (s : 集合 β)
-  证明: rfl
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.prodMkRight_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel`。
+形式化陈述：prodMkRight_apply' (κ : Kernel α β) (ca : α × γ) (s : Set β) : prodMkRight
+ γ κ ca s = κ ca.fst s
+参数：κ : Kernel α β；ca : α × γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodMkRight_apply' (κ : Kernel α β) (ca : α × γ) (s : Set β) :
     prodMkRight γ κ ca s = κ ca.fst s := rfl
 
 @[simp]
-/--
-lemma `prodMkLeft_zero` / 引理 `prodMkLeft_zero`
-
-English:
-lemma prodMkLeft_zero
-  statement: Kernel.prodMkLeft α (0 : Kernel β γ) = 0
-  proof: by
-  ext x s _; simp
-
-@[simp]
-
-中文:
-引理 prodMkLeft_zero
-  结论: 核.prodMkLeft α (0 : 核 β γ) = 0
-  证明: by
-  ext x s _; simp
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.prodMkLeft_zero** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：prodMkLeft_zero : Kernel.prodMkLeft α (0 : Kernel β γ) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodMkLeft_zero : Kernel.prodMkLeft α (0 : Kernel β γ) = 0 := by
   ext x s _; simp
 
 @[simp]
-/--
-lemma `prodMkRight_zero` / 引理 `prodMkRight_zero`
-
-English:
-lemma prodMkRight_zero
-  statement: Kernel.prodMkRight α (0 : Kernel β γ) = 0
-  proof: by
-  ext x s _; simp
-
-@[simp]
-
-中文:
-引理 prodMkRight_zero
-  结论: 核.prodMkRight α (0 : 核 β γ) = 0
-  证明: by
-  ext x s _; simp
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.prodMkRight_zero** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：prodMkRight_zero : Kernel.prodMkRight α (0 : Kernel β γ) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodMkRight_zero : Kernel.prodMkRight α (0 : Kernel β γ) = 0 := by
   ext x s _; simp
 
 @[simp]
-/--
-lemma `prodMkLeft_add` / 引理 `prodMkLeft_add`
-
-English:
-lemma prodMkLeft_add
-  given: (κ η : Kernel α β)
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 prodMkLeft_add
-  条件: (κ η : 核 α β)
-  证明: by ext; simp
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.prodMkLeft_add** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：prodMkLeft_add (κ η : Kernel α β) : prodMkLeft γ (κ + η) = prodMkLeft γ κ 
++ prodMkLeft γ η
+参数：κ η : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `ProbabilityTheory.Kernel.instIsAddApplyMeasure`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsAddApply (Probabi
+lityTheory.Kernel α β) α (MeasureThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodMkLeft_add (κ η : Kernel α β) :
     prodMkLeft γ (κ + η) = prodMkLeft γ κ + prodMkLeft γ η := by ext; simp
 
 @[simp]
-/--
-lemma `prodMkRight_add` / 引理 `prodMkRight_add`
-
-English:
-lemma prodMkRight_add
-  given: (κ η : Kernel α β)
-  proof: by ext; simp
-
-中文:
-引理 prodMkRight_add
-  条件: (κ η : 核 α β)
-  证明: by ext; simp
+/-
+**ProbabilityTheory.Kernel.prodMkRight_add** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：prodMkRight_add (κ η : Kernel α β) : prodMkRight γ (κ + η) = prodMkRight γ
+ κ + prodMkRight γ η
+参数：κ η : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `ProbabilityTheory.Kernel.instIsAddApplyMeasure`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsAddApply (Probabi
+lityTheory.Kernel α β) α (MeasureThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodMkRight_add (κ η : Kernel α β) :
     prodMkRight γ (κ + η) = prodMkRight γ κ + prodMkRight γ η := by ext; simp
-
-/--
-lemma `sum_prodMkLeft` / 引理 `sum_prodMkLeft`
-
-English:
-lemma sum_prodMkLeft
-  given: {ι : Type*} [Countable ι] {κ : ι -> Kernel α β}
-  proof: by
+/-
+**ProbabilityTheory.Kernel.sum_prodMkLeft** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：sum_prodMkLeft {ι : Type*} [Countable ι] {κ : ι -> Kernel α β} : Kernel.su
+m (fun i => Kernel.prodMkLeft γ (κ i)) = Kernel.prodMkLeft γ (Kernel.sum κ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma sum_prodMkLeft {ι : Type*} [Countable ι] {κ : ι → Kernel α β} :
+    Kernel.sum (fun i ↦ Kernel.prodMkLeft γ (κ i)) = Kernel.prodMkLeft γ (Kernel.sum κ) := by
   ext
   simp_rw [sum_apply, prodMkLeft_apply, sum_apply]
-
-中文:
-引理 sum_prodMkLeft
-  条件: {ι : 类型} [可数 ι] {κ : ι -> 核 α β}
-  证明: by
-  ext
-  simp_rw [sum_apply, prodMkLeft_apply, sum_apply]
-
-Depends on / 依赖: prodMkLeft_apply, simp_rw, sum_apply
+/-
+**ProbabilityTheory.Kernel.sum_prodMkRight** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：sum_prodMkRight {ι : Type*} [Countable ι] {κ : ι -> Kernel α β} : Kernel.s
+um (fun i => Kernel.prodMkRight γ (κ i)) = Kernel.prodMkRight γ (Kernel.sum κ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma sum_prodMkLeft {ι : Type*} [Countable ι] {κ : ι -> Kernel α β} :
-    Kernel.sum (fun i => Kernel.prodMkLeft γ (κ i)) = Kernel.prodMkLeft γ (Kernel.sum κ) := by
-  ext
-  simp_rw [sum_apply, prodMkLeft_apply, sum_apply]
-
-/--
-lemma `sum_prodMkRight` / 引理 `sum_prodMkRight`
-
-English:
-lemma sum_prodMkRight
-  given: {ι : Type*} [Countable ι] {κ : ι -> Kernel α β}
-  proof: by
+lemma sum_prodMkRight {ι : Type*} [Countable ι] {κ : ι → Kernel α β} :
+    Kernel.sum (fun i ↦ Kernel.prodMkRight γ (κ i)) = Kernel.prodMkRight γ (Kernel.sum κ) := by
   ext
   simp_rw [sum_apply, prodMkRight_apply, sum_apply]
-
-中文:
-引理 sum_prodMkRight
-  条件: {ι : 类型} [可数 ι] {κ : ι -> 核 α β}
-  证明: by
-  ext
-  simp_rw [sum_apply, prodMkRight_apply, sum_apply]
-
-Depends on / 依赖: prodMkRight_apply, simp_rw, sum_apply
+/-
+**ProbabilityTheory.Kernel.lintegral_prodMkLeft** 是 Mathlib 中的一个定理，位于命名空间 `Proba
+bilityTheory.Kernel`。
+形式化陈述：lintegral_prodMkLeft (κ : Kernel α β) (ca : γ × α) (g : β -> Real>=0∞) : ∫
+⁻ b, g b ∂prodMkLeft γ κ ca = ∫⁻ b, g b ∂κ ca.snd
+参数：κ : Kernel α β；ca : γ × α；g : β -> Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma sum_prodMkRight {ι : Type*} [Countable ι] {κ : ι -> Kernel α β} :
-    Kernel.sum (fun i => Kernel.prodMkRight γ (κ i)) = Kernel.prodMkRight γ (Kernel.sum κ) := by
-  ext
-  simp_rw [sum_apply, prodMkRight_apply, sum_apply]
-
-/--
-theorem `lintegral_prodMkLeft` / 定理 `lintegral_prodMkLeft`
-
-English:
-theorem lintegral_prodMkLeft
-  given: (κ : Kernel α β) (ca : γ × α) (g : β -> Real>=0∞)
-  proof: rfl
-
-中文:
-定理 lintegral_prodMkLeft
-  条件: (κ : 核 α β) (ca : γ × α) (g : β -> 实数>=0∞)
-  证明: rfl
--/
-theorem lintegral_prodMkLeft (κ : Kernel α β) (ca : γ × α) (g : β -> Real>=0∞) :
+theorem lintegral_prodMkLeft (κ : Kernel α β) (ca : γ × α) (g : β → ℝ≥0∞) :
     ∫⁻ b, g b ∂prodMkLeft γ κ ca = ∫⁻ b, g b ∂κ ca.snd := rfl
-
-/--
-theorem `lintegral_prodMkRight` / 定理 `lintegral_prodMkRight`
-
-English:
-theorem lintegral_prodMkRight
-  given: (κ : Kernel α β) (ca : α × γ) (g : β -> Real>=0∞)
-  proof: rfl
-
-中文:
-定理 lintegral_prodMkRight
-  条件: (κ : 核 α β) (ca : α × γ) (g : β -> 实数>=0∞)
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.lintegral_prodMkRight** 是 Mathlib 中的一个定理，位于命名空间 `Prob
+abilityTheory.Kernel`。
+形式化陈述：lintegral_prodMkRight (κ : Kernel α β) (ca : α × γ) (g : β -> Real>=0∞) : 
+∫⁻ b, g b ∂prodMkRight γ κ ca = ∫⁻ b, g b ∂κ ca.fst
+参数：κ : Kernel α β；ca : α × γ；g : β -> Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lintegral_prodMkRight (κ : Kernel α β) (ca : α × γ) (g : β -> Real>=0∞) :
+theorem lintegral_prodMkRight (κ : Kernel α β) (ca : α × γ) (g : β → ℝ≥0∞) :
     ∫⁻ b, g b ∂prodMkRight γ κ ca = ∫⁻ b, g b ∂κ ca.fst := rfl
-
-/--
-Instance `IsMarkovKernel.prodMkLeft` / 实例 `IsMarkovKernel.prodMkLeft`
-
-English:
-instance IsMarkovKernel.prodMkLeft
-  signature: (κ : Kernel α β) [IsMarkovKernel κ]
-  body: by rw [Kernel.prodMkLeft]; infer_instance
-
-中文:
-实例 是MarkovKernel.prodMkLeft
-  签名: (κ : 核 α β) [是MarkovKernel κ]
-  定义体: by rw [Kernel.prodMkLeft]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.prodMkLeft** 是 Mathlib 中的一个定理，位于命名空间 `
+ProbabilityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsMarkovKernel κ],   ProbabilityTheory.IsMarkovKernel (P
+robabilityTheory.Kernel.prodMkLeft γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkLeft γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2
+} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Mea
+surableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsMarkovKernel.prodMkLeft (κ : Kernel α β) [IsMarkovKernel κ] :
     IsMarkovKernel (prodMkLeft γ κ) := by rw [Kernel.prodMkLeft]; infer_instance
-
-/--
-Instance `IsMarkovKernel.prodMkRight` / 实例 `IsMarkovKernel.prodMkRight`
-
-English:
-instance IsMarkovKernel.prodMkRight
-  signature: (κ : Kernel α β) [IsMarkovKernel κ]
-  body: by rw [Kernel.prodMkRight]; infer_instance
-
-中文:
-实例 是MarkovKernel.prodMkRight
-  签名: (κ : 核 α β) [是MarkovKernel κ]
-  定义体: by rw [Kernel.prodMkRight]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkRight, MvPowerSeries, MvPowerSeries.map.isLocalHom, infer_instance, isLocalHom, prodMkRight
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.prodMkRight** 是 Mathlib 中的一个定理，位于命名空间 
+`ProbabilityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsMarkovKernel κ],   ProbabilityTheory.IsMarkovKernel (P
+robabilityTheory.Kernel.prodMkRight γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkRight γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkRight.eq_1`：∀ {α : Type u_1} {β : Type u_
+2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Me
+asurableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsMarkovKernel.prodMkRight (κ : Kernel α β) [IsMarkovKernel κ] :
     IsMarkovKernel (prodMkRight γ κ) := by rw [Kernel.prodMkRight]; infer_instance
-
-/--
-Instance `IsZeroOrMarkovKernel.prodMkLeft` / 实例 `IsZeroOrMarkovKernel.prodMkLeft`
-
-English:
-instance IsZeroOrMarkovKernel.prodMkLeft
-  signature: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
-  body: by rw [Kernel.prodMkLeft]; infer_instance
-
-中文:
-实例 是ZeroOrMarkovKernel.prodMkLeft
-  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
-  定义体: by rw [Kernel.prodMkLeft]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
+/-
+**ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.prodMkLeft** 是 Mathlib 中的一个定理，位于
+命名空间 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsZeroOrMarkovKernel κ],   ProbabilityTheory.IsZeroOrMar
+kovKernel (ProbabilityTheory.Kernel.prodMkLeft γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkLeft γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2
+} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Mea
+surableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.comap`：∀ {α : Type u_1} {β
+ : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   
+{mγ : MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsZeroOrMarkovKernel.prodMkLeft (κ : Kernel α β) [IsZeroOrMarkovKernel κ] :
     IsZeroOrMarkovKernel (prodMkLeft γ κ) := by rw [Kernel.prodMkLeft]; infer_instance
-
-/--
-Instance `IsZeroOrMarkovKernel.prodMkRight` / 实例 `IsZeroOrMarkovKernel.prodMkRight`
-
-English:
-instance IsZeroOrMarkovKernel.prodMkRight
-  signature: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
-  body: by rw [Kernel.prodMkRight]; infer_instance
-
-中文:
-实例 是ZeroOrMarkovKernel.prodMkRight
-  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
-  定义体: by rw [Kernel.prodMkRight]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkRight, infer_instance, prodMkRight
+/-
+**ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.prodMkRight** 是 Mathlib 中的一个定理，位
+于命名空间 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsZeroOrMarkovKernel κ],   ProbabilityTheory.IsZeroOrMar
+kovKernel (ProbabilityTheory.Kernel.prodMkRight γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkRight γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkRight.eq_1`：∀ {α : Type u_1} {β : Type u_
+2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Me
+asurableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.comap`：∀ {α : Type u_1} {β
+ : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   
+{mγ : MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsZeroOrMarkovKernel.prodMkRight (κ : Kernel α β) [IsZeroOrMarkovKernel κ] :
     IsZeroOrMarkovKernel (prodMkRight γ κ) := by rw [Kernel.prodMkRight]; infer_instance
-
-/--
-Instance `IsFiniteKernel.prodMkLeft` / 实例 `IsFiniteKernel.prodMkLeft`
-
-English:
-instance IsFiniteKernel.prodMkLeft
-  signature: (κ : Kernel α β) [IsFiniteKernel κ]
-  body: by rw [Kernel.prodMkLeft]; infer_instance
-
-中文:
-实例 是FiniteKernel.prodMkLeft
-  签名: (κ : 核 α β) [是FiniteKernel κ]
-  定义体: by rw [Kernel.prodMkLeft]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.prodMkLeft** 是 Mathlib 中的一个定理，位于命名空间 `
+ProbabilityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsFiniteKernel κ],   ProbabilityTheory.IsFiniteKernel (P
+robabilityTheory.Kernel.prodMkLeft γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkLeft γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2
+} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Mea
+surableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsFiniteKernel.prodMkLeft (κ : Kernel α β) [IsFiniteKernel κ] :
     IsFiniteKernel (prodMkLeft γ κ) := by rw [Kernel.prodMkLeft]; infer_instance
-
-/--
-Instance `IsFiniteKernel.prodMkRight` / 实例 `IsFiniteKernel.prodMkRight`
-
-English:
-instance IsFiniteKernel.prodMkRight
-  signature: (κ : Kernel α β) [IsFiniteKernel κ]
-  body: by rw [Kernel.prodMkRight]; infer_instance
-
-中文:
-实例 是FiniteKernel.prodMkRight
-  签名: (κ : 核 α β) [是FiniteKernel κ]
-  定义体: by rw [Kernel.prodMkRight]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkRight, infer_instance, prodMkRight
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.prodMkRight** 是 Mathlib 中的一个定理，位于命名空间 
+`ProbabilityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsFiniteKernel κ],   ProbabilityTheory.IsFiniteKernel (P
+robabilityTheory.Kernel.prodMkRight γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkRight γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkRight.eq_1`：∀ {α : Type u_1} {β : Type u_
+2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Me
+asurableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsFiniteKernel.prodMkRight (κ : Kernel α β) [IsFiniteKernel κ] :
     IsFiniteKernel (prodMkRight γ κ) := by rw [Kernel.prodMkRight]; infer_instance
-
-/--
-Instance `IsSFiniteKernel.prodMkLeft` / 实例 `IsSFiniteKernel.prodMkLeft`
-
-English:
-instance IsSFiniteKernel.prodMkLeft
-  signature: (κ : Kernel α β) [IsSFiniteKernel κ]
-  body: by rw [Kernel.prodMkLeft]; infer_instance
-
-中文:
-实例 是SFiniteKernel.prodMkLeft
-  签名: (κ : 核 α β) [是SFiniteKernel κ]
-  定义体: by rw [Kernel.prodMkLeft]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.prodMkLeft** 是 Mathlib 中的一个定理，位于命名空间 
+`ProbabilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsSFiniteKernel κ],   ProbabilityTheory.IsSFiniteKernel 
+(ProbabilityTheory.Kernel.prodMkLeft γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkLeft γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2
+} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Mea
+surableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.comap`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ :
+ MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsSFiniteKernel.prodMkLeft (κ : Kernel α β) [IsSFiniteKernel κ] :
     IsSFiniteKernel (prodMkLeft γ κ) := by rw [Kernel.prodMkLeft]; infer_instance
-
-/--
-Instance `IsSFiniteKernel.prodMkRight` / 实例 `IsSFiniteKernel.prodMkRight`
-
-English:
-instance IsSFiniteKernel.prodMkRight
-  signature: (κ : Kernel α β) [IsSFiniteKernel κ]
-  body: by rw [Kernel.prodMkRight]; infer_instance
-
-中文:
-实例 是SFiniteKernel.prodMkRight
-  签名: (κ : 核 α β) [是SFiniteKernel κ]
-  定义体: by rw [Kernel.prodMkRight]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.prodMkRight, infer_instance, prodMkRight
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.prodMkRight** 是 Mathlib 中的一个定理，位于命名空间
+ `ProbabilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α β) [ProbabilityTheory.IsSFiniteKernel κ],   ProbabilityTheory.IsSFiniteKernel 
+(ProbabilityTheory.Kernel.prodMkRight γ κ)
+参数：κ : ProbabilityTheory.Kernel α β；ProbabilityTheory.Kernel.prodMkRight γ κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.prodMkRight.eq_1`：∀ {α : Type u_1} {β : Type u_
+2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (γ : Type u_5)   [inst : Me
+asurableSpace γ] (κ : Probabili…
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.comap`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ :
+ MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsSFiniteKernel.prodMkRight (κ : Kernel α β) [IsSFiniteKernel κ] :
     IsSFiniteKernel (prodMkRight γ κ) := by rw [Kernel.prodMkRight]; infer_instance
-
-/--
-lemma `isSFiniteKernel_prodMkLeft_unit` / 引理 `isSFiniteKernel_prodMkLeft_unit`
-
-English:
-lemma isSFiniteKernel_prodMkLeft_unit
-  given: {κ : Kernel α β}
-  proof: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  change IsSFiniteKernel ((prodMkLeft Unit κ).comap (fun a => ((), a)) (by fun_prop))
-  infer_instance
-
-中文:
-引理 isSFiniteKernel_prodMkLeft_unit
-  条件: {κ : 核 α β}
-  证明: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  change IsSFiniteKernel ((prodMkLeft Unit κ).comap (fun a => ((), a)) (by fun_prop))
-  infer_instance
-
-Depends on / 依赖: IsSFiniteKernel, fun_prop, infer_instance, prodMkLeft
+/-
+**ProbabilityTheory.Kernel.isSFiniteKernel_prodMkLeft_unit** 是 Mathlib 中的一个引理，位于
+命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：isSFiniteKernel_prodMkLeft_unit {κ : Kernel α β} : IsSFiniteKernel (prodMk
+Left Unit κ) ↔ IsSFiniteKernel κ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `measurable_id'`：measurable_id' {_ : MeasurableSpace α} : Measurable fun 
+a : α => a
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.comap`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ :
+ MeasurableSpace γ} {g : γ → α} (κ :…
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.prodMkLeft`：∀ {α : Type u_1} {β
+ : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   
+{mγ : MeasurableSpace γ} (κ : Probability…
 -/
 lemma isSFiniteKernel_prodMkLeft_unit {κ : Kernel α β} :
     IsSFiniteKernel (prodMkLeft Unit κ) ↔ IsSFiniteKernel κ := by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  change IsSFiniteKernel ((prodMkLeft Unit κ).comap (fun a => ((), a)) (by fun_prop))
+  refine ⟨fun _ ↦ ?_, fun _ ↦ inferInstance⟩
+  change IsSFiniteKernel ((prodMkLeft Unit κ).comap (fun a ↦ ((), a)) (by fun_prop))
   infer_instance
-
-/--
-lemma `isSFiniteKernel_prodMkRight_unit` / 引理 `isSFiniteKernel_prodMkRight_unit`
-
-English:
-lemma isSFiniteKernel_prodMkRight_unit
-  given: {κ : Kernel α β}
-  proof: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  change IsSFiniteKernel ((prodMkRight Unit κ).comap (fun a => (a, ())) (by fun_prop))
-  infer_instance
-
-中文:
-引理 isSFiniteKernel_prodMkRight_unit
-  条件: {κ : 核 α β}
-  证明: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  change IsSFiniteKernel ((prodMkRight Unit κ).comap (fun a => (a, ())) (by fun_prop))
-  infer_instance
-
-Depends on / 依赖: IsSFiniteKernel, fun_prop, infer_instance, prodMkRight
+/-
+**ProbabilityTheory.Kernel.isSFiniteKernel_prodMkRight_unit** 是 Mathlib 中的一个引理，位
+于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：isSFiniteKernel_prodMkRight_unit {κ : Kernel α β} : IsSFiniteKernel (prodM
+kRight Unit κ) ↔ IsSFiniteKernel κ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_id'`：measurable_id' {_ : MeasurableSpace α} : Measurable fun 
+a : α => a
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.comap`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ :
+ MeasurableSpace γ} {g : γ → α} (κ :…
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.prodMkRight`：∀ {α : Type u_1} {
+β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}  
+ {mγ : MeasurableSpace γ} (κ : Probability…
 -/
 lemma isSFiniteKernel_prodMkRight_unit {κ : Kernel α β} :
     IsSFiniteKernel (prodMkRight Unit κ) ↔ IsSFiniteKernel κ := by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  change IsSFiniteKernel ((prodMkRight Unit κ).comap (fun a => (a, ())) (by fun_prop))
+  refine ⟨fun _ ↦ ?_, fun _ ↦ inferInstance⟩
+  change IsSFiniteKernel ((prodMkRight Unit κ).comap (fun a ↦ (a, ())) (by fun_prop))
   infer_instance
-
-/--
-lemma `map_prodMkLeft` / 引理 `map_prodMkLeft`
-
-English:
-lemma map_prodMkLeft
-  given: (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) (f : β -> δ)
-  proof: by
-  by_cases hf : Measurable f
-  · simp only [map, hf, ↓reduceDIte]
-    rfl
-  · simp [map_of_not_measurable _ hf]
-
-中文:
-引理 map_prodMkLeft
-  条件: (γ : 类型) [可测空间 γ] (κ : 核 α β) (f : β -> δ)
-  证明: by
-  by_cases hf : Measurable f
-  · simp only [map, hf, ↓reduceDIte]
-    rfl
-  · simp [map_of_not_measurable _ hf]
-
-Depends on / 依赖: Measurable, map_of_not_measurable, reduceDIte
+/-
+**ProbabilityTheory.Kernel.map_prodMkLeft** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：map_prodMkLeft (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) (f : β -> 
+δ) : map (prodMkLeft γ κ) f = prodMkLeft γ (map κ f)
+参数：γ : Type*；κ : Kernel α β；f : β -> δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
+· 使用引理 `ProbabilityTheory.Kernel.prodMkLeft_zero`：prodMkLeft_zero : Kernel.prodM
+kLeft α (0 : Kernel β γ) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma map_prodMkLeft (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) (f : β -> δ) :
+lemma map_prodMkLeft (γ : Type*) [MeasurableSpace γ] (κ : Kernel α β) (f : β → δ) :
     map (prodMkLeft γ κ) f = prodMkLeft γ (map κ f) := by
   by_cases hf : Measurable f
   · simp only [map, hf, ↓reduceDIte]
     rfl
   · simp [map_of_not_measurable _ hf]
-
-/--
-lemma `map_prodMkRight` / 引理 `map_prodMkRight`
-
-English:
-lemma map_prodMkRight
-  given: (κ : Kernel α β) (γ : Type*) {mγ : MeasurableSpace γ} (f : β -> δ)
-  proof: by
-  by_cases hf : Measurable f
-  · simp only [map, hf, ↓reduceDIte]
-    rfl
-  · simp [map_of_not_measurable _ hf]
-
-中文:
-引理 map_prodMkRight
-  条件: (κ : 核 α β) (γ : 类型) {mγ : 可测空间 γ} (f : β -> δ)
-  证明: by
-  by_cases hf : Measurable f
-  · simp only [map, hf, ↓reduceDIte]
-    rfl
-  · simp [map_of_not_measurable _ hf]
-
-Depends on / 依赖: Measurable, map_of_not_measurable, reduceDIte
+/-
+**ProbabilityTheory.Kernel.map_prodMkRight** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：map_prodMkRight (κ : Kernel α β) (γ : Type*) {mγ : MeasurableSpace γ} (f :
+ β -> δ) : map (prodMkRight γ κ) f = prodMkRight γ (map κ f)
+参数：κ : Kernel α β；γ : Type*；f : β -> δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
+· 使用引理 `ProbabilityTheory.Kernel.prodMkRight_zero`：prodMkRight_zero : Kernel.pro
+dMkRight α (0 : Kernel β γ) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma map_prodMkRight (κ : Kernel α β) (γ : Type*) {mγ : MeasurableSpace γ} (f : β -> δ) :
+lemma map_prodMkRight (κ : Kernel α β) (γ : Type*) {mγ : MeasurableSpace γ} (f : β → δ) :
     map (prodMkRight γ κ) f = prodMkRight γ (map κ f) := by
   by_cases hf : Measurable f
   · simp only [map, hf, ↓reduceDIte]
     rfl
   · simp [map_of_not_measurable _ hf]
 
-/--
-Definition of `swapLeft` / `swapLeft` 的定义
+/-- Define a `Kernel (β × α) γ` from a `Kernel (α × β) γ` by taking the comap of `Prod.swap`. -/
+/-
+**ProbabilityTheory.Kernel.swapLeft** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：swapLeft (κ : Kernel (α × β) γ) : Kernel (β × α) γ
+参数：κ : Kernel (α × β) γ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
 
-English:
-definition swapLeft
-  signature: (κ : Kernel (α × β) γ)
-  body: comap κ Prod.swap measurable_swap
-
-@[simp]
-
-中文:
-定义 swapLeft
-  签名: (κ : 核 (α × β) γ)
-  定义体: comap κ Prod.swap measurable_swap
-
-@[simp]
-
-Depends on / 依赖: Prod.swap, measurable_swap
+--- 原说明 ---
+Define a `Kernel (β × α) γ` from a `Kernel (α × β) γ` by taking the comap of `Pr
+od.swap`.
 -/
 def swapLeft (κ : Kernel (α × β) γ) : Kernel (β × α) γ :=
   comap κ Prod.swap measurable_swap
 
 @[simp]
-/--
-lemma `swapLeft_zero` / 引理 `swapLeft_zero`
-
-English:
-lemma swapLeft_zero
-  statement: swapLeft (0 : Kernel (α × β) γ) = 0
-  proof: by simp [swapLeft]
-
-@[simp]
-
-中文:
-引理 swapLeft_zero
-  结论: swapLeft (0 : 核 (α × β) γ) = 0
-  证明: by simp [swapLeft]
-
-@[simp]
-
-Depends on / 依赖: swapLeft
+/-
+**ProbabilityTheory.Kernel.swapLeft_zero** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory.Kernel`。
+形式化陈述：swapLeft_zero : swapLeft (0 : Kernel (α × β) γ) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.comap_zero`：comap_zero (hg : Measurable g) : Ke
+rnel.comap (0 : Kernel α β) g hg = 0
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma swapLeft_zero : swapLeft (0 : Kernel (α × β) γ) = 0 := by simp [swapLeft]
 
 @[simp]
-/--
-theorem `swapLeft_apply` / 定理 `swapLeft_apply`
-
-English:
-theorem swapLeft_apply
-  given: (κ : Kernel (α × β) γ) (a : β × α)
-  statement: swapLeft κ a = κ a.swap
-  proof: rfl
-
-中文:
-定理 swapLeft_apply
-  条件: (κ : 核 (α × β) γ) (a : β × α)
-  结论: swapLeft κ a = κ a.swap
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.swapLeft_apply** 是 Mathlib 中的一个定理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：swapLeft_apply (κ : Kernel (α × β) γ) (a : β × α) : swapLeft κ a = κ a.swa
+p
+参数：κ : Kernel (α × β) γ；a : β × α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem swapLeft_apply (κ : Kernel (α × β) γ) (a : β × α) : swapLeft κ a = κ a.swap := rfl
-
-/--
-theorem `swapLeft_apply'` / 定理 `swapLeft_apply'`
-
-English:
-theorem swapLeft_apply'
-  given: (κ : Kernel (α × β) γ) (a : β × α) (s : Set γ)
-  proof: rfl
-
-中文:
-定理 swapLeft_apply'
-  条件: (κ : 核 (α × β) γ) (a : β × α) (s : 集合 γ)
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.swapLeft_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：swapLeft_apply' (κ : Kernel (α × β) γ) (a : β × α) (s : Set γ) : swapLeft 
+κ a s = κ a.swap s
+参数：κ : Kernel (α × β) γ；a : β × α；s : Set γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem swapLeft_apply' (κ : Kernel (α × β) γ) (a : β × α) (s : Set γ) :
     swapLeft κ a s = κ a.swap s := rfl
-
-/--
-theorem `lintegral_swapLeft` / 定理 `lintegral_swapLeft`
-
-English:
-theorem lintegral_swapLeft
-  given: (κ : Kernel (α × β) γ) (a : β × α) (g : γ -> Real>=0∞)
-  proof: by
-  rw [swapLeft_apply]
-
-中文:
-定理 lintegral_swapLeft
-  条件: (κ : 核 (α × β) γ) (a : β × α) (g : γ -> 实数>=0∞)
-  证明: by
-  rw [swapLeft_apply]
-
-Depends on / 依赖: swapLeft_apply
+/-
+**ProbabilityTheory.Kernel.lintegral_swapLeft** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel`。
+形式化陈述：lintegral_swapLeft (κ : Kernel (α × β) γ) (a : β × α) (g : γ -> Real>=0∞) 
+: ∫⁻ c, g c ∂swapLeft κ a = ∫⁻ c, g c ∂κ a.swap
+参数：κ : Kernel (α × β) γ；a : β × α；g : γ -> Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.swapLeft_apply`：swapLeft_apply (κ : Kernel (α ×
+ β) γ) (a : β × α) : swapLeft κ a = κ a.swap
 -/
-theorem lintegral_swapLeft (κ : Kernel (α × β) γ) (a : β × α) (g : γ -> Real>=0∞) :
+theorem lintegral_swapLeft (κ : Kernel (α × β) γ) (a : β × α) (g : γ → ℝ≥0∞) :
     ∫⁻ c, g c ∂swapLeft κ a = ∫⁻ c, g c ∂κ a.swap := by
   rw [swapLeft_apply]
-
-/--
-Instance `IsMarkovKernel.swapLeft` / 实例 `IsMarkovKernel.swapLeft`
-
-English:
-instance IsMarkovKernel.swapLeft
-  signature: (κ : Kernel (α × β) γ) [IsMarkovKernel κ]
-  body: by rw [Kernel.swapLeft]; infer_instance
-
-中文:
-实例 是MarkovKernel.swapLeft
-  签名: (κ : 核 (α × β) γ) [是MarkovKernel κ]
-  定义体: by rw [Kernel.swapLeft]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.swapLeft, infer_instance, swapLeft
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.swapLeft** 是 Mathlib 中的一个定理，位于命名空间 `Pr
+obabilityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+(α × β) γ) [ProbabilityTheory.IsMarkovKernel κ],   ProbabilityTheory.IsMarkovKer
+nel κ.swapLeft
+参数：κ : ProbabilityTheory.Kernel (α × β) γ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.swapLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2} 
+{γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : Measura
+bleSpace γ} (κ : Probability…
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsMarkovKernel.swapLeft (κ : Kernel (α × β) γ) [IsMarkovKernel κ] :
     IsMarkovKernel (swapLeft κ) := by rw [Kernel.swapLeft]; infer_instance
-
-/--
-Instance `IsFiniteKernel.swapLeft` / 实例 `IsFiniteKernel.swapLeft`
-
-English:
-instance IsFiniteKernel.swapLeft
-  signature: (κ : Kernel (α × β) γ) [IsFiniteKernel κ]
-  body: by rw [Kernel.swapLeft]; infer_instance
-
-中文:
-实例 是FiniteKernel.swapLeft
-  签名: (κ : 核 (α × β) γ) [是FiniteKernel κ]
-  定义体: by rw [Kernel.swapLeft]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.swapLeft, infer_instance, swapLeft
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.swapLeft** 是 Mathlib 中的一个定理，位于命名空间 `Pr
+obabilityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+(α × β) γ) [ProbabilityTheory.IsFiniteKernel κ],   ProbabilityTheory.IsFiniteKer
+nel κ.swapLeft
+参数：κ : ProbabilityTheory.Kernel (α × β) γ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.swapLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2} 
+{γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : Measura
+bleSpace γ} (κ : Probability…
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.comap`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : 
+MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsFiniteKernel.swapLeft (κ : Kernel (α × β) γ) [IsFiniteKernel κ] :
     IsFiniteKernel (swapLeft κ) := by rw [Kernel.swapLeft]; infer_instance
-
-/--
-Instance `IsSFiniteKernel.swapLeft` / 实例 `IsSFiniteKernel.swapLeft`
-
-English:
-instance IsSFiniteKernel.swapLeft
-  signature: (κ : Kernel (α × β) γ) [IsSFiniteKernel κ]
-  body: by rw [Kernel.swapLeft]; infer_instance
-
-中文:
-实例 是SFiniteKernel.swapLeft
-  签名: (κ : 核 (α × β) γ) [是SFiniteKernel κ]
-  定义体: by rw [Kernel.swapLeft]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.swapLeft, infer_instance, swapLeft
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.swapLeft** 是 Mathlib 中的一个定理，位于命名空间 `P
+robabilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+(α × β) γ) [ProbabilityTheory.IsSFiniteKernel κ],   ProbabilityTheory.IsSFiniteK
+ernel κ.swapLeft
+参数：κ : ProbabilityTheory.Kernel (α × β) γ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.swapLeft.eq_1`：∀ {α : Type u_1} {β : Type u_2} 
+{γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : Measura
+bleSpace γ} (κ : Probability…
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.comap`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ :
+ MeasurableSpace γ} {g : γ → α} (κ :…
 -/
 instance IsSFiniteKernel.swapLeft (κ : Kernel (α × β) γ) [IsSFiniteKernel κ] :
     IsSFiniteKernel (swapLeft κ) := by rw [Kernel.swapLeft]; infer_instance
-
-/--
-lemma `swapLeft_prodMkLeft` / 引理 `swapLeft_prodMkLeft`
-
-English:
-lemma swapLeft_prodMkLeft
-  given: (κ : Kernel α β) (γ : Type*) {_ : MeasurableSpace γ}
-  proof: rfl
-
-中文:
-引理 swapLeft_prodMkLeft
-  条件: (κ : 核 α β) (γ : 类型) {_ : 可测空间 γ}
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.swapLeft_prodMkLeft** 是 Mathlib 中的一个定理，位于命名空间 `Probab
+ilityTheory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} (κ : ProbabilityTheory.Kernel α β)   (γ : Type u_5) {x : MeasurableSpace
+ γ},   (ProbabilityTheory.Kernel.prodMkLeft γ κ).swapLeft = ProbabilityTheory.Ke
+rnel.prodMkRight γ κ
+参数：κ : ProbabilityTheory.Kernel α β；γ : Type u_5；ProbabilityTheory.Kernel.prodMk
+Left γ κ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma swapLeft_prodMkLeft (κ : Kernel α β) (γ : Type*) {_ : MeasurableSpace γ} :
     swapLeft (prodMkLeft γ κ) = prodMkRight γ κ := rfl
-
-/--
-lemma `swapLeft_prodMkRight` / 引理 `swapLeft_prodMkRight`
-
-English:
-lemma swapLeft_prodMkRight
-  given: (κ : Kernel α β) (γ : Type*) {_ : MeasurableSpace γ}
-  proof: rfl
-
-中文:
-引理 swapLeft_prodMkRight
-  条件: (κ : 核 α β) (γ : 类型) {_ : 可测空间 γ}
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.swapLeft_prodMkRight** 是 Mathlib 中的一个定理，位于命名空间 `Proba
+bilityTheory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} (κ : ProbabilityTheory.Kernel α β)   (γ : Type u_5) {x : MeasurableSpace
+ γ},   (ProbabilityTheory.Kernel.prodMkRight γ κ).swapLeft = ProbabilityTheory.K
+ernel.prodMkLeft γ κ
+参数：κ : ProbabilityTheory.Kernel α β；γ : Type u_5；ProbabilityTheory.Kernel.prodMk
+Right γ κ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma swapLeft_prodMkRight (κ : Kernel α β) (γ : Type*) {_ : MeasurableSpace γ} :
     swapLeft (prodMkRight γ κ) = prodMkLeft γ κ := rfl
 
-/--
-Definition of `swapRight` / `swapRight` 的定义
+/-- Define a `Kernel α (γ × β)` from a `Kernel α (β × γ)` by taking the map of `Prod.swap`.
+We use `mapOfMeasurable` in the definition for better defeqs. -/
+/-
+**ProbabilityTheory.Kernel.swapRight** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：swapRight (κ : Kernel α (β × γ)) : Kernel α (γ × β)
+参数：κ : Kernel α (β × γ)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
 
-English:
-definition swapRight
-  signature: (κ : Kernel α (β × γ))
-  body: mapOfMeasurable κ Prod.swap measurable_swap
-
-中文:
-定义 swapRight
-  签名: (κ : 核 α (β × γ))
-  定义体: mapOfMeasurable κ Prod.swap measurable_swap
-
-Depends on / 依赖: Prod.swap, mapOfMeasurable, measurable_swap
+--- 原说明 ---
+Define a `Kernel α (γ × β)` from a `Kernel α (β × γ)` by taking the map of `Prod
+.swap`.
+We use `mapOfMeasurable` in the definition for better defeqs.
 -/
 noncomputable def swapRight (κ : Kernel α (β × γ)) : Kernel α (γ × β) :=
   mapOfMeasurable κ Prod.swap measurable_swap
-
-/--
-lemma `swapRight_eq` / 引理 `swapRight_eq`
-
-English:
-lemma swapRight_eq
-  given: (κ : Kernel α (β × γ))
-  statement: swapRight κ = map κ Prod.swap
-  proof: by
-  simp [swapRight]
-
-@[simp]
-
-中文:
-引理 swapRight_eq
-  条件: (κ : 核 α (β × γ))
-  结论: swapRight κ = map κ 积类型.swap
-  证明: by
-  simp [swapRight]
-
-@[simp]
-
-Depends on / 依赖: swapRight
+/-
+**ProbabilityTheory.Kernel.swapRight_eq** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：swapRight_eq (κ : Kernel α (β × γ)) : swapRight κ = map κ Prod.swap
+参数：κ : Kernel α (β × γ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.mapOfMeasurable_eq_map`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ 
+: MeasurableSpace γ} (κ : Probability…
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma swapRight_eq (κ : Kernel α (β × γ)) : swapRight κ = map κ Prod.swap := by
   simp [swapRight]
 
 @[simp]
-/--
-lemma `swapRight_zero` / 引理 `swapRight_zero`
-
-English:
-lemma swapRight_zero
-  statement: swapRight (0 : Kernel α (β × γ)) = 0
-  proof: by simp [swapRight]
-
-中文:
-引理 swapRight_zero
-  结论: swapRight (0 : 核 α (β × γ)) = 0
-  证明: by simp [swapRight]
-
-Depends on / 依赖: swapRight
+/-
+**ProbabilityTheory.Kernel.swapRight_zero** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：swapRight_zero : swapRight (0 : Kernel α (β × γ)) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `ProbabilityTheory.Kernel.mapOfMeasurable_eq_map`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ 
+: MeasurableSpace γ} (κ : Probability…
+· 使用引理 `ProbabilityTheory.Kernel.map_zero`：map_zero : Kernel.map (0 : Kernel α β
+) f = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma swapRight_zero : swapRight (0 : Kernel α (β × γ)) = 0 := by simp [swapRight]
-
-/--
-theorem `swapRight_apply` / 定理 `swapRight_apply`
-
-English:
-theorem swapRight_apply
-  given: (κ : Kernel α (β × γ)) (a : α)
-  statement: swapRight κ a = (κ a).map Prod.swap
-  proof: rfl
-
-中文:
-定理 swapRight_apply
-  条件: (κ : 核 α (β × γ)) (a : α)
-  结论: swapRight κ a = (κ a).map 积类型.swap
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.swapRight_apply** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：swapRight_apply (κ : Kernel α (β × γ)) (a : α) : swapRight κ a = (κ a).map
+ Prod.swap
+参数：κ : Kernel α (β × γ)；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem swapRight_apply (κ : Kernel α (β × γ)) (a : α) : swapRight κ a = (κ a).map Prod.swap :=
   rfl
-
-/--
-theorem `swapRight_apply'` / 定理 `swapRight_apply'`
-
-English:
-theorem swapRight_apply'
-  given: (κ : Kernel α (β × γ)) (a : α) {s : Set (γ × β)} (hs : MeasurableSet s)
-  proof: by
-  rw [swapRight_apply]; rw [Measure.map_apply measurable_swap hs]; rfl
-
-中文:
-定理 swapRight_apply'
-  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 (γ × β)} (hs : 可测集 s)
-  证明: by
-  rw [swapRight_apply]; rw [Measure.map_apply measurable_swap hs]; rfl
-
-Depends on / 依赖: Measure, Measure.map_apply, map_apply, measurable_swap, swapRight_apply
+/-
+**ProbabilityTheory.Kernel.swapRight_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：swapRight_apply' (κ : Kernel α (β × γ)) (a : α) {s : Set (γ × β)} (hs : Me
+asurableSet s) : swapRight κ a s = κ a {p | p.swap in s}
+参数：κ : Kernel α (β × γ)；a : α；γ × β；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.swapRight_apply`：swapRight_apply (κ : Kernel α 
+(β × γ)) (a : α) : swapRight κ a = (κ a).map Prod.swap
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
 -/
 theorem swapRight_apply' (κ : Kernel α (β × γ)) (a : α) {s : Set (γ × β)} (hs : MeasurableSet s) :
-    swapRight κ a s = κ a {p | p.swap in s} := by
-  rw [swapRight_apply]; rw [Measure.map_apply measurable_swap hs]; rfl
-
-/--
-theorem `lintegral_swapRight` / 定理 `lintegral_swapRight`
-
-English:
-theorem lintegral_swapRight
-  given: (κ : Kernel α (β × γ)) (a : α) {g : γ × β -> Real>=0∞} (hg : Measurable g)
-  proof: by
-  rw [swapRight_eq]; rw [lintegral_map _ measurable_swap a hg]
-
-中文:
-定理 lintegral_swapRight
-  条件: (κ : 核 α (β × γ)) (a : α) {g : γ × β -> 实数>=0∞} (hg : 可测 g)
-  证明: by
-  rw [swapRight_eq]; rw [lintegral_map _ measurable_swap a hg]
-
-Depends on / 依赖: lintegral_map, measurable_swap, swapRight_eq
+    swapRight κ a s = κ a {p | p.swap ∈ s} := by
+  rw [swapRight_apply, Measure.map_apply measurable_swap hs]; rfl
+/-
+**ProbabilityTheory.Kernel.lintegral_swapRight** 是 Mathlib 中的一个定理，位于命名空间 `Probab
+ilityTheory.Kernel`。
+形式化陈述：lintegral_swapRight (κ : Kernel α (β × γ)) (a : α) {g : γ × β -> Real>=0∞}
+ (hg : Measurable g) : ∫⁻ c, g c ∂swapRight κ a = ∫⁻ bc : β × γ, g bc.swap ∂κ a
+参数：κ : Kernel α (β × γ)；a : α；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.swapRight_eq`：swapRight_eq (κ : Kernel α (β × γ
+)) : swapRight κ = map κ Prod.swap
+· 使用定理 `ProbabilityTheory.Kernel.lintegral_map`：∀ {α : Type u_1} {β : Type u_2} 
+{mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Measura
+bleSpace γ} {f : β → γ} (κ :…
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
 -/
-theorem lintegral_swapRight (κ : Kernel α (β × γ)) (a : α) {g : γ × β -> Real>=0∞} (hg : Measurable g) :
+theorem lintegral_swapRight (κ : Kernel α (β × γ)) (a : α) {g : γ × β → ℝ≥0∞} (hg : Measurable g) :
     ∫⁻ c, g c ∂swapRight κ a = ∫⁻ bc : β × γ, g bc.swap ∂κ a := by
-  rw [swapRight_eq]; rw [lintegral_map _ measurable_swap a hg]
-
-/--
-Instance `IsMarkovKernel.swapRight` / 实例 `IsMarkovKernel.swapRight`
-
-English:
-instance IsMarkovKernel.swapRight
-  signature: (κ : Kernel α (β × γ)) [IsMarkovKernel κ]
-  body: by
-  rw [Kernel.swapRight_eq]; exact IsMarkovKernel.map _ measurable_swap
-
-中文:
-实例 是MarkovKernel.swapRight
-  签名: (κ : 核 α (β × γ)) [是MarkovKernel κ]
-  定义体: by
-  rw [Kernel.swapRight_eq]; exact IsMarkovKernel.map _ measurable_swap
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Kernel, Kernel.swapRight_eq, measurable_swap, swapRight_eq
+  rw [swapRight_eq, lintegral_map _ measurable_swap a hg]
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.swapRight** 是 Mathlib 中的一个定理，位于命名空间 `P
+robabilityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsMarkovKernel κ],   ProbabilityTheory.IsMarkovKer
+nel κ.swapRight
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.swapRight_eq`：swapRight_eq (κ : Kernel α (β × γ
+)) : swapRight κ = map κ Prod.swap
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} {f : β → γ} (κ :…
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
 -/
 instance IsMarkovKernel.swapRight (κ : Kernel α (β × γ)) [IsMarkovKernel κ] :
     IsMarkovKernel (swapRight κ) := by
   rw [Kernel.swapRight_eq]; exact IsMarkovKernel.map _ measurable_swap
-
-/--
-Instance `IsZeroOrMarkovKernel.swapRight` / 实例 `IsZeroOrMarkovKernel.swapRight`
-
-English:
-instance IsZeroOrMarkovKernel.swapRight
-  signature: (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ]
-  body: by rw [Kernel.swapRight_eq]; infer_instance
-
-中文:
-实例 是ZeroOrMarkovKernel.swapRight
-  签名: (κ : 核 α (β × γ)) [是ZeroOrMarkovKernel κ]
-  定义体: by rw [Kernel.swapRight_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.swapRight_eq, infer_instance, swapRight_eq
+/-
+**ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.swapRight** 是 Mathlib 中的一个定理，位于命
+名空间 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsZeroOrMarkovKernel κ],   ProbabilityTheory.IsZer
+oOrMarkovKernel κ.swapRight
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.swapRight_eq`：swapRight_eq (κ : Kernel α (β × γ
+)) : swapRight κ = map κ Prod.swap
+· 使用定理 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.map`：∀ {α : Type u_1} {β :
+ Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {m
+γ : MeasurableSpace γ} (κ : Probability…
 -/
 instance IsZeroOrMarkovKernel.swapRight (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ] :
     IsZeroOrMarkovKernel (swapRight κ) := by rw [Kernel.swapRight_eq]; infer_instance
-
-/--
-Instance `IsFiniteKernel.swapRight` / 实例 `IsFiniteKernel.swapRight`
-
-English:
-instance IsFiniteKernel.swapRight
-  signature: (κ : Kernel α (β × γ)) [IsFiniteKernel κ]
-  body: by rw [Kernel.swapRight_eq]; infer_instance
-
-中文:
-实例 是FiniteKernel.swapRight
-  签名: (κ : 核 α (β × γ)) [是FiniteKernel κ]
-  定义体: by rw [Kernel.swapRight_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.swapRight_eq, infer_instance, swapRight_eq
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.swapRight** 是 Mathlib 中的一个定理，位于命名空间 `P
+robabilityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsFiniteKernel κ],   ProbabilityTheory.IsFiniteKer
+nel κ.swapRight
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.swapRight_eq`：swapRight_eq (κ : Kernel α (β × γ
+)) : swapRight κ = map κ Prod.swap
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} (κ : Probability…
 -/
 instance IsFiniteKernel.swapRight (κ : Kernel α (β × γ)) [IsFiniteKernel κ] :
     IsFiniteKernel (swapRight κ) := by rw [Kernel.swapRight_eq]; infer_instance
-
-/--
-Instance `IsSFiniteKernel.swapRight` / 实例 `IsSFiniteKernel.swapRight`
-
-English:
-instance IsSFiniteKernel.swapRight
-  signature: (κ : Kernel α (β × γ)) [IsSFiniteKernel κ]
-  body: by rw [Kernel.swapRight_eq]; infer_instance
-
-中文:
-实例 是SFiniteKernel.swapRight
-  签名: (κ : 核 α (β × γ)) [是SFiniteKernel κ]
-  定义体: by rw [Kernel.swapRight_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.swapRight_eq, infer_instance, swapRight_eq
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.swapRight** 是 Mathlib 中的一个定理，位于命名空间 `
+ProbabilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsSFiniteKernel κ],   ProbabilityTheory.IsSFiniteK
+ernel κ.swapRight
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.swapRight_eq`：swapRight_eq (κ : Kernel α (β × γ
+)) : swapRight κ = map κ Prod.swap
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.map`：∀ {α : Type u_1} {β : Type
+ u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : M
+easurableSpace γ} (κ : Probability…
 -/
 instance IsSFiniteKernel.swapRight (κ : Kernel α (β × γ)) [IsSFiniteKernel κ] :
     IsSFiniteKernel (swapRight κ) := by rw [Kernel.swapRight_eq]; infer_instance
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- Define a `Kernel α β` from a `Kernel α (β × γ)` by taking the map of the first projection.
+We use `mapOfMeasurable` for better defeqs. -/
+/-
+**ProbabilityTheory.Kernel.fst** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Kern
+el`。
+形式化陈述：fst (κ : Kernel α (β × γ)) : Kernel α β
+参数：κ : Kernel α (β × γ)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
 
-English:
-definition fst
-  signature: (κ : Kernel α (β × γ))
-  body: mapOfMeasurable κ Prod.fst measurable_fst
-
-中文:
-定义 fst
-  签名: (κ : 核 α (β × γ))
-  定义体: mapOfMeasurable κ Prod.fst measurable_fst
-
-Depends on / 依赖: Prod.fst, mapOfMeasurable, measurable_fst
+--- 原说明 ---
+Define a `Kernel α β` from a `Kernel α (β × γ)` by taking the map of the first p
+rojection.
+We use `mapOfMeasurable` for better defeqs.
 -/
 noncomputable def fst (κ : Kernel α (β × γ)) : Kernel α β :=
   mapOfMeasurable κ Prod.fst measurable_fst
-
-/--
-theorem `fst_eq` / 定理 `fst_eq`
-
-English:
-theorem fst_eq
-  given: (κ : Kernel α (β × γ))
-  statement: fst κ = map κ Prod.fst
-  proof: by simp [fst]
-
-中文:
-定理 fst_eq
-  条件: (κ : 核 α (β × γ))
-  结论: fst κ = map κ 积类型.fst
-  证明: by simp [fst]
+/-
+**ProbabilityTheory.Kernel.fst_eq** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory.K
+ernel`。
+形式化陈述：fst_eq (κ : Kernel α (β × γ)) : fst κ = map κ Prod.fst
+参数：κ : Kernel α (β × γ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.mapOfMeasurable_eq_map`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ 
+: MeasurableSpace γ} (κ : Probability…
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fst_eq (κ : Kernel α (β × γ)) : fst κ = map κ Prod.fst := by simp [fst]
-
-/--
-theorem `fst_apply` / 定理 `fst_apply`
-
-English:
-theorem fst_apply
-  given: (κ : Kernel α (β × γ)) (a : α)
-  statement: fst κ a = (κ a).map Prod.fst
-  proof: rfl
-
-中文:
-定理 fst_apply
-  条件: (κ : 核 α (β × γ)) (a : α)
-  结论: fst κ a = (κ a).map 积类型.fst
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.fst_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：fst_apply (κ : Kernel α (β × γ)) (a : α) : fst κ a = (κ a).map Prod.fst
+参数：κ : Kernel α (β × γ)；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_apply (κ : Kernel α (β × γ)) (a : α) : fst κ a = (κ a).map Prod.fst :=
   rfl
-
-/--
-theorem `fst_apply'` / 定理 `fst_apply'`
-
-English:
-theorem fst_apply'
-  given: (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : MeasurableSet s)
-  proof: by rw [fst_apply, Measure.map_apply measurable_fst hs]; rfl
-
-中文:
-定理 fst_apply'
-  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 β} (hs : 可测集 s)
-  证明: by rw [fst_apply, Measure.map_apply measurable_fst hs]; rfl
-
-Depends on / 依赖: Measure, Measure.map_apply, fst_apply, map_apply, measurable_fst
+/-
+**ProbabilityTheory.Kernel.fst_apply'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：fst_apply' (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : MeasurableSet 
+s) : fst κ a s = κ a {p | p.1 in s}
+参数：κ : Kernel α (β × γ)；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply`：fst_apply (κ : Kernel α (β × γ)) (a 
+: α) : fst κ a = (κ a).map Prod.fst
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
 -/
 theorem fst_apply' (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : MeasurableSet s) :
-    fst κ a s = κ a {p | p.1 in s} := by rw [fst_apply, Measure.map_apply measurable_fst hs]; rfl
-
-/--
-theorem `fst_real_apply` / 定理 `fst_real_apply`
-
-English:
-theorem fst_real_apply
-  given: (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : MeasurableSet s)
-  proof: by
-  simp [fst_apply', hs, measureReal_def]
-
-@[simp]
-
-中文:
-定理 fst_real_apply
-  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 β} (hs : 可测集 s)
-  证明: by
-  simp [fst_apply', hs, measureReal_def]
-
-@[simp]
-
-Depends on / 依赖: fst_apply, measureReal_def
+    fst κ a s = κ a {p | p.1 ∈ s} := by rw [fst_apply, Measure.map_apply measurable_fst hs]; rfl
+/-
+**ProbabilityTheory.Kernel.fst_real_apply** 是 Mathlib 中的一个定理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：fst_real_apply (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : Measurable
+Set s) : (fst κ a).real s = (κ a).real {p | p.1 in s}
+参数：κ : Kernel α (β × γ)；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fst_real_apply (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : MeasurableSet s) :
-    (fst κ a).real s = (κ a).real {p | p.1 in s} := by
+    (fst κ a).real s = (κ a).real {p | p.1 ∈ s} := by
   simp [fst_apply', hs, measureReal_def]
 
 @[simp]
-/--
-lemma `fst_zero` / 引理 `fst_zero`
-
-English:
-lemma fst_zero
-  statement: fst (0 : Kernel α (β × γ)) = 0
-  proof: by simp [fst]
-
-中文:
-引理 fst_zero
-  结论: fst (0 : 核 α (β × γ)) = 0
-  证明: by simp [fst]
+/-
+**ProbabilityTheory.Kernel.fst_zero** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：fst_zero : fst (0 : Kernel α (β × γ)) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `ProbabilityTheory.Kernel.mapOfMeasurable_eq_map`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ 
+: MeasurableSpace γ} (κ : Probability…
+· 使用引理 `ProbabilityTheory.Kernel.map_zero`：map_zero : Kernel.map (0 : Kernel α β
+) f = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma fst_zero : fst (0 : Kernel α (β × γ)) = 0 := by simp [fst]
-
-/--
-theorem `lintegral_fst` / 定理 `lintegral_fst`
-
-English:
-theorem lintegral_fst
-  given: (κ : Kernel α (β × γ)) (a : α) {g : β -> Real>=0∞} (hg : Measurable g)
-  proof: by
-  rw [fst_eq]; rw [lintegral_map _ measurable_fst a hg]
-
-中文:
-定理 lintegral_fst
-  条件: (κ : 核 α (β × γ)) (a : α) {g : β -> 实数>=0∞} (hg : 可测 g)
-  证明: by
-  rw [fst_eq]; rw [lintegral_map _ measurable_fst a hg]
-
-Depends on / 依赖: fst_eq, lintegral_map, measurable_fst
+/-
+**ProbabilityTheory.Kernel.lintegral_fst** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityT
+heory.Kernel`。
+形式化陈述：lintegral_fst (κ : Kernel α (β × γ)) (a : α) {g : β -> Real>=0∞} (hg : Mea
+surable g) : ∫⁻ c, g c ∂fst κ a = ∫⁻ bc : β × γ, g bc.fst ∂κ a
+参数：κ : Kernel α (β × γ)；a : α；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_eq`：fst_eq (κ : Kernel α (β × γ)) : fst κ =
+ map κ Prod.fst
+· 使用定理 `ProbabilityTheory.Kernel.lintegral_map`：∀ {α : Type u_1} {β : Type u_2} 
+{mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Measura
+bleSpace γ} {f : β → γ} (κ :…
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
 -/
-theorem lintegral_fst (κ : Kernel α (β × γ)) (a : α) {g : β -> Real>=0∞} (hg : Measurable g) :
+theorem lintegral_fst (κ : Kernel α (β × γ)) (a : α) {g : β → ℝ≥0∞} (hg : Measurable g) :
     ∫⁻ c, g c ∂fst κ a = ∫⁻ bc : β × γ, g bc.fst ∂κ a := by
-  rw [fst_eq]; rw [lintegral_map _ measurable_fst a hg]
-
-/--
-Instance `IsMarkovKernel.fst` / 实例 `IsMarkovKernel.fst`
-
-English:
-instance IsMarkovKernel.fst
-  signature: (κ : Kernel α (β × γ)) [IsMarkovKernel κ]
-  body: by
-  rw [Kernel.fst_eq]; exact IsMarkovKernel.map _ measurable_fst
-
-中文:
-实例 是MarkovKernel.fst
-  签名: (κ : 核 α (β × γ)) [是MarkovKernel κ]
-  定义体: by
-  rw [Kernel.fst_eq]; exact IsMarkovKernel.map _ measurable_fst
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Kernel, Kernel.fst_eq, fst_eq, measurable_fst
+  rw [fst_eq, lintegral_map _ measurable_fst a hg]
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.fst** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsMarkovKernel κ],   ProbabilityTheory.IsMarkovKer
+nel κ.fst
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_eq`：fst_eq (κ : Kernel α (β × γ)) : fst κ =
+ map κ Prod.fst
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} {f : β → γ} (κ :…
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
 -/
 instance IsMarkovKernel.fst (κ : Kernel α (β × γ)) [IsMarkovKernel κ] : IsMarkovKernel (fst κ) := by
   rw [Kernel.fst_eq]; exact IsMarkovKernel.map _ measurable_fst
-
-/--
-Instance `IsZeroOrMarkovKernel.fst` / 实例 `IsZeroOrMarkovKernel.fst`
-
-English:
-instance IsZeroOrMarkovKernel.fst
-  signature: (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ]
-  body: by
-  rw [Kernel.fst_eq]; infer_instance
-
-中文:
-实例 是ZeroOrMarkovKernel.fst
-  签名: (κ : 核 α (β × γ)) [是ZeroOrMarkovKernel κ]
-  定义体: by
-  rw [Kernel.fst_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.fst_eq, fst_eq, infer_instance
+/-
+**ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.fst** 是 Mathlib 中的一个定理，位于命名空间 `P
+robabilityTheory.Kernel.IsZeroOrMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsZeroOrMarkovKernel κ],   ProbabilityTheory.IsZer
+oOrMarkovKernel κ.fst
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_eq`：fst_eq (κ : Kernel α (β × γ)) : fst κ =
+ map κ Prod.fst
+· 使用定理 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.map`：∀ {α : Type u_1} {β :
+ Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {m
+γ : MeasurableSpace γ} (κ : Probability…
 -/
 instance IsZeroOrMarkovKernel.fst (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ] :
     IsZeroOrMarkovKernel (fst κ) := by
   rw [Kernel.fst_eq]; infer_instance
-
-/--
-Instance `IsFiniteKernel.fst` / 实例 `IsFiniteKernel.fst`
-
-English:
-instance IsFiniteKernel.fst
-  signature: (κ : Kernel α (β × γ)) [IsFiniteKernel κ]
-  body: by
-  rw [Kernel.fst_eq]; infer_instance
-
-中文:
-实例 是FiniteKernel.fst
-  签名: (κ : 核 α (β × γ)) [是FiniteKernel κ]
-  定义体: by
-  rw [Kernel.fst_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.fst_eq, fst_eq, infer_instance
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.fst** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsFiniteKernel κ],   ProbabilityTheory.IsFiniteKer
+nel κ.fst
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_eq`：fst_eq (κ : Kernel α (β × γ)) : fst κ =
+ map κ Prod.fst
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} (κ : Probability…
 -/
 instance IsFiniteKernel.fst (κ : Kernel α (β × γ)) [IsFiniteKernel κ] : IsFiniteKernel (fst κ) := by
   rw [Kernel.fst_eq]; infer_instance
-
-/--
-Instance `IsSFiniteKernel.fst` / 实例 `IsSFiniteKernel.fst`
-
-English:
-instance IsSFiniteKernel.fst
-  signature: (κ : Kernel α (β × γ)) [IsSFiniteKernel κ]
-  body: by rw [Kernel.fst_eq]; infer_instance
-
-中文:
-实例 是SFiniteKernel.fst
-  签名: (κ : 核 α (β × γ)) [是SFiniteKernel κ]
-  定义体: by rw [Kernel.fst_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.fst_eq, fst_eq, infer_instance
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.fst** 是 Mathlib 中的一个定理，位于命名空间 `Probab
+ilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsSFiniteKernel κ],   ProbabilityTheory.IsSFiniteK
+ernel κ.fst
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_eq`：fst_eq (κ : Kernel α (β × γ)) : fst κ =
+ map κ Prod.fst
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.map`：∀ {α : Type u_1} {β : Type
+ u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : M
+easurableSpace γ} (κ : Probability…
 -/
 instance IsSFiniteKernel.fst (κ : Kernel α (β × γ)) [IsSFiniteKernel κ] :
     IsSFiniteKernel (fst κ) := by rw [Kernel.fst_eq]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isFiniteKernel_of_isFiniteKernel_fst {κ : Kernel α (β × γ)}
     [h : IsFiniteKernel (fst κ)] :
     IsFiniteKernel κ := by
   refine ⟨(fst κ).bound, (fst κ).bound_lt_top,
-    fun a => le_trans ?_ (measure_le_bound (fst κ) a Set.univ)⟩
+    fun a ↦ le_trans ?_ (measure_le_bound (fst κ) a Set.univ)⟩
   rw [fst_apply' _ _ MeasurableSet.univ]
   simp
-
-/--
-lemma `fst_map_prod` / 引理 `fst_map_prod`
-
-English:
-lemma fst_map_prod
-  given: (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hg : Measurable g)
-  proof: by
-  by_cases hf : Measurable f
-  · ext x s hs
-    rw [fst_apply' _ _ hs]; rw [map_apply' _ (hf.prod hg) _]; rw [map_apply' _ hf _ hs]
-    · simp only [Set.preimage, Set.mem_ofPred]
-    · exact measurable_fst hs
-  · have : ¬ Measurable (fun x => (f x, g x)) := by
-      contrapose hf; exact hf.fst
-    simp [map_of_not_measurable _ hf, map_of_not_measurable _ this]
-
-中文:
-引理 fst_map_prod
-  条件: (κ : 核 α β) {f : β -> γ} {g : β -> δ} (hg : 可测 g)
-  证明: by
-  by_cases hf : Measurable f
-  · ext x s hs
-    rw [fst_apply' _ _ hs]; rw [map_apply' _ (hf.prod hg) _]; rw [map_apply' _ hf _ hs]
-    · simp only [Set.preimage, Set.mem_ofPred]
-    · exact measurable_fst hs
-  · have : ¬ Measurable (fun x => (f x, g x)) := by
-      contrapose hf; exact hf.fst
-    simp [map_of_not_measurable _ hf, map_of_not_measurable _ this]
-
-Depends on / 依赖: Measurable, Set.mem_ofPred, Set.preimage, contrapose, fst_apply, hf.fst, hf.prod, map_apply, map_of_not_measurable, measurable_fst, mem_ofPred, preimage
+/-
+**ProbabilityTheory.Kernel.fst_map_prod** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：fst_map_prod (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hg : Measurable g
+) : fst (map κ (fun x => (f x, g x))) = map κ f
+参数：κ : Kernel α β；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用定理 `ProbabilityTheory.Kernel.map_apply'`：map_apply' (κ : Kernel α β) (hf : M
+easurable f) (a : α) {s : Set γ} (hs : MeasurableSet s) : map κ f a s = κ a (f ⁻
+¹' s)
+· 使用定理 `Measurable.prod`：Measurable.prod {f : α -> β × γ} (hf₁ : Measurable fun 
+a => (f a).1) (hf₂ : Measurable fun a => (f a).2) : Measurable f
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Measurable.fst`：Measurable.fst {f : α -> β × γ} (hf : Measurable f) : Me
+asurable fun a : α => (f a).1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
+· 使用引理 `ProbabilityTheory.Kernel.fst_zero`：fst_zero : fst (0 : Kernel α (β × γ))
+ = 0
 -/
-lemma fst_map_prod (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hg : Measurable g) :
-    fst (map κ (fun x => (f x, g x))) = map κ f := by
+lemma fst_map_prod (κ : Kernel α β) {f : β → γ} {g : β → δ} (hg : Measurable g) :
+    fst (map κ (fun x ↦ (f x, g x))) = map κ f := by
   by_cases hf : Measurable f
   · ext x s hs
-    rw [fst_apply' _ _ hs]; rw [map_apply' _ (hf.prod hg) _]; rw [map_apply' _ hf _ hs]
+    rw [fst_apply' _ _ hs, map_apply' _ (hf.prod hg) _, map_apply' _ hf _ hs]
     · simp only [Set.preimage, Set.mem_ofPred]
     · exact measurable_fst hs
-  · have : ¬ Measurable (fun x => (f x, g x)) := by
+  · have : ¬ Measurable (fun x ↦ (f x, g x)) := by
       contrapose hf; exact hf.fst
     simp [map_of_not_measurable _ hf, map_of_not_measurable _ this]
-
-/--
-lemma `fst_map_id_prod` / 引理 `fst_map_id_prod`
-
-English:
-lemma fst_map_id_prod
-  given: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f)
-  proof: by
-  rw [fst_map_prod _ hf]; rw [Kernel.map_id']
-
-中文:
-引理 fst_map_id_prod
-  条件: (κ : 核 α β) {f : β -> γ} (hf : 可测 f)
-  证明: by
-  rw [fst_map_prod _ hf]; rw [Kernel.map_id']
-
-Depends on / 依赖: Kernel, Kernel.map_id, fst_map_prod, map_id
+/-
+**ProbabilityTheory.Kernel.fst_map_id_prod** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：fst_map_id_prod (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) : fst (m
+ap κ (fun a => (a, f a))) = κ
+参数：κ : Kernel α β；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.fst_map_prod`：fst_map_prod (κ : Kernel α β) {f 
+: β -> γ} {g : β -> δ} (hg : Measurable g) : fst (map κ (fun x => (f x, g x))) =
+ map κ f
+· 使用引理 `ProbabilityTheory.Kernel.map_id'`：map_id' (κ : Kernel α β) : map κ (fun 
+a => a) = κ
 -/
-lemma fst_map_id_prod (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) :
-    fst (map κ (fun a => (a, f a))) = κ := by
-  rw [fst_map_prod _ hf]; rw [Kernel.map_id']
-
-/--
-lemma `fst_prodMkLeft` / 引理 `fst_prodMkLeft`
-
-English:
-lemma fst_prodMkLeft
-  given: (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ))
-  proof: rfl
-
-中文:
-引理 fst_prodMkLeft
-  条件: (δ : 类型) [可测空间 δ] (κ : 核 α (β × γ))
-  证明: rfl
+lemma fst_map_id_prod (κ : Kernel α β) {f : β → γ} (hf : Measurable f) :
+    fst (map κ (fun a ↦ (a, f a))) = κ := by
+  rw [fst_map_prod _ hf, Kernel.map_id']
+/-
+**ProbabilityTheory.Kernel.fst_prodMkLeft** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：fst_prodMkLeft (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ)) : fs
+t (prodMkLeft δ κ) = prodMkLeft δ (fst κ)
+参数：δ : Type*；κ : Kernel α (β × γ)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fst_prodMkLeft (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ)) :
     fst (prodMkLeft δ κ) = prodMkLeft δ (fst κ) := rfl
-
-/--
-lemma `fst_prodMkRight` / 引理 `fst_prodMkRight`
-
-English:
-lemma fst_prodMkRight
-  given: (κ : Kernel α (β × γ)) (δ : Type*) [MeasurableSpace δ]
-  proof: rfl
-
-中文:
-引理 fst_prodMkRight
-  条件: (κ : 核 α (β × γ)) (δ : 类型) [可测空间 δ]
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.fst_prodMkRight** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：fst_prodMkRight (κ : Kernel α (β × γ)) (δ : Type*) [MeasurableSpace δ] : f
+st (prodMkRight δ κ) = prodMkRight δ (fst κ)
+参数：κ : Kernel α (β × γ)；δ : Type*。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fst_prodMkRight (κ : Kernel α (β × γ)) (δ : Type*) [MeasurableSpace δ] :
     fst (prodMkRight δ κ) = prodMkRight δ (fst κ) := rfl
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- Define a `Kernel α γ` from a `Kernel α (β × γ)` by taking the map of the second projection.
+We use `mapOfMeasurable` for better defeqs. -/
+/-
+**ProbabilityTheory.Kernel.snd** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Kern
+el`。
+形式化陈述：snd (κ : Kernel α (β × γ)) : Kernel α γ
+参数：κ : Kernel α (β × γ)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
 
-English:
-definition snd
-  signature: (κ : Kernel α (β × γ))
-  body: mapOfMeasurable κ Prod.snd measurable_snd
-
-中文:
-定义 snd
-  签名: (κ : 核 α (β × γ))
-  定义体: mapOfMeasurable κ Prod.snd measurable_snd
-
-Depends on / 依赖: Prod.snd, mapOfMeasurable, measurable_snd
+--- 原说明 ---
+Define a `Kernel α γ` from a `Kernel α (β × γ)` by taking the map of the second 
+projection.
+We use `mapOfMeasurable` for better defeqs.
 -/
 noncomputable def snd (κ : Kernel α (β × γ)) : Kernel α γ :=
   mapOfMeasurable κ Prod.snd measurable_snd
-
-/--
-theorem `snd_eq` / 定理 `snd_eq`
-
-English:
-theorem snd_eq
-  given: (κ : Kernel α (β × γ))
-  statement: snd κ = map κ Prod.snd
-  proof: by simp [snd]
-
-中文:
-定理 snd_eq
-  条件: (κ : 核 α (β × γ))
-  结论: snd κ = map κ 积类型.snd
-  证明: by simp [snd]
+/-
+**ProbabilityTheory.Kernel.snd_eq** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory.K
+ernel`。
+形式化陈述：snd_eq (κ : Kernel α (β × γ)) : snd κ = map κ Prod.snd
+参数：κ : Kernel α (β × γ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.mapOfMeasurable_eq_map`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ 
+: MeasurableSpace γ} (κ : Probability…
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem snd_eq (κ : Kernel α (β × γ)) : snd κ = map κ Prod.snd := by simp [snd]
-
-/--
-theorem `snd_apply` / 定理 `snd_apply`
-
-English:
-theorem snd_apply
-  given: (κ : Kernel α (β × γ)) (a : α)
-  statement: snd κ a = (κ a).map Prod.snd
-  proof: rfl
-
-中文:
-定理 snd_apply
-  条件: (κ : 核 α (β × γ)) (a : α)
-  结论: snd κ a = (κ a).map 积类型.snd
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.snd_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：snd_apply (κ : Kernel α (β × γ)) (a : α) : snd κ a = (κ a).map Prod.snd
+参数：κ : Kernel α (β × γ)；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_apply (κ : Kernel α (β × γ)) (a : α) : snd κ a = (κ a).map Prod.snd :=
   rfl
-
-/--
-theorem `snd_apply'` / 定理 `snd_apply'`
-
-English:
-theorem snd_apply'
-  given: (κ : Kernel α (β × γ)) (a : α) {s : Set γ} (hs : MeasurableSet s)
-  proof: by rw [snd_apply, Measure.map_apply measurable_snd hs]
-
-@[simp]
-
-中文:
-定理 snd_apply'
-  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 γ} (hs : 可测集 s)
-  证明: by rw [snd_apply, Measure.map_apply measurable_snd hs]
-
-@[simp]
-
-Depends on / 依赖: Measure, Measure.map_apply, map_apply, measurable_snd, snd_apply
+/-
+**ProbabilityTheory.Kernel.snd_apply'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：snd_apply' (κ : Kernel α (β × γ)) (a : α) {s : Set γ} (hs : MeasurableSet 
+s) : snd κ a s = κ a (Prod.snd ⁻¹' s)
+参数：κ : Kernel α (β × γ)；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_apply`：snd_apply (κ : Kernel α (β × γ)) (a 
+: α) : snd κ a = (κ a).map Prod.snd
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
 -/
 theorem snd_apply' (κ : Kernel α (β × γ)) (a : α) {s : Set γ} (hs : MeasurableSet s) :
     snd κ a s = κ a (Prod.snd ⁻¹' s) := by rw [snd_apply, Measure.map_apply measurable_snd hs]
 
 @[simp]
-/--
-lemma `snd_zero` / 引理 `snd_zero`
-
-English:
-lemma snd_zero
-  statement: snd (0 : Kernel α (β × γ)) = 0
-  proof: by simp [snd]
-
-中文:
-引理 snd_zero
-  结论: snd (0 : 核 α (β × γ)) = 0
-  证明: by simp [snd]
+/-
+**ProbabilityTheory.Kernel.snd_zero** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：snd_zero : snd (0 : Kernel α (β × γ)) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `ProbabilityTheory.Kernel.mapOfMeasurable_eq_map`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ 
+: MeasurableSpace γ} (κ : Probability…
+· 使用引理 `ProbabilityTheory.Kernel.map_zero`：map_zero : Kernel.map (0 : Kernel α β
+) f = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma snd_zero : snd (0 : Kernel α (β × γ)) = 0 := by simp [snd]
-
-/--
-theorem `lintegral_snd` / 定理 `lintegral_snd`
-
-English:
-theorem lintegral_snd
-  given: (κ : Kernel α (β × γ)) (a : α) {g : γ -> Real>=0∞} (hg : Measurable g)
-  proof: by
-  rw [snd_eq]; rw [lintegral_map _ measurable_snd a hg]
-
-中文:
-定理 lintegral_snd
-  条件: (κ : 核 α (β × γ)) (a : α) {g : γ -> 实数>=0∞} (hg : 可测 g)
-  证明: by
-  rw [snd_eq]; rw [lintegral_map _ measurable_snd a hg]
-
-Depends on / 依赖: lintegral_map, measurable_snd, snd_eq
+/-
+**ProbabilityTheory.Kernel.lintegral_snd** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityT
+heory.Kernel`。
+形式化陈述：lintegral_snd (κ : Kernel α (β × γ)) (a : α) {g : γ -> Real>=0∞} (hg : Mea
+surable g) : ∫⁻ c, g c ∂snd κ a = ∫⁻ bc : β × γ, g bc.snd ∂κ a
+参数：κ : Kernel α (β × γ)；a : α；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_eq`：snd_eq (κ : Kernel α (β × γ)) : snd κ =
+ map κ Prod.snd
+· 使用定理 `ProbabilityTheory.Kernel.lintegral_map`：∀ {α : Type u_1} {β : Type u_2} 
+{mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Measura
+bleSpace γ} {f : β → γ} (κ :…
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
 -/
-theorem lintegral_snd (κ : Kernel α (β × γ)) (a : α) {g : γ -> Real>=0∞} (hg : Measurable g) :
+theorem lintegral_snd (κ : Kernel α (β × γ)) (a : α) {g : γ → ℝ≥0∞} (hg : Measurable g) :
     ∫⁻ c, g c ∂snd κ a = ∫⁻ bc : β × γ, g bc.snd ∂κ a := by
-  rw [snd_eq]; rw [lintegral_map _ measurable_snd a hg]
-
-/--
-Instance `IsMarkovKernel.snd` / 实例 `IsMarkovKernel.snd`
-
-English:
-instance IsMarkovKernel.snd
-  signature: (κ : Kernel α (β × γ)) [IsMarkovKernel κ]
-  body: by
-  rw [Kernel.snd_eq]; exact IsMarkovKernel.map _ measurable_snd
-
-中文:
-实例 是MarkovKernel.snd
-  签名: (κ : 核 α (β × γ)) [是MarkovKernel κ]
-  定义体: by
-  rw [Kernel.snd_eq]; exact IsMarkovKernel.map _ measurable_snd
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Kernel, Kernel.snd_eq, measurable_snd, snd_eq
+  rw [snd_eq, lintegral_map _ measurable_snd a hg]
+/-
+**ProbabilityTheory.Kernel.IsMarkovKernel.snd** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsMarkovKernel κ],   ProbabilityTheory.IsMarkovKer
+nel κ.snd
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_eq`：snd_eq (κ : Kernel α (β × γ)) : snd κ =
+ map κ Prod.snd
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} {f : β → γ} (κ :…
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
 -/
 instance IsMarkovKernel.snd (κ : Kernel α (β × γ)) [IsMarkovKernel κ] : IsMarkovKernel (snd κ) := by
   rw [Kernel.snd_eq]; exact IsMarkovKernel.map _ measurable_snd
-
-/--
-Instance `IsZeroOrMarkovKernel.snd` / 实例 `IsZeroOrMarkovKernel.snd`
-
-English:
-instance IsZeroOrMarkovKernel.snd
-  signature: (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ]
-  body: by
-  rw [Kernel.snd_eq]; infer_instance
-
-中文:
-实例 是ZeroOrMarkovKernel.snd
-  签名: (κ : 核 α (β × γ)) [是ZeroOrMarkovKernel κ]
-  定义体: by
-  rw [Kernel.snd_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.snd_eq, infer_instance, snd_eq
+/-
+**ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.snd** 是 Mathlib 中的一个定理，位于命名空间 `P
+robabilityTheory.Kernel.IsZeroOrMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsZeroOrMarkovKernel κ],   ProbabilityTheory.IsZer
+oOrMarkovKernel κ.snd
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_eq`：snd_eq (κ : Kernel α (β × γ)) : snd κ =
+ map κ Prod.snd
+· 使用定理 `ProbabilityTheory.Kernel.IsZeroOrMarkovKernel.map`：∀ {α : Type u_1} {β :
+ Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {m
+γ : MeasurableSpace γ} (κ : Probability…
 -/
 instance IsZeroOrMarkovKernel.snd (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ] :
     IsZeroOrMarkovKernel (snd κ) := by
   rw [Kernel.snd_eq]; infer_instance
-
-/--
-Instance `IsFiniteKernel.snd` / 实例 `IsFiniteKernel.snd`
-
-English:
-instance IsFiniteKernel.snd
-  signature: (κ : Kernel α (β × γ)) [IsFiniteKernel κ]
-  body: by
-  rw [Kernel.snd_eq]; infer_instance
-
-中文:
-实例 是FiniteKernel.snd
-  签名: (κ : 核 α (β × γ)) [是FiniteKernel κ]
-  定义体: by
-  rw [Kernel.snd_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.snd_eq, infer_instance, snd_eq
+/-
+**ProbabilityTheory.Kernel.IsFiniteKernel.snd** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory.Kernel.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsFiniteKernel κ],   ProbabilityTheory.IsFiniteKer
+nel κ.snd
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_eq`：snd_eq (κ : Kernel α (β × γ)) : snd κ =
+ map κ Prod.snd
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} (κ : Probability…
 -/
 instance IsFiniteKernel.snd (κ : Kernel α (β × γ)) [IsFiniteKernel κ] : IsFiniteKernel (snd κ) := by
   rw [Kernel.snd_eq]; infer_instance
-
-/--
-Instance `IsSFiniteKernel.snd` / 实例 `IsSFiniteKernel.snd`
-
-English:
-instance IsSFiniteKernel.snd
-  signature: (κ : Kernel α (β × γ)) [IsSFiniteKernel κ]
-  body: by rw [Kernel.snd_eq]; infer_instance
-
-中文:
-实例 是SFiniteKernel.snd
-  签名: (κ : 核 α (β × γ)) [是SFiniteKernel κ]
-  定义体: by rw [Kernel.snd_eq]; infer_instance
-
-Depends on / 依赖: Kernel, Kernel.snd_eq, infer_instance, snd_eq
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.snd** 是 Mathlib 中的一个定理，位于命名空间 `Probab
+ilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+α (β × γ)) [ProbabilityTheory.IsSFiniteKernel κ],   ProbabilityTheory.IsSFiniteK
+ernel κ.snd
+参数：κ : ProbabilityTheory.Kernel α (β × γ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_eq`：snd_eq (κ : Kernel α (β × γ)) : snd κ =
+ map κ Prod.snd
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.map`：∀ {α : Type u_1} {β : Type
+ u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : M
+easurableSpace γ} (κ : Probability…
 -/
 instance IsSFiniteKernel.snd (κ : Kernel α (β × γ)) [IsSFiniteKernel κ] :
     IsSFiniteKernel (snd κ) := by rw [Kernel.snd_eq]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isFiniteKernel_of_isFiniteKernel_snd {κ : Kernel α (β × γ)}
     [h : IsFiniteKernel (snd κ)] :
     IsFiniteKernel κ := by
   refine ⟨(snd κ).bound, (snd κ).bound_lt_top,
-    fun a => le_trans ?_ (measure_le_bound (snd κ) a Set.univ)⟩
+    fun a ↦ le_trans ?_ (measure_le_bound (snd κ) a Set.univ)⟩
   rw [snd_apply' _ _ MeasurableSet.univ]
   simp
-
-/--
-lemma `snd_map_prod` / 引理 `snd_map_prod`
-
-English:
-lemma snd_map_prod
-  given: (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hf : Measurable f)
-  proof: by
-  by_cases hg : Measurable g
-  · ext x s hs
-    rw [snd_apply' _ _ hs]; rw [map_apply' _ (hf.prod hg)]; rw [map_apply' _ hg _ hs]
-    · simp only [Set.preimage, Set.mem_ofPred]
-    · exact measurable_snd hs
-  · have : ¬ Measurable (fun x => (f x, g x)) := by
-      contrapose hg; exact hg.snd
-    simp [map_of_not_measurable _ hg, map_of_not_measurable _ this]
-
-中文:
-引理 snd_map_prod
-  条件: (κ : 核 α β) {f : β -> γ} {g : β -> δ} (hf : 可测 f)
-  证明: by
-  by_cases hg : Measurable g
-  · ext x s hs
-    rw [snd_apply' _ _ hs]; rw [map_apply' _ (hf.prod hg)]; rw [map_apply' _ hg _ hs]
-    · simp only [Set.preimage, Set.mem_ofPred]
-    · exact measurable_snd hs
-  · have : ¬ Measurable (fun x => (f x, g x)) := by
-      contrapose hg; exact hg.snd
-    simp [map_of_not_measurable _ hg, map_of_not_measurable _ this]
-
-Depends on / 依赖: Measurable, Set.mem_ofPred, Set.preimage, contrapose, hf.prod, hg.snd, map_apply, map_of_not_measurable, measurable_snd, mem_ofPred, preimage, snd_apply
+/-
+**ProbabilityTheory.Kernel.snd_map_prod** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：snd_map_prod (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hf : Measurable f
+) : snd (map κ (fun x => (f x, g x))) = map κ g
+参数：κ : Kernel α β；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_apply'`：snd_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set γ} (hs : MeasurableSet s) : snd κ a s = κ a (Prod.snd ⁻¹' s)
+· 使用定理 `ProbabilityTheory.Kernel.map_apply'`：map_apply' (κ : Kernel α β) (hf : M
+easurable f) (a : α) {s : Set γ} (hs : MeasurableSet s) : map κ f a s = κ a (f ⁻
+¹' s)
+· 使用定理 `Measurable.prod`：Measurable.prod {f : α -> β × γ} (hf₁ : Measurable fun 
+a => (f a).1) (hf₂ : Measurable fun a => (f a).2) : Measurable f
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Measurable.snd`：Measurable.snd {f : α -> β × γ} (hf : Measurable f) : Me
+asurable fun a : α => (f a).2
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ProbabilityTheory.Kernel.map_of_not_measurable`：map_of_not_measurable (κ
+ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f)) : map κ f = 0
+· 使用引理 `ProbabilityTheory.Kernel.snd_zero`：snd_zero : snd (0 : Kernel α (β × γ))
+ = 0
 -/
-lemma snd_map_prod (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hf : Measurable f) :
-    snd (map κ (fun x => (f x, g x))) = map κ g := by
+lemma snd_map_prod (κ : Kernel α β) {f : β → γ} {g : β → δ} (hf : Measurable f) :
+    snd (map κ (fun x ↦ (f x, g x))) = map κ g := by
   by_cases hg : Measurable g
   · ext x s hs
-    rw [snd_apply' _ _ hs]; rw [map_apply' _ (hf.prod hg)]; rw [map_apply' _ hg _ hs]
+    rw [snd_apply' _ _ hs, map_apply' _ (hf.prod hg), map_apply' _ hg _ hs]
     · simp only [Set.preimage, Set.mem_ofPred]
     · exact measurable_snd hs
-  · have : ¬ Measurable (fun x => (f x, g x)) := by
+  · have : ¬ Measurable (fun x ↦ (f x, g x)) := by
       contrapose hg; exact hg.snd
     simp [map_of_not_measurable _ hg, map_of_not_measurable _ this]
-
-/--
-lemma `snd_map_prod_id` / 引理 `snd_map_prod_id`
-
-English:
-lemma snd_map_prod_id
-  given: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f)
-  proof: by
-  rw [snd_map_prod _ hf]; rw [Kernel.map_id']
-
-中文:
-引理 snd_map_prod_id
-  条件: (κ : 核 α β) {f : β -> γ} (hf : 可测 f)
-  证明: by
-  rw [snd_map_prod _ hf]; rw [Kernel.map_id']
-
-Depends on / 依赖: Kernel, Kernel.map_id, map_id, snd_map_prod
+/-
+**ProbabilityTheory.Kernel.snd_map_prod_id** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：snd_map_prod_id (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) : snd (m
+ap κ (fun a => (f a, a))) = κ
+参数：κ : Kernel α β；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.snd_map_prod`：snd_map_prod (κ : Kernel α β) {f 
+: β -> γ} {g : β -> δ} (hf : Measurable f) : snd (map κ (fun x => (f x, g x))) =
+ map κ g
+· 使用引理 `ProbabilityTheory.Kernel.map_id'`：map_id' (κ : Kernel α β) : map κ (fun 
+a => a) = κ
 -/
-lemma snd_map_prod_id (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) :
-    snd (map κ (fun a => (f a, a))) = κ := by
-  rw [snd_map_prod _ hf]; rw [Kernel.map_id']
-
-/--
-lemma `snd_prodMkLeft` / 引理 `snd_prodMkLeft`
-
-English:
-lemma snd_prodMkLeft
-  given: (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ))
-  proof: rfl
-
-中文:
-引理 snd_prodMkLeft
-  条件: (δ : 类型) [可测空间 δ] (κ : 核 α (β × γ))
-  证明: rfl
+lemma snd_map_prod_id (κ : Kernel α β) {f : β → γ} (hf : Measurable f) :
+    snd (map κ (fun a ↦ (f a, a))) = κ := by
+  rw [snd_map_prod _ hf, Kernel.map_id']
+/-
+**ProbabilityTheory.Kernel.snd_prodMkLeft** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：snd_prodMkLeft (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ)) : sn
+d (prodMkLeft δ κ) = prodMkLeft δ (snd κ)
+参数：δ : Type*；κ : Kernel α (β × γ)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma snd_prodMkLeft (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ)) :
     snd (prodMkLeft δ κ) = prodMkLeft δ (snd κ) := rfl
-
-/--
-lemma `snd_prodMkRight` / 引理 `snd_prodMkRight`
-
-English:
-lemma snd_prodMkRight
-  given: (κ : Kernel α (β × γ)) (δ : Type*) [MeasurableSpace δ]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 snd_prodMkRight
-  条件: (κ : 核 α (β × γ)) (δ : 类型) [可测空间 δ]
-  证明: rfl
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.snd_prodMkRight** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：snd_prodMkRight (κ : Kernel α (β × γ)) (δ : Type*) [MeasurableSpace δ] : s
+nd (prodMkRight δ κ) = prodMkRight δ (snd κ)
+参数：κ : Kernel α (β × γ)；δ : Type*。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma snd_prodMkRight (κ : Kernel α (β × γ)) (δ : Type*) [MeasurableSpace δ] :
     snd (prodMkRight δ κ) = prodMkRight δ (snd κ) := rfl
 
 @[simp]
-/--
-lemma `fst_swapRight` / 引理 `fst_swapRight`
-
-English:
-lemma fst_swapRight
-  given: (κ : Kernel α (β × γ))
-  statement: fst (swapRight κ) = snd κ
-  proof: by
-  ext a s hs
-  rw [fst_apply' _ _ hs]; rw [swapRight_apply']; rw [snd_apply' _ _ hs]
-  · rfl
-  · exact measurable_fst hs
-
-@[simp]
-
-中文:
-引理 fst_swapRight
-  条件: (κ : 核 α (β × γ))
-  结论: fst (swapRight κ) = snd κ
-  证明: by
-  ext a s hs
-  rw [fst_apply' _ _ hs]; rw [swapRight_apply']; rw [snd_apply' _ _ hs]
-  · rfl
-  · exact measurable_fst hs
-
-@[simp]
-
-Depends on / 依赖: fst_apply, measurable_fst, snd_apply, swapRight_apply
+/-
+**ProbabilityTheory.Kernel.fst_swapRight** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory.Kernel`。
+形式化陈述：fst_swapRight (κ : Kernel α (β × γ)) : fst (swapRight κ) = snd κ
+参数：κ : Kernel α (β × γ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用定理 `ProbabilityTheory.Kernel.swapRight_apply'`：swapRight_apply' (κ : Kernel 
+α (β × γ)) (a : α) {s : Set (γ × β)} (hs : MeasurableSet s) : swapRight κ a s = 
+κ a {p | p.swap in s}
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用定理 `ProbabilityTheory.Kernel.snd_apply'`：snd_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set γ} (hs : MeasurableSet s) : snd κ a s = κ a (Prod.snd ⁻¹' s)
 -/
 lemma fst_swapRight (κ : Kernel α (β × γ)) : fst (swapRight κ) = snd κ := by
   ext a s hs
-  rw [fst_apply' _ _ hs]; rw [swapRight_apply']; rw [snd_apply' _ _ hs]
+  rw [fst_apply' _ _ hs, swapRight_apply', snd_apply' _ _ hs]
   · rfl
   · exact measurable_fst hs
 
 @[simp]
-/--
-lemma `snd_swapRight` / 引理 `snd_swapRight`
-
-English:
-lemma snd_swapRight
-  given: (κ : Kernel α (β × γ))
-  statement: snd (swapRight κ) = fst κ
-  proof: by
-  ext a s hs
-  rw [snd_apply' _ _ hs]; rw [swapRight_apply']; rw [fst_apply' _ _ hs]
-  · rfl
-  · exact measurable_snd hs
-
-中文:
-引理 snd_swapRight
-  条件: (κ : 核 α (β × γ))
-  结论: snd (swapRight κ) = fst κ
-  证明: by
-  ext a s hs
-  rw [snd_apply' _ _ hs]; rw [swapRight_apply']; rw [fst_apply' _ _ hs]
-  · rfl
-  · exact measurable_snd hs
-
-Depends on / 依赖: fst_apply, measurable_snd, snd_apply, swapRight_apply
+/-
+**ProbabilityTheory.Kernel.snd_swapRight** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory.Kernel`。
+形式化陈述：snd_swapRight (κ : Kernel α (β × γ)) : snd (swapRight κ) = fst κ
+参数：κ : Kernel α (β × γ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.snd_apply'`：snd_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set γ} (hs : MeasurableSet s) : snd κ a s = κ a (Prod.snd ⁻¹' s)
+· 使用定理 `ProbabilityTheory.Kernel.swapRight_apply'`：swapRight_apply' (κ : Kernel 
+α (β × γ)) (a : α) {s : Set (γ × β)} (hs : MeasurableSet s) : swapRight κ a s = 
+κ a {p | p.swap in s}
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
 -/
 lemma snd_swapRight (κ : Kernel α (β × γ)) : snd (swapRight κ) = fst κ := by
   ext a s hs
-  rw [snd_apply' _ _ hs]; rw [swapRight_apply']; rw [fst_apply' _ _ hs]
+  rw [snd_apply' _ _ hs, swapRight_apply', fst_apply' _ _ hs]
   · rfl
   · exact measurable_snd hs
 
@@ -2495,381 +2492,377 @@ section sectLsectR
 
 variable {γ δ : Type*} {mγ : MeasurableSpace γ} {mδ : MeasurableSpace δ}
 
-/--
-Definition of `sectL` / `sectL` 的定义
+/-- Define a `Kernel α γ` from a `Kernel (α × β) γ` by taking the comap of `fun a ↦ (a, b)` for
+a given `b : β`. -/
+/-
+**ProbabilityTheory.Kernel.sectL** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Ke
+rnel`。
+形式化陈述：sectL (κ : Kernel (α × β) γ) (b : β) : Kernel α γ
+参数：κ : Kernel (α × β) γ；b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectL
-  signature: (κ : Kernel (α × β) γ) (b : β)
-  body: comap κ (fun a => (a, b)) (measurable_id.prodMk measurable_const)
-
-中文:
-定义 sectL
-  签名: (κ : 核 (α × β) γ) (b : β)
-  定义体: comap κ (fun a => (a, b)) (measurable_id.prodMk measurable_const)
-
-Depends on / 依赖: measurable_const, measurable_id, measurable_id.prodMk, prodMk
+--- 原说明 ---
+Define a `Kernel α γ` from a `Kernel (α × β) γ` by taking the comap of `fun a ↦ 
+(a, b)` for
+a given `b : β`.
 -/
 noncomputable def sectL (κ : Kernel (α × β) γ) (b : β) : Kernel α γ :=
-  comap κ (fun a => (a, b)) (measurable_id.prodMk measurable_const)
-
-/--
-theorem `sectL_apply` / 定理 `sectL_apply`
-
-English:
-theorem sectL_apply
-  given: (κ : Kernel (α × β) γ) (b : β) (a : α)
-  statement: sectL κ b a = κ (a, b)
-  proof: rfl
-
-中文:
-定理 sectL_apply
-  条件: (κ : 核 (α × β) γ) (b : β) (a : α)
-  结论: sectL κ b a = κ (a, b)
-  证明: rfl
+  comap κ (fun a ↦ (a, b)) (measurable_id.prodMk measurable_const)
+/-
+**ProbabilityTheory.Kernel.sectL_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+(α × β) γ) (b : β) (a : α), (κ.sectL b) a = κ (a, b)
+参数：κ : ProbabilityTheory.Kernel (α × β) γ；b : β；a : α；κ.sectL b；a, b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sectL_apply (κ : Kernel (α × β) γ) (b : β) (a : α) : sectL κ b a = κ (a, b) := rfl
-
-/--
-lemma `sectL_zero` / 引理 `sectL_zero`
-
-English:
-lemma sectL_zero
-  given: (b : β)
-  statement: sectL (0 : Kernel (α × β) γ) b = 0
-  proof: by simp [sectL]
-
-中文:
-引理 sectL_zero
-  条件: (b : β)
-  结论: sectL (0 : 核 (α × β) γ) b = 0
-  证明: by simp [sectL]
+/-
+**ProbabilityTheory.Kernel.sectL_zero** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (b : β), ProbabilityTheory.Ker
+nel.sectL 0 b = 0
+参数：b : β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.comap_zero`：comap_zero (hg : Measurable g) : Ke
+rnel.comap (0 : Kernel α β) g hg = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma sectL_zero (b : β) : sectL (0 : Kernel (α × β) γ) b = 0 := by simp [sectL]
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (b : β) [IsMarkovKernel κ] : IsMarkovKernel (sectL κ b) := by
   rw [sectL]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (b : β) [IsZeroOrMarkovKernel κ] :
     IsZeroOrMarkovKernel (sectL κ b) := by
   rw [sectL]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (b : β) [IsFiniteKernel κ] : IsFiniteKernel (sectL κ b) := by
   rw [sectL]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (b : β) [IsSFiniteKernel κ] : IsSFiniteKernel (sectL κ b) := by
   rw [sectL]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (a : α) (b : β) [NeZero (κ (a, b))] : NeZero ((sectL κ b) a) := by
   rw [sectL_apply]; infer_instance
-
-instance (priority := 100) {κ : Kernel (α × β) γ} [forall b, IsMarkovKernel (sectL κ b)] :
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 100) {κ : Kernel (α × β) γ} [∀ b, IsMarkovKernel (sectL κ b)] :
     IsMarkovKernel κ := by
-  refine ⟨fun _ => ⟨?_⟩⟩
-  rw [← sectL_apply]; rw [measure_univ]
+  refine ⟨fun _ ↦ ⟨?_⟩⟩
+  rw [← sectL_apply, measure_univ]
 
 --I'm not sure this lemma is actually useful
-/--
-lemma `comap_sectL` / 引理 `comap_sectL`
-
-English:
-lemma comap_sectL
-  given: (κ : Kernel (α × β) γ) (b : β) {f : δ -> α} (hf : Measurable f)
-  proof: by
-  ext d s
-  rw [comap_apply]; rw [sectL_apply]; rw [comap_apply]
-
-@[simp]
-
-中文:
-引理 comap_sectL
-  条件: (κ : 核 (α × β) γ) (b : β) {f : δ -> α} (hf : 可测 f)
-  证明: by
-  ext d s
-  rw [comap_apply]; rw [sectL_apply]; rw [comap_apply]
-
-@[simp]
-
-Depends on / 依赖: comap_apply, sectL_apply
+/-
+**ProbabilityTheory.Kernel.comap_sectL** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：comap_sectL (κ : Kernel (α × β) γ) (b : β) {f : δ -> α} (hf : Measurable f
+) : comap (sectL κ b) f hf = comap κ (fun d => (f d, b)) (hf.prodMk measurable_c
+onst)
+参数：κ : Kernel (α × β) γ；b : β；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.comap_apply`：comap_apply (κ : Kernel α β) (hg :
+ Measurable g) (c : γ) : comap κ g hg c = κ (g c)
+· 使用定理 `ProbabilityTheory.Kernel.sectL_apply`：∀ {α : Type u_1} {β : Type u_2} {m
+α : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Measurabl
+eSpace γ} (κ : Probability…
 -/
-lemma comap_sectL (κ : Kernel (α × β) γ) (b : β) {f : δ -> α} (hf : Measurable f) :
-    comap (sectL κ b) f hf = comap κ (fun d => (f d, b)) (hf.prodMk measurable_const) := by
+lemma comap_sectL (κ : Kernel (α × β) γ) (b : β) {f : δ → α} (hf : Measurable f) :
+    comap (sectL κ b) f hf = comap κ (fun d ↦ (f d, b)) (hf.prodMk measurable_const) := by
   ext d s
-  rw [comap_apply]; rw [sectL_apply]; rw [comap_apply]
+  rw [comap_apply, sectL_apply, comap_apply]
 
 @[simp]
-/--
-lemma `sectL_prodMkLeft` / 引理 `sectL_prodMkLeft`
-
-English:
-lemma sectL_prodMkLeft
-  given: (α : Type*) [MeasurableSpace α] (κ : Kernel β γ) (a : α) {b : β}
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 sectL_prodMkLeft
-  条件: (α : 类型) [可测空间 α] (κ : 核 β γ) (a : α) {b : β}
-  证明: rfl
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.sectL_prodMkLeft** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：sectL_prodMkLeft (α : Type*) [MeasurableSpace α] (κ : Kernel β γ) (a : α) 
+{b : β} : sectL (prodMkLeft α κ) b a = κ b
+参数：α : Type*；κ : Kernel β γ；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sectL_prodMkLeft (α : Type*) [MeasurableSpace α] (κ : Kernel β γ) (a : α) {b : β} :
     sectL (prodMkLeft α κ) b a = κ b := rfl
 
 @[simp]
-/--
-lemma `sectL_prodMkRight` / 引理 `sectL_prodMkRight`
-
-English:
-lemma sectL_prodMkRight
-  given: (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β)
-  proof: rfl
-
-中文:
-引理 sectL_prodMkRight
-  条件: (β : 类型) [可测空间 β] (κ : 核 α γ) (b : β)
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.sectL_prodMkRight** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：sectL_prodMkRight (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β)
+ : sectL (prodMkRight β κ) b = κ
+参数：β : Type*；κ : Kernel α γ；b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sectL_prodMkRight (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β) :
     sectL (prodMkRight β κ) b = κ := rfl
 
-/--
-Definition of `sectR` / `sectR` 的定义
+/-- Define a `Kernel β γ` from a `Kernel (α × β) γ` by taking the comap of `fun b ↦ (a, b)` for
+a given `a : α`. -/
+/-
+**ProbabilityTheory.Kernel.sectR** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Ke
+rnel`。
+形式化陈述：sectR (κ : Kernel (α × β) γ) (a : α) : Kernel β γ
+参数：κ : Kernel (α × β) γ；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectR
-  signature: (κ : Kernel (α × β) γ) (a : α)
-  body: comap κ (fun b => (a, b)) (measurable_const.prodMk measurable_id)
-
-中文:
-定义 sectR
-  签名: (κ : 核 (α × β) γ) (a : α)
-  定义体: comap κ (fun b => (a, b)) (measurable_const.prodMk measurable_id)
-
-Depends on / 依赖: measurable_const, measurable_const.prodMk, measurable_id, prodMk
+--- 原说明 ---
+Define a `Kernel β γ` from a `Kernel (α × β) γ` by taking the comap of `fun b ↦ 
+(a, b)` for
+a given `a : α`.
 -/
 noncomputable def sectR (κ : Kernel (α × β) γ) (a : α) : Kernel β γ :=
-  comap κ (fun b => (a, b)) (measurable_const.prodMk measurable_id)
-
-/--
-theorem `sectR_apply` / 定理 `sectR_apply`
-
-English:
-theorem sectR_apply
-  given: (κ : Kernel (α × β) γ) (b : β) (a : α)
-  statement: sectR κ a b = κ (a, b)
-  proof: rfl
-
-中文:
-定理 sectR_apply
-  条件: (κ : 核 (α × β) γ) (b : β) (a : α)
-  结论: sectR κ a b = κ (a, b)
-  证明: rfl
+  comap κ (fun b ↦ (a, b)) (measurable_const.prodMk measurable_id)
+/-
+**ProbabilityTheory.Kernel.sectR_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+(α × β) γ) (b : β) (a : α), (κ.sectR a) b = κ (a, b)
+参数：κ : ProbabilityTheory.Kernel (α × β) γ；b : β；a : α；κ.sectR a；a, b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem sectR_apply (κ : Kernel (α × β) γ) (b : β) (a : α) : sectR κ a b = κ (a, b) := rfl
-
-/--
-lemma `sectR_zero` / 引理 `sectR_zero`
-
-English:
-lemma sectR_zero
-  given: (a : α)
-  statement: sectR (0 : Kernel (α × β) γ) a = 0
-  proof: by simp [sectR]
-
-中文:
-引理 sectR_zero
-  条件: (a : α)
-  结论: sectR (0 : 核 (α × β) γ) a = 0
-  证明: by simp [sectR]
+/-
+**ProbabilityTheory.Kernel.sectR_zero** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (a : α), ProbabilityTheory.Ker
+nel.sectR 0 a = 0
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.comap_zero`：comap_zero (hg : Measurable g) : Ke
+rnel.comap (0 : Kernel α β) g hg = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma sectR_zero (a : α) : sectR (0 : Kernel (α × β) γ) a = 0 := by simp [sectR]
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (a : α) [IsMarkovKernel κ] : IsMarkovKernel (sectR κ a) := by
   rw [sectR]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (a : α) [IsZeroOrMarkovKernel κ] :
     IsZeroOrMarkovKernel (sectR κ a) := by
   rw [sectR]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (a : α) [IsFiniteKernel κ] : IsFiniteKernel (sectR κ a) := by
   rw [sectR]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (a : α) [IsSFiniteKernel κ] : IsSFiniteKernel (sectR κ a) := by
   rw [sectR]; infer_instance
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (κ : Kernel (α × β) γ) (a : α) (b : β) [NeZero (κ (a, b))] : NeZero ((sectR κ a) b) := by
   rw [sectR_apply]; infer_instance
-
-instance (priority := 100) {κ : Kernel (α × β) γ} [forall b, IsMarkovKernel (sectR κ b)] :
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 100) {κ : Kernel (α × β) γ} [∀ b, IsMarkovKernel (sectR κ b)] :
     IsMarkovKernel κ := by
-  refine ⟨fun _ => ⟨?_⟩⟩
-  rw [← sectR_apply]; rw [measure_univ]
+  refine ⟨fun _ ↦ ⟨?_⟩⟩
+  rw [← sectR_apply, measure_univ]
 
 --I'm not sure this lemma is actually useful
-/--
-lemma `comap_sectR` / 引理 `comap_sectR`
-
-English:
-lemma comap_sectR
-  given: (κ : Kernel (α × β) γ) (a : α) {f : δ -> β} (hf : Measurable f)
-  proof: by
-  ext d s
-  rw [comap_apply]; rw [sectR_apply]; rw [comap_apply]
-
-@[simp]
-
-中文:
-引理 comap_sectR
-  条件: (κ : 核 (α × β) γ) (a : α) {f : δ -> β} (hf : 可测 f)
-  证明: by
-  ext d s
-  rw [comap_apply]; rw [sectR_apply]; rw [comap_apply]
-
-@[simp]
-
-Depends on / 依赖: comap_apply, sectR_apply
+/-
+**ProbabilityTheory.Kernel.comap_sectR** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：comap_sectR (κ : Kernel (α × β) γ) (a : α) {f : δ -> β} (hf : Measurable f
+) : comap (sectR κ a) f hf = comap κ (fun d => (a, f d)) (measurable_const.prodM
+k hf)
+参数：κ : Kernel (α × β) γ；a : α；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.comap_apply`：comap_apply (κ : Kernel α β) (hg :
+ Measurable g) (c : γ) : comap κ g hg c = κ (g c)
+· 使用定理 `ProbabilityTheory.Kernel.sectR_apply`：∀ {α : Type u_1} {β : Type u_2} {m
+α : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Measurabl
+eSpace γ} (κ : Probability…
 -/
-lemma comap_sectR (κ : Kernel (α × β) γ) (a : α) {f : δ -> β} (hf : Measurable f) :
-    comap (sectR κ a) f hf = comap κ (fun d => (a, f d)) (measurable_const.prodMk hf) := by
+lemma comap_sectR (κ : Kernel (α × β) γ) (a : α) {f : δ → β} (hf : Measurable f) :
+    comap (sectR κ a) f hf = comap κ (fun d ↦ (a, f d)) (measurable_const.prodMk hf) := by
   ext d s
-  rw [comap_apply]; rw [sectR_apply]; rw [comap_apply]
+  rw [comap_apply, sectR_apply, comap_apply]
 
 @[simp]
-/--
-lemma `sectR_prodMkLeft` / 引理 `sectR_prodMkLeft`
-
-English:
-lemma sectR_prodMkLeft
-  given: (α : Type*) [MeasurableSpace α] (κ : Kernel β γ) (a : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 sectR_prodMkLeft
-  条件: (α : 类型) [可测空间 α] (κ : 核 β γ) (a : α)
-  证明: rfl
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.sectR_prodMkLeft** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：sectR_prodMkLeft (α : Type*) [MeasurableSpace α] (κ : Kernel β γ) (a : α) 
+: sectR (prodMkLeft α κ) a = κ
+参数：α : Type*；κ : Kernel β γ；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sectR_prodMkLeft (α : Type*) [MeasurableSpace α] (κ : Kernel β γ) (a : α) :
     sectR (prodMkLeft α κ) a = κ := rfl
 
 @[simp]
-/--
-lemma `sectR_prodMkRight` / 引理 `sectR_prodMkRight`
-
-English:
-lemma sectR_prodMkRight
-  given: (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β) {a : α}
-  proof: rfl
-
-中文:
-引理 sectR_prodMkRight
-  条件: (β : 类型) [可测空间 β] (κ : 核 α γ) (b : β) {a : α}
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.sectR_prodMkRight** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：sectR_prodMkRight (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β)
+ {a : α} : sectR (prodMkRight β κ) a b = κ a
+参数：β : Type*；κ : Kernel α γ；b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sectR_prodMkRight (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β) {a : α} :
     sectR (prodMkRight β κ) a b = κ a := rfl
-
-/--
-lemma `sectL_swapRight` / 引理 `sectL_swapRight`
-
-English:
-lemma sectL_swapRight
-  given: (κ : Kernel (α × β) γ)
-  statement: sectL (swapLeft κ) = sectR κ
-  proof: rfl
-
-中文:
-引理 sectL_swapRight
-  条件: (κ : 核 (α × β) γ)
-  结论: sectL (swapLeft κ) = sectR κ
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.sectL_swapRight** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+(α × β) γ), κ.swapLeft.sectL = κ.sectR
+参数：κ : ProbabilityTheory.Kernel (α × β) γ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma sectL_swapRight (κ : Kernel (α × β) γ) : sectL (swapLeft κ) = sectR κ := rfl
-
-/--
-lemma `sectR_swapRight` / 引理 `sectR_swapRight`
-
-English:
-lemma sectR_swapRight
-  given: (κ : Kernel (α × β) γ)
-  statement: sectR (swapLeft κ) = sectL κ
-  proof: rfl
-
-中文:
-引理 sectR_swapRight
-  条件: (κ : 核 (α × β) γ)
-  结论: sectR (swapLeft κ) = sectL κ
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.sectR_swapRight** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {γ : Type u_4}   {mγ : MeasurableSpace γ} (κ : ProbabilityTheory.Kernel 
+(α × β) γ), κ.swapLeft.sectR = κ.sectL
+参数：κ : ProbabilityTheory.Kernel (α × β) γ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma sectR_swapRight (κ : Kernel (α × β) γ) : sectR (swapLeft κ) = sectL κ := rfl
 
 end sectLsectR
 
-/--
-lemma `isSFiniteKernel_prodMkLeft_iff` / 引理 `isSFiniteKernel_prodMkLeft_iff`
-
-English:
-lemma isSFiniteKernel_prodMkLeft_iff
-  given: [Nonempty γ] {κ : Kernel α β}
-  proof: by
-  inhabit γ
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← sectR_prodMkLeft γ κ default]
-  infer_instance
-
-中文:
-引理 isSFiniteKernel_prodMkLeft_iff
-  条件: [非空 γ] {κ : 核 α β}
-  证明: by
-  inhabit γ
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← sectR_prodMkLeft γ κ default]
-  infer_instance
-
-Depends on / 依赖: infer_instance, inhabit, sectR_prodMkLeft
+/-
+**ProbabilityTheory.Kernel.isSFiniteKernel_prodMkLeft_iff** 是 Mathlib 中的一个引理，位于命
+名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：isSFiniteKernel_prodMkLeft_iff [Nonempty γ] {κ : Kernel α β} : IsSFiniteKe
+rnel (prodMkLeft γ κ) ↔ IsSFiniteKernel κ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ProbabilityTheory.Kernel.sectR_prodMkLeft`：sectR_prodMkLeft (α : Type*) 
+[MeasurableSpace α] (κ : Kernel β γ) (a : α) : sectR (prodMkLeft α κ) a = κ
+· 使用定理 `ProbabilityTheory.Kernel.instIsSFiniteKernelSectROfProd`：∀ {α : Type u_1
+} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4
+}   {mγ : MeasurableSpace γ} (κ : Probability…
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.prodMkLeft`：∀ {α : Type u_1} {β
+ : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   
+{mγ : MeasurableSpace γ} (κ : Probability…
 -/
 lemma isSFiniteKernel_prodMkLeft_iff [Nonempty γ] {κ : Kernel α β} :
     IsSFiniteKernel (prodMkLeft γ κ) ↔ IsSFiniteKernel κ := by
   inhabit γ
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
+  refine ⟨fun h ↦ ?_, fun _ ↦ inferInstance⟩
   rw [← sectR_prodMkLeft γ κ default]
   infer_instance
-
-/--
-lemma `isSFiniteKernel_prodMkRight_iff` / 引理 `isSFiniteKernel_prodMkRight_iff`
-
-English:
-lemma isSFiniteKernel_prodMkRight_iff
-  given: [Nonempty γ] {κ : Kernel α β}
-  proof: by
-  inhabit γ
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← sectL_prodMkRight γ κ default]
-  infer_instance
-
-中文:
-引理 isSFiniteKernel_prodMkRight_iff
-  条件: [非空 γ] {κ : 核 α β}
-  证明: by
-  inhabit γ
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← sectL_prodMkRight γ κ default]
-  infer_instance
-
-Depends on / 依赖: infer_instance, inhabit, sectL_prodMkRight
+/-
+**ProbabilityTheory.Kernel.isSFiniteKernel_prodMkRight_iff** 是 Mathlib 中的一个引理，位于
+命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：isSFiniteKernel_prodMkRight_iff [Nonempty γ] {κ : Kernel α β} : IsSFiniteK
+ernel (prodMkRight γ κ) ↔ IsSFiniteKernel κ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ProbabilityTheory.Kernel.sectL_prodMkRight`：sectL_prodMkRight (β : Type*
+) [MeasurableSpace β] (κ : Kernel α γ) (b : β) : sectL (prodMkRight β κ) b = κ
+· 使用定理 `ProbabilityTheory.Kernel.instIsSFiniteKernelSectLOfProd`：∀ {α : Type u_1
+} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4
+}   {mγ : MeasurableSpace γ} (κ : Probability…
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.prodMkRight`：∀ {α : Type u_1} {
+β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}  
+ {mγ : MeasurableSpace γ} (κ : Probability…
 -/
 lemma isSFiniteKernel_prodMkRight_iff [Nonempty γ] {κ : Kernel α β} :
     IsSFiniteKernel (prodMkRight γ κ) ↔ IsSFiniteKernel κ := by
   inhabit γ
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
+  refine ⟨fun h ↦ ?_, fun _ ↦ inferInstance⟩
   rw [← sectL_prodMkRight γ κ default]
   infer_instance
 
 end Kernel
 end ProbabilityTheory
+

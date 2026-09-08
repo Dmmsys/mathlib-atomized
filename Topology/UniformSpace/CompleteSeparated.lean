@@ -22,28 +22,40 @@ open Topology Filter
 
 variable {α β : Type*}
 
-/--
-theorem `IsComplete.isClosed` / 定理 `IsComplete.isClosed`
+/-- In a separated space, a complete set is closed. -/
+/-
+**IsComplete.isClosed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsComplete.isClosed [UniformSpace α] [T0Space α] {s : Set α} (h : IsComple
+te s) : IsClosed s
+参数：h : IsComplete s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isClosed_iff_clusterPt`：isClosed_iff_clusterPt : IsClosed s ↔ forall a, 
+ClusterPt a (𝓟 s) -> a in s
+· 使用定理 `Cauchy.mono'`：Cauchy.mono' {f g : Filter α} (h_c : Cauchy f) (_ : NeBot 
+g) (h_le : g <= f) : Cauchy g
+· 使用定理 `cauchy_nhds`：cauchy_nhds {a : α} : Cauchy (𝓝 a)
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tendsto_nhds_unique'`：tendsto_nhds_unique' [T2Space X] {f : Y -> X} {l :
+ Filter Y} {a b : X} (_ : NeBot l) (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝
+ b)) : a =…
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
 
-English:
-theorem IsComplete.isClosed
-  given: [UniformSpace α] [T0Space α] {s : Set α} (h : IsComplete s)
-  proof: isClosed_iff_clusterPt.2 fun a ha => by
-    let f := 𝓝[s] a
-    have : Cauchy f := cauchy_nhds.mono' ha inf_le_left
-    rcases h f this inf_le_right with ⟨y, ys, fy⟩
-    rwa [(tendsto_nhds_unique' ha inf_le_left fy : a = y)]
-
-中文:
-定理 是完备.isClosed
-  条件: [一致空间 α] [T0空间 α] {s : 集合 α} (h : 是完备 s)
-  证明: isClosed_iff_clusterPt.2 fun a ha => by
-    let f := 𝓝[s] a
-    have : Cauchy f := cauchy_nhds.mono' ha inf_le_left
-    rcases h f this inf_le_right with ⟨y, ys, fy⟩
-    rwa [(tendsto_nhds_unique' ha inf_le_left fy : a = y)]
-
-Depends on / 依赖: Cauchy, cauchy_nhds, cauchy_nhds.mono, inf_le_left, inf_le_right, isClosed_iff_clusterPt, tendsto_nhds_unique
+--- 原说明 ---
+In a separated space, a complete set is closed.
 -/
 theorem IsComplete.isClosed [UniformSpace α] [T0Space α] {s : Set α} (h : IsComplete s) :
     IsClosed s :=
@@ -52,24 +64,26 @@ theorem IsComplete.isClosed [UniformSpace α] [T0Space α] {s : Set α} (h : IsC
     have : Cauchy f := cauchy_nhds.mono' ha inf_le_left
     rcases h f this inf_le_right with ⟨y, ys, fy⟩
     rwa [(tendsto_nhds_unique' ha inf_le_left fy : a = y)]
-
-/--
-theorem `IsUniformEmbedding.isClosedEmbedding` / 定理 `IsUniformEmbedding.isClosedEmbedding`
-
-English:
-theorem IsUniformEmbedding.isClosedEmbedding
-  statement: [UniformSpace α] [UniformSpace β] [CompleteSpace α]
-  proof: ⟨hf.isEmbedding, hf.isUniformInducing.isComplete_range.isClosed⟩
-
-中文:
-定理 是一致嵌入.isClosedEmbedding
-  结论: [一致空间 α] [一致空间 β] [完备空间 α]
-  证明: ⟨hf.isEmbedding, hf.isUniformInducing.isComplete_range.isClosed⟩
-
-Depends on / 依赖: hf.isEmbedding, hf.isUniformInducing.isComplete_range.isClosed, isClosed, isComplete_range, isEmbedding, isUniformInducing
+/-
+**IsUniformEmbedding.isClosedEmbedding** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUniformEmbedding.isClosedEmbedding [UniformSpace α] [UniformSpace β] [Co
+mpleteSpace α] [T0Space β] {f : α -> β} (hf : IsUniformEmbedding f) : IsClosedEm
+bedding f
+参数：hf : IsUniformEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.isEmbedding`：∀ {α : Type u} {β : Type v} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Topo
+logy.IsEmbedding f
+· 使用定理 `IsComplete.isClosed`：IsComplete.isClosed [UniformSpace α] [T0Space α] {s
+ : Set α} (h : IsComplete s) : IsClosed s
+· 使用引理 `IsUniformInducing.isComplete_range`：IsUniformInducing.isComplete_range [
+CompleteSpace α] (hf : IsUniformInducing f) : IsComplete (range f)
+· 使用引理 `IsUniformEmbedding.isUniformInducing`：IsUniformEmbedding.isUniformInduci
+ng {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformInducing f
 -/
 theorem IsUniformEmbedding.isClosedEmbedding [UniformSpace α] [UniformSpace β] [CompleteSpace α]
-    [T0Space β] {f : α -> β} (hf : IsUniformEmbedding f) :
+    [T0Space β] {f : α → β} (hf : IsUniformEmbedding f) :
     IsClosedEmbedding f :=
   ⟨hf.isEmbedding, hf.isUniformInducing.isComplete_range.isClosed⟩
 
@@ -80,23 +94,28 @@ open Filter
 variable [TopologicalSpace α] {β : Type*} [TopologicalSpace β]
 variable {γ : Type*} [UniformSpace γ] [CompleteSpace γ] [T0Space γ]
 
-/--
-theorem `continuous_extend_of_cauchy` / 定理 `continuous_extend_of_cauchy`
-
-English:
-theorem continuous_extend_of_cauchy
-  statement: {e : α -> β} {f : α -> γ} (de : IsDenseInducing e)
-  proof: de.continuous_extend fun b => CompleteSpace.complete (h b)
-
-中文:
-定理 continuous_extend_of_cauchy
-  结论: {e : α -> β} {f : α -> γ} (de : 是DenseInducing e)
-  证明: de.continuous_extend fun b => CompleteSpace.complete (h b)
-
-Depends on / 依赖: CompleteSpace, CompleteSpace.complete, complete, continuous_extend, de.continuous_extend
+/-
+**IsDenseInducing.continuous_extend_of_cauchy** 是 Mathlib 中的一个定理，位于命名空间 `IsDense
+Inducing`。
+形式化陈述：continuous_extend_of_cauchy {e : α -> β} {f : α -> γ} (de : IsDenseInducin
+g e) (h : forall b : β, Cauchy (map f (comap e <| 𝓝 b))) : Continuous (de.extend
+ f)
+参数：de : IsDenseInducing e；h : forall b : β, Cauchy (map f (comap e <| 𝓝 b))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsDenseInducing.continuous_extend`：continuous_extend [T3Space γ] {f : α 
+-> γ} (di : IsDenseInducing i) (hf : forall b, exists c, Tendsto f (comap i (𝓝 b
+)) (𝓝 c)) : Continuous …
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `CompleteSpace.complete`：∀ {α : Type u} {inst : UniformSpace α} [self : C
+ompleteSpace α] {f : Filter α}, Cauchy f → ∃ x, f ≤ nhds x
 -/
-theorem continuous_extend_of_cauchy {e : α -> β} {f : α -> γ} (de : IsDenseInducing e)
-    (h : forall b : β, Cauchy (map f (comap e <| 𝓝 b))) : Continuous (de.extend f) :=
+theorem continuous_extend_of_cauchy {e : α → β} {f : α → γ} (de : IsDenseInducing e)
+    (h : ∀ b : β, Cauchy (map f (comap e <| 𝓝 b))) : Continuous (de.extend f) :=
   de.continuous_extend fun b => CompleteSpace.complete (h b)
 
 end IsDenseInducing
+

@@ -53,250 +53,167 @@ variable {ι σ A : Type*}
 section HomogeneousDef
 
 variable [Semiring A]
-variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι -> σ)
+variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ)
 variable [DecidableEq ι] [AddMonoid ι] [GradedRing 𝒜]
 variable (I : Ideal A)
 
-/--
-Definition of `Ideal.IsHomogeneous` / `Ideal.IsHomogeneous` 的定义
+/-- An `I : Ideal A` is homogeneous if for every `r ∈ I`, all homogeneous components
+  of `r` are in `I`. -/
+/-
+**Ideal.IsHomogeneous** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Ideal.IsHomogeneous : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Ideal.IsHomogeneous
-  signature: : Prop
-  body: Submodule.IsHomogeneous I 𝒜
-
-中文:
-缩写 理想.IsHomogeneous
-  签名: : 命题
-  定义体: Submodule.IsHomogeneous I 𝒜
-
-Depends on / 依赖: IsHomogeneous, Submodule, Submodule.IsHomogeneous
+--- 原说明 ---
+An `I : Ideal A` is homogeneous if for every `r ∈ I`, all homogeneous components
+  of `r` are in `I`.
 -/
 abbrev Ideal.IsHomogeneous : Prop := Submodule.IsHomogeneous I 𝒜
-
-/--
-theorem `Ideal.IsHomogeneous.mem_iff` / 定理 `Ideal.IsHomogeneous.mem_iff`
-
-English:
-theorem Ideal.IsHomogeneous.mem_iff
-  given: {I} (hI : Ideal.IsHomogeneous 𝒜 I) {x}
-  proof: AddSubmonoidClass.IsHomogeneous.mem_iff 𝒜 _ hI
-
-中文:
-定理 理想.IsHomogeneous.mem_iff
-  条件: {I} (hI : 理想.IsHomogeneous 𝒜 I) {x}
-  证明: AddSubmonoidClass.IsHomogeneous.mem_iff 𝒜 _ hI
-
-Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.IsHomogeneous.mem_iff, IsHomogeneous, mem_iff
+/-
+**Ideal.IsHomogeneous.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.IsHomogeneous.mem_iff {I} (hI : Ideal.IsHomogeneous 𝒜 I) {x} : x in 
+I ↔ forall i, (decompose 𝒜 x i : A) in I
+参数：hI : Ideal.IsHomogeneous 𝒜 I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.AddSubmonoidClass.IsHomogeneous.mem_iff`：∀ {ι : Type u_1} {M :
+ Type u_3} {σ : Type u_4} [inst : DecidableEq ι] [inst_1 : AddCommMonoid M] [ins
+t_2 : SetLike σ M]   [inst_3 : AddSubmo…
 -/
 theorem Ideal.IsHomogeneous.mem_iff {I} (hI : Ideal.IsHomogeneous 𝒜 I) {x} :
-    x in I ↔ forall i, (decompose 𝒜 x i : A) in I :=
+    x ∈ I ↔ ∀ i, (decompose 𝒜 x i : A) ∈ I :=
   AddSubmonoidClass.IsHomogeneous.mem_iff 𝒜 _ hI
 
-/--
-Definition of `HomogeneousIdeal` / `HomogeneousIdeal` 的定义
+/-- For any `Semiring A`, we collect the homogeneous ideals of `A` into a type. -/
+/-
+**HomogeneousIdeal** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HomogeneousIdeal
-  body: HomogeneousSubmodule 𝒜 𝒜
-
-中文:
-缩写 HomogeneousIdeal
-  定义体: HomogeneousSubmodule 𝒜 𝒜
-
-Depends on / 依赖: HomogeneousSubmodule
+--- 原说明 ---
+For any `Semiring A`, we collect the homogeneous ideals of `A` into a type.
 -/
 abbrev HomogeneousIdeal := HomogeneousSubmodule 𝒜 𝒜
 
 variable {𝒜}
 
-/--
-Definition of `HomogeneousIdeal.toIdeal` / `HomogeneousIdeal.toIdeal` 的定义
+/-- Converting a homogeneous ideal to an ideal. -/
+/-
+**HomogeneousIdeal.toIdeal** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.toIdeal (I : HomogeneousIdeal 𝒜) : Ideal A
+参数：I : HomogeneousIdeal 𝒜。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HomogeneousIdeal.toIdeal
-  signature: (I : HomogeneousIdeal 𝒜)
-  body: I.toSubmodule
-
-中文:
-缩写 HomogeneousIdeal.toIdeal
-  签名: (I : HomogeneousIdeal 𝒜)
-  定义体: I.toSubmodule
-
-Depends on / 依赖: I.toSubmodule, toSubmodule
+--- 原说明 ---
+Converting a homogeneous ideal to an ideal.
 -/
 abbrev HomogeneousIdeal.toIdeal (I : HomogeneousIdeal 𝒜) : Ideal A :=
   I.toSubmodule
-
-/--
-lemma `coe_toIdeal` / 引理 `coe_toIdeal`
-
-English:
-lemma coe_toIdeal
-  given: (I : HomogeneousIdeal 𝒜)
-  statement: (I.toIdeal : Set A) = I
-  proof: rfl
-
-中文:
-引理 coe_toIdeal
-  条件: (I : HomogeneousIdeal 𝒜)
-  结论: (I.toIdeal : 集合 A) = I
-  证明: rfl
+/-
+**coe_toIdeal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : SetLike σ A]   [inst_2 : AddSubmonoidClass σ A] {𝒜 : ι → σ} [inst_3 : Decidab
+leEq ι] [inst_4 : AddMonoid ι] [inst_5 : GradedRing 𝒜]   (I : HomogeneousIdeal 𝒜
+), ↑I.toIdeal = ↑I
+参数：I : HomogeneousIdeal 𝒜。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toIdeal (I : HomogeneousIdeal 𝒜) : (I.toIdeal : Set A) = I := rfl
-
-/--
-theorem `HomogeneousIdeal.isHomogeneous` / 定理 `HomogeneousIdeal.isHomogeneous`
-
-English:
-theorem HomogeneousIdeal.isHomogeneous
-  given: (I : HomogeneousIdeal 𝒜)
-  proof: I.is_homogeneous'
-
-中文:
-定理 HomogeneousIdeal.isHomogeneous
-  条件: (I : HomogeneousIdeal 𝒜)
-  证明: I.is_homogeneous'
-
-Depends on / 依赖: I.is_homogeneous, is_homogeneous
+/-
+**HomogeneousIdeal.isHomogeneous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.isHomogeneous (I : HomogeneousIdeal 𝒜) : I.toIdeal.IsHomo
+geneous 𝒜
+参数：I : HomogeneousIdeal 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousSubmodule.is_homogeneous'`：∀ {ιA : Type u_1} {ιM : Type u_2} 
+{σA : Type u_3} {σM : Type u_4} {A : Type u_5} {M : Type u_6} [inst : Semiring A
+]   [inst_1 : AddCommMonoi…
 -/
 theorem HomogeneousIdeal.isHomogeneous (I : HomogeneousIdeal 𝒜) :
     I.toIdeal.IsHomogeneous 𝒜 := I.is_homogeneous'
-
-/--
-theorem `HomogeneousIdeal.toIdeal_injective` / 定理 `HomogeneousIdeal.toIdeal_injective`
-
-English:
-theorem HomogeneousIdeal.toIdeal_injective
-  proof: HomogeneousSubmodule.toSubmodule_injective 𝒜 𝒜
-
-中文:
-定理 HomogeneousIdeal.toIdeal_injective
-  证明: HomogeneousSubmodule.toSubmodule_injective 𝒜 𝒜
-
-Depends on / 依赖: HomogeneousSubmodule, HomogeneousSubmodule.toSubmodule_injective, toSubmodule_injective
+/-
+**HomogeneousIdeal.toIdeal_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.toIdeal_injective : Function.Injective (HomogeneousIdeal.
+toIdeal : HomogeneousIdeal 𝒜 -> Ideal A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousSubmodule.toSubmodule_injective`：HomogeneousSubmodule.toSubmo
+dule_injective : Function.Injective (HomogeneousSubmodule.toSubmodule : Homogene
+ousSubmodule 𝒜 ℳ -> Submodule A …
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
 -/
 theorem HomogeneousIdeal.toIdeal_injective :
-    Function.Injective (HomogeneousIdeal.toIdeal : HomogeneousIdeal 𝒜 -> Ideal A) :=
+    Function.Injective (HomogeneousIdeal.toIdeal : HomogeneousIdeal 𝒜 → Ideal A) :=
   HomogeneousSubmodule.toSubmodule_injective 𝒜 𝒜
-
-/--
-lemma `toIdeal_le_toIdeal_iff` / 引理 `toIdeal_le_toIdeal_iff`
-
-English:
-lemma toIdeal_le_toIdeal_iff
-  given: {I J : HomogeneousIdeal 𝒜}
-  proof: Iff.rfl
-
-中文:
-引理 toIdeal_le_toIdeal_iff
-  条件: {I J : HomogeneousIdeal 𝒜}
-  证明: Iff.rfl
+/-
+**toIdeal_le_toIdeal_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : SetLike σ A]   [inst_2 : AddSubmonoidClass σ A] {𝒜 : ι → σ} [inst_3 : Decidab
+leEq ι] [inst_4 : AddMonoid ι] [inst_5 : GradedRing 𝒜]   {I J : HomogeneousIdeal
+ 𝒜}, I.toIdeal ≤ J.toIdeal ↔ I ≤ J
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma toIdeal_le_toIdeal_iff {I J : HomogeneousIdeal 𝒜} :
-    I.toIdeal <= J.toIdeal ↔ I <= J := Iff.rfl
-
-/--
-Instance `HomogeneousIdeal.setLike` / 实例 `HomogeneousIdeal.setLike`
-
-English:
-instance HomogeneousIdeal.setLike
-  signature: : SetLike (HomogeneousIdeal 𝒜) A
-  body: HomogeneousSubmodule.setLike 𝒜 𝒜
-
-中文:
-实例 HomogeneousIdeal.setLike
-  签名: : 集合状 (HomogeneousIdeal 𝒜) A
-  定义体: HomogeneousSubmodule.setLike 𝒜 𝒜
-
-Depends on / 依赖: HomogeneousSubmodule, HomogeneousSubmodule.setLike, setLike
+    I.toIdeal ≤ J.toIdeal ↔ I ≤ J := Iff.rfl
+/-
+**HomogeneousIdeal.setLike** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.setLike : SetLike (HomogeneousIdeal 𝒜) A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance HomogeneousIdeal.setLike : SetLike (HomogeneousIdeal 𝒜) A :=
   HomogeneousSubmodule.setLike 𝒜 𝒜
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (HomogeneousIdeal 𝒜)
-  body: .ofSetLike (HomogeneousIdeal 𝒜) A
-
-@[ext]
-
-中文:
-实例 :
-  签名: 偏序 (HomogeneousIdeal 𝒜)
-  定义体: .ofSetLike (HomogeneousIdeal 𝒜) A
-
-@[ext]
-
-Depends on / 依赖: HomogeneousIdeal, ofSetLike
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (HomogeneousIdeal 𝒜) := .ofSetLike (HomogeneousIdeal 𝒜) A
 
 @[ext]
-/--
-theorem `HomogeneousIdeal.ext` / 定理 `HomogeneousIdeal.ext`
-
-English:
-theorem HomogeneousIdeal.ext
-  given: {I J : HomogeneousIdeal 𝒜} (h : I.toIdeal = J.toIdeal)
-  statement: I = J
-  proof: HomogeneousIdeal.toIdeal_injective h
-
-中文:
-定理 HomogeneousIdeal.ext
-  条件: {I J : HomogeneousIdeal 𝒜} (h : I.toIdeal = J.toIdeal)
-  结论: I = J
-  证明: HomogeneousIdeal.toIdeal_injective h
-
-Depends on / 依赖: HomogeneousIdeal, HomogeneousIdeal.toIdeal_injective, toIdeal_injective
+/-
+**HomogeneousIdeal.ext** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.ext {I J : HomogeneousIdeal 𝒜} (h : I.toIdeal = J.toIdeal
+) : I = J
+参数：h : I.toIdeal = J.toIdeal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousIdeal.toIdeal_injective`：HomogeneousIdeal.toIdeal_injective :
+ Function.Injective (HomogeneousIdeal.toIdeal : HomogeneousIdeal 𝒜 -> Ideal A)
 -/
 theorem HomogeneousIdeal.ext {I J : HomogeneousIdeal 𝒜} (h : I.toIdeal = J.toIdeal) : I = J :=
   HomogeneousIdeal.toIdeal_injective h
-
-/--
-theorem `HomogeneousIdeal.ext'` / 定理 `HomogeneousIdeal.ext'`
-
-English:
-theorem HomogeneousIdeal.ext'
-  given: {I J : HomogeneousIdeal 𝒜} (h : forall i, forall x in 𝒜 i, x in I ↔ x in J)
-  proof: HomogeneousSubmodule.ext' 𝒜 𝒜 h
-
-@[simp high]
-
-中文:
-定理 HomogeneousIdeal.ext'
-  条件: {I J : HomogeneousIdeal 𝒜} (h : 对任意 i, 对任意 x in 𝒜 i, x in I ↔ x in J)
-  证明: HomogeneousSubmodule.ext' 𝒜 𝒜 h
-
-@[simp high]
-
-Depends on / 依赖: HomogeneousSubmodule, HomogeneousSubmodule.ext
+/-
+**HomogeneousIdeal.ext'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.ext' {I J : HomogeneousIdeal 𝒜} (h : forall i, forall x i
+n 𝒜 i, x in I ↔ x in J) : I = J
+参数：h : forall i, forall x in 𝒜 i, x in I ↔ x in J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousSubmodule.ext'`：HomogeneousSubmodule.ext' {I J : HomogeneousS
+ubmodule 𝒜 ℳ} (h : forall i, forall x in ℳ i, x in I ↔ x in J) : I = J
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
 -/
-theorem HomogeneousIdeal.ext' {I J : HomogeneousIdeal 𝒜} (h : forall i, forall x in 𝒜 i, x in I ↔ x in J) :
+theorem HomogeneousIdeal.ext' {I J : HomogeneousIdeal 𝒜} (h : ∀ i, ∀ x ∈ 𝒜 i, x ∈ I ↔ x ∈ J) :
     I = J := HomogeneousSubmodule.ext' 𝒜 𝒜 h
 
 @[simp high]
-/--
-theorem `HomogeneousIdeal.mem_iff` / 定理 `HomogeneousIdeal.mem_iff`
-
-English:
-theorem HomogeneousIdeal.mem_iff
-  given: {I : HomogeneousIdeal 𝒜} {x : A}
-  statement: x in I.toIdeal ↔ x in I
-  proof: Iff.rfl
-
-中文:
-定理 HomogeneousIdeal.mem_iff
-  条件: {I : HomogeneousIdeal 𝒜} {x : A}
-  结论: x in I.toIdeal ↔ x in I
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**HomogeneousIdeal.mem_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.mem_iff {I : HomogeneousIdeal 𝒜} {x : A} : x in I.toIdeal
+ ↔ x in I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem HomogeneousIdeal.mem_iff {I : HomogeneousIdeal 𝒜} {x : A} : x in I.toIdeal ↔ x in I :=
+theorem HomogeneousIdeal.mem_iff {I : HomogeneousIdeal 𝒜} {x : A} : x ∈ I.toIdeal ↔ x ∈ I :=
   Iff.rfl
 
 end HomogeneousDef
@@ -304,199 +221,194 @@ end HomogeneousDef
 section HomogeneousCore
 
 variable [Semiring A]
-variable [SetLike σ A] (𝒜 : ι -> σ)
+variable [SetLike σ A] (𝒜 : ι → σ)
 variable (I : Ideal A)
 
-/--
-Definition of `Ideal.homogeneousCore'` / `Ideal.homogeneousCore'` 的定义
+/-- For any `I : Ideal A`, not necessarily homogeneous, `I.homogeneousCore' 𝒜`
+is the largest homogeneous ideal of `A` contained in `I`, as an ideal. -/
+/-
+**Ideal.homogeneousCore'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousCore' (I : Ideal A) : Ideal A
+参数：I : Ideal A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ideal.homogeneousCore'
-  signature: (I : Ideal A)
-  body: Ideal.span ((↑) '' (((↑) : Subtype (SetLike.IsHomogeneousElem 𝒜) -> A) ⁻¹' I))
-
-中文:
-定义 理想.homogeneousCore'
-  签名: (I : 理想 A)
-  定义体: Ideal.span ((↑) '' (((↑) : Subtype (SetLike.IsHomogeneousElem 𝒜) -> A) ⁻¹' I))
-
-Depends on / 依赖: Ideal.span, IsHomogeneousElem, SetLike, SetLike.IsHomogeneousElem, Subtype
+--- 原说明 ---
+For any `I : Ideal A`, not necessarily homogeneous, `I.homogeneousCore' 𝒜`
+is the largest homogeneous ideal of `A` contained in `I`, as an ideal.
 -/
 def Ideal.homogeneousCore' (I : Ideal A) : Ideal A :=
-  Ideal.span ((↑) '' (((↑) : Subtype (SetLike.IsHomogeneousElem 𝒜) -> A) ⁻¹' I))
-
-/--
-theorem `Ideal.homogeneousCore'_mono` / 定理 `Ideal.homogeneousCore'_mono`
-
-English:
-theorem Ideal.homogeneousCore'_mono
-  statement: Monotone (Ideal.homogeneousCore' 𝒜)
-  proof: fun _ _ I_le_J => Ideal.span_mono Set.image_mono fun _ => @I_le_J _
-
-中文:
-定理 理想.homogeneousCore'_mono
-  结论: 递增 (理想.homogeneousCore' 𝒜)
-  证明: fun _ _ I_le_J => Ideal.span_mono Set.image_mono fun _ => @I_le_J _
+  Ideal.span ((↑) '' (((↑) : Subtype (SetLike.IsHomogeneousElem 𝒜) → A) ⁻¹' I))
+/-
+**Ideal.homogeneousCore'_mono** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : SetLike σ A] (𝒜 : ι → σ),   Monotone (Ideal.homogeneousCore' 𝒜)
+参数：𝒜 : ι → σ；Ideal.homogeneousCore' 𝒜。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.span_mono`：span_mono {s t : Set α} : s subseteq t -> span s <= spa
+n t
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
 theorem Ideal.homogeneousCore'_mono : Monotone (Ideal.homogeneousCore' 𝒜) :=
-fun _ _ I_le_J => Ideal.span_mono Set.image_mono fun _ => @I_le_J _
-
-/--
-theorem `Ideal.homogeneousCore'_le` / 定理 `Ideal.homogeneousCore'_le`
-
-English:
-theorem Ideal.homogeneousCore'_le
-  statement: I.homogeneousCore' 𝒜 <= I
-  proof: Ideal.span_le.2 image_preimage_subset _ _
-
-中文:
-定理 理想.homogeneousCore'_le
-  结论: I.homogeneousCore' 𝒜 <= I
-  证明: Ideal.span_le.2 image_preimage_subset _ _
+  fun _ _ I_le_J => Ideal.span_mono <| Set.image_mono fun _ => @I_le_J _
+/-
+**Ideal.homogeneousCore'_le** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : SetLike σ A] (𝒜 : ι → σ) (I : Ideal A),   Ideal.homogeneousCore' 𝒜 I ≤ I
+参数：𝒜 : ι → σ；I : Ideal A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
 -/
-theorem Ideal.homogeneousCore'_le : I.homogeneousCore' 𝒜 <= I :=
-Ideal.span_le.2 image_preimage_subset _ _
+theorem Ideal.homogeneousCore'_le : I.homogeneousCore' 𝒜 ≤ I :=
+  Ideal.span_le.2 <| image_preimage_subset _ _
 
 end HomogeneousCore
 
 section IsHomogeneousIdealDefs
 
 variable [Semiring A]
-variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι -> σ)
+variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ)
 variable [DecidableEq ι] [AddMonoid ι] [GradedRing 𝒜]
 variable (I : Ideal A)
 
-/--
-theorem `Ideal.isHomogeneous_iff_forall_subset` / 定理 `Ideal.isHomogeneous_iff_forall_subset`
-
-English:
-theorem Ideal.isHomogeneous_iff_forall_subset
-  proof: Iff.rfl
-
-中文:
-定理 理想.isHomogeneous_iff_对任意_subset
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Ideal.isHomogeneous_iff_forall_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.isHomogeneous_iff_forall_subset : I.IsHomogeneous 𝒜 ↔ forall i, (I :
+ Set A) subseteq GradedRing.proj 𝒜 i ⁻¹' I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Ideal.isHomogeneous_iff_forall_subset :
-    I.IsHomogeneous 𝒜 ↔ forall i, (I : Set A) subseteq GradedRing.proj 𝒜 i ⁻¹' I :=
+    I.IsHomogeneous 𝒜 ↔ ∀ i, (I : Set A) ⊆ GradedRing.proj 𝒜 i ⁻¹' I :=
   Iff.rfl
-
-/--
-theorem `Ideal.isHomogeneous_iff_subset_iInter` / 定理 `Ideal.isHomogeneous_iff_subset_iInter`
-
-English:
-theorem Ideal.isHomogeneous_iff_subset_iInter
-  proof: subset_iInter_iff.symm
-
-中文:
-定理 理想.isHomogeneous_iff_subset_i整数er
-  证明: subset_iInter_iff.symm
-
-Depends on / 依赖: subset_iInter_iff, subset_iInter_iff.symm
+/-
+**Ideal.isHomogeneous_iff_subset_iInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.isHomogeneous_iff_subset_iInter : I.IsHomogeneous 𝒜 ↔ (I : Set A) su
+bseteq ⋂ i, GradedRing.proj 𝒜 i ⁻¹' ↑I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.subset_iInter_iff`：subset_iInter_iff {s : Set α} {t : ι -> Set α} : 
+(s subseteq ⋂ i, t i) ↔ forall i, s subseteq t i
 -/
 theorem Ideal.isHomogeneous_iff_subset_iInter :
-    I.IsHomogeneous 𝒜 ↔ (I : Set A) subseteq ⋂ i, GradedRing.proj 𝒜 i ⁻¹' ↑I :=
+    I.IsHomogeneous 𝒜 ↔ (I : Set A) ⊆ ⋂ i, GradedRing.proj 𝒜 i ⁻¹' ↑I :=
   subset_iInter_iff.symm
-
-/--
-theorem `Ideal.mul_homogeneous_element_mem_of_mem` / 定理 `Ideal.mul_homogeneous_element_mem_of_mem`
-
-English:
-theorem Ideal.mul_homogeneous_element_mem_of_mem
-  proof: by
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 r]; rw [Finset.sum_mul]; rw [map_sum]
-  apply Ideal.sum_mem
-  intro k _
-  obtain ⟨i, hi⟩ := hx₁
-  have mem₁ : (DirectSum.decompose 𝒜 r k : A) * x in 𝒜 (k + i) :=
-    GradedMul.mul_mem (SetLike.coe_mem _) hi
-  rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem 𝒜 mem₁]; rw [coe_of_apply]
-  split_ifs
-  · exact I.mul_mem_left _ hx₂
-  · exact I.zero_mem
-
-中文:
-定理 理想.mul_homogeneous_element_mem_of_mem
-  证明: by
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 r]; rw [Finset.sum_mul]; rw [map_sum]
-  apply Ideal.sum_mem
-  intro k _
-  obtain ⟨i, hi⟩ := hx₁
-  have mem₁ : (DirectSum.decompose 𝒜 r k : A) * x in 𝒜 (k + i) :=
-    GradedMul.mul_mem (SetLike.coe_mem _) hi
-  rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem 𝒜 mem₁]; rw [coe_of_apply]
-  split_ifs
-  · exact I.mul_mem_left _ hx₂
-  · exact I.zero_mem
-
-Depends on / 依赖: DirectSum, DirectSum.decompose, DirectSum.decompose_of_mem, DirectSum.sum_support_decompose, Finset, Finset.sum_mul, GradedMul, GradedMul.mul_mem, GradedRing, GradedRing.proj_apply, I.mul_mem_left, I.zero_mem, Ideal.sum_mem, SetLike, SetLike.coe_mem, classical, coe_mem, coe_of_apply, decompose, decompose_of_mem
+/-
+**Ideal.mul_homogeneous_element_mem_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.mul_homogeneous_element_mem_of_mem {I : Ideal A} (r x : A) (hx₁ : Se
+tLike.IsHomogeneousElem 𝒜 x) (hx₂ : x in I) (j : ι) : GradedRing.proj 𝒜 j (r * x
+) in I
+参数：r x : A；hx₁ : SetLike.IsHomogeneousElem 𝒜 x；hx₂ : x in I；j : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.sum_support_decompose`：sum_support_decompose [forall (i) (x : 
+ℳ i), Decidable (x != 0)] (r : M) : (∑ i in (decompose ℳ r).support, (decompose 
+ℳ r i : M)) = r
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `Ideal.sum_mem`：sum_mem (I : Ideal α) {ι : Type*} {t : Finset ι} {f : ι -
+> α} : (forall c in t, f c in I) -> (∑ i in t, f i) in I
+· 使用定理 `SetLike.GradedMul.mul_mem`：∀ {ι : Type u_1} {R : Type u_2} {S : Type u_3
+} {inst : SetLike S R} {inst_1 : Mul R} {inst_2 : Add ι} {A : ι → S}   [self : S
+etLike.GradedMu…
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `SetLike.coe_mem`：coe_mem (x : p) : (x : B) in p
+· 使用定理 `GradedRing.proj_apply`：GradedRing.proj_apply (i : ι) (r : A) : GradedRin
+g.proj 𝒜 i r = (decompose 𝒜 r : ⨁ i, 𝒜 i) i
+· 使用定理 `DirectSum.decompose_of_mem`：decompose_of_mem {x : M} {i : ι} (hx : x in 
+ℳ i) : decompose ℳ x = DirectSum.of (fun i => ℳ i) i ⟨x, hx⟩
+· 使用定理 `DirectSum.coe_of_apply`：coe_of_apply {M S : Type*} [DecidableEq ι] [AddC
+ommMonoid M] [SetLike S M] [AddSubmonoidClass S M] {A : ι -> S} (i j : ι) (x : A
+ i) : (of (f…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
 -/
 theorem Ideal.mul_homogeneous_element_mem_of_mem
     {I : Ideal A} (r x : A) (hx₁ : SetLike.IsHomogeneousElem 𝒜 x)
-    (hx₂ : x in I) (j : ι) : GradedRing.proj 𝒜 j (r * x) in I := by
+    (hx₂ : x ∈ I) (j : ι) : GradedRing.proj 𝒜 j (r * x) ∈ I := by
   classical
-  rw [← DirectSum.sum_support_decompose 𝒜 r]; rw [Finset.sum_mul]; rw [map_sum]
+  rw [← DirectSum.sum_support_decompose 𝒜 r, Finset.sum_mul, map_sum]
   apply Ideal.sum_mem
   intro k _
   obtain ⟨i, hi⟩ := hx₁
-  have mem₁ : (DirectSum.decompose 𝒜 r k : A) * x in 𝒜 (k + i) :=
+  have mem₁ : (DirectSum.decompose 𝒜 r k : A) * x ∈ 𝒜 (k + i) :=
     GradedMul.mul_mem (SetLike.coe_mem _) hi
-  rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem 𝒜 mem₁]; rw [coe_of_apply]
+  rw [GradedRing.proj_apply, DirectSum.decompose_of_mem 𝒜 mem₁, coe_of_apply]
   split_ifs
   · exact I.mul_mem_left _ hx₂
   · exact I.zero_mem
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Ideal.homogeneous_span` / 定理 `Ideal.homogeneous_span`
-
-English:
-theorem Ideal.homogeneous_span
-  given: (s : Set A) (h : forall x in s, SetLike.IsHomogeneousElem 𝒜 x)
-  proof: by
-  rintro i r hr
-  rw [Ideal.span]; rw [Finsupp.span_eq_range_linearCombination] at hr
-  rw [LinearMap.mem_range] at hr
-  obtain ⟨s, rfl⟩ := hr
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [decompose_sum]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
-  refine Ideal.sum_mem _ ?_
-  rintro z hz1
-  rw [smul_eq_mul]
-  refine Ideal.mul_homogeneous_element_mem_of_mem 𝒜 (s z) z ?_ ?_ i
-  · rcases z with ⟨z, hz2⟩
-    apply h _ hz2
-  · exact Ideal.subset_span z.2
-
-中文:
-定理 理想.homogeneous_span
-  条件: (s : 集合 A) (h : 对任意 x in s, 集合状.IsHomogeneousElem 𝒜 x)
-  证明: by
-  rintro i r hr
-  rw [Ideal.span]; rw [Finsupp.span_eq_range_linearCombination] at hr
-  rw [LinearMap.mem_range] at hr
-  obtain ⟨s, rfl⟩ := hr
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [decompose_sum]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
-  refine Ideal.sum_mem _ ?_
-  rintro z hz1
-  rw [smul_eq_mul]
-  refine Ideal.mul_homogeneous_element_mem_of_mem 𝒜 (s z) z ?_ ?_ i
-  · rcases z with ⟨z, hz2⟩
-    apply h _ hz2
-  · exact Ideal.subset_span z.2
-
-Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, DFinsupp, DFinsupp.finsetSum_apply, Finsupp, Finsupp.linearCombination_apply, Finsupp.span_eq_range_linearCombination, Finsupp.sum, Ideal.mul_homogeneous_element_mem_of_mem, Ideal.span, Ideal.subset_span, Ideal.sum_mem, LinearMap, LinearMap.mem_range, coe_finsetSum, decompose_sum, finsetSum_apply, linearCombination_apply, mem_range, mul_homogeneous_element_mem_of_mem
+/-
+**Ideal.homogeneous_span** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneous_span (s : Set A) (h : forall x in s, SetLike.IsHomogeneo
+usElem 𝒜 x) : (Ideal.span s).IsHomogeneous 𝒜
+参数：s : Set A；h : forall x in s, SetLike.IsHomogeneousElem 𝒜 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.mem_range`：mem_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] 
+M₂} {x} : x in range f ↔ exists y, f y = x
+· 使用定理 `Finsupp.span_eq_range_linearCombination`：span_eq_range_linearCombination
+ (s : Set M) : span R s = LinearMap.range (linearCombination R ((↑) : s -> M))
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `Finsupp.sum.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst 
+: Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M) (g : α → M → N),   f.sum g = ∑
+ a ∈ f…
+· 使用定理 `DirectSum.decompose_sum`：decompose_sum {ι'} (s : Finset ι') (f : ι' -> M
+) : decompose ℳ (∑ i in s, f i) = ∑ i in s, decompose ℳ (f i)
+· 使用定理 `DFinsupp.finsetSum_apply`：finsetSum_apply {α} [forall i, AddCommMonoid (
+β i)] (s : Finset α) (g : α -> Π₀ i, β i) (i : ι) : (∑ a in s, g a) i = ∑ a in s
+, g a i
+· 使用定理 `AddSubmonoidClass.coe_finsetSum`：∀ {B : Type u_3} {S : B} {ι : Type u_4}
+ {M : Type u_5} [inst : AddCommMonoid M] [inst_1 : SetLike B M]   [inst_2 : AddS
+ubmonoidClass B M] (f…
+· 使用定理 `Ideal.sum_mem`：sum_mem (I : Ideal α) {ι : Type*} {t : Finset ι} {f : ι -
+> α} : (forall c in t, f c in I) -> (∑ i in t, f i) in I
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `Ideal.mul_homogeneous_element_mem_of_mem`：Ideal.mul_homogeneous_element_
+mem_of_mem {I : Ideal A} (r x : A) (hx₁ : SetLike.IsHomogeneousElem 𝒜 x) (hx₂ : 
+x in I) (j : ι) : GradedRing.p…
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem Ideal.homogeneous_span (s : Set A) (h : forall x in s, SetLike.IsHomogeneousElem 𝒜 x) :
+theorem Ideal.homogeneous_span (s : Set A) (h : ∀ x ∈ s, SetLike.IsHomogeneousElem 𝒜 x) :
     (Ideal.span s).IsHomogeneous 𝒜 := by
   rintro i r hr
-  rw [Ideal.span]; rw [Finsupp.span_eq_range_linearCombination] at hr
+  rw [Ideal.span, Finsupp.span_eq_range_linearCombination] at hr
   rw [LinearMap.mem_range] at hr
   obtain ⟨s, rfl⟩ := hr
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [decompose_sum]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
+  rw [Finsupp.linearCombination_apply, Finsupp.sum, decompose_sum, DFinsupp.finsetSum_apply,
+    AddSubmonoidClass.coe_finsetSum]
   refine Ideal.sum_mem _ ?_
   rintro z hz1
   rw [smul_eq_mul]
@@ -505,118 +417,85 @@ theorem Ideal.homogeneous_span (s : Set A) (h : forall x in s, SetLike.IsHomogen
     apply h _ hz2
   · exact Ideal.subset_span z.2
 
-/--
-Definition of `Ideal.homogeneousCore` / `Ideal.homogeneousCore` 的定义
+/-- For any `I : Ideal A`, not necessarily homogeneous, `I.homogeneousCore' 𝒜`
+is the largest homogeneous ideal of `A` contained in `I`. -/
+/-
+**Ideal.homogeneousCore** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousCore : HomogeneousIdeal 𝒜
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ideal.homogeneousCore
-  signature: : HomogeneousIdeal 𝒜
-  body: ⟨Ideal.homogeneousCore' 𝒜 I,
-    Ideal.homogeneous_span _ _ fun _ h => by
-      have := Subtype.image_preimage_coe (Set.ofPred (SetLike.IsHomogeneousElem 𝒜)) (I : Set A)
-      exact (cast congr(_ in $this) h).1⟩
-
-中文:
-定义 理想.homogeneousCore
-  签名: : HomogeneousIdeal 𝒜
-  定义体: ⟨Ideal.homogeneousCore' 𝒜 I,
-    Ideal.homogeneous_span _ _ fun _ h => by
-      have := Subtype.image_preimage_coe (Set.ofPred (SetLike.IsHomogeneousElem 𝒜)) (I : Set A)
-      exact (cast congr(_ in $this) h).1⟩
-
-Depends on / 依赖: Ideal.homogeneousCore, Ideal.homogeneous_span, IsHomogeneousElem, Set.ofPred, SetLike, SetLike.IsHomogeneousElem, Subtype, Subtype.image_preimage_coe, homogeneousCore, homogeneous_span, image_preimage_coe, ofPred
+--- 原说明 ---
+For any `I : Ideal A`, not necessarily homogeneous, `I.homogeneousCore' 𝒜`
+is the largest homogeneous ideal of `A` contained in `I`.
 -/
 def Ideal.homogeneousCore : HomogeneousIdeal 𝒜 :=
   ⟨Ideal.homogeneousCore' 𝒜 I,
     Ideal.homogeneous_span _ _ fun _ h => by
       have := Subtype.image_preimage_coe (Set.ofPred (SetLike.IsHomogeneousElem 𝒜)) (I : Set A)
-      exact (cast congr(_ in $this) h).1⟩
-
-/--
-theorem `Ideal.homogeneousCore_mono` / 定理 `Ideal.homogeneousCore_mono`
-
-English:
-theorem Ideal.homogeneousCore_mono
-  statement: Monotone (Ideal.homogeneousCore 𝒜)
-  proof: Ideal.homogeneousCore'_mono 𝒜
-
-中文:
-定理 理想.homogeneousCore_mono
-  结论: 递增 (理想.homogeneousCore 𝒜)
-  证明: Ideal.homogeneousCore'_mono 𝒜
-
-Depends on / 依赖: Ideal.homogeneousCore, _mono, homogeneousCore
+      exact (cast congr(_ ∈ $this) h).1⟩
+/-
+**Ideal.homogeneousCore_mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousCore_mono : Monotone (Ideal.homogeneousCore 𝒜)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.homogeneousCore'_mono`：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u
+_3} [inst : Semiring A] [inst_1 : SetLike σ A] (𝒜 : ι → σ),   Monotone (Ideal.ho
+mogeneousCore' 𝒜)
 -/
 theorem Ideal.homogeneousCore_mono : Monotone (Ideal.homogeneousCore 𝒜) :=
   Ideal.homogeneousCore'_mono 𝒜
-
-/--
-theorem `Ideal.toIdeal_homogeneousCore_le` / 定理 `Ideal.toIdeal_homogeneousCore_le`
-
-English:
-theorem Ideal.toIdeal_homogeneousCore_le
-  statement: (I.homogeneousCore 𝒜).toIdeal <= I
-  proof: Ideal.homogeneousCore'_le 𝒜 I
-
-中文:
-定理 理想.toIdeal_homogeneousCore_le
-  结论: (I.homogeneousCore 𝒜).toIdeal <= I
-  证明: Ideal.homogeneousCore'_le 𝒜 I
-
-Depends on / 依赖: Ideal.homogeneousCore, homogeneousCore
+/-
+**Ideal.toIdeal_homogeneousCore_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.toIdeal_homogeneousCore_le : (I.homogeneousCore 𝒜).toIdeal <= I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.homogeneousCore'_le`：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3
+} [inst : Semiring A] [inst_1 : SetLike σ A] (𝒜 : ι → σ) (I : Ideal A),   Ideal.
+homogeneousCore…
 -/
-theorem Ideal.toIdeal_homogeneousCore_le : (I.homogeneousCore 𝒜).toIdeal <= I :=
+theorem Ideal.toIdeal_homogeneousCore_le : (I.homogeneousCore 𝒜).toIdeal ≤ I :=
   Ideal.homogeneousCore'_le 𝒜 I
 
 variable {𝒜 I}
-
-/--
-theorem `Ideal.mem_homogeneousCore_of_homogeneous_of_mem` / 定理 `Ideal.mem_homogeneousCore_of_homogeneous_of_mem`
-
-English:
-theorem Ideal.mem_homogeneousCore_of_homogeneous_of_mem
-  statement: {x : A} (h : SetLike.IsHomogeneousElem 𝒜 x)
-  proof: Ideal.subset_span ⟨⟨x, h⟩, hmem, rfl⟩
-
-中文:
-定理 理想.mem_homogeneousCore_of_homogeneous_of_mem
-  结论: {x : A} (h : 集合状.IsHomogeneousElem 𝒜 x)
-  证明: Ideal.subset_span ⟨⟨x, h⟩, hmem, rfl⟩
-
-Depends on / 依赖: Ideal.subset_span, subset_span
+/-
+**Ideal.mem_homogeneousCore_of_homogeneous_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.mem_homogeneousCore_of_homogeneous_of_mem {x : A} (h : SetLike.IsHom
+ogeneousElem 𝒜 x) (hmem : x in I) : x in I.homogeneousCore 𝒜
+参数：h : SetLike.IsHomogeneousElem 𝒜 x；hmem : x in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
 -/
 theorem Ideal.mem_homogeneousCore_of_homogeneous_of_mem {x : A} (h : SetLike.IsHomogeneousElem 𝒜 x)
-    (hmem : x in I) : x in I.homogeneousCore 𝒜 :=
+    (hmem : x ∈ I) : x ∈ I.homogeneousCore 𝒜 :=
   Ideal.subset_span ⟨⟨x, h⟩, hmem, rfl⟩
-
-/--
-theorem `Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self` / 定理 `Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self`
-
-English:
-theorem Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self
-  given: (h : I.IsHomogeneous 𝒜)
-  proof: by
-  apply le_antisymm (I.homogeneousCore'_le 𝒜) _
-  intro x hx
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 x]
-  exact Ideal.sum_mem _ fun j _ => Ideal.subset_span ⟨⟨_, isHomogeneousElem_coe _⟩, h _ hx, rfl⟩
-
-@[simp]
-
-中文:
-定理 理想.IsHomogeneous.toIdeal_homogeneousCore_eq_self
-  条件: (h : I.IsHomogeneous 𝒜)
-  证明: by
-  apply le_antisymm (I.homogeneousCore'_le 𝒜) _
-  intro x hx
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 x]
-  exact Ideal.sum_mem _ fun j _ => Ideal.subset_span ⟨⟨_, isHomogeneousElem_coe _⟩, h _ hx, rfl⟩
-
-@[simp]
-
-Depends on / 依赖: DirectSum, DirectSum.sum_support_decompose, I.homogeneousCore, Ideal.subset_span, Ideal.sum_mem, classical, homogeneousCore, isHomogeneousElem_coe, le_antisymm, subset_span, sum_mem, sum_support_decompose
+/-
+**Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self (h : I.IsHomogeneous 𝒜
+) : (I.homogeneousCore 𝒜).toIdeal = I
+参数：h : I.IsHomogeneous 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ideal.homogeneousCore'_le`：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3
+} [inst : Semiring A] [inst_1 : SetLike σ A] (𝒜 : ι → σ) (I : Ideal A),   Ideal.
+homogeneousCore…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.sum_support_decompose`：sum_support_decompose [forall (i) (x : 
+ℳ i), Decidable (x != 0)] (r : M) : (∑ i in (decompose ℳ r).support, (decompose 
+ℳ r i : M)) = r
+· 使用定理 `Ideal.sum_mem`：sum_mem (I : Ideal α) {ι : Type*} {t : Finset ι} {f : ι -
+> α} : (forall c in t, f c in I) -> (∑ i in t, f i) in I
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `SetLike.isHomogeneousElem_coe`：SetLike.isHomogeneousElem_coe {A : ι -> S
+} {i} (x : A i) : SetLike.IsHomogeneousElem A (x : R)
 -/
 theorem Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self (h : I.IsHomogeneous 𝒜) :
     (I.homogeneousCore 𝒜).toIdeal = I := by
@@ -627,24 +506,20 @@ theorem Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self (h : I.IsHomogeneous
   exact Ideal.sum_mem _ fun j _ => Ideal.subset_span ⟨⟨_, isHomogeneousElem_coe _⟩, h _ hx, rfl⟩
 
 @[simp]
-/--
-theorem `HomogeneousIdeal.toIdeal_homogeneousCore_eq_self` / 定理 `HomogeneousIdeal.toIdeal_homogeneousCore_eq_self`
-
-English:
-theorem HomogeneousIdeal.toIdeal_homogeneousCore_eq_self
-  given: (I : HomogeneousIdeal 𝒜)
-  proof: by
-  ext1
-  convert! Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self I.isHomogeneous
-
-中文:
-定理 HomogeneousIdeal.toIdeal_homogeneousCore_eq_self
-  条件: (I : HomogeneousIdeal 𝒜)
-  证明: by
-  ext1
-  convert! Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self I.isHomogeneous
-
-Depends on / 依赖: I.isHomogeneous, Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self, IsHomogeneous, convert, isHomogeneous, toIdeal_homogeneousCore_eq_self
+/-
+**HomogeneousIdeal.toIdeal_homogeneousCore_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.toIdeal_homogeneousCore_eq_self (I : HomogeneousIdeal 𝒜) 
+: I.toIdeal.homogeneousCore 𝒜 = I
+参数：I : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousIdeal.ext`：HomogeneousIdeal.ext {I J : HomogeneousIdeal 𝒜} (h
+ : I.toIdeal = J.toIdeal) : I = J
+· 使用定理 `Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self`：Ideal.IsHomogeneous
+.toIdeal_homogeneousCore_eq_self (h : I.IsHomogeneous 𝒜) : (I.homogeneousCore 𝒜)
+.toIdeal = I
+· 使用定理 `HomogeneousIdeal.isHomogeneous`：HomogeneousIdeal.isHomogeneous (I : Homo
+geneousIdeal 𝒜) : I.toIdeal.IsHomogeneous 𝒜
 -/
 theorem HomogeneousIdeal.toIdeal_homogeneousCore_eq_self (I : HomogeneousIdeal 𝒜) :
     I.toIdeal.homogeneousCore 𝒜 = I := by
@@ -652,45 +527,51 @@ theorem HomogeneousIdeal.toIdeal_homogeneousCore_eq_self (I : HomogeneousIdeal �
   convert! Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self I.isHomogeneous
 
 variable (𝒜 I)
-
-/--
-theorem `Ideal.IsHomogeneous.iff_eq` / 定理 `Ideal.IsHomogeneous.iff_eq`
-
-English:
-theorem Ideal.IsHomogeneous.iff_eq
-  statement: I.IsHomogeneous 𝒜 ↔ (I.homogeneousCore 𝒜).toIdeal = I
-  proof: ⟨fun hI => hI.toIdeal_homogeneousCore_eq_self, fun hI => hI ▸ (Ideal.homogeneousCore 𝒜 I).2⟩
-
-中文:
-定理 理想.IsHomogeneous.iff_eq
-  结论: I.IsHomogeneous 𝒜 ↔ (I.homogeneousCore 𝒜).toIdeal = I
-  证明: ⟨fun hI => hI.toIdeal_homogeneousCore_eq_self, fun hI => hI ▸ (Ideal.homogeneousCore 𝒜 I).2⟩
-
-Depends on / 依赖: Ideal.homogeneousCore, hI.toIdeal_homogeneousCore_eq_self, homogeneousCore, toIdeal_homogeneousCore_eq_self
+/-
+**Ideal.IsHomogeneous.iff_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.IsHomogeneous.iff_eq : I.IsHomogeneous 𝒜 ↔ (I.homogeneousCore 𝒜).toI
+deal = I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.IsHomogeneous.toIdeal_homogeneousCore_eq_self`：Ideal.IsHomogeneous
+.toIdeal_homogeneousCore_eq_self (h : I.IsHomogeneous 𝒜) : (I.homogeneousCore 𝒜)
+.toIdeal = I
+· 使用定理 `HomogeneousSubmodule.is_homogeneous'`：∀ {ιA : Type u_1} {ιM : Type u_2} 
+{σA : Type u_3} {σM : Type u_4} {A : Type u_5} {M : Type u_6} [inst : Semiring A
+]   [inst_1 : AddCommMonoi…
 -/
 theorem Ideal.IsHomogeneous.iff_eq : I.IsHomogeneous 𝒜 ↔ (I.homogeneousCore 𝒜).toIdeal = I :=
   ⟨fun hI => hI.toIdeal_homogeneousCore_eq_self, fun hI => hI ▸ (Ideal.homogeneousCore 𝒜 I).2⟩
-
-/--
-theorem `Ideal.IsHomogeneous.iff_exists` / 定理 `Ideal.IsHomogeneous.iff_exists`
-
-English:
-theorem Ideal.IsHomogeneous.iff_exists
-  proof: by
-  rw [Ideal.IsHomogeneous.iff_eq]; rw [eq_comm]
-  exact ((Set.image_preimage.compose (Submodule.gi _ _).gc).exists_eq_l _).symm
-
-中文:
-定理 理想.IsHomogeneous.iff_存在
-  证明: by
-  rw [Ideal.IsHomogeneous.iff_eq]; rw [eq_comm]
-  exact ((Set.image_preimage.compose (Submodule.gi _ _).gc).exists_eq_l _).symm
-
-Depends on / 依赖: Ideal.IsHomogeneous.iff_eq, IsHomogeneous, Set.image_preimage.compose, Submodule, Submodule.gi, compose, eq_comm, exists_eq_l, iff_eq, image_preimage
+/-
+**Ideal.IsHomogeneous.iff_exists** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.IsHomogeneous.iff_exists : I.IsHomogeneous 𝒜 ↔ exists S : Set (homog
+eneousSubmonoid 𝒜), I = Ideal.span ((↑) '' S)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.IsHomogeneous.iff_eq`：Ideal.IsHomogeneous.iff_eq : I.IsHomogeneous
+ 𝒜 ↔ (I.homogeneousCore 𝒜).toIdeal = I
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `GaloisConnection.exists_eq_l`：∀ {α : Type u} {β : Type v} [inst : Partia
+lOrder α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u 
+→ ∀ (a : α), (∃ b,…
+· 使用定理 `GaloisConnection.compose`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst
+ : Preorder α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {l1 : α → β}   {u1 : 
+β → α} {l2 : β…
+· 使用定理 `Set.image_preimage`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, GaloisC
+onnection (Set.image f) (Set.preimage f)
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
 theorem Ideal.IsHomogeneous.iff_exists :
-    I.IsHomogeneous 𝒜 ↔ exists S : Set (homogeneousSubmonoid 𝒜), I = Ideal.span ((↑) '' S) := by
-  rw [Ideal.IsHomogeneous.iff_eq]; rw [eq_comm]
+    I.IsHomogeneous 𝒜 ↔ ∃ S : Set (homogeneousSubmonoid 𝒜), I = Ideal.span ((↑) '' S) := by
+  rw [Ideal.IsHomogeneous.iff_eq, eq_comm]
   exact ((Set.image_preimage.compose (Submodule.gi _ _).gc).exists_eq_l _).symm
 
 end IsHomogeneousIdealDefs
@@ -706,131 +587,101 @@ section Operations
 section Semiring
 
 variable [Semiring A] [DecidableEq ι] [AddMonoid ι]
-variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι -> σ) [GradedRing 𝒜]
+variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ) [GradedRing 𝒜]
 
 namespace Ideal.IsHomogeneous
 
-/--
-theorem `bot` / 定理 `bot`
-
-English:
-theorem bot
-  statement: Ideal.IsHomogeneous 𝒜 ⊥
-  proof: fun i r hr => by
-  simp only [Ideal.mem_bot] at hr
-  rw [hr]; rw [decompose_zero]; rw [zero_apply]
-  apply Ideal.zero_mem
-
-中文:
-定理 bot
-  结论: 理想.IsHomogeneous 𝒜 ⊥
-  证明: fun i r hr => by
-  simp only [Ideal.mem_bot] at hr
-  rw [hr]; rw [decompose_zero]; rw [zero_apply]
-  apply Ideal.zero_mem
-
-Depends on / 依赖: Ideal.mem_bot, Ideal.zero_mem, decompose_zero, mem_bot, zero_apply, zero_mem
+/-
+**Ideal.IsHomogeneous.bot** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：bot : Ideal.IsHomogeneous 𝒜 ⊥
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.decompose_zero`：decompose_zero : decompose ℳ (0 : M) = 0
+· 使用定理 `DirectSum.zero_apply`：zero_apply (i : ι) : (0 : ⨁ i, β i) i = 0
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
 -/
 theorem bot : Ideal.IsHomogeneous 𝒜 ⊥ := fun i r hr => by
   simp only [Ideal.mem_bot] at hr
-  rw [hr]; rw [decompose_zero]; rw [zero_apply]
+  rw [hr, decompose_zero, zero_apply]
   apply Ideal.zero_mem
-
-/--
-theorem `top` / 定理 `top`
-
-English:
-theorem top
-  statement: Ideal.IsHomogeneous 𝒜 ⊤
-  proof: fun i r _ => by simp only [Submodule.mem_top]
-
-中文:
-定理 top
-  结论: 理想.IsHomogeneous 𝒜 ⊤
-  证明: fun i r _ => by simp only [Submodule.mem_top]
-
-Depends on / 依赖: Submodule, Submodule.mem_top, mem_top
+/-
+**Ideal.IsHomogeneous.top** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：top : Ideal.IsHomogeneous 𝒜 ⊤
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 theorem top : Ideal.IsHomogeneous 𝒜 ⊤ := fun i r _ => by simp only [Submodule.mem_top]
 
 variable {𝒜}
-
-/--
-theorem `inf` / 定理 `inf`
-
-English:
-theorem inf
-  given: {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
-  proof: fun _ _ hr => ⟨HI _ hr.1, HJ _ hr.2⟩
-
-中文:
-定理 下确界
-  条件: {I J : 理想 A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
-  证明: fun _ _ hr => ⟨HI _ hr.1, HJ _ hr.2⟩
+/-
+**Ideal.IsHomogeneous.inf** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：inf {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜) : (I
+ ⊓ J).IsHomogeneous 𝒜
+参数：HI : I.IsHomogeneous 𝒜；HJ : J.IsHomogeneous 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem inf {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜) :
     (I ⊓ J).IsHomogeneous 𝒜 :=
   fun _ _ hr => ⟨HI _ hr.1, HJ _ hr.2⟩
-
-/--
-theorem `sup` / 定理 `sup`
-
-English:
-theorem sup
-  given: {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
-  proof: by
-  rw [iff_exists] at HI HJ ⊢
-  obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
-  refine ⟨s₁ union s₂, ?_⟩
-  rw [Set.image_union]
-  exact (Submodule.span_union _ _).symm
-
-中文:
-定理 上确界
-  条件: {I J : 理想 A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
-  证明: by
-  rw [iff_exists] at HI HJ ⊢
-  obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
-  refine ⟨s₁ union s₂, ?_⟩
-  rw [Set.image_union]
-  exact (Submodule.span_union _ _).symm
-
-Depends on / 依赖: Set.image_union, Submodule, Submodule.span_union, iff_exists, image_union, span_union
+/-
+**Ideal.IsHomogeneous.sup** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：sup {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜) : (I
+ ⊔ J).IsHomogeneous 𝒜
+参数：HI : I.IsHomogeneous 𝒜；HJ : J.IsHomogeneous 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.IsHomogeneous.iff_exists`：Ideal.IsHomogeneous.iff_exists : I.IsHom
+ogeneous 𝒜 ↔ exists S : Set (homogeneousSubmonoid 𝒜), I = Ideal.span ((↑) '' S)
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.span_union`：span_union (s t : Set M) : span R (s union t) = sp
+an R s ⊔ span R t
 -/
 theorem sup {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜) :
     (I ⊔ J).IsHomogeneous 𝒜 := by
   rw [iff_exists] at HI HJ ⊢
   obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
-  refine ⟨s₁ union s₂, ?_⟩
+  refine ⟨s₁ ∪ s₂, ?_⟩
   rw [Set.image_union]
   exact (Submodule.span_union _ _).symm
-
-/--
-theorem `iSup` / 定理 `iSup`
-
-English:
-theorem iSup
-  given: {κ : Sort*} {f : κ -> Ideal A} (h : forall i, (f i).IsHomogeneous 𝒜)
-  proof: by
-  simp_rw [iff_exists] at h ⊢
-  choose s hs using h
-  refine ⟨⋃ i, s i, ?_⟩
-  simp_rw [Set.image_iUnion, Ideal.span_iUnion]
-  congr
-  exact funext hs
-
-中文:
-定理 iSup
-  条件: {κ : 类型层*} {f : κ -> 理想 A} (h : 对任意 i, (f i).IsHomogeneous 𝒜)
-  证明: by
-  simp_rw [iff_exists] at h ⊢
-  choose s hs using h
-  refine ⟨⋃ i, s i, ?_⟩
-  simp_rw [Set.image_iUnion, Ideal.span_iUnion]
-  congr
-  exact funext hs
+/-
+**Ideal.IsHomogeneous.iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : DecidableEq ι] [inst_2 : AddMonoid ι]   [inst_3 : SetLike σ A] [inst_4 : AddS
+ubmonoidClass σ A] {𝒜 : ι → σ} [inst_5 : GradedRing 𝒜] {κ : Sort u_4}   {f : κ →
+ Ideal A}, (∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)) → Ideal.IsHomogeneous 𝒜 (⨆ i
+, f i)
+参数：∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)；⨆ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_iUnion`：image_iUnion {f : α -> β} {s : ι -> Set α} : (f '' ⋃ i
+, s i) = ⋃ i, f '' s i
+· 使用定理 `Ideal.span_iUnion`：span_iUnion {ι} (s : ι -> Set α) : span (⋃ i, s i) = 
+⨆ i, span (s i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-protected theorem iSup {κ : Sort*} {f : κ -> Ideal A} (h : forall i, (f i).IsHomogeneous 𝒜) :
+protected theorem iSup {κ : Sort*} {f : κ → Ideal A} (h : ∀ i, (f i).IsHomogeneous 𝒜) :
     (⨆ i, f i).IsHomogeneous 𝒜 := by
   simp_rw [iff_exists] at h ⊢
   choose s hs using h
@@ -838,114 +689,96 @@ protected theorem iSup {κ : Sort*} {f : κ -> Ideal A} (h : forall i, (f i).IsH
   simp_rw [Set.image_iUnion, Ideal.span_iUnion]
   congr
   exact funext hs
-
-/--
-theorem `iInf` / 定理 `iInf`
-
-English:
-theorem iInf
-  given: {κ : Sort*} {f : κ -> Ideal A} (h : forall i, (f i).IsHomogeneous 𝒜)
-  proof: by
-  intro i x hx
-  simp only [Ideal.mem_iInf] at hx ⊢
-  exact fun j => h _ _ (hx j)
-
-中文:
-定理 iInf
-  条件: {κ : 类型层*} {f : κ -> 理想 A} (h : 对任意 i, (f i).IsHomogeneous 𝒜)
-  证明: by
-  intro i x hx
-  simp only [Ideal.mem_iInf] at hx ⊢
-  exact fun j => h _ _ (hx j)
+/-
+**Ideal.IsHomogeneous.iInf** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : DecidableEq ι] [inst_2 : AddMonoid ι]   [inst_3 : SetLike σ A] [inst_4 : AddS
+ubmonoidClass σ A] {𝒜 : ι → σ} [inst_5 : GradedRing 𝒜] {κ : Sort u_4}   {f : κ →
+ Ideal A}, (∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)) → Ideal.IsHomogeneous 𝒜 (⨅ i
+, f i)
+参数：∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)；⨅ i, f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem iInf {κ : Sort*} {f : κ -> Ideal A} (h : forall i, (f i).IsHomogeneous 𝒜) :
+protected theorem iInf {κ : Sort*} {f : κ → Ideal A} (h : ∀ i, (f i).IsHomogeneous 𝒜) :
     (⨅ i, f i).IsHomogeneous 𝒜 := by
   intro i x hx
   simp only [Ideal.mem_iInf] at hx ⊢
   exact fun j => h _ _ (hx j)
-
-/--
-theorem `iSup₂` / 定理 `iSup₂`
-
-English:
-theorem iSup₂
-  statement: {κ : Sort*} {κ' : κ -> Sort*} {f : forall i, κ' i -> Ideal A}
-  proof: IsHomogeneous.iSup fun i => IsHomogeneous.iSup h i
-
-中文:
-定理 iSup₂
-  结论: {κ : 类型层*} {κ' : κ -> 类型层*} {f : 对任意 i, κ' i -> 理想 A}
-  证明: IsHomogeneous.iSup fun i => IsHomogeneous.iSup h i
-
-Depends on / 依赖: IsHomogeneous, IsHomogeneous.iSup
+/-
+**Ideal.IsHomogeneous.iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : DecidableEq ι] [inst_2 : AddMonoid ι]   [inst_3 : SetLike σ A] [inst_4 : AddS
+ubmonoidClass σ A] {𝒜 : ι → σ} [inst_5 : GradedRing 𝒜] {κ : Sort u_4}   {f : κ →
+ Ideal A}, (∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)) → Ideal.IsHomogeneous 𝒜 (⨆ i
+, f i)
+参数：∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)；⨆ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_iUnion`：image_iUnion {f : α -> β} {s : ι -> Set α} : (f '' ⋃ i
+, s i) = ⋃ i, f '' s i
+· 使用定理 `Ideal.span_iUnion`：span_iUnion {ι} (s : ι -> Set α) : span (⋃ i, s i) = 
+⨆ i, span (s i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem iSup₂ {κ : Sort*} {κ' : κ -> Sort*} {f : forall i, κ' i -> Ideal A}
-    (h : forall i j, (f i j).IsHomogeneous 𝒜) : (⨆ (i) (j), f i j).IsHomogeneous 𝒜 :=
-IsHomogeneous.iSup fun i => IsHomogeneous.iSup h i
-
-/--
-theorem `iInf₂` / 定理 `iInf₂`
-
-English:
-theorem iInf₂
-  statement: {κ : Sort*} {κ' : κ -> Sort*} {f : forall i, κ' i -> Ideal A}
-  proof: IsHomogeneous.iInf fun i => IsHomogeneous.iInf h i
-
-中文:
-定理 iInf₂
-  结论: {κ : 类型层*} {κ' : κ -> 类型层*} {f : 对任意 i, κ' i -> 理想 A}
-  证明: IsHomogeneous.iInf fun i => IsHomogeneous.iInf h i
-
-Depends on / 依赖: IsHomogeneous, IsHomogeneous.iInf
+theorem iSup₂ {κ : Sort*} {κ' : κ → Sort*} {f : ∀ i, κ' i → Ideal A}
+    (h : ∀ i j, (f i j).IsHomogeneous 𝒜) : (⨆ (i) (j), f i j).IsHomogeneous 𝒜 :=
+  IsHomogeneous.iSup fun i => IsHomogeneous.iSup <| h i
+/-
+**Ideal.IsHomogeneous.iInf** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : DecidableEq ι] [inst_2 : AddMonoid ι]   [inst_3 : SetLike σ A] [inst_4 : AddS
+ubmonoidClass σ A] {𝒜 : ι → σ} [inst_5 : GradedRing 𝒜] {κ : Sort u_4}   {f : κ →
+ Ideal A}, (∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)) → Ideal.IsHomogeneous 𝒜 (⨅ i
+, f i)
+参数：∀ (i : κ), Ideal.IsHomogeneous 𝒜 (f i)；⨅ i, f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iInf₂ {κ : Sort*} {κ' : κ -> Sort*} {f : forall i, κ' i -> Ideal A}
-    (h : forall i j, (f i j).IsHomogeneous 𝒜) : (⨅ (i) (j), f i j).IsHomogeneous 𝒜 :=
-IsHomogeneous.iInf fun i => IsHomogeneous.iInf h i
-
-/--
-theorem `sSup` / 定理 `sSup`
-
-English:
-theorem sSup
-  given: {ℐ : Set (Ideal A)} (h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I)
-  proof: by
-  rw [sSup_eq_iSup]
-  exact iSup₂ h
-
-中文:
-定理 sSup
-  条件: {ℐ : 集合 (理想 A)} (h : 对任意 I in ℐ, 理想.IsHomogeneous 𝒜 I)
-  证明: by
-  rw [sSup_eq_iSup]
-  exact iSup₂ h
-
-Depends on / 依赖: sSup_eq_iSup
+theorem iInf₂ {κ : Sort*} {κ' : κ → Sort*} {f : ∀ i, κ' i → Ideal A}
+    (h : ∀ i j, (f i j).IsHomogeneous 𝒜) : (⨅ (i) (j), f i j).IsHomogeneous 𝒜 :=
+  IsHomogeneous.iInf fun i => IsHomogeneous.iInf <| h i
+/-
+**Ideal.IsHomogeneous.sSup** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：sSup {ℐ : Set (Ideal A)} (h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I) : (s
+Sup ℐ).IsHomogeneous 𝒜
+参数：Ideal A；h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup`：sSup_eq_iSup {s : Set α} : sSup s = ⨆ a in s, a
+· 使用定理 `Ideal.IsHomogeneous.iSup₂`：iSup₂ {κ : Sort*} {κ' : κ -> Sort*} {f : fora
+ll i, κ' i -> Ideal A} (h : forall i j, (f i j).IsHomogeneous 𝒜) : (⨆ (i) (j), f
+ i j).IsHomogen…
 -/
-theorem sSup {ℐ : Set (Ideal A)} (h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I) :
+theorem sSup {ℐ : Set (Ideal A)} (h : ∀ I ∈ ℐ, Ideal.IsHomogeneous 𝒜 I) :
     (sSup ℐ).IsHomogeneous 𝒜 := by
   rw [sSup_eq_iSup]
   exact iSup₂ h
-
-/--
-theorem `sInf` / 定理 `sInf`
-
-English:
-theorem sInf
-  given: {ℐ : Set (Ideal A)} (h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I)
-  proof: by
-  rw [sInf_eq_iInf]
-  exact iInf₂ h
-
-中文:
-定理 sInf
-  条件: {ℐ : 集合 (理想 A)} (h : 对任意 I in ℐ, 理想.IsHomogeneous 𝒜 I)
-  证明: by
-  rw [sInf_eq_iInf]
-  exact iInf₂ h
-
-Depends on / 依赖: sInf_eq_iInf
+/-
+**Ideal.IsHomogeneous.sInf** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsHomogeneous`。
+形式化陈述：sInf {ℐ : Set (Ideal A)} (h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I) : (s
+Inf ℐ).IsHomogeneous 𝒜
+参数：Ideal A；h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sInf_eq_iInf`：∀ {α : Type u_1} [inst : CompleteLattice α] {s : Set α}, s
+Inf s = ⨅ a ∈ s, a
+· 使用定理 `Ideal.IsHomogeneous.iInf₂`：iInf₂ {κ : Sort*} {κ' : κ -> Sort*} {f : fora
+ll i, κ' i -> Ideal A} (h : forall i j, (f i j).IsHomogeneous 𝒜) : (⨅ (i) (j), f
+ i j).IsHomogen…
 -/
-theorem sInf {ℐ : Set (Ideal A)} (h : forall I in ℐ, Ideal.IsHomogeneous 𝒜 I) :
+theorem sInf {ℐ : Set (Ideal A)} (h : ∀ I ∈ ℐ, Ideal.IsHomogeneous 𝒜 I) :
     (sInf ℐ).IsHomogeneous 𝒜 := by
   rw [sInf_eq_iInf]
   exact iInf₂ h
@@ -956,554 +789,309 @@ variable {𝒜}
 
 namespace HomogeneousIdeal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (HomogeneousIdeal 𝒜)
-  body: ⟨⟨⊤, Ideal.IsHomogeneous.top 𝒜⟩⟩
-
-中文:
-实例 :
-  签名: 顶元素 (HomogeneousIdeal 𝒜)
-  定义体: ⟨⟨⊤, Ideal.IsHomogeneous.top 𝒜⟩⟩
-
-Depends on / 依赖: Ideal.IsHomogeneous.top, IsHomogeneous
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (HomogeneousIdeal 𝒜) :=
   ⟨⟨⊤, Ideal.IsHomogeneous.top 𝒜⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (HomogeneousIdeal 𝒜)
-  body: ⟨⟨⊥, Ideal.IsHomogeneous.bot 𝒜⟩⟩
-
-中文:
-实例 :
-  签名: 底元素 (HomogeneousIdeal 𝒜)
-  定义体: ⟨⟨⊥, Ideal.IsHomogeneous.bot 𝒜⟩⟩
-
-Depends on / 依赖: Ideal.IsHomogeneous.bot, IsHomogeneous
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (HomogeneousIdeal 𝒜) :=
   ⟨⟨⊥, Ideal.IsHomogeneous.bot 𝒜⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (HomogeneousIdeal 𝒜)
-  body: ⟨fun I J => ⟨_, I.isHomogeneous.sup J.isHomogeneous⟩⟩
-
-中文:
-实例 :
-  签名: 最大值 (HomogeneousIdeal 𝒜)
-  定义体: ⟨fun I J => ⟨_, I.isHomogeneous.sup J.isHomogeneous⟩⟩
-
-Depends on / 依赖: I.isHomogeneous.sup, J.isHomogeneous, isHomogeneous
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (HomogeneousIdeal 𝒜) :=
   ⟨fun I J => ⟨_, I.isHomogeneous.sup J.isHomogeneous⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (HomogeneousIdeal 𝒜)
-  body: ⟨fun I J => ⟨_, I.isHomogeneous.inf J.isHomogeneous⟩⟩
-
-中文:
-实例 :
-  签名: 最小值 (HomogeneousIdeal 𝒜)
-  定义体: ⟨fun I J => ⟨_, I.isHomogeneous.inf J.isHomogeneous⟩⟩
-
-Depends on / 依赖: I.isHomogeneous.inf, J.isHomogeneous, isHomogeneous
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (HomogeneousIdeal 𝒜) :=
   ⟨fun I J => ⟨_, I.isHomogeneous.inf J.isHomogeneous⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (HomogeneousIdeal 𝒜)
-  body: ⟨fun S => ⟨⨆ s in S, toIdeal s, Ideal.IsHomogeneous.iSup₂ fun s _ => s.isHomogeneous⟩⟩
-
-中文:
-实例 :
-  签名: 上确界集 (HomogeneousIdeal 𝒜)
-  定义体: ⟨fun S => ⟨⨆ s in S, toIdeal s, Ideal.IsHomogeneous.iSup₂ fun s _ => s.isHomogeneous⟩⟩
-
-Depends on / 依赖: Ideal.IsHomogeneous.iSup, IsHomogeneous, isHomogeneous, s.isHomogeneous, toIdeal
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (HomogeneousIdeal 𝒜) :=
-  ⟨fun S => ⟨⨆ s in S, toIdeal s, Ideal.IsHomogeneous.iSup₂ fun s _ => s.isHomogeneous⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (HomogeneousIdeal 𝒜)
-  body: ⟨fun S => ⟨⨅ s in S, toIdeal s, Ideal.IsHomogeneous.iInf₂ fun s _ => s.isHomogeneous⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 下确界集 (HomogeneousIdeal 𝒜)
-  定义体: ⟨fun S => ⟨⨅ s in S, toIdeal s, Ideal.IsHomogeneous.iInf₂ fun s _ => s.isHomogeneous⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Ideal.IsHomogeneous.iInf, IsHomogeneous, isHomogeneous, s.isHomogeneous, toIdeal
+  ⟨fun S => ⟨⨆ s ∈ S, toIdeal s, Ideal.IsHomogeneous.iSup₂ fun s _ => s.isHomogeneous⟩⟩
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (HomogeneousIdeal 𝒜) :=
-  ⟨fun S => ⟨⨅ s in S, toIdeal s, Ideal.IsHomogeneous.iInf₂ fun s _ => s.isHomogeneous⟩⟩
+  ⟨fun S => ⟨⨅ s ∈ S, toIdeal s, Ideal.IsHomogeneous.iInf₂ fun s _ => s.isHomogeneous⟩⟩
 
 @[simp]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: ((⊤ : HomogeneousIdeal 𝒜) : Set A) = univ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_top
-  结论: ((⊤ : HomogeneousIdeal 𝒜) : 集合 A) = univ
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：coe_top : ((⊤ : HomogeneousIdeal 𝒜) : Set A) = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : ((⊤ : HomogeneousIdeal 𝒜) : Set A) = univ :=
   rfl
 
 @[simp]
-/--
-theorem `coe_bot` / 定理 `coe_bot`
-
-English:
-theorem coe_bot
-  statement: ((⊥ : HomogeneousIdeal 𝒜) : Set A) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_bot
-  结论: ((⊥ : HomogeneousIdeal 𝒜) : 集合 A) = 0
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：coe_bot : ((⊥ : HomogeneousIdeal 𝒜) : Set A) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bot : ((⊥ : HomogeneousIdeal 𝒜) : Set A) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_sup` / 定理 `coe_sup`
-
-English:
-theorem coe_sup
-  given: (I J : HomogeneousIdeal 𝒜)
-  statement: ↑(I ⊔ J) = (I + J : Set A)
-  proof: Submodule.coe_sup _ _
-
-@[simp]
-
-中文:
-定理 coe_sup
-  条件: (I J : HomogeneousIdeal 𝒜)
-  结论: ↑(I ⊔ J) = (I + J : 集合 A)
-  证明: Submodule.coe_sup _ _
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.coe_sup, coe_sup
+/-
+**HomogeneousIdeal.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：coe_sup (I J : HomogeneousIdeal 𝒜) : ↑(I ⊔ J) = (I + J : Set A)
+参数：I J : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.coe_sup`：coe_sup : ↑(p ⊔ p') = (p + p' : Set M)
 -/
 theorem coe_sup (I J : HomogeneousIdeal 𝒜) : ↑(I ⊔ J) = (I + J : Set A) :=
   Submodule.coe_sup _ _
 
 @[simp]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  given: (I J : HomogeneousIdeal 𝒜)
-  statement: (↑(I ⊓ J) : Set A) = ↑I inter ↑J
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_inf
-  条件: (I J : HomogeneousIdeal 𝒜)
-  结论: (↑(I ⊓ J) : 集合 A) = ↑I inter ↑J
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：coe_inf (I J : HomogeneousIdeal 𝒜) : (↑(I ⊓ J) : Set A) = ↑I inter ↑J
+参数：I J : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf (I J : HomogeneousIdeal 𝒜) : (↑(I ⊓ J) : Set A) = ↑I inter ↑J :=
+theorem coe_inf (I J : HomogeneousIdeal 𝒜) : (↑(I ⊓ J) : Set A) = ↑I ∩ ↑J :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_top` / 定理 `toIdeal_top`
-
-English:
-theorem toIdeal_top
-  statement: (⊤ : HomogeneousIdeal 𝒜).toIdeal = (⊤ : Ideal A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toIdeal_top
-  结论: (⊤ : HomogeneousIdeal 𝒜).toIdeal = (⊤ : 理想 A)
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.toIdeal_top** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_top : (⊤ : HomogeneousIdeal 𝒜).toIdeal = (⊤ : Ideal A)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toIdeal_top : (⊤ : HomogeneousIdeal 𝒜).toIdeal = (⊤ : Ideal A) :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_bot` / 定理 `toIdeal_bot`
-
-English:
-theorem toIdeal_bot
-  statement: (⊥ : HomogeneousIdeal 𝒜).toIdeal = (⊥ : Ideal A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toIdeal_bot
-  结论: (⊥ : HomogeneousIdeal 𝒜).toIdeal = (⊥ : 理想 A)
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.toIdeal_bot** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_bot : (⊥ : HomogeneousIdeal 𝒜).toIdeal = (⊥ : Ideal A)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toIdeal_bot : (⊥ : HomogeneousIdeal 𝒜).toIdeal = (⊥ : Ideal A) :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_sup` / 定理 `toIdeal_sup`
-
-English:
-theorem toIdeal_sup
-  given: (I J : HomogeneousIdeal 𝒜)
-  statement: (I ⊔ J).toIdeal = I.toIdeal ⊔ J.toIdeal
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toIdeal_sup
-  条件: (I J : HomogeneousIdeal 𝒜)
-  结论: (I ⊔ J).toIdeal = I.toIdeal ⊔ J.toIdeal
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.toIdeal_sup** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_sup (I J : HomogeneousIdeal 𝒜) : (I ⊔ J).toIdeal = I.toIdeal ⊔ J.t
+oIdeal
+参数：I J : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toIdeal_sup (I J : HomogeneousIdeal 𝒜) : (I ⊔ J).toIdeal = I.toIdeal ⊔ J.toIdeal :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_inf` / 定理 `toIdeal_inf`
-
-English:
-theorem toIdeal_inf
-  given: (I J : HomogeneousIdeal 𝒜)
-  statement: (I ⊓ J).toIdeal = I.toIdeal ⊓ J.toIdeal
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toIdeal_inf
-  条件: (I J : HomogeneousIdeal 𝒜)
-  结论: (I ⊓ J).toIdeal = I.toIdeal ⊓ J.toIdeal
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.toIdeal_inf** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_inf (I J : HomogeneousIdeal 𝒜) : (I ⊓ J).toIdeal = I.toIdeal ⊓ J.t
+oIdeal
+参数：I J : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toIdeal_inf (I J : HomogeneousIdeal 𝒜) : (I ⊓ J).toIdeal = I.toIdeal ⊓ J.toIdeal :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_sSup` / 定理 `toIdeal_sSup`
-
-English:
-theorem toIdeal_sSup
-  given: (ℐ : Set (HomogeneousIdeal 𝒜))
-  statement: (sSup ℐ).toIdeal = ⨆ s in ℐ, toIdeal s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toIdeal_sSup
-  条件: (ℐ : 集合 (HomogeneousIdeal 𝒜))
-  结论: (sSup ℐ).toIdeal = ⨆ s in ℐ, toIdeal s
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.toIdeal_sSup** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_sSup (ℐ : Set (HomogeneousIdeal 𝒜)) : (sSup ℐ).toIdeal = ⨆ s in ℐ,
+ toIdeal s
+参数：ℐ : Set (HomogeneousIdeal 𝒜)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toIdeal_sSup (ℐ : Set (HomogeneousIdeal 𝒜)) : (sSup ℐ).toIdeal = ⨆ s in ℐ, toIdeal s :=
+theorem toIdeal_sSup (ℐ : Set (HomogeneousIdeal 𝒜)) : (sSup ℐ).toIdeal = ⨆ s ∈ ℐ, toIdeal s :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_sInf` / 定理 `toIdeal_sInf`
-
-English:
-theorem toIdeal_sInf
-  given: (ℐ : Set (HomogeneousIdeal 𝒜))
-  statement: (sInf ℐ).toIdeal = ⨅ s in ℐ, toIdeal s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toIdeal_sInf
-  条件: (ℐ : 集合 (HomogeneousIdeal 𝒜))
-  结论: (sInf ℐ).toIdeal = ⨅ s in ℐ, toIdeal s
-  证明: rfl
-
-@[simp]
+/-
+**HomogeneousIdeal.toIdeal_sInf** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_sInf (ℐ : Set (HomogeneousIdeal 𝒜)) : (sInf ℐ).toIdeal = ⨅ s in ℐ,
+ toIdeal s
+参数：ℐ : Set (HomogeneousIdeal 𝒜)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toIdeal_sInf (ℐ : Set (HomogeneousIdeal 𝒜)) : (sInf ℐ).toIdeal = ⨅ s in ℐ, toIdeal s :=
+theorem toIdeal_sInf (ℐ : Set (HomogeneousIdeal 𝒜)) : (sInf ℐ).toIdeal = ⨅ s ∈ ℐ, toIdeal s :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_iSup` / 定理 `toIdeal_iSup`
-
-English:
-theorem toIdeal_iSup
-  given: {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜)
-  proof: by
-  rw [iSup]; rw [toIdeal_sSup]; rw [iSup_range]
-
-@[simp]
-
-中文:
-定理 toIdeal_iSup
-  条件: {κ : 类型层*} (s : κ -> HomogeneousIdeal 𝒜)
-  证明: by
-  rw [iSup]; rw [toIdeal_sSup]; rw [iSup_range]
-
-@[simp]
-
-Depends on / 依赖: iSup_range, toIdeal_sSup
+/-
+**HomogeneousIdeal.toIdeal_iSup** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_iSup {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜) : (⨆ i, s i).toIdea
+l = ⨆ i, (s i).toIdeal
+参数：s : κ -> HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : SupSet α] (s : ι → α), iS
+up s = sSup (Set.range s)
+· 使用定理 `HomogeneousIdeal.toIdeal_sSup`：toIdeal_sSup (ℐ : Set (HomogeneousIdeal 𝒜
+)) : (sSup ℐ).toIdeal = ⨆ s in ℐ, toIdeal s
+· 使用定理 `iSup_range`：iSup_range {g : β -> α} {f : ι -> β} : ⨆ b in range f, g b =
+ ⨆ i, g (f i)
 -/
-theorem toIdeal_iSup {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜) :
+theorem toIdeal_iSup {κ : Sort*} (s : κ → HomogeneousIdeal 𝒜) :
     (⨆ i, s i).toIdeal = ⨆ i, (s i).toIdeal := by
-  rw [iSup]; rw [toIdeal_sSup]; rw [iSup_range]
+  rw [iSup, toIdeal_sSup, iSup_range]
 
 @[simp]
-/--
-theorem `toIdeal_iInf` / 定理 `toIdeal_iInf`
-
-English:
-theorem toIdeal_iInf
-  given: {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜)
-  proof: by
-  rw [iInf]; rw [toIdeal_sInf]; rw [iInf_range]
-
-中文:
-定理 toIdeal_iInf
-  条件: {κ : 类型层*} (s : κ -> HomogeneousIdeal 𝒜)
-  证明: by
-  rw [iInf]; rw [toIdeal_sInf]; rw [iInf_range]
-
-Depends on / 依赖: iInf_range, toIdeal_sInf
+/-
+**HomogeneousIdeal.toIdeal_iInf** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_iInf {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜) : (⨅ i, s i).toIdea
+l = ⨅ i, (s i).toIdeal
+参数：s : κ -> HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `HomogeneousIdeal.toIdeal_sInf`：toIdeal_sInf (ℐ : Set (HomogeneousIdeal 𝒜
+)) : (sInf ℐ).toIdeal = ⨅ s in ℐ, toIdeal s
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
 -/
-theorem toIdeal_iInf {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜) :
+theorem toIdeal_iInf {κ : Sort*} (s : κ → HomogeneousIdeal 𝒜) :
     (⨅ i, s i).toIdeal = ⨅ i, (s i).toIdeal := by
-  rw [iInf]; rw [toIdeal_sInf]; rw [iInf_range]
-
-/--
-theorem `toIdeal_iSup₂` / 定理 `toIdeal_iSup₂`
-
-English:
-theorem toIdeal_iSup₂
-  given: {κ : Sort*} {κ' : κ -> Sort*} (s : forall i, κ' i -> HomogeneousIdeal 𝒜)
-  proof: by
-  simp_rw [toIdeal_iSup]
-
-中文:
-定理 toIdeal_iSup₂
-  条件: {κ : 类型层*} {κ' : κ -> 类型层*} (s : 对任意 i, κ' i -> HomogeneousIdeal 𝒜)
-  证明: by
-  simp_rw [toIdeal_iSup]
-
-Depends on / 依赖: simp_rw, toIdeal_iSup
+  rw [iInf, toIdeal_sInf, iInf_range]
+/-
+**HomogeneousIdeal.toIdeal_iSup** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_iSup {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜) : (⨆ i, s i).toIdea
+l = ⨆ i, (s i).toIdeal
+参数：s : κ -> HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : SupSet α] (s : ι → α), iS
+up s = sSup (Set.range s)
+· 使用定理 `HomogeneousIdeal.toIdeal_sSup`：toIdeal_sSup (ℐ : Set (HomogeneousIdeal 𝒜
+)) : (sSup ℐ).toIdeal = ⨆ s in ℐ, toIdeal s
+· 使用定理 `iSup_range`：iSup_range {g : β -> α} {f : ι -> β} : ⨆ b in range f, g b =
+ ⨆ i, g (f i)
 -/
-theorem toIdeal_iSup₂ {κ : Sort*} {κ' : κ -> Sort*} (s : forall i, κ' i -> HomogeneousIdeal 𝒜) :
+theorem toIdeal_iSup₂ {κ : Sort*} {κ' : κ → Sort*} (s : ∀ i, κ' i → HomogeneousIdeal 𝒜) :
     (⨆ (i) (j), s i j).toIdeal = ⨆ (i) (j), (s i j).toIdeal := by
   simp_rw [toIdeal_iSup]
-
-/--
-theorem `toIdeal_iInf₂` / 定理 `toIdeal_iInf₂`
-
-English:
-theorem toIdeal_iInf₂
-  given: {κ : Sort*} {κ' : κ -> Sort*} (s : forall i, κ' i -> HomogeneousIdeal 𝒜)
-  proof: by
-  simp_rw [toIdeal_iInf]
-
-@[simp]
-
-中文:
-定理 toIdeal_iInf₂
-  条件: {κ : 类型层*} {κ' : κ -> 类型层*} (s : 对任意 i, κ' i -> HomogeneousIdeal 𝒜)
-  证明: by
-  simp_rw [toIdeal_iInf]
-
-@[simp]
-
-Depends on / 依赖: simp_rw, toIdeal_iInf
+/-
+**HomogeneousIdeal.toIdeal_iInf** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_iInf {κ : Sort*} (s : κ -> HomogeneousIdeal 𝒜) : (⨅ i, s i).toIdea
+l = ⨅ i, (s i).toIdeal
+参数：s : κ -> HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `HomogeneousIdeal.toIdeal_sInf`：toIdeal_sInf (ℐ : Set (HomogeneousIdeal 𝒜
+)) : (sInf ℐ).toIdeal = ⨅ s in ℐ, toIdeal s
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
 -/
-theorem toIdeal_iInf₂ {κ : Sort*} {κ' : κ -> Sort*} (s : forall i, κ' i -> HomogeneousIdeal 𝒜) :
+theorem toIdeal_iInf₂ {κ : Sort*} {κ' : κ → Sort*} (s : ∀ i, κ' i → HomogeneousIdeal 𝒜) :
     (⨅ (i) (j), s i j).toIdeal = ⨅ (i) (j), (s i j).toIdeal := by
   simp_rw [toIdeal_iInf]
 
 @[simp]
-/--
-theorem `eq_top_iff` / 定理 `eq_top_iff`
-
-English:
-theorem eq_top_iff
-  given: (I : HomogeneousIdeal 𝒜)
-  statement: I = ⊤ ↔ I.toIdeal = ⊤
-  proof: toIdeal_injective.eq_iff.symm
-
-@[simp]
-
-中文:
-定理 eq_top_iff
-  条件: (I : HomogeneousIdeal 𝒜)
-  结论: I = ⊤ ↔ I.toIdeal = ⊤
-  证明: toIdeal_injective.eq_iff.symm
-
-@[simp]
-
-Depends on / 依赖: eq_iff, toIdeal_injective, toIdeal_injective.eq_iff.symm
+/-
+**HomogeneousIdeal.eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：eq_top_iff (I : HomogeneousIdeal 𝒜) : I = ⊤ ↔ I.toIdeal = ⊤
+参数：I : HomogeneousIdeal 𝒜。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `HomogeneousIdeal.toIdeal_injective`：HomogeneousIdeal.toIdeal_injective :
+ Function.Injective (HomogeneousIdeal.toIdeal : HomogeneousIdeal 𝒜 -> Ideal A)
 -/
 theorem eq_top_iff (I : HomogeneousIdeal 𝒜) : I = ⊤ ↔ I.toIdeal = ⊤ :=
   toIdeal_injective.eq_iff.symm
 
 @[simp]
-/--
-theorem `eq_bot_iff` / 定理 `eq_bot_iff`
-
-English:
-theorem eq_bot_iff
-  given: (I : HomogeneousIdeal 𝒜)
-  statement: I = ⊥ ↔ I.toIdeal = ⊥
-  proof: toIdeal_injective.eq_iff.symm
-
-中文:
-定理 eq_bot_iff
-  条件: (I : HomogeneousIdeal 𝒜)
-  结论: I = ⊥ ↔ I.toIdeal = ⊥
-  证明: toIdeal_injective.eq_iff.symm
-
-Depends on / 依赖: eq_iff, toIdeal_injective, toIdeal_injective.eq_iff.symm
+/-
+**HomogeneousIdeal.eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：eq_bot_iff (I : HomogeneousIdeal 𝒜) : I = ⊥ ↔ I.toIdeal = ⊥
+参数：I : HomogeneousIdeal 𝒜。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `HomogeneousIdeal.toIdeal_injective`：HomogeneousIdeal.toIdeal_injective :
+ Function.Injective (HomogeneousIdeal.toIdeal : HomogeneousIdeal 𝒜 -> Ideal A)
 -/
 theorem eq_bot_iff (I : HomogeneousIdeal 𝒜) : I = ⊥ ↔ I.toIdeal = ⊥ :=
   toIdeal_injective.eq_iff.symm
-
-/--
-Instance `completeLattice` / 实例 `completeLattice`
-
-English:
-instance completeLattice
-  signature: : CompleteLattice (HomogeneousIdeal 𝒜)
-  body: toIdeal_injective.completeLattice _ .rfl .rfl toIdeal_sup toIdeal_inf toIdeal_sSup toIdeal_sInf
-    toIdeal_top toIdeal_bot
-
-中文:
-实例 completeLattice
-  签名: : 完备格 (HomogeneousIdeal 𝒜)
-  定义体: toIdeal_injective.completeLattice _ .rfl .rfl toIdeal_sup toIdeal_inf toIdeal_sSup toIdeal_sInf
-    toIdeal_top toIdeal_bot
-
-Depends on / 依赖: completeLattice, toIdeal_bot, toIdeal_inf, toIdeal_injective, toIdeal_injective.completeLattice, toIdeal_sInf, toIdeal_sSup, toIdeal_sup, toIdeal_top
+/-
+**HomogeneousIdeal.completeLattice** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：completeLattice : CompleteLattice (HomogeneousIdeal 𝒜)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousIdeal.toIdeal_injective`：HomogeneousIdeal.toIdeal_injective :
+ Function.Injective (HomogeneousIdeal.toIdeal : HomogeneousIdeal 𝒜 -> Ideal A)
+· 使用定理 `HomogeneousIdeal.toIdeal_sup`：toIdeal_sup (I J : HomogeneousIdeal 𝒜) : (
+I ⊔ J).toIdeal = I.toIdeal ⊔ J.toIdeal
+· 使用定理 `HomogeneousIdeal.toIdeal_inf`：toIdeal_inf (I J : HomogeneousIdeal 𝒜) : (
+I ⊓ J).toIdeal = I.toIdeal ⊓ J.toIdeal
+· 使用定理 `HomogeneousIdeal.toIdeal_sSup`：toIdeal_sSup (ℐ : Set (HomogeneousIdeal 𝒜
+)) : (sSup ℐ).toIdeal = ⨆ s in ℐ, toIdeal s
+· 使用定理 `HomogeneousIdeal.toIdeal_sInf`：toIdeal_sInf (ℐ : Set (HomogeneousIdeal 𝒜
+)) : (sInf ℐ).toIdeal = ⨅ s in ℐ, toIdeal s
+· 使用定理 `HomogeneousIdeal.toIdeal_top`：toIdeal_top : (⊤ : HomogeneousIdeal 𝒜).toI
+deal = (⊤ : Ideal A)
+· 使用定理 `HomogeneousIdeal.toIdeal_bot`：toIdeal_bot : (⊥ : HomogeneousIdeal 𝒜).toI
+deal = (⊥ : Ideal A)
 -/
 instance completeLattice : CompleteLattice (HomogeneousIdeal 𝒜) :=
   toIdeal_injective.completeLattice _ .rfl .rfl toIdeal_sup toIdeal_inf toIdeal_sSup toIdeal_sInf
     toIdeal_top toIdeal_bot
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (HomogeneousIdeal 𝒜)
-  body: ⟨(· ⊔ ·)⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 加法 (HomogeneousIdeal 𝒜)
-  定义体: ⟨(· ⊔ ·)⟩
-
-@[simp]
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (HomogeneousIdeal 𝒜) :=
   ⟨(· ⊔ ·)⟩
 
 @[simp]
-/--
-theorem `toIdeal_add` / 定理 `toIdeal_add`
-
-English:
-theorem toIdeal_add
-  given: (I J : HomogeneousIdeal 𝒜)
-  statement: (I + J).toIdeal = I.toIdeal + J.toIdeal
-  proof: rfl
-
-中文:
-定理 toIdeal_add
-  条件: (I J : HomogeneousIdeal 𝒜)
-  结论: (I + J).toIdeal = I.toIdeal + J.toIdeal
-  证明: rfl
+/-
+**HomogeneousIdeal.toIdeal_add** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：toIdeal_add (I J : HomogeneousIdeal 𝒜) : (I + J).toIdeal = I.toIdeal + J.t
+oIdeal
+参数：I J : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toIdeal_add (I J : HomogeneousIdeal 𝒜) : (I + J).toIdeal = I.toIdeal + J.toIdeal :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (HomogeneousIdeal 𝒜)
-  body: ⊥
-
-中文:
-实例 :
-  签名: 可居 (HomogeneousIdeal 𝒜)
-  定义体: ⊥
+/-
+**HomogeneousIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `HomogeneousIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (HomogeneousIdeal 𝒜) where default := ⊥
 
@@ -1515,74 +1103,58 @@ section CommSemiring
 
 variable [CommSemiring A]
 variable [DecidableEq ι] [AddMonoid ι]
-variable [SetLike σ A] [AddSubmonoidClass σ A] {𝒜 : ι -> σ} [GradedRing 𝒜]
+variable [SetLike σ A] [AddSubmonoidClass σ A] {𝒜 : ι → σ} [GradedRing 𝒜]
 variable (I : Ideal A)
 
-/--
-theorem `Ideal.IsHomogeneous.mul` / 定理 `Ideal.IsHomogeneous.mul`
-
-English:
-theorem Ideal.IsHomogeneous.mul
-  given: {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
-  proof: by
-  rw [Ideal.IsHomogeneous.iff_exists] at HI HJ ⊢
-  obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
-  rw [Ideal.span_mul_span']
-exact ⟨s₁ * s₂, congr_arg _ (Set.image_mul (homogeneousSubmonoid 𝒜).subtype).symm⟩
-
-中文:
-定理 理想.IsHomogeneous.mul
-  条件: {I J : 理想 A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜)
-  证明: by
-  rw [Ideal.IsHomogeneous.iff_exists] at HI HJ ⊢
-  obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
-  rw [Ideal.span_mul_span']
-exact ⟨s₁ * s₂, congr_arg _ (Set.image_mul (homogeneousSubmonoid 𝒜).subtype).symm⟩
-
-Depends on / 依赖: Ideal.IsHomogeneous.iff_exists, Ideal.span_mul_span, IsHomogeneous, Set.image_mul, congr_arg, homogeneousSubmonoid, iff_exists, image_mul, span_mul_span, subtype
+/-
+**Ideal.IsHomogeneous.mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.IsHomogeneous.mul {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.I
+sHomogeneous 𝒜) : (I * J).IsHomogeneous 𝒜
+参数：HI : I.IsHomogeneous 𝒜；HJ : J.IsHomogeneous 𝒜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `GradedRing.toGradedMonoid`：∀ {ι : Type u_1} {A : Type u_3} {σ : Type u_4
+} {inst : DecidableEq ι} {inst_1 : AddMonoid ι} {inst_2 : Semiring A}   {inst_3 
+: SetLike σ A} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.IsHomogeneous.iff_exists`：Ideal.IsHomogeneous.iff_exists : I.IsHom
+ogeneous 𝒜 ↔ exists S : Set (homogeneousSubmonoid 𝒜), I = Ideal.span ((↑) '' S)
+· 使用定理 `Ideal.span_mul_span'`：span_mul_span' (S T : Set R) [(span S).IsTwoSided]
+ : span S * span T = span (S * T)
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_mul`：image_mul : m '' (s * t) = m '' s * m '' t
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
 theorem Ideal.IsHomogeneous.mul {I J : Ideal A} (HI : I.IsHomogeneous 𝒜) (HJ : J.IsHomogeneous 𝒜) :
     (I * J).IsHomogeneous 𝒜 := by
   rw [Ideal.IsHomogeneous.iff_exists] at HI HJ ⊢
   obtain ⟨⟨s₁, rfl⟩, ⟨s₂, rfl⟩⟩ := HI, HJ
   rw [Ideal.span_mul_span']
-exact ⟨s₁ * s₂, congr_arg _ (Set.image_mul (homogeneousSubmonoid 𝒜).subtype).symm⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (HomogeneousIdeal 𝒜)
-  body: ⟨I.toIdeal * J.toIdeal, I.isHomogeneous.mul J.isHomogeneous⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 乘法 (HomogeneousIdeal 𝒜)
-  定义体: ⟨I.toIdeal * J.toIdeal, I.isHomogeneous.mul J.isHomogeneous⟩
-
-@[simp]
-
-Depends on / 依赖: I.isHomogeneous.mul, I.toIdeal, J.isHomogeneous, J.toIdeal, isHomogeneous, toIdeal
+  exact ⟨s₁ * s₂, congr_arg _ <| (Set.image_mul (homogeneousSubmonoid 𝒜).subtype).symm⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (HomogeneousIdeal 𝒜) where
   mul I J := ⟨I.toIdeal * J.toIdeal, I.isHomogeneous.mul J.isHomogeneous⟩
 
 @[simp]
-/--
-theorem `HomogeneousIdeal.toIdeal_mul` / 定理 `HomogeneousIdeal.toIdeal_mul`
-
-English:
-theorem HomogeneousIdeal.toIdeal_mul
-  given: (I J : HomogeneousIdeal 𝒜)
-  proof: rfl
-
-中文:
-定理 HomogeneousIdeal.toIdeal_mul
-  条件: (I J : HomogeneousIdeal 𝒜)
-  证明: rfl
+/-
+**HomogeneousIdeal.toIdeal_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.toIdeal_mul (I J : HomogeneousIdeal 𝒜) : (I * J).toIdeal 
+= I.toIdeal * J.toIdeal
+参数：I J : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HomogeneousIdeal.toIdeal_mul (I J : HomogeneousIdeal 𝒜) :
     (I * J).toIdeal = I.toIdeal * J.toIdeal :=
@@ -1603,50 +1175,44 @@ section homogeneousCore
 open HomogeneousIdeal
 
 variable [Semiring A] [DecidableEq ι] [AddMonoid ι]
-variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι -> σ) [GradedRing 𝒜]
+variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ) [GradedRing 𝒜]
 variable (I : Ideal A)
 
-/--
-theorem `Ideal.homogeneousCore.gc` / 定理 `Ideal.homogeneousCore.gc`
-
-English:
-theorem Ideal.homogeneousCore.gc
-  statement: GaloisConnection toIdeal (Ideal.homogeneousCore 𝒜)
-  proof: fun I _ =>
-  ⟨fun H => I.toIdeal_homogeneousCore_eq_self ▸ Ideal.homogeneousCore_mono 𝒜 H,
-    fun H => le_trans H (Ideal.homogeneousCore'_le _ _)⟩
-
-中文:
-定理 理想.homogeneousCore.gc
-  结论: GaloisConnection toIdeal (理想.homogeneousCore 𝒜)
-  证明: fun I _ =>
-  ⟨fun H => I.toIdeal_homogeneousCore_eq_self ▸ Ideal.homogeneousCore_mono 𝒜 H,
-    fun H => le_trans H (Ideal.homogeneousCore'_le _ _)⟩
+/-
+**Ideal.homogeneousCore.gc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousCore.gc : GaloisConnection toIdeal (Ideal.homogeneousCore
+ 𝒜)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.homogeneousCore_mono`：Ideal.homogeneousCore_mono : Monotone (Ideal
+.homogeneousCore 𝒜)
+· 使用定理 `HomogeneousIdeal.toIdeal_homogeneousCore_eq_self`：HomogeneousIdeal.toIde
+al_homogeneousCore_eq_self (I : HomogeneousIdeal 𝒜) : I.toIdeal.homogeneousCore 
+𝒜 = I
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Ideal.homogeneousCore'_le`：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3
+} [inst : Semiring A] [inst_1 : SetLike σ A] (𝒜 : ι → σ) (I : Ideal A),   Ideal.
+homogeneousCore…
 -/
 theorem Ideal.homogeneousCore.gc : GaloisConnection toIdeal (Ideal.homogeneousCore 𝒜) := fun I _ =>
   ⟨fun H => I.toIdeal_homogeneousCore_eq_self ▸ Ideal.homogeneousCore_mono 𝒜 H,
     fun H => le_trans H (Ideal.homogeneousCore'_le _ _)⟩
 
-/--
-Definition of `Ideal.homogeneousCore.gi` / `Ideal.homogeneousCore.gi` 的定义
+/-- `toIdeal : HomogeneousIdeal 𝒜 → Ideal A` and `Ideal.homogeneousCore 𝒜` forms a Galois
+coinsertion. -/
+/-
+**Ideal.homogeneousCore.gi** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousCore.gi : GaloisCoinsertion toIdeal (Ideal.homogeneousCor
+e 𝒜) where choice I HI
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.homogeneousCore.gc`：Ideal.homogeneousCore.gc : GaloisConnection to
+Ideal (Ideal.homogeneousCore 𝒜)
 
-English:
-definition Ideal.homogeneousCore.gi
-  signature: : GaloisCoinsertion toIdeal (Ideal.homogeneousCore 𝒜) where
-  body: ⟨I, le_antisymm (I.toIdeal_homogeneousCore_le 𝒜) HI ▸ HomogeneousIdeal.isHomogeneous _⟩
-  gc := Ideal.homogeneousCore.gc 𝒜
-  u_l_le _ := Ideal.homogeneousCore'_le _ _
-  choice_eq I H := le_antisymm H (I.toIdeal_homogeneousCore_le _)
-
-中文:
-定义 理想.homogeneousCore.gi
-  签名: : Galois余嵌入 toIdeal (理想.homogeneousCore 𝒜) where
-  定义体: ⟨I, le_antisymm (I.toIdeal_homogeneousCore_le 𝒜) HI ▸ HomogeneousIdeal.isHomogeneous _⟩
-  gc := Ideal.homogeneousCore.gc 𝒜
-  u_l_le _ := Ideal.homogeneousCore'_le _ _
-  choice_eq I H := le_antisymm H (I.toIdeal_homogeneousCore_le _)
-
-Depends on / 依赖: HomogeneousIdeal, HomogeneousIdeal.isHomogeneous, I.toIdeal_homogeneousCore_le, Ideal.homogeneousCore, Ideal.homogeneousCore.gc, choice_eq, homogeneousCore, isHomogeneous, le_antisymm, toIdeal_homogeneousCore_le, u_l_le
+--- 原说明 ---
+`toIdeal : HomogeneousIdeal 𝒜 → Ideal A` and `Ideal.homogeneousCore 𝒜` forms a G
+alois
+coinsertion.
 -/
 def Ideal.homogeneousCore.gi : GaloisCoinsertion toIdeal (Ideal.homogeneousCore 𝒜) where
   choice I HI :=
@@ -1654,61 +1220,68 @@ def Ideal.homogeneousCore.gi : GaloisCoinsertion toIdeal (Ideal.homogeneousCore 
   gc := Ideal.homogeneousCore.gc 𝒜
   u_l_le _ := Ideal.homogeneousCore'_le _ _
   choice_eq I H := le_antisymm H (I.toIdeal_homogeneousCore_le _)
-
-/--
-theorem `Ideal.homogeneousCore_eq_sSup` / 定理 `Ideal.homogeneousCore_eq_sSup`
-
-English:
-theorem Ideal.homogeneousCore_eq_sSup
-  proof: Eq.symm IsLUB.sSup_eq (Ideal.homogeneousCore.gc 𝒜).isGreatest_u.isLUB
-
-中文:
-定理 理想.homogeneousCore_eq_sSup
-  证明: Eq.symm IsLUB.sSup_eq (Ideal.homogeneousCore.gc 𝒜).isGreatest_u.isLUB
-
-Depends on / 依赖: Eq.symm, Ideal.homogeneousCore.gc, IsLUB.sSup_eq, homogeneousCore, isGreatest_u, isGreatest_u.isLUB, sSup_eq
+/-
+**Ideal.homogeneousCore_eq_sSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousCore_eq_sSup : I.homogeneousCore 𝒜 = sSup { J : Homogeneo
+usIdeal 𝒜 | J.toIdeal <= I }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLUB.sSup_eq`：∀ {α : Type u_1} [inst : CompleteSemilatticeSup α] {s : S
+et α} {a : α}, IsLUB s a → sSup s = a
+· 使用定理 `IsGreatest.isLUB`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α} {a : 
+α}, IsGreatest s a → IsLUB s a
+· 使用定理 `GaloisConnection.isGreatest_u`：∀ {α : Type u} {β : Type v} [inst : Preor
+der α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → ∀
+ {a : α}, IsGreates…
+· 使用定理 `Ideal.homogeneousCore.gc`：Ideal.homogeneousCore.gc : GaloisConnection to
+Ideal (Ideal.homogeneousCore 𝒜)
 -/
 theorem Ideal.homogeneousCore_eq_sSup :
-    I.homogeneousCore 𝒜 = sSup { J : HomogeneousIdeal 𝒜 | J.toIdeal <= I } :=
-Eq.symm IsLUB.sSup_eq (Ideal.homogeneousCore.gc 𝒜).isGreatest_u.isLUB
-
-/--
-theorem `Ideal.homogeneousCore'_eq_sSup` / 定理 `Ideal.homogeneousCore'_eq_sSup`
-
-English:
-theorem Ideal.homogeneousCore'_eq_sSup
-  proof: by
-  refine (IsLUB.sSup_eq ?_).symm
-  apply IsGreatest.isLUB
-  have coe_mono : Monotone (toIdeal : HomogeneousIdeal 𝒜 -> Ideal A) := fun x y => id
-  convert! coe_mono.map_isGreatest (Ideal.homogeneousCore.gc 𝒜).isGreatest_u using 1
-  ext x
-  rw [mem_image]; rw [mem_ofPred_eq]
-  refine ⟨fun hI => ⟨⟨x, hI.1⟩, ⟨hI.2, rfl⟩⟩, ?_⟩
-  rintro ⟨x, ⟨hx, rfl⟩⟩
-  exact ⟨x.isHomogeneous, hx⟩
-
-中文:
-定理 理想.homogeneousCore'_eq_sSup
-  证明: by
-  refine (IsLUB.sSup_eq ?_).symm
-  apply IsGreatest.isLUB
-  have coe_mono : Monotone (toIdeal : HomogeneousIdeal 𝒜 -> Ideal A) := fun x y => id
-  convert! coe_mono.map_isGreatest (Ideal.homogeneousCore.gc 𝒜).isGreatest_u using 1
-  ext x
-  rw [mem_image]; rw [mem_ofPred_eq]
-  refine ⟨fun hI => ⟨⟨x, hI.1⟩, ⟨hI.2, rfl⟩⟩, ?_⟩
-  rintro ⟨x, ⟨hx, rfl⟩⟩
-  exact ⟨x.isHomogeneous, hx⟩
+    I.homogeneousCore 𝒜 = sSup { J : HomogeneousIdeal 𝒜 | J.toIdeal ≤ I } :=
+  Eq.symm <| IsLUB.sSup_eq <| (Ideal.homogeneousCore.gc 𝒜).isGreatest_u.isLUB
+/-
+**Ideal.homogeneousCore'_eq_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {A : Type u_3} [inst : Semiring A] [inst_1
+ : DecidableEq ι] [inst_2 : AddMonoid ι]   [inst_3 : SetLike σ A] [inst_4 : AddS
+ubmonoidClass σ A] (𝒜 : ι → σ) [inst_5 : GradedRing 𝒜] (I : Ideal A),   Ideal.ho
+mogeneousCore' 𝒜 I = sSup {J | Ideal.IsHomogeneous 𝒜 J ∧ J ≤ I}
+参数：𝒜 : ι → σ；I : Ideal A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLUB.sSup_eq`：∀ {α : Type u_1} [inst : CompleteSemilatticeSup α] {s : S
+et α} {a : α}, IsLUB s a → sSup s = a
+· 使用定理 `IsGreatest.isLUB`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α} {a : 
+α}, IsGreatest s a → IsLUB s a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `HomogeneousIdeal.isHomogeneous`：HomogeneousIdeal.isHomogeneous (I : Homo
+geneousIdeal 𝒜) : I.toIdeal.IsHomogeneous 𝒜
+· 使用定理 `Monotone.map_isGreatest`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] {f : α → β},   Monotone f → ∀ {a : α} {s : Set α}, IsGrea
+test s a → Is…
+· 使用定理 `GaloisConnection.isGreatest_u`：∀ {α : Type u} {β : Type v} [inst : Preor
+der α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → ∀
+ {a : α}, IsGreates…
+· 使用定理 `Ideal.homogeneousCore.gc`：Ideal.homogeneousCore.gc : GaloisConnection to
+Ideal (Ideal.homogeneousCore 𝒜)
 -/
 theorem Ideal.homogeneousCore'_eq_sSup :
-    I.homogeneousCore' 𝒜 = sSup { J : Ideal A | J.IsHomogeneous 𝒜 ∧ J <= I } := by
+    I.homogeneousCore' 𝒜 = sSup { J : Ideal A | J.IsHomogeneous 𝒜 ∧ J ≤ I } := by
   refine (IsLUB.sSup_eq ?_).symm
   apply IsGreatest.isLUB
-  have coe_mono : Monotone (toIdeal : HomogeneousIdeal 𝒜 -> Ideal A) := fun x y => id
+  have coe_mono : Monotone (toIdeal : HomogeneousIdeal 𝒜 → Ideal A) := fun x y => id
   convert! coe_mono.map_isGreatest (Ideal.homogeneousCore.gc 𝒜).isGreatest_u using 1
   ext x
-  rw [mem_image]; rw [mem_ofPred_eq]
+  rw [mem_image, mem_ofPred_eq]
   refine ⟨fun hI => ⟨⟨x, hI.1⟩, ⟨hI.2, rfl⟩⟩, ?_⟩
   rintro ⟨x, ⟨hx, rfl⟩⟩
   exact ⟨x.isHomogeneous, hx⟩
@@ -1723,68 +1296,46 @@ section HomogeneousHull
 open HomogeneousIdeal
 
 variable [Semiring A] [DecidableEq ι] [AddMonoid ι]
-variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι -> σ) [GradedRing 𝒜]
+variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ) [GradedRing 𝒜]
 variable (I : Ideal A)
 
-/--
-Definition of `Ideal.homogeneousHull` / `Ideal.homogeneousHull` 的定义
+/-- For any `I : Ideal A`, not necessarily homogeneous, `I.homogeneousHull 𝒜` is
+the smallest homogeneous ideal containing `I`. -/
+/-
+**Ideal.homogeneousHull** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousHull : HomogeneousIdeal 𝒜
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ideal.homogeneousHull
-  signature: : HomogeneousIdeal 𝒜
-  body: ⟨Ideal.span { r : A | exists (i : ι) (x : I), (DirectSum.decompose 𝒜 (x : A) i : A) = r }, by
-    refine Ideal.homogeneous_span _ _ fun x hx => ?_
-    obtain ⟨i, x, rfl⟩ := hx
-    apply SetLike.isHomogeneousElem_coe⟩
-
-中文:
-定义 理想.homogeneousHull
-  签名: : HomogeneousIdeal 𝒜
-  定义体: ⟨Ideal.span { r : A | exists (i : ι) (x : I), (DirectSum.decompose 𝒜 (x : A) i : A) = r }, by
-    refine Ideal.homogeneous_span _ _ fun x hx => ?_
-    obtain ⟨i, x, rfl⟩ := hx
-    apply SetLike.isHomogeneousElem_coe⟩
-
-Depends on / 依赖: DirectSum, DirectSum.decompose, Ideal.homogeneous_span, Ideal.span, SetLike, SetLike.isHomogeneousElem_coe, decompose, homogeneous_span, isHomogeneousElem_coe
+--- 原说明 ---
+For any `I : Ideal A`, not necessarily homogeneous, `I.homogeneousHull 𝒜` is
+the smallest homogeneous ideal containing `I`.
 -/
 def Ideal.homogeneousHull : HomogeneousIdeal 𝒜 :=
-  ⟨Ideal.span { r : A | exists (i : ι) (x : I), (DirectSum.decompose 𝒜 (x : A) i : A) = r }, by
+  ⟨Ideal.span { r : A | ∃ (i : ι) (x : I), (DirectSum.decompose 𝒜 (x : A) i : A) = r }, by
     refine Ideal.homogeneous_span _ _ fun x hx => ?_
     obtain ⟨i, x, rfl⟩ := hx
     apply SetLike.isHomogeneousElem_coe⟩
-
-/--
-theorem `Ideal.le_toIdeal_homogeneousHull` / 定理 `Ideal.le_toIdeal_homogeneousHull`
-
-English:
-theorem Ideal.le_toIdeal_homogeneousHull
-  statement: I <= (Ideal.homogeneousHull 𝒜 I).toIdeal
-  proof: by
-  intro r hr
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 r]
-  refine Ideal.sum_mem _ ?_
-  intro j _
-  apply Ideal.subset_span
-  use j
-  use ⟨r, hr⟩
-
-中文:
-定理 理想.le_toIdeal_homogeneousHull
-  结论: I <= (理想.homogeneousHull 𝒜 I).toIdeal
-  证明: by
-  intro r hr
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 r]
-  refine Ideal.sum_mem _ ?_
-  intro j _
-  apply Ideal.subset_span
-  use j
-  use ⟨r, hr⟩
-
-Depends on / 依赖: DirectSum, DirectSum.sum_support_decompose, Ideal.subset_span, Ideal.sum_mem, classical, subset_span, sum_mem, sum_support_decompose
+/-
+**Ideal.le_toIdeal_homogeneousHull** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.le_toIdeal_homogeneousHull : I <= (Ideal.homogeneousHull 𝒜 I).toIdea
+l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.sum_support_decompose`：sum_support_decompose [forall (i) (x : 
+ℳ i), Decidable (x != 0)] (r : M) : (∑ i in (decompose ℳ r).support, (decompose 
+ℳ r i : M)) = r
+· 使用定理 `Ideal.sum_mem`：sum_mem (I : Ideal α) {ι : Type*} {t : Finset ι} {f : ι -
+> α} : (forall c in t, f c in I) -> (∑ i in t, f i) in I
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
 -/
-theorem Ideal.le_toIdeal_homogeneousHull : I <= (Ideal.homogeneousHull 𝒜 I).toIdeal := by
+theorem Ideal.le_toIdeal_homogeneousHull : I ≤ (Ideal.homogeneousHull 𝒜 I).toIdeal := by
   intro r hr
   classical
   rw [← DirectSum.sum_support_decompose 𝒜 r]
@@ -1793,27 +1344,13 @@ theorem Ideal.le_toIdeal_homogeneousHull : I <= (Ideal.homogeneousHull 𝒜 I).t
   apply Ideal.subset_span
   use j
   use ⟨r, hr⟩
-
-/--
-theorem `Ideal.homogeneousHull_mono` / 定理 `Ideal.homogeneousHull_mono`
-
-English:
-theorem Ideal.homogeneousHull_mono
-  statement: Monotone (Ideal.homogeneousHull 𝒜)
-  proof: fun I J I_le_J => by
-  apply Ideal.span_mono
-  rintro r ⟨hr1, ⟨x, hx⟩, rfl⟩
-  exact ⟨hr1, ⟨⟨x, I_le_J hx⟩, rfl⟩⟩
-
-中文:
-定理 理想.homogeneousHull_mono
-  结论: 递增 (理想.homogeneousHull 𝒜)
-  证明: fun I J I_le_J => by
-  apply Ideal.span_mono
-  rintro r ⟨hr1, ⟨x, hx⟩, rfl⟩
-  exact ⟨hr1, ⟨⟨x, I_le_J hx⟩, rfl⟩⟩
-
-Depends on / 依赖: I_le_J, Ideal.span_mono, span_mono
+/-
+**Ideal.homogeneousHull_mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousHull_mono : Monotone (Ideal.homogeneousHull 𝒜)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.span_mono`：span_mono {s t : Set α} : s subseteq t -> span s <= spa
+n t
 -/
 theorem Ideal.homogeneousHull_mono : Monotone (Ideal.homogeneousHull 𝒜) := fun I J I_le_J => by
   apply Ideal.span_mono
@@ -1821,33 +1358,20 @@ theorem Ideal.homogeneousHull_mono : Monotone (Ideal.homogeneousHull 𝒜) := fu
   exact ⟨hr1, ⟨⟨x, I_le_J hx⟩, rfl⟩⟩
 
 variable {I 𝒜}
-
-/--
-theorem `Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self` / 定理 `Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self`
-
-English:
-theorem Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self
-  given: (h : I.IsHomogeneous 𝒜)
-  proof: by
-  apply le_antisymm _ (Ideal.le_toIdeal_homogeneousHull _ _)
-  apply Ideal.span_le.2
-  rintro _ ⟨i, x, rfl⟩
-  exact h _ x.prop
-
-@[simp]
-
-中文:
-定理 理想.IsHomogeneous.toIdeal_homogeneousHull_eq_self
-  条件: (h : I.IsHomogeneous 𝒜)
-  证明: by
-  apply le_antisymm _ (Ideal.le_toIdeal_homogeneousHull _ _)
-  apply Ideal.span_le.2
-  rintro _ ⟨i, x, rfl⟩
-  exact h _ x.prop
-
-@[simp]
-
-Depends on / 依赖: Ideal.le_toIdeal_homogeneousHull, Ideal.span_le, le_antisymm, le_toIdeal_homogeneousHull, span_le, x.prop
+/-
+**Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self (h : I.IsHomogeneous 𝒜
+) : (Ideal.homogeneousHull 𝒜 I).toIdeal = I
+参数：h : I.IsHomogeneous 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Ideal.le_toIdeal_homogeneousHull`：Ideal.le_toIdeal_homogeneousHull : I <
+= (Ideal.homogeneousHull 𝒜 I).toIdeal
 -/
 theorem Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self (h : I.IsHomogeneous 𝒜) :
     (Ideal.homogeneousHull 𝒜 I).toIdeal = I := by
@@ -1857,49 +1381,52 @@ theorem Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self (h : I.IsHomogeneous
   exact h _ x.prop
 
 @[simp]
-/--
-theorem `HomogeneousIdeal.homogeneousHull_toIdeal_eq_self` / 定理 `HomogeneousIdeal.homogeneousHull_toIdeal_eq_self`
-
-English:
-theorem HomogeneousIdeal.homogeneousHull_toIdeal_eq_self
-  given: (I : HomogeneousIdeal 𝒜)
-  proof: HomogeneousIdeal.toIdeal_injective I.isHomogeneous.toIdeal_homogeneousHull_eq_self
-
-中文:
-定理 HomogeneousIdeal.homogeneousHull_toIdeal_eq_self
-  条件: (I : HomogeneousIdeal 𝒜)
-  证明: HomogeneousIdeal.toIdeal_injective I.isHomogeneous.toIdeal_homogeneousHull_eq_self
-
-Depends on / 依赖: HomogeneousIdeal, HomogeneousIdeal.toIdeal_injective, I.isHomogeneous.toIdeal_homogeneousHull_eq_self, isHomogeneous, toIdeal_homogeneousHull_eq_self, toIdeal_injective
+/-
+**HomogeneousIdeal.homogeneousHull_toIdeal_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HomogeneousIdeal.homogeneousHull_toIdeal_eq_self (I : HomogeneousIdeal 𝒜) 
+: I.toIdeal.homogeneousHull 𝒜 = I
+参数：I : HomogeneousIdeal 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousIdeal.toIdeal_injective`：HomogeneousIdeal.toIdeal_injective :
+ Function.Injective (HomogeneousIdeal.toIdeal : HomogeneousIdeal 𝒜 -> Ideal A)
+· 使用定理 `Ideal.IsHomogeneous.toIdeal_homogeneousHull_eq_self`：Ideal.IsHomogeneous
+.toIdeal_homogeneousHull_eq_self (h : I.IsHomogeneous 𝒜) : (Ideal.homogeneousHul
+l 𝒜 I).toIdeal = I
+· 使用定理 `HomogeneousIdeal.isHomogeneous`：HomogeneousIdeal.isHomogeneous (I : Homo
+geneousIdeal 𝒜) : I.toIdeal.IsHomogeneous 𝒜
 -/
 theorem HomogeneousIdeal.homogeneousHull_toIdeal_eq_self (I : HomogeneousIdeal 𝒜) :
     I.toIdeal.homogeneousHull 𝒜 = I :=
-HomogeneousIdeal.toIdeal_injective I.isHomogeneous.toIdeal_homogeneousHull_eq_self
+  HomogeneousIdeal.toIdeal_injective <| I.isHomogeneous.toIdeal_homogeneousHull_eq_self
 
 variable (I 𝒜)
-
-/--
-theorem `Ideal.toIdeal_homogeneousHull_eq_iSup` / 定理 `Ideal.toIdeal_homogeneousHull_eq_iSup`
-
-English:
-theorem Ideal.toIdeal_homogeneousHull_eq_iSup
-  proof: by
-  rw [← Ideal.span_iUnion]
-  apply congr_arg Ideal.span _
-  ext1
-  simp only [Set.mem_iUnion, Set.mem_image, mem_ofPred_eq, GradedRing.proj_apply, SetLike.exists,
-    exists_prop, SetLike.mem_coe]
-
-中文:
-定理 理想.toIdeal_homogeneousHull_eq_iSup
-  证明: by
-  rw [← Ideal.span_iUnion]
-  apply congr_arg Ideal.span _
-  ext1
-  simp only [Set.mem_iUnion, Set.mem_image, mem_ofPred_eq, GradedRing.proj_apply, SetLike.exists,
-    exists_prop, SetLike.mem_coe]
-
-Depends on / 依赖: GradedRing, GradedRing.proj_apply, Ideal.span, Ideal.span_iUnion, Set.mem_iUnion, Set.mem_image, SetLike, SetLike.exists, SetLike.mem_coe, congr_arg, exists_prop, mem_coe, mem_iUnion, mem_image, mem_ofPred_eq, proj_apply, span_iUnion
+/-
+**Ideal.toIdeal_homogeneousHull_eq_iSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.toIdeal_homogeneousHull_eq_iSup : (I.homogeneousHull 𝒜).toIdeal = ⨆ 
+i, Ideal.span (GradedRing.proj 𝒜 i '' I)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_iUnion`：span_iUnion {ι} (s : ι -> Set α) : span (⋃ i, s i) = 
+⨆ i, span (s i)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Ideal.toIdeal_homogeneousHull_eq_iSup :
     (I.homogeneousHull 𝒜).toIdeal = ⨆ i, Ideal.span (GradedRing.proj 𝒜 i '' I) := by
@@ -1908,23 +1435,24 @@ theorem Ideal.toIdeal_homogeneousHull_eq_iSup :
   ext1
   simp only [Set.mem_iUnion, Set.mem_image, mem_ofPred_eq, GradedRing.proj_apply, SetLike.exists,
     exists_prop, SetLike.mem_coe]
-
-/--
-theorem `Ideal.homogeneousHull_eq_iSup` / 定理 `Ideal.homogeneousHull_eq_iSup`
-
-English:
-theorem Ideal.homogeneousHull_eq_iSup
-  proof: by
-  ext1
-  rw [Ideal.toIdeal_homogeneousHull_eq_iSup]; rw [toIdeal_iSup]
-
-中文:
-定理 理想.homogeneousHull_eq_iSup
-  证明: by
-  ext1
-  rw [Ideal.toIdeal_homogeneousHull_eq_iSup]; rw [toIdeal_iSup]
-
-Depends on / 依赖: Ideal.toIdeal_homogeneousHull_eq_iSup, toIdeal_homogeneousHull_eq_iSup, toIdeal_iSup
+/-
+**Ideal.homogeneousHull_eq_iSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousHull_eq_iSup : I.homogeneousHull 𝒜 = ⨆ i, ⟨Ideal.span (Gr
+adedRing.proj 𝒜 i '' I), Ideal.homogeneous_span 𝒜 _ (by rintro _ ⟨x, -, rfl⟩ app
+ly SetLike.isHomogeneousElem_coe)⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomogeneousIdeal.ext`：HomogeneousIdeal.ext {I J : HomogeneousIdeal 𝒜} (h
+ : I.toIdeal = J.toIdeal) : I = J
+· 使用定理 `Ideal.homogeneous_span`：Ideal.homogeneous_span (s : Set A) (h : forall x
+ in s, SetLike.IsHomogeneousElem 𝒜 x) : (Ideal.span s).IsHomogeneous 𝒜
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.toIdeal_homogeneousHull_eq_iSup`：Ideal.toIdeal_homogeneousHull_eq_
+iSup : (I.homogeneousHull 𝒜).toIdeal = ⨆ i, Ideal.span (GradedRing.proj 𝒜 i '' I
+)
+· 使用定理 `HomogeneousIdeal.toIdeal_iSup`：toIdeal_iSup {κ : Sort*} (s : κ -> Homoge
+neousIdeal 𝒜) : (⨆ i, s i).toIdeal = ⨆ i, (s i).toIdeal
 -/
 theorem Ideal.homogeneousHull_eq_iSup :
     I.homogeneousHull 𝒜 =
@@ -1932,7 +1460,7 @@ theorem Ideal.homogeneousHull_eq_iSup :
         rintro _ ⟨x, -, rfl⟩
         apply SetLike.isHomogeneousElem_coe)⟩ := by
   ext1
-  rw [Ideal.toIdeal_homogeneousHull_eq_iSup]; rw [toIdeal_iSup]
+  rw [Ideal.toIdeal_homogeneousHull_eq_iSup, toIdeal_iSup]
 
 end HomogeneousHull
 
@@ -1941,74 +1469,67 @@ section GaloisConnection
 open HomogeneousIdeal
 
 variable [Semiring A] [DecidableEq ι] [AddMonoid ι]
-variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι -> σ) [GradedRing 𝒜]
+variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ) [GradedRing 𝒜]
 
-/--
-theorem `Ideal.homogeneousHull.gc` / 定理 `Ideal.homogeneousHull.gc`
-
-English:
-theorem Ideal.homogeneousHull.gc
-  statement: GaloisConnection (Ideal.homogeneousHull 𝒜) toIdeal
-  proof: fun _ J =>
-  ⟨le_trans (Ideal.le_toIdeal_homogeneousHull _ _),
-    fun H => J.homogeneousHull_toIdeal_eq_self ▸ Ideal.homogeneousHull_mono 𝒜 H⟩
-
-中文:
-定理 理想.homogeneousHull.gc
-  结论: GaloisConnection (理想.homogeneousHull 𝒜) toIdeal
-  证明: fun _ J =>
-  ⟨le_trans (Ideal.le_toIdeal_homogeneousHull _ _),
-    fun H => J.homogeneousHull_toIdeal_eq_self ▸ Ideal.homogeneousHull_mono 𝒜 H⟩
+/-
+**Ideal.homogeneousHull.gc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousHull.gc : GaloisConnection (Ideal.homogeneousHull 𝒜) toId
+eal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Ideal.le_toIdeal_homogeneousHull`：Ideal.le_toIdeal_homogeneousHull : I <
+= (Ideal.homogeneousHull 𝒜 I).toIdeal
+· 使用定理 `Ideal.homogeneousHull_mono`：Ideal.homogeneousHull_mono : Monotone (Ideal
+.homogeneousHull 𝒜)
+· 使用定理 `HomogeneousIdeal.homogeneousHull_toIdeal_eq_self`：HomogeneousIdeal.homog
+eneousHull_toIdeal_eq_self (I : HomogeneousIdeal 𝒜) : I.toIdeal.homogeneousHull 
+𝒜 = I
 -/
 theorem Ideal.homogeneousHull.gc : GaloisConnection (Ideal.homogeneousHull 𝒜) toIdeal := fun _ J =>
   ⟨le_trans (Ideal.le_toIdeal_homogeneousHull _ _),
     fun H => J.homogeneousHull_toIdeal_eq_self ▸ Ideal.homogeneousHull_mono 𝒜 H⟩
 
-/--
-Definition of `Ideal.homogeneousHull.gi` / `Ideal.homogeneousHull.gi` 的定义
+/-- `Ideal.homogeneousHull 𝒜` and `toIdeal : HomogeneousIdeal 𝒜 → Ideal A` form a Galois
+insertion. -/
+/-
+**Ideal.homogeneousHull.gi** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousHull.gi : GaloisInsertion (Ideal.homogeneousHull 𝒜) toIde
+al where choice I H
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.homogeneousHull.gc`：Ideal.homogeneousHull.gc : GaloisConnection (I
+deal.homogeneousHull 𝒜) toIdeal
 
-English:
-definition Ideal.homogeneousHull.gi
-  signature: : GaloisInsertion (Ideal.homogeneousHull 𝒜) toIdeal where
-  body: ⟨I, le_antisymm H (I.le_toIdeal_homogeneousHull 𝒜) ▸ isHomogeneous _⟩
-  gc := Ideal.homogeneousHull.gc 𝒜
-  le_l_u _ := Ideal.le_toIdeal_homogeneousHull _ _
-  choice_eq I H := le_antisymm (I.le_toIdeal_homogeneousHull 𝒜) H
-
-中文:
-定义 理想.homogeneousHull.gi
-  签名: : Galois嵌入 (理想.homogeneousHull 𝒜) toIdeal where
-  定义体: ⟨I, le_antisymm H (I.le_toIdeal_homogeneousHull 𝒜) ▸ isHomogeneous _⟩
-  gc := Ideal.homogeneousHull.gc 𝒜
-  le_l_u _ := Ideal.le_toIdeal_homogeneousHull _ _
-  choice_eq I H := le_antisymm (I.le_toIdeal_homogeneousHull 𝒜) H
-
-Depends on / 依赖: I.le_toIdeal_homogeneousHull, isHomogeneous, le_antisymm, le_toIdeal_homogeneousHull
+--- 原说明 ---
+`Ideal.homogeneousHull 𝒜` and `toIdeal : HomogeneousIdeal 𝒜 → Ideal A` form a Ga
+lois
+insertion.
 -/
 def Ideal.homogeneousHull.gi : GaloisInsertion (Ideal.homogeneousHull 𝒜) toIdeal where
   choice I H := ⟨I, le_antisymm H (I.le_toIdeal_homogeneousHull 𝒜) ▸ isHomogeneous _⟩
   gc := Ideal.homogeneousHull.gc 𝒜
   le_l_u _ := Ideal.le_toIdeal_homogeneousHull _ _
   choice_eq I H := le_antisymm (I.le_toIdeal_homogeneousHull 𝒜) H
-
-/--
-theorem `Ideal.homogeneousHull_eq_sInf` / 定理 `Ideal.homogeneousHull_eq_sInf`
-
-English:
-theorem Ideal.homogeneousHull_eq_sInf
-  given: (I : Ideal A)
-  proof: Eq.symm IsGLB.sInf_eq (Ideal.homogeneousHull.gc 𝒜).isLeast_l.isGLB
-
-中文:
-定理 理想.homogeneousHull_eq_sInf
-  条件: (I : 理想 A)
-  证明: Eq.symm IsGLB.sInf_eq (Ideal.homogeneousHull.gc 𝒜).isLeast_l.isGLB
-
-Depends on / 依赖: Eq.symm, Ideal.homogeneousHull.gc, IsGLB.sInf_eq, homogeneousHull, isLeast_l, isLeast_l.isGLB, sInf_eq
+/-
+**Ideal.homogeneousHull_eq_sInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.homogeneousHull_eq_sInf (I : Ideal A) : Ideal.homogeneousHull 𝒜 I = 
+sInf { J : HomogeneousIdeal 𝒜 | I <= J.toIdeal }
+参数：I : Ideal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsGLB.sInf_eq`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : S
+et α} {a : α}, IsGLB s a → sInf s = a
+· 使用定理 `IsLeast.isGLB`：IsLeast.isGLB (h : IsLeast s a) : IsGLB s a
+· 使用定理 `GaloisConnection.isLeast_l`：isLeast_l {a : α} : IsLeast { b | a <= u b }
+ (l a)
+· 使用定理 `Ideal.homogeneousHull.gc`：Ideal.homogeneousHull.gc : GaloisConnection (I
+deal.homogeneousHull 𝒜) toIdeal
 -/
 theorem Ideal.homogeneousHull_eq_sInf (I : Ideal A) :
-    Ideal.homogeneousHull 𝒜 I = sInf { J : HomogeneousIdeal 𝒜 | I <= J.toIdeal } :=
-Eq.symm IsGLB.sInf_eq (Ideal.homogeneousHull.gc 𝒜).isLeast_l.isGLB
+    Ideal.homogeneousHull 𝒜 I = sInf { J : HomogeneousIdeal 𝒜 | I ≤ J.toIdeal } :=
+  Eq.symm <| IsGLB.sInf_eq <| (Ideal.homogeneousHull.gc 𝒜).isLeast_l.isGLB
 
 end GaloisConnection
 
@@ -2019,40 +1540,29 @@ namespace HomogeneousIdeal
 variable [Semiring A]
 variable [DecidableEq ι]
 variable [AddCommMonoid ι] [PartialOrder ι] [CanonicallyOrderedAdd ι]
-variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι -> σ) [GradedRing 𝒜]
+variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ) [GradedRing 𝒜]
 
 open GradedRing SetLike.GradedMonoid DirectSum
 
-/--
-Definition of `irrelevant` / `irrelevant` 的定义
+/-- For a graded ring `⨁ᵢ 𝒜ᵢ` graded by
+`[AddCommMonoid ι] [PartialOrder ι] [CanonicallyOrderedAdd ι]`, the irrelevant ideal refers to
+`⨁_{i>0} 𝒜ᵢ`, or equivalently `{a | a₀ = 0}`. This definition is used in `Proj` construction where
+`ι` is always `ℕ` so the irrelevant ideal is simply elements with `0` as 0-th coordinate.
+-/
+/-
+**HomogeneousIdeal.irrelevant** 是 Mathlib 中的一个定义，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：irrelevant : HomogeneousIdeal 𝒜
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition irrelevant
-  signature: : HomogeneousIdeal 𝒜
-  body: ⟨RingHom.ker (GradedRing.projZeroRingHom 𝒜), fun i r (hr : (decompose 𝒜 r 0 : A) = 0) => by
-    change (decompose 𝒜 (decompose 𝒜 r _ : A) 0 : A) = 0
-    by_cases h : i = 0
-    · rw [h, hr, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
-    · rw [decompose_of_mem_ne 𝒜 (SetLike.coe_mem _) h]⟩
-
-@[inherit_doc] scoped notation 𝒜 "₊" => irrelevant 𝒜
-
-@[simp]
-
-中文:
-定义 irrelevant
-  签名: : HomogeneousIdeal 𝒜
-  定义体: ⟨RingHom.ker (GradedRing.projZeroRingHom 𝒜), fun i r (hr : (decompose 𝒜 r 0 : A) = 0) => by
-    change (decompose 𝒜 (decompose 𝒜 r _ : A) 0 : A) = 0
-    by_cases h : i = 0
-    · rw [h, hr, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
-    · rw [decompose_of_mem_ne 𝒜 (SetLike.coe_mem _) h]⟩
-
-@[inherit_doc] scoped notation 𝒜 "₊" => irrelevant 𝒜
-
-@[simp]
-
-Depends on / 依赖: GradedRing, GradedRing.projZeroRingHom, RingHom, RingHom.ker, SetLike, SetLike.coe_mem, ZeroMemClass, ZeroMemClass.coe_zero, coe_mem, coe_zero, decompose, decompose_of_mem_ne, decompose_zero, projZeroRingHom, zero_apply
+--- 原说明 ---
+For a graded ring `⨁ᵢ 𝒜ᵢ` graded by
+`[AddCommMonoid ι] [PartialOrder ι] [CanonicallyOrderedAdd ι]`, the irrelevant i
+deal refers to
+`⨁_{i>0} 𝒜ᵢ`, or equivalently `{a | a₀ = 0}`. This definition is used in `Proj` 
+construction where
+`ι` is always `ℕ` so the irrelevant ideal is simply elements with `0` as 0-th co
+ordinate.
 -/
 def irrelevant : HomogeneousIdeal 𝒜 :=
   ⟨RingHom.ker (GradedRing.projZeroRingHom 𝒜), fun i r (hr : (decompose 𝒜 r 0 : A) = 0) => by
@@ -2064,217 +1574,214 @@ def irrelevant : HomogeneousIdeal 𝒜 :=
 @[inherit_doc] scoped notation 𝒜 "₊" => irrelevant 𝒜
 
 @[simp]
-/--
-theorem `mem_irrelevant_iff` / 定理 `mem_irrelevant_iff`
-
-English:
-theorem mem_irrelevant_iff
-  given: (a : A)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_irrelevant_iff
-  条件: (a : A)
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**HomogeneousIdeal.mem_irrelevant_iff** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdea
+l`。
+形式化陈述：mem_irrelevant_iff (a : A) : a in 𝒜₊ ↔ proj 𝒜 0 a = 0
+参数：a : A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_irrelevant_iff (a : A) :
-    a in 𝒜₊ ↔ proj 𝒜 0 a = 0 :=
+    a ∈ 𝒜₊ ↔ proj 𝒜 0 a = 0 :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `toIdeal_irrelevant` / 定理 `toIdeal_irrelevant`
-
-English:
-theorem toIdeal_irrelevant
-  proof: rfl
-
-中文:
-定理 toIdeal_irrelevant
-  证明: rfl
+/-
+**HomogeneousIdeal.toIdeal_irrelevant** 是 Mathlib 中的一个定理，位于命名空间 `HomogeneousIdea
+l`。
+形式化陈述：toIdeal_irrelevant : 𝒜₊.toIdeal = RingHom.ker (GradedRing.projZeroRingHom 
+𝒜)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toIdeal_irrelevant :
     𝒜₊.toIdeal = RingHom.ker (GradedRing.projZeroRingHom 𝒜) :=
   rfl
-
-/--
-lemma `mem_irrelevant_of_mem` / 引理 `mem_irrelevant_of_mem`
-
-English:
-lemma mem_irrelevant_of_mem
-  given: {x : A} {i : ι} (hi : 0 < i) (hx : x in 𝒜 i)
-  statement: x in 𝒜₊
-  proof: by
-  rw [mem_irrelevant_iff]; rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem _ hx]; rw [DirectSum.of_eq_of_ne _ _ _ (by aesop)]; rw [ZeroMemClass.coe_zero]
-
-中文:
-引理 mem_irrelevant_of_mem
-  条件: {x : A} {i : ι} (hi : 0 < i) (hx : x in 𝒜 i)
-  结论: x in 𝒜₊
-  证明: by
-  rw [mem_irrelevant_iff]; rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem _ hx]; rw [DirectSum.of_eq_of_ne _ _ _ (by aesop)]; rw [ZeroMemClass.coe_zero]
-
-Depends on / 依赖: DirectSum, DirectSum.decompose_of_mem, DirectSum.of_eq_of_ne, GradedRing, GradedRing.proj_apply, ZeroMemClass, ZeroMemClass.coe_zero, coe_zero, decompose_of_mem, mem_irrelevant_iff, of_eq_of_ne, proj_apply
+/-
+**HomogeneousIdeal.mem_irrelevant_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `HomogeneousI
+deal`。
+形式化陈述：mem_irrelevant_of_mem {x : A} {i : ι} (hi : 0 < i) (hx : x in 𝒜 i) : x in 
+𝒜₊
+参数：hi : 0 < i；hx : x in 𝒜 i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomogeneousIdeal.mem_irrelevant_iff`：mem_irrelevant_iff (a : A) : a in 𝒜
+₊ ↔ proj 𝒜 0 a = 0
+· 使用定理 `GradedRing.proj_apply`：GradedRing.proj_apply (i : ι) (r : A) : GradedRin
+g.proj 𝒜 i r = (decompose 𝒜 r : ⨁ i, 𝒜 i) i
+· 使用定理 `DirectSum.decompose_of_mem`：decompose_of_mem {x : M} {i : ι} (hx : x in 
+ℳ i) : decompose ℳ x = DirectSum.of (fun i => ℳ i) i ⟨x, hx⟩
+· 使用定理 `DirectSum.of_eq_of_ne`：of_eq_of_ne (i j : ι) (x : β i) (h : j != i) : (o
+f _ i x) j = 0
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `ZeroMemClass.coe_zero`：∀ {A : Type u_3} {M₁ : Type u_4} [inst : SetLike 
+A M₁] [inst_1 : Zero M₁] [hA : ZeroMemClass A M₁] (S' : A), ↑0 = 0
 -/
-lemma mem_irrelevant_of_mem {x : A} {i : ι} (hi : 0 < i) (hx : x in 𝒜 i) : x in 𝒜₊ := by
-  rw [mem_irrelevant_iff]; rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem _ hx]; rw [DirectSum.of_eq_of_ne _ _ _ (by aesop)]; rw [ZeroMemClass.coe_zero]
+lemma mem_irrelevant_of_mem {x : A} {i : ι} (hi : 0 < i) (hx : x ∈ 𝒜 i) : x ∈ 𝒜₊ := by
+  rw [mem_irrelevant_iff, GradedRing.proj_apply, DirectSum.decompose_of_mem _ hx,
+    DirectSum.of_eq_of_ne _ _ _ (by aesop), ZeroMemClass.coe_zero]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `irrelevant_eq_iSup` / 引理 `irrelevant_eq_iSup`
+/-- `irrelevant 𝒜 = ⨁_{i>0} 𝒜ᵢ` -/
+/-
+**HomogeneousIdeal.irrelevant_eq_iSup** 是 Mathlib 中的一个引理，位于命名空间 `HomogeneousIdea
+l`。
+形式化陈述：irrelevant_eq_iSup : 𝒜₊.toAddSubmonoid = ⨆ i > 0, .ofClass (𝒜 i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.sum_support_decompose`：sum_support_decompose [forall (i) (x : 
+ℳ i), Decidable (x != 0)] (r : M) : (∑ i in (decompose ℳ r).support, (decompose 
+ℳ r i : M)) = r
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `AddSubmonoid.instAddSubmonoidClass`：∀ {M : Type u_1} [inst : AddZeroClas
+s M], AddSubmonoidClass (AddSubmonoid M) M
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFinsupp.mem_support_iff`：mem_support_iff {f : Π₀ i, β i} {i : ι} : i in
+ f.support ↔ f i != 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `GradedRing.projZeroRingHom_apply`：∀ {ι : Type u_1} {A : Type u_3} {σ : T
+ype u_4} [inst : Semiring A] [inst_1 : DecidableEq ι] [inst_2 : AddCommMonoid ι]
+   [inst_3 : PartialOr…
+· 使用定理 `AddSubmonoid.mem_iSup_of_mem`：∀ {M : Type u_1} [inst : AddZeroClass M] {
+ι : Sort u_4} {S : ι → AddSubmonoid M} (i : ι) {x : M}, x ∈ S i → x ∈ iSup S
+· 使用定理 `pos_of_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_1
+ : Zero α] [IsBotZeroClass α], a ≠ 0 → 0 < a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `iSup₂_le`：iSup₂_le {f : forall i, κ i -> α} (h : forall i j, f i j <= a)
+ : ⨆ (i) (j), f i j <= a
+· 使用引理 `HomogeneousIdeal.mem_irrelevant_of_mem`：mem_irrelevant_of_mem {x : A} {i
+ : ι} (hi : 0 < i) (hx : x in 𝒜 i) : x in 𝒜₊
 
-English:
-lemma irrelevant_eq_iSup
-  statement: 𝒜₊.toAddSubmonoid = ⨆ i > 0, .ofClass (𝒜 i)
-  proof: by
-refine le_antisymm (fun x hx => ?_) iSup₂_le fun i hi x hx => mem_irrelevant_of_mem _ hi hx
-  classical rw [← DirectSum.sum_support_decompose 𝒜 x]
-  refine sum_mem fun j hj => ?_
-  by_cases hj₀ : j = 0
-  · classical exact (DFinsupp.mem_support_iff.mp hj <| hj₀ ▸ (by simpa using hx)).elim
-· exact AddSubmonoid.mem_iSup_of_mem j AddSubmonoid.mem_iSup_of_mem (pos_of_ne_zero hj₀)
-      Subtype.prop _
-
-中文:
-引理 irrelevant_eq_iSup
-  结论: 𝒜₊.toAddSubmonoid = ⨆ i > 0, .ofClass (𝒜 i)
-  证明: by
-refine le_antisymm (fun x hx => ?_) iSup₂_le fun i hi x hx => mem_irrelevant_of_mem _ hi hx
-  classical rw [← DirectSum.sum_support_decompose 𝒜 x]
-  refine sum_mem fun j hj => ?_
-  by_cases hj₀ : j = 0
-  · classical exact (DFinsupp.mem_support_iff.mp hj <| hj₀ ▸ (by simpa using hx)).elim
-· exact AddSubmonoid.mem_iSup_of_mem j AddSubmonoid.mem_iSup_of_mem (pos_of_ne_zero hj₀)
-      Subtype.prop _
-
-Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_iSup_of_mem, DFinsupp, DFinsupp.mem_support_iff.mp, DirectSum, DirectSum.sum_support_decompose, Subtype, Subtype.prop, classical, le_antisymm, mem_iSup_of_mem, mem_irrelevant_of_mem, mem_support_iff, pos_of_ne_zero, sum_mem, sum_support_decompose
+--- 原说明 ---
+`irrelevant 𝒜 = ⨁_{i>0} 𝒜ᵢ`
 -/
 lemma irrelevant_eq_iSup : 𝒜₊.toAddSubmonoid = ⨆ i > 0, .ofClass (𝒜 i) := by
-refine le_antisymm (fun x hx => ?_) iSup₂_le fun i hi x hx => mem_irrelevant_of_mem _ hi hx
+  refine le_antisymm (fun x hx ↦ ?_) <| iSup₂_le fun i hi x hx ↦ mem_irrelevant_of_mem _ hi hx
   classical rw [← DirectSum.sum_support_decompose 𝒜 x]
-  refine sum_mem fun j hj => ?_
+  refine sum_mem fun j hj ↦ ?_
   by_cases hj₀ : j = 0
   · classical exact (DFinsupp.mem_support_iff.mp hj <| hj₀ ▸ (by simpa using hx)).elim
-· exact AddSubmonoid.mem_iSup_of_mem j AddSubmonoid.mem_iSup_of_mem (pos_of_ne_zero hj₀)
+  · exact AddSubmonoid.mem_iSup_of_mem j <| AddSubmonoid.mem_iSup_of_mem (pos_of_ne_zero hj₀) <|
       Subtype.prop _
 
 open AddSubmonoid Set in
-/--
-lemma `irrelevant_eq_closure` / 引理 `irrelevant_eq_closure`
-
-English:
-lemma irrelevant_eq_closure
-  statement: 𝒜₊.toAddSubmonoid = .closure (⋃ i > 0, 𝒜 i)
-  proof: by
-  rw [irrelevant_eq_iSup]
-exact le_antisymm (iSup_le fun i => iSup_le fun hi _ hx => subset_closure <| mem_biUnion hi hx)
-closure_le.mpr iUnion_subset fun i => iUnion_subset fun hi => le_biSup (ofClass <| 𝒜 ·) hi
-
-中文:
-引理 irrelevant_eq_closure
-  结论: 𝒜₊.toAddSubmonoid = .closure (⋃ i > 0, 𝒜 i)
-  证明: by
-  rw [irrelevant_eq_iSup]
-exact le_antisymm (iSup_le fun i => iSup_le fun hi _ hx => subset_closure <| mem_biUnion hi hx)
-closure_le.mpr iUnion_subset fun i => iUnion_subset fun hi => le_biSup (ofClass <| 𝒜 ·) hi
-
-Depends on / 依赖: closure_le, closure_le.mpr, iSup_le, iUnion_subset, irrelevant_eq_iSup, le_antisymm, le_biSup, mem_biUnion, ofClass, subset_closure
+/-
+**HomogeneousIdeal.irrelevant_eq_closure** 是 Mathlib 中的一个引理，位于命名空间 `HomogeneousI
+deal`。
+形式化陈述：irrelevant_eq_closure : 𝒜₊.toAddSubmonoid = .closure (⋃ i > 0, 𝒜 i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomogeneousIdeal.irrelevant_eq_iSup`：irrelevant_eq_iSup : 𝒜₊.toAddSubmon
+oid = ⨆ i > 0, .ofClass (𝒜 i)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `AddSubmonoid.subset_closure`：∀ {M : Type u_1} [inst : AddZeroClass M] {s
+ : Set M}, s ⊆ ↑(AddSubmonoid.closure s)
+· 使用定理 `Set.mem_biUnion`：mem_biUnion {s : Set α} {t : α -> Set β} {x : α} {y : β
+} (xs : x in s) (ytx : y in t x) : y in ⋃ x in s, t x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AddSubmonoid.closure_le`：∀ {M : Type u_1} [inst : AddZeroClass M] {s : S
+et M} {S : AddSubmonoid M}, AddSubmonoid.closure s ≤ S ↔ s ⊆ ↑S
+· 使用定理 `Set.iUnion_subset`：iUnion_subset {s : ι -> Set α} {t : Set α} (h : foral
+l i, s i subseteq t) : ⋃ i, s i subseteq t
+· 使用引理 `le_biSup`：le_biSup {ι : Type*} {s : Set ι} (f : ι -> α) {i : ι} (hi : i 
+in s) : f i <= ⨆ i in s, f i
 -/
 lemma irrelevant_eq_closure : 𝒜₊.toAddSubmonoid = .closure (⋃ i > 0, 𝒜 i) := by
   rw [irrelevant_eq_iSup]
-exact le_antisymm (iSup_le fun i => iSup_le fun hi _ hx => subset_closure <| mem_biUnion hi hx)
-closure_le.mpr iUnion_subset fun i => iUnion_subset fun hi => le_biSup (ofClass <| 𝒜 ·) hi
+  exact le_antisymm (iSup_le fun i ↦ iSup_le fun hi _ hx ↦ subset_closure <| mem_biUnion hi hx) <|
+    closure_le.mpr <| iUnion_subset fun i ↦ iUnion_subset fun hi ↦ le_biSup (ofClass <| 𝒜 ·) hi
 
 open AddSubmonoid Set in
-/--
-lemma `irrelevant_eq_span` / 引理 `irrelevant_eq_span`
-
-English:
-lemma irrelevant_eq_span
-  statement: 𝒜₊.toIdeal = .span (⋃ i > 0, 𝒜 i)
-  proof: le_antisymm ((irrelevant_eq_closure 𝒜).trans_le <| closure_le.mpr Ideal.subset_span)
-Ideal.span_le.mpr iUnion_subset fun _ => iUnion_subset fun hi _ hx =>
-    mem_irrelevant_of_mem _ hi hx
-
-中文:
-引理 irrelevant_eq_span
-  结论: 𝒜₊.toIdeal = .span (⋃ i > 0, 𝒜 i)
-  证明: le_antisymm ((irrelevant_eq_closure 𝒜).trans_le <| closure_le.mpr Ideal.subset_span)
-Ideal.span_le.mpr iUnion_subset fun _ => iUnion_subset fun hi _ hx =>
-    mem_irrelevant_of_mem _ hi hx
-
-Depends on / 依赖: Ideal.span_le.mpr, Ideal.subset_span, closure_le, closure_le.mpr, iUnion_subset, irrelevant_eq_closure, le_antisymm, mem_irrelevant_of_mem, span_le, subset_span, trans_le
+/-
+**HomogeneousIdeal.irrelevant_eq_span** 是 Mathlib 中的一个引理，位于命名空间 `HomogeneousIdea
+l`。
+形式化陈述：irrelevant_eq_span : 𝒜₊.toIdeal = .span (⋃ i > 0, 𝒜 i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用引理 `HomogeneousIdeal.irrelevant_eq_closure`：irrelevant_eq_closure : 𝒜₊.toAdd
+Submonoid = .closure (⋃ i > 0, 𝒜 i)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AddSubmonoid.closure_le`：∀ {M : Type u_1} [inst : AddZeroClass M] {s : S
+et M} {S : AddSubmonoid M}, AddSubmonoid.closure s ≤ S ↔ s ⊆ ↑S
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `Set.iUnion_subset`：iUnion_subset {s : ι -> Set α} {t : Set α} (h : foral
+l i, s i subseteq t) : ⋃ i, s i subseteq t
+· 使用引理 `HomogeneousIdeal.mem_irrelevant_of_mem`：mem_irrelevant_of_mem {x : A} {i
+ : ι} (hi : 0 < i) (hx : x in 𝒜 i) : x in 𝒜₊
 -/
 lemma irrelevant_eq_span : 𝒜₊.toIdeal = .span (⋃ i > 0, 𝒜 i) :=
-le_antisymm ((irrelevant_eq_closure 𝒜).trans_le <| closure_le.mpr Ideal.subset_span)
-Ideal.span_le.mpr iUnion_subset fun _ => iUnion_subset fun hi _ hx =>
+  le_antisymm ((irrelevant_eq_closure 𝒜).trans_le <| closure_le.mpr Ideal.subset_span) <|
+    Ideal.span_le.mpr <| iUnion_subset fun _ ↦ iUnion_subset fun hi _ hx ↦
     mem_irrelevant_of_mem _ hi hx
-
-/--
-lemma `toAddSubmonoid_irrelevant_le` / 引理 `toAddSubmonoid_irrelevant_le`
-
-English:
-lemma toAddSubmonoid_irrelevant_le
-  given: {P : AddSubmonoid A}
-  proof: by
-  rw [irrelevant_eq_iSup]; rw [iSup₂_le_iff]
-
-中文:
-引理 toAddSubmonoid_irrelevant_le
-  条件: {P : 加法子幺半群 A}
-  证明: by
-  rw [irrelevant_eq_iSup]; rw [iSup₂_le_iff]
-
-Depends on / 依赖: irrelevant_eq_iSup
+/-
+**HomogeneousIdeal.toAddSubmonoid_irrelevant_le** 是 Mathlib 中的一个引理，位于命名空间 `Homog
+eneousIdeal`。
+形式化陈述：toAddSubmonoid_irrelevant_le {P : AddSubmonoid A} : 𝒜₊.toAddSubmonoid <= P
+ ↔ forall i > 0, .ofClass (𝒜 i) <= P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `HomogeneousIdeal.irrelevant_eq_iSup`：irrelevant_eq_iSup : 𝒜₊.toAddSubmon
+oid = ⨆ i > 0, .ofClass (𝒜 i)
+· 使用定理 `iSup₂_le_iff`：iSup₂_le_iff {f : forall i, κ i -> α} : ⨆ (i) (j), f i j <
+= a ↔ forall i j, f i j <= a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma toAddSubmonoid_irrelevant_le {P : AddSubmonoid A} :
-    𝒜₊.toAddSubmonoid <= P ↔ forall i > 0, .ofClass (𝒜 i) <= P := by
-  rw [irrelevant_eq_iSup]; rw [iSup₂_le_iff]
-
-/--
-lemma `toIdeal_irrelevant_le` / 引理 `toIdeal_irrelevant_le`
-
-English:
-lemma toIdeal_irrelevant_le
-  given: {I : Ideal A}
-  proof: toAddSubmonoid_irrelevant_le _
-
-中文:
-引理 toIdeal_irrelevant_le
-  条件: {I : 理想 A}
-  证明: toAddSubmonoid_irrelevant_le _
-
-Depends on / 依赖: toAddSubmonoid_irrelevant_le
+    𝒜₊.toAddSubmonoid ≤ P ↔ ∀ i > 0, .ofClass (𝒜 i) ≤ P := by
+  rw [irrelevant_eq_iSup, iSup₂_le_iff]
+/-
+**HomogeneousIdeal.toIdeal_irrelevant_le** 是 Mathlib 中的一个引理，位于命名空间 `HomogeneousI
+deal`。
+形式化陈述：toIdeal_irrelevant_le {I : Ideal A} : 𝒜₊.toIdeal <= I ↔ forall i > 0, .ofC
+lass (𝒜 i) <= I.toAddSubmonoid
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomogeneousIdeal.toAddSubmonoid_irrelevant_le`：toAddSubmonoid_irrelevant
+_le {P : AddSubmonoid A} : 𝒜₊.toAddSubmonoid <= P ↔ forall i > 0, .ofClass (𝒜 i)
+ <= P
 -/
 lemma toIdeal_irrelevant_le {I : Ideal A} :
-    𝒜₊.toIdeal <= I ↔ forall i > 0, .ofClass (𝒜 i) <= I.toAddSubmonoid :=
+    𝒜₊.toIdeal ≤ I ↔ ∀ i > 0, .ofClass (𝒜 i) ≤ I.toAddSubmonoid :=
   toAddSubmonoid_irrelevant_le _
-
-/--
-lemma `irrelevant_le` / 引理 `irrelevant_le`
-
-English:
-lemma irrelevant_le
-  given: {P : HomogeneousIdeal 𝒜}
-  proof: toIdeal_irrelevant_le _
-
-中文:
-引理 irrelevant_le
-  条件: {P : HomogeneousIdeal 𝒜}
-  证明: toIdeal_irrelevant_le _
-
-Depends on / 依赖: toIdeal_irrelevant_le
+/-
+**HomogeneousIdeal.irrelevant_le** 是 Mathlib 中的一个引理，位于命名空间 `HomogeneousIdeal`。
+形式化陈述：irrelevant_le {P : HomogeneousIdeal 𝒜} : 𝒜₊ <= P ↔ forall i > 0, .ofClass 
+(𝒜 i) <= P.toAddSubmonoid
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomogeneousIdeal.toIdeal_irrelevant_le`：toIdeal_irrelevant_le {I : Ideal
+ A} : 𝒜₊.toIdeal <= I ↔ forall i > 0, .ofClass (𝒜 i) <= I.toAddSubmonoid
 -/
 lemma irrelevant_le {P : HomogeneousIdeal 𝒜} :
-    𝒜₊ <= P ↔ forall i > 0, .ofClass (𝒜 i) <= P.toAddSubmonoid :=
+    𝒜₊ ≤ P ↔ ∀ i > 0, .ofClass (𝒜 i) ≤ P.toAddSubmonoid :=
   toIdeal_irrelevant_le _
 
 end HomogeneousIdeal
 
 end IrrelevantIdeal
+

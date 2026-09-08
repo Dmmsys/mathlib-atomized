@@ -23,40 +23,15 @@ We define
 namespace Lean.Meta.RefinedDiscrTree
 
 
-/--
-Inductive type `Key` / 归纳类型 `Key`
+/-- Discrimination tree key. -/
+/-
+**Lean.Meta.RefinedDiscrTree.Key** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lean.Meta.RefinedD
+iscrTree`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Key
-  parameters: where
-  constructors (11):
-    - star: 
-    - labelledStar: (id : Nat)
-    - opaque: 
-    - const: (declName : Name) (nargs : Nat)
-    - fvar: (fvarId : FVarId) (nargs : Nat)
-    - bvar: (deBruijnIndex nargs : Nat)
-    - lit: (v : Literal)
-    - sort: 
-    - lam: 
-    - forall: 
-    - proj: (typeName : Name) (idx nargs : Nat)
-
-中文:
-归纳类型 Key
-  参数: where
-  构造子 (11 个):
-    - star: 
-    - labelledStar: (id : 自然数)
-    - opaque: 
-    - const: (declName : Name) (nargs : 自然数)
-    - fvar: (fvarId : FVarId) (nargs : 自然数)
-    - bvar: (deBruijnIndex nargs : 自然数)
-    - lit: (v : Literal)
-    - sort: 
-    - lam: 
-    - forall: 
-    - proj: (typeName : Name) (idx nargs : 自然数)
+--- 原说明 ---
+Discrimination tree key.
 -/
 inductive Key where
   /-- A metavariable. This key matches with anything. -/
@@ -84,112 +59,94 @@ inductive Key where
   | proj (typeName : Name) (idx nargs : Nat)
   deriving Inhabited, BEq
 
-/--
-Definition of `Key.hash` / `Key.hash` 的定义
+/-- Compute the hash of a `RefinedDiscrTree.Key`.
 
-English:
-definition Key.hash
-  signature: : Key -> UInt64
-
-中文:
-定义 Key.hash
-  签名: : Key -> U整数64
+Note: at the root, `.const` is the most common key, and it is very uncommon
+to get the same constant name with a different arity.
+So for performance, we just use `hash name` to hash `.const name _`.
 -/
-protected def Key.hash : Key -> UInt64
-  | .star => 0
-| .labelledStar id => mixHash 5 hash id
-  | .opaque => 1
-  | .const name _ => hash name
-| .fvar fvarId nargs => mixHash 6 mixHash (hash fvarId) (hash nargs)
-| .bvar idx nargs => mixHash 7 mixHash (hash idx) (hash nargs)
-| .lit v => mixHash 8 hash v
-  | .sort => 2
-  | .lam => 3
-  | .«forall» => 4
-| .proj name idx nargs => mixHash (hash nargs) mixHash (hash name) (hash idx)
+/-
+**Lean.Meta.RefinedDiscrTree.Key.hash** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refin
+edDiscrTree.Key`。
+形式化陈述：Meta.RefinedDiscrTree.Key → UInt64
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+--- 原说明 ---
+Compute the hash of a `RefinedDiscrTree.Key`.
 
-English:
-instance :
-  signature: Hashable Key
-  body: ⟨Key.hash⟩
-
-中文:
-实例 :
-  签名: Hashable Key
-  定义体: ⟨Key.hash⟩
-
-Depends on / 依赖: Key.hash
+Note: at the root, `.const` is the most common key, and it is very uncommon
+to get the same constant name with a different arity.
+So for performance, we just use `hash name` to hash `.const name _`.
+-/
+protected def Key.hash : Key → UInt64
+  | .star                => 0
+  | .labelledStar id     => mixHash 5 <| hash id
+  | .opaque              => 1
+  | .const name _        => hash name
+  | .fvar fvarId nargs   => mixHash 6 <| mixHash (hash fvarId) (hash nargs)
+  | .bvar idx nargs      => mixHash 7 <| mixHash (hash idx) (hash nargs)
+  | .lit v               => mixHash 8 <| hash v
+  | .sort                => 2
+  | .lam                 => 3
+  | .«forall»            => 4
+  | .proj name idx nargs => mixHash (hash nargs) <| mixHash (hash name) (hash idx)
+/-
+**Lean.Meta.RefinedDiscrTree.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta.RefinedDiscrT
+ree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Hashable Key := ⟨Key.hash⟩
 
-/--
-Definition of `Key.format` / `Key.format` 的定义
+/-- Format a `RefinedDiscrTree.Key`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.Key.format** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Ref
+inedDiscrTree.Key`。
+形式化陈述：Meta.RefinedDiscrTree.Key → Format
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Key.format
-  signature: : Key -> Format
-
-中文:
-定义 Key.format
-  签名: : Key -> Format
+--- 原说明 ---
+Format a `RefinedDiscrTree.Key`.
 -/
-def Key.format : Key -> Format
-  | .star => f!"*"
-  | .labelledStar id => f!"*{id}"
-  | .opaque => "◾"
-  | .const name nargs => f!"⟨{name}, {nargs}⟩"
-  | .fvar fvarId nargs => f!"⟨{fvarId.name}, {nargs}⟩"
+def Key.format : Key → Format
+  | .star                   => f!"*"
+  | .labelledStar id        => f!"*{id}"
+  | .opaque                 => "◾"
+  | .const name nargs       => f!"⟨{name}, {nargs}⟩"
+  | .fvar fvarId nargs      => f!"⟨{fvarId.name}, {nargs}⟩"
   | .lit (Literal.natVal n) => f!"{n}"
   | .lit (Literal.strVal s) => f!"{s.quote}"
-  | .sort => "Sort"
-  | .bvar i nargs => f!"⟨#{i}, {nargs}⟩"
-  | .lam => "fun"
-  | .forall => "forall"
-  | .proj name idx nargs => f!"⟨{name}.{idx}, {nargs}⟩"
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToFormat Key
-  body: ⟨Key.format⟩
-
-中文:
-实例 :
-  签名: ToFormat Key
-  定义体: ⟨Key.format⟩
-
-Depends on / 依赖: Key.format, format
+  | .sort                   => "Sort"
+  | .bvar i nargs           => f!"⟨#{i}, {nargs}⟩"
+  | .lam                    => "λ"
+  | .forall                 => "∀"
+  | .proj name idx nargs    => f!"⟨{name}.{idx}, {nargs}⟩"
+/-
+**Lean.Meta.RefinedDiscrTree.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta.RefinedDiscrT
+ree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToFormat Key := ⟨Key.format⟩
 
 /--
-Definition of `keysAsPattern` / `keysAsPattern` 的定义
+Converts an entry (i.e., `List Key`) to the discrimination tree into
+`MessageData` that is more user-friendly.
 
-English:
-definition keysAsPattern
-  signature: (keys : Array Key)
-  body: do
-.run keys.toList let (msg, keys) ← go (paren := false)
-  if !keys.isEmpty then
-    throwError "illegal discrimination tree entry: {keys.map Key.format}"
-  return msg
+This is a copy of `Lean.Meta.DiscrTree.keysAsPattern`
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.keysAsPattern** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.
+RefinedDiscrTree`。
+形式化陈述：Array Meta.RefinedDiscrTree.Key → CoreM MessageData
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 keysAsPattern
-  签名: (keys : 数组 Key)
-  定义体: do
-.run keys.toList let (msg, keys) ← go (paren := false)
-  if !keys.isEmpty then
-    throwError "illegal discrimination tree entry: {keys.map Key.format}"
-  return msg
+--- 原说明 ---
+Converts an entry (i.e., `List Key`) to the discrimination tree into
+`MessageData` that is more user-friendly.
+
+This is a copy of `Lean.Meta.DiscrTree.keysAsPattern`
 -/
 partial def keysAsPattern (keys : Array Key) : CoreM MessageData := do
-.run keys.toList let (msg, keys) ← go (paren := false)
+  let (msg, keys) ← go (paren := false) |>.run keys.toList
   if !keys.isEmpty then
     throwError "illegal discrimination tree entry: {keys.map Key.format}"
   return msg
@@ -226,56 +183,44 @@ where
     | .bvar i nargs =>
       mkApp m!"#{i}" nargs paren
     | .lam =>
-      return parenthesize m!"fun, {← go (paren := false)}" paren
+      return parenthesize m!"λ, {← go (paren := false)}" paren
     | .forall =>
-      return parenthesize m!"{← go} -> {← go (paren := false)}" paren
+      return parenthesize m!"{← go} → {← go (paren := false)}" paren
     | _ => return key.format
   /-- Add parentheses if `paren == true`. -/
   parenthesize (msg : MessageData) (paren : Bool) : MessageData :=
     if paren then msg.paren else msg.group
 
-/--
-Definition of `Key.arity` / `Key.arity` 的定义
+/-- Return the number of arguments that the `Key` takes. -/
+/-
+**Lean.Meta.RefinedDiscrTree.Key.arity** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refi
+nedDiscrTree.Key`。
+形式化陈述：Meta.RefinedDiscrTree.Key → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Key.arity
-  signature: : Key -> Nat
-
-中文:
-定义 Key.arity
-  签名: : Key -> 自然数
+--- 原说明 ---
+Return the number of arguments that the `Key` takes.
 -/
-def Key.arity : Key -> Nat
-  | .const _ nargs => nargs
-  | .fvar _ nargs => nargs
-  | .bvar _ nargs => nargs
-  | .lam => 1
-  | .forall => 2
+def Key.arity : Key → Nat
+  | .const _ nargs  => nargs
+  | .fvar _ nargs   => nargs
+  | .bvar _ nargs   => nargs
+  | .lam            => 1
+  | .forall         => 2
   | .proj _ _ nargs => nargs + 1
-  | _ => 0
+  | _               => 0
 
-/--
-Definition of `ExprInfo` / `ExprInfo` 的定义
+/-- The information for computing the keys of a subexpression. -/
+/-
+**Lean.Meta.RefinedDiscrTree.ExprInfo** 是 Mathlib 中的一个结构，位于命名空间 `Lean.Meta.Refin
+edDiscrTree`。
+形式化陈述：ExprInfo where /-- The expression -/ expr : Expr /-- Variables that come f
+rom a lambda or forall binder. The list index gives the De Bruijn index. -/ bvar
+s : List FVarId
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ExprInfo
-  parameters: where
-  axioms and operations (5):
-    - expr : Expr
-    - bvars : List FVarId  [default: []]
-    - lctx : LocalContext
-    - localInsts : LocalInstances
-    - cfg : Config
-
-中文:
-结构 ExprInfo
-  参数: where
-  公理与运算 (5 个):
-    - expr : Expr
-    - bvars : 列表 FVarId  [默认: []]
-    - lctx : LocalContext
-    - localInsts : LocalInstances
-    - cfg : 余nfig
+--- 原说明 ---
+The information for computing the keys of a subexpression.
 -/
 structure ExprInfo where
   /-- The expression -/
@@ -290,30 +235,17 @@ structure ExprInfo where
   /-- The `Meta.Config` used by this entry. -/
   cfg : Config
 
-/--
-Definition of `mkExprInfo` / `mkExprInfo` 的定义
+/-- Creates an `ExprInfo` using the current context. -/
+/-
+**Lean.Meta.RefinedDiscrTree.mkExprInfo** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Ref
+inedDiscrTree`。
+形式化陈述：mkExprInfo (expr : Expr) (bvars : List FVarId) : MetaM ExprInfo
+参数：expr : Expr；bvars : List FVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkExprInfo
-  signature: (expr : Expr) (bvars : List FVarId)
-  body: return {
-    expr, bvars,
-    lctx := ← getLCtx
-    localInsts := ← getLocalInstances
-    cfg := ← getConfig
-  }
-
-中文:
-定义 mkExprInfo
-  签名: (expr : Expr) (bvars : 列表 FVarId)
-  定义体: return {
-    expr, bvars,
-    lctx := ← getLCtx
-    localInsts := ← getLocalInstances
-    cfg := ← getConfig
-  }
-
-Depends on / 依赖: getConfig, getLCtx, getLocalInstances, localInsts, return
+--- 原说明 ---
+Creates an `ExprInfo` using the current context.
 -/
 def mkExprInfo (expr : Expr) (bvars : List FVarId) : MetaM ExprInfo :=
   return {
@@ -323,22 +255,15 @@ def mkExprInfo (expr : Expr) (bvars : List FVarId) : MetaM ExprInfo :=
     cfg := ← getConfig
   }
 
-/--
-Inductive type `StackEntry` / 归纳类型 `StackEntry`
+/-- The possible values that can appear in the stack -/
+/-
+**Lean.Meta.RefinedDiscrTree.StackEntry** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lean.Meta.R
+efinedDiscrTree`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive StackEntry
-  parameters: where
-  constructors (2):
-    - star: 
-    - expr: (info : ExprInfo)
-
-中文:
-归纳类型 StackEntry
-  参数: where
-  构造子 (2 个):
-    - star: 
-    - expr: (info : ExprInfo)
+--- 原说明 ---
+The possible values that can appear in the stack
 -/
 inductive StackEntry where
   /-- `.star` is an expression that will not be explicitly indexed. -/
@@ -346,60 +271,44 @@ inductive StackEntry where
   /-- `.expr` is an expression that will be indexed. -/
   | expr (info : ExprInfo)
 
-/--
-Definition of `StackEntry.format` / `StackEntry.format` 的定义
+/-- Format a `RefinedDiscrTree.StackEntry`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.StackEntry.format** 是 Mathlib 中的一个定义，位于命名空间 `Lean.M
+eta.RefinedDiscrTree.StackEntry`。
+形式化陈述：Meta.RefinedDiscrTree.StackEntry → Format
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StackEntry.format
-  signature: : StackEntry -> Format
-
-中文:
-定义 StackEntry.format
-  签名: : StackEntry -> Format
+--- 原说明 ---
+Format a `RefinedDiscrTree.StackEntry`.
 -/
-def StackEntry.format : StackEntry -> Format
+def StackEntry.format : StackEntry → Format
   | .star => f!".star"
   | .expr info => f!".expr {info.expr}"
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToFormat StackEntry
-  body: ⟨StackEntry.format⟩
-
-中文:
-实例 :
-  签名: ToFormat StackEntry
-  定义体: ⟨StackEntry.format⟩
-
-Depends on / 依赖: StackEntry, StackEntry.format, format
+/-
+**Lean.Meta.RefinedDiscrTree.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta.RefinedDiscrT
+ree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToFormat StackEntry := ⟨StackEntry.format⟩
 
-/--
-Definition of `LazyEntry` / `LazyEntry` 的定义
+/-- A `LazyEntry` represents a snapshot of the computation of encoding an `Expr` as `Array Key`.
+This is used for computing the keys one by one. -/
+/-
+**Lean.Meta.RefinedDiscrTree.LazyEntry** 是 Mathlib 中的一个结构，位于命名空间 `Lean.Meta.Refi
+nedDiscrTree`。
+形式化陈述：LazyEntry where /-- If an expression creates more entries in the stack, fo
+r example because it is an application, then instead of pushing to the stack gre
+edily, we only extend the stack once we need to. So, the field `previous` is use
+d to extend the `stack` before looking in the `stack`.  For example in `10.add (
+20.add 30)`, after computing the key `⟨Nat.add, 2⟩`, the stack is still empty, a
+nd `previous` will be `10.add (20.add 30)`. -/ previous : Option ExprInfo
+参数：20.add 30；20.add 30。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LazyEntry
-  parameters: where
-  axioms and operations (5):
-    - previous : Option ExprInfo  [default: none]
-    - stack : List StackEntry  [default: []]
-    - mctx : MetavarContext
-    - labelledStars? : Option (Array MVarId)
-    - computedKeys : List Key  [default: []]
-
-中文:
-结构 LazyEntry
-  参数: where
-  公理与运算 (5 个):
-    - previous : 选项类型 ExprInfo  [默认: none]
-    - stack : 列表 StackEntry  [默认: []]
-    - mctx : MetavarContext
-    - labelledStars? : 选项类型 (数组 MVarId)
-    - computedKeys : 列表 Key  [默认: []]
+--- 原说明 ---
+A `LazyEntry` represents a snapshot of the computation of encoding an `Expr` as 
+`Array Key`.
+This is used for computing the keys one by one.
 -/
 structure LazyEntry where
   /--
@@ -418,15 +327,15 @@ structure LazyEntry where
   For example in `10.add (20.add 30)`, after computing the keys `⟨Nat.add, 2⟩` and `10`, the stack
   will be a list of length 1 containing the expression `20.add 30`.
   -/
-  stack : List StackEntry := []
+  stack    : List StackEntry := []
   /-- The metavariable context, which may contain variables appearing in this entry. -/
-  mctx : MetavarContext
+  mctx     : MetavarContext
   /--
   `MVarId`s corresponding to the `.labelledStar` labels. The index in the array is the label.
   It is `none` if we use `.star` instead of `labelledStar`,
   for example when encoding the lookup expression.
   -/
-  labelledStars? : Option (Array MVarId)
+  labelledStars?   : Option (Array MVarId)
   /--
   The `Key`s that have already been computed.
 
@@ -434,29 +343,20 @@ structure LazyEntry where
   there are lambda binders (because it depends on the body whether the lambda key
   should be indexed or not). In that case the remaining `Key`s are stored in `results`.
   -/
-  computedKeys : List Key := []
+  computedKeys  : List Key := []
 deriving Inhabited
 
-/--
-Definition of `mkInitLazyEntry` / `mkInitLazyEntry` 的定义
+/-- Creates a `LazyEntry` using the current metavariable context. -/
+/-
+**Lean.Meta.RefinedDiscrTree.mkInitLazyEntry** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Met
+a.RefinedDiscrTree`。
+形式化陈述：mkInitLazyEntry (labelledStars : Bool) : MetaM LazyEntry
+参数：labelledStars : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkInitLazyEntry
-  signature: (labelledStars : Bool)
-  body: return {
-    mctx := ← getMCtx
-    labelledStars? := if labelledStars then some #[] else none
-  }
-
-中文:
-定义 mkInitLazyEntry
-  签名: (labelledStars : 布尔值)
-  定义体: return {
-    mctx := ← getMCtx
-    labelledStars? := if labelledStars then some #[] else none
-  }
-
-Depends on / 依赖: getMCtx, labelledStars, return
+--- 原说明 ---
+Creates a `LazyEntry` using the current metavariable context.
 -/
 def mkInitLazyEntry (labelledStars : Bool) : MetaM LazyEntry :=
   return {
@@ -464,32 +364,15 @@ def mkInitLazyEntry (labelledStars : Bool) : MetaM LazyEntry :=
     labelledStars? := if labelledStars then some #[] else none
   }
 
-/--
-Definition of `LazyEntry.format` / `LazyEntry.format` 的定义
+/-- Format a `RefinedDiscrTree.LazyEntry`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.LazyEntry.format** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Me
+ta.RefinedDiscrTree.LazyEntry`。
+形式化陈述：Meta.RefinedDiscrTree.LazyEntry → Format
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LazyEntry.format
-  signature: (entry : LazyEntry)
-  body: Id.run do
-  let mut parts := #[f!"stack: {entry.stack}"]
-  unless entry.computedKeys == [] do
-    parts := parts.push f!"results: {entry.computedKeys}"
-  if let some info := entry.previous then
-    parts := parts.push f!"todo: {info.expr}"
-  return Format.joinSep parts.toList ", "
-
-中文:
-定义 LazyEntry.format
-  签名: (entry : LazyEntry)
-  定义体: Id.run do
-  let mut parts := #[f!"stack: {entry.stack}"]
-  unless entry.computedKeys == [] do
-    parts := parts.push f!"results: {entry.computedKeys}"
-  if let some info := entry.previous then
-    parts := parts.push f!"todo: {info.expr}"
-  return Format.joinSep parts.toList ", "
-
-Depends on / 依赖: Id.run
+--- 原说明 ---
+Format a `RefinedDiscrTree.LazyEntry`.
 -/
 def LazyEntry.format (entry : LazyEntry) : Format := Id.run do
   let mut parts := #[f!"stack: {entry.stack}"]
@@ -498,51 +381,49 @@ def LazyEntry.format (entry : LazyEntry) : Format := Id.run do
   if let some info := entry.previous then
     parts := parts.push f!"todo: {info.expr}"
   return Format.joinSep parts.toList ", "
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToFormat LazyEntry
-  body: ⟨LazyEntry.format⟩
-
-中文:
-实例 :
-  签名: ToFormat LazyEntry
-  定义体: ⟨LazyEntry.format⟩
-
-Depends on / 依赖: LazyEntry, LazyEntry.format, format
+/-
+**Lean.Meta.RefinedDiscrTree.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta.RefinedDiscrT
+ree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToFormat LazyEntry := ⟨LazyEntry.format⟩
 
-/--
-Definition of `TrieIndex` / `TrieIndex` 的定义
+/-- Array index of a `Trie α` in the `tries` of a `RefinedDiscrTree`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.TrieIndex** 是 Mathlib 中的一个缩写定义，位于命名空间 `Lean.Meta.Re
+finedDiscrTree`。
+形式化陈述：TrieIndex
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation TrieIndex
-  body: Nat
-
-中文:
-缩写 TrieIndex
-  定义体: Nat
+--- 原说明 ---
+Array index of a `Trie α` in the `tries` of a `RefinedDiscrTree`.
 -/
 abbrev TrieIndex := Nat
 
 /--
-Definition of `Trie` / `Trie` 的定义
+Discrimination tree trie. See `RefinedDiscrTree`.
 
-English:
-structure Trie
-  parameters: (α : Type)
-  axioms and operations (1):
-    - node : : values : Array α star : Option TrieIndex labelledStars : Std.HashMap Nat TrieIndex children : Std.HashMap Key TrieIndex pending : Array (LazyEntry × α)
+A `Trie` will normally have exactly one of the following
+- nonempty `values`
+- nonempty `stars`, `labelledStars` and/or `children`
+- nonempty `pending`
+But defining it as a structure that can have all at the same time turns out to be easier.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.Trie** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lean.Meta.Refined
+DiscrTree`。
+形式化陈述：Type → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 Trie
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - node : : values : 数组 α star : 选项类型 TrieIndex labelledStars : Std.HashMap 自然数 TrieIndex children : Std.HashMap Key TrieIndex pending : 数组 (LazyEntry × α)
+--- 原说明 ---
+Discrimination tree trie. See `RefinedDiscrTree`.
+
+A `Trie` will normally have exactly one of the following
+- nonempty `values`
+- nonempty `stars`, `labelledStars` and/or `children`
+- nonempty `pending`
+But defining it as a structure that can have all at the same time turns out to b
+e easier.
 -/
 structure Trie (α : Type) where
   node ::
@@ -556,7 +437,11 @@ structure Trie (α : Type) where
     children : Std.HashMap Key TrieIndex
     /-- Lazy entries that still have to be evaluated. -/
     pending : Array (LazyEntry × α)
-
+/-
+**Lean.Meta.RefinedDiscrTree.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta.RefinedDiscrT
+ree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type} : Inhabited (Trie α) := ⟨.node #[] none {} {} #[]⟩
 
 end RefinedDiscrTree
@@ -564,21 +449,26 @@ end RefinedDiscrTree
 open RefinedDiscrTree in
 
 /--
-Definition of `RefinedDiscrTree` / `RefinedDiscrTree` 的定义
+Lazy refined discrimination tree. It is an index from expressions to values of type `α`.
 
-English:
-structure RefinedDiscrTree
-  parameters: (α : Type)
-  axioms and operations (2):
-    - root : Std.HashMap Key TrieIndex  [default: {}]
-    - tries : Array (Trie α)  [default: #[]]
+We store all of the nodes in one `Array`, `tries`, instead of using a 'normal' inductive type.
+This is so that we can modify the tree globally, which is very useful when evaluating lazy
+entries and saving the result globally.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lean.Meta`。
+形式化陈述：Type → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 RefinedDiscrTree
-  参数: (α : 类型)
-  公理与运算 (2 个):
-    - root : Std.HashMap Key TrieIndex  [默认: {}]
-    - tries : 数组 (Trie α)  [默认: #[]]
+--- 原说明 ---
+Lazy refined discrimination tree. It is an index from expressions to values of t
+ype `α`.
+
+We store all of the nodes in one `Array`, `tries`, instead of using a 'normal' i
+nductive type.
+This is so that we can modify the tree globally, which is very useful when evalu
+ating lazy
+entries and saving the result globally.
 -/
 structure RefinedDiscrTree (α : Type) where
   /-- `Trie`s at the root based of the `Key`. -/
@@ -591,28 +481,79 @@ namespace RefinedDiscrTree
 
 variable {α : Type}
 
-/--
-Definition of `format` / `format` 的定义
+/-- Format a `RefinedDiscrTree` as a flowchart.
+- Non-terminal nodes are of the form `{key} =>`, followed by all of the following nodes,
+  indented with 2 more spaces.
+- Terminal nodes have either "entries", containing the return values,
+  or "pending entries", for nodes that have not been evaluated/expanded.
 
-English:
-definition format
-  signature: [ToFormat α] (tree : RefinedDiscrTree α)
-  body: let lines := tree.root.fold (init := #[]) fun lines key trie =>
-    lines.push (Format.nest 2 f!"{key} =>{Format.line}{go trie}")
-  if lines.size = 0 then
-    f!"<empty discrimination tree>"
-  else
-    "Discrimination tree flowchart:\n" ++ Format.joinSep lines.toList "\n"
+For example:
+```
+Discrimination tree flowchart:
+⟨HMul.hMul, 6⟩ =>
+  ⟨Int, 0⟩ =>
+    ⟨Int, 0⟩ =>
+      * =>
+        * =>
+          *0 =>
+            *0 =>
+              pending entries: #[mul_self]
+            *1 =>
+              entries: #[mul_comm]
+            ⟨Neg.neg, 3⟩ =>
+              ⟨Int, 0⟩ =>
+                * =>
+                  *1 =>
+                    entries: #[mul_neg]
+            1 =>
+              pending entries: #[mul_one]
+          ⟨Neg.neg, 3⟩ =>
+            pending entries: #[neg_mul]
+          1 =>
+            *0 =>
+              entries: #[one_mul]
+```
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.format** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refined
+DiscrTree`。
+形式化陈述：{α : Type} → [ToFormat α] → Meta.RefinedDiscrTree α → Format
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 format
-  签名: [ToFormat α] (tree : RefinedDiscrTree α)
-  定义体: let lines := tree.root.fold (init := #[]) fun lines key trie =>
-    lines.push (Format.nest 2 f!"{key} =>{Format.line}{go trie}")
-  if lines.size = 0 then
-    f!"<empty discrimination tree>"
-  else
-    "Discrimination tree flowchart:\n" ++ Format.joinSep lines.toList "\n"
+--- 原说明 ---
+Format a `RefinedDiscrTree` as a flowchart.
+- Non-terminal nodes are of the form `{key} =>`, followed by all of the followin
+g nodes,
+  indented with 2 more spaces.
+- Terminal nodes have either "entries", containing the return values,
+  or "pending entries", for nodes that have not been evaluated/expanded.
+
+For example:
+```
+Discrimination tree flowchart:
+⟨HMul.hMul, 6⟩ =>
+  ⟨Int, 0⟩ =>
+    ⟨Int, 0⟩ =>
+      * =>
+        * =>
+          *0 =>
+            *0 =>
+              pending entries: #[mul_self]
+            *1 =>
+              entries: #[mul_comm]
+            ⟨Neg.neg, 3⟩ =>
+              ⟨Int, 0⟩ =>
+                * =>
+                  *1 =>
+                    entries: #[mul_neg]
+            1 =>
+              pending entries: #[mul_one]
+          ⟨Neg.neg, 3⟩ =>
+            pending entries: #[neg_mul]
+          1 =>
+            *0 =>
+              entries: #[one_mul]
+```
 -/
 partial def format [ToFormat α] (tree : RefinedDiscrTree α) : Format :=
   let lines := tree.root.fold (init := #[]) fun lines key trie =>
@@ -640,22 +581,12 @@ where
       f!"<empty node>"
     else
       Format.joinSep lines.toList "\n"
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ToFormat
-  signature: α] : ToFormat (RefinedDiscrTree α)
-  body: ⟨format⟩
-
-中文:
-实例 [ToFormat
-  签名: α] : ToFormat (RefinedDiscrTree α)
-  定义体: ⟨format⟩
-
-Depends on / 依赖: format
+/-
+**Lean.Meta.RefinedDiscrTree.** 是 Mathlib 中的一个实例，位于命名空间 `Lean.Meta.RefinedDiscrT
+ree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ToFormat α] : ToFormat (RefinedDiscrTree α) := ⟨format⟩
 
 end Lean.Meta.RefinedDiscrTree
+

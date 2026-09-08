@@ -16,34 +16,29 @@ public meta section
 
 namespace Lean.Elab.Term
 
-/--
-Definition of `elabPattern` / `elabPattern` 的定义
+/-- Fully elaborates the term `patt`, allowing typeclass inference failure,
+but while setting `errToSorry` to false.
+Typeclass failures result in plain metavariables.
+Instantiates all assigned metavariables. -/
+/-
+**Lean.Elab.Term.elabPattern** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Term`。
+形式化陈述：elabPattern (patt : Term) (expectedType? : Option Expr) : TermElabM Expr
+参数：patt : Term；expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabPattern
-  signature: (patt : Term) (expectedType? : Option Expr)
-  body: do
-withTheReader Term.Context ({ · with ignoreTCFailures := true, errToSorry := false })
-    withSynthesizeLight do
-      let t ← elabTerm patt expectedType?
-      synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
-      instantiateMVars t
-
-中文:
-定义 elabPattern
-  签名: (patt : 项) (expectedType? : 选项类型 Expr)
-  定义体: do
-withTheReader Term.Context ({ · with ignoreTCFailures := true, errToSorry := false })
-    withSynthesizeLight do
-      let t ← elabTerm patt expectedType?
-      synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
-      instantiateMVars t
+--- 原说明 ---
+Fully elaborates the term `patt`, allowing typeclass inference failure,
+but while setting `errToSorry` to false.
+Typeclass failures result in plain metavariables.
+Instantiates all assigned metavariables.
 -/
 def elabPattern (patt : Term) (expectedType? : Option Expr) : TermElabM Expr := do
-withTheReader Term.Context ({ · with ignoreTCFailures := true, errToSorry := false })
+  withTheReader Term.Context ({ · with ignoreTCFailures := true, errToSorry := false }) <|
     withSynthesizeLight do
       let t ← elabTerm patt expectedType?
       synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
       instantiateMVars t
 
 end Lean.Elab.Term
+

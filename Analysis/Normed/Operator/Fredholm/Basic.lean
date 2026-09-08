@@ -108,30 +108,40 @@ section DefTFAE
 
 section IsFredholm
 
-/--
-Definition of `IsFredholm` / `IsFredholm` 的定义
+/-- A continuous linear map `u : E →L[𝕜] F` is a **Fredholm operator** if it is strict,
+its range is closed and has finite codimension, and its kernel is (topologically) complemented and
+has finite dimension.
 
-English:
-structure IsFredholm
-  parameters: (u : E ->L[𝕜] F)
-  axioms and operations (5):
-    - isStrictMap : IsStrictMap u
-    - isClosed_range : IsClosed (u.range : Set F)
-    - finite_ker : FiniteDimensional 𝕜 u.ker
-    - finite_coker : u.range.CoFG
-    - closedComplemented_ker : u.ker.ClosedComplemented
+See also `isFredholm_tfae` for other equivalent characterizations.
+We will also prove later (not in Mathlib yet) that for maps between Banach (or even Fréchet)
+spaces over `ℝ` or `ℂ`, all the conditions follow from the kernel and cokernel having finite
+dimension. -/
+/-
+**ContinuousLinearMap.IsFredholm** 是 Mathlib 中的一个归纳类型，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：{𝕜 : Type u_1} →   {E : Type u_2} →     {F : Type u_3} →       [inst : Non
+triviallyNormedField 𝕜] →         [inst_1 : AddCommGroup E] →           [inst_2 
+: AddCommGroup F] →             [inst_3 : _root_.Module 𝕜 E] →               [in
+st_4 : _root_.Module 𝕜 F] →                 [inst_5 : TopologicalSpace E] → [ins
+t_6 : TopologicalSpace F] → (E →L[𝕜] F) → Prop
+参数：E →L[𝕜] F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 是Fredholm
-  参数: (u : E ->L[𝕜] F)
-  公理与运算 (5 个):
-    - isStrictMap : IsStrictMap u
-    - isClosed_range : 是闭集 (u.range : 集合 F)
-    - finite_ker : 有限维 𝕜 u.ker
-    - finite_coker : u.range.CoFG
-    - closedComplemented_ker : u.ker.ClosedComplemented
+--- 原说明 ---
+A continuous linear map `u : E →L[𝕜] F` is a **Fredholm operator** if it is stri
+ct,
+its range is closed and has finite codimension, and its kernel is (topologically
+) complemented and
+has finite dimension.
+
+See also `isFredholm_tfae` for other equivalent characterizations.
+We will also prove later (not in Mathlib yet) that for maps between Banach (or e
+ven Fréchet)
+spaces over `ℝ` or `ℂ`, all the conditions follow from the kernel and cokernel h
+aving finite
+dimension.
 -/
-structure IsFredholm (u : E ->L[𝕜] F) : Prop where
+structure IsFredholm (u : E →L[𝕜] F) : Prop where
   isStrictMap : IsStrictMap u
   isClosed_range : IsClosed (u.range : Set F)
   finite_ker : FiniteDimensional 𝕜 u.ker
@@ -139,24 +149,31 @@ structure IsFredholm (u : E ->L[𝕜] F) : Prop where
   closedComplemented_ker : u.ker.ClosedComplemented
 
 variable [CompleteSpace 𝕜] [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F] in
-/--
-lemma `IsFredholm.closedComplemented_range` / 引理 `IsFredholm.closedComplemented_range`
+/-- A Fredholm operator has (topologically) complemented range. -/
+/-
+**ContinuousLinearMap.IsFredholm.closedComplemented_range** 是 Mathlib 中的一个定理，位于命
+名空间 `ContinuousLinearMap.IsFredholm`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] [CompleteSpace 𝕜] [IsTopologicalAddGroup F] [ContinuousSMu
+l 𝕜 F] {u : E →L[𝕜] F},   u.IsFredholm → (↑u).range.ClosedComplemented
+参数：↑u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.IsFredholm.finite_coker`：∀ {𝕜 : Type u_1} {E : Type 
+u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E]
+   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `Submodule.ClosedComplemented.of_finiteDimensional_quotient`：Submodule.Cl
+osedComplemented.of_finiteDimensional_quotient {p : Submodule 𝕜 E} (hp : IsClose
+d (p : Set E)) [hq : FiniteDimensional 𝕜 (E ⧸ p)…
+· 使用定理 `ContinuousLinearMap.IsFredholm.isClosed_range`：∀ {𝕜 : Type u_1} {E : Typ
+e u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup 
+E]   [inst_2 : AddCommGroup F] [ins…
 
-English:
-lemma IsFredholm.closedComplemented_range
-  given: {u : E ->L[𝕜] F} (u_fred : IsFredholm u)
-  proof: have := u_fred.finite_coker
-  ClosedComplemented.of_finiteDimensional_quotient u_fred.isClosed_range
-
-中文:
-引理 是Fredholm.closedComplemented_range
-  条件: {u : E ->L[𝕜] F} (u_fred : 是Fredholm u)
-  证明: have := u_fred.finite_coker
-  ClosedComplemented.of_finiteDimensional_quotient u_fred.isClosed_range
-
-Depends on / 依赖: ClosedComplemented, ClosedComplemented.of_finiteDimensional_quotient, finite_coker, isClosed_range, of_finiteDimensional_quotient, u_fred, u_fred.finite_coker, u_fred.isClosed_range
+--- 原说明 ---
+A Fredholm operator has (topologically) complemented range.
 -/
-lemma IsFredholm.closedComplemented_range {u : E ->L[𝕜] F} (u_fred : IsFredholm u) :
+lemma IsFredholm.closedComplemented_range {u : E →L[𝕜] F} (u_fred : IsFredholm u) :
     u.range.ClosedComplemented :=
   have := u_fred.finite_coker
   ClosedComplemented.of_finiteDimensional_quotient u_fred.isClosed_range
@@ -166,26 +183,25 @@ end IsFredholm
 section FredholmPackage
 
 variable (𝕜 E) in
-/--
-Definition of `_root_.FredholmDecomposition` / `_root_.FredholmDecomposition` 的定义
+/-- A **Fredholm decomposition** of a topological vector space `E` is the data of two subspaces
+`X₀` and `X₁` which are topological complements, and where `X₀` is finite dimensional.
 
-English:
-structure _root_.FredholmDecomposition
-  parameters: where
-  axioms and operations (4):
-    - X₀ : Submodule 𝕜 E
-    - X₁ : Submodule 𝕜 E
-    - isTopCompl : IsTopCompl X₁ X₀
-    - finite_X₀ : FiniteDimensional 𝕜 X₀
+Note that we purposefully use the index `₀` for the "inessential" (i.e. finite dimensional)
+part of the decomposition. -/
+/-
+**ContinuousLinearMap._root_.FredholmDecomposition** 是 Mathlib 中的一个结构，位于命名空间 `Co
+ntinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 _root_.FredholmDecomposition
-  参数: where
-  公理与运算 (4 个):
-    - X₀ : 子模 𝕜 E
-    - X₁ : 子模 𝕜 E
-    - isTopCompl : 是TopCompl X₁ X₀
-    - finite_X₀ : 有限维 𝕜 X₀
+--- 原说明 ---
+A **Fredholm decomposition** of a topological vector space `E` is the data of tw
+o subspaces
+`X₀` and `X₁` which are topological complements, and where `X₀` is finite dimens
+ional.
+
+Note that we purposefully use the index `₀` for the "inessential" (i.e. finite d
+imensional)
+part of the decomposition.
 -/
 structure _root_.FredholmDecomposition where
   /-- The inessential (i.e. finite dimensional) part of a Fredholm decomposition. -/
@@ -195,46 +211,68 @@ structure _root_.FredholmDecomposition where
   isTopCompl : IsTopCompl X₁ X₀
   finite_X₀ : FiniteDimensional 𝕜 X₀
 
-/--
-Definition of `_root_.FredholmDecomposition.proj` / `_root_.FredholmDecomposition.proj` 的定义
+/-- Given a Fredholm decomposition `dec` of the space `E`, `dec.proj` is the (continuous linear)
+projection onto the "essential part" `dec.X₁` along the "inessential part" `dec.X₀`.
+This is a Fredholm operator. -/
+/-
+**ContinuousLinearMap._root_.FredholmDecomposition.proj** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.FredholmDecomposition.proj
-  signature: (dec : FredholmDecomposition 𝕜 E)
-  body: dec.X₁.projectionOntoL dec.X₀ dec.isTopCompl
-
-中文:
-缩写 _root_.FredholmDecomposition.proj
-  签名: (dec : FredholmDecomposition 𝕜 E)
-  定义体: dec.X₁.projectionOntoL dec.X₀ dec.isTopCompl
-
-Depends on / 依赖: dec.X, dec.isTopCompl, isTopCompl, projectionOntoL
+--- 原说明 ---
+Given a Fredholm decomposition `dec` of the space `E`, `dec.proj` is the (contin
+uous linear)
+projection onto the "essential part" `dec.X₁` along the "inessential part" `dec.
+X₀`.
+This is a Fredholm operator.
 -/
 abbrev _root_.FredholmDecomposition.proj (dec : FredholmDecomposition 𝕜 E) :
-    E ->L[𝕜] dec.X₁ := dec.X₁.projectionOntoL dec.X₀ dec.isTopCompl
+    E →L[𝕜] dec.X₁ := dec.X₁.projectionOntoL dec.X₀ dec.isTopCompl
 
-/--
-Definition of `FredholmPackage` / `FredholmPackage` 的定义
+/-- Let `u : E →L[𝕜] F` be a continuous linear map. A **Fredholm package** for `u` is the data of
+Fredholm decompositions `decDom` and `decCodom` of `E` and `F` respectively, together with
+a continuous linear equivalence `equiv : decDom.X₁ ≃L[𝕜] decCodom.X₁` between the "essential"
+(i.e. finite codimension) parts of these decompositions, such that `u` equals the composition
+`decCodom.X₁.subtypeL ∘L equiv ∘L decDom.proj`. In other words, in these
+"essential ⊕ inessential" decompositions, the matrix of `u` is
+$\begin{pmatrix} \texttt{equiv} & 0 \cr 0 & 0 \end{pmatrix}$.
 
-English:
-structure FredholmPackage
-  parameters: (u : E ->L[𝕜] F)
-  axioms and operations (4):
-    - decDom : FredholmDecomposition 𝕜 E
-    - decCodom : FredholmDecomposition 𝕜 F
-    - equiv : decDom.X₁ ≃L[𝕜] decCodom.X₁
-    - eq_equiv : u = decCodom.X₁.subtypeL ∘L equiv ∘L decDom.proj
+We will show in `isFredholm_tfae` that an operator is Fredholm if and only if it admits
+a Fredholm package. In practice, the condition that `u` is Fredholm (`IsFredholm`) is always easier
+to prove, so if you need a Fredholm package you should probably get it from
+`IsFredholm.nonempty_fredholmPackage` or `IsFredholm.fredholmPackage`. -/
+/-
+**ContinuousLinearMap.FredholmPackage** 是 Mathlib 中的一个归纳类型，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：{𝕜 : Type u_1} →   {E : Type u_2} →     {F : Type u_3} →       [inst : Non
+triviallyNormedField 𝕜] →         [inst_1 : AddCommGroup E] →           [inst_2 
+: AddCommGroup F] →             [inst_3 : _root_.Module 𝕜 E] →               [in
+st_4 : _root_.Module 𝕜 F] →                 [inst_5 : TopologicalSpace E] → [ins
+t_6 : TopologicalSpace F] → (E →L[𝕜] F) → Type (max u_2 u_3)
+参数：E →L[𝕜] F；max u_2 u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 FredholmPackage
-  参数: (u : E ->L[𝕜] F)
-  公理与运算 (4 个):
-    - decDom : FredholmDecomposition 𝕜 E
-    - decCodom : FredholmDecomposition 𝕜 F
-    - equiv : decDom.X₁ ≃L[𝕜] decCodom.X₁
-    - eq_equiv : u = decCodom.X₁.subtypeL ∘L equiv ∘L decDom.proj
+--- 原说明 ---
+Let `u : E →L[𝕜] F` be a continuous linear map. A **Fredholm package** for `u` i
+s the data of
+Fredholm decompositions `decDom` and `decCodom` of `E` and `F` respectively, tog
+ether with
+a continuous linear equivalence `equiv : decDom.X₁ ≃L[𝕜] decCodom.X₁` between th
+e "essential"
+(i.e. finite codimension) parts of these decompositions, such that `u` equals th
+e composition
+`decCodom.X₁.subtypeL ∘L equiv ∘L decDom.proj`. In other words, in these
+"essential ⊕ inessential" decompositions, the matrix of `u` is
+$\begin{pmatrix} \texttt{equiv} & 0 \cr 0 & 0 \end{pmatrix}$.
+
+We will show in `isFredholm_tfae` that an operator is Fredholm if and only if it
+ admits
+a Fredholm package. In practice, the condition that `u` is Fredholm (`IsFredholm
+`) is always easier
+to prove, so if you need a Fredholm package you should probably get it from
+`IsFredholm.nonempty_fredholmPackage` or `IsFredholm.fredholmPackage`.
 -/
-structure FredholmPackage (u : E ->L[𝕜] F) where
+structure FredholmPackage (u : E →L[𝕜] F) where
   /-- A `FredholmDecomposition` of the domain. -/
   decDom : FredholmDecomposition 𝕜 E
   /-- A `FredholmDecomposition` of the codomain. -/
@@ -242,165 +280,235 @@ structure FredholmPackage (u : E ->L[𝕜] F) where
   /-- An isomorphism between the essential parts of `decDom` and `decCodom`. -/
   equiv : decDom.X₁ ≃L[𝕜] decCodom.X₁
   eq_equiv : u = decCodom.X₁.subtypeL ∘L equiv ∘L decDom.proj
-
-/--
-lemma `FredholmPackage.ker_eq` / 引理 `FredholmPackage.ker_eq`
-
-English:
-lemma FredholmPackage.ker_eq
-  given: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  proof: by simp [pkg.eq_equiv, ker_comp]
-
-中文:
-引理 FredholmPackage.ker_eq
-  条件: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  证明: by simp [pkg.eq_equiv, ker_comp]
-
-Depends on / 依赖: eq_equiv, ker_comp, pkg.eq_equiv
+/-
+**ContinuousLinearMap.FredholmPackage.ker_eq** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap.FredholmPackage`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] {u : E →L[𝕜] F} (pkg : u.FredholmPackage), (↑u).ker = pkg.
+decDom.X₀
+参数：pkg : u.FredholmPackage；↑u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.IsTopCompl.isCompl`：∀ {R : Type u_1} [inst : Ring R] {M : Type
+ u_2} [inst_1 : TopologicalSpace M] [inst_2 : AddCommGroup M]   [inst_3 : _root_
+.Module R M] {p q …
+· 使用定理 `FredholmDecomposition.isTopCompl`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module
+ 𝕜 E] [inst_3 : Topolo…
+· 使用定理 `ContinuousLinearMap.FredholmPackage.eq_equiv`：∀ {𝕜 : Type u_1} {E : Type
+ u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E
+]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `Submodule.ker_subtype`：ker_subtype : ker p.subtype = ⊥
+· 使用定理 `LinearEquiv.ker`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_5} {M₂ : T
+ype u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M]
+ [ins…
+· 使用定理 `Submodule.ker_projectionOnto`：ker_projectionOnto (h : IsCompl p q) : ker
+ (projectionOnto p q h) = q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma FredholmPackage.ker_eq {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
+lemma FredholmPackage.ker_eq {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
     u.ker = pkg.decDom.X₀ := by simp [pkg.eq_equiv, ker_comp]
-
-/--
-lemma `FredholmPackage.range_eq` / 引理 `FredholmPackage.range_eq`
-
-English:
-lemma FredholmPackage.range_eq
-  given: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  proof: by
-  simp [pkg.eq_equiv, range_comp]
-
-中文:
-引理 FredholmPackage.range_eq
-  条件: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  证明: by
-  simp [pkg.eq_equiv, range_comp]
-
-Depends on / 依赖: eq_equiv, pkg.eq_equiv, range_comp
+/-
+**ContinuousLinearMap.FredholmPackage.range_eq** 是 Mathlib 中的一个定理，位于命名空间 `Contin
+uousLinearMap.FredholmPackage`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] {u : E →L[𝕜] F} (pkg : u.FredholmPackage), (↑u).range = pk
+g.decCodom.X₁
+参数：pkg : u.FredholmPackage；↑u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.IsTopCompl.isCompl`：∀ {R : Type u_1} [inst : Ring R] {M : Type
+ u_2} [inst_1 : TopologicalSpace M] [inst_2 : AddCommGroup M]   [inst_3 : _root_
+.Module R M] {p q …
+· 使用定理 `FredholmDecomposition.isTopCompl`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module
+ 𝕜 E] [inst_3 : Topolo…
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `ContinuousLinearMap.FredholmPackage.eq_equiv`：∀ {𝕜 : Type u_1} {E : Type
+ u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E
+]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `Submodule.range_projectionOnto`：range_projectionOnto (h : IsCompl p q) :
+ range (projectionOnto p q h) = ⊤
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `LinearEquiv.range`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ :
+ Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid 
+M] [ins…
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma FredholmPackage.range_eq {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
+lemma FredholmPackage.range_eq {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
     u.range = pkg.decCodom.X₁ := by
   simp [pkg.eq_equiv, range_comp]
-
-/--
-lemma `FredholmPackage.mapsTo` / 引理 `FredholmPackage.mapsTo`
-
-English:
-lemma FredholmPackage.mapsTo
-  given: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  proof: by
-  simpa [← FredholmPackage.range_eq, LinearMap.coe_range] using Set.mapsTo_range _ _
-
-中文:
-引理 FredholmPackage.mapsTo
-  条件: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  证明: by
-  simpa [← FredholmPackage.range_eq, LinearMap.coe_range] using Set.mapsTo_range _ _
-
-Depends on / 依赖: FredholmPackage, FredholmPackage.range_eq, LinearMap, LinearMap.coe_range, Set.mapsTo_range, coe_range, mapsTo_range, range_eq
+/-
+**ContinuousLinearMap.FredholmPackage.mapsTo** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap.FredholmPackage`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] {u : E →L[𝕜] F} (pkg : u.FredholmPackage), Set.MapsTo ⇑u ↑
+pkg.decDom.X₁ ↑pkg.decCodom.X₁
+参数：pkg : u.FredholmPackage。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mapsTo_range`：mapsTo_range (f : α -> β) (s : Set α) : MapsTo f s (ra
+nge f)
 -/
-lemma FredholmPackage.mapsTo {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
+lemma FredholmPackage.mapsTo {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
     MapsTo u pkg.decDom.X₁ pkg.decCodom.X₁ := by
   simpa [← FredholmPackage.range_eq, LinearMap.coe_range] using Set.mapsTo_range _ _
-
-/--
-lemma `FredholmPackage.equiv_eq_restrict` / 引理 `FredholmPackage.equiv_eq_restrict`
-
-English:
-lemma FredholmPackage.equiv_eq_restrict
-  given: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  proof: by
-  ext x
-  simp [pkg.eq_equiv]
-
-中文:
-引理 FredholmPackage.equiv_eq_restrict
-  条件: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  证明: by
-  ext x
-  simp [pkg.eq_equiv]
-
-Depends on / 依赖: eq_equiv, pkg.eq_equiv
+/-
+**ContinuousLinearMap.FredholmPackage.equiv_eq_restrict** 是 Mathlib 中的一个定理，位于命名空
+间 `ContinuousLinearMap.FredholmPackage`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] {u : E →L[𝕜] F} (pkg : u.FredholmPackage), ↑pkg.equiv = u.
+restrict ⋯
+参数：pkg : u.FredholmPackage。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousLinearMap.FredholmPackage.mapsTo`：∀ {𝕜 : Type u_1} {E : Type u
+_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E] 
+  [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.FredholmPackage.eq_equiv`：∀ {𝕜 : Type u_1} {E : Type
+ u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E
+]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ContinuousLinearMap.restrict.congr_simp`：∀ {R₁ : Type u_1} {R₂ : Type u_
+2} [inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}
+   {M₂ : Type u_5} [inst_2 : …
+· 使用定理 `Submodule.projectionOntoL_apply_left`：projectionOntoL_apply_left (h : Is
+TopCompl p q) (x : p) : p.projectionOntoL q h x = x
+· 使用定理 `FredholmDecomposition.isTopCompl`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module
+ 𝕜 E] [inst_3 : Topolo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma FredholmPackage.equiv_eq_restrict {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
+lemma FredholmPackage.equiv_eq_restrict {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
     pkg.equiv = u.restrict pkg.mapsTo := by
   ext x
   simp [pkg.eq_equiv]
-
-/--
-lemma `FredholmPackage.isInvertible_restrict` / 引理 `FredholmPackage.isInvertible_restrict`
-
-English:
-lemma FredholmPackage.isInvertible_restrict
-  given: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  proof: u.restrict pkg.mapsTo
-  ⟨pkg.equiv, pkg.equiv_eq_restrict⟩
-
-中文:
-引理 FredholmPackage.isInvertible_restrict
-  条件: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  证明: u.restrict pkg.mapsTo
-  ⟨pkg.equiv, pkg.equiv_eq_restrict⟩
-
-Depends on / 依赖: mapsTo, pkg.mapsTo, restrict, u.restrict
+/-
+**ContinuousLinearMap.FredholmPackage.isInvertible_restrict** 是 Mathlib 中的一个定理，位
+于命名空间 `ContinuousLinearMap.FredholmPackage`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] {u : E →L[𝕜] F} (pkg : u.FredholmPackage), (u.restrict ⋯).
+IsInvertible
+参数：pkg : u.FredholmPackage；u.restrict ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.FredholmPackage.mapsTo`：∀ {𝕜 : Type u_1} {E : Type u
+_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E] 
+  [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `ContinuousLinearMap.FredholmPackage.equiv_eq_restrict`：∀ {𝕜 : Type u_1} 
+{E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCo
+mmGroup E]   [inst_2 : AddCommGroup F] [ins…
 -/
-lemma FredholmPackage.isInvertible_restrict {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
-.IsInvertible := u.restrict pkg.mapsTo
+lemma FredholmPackage.isInvertible_restrict {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
+    u.restrict pkg.mapsTo |>.IsInvertible :=
   ⟨pkg.equiv, pkg.equiv_eq_restrict⟩
 
-/--
-Definition of `FredholmPackage.quasiInverse` / `FredholmPackage.quasiInverse` 的定义
+/-- The data of a Fredholm package for `u` determines a canonical quasi-inverse of `u`. -/
+/-
+**ContinuousLinearMap.FredholmPackage.quasiInverse** 是 Mathlib 中的一个定义，位于命名空间 `Co
+ntinuousLinearMap.FredholmPackage`。
+形式化陈述：{𝕜 : Type u_1} →   {E : Type u_2} →     {F : Type u_3} →       [inst : Non
+triviallyNormedField 𝕜] →         [inst_1 : AddCommGroup E] →           [inst_2 
+: AddCommGroup F] →             [inst_3 : _root_.Module 𝕜 E] →               [in
+st_4 : _root_.Module 𝕜 F] →                 [inst_5 : TopologicalSpace E] →     
+              [inst_6 : TopologicalSpace F] → {u : E →L[𝕜] F} → u.FredholmPackag
+e → F →L[𝕜] E
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FredholmPackage.quasiInverse
-  signature: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  body: pkg.decDom.X₁.subtypeL ∘L pkg.equiv.symm ∘L pkg.decCodom.proj
-
-中文:
-定义 FredholmPackage.quasiInverse
-  签名: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  定义体: pkg.decDom.X₁.subtypeL ∘L pkg.equiv.symm ∘L pkg.decCodom.proj
-
-Depends on / 依赖: decCodom, decDom, pkg.decCodom.proj, pkg.decDom.X, pkg.equiv.symm, subtypeL
+--- 原说明 ---
+The data of a Fredholm package for `u` determines a canonical quasi-inverse of `
+u`.
 -/
-def FredholmPackage.quasiInverse {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
-    F ->L[𝕜] E :=
+def FredholmPackage.quasiInverse {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
+    F →L[𝕜] E :=
   pkg.decDom.X₁.subtypeL ∘L pkg.equiv.symm ∘L pkg.decCodom.proj
 
-/--
-lemma `FredholmPackage.isQuasiInverse` / 引理 `FredholmPackage.isQuasiInverse`
+/-- The data of a Fredholm package for `u` determines a canonical quasi-inverse of `u`. -/
+/-
+**ContinuousLinearMap.FredholmPackage.isQuasiInverse** 是 Mathlib 中的一个定理，位于命名空间 `
+ContinuousLinearMap.FredholmPackage`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] {u : E →L[𝕜] F} (pkg : u.FredholmPackage), (↑pkg.quasiInve
+rse).IsQuasiInverse ↑u
+参数：pkg : u.FredholmPackage；↑pkg.quasiInverse。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.FredholmPackage.eq_equiv`：∀ {𝕜 : Type u_1} {E : Type
+ u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E
+]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `FredholmDecomposition.finite_X₀`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst :
+ NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 
+𝕜 E] [inst_3 : Topolo…
+· 使用引理 `LinearMap.isQuasiInverse_subtype_projectionOnto`：isQuasiInverse_subtype_
+projectionOnto {S T : Submodule K V} [IsNoetherian K T] (hST : IsCompl S T) : Is
+QuasiInverse S.subtype (S.projectionO…
+· 使用定理 `IsSimpleModule.instIsNoetherian`：∀ (R : Type u_2) [inst : Ring R] {M : T
+ype u_4} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimpleModul
+e R M], IsNoetherian …
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `Submodule.IsTopCompl.isCompl`：∀ {R : Type u_1} [inst : Ring R] {M : Type
+ u_2} [inst_1 : TopologicalSpace M] [inst_2 : AddCommGroup M]   [inst_3 : _root_
+.Module R M] {p q …
+· 使用定理 `FredholmDecomposition.isTopCompl`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst 
+: NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module
+ 𝕜 E] [inst_3 : Topolo…
+· 使用定理 `LinearMap.IsQuasiInverse.comp`：∀ {K : Type u_1} {V : Type u_2} {V₂ : Typ
+e u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V]   [inst_2 :
+ _root_.Module K V]…
+· 使用定理 `LinearEquiv.isQuasiInverse`：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u
+_4} [inst : CommRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V]
+ [inst_3 : AddCo…
+· 使用定理 `LinearMap.IsQuasiInverse.symm`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Ty
+pe u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.Module
+ K V₂] [inst_3 : Ad…
 
-English:
-lemma FredholmPackage.isQuasiInverse
-  given: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  proof: by
-  nth_rw 2 [pkg.eq_equiv]
-  have hdom : IsQuasiInverse pkg.decDom.X₁.subtype pkg.decDom.proj :=
-    have := pkg.decDom.finite_X₀
-    isQuasiInverse_subtype_projectionOnto _
-  have hcodom : IsQuasiInverse pkg.decCodom.X₁.subtype pkg.decCodom.proj :=
-    have := pkg.decCodom.finite_X₀
-    isQuasiInverse_subtype_projectionOnto _
-  -- For some reason `exact` and `refine` are slow here!
-  apply hdom.comp (pkg.equiv.isQuasiInverse.comp hcodom.symm)
-
-中文:
-引理 FredholmPackage.isQuasiInverse
-  条件: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  证明: by
-  nth_rw 2 [pkg.eq_equiv]
-  have hdom : IsQuasiInverse pkg.decDom.X₁.subtype pkg.decDom.proj :=
-    have := pkg.decDom.finite_X₀
-    isQuasiInverse_subtype_projectionOnto _
-  have hcodom : IsQuasiInverse pkg.decCodom.X₁.subtype pkg.decCodom.proj :=
-    have := pkg.decCodom.finite_X₀
-    isQuasiInverse_subtype_projectionOnto _
-  -- For some reason `exact` and `refine` are slow here!
-  apply hdom.comp (pkg.equiv.isQuasiInverse.comp hcodom.symm)
-
-Depends on / 依赖: IsQuasiInverse, decCodom, decDom, eq_equiv, hcodom, isQuasiInverse_subtype_projectionOnto, nth_rw, pkg.decCodom.X, pkg.decCodom.finite_X, pkg.decCodom.proj, pkg.decDom.X, pkg.decDom.finite_X, pkg.decDom.proj, pkg.eq_equiv, subtype
+--- 原说明 ---
+The data of a Fredholm package for `u` determines a canonical quasi-inverse of `
+u`.
 -/
-lemma FredholmPackage.isQuasiInverse {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
+lemma FredholmPackage.isQuasiInverse {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
     pkg.quasiInverse.IsQuasiInverse u := by
   nth_rw 2 [pkg.eq_equiv]
   have hdom : IsQuasiInverse pkg.decDom.X₁.subtype pkg.decDom.proj :=
@@ -415,58 +523,41 @@ lemma FredholmPackage.isQuasiInverse {u : E ->L[𝕜] F} (pkg : FredholmPackage 
 end FredholmPackage
 
 variable [T2Space E] [T2Space F] in
-/--
-theorem `exists_restrict_isInvertible_of_isQuasiInverse` / 定理 `exists_restrict_isInvertible_of_isQuasiInverse`
+/-- Assume that `u : E →L[𝕜] F` has a continuous quasi-inverse. Then there are closed
+subspaces of finite codimensions `E₁` and `F₁` between which `u` induces an isomorphism.
 
-English:
-theorem exists_restrict_isInvertible_of_isQuasiInverse
-  statement: {u : E ->L[𝕜] F}
-  proof: by
-  obtain ⟨hvu, huv⟩ := hvu
-  rw [IsRightQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at huv
-  rw [IsLeftQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at hvu
-  set E₁ := (ContinuousLinearMap.id 𝕜 E).eqLocus (v ∘L u)
-  set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u ∘L v)
-  have u_mapsto : MapsTo u E₁ F₁ := fun x hx => congr(u $hx)
-  have v_mapsto : MapsTo v F₁ E₁ := fun x hx => congr(v $hx)
-  refine ⟨E₁, F₁, isClosed_eqLocus _ _, isClosed_eqLocus _ _, hvu, huv, u_mapsto, ?_⟩
-  refine .of_inverse (g := v.restrict v_mapsto) ?_ ?_
-  · ext ⟨x, hx : x = u (v x)⟩
-    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
-  · ext ⟨x, hx : x = v (u x)⟩
-    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
-
-中文:
-定理 存在_restrict_isInvertible_of_isQuasiInverse
-  结论: {u : E ->L[𝕜] F}
-  证明: by
-  obtain ⟨hvu, huv⟩ := hvu
-  rw [IsRightQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at huv
-  rw [IsLeftQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at hvu
-  set E₁ := (ContinuousLinearMap.id 𝕜 E).eqLocus (v ∘L u)
-  set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u ∘L v)
-  have u_mapsto : MapsTo u E₁ F₁ := fun x hx => congr(u $hx)
-  have v_mapsto : MapsTo v F₁ E₁ := fun x hx => congr(v $hx)
-  refine ⟨E₁, F₁, isClosed_eqLocus _ _, isClosed_eqLocus _ _, hvu, huv, u_mapsto, ?_⟩
-  refine .of_inverse (g := v.restrict v_mapsto) ?_ ?_
-  · ext ⟨x, hx : x = u (v x)⟩
-    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
-  · ext ⟨x, hx : x = v (u x)⟩
-    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
+This statement is private because it is superseded by later results: using `isFredholm_tfae`,
+you can build a `FredholmPackage` for `u`, and then apply `FredholmPackage.isInvertible_restrict`.
 -/
-private theorem exists_restrict_isInvertible_of_isQuasiInverse {u : E ->L[𝕜] F}
-    {v : F ->L[𝕜] E} (hvu : v.IsQuasiInverse u) :
-    exists (E₁ : Submodule 𝕜 E) (F₁ : Submodule 𝕜 F),
+/-
+**ContinuousLinearMap.exists_restrict_isInvertible_of_isQuasiInverse** 是 Mathlib
+ 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Assume that `u : E →L[𝕜] F` has a continuous quasi-inverse. Then there are close
+d
+subspaces of finite codimensions `E₁` and `F₁` between which `u` induces an isom
+orphism.
+
+This statement is private because it is superseded by later results: using `isFr
+edholm_tfae`,
+you can build a `FredholmPackage` for `u`, and then apply `FredholmPackage.isInv
+ertible_restrict`.
+-/
+private theorem exists_restrict_isInvertible_of_isQuasiInverse {u : E →L[𝕜] F}
+    {v : F →L[𝕜] E} (hvu : v.IsQuasiInverse u) :
+    ∃ (E₁ : Submodule 𝕜 E) (F₁ : Submodule 𝕜 F),
       IsClosed (E₁ : Set E) ∧ IsClosed (F₁ : Set F) ∧
       E₁.CoFG ∧ F₁.CoFG ∧
-      exists h : MapsTo u E₁ F₁, (u.restrict h).IsInvertible := by
+      ∃ h : MapsTo u E₁ F₁, (u.restrict h).IsInvertible := by
   obtain ⟨hvu, huv⟩ := hvu
-  rw [IsRightQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at huv
-  rw [IsLeftQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at hvu
+  rw [IsRightQuasiInverse, Setoid.comm, equiv_iff_eqLocus_coFG] at huv
+  rw [IsLeftQuasiInverse, Setoid.comm, equiv_iff_eqLocus_coFG] at hvu
   set E₁ := (ContinuousLinearMap.id 𝕜 E).eqLocus (v ∘L u)
   set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u ∘L v)
-  have u_mapsto : MapsTo u E₁ F₁ := fun x hx => congr(u $hx)
-  have v_mapsto : MapsTo v F₁ E₁ := fun x hx => congr(v $hx)
+  have u_mapsto : MapsTo u E₁ F₁ := fun x hx ↦ congr(u $hx)
+  have v_mapsto : MapsTo v F₁ E₁ := fun x hx ↦ congr(v $hx)
   refine ⟨E₁, F₁, isClosed_eqLocus _ _, isClosed_eqLocus _ _, hvu, huv, u_mapsto, ?_⟩
   refine .of_inverse (g := v.restrict v_mapsto) ?_ ?_
   · ext ⟨x, hx : x = u (v x)⟩
@@ -478,54 +569,98 @@ variable [CompleteSpace 𝕜]
   [IsTopologicalAddGroup E] [ContinuousSMul 𝕜 E]
   [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F]
 
-/--
-theorem `IsFredholm.of_isInvertible_restrict` / 定理 `IsFredholm.of_isInvertible_restrict`
+/-- Assume that `u : E →L[𝕜] F` restricts to an isomorphism between closed finite codimension
+subspaces `E₁` and `F₁`. Then `u` is Fredholm.
 
-English:
-theorem IsFredholm.of_isInvertible_restrict
-  statement: {u : E ->L[𝕜] F}
-  proof: by
-  obtain ⟨e, he⟩ := h_inv
-  have eqL : u.domRestrict E₁ = F₁.subtypeL ∘L e := congr(F₁.subtypeL ∘L $he).symm
-  have eqₗ : u.toLinearMap.domRestrict E₁ = F₁.subtype ∘ₗ e := congr(($eqL).toLinearMap)
-  have h : Topology.IsStrictMap u ∧ IsClosed (u.range : Set F) := by
-    rw [u.isStrictMap_isClosed_range_iff_restrict E₁ E₁_closed]; rw [eqL]
-.isStrictMap, by simpa⟩ exact ⟨F₁.isEmbedding_subtype.comp e.isHomeomorph.isEmbedding
-  have disj : Disjoint E₁ u.ker := by
-    rw [disjoint_iff_comap_eq_bot]; rw [← LinearMap.ker_domRestrict]; rw [eqₗ]; rw [LinearMap.ker_comp]; rw [ker_subtype]; rw [comap_bot]; rw [LinearEquiv.ker]
-  refine ⟨h.1, h.2, ?_, ?_, ?_⟩
-  · rw [← Submodule.fg_iff_finiteDimensional]
-    exact E₁_coFG.fg_of_disjoint disj.symm
-  · refine F₁_coFG.of_le (le_trans ?_ (u.range_domRestrict_le_range E₁))
-    rw [eqₗ]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [range_subtype]
-  · exact .of_disjoint_of_finiteDimensional_quotient E₁_closed disj.symm
+In fact it is enough to assume that the restriction `E₁ →L[𝕜] F₁` is Fredholm, see
+`IsFredholm.of_restrict` (not in Mathlib yet). -/
+/-
+**ContinuousLinearMap.IsFredholm.of_isInvertible_restrict** 是 Mathlib 中的一个定理，位于命
+名空间 `ContinuousLinearMap.IsFredholm`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] [CompleteSpace 𝕜] [IsTopologicalAddGroup E] [ContinuousSMu
+l 𝕜 E]   [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F] {u : E →L[𝕜] F} {E₁ : Su
+bmodule 𝕜 E},   IsClosed ↑E₁ →     ∀ [E₁_coFG : E₁.CoFG] {F₁ : Submodule 𝕜 F},  
+     IsClosed ↑F₁ →         ∀ [F₁_coFG : F₁.CoFG] (h_mapsto : Set.MapsTo ⇑u ↑E₁ 
+↑F₁), (u.restrict h_mapsto).IsInvertible → u.IsFredholm
+参数：h_mapsto : Set.MapsTo ⇑u ↑E₁ ↑F₁；u.restrict h_mapsto。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.isStrictMap_isClosed_range_iff_restrict`：∀ {𝕜 : Type
+ u_1} [inst : NontriviallyNormedField 𝕜] [CompleteSpace 𝕜] {E : Type u_2} {F : T
+ype u_3}   [inst_2 : AddCommGroup E] [inst_3 : _r…
+· 使用定理 `Topology.IsEmbedding.isStrictMap`：∀ {X : Type u_1} {Y : Type u_2} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.IsEm
+bedding f → Topology.I…
+· 使用定理 `Topology.IsEmbedding.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3
+} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalSpa
+ce Y] [inst_2 :…
+· 使用定理 `Submodule.isEmbedding_subtype`：isEmbedding_subtype (p : Submodule R M) :
+ Topology.IsEmbedding p.subtype
+· 使用引理 `IsHomeomorph.isEmbedding`：isEmbedding : IsEmbedding f
+· 使用定理 `ContinuousLinearEquiv.isHomeomorph`：isHomeomorph (f : M ≃SL[σ] M₁) : IsH
+omeomorph f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearEquiv.range_comp`：range_comp [RingHomSurjective σ₂₃] [RingHomSurje
+ctive σ₁₃] : LinearMap.range (h.comp (e : M ->ₛₗ[σ₁₂] M₂) : M ->ₛₗ[σ₁₃] M₃) = Li
+nearMap.rang…
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `Submodule.disjoint_iff_comap_eq_bot`：disjoint_iff_comap_eq_bot {p q : Su
+bmodule R M} : Disjoint p q ↔ comap p.subtype q = ⊥
+· 使用引理 `LinearMap.ker_domRestrict`：ker_domRestrict (p : Submodule R M) (f : M ->
+ₛₗ[τ₁₂] M₂) : ker (domRestrict f p) = (ker f).comap p.subtype
+· 使用定理 `LinearMap.ker_comp`：ker_comp (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) 
+: ker (g.comp f : M ->ₛₗ[τ₁₃] M₃) = comap f (ker g)
+· 使用定理 `Submodule.ker_subtype`：ker_subtype : ker p.subtype = ⊥
+· 使用定理 `Submodule.comap_bot`：comap_bot (f : M ->ₛₗ[τ₁₂] M₂) : comap f ⊥ = ker f
+· 使用定理 `LinearEquiv.ker`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_5} {M₂ : T
+ype u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M]
+ [ins…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Submodule.fg_iff_finiteDimensional`：fg_iff_finiteDimensional (s : Submod
+ule K V) : s.FG ↔ FiniteDimensional K s
+· 使用定理 `Submodule.CoFG.fg_of_disjoint`：∀ {R : Type u_1} [inst : Ring R] {M : Typ
+e u_2} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsNoetherianRin
+g R] {S T : Submodu…
+· 使用定理 `IsSimpleModule.instIsNoetherian`：∀ (R : Type u_2) [inst : Ring R] {M : T
+ype u_4} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimpleModul
+e R M], IsNoetherian …
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `Submodule.CoFG.of_le`：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [i
+nst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {S T : Submodule R M}, S 
+≤ T → S.Co…
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `LinearEquiv.range`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ :
+ Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid 
+M] [ins…
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+（共 33 条，此处仅展示前 30 条）
 
-omit [ContinuousSMul 𝕜 E] in
+--- 原说明 ---
+Assume that `u : E →L[𝕜] F` restricts to an isomorphism between closed finite co
+dimension
+subspaces `E₁` and `F₁`. Then `u` is Fredholm.
 
-中文:
-定理 是Fredholm.of_isInvertible_restrict
-  结论: {u : E ->L[𝕜] F}
-  证明: by
-  obtain ⟨e, he⟩ := h_inv
-  have eqL : u.domRestrict E₁ = F₁.subtypeL ∘L e := congr(F₁.subtypeL ∘L $he).symm
-  have eqₗ : u.toLinearMap.domRestrict E₁ = F₁.subtype ∘ₗ e := congr(($eqL).toLinearMap)
-  have h : Topology.IsStrictMap u ∧ IsClosed (u.range : Set F) := by
-    rw [u.isStrictMap_isClosed_range_iff_restrict E₁ E₁_closed]; rw [eqL]
-.isStrictMap, by simpa⟩ exact ⟨F₁.isEmbedding_subtype.comp e.isHomeomorph.isEmbedding
-  have disj : Disjoint E₁ u.ker := by
-    rw [disjoint_iff_comap_eq_bot]; rw [← LinearMap.ker_domRestrict]; rw [eqₗ]; rw [LinearMap.ker_comp]; rw [ker_subtype]; rw [comap_bot]; rw [LinearEquiv.ker]
-  refine ⟨h.1, h.2, ?_, ?_, ?_⟩
-  · rw [← Submodule.fg_iff_finiteDimensional]
-    exact E₁_coFG.fg_of_disjoint disj.symm
-  · refine F₁_coFG.of_le (le_trans ?_ (u.range_domRestrict_le_range E₁))
-    rw [eqₗ]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [range_subtype]
-  · exact .of_disjoint_of_finiteDimensional_quotient E₁_closed disj.symm
-
-omit [ContinuousSMul 𝕜 E] in
-
-Depends on / 依赖: Disjoint, IsClosed, IsStrictMap, LinearMa, Topology, Topology.IsStrictMap, disjoint_iff_comap_eq_bot, domRestrict, e.isHomeomorph.isEmbedding, h_inv, isEmbedding, isEmbedding_subtype, isEmbedding_subtype.comp, isHomeomorph, isStrictMap, isStrictMap_isClosed_range_iff_restrict, subtype, subtypeL, toLinearMap, u.domRestrict
+In fact it is enough to assume that the restriction `E₁ →L[𝕜] F₁` is Fredholm, s
+ee
+`IsFredholm.of_restrict` (not in Mathlib yet).
 -/
-theorem IsFredholm.of_isInvertible_restrict {u : E ->L[𝕜] F}
+theorem IsFredholm.of_isInvertible_restrict {u : E →L[𝕜] F}
     {E₁ : Submodule 𝕜 E} (E₁_closed : IsClosed (E₁ : Set E)) [E₁_coFG : E₁.CoFG]
     {F₁ : Submodule 𝕜 F} (F₁_closed : IsClosed (F₁ : Set F)) [F₁_coFG : F₁.CoFG]
     (h_mapsto : MapsTo u E₁ F₁) (h_inv : (u.restrict h_mapsto).IsInvertible) :
@@ -534,74 +669,62 @@ theorem IsFredholm.of_isInvertible_restrict {u : E ->L[𝕜] F}
   have eqL : u.domRestrict E₁ = F₁.subtypeL ∘L e := congr(F₁.subtypeL ∘L $he).symm
   have eqₗ : u.toLinearMap.domRestrict E₁ = F₁.subtype ∘ₗ e := congr(($eqL).toLinearMap)
   have h : Topology.IsStrictMap u ∧ IsClosed (u.range : Set F) := by
-    rw [u.isStrictMap_isClosed_range_iff_restrict E₁ E₁_closed]; rw [eqL]
-.isStrictMap, by simpa⟩ exact ⟨F₁.isEmbedding_subtype.comp e.isHomeomorph.isEmbedding
+    rw [u.isStrictMap_isClosed_range_iff_restrict E₁ E₁_closed, eqL]
+    exact ⟨F₁.isEmbedding_subtype.comp e.isHomeomorph.isEmbedding |>.isStrictMap, by simpa⟩
   have disj : Disjoint E₁ u.ker := by
-    rw [disjoint_iff_comap_eq_bot]; rw [← LinearMap.ker_domRestrict]; rw [eqₗ]; rw [LinearMap.ker_comp]; rw [ker_subtype]; rw [comap_bot]; rw [LinearEquiv.ker]
+    rw [disjoint_iff_comap_eq_bot, ← LinearMap.ker_domRestrict, eqₗ,
+      LinearMap.ker_comp, ker_subtype, comap_bot, LinearEquiv.ker]
   refine ⟨h.1, h.2, ?_, ?_, ?_⟩
   · rw [← Submodule.fg_iff_finiteDimensional]
     exact E₁_coFG.fg_of_disjoint disj.symm
   · refine F₁_coFG.of_le (le_trans ?_ (u.range_domRestrict_le_range E₁))
-    rw [eqₗ]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [range_subtype]
+    rw [eqₗ, LinearMap.range_comp, LinearEquiv.range, Submodule.map_top, range_subtype]
   · exact .of_disjoint_of_finiteDimensional_quotient E₁_closed disj.symm
 
 omit [ContinuousSMul 𝕜 E] in
-/--
-Definition of `IsFredholm.fredholmPackage` / `IsFredholm.fredholmPackage` 的定义
+/-- Let `u : E →L[𝕜] F` be a Fredholm operator. Given `dom₁` (resp. `codom₀`) an arbitrary
+topological complement of `u.ker` (resp. `u.range`), we get a `FredholmPackage` for `u`
+by considering the decompositions `E = dom₁ ⊕ u.ker`, `F = u.range ⊕ codom₀`, and the isomorphism
+`dom₁ ≃L[𝕜] u.range` induced by `u`.
 
-English:
-definition IsFredholm.fredholmPackage
-  signature: {u : E ->L[𝕜] F}
-  body: { X₀ := u.ker
-      X₁ := dom₁
-      isTopCompl := h_dom.symm
-      finite_X₀ := u_fred.finite_ker }
-  decCodom :=
-    { X₀ := codom₀
-      X₁ := u.range
-      isTopCompl := h_codom
-finite_X₀ := .of_fg u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
-  equiv :=
-.symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker := u.ker.quotientEquivOfIsTopCompl dom₁ h_dom
-    letI Ψ : (E ⧸ u.ker) ≃L[𝕜] u.range := .quotKerEquivRange u_fred.isStrictMap
-    Φ.trans Ψ
-  eq_equiv := by
-    refine LinearMap.ext_on_codisjoint h_dom.isCompl.codisjoint ?_ ?_
-    · intro x (hx : u x = 0)
-      simp [hx, projection_apply_of_mem_right]
-    · intro x (hx : x in dom₁)
-      simp [hx, projection_apply_of_mem_left, ContinuousLinearEquiv.quotKerEquivRange]
+If you need control over the decompositions, this is the primary way to get a `FredholmPackage`.
+Otherwise, see `IsFredholm.nonempty_fredholmPackage`. -/
+/-
+**ContinuousLinearMap.IsFredholm.fredholmPackage** 是 Mathlib 中的一个定义，位于命名空间 `Cont
+inuousLinearMap.IsFredholm`。
+形式化陈述：{𝕜 : Type u_1} →   {E : Type u_2} →     {F : Type u_3} →       [inst : Non
+triviallyNormedField 𝕜] →         [inst_1 : AddCommGroup E] →           [inst_2 
+: AddCommGroup F] →             [inst_3 : _root_.Module 𝕜 E] →               [in
+st_4 : _root_.Module 𝕜 F] →                 [inst_5 : TopologicalSpace E] →     
+              [inst_6 : TopologicalSpace F] →                     [IsTopological
+AddGroup E] →                       {u : E →L[𝕜] F} →                         u.
+IsFredholm →                           {dom₁ : Submodule 𝕜 E} →                 
+            {codom₀ : Submodule 𝕜 F} →                               Submodule.I
+sTopCompl (↑u).ker dom₁ →                                 Submodule.IsTopCompl (
+↑u).range codom₀ → u.FredholmPackage
+参数：↑u；↑u。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.IsFredholm.finite_ker`：∀ {𝕜 : Type u_1} {E : Type u_
+2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E]  
+ [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `ContinuousLinearMap.IsFredholm.isStrictMap`：∀ {𝕜 : Type u_1} {E : Type u
+_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup E] 
+  [inst_2 : AddCommGroup F] [ins…
 
-omit [ContinuousSMul 𝕜 E] in
+--- 原说明 ---
+Let `u : E →L[𝕜] F` be a Fredholm operator. Given `dom₁` (resp. `codom₀`) an arb
+itrary
+topological complement of `u.ker` (resp. `u.range`), we get a `FredholmPackage` 
+for `u`
+by considering the decompositions `E = dom₁ ⊕ u.ker`, `F = u.range ⊕ codom₀`, an
+d the isomorphism
+`dom₁ ≃L[𝕜] u.range` induced by `u`.
 
-中文:
-定义 是Fredholm.fredholmPackage
-  签名: {u : E ->L[𝕜] F}
-  定义体: { X₀ := u.ker
-      X₁ := dom₁
-      isTopCompl := h_dom.symm
-      finite_X₀ := u_fred.finite_ker }
-  decCodom :=
-    { X₀ := codom₀
-      X₁ := u.range
-      isTopCompl := h_codom
-finite_X₀ := .of_fg u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
-  equiv :=
-.symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker := u.ker.quotientEquivOfIsTopCompl dom₁ h_dom
-    letI Ψ : (E ⧸ u.ker) ≃L[𝕜] u.range := .quotKerEquivRange u_fred.isStrictMap
-    Φ.trans Ψ
-  eq_equiv := by
-    refine LinearMap.ext_on_codisjoint h_dom.isCompl.codisjoint ?_ ?_
-    · intro x (hx : u x = 0)
-      simp [hx, projection_apply_of_mem_right]
-    · intro x (hx : x in dom₁)
-      simp [hx, projection_apply_of_mem_left, ContinuousLinearEquiv.quotKerEquivRange]
-
-omit [ContinuousSMul 𝕜 E] in
-
-Depends on / 依赖: LinearMap, LinearMap.ext_on_codisjoint, codisjoint, decCodom, eq_equiv, ext_on_codisjoint, fg_of_isCompl, finite_coker, finite_ker, h_codom, h_codom.isCompl, h_dom, h_dom.isCompl.codisjoint, h_dom.symm, isCompl, isStrictMap, isTopCompl, of_fg, quotKerEquivRange, quotientEquivOfIsTopCompl
+If you need control over the decompositions, this is the primary way to get a `F
+redholmPackage`.
+Otherwise, see `IsFredholm.nonempty_fredholmPackage`.
 -/
-def IsFredholm.fredholmPackage {u : E ->L[𝕜] F}
+def IsFredholm.fredholmPackage {u : E →L[𝕜] F}
     (u_fred : IsFredholm u) {dom₁ : Submodule 𝕜 E} {codom₀ : Submodule 𝕜 F}
     (h_dom : IsTopCompl u.ker dom₁) (h_codom : IsTopCompl u.range codom₀) :
     FredholmPackage u where
@@ -614,41 +737,51 @@ def IsFredholm.fredholmPackage {u : E ->L[𝕜] F}
     { X₀ := codom₀
       X₁ := u.range
       isTopCompl := h_codom
-finite_X₀ := .of_fg u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
+      finite_X₀ := .of_fg <| u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
   equiv :=
-.symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker := u.ker.quotientEquivOfIsTopCompl dom₁ h_dom
+    letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker := u.ker.quotientEquivOfIsTopCompl dom₁ h_dom |>.symm
     letI Ψ : (E ⧸ u.ker) ≃L[𝕜] u.range := .quotKerEquivRange u_fred.isStrictMap
     Φ.trans Ψ
   eq_equiv := by
     refine LinearMap.ext_on_codisjoint h_dom.isCompl.codisjoint ?_ ?_
     · intro x (hx : u x = 0)
       simp [hx, projection_apply_of_mem_right]
-    · intro x (hx : x in dom₁)
+    · intro x (hx : x ∈ dom₁)
       simp [hx, projection_apply_of_mem_left, ContinuousLinearEquiv.quotKerEquivRange]
 
 omit [ContinuousSMul 𝕜 E] in
-/--
-theorem `IsFredholm.nonempty_fredholmPackage` / 定理 `IsFredholm.nonempty_fredholmPackage`
+/-- Every Fredholm operator admits a `FredholmPackage`.
 
-English:
-theorem IsFredholm.nonempty_fredholmPackage
-  statement: {u : E ->L[𝕜] F}
-  proof: by
-  obtain ⟨codom₀, h_codom⟩ := u_fred.closedComplemented_range.exists_isTopCompl
-  obtain ⟨dom₁, h_dom⟩ := u_fred.closedComplemented_ker.exists_isTopCompl
-  exact ⟨u_fred.fredholmPackage h_dom h_codom⟩
+This is the primary way to get a `FredholmPackage` if you don't need control of the decompositions.
+If you do, see `IsFredholm.fredholmPackage`. -/
+/-
+**ContinuousLinearMap.IsFredholm.nonempty_fredholmPackage** 是 Mathlib 中的一个定理，位于命
+名空间 `ContinuousLinearMap.IsFredholm`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] [CompleteSpace 𝕜] [IsTopologicalAddGroup E] [IsTopological
+AddGroup F]   [ContinuousSMul 𝕜 F] {u : E →L[𝕜] F}, u.IsFredholm → Nonempty u.Fr
+edholmPackage
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ClosedComplemented.exists_isTopCompl`：∀ {R : Type u_1} [inst :
+ Ring R] {M : Type u_2} [inst_1 : TopologicalSpace M] [inst_2 : AddCommGroup M] 
+  [inst_3 : _root_.Module R M] {p : …
+· 使用定理 `ContinuousLinearMap.IsFredholm.closedComplemented_range`：∀ {𝕜 : Type u_1
+} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : Add
+CommGroup E]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `ContinuousLinearMap.IsFredholm.closedComplemented_ker`：∀ {𝕜 : Type u_1} 
+{E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCo
+mmGroup E]   [inst_2 : AddCommGroup F] [ins…
 
-中文:
-定理 是Fredholm.nonempty_fredholmPackage
-  结论: {u : E ->L[𝕜] F}
-  证明: by
-  obtain ⟨codom₀, h_codom⟩ := u_fred.closedComplemented_range.exists_isTopCompl
-  obtain ⟨dom₁, h_dom⟩ := u_fred.closedComplemented_ker.exists_isTopCompl
-  exact ⟨u_fred.fredholmPackage h_dom h_codom⟩
+--- 原说明 ---
+Every Fredholm operator admits a `FredholmPackage`.
 
-Depends on / 依赖: closedComplemented_ker, closedComplemented_range, exists_isTopCompl, fredholmPackage, h_codom, h_dom, u_fred, u_fred.closedComplemented_ker.exists_isTopCompl, u_fred.closedComplemented_range.exists_isTopCompl, u_fred.fredholmPackage
+This is the primary way to get a `FredholmPackage` if you don't need control of 
+the decompositions.
+If you do, see `IsFredholm.fredholmPackage`.
 -/
-theorem IsFredholm.nonempty_fredholmPackage {u : E ->L[𝕜] F}
+theorem IsFredholm.nonempty_fredholmPackage {u : E →L[𝕜] F}
     (u_fred : IsFredholm u) : Nonempty (FredholmPackage u) := by
   obtain ⟨codom₀, h_codom⟩ := u_fred.closedComplemented_range.exists_isTopCompl
   obtain ⟨dom₁, h_dom⟩ := u_fred.closedComplemented_ker.exists_isTopCompl
@@ -657,122 +790,146 @@ theorem IsFredholm.nonempty_fredholmPackage {u : E ->L[𝕜] F}
 variable [T2Space E] [T2Space F]
 
 /--
-theorem `isFredholm_tfae` / 定理 `isFredholm_tfae`
+Let `E`, `F` be two Hausdorff topological vector spaces over a complete `NontriviallyNormedField`
+denoted `𝕜`, and `u : E →L[𝕜] F` a continuous linear map. The following conditions are equivalent:
 
-English:
-theorem isFredholm_tfae
-  given: (u : E ->L[𝕜] F)
-  proof: by
-  tfae_have 1 -> 4 := IsFredholm.nonempty_fredholmPackage
-  tfae_have 4 -> 2 := by
-    rintro ⟨dec⟩
-    exact ⟨dec.quasiInverse, dec.isQuasiInverse⟩
-  tfae_have 2 -> 3 := by
-    rintro ⟨v, huv⟩
-    exact exists_restrict_isInvertible_of_isQuasiInverse huv
-  tfae_have 3 -> 1 := by
-    rintro ⟨E₁, F₁, E₁_closed, F₁_closed, E₁_coFG, F₁_coFG, u_mapsto, u_invertible⟩
-    exact .of_isInvertible_restrict E₁_closed F₁_closed u_mapsto u_invertible
-  tfae_finish
+1. `u` is a **Fredholm operator**, in the sense of `ContinuousLinearMap.IsFredholm`.
+2. `u` admits a continuous **quasi-inverse**, in the sense of `LinearMap.IsQuasiInverse`.
+3. There are closed finite-codimension subspaces `E₁` and `F₁` of `E` and `F` between which `u`
+  induces an isomorphism.
+4. `u` admits a `FredholmPackage`.
 
-中文:
-定理 isFredholm_tfae
-  条件: (u : E ->L[𝕜] F)
-  证明: by
-  tfae_have 1 -> 4 := IsFredholm.nonempty_fredholmPackage
-  tfae_have 4 -> 2 := by
-    rintro ⟨dec⟩
-    exact ⟨dec.quasiInverse, dec.isQuasiInverse⟩
-  tfae_have 2 -> 3 := by
-    rintro ⟨v, huv⟩
-    exact exists_restrict_isInvertible_of_isQuasiInverse huv
-  tfae_have 3 -> 1 := by
-    rintro ⟨E₁, F₁, E₁_closed, F₁_closed, E₁_coFG, F₁_coFG, u_mapsto, u_invertible⟩
-    exact .of_isInvertible_restrict E₁_closed F₁_closed u_mapsto u_invertible
-  tfae_finish
-
-Depends on / 依赖: IsFredholm, IsFredholm.nonempty_fredholmPackage, dec.isQuasiInverse, dec.quasiInverse, exists_restrict_isInvertible_of_isQuasiInverse, isQuasiInverse, nonempty_fredholmPackage, of_isInvertible_restrict, quasiInverse, tfae_finish, tfae_have, u_invertible, u_mapsto
+In practice, condition `4` is the "strongest", so you should probably not use it to *prove* that an
+operator is Fredholm.
 -/
-theorem isFredholm_tfae (u : E ->L[𝕜] F) :
+/-
+**ContinuousLinearMap.isFredholm_tfae** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：isFredholm_tfae (u : E ->L[𝕜] F) : [ IsFredholm u, exists v : F ->L[𝕜] E, 
+v.IsQuasiInverse u, exists (E₁ : Submodule 𝕜 E) (F₁ : Submodule 𝕜 F), IsClosed (
+E₁ : Set E) ∧ IsClosed (F₁ : Set F) ∧ E₁.CoFG ∧ F₁.CoFG ∧ exists h : MapsTo u E₁
+ F₁, (u.restrict h).IsInvertible, Nonempty (FredholmPackage u) ].TFAE
+参数：u : E ->L[𝕜] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.IsFredholm.nonempty_fredholmPackage`：∀ {𝕜 : Type u_1
+} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : Add
+CommGroup E]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `ContinuousLinearMap.FredholmPackage.isQuasiInverse`：∀ {𝕜 : Type u_1} {E 
+: Type u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommG
+roup E]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `_private.Mathlib.Analysis.Normed.Operator.Fredholm.Basic.0.ContinuousLin
+earMap.exists_restrict_isInvertible_of_isQuasiInverse`：∀ {𝕜 : Type u_1} {E : Typ
+e u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : AddCommGroup 
+E]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `ContinuousLinearMap.IsFredholm.of_isInvertible_restrict`：∀ {𝕜 : Type u_1
+} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : Add
+CommGroup E]   [inst_2 : AddCommGroup F] [ins…
+· 使用定理 `List.tfae_of_cycle`：tfae_of_cycle {a b} {l : List Prop} (h_chain : List.
+IsChain (· -> ·) (a :: b :: l)) (h_last : getLastD l b -> a) : TFAE (a :: b :: l
+)
+
+--- 原说明 ---
+Let `E`, `F` be two Hausdorff topological vector spaces over a complete `Nontriv
+iallyNormedField`
+denoted `𝕜`, and `u : E →L[𝕜] F` a continuous linear map. The following conditio
+ns are equivalent:
+
+1. `u` is a **Fredholm operator**, in the sense of `ContinuousLinearMap.IsFredho
+lm`.
+2. `u` admits a continuous **quasi-inverse**, in the sense of `LinearMap.IsQuasi
+Inverse`.
+3. There are closed finite-codimension subspaces `E₁` and `F₁` of `E` and `F` be
+tween which `u`
+  induces an isomorphism.
+4. `u` admits a `FredholmPackage`.
+
+In practice, condition `4` is the "strongest", so you should probably not use it
+ to *prove* that an
+operator is Fredholm.
+-/
+theorem isFredholm_tfae (u : E →L[𝕜] F) :
     [ IsFredholm u,
-      exists v : F ->L[𝕜] E, v.IsQuasiInverse u,
-      exists (E₁ : Submodule 𝕜 E) (F₁ : Submodule 𝕜 F),
+      ∃ v : F →L[𝕜] E, v.IsQuasiInverse u,
+      ∃ (E₁ : Submodule 𝕜 E) (F₁ : Submodule 𝕜 F),
         IsClosed (E₁ : Set E) ∧ IsClosed (F₁ : Set F) ∧
         E₁.CoFG ∧ F₁.CoFG ∧
-        exists h : MapsTo u E₁ F₁, (u.restrict h).IsInvertible,
+        ∃ h : MapsTo u E₁ F₁, (u.restrict h).IsInvertible,
       Nonempty (FredholmPackage u) ].TFAE := by
-  tfae_have 1 -> 4 := IsFredholm.nonempty_fredholmPackage
-  tfae_have 4 -> 2 := by
+  tfae_have 1 → 4 := IsFredholm.nonempty_fredholmPackage
+  tfae_have 4 → 2 := by
     rintro ⟨dec⟩
     exact ⟨dec.quasiInverse, dec.isQuasiInverse⟩
-  tfae_have 2 -> 3 := by
+  tfae_have 2 → 3 := by
     rintro ⟨v, huv⟩
     exact exists_restrict_isInvertible_of_isQuasiInverse huv
-  tfae_have 3 -> 1 := by
+  tfae_have 3 → 1 := by
     rintro ⟨E₁, F₁, E₁_closed, F₁_closed, E₁_coFG, F₁_coFG, u_mapsto, u_invertible⟩
     exact .of_isInvertible_restrict E₁_closed F₁_closed u_mapsto u_invertible
   tfae_finish
 
-/--
-theorem `FredholmPackage.isFredholm` / 定理 `FredholmPackage.isFredholm`
+/-- If `u` has a Fredholm package, it is Fredholm. -/
+/-
+**ContinuousLinearMap.FredholmPackage.isFredholm** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+inuousLinearMap.FredholmPackage`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] [CompleteSpace 𝕜] [IsTopologicalAddGroup E] [ContinuousSMu
+l 𝕜 E]   [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F] [T2Space E] [T2Space F] 
+{u : E →L[𝕜] F} (pkg : u.FredholmPackage),   u.IsFredholm
+参数：pkg : u.FredholmPackage。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `ContinuousLinearMap.isFredholm_tfae`：isFredholm_tfae (u : E ->L[𝕜] F) : 
+[ IsFredholm u, exists v : F ->L[𝕜] E, v.IsQuasiInverse u, exists (E₁ : Submodul
+e 𝕜 E) (F₁ : Submodule 𝕜 …
 
-English:
-theorem FredholmPackage.isFredholm
-  given: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  proof: .mp (Nonempty.intro pkg) .out 3 0 isFredholm_tfae u
-
-中文:
-定理 FredholmPackage.isFredholm
-  条件: {u : E ->L[𝕜] F} (pkg : FredholmPackage u)
-  证明: .mp (Nonempty.intro pkg) .out 3 0 isFredholm_tfae u
-
-Depends on / 依赖: Nonempty, Nonempty.intro, isFredholm_tfae
+--- 原说明 ---
+If `u` has a Fredholm package, it is Fredholm.
 -/
-theorem FredholmPackage.isFredholm {u : E ->L[𝕜] F} (pkg : FredholmPackage u) :
+theorem FredholmPackage.isFredholm {u : E →L[𝕜] F} (pkg : FredholmPackage u) :
     IsFredholm u :=
-.mp (Nonempty.intro pkg) .out 3 0 isFredholm_tfae u
-
-/--
-theorem `isFredholm_iff_exists_isQuasiInverse` / 定理 `isFredholm_iff_exists_isQuasiInverse`
-
-English:
-theorem isFredholm_iff_exists_isQuasiInverse
-  given: {u : E ->L[𝕜] F}
-  proof: .out 0 1 isFredholm_tfae u
-
-alias ⟨IsFredholm.exists_isQuasiInverse, _⟩ := isFredholm_iff_exists_isQuasiInverse
-
-中文:
-定理 isFredholm_iff_存在_isQuasiInverse
-  条件: {u : E ->L[𝕜] F}
-  证明: .out 0 1 isFredholm_tfae u
-
-alias ⟨IsFredholm.exists_isQuasiInverse, _⟩ := isFredholm_iff_exists_isQuasiInverse
-
-Depends on / 依赖: isFredholm_tfae
+  isFredholm_tfae u |>.out 3 0 |>.mp (Nonempty.intro pkg)
+/-
+**ContinuousLinearMap.isFredholm_iff_exists_isQuasiInverse** 是 Mathlib 中的一个定理，位于
+命名空间 `ContinuousLinearMap`。
+形式化陈述：isFredholm_iff_exists_isQuasiInverse {u : E ->L[𝕜] F} : IsFredholm u ↔ exi
+sts v : F ->L[𝕜] E, v.IsQuasiInverse u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `ContinuousLinearMap.isFredholm_tfae`：isFredholm_tfae (u : E ->L[𝕜] F) : 
+[ IsFredholm u, exists v : F ->L[𝕜] E, v.IsQuasiInverse u, exists (E₁ : Submodul
+e 𝕜 E) (F₁ : Submodule 𝕜 …
 -/
-theorem isFredholm_iff_exists_isQuasiInverse {u : E ->L[𝕜] F} :
-    IsFredholm u ↔ exists v : F ->L[𝕜] E, v.IsQuasiInverse u :=
-.out 0 1 isFredholm_tfae u
+theorem isFredholm_iff_exists_isQuasiInverse {u : E →L[𝕜] F} :
+    IsFredholm u ↔ ∃ v : F →L[𝕜] E, v.IsQuasiInverse u :=
+  isFredholm_tfae u |>.out 0 1
 
 alias ⟨IsFredholm.exists_isQuasiInverse, _⟩ := isFredholm_iff_exists_isQuasiInverse
-
-/--
-theorem `IsFredholm.of_isQuasiInverse` / 定理 `IsFredholm.of_isQuasiInverse`
-
-English:
-theorem IsFredholm.of_isQuasiInverse
-  given: {u : E ->L[𝕜] F} {v : F ->L[𝕜] E} (h : v.IsQuasiInverse u)
-  proof: isFredholm_iff_exists_isQuasiInverse.mpr ⟨v, h⟩
-
-中文:
-定理 是Fredholm.of_isQuasiInverse
-  条件: {u : E ->L[𝕜] F} {v : F ->L[𝕜] E} (h : v.IsQuasiInverse u)
-  证明: isFredholm_iff_exists_isQuasiInverse.mpr ⟨v, h⟩
-
-Depends on / 依赖: isFredholm_iff_exists_isQuasiInverse, isFredholm_iff_exists_isQuasiInverse.mpr
+/-
+**ContinuousLinearMap.IsFredholm.of_isQuasiInverse** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousLinearMap.IsFredholm`。
+形式化陈述：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NontriviallyNormedF
+ield 𝕜] [inst_1 : AddCommGroup E]   [inst_2 : AddCommGroup F] [inst_3 : _root_.M
+odule 𝕜 E] [inst_4 : _root_.Module 𝕜 F] [inst_5 : TopologicalSpace E]   [inst_6 
+: TopologicalSpace F] [CompleteSpace 𝕜] [IsTopologicalAddGroup E] [ContinuousSMu
+l 𝕜 E]   [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F] [T2Space E] [T2Space F] 
+{u : E →L[𝕜] F} {v : F →L[𝕜] E},   (↑v).IsQuasiInverse ↑u → u.IsFredholm
+参数：↑v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ContinuousLinearMap.isFredholm_iff_exists_isQuasiInverse`：isFredholm_iff
+_exists_isQuasiInverse {u : E ->L[𝕜] F} : IsFredholm u ↔ exists v : F ->L[𝕜] E, 
+v.IsQuasiInverse u
 -/
-theorem IsFredholm.of_isQuasiInverse {u : E ->L[𝕜] F} {v : F ->L[𝕜] E} (h : v.IsQuasiInverse u) :
+theorem IsFredholm.of_isQuasiInverse {u : E →L[𝕜] F} {v : F →L[𝕜] E} (h : v.IsQuasiInverse u) :
     IsFredholm u :=
   isFredholm_iff_exists_isQuasiInverse.mpr ⟨v, h⟩
 
@@ -782,3 +939,4 @@ end TVS
 end ContinuousLinearMap
 
 end
+

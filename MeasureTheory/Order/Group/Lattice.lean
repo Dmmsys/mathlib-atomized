@@ -19,204 +19,160 @@ measurable function, group, lattice operation
 public section
 
 variable {α β : Type*} [Lattice α] [Group α] [MeasurableSpace α]
-  [MeasurableSpace β] {f : β -> α}
+  [MeasurableSpace β] {f : β → α}
 
 @[to_additive]
-/--
-theorem `measurable_oneLePart` / 定理 `measurable_oneLePart`
-
-English:
-theorem measurable_oneLePart
-  given: [MeasurableSup α]
-  statement: Measurable (oneLePart : α -> α)
-  proof: measurable_sup_const _
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-定理 measurable_oneLePart
-  条件: [MeasurableSup α]
-  结论: 可测 (oneLePart : α -> α)
-  证明: measurable_sup_const _
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: measurable_sup_const
+/-
+**measurable_oneLePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_oneLePart [MeasurableSup α] : Measurable (oneLePart : α -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSup.measurable_sup_const`：∀ {M : Type u_1} {inst : MeasurableS
+pace M} {inst_1 : Max M} [self : MeasurableSup M] (c : M), Measurable fun x => x
+ ⊔ c
 -/
-theorem measurable_oneLePart [MeasurableSup α] : Measurable (oneLePart : α -> α) :=
+theorem measurable_oneLePart [MeasurableSup α] : Measurable (oneLePart : α → α) :=
   measurable_sup_const _
 
 @[to_additive (attr := fun_prop)]
-/--
-theorem `Measurable.oneLePart` / 定理 `Measurable.oneLePart`
-
-English:
-theorem Measurable.oneLePart
-  given: [MeasurableSup α] (hf : Measurable f)
-  proof: measurable_oneLePart.comp hf
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-定理 可测.oneLePart
-  条件: [MeasurableSup α] (hf : 可测 f)
-  证明: measurable_oneLePart.comp hf
-
-@[to_additive (attr := fun_prop)]
+/-
+**Measurable.oneLePart** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Lattice α] [inst_1 : Group α] [ins
+t_2 : MeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β → α} [MeasurableS
+up α], Measurable f → Measurable fun x => (f x)⁺ᵐ
+参数：f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_oneLePart`：measurable_oneLePart [MeasurableSup α] : Measurabl
+e (oneLePart : α -> α)
 -/
 protected theorem Measurable.oneLePart [MeasurableSup α] (hf : Measurable f) :
-    Measurable fun x => oneLePart (f x) :=
+    Measurable fun x ↦ oneLePart (f x) :=
   measurable_oneLePart.comp hf
 
 @[to_additive (attr := fun_prop)]
-/--
-theorem `AEMeasurable.oneLePart` / 定理 `AEMeasurable.oneLePart`
-
-English:
-theorem AEMeasurable.oneLePart
-  statement: {μ : MeasureTheory.Measure β} [MeasurableSup α]
-  proof: hf.sup_const 1
-
-中文:
-定理 几乎处处可测.oneLePart
-  结论: {μ : 测度论.测度 β} [MeasurableSup α]
-  证明: hf.sup_const 1
+/-
+**AEMeasurable.oneLePart** 是 Mathlib 中的一个定理，位于命名空间 `AEMeasurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Lattice α] [inst_1 : Group α] [ins
+t_2 : MeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β → α} {μ : Measure
+Theory.Measure β} [MeasurableSup α],   AEMeasurable f μ → AEMeasurable (fun x =>
+ (f x)⁺ᵐ) μ
+参数：fun x => (f x)⁺ᵐ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.sup_const`：AEMeasurable.sup_const (hf : AEMeasurable f μ) (
+c : M) : AEMeasurable (fun x => f x ⊔ c) μ
 -/
 protected theorem AEMeasurable.oneLePart {μ : MeasureTheory.Measure β} [MeasurableSup α]
     (hf : AEMeasurable f μ) :
-    AEMeasurable (fun x => oneLePart (f x)) μ :=
+    AEMeasurable (fun x ↦ oneLePart (f x)) μ :=
   hf.sup_const 1
 
 variable [MeasurableInv α]
 
 @[to_additive]
-/--
-theorem `measurable_leOnePart` / 定理 `measurable_leOnePart`
-
-English:
-theorem measurable_leOnePart
-  given: [MeasurableSup α]
-  statement: Measurable (leOnePart : α -> α)
-  proof: (measurable_sup_const _).comp measurable_inv
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-定理 measurable_leOnePart
-  条件: [MeasurableSup α]
-  结论: 可测 (leOnePart : α -> α)
-  证明: (measurable_sup_const _).comp measurable_inv
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: measurable_inv, measurable_sup_const
+/-
+**measurable_leOnePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_leOnePart [MeasurableSup α] : Measurable (leOnePart : α -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `MeasurableSup.measurable_sup_const`：∀ {M : Type u_1} {inst : MeasurableS
+pace M} {inst_1 : Max M} [self : MeasurableSup M] (c : M), Measurable fun x => x
+ ⊔ c
+· 使用定理 `MeasurableInv.measurable_inv`：∀ {G : Type u_2} {inst : Inv G} {inst_1 : 
+MeasurableSpace G} [self : MeasurableInv G], Measurable Inv.inv
 -/
-theorem measurable_leOnePart [MeasurableSup α] : Measurable (leOnePart : α -> α) :=
+theorem measurable_leOnePart [MeasurableSup α] : Measurable (leOnePart : α → α) :=
   (measurable_sup_const _).comp measurable_inv
 
 @[to_additive (attr := fun_prop)]
-/--
-theorem `Measurable.leOnePart` / 定理 `Measurable.leOnePart`
-
-English:
-theorem Measurable.leOnePart
-  given: [MeasurableSup α] (hf : Measurable f)
-  proof: measurable_leOnePart.comp hf
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-定理 可测.leOnePart
-  条件: [MeasurableSup α] (hf : 可测 f)
-  证明: measurable_leOnePart.comp hf
-
-@[to_additive (attr := fun_prop)]
+/-
+**Measurable.leOnePart** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Lattice α] [inst_1 : Group α] [ins
+t_2 : MeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β → α} [MeasurableI
+nv α] [MeasurableSup α],   Measurable f → Measurable fun x => (f x)⁻ᵐ
+参数：f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_leOnePart`：measurable_leOnePart [MeasurableSup α] : Measurabl
+e (leOnePart : α -> α)
 -/
 protected theorem Measurable.leOnePart [MeasurableSup α] (hf : Measurable f) :
-    Measurable fun x => leOnePart (f x) :=
+    Measurable fun x ↦ leOnePart (f x) :=
   measurable_leOnePart.comp hf
 
 @[to_additive (attr := fun_prop)]
-/--
-theorem `AEMeasurable.leOnePart` / 定理 `AEMeasurable.leOnePart`
-
-English:
-theorem AEMeasurable.leOnePart
-  statement: {μ : MeasureTheory.Measure β} [MeasurableSup α]
-  proof: hf.inv.sup_const 1
-
-中文:
-定理 几乎处处可测.leOnePart
-  结论: {μ : 测度论.测度 β} [MeasurableSup α]
-  证明: hf.inv.sup_const 1
+/-
+**AEMeasurable.leOnePart** 是 Mathlib 中的一个定理，位于命名空间 `AEMeasurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Lattice α] [inst_1 : Group α] [ins
+t_2 : MeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β → α} [MeasurableI
+nv α] {μ : MeasureTheory.Measure β} [MeasurableSup α],   AEMeasurable f μ → AEMe
+asurable (fun x => (f x)⁻ᵐ) μ
+参数：fun x => (f x)⁻ᵐ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.sup_const`：AEMeasurable.sup_const (hf : AEMeasurable f μ) (
+c : M) : AEMeasurable (fun x => f x ⊔ c) μ
+· 使用定理 `AEMeasurable.inv`：AEMeasurable.inv (hf : AEMeasurable f μ) : AEMeasurabl
+e f⁻¹ μ
 -/
 protected theorem AEMeasurable.leOnePart {μ : MeasureTheory.Measure β} [MeasurableSup α]
     (hf : AEMeasurable f μ) :
-    AEMeasurable (fun x => leOnePart (f x)) μ :=
+    AEMeasurable (fun x ↦ leOnePart (f x)) μ :=
   hf.inv.sup_const 1
 
 variable [MeasurableSup₂ α]
 
 @[to_additive]
-/--
-theorem `measurable_mabs` / 定理 `measurable_mabs`
-
-English:
-theorem measurable_mabs
-  statement: Measurable (mabs : α -> α)
-  proof: measurable_id'.sup measurable_inv
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-定理 measurable_mabs
-  结论: 可测 (mabs : α -> α)
-  证明: measurable_id'.sup measurable_inv
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: measurable_id, measurable_inv
+/-
+**measurable_mabs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_mabs : Measurable (mabs : α -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.sup`：Measurable.sup (hf : Measurable f) (hg : Measurable g) :
+ Measurable (f ⊔ g)
+· 使用定理 `measurable_id'`：measurable_id' {_ : MeasurableSpace α} : Measurable fun 
+a : α => a
+· 使用定理 `MeasurableInv.measurable_inv`：∀ {G : Type u_2} {inst : Inv G} {inst_1 : 
+MeasurableSpace G} [self : MeasurableInv G], Measurable Inv.inv
 -/
-theorem measurable_mabs : Measurable (mabs : α -> α) :=
+theorem measurable_mabs : Measurable (mabs : α → α) :=
   measurable_id'.sup measurable_inv
 
 @[to_additive (attr := fun_prop)]
-/--
-theorem `Measurable.mabs` / 定理 `Measurable.mabs`
-
-English:
-theorem Measurable.mabs
-  given: (hf : Measurable f)
-  statement: Measurable fun x => mabs (f x)
-  proof: measurable_mabs.comp hf
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-定理 可测.mabs
-  条件: (hf : 可测 f)
-  结论: 可测 fun x => mabs (f x)
-  证明: measurable_mabs.comp hf
-
-@[to_additive (attr := fun_prop)]
+/-
+**Measurable.mabs** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Lattice α] [inst_1 : Group α] [ins
+t_2 : MeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β → α} [MeasurableI
+nv α] [MeasurableSup₂ α],   Measurable f → Measurable fun x => |f x|ₘ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_mabs`：measurable_mabs : Measurable (mabs : α -> α)
 -/
-protected theorem Measurable.mabs (hf : Measurable f) : Measurable fun x => mabs (f x) :=
+protected theorem Measurable.mabs (hf : Measurable f) : Measurable fun x ↦ mabs (f x) :=
   measurable_mabs.comp hf
 
 @[to_additive (attr := fun_prop)]
-/--
-theorem `AEMeasurable.mabs` / 定理 `AEMeasurable.mabs`
-
-English:
-theorem AEMeasurable.mabs
-  given: {μ : MeasureTheory.Measure β} (hf : AEMeasurable f μ)
-  proof: measurable_mabs.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.mabs
-  条件: {μ : 测度论.测度 β} (hf : 几乎处处可测 f μ)
-  证明: measurable_mabs.comp_aemeasurable hf
+/-
+**AEMeasurable.mabs** 是 Mathlib 中的一个定理，位于命名空间 `AEMeasurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Lattice α] [inst_1 : Group α] [ins
+t_2 : MeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β → α} [MeasurableI
+nv α] [MeasurableSup₂ α] {μ : MeasureTheory.Measure β},   AEMeasurable f μ → AEM
+easurable (fun x => |f x|ₘ) μ
+参数：fun x => |f x|ₘ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_mabs`：measurable_mabs : Measurable (mabs : α -> α)
 -/
 protected theorem AEMeasurable.mabs {μ : MeasureTheory.Measure β} (hf : AEMeasurable f μ) :
-    AEMeasurable (fun x => mabs (f x)) μ :=
+    AEMeasurable (fun x ↦ mabs (f x)) μ :=
   measurable_mabs.comp_aemeasurable hf

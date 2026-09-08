@@ -28,23 +28,19 @@ namespace Set
 /-- Given `X : Type u`, this is the functor `Set X ⥤ Type u` which sends `A`
 to its underlying type. -/
 @[simps obj map]
-/--
-Definition of `functorToTypes` / `functorToTypes` 的定义
+/-
+**Set.functorToTypes** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：functorToTypes {X : Type u} : Set X ⥤ Type u where obj S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToTypes
-  signature: {X : Type u}
-  body: S
-  map {S T} f := ↾fun ⟨x, hx⟩ => ⟨x, leOfHom f hx⟩
-
-中文:
-定义 functorToTypes
-  签名: {X : 类型u}
-  定义体: S
-  map {S T} f := ↾fun ⟨x, hx⟩ => ⟨x, leOfHom f hx⟩
+--- 原说明 ---
+Given `X : Type u`, this is the functor `Set X ⥤ Type u` which sends `A`
+to its underlying type.
 -/
 def functorToTypes {X : Type u} : Set X ⥤ Type u where
   obj S := S
-  map {S T} f := ↾fun ⟨x, hx⟩ => ⟨x, leOfHom f hx⟩
+  map {S T} f := ↾fun ⟨x, hx⟩ ↦ ⟨x, leOfHom f hx⟩
 
 end Set
+

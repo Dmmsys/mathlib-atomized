@@ -38,39 +38,26 @@ attribute [simp] LawfulTraversable.id_traverse
 
 namespace Traversable
 
-variable {t : Type u -> Type u}
+variable {t : Type u → Type u}
 variable [Traversable t] [LawfulTraversable t]
-variable (F G : Type u -> Type u)
+variable (F G : Type u → Type u)
 variable [Applicative F] [LawfulApplicative F]
 variable [Applicative G] [LawfulApplicative G]
 variable {α β γ : Type u}
-variable (g : α -> F β)
-variable (f : β -> γ)
+variable (g : α → F β)
+variable (f : β → γ)
 
-/--
-Definition of `PureTransformation` / `PureTransformation` 的定义
+/-- The natural applicative transformation from the identity functor
+to `F`, defined by `pure : Π {α}, α → F α`. -/
+/-
+**Traversable.PureTransformation** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：PureTransformation : ApplicativeTransformation Id F where app
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PureTransformation
-  signature: :
-  body: @pure F _
-  preserves_pure' _ := rfl
-  preserves_seq' f x := by
-    simp only [map_pure, seq_pure]
-    rfl
-
-@[simp]
-
-中文:
-定义 PureTransformation
-  签名: :
-  定义体: @pure F _
-  preserves_pure' _ := rfl
-  preserves_seq' f x := by
-    simp only [map_pure, seq_pure]
-    rfl
-
-@[simp]
+--- 原说明 ---
+The natural applicative transformation from the identity functor
+to `F`, defined by `pure : Π {α}, α → F α`.
 -/
 def PureTransformation :
     ApplicativeTransformation Id F where
@@ -81,341 +68,298 @@ def PureTransformation :
     rfl
 
 @[simp]
-/--
-theorem `pureTransformation_apply` / 定理 `pureTransformation_apply`
-
-English:
-theorem pureTransformation_apply
-  given: {α} (x : id α)
-  statement: PureTransformation F x = pure x
-  proof: rfl
-
-中文:
-定理 pureTransformation_apply
-  条件: {α} (x : id α)
-  结论: PureTransformation F x = pure x
-  证明: rfl
+/-
+**Traversable.pureTransformation_apply** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：pureTransformation_apply {α} (x : id α) : PureTransformation F x = pure x
+参数：x : id α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pureTransformation_apply {α} (x : id α) : PureTransformation F x = pure x :=
   rfl
 
 variable {F G}
-
-/--
-theorem `map_eq_traverse_id` / 定理 `map_eq_traverse_id`
-
-English:
-theorem map_eq_traverse_id
-  statement: map (f := t) f = Id.run ∘ traverse (pure ∘ f)
-  proof: funext fun y => (traverse_eq_map_id f y).symm
-
-中文:
-定理 map_eq_traverse_id
-  结论: map (f := t) f = Id.run ∘ traverse (pure ∘ f)
-  证明: funext fun y => (traverse_eq_map_id f y).symm
-
-Depends on / 依赖: Id.run, traverse
+/-
+**Traversable.map_eq_traverse_id** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：map_eq_traverse_id : map (f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LawfulTraversable.traverse_eq_map_id`：∀ {t : Type u → Type u} {inst : Tr
+aversable t} [self : LawfulTraversable t] {α β : Type u} (f : α → β) (x : t α), 
+  traverse (pure ∘ f) x = …
 -/
 theorem map_eq_traverse_id : map (f := t) f = Id.run ∘ traverse (pure ∘ f) :=
   funext fun y => (traverse_eq_map_id f y).symm
-
-/--
-theorem `map_traverse` / 定理 `map_traverse`
-
-English:
-theorem map_traverse
-  given: (x : t α)
-  statement: map f < > traverse g x = traverse (map f ∘ g) x
-  proof: by
-  rw [map_eq_traverse_id f]
-  refine (comp_traverse (pure ∘ f) g x).symm.trans ?_
-  congr 1; apply Comp.applicative_comp_id
-
-中文:
-定理 map_traverse
-  条件: (x : t α)
-  结论: map f < > traverse g x = traverse (map f ∘ g) x
-  证明: by
-  rw [map_eq_traverse_id f]
-  refine (comp_traverse (pure ∘ f) g x).symm.trans ?_
-  congr 1; apply Comp.applicative_comp_id
-
-Depends on / 依赖: Comp.applicative_comp_id, applicative_comp_id, comp_traverse, map_eq_traverse_id, symm.trans
+/-
+**Traversable.map_traverse** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：map_traverse (x : t α) : map f < > traverse g x = traverse (map f ∘ g) x
+参数：x : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.map_eq_traverse_id`：map_eq_traverse_id : map (f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LawfulTraversable.comp_traverse`：∀ {t : Type u → Type u} {inst : Travers
+able t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applica
+tive F] [inst_2 : App…
+· 使用定理 `CommApplicative.toLawfulApplicative`：∀ {m : Type u → Type v} {inst : App
+licative m} [self : CommApplicative m], LawfulApplicative m
+· 使用定理 `instCommApplicativeId`：CommApplicative Id
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Functor.Comp.applicative_comp_id`：applicative_comp_id {F} [AF : Applicat
+ive F] [LawfulApplicative F] : @Comp.instApplicativeComp F Id _ _ = AF
 -/
-theorem map_traverse (x : t α) : map f < > traverse g x = traverse (map f ∘ g) x := by
+theorem map_traverse (x : t α) : map f <$> traverse g x = traverse (map f ∘ g) x := by
   rw [map_eq_traverse_id f]
   refine (comp_traverse (pure ∘ f) g x).symm.trans ?_
   congr 1; apply Comp.applicative_comp_id
-
-/--
-theorem `traverse_map` / 定理 `traverse_map`
-
-English:
-theorem traverse_map
-  given: (f : β -> F γ) (g : α -> β) (x : t α)
-  proof: by
-  rw [@map_eq_traverse_id t _ _ _ _ g]
-  refine (comp_traverse (G := Id) f (pure ∘ g) x).symm.trans ?_
-  congr 1; apply Comp.applicative_id_comp
-
-中文:
-定理 traverse_map
-  条件: (f : β -> F γ) (g : α -> β) (x : t α)
-  证明: by
-  rw [@map_eq_traverse_id t _ _ _ _ g]
-  refine (comp_traverse (G := Id) f (pure ∘ g) x).symm.trans ?_
-  congr 1; apply Comp.applicative_id_comp
-
-Depends on / 依赖: Comp.applicative_id_comp, applicative_id_comp, comp_traverse, map_eq_traverse_id, symm.trans
+/-
+**Traversable.traverse_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：traverse_map (f : β -> F γ) (g : α -> β) (x : t α) : traverse f (g <$> x) 
+= traverse (f ∘ g) x
+参数：f : β -> F γ；g : α -> β；x : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.map_eq_traverse_id`：map_eq_traverse_id : map (f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LawfulTraversable.comp_traverse`：∀ {t : Type u → Type u} {inst : Travers
+able t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applica
+tive F] [inst_2 : App…
+· 使用定理 `CommApplicative.toLawfulApplicative`：∀ {m : Type u → Type v} {inst : App
+licative m} [self : CommApplicative m], LawfulApplicative m
+· 使用定理 `instCommApplicativeId`：CommApplicative Id
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Functor.Comp.applicative_id_comp`：applicative_id_comp {F} [AF : Applicat
+ive F] [LawfulApplicative F] : @instApplicativeComp Id F _ _ = AF
 -/
-theorem traverse_map (f : β -> F γ) (g : α -> β) (x : t α) :
+theorem traverse_map (f : β → F γ) (g : α → β) (x : t α) :
     traverse f (g <$> x) = traverse (f ∘ g) x := by
   rw [@map_eq_traverse_id t _ _ _ _ g]
   refine (comp_traverse (G := Id) f (pure ∘ g) x).symm.trans ?_
   congr 1; apply Comp.applicative_id_comp
-
-/--
-theorem `pure_traverse` / 定理 `pure_traverse`
-
-English:
-theorem pure_traverse
-  given: (x : t α)
-  statement: traverse pure x = (pure x : F (t α))
-  proof: by
-  have : traverse pure x = pure (traverse (m := Id) pure x) :=
-      (naturality (PureTransformation F) pure x).symm
-  rwa [id_traverse] at this
-
-中文:
-定理 pure_traverse
-  条件: (x : t α)
-  结论: traverse pure x = (pure x : F (t α))
-  证明: by
-  have : traverse pure x = pure (traverse (m := Id) pure x) :=
-      (naturality (PureTransformation F) pure x).symm
-  rwa [id_traverse] at this
-
-Depends on / 依赖: PureTransformation, id_traverse, naturality, traverse
+/-
+**Traversable.pure_traverse** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：pure_traverse (x : t α) : traverse pure x = (pure x : F (t α))
+参数：x : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LawfulTraversable.naturality`：∀ {t : Type u → Type u} {inst : Traversabl
+e t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applicativ
+e F] [inst_2 : App…
+· 使用定理 `CommApplicative.toLawfulApplicative`：∀ {m : Type u → Type v} {inst : App
+licative m} [self : CommApplicative m], LawfulApplicative m
+· 使用定理 `instCommApplicativeId`：CommApplicative Id
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulTraversable.id_traverse`：∀ {t : Type u → Type u} {inst : Traversab
+le t} [self : LawfulTraversable t] {α : Type u} (x : t α),   traverse pure x = p
+ure x
 -/
 theorem pure_traverse (x : t α) : traverse pure x = (pure x : F (t α)) := by
   have : traverse pure x = pure (traverse (m := Id) pure x) :=
       (naturality (PureTransformation F) pure x).symm
   rwa [id_traverse] at this
-
-/--
-theorem `id_sequence` / 定理 `id_sequence`
-
-English:
-theorem id_sequence
-  given: (x : t α)
-  statement: sequence (f := Id) (pure <$> x) = pure x
-  proof: by
-  simp [sequence, traverse_map, id_traverse]
-
-中文:
-定理 id_sequence
-  条件: (x : t α)
-  结论: sequence (f := Id) (pure <$> x) = pure x
-  证明: by
-  simp [sequence, traverse_map, id_traverse]
-
-Depends on / 依赖: id_traverse, sequence, traverse_map
+/-
+**Traversable.id_sequence** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：id_sequence (x : t α) : sequence (f
+参数：x : t α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.traverse_map`：traverse_map (f : β -> F γ) (g : α -> β) (x : 
+t α) : traverse f (g <$> x) = traverse (f ∘ g) x
+· 使用定理 `CommApplicative.toLawfulApplicative`：∀ {m : Type u → Type v} {inst : App
+licative m} [self : CommApplicative m], LawfulApplicative m
+· 使用定理 `instCommApplicativeId`：CommApplicative Id
+· 使用定理 `LawfulTraversable.id_traverse`：∀ {t : Type u → Type u} {inst : Traversab
+le t} [self : LawfulTraversable t] {α : Type u} (x : t α),   traverse pure x = p
+ure x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem id_sequence (x : t α) : sequence (f := Id) (pure <$> x) = pure x := by
   simp [sequence, traverse_map, id_traverse]
-
-/--
-theorem `comp_sequence` / 定理 `comp_sequence`
-
-English:
-theorem comp_sequence
-  given: (x : t (F (G α)))
-  proof: by
-  simp only [sequence, traverse_map, id_comp]; rw [← comp_traverse]; simp [map_id]
-
-中文:
-定理 comp_sequence
-  条件: (x : t (F (G α)))
-  证明: by
-  simp only [sequence, traverse_map, id_comp]; rw [← comp_traverse]; simp [map_id]
-
-Depends on / 依赖: comp_traverse, id_comp, map_id, sequence, traverse_map
+/-
+**Traversable.comp_sequence** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：comp_sequence (x : t (F (G α))) : sequence (Comp.mk <$> x) = Comp.mk (sequ
+ence <$> sequence x)
+参数：x : t (F (G α))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.traverse_map`：traverse_map (f : β -> F γ) (g : α -> β) (x : 
+t α) : traverse f (g <$> x) = traverse (f ∘ g) x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LawfulTraversable.comp_traverse`：∀ {t : Type u → Type u} {inst : Travers
+able t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applica
+tive F] [inst_2 : App…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Functor.map_id`：Functor.map_id : (id <$> ·) = (id : F α -> F α)
+· 使用定理 `LawfulApplicative.toLawfulFunctor`：∀ {f : Type u → Type v} {inst : Appli
+cative f} [self : LawfulApplicative f], LawfulFunctor f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_sequence (x : t (F (G α))) :
     sequence (Comp.mk <$> x) = Comp.mk (sequence <$> sequence x) := by
   simp only [sequence, traverse_map, id_comp]; rw [← comp_traverse]; simp [map_id]
-
-/--
-theorem `naturality'` / 定理 `naturality'`
-
-English:
-theorem naturality'
-  given: (η : ApplicativeTransformation F G) (x : t (F α))
-  proof: by simp [sequence, naturality, traverse_map]
-
-@[functor_norm]
-
-中文:
-定理 naturality'
-  条件: (η : ApplicativeTransformation F G) (x : t (F α))
-  证明: by simp [sequence, naturality, traverse_map]
-
-@[functor_norm]
-
-Depends on / 依赖: naturality, sequence, traverse_map
+/-
+**Traversable.naturality'** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：naturality' (η : ApplicativeTransformation F G) (x : t (F α)) : η (sequenc
+e x) = sequence (@η _ <$> x)
+参数：η : ApplicativeTransformation F G；x : t (F α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulTraversable.naturality`：∀ {t : Type u → Type u} {inst : Traversabl
+e t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applicativ
+e F] [inst_2 : App…
+· 使用定理 `Traversable.traverse_map`：traverse_map (f : β -> F γ) (g : α -> β) (x : 
+t α) : traverse f (g <$> x) = traverse (f ∘ g) x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem naturality' (η : ApplicativeTransformation F G) (x : t (F α)) :
     η (sequence x) = sequence (@η _ <$> x) := by simp [sequence, naturality, traverse_map]
 
 @[functor_norm]
-/--
-theorem `traverse_id` / 定理 `traverse_id`
-
-English:
-theorem traverse_id
-  statement: traverse pure = (pure : t α -> Id (t α))
-  proof: by
-  ext
-  exact id_traverse _
-
-@[functor_norm]
-
-中文:
-定理 traverse_id
-  结论: traverse pure = (pure : t α -> Id (t α))
-  证明: by
-  ext
-  exact id_traverse _
-
-@[functor_norm]
-
-Depends on / 依赖: id_traverse
+/-
+**Traversable.traverse_id** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：traverse_id : traverse pure = (pure : t α -> Id (t α))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Id.ext`：∀ {α : Type u_1} {x y : Id α}, x.run = y.run → x = y
+· 使用定理 `LawfulTraversable.id_traverse`：∀ {t : Type u → Type u} {inst : Traversab
+le t} [self : LawfulTraversable t] {α : Type u} (x : t α),   traverse pure x = p
+ure x
 -/
-theorem traverse_id : traverse pure = (pure : t α -> Id (t α)) := by
+theorem traverse_id : traverse pure = (pure : t α → Id (t α)) := by
   ext
   exact id_traverse _
 
 @[functor_norm]
-/--
-theorem `traverse_comp` / 定理 `traverse_comp`
-
-English:
-theorem traverse_comp
-  given: (g : α -> F β) (h : β -> G γ)
-  proof: by
-  ext
-  exact comp_traverse _ _ _
-
-中文:
-定理 traverse_comp
-  条件: (g : α -> F β) (h : β -> G γ)
-  证明: by
-  ext
-  exact comp_traverse _ _ _
-
-Depends on / 依赖: comp_traverse
+/-
+**Traversable.traverse_comp** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：traverse_comp (g : α -> F β) (h : β -> G γ) : traverse (Comp.mk ∘ map h ∘ 
+g) = (Comp.mk ∘ map (traverse h) ∘ traverse g : t α -> Comp F G (t γ))
+参数：g : α -> F β；h : β -> G γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulTraversable.comp_traverse`：∀ {t : Type u → Type u} {inst : Travers
+able t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applica
+tive F] [inst_2 : App…
 -/
-theorem traverse_comp (g : α -> F β) (h : β -> G γ) :
+theorem traverse_comp (g : α → F β) (h : β → G γ) :
     traverse (Comp.mk ∘ map h ∘ g) =
-      (Comp.mk ∘ map (traverse h) ∘ traverse g : t α -> Comp F G (t γ)) := by
+      (Comp.mk ∘ map (traverse h) ∘ traverse g : t α → Comp F G (t γ)) := by
   ext
   exact comp_traverse _ _ _
-
-/--
-theorem `traverse_eq_map_id'` / 定理 `traverse_eq_map_id'`
-
-English:
-theorem traverse_eq_map_id'
-  given: (f : β -> γ)
-  proof: by
-  ext
-  exact traverse_eq_map_id _ _
-
-中文:
-定理 traverse_eq_map_id'
-  条件: (f : β -> γ)
-  证明: by
-  ext
-  exact traverse_eq_map_id _ _
-
-Depends on / 依赖: traverse_eq_map_id
+/-
+**Traversable.traverse_eq_map_id'** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：traverse_eq_map_id' (f : β -> γ) : traverse (m
+参数：f : β -> γ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Id.ext`：∀ {α : Type u_1} {x y : Id α}, x.run = y.run → x = y
+· 使用定理 `LawfulTraversable.traverse_eq_map_id`：∀ {t : Type u → Type u} {inst : Tr
+aversable t} [self : LawfulTraversable t] {α β : Type u} (f : α → β) (x : t α), 
+  traverse (pure ∘ f) x = …
 -/
-theorem traverse_eq_map_id' (f : β -> γ) :
-    traverse (m := Id) (pure ∘ f) = pure ∘ (map f : t β -> t γ) := by
+theorem traverse_eq_map_id' (f : β → γ) :
+    traverse (m := Id) (pure ∘ f) = pure ∘ (map f : t β → t γ) := by
   ext
   exact traverse_eq_map_id _ _
 
 -- @[functor_norm]
-/--
-theorem `traverse_map'` / 定理 `traverse_map'`
-
-English:
-theorem traverse_map'
-  given: (g : α -> β) (h : β -> G γ)
-  proof: by
-  ext
-  rw [comp_apply]; rw [traverse_map]
-
-中文:
-定理 traverse_map'
-  条件: (g : α -> β) (h : β -> G γ)
-  证明: by
-  ext
-  rw [comp_apply]; rw [traverse_map]
-
-Depends on / 依赖: comp_apply, traverse_map
+/-
+**Traversable.traverse_map'** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：traverse_map' (g : α -> β) (h : β -> G γ) : traverse (h ∘ g) = (traverse h
+ ∘ map g : t α -> G (t γ))
+参数：g : α -> β；h : β -> G γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Traversable.traverse_map`：traverse_map (f : β -> F γ) (g : α -> β) (x : 
+t α) : traverse f (g <$> x) = traverse (f ∘ g) x
 -/
-theorem traverse_map' (g : α -> β) (h : β -> G γ) :
-    traverse (h ∘ g) = (traverse h ∘ map g : t α -> G (t γ)) := by
+theorem traverse_map' (g : α → β) (h : β → G γ) :
+    traverse (h ∘ g) = (traverse h ∘ map g : t α → G (t γ)) := by
   ext
-  rw [comp_apply]; rw [traverse_map]
-
-/--
-theorem `map_traverse'` / 定理 `map_traverse'`
-
-English:
-theorem map_traverse'
-  given: (g : α -> G β) (h : β -> γ)
-  proof: by
-  ext
-  rw [comp_apply]; rw [map_traverse]
-
-中文:
-定理 map_traverse'
-  条件: (g : α -> G β) (h : β -> γ)
-  证明: by
-  ext
-  rw [comp_apply]; rw [map_traverse]
-
-Depends on / 依赖: comp_apply, map_traverse
+  rw [comp_apply, traverse_map]
+/-
+**Traversable.map_traverse'** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：map_traverse' (g : α -> G β) (h : β -> γ) : traverse (map h ∘ g) = (map (m
+ap h) ∘ traverse g : t α -> G (t γ))
+参数：g : α -> G β；h : β -> γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Traversable.map_traverse`：map_traverse (x : t α) : map f < > traverse g 
+x = traverse (map f ∘ g) x
 -/
-theorem map_traverse' (g : α -> G β) (h : β -> γ) :
-    traverse (map h ∘ g) = (map (map h) ∘ traverse g : t α -> G (t γ)) := by
+theorem map_traverse' (g : α → G β) (h : β → γ) :
+    traverse (map h ∘ g) = (map (map h) ∘ traverse g : t α → G (t γ)) := by
   ext
-  rw [comp_apply]; rw [map_traverse]
-
-/--
-theorem `naturality_pf` / 定理 `naturality_pf`
-
-English:
-theorem naturality_pf
-  given: (η : ApplicativeTransformation F G) (f : α -> F β)
-  proof: by
-  ext
-  rw [comp_apply]; rw [naturality]
-
-中文:
-定理 naturality_pf
-  条件: (η : ApplicativeTransformation F G) (f : α -> F β)
-  证明: by
-  ext
-  rw [comp_apply]; rw [naturality]
-
-Depends on / 依赖: comp_apply, naturality
+  rw [comp_apply, map_traverse]
+/-
+**Traversable.naturality_pf** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：naturality_pf (η : ApplicativeTransformation F G) (f : α -> F β) : travers
+e (@η _ ∘ f) = @η _ ∘ (traverse f : t α -> F (t β))
+参数：η : ApplicativeTransformation F G；f : α -> F β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LawfulTraversable.naturality`：∀ {t : Type u → Type u} {inst : Traversabl
+e t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applicativ
+e F] [inst_2 : App…
 -/
-theorem naturality_pf (η : ApplicativeTransformation F G) (f : α -> F β) :
-    traverse (@η _ ∘ f) = @η _ ∘ (traverse f : t α -> F (t β)) := by
+theorem naturality_pf (η : ApplicativeTransformation F G) (f : α → F β) :
+    traverse (@η _ ∘ f) = @η _ ∘ (traverse f : t α → F (t β)) := by
   ext
-  rw [comp_apply]; rw [naturality]
+  rw [comp_apply, naturality]
 
 end Traversable
+

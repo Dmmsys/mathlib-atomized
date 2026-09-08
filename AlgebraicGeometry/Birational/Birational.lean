@@ -34,30 +34,18 @@ open CategoryTheory
 
 namespace AlgebraicGeometry.Scheme
 
-/--
-Definition of `PartialIso` / `PartialIso` 的定义
+/-- A partial isomorphism from `X` to `Y` is an isomorphism between dense open subschemes
+of `X` and `Y`. -/
+/-
+**AlgebraicGeometry.Scheme.PartialIso** 是 Mathlib 中的一个归纳类型，位于命名空间 `AlgebraicGeom
+etry.Scheme`。
+形式化陈述：AlgebraicGeometry.Scheme → AlgebraicGeometry.Scheme → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PartialIso
-  parameters: (X Y : Scheme.{u})
-  axioms and operations (5):
-    - source : X.Opens
-    - dense_source : Dense (source : Set X)
-    - target : Y.Opens
-    - dense_target : Dense (target : Set Y)
-    - iso : source.toScheme ≅ target.toScheme
-
-中文:
-结构 PartialIso
-  参数: (X Y : 概形.{u})
-  公理与运算 (5 个):
-    - source : X.Opens
-    - dense_source : 稠密 (source : 集合 X)
-    - target : Y.Opens
-    - dense_target : 稠密 (target : 集合 Y)
-    - iso : source.toScheme ≅ target.toScheme
-
-Depends on / 依赖: LocallyOfFinitePresentation, UniversallyOpen, UniversallyOpen.of_flat, of_flat
+--- 原说明 ---
+A partial isomorphism from `X` to `Y` is an isomorphism between dense open subsc
+hemes
+of `X` and `Y`.
 -/
 structure PartialIso (X Y : Scheme.{u}) where
   /-- The source open subscheme of a partial isomorphism. -/
@@ -74,61 +62,58 @@ namespace PartialIso
 variable {X Y Z S : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S}
 
 variable (sX sY) in
-/--
-Definition of `IsOver` / `IsOver` 的定义
+/-- A partial iso is an `S`-map if the underlying morphism is. -/
+/-
+**AlgebraicGeometry.Scheme.PartialIso.IsOver** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebr
+aicGeometry.Scheme.PartialIso`。
+形式化陈述：IsOver (f : X.PartialIso Y) : Prop
+参数：f : X.PartialIso Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsOver
-  signature: (f : X.PartialIso Y)
-  body: f.iso.hom ≫ f.target.ι ≫ sY = f.source.ι ≫ sX
-
-中文:
-缩写 是Over
-  签名: (f : X.PartialIso Y)
-  定义体: f.iso.hom ≫ f.target.ι ≫ sY = f.source.ι ≫ sX
-
-Depends on / 依赖: f.iso.hom, f.source, f.target, source, target
+--- 原说明 ---
+A partial iso is an `S`-map if the underlying morphism is.
 -/
 abbrev IsOver (f : X.PartialIso Y) : Prop :=
   f.iso.hom ≫ f.target.ι ≫ sY = f.source.ι ≫ sX
-
-/--
-lemma `ext_iff` / 引理 `ext_iff`
-
-English:
-lemma ext_iff
-  given: (f g : X.PartialIso Y)
-  proof: by
-  constructor
-  · rintro rfl
-    simp
-  · obtain ⟨U₁, hU₁, U₂, hU₂, f⟩ := f
-    obtain ⟨V₁, hV₁, V₂, hU₂, g⟩ := g
-    simp only [forall_exists_index]
-    rintro rfl rfl e
-    simpa using e
-
-@[ext]
-
-中文:
-引理 ext_iff
-  条件: (f g : X.PartialIso Y)
-  证明: by
-  constructor
-  · rintro rfl
-    simp
-  · obtain ⟨U₁, hU₁, U₂, hU₂, f⟩ := f
-    obtain ⟨V₁, hV₁, V₂, hU₂, g⟩ := g
-    simp only [forall_exists_index]
-    rintro rfl rfl e
-    simpa using e
-
-@[ext]
-
-Depends on / 依赖: forall_exists_index
+/-
+**AlgebraicGeometry.Scheme.PartialIso.ext_iff** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme.PartialIso`。
+形式化陈述：ext_iff (f g : X.PartialIso Y) : f = g ↔ exists (e : f.source = g.source) 
+(e' : g.target = f.target), f.iso = X.isoOfEq e ≪≫ g.iso ≪≫ Y.isoOfEq e'
+参数：f g : X.PartialIso Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AlgebraicGeometry.Scheme.isoOfEq_rfl`：∀ (X : AlgebraicGeometry.Scheme) (
+U : X.Opens), X.isoOfEq ⋯ = CategoryTheory.Iso.refl ↑U
+· 使用定理 `CategoryTheory.Iso.trans_refl`：trans_refl (α : X ≅ Y) : α ≪≫ Iso.refl Y 
+= α
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.mk.injEq`：∀ {X Y : AlgebraicGeometry
+.Scheme} (source : X.Opens) (dense_source : Dense ↑source) (target : Y.Opens)   
+(dense_target : Dense ↑target) (is…
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
 lemma ext_iff (f g : X.PartialIso Y) :
-    f = g ↔ exists (e : f.source = g.source) (e' : g.target = f.target),
+    f = g ↔ ∃ (e : f.source = g.source) (e' : g.target = f.target),
       f.iso = X.isoOfEq e ≪≫ g.iso ≪≫ Y.isoOfEq e' := by
   constructor
   · rintro rfl
@@ -140,24 +125,20 @@ lemma ext_iff (f g : X.PartialIso Y) :
     simpa using e
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  statement: (f g : X.PartialIso Y) (e : f.source = g.source) (e' : g.target = f.target)
-  proof: by
-  rw [ext_iff]
-  exact ⟨e, e', H⟩
-
-中文:
-引理 ext
-  结论: (f g : X.PartialIso Y) (e : f.source = g.source) (e' : g.target = f.target)
-  证明: by
-  rw [ext_iff]
-  exact ⟨e, e', H⟩
-
-Depends on / 依赖: WeaklyEtale, ext_iff
+/-
+**AlgebraicGeometry.Scheme.PartialIso.ext** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGe
+ometry.Scheme.PartialIso`。
+形式化陈述：ext (f g : X.PartialIso Y) (e : f.source = g.source) (e' : g.target = f.ta
+rget) (H : f.iso = X.isoOfEq e ≪≫ g.iso ≪≫ Y.isoOfEq e') : f = g
+参数：f g : X.PartialIso Y；e : f.source = g.source；e' : g.target = f.target；H : f.i
+so = X.isoOfEq e ≪≫ g.iso ≪≫ Y.isoOfEq e'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.PartialIso.ext_iff`：ext_iff (f g : X.PartialIso
+ Y) : f = g ↔ exists (e : f.source = g.source) (e' : g.target = f.target), f.iso
+ = X.isoOfEq e ≪≫ g.iso ≪≫ Y.isoO…
 -/
 lemma ext (f g : X.PartialIso Y) (e : f.source = g.source) (e' : g.target = f.target)
     (H : f.iso = X.isoOfEq e ≪≫ g.iso ≪≫ Y.isoOfEq e') : f = g := by
@@ -167,26 +148,15 @@ lemma ext (f g : X.PartialIso Y) (e : f.source = g.source) (e' : g.target = f.ta
 variable (X) in
 /-- The identity partial isomorphism on `X`, defined on all of `X`. -/
 @[refl, simps]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.refl** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.Scheme.PartialIso`。
+形式化陈述：refl : X.PartialIso X where source
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: : X.PartialIso X where
-  body: ⊤
-  dense_source := dense_univ
-  target := ⊤
-  dense_target := dense_univ
-  iso := Iso.refl _
-
-中文:
-定义 refl
-  签名: : X.PartialIso X where
-  定义体: ⊤
-  dense_source := dense_univ
-  target := ⊤
-  dense_target := dense_univ
-  iso := Iso.refl _
+--- 原说明 ---
+The identity partial isomorphism on `X`, defined on all of `X`.
 -/
 def refl : X.PartialIso X where
   source := ⊤
@@ -197,28 +167,20 @@ def refl : X.PartialIso X where
 
 /-- The inverse of a partial isomorphism. -/
 @[symm, simps]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.symm** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.Scheme.PartialIso`。
+形式化陈述：symm (f : X.PartialIso Y) : Y.PartialIso X where source
+参数：f : X.PartialIso Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.dense_target`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (self : X.PartialIso Y), Dense ↑self.target
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.dense_source`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (self : X.PartialIso Y), Dense ↑self.source
 
-English:
-definition symm
-  signature: (f : X.PartialIso Y)
-  body: f.target
-  dense_source := f.dense_target
-  target := f.source
-  dense_target := f.dense_source
-  iso := f.iso.symm
-
-中文:
-定义 symm
-  签名: (f : X.PartialIso Y)
-  定义体: f.target
-  dense_source := f.dense_target
-  target := f.source
-  dense_target := f.dense_source
-  iso := f.iso.symm
-
-Depends on / 依赖: f.target, target
+--- 原说明 ---
+The inverse of a partial isomorphism.
 -/
 def symm (f : X.PartialIso Y) : Y.PartialIso X where
   source := f.target
@@ -228,24 +190,29 @@ def symm (f : X.PartialIso Y) : Y.PartialIso X where
   iso := f.iso.symm
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `IsOver.symm` / 引理 `IsOver.symm`
-
-English:
-lemma IsOver.symm
-  given: {f : X.PartialIso Y} (hf : f.IsOver sX sY)
-  statement: f.symm.IsOver sY sX
-  proof: by
-  simpa [IsOver, ← cancel_epi f.iso.hom] using Eq.symm hf
-
-中文:
-引理 是Over.symm
-  条件: {f : X.PartialIso Y} (hf : f.是Over sX sY)
-  结论: f.symm.是Over sY sX
-  证明: by
-  simpa [IsOver, ← cancel_epi f.iso.hom] using Eq.symm hf
-
-Depends on / 依赖: Eq.symm, IsOver, cancel_epi, f.iso.hom
+/-
+**AlgebraicGeometry.Scheme.PartialIso.IsOver.symm** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.Scheme.PartialIso.IsOver`。
+形式化陈述：∀ {X Y S : AlgebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.Part
+ialIso Y},   AlgebraicGeometry.Scheme.PartialIso.IsOver sX sY f → AlgebraicGeome
+try.Scheme.PartialIso.IsOver sY sX f.symm
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 lemma IsOver.symm {f : X.PartialIso Y} (hf : f.IsOver sX sY) : f.symm.IsOver sY sX := by
   simpa [IsOver, ← cancel_epi f.iso.hom] using Eq.symm hf
@@ -253,28 +220,23 @@ lemma IsOver.symm {f : X.PartialIso Y} (hf : f.IsOver sX sY) : f.symm.IsOver sY 
 /-- Compose two partial isomorphisms along a proof that the target of `f` equals the source
 of `g`. See `trans` for the version that does not require this. -/
 @[simps]
-/--
-Definition of `trans'` / `trans'` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.trans'** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry.Scheme.PartialIso`。
+形式化陈述：trans' (f : X.PartialIso Y) (g : Y.PartialIso Z) (e : f.target = g.source)
+ : X.PartialIso Z where source
+参数：f : X.PartialIso Y；g : Y.PartialIso Z；e : f.target = g.source。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.dense_source`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (self : X.PartialIso Y), Dense ↑self.source
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.dense_target`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (self : X.PartialIso Y), Dense ↑self.target
 
-English:
-definition trans'
-  signature: (f : X.PartialIso Y) (g : Y.PartialIso Z) (e : f.target = g.source)
-  body: f.source
-  dense_source := f.dense_source
-  target := g.target
-  dense_target := g.dense_target
-  iso := f.iso ≪≫ Y.isoOfEq e ≪≫ g.iso
-
-中文:
-定义 trans'
-  签名: (f : X.PartialIso Y) (g : Y.PartialIso Z) (e : f.target = g.source)
-  定义体: f.source
-  dense_source := f.dense_source
-  target := g.target
-  dense_target := g.dense_target
-  iso := f.iso ≪≫ Y.isoOfEq e ≪≫ g.iso
-
-Depends on / 依赖: f.source, source
+--- 原说明 ---
+Compose two partial isomorphisms along a proof that the target of `f` equals the
+ source
+of `g`. See `trans` for the version that does not require this.
 -/
 noncomputable def trans' (f : X.PartialIso Y) (g : Y.PartialIso Z) (e : f.target = g.source) :
     X.PartialIso Z where
@@ -285,22 +247,30 @@ noncomputable def trans' (f : X.PartialIso Y) (g : Y.PartialIso Z) (e : f.target
   iso := f.iso ≪≫ Y.isoOfEq e ≪≫ g.iso
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `IsOver.trans'` / 引理 `IsOver.trans'`
-
-English:
-lemma IsOver.trans'
-  statement: {f : X.PartialIso Y} {g : Y.PartialIso Z} {e : f.target = g.source}
-  proof: by
-  simp [IsOver, ← hf, hg]
-
-中文:
-引理 是Over.trans'
-  结论: {f : X.PartialIso Y} {g : Y.PartialIso Z} {e : f.target = g.source}
-  证明: by
-  simp [IsOver, ← hf, hg]
-
-Depends on / 依赖: IsOver
+/-
+**AlgebraicGeometry.Scheme.PartialIso.IsOver.trans'** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.Scheme.PartialIso.IsOver`。
+形式化陈述：∀ {X Y Z S : AlgebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶
+ S} {f : X.PartialIso Y} {g : Y.PartialIso Z}   {e : f.target = g.source},   Alg
+ebraicGeometry.Scheme.PartialIso.IsOver sX sY f →     AlgebraicGeometry.Scheme.P
+artialIso.IsOver sY sZ g → AlgebraicGeometry.Scheme.PartialIso.IsOver sX sZ (f.t
+rans' g e)
+参数：f.trans' g e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.isoOfEq_hom_ι_assoc`：∀ (X : AlgebraicGeometry.S
+cheme) {U V : X.Opens} (e : U = V) {Z : AlgebraicGeometry.Scheme} (h : X ⟶ Z),  
+ CategoryTheory.CategoryStruct.com…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma IsOver.trans' {f : X.PartialIso Y} {g : Y.PartialIso Z} {e : f.target = g.source}
     (hf : f.IsOver sX sY) (hg : g.IsOver sY sZ) : (trans' f g e).IsOver sX sZ := by
@@ -308,154 +278,137 @@ lemma IsOver.trans' {f : X.PartialIso Y} {g : Y.PartialIso Z} {e : f.target = g.
 
 /-- Restrict the source of a partial isomorphism to a smaller dense open. -/
 @[simps]
-/--
-Definition of `restrictSource` / `restrictSource` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.restrictSource** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.Scheme.PartialIso`。
+形式化陈述：restrictSource (f : X.PartialIso Y) (U : Opens X) (hU : Dense (U : Set X))
+ (hU' : U <= f.source) : X.PartialIso Y where source
+参数：f : X.PartialIso Y；U : Opens X；hU : Dense (U : Set X)；hU' : U <= f.source。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictSource
-  signature: (f : X.PartialIso Y) (U : Opens X) (hU : Dense (U : Set X))
-  body: U
-  dense_source := hU
-  target := f.target.ι ''ᵁ f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U
-  dense_target :=
-    have := Opens.isDominant_ι f.dense_target
-f.target.ι.denseRange.dense_image f.target.ι.continuous
-f.iso.hom.denseRange.dense_image f.iso.hom.continuous
-        hU.preimage f.source.ι.isOpenEmbedding.isOpenMap
-  iso := (Opens.isoOfLE hU').symm ≪≫
-    (f.iso.hom.isoImage (f.source.ι ⁻¹ᵁ U)) ≪≫
-    (f.target.ι.isoImage (f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U))
-
-中文:
-定义 restrictSource
-  签名: (f : X.PartialIso Y) (U : Opens X) (hU : 稠密 (U : 集合 X))
-  定义体: U
-  dense_source := hU
-  target := f.target.ι ''ᵁ f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U
-  dense_target :=
-    have := Opens.isDominant_ι f.dense_target
-f.target.ι.denseRange.dense_image f.target.ι.continuous
-f.iso.hom.denseRange.dense_image f.iso.hom.continuous
-        hU.preimage f.source.ι.isOpenEmbedding.isOpenMap
-  iso := (Opens.isoOfLE hU').symm ≪≫
-    (f.iso.hom.isoImage (f.source.ι ⁻¹ᵁ U)) ≪≫
-    (f.target.ι.isoImage (f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U))
+--- 原说明 ---
+Restrict the source of a partial isomorphism to a smaller dense open.
 -/
 noncomputable def restrictSource (f : X.PartialIso Y) (U : Opens X) (hU : Dense (U : Set X))
-    (hU' : U <= f.source) : X.PartialIso Y where
+    (hU' : U ≤ f.source) : X.PartialIso Y where
   source := U
   dense_source := hU
   target := f.target.ι ''ᵁ f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U
   dense_target :=
     have := Opens.isDominant_ι f.dense_target
-f.target.ι.denseRange.dense_image f.target.ι.continuous
-f.iso.hom.denseRange.dense_image f.iso.hom.continuous
+    f.target.ι.denseRange.dense_image f.target.ι.continuous <|
+      f.iso.hom.denseRange.dense_image f.iso.hom.continuous <|
         hU.preimage f.source.ι.isOpenEmbedding.isOpenMap
   iso := (Opens.isoOfLE hU').symm ≪≫
     (f.iso.hom.isoImage (f.source.ι ⁻¹ᵁ U)) ≪≫
     (f.target.ι.isoImage (f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U))
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `IsOver.restrictSource` / 引理 `IsOver.restrictSource`
-
-English:
-lemma IsOver.restrictSource
-  statement: {f : X.PartialIso Y} (hf : f.IsOver sX sY) (U : Opens X)
-  proof: by
-  simp [IsOver, hf]
-
-中文:
-引理 是Over.restrictSource
-  结论: {f : X.PartialIso Y} (hf : f.是Over sX sY) (U : Opens X)
-  证明: by
-  simp [IsOver, hf]
-
-Depends on / 依赖: IsOver, MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
+/-
+**AlgebraicGeometry.Scheme.PartialIso.IsOver.restrictSource** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.Scheme.PartialIso.IsOver`。
+形式化陈述：∀ {X Y S : AlgebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.Part
+ialIso Y},   AlgebraicGeometry.Scheme.PartialIso.IsOver sX sY f →     ∀ (U : X.O
+pens) (hU : Dense ↑U) (hU' : U ≤ f.source),       AlgebraicGeometry.Scheme.Parti
+alIso.IsOver sX sY (f.restrictSource U hU hU')
+参数：U : X.Opens；hU : Dense ↑U；hU' : U ≤ f.source；f.restrictSource U hU hU'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoImage_hom_ι_assoc`：∀ {X Y : AlgebraicGeo
+metry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f] (U : X.Op
+ens)   {Z : AlgebraicGeometry.Scheme} (…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.isoOfLE_inv_ι_assoc`：∀ {X : AlgebraicGeom
+etry.Scheme} {U V : X.Opens} (hUV : U ≤ V) {Z : AlgebraicGeometry.Scheme} (h : X
+ ⟶ Z),   CategoryTheory.CategoryStruct.c…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma IsOver.restrictSource {f : X.PartialIso Y} (hf : f.IsOver sX sY) (U : Opens X)
-    (hU : Dense (U : Set X)) (hU' : U <= f.source) :
+    (hU : Dense (U : Set X)) (hU' : U ≤ f.source) :
     (f.restrictSource U hU hU').IsOver sX sY := by
   simp [IsOver, hf]
 
 /-- Restrict the target of a partial isomorphism to a smaller dense open. -/
 @[simps! source target iso]
-/--
-Definition of `restrictTarget` / `restrictTarget` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.restrictTarget** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.Scheme.PartialIso`。
+形式化陈述：restrictTarget (f : X.PartialIso Y) (U : Opens Y) (hU : Dense (U : Set Y))
+ (hU' : U <= f.target) : X.PartialIso Y
+参数：f : X.PartialIso Y；U : Opens Y；hU : Dense (U : Set Y)；hU' : U <= f.target。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictTarget
-  signature: (f : X.PartialIso Y) (U : Opens Y) (hU : Dense (U : Set Y))
-  body: (f.symm.restrictSource U hU hU').symm
-
-中文:
-定义 restrictTarget
-  签名: (f : X.PartialIso Y) (U : Opens Y) (hU : 稠密 (U : 集合 Y))
-  定义体: (f.symm.restrictSource U hU hU').symm
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, f.symm.restrictSource, pullback_snd, restrictSource
+--- 原说明 ---
+Restrict the target of a partial isomorphism to a smaller dense open.
 -/
 noncomputable def restrictTarget (f : X.PartialIso Y) (U : Opens Y) (hU : Dense (U : Set Y))
-    (hU' : U <= f.target) : X.PartialIso Y :=
+    (hU' : U ≤ f.target) : X.PartialIso Y :=
   (f.symm.restrictSource U hU hU').symm
-
-/--
-lemma `IsOver.restrictTarget` / 引理 `IsOver.restrictTarget`
-
-English:
-lemma IsOver.restrictTarget
-  statement: {f : X.PartialIso Y} (hf : f.IsOver sX sY) (U : Opens Y)
-  proof: (hf.symm.restrictSource U hU hU').symm
-
-中文:
-引理 是Over.restrictTarget
-  结论: {f : X.PartialIso Y} (hf : f.是Over sX sY) (U : Opens Y)
-  证明: (hf.symm.restrictSource U hU hU').symm
-
-Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.restrict, hf.symm.restrictSource, restrict, restrictSource
+/-
+**AlgebraicGeometry.Scheme.PartialIso.IsOver.restrictTarget** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.Scheme.PartialIso.IsOver`。
+形式化陈述：∀ {X Y S : AlgebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.Part
+ialIso Y},   AlgebraicGeometry.Scheme.PartialIso.IsOver sX sY f →     ∀ (U : Y.O
+pens) (hU : Dense ↑U) (hU' : U ≤ f.target),       AlgebraicGeometry.Scheme.Parti
+alIso.IsOver sX sY (f.restrictTarget U hU hU')
+参数：U : Y.Opens；hU : Dense ↑U；hU' : U ≤ f.target；f.restrictTarget U hU hU'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.IsOver.symm`：∀ {X Y S : AlgebraicGeo
+metry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.PartialIso Y},   AlgebraicGeometr
+y.Scheme.PartialIso.IsOver sX sY f → …
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.IsOver.restrictSource`：∀ {X Y S : Al
+gebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.PartialIso Y},   Algebr
+aicGeometry.Scheme.PartialIso.IsOver sX sY f → …
 -/
 lemma IsOver.restrictTarget {f : X.PartialIso Y} (hf : f.IsOver sX sY) (U : Opens Y)
-    (hU : Dense (U : Set Y)) (hU' : U <= f.target) :
+    (hU : Dense (U : Set Y)) (hU' : U ≤ f.target) :
     (f.restrictTarget U hU hU').IsOver sX sY :=
   (hf.symm.restrictSource U hU hU').symm
 
 /-- Compose two partial isomorphisms, restricting to the intersection of the intermediate opens. -/
 @[trans, simps! source target iso]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.trans** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.Scheme.PartialIso`。
+形式化陈述：trans (f : X.PartialIso Y) (g : Y.PartialIso Z) : X.PartialIso Z
+参数：f : X.PartialIso Y；g : Y.PartialIso Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (f : X.PartialIso Y) (g : Y.PartialIso Z)
-  body: have := f.dense_target.inter_of_isOpen_right g.dense_source g.source.2
-  (f.restrictTarget _ this inf_le_left).trans' (g.restrictSource _ this inf_le_right) rfl
-
-中文:
-定义 trans
-  签名: (f : X.PartialIso Y) (g : Y.PartialIso Z)
-  定义体: have := f.dense_target.inter_of_isOpen_right g.dense_source g.source.2
-  (f.restrictTarget _ this inf_le_left).trans' (g.restrictSource _ this inf_le_right) rfl
-
-Depends on / 依赖: Scheme, Scheme.Hom.resLE, dense_source, dense_target, f.dense_target.inter_of_isOpen_right, f.restrictTarget, g.dense_source, g.restrictSource, g.source, inf_le_left, inf_le_right, infer_instance, inter_of_isOpen_right, restrictSource, restrictTarget, source
+--- 原说明 ---
+Compose two partial isomorphisms, restricting to the intersection of the interme
+diate opens.
 -/
 noncomputable def trans (f : X.PartialIso Y) (g : Y.PartialIso Z) : X.PartialIso Z :=
   have := f.dense_target.inter_of_isOpen_right g.dense_source g.source.2
   (f.restrictTarget _ this inf_le_left).trans' (g.restrictSource _ this inf_le_right) rfl
-
-/--
-lemma `IsOver.trans` / 引理 `IsOver.trans`
-
-English:
-lemma IsOver.trans
-  statement: {f : X.PartialIso Y} {g : Y.PartialIso Z} (hf : f.IsOver sX sY)
-  proof: (hf.restrictTarget _ _ _).trans' (hg.restrictSource _ _ _)
-
-中文:
-引理 是Over.trans
-  结论: {f : X.PartialIso Y} {g : Y.PartialIso Z} (hf : f.是Over sX sY)
-  证明: (hf.restrictTarget _ _ _).trans' (hg.restrictSource _ _ _)
-
-Depends on / 依赖: hf.restrictTarget, hg.restrictSource, restrictSource, restrictTarget
+/-
+**AlgebraicGeometry.Scheme.PartialIso.IsOver.trans** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicGeometry.Scheme.PartialIso.IsOver`。
+形式化陈述：∀ {X Y Z S : AlgebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶
+ S} {f : X.PartialIso Y} {g : Y.PartialIso Z},   AlgebraicGeometry.Scheme.Partia
+lIso.IsOver sX sY f →     AlgebraicGeometry.Scheme.PartialIso.IsOver sY sZ g → A
+lgebraicGeometry.Scheme.PartialIso.IsOver sX sZ (f.trans g)
+参数：f.trans g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.IsOver.trans'`：∀ {X Y Z S : Algebrai
+cGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S} {f : X.PartialIso Y} {g
+ : Y.PartialIso Z}   {e : f.target = g.…
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.IsOver.restrictTarget`：∀ {X Y S : Al
+gebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.PartialIso Y},   Algebr
+aicGeometry.Scheme.PartialIso.IsOver sX sY f → …
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.IsOver.restrictSource`：∀ {X Y S : Al
+gebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.PartialIso Y},   Algebr
+aicGeometry.Scheme.PartialIso.IsOver sX sY f → …
 -/
 lemma IsOver.trans {f : X.PartialIso Y} {g : Y.PartialIso Z} (hf : f.IsOver sX sY)
     (hg : g.IsOver sY sZ) : (f.trans g).IsOver sX sZ :=
@@ -463,69 +416,51 @@ lemma IsOver.trans {f : X.PartialIso Y} {g : Y.PartialIso Z} (hf : f.IsOver sX s
 
 /-- The underlying partial map of a partial isomorphism. -/
 @[simps]
-/--
-Definition of `toPartialMap` / `toPartialMap` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.toPartialMap** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.Scheme.PartialIso`。
+形式化陈述：toPartialMap (f : X.PartialIso Y) : X.PartialMap Y where domain
+参数：f : X.PartialIso Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.dense_source`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (self : X.PartialIso Y), Dense ↑self.source
 
-English:
-definition toPartialMap
-  signature: (f : X.PartialIso Y)
-  body: f.source
-  dense_domain := f.dense_source
-  hom := f.iso.hom ≫ f.target.ι
-
-中文:
-定义 toPartialMap
-  签名: (f : X.PartialIso Y)
-  定义体: f.source
-  dense_domain := f.dense_source
-  hom := f.iso.hom ≫ f.target.ι
-
-Depends on / 依赖: f.source, source
+--- 原说明 ---
+The underlying partial map of a partial isomorphism.
 -/
 def toPartialMap (f : X.PartialIso Y) : X.PartialMap Y where
   domain := f.source
   dense_domain := f.dense_source
   hom := f.iso.hom ≫ f.target.ι
 
-/--
-Definition of `toRationalMap` / `toRationalMap` 的定义
+/-- The underlying rational map of a partial isomorphism. -/
+/-
+**AlgebraicGeometry.Scheme.PartialIso.toRationalMap** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`AlgebraicGeometry.Scheme.PartialIso`。
+形式化陈述：toRationalMap (f : X.PartialIso Y) : X ⤏ Y
+参数：f : X.PartialIso Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toRationalMap
-  signature: (f : X.PartialIso Y)
-  body: f.toPartialMap.toRationalMap
-
-中文:
-缩写 toRationalMap
-  签名: (f : X.PartialIso Y)
-  定义体: f.toPartialMap.toRationalMap
-
-Depends on / 依赖: f.toPartialMap.toRationalMap, toPartialMap, toRationalMap
+--- 原说明 ---
+The underlying rational map of a partial isomorphism.
 -/
 abbrev toRationalMap (f : X.PartialIso Y) : X ⤏ Y := f.toPartialMap.toRationalMap
 
 /-- A scheme isomorphism viewed as a partial isomorphism defined on all of `X` and `Y`. -/
 @[simps]
-/--
-Definition of `ofIso` / `ofIso` 的定义
+/-
+**AlgebraicGeometry.Scheme.PartialIso.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.Scheme.PartialIso`。
+形式化陈述：ofIso (f : X ≅ Y) : X.PartialIso Y where source
+参数：f : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIso
-  signature: (f : X ≅ Y)
-  body: ⊤
-  dense_source := dense_univ
-  target := ⊤
-  dense_target := dense_univ
-  iso := X.topIso ≪≫ f ≪≫ Y.topIso.symm
-
-中文:
-定义 ofIso
-  签名: (f : X ≅ Y)
-  定义体: ⊤
-  dense_source := dense_univ
-  target := ⊤
-  dense_target := dense_univ
-  iso := X.topIso ≪≫ f ≪≫ Y.topIso.symm
+--- 原说明 ---
+A scheme isomorphism viewed as a partial isomorphism defined on all of `X` and `
+Y`.
 -/
 noncomputable def ofIso (f : X ≅ Y) : X.PartialIso Y where
   source := ⊤
@@ -538,224 +473,167 @@ end PartialIso
 
 /-- `X` and `Y` are birational if there exists a partial isomorphism between them. -/
 @[stacks 0A20 "(1)"]
-/--
-Definition of `Birational` / `Birational` 的定义
+/-
+**AlgebraicGeometry.Scheme.Birational** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeomet
+ry.Scheme`。
+形式化陈述：Birational (X Y : Scheme.{u}) : Prop
+参数：X Y : Scheme.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Birational
-  signature: (X Y : Scheme.{u})
-  body: Nonempty (PartialIso X Y)
-
-中文:
-定义 Birational
-  签名: (X Y : 概形.{u})
-  定义体: Nonempty (PartialIso X Y)
-
-Depends on / 依赖: Nonempty, PartialIso
+--- 原说明 ---
+`X` and `Y` are birational if there exists a partial isomorphism between them.
 -/
 def Birational (X Y : Scheme.{u}) : Prop := Nonempty (PartialIso X Y)
 
-/--
-Definition of `Birational.partialIso` / `Birational.partialIso` 的定义
+/-- Choose a partial isomorphism witnessing that `X` and `Y` are birational. -/
+/-
+**AlgebraicGeometry.Scheme.Birational.partialIso** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry.Scheme.Birational`。
+形式化陈述：{X Y : AlgebraicGeometry.Scheme} → X.Birational Y → X.PartialIso Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Birational.partialIso
-  signature: {X Y : Scheme.{u}} (h : Birational X Y)
-  body: Classical.choice h
-
-@[refl]
-
-中文:
-定义 Birational.partialIso
-  签名: {X Y : 概形.{u}} (h : Birational X Y)
-  定义体: Classical.choice h
-
-@[refl]
-
-Depends on / 依赖: Classical, Classical.choice, choice
+--- 原说明 ---
+Choose a partial isomorphism witnessing that `X` and `Y` are birational.
 -/
 noncomputable def Birational.partialIso {X Y : Scheme.{u}} (h : Birational X Y) :
     PartialIso X Y :=
   Classical.choice h
 
 @[refl]
-/--
-lemma `Birational.refl` / 引理 `Birational.refl`
-
-English:
-lemma Birational.refl
-  given: (X : Scheme.{u})
-  statement: Birational X X
-  proof: ⟨.refl X⟩
-
-@[symm]
-
-中文:
-引理 Birational.refl
-  条件: (X : 概形.{u})
-  结论: Birational X X
-  证明: ⟨.refl X⟩
-
-@[symm]
+/-
+**AlgebraicGeometry.Scheme.Birational.refl** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry.Scheme.Birational`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme), X.Birational X
+参数：X : AlgebraicGeometry.Scheme。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Birational.refl (X : Scheme.{u}) : Birational X X :=
   ⟨.refl X⟩
 
 @[symm]
-/--
-lemma `Birational.symm` / 引理 `Birational.symm`
-
-English:
-lemma Birational.symm
-  given: {X Y : Scheme.{u}} (h : Birational X Y)
-  statement: Birational Y X
-  proof: ⟨h.partialIso.symm⟩
-
-@[trans]
-
-中文:
-引理 Birational.symm
-  条件: {X Y : 概形.{u}} (h : Birational X Y)
-  结论: Birational Y X
-  证明: ⟨h.partialIso.symm⟩
-
-@[trans]
-
-Depends on / 依赖: h.partialIso.symm, partialIso
+/-
+**AlgebraicGeometry.Scheme.Birational.symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry.Scheme.Birational`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme}, X.Birational Y → Y.Birational X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Birational.symm {X Y : Scheme.{u}} (h : Birational X Y) : Birational Y X :=
   ⟨h.partialIso.symm⟩
 
 @[trans]
-/--
-lemma `Birational.trans` / 引理 `Birational.trans`
-
-English:
-lemma Birational.trans
-  given: {X Y Z : Scheme.{u}} (h₁ : Birational X Y) (h₂ : Birational Y Z)
-  proof: ⟨h₁.partialIso.trans h₂.partialIso⟩
-
-中文:
-引理 Birational.trans
-  条件: {X Y Z : 概形.{u}} (h₁ : Birational X Y) (h₂ : Birational Y Z)
-  证明: ⟨h₁.partialIso.trans h₂.partialIso⟩
-
-Depends on / 依赖: partialIso, partialIso.trans
+/-
+**AlgebraicGeometry.Scheme.Birational.trans** 是 Mathlib 中的一个定理，位于命名空间 `Algebraic
+Geometry.Scheme.Birational`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme}, X.Birational Y → Y.Birational Z → X.
+Birational Z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Birational.trans {X Y Z : Scheme.{u}} (h₁ : Birational X Y) (h₂ : Birational Y Z) :
     Birational X Z :=
   ⟨h₁.partialIso.trans h₂.partialIso⟩
 
-/--
-Definition of `BirationalOver` / `BirationalOver` 的定义
+/-- `X` and `Y` are birational over `S` if there exists a partial isomorphism between them
+that is compatible with the structure maps to `S`. -/
+/-
+**AlgebraicGeometry.Scheme.BirationalOver** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.Scheme`。
+形式化陈述：BirationalOver {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S) : Prop
+参数：sX : X ⟶ S；sY : Y ⟶ S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BirationalOver
-  signature: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  body: exists f : PartialIso X Y, f.IsOver sX sY
-
-中文:
-定义 BirationalOver
-  签名: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  定义体: exists f : PartialIso X Y, f.IsOver sX sY
-
-Depends on / 依赖: IsOver, PartialIso, f.IsOver
+--- 原说明 ---
+`X` and `Y` are birational over `S` if there exists a partial isomorphism betwee
+n them
+that is compatible with the structure maps to `S`.
 -/
 def BirationalOver {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S) : Prop :=
-  exists f : PartialIso X Y, f.IsOver sX sY
+  ∃ f : PartialIso X Y, f.IsOver sX sY
 
-/--
-Definition of `BirationalOver.partialIso` / `BirationalOver.partialIso` 的定义
+/-- Choose a partial isomorphism witnessing that `X` and `Y` are birational over `S`. -/
+/-
+**AlgebraicGeometry.Scheme.BirationalOver.partialIso** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.Scheme.BirationalOver`。
+形式化陈述：{S X Y : AlgebraicGeometry.Scheme} →   (sX : X ⟶ S) → (sY : Y ⟶ S) → Algeb
+raicGeometry.Scheme.BirationalOver sX sY → X.PartialIso Y
+参数：sX : X ⟶ S；sY : Y ⟶ S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BirationalOver.partialIso
-  signature: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  body: h.choose
-
-中文:
-定义 BirationalOver.partialIso
-  签名: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  定义体: h.choose
-
-Depends on / 依赖: h.choose
+--- 原说明 ---
+Choose a partial isomorphism witnessing that `X` and `Y` are birational over `S`
+.
 -/
 noncomputable def BirationalOver.partialIso {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
     (h : BirationalOver sX sY) :=
   h.choose
-
-/--
-lemma `BirationalOver.partialIso_isOver` / 引理 `BirationalOver.partialIso_isOver`
-
-English:
-lemma BirationalOver.partialIso_isOver
-  statement: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  proof: h.choose_spec
-
-中文:
-引理 BirationalOver.partialIso_isOver
-  结论: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  证明: h.choose_spec
-
-Depends on / 依赖: choose_spec, h.choose_spec
+/-
+**AlgebraicGeometry.Scheme.BirationalOver.partialIso_isOver** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.Scheme.BirationalOver`。
+形式化陈述：∀ {S X Y : AlgebraicGeometry.Scheme} (sX : X ⟶ S) (sY : Y ⟶ S) (h : Algebr
+aicGeometry.Scheme.BirationalOver sX sY),   AlgebraicGeometry.Scheme.PartialIso.
+IsOver sX sY (AlgebraicGeometry.Scheme.BirationalOver.partialIso sX sY h)
+参数：sX : X ⟶ S；sY : Y ⟶ S；h : AlgebraicGeometry.Scheme.BirationalOver sX sY；Algeb
+raicGeometry.Scheme.BirationalOver.partialIso sX sY h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 lemma BirationalOver.partialIso_isOver {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
     (h : BirationalOver sX sY) : h.partialIso.IsOver sX sY :=
   h.choose_spec
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `BirationalOver.refl` / 引理 `BirationalOver.refl`
-
-English:
-lemma BirationalOver.refl
-  given: {S X : Scheme.{u}} (sX : X ⟶ S)
-  statement: BirationalOver sX sX
-  proof: ⟨.refl X, by simp [PartialIso.IsOver]⟩
-
-中文:
-引理 BirationalOver.refl
-  条件: {S X : 概形.{u}} (sX : X ⟶ S)
-  结论: BirationalOver sX sX
-  证明: ⟨.refl X, by simp [PartialIso.IsOver]⟩
-
-Depends on / 依赖: IsOver, PartialIso, PartialIso.IsOver
+/-
+**AlgebraicGeometry.Scheme.BirationalOver.refl** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.Scheme.BirationalOver`。
+形式化陈述：∀ {S X : AlgebraicGeometry.Scheme} (sX : X ⟶ S), AlgebraicGeometry.Scheme.
+BirationalOver sX sX
+参数：sX : X ⟶ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma BirationalOver.refl {S X : Scheme.{u}} (sX : X ⟶ S) : BirationalOver sX sX :=
   ⟨.refl X, by simp [PartialIso.IsOver]⟩
-
-/--
-lemma `BirationalOver.symm` / 引理 `BirationalOver.symm`
-
-English:
-lemma BirationalOver.symm
-  statement: {S X Y : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S}
-  proof: ⟨h.partialIso.symm, h.partialIso_isOver.symm⟩
-
-中文:
-引理 BirationalOver.symm
-  结论: {S X Y : 概形.{u}} {sX : X ⟶ S} {sY : Y ⟶ S}
-  证明: ⟨h.partialIso.symm, h.partialIso_isOver.symm⟩
-
-Depends on / 依赖: h.partialIso.symm, h.partialIso_isOver.symm, partialIso, partialIso_isOver
+/-
+**AlgebraicGeometry.Scheme.BirationalOver.symm** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.Scheme.BirationalOver`。
+形式化陈述：∀ {S X Y : AlgebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S},   Algebrai
+cGeometry.Scheme.BirationalOver sX sY → AlgebraicGeometry.Scheme.BirationalOver 
+sY sX
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.IsOver.symm`：∀ {X Y S : AlgebraicGeo
+metry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {f : X.PartialIso Y},   AlgebraicGeometr
+y.Scheme.PartialIso.IsOver sX sY f → …
+· 使用定理 `AlgebraicGeometry.Scheme.BirationalOver.partialIso_isOver`：∀ {S X Y : Al
+gebraicGeometry.Scheme} (sX : X ⟶ S) (sY : Y ⟶ S) (h : AlgebraicGeometry.Scheme.
+BirationalOver sX sY),   AlgebraicGeometry.Sche…
 -/
 lemma BirationalOver.symm {S X Y : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S}
     (h : BirationalOver sX sY) : BirationalOver sY sX :=
   ⟨h.partialIso.symm, h.partialIso_isOver.symm⟩
-
-/--
-lemma `BirationalOver.trans` / 引理 `BirationalOver.trans`
-
-English:
-lemma BirationalOver.trans
-  statement: {S X Y Z : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S}
-  proof: ⟨h₁.partialIso.trans h₂.partialIso, h₁.partialIso_isOver.trans h₂.partialIso_isOver⟩
-
-中文:
-引理 BirationalOver.trans
-  结论: {S X Y Z : 概形.{u}} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S}
-  证明: ⟨h₁.partialIso.trans h₂.partialIso, h₁.partialIso_isOver.trans h₂.partialIso_isOver⟩
-
-Depends on / 依赖: partialIso, partialIso.trans, partialIso_isOver, partialIso_isOver.trans
+/-
+**AlgebraicGeometry.Scheme.BirationalOver.trans** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.Scheme.BirationalOver`。
+形式化陈述：∀ {S X Y Z : AlgebraicGeometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶
+ S},   AlgebraicGeometry.Scheme.BirationalOver sX sY →     AlgebraicGeometry.Sch
+eme.BirationalOver sY sZ → AlgebraicGeometry.Scheme.BirationalOver sX sZ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.PartialIso.IsOver.trans`：∀ {X Y Z S : Algebraic
+Geometry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S} {f : X.PartialIso Y} {g 
+: Y.PartialIso Z},   AlgebraicGeometry…
+· 使用定理 `AlgebraicGeometry.Scheme.BirationalOver.partialIso_isOver`：∀ {S X Y : Al
+gebraicGeometry.Scheme} (sX : X ⟶ S) (sY : Y ⟶ S) (h : AlgebraicGeometry.Scheme.
+BirationalOver sX sY),   AlgebraicGeometry.Sche…
 -/
 lemma BirationalOver.trans {S X Y Z : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S}
     (h₁ : BirationalOver sX sY) (h₂ : BirationalOver sY sZ) :
@@ -765,45 +643,46 @@ lemma BirationalOver.trans {S X Y Z : Scheme.{u}} {sX : X ⟶ S} {sY : Y ⟶ S} 
 /-- `X` is rational over `S` (or `S`-rational) if it is birational over `S` to some
 affine space `𝔸(n; S)`. Note that we do not require `n` to be finite here. -/
 @[mk_iff]
-/--
-Definition of `IsRationalOver` / `IsRationalOver` 的定义
+/-
+**AlgebraicGeometry.Scheme.IsRationalOver** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebraic
+Geometry.Scheme`。
+形式化陈述：{S X : AlgebraicGeometry.Scheme} → (X ⟶ S) → Prop
+参数：X ⟶ S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRationalOver
-  parameters: {S X : Scheme.{u}} (sX : X ⟶ S)
-  axioms and operations (1):
-    - exists_birationalOver_affineSpace((sX)) : exists (n : Type u), BirationalOver sX (𝔸(n; S) ↘ S)
-
-中文:
-类 是RationalOver
-  参数: {S X : 概形.{u}} (sX : X ⟶ S)
-  公理与运算 (1 个):
-    - exists_birationalOver_affineSpace((sX)) : 存在 (n : 类型u), BirationalOver sX (𝔸(n; S) ↘ S)
+--- 原说明 ---
+`X` is rational over `S` (or `S`-rational) if it is birational over `S` to some
+affine space `𝔸(n; S)`. Note that we do not require `n` to be finite here.
 -/
 class IsRationalOver {S X : Scheme.{u}} (sX : X ⟶ S) : Prop where
-  exists_birationalOver_affineSpace (sX) : exists (n : Type u), BirationalOver sX (𝔸(n; S) ↘ S)
-
+  exists_birationalOver_affineSpace (sX) : ∃ (n : Type u), BirationalOver sX (𝔸(n; S) ↘ S)
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : Scheme.{u}) (n : Type u) : IsRationalOver (𝔸(n; S) ↘ S) where
   exists_birationalOver_affineSpace := ⟨n, .refl _⟩
 
-/--
-lemma `BirationalOver.isRationalOver` / 引理 `BirationalOver.isRationalOver`
+/-- If a scheme `X` is `S`-birational to an `S`-rational scheme `Y`, then `X` is `S`-rational. -/
+/-
+**AlgebraicGeometry.Scheme.BirationalOver.isRationalOver** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme.BirationalOver`。
+形式化陈述：∀ {S X Y : AlgebraicGeometry.Scheme} (sX : X ⟶ S) (sY : Y ⟶ S) [AlgebraicG
+eometry.Scheme.IsRationalOver sY],   AlgebraicGeometry.Scheme.BirationalOver sX 
+sY → AlgebraicGeometry.Scheme.IsRationalOver sX
+参数：sX : X ⟶ S；sY : Y ⟶ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.IsRationalOver.exists_birationalOver_affineSpac
+e`：∀ {S X : AlgebraicGeometry.Scheme} (sX : X ⟶ S) [self : AlgebraicGeometry.Sch
+eme.IsRationalOver sX],   ∃ n, AlgebraicGeometry.Scheme.Biratio…
+· 使用定理 `AlgebraicGeometry.Scheme.BirationalOver.trans`：∀ {S X Y Z : AlgebraicGeo
+metry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S},   AlgebraicGeometry.Scheme
+.BirationalOver sX sY →     Algebra…
 
-English:
-lemma BirationalOver.isRationalOver
-  statement: {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  proof: by
-  obtain ⟨n, hn⟩ := IsRationalOver.exists_birationalOver_affineSpace sY
-  exact ⟨n, h.trans hn⟩
-
-中文:
-引理 BirationalOver.isRationalOver
-  结论: {S X Y : 概形.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
-  证明: by
-  obtain ⟨n, hn⟩ := IsRationalOver.exists_birationalOver_affineSpace sY
-  exact ⟨n, h.trans hn⟩
-
-Depends on / 依赖: IsRationalOver, IsRationalOver.exists_birationalOver_affineSpace, exists_birationalOver_affineSpace, h.trans
+--- 原说明 ---
+If a scheme `X` is `S`-birational to an `S`-rational scheme `Y`, then `X` is `S`
+-rational.
 -/
 lemma BirationalOver.isRationalOver {S X Y : Scheme.{u}} (sX : X ⟶ S) (sY : Y ⟶ S)
     [IsRationalOver sY] (h : BirationalOver sX sY) : IsRationalOver sX := by
@@ -816,26 +695,17 @@ variable {X S : Scheme.{u}} (U : Opens X) (sX : X ⟶ S)
 
 /-- A dense open set `U : Opens X` induces a partial isomorphism between `U` and `X`. -/
 @[simps]
-/--
-Definition of `Opens.partialIsoOfDense` / `Opens.partialIsoOfDense` 的定义
+/-
+**AlgebraicGeometry.Scheme.Opens.partialIsoOfDense** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.Scheme.Opens`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} → (U : X.Opens) → Dense ↑U → (↑U).PartialIs
+o X
+参数：U : X.Opens；↑U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Opens.partialIsoOfDense
-  signature: (hU : Dense (U : Set X))
-  body: ⊤
-  dense_source := dense_univ
-  target := U
-  dense_target := hU
-  iso := U.toScheme.topIso
-
-中文:
-定义 Opens.partialIsoOfDense
-  签名: (hU : 稠密 (U : 集合 X))
-  定义体: ⊤
-  dense_source := dense_univ
-  target := U
-  dense_target := hU
-  iso := U.toScheme.topIso
+--- 原说明 ---
+A dense open set `U : Opens X` induces a partial isomorphism between `U` and `X`
+.
 -/
 def Opens.partialIsoOfDense (hU : Dense (U : Set X)) : PartialIso U X where
   source := ⊤
@@ -844,65 +714,62 @@ def Opens.partialIsoOfDense (hU : Dense (U : Set X)) : PartialIso U X where
   dense_target := hU
   iso := U.toScheme.topIso
 
-/--
-lemma `Opens.birational_of_dense` / 引理 `Opens.birational_of_dense`
+/-- A dense open set `U : Opens X` is birational to `X`. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.birational_of_dense** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.Scheme.Opens`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (U : X.Opens), Dense ↑U → (↑U).Birational
+ X
+参数：U : X.Opens；↑U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Opens.birational_of_dense
-  given: (hU : Dense (U : Set X))
-  statement: Birational U X
-  proof: ⟨U.partialIsoOfDense hU⟩
-
-中文:
-引理 Opens.birational_of_dense
-  条件: (hU : 稠密 (U : 集合 X))
-  结论: Birational U X
-  证明: ⟨U.partialIsoOfDense hU⟩
-
-Depends on / 依赖: U.partialIsoOfDense, partialIsoOfDense
+--- 原说明 ---
+A dense open set `U : Opens X` is birational to `X`.
 -/
 lemma Opens.birational_of_dense (hU : Dense (U : Set X)) : Birational U X :=
   ⟨U.partialIsoOfDense hU⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `Opens.birationalOver_of_dense` / 引理 `Opens.birationalOver_of_dense`
+/-- A dense open set `U : Opens X` of a scheme `X` over `S` is `S`-birational to `X`. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.birationalOver_of_dense** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme.Opens`。
+形式化陈述：∀ {X S : AlgebraicGeometry.Scheme} (U : X.Opens) (sX : X ⟶ S),   Dense ↑U 
+→ AlgebraicGeometry.Scheme.BirationalOver (CategoryTheory.CategoryStruct.comp U.
+ι sX) sX
+参数：U : X.Opens；sX : X ⟶ S；CategoryTheory.CategoryStruct.comp U.ι sX。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Opens.birationalOver_of_dense
-  given: (hU : Dense (U : Set X))
-  statement: BirationalOver (U.ι ≫ sX) sX
-  proof: ⟨U.partialIsoOfDense hU, by simp [PartialIso.IsOver]⟩
-
-中文:
-引理 Opens.birationalOver_of_dense
-  条件: (hU : 稠密 (U : 集合 X))
-  结论: BirationalOver (U.ι ≫ sX) sX
-  证明: ⟨U.partialIsoOfDense hU, by simp [PartialIso.IsOver]⟩
-
-Depends on / 依赖: IsOver, PartialIso, PartialIso.IsOver, U.partialIsoOfDense, partialIsoOfDense
+--- 原说明 ---
+A dense open set `U : Opens X` of a scheme `X` over `S` is `S`-birational to `X`
+.
 -/
 lemma Opens.birationalOver_of_dense (hU : Dense (U : Set X)) : BirationalOver (U.ι ≫ sX) sX :=
   ⟨U.partialIsoOfDense hU, by simp [PartialIso.IsOver]⟩
 
-/--
-lemma `Opens.isRationalOver_of_dense` / 引理 `Opens.isRationalOver_of_dense`
+/-- A dense open set `U : Opens X` of a `S`-rational scheme `X` is `S`-rational. -/
+/-
+**AlgebraicGeometry.Scheme.Opens.isRationalOver_of_dense** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme.Opens`。
+形式化陈述：∀ {X S : AlgebraicGeometry.Scheme} (U : X.Opens) (sX : X ⟶ S),   Dense ↑U 
+→     ∀ [AlgebraicGeometry.Scheme.IsRationalOver sX],       AlgebraicGeometry.Sc
+heme.IsRationalOver (CategoryTheory.CategoryStruct.comp U.ι sX)
+参数：U : X.Opens；sX : X ⟶ S；CategoryTheory.CategoryStruct.comp U.ι sX。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.IsRationalOver.exists_birationalOver_affineSpac
+e`：∀ {S X : AlgebraicGeometry.Scheme} (sX : X ⟶ S) [self : AlgebraicGeometry.Sch
+eme.IsRationalOver sX],   ∃ n, AlgebraicGeometry.Scheme.Biratio…
+· 使用定理 `AlgebraicGeometry.Scheme.BirationalOver.trans`：∀ {S X Y Z : AlgebraicGeo
+metry.Scheme} {sX : X ⟶ S} {sY : Y ⟶ S} {sZ : Z ⟶ S},   AlgebraicGeometry.Scheme
+.BirationalOver sX sY →     Algebra…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.birationalOver_of_dense`：∀ {X S : Algebra
+icGeometry.Scheme} (U : X.Opens) (sX : X ⟶ S),   Dense ↑U → AlgebraicGeometry.Sc
+heme.BirationalOver (CategoryTheory.Category…
 
-English:
-lemma Opens.isRationalOver_of_dense
-  given: (hU : Dense (U : Set X)) [IsRationalOver sX]
-  proof: by
-  obtain ⟨n, hn⟩ := IsRationalOver.exists_birationalOver_affineSpace sX
-  exact ⟨n, (U.birationalOver_of_dense sX hU).trans hn⟩
-
-中文:
-引理 Opens.isRationalOver_of_dense
-  条件: (hU : 稠密 (U : 集合 X)) [是RationalOver sX]
-  证明: by
-  obtain ⟨n, hn⟩ := IsRationalOver.exists_birationalOver_affineSpace sX
-  exact ⟨n, (U.birationalOver_of_dense sX hU).trans hn⟩
-
-Depends on / 依赖: IsRationalOver, IsRationalOver.exists_birationalOver_affineSpace, U.birationalOver_of_dense, birationalOver_of_dense, exists_birationalOver_affineSpace
+--- 原说明 ---
+A dense open set `U : Opens X` of a `S`-rational scheme `X` is `S`-rational.
 -/
 lemma Opens.isRationalOver_of_dense (hU : Dense (U : Set X)) [IsRationalOver sX] :
     IsRationalOver (U.ι ≫ sX) := by
@@ -917,60 +784,70 @@ variable {X U S : Scheme.{u}}
 
 /-- A dominant open immersion `f : U ⟶ X` induces a partial isomorphism between `U` and `X`. -/
 @[simps! source target iso]
-/--
-Definition of `Hom.partialIso` / `Hom.partialIso` 的定义
+/-
+**AlgebraicGeometry.Scheme.Hom.partialIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.Scheme.Hom`。
+形式化陈述：{X U : AlgebraicGeometry.Scheme} →   (f : U ⟶ X) → [AlgebraicGeometry.IsOp
+enImmersion f] → [AlgebraicGeometry.IsDominant f] → U.PartialIso X
+参数：f : U ⟶ X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.denseRange`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y) [AlgebraicGeometry.IsDominant f], DenseRange ⇑f
 
-English:
-definition Hom.partialIso
-  signature: (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f]
-  body: (PartialIso.ofIso f.isoOpensRange).trans' (f.opensRange.partialIsoOfDense f.denseRange) rfl
-
-中文:
-定义 态射.partialIso
-  签名: (f : U ⟶ X) [是开浸入 f] [是Dominant f]
-  定义体: (PartialIso.ofIso f.isoOpensRange).trans' (f.opensRange.partialIsoOfDense f.denseRange) rfl
-
-Depends on / 依赖: PartialIso, PartialIso.ofIso, denseRange, f.denseRange, f.isoOpensRange, f.opensRange.partialIsoOfDense, isoOpensRange, opensRange, partialIsoOfDense
+--- 原说明 ---
+A dominant open immersion `f : U ⟶ X` induces a partial isomorphism between `U` 
+and `X`.
 -/
 noncomputable def Hom.partialIso (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f] : U.PartialIso X :=
   (PartialIso.ofIso f.isoOpensRange).trans' (f.opensRange.partialIsoOfDense f.denseRange) rfl
-
-/--
-lemma `Hom.birational` / 引理 `Hom.birational`
-
-English:
-lemma Hom.birational
-  given: (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f]
-  statement: Birational U X
-  proof: ⟨f.partialIso⟩
-
-中文:
-引理 态射.birational
-  条件: (f : U ⟶ X) [是开浸入 f] [是Dominant f]
-  结论: Birational U X
-  证明: ⟨f.partialIso⟩
-
-Depends on / 依赖: f.partialIso, partialIso
+/-
+**AlgebraicGeometry.Scheme.Hom.birational** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.Scheme.Hom`。
+形式化陈述：∀ {X U : AlgebraicGeometry.Scheme} (f : U ⟶ X) [AlgebraicGeometry.IsOpenIm
+mersion f] [AlgebraicGeometry.IsDominant f],   U.Birational X
+参数：f : U ⟶ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.birational (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f] : Birational U X :=
   ⟨f.partialIso⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `Hom.birationalOver` / 引理 `Hom.birationalOver`
-
-English:
-lemma Hom.birationalOver
-  statement: (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f] (sX : X ⟶ S) (sU : U ⟶ S)
-  proof: ⟨f.partialIso, by simp [PartialIso.IsOver, hf]⟩
-
-中文:
-引理 态射.birationalOver
-  结论: (f : U ⟶ X) [是开浸入 f] [是Dominant f] (sX : X ⟶ S) (sU : U ⟶ S)
-  证明: ⟨f.partialIso, by simp [PartialIso.IsOver, hf]⟩
-
-Depends on / 依赖: IsOver, PartialIso, PartialIso.IsOver, f.partialIso, partialIso
+/-
+**AlgebraicGeometry.Scheme.Hom.birationalOver** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.Scheme.Hom`。
+形式化陈述：∀ {X U S : AlgebraicGeometry.Scheme} (f : U ⟶ X) [AlgebraicGeometry.IsOpen
+Immersion f] [AlgebraicGeometry.IsDominant f]   (sX : X ⟶ S) (sU : U ⟶ S),   Cat
+egoryTheory.CategoryStruct.comp f sX = sU → AlgebraicGeometry.Scheme.BirationalO
+ver sU sX
+参数：f : U ⟶ X；sX : X ⟶ S；sU : U ⟶ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.denseRange`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y) [AlgebraicGeometry.IsDominant f], DenseRange ⇑f
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.partialIso_iso`：∀ {X U : AlgebraicGeometry.
+Scheme} (f : U ⟶ X) [inst : AlgebraicGeometry.IsOpenImmersion f]   [inst_1 : Alg
+ebraicGeometry.IsDominant f],   (…
+· 使用定理 `AlgebraicGeometry.Scheme.isoOfEq_rfl`：∀ (X : AlgebraicGeometry.Scheme) (
+U : X.Opens), X.isoOfEq ⋯ = CategoryTheory.Iso.refl ↑U
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `CategoryTheory.Iso.symm_self_id`：symm_self_id (α : X ≅ Y) : α.symm ≪≫ α 
+= Iso.refl Y
+· 使用定理 `CategoryTheory.Iso.trans_refl`：trans_refl (α : X ≅ Y) : α ≪≫ Iso.refl Y 
+= α
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isoOpensRange_hom_ι_assoc`：∀ {X Y : Algebra
+icGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f]   {Z
+ : AlgebraicGeometry.Scheme} (h : Y ⟶ Z),   …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Hom.birationalOver (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f] (sX : X ⟶ S) (sU : U ⟶ S)
     (hf : f ≫ sX = sU) : BirationalOver sU sX :=
@@ -979,3 +856,4 @@ lemma Hom.birationalOver (f : U ⟶ X) [IsOpenImmersion f] [IsDominant f] (sX : 
 end OpenImmersion
 
 end AlgebraicGeometry.Scheme
+

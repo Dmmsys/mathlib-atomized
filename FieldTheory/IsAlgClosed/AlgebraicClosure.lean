@@ -40,290 +40,355 @@ variable (k : Type u) [Field k]
 
 namespace AlgebraicClosure
 
-/--
-Definition of `Monics` / `Monics` 的定义
+/-- The subtype of monic polynomials. -/
+/-
+**AlgebraicClosure.Monics** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicClosure`。
+形式化陈述：Monics : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Monics
-  signature: : Type u
-  body: {f : k[X] // f.Monic}
-
-中文:
-定义 Monics
-  签名: : 类型u
-  定义体: {f : k[X] // f.Monic}
-
-Depends on / 依赖: f.Monic
+--- 原说明 ---
+The subtype of monic polynomials.
 -/
 def Monics : Type u := {f : k[X] // f.Monic}
 
-/--
-Definition of `Vars` / `Vars` 的定义
+/-- `Vars k` provides `n` variables $X_{f,1}, \dots, X_{f,n}$ for each monic polynomial
+`f : k[X]` of degree `n`. -/
+/-
+**AlgebraicClosure.Vars** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicClosure`。
+形式化陈述：Vars : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Vars
-  signature: : Type u
-  body: Σ f : Monics k, Fin f.1.natDegree
-
-中文:
-定义 Vars
-  签名: : 类型u
-  定义体: Σ f : Monics k, Fin f.1.natDegree
-
-Depends on / 依赖: Monics, natDegree
+--- 原说明 ---
+`Vars k` provides `n` variables $X_{f,1}, \dots, X_{f,n}$ for each monic polynom
+ial
+`f : k[X]` of degree `n`.
 -/
 def Vars : Type u := Σ f : Monics k, Fin f.1.natDegree
 
 variable {k} in
-/--
-Definition of `subProdXSubC` / `subProdXSubC` 的定义
+/-- Given a monic polynomial `f : k[X]`,
+`subProdXSubC f` is the polynomial $f - \prod_i (X - X_{f,i})$. -/
+/-
+**AlgebraicClosure.subProdXSubC** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicClosure`。
+形式化陈述：subProdXSubC (f : Monics k) : (MvPolynomial (Vars k) k)[X]
+参数：f : Monics k。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subProdXSubC
-  signature: (f : Monics k)
-  body: f.1.map (algebraMap _ _) - ∏ i : Fin f.1.natDegree, (X - C (MvPolynomial.X ⟨f, i⟩))
-
-中文:
-定义 subProdXSubC
-  签名: (f : Monics k)
-  定义体: f.1.map (algebraMap _ _) - ∏ i : Fin f.1.natDegree, (X - C (MvPolynomial.X ⟨f, i⟩))
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.X, algebraMap, natDegree
+--- 原说明 ---
+Given a monic polynomial `f : k[X]`,
+`subProdXSubC f` is the polynomial $f - \prod_i (X - X_{f,i})$.
 -/
 def subProdXSubC (f : Monics k) : (MvPolynomial (Vars k) k)[X] :=
   f.1.map (algebraMap _ _) - ∏ i : Fin f.1.natDegree, (X - C (MvPolynomial.X ⟨f, i⟩))
 
-/--
-Definition of `spanCoeffs` / `spanCoeffs` 的定义
+/-- The span of all coefficients of `subProdXSubC f` as `f` ranges all polynomials in `k[X]`. -/
+/-
+**AlgebraicClosure.spanCoeffs** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicClosure`。
+形式化陈述：spanCoeffs : Ideal (MvPolynomial (Vars k) k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanCoeffs
-  signature: : Ideal (MvPolynomial (Vars k) k)
-  body: Ideal.span Set.range fun fn : Monics k × Nat => (subProdXSubC fn.1).coeff fn.2
-
-中文:
-定义 spanCoeffs
-  签名: : 理想 (多元多项式 (Vars k) k)
-  定义体: Ideal.span Set.range fun fn : Monics k × Nat => (subProdXSubC fn.1).coeff fn.2
-
-Depends on / 依赖: Ideal.span, Monics, Set.range, subProdXSubC
+--- 原说明 ---
+The span of all coefficients of `subProdXSubC f` as `f` ranges all polynomials i
+n `k[X]`.
 -/
 def spanCoeffs : Ideal (MvPolynomial (Vars k) k) :=
-Ideal.span Set.range fun fn : Monics k × Nat => (subProdXSubC fn.1).coeff fn.2
+  Ideal.span <| Set.range fun fn : Monics k × ℕ ↦ (subProdXSubC fn.1).coeff fn.2
 
 variable {k}
 
-/--
-Definition of `finEquivRoots` / `finEquivRoots` 的定义
+/-- If a monic polynomial `f : k[X]` splits in `K`,
+then it has as many roots (counting multiplicity) as its degree. -/
+/-
+**AlgebraicClosure.finEquivRoots** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicClosure`。
+形式化陈述：finEquivRoots {K} [Field K] [DecidableEq K] {i : k ->+* K} {f : Monics k} 
+(hf : (f.1.map i).Splits) : Fin f.1.natDegree ≃ (f.1.map i).roots.toEnumFinset
+参数：hf : (f.1.map i).Splits。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition finEquivRoots
-  signature: {K} [Field K] [DecidableEq K] {i : k ->+* K} {f : Monics k}
-  body: .symm Finset.equivFinOfCardEq by
-    rwa [splits_iff_card_roots,
-      ← Multiset.card_toEnumFinset, f.2.natDegree_map] at hf
-
-中文:
-定义 finEquivRoots
-  签名: {K} [域 K] [DecidableEq K] {i : k ->+* K} {f : Monics k}
-  定义体: .symm Finset.equivFinOfCardEq by
-    rwa [splits_iff_card_roots,
-      ← Multiset.card_toEnumFinset, f.2.natDegree_map] at hf
-
-Depends on / 依赖: Finset, Finset.equivFinOfCardEq, Multiset, Multiset.card_toEnumFinset, card_toEnumFinset, equivFinOfCardEq, natDegree_map, splits_iff_card_roots
+--- 原说明 ---
+If a monic polynomial `f : k[X]` splits in `K`,
+then it has as many roots (counting multiplicity) as its degree.
 -/
-def finEquivRoots {K} [Field K] [DecidableEq K] {i : k ->+* K} {f : Monics k}
+def finEquivRoots {K} [Field K] [DecidableEq K] {i : k →+* K} {f : Monics k}
     (hf : (f.1.map i).Splits) : Fin f.1.natDegree ≃ (f.1.map i).roots.toEnumFinset :=
-.symm Finset.equivFinOfCardEq by
+  .symm <| Finset.equivFinOfCardEq <| by
     rwa [splits_iff_card_roots,
       ← Multiset.card_toEnumFinset, f.2.natDegree_map] at hf
-
-/--
-lemma `Monics.splits_finsetProd` / 引理 `Monics.splits_finsetProd`
-
-English:
-lemma Monics.splits_finsetProd
-  given: {s : Finset (Monics k)} {f : Monics k} (hf : f in s)
-  proof: (splits_prod_iff fun j _ => map_ne_zero j.2.ne_zero).mp
-    (by simpa [Polynomial.map_prod] using SplittingField.splits (∏ f in s, f.1)) f hf
-
-中文:
-引理 Monics.splits_finsetProd
-  条件: {s : 有限集 (Monics k)} {f : Monics k} (hf : f in s)
-  证明: (splits_prod_iff fun j _ => map_ne_zero j.2.ne_zero).mp
-    (by simpa [Polynomial.map_prod] using SplittingField.splits (∏ f in s, f.1)) f hf
-
-Depends on / 依赖: Polynomial, Polynomial.map_prod, SplittingField, SplittingField.splits, map_ne_zero, map_prod, ne_zero, splits, splits_prod_iff
+/-
+**AlgebraicClosure.Monics.splits_finsetProd** 是 Mathlib 中的一个定理，位于命名空间 `Algebraic
+Closure.Monics`。
+形式化陈述：∀ {k : Type u} [inst : Field k] {s : Finset (AlgebraicClosure.Monics k)} {
+f : AlgebraicClosure.Monics k},   f ∈ s → (Polynomial.map (algebraMap k (∏ f ∈ s
+, ↑f).SplittingField) ↑f).Splits
+参数：AlgebraicClosure.Monics k；Polynomial.map (algebraMap k (∏ f ∈ s, ↑f).Splittin
+gField) ↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Polynomial.splits_prod_iff`：splits_prod_iff {ι : Type*} {f : ι -> R[X]} 
+{s : Finset ι} (hf : forall i in s, f i != 0) : (∏ x in s, f x).Splits ↔ forall 
+x in s, (f x).Sp…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.map_ne_zero`：map_ne_zero {f : R ->+* S} (hp : p != 0) : p.map
+ f != 0
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Polynomial.Monic.ne_zero`：∀ {R : Type u} [inst : Semiring R] [Nontrivial
+ R] {p : Polynomial R}, p.Monic → p ≠ 0
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_prod`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R]
+ [inst_1 : CommSemiring S] (f : R →+* S) {ι : Type u_1}   (g : ι → Polynomial R)
+ (s : Fin…
+· 使用定理 `Polynomial.SplittingField.splits`：∀ {K : Type v} [inst : Field K] (f : P
+olynomial K), (Polynomial.map (algebraMap K f.SplittingField) f).Splits
 -/
-lemma Monics.splits_finsetProd {s : Finset (Monics k)} {f : Monics k} (hf : f in s) :
-    (f.1.map (algebraMap k (SplittingField (∏ f in s, f.1)))).Splits :=
-  (splits_prod_iff fun j _ => map_ne_zero j.2.ne_zero).mp
-    (by simpa [Polynomial.map_prod] using SplittingField.splits (∏ f in s, f.1)) f hf
+lemma Monics.splits_finsetProd {s : Finset (Monics k)} {f : Monics k} (hf : f ∈ s) :
+    (f.1.map (algebraMap k (SplittingField (∏ f ∈ s, f.1)))).Splits :=
+  (splits_prod_iff fun j _ ↦ map_ne_zero j.2.ne_zero).mp
+    (by simpa [Polynomial.map_prod] using SplittingField.splits (∏ f ∈ s, f.1)) f hf
 
 open scoped Classical in
-/--
-Definition of `toSplittingField` / `toSplittingField` 的定义
+/-- Given a finite set of monic polynomials, construct an algebra homomorphism
+to the splitting field of the product of the polynomials
+sending indeterminates $X_{f_i}$ to the distinct roots of `f`. -/
+/-
+**AlgebraicClosure.toSplittingField** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicClosure`
+。
+形式化陈述：toSplittingField (s : Finset (Monics k)) : MvPolynomial (Vars k) k ->ₐ[k] 
+SplittingField (∏ f in s, f.1)
+参数：s : Finset (Monics k)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSplittingField
-  signature: (s : Finset (Monics k))
-  body: MvPolynomial.aeval fun fi =>
-    if hf : fi.1 in s then (finEquivRoots (Monics.splits_finsetProd hf) fi.2).1.1 else 37
-
-中文:
-定义 toSplittingField
-  签名: (s : 有限集 (Monics k))
-  定义体: MvPolynomial.aeval fun fi =>
-    if hf : fi.1 in s then (finEquivRoots (Monics.splits_finsetProd hf) fi.2).1.1 else 37
-
-Depends on / 依赖: Monics, Monics.splits_finsetProd, MvPolynomial, MvPolynomial.aeval, finEquivRoots, splits_finsetProd
+--- 原说明 ---
+Given a finite set of monic polynomials, construct an algebra homomorphism
+to the splitting field of the product of the polynomials
+sending indeterminates $X_{f_i}$ to the distinct roots of `f`.
 -/
 def toSplittingField (s : Finset (Monics k)) :
-    MvPolynomial (Vars k) k ->ₐ[k] SplittingField (∏ f in s, f.1) :=
-  MvPolynomial.aeval fun fi =>
-    if hf : fi.1 in s then (finEquivRoots (Monics.splits_finsetProd hf) fi.2).1.1 else 37
+    MvPolynomial (Vars k) k →ₐ[k] SplittingField (∏ f ∈ s, f.1) :=
+  MvPolynomial.aeval fun fi ↦
+    if hf : fi.1 ∈ s then (finEquivRoots (Monics.splits_finsetProd hf) fi.2).1.1 else 37
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `toSplittingField_coeff` / 定理 `toSplittingField_coeff`
-
-English:
-theorem toSplittingField_coeff
-  given: {s : Finset (Monics k)} {f} (h : f in s) (n)
-  proof: by
-  classical
-  simp_rw [← AlgHom.coe_toRingHom, ← coeff_map, subProdXSubC, Polynomial.map_sub,
-    Polynomial.map_prod, Polynomial.map_sub, map_X, map_C, toSplittingField,
-    AlgHom.coe_toRingHom, MvPolynomial.aeval_X, dif_pos h,
-    ← (finEquivRoots (Monics.splits_finsetProd h)).symm.prod_comp, Equiv.apply_symm_apply]
-  rw [Finset.prod_coe_sort (f := fun x : _ × Nat => X - C x.1)]; rw [(Multiset.toEnumFinset _)
-.prod_eq_multiset_prod]; rw [← Function.comp_def (X - C ·) Prod.fst]; rw [← Multiset.map_map]; rw [Multiset.map_toEnumFinset_fst]; rw [map_map]; rw [AlgHom.comp_algebraMap]
-  conv in map _ _ => rw [Splits.eq_prod_roots (Monics.splits_finsetProd h)]
-  rw [leadingCoeff_map]; rw [f.2]; rw [map_one]; rw [C_1]; rw [one_mul]; rw [sub_self]; rw [coeff_zero]
-
-中文:
-定理 toSplittingField_coeff
-  条件: {s : 有限集 (Monics k)} {f} (h : f in s) (n)
-  证明: by
-  classical
-  simp_rw [← AlgHom.coe_toRingHom, ← coeff_map, subProdXSubC, Polynomial.map_sub,
-    Polynomial.map_prod, Polynomial.map_sub, map_X, map_C, toSplittingField,
-    AlgHom.coe_toRingHom, MvPolynomial.aeval_X, dif_pos h,
-    ← (finEquivRoots (Monics.splits_finsetProd h)).symm.prod_comp, Equiv.apply_symm_apply]
-  rw [Finset.prod_coe_sort (f := fun x : _ × Nat => X - C x.1)]; rw [(Multiset.toEnumFinset _)
-.prod_eq_multiset_prod]; rw [← Function.comp_def (X - C ·) Prod.fst]; rw [← Multiset.map_map]; rw [Multiset.map_toEnumFinset_fst]; rw [map_map]; rw [AlgHom.comp_algebraMap]
-  conv in map _ _ => rw [Splits.eq_prod_roots (Monics.splits_finsetProd h)]
-  rw [leadingCoeff_map]; rw [f.2]; rw [map_one]; rw [C_1]; rw [one_mul]; rw [sub_self]; rw [coeff_zero]
-
-Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, Equiv.apply_symm_apply, Finset, Finset.prod_coe_sort, Function, Function.comp_def, Monics, Monics.splits_finsetProd, Multiset, Multiset.map_map, Multiset.toEnumFinset, MvPolynomial, MvPolynomial.aeval_X, Polynomial, Polynomial.map_prod, Polynomial.map_sub, Prod.fst, aeval_X, apply_symm_apply
+/-
+**AlgebraicClosure.toSplittingField_coeff** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicCl
+osure`。
+形式化陈述：toSplittingField_coeff {s : Finset (Monics k)} {f} (h : f in s) (n) : toSp
+littingField s ((subProdXSubC f).coeff n) = 0
+参数：Monics k；h : f in s；n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_sub`：∀ {R : Type u} [inst : Ring R] {p q : Polynomial R} 
+{S : Type u_1} [inst_1 : Ring S] (f : R →+* S),   Polynomial.map f (p - q) = Pol
+ynomial.…
+· 使用定理 `Polynomial.map_prod`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R]
+ [inst_1 : CommSemiring S] (f : R →+* S) {ι : Type u_1}   (g : ι → Polynomial R)
+ (s : Fin…
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `AlgebraicClosure.Monics.splits_finsetProd`：∀ {k : Type u} [inst : Field 
+k] {s : Finset (AlgebraicClosure.Monics k)} {f : AlgebraicClosure.Monics k},   f
+ ∈ s → (Polynomial.map (algebra…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.prod_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : 
+Fintype ι] [inst_1 : Fintype κ] [inst_2 : CommMonoid M]   (e : ι ≃ κ) (g : κ → M
+), ∏ …
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Finset.prod_coe_sort`：prod_coe_sort : ∏ i : s, f i = ∏ i in s, f i
+· 使用定理 `Finset.prod_eq_multiset_prod`：prod_eq_multiset_prod [CommMonoid M] (s : 
+Finset ι) (f : ι -> M) : ∏ x in s, f x = (s.1.map f).prod
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `Multiset.map_toEnumFinset_fst`：∀ {α : Type u_1} [inst : DecidableEq α] (
+m : Multiset α), Multiset.map Prod.fst m.toEnumFinset.val = m
+· 使用定理 `Polynomial.map_map`：map_map [Semiring T] (g : S ->+* T) (p : R[X]) : (p.
+map f).map g = p.map (g.comp f)
+· 使用定理 `AlgHom.comp_algebraMap`：comp_algebraMap : (φ : A ->+* B).comp (algebraMa
+p R A) = algebraMap R B
+· 使用定理 `Polynomial.Splits.eq_prod_roots`：∀ {R : Type u_1} [inst : CommRing R] {f
+ : Polynomial R} [inst_1 : IsDomain R],   f.Splits → f = Polynomial.C f.leadingC
+oeff * (Multiset.map …
+· 使用定理 `Polynomial.leadingCoeff_map`：leadingCoeff_map (f : R ->+* S) : (p.map f)
+.leadingCoeff = f p.leadingCoeff
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+（共 40 条，此处仅展示前 30 条）
 -/
-theorem toSplittingField_coeff {s : Finset (Monics k)} {f} (h : f in s) (n) :
+theorem toSplittingField_coeff {s : Finset (Monics k)} {f} (h : f ∈ s) (n) :
     toSplittingField s ((subProdXSubC f).coeff n) = 0 := by
   classical
   simp_rw [← AlgHom.coe_toRingHom, ← coeff_map, subProdXSubC, Polynomial.map_sub,
     Polynomial.map_prod, Polynomial.map_sub, map_X, map_C, toSplittingField,
     AlgHom.coe_toRingHom, MvPolynomial.aeval_X, dif_pos h,
     ← (finEquivRoots (Monics.splits_finsetProd h)).symm.prod_comp, Equiv.apply_symm_apply]
-  rw [Finset.prod_coe_sort (f := fun x : _ × Nat => X - C x.1)]; rw [(Multiset.toEnumFinset _)
-.prod_eq_multiset_prod]; rw [← Function.comp_def (X - C ·) Prod.fst]; rw [← Multiset.map_map]; rw [Multiset.map_toEnumFinset_fst]; rw [map_map]; rw [AlgHom.comp_algebraMap]
+  rw [Finset.prod_coe_sort (f := fun x : _ × ℕ ↦ X - C x.1), (Multiset.toEnumFinset _)
+    |>.prod_eq_multiset_prod, ← Function.comp_def (X - C ·) Prod.fst, ← Multiset.map_map,
+    Multiset.map_toEnumFinset_fst, map_map, AlgHom.comp_algebraMap]
   conv in map _ _ => rw [Splits.eq_prod_roots (Monics.splits_finsetProd h)]
-  rw [leadingCoeff_map]; rw [f.2]; rw [map_one]; rw [C_1]; rw [one_mul]; rw [sub_self]; rw [coeff_zero]
+  rw [leadingCoeff_map, f.2, map_one, C_1, one_mul, sub_self, coeff_zero]
 
 variable (k)
-
-/--
-theorem `spanCoeffs_ne_top` / 定理 `spanCoeffs_ne_top`
-
-English:
-theorem spanCoeffs_ne_top
-  statement: spanCoeffs k != ⊤
-  proof: by
-  rw [Ideal.ne_top_iff_one]; rw [spanCoeffs]; rw [Ideal.span]; rw [← Set.image_univ]; rw [Finsupp.mem_span_image_iff_linearCombination]
-  rintro ⟨v, _, hv⟩
-  classical
-  replace hv := congr_arg (toSplittingField <| v.support.image Prod.fst) hv
-  rw [map_one]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [Finset.sum_eq_zero] at hv
-  · exact zero_ne_one hv
-  intro j hj
-  rw [smul_eq_mul]; rw [map_mul]; rw [toSplittingField_coeff (Finset.mem_image_of_mem _ hj)]; rw [mul_zero]
-
-中文:
-定理 spanCoeffs_ne_top
-  结论: spanCoeffs k != ⊤
-  证明: by
-  rw [Ideal.ne_top_iff_one]; rw [spanCoeffs]; rw [Ideal.span]; rw [← Set.image_univ]; rw [Finsupp.mem_span_image_iff_linearCombination]
-  rintro ⟨v, _, hv⟩
-  classical
-  replace hv := congr_arg (toSplittingField <| v.support.image Prod.fst) hv
-  rw [map_one]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [Finset.sum_eq_zero] at hv
-  · exact zero_ne_one hv
-  intro j hj
-  rw [smul_eq_mul]; rw [map_mul]; rw [toSplittingField_coeff (Finset.mem_image_of_mem _ hj)]; rw [mul_zero]
-
-Depends on / 依赖: Finset, Finset.mem_image_of_mem, Finset.sum_eq_zero, Finsupp, Finsupp.linearCombination_apply, Finsupp.mem_span_image_iff_linearCombination, Finsupp.sum, Ideal.ne_top_iff_one, Ideal.span, Prod.fst, Set.image_univ, classical, congr_arg, image_univ, linearCombination_apply, map_mul, map_one, map_sum, mem_image_of_mem, mem_span_image_iff_linearCombination
+/-
+**AlgebraicClosure.spanCoeffs_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicClosure
+`。
+形式化陈述：spanCoeffs_ne_top : spanCoeffs k != ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.ne_top_iff_one`：ne_top_iff_one : I != ⊤ ↔ (1 : α) ∉ I
+· 使用定理 `AlgebraicClosure.spanCoeffs.eq_1`：∀ (k : Type u) [inst : Field k],   Alg
+ebraicClosure.spanCoeffs k = Ideal.span (Set.range fun fn => (AlgebraicClosure.s
+ubProdXSubC fn.1).coef…
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Finsupp.mem_span_image_iff_linearCombination`：mem_span_image_iff_linearC
+ombination {s : Set α} {x : M} : x in span R (v '' s) ↔ exists l in supported R 
+R s, linearCombination R v l = x
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `AlgebraicClosure.toSplittingField_coeff`：toSplittingField_coeff {s : Fin
+set (Monics k)} {f} (h : f in s) (n) : toSplittingField s ((subProdXSubC f).coef
+f n) = 0
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `Finsupp.sum.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst 
+: Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M) (g : α → M → N),   f.sum g = ∑
+ a ∈ f…
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-theorem spanCoeffs_ne_top : spanCoeffs k != ⊤ := by
-  rw [Ideal.ne_top_iff_one]; rw [spanCoeffs]; rw [Ideal.span]; rw [← Set.image_univ]; rw [Finsupp.mem_span_image_iff_linearCombination]
+theorem spanCoeffs_ne_top : spanCoeffs k ≠ ⊤ := by
+  rw [Ideal.ne_top_iff_one, spanCoeffs, Ideal.span, ← Set.image_univ,
+    Finsupp.mem_span_image_iff_linearCombination]
   rintro ⟨v, _, hv⟩
   classical
   replace hv := congr_arg (toSplittingField <| v.support.image Prod.fst) hv
-  rw [map_one]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [Finset.sum_eq_zero] at hv
+  rw [map_one, Finsupp.linearCombination_apply, Finsupp.sum, map_sum, Finset.sum_eq_zero] at hv
   · exact zero_ne_one hv
   intro j hj
-  rw [smul_eq_mul]; rw [map_mul]; rw [toSplittingField_coeff (Finset.mem_image_of_mem _ hj)]; rw [mul_zero]
+  rw [smul_eq_mul, map_mul, toSplittingField_coeff (Finset.mem_image_of_mem _ hj), mul_zero]
 
-/--
-Definition of `maxIdeal` / `maxIdeal` 的定义
+/-- A random maximal ideal that contains `spanEval k` -/
+/-
+**AlgebraicClosure.maxIdeal** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicClosure`。
+形式化陈述：maxIdeal : Ideal (MvPolynomial (Vars k) k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition maxIdeal
-  signature: : Ideal (MvPolynomial (Vars k) k)
-  body: Classical.choose Ideal.exists_le_maximal _ spanCoeffs_ne_top k
-
-中文:
-定义 maxIdeal
-  签名: : 理想 (多元多项式 (Vars k) k)
-  定义体: Classical.choose Ideal.exists_le_maximal _ spanCoeffs_ne_top k
-
-Depends on / 依赖: Classical, Classical.choose, Ideal.exists_le_maximal, exists_le_maximal, spanCoeffs_ne_top
+--- 原说明 ---
+A random maximal ideal that contains `spanEval k`
 -/
 def maxIdeal : Ideal (MvPolynomial (Vars k) k) :=
-Classical.choose Ideal.exists_le_maximal _ spanCoeffs_ne_top k
-
-/--
-Instance `maxIdeal.isMaximal` / 实例 `maxIdeal.isMaximal`
-
-English:
-instance maxIdeal.isMaximal
-  signature: : (maxIdeal k).IsMaximal
-  body: (Classical.choose_spec <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k).1
-
-中文:
-实例 maxIdeal.isMaximal
-  签名: : (maxIdeal k).是极大
-  定义体: (Classical.choose_spec <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k).1
-
-Depends on / 依赖: Classical, Classical.choose_spec, Ideal.exists_le_maximal, choose_spec, exists_le_maximal, spanCoeffs_ne_top
+  Classical.choose <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k
+/-
+**AlgebraicClosure.maxIdeal.isMaximal** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicClosur
+e.maxIdeal`。
+形式化陈述：∀ (k : Type u) [inst : Field k], (AlgebraicClosure.maxIdeal k).IsMaximal
+参数：k : Type u；AlgebraicClosure.maxIdeal k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Ideal.exists_le_maximal`：exists_le_maximal (I : Ideal α) (hI : I != ⊤) :
+ exists M : Ideal α, M.IsMaximal ∧ I <= M
+· 使用定理 `AlgebraicClosure.spanCoeffs_ne_top`：spanCoeffs_ne_top : spanCoeffs k != 
+⊤
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 instance maxIdeal.isMaximal : (maxIdeal k).IsMaximal :=
   (Classical.choose_spec <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k).1
-
-/--
-theorem `le_maxIdeal` / 定理 `le_maxIdeal`
-
-English:
-theorem le_maxIdeal
-  statement: spanCoeffs k <= maxIdeal k
-  proof: (Classical.choose_spec <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k).2
-
-中文:
-定理 le_maxIdeal
-  结论: spanCoeffs k <= maxIdeal k
-  证明: (Classical.choose_spec <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k).2
-
-Depends on / 依赖: Classical, Classical.choose_spec, Ideal.exists_le_maximal, choose_spec, exists_le_maximal, spanCoeffs_ne_top
+/-
+**AlgebraicClosure.le_maxIdeal** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicClosure`。
+形式化陈述：le_maxIdeal : spanCoeffs k <= maxIdeal k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ideal.exists_le_maximal`：exists_le_maximal (I : Ideal α) (hI : I != ⊤) :
+ exists M : Ideal α, M.IsMaximal ∧ I <= M
+· 使用定理 `AlgebraicClosure.spanCoeffs_ne_top`：spanCoeffs_ne_top : spanCoeffs k != 
+⊤
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem le_maxIdeal : spanCoeffs k <= maxIdeal k :=
+theorem le_maxIdeal : spanCoeffs k ≤ maxIdeal k :=
   (Classical.choose_spec <| Ideal.exists_le_maximal _ <| spanCoeffs_ne_top k).2
 
 end AlgebraicClosure
@@ -332,20 +397,16 @@ open AlgebraicClosure in
 /-- The canonical algebraic closure of a field, the direct limit of adding roots to the field for
 each polynomial over the field. -/
 @[stacks 09GT]
-/--
-Definition of `AlgebraicClosure` / `AlgebraicClosure` 的定义
+/-
+**AlgebraicClosure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AlgebraicClosure : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AlgebraicClosure
-  signature: : Type u
-  body: MvPolynomial (Vars k) k ⧸ maxIdeal k
-
-中文:
-定义 代数闭包
-  签名: : 类型u
-  定义体: MvPolynomial (Vars k) k ⧸ maxIdeal k
-
-Depends on / 依赖: MvPolynomial, maxIdeal
+--- 原说明 ---
+The canonical algebraic closure of a field, the direct limit of adding roots to 
+the field for
+each polynomial over the field.
 -/
 def AlgebraicClosure : Type u :=
   MvPolynomial (Vars k) k ⧸ maxIdeal k
@@ -354,112 +415,52 @@ namespace AlgebraicClosure
 
 deriving instance Inhabited for AlgebraicClosure
 
+/-
+**AlgebraicClosure.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : Type*} [DistribSMul S k] [IsScalarTower S k k] : SMul S (AlgebraicClosure k) :=
-inferInstanceAs SMul S (_ ⧸ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommRing (AlgebraicClosure k)
-  body: letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Nat); (· • · )
-  zsmul := letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Int); (· • · )
-__ : CommRing (AlgebraicClosure k) := inferInstanceAs CommRing (_ ⧸ _)
-
-中文:
-实例 :
-  签名: 交换环 (代数闭包 k)
-  定义体: letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Nat); (· • · )
-  zsmul := letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Int); (· • · )
-__ : CommRing (AlgebraicClosure k) := inferInstanceAs CommRing (_ ⧸ _)
-
-Depends on / 依赖: AlgebraicClosure, AlgebraicClosure.instSMulOfIsScalarTower, instSMulOfIsScalarTower
+  inferInstanceAs <| SMul S (_ ⧸ _)
+/-
+**AlgebraicClosure.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommRing (AlgebraicClosure k) where
-  nsmul := letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Nat); (· • · )
-  zsmul := letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := Int); (· • · )
-__ : CommRing (AlgebraicClosure k) := inferInstanceAs CommRing (_ ⧸ _)
-
-/--
-Instance `instAlgebra` / 实例 `instAlgebra`
-
-English:
-instance instAlgebra
-  signature: {R : Type*} [CommSemiring R] [Algebra R k]
-  body: inferInstanceAs Algebra R (_ ⧸ _)
-
-中文:
-实例 instAlgebra
-  签名: {R : 类型} [交换半环 R] [代数 R k]
-  定义体: inferInstanceAs Algebra R (_ ⧸ _)
-
-Depends on / 依赖: Algebra
+  nsmul := letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := ℕ); (· • · )
+  zsmul := letI := AlgebraicClosure.instSMulOfIsScalarTower k (S := ℤ); (· • · )
+  __ : CommRing (AlgebraicClosure k) := inferInstanceAs <| CommRing (_ ⧸ _)
+/-
+**AlgebraicClosure.instAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+形式化陈述：instAlgebra {R : Type*} [CommSemiring R] [Algebra R k] : Algebra R (Algebr
+aicClosure k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAlgebra {R : Type*} [CommSemiring R] [Algebra R k] : Algebra R (AlgebraicClosure k) :=
-inferInstanceAs Algebra R (_ ⧸ _)
-
+  inferInstanceAs <| Algebra R (_ ⧸ _)
+/-
+**AlgebraicClosure.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R S : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S] [Algebra S k] [Algebra R k]
     [IsScalarTower R S k] : IsScalarTower R S (AlgebraicClosure k) :=
-inferInstanceAs IsScalarTower R S (_ ⧸ _)
+  inferInstanceAs <| IsScalarTower R S (_ ⧸ _)
 
 attribute [local instance] Ideal.Quotient.field in
-/--
-Instance `instGroupWithZero` / 实例 `instGroupWithZero`
-
-English:
-instance instGroupWithZero
-  signature: : GroupWithZero (AlgebraicClosure k)
-  body: inferInstanceAs GroupWithZero (_ ⧸ _)
-
-中文:
-实例 instGroupWithZero
-  签名: : 带零群 (代数闭包 k)
-  定义体: inferInstanceAs GroupWithZero (_ ⧸ _)
-
-Depends on / 依赖: GroupWithZero
+/-
+**AlgebraicClosure.instGroupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure
+`。
+形式化陈述：instGroupWithZero : GroupWithZero (AlgebraicClosure k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instGroupWithZero : GroupWithZero (AlgebraicClosure k) :=
-inferInstanceAs GroupWithZero (_ ⧸ _)
-
-/--
-Instance `instField` / 实例 `instField`
-
-English:
-instance instField
-  signature: : Field (AlgebraicClosure k) where
-  body: instCommRing _
-  __ := instGroupWithZero _
-  nnqsmul := (· • ·)
-  qsmul := (· • ·)
-  nnratCast q := algebraMap k _ q
-  ratCast q := algebraMap k _ q
-  nnratCast_def q := by change algebraMap k _ _ = _; simp_rw [NNRat.cast_def, map_div₀, map_natCast]
-  ratCast_def q := by
-    change algebraMap k _ _ = _; rw [Rat.cast_def, map_div₀, map_intCast, map_natCast]
-nnqsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
-    ext; simp [MvPolynomial.algebraMap_eq, NNRat.smul_def]
-qsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
-    ext; simp [MvPolynomial.algebraMap_eq, Rat.smul_def]
-
-中文:
-实例 instField
-  签名: : 域 (代数闭包 k) where
-  定义体: instCommRing _
-  __ := instGroupWithZero _
-  nnqsmul := (· • ·)
-  qsmul := (· • ·)
-  nnratCast q := algebraMap k _ q
-  ratCast q := algebraMap k _ q
-  nnratCast_def q := by change algebraMap k _ _ = _; simp_rw [NNRat.cast_def, map_div₀, map_natCast]
-  ratCast_def q := by
-    change algebraMap k _ _ = _; rw [Rat.cast_def, map_div₀, map_intCast, map_natCast]
-nnqsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
-    ext; simp [MvPolynomial.algebraMap_eq, NNRat.smul_def]
-qsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
-    ext; simp [MvPolynomial.algebraMap_eq, Rat.smul_def]
-
-Depends on / 依赖: instCommRing
+  inferInstanceAs <| GroupWithZero (_ ⧸ _)
+/-
+**AlgebraicClosure.instField** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+形式化陈述：instField : Field (AlgebraicClosure k) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instField : Field (AlgebraicClosure k) where
   __ := instCommRing _
@@ -471,94 +472,130 @@ instance instField : Field (AlgebraicClosure k) where
   nnratCast_def q := by change algebraMap k _ _ = _; simp_rw [NNRat.cast_def, map_div₀, map_natCast]
   ratCast_def q := by
     change algebraMap k _ _ = _; rw [Rat.cast_def, map_div₀, map_intCast, map_natCast]
-nnqsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+  nnqsmul_def q x := Quotient.inductionOn x fun p ↦ congr_arg Quotient.mk'' <| by
     ext; simp [MvPolynomial.algebraMap_eq, NNRat.smul_def]
-qsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+  qsmul_def q x := Quotient.inductionOn x fun p ↦ congr_arg Quotient.mk'' <| by
     ext; simp [MvPolynomial.algebraMap_eq, Rat.smul_def]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Monics.map_eq_prod` / 定理 `Monics.map_eq_prod`
-
-English:
-theorem Monics.map_eq_prod
-  given: {f : Monics k}
-  proof: by
-  ext
-  dsimp [AlgebraicClosure]
-  rw [← Ideal.Quotient.mk_comp_algebraMap]; rw [← map_map]; rw [← Polynomial.map_prod]; rw [← sub_eq_zero]; rw [← coeff_sub]; rw [← Polynomial.map_sub]; rw [← subProdXSubC]; rw [coeff_map]; rw [Ideal.Quotient.eq_zero_iff_mem]
-  refine le_maxIdeal _ (Ideal.subset_span ⟨⟨f, _⟩, rfl⟩)
-
-中文:
-定理 Monics.map_eq_prod
-  条件: {f : Monics k}
-  证明: by
-  ext
-  dsimp [AlgebraicClosure]
-  rw [← Ideal.Quotient.mk_comp_algebraMap]; rw [← map_map]; rw [← Polynomial.map_prod]; rw [← sub_eq_zero]; rw [← coeff_sub]; rw [← Polynomial.map_sub]; rw [← subProdXSubC]; rw [coeff_map]; rw [Ideal.Quotient.eq_zero_iff_mem]
-  refine le_maxIdeal _ (Ideal.subset_span ⟨⟨f, _⟩, rfl⟩)
-
-Depends on / 依赖: AlgebraicClosure, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk_comp_algebraMap, Ideal.subset_span, Polynomial, Polynomial.map_prod, Polynomial.map_sub, Quotient, coeff_map, coeff_sub, eq_zero_iff_mem, le_maxIdeal, map_map, map_prod, map_sub, mk_comp_algebraMap, subProdXSubC, sub_eq_zero, subset_span
+/-
+**AlgebraicClosure.Monics.map_eq_prod** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicClosur
+e.Monics`。
+形式化陈述：∀ (k : Type u) [inst : Field k] {f : AlgebraicClosure.Monics k},   Polynom
+ial.map (algebraMap k (AlgebraicClosure k)) ↑f =     ∏ i,       Polynomial.map (
+Ideal.Quotient.mk (AlgebraicClosure.maxIdeal k))         (Polynomial.X - Polynom
+ial.C (MvPolynomial.X ⟨f, i⟩))
+参数：k : Type u；algebraMap k (AlgebraicClosure k)；Ideal.Quotient.mk (AlgebraicClos
+ure.maxIdeal k)；Polynomial.X - Polynomial.C (MvPolynomial.X ⟨f, i⟩)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.ext`：ext {p q : R[X]} : (forall n, coeff p n = coeff q n) -> 
+p = q
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.Quotient.mk_comp_algebraMap`：∀ (R₁ : Type u_1) {A : Type u_3} [ins
+t : CommSemiring R₁] [inst_1 : Ring A] [inst_2 : Algebra R₁ A] (I : Ideal A)   [
+inst_3 : I.IsTwoSided],…
+· 使用定理 `Polynomial.map_map`：map_map [Semiring T] (g : S ->+* T) (p : R[X]) : (p.
+map f).map g = p.map (g.comp f)
+· 使用定理 `Polynomial.map_prod`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R]
+ [inst_1 : CommSemiring S] (f : R →+* S) {ι : Type u_1}   (g : ι → Polynomial R)
+ (s : Fin…
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Polynomial.coeff_sub`：coeff_sub (p q : R[X]) (n : Nat) : coeff (p - q) n
+ = coeff p n - coeff q n
+· 使用定理 `Polynomial.map_sub`：∀ {R : Type u} [inst : Ring R] {p q : Polynomial R} 
+{S : Type u_1} [inst_1 : Ring S] (f : R →+* S),   Polynomial.map f (p - q) = Pol
+ynomial.…
+· 使用定理 `AlgebraicClosure.subProdXSubC.eq_1`：∀ {k : Type u} [inst : Field k] (f :
+ AlgebraicClosure.Monics k),   AlgebraicClosure.subProdXSubC f =     Polynomial.
+map (algebraMap k (MvPol…
+· 使用定理 `Polynomial.coeff_map`：coeff_map (n : Nat) : coeff (p.map f) n = f (coeff
+ p n)
+· 使用定理 `Ideal.Quotient.eq_zero_iff_mem`：eq_zero_iff_mem : mk I a = 0 ↔ a in I
+· 使用定理 `AlgebraicClosure.le_maxIdeal`：le_maxIdeal : spanCoeffs k <= maxIdeal k
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
 -/
 theorem Monics.map_eq_prod {f : Monics k} :
     f.1.map (algebraMap k (AlgebraicClosure k)) =
       ∏ i, map (Ideal.Quotient.mk <| maxIdeal k) (X - C (MvPolynomial.X ⟨f, i⟩)) := by
   ext
   dsimp [AlgebraicClosure]
-  rw [← Ideal.Quotient.mk_comp_algebraMap]; rw [← map_map]; rw [← Polynomial.map_prod]; rw [← sub_eq_zero]; rw [← coeff_sub]; rw [← Polynomial.map_sub]; rw [← subProdXSubC]; rw [coeff_map]; rw [Ideal.Quotient.eq_zero_iff_mem]
+  rw [← Ideal.Quotient.mk_comp_algebraMap, ← map_map, ← Polynomial.map_prod, ← sub_eq_zero,
+    ← coeff_sub, ← Polynomial.map_sub, ← subProdXSubC, coeff_map, Ideal.Quotient.eq_zero_iff_mem]
   refine le_maxIdeal _ (Ideal.subset_span ⟨⟨f, _⟩, rfl⟩)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isAlgebraic` / 实例 `isAlgebraic`
-
-English:
-instance isAlgebraic
-  signature: : Algebra.IsAlgebraic k (AlgebraicClosure k)
-  body: ⟨fun z =>
-IsIntegral.isAlgebraic by
-      let ⟨p, hp⟩ := Ideal.Quotient.mk_surjective z
-      rw [← hp]
-      induction p using MvPolynomial.induction_on generalizing z with
-        | C => exact isIntegral_algebraMap
-        | add _ _ ha hb => exact (ha _ rfl).add (hb _ rfl)
-        | mul_X p fi ih =>
-          rw [map_mul]
-          refine (ih _ rfl).mul ⟨_, fi.1.2, ?_⟩
-          simp_rw [← eval_map, Monics.map_eq_prod, eval_prod, Polynomial.map_sub, eval_sub]
-          apply Finset.prod_eq_zero (Finset.mem_univ fi.2)
-          rw [map_C]
-          -- The `erw` is needed here because the `R` in `eval` is `AlgebraicClosure k`,
-          -- but this has been unfolded in the arguments of `eval`.
-          erw [eval_C]
-          simp⟩
-
-中文:
-实例 isAlgebraic
-  签名: : 代数.是代数 k (代数闭包 k)
-  定义体: ⟨fun z =>
-IsIntegral.isAlgebraic by
-      let ⟨p, hp⟩ := Ideal.Quotient.mk_surjective z
-      rw [← hp]
-      induction p using MvPolynomial.induction_on generalizing z with
-        | C => exact isIntegral_algebraMap
-        | add _ _ ha hb => exact (ha _ rfl).add (hb _ rfl)
-        | mul_X p fi ih =>
-          rw [map_mul]
-          refine (ih _ rfl).mul ⟨_, fi.1.2, ?_⟩
-          simp_rw [← eval_map, Monics.map_eq_prod, eval_prod, Polynomial.map_sub, eval_sub]
-          apply Finset.prod_eq_zero (Finset.mem_univ fi.2)
-          rw [map_C]
-          -- The `erw` is needed here because the `R` in `eval` is `AlgebraicClosure k`,
-          -- but this has been unfolded in the arguments of `eval`.
-          erw [eval_C]
-          simp⟩
-
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.prod_eq_zero, Ideal.Quotient.mk_surjective, IsIntegral, IsIntegral.isAlgebraic, Monics, Monics.map_eq_prod, MvPolynomial, MvPolynomial.induction_on, Polynomial, Polynomial.map_sub, Quotient, eval_map, eval_prod, eval_sub, generalizing, induction_on, isAlgebraic, isIntegral_algebraMap
+/-
+**AlgebraicClosure.isAlgebraic** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+形式化陈述：isAlgebraic : Algebra.IsAlgebraic k (AlgebraicClosure k)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIntegral.isAlgebraic`：IsIntegral.isAlgebraic [Nontrivial R] {x : A} : 
+IsIntegral R x -> IsAlgebraic R x
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `isIntegral_algebraMap`：isIntegral_algebraMap {x : R} : IsIntegral R (alg
+ebraMap R A x)
+· 使用定理 `IsIntegral.add`：∀ {R : Type u_1} {A : Type u_2} [inst : CommRing R] [ins
+t_1 : CommRing A] [inst_2 : Algebra R A] {x y : A},   IsIntegral R x → IsIntegra
+l R …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `IsIntegral.mul`：∀ {R : Type u_1} {A : Type u_2} [inst : CommRing R] [ins
+t_1 : CommRing A] [inst_2 : Algebra R A] {x y : A},   IsIntegral R x → IsIntegra
+l R …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicClosure.Monics.map_eq_prod`：∀ (k : Type u) [inst : Field k] {f 
+: AlgebraicClosure.Monics k},   Polynomial.map (algebraMap k (AlgebraicClosure k
+)) ↑f =     ∏ i,       Po…
+· 使用定理 `Polynomial.eval_prod`：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X
+]) (x : R) : eval x (∏ j in s, p j) = ∏ j in s, eval x (p j)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Polynomial.map_sub`：∀ {R : Type u} [inst : Ring R] {p q : Polynomial R} 
+{S : Type u_1} [inst_1 : Ring S] (f : R →+* S),   Polynomial.map f (p - q) = Pol
+ynomial.…
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用引理 `Finset.prod_eq_zero`：prod_eq_zero (hi : i in s) (h : f i = 0) : ∏ j in s
+, f j = 0
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+（共 33 条，此处仅展示前 30 条）
 -/
 instance isAlgebraic : Algebra.IsAlgebraic k (AlgebraicClosure k) :=
   ⟨fun z =>
-IsIntegral.isAlgebraic by
+    IsIntegral.isAlgebraic <| by
       let ⟨p, hp⟩ := Ideal.Quotient.mk_surjective z
       rw [← hp]
       induction p using MvPolynomial.induction_on generalizing z with
@@ -576,67 +613,48 @@ IsIntegral.isAlgebraic by
           simp⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsAlgClosure k (AlgebraicClosure k)
-  body: .of_splits fun f hf _ => by
-  rw [show f = (⟨f]; rw [hf⟩ : Monics k) from rfl]; rw [Monics.map_eq_prod]
-  exact Splits.prod fun _ _ => (Splits.X_sub_C _).map _
-
-中文:
-实例 :
-  签名: 是AlgClosure k (代数闭包 k)
-  定义体: .of_splits fun f hf _ => by
-  rw [show f = (⟨f]; rw [hf⟩ : Monics k) from rfl]; rw [Monics.map_eq_prod]
-  exact Splits.prod fun _ _ => (Splits.X_sub_C _).map _
-
-Depends on / 依赖: Monics, Monics.map_eq_prod, Splits, Splits.X_sub_C, Splits.prod, X_sub_C, map_eq_prod, of_splits
+/-
+**AlgebraicClosure.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsAlgClosure k (AlgebraicClosure k) := .of_splits fun f hf _ => by
-  rw [show f = (⟨f]; rw [hf⟩ : Monics k) from rfl]; rw [Monics.map_eq_prod]
-  exact Splits.prod fun _ _ => (Splits.X_sub_C _).map _
-
-/--
-Instance `isAlgClosed` / 实例 `isAlgClosed`
-
-English:
-instance isAlgClosed
-  signature: : IsAlgClosed (AlgebraicClosure k)
-  body: IsAlgClosure.isAlgClosed k
-
-中文:
-实例 isAlgClosed
-  签名: : 是代数闭 (代数闭包 k)
-  定义体: IsAlgClosure.isAlgClosed k
-
-Depends on / 依赖: IsAlgClosure, IsAlgClosure.isAlgClosed, isAlgClosed
+instance : IsAlgClosure k (AlgebraicClosure k) := .of_splits fun f hf _ ↦ by
+  rw [show f = (⟨f, hf⟩ : Monics k) from rfl, Monics.map_eq_prod]
+  exact Splits.prod fun _ _ ↦ (Splits.X_sub_C _).map _
+/-
+**AlgebraicClosure.isAlgClosed** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+形式化陈述：isAlgClosed : IsAlgClosed (AlgebraicClosure k)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAlgClosure.isAlgClosed`：∀ (R : Type u) {K : Type v} {inst : CommRing R
+} {inst_1 : Field K} {inst_2 : Algebra R K}   {inst_3 : Module.IsTorsionFree R K
+} [self : IsAl…
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `AlgebraicClosure.instIsAlgClosure`：∀ (k : Type u) [inst : Field k], IsAl
+gClosure k (AlgebraicClosure k)
 -/
 instance isAlgClosed : IsAlgClosed (AlgebraicClosure k) := IsAlgClosure.isAlgClosed k
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: k] : CharZero (AlgebraicClosure k)
-  body: charZero_of_injective_algebraMap (RingHom.injective (algebraMap k (AlgebraicClosure k)))
-
-中文:
-实例 [特征零
-  签名: k] : 特征零 (代数闭包 k)
-  定义体: charZero_of_injective_algebraMap (RingHom.injective (algebraMap k (AlgebraicClosure k)))
-
-Depends on / 依赖: AlgebraicClosure, RingHom, RingHom.injective, algebraMap, charZero_of_injective_algebraMap, injective
+/-
+**AlgebraicClosure.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharZero k] : CharZero (AlgebraicClosure k) :=
   charZero_of_injective_algebraMap (RingHom.injective (algebraMap k (AlgebraicClosure k)))
-
-instance {p : Nat} [CharP k p] : CharP (AlgebraicClosure k) p :=
+/-
+**AlgebraicClosure.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {p : ℕ} [CharP k p] : CharP (AlgebraicClosure k) p :=
   charP_of_injective_algebraMap (RingHom.injective (algebraMap k (AlgebraicClosure k))) p
-
+/-
+**AlgebraicClosure.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicClosure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {L : Type*} [Field L] [Algebra k L] [Algebra.IsAlgebraic k L] :
     IsAlgClosure k (AlgebraicClosure L) where
   isAlgebraic := .trans k L _
@@ -648,62 +666,46 @@ namespace IntermediateField
 
 variable {K L : Type*} [Field K] [Field L] [Algebra K L] (E : IntermediateField K L)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Algebra.IsAlgebraic
-  signature: K E] : IsAlgClosure K (AlgebraicClosure E)
-  body: ⟨AlgebraicClosure.isAlgClosed E, Algebra.IsAlgebraic.trans K E (AlgebraicClosure E)⟩
-
-中文:
-实例 [代数.是代数
-  签名: K E] : 是AlgClosure K (代数闭包 E)
-  定义体: ⟨AlgebraicClosure.isAlgClosed E, Algebra.IsAlgebraic.trans K E (AlgebraicClosure E)⟩
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic.trans, AlgebraicClosure, AlgebraicClosure.isAlgClosed, IsAlgebraic, isAlgClosed
+/-
+**IntermediateField.** 是 Mathlib 中的一个实例，位于命名空间 `IntermediateField`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Algebra.IsAlgebraic K E] : IsAlgClosure K (AlgebraicClosure E) :=
   ⟨AlgebraicClosure.isAlgClosed E, Algebra.IsAlgebraic.trans K E (AlgebraicClosure E)⟩
-
-/--
-theorem `AdjoinSimple.normal_algebraicClosure` / 定理 `AdjoinSimple.normal_algebraicClosure`
-
-English:
-theorem AdjoinSimple.normal_algebraicClosure
-  given: {x : L} (hx : IsIntegral K x)
-  proof: have : Algebra.IsAlgebraic K K⟮x⟯ := isAlgebraic_adjoin_simple hx
-  IsAlgClosure.normal _ _
-
-中文:
-定理 AdjoinSimple.normal_algebraicClosure
-  条件: {x : L} (hx : 是整 K x)
-  证明: have : Algebra.IsAlgebraic K K⟮x⟯ := isAlgebraic_adjoin_simple hx
-  IsAlgClosure.normal _ _
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic, IsAlgClosure, IsAlgClosure.normal, IsAlgebraic, isAlgebraic_adjoin_simple, normal
+/-
+**IntermediateField.AdjoinSimple.normal_algebraicClosure** 是 Mathlib 中的一个定理，位于命名
+空间 `IntermediateField.AdjoinSimple`。
+形式化陈述：∀ {K : Type u_1} {L : Type u_2} [inst : Field K] [inst_1 : Field L] [inst_
+2 : Algebra K L] {x : L},   IsIntegral K x → Normal K (AlgebraicClosure ↥K⟮x⟯)
+参数：AlgebraicClosure ↥K⟮x⟯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntermediateField.isAlgebraic_adjoin_simple`：isAlgebraic_adjoin_simple {
+x : L} (hx : IsIntegral K x) : Algebra.IsAlgebraic K K⟮x⟯
+· 使用定理 `IsAlgClosure.normal`：∀ (R : Type u_1) (K : Type u_2) [inst : Field R] [i
+nst_1 : Field K] [inst_2 : Algebra R K] [IsAlgClosure R K],   Normal R K
+· 使用定理 `IntermediateField.instIsAlgClosureAlgebraicClosureSubtypeMemOfIsAlgebrai
+c`：∀ {K : Type u_1} {L : Type u_2} [inst : Field K] [inst_1 : Field L] [inst_2 :
+ Algebra K L] (E : IntermediateField K L)   [Algebra.IsAlgebrai…
 -/
 theorem AdjoinSimple.normal_algebraicClosure {x : L} (hx : IsIntegral K x) :
     Normal K (AlgebraicClosure K⟮x⟯) :=
   have : Algebra.IsAlgebraic K K⟮x⟯ := isAlgebraic_adjoin_simple hx
   IsAlgClosure.normal _ _
-
-/--
-theorem `AdjoinDouble.normal_algebraicClosure` / 定理 `AdjoinDouble.normal_algebraicClosure`
-
-English:
-theorem AdjoinDouble.normal_algebraicClosure
-  statement: {x y : L} (hx : IsIntegral K x)
-  proof: have : Algebra.IsAlgebraic K K⟮x, y⟯ := isAlgebraic_adjoin_pair hx hy
-  IsAlgClosure.normal _ _
-
-中文:
-定理 AdjoinDouble.normal_algebraicClosure
-  结论: {x y : L} (hx : 是整 K x)
-  证明: have : Algebra.IsAlgebraic K K⟮x, y⟯ := isAlgebraic_adjoin_pair hx hy
-  IsAlgClosure.normal _ _
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic, IsAlgClosure, IsAlgClosure.normal, IsAlgebraic, isAlgebraic_adjoin_pair, normal
+/-
+**IntermediateField.AdjoinDouble.normal_algebraicClosure** 是 Mathlib 中的一个定理，位于命名
+空间 `IntermediateField.AdjoinDouble`。
+形式化陈述：∀ {K : Type u_1} {L : Type u_2} [inst : Field K] [inst_1 : Field L] [inst_
+2 : Algebra K L] {x y : L},   IsIntegral K x → IsIntegral K y → Normal K (Algebr
+aicClosure ↥K⟮x, y⟯)
+参数：AlgebraicClosure ↥K⟮x, y⟯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntermediateField.isAlgebraic_adjoin_pair`：isAlgebraic_adjoin_pair (hx :
+ IsIntegral K x) (hy : IsIntegral K y) : Algebra.IsAlgebraic K K⟮x, y⟯
+· 使用定理 `IsAlgClosure.normal`：∀ (R : Type u_1) (K : Type u_2) [inst : Field R] [i
+nst_1 : Field K] [inst_2 : Algebra R K] [IsAlgClosure R K],   Normal R K
+· 使用定理 `IntermediateField.instIsAlgClosureAlgebraicClosureSubtypeMemOfIsAlgebrai
+c`：∀ {K : Type u_1} {L : Type u_2} [inst : Field K] [inst_1 : Field L] [inst_2 :
+ Algebra K L] (E : IntermediateField K L)   [Algebra.IsAlgebrai…
 -/
 theorem AdjoinDouble.normal_algebraicClosure {x y : L} (hx : IsIntegral K x)
     (hy : IsIntegral K y) : Normal K (AlgebraicClosure K⟮x, y⟯) :=
@@ -711,3 +713,4 @@ theorem AdjoinDouble.normal_algebraicClosure {x y : L} (hx : IsIntegral K x)
   IsAlgClosure.normal _ _
 
 end IntermediateField
+

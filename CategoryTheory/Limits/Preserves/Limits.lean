@@ -42,20 +42,34 @@ variable [PreservesLimit F G]
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `preserves_lift_mapCone` / 定理 `preserves_lift_mapCone`
-
-English:
-theorem preserves_lift_mapCone
-  given: (c₁ c₂ : Cone F) (t : IsLimit c₁)
-  proof: ((isLimitOfPreserves G t).uniq (G.mapCone c₂) _ (by simp [← G.map_comp])).symm
-
-中文:
-定理 preserves_lift_mapCone
-  条件: (c₁ c₂ : 锥 F) (t : 是极限 c₁)
-  证明: ((isLimitOfPreserves G t).uniq (G.mapCone c₂) _ (by simp [← G.map_comp])).symm
-
-Depends on / 依赖: G.mapCone, G.map_comp, isLimitOfPreserves, mapCone, map_comp
+/-
+**CategoryTheory.preserves_lift_mapCone** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：preserves_lift_mapCone (c₁ c₂ : Cone F) (t : IsLimit c₁) : (isLimitOfPrese
+rves G t).lift (G.mapCone c₂) = G.map (t.lift c₂)
+参数：c₁ c₂ : Cone F；t : IsLimit c₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsLimit.uniq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃}
+ C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem preserves_lift_mapCone (c₁ c₂ : Cone F) (t : IsLimit c₁) :
     (isLimitOfPreserves G t).lift (G.mapCone c₂) = G.map (t.lift c₂) :=
@@ -63,67 +77,41 @@ theorem preserves_lift_mapCone (c₁ c₂ : Cone F) (t : IsLimit c₁) :
 
 variable [HasLimit F]
 
-/--
-Definition of `preservesLimitIso` / `preservesLimitIso` 的定义
+/-- If `G` preserves limits, we have an isomorphism from the image of the limit of a functor `F`
+to the limit of the functor `F ⋙ G`.
+-/
+/-
+**CategoryTheory.preservesLimitIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：preservesLimitIso : G.obj (limit F) ≅ limit (F ⋙ G)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
 
-English:
-definition preservesLimitIso
-  signature: : G.obj (limit F) ≅ limit (F ⋙ G)
-  body: (isLimitOfPreserves G (limit.isLimit _)).conePointUniqueUpToIso (limit.isLimit _)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 preservesLimitIso
-  签名: : G.obj (limit F) ≅ limit (F ⋙ G)
-  定义体: (isLimitOfPreserves G (limit.isLimit _)).conePointUniqueUpToIso (limit.isLimit _)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: conePointUniqueUpToIso, isLimit, isLimitOfPreserves, limit.isLimit
+--- 原说明 ---
+If `G` preserves limits, we have an isomorphism from the image of the limit of a
+ functor `F`
+to the limit of the functor `F ⋙ G`.
 -/
 def preservesLimitIso : G.obj (limit F) ≅ limit (F ⋙ G) :=
   (isLimitOfPreserves G (limit.isLimit _)).conePointUniqueUpToIso (limit.isLimit _)
 
 @[reassoc (attr := simp)]
-/--
-theorem `preservesLimitIso_hom_π` / 定理 `preservesLimitIso_hom_π`
-
-English:
-theorem preservesLimitIso_hom_π
-  given: (j)
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ j
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 preservesLimitIso_hom_π
-  条件: (j)
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ j
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, conePointUniqueUpToIso_hom_comp
+/-
+**CategoryTheory.preservesLimitIso_hom_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem preservesLimitIso_hom_π (j) :
     (preservesLimitIso G F).hom ≫ limit.π _ j = G.map (limit.π F j) :=
   IsLimit.conePointUniqueUpToIso_hom_comp _ _ j
 
 @[reassoc (attr := simp)]
-/--
-theorem `preservesLimitIso_inv_π` / 定理 `preservesLimitIso_inv_π`
-
-English:
-theorem preservesLimitIso_inv_π
-  given: (j)
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ j
-
-中文:
-定理 preservesLimitIso_inv_π
-  条件: (j)
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ j
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.preservesLimitIso_inv_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem preservesLimitIso_inv_π (j) :
     (preservesLimitIso G F).inv ≫ G.map (limit.π F j) = limit.π _ j :=
@@ -131,43 +119,48 @@ theorem preservesLimitIso_inv_π (j) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `lift_comp_preservesLimitIso_hom` / 定理 `lift_comp_preservesLimitIso_hom`
-
-English:
-theorem lift_comp_preservesLimitIso_hom
-  given: (t : Cone F)
-  proof: by
-  ext
-  simp [← G.map_comp]
-
-中文:
-定理 lift_comp_preservesLimitIso_hom
-  条件: (t : 锥 F)
-  证明: by
-  ext
-  simp [← G.map_comp]
-
-Depends on / 依赖: G.map_comp, map_comp
+/-
+**CategoryTheory.lift_comp_preservesLimitIso_hom** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：lift_comp_preservesLimitIso_hom (t : Cone F) : G.map (limit.lift _ t) ≫ (p
+reservesLimitIso G F).hom = limit.lift (F ⋙ G) (G.mapCone _)
+参数：t : Cone F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.preservesLimitIso_hom_π`：preservesLimitIso_hom_π (j) : (p
+reservesLimitIso G F).hom ≫ limit.π _ j = G.map (limit.π F j)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lift_comp_preservesLimitIso_hom (t : Cone F) :
     G.map (limit.lift _ t) ≫ (preservesLimitIso G F).hom =
     limit.lift (F ⋙ G) (G.mapCone _) := by
   ext
   simp [← G.map_comp]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (limit.post F G)
-  body: show IsIso (preservesLimitIso G F).hom from inferInstance
-
-中文:
-实例 :
-  签名: 是同构 (limit.post F G)
-  定义体: show IsIso (preservesLimitIso G F).hom from inferInstance
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (limit.post F G) :=
   show IsIso (preservesLimitIso G F).hom from inferInstance
@@ -178,32 +171,24 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `C, D` has all limits of shape `J`, and `G` preserves them, then `preservesLimitsIso` is
 functorial w.r.t. `F`. -/
 @[simps!]
-/--
-Definition of `preservesLimitNatIso` / `preservesLimitNatIso` 的定义
+/-
+**CategoryTheory.preservesLimitNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：preservesLimitNatIso : lim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G ⋙ l
+im
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition preservesLimitNatIso
-  signature: : lim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G ⋙ lim
-  body: NatIso.ofComponents (fun F => preservesLimitIso G F)
-    (by
-      intro _ _ f
-      apply limit.hom_ext; intro j
-      dsimp
-      simp only [preservesLimitIso_hom_π, Functor.whiskerRight_app, limMap_π, Category.assoc,
-        preservesLimitIso_hom_π_assoc, ← G.map_comp])
-
-中文:
-定义 preservesLimit自然数Iso
-  签名: : lim ⋙ G ≅ (函子.whiskeringRight J C D).obj G ⋙ lim
-  定义体: NatIso.ofComponents (fun F => preservesLimitIso G F)
-    (by
-      intro _ _ f
-      apply limit.hom_ext; intro j
-      dsimp
-      simp only [preservesLimitIso_hom_π, Functor.whiskerRight_app, limMap_π, Category.assoc,
-        preservesLimitIso_hom_π_assoc, ← G.map_comp])
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.whiskerRight_app, G.map_comp, NatIso, NatIso.ofComponents, hom_ext, limit.hom_ext, map_comp, ofComponents, preservesLimitIso, whiskerRight_app
+--- 原说明 ---
+If `C, D` has all limits of shape `J`, and `G` preserves them, then `preservesLi
+mitsIso` is
+functorial w.r.t. `F`.
 -/
 def preservesLimitNatIso : lim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G ⋙ lim :=
   NatIso.ofComponents (fun F => preservesLimitIso G F)
@@ -220,26 +205,23 @@ section
 
 variable [HasLimit F] [HasLimit (F ⋙ G)]
 
-/--
-lemma `preservesLimit_of_isIso_post` / 引理 `preservesLimit_of_isIso_post`
+/-- If the comparison morphism `G.obj (limit F) ⟶ limit (F ⋙ G)` is an isomorphism, then `G`
+preserves limits of `F`. -/
+/-
+**CategoryTheory.preservesLimit_of_isIso_post** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：preservesLimit_of_isIso_post [IsIso (limit.post F G)] : PreservesLimit F G
+参数：limit.post F G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
 
-English:
-lemma preservesLimit_of_isIso_post
-  given: [IsIso (limit.post F G)]
-  statement: PreservesLimit F G
-  proof: preservesLimit_of_preserves_limit_cone (limit.isLimit F) (by
-    convert! IsLimit.ofPointIso (limit.isLimit (F ⋙ G))
-    assumption)
-
-中文:
-引理 preservesLimit_of_isIso_post
-  条件: [是同构 (limit.post F G)]
-  结论: 保持极限 F G
-  证明: preservesLimit_of_preserves_limit_cone (limit.isLimit F) (by
-    convert! IsLimit.ofPointIso (limit.isLimit (F ⋙ G))
-    assumption)
-
-Depends on / 依赖: IsLimit, IsLimit.ofPointIso, convert, isLimit, limit.isLimit, ofPointIso, preservesLimit_of_preserves_limit_cone
+--- 原说明 ---
+If the comparison morphism `G.obj (limit F) ⟶ limit (F ⋙ G)` is an isomorphism, 
+then `G`
+preserves limits of `F`.
 -/
 lemma preservesLimit_of_isIso_post [IsIso (limit.post F G)] : PreservesLimit F G :=
   preservesLimit_of_preserves_limit_cone (limit.isLimit F) (by
@@ -254,20 +236,34 @@ variable [PreservesColimit F G]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `preserves_desc_mapCocone` / 定理 `preserves_desc_mapCocone`
-
-English:
-theorem preserves_desc_mapCocone
-  given: (c₁ c₂ : Cocone F) (t : IsColimit c₁)
-  proof: ((isColimitOfPreserves G t).uniq (G.mapCocone _) _ (by simp [← G.map_comp])).symm
-
-中文:
-定理 preserves_desc_mapCocone
-  条件: (c₁ c₂ : 余锥 F) (t : 是余极限 c₁)
-  证明: ((isColimitOfPreserves G t).uniq (G.mapCocone _) _ (by simp [← G.map_comp])).symm
-
-Depends on / 依赖: G.mapCocone, G.map_comp, isColimitOfPreserves, mapCocone, map_comp
+/-
+**CategoryTheory.preserves_desc_mapCocone** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：preserves_desc_mapCocone (c₁ c₂ : Cocone F) (t : IsColimit c₁) : (isColimi
+tOfPreserves G t).desc (G.mapCocone _) = G.map (t.desc c₂)
+参数：c₁ c₂ : Cocone F；t : IsColimit c₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsColimit.uniq`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} C]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem preserves_desc_mapCocone (c₁ c₂ : Cocone F) (t : IsColimit c₁) :
     (isColimitOfPreserves G t).desc (G.mapCocone _) = G.map (t.desc c₂) :=
@@ -276,67 +272,39 @@ theorem preserves_desc_mapCocone (c₁ c₂ : Cocone F) (t : IsColimit c₁) :
 variable [HasColimit F]
 
 -- TODO: think about swapping the order here
-/--
-Definition of `preservesColimitIso` / `preservesColimitIso` 的定义
+/-- If `G` preserves colimits, we have an isomorphism from the image of the colimit of a functor `F`
+to the colimit of the functor `F ⋙ G`.
+-/
+/-
+**CategoryTheory.preservesColimitIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：preservesColimitIso : G.obj (colimit F) ≅ colimit (F ⋙ G)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitCompOfPreservesColimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
 
-English:
-definition preservesColimitIso
-  signature: : G.obj (colimit F) ≅ colimit (F ⋙ G)
-  body: (isColimitOfPreserves G (colimit.isColimit _)).coconePointUniqueUpToIso (colimit.isColimit _)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 preservesColimitIso
-  签名: : G.obj (colimit F) ≅ colimit (F ⋙ G)
-  定义体: (isColimitOfPreserves G (colimit.isColimit _)).coconePointUniqueUpToIso (colimit.isColimit _)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: coconePointUniqueUpToIso, colimit, colimit.isColimit, isColimit, isColimitOfPreserves
+--- 原说明 ---
+If `G` preserves colimits, we have an isomorphism from the image of the colimit 
+of a functor `F`
+to the colimit of the functor `F ⋙ G`.
 -/
 def preservesColimitIso : G.obj (colimit F) ≅ colimit (F ⋙ G) :=
   (isColimitOfPreserves G (colimit.isColimit _)).coconePointUniqueUpToIso (colimit.isColimit _)
 
 @[reassoc (attr := simp)]
-/--
-theorem `ι_preservesColimitIso_inv` / 定理 `ι_preservesColimitIso_inv`
-
-English:
-theorem ι_preservesColimitIso_inv
-  given: (j : J)
-  proof: IsColimit.comp_coconePointUniqueUpToIso_inv _ (colimit.isColimit (F ⋙ G)) j
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ι_preservesColimitIso_inv
-  条件: (j : J)
-  证明: IsColimit.comp_coconePointUniqueUpToIso_inv _ (colimit.isColimit (F ⋙ G)) j
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, colimit, colimit.isColimit, comp_coconePointUniqueUpToIso_inv, isColimit
+/-
+**CategoryTheory.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_preservesColimitIso_inv (j : J) :
     colimit.ι _ j ≫ (preservesColimitIso G F).inv = G.map (colimit.ι F j) :=
   IsColimit.comp_coconePointUniqueUpToIso_inv _ (colimit.isColimit (F ⋙ G)) j
 
 @[reassoc (attr := simp)]
-/--
-theorem `ι_preservesColimitIso_hom` / 定理 `ι_preservesColimitIso_hom`
-
-English:
-theorem ι_preservesColimitIso_hom
-  given: (j : J)
-  proof: (isColimitOfPreserves G (colimit.isColimit _)).comp_coconePointUniqueUpToIso_hom _ j
-
-中文:
-定理 ι_preservesColimitIso_hom
-  条件: (j : J)
-  证明: (isColimitOfPreserves G (colimit.isColimit _)).comp_coconePointUniqueUpToIso_hom _ j
-
-Depends on / 依赖: colimit, colimit.isColimit, comp_coconePointUniqueUpToIso_hom, isColimit, isColimitOfPreserves
+/-
+**CategoryTheory.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_preservesColimitIso_hom (j : J) :
     G.map (colimit.ι F j) ≫ (preservesColimitIso G F).hom = colimit.ι (F ⋙ G) j :=
@@ -344,45 +312,46 @@ theorem ι_preservesColimitIso_hom (j : J) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `preservesColimitIso_inv_comp_desc` / 定理 `preservesColimitIso_inv_comp_desc`
-
-English:
-theorem preservesColimitIso_inv_comp_desc
-  given: (t : Cocone F)
-  proof: by
-  ext
-  simp [← G.map_comp]
-
-中文:
-定理 preservesColimitIso_inv_comp_desc
-  条件: (t : 余锥 F)
-  证明: by
-  ext
-  simp [← G.map_comp]
-
-Depends on / 依赖: G.map_comp, map_comp
+/-
+**CategoryTheory.preservesColimitIso_inv_comp_desc** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：preservesColimitIso_inv_comp_desc (t : Cocone F) : (preservesColimitIso G 
+F).inv ≫ G.map (colimit.desc _ t) = colimit.desc _ (G.mapCocone t)
+参数：t : Cocone F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitCompOfPreservesColimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ι_preservesColimitIso_inv_assoc`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   (G : CategoryTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preservesColimitIso_inv_comp_desc (t : Cocone F) :
     (preservesColimitIso G F).inv ≫ G.map (colimit.desc _ t) =
     colimit.desc _ (G.mapCocone t) := by
   ext
   simp [← G.map_comp]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (colimit.post F G)
-  body: show IsIso (preservesColimitIso G F).inv from inferInstance
-
-中文:
-实例 :
-  签名: 是同构 (colimit.post F G)
-  定义体: show IsIso (preservesColimitIso G F).inv from inferInstance
-
-Depends on / 依赖: preservesColimitIso
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (colimit.post F G) :=
   show IsIso (preservesColimitIso G F).inv from inferInstance
@@ -393,44 +362,30 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `C, D` has all colimits of shape `J`, and `G` preserves them, then `preservesColimitIso`
 is functorial w.r.t. `F`. -/
 @[simps!]
-/--
-Definition of `preservesColimitNatIso` / `preservesColimitNatIso` 的定义
+/-
+**CategoryTheory.preservesColimitNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：preservesColimitNatIso : colim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G
+ ⋙ colim
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition preservesColimitNatIso
-  signature: : colim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G ⋙ colim
-  body: NatIso.ofComponents (fun F => preservesColimitIso G F)
-    (by
-      intro _ _ f
-      rw [← Iso.inv_comp_eq]; rw [← Category.assoc]; rw [← Iso.eq_comp_inv]
-      apply colimit.hom_ext; intro j
-      dsimp
-      rw [ι_colimMap_assoc]
-      simp only [ι_preservesColimitIso_inv, Functor.whiskerRight_app,
-        ι_preservesColimitIso_inv_assoc, ← G.map_comp]
-      rw [ι_colimMap])
-
-中文:
-定义 preservesColimit自然数Iso
-  签名: : colim ⋙ G ≅ (函子.whiskeringRight J C D).obj G ⋙ colim
-  定义体: NatIso.ofComponents (fun F => preservesColimitIso G F)
-    (by
-      intro _ _ f
-      rw [← Iso.inv_comp_eq]; rw [← Category.assoc]; rw [← Iso.eq_comp_inv]
-      apply colimit.hom_ext; intro j
-      dsimp
-      rw [ι_colimMap_assoc]
-      simp only [ι_preservesColimitIso_inv, Functor.whiskerRight_app,
-        ι_preservesColimitIso_inv_assoc, ← G.map_comp]
-      rw [ι_colimMap])
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.whiskerRight_app, G.map_comp, Iso.eq_comp_inv, Iso.inv_comp_eq, NatIso, NatIso.ofComponents, colimit, colimit.hom_ext, eq_comp_inv, hom_ext, inv_comp_eq, map_comp, ofComponents, preservesColimitIso, whiskerRight_app
+--- 原说明 ---
+If `C, D` has all colimits of shape `J`, and `G` preserves them, then `preserves
+ColimitIso`
+is functorial w.r.t. `F`.
 -/
 def preservesColimitNatIso : colim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G ⋙ colim :=
   NatIso.ofComponents (fun F => preservesColimitIso G F)
     (by
       intro _ _ f
-      rw [← Iso.inv_comp_eq]; rw [← Category.assoc]; rw [← Iso.eq_comp_inv]
+      rw [← Iso.inv_comp_eq, ← Category.assoc, ← Iso.eq_comp_inv]
       apply colimit.hom_ext; intro j
       dsimp
       rw [ι_colimMap_assoc]
@@ -444,26 +399,24 @@ section
 
 variable [HasColimit F] [HasColimit (F ⋙ G)]
 
-/--
-lemma `preservesColimit_of_isIso_post` / 引理 `preservesColimit_of_isIso_post`
+/-- If the comparison morphism `colimit (F ⋙ G) ⟶ G.obj (colimit F)` is an isomorphism, then `G`
+preserves colimits of `F`. -/
+/-
+**CategoryTheory.preservesColimit_of_isIso_post** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：preservesColimit_of_isIso_post [IsIso (colimit.post F G)] : PreservesColim
+it F G
+参数：colimit.post F G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone`：pres
+ervesColimit_of_preserves_colimit_cocone {F : C ⥤ D} {t : Cocone K} (h : IsColim
+it t) (hF : IsColimit (F.mapCocone t)) : PreservesColimi…
 
-English:
-lemma preservesColimit_of_isIso_post
-  given: [IsIso (colimit.post F G)]
-  statement: PreservesColimit F G
-  proof: preservesColimit_of_preserves_colimit_cocone (colimit.isColimit F) (by
-    convert! IsColimit.ofPointIso (colimit.isColimit (F ⋙ G))
-    assumption)
-
-中文:
-引理 preservesColimit_of_isIso_post
-  条件: [是同构 (colimit.post F G)]
-  结论: 保持余极限 F G
-  证明: preservesColimit_of_preserves_colimit_cocone (colimit.isColimit F) (by
-    convert! IsColimit.ofPointIso (colimit.isColimit (F ⋙ G))
-    assumption)
-
-Depends on / 依赖: IsColimit, IsColimit.ofPointIso, colimit, colimit.isColimit, convert, isColimit, ofPointIso, preservesColimit_of_preserves_colimit_cocone
+--- 原说明 ---
+If the comparison morphism `colimit (F ⋙ G) ⟶ G.obj (colimit F)` is an isomorphi
+sm, then `G`
+preserves colimits of `F`.
 -/
 lemma preservesColimit_of_isIso_post [IsIso (colimit.post F G)] : PreservesColimit F G :=
   preservesColimit_of_preserves_colimit_cocone (colimit.isColimit F) (by
@@ -473,3 +426,4 @@ lemma preservesColimit_of_isIso_post [IsIso (colimit.post F G)] : PreservesColim
 end
 
 end CategoryTheory
+

@@ -38,20 +38,13 @@ namespace Cat
 
 namespace HasLimits
 
-/--
-Instance `categoryObjects` / 实例 `categoryObjects`
-
-English:
-instance categoryObjects
-  signature: {F : J ⥤ Cat.{u, u}} {j}
-  body: (F.obj j).str
-
-中文:
-实例 categoryObjects
-  签名: {F : J ⥤ Cat.{u, u}} {j}
-  定义体: (F.obj j).str
-
-Depends on / 依赖: F.obj
+/-
+**CategoryTheory.Cat.HasLimits.categoryObjects** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Cat.HasLimits`。
+形式化陈述：categoryObjects {F : J ⥤ Cat.{u, u}} {j} : SmallCategory ((F ⋙ Cat.objects
+.{u, u}).obj j)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance categoryObjects {F : J ⥤ Cat.{u, u}} {j} :
     SmallCategory ((F ⋙ Cat.objects.{u, u}).obj j) :=
@@ -61,49 +54,24 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Auxiliary definition:
 the diagram whose limit gives the morphism space between two objects of the limit category. -/
 @[simps]
-/--
-Definition of `homDiagram` / `homDiagram` 的定义
+/-
+**CategoryTheory.Cat.HasLimits.homDiagram** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Cat.HasLimits`。
+形式化陈述：homDiagram {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v})) : J
+ ⥤ Type v where obj j
+参数：X Y : limit (F ⋙ Cat.objects.{v, v})。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homDiagram
-  signature: {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v}))
-  body: limit.π (F ⋙ Cat.objects) j X ⟶ limit.π (F ⋙ Cat.objects) j Y
-  map f := ↾fun g => by
-    refine eqToHom ?_ ≫ (F.map f).toFunctor.map g ≫ eqToHom ?_
-    · exact (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm
-    · exact congr_hom (limit.w (F ⋙ Cat.objects) f) Y
-  map_id X := by
-    ext f
-    let : Category (objects.obj (F.obj X)) := (inferInstance : Category (F.obj X))
-    simp [Functor.congr_hom congr($(F.map_id X).toFunctor) f]
-  map_comp {_ _ Z} f g := by
-    ext h
-    let : Category (objects.obj (F.obj Z)) := (inferInstance : Category (F.obj Z))
-    simp [Functor.congr_hom congr($(F.map_comp f g).toFunctor) h, eqToHom_map]
-
-中文:
-定义 homDiagram
-  签名: {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v}))
-  定义体: limit.π (F ⋙ Cat.objects) j X ⟶ limit.π (F ⋙ Cat.objects) j Y
-  map f := ↾fun g => by
-    refine eqToHom ?_ ≫ (F.map f).toFunctor.map g ≫ eqToHom ?_
-    · exact (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm
-    · exact congr_hom (limit.w (F ⋙ Cat.objects) f) Y
-  map_id X := by
-    ext f
-    let : Category (objects.obj (F.obj X)) := (inferInstance : Category (F.obj X))
-    simp [Functor.congr_hom congr($(F.map_id X).toFunctor) f]
-  map_comp {_ _ Z} f g := by
-    ext h
-    let : Category (objects.obj (F.obj Z)) := (inferInstance : Category (F.obj Z))
-    simp [Functor.congr_hom congr($(F.map_comp f g).toFunctor) h, eqToHom_map]
-
-Depends on / 依赖: Cat.objects, objects
+--- 原说明 ---
+Auxiliary definition:
+the diagram whose limit gives the morphism space between two objects of the limi
+t category.
 -/
 def homDiagram {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v})) :
     J ⥤ Type v where
   obj j := limit.π (F ⋙ Cat.objects) j X ⟶ limit.π (F ⋙ Cat.objects) j Y
-  map f := ↾fun g => by
+  map f := ↾fun g ↦ by
     refine eqToHom ?_ ≫ (F.map f).toFunctor.map g ≫ eqToHom ?_
     · exact (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm
     · exact congr_hom (limit.w (F ⋙ Cat.objects) f) Y
@@ -118,6 +86,11 @@ def homDiagram {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v})) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simps]
+/-
+**CategoryTheory.Cat.HasLimits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cat.Ha
+sLimits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : J ⥤ Cat.{v, v}) : Category (limit (F ⋙ Cat.objects) :) where
   Hom X Y := limit (homDiagram X Y)
   id X := Types.Limit.mk.{v, v} (homDiagram X X) (fun _ => 𝟙 _) fun j j' f => by simp
@@ -137,20 +110,16 @@ instance (F : J ⥤ Cat.{v, v}) : Category (limit (F ⋙ Cat.objects) :) where
 
 /-- Auxiliary definition: the limit category. -/
 @[simps]
-/--
-Definition of `limitConeX` / `limitConeX` 的定义
+/-
+**CategoryTheory.Cat.HasLimits.limitConeX** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Cat.HasLimits`。
+形式化陈述：limitConeX (F : J ⥤ Cat.{v, v}) : Cat.{v, v} where α
+参数：F : J ⥤ Cat.{v, v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeX
-  signature: (F : J ⥤ Cat.{v, v})
-  body: limit (F ⋙ Cat.objects)
-
-中文:
-定义 limitConeX
-  签名: (F : J ⥤ Cat.{v, v})
-  定义体: limit (F ⋙ Cat.objects)
-
-Depends on / 依赖: Cat.objects, objects
+--- 原说明 ---
+Auxiliary definition: the limit category.
 -/
 def limitConeX (F : J ⥤ Cat.{v, v}) : Cat.{v, v} where α := limit (F ⋙ Cat.objects)
 
@@ -158,34 +127,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 attribute [-simp] homDiagram_obj in
 /-- Auxiliary definition: the cone over the limit category. -/
 @[simps]
-/--
-Definition of `limitCone` / `limitCone` 的定义
+/-
+**CategoryTheory.Cat.HasLimits.limitCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Cat.HasLimits`。
+形式化陈述：limitCone (F : J ⥤ Cat.{v, v}) : Cone F where pt
+参数：F : J ⥤ Cat.{v, v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitCone
-  signature: (F : J ⥤ Cat.{v, v})
-  body: limitConeX F
-  π :=
-    { app := fun j => Functor.toCatHom
-        { obj := limit.π (F ⋙ Cat.objects) j
-          map := fun f => limit.π (homDiagram _ _) j f }
-naturality := fun _ _ f => Cat.Hom.ext
-        CategoryTheory.Functor.ext (fun X => (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm)
-          fun X Y h => (congr_hom (limit.w (homDiagram X Y) f) h).symm }
-
-中文:
-定义 limitCone
-  签名: (F : J ⥤ Cat.{v, v})
-  定义体: limitConeX F
-  π :=
-    { app := fun j => Functor.toCatHom
-        { obj := limit.π (F ⋙ Cat.objects) j
-          map := fun f => limit.π (homDiagram _ _) j f }
-naturality := fun _ _ f => Cat.Hom.ext
-        CategoryTheory.Functor.ext (fun X => (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm)
-          fun X Y h => (congr_hom (limit.w (homDiagram X Y) f) h).symm }
-
-Depends on / 依赖: limitConeX
+--- 原说明 ---
+Auxiliary definition: the cone over the limit category.
 -/
 def limitCone (F : J ⥤ Cat.{v, v}) : Cone F where
   pt := limitConeX F
@@ -193,7 +144,7 @@ def limitCone (F : J ⥤ Cat.{v, v}) : Cone F where
     { app := fun j => Functor.toCatHom
         { obj := limit.π (F ⋙ Cat.objects) j
           map := fun f => limit.π (homDiagram _ _) j f }
-naturality := fun _ _ f => Cat.Hom.ext
+      naturality := fun _ _ f => Cat.Hom.ext <|
         CategoryTheory.Functor.ext (fun X => (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm)
           fun X Y h => (congr_hom (limit.w (homDiagram X Y) f) h).symm }
 
@@ -202,61 +153,19 @@ attribute [-simp] homDiagram_obj Functor.comp_obj in
 set_option backward.isDefEq.respectTransparency false in
 /-- Auxiliary definition: the universal morphism to the proposed limit cone. -/
 @[simps! toFunctor]
-/--
-Definition of `limitConeLift` / `limitConeLift` 的定义
+/-
+**CategoryTheory.Cat.HasLimits.limitConeLift** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Cat.HasLimits`。
+形式化陈述：limitConeLift (F : J ⥤ Cat.{v, v}) (s : Cone F) : s.pt ⟶ limitConeX F
+参数：F : J ⥤ Cat.{v, v}；s : Cone F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeLift
-  signature: (F : J ⥤ Cat.{v, v}) (s : Cone F)
-  body: Functor.toCatHom {
-    obj :=
-      limit.lift (F ⋙ Cat.objects)
-        { pt := s.pt
-          π :=
-            { app := fun j => ↾(s.π.app j).toFunctor.obj
-              naturality := fun _ _ f => objects.congr_map (s.π.naturality f) } }
-    map f := by
-      fapply Types.Limit.mk.{v, v}
-      · intro j
-        refine eqToHom ?_ ≫ (s.π.app j).toFunctor.map f ≫ eqToHom ?_ <;> simp
-      · intro j j' h
-        dsimp [Functor.comp_obj, homDiagram_obj]
-        simp only [Functor.map_comp, eqToHom_map, ← Functor.comp_map, Category.assoc, eqToHom_trans,
-          eqToHom_trans_assoc]
-        have := congr($((s.π.naturality h).symm).toFunctor)
-        dsimp at this
-        rw [Functor.id_comp] at this
-        rw [Functor.congr_hom this f]
-        simp }
-
-中文:
-定义 limitConeLift
-  签名: (F : J ⥤ Cat.{v, v}) (s : 锥 F)
-  定义体: Functor.toCatHom {
-    obj :=
-      limit.lift (F ⋙ Cat.objects)
-        { pt := s.pt
-          π :=
-            { app := fun j => ↾(s.π.app j).toFunctor.obj
-              naturality := fun _ _ f => objects.congr_map (s.π.naturality f) } }
-    map f := by
-      fapply Types.Limit.mk.{v, v}
-      · intro j
-        refine eqToHom ?_ ≫ (s.π.app j).toFunctor.map f ≫ eqToHom ?_ <;> simp
-      · intro j j' h
-        dsimp [Functor.comp_obj, homDiagram_obj]
-        simp only [Functor.map_comp, eqToHom_map, ← Functor.comp_map, Category.assoc, eqToHom_trans,
-          eqToHom_trans_assoc]
-        have := congr($((s.π.naturality h).symm).toFunctor)
-        dsimp at this
-        rw [Functor.id_comp] at this
-        rw [Functor.congr_hom this f]
-        simp }
-
-Depends on / 依赖: Cat.objects, Category, Category.assoc, Functor, Functor.comp_map, Functor.comp_obj, Functor.map_comp, Functor.toCatHom, Types.Limit.mk, comp_map, comp_obj, congr_map, eqToHom, eqToHom_map, eqToHom_trans, eqToHom_trans_assoc, fapply, homDiagram_obj, limit.lift, map_comp
+--- 原说明 ---
+Auxiliary definition: the universal morphism to the proposed limit cone.
 -/
 def limitConeLift (F : J ⥤ Cat.{v, v}) (s : Cone F) : s.pt ⟶ limitConeX F :=
-Functor.toCatHom {
+  Functor.toCatHom <| {
     obj :=
       limit.lift (F ⋙ Cat.objects)
         { pt := s.pt
@@ -278,24 +187,10 @@ Functor.toCatHom {
         simp }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `limit_π_homDiagram_eqToHom` / 定理 `limit_π_homDiagram_eqToHom`
-
-English:
-theorem limit_π_homDiagram_eqToHom
-  statement: {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v}))
-  proof: by
-  subst h
-  simp [-homDiagram_obj]
-
-中文:
-定理 limit_π_homDiagram_eqToHom
-  结论: {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v}))
-  证明: by
-  subst h
-  simp [-homDiagram_obj]
-
-Depends on / 依赖: homDiagram_obj
+/-
+**CategoryTheory.Cat.HasLimits.limit_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Cat.HasLimits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem limit_π_homDiagram_eqToHom {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ Cat.objects.{v, v}))
     (j : J) (h : X = Y) :
@@ -306,54 +201,21 @@ theorem limit_π_homDiagram_eqToHom {F : J ⥤ Cat.{v, v}} (X Y : limit (F ⋙ C
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `limitConeIsLimit` / `limitConeIsLimit` 的定义
+/-- Auxiliary definition: the proposed cone is a limit cone. -/
+/-
+**CategoryTheory.Cat.HasLimits.limitConeIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Cat.HasLimits`。
+形式化陈述：limitConeIsLimit (F : J ⥤ Cat.{v, v}) : IsLimit (limitCone F) where lift
+参数：F : J ⥤ Cat.{v, v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeIsLimit
-  signature: (F : J ⥤ Cat.{v, v})
-  body: limitConeLift F
-fac s j := Cat.Hom.ext CategoryTheory.Functor.ext (by intro; simp [← comp_apply])
-    fun X Y f => by
-      dsimp [limitConeLift]
-      exact Types.Limit.π_mk.{v, v} _ _ _ _
-  uniq s m w := by
-    symm
-    ext1
-    refine CategoryTheory.Functor.ext ?_ ?_
-    · intro X
-      apply Types.limit_ext.{v, v}
-      intro j
-      simp [← comp_apply, ← w j]
-    · intro X Y f
-      have (j : _) := Functor.congr_hom congr($((w j).symm).toFunctor) f
-      simp [this, -homDiagram_obj, limit_π_homDiagram_eqToHom]
-
-中文:
-定义 limitConeIsLimit
-  签名: (F : J ⥤ Cat.{v, v})
-  定义体: limitConeLift F
-fac s j := Cat.Hom.ext CategoryTheory.Functor.ext (by intro; simp [← comp_apply])
-    fun X Y f => by
-      dsimp [limitConeLift]
-      exact Types.Limit.π_mk.{v, v} _ _ _ _
-  uniq s m w := by
-    symm
-    ext1
-    refine CategoryTheory.Functor.ext ?_ ?_
-    · intro X
-      apply Types.limit_ext.{v, v}
-      intro j
-      simp [← comp_apply, ← w j]
-    · intro X Y f
-      have (j : _) := Functor.congr_hom congr($((w j).symm).toFunctor) f
-      simp [this, -homDiagram_obj, limit_π_homDiagram_eqToHom]
-
-Depends on / 依赖: limitConeLift
+--- 原说明 ---
+Auxiliary definition: the proposed cone is a limit cone.
 -/
 def limitConeIsLimit (F : J ⥤ Cat.{v, v}) : IsLimit (limitCone F) where
   lift := limitConeLift F
-fac s j := Cat.Hom.ext CategoryTheory.Functor.ext (by intro; simp [← comp_apply])
+  fac s j := Cat.Hom.ext <| CategoryTheory.Functor.ext (by intro; simp [← comp_apply])
     fun X Y f => by
       dsimp [limitConeLift]
       exact Types.Limit.π_mk.{v, v} _ _ _ _
@@ -371,46 +233,22 @@ fac s j := Cat.Hom.ext CategoryTheory.Functor.ext (by intro; simp [← comp_appl
 
 end HasLimits
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The category of small categories has all small limits. -/
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: HasLimits Cat.{v, v}
-  body: { has_limit := fun F => ⟨⟨⟨HasLimits.limitCone F, HasLimits.limitConeIsLimit F⟩⟩⟩ }
-
-中文:
-实例 :
-  签名: 有极限 Cat.{v, v}
-  定义体: { has_limit := fun F => ⟨⟨⟨HasLimits.limitCone F, HasLimits.limitConeIsLimit F⟩⟩⟩ }
-
-Depends on / 依赖: HasLimits, HasLimits.limitCone, HasLimits.limitConeIsLimit, has_limit, limitCone, limitConeIsLimit
+--- 原说明 ---
+The category of small categories has all small limits.
 -/
 instance : HasLimits Cat.{v, v} where
   has_limits_of_shape _ :=
     { has_limit := fun F => ⟨⟨⟨HasLimits.limitCone F, HasLimits.limitConeIsLimit F⟩⟩⟩ }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesLimits Cat.objects.{v, v}
-  body: { preservesLimit := fun {F} =>
-        preservesLimit_of_preserves_limit_cone (HasLimits.limitConeIsLimit F)
-          (Limits.IsLimit.ofIsoLimit (limit.isLimit (F ⋙ Cat.objects))
-            (Cone.ext (by rfl) (by cat_disch))) }
-
-中文:
-实例 :
-  签名: PreservesLimits Cat.objects.{v, v}
-  定义体: { preservesLimit := fun {F} =>
-        preservesLimit_of_preserves_limit_cone (HasLimits.limitConeIsLimit F)
-          (Limits.IsLimit.ofIsoLimit (limit.isLimit (F ⋙ Cat.objects))
-            (Cone.ext (by rfl) (by cat_disch))) }
-
-Depends on / 依赖: Cat.objects, Cone.ext, HasLimits, HasLimits.limitConeIsLimit, IsLimit, Limits, Limits.IsLimit.ofIsoLimit, cat_disch, isLimit, limit.isLimit, limitConeIsLimit, objects, ofIsoLimit, preservesLimit, preservesLimit_of_preserves_limit_cone
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesLimits Cat.objects.{v, v} where
   preservesLimitsOfShape :=
@@ -422,3 +260,4 @@ instance : PreservesLimits Cat.objects.{v, v} where
 end Cat
 
 end CategoryTheory
+

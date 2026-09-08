@@ -40,130 +40,114 @@ namespace Scheme
 
 variable (K : Precoverage Scheme.{u})
 
-/--
-Definition of `JointlySurjective` / `JointlySurjective` 的定义
+/-- A coverage `K` on `Scheme` is called jointly surjective if every covering family in `K`
+is jointly surjective. -/
+/-
+**AlgebraicGeometry.Scheme.JointlySurjective** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebr
+aicGeometry.Scheme`。
+形式化陈述：CategoryTheory.Precoverage AlgebraicGeometry.Scheme → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class JointlySurjective
-  parameters: (K : Precoverage Scheme.{u})
-  axioms and operations (1):
-    - exists_eq({X : Scheme.{u}} (S : Presieve X) (hS : S in K X) (x : X)) : exists (Y : Scheme.{u}) (g : Y ⟶ X), S g ∧ x in Set.range g
-
-中文:
-类 JointlySurjective
-  参数: (K : Precoverage 概形.{u})
-  公理与运算 (1 个):
-    - exists_eq({X : 概形.{u}} (S : Presieve X) (hS : S in K X) (x : X)) : 存在 (Y : 概形.{u}) (g : Y ⟶ X), S g ∧ x in 集合.range g
+--- 原说明 ---
+A coverage `K` on `Scheme` is called jointly surjective if every covering family
+ in `K`
+is jointly surjective.
 -/
 class JointlySurjective (K : Precoverage Scheme.{u}) : Prop where
-  exists_eq {X : Scheme.{u}} (S : Presieve X) (hS : S in K X) (x : X) :
-    exists (Y : Scheme.{u}) (g : Y ⟶ X), S g ∧ x in Set.range g
+  exists_eq {X : Scheme.{u}} (S : Presieve X) (hS : S ∈ K X) (x : X) :
+    ∃ (Y : Scheme.{u}) (g : Y ⟶ X), S g ∧ x ∈ Set.range g
 
-/--
-Definition of `Cover` / `Cover` 的定义
+/-- A cover of `X` in the coverage `K` is a `0`-hypercover for `K`. -/
+/-
+**AlgebraicGeometry.Scheme.Cover** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicGeometry.
+Scheme`。
+形式化陈述：Cover (K : Precoverage Scheme.{u})
+参数：K : Precoverage Scheme.{u}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Cover
-  signature: (K : Precoverage Scheme.{u})
-  body: Precoverage.ZeroHypercover.{v} K
-
-中文:
-缩写 Cover
-  签名: (K : Precoverage 概形.{u})
-  定义体: Precoverage.ZeroHypercover.{v} K
-
-Depends on / 依赖: Precoverage, Precoverage.ZeroHypercover, ZeroHypercover
+--- 原说明 ---
+A cover of `X` in the coverage `K` is a `0`-hypercover for `K`.
 -/
 abbrev Cover (K : Precoverage Scheme.{u}) := Precoverage.ZeroHypercover.{v} K
 
 variable {K}
 
 variable {X Y Z : Scheme.{u}} (𝒰 : X.Cover K) (f : X ⟶ Z) (g : Y ⟶ Z)
-variable [forall x, HasPullback (𝒰.f x ≫ f) g]
-
-/--
-lemma `Cover.exists_eq` / 引理 `Cover.exists_eq`
-
-English:
-lemma Cover.exists_eq
-  given: [JointlySurjective K] (𝒰 : X.Cover K) (x : X)
-  proof: by
-  obtain ⟨Y, g, ⟨i⟩, y, hy⟩ := JointlySurjective.exists_eq 𝒰.presieve₀ 𝒰.mem₀ x
-  use i, y
-
-中文:
-引理 Cover.存在_eq
-  条件: [JointlySurjective K] (𝒰 : X.Cover K) (x : X)
-  证明: by
-  obtain ⟨Y, g, ⟨i⟩, y, hy⟩ := JointlySurjective.exists_eq 𝒰.presieve₀ 𝒰.mem₀ x
-  use i, y
-
-Depends on / 依赖: JointlySurjective, JointlySurjective.exists_eq, exists_eq
+variable [∀ x, HasPullback (𝒰.f x ≫ f) g]
+/-
+**AlgebraicGeometry.Scheme.Cover.exists_eq** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry.Scheme.Cover`。
+形式化陈述：∀ {K : CategoryTheory.Precoverage AlgebraicGeometry.Scheme} {X : Algebraic
+Geometry.Scheme}   [AlgebraicGeometry.Scheme.JointlySurjective K] (𝒰 : Algebraic
+Geometry.Scheme.Cover K X) (x : ↥X), ∃ i y, (𝒰.f i) y = x
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover K X；x : ↥X；𝒰.f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.JointlySurjective.exists_eq`：∀ {K : CategoryThe
+ory.Precoverage AlgebraicGeometry.Scheme} [self : AlgebraicGeometry.Scheme.Joint
+lySurjective K]   {X : AlgebraicGeometry.S…
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.mem₀`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {J : CategoryTheory.Precoverage C} {S : C}   (s
+elf : J.ZeroHypercover S), self.pres…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 lemma Cover.exists_eq [JointlySurjective K] (𝒰 : X.Cover K) (x : X) :
-    exists i y, 𝒰.f i y = x := by
+    ∃ i y, 𝒰.f i y = x := by
   obtain ⟨Y, g, ⟨i⟩, y, hy⟩ := JointlySurjective.exists_eq 𝒰.presieve₀ 𝒰.mem₀ x
   use i, y
 
-/--
-Definition of `Cover.idx` / `Cover.idx` 的定义
+/-- A choice of an index `i` such that `x` is in the range of `𝒰.f i`. -/
+/-
+**AlgebraicGeometry.Scheme.Cover.idx** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y.Scheme.Cover`。
+形式化陈述：{K : CategoryTheory.Precoverage AlgebraicGeometry.Scheme} →   {X : Algebra
+icGeometry.Scheme} →     [AlgebraicGeometry.Scheme.JointlySurjective K] → (𝒰 : A
+lgebraicGeometry.Scheme.Cover K X) → ↥X → 𝒰.I₀
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover K X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.exists_eq`：∀ {K : CategoryTheory.Precover
+age AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}   [AlgebraicGeometr
+y.Scheme.JointlySurjective K] …
 
-English:
-definition Cover.idx
-  signature: [JointlySurjective K] (𝒰 : X.Cover K) (x : X)
-  body: (𝒰.exists_eq x).choose
-
-中文:
-定义 Cover.idx
-  签名: [JointlySurjective K] (𝒰 : X.Cover K) (x : X)
-  定义体: (𝒰.exists_eq x).choose
-
-Depends on / 依赖: exists_eq
+--- 原说明 ---
+A choice of an index `i` such that `x` is in the range of `𝒰.f i`.
 -/
 def Cover.idx [JointlySurjective K] (𝒰 : X.Cover K) (x : X) : 𝒰.I₀ :=
   (𝒰.exists_eq x).choose
-
-/--
-lemma `Cover.covers` / 引理 `Cover.covers`
-
-English:
-lemma Cover.covers
-  given: [JointlySurjective K] (𝒰 : X.Cover K) (x : X)
-  proof: (𝒰.exists_eq x).choose_spec
-
-中文:
-引理 Cover.covers
-  条件: [JointlySurjective K] (𝒰 : X.Cover K) (x : X)
-  证明: (𝒰.exists_eq x).choose_spec
-
-Depends on / 依赖: choose_spec, exists_eq
+/-
+**AlgebraicGeometry.Scheme.Cover.covers** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.Scheme.Cover`。
+形式化陈述：∀ {K : CategoryTheory.Precoverage AlgebraicGeometry.Scheme} {X : Algebraic
+Geometry.Scheme}   [inst : AlgebraicGeometry.Scheme.JointlySurjective K] (𝒰 : Al
+gebraicGeometry.Scheme.Cover K X) (x : ↥X),   x ∈ Set.range ⇑(𝒰.f (𝒰.idx x))
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover K X；x : ↥X；𝒰.f (𝒰.idx x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.exists_eq`：∀ {K : CategoryTheory.Precover
+age AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}   [AlgebraicGeometr
+y.Scheme.JointlySurjective K] …
 -/
 lemma Cover.covers [JointlySurjective K] (𝒰 : X.Cover K) (x : X) :
-    x in Set.range (𝒰.f (𝒰.idx x)) :=
+    x ∈ Set.range (𝒰.f (𝒰.idx x)) :=
   (𝒰.exists_eq x).choose_spec
-
-/--
-theorem `Cover.iUnion_range` / 定理 `Cover.iUnion_range`
-
-English:
-theorem Cover.iUnion_range
-  given: [JointlySurjective K] {X : Scheme.{u}} (𝒰 : X.Cover K)
-  proof: by
-  rw [Set.eq_univ_iff_forall]
-  intro x
-  rw [Set.mem_iUnion]
-  exact 𝒰.exists_eq x
-
-中文:
-定理 Cover.iUnion_range
-  条件: [JointlySurjective K] {X : 概形.{u}} (𝒰 : X.Cover K)
-  证明: by
-  rw [Set.eq_univ_iff_forall]
-  intro x
-  rw [Set.mem_iUnion]
-  exact 𝒰.exists_eq x
-
-Depends on / 依赖: Set.eq_univ_iff_forall, Set.mem_iUnion, eq_univ_iff_forall, exists_eq, mem_iUnion
+/-
+**AlgebraicGeometry.Scheme.Cover.iUnion_range** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.Scheme.Cover`。
+形式化陈述：∀ {K : CategoryTheory.Precoverage AlgebraicGeometry.Scheme} [AlgebraicGeom
+etry.Scheme.JointlySurjective K]   {X : AlgebraicGeometry.Scheme} (𝒰 : Algebraic
+Geometry.Scheme.Cover K X), ⋃ i, Set.range ⇑(𝒰.f i) = Set.univ
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover K X；𝒰.f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.exists_eq`：∀ {K : CategoryTheory.Precover
+age AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}   [AlgebraicGeometr
+y.Scheme.JointlySurjective K] …
 -/
 theorem Cover.iUnion_range [JointlySurjective K] {X : Scheme.{u}} (𝒰 : X.Cover K) :
     ⋃ i, Set.range (𝒰.f i) = Set.univ := by
@@ -171,25 +155,17 @@ theorem Cover.iUnion_range [JointlySurjective K] {X : Scheme.{u}} (𝒰 : X.Cove
   intro x
   rw [Set.mem_iUnion]
   exact 𝒰.exists_eq x
-
-/--
-Instance `Cover.nonempty_of_nonempty` / 实例 `Cover.nonempty_of_nonempty`
-
-English:
-instance Cover.nonempty_of_nonempty
-  signature: [JointlySurjective K] [Nonempty X] (𝒰 : X.Cover K)
-  body: by
-  obtain ⟨i, _⟩ := 𝒰.exists_eq ‹Nonempty X›.some
-  use i
-
-中文:
-实例 Cover.nonempty_of_nonempty
-  签名: [JointlySurjective K] [非空 X] (𝒰 : X.Cover K)
-  定义体: by
-  obtain ⟨i, _⟩ := 𝒰.exists_eq ‹Nonempty X›.some
-  use i
-
-Depends on / 依赖: Nonempty, exists_eq
+/-
+**AlgebraicGeometry.Scheme.Cover.nonempty_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：∀ {K : CategoryTheory.Precoverage AlgebraicGeometry.Scheme} {X : Algebraic
+Geometry.Scheme}   [AlgebraicGeometry.Scheme.JointlySurjective K] [Nonempty ↥X] 
+(𝒰 : AlgebraicGeometry.Scheme.Cover K X), Nonempty 𝒰.I₀
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover K X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.exists_eq`：∀ {K : CategoryTheory.Precover
+age AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}   [AlgebraicGeometr
+y.Scheme.JointlySurjective K] …
 -/
 instance Cover.nonempty_of_nonempty [JointlySurjective K] [Nonempty X] (𝒰 : X.Cover K) :
     Nonempty 𝒰.I₀ := by
@@ -200,44 +176,29 @@ section MorphismProperty
 
 variable {P Q : MorphismProperty Scheme.{u}}
 
-/--
-lemma `presieve₀_mem_precoverage_iff` / 引理 `presieve₀_mem_precoverage_iff`
-
-English:
-lemma presieve₀_mem_precoverage_iff
-  given: (E : PreZeroHypercover X)
-  proof: by
-  simp
-
-@[grind ←]
-
-中文:
-引理 presieve₀_mem_precoverage_iff
-  条件: (E : PreZeroHypercover X)
-  证明: by
-  simp
-
-@[grind ←]
+/-
+**AlgebraicGeometry.Scheme.presieve** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry
+.Scheme`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma presieve₀_mem_precoverage_iff (E : PreZeroHypercover X) :
-    E.presieve₀ in precoverage P X ↔ (forall x, exists i, x in Set.range (E.f i)) ∧ forall i, P (E.f i) := by
+    E.presieve₀ ∈ precoverage P X ↔ (∀ x, ∃ i, x ∈ Set.range (E.f i)) ∧ ∀ i, P (E.f i) := by
   simp
 
 @[grind ←]
-/--
-lemma `Cover.map_prop` / 引理 `Cover.map_prop`
-
-English:
-lemma Cover.map_prop
-  given: (𝒰 : X.Cover (precoverage P)) (i : 𝒰.I₀)
-  statement: P (𝒰.f i)
-  proof: 𝒰.mem₀.2 ⟨i⟩
-
-中文:
-引理 Cover.map_prop
-  条件: (𝒰 : X.Cover (precoverage P)) (i : 𝒰.I₀)
-  结论: P (𝒰.f i)
-  证明: 𝒰.mem₀.2 ⟨i⟩
+/-
+**AlgebraicGeometry.Scheme.Cover.map_prop** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.Scheme.Cover`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {P : CategoryTheory.MorphismProperty Alge
+braicGeometry.Scheme}   (𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry.S
+cheme.precoverage P) X) (i : 𝒰.I₀), P (𝒰.f i)
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) X
+；i : 𝒰.I₀；𝒰.f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.mem₀`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {J : CategoryTheory.Precoverage C} {S : C}   (s
+elf : J.ZeroHypercover S), self.pres…
 -/
 lemma Cover.map_prop (𝒰 : X.Cover (precoverage P)) (i : 𝒰.I₀) : P (𝒰.f i) :=
   𝒰.mem₀.2 ⟨i⟩
@@ -245,34 +206,27 @@ lemma Cover.map_prop (𝒰 : X.Cover (precoverage P)) (i : 𝒰.I₀) : P (𝒰.
 /-- Given a family of schemes with morphisms to `X` satisfying `P` that jointly
 cover `X`, `Cover.mkOfCovers` is an associated `P`-cover of `X`. -/
 @[simps!]
-/--
-Definition of `Cover.mkOfCovers` / `Cover.mkOfCovers` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.mkOfCovers** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.Scheme.Cover`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} →   {P : CategoryTheory.MorphismProperty Al
+gebraicGeometry.Scheme} →     (J : Type u_1) →       (obj : J → AlgebraicGeometr
+y.Scheme) →         (map : (j : J) → obj j ⟶ X) →           (∀ (x : ↥X), ∃ j y, 
+(map j) y = x) →             autoParam (∀ (j : J), P (map j)) AlgebraicGeometry.
+Scheme.Cover.mkOfCovers._auto_1 →               AlgebraicGeometry.Scheme.Cover (
+AlgebraicGeometry.Scheme.precoverage P) X
+参数：J : Type u_1；obj : J → AlgebraicGeometry.Scheme；map : (j : J) → obj j ⟶ X；∀ (
+x : ↥X), ∃ j y, (map j) y = x；∀ (j : J), P (map j)；AlgebraicGeometry.Scheme.prec
+overage P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cover.mkOfCovers
-  signature: (J : Type*) (obj : J -> Scheme.{u}) (map : (j : J) -> obj j ⟶ X)
-  body: J
-  X := obj
-  f := map
-  mem₀ := by
-    simp_rw [presieve₀_mem_precoverage_iff, Set.mem_range]
-    grind
-
-中文:
-定义 Cover.mkOfCovers
-  签名: (J : 类型) (obj : J -> 概形.{u}) (map : (j : J) -> obj j ⟶ X)
-  定义体: J
-  X := obj
-  f := map
-  mem₀ := by
-    simp_rw [presieve₀_mem_precoverage_iff, Set.mem_range]
-    grind
-
-Depends on / 依赖: Set.mem_range, X.Cover, infer_instance, mem_range, precoverage, simp_rw
+--- 原说明 ---
+Given a family of schemes with morphisms to `X` satisfying `P` that jointly
+cover `X`, `Cover.mkOfCovers` is an associated `P`-cover of `X`.
 -/
-def Cover.mkOfCovers (J : Type*) (obj : J -> Scheme.{u}) (map : (j : J) -> obj j ⟶ X)
-    (covers : forall x, exists j y, map j y = x)
-    (map_prop : forall j, P (map j) := by infer_instance) : X.Cover (precoverage P) where
+def Cover.mkOfCovers (J : Type*) (obj : J → Scheme.{u}) (map : (j : J) → obj j ⟶ X)
+    (covers : ∀ x, ∃ j y, map j y = x)
+    (map_prop : ∀ j, P (map j) := by infer_instance) : X.Cover (precoverage P) where
   I₀ := J
   X := obj
   f := map
@@ -282,88 +236,55 @@ def Cover.mkOfCovers (J : Type*) (obj : J -> Scheme.{u}) (map : (j : J) -> obj j
 
 /-- An isomorphism `X ⟶ Y` is a `P`-cover of `Y`. -/
 @[simps! I₀ X f]
-/--
-Definition of `coverOfIsIso` / `coverOfIsIso` 的定义
+/-
+**AlgebraicGeometry.Scheme.coverOfIsIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.Scheme`。
+形式化陈述：coverOfIsIso [P.ContainsIdentities] [P.RespectsIso] {X Y : Scheme.{u}} (f 
+: X ⟶ Y) [IsIso f] : Cover.{v} (precoverage P) Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.of_isIso`：of_isIso (P : MorphismProperty
+ C) [P.ContainsIdentities] [P.RespectsIso] {X Y : C} (f : X ⟶ Y) [IsIso f] : P f
 
-English:
-definition coverOfIsIso
-  signature: [P.ContainsIdentities] [P.RespectsIso] {X Y : Scheme.{u}} (f : X ⟶ Y)
-  body: .mkOfCovers PUnit (fun _ => X)
-    (fun _ => f)
-    (fun x => ⟨⟨⟩, inv f x, by simp [← Hom.comp_apply]⟩)
-    (fun _ => P.of_isIso f)
-
-中文:
-定义 coverOfIsIso
-  签名: [P.余ntainsIdentities] [P.RespectsIso] {X Y : 概形.{u}} (f : X ⟶ Y)
-  定义体: .mkOfCovers PUnit (fun _ => X)
-    (fun _ => f)
-    (fun x => ⟨⟨⟩, inv f x, by simp [← Hom.comp_apply]⟩)
-    (fun _ => P.of_isIso f)
-
-Depends on / 依赖: Hom.comp_apply, P.of_isIso, comp_apply, mkOfCovers, of_isIso
+--- 原说明 ---
+An isomorphism `X ⟶ Y` is a `P`-cover of `Y`.
 -/
 def coverOfIsIso [P.ContainsIdentities] [P.RespectsIso] {X Y : Scheme.{u}} (f : X ⟶ Y)
     [IsIso f] : Cover.{v} (precoverage P) Y :=
-  .mkOfCovers PUnit (fun _ => X)
-    (fun _ => f)
-    (fun x => ⟨⟨⟩, inv f x, by simp [← Hom.comp_apply]⟩)
-    (fun _ => P.of_isIso f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: JointlySurjective (precoverage P)
-  body: fun ⟨hR, _⟩ x => by
-    rw [jointlySurjectivePrecoverage]; rw [Presieve.mem_comap_jointlySurjectivePrecoverage_iff] at hR
-    obtain ⟨Y, g, hg, heq⟩ := hR x
-    use Y, g, hg
-    exact heq
-
-中文:
-实例 :
-  签名: JointlySurjective (precoverage P)
-  定义体: fun ⟨hR, _⟩ x => by
-    rw [jointlySurjectivePrecoverage]; rw [Presieve.mem_comap_jointlySurjectivePrecoverage_iff] at hR
-    obtain ⟨Y, g, hg, heq⟩ := hR x
-    use Y, g, hg
-    exact heq
-
-Depends on / 依赖: Presieve, Presieve.mem_comap_jointlySurjectivePrecoverage_iff, jointlySurjectivePrecoverage, mem_comap_jointlySurjectivePrecoverage_iff
+  .mkOfCovers PUnit (fun _ ↦ X)
+    (fun _ ↦ f)
+    (fun x ↦ ⟨⟨⟩, inv f x, by simp [← Hom.comp_apply]⟩)
+    (fun _ ↦ P.of_isIso f)
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : JointlySurjective (precoverage P) where
-  exists_eq {X} R := fun ⟨hR, _⟩ x => by
-    rw [jointlySurjectivePrecoverage]; rw [Presieve.mem_comap_jointlySurjectivePrecoverage_iff] at hR
+  exists_eq {X} R := fun ⟨hR, _⟩ x ↦ by
+    rw [jointlySurjectivePrecoverage, Presieve.mem_comap_jointlySurjectivePrecoverage_iff] at hR
     obtain ⟨Y, g, hg, heq⟩ := hR x
     use Y, g, hg
     exact heq
 
-/--
-Definition of `Cover.changeProp` / `Cover.changeProp` 的定义
+/-- Turn a `K`-cover into a `Q`-cover by showing that the components satisfy `Q`. -/
+/-
+**AlgebraicGeometry.Scheme.Cover.changeProp** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.Scheme.Cover`。
+形式化陈述：{K : CategoryTheory.Precoverage AlgebraicGeometry.Scheme} →   {X : Algebra
+icGeometry.Scheme} →     {Q : CategoryTheory.MorphismProperty AlgebraicGeometry.
+Scheme} →       [AlgebraicGeometry.Scheme.JointlySurjective K] →         (𝒰 : Al
+gebraicGeometry.Scheme.Cover K X) →           (∀ (j : 𝒰.I₀), Q (𝒰.f j)) → Algebr
+aicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage Q) X
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover K X；∀ (j : 𝒰.I₀), Q (𝒰.f j)；AlgebraicGeome
+try.Scheme.precoverage Q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cover.changeProp
-  signature: [JointlySurjective K] (𝒰 : X.Cover K) (h : forall j, Q (𝒰.f j))
-  body: 𝒰.I₀
-  X := 𝒰.X
-  f := 𝒰.f
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    exact ⟨𝒰.exists_eq, h⟩
-
-中文:
-定义 Cover.changeProp
-  签名: [JointlySurjective K] (𝒰 : X.Cover K) (h : 对任意 j, Q (𝒰.f j))
-  定义体: 𝒰.I₀
-  X := 𝒰.X
-  f := 𝒰.f
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    exact ⟨𝒰.exists_eq, h⟩
+--- 原说明 ---
+Turn a `K`-cover into a `Q`-cover by showing that the components satisfy `Q`.
 -/
-def Cover.changeProp [JointlySurjective K] (𝒰 : X.Cover K) (h : forall j, Q (𝒰.f j)) :
+def Cover.changeProp [JointlySurjective K] (𝒰 : X.Cover K) (h : ∀ j, Q (𝒰.f j)) :
     X.Cover (precoverage Q) where
   I₀ := 𝒰.I₀
   X := 𝒰.X
@@ -375,53 +296,38 @@ def Cover.changeProp [JointlySurjective K] (𝒰 : X.Cover K) (h : forall j, Q (
 /-- We construct a cover from another, by providing the needed fields and showing that the
 provided fields are isomorphic with the original cover. -/
 @[simps I₀ X f]
-/--
-Definition of `Cover.copy` / `Cover.copy` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.copy** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeomet
+ry.Scheme.Cover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   [P.Resp
+ectsIso] →     {X : AlgebraicGeometry.Scheme} →       (𝒰 : AlgebraicGeometry.Sch
+eme.Cover (AlgebraicGeometry.Scheme.precoverage P) X) →         (J : Type u_1) →
+           (obj : J → AlgebraicGeometry.Scheme) →             (map : (i : J) → o
+bj i ⟶ X) →               (e₁ : J ≃ 𝒰.I₀) →                 (e₂ : (i : J) → obj 
+i ≅ 𝒰.X (e₁ i)) →                   (∀ (i : J), map i = CategoryTheory.CategoryS
+truct.comp (e₂ i).hom (𝒰.f (e₁ i))) →                     AlgebraicGeometry.Sche
+me.Cover (AlgebraicGeometry.Scheme.precoverage P) X
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) X
+；J : Type u_1；obj : J → AlgebraicGeometry.Scheme；map : (i : J) → obj i ⟶ X；e₁ : 
+J ≃ 𝒰.I₀；e₂ : (i : J) → obj i ≅ 𝒰.X (e₁ i)；∀ (i : J), map i = CategoryTheory.Cat
+egoryStruct.comp (e₂ i).hom (𝒰.f (e₁ i))；AlgebraicGeometry.Scheme.precoverage P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cover.copy
-  signature: [P.RespectsIso] {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P))
-  body: J
-  X := obj
-  f := map
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, ?_⟩
-    · obtain ⟨i, y, rfl⟩ := 𝒰.exists_eq x
-      obtain ⟨i, rfl⟩ := e₁.surjective i
-      use i, (e₂ i).inv y
-      simp [h]
-    · simp_rw [h, MorphismProperty.cancel_left_of_respectsIso]
-      intro i
-      exact 𝒰.map_prop _
-
-中文:
-定义 Cover.copy
-  签名: [P.RespectsIso] {X : 概形.{u}} (𝒰 : X.Cover (precoverage P))
-  定义体: J
-  X := obj
-  f := map
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, ?_⟩
-    · obtain ⟨i, y, rfl⟩ := 𝒰.exists_eq x
-      obtain ⟨i, rfl⟩ := e₁.surjective i
-      use i, (e₂ i).inv y
-      simp [h]
-    · simp_rw [h, MorphismProperty.cancel_left_of_respectsIso]
-      intro i
-      exact 𝒰.map_prop _
+--- 原说明 ---
+We construct a cover from another, by providing the needed fields and showing th
+at the
+provided fields are isomorphic with the original cover.
 -/
 def Cover.copy [P.RespectsIso] {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P))
-    (J : Type*) (obj : J -> Scheme)
-    (map : forall i, obj i ⟶ X) (e₁ : J ≃ 𝒰.I₀) (e₂ : forall i, obj i ≅ 𝒰.X (e₁ i))
-    (h : forall i, map i = (e₂ i).hom ≫ 𝒰.f (e₁ i)) : X.Cover (precoverage P) where
+    (J : Type*) (obj : J → Scheme)
+    (map : ∀ i, obj i ⟶ X) (e₁ : J ≃ 𝒰.I₀) (e₂ : ∀ i, obj i ≅ 𝒰.X (e₁ i))
+    (h : ∀ i, map i = (e₂ i).hom ≫ 𝒰.f (e₁ i)) : X.Cover (precoverage P) where
   I₀ := J
   X := obj
   f := map
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, ?_⟩
+    refine ⟨fun x ↦ ?_, ?_⟩
     · obtain ⟨i, y, rfl⟩ := 𝒰.exists_eq x
       obtain ⟨i, rfl⟩ := e₁.surjective i
       use i, (e₂ i).inv y
@@ -436,24 +342,28 @@ def Cover.copy [P.RespectsIso] {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P))
 set_option backward.isDefEq.respectTransparency false in
 /-- The pushforward of a cover along an isomorphism. -/
 @[simps! I₀ X f, implicit_reducible]
-/--
-Definition of `Cover.pushforwardIso` / `Cover.pushforwardIso` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.pushforwardIso** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.Scheme.Cover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   [P.Resp
+ectsIso] →     [P.ContainsIdentities] →       [P.IsStableUnderComposition] →    
+     {X Y : AlgebraicGeometry.Scheme} →           AlgebraicGeometry.Scheme.Cover
+ (AlgebraicGeometry.Scheme.precoverage P) X →             (f : X ⟶ Y) →         
+      [CategoryTheory.IsIso f] → AlgebraicGeometry.Scheme.Cover (AlgebraicGeomet
+ry.Scheme.precoverage P) Y
+参数：AlgebraicGeometry.Scheme.precoverage P；f : X ⟶ Y；AlgebraicGeometry.Scheme.pre
+coverage P。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderCompositionPrecoverageOfIsStab
+leUnderComposition`：∀ (P : CategoryTheory.MorphismProperty AlgebraicGeometry.Sch
+eme) [P.IsStableUnderComposition],   (AlgebraicGeometry.Scheme.precoverage P).Is
+…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Cover.pushforwardIso
-  signature: [P.RespectsIso] [P.ContainsIdentities] [P.IsStableUnderComposition]
-  body: Cover.copy ((coverOfIsIso.{v, u} f).bind fun _ => 𝒰) 𝒰.I₀ _ _
-    ((Equiv.punitProd _).symm.trans (Equiv.sigmaEquivProd PUnit 𝒰.I₀).symm) (fun _ => Iso.refl _)
-    fun _ => (Category.id_comp _).symm
-
-中文:
-定义 Cover.pushforwardIso
-  签名: [P.RespectsIso] [P.余ntainsIdentities] [P.是StableUnderComposition]
-  定义体: Cover.copy ((coverOfIsIso.{v, u} f).bind fun _ => 𝒰) 𝒰.I₀ _ _
-    ((Equiv.punitProd _).symm.trans (Equiv.sigmaEquivProd PUnit 𝒰.I₀).symm) (fun _ => Iso.refl _)
-    fun _ => (Category.id_comp _).symm
-
-Depends on / 依赖: Category, Category.id_comp, Cover.copy, Equiv.punitProd, Equiv.sigmaEquivProd, Iso.refl, coverOfIsIso, id_comp, punitProd, sigmaEquivProd, symm.trans
+--- 原说明 ---
+The pushforward of a cover along an isomorphism.
 -/
 def Cover.pushforwardIso [P.RespectsIso] [P.ContainsIdentities] [P.IsStableUnderComposition]
     {X Y : Scheme.{u}} (𝒰 : Cover.{v} (precoverage P) X) (f : X ⟶ Y) [IsIso f] :
@@ -469,80 +379,88 @@ nonrec def Cover.add {X Y : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (f : Y 
   __ := 𝒰.toPreZeroHypercover.add f
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-refine ⟨fun x => ⟨some 𝒰.idx x, 𝒰.covers x⟩, ?_⟩
+    refine ⟨fun x ↦ ⟨some <| 𝒰.idx x, 𝒰.covers x⟩, ?_⟩
     rintro (i | i) <;> simp [hf, 𝒰.map_prop]
 
-/--
-Definition of `Cover.pullbackHom` / `Cover.pullbackHom` 的定义
+/-- The family of morphisms from the pullback cover to the original cover. -/
+/-
+**AlgebraicGeometry.Scheme.Cover.pullbackHom** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry.Scheme.Cover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   [inst :
+ P.IsStableUnderBaseChange] →     [inst_1 : AlgebraicGeometry.Scheme.IsJointlySu
+rjectivePreserving P] →       {X W : AlgebraicGeometry.Scheme} →         (𝒰 : Al
+gebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) X) →      
+     (f : W ⟶ X) →             (i : 𝒰.toPreZeroHypercover.1) →               [in
+st_2 : ∀ (x : 𝒰.I₀), CategoryTheory.Limits.HasPullback f (𝒰.f x)] →             
+    (CategoryTheory.Precoverage.ZeroHypercover.pullback₁ f 𝒰).X i ⟶ 𝒰.X i
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) X
+；f : W ⟶ X；i : 𝒰.toPreZeroHypercover.1；x : 𝒰.I₀；𝒰.f x；CategoryTheory.Precoverage
+.ZeroHypercover.pullback₁ f 𝒰。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cover.pullbackHom
-  signature: [P.IsStableUnderBaseChange] [IsJointlySurjectivePreserving P]
-  body: pullback.snd f (𝒰.f i)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 Cover.pullbackHom
-  签名: [P.是StableUnderBaseChange] [是JointlySurjectivePreserving P]
-  定义体: pullback.snd f (𝒰.f i)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: pullback, pullback.snd
+--- 原说明 ---
+The family of morphisms from the pullback cover to the original cover.
 -/
 def Cover.pullbackHom [P.IsStableUnderBaseChange] [IsJointlySurjectivePreserving P]
-    {X W : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (f : W ⟶ X) (i) [forall x, HasPullback f (𝒰.f x)] :
+    {X W : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (f : W ⟶ X) (i) [∀ x, HasPullback f (𝒰.f x)] :
     (𝒰.pullback₁ f).X i ⟶ 𝒰.X i :=
   pullback.snd f (𝒰.f i)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Cover.pullbackHom_map` / 引理 `Cover.pullbackHom_map`
-
-English:
-lemma Cover.pullbackHom_map
-  statement: [P.IsStableUnderBaseChange] [IsJointlySurjectivePreserving P]
-  proof: pullback.condition.symm
-
-中文:
-引理 Cover.pullbackHom_map
-  结论: [P.是StableUnderBaseChange] [是JointlySurjectivePreserving P]
-  证明: pullback.condition.symm
-
-Depends on / 依赖: condition, pullback, pullback.condition.symm
+/-
+**AlgebraicGeometry.Scheme.Cover.pullbackHom_map** 是 Mathlib 中的一个定理，位于命名空间 `Alge
+braicGeometry.Scheme.Cover`。
+形式化陈述：∀ {P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} [inst : P
+.IsStableUnderBaseChange]   [inst_1 : AlgebraicGeometry.Scheme.IsJointlySurjecti
+vePreserving P] {X W : AlgebraicGeometry.Scheme}   (𝒰 : AlgebraicGeometry.Scheme
+.Cover (AlgebraicGeometry.Scheme.precoverage P) X) (f : W ⟶ X)   [inst_2 : ∀ (x 
+: 𝒰.I₀), CategoryTheory.Limits.HasPullback f (𝒰.f x)] (i : 𝒰.toPreZeroHypercover
+.1),   CategoryTheory.CategoryStruct.comp (𝒰.pullbackHom f i) (𝒰.f i) =     Cate
+goryTheory.CategoryStruct.comp ((CategoryTheory.Precoverage.ZeroHypercover.pullb
+ack₁ f 𝒰).f i) f
+参数：𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) X
+；f : W ⟶ X；x : 𝒰.I₀；𝒰.f x；i : 𝒰.toPreZeroHypercover.1；𝒰.pullbackHom f i；𝒰.f i；(C
+ategoryTheory.Precoverage.ZeroHypercover.pullback₁ f 𝒰).f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
 -/
 lemma Cover.pullbackHom_map [P.IsStableUnderBaseChange] [IsJointlySurjectivePreserving P]
     {X W : Scheme.{u}} (𝒰 : X.Cover (precoverage P)) (f : W ⟶ X)
-    [forall (x : 𝒰.I₀), HasPullback f (𝒰.f x)] (i) :
+    [∀ (x : 𝒰.I₀), HasPullback f (𝒰.f x)] (i) :
     𝒰.pullbackHom f i ≫ 𝒰.f i = (𝒰.pullback₁ f).f i ≫ f := pullback.condition.symm
 
 /--
-Definition of `AffineCover` / `AffineCover` 的定义
+An affine cover of `X` consists of a jointly surjective family of maps into `X` from
+spectra of rings.
 
-English:
-structure AffineCover
-  parameters: (P : MorphismProperty Scheme.{u}) (S : Scheme.{u})
-  axioms and operations (6):
-    - I₀ : Type v
-    - X((j : I₀)) : CommRingCat.{u}
-    - f((j : I₀)) : Spec (X j) ⟶ S
-    - idx((x : S)) : I₀
-    - covers((x : S)) : x in Set.range (f (idx x))
-    - map_prop((j : I₀)) : P (f j)  [default: by infer_instance]
+Note: The `map_prop` field is equipped with a default argument `by infer_instance`. In general
+this causes worse error messages, but in practice `P` is mostly defined via `class`.
+-/
+/-
+**AlgebraicGeometry.Scheme.AffineCover** 是 Mathlib 中的一个结构，位于命名空间 `AlgebraicGeome
+try.Scheme`。
+形式化陈述：AffineCover (P : MorphismProperty Scheme.{u}) (S : Scheme.{u}) where /-- i
+ndex set of an affine cover of a scheme `S` -/ I₀ : Type v /-- the ring associat
+ed to a component of an affine cover -/ X (j : I₀) : CommRingCat.{u} /-- the com
+ponents map to `S` -/ f (j : I₀) : Spec (X j) ⟶ S /-- given a point of `x : S`, 
+`idx x` is the index of the component which contains `x` -/ idx (x : S) : I₀ /--
+ the components cover `S` -/ covers (x : S) : x in Set.range (f (idx x)) /-- the
+ component maps satisfy `P
+参数：P : MorphismProperty Scheme.{u}；S : Scheme.{u}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 仿射覆盖
-  参数: (P : MorphismProperty 概形.{u}) (S : 概形.{u})
-  公理与运算 (6 个):
-    - I₀ : 类型v
-    - X((j : I₀)) : 交换环范畴.{u}
-    - f((j : I₀)) : Spec (X j) ⟶ S
-    - idx((x : S)) : I₀
-    - covers((x : S)) : x in 集合.range (f (idx x))
-    - map_prop((j : I₀)) : P (f j)  [默认: by infer_instance]
+--- 原说明 ---
+An affine cover of `X` consists of a jointly surjective family of maps into `X` 
+from
+spectra of rings.
 
-Depends on / 依赖: infer_instance
+Note: The `map_prop` field is equipped with a default argument `by infer_instanc
+e`. In general
+this causes worse error messages, but in practice `P` is mostly defined via `cla
+ss`. -/
 -/
 structure AffineCover (P : MorphismProperty Scheme.{u}) (S : Scheme.{u}) where
   /-- index set of an affine cover of a scheme `S` -/
@@ -554,38 +472,23 @@ structure AffineCover (P : MorphismProperty Scheme.{u}) (S : Scheme.{u}) where
   /-- given a point of `x : S`, `idx x` is the index of the component which contains `x` -/
   idx (x : S) : I₀
   /-- the components cover `S` -/
-  covers (x : S) : x in Set.range (f (idx x))
+  covers (x : S) : x ∈ Set.range (f (idx x))
   /-- the component maps satisfy `P` -/
   map_prop (j : I₀) : P (f j) := by infer_instance
 
 /-- The cover associated to an affine cover. -/
 @[simps]
-/--
-Definition of `AffineCover.cover` / `AffineCover.cover` 的定义
+/-
+**AlgebraicGeometry.Scheme.AffineCover.cover** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry.Scheme.AffineCover`。
+形式化陈述：{P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} →   {X : Al
+gebraicGeometry.Scheme} →     AlgebraicGeometry.Scheme.AffineCover P X → Algebra
+icGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) X
+参数：AlgebraicGeometry.Scheme.precoverage P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AffineCover.cover
-  signature: {X : Scheme.{u}} (𝒰 : X.AffineCover P)
-  body: 𝒰.I₀
-  X j := Spec (𝒰.X j)
-  f := 𝒰.f
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, 𝒰.map_prop⟩
-    obtain ⟨y, hy⟩ := 𝒰.covers x
-    use 𝒰.idx x, y
-
-中文:
-定义 仿射覆盖.cover
-  签名: {X : 概形.{u}} (𝒰 : X.仿射覆盖 P)
-  定义体: 𝒰.I₀
-  X j := Spec (𝒰.X j)
-  f := 𝒰.f
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, 𝒰.map_prop⟩
-    obtain ⟨y, hy⟩ := 𝒰.covers x
-    use 𝒰.idx x, y
+--- 原说明 ---
+The cover associated to an affine cover.
 -/
 def AffineCover.cover {X : Scheme.{u}} (𝒰 : X.AffineCover P) :
     X.Cover (precoverage P) where
@@ -594,36 +497,28 @@ def AffineCover.cover {X : Scheme.{u}} (𝒰 : X.AffineCover P) :
   f := 𝒰.f
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, 𝒰.map_prop⟩
+    refine ⟨fun x ↦ ?_, 𝒰.map_prop⟩
     obtain ⟨y, hy⟩ := 𝒰.covers x
     use 𝒰.idx x, y
 
 /-- Any `v`-cover `𝒰` induces a `u`-cover indexed by the points of `X`. -/
 @[simps!]
-/--
-Definition of `Cover.ulift` / `Cover.ulift` 的定义
+/-
+**AlgebraicGeometry.Scheme.Cover.ulift** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeome
+try.Scheme.Cover`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} →   {P : CategoryTheory.MorphismProperty Al
+gebraicGeometry.Scheme} →     AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry.
+Scheme.precoverage P) X →       AlgebraicGeometry.Scheme.Cover (AlgebraicGeometr
+y.Scheme.precoverage P) X
+参数：AlgebraicGeometry.Scheme.precoverage P；AlgebraicGeometry.Scheme.precoverage P
+。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
 
-English:
-definition Cover.ulift
-  signature: (𝒰 : Cover.{v} (precoverage P) X)
-  body: X
-  X x := 𝒰.X (𝒰.idx x)
-  f x := 𝒰.f _
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun i => 𝒰.map_prop _⟩
-    use x, (𝒰.exists_eq x).choose_spec.choose, (𝒰.exists_eq x).choose_spec.choose_spec
-
-中文:
-定义 Cover.ulift
-  签名: (𝒰 : Cover.{v} (precoverage P) X)
-  定义体: X
-  X x := 𝒰.X (𝒰.idx x)
-  f x := 𝒰.f _
-  mem₀ := by
-    rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun i => 𝒰.map_prop _⟩
-    use x, (𝒰.exists_eq x).choose_spec.choose, (𝒰.exists_eq x).choose_spec.choose_spec
+--- 原说明 ---
+Any `v`-cover `𝒰` induces a `u`-cover indexed by the points of `X`.
 -/
 def Cover.ulift (𝒰 : Cover.{v} (precoverage P) X) : Cover.{u} (precoverage P) X where
   I₀ := X
@@ -631,23 +526,12 @@ def Cover.ulift (𝒰 : Cover.{v} (precoverage P) X) : Cover.{u} (precoverage P)
   f x := 𝒰.f _
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
-    refine ⟨fun x => ?_, fun i => 𝒰.map_prop _⟩
+    refine ⟨fun x ↦ ?_, fun i ↦ 𝒰.map_prop _⟩
     use x, (𝒰.exists_eq x).choose_spec.choose, (𝒰.exists_eq x).choose_spec.choose_spec
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Precoverage.Small.{u} (precoverage P)
-  body: ⟨S, Cover.idx 𝒰, (Cover.ulift 𝒰).mem₀⟩
-
-中文:
-实例 :
-  签名: Precoverage.Small.{u} (precoverage P)
-  定义体: ⟨S, Cover.idx 𝒰, (Cover.ulift 𝒰).mem₀⟩
-
-Depends on / 依赖: Cover.idx, Cover.ulift
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Precoverage.Small.{u} (precoverage P) where
   zeroHypercoverSmall {S} 𝒰 := ⟨S, Cover.idx 𝒰, (Cover.ulift 𝒰).mem₀⟩
@@ -655,55 +539,26 @@ instance : Precoverage.Small.{u} (precoverage P) where
 section category
 
 /--
-Definition of `Cover.Hom` / `Cover.Hom` 的定义
+A morphism between covers `𝒰 ⟶ 𝒱` indicates that `𝒰` is a refinement of `𝒱`.
+Since covers of schemes are indexed, the definition also involves a map on the
+indexing types.
+This is implemented as an `abbrev` for `CategoryTheory.Precoverage.ZeroHypercover.Hom`.
+-/
+/-
+**AlgebraicGeometry.Scheme.Cover.Hom** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y.Scheme.Cover`。
+形式化陈述：{K : CategoryTheory.Precoverage AlgebraicGeometry.Scheme} →   {X : Algebra
+icGeometry.Scheme} →     AlgebraicGeometry.Scheme.Cover K X → AlgebraicGeometry.
+Scheme.Cover K X → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Cover.Hom
-  signature: {X : Scheme.{u}} (𝒰 𝒱 : Cover.{v} K X)
-  body: Precoverage.ZeroHypercover.Hom K 𝒰 𝒱
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.idx := PreZeroHypercover.Hom.s₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.app := PreZeroHypercover.Hom.h₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.w := PreZeroHypercover.Hom.w₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.id := PreZeroHypercover.Hom.id
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.comp := PreZeroHypercover.Hom.comp
-
-@[deprecated (since := "2026-01-13")] alias Cover.id_idx_apply := PreZeroHypercover.id_s₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.id_app := PreZeroHypercover.id_h₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.comp_idx_apply := PreZeroHypercover.comp_s₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.comp_app := PreZeroHypercover.comp_h₀
-
-中文:
-缩写 Cover.态射
-  签名: {X : 概形.{u}} (𝒰 𝒱 : Cover.{v} K X)
-  定义体: Precoverage.ZeroHypercover.Hom K 𝒰 𝒱
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.idx := PreZeroHypercover.Hom.s₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.app := PreZeroHypercover.Hom.h₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.w := PreZeroHypercover.Hom.w₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.id := PreZeroHypercover.Hom.id
-
-@[deprecated (since := "2026-01-13")] alias Cover.Hom.comp := PreZeroHypercover.Hom.comp
-
-@[deprecated (since := "2026-01-13")] alias Cover.id_idx_apply := PreZeroHypercover.id_s₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.id_app := PreZeroHypercover.id_h₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.comp_idx_apply := PreZeroHypercover.comp_s₀
-
-@[deprecated (since := "2026-01-13")] alias Cover.comp_app := PreZeroHypercover.comp_h₀
-
-Depends on / 依赖: Precoverage, Precoverage.ZeroHypercover.Hom, ZeroHypercover
+--- 原说明 ---
+A morphism between covers `𝒰 ⟶ 𝒱` indicates that `𝒰` is a refinement of `𝒱`.
+Since covers of schemes are indexed, the definition also involves a map on the
+indexing types.
+This is implemented as an `abbrev` for `CategoryTheory.Precoverage.ZeroHypercove
+r.Hom`.
 -/
 abbrev Cover.Hom {X : Scheme.{u}} (𝒰 𝒱 : Cover.{v} K X) :=
   Precoverage.ZeroHypercover.Hom K 𝒰 𝒱
@@ -733,3 +588,4 @@ end MorphismProperty
 end Scheme
 
 end AlgebraicGeometry
+

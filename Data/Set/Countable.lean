@@ -39,120 +39,98 @@ variable {α : Type u} {β : Type v} {γ : Type w} {ι : Sort x}
 
 namespace Set
 
-/--
-Definition of `Countable` / `Countable` 的定义
+/-- A set `s` is countable if the corresponding subtype is countable,
+i.e., there exists an injective map `f : s → ℕ`.
 
-English:
-definition Countable
-  signature: (s : Set α)
-  body: Countable s
+Note that this is an abbreviation, so `hs : Set.Countable s` in the proof context
+is the same as an instance `Countable s`.
+For a constructive version, see `Encodable`.
+-/
+/-
+**Set.Countable** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A set `s` is countable if the corresponding subtype is countable,
+i.e., there exists an injective map `f : s → ℕ`.
 
-中文:
-定义 可数
-  签名: (s : 集合 α)
-  定义体: Countable s
-
-@[simp]
+Note that this is an abbreviation, so `hs : Set.Countable s` in the proof contex
+t
+is the same as an instance `Countable s`.
+For a constructive version, see `Encodable`.
 -/
 protected def Countable (s : Set α) : Prop := Countable s
 
 @[simp]
-/--
-theorem `countable_coe_iff` / 定理 `countable_coe_iff`
-
-English:
-theorem countable_coe_iff
-  given: {s : Set α}
-  statement: Countable s ↔ s.Countable
-  proof: .rfl
-
-中文:
-定理 countable_coe_iff
-  条件: {s : 集合 α}
-  结论: 可数 s ↔ s.可数
-  证明: .rfl
+/-
+**Set.countable_coe_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_coe_iff {s : Set α} : Countable s ↔ s.Countable
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem countable_coe_iff {s : Set α} : Countable s ↔ s.Countable := .rfl
 
-/--
-theorem `to_countable` / 定理 `to_countable`
+/-- Prove `Set.Countable` from a `Countable` instance on the subtype. -/
+/-
+**Set.to_countable** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：to_countable (s : Set α) [Countable s] : s.Countable
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem to_countable
-  given: (s : Set α) [Countable s]
-  statement: s.Countable
-  proof: ‹_›
-
-中文:
-定理 to_countable
-  条件: (s : 集合 α) [可数 s]
-  结论: s.可数
-  证明: ‹_›
+--- 原说明 ---
+Prove `Set.Countable` from a `Countable` instance on the subtype.
 -/
 theorem to_countable (s : Set α) [Countable s] : s.Countable := ‹_›
 
 /-- Restate `Set.Countable` as a `Countable` instance. -/
 alias ⟨_root_.Countable.to_set, Countable.to_subtype⟩ := countable_coe_iff
 
-/--
-theorem `countable_iff_exists_injective` / 定理 `countable_iff_exists_injective`
-
-English:
-theorem countable_iff_exists_injective
-  given: {s : Set α}
-  proof: countable_iff_exists_injective s
-
-中文:
-定理 countable_iff_存在_injective
-  条件: {s : 集合 α}
-  证明: countable_iff_exists_injective s
+/-
+**Set.countable_iff_exists_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Countable ↔ ∃ f, Function.Injective f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `countable_iff_exists_injective`：∀ (α : Sort u), Countable α ↔ ∃ f, Funct
+ion.Injective f
 -/
 protected theorem countable_iff_exists_injective {s : Set α} :
-    s.Countable ↔ exists f : s -> Nat, Injective f :=
+    s.Countable ↔ ∃ f : s → ℕ, Injective f :=
   countable_iff_exists_injective s
 
-/--
-theorem `countable_iff_exists_injOn` / 定理 `countable_iff_exists_injOn`
+/-- A set `s : Set α` is countable if and only if there exists a function `α → ℕ` injective
+on `s`. -/
+/-
+**Set.countable_iff_exists_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_iff_exists_injOn {s : Set α} : s.Countable ↔ exists f : α -> Nat
+, InjOn f s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.countable_iff_exists_injective`：∀ {α : Type u} {s : Set α}, s.Counta
+ble ↔ ∃ f, Function.Injective f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.exists_injOn_iff_injective`：exists_injOn_iff_injective [Nonempty β] 
+: (exists f : α -> β, InjOn f s) ↔ exists f : s -> β, Injective f
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 
-English:
-theorem countable_iff_exists_injOn
-  given: {s : Set α}
-  statement: s.Countable ↔ exists f : α -> Nat, InjOn f s
-  proof: Set.countable_iff_exists_injective.trans exists_injOn_iff_injective.symm
-
-中文:
-定理 countable_iff_存在_injOn
-  条件: {s : 集合 α}
-  结论: s.可数 ↔ 存在 f : α -> 自然数, 单射限制 f s
-  证明: Set.countable_iff_exists_injective.trans exists_injOn_iff_injective.symm
-
-Depends on / 依赖: Set.countable_iff_exists_injective.trans, countable_iff_exists_injective, exists_injOn_iff_injective, exists_injOn_iff_injective.symm
+--- 原说明 ---
+A set `s : Set α` is countable if and only if there exists a function `α → ℕ` in
+jective
+on `s`.
 -/
-theorem countable_iff_exists_injOn {s : Set α} : s.Countable ↔ exists f : α -> Nat, InjOn f s :=
+theorem countable_iff_exists_injOn {s : Set α} : s.Countable ↔ ∃ f : α → ℕ, InjOn f s :=
   Set.countable_iff_exists_injective.trans exists_injOn_iff_injective.symm
-
-/--
-theorem `countable_iff_nonempty_encodable` / 定理 `countable_iff_nonempty_encodable`
-
-English:
-theorem countable_iff_nonempty_encodable
-  given: {s : Set α}
-  statement: s.Countable ↔ Nonempty (Encodable s)
-  proof: Encodable.nonempty_encodable.symm
-
-alias ⟨Countable.nonempty_encodable, _⟩ := countable_iff_nonempty_encodable
-
-中文:
-定理 countable_iff_nonempty_encodable
-  条件: {s : 集合 α}
-  结论: s.可数 ↔ 非空 (可编码 s)
-  证明: Encodable.nonempty_encodable.symm
-
-alias ⟨Countable.nonempty_encodable, _⟩ := countable_iff_nonempty_encodable
-
-Depends on / 依赖: Encodable, Encodable.nonempty_encodable.symm, nonempty_encodable
+/-
+**Set.countable_iff_nonempty_encodable** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_iff_nonempty_encodable {s : Set α} : s.Countable ↔ Nonempty (Enc
+odable s)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Encodable.nonempty_encodable`：nonempty_encodable : Nonempty (Encodable α
+) ↔ Countable α
 -/
 theorem countable_iff_nonempty_encodable {s : Set α} : s.Countable ↔ Nonempty (Encodable s) :=
   Encodable.nonempty_encodable.symm
@@ -161,547 +139,428 @@ alias ⟨Countable.nonempty_encodable, _⟩ := countable_iff_nonempty_encodable
 
 /-- Convert `Set.Countable s` to `Encodable s` (noncomputable). -/
 @[instance_reducible]
-/--
-Definition of `Countable.toEncodable` / `Countable.toEncodable` 的定义
+/-
+**Set.Countable.toEncodable** 是 Mathlib 中的一个定义，位于命名空间 `Set.Countable`。
+形式化陈述：{α : Type u} → {s : Set α} → s.Countable → Encodable ↑s
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.nonempty_encodable`：∀ {α : Type u} {s : Set α}, s.Countabl
+e → Nonempty (Encodable ↑s)
 
-English:
-definition Countable.toEncodable
-  signature: {s : Set α} (hs : s.Countable)
-  body: Classical.choice hs.nonempty_encodable
-
-中文:
-定义 可数.toEncodable
-  签名: {s : 集合 α} (hs : s.可数)
-  定义体: Classical.choice hs.nonempty_encodable
+--- 原说明 ---
+Convert `Set.Countable s` to `Encodable s` (noncomputable).
 -/
 protected def Countable.toEncodable {s : Set α} (hs : s.Countable) : Encodable s :=
   Classical.choice hs.nonempty_encodable
 
 section Enumerate
 
-/--
-Definition of `enumerateCountable` / `enumerateCountable` 的定义
+/-- Noncomputably enumerate elements in a set. The `default` value is used to extend the domain to
+all of `ℕ`. -/
+/-
+**Set.enumerateCountable** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：enumerateCountable {s : Set α} (h : s.Countable) (default : α) : Nat -> α
+参数：h : s.Countable；default : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enumerateCountable
-  signature: {s : Set α} (h : s.Countable) (default : α)
-  body: fun n =>
-  match @Encodable.decode s h.toEncodable n with
-  | some y => y
-  | none => default
-
-中文:
-定义 enumerateCountable
-  签名: {s : 集合 α} (h : s.可数) (default : α)
-  定义体: fun n =>
-  match @Encodable.decode s h.toEncodable n with
-  | some y => y
-  | none => default
+--- 原说明 ---
+Noncomputably enumerate elements in a set. The `default` value is used to extend
+ the domain to
+all of `ℕ`.
 -/
-def enumerateCountable {s : Set α} (h : s.Countable) (default : α) : Nat -> α := fun n =>
+def enumerateCountable {s : Set α} (h : s.Countable) (default : α) : ℕ → α := fun n =>
   match @Encodable.decode s h.toEncodable n with
   | some y => y
   | none => default
-
-/--
-theorem `subset_range_enumerate` / 定理 `subset_range_enumerate`
-
-English:
-theorem subset_range_enumerate
-  given: {s : Set α} (h : s.Countable) (default : α)
-  proof: fun x hx =>
-  ⟨@Encodable.encode s h.toEncodable ⟨x, hx⟩, by
-    simp [enumerateCountable, Encodable.encodek]⟩
-
-中文:
-定理 subset_range_enumerate
-  条件: {s : 集合 α} (h : s.可数) (default : α)
-  证明: fun x hx =>
-  ⟨@Encodable.encode s h.toEncodable ⟨x, hx⟩, by
-    simp [enumerateCountable, Encodable.encodek]⟩
+/-
+**Set.subset_range_enumerate** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_range_enumerate {s : Set α} (h : s.Countable) (default : α) : s sub
+seteq range (enumerateCountable h default)
+参数：h : s.Countable；default : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Encodable.encodek`：∀ {α : Type u_1} [self : Encodable α] (a : α), Encoda
+ble.decode (Encodable.encode a) = some a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem subset_range_enumerate {s : Set α} (h : s.Countable) (default : α) :
-    s subseteq range (enumerateCountable h default) := fun x hx =>
+    s ⊆ range (enumerateCountable h default) := fun x hx =>
   ⟨@Encodable.encode s h.toEncodable ⟨x, hx⟩, by
     simp [enumerateCountable, Encodable.encodek]⟩
-
-/--
-lemma `range_enumerateCountable_subset` / 引理 `range_enumerateCountable_subset`
-
-English:
-lemma range_enumerateCountable_subset
-  given: {s : Set α} (h : s.Countable) (default : α)
-  proof: by
-  refine range_subset_iff.mpr (fun n => ?_)
-  rw [enumerateCountable]
-  match @decode s (Countable.toEncodable h) n with
-  | none => exact mem_insert _ _
-  | some val => simp
-
-中文:
-引理 range_enumerateCountable_subset
-  条件: {s : 集合 α} (h : s.可数) (default : α)
-  证明: by
-  refine range_subset_iff.mpr (fun n => ?_)
-  rw [enumerateCountable]
-  match @decode s (Countable.toEncodable h) n with
-  | none => exact mem_insert _ _
-  | some val => simp
-
-Depends on / 依赖: Countable, Countable.toEncodable, decode, enumerateCountable, mem_insert, range_subset_iff, range_subset_iff.mpr, toEncodable
+/-
+**Set.range_enumerateCountable_subset** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：range_enumerateCountable_subset {s : Set α} (h : s.Countable) (default : α
+) : range (enumerateCountable h default) subseteq insert default s
+参数：h : s.Countable；default : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.enumerateCountable.eq_1`：∀ {α : Type u} {s : Set α} (h : s.Countable
+) (default : α) (n : ℕ),   Set.enumerateCountable h default n =     match Encoda
+ble.decode n with…
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
 lemma range_enumerateCountable_subset {s : Set α} (h : s.Countable) (default : α) :
-    range (enumerateCountable h default) subseteq insert default s := by
-  refine range_subset_iff.mpr (fun n => ?_)
+    range (enumerateCountable h default) ⊆ insert default s := by
+  refine range_subset_iff.mpr (fun n ↦ ?_)
   rw [enumerateCountable]
   match @decode s (Countable.toEncodable h) n with
   | none => exact mem_insert _ _
   | some val => simp
-
-/--
-lemma `range_enumerateCountable_of_mem` / 引理 `range_enumerateCountable_of_mem`
-
-English:
-lemma range_enumerateCountable_of_mem
-  statement: {s : Set α} (h : s.Countable) {default : α}
-  proof: subset_antisymm ((range_enumerateCountable_subset h _).trans_eq (insert_eq_of_mem h_mem))
-    (subset_range_enumerate h default)
-
-中文:
-引理 range_enumerateCountable_of_mem
-  结论: {s : 集合 α} (h : s.可数) {default : α}
-  证明: subset_antisymm ((range_enumerateCountable_subset h _).trans_eq (insert_eq_of_mem h_mem))
-    (subset_range_enumerate h default)
-
-Depends on / 依赖: h_mem, insert_eq_of_mem, range_enumerateCountable_subset, subset_antisymm, subset_range_enumerate, trans_eq
+/-
+**Set.range_enumerateCountable_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：range_enumerateCountable_of_mem {s : Set α} (h : s.Countable) {default : α
+} (h_mem : default in s) : range (enumerateCountable h default) = s
+参数：h : s.Countable；h_mem : default in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `Set.range_enumerateCountable_subset`：range_enumerateCountable_subset {s 
+: Set α} (h : s.Countable) (default : α) : range (enumerateCountable h default) 
+subseteq insert default s
+· 使用定理 `Set.insert_eq_of_mem`：insert_eq_of_mem {a : α} {s : Set α} (h : a in s) 
+: insert a s = s
+· 使用定理 `Set.subset_range_enumerate`：subset_range_enumerate {s : Set α} (h : s.Co
+untable) (default : α) : s subseteq range (enumerateCountable h default)
 -/
 lemma range_enumerateCountable_of_mem {s : Set α} (h : s.Countable) {default : α}
-    (h_mem : default in s) :
+    (h_mem : default ∈ s) :
     range (enumerateCountable h default) = s :=
   subset_antisymm ((range_enumerateCountable_subset h _).trans_eq (insert_eq_of_mem h_mem))
     (subset_range_enumerate h default)
-
-/--
-lemma `enumerateCountable_mem` / 引理 `enumerateCountable_mem`
-
-English:
-lemma enumerateCountable_mem
-  statement: {s : Set α} (h : s.Countable) {default : α} (h_mem : default in s)
-  proof: by
-  convert! mem_range_self n
-  exact (range_enumerateCountable_of_mem h h_mem).symm
-
-中文:
-引理 enumerateCountable_mem
-  结论: {s : 集合 α} (h : s.可数) {default : α} (h_mem : default in s)
-  证明: by
-  convert! mem_range_self n
-  exact (range_enumerateCountable_of_mem h h_mem).symm
-
-Depends on / 依赖: convert, h_mem, mem_range_self, range_enumerateCountable_of_mem
+/-
+**Set.enumerateCountable_mem** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：enumerateCountable_mem {s : Set α} (h : s.Countable) {default : α} (h_mem 
+: default in s) (n : Nat) : enumerateCountable h default n in s
+参数：h : s.Countable；h_mem : default in s；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.range_enumerateCountable_of_mem`：range_enumerateCountable_of_mem {s 
+: Set α} (h : s.Countable) {default : α} (h_mem : default in s) : range (enumera
+teCountable h default) = …
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-lemma enumerateCountable_mem {s : Set α} (h : s.Countable) {default : α} (h_mem : default in s)
-    (n : Nat) :
-    enumerateCountable h default n in s := by
+lemma enumerateCountable_mem {s : Set α} (h : s.Countable) {default : α} (h_mem : default ∈ s)
+    (n : ℕ) :
+    enumerateCountable h default n ∈ s := by
   convert! mem_range_self n
   exact (range_enumerateCountable_of_mem h h_mem).symm
 
 end Enumerate
 
-/--
-theorem `Countable.mono` / 定理 `Countable.mono`
-
-English:
-theorem Countable.mono
-  given: {s₁ s₂ : Set α} (h : s₁ subseteq s₂) (hs : s₂.Countable)
-  statement: s₁.Countable
-  proof: have := hs.to_subtype; (inclusion_injective h).countable
-
-中文:
-定理 可数.mono
-  条件: {s₁ s₂ : 集合 α} (h : s₁ subseteq s₂) (hs : s₂.可数)
-  结论: s₁.可数
-  证明: have := hs.to_subtype; (inclusion_injective h).countable
-
-Depends on / 依赖: countable, hs.to_subtype, inclusion_injective, to_subtype
+/-
+**Set.Countable.mono** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countable → s₁.Countable
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Function.Injective.countable`：∀ {α : Sort u} {β : Sort v} [Countable β] 
+{f : α → β}, Function.Injective f → Countable α
+· 使用定理 `Set.inclusion_injective`：inclusion_injective (h : s subseteq t) : (inclu
+sion h).Injective
 -/
-theorem Countable.mono {s₁ s₂ : Set α} (h : s₁ subseteq s₂) (hs : s₂.Countable) : s₁.Countable :=
+theorem Countable.mono {s₁ s₂ : Set α} (h : s₁ ⊆ s₂) (hs : s₂.Countable) : s₁.Countable :=
   have := hs.to_subtype; (inclusion_injective h).countable
-
-/--
-theorem `countable_range` / 定理 `countable_range`
-
-English:
-theorem countable_range
-  given: [Countable ι] (f : ι -> β)
-  statement: (range f).Countable
-  proof: rangeFactorization_surjective.countable.to_set
-
-中文:
-定理 countable_range
-  条件: [可数 ι] (f : ι -> β)
-  结论: (range f).可数
-  证明: rangeFactorization_surjective.countable.to_set
-
-Depends on / 依赖: countable, rangeFactorization_surjective, rangeFactorization_surjective.countable.to_set, to_set
+/-
+**Set.countable_range** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_range [Countable ι] (f : ι -> β) : (range f).Countable
+参数：f : ι -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Countable.to_set`：∀ {α : Type u} {s : Set α}, Countable ↑s → s.Countable
+· 使用定理 `Function.Surjective.countable`：∀ {α : Sort u} {β : Sort v} [Countable α]
+ {f : α → β}, Function.Surjective f → Countable β
+· 使用定理 `Set.rangeFactorization_surjective`：∀ {α : Type u} {ι : Sort u_1} {f : ι 
+→ α}, Function.Surjective (Set.rangeFactorization f)
 -/
-theorem countable_range [Countable ι] (f : ι -> β) : (range f).Countable :=
+theorem countable_range [Countable ι] (f : ι → β) : (range f).Countable :=
   rangeFactorization_surjective.countable.to_set
-
-/--
-theorem `countable_iff_exists_subset_range` / 定理 `countable_iff_exists_subset_range`
-
-English:
-theorem countable_iff_exists_subset_range
-  given: [Nonempty α] {s : Set α}
-  proof: ⟨fun h => by
-    inhabit α
-    exact ⟨enumerateCountable h default, subset_range_enumerate _ _⟩, fun ⟨f, hsf⟩ =>
-    (countable_range f).mono hsf⟩
-
-中文:
-定理 countable_iff_存在_subset_range
-  条件: [非空 α] {s : 集合 α}
-  证明: ⟨fun h => by
-    inhabit α
-    exact ⟨enumerateCountable h default, subset_range_enumerate _ _⟩, fun ⟨f, hsf⟩ =>
-    (countable_range f).mono hsf⟩
-
-Depends on / 依赖: countable_range, enumerateCountable, inhabit, subset_range_enumerate
+/-
+**Set.countable_iff_exists_subset_range** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_iff_exists_subset_range [Nonempty α] {s : Set α} : s.Countable ↔
+ exists f : Nat -> α, s subseteq range f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subset_range_enumerate`：subset_range_enumerate {s : Set α} (h : s.Co
+untable) (default : α) : s subseteq range (enumerateCountable h default)
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
 theorem countable_iff_exists_subset_range [Nonempty α] {s : Set α} :
-    s.Countable ↔ exists f : Nat -> α, s subseteq range f :=
+    s.Countable ↔ ∃ f : ℕ → α, s ⊆ range f :=
   ⟨fun h => by
     inhabit α
     exact ⟨enumerateCountable h default, subset_range_enumerate _ _⟩, fun ⟨f, hsf⟩ =>
     (countable_range f).mono hsf⟩
 
-/--
-theorem `countable_iff_exists_surjective` / 定理 `countable_iff_exists_surjective`
+/-- A non-empty set is countable iff there exists a surjection from the
+natural numbers onto the subtype induced by the set.
+-/
+/-
+**Set.countable_iff_exists_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Nonempty → (s.Countable ↔ ∃ f, Function.Surj
+ective f)
+参数：s.Countable ↔ ∃ f, Function.Surjective f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `countable_iff_exists_surjective`：countable_iff_exists_surjective [Nonemp
+ty α] : Countable α ↔ exists f : Nat -> α, Surjective f
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
 
-English:
-theorem countable_iff_exists_surjective
-  given: {s : Set α} (hs : s.Nonempty)
-  proof: @countable_iff_exists_surjective s hs.to_subtype
-
-alias ⟨Countable.exists_surjective, _⟩ := Set.countable_iff_exists_surjective
-
-中文:
-定理 countable_iff_存在_surjective
-  条件: {s : 集合 α} (hs : s.非空)
-  证明: @countable_iff_exists_surjective s hs.to_subtype
-
-alias ⟨Countable.exists_surjective, _⟩ := Set.countable_iff_exists_surjective
+--- 原说明 ---
+A non-empty set is countable iff there exists a surjection from the
+natural numbers onto the subtype induced by the set.
 -/
 protected theorem countable_iff_exists_surjective {s : Set α} (hs : s.Nonempty) :
-    s.Countable ↔ exists f : Nat -> s, Surjective f :=
+    s.Countable ↔ ∃ f : ℕ → s, Surjective f :=
   @countable_iff_exists_surjective s hs.to_subtype
 
 alias ⟨Countable.exists_surjective, _⟩ := Set.countable_iff_exists_surjective
-
-/--
-theorem `countable_univ_iff` / 定理 `countable_univ_iff`
-
-English:
-theorem countable_univ_iff
-  statement: (univ : Set α).Countable ↔ Countable α
-  proof: countable_coe_iff.symm.trans (Equiv.Set.univ _).countable_iff
-
-中文:
-定理 countable_univ_iff
-  结论: (univ : 集合 α).可数 ↔ 可数 α
-  证明: countable_coe_iff.symm.trans (Equiv.Set.univ _).countable_iff
-
-Depends on / 依赖: Equiv.Set.univ, countable_coe_iff, countable_coe_iff.symm.trans, countable_iff
+/-
+**Set.countable_univ_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_univ_iff : (univ : Set α).Countable ↔ Countable α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Set.countable_coe_iff`：countable_coe_iff {s : Set α} : Countable s ↔ s.C
+ountable
+· 使用定理 `Equiv.countable_iff`：Equiv.countable_iff (e : α ≃ β) : Countable α ↔ Cou
+ntable β
 -/
 theorem countable_univ_iff : (univ : Set α).Countable ↔ Countable α :=
   countable_coe_iff.symm.trans (Equiv.Set.univ _).countable_iff
-
-/--
-theorem `countable_univ` / 定理 `countable_univ`
-
-English:
-theorem countable_univ
-  given: [Countable α]
-  statement: (univ : Set α).Countable
-  proof: to_countable univ
-
-中文:
-定理 countable_univ
-  条件: [可数 α]
-  结论: (univ : 集合 α).可数
-  证明: to_countable univ
-
-Depends on / 依赖: to_countable
+/-
+**Set.countable_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_univ [Countable α] : (univ : Set α).Countable
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
 -/
 theorem countable_univ [Countable α] : (univ : Set α).Countable :=
   to_countable univ
-
-/--
-theorem `not_countable_univ_iff` / 定理 `not_countable_univ_iff`
-
-English:
-theorem not_countable_univ_iff
-  statement: ¬ (univ : Set α).Countable ↔ Uncountable α
-  proof: by
-  rw [countable_univ_iff]; rw [not_countable_iff]
-
-中文:
-定理 not_countable_univ_iff
-  结论: ¬ (univ : 集合 α).可数 ↔ 不可数 α
-  证明: by
-  rw [countable_univ_iff]; rw [not_countable_iff]
-
-Depends on / 依赖: countable_univ_iff, not_countable_iff
+/-
+**Set.not_countable_univ_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_countable_univ_iff : ¬ (univ : Set α).Countable ↔ Uncountable α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.countable_univ_iff`：countable_univ_iff : (univ : Set α).Countable ↔ 
+Countable α
+· 使用引理 `not_countable_iff`：not_countable_iff : ¬Countable α ↔ Uncountable α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem not_countable_univ_iff : ¬ (univ : Set α).Countable ↔ Uncountable α := by
-  rw [countable_univ_iff]; rw [not_countable_iff]
-
-/--
-theorem `not_countable_univ` / 定理 `not_countable_univ`
-
-English:
-theorem not_countable_univ
-  given: [Uncountable α]
-  statement: ¬ (univ : Set α).Countable
-  proof: not_countable_univ_iff.2 ‹_›
-
-中文:
-定理 not_countable_univ
-  条件: [不可数 α]
-  结论: ¬ (univ : 集合 α).可数
-  证明: not_countable_univ_iff.2 ‹_›
-
-Depends on / 依赖: not_countable_univ_iff
+  rw [countable_univ_iff, not_countable_iff]
+/-
+**Set.not_countable_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_countable_univ [Uncountable α] : ¬ (univ : Set α).Countable
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.not_countable_univ_iff`：not_countable_univ_iff : ¬ (univ : Set α).Co
+untable ↔ Uncountable α
 -/
 theorem not_countable_univ [Uncountable α] : ¬ (univ : Set α).Countable :=
   not_countable_univ_iff.2 ‹_›
 
-/--
-theorem `Countable.exists_eq_range` / 定理 `Countable.exists_eq_range`
+/-- If `s : Set α` is a nonempty countable set, then there exists a map
+`f : ℕ → α` such that `s = range f`. -/
+/-
+**Set.Countable.exists_eq_range** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Countable → s.Nonempty → ∃ f, s = Set.range 
+f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.exists_surjective`：∀ {α : Type u} {s : Set α}, s.Nonempty 
+→ s.Countable → ∃ f, Function.Surjective f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Surjective.range_comp`：∀ {α : Type u_1} {ι : Sort u_3} {ι' : So
+rt u_4} {f : ι → ι'},   Function.Surjective f → ∀ (g : ι' → α), Set.range (g ∘ f
+) = Set.range g
+· 使用定理 `Subtype.range_coe`：range_coe {s : Set α} : range ((↑) : s -> α) = s
 
-English:
-theorem Countable.exists_eq_range
-  given: {s : Set α} (hc : s.Countable) (hs : s.Nonempty)
-  proof: by
-  rcases hc.exists_surjective hs with ⟨f, hf⟩
-  refine ⟨(↑) ∘ f, ?_⟩
-  rw [hf.range_comp]; rw [Subtype.range_coe]
-
-中文:
-定理 可数.存在_eq_range
-  条件: {s : 集合 α} (hc : s.可数) (hs : s.非空)
-  证明: by
-  rcases hc.exists_surjective hs with ⟨f, hf⟩
-  refine ⟨(↑) ∘ f, ?_⟩
-  rw [hf.range_comp]; rw [Subtype.range_coe]
-
-Depends on / 依赖: Subtype, Subtype.range_coe, exists_surjective, hc.exists_surjective, hf.range_comp, range_coe, range_comp
+--- 原说明 ---
+If `s : Set α` is a nonempty countable set, then there exists a map
+`f : ℕ → α` such that `s = range f`.
 -/
 theorem Countable.exists_eq_range {s : Set α} (hc : s.Countable) (hs : s.Nonempty) :
-    exists f : Nat -> α, s = range f := by
+    ∃ f : ℕ → α, s = range f := by
   rcases hc.exists_surjective hs with ⟨f, hf⟩
   refine ⟨(↑) ∘ f, ?_⟩
-  rw [hf.range_comp]; rw [Subtype.range_coe]
-
-/--
-theorem `countable_empty` / 定理 `countable_empty`
-
-English:
-theorem countable_empty
-  statement: (∅ : Set α).Countable
-  proof: to_countable _
-
-中文:
-定理 countable_empty
-  结论: (∅ : 集合 α).可数
-  证明: to_countable _
+  rw [hf.range_comp, Subtype.range_coe]
+/-
+**Set.countable_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u}, ∅.Countable
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Set.instIsEmptyElemEmptyCollection`：∀ (α : Type u), IsEmpty ↑∅
 -/
 @[simp] theorem countable_empty : (∅ : Set α).Countable := to_countable _
-
-/--
-theorem `countable_singleton` / 定理 `countable_singleton`
-
-English:
-theorem countable_singleton
-  given: (a : α)
-  statement: ({a} : Set α).Countable
-  proof: to_countable _
-
-中文:
-定理 countable_singleton
-  条件: (a : α)
-  结论: ({a} : 集合 α).可数
-  证明: to_countable _
+/-
+**Set.countable_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u} (a : α), {a}.Countable
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 @[simp] theorem countable_singleton (a : α) : ({a} : Set α).Countable := to_countable _
-
-/--
-theorem `Countable.image` / 定理 `Countable.image`
-
-English:
-theorem Countable.image
-  given: {s : Set α} (hs : s.Countable) (f : α -> β)
-  statement: (f '' s).Countable
-  proof: by
-  rw [image_eq_range]
-  have := hs.to_subtype
-  apply countable_range
-
-中文:
-定理 可数.像
-  条件: {s : 集合 α} (hs : s.可数) (f : α -> β)
-  结论: (f '' s).可数
-  证明: by
-  rw [image_eq_range]
-  have := hs.to_subtype
-  apply countable_range
-
-Depends on / 依赖: countable_range, hs.to_subtype, image_eq_range, to_subtype
+/-
+**Set.Countable.image** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countable → ∀ (f : α → β), (f '
+' s).Countable
+参数：f : α → β；f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_eq_range`：image_eq_range (f : α -> β) (s : Set α) : f '' s = r
+ange fun x : s => f x
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
 -/
-theorem Countable.image {s : Set α} (hs : s.Countable) (f : α -> β) : (f '' s).Countable := by
+theorem Countable.image {s : Set α} (hs : s.Countable) (f : α → β) : (f '' s).Countable := by
   rw [image_eq_range]
   have := hs.to_subtype
   apply countable_range
-
-/--
-theorem `Infinite.exists_subset_countable_infinite` / 定理 `Infinite.exists_subset_countable_infinite`
-
-English:
-theorem Infinite.exists_subset_countable_infinite
-  given: {α : Type u} {s : Set α} (hs : s.Infinite)
-  proof: by
-  obtain ⟨f, hf⟩ := Infinite.natEmbedding s hs
-  refine ⟨range (Subtype.val ∘ f), ?_, ?_, ?_⟩
-  · exact fun _ ⟨y, hy⟩ => hy ▸ Subtype.coe_prop (f y)
-  · exact countable_range (Subtype.val ∘ f)
-· exact infinite_range_of_injective Injective.comp Subtype.val_injective hf
-
-中文:
-定理 无限.存在_subset_countable_infinite
-  条件: {α : 类型u} {s : 集合 α} (hs : s.无限)
-  证明: by
-  obtain ⟨f, hf⟩ := Infinite.natEmbedding s hs
-  refine ⟨range (Subtype.val ∘ f), ?_, ?_, ?_⟩
-  · exact fun _ ⟨y, hy⟩ => hy ▸ Subtype.coe_prop (f y)
-  · exact countable_range (Subtype.val ∘ f)
-· exact infinite_range_of_injective Injective.comp Subtype.val_injective hf
-
-Depends on / 依赖: Infinite, Infinite.natEmbedding, Injective, Injective.comp, Subtype, Subtype.coe_prop, Subtype.val, Subtype.val_injective, coe_prop, countable_range, infinite_range_of_injective, natEmbedding, val_injective
+/-
+**Set.Infinite.exists_subset_countable_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set.I
+nfinite`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Infinite → ∃ t ⊆ s, t.Countable ∧ t.Infinite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_prop`：coe_prop {S : Set α} (a : { a // a in S }) : ↑a in S
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Set.infinite_range_of_injective`：infinite_range_of_injective [Infinite α
+] {f : α -> β} (hi : Injective f) : (range f).Infinite
+· 使用定理 `instInfiniteNat`：Infinite ℕ
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
 -/
 theorem Infinite.exists_subset_countable_infinite {α : Type u} {s : Set α} (hs : s.Infinite) :
-    exists t subseteq s, t.Countable ∧ t.Infinite := by
+    ∃ t ⊆ s, t.Countable ∧ t.Infinite := by
   obtain ⟨f, hf⟩ := Infinite.natEmbedding s hs
   refine ⟨range (Subtype.val ∘ f), ?_, ?_, ?_⟩
-  · exact fun _ ⟨y, hy⟩ => hy ▸ Subtype.coe_prop (f y)
+  · exact fun _ ⟨y, hy⟩ ↦ hy ▸ Subtype.coe_prop (f y)
   · exact countable_range (Subtype.val ∘ f)
-· exact infinite_range_of_injective Injective.comp Subtype.val_injective hf
-
-/--
-theorem `MapsTo.countable_of_injOn` / 定理 `MapsTo.countable_of_injOn`
-
-English:
-theorem MapsTo.countable_of_injOn
-  statement: {s : Set α} {t : Set β} {f : α -> β} (hf : MapsTo f s t)
-  proof: have := ht.to_subtype
-  have : Injective (hf.restrict f s t) := (injOn_iff_injective.1 hf').codRestrict _
-  this.countable
-
-中文:
-定理 映射到.countable_of_injOn
-  结论: {s : 集合 α} {t : 集合 β} {f : α -> β} (hf : 映射到 f s t)
-  证明: have := ht.to_subtype
-  have : Injective (hf.restrict f s t) := (injOn_iff_injective.1 hf').codRestrict _
-  this.countable
-
-Depends on / 依赖: Injective, codRestrict, countable, hf.restrict, ht.to_subtype, injOn_iff_injective, restrict, this.countable, to_subtype
+  · exact infinite_range_of_injective <| Injective.comp Subtype.val_injective hf
+/-
+**Set.MapsTo.countable_of_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.MapsTo`。
+形式化陈述：∀ {α : Type u} {β : Type v} {s : Set α} {t : Set β} {f : α → β},   Set.Map
+sTo f s t → Set.InjOn f s → t.Countable → s.Countable
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Function.Injective.codRestrict`：∀ {α : Type u_1} {ι : Sort u_5} {f : ι →
+ α} {s : Set α} (h : ∀ (x : ι), f x ∈ s),   Function.Injective f → Function.Inje
+ctive (Set.codRestri…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.injOn_iff_injective`：injOn_iff_injective : InjOn f s ↔ Injective (s.
+domRestrict f)
+· 使用定理 `Function.Injective.countable`：∀ {α : Sort u} {β : Sort v} [Countable β] 
+{f : α → β}, Function.Injective f → Countable α
 -/
-theorem MapsTo.countable_of_injOn {s : Set α} {t : Set β} {f : α -> β} (hf : MapsTo f s t)
+theorem MapsTo.countable_of_injOn {s : Set α} {t : Set β} {f : α → β} (hf : MapsTo f s t)
     (hf' : InjOn f s) (ht : t.Countable) : s.Countable :=
   have := ht.to_subtype
   have : Injective (hf.restrict f s t) := (injOn_iff_injective.1 hf').codRestrict _
   this.countable
-
-/--
-theorem `Countable.preimage_of_injOn` / 定理 `Countable.preimage_of_injOn`
-
-English:
-theorem Countable.preimage_of_injOn
-  statement: {s : Set β} (hs : s.Countable) {f : α -> β}
-  proof: (mapsTo_preimage f s).countable_of_injOn hf hs
-
-中文:
-定理 可数.preimage_of_injOn
-  结论: {s : 集合 β} (hs : s.可数) {f : α -> β}
-  证明: (mapsTo_preimage f s).countable_of_injOn hf hs
-
-Depends on / 依赖: countable_of_injOn, mapsTo_preimage
+/-
+**Set.Countable.preimage_of_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {β : Type v} {s : Set β}, s.Countable → ∀ {f : α → β}, Set.
+InjOn f (f ⁻¹' s) → (f ⁻¹' s).Countable
+参数：f ⁻¹' s；f ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.countable_of_injOn`：∀ {α : Type u} {β : Type v} {s : Set α} {
+t : Set β} {f : α → β},   Set.MapsTo f s t → Set.InjOn f s → t.Countable → s.Cou
+ntable
+· 使用定理 `Set.mapsTo_preimage`：mapsTo_preimage (f : α -> β) (t : Set β) : MapsTo f
+ (f ⁻¹' t) t
 -/
-theorem Countable.preimage_of_injOn {s : Set β} (hs : s.Countable) {f : α -> β}
+theorem Countable.preimage_of_injOn {s : Set β} (hs : s.Countable) {f : α → β}
     (hf : InjOn f (f ⁻¹' s)) : (f ⁻¹' s).Countable :=
   (mapsTo_preimage f s).countable_of_injOn hf hs
-
-/--
-theorem `Countable.preimage` / 定理 `Countable.preimage`
-
-English:
-theorem Countable.preimage
-  given: {s : Set β} (hs : s.Countable) {f : α -> β} (hf : Injective f)
-  proof: hs.preimage_of_injOn hf.injOn
-
-中文:
-定理 可数.原像
-  条件: {s : 集合 β} (hs : s.可数) {f : α -> β} (hf : 单射 f)
-  证明: hs.preimage_of_injOn hf.injOn
+/-
+**Set.Countable.preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {β : Type v} {s : Set β}, s.Countable → ∀ {f : α → β}, Func
+tion.Injective f → (f ⁻¹' s).Countable
+参数：f ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.preimage_of_injOn`：∀ {α : Type u} {β : Type v} {s : Set β}
+, s.Countable → ∀ {f : α → β}, Set.InjOn f (f ⁻¹' s) → (f ⁻¹' s).Countable
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
 -/
-protected theorem Countable.preimage {s : Set β} (hs : s.Countable) {f : α -> β} (hf : Injective f) :
+protected theorem Countable.preimage {s : Set β} (hs : s.Countable) {f : α → β} (hf : Injective f) :
     (f ⁻¹' s).Countable :=
   hs.preimage_of_injOn hf.injOn
-
-/--
-theorem `exists_seq_iSup_eq_top_iff_countable` / 定理 `exists_seq_iSup_eq_top_iff_countable`
-
-English:
-theorem exists_seq_iSup_eq_top_iff_countable
-  given: [CompleteLattice α] {p : α -> Prop} (h : exists x, p x)
-  proof: by
-  constructor
-  · rintro ⟨s, hps, hs⟩
-    refine ⟨range s, countable_range s, forall_mem_range.2 hps, ?_⟩
-    rwa [sSup_range]
-  · rintro ⟨S, hSc, hps, hS⟩
-    rcases eq_empty_or_nonempty S with (rfl | hne)
-    · rw [sSup_empty] at hS
-      have := subsingleton_of_bot_eq_top hS
-      rcases h with ⟨x, hx⟩
-      exact ⟨fun _ => x, fun _ => hx, Subsingleton.elim _ _⟩
-    · rcases (Set.countable_iff_exists_surjective hne).1 hSc with ⟨s, hs⟩
-      refine ⟨fun n => s n, fun n => hps _ (s n).coe_prop, ?_⟩
-      rwa [hs.iSup_comp, ← sSup_eq_iSup']
-
-中文:
-定理 存在_seq_iSup_eq_top_iff_countable
-  条件: [完备格 α] {p : α -> 命题} (h : 存在 x, p x)
-  证明: by
-  constructor
-  · rintro ⟨s, hps, hs⟩
-    refine ⟨range s, countable_range s, forall_mem_range.2 hps, ?_⟩
-    rwa [sSup_range]
-  · rintro ⟨S, hSc, hps, hS⟩
-    rcases eq_empty_or_nonempty S with (rfl | hne)
-    · rw [sSup_empty] at hS
-      have := subsingleton_of_bot_eq_top hS
-      rcases h with ⟨x, hx⟩
-      exact ⟨fun _ => x, fun _ => hx, Subsingleton.elim _ _⟩
-    · rcases (Set.countable_iff_exists_surjective hne).1 hSc with ⟨s, hs⟩
-      refine ⟨fun n => s n, fun n => hps _ (s n).coe_prop, ?_⟩
-      rwa [hs.iSup_comp, ← sSup_eq_iSup']
-
-Depends on / 依赖: Set.countable_iff_exists_surjective, Subsingleton, Subsingleton.elim, coe_prop, countable_iff_exists_surjective, countable_range, eq_empty_or_nonempty, forall_mem_range, hs.iSup_comp, iSup_comp, sSup_empty, sSup_eq_iSup, sSup_range, subsingleton_of_bot_eq_top
+/-
+**Set.exists_seq_iSup_eq_top_iff_countable** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_seq_iSup_eq_top_iff_countable [CompleteLattice α] {p : α -> Prop} (
+h : exists x, p x) : (exists s : Nat -> α, (forall n, p (s n)) ∧ ⨆ n, s n = ⊤) ↔
+ exists S : Set α, S.Countable ∧ (forall s in S, p s) ∧ sSup S = ⊤
+参数：h : exists x, p x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_range`：sSup_range : sSup (range f) = iSup f
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `subsingleton_of_bot_eq_top`：subsingleton_of_bot_eq_top (hα : (⊥ : α) = (
+⊤ : α)) : Subsingleton α
+· 使用定理 `sSup_empty`：sSup_empty : sSup ∅ = (⊥ : α)
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.countable_iff_exists_surjective`：∀ {α : Type u} {s : Set α}, s.Nonem
+pty → (s.Countable ↔ ∃ f, Function.Surjective f)
+· 使用定理 `Subtype.coe_prop`：coe_prop {S : Set α} (a : { a // a in S }) : ↑a in S
+· 使用定理 `Function.Surjective.iSup_comp`：Function.Surjective.iSup_comp {f : ι -> ι
+'} (hf : Surjective f) (g : ι' -> α) : ⨆ x, g (f x) = ⨆ y, g y
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
 -/
-theorem exists_seq_iSup_eq_top_iff_countable [CompleteLattice α] {p : α -> Prop} (h : exists x, p x) :
-    (exists s : Nat -> α, (forall n, p (s n)) ∧ ⨆ n, s n = ⊤) ↔
-      exists S : Set α, S.Countable ∧ (forall s in S, p s) ∧ sSup S = ⊤ := by
+theorem exists_seq_iSup_eq_top_iff_countable [CompleteLattice α] {p : α → Prop} (h : ∃ x, p x) :
+    (∃ s : ℕ → α, (∀ n, p (s n)) ∧ ⨆ n, s n = ⊤) ↔
+      ∃ S : Set α, S.Countable ∧ (∀ s ∈ S, p s) ∧ sSup S = ⊤ := by
   constructor
   · rintro ⟨s, hps, hs⟩
     refine ⟨range s, countable_range s, forall_mem_range.2 hps, ?_⟩
@@ -715,222 +574,170 @@ theorem exists_seq_iSup_eq_top_iff_countable [CompleteLattice α] {p : α -> Pro
     · rcases (Set.countable_iff_exists_surjective hne).1 hSc with ⟨s, hs⟩
       refine ⟨fun n => s n, fun n => hps _ (s n).coe_prop, ?_⟩
       rwa [hs.iSup_comp, ← sSup_eq_iSup']
-
-/--
-theorem `exists_seq_cover_iff_countable` / 定理 `exists_seq_cover_iff_countable`
-
-English:
-theorem exists_seq_cover_iff_countable
-  given: {p : Set α -> Prop} (h : exists s, p s)
-  proof: exists_seq_iSup_eq_top_iff_countable h
-
-中文:
-定理 存在_seq_cover_iff_countable
-  条件: {p : 集合 α -> 命题} (h : 存在 s, p s)
-  证明: exists_seq_iSup_eq_top_iff_countable h
-
-Depends on / 依赖: exists_seq_iSup_eq_top_iff_countable
+/-
+**Set.exists_seq_cover_iff_countable** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_seq_cover_iff_countable {p : Set α -> Prop} (h : exists s, p s) : (
+exists s : Nat -> Set α, (forall n, p (s n)) ∧ ⋃ n, s n = univ) ↔ exists S : Set
+ (Set α), S.Countable ∧ (forall s in S, p s) ∧ ⋃₀ S = univ
+参数：h : exists s, p s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.exists_seq_iSup_eq_top_iff_countable`：exists_seq_iSup_eq_top_iff_cou
+ntable [CompleteLattice α] {p : α -> Prop} (h : exists x, p x) : (exists s : Nat
+ -> α, (forall n, p (s n)) ∧ ⨆…
 -/
-theorem exists_seq_cover_iff_countable {p : Set α -> Prop} (h : exists s, p s) :
-    (exists s : Nat -> Set α, (forall n, p (s n)) ∧ ⋃ n, s n = univ) ↔
-      exists S : Set (Set α), S.Countable ∧ (forall s in S, p s) ∧ ⋃₀ S = univ :=
+theorem exists_seq_cover_iff_countable {p : Set α → Prop} (h : ∃ s, p s) :
+    (∃ s : ℕ → Set α, (∀ n, p (s n)) ∧ ⋃ n, s n = univ) ↔
+      ∃ S : Set (Set α), S.Countable ∧ (∀ s ∈ S, p s) ∧ ⋃₀ S = univ :=
   exists_seq_iSup_eq_top_iff_countable h
-
-/--
-theorem `countable_of_injective_of_countable_image` / 定理 `countable_of_injective_of_countable_image`
-
-English:
-theorem countable_of_injective_of_countable_image
-  statement: {s : Set α} {f : α -> β} (hf : InjOn f s)
-  proof: (mapsTo_image _ _).countable_of_injOn hf hs
-
-中文:
-定理 countable_of_injective_of_countable_image
-  结论: {s : 集合 α} {f : α -> β} (hf : 单射限制 f s)
-  证明: (mapsTo_image _ _).countable_of_injOn hf hs
-
-Depends on / 依赖: countable_of_injOn, mapsTo_image
+/-
+**Set.countable_of_injective_of_countable_image** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_of_injective_of_countable_image {s : Set α} {f : α -> β} (hf : I
+njOn f s) (hs : (f '' s).Countable) : s.Countable
+参数：hf : InjOn f s；hs : (f '' s).Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.MapsTo.countable_of_injOn`：∀ {α : Type u} {β : Type v} {s : Set α} {
+t : Set β} {f : α → β},   Set.MapsTo f s t → Set.InjOn f s → t.Countable → s.Cou
+ntable
+· 使用定理 `Set.mapsTo_image`：mapsTo_image (f : α -> β) (s : Set α) : MapsTo f s (f 
+'' s)
 -/
-theorem countable_of_injective_of_countable_image {s : Set α} {f : α -> β} (hf : InjOn f s)
+theorem countable_of_injective_of_countable_image {s : Set α} {f : α → β} (hf : InjOn f s)
     (hs : (f '' s).Countable) : s.Countable :=
   (mapsTo_image _ _).countable_of_injOn hf hs
-
-/--
-theorem `countable_iUnion` / 定理 `countable_iUnion`
-
-English:
-theorem countable_iUnion
-  given: {t : ι -> Set α} [Countable ι] (ht : forall i, (t i).Countable)
-  proof: by
-  have := fun i => (ht i).to_subtype
-  rw [iUnion_eq_range_psigma]
-  apply countable_range
-
-@[simp]
-
-中文:
-定理 countable_iUnion
-  条件: {t : ι -> 集合 α} [可数 ι] (ht : 对任意 i, (t i).可数)
-  证明: by
-  have := fun i => (ht i).to_subtype
-  rw [iUnion_eq_range_psigma]
-  apply countable_range
-
-@[simp]
-
-Depends on / 依赖: countable_range, iUnion_eq_range_psigma, to_subtype
+/-
+**Set.countable_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_iUnion {t : ι -> Set α} [Countable ι] (ht : forall i, (t i).Coun
+table) : (⋃ i, t i).Countable
+参数：ht : forall i, (t i).Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.iUnion_eq_range_psigma`：iUnion_eq_range_psigma (s : ι -> Set β) : ⋃ 
+i, s i = range fun a : Σ' i, s i => a.2
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `instCountablePSigma`：∀ {α : Sort u} {π : α → Sort w} [Countable α] [∀ (a
+ : α), Countable (π a)], Countable (PSigma π)
 -/
-theorem countable_iUnion {t : ι -> Set α} [Countable ι] (ht : forall i, (t i).Countable) :
+theorem countable_iUnion {t : ι → Set α} [Countable ι] (ht : ∀ i, (t i).Countable) :
     (⋃ i, t i).Countable := by
-  have := fun i => (ht i).to_subtype
+  have := fun i ↦ (ht i).to_subtype
   rw [iUnion_eq_range_psigma]
   apply countable_range
 
 @[simp]
-/--
-theorem `countable_iUnion_iff` / 定理 `countable_iUnion_iff`
-
-English:
-theorem countable_iUnion_iff
-  given: [Countable ι] {t : ι -> Set α}
-  proof: ⟨fun h _ => h.mono subset_iUnion _ _, countable_iUnion⟩
-
-中文:
-定理 countable_iUnion_iff
-  条件: [可数 ι] {t : ι -> 集合 α}
-  证明: ⟨fun h _ => h.mono subset_iUnion _ _, countable_iUnion⟩
-
-Depends on / 依赖: countable_iUnion, h.mono, subset_iUnion
+/-
+**Set.countable_iUnion_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_iUnion_iff [Countable ι] {t : ι -> Set α} : (⋃ i, t i).Countable
+ ↔ forall i, (t i).Countable
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
+· 使用定理 `Set.countable_iUnion`：countable_iUnion {t : ι -> Set α} [Countable ι] (h
+t : forall i, (t i).Countable) : (⋃ i, t i).Countable
 -/
-theorem countable_iUnion_iff [Countable ι] {t : ι -> Set α} :
-    (⋃ i, t i).Countable ↔ forall i, (t i).Countable :=
-⟨fun h _ => h.mono subset_iUnion _ _, countable_iUnion⟩
-
-/--
-theorem `Countable.biUnion_iff` / 定理 `Countable.biUnion_iff`
-
-English:
-theorem Countable.biUnion_iff
-  given: {s : Set α} {t : forall a in s, Set β} (hs : s.Countable)
-  proof: by
-  have := hs.to_subtype
-  rw [biUnion_eq_iUnion]; rw [countable_iUnion_iff]; rw [SetCoe.forall']
-
-中文:
-定理 可数.biUnion_iff
-  条件: {s : 集合 α} {t : 对任意 a in s, 集合 β} (hs : s.可数)
-  证明: by
-  have := hs.to_subtype
-  rw [biUnion_eq_iUnion]; rw [countable_iUnion_iff]; rw [SetCoe.forall']
-
-Depends on / 依赖: SetCoe, SetCoe.forall, biUnion_eq_iUnion, countable_iUnion_iff, hs.to_subtype, to_subtype
+theorem countable_iUnion_iff [Countable ι] {t : ι → Set α} :
+    (⋃ i, t i).Countable ↔ ∀ i, (t i).Countable :=
+  ⟨fun h _ => h.mono <| subset_iUnion _ _, countable_iUnion⟩
+/-
+**Set.Countable.biUnion_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {β : Type v} {s : Set α} {t : (a : α) → a ∈ s → Set β},   s
+.Countable → ((⋃ a, ⋃ (h : a ∈ s), t a h).Countable ↔ ∀ (a : α) (ha : a ∈ s), (t
+ a ha).Countable)
+参数：a : α；(⋃ a, ⋃ (h : a ∈ s), t a h).Countable ↔ ∀ (a : α) (ha : a ∈ s), (t a ha
+).Countable。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biUnion_eq_iUnion`：biUnion_eq_iUnion (s : Set α) (t : forall x in s,
+ Set β) : ⋃ x in s, t x ‹_› = ⋃ x : s, t x x.2
+· 使用定理 `Set.countable_iUnion_iff`：countable_iUnion_iff [Countable ι] {t : ι -> S
+et α} : (⋃ i, t i).Countable ↔ forall i, (t i).Countable
+· 使用定理 `SetCoe.forall'`：SetCoe.forall' {s : Set α} {p : forall x, x in s -> Prop
+} : (forall (x) (h : x in s), p x h) ↔ forall x : s, p x.1 x.2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Countable.biUnion_iff {s : Set α} {t : forall a in s, Set β} (hs : s.Countable) :
-    (⋃ a in s, t a ‹_›).Countable ↔ forall a (ha : a in s), (t a ha).Countable := by
+theorem Countable.biUnion_iff {s : Set α} {t : ∀ a ∈ s, Set β} (hs : s.Countable) :
+    (⋃ a ∈ s, t a ‹_›).Countable ↔ ∀ a (ha : a ∈ s), (t a ha).Countable := by
   have := hs.to_subtype
-  rw [biUnion_eq_iUnion]; rw [countable_iUnion_iff]; rw [SetCoe.forall']
-
-/--
-theorem `Countable.sUnion_iff` / 定理 `Countable.sUnion_iff`
-
-English:
-theorem Countable.sUnion_iff
-  given: {s : Set (Set α)} (hs : s.Countable)
-  proof: by rw [sUnion_eq_biUnion, hs.biUnion_iff]
-
-alias ⟨_, Countable.biUnion⟩ := Countable.biUnion_iff
-
-alias ⟨_, Countable.sUnion⟩ := Countable.sUnion_iff
-
-@[simp]
-
-中文:
-定理 可数.sUnion_iff
-  条件: {s : 集合 (集合 α)} (hs : s.可数)
-  证明: by rw [sUnion_eq_biUnion, hs.biUnion_iff]
-
-alias ⟨_, Countable.biUnion⟩ := Countable.biUnion_iff
-
-alias ⟨_, Countable.sUnion⟩ := Countable.sUnion_iff
-
-@[simp]
-
-Depends on / 依赖: biUnion_iff, hs.biUnion_iff, sUnion_eq_biUnion
+  rw [biUnion_eq_iUnion, countable_iUnion_iff, SetCoe.forall']
+/-
+**Set.Countable.sUnion_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {s : Set (Set α)}, s.Countable → ((⋃₀ s).Countable ↔ ∀ a ∈ 
+s, a.Countable)
+参数：Set α；(⋃₀ s).Countable ↔ ∀ a ∈ s, a.Countable。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sUnion_eq_biUnion`：sUnion_eq_biUnion {s : Set (Set α)} : ⋃₀ s = ⋃ (i
+ : Set α) (_ : i in s), i
+· 使用定理 `Set.Countable.biUnion_iff`：∀ {α : Type u} {β : Type v} {s : Set α} {t : 
+(a : α) → a ∈ s → Set β},   s.Countable → ((⋃ a, ⋃ (h : a ∈ s), t a h).Countable
+ ↔ ∀ (a : α) (h…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Countable.sUnion_iff {s : Set (Set α)} (hs : s.Countable) :
-    (⋃₀ s).Countable ↔ forall a in s, a.Countable := by rw [sUnion_eq_biUnion, hs.biUnion_iff]
+    (⋃₀ s).Countable ↔ ∀ a ∈ s, a.Countable := by rw [sUnion_eq_biUnion, hs.biUnion_iff]
 
 alias ⟨_, Countable.biUnion⟩ := Countable.biUnion_iff
 
 alias ⟨_, Countable.sUnion⟩ := Countable.sUnion_iff
 
 @[simp]
-/--
-theorem `countable_union` / 定理 `countable_union`
-
-English:
-theorem countable_union
-  given: {s t : Set α}
-  statement: (s union t).Countable ↔ s.Countable ∧ t.Countable
-  proof: by
-  simp [union_eq_iUnion, and_comm]
-
-中文:
-定理 countable_union
-  条件: {s t : 集合 α}
-  结论: (s union t).可数 ↔ s.可数 ∧ t.可数
-  证明: by
-  simp [union_eq_iUnion, and_comm]
-
-Depends on / 依赖: and_comm, union_eq_iUnion
+/-
+**Set.countable_union** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_union {s t : Set α} : (s union t).Countable ↔ s.Countable ∧ t.Co
+untable
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_eq_iUnion`：union_eq_iUnion {s₁ s₂ : Set α} : s₁ union s₂ = ⋃ b
+ : Bool, cond b s₁ s₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem countable_union {s t : Set α} : (s union t).Countable ↔ s.Countable ∧ t.Countable := by
+theorem countable_union {s t : Set α} : (s ∪ t).Countable ↔ s.Countable ∧ t.Countable := by
   simp [union_eq_iUnion, and_comm]
-
-/--
-theorem `Countable.union` / 定理 `Countable.union`
-
-English:
-theorem Countable.union
-  given: {s t : Set α} (hs : s.Countable) (ht : t.Countable)
-  statement: (s union t).Countable
-  proof: countable_union.2 ⟨hs, ht⟩
-
-中文:
-定理 可数.union
-  条件: {s t : 集合 α} (hs : s.可数) (ht : t.可数)
-  结论: (s union t).可数
-  证明: countable_union.2 ⟨hs, ht⟩
-
-Depends on / 依赖: countable_union
+/-
+**Set.Countable.union** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, s.Countable → t.Countable → (s ∪ t).Countabl
+e
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.countable_union`：countable_union {s t : Set α} : (s union t).Countab
+le ↔ s.Countable ∧ t.Countable
 -/
-theorem Countable.union {s t : Set α} (hs : s.Countable) (ht : t.Countable) : (s union t).Countable :=
+theorem Countable.union {s t : Set α} (hs : s.Countable) (ht : t.Countable) : (s ∪ t).Countable :=
   countable_union.2 ⟨hs, ht⟩
-
-/--
-theorem `Countable.of_sdiff` / 定理 `Countable.of_sdiff`
-
-English:
-theorem Countable.of_sdiff
-  given: {s t : Set α} (h : (s \ t).Countable) (ht : t.Countable)
-  statement: s.Countable
-  proof: (h.union ht).mono (subset_sdiff_union _ _)
-
-@[deprecated (since := "2026-06-03")] alias Countable.of_diff := Countable.of_sdiff
-
-@[simp]
-
-中文:
-定理 可数.of_sdiff
-  条件: {s t : 集合 α} (h : (s \ t).可数) (ht : t.可数)
-  结论: s.可数
-  证明: (h.union ht).mono (subset_sdiff_union _ _)
-
-@[deprecated (since := "2026-06-03")] alias Countable.of_diff := Countable.of_sdiff
-
-@[simp]
-
-Depends on / 依赖: h.union, subset_sdiff_union
+/-
+**Set.Countable.of_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {s t : Set α}, (s \ t).Countable → t.Countable → s.Countabl
+e
+参数：s \ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `Set.subset_sdiff_union`：subset_sdiff_union (s t : Set α) : s subseteq s 
+\ t union t
+· 使用定理 `Set.Countable.union`：∀ {α : Type u} {s t : Set α}, s.Countable → t.Count
+able → (s ∪ t).Countable
 -/
 theorem Countable.of_sdiff {s t : Set α} (h : (s \ t).Countable) (ht : t.Countable) : s.Countable :=
   (h.union ht).mono (subset_sdiff_union _ _)
@@ -938,186 +745,127 @@ theorem Countable.of_sdiff {s t : Set α} (h : (s \ t).Countable) (ht : t.Counta
 @[deprecated (since := "2026-06-03")] alias Countable.of_diff := Countable.of_sdiff
 
 @[simp]
-/--
-theorem `countable_insert` / 定理 `countable_insert`
-
-English:
-theorem countable_insert
-  given: {s : Set α} {a : α}
-  statement: (insert a s).Countable ↔ s.Countable
-  proof: by
-  simp only [insert_eq, countable_union, countable_singleton, true_and]
-
-中文:
-定理 countable_insert
-  条件: {s : 集合 α} {a : α}
-  结论: (insert a s).可数 ↔ s.可数
-  证明: by
-  simp only [insert_eq, countable_union, countable_singleton, true_and]
-
-Depends on / 依赖: countable_singleton, countable_union, insert_eq, true_and
+/-
+**Set.countable_insert** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_insert {s : Set α} {a : α} : (insert a s).Countable ↔ s.Countabl
+e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem countable_insert {s : Set α} {a : α} : (insert a s).Countable ↔ s.Countable := by
   simp only [insert_eq, countable_union, countable_singleton, true_and]
-
-/--
-theorem `Countable.insert` / 定理 `Countable.insert`
-
-English:
-theorem Countable.insert
-  given: {s : Set α} (a : α) (h : s.Countable)
-  statement: (insert a s).Countable
-  proof: countable_insert.2 h
-
-中文:
-定理 可数.insert
-  条件: {s : 集合 α} (a : α) (h : s.可数)
-  结论: (insert a s).可数
-  证明: countable_insert.2 h
+/-
+**Set.Countable.insert** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {s : Set α} (a : α), s.Countable → (insert a s).Countable
+参数：a : α；insert a s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.countable_insert`：countable_insert {s : Set α} {a : α} : (insert a s
+).Countable ↔ s.Countable
 -/
 protected theorem Countable.insert {s : Set α} (a : α) (h : s.Countable) : (insert a s).Countable :=
   countable_insert.2 h
-
-/--
-theorem `Finite.countable` / 定理 `Finite.countable`
-
-English:
-theorem Finite.countable
-  given: {s : Set α} (hs : s.Finite)
-  statement: s.Countable
-  proof: have := hs.to_subtype; s.to_countable
-
-@[nontriviality]
-
-中文:
-定理 有限.countable
-  条件: {s : 集合 α} (hs : s.有限)
-  结论: s.可数
-  证明: have := hs.to_subtype; s.to_countable
-
-@[nontriviality]
-
-Depends on / 依赖: hs.to_subtype, s.to_countable, to_countable, to_subtype
+/-
+**Set.Finite.countable** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Finite → Finite ↑s
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
 -/
 theorem Finite.countable {s : Set α} (hs : s.Finite) : s.Countable :=
   have := hs.to_subtype; s.to_countable
 
 @[nontriviality]
-/--
-theorem `Countable.of_subsingleton` / 定理 `Countable.of_subsingleton`
-
-English:
-theorem Countable.of_subsingleton
-  given: [Subsingleton α] (s : Set α)
-  statement: s.Countable
-  proof: (Finite.of_subsingleton s).countable
-
-中文:
-定理 可数.of_subsingleton
-  条件: [子单例 α] (s : 集合 α)
-  结论: s.可数
-  证明: (Finite.of_subsingleton s).countable
-
-Depends on / 依赖: Finite, Finite.of_subsingleton, countable, of_subsingleton
+/-
+**Set.Countable.of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} [Subsingleton α] (s : Set α), s.Countable
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+· 使用定理 `Set.Finite.of_subsingleton`：∀ {α : Type u} [Subsingleton α] (s : Set α),
+ s.Finite
 -/
 theorem Countable.of_subsingleton [Subsingleton α] (s : Set α) : s.Countable :=
   (Finite.of_subsingleton s).countable
-
-/--
-theorem `Subsingleton.countable` / 定理 `Subsingleton.countable`
-
-English:
-theorem Subsingleton.countable
-  given: {s : Set α} (hs : s.Subsingleton)
-  statement: s.Countable
-  proof: hs.finite.countable
-
-中文:
-定理 子单例.countable
-  条件: {s : 集合 α} (hs : s.子单例)
-  结论: s.可数
-  证明: hs.finite.countable
-
-Depends on / 依赖: countable, finite, hs.finite.countable
+/-
+**Set.Subsingleton.countable** 是 Mathlib 中的一个定理，位于命名空间 `Set.Subsingleton`。
+形式化陈述：∀ {α : Type u} {s : Set α}, s.Subsingleton → s.Countable
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+· 使用定理 `Set.Subsingleton.finite`：∀ {α : Type u} {s : Set α}, s.Subsingleton → s.
+Finite
 -/
 theorem Subsingleton.countable {s : Set α} (hs : s.Subsingleton) : s.Countable :=
   hs.finite.countable
-
-/--
-theorem `countable_isTop` / 定理 `countable_isTop`
-
-English:
-theorem countable_isTop
-  given: (α : Type*) [PartialOrder α]
-  statement: { x : α | IsTop x }.Countable
-  proof: (finite_isTop α).countable
-
-中文:
-定理 countable_isTop
-  条件: (α : 类型) [偏序 α]
-  结论: { x : α | IsTop x }.可数
-  证明: (finite_isTop α).countable
-
-Depends on / 依赖: countable, finite_isTop
+/-
+**Set.countable_isTop** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_isTop (α : Type*) [PartialOrder α] : { x : α | IsTop x }.Countab
+le
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+· 使用引理 `Set.finite_isTop`：finite_isTop : {a : α | IsTop a}.Finite
 -/
 theorem countable_isTop (α : Type*) [PartialOrder α] : { x : α | IsTop x }.Countable :=
   (finite_isTop α).countable
-
-/--
-theorem `countable_isBot` / 定理 `countable_isBot`
-
-English:
-theorem countable_isBot
-  given: (α : Type*) [PartialOrder α]
-  statement: { x : α | IsBot x }.Countable
-  proof: (finite_isBot α).countable
-
-中文:
-定理 countable_isBot
-  条件: (α : 类型) [偏序 α]
-  结论: { x : α | IsBot x }.可数
-  证明: (finite_isBot α).countable
-
-Depends on / 依赖: countable, finite_isBot
+/-
+**Set.countable_isBot** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_isBot (α : Type*) [PartialOrder α] : { x : α | IsBot x }.Countab
+le
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+· 使用定理 `Set.finite_isBot`：∀ (α : Type u_2) [inst : PartialOrder α], {a | IsBot a
+}.Finite
 -/
 theorem countable_isBot (α : Type*) [PartialOrder α] : { x : α | IsBot x }.Countable :=
   (finite_isBot α).countable
 
-/--
-theorem `countable_ofPred_finite_subset` / 定理 `countable_ofPred_finite_subset`
+/-- The set of finite subsets of a countable set is countable. -/
+/-
+**Set.countable_ofPred_finite_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_ofPred_finite_subset {s : Set α} (hs : s.Countable) : { t | Set.
+Finite t ∧ t subseteq s }.Countable
+参数：hs : s.Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Set.instCanLiftFinsetCoeFinite`：∀ {α : Type u}, CanLift (Set α) (Finset 
+α) SetLike.coe Set.Finite
+· 使用定理 `Set.Finite.of_finite_image`：∀ {α : Type u} {β : Type v} {s : Set α} {f :
+ α → β}, (f '' s).Finite → Set.InjOn f s → s.Finite
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `Finset.countable`：∀ {α : Type u_1} [Countable α], Countable (Finset α)
 
-English:
-theorem countable_ofPred_finite_subset
-  given: {s : Set α} (hs : s.Countable)
-  proof: by
-  have := hs.to_subtype
-  refine (countable_range fun t : Finset s => Subtype.val '' (t : Set s)).mono ?_
-  rintro t ⟨ht, hts⟩
-  lift t to Set s using hts
-  lift t to Finset s using ht.of_finite_image Subtype.val_injective.injOn
-  exact mem_range_self _
-
-@[deprecated (since := "2026-07-09")]
-alias countable_setOf_finite_subset := countable_ofPred_finite_subset
-
-中文:
-定理 countable_ofPred_finite_subset
-  条件: {s : 集合 α} (hs : s.可数)
-  证明: by
-  have := hs.to_subtype
-  refine (countable_range fun t : Finset s => Subtype.val '' (t : Set s)).mono ?_
-  rintro t ⟨ht, hts⟩
-  lift t to Set s using hts
-  lift t to Finset s using ht.of_finite_image Subtype.val_injective.injOn
-  exact mem_range_self _
-
-@[deprecated (since := "2026-07-09")]
-alias countable_setOf_finite_subset := countable_ofPred_finite_subset
-
-Depends on / 依赖: Finset, Subtype, Subtype.val, Subtype.val_injective.injOn, countable_range, hs.to_subtype, ht.of_finite_image, mem_range_self, of_finite_image, to_subtype, val_injective
+--- 原说明 ---
+The set of finite subsets of a countable set is countable.
 -/
 theorem countable_ofPred_finite_subset {s : Set α} (hs : s.Countable) :
-    { t | Set.Finite t ∧ t subseteq s }.Countable := by
+    { t | Set.Finite t ∧ t ⊆ s }.Countable := by
   have := hs.to_subtype
   refine (countable_range fun t : Finset s => Subtype.val '' (t : Set s)).mono ?_
   rintro t ⟨ht, hts⟩
@@ -1128,201 +876,171 @@ theorem countable_ofPred_finite_subset {s : Set α} (hs : s.Countable) :
 @[deprecated (since := "2026-07-09")]
 alias countable_setOf_finite_subset := countable_ofPred_finite_subset
 
-/--
-theorem `Countable.ofPred_finite` / 定理 `Countable.ofPred_finite`
+/-- The set of finite sets in a countable type is countable. -/
+/-
+**Set.Countable.ofPred_finite** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} [Countable α], {s | s.Finite}.Countable
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Set.countable_ofPred_finite_subset`：countable_ofPred_finite_subset {s : 
+Set α} (hs : s.Countable) : { t | Set.Finite t ∧ t subseteq s }.Countable
+· 使用定理 `Set.countable_univ`：countable_univ [Countable α] : (univ : Set α).Counta
+ble
 
-English:
-theorem Countable.ofPred_finite
-  given: [Countable α]
-  statement: {s : Set α | s.Finite}.Countable
-  proof: by
-  simpa using countable_ofPred_finite_subset countable_univ
-
-@[deprecated (since := "2026-07-09")] alias Countable.setOf_finite := Countable.ofPred_finite
-
-中文:
-定理 可数.ofPred_finite
-  条件: [可数 α]
-  结论: {s : 集合 α | s.有限}.可数
-  证明: by
-  simpa using countable_ofPred_finite_subset countable_univ
-
-@[deprecated (since := "2026-07-09")] alias Countable.setOf_finite := Countable.ofPred_finite
-
-Depends on / 依赖: countable_ofPred_finite_subset, countable_univ
+--- 原说明 ---
+The set of finite sets in a countable type is countable.
 -/
 theorem Countable.ofPred_finite [Countable α] : {s : Set α | s.Finite}.Countable := by
   simpa using countable_ofPred_finite_subset countable_univ
 
 @[deprecated (since := "2026-07-09")] alias Countable.setOf_finite := Countable.ofPred_finite
 
-/--
-theorem `Countable.of_preimage_singleton` / 定理 `Countable.of_preimage_singleton`
+/-- If the codomain of a map is countable and the fibres are countable, the domain
+is countable. -/
+/-
+**Set.Countable.of_preimage_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {β : Type v} {f : α → β} [Countable β], (∀ (b : β), (f ⁻¹' 
+{b}).Countable) → Countable α
+参数：∀ (b : β), (f ⁻¹' {b}).Countable。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_iUnion`：preimage_iUnion {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
+· 使用定理 `Set.countable_iUnion`：countable_iUnion {t : ι -> Set α} [Countable ι] (h
+t : forall i, (t i).Countable) : (⋃ i, t i).Countable
 
-English:
-theorem Countable.of_preimage_singleton
-  statement: {f : α -> β} [Countable β]
-  proof: by
+--- 原说明 ---
+If the codomain of a map is countable and the fibres are countable, the domain
+is countable.
+-/
+theorem Countable.of_preimage_singleton {f : α → β} [Countable β]
+    (h : ∀ (b : β), (f ⁻¹' {b}).Countable) : Countable α := by
   simp_rw [← Set.countable_univ_iff, ← Set.preimage_univ (f := f), ← Set.iUnion_of_singleton,
     Set.preimage_iUnion, Set.countable_iUnion h]
-
-中文:
-定理 可数.of_preimage_singleton
-  结论: {f : α -> β} [可数 β]
-  证明: by
-  simp_rw [← Set.countable_univ_iff, ← Set.preimage_univ (f := f), ← Set.iUnion_of_singleton,
-    Set.preimage_iUnion, Set.countable_iUnion h]
-
-Depends on / 依赖: Set.countable_iUnion, Set.countable_univ_iff, Set.iUnion_of_singleton, Set.preimage_iUnion, Set.preimage_univ, countable_iUnion, countable_univ_iff, iUnion_of_singleton, preimage_iUnion, preimage_univ, simp_rw
+/-
+**Set.countable_univ_pi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_univ_pi {π : α -> Type*} [Finite α] {s : forall a, Set (π a)} (h
+s : forall a, (s a).Countable) : (pi univ s).Countable
+参数：π a；hs : forall a, (s a).Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Countable.of_equiv`：Countable.of_equiv (α : Sort*) [Countable α] (e : α 
+≃ β) : Countable β
+· 使用定理 `instCountableForallOfFinite`：∀ {α : Sort u} {π : α → Sort w} [Finite α] 
+[∀ (a : α), Countable (π a)], Countable ((a : α) → π a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem Countable.of_preimage_singleton {f : α -> β} [Countable β]
-    (h : forall (b : β), (f ⁻¹' {b}).Countable) : Countable α := by
-  simp_rw [← Set.countable_univ_iff, ← Set.preimage_univ (f := f), ← Set.iUnion_of_singleton,
-    Set.preimage_iUnion, Set.countable_iUnion h]
-
-/--
-theorem `countable_univ_pi` / 定理 `countable_univ_pi`
-
-English:
-theorem countable_univ_pi
-  statement: {π : α -> Type*} [Finite α] {s : forall a, Set (π a)}
-  proof: have := fun a => (hs a).to_subtype; .of_equiv _ (Equiv.Set.univPi s).symm
-
-中文:
-定理 countable_univ_pi
-  结论: {π : α -> 类型} [有限 α] {s : 对任意 a, 集合 (π a)}
-  证明: have := fun a => (hs a).to_subtype; .of_equiv _ (Equiv.Set.univPi s).symm
-
-Depends on / 依赖: Equiv.Set.univPi, of_equiv, to_subtype, univPi
+theorem countable_univ_pi {π : α → Type*} [Finite α] {s : ∀ a, Set (π a)}
+    (hs : ∀ a, (s a).Countable) : (pi univ s).Countable :=
+  have := fun a ↦ (hs a).to_subtype; .of_equiv _ (Equiv.Set.univPi s).symm
+/-
+**Set.countable_pi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_pi {π : α -> Type*} [Finite α] {s : forall a, Set (π a)} (hs : f
+orall a, (s a).Countable) : { f : forall a, π a | forall a, f a in s a }.Countab
+le
+参数：π a；hs : forall a, (s a).Countable。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.countable_univ_pi`：countable_univ_pi {π : α -> Type*} [Finite α] {s 
+: forall a, Set (π a)} (hs : forall a, (s a).Countable) : (pi univ s).Countable
 -/
-theorem countable_univ_pi {π : α -> Type*} [Finite α] {s : forall a, Set (π a)}
-    (hs : forall a, (s a).Countable) : (pi univ s).Countable :=
-  have := fun a => (hs a).to_subtype; .of_equiv _ (Equiv.Set.univPi s).symm
-
-/--
-theorem `countable_pi` / 定理 `countable_pi`
-
-English:
-theorem countable_pi
-  given: {π : α -> Type*} [Finite α] {s : forall a, Set (π a)} (hs : forall a, (s a).Countable)
-  proof: by
+theorem countable_pi {π : α → Type*} [Finite α] {s : ∀ a, Set (π a)} (hs : ∀ a, (s a).Countable) :
+    { f : ∀ a, π a | ∀ a, f a ∈ s a }.Countable := by
   simpa only [← mem_univ_pi] using! countable_univ_pi hs
-
-中文:
-定理 countable_pi
-  条件: {π : α -> 类型} [有限 α] {s : 对任意 a, 集合 (π a)} (hs : 对任意 a, (s a).可数)
-  证明: by
-  simpa only [← mem_univ_pi] using! countable_univ_pi hs
-
-Depends on / 依赖: countable_univ_pi, mem_univ_pi
--/
-theorem countable_pi {π : α -> Type*} [Finite α] {s : forall a, Set (π a)} (hs : forall a, (s a).Countable) :
-    { f : forall a, π a | forall a, f a in s a }.Countable := by
-  simpa only [← mem_univ_pi] using! countable_univ_pi hs
-
-/--
-theorem `Countable.prod` / 定理 `Countable.prod`
-
-English:
-theorem Countable.prod
-  given: {s : Set α} {t : Set β} (hs : s.Countable) (ht : t.Countable)
-  proof: have := hs.to_subtype; have := ht.to_subtype; .of_equiv _ (Equiv.Set.prod _ _).symm
-
-中文:
-定理 可数.乘积
-  条件: {s : 集合 α} {t : 集合 β} (hs : s.可数) (ht : t.可数)
-  证明: have := hs.to_subtype; have := ht.to_subtype; .of_equiv _ (Equiv.Set.prod _ _).symm
+/-
+**Set.Countable.prod** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {β : Type v} {s : Set α} {t : Set β}, s.Countable → t.Count
+able → (s ×ˢ t).Countable
+参数：s ×ˢ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Countable.to_subtype`：∀ {α : Type u} {s : Set α}, s.Countable → Coun
+table ↑s
+· 使用定理 `Countable.of_equiv`：Countable.of_equiv (α : Sort*) [Countable α] (e : α 
+≃ β) : Countable β
+· 使用定理 `instCountableProd`：∀ {α : Type u} {β : Type v} [Countable α] [Countable 
+β], Countable (α × β)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 protected theorem Countable.prod {s : Set α} {t : Set β} (hs : s.Countable) (ht : t.Countable) :
     Set.Countable (s ×ˢ t) :=
-have := hs.to_subtype; have := ht.to_subtype; .of_equiv _ (Equiv.Set.prod _ _).symm
-
-/--
-theorem `Countable.image2` / 定理 `Countable.image2`
-
-English:
-theorem Countable.image2
-  statement: {s : Set α} {t : Set β} (hs : s.Countable) (ht : t.Countable)
-  proof: by
-  rw [← image_prod]
-  exact (hs.prod ht).image _
-
-中文:
-定理 可数.image2
-  结论: {s : 集合 α} {t : 集合 β} (hs : s.可数) (ht : t.可数)
-  证明: by
-  rw [← image_prod]
-  exact (hs.prod ht).image _
-
-Depends on / 依赖: hs.prod, image_prod
+  have := hs.to_subtype; have := ht.to_subtype; .of_equiv _ <| (Equiv.Set.prod _ _).symm
+/-
+**Set.Countable.image2** 是 Mathlib 中的一个定理，位于命名空间 `Set.Countable`。
+形式化陈述：∀ {α : Type u} {β : Type v} {γ : Type w} {s : Set α} {t : Set β},   s.Coun
+table → t.Countable → ∀ (f : α → β → γ), (Set.image2 f s t).Countable
+参数：f : α → β → γ；Set.image2 f s t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.image_prod`：image_prod : (fun x : α × β => f x.1 x.2) '' s ×ˢ t = im
+age2 f s t
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Set.Countable.prod`：∀ {α : Type u} {β : Type v} {s : Set α} {t : Set β},
+ s.Countable → t.Countable → (s ×ˢ t).Countable
 -/
 theorem Countable.image2 {s : Set α} {t : Set β} (hs : s.Countable) (ht : t.Countable)
-    (f : α -> β -> γ) : (image2 f s t).Countable := by
+    (f : α → β → γ) : (image2 f s t).Countable := by
   rw [← image_prod]
   exact (hs.prod ht).image _
 
-/--
-theorem `countable_ofPred_nonempty_of_disjoint` / 定理 `countable_ofPred_nonempty_of_disjoint`
+/-- If a family of disjoint sets is included in a countable set, then only countably many of
+them are nonempty. -/
+/-
+**Set.countable_ofPred_nonempty_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：countable_ofPred_nonempty_of_disjoint {f : β -> Set α} (hf : Pairwise (Dis
+joint on f)) {s : Set α} (h'f : forall t, f t subseteq s) (hs : s.Countable) : S
+et.Countable {t | (f t).Nonempty}
+参数：hf : Pairwise (Disjoint on f)；h'f : forall t, f t subseteq s；hs : s.Countable
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.countable_coe_iff`：countable_coe_iff {s : Set α} : Countable s ↔ s.C
+ountable
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Set.not_disjoint_iff_nonempty_inter`：not_disjoint_iff_nonempty_inter : ¬
+ Disjoint s t ↔ (s inter t).Nonempty
+· 使用定理 `Function.Injective.countable`：∀ {α : Sort u} {β : Sort v} [Countable β] 
+{f : α → β}, Function.Injective f → Countable α
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-theorem countable_ofPred_nonempty_of_disjoint
-  statement: {f : β -> Set α}
-  proof: by
-  rw [← Set.countable_coe_iff] at hs ⊢
-  have : forall t : {t // (f t).Nonempty}, exists x : s, x.1 in f t := by
-    rintro ⟨t, ⟨x, hx⟩⟩
-    exact ⟨⟨x, (h'f t hx)⟩, hx⟩
-  choose F hF using this
-  have A : Injective F := by
-    rintro ⟨t, ht⟩ ⟨t', ht'⟩ htt'
-    have A : (f t inter f t').Nonempty := by
-      refine ⟨F ⟨t, ht⟩, hF ⟨t, _⟩, ?_⟩
-      rw [htt']
-      exact hF ⟨t', _⟩
-    simp only [Subtype.mk.injEq]
-    by_contra H
-    exact not_disjoint_iff_nonempty_inter.2 A (hf H)
-  exact Injective.countable A
-
-@[deprecated (since := "2026-07-09")]
-alias countable_setOf_nonempty_of_disjoint := countable_ofPred_nonempty_of_disjoint
-
-中文:
-定理 countable_ofPred_nonempty_of_disjoint
-  结论: {f : β -> 集合 α}
-  证明: by
-  rw [← Set.countable_coe_iff] at hs ⊢
-  have : forall t : {t // (f t).Nonempty}, exists x : s, x.1 in f t := by
-    rintro ⟨t, ⟨x, hx⟩⟩
-    exact ⟨⟨x, (h'f t hx)⟩, hx⟩
-  choose F hF using this
-  have A : Injective F := by
-    rintro ⟨t, ht⟩ ⟨t', ht'⟩ htt'
-    have A : (f t inter f t').Nonempty := by
-      refine ⟨F ⟨t, ht⟩, hF ⟨t, _⟩, ?_⟩
-      rw [htt']
-      exact hF ⟨t', _⟩
-    simp only [Subtype.mk.injEq]
-    by_contra H
-    exact not_disjoint_iff_nonempty_inter.2 A (hf H)
-  exact Injective.countable A
-
-@[deprecated (since := "2026-07-09")]
-alias countable_setOf_nonempty_of_disjoint := countable_ofPred_nonempty_of_disjoint
-
-Depends on / 依赖: Injective, Injective.countable, Nonempty, Set.countable_coe_iff, Subtype, Subtype.mk.injEq, countable, countable_coe_iff, not_disjoint_iff_nonempty_inter
+--- 原说明 ---
+If a family of disjoint sets is included in a countable set, then only countably
+ many of
+them are nonempty.
 -/
-theorem countable_ofPred_nonempty_of_disjoint {f : β -> Set α}
-    (hf : Pairwise (Disjoint on f)) {s : Set α} (h'f : forall t, f t subseteq s) (hs : s.Countable) :
+theorem countable_ofPred_nonempty_of_disjoint {f : β → Set α}
+    (hf : Pairwise (Disjoint on f)) {s : Set α} (h'f : ∀ t, f t ⊆ s) (hs : s.Countable) :
     Set.Countable {t | (f t).Nonempty} := by
   rw [← Set.countable_coe_iff] at hs ⊢
-  have : forall t : {t // (f t).Nonempty}, exists x : s, x.1 in f t := by
+  have : ∀ t : {t // (f t).Nonempty}, ∃ x : s, x.1 ∈ f t := by
     rintro ⟨t, ⟨x, hx⟩⟩
     exact ⟨⟨x, (h'f t hx)⟩, hx⟩
   choose F hF using this
   have A : Injective F := by
     rintro ⟨t, ht⟩ ⟨t', ht'⟩ htt'
-    have A : (f t inter f t').Nonempty := by
+    have A : (f t ∩ f t').Nonempty := by
       refine ⟨F ⟨t, ht⟩, hF ⟨t, _⟩, ?_⟩
       rw [htt']
       exact hF ⟨t', _⟩
@@ -1336,22 +1054,14 @@ alias countable_setOf_nonempty_of_disjoint := countable_ofPred_nonempty_of_disjo
 
 end Set
 
-/--
-theorem `Finset.countable_toSet` / 定理 `Finset.countable_toSet`
-
-English:
-theorem Finset.countable_toSet
-  given: (s : Finset α)
-  statement: Set.Countable (↑s : Set α)
-  proof: s.finite_toSet.countable
-
-中文:
-定理 有限集.countable_toSet
-  条件: (s : 有限集 α)
-  结论: 集合.可数 (↑s : 集合 α)
-  证明: s.finite_toSet.countable
-
-Depends on / 依赖: countable, finite_toSet, s.finite_toSet.countable
+/-
+**Finset.countable_toSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.countable_toSet (s : Finset α) : Set.Countable (↑s : Set α)
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
 -/
 theorem Finset.countable_toSet (s : Finset α) : Set.Countable (↑s : Set α) :=
   s.finite_toSet.countable

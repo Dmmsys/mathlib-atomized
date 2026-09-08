@@ -34,97 +34,122 @@ variable {X : Type u}
 /-- Local notation for `m a b`. -/
 local notation a " <" m:51 "> " b => m a b
 
-/--
-Definition of `IsUnital` / `IsUnital` 的定义
+/-- `IsUnital m e` expresses that `e : X` is a left and right unit
+for the binary operation `m : X → X → X`. -/
+/-
+**EckmannHilton.IsUnital** 是 Mathlib 中的一个归纳类型，位于命名空间 `EckmannHilton`。
+形式化陈述：{X : Type u} → (X → X → X) → X → Prop
+参数：X → X → X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsUnital
-  parameters: (m : X -> X -> X) (e : X)
-  extends: Std.LawfulIdentity m e
-  (no additional axioms)
-
-中文:
-结构 是Unital
-  参数: (m : X -> X -> X) (e : X)
-  继承: Std.LawfulIdentity m e
-  (无附加公理)
+--- 原说明 ---
+`IsUnital m e` expresses that `e : X` is a left and right unit
+for the binary operation `m : X → X → X`.
 -/
-structure IsUnital (m : X -> X -> X) (e : X) : Prop extends Std.LawfulIdentity m e
+structure IsUnital (m : X → X → X) (e : X) : Prop extends Std.LawfulIdentity m e
 
 @[to_additive EckmannHilton.AddZeroClass.IsUnital]
-/--
-theorem `MulOneClass.isUnital` / 定理 `MulOneClass.isUnital`
-
-English:
-theorem MulOneClass.isUnital
-  given: [_G : MulOneClass X]
-  statement: IsUnital (· * ·) (1 : X)
-  proof: IsUnital.mk { left_id := MulOneClass.one_mul,
-                right_id := MulOneClass.mul_one }
-
-中文:
-定理 MulOne类.isUnital
-  条件: [_G : MulOne类 X]
-  结论: 是Unital (· * ·) (1 : X)
-  证明: IsUnital.mk { left_id := MulOneClass.one_mul,
-                right_id := MulOneClass.mul_one }
-
-Depends on / 依赖: IsUnital, IsUnital.mk, MulOneClass, MulOneClass.mul_one, MulOneClass.one_mul, left_id, mul_one, one_mul, right_id
+/-
+**EckmannHilton.MulOneClass.isUnital** 是 Mathlib 中的一个定理，位于命名空间 `EckmannHilton.Mu
+lOneClass`。
+形式化陈述：∀ {X : Type u} [_G : MulOneClass X], EckmannHilton.IsUnital (fun x1 x2 => 
+x1 * x2) 1
+参数：fun x1 x2 => x1 * x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOneClass.one_mul`：∀ {M : Type u} [self : MulOneClass M] (a : M), 1 * 
+a = a
+· 使用定理 `MulOneClass.mul_one`：∀ {M : Type u} [self : MulOneClass M] (a : M), a * 
+1 = a
 -/
 theorem MulOneClass.isUnital [_G : MulOneClass X] : IsUnital (· * ·) (1 : X) :=
   IsUnital.mk { left_id := MulOneClass.one_mul,
                 right_id := MulOneClass.mul_one }
 
-variable {m₁ m₂ : X -> X -> X} {e₁ e₂ : X}
+variable {m₁ m₂ : X → X → X} {e₁ e₂ : X}
 variable (h₁ : IsUnital m₁ e₁) (h₂ : IsUnital m₂ e₂)
-variable (distrib : forall a b c d, ((a <m₂> b) <m₁> c <m₂> d) = (a <m₁> c) <m₂> b <m₁> d)
+variable (distrib : ∀ a b c d, ((a <m₂> b) <m₁> c <m₂> d) = (a <m₁> c) <m₂> b <m₁> d)
 
 include h₁ h₂ distrib
 
-/--
-theorem `one` / 定理 `one`
+/-- If a type carries two unital binary operations that distribute over each other,
+then they have the same unit elements.
 
-English:
-theorem one
-  statement: e₁ = e₂
-  proof: by
-  simpa only [h₁.left_id, h₁.right_id, h₂.left_id, h₂.right_id] using distrib e₂ e₁ e₁ e₂
+In fact, the two operations are the same, and give a commutative monoid structure,
+see `eckmann_hilton.CommMonoid`. -/
+/-
+**EckmannHilton.one** 是 Mathlib 中的一个定理，位于命名空间 `EckmannHilton`。
+形式化陈述：one : e₁ = e₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Std.LawfulLeftIdentity.left_id`：∀ {α : Sort u} {β : Sort u_1} {op : α → 
+β → β} {o : outParam α} [self : Std.LawfulLeftIdentity op o] (a : β), op o a = a
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `EckmannHilton.IsUnital.toLawfulIdentity`：∀ {X : Type u} {m : X → X → X} 
+{e : X}, EckmannHilton.IsUnital m e → Std.LawfulIdentity m e
+· 使用定理 `Std.LawfulRightIdentity.right_id`：∀ {α : Sort u} {β : Sort u_1} {op : α 
+→ β → α} {o : outParam β} [self : Std.LawfulRightIdentity op o] (a : α),   op a 
+o = a
+· 使用定理 `Std.LawfulIdentity.toLawfulRightIdentity`：∀ {α : Sort u} {op : α → α → α
+} {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulRightIdentity op 
+o
 
-中文:
-定理 one
-  结论: e₁ = e₂
-  证明: by
-  simpa only [h₁.left_id, h₁.right_id, h₂.left_id, h₂.right_id] using distrib e₂ e₁ e₁ e₂
+--- 原说明 ---
+If a type carries two unital binary operations that distribute over each other,
+then they have the same unit elements.
 
-Depends on / 依赖: distrib, left_id, right_id
+In fact, the two operations are the same, and give a commutative monoid structur
+e,
+see `eckmann_hilton.CommMonoid`.
 -/
 theorem one : e₁ = e₂ := by
   simpa only [h₁.left_id, h₁.right_id, h₂.left_id, h₂.right_id] using distrib e₂ e₁ e₁ e₂
 
-/--
-theorem `mul` / 定理 `mul`
+/-- If a type carries two unital binary operations that distribute over each other,
+then these operations are equal.
 
-English:
-theorem mul
-  statement: m₁ = m₂
-  proof: by
-  funext a b
-  calc
-    m₁ a b = m₁ (m₂ a e₁) (m₂ e₁ b) := by
-      { simp only [one h₁ h₂ distrib, h₂.left_id, h₂.right_id] }
-    _ = m₂ a b := by simp only [distrib, h₁.left_id, h₁.right_id]
+In fact, they give a commutative monoid structure, see `eckmann_hilton.CommMonoid`. -/
+/-
+**EckmannHilton.mul** 是 Mathlib 中的一个定理，位于命名空间 `EckmannHilton`。
+形式化陈述：mul : m₁ = m₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `EckmannHilton.one`：one : e₁ = e₂
+· 使用定理 `Std.LawfulRightIdentity.right_id`：∀ {α : Sort u} {β : Sort u_1} {op : α 
+→ β → α} {o : outParam β} [self : Std.LawfulRightIdentity op o] (a : α),   op a 
+o = a
+· 使用定理 `Std.LawfulIdentity.toLawfulRightIdentity`：∀ {α : Sort u} {op : α → α → α
+} {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulRightIdentity op 
+o
+· 使用定理 `EckmannHilton.IsUnital.toLawfulIdentity`：∀ {X : Type u} {m : X → X → X} 
+{e : X}, EckmannHilton.IsUnital m e → Std.LawfulIdentity m e
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Std.LawfulLeftIdentity.left_id`：∀ {α : Sort u} {β : Sort u_1} {op : α → 
+β → β} {o : outParam α} [self : Std.LawfulLeftIdentity op o] (a : β), op o a = a
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 mul
-  结论: m₁ = m₂
-  证明: by
-  funext a b
-  calc
-    m₁ a b = m₁ (m₂ a e₁) (m₂ e₁ b) := by
-      { simp only [one h₁ h₂ distrib, h₂.left_id, h₂.right_id] }
-    _ = m₂ a b := by simp only [distrib, h₁.left_id, h₁.right_id]
+--- 原说明 ---
+If a type carries two unital binary operations that distribute over each other,
+then these operations are equal.
 
-Depends on / 依赖: distrib, left_id, right_id
+In fact, they give a commutative monoid structure, see `eckmann_hilton.CommMonoi
+d`.
 -/
 theorem mul : m₁ = m₂ := by
   funext a b
@@ -133,38 +158,82 @@ theorem mul : m₁ = m₂ := by
       { simp only [one h₁ h₂ distrib, h₂.left_id, h₂.right_id] }
     _ = m₂ a b := by simp only [distrib, h₁.left_id, h₁.right_id]
 
-/--
-theorem `mul_comm` / 定理 `mul_comm`
+/-- If a type carries two unital binary operations that distribute over each other,
+then these operations are commutative.
 
-English:
-theorem mul_comm
-  statement: Std.Commutative m₂
-  proof: ⟨fun a b => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib e₂ a b e₂⟩
+In fact, they give a commutative monoid structure, see `eckmann_hilton.CommMonoid`. -/
+/-
+**EckmannHilton.mul_comm** 是 Mathlib 中的一个定理，位于命名空间 `EckmannHilton`。
+形式化陈述：mul_comm : Std.Commutative m₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EckmannHilton.mul`：mul : m₁ = m₂
+· 使用定理 `Std.LawfulLeftIdentity.left_id`：∀ {α : Sort u} {β : Sort u_1} {op : α → 
+β → β} {o : outParam α} [self : Std.LawfulLeftIdentity op o] (a : β), op o a = a
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `EckmannHilton.IsUnital.toLawfulIdentity`：∀ {X : Type u} {m : X → X → X} 
+{e : X}, EckmannHilton.IsUnital m e → Std.LawfulIdentity m e
+· 使用定理 `Std.LawfulRightIdentity.right_id`：∀ {α : Sort u} {β : Sort u_1} {op : α 
+→ β → α} {o : outParam β} [self : Std.LawfulRightIdentity op o] (a : α),   op a 
+o = a
+· 使用定理 `Std.LawfulIdentity.toLawfulRightIdentity`：∀ {α : Sort u} {op : α → α → α
+} {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulRightIdentity op 
+o
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 
-中文:
-定理 mul_comm
-  结论: Std.交换 m₂
-  证明: ⟨fun a b => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib e₂ a b e₂⟩
+--- 原说明 ---
+If a type carries two unital binary operations that distribute over each other,
+then these operations are commutative.
 
-Depends on / 依赖: distrib, left_id, right_id
+In fact, they give a commutative monoid structure, see `eckmann_hilton.CommMonoi
+d`.
 -/
 theorem mul_comm : Std.Commutative m₂ :=
   ⟨fun a b => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib e₂ a b e₂⟩
 
-/--
-theorem `mul_assoc` / 定理 `mul_assoc`
+/-- If a type carries two unital binary operations that distribute over each other,
+then these operations are associative.
 
-English:
-theorem mul_assoc
-  statement: Std.Associative m₂
-  proof: ⟨fun a b c => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib a b e₂ c⟩
+In fact, they give a commutative monoid structure, see `eckmann_hilton.CommMonoid`. -/
+/-
+**EckmannHilton.mul_assoc** 是 Mathlib 中的一个定理，位于命名空间 `EckmannHilton`。
+形式化陈述：mul_assoc : Std.Associative m₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `EckmannHilton.mul`：mul : m₁ = m₂
+· 使用定理 `Std.LawfulLeftIdentity.left_id`：∀ {α : Sort u} {β : Sort u_1} {op : α → 
+β → β} {o : outParam α} [self : Std.LawfulLeftIdentity op o] (a : β), op o a = a
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `EckmannHilton.IsUnital.toLawfulIdentity`：∀ {X : Type u} {m : X → X → X} 
+{e : X}, EckmannHilton.IsUnital m e → Std.LawfulIdentity m e
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Std.LawfulRightIdentity.right_id`：∀ {α : Sort u} {β : Sort u_1} {op : α 
+→ β → α} {o : outParam β} [self : Std.LawfulRightIdentity op o] (a : α),   op a 
+o = a
+· 使用定理 `Std.LawfulIdentity.toLawfulRightIdentity`：∀ {α : Sort u} {op : α → α → α
+} {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulRightIdentity op 
+o
 
-中文:
-定理 mul_assoc
-  结论: Std.结合 m₂
-  证明: ⟨fun a b c => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib a b e₂ c⟩
+--- 原说明 ---
+If a type carries two unital binary operations that distribute over each other,
+then these operations are associative.
 
-Depends on / 依赖: distrib, left_id, right_id
+In fact, they give a commutative monoid structure, see `eckmann_hilton.CommMonoi
+d`.
 -/
 theorem mul_assoc : Std.Associative m₂ :=
   ⟨fun a b c => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib a b e₂ c⟩
@@ -174,27 +243,20 @@ operation, then the magma structure is a commutative monoid. -/
 @[to_additive
       /-- If a type carries a unital additive magma structure that distributes over a unital binary
       operation, then the additive magma structure is a commutative additive monoid. -/]
-/--
-Definition of `commMonoid` / `commMonoid` 的定义
-
-English:
-abbreviation commMonoid
-  signature: [h : MulOneClass X]
-  body: { h with
-      mul_comm := (mul_comm h₁ MulOneClass.isUnital distrib).comm,
-      mul_assoc := (mul_assoc h₁ MulOneClass.isUnital distrib).assoc }
-
-中文:
-缩写 commMonoid
-  签名: [h : MulOne类 X]
-  定义体: { h with
-      mul_comm := (mul_comm h₁ MulOneClass.isUnital distrib).comm,
-      mul_assoc := (mul_assoc h₁ MulOneClass.isUnital distrib).assoc }
-
-Depends on / 依赖: MulOneClass, MulOneClass.isUnital, distrib, isUnital, mul_assoc, mul_comm
+/-
+**EckmannHilton.commMonoid** 是 Mathlib 中的一个缩写定义，位于命名空间 `EckmannHilton`。
+形式化陈述：commMonoid [h : MulOneClass X] (distrib : forall a b c d, ((a * b) <m₁> c 
+* d) = (a <m₁> c) * b <m₁> d) : CommMonoid X
+参数：distrib : forall a b c d, ((a * b) <m₁> c * d) = (a <m₁> c) * b <m₁> d。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOneClass.one_mul`：∀ {M : Type u} [self : MulOneClass M] (a : M), 1 * 
+a = a
+· 使用定理 `MulOneClass.mul_one`：∀ {M : Type u} [self : MulOneClass M] (a : M), a * 
+1 = a
 -/
 abbrev commMonoid [h : MulOneClass X]
-    (distrib : forall a b c d, ((a * b) <m₁> c * d) = (a <m₁> c) * b <m₁> d) : CommMonoid X :=
+    (distrib : ∀ a b c d, ((a * b) <m₁> c * d) = (a <m₁> c) * b <m₁> d) : CommMonoid X :=
   { h with
       mul_comm := (mul_comm h₁ MulOneClass.isUnital distrib).comm,
       mul_assoc := (mul_assoc h₁ MulOneClass.isUnital distrib).assoc }
@@ -204,23 +266,19 @@ then the group is commutative. -/
 @[to_additive
       /-- If a type carries an additive group structure that distributes over a unital binary
       operation, then the additive group is commutative. -/]
-/--
-Definition of `commGroup` / `commGroup` 的定义
-
-English:
-abbreviation commGroup
-  signature: [G : Group X]
-  body: { G, EckmannHilton.commMonoid h₁ distrib with .. }
-
-中文:
-缩写 commGroup
-  签名: [G : 群 X]
-  定义体: { G, EckmannHilton.commMonoid h₁ distrib with .. }
-
-Depends on / 依赖: EckmannHilton, EckmannHilton.commMonoid, commMonoid, distrib
+/-
+**EckmannHilton.commGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 `EckmannHilton`。
+形式化陈述：commGroup [G : Group X] (distrib : forall a b c d, ((a * b) <m₁> c * d) = 
+(a <m₁> c) * b <m₁> d) : CommGroup X
+参数：distrib : forall a b c d, ((a * b) <m₁> c * d) = (a <m₁> c) * b <m₁> d。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMonoid.mul_comm`：∀ {M : Type u} [self : CommMonoid M] (a b : M), a *
+ b = b * a
 -/
 abbrev commGroup [G : Group X]
-    (distrib : forall a b c d, ((a * b) <m₁> c * d) = (a <m₁> c) * b <m₁> d) : CommGroup X :=
+    (distrib : ∀ a b c d, ((a * b) <m₁> c * d) = (a <m₁> c) * b <m₁> d) : CommGroup X :=
   { G, EckmannHilton.commMonoid h₁ distrib with .. }
 
 end EckmannHilton
+

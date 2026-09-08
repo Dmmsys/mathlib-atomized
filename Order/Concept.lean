@@ -39,573 +39,390 @@ concept, formal concept analysis, intent, extent, object, attribute
 
 open Function OrderDual Order Set
 
-variable {ι : Sort*} {α β γ : Type*} {κ : ι -> Sort*} (r : α -> β -> Prop) {s : Set α} {t : Set β}
+variable {ι : Sort*} {α β γ : Type*} {κ : ι → Sort*} (r : α → β → Prop) {s : Set α} {t : Set β}
 
 /-! ### Lower and upper polars -/
 
-/--
-Definition of `upperPolar` / `upperPolar` 的定义
+/-- The upper polar of `s : Set α` along a relation `r : α → β → Prop` is the set of all elements
+which `r` relates to all elements of `s`. -/
+/-
+**upperPolar** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：upperPolar (s : Set α) : Set β
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition upperPolar
-  signature: (s : Set α)
-  body: { b | forall ⦃a⦄, a in s -> r a b }
-
-中文:
-定义 upperPolar
-  签名: (s : 集合 α)
-  定义体: { b | forall ⦃a⦄, a in s -> r a b }
+--- 原说明 ---
+The upper polar of `s : Set α` along a relation `r : α → β → Prop` is the set of
+ all elements
+which `r` relates to all elements of `s`.
 -/
 def upperPolar (s : Set α) : Set β :=
-  { b | forall ⦃a⦄, a in s -> r a b }
+  { b | ∀ ⦃a⦄, a ∈ s → r a b }
 
-/--
-Definition of `lowerPolar` / `lowerPolar` 的定义
+/-- The lower polar of `t : Set β` along a relation `r : α → β → Prop` is the set of all elements
+which `r` relates to all elements of `t`. -/
+/-
+**lowerPolar** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：lowerPolar (t : Set β) : Set α
+参数：t : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lowerPolar
-  signature: (t : Set β)
-  body: { a | forall ⦃b⦄, b in t -> r a b }
-
-中文:
-定义 lowerPolar
-  签名: (t : 集合 β)
-  定义体: { a | forall ⦃b⦄, b in t -> r a b }
+--- 原说明 ---
+The lower polar of `t : Set β` along a relation `r : α → β → Prop` is the set of
+ all elements
+which `r` relates to all elements of `t`.
 -/
 def lowerPolar (t : Set β) : Set α :=
-  { a | forall ⦃b⦄, b in t -> r a b }
-
-/--
-theorem `upperPolar_le` / 定理 `upperPolar_le`
-
-English:
-theorem upperPolar_le
-  given: [LE α]
-  statement: upperPolar (· <= ·) s = upperBounds s
-  proof: rfl
-
-中文:
-定理 upperPolar_le
-  条件: [LE α]
-  结论: upperPolar (· <= ·) s = upperBounds s
-  证明: rfl
+  { a | ∀ ⦃b⦄, b ∈ t → r a b }
+/-
+**upperPolar_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {s : Set α} [inst : LE α], upperPolar (fun x1 x2 => x1 ≤ 
+x2) s = upperBounds s
+参数：fun x1 x2 => x1 ≤ x2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem upperPolar_le [LE α] : upperPolar (· <= ·) s = upperBounds s := rfl
-/--
-theorem `lowerPolar_le` / 定理 `lowerPolar_le`
-
-English:
-theorem lowerPolar_le
-  given: [LE β]
-  statement: lowerPolar (· <= ·) t = lowerBounds t
-  proof: rfl
-
-中文:
-定理 lowerPolar_le
-  条件: [LE β]
-  结论: lowerPolar (· <= ·) t = lowerBounds t
-  证明: rfl
+@[simp] theorem upperPolar_le [LE α] : upperPolar (· ≤ ·) s = upperBounds s := rfl
+/-
+**lowerPolar_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {β : Type u_3} {t : Set β} [inst : LE β], lowerPolar (fun x1 x2 => x1 ≤ 
+x2) t = lowerBounds t
+参数：fun x1 x2 => x1 ≤ x2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem lowerPolar_le [LE β] : lowerPolar (· <= ·) t = lowerBounds t := rfl
+@[simp] theorem lowerPolar_le [LE β] : lowerPolar (· ≤ ·) t = lowerBounds t := rfl
 
 variable {r} {a : α} {b : β}
-
-/--
-theorem `mem_upperPolar_iff` / 定理 `mem_upperPolar_iff`
-
-English:
-theorem mem_upperPolar_iff
-  statement: b in upperPolar r s ↔ forall ⦃a⦄, a in s -> r a b
-  proof: .rfl
-
-中文:
-定理 mem_upperPolar_iff
-  结论: b in upperPolar r s ↔ 对任意 ⦃a⦄, a in s -> r a b
-  证明: .rfl
+/-
+**mem_upperPolar_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_upperPolar_iff : b in upperPolar r s ↔ forall ⦃a⦄, a in s -> r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_upperPolar_iff : b in upperPolar r s ↔ forall ⦃a⦄, a in s -> r a b := .rfl
-/--
-theorem `mem_lowerPolar_iff` / 定理 `mem_lowerPolar_iff`
-
-English:
-theorem mem_lowerPolar_iff
-  statement: a in lowerPolar r t ↔ forall ⦃b⦄, b in t -> r a b
-  proof: .rfl
-
-中文:
-定理 mem_lowerPolar_iff
-  结论: a in lowerPolar r t ↔ 对任意 ⦃b⦄, b in t -> r a b
-  证明: .rfl
+theorem mem_upperPolar_iff : b ∈ upperPolar r s ↔ ∀ ⦃a⦄, a ∈ s → r a b := .rfl
+/-
+**mem_lowerPolar_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_lowerPolar_iff : a in lowerPolar r t ↔ forall ⦃b⦄, b in t -> r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_lowerPolar_iff : a in lowerPolar r t ↔ forall ⦃b⦄, b in t -> r a b := .rfl
-
-/--
-theorem `subset_upperPolar_iff_subset_lowerPolar` / 定理 `subset_upperPolar_iff_subset_lowerPolar`
-
-English:
-theorem subset_upperPolar_iff_subset_lowerPolar
-  proof: ⟨fun h _ ha _ hb => h hb ha, fun h _ hb _ ha => h ha hb⟩
-
-中文:
-定理 subset_upperPolar_iff_subset_lowerPolar
-  证明: ⟨fun h _ ha _ hb => h hb ha, fun h _ hb _ ha => h ha hb⟩
+theorem mem_lowerPolar_iff : a ∈ lowerPolar r t ↔ ∀ ⦃b⦄, b ∈ t → r a b := .rfl
+/-
+**subset_upperPolar_iff_subset_lowerPolar** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_upperPolar_iff_subset_lowerPolar : t subseteq upperPolar r s ↔ s su
+bseteq lowerPolar r t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem subset_upperPolar_iff_subset_lowerPolar :
-    t subseteq upperPolar r s ↔ s subseteq lowerPolar r t :=
+    t ⊆ upperPolar r s ↔ s ⊆ lowerPolar r t :=
   ⟨fun h _ ha _ hb => h hb ha, fun h _ hb _ ha => h ha hb⟩
 
 variable (r)
-
-/--
-theorem `gc_upperPolar_lowerPolar` / 定理 `gc_upperPolar_lowerPolar`
-
-English:
-theorem gc_upperPolar_lowerPolar
-  proof: fun _ _ =>
-  subset_upperPolar_iff_subset_lowerPolar
-
-中文:
-定理 gc_upperPolar_lowerPolar
-  证明: fun _ _ =>
-  subset_upperPolar_iff_subset_lowerPolar
+/-
+**gc_upperPolar_lowerPolar** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：gc_upperPolar_lowerPolar : GaloisConnection (toDual ∘ upperPolar r) (lower
+Polar r ∘ ofDual)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_upperPolar_iff_subset_lowerPolar`：subset_upperPolar_iff_subset_lo
+werPolar : t subseteq upperPolar r s ↔ s subseteq lowerPolar r t
 -/
 theorem gc_upperPolar_lowerPolar :
     GaloisConnection (toDual ∘ upperPolar r) (lowerPolar r ∘ ofDual) := fun _ _ =>
   subset_upperPolar_iff_subset_lowerPolar
-
-/--
-theorem `gc_lowerPolar_upperPolar` / 定理 `gc_lowerPolar_upperPolar`
-
-English:
-theorem gc_lowerPolar_upperPolar
-  proof: fun _ _ =>
-  subset_upperPolar_iff_subset_lowerPolar
-
-中文:
-定理 gc_lowerPolar_upperPolar
-  证明: fun _ _ =>
-  subset_upperPolar_iff_subset_lowerPolar
+/-
+**gc_lowerPolar_upperPolar** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：gc_lowerPolar_upperPolar : GaloisConnection (toDual ∘ lowerPolar r) (upper
+Polar r ∘ ofDual)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_upperPolar_iff_subset_lowerPolar`：subset_upperPolar_iff_subset_lo
+werPolar : t subseteq upperPolar r s ↔ s subseteq lowerPolar r t
 -/
 theorem gc_lowerPolar_upperPolar :
     GaloisConnection (toDual ∘ lowerPolar r) (upperPolar r ∘ ofDual) := fun _ _ =>
   subset_upperPolar_iff_subset_lowerPolar
-
-/--
-theorem `upperPolar_swap` / 定理 `upperPolar_swap`
-
-English:
-theorem upperPolar_swap
-  given: (t : Set β)
-  statement: upperPolar (swap r) t = lowerPolar r t
-  proof: rfl
-
-中文:
-定理 upperPolar_swap
-  条件: (t : 集合 β)
-  结论: upperPolar (swap r) t = lowerPolar r t
-  证明: rfl
+/-
+**upperPolar_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_swap (t : Set β) : upperPolar (swap r) t = lowerPolar r t
+参数：t : Set β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem upperPolar_swap (t : Set β) : upperPolar (swap r) t = lowerPolar r t :=
   rfl
-
-/--
-theorem `lowerPolar_swap` / 定理 `lowerPolar_swap`
-
-English:
-theorem lowerPolar_swap
-  given: (s : Set α)
-  statement: lowerPolar (swap r) s = upperPolar r s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lowerPolar_swap
-  条件: (s : 集合 α)
-  结论: lowerPolar (swap r) s = upperPolar r s
-  证明: rfl
-
-@[simp]
+/-
+**lowerPolar_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_swap (s : Set α) : lowerPolar (swap r) s = upperPolar r s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lowerPolar_swap (s : Set α) : lowerPolar (swap r) s = upperPolar r s :=
   rfl
 
 @[simp]
-/--
-theorem `upperPolar_empty` / 定理 `upperPolar_empty`
-
-English:
-theorem upperPolar_empty
-  statement: upperPolar r ∅ = univ
-  proof: eq_univ_of_forall fun _ _ => False.elim
-
-@[simp]
-
-中文:
-定理 upperPolar_empty
-  结论: upperPolar r ∅ = univ
-  证明: eq_univ_of_forall fun _ _ => False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim, eq_univ_of_forall
+/-
+**upperPolar_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_empty : upperPolar r ∅ = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
 -/
 theorem upperPolar_empty : upperPolar r ∅ = univ :=
   eq_univ_of_forall fun _ _ => False.elim
 
 @[simp]
-/--
-theorem `lowerPolar_empty` / 定理 `lowerPolar_empty`
-
-English:
-theorem lowerPolar_empty
-  statement: lowerPolar r ∅ = univ
-  proof: upperPolar_empty _
-
-@[simp]
-
-中文:
-定理 lowerPolar_empty
-  结论: lowerPolar r ∅ = univ
-  证明: upperPolar_empty _
-
-@[simp]
-
-Depends on / 依赖: upperPolar_empty
+/-
+**lowerPolar_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_empty : lowerPolar r ∅ = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperPolar_empty`：upperPolar_empty : upperPolar r ∅ = univ
 -/
 theorem lowerPolar_empty : lowerPolar r ∅ = univ :=
   upperPolar_empty _
 
 @[simp]
-/--
-theorem `mem_upperPolar_singleton` / 定理 `mem_upperPolar_singleton`
-
-English:
-theorem mem_upperPolar_singleton
-  statement: b in upperPolar r {a} ↔ r a b
-  proof: by
-  simp_rw [mem_upperPolar_iff, mem_singleton_iff, forall_eq]
-
-@[simp]
-
-中文:
-定理 mem_upperPolar_singleton
-  结论: b in upperPolar r {a} ↔ r a b
-  证明: by
-  simp_rw [mem_upperPolar_iff, mem_singleton_iff, forall_eq]
-
-@[simp]
-
-Depends on / 依赖: forall_eq, mem_singleton_iff, mem_upperPolar_iff, simp_rw
+/-
+**mem_upperPolar_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_upperPolar_singleton : b in upperPolar r {a} ↔ r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_upperPolar_singleton : b in upperPolar r {a} ↔ r a b := by
+theorem mem_upperPolar_singleton : b ∈ upperPolar r {a} ↔ r a b := by
   simp_rw [mem_upperPolar_iff, mem_singleton_iff, forall_eq]
 
 @[simp]
-/--
-theorem `mem_lowerPolar_singleton` / 定理 `mem_lowerPolar_singleton`
-
-English:
-theorem mem_lowerPolar_singleton
-  statement: a in lowerPolar r {b} ↔ r a b
-  proof: by
-  simp_rw [mem_lowerPolar_iff, mem_singleton_iff, forall_eq]
-
-@[simp]
-
-中文:
-定理 mem_lowerPolar_singleton
-  结论: a in lowerPolar r {b} ↔ r a b
-  证明: by
-  simp_rw [mem_lowerPolar_iff, mem_singleton_iff, forall_eq]
-
-@[simp]
-
-Depends on / 依赖: forall_eq, mem_lowerPolar_iff, mem_singleton_iff, simp_rw
+/-
+**mem_lowerPolar_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_lowerPolar_singleton : a in lowerPolar r {b} ↔ r a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_lowerPolar_singleton : a in lowerPolar r {b} ↔ r a b := by
+theorem mem_lowerPolar_singleton : a ∈ lowerPolar r {b} ↔ r a b := by
   simp_rw [mem_lowerPolar_iff, mem_singleton_iff, forall_eq]
 
 @[simp]
-/--
-theorem `upperPolar_union` / 定理 `upperPolar_union`
-
-English:
-theorem upperPolar_union
-  given: (s₁ s₂ : Set α)
-  proof: ext fun _ => forall₂_or_left
-
-@[simp]
-
-中文:
-定理 upperPolar_union
-  条件: (s₁ s₂ : 集合 α)
-  证明: ext fun _ => forall₂_or_left
-
-@[simp]
+/-
+**upperPolar_union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_union (s₁ s₂ : Set α) : upperPolar r (s₁ union s₂) = upperPolar
+ r s₁ inter upperPolar r s₂
+参数：s₁ s₂ : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `forall₂_or_left`：forall₂_or_left : (forall x, p x ∨ q x -> r x) ↔ (foral
+l x, p x -> r x) ∧ forall x, q x -> r x
 -/
 theorem upperPolar_union (s₁ s₂ : Set α) :
-    upperPolar r (s₁ union s₂) = upperPolar r s₁ inter upperPolar r s₂ :=
+    upperPolar r (s₁ ∪ s₂) = upperPolar r s₁ ∩ upperPolar r s₂ :=
   ext fun _ => forall₂_or_left
 
 @[simp]
-/--
-theorem `lowerPolar_union` / 定理 `lowerPolar_union`
-
-English:
-theorem lowerPolar_union
-  given: (t₁ t₂ : Set β)
-  proof: upperPolar_union ..
-
-@[simp]
-
-中文:
-定理 lowerPolar_union
-  条件: (t₁ t₂ : 集合 β)
-  证明: upperPolar_union ..
-
-@[simp]
-
-Depends on / 依赖: upperPolar_union
+/-
+**lowerPolar_union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_union (t₁ t₂ : Set β) : lowerPolar r (t₁ union t₂) = lowerPolar
+ r t₁ inter lowerPolar r t₂
+参数：t₁ t₂ : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperPolar_union`：upperPolar_union (s₁ s₂ : Set α) : upperPolar r (s₁ un
+ion s₂) = upperPolar r s₁ inter upperPolar r s₂
 -/
 theorem lowerPolar_union (t₁ t₂ : Set β) :
-    lowerPolar r (t₁ union t₂) = lowerPolar r t₁ inter lowerPolar r t₂ :=
+    lowerPolar r (t₁ ∪ t₂) = lowerPolar r t₁ ∩ lowerPolar r t₂ :=
   upperPolar_union ..
 
 @[simp]
-/--
-theorem `upperPolar_iUnion` / 定理 `upperPolar_iUnion`
-
-English:
-theorem upperPolar_iUnion
-  given: (f : ι -> Set α)
-  proof: (gc_upperPolar_lowerPolar r).l_iSup
-
-@[simp]
-
-中文:
-定理 upperPolar_iUnion
-  条件: (f : ι -> 集合 α)
-  证明: (gc_upperPolar_lowerPolar r).l_iSup
-
-@[simp]
-
-Depends on / 依赖: gc_upperPolar_lowerPolar, l_iSup
+/-
+**upperPolar_iUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_iUnion (f : ι -> Set α) : upperPolar r (⋃ i, f i) = ⋂ i, upperP
+olar r (f i)
+参数：f : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 -/
-theorem upperPolar_iUnion (f : ι -> Set α) :
+theorem upperPolar_iUnion (f : ι → Set α) :
     upperPolar r (⋃ i, f i) = ⋂ i, upperPolar r (f i) :=
   (gc_upperPolar_lowerPolar r).l_iSup
 
 @[simp]
-/--
-theorem `lowerPolar_iUnion` / 定理 `lowerPolar_iUnion`
-
-English:
-theorem lowerPolar_iUnion
-  given: (f : ι -> Set β)
-  proof: upperPolar_iUnion ..
-
-中文:
-定理 lowerPolar_iUnion
-  条件: (f : ι -> 集合 β)
-  证明: upperPolar_iUnion ..
-
-Depends on / 依赖: upperPolar_iUnion
+/-
+**lowerPolar_iUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_iUnion (f : ι -> Set β) : lowerPolar r (⋃ i, f i) = ⋂ i, lowerP
+olar r (f i)
+参数：f : ι -> Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperPolar_iUnion`：upperPolar_iUnion (f : ι -> Set α) : upperPolar r (⋃ 
+i, f i) = ⋂ i, upperPolar r (f i)
 -/
-theorem lowerPolar_iUnion (f : ι -> Set β) :
+theorem lowerPolar_iUnion (f : ι → Set β) :
     lowerPolar r (⋃ i, f i) = ⋂ i, lowerPolar r (f i) :=
   upperPolar_iUnion ..
-
-/--
-theorem `upperPolar_iUnion₂` / 定理 `upperPolar_iUnion₂`
-
-English:
-theorem upperPolar_iUnion₂
-  given: (f : forall i, κ i -> Set α)
-  proof: (gc_upperPolar_lowerPolar r).l_iSup₂
-
-中文:
-定理 upperPolar_iUnion₂
-  条件: (f : 对任意 i, κ i -> 集合 α)
-  证明: (gc_upperPolar_lowerPolar r).l_iSup₂
-
-Depends on / 依赖: gc_upperPolar_lowerPolar
+/-
+**upperPolar_iUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_iUnion (f : ι -> Set α) : upperPolar r (⋃ i, f i) = ⋂ i, upperP
+olar r (f i)
+参数：f : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 -/
-theorem upperPolar_iUnion₂ (f : forall i, κ i -> Set α) :
+theorem upperPolar_iUnion₂ (f : ∀ i, κ i → Set α) :
     upperPolar r (⋃ (i) (j), f i j) = ⋂ (i) (j), upperPolar r (f i j) :=
   (gc_upperPolar_lowerPolar r).l_iSup₂
-
-/--
-theorem `lowerPolar_iUnion₂` / 定理 `lowerPolar_iUnion₂`
-
-English:
-theorem lowerPolar_iUnion₂
-  given: (f : forall i, κ i -> Set β)
-  proof: upperPolar_iUnion₂ ..
-
-中文:
-定理 lowerPolar_iUnion₂
-  条件: (f : 对任意 i, κ i -> 集合 β)
-  证明: upperPolar_iUnion₂ ..
+/-
+**lowerPolar_iUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_iUnion (f : ι -> Set β) : lowerPolar r (⋃ i, f i) = ⋂ i, lowerP
+olar r (f i)
+参数：f : ι -> Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperPolar_iUnion`：upperPolar_iUnion (f : ι -> Set α) : upperPolar r (⋃ 
+i, f i) = ⋂ i, upperPolar r (f i)
 -/
-theorem lowerPolar_iUnion₂ (f : forall i, κ i -> Set β) :
+theorem lowerPolar_iUnion₂ (f : ∀ i, κ i → Set β) :
     lowerPolar r (⋃ (i) (j), f i j) = ⋂ (i) (j), lowerPolar r (f i j) :=
   upperPolar_iUnion₂ ..
-
-/--
-theorem `subset_lowerPolar_upperPolar` / 定理 `subset_lowerPolar_upperPolar`
-
-English:
-theorem subset_lowerPolar_upperPolar
-  given: (s : Set α)
-  proof: (gc_upperPolar_lowerPolar r).le_u_l _
-
-中文:
-定理 subset_lowerPolar_upperPolar
-  条件: (s : 集合 α)
-  证明: (gc_upperPolar_lowerPolar r).le_u_l _
-
-Depends on / 依赖: gc_upperPolar_lowerPolar, le_u_l
+/-
+**subset_lowerPolar_upperPolar** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_lowerPolar_upperPolar (s : Set α) : s subseteq lowerPolar r (upperP
+olar r s)
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.le_u_l`：le_u_l (a) : a <= u (l a)
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 -/
 theorem subset_lowerPolar_upperPolar (s : Set α) :
-    s subseteq lowerPolar r (upperPolar r s) :=
+    s ⊆ lowerPolar r (upperPolar r s) :=
   (gc_upperPolar_lowerPolar r).le_u_l _
-
-/--
-theorem `subset_upperPolar_lowerPolar` / 定理 `subset_upperPolar_lowerPolar`
-
-English:
-theorem subset_upperPolar_lowerPolar
-  given: (t : Set β)
-  proof: subset_lowerPolar_upperPolar _ t
-
-@[simp]
-
-中文:
-定理 subset_upperPolar_lowerPolar
-  条件: (t : 集合 β)
-  证明: subset_lowerPolar_upperPolar _ t
-
-@[simp]
-
-Depends on / 依赖: subset_lowerPolar_upperPolar
+/-
+**subset_upperPolar_lowerPolar** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_upperPolar_lowerPolar (t : Set β) : t subseteq upperPolar r (lowerP
+olar r t)
+参数：t : Set β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_lowerPolar_upperPolar`：subset_lowerPolar_upperPolar (s : Set α) :
+ s subseteq lowerPolar r (upperPolar r s)
 -/
 theorem subset_upperPolar_lowerPolar (t : Set β) :
-    t subseteq upperPolar r (lowerPolar r t) :=
+    t ⊆ upperPolar r (lowerPolar r t) :=
   subset_lowerPolar_upperPolar _ t
 
 @[simp]
-/--
-theorem `upperPolar_lowerPolar_upperPolar` / 定理 `upperPolar_lowerPolar_upperPolar`
-
-English:
-theorem upperPolar_lowerPolar_upperPolar
-  given: (s : Set α)
-  proof: (gc_upperPolar_lowerPolar r).l_u_l_eq_l _
-
-@[simp]
-
-中文:
-定理 upperPolar_lowerPolar_upperPolar
-  条件: (s : 集合 α)
-  证明: (gc_upperPolar_lowerPolar r).l_u_l_eq_l _
-
-@[simp]
-
-Depends on / 依赖: gc_upperPolar_lowerPolar, l_u_l_eq_l
+/-
+**upperPolar_lowerPolar_upperPolar** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_lowerPolar_upperPolar (s : Set α) : upperPolar r (lowerPolar r 
+<| upperPolar r s) = upperPolar r s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_u_l_eq_l`：∀ {α : Type u} {β : Type v} [inst : Partial
+Order α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u →
+ ∀ (b : β), l (u …
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 -/
 theorem upperPolar_lowerPolar_upperPolar (s : Set α) :
     upperPolar r (lowerPolar r <| upperPolar r s) = upperPolar r s :=
   (gc_upperPolar_lowerPolar r).l_u_l_eq_l _
 
 @[simp]
-/--
-theorem `lowerPolar_upperPolar_lowerPolar` / 定理 `lowerPolar_upperPolar_lowerPolar`
-
-English:
-theorem lowerPolar_upperPolar_lowerPolar
-  given: (t : Set β)
-  proof: upperPolar_lowerPolar_upperPolar _ t
-
-中文:
-定理 lowerPolar_upperPolar_lowerPolar
-  条件: (t : 集合 β)
-  证明: upperPolar_lowerPolar_upperPolar _ t
-
-Depends on / 依赖: upperPolar_lowerPolar_upperPolar
+/-
+**lowerPolar_upperPolar_lowerPolar** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_upperPolar_lowerPolar (t : Set β) : lowerPolar r (upperPolar r 
+<| lowerPolar r t) = lowerPolar r t
+参数：t : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperPolar_lowerPolar_upperPolar`：upperPolar_lowerPolar_upperPolar (s : 
+Set α) : upperPolar r (lowerPolar r <| upperPolar r s) = upperPolar r s
 -/
 theorem lowerPolar_upperPolar_lowerPolar (t : Set β) :
     lowerPolar r (upperPolar r <| lowerPolar r t) = lowerPolar r t :=
   upperPolar_lowerPolar_upperPolar _ t
-
-/--
-theorem `upperPolar_anti` / 定理 `upperPolar_anti`
-
-English:
-theorem upperPolar_anti
-  statement: Antitone (upperPolar r)
-  proof: (gc_upperPolar_lowerPolar r).monotone_l
-
-中文:
-定理 upperPolar_anti
-  结论: 递减 (upperPolar r)
-  证明: (gc_upperPolar_lowerPolar r).monotone_l
-
-Depends on / 依赖: gc_upperPolar_lowerPolar, monotone_l
+/-
+**upperPolar_anti** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_anti : Antitone (upperPolar r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 -/
 theorem upperPolar_anti : Antitone (upperPolar r) :=
   (gc_upperPolar_lowerPolar r).monotone_l
-
-/--
-theorem `lowerPolar_anti` / 定理 `lowerPolar_anti`
-
-English:
-theorem lowerPolar_anti
-  statement: Antitone (lowerPolar r)
-  proof: upperPolar_anti _
-
-中文:
-定理 lowerPolar_anti
-  结论: 递减 (lowerPolar r)
-  证明: upperPolar_anti _
-
-Depends on / 依赖: upperPolar_anti
+/-
+**lowerPolar_anti** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_anti : Antitone (lowerPolar r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `upperPolar_anti`：upperPolar_anti : Antitone (upperPolar r)
 -/
 theorem lowerPolar_anti : Antitone (lowerPolar r) :=
   upperPolar_anti _
-
-/--
-theorem `lowerPolar_upperPolar_monotone` / 定理 `lowerPolar_upperPolar_monotone`
-
-English:
-theorem lowerPolar_upperPolar_monotone
-  statement: Monotone (lowerPolar r ∘ upperPolar r)
-  proof: (gc_upperPolar_lowerPolar r).monotone_u_comp_l
-
-中文:
-定理 lowerPolar_upperPolar_monotone
-  结论: 递增 (lowerPolar r ∘ upperPolar r)
-  证明: (gc_upperPolar_lowerPolar r).monotone_u_comp_l
-
-Depends on / 依赖: gc_upperPolar_lowerPolar, monotone_u_comp_l
+/-
+**lowerPolar_upperPolar_monotone** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerPolar_upperPolar_monotone : Monotone (lowerPolar r ∘ upperPolar r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_u_comp_l`：∀ {α : Type u} {β : Type v} [inst : 
+Preorder α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l 
+u → Monotone (u ∘ l)
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 -/
 theorem lowerPolar_upperPolar_monotone : Monotone (lowerPolar r ∘ upperPolar r) :=
   (gc_upperPolar_lowerPolar r).monotone_u_comp_l
-
-/--
-theorem `upperPolar_lowerPolar_monotone` / 定理 `upperPolar_lowerPolar_monotone`
-
-English:
-theorem upperPolar_lowerPolar_monotone
-  statement: Monotone (upperPolar r ∘ lowerPolar r)
-  proof: (gc_lowerPolar_upperPolar r).monotone_u_comp_l
-
-中文:
-定理 upperPolar_lowerPolar_monotone
-  结论: 递增 (upperPolar r ∘ lowerPolar r)
-  证明: (gc_lowerPolar_upperPolar r).monotone_u_comp_l
-
-Depends on / 依赖: gc_lowerPolar_upperPolar, monotone_u_comp_l
+/-
+**upperPolar_lowerPolar_monotone** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperPolar_lowerPolar_monotone : Monotone (upperPolar r ∘ lowerPolar r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_u_comp_l`：∀ {α : Type u} {β : Type v} [inst : 
+Preorder α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l 
+u → Monotone (u ∘ l)
+· 使用定理 `gc_lowerPolar_upperPolar`：gc_lowerPolar_upperPolar : GaloisConnection (t
+oDual ∘ lowerPolar r) (upperPolar r ∘ ofDual)
 -/
 theorem upperPolar_lowerPolar_monotone : Monotone (upperPolar r ∘ lowerPolar r) :=
   (gc_lowerPolar_upperPolar r).monotone_u_comp_l
@@ -613,43 +430,39 @@ theorem upperPolar_lowerPolar_monotone : Monotone (upperPolar r ∘ lowerPolar r
 /-- The `extentClosure` of a set is the smallest extent containing it. See
 `IsExtent.lowerPolar_upperPolar_subset` for this proof. -/
 @[simps!]
-/--
-Definition of `extentClosure` / `extentClosure` 的定义
+/-
+**extentClosure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：extentClosure (r : α -> β -> Prop) : ClosureOperator (Set α)
+参数：r : α -> β -> Prop。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 
-English:
-definition extentClosure
-  signature: (r : α -> β -> Prop)
-  body: (gc_upperPolar_lowerPolar r).closureOperator
-
-中文:
-定义 extentClosure
-  签名: (r : α -> β -> 命题)
-  定义体: (gc_upperPolar_lowerPolar r).closureOperator
-
-Depends on / 依赖: closureOperator, gc_upperPolar_lowerPolar
+--- 原说明 ---
+The `extentClosure` of a set is the smallest extent containing it. See
+`IsExtent.lowerPolar_upperPolar_subset` for this proof.
 -/
-def extentClosure (r : α -> β -> Prop) : ClosureOperator (Set α) :=
+def extentClosure (r : α → β → Prop) : ClosureOperator (Set α) :=
   (gc_upperPolar_lowerPolar r).closureOperator
 
 /-- The `intentClosure` of a set is the smallest intent containing it. See
 `IsIntent.upperPolar_lowerPolar_subset` for this proof. -/
 @[simps!]
-/--
-Definition of `intentClosure` / `intentClosure` 的定义
+/-
+**intentClosure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：intentClosure (r : α -> β -> Prop) : ClosureOperator (Set β)
+参数：r : α -> β -> Prop。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `gc_lowerPolar_upperPolar`：gc_lowerPolar_upperPolar : GaloisConnection (t
+oDual ∘ lowerPolar r) (upperPolar r ∘ ofDual)
 
-English:
-definition intentClosure
-  signature: (r : α -> β -> Prop)
-  body: (gc_lowerPolar_upperPolar r).closureOperator
-
-中文:
-定义 intentClosure
-  签名: (r : α -> β -> 命题)
-  定义体: (gc_lowerPolar_upperPolar r).closureOperator
-
-Depends on / 依赖: closureOperator, gc_lowerPolar_upperPolar
+--- 原说明 ---
+The `intentClosure` of a set is the smallest intent containing it. See
+`IsIntent.upperPolar_lowerPolar_subset` for this proof.
 -/
-def intentClosure (r : α -> β -> Prop) : ClosureOperator (Set β) :=
+def intentClosure (r : α → β → Prop) : ClosureOperator (Set β) :=
   (gc_lowerPolar_upperPolar r).closureOperator
 
 /-! ### Intent and extent -/
@@ -659,307 +472,245 @@ namespace Order
 variable {r}
 
 /--
-Definition of `IsExtent` / `IsExtent` 的定义
+A set is an extent when either of the following equivalent definitions holds:
 
-English:
-definition IsExtent
-  signature: (r : α -> β -> Prop) (s : Set α)
-  body: s in range (lowerPolar r)
+- The `lowerPolar` of its `upperPolar` is itself.
+- The set is the `lowerPolar` of some other set.
 
-中文:
-定义 IsExtent
-  签名: (r : α -> β -> 命题) (s : 集合 α)
-  定义体: s in range (lowerPolar r)
-
-Depends on / 依赖: lowerPolar
+The latter is used as a definition, but one can rewrite using the former via `IsExtent.eq`.
 -/
-def IsExtent (r : α -> β -> Prop) (s : Set α) := s in range (lowerPolar r)
+/-
+**Order.IsExtent** 是 Mathlib 中的一个定义，位于命名空间 `Order`。
+形式化陈述：IsExtent (r : α -> β -> Prop) (s : Set α)
+参数：r : α -> β -> Prop；s : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-theorem `isExtent_lowerPolar` / 定理 `isExtent_lowerPolar`
+--- 原说明 ---
+A set is an extent when either of the following equivalent definitions holds:
 
-English:
-theorem isExtent_lowerPolar
-  statement: IsExtent r (lowerPolar r t)
-  proof: ⟨_, rfl⟩
+- The `lowerPolar` of its `upperPolar` is itself.
+- The set is the `lowerPolar` of some other set.
 
-中文:
-定理 isExtent_lowerPolar
-  结论: IsExtent r (lowerPolar r t)
-  证明: ⟨_, rfl⟩
+The latter is used as a definition, but one can rewrite using the former via `Is
+Extent.eq`.
+-/
+def IsExtent (r : α → β → Prop) (s : Set α) := s ∈ range (lowerPolar r)
+/-
+**Order.isExtent_lowerPolar** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {t : Set β}, Order.IsEx
+tent r (lowerPolar r t)
+参数：lowerPolar r t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem isExtent_lowerPolar : IsExtent r (lowerPolar r t) := ⟨_, rfl⟩
-
-/--
-theorem `isExtent_iff` / 定理 `isExtent_iff`
-
-English:
-theorem isExtent_iff
-  statement: IsExtent r s ↔ lowerPolar r (upperPolar r s) = s
-  proof: ⟨fun ⟨t, h⟩ => h ▸ lowerPolar_upperPolar_lowerPolar r t, fun h => ⟨_, h⟩⟩
-
-alias ⟨IsExtent.eq, _⟩ := isExtent_iff
-
-@[simp]
-
-中文:
-定理 isExtent_iff
-  结论: IsExtent r s ↔ lowerPolar r (upperPolar r s) = s
-  证明: ⟨fun ⟨t, h⟩ => h ▸ lowerPolar_upperPolar_lowerPolar r t, fun h => ⟨_, h⟩⟩
-
-alias ⟨IsExtent.eq, _⟩ := isExtent_iff
-
-@[simp]
-
-Depends on / 依赖: lowerPolar_upperPolar_lowerPolar
+/-
+**Order.isExtent_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：isExtent_iff : IsExtent r s ↔ lowerPolar r (upperPolar r s) = s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lowerPolar_upperPolar_lowerPolar`：lowerPolar_upperPolar_lowerPolar (t : 
+Set β) : lowerPolar r (upperPolar r <| lowerPolar r t) = lowerPolar r t
 -/
 theorem isExtent_iff : IsExtent r s ↔ lowerPolar r (upperPolar r s) = s :=
-  ⟨fun ⟨t, h⟩ => h ▸ lowerPolar_upperPolar_lowerPolar r t, fun h => ⟨_, h⟩⟩
+  ⟨fun ⟨t, h⟩ ↦ h ▸ lowerPolar_upperPolar_lowerPolar r t, fun h ↦ ⟨_, h⟩⟩
 
 alias ⟨IsExtent.eq, _⟩ := isExtent_iff
 
 @[simp]
-/--
-theorem `IsExtent.univ` / 定理 `IsExtent.univ`
-
-English:
-theorem IsExtent.univ
-  statement: IsExtent r univ
-  proof: isExtent_iff.2 (gc_upperPolar_lowerPolar r).u_l_top
-
-中文:
-定理 IsExtent.univ
-  结论: IsExtent r univ
-  证明: isExtent_iff.2 (gc_upperPolar_lowerPolar r).u_l_top
+/-
+**Order.IsExtent.univ** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsExtent`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop}, Order.IsExtent r Set.u
+niv
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.isExtent_iff`：isExtent_iff : IsExtent r s ↔ lowerPolar r (upperPol
+ar r s) = s
+· 使用定理 `GaloisConnection.u_l_top`：u_l_top {l : α -> β} {u : β -> α} (gc : Galois
+Connection l u) : u (l ⊤) = ⊤
+· 使用定理 `gc_upperPolar_lowerPolar`：gc_upperPolar_lowerPolar : GaloisConnection (t
+oDual ∘ upperPolar r) (lowerPolar r ∘ ofDual)
 -/
 protected theorem IsExtent.univ : IsExtent r univ :=
   isExtent_iff.2 (gc_upperPolar_lowerPolar r).u_l_top
-
-/--
-theorem `IsExtent.inter` / 定理 `IsExtent.inter`
-
-English:
-theorem IsExtent.inter
-  given: {s' : Set α}
-  proof: by
-  simp_rw [IsExtent, mem_range, forall_exists_index]
-  rintro t rfl t' rfl
-  exact ⟨_, lowerPolar_union r t t'⟩
-
-中文:
-定理 IsExtent.inter
-  条件: {s' : 集合 α}
-  证明: by
-  simp_rw [IsExtent, mem_range, forall_exists_index]
-  rintro t rfl t' rfl
-  exact ⟨_, lowerPolar_union r t t'⟩
+/-
+**Order.IsExtent.inter** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsExtent`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s s' : Set α},   Order
+.IsExtent r s → Order.IsExtent r s' → Order.IsExtent r (s ∩ s')
+参数：s ∩ s'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `lowerPolar_union`：lowerPolar_union (t₁ t₂ : Set β) : lowerPolar r (t₁ un
+ion t₂) = lowerPolar r t₁ inter lowerPolar r t₂
 -/
 protected theorem IsExtent.inter {s' : Set α} :
-    IsExtent r s -> IsExtent r s' -> IsExtent r (s inter s') := by
+    IsExtent r s → IsExtent r s' → IsExtent r (s ∩ s') := by
   simp_rw [IsExtent, mem_range, forall_exists_index]
   rintro t rfl t' rfl
   exact ⟨_, lowerPolar_union r t t'⟩
-
-/--
-theorem `IsExtent.iInter` / 定理 `IsExtent.iInter`
-
-English:
-theorem IsExtent.iInter
-  given: (f : ι -> Set α) (hf : forall i, IsExtent r (f i))
-  proof: ⟨_, (lowerPolar_iUnion ..).trans (iInter_congr fun i => (hf i).eq)⟩
-
-中文:
-定理 IsExtent.i整数er
-  条件: (f : ι -> 集合 α) (hf : 对任意 i, IsExtent r (f i))
-  证明: ⟨_, (lowerPolar_iUnion ..).trans (iInter_congr fun i => (hf i).eq)⟩
+/-
+**Order.IsExtent.iInter** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsExtent`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {β : Type u_3} {r : α → β → Prop} (f : ι →
+ Set α),   (∀ (i : ι), Order.IsExtent r (f i)) → Order.IsExtent r (⋂ i, f i)
+参数：f : ι → Set α；∀ (i : ι), Order.IsExtent r (f i)；⋂ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `lowerPolar_iUnion`：lowerPolar_iUnion (f : ι -> Set β) : lowerPolar r (⋃ 
+i, f i) = ⋂ i, lowerPolar r (f i)
+· 使用引理 `Set.iInter_congr`：iInter_congr {s t : ι -> Set α} (h : forall i, s i = t
+ i) : ⋂ i, s i = ⋂ i, t i
+· 使用定理 `Order.IsExtent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s
+ : Set α}, Order.IsExtent r s → lowerPolar r (upperPolar r s) = s
 -/
-protected theorem IsExtent.iInter (f : ι -> Set α) (hf : forall i, IsExtent r (f i)) :
+protected theorem IsExtent.iInter (f : ι → Set α) (hf : ∀ i, IsExtent r (f i)) :
     IsExtent r (⋂ i, f i) :=
-  ⟨_, (lowerPolar_iUnion ..).trans (iInter_congr fun i => (hf i).eq)⟩
-
-/--
-theorem `IsExtent.iInter₂` / 定理 `IsExtent.iInter₂`
-
-English:
-theorem IsExtent.iInter₂
-  given: (f : forall i, κ i -> Set α) (hf : forall i j, IsExtent r (f i j))
-  proof: ⟨_, (lowerPolar_iUnion₂ ..).trans (iInter₂_congr fun i j => (hf i j).eq)⟩
-
-中文:
-定理 IsExtent.i整数er₂
-  条件: (f : 对任意 i, κ i -> 集合 α) (hf : 对任意 i j, IsExtent r (f i j))
-  证明: ⟨_, (lowerPolar_iUnion₂ ..).trans (iInter₂_congr fun i j => (hf i j).eq)⟩
+  ⟨_, (lowerPolar_iUnion ..).trans (iInter_congr fun i ↦ (hf i).eq)⟩
+/-
+**Order.IsExtent.iInter** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsExtent`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {β : Type u_3} {r : α → β → Prop} (f : ι →
+ Set α),   (∀ (i : ι), Order.IsExtent r (f i)) → Order.IsExtent r (⋂ i, f i)
+参数：f : ι → Set α；∀ (i : ι), Order.IsExtent r (f i)；⋂ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `lowerPolar_iUnion`：lowerPolar_iUnion (f : ι -> Set β) : lowerPolar r (⋃ 
+i, f i) = ⋂ i, lowerPolar r (f i)
+· 使用引理 `Set.iInter_congr`：iInter_congr {s t : ι -> Set α} (h : forall i, s i = t
+ i) : ⋂ i, s i = ⋂ i, t i
+· 使用定理 `Order.IsExtent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s
+ : Set α}, Order.IsExtent r s → lowerPolar r (upperPolar r s) = s
 -/
-protected theorem IsExtent.iInter₂ (f : forall i, κ i -> Set α) (hf : forall i j, IsExtent r (f i j)) :
+protected theorem IsExtent.iInter₂ (f : ∀ i, κ i → Set α) (hf : ∀ i j, IsExtent r (f i j)) :
     IsExtent r (⋂ (i) (j), f i j) :=
-  ⟨_, (lowerPolar_iUnion₂ ..).trans (iInter₂_congr fun i j => (hf i j).eq)⟩
-
-/--
-theorem `IsExtent.lowerPolar_upperPolar_subset` / 定理 `IsExtent.lowerPolar_upperPolar_subset`
-
-English:
-theorem IsExtent.lowerPolar_upperPolar_subset
-  given: {s' : Set α} (h : IsExtent r s) (hs' : s' subseteq s)
-  proof: by
-  rw [← h.eq]
-  exact lowerPolar_upperPolar_monotone r hs'
-
-中文:
-定理 IsExtent.lowerPolar_upperPolar_subset
-  条件: {s' : 集合 α} (h : IsExtent r s) (hs' : s' subseteq s)
-  证明: by
-  rw [← h.eq]
-  exact lowerPolar_upperPolar_monotone r hs'
-
-Depends on / 依赖: h.eq, lowerPolar_upperPolar_monotone
+  ⟨_, (lowerPolar_iUnion₂ ..).trans (iInter₂_congr fun i j ↦ (hf i j).eq)⟩
+/-
+**Order.IsExtent.lowerPolar_upperPolar_subset** 是 Mathlib 中的一个定理，位于命名空间 `Order.I
+sExtent`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s s' : Set α},   Order
+.IsExtent r s → s' ⊆ s → lowerPolar r (upperPolar r s') ⊆ s
+参数：upperPolar r s'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.IsExtent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s
+ : Set α}, Order.IsExtent r s → lowerPolar r (upperPolar r s) = s
+· 使用定理 `lowerPolar_upperPolar_monotone`：lowerPolar_upperPolar_monotone : Monoton
+e (lowerPolar r ∘ upperPolar r)
 -/
-theorem IsExtent.lowerPolar_upperPolar_subset {s' : Set α} (h : IsExtent r s) (hs' : s' subseteq s) :
-    lowerPolar r (upperPolar r s') subseteq s := by
+theorem IsExtent.lowerPolar_upperPolar_subset {s' : Set α} (h : IsExtent r s) (hs' : s' ⊆ s) :
+    lowerPolar r (upperPolar r s') ⊆ s := by
   rw [← h.eq]
   exact lowerPolar_upperPolar_monotone r hs'
 
 /--
-Definition of `IsIntent` / `IsIntent` 的定义
+A set is an intent when either of the following equivalent definitions holds:
 
-English:
-definition IsIntent
-  signature: (r : α -> β -> Prop) (t : Set β)
-  body: t in range (upperPolar r)
+- The `upperPolar` of its `lowerPolar` is itself.
+- The set is the `upperPolar` of some other set.
 
-中文:
-定义 Is整数ent
-  签名: (r : α -> β -> 命题) (t : 集合 β)
-  定义体: t in range (upperPolar r)
-
-Depends on / 依赖: upperPolar
+The latter is used as a definition, but one can rewrite using the former via `IsIntent.eq`.
 -/
-def IsIntent (r : α -> β -> Prop) (t : Set β) := t in range (upperPolar r)
+/-
+**Order.IsIntent** 是 Mathlib 中的一个定义，位于命名空间 `Order`。
+形式化陈述：IsIntent (r : α -> β -> Prop) (t : Set β)
+参数：r : α -> β -> Prop；t : Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-theorem `isIntent_upperPolar` / 定理 `isIntent_upperPolar`
+--- 原说明 ---
+A set is an intent when either of the following equivalent definitions holds:
 
-English:
-theorem isIntent_upperPolar
-  statement: IsIntent r (upperPolar r s)
-  proof: ⟨_, rfl⟩
+- The `upperPolar` of its `lowerPolar` is itself.
+- The set is the `upperPolar` of some other set.
 
-中文:
-定理 is整数ent_upperPolar
-  结论: Is整数ent r (upperPolar r s)
-  证明: ⟨_, rfl⟩
+The latter is used as a definition, but one can rewrite using the former via `Is
+Intent.eq`.
+-/
+def IsIntent (r : α → β → Prop) (t : Set β) := t ∈ range (upperPolar r)
+/-
+**Order.isIntent_upperPolar** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s : Set α}, Order.IsIn
+tent r (upperPolar r s)
+参数：upperPolar r s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem isIntent_upperPolar : IsIntent r (upperPolar r s) := ⟨_, rfl⟩
-
-/--
-theorem `isIntent_iff` / 定理 `isIntent_iff`
-
-English:
-theorem isIntent_iff
-  statement: IsIntent r t ↔ upperPolar r (lowerPolar r t) = t
-  proof: isExtent_iff
-
-alias ⟨IsIntent.eq, _⟩ := isIntent_iff
-
-中文:
-定理 is整数ent_iff
-  结论: Is整数ent r t ↔ upperPolar r (lowerPolar r t) = t
-  证明: isExtent_iff
-
-alias ⟨IsIntent.eq, _⟩ := isIntent_iff
-
-Depends on / 依赖: isExtent_iff
+/-
+**Order.isIntent_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：isIntent_iff : IsIntent r t ↔ upperPolar r (lowerPolar r t) = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.isExtent_iff`：isExtent_iff : IsExtent r s ↔ lowerPolar r (upperPol
+ar r s) = s
 -/
 theorem isIntent_iff : IsIntent r t ↔ upperPolar r (lowerPolar r t) = t := isExtent_iff
 
 alias ⟨IsIntent.eq, _⟩ := isIntent_iff
-
-/--
-theorem `IsIntent.univ` / 定理 `IsIntent.univ`
-
-English:
-theorem IsIntent.univ
-  statement: IsIntent r univ
-  proof: IsExtent.univ
-
-中文:
-定理 Is整数ent.univ
-  结论: Is整数ent r univ
-  证明: IsExtent.univ
+/-
+**Order.IsIntent.univ** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsIntent`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop}, Order.IsIntent r Set.u
+niv
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.univ`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop},
+ Order.IsExtent r Set.univ
 -/
 @[simp] protected theorem IsIntent.univ : IsIntent r univ := IsExtent.univ
-
-/--
-theorem `IsIntent.inter` / 定理 `IsIntent.inter`
-
-English:
-theorem IsIntent.inter
-  given: {t' : Set β}
-  proof: IsExtent.inter
-
-中文:
-定理 Is整数ent.inter
-  条件: {t' : 集合 β}
-  证明: IsExtent.inter
+/-
+**Order.IsIntent.inter** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsIntent`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {t t' : Set β},   Order
+.IsIntent r t → Order.IsIntent r t' → Order.IsIntent r (t ∩ t')
+参数：t ∩ t'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.inter`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop}
+ {s s' : Set α},   Order.IsExtent r s → Order.IsExtent r s' → Order.IsExtent r (
+s ∩ s')
 -/
 protected theorem IsIntent.inter {t' : Set β} :
-    IsIntent r t -> IsIntent r t' -> IsIntent r (t inter t') :=
+    IsIntent r t → IsIntent r t' → IsIntent r (t ∩ t') :=
   IsExtent.inter
-
-/--
-theorem `IsIntent.iInter` / 定理 `IsIntent.iInter`
-
-English:
-theorem IsIntent.iInter
-  given: (f : ι -> Set β) (hf : forall i, IsIntent r (f i))
-  proof: IsExtent.iInter _ hf
-
-中文:
-定理 Is整数ent.i整数er
-  条件: (f : ι -> 集合 β) (hf : 对任意 i, Is整数ent r (f i))
-  证明: IsExtent.iInter _ hf
+/-
+**Order.IsIntent.iInter** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsIntent`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {β : Type u_3} {r : α → β → Prop} (f : ι →
+ Set β),   (∀ (i : ι), Order.IsIntent r (f i)) → Order.IsIntent r (⋂ i, f i)
+参数：f : ι → Set β；∀ (i : ι), Order.IsIntent r (f i)；⋂ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.iInter`：∀ {ι : Sort u_1} {α : Type u_2} {β : Type u_3} {r
+ : α → β → Prop} (f : ι → Set α),   (∀ (i : ι), Order.IsExtent r (f i)) → Order.
+IsExtent r …
 -/
-protected theorem IsIntent.iInter (f : ι -> Set β) (hf : forall i, IsIntent r (f i)) :
+protected theorem IsIntent.iInter (f : ι → Set β) (hf : ∀ i, IsIntent r (f i)) :
     IsIntent r (⋂ i, f i) :=
   IsExtent.iInter _ hf
-
-/--
-theorem `IsIntent.iInter₂` / 定理 `IsIntent.iInter₂`
-
-English:
-theorem IsIntent.iInter₂
-  given: (f : forall i, κ i -> Set β) (hf : forall i j, IsIntent r (f i j))
-  proof: IsExtent.iInter₂ _ hf
-
-中文:
-定理 Is整数ent.i整数er₂
-  条件: (f : 对任意 i, κ i -> 集合 β) (hf : 对任意 i j, Is整数ent r (f i j))
-  证明: IsExtent.iInter₂ _ hf
+/-
+**Order.IsIntent.iInter** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsIntent`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {β : Type u_3} {r : α → β → Prop} (f : ι →
+ Set β),   (∀ (i : ι), Order.IsIntent r (f i)) → Order.IsIntent r (⋂ i, f i)
+参数：f : ι → Set β；∀ (i : ι), Order.IsIntent r (f i)；⋂ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.iInter`：∀ {ι : Sort u_1} {α : Type u_2} {β : Type u_3} {r
+ : α → β → Prop} (f : ι → Set α),   (∀ (i : ι), Order.IsExtent r (f i)) → Order.
+IsExtent r …
 -/
-protected theorem IsIntent.iInter₂ (f : forall i, κ i -> Set β) (hf : forall i j, IsIntent r (f i j)) :
+protected theorem IsIntent.iInter₂ (f : ∀ i, κ i → Set β) (hf : ∀ i j, IsIntent r (f i j)) :
     IsIntent r (⋂ (i) (j), f i j) :=
   IsExtent.iInter₂ _ hf
-
-/--
-theorem `IsIntent.upperPolar_lowerPolar_subset` / 定理 `IsIntent.upperPolar_lowerPolar_subset`
-
-English:
-theorem IsIntent.upperPolar_lowerPolar_subset
-  given: {t' : Set β} (h : IsIntent r t) (ht' : t' subseteq t)
-  proof: by
-  rw [← h.eq]
-  exact upperPolar_lowerPolar_monotone r ht'
-
-中文:
-定理 Is整数ent.upperPolar_lowerPolar_subset
-  条件: {t' : 集合 β} (h : Is整数ent r t) (ht' : t' subseteq t)
-  证明: by
-  rw [← h.eq]
-  exact upperPolar_lowerPolar_monotone r ht'
-
-Depends on / 依赖: h.eq, upperPolar_lowerPolar_monotone
+/-
+**Order.IsIntent.upperPolar_lowerPolar_subset** 是 Mathlib 中的一个定理，位于命名空间 `Order.I
+sIntent`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {t t' : Set β},   Order
+.IsIntent r t → t' ⊆ t → upperPolar r (lowerPolar r t') ⊆ t
+参数：lowerPolar r t'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.IsIntent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {t
+ : Set β}, Order.IsIntent r t → upperPolar r (lowerPolar r t) = t
+· 使用定理 `upperPolar_lowerPolar_monotone`：upperPolar_lowerPolar_monotone : Monoton
+e (upperPolar r ∘ lowerPolar r)
 -/
-theorem IsIntent.upperPolar_lowerPolar_subset {t' : Set β} (h : IsIntent r t) (ht' : t' subseteq t) :
-    upperPolar r (lowerPolar r t') subseteq t := by
+theorem IsIntent.upperPolar_lowerPolar_subset {t' : Set β} (h : IsIntent r t) (ht' : t' ⊆ t) :
+    upperPolar r (lowerPolar r t') ⊆ t := by
   rw [← h.eq]
   exact upperPolar_lowerPolar_monotone r ht'
 
@@ -969,26 +720,20 @@ end Order
 
 variable (α β)
 
-/--
-Definition of `Concept` / `Concept` 的定义
+/-- The formal concepts of a relation. A concept of `r : α → β → Prop` is a pair of sets `s`, `t`
+such that `s` is the set of all elements that are `r`-related to all of `t` and `t` is the set of
+all elements that are `r`-related to all of `s`. -/
+/-
+**Concept** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_2) → (β : Type u_3) → (α → β → Prop) → Type (max u_2 u_3)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Concept
-  parameters: where
-  axioms and operations (4):
-    - extent : Set α
-    - intent : Set β
-    - upperPolar_extent : upperPolar r extent = intent
-    - lowerPolar_intent : lowerPolar r intent = extent
-
-中文:
-结构 余ncept
-  参数: where
-  公理与运算 (4 个):
-    - extent : 集合 α
-    - intent : 集合 β
-    - upperPolar_extent : upperPolar r extent = intent
-    - lowerPolar_intent : lowerPolar r intent = extent
+--- 原说明 ---
+The formal concepts of a relation. A concept of `r : α → β → Prop` is a pair of 
+sets `s`, `t`
+such that `s` is the set of all elements that are `r`-related to all of `t` and 
+`t` is the set of
+all elements that are `r`-related to all of `s`.
 -/
 structure Concept where
   /-- The extent of a concept. -/
@@ -1011,28 +756,15 @@ attribute [simp] upperPolar_extent lowerPolar_intent
 
 /-- See `Concept.ext'` for a version using the intent. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**Concept.ext** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：ext (h : c.extent = d.extent) : c = d
+参数：h : c.extent = d.extent。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ext
-  given: (h : c.extent = d.extent)
-  statement: c = d
-  proof: by
-  obtain ⟨s₁, t₁, rfl, _⟩ := c
-  obtain ⟨s₂, t₂, rfl, _⟩ := d
-  subst h
-  rfl
-
-中文:
-定理 ext
-  条件: (h : c.extent = d.extent)
-  结论: c = d
-  证明: by
-  obtain ⟨s₁, t₁, rfl, _⟩ := c
-  obtain ⟨s₂, t₂, rfl, _⟩ := d
-  subst h
-  rfl
+--- 原说明 ---
+See `Concept.ext'` for a version using the intent.
 -/
 theorem ext (h : c.extent = d.extent) : c = d := by
   obtain ⟨s₁, t₁, rfl, _⟩ := c
@@ -1040,85 +772,51 @@ theorem ext (h : c.extent = d.extent) : c = d := by
   subst h
   rfl
 
-/--
-theorem `ext'` / 定理 `ext'`
+/-- See `Concept.ext` for a version using the extent. -/
+/-
+**Concept.ext'** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：ext' (h : c.intent = d.intent) : c = d
+参数：h : c.intent = d.intent。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ext'
-  given: (h : c.intent = d.intent)
-  statement: c = d
-  proof: by
-  obtain ⟨s₁, t₁, _, rfl⟩ := c
-  obtain ⟨s₂, t₂, _, rfl⟩ := d
-  subst h
-  rfl
-
-中文:
-定理 ext'
-  条件: (h : c.intent = d.intent)
-  结论: c = d
-  证明: by
-  obtain ⟨s₁, t₁, _, rfl⟩ := c
-  obtain ⟨s₂, t₂, _, rfl⟩ := d
-  subst h
-  rfl
+--- 原说明 ---
+See `Concept.ext` for a version using the extent.
 -/
 theorem ext' (h : c.intent = d.intent) : c = d := by
   obtain ⟨s₁, t₁, _, rfl⟩ := c
   obtain ⟨s₂, t₂, _, rfl⟩ := d
   subst h
   rfl
-
-/--
-theorem `extent_injective` / 定理 `extent_injective`
-
-English:
-theorem extent_injective
-  statement: Injective (@extent α β r)
-  proof: fun _ _ => ext
-
-中文:
-定理 extent_injective
-  结论: 单射 (@extent α β r)
-  证明: fun _ _ => ext
+/-
+**Concept.extent_injective** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：extent_injective : Injective (@extent α β r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.ext`：ext (h : c.extent = d.extent) : c = d
 -/
 theorem extent_injective : Injective (@extent α β r) := fun _ _ => ext
-
-/--
-theorem `intent_injective` / 定理 `intent_injective`
-
-English:
-theorem intent_injective
-  statement: Injective (@intent α β r)
-  proof: fun _ _ => ext'
-
-中文:
-定理 intent_injective
-  结论: 单射 (@intent α β r)
-  证明: fun _ _ => ext'
+/-
+**Concept.intent_injective** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：intent_injective : Injective (@intent α β r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.ext'`：ext' (h : c.intent = d.intent) : c = d
 -/
 theorem intent_injective : Injective (@intent α β r) := fun _ _ => ext'
 
 /-- Copy a concept, adjusting definitional equalities. -/
 @[simps]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**Concept.copy** 是 Mathlib 中的一个定义，位于命名空间 `Concept`。
+形式化陈述：copy (c : Concept α β r) (e : Set α) (i : Set β) (he : e = c.extent) (hi :
+ i = c.intent) : Concept α β r where extent
+参数：c : Concept α β r；e : Set α；i : Set β；he : e = c.extent；hi : i = c.intent。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (c : Concept α β r) (e : Set α) (i : Set β) (he : e = c.extent) (hi : i = c.intent)
-  body: e
-  intent := i
-  upperPolar_extent := he ▸ hi ▸ c.upperPolar_extent
-  lowerPolar_intent := he ▸ hi ▸ c.lowerPolar_intent
-
-中文:
-定义 copy
-  签名: (c : 余ncept α β r) (e : 集合 α) (i : 集合 β) (he : e = c.extent) (hi : i = c.intent)
-  定义体: e
-  intent := i
-  upperPolar_extent := he ▸ hi ▸ c.upperPolar_extent
-  lowerPolar_intent := he ▸ hi ▸ c.lowerPolar_intent
+--- 原说明 ---
+Copy a concept, adjusting definitional equalities.
 -/
 def copy (c : Concept α β r) (e : Set α) (i : Set β) (he : e = c.extent) (hi : i = c.intent) :
     Concept α β r where
@@ -1126,23 +824,28 @@ def copy (c : Concept α β r) (e : Set α) (i : Set β) (he : e = c.extent) (hi
   intent := i
   upperPolar_extent := he ▸ hi ▸ c.upperPolar_extent
   lowerPolar_intent := he ▸ hi ▸ c.lowerPolar_intent
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (c : Concept α β r) (e : Set α) (i : Set β) (he hi)
-  statement: c.copy e i he hi = c
-  proof: by
-  ext; simp_all
-
-中文:
-定理 copy_eq
-  条件: (c : 余ncept α β r) (e : 集合 α) (i : 集合 β) (he hi)
-  结论: c.copy e i he hi = c
-  证明: by
-  ext; simp_all
+/-
+**Concept.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：copy_eq (c : Concept α β r) (e : Set α) (i : Set β) (he hi) : c.copy e i h
+e hi = c
+参数：c : Concept α β r；e : Set α；i : Set β；he hi。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.ext`：ext (h : c.extent = d.extent) : c = d
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Concept.copy.congr_simp`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Pr
+op} (c c_1 : Concept α β r) (e_c : c = c_1) (e e_1 : Set α)   (e_e : e = e_1) (i
+ i_1 : Set β)…
+· 使用定理 `Concept.extent_copy`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} 
+(c : Concept α β r) (e : Set α) (i : Set β) (he : e = c.extent)   (hi : i = c.in
+tent), (c…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem copy_eq (c : Concept α β r) (e : Set α) (i : Set β) (he hi) : c.copy e i he hi = c := by
   ext; simp_all
@@ -1150,28 +853,17 @@ theorem copy_eq (c : Concept α β r) (e : Set α) (i : Set β) (he hi) : c.copy
 variable (r s) in
 /-- Define a concept from an extent, by setting the intent to its upper polar. -/
 @[simps]
-/--
-Definition of `ofIsExtent` / `ofIsExtent` 的定义
+/-
+**Concept.ofIsExtent** 是 Mathlib 中的一个定义，位于命名空间 `Concept`。
+形式化陈述：ofIsExtent (hs : IsExtent r s) : Concept α β r where extent
+参数：hs : IsExtent r s。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s
+ : Set α}, Order.IsExtent r s → lowerPolar r (upperPolar r s) = s
 
-English:
-definition ofIsExtent
-  signature: (hs : IsExtent r s)
-  body: s
-  intent := upperPolar r s
-  upperPolar_extent := rfl
-  lowerPolar_intent := hs.eq
-
-@[simp]
-
-中文:
-定义 ofIsExtent
-  签名: (hs : IsExtent r s)
-  定义体: s
-  intent := upperPolar r s
-  upperPolar_extent := rfl
-  lowerPolar_intent := hs.eq
-
-@[simp]
+--- 原说明 ---
+Define a concept from an extent, by setting the intent to its upper polar.
 -/
 def ofIsExtent (hs : IsExtent r s) : Concept α β r where
   extent := s
@@ -1180,71 +872,45 @@ def ofIsExtent (hs : IsExtent r s) : Concept α β r where
   lowerPolar_intent := hs.eq
 
 @[simp]
-/--
-theorem `isExtent_extent` / 定理 `isExtent_extent`
-
-English:
-theorem isExtent_extent
-  given: (c : Concept α β r)
-  statement: IsExtent r c.extent
-  proof: lowerPolar_intent c ▸ isExtent_lowerPolar
-
-中文:
-定理 isExtent_extent
-  条件: (c : 余ncept α β r)
-  结论: IsExtent r c.extent
-  证明: lowerPolar_intent c ▸ isExtent_lowerPolar
-
-Depends on / 依赖: isExtent_lowerPolar, lowerPolar_intent
+/-
+**Concept.isExtent_extent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isExtent_extent (c : Concept α β r) : IsExtent r c.extent
+参数：c : Concept α β r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.isExtent_lowerPolar`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} {t : Set β}, Order.IsExtent r (lowerPolar r t)
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
 -/
 theorem isExtent_extent (c : Concept α β r) : IsExtent r c.extent :=
   lowerPolar_intent c ▸ isExtent_lowerPolar
-
-/--
-theorem `isExtent_iff_exists_concept` / 定理 `isExtent_iff_exists_concept`
-
-English:
-theorem isExtent_iff_exists_concept
-  statement: IsExtent r s ↔ exists c : Concept α β r, c.extent = s
-  proof: ⟨fun h => ⟨ofIsExtent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isExtent_extent⟩
-
-中文:
-定理 isExtent_iff_存在_concept
-  结论: IsExtent r s ↔ 存在 c : 余ncept α β r, c.extent = s
-  证明: ⟨fun h => ⟨ofIsExtent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isExtent_extent⟩
-
-Depends on / 依赖: c.isExtent_extent, isExtent_extent, ofIsExtent
+/-
+**Concept.isExtent_iff_exists_concept** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isExtent_iff_exists_concept : IsExtent r s ↔ exists c : Concept α β r, c.e
+xtent = s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.isExtent_extent`：isExtent_extent (c : Concept α β r) : IsExtent 
+r c.extent
 -/
-theorem isExtent_iff_exists_concept : IsExtent r s ↔ exists c : Concept α β r, c.extent = s :=
-  ⟨fun h => ⟨ofIsExtent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isExtent_extent⟩
+theorem isExtent_iff_exists_concept : IsExtent r s ↔ ∃ c : Concept α β r, c.extent = s :=
+  ⟨fun h ↦ ⟨ofIsExtent _ _ h, rfl⟩, fun ⟨c, h⟩ ↦ h ▸ c.isExtent_extent⟩
 
 variable (r t) in
 /-- Define a concept from an intent, by setting the extent to its lower polar. -/
 @[simps]
-/--
-Definition of `ofIsIntent` / `ofIsIntent` 的定义
+/-
+**Concept.ofIsIntent** 是 Mathlib 中的一个定义，位于命名空间 `Concept`。
+形式化陈述：ofIsIntent (ht : IsIntent r t) : Concept α β r where extent
+参数：ht : IsIntent r t。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsIntent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {t
+ : Set β}, Order.IsIntent r t → upperPolar r (lowerPolar r t) = t
 
-English:
-definition ofIsIntent
-  signature: (ht : IsIntent r t)
-  body: lowerPolar r t
-  intent := t
-  upperPolar_extent := ht.eq
-  lowerPolar_intent := rfl
-
-@[simp]
-
-中文:
-定义 ofIs整数ent
-  签名: (ht : Is整数ent r t)
-  定义体: lowerPolar r t
-  intent := t
-  upperPolar_extent := ht.eq
-  lowerPolar_intent := rfl
-
-@[simp]
-
-Depends on / 依赖: lowerPolar
+--- 原说明 ---
+Define a concept from an intent, by setting the extent to its lower polar.
 -/
 def ofIsIntent (ht : IsIntent r t) : Concept α β r where
   extent := lowerPolar r t
@@ -1253,175 +919,117 @@ def ofIsIntent (ht : IsIntent r t) : Concept α β r where
   lowerPolar_intent := rfl
 
 @[simp]
-/--
-theorem `isIntent_intent` / 定理 `isIntent_intent`
-
-English:
-theorem isIntent_intent
-  given: (c : Concept α β r)
-  statement: IsIntent r c.intent
-  proof: upperPolar_extent c ▸ isIntent_upperPolar
-
-中文:
-定理 is整数ent_intent
-  条件: (c : 余ncept α β r)
-  结论: Is整数ent r c.intent
-  证明: upperPolar_extent c ▸ isIntent_upperPolar
-
-Depends on / 依赖: isIntent_upperPolar, upperPolar_extent
+/-
+**Concept.isIntent_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isIntent_intent (c : Concept α β r) : IsIntent r c.intent
+参数：c : Concept α β r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.isIntent_upperPolar`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} {s : Set α}, Order.IsIntent r (upperPolar r s)
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
 -/
 theorem isIntent_intent (c : Concept α β r) : IsIntent r c.intent :=
   upperPolar_extent c ▸ isIntent_upperPolar
-
-/--
-theorem `isIntent_iff_exists_concept` / 定理 `isIntent_iff_exists_concept`
-
-English:
-theorem isIntent_iff_exists_concept
-  statement: IsIntent r t ↔ exists c : Concept α β r, c.intent = t
-  proof: ⟨fun h => ⟨ofIsIntent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isIntent_intent⟩
-
-中文:
-定理 is整数ent_iff_存在_concept
-  结论: Is整数ent r t ↔ 存在 c : 余ncept α β r, c.intent = t
-  证明: ⟨fun h => ⟨ofIsIntent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isIntent_intent⟩
-
-Depends on / 依赖: c.isIntent_intent, isIntent_intent, ofIsIntent
+/-
+**Concept.isIntent_iff_exists_concept** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isIntent_iff_exists_concept : IsIntent r t ↔ exists c : Concept α β r, c.i
+ntent = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.isIntent_intent`：isIntent_intent (c : Concept α β r) : IsIntent 
+r c.intent
 -/
-theorem isIntent_iff_exists_concept : IsIntent r t ↔ exists c : Concept α β r, c.intent = t :=
-  ⟨fun h => ⟨ofIsIntent _ _ h, rfl⟩, fun ⟨c, h⟩ => h ▸ c.isIntent_intent⟩
+theorem isIntent_iff_exists_concept : IsIntent r t ↔ ∃ c : Concept α β r, c.intent = t :=
+  ⟨fun h ↦ ⟨ofIsIntent _ _ h, rfl⟩, fun ⟨c, h⟩ ↦ h ▸ c.isIntent_intent⟩
 
 /-- The concept generated from the upper polar of a set, i.e. the smallest concept containing the
 set of objects `s`. -/
 @[simps!]
-/--
-Definition of `ofObjects` / `ofObjects` 的定义
+/-
+**Concept.ofObjects** 是 Mathlib 中的一个定义，位于命名空间 `Concept`。
+形式化陈述：ofObjects (r : α -> β -> Prop) (s : Set α) : Concept α β r
+参数：r : α -> β -> Prop；s : Set α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.isIntent_upperPolar`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} {s : Set α}, Order.IsIntent r (upperPolar r s)
 
-English:
-definition ofObjects
-  signature: (r : α -> β -> Prop) (s : Set α)
-  body: ofIsIntent r _ (isIntent_upperPolar (s := s))
-
-中文:
-定义 ofObjects
-  签名: (r : α -> β -> 命题) (s : 集合 α)
-  定义体: ofIsIntent r _ (isIntent_upperPolar (s := s))
-
-Depends on / 依赖: isIntent_upperPolar, ofIsIntent
+--- 原说明 ---
+The concept generated from the upper polar of a set, i.e. the smallest concept c
+ontaining the
+set of objects `s`.
 -/
-def ofObjects (r : α -> β -> Prop) (s : Set α) : Concept α β r :=
+def ofObjects (r : α → β → Prop) (s : Set α) : Concept α β r :=
   ofIsIntent r _ (isIntent_upperPolar (s := s))
 
-/--
-Definition of `ofObject` / `ofObject` 的定义
+/-- The concept generated by a single object. -/
+/-
+**Concept.ofObject** 是 Mathlib 中的一个缩写定义，位于命名空间 `Concept`。
+形式化陈述：ofObject (r : α -> β -> Prop) (a : α) : Concept α β r
+参数：r : α -> β -> Prop；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofObject
-  signature: (r : α -> β -> Prop) (a : α)
-  body: ofObjects r {a}
-
-@[simp]
-
-中文:
-缩写 ofObject
-  签名: (r : α -> β -> 命题) (a : α)
-  定义体: ofObjects r {a}
-
-@[simp]
-
-Depends on / 依赖: ofObjects
+--- 原说明 ---
+The concept generated by a single object.
 -/
-abbrev ofObject (r : α -> β -> Prop) (a : α) : Concept α β r := ofObjects r {a}
+abbrev ofObject (r : α → β → Prop) (a : α) : Concept α β r := ofObjects r {a}
 
 @[simp]
-/--
-theorem `ofObjects_extent` / 定理 `ofObjects_extent`
-
-English:
-theorem ofObjects_extent
-  statement: ofObjects r c.extent = c
-  proof: intent_injective c.upperPolar_extent
-
-中文:
-定理 ofObjects_extent
-  结论: ofObjects r c.extent = c
-  证明: intent_injective c.upperPolar_extent
-
-Depends on / 依赖: c.upperPolar_extent, intent_injective, upperPolar_extent
+/-
+**Concept.ofObjects_extent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：ofObjects_extent : ofObjects r c.extent = c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.intent_injective`：intent_injective : Injective (@intent α β r)
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
 -/
 theorem ofObjects_extent : ofObjects r c.extent = c :=
   intent_injective c.upperPolar_extent
-
-/--
-theorem `extent_ofObjects_of_isExtent` / 定理 `extent_ofObjects_of_isExtent`
-
-English:
-theorem extent_ofObjects_of_isExtent
-  given: (hs : IsExtent r s)
-  statement: (ofObjects r s).extent = s
-  proof: hs.eq
-
-中文:
-定理 extent_ofObjects_of_isExtent
-  条件: (hs : IsExtent r s)
-  结论: (ofObjects r s).extent = s
-  证明: hs.eq
-
-Depends on / 依赖: hs.eq
+/-
+**Concept.extent_ofObjects_of_isExtent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：extent_ofObjects_of_isExtent (hs : IsExtent r s) : (ofObjects r s).extent 
+= s
+参数：hs : IsExtent r s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s
+ : Set α}, Order.IsExtent r s → lowerPolar r (upperPolar r s) = s
 -/
 theorem extent_ofObjects_of_isExtent (hs : IsExtent r s) : (ofObjects r s).extent = s :=
   hs.eq
-
-/--
-theorem `leftInverse_ofObjects_extent` / 定理 `leftInverse_ofObjects_extent`
-
-English:
-theorem leftInverse_ofObjects_extent
-  statement: LeftInverse (ofObjects r) extent
-  proof: fun _ => ofObjects_extent
-
-中文:
-定理 leftInverse_ofObjects_extent
-  结论: 左逆 (ofObjects r) extent
-  证明: fun _ => ofObjects_extent
-
-Depends on / 依赖: ofObjects_extent
+/-
+**Concept.leftInverse_ofObjects_extent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：leftInverse_ofObjects_extent : LeftInverse (ofObjects r) extent
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.ofObjects_extent`：ofObjects_extent : ofObjects r c.extent = c
 -/
 theorem leftInverse_ofObjects_extent : LeftInverse (ofObjects r) extent :=
-  fun _ => ofObjects_extent
-
-/--
-theorem `leftInvOn_extent_ofObjects` / 定理 `leftInvOn_extent_ofObjects`
-
-English:
-theorem leftInvOn_extent_ofObjects
-  statement: Set.LeftInvOn extent (ofObjects r) {s | IsExtent r s}
-  proof: fun _ => IsExtent.eq
-
-中文:
-定理 leftInvOn_extent_ofObjects
-  结论: 集合.LeftInvOn extent (ofObjects r) {s | IsExtent r s}
-  证明: fun _ => IsExtent.eq
-
-Depends on / 依赖: IsExtent, IsExtent.eq
+  fun _ ↦ ofObjects_extent
+/-
+**Concept.leftInvOn_extent_ofObjects** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：leftInvOn_extent_ofObjects : Set.LeftInvOn extent (ofObjects r) {s | IsExt
+ent r s}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {s
+ : Set α}, Order.IsExtent r s → lowerPolar r (upperPolar r s) = s
 -/
 theorem leftInvOn_extent_ofObjects : Set.LeftInvOn extent (ofObjects r) {s | IsExtent r s} :=
-  fun _ => IsExtent.eq
-
-/--
-theorem `surjective_ofObjects` / 定理 `surjective_ofObjects`
-
-English:
-theorem surjective_ofObjects
-  statement: Surjective (ofObjects r)
-  proof: leftInverse_ofObjects_extent.surjective
-
-中文:
-定理 surjective_ofObjects
-  结论: 满射 (ofObjects r)
-  证明: leftInverse_ofObjects_extent.surjective
-
-Depends on / 依赖: leftInverse_ofObjects_extent, leftInverse_ofObjects_extent.surjective, surjective
+  fun _ ↦ IsExtent.eq
+/-
+**Concept.surjective_ofObjects** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：surjective_ofObjects : Surjective (ofObjects r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.LeftInverse f g → Function.Surjective f
+· 使用定理 `Concept.leftInverse_ofObjects_extent`：leftInverse_ofObjects_extent : Lef
+tInverse (ofObjects r) extent
 -/
 theorem surjective_ofObjects : Surjective (ofObjects r) :=
   leftInverse_ofObjects_extent.surjective
@@ -1429,442 +1037,297 @@ theorem surjective_ofObjects : Surjective (ofObjects r) :=
 /-- The concept generated from the lower polar of a set, i.e. the smallest concept whose set of
 attributes is contained in `t`. -/
 @[simps!]
-/--
-Definition of `ofAttributes` / `ofAttributes` 的定义
-
-English:
-definition ofAttributes
-  signature: (r : α -> β -> Prop) (t : Set β)
-  body: ofIsExtent r _ (isExtent_lowerPolar (t := t))
-
-中文:
-定义 ofAttributes
-  签名: (r : α -> β -> 命题) (t : 集合 β)
-  定义体: ofIsExtent r _ (isExtent_lowerPolar (t := t))
-
-Depends on / 依赖: isExtent_lowerPolar, ofIsExtent
+/-
+**Concept.ofAttributes** 是 Mathlib 中的一个定义，位于命名空间 `Concept`。
+形式化陈述：ofAttributes (r : α -> β -> Prop) (t : Set β) : Concept α β r
+参数：r : α -> β -> Prop；t : Set β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.isExtent_lowerPolar`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} {t : Set β}, Order.IsExtent r (lowerPolar r t)
 -/
-def ofAttributes (r : α -> β -> Prop) (t : Set β) : Concept α β r :=
+def ofAttributes (r : α → β → Prop) (t : Set β) : Concept α β r :=
   ofIsExtent r _ (isExtent_lowerPolar (t := t))
 
-/--
-Definition of `ofAttribute` / `ofAttribute` 的定义
+/-- The concept generated by a single attribute. -/
+/-
+**Concept.ofAttribute** 是 Mathlib 中的一个缩写定义，位于命名空间 `Concept`。
+形式化陈述：ofAttribute (r : α -> β -> Prop) (b : β) : Concept α β r
+参数：r : α -> β -> Prop；b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofAttribute
-  signature: (r : α -> β -> Prop) (b : β)
-  body: ofAttributes r {b}
-
-@[simp]
-
-中文:
-缩写 ofAttribute
-  签名: (r : α -> β -> 命题) (b : β)
-  定义体: ofAttributes r {b}
-
-@[simp]
-
-Depends on / 依赖: ofAttributes
+--- 原说明 ---
+The concept generated by a single attribute.
 -/
-abbrev ofAttribute (r : α -> β -> Prop) (b : β) : Concept α β r := ofAttributes r {b}
+abbrev ofAttribute (r : α → β → Prop) (b : β) : Concept α β r := ofAttributes r {b}
 
 @[simp]
-/--
-theorem `ofAttributes_intent` / 定理 `ofAttributes_intent`
-
-English:
-theorem ofAttributes_intent
-  statement: ofAttributes r c.intent = c
-  proof: extent_injective c.lowerPolar_intent
-
-中文:
-定理 ofAttributes_intent
-  结论: ofAttributes r c.intent = c
-  证明: extent_injective c.lowerPolar_intent
-
-Depends on / 依赖: c.lowerPolar_intent, extent_injective, lowerPolar_intent
+/-
+**Concept.ofAttributes_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：ofAttributes_intent : ofAttributes r c.intent = c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.extent_injective`：extent_injective : Injective (@extent α β r)
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
 -/
 theorem ofAttributes_intent : ofAttributes r c.intent = c :=
   extent_injective c.lowerPolar_intent
-
-/--
-theorem `intent_ofAttributes_of_isIntent` / 定理 `intent_ofAttributes_of_isIntent`
-
-English:
-theorem intent_ofAttributes_of_isIntent
-  given: (hs : IsIntent r t)
-  statement: (ofAttributes r t).intent = t
-  proof: hs.eq
-
-中文:
-定理 intent_ofAttributes_of_is整数ent
-  条件: (hs : Is整数ent r t)
-  结论: (ofAttributes r t).intent = t
-  证明: hs.eq
-
-Depends on / 依赖: hs.eq
+/-
+**Concept.intent_ofAttributes_of_isIntent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：intent_ofAttributes_of_isIntent (hs : IsIntent r t) : (ofAttributes r t).i
+ntent = t
+参数：hs : IsIntent r t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsIntent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {t
+ : Set β}, Order.IsIntent r t → upperPolar r (lowerPolar r t) = t
 -/
 theorem intent_ofAttributes_of_isIntent (hs : IsIntent r t) : (ofAttributes r t).intent = t :=
   hs.eq
-
-/--
-theorem `leftInverse_ofAttributes_extent` / 定理 `leftInverse_ofAttributes_extent`
-
-English:
-theorem leftInverse_ofAttributes_extent
-  statement: LeftInverse (ofAttributes r) intent
-  proof: fun c => extent_injective c.lowerPolar_intent
-
-中文:
-定理 leftInverse_ofAttributes_extent
-  结论: 左逆 (ofAttributes r) intent
-  证明: fun c => extent_injective c.lowerPolar_intent
-
-Depends on / 依赖: c.lowerPolar_intent, extent_injective, lowerPolar_intent
+/-
+**Concept.leftInverse_ofAttributes_extent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：leftInverse_ofAttributes_extent : LeftInverse (ofAttributes r) intent
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.extent_injective`：extent_injective : Injective (@extent α β r)
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
 -/
 theorem leftInverse_ofAttributes_extent : LeftInverse (ofAttributes r) intent :=
-  fun c => extent_injective c.lowerPolar_intent
-
-/--
-theorem `leftInvOn_ofObjects_intent` / 定理 `leftInvOn_ofObjects_intent`
-
-English:
-theorem leftInvOn_ofObjects_intent
-  statement: Set.LeftInvOn intent (ofAttributes r) {s | IsIntent r s}
-  proof: fun _ => IsIntent.eq
-
-中文:
-定理 leftInvOn_ofObjects_intent
-  结论: 集合.LeftInvOn intent (ofAttributes r) {s | Is整数ent r s}
-  证明: fun _ => IsIntent.eq
-
-Depends on / 依赖: IsIntent, IsIntent.eq
+  fun c ↦ extent_injective c.lowerPolar_intent
+/-
+**Concept.leftInvOn_ofObjects_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：leftInvOn_ofObjects_intent : Set.LeftInvOn intent (ofAttributes r) {s | Is
+Intent r s}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsIntent.eq`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} {t
+ : Set β}, Order.IsIntent r t → upperPolar r (lowerPolar r t) = t
 -/
 theorem leftInvOn_ofObjects_intent : Set.LeftInvOn intent (ofAttributes r) {s | IsIntent r s} :=
-  fun _ => IsIntent.eq
-
-/--
-theorem `surjective_ofAttributes` / 定理 `surjective_ofAttributes`
-
-English:
-theorem surjective_ofAttributes
-  statement: Surjective (ofAttributes r)
-  proof: leftInverse_ofAttributes_extent.surjective
-
-中文:
-定理 surjective_ofAttributes
-  结论: 满射 (ofAttributes r)
-  证明: leftInverse_ofAttributes_extent.surjective
-
-Depends on / 依赖: leftInverse_ofAttributes_extent, leftInverse_ofAttributes_extent.surjective, surjective
+  fun _ ↦ IsIntent.eq
+/-
+**Concept.surjective_ofAttributes** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：surjective_ofAttributes : Surjective (ofAttributes r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.LeftInverse f g → Function.Surjective f
+· 使用定理 `Concept.leftInverse_ofAttributes_extent`：leftInverse_ofAttributes_extent
+ : LeftInverse (ofAttributes r) intent
 -/
 theorem surjective_ofAttributes : Surjective (ofAttributes r) :=
   leftInverse_ofAttributes_extent.surjective
-
-/--
-theorem `rel_extent_intent` / 定理 `rel_extent_intent`
-
-English:
-theorem rel_extent_intent
-  given: {x y} (hx : x in c.extent) (hy : y in c.intent)
-  statement: r x y
-  proof: by
-  rw [← c.upperPolar_extent] at hy
-  exact hy hx
-
-中文:
-定理 rel_extent_intent
-  条件: {x y} (hx : x in c.extent) (hy : y in c.intent)
-  结论: r x y
-  证明: by
-  rw [← c.upperPolar_extent] at hy
-  exact hy hx
-
-Depends on / 依赖: c.upperPolar_extent, upperPolar_extent
+/-
+**Concept.rel_extent_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：rel_extent_intent {x y} (hx : x in c.extent) (hy : y in c.intent) : r x y
+参数：hx : x in c.extent；hy : y in c.intent。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
 -/
-theorem rel_extent_intent {x y} (hx : x in c.extent) (hy : y in c.intent) : r x y := by
+theorem rel_extent_intent {x y} (hx : x ∈ c.extent) (hy : y ∈ c.intent) : r x y := by
   rw [← c.upperPolar_extent] at hy
   exact hy hx
 
-/--
-theorem `disjoint_extent_intent` / 定理 `disjoint_extent_intent`
+/-- Note that if `r'` is the `≤` relation, this theorem will often not be true! -/
+/-
+**Concept.disjoint_extent_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：disjoint_extent_intent [Std.Irrefl r'] : Disjoint c'.extent c'.intent
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.disjoint_iff_forall_ne`：disjoint_iff_forall_ne : Disjoint s t ↔ fora
+ll ⦃a⦄, a in s -> forall ⦃b⦄, b in t -> a != b
+· 使用引理 `irrefl`：irrefl [Std.Irrefl r] (a : α) : ¬a ≺ a
+· 使用定理 `Concept.rel_extent_intent`：rel_extent_intent {x y} (hx : x in c.extent) 
+(hy : y in c.intent) : r x y
 
-English:
-theorem disjoint_extent_intent
-  given: [Std.Irrefl r']
-  statement: Disjoint c'.extent c'.intent
-  proof: by
-  rw [disjoint_iff_forall_ne]
-  rintro x hx _ hx' rfl
-  exact irrefl x (rel_extent_intent hx hx')
-
-中文:
-定理 disjoint_extent_intent
-  条件: [Std.Irrefl r']
-  结论: Disjoint c'.extent c'.intent
-  证明: by
-  rw [disjoint_iff_forall_ne]
-  rintro x hx _ hx' rfl
-  exact irrefl x (rel_extent_intent hx hx')
-
-Depends on / 依赖: disjoint_iff_forall_ne, irrefl, rel_extent_intent
+--- 原说明 ---
+Note that if `r'` is the `≤` relation, this theorem will often not be true!
 -/
 theorem disjoint_extent_intent [Std.Irrefl r'] : Disjoint c'.extent c'.intent := by
   rw [disjoint_iff_forall_ne]
   rintro x hx _ hx' rfl
   exact irrefl x (rel_extent_intent hx hx')
-
-/--
-theorem `mem_extent_of_rel_extent` / 定理 `mem_extent_of_rel_extent`
-
-English:
-theorem mem_extent_of_rel_extent
-  given: [IsTrans α r'] {x y} (hy : r' y x) (hx : x in c'.extent)
-  proof: by
-  rw [← lowerPolar_intent]
-  exact fun z hz => _root_.trans hy (rel_extent_intent hx hz)
-
-中文:
-定理 mem_extent_of_rel_extent
-  条件: [是Trans α r'] {x y} (hy : r' y x) (hx : x in c'.extent)
-  证明: by
-  rw [← lowerPolar_intent]
-  exact fun z hz => _root_.trans hy (rel_extent_intent hx hz)
-
-Depends on / 依赖: _root_, _root_.trans, lowerPolar_intent, rel_extent_intent
+/-
+**Concept.mem_extent_of_rel_extent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：mem_extent_of_rel_extent [IsTrans α r'] {x y} (hy : r' y x) (hx : x in c'.
+extent) : y in c'.extent
+参数：hy : r' y x；hx : x in c'.extent。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `Concept.rel_extent_intent`：rel_extent_intent {x y} (hx : x in c.extent) 
+(hy : y in c.intent) : r x y
 -/
-theorem mem_extent_of_rel_extent [IsTrans α r'] {x y} (hy : r' y x) (hx : x in c'.extent) :
-    y in c'.extent := by
+theorem mem_extent_of_rel_extent [IsTrans α r'] {x y} (hy : r' y x) (hx : x ∈ c'.extent) :
+    y ∈ c'.extent := by
   rw [← lowerPolar_intent]
-  exact fun z hz => _root_.trans hy (rel_extent_intent hx hz)
-
-/--
-theorem `mem_intent_of_intent_rel` / 定理 `mem_intent_of_intent_rel`
-
-English:
-theorem mem_intent_of_intent_rel
-  given: [IsTrans α r'] {x y} (hy : r' x y) (hx : x in c'.intent)
-  proof: by
-  rw [← upperPolar_extent]
-  exact fun z hz => _root_.trans (rel_extent_intent hz hx) hy
-
-中文:
-定理 mem_intent_of_intent_rel
-  条件: [是Trans α r'] {x y} (hy : r' x y) (hx : x in c'.intent)
-  证明: by
-  rw [← upperPolar_extent]
-  exact fun z hz => _root_.trans (rel_extent_intent hz hx) hy
-
-Depends on / 依赖: _root_, _root_.trans, rel_extent_intent, upperPolar_extent
+  exact fun z hz ↦ _root_.trans hy (rel_extent_intent hx hz)
+/-
+**Concept.mem_intent_of_intent_rel** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：mem_intent_of_intent_rel [IsTrans α r'] {x y} (hy : r' x y) (hx : x in c'.
+intent) : y in c'.intent
+参数：hy : r' x y；hx : x in c'.intent。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `Concept.rel_extent_intent`：rel_extent_intent {x y} (hx : x in c.extent) 
+(hy : y in c.intent) : r x y
 -/
-theorem mem_intent_of_intent_rel [IsTrans α r'] {x y} (hy : r' x y) (hx : x in c'.intent) :
-    y in c'.intent := by
+theorem mem_intent_of_intent_rel [IsTrans α r'] {x y} (hy : r' x y) (hx : x ∈ c'.intent) :
+    y ∈ c'.intent := by
   rw [← upperPolar_extent]
-  exact fun z hz => _root_.trans (rel_extent_intent hz hx) hy
-
-/--
-theorem `codisjoint_extent_intent` / 定理 `codisjoint_extent_intent`
-
-English:
-theorem codisjoint_extent_intent
-  given: [Std.Trichotomous r'] [IsTrans α r']
-  proof: by
-  rw [codisjoint_iff_le_sup]
-  refine fun x _ => or_iff_not_imp_left.2 fun hx => ?_
-  rw [← upperPolar_extent]
-  intro y hy
-apply Not.imp_symm Std.Trichotomous.trichotomous x y (hx <| mem_extent_of_rel_extent · hy)
-  exact (hx <| · ▸ hy)
-
-中文:
-定理 codisjoint_extent_intent
-  条件: [Std.三歧 r'] [是Trans α r']
-  证明: by
-  rw [codisjoint_iff_le_sup]
-  refine fun x _ => or_iff_not_imp_left.2 fun hx => ?_
-  rw [← upperPolar_extent]
-  intro y hy
-apply Not.imp_symm Std.Trichotomous.trichotomous x y (hx <| mem_extent_of_rel_extent · hy)
-  exact (hx <| · ▸ hy)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, Not.imp_symm, Std.Trichotomous.trichotomous, Trichotomous, codisjoint_iff_le_sup, imp_symm, mem_extent_of_rel_extent, or_iff_not_imp_left, trichotomous, upperPolar_extent
+  exact fun z hz ↦ _root_.trans (rel_extent_intent hz hx) hy
+/-
+**Concept.codisjoint_extent_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：codisjoint_extent_intent [Std.Trichotomous r'] [IsTrans α r'] : Codisjoint
+ c'.extent c'.intent
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `codisjoint_iff_le_sup`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_
+1 : OrderTop α] {a b : α}, Codisjoint a b ↔ ⊤ ≤ a ⊔ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
+· 使用定理 `Not.imp_symm`：Not.imp_symm : (¬a -> b) -> ¬b -> a
+· 使用定理 `Std.Trichotomous.trichotomous`：∀ {α : Sort u} {r : α → α → Prop} [self :
+ Std.Trichotomous r] (a b : α), ¬r a b → ¬r b a → a = b
+· 使用定理 `Concept.mem_extent_of_rel_extent`：mem_extent_of_rel_extent [IsTrans α r'
+] {x y} (hy : r' y x) (hx : x in c'.extent) : y in c'.extent
 -/
 theorem codisjoint_extent_intent [Std.Trichotomous r'] [IsTrans α r'] :
     Codisjoint c'.extent c'.intent := by
   rw [codisjoint_iff_le_sup]
-  refine fun x _ => or_iff_not_imp_left.2 fun hx => ?_
+  refine fun x _ ↦ or_iff_not_imp_left.2 fun hx ↦ ?_
   rw [← upperPolar_extent]
   intro y hy
-apply Not.imp_symm Std.Trichotomous.trichotomous x y (hx <| mem_extent_of_rel_extent · hy)
+  apply Not.imp_symm <| Std.Trichotomous.trichotomous x y (hx <| mem_extent_of_rel_extent · hy)
   exact (hx <| · ▸ hy)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Concept α β r)
-  body: .lift _ extent_injective
-
-中文:
-实例 :
-  签名: 偏序 (余ncept α β r)
-  定义体: .lift _ extent_injective
-
-Depends on / 依赖: extent_injective
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Concept α β r) := .lift _ extent_injective
-
-/--
-theorem `isCompl_extent_intent` / 定理 `isCompl_extent_intent`
-
-English:
-theorem isCompl_extent_intent
-  given: [IsStrictTotalOrder α r'] (c' : Concept α α r')
-  proof: ⟨c'.disjoint_extent_intent, c'.codisjoint_extent_intent⟩
-
-@[simp]
-
-中文:
-定理 isCompl_extent_intent
-  条件: [是StrictTotal序 α r'] (c' : 余ncept α α r')
-  证明: ⟨c'.disjoint_extent_intent, c'.codisjoint_extent_intent⟩
-
-@[simp]
-
-Depends on / 依赖: codisjoint_extent_intent, disjoint_extent_intent, f.hom
+/-
+**Concept.isCompl_extent_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isCompl_extent_intent [IsStrictTotalOrder α r'] (c' : Concept α α r') : Is
+Compl c'.extent c'.intent
+参数：c' : Concept α α r'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.disjoint_extent_intent`：disjoint_extent_intent [Std.Irrefl r'] :
+ Disjoint c'.extent c'.intent
+· 使用定理 `IsStrictOrder.toIrrefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsSt
+rictOrder α r], Std.Irrefl r
+· 使用定理 `IsStrictTotalOrder.toIsStrictOrder`：∀ {α : Sort u_1} {lt : α → α → Prop}
+ [self : IsStrictTotalOrder α lt], IsStrictOrder α lt
+· 使用定理 `Concept.codisjoint_extent_intent`：codisjoint_extent_intent [Std.Trichoto
+mous r'] [IsTrans α r'] : Codisjoint c'.extent c'.intent
+· 使用定理 `IsStrictTotalOrder.toTrichotomous`：∀ {α : Sort u_1} {lt : α → α → Prop} 
+[self : IsStrictTotalOrder α lt], Std.Trichotomous lt
+· 使用定理 `IsStrictOrder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsS
+trictOrder α r], IsTrans α r
 -/
 theorem isCompl_extent_intent [IsStrictTotalOrder α r'] (c' : Concept α α r') :
     IsCompl c'.extent c'.intent :=
   ⟨c'.disjoint_extent_intent, c'.codisjoint_extent_intent⟩
 
 @[simp]
-/--
-theorem `compl_extent` / 定理 `compl_extent`
-
-English:
-theorem compl_extent
-  given: [IsStrictTotalOrder α r'] (c' : Concept α α r')
-  statement: c'.extentᶜ = c'.intent
-  proof: c'.isCompl_extent_intent.compl_eq
-
-@[simp]
-
-中文:
-定理 compl_extent
-  条件: [是StrictTotal序 α r'] (c' : 余ncept α α r')
-  结论: c'.extentᶜ = c'.intent
-  证明: c'.isCompl_extent_intent.compl_eq
-
-@[simp]
-
-Depends on / 依赖: compl_eq, isCompl_extent_intent, isCompl_extent_intent.compl_eq
+/-
+**Concept.compl_extent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：compl_extent [IsStrictTotalOrder α r'] (c' : Concept α α r') : c'.extentᶜ 
+= c'.intent
+参数：c' : Concept α α r'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompl.compl_eq`：IsCompl.compl_eq (h : IsCompl a b) : aᶜ = b
+· 使用定理 `Concept.isCompl_extent_intent`：isCompl_extent_intent [IsStrictTotalOrder
+ α r'] (c' : Concept α α r') : IsCompl c'.extent c'.intent
 -/
 theorem compl_extent [IsStrictTotalOrder α r'] (c' : Concept α α r') : c'.extentᶜ = c'.intent :=
   c'.isCompl_extent_intent.compl_eq
 
 @[simp]
-/--
-theorem `compl_intent` / 定理 `compl_intent`
-
-English:
-theorem compl_intent
-  given: [IsStrictTotalOrder α r'] (c' : Concept α α r')
-  statement: c'.intentᶜ = c'.extent
-  proof: c'.isCompl_extent_intent.symm.compl_eq
-
-@[simp]
-
-中文:
-定理 compl_intent
-  条件: [是StrictTotal序 α r'] (c' : 余ncept α α r')
-  结论: c'.intentᶜ = c'.extent
-  证明: c'.isCompl_extent_intent.symm.compl_eq
-
-@[simp]
-
-Depends on / 依赖: compl_eq, isCompl_extent_intent, isCompl_extent_intent.symm.compl_eq
+/-
+**Concept.compl_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：compl_intent [IsStrictTotalOrder α r'] (c' : Concept α α r') : c'.intentᶜ 
+= c'.extent
+参数：c' : Concept α α r'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompl.compl_eq`：IsCompl.compl_eq (h : IsCompl a b) : aᶜ = b
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `Concept.isCompl_extent_intent`：isCompl_extent_intent [IsStrictTotalOrder
+ α r'] (c' : Concept α α r') : IsCompl c'.extent c'.intent
 -/
 theorem compl_intent [IsStrictTotalOrder α r'] (c' : Concept α α r') : c'.intentᶜ = c'.extent :=
   c'.isCompl_extent_intent.symm.compl_eq
 
 @[simp]
-/--
-theorem `extent_subset_extent_iff` / 定理 `extent_subset_extent_iff`
-
-English:
-theorem extent_subset_extent_iff
-  statement: c.extent subseteq d.extent ↔ c <= d
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 extent_subset_extent_iff
-  结论: c.extent subseteq d.extent ↔ c <= d
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Concept.extent_subset_extent_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：extent_subset_extent_iff : c.extent subseteq d.extent ↔ c <= d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem extent_subset_extent_iff : c.extent subseteq d.extent ↔ c <= d :=
+theorem extent_subset_extent_iff : c.extent ⊆ d.extent ↔ c ≤ d :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `extent_ssubset_extent_iff` / 定理 `extent_ssubset_extent_iff`
-
-English:
-theorem extent_ssubset_extent_iff
-  statement: c.extent ⊂ d.extent ↔ c < d
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 extent_ssubset_extent_iff
-  结论: c.extent ⊂ d.extent ↔ c < d
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Concept.extent_ssubset_extent_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：extent_ssubset_extent_iff : c.extent ⊂ d.extent ↔ c < d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem extent_ssubset_extent_iff : c.extent ⊂ d.extent ↔ c < d :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `intent_subset_intent_iff` / 定理 `intent_subset_intent_iff`
-
-English:
-theorem intent_subset_intent_iff
-  statement: c.intent subseteq d.intent ↔ d <= c
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← extent_subset_extent_iff, ← c.lowerPolar_intent, ← d.lowerPolar_intent]
-    exact lowerPolar_anti _ h
-  · rw [← c.upperPolar_extent, ← d.upperPolar_extent]
-    exact upperPolar_anti _ h
-
-@[simp]
-
-中文:
-定理 intent_subset_intent_iff
-  结论: c.intent subseteq d.intent ↔ d <= c
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← extent_subset_extent_iff, ← c.lowerPolar_intent, ← d.lowerPolar_intent]
-    exact lowerPolar_anti _ h
-  · rw [← c.upperPolar_extent, ← d.upperPolar_extent]
-    exact upperPolar_anti _ h
-
-@[simp]
-
-Depends on / 依赖: c.lowerPolar_intent, c.upperPolar_extent, d.lowerPolar_intent, d.upperPolar_extent, extent_subset_extent_iff, lowerPolar_anti, lowerPolar_intent, upperPolar_anti, upperPolar_extent
+/-
+**Concept.intent_subset_intent_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：intent_subset_intent_iff : c.intent subseteq d.intent ↔ d <= c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.extent_subset_extent_iff`：extent_subset_extent_iff : c.extent su
+bseteq d.extent ↔ c <= d
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
+· 使用定理 `lowerPolar_anti`：lowerPolar_anti : Antitone (lowerPolar r)
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
+· 使用定理 `upperPolar_anti`：upperPolar_anti : Antitone (upperPolar r)
 -/
-theorem intent_subset_intent_iff : c.intent subseteq d.intent ↔ d <= c := by
+theorem intent_subset_intent_iff : c.intent ⊆ d.intent ↔ d ≤ c := by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rw [← extent_subset_extent_iff, ← c.lowerPolar_intent, ← d.lowerPolar_intent]
     exact lowerPolar_anti _ h
@@ -1872,141 +1335,94 @@ theorem intent_subset_intent_iff : c.intent subseteq d.intent ↔ d <= c := by
     exact upperPolar_anti _ h
 
 @[simp]
-/--
-theorem `intent_ssubset_intent_iff` / 定理 `intent_ssubset_intent_iff`
-
-English:
-theorem intent_ssubset_intent_iff
-  statement: c.intent ⊂ d.intent ↔ d < c
-  proof: by
-  rw [ssubset_iff_subset_not_subset]; rw [lt_iff_le_not_ge]; rw [intent_subset_intent_iff]; rw [intent_subset_intent_iff]
-
-中文:
-定理 intent_ssubset_intent_iff
-  结论: c.intent ⊂ d.intent ↔ d < c
-  证明: by
-  rw [ssubset_iff_subset_not_subset]; rw [lt_iff_le_not_ge]; rw [intent_subset_intent_iff]; rw [intent_subset_intent_iff]
-
-Depends on / 依赖: intent_subset_intent_iff, lt_iff_le_not_ge, ssubset_iff_subset_not_subset
+/-
+**Concept.intent_ssubset_intent_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：intent_ssubset_intent_iff : c.intent ⊂ d.intent ↔ d < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ssubset_iff_subset_not_subset`：∀ {α : Type u_1} [UsesSetNotationForOrder
+ α] [inst : Preorder α] {a b : α}, a ⊂ b ↔ a ⊆ b ∧ ¬b ⊆ a
+· 使用引理 `lt_iff_le_not_ge`：lt_iff_le_not_ge : a < b ↔ a <= b ∧ ¬b <= a
+· 使用定理 `Concept.intent_subset_intent_iff`：intent_subset_intent_iff : c.intent su
+bseteq d.intent ↔ d <= c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem intent_ssubset_intent_iff : c.intent ⊂ d.intent ↔ d < c := by
-  rw [ssubset_iff_subset_not_subset]; rw [lt_iff_le_not_ge]; rw [intent_subset_intent_iff]; rw [intent_subset_intent_iff]
-
-/--
-theorem `strictMono_extent` / 定理 `strictMono_extent`
-
-English:
-theorem strictMono_extent
-  statement: StrictMono (@extent α β r)
-  proof: fun _ _ =>
-  extent_ssubset_extent_iff.2
-
-中文:
-定理 strictMono_extent
-  结论: 严格递增 (@extent α β r)
-  证明: fun _ _ =>
-  extent_ssubset_extent_iff.2
+  rw [ssubset_iff_subset_not_subset, lt_iff_le_not_ge,
+    intent_subset_intent_iff, intent_subset_intent_iff]
+/-
+**Concept.strictMono_extent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：strictMono_extent : StrictMono (@extent α β r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Concept.extent_ssubset_extent_iff`：extent_ssubset_extent_iff : c.extent 
+⊂ d.extent ↔ c < d
 -/
 theorem strictMono_extent : StrictMono (@extent α β r) := fun _ _ =>
   extent_ssubset_extent_iff.2
-
-/--
-theorem `strictAnti_intent` / 定理 `strictAnti_intent`
-
-English:
-theorem strictAnti_intent
-  statement: StrictAnti (@intent α β r)
-  proof: fun _ _ =>
-  intent_ssubset_intent_iff.2
-
-@[simp]
-
-中文:
-定理 strictAnti_intent
-  结论: 严格递减 (@intent α β r)
-  证明: fun _ _ =>
-  intent_ssubset_intent_iff.2
-
-@[simp]
+/-
+**Concept.strictAnti_intent** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：strictAnti_intent : StrictAnti (@intent α β r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Concept.intent_ssubset_intent_iff`：intent_ssubset_intent_iff : c.intent 
+⊂ d.intent ↔ d < c
 -/
 theorem strictAnti_intent : StrictAnti (@intent α β r) := fun _ _ =>
   intent_ssubset_intent_iff.2
 
 @[simp]
-/--
-theorem `isLowerSet_extent_le` / 定理 `isLowerSet_extent_le`
-
-English:
-theorem isLowerSet_extent_le
-  given: {α : Type*} [Preorder α] (c : Concept α α (· <= ·))
-  proof: @mem_extent_of_rel_extent _ _ _ _
-
-@[simp]
-
-中文:
-定理 isLowerSet_extent_le
-  条件: {α : 类型} [预序 α] (c : 余ncept α α (· <= ·))
-  证明: @mem_extent_of_rel_extent _ _ _ _
-
-@[simp]
-
-Depends on / 依赖: mem_extent_of_rel_extent
+/-
+**Concept.isLowerSet_extent_le** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isLowerSet_extent_le {α : Type*} [Preorder α] (c : Concept α α (· <= ·)) :
+ IsLowerSet c.extent
+参数：c : Concept α α (· <= ·)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.mem_extent_of_rel_extent`：mem_extent_of_rel_extent [IsTrans α r'
+] {x y} (hy : r' y x) (hx : x in c'.extent) : y in c'.extent
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
 -/
-theorem isLowerSet_extent_le {α : Type*} [Preorder α] (c : Concept α α (· <= ·)) :
+theorem isLowerSet_extent_le {α : Type*} [Preorder α] (c : Concept α α (· ≤ ·)) :
     IsLowerSet c.extent :=
   @mem_extent_of_rel_extent _ _ _ _
 
 @[simp]
-/--
-theorem `isUpperSet_intent_le` / 定理 `isUpperSet_intent_le`
-
-English:
-theorem isUpperSet_intent_le
-  given: {α : Type*} [Preorder α] (c : Concept α α (· <= ·))
-  proof: @mem_intent_of_intent_rel _ _ _ _
-
-@[simp]
-
-中文:
-定理 isUpperSet_intent_le
-  条件: {α : 类型} [预序 α] (c : 余ncept α α (· <= ·))
-  证明: @mem_intent_of_intent_rel _ _ _ _
-
-@[simp]
-
-Depends on / 依赖: mem_intent_of_intent_rel
+/-
+**Concept.isUpperSet_intent_le** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isUpperSet_intent_le {α : Type*} [Preorder α] (c : Concept α α (· <= ·)) :
+ IsUpperSet c.intent
+参数：c : Concept α α (· <= ·)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.mem_intent_of_intent_rel`：mem_intent_of_intent_rel [IsTrans α r'
+] {x y} (hy : r' x y) (hx : x in c'.intent) : y in c'.intent
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
 -/
-theorem isUpperSet_intent_le {α : Type*} [Preorder α] (c : Concept α α (· <= ·)) :
+theorem isUpperSet_intent_le {α : Type*} [Preorder α] (c : Concept α α (· ≤ ·)) :
     IsUpperSet c.intent :=
   @mem_intent_of_intent_rel _ _ _ _
 
 @[simp]
-/--
-theorem `isLowerSet_extent_lt` / 定理 `isLowerSet_extent_lt`
-
-English:
-theorem isLowerSet_extent_lt
-  given: {α : Type*} [PartialOrder α] (c : Concept α α (· < ·))
-  proof: by
-  intro a b hb ha
-  obtain rfl | hb := hb.eq_or_lt
-  · assumption
-  · exact mem_extent_of_rel_extent hb ha
-
-@[simp]
-
-中文:
-定理 isLowerSet_extent_lt
-  条件: {α : 类型} [偏序 α] (c : 余ncept α α (· < ·))
-  证明: by
-  intro a b hb ha
-  obtain rfl | hb := hb.eq_or_lt
-  · assumption
-  · exact mem_extent_of_rel_extent hb ha
-
-@[simp]
-
-Depends on / 依赖: eq_or_lt, hb.eq_or_lt, mem_extent_of_rel_extent
+/-
+**Concept.isLowerSet_extent_lt** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isLowerSet_extent_lt {α : Type*} [PartialOrder α] (c : Concept α α (· < ·)
+) : IsLowerSet c.extent
+参数：c : Concept α α (· < ·)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Concept.mem_extent_of_rel_extent`：mem_extent_of_rel_extent [IsTrans α r'
+] {x y} (hy : r' y x) (hx : x in c'.extent) : y in c'.extent
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 theorem isLowerSet_extent_lt {α : Type*} [PartialOrder α] (c : Concept α α (· < ·)) :
     IsLowerSet c.extent := by
@@ -2016,32 +1432,19 @@ theorem isLowerSet_extent_lt {α : Type*} [PartialOrder α] (c : Concept α α (
   · exact mem_extent_of_rel_extent hb ha
 
 @[simp]
-/--
-theorem `isUpperSet_intent_lt` / 定理 `isUpperSet_intent_lt`
-
-English:
-theorem isUpperSet_intent_lt
-  given: {α : Type*} [PartialOrder α] (c : Concept α α (· < ·))
-  proof: by
-  intro a b hb ha
-  obtain rfl | hb := hb.eq_or_lt
-  · assumption
-  · exact mem_intent_of_intent_rel hb ha
-
-@[simps!]
-
-中文:
-定理 isUpperSet_intent_lt
-  条件: {α : 类型} [偏序 α] (c : 余ncept α α (· < ·))
-  证明: by
-  intro a b hb ha
-  obtain rfl | hb := hb.eq_or_lt
-  · assumption
-  · exact mem_intent_of_intent_rel hb ha
-
-@[simps!]
-
-Depends on / 依赖: eq_or_lt, hb.eq_or_lt, mem_intent_of_intent_rel
+/-
+**Concept.isUpperSet_intent_lt** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：isUpperSet_intent_lt {α : Type*} [PartialOrder α] (c : Concept α α (· < ·)
+) : IsUpperSet c.intent
+参数：c : Concept α α (· < ·)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Concept.mem_intent_of_intent_rel`：mem_intent_of_intent_rel [IsTrans α r'
+] {x y} (hy : r' x y) (hx : x in c'.intent) : y in c'.intent
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 theorem isUpperSet_intent_lt {α : Type*} [PartialOrder α] (c : Concept α α (· < ·)) :
     IsUpperSet c.intent := by
@@ -2051,30 +1454,9 @@ theorem isUpperSet_intent_lt {α : Type*} [PartialOrder α] (c : Concept α α (
   · exact mem_intent_of_intent_rel hb ha
 
 @[simps!]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (Concept α β r)
-  body: ofIsIntent _ _ (c.isIntent_intent.inter d.isIntent_intent)
-
-alias extent_sup := extent_max
-alias intent_sup := intent_max
-
-@[simps!]
-
-中文:
-实例 :
-  签名: 最大值 (余ncept α β r)
-  定义体: ofIsIntent _ _ (c.isIntent_intent.inter d.isIntent_intent)
-
-alias extent_sup := extent_max
-alias intent_sup := intent_max
-
-@[simps!]
-
-Depends on / 依赖: c.isIntent_intent.inter, d.isIntent_intent, isIntent_intent, ofIsIntent
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (Concept α β r) where
   max c d := ofIsIntent _ _ (c.isIntent_intent.inter d.isIntent_intent)
@@ -2083,553 +1465,381 @@ alias extent_sup := extent_max
 alias intent_sup := intent_max
 
 @[simps!]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (Concept α β r)
-  body: ofIsExtent _ _ (c.isExtent_extent.inter d.isExtent_extent)
-
-alias extent_inf := extent_min
-alias intent_inf := intent_min
-
-中文:
-实例 :
-  签名: 最小值 (余ncept α β r)
-  定义体: ofIsExtent _ _ (c.isExtent_extent.inter d.isExtent_extent)
-
-alias extent_inf := extent_min
-alias intent_inf := intent_min
-
-Depends on / 依赖: c.isExtent_extent.inter, d.isExtent_extent, isExtent_extent, ofIsExtent
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (Concept α β r) where
   min c d := ofIsExtent _ _ (c.isExtent_extent.inter d.isExtent_extent)
 
 alias extent_inf := extent_min
 alias intent_inf := intent_min
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeInf (Concept α β r)
-  body: extent_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-中文:
-实例 :
-  签名: SemilatticeInf (余ncept α β r)
-  定义体: extent_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-Depends on / 依赖: extent_injective, extent_injective.semilatticeInf, semilatticeInf
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeInf (Concept α β r) :=
-  extent_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeSup (Concept α β r)
-  body: (toDual.injective.comp intent_injective).semilatticeSup _ (by simp) (by simp) fun _ _ => rfl
-
-中文:
-实例 :
-  签名: SemilatticeSup (余ncept α β r)
-  定义体: (toDual.injective.comp intent_injective).semilatticeSup _ (by simp) (by simp) fun _ _ => rfl
-
-Depends on / 依赖: injective, intent_injective, semilatticeSup, toDual, toDual.injective.comp
+  extent_injective.semilatticeInf _ .rfl .rfl fun _ _ ↦ rfl
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeSup (Concept α β r) :=
-  (toDual.injective.comp intent_injective).semilatticeSup _ (by simp) (by simp) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Lattice (Concept α β r)
-
-中文:
-实例 :
-  签名: 格 (余ncept α β r)
+  (toDual.injective.comp intent_injective).semilatticeSup _ (by simp) (by simp) fun _ _ ↦ rfl
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Lattice (Concept α β r) where
 
 @[simp]
-/--
-theorem `ofObjects_le_iff` / 定理 `ofObjects_le_iff`
-
-English:
-theorem ofObjects_le_iff
-  statement: ofObjects r s <= c ↔ s subseteq c.extent
-  proof: by
+/-
+**Concept.ofObjects_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：ofObjects_le_iff : ofObjects r s <= c ↔ s subseteq c.extent
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.extent_subset_extent_iff`：extent_subset_extent_iff : c.extent su
+bseteq d.extent ↔ c <= d
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `subset_lowerPolar_upperPolar`：subset_lowerPolar_upperPolar (s : Set α) :
+ s subseteq lowerPolar r (upperPolar r s)
+· 使用定理 `Order.IsExtent.lowerPolar_upperPolar_subset`：∀ {α : Type u_2} {β : Type 
+u_3} {r : α → β → Prop} {s s' : Set α},   Order.IsExtent r s → s' ⊆ s → lowerPol
+ar r (upperPolar r s') ⊆ s
+· 使用定理 `Concept.isExtent_extent`：isExtent_extent (c : Concept α β r) : IsExtent 
+r c.extent
+-/
+theorem ofObjects_le_iff : ofObjects r s ≤ c ↔ s ⊆ c.extent := by
   rw [← extent_subset_extent_iff]
   exact ⟨((subset_lowerPolar_upperPolar r s).trans ·),
     (isExtent_extent c).lowerPolar_upperPolar_subset⟩
-
-中文:
-定理 ofObjects_le_iff
-  结论: ofObjects r s <= c ↔ s subseteq c.extent
-  证明: by
-  rw [← extent_subset_extent_iff]
-  exact ⟨((subset_lowerPolar_upperPolar r s).trans ·),
-    (isExtent_extent c).lowerPolar_upperPolar_subset⟩
-
-Depends on / 依赖: extent_subset_extent_iff, isExtent_extent, lowerPolar_upperPolar_subset, subset_lowerPolar_upperPolar
+/-
+**Concept.le_ofObjects_of_extent_subset** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：le_ofObjects_of_extent_subset (h : c.extent subseteq s) : c <= ofObjects r
+ s
+参数：h : c.extent subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
+· 使用定理 `Antitone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Antit
+one…
+· 使用定理 `lowerPolar_anti`：lowerPolar_anti : Antitone (lowerPolar r)
+· 使用定理 `upperPolar_anti`：upperPolar_anti : Antitone (upperPolar r)
 -/
-theorem ofObjects_le_iff : ofObjects r s <= c ↔ s subseteq c.extent := by
-  rw [← extent_subset_extent_iff]
-  exact ⟨((subset_lowerPolar_upperPolar r s).trans ·),
-    (isExtent_extent c).lowerPolar_upperPolar_subset⟩
-
-/--
-theorem `le_ofObjects_of_extent_subset` / 定理 `le_ofObjects_of_extent_subset`
-
-English:
-theorem le_ofObjects_of_extent_subset
-  given: (h : c.extent subseteq s)
-  statement: c <= ofObjects r s
-  proof: by
+theorem le_ofObjects_of_extent_subset (h : c.extent ⊆ s) : c ≤ ofObjects r s := by
   simpa using! (lowerPolar_anti r).comp (upperPolar_anti r) h
 
 @[simp]
-
-中文:
-定理 le_ofObjects_of_extent_subset
-  条件: (h : c.extent subseteq s)
-  结论: c <= ofObjects r s
-  证明: by
-  simpa using! (lowerPolar_anti r).comp (upperPolar_anti r) h
-
-@[simp]
-
-Depends on / 依赖: lowerPolar_anti, upperPolar_anti
+/-
+**Concept.le_ofAttributes_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：le_ofAttributes_iff : c <= ofAttributes r t ↔ t subseteq c.intent
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.intent_subset_intent_iff`：intent_subset_intent_iff : c.intent su
+bseteq d.intent ↔ d <= c
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `subset_upperPolar_lowerPolar`：subset_upperPolar_lowerPolar (t : Set β) :
+ t subseteq upperPolar r (lowerPolar r t)
+· 使用定理 `Order.IsIntent.upperPolar_lowerPolar_subset`：∀ {α : Type u_2} {β : Type 
+u_3} {r : α → β → Prop} {t t' : Set β},   Order.IsIntent r t → t' ⊆ t → upperPol
+ar r (lowerPolar r t') ⊆ t
+· 使用定理 `Concept.isIntent_intent`：isIntent_intent (c : Concept α β r) : IsIntent 
+r c.intent
 -/
-theorem le_ofObjects_of_extent_subset (h : c.extent subseteq s) : c <= ofObjects r s := by
-  simpa using! (lowerPolar_anti r).comp (upperPolar_anti r) h
-
-@[simp]
-/--
-theorem `le_ofAttributes_iff` / 定理 `le_ofAttributes_iff`
-
-English:
-theorem le_ofAttributes_iff
-  statement: c <= ofAttributes r t ↔ t subseteq c.intent
-  proof: by
+theorem le_ofAttributes_iff : c ≤ ofAttributes r t ↔ t ⊆ c.intent := by
   rw [← intent_subset_intent_iff]
   exact ⟨((subset_upperPolar_lowerPolar r t).trans ·),
     (isIntent_intent c).upperPolar_lowerPolar_subset⟩
-
-中文:
-定理 le_ofAttributes_iff
-  结论: c <= ofAttributes r t ↔ t subseteq c.intent
-  证明: by
-  rw [← intent_subset_intent_iff]
-  exact ⟨((subset_upperPolar_lowerPolar r t).trans ·),
-    (isIntent_intent c).upperPolar_lowerPolar_subset⟩
-
-Depends on / 依赖: intent_subset_intent_iff, isIntent_intent, subset_upperPolar_lowerPolar, upperPolar_lowerPolar_subset
+/-
+**Concept.ofAttributes_le_of_intent_subset** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：ofAttributes_le_of_intent_subset (h : c.intent subseteq t) : ofAttributes 
+r t <= c
+参数：h : c.intent subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Concept.intent_subset_intent_iff`：intent_subset_intent_iff : c.intent su
+bseteq d.intent ↔ d <= c
+· 使用定理 `Concept.intent_ofAttributes`：∀ {α : Type u_2} {β : Type u_3} (r : α → β 
+→ Prop) (t : Set β),   (Concept.ofAttributes r t).intent = upperPolar r (lowerPo
+lar r t)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
+· 使用定理 `Antitone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Antit
+one…
+· 使用定理 `upperPolar_anti`：upperPolar_anti : Antitone (upperPolar r)
+· 使用定理 `lowerPolar_anti`：lowerPolar_anti : Antitone (lowerPolar r)
 -/
-theorem le_ofAttributes_iff : c <= ofAttributes r t ↔ t subseteq c.intent := by
-  rw [← intent_subset_intent_iff]
-  exact ⟨((subset_upperPolar_lowerPolar r t).trans ·),
-    (isIntent_intent c).upperPolar_lowerPolar_subset⟩
-
-/--
-theorem `ofAttributes_le_of_intent_subset` / 定理 `ofAttributes_le_of_intent_subset`
-
-English:
-theorem ofAttributes_le_of_intent_subset
-  given: (h : c.intent subseteq t)
-  statement: ofAttributes r t <= c
-  proof: by
+theorem ofAttributes_le_of_intent_subset (h : c.intent ⊆ t) : ofAttributes r t ≤ c := by
   rw [← intent_subset_intent_iff]
   simpa using (upperPolar_anti r).comp (lowerPolar_anti r) h
-
-中文:
-定理 ofAttributes_le_of_intent_subset
-  条件: (h : c.intent subseteq t)
-  结论: ofAttributes r t <= c
-  证明: by
-  rw [← intent_subset_intent_iff]
-  simpa using (upperPolar_anti r).comp (lowerPolar_anti r) h
-
-Depends on / 依赖: intent_subset_intent_iff, lowerPolar_anti, upperPolar_anti
+/-
+**Concept.ofObject_le_ofAttribute_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：ofObject_le_ofAttribute_iff {a b} : ofObject r a <= ofAttribute r b ↔ r a 
+b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Concept.intent_ofObjects`：∀ {α : Type u_2} {β : Type u_3} (r : α → β → P
+rop) (s : Set α), (Concept.ofObjects r s).intent = upperPolar r s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ofAttributes_le_of_intent_subset (h : c.intent subseteq t) : ofAttributes r t <= c := by
-  rw [← intent_subset_intent_iff]
-  simpa using (upperPolar_anti r).comp (lowerPolar_anti r) h
-
-/--
-theorem `ofObject_le_ofAttribute_iff` / 定理 `ofObject_le_ofAttribute_iff`
-
-English:
-theorem ofObject_le_ofAttribute_iff
-  given: {a b}
-  statement: ofObject r a <= ofAttribute r b ↔ r a b
-  proof: by
+theorem ofObject_le_ofAttribute_iff {a b} : ofObject r a ≤ ofAttribute r b ↔ r a b := by
   simp
 
 @[simps!]
-
-中文:
-定理 ofObject_le_ofAttribute_iff
-  条件: {a b}
-  结论: ofObject r a <= ofAttribute r b ↔ r a b
-  证明: by
-  simp
-
-@[simps!]
--/
-theorem ofObject_le_ofAttribute_iff {a b} : ofObject r a <= ofAttribute r b ↔ r a b := by
-  simp
-
-@[simps!]
-/--
-Instance `instBoundedOrderConcept` / 实例 `instBoundedOrderConcept`
-
-English:
-instance instBoundedOrderConcept
-  signature: : BoundedOrder (Concept α β r) where
-  body: ofIsExtent _ _ .univ
-  le_top _ := subset_univ _
-  bot := ofIsIntent _ _ .univ
-bot_le _ := intent_subset_intent_iff.1 subset_univ _
-
-@[simps!]
-
-中文:
-实例 instBoundedOrderConcept
-  签名: : 有界序 (余ncept α β r) where
-  定义体: ofIsExtent _ _ .univ
-  le_top _ := subset_univ _
-  bot := ofIsIntent _ _ .univ
-bot_le _ := intent_subset_intent_iff.1 subset_univ _
-
-@[simps!]
-
-Depends on / 依赖: ofIsExtent
+/-
+**Concept.instBoundedOrderConcept** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+形式化陈述：instBoundedOrderConcept : BoundedOrder (Concept α β r) where top
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsExtent.univ`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop},
+ Order.IsExtent r Set.univ
+· 使用定理 `Order.IsIntent.univ`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop},
+ Order.IsIntent r Set.univ
 -/
 instance instBoundedOrderConcept : BoundedOrder (Concept α β r) where
   top := ofIsExtent _ _ .univ
   le_top _ := subset_univ _
   bot := ofIsIntent _ _ .univ
-bot_le _ := intent_subset_intent_iff.1 subset_univ _
+  bot_le _ := intent_subset_intent_iff.1 <| subset_univ _
 
 @[simps!]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Concept α β r)
-  body: ofIsExtent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isExtent_extent)
-
-@[simps!]
-
-中文:
-实例 :
-  签名: 下确界集 (余ncept α β r)
-  定义体: ofIsExtent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isExtent_extent)
-
-@[simps!]
-
-Depends on / 依赖: c.isExtent_extent, isExtent_extent, ofIsExtent
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (Concept α β r) where
-  sInf S := ofIsExtent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isExtent_extent)
+  sInf S := ofIsExtent _ _ (.iInter₂ _ fun c (_ : c ∈ S) ↦ c.isExtent_extent)
 
 @[simps!]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (Concept α β r)
-  body: ofIsIntent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isIntent_intent)
-
-中文:
-实例 :
-  签名: 上确界集 (余ncept α β r)
-  定义体: ofIsIntent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isIntent_intent)
-
-Depends on / 依赖: c.isIntent_intent, isIntent_intent, ofIsIntent
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (Concept α β r) where
-  sSup S := ofIsIntent _ _ (.iInter₂ _ fun c (_ : c in S) => c.isIntent_intent)
+  sSup S := ofIsIntent _ _ (.iInter₂ _ fun c (_ : c ∈ S) ↦ c.isIntent_intent)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- One half of the **fundamental theorem of concept lattices**: every concept lattice is a complete
+lattice.
 
-English:
-instance :
-  signature: CompleteLattice (Concept α β r)
-  body: by
-    refine ⟨fun _ hc => ?_, fun _ hc => ?_⟩
-· exact intent_subset_intent_iff.1 biInter_subset_of_mem hc
-· exact intent_subset_intent_iff.1
-        subset_iInter₂ fun a ha => intent_subset_intent_iff.2 (hc ha)
-  isGLB_sInf s := ⟨fun _ => biInter_subset_of_mem, fun _ => subset_iInter₂⟩
+See `DedekindCut.principalIso` for the second half. -/
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+One half of the **fundamental theorem of concept lattices**: every concept latti
+ce is a complete
+lattice.
 
-中文:
-实例 :
-  签名: 完备格 (余ncept α β r)
-  定义体: by
-    refine ⟨fun _ hc => ?_, fun _ hc => ?_⟩
-· exact intent_subset_intent_iff.1 biInter_subset_of_mem hc
-· exact intent_subset_intent_iff.1
-        subset_iInter₂ fun a ha => intent_subset_intent_iff.2 (hc ha)
-  isGLB_sInf s := ⟨fun _ => biInter_subset_of_mem, fun _ => subset_iInter₂⟩
-
-@[simp]
-
-Depends on / 依赖: biInter_subset_of_mem, intent_subset_intent_iff, isGLB_sInf
+See `DedekindCut.principalIso` for the second half.
 -/
 instance : CompleteLattice (Concept α β r) where
   isLUB_sSup s := by
-    refine ⟨fun _ hc => ?_, fun _ hc => ?_⟩
-· exact intent_subset_intent_iff.1 biInter_subset_of_mem hc
-· exact intent_subset_intent_iff.1
-        subset_iInter₂ fun a ha => intent_subset_intent_iff.2 (hc ha)
-  isGLB_sInf s := ⟨fun _ => biInter_subset_of_mem, fun _ => subset_iInter₂⟩
+    refine ⟨fun _ hc ↦ ?_, fun _ hc ↦ ?_⟩
+    · exact intent_subset_intent_iff.1 <| biInter_subset_of_mem hc
+    · exact intent_subset_intent_iff.1 <|
+        subset_iInter₂ fun a ha ↦ intent_subset_intent_iff.2 (hc ha)
+  isGLB_sInf s := ⟨fun _ ↦ biInter_subset_of_mem, fun _ ↦ subset_iInter₂⟩
 
 @[simp]
-/--
-theorem `extent_iSup` / 定理 `extent_iSup`
-
-English:
-theorem extent_iSup
-  given: (f : ι -> Concept α β r)
-  proof: by
-  simp_rw [iSup, extent_sSup, ← Set.iInf_eq_iInter, iInf_range]
-
-@[simp]
-
-中文:
-定理 extent_iSup
-  条件: (f : ι -> 余ncept α β r)
-  证明: by
-  simp_rw [iSup, extent_sSup, ← Set.iInf_eq_iInter, iInf_range]
-
-@[simp]
-
-Depends on / 依赖: Set.iInf_eq_iInter, extent_sSup, iInf_eq_iInter, iInf_range, simp_rw
+/-
+**Concept.extent_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：extent_iSup (f : ι -> Concept α β r) : (⨆ i, f i).extent = lowerPolar r (⋂
+ i, (f i).intent)
+参数：f : ι -> Concept α β r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Concept.extent_sSup`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} 
+(S : Set (Concept α β r)),   (sSup S).extent = lowerPolar r (⋂ i ∈ S, i.intent)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem extent_iSup (f : ι -> Concept α β r) :
+theorem extent_iSup (f : ι → Concept α β r) :
     (⨆ i, f i).extent = lowerPolar r (⋂ i, (f i).intent) := by
   simp_rw [iSup, extent_sSup, ← Set.iInf_eq_iInter, iInf_range]
 
 @[simp]
-/--
-theorem `intent_iSup` / 定理 `intent_iSup`
-
-English:
-theorem intent_iSup
-  given: (f : ι -> Concept α β r)
-  statement: (⨆ i, f i).intent = ⋂ i, (f i).intent
-  proof: by
+/-
+**Concept.intent_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：intent_iSup (f : ι -> Concept α β r) : (⨆ i, f i).intent = ⋂ i, (f i).inte
+nt
+参数：f : ι -> Concept α β r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Concept.intent_sSup`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} 
+(S : Set (Concept α β r)), (sSup S).intent = ⋂ i ∈ S, i.intent
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem intent_iSup (f : ι → Concept α β r) : (⨆ i, f i).intent = ⋂ i, (f i).intent := by
   simp_rw [iSup, intent_sSup, ← Set.iInf_eq_iInter, iInf_range]
 
 @[simp]
-
-中文:
-定理 intent_iSup
-  条件: (f : ι -> 余ncept α β r)
-  结论: (⨆ i, f i).intent = ⋂ i, (f i).intent
-  证明: by
-  simp_rw [iSup, intent_sSup, ← Set.iInf_eq_iInter, iInf_range]
-
-@[simp]
-
-Depends on / 依赖: Set.iInf_eq_iInter, iInf_eq_iInter, iInf_range, intent_sSup, simp_rw
+/-
+**Concept.extent_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：extent_iInf (f : ι -> Concept α β r) : (⨅ i, f i).extent = ⋂ i, (f i).exte
+nt
+参数：f : ι -> Concept α β r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Concept.extent_sInf`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} 
+(S : Set (Concept α β r)), (sInf S).extent = ⋂ i ∈ S, i.extent
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem intent_iSup (f : ι -> Concept α β r) : (⨆ i, f i).intent = ⋂ i, (f i).intent := by
-  simp_rw [iSup, intent_sSup, ← Set.iInf_eq_iInter, iInf_range]
-
-@[simp]
-/--
-theorem `extent_iInf` / 定理 `extent_iInf`
-
-English:
-theorem extent_iInf
-  given: (f : ι -> Concept α β r)
-  statement: (⨅ i, f i).extent = ⋂ i, (f i).extent
-  proof: by
+theorem extent_iInf (f : ι → Concept α β r) : (⨅ i, f i).extent = ⋂ i, (f i).extent := by
   simp_rw [iInf, extent_sInf, ← Set.iInf_eq_iInter, iInf_range]
 
 @[simp]
-
-中文:
-定理 extent_iInf
-  条件: (f : ι -> 余ncept α β r)
-  结论: (⨅ i, f i).extent = ⋂ i, (f i).extent
-  证明: by
-  simp_rw [iInf, extent_sInf, ← Set.iInf_eq_iInter, iInf_range]
-
-@[simp]
-
-Depends on / 依赖: Set.iInf_eq_iInter, extent_sInf, iInf_eq_iInter, iInf_range, simp_rw
+/-
+**Concept.intent_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：intent_iInf (f : ι -> Concept α β r) : (⨅ i, f i).intent = upperPolar r (⋂
+ i, (f i).extent)
+参数：f : ι -> Concept α β r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Concept.intent_sInf`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → Prop} 
+(S : Set (Concept α β r)),   (sInf S).intent = upperPolar r (⋂ i ∈ S, i.extent)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem extent_iInf (f : ι -> Concept α β r) : (⨅ i, f i).extent = ⋂ i, (f i).extent := by
-  simp_rw [iInf, extent_sInf, ← Set.iInf_eq_iInter, iInf_range]
-
-@[simp]
-/--
-theorem `intent_iInf` / 定理 `intent_iInf`
-
-English:
-theorem intent_iInf
-  given: (f : ι -> Concept α β r)
-  proof: by
-  simp_rw [iInf, intent_sInf, ← Set.iInf_eq_iInter, iInf_range]
-
-中文:
-定理 intent_iInf
-  条件: (f : ι -> 余ncept α β r)
-  证明: by
-  simp_rw [iInf, intent_sInf, ← Set.iInf_eq_iInter, iInf_range]
-
-Depends on / 依赖: Set.iInf_eq_iInter, iInf_eq_iInter, iInf_range, intent_sInf, simp_rw
--/
-theorem intent_iInf (f : ι -> Concept α β r) :
+theorem intent_iInf (f : ι → Concept α β r) :
     (⨅ i, f i).intent = upperPolar r (⋂ i, (f i).extent) := by
   simp_rw [iInf, intent_sInf, ← Set.iInf_eq_iInter, iInf_range]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Concept α β r)
-  body: ⟨⊥⟩
-
-中文:
-实例 :
-  签名: 可居 (余ncept α β r)
-  定义体: ⟨⊥⟩
+/-
+**Concept.** 是 Mathlib 中的一个实例，位于命名空间 `Concept`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Concept α β r) :=
   ⟨⊥⟩
 
 /-- Swap the sets of a concept to make it a concept of the dual context. -/
 @[simps]
-/--
-Definition of `swap` / `swap` 的定义
+/-
+**Concept.swap** 是 Mathlib 中的一个定义，位于命名空间 `Concept`。
+形式化陈述：swap (c : Concept α β r) : Concept β α (swap r)
+参数：c : Concept α β r。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.lowerPolar_intent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), lowerPolar r self.intent = self.extent
+· 使用定理 `Concept.upperPolar_extent`：∀ {α : Type u_2} {β : Type u_3} {r : α → β → 
+Prop} (self : Concept α β r), upperPolar r self.extent = self.intent
 
-English:
-definition swap
-  signature: (c : Concept α β r)
-  body: ⟨c.intent, c.extent, c.lowerPolar_intent, c.upperPolar_extent⟩
-
-@[simp]
-
-中文:
-定义 swap
-  签名: (c : 余ncept α β r)
-  定义体: ⟨c.intent, c.extent, c.lowerPolar_intent, c.upperPolar_extent⟩
-
-@[simp]
-
-Depends on / 依赖: c.extent, c.intent, c.lowerPolar_intent, c.upperPolar_extent, extent, intent, lowerPolar_intent, upperPolar_extent
+--- 原说明 ---
+Swap the sets of a concept to make it a concept of the dual context.
 -/
 def swap (c : Concept α β r) : Concept β α (swap r) :=
   ⟨c.intent, c.extent, c.lowerPolar_intent, c.upperPolar_extent⟩
 
 @[simp]
-/--
-theorem `swap_swap` / 定理 `swap_swap`
-
-English:
-theorem swap_swap
-  given: (c : Concept α β r)
-  statement: c.swap.swap = c
-  proof: ext rfl
-
-@[simp]
-
-中文:
-定理 swap_swap
-  条件: (c : 余ncept α β r)
-  结论: c.swap.swap = c
-  证明: ext rfl
-
-@[simp]
+/-
+**Concept.swap_swap** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：swap_swap (c : Concept α β r) : c.swap.swap = c
+参数：c : Concept α β r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.ext`：ext (h : c.extent = d.extent) : c = d
 -/
 theorem swap_swap (c : Concept α β r) : c.swap.swap = c :=
   ext rfl
 
 @[simp]
-/--
-theorem `swap_le_swap_iff` / 定理 `swap_le_swap_iff`
-
-English:
-theorem swap_le_swap_iff
-  statement: c.swap <= d.swap ↔ d <= c
-  proof: intent_subset_intent_iff
-
-@[simp]
-
-中文:
-定理 swap_le_swap_iff
-  结论: c.swap <= d.swap ↔ d <= c
-  证明: intent_subset_intent_iff
-
-@[simp]
-
-Depends on / 依赖: intent_subset_intent_iff
+/-
+**Concept.swap_le_swap_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：swap_le_swap_iff : c.swap <= d.swap ↔ d <= c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.intent_subset_intent_iff`：intent_subset_intent_iff : c.intent su
+bseteq d.intent ↔ d <= c
 -/
-theorem swap_le_swap_iff : c.swap <= d.swap ↔ d <= c :=
+theorem swap_le_swap_iff : c.swap ≤ d.swap ↔ d ≤ c :=
   intent_subset_intent_iff
 
 @[simp]
-/--
-theorem `swap_lt_swap_iff` / 定理 `swap_lt_swap_iff`
-
-English:
-theorem swap_lt_swap_iff
-  statement: c.swap < d.swap ↔ d < c
-  proof: intent_ssubset_intent_iff
-
-中文:
-定理 swap_lt_swap_iff
-  结论: c.swap < d.swap ↔ d < c
-  证明: intent_ssubset_intent_iff
-
-Depends on / 依赖: intent_ssubset_intent_iff
+/-
+**Concept.swap_lt_swap_iff** 是 Mathlib 中的一个定理，位于命名空间 `Concept`。
+形式化陈述：swap_lt_swap_iff : c.swap < d.swap ↔ d < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.intent_ssubset_intent_iff`：intent_ssubset_intent_iff : c.intent 
+⊂ d.intent ↔ d < c
 -/
 theorem swap_lt_swap_iff : c.swap < d.swap ↔ d < c :=
   intent_ssubset_intent_iff
 
 /-- The dual of a concept lattice is isomorphic to the concept lattice of the dual context. -/
 @[simps]
-/--
-Definition of `swapEquiv` / `swapEquiv` 的定义
+/-
+**Concept.swapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Concept`。
+形式化陈述：swapEquiv : (Concept α β r)ᵒᵈ ≃o Concept β α (Function.swap r) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Concept.swap_swap`：swap_swap (c : Concept α β r) : c.swap.swap = c
 
-English:
-definition swapEquiv
-  signature: : (Concept α β r)ᵒᵈ ≃o Concept β α (Function.swap r) where
-  body: swap ∘ ofDual
-  invFun := toDual ∘ swap
-  left_inv := swap_swap
-  right_inv := swap_swap
-  map_rel_iff' := swap_le_swap_iff
-
-中文:
-定义 swapEquiv
-  签名: : (余ncept α β r)ᵒᵈ ≃o 余ncept β α (函数.swap r) where
-  定义体: swap ∘ ofDual
-  invFun := toDual ∘ swap
-  left_inv := swap_swap
-  right_inv := swap_swap
-  map_rel_iff' := swap_le_swap_iff
-
-Depends on / 依赖: ofDual
+--- 原说明 ---
+The dual of a concept lattice is isomorphic to the concept lattice of the dual c
+ontext.
 -/
 def swapEquiv : (Concept α β r)ᵒᵈ ≃o Concept β α (Function.swap r) where
   toFun := swap ∘ ofDual
@@ -2639,3 +1849,4 @@ def swapEquiv : (Concept α β r)ᵒᵈ ≃o Concept β α (Function.swap r) whe
   map_rel_iff' := swap_le_swap_iff
 
 end Concept
+

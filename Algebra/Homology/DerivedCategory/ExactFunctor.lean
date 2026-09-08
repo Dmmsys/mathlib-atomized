@@ -31,366 +31,301 @@ variable {C₁ : Type u₁} [Category.{v₁} C₁] [Abelian C₁] [HasDerivedCat
 
 namespace CategoryTheory.Functor
 
-/--
-Definition of `mapDerivedCategory` / `mapDerivedCategory` 的定义
+/-- The functor `DerivedCategory C₁ ⥤ DerivedCategory C₂` induced
+by an exact functor `F : C₁ ⥤ C₂` between abelian categories. -/
+/-
+**CategoryTheory.Functor.mapDerivedCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：mapDerivedCategory : DerivedCategory C₁ ⥤ DerivedCategory C₂
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
 
-English:
-definition mapDerivedCategory
-  signature: : DerivedCategory C₁ ⥤ DerivedCategory C₂
-  body: F.mapHomologicalComplexUpToQuasiIso (ComplexShape.up Int)
-
-中文:
-定义 mapDerivedCategory
-  签名: : 导出范畴 C₁ ⥤ 导出范畴 C₂
-  定义体: F.mapHomologicalComplexUpToQuasiIso (ComplexShape.up Int)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, F.mapHomologicalComplexUpToQuasiIso, mapHomologicalComplexUpToQuasiIso
+--- 原说明 ---
+The functor `DerivedCategory C₁ ⥤ DerivedCategory C₂` induced
+by an exact functor `F : C₁ ⥤ C₂` between abelian categories.
 -/
 noncomputable def mapDerivedCategory : DerivedCategory C₁ ⥤ DerivedCategory C₂ :=
-  F.mapHomologicalComplexUpToQuasiIso (ComplexShape.up Int)
+  F.mapHomologicalComplexUpToQuasiIso (ComplexShape.up ℤ)
 
-/--
-Definition of `mapDerivedCategoryFactors` / `mapDerivedCategoryFactors` 的定义
+/-- The functor `F.mapDerivedCategory` is induced
+by `F.mapHomologicalComplex (ComplexShape.up ℤ)`. -/
+/-
+**CategoryTheory.Functor.mapDerivedCategoryFactors** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor`。
+形式化陈述：mapDerivedCategoryFactors : DerivedCategory.Q ⋙ F.mapDerivedCategory ≅ F.m
+apHomologicalComplex (ComplexShape.up Int) ⋙ DerivedCategory.Q
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
 
-English:
-definition mapDerivedCategoryFactors
-  signature: :
-  body: F.mapHomologicalComplexUpToQuasiIsoFactors _
-
-@[reassoc]
-
-中文:
-定义 mapDerivedCategoryFactors
-  签名: :
-  定义体: F.mapHomologicalComplexUpToQuasiIsoFactors _
-
-@[reassoc]
-
-Depends on / 依赖: F.mapHomologicalComplexUpToQuasiIsoFactors, mapHomologicalComplexUpToQuasiIsoFactors
+--- 原说明 ---
+The functor `F.mapDerivedCategory` is induced
+by `F.mapHomologicalComplex (ComplexShape.up ℤ)`.
 -/
 noncomputable def mapDerivedCategoryFactors :
     DerivedCategory.Q ⋙ F.mapDerivedCategory ≅
-      F.mapHomologicalComplex (ComplexShape.up Int) ⋙ DerivedCategory.Q :=
+      F.mapHomologicalComplex (ComplexShape.up ℤ) ⋙ DerivedCategory.Q :=
   F.mapHomologicalComplexUpToQuasiIsoFactors _
 
 @[reassoc]
-/--
-lemma `mapDerivedCategoryFactors_hom_naturality` / 引理 `mapDerivedCategoryFactors_hom_naturality`
-
-English:
-lemma mapDerivedCategoryFactors_hom_naturality
-  given: {X Y : CochainComplex C₁ Int} (f : X ⟶ Y)
-  proof: F.mapDerivedCategoryFactors.hom.naturality f
-
-中文:
-引理 mapDerivedCategoryFactors_hom_naturality
-  条件: {X Y : 上链复形 C₁ 整数} (f : X ⟶ Y)
-  证明: F.mapDerivedCategoryFactors.hom.naturality f
-
-Depends on / 依赖: F.mapDerivedCategoryFactors.hom.naturality, mapDerivedCategoryFactors, naturality
+/-
+**CategoryTheory.Functor.mapDerivedCategoryFactors_hom_naturality** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：mapDerivedCategoryFactors_hom_naturality {X Y : CochainComplex C₁ Int} (f 
+: X ⟶ Y) : F.mapDerivedCategory.map (DerivedCategory.Q.map f) ≫ F.mapDerivedCate
+goryFactors.hom.app Y = F.mapDerivedCategoryFactors.hom.app X ≫ DerivedCategory.
+Q.map ((F.mapHomologicalComplex (ComplexShape.up Int)).map f)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
 -/
-lemma mapDerivedCategoryFactors_hom_naturality {X Y : CochainComplex C₁ Int} (f : X ⟶ Y) :
+lemma mapDerivedCategoryFactors_hom_naturality {X Y : CochainComplex C₁ ℤ} (f : X ⟶ Y) :
     F.mapDerivedCategory.map (DerivedCategory.Q.map f) ≫ F.mapDerivedCategoryFactors.hom.app Y =
       F.mapDerivedCategoryFactors.hom.app X ≫
-        DerivedCategory.Q.map ((F.mapHomologicalComplex (ComplexShape.up Int)).map f) :=
+        DerivedCategory.Q.map ((F.mapHomologicalComplex (ComplexShape.up ℤ)).map f) :=
   F.mapDerivedCategoryFactors.hom.naturality f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: ⟨F.mapDerivedCategoryFactors⟩
-
-中文:
-实例 :
-  定义体: ⟨F.mapDerivedCategoryFactors⟩
-
-Depends on / 依赖: F.mapDerivedCategoryFactors, mapDerivedCategoryFactors
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance :
     Localization.Lifting DerivedCategory.Q
-      (HomologicalComplex.quasiIso C₁ (ComplexShape.up Int))
+      (HomologicalComplex.quasiIso C₁ (ComplexShape.up ℤ))
       (F.mapHomologicalComplex _ ⋙ DerivedCategory.Q) F.mapDerivedCategory :=
   ⟨F.mapDerivedCategoryFactors⟩
 
-/--
-Definition of `mapDerivedCategoryFactorsh` / `mapDerivedCategoryFactorsh` 的定义
+/-- The functor `F.mapDerivedCategory` is induced
+by `F.mapHomotopyCategory (ComplexShape.up ℤ)`. -/
+/-
+**CategoryTheory.Functor.mapDerivedCategoryFactorsh** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：mapDerivedCategoryFactorsh : DerivedCategory.Qh ⋙ F.mapDerivedCategory ≅ F
+.mapHomotopyCategory (ComplexShape.up Int) ⋙ DerivedCategory.Qh
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
 
-English:
-definition mapDerivedCategoryFactorsh
-  signature: :
-  body: F.mapHomologicalComplexUpToQuasiIsoFactorsh _
-
-中文:
-定义 mapDerivedCategoryFactorsh
-  签名: :
-  定义体: F.mapHomologicalComplexUpToQuasiIsoFactorsh _
-
-Depends on / 依赖: F.mapHomologicalComplexUpToQuasiIsoFactorsh, mapHomologicalComplexUpToQuasiIsoFactorsh
+--- 原说明 ---
+The functor `F.mapDerivedCategory` is induced
+by `F.mapHomotopyCategory (ComplexShape.up ℤ)`.
 -/
 noncomputable def mapDerivedCategoryFactorsh :
     DerivedCategory.Qh ⋙ F.mapDerivedCategory ≅
-      F.mapHomotopyCategory (ComplexShape.up Int) ⋙ DerivedCategory.Qh :=
+      F.mapHomotopyCategory (ComplexShape.up ℤ) ⋙ DerivedCategory.Qh :=
   F.mapHomologicalComplexUpToQuasiIsoFactorsh _
-
-/--
-lemma `mapDerivedCategoryFactorsh_hom_app` / 引理 `mapDerivedCategoryFactorsh_hom_app`
-
-English:
-lemma mapDerivedCategoryFactorsh_hom_app
-  given: (K : CochainComplex C₁ Int)
-  proof: F.mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app K
-
-中文:
-引理 mapDerivedCategoryFactorsh_hom_app
-  条件: (K : 上链复形 C₁ 整数)
-  证明: F.mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app K
-
-Depends on / 依赖: F.mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app, mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
+/-
+**CategoryTheory.Functor.mapDerivedCategoryFactorsh_hom_app** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Functor`。
+形式化陈述：mapDerivedCategoryFactorsh_hom_app (K : CochainComplex C₁ Int) : F.mapDeri
+vedCategoryFactorsh.hom.app ((HomotopyCategory.quotient _ _).obj K) = F.mapDeriv
+edCategory.map ((DerivedCategory.quotientCompQhIso C₁).hom.app K) ≫ F.mapDerived
+CategoryFactors.hom.app K ≫ (DerivedCategory.quotientCompQhIso C₂).inv.app _ ≫ D
+erivedCategory.Qh.map ((F.mapHomotopyCategoryFactors (ComplexShape.up Int)).inv.
+app K)
+参数：K : CochainComplex C₁ Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
+`：mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app (K : HomologicalComplex C c)
+ : (F.mapHomologicalComplexUpToQuasiIsoFactorsh c).hom.app ((H…
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
+· 使用定理 `CategoryTheory.Functor.preservesHomologyOfExact`：∀ {C : Type u_1} {D : T
+ype u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheor
+y.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `instQFactorsThroughHomotopyIntUp`：∀ (C : Type u_1) [inst : CategoryTheor
+y.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]   [CategoryTheo
+ry.Limits.HasBinaryBip…
+· 使用定理 `CategoryTheory.Abelian.hasBinaryBiproducts`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   CategoryTheo
+ry.Limits.HasBinaryBiproducts C
+· 使用定理 `instIsLocalizationHomologicalComplexIntUpHomotopyCategoryQuotientHomotop
+yEquivalences`：∀ (C : Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] [i
+nst_1 : CategoryTheory.Preadditive C]   [CategoryTheory.Limits.HasBinaryBip…
 -/
-lemma mapDerivedCategoryFactorsh_hom_app (K : CochainComplex C₁ Int) :
+lemma mapDerivedCategoryFactorsh_hom_app (K : CochainComplex C₁ ℤ) :
     F.mapDerivedCategoryFactorsh.hom.app ((HomotopyCategory.quotient _ _).obj K) =
       F.mapDerivedCategory.map ((DerivedCategory.quotientCompQhIso C₁).hom.app K) ≫
         F.mapDerivedCategoryFactors.hom.app K ≫
         (DerivedCategory.quotientCompQhIso C₂).inv.app _ ≫
-        DerivedCategory.Qh.map ((F.mapHomotopyCategoryFactors (ComplexShape.up Int)).inv.app K) :=
+        DerivedCategory.Qh.map ((F.mapHomotopyCategoryFactors (ComplexShape.up ℤ)).inv.app K) :=
   F.mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app K
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: ⟨F.mapDerivedCategoryFactorsh⟩
-
-中文:
-实例 :
-  定义体: ⟨F.mapDerivedCategoryFactorsh⟩
-
-Depends on / 依赖: F.mapDerivedCategoryFactorsh, mapDerivedCategoryFactorsh
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance :
     Localization.Lifting DerivedCategory.Qh
-      (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int))
+      (HomotopyCategory.quasiIso C₁ (ComplexShape.up ℤ))
       (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh) F.mapDerivedCategory :=
   ⟨F.mapDerivedCategoryFactorsh⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: F.mapDerivedCategory.CommShift Int
-  body: Functor.commShiftOfLocalization DerivedCategory.Qh
-    (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int)) Int
-    (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
-    F.mapDerivedCategory
-
-中文:
-实例 :
-  签名: F.mapDerivedCategory.交换Shift 整数
-  定义体: Functor.commShiftOfLocalization DerivedCategory.Qh
-    (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int)) Int
-    (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
-    F.mapDerivedCategory
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.Qh, F.mapDerivedCategory, F.mapHomotopyCategory, Functor, Functor.commShiftOfLocalization, HomotopyCategory, HomotopyCategory.quasiIso, commShiftOfLocalization, mapDerivedCategory, mapHomotopyCategory, quasiIso
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : F.mapDerivedCategory.CommShift Int :=
+noncomputable instance : F.mapDerivedCategory.CommShift ℤ :=
   Functor.commShiftOfLocalization DerivedCategory.Qh
-    (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int)) Int
+    (HomotopyCategory.quasiIso C₁ (ComplexShape.up ℤ)) ℤ
     (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
     F.mapDerivedCategory
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatTrans.CommShift F.mapDerivedCategoryFactorsh.hom Int
-  body: inferInstanceAs (NatTrans.CommShift (Localization.Lifting.iso
-      DerivedCategory.Qh (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int))
-        (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
-          F.mapDerivedCategory).hom Int)
-
-中文:
-实例 :
-  签名: 自然变换.交换Shift F.mapDerivedCategoryFactorsh.hom 整数
-  定义体: inferInstanceAs (NatTrans.CommShift (Localization.Lifting.iso
-      DerivedCategory.Qh (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int))
-        (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
-          F.mapDerivedCategory).hom Int)
-
-Depends on / 依赖: CommShift, ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.Qh, F.mapDerivedCategory, F.mapHomotopyCategory, HomotopyCategory, HomotopyCategory.quasiIso, Lifting, Localization, Localization.Lifting.iso, NatTrans, NatTrans.CommShift, mapDerivedCategory, mapHomotopyCategory, quasiIso
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NatTrans.CommShift F.mapDerivedCategoryFactorsh.hom Int :=
+instance : NatTrans.CommShift F.mapDerivedCategoryFactorsh.hom ℤ :=
   inferInstanceAs (NatTrans.CommShift (Localization.Lifting.iso
-      DerivedCategory.Qh (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int))
+      DerivedCategory.Qh (HomotopyCategory.quasiIso C₁ (ComplexShape.up ℤ))
         (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
-          F.mapDerivedCategory).hom Int)
+          F.mapDerivedCategory).hom ℤ)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatTrans.CommShift F.mapDerivedCategoryFactors.hom Int
-  body: NatTrans.CommShift.verticalComposition (DerivedCategory.quotientCompQhIso C₁).inv
-    (DerivedCategory.quotientCompQhIso C₂).hom
-    (F.mapHomotopyCategoryFactors (ComplexShape.up Int)).hom
-    F.mapDerivedCategoryFactorsh.hom F.mapDerivedCategoryFactors.hom Int (by
-      ext K
-      dsimp
-      simp only [id_comp, mapDerivedCategoryFactorsh_hom_app, assoc, comp_id,
-        ← Functor.map_comp_assoc, Iso.inv_hom_id_app, map_id, comp_obj])
-
-中文:
-实例 :
-  签名: 自然变换.交换Shift F.mapDerivedCategoryFactors.hom 整数
-  定义体: NatTrans.CommShift.verticalComposition (DerivedCategory.quotientCompQhIso C₁).inv
-    (DerivedCategory.quotientCompQhIso C₂).hom
-    (F.mapHomotopyCategoryFactors (ComplexShape.up Int)).hom
-    F.mapDerivedCategoryFactorsh.hom F.mapDerivedCategoryFactors.hom Int (by
-      ext K
-      dsimp
-      simp only [id_comp, mapDerivedCategoryFactorsh_hom_app, assoc, comp_id,
-        ← Functor.map_comp_assoc, Iso.inv_hom_id_app, map_id, comp_obj])
-
-Depends on / 依赖: CommShift, ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.quotientCompQhIso, F.mapDerivedCategoryFactors.hom, F.mapDerivedCategoryFactorsh.hom, F.mapHomotopyCategoryFactors, Functor, Functor.map_comp_assoc, Iso.inv_hom_id_app, NatTrans, NatTrans.CommShift.verticalComposition, comp_id, comp_obj, id_comp, inv_hom_id_app, mapDerivedCategoryFactors, mapDerivedCategoryFactorsh, mapDerivedCategoryFactorsh_hom_app
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NatTrans.CommShift F.mapDerivedCategoryFactors.hom Int :=
+instance : NatTrans.CommShift F.mapDerivedCategoryFactors.hom ℤ :=
   NatTrans.CommShift.verticalComposition (DerivedCategory.quotientCompQhIso C₁).inv
     (DerivedCategory.quotientCompQhIso C₂).hom
-    (F.mapHomotopyCategoryFactors (ComplexShape.up Int)).hom
-    F.mapDerivedCategoryFactorsh.hom F.mapDerivedCategoryFactors.hom Int (by
+    (F.mapHomotopyCategoryFactors (ComplexShape.up ℤ)).hom
+    F.mapDerivedCategoryFactorsh.hom F.mapDerivedCategoryFactors.hom ℤ (by
       ext K
       dsimp
       simp only [id_comp, mapDerivedCategoryFactorsh_hom_app, assoc, comp_id,
         ← Functor.map_comp_assoc, Iso.inv_hom_id_app, map_id, comp_obj])
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: F.mapDerivedCategory.IsTriangulated
-  body: Functor.isTriangulated_of_precomp_iso F.mapDerivedCategoryFactorsh
-
-中文:
-实例 :
-  签名: F.mapDerivedCategory.是三角
-  定义体: Functor.isTriangulated_of_precomp_iso F.mapDerivedCategoryFactorsh
-
-Depends on / 依赖: F.mapDerivedCategoryFactorsh, Functor, Functor.isTriangulated_of_precomp_iso, isTriangulated_of_precomp_iso, mapDerivedCategoryFactorsh
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : F.mapDerivedCategory.IsTriangulated :=
   Functor.isTriangulated_of_precomp_iso F.mapDerivedCategoryFactorsh
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
-  body: inferInstanceAs ((F.mapHomologicalComplex (ComplexShape.up Int)).CommShift Int)
-
-中文:
-实例 :
-  签名: (F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
-  定义体: inferInstanceAs ((F.mapHomologicalComplex (ComplexShape.up Int)).CommShift Int)
-
-Depends on / 依赖: CommShift, ComplexShape, ComplexShape.up, F.mapHomologicalComplex, mapHomologicalComplex
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
-    (ComplexShape.up Int)).functor.CommShift Int :=
-  inferInstanceAs ((F.mapHomologicalComplex (ComplexShape.up Int)).CommShift Int)
+    (ComplexShape.up ℤ)).functor.CommShift ℤ :=
+  inferInstanceAs ((F.mapHomologicalComplex (ComplexShape.up ℤ)).CommShift ℤ)
 
-/--
-Definition of `mapDerivedCategorySingleFunctor` / `mapDerivedCategorySingleFunctor` 的定义
+/-- `DerivedCategory.singleFunctor` commutes with `F` and `F.mapDerivedCategory`. -/
+/-
+**CategoryTheory.Functor.mapDerivedCategorySingleFunctor** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Functor`。
+形式化陈述：mapDerivedCategorySingleFunctor (n : Int) : DerivedCategory.singleFunctor 
+C₁ n ⋙ F.mapDerivedCategory ≅ F ⋙ DerivedCategory.singleFunctor C₂ n
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Abelian.hasZeroObject`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.HasZe
+roObject C
 
-English:
-definition mapDerivedCategorySingleFunctor
-  signature: (n : Int)
-  body: isoWhiskerRight (DerivedCategory.singleFunctorIsoCompQ C₁ n) _ ≪≫
-    associator .. ≪≫ isoWhiskerLeft _ F.mapDerivedCategoryFactors ≪≫ (associator ..).symm ≪≫
-      isoWhiskerRight (HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up Int) n) _ ≪≫
-        associator .. ≪≫ (isoWhiskerLeft _ (DerivedCategory.singleFunctorIsoCompQ C₂ n)).symm
-
-中文:
-定义 mapDerivedCategorySingleFunctor
-  签名: (n : 整数)
-  定义体: isoWhiskerRight (DerivedCategory.singleFunctorIsoCompQ C₁ n) _ ≪≫
-    associator .. ≪≫ isoWhiskerLeft _ F.mapDerivedCategoryFactors ≪≫ (associator ..).symm ≪≫
-      isoWhiskerRight (HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up Int) n) _ ≪≫
-        associator .. ≪≫ (isoWhiskerLeft _ (DerivedCategory.singleFunctorIsoCompQ C₂ n)).symm
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.singleFunctorIsoCompQ, F.mapDerivedCategoryFactors, HomologicalComplex, HomologicalComplex.singleMapHomologicalComplex, associator, isoWhiskerLeft, isoWhiskerRight, mapDerivedCategoryFactors, singleFunctorIsoCompQ, singleMapHomologicalComplex
+--- 原说明 ---
+`DerivedCategory.singleFunctor` commutes with `F` and `F.mapDerivedCategory`.
 -/
-noncomputable def mapDerivedCategorySingleFunctor (n : Int) :
+noncomputable def mapDerivedCategorySingleFunctor (n : ℤ) :
     DerivedCategory.singleFunctor C₁ n ⋙ F.mapDerivedCategory ≅
       F ⋙ DerivedCategory.singleFunctor C₂ n :=
   isoWhiskerRight (DerivedCategory.singleFunctorIsoCompQ C₁ n) _ ≪≫
     associator .. ≪≫ isoWhiskerLeft _ F.mapDerivedCategoryFactors ≪≫ (associator ..).symm ≪≫
-      isoWhiskerRight (HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up Int) n) _ ≪≫
+      isoWhiskerRight (HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up ℤ) n) _ ≪≫
         associator .. ≪≫ (isoWhiskerLeft _ (DerivedCategory.singleFunctorIsoCompQ C₂ n)).symm
 
 variable (R : Type*) [Ring R] [CategoryTheory.Linear R C₁] [CategoryTheory.Linear R C₂]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Linear
-  signature: R] : F.mapDerivedCategory.Linear R
-  body: by
-  rw [← Localization.functor_linear_iff DerivedCategory.Qh (HomotopyCategory.quasiIso C₁
-    (ComplexShape.up Int)) R ((F.mapHomotopyCategory (ComplexShape.up Int)).comp DerivedCategory.Qh)]
-  infer_instance
-
-中文:
-实例 [F.线性
-  签名: R] : F.mapDerivedCategory.线性 R
-  定义体: by
-  rw [← Localization.functor_linear_iff DerivedCategory.Qh (HomotopyCategory.quasiIso C₁
-    (ComplexShape.up Int)) R ((F.mapHomotopyCategory (ComplexShape.up Int)).comp DerivedCategory.Qh)]
-  infer_instance
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.Qh, F.mapHomotopyCategory, HomotopyCategory, HomotopyCategory.quasiIso, Localization, Localization.functor_linear_iff, functor_linear_iff, infer_instance, mapHomotopyCategory, quasiIso
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.Linear R] : F.mapDerivedCategory.Linear R := by
   rw [← Localization.functor_linear_iff DerivedCategory.Qh (HomotopyCategory.quasiIso C₁
-    (ComplexShape.up Int)) R ((F.mapHomotopyCategory (ComplexShape.up Int)).comp DerivedCategory.Qh)]
+    (ComplexShape.up ℤ)) R ((F.mapHomotopyCategory (ComplexShape.up ℤ)).comp DerivedCategory.Qh)]
   infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app` / 引理 `mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app`
-
-English:
-lemma mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app
-  given: (X : C₁)
-  proof: by
-  simp [Functor.mapDerivedCategorySingleFunctor, Functor.mapCochainComplexSingleFunctor,
-    CochainComplex.singleFunctor, CochainComplex.singleFunctors,
-    DerivedCategory.singleFunctorIsoCompQ]
-
-中文:
-引理 mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app
-  条件: (X : C₁)
-  证明: by
-  simp [Functor.mapDerivedCategorySingleFunctor, Functor.mapCochainComplexSingleFunctor,
-    CochainComplex.singleFunctor, CochainComplex.singleFunctors,
-    DerivedCategory.singleFunctorIsoCompQ]
-
-Depends on / 依赖: CochainComplex, CochainComplex.singleFunctor, CochainComplex.singleFunctors, DerivedCategory, DerivedCategory.singleFunctorIsoCompQ, Functor, Functor.mapCochainComplexSingleFunctor, Functor.mapDerivedCategorySingleFunctor, mapCochainComplexSingleFunctor, mapDerivedCategorySingleFunctor, singleFunctor, singleFunctorIsoCompQ, singleFunctors
+/-
+**CategoryTheory.Functor.mapDerivedCategoryFactors_inv_app_mapDerivedCategorySin
+gleFunctor_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app 
+(X : C₁) : dsimp% F.mapDerivedCategoryFactors.inv.app ((HomologicalComplex.singl
+e C₁ (.up Int) 0).obj X) ≫ (F.mapDerivedCategorySingleFunctor 0).hom.app X = Der
+ivedCategory.Q.map ((F.mapCochainComplexSingleFunctor 0).hom.app X)
+参数：X : C₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Abelian.hasZeroObject`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.HasZe
+roObject C
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.isoWhiskerRight_refl`：isoWhiskerRight_refl (F : C
+ ⥤ D) (G : D ⥤ E) : isoWhiskerRight (Iso.refl F) G = Iso.refl _
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app (X : C₁) :
-    dsimp% F.mapDerivedCategoryFactors.inv.app ((HomologicalComplex.single C₁ (.up Int) 0).obj X) ≫
+    dsimp% F.mapDerivedCategoryFactors.inv.app ((HomologicalComplex.single C₁ (.up ℤ) 0).obj X) ≫
       (F.mapDerivedCategorySingleFunctor 0).hom.app X =
     DerivedCategory.Q.map ((F.mapCochainComplexSingleFunctor 0).hom.app X) := by
   simp [Functor.mapDerivedCategorySingleFunctor, Functor.mapCochainComplexSingleFunctor,
@@ -400,33 +335,66 @@ lemma mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app` / 引理 `mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app`
-
-English:
-lemma mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app
-  given: (X : C₁)
-  proof: by
-  simp [Functor.mapDerivedCategorySingleFunctor, Functor.mapCochainComplexSingleFunctor,
-    CochainComplex.singleFunctor, CochainComplex.singleFunctors,
-    DerivedCategory.singleFunctorIsoCompQ]
-
-中文:
-引理 mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app
-  条件: (X : C₁)
-  证明: by
-  simp [Functor.mapDerivedCategorySingleFunctor, Functor.mapCochainComplexSingleFunctor,
-    CochainComplex.singleFunctor, CochainComplex.singleFunctors,
-    DerivedCategory.singleFunctorIsoCompQ]
-
-Depends on / 依赖: CochainComplex, CochainComplex.singleFunctor, CochainComplex.singleFunctors, DerivedCategory, DerivedCategory.singleFunctorIsoCompQ, Functor, Functor.mapCochainComplexSingleFunctor, Functor.mapDerivedCategorySingleFunctor, mapCochainComplexSingleFunctor, mapDerivedCategorySingleFunctor, singleFunctor, singleFunctorIsoCompQ, singleFunctors
+/-
+**CategoryTheory.Functor.mapDerivedCategorySingleFunctor_inv_app_mapDerivedCateg
+oryFactors_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app 
+(X : C₁) : dsimp% (F.mapDerivedCategorySingleFunctor 0).inv.app X ≫ F.mapDerived
+CategoryFactors.hom.app ((HomologicalComplex.single C₁ (.up Int) 0).obj X) = Der
+ivedCategory.Q.map ((F.mapCochainComplexSingleFunctor 0).inv.app X)
+参数：X : C₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Abelian.hasZeroObject`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.HasZe
+roObject C
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.isoWhiskerRight_refl`：isoWhiskerRight_refl (F : C
+ ⥤ D) (G : D ⥤ E) : isoWhiskerRight (Iso.refl F) G = Iso.refl _
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app (X : C₁) :
     dsimp% (F.mapDerivedCategorySingleFunctor 0).inv.app X ≫
-      F.mapDerivedCategoryFactors.hom.app ((HomologicalComplex.single C₁ (.up Int) 0).obj X) =
+      F.mapDerivedCategoryFactors.hom.app ((HomologicalComplex.single C₁ (.up ℤ) 0).obj X) =
     DerivedCategory.Q.map ((F.mapCochainComplexSingleFunctor 0).inv.app X) := by
   simp [Functor.mapDerivedCategorySingleFunctor, Functor.mapCochainComplexSingleFunctor,
     CochainComplex.singleFunctor, CochainComplex.singleFunctors,
     DerivedCategory.singleFunctorIsoCompQ]
 
 end CategoryTheory.Functor
+

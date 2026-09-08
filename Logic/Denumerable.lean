@@ -29,26 +29,19 @@ assert_not_exists Monoid
 
 variable {α β : Type*}
 
-/--
-Definition of `Denumerable` / `Denumerable` 的定义
+/-- A denumerable type is (constructively) bijective with `ℕ`. Typeclass equivalent of `α ≃ ℕ`. -/
+/-
+**Denumerable** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_3 → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Denumerable
-  parameters: (α : Type*)
-  extends: Encodable α
-  axioms and operations (1):
-    - decode_inv : forall n, exists a in decode n, encode a = n
-
-中文:
-类 可枚举
-  参数: (α : 类型)
-  继承: 可编码 α
-  公理与运算 (1 个):
-    - decode_inv : 对任意 n, 存在 a in decode n, encode a = n
+--- 原说明 ---
+A denumerable type is (constructively) bijective with `ℕ`. Typeclass equivalent 
+of `α ≃ ℕ`.
 -/
 class Denumerable (α : Type*) extends Encodable α where
   /-- `decode` and `encode` are inverses. -/
-  decode_inv : forall n, exists a in decode n, encode a = n
+  decode_inv : ∀ n, ∃ a ∈ decode n, encode a = n
 
 open Finset Nat
 
@@ -60,186 +53,140 @@ variable [Denumerable α] [Denumerable β]
 
 open Encodable
 
-/--
-theorem `decode_isSome` / 定理 `decode_isSome`
-
-English:
-theorem decode_isSome
-  given: (α) [Denumerable α] (n : Nat)
-  statement: (decode (α := α) n).isSome
-  proof: Option.isSome_iff_exists.2 (decode_inv n).imp fun _ => And.left
-
-中文:
-定理 decode_isSome
-  条件: (α) [可枚举 α] (n : 自然数)
-  结论: (decode (α := α) n).isSome
-  证明: Option.isSome_iff_exists.2 (decode_inv n).imp fun _ => And.left
-
-Depends on / 依赖: isSome
+/-
+**Denumerable.decode_isSome** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：decode_isSome (α) [Denumerable α] (n : Nat) : (decode (α
+参数：α；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Option.isSome_iff_exists`：∀ {α : Type u_1} {x : Option α}, x.isSome = tr
+ue ↔ ∃ a, x = some a
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Denumerable.decode_inv`：∀ {α : Type u_3} [self : Denumerable α] (n : ℕ),
+ ∃ a ∈ Encodable.decode n, Encodable.encode a = n
 -/
-theorem decode_isSome (α) [Denumerable α] (n : Nat) : (decode (α := α) n).isSome :=
-Option.isSome_iff_exists.2 (decode_inv n).imp fun _ => And.left
+theorem decode_isSome (α) [Denumerable α] (n : ℕ) : (decode (α := α) n).isSome :=
+  Option.isSome_iff_exists.2 <| (decode_inv n).imp fun _ => And.left
 
-/--
-Definition of `ofNat` / `ofNat` 的定义
+/-- Returns the `n`-th element of `α` indexed by the decoding. -/
+/-
+**Denumerable.ofNat** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：ofNat (α) [Denumerable α] (n : Nat) : α
+参数：α；n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.decode_isSome`：decode_isSome (α) [Denumerable α] (n : Nat) :
+ (decode (α
 
-English:
-definition ofNat
-  signature: (α) [Denumerable α] (n : Nat)
-  body: Option.get _ (decode_isSome α n)
-
-@[simp]
-
-中文:
-定义 of自然数
-  签名: (α) [可枚举 α] (n : 自然数)
-  定义体: Option.get _ (decode_isSome α n)
-
-@[simp]
-
-Depends on / 依赖: Option.get, decode_isSome
+--- 原说明 ---
+Returns the `n`-th element of `α` indexed by the decoding.
 -/
-def ofNat (α) [Denumerable α] (n : Nat) : α :=
+def ofNat (α) [Denumerable α] (n : ℕ) : α :=
   Option.get _ (decode_isSome α n)
 
 @[simp]
-/--
-theorem `decode_eq_ofNat` / 定理 `decode_eq_ofNat`
-
-English:
-theorem decode_eq_ofNat
-  given: (α) [Denumerable α] (n : Nat)
-  statement: decode (α := α) n = some (ofNat α n)
-  proof: Option.eq_some_of_isSome _
-
-中文:
-定理 decode_eq_of自然数
-  条件: (α) [可枚举 α] (n : 自然数)
-  结论: decode (α := α) n = some (of自然数 α n)
-  证明: Option.eq_some_of_isSome _
+/-
+**Denumerable.decode_eq_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：decode_eq_ofNat (α) [Denumerable α] (n : Nat) : decode (α
+参数：α；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.eq_some_of_isSome`：∀ {α : Type u_1} {o : Option α} (h : o.isSome 
+= true), o = some (o.get h)
+· 使用定理 `Denumerable.decode_isSome`：decode_isSome (α) [Denumerable α] (n : Nat) :
+ (decode (α
 -/
-theorem decode_eq_ofNat (α) [Denumerable α] (n : Nat) : decode (α := α) n = some (ofNat α n) :=
+theorem decode_eq_ofNat (α) [Denumerable α] (n : ℕ) : decode (α := α) n = some (ofNat α n) :=
   Option.eq_some_of_isSome _
-
-/--
-theorem `ofNat_of_decode` / 定理 `ofNat_of_decode`
-
-English:
-theorem ofNat_of_decode
-  given: {n b} (h : decode (α := α) n = some b)
-  statement: ofNat (α := α) n = b
-  proof: by
-  simpa using h
-
-@[simp]
-
-中文:
-定理 of自然数_of_decode
-  条件: {n b} (h : decode (α := α) n = some b)
-  结论: of自然数 (α := α) n = b
-  证明: by
-  simpa using h
-
-@[simp]
+/-
+**Denumerable.ofNat_of_decode** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：ofNat_of_decode {n b} (h : decode (α
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Denumerable.decode_eq_ofNat`：decode_eq_ofNat (α) [Denumerable α] (n : Na
+t) : decode (α
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
 -/
 theorem ofNat_of_decode {n b} (h : decode (α := α) n = some b) : ofNat (α := α) n = b := by
   simpa using h
 
 @[simp]
-/--
-theorem `encode_ofNat` / 定理 `encode_ofNat`
-
-English:
-theorem encode_ofNat
-  given: (n)
-  statement: encode (ofNat α n) = n
-  proof: by
-  obtain ⟨a, h, e⟩ := decode_inv (α := α) n
-  rwa [ofNat_of_decode h]
-
-@[simp]
-
-中文:
-定理 encode_of自然数
-  条件: (n)
-  结论: encode (of自然数 α n) = n
-  证明: by
-  obtain ⟨a, h, e⟩ := decode_inv (α := α) n
-  rwa [ofNat_of_decode h]
-
-@[simp]
-
-Depends on / 依赖: decode_inv, ofNat_of_decode
+/-
+**Denumerable.encode_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：encode_ofNat (n) : encode (ofNat α n) = n
+参数：n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.decode_inv`：∀ {α : Type u_3} [self : Denumerable α] (n : ℕ),
+ ∃ a ∈ Encodable.decode n, Encodable.encode a = n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Denumerable.ofNat_of_decode`：ofNat_of_decode {n b} (h : decode (α
 -/
 theorem encode_ofNat (n) : encode (ofNat α n) = n := by
   obtain ⟨a, h, e⟩ := decode_inv (α := α) n
   rwa [ofNat_of_decode h]
 
 @[simp]
-/--
-theorem `ofNat_encode` / 定理 `ofNat_encode`
-
-English:
-theorem ofNat_encode
-  given: (a)
-  statement: ofNat α (encode a) = a
-  proof: ofNat_of_decode (encodek _)
-
-中文:
-定理 of自然数_encode
-  条件: (a)
-  结论: of自然数 α (encode a) = a
-  证明: ofNat_of_decode (encodek _)
-
-Depends on / 依赖: encodek, ofNat_of_decode
+/-
+**Denumerable.ofNat_encode** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：ofNat_encode (a) : ofNat α (encode a) = a
+参数：a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.ofNat_of_decode`：ofNat_of_decode {n b} (h : decode (α
+· 使用定理 `Encodable.encodek`：∀ {α : Type u_1} [self : Encodable α] (a : α), Encoda
+ble.decode (Encodable.encode a) = some a
 -/
 theorem ofNat_encode (a) : ofNat α (encode a) = a :=
   ofNat_of_decode (encodek _)
 
-/--
-Definition of `eqv` / `eqv` 的定义
+/-- A denumerable type is equivalent to `ℕ`. -/
+/-
+**Denumerable.eqv** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：eqv (α) [Denumerable α] : α ≃ Nat
+参数：α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.ofNat_encode`：ofNat_encode (a) : ofNat α (encode a) = a
+· 使用定理 `Denumerable.encode_ofNat`：encode_ofNat (n) : encode (ofNat α n) = n
 
-English:
-definition eqv
-  signature: (α) [Denumerable α]
-  body: ⟨encode, ofNat α, ofNat_encode, encode_ofNat⟩
-
-中文:
-定义 eqv
-  签名: (α) [可枚举 α]
-  定义体: ⟨encode, ofNat α, ofNat_encode, encode_ofNat⟩
-
-Depends on / 依赖: encode, encode_ofNat, ofNat_encode
+--- 原说明 ---
+A denumerable type is equivalent to `ℕ`.
 -/
-def eqv (α) [Denumerable α] : α ≃ Nat :=
+def eqv (α) [Denumerable α] : α ≃ ℕ :=
   ⟨encode, ofNat α, ofNat_encode, encode_ofNat⟩
 
 -- See Note [lower instance priority]
+/-
+**Denumerable.** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : Infinite α :=
   Infinite.of_surjective _ (eqv α).surjective
 
 /-- A type equivalent to `ℕ` is denumerable. -/
 @[instance_reducible]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**Denumerable.mk'** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：mk' {α} (e : α ≃ Nat) : Denumerable α where encode
+参数：e : α ≃ Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mk'
-  signature: {α} (e : α ≃ Nat)
-  body: e
-  decode := some ∘ e.symm
-  encodek _ := congr_arg some (e.symm_apply_apply _)
-  decode_inv _ := ⟨_, rfl, e.apply_symm_apply _⟩
-
-中文:
-定义 mk'
-  签名: {α} (e : α ≃ 自然数)
-  定义体: e
-  decode := some ∘ e.symm
-  encodek _ := congr_arg some (e.symm_apply_apply _)
-  decode_inv _ := ⟨_, rfl, e.apply_symm_apply _⟩
+--- 原说明 ---
+A type equivalent to `ℕ` is denumerable.
 -/
-def mk' {α} (e : α ≃ Nat) : Denumerable α where
+def mk' {α} (e : α ≃ ℕ) : Denumerable α where
   encode := e
   decode := some ∘ e.symm
   encodek _ := congr_arg some (e.symm_apply_apply _)
@@ -248,28 +195,17 @@ def mk' {α} (e : α ≃ Nat) : Denumerable α where
 /-- Denumerability is conserved by equivalences. This is transitivity of equivalence the denumerable
 way. -/
 @[instance_reducible]
-/--
-Definition of `ofEquiv` / `ofEquiv` 的定义
+/-
+**Denumerable.ofEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：ofEquiv (α) {β} [Denumerable α] (e : β ≃ α) : Denumerable β
+参数：α；e : β ≃ α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEquiv
-  signature: (α) {β} [Denumerable α] (e : β ≃ α)
-  body: { Encodable.ofEquiv _ e with
-    decode_inv := fun n => by
-      simp [decode_ofEquiv, encode_ofEquiv] }
-
-@[simp]
-
-中文:
-定义 ofEquiv
-  签名: (α) {β} [可枚举 α] (e : β ≃ α)
-  定义体: { Encodable.ofEquiv _ e with
-    decode_inv := fun n => by
-      simp [decode_ofEquiv, encode_ofEquiv] }
-
-@[simp]
-
-Depends on / 依赖: Encodable, Encodable.ofEquiv, decode_inv, decode_ofEquiv, encode_ofEquiv, ofEquiv
+--- 原说明 ---
+Denumerability is conserved by equivalences. This is transitivity of equivalence
+ the denumerable
+way.
 -/
 def ofEquiv (α) {β} [Denumerable α] (e : β ≃ α) : Denumerable β :=
   { Encodable.ofEquiv _ e with
@@ -277,28 +213,26 @@ def ofEquiv (α) {β} [Denumerable α] (e : β ≃ α) : Denumerable β :=
       simp [decode_ofEquiv, encode_ofEquiv] }
 
 @[simp]
-/--
-theorem `ofEquiv_ofNat` / 定理 `ofEquiv_ofNat`
-
-English:
-theorem ofEquiv_ofNat
-  given: (α) {β} [Denumerable α] (e : β ≃ α) (n)
-  proof: by
-  let := ofEquiv _ e
-  refine ofNat_of_decode ?_
-  rw [decode_ofEquiv e]
-  simp
-
-中文:
-定理 ofEquiv_of自然数
-  条件: (α) {β} [可枚举 α] (e : β ≃ α) (n)
-  证明: by
-  let := ofEquiv _ e
-  refine ofNat_of_decode ?_
-  rw [decode_ofEquiv e]
-  simp
-
-Depends on / 依赖: decode_ofEquiv, ofEquiv, ofNat_of_decode
+/-
+**Denumerable.ofEquiv_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：ofEquiv_ofNat (α) {β} [Denumerable α] (e : β ≃ α) (n) : @ofNat β (ofEquiv 
+_ e) n = e.symm (ofNat α n)
+参数：α；e : β ≃ α；n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Denumerable.ofNat_of_decode`：ofNat_of_decode {n b} (h : decode (α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Encodable.decode_ofEquiv`：decode_ofEquiv {α β} [Encodable α] (e : β ≃ α)
+ (n : Nat) : @decode _ (ofEquiv _ e) n = (decode n).map e.symm
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Denumerable.decode_eq_ofNat`：decode_eq_ofNat (α) [Denumerable α] (n : Na
+t) : decode (α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofEquiv_ofNat (α) {β} [Denumerable α] (e : β ≃ α) (n) :
     @ofNat β (ofEquiv _ e) n = e.symm (ofNat α n) := by
@@ -307,317 +241,238 @@ theorem ofEquiv_ofNat (α) {β} [Denumerable α] (e : β ≃ α) (n) :
   rw [decode_ofEquiv e]
   simp
 
-/--
-Definition of `equiv₂` / `equiv₂` 的定义
+/-- All denumerable types are equivalent. -/
+/-
+**Denumerable.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equiv₂
-  signature: (α β) [Denumerable α] [Denumerable β]
-  body: (eqv α).trans (eqv β).symm
-
-中文:
-定义 equiv₂
-  签名: (α β) [可枚举 α] [可枚举 β]
-  定义体: (eqv α).trans (eqv β).symm
+--- 原说明 ---
+All denumerable types are equivalent.
 -/
 def equiv₂ (α β) [Denumerable α] [Denumerable β] : α ≃ β :=
   (eqv α).trans (eqv β).symm
-
-/--
-Instance `nat` / 实例 `nat`
-
-English:
-instance nat
-  signature: : Denumerable Nat
-  body: ⟨fun _ => ⟨_, rfl, rfl⟩⟩
-
-@[simp]
-
-中文:
-实例 nat
-  签名: : 可枚举 自然数
-  定义体: ⟨fun _ => ⟨_, rfl, rfl⟩⟩
-
-@[simp]
+/-
+**Denumerable.nat** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：nat : Denumerable Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance nat : Denumerable Nat :=
+instance nat : Denumerable ℕ :=
   ⟨fun _ => ⟨_, rfl, rfl⟩⟩
 
 @[simp]
-/--
-theorem `ofNat_nat` / 定理 `ofNat_nat`
-
-English:
-theorem ofNat_nat
-  given: (n)
-  statement: ofNat Nat n = n
-  proof: rfl
-
-中文:
-定理 of自然数_nat
-  条件: (n)
-  结论: of自然数 自然数 n = n
-  证明: rfl
+/-
+**Denumerable.ofNat_nat** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：ofNat_nat (n) : ofNat Nat n = n
+参数：n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofNat_nat (n) : ofNat Nat n = n :=
+theorem ofNat_nat (n) : ofNat ℕ n = n :=
   rfl
 
-/--
-Instance `option` / 实例 `option`
+/-- If `α` is denumerable, then so is `Option α`. -/
+/-
+**Denumerable.option** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：option : Denumerable (Option α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance option
-  signature: : Denumerable (Option α)
-  body: ⟨fun n => by
-    cases n with
-    | zero =>
-      refine ⟨none, ?_, encode_none⟩
-      rw [decode_option_zero]; rw [Option.mem_def]
-    | succ n =>
-      refine ⟨some (ofNat α n), ?_, ?_⟩
-      · rw [decode_option_succ, decode_eq_ofNat, Option.map_some, Option.mem_def]
-      rw [encode_some]; rw [encode_ofNat]⟩
-
-中文:
-实例 option
-  签名: : 可枚举 (选项类型 α)
-  定义体: ⟨fun n => by
-    cases n with
-    | zero =>
-      refine ⟨none, ?_, encode_none⟩
-      rw [decode_option_zero]; rw [Option.mem_def]
-    | succ n =>
-      refine ⟨some (ofNat α n), ?_, ?_⟩
-      · rw [decode_option_succ, decode_eq_ofNat, Option.map_some, Option.mem_def]
-      rw [encode_some]; rw [encode_ofNat]⟩
-
-Depends on / 依赖: Option.map_some, Option.mem_def, decode_eq_ofNat, decode_option_succ, decode_option_zero, encode_none, encode_ofNat, encode_some, map_some, mem_def
+--- 原说明 ---
+If `α` is denumerable, then so is `Option α`.
 -/
 instance option : Denumerable (Option α) :=
   ⟨fun n => by
     cases n with
     | zero =>
       refine ⟨none, ?_, encode_none⟩
-      rw [decode_option_zero]; rw [Option.mem_def]
+      rw [decode_option_zero, Option.mem_def]
     | succ n =>
       refine ⟨some (ofNat α n), ?_, ?_⟩
       · rw [decode_option_succ, decode_eq_ofNat, Option.map_some, Option.mem_def]
-      rw [encode_some]; rw [encode_ofNat]⟩
+      rw [encode_some, encode_ofNat]⟩
 
-/--
-Instance `sum` / 实例 `sum`
+/-- If `α` and `β` are denumerable, then so is their sum. -/
+/-
+**Denumerable.sum** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：sum : Denumerable (α oplus β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance sum
-  signature: : Denumerable (α oplus β)
-  body: ⟨fun n => by
-    suffices exists a in @decodeSum α β _ _ n, encodeSum a = bit (bodd n) (div2 n) by
-      simpa [bit_bodd_div2]
-    simp only [decodeSum, decode_eq_ofNat, Option.map_some, Sum.exists]
-    cases bodd n <;> simp [bit_val, encodeSum]⟩
-
-中文:
-实例 求和
-  签名: : 可枚举 (α oplus β)
-  定义体: ⟨fun n => by
-    suffices exists a in @decodeSum α β _ _ n, encodeSum a = bit (bodd n) (div2 n) by
-      simpa [bit_bodd_div2]
-    simp only [decodeSum, decode_eq_ofNat, Option.map_some, Sum.exists]
-    cases bodd n <;> simp [bit_val, encodeSum]⟩
-
-Depends on / 依赖: Option.map_some, Sum.exists, bit_bodd_div2, bit_val, decodeSum, decode_eq_ofNat, encodeSum, map_some
+--- 原说明 ---
+If `α` and `β` are denumerable, then so is their sum.
 -/
-instance sum : Denumerable (α oplus β) :=
+instance sum : Denumerable (α ⊕ β) :=
   ⟨fun n => by
-    suffices exists a in @decodeSum α β _ _ n, encodeSum a = bit (bodd n) (div2 n) by
+    suffices ∃ a ∈ @decodeSum α β _ _ n, encodeSum a = bit (bodd n) (div2 n) by
       simpa [bit_bodd_div2]
     simp only [decodeSum, decode_eq_ofNat, Option.map_some, Sum.exists]
     cases bodd n <;> simp [bit_val, encodeSum]⟩
 
 section Sigma
 
-variable {γ : α -> Type*} [forall a, Denumerable (γ a)]
+variable {γ : α → Type*} [∀ a, Denumerable (γ a)]
 
-/--
-Instance `sigma` / 实例 `sigma`
+/-- A denumerable collection of denumerable types is denumerable. -/
+/-
+**Denumerable.sigma** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：sigma : Denumerable (Sigma γ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance sigma
-  signature: : Denumerable (Sigma γ)
-  body: ⟨fun n => by simp⟩
-
-@[simp]
-
-中文:
-实例 sigma
-  签名: : 可枚举 (依赖和类型 γ)
-  定义体: ⟨fun n => by simp⟩
-
-@[simp]
+--- 原说明 ---
+A denumerable collection of denumerable types is denumerable.
 -/
 instance sigma : Denumerable (Sigma γ) :=
   ⟨fun n => by simp⟩
 
 @[simp]
-/--
-theorem `sigma_ofNat_val` / 定理 `sigma_ofNat_val`
-
-English:
-theorem sigma_ofNat_val
-  given: (n : Nat)
-  proof: Option.some.inj by rw [← decode_eq_ofNat, decode_sigma_val]; simp
-
-中文:
-定理 sigma_of自然数_val
-  条件: (n : 自然数)
-  证明: Option.some.inj by rw [← decode_eq_ofNat, decode_sigma_val]; simp
-
-Depends on / 依赖: Option.some.inj, decode_eq_ofNat, decode_sigma_val
+/-
+**Denumerable.sigma_ofNat_val** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：sigma_ofNat_val (n : Nat) : ofNat (Sigma γ) n = ⟨ofNat α (unpair n).1, ofN
+at (γ _) (unpair n).2⟩
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.some.inj`：∀ {α : Type u} {val val_1 : α}, some val = some val_1 →
+ val = val_1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Denumerable.decode_eq_ofNat`：decode_eq_ofNat (α) [Denumerable α] (n : Na
+t) : decode (α
+· 使用定理 `Encodable.decode_sigma_val`：decode_sigma_val (n : Nat) : (decode n : Opt
+ion (Sigma γ)) = (decode n.unpair.1).bind fun a => (decode n.unpair.2).map Sigma
+.mk a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Option.bind_congr'`：bind_congr' {f g : α -> Option β} {x y : Option α} (
+hx : x = y) (hf : forall a in y, f a = g a) : x.bind f = y.bind g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sigma_ofNat_val (n : Nat) :
+theorem sigma_ofNat_val (n : ℕ) :
     ofNat (Sigma γ) n = ⟨ofNat α (unpair n).1, ofNat (γ _) (unpair n).2⟩ :=
-Option.some.inj by rw [← decode_eq_ofNat, decode_sigma_val]; simp
+  Option.some.inj <| by rw [← decode_eq_ofNat, decode_sigma_val]; simp
 
 end Sigma
 
-/--
-Instance `prod` / 实例 `prod`
+/-- If `α` and `β` are denumerable, then so is their product. -/
+/-
+**Denumerable.prod** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：prod : Denumerable (α × β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance prod
-  signature: : Denumerable (α × β)
-  body: ofEquiv _ (Equiv.sigmaEquivProd α β).symm
-
-中文:
-实例 乘积
-  签名: : 可枚举 (α × β)
-  定义体: ofEquiv _ (Equiv.sigmaEquivProd α β).symm
-
-Depends on / 依赖: Equiv.sigmaEquivProd, ofEquiv, sigmaEquivProd
+--- 原说明 ---
+If `α` and `β` are denumerable, then so is their product.
 -/
 instance prod : Denumerable (α × β) :=
   ofEquiv _ (Equiv.sigmaEquivProd α β).symm
-
-/--
-theorem `prod_ofNat_val` / 定理 `prod_ofNat_val`
-
-English:
-theorem prod_ofNat_val
-  given: (n : Nat)
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 prod_of自然数_val
-  条件: (n : 自然数)
-  证明: by simp
-
-@[simp]
+/-
+**Denumerable.prod_ofNat_val** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：prod_ofNat_val (n : Nat) : ofNat (α × β) n = (ofNat α (unpair n).1, ofNat 
+β (unpair n).2)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Denumerable.ofEquiv_ofNat`：ofEquiv_ofNat (α) {β} [Denumerable α] (e : β 
+≃ α) (n) : @ofNat β (ofEquiv _ e) n = e.symm (ofNat α n)
+· 使用定理 `Denumerable.sigma_ofNat_val`：sigma_ofNat_val (n : Nat) : ofNat (Sigma γ)
+ n = ⟨ofNat α (unpair n).1, ofNat (γ _) (unpair n).2⟩
+· 使用定理 `Equiv.sigmaEquivProd_apply`：∀ (α : Type u_1) (β : Type u_2) (a : (_ : α)
+ × β), (Equiv.sigmaEquivProd α β) a = (a.fst, a.snd)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_ofNat_val (n : Nat) :
+theorem prod_ofNat_val (n : ℕ) :
     ofNat (α × β) n = (ofNat α (unpair n).1, ofNat β (unpair n).2) := by simp
 
 @[simp]
-/--
-theorem `prod_nat_ofNat` / 定理 `prod_nat_ofNat`
-
-English:
-theorem prod_nat_ofNat
-  statement: ofNat (Nat × Nat) = unpair
-  proof: by funext; simp
-
-中文:
-定理 prod_nat_of自然数
-  结论: of自然数 (自然数 × 自然数) = unpair
-  证明: by funext; simp
+/-
+**Denumerable.prod_nat_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Denumerable`。
+形式化陈述：prod_nat_ofNat : ofNat (Nat × Nat) = unpair
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Denumerable.ofEquiv_ofNat`：ofEquiv_ofNat (α) {β} [Denumerable α] (e : β 
+≃ α) (n) : @ofNat β (ofEquiv _ e) n = e.symm (ofNat α n)
+· 使用定理 `Denumerable.sigma_ofNat_val`：sigma_ofNat_val (n : Nat) : ofNat (Sigma γ)
+ n = ⟨ofNat α (unpair n).1, ofNat (γ _) (unpair n).2⟩
+· 使用定理 `Equiv.sigmaEquivProd_apply`：∀ (α : Type u_1) (β : Type u_2) (a : (_ : α)
+ × β), (Equiv.sigmaEquivProd α β) a = (a.fst, a.snd)
+· 使用定理 `Prod.mk.eta`：∀ {α : Type u_1} {β : Type u_2} {p : α × β}, (p.1, p.2) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_nat_ofNat : ofNat (Nat × Nat) = unpair := by funext; simp
-
-/--
-Instance `int` / 实例 `int`
-
-English:
-instance int
-  signature: : Denumerable Int
-  body: fast_instance% Denumerable.mk' Equiv.intEquivNat
-
-中文:
-实例 int
-  签名: : 可枚举 整数
-  定义体: fast_instance% Denumerable.mk' Equiv.intEquivNat
-
-Depends on / 依赖: Denumerable, Denumerable.mk, Equiv.intEquivNat, fast_instance, intEquivNat
+theorem prod_nat_ofNat : ofNat (ℕ × ℕ) = unpair := by funext; simp
+/-
+**Denumerable.int** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：int : Denumerable Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance int : Denumerable Int :=
+instance int : Denumerable ℤ :=
   fast_instance% Denumerable.mk' Equiv.intEquivNat
-
-/--
-Instance `pnat` / 实例 `pnat`
-
-English:
-instance pnat
-  signature: : Denumerable Nat+
-  body: fast_instance% Denumerable.mk' Equiv.pnatEquivNat
-
-中文:
-实例 pnat
-  签名: : 可枚举 自然数+
-  定义体: fast_instance% Denumerable.mk' Equiv.pnatEquivNat
-
-Depends on / 依赖: Denumerable, Denumerable.mk, Equiv.pnatEquivNat, fast_instance, pnatEquivNat
+/-
+**Denumerable.pnat** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：pnat : Denumerable Nat+
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance pnat : Denumerable Nat+ :=
+instance pnat : Denumerable ℕ+ :=
   fast_instance% Denumerable.mk' Equiv.pnatEquivNat
 
-/--
-Instance `ulift` / 实例 `ulift`
+/-- The lift of a denumerable type is denumerable. -/
+/-
+**Denumerable.ulift** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：ulift : Denumerable (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance ulift
-  signature: : Denumerable (ULift α)
-  body: ofEquiv _ Equiv.ulift
-
-中文:
-实例 ulift
-  签名: : 可枚举 (类型层提升 α)
-  定义体: ofEquiv _ Equiv.ulift
-
-Depends on / 依赖: Equiv.ulift, ofEquiv
+--- 原说明 ---
+The lift of a denumerable type is denumerable.
 -/
 instance ulift : Denumerable (ULift α) :=
   ofEquiv _ Equiv.ulift
 
-/--
-Instance `plift` / 实例 `plift`
+/-- The lift of a denumerable type is denumerable. -/
+/-
+**Denumerable.plift** 是 Mathlib 中的一个实例，位于命名空间 `Denumerable`。
+形式化陈述：plift : Denumerable (PLift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance plift
-  signature: : Denumerable (PLift α)
-  body: ofEquiv _ Equiv.plift
-
-中文:
-实例 plift
-  签名: : 可枚举 (命题层提升 α)
-  定义体: ofEquiv _ Equiv.plift
-
-Depends on / 依赖: Equiv.plift, ofEquiv
+--- 原说明 ---
+The lift of a denumerable type is denumerable.
 -/
 instance plift : Denumerable (PLift α) :=
   ofEquiv _ Equiv.plift
 
-/--
-Definition of `pair` / `pair` 的定义
+/-- If `α` is denumerable, then `α × α` and `α` are equivalent. -/
+/-
+**Denumerable.pair** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：pair : α × α ≃ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pair
-  signature: : α × α ≃ α
-  body: equiv₂ _ _
-
-中文:
-定义 pair
-  签名: : α × α ≃ α
-  定义体: equiv₂ _ _
+--- 原说明 ---
+If `α` is denumerable, then `α × α` and `α` are equivalent.
 -/
 def pair : α × α ≃ α :=
   equiv₂ _ _
@@ -632,257 +487,209 @@ open Function Encodable
 
 /-! ### Subsets of `ℕ` -/
 
-variable {s : Set Nat} [Infinite s]
+variable {s : Set ℕ} [Infinite s]
 
 section Classical
 
-/--
-theorem `exists_succ` / 定理 `exists_succ`
-
-English:
-theorem exists_succ
-  given: (x : s)
-  statement: exists n, (x : Nat) + n + 1 in s
-  proof: by
-  by_contra h
-  have (a : Nat) (ha : a in s) : a < x + 1 :=
-    lt_of_not_ge fun hax => h ⟨a - (x + 1), by rwa [Nat.add_right_comm, Nat.add_sub_cancel' hax]⟩
-  classical
-  exact Fintype.false
-    ⟨(((Multiset.range (succ x)).filter (· in s)).pmap
-      (fun (y : Nat) (hy : y in s) => Subtype.mk y hy) (by simp [-Multiset.range_succ])).toFinset,
-      by simpa [Subtype.ext_iff, Multiset.mem_filter, -Multiset.range_succ] ⟩
-
-中文:
-定理 存在_succ
-  条件: (x : s)
-  结论: 存在 n, (x : 自然数) + n + 1 in s
-  证明: by
-  by_contra h
-  have (a : Nat) (ha : a in s) : a < x + 1 :=
-    lt_of_not_ge fun hax => h ⟨a - (x + 1), by rwa [Nat.add_right_comm, Nat.add_sub_cancel' hax]⟩
-  classical
-  exact Fintype.false
-    ⟨(((Multiset.range (succ x)).filter (· in s)).pmap
-      (fun (y : Nat) (hy : y in s) => Subtype.mk y hy) (by simp [-Multiset.range_succ])).toFinset,
-      by simpa [Subtype.ext_iff, Multiset.mem_filter, -Multiset.range_succ] ⟩
-
-Depends on / 依赖: Fintype, Fintype.false, Multiset, Multiset.mem_filter, Multiset.range, Multiset.range_succ, Nat.add_right_comm, Nat.add_sub_cancel, Subtype, Subtype.ext_iff, Subtype.mk, add_right_comm, add_sub_cancel, classical, ext_iff, filter, lt_of_not_ge, mem_filter, range_succ, toFinset
+/-
+**Nat.Subtype.exists_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：exists_succ (x : s) : exists n, (x : Nat) + n + 1 in s
+参数：x : s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.add_right_comm`：∀ (n m k : ℕ), n + m + k = n + k + m
+· 使用定理 `Nat.add_sub_cancel'`：∀ {n m : ℕ}, m ≤ n → m + (n - m) = n
+· 使用定理 `Fintype.false`：∀ {α : Type u_1} [Infinite α] (_h : Fintype α), False
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem exists_succ (x : s) : exists n, (x : Nat) + n + 1 in s := by
+theorem exists_succ (x : s) : ∃ n, (x : ℕ) + n + 1 ∈ s := by
   by_contra h
-  have (a : Nat) (ha : a in s) : a < x + 1 :=
+  have (a : ℕ) (ha : a ∈ s) : a < x + 1 :=
     lt_of_not_ge fun hax => h ⟨a - (x + 1), by rwa [Nat.add_right_comm, Nat.add_sub_cancel' hax]⟩
   classical
   exact Fintype.false
-    ⟨(((Multiset.range (succ x)).filter (· in s)).pmap
-      (fun (y : Nat) (hy : y in s) => Subtype.mk y hy) (by simp [-Multiset.range_succ])).toFinset,
+    ⟨(((Multiset.range (succ x)).filter (· ∈ s)).pmap
+      (fun (y : ℕ) (hy : y ∈ s) => Subtype.mk y hy) (by simp [-Multiset.range_succ])).toFinset,
       by simpa [Subtype.ext_iff, Multiset.mem_filter, -Multiset.range_succ] ⟩
 
 end Classical
 
-variable [DecidablePred (· in s)]
+variable [DecidablePred (· ∈ s)]
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- Returns the next natural in a set, according to the usual ordering of `ℕ`. -/
+/-
+**Nat.Subtype.succ** 是 Mathlib 中的一个定义，位于命名空间 `Nat.Subtype`。
+形式化陈述：succ (x : s) : s
+参数：x : s。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Subtype.exists_succ`：exists_succ (x : s) : exists n, (x : Nat) + n +
+ 1 in s
 
-English:
-definition succ
-  signature: (x : s)
-  body: have h : exists m, (x : Nat) + m + 1 in s := exists_succ x
-  ⟨↑x + Nat.find h + 1, Nat.find_spec h⟩
-
-中文:
-定义 succ
-  签名: (x : s)
-  定义体: have h : exists m, (x : Nat) + m + 1 in s := exists_succ x
-  ⟨↑x + Nat.find h + 1, Nat.find_spec h⟩
-
-Depends on / 依赖: Nat.find, Nat.find_spec, exists_succ, find_spec
+--- 原说明 ---
+Returns the next natural in a set, according to the usual ordering of `ℕ`.
 -/
 def succ (x : s) : s :=
-  have h : exists m, (x : Nat) + m + 1 in s := exists_succ x
+  have h : ∃ m, (x : ℕ) + m + 1 ∈ s := exists_succ x
   ⟨↑x + Nat.find h + 1, Nat.find_spec h⟩
-
-/--
-theorem `succ_le_of_lt` / 定理 `succ_le_of_lt`
-
-English:
-theorem succ_le_of_lt
-  given: {x y : s} (h : y < x)
-  statement: succ y <= x
-  proof: have hx : exists m, (y : Nat) + m + 1 in s := exists_succ _
-  let ⟨k, hk⟩ := Nat.exists_eq_add_of_lt h
-  have : Nat.find hx <= k := Nat.find_min' _ (hk ▸ x.2)
-  show (y : Nat) + Nat.find hx + 1 <= x by lia
-
-中文:
-定理 succ_le_of_lt
-  条件: {x y : s} (h : y < x)
-  结论: succ y <= x
-  证明: have hx : exists m, (y : Nat) + m + 1 in s := exists_succ _
-  let ⟨k, hk⟩ := Nat.exists_eq_add_of_lt h
-  have : Nat.find hx <= k := Nat.find_min' _ (hk ▸ x.2)
-  show (y : Nat) + Nat.find hx + 1 <= x by lia
-
-Depends on / 依赖: Nat.exists_eq_add_of_lt, Nat.find, Nat.find_min, exists_eq_add_of_lt, exists_succ, find_min
+/-
+**Nat.Subtype.succ_le_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：succ_le_of_lt {x y : s} (h : y < x) : succ y <= x
+参数：h : y < x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Subtype.exists_succ`：exists_succ (x : s) : exists n, (x : Nat) + n +
+ 1 in s
+· 使用定理 `Nat.exists_eq_add_of_lt`：∀ {m n : ℕ}, m < n → ∃ k, n = m + k + 1
+· 使用定理 `Nat.find_min'`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n) 
+{m : ℕ}, p m → Nat.find H ≤ m
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem succ_le_of_lt {x y : s} (h : y < x) : succ y <= x :=
-  have hx : exists m, (y : Nat) + m + 1 in s := exists_succ _
+theorem succ_le_of_lt {x y : s} (h : y < x) : succ y ≤ x :=
+  have hx : ∃ m, (y : ℕ) + m + 1 ∈ s := exists_succ _
   let ⟨k, hk⟩ := Nat.exists_eq_add_of_lt h
-  have : Nat.find hx <= k := Nat.find_min' _ (hk ▸ x.2)
-  show (y : Nat) + Nat.find hx + 1 <= x by lia
-
-/--
-theorem `le_succ_of_forall_lt_le` / 定理 `le_succ_of_forall_lt_le`
-
-English:
-theorem le_succ_of_forall_lt_le
-  given: {x y : s} (h : forall z < x, z <= y)
-  statement: x <= succ y
-  proof: have hx : exists m, (y : Nat) + m + 1 in s := exists_succ _
-  show (x : Nat) <= (y : Nat) + Nat.find hx + 1 from
-    le_of_not_gt fun hxy =>
-(h ⟨_, Nat.find_spec hx⟩ hxy).not_gt
-        (by lia : (y : Nat) < (y : Nat) + Nat.find hx + 1)
-
-中文:
-定理 le_succ_of_对任意_lt_le
-  条件: {x y : s} (h : 对任意 z < x, z <= y)
-  结论: x <= succ y
-  证明: have hx : exists m, (y : Nat) + m + 1 in s := exists_succ _
-  show (x : Nat) <= (y : Nat) + Nat.find hx + 1 from
-    le_of_not_gt fun hxy =>
-(h ⟨_, Nat.find_spec hx⟩ hxy).not_gt
-        (by lia : (y : Nat) < (y : Nat) + Nat.find hx + 1)
-
-Depends on / 依赖: Nat.find, Nat.find_spec, exists_succ, find_spec, le_of_not_gt, not_gt
+  have : Nat.find hx ≤ k := Nat.find_min' _ (hk ▸ x.2)
+  show (y : ℕ) + Nat.find hx + 1 ≤ x by lia
+/-
+**Nat.Subtype.le_succ_of_forall_lt_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：le_succ_of_forall_lt_le {x y : s} (h : forall z < x, z <= y) : x <= succ y
+参数：h : forall z < x, z <= y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Subtype.exists_succ`：exists_succ (x : s) : exists n, (x : Nat) + n +
+ 1 in s
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.find_spec`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n),
+ p (Nat.find H)
 -/
-theorem le_succ_of_forall_lt_le {x y : s} (h : forall z < x, z <= y) : x <= succ y :=
-  have hx : exists m, (y : Nat) + m + 1 in s := exists_succ _
-  show (x : Nat) <= (y : Nat) + Nat.find hx + 1 from
+theorem le_succ_of_forall_lt_le {x y : s} (h : ∀ z < x, z ≤ y) : x ≤ succ y :=
+  have hx : ∃ m, (y : ℕ) + m + 1 ∈ s := exists_succ _
+  show (x : ℕ) ≤ (y : ℕ) + Nat.find hx + 1 from
     le_of_not_gt fun hxy =>
-(h ⟨_, Nat.find_spec hx⟩ hxy).not_gt
-        (by lia : (y : Nat) < (y : Nat) + Nat.find hx + 1)
-
-/--
-theorem `lt_succ_self` / 定理 `lt_succ_self`
-
-English:
-theorem lt_succ_self
-  given: (x : s)
-  statement: x < succ x
-  proof: calc
-    (x : Nat) <= (x + _) := le_add_right ..
-    _ < (succ x) := Nat.lt_succ_self (x + _)
-
-中文:
-定理 lt_succ_self
-  条件: (x : s)
-  结论: x < succ x
-  证明: calc
-    (x : Nat) <= (x + _) := le_add_right ..
-    _ < (succ x) := Nat.lt_succ_self (x + _)
-
-Depends on / 依赖: Nat.lt_succ_self, le_add_right, lt_succ_self
+      (h ⟨_, Nat.find_spec hx⟩ hxy).not_gt <|
+        (by lia : (y : ℕ) < (y : ℕ) + Nat.find hx + 1)
+/-
+**Nat.Subtype.lt_succ_self** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：lt_succ_self (x : s) : x < succ x
+参数：x : s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Subtype.exists_succ`：exists_succ (x : s) : exists n, (x : Nat) + n +
+ 1 in s
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
 -/
 theorem lt_succ_self (x : s) : x < succ x :=
   calc
-    (x : Nat) <= (x + _) := le_add_right ..
+    (x : ℕ) ≤ (x + _) := le_add_right ..
     _ < (succ x) := Nat.lt_succ_self (x + _)
-
-/--
-theorem `lt_succ_iff_le` / 定理 `lt_succ_iff_le`
-
-English:
-theorem lt_succ_iff_le
-  given: {x y : s}
-  statement: x < succ y ↔ x <= y
-  proof: ⟨fun h => le_of_not_gt fun h' => not_le_of_gt h (succ_le_of_lt h'), fun h =>
-    lt_of_le_of_lt h (lt_succ_self _)⟩
-
-中文:
-定理 lt_succ_iff_le
-  条件: {x y : s}
-  结论: x < succ y ↔ x <= y
-  证明: ⟨fun h => le_of_not_gt fun h' => not_le_of_gt h (succ_le_of_lt h'), fun h =>
-    lt_of_le_of_lt h (lt_succ_self _)⟩
-
-Depends on / 依赖: le_of_not_gt, lt_of_le_of_lt, lt_succ_self, not_le_of_gt, succ_le_of_lt
+/-
+**Nat.Subtype.lt_succ_iff_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：lt_succ_iff_le {x y : s} : x < succ y ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Nat.Subtype.succ_le_of_lt`：succ_le_of_lt {x y : s} (h : y < x) : succ y 
+<= x
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Nat.Subtype.lt_succ_self`：lt_succ_self (x : s) : x < succ x
 -/
-theorem lt_succ_iff_le {x y : s} : x < succ y ↔ x <= y :=
+theorem lt_succ_iff_le {x y : s} : x < succ y ↔ x ≤ y :=
   ⟨fun h => le_of_not_gt fun h' => not_le_of_gt h (succ_le_of_lt h'), fun h =>
     lt_of_le_of_lt h (lt_succ_self _)⟩
 
-/--
-Definition of `ofNat` / `ofNat` 的定义
+/-- Returns the `n`-th element of a set, according to the usual ordering of `ℕ`. -/
+/-
+**Nat.Subtype.ofNat** 是 Mathlib 中的一个定义，位于命名空间 `Nat.Subtype`。
+形式化陈述：(s : Set ℕ) → [DecidablePred fun x => x ∈ s] → [Infinite ↑s] → ℕ → ↑s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNat
-  signature: (s : Set Nat) [DecidablePred (· in s)] [Infinite s]
-
-中文:
-定义 of自然数
-  签名: (s : 集合 自然数) [DecidablePred (· in s)] [无限 s]
+--- 原说明 ---
+Returns the `n`-th element of a set, according to the usual ordering of `ℕ`.
 -/
-def ofNat (s : Set Nat) [DecidablePred (· in s)] [Infinite s] : Nat -> s
+def ofNat (s : Set ℕ) [DecidablePred (· ∈ s)] [Infinite s] : ℕ → s
   | 0 => ⊥
   | n + 1 => succ (ofNat s n)
-
-/--
-theorem `ofNat_surjective` / 定理 `ofNat_surjective`
-
-English:
-theorem ofNat_surjective
-  statement: Surjective (ofNat s)
-  proof: ((List.range x).filter fun y => y in s).pmap
-        (fun (y : Nat) (hy : y in s) => ⟨y, hy⟩)
-        (by intro a ha; simpa using! (List.mem_filter.mp ha).2) with ht
-    have hmt : forall {y : s}, y in t ↔ y < ⟨x, hx⟩ := by
-      simp [List.mem_filter, Subtype.ext_iff, ht]
-    cases hmax : List.maximum t with
-    | bot =>
-      refine ⟨0, le_antisymm bot_le (le_of_not_gt fun h => List.not_mem_nil (a := (⊥ : s)) ?_)⟩
-      rwa [← List.maximum_eq_bot.1 hmax, hmt]
-    | coe m =>
-      have wf : ↑m < x := by simpa using! hmt.mp (List.maximum_mem hmax)
-      rcases ofNat_surjective m with ⟨a, rfl⟩
-      refine ⟨a + 1, le_antisymm (succ_le_of_lt wf) ?_⟩
-      exact le_succ_of_forall_lt_le fun z hz => List.le_maximum_of_mem (hmt.2 hz) hmax
-  termination_by n => n.val
-
-@[simp]
-
-中文:
-定理 of自然数_surjective
-  结论: 满射 (of自然数 s)
-  证明: ((List.range x).filter fun y => y in s).pmap
-        (fun (y : Nat) (hy : y in s) => ⟨y, hy⟩)
-        (by intro a ha; simpa using! (List.mem_filter.mp ha).2) with ht
-    have hmt : forall {y : s}, y in t ↔ y < ⟨x, hx⟩ := by
-      simp [List.mem_filter, Subtype.ext_iff, ht]
-    cases hmax : List.maximum t with
-    | bot =>
-      refine ⟨0, le_antisymm bot_le (le_of_not_gt fun h => List.not_mem_nil (a := (⊥ : s)) ?_)⟩
-      rwa [← List.maximum_eq_bot.1 hmax, hmt]
-    | coe m =>
-      have wf : ↑m < x := by simpa using! hmt.mp (List.maximum_mem hmax)
-      rcases ofNat_surjective m with ⟨a, rfl⟩
-      refine ⟨a + 1, le_antisymm (succ_le_of_lt wf) ?_⟩
-      exact le_succ_of_forall_lt_le fun z hz => List.le_maximum_of_mem (hmt.2 hz) hmax
-  termination_by n => n.val
-
-@[simp]
-
-Depends on / 依赖: List.maximum, List.maximum_eq_bot, List.maximum_mem, List.mem_filter, List.mem_filter.mp, List.not_mem_nil, List.range, Subtype, Subtype.ext_iff, bot_le, ext_iff, filter, hmt.mp, le_antisymm, le_of_not_gt, maximum, maximum_eq_bot, maximum_mem, mem_filter, not_mem_nil
+/-
+**Nat.Subtype.ofNat_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：ofNat_surjective : Surjective (ofNat s) | ⟨x, hx⟩ => by set t : List s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.mem_filter`：∀ {α : Type u_1} {p : α → Bool} {as : List α} {x : α}, 
+x ∈ List.filter p as ↔ x ∈ as ∧ p x = true
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `Infinite.instNontrivial`：∀ (α : Type u_4) [Infinite α], Nontrivial α
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `List.not_mem_nil`：∀ {α : Type u_1} {a : α}, a ∉ []
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.maximum_eq_bot`：maximum_eq_bot {l : List α} : l.maximum = ⊥ ↔ l = [
+]
+· 使用定理 `List.maximum_mem`：maximum_mem {l : List α} {m : α} : (maximum l : WithTo
+p α) = m -> m in l
+· 使用定理 `Nat.Subtype.succ_le_of_lt`：succ_le_of_lt {x y : s} (h : y < x) : succ y 
+<= x
+· 使用定理 `Nat.Subtype.le_succ_of_forall_lt_le`：le_succ_of_forall_lt_le {x y : s} (
+h : forall z < x, z <= y) : x <= succ y
+· 使用定理 `List.le_maximum_of_mem`：le_maximum_of_mem : a in l -> (maximum l : WithB
+ot α) = m -> a <= m
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
 theorem ofNat_surjective : Surjective (ofNat s)
   | ⟨x, hx⟩ => by
     set t : List s :=
-      ((List.range x).filter fun y => y in s).pmap
-        (fun (y : Nat) (hy : y in s) => ⟨y, hy⟩)
+      ((List.range x).filter fun y => y ∈ s).pmap
+        (fun (y : ℕ) (hy : y ∈ s) => ⟨y, hy⟩)
         (by intro a ha; simpa using! (List.mem_filter.mp ha).2) with ht
-    have hmt : forall {y : s}, y in t ↔ y < ⟨x, hx⟩ := by
+    have hmt : ∀ {y : s}, y ∈ t ↔ y < ⟨x, hx⟩ := by
       simp [List.mem_filter, Subtype.ext_iff, ht]
     cases hmax : List.maximum t with
     | bot =>
@@ -896,143 +703,68 @@ theorem ofNat_surjective : Surjective (ofNat s)
   termination_by n => n.val
 
 @[simp]
-/--
-theorem `ofNat_range` / 定理 `ofNat_range`
-
-English:
-theorem ofNat_range
-  statement: Set.range (ofNat s) = Set.univ
-  proof: ofNat_surjective.range_eq
-
-@[simp]
-
-中文:
-定理 of自然数_range
-  结论: 集合.range (of自然数 s) = 集合.univ
-  证明: ofNat_surjective.range_eq
-
-@[simp]
-
-Depends on / 依赖: ofNat_surjective, ofNat_surjective.range_eq, range_eq
+/-
+**Nat.Subtype.ofNat_range** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：ofNat_range : Set.range (ofNat s) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `Nat.Subtype.ofNat_surjective`：ofNat_surjective : Surjective (ofNat s) | 
+⟨x, hx⟩ => by set t : List s
 -/
 theorem ofNat_range : Set.range (ofNat s) = Set.univ :=
   ofNat_surjective.range_eq
 
 @[simp]
-/--
-theorem `coe_comp_ofNat_range` / 定理 `coe_comp_ofNat_range`
-
-English:
-theorem coe_comp_ofNat_range
-  statement: Set.range ((↑) ∘ ofNat s : Nat -> Nat) = s
-  proof: by
-  rw [Set.range_comp Subtype.val]; rw [ofNat_range]; rw [Set.image_univ]; rw [Subtype.range_coe]
-
-中文:
-定理 coe_comp_of自然数_range
-  结论: 集合.range ((↑) ∘ of自然数 s : 自然数 -> 自然数) = s
-  证明: by
-  rw [Set.range_comp Subtype.val]; rw [ofNat_range]; rw [Set.image_univ]; rw [Subtype.range_coe]
-
-Depends on / 依赖: Set.image_univ, Set.range_comp, Subtype, Subtype.range_coe, Subtype.val, image_univ, ofNat_range, range_coe, range_comp
+/-
+**Nat.Subtype.coe_comp_ofNat_range** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+形式化陈述：coe_comp_ofNat_range : Set.range ((↑) ∘ ofNat s : Nat -> Nat) = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Nat.Subtype.ofNat_range`：ofNat_range : Set.range (ofNat s) = Set.univ
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Subtype.range_coe`：range_coe {s : Set α} : range ((↑) : s -> α) = s
 -/
-theorem coe_comp_ofNat_range : Set.range ((↑) ∘ ofNat s : Nat -> Nat) = s := by
-  rw [Set.range_comp Subtype.val]; rw [ofNat_range]; rw [Set.image_univ]; rw [Subtype.range_coe]
+theorem coe_comp_ofNat_range : Set.range ((↑) ∘ ofNat s : ℕ → ℕ) = s := by
+  rw [Set.range_comp Subtype.val, ofNat_range, Set.image_univ, Subtype.range_coe]
 
 set_option backward.privateInPublic true in
-/--
-Definition of `toFunAux` / `toFunAux` 的定义
-
-English:
-definition toFunAux
-  signature: (x : s)
-  body: (List.range x).countP (· in s)
-
-中文:
-定义 toFunAux
-  签名: (x : s)
-  定义体: (List.range x).countP (· in s)
+/-
+**Nat.Subtype.toFunAux** 是 Mathlib 中的一个定义，位于命名空间 `Nat.Subtype`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def toFunAux (x : s) : Nat :=
-  (List.range x).countP (· in s)
-
-/--
-theorem `toFunAux_eq` / 定理 `toFunAux_eq`
-
-English:
-theorem toFunAux_eq
-  given: {s : Set Nat} [DecidablePred (· in s)] (x : s)
-  proof: by
-  rw [toFunAux]; rw [List.countP_eq_length_filter]
-  rfl
-
-中文:
-定理 toFunAux_eq
-  条件: {s : 集合 自然数} [DecidablePred (· in s)] (x : s)
-  证明: by
-  rw [toFunAux]; rw [List.countP_eq_length_filter]
-  rfl
+private def toFunAux (x : s) : ℕ :=
+  (List.range x).countP (· ∈ s)
+/-
+**Nat.Subtype.toFunAux_eq** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem toFunAux_eq {s : Set Nat} [DecidablePred (· in s)] (x : s) :
-    toFunAux x = #{y in Finset.range x | y in s} := by
-  rw [toFunAux]; rw [List.countP_eq_length_filter]
+private theorem toFunAux_eq {s : Set ℕ} [DecidablePred (· ∈ s)] (x : s) :
+    toFunAux x = #{y ∈ Finset.range x | y ∈ s} := by
+  rw [toFunAux, List.countP_eq_length_filter]
   rfl
 
 set_option backward.privateInPublic true in
-/--
-theorem `right_inverse_aux` / 定理 `right_inverse_aux`
-
-English:
-theorem right_inverse_aux
-  statement: forall n, toFunAux (ofNat s n) = n
-  proof: right_inverse_aux n
-    have h₁ : (ofNat s n : Nat) ∉ {x in range (ofNat s n) | x in s} := by simp
-    have h₂ : {x in range (succ (ofNat s n)) | x in s} =
-        insert ↑(ofNat s n) {x in range (ofNat s n) | x in s} := by
-      simp only [Finset.ext_iff, mem_insert, mem_range, mem_filter]
-      exact fun m =>
-        ⟨fun h => by
-          simp only [h.2, and_true]
-          exact Or.symm (lt_or_eq_of_le ((@lt_succ_iff_le _ _ _ ⟨m, h.2⟩ _).1 h.1)),
-         fun h =>
-          h.elim (fun h => h.symm ▸ ⟨lt_succ_self _, (ofNat s n).prop⟩) fun h =>
-            ⟨h.1.trans (lt_succ_self _), h.2⟩⟩
-    simp only [toFunAux_eq, ofNat] at ih ⊢
-    conv =>
-      rhs
-      rw [← ih]; rw [← card_insert_of_notMem h₁]; rw [← h₂]
-
-中文:
-定理 right_inverse_aux
-  结论: 对任意 n, toFunAux (of自然数 s n) = n
-  证明: right_inverse_aux n
-    have h₁ : (ofNat s n : Nat) ∉ {x in range (ofNat s n) | x in s} := by simp
-    have h₂ : {x in range (succ (ofNat s n)) | x in s} =
-        insert ↑(ofNat s n) {x in range (ofNat s n) | x in s} := by
-      simp only [Finset.ext_iff, mem_insert, mem_range, mem_filter]
-      exact fun m =>
-        ⟨fun h => by
-          simp only [h.2, and_true]
-          exact Or.symm (lt_or_eq_of_le ((@lt_succ_iff_le _ _ _ ⟨m, h.2⟩ _).1 h.1)),
-         fun h =>
-          h.elim (fun h => h.symm ▸ ⟨lt_succ_self _, (ofNat s n).prop⟩) fun h =>
-            ⟨h.1.trans (lt_succ_self _), h.2⟩⟩
-    simp only [toFunAux_eq, ofNat] at ih ⊢
-    conv =>
-      rhs
-      rw [← ih]; rw [← card_insert_of_notMem h₁]; rw [← h₂]
+/-
+**Nat.Subtype.right_inverse_aux** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Subtype`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem right_inverse_aux : forall n, toFunAux (ofNat s n) = n
+private theorem right_inverse_aux : ∀ n, toFunAux (ofNat s n) = n
   | 0 => by
-    rw [toFunAux_eq]; rw [card_eq_zero]; rw [eq_empty_iff_forall_notMem]
+    rw [toFunAux_eq, card_eq_zero, eq_empty_iff_forall_notMem]
     rintro n hn
-    rw [mem_filter]; rw [ofNat]; rw [mem_range] at hn
+    rw [mem_filter, ofNat, mem_range] at hn
     exact bot_le.not_gt (show (⟨n, hn.2⟩ : s) < ⊥ from hn.1)
   | n + 1 => by
     have ih : toFunAux (ofNat s n) = n := right_inverse_aux n
-    have h₁ : (ofNat s n : Nat) ∉ {x in range (ofNat s n) | x in s} := by simp
-    have h₂ : {x in range (succ (ofNat s n)) | x in s} =
-        insert ↑(ofNat s n) {x in range (ofNat s n) | x in s} := by
+    have h₁ : (ofNat s n : ℕ) ∉ {x ∈ range (ofNat s n) | x ∈ s} := by simp
+    have h₂ : {x ∈ range (succ (ofNat s n)) | x ∈ s} =
+        insert ↑(ofNat s n) {x ∈ range (ofNat s n) | x ∈ s} := by
       simp only [Finset.ext_iff, mem_insert, mem_range, mem_filter]
       exact fun m =>
         ⟨fun h => by
@@ -1044,37 +776,28 @@ private theorem right_inverse_aux : forall n, toFunAux (ofNat s n) = n
     simp only [toFunAux_eq, ofNat] at ih ⊢
     conv =>
       rhs
-      rw [← ih]; rw [← card_insert_of_notMem h₁]; rw [← h₂]
+      rw [← ih, ← card_insert_of_notMem h₁, ← h₂]
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 /-- Any infinite set of naturals is denumerable. -/
 @[instance_reducible]
-/--
-Definition of `denumerable` / `denumerable` 的定义
+/-
+**Nat.Subtype.denumerable** 是 Mathlib 中的一个定义，位于命名空间 `Nat.Subtype`。
+形式化陈述：denumerable (s : Set Nat) [DecidablePred (· in s)] [Infinite s] : Denumera
+ble s
+参数：s : Set Nat；· in s。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Logic.Denumerable.0.Nat.Subtype.right_inverse_aux`：∀ {s
+ : Set ℕ} [inst : Infinite ↑s] [inst_1 : DecidablePred fun x => x ∈ s] (n : ℕ), 
+  Nat.Subtype.toFunAux✝ (Nat.Subtype.ofNat s n) = n
 
-English:
-definition denumerable
-  signature: (s : Set Nat) [DecidablePred (· in s)] [Infinite s]
-  body: Denumerable.ofEquiv Nat
-    { toFun := toFunAux
-      invFun := ofNat s
-      left_inv := leftInverse_of_surjective_of_rightInverse ofNat_surjective right_inverse_aux
-      right_inv := right_inverse_aux }
-
-中文:
-定义 denumerable
-  签名: (s : 集合 自然数) [DecidablePred (· in s)] [无限 s]
-  定义体: Denumerable.ofEquiv Nat
-    { toFun := toFunAux
-      invFun := ofNat s
-      left_inv := leftInverse_of_surjective_of_rightInverse ofNat_surjective right_inverse_aux
-      right_inv := right_inverse_aux }
-
-Depends on / 依赖: Denumerable, Denumerable.ofEquiv, invFun, leftInverse_of_surjective_of_rightInverse, left_inv, ofEquiv, ofNat_surjective, right_inv, right_inverse_aux, toFunAux
+--- 原说明 ---
+Any infinite set of naturals is denumerable.
 -/
-def denumerable (s : Set Nat) [DecidablePred (· in s)] [Infinite s] : Denumerable s :=
-  Denumerable.ofEquiv Nat
+def denumerable (s : Set ℕ) [DecidablePred (· ∈ s)] [Infinite s] : Denumerable s :=
+  Denumerable.ofEquiv ℕ
     { toFun := toFunAux
       invFun := ofNat s
       left_inv := leftInverse_of_surjective_of_rightInverse ofNat_surjective right_inverse_aux
@@ -1088,30 +811,16 @@ open Encodable
 
 /-- An infinite encodable type is denumerable. -/
 @[instance_reducible]
-/--
-Definition of `ofEncodableOfInfinite` / `ofEncodableOfInfinite` 的定义
+/-
+**Denumerable.ofEncodableOfInfinite** 是 Mathlib 中的一个定义，位于命名空间 `Denumerable`。
+形式化陈述：ofEncodableOfInfinite (α : Type*) [Encodable α] [Infinite α] : Denumerable
+ α
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEncodableOfInfinite
-  signature: (α : Type*) [Encodable α] [Infinite α]
-  body: by
-  letI := @decidableRangeEncode α _
-  letI : Infinite (Set.range (@encode α _)) :=
-    Infinite.of_injective _ (Equiv.ofInjective _ encode_injective).injective
-  letI := Nat.Subtype.denumerable (Set.range (@encode α _))
-  exact Denumerable.ofEquiv (Set.range (@encode α _)) (equivRangeEncode α)
-
-中文:
-定义 ofEncodableOfInfinite
-  签名: (α : 类型) [可编码 α] [无限 α]
-  定义体: by
-  letI := @decidableRangeEncode α _
-  letI : Infinite (Set.range (@encode α _)) :=
-    Infinite.of_injective _ (Equiv.ofInjective _ encode_injective).injective
-  letI := Nat.Subtype.denumerable (Set.range (@encode α _))
-  exact Denumerable.ofEquiv (Set.range (@encode α _)) (equivRangeEncode α)
-
-Depends on / 依赖: Denumerable, Denumerable.ofEquiv, Equiv.ofInjective, Infinite, Infinite.of_injective, Nat.Subtype.denumerable, Set.range, Subtype, decidableRangeEncode, denumerable, encode, encode_injective, equivRangeEncode, injective, ofEquiv, ofInjective, of_injective
+--- 原说明 ---
+An infinite encodable type is denumerable.
 -/
 def ofEncodableOfInfinite (α : Type*) [Encodable α] [Infinite α] : Denumerable α := by
   letI := @decidableRangeEncode α _
@@ -1122,65 +831,50 @@ def ofEncodableOfInfinite (α : Type*) [Encodable α] [Infinite α] : Denumerabl
 
 end Denumerable
 
-/--
-theorem `nonempty_denumerable` / 定理 `nonempty_denumerable`
+/-- See also `nonempty_encodable`, `nonempty_fintype`. -/
+/-
+**nonempty_denumerable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_denumerable (α : Type*) [Countable α] [Infinite α] : Nonempty (De
+numerable α)
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `nonempty_encodable`：nonempty_encodable (α : Type*) [Countable α] : Nonem
+pty (Encodable α)
 
-English:
-theorem nonempty_denumerable
-  given: (α : Type*) [Countable α] [Infinite α]
-  statement: Nonempty (Denumerable α)
-  proof: (nonempty_encodable α).map fun h => @Denumerable.ofEncodableOfInfinite _ h _
-
-中文:
-定理 nonempty_denumerable
-  条件: (α : 类型) [可数 α] [无限 α]
-  结论: 非空 (可枚举 α)
-  证明: (nonempty_encodable α).map fun h => @Denumerable.ofEncodableOfInfinite _ h _
-
-Depends on / 依赖: Denumerable, Denumerable.ofEncodableOfInfinite, nonempty_encodable, ofEncodableOfInfinite
+--- 原说明 ---
+See also `nonempty_encodable`, `nonempty_fintype`.
 -/
 theorem nonempty_denumerable (α : Type*) [Countable α] [Infinite α] : Nonempty (Denumerable α) :=
   (nonempty_encodable α).map fun h => @Denumerable.ofEncodableOfInfinite _ h _
-
-/--
-theorem `nonempty_denumerable_iff` / 定理 `nonempty_denumerable_iff`
-
-English:
-theorem nonempty_denumerable_iff
-  given: {α : Type*}
-  proof: ⟨fun ⟨_⟩ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => nonempty_denumerable _⟩
-
-中文:
-定理 nonempty_denumerable_iff
-  条件: {α : 类型}
-  证明: ⟨fun ⟨_⟩ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => nonempty_denumerable _⟩
-
-Depends on / 依赖: nonempty_denumerable
+/-
+**nonempty_denumerable_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_denumerable_iff {α : Type*} : Nonempty (Denumerable α) ↔ Countabl
+e α ∧ Infinite α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Denumerable.instInfinite`：∀ {α : Type u_1} [Denumerable α], Infinite α
+· 使用定理 `nonempty_denumerable`：nonempty_denumerable (α : Type*) [Countable α] [In
+finite α] : Nonempty (Denumerable α)
 -/
 theorem nonempty_denumerable_iff {α : Type*} :
     Nonempty (Denumerable α) ↔ Countable α ∧ Infinite α :=
-  ⟨fun ⟨_⟩ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => nonempty_denumerable _⟩
-
-/--
-Instance `nonempty_equiv_of_countable` / 实例 `nonempty_equiv_of_countable`
-
-English:
-instance nonempty_equiv_of_countable
-  signature: [Countable α] [Infinite α] [Countable β] [Infinite β]
-  body: by
-  cases nonempty_denumerable α
-  cases nonempty_denumerable β
-  exact ⟨(Denumerable.eqv _).trans (Denumerable.eqv _).symm⟩
-
-中文:
-实例 nonempty_equiv_of_countable
-  签名: [可数 α] [无限 α] [可数 β] [无限 β]
-  定义体: by
-  cases nonempty_denumerable α
-  cases nonempty_denumerable β
-  exact ⟨(Denumerable.eqv _).trans (Denumerable.eqv _).symm⟩
-
-Depends on / 依赖: Denumerable, Denumerable.eqv, nonempty_denumerable
+  ⟨fun ⟨_⟩ ↦ ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ ↦ nonempty_denumerable _⟩
+/-
+**nonempty_equiv_of_countable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nonempty_equiv_of_countable [Countable α] [Infinite α] [Countable β] [Infi
+nite β] : Nonempty (α ≃ β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_denumerable`：nonempty_denumerable (α : Type*) [Countable α] [In
+finite α] : Nonempty (Denumerable α)
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance nonempty_equiv_of_countable [Countable α] [Infinite α] [Countable β] [Infinite β] :
     Nonempty (α ≃ β) := by

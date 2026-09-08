@@ -81,365 +81,412 @@ open Complex MeasureTheory TopologicalSpace Metric Function Set Filter Asymptoti
 
 /-- The range of `circleMap c R` is the circle with center `c` and radius `|R|`. -/
 @[simp]
-/--
-theorem `range_circleMap` / 定理 `range_circleMap`
+/-
+**range_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：range_circleMap (c : Complex) (R : Real) : range (circleMap c R) = sphere 
+c |R|
+参数：c : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Complex.range_exp_mul_I`：range_exp_mul_I : (Set.range fun x : Real => ex
+p (x * I)) = Metric.sphere 0 1
+· 使用定理 `smul_sphere`：smul_sphere [Nontrivial E] (c : 𝕜) (x : E) {r : Real} (hr :
+ 0 <= r) : c • sphere x r = sphere (c • x) (‖c‖ * r)
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `vadd_sphere_zero`：∀ {E : Type u_1} [inst : SeminormedAddCommGroup E] (δ 
+: ℝ) (x : E), x +ᵥ Metric.sphere 0 δ = Metric.sphere x δ
 
-English:
-theorem range_circleMap
-  given: (c : Complex) (R : Real)
-  statement: range (circleMap c R) = sphere c |R|
-  proof: calc
-    range (circleMap c R) = c +ᵥ R • range fun θ : Real => exp (θ * I) := by
-      simp +unfoldPartialApp only [← image_vadd, ← image_smul, ← range_comp,
-        vadd_eq_add, circleMap, comp_def, real_smul]
-    _ = sphere c |R| := by
-      rw [range_exp_mul_I]; rw [smul_sphere R 0 zero_le_one]
-      simp
-
-中文:
-定理 range_circleMap
-  条件: (c : 复形) (R : 实数)
-  结论: range (circleMap c R) = sphere c |R|
-  证明: calc
-    range (circleMap c R) = c +ᵥ R • range fun θ : Real => exp (θ * I) := by
-      simp +unfoldPartialApp only [← image_vadd, ← image_smul, ← range_comp,
-        vadd_eq_add, circleMap, comp_def, real_smul]
-    _ = sphere c |R| := by
-      rw [range_exp_mul_I]; rw [smul_sphere R 0 zero_le_one]
-      simp
-
-Depends on / 依赖: circleMap, comp_def, image_smul, image_vadd, range_comp, range_exp_mul_I, real_smul, smul_sphere, sphere, unfoldPartialApp, vadd_eq_add, zero_le_one
+--- 原说明 ---
+The range of `circleMap c R` is the circle with center `c` and radius `|R|`.
 -/
-theorem range_circleMap (c : Complex) (R : Real) : range (circleMap c R) = sphere c |R| :=
+theorem range_circleMap (c : ℂ) (R : ℝ) : range (circleMap c R) = sphere c |R| :=
   calc
-    range (circleMap c R) = c +ᵥ R • range fun θ : Real => exp (θ * I) := by
+    range (circleMap c R) = c +ᵥ R • range fun θ : ℝ => exp (θ * I) := by
       simp +unfoldPartialApp only [← image_vadd, ← image_smul, ← range_comp,
         vadd_eq_add, circleMap, comp_def, real_smul]
     _ = sphere c |R| := by
-      rw [range_exp_mul_I]; rw [smul_sphere R 0 zero_le_one]
+      rw [range_exp_mul_I, smul_sphere R 0 zero_le_one]
       simp
 
 /-- The image of `(0, 2π]` under `circleMap c R` is the circle with center `c` and radius `|R|`. -/
 @[simp]
-/--
-theorem `image_circleMap_Ioc` / 定理 `image_circleMap_Ioc`
+/-
+**image_circleMap_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：image_circleMap_Ioc (c : Complex) (R : Real) : circleMap c R '' Ioc 0 (2 *
+ π) = sphere c |R|
+参数：c : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `range_circleMap`：range_circleMap (c : Complex) (R : Real) : range (circl
+eMap c R) = sphere c |R|
+· 使用定理 `Function.Periodic.image_Ioc`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}
+ {c : α} [inst : AddCommGroup α] [inst_1 : LinearOrder α]   [IsOrderedAddMonoid 
+α] [Archimedean α…
+· 使用定理 `periodic_circleMap`：periodic_circleMap (c : Complex) (R : Real) : Period
+ic (circleMap c R) (2 * π)
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 
-English:
-theorem image_circleMap_Ioc
-  given: (c : Complex) (R : Real)
-  statement: circleMap c R '' Ioc 0 (2 * π) = sphere c |R|
-  proof: by
-  rw [← range_circleMap]; rw [← (periodic_circleMap c R).image_Ioc Real.two_pi_pos 0]; rw [zero_add]
-
-中文:
-定理 image_circleMap_Ioc
-  条件: (c : 复形) (R : 实数)
-  结论: circleMap c R '' 左开右闭区间 0 (2 * π) = sphere c |R|
-  证明: by
-  rw [← range_circleMap]; rw [← (periodic_circleMap c R).image_Ioc Real.two_pi_pos 0]; rw [zero_add]
-
-Depends on / 依赖: Real.two_pi_pos, image_Ioc, periodic_circleMap, range_circleMap, two_pi_pos, zero_add
+--- 原说明 ---
+The image of `(0, 2π]` under `circleMap c R` is the circle with center `c` and r
+adius `|R|`.
 -/
-theorem image_circleMap_Ioc (c : Complex) (R : Real) : circleMap c R '' Ioc 0 (2 * π) = sphere c |R| := by
-  rw [← range_circleMap]; rw [← (periodic_circleMap c R).image_Ioc Real.two_pi_pos 0]; rw [zero_add]
-
-/--
-theorem `hasDerivAt_circleMap` / 定理 `hasDerivAt_circleMap`
-
-English:
-theorem hasDerivAt_circleMap
-  given: (c : Complex) (R : Real) (θ : Real)
-  proof: by
-  simpa only [mul_assoc, one_mul, ofRealCLM_apply, circleMap, ofReal_one, zero_add]
-    using! (((ofRealCLM.hasDerivAt (x := θ)).mul_const I).cexp.const_mul (R : Complex)).const_add c
-
-中文:
-定理 hasDerivAt_circleMap
-  条件: (c : 复形) (R : 实数) (θ : 实数)
-  证明: by
-  simpa only [mul_assoc, one_mul, ofRealCLM_apply, circleMap, ofReal_one, zero_add]
-    using! (((ofRealCLM.hasDerivAt (x := θ)).mul_const I).cexp.const_mul (R : Complex)).const_add c
-
-Depends on / 依赖: cexp.const_mul, circleMap, const_add, const_mul, hasDerivAt, mul_assoc, mul_const, ofRealCLM, ofRealCLM.hasDerivAt, ofRealCLM_apply, ofReal_one, one_mul, zero_add
+theorem image_circleMap_Ioc (c : ℂ) (R : ℝ) : circleMap c R '' Ioc 0 (2 * π) = sphere c |R| := by
+  rw [← range_circleMap, ← (periodic_circleMap c R).image_Ioc Real.two_pi_pos 0, zero_add]
+/-
+**hasDerivAt_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasDerivAt_circleMap (c : Complex) (R : Real) (θ : Real) : HasDerivAt (cir
+cleMap c R) (circleMap 0 R θ * I) θ
+参数：c : Complex；R : Real；θ : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `HasDerivAt.congr_simp`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜]
+ {F : Type v} [inst_1 : AddCommGroup F] [inst_2 : _root_.Module 𝕜 F]   [inst_3 :
+ Topologica…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `HasDerivAt.const_add`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜] 
+{F : Type v} [inst_1 : NormedAddCommGroup F]   [inst_2 : NormedSpace 𝕜 F] {f : 𝕜
+ → F} {f' …
+· 使用定理 `HasDerivAt.const_mul`：HasDerivAt.const_mul (c : 𝔸) (hd : HasDerivAt d d'
+ x) : HasDerivAt (fun y => c * d y) (c * d') x
+· 使用定理 `HasDerivAt.cexp`：HasDerivAt.cexp (hf : HasDerivAt f f' x) : HasDerivAt (
+fun x => Complex.exp (f x)) (Complex.exp (f x) * f') x
+· 使用定理 `HasDerivAt.mul_const`：HasDerivAt.mul_const (hc : HasDerivAt c c' x) (d :
+ 𝔸) : HasDerivAt (fun y => c y * d) (c' * d) x
+· 使用定理 `ContinuousLinearMap.hasDerivAt`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {F : Type v} [inst_1 : NormedAddCommGroup F]   [inst_2 : NormedSpace 𝕜
+ F] {x : 𝕜} (e : 𝕜 →…
 -/
-theorem hasDerivAt_circleMap (c : Complex) (R : Real) (θ : Real) :
+theorem hasDerivAt_circleMap (c : ℂ) (R : ℝ) (θ : ℝ) :
     HasDerivAt (circleMap c R) (circleMap 0 R θ * I) θ := by
   simpa only [mul_assoc, one_mul, ofRealCLM_apply, circleMap, ofReal_one, zero_add]
-    using! (((ofRealCLM.hasDerivAt (x := θ)).mul_const I).cexp.const_mul (R : Complex)).const_add c
-
-/--
-theorem `differentiable_circleMap` / 定理 `differentiable_circleMap`
-
-English:
-theorem differentiable_circleMap
-  given: (c : Complex) (R : Real)
-  statement: Differentiable Real (circleMap c R)
-  proof: fun θ =>
-  (hasDerivAt_circleMap c R θ).differentiableAt
-
-中文:
-定理 differentiable_circleMap
-  条件: (c : 复形) (R : 实数)
-  结论: 可微 实数 (circleMap c R)
-  证明: fun θ =>
-  (hasDerivAt_circleMap c R θ).differentiableAt
+    using! (((ofRealCLM.hasDerivAt (x := θ)).mul_const I).cexp.const_mul (R : ℂ)).const_add c
+/-
+**differentiable_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiable_circleMap (c : Complex) (R : Real) : Differentiable Real (c
+ircleMap c R)
+参数：c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.differentiableAt`：HasDerivAt.differentiableAt (h : HasDerivAt
+ f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `hasDerivAt_circleMap`：hasDerivAt_circleMap (c : Complex) (R : Real) (θ :
+ Real) : HasDerivAt (circleMap c R) (circleMap 0 R θ * I) θ
 -/
-theorem differentiable_circleMap (c : Complex) (R : Real) : Differentiable Real (circleMap c R) := fun θ =>
+theorem differentiable_circleMap (c : ℂ) (R : ℝ) : Differentiable ℝ (circleMap c R) := fun θ =>
   (hasDerivAt_circleMap c R θ).differentiableAt
 
-/--
-theorem `analyticOnNhd_circleMap` / 定理 `analyticOnNhd_circleMap`
+/-- The circleMap is real analytic. -/
+/-
+**analyticOnNhd_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：analyticOnNhd_circleMap (c : Complex) (R : Real) : AnalyticOnNhd Real (cir
+cleMap c R) Set.univ
+参数：c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AnalyticAt.add`：AnalyticAt.add (hf : AnalyticAt 𝕜 f x) (hg : AnalyticAt 
+𝕜 g x) : AnalyticAt 𝕜 (f + g) x
+· 使用定理 `analyticAt_const`：analyticAt_const {v : F} {x : E} : AnalyticAt 𝕜 (fun _
+ => v) x
+· 使用引理 `AnalyticAt.mul`：AnalyticAt.mul {f g : E -> A} {z : E} (hf : AnalyticAt 𝕜
+ f z) (hg : AnalyticAt 𝕜 g z) : AnalyticAt 𝕜 (f * g) z
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `AnalyticAt.comp`：AnalyticAt.comp {g : F -> G} {f : E -> F} {x : E} (hg :
+ AnalyticAt 𝕜 g (f x)) (hf : AnalyticAt 𝕜 f x) : AnalyticAt 𝕜 (g ∘ f) x
+· 使用引理 `AnalyticAt.restrictScalars`：AnalyticAt.restrictScalars (hf : AnalyticAt 
+𝕜' f x) : AnalyticAt 𝕜 f x
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `analyticAt_cexp`：analyticAt_cexp : AnalyticAt Complex exp z
+· 使用定理 `ContinuousLinearMap.analyticAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpa
+ce 𝕜 E] {F : Type u_…
 
-English:
-theorem analyticOnNhd_circleMap
-  given: (c : Complex) (R : Real)
-  proof: by
+--- 原说明 ---
+The circleMap is real analytic.
+-/
+theorem analyticOnNhd_circleMap (c : ℂ) (R : ℝ) :
+    AnalyticOnNhd ℝ (circleMap c R) Set.univ := by
   intro z hz
   apply analyticAt_const.add
   apply analyticAt_const.mul
   rw [← Function.comp_def]
   apply analyticAt_cexp.restrictScalars.comp ((ofRealCLM.analyticAt z).mul (by fun_prop))
 
-中文:
-定理 analyticOnNhd_circleMap
-  条件: (c : 复形) (R : 实数)
-  证明: by
-  intro z hz
-  apply analyticAt_const.add
-  apply analyticAt_const.mul
-  rw [← Function.comp_def]
-  apply analyticAt_cexp.restrictScalars.comp ((ofRealCLM.analyticAt z).mul (by fun_prop))
+/-- The circleMap is continuously differentiable. -/
+/-
+**contDiff_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiff_circleMap (c : Complex) (R : Real) {n : WithTop Nat∞} : ContDiff 
+Real n (circleMap c R)
+参数：c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AnalyticOnNhd.contDiff`：AnalyticOnNhd.contDiff (hf : AnalyticOnNhd 𝕜 f u
+niv) : ContDiff 𝕜 n f
+· 使用定理 `analyticOnNhd_circleMap`：analyticOnNhd_circleMap (c : Complex) (R : Real
+) : AnalyticOnNhd Real (circleMap c R) Set.univ
 
-Depends on / 依赖: Function, Function.comp_def, analyticAt, analyticAt_cexp, analyticAt_cexp.restrictScalars.comp, analyticAt_const, analyticAt_const.add, analyticAt_const.mul, comp_def, fun_prop, ofRealCLM, ofRealCLM.analyticAt, restrictScalars
+--- 原说明 ---
+The circleMap is continuously differentiable.
 -/
-theorem analyticOnNhd_circleMap (c : Complex) (R : Real) :
-    AnalyticOnNhd Real (circleMap c R) Set.univ := by
-  intro z hz
-  apply analyticAt_const.add
-  apply analyticAt_const.mul
-  rw [← Function.comp_def]
-  apply analyticAt_cexp.restrictScalars.comp ((ofRealCLM.analyticAt z).mul (by fun_prop))
-
-/--
-theorem `contDiff_circleMap` / 定理 `contDiff_circleMap`
-
-English:
-theorem contDiff_circleMap
-  given: (c : Complex) (R : Real) {n : WithTop Nat∞}
-  proof: (analyticOnNhd_circleMap c R).contDiff
-
-@[continuity, fun_prop]
-
-中文:
-定理 contDiff_circleMap
-  条件: (c : 复形) (R : 实数) {n : WithTop 自然数∞}
-  证明: (analyticOnNhd_circleMap c R).contDiff
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: analyticOnNhd_circleMap, contDiff
--/
-theorem contDiff_circleMap (c : Complex) (R : Real) {n : WithTop Nat∞} :
-    ContDiff Real n (circleMap c R) :=
+theorem contDiff_circleMap (c : ℂ) (R : ℝ) {n : WithTop ℕ∞} :
+    ContDiff ℝ n (circleMap c R) :=
   (analyticOnNhd_circleMap c R).contDiff
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_circleMap` / 定理 `continuous_circleMap`
-
-English:
-theorem continuous_circleMap
-  given: (c : Complex) (R : Real)
-  statement: Continuous (circleMap c R)
-  proof: (differentiable_circleMap c R).continuous
-
-@[fun_prop]
-
-中文:
-定理 continuous_circleMap
-  条件: (c : 复形) (R : 实数)
-  结论: 连续 (circleMap c R)
-  证明: (differentiable_circleMap c R).continuous
-
-@[fun_prop]
-
-Depends on / 依赖: continuous, differentiable_circleMap
+/-
+**continuous_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_circleMap (c : Complex) (R : Real) : Continuous (circleMap c R)
+参数：c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Differentiable.continuous`：Differentiable.continuous (h : Differentiable
+ 𝕜 f) : Continuous f
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `differentiable_circleMap`：differentiable_circleMap (c : Complex) (R : Re
+al) : Differentiable Real (circleMap c R)
 -/
-theorem continuous_circleMap (c : Complex) (R : Real) : Continuous (circleMap c R) :=
+theorem continuous_circleMap (c : ℂ) (R : ℝ) : Continuous (circleMap c R) :=
   (differentiable_circleMap c R).continuous
 
 @[fun_prop]
-/--
-theorem `measurable_circleMap` / 定理 `measurable_circleMap`
-
-English:
-theorem measurable_circleMap
-  given: (c : Complex) (R : Real)
-  statement: Measurable (circleMap c R)
-  proof: (continuous_circleMap c R).measurable
-
-@[simp]
-
-中文:
-定理 measurable_circleMap
-  条件: (c : 复形) (R : 实数)
-  结论: 可测 (circleMap c R)
-  证明: (continuous_circleMap c R).measurable
-
-@[simp]
-
-Depends on / 依赖: continuous_circleMap, measurable
+/-
+**measurable_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_circleMap (c : Complex) (R : Real) : Measurable (circleMap c R)
+参数：c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
 -/
-theorem measurable_circleMap (c : Complex) (R : Real) : Measurable (circleMap c R) :=
+theorem measurable_circleMap (c : ℂ) (R : ℝ) : Measurable (circleMap c R) :=
   (continuous_circleMap c R).measurable
 
 @[simp]
-/--
-theorem `deriv_circleMap` / 定理 `deriv_circleMap`
-
-English:
-theorem deriv_circleMap
-  given: (c : Complex) (R : Real) (θ : Real)
-  statement: deriv (circleMap c R) θ = circleMap 0 R θ * I
-  proof: (hasDerivAt_circleMap _ _ _).deriv
-
-中文:
-定理 deriv_circleMap
-  条件: (c : 复形) (R : 实数) (θ : 实数)
-  结论: deriv (circleMap c R) θ = circleMap 0 R θ * I
-  证明: (hasDerivAt_circleMap _ _ _).deriv
-
-Depends on / 依赖: hasDerivAt_circleMap
+/-
+**deriv_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : deriv (circleMap c R
+) θ = circleMap 0 R θ * I
+参数：c : Complex；R : Real；θ : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `hasDerivAt_circleMap`：hasDerivAt_circleMap (c : Complex) (R : Real) (θ :
+ Real) : HasDerivAt (circleMap c R) (circleMap 0 R θ * I) θ
 -/
-theorem deriv_circleMap (c : Complex) (R : Real) (θ : Real) : deriv (circleMap c R) θ = circleMap 0 R θ * I :=
+theorem deriv_circleMap (c : ℂ) (R : ℝ) (θ : ℝ) : deriv (circleMap c R) θ = circleMap 0 R θ * I :=
   (hasDerivAt_circleMap _ _ _).deriv
-
-/--
-theorem `deriv_circleMap_eq_zero_iff` / 定理 `deriv_circleMap_eq_zero_iff`
-
-English:
-theorem deriv_circleMap_eq_zero_iff
-  given: {c : Complex} {R : Real} {θ : Real}
-  proof: by simp [I_ne_zero]
-
-中文:
-定理 deriv_circleMap_eq_zero_iff
-  条件: {c : 复形} {R : 实数} {θ : 实数}
-  证明: by simp [I_ne_zero]
-
-Depends on / 依赖: I_ne_zero, IsAtomic
+/-
+**deriv_circleMap_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_circleMap_eq_zero_iff {c : Complex} {R : Real} {θ : Real} : deriv (c
+ircleMap c R) θ = 0 ↔ R = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem deriv_circleMap_eq_zero_iff {c : Complex} {R : Real} {θ : Real} :
+theorem deriv_circleMap_eq_zero_iff {c : ℂ} {R : ℝ} {θ : ℝ} :
     deriv (circleMap c R) θ = 0 ↔ R = 0 := by simp [I_ne_zero]
-
-/--
-theorem `deriv_circleMap_ne_zero` / 定理 `deriv_circleMap_ne_zero`
-
-English:
-theorem deriv_circleMap_ne_zero
-  given: {c : Complex} {R : Real} {θ : Real} (hR : R != 0)
-  proof: mt deriv_circleMap_eq_zero_iff.1 hR
-
-中文:
-定理 deriv_circleMap_ne_zero
-  条件: {c : 复形} {R : 实数} {θ : 实数} (hR : R != 0)
-  证明: mt deriv_circleMap_eq_zero_iff.1 hR
-
-Depends on / 依赖: IsCoatomic, deriv_circleMap_eq_zero_iff
+/-
+**deriv_circleMap_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_circleMap_ne_zero {c : Complex} {R : Real} {θ : Real} (hR : R != 0) 
+: deriv (circleMap c R) θ != 0
+参数：hR : R != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `deriv_circleMap_eq_zero_iff`：deriv_circleMap_eq_zero_iff {c : Complex} {
+R : Real} {θ : Real} : deriv (circleMap c R) θ = 0 ↔ R = 0
 -/
-theorem deriv_circleMap_ne_zero {c : Complex} {R : Real} {θ : Real} (hR : R != 0) :
-    deriv (circleMap c R) θ != 0 :=
+theorem deriv_circleMap_ne_zero {c : ℂ} {R : ℝ} {θ : ℝ} (hR : R ≠ 0) :
+    deriv (circleMap c R) θ ≠ 0 :=
   mt deriv_circleMap_eq_zero_iff.1 hR
-
-/--
-theorem `lipschitzWith_circleMap` / 定理 `lipschitzWith_circleMap`
-
-English:
-theorem lipschitzWith_circleMap
-  given: (c : Complex) (R : Real)
-  statement: LipschitzWith (Real.nnabs R) (circleMap c R)
-  proof: lipschitzWith_of_nnnorm_deriv_le (differentiable_circleMap _ _) fun θ =>
-NNReal.coe_le_coe.1 by simp
-
-中文:
-定理 lipschitzWith_circleMap
-  条件: (c : 复形) (R : 实数)
-  结论: LipschitzWith (实数.nnabs R) (circleMap c R)
-  证明: lipschitzWith_of_nnnorm_deriv_le (differentiable_circleMap _ _) fun θ =>
-NNReal.coe_le_coe.1 by simp
-
-Depends on / 依赖: NNReal, NNReal.coe_le_coe, coe_le_coe, differentiable_circleMap, lipschitzWith_of_nnnorm_deriv_le
+/-
+**lipschitzWith_circleMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lipschitzWith_circleMap (c : Complex) (R : Real) : LipschitzWith (Real.nna
+bs R) (circleMap c R)
+参数：c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lipschitzWith_of_nnnorm_deriv_le`：∀ {𝕜 : Type u_3} {G : Type u_4} [inst 
+: RCLike 𝕜] [inst_1 : NormedAddCommGroup G] [inst_2 : NormedSpace 𝕜 G] {f : 𝕜 → 
+G}   {C : NNReal}, Dif…
+· 使用定理 `differentiable_circleMap`：differentiable_circleMap (c : Complex) (R : Re
+al) : Differentiable Real (circleMap c R)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNReal.coe_le_coe`：∀ {r₁ r₂ : NNReal}, ↑r₁ ≤ ↑r₂ ↔ r₁ ≤ r₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `nnnorm_mul`：∀ {α : Type u_2} [inst : SeminormedAddCommGroup α] [inst_1 :
+ Mul α] [NormMulClass α] (a b : α), ‖a * b‖₊ = ‖a‖₊ * ‖b‖₊
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Complex.nnnorm_I`：‖Complex.I‖₊ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `norm_circleMap_zero`：norm_circleMap_zero (R : Real) (θ : Real) : ‖circle
+Map 0 R θ‖ = |R|
 -/
-theorem lipschitzWith_circleMap (c : Complex) (R : Real) : LipschitzWith (Real.nnabs R) (circleMap c R) :=
+theorem lipschitzWith_circleMap (c : ℂ) (R : ℝ) : LipschitzWith (Real.nnabs R) (circleMap c R) :=
   lipschitzWith_of_nnnorm_deriv_le (differentiable_circleMap _ _) fun θ =>
-NNReal.coe_le_coe.1 by simp
-
-/--
-theorem `continuous_circleMap_inv` / 定理 `continuous_circleMap_inv`
-
-English:
-theorem continuous_circleMap_inv
-  given: {R : Real} {z w : Complex} (hw : w in ball z R)
-  proof: by
-  have : forall θ, circleMap z R θ - w != 0 := by
-    simp_rw [sub_ne_zero]
-    exact fun θ => circleMap_ne_mem_ball hw θ
-  -- Porting note: was `continuity`
-  exact Continuous.inv₀ (by fun_prop) this
-
-中文:
-定理 continuous_circleMap_inv
-  条件: {R : 实数} {z w : 复形} (hw : w in ball z R)
-  证明: by
-  have : forall θ, circleMap z R θ - w != 0 := by
-    simp_rw [sub_ne_zero]
-    exact fun θ => circleMap_ne_mem_ball hw θ
-  -- Porting note: was `continuity`
-  exact Continuous.inv₀ (by fun_prop) this
-
-Depends on / 依赖: circleMap, circleMap_ne_mem_ball, simp_rw, sub_ne_zero
+    NNReal.coe_le_coe.1 <| by simp
+/-
+**continuous_circleMap_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_circleMap_inv {R : Real} {z w : Complex} (hw : w in ball z R) :
+ Continuous fun θ => (circleMap z R θ - w)⁻¹
+参数：hw : w in ball z R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `circleMap_ne_mem_ball`：circleMap_ne_mem_ball {c : Complex} {R : Real} {w
+ : Complex} (hw : w in ball c R) (θ : Real) : circleMap c R θ != w
+· 使用定理 `Continuous.inv₀`：Continuous.inv₀ (hf : Continuous f) (h0 : forall x, f x
+ != 0) : Continuous f⁻¹
+· 使用定理 `IsTopologicalDivisionRing.toContinuousInv₀`：∀ {K : Type u_1} {inst : Div
+isionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing K],
+   ContinuousInv₀ K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 -/
-theorem continuous_circleMap_inv {R : Real} {z w : Complex} (hw : w in ball z R) :
+theorem continuous_circleMap_inv {R : ℝ} {z w : ℂ} (hw : w ∈ ball z R) :
     Continuous fun θ => (circleMap z R θ - w)⁻¹ := by
-  have : forall θ, circleMap z R θ - w != 0 := by
+  have : ∀ θ, circleMap z R θ - w ≠ 0 := by
     simp_rw [sub_ne_zero]
     exact fun θ => circleMap_ne_mem_ball hw θ
   -- Porting note: was `continuity`
   exact Continuous.inv₀ (by fun_prop) this
-
-/--
-theorem `circleMap_preimage_codiscrete` / 定理 `circleMap_preimage_codiscrete`
-
-English:
-theorem circleMap_preimage_codiscrete
-  given: {c : Complex} {R : Real} (hR : R != 0)
-  proof: by
-  intro s hs
-  apply (analyticOnNhd_circleMap c R).preimage_mem_codiscreteWithin
-  · intro x hx
-    by_contra hCon
-    obtain ⟨a, ha⟩ := eventuallyConst_iff_exists_eventuallyEq.1 hCon
-    have := ha.deriv.eq_of_nhds
-    simp [hR] at this
-  · rwa [Set.image_univ, range_circleMap]
-
-中文:
-定理 circleMap_preimage_codiscrete
-  条件: {c : 复形} {R : 实数} (hR : R != 0)
-  证明: by
-  intro s hs
-  apply (analyticOnNhd_circleMap c R).preimage_mem_codiscreteWithin
-  · intro x hx
-    by_contra hCon
-    obtain ⟨a, ha⟩ := eventuallyConst_iff_exists_eventuallyEq.1 hCon
-    have := ha.deriv.eq_of_nhds
-    simp [hR] at this
-  · rwa [Set.image_univ, range_circleMap]
-
-Depends on / 依赖: Set.image_univ, analyticOnNhd_circleMap, eq_of_nhds, eventuallyConst_iff_exists_eventuallyEq, ha.deriv.eq_of_nhds, image_univ, preimage_mem_codiscreteWithin, range_circleMap
+/-
+**circleMap_preimage_codiscrete** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleMap_preimage_codiscrete {c : Complex} {R : Real} (hR : R != 0) : map
+ (circleMap c R) (codiscrete Real) <= codiscreteWithin (sphere c |R|)
+参数：hR : R != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AnalyticOnNhd.preimage_mem_codiscreteWithin`：AnalyticOnNhd.preimage_mem_
+codiscreteWithin {U : Set 𝕜} {s : Set E} {f : 𝕜 -> E} (hfU : AnalyticOnNhd 𝕜 f U
+) (h₂f : forall x in U, ¬Eventual…
+· 使用定理 `analyticOnNhd_circleMap`：analyticOnNhd_circleMap (c : Complex) (R : Real
+) : AnalyticOnNhd Real (circleMap c R) Set.univ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.eventuallyConst_iff_exists_eventuallyEq`：eventuallyConst_iff_exis
+ts_eventuallyEq [Nonempty β] : EventuallyConst f l ↔ exists c, f =ᶠ[l] fun _ => 
+c
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.EventuallyEq.eq_of_nhds`：Filter.EventuallyEq.eq_of_nhds {f g : X 
+-> α} (h : f =ᶠ[𝓝 x] g) : f x = g x
+· 使用定理 `Filter.EventuallyEq.deriv`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFiel
+d 𝕜] {F : Type v} [inst_1 : NormedAddCommGroup F]   [inst_2 : NormedSpace 𝕜 F] {
+f f₁ : 𝕜 → F} {…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `deriv_const'`：deriv_const' : (deriv fun _ : 𝕜 => c) = fun _ => 0
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `range_circleMap`：range_circleMap (c : Complex) (R : Real) : range (circl
+eMap c R) = sphere c |R|
 -/
-theorem circleMap_preimage_codiscrete {c : Complex} {R : Real} (hR : R != 0) :
-    map (circleMap c R) (codiscrete Real) <= codiscreteWithin (sphere c |R|) := by
+theorem circleMap_preimage_codiscrete {c : ℂ} {R : ℝ} (hR : R ≠ 0) :
+    map (circleMap c R) (codiscrete ℝ) ≤ codiscreteWithin (sphere c |R|) := by
   intro s hs
   apply (analyticOnNhd_circleMap c R).preimage_mem_codiscreteWithin
   · intro x hx
@@ -448,25 +495,35 @@ theorem circleMap_preimage_codiscrete {c : Complex} {R : Real} (hR : R != 0) :
     have := ha.deriv.eq_of_nhds
     simp [hR] at this
   · rwa [Set.image_univ, range_circleMap]
-
-/--
-theorem `circleMap_neg_radius` / 定理 `circleMap_neg_radius`
-
-English:
-theorem circleMap_neg_radius
-  given: {r x : Real} {c : Complex}
-  proof: by
-  simp [circleMap, add_mul, Complex.exp_add]
-
-中文:
-定理 circleMap_neg_radius
-  条件: {r x : 实数} {c : 复形}
-  证明: by
-  simp [circleMap, add_mul, Complex.exp_add]
-
-Depends on / 依赖: Complex.exp_add, IsAtomistic, add_mul, circleMap, exp_add
+/-
+**circleMap_neg_radius** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleMap_neg_radius {r x : Real} {c : Complex} : circleMap c (-r) x = cir
+cleMap c r (x + π)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Complex.ofReal_neg`：ofReal_neg (r : Real) : ((-r : Real) : Complex) = -r
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `Complex.ofReal_add`：ofReal_add (r s : Real) : ((r + s : Real) : Complex)
+ = r + s
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `Complex.exp_add`：exp_add : exp (x + y) = exp x * exp y
+· 使用定理 `Complex.exp_pi_mul_I`：exp_pi_mul_I : exp (π * I) = -1
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem circleMap_neg_radius {r x : Real} {c : Complex} :
+theorem circleMap_neg_radius {r x : ℝ} {c : ℂ} :
     circleMap c (-r) x = circleMap c r (x + π) := by
   simp [circleMap, add_mul, Complex.exp_add]
 
@@ -481,164 +538,127 @@ Note that the actual function used in the definition of `circleIntegral` is
 `(deriv (circleMap c R) θ) • f (circleMap c R θ)`. Integrability of this function is equivalent
 to integrability of `f ∘ circleMap c R` whenever `R ≠ 0`. -/
 @[fun_prop]
-/--
-Definition of `CircleIntegrable` / `CircleIntegrable` 的定义
+/-
+**CircleIntegrable** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CircleIntegrable (f : Complex -> E) (c : Complex) (R : Real) : Prop
+参数：f : Complex -> E；c : Complex；R : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CircleIntegrable
-  signature: (f : Complex -> E) (c : Complex) (R : Real)
-  body: IntervalIntegrable (fun θ : Real => f (circleMap c R θ)) volume 0 (2 * π)
+--- 原说明 ---
+We say that a function `f : ℂ → E` is integrable on the circle with center `c` a
+nd radius `R` if
+the function `f ∘ circleMap c R` is integrable on `[0, 2π]`.
 
-中文:
-定义 Circle整数egrable
-  签名: (f : 复形 -> E) (c : 复形) (R : 实数)
-  定义体: IntervalIntegrable (fun θ : Real => f (circleMap c R θ)) volume 0 (2 * π)
-
-Depends on / 依赖: IntervalIntegrable, IsCoatomistic, circleMap, volume
+Note that the actual function used in the definition of `circleIntegral` is
+`(deriv (circleMap c R) θ) • f (circleMap c R θ)`. Integrability of this functio
+n is equivalent
+to integrability of `f ∘ circleMap c R` whenever `R ≠ 0`.
 -/
-def CircleIntegrable (f : Complex -> E) (c : Complex) (R : Real) : Prop :=
-  IntervalIntegrable (fun θ : Real => f (circleMap c R θ)) volume 0 (2 * π)
-
-/--
-theorem `circleIntegrable_def` / 定理 `circleIntegrable_def`
-
-English:
-theorem circleIntegrable_def
-  given: (f : Complex -> E) (c : Complex) (R : Real)
-  statement: CircleIntegrable f c R ↔
-  proof: Iff.rfl
+def CircleIntegrable (f : ℂ → E) (c : ℂ) (R : ℝ) : Prop :=
+  IntervalIntegrable (fun θ : ℝ ↦ f (circleMap c R θ)) volume 0 (2 * π)
+/-
+**circleIntegrable_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_def (f : Complex -> E) (c : Complex) (R : Real) : CircleI
+ntegrable f c R ↔ IntervalIntegrable (fun θ : Real => f (circleMap c R θ)) volum
+e 0 (2 * π)
+参数：f : Complex -> E；c : Complex；R : Real。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem circleIntegrable_def (f : ℂ → E) (c : ℂ) (R : ℝ) : CircleIntegrable f c R ↔
+    IntervalIntegrable (fun θ : ℝ ↦ f (circleMap c R θ)) volume 0 (2 * π) := Iff.rfl
 
 @[simp, fun_prop]
-
-中文:
-定理 circle整数egrable_def
-  条件: (f : 复形 -> E) (c : 复形) (R : 实数)
-  结论: Circle整数egrable f c R ↔
-  证明: Iff.rfl
-
-@[simp, fun_prop]
-
-Depends on / 依赖: Iff.rfl
+/-
+**circleIntegrable_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_const (a : E) (c : Complex) (R : Real) : CircleIntegrable
+ (fun _ => a) c R
+参数：a : E；c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intervalIntegrable_const`：intervalIntegrable_const [IsLocallyFiniteMeasu
+re μ] {c : E} : IntervalIntegrable (fun _ => c) μ a b
 -/
-theorem circleIntegrable_def (f : Complex -> E) (c : Complex) (R : Real) : CircleIntegrable f c R ↔
-    IntervalIntegrable (fun θ : Real => f (circleMap c R θ)) volume 0 (2 * π) := Iff.rfl
-
-@[simp, fun_prop]
-/--
-theorem `circleIntegrable_const` / 定理 `circleIntegrable_const`
-
-English:
-theorem circleIntegrable_const
-  given: (a : E) (c : Complex) (R : Real)
-  statement: CircleIntegrable (fun _ => a) c R
-  proof: intervalIntegrable_const
-
-@[fun_prop]
-
-中文:
-定理 circle整数egrable_const
-  条件: (a : E) (c : 复形) (R : 实数)
-  结论: Circle整数egrable (fun _ => a) c R
-  证明: intervalIntegrable_const
-
-@[fun_prop]
-
-Depends on / 依赖: intervalIntegrable_const
--/
-theorem circleIntegrable_const (a : E) (c : Complex) (R : Real) : CircleIntegrable (fun _ => a) c R :=
+theorem circleIntegrable_const (a : E) (c : ℂ) (R : ℝ) : CircleIntegrable (fun _ => a) c R :=
   intervalIntegrable_const
 
 @[fun_prop]
-/--
-theorem `circleIntegrable_id` / 定理 `circleIntegrable_id`
-
-English:
-theorem circleIntegrable_id
-  given: (c : Complex) (R : Real)
-  statement: CircleIntegrable (fun z => z) c R
-  proof: (continuous_circleMap c R).intervalIntegrable 0 (2 * π)
-
-中文:
-定理 circle整数egrable_id
-  条件: (c : 复形) (R : 实数)
-  结论: Circle整数egrable (fun z => z) c R
-  证明: (continuous_circleMap c R).intervalIntegrable 0 (2 * π)
-
-Depends on / 依赖: continuous_circleMap, intervalIntegrable
+/-
+**circleIntegrable_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_id (c : Complex) (R : Real) : CircleIntegrable (fun z => 
+z) c R
+参数：c : Complex；R : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.intervalIntegrable`：Continuous.intervalIntegrable {u : Real -
+> E} (hu : Continuous u) (a b : Real) : IntervalIntegrable u μ a b
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
 -/
-theorem circleIntegrable_id (c : Complex) (R : Real) : CircleIntegrable (fun z => z) c R :=
+theorem circleIntegrable_id (c : ℂ) (R : ℝ) : CircleIntegrable (fun z => z) c R :=
   (continuous_circleMap c R).intervalIntegrable 0 (2 * π)
 
 namespace CircleIntegrable
 
-variable {f g : Complex -> E} {c : Complex} {R : Real} {A : Type*} [NormedRing A] {a : A}
+variable {f g : ℂ → E} {c : ℂ} {R : ℝ} {A : Type*} [NormedRing A] {a : A}
 
 /--
 Analogue of `IntervalIntegrable.abs`: If a real-valued function `f` is circle integrable, then so is
 `|f|`.
 -/
 @[to_fun (attr := fun_prop)]
-/--
-theorem `abs` / 定理 `abs`
+/-
+**CircleIntegrable.abs** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`。
+形式化陈述：abs {f : Complex -> Real} (hf : CircleIntegrable f c R) : CircleIntegrable
+ |f| c R
+参数：hf : CircleIntegrable f c R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.abs`：abs {f : Real -> Real} (h : IntervalIntegrable f
+ μ a b) : IntervalIntegrable (fun x => |f x|) μ a b
 
-English:
-theorem abs
-  given: {f : Complex -> Real} (hf : CircleIntegrable f c R)
-  proof: IntervalIntegrable.abs hf
-
-@[to_fun (attr := fun_prop)]
-
-中文:
-定理 abs
-  条件: {f : 复形 -> 实数} (hf : Circle整数egrable f c R)
-  证明: IntervalIntegrable.abs hf
-
-@[to_fun (attr := fun_prop)]
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.abs
+--- 原说明 ---
+Analogue of `IntervalIntegrable.abs`: If a real-valued function `f` is circle in
+tegrable, then so is
+`|f|`.
 -/
-theorem abs {f : Complex -> Real} (hf : CircleIntegrable f c R) :
+theorem abs {f : ℂ → ℝ} (hf : CircleIntegrable f c R) :
     CircleIntegrable |f| c R := IntervalIntegrable.abs hf
 
 @[to_fun (attr := fun_prop)]
-/--
-theorem `add` / 定理 `add`
-
-English:
-theorem add
-  given: (hf : CircleIntegrable f c R) (hg : CircleIntegrable g c R)
-  proof: IntervalIntegrable.add hf hg
-
-@[to_fun (attr := fun_prop)]
-
-中文:
-定理 add
-  条件: (hf : Circle整数egrable f c R) (hg : Circle整数egrable g c R)
-  证明: IntervalIntegrable.add hf hg
-
-@[to_fun (attr := fun_prop)]
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.add
+/-
+**CircleIntegrable.add** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`。
+形式化陈述：add (hf : CircleIntegrable f c R) (hg : CircleIntegrable g c R) : CircleIn
+tegrable (f + g) c R
+参数：hf : CircleIntegrable f c R；hg : CircleIntegrable g c R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.add`：add [ContinuousAdd ε] (hf : IntervalIntegrable f
+ μ a b) (hg : IntervalIntegrable g μ a b) : IntervalIntegrable (fun x => f x + g
+ x) μ a b
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 theorem add (hf : CircleIntegrable f c R) (hg : CircleIntegrable g c R) :
     CircleIntegrable (f + g) c R :=
   IntervalIntegrable.add hf hg
 
 @[to_fun (attr := fun_prop)]
-/--
-theorem `sub` / 定理 `sub`
-
-English:
-theorem sub
-  given: (hf : CircleIntegrable f c R) (hg : CircleIntegrable g c R)
-  proof: IntervalIntegrable.sub hf hg
-
-中文:
-定理 sub
-  条件: (hf : Circle整数egrable f c R) (hg : Circle整数egrable g c R)
-  证明: IntervalIntegrable.sub hf hg
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.sub
+/-
+**CircleIntegrable.sub** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`。
+形式化陈述：sub (hf : CircleIntegrable f c R) (hg : CircleIntegrable g c R) : CircleIn
+tegrable (f - g) c R
+参数：hf : CircleIntegrable f c R；hg : CircleIntegrable g c R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.sub`：sub {f g : Real -> E} (hf : IntervalIntegrable f
+ μ a b) (hg : IntervalIntegrable g μ a b) : IntervalIntegrable (fun x => f x - g
+ x) μ a b
 -/
 theorem sub (hf : CircleIntegrable f c R) (hg : CircleIntegrable g c R) :
     CircleIntegrable (f - g) c R :=
@@ -646,70 +666,77 @@ theorem sub (hf : CircleIntegrable f c R) (hg : CircleIntegrable g c R) :
 
 /-- Sums of circle integrable functions are circle integrable. -/
 @[to_fun (attr := fun_prop)]
-/--
-theorem `sum` / 定理 `sum`
+/-
+**CircleIntegrable.sum** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`。
+形式化陈述：∀ {E : Type u_1} [inst : NormedAddCommGroup E] {c : ℂ} {R : ℝ} {ι : Type u
+_3} (s : Finset ι) {f : ι → ℂ → E},   (∀ i ∈ s, CircleIntegrable (f i) c R) → Ci
+rcleIntegrable (∑ i ∈ s, f i) c R
+参数：s : Finset ι；∀ i ∈ s, CircleIntegrable (f i) c R；∑ i ∈ s, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CircleIntegrable.eq_1`：∀ {E : Type u_1} [inst : NormedAddCommGroup E] (f
+ : ℂ → E) (c : ℂ) (R : ℝ),   CircleIntegrable f c R = IntervalIntegrable (fun θ 
+=> f (circl…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IntervalIntegrable.sum`：sum {ε} [TopologicalSpace ε] [ENormedAddCommMono
+id ε] [ContinuousAdd ε] (s : Finset ι) {f : ι -> Real -> ε} (h : forall i in s, 
+IntervalInte…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 
-English:
-theorem sum
-  statement: {ι : Type*} (s : Finset ι) {f : ι -> Complex -> E}
-  proof: by
-  rw [CircleIntegrable]; rw [(by aesop : (fun θ => (∑ i in s]; rw [f i) (circleMap c R θ))
-    = ∑ i in s]; rw [fun θ => f i (circleMap c R θ))] at *
-  exact IntervalIntegrable.sum s h
-
-中文:
-定理 求和
-  结论: {ι : 类型} (s : 有限集 ι) {f : ι -> 复形 -> E}
-  证明: by
-  rw [CircleIntegrable]; rw [(by aesop : (fun θ => (∑ i in s]; rw [f i) (circleMap c R θ))
-    = ∑ i in s]; rw [fun θ => f i (circleMap c R θ))] at *
-  exact IntervalIntegrable.sum s h
+--- 原说明 ---
+Sums of circle integrable functions are circle integrable.
 -/
-protected theorem sum {ι : Type*} (s : Finset ι) {f : ι -> Complex -> E}
-    (h : forall i in s, CircleIntegrable (f i) c R) :
-    CircleIntegrable (∑ i in s, f i) c R := by
-  rw [CircleIntegrable]; rw [(by aesop : (fun θ => (∑ i in s]; rw [f i) (circleMap c R θ))
-    = ∑ i in s]; rw [fun θ => f i (circleMap c R θ))] at *
+protected theorem sum {ι : Type*} (s : Finset ι) {f : ι → ℂ → E}
+    (h : ∀ i ∈ s, CircleIntegrable (f i) c R) :
+    CircleIntegrable (∑ i ∈ s, f i) c R := by
+  rw [CircleIntegrable, (by aesop : (fun θ ↦ (∑ i ∈ s, f i) (circleMap c R θ))
+    = ∑ i ∈ s, fun θ ↦ f i (circleMap c R θ))] at *
   exact IntervalIntegrable.sum s h
 
 /-- `finsum`s of circle integrable functions are circle integrable. -/
 @[fun_prop]
-/--
-theorem `finsum` / 定理 `finsum`
+/-
+**CircleIntegrable.finsum** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`。
+形式化陈述：∀ {E : Type u_1} [inst : NormedAddCommGroup E] {c : ℂ} {R : ℝ} {ι : Type u
+_3} {f : ι → ℂ → E},   (∀ (i : ι), CircleIntegrable (f i) c R) → CircleIntegrabl
+e (∑ᶠ (i : ι), f i) c R
+参数：∀ (i : ι), CircleIntegrable (f i) c R；∑ᶠ (i : ι), f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finsum_eq_sum`：∀ {α : Type u_1} {M : Type u_5} [inst : AddCommMonoid M] 
+(f : α → M) (hf : Function.HasFiniteSupport f),   ∑ᶠ (i : α), f i = ∑ i ∈ Set.Fi
+nit…
+· 使用定理 `CircleIntegrable.sum`：∀ {E : Type u_1} [inst : NormedAddCommGroup E] {c 
+: ℂ} {R : ℝ} {ι : Type u_3} (s : Finset ι) {f : ι → ℂ → E},   (∀ i ∈ s, CircleIn
+tegrable (…
+· 使用定理 `finsum_of_infinite_support`：∀ {α : Type u_1} {M : Type u_5} [inst : AddC
+ommMonoid M] {f : α → M},   (Function.support f).Infinite → ∑ᶠ (i : α), f i = 0
+· 使用定理 `circleIntegrable_const`：circleIntegrable_const (a : E) (c : Complex) (R 
+: Real) : CircleIntegrable (fun _ => a) c R
 
-English:
-theorem finsum
-  given: {ι : Type*} {f : ι -> Complex -> E} (h : forall i, CircleIntegrable (f i) c R)
-  proof: by
-  by_cases h₁ : (Function.support f).Finite
-  · rw [finsum_eq_sum f h₁]
-    exact CircleIntegrable.sum h₁.toFinset (fun i _ => h i)
-  · rw [finsum_of_infinite_support h₁]
-    apply circleIntegrable_const
-
-@[to_fun (attr := fun_prop)]
-nonrec theorem neg (hf : CircleIntegrable f c R) : CircleIntegrable (-f) c R :=
-  hf.neg
-
-中文:
-定理 finsum
-  条件: {ι : 类型} {f : ι -> 复形 -> E} (h : 对任意 i, Circle整数egrable (f i) c R)
-  证明: by
-  by_cases h₁ : (Function.support f).Finite
-  · rw [finsum_eq_sum f h₁]
-    exact CircleIntegrable.sum h₁.toFinset (fun i _ => h i)
-  · rw [finsum_of_infinite_support h₁]
-    apply circleIntegrable_const
-
-@[to_fun (attr := fun_prop)]
-nonrec theorem neg (hf : CircleIntegrable f c R) : CircleIntegrable (-f) c R :=
-  hf.neg
+--- 原说明 ---
+`finsum`s of circle integrable functions are circle integrable.
 -/
-protected theorem finsum {ι : Type*} {f : ι -> Complex -> E} (h : forall i, CircleIntegrable (f i) c R) :
+protected theorem finsum {ι : Type*} {f : ι → ℂ → E} (h : ∀ i, CircleIntegrable (f i) c R) :
     CircleIntegrable (∑ᶠ i, f i) c R := by
   by_cases h₁ : (Function.support f).Finite
   · rw [finsum_eq_sum f h₁]
-    exact CircleIntegrable.sum h₁.toFinset (fun i _ => h i)
+    exact CircleIntegrable.sum h₁.toFinset (fun i _ ↦ h i)
   · rw [finsum_of_infinite_support h₁]
     apply circleIntegrable_const
 
@@ -719,24 +746,20 @@ nonrec theorem neg (hf : CircleIntegrable f c R) : CircleIntegrable (-f) c R :=
 
 /-- If `f` is circle integrable, then so are its scalar multiples. -/
 @[to_fun (attr := fun_prop) const_fun_smul]
-/--
-theorem `const_smul` / 定理 `const_smul`
+/-
+**CircleIntegrable.const_smul** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`。
+形式化陈述：const_smul {f : Complex -> A} (h : CircleIntegrable f c R) : CircleIntegra
+ble (a • f) c R
+参数：h : CircleIntegrable f c R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.const_mul`：const_mul {f : Real -> A} (hf : IntervalIn
+tegrable f μ a b) (c : A) : IntervalIntegrable (fun x => c * f x) μ a b
 
-English:
-theorem const_smul
-  given: {f : Complex -> A} (h : CircleIntegrable f c R)
-  statement: CircleIntegrable (a • f) c R
-  proof: IntervalIntegrable.const_mul h _
-
-中文:
-定理 const_smul
-  条件: {f : 复形 -> A} (h : Circle整数egrable f c R)
-  结论: Circle整数egrable (a • f) c R
-  证明: IntervalIntegrable.const_mul h _
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.const_mul, const_mul
+--- 原说明 ---
+If `f` is circle integrable, then so are its scalar multiples.
 -/
-theorem const_smul {f : Complex -> A} (h : CircleIntegrable f c R) : CircleIntegrable (a • f) c R :=
+theorem const_smul {f : ℂ → A} (h : CircleIntegrable f c R) : CircleIntegrable (a • f) c R :=
   IntervalIntegrable.const_mul h _
 
 variable
@@ -747,153 +770,240 @@ If `g` is continuous on the circle `sphere c |R|` and `f` is circle integrable, 
 circle integrable.
 -/
 @[to_fun (attr := fun_prop)]
-/--
-theorem `continuousOn_smul` / 定理 `continuousOn_smul`
+/-
+**CircleIntegrable.continuousOn_smul** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable
+`。
+形式化陈述：continuousOn_smul {f : Complex -> F} {g : Complex -> 𝕜} (hf : CircleIntegr
+able f c R) (hg : ContinuousOn g (sphere c |R|)) : CircleIntegrable (g • f) c R
+参数：hf : CircleIntegrable f c R；hg : ContinuousOn g (sphere c |R|)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.continuousOn_smul`：continuousOn_smul (hg : IntervalIn
+tegrable g μ a b) (hf : ContinuousOn f [[a, b]]) : IntervalIntegrable (fun x => 
+f x • g x) μ a b
+· 使用定理 `ContinuousOn.comp`：ContinuousOn.comp {g : β -> γ} {t : Set β} (hg : Cont
+inuousOn g t) (hf : ContinuousOn f s) (h : MapsTo f s t) : ContinuousOn (g ∘ f) 
+s
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
 
-English:
-theorem continuousOn_smul
-  statement: {f : Complex -> F} {g : Complex -> 𝕜} (hf : CircleIntegrable f c R)
-  proof: IntervalIntegrable.continuousOn_smul hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-中文:
-定理 continuousOn_smul
-  结论: {f : 复形 -> F} {g : 复形 -> 𝕜} (hf : Circle整数egrable f c R)
-  证明: IntervalIntegrable.continuousOn_smul hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.continuousOn_smul, circleMap_mem_sphere, continuousOn_smul, fun_prop, hg.comp
+--- 原说明 ---
+If `g` is continuous on the circle `sphere c |R|` and `f` is circle integrable, 
+then `g • f` is
+circle integrable.
 -/
-theorem continuousOn_smul {f : Complex -> F} {g : Complex -> 𝕜} (hf : CircleIntegrable f c R)
+theorem continuousOn_smul {f : ℂ → F} {g : ℂ → 𝕜} (hf : CircleIntegrable f c R)
     (hg : ContinuousOn g (sphere c |R|)) :
     CircleIntegrable (g • f) c R :=
   IntervalIntegrable.continuousOn_smul hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
+    (hg.comp (by fun_prop) (fun x hx ↦ circleMap_mem_sphere' c R x))
 
 /--
 If `f` is circle integrable and `g` is continuous on the circle `sphere c |R|`, then `f • g` is
 circle integrable.
 -/
 @[to_fun (attr := fun_prop)]
-/--
-theorem `smul_continuousOn` / 定理 `smul_continuousOn`
+/-
+**CircleIntegrable.smul_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable
+`。
+形式化陈述：smul_continuousOn {f : Complex -> 𝕜} {g : Complex -> F} (hf : CircleIntegr
+able f c R) (hg : ContinuousOn g (sphere c |R|)) : CircleIntegrable (f • g) c R
+参数：hf : CircleIntegrable f c R；hg : ContinuousOn g (sphere c |R|)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.smul_continuousOn`：smul_continuousOn (hf : IntervalIn
+tegrable f μ a b) (hg : ContinuousOn g [[a, b]]) : IntervalIntegrable (fun x => 
+f x • g x) μ a b
+· 使用定理 `ContinuousOn.comp`：ContinuousOn.comp {g : β -> γ} {t : Set β} (hg : Cont
+inuousOn g t) (hf : ContinuousOn f s) (h : MapsTo f s t) : ContinuousOn (g ∘ f) 
+s
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
 
-English:
-theorem smul_continuousOn
-  statement: {f : Complex -> 𝕜} {g : Complex -> F} (hf : CircleIntegrable f c R)
-  proof: IntervalIntegrable.smul_continuousOn hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-中文:
-定理 smul_continuousOn
-  结论: {f : 复形 -> 𝕜} {g : 复形 -> F} (hf : Circle整数egrable f c R)
-  证明: IntervalIntegrable.smul_continuousOn hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.smul_continuousOn, circleMap_mem_sphere, fun_prop, hg.comp, smul_continuousOn
+--- 原说明 ---
+If `f` is circle integrable and `g` is continuous on the circle `sphere c |R|`, 
+then `f • g` is
+circle integrable.
 -/
-theorem smul_continuousOn {f : Complex -> 𝕜} {g : Complex -> F} (hf : CircleIntegrable f c R)
+theorem smul_continuousOn {f : ℂ → 𝕜} {g : ℂ → F} (hf : CircleIntegrable f c R)
     (hg : ContinuousOn g (sphere c |R|)) :
     CircleIntegrable (f • g) c R :=
   IntervalIntegrable.smul_continuousOn hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
+    (hg.comp (by fun_prop) (fun x hx ↦ circleMap_mem_sphere' c R x))
 
 /--
 If `g` is continuous on the circle `sphere c |R|` and `f` is circle integrable, then `g * f` is
 circle integrable.
 -/
 @[to_fun (attr := fun_prop)]
-/--
-theorem `continuousOn_mul` / 定理 `continuousOn_mul`
+/-
+**CircleIntegrable.continuousOn_mul** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`
+。
+形式化陈述：continuousOn_mul {f g : Complex -> 𝕜} (hf : CircleIntegrable f c R) (hg : 
+ContinuousOn g (sphere c |R|)) : CircleIntegrable (g * f) c R
+参数：hf : CircleIntegrable f c R；hg : ContinuousOn g (sphere c |R|)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.continuousOn_mul`：continuousOn_mul {f g : Real -> A} 
+(hf : IntervalIntegrable f μ a b) (hg : ContinuousOn g [[a, b]]) : IntervalInteg
+rable (fun x => g x * f x…
+· 使用定理 `ContinuousOn.comp`：ContinuousOn.comp {g : β -> γ} {t : Set β} (hg : Cont
+inuousOn g t) (hf : ContinuousOn f s) (h : MapsTo f s t) : ContinuousOn (g ∘ f) 
+s
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
 
-English:
-theorem continuousOn_mul
-  statement: {f g : Complex -> 𝕜} (hf : CircleIntegrable f c R)
-  proof: IntervalIntegrable.continuousOn_mul hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-中文:
-定理 continuousOn_mul
-  结论: {f g : 复形 -> 𝕜} (hf : Circle整数egrable f c R)
-  证明: IntervalIntegrable.continuousOn_mul hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.continuousOn_mul, circleMap_mem_sphere, continuousOn_mul, fun_prop, hg.comp
+--- 原说明 ---
+If `g` is continuous on the circle `sphere c |R|` and `f` is circle integrable, 
+then `g * f` is
+circle integrable.
 -/
-theorem continuousOn_mul {f g : Complex -> 𝕜} (hf : CircleIntegrable f c R)
+theorem continuousOn_mul {f g : ℂ → 𝕜} (hf : CircleIntegrable f c R)
     (hg : ContinuousOn g (sphere c |R|)) :
     CircleIntegrable (g * f) c R :=
   IntervalIntegrable.continuousOn_mul hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
+    (hg.comp (by fun_prop) (fun x hx ↦ circleMap_mem_sphere' c R x))
 
 /--
 If `f` is circle integrable and `g` is continuous on the circle `sphere c |R|`, then `f * g` is
 circle integrable.
 -/
 @[to_fun (attr := fun_prop)]
-/--
-theorem `mul_continuousOn` / 定理 `mul_continuousOn`
+/-
+**CircleIntegrable.mul_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`
+。
+形式化陈述：mul_continuousOn {f g : Complex -> 𝕜} (hf : CircleIntegrable f c R) (hg : 
+ContinuousOn g (sphere c |R|)) : CircleIntegrable (f * g) c R
+参数：hf : CircleIntegrable f c R；hg : ContinuousOn g (sphere c |R|)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntervalIntegrable.mul_continuousOn`：mul_continuousOn {f g : Real -> A} 
+(hf : IntervalIntegrable f μ a b) (hg : ContinuousOn g [[a, b]]) : IntervalInteg
+rable (fun x => f x * g x…
+· 使用定理 `ContinuousOn.comp`：ContinuousOn.comp {g : β -> γ} {t : Set β} (hg : Cont
+inuousOn g t) (hf : ContinuousOn f s) (h : MapsTo f s t) : ContinuousOn (g ∘ f) 
+s
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
 
-English:
-theorem mul_continuousOn
-  statement: {f g : Complex -> 𝕜} (hf : CircleIntegrable f c R)
-  proof: IntervalIntegrable.mul_continuousOn hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-@[deprecated (since := "2026-07-01")] alias smul_of_continuousOn := continuousOn_smul
-@[deprecated (since := "2026-07-01")] alias mul_of_continuousOn := continuousOn_mul
-@[deprecated (since := "2026-07-01")] alias fun_smul_of_continuousOn := fun_continuousOn_smul
-@[deprecated (since := "2026-07-01")] alias fun_mul_of_continuousOn := fun_continuousOn_mul
-
-中文:
-定理 mul_continuousOn
-  结论: {f g : 复形 -> 𝕜} (hf : Circle整数egrable f c R)
-  证明: IntervalIntegrable.mul_continuousOn hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
-
-@[deprecated (since := "2026-07-01")] alias smul_of_continuousOn := continuousOn_smul
-@[deprecated (since := "2026-07-01")] alias mul_of_continuousOn := continuousOn_mul
-@[deprecated (since := "2026-07-01")] alias fun_smul_of_continuousOn := fun_continuousOn_smul
-@[deprecated (since := "2026-07-01")] alias fun_mul_of_continuousOn := fun_continuousOn_mul
-
-Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.mul_continuousOn, circleMap_mem_sphere, fun_prop, hg.comp, mul_continuousOn
+--- 原说明 ---
+If `f` is circle integrable and `g` is continuous on the circle `sphere c |R|`, 
+then `f * g` is
+circle integrable.
 -/
-theorem mul_continuousOn {f g : Complex -> 𝕜} (hf : CircleIntegrable f c R)
+theorem mul_continuousOn {f g : ℂ → 𝕜} (hf : CircleIntegrable f c R)
     (hg : ContinuousOn g (sphere c |R|)) :
     CircleIntegrable (f * g) c R :=
   IntervalIntegrable.mul_continuousOn hf
-    (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
+    (hg.comp (by fun_prop) (fun x hx ↦ circleMap_mem_sphere' c R x))
 
 @[deprecated (since := "2026-07-01")] alias smul_of_continuousOn := continuousOn_smul
 @[deprecated (since := "2026-07-01")] alias mul_of_continuousOn := continuousOn_mul
 @[deprecated (since := "2026-07-01")] alias fun_smul_of_continuousOn := fun_continuousOn_smul
 @[deprecated (since := "2026-07-01")] alias fun_mul_of_continuousOn := fun_continuousOn_mul
 
-/--
-theorem `out` / 定理 `out`
+/-- The function we actually integrate over `[0, 2π]` in the definition of `circleIntegral` is
+integrable. -/
+/-
+**CircleIntegrable.out** 是 Mathlib 中的一个定理，位于命名空间 `CircleIntegrable`。
+形式化陈述：out [NormedSpace Complex E] (hf : CircleIntegrable f c R) : IntervalIntegr
+able (fun θ : Real => deriv (circleMap c R) θ • f (circleMap c R θ)) volume 0 (2
+ * π)
+参数：hf : CircleIntegrable f c R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `MeasureTheory.Integrable.mono'`：∀ {α : Type u_1} {β : Type u_2} {m : Mea
+surableSpace α} {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β]   {f
+ : α → β} {g : α → ℝ…
+· 使用定理 `MeasureTheory.Integrable.const_mul`：∀ {α : Type u_1} {m : MeasurableSpac
+e α} {μ : MeasureTheory.Measure α} {𝕜 : Type u_8} [inst : NormedRing 𝕜] {f : α →
+ 𝕜},   MeasureTheory.Int…
+· 使用定理 `MeasureTheory.Integrable.norm`：∀ {α : Type u_1} {β : Type u_2} {m : Meas
+urableSpace α} {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β]   {f 
+: α → β}, MeasureTh…
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.smul`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measu
+re α}   {𝕜 : Type u_5} [inst_…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.mul_const`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.
+Measure α}   {f : α → β} [inst_1 :…
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Continuous.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   {f
+ : α → β} [inst_1 : T…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用定理 `secondCountable_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [
+ProperSpace α], SecondCountableTopology α
+· 使用定理 `Complex.instProperSpace`：ProperSpace ℂ
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
+· 使用定理 `MeasureTheory.Integrable.aestronglyMeasurable`：∀ {α : Type u_1} {ε : Typ
+e u_5} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst : Topological
+Space ε]   [inst_1 : ContinuousENor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `Complex.norm_mul`：∀ (z w : ℂ), ‖z * w‖ = ‖z‖ * ‖w‖
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem out
-  given: [NormedSpace Complex E] (hf : CircleIntegrable f c R)
-  proof: by
-  simp only [CircleIntegrable, deriv_circleMap, intervalIntegrable_iff] at *
-  refine (hf.norm.const_mul |R|).mono' ?_ ?_
-  · exact ((continuous_circleMap _ _).aestronglyMeasurable.mul_const I).smul hf.aestronglyMeasurable
-  · simp [norm_smul]
-
-中文:
-定理 out
-  条件: [赋范空间 复形 E] (hf : Circle整数egrable f c R)
-  证明: by
-  simp only [CircleIntegrable, deriv_circleMap, intervalIntegrable_iff] at *
-  refine (hf.norm.const_mul |R|).mono' ?_ ?_
-  · exact ((continuous_circleMap _ _).aestronglyMeasurable.mul_const I).smul hf.aestronglyMeasurable
-  · simp [norm_smul]
-
-Depends on / 依赖: CircleIntegrable, aestronglyMeasurable, aestronglyMeasurable.mul_const, const_mul, continuous_circleMap, deriv_circleMap, hf.aestronglyMeasurable, hf.norm.const_mul, intervalIntegrable_iff, mul_const, norm_smul
+--- 原说明 ---
+The function we actually integrate over `[0, 2π]` in the definition of `circleIn
+tegral` is
+integrable.
 -/
-theorem out [NormedSpace Complex E] (hf : CircleIntegrable f c R) :
-    IntervalIntegrable (fun θ : Real => deriv (circleMap c R) θ • f (circleMap c R θ)) volume 0
+theorem out [NormedSpace ℂ E] (hf : CircleIntegrable f c R) :
+    IntervalIntegrable (fun θ : ℝ => deriv (circleMap c R) θ • f (circleMap c R θ)) volume 0
       (2 * π) := by
   simp only [CircleIntegrable, deriv_circleMap, intervalIntegrable_iff] at *
   refine (hf.norm.const_mul |R|).mono' ?_ ?_
@@ -903,115 +1013,138 @@ theorem out [NormedSpace Complex E] (hf : CircleIntegrable f c R) :
 end CircleIntegrable
 
 @[simp]
-/--
-theorem `circleIntegrable_zero_radius` / 定理 `circleIntegrable_zero_radius`
-
-English:
-theorem circleIntegrable_zero_radius
-  given: {f : Complex -> E} {c : Complex}
-  statement: CircleIntegrable f c 0
-  proof: by
-  simp [CircleIntegrable]
-
-中文:
-定理 circle整数egrable_zero_radius
-  条件: {f : 复形 -> E} {c : 复形}
-  结论: Circle整数egrable f c 0
-  证明: by
-  simp [CircleIntegrable]
-
-Depends on / 依赖: CircleIntegrable
+/-
+**circleIntegrable_zero_radius** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_zero_radius {f : Complex -> E} {c : Complex} : CircleInte
+grable f c 0
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `circleMap_zero_radius`：circleMap_zero_radius (c : Complex) : circleMap c
+ 0 = const Real c
 -/
-theorem circleIntegrable_zero_radius {f : Complex -> E} {c : Complex} : CircleIntegrable f c 0 := by
+theorem circleIntegrable_zero_radius {f : ℂ → E} {c : ℂ} : CircleIntegrable f c 0 := by
   simp [CircleIntegrable]
 
 /--
-theorem `circleIntegrable_congr` / 定理 `circleIntegrable_congr`
-
-English:
-theorem circleIntegrable_congr
-  statement: {c : Complex} {R : Real} {f₁ f₂ : Complex -> E}
-  proof: intervalIntegrable_congr fun x _ => hf (circleMap_mem_sphere' c R x)
-
-@[deprecated (since := "2026-04-26")] alias crcleIntegrable_congr := circleIntegrable_congr
-
-中文:
-定理 circle整数egrable_congr
-  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> E}
-  证明: intervalIntegrable_congr fun x _ => hf (circleMap_mem_sphere' c R x)
-
-@[deprecated (since := "2026-04-26")] alias crcleIntegrable_congr := circleIntegrable_congr
-
-Depends on / 依赖: circleMap_mem_sphere, intervalIntegrable_congr
+Circle integrability depends only on the restriction of the function to the sphere.
 -/
-theorem circleIntegrable_congr {c : Complex} {R : Real} {f₁ f₂ : Complex -> E}
+/-
+**circleIntegrable_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_congr {c : Complex} {R : Real} {f₁ f₂ : Complex -> E} (hf
+ : Set.EqOn f₁ f₂ (sphere c |R|)) : CircleIntegrable f₁ c R ↔ CircleIntegrable f
+₂ c R
+参数：hf : Set.EqOn f₁ f₂ (sphere c |R|)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intervalIntegrable_congr`：intervalIntegrable_congr {g : Real -> ε} (h : 
+EqOn f g (Ι a b)) : IntervalIntegrable f μ a b ↔ IntervalIntegrable g μ a b
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
+
+--- 原说明 ---
+Circle integrability depends only on the restriction of the function to the sphe
+re.
+-/
+theorem circleIntegrable_congr {c : ℂ} {R : ℝ} {f₁ f₂ : ℂ → E}
     (hf : Set.EqOn f₁ f₂ (sphere c |R|)) :
     CircleIntegrable f₁ c R ↔ CircleIntegrable f₂ c R :=
-  intervalIntegrable_congr fun x _ => hf (circleMap_mem_sphere' c R x)
+  intervalIntegrable_congr fun x _ ↦ hf (circleMap_mem_sphere' c R x)
 
 @[deprecated (since := "2026-04-26")] alias crcleIntegrable_congr := circleIntegrable_congr
 
 /--
-theorem `circleIntegrable_neg_radius` / 定理 `circleIntegrable_neg_radius`
-
-English:
-theorem circleIntegrable_neg_radius
-  given: {c : Complex} {R : Real} {f : Complex -> E}
-  proof: by
-  unfold CircleIntegrable
-  rw [intervalIntegrable_congr (f := fun θ => f (circleMap c (-R) θ))
-    (g := fun θ => (f ∘ (circleMap c R)) (θ + π)) (fun _ _ => by simp [circleMap_neg_radius]),
-    IntervalIntegrable.comp_add_right_iff (c := π), add_comm (2 * π) π]
-  simpa using! ((periodic_circleMap c R).comp f).intervalIntegrable_iff (t₂ := 0)
-
-中文:
-定理 circle整数egrable_neg_radius
-  条件: {c : 复形} {R : 实数} {f : 复形 -> E}
-  证明: by
-  unfold CircleIntegrable
-  rw [intervalIntegrable_congr (f := fun θ => f (circleMap c (-R) θ))
-    (g := fun θ => (f ∘ (circleMap c R)) (θ + π)) (fun _ _ => by simp [circleMap_neg_radius]),
-    IntervalIntegrable.comp_add_right_iff (c := π), add_comm (2 * π) π]
-  simpa using! ((periodic_circleMap c R).comp f).intervalIntegrable_iff (t₂ := 0)
+Circle integrability is invariant when taking negative radius.
 -/
-@[simp] theorem circleIntegrable_neg_radius {c : Complex} {R : Real} {f : Complex -> E} :
+/-
+**circleIntegrable_neg_radius** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_1} [inst : NormedAddCommGroup E] {c : ℂ} {R : ℝ} {f : ℂ → E}
+,   CircleIntegrable f c (-R) ↔ CircleIntegrable f c R
+参数：-R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `intervalIntegrable_congr`：intervalIntegrable_congr {g : Real -> ε} (h : 
+EqOn f g (Ι a b)) : IntervalIntegrable f μ a b ↔ IntervalIntegrable g μ a b
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `circleMap_neg_radius`：circleMap_neg_radius {r x : Real} {c : Complex} : 
+circleMap c (-r) x = circleMap c r (x + π)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IntervalIntegrable.comp_add_right_iff`：comp_add_right_iff {c : Real} (h 
+: ‖f (min a b + c)‖ₑ != ⊤
+· 使用引理 `enorm_ne_top`：enorm_ne_top : ‖x‖ₑ != ∞
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Function.Periodic.intervalIntegrable_iff`：intervalIntegrable_iff {t₁ t₂ 
+: Real} (hf : Periodic f T) : IntervalIntegrable f volume t₁ (t₁ + T) ↔ Interval
+Integrable f volume t₂ (t₂ + T…
+· 使用定理 `Function.Periodic.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {
+f : α → β} {c : α} [inst : Add α],   Function.Periodic f c → ∀ (g : β → γ), Func
+tion.Periodi…
+· 使用定理 `periodic_circleMap`：periodic_circleMap (c : Complex) (R : Real) : Period
+ic (circleMap c R) (2 * π)
+
+--- 原说明 ---
+Circle integrability is invariant when taking negative radius.
+-/
+@[simp] theorem circleIntegrable_neg_radius {c : ℂ} {R : ℝ} {f : ℂ → E} :
     CircleIntegrable f c (-R) ↔ CircleIntegrable f c R := by
   unfold CircleIntegrable
-  rw [intervalIntegrable_congr (f := fun θ => f (circleMap c (-R) θ))
-    (g := fun θ => (f ∘ (circleMap c R)) (θ + π)) (fun _ _ => by simp [circleMap_neg_radius]),
+  rw [intervalIntegrable_congr (f := fun θ ↦ f (circleMap c (-R) θ))
+    (g := fun θ ↦ (f ∘ (circleMap c R)) (θ + π)) (fun _ _ ↦ by simp [circleMap_neg_radius]),
     IntervalIntegrable.comp_add_right_iff (c := π), add_comm (2 * π) π]
   simpa using! ((periodic_circleMap c R).comp f).intervalIntegrable_iff (t₂ := 0)
 
-/--
-theorem `CircleIntegrable.congr_codiscreteWithin` / 定理 `CircleIntegrable.congr_codiscreteWithin`
+/-- Circle integrability is invariant when functions change along discrete sets. -/
+/-
+**CircleIntegrable.congr_codiscreteWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CircleIntegrable.congr_codiscreteWithin {c : Complex} {R : Real} {f₁ f₂ : 
+Complex -> E} (hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂) (hf₁ : CircleInte
+grable f₁ c R) : CircleIntegrable f₂ c R
+参数：hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂；hf₁ : CircleIntegrable f₁ c R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `intervalIntegrable_congr_codiscreteWithin`：intervalIntegrable_congr_codi
+screteWithin {g : Real -> ε} [NullSingletonClass μ] (h : f =ᶠ[codiscreteWithin (
+Ι a b)] g) : IntervalIntegrable…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `Filter.eventuallyEq_iff_exists_mem`：eventuallyEq_iff_exists_mem {l : Fil
+ter α} {f g : α -> β} : f =ᶠ[l] g ↔ exists s in l, EqOn f g s
+· 使用引理 `Filter.codiscreteWithin_mono`：Filter.codiscreteWithin_mono {U₁ U : Set X
+} (hU : U₁ subseteq U) : codiscreteWithin U₁ <= codiscreteWithin U
+· 使用定理 `circleMap_preimage_codiscrete`：circleMap_preimage_codiscrete {c : Comple
+x} {R : Real} (hR : R != 0) : map (circleMap c R) (codiscrete Real) <= codiscret
+eWithin (sphere c |…
 
-English:
-theorem CircleIntegrable.congr_codiscreteWithin
-  statement: {c : Complex} {R : Real} {f₁ f₂ : Complex -> E}
-  proof: by
-  by_cases hR : R = 0
-  · simp [hR]
-  apply (intervalIntegrable_congr_codiscreteWithin _).1 hf₁
-  rw [eventuallyEq_iff_exists_mem]
-  exact ⟨(circleMap c R)⁻¹' {z | f₁ z = f₂ z},
-    codiscreteWithin_mono (by simp only [Set.subset_univ]) (circleMap_preimage_codiscrete hR hf),
-    by tauto⟩
-
-中文:
-定理 Circle整数egrable.congr_codiscreteWithin
-  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> E}
-  证明: by
-  by_cases hR : R = 0
-  · simp [hR]
-  apply (intervalIntegrable_congr_codiscreteWithin _).1 hf₁
-  rw [eventuallyEq_iff_exists_mem]
-  exact ⟨(circleMap c R)⁻¹' {z | f₁ z = f₂ z},
-    codiscreteWithin_mono (by simp only [Set.subset_univ]) (circleMap_preimage_codiscrete hR hf),
-    by tauto⟩
-
-Depends on / 依赖: Set.subset_univ, circleMap, circleMap_preimage_codiscrete, codiscreteWithin_mono, eventuallyEq_iff_exists_mem, intervalIntegrable_congr_codiscreteWithin, subset_univ
+--- 原说明 ---
+Circle integrability is invariant when functions change along discrete sets.
 -/
-theorem CircleIntegrable.congr_codiscreteWithin {c : Complex} {R : Real} {f₁ f₂ : Complex -> E}
+theorem CircleIntegrable.congr_codiscreteWithin {c : ℂ} {R : ℝ} {f₁ f₂ : ℂ → E}
     (hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂) (hf₁ : CircleIntegrable f₁ c R) :
     CircleIntegrable f₂ c R := by
   by_cases hR : R = 0
@@ -1022,214 +1155,230 @@ theorem CircleIntegrable.congr_codiscreteWithin {c : Complex} {R : Real} {f₁ f
     codiscreteWithin_mono (by simp only [Set.subset_univ]) (circleMap_preimage_codiscrete hR hf),
     by tauto⟩
 
-/--
-theorem `circleIntegrable_congr_codiscreteWithin` / 定理 `circleIntegrable_congr_codiscreteWithin`
+/-- Circle integrability is invariant when functions change along discrete sets. -/
+/-
+**circleIntegrable_congr_codiscreteWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_congr_codiscreteWithin {c : Complex} {R : Real} {f₁ f₂ : 
+Complex -> E} (hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂) : CircleIntegrabl
+e f₁ c R ↔ CircleIntegrable f₂ c R
+参数：hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CircleIntegrable.congr_codiscreteWithin`：CircleIntegrable.congr_codiscre
+teWithin {c : Complex} {R : Real} {f₁ f₂ : Complex -> E} (hf : f₁ =ᶠ[codiscreteW
+ithin (sphere c |R|)] f₂) (hf…
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
 
-English:
-theorem circleIntegrable_congr_codiscreteWithin
-  statement: {c : Complex} {R : Real} {f₁ f₂ : Complex -> E}
-  proof: ⟨(CircleIntegrable.congr_codiscreteWithin hf ·),
-    (CircleIntegrable.congr_codiscreteWithin hf.symm ·)⟩
-
-中文:
-定理 circle整数egrable_congr_codiscreteWithin
-  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> E}
-  证明: ⟨(CircleIntegrable.congr_codiscreteWithin hf ·),
-    (CircleIntegrable.congr_codiscreteWithin hf.symm ·)⟩
-
-Depends on / 依赖: CircleIntegrable, CircleIntegrable.congr_codiscreteWithin, congr_codiscreteWithin, hf.symm
+--- 原说明 ---
+Circle integrability is invariant when functions change along discrete sets.
 -/
-theorem circleIntegrable_congr_codiscreteWithin {c : Complex} {R : Real} {f₁ f₂ : Complex -> E}
+theorem circleIntegrable_congr_codiscreteWithin {c : ℂ} {R : ℝ} {f₁ f₂ : ℂ → E}
     (hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂) :
     CircleIntegrable f₁ c R ↔ CircleIntegrable f₂ c R :=
   ⟨(CircleIntegrable.congr_codiscreteWithin hf ·),
     (CircleIntegrable.congr_codiscreteWithin hf.symm ·)⟩
-
-/--
-theorem `circleIntegrable_iff` / 定理 `circleIntegrable_iff`
-
-English:
-theorem circleIntegrable_iff
-  given: [NormedSpace Complex E] {f : Complex -> E} {c : Complex} (R : Real)
-  proof: by
-  by_cases h₀ : R = 0
-  · simp +unfoldPartialApp [h₀, const]
-  refine ⟨fun h => h.out, fun h => ?_⟩
-  simp only [CircleIntegrable, intervalIntegrable_iff, deriv_circleMap] at h ⊢
-  refine (h.norm.const_mul |R|⁻¹).mono' ?_ ?_
-  · have H : forall {θ}, circleMap 0 R θ * I != 0 := fun {θ} => by simp [h₀, I_ne_zero]
-    simpa only [inv_smul_smul₀ H]
-      using ((continuous_circleMap 0 R).aestronglyMeasurable.mul_const
-        I).aemeasurable.fun_inv.aestronglyMeasurable.fun_smul h.aestronglyMeasurable
-  · simp [norm_smul, h₀]
-
-@[fun_prop]
-
-中文:
-定理 circle整数egrable_iff
-  条件: [赋范空间 复形 E] {f : 复形 -> E} {c : 复形} (R : 实数)
-  证明: by
-  by_cases h₀ : R = 0
-  · simp +unfoldPartialApp [h₀, const]
-  refine ⟨fun h => h.out, fun h => ?_⟩
-  simp only [CircleIntegrable, intervalIntegrable_iff, deriv_circleMap] at h ⊢
-  refine (h.norm.const_mul |R|⁻¹).mono' ?_ ?_
-  · have H : forall {θ}, circleMap 0 R θ * I != 0 := fun {θ} => by simp [h₀, I_ne_zero]
-    simpa only [inv_smul_smul₀ H]
-      using ((continuous_circleMap 0 R).aestronglyMeasurable.mul_const
-        I).aemeasurable.fun_inv.aestronglyMeasurable.fun_smul h.aestronglyMeasurable
-  · simp [norm_smul, h₀]
-
-@[fun_prop]
-
-Depends on / 依赖: CircleIntegrable, I_ne_zero, aemeasurable, aemeasurable.fun_inv.aestronglyMeasurable.fun_smul, aestronglyMeasurable, aestronglyMeasurable.mul_const, circleMap, const_mul, continuous_circleMap, deriv_circleMap, fun_inv, fun_smul, h.aestronglyMeasurable, h.norm.const_mul, h.out, intervalIntegrable_iff, mul_const, norm_smul, unfoldPartialApp
+/-
+**circleIntegrable_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_iff [NormedSpace Complex E] {f : Complex -> E} {c : Compl
+ex} (R : Real) : CircleIntegrable f c R ↔ IntervalIntegrable (fun θ : Real => de
+riv (circleMap c R) θ • f (circleMap c R θ)) volume 0 (2 * π)
+参数：R : Real。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `circleMap_zero_radius`：circleMap_zero_radius (c : Complex) : circleMap c
+ 0 = const Real c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `deriv_const'`：deriv_const' : (deriv fun _ : 𝕜 => c) = fun _ => 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `CircleIntegrable.out`：out [NormedSpace Complex E] (hf : CircleIntegrable
+ f c R) : IntervalIntegrable (fun θ : Real => deriv (circleMap c R) θ • f (circl
+eMap c R θ…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `MeasureTheory.Integrable.mono'`：∀ {α : Type u_1} {β : Type u_2} {m : Mea
+surableSpace α} {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β]   {f
+ : α → β} {g : α → ℝ…
+· 使用定理 `MeasureTheory.Integrable.const_mul`：∀ {α : Type u_1} {m : MeasurableSpac
+e α} {μ : MeasureTheory.Measure α} {𝕜 : Type u_8} [inst : NormedRing 𝕜] {f : α →
+ 𝕜},   MeasureTheory.Int…
+· 使用定理 `MeasureTheory.Integrable.norm`：∀ {α : Type u_1} {β : Type u_2} {m : Meas
+urableSpace α} {μ : MeasureTheory.Measure α} [inst : NormedAddCommGroup β]   {f 
+: α → β}, MeasureTh…
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.fun_smul`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.M
+easure α}   {𝕜 : Type u_5} [inst_…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `AEMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst
+ : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 : M…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `secondCountable_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [
+ProperSpace α], SecondCountableTopology α
+· 使用定理 `Complex.instProperSpace`：ProperSpace ℂ
+（共 57 条，此处仅展示前 30 条）
 -/
-theorem circleIntegrable_iff [NormedSpace Complex E] {f : Complex -> E} {c : Complex} (R : Real) :
-    CircleIntegrable f c R ↔ IntervalIntegrable (fun θ : Real =>
+theorem circleIntegrable_iff [NormedSpace ℂ E] {f : ℂ → E} {c : ℂ} (R : ℝ) :
+    CircleIntegrable f c R ↔ IntervalIntegrable (fun θ : ℝ =>
       deriv (circleMap c R) θ • f (circleMap c R θ)) volume 0 (2 * π) := by
   by_cases h₀ : R = 0
   · simp +unfoldPartialApp [h₀, const]
   refine ⟨fun h => h.out, fun h => ?_⟩
   simp only [CircleIntegrable, intervalIntegrable_iff, deriv_circleMap] at h ⊢
   refine (h.norm.const_mul |R|⁻¹).mono' ?_ ?_
-  · have H : forall {θ}, circleMap 0 R θ * I != 0 := fun {θ} => by simp [h₀, I_ne_zero]
+  · have H : ∀ {θ}, circleMap 0 R θ * I ≠ 0 := fun {θ} => by simp [h₀, I_ne_zero]
     simpa only [inv_smul_smul₀ H]
       using ((continuous_circleMap 0 R).aestronglyMeasurable.mul_const
         I).aemeasurable.fun_inv.aestronglyMeasurable.fun_smul h.aestronglyMeasurable
   · simp [norm_smul, h₀]
 
 @[fun_prop]
-/--
-theorem `ContinuousOn.circleIntegrable'` / 定理 `ContinuousOn.circleIntegrable'`
-
-English:
-theorem ContinuousOn.circleIntegrable'
-  statement: {f : Complex -> E} {c : Complex} {R : Real}
-  proof: (hf.comp_continuous (continuous_circleMap _ _) (circleMap_mem_sphere' _ _)).intervalIntegrable _ _
-
-中文:
-定理 ContinuousOn.circle整数egrable'
-  结论: {f : 复形 -> E} {c : 复形} {R : 实数}
-  证明: (hf.comp_continuous (continuous_circleMap _ _) (circleMap_mem_sphere' _ _)).intervalIntegrable _ _
-
-Depends on / 依赖: circleMap_mem_sphere, comp_continuous, continuous_circleMap, hf.comp_continuous, intervalIntegrable
+/-
+**ContinuousOn.circleIntegrable'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.circleIntegrable' {f : Complex -> E} {c : Complex} {R : Real}
+ (hf : ContinuousOn f (sphere c |R|)) : CircleIntegrable f c R
+参数：hf : ContinuousOn f (sphere c |R|)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.intervalIntegrable`：Continuous.intervalIntegrable {u : Real -
+> E} (hu : Continuous u) (a b : Real) : IntervalIntegrable u μ a b
+· 使用定理 `ContinuousOn.comp_continuous`：ContinuousOn.comp_continuous {g : β -> γ} 
+{f : α -> β} {s : Set β} (hg : ContinuousOn g s) (hf : Continuous f) (hs : foral
+l x, f x in s) : C…
+· 使用定理 `continuous_circleMap`：continuous_circleMap (c : Complex) (R : Real) : Co
+ntinuous (circleMap c R)
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
 -/
-theorem ContinuousOn.circleIntegrable' {f : Complex -> E} {c : Complex} {R : Real}
+theorem ContinuousOn.circleIntegrable' {f : ℂ → E} {c : ℂ} {R : ℝ}
     (hf : ContinuousOn f (sphere c |R|)) : CircleIntegrable f c R :=
   (hf.comp_continuous (continuous_circleMap _ _) (circleMap_mem_sphere' _ _)).intervalIntegrable _ _
-
-/--
-theorem `ContinuousOn.circleIntegrable` / 定理 `ContinuousOn.circleIntegrable`
-
-English:
-theorem ContinuousOn.circleIntegrable
-  statement: {f : Complex -> E} {c : Complex} {R : Real} (hR : 0 <= R)
-  proof: ContinuousOn.circleIntegrable' (abs_of_nonneg hR).symm ▸ hf
-
-中文:
-定理 ContinuousOn.circle整数egrable
-  结论: {f : 复形 -> E} {c : 复形} {R : 实数} (hR : 0 <= R)
-  证明: ContinuousOn.circleIntegrable' (abs_of_nonneg hR).symm ▸ hf
-
-Depends on / 依赖: ContinuousOn, ContinuousOn.circleIntegrable, abs_of_nonneg, circleIntegrable
+/-
+**ContinuousOn.circleIntegrable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.circleIntegrable {f : Complex -> E} {c : Complex} {R : Real} 
+(hR : 0 <= R) (hf : ContinuousOn f (sphere c R)) : CircleIntegrable f c R
+参数：hR : 0 <= R；hf : ContinuousOn f (sphere c R)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.circleIntegrable'`：ContinuousOn.circleIntegrable' {f : Comp
+lex -> E} {c : Complex} {R : Real} (hf : ContinuousOn f (sphere c |R|)) : Circle
+Integrable f c R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-theorem ContinuousOn.circleIntegrable {f : Complex -> E} {c : Complex} {R : Real} (hR : 0 <= R)
+theorem ContinuousOn.circleIntegrable {f : ℂ → E} {c : ℂ} {R : ℝ} (hR : 0 ≤ R)
     (hf : ContinuousOn f (sphere c R)) : CircleIntegrable f c R :=
-ContinuousOn.circleIntegrable' (abs_of_nonneg hR).symm ▸ hf
+  ContinuousOn.circleIntegrable' <| (abs_of_nonneg hR).symm ▸ hf
 
 /-- The function `fun z ↦ (z - w) ^ n`, `n : ℤ`, is circle integrable on the circle with center `c`
 and radius `|R|` if and only if `R = 0` or `0 ≤ n`, or `w` does not belong to this circle. -/
 @[simp]
-/--
-theorem `circleIntegrable_sub_zpow_iff` / 定理 `circleIntegrable_sub_zpow_iff`
+/-
+**circleIntegrable_sub_zpow_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_sub_zpow_iff {c w : Complex} {R : Real} {n : Int} : Circl
+eIntegrable (fun z => (z - w) ^ n) c R ↔ R = 0 ∨ 0 <= n ∨ w ∉ sphere c |R|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `circleIntegrable_iff`：circleIntegrable_iff [NormedSpace Complex E] {f : 
+Complex -> E} {c : Complex} (R : Real) : CircleIntegrable f c R ↔ IntervalIntegr
+able (fun …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `image_circleMap_Ioc`：image_circleMap_Ioc (c : Complex) (R : Real) : circ
+leMap c R '' Ioc 0 (2 * π) = sphere c |R|
+· 使用引理 `Set.Icc_subset_uIcc`：Icc_subset_uIcc : Icc a b subseteq [[a, b]]
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
+· 使用定理 `not_intervalIntegrable_of_sub_inv_isBigO_punctured`：not_intervalIntegrab
+le_of_sub_inv_isBigO_punctured {f : Real -> F} {a b c : Real} (hf : (fun x => (x
+ - c)⁻¹) =O[𝓝[!=] c] f) (hne : a != b) (…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `Metric.ball_mem_nhds`：ball_mem_nhds (x : α) {ε : Real} (ε0 : 0 < ε) : ba
+ll x ε in 𝓝 x
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Complex.dist_eq`：dist_eq (z w : Complex) : dist z w = ‖z - w‖
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+（共 88 条，此处仅展示前 30 条）
 
-English:
-theorem circleIntegrable_sub_zpow_iff
-  given: {c w : Complex} {R : Real} {n : Int}
-  proof: by
-  constructor
-  · intro h; contrapose! h; rcases h with ⟨hR, hn, hw⟩
-    simp only [circleIntegrable_iff R, deriv_circleMap]
-    rw [← image_circleMap_Ioc] at hw; rcases hw with ⟨θ, hθ, rfl⟩
-    replace hθ : θ in [[0, 2 * π]] := Icc_subset_uIcc (Ioc_subset_Icc_self hθ)
-    refine not_intervalIntegrable_of_sub_inv_isBigO_punctured ?_ Real.two_pi_pos.ne hθ
-    set f : Real -> Complex := fun θ' => circleMap c R θ' - circleMap c R θ
-    have : forallᶠ θ' in 𝓝[!=] θ, f θ' in ball (0 : Complex) 1 \ {0} := by
-      suffices forallᶠ z in 𝓝[!=] circleMap c R θ, z - circleMap c R θ in ball (0 : Complex) 1 \ {0} from
-        ((differentiable_circleMap c R θ).hasDerivAt.tendsto_nhdsNE
-          (deriv_circleMap_ne_zero hR)).eventually this
-      filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds (ball_mem_nhds _ zero_lt_one)]
-      simp_all [dist_eq, sub_eq_zero]
-    refine (((hasDerivAt_circleMap c R θ).isBigO_sub.mono inf_le_left).inv_rev
-      (this.mono fun θ' h₁ h₂ => absurd h₂ h₁.2)).trans ?_
-    refine IsBigO.of_bound |R|⁻¹ (this.mono fun θ' hθ' => ?_)
-    set x := ‖f θ'‖
-    suffices x⁻¹ <= x ^ n by
-      simp only [smul_eq_mul, norm_mul,
-        norm_inv, norm_I, mul_one]
-      simpa only [norm_circleMap_zero, norm_zpow, Ne, abs_eq_zero.not.2 hR, not_false_iff,
-        inv_mul_cancel_left₀] using this
-    have : x in Ioo (0 : Real) 1 := by simpa [x, and_comm] using hθ'
-    rw [← zpow_neg_one]
-    refine (zpow_right_strictAnti₀ this.1 this.2).le_iff_ge.2 (Int.lt_add_one_iff.1 ?_); exact hn
-  · rintro (rfl | H)
-    exacts [circleIntegrable_zero_radius,
-      ((continuousOn_id.sub continuousOn_const).zpow₀ _ fun z hz =>
-        H.symm.imp_left fun (hw : w ∉ sphere c |R|) =>
-sub_ne_zero.2 ne_of_mem_of_not_mem hz hw).circleIntegrable']
-
-@[simp]
-
-中文:
-定理 circle整数egrable_sub_zpow_iff
-  条件: {c w : 复形} {R : 实数} {n : 整数}
-  证明: by
-  constructor
-  · intro h; contrapose! h; rcases h with ⟨hR, hn, hw⟩
-    simp only [circleIntegrable_iff R, deriv_circleMap]
-    rw [← image_circleMap_Ioc] at hw; rcases hw with ⟨θ, hθ, rfl⟩
-    replace hθ : θ in [[0, 2 * π]] := Icc_subset_uIcc (Ioc_subset_Icc_self hθ)
-    refine not_intervalIntegrable_of_sub_inv_isBigO_punctured ?_ Real.two_pi_pos.ne hθ
-    set f : Real -> Complex := fun θ' => circleMap c R θ' - circleMap c R θ
-    have : forallᶠ θ' in 𝓝[!=] θ, f θ' in ball (0 : Complex) 1 \ {0} := by
-      suffices forallᶠ z in 𝓝[!=] circleMap c R θ, z - circleMap c R θ in ball (0 : Complex) 1 \ {0} from
-        ((differentiable_circleMap c R θ).hasDerivAt.tendsto_nhdsNE
-          (deriv_circleMap_ne_zero hR)).eventually this
-      filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds (ball_mem_nhds _ zero_lt_one)]
-      simp_all [dist_eq, sub_eq_zero]
-    refine (((hasDerivAt_circleMap c R θ).isBigO_sub.mono inf_le_left).inv_rev
-      (this.mono fun θ' h₁ h₂ => absurd h₂ h₁.2)).trans ?_
-    refine IsBigO.of_bound |R|⁻¹ (this.mono fun θ' hθ' => ?_)
-    set x := ‖f θ'‖
-    suffices x⁻¹ <= x ^ n by
-      simp only [smul_eq_mul, norm_mul,
-        norm_inv, norm_I, mul_one]
-      simpa only [norm_circleMap_zero, norm_zpow, Ne, abs_eq_zero.not.2 hR, not_false_iff,
-        inv_mul_cancel_left₀] using this
-    have : x in Ioo (0 : Real) 1 := by simpa [x, and_comm] using hθ'
-    rw [← zpow_neg_one]
-    refine (zpow_right_strictAnti₀ this.1 this.2).le_iff_ge.2 (Int.lt_add_one_iff.1 ?_); exact hn
-  · rintro (rfl | H)
-    exacts [circleIntegrable_zero_radius,
-      ((continuousOn_id.sub continuousOn_const).zpow₀ _ fun z hz =>
-        H.symm.imp_left fun (hw : w ∉ sphere c |R|) =>
-sub_ne_zero.2 ne_of_mem_of_not_mem hz hw).circleIntegrable']
-
-@[simp]
-
-Depends on / 依赖: Icc_subset_uIcc, Ioc_subset_Icc_self, Real.two_pi_pos.ne, circleIntegrable_iff, circleMap, contrapose, deriv_circleMap, image_circleMap_Ioc, not_intervalIntegrable_of_sub_inv_isBigO_punctured, replace, two_pi_pos
+--- 原说明 ---
+The function `fun z ↦ (z - w) ^ n`, `n : ℤ`, is circle integrable on the circle 
+with center `c`
+and radius `|R|` if and only if `R = 0` or `0 ≤ n`, or `w` does not belong to th
+is circle.
 -/
-theorem circleIntegrable_sub_zpow_iff {c w : Complex} {R : Real} {n : Int} :
-    CircleIntegrable (fun z => (z - w) ^ n) c R ↔ R = 0 ∨ 0 <= n ∨ w ∉ sphere c |R| := by
+theorem circleIntegrable_sub_zpow_iff {c w : ℂ} {R : ℝ} {n : ℤ} :
+    CircleIntegrable (fun z => (z - w) ^ n) c R ↔ R = 0 ∨ 0 ≤ n ∨ w ∉ sphere c |R| := by
   constructor
   · intro h; contrapose! h; rcases h with ⟨hR, hn, hw⟩
     simp only [circleIntegrable_iff R, deriv_circleMap]
     rw [← image_circleMap_Ioc] at hw; rcases hw with ⟨θ, hθ, rfl⟩
-    replace hθ : θ in [[0, 2 * π]] := Icc_subset_uIcc (Ioc_subset_Icc_self hθ)
+    replace hθ : θ ∈ [[0, 2 * π]] := Icc_subset_uIcc (Ioc_subset_Icc_self hθ)
     refine not_intervalIntegrable_of_sub_inv_isBigO_punctured ?_ Real.two_pi_pos.ne hθ
-    set f : Real -> Complex := fun θ' => circleMap c R θ' - circleMap c R θ
-    have : forallᶠ θ' in 𝓝[!=] θ, f θ' in ball (0 : Complex) 1 \ {0} := by
-      suffices forallᶠ z in 𝓝[!=] circleMap c R θ, z - circleMap c R θ in ball (0 : Complex) 1 \ {0} from
+    set f : ℝ → ℂ := fun θ' => circleMap c R θ' - circleMap c R θ
+    have : ∀ᶠ θ' in 𝓝[≠] θ, f θ' ∈ ball (0 : ℂ) 1 \ {0} := by
+      suffices ∀ᶠ z in 𝓝[≠] circleMap c R θ, z - circleMap c R θ ∈ ball (0 : ℂ) 1 \ {0} from
         ((differentiable_circleMap c R θ).hasDerivAt.tendsto_nhdsNE
           (deriv_circleMap_ne_zero hR)).eventually this
       filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds (ball_mem_nhds _ zero_lt_one)]
@@ -1238,133 +1387,121 @@ theorem circleIntegrable_sub_zpow_iff {c w : Complex} {R : Real} {n : Int} :
       (this.mono fun θ' h₁ h₂ => absurd h₂ h₁.2)).trans ?_
     refine IsBigO.of_bound |R|⁻¹ (this.mono fun θ' hθ' => ?_)
     set x := ‖f θ'‖
-    suffices x⁻¹ <= x ^ n by
+    suffices x⁻¹ ≤ x ^ n by
       simp only [smul_eq_mul, norm_mul,
         norm_inv, norm_I, mul_one]
       simpa only [norm_circleMap_zero, norm_zpow, Ne, abs_eq_zero.not.2 hR, not_false_iff,
         inv_mul_cancel_left₀] using this
-    have : x in Ioo (0 : Real) 1 := by simpa [x, and_comm] using hθ'
+    have : x ∈ Ioo (0 : ℝ) 1 := by simpa [x, and_comm] using hθ'
     rw [← zpow_neg_one]
     refine (zpow_right_strictAnti₀ this.1 this.2).le_iff_ge.2 (Int.lt_add_one_iff.1 ?_); exact hn
   · rintro (rfl | H)
     exacts [circleIntegrable_zero_radius,
       ((continuousOn_id.sub continuousOn_const).zpow₀ _ fun z hz =>
         H.symm.imp_left fun (hw : w ∉ sphere c |R|) =>
-sub_ne_zero.2 ne_of_mem_of_not_mem hz hw).circleIntegrable']
+          sub_ne_zero.2 <| ne_of_mem_of_not_mem hz hw).circleIntegrable']
 
 @[simp]
-/--
-theorem `circleIntegrable_sub_inv_iff` / 定理 `circleIntegrable_sub_inv_iff`
-
-English:
-theorem circleIntegrable_sub_inv_iff
-  given: {c w : Complex} {R : Real}
-  proof: by
-  simp only [← zpow_neg_one, circleIntegrable_sub_zpow_iff]; simp
-
-中文:
-定理 circle整数egrable_sub_inv_iff
-  条件: {c w : 复形} {R : 实数}
-  证明: by
-  simp only [← zpow_neg_one, circleIntegrable_sub_zpow_iff]; simp
-
-Depends on / 依赖: circleIntegrable_sub_zpow_iff, zpow_neg_one
+/-
+**circleIntegrable_sub_inv_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegrable_sub_inv_iff {c w : Complex} {R : Real} : CircleIntegrable
+ (fun z => (z - w)⁻¹) c R ↔ R = 0 ∨ w ∉ sphere c |R|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false_of_decide`：∀ {p : Prop} {x : Decidable p}, decide p = false → p
+ = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem circleIntegrable_sub_inv_iff {c w : Complex} {R : Real} :
+theorem circleIntegrable_sub_inv_iff {c w : ℂ} {R : ℝ} :
     CircleIntegrable (fun z => (z - w)⁻¹) c R ↔ R = 0 ∨ w ∉ sphere c |R| := by
   simp only [← zpow_neg_one, circleIntegrable_sub_zpow_iff]; simp
 
-variable [NormedSpace Complex E]
+variable [NormedSpace ℂ E]
 
-/--
-Definition of `circleIntegral` / `circleIntegral` 的定义
+/-- Definition for $\oint_{|z-c|=R} f(z)\,dz$ -/
+/-
+**circleIntegral** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：circleIntegral (f : Complex -> E) (c : Complex) (R : Real) : E
+参数：f : Complex -> E；c : Complex；R : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition circleIntegral
-  signature: (f : Complex -> E) (c : Complex) (R : Real)
-  body: ∫ θ : Real in 0..2 * π, deriv (circleMap c R) θ • f (circleMap c R θ)
-
-中文:
-定义 circle整数egral
-  签名: (f : 复形 -> E) (c : 复形) (R : 实数)
-  定义体: ∫ θ : Real in 0..2 * π, deriv (circleMap c R) θ • f (circleMap c R θ)
-
-Depends on / 依赖: circleMap
+--- 原说明 ---
+Definition for $\oint_{|z-c|=R} f(z)\,dz$
 -/
-def circleIntegral (f : Complex -> E) (c : Complex) (R : Real) : E :=
-  ∫ θ : Real in 0..2 * π, deriv (circleMap c R) θ • f (circleMap c R θ)
+def circleIntegral (f : ℂ → E) (c : ℂ) (R : ℝ) : E :=
+  ∫ θ : ℝ in 0..2 * π, deriv (circleMap c R) θ • f (circleMap c R θ)
 
 /-- `∮ z in C(c, R), f z` is the circle integral $\oint_{|z-c|=R} f(z)\,dz$. -/
 notation3 "∮ "(...)" in ""C("c", "R")"", "r:60:(scoped f => circleIntegral f c R) => r
 
-/--
-theorem `circleIntegral_def_Icc` / 定理 `circleIntegral_def_Icc`
-
-English:
-theorem circleIntegral_def_Icc
-  given: (f : Complex -> E) (c : Complex) (R : Real)
-  proof: by
-  rw [circleIntegral]; rw [intervalIntegral.integral_of_le Real.two_pi_pos.le]; rw [Measure.restrict_congr_set Ioc_ae_eq_Icc]
-
-中文:
-定理 circle整数egral_def_Icc
-  条件: (f : 复形 -> E) (c : 复形) (R : 实数)
-  证明: by
-  rw [circleIntegral]; rw [intervalIntegral.integral_of_le Real.two_pi_pos.le]; rw [Measure.restrict_congr_set Ioc_ae_eq_Icc]
-
-Depends on / 依赖: Ioc_ae_eq_Icc, Measure, Measure.restrict_congr_set, Real.two_pi_pos.le, circleIntegral, integral_of_le, intervalIntegral, intervalIntegral.integral_of_le, restrict_congr_set, two_pi_pos
+/-
+**circleIntegral_def_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：circleIntegral_def_Icc (f : Complex -> E) (c : Complex) (R : Real) : (∮ z 
+in C(c, R), f z) = ∫ θ in Icc 0 (2 * π), deriv (circleMap c R) θ • f (circleMap 
+c R θ)
+参数：f : Complex -> E；c : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `circleIntegral.eq_1`：∀ {E : Type u_1} [inst : NormedAddCommGroup E] [ins
+t_1 : NormedSpace ℂ E] (f : ℂ → E) (c : ℂ) (R : ℝ),   circleIntegral f c R = ∫ (
+θ : ℝ) in…
+· 使用定理 `intervalIntegral.integral_of_le`：integral_of_le (h : a <= b) : ∫ x in a.
+.b, f x ∂μ = ∫ x in Ioc a b, f x ∂μ
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `MeasureTheory.Measure.restrict_congr_set`：restrict_congr_set (h : s =ᵐ[μ
+] t) : μ.restrict s = μ.restrict t
+· 使用定理 `MeasureTheory.Ioc_ae_eq_Icc`：Ioc_ae_eq_Icc : Ioc a b =ᵐ[μ] Icc a b
 -/
-theorem circleIntegral_def_Icc (f : Complex -> E) (c : Complex) (R : Real) :
+theorem circleIntegral_def_Icc (f : ℂ → E) (c : ℂ) (R : ℝ) :
     (∮ z in C(c, R), f z) = ∫ θ in Icc 0 (2 * π),
     deriv (circleMap c R) θ • f (circleMap c R θ) := by
-  rw [circleIntegral]; rw [intervalIntegral.integral_of_le Real.two_pi_pos.le]; rw [Measure.restrict_congr_set Ioc_ae_eq_Icc]
+  rw [circleIntegral, intervalIntegral.integral_of_le Real.two_pi_pos.le,
+    Measure.restrict_congr_set Ioc_ae_eq_Icc]
 
-/--
-theorem `_root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn` / 定理 `_root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn`
+/-- If a sequence of continuous functions converges uniformly on the circle,
+then their circle integrals converge to the circle integral of the limit function. -/
+/-
+**_root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn** 是 Mathlib 中
+的一个定理，位于命名空间 ``。
+形式化陈述：_root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn {ι : Type
+*} {f : ι -> Complex -> E} {g : Complex -> E} {c : Complex} {R : Real} {l : Filt
+er ι} [l.IsCountablyGenerated] (hR : 0 <= R) (hf : forallᶠ i in l, ContinuousOn 
+(f i) (sphere c R)) (h : TendstoUniformlyOn f g l (sphere c R)) : Tendsto (fun n
+ => ∮ z in C(c, R), f n z) l (𝓝 (∮ z in C(c, R), g z))
+参数：hR : 0 <= R；hf : forallᶠ i in l, ContinuousOn (f i) (sphere c R)；h : TendstoU
+niformlyOn f g l (sphere c R)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn
-  proof: by
-  apply TendstoUniformlyOn.tendsto_intervalIntegral_of_continuousOn
-  · refine hf.mono fun i hi => .smul ?_ (hi.comp ?_ ?_)
-    · rw [funext (deriv_circleMap _ _)]
-      fun_prop
-    · fun_prop
-    · simp [hR, MapsTo]
-  · rw [Metric.tendstoUniformlyOn_iff] at h ⊢
-    simp only [dist_smul₀, deriv_circleMap, norm_mul, norm_I, norm_circleMap_zero,
-      abs_of_nonneg hR, mul_one]
-    intro ε hε
-    rcases exists_pos_mul_lt hε R with ⟨δ, hδ₀, hRδ⟩
-    refine (h δ hδ₀).mono fun i hi x hx => ?_
-    grw [← hRδ, hi (circleMap c R x) (by simp [hR])]
-
-中文:
-定理 _root_.TendstoUniformlyOn.tendsto_circle整数egral_of_continuousOn
-  证明: by
-  apply TendstoUniformlyOn.tendsto_intervalIntegral_of_continuousOn
-  · refine hf.mono fun i hi => .smul ?_ (hi.comp ?_ ?_)
-    · rw [funext (deriv_circleMap _ _)]
-      fun_prop
-    · fun_prop
-    · simp [hR, MapsTo]
-  · rw [Metric.tendstoUniformlyOn_iff] at h ⊢
-    simp only [dist_smul₀, deriv_circleMap, norm_mul, norm_I, norm_circleMap_zero,
-      abs_of_nonneg hR, mul_one]
-    intro ε hε
-    rcases exists_pos_mul_lt hε R with ⟨δ, hδ₀, hRδ⟩
-    refine (h δ hδ₀).mono fun i hi x hx => ?_
-    grw [← hRδ, hi (circleMap c R x) (by simp [hR])]
-
-Depends on / 依赖: MapsTo, Metric, Metric.tendstoUniformlyOn_iff, TendstoUniformlyOn, TendstoUniformlyOn.tendsto_intervalIntegral_of_continuousOn, abs_of_nonneg, circleMap, deriv_circleMap, exists_pos_mul_lt, fun_prop, hf.mono, hi.comp, mul_one, norm_I, norm_circleMap_zero, norm_mul, tendstoUniformlyOn_iff, tendsto_intervalIntegral_of_continuousOn
+--- 原说明 ---
+If a sequence of continuous functions converges uniformly on the circle,
+then their circle integrals converge to the circle integral of the limit functio
+n.
 -/
 theorem _root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn
-    {ι : Type*} {f : ι -> Complex -> E} {g : Complex -> E} {c : Complex} {R : Real}
-    {l : Filter ι} [l.IsCountablyGenerated] (hR : 0 <= R)
-    (hf : forallᶠ i in l, ContinuousOn (f i) (sphere c R)) (h : TendstoUniformlyOn f g l (sphere c R)) :
-    Tendsto (fun n => ∮ z in C(c, R), f n z) l (𝓝 (∮ z in C(c, R), g z)) := by
+    {ι : Type*} {f : ι → ℂ → E} {g : ℂ → E} {c : ℂ} {R : ℝ}
+    {l : Filter ι} [l.IsCountablyGenerated] (hR : 0 ≤ R)
+    (hf : ∀ᶠ i in l, ContinuousOn (f i) (sphere c R)) (h : TendstoUniformlyOn f g l (sphere c R)) :
+    Tendsto (fun n ↦ ∮ z in C(c, R), f n z) l (𝓝 (∮ z in C(c, R), g z)) := by
   apply TendstoUniformlyOn.tendsto_intervalIntegral_of_continuousOn
-  · refine hf.mono fun i hi => .smul ?_ (hi.comp ?_ ?_)
+  · refine hf.mono fun i hi ↦ .smul ?_ (hi.comp ?_ ?_)
     · rw [funext (deriv_circleMap _ _)]
       fun_prop
     · fun_prop
@@ -1374,318 +1511,537 @@ theorem _root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn
       abs_of_nonneg hR, mul_one]
     intro ε hε
     rcases exists_pos_mul_lt hε R with ⟨δ, hδ₀, hRδ⟩
-    refine (h δ hδ₀).mono fun i hi x hx => ?_
+    refine (h δ hδ₀).mono fun i hi x hx ↦ ?_
     grw [← hRδ, hi (circleMap c R x) (by simp [hR])]
 
 namespace circleIntegral
 
 @[simp]
-/--
-theorem `integral_radius_zero` / 定理 `integral_radius_zero`
-
-English:
-theorem integral_radius_zero
-  given: (f : Complex -> E) (c : Complex)
-  statement: (∮ z in C(c, 0), f z) = 0
-  proof: by
-  simp +unfoldPartialApp [circleIntegral, const]
-
-中文:
-定理 integral_radius_zero
-  条件: (f : 复形 -> E) (c : 复形)
-  结论: (∮ z in C(c, 0), f z) = 0
-  证明: by
-  simp +unfoldPartialApp [circleIntegral, const]
-
-Depends on / 依赖: circleIntegral, unfoldPartialApp
+/-
+**circleIntegral.integral_radius_zero** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`
+。
+形式化陈述：integral_radius_zero (f : Complex -> E) (c : Complex) : (∮ z in C(c, 0), f
+ z) = 0
+参数：f : Complex -> E；c : Complex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `circleMap_zero_radius`：circleMap_zero_radius (c : Complex) : circleMap c
+ 0 = const Real c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `deriv_const'`：deriv_const' : (deriv fun _ : 𝕜 => c) = fun _ => 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `intervalIntegral.integral_zero`：integral_zero : (∫ _ in a..b, (0 : E) ∂μ
+) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_radius_zero (f : Complex -> E) (c : Complex) : (∮ z in C(c, 0), f z) = 0 := by
+theorem integral_radius_zero (f : ℂ → E) (c : ℂ) : (∮ z in C(c, 0), f z) = 0 := by
   simp +unfoldPartialApp [circleIntegral, const]
-
-/--
-theorem `integral_congr` / 定理 `integral_congr`
-
-English:
-theorem integral_congr
-  given: {f g : Complex -> E} {c : Complex} {R : Real} (hR : 0 <= R) (h : EqOn f g (sphere c R))
-  proof: intervalIntegral.integral_congr fun θ _ => by simp only [h (circleMap_mem_sphere _ hR _)]
-
-中文:
-定理 integral_congr
-  条件: {f g : 复形 -> E} {c : 复形} {R : 实数} (hR : 0 <= R) (h : EqOn f g (sphere c R))
-  证明: intervalIntegral.integral_congr fun θ _ => by simp only [h (circleMap_mem_sphere _ hR _)]
-
-Depends on / 依赖: circleMap_mem_sphere, integral_congr, intervalIntegral, intervalIntegral.integral_congr
+/-
+**circleIntegral.integral_congr** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_congr {f g : Complex -> E} {c : Complex} {R : Real} (hR : 0 <= R)
+ (h : EqOn f g (sphere c R)) : (∮ z in C(c, R), f z) = ∮ z in C(c, R), g z
+参数：hR : 0 <= R；h : EqOn f g (sphere c R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intervalIntegral.integral_congr`：integral_congr {a b : Real} (h : EqOn f
+ g [[a, b]]) : ∫ x in a..b, f x ∂μ = ∫ x in a..b, g x ∂μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `circleMap_mem_sphere`：circleMap_mem_sphere (c : Complex) {R : Real} (hR 
+: 0 <= R) (θ : Real) : circleMap c R θ in sphere c R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_congr {f g : Complex -> E} {c : Complex} {R : Real} (hR : 0 <= R) (h : EqOn f g (sphere c R)) :
+theorem integral_congr {f g : ℂ → E} {c : ℂ} {R : ℝ} (hR : 0 ≤ R) (h : EqOn f g (sphere c R)) :
     (∮ z in C(c, R), f z) = ∮ z in C(c, R), g z :=
   intervalIntegral.integral_congr fun θ _ => by simp only [h (circleMap_mem_sphere _ hR _)]
 
-/--
-theorem `circleIntegral_congr_codiscreteWithin` / 定理 `circleIntegral_congr_codiscreteWithin`
+/-- Circle integrals are invariant when functions change along discrete sets. -/
+/-
+**circleIntegral.circleIntegral_congr_codiscreteWithin** 是 Mathlib 中的一个定理，位于命名空间
+ `circleIntegral`。
+形式化陈述：circleIntegral_congr_codiscreteWithin {c : Complex} {R : Real} {f₁ f₂ : Co
+mplex -> Complex} (hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂) (hR : R != 0)
+ : (∮ z in C(c, R), f₁ z) = (∮ z in C(c, R), f₂ z)
+参数：hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂；hR : R != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intervalIntegral.integral_congr_ae_restrict`：integral_congr_ae_restrict 
+{a b : Real} {f g : Real -> E} {μ : Measure Real} (h : f =ᵐ[μ.restrict (Ι a b)] 
+g) : ∫ x in a..b, f x ∂μ = ∫ x in…
+· 使用定理 `ae_restrict_le_codiscreteWithin`：ae_restrict_le_codiscreteWithin {α : Ty
+pe*} [MeasurableSpace α] [TopologicalSpace α] [SecondCountableTopology α] {μ : M
+easure α} [NullSingle…
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `measurableSet_uIoc`：measurableSet_uIoc [ClosedIicTopology α] : Measurabl
+eSet (uIoc a b)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用引理 `Filter.codiscreteWithin_mono`：Filter.codiscreteWithin_mono {U₁ U : Set X
+} (hU : U₁ subseteq U) : codiscreteWithin U₁ <= codiscreteWithin U
+· 使用定理 `trivial`：True
+· 使用定理 `circleMap_preimage_codiscrete`：circleMap_preimage_codiscrete {c : Comple
+x} {R : Real} (hR : R != 0) : map (circleMap c R) (codiscrete Real) <= codiscret
+eWithin (sphere c |…
 
-English:
-theorem circleIntegral_congr_codiscreteWithin
-  statement: {c : Complex} {R : Real} {f₁ f₂ : Complex -> Complex}
-  proof: by
-  apply intervalIntegral.integral_congr_ae_restrict
-  apply ae_restrict_le_codiscreteWithin measurableSet_uIoc
-  simp only [deriv_circleMap, smul_eq_mul, mul_eq_mul_left_iff, mul_eq_zero,
-    circleMap_eq_center_iff, hR, Complex.I_ne_zero, or_self, or_false]
-  exact codiscreteWithin_mono (by tauto) (circleMap_preimage_codiscrete hR hf)
-
-中文:
-定理 circle整数egral_congr_codiscreteWithin
-  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> 复形}
-  证明: by
-  apply intervalIntegral.integral_congr_ae_restrict
-  apply ae_restrict_le_codiscreteWithin measurableSet_uIoc
-  simp only [deriv_circleMap, smul_eq_mul, mul_eq_mul_left_iff, mul_eq_zero,
-    circleMap_eq_center_iff, hR, Complex.I_ne_zero, or_self, or_false]
-  exact codiscreteWithin_mono (by tauto) (circleMap_preimage_codiscrete hR hf)
-
-Depends on / 依赖: Complex.I_ne_zero, I_ne_zero, ae_restrict_le_codiscreteWithin, circleMap_eq_center_iff, circleMap_preimage_codiscrete, codiscreteWithin_mono, deriv_circleMap, integral_congr_ae_restrict, intervalIntegral, intervalIntegral.integral_congr_ae_restrict, measurableSet_uIoc, mul_eq_mul_left_iff, mul_eq_zero, or_false, or_self, smul_eq_mul
+--- 原说明 ---
+Circle integrals are invariant when functions change along discrete sets.
 -/
-theorem circleIntegral_congr_codiscreteWithin {c : Complex} {R : Real} {f₁ f₂ : Complex -> Complex}
-    (hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂) (hR : R != 0) :
+theorem circleIntegral_congr_codiscreteWithin {c : ℂ} {R : ℝ} {f₁ f₂ : ℂ → ℂ}
+    (hf : f₁ =ᶠ[codiscreteWithin (sphere c |R|)] f₂) (hR : R ≠ 0) :
     (∮ z in C(c, R), f₁ z) = (∮ z in C(c, R), f₂ z) := by
   apply intervalIntegral.integral_congr_ae_restrict
   apply ae_restrict_le_codiscreteWithin measurableSet_uIoc
   simp only [deriv_circleMap, smul_eq_mul, mul_eq_mul_left_iff, mul_eq_zero,
     circleMap_eq_center_iff, hR, Complex.I_ne_zero, or_self, or_false]
   exact codiscreteWithin_mono (by tauto) (circleMap_preimage_codiscrete hR hf)
-
-/--
-theorem `integral_sub_inv_smul_sub_smul` / 定理 `integral_sub_inv_smul_sub_smul`
-
-English:
-theorem integral_sub_inv_smul_sub_smul
-  given: (f : Complex -> E) (c w : Complex) (R : Real)
-  proof: by
-  rcases eq_or_ne R 0 with (rfl | hR); · simp only [integral_radius_zero]
-  have : (circleMap c R ⁻¹' {w}).Countable := (countable_singleton _).preimage_circleMap c hR
-  refine intervalIntegral.integral_congr_ae ((this.ae_notMem _).mono fun θ hθ _' => ?_)
-  change circleMap c R θ != w at hθ
-  simp only [inv_smul_smul₀ (sub_ne_zero.2 <| hθ)]
-
-中文:
-定理 integral_sub_inv_smul_sub_smul
-  条件: (f : 复形 -> E) (c w : 复形) (R : 实数)
-  证明: by
-  rcases eq_or_ne R 0 with (rfl | hR); · simp only [integral_radius_zero]
-  have : (circleMap c R ⁻¹' {w}).Countable := (countable_singleton _).preimage_circleMap c hR
-  refine intervalIntegral.integral_congr_ae ((this.ae_notMem _).mono fun θ hθ _' => ?_)
-  change circleMap c R θ != w at hθ
-  simp only [inv_smul_smul₀ (sub_ne_zero.2 <| hθ)]
-
-Depends on / 依赖: Countable, ae_notMem, circleMap, countable_singleton, eq_or_ne, integral_congr_ae, integral_radius_zero, intervalIntegral, intervalIntegral.integral_congr_ae, preimage_circleMap, sub_ne_zero, this.ae_notMem
+/-
+**circleIntegral.integral_sub_inv_smul_sub_smul** 是 Mathlib 中的一个定理，位于命名空间 `circl
+eIntegral`。
+形式化陈述：integral_sub_inv_smul_sub_smul (f : Complex -> E) (c w : Complex) (R : Rea
+l) : (∮ z in C(c, R), (z - w)⁻¹ • (z - w) • f z) = ∮ z in C(c, R), f z
+参数：f : Complex -> E；c w : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `circleIntegral.integral_radius_zero`：integral_radius_zero (f : Complex -
+> E) (c : Complex) : (∮ z in C(c, 0), f z) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Countable.preimage_circleMap`：Set.Countable.preimage_circleMap {s : 
+Set Complex} (hs : s.Countable) (c : Complex) {R : Real} (hR : R != 0) : (circle
+Map c R ⁻¹' s).Countab…
+· 使用定理 `Set.countable_singleton`：∀ {α : Type u} (a : α), {a}.Countable
+· 使用定理 `intervalIntegral.integral_congr_ae`：integral_congr_ae (h : forallᵐ x ∂μ,
+ x in Ι a b -> f x = g x) : ∫ x in a..b, f x ∂μ = ∫ x in a..b, g x ∂μ
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.Countable.ae_notMem`：∀ {α : Type u_1} {m0 : MeasurableSpace α} {s : 
+Set α},   s.Countable → ∀ (μ : MeasureTheory.Measure α) [MeasureTheory.NullSingl
+etonClass μ],…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_ne_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b ≠ 0 ↔
+ a ≠ b
 -/
-theorem integral_sub_inv_smul_sub_smul (f : Complex -> E) (c w : Complex) (R : Real) :
+theorem integral_sub_inv_smul_sub_smul (f : ℂ → E) (c w : ℂ) (R : ℝ) :
     (∮ z in C(c, R), (z - w)⁻¹ • (z - w) • f z) = ∮ z in C(c, R), f z := by
   rcases eq_or_ne R 0 with (rfl | hR); · simp only [integral_radius_zero]
   have : (circleMap c R ⁻¹' {w}).Countable := (countable_singleton _).preimage_circleMap c hR
   refine intervalIntegral.integral_congr_ae ((this.ae_notMem _).mono fun θ hθ _' => ?_)
-  change circleMap c R θ != w at hθ
+  change circleMap c R θ ≠ w at hθ
   simp only [inv_smul_smul₀ (sub_ne_zero.2 <| hθ)]
-
-/--
-theorem `integral_undef` / 定理 `integral_undef`
-
-English:
-theorem integral_undef
-  given: {f : Complex -> E} {c : Complex} {R : Real} (hf : ¬CircleIntegrable f c R)
-  proof: intervalIntegral.integral_undef (mt (circleIntegrable_iff R).mpr hf)
-
-中文:
-定理 integral_undef
-  条件: {f : 复形 -> E} {c : 复形} {R : 实数} (hf : ¬Circle整数egrable f c R)
-  证明: intervalIntegral.integral_undef (mt (circleIntegrable_iff R).mpr hf)
-
-Depends on / 依赖: circleIntegrable_iff, integral_undef, intervalIntegral, intervalIntegral.integral_undef
+/-
+**circleIntegral.integral_undef** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_undef {f : Complex -> E} {c : Complex} {R : Real} (hf : ¬CircleIn
+tegrable f c R) : (∮ z in C(c, R), f z) = 0
+参数：hf : ¬CircleIntegrable f c R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intervalIntegral.integral_undef`：∀ {E : Type u_5} [inst : NormedAddCommG
+roup E] [inst_1 : NormedSpace ℝ E] {a b : ℝ} {f : ℝ → E}   {μ : MeasureTheory.Me
+asure ℝ}, ¬IntervalIn…
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `circleIntegrable_iff`：circleIntegrable_iff [NormedSpace Complex E] {f : 
+Complex -> E} {c : Complex} (R : Real) : CircleIntegrable f c R ↔ IntervalIntegr
+able (fun …
 -/
-theorem integral_undef {f : Complex -> E} {c : Complex} {R : Real} (hf : ¬CircleIntegrable f c R) :
+theorem integral_undef {f : ℂ → E} {c : ℂ} {R : ℝ} (hf : ¬CircleIntegrable f c R) :
     (∮ z in C(c, R), f z) = 0 :=
   intervalIntegral.integral_undef (mt (circleIntegrable_iff R).mpr hf)
-
-/--
-theorem `integral_add` / 定理 `integral_add`
-
-English:
-theorem integral_add
-  statement: {f g : Complex -> E} {c : Complex} {R : Real} (hf : CircleIntegrable f c R)
-  proof: by
-  simp only [circleIntegral, smul_add, intervalIntegral.integral_add hf.out hg.out]
-
-中文:
-定理 integral_add
-  结论: {f g : 复形 -> E} {c : 复形} {R : 实数} (hf : Circle整数egrable f c R)
-  证明: by
-  simp only [circleIntegral, smul_add, intervalIntegral.integral_add hf.out hg.out]
-
-Depends on / 依赖: circleIntegral, hf.out, hg.out, integral_add, intervalIntegral, intervalIntegral.integral_add, smul_add
+/-
+**circleIntegral.integral_add** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_add {f g : Complex -> E} {c : Complex} {R : Real} (hf : CircleInt
+egrable f c R) (hg : CircleIntegrable g c R) : (∮ z in C(c, R), f z + g z) = (∮ 
+z in C(c, R), f z) + (∮ z in C(c, R), g z)
+参数：hf : CircleIntegrable f c R；hg : CircleIntegrable g c R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `intervalIntegral.integral_add`：∀ {E : Type u_5} [inst : NormedAddCommGro
+up E] [inst_1 : NormedSpace ℝ E] {a b : ℝ} {f g : ℝ → E}   {μ : MeasureTheory.Me
+asure ℝ},   Interva…
+· 使用定理 `CircleIntegrable.out`：out [NormedSpace Complex E] (hf : CircleIntegrable
+ f c R) : IntervalIntegrable (fun θ : Real => deriv (circleMap c R) θ • f (circl
+eMap c R θ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_add {f g : Complex -> E} {c : Complex} {R : Real} (hf : CircleIntegrable f c R)
+theorem integral_add {f g : ℂ → E} {c : ℂ} {R : ℝ} (hf : CircleIntegrable f c R)
     (hg : CircleIntegrable g c R) :
     (∮ z in C(c, R), f z + g z) = (∮ z in C(c, R), f z) + (∮ z in C(c, R), g z) := by
   simp only [circleIntegral, smul_add, intervalIntegral.integral_add hf.out hg.out]
-
-/--
-theorem `integral_sub` / 定理 `integral_sub`
-
-English:
-theorem integral_sub
-  statement: {f g : Complex -> E} {c : Complex} {R : Real} (hf : CircleIntegrable f c R)
-  proof: by
-  simp only [circleIntegral, smul_sub, intervalIntegral.integral_sub hf.out hg.out]
-
-中文:
-定理 integral_sub
-  结论: {f g : 复形 -> E} {c : 复形} {R : 实数} (hf : Circle整数egrable f c R)
-  证明: by
-  simp only [circleIntegral, smul_sub, intervalIntegral.integral_sub hf.out hg.out]
-
-Depends on / 依赖: circleIntegral, hf.out, hg.out, integral_sub, intervalIntegral, intervalIntegral.integral_sub, smul_sub
+/-
+**circleIntegral.integral_sub** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_sub {f g : Complex -> E} {c : Complex} {R : Real} (hf : CircleInt
+egrable f c R) (hg : CircleIntegrable g c R) : (∮ z in C(c, R), f z - g z) = (∮ 
+z in C(c, R), f z) - ∮ z in C(c, R), g z
+参数：hf : CircleIntegrable f c R；hg : CircleIntegrable g c R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `intervalIntegral.integral_sub`：integral_sub (hf : IntervalIntegrable f μ
+ a b) (hg : IntervalIntegrable g μ a b) : ∫ x in a..b, f x - g x ∂μ = (∫ x in a.
+.b, f x ∂μ) - ∫ x i…
+· 使用定理 `CircleIntegrable.out`：out [NormedSpace Complex E] (hf : CircleIntegrable
+ f c R) : IntervalIntegrable (fun θ : Real => deriv (circleMap c R) θ • f (circl
+eMap c R θ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_sub {f g : Complex -> E} {c : Complex} {R : Real} (hf : CircleIntegrable f c R)
+theorem integral_sub {f g : ℂ → E} {c : ℂ} {R : ℝ} (hf : CircleIntegrable f c R)
     (hg : CircleIntegrable g c R) :
     (∮ z in C(c, R), f z - g z) = (∮ z in C(c, R), f z) - ∮ z in C(c, R), g z := by
   simp only [circleIntegral, smul_sub, intervalIntegral.integral_sub hf.out hg.out]
-
-/--
-theorem `integral_fun_sum` / 定理 `integral_fun_sum`
-
-English:
-theorem integral_fun_sum
-  statement: {ι : Type*} {s : Finset ι} {f : ι -> Complex -> E} {c : Complex} {R : Real}
-  proof: by
-  simp only [circleIntegral, Finset.smul_sum,
-    intervalIntegral.integral_finsetSum fun i hi => (h i hi).out]
-
-中文:
-定理 integral_fun_sum
-  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 复形 -> E} {c : 复形} {R : 实数}
-  证明: by
-  simp only [circleIntegral, Finset.smul_sum,
-    intervalIntegral.integral_finsetSum fun i hi => (h i hi).out]
-
-Depends on / 依赖: Finset, Finset.smul_sum, circleIntegral, integral_finsetSum, intervalIntegral, intervalIntegral.integral_finsetSum, smul_sum
+/-
+**circleIntegral.integral_fun_sum** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_fun_sum {ι : Type*} {s : Finset ι} {f : ι -> Complex -> E} {c : C
+omplex} {R : Real} (h : forall i in s, CircleIntegrable (f i) c R) : (∮ z in C(c
+, R), ∑ i in s, f i z) = ∑ i in s, ∮ z in C(c, R), f i z
+参数：h : forall i in s, CircleIntegrable (f i) c R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `intervalIntegral.integral_finsetSum`：∀ {E : Type u_5} [inst : NormedAddC
+ommGroup E] [inst_1 : NormedSpace ℝ E] {a b : ℝ} {μ : MeasureTheory.Measure ℝ}  
+ {ι : Type u_8} {s : Fins…
+· 使用定理 `CircleIntegrable.out`：out [NormedSpace Complex E] (hf : CircleIntegrable
+ f c R) : IntervalIntegrable (fun θ : Real => deriv (circleMap c R) θ • f (circl
+eMap c R θ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_fun_sum {ι : Type*} {s : Finset ι} {f : ι -> Complex -> E} {c : Complex} {R : Real}
-    (h : forall i in s, CircleIntegrable (f i) c R) :
-    (∮ z in C(c, R), ∑ i in s, f i z) = ∑ i in s, ∮ z in C(c, R), f i z := by
+theorem integral_fun_sum {ι : Type*} {s : Finset ι} {f : ι → ℂ → E} {c : ℂ} {R : ℝ}
+    (h : ∀ i ∈ s, CircleIntegrable (f i) c R) :
+    (∮ z in C(c, R), ∑ i ∈ s, f i z) = ∑ i ∈ s, ∮ z in C(c, R), f i z := by
   simp only [circleIntegral, Finset.smul_sum,
-    intervalIntegral.integral_finsetSum fun i hi => (h i hi).out]
-
-/--
-theorem `norm_integral_le_of_norm_le_const'` / 定理 `norm_integral_le_of_norm_le_const'`
-
-English:
-theorem norm_integral_le_of_norm_le_const'
-  statement: {f : Complex -> E} {c : Complex} {R C : Real}
-  proof: calc
-    ‖∮ z in C(c, R), f z‖ <= |R| * C * |2 * π - 0| :=
+    intervalIntegral.integral_finsetSum fun i hi ↦ (h i hi).out]
+/-
+**circleIntegral.norm_integral_le_of_norm_le_const'** 是 Mathlib 中的一个定理，位于命名空间 `c
+ircleIntegral`。
+形式化陈述：norm_integral_le_of_norm_le_const' {f : Complex -> E} {c : Complex} {R C :
+ Real} (hf : forall z in sphere c |R|, ‖f z‖ <= C) : ‖∮ z in C(c, R), f z‖ <= 2 
+* π * |R| * C
+参数：hf : forall z in sphere c |R|, ‖f z‖ <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `intervalIntegral.norm_integral_le_of_norm_le_const`：norm_integral_le_of_
+norm_le_const {a b C : Real} {f : Real -> E} (h : forall x in Ι a b, ‖f x‖ <= C)
+ : ‖∫ x in a..b, f x‖ <= C * |b - a|
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `Complex.norm_mul`：∀ (z w : ℂ), ‖z * w‖ = ‖z‖ * ‖w‖
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_circleMap_zero`：norm_circleMap_zero (R : Real) (θ : Real) : ‖circle
+Map 0 R θ‖ = |R|
+· 使用定理 `Complex.norm_I`：‖Complex.I‖ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `Lean.Data.AC.Context.eq_of_norm`：∀ {α : Sort u_1} (ctx : Data.AC.Context
+ α) (a b : Data.AC.Expr),   (Data.AC.norm ctx a == Data.AC.norm ctx b) = true → 
+Data.AC.eval α ctx a …
+· 使用定理 `IsMulCommutative.is_comm`：∀ {M : Type u_2} {inst : Mul M} [self : IsMulC
+ommutative M], Std.Commutative fun x1 x2 => x1 * x2
+-/
+theorem norm_integral_le_of_norm_le_const' {f : ℂ → E} {c : ℂ} {R C : ℝ}
+    (hf : ∀ z ∈ sphere c |R|, ‖f z‖ ≤ C) : ‖∮ z in C(c, R), f z‖ ≤ 2 * π * |R| * C :=
+  calc
+    ‖∮ z in C(c, R), f z‖ ≤ |R| * C * |2 * π - 0| :=
       intervalIntegral.norm_integral_le_of_norm_le_const fun θ _ =>
         calc
           ‖deriv (circleMap c R) θ • f (circleMap c R θ)‖ = |R| * ‖f (circleMap c R θ)‖ := by
             simp [norm_smul]
-          _ <= |R| * C := by
-gcongr; exact hf _ circleMap_mem_sphere' _ _ _
+          _ ≤ |R| * C := by
+            gcongr; exact hf _ <| circleMap_mem_sphere' _ _ _
     _ = 2 * π * |R| * C := by rw [sub_zero, _root_.abs_of_pos Real.two_pi_pos]; ac_rfl
-
-中文:
-定理 norm_integral_le_of_norm_le_const'
-  结论: {f : 复形 -> E} {c : 复形} {R C : 实数}
-  证明: calc
-    ‖∮ z in C(c, R), f z‖ <= |R| * C * |2 * π - 0| :=
-      intervalIntegral.norm_integral_le_of_norm_le_const fun θ _ =>
-        calc
-          ‖deriv (circleMap c R) θ • f (circleMap c R θ)‖ = |R| * ‖f (circleMap c R θ)‖ := by
-            simp [norm_smul]
-          _ <= |R| * C := by
-gcongr; exact hf _ circleMap_mem_sphere' _ _ _
-    _ = 2 * π * |R| * C := by rw [sub_zero, _root_.abs_of_pos Real.two_pi_pos]; ac_rfl
-
-Depends on / 依赖: Real.two_pi_pos, _root_, _root_.abs_of_pos, abs_of_pos, circleMap, circleMap_mem_sphere, intervalIntegral, intervalIntegral.norm_integral_le_of_norm_le_const, norm_integral_le_of_norm_le_const, norm_smul, sub_zero, two_pi_pos
+/-
+**circleIntegral.norm_integral_le_of_norm_le_const** 是 Mathlib 中的一个定理，位于命名空间 `ci
+rcleIntegral`。
+形式化陈述：norm_integral_le_of_norm_le_const {f : Complex -> E} {c : Complex} {R C : 
+Real} (hR : 0 <= R) (hf : forall z in sphere c R, ‖f z‖ <= C) : ‖∮ z in C(c, R),
+ f z‖ <= 2 * π * R * C
+参数：hR : 0 <= R；hf : forall z in sphere c R, ‖f z‖ <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `circleIntegral.norm_integral_le_of_norm_le_const'`：norm_integral_le_of_n
+orm_le_const' {f : Complex -> E} {c : Complex} {R C : Real} (hf : forall z in sp
+here c |R|, ‖f z‖ <= C) : ‖∮ z in C(c, …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem norm_integral_le_of_norm_le_const' {f : Complex -> E} {c : Complex} {R C : Real}
-    (hf : forall z in sphere c |R|, ‖f z‖ <= C) : ‖∮ z in C(c, R), f z‖ <= 2 * π * |R| * C :=
-  calc
-    ‖∮ z in C(c, R), f z‖ <= |R| * C * |2 * π - 0| :=
-      intervalIntegral.norm_integral_le_of_norm_le_const fun θ _ =>
-        calc
-          ‖deriv (circleMap c R) θ • f (circleMap c R θ)‖ = |R| * ‖f (circleMap c R θ)‖ := by
-            simp [norm_smul]
-          _ <= |R| * C := by
-gcongr; exact hf _ circleMap_mem_sphere' _ _ _
-    _ = 2 * π * |R| * C := by rw [sub_zero, _root_.abs_of_pos Real.two_pi_pos]; ac_rfl
-
-/--
-theorem `norm_integral_le_of_norm_le_const` / 定理 `norm_integral_le_of_norm_le_const`
-
-English:
-theorem norm_integral_le_of_norm_le_const
-  statement: {f : Complex -> E} {c : Complex} {R C : Real} (hR : 0 <= R)
-  proof: have : |R| = R := abs_of_nonneg hR
-  calc
-‖∮ z in C(c, R), f z‖ <= 2 * π * |R| * C := norm_integral_le_of_norm_le_const' by rwa [this]
-    _ = 2 * π * R * C := by rw [this]
-
-中文:
-定理 norm_integral_le_of_norm_le_const
-  结论: {f : 复形 -> E} {c : 复形} {R C : 实数} (hR : 0 <= R)
-  证明: have : |R| = R := abs_of_nonneg hR
-  calc
-‖∮ z in C(c, R), f z‖ <= 2 * π * |R| * C := norm_integral_le_of_norm_le_const' by rwa [this]
-    _ = 2 * π * R * C := by rw [this]
-
-Depends on / 依赖: abs_of_nonneg, norm_integral_le_of_norm_le_const
--/
-theorem norm_integral_le_of_norm_le_const {f : Complex -> E} {c : Complex} {R C : Real} (hR : 0 <= R)
-    (hf : forall z in sphere c R, ‖f z‖ <= C) : ‖∮ z in C(c, R), f z‖ <= 2 * π * R * C :=
+theorem norm_integral_le_of_norm_le_const {f : ℂ → E} {c : ℂ} {R C : ℝ} (hR : 0 ≤ R)
+    (hf : ∀ z ∈ sphere c R, ‖f z‖ ≤ C) : ‖∮ z in C(c, R), f z‖ ≤ 2 * π * R * C :=
   have : |R| = R := abs_of_nonneg hR
   calc
-‖∮ z in C(c, R), f z‖ <= 2 * π * |R| * C := norm_integral_le_of_norm_le_const' by rwa [this]
+    ‖∮ z in C(c, R), f z‖ ≤ 2 * π * |R| * C := norm_integral_le_of_norm_le_const' <| by rwa [this]
     _ = 2 * π * R * C := by rw [this]
-
-/--
-theorem `norm_two_pi_i_inv_smul_integral_le_of_norm_le_const` / 定理 `norm_two_pi_i_inv_smul_integral_le_of_norm_le_const`
-
-English:
-theorem norm_two_pi_i_inv_smul_integral_le_of_norm_le_const
-  statement: {f : Complex -> E} {c : Complex} {R C : Real}
-  proof: by
-  have : ‖(2 * π * I : Complex)⁻¹‖ = (2 * π)⁻¹ := by simp [Real.pi_pos.le]
-  rw [norm_smul]; rw [this]; rw [← div_eq_inv_mul]; rw [div_le_iff₀ Real.two_pi_pos]; rw [mul_comm (R * C)]; rw [← mul_assoc]
-  exact norm_integral_le_of_norm_le_const hR hf
-
-中文:
-定理 norm_two_pi_i_inv_smul_integral_le_of_norm_le_const
-  结论: {f : 复形 -> E} {c : 复形} {R C : 实数}
-  证明: by
-  have : ‖(2 * π * I : Complex)⁻¹‖ = (2 * π)⁻¹ := by simp [Real.pi_pos.le]
-  rw [norm_smul]; rw [this]; rw [← div_eq_inv_mul]; rw [div_le_iff₀ Real.two_pi_pos]; rw [mul_comm (R * C)]; rw [← mul_assoc]
-  exact norm_integral_le_of_norm_le_const hR hf
-
-Depends on / 依赖: Real.pi_pos.le, Real.two_pi_pos, div_eq_inv_mul, mul_assoc, mul_comm, norm_integral_le_of_norm_le_const, norm_smul, pi_pos, two_pi_pos
+/-
+**circleIntegral.norm_two_pi_i_inv_smul_integral_le_of_norm_le_const** 是 Mathlib
+ 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：norm_two_pi_i_inv_smul_integral_le_of_norm_le_const {f : Complex -> E} {c 
+: Complex} {R C : Real} (hR : 0 <= R) (hf : forall z in sphere c R, ‖f z‖ <= C) 
+: ‖(2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), f z‖ <= R * C
+参数：hR : 0 <= R；hf : forall z in sphere c R, ‖f z‖ <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `Complex.inv_I`：inv_I : I⁻¹ = -I
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `Complex.norm_mul`：∀ (z w : ℂ), ‖z * w‖ = ‖z‖ * ‖w‖
+· 使用定理 `Complex.norm_I`：‖Complex.I‖ = 1
+· 使用定理 `norm_inv`：norm_inv (a : α) : ‖a⁻¹‖ = ‖a‖⁻¹
+· 使用引理 `Complex.norm_real`：norm_real (r : Real) : ‖(r : Complex)‖ = ‖r‖
+· 使用引理 `Complex.norm_ofNat`：norm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) : C
+omplex)‖ = OfNat.ofNat n
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
+· 使用引理 `div_le_iff₀`：div_le_iff₀ (hc : 0 < c) : b / c <= a ↔ b <= a * c
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+（共 36 条，此处仅展示前 30 条）
 -/
-theorem norm_two_pi_i_inv_smul_integral_le_of_norm_le_const {f : Complex -> E} {c : Complex} {R C : Real}
-    (hR : 0 <= R) (hf : forall z in sphere c R, ‖f z‖ <= C) :
-    ‖(2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), f z‖ <= R * C := by
-  have : ‖(2 * π * I : Complex)⁻¹‖ = (2 * π)⁻¹ := by simp [Real.pi_pos.le]
-  rw [norm_smul]; rw [this]; rw [← div_eq_inv_mul]; rw [div_le_iff₀ Real.two_pi_pos]; rw [mul_comm (R * C)]; rw [← mul_assoc]
+theorem norm_two_pi_i_inv_smul_integral_le_of_norm_le_const {f : ℂ → E} {c : ℂ} {R C : ℝ}
+    (hR : 0 ≤ R) (hf : ∀ z ∈ sphere c R, ‖f z‖ ≤ C) :
+    ‖(2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), f z‖ ≤ R * C := by
+  have : ‖(2 * π * I : ℂ)⁻¹‖ = (2 * π)⁻¹ := by simp [Real.pi_pos.le]
+  rw [norm_smul, this, ← div_eq_inv_mul, div_le_iff₀ Real.two_pi_pos, mul_comm (R * C), ← mul_assoc]
   exact norm_integral_le_of_norm_le_const hR hf
 
-/--
-theorem `norm_integral_lt_of_norm_le_const_of_lt` / 定理 `norm_integral_lt_of_norm_le_const_of_lt`
+/-- If `f` is continuous on the circle `|z - c| = R`, `R > 0`, the `‖f z‖` is less than or equal to
+`C : ℝ` on this circle, and this norm is strictly less than `C` at some point `z` of the circle,
+then `‖∮ z in C(c, R), f z‖ < 2 * π * R * C`. -/
+/-
+**circleIntegral.norm_integral_lt_of_norm_le_const_of_lt** 是 Mathlib 中的一个定理，位于命名
+空间 `circleIntegral`。
+形式化陈述：norm_integral_lt_of_norm_le_const_of_lt {f : Complex -> E} {c : Complex} {
+R C : Real} (hR : 0 < R) (hc : ContinuousOn f (sphere c R)) (hf : forall z in sp
+here c R, ‖f z‖ <= C) (hlt : exists z in sphere c R, ‖f z‖ < C) : ‖∮ z in C(c, R
+), f z‖ < 2 * π * R * C
+参数：hR : 0 < R；hc : ContinuousOn f (sphere c R)；hf : forall z in sphere c R, ‖f z
+‖ <= C；hlt : exists z in sphere c R, ‖f z‖ < C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `image_circleMap_Ioc`：image_circleMap_Ioc (c : Complex) (R : Real) : circ
+leMap c R '' Ioc 0 (2 * π) = sphere c |R|
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `intervalIntegral.norm_integral_le_integral_norm`：norm_integral_le_integr
+al_norm (h : a <= b) : ‖∫ x in a..b, f x ∂μ‖ <= ∫ x in a..b, ‖f x‖ ∂μ
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `norm_mul`：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClas
+s α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_circleMap_zero`：norm_circleMap_zero (R : Real) (θ : Real) : ‖circle
+Map 0 R θ‖ = |R|
+· 使用定理 `Complex.norm_I`：‖Complex.I‖ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
+`：integral_lt_integral_of_continuousOn_of_le_of_exists_lt {f g : Real -> Real} {
+a b : Real} (hab : a < b) (hfc : ContinuousOn f (Icc a b)) (hg…
+· 使用定理 `ContinuousOn.mul`：ContinuousOn.mul (hf : ContinuousOn f s) (hg : Continu
+ousOn g s) : ContinuousOn (f * g) s
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `ContinuousOn.norm`：∀ {α : Type u_1} {E : Type u_4} [inst : SeminormedAdd
+Group E] [inst_1 : TopologicalSpace α] {f : α → E} {s : Set α},   ContinuousOn f
+ s → Co…
+· 使用定理 `ContinuousOn.comp`：ContinuousOn.comp {g : β -> γ} {t : Set β} (hg : Cont
+inuousOn g t) (hf : ContinuousOn f s) (h : MapsTo f s t) : ContinuousOn (g ∘ f) 
+s
+（共 59 条，此处仅展示前 30 条）
 
-English:
-theorem norm_integral_lt_of_norm_le_const_of_lt
-  statement: {f : Complex -> E} {c : Complex} {R C : Real} (hR : 0 < R)
-  proof: by
-  rw [← _root_.abs_of_pos hR]; rw [← image_circleMap_Ioc] at hlt
+--- 原说明 ---
+If `f` is continuous on the circle `|z - c| = R`, `R > 0`, the `‖f z‖` is less t
+han or equal to
+`C : ℝ` on this circle, and this norm is strictly less than `C` at some point `z
+` of the circle,
+then `‖∮ z in C(c, R), f z‖ < 2 * π * R * C`.
+-/
+theorem norm_integral_lt_of_norm_le_const_of_lt {f : ℂ → E} {c : ℂ} {R C : ℝ} (hR : 0 < R)
+    (hc : ContinuousOn f (sphere c R)) (hf : ∀ z ∈ sphere c R, ‖f z‖ ≤ C)
+    (hlt : ∃ z ∈ sphere c R, ‖f z‖ < C) : ‖∮ z in C(c, R), f z‖ < 2 * π * R * C := by
+  rw [← _root_.abs_of_pos hR, ← image_circleMap_Ioc] at hlt
   rcases hlt with ⟨_, ⟨θ₀, hmem, rfl⟩, hlt⟩
   calc
-    ‖∮ z in C(c, R), f z‖ <= ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ • f (circleMap c R θ)‖ :=
+    ‖∮ z in C(c, R), f z‖ ≤ ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ • f (circleMap c R θ)‖ :=
       intervalIntegral.norm_integral_le_integral_norm Real.two_pi_pos.le
     _ < ∫ _ in 0..2 * π, R * C := by
       simp only [deriv_circleMap, norm_smul, norm_mul, norm_circleMap_zero, abs_of_pos hR, norm_I,
@@ -1695,184 +2051,198 @@ theorem norm_integral_lt_of_norm_le_const_of_lt
       · exact continuousOn_const.mul (hc.comp (continuous_circleMap _ _).continuousOn fun θ _ =>
           circleMap_mem_sphere _ hR.le _).norm
       · gcongr
-exact hf _ circleMap_mem_sphere _ hR.le _
+        exact hf _ <| circleMap_mem_sphere _ hR.le _
       · gcongr
     _ = 2 * π * R * C := by simp [mul_assoc]; ring
 
 @[simp]
-
-中文:
-定理 norm_integral_lt_of_norm_le_const_of_lt
-  结论: {f : 复形 -> E} {c : 复形} {R C : 实数} (hR : 0 < R)
-  证明: by
-  rw [← _root_.abs_of_pos hR]; rw [← image_circleMap_Ioc] at hlt
-  rcases hlt with ⟨_, ⟨θ₀, hmem, rfl⟩, hlt⟩
-  calc
-    ‖∮ z in C(c, R), f z‖ <= ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ • f (circleMap c R θ)‖ :=
-      intervalIntegral.norm_integral_le_integral_norm Real.two_pi_pos.le
-    _ < ∫ _ in 0..2 * π, R * C := by
-      simp only [deriv_circleMap, norm_smul, norm_mul, norm_circleMap_zero, abs_of_pos hR, norm_I,
-        mul_one]
-      refine intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
-          Real.two_pi_pos ?_ continuousOn_const (fun θ _ => ?_) ⟨θ₀, Ioc_subset_Icc_self hmem, ?_⟩
-      · exact continuousOn_const.mul (hc.comp (continuous_circleMap _ _).continuousOn fun θ _ =>
-          circleMap_mem_sphere _ hR.le _).norm
-      · gcongr
-exact hf _ circleMap_mem_sphere _ hR.le _
-      · gcongr
-    _ = 2 * π * R * C := by simp [mul_assoc]; ring
-
-@[simp]
-
-Depends on / 依赖: Real.two_pi_, Real.two_pi_pos.le, _root_, _root_.abs_of_pos, abs_of_pos, circleMap, deriv_circleMap, image_circleMap_Ioc, integral_lt_integral_of_continuousOn_of_le_of_exists_lt, intervalIntegral, intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt, intervalIntegral.norm_integral_le_integral_norm, mul_one, norm_I, norm_circleMap_zero, norm_integral_le_integral_norm, norm_mul, norm_smul, two_pi_, two_pi_pos
+/-
+**circleIntegral.integral_smul** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_smul {𝕜 : Type*} [RCLike 𝕜] [NormedSpace 𝕜 E] [SMulCommClass 𝕜 Co
+mplex E] (a : 𝕜) (f : Complex -> E) (c : Complex) (R : Real) : (∮ z in C(c, R), 
+a • f z) = a • ∮ z in C(c, R), f z
+参数：a : 𝕜；f : Complex -> E；c : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `intervalIntegral.integral_smul`：∀ {𝕜 : Type u_2} {E : Type u_5} [inst : 
+NormedAddCommGroup E] [inst_1 : NormedSpace ℝ E] {a b : ℝ}   {μ : MeasureTheory.
+Measure ℝ} [inst_2 :…
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Real.isScalarTower`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst_1 : _
+root_.Module ℝ E] [inst_2 : TopologicalSpace E] [ContinuousSMul ℝ E]   [T2Space 
+E] {A : …
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_integral_lt_of_norm_le_const_of_lt {f : Complex -> E} {c : Complex} {R C : Real} (hR : 0 < R)
-    (hc : ContinuousOn f (sphere c R)) (hf : forall z in sphere c R, ‖f z‖ <= C)
-    (hlt : exists z in sphere c R, ‖f z‖ < C) : ‖∮ z in C(c, R), f z‖ < 2 * π * R * C := by
-  rw [← _root_.abs_of_pos hR]; rw [← image_circleMap_Ioc] at hlt
-  rcases hlt with ⟨_, ⟨θ₀, hmem, rfl⟩, hlt⟩
-  calc
-    ‖∮ z in C(c, R), f z‖ <= ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ • f (circleMap c R θ)‖ :=
-      intervalIntegral.norm_integral_le_integral_norm Real.two_pi_pos.le
-    _ < ∫ _ in 0..2 * π, R * C := by
-      simp only [deriv_circleMap, norm_smul, norm_mul, norm_circleMap_zero, abs_of_pos hR, norm_I,
-        mul_one]
-      refine intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
-          Real.two_pi_pos ?_ continuousOn_const (fun θ _ => ?_) ⟨θ₀, Ioc_subset_Icc_self hmem, ?_⟩
-      · exact continuousOn_const.mul (hc.comp (continuous_circleMap _ _).continuousOn fun θ _ =>
-          circleMap_mem_sphere _ hR.le _).norm
-      · gcongr
-exact hf _ circleMap_mem_sphere _ hR.le _
-      · gcongr
-    _ = 2 * π * R * C := by simp [mul_assoc]; ring
+theorem integral_smul {𝕜 : Type*} [RCLike 𝕜] [NormedSpace 𝕜 E] [SMulCommClass 𝕜 ℂ E] (a : 𝕜)
+    (f : ℂ → E) (c : ℂ) (R : ℝ) : (∮ z in C(c, R), a • f z) = a • ∮ z in C(c, R), f z := by
+  simp only [circleIntegral, ← smul_comm a (_ : ℂ) (_ : E), intervalIntegral.integral_smul]
 
 @[simp]
-/--
-theorem `integral_smul` / 定理 `integral_smul`
-
-English:
-theorem integral_smul
-  statement: {𝕜 : Type*} [RCLike 𝕜] [NormedSpace 𝕜 E] [SMulCommClass 𝕜 Complex E] (a : 𝕜)
-  proof: by
-  simp only [circleIntegral, ← smul_comm a (_ : Complex) (_ : E), intervalIntegral.integral_smul]
-
-@[simp]
-
-中文:
-定理 integral_smul
-  结论: {𝕜 : 类型} [RCLike 𝕜] [赋范空间 𝕜 E] [标量交换类 𝕜 复形 E] (a : 𝕜)
-  证明: by
-  simp only [circleIntegral, ← smul_comm a (_ : Complex) (_ : E), intervalIntegral.integral_smul]
-
-@[simp]
-
-Depends on / 依赖: circleIntegral, integral_smul, intervalIntegral, intervalIntegral.integral_smul, smul_comm
+/-
+**circleIntegral.integral_smul_const** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_smul_const [CompleteSpace E] (f : Complex -> Complex) (a : E) (c 
+: Complex) (R : Real) : (∮ z in C(c, R), f z • a) = (∮ z in C(c, R), f z) • a
+参数：f : Complex -> Complex；a : E；c : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `intervalIntegral.integral_smul_const`：∀ {E : Type u_5} [inst : NormedAdd
+CommGroup E] [inst_1 : NormedSpace ℝ E] {a b : ℝ} {μ : MeasureTheory.Measure ℝ} 
+  [CompleteSpace E] {𝕜 : T…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_smul {𝕜 : Type*} [RCLike 𝕜] [NormedSpace 𝕜 E] [SMulCommClass 𝕜 Complex E] (a : 𝕜)
-    (f : Complex -> E) (c : Complex) (R : Real) : (∮ z in C(c, R), a • f z) = a • ∮ z in C(c, R), f z := by
-  simp only [circleIntegral, ← smul_comm a (_ : Complex) (_ : E), intervalIntegral.integral_smul]
-
-@[simp]
-/--
-theorem `integral_smul_const` / 定理 `integral_smul_const`
-
-English:
-theorem integral_smul_const
-  given: [CompleteSpace E] (f : Complex -> Complex) (a : E) (c : Complex) (R : Real)
-  proof: by
-  simp only [circleIntegral, intervalIntegral.integral_smul_const, ← smul_assoc]
-
-@[simp]
-
-中文:
-定理 integral_smul_const
-  条件: [完备空间 E] (f : 复形 -> 复形) (a : E) (c : 复形) (R : 实数)
-  证明: by
-  simp only [circleIntegral, intervalIntegral.integral_smul_const, ← smul_assoc]
-
-@[simp]
-
-Depends on / 依赖: circleIntegral, integral_smul_const, intervalIntegral, intervalIntegral.integral_smul_const, smul_assoc
--/
-theorem integral_smul_const [CompleteSpace E] (f : Complex -> Complex) (a : E) (c : Complex) (R : Real) :
+theorem integral_smul_const [CompleteSpace E] (f : ℂ → ℂ) (a : E) (c : ℂ) (R : ℝ) :
     (∮ z in C(c, R), f z • a) = (∮ z in C(c, R), f z) • a := by
   simp only [circleIntegral, intervalIntegral.integral_smul_const, ← smul_assoc]
 
 @[simp]
-/--
-theorem `integral_const_mul` / 定理 `integral_const_mul`
-
-English:
-theorem integral_const_mul
-  given: (a : Complex) (f : Complex -> Complex) (c : Complex) (R : Real)
-  proof: integral_smul a f c R
-
-@[simp]
-
-中文:
-定理 integral_const_mul
-  条件: (a : 复形) (f : 复形 -> 复形) (c : 复形) (R : 实数)
-  证明: integral_smul a f c R
-
-@[simp]
-
-Depends on / 依赖: integral_smul
+/-
+**circleIntegral.integral_const_mul** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegral`。
+形式化陈述：integral_const_mul (a : Complex) (f : Complex -> Complex) (c : Complex) (R
+ : Real) : (∮ z in C(c, R), a * f z) = a * ∮ z in C(c, R), f z
+参数：a : Complex；f : Complex -> Complex；c : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `circleIntegral.integral_smul`：integral_smul {𝕜 : Type*} [RCLike 𝕜] [Norm
+edSpace 𝕜 E] [SMulCommClass 𝕜 Complex E] (a : 𝕜) (f : Complex -> E) (c : Complex
+) (R : Real) : (∮ …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem integral_const_mul (a : Complex) (f : Complex -> Complex) (c : Complex) (R : Real) :
+theorem integral_const_mul (a : ℂ) (f : ℂ → ℂ) (c : ℂ) (R : ℝ) :
     (∮ z in C(c, R), a * f z) = a * ∮ z in C(c, R), f z :=
   integral_smul a f c R
 
 @[simp]
-/--
-theorem `integral_sub_center_inv` / 定理 `integral_sub_center_inv`
-
-English:
-theorem integral_sub_center_inv
-  given: (c : Complex) {R : Real} (hR : R != 0)
-  proof: by
-  simp [circleIntegral, ← div_eq_mul_inv, mul_div_cancel_left₀ _ (circleMap_ne_center hR)]
-
-中文:
-定理 integral_sub_center_inv
-  条件: (c : 复形) {R : 实数} (hR : R != 0)
-  证明: by
-  simp [circleIntegral, ← div_eq_mul_inv, mul_div_cancel_left₀ _ (circleMap_ne_center hR)]
-
-Depends on / 依赖: circleIntegral, circleMap_ne_center, div_eq_mul_inv
+/-
+**circleIntegral.integral_sub_center_inv** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegr
+al`。
+形式化陈述：integral_sub_center_inv (c : Complex) {R : Real} (hR : R != 0) : (∮ z in C
+(c, R), (z - c)⁻¹) = 2 * π * I
+参数：c : Complex；hR : R != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `circleMap_sub_center`：circleMap_sub_center (c : Complex) (R : Real) (θ :
+ Real) : circleMap c R θ - c = circleMap 0 R θ
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+· 使用定理 `EuclideanDomain.toMulDivCancelClass`：∀ {R : Type u} [inst : EuclideanDom
+ain R], MulDivCancelClass R
+· 使用定理 `circleMap_ne_center`：circleMap_ne_center {c : Complex} {R : Real} (hR : 
+R != 0) {θ : Real} : circleMap c R θ != c
+· 使用定理 `intervalIntegral.integral_const`：integral_const [CompleteSpace E] (c : E
+) : ∫ _ in a..b, c = (b - a) • c
+· 使用定理 `Complex.instCompleteSpace`：CompleteSpace ℂ
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Complex.ofReal_mul`：ofReal_mul (r s : Real) : ((r * s : Real) : Complex)
+ = r * s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem integral_sub_center_inv (c : Complex) {R : Real} (hR : R != 0) :
+theorem integral_sub_center_inv (c : ℂ) {R : ℝ} (hR : R ≠ 0) :
     (∮ z in C(c, R), (z - c)⁻¹) = 2 * π * I := by
   simp [circleIntegral, ← div_eq_mul_inv, mul_div_cancel_left₀ _ (circleMap_ne_center hR)]
 
-/--
-theorem `integral_eq_zero_of_hasDerivWithinAt'` / 定理 `integral_eq_zero_of_hasDerivWithinAt'`
+/-- If `f' : ℂ → E` is a derivative of a complex differentiable function on the circle
+`Metric.sphere c |R|`, then `∮ z in C(c, R), f' z = 0`. -/
+/-
+**circleIntegral.integral_eq_zero_of_hasDerivWithinAt'** 是 Mathlib 中的一个定理，位于命名空间
+ `circleIntegral`。
+形式化陈述：integral_eq_zero_of_hasDerivWithinAt' [CompleteSpace E] {f f' : Complex ->
+ E} {c : Complex} {R : Real} (h : forall z in sphere c |R|, HasDerivWithinAt f (
+f' z) (sphere c |R|) z) : (∮ z in C(c, R), f' z) = 0
+参数：h : forall z in sphere c |R|, HasDerivWithinAt f (f' z) (sphere c |R|) z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Function.Periodic.eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {c : α
+} [inst : AddZeroClass α], Function.Periodic f c → f c = f 0
+· 使用定理 `Function.Periodic.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {
+f : α → β} {c : α} [inst : Add α],   Function.Periodic f c → ∀ (g : β → γ), Func
+tion.Periodi…
+· 使用定理 `periodic_circleMap`：periodic_circleMap (c : Complex) (R : Real) : Period
+ic (circleMap c R) (2 * π)
+· 使用定理 `intervalIntegral.integral_eq_sub_of_hasDerivAt`：integral_eq_sub_of_hasDe
+rivAt (hderiv : forall x in uIcc a b, HasDerivAt f (f' x) x) (hint : IntervalInt
+egrable f' volume a b) : ∫ y in a..b…
+· 使用定理 `HasDerivWithinAt.scomp_hasDerivAt`：HasDerivWithinAt.scomp_hasDerivAt (hg
+ : HasDerivWithinAt g₁ g₁' s' (h x)) (hh : HasDerivAt h h' x) (hs : forall x, h 
+x in s') : HasDerivAt (…
+· 使用定理 `circleMap_mem_sphere'`：circleMap_mem_sphere' (c : Complex) (R : Real) (θ
+ : Real) : circleMap c R θ in sphere c |R|
+· 使用定理 `DifferentiableAt.hasDerivAt`：DifferentiableAt.hasDerivAt (h : Differenti
+ableAt 𝕜 f x) : HasDerivAt f (deriv f x) x
+· 使用定理 `differentiable_circleMap`：differentiable_circleMap (c : Complex) (R : Re
+al) : Differentiable Real (circleMap c R)
+· 使用定理 `CircleIntegrable.out`：out [NormedSpace Complex E] (hf : CircleIntegrable
+ f c R) : IntervalIntegrable (fun θ : Real => deriv (circleMap c R) θ • f (circl
+eMap c R θ…
+· 使用定理 `circleIntegral.integral_undef`：integral_undef {f : Complex -> E} {c : Co
+mplex} {R : Real} (hf : ¬CircleIntegrable f c R) : (∮ z in C(c, R), f z) = 0
 
-English:
-theorem integral_eq_zero_of_hasDerivWithinAt'
-  statement: [CompleteSpace E] {f f' : Complex -> E} {c : Complex} {R : Real}
-  proof: by
-  by_cases hi : CircleIntegrable f' c R
-  · rw [← sub_eq_zero.2 ((periodic_circleMap c R).comp f).eq]
-    refine intervalIntegral.integral_eq_sub_of_hasDerivAt (fun θ _ => ?_) hi.out
-    exact (h _ (circleMap_mem_sphere' _ _ _)).scomp_hasDerivAt θ
-      (differentiable_circleMap _ _ _).hasDerivAt (circleMap_mem_sphere' _ _)
-  · exact integral_undef hi
-
-中文:
-定理 integral_eq_zero_of_hasDerivWithinAt'
-  结论: [完备空间 E] {f f' : 复形 -> E} {c : 复形} {R : 实数}
-  证明: by
-  by_cases hi : CircleIntegrable f' c R
-  · rw [← sub_eq_zero.2 ((periodic_circleMap c R).comp f).eq]
-    refine intervalIntegral.integral_eq_sub_of_hasDerivAt (fun θ _ => ?_) hi.out
-    exact (h _ (circleMap_mem_sphere' _ _ _)).scomp_hasDerivAt θ
-      (differentiable_circleMap _ _ _).hasDerivAt (circleMap_mem_sphere' _ _)
-  · exact integral_undef hi
-
-Depends on / 依赖: CircleIntegrable, circleMap_mem_sphere, differentiable_circleMap, hasDerivAt, hi.out, integral_eq_sub_of_hasDerivAt, integral_undef, intervalIntegral, intervalIntegral.integral_eq_sub_of_hasDerivAt, periodic_circleMap, scomp_hasDerivAt, sub_eq_zero
+--- 原说明 ---
+If `f' : ℂ → E` is a derivative of a complex differentiable function on the circ
+le
+`Metric.sphere c |R|`, then `∮ z in C(c, R), f' z = 0`.
 -/
-theorem integral_eq_zero_of_hasDerivWithinAt' [CompleteSpace E] {f f' : Complex -> E} {c : Complex} {R : Real}
-    (h : forall z in sphere c |R|, HasDerivWithinAt f (f' z) (sphere c |R|) z) :
+theorem integral_eq_zero_of_hasDerivWithinAt' [CompleteSpace E] {f f' : ℂ → E} {c : ℂ} {R : ℝ}
+    (h : ∀ z ∈ sphere c |R|, HasDerivWithinAt f (f' z) (sphere c |R|) z) :
     (∮ z in C(c, R), f' z) = 0 := by
   by_cases hi : CircleIntegrable f' c R
   · rw [← sub_eq_zero.2 ((periodic_circleMap c R).comp f).eq]
@@ -1881,350 +2251,487 @@ theorem integral_eq_zero_of_hasDerivWithinAt' [CompleteSpace E] {f f' : Complex 
       (differentiable_circleMap _ _ _).hasDerivAt (circleMap_mem_sphere' _ _)
   · exact integral_undef hi
 
-/--
-theorem `integral_eq_zero_of_hasDerivWithinAt` / 定理 `integral_eq_zero_of_hasDerivWithinAt`
+/-- If `f' : ℂ → E` is a derivative of a complex differentiable function on the circle
+`Metric.sphere c R`, then `∮ z in C(c, R), f' z = 0`. -/
+/-
+**circleIntegral.integral_eq_zero_of_hasDerivWithinAt** 是 Mathlib 中的一个定理，位于命名空间 
+`circleIntegral`。
+形式化陈述：integral_eq_zero_of_hasDerivWithinAt [CompleteSpace E] {f f' : Complex -> 
+E} {c : Complex} {R : Real} (hR : 0 <= R) (h : forall z in sphere c R, HasDerivW
+ithinAt f (f' z) (sphere c R) z) : (∮ z in C(c, R), f' z) = 0
+参数：hR : 0 <= R；h : forall z in sphere c R, HasDerivWithinAt f (f' z) (sphere c R
+) z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `circleIntegral.integral_eq_zero_of_hasDerivWithinAt'`：integral_eq_zero_o
+f_hasDerivWithinAt' [CompleteSpace E] {f f' : Complex -> E} {c : Complex} {R : R
+eal} (h : forall z in sphere c |R|, HasDer…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 
-English:
-theorem integral_eq_zero_of_hasDerivWithinAt
-  statement: [CompleteSpace E]
-  proof: integral_eq_zero_of_hasDerivWithinAt' (abs_of_nonneg hR).symm ▸ h
-
-中文:
-定理 integral_eq_zero_of_hasDerivWithinAt
-  结论: [完备空间 E]
-  证明: integral_eq_zero_of_hasDerivWithinAt' (abs_of_nonneg hR).symm ▸ h
-
-Depends on / 依赖: abs_of_nonneg, integral_eq_zero_of_hasDerivWithinAt
+--- 原说明 ---
+If `f' : ℂ → E` is a derivative of a complex differentiable function on the circ
+le
+`Metric.sphere c R`, then `∮ z in C(c, R), f' z = 0`.
 -/
 theorem integral_eq_zero_of_hasDerivWithinAt [CompleteSpace E]
-    {f f' : Complex -> E} {c : Complex} {R : Real} (hR : 0 <= R)
-    (h : forall z in sphere c R, HasDerivWithinAt f (f' z) (sphere c R) z) : (∮ z in C(c, R), f' z) = 0 :=
-integral_eq_zero_of_hasDerivWithinAt' (abs_of_nonneg hR).symm ▸ h
+    {f f' : ℂ → E} {c : ℂ} {R : ℝ} (hR : 0 ≤ R)
+    (h : ∀ z ∈ sphere c R, HasDerivWithinAt f (f' z) (sphere c R) z) : (∮ z in C(c, R), f' z) = 0 :=
+  integral_eq_zero_of_hasDerivWithinAt' <| (abs_of_nonneg hR).symm ▸ h
 
-/--
-theorem `integral_sub_zpow_of_undef` / 定理 `integral_sub_zpow_of_undef`
+/-- If `n < 0` and `|w - c| = |R|`, then `(z - w) ^ n` is not circle integrable on the circle with
+center `c` and radius `|R|`, so the integral `∮ z in C(c, R), (z - w) ^ n` is equal to zero. -/
+/-
+**circleIntegral.integral_sub_zpow_of_undef** 是 Mathlib 中的一个定理，位于命名空间 `circleInt
+egral`。
+形式化陈述：integral_sub_zpow_of_undef {n : Int} {c w : Complex} {R : Real} (hn : n < 
+0) (hw : w in sphere c |R|) : (∮ z in C(c, R), (z - w) ^ n) = 0
+参数：hn : n < 0；hw : w in sphere c |R|。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `circleIntegral.integral_radius_zero`：integral_radius_zero (f : Complex -
+> E) (c : Complex) : (∮ z in C(c, 0), f z) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `circleIntegral.integral_undef`：integral_undef {f : Complex -> E} {c : Co
+mplex} {R : Real} (hf : ¬CircleIntegrable f c R) : (∮ z in C(c, R), f z) = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_sphere_iff_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] 
+{a b : E} {r : ℝ}, b ∈ Metric.sphere a r ↔ ‖b - a‖ = r
 
-English:
-theorem integral_sub_zpow_of_undef
-  statement: {n : Int} {c w : Complex} {R : Real} (hn : n < 0)
-  proof: by
-  rcases eq_or_ne R 0 with (rfl | h0)
-  · apply integral_radius_zero
-  · apply integral_undef
-    simpa [circleIntegrable_sub_zpow_iff, *, not_or] using mem_sphere_iff_norm.1 hw
-
-中文:
-定理 integral_sub_zpow_of_undef
-  结论: {n : 整数} {c w : 复形} {R : 实数} (hn : n < 0)
-  证明: by
-  rcases eq_or_ne R 0 with (rfl | h0)
-  · apply integral_radius_zero
-  · apply integral_undef
-    simpa [circleIntegrable_sub_zpow_iff, *, not_or] using mem_sphere_iff_norm.1 hw
-
-Depends on / 依赖: circleIntegrable_sub_zpow_iff, eq_or_ne, integral_radius_zero, integral_undef, mem_sphere_iff_norm, not_or
+--- 原说明 ---
+If `n < 0` and `|w - c| = |R|`, then `(z - w) ^ n` is not circle integrable on t
+he circle with
+center `c` and radius `|R|`, so the integral `∮ z in C(c, R), (z - w) ^ n` is eq
+ual to zero.
 -/
-theorem integral_sub_zpow_of_undef {n : Int} {c w : Complex} {R : Real} (hn : n < 0)
-    (hw : w in sphere c |R|) : (∮ z in C(c, R), (z - w) ^ n) = 0 := by
+theorem integral_sub_zpow_of_undef {n : ℤ} {c w : ℂ} {R : ℝ} (hn : n < 0)
+    (hw : w ∈ sphere c |R|) : (∮ z in C(c, R), (z - w) ^ n) = 0 := by
   rcases eq_or_ne R 0 with (rfl | h0)
   · apply integral_radius_zero
   · apply integral_undef
     simpa [circleIntegrable_sub_zpow_iff, *, not_or] using mem_sphere_iff_norm.1 hw
 
-/--
-theorem `integral_sub_zpow_of_ne` / 定理 `integral_sub_zpow_of_ne`
+/-- If `n ≠ -1` is an integer number, then the integral of `(z - w) ^ n` over the circle equals
+zero. -/
+/-
+**circleIntegral.integral_sub_zpow_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `circleIntegr
+al`。
+形式化陈述：integral_sub_zpow_of_ne {n : Int} (hn : n != -1) (c w : Complex) (R : Real
+) : (∮ z in C(c, R), (z - w) ^ n) = 0
+参数：hn : n != -1；c w : Complex；R : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `circleIntegral.integral_sub_zpow_of_undef`：integral_sub_zpow_of_undef {n
+ : Int} {c w : Complex} {R : Real} (hn : n < 0) (hw : w in sphere c |R|) : (∮ z 
+in C(c, R), (z - w) ^ n) = 0
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `eq_neg_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a = -b ↔ a + b = 0
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用引理 `Int.cast_inj`：cast_inj : (m : α) = n ↔ m = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+· 使用定理 `EuclideanDomain.toMulDivCancelClass`：∀ {R : Type u} [inst : EuclideanDom
+ain R], MulDivCancelClass R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `HasDerivAt.div_const`：HasDerivAt.div_const (hc : HasDerivAt c c' x) (d :
+ 𝕜') : HasDerivAt (fun x => c x / d) (c' / d) x
+· 使用定理 `HasDerivAt.comp`：HasDerivAt.comp (hh₂ : HasDerivAt h₂ h₂' (h x)) (hh : H
+asDerivAt h h' x) : HasDerivAt (h₂ ∘ h) (h₂' * h') x
+· 使用定理 `hasDerivAt_zpow`：hasDerivAt_zpow (m : Int) (x : 𝕜) (h : x != 0 ∨ 0 <= m)
+ : HasDerivAt (fun x => x ^ m) ((m : 𝕜) * x ^ (m - 1)) x
+（共 45 条，此处仅展示前 30 条）
 
-English:
-theorem integral_sub_zpow_of_ne
-  given: {n : Int} (hn : n != -1) (c w : Complex) (R : Real)
-  proof: by
-  by_cases! H : w in sphere c |R| ∧ n < -1
-  · rcases H with ⟨hw, hn⟩
-    exact integral_sub_zpow_of_undef (hn.trans (by decide)) hw
-  have hd : forall z, z != w ∨ -1 <= n ->
-      HasDerivAt (fun z => (z - w) ^ (n + 1) / (n + 1)) ((z - w) ^ n) z := by
-    intro z hne
-    convert!
-      ((hasDerivAt_zpow (n + 1) _ (hne.imp _ _)).comp z ((hasDerivAt_id z).sub_const w)).div_const
-        _ using 1
-    · have hn' : (n + 1 : Complex) != 0 := by
-        rwa [Ne, ← eq_neg_iff_add_eq_zero, ← Int.cast_one, ← Int.cast_neg, Int.cast_inj]
-      simp [mul_div_cancel_left₀ _ hn']
-    exacts [sub_ne_zero.2, neg_le_iff_add_nonneg.1]
-  refine integral_eq_zero_of_hasDerivWithinAt' fun z hz => (hd z ?_).hasDerivWithinAt
-exact (ne_or_eq z w).imp_right fun (h : z = w) => H h ▸ hz
-
-中文:
-定理 integral_sub_zpow_of_ne
-  条件: {n : 整数} (hn : n != -1) (c w : 复形) (R : 实数)
-  证明: by
-  by_cases! H : w in sphere c |R| ∧ n < -1
-  · rcases H with ⟨hw, hn⟩
-    exact integral_sub_zpow_of_undef (hn.trans (by decide)) hw
-  have hd : forall z, z != w ∨ -1 <= n ->
-      HasDerivAt (fun z => (z - w) ^ (n + 1) / (n + 1)) ((z - w) ^ n) z := by
-    intro z hne
-    convert!
-      ((hasDerivAt_zpow (n + 1) _ (hne.imp _ _)).comp z ((hasDerivAt_id z).sub_const w)).div_const
-        _ using 1
-    · have hn' : (n + 1 : Complex) != 0 := by
-        rwa [Ne, ← eq_neg_iff_add_eq_zero, ← Int.cast_one, ← Int.cast_neg, Int.cast_inj]
-      simp [mul_div_cancel_left₀ _ hn']
-    exacts [sub_ne_zero.2, neg_le_iff_add_nonneg.1]
-  refine integral_eq_zero_of_hasDerivWithinAt' fun z hz => (hd z ?_).hasDerivWithinAt
-exact (ne_or_eq z w).imp_right fun (h : z = w) => H h ▸ hz
-
-Depends on / 依赖: HasDerivAt, Int.cast_inj, Int.cast_neg, Int.cast_one, cast_inj, cast_neg, cast_one, convert, div_const, eq_neg_iff_add_eq_zero, hasDerivAt_id, hasDerivAt_zpow, hn.trans, hne.imp, integral_sub_zpow_of_undef, mul_div, sphere, sub_const
+--- 原说明 ---
+If `n ≠ -1` is an integer number, then the integral of `(z - w) ^ n` over the ci
+rcle equals
+zero.
 -/
-theorem integral_sub_zpow_of_ne {n : Int} (hn : n != -1) (c w : Complex) (R : Real) :
+theorem integral_sub_zpow_of_ne {n : ℤ} (hn : n ≠ -1) (c w : ℂ) (R : ℝ) :
     (∮ z in C(c, R), (z - w) ^ n) = 0 := by
-  by_cases! H : w in sphere c |R| ∧ n < -1
+  by_cases! H : w ∈ sphere c |R| ∧ n < -1
   · rcases H with ⟨hw, hn⟩
     exact integral_sub_zpow_of_undef (hn.trans (by decide)) hw
-  have hd : forall z, z != w ∨ -1 <= n ->
+  have hd : ∀ z, z ≠ w ∨ -1 ≤ n →
       HasDerivAt (fun z => (z - w) ^ (n + 1) / (n + 1)) ((z - w) ^ n) z := by
     intro z hne
     convert!
       ((hasDerivAt_zpow (n + 1) _ (hne.imp _ _)).comp z ((hasDerivAt_id z).sub_const w)).div_const
         _ using 1
-    · have hn' : (n + 1 : Complex) != 0 := by
+    · have hn' : (n + 1 : ℂ) ≠ 0 := by
         rwa [Ne, ← eq_neg_iff_add_eq_zero, ← Int.cast_one, ← Int.cast_neg, Int.cast_inj]
       simp [mul_div_cancel_left₀ _ hn']
     exacts [sub_ne_zero.2, neg_le_iff_add_nonneg.1]
   refine integral_eq_zero_of_hasDerivWithinAt' fun z hz => (hd z ?_).hasDerivWithinAt
-exact (ne_or_eq z w).imp_right fun (h : z = w) => H h ▸ hz
+  exact (ne_or_eq z w).imp_right fun (h : z = w) => H <| h ▸ hz
 
 end circleIntegral
 
-/--
-Definition of `cauchyPowerSeries` / `cauchyPowerSeries` 的定义
+/-- The power series that is equal to
+$\frac{1}{2πi}\sum_{n=0}^{\infty}
+  \oint_{|z-c|=R} \left(\frac{w-c}{z - c}\right)^n \frac{1}{z-c}f(z)\,dz$ at
+`w - c`. The coefficients of this power series depend only on `f ∘ circleMap c R`, and the power
+series converges to `f w` if `f` is differentiable on the closed ball `Metric.closedBall c R` and
+`w` belongs to the corresponding open ball. For any circle integrable function `f`, this power
+series converges to the Cauchy integral for `f`. -/
+/-
+**cauchyPowerSeries** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：cauchyPowerSeries (f : Complex -> E) (c : Complex) (R : Real) : FormalMult
+ilinearSeries Complex Complex E
+参数：f : Complex -> E；c : Complex；R : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cauchyPowerSeries
-  signature: (f : Complex -> E) (c : Complex) (R : Real)
-  body: fun n =>
-ContinuousMultilinearMap.mkPiRing Complex _
-    (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z
-
-中文:
-定义 cauchyPowerSeries
-  签名: (f : 复形 -> E) (c : 复形) (R : 实数)
-  定义体: fun n =>
-ContinuousMultilinearMap.mkPiRing Complex _
-    (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z
+--- 原说明 ---
+The power series that is equal to
+$\frac{1}{2πi}\sum_{n=0}^{\infty}
+  \oint_{|z-c|=R} \left(\frac{w-c}{z - c}\right)^n \frac{1}{z-c}f(z)\,dz$ at
+`w - c`. The coefficients of this power series depend only on `f ∘ circleMap c R
+`, and the power
+series converges to `f w` if `f` is differentiable on the closed ball `Metric.cl
+osedBall c R` and
+`w` belongs to the corresponding open ball. For any circle integrable function `
+f`, this power
+series converges to the Cauchy integral for `f`.
 -/
-def cauchyPowerSeries (f : Complex -> E) (c : Complex) (R : Real) : FormalMultilinearSeries Complex Complex E := fun n =>
-ContinuousMultilinearMap.mkPiRing Complex _
-    (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z
-
-/--
-theorem `cauchyPowerSeries_apply` / 定理 `cauchyPowerSeries_apply`
-
-English:
-theorem cauchyPowerSeries_apply
-  given: (f : Complex -> E) (c : Complex) (R : Real) (n : Nat) (w : Complex)
-  proof: by
-  simp only [cauchyPowerSeries, ContinuousMultilinearMap.mkPiRing_apply, Fin.prod_const,
-    div_eq_mul_inv, mul_pow, mul_smul, circleIntegral.integral_smul]
-  rw [← smul_comm (w ^ n)]
-
-中文:
-定理 cauchyPowerSeries_apply
-  条件: (f : 复形 -> E) (c : 复形) (R : 实数) (n : 自然数) (w : 复形)
-  证明: by
-  simp only [cauchyPowerSeries, ContinuousMultilinearMap.mkPiRing_apply, Fin.prod_const,
-    div_eq_mul_inv, mul_pow, mul_smul, circleIntegral.integral_smul]
-  rw [← smul_comm (w ^ n)]
-
-Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.mkPiRing_apply, Fin.prod_const, cauchyPowerSeries, circleIntegral, circleIntegral.integral_smul, div_eq_mul_inv, integral_smul, mkPiRing_apply, mul_pow, mul_smul, prod_const, smul_comm
+def cauchyPowerSeries (f : ℂ → E) (c : ℂ) (R : ℝ) : FormalMultilinearSeries ℂ ℂ E := fun n =>
+  ContinuousMultilinearMap.mkPiRing ℂ _ <|
+    (2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z
+/-
+**cauchyPowerSeries_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：cauchyPowerSeries_apply (f : Complex -> E) (c : Complex) (R : Real) (n : N
+at) (w : Complex) : (cauchyPowerSeries f c R n fun _ => w) = (2 * π * I : Comple
+x)⁻¹ • ∮ z in C(c, R), (w / (z - c)) ^ n • (z - c)⁻¹ • f z
+参数：f : Complex -> E；c : Complex；R : Real；n : Nat；w : Complex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fin.prod_const`：prod_const (n : Nat) (x : M) : ∏ _i : Fin n, x = x ^ n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `circleIntegral.integral_smul`：integral_smul {𝕜 : Type*} [RCLike 𝕜] [Norm
+edSpace 𝕜 E] [SMulCommClass 𝕜 Complex E] (a : 𝕜) (f : Complex -> E) (c : Complex
+) (R : Real) : (∮ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
-theorem cauchyPowerSeries_apply (f : Complex -> E) (c : Complex) (R : Real) (n : Nat) (w : Complex) :
+theorem cauchyPowerSeries_apply (f : ℂ → E) (c : ℂ) (R : ℝ) (n : ℕ) (w : ℂ) :
     (cauchyPowerSeries f c R n fun _ => w) =
-      (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (w / (z - c)) ^ n • (z - c)⁻¹ • f z := by
+      (2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (w / (z - c)) ^ n • (z - c)⁻¹ • f z := by
   simp only [cauchyPowerSeries, ContinuousMultilinearMap.mkPiRing_apply, Fin.prod_const,
     div_eq_mul_inv, mul_pow, mul_smul, circleIntegral.integral_smul]
   rw [← smul_comm (w ^ n)]
-
-/--
-theorem `norm_cauchyPowerSeries_le` / 定理 `norm_cauchyPowerSeries_le`
-
-English:
-theorem norm_cauchyPowerSeries_le
-  given: (f : Complex -> E) (c : Complex) (R : Real) (n : Nat)
-  proof: calc ‖cauchyPowerSeries f c R n‖
-    _ = (2 * π)⁻¹ * ‖∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z‖ := by
-      simp [cauchyPowerSeries, norm_smul, Real.pi_pos.le]
-    _ <= (2 * π)⁻¹ * ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ •
-        (circleMap c R θ - c)⁻¹ ^ n • (circleMap c R θ - c)⁻¹ • f (circleMap c R θ)‖ := by
-      gcongr
-      exact intervalIntegral.norm_integral_le_integral_norm (by positivity)
-    _ = (2 * π)⁻¹ *
-        (|R|⁻¹ ^ n * (|R| * (|R|⁻¹ * ∫ x : Real in 0..2 * π, ‖f (circleMap c R x)‖))) := by
-      simp [norm_smul, mul_left_comm |R|]
-    _ <= ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (circleMap c R θ)‖) * |R|⁻¹ ^ n := by
-      rcases eq_or_ne R 0 with (rfl | hR)
-      · cases n <;> simp [-mul_inv_rev]
-      · rw [mul_inv_cancel_left₀, mul_assoc, mul_comm (|R|⁻¹ ^ n)]
-        rwa [Ne, _root_.abs_eq_zero]
-
-中文:
-定理 norm_cauchyPowerSeries_le
-  条件: (f : 复形 -> E) (c : 复形) (R : 实数) (n : 自然数)
-  证明: calc ‖cauchyPowerSeries f c R n‖
-    _ = (2 * π)⁻¹ * ‖∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z‖ := by
-      simp [cauchyPowerSeries, norm_smul, Real.pi_pos.le]
-    _ <= (2 * π)⁻¹ * ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ •
-        (circleMap c R θ - c)⁻¹ ^ n • (circleMap c R θ - c)⁻¹ • f (circleMap c R θ)‖ := by
-      gcongr
-      exact intervalIntegral.norm_integral_le_integral_norm (by positivity)
-    _ = (2 * π)⁻¹ *
-        (|R|⁻¹ ^ n * (|R| * (|R|⁻¹ * ∫ x : Real in 0..2 * π, ‖f (circleMap c R x)‖))) := by
-      simp [norm_smul, mul_left_comm |R|]
-    _ <= ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (circleMap c R θ)‖) * |R|⁻¹ ^ n := by
-      rcases eq_or_ne R 0 with (rfl | hR)
-      · cases n <;> simp [-mul_inv_rev]
-      · rw [mul_inv_cancel_left₀, mul_assoc, mul_comm (|R|⁻¹ ^ n)]
-        rwa [Ne, _root_.abs_eq_zero]
-
-Depends on / 依赖: Real.pi_pos.le, cauchyPowerSeries, circleMap, intervalIntegral, intervalIntegral.norm_integral_le_integral_norm, mul_l, norm_integral_le_integral_norm, norm_smul, pi_pos
+/-
+**norm_cauchyPowerSeries_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_cauchyPowerSeries_le (f : Complex -> E) (c : Complex) (R : Real) (n :
+ Nat) : ‖cauchyPowerSeries f c R n‖ <= ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (
+circleMap c R θ)‖) * |R|⁻¹ ^ n
+参数：f : Complex -> E；c : Complex；R : Real；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMultilinearMap.mkPiRing.congr_simp`：∀ (R : Type u) (ι : Type v
+) {M : Type u_1} [inst : Fintype ι] [inst_1 : CommRing R] [inst_2 : AddCommMonoi
+d M]   [inst_3 : _root_.Module R M…
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `Complex.inv_I`：inv_I : I⁻¹ = -I
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `ContinuousMultilinearMap.norm_mkPiRing`：norm_mkPiRing (z : G) : ‖Continu
+ousMultilinearMap.mkPiRing 𝕜 ι z‖ = ‖z‖
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `Complex.norm_mul`：∀ (z w : ℂ), ‖z * w‖ = ‖z‖ * ‖w‖
+· 使用定理 `Complex.norm_I`：‖Complex.I‖ = 1
+· 使用定理 `norm_inv`：norm_inv (a : α) : ‖a⁻¹‖ = ‖a‖⁻¹
+· 使用引理 `Complex.norm_real`：norm_real (r : Real) : ‖(r : Complex)‖ = ‖r‖
+· 使用引理 `Complex.norm_ofNat`：norm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) : C
+omplex)‖ = OfNat.ofNat n
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+（共 79 条，此处仅展示前 30 条）
 -/
-theorem norm_cauchyPowerSeries_le (f : Complex -> E) (c : Complex) (R : Real) (n : Nat) :
-    ‖cauchyPowerSeries f c R n‖ <=
-      ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (circleMap c R θ)‖) * |R|⁻¹ ^ n :=
+theorem norm_cauchyPowerSeries_le (f : ℂ → E) (c : ℂ) (R : ℝ) (n : ℕ) :
+    ‖cauchyPowerSeries f c R n‖ ≤
+      ((2 * π)⁻¹ * ∫ θ : ℝ in 0..2 * π, ‖f (circleMap c R θ)‖) * |R|⁻¹ ^ n :=
   calc ‖cauchyPowerSeries f c R n‖
     _ = (2 * π)⁻¹ * ‖∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z‖ := by
       simp [cauchyPowerSeries, norm_smul, Real.pi_pos.le]
-    _ <= (2 * π)⁻¹ * ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ •
+    _ ≤ (2 * π)⁻¹ * ∫ θ in 0..2 * π, ‖deriv (circleMap c R) θ •
         (circleMap c R θ - c)⁻¹ ^ n • (circleMap c R θ - c)⁻¹ • f (circleMap c R θ)‖ := by
       gcongr
       exact intervalIntegral.norm_integral_le_integral_norm (by positivity)
     _ = (2 * π)⁻¹ *
-        (|R|⁻¹ ^ n * (|R| * (|R|⁻¹ * ∫ x : Real in 0..2 * π, ‖f (circleMap c R x)‖))) := by
+        (|R|⁻¹ ^ n * (|R| * (|R|⁻¹ * ∫ x : ℝ in 0..2 * π, ‖f (circleMap c R x)‖))) := by
       simp [norm_smul, mul_left_comm |R|]
-    _ <= ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (circleMap c R θ)‖) * |R|⁻¹ ^ n := by
+    _ ≤ ((2 * π)⁻¹ * ∫ θ : ℝ in 0..2 * π, ‖f (circleMap c R θ)‖) * |R|⁻¹ ^ n := by
       rcases eq_or_ne R 0 with (rfl | hR)
       · cases n <;> simp [-mul_inv_rev]
       · rw [mul_inv_cancel_left₀, mul_assoc, mul_comm (|R|⁻¹ ^ n)]
         rwa [Ne, _root_.abs_eq_zero]
-
-/--
-theorem `le_radius_cauchyPowerSeries` / 定理 `le_radius_cauchyPowerSeries`
-
-English:
-theorem le_radius_cauchyPowerSeries
-  given: (f : Complex -> E) (c : Complex) (R : Real>=0)
-  proof: by
-  refine
-    (cauchyPowerSeries f c R).le_radius_of_bound
-      ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (circleMap c R θ)‖) fun n => ?_
-  refine (mul_le_mul_of_nonneg_right (norm_cauchyPowerSeries_le _ _ _ _)
-    (pow_nonneg R.coe_nonneg _)).trans ?_
-  rw [abs_of_nonneg R.coe_nonneg]
-  rcases eq_or_ne (R ^ n : Real) 0 with hR | hR
-  · rw_mod_cast [hR, mul_zero]
-    exact mul_nonneg (inv_nonneg.2 Real.two_pi_pos.le)
-      (intervalIntegral.integral_nonneg Real.two_pi_pos.le fun _ _ => norm_nonneg _)
-  · rw [inv_pow]
-    have : (R : Real) ^ n != 0 := by norm_cast at hR ⊢
-    rw [inv_mul_cancel_right₀ this]
-
-中文:
-定理 le_radius_cauchyPowerSeries
-  条件: (f : 复形 -> E) (c : 复形) (R : 实数>=0)
-  证明: by
-  refine
-    (cauchyPowerSeries f c R).le_radius_of_bound
-      ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (circleMap c R θ)‖) fun n => ?_
-  refine (mul_le_mul_of_nonneg_right (norm_cauchyPowerSeries_le _ _ _ _)
-    (pow_nonneg R.coe_nonneg _)).trans ?_
-  rw [abs_of_nonneg R.coe_nonneg]
-  rcases eq_or_ne (R ^ n : Real) 0 with hR | hR
-  · rw_mod_cast [hR, mul_zero]
-    exact mul_nonneg (inv_nonneg.2 Real.two_pi_pos.le)
-      (intervalIntegral.integral_nonneg Real.two_pi_pos.le fun _ _ => norm_nonneg _)
-  · rw [inv_pow]
-    have : (R : Real) ^ n != 0 := by norm_cast at hR ⊢
-    rw [inv_mul_cancel_right₀ this]
-
-Depends on / 依赖: R.coe_nonneg, Real.two_pi_pos.le, abs_of_nonneg, cauchyPowerSeries, circleMap, coe_nonneg, eq_or_ne, integral_nonneg, intervalIntegral, intervalIntegral.integral_nonneg, inv_nonneg, inv_pow, le_radius_of_bound, mul_le_mul_of_nonneg_right, mul_nonneg, mul_zero, norm_cauchyPowerSeries_le, norm_nonneg, pow_nonneg, rw_mod_cast
+/-
+**le_radius_cauchyPowerSeries** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_radius_cauchyPowerSeries (f : Complex -> E) (c : Complex) (R : Real>=0)
+ : ↑R <= (cauchyPowerSeries f c R).radius
+参数：f : Complex -> E；c : Complex；R : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FormalMultilinearSeries.le_radius_of_bound`：le_radius_of_bound (C : Real
+) {r : Real>=0} (h : forall n : Nat, ‖p n‖ * (r : Real) ^ n <= C) : (r : Real>=0
+∞) <= p.radius
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `norm_cauchyPowerSeries_le`：norm_cauchyPowerSeries_le (f : Complex -> E) 
+(c : Complex) (R : Real) (n : Nat) : ‖cauchyPowerSeries f c R n‖ <= ((2 * π)⁻¹ *
+ ∫ θ : Real in …
+· 使用定理 `pow_nonneg`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : Preor
+der M₀] {a : M₀} [ZeroLEOneClass M₀] [PosMulMono M₀],   0 ≤ a → ∀ (n : ℕ), 0 ≤ a
+…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_nonneg`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : Partia
+lOrder G₀] [PosMulReflectLT G₀] {a : G₀}, 0 ≤ a⁻¹ ↔ 0 ≤ a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `intervalIntegral.integral_nonneg`：integral_nonneg (hab : a <= b) (hf : f
+orall u, u in Icc a b -> 0 <= f u) : 0 <= ∫ u in a..b, f u ∂μ
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+（共 33 条，此处仅展示前 30 条）
 -/
-theorem le_radius_cauchyPowerSeries (f : Complex -> E) (c : Complex) (R : Real>=0) :
-    ↑R <= (cauchyPowerSeries f c R).radius := by
+theorem le_radius_cauchyPowerSeries (f : ℂ → E) (c : ℂ) (R : ℝ≥0) :
+    ↑R ≤ (cauchyPowerSeries f c R).radius := by
   refine
     (cauchyPowerSeries f c R).le_radius_of_bound
-      ((2 * π)⁻¹ * ∫ θ : Real in 0..2 * π, ‖f (circleMap c R θ)‖) fun n => ?_
+      ((2 * π)⁻¹ * ∫ θ : ℝ in 0..2 * π, ‖f (circleMap c R θ)‖) fun n => ?_
   refine (mul_le_mul_of_nonneg_right (norm_cauchyPowerSeries_le _ _ _ _)
     (pow_nonneg R.coe_nonneg _)).trans ?_
   rw [abs_of_nonneg R.coe_nonneg]
-  rcases eq_or_ne (R ^ n : Real) 0 with hR | hR
+  rcases eq_or_ne (R ^ n : ℝ) 0 with hR | hR
   · rw_mod_cast [hR, mul_zero]
     exact mul_nonneg (inv_nonneg.2 Real.two_pi_pos.le)
       (intervalIntegral.integral_nonneg Real.two_pi_pos.le fun _ _ => norm_nonneg _)
   · rw [inv_pow]
-    have : (R : Real) ^ n != 0 := by norm_cast at hR ⊢
+    have : (R : ℝ) ^ n ≠ 0 := by norm_cast at hR ⊢
     rw [inv_mul_cancel_right₀ this]
 
-/--
-theorem `hasSum_two_pi_I_cauchyPowerSeries_integral` / 定理 `hasSum_two_pi_I_cauchyPowerSeries_integral`
+/-- For any circle integrable function `f`, the power series `cauchyPowerSeries f c R` multiplied
+by `2πI` converges to the integral `∮ z in C(c, R), (z - w)⁻¹ • f z` on the open disc
+`Metric.ball c R`. -/
+/-
+**hasSum_two_pi_I_cauchyPowerSeries_integral** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasSum_two_pi_I_cauchyPowerSeries_integral {f : Complex -> E} {c : Complex
+} {R : Real} {w : Complex} (hf : CircleIntegrable f c R) (hw : ‖w‖ < R) : HasSum
+ (fun n : Nat => ∮ z in C(c, R), (w / (z - c)) ^ n • (z - c)⁻¹ • f z) (∮ z in C(
+c, R), (z - (c + w))⁻¹ • f z)
+参数：hf : CircleIntegrable f c R；hw : ‖w‖ < R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用引理 `div_nonneg`：div_nonneg (ha : 0 <= a) (hb : 0 <= b) : 0 <= a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `div_lt_one`：div_lt_one (hb : 0 < b) : a / b < 1 ↔ a < b
+· 使用定理 `intervalIntegral.hasSum_integral_of_dominated_convergence`：∀ {E : Type u
+_2} [inst : NormedAddCommGroup E] [inst_1 : NormedSpace ℝ E] {a b : ℝ} {f : ℝ → 
+E}   {μ : MeasureTheory.Measure ℝ} {ι : Type u_…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `deriv_circleMap`：deriv_circleMap (c : Complex) (R : Real) (θ : Real) : d
+eriv (circleMap c R) θ = circleMap 0 R θ * I
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.smul`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measu
+re α}   {𝕜 : Type u_5} [inst_…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Measurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 :…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `secondCountable_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [
+ProperSpace α], SecondCountableTopology α
+· 使用定理 `Complex.instProperSpace`：ProperSpace ℂ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `Measurable.mul_const`：Measurable.mul_const [MeasurableMul M] (hf : Measu
+rable f) (c : M) : Measurable fun x => f x * c
+· 使用定理 `ContinuousMul.measurableMul`：∀ {γ : Type u_3} [inst : TopologicalSpace γ
+] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [inst_3 : Mul γ]   [SeparatelyCont
+inuousMul γ], Mea…
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `measurable_circleMap`：measurable_circleMap (c : Complex) (R : Real) : Me
+asurable (circleMap c R)
+（共 98 条，此处仅展示前 30 条）
 
-English:
-theorem hasSum_two_pi_I_cauchyPowerSeries_integral
-  statement: {f : Complex -> E} {c : Complex} {R : Real} {w : Complex}
-  proof: by
-  have hR : 0 < R := (norm_nonneg w).trans_lt hw
-  have hwR : ‖w‖ / R in Ico (0 : Real) 1 :=
-    ⟨div_nonneg (norm_nonneg w) hR.le, (div_lt_one hR).2 hw⟩
-  refine intervalIntegral.hasSum_integral_of_dominated_convergence
-      (fun n θ => ‖f (circleMap c R θ)‖ * (‖w‖ / R) ^ n) (fun n => ?_) (fun n => ?_) ?_ ?_ ?_
-  · simp only [deriv_circleMap]
-    apply_rules [AEStronglyMeasurable.smul, hf.def'.1] <;> apply Measurable.aestronglyMeasurable
-    · fun_prop
-    · fun_prop
-    · fun_prop
-  · simp [norm_smul, abs_of_pos hR, mul_left_comm R, inv_mul_cancel_left₀ hR.ne', mul_comm ‖_‖]
-  · exact Eventually.of_forall fun _ _ => (summable_geometric_of_lt_one hwR.1 hwR.2).mul_left _
-  · simpa only [tsum_mul_left, tsum_geometric_of_lt_one hwR.1 hwR.2] using
-      hf.norm.mul_continuousOn continuousOn_const
-  · refine Eventually.of_forall fun θ _ => HasSum.const_smul _ ?_
-    simp only [smul_smul]
-    refine HasSum.smul_const ?_ _
-    have : ‖w / (circleMap c R θ - c)‖ < 1 := by simpa [abs_of_pos hR] using hwR.2
-    convert! (hasSum_geometric_of_norm_lt_one this).mul_right _ using 1
-    simp [← sub_sub, ← mul_inv, sub_mul, div_mul_cancel₀ _ (circleMap_ne_center hR.ne')]
-
-中文:
-定理 hasSum_two_pi_I_cauchyPowerSeries_integral
-  结论: {f : 复形 -> E} {c : 复形} {R : 实数} {w : 复形}
-  证明: by
-  have hR : 0 < R := (norm_nonneg w).trans_lt hw
-  have hwR : ‖w‖ / R in Ico (0 : Real) 1 :=
-    ⟨div_nonneg (norm_nonneg w) hR.le, (div_lt_one hR).2 hw⟩
-  refine intervalIntegral.hasSum_integral_of_dominated_convergence
-      (fun n θ => ‖f (circleMap c R θ)‖ * (‖w‖ / R) ^ n) (fun n => ?_) (fun n => ?_) ?_ ?_ ?_
-  · simp only [deriv_circleMap]
-    apply_rules [AEStronglyMeasurable.smul, hf.def'.1] <;> apply Measurable.aestronglyMeasurable
-    · fun_prop
-    · fun_prop
-    · fun_prop
-  · simp [norm_smul, abs_of_pos hR, mul_left_comm R, inv_mul_cancel_left₀ hR.ne', mul_comm ‖_‖]
-  · exact Eventually.of_forall fun _ _ => (summable_geometric_of_lt_one hwR.1 hwR.2).mul_left _
-  · simpa only [tsum_mul_left, tsum_geometric_of_lt_one hwR.1 hwR.2] using
-      hf.norm.mul_continuousOn continuousOn_const
-  · refine Eventually.of_forall fun θ _ => HasSum.const_smul _ ?_
-    simp only [smul_smul]
-    refine HasSum.smul_const ?_ _
-    have : ‖w / (circleMap c R θ - c)‖ < 1 := by simpa [abs_of_pos hR] using hwR.2
-    convert! (hasSum_geometric_of_norm_lt_one this).mul_right _ using 1
-    simp [← sub_sub, ← mul_inv, sub_mul, div_mul_cancel₀ _ (circleMap_ne_center hR.ne')]
-
-Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.smul, Measurable, Measurable.aestronglyMeasurable, abs_of_pos, aestronglyMeasurable, apply_rules, circleMap, deriv_circleMap, div_lt_one, div_nonneg, fun_prop, hR.le, hasSum_integral_of_dominated_convergence, hf.def, intervalIntegral, intervalIntegral.hasSum_integral_of_dominated_convergence, mul_left, norm_nonneg, norm_smul
+--- 原说明 ---
+For any circle integrable function `f`, the power series `cauchyPowerSeries f c 
+R` multiplied
+by `2πI` converges to the integral `∮ z in C(c, R), (z - w)⁻¹ • f z` on the open
+ disc
+`Metric.ball c R`.
 -/
-theorem hasSum_two_pi_I_cauchyPowerSeries_integral {f : Complex -> E} {c : Complex} {R : Real} {w : Complex}
+theorem hasSum_two_pi_I_cauchyPowerSeries_integral {f : ℂ → E} {c : ℂ} {R : ℝ} {w : ℂ}
     (hf : CircleIntegrable f c R) (hw : ‖w‖ < R) :
-    HasSum (fun n : Nat => ∮ z in C(c, R), (w / (z - c)) ^ n • (z - c)⁻¹ • f z)
+    HasSum (fun n : ℕ => ∮ z in C(c, R), (w / (z - c)) ^ n • (z - c)⁻¹ • f z)
       (∮ z in C(c, R), (z - (c + w))⁻¹ • f z) := by
   have hR : 0 < R := (norm_nonneg w).trans_lt hw
-  have hwR : ‖w‖ / R in Ico (0 : Real) 1 :=
+  have hwR : ‖w‖ / R ∈ Ico (0 : ℝ) 1 :=
     ⟨div_nonneg (norm_nonneg w) hR.le, (div_lt_one hR).2 hw⟩
   refine intervalIntegral.hasSum_integral_of_dominated_convergence
       (fun n θ => ‖f (circleMap c R θ)‖ * (‖w‖ / R) ^ n) (fun n => ?_) (fun n => ?_) ?_ ?_ ?_
@@ -2244,142 +2751,221 @@ theorem hasSum_two_pi_I_cauchyPowerSeries_integral {f : Complex -> E} {c : Compl
     convert! (hasSum_geometric_of_norm_lt_one this).mul_right _ using 1
     simp [← sub_sub, ← mul_inv, sub_mul, div_mul_cancel₀ _ (circleMap_ne_center hR.ne')]
 
-/--
-theorem `hasSum_cauchyPowerSeries_integral` / 定理 `hasSum_cauchyPowerSeries_integral`
+/-- For any circle integrable function `f`, the power series `cauchyPowerSeries f c R`, `R > 0`,
+converges to the Cauchy integral `(2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z` on the open
+disc `Metric.ball c R`. -/
+/-
+**hasSum_cauchyPowerSeries_integral** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasSum_cauchyPowerSeries_integral {f : Complex -> E} {c : Complex} {R : Re
+al} {w : Complex} (hf : CircleIntegrable f c R) (hw : ‖w‖ < R) : HasSum (fun n =
+> cauchyPowerSeries f c R n fun _ => w) ((2 * π * I : Complex)⁻¹ • ∮ z in C(c, R
+), (z - (c + w))⁻¹ • f z)
+参数：hf : CircleIntegrable f c R；hw : ‖w‖ < R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `cauchyPowerSeries_apply`：cauchyPowerSeries_apply (f : Complex -> E) (c :
+ Complex) (R : Real) (n : Nat) (w : Complex) : (cauchyPowerSeries f c R n fun _ 
+=> w) = (2 * …
+· 使用定理 `HasSum.const_smul`：HasSum.const_smul {a : α} (b : γ) (hf : HasSum f a L)
+ : HasSum (fun i => b • f i) (b • a) L
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `hasSum_two_pi_I_cauchyPowerSeries_integral`：hasSum_two_pi_I_cauchyPowerS
+eries_integral {f : Complex -> E} {c : Complex} {R : Real} {w : Complex} (hf : C
+ircleIntegrable f c R) (hw : ‖w‖…
 
-English:
-theorem hasSum_cauchyPowerSeries_integral
-  statement: {f : Complex -> E} {c : Complex} {R : Real} {w : Complex}
-  proof: by
-  simp only [cauchyPowerSeries_apply]
-  exact (hasSum_two_pi_I_cauchyPowerSeries_integral hf hw).const_smul _
-
-中文:
-定理 hasSum_cauchyPowerSeries_integral
-  结论: {f : 复形 -> E} {c : 复形} {R : 实数} {w : 复形}
-  证明: by
-  simp only [cauchyPowerSeries_apply]
-  exact (hasSum_two_pi_I_cauchyPowerSeries_integral hf hw).const_smul _
-
-Depends on / 依赖: cauchyPowerSeries_apply, const_smul, hasSum_two_pi_I_cauchyPowerSeries_integral
+--- 原说明 ---
+For any circle integrable function `f`, the power series `cauchyPowerSeries f c 
+R`, `R > 0`,
+converges to the Cauchy integral `(2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ 
+• f z` on the open
+disc `Metric.ball c R`.
 -/
-theorem hasSum_cauchyPowerSeries_integral {f : Complex -> E} {c : Complex} {R : Real} {w : Complex}
+theorem hasSum_cauchyPowerSeries_integral {f : ℂ → E} {c : ℂ} {R : ℝ} {w : ℂ}
     (hf : CircleIntegrable f c R) (hw : ‖w‖ < R) :
     HasSum (fun n => cauchyPowerSeries f c R n fun _ => w)
-      ((2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - (c + w))⁻¹ • f z) := by
+      ((2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - (c + w))⁻¹ • f z) := by
   simp only [cauchyPowerSeries_apply]
   exact (hasSum_two_pi_I_cauchyPowerSeries_integral hf hw).const_smul _
 
-/--
-theorem `sum_cauchyPowerSeries_eq_integral` / 定理 `sum_cauchyPowerSeries_eq_integral`
+/-- For any circle integrable function `f`, the power series `cauchyPowerSeries f c R`, `R > 0`,
+converges to the Cauchy integral `(2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z` on the open
+disc `Metric.ball c R`. -/
+/-
+**sum_cauchyPowerSeries_eq_integral** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sum_cauchyPowerSeries_eq_integral {f : Complex -> E} {c : Complex} {R : Re
+al} {w : Complex} (hf : CircleIntegrable f c R) (hw : ‖w‖ < R) : (cauchyPowerSer
+ies f c R).sum w = (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - (c + w))⁻¹ • f
+ z
+参数：hf : CircleIntegrable f c R；hw : ‖w‖ < R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasSum.tsum_eq`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α} {a : α} [T2
+Spac…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `hasSum_cauchyPowerSeries_integral`：hasSum_cauchyPowerSeries_integral {f 
+: Complex -> E} {c : Complex} {R : Real} {w : Complex} (hf : CircleIntegrable f 
+c R) (hw : ‖w‖ < R) : H…
 
-English:
-theorem sum_cauchyPowerSeries_eq_integral
-  statement: {f : Complex -> E} {c : Complex} {R : Real} {w : Complex}
-  proof: (hasSum_cauchyPowerSeries_integral hf hw).tsum_eq
-
-中文:
-定理 sum_cauchyPowerSeries_eq_integral
-  结论: {f : 复形 -> E} {c : 复形} {R : 实数} {w : 复形}
-  证明: (hasSum_cauchyPowerSeries_integral hf hw).tsum_eq
-
-Depends on / 依赖: hasSum_cauchyPowerSeries_integral, tsum_eq
+--- 原说明 ---
+For any circle integrable function `f`, the power series `cauchyPowerSeries f c 
+R`, `R > 0`,
+converges to the Cauchy integral `(2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ 
+• f z` on the open
+disc `Metric.ball c R`.
 -/
-theorem sum_cauchyPowerSeries_eq_integral {f : Complex -> E} {c : Complex} {R : Real} {w : Complex}
+theorem sum_cauchyPowerSeries_eq_integral {f : ℂ → E} {c : ℂ} {R : ℝ} {w : ℂ}
     (hf : CircleIntegrable f c R) (hw : ‖w‖ < R) :
-    (cauchyPowerSeries f c R).sum w = (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - (c + w))⁻¹ • f z :=
+    (cauchyPowerSeries f c R).sum w = (2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - (c + w))⁻¹ • f z :=
   (hasSum_cauchyPowerSeries_integral hf hw).tsum_eq
 
-/--
-theorem `hasFPowerSeriesOn_cauchy_integral` / 定理 `hasFPowerSeriesOn_cauchy_integral`
+/-- For any circle integrable function `f`, the power series `cauchyPowerSeries f c R`, `R > 0`,
+converges to the Cauchy integral `(2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z` on the open
+disc `Metric.ball c R`. -/
+/-
+**hasFPowerSeriesOn_cauchy_integral** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFPowerSeriesOn_cauchy_integral {f : Complex -> E} {c : Complex} {R : Re
+al>=0} (hf : CircleIntegrable f c R) (hR : 0 < R) : HasFPowerSeriesOnBall (fun w
+ => (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z) (cauchyPowerSerie
+s f c R) c R
+参数：hf : CircleIntegrable f c R；hR : 0 < R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `le_radius_cauchyPowerSeries`：le_radius_cauchyPowerSeries (f : Complex ->
+ E) (c : Complex) (R : Real>=0) : ↑R <= (cauchyPowerSeries f c R).radius
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.coe_pos`：∀ {r : NNReal}, 0 < ↑r ↔ 0 < r
+· 使用定理 `hasSum_cauchyPowerSeries_integral`：hasSum_cauchyPowerSeries_integral {f 
+: Complex -> E} {c : Complex} {R : Real} {w : Complex} (hf : CircleIntegrable f 
+c R) (hw : ‖w‖ < R) : H…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.eball_coe`：Metric.eball_coe {x : α} {ε : Real>=0} : eball x ε = b
+all x ε
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
 
-English:
-theorem hasFPowerSeriesOn_cauchy_integral
-  statement: {f : Complex -> E} {c : Complex} {R : Real>=0}
-  proof: { r_le := le_radius_cauchyPowerSeries _ _ _
-    r_pos := ENNReal.coe_pos.2 hR
-hasSum := fun hy => hasSum_cauchyPowerSeries_integral hf by simpa using hy }
-
-中文:
-定理 hasFPowerSeriesOn_cauchy_integral
-  结论: {f : 复形 -> E} {c : 复形} {R : 实数>=0}
-  证明: { r_le := le_radius_cauchyPowerSeries _ _ _
-    r_pos := ENNReal.coe_pos.2 hR
-hasSum := fun hy => hasSum_cauchyPowerSeries_integral hf by simpa using hy }
-
-Depends on / 依赖: ENNReal, ENNReal.coe_pos, coe_pos, hasSum, hasSum_cauchyPowerSeries_integral, le_radius_cauchyPowerSeries, r_le, r_pos
+--- 原说明 ---
+For any circle integrable function `f`, the power series `cauchyPowerSeries f c 
+R`, `R > 0`,
+converges to the Cauchy integral `(2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ 
+• f z` on the open
+disc `Metric.ball c R`.
 -/
-theorem hasFPowerSeriesOn_cauchy_integral {f : Complex -> E} {c : Complex} {R : Real>=0}
+theorem hasFPowerSeriesOn_cauchy_integral {f : ℂ → E} {c : ℂ} {R : ℝ≥0}
     (hf : CircleIntegrable f c R) (hR : 0 < R) :
-    HasFPowerSeriesOnBall (fun w => (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z)
+    HasFPowerSeriesOnBall (fun w => (2 * π * I : ℂ)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z)
       (cauchyPowerSeries f c R) c R :=
   { r_le := le_radius_cauchyPowerSeries _ _ _
     r_pos := ENNReal.coe_pos.2 hR
-hasSum := fun hy => hasSum_cauchyPowerSeries_integral hf by simpa using hy }
+    hasSum := fun hy ↦ hasSum_cauchyPowerSeries_integral hf <| by simpa using hy }
 
 namespace circleIntegral
 
-/--
-theorem `integral_sub_inv_of_mem_ball` / 定理 `integral_sub_inv_of_mem_ball`
+/-- Integral $\oint_{|z-c|=R} \frac{dz}{z-w} = 2πi$ whenever $|w-c| < R$. -/
+/-
+**circleIntegral.integral_sub_inv_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `circleI
+ntegral`。
+形式化陈述：integral_sub_inv_of_mem_ball {c w : Complex} {R : Real} (hw : w in ball c 
+R) : (∮ z in C(c, R), (z - w)⁻¹) = 2 * π * I
+参数：hw : w in ball c R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `dist_nonneg`：dist_nonneg {x y : α} : 0 <= dist x y
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `circleIntegral.integral_sub_zpow_of_ne`：integral_sub_zpow_of_ne {n : Int
+} (hn : n != -1) (c w : Complex) (R : Real) : (∮ z in C(c, R), (z - w) ^ n) = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `circleIntegral.integral_sub_center_inv`：integral_sub_center_inv (c : Com
+plex) {R : Real} (hR : R != 0) : (∮ z in C(c, R), (z - c)⁻¹) = 2 * π * I
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `hasSum_single`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] 
+[inst_1 : TopologicalSpace α] {f : β → α} (b : β),   (∀ (b' : β), b' ≠ b → f b' 
+= 0…
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `circleIntegral.integral_const_mul`：integral_const_mul (a : Complex) (f :
+ Complex -> Complex) (c : Complex) (R : Real) : (∮ z in C(c, R), a * f z) = a * 
+∮ z in C(c, R), f z
+· 使用定理 `circleIntegral.integral_congr`：integral_congr {f g : Complex -> E} {c : 
+Complex} {R : Real} (hR : 0 <= R) (h : EqOn f g (sphere c R)) : (∮ z in C(c, R),
+ f z) = ∮ z in C(c,…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `inv_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a⁻
+¹ ^ n = (a ^ n)⁻¹
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Int.natCast_succ`：∀ (n : ℕ), ↑n.succ = ↑n + 1
+（共 45 条，此处仅展示前 30 条）
 
-English:
-theorem integral_sub_inv_of_mem_ball
-  given: {c w : Complex} {R : Real} (hw : w in ball c R)
-  proof: by
-  have hR : 0 < R := dist_nonneg.trans_lt hw
-  suffices H : HasSum (fun n : Nat => ∮ z in C(c, R), ((w - c) / (z - c)) ^ n * (z - c)⁻¹)
-      (2 * π * I) by
-    have A : CircleIntegrable (fun _ => (1 : Complex)) c R := continuousOn_const.circleIntegrable'
-    refine (H.unique ?_).symm
-    simpa only [smul_eq_mul, mul_one, add_sub_cancel] using
-      hasSum_two_pi_I_cauchyPowerSeries_integral A (mem_ball_iff_norm.1 hw)
-  have H : forall n : Nat, n != 0 -> (∮ z in C(c, R), (z - c) ^ (-n - 1 : Int)) = 0 := by
-    refine fun n hn => integral_sub_zpow_of_ne ?_ _ _ _; simpa
-  have : (∮ z in C(c, R), ((w - c) / (z - c)) ^ 0 * (z - c)⁻¹) = 2 * π * I := by simp [hR.ne']
-  refine this ▸ hasSum_single _ fun n hn => ?_
-  simp only [div_eq_mul_inv, mul_pow, integral_const_mul, mul_assoc]
-  rw [(integral_congr hR.le fun z hz => _).trans (H n hn)]; rw [mul_zero]
-  intro z _
-  rw [← pow_succ]; rw [← zpow_natCast]; rw [inv_zpow]; rw [← zpow_neg]; rw [Int.natCast_succ]; rw [neg_add]; rw [sub_eq_add_neg _ (1 : Int)]
-
-中文:
-定理 integral_sub_inv_of_mem_ball
-  条件: {c w : 复形} {R : 实数} (hw : w in ball c R)
-  证明: by
-  have hR : 0 < R := dist_nonneg.trans_lt hw
-  suffices H : HasSum (fun n : Nat => ∮ z in C(c, R), ((w - c) / (z - c)) ^ n * (z - c)⁻¹)
-      (2 * π * I) by
-    have A : CircleIntegrable (fun _ => (1 : Complex)) c R := continuousOn_const.circleIntegrable'
-    refine (H.unique ?_).symm
-    simpa only [smul_eq_mul, mul_one, add_sub_cancel] using
-      hasSum_two_pi_I_cauchyPowerSeries_integral A (mem_ball_iff_norm.1 hw)
-  have H : forall n : Nat, n != 0 -> (∮ z in C(c, R), (z - c) ^ (-n - 1 : Int)) = 0 := by
-    refine fun n hn => integral_sub_zpow_of_ne ?_ _ _ _; simpa
-  have : (∮ z in C(c, R), ((w - c) / (z - c)) ^ 0 * (z - c)⁻¹) = 2 * π * I := by simp [hR.ne']
-  refine this ▸ hasSum_single _ fun n hn => ?_
-  simp only [div_eq_mul_inv, mul_pow, integral_const_mul, mul_assoc]
-  rw [(integral_congr hR.le fun z hz => _).trans (H n hn)]; rw [mul_zero]
-  intro z _
-  rw [← pow_succ]; rw [← zpow_natCast]; rw [inv_zpow]; rw [← zpow_neg]; rw [Int.natCast_succ]; rw [neg_add]; rw [sub_eq_add_neg _ (1 : Int)]
-
-Depends on / 依赖: CircleIntegrable, H.unique, HasSum, add_sub_cancel, circleIntegrable, continuousOn_const, continuousOn_const.circleIntegrable, dist_nonneg, dist_nonneg.trans_lt, hasSum_two_pi_I_cauchyPowerSeries_integral, mem_ball_iff_norm, mul_one, smul_eq_mul, trans_lt, unique
+--- 原说明 ---
+Integral $\oint_{|z-c|=R} \frac{dz}{z-w} = 2πi$ whenever $|w-c| < R$.
 -/
-theorem integral_sub_inv_of_mem_ball {c w : Complex} {R : Real} (hw : w in ball c R) :
+theorem integral_sub_inv_of_mem_ball {c w : ℂ} {R : ℝ} (hw : w ∈ ball c R) :
     (∮ z in C(c, R), (z - w)⁻¹) = 2 * π * I := by
   have hR : 0 < R := dist_nonneg.trans_lt hw
-  suffices H : HasSum (fun n : Nat => ∮ z in C(c, R), ((w - c) / (z - c)) ^ n * (z - c)⁻¹)
+  suffices H : HasSum (fun n : ℕ => ∮ z in C(c, R), ((w - c) / (z - c)) ^ n * (z - c)⁻¹)
       (2 * π * I) by
-    have A : CircleIntegrable (fun _ => (1 : Complex)) c R := continuousOn_const.circleIntegrable'
+    have A : CircleIntegrable (fun _ => (1 : ℂ)) c R := continuousOn_const.circleIntegrable'
     refine (H.unique ?_).symm
     simpa only [smul_eq_mul, mul_one, add_sub_cancel] using
       hasSum_two_pi_I_cauchyPowerSeries_integral A (mem_ball_iff_norm.1 hw)
-  have H : forall n : Nat, n != 0 -> (∮ z in C(c, R), (z - c) ^ (-n - 1 : Int)) = 0 := by
+  have H : ∀ n : ℕ, n ≠ 0 → (∮ z in C(c, R), (z - c) ^ (-n - 1 : ℤ)) = 0 := by
     refine fun n hn => integral_sub_zpow_of_ne ?_ _ _ _; simpa
   have : (∮ z in C(c, R), ((w - c) / (z - c)) ^ 0 * (z - c)⁻¹) = 2 * π * I := by simp [hR.ne']
   refine this ▸ hasSum_single _ fun n hn => ?_
   simp only [div_eq_mul_inv, mul_pow, integral_const_mul, mul_assoc]
-  rw [(integral_congr hR.le fun z hz => _).trans (H n hn)]; rw [mul_zero]
+  rw [(integral_congr hR.le fun z hz => _).trans (H n hn), mul_zero]
   intro z _
-  rw [← pow_succ]; rw [← zpow_natCast]; rw [inv_zpow]; rw [← zpow_neg]; rw [Int.natCast_succ]; rw [neg_add]; rw [sub_eq_add_neg _ (1 : Int)]
+  rw [← pow_succ, ← zpow_natCast, inv_zpow, ← zpow_neg, Int.natCast_succ, neg_add,
+    sub_eq_add_neg _ (1 : ℤ)]
 
 end circleIntegral
+

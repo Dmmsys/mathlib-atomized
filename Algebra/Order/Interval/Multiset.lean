@@ -22,204 +22,218 @@ namespace Multiset
 variable [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
   [ExistsAddOfLE α] [LocallyFiniteOrder α]
 
-/--
-lemma `map_add_left_Icc` / 引理 `map_add_left_Icc`
-
-English:
-lemma map_add_left_Icc
-  given: (a b c : α)
-  statement: (Icc a b).map (c + ·) = Icc (c + a) (c + b)
-  proof: by
-  classical rw [Icc, Icc, ← Finset.image_add_left_Icc, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-中文:
-引理 map_add_left_Icc
-  条件: (a b c : α)
-  结论: (闭区间 a b).map (c + ·) = 闭区间 (c + a) (c + b)
-  证明: by
-  classical rw [Icc, Icc, ← Finset.image_add_left_Icc, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-Depends on / 依赖: Finset, Finset.image_add_left_Icc, Finset.image_val, Finset.nodup, add_right_injective, classical, image_add_left_Icc, image_val
+/-
+**Multiset.map_add_left_Icc** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_left_Icc (a b c : α) : (Icc a b).map (c + ·) = Icc (c + a) (c + b)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Icc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Icc a b = (Finset.Icc a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.image_add_left_Icc`：∀ {α : Type u_2} [inst : AddCommMonoid α] [in
+st_1 : PartialOrder α] [IsOrderedCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 
+: LocallyFinite…
+· 使用定理 `Finset.image_val`：image_val (f : α -> β) (s : Finset α) : (image f s).1 
+= (s.1.map f).dedup
+· 使用定理 `Multiset.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Multi
+set α}, s.Nodup → s.dedup = s
+· 使用定理 `Multiset.Nodup.map`：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multi
+set α}, Function.Injective f → s.Nodup → (Multiset.map f s).Nodup
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 lemma map_add_left_Icc (a b c : α) : (Icc a b).map (c + ·) = Icc (c + a) (c + b) := by
   classical rw [Icc, Icc, ← Finset.image_add_left_Icc, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-/--
-lemma `map_add_left_Ico` / 引理 `map_add_left_Ico`
-
-English:
-lemma map_add_left_Ico
-  given: (a b c : α)
-  statement: (Ico a b).map (c + ·) = Ico (c + a) (c + b)
-  proof: by
-  classical rw [Ico, Ico, ← Finset.image_add_left_Ico, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-中文:
-引理 map_add_left_Ico
-  条件: (a b c : α)
-  结论: (左闭右开区间 a b).map (c + ·) = 左闭右开区间 (c + a) (c + b)
-  证明: by
-  classical rw [Ico, Ico, ← Finset.image_add_left_Ico, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-Depends on / 依赖: Finset, Finset.image_add_left_Ico, Finset.image_val, Finset.nodup, add_right_injective, classical, image_add_left_Ico, image_val
+/-
+**Multiset.map_add_left_Ico** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_left_Ico (a b c : α) : (Ico a b).map (c + ·) = Ico (c + a) (c + b)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.image_add_left_Ico`：∀ {α : Type u_2} [inst : AddCommMonoid α] [in
+st_1 : PartialOrder α] [IsOrderedCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 
+: LocallyFinite…
+· 使用定理 `Finset.image_val`：image_val (f : α -> β) (s : Finset α) : (image f s).1 
+= (s.1.map f).dedup
+· 使用定理 `Multiset.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Multi
+set α}, s.Nodup → s.dedup = s
+· 使用定理 `Multiset.Nodup.map`：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multi
+set α}, Function.Injective f → s.Nodup → (Multiset.map f s).Nodup
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 lemma map_add_left_Ico (a b c : α) : (Ico a b).map (c + ·) = Ico (c + a) (c + b) := by
   classical rw [Ico, Ico, ← Finset.image_add_left_Ico, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-/--
-lemma `map_add_left_Ioc` / 引理 `map_add_left_Ioc`
-
-English:
-lemma map_add_left_Ioc
-  given: (a b c : α)
-  statement: (Ioc a b).map (c + ·) = Ioc (c + a) (c + b)
-  proof: by
-  classical rw [Ioc, Ioc, ← Finset.image_add_left_Ioc, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-中文:
-引理 map_add_left_Ioc
-  条件: (a b c : α)
-  结论: (左开右闭区间 a b).map (c + ·) = 左开右闭区间 (c + a) (c + b)
-  证明: by
-  classical rw [Ioc, Ioc, ← Finset.image_add_left_Ioc, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-Depends on / 依赖: Finset, Finset.image_add_left_Ioc, Finset.image_val, Finset.nodup, add_right_injective, classical, image_add_left_Ioc, image_val
+/-
+**Multiset.map_add_left_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_left_Ioc (a b c : α) : (Ioc a b).map (c + ·) = Ioc (c + a) (c + b)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioc a b = (Finset.Ioc a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.image_add_left_Ioc`：∀ {α : Type u_2} [inst : AddCommMonoid α] [in
+st_1 : PartialOrder α] [IsOrderedCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 
+: LocallyFinite…
+· 使用定理 `Finset.image_val`：image_val (f : α -> β) (s : Finset α) : (image f s).1 
+= (s.1.map f).dedup
+· 使用定理 `Multiset.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Multi
+set α}, s.Nodup → s.dedup = s
+· 使用定理 `Multiset.Nodup.map`：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multi
+set α}, Function.Injective f → s.Nodup → (Multiset.map f s).Nodup
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 lemma map_add_left_Ioc (a b c : α) : (Ioc a b).map (c + ·) = Ioc (c + a) (c + b) := by
   classical rw [Ioc, Ioc, ← Finset.image_add_left_Ioc, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-/--
-lemma `map_add_left_Ioo` / 引理 `map_add_left_Ioo`
-
-English:
-lemma map_add_left_Ioo
-  given: (a b c : α)
-  statement: (Ioo a b).map (c + ·) = Ioo (c + a) (c + b)
-  proof: by
-  classical rw [Ioo, Ioo, ← Finset.image_add_left_Ioo, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-中文:
-引理 map_add_left_Ioo
-  条件: (a b c : α)
-  结论: (开区间 a b).map (c + ·) = 开区间 (c + a) (c + b)
-  证明: by
-  classical rw [Ioo, Ioo, ← Finset.image_add_left_Ioo, Finset.image_val,
-      ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-Depends on / 依赖: Finset, Finset.image_add_left_Ioo, Finset.image_val, Finset.nodup, add_right_injective, classical, image_add_left_Ioo, image_val
+/-
+**Multiset.map_add_left_Ioo** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_left_Ioo (a b c : α) : (Ioo a b).map (c + ·) = Ioo (c + a) (c + b)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioo.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioo a b = (Finset.Ioo a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.image_add_left_Ioo`：∀ {α : Type u_2} [inst : AddCommMonoid α] [in
+st_1 : PartialOrder α] [IsOrderedCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 
+: LocallyFinite…
+· 使用定理 `Finset.image_val`：image_val (f : α -> β) (s : Finset α) : (image f s).1 
+= (s.1.map f).dedup
+· 使用定理 `Multiset.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Multi
+set α}, s.Nodup → s.dedup = s
+· 使用定理 `Multiset.Nodup.map`：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multi
+set α}, Function.Injective f → s.Nodup → (Multiset.map f s).Nodup
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 lemma map_add_left_Ioo (a b c : α) : (Ioo a b).map (c + ·) = Ioo (c + a) (c + b) := by
   classical rw [Ioo, Ioo, ← Finset.image_add_left_Ioo, Finset.image_val,
       ((Finset.nodup _).map <| add_right_injective c).dedup]
-
-/--
-lemma `map_add_right_Icc` / 引理 `map_add_right_Icc`
-
-English:
-lemma map_add_right_Icc
-  given: (a b c : α)
-  statement: ((Icc a b).map fun x => x + c) = Icc (a + c) (b + c)
-  proof: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Icc _ _ _
-
-中文:
-引理 map_add_right_Icc
-  条件: (a b c : α)
-  结论: ((闭区间 a b).map fun x => x + c) = 闭区间 (a + c) (b + c)
-  证明: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Icc _ _ _
-
-Depends on / 依赖: add_comm, map_add_left_Icc, simp_rw
+/-
+**Multiset.map_add_right_Icc** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_right_Icc (a b c : α) : ((Icc a b).map fun x => x + c) = Icc (a + 
+c) (b + c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Multiset.map_add_left_Icc`：map_add_left_Icc (a b c : α) : (Icc a b).map 
+(c + ·) = Icc (c + a) (c + b)
 -/
 lemma map_add_right_Icc (a b c : α) : ((Icc a b).map fun x => x + c) = Icc (a + c) (b + c) := by
   simp_rw [add_comm _ c]
   exact map_add_left_Icc _ _ _
-
-/--
-lemma `map_add_right_Ico` / 引理 `map_add_right_Ico`
-
-English:
-lemma map_add_right_Ico
-  given: (a b c : α)
-  statement: ((Ico a b).map fun x => x + c) = Ico (a + c) (b + c)
-  proof: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Ico _ _ _
-
-中文:
-引理 map_add_right_Ico
-  条件: (a b c : α)
-  结论: ((左闭右开区间 a b).map fun x => x + c) = 左闭右开区间 (a + c) (b + c)
-  证明: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Ico _ _ _
-
-Depends on / 依赖: add_comm, map_add_left_Ico, simp_rw
+/-
+**Multiset.map_add_right_Ico** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_right_Ico (a b c : α) : ((Ico a b).map fun x => x + c) = Ico (a + 
+c) (b + c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Multiset.map_add_left_Ico`：map_add_left_Ico (a b c : α) : (Ico a b).map 
+(c + ·) = Ico (c + a) (c + b)
 -/
 lemma map_add_right_Ico (a b c : α) : ((Ico a b).map fun x => x + c) = Ico (a + c) (b + c) := by
   simp_rw [add_comm _ c]
   exact map_add_left_Ico _ _ _
-
-/--
-lemma `map_add_right_Ioc` / 引理 `map_add_right_Ioc`
-
-English:
-lemma map_add_right_Ioc
-  given: (a b c : α)
-  statement: ((Ioc a b).map fun x => x + c) = Ioc (a + c) (b + c)
-  proof: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Ioc _ _ _
-
-中文:
-引理 map_add_right_Ioc
-  条件: (a b c : α)
-  结论: ((左开右闭区间 a b).map fun x => x + c) = 左开右闭区间 (a + c) (b + c)
-  证明: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Ioc _ _ _
-
-Depends on / 依赖: add_comm, map_add_left_Ioc, simp_rw
+/-
+**Multiset.map_add_right_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_right_Ioc (a b c : α) : ((Ioc a b).map fun x => x + c) = Ioc (a + 
+c) (b + c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Multiset.map_add_left_Ioc`：map_add_left_Ioc (a b c : α) : (Ioc a b).map 
+(c + ·) = Ioc (c + a) (c + b)
 -/
 lemma map_add_right_Ioc (a b c : α) : ((Ioc a b).map fun x => x + c) = Ioc (a + c) (b + c) := by
   simp_rw [add_comm _ c]
   exact map_add_left_Ioc _ _ _
-
-/--
-lemma `map_add_right_Ioo` / 引理 `map_add_right_Ioo`
-
-English:
-lemma map_add_right_Ioo
-  given: (a b c : α)
-  statement: ((Ioo a b).map fun x => x + c) = Ioo (a + c) (b + c)
-  proof: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Ioo _ _ _
-
-中文:
-引理 map_add_right_Ioo
-  条件: (a b c : α)
-  结论: ((开区间 a b).map fun x => x + c) = 开区间 (a + c) (b + c)
-  证明: by
-  simp_rw [add_comm _ c]
-  exact map_add_left_Ioo _ _ _
-
-Depends on / 依赖: add_comm, map_add_left_Ioo, simp_rw
+/-
+**Multiset.map_add_right_Ioo** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：map_add_right_Ioo (a b c : α) : ((Ioo a b).map fun x => x + c) = Ioo (a + 
+c) (b + c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Multiset.map_add_left_Ioo`：map_add_left_Ioo (a b c : α) : (Ioo a b).map 
+(c + ·) = Ioo (c + a) (c + b)
 -/
 lemma map_add_right_Ioo (a b c : α) : ((Ioo a b).map fun x => x + c) = Ioo (a + c) (b + c) := by
   simp_rw [add_comm _ c]
   exact map_add_left_Ioo _ _ _
 
 end Multiset
+

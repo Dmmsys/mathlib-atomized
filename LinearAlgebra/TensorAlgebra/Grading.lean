@@ -27,102 +27,55 @@ variable (R M)
 
 /-- A version of `TensorAlgebra.ι` that maps directly into the graded structure. This is
 primarily an auxiliary construction used to provide `TensorAlgebra.gradedAlgebra`. -/
-nonrec def GradedAlgebra.ι : M ->ₗ[R] ⨁ i : Nat, ↥(LinearMap.range (ι R : M ->ₗ[_] _) ^ i) :=
-  DirectSum.lof R Nat (fun i => ↥(LinearMap.range (ι R : M ->ₗ[_] _) ^ i)) 1 ∘ₗ
+nonrec def GradedAlgebra.ι : M →ₗ[R] ⨁ i : ℕ, ↥(LinearMap.range (ι R : M →ₗ[_] _) ^ i) :=
+  DirectSum.lof R ℕ (fun i => ↥(LinearMap.range (ι R : M →ₗ[_] _) ^ i)) 1 ∘ₗ
     (ι R).codRestrict _ fun m => by simpa only [pow_one] using LinearMap.mem_range_self _ m
 
-/--
-theorem `GradedAlgebra.ι_apply` / 定理 `GradedAlgebra.ι_apply`
-
-English:
-theorem GradedAlgebra.ι_apply
-  given: (m : M)
-  proof: rfl
-
-中文:
-定理 分次代数.ι_apply
-  条件: (m : M)
-  证明: rfl
+/-
+**TensorAlgebra.GradedAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem GradedAlgebra.ι_apply (m : M) :
     GradedAlgebra.ι R M m =
-      DirectSum.of (fun (i : Nat) => ↥(LinearMap.range (TensorAlgebra.ι R : M ->ₗ[_] _) ^ i)) 1
+      DirectSum.of (fun (i : ℕ) => ↥(LinearMap.range (TensorAlgebra.ι R : M →ₗ[_] _) ^ i)) 1
         ⟨TensorAlgebra.ι R m, by simpa only [pow_one] using LinearMap.mem_range_self _ m⟩ :=
   rfl
 
 variable {R M}
 
-/--
-Instance `gradedAlgebra` / 实例 `gradedAlgebra`
+/-- The tensor algebra is graded by the powers of the submodule `(TensorAlgebra.ι R).range`. -/
+/-
+**TensorAlgebra.gradedAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+形式化陈述：gradedAlgebra : GradedAlgebra ((LinearMap.range (ι R : M ->ₗ[R] TensorAlge
+bra R M) ^ ·) : Nat -> Submodule R _)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gradedAlgebra
-  signature: :
-  body: fast_instance% GradedAlgebra.ofAlgHom _ (lift R <| GradedAlgebra.ι R M)
-    (by
-      ext m
-      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
-        AlgHom.id_apply]
-      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
-    fun i x => by
-    obtain ⟨x, hx⟩ := x
-    dsimp only [Subtype.coe_mk, DirectSum.lof_eq_of]
-    induction hx using Submodule.pow_induction_on_left' with
-    | algebraMap r =>
-      rw [AlgHom.commutes]; rw [DirectSum.algebraMap_apply]; rfl
-    | add x y i hx hy ihx ihy =>
-      rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]
-      rfl
-    | mem_mul m hm i x hx ih =>
-      obtain ⟨_, rfl⟩ := hm
-      rw [map_mul]; rw [ih]; rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.of_mul_of]
-      exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext (add_comm _ _) rfl)
-
-中文:
-实例 gradedAlgebra
-  签名: :
-  定义体: fast_instance% GradedAlgebra.ofAlgHom _ (lift R <| GradedAlgebra.ι R M)
-    (by
-      ext m
-      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
-        AlgHom.id_apply]
-      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
-    fun i x => by
-    obtain ⟨x, hx⟩ := x
-    dsimp only [Subtype.coe_mk, DirectSum.lof_eq_of]
-    induction hx using Submodule.pow_induction_on_left' with
-    | algebraMap r =>
-      rw [AlgHom.commutes]; rw [DirectSum.algebraMap_apply]; rfl
-    | add x y i hx hy ihx ihy =>
-      rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]
-      rfl
-    | mem_mul m hm i x hx ih =>
-      obtain ⟨_, rfl⟩ := hm
-      rw [map_mul]; rw [ih]; rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.of_mul_of]
-      exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext (add_comm _ _) rfl)
-
-Depends on / 依赖: AlgHom, AlgHom.commutes, AlgHom.comp_apply, AlgHom.id_apply, AlgHom.toLinearMap_apply, DirectSum, DirectSum.algebraMap_apply, DirectSum.coeAlgHom_of, DirectSum.lof_eq_of, GradedAlgebra, GradedAlgebra.ofAlgHom, LinearMap, LinearMap.comp_apply, Submodule, Submodule.pow_induction_on_left, Subtype, Subtype.coe_mk, algebraMap, algebraMap_apply, coeAlgHom_of
+--- 原说明 ---
+The tensor algebra is graded by the powers of the submodule `(TensorAlgebra.ι R)
+.range`.
 -/
 instance gradedAlgebra :
-    GradedAlgebra ((LinearMap.range (ι R : M ->ₗ[R] TensorAlgebra R M) ^ ·) : Nat -> Submodule R _) :=
+    GradedAlgebra ((LinearMap.range (ι R : M →ₗ[R] TensorAlgebra R M) ^ ·) : ℕ → Submodule R _) :=
   fast_instance% GradedAlgebra.ofAlgHom _ (lift R <| GradedAlgebra.ι R M)
     (by
       ext m
       dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
         AlgHom.id_apply]
-      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
+      rw [lift_ι_apply, GradedAlgebra.ι_apply R M, DirectSum.coeAlgHom_of, Subtype.coe_mk])
     fun i x => by
     obtain ⟨x, hx⟩ := x
     dsimp only [Subtype.coe_mk, DirectSum.lof_eq_of]
     induction hx using Submodule.pow_induction_on_left' with
     | algebraMap r =>
-      rw [AlgHom.commutes]; rw [DirectSum.algebraMap_apply]; rfl
+      rw [AlgHom.commutes, DirectSum.algebraMap_apply]; rfl
     | add x y i hx hy ihx ihy =>
-      rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]
+      rw [map_add, ihx, ihy, ← map_add]
       rfl
     | mem_mul m hm i x hx ih =>
       obtain ⟨_, rfl⟩ := hm
-      rw [map_mul]; rw [ih]; rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.of_mul_of]
+      rw [map_mul, ih, lift_ι_apply, GradedAlgebra.ι_apply R M, DirectSum.of_mul_of]
       exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext (add_comm _ _) rfl)
 
 end TensorAlgebra
+

@@ -24,20 +24,9 @@ universe v u
 
 variable (R : Type u) [Ring R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Small.{v}
-  signature: R] : CategoryTheory.HasExt.{v} (ModuleCat.{v} R)
-  body: CategoryTheory.hasExt_of_enoughProjectives.{v} (ModuleCat.{v} R)
-
-中文:
-实例 [Small.{v}
-  签名: R] : 范畴论.HasExt.{v} (模范畴.{v} R)
-  定义体: CategoryTheory.hasExt_of_enoughProjectives.{v} (ModuleCat.{v} R)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.hasExt_of_enoughProjectives, ModuleCat, hasExt_of_enoughProjectives
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Small.{v} R] : CategoryTheory.HasExt.{v} (ModuleCat.{v} R) :=
   CategoryTheory.hasExt_of_enoughProjectives.{v} (ModuleCat.{v} R)

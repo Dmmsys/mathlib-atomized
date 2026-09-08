@@ -30,77 +30,42 @@ open Lean Meta Elab Tactic
 initialize registerTraceClass `tactic.use
 
 /--
-Definition of `applyTheConstructor` / `applyTheConstructor` 的定义
+When the goal `mvarId` is an inductive datatype with a single constructor,
+this applies that constructor, then returns metavariables for the non-parameter explicit arguments
+along with metavariables for the parameters and implicit arguments.
 
-English:
-definition applyTheConstructor
-  signature: (mvarId : MVarId)
-  body: do
-  mvarId.withContext do
-    mvarId.checkNotAssigned `constructor
-    let target ← mvarId.getType'
-    matchConstInduct target.getAppFn
-      (fun _ => throwTacticEx `constructor mvarId
-                  m!"target is not an inductive datatype{indentExpr target}")
-      fun ival us => do
-        match ival.ctors with
-        | [ctor] =>
-          let cinfo ← getConstInfoCtor ctor
-          let ctorConst := Lean.mkConst ctor us
-          let (args, binderInfos, _) ← forallMetaTelescopeReducing (← inferType ctorConst)
-          let mut explicit := #[]
-          let mut implicit := #[]
-          let mut insts := #[]
-          for arg in args, binderInfo in binderInfos, i in [0:args.size] do
-            if cinfo.numParams <= i ∧ binderInfo.isExplicit then
-              explicit := explicit.push arg.mvarId!
-            else
-              implicit := implicit.push arg.mvarId!
-              if binderInfo.isInstImplicit then
-                insts := insts.push arg.mvarId!
-          let e := mkAppN ctorConst args
-          let eType ← inferType e
-          unless (← withAssignableSyntheticOpaque <| isDefEq eType target) do
-            throwError m!"type mismatch{indentExpr e}\n{← mkHasTypeButIsExpectedMsg eType target}"
-          mvarId.assign e
-          return (explicit.toList, implicit.toList, insts.toList)
-        | _ => throwTacticEx `constructor mvarId
-                m!"target inductive type does not have exactly one constructor{indentExpr target}"
+The first list of returned metavariables correspond to the arguments that `⟨x,y,...⟩` notation uses.
+The second list corresponds to everything else: the parameters and implicit arguments.
+The third list consists of those implicit arguments that are instance implicits, which one can
+try to synthesize. The third list is a sublist of the second list.
 
-中文:
-定义 applyTheConstructor
-  签名: (mvarId : MVarId)
-  定义体: do
-  mvarId.withContext do
-    mvarId.checkNotAssigned `constructor
-    let target ← mvarId.getType'
-    matchConstInduct target.getAppFn
-      (fun _ => throwTacticEx `constructor mvarId
-                  m!"target is not an inductive datatype{indentExpr target}")
-      fun ival us => do
-        match ival.ctors with
-        | [ctor] =>
-          let cinfo ← getConstInfoCtor ctor
-          let ctorConst := Lean.mkConst ctor us
-          let (args, binderInfos, _) ← forallMetaTelescopeReducing (← inferType ctorConst)
-          let mut explicit := #[]
-          let mut implicit := #[]
-          let mut insts := #[]
-          for arg in args, binderInfo in binderInfos, i in [0:args.size] do
-            if cinfo.numParams <= i ∧ binderInfo.isExplicit then
-              explicit := explicit.push arg.mvarId!
-            else
-              implicit := implicit.push arg.mvarId!
-              if binderInfo.isInstImplicit then
-                insts := insts.push arg.mvarId!
-          let e := mkAppN ctorConst args
-          let eType ← inferType e
-          unless (← withAssignableSyntheticOpaque <| isDefEq eType target) do
-            throwError m!"type mismatch{indentExpr e}\n{← mkHasTypeButIsExpectedMsg eType target}"
-          mvarId.assign e
-          return (explicit.toList, implicit.toList, insts.toList)
-        | _ => throwTacticEx `constructor mvarId
-                m!"target inductive type does not have exactly one constructor{indentExpr target}"
+Returns metavariables for all arguments whether or not the metavariables are assigned.
+-/
+/-
+**Mathlib.Tactic.applyTheConstructor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：applyTheConstructor (mvarId : MVarId) : MetaM (List MVarId × List MVarId ×
+ List MVarId)
+参数：mvarId : MVarId。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
+
+--- 原说明 ---
+When the goal `mvarId` is an inductive datatype with a single constructor,
+this applies that constructor, then returns metavariables for the non-parameter 
+explicit arguments
+along with metavariables for the parameters and implicit arguments.
+
+The first list of returned metavariables correspond to the arguments that `⟨x,y,
+...⟩` notation uses.
+The second list corresponds to everything else: the parameters and implicit argu
+ments.
+The third list consists of those implicit arguments that are instance implicits,
+ which one can
+try to synthesize. The third list is a sublist of the second list.
+
+Returns metavariables for all arguments whether or not the metavariables are ass
+igned.
 -/
 def applyTheConstructor (mvarId : MVarId) :
     MetaM (List MVarId × List MVarId × List MVarId) := do
@@ -120,7 +85,7 @@ def applyTheConstructor (mvarId : MVarId) :
           let mut implicit := #[]
           let mut insts := #[]
           for arg in args, binderInfo in binderInfos, i in [0:args.size] do
-            if cinfo.numParams <= i ∧ binderInfo.isExplicit then
+            if cinfo.numParams ≤ i ∧ binderInfo.isExplicit then
               explicit := explicit.push arg.mvarId!
             else
               implicit := implicit.push arg.mvarId!
@@ -144,80 +109,13 @@ Returns the remaining explicit goals `gs`, any goals `acc` due to `refine`, and 
 of instance arguments that we should try synthesizing after the loop.
 The new set of goals should be `gs ++ acc`. -/
 partial
-/--
-Definition of `useLoop` / `useLoop` 的定义
-
-English:
-definition useLoop
-  signature: (eager : Bool) (gs : List MVarId) (args : List Term) (acc insts : List MVarId)
-  body: do
-  trace[tactic.use] "gs = {gs}\nargs = {args}\nacc = {acc}"
-  match gs, args with
-  | gs, [] =>
-    return (gs, acc, insts)
-  | [], arg :: _ =>
-    throwErrorAt arg "too many arguments supplied to `use`"
-  | g :: gs', arg :: args' => g.withContext do
-    if ← g.isAssigned then
-      -- Goals might become assigned in inductive types with indices.
-      -- Let's check that what's supplied is defeq to what's already there.
-      let e ← Term.elabTermEnsuringType arg (← g.getType)
-      unless ← isDefEq e (.mvar g) do
-        throwErrorAt arg
-          "argument is not definitionally equal to inferred value{indentExpr (.mvar g)}"
-      return ← useLoop eager gs' args' acc insts
-    -- Type ascription is a workaround for `refine` ensuring the type after synthesizing mvars.
-    let refineArg ← `(tactic| refine ($arg : $(← Term.exprToSyntax (← g.getType))))
-    if eager then
-      -- In eager mode, first try refining with the argument before applying the constructor
-      if let some newGoals ← observing? (run g do withoutRecover <| evalTactic refineArg) then
-        return ← useLoop eager gs' args' (acc ++ newGoals) insts
-    if eager || gs'.isEmpty then
-      if let some (expl, impl, insts') ← observing? do
-                try applyTheConstructor g
-                catch e => trace[tactic.use] "Constructor. {e.toMessageData}"; throw e then
-        trace[tactic.use] "expl.length = {expl.length}, impl.length = {impl.length}"
-        return ← useLoop eager (expl ++ gs') args (acc ++ impl) (insts ++ insts')
-    -- In eager mode, the following will give an error, which hopefully is more informative than
-    -- the one provided by `applyTheConstructor`.
-    let newGoals ← run g do evalTactic refineArg
-    useLoop eager gs' args' (acc ++ newGoals) insts
-
-中文:
-定义 useLoop
-  签名: (eager : 布尔值) (gs : 列表 MVarId) (args : 列表 项) (acc insts : 列表 MVarId)
-  定义体: do
-  trace[tactic.use] "gs = {gs}\nargs = {args}\nacc = {acc}"
-  match gs, args with
-  | gs, [] =>
-    return (gs, acc, insts)
-  | [], arg :: _ =>
-    throwErrorAt arg "too many arguments supplied to `use`"
-  | g :: gs', arg :: args' => g.withContext do
-    if ← g.isAssigned then
-      -- Goals might become assigned in inductive types with indices.
-      -- Let's check that what's supplied is defeq to what's already there.
-      let e ← Term.elabTermEnsuringType arg (← g.getType)
-      unless ← isDefEq e (.mvar g) do
-        throwErrorAt arg
-          "argument is not definitionally equal to inferred value{indentExpr (.mvar g)}"
-      return ← useLoop eager gs' args' acc insts
-    -- Type ascription is a workaround for `refine` ensuring the type after synthesizing mvars.
-    let refineArg ← `(tactic| refine ($arg : $(← Term.exprToSyntax (← g.getType))))
-    if eager then
-      -- In eager mode, first try refining with the argument before applying the constructor
-      if let some newGoals ← observing? (run g do withoutRecover <| evalTactic refineArg) then
-        return ← useLoop eager gs' args' (acc ++ newGoals) insts
-    if eager || gs'.isEmpty then
-      if let some (expl, impl, insts') ← observing? do
-                try applyTheConstructor g
-                catch e => trace[tactic.use] "Constructor. {e.toMessageData}"; throw e then
-        trace[tactic.use] "expl.length = {expl.length}, impl.length = {impl.length}"
-        return ← useLoop eager (expl ++ gs') args (acc ++ impl) (insts ++ insts')
-    -- In eager mode, the following will give an error, which hopefully is more informative than
-    -- the one provided by `applyTheConstructor`.
-    let newGoals ← run g do evalTactic refineArg
-    useLoop eager gs' args' (acc ++ newGoals) insts
+/-
+**Mathlib.Tactic.useLoop** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：useLoop (eager : Bool) (gs : List MVarId) (args : List Term) (acc insts : 
+List MVarId) : TermElabM (List MVarId × List MVarId × List MVarId)
+参数：eager : Bool；gs : List MVarId；args : List Term；acc insts : List MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def useLoop (eager : Bool) (gs : List MVarId) (args : List Term) (acc insts : List MVarId) :
     TermElabM (List MVarId × List MVarId × List MVarId) := do
@@ -253,54 +151,18 @@ def useLoop (eager : Bool) (gs : List MVarId) (args : List Term) (acc insts : Li
     let newGoals ← run g do evalTactic refineArg
     useLoop eager gs' args' (acc ++ newGoals) insts
 
-/--
-Definition of `runUse` / `runUse` 的定义
+/-- Run the `useLoop` on the main goal then discharge remaining explicit `Prop` arguments. -/
+/-
+**Mathlib.Tactic.runUse** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：runUse (eager : Bool) (discharger : TacticM Unit) (args : List Term) : Tac
+ticM Unit
+参数：eager : Bool；discharger : TacticM Unit；args : List Term。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runUse
-  signature: (eager : Bool) (discharger : TacticM Unit) (args : List Term)
-  body: do
-  let egoals ← focus do
-    let (egoals, acc, insts) ← useLoop eager (← getGoals) args [] []
-    -- Try synthesizing instance arguments
-    for inst in insts do
-      if !(← inst.isAssigned) then
-discard inst.withContext observing? do inst.assign (← synthInstance (← inst.getType))
-    -- Set the goals.
-    setGoals (egoals ++ acc)
-    pruneSolvedGoals
-    pure egoals
-  -- Run the discharger on non-assigned proposition metavariables
-  -- (`trivial` uses `assumption`, which isn't great for non-propositions)
-  for g in egoals do
-    if !(← g.isAssigned) then
-      g.withContext do
-        if ← isProp (← g.getType) then
-          trace[tactic.use] "running discharger on {g}"
-discard run g discharger
-
-中文:
-定义 runUse
-  签名: (eager : 布尔值) (discharger : TacticM 单元) (args : 列表 项)
-  定义体: do
-  let egoals ← focus do
-    let (egoals, acc, insts) ← useLoop eager (← getGoals) args [] []
-    -- Try synthesizing instance arguments
-    for inst in insts do
-      if !(← inst.isAssigned) then
-discard inst.withContext observing? do inst.assign (← synthInstance (← inst.getType))
-    -- Set the goals.
-    setGoals (egoals ++ acc)
-    pruneSolvedGoals
-    pure egoals
-  -- Run the discharger on non-assigned proposition metavariables
-  -- (`trivial` uses `assumption`, which isn't great for non-propositions)
-  for g in egoals do
-    if !(← g.isAssigned) then
-      g.withContext do
-        if ← isProp (← g.getType) then
-          trace[tactic.use] "running discharger on {g}"
-discard run g discharger
+--- 原说明 ---
+Run the `useLoop` on the main goal then discharge remaining explicit `Prop` argu
+ments.
 -/
 def runUse (eager : Bool) (discharger : TacticM Unit) (args : List Term) : TacticM Unit := do
   let egoals ← focus do
@@ -308,7 +170,7 @@ def runUse (eager : Bool) (discharger : TacticM Unit) (args : List Term) : Tacti
     -- Try synthesizing instance arguments
     for inst in insts do
       if !(← inst.isAssigned) then
-discard inst.withContext observing? do inst.assign (← synthInstance (← inst.getType))
+        discard <| inst.withContext <| observing? do inst.assign (← synthInstance (← inst.getType))
     -- Set the goals.
     setGoals (egoals ++ acc)
     pruneSolvedGoals
@@ -320,7 +182,7 @@ discard inst.withContext observing? do inst.assign (← synthInstance (← inst.
       g.withContext do
         if ← isProp (← g.getType) then
           trace[tactic.use] "running discharger on {g}"
-discard run g discharger
+          discard <| run g discharger
 
 /-- `use_discharger` is used by `use` to discharge side goals.
 
@@ -339,34 +201,20 @@ macro_rules | `(tactic| use_discharger) => `(tactic| rfl)
 macro_rules | `(tactic| use_discharger) => `(tactic| assumption)
 macro_rules | `(tactic| use_discharger) => `(tactic| apply True.intro)
 
-/--
-Definition of `mkUseDischarger` / `mkUseDischarger` 的定义
+/-- Returns a `TacticM Unit` that either runs the tactic sequence from `discharger?` if it's
+non-`none`, or it does `try with_reducible use_discharger`. -/
+/-
+**Mathlib.Tactic.mkUseDischarger** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：mkUseDischarger (discharger? : Option (TSyntax ``Parser.Tactic.discharger)
+) : TacticM (TacticM Unit)
+参数：discharger? : Option (TSyntax ``Parser.Tactic.discharger)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkUseDischarger
-  signature: (discharger? : Option (TSyntax ``Parser.Tactic.discharger))
-  body: do
-  let discharger ←
-    if let some disch := discharger? then
-      match disch with
-      | `(Parser.Tactic.discharger| ($_ := $d)) => `(tactic| ($d))
-      | _ => throwUnsupportedSyntax
-    else
-      `(tactic| try with_reducible use_discharger)
-  return evalTactic discharger
-
-中文:
-定义 mkUseDischarger
-  签名: (discharger? : 选项类型 (TSyntax ``Parser.Tactic.discharger))
-  定义体: do
-  let discharger ←
-    if let some disch := discharger? then
-      match disch with
-      | `(Parser.Tactic.discharger| ($_ := $d)) => `(tactic| ($d))
-      | _ => throwUnsupportedSyntax
-    else
-      `(tactic| try with_reducible use_discharger)
-  return evalTactic discharger
+--- 原说明 ---
+Returns a `TacticM Unit` that either runs the tactic sequence from `discharger?`
+ if it's
+non-`none`, or it does `try with_reducible use_discharger`.
 -/
 def mkUseDischarger (discharger? : Option (TSyntax ``Parser.Tactic.discharger)) :
     TacticM (TacticM Unit) := do
@@ -435,3 +283,4 @@ elab "use!" discharger?:(Parser.Tactic.discharger)? ppSpace args:term,+ : tactic
   runUse true (← mkUseDischarger discharger?) args.getElems.toList
 
 end Mathlib.Tactic
+

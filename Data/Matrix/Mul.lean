@@ -57,7 +57,7 @@ assert_not_exists Algebra Field TrivialStar
 
 universe u u' v w
 
-variable {l m n o : Type*} {m' : o -> Type*} {n' : o -> Type*}
+variable {l m n o : Type*} {m' : o → Type*} {n' : o → Type*}
 variable {R : Type*} {S : Type*} {α : Type v} {β : Type w} {γ : Type*}
 
 open Matrix
@@ -66,20 +66,22 @@ section DotProduct
 
 variable [Fintype m] [Fintype n]
 
-/--
-Definition of `dotProduct` / `dotProduct` 的定义
+/-- `dotProduct v w` is the sum of the entrywise products `v i * w i`.
 
-English:
-definition dotProduct
-  signature: [Mul α] [AddCommMonoid α] (v w : m -> α)
-  body: ∑ i, v i * w i
+See also `dotProductEquiv`. -/
+/-
+**dotProduct** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：dotProduct [Mul α] [AddCommMonoid α] (v w : m -> α) : α
+参数：v w : m -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 dotProduct
-  签名: [乘法 α] [加法交换幺半群 α] (v w : m -> α)
-  定义体: ∑ i, v i * w i
+--- 原说明 ---
+`dotProduct v w` is the sum of the entrywise products `v i * w i`.
+
+See also `dotProductEquiv`.
 -/
-def dotProduct [Mul α] [AddCommMonoid α] (v w : m -> α) : α :=
+def dotProduct [Mul α] [AddCommMonoid α] (v w : m → α) : α :=
   ∑ i, v i * w i
 
 /- The precedence of 72 comes immediately after ` • ` for `SMul.smul`,
@@ -87,399 +89,409 @@ so that `r₁ • a ⬝ᵥ r₂ • b` is parsed as `(r₁ • a) ⬝ᵥ (r₂ �
 @[inherit_doc]
 infixl:72 " ⬝ᵥ " => dotProduct
 
-/--
-theorem `dotProduct_assoc` / 定理 `dotProduct_assoc`
-
-English:
-theorem dotProduct_assoc
-  given: [NonUnitalSemiring α] (u : m -> α) (w : n -> α) (v : Matrix m n α)
-  proof: by
-  simpa [dotProduct, Finset.mul_sum, Finset.sum_mul, mul_assoc] using Finset.sum_comm
-
-中文:
-定理 dotProduct_assoc
-  条件: [非幺半环 α] (u : m -> α) (w : n -> α) (v : 矩阵 m n α)
-  证明: by
-  simpa [dotProduct, Finset.mul_sum, Finset.sum_mul, mul_assoc] using Finset.sum_comm
-
-Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_comm, Finset.sum_mul, dotProduct, mul_assoc, mul_sum, sum_comm, sum_mul
+/-
+**dotProduct_assoc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_assoc [NonUnitalSemiring α] (u : m -> α) (w : n -> α) (v : Matr
+ix m n α) : (fun j => u ⬝ᵥ fun i => v i j) ⬝ᵥ w = u ⬝ᵥ fun i => v i ⬝ᵥ w
+参数：u : m -> α；w : n -> α；v : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
 -/
-theorem dotProduct_assoc [NonUnitalSemiring α] (u : m -> α) (w : n -> α) (v : Matrix m n α) :
+theorem dotProduct_assoc [NonUnitalSemiring α] (u : m → α) (w : n → α) (v : Matrix m n α) :
     (fun j => u ⬝ᵥ fun i => v i j) ⬝ᵥ w = u ⬝ᵥ fun i => v i ⬝ᵥ w := by
   simpa [dotProduct, Finset.mul_sum, Finset.sum_mul, mul_assoc] using Finset.sum_comm
-
-/--
-theorem `dotProduct_comm` / 定理 `dotProduct_comm`
-
-English:
-theorem dotProduct_comm
-  given: [AddCommMonoid α] [CommMagma α] (v w : m -> α)
-  statement: v ⬝ᵥ w = w ⬝ᵥ v
-  proof: by
-  simp_rw [dotProduct, mul_comm]
-
-@[simp]
-
-中文:
-定理 dotProduct_comm
-  条件: [加法交换幺半群 α] [交换原群 α] (v w : m -> α)
-  结论: v ⬝ᵥ w = w ⬝ᵥ v
-  证明: by
-  simp_rw [dotProduct, mul_comm]
-
-@[simp]
-
-Depends on / 依赖: dotProduct, mul_comm, simp_rw
+/-
+**dotProduct_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : m -> α) : v ⬝ᵥ w = 
+w ⬝ᵥ v
+参数：v w : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : m -> α) : v ⬝ᵥ w = w ⬝ᵥ v := by
+theorem dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : m → α) : v ⬝ᵥ w = w ⬝ᵥ v := by
   simp_rw [dotProduct, mul_comm]
 
 @[simp]
-/--
-theorem `dotProduct_pUnit` / 定理 `dotProduct_pUnit`
-
-English:
-theorem dotProduct_pUnit
-  given: [AddCommMonoid α] [Mul α] (v w : PUnit -> α)
-  statement: v ⬝ᵥ w = v ⟨⟩ * w ⟨⟩
-  proof: by
-  simp [dotProduct]
-
-中文:
-定理 dotProduct_pUnit
-  条件: [加法交换幺半群 α] [乘法 α] (v w : 命题单元 -> α)
-  结论: v ⬝ᵥ w = v ⟨⟩ * w ⟨⟩
-  证明: by
-  simp [dotProduct]
-
-Depends on / 依赖: dotProduct
+/-
+**dotProduct_pUnit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_pUnit [AddCommMonoid α] [Mul α] (v w : PUnit -> α) : v ⬝ᵥ w = v
+ ⟨⟩ * w ⟨⟩
+参数：v w : PUnit -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dotProduct_pUnit [AddCommMonoid α] [Mul α] (v w : PUnit -> α) : v ⬝ᵥ w = v ⟨⟩ * w ⟨⟩ := by
+theorem dotProduct_pUnit [AddCommMonoid α] [Mul α] (v w : PUnit → α) : v ⬝ᵥ w = v ⟨⟩ * w ⟨⟩ := by
   simp [dotProduct]
 
 section MulOneClass
 
 variable [MulOneClass α] [AddCommMonoid α]
 
-/--
-theorem `dotProduct_one` / 定理 `dotProduct_one`
-
-English:
-theorem dotProduct_one
-  given: (v : n -> α)
-  statement: v ⬝ᵥ 1 = ∑ i, v i
-  proof: by simp [(· ⬝ᵥ ·)]
-
-中文:
-定理 dotProduct_one
-  条件: (v : n -> α)
-  结论: v ⬝ᵥ 1 = ∑ i, v i
-  证明: by simp [(· ⬝ᵥ ·)]
+/-
+**dotProduct_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_one (v : n -> α) : v ⬝ᵥ 1 = ∑ i, v i
+参数：v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dotProduct_one (v : n -> α) : v ⬝ᵥ 1 = ∑ i, v i := by simp [(· ⬝ᵥ ·)]
-
-/--
-theorem `one_dotProduct` / 定理 `one_dotProduct`
-
-English:
-theorem one_dotProduct
-  given: (v : n -> α)
-  statement: 1 ⬝ᵥ v = ∑ i, v i
-  proof: by simp [(· ⬝ᵥ ·)]
-
-中文:
-定理 one_dotProduct
-  条件: (v : n -> α)
-  结论: 1 ⬝ᵥ v = ∑ i, v i
-  证明: by simp [(· ⬝ᵥ ·)]
+theorem dotProduct_one (v : n → α) : v ⬝ᵥ 1 = ∑ i, v i := by simp [(· ⬝ᵥ ·)]
+/-
+**one_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_dotProduct (v : n -> α) : 1 ⬝ᵥ v = ∑ i, v i
+参数：v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem one_dotProduct (v : n -> α) : 1 ⬝ᵥ v = ∑ i, v i := by simp [(· ⬝ᵥ ·)]
+theorem one_dotProduct (v : n → α) : 1 ⬝ᵥ v = ∑ i, v i := by simp [(· ⬝ᵥ ·)]
 
 end MulOneClass
 
 section NonUnitalNonAssocSemiring
 
-variable [NonUnitalNonAssocSemiring α] (u v w : m -> α) (x y : n -> α)
+variable [NonUnitalNonAssocSemiring α] (u v w : m → α) (x y : n → α)
 
 @[simp]
-/--
-theorem `dotProduct_zero` / 定理 `dotProduct_zero`
-
-English:
-theorem dotProduct_zero
-  statement: v ⬝ᵥ 0 = 0
-  proof: by simp [dotProduct]
-
-@[simp]
-
-中文:
-定理 dotProduct_zero
-  结论: v ⬝ᵥ 0 = 0
-  证明: by simp [dotProduct]
-
-@[simp]
-
-Depends on / 依赖: dotProduct
+/-
+**dotProduct_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_zero : v ⬝ᵥ 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dotProduct_zero : v ⬝ᵥ 0 = 0 := by simp [dotProduct]
 
 @[simp]
-/--
-theorem `dotProduct_zero'` / 定理 `dotProduct_zero'`
-
-English:
-theorem dotProduct_zero'
-  statement: (v ⬝ᵥ fun _ => 0) = 0
-  proof: dotProduct_zero v
-
-@[simp]
-
-中文:
-定理 dotProduct_zero'
-  结论: (v ⬝ᵥ fun _ => 0) = 0
-  证明: dotProduct_zero v
-
-@[simp]
-
-Depends on / 依赖: dotProduct_zero
+/-
+**dotProduct_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_zero' : (v ⬝ᵥ fun _ => 0) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dotProduct_zero`：dotProduct_zero : v ⬝ᵥ 0 = 0
 -/
 theorem dotProduct_zero' : (v ⬝ᵥ fun _ => 0) = 0 :=
   dotProduct_zero v
 
 @[simp]
-/--
-theorem `zero_dotProduct` / 定理 `zero_dotProduct`
-
-English:
-theorem zero_dotProduct
-  statement: 0 ⬝ᵥ v = 0
-  proof: by simp [dotProduct]
-
-@[simp]
-
-中文:
-定理 zero_dotProduct
-  结论: 0 ⬝ᵥ v = 0
-  证明: by simp [dotProduct]
-
-@[simp]
-
-Depends on / 依赖: dotProduct
+/-
+**zero_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：zero_dotProduct : 0 ⬝ᵥ v = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem zero_dotProduct : 0 ⬝ᵥ v = 0 := by simp [dotProduct]
 
 @[simp]
-/--
-theorem `zero_dotProduct'` / 定理 `zero_dotProduct'`
-
-English:
-theorem zero_dotProduct'
-  statement: (fun _ => (0 : α)) ⬝ᵥ v = 0
-  proof: zero_dotProduct v
-
-@[simp]
-
-中文:
-定理 zero_dotProduct'
-  结论: (fun _ => (0 : α)) ⬝ᵥ v = 0
-  证明: zero_dotProduct v
-
-@[simp]
-
-Depends on / 依赖: zero_dotProduct
+/-
+**zero_dotProduct'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：zero_dotProduct' : (fun _ => (0 : α)) ⬝ᵥ v = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_dotProduct`：zero_dotProduct : 0 ⬝ᵥ v = 0
 -/
 theorem zero_dotProduct' : (fun _ => (0 : α)) ⬝ᵥ v = 0 :=
   zero_dotProduct v
 
 @[simp]
-/--
-theorem `add_dotProduct` / 定理 `add_dotProduct`
-
-English:
-theorem add_dotProduct
-  statement: (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w
-  proof: by
-  simp [dotProduct, add_mul, Finset.sum_add_distrib]
-
-@[simp]
-
-中文:
-定理 add_dotProduct
-  结论: (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w
-  证明: by
-  simp [dotProduct, add_mul, Finset.sum_add_distrib]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_add_distrib, add_mul, dotProduct, sum_add_distrib
+/-
+**add_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_dotProduct : (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem add_dotProduct : (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w := by
   simp [dotProduct, add_mul, Finset.sum_add_distrib]
 
 @[simp]
-/--
-theorem `dotProduct_add` / 定理 `dotProduct_add`
-
-English:
-theorem dotProduct_add
-  statement: u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w
-  proof: by
-  simp [dotProduct, mul_add, Finset.sum_add_distrib]
-
-@[simp]
-
-中文:
-定理 dotProduct_add
-  结论: u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w
-  证明: by
-  simp [dotProduct, mul_add, Finset.sum_add_distrib]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_add_distrib, dotProduct, mul_add, sum_add_distrib
+/-
+**dotProduct_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_add : u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dotProduct_add : u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w := by
   simp [dotProduct, mul_add, Finset.sum_add_distrib]
 
 @[simp]
-/--
-theorem `sumElim_dotProduct_sumElim` / 定理 `sumElim_dotProduct_sumElim`
-
-English:
-theorem sumElim_dotProduct_sumElim
-  statement: Sum.elim u x ⬝ᵥ Sum.elim v y = u ⬝ᵥ v + x ⬝ᵥ y
-  proof: by
-  simp [dotProduct]
-
-中文:
-定理 sumElim_dotProduct_sumElim
-  结论: 和.elim u x ⬝ᵥ 和.elim v y = u ⬝ᵥ v + x ⬝ᵥ y
-  证明: by
-  simp [dotProduct]
-
-Depends on / 依赖: dotProduct
+/-
+**sumElim_dotProduct_sumElim** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sumElim_dotProduct_sumElim : Sum.elim u x ⬝ᵥ Sum.elim v y = u ⬝ᵥ v + x ⬝ᵥ 
+y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.sum_sum_type`：∀ {α₁ : Type u_4} {α₂ : Type u_5} {M : Type u_6} [
+inst : Fintype α₁] [inst_1 : Fintype α₂] [inst_2 : AddCommMonoid M]   (f : α₁ ⊕ 
+α₂ → M), ∑…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sumElim_dotProduct_sumElim : Sum.elim u x ⬝ᵥ Sum.elim v y = u ⬝ᵥ v + x ⬝ᵥ y := by
   simp [dotProduct]
 
 /-- Permuting a vector on the left of a dot product can be transferred to the right. -/
 @[simp]
-/--
-theorem `comp_equiv_symm_dotProduct` / 定理 `comp_equiv_symm_dotProduct`
+/-
+**comp_equiv_symm_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_equiv_symm_dotProduct (e : m ≃ n) : u ∘ e.symm ⬝ᵥ x = u ⬝ᵥ x ∘ e
+参数：e : m ≃ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : F
+intype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (g : κ →
+ M),…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem comp_equiv_symm_dotProduct
-  given: (e : m ≃ n)
-  statement: u ∘ e.symm ⬝ᵥ x = u ⬝ᵥ x ∘ e
-  proof: (e.sum_comp _).symm.trans
-    Finset.sum_congr rfl fun _ _ => by simp only [Function.comp, Equiv.symm_apply_apply]
-
-中文:
-定理 comp_equiv_symm_dotProduct
-  条件: (e : m ≃ n)
-  结论: u ∘ e.symm ⬝ᵥ x = u ⬝ᵥ x ∘ e
-  证明: (e.sum_comp _).symm.trans
-    Finset.sum_congr rfl fun _ _ => by simp only [Function.comp, Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.symm_apply_apply, Finset, Finset.sum_congr, Function, Function.comp, e.sum_comp, sum_comp, sum_congr, symm.trans, symm_apply_apply
+--- 原说明 ---
+Permuting a vector on the left of a dot product can be transferred to the right.
 -/
 theorem comp_equiv_symm_dotProduct (e : m ≃ n) : u ∘ e.symm ⬝ᵥ x = u ⬝ᵥ x ∘ e :=
-(e.sum_comp _).symm.trans
+  (e.sum_comp _).symm.trans <|
     Finset.sum_congr rfl fun _ _ => by simp only [Function.comp, Equiv.symm_apply_apply]
 
 /-- Permuting a vector on the right of a dot product can be transferred to the left. -/
 @[simp]
-/--
-theorem `dotProduct_comp_equiv_symm` / 定理 `dotProduct_comp_equiv_symm`
+/-
+**dotProduct_comp_equiv_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_comp_equiv_symm (e : n ≃ m) : u ⬝ᵥ x ∘ e.symm = u ∘ e ⬝ᵥ x
+参数：e : n ≃ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `comp_equiv_symm_dotProduct`：comp_equiv_symm_dotProduct (e : m ≃ n) : u ∘
+ e.symm ⬝ᵥ x = u ⬝ᵥ x ∘ e
 
-English:
-theorem dotProduct_comp_equiv_symm
-  given: (e : n ≃ m)
-  statement: u ⬝ᵥ x ∘ e.symm = u ∘ e ⬝ᵥ x
-  proof: by
-  simpa only [Equiv.symm_symm] using (comp_equiv_symm_dotProduct u x e.symm).symm
-
-中文:
-定理 dotProduct_comp_equiv_symm
-  条件: (e : n ≃ m)
-  结论: u ⬝ᵥ x ∘ e.symm = u ∘ e ⬝ᵥ x
-  证明: by
-  simpa only [Equiv.symm_symm] using (comp_equiv_symm_dotProduct u x e.symm).symm
-
-Depends on / 依赖: Equiv.symm_symm, comp_equiv_symm_dotProduct, e.symm, symm_symm
+--- 原说明 ---
+Permuting a vector on the right of a dot product can be transferred to the left.
 -/
 theorem dotProduct_comp_equiv_symm (e : n ≃ m) : u ⬝ᵥ x ∘ e.symm = u ∘ e ⬝ᵥ x := by
   simpa only [Equiv.symm_symm] using (comp_equiv_symm_dotProduct u x e.symm).symm
 
 /-- Permuting vectors on both sides of a dot product is a no-op. -/
 @[simp]
-/--
-theorem `comp_equiv_dotProduct_comp_equiv` / 定理 `comp_equiv_dotProduct_comp_equiv`
+/-
+**comp_equiv_dotProduct_comp_equiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_equiv_dotProduct_comp_equiv (e : m ≃ n) : x ∘ e ⬝ᵥ y ∘ e = x ⬝ᵥ y
+参数：e : m ≃ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem comp_equiv_dotProduct_comp_equiv
-  given: (e : m ≃ n)
-  statement: x ∘ e ⬝ᵥ y ∘ e = x ⬝ᵥ y
-  proof: by
-  simp [← dotProduct_comp_equiv_symm, Function.comp_def _ e.symm]
-
-中文:
-定理 comp_equiv_dotProduct_comp_equiv
-  条件: (e : m ≃ n)
-  结论: x ∘ e ⬝ᵥ y ∘ e = x ⬝ᵥ y
-  证明: by
-  simp [← dotProduct_comp_equiv_symm, Function.comp_def _ e.symm]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, dotProduct_comp_equiv_symm, e.symm
+--- 原说明 ---
+Permuting vectors on both sides of a dot product is a no-op.
 -/
 theorem comp_equiv_dotProduct_comp_equiv (e : m ≃ n) : x ∘ e ⬝ᵥ y ∘ e = x ⬝ᵥ y := by
   simp [← dotProduct_comp_equiv_symm, Function.comp_def _ e.symm]
-
-/--
-theorem `dotProduct_sum` / 定理 `dotProduct_sum`
-
-English:
-theorem dotProduct_sum
-  given: {ι : Type*} (u : m -> α) (s : Finset ι) (v : ι -> (m -> α))
-  proof: by
-  simp only [dotProduct, Finset.sum_apply, Finset.mul_sum]
-  rw [Finset.sum_comm]
-
-中文:
-定理 dotProduct_sum
-  条件: {ι : 类型} (u : m -> α) (s : 有限集 ι) (v : ι -> (m -> α))
-  证明: by
-  simp only [dotProduct, Finset.sum_apply, Finset.mul_sum]
-  rw [Finset.sum_comm]
-
-Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_apply, Finset.sum_comm, dotProduct, mul_sum, sum_apply, sum_comm
+/-
+**dotProduct_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_sum {ι : Type*} (u : m -> α) (s : Finset ι) (v : ι -> (m -> α))
+ : u ⬝ᵥ ∑ i in s, v i = ∑ i in s, u ⬝ᵥ v i
+参数：u : m -> α；s : Finset ι；v : ι -> (m -> α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
 -/
-theorem dotProduct_sum {ι : Type*} (u : m -> α) (s : Finset ι) (v : ι -> (m -> α)) :
-    u ⬝ᵥ ∑ i in s, v i = ∑ i in s, u ⬝ᵥ v i := by
+theorem dotProduct_sum {ι : Type*} (u : m → α) (s : Finset ι) (v : ι → (m → α)) :
+    u ⬝ᵥ ∑ i ∈ s, v i = ∑ i ∈ s, u ⬝ᵥ v i := by
   simp only [dotProduct, Finset.sum_apply, Finset.mul_sum]
   rw [Finset.sum_comm]
-
-/--
-theorem `sum_dotProduct` / 定理 `sum_dotProduct`
-
-English:
-theorem sum_dotProduct
-  given: {ι : Type*} (s : Finset ι) (u : ι -> (m -> α)) (v : m -> α)
-  proof: by
-  simp only [dotProduct, Finset.sum_apply, Finset.sum_mul]
-  rw [Finset.sum_comm]
-
-中文:
-定理 sum_dotProduct
-  条件: {ι : 类型} (s : 有限集 ι) (u : ι -> (m -> α)) (v : m -> α)
-  证明: by
-  simp only [dotProduct, Finset.sum_apply, Finset.sum_mul]
-  rw [Finset.sum_comm]
-
-Depends on / 依赖: Finset, Finset.sum_apply, Finset.sum_comm, Finset.sum_mul, dotProduct, sum_apply, sum_comm, sum_mul
+/-
+**sum_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sum_dotProduct {ι : Type*} (s : Finset ι) (u : ι -> (m -> α)) (v : m -> α)
+ : (∑ i in s, u i) ⬝ᵥ v = ∑ i in s, u i ⬝ᵥ v
+参数：s : Finset ι；u : ι -> (m -> α)；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
 -/
-theorem sum_dotProduct {ι : Type*} (s : Finset ι) (u : ι -> (m -> α)) (v : m -> α) :
-    (∑ i in s, u i) ⬝ᵥ v = ∑ i in s, u i ⬝ᵥ v := by
+theorem sum_dotProduct {ι : Type*} (s : Finset ι) (u : ι → (m → α)) (v : m → α) :
+    (∑ i ∈ s, u i) ⬝ᵥ v = ∑ i ∈ s, u i ⬝ᵥ v := by
   simp only [dotProduct, Finset.sum_apply, Finset.sum_mul]
   rw [Finset.sum_comm]
 
@@ -487,151 +499,185 @@ end NonUnitalNonAssocSemiring
 
 section NonUnitalNonAssocSemiringDecidable
 
-variable [DecidableEq m] [NonUnitalNonAssocSemiring α] (u v w : m -> α)
+variable [DecidableEq m] [NonUnitalNonAssocSemiring α] (u v w : m → α)
 
 @[simp]
-/--
-theorem `diagonal_dotProduct` / 定理 `diagonal_dotProduct`
-
-English:
-theorem diagonal_dotProduct
-  given: (i : m)
-  statement: diagonal v i ⬝ᵥ w = v i * w i
-  proof: by
-  have : forall j != i, diagonal v i j * w j = 0 := fun j hij => by
-    simp [diagonal_apply_ne' _ hij]
-  convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
-
-
-@[simp]
-
-中文:
-定理 diagonal_dotProduct
-  条件: (i : m)
-  结论: diagonal v i ⬝ᵥ w = v i * w i
-  证明: by
-  have : forall j != i, diagonal v i j * w j = 0 := fun j hij => by
-    simp [diagonal_apply_ne' _ hij]
-  convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
-
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, convert, diagonal, diagonal_apply_ne, sum_eq_single
+/-
+**diagonal_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：diagonal_dotProduct (i : m) : diagonal v i ⬝ᵥ w = v i * w i
+参数：i : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_apply_ne'`：diagonal_apply_ne' [Zero α] (d : n -> α) {i j
+ : n} (h : j != i) : (diagonal d) i j = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
 -/
 theorem diagonal_dotProduct (i : m) : diagonal v i ⬝ᵥ w = v i * w i := by
-  have : forall j != i, diagonal v i j * w j = 0 := fun j hij => by
+  have : ∀ j ≠ i, diagonal v i j * w j = 0 := fun j hij => by
     simp [diagonal_apply_ne' _ hij]
   convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
 
 
 @[simp]
-/--
-theorem `dotProduct_diagonal` / 定理 `dotProduct_diagonal`
-
-English:
-theorem dotProduct_diagonal
-  given: (i : m)
-  statement: v ⬝ᵥ diagonal w i = v i * w i
-  proof: by
-  have : forall j != i, v j * diagonal w i j = 0 := fun j hij => by
-    simp [diagonal_apply_ne' _ hij]
-  convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
-
-@[simp]
-
-中文:
-定理 dotProduct_diagonal
-  条件: (i : m)
-  结论: v ⬝ᵥ diagonal w i = v i * w i
-  证明: by
-  have : forall j != i, v j * diagonal w i j = 0 := fun j hij => by
-    simp [diagonal_apply_ne' _ hij]
-  convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, convert, diagonal, diagonal_apply_ne, sum_eq_single
+/-
+**dotProduct_diagonal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_diagonal (i : m) : v ⬝ᵥ diagonal w i = v i * w i
+参数：i : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_apply_ne'`：diagonal_apply_ne' [Zero α] (d : n -> α) {i j
+ : n} (h : j != i) : (diagonal d) i j = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
 -/
 theorem dotProduct_diagonal (i : m) : v ⬝ᵥ diagonal w i = v i * w i := by
-  have : forall j != i, v j * diagonal w i j = 0 := fun j hij => by
+  have : ∀ j ≠ i, v j * diagonal w i j = 0 := fun j hij => by
     simp [diagonal_apply_ne' _ hij]
   convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
 
 @[simp]
-/--
-theorem `dotProduct_diagonal'` / 定理 `dotProduct_diagonal'`
-
-English:
-theorem dotProduct_diagonal'
-  given: (i : m)
-  statement: (v ⬝ᵥ fun j => diagonal w j i) = v i * w i
-  proof: by
-  have : forall j != i, v j * diagonal w j i = 0 := fun j hij => by
-    simp [diagonal_apply_ne _ hij]
-  convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
-
-@[simp]
-
-中文:
-定理 dotProduct_diagonal'
-  条件: (i : m)
-  结论: (v ⬝ᵥ fun j => diagonal w j i) = v i * w i
-  证明: by
-  have : forall j != i, v j * diagonal w j i = 0 := fun j hij => by
-    simp [diagonal_apply_ne _ hij]
-  convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, convert, diagonal, diagonal_apply_ne, sum_eq_single
+/-
+**dotProduct_diagonal'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_diagonal' (i : m) : (v ⬝ᵥ fun j => diagonal w j i) = v i * w i
+参数：i : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_apply_ne`：diagonal_apply_ne [Zero α] (d : n -> α) {i j :
+ n} (h : i != j) : (diagonal d) i j = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
 -/
 theorem dotProduct_diagonal' (i : m) : (v ⬝ᵥ fun j => diagonal w j i) = v i * w i := by
-  have : forall j != i, v j * diagonal w j i = 0 := fun j hij => by
+  have : ∀ j ≠ i, v j * diagonal w j i = 0 := fun j hij => by
     simp [diagonal_apply_ne _ hij]
   convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
 
 @[simp]
-/--
-theorem `single_dotProduct` / 定理 `single_dotProduct`
-
-English:
-theorem single_dotProduct
-  given: (x : α) (i : m)
-  statement: Pi.single i x ⬝ᵥ v = x * v i
-  proof: by
-
-中文:
-定理 single_dotProduct
-  条件: (x : α) (i : m)
-  结论: 依赖函数类型.single i x ⬝ᵥ v = x * v i
-  证明: by
+/-
+**single_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：single_dotProduct (x : α) (i : m) : Pi.single i x ⬝ᵥ v = x * v i
+参数：x : α；i : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
 -/
 theorem single_dotProduct (x : α) (i : m) : Pi.single i x ⬝ᵥ v = x * v i := by
 -- Porting note: added `(_ : m → α)`
-  have : forall j != i, (Pi.single i x : m -> α) j * v j = 0 := fun j hij => by
+  have : ∀ j ≠ i, (Pi.single i x : m → α) j * v j = 0 := fun j hij => by
     simp [Pi.single_eq_of_ne hij]
   convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
 
 @[simp]
-/--
-theorem `dotProduct_single` / 定理 `dotProduct_single`
-
-English:
-theorem dotProduct_single
-  given: (x : α) (i : m)
-  statement: v ⬝ᵥ Pi.single i x = v i * x
-  proof: by
-
-中文:
-定理 dotProduct_single
-  条件: (x : α) (i : m)
-  结论: v ⬝ᵥ 依赖函数类型.single i x = v i * x
-  证明: by
+/-
+**dotProduct_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_single (x : α) (i : m) : v ⬝ᵥ Pi.single i x = v i * x
+参数：x : α；i : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
 -/
 theorem dotProduct_single (x : α) (i : m) : v ⬝ᵥ Pi.single i x = v i * x := by
 -- Porting note: added `(_ : m → α)`
-  have : forall j != i, v j * (Pi.single i x : m -> α) j = 0 := fun j hij => by
+  have : ∀ j ≠ i, v j * (Pi.single i x : m → α) j = 0 := fun j hij => by
     simp [Pi.single_eq_of_ne hij]
   convert! Finset.sum_eq_single i (fun j _ => this j) _ using 1 <;> simp
 
@@ -642,175 +688,164 @@ section NonAssocSemiring
 variable [NonAssocSemiring α]
 
 @[simp]
-/--
-theorem `one_dotProduct_one` / 定理 `one_dotProduct_one`
-
-English:
-theorem one_dotProduct_one
-  statement: (1 : n -> α) ⬝ᵥ 1 = Fintype.card n
-  proof: by
-  simp [dotProduct]
-
-中文:
-定理 one_dotProduct_one
-  结论: (1 : n -> α) ⬝ᵥ 1 = 有限类型.card n
-  证明: by
-  simp [dotProduct]
-
-Depends on / 依赖: dotProduct
+/-
+**one_dotProduct_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_dotProduct_one : (1 : n -> α) ⬝ᵥ 1 = Fintype.card n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem one_dotProduct_one : (1 : n -> α) ⬝ᵥ 1 = Fintype.card n := by
+theorem one_dotProduct_one : (1 : n → α) ⬝ᵥ 1 = Fintype.card n := by
   simp [dotProduct]
-
-/--
-theorem `dotProduct_single_one` / 定理 `dotProduct_single_one`
-
-English:
-theorem dotProduct_single_one
-  given: [DecidableEq n] (v : n -> α) (i : n)
-  proof: by
-  rw [dotProduct_single]; rw [mul_one]
-
-中文:
-定理 dotProduct_single_one
-  条件: [DecidableEq n] (v : n -> α) (i : n)
-  证明: by
-  rw [dotProduct_single]; rw [mul_one]
-
-Depends on / 依赖: dotProduct_single, mul_one
+/-
+**dotProduct_single_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_single_one [DecidableEq n] (v : n -> α) (i : n) : v ⬝ᵥ Pi.singl
+e i 1 = v i
+参数：v : n -> α；i : n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dotProduct_single`：dotProduct_single (x : α) (i : m) : v ⬝ᵥ Pi.single i 
+x = v i * x
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem dotProduct_single_one [DecidableEq n] (v : n -> α) (i : n) :
+theorem dotProduct_single_one [DecidableEq n] (v : n → α) (i : n) :
     v ⬝ᵥ Pi.single i 1 = v i := by
-  rw [dotProduct_single]; rw [mul_one]
-
-/--
-theorem `single_one_dotProduct` / 定理 `single_one_dotProduct`
-
-English:
-theorem single_one_dotProduct
-  given: [DecidableEq n] (i : n) (v : n -> α)
-  proof: by
-  rw [single_dotProduct]; rw [one_mul]
-
-中文:
-定理 single_one_dotProduct
-  条件: [DecidableEq n] (i : n) (v : n -> α)
-  证明: by
-  rw [single_dotProduct]; rw [one_mul]
-
-Depends on / 依赖: one_mul, single_dotProduct
+  rw [dotProduct_single, mul_one]
+/-
+**single_one_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：single_one_dotProduct [DecidableEq n] (i : n) (v : n -> α) : Pi.single i 1
+ ⬝ᵥ v = v i
+参数：i : n；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `single_dotProduct`：single_dotProduct (x : α) (i : m) : Pi.single i x ⬝ᵥ 
+v = x * v i
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem single_one_dotProduct [DecidableEq n] (i : n) (v : n -> α) :
+theorem single_one_dotProduct [DecidableEq n] (i : n) (v : n → α) :
     Pi.single i 1 ⬝ᵥ v = v i := by
-  rw [single_dotProduct]; rw [one_mul]
+  rw [single_dotProduct, one_mul]
 
 end NonAssocSemiring
 
 section NonUnitalNonAssocRing
 
-variable [NonUnitalNonAssocRing α] (u v w : m -> α)
+variable [NonUnitalNonAssocRing α] (u v w : m → α)
 
 @[simp]
-/--
-theorem `neg_dotProduct` / 定理 `neg_dotProduct`
-
-English:
-theorem neg_dotProduct
-  statement: -v ⬝ᵥ w = -(v ⬝ᵥ w)
-  proof: by simp [dotProduct]
-
-@[simp]
-
-中文:
-定理 neg_dotProduct
-  结论: -v ⬝ᵥ w = -(v ⬝ᵥ w)
-  证明: by simp [dotProduct]
-
-@[simp]
-
-Depends on / 依赖: dotProduct
+/-
+**neg_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_dotProduct : -v ⬝ᵥ w = -(v ⬝ᵥ w)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `Finset.sum_neg_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f : ι → G),   ∑ x ∈ s, -f x = -∑ x ∈ s, f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neg_dotProduct : -v ⬝ᵥ w = -(v ⬝ᵥ w) := by simp [dotProduct]
 
 @[simp]
-/--
-theorem `dotProduct_neg` / 定理 `dotProduct_neg`
-
-English:
-theorem dotProduct_neg
-  statement: v ⬝ᵥ -w = -(v ⬝ᵥ w)
-  proof: by simp [dotProduct]
-
-中文:
-定理 dotProduct_neg
-  结论: v ⬝ᵥ -w = -(v ⬝ᵥ w)
-  证明: by simp [dotProduct]
-
-Depends on / 依赖: dotProduct
+/-
+**dotProduct_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_neg : v ⬝ᵥ -w = -(v ⬝ᵥ w)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `Finset.sum_neg_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f : ι → G),   ∑ x ∈ s, -f x = -∑ x ∈ s, f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dotProduct_neg : v ⬝ᵥ -w = -(v ⬝ᵥ w) := by simp [dotProduct]
-
-/--
-lemma `neg_dotProduct_neg` / 引理 `neg_dotProduct_neg`
-
-English:
-lemma neg_dotProduct_neg
-  statement: -v ⬝ᵥ -w = v ⬝ᵥ w
-  proof: by
-  rw [neg_dotProduct]; rw [dotProduct_neg]; rw [neg_neg]
-
-@[simp]
-
-中文:
-引理 neg_dotProduct_neg
-  结论: -v ⬝ᵥ -w = v ⬝ᵥ w
-  证明: by
-  rw [neg_dotProduct]; rw [dotProduct_neg]; rw [neg_neg]
-
-@[simp]
-
-Depends on / 依赖: dotProduct_neg, neg_dotProduct, neg_neg
+/-
+**neg_dotProduct_neg** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：neg_dotProduct_neg : -v ⬝ᵥ -w = v ⬝ᵥ w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_dotProduct`：neg_dotProduct : -v ⬝ᵥ w = -(v ⬝ᵥ w)
+· 使用定理 `dotProduct_neg`：dotProduct_neg : v ⬝ᵥ -w = -(v ⬝ᵥ w)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
 lemma neg_dotProduct_neg : -v ⬝ᵥ -w = v ⬝ᵥ w := by
-  rw [neg_dotProduct]; rw [dotProduct_neg]; rw [neg_neg]
+  rw [neg_dotProduct, dotProduct_neg, neg_neg]
 
 @[simp]
-/--
-theorem `sub_dotProduct` / 定理 `sub_dotProduct`
-
-English:
-theorem sub_dotProduct
-  statement: (u - v) ⬝ᵥ w = u ⬝ᵥ w - v ⬝ᵥ w
-  proof: by simp [sub_eq_add_neg]
-
-@[simp]
-
-中文:
-定理 sub_dotProduct
-  结论: (u - v) ⬝ᵥ w = u ⬝ᵥ w - v ⬝ᵥ w
-  证明: by simp [sub_eq_add_neg]
-
-@[simp]
-
-Depends on / 依赖: sub_eq_add_neg
+/-
+**sub_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sub_dotProduct : (u - v) ⬝ᵥ w = u ⬝ᵥ w - v ⬝ᵥ w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `add_dotProduct`：add_dotProduct : (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w
+· 使用定理 `neg_dotProduct`：neg_dotProduct : -v ⬝ᵥ w = -(v ⬝ᵥ w)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sub_dotProduct : (u - v) ⬝ᵥ w = u ⬝ᵥ w - v ⬝ᵥ w := by simp [sub_eq_add_neg]
 
 @[simp]
-/--
-theorem `dotProduct_sub` / 定理 `dotProduct_sub`
-
-English:
-theorem dotProduct_sub
-  statement: u ⬝ᵥ (v - w) = u ⬝ᵥ v - u ⬝ᵥ w
-  proof: by simp [sub_eq_add_neg]
-
-中文:
-定理 dotProduct_sub
-  结论: u ⬝ᵥ (v - w) = u ⬝ᵥ v - u ⬝ᵥ w
-  证明: by simp [sub_eq_add_neg]
-
-Depends on / 依赖: sub_eq_add_neg
+/-
+**dotProduct_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_sub : u ⬝ᵥ (v - w) = u ⬝ᵥ v - u ⬝ᵥ w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `dotProduct_add`：dotProduct_add : u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w
+· 使用定理 `dotProduct_neg`：dotProduct_neg : v ⬝ᵥ -w = -(v ⬝ᵥ w)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dotProduct_sub : u ⬝ᵥ (v - w) = u ⬝ᵥ v - u ⬝ᵥ w := by simp [sub_eq_add_neg]
 
@@ -821,45 +856,55 @@ section DistribMulAction
 variable [Mul α] [AddCommMonoid α] [DistribSMul R α]
 
 @[simp]
-/--
-theorem `smul_dotProduct` / 定理 `smul_dotProduct`
-
-English:
-theorem smul_dotProduct
-  given: [IsScalarTower R α α] (x : R) (v w : m -> α)
-  proof: by simp [dotProduct, Finset.smul_sum, smul_mul_assoc]
-
-@[simp]
-
-中文:
-定理 smul_dotProduct
-  条件: [标量塔 R α α] (x : R) (v w : m -> α)
-  证明: by simp [dotProduct, Finset.smul_sum, smul_mul_assoc]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.smul_sum, dotProduct, smul_mul_assoc, smul_sum
+/-
+**smul_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_dotProduct [IsScalarTower R α α] (x : R) (v w : m -> α) : x • v ⬝ᵥ w 
+= x • (v ⬝ᵥ w)
+参数：x : R；v w : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem smul_dotProduct [IsScalarTower R α α] (x : R) (v w : m -> α) :
+theorem smul_dotProduct [IsScalarTower R α α] (x : R) (v w : m → α) :
     x • v ⬝ᵥ w = x • (v ⬝ᵥ w) := by simp [dotProduct, Finset.smul_sum, smul_mul_assoc]
 
 @[simp]
-/--
-theorem `dotProduct_smul` / 定理 `dotProduct_smul`
-
-English:
-theorem dotProduct_smul
-  given: [SMulCommClass R α α] (x : R) (v w : m -> α)
-  proof: by simp [dotProduct, Finset.smul_sum, mul_smul_comm]
-
-中文:
-定理 dotProduct_smul
-  条件: [标量交换类 R α α] (x : R) (v w : m -> α)
-  证明: by simp [dotProduct, Finset.smul_sum, mul_smul_comm]
-
-Depends on / 依赖: Finset, Finset.smul_sum, dotProduct, mul_smul_comm, smul_sum
+/-
+**dotProduct_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dotProduct_smul [SMulCommClass R α α] (x : R) (v w : m -> α) : v ⬝ᵥ x • w 
+= x • (v ⬝ᵥ w)
+参数：x : R；v w : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dotProduct_smul [SMulCommClass R α α] (x : R) (v w : m -> α) :
+theorem dotProduct_smul [SMulCommClass R α α] (x : R) (v w : m → α) :
     v ⬝ᵥ x • w = x • (v ⬝ᵥ w) := by simp [dotProduct, Finset.smul_sum, mul_smul_comm]
 
 end DistribMulAction
@@ -867,43 +912,74 @@ end DistribMulAction
 section CommRing
 variable [CommRing α] [Nontrivial m] [Nontrivial α]
 
-/--
-theorem `exists_ne_zero_dotProduct_eq_zero` / 定理 `exists_ne_zero_dotProduct_eq_zero`
+/-- For any vector `a` in a nontrivial commutative ring with nontrivial index,
+there exists a non-zero vector `b` such that `b ⬝ᵥ a = 0`. In other words,
+there exists a non-zero orthogonal vector. -/
+/-
+**exists_ne_zero_dotProduct_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_ne_zero_dotProduct_eq_zero (a : m -> α) : exists b != 0, b ⬝ᵥ a = 0
+参数：a : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nontrivial_iff`：nontrivial_iff : Nontrivial α ↔ exists x y : α, x != y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `single_dotProduct`：single_dotProduct (x : α) (i : m) : Pi.single i x ⬝ᵥ 
+v = x * v i
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.ne_iff`：ne_iff {β : α -> Sort*} {f₁ f₂ : forall a, β a} : f₁ !=
+ f₂ ↔ exists a, f₁ a != f₂ a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Finset.sum_ite`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M]
+ {s : Finset ι} {p : ι → Prop} [inst_1 : DecidablePred p]   (f g : ι → M), (∑ x 
+∈ s,…
+· 使用定理 `Finset.sum_eq_ite`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠
+ a → f …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `not_true_eq_false`：(¬True) = False
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem exists_ne_zero_dotProduct_eq_zero
-  given: (a : m -> α)
-  statement: exists b != 0, b ⬝ᵥ a = 0
-  proof: by
-  obtain ⟨i, j, hij⟩ : exists i j : m, i != j := nontrivial_iff.mp ‹_›
-  classical
-  use if a i = 0 then Pi.single i 1 else if a j = 0 then Pi.single j 1 else
-    fun k => if k = i then a j else if k = j then - a i else 0
-  split_ifs with h h2
-  · simp [h]
-  · simp [h2]
-  · refine ⟨Function.ne_iff.mpr ⟨i, by simp [h2]⟩, ?_⟩
-    simp [dotProduct, Finset.sum_ite, Finset.sum_eq_ite i, hij.symm, mul_comm (a i)]
-
-中文:
-定理 存在_ne_zero_dotProduct_eq_zero
-  条件: (a : m -> α)
-  结论: 存在 b != 0, b ⬝ᵥ a = 0
-  证明: by
-  obtain ⟨i, j, hij⟩ : exists i j : m, i != j := nontrivial_iff.mp ‹_›
-  classical
-  use if a i = 0 then Pi.single i 1 else if a j = 0 then Pi.single j 1 else
-    fun k => if k = i then a j else if k = j then - a i else 0
-  split_ifs with h h2
-  · simp [h]
-  · simp [h2]
-  · refine ⟨Function.ne_iff.mpr ⟨i, by simp [h2]⟩, ?_⟩
-    simp [dotProduct, Finset.sum_ite, Finset.sum_eq_ite i, hij.symm, mul_comm (a i)]
-
-Depends on / 依赖: Finset, Finset.sum_eq_ite, Finset.sum_ite, Function, Function.ne_iff.mpr, Pi.single, classical, dotProduct, hij.symm, mul_comm, ne_iff, nontrivial_iff, nontrivial_iff.mp, single, split_ifs, sum_eq_ite, sum_ite
+--- 原说明 ---
+For any vector `a` in a nontrivial commutative ring with nontrivial index,
+there exists a non-zero vector `b` such that `b ⬝ᵥ a = 0`. In other words,
+there exists a non-zero orthogonal vector.
 -/
-theorem exists_ne_zero_dotProduct_eq_zero (a : m -> α) : exists b != 0, b ⬝ᵥ a = 0 := by
-  obtain ⟨i, j, hij⟩ : exists i j : m, i != j := nontrivial_iff.mp ‹_›
+theorem exists_ne_zero_dotProduct_eq_zero (a : m → α) : ∃ b ≠ 0, b ⬝ᵥ a = 0 := by
+  obtain ⟨i, j, hij⟩ : ∃ i j : m, i ≠ j := nontrivial_iff.mp ‹_›
   classical
   use if a i = 0 then Pi.single i 1 else if a j = 0 then Pi.single j 1 else
     fun k => if k = i then a j else if k = j then - a i else 0
@@ -912,56 +988,56 @@ theorem exists_ne_zero_dotProduct_eq_zero (a : m -> α) : exists b != 0, b ⬝�
   · simp [h2]
   · refine ⟨Function.ne_iff.mpr ⟨i, by simp [h2]⟩, ?_⟩
     simp [dotProduct, Finset.sum_ite, Finset.sum_eq_ite i, hij.symm, mul_comm (a i)]
-
-/--
-lemma `not_injective_dotProduct_left` / 引理 `not_injective_dotProduct_left`
-
-English:
-lemma not_injective_dotProduct_left
-  given: (a : m -> α)
-  proof: by
-  intro h
-  obtain ⟨b, hb, hba⟩ := exists_ne_zero_dotProduct_eq_zero a
-  simpa [dotProduct_comm a b, hba, hb] using @h b 0
-
-中文:
-引理 not_injective_dotProduct_left
-  条件: (a : m -> α)
-  证明: by
-  intro h
-  obtain ⟨b, hb, hba⟩ := exists_ne_zero_dotProduct_eq_zero a
-  simpa [dotProduct_comm a b, hba, hb] using @h b 0
-
-Depends on / 依赖: dotProduct_comm, exists_ne_zero_dotProduct_eq_zero
+/-
+**not_injective_dotProduct_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：not_injective_dotProduct_left (a : m -> α) : ¬ Function.Injective (dotProd
+uct a)
+参数：a : m -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_ne_zero_dotProduct_eq_zero`：exists_ne_zero_dotProduct_eq_zero (a 
+: m -> α) : exists b != 0, b ⬝ᵥ a = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dotProduct_comm`：dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : 
+m -> α) : v ⬝ᵥ w = w ⬝ᵥ v
+· 使用定理 `dotProduct_zero`：dotProduct_zero : v ⬝ᵥ 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
-lemma not_injective_dotProduct_left (a : m -> α) :
+lemma not_injective_dotProduct_left (a : m → α) :
     ¬ Function.Injective (dotProduct a) := by
   intro h
   obtain ⟨b, hb, hba⟩ := exists_ne_zero_dotProduct_eq_zero a
   simpa [dotProduct_comm a b, hba, hb] using @h b 0
-
-/--
-lemma `not_injective_dotProduct_right` / 引理 `not_injective_dotProduct_right`
-
-English:
-lemma not_injective_dotProduct_right
-  given: (a : m -> α)
-  proof: by
-  intro h
-  obtain ⟨b, hb, hba⟩ := exists_ne_zero_dotProduct_eq_zero a
-  simpa [hba, hb] using @h b 0
-
-中文:
-引理 not_injective_dotProduct_right
-  条件: (a : m -> α)
-  证明: by
-  intro h
-  obtain ⟨b, hb, hba⟩ := exists_ne_zero_dotProduct_eq_zero a
-  simpa [hba, hb] using @h b 0
-
-Depends on / 依赖: exists_ne_zero_dotProduct_eq_zero
+/-
+**not_injective_dotProduct_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：not_injective_dotProduct_right (a : m -> α) : ¬ Function.Injective (dotPro
+duct · a)
+参数：a : m -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_ne_zero_dotProduct_eq_zero`：exists_ne_zero_dotProduct_eq_zero (a 
+: m -> α) : exists b != 0, b ⬝ᵥ a = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_dotProduct`：zero_dotProduct : 0 ⬝ᵥ v = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
-lemma not_injective_dotProduct_right (a : m -> α) :
+lemma not_injective_dotProduct_right (a : m → α) :
     ¬ Function.Injective (dotProduct · a) := by
   intro h
   obtain ⟨b, hb, hba⟩ := exists_ne_zero_dotProduct_eq_zero a
@@ -981,106 +1057,77 @@ This is currently only defined when `m` is finite. -/
 -- We want to be lower priority than `instHMul`, but without this we can't have operands with
 -- implicit dimensions.
 @[default_instance 100]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: m] [Mul α] [AddCommMonoid α] :
-  body: fun i k => (fun j => M i j) ⬝ᵥ fun j => N j k
-
-中文:
-实例 [有限类型
-  签名: m] [乘法 α] [加法交换幺半群 α] :
-  定义体: fun i k => (fun j => M i j) ⬝ᵥ fun j => N j k
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fintype m] [Mul α] [AddCommMonoid α] :
     HMul (Matrix l m α) (Matrix m n α) (Matrix l n α) where
   hMul M N := fun i k => (fun j => M i j) ⬝ᵥ fun j => N j k
-
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  statement: [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
-  proof: rfl
-
-中文:
-定理 mul_apply
-  结论: [有限类型 m] [乘法 α] [加法交换幺半群 α] {M : 矩阵 l m α} {N : 矩阵 m n α}
-  证明: rfl
+/-
+**Matrix.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_apply [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Ma
+trix m n α} {i k} : (M * N) i k = ∑ j, M i j * N j k
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_apply [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
     {i k} : (M * N) i k = ∑ j, M i j * N j k :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: n] [Mul α] [AddCommMonoid α] : Mul (Matrix n n α) where
-  body: M * N
-
-中文:
-实例 [有限类型
-  签名: n] [乘法 α] [加法交换幺半群 α] : 乘法 (矩阵 n n α) where
-  定义体: M * N
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fintype n] [Mul α] [AddCommMonoid α] : Mul (Matrix n n α) where
   mul M N := M * N
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: n] [DecidableEq n] [MulOne α] [AddCommMonoid α] : MulOne (Matrix n n α) where
-
-中文:
-实例 [有限类型
-  签名: n] [DecidableEq n] [MulOne α] [加法交换幺半群 α] : MulOne (矩阵 n n α) where
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fintype n] [DecidableEq n] [MulOne α] [AddCommMonoid α] : MulOne (Matrix n n α) where
-
-/--
-theorem `mul_apply'` / 定理 `mul_apply'`
-
-English:
-theorem mul_apply'
-  statement: [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
-  proof: rfl
-
-中文:
-定理 mul_apply'
-  结论: [有限类型 m] [乘法 α] [加法交换幺半群 α] {M : 矩阵 l m α} {N : 矩阵 m n α}
-  证明: rfl
+/-
+**Matrix.mul_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_apply' [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : M
+atrix m n α} {i k} : (M * N) i k = (M i) ⬝ᵥ fun j => N j k
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_apply' [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
     {i k} : (M * N) i k = (M i) ⬝ᵥ fun j => N j k :=
   rfl
-
-/--
-theorem `two_mul_expl` / 定理 `two_mul_expl`
-
-English:
-theorem two_mul_expl
-  given: {R : Type*} [NonUnitalNonAssocSemiring R] (A B : Matrix (Fin 2) (Fin 2) R)
-  proof: by
-  refine ⟨?_, ?_, ?_, ?_⟩ <;>
-  · rw [Matrix.mul_apply, Finset.sum_fin_eq_sum_range, Finset.sum_range_succ, Finset.sum_range_succ]
-    simp
-
-中文:
-定理 two_mul_expl
-  条件: {R : 类型} [非幺非结合半环 R] (A B : 矩阵 (有限集 2) (有限集 2) R)
-  证明: by
-  refine ⟨?_, ?_, ?_, ?_⟩ <;>
-  · rw [Matrix.mul_apply, Finset.sum_fin_eq_sum_range, Finset.sum_range_succ, Finset.sum_range_succ]
-    simp
-
-Depends on / 依赖: Finset, Finset.sum_fin_eq_sum_range, Finset.sum_range_succ, Matrix, Matrix.mul_apply, mul_apply, sum_fin_eq_sum_range, sum_range_succ
+/-
+**Matrix.two_mul_expl** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：two_mul_expl {R : Type*} [NonUnitalNonAssocSemiring R] (A B : Matrix (Fin 
+2) (Fin 2) R) : (A * B) 0 0 = A 0 0 * B 0 0 + A 0 1 * B 1 0 ∧ (A * B) 0 1 = A 0 
+0 * B 0 1 + A 0 1 * B 1 1 ∧ (A * B) 1 0 = A 1 0 * B 0 0 + A 1 1 * B 1 0 ∧ (A * B
+) 1 1 = A 1 0 * B 0 1 + A 1 1 * B 1 1
+参数：A B : Matrix (Fin 2) (Fin 2) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mul_apply`：mul_apply [Fintype m] [Mul α] [AddCommMonoid α] {M : M
+atrix l m α} {N : Matrix m n α} {i k} : (M * N) i k = ∑ j, M i j * N j k
+· 使用定理 `Finset.sum_fin_eq_sum_range`：∀ {β : Type u_2} [inst : AddCommMonoid β] {
+n : ℕ} (c : Fin n → β),   ∑ i, c i = ∑ i ∈ Finset.range n, if h : i < n then c ⟨
+i, h⟩ else 0
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem two_mul_expl {R : Type*} [NonUnitalNonAssocSemiring R] (A B : Matrix (Fin 2) (Fin 2) R) :
     (A * B) 0 0 = A 0 0 * B 0 0 + A 0 1 * B 1 0 ∧
@@ -1096,28 +1143,16 @@ section AddCommMonoid
 variable [AddCommMonoid α] [Mul α]
 
 @[simp]
-/--
-theorem `smul_mul` / 定理 `smul_mul`
-
-English:
-theorem smul_mul
-  statement: [Fintype n] [Monoid R] [DistribMulAction R α] [IsScalarTower R α α] (a : R)
-  proof: by
-  ext
-  apply smul_dotProduct a
-
-@[simp]
-
-中文:
-定理 smul_mul
-  结论: [有限类型 n] [幺半群 R] [分配乘法作用 R α] [标量塔 R α α] (a : R)
-  证明: by
-  ext
-  apply smul_dotProduct a
-
-@[simp]
-
-Depends on / 依赖: smul_dotProduct
+/-
+**Matrix.smul_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_mul [Fintype n] [Monoid R] [DistribMulAction R α] [IsScalarTower R α 
+α] (a : R) (M : Matrix m n α) (N : Matrix n l α) : (a • M) * N = a • (M * N)
+参数：a : R；M : Matrix m n α；N : Matrix n l α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `smul_dotProduct`：smul_dotProduct [IsScalarTower R α α] (x : R) (v w : m 
+-> α) : x • v ⬝ᵥ w = x • (v ⬝ᵥ w)
 -/
 theorem smul_mul [Fintype n] [Monoid R] [DistribMulAction R α] [IsScalarTower R α α] (a : R)
     (M : Matrix m n α) (N : Matrix n l α) : (a • M) * N = a • (M * N) := by
@@ -1125,22 +1160,17 @@ theorem smul_mul [Fintype n] [Monoid R] [DistribMulAction R α] [IsScalarTower R
   apply smul_dotProduct a
 
 @[simp]
-/--
-theorem `mul_smul` / 定理 `mul_smul`
-
-English:
-theorem mul_smul
-  statement: [Fintype n] [Monoid R] [DistribMulAction R α] [SMulCommClass R α α]
-  proof: by
-  ext
-  apply dotProduct_smul
-
-中文:
-定理 mul_smul
-  结论: [有限类型 n] [幺半群 R] [分配乘法作用 R α] [标量交换类 R α α]
-  证明: by
-  ext
-  apply dotProduct_smul
+/-
+**Matrix.mul_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {R : Type u_7} {α : Type v}
+ [inst : AddCommMonoid α] [inst_1 : Mul α]   [inst_2 : Fintype n] [inst_3 : Mono
+id R] [inst_4 : DistribMulAction R α] [SMulCommClass R α α] (M : Matrix m n α)  
+ (a : R) (N : Matrix n l α), M * a • N = a • (M * N)
+参数：M : Matrix m n α；a : R；N : Matrix n l α；M * N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `dotProduct_smul`：dotProduct_smul [SMulCommClass R α α] (x : R) (v w : m 
+-> α) : v ⬝ᵥ x • w = x • (v ⬝ᵥ w)
 -/
 protected theorem mul_smul [Fintype n] [Monoid R] [DistribMulAction R α] [SMulCommClass R α α]
     (M : Matrix m n α) (a : R) (N : Matrix n l α) : M * (a • N) = a • (M * N) := by
@@ -1154,127 +1184,78 @@ section NonUnitalNonAssocSemiring
 variable [NonUnitalNonAssocSemiring α]
 
 @[simp]
-/--
-theorem `mul_zero` / 定理 `mul_zero`
-
-English:
-theorem mul_zero
-  given: [Fintype n] (M : Matrix m n α)
-  statement: M * (0 : Matrix n o α) = 0
-  proof: by
-  ext
-  apply dotProduct_zero
-
-@[simp]
-
-中文:
-定理 mul_zero
-  条件: [有限类型 n] (M : 矩阵 m n α)
-  结论: M * (0 : 矩阵 n o α) = 0
-  证明: by
-  ext
-  apply dotProduct_zero
-
-@[simp]
+/-
+**Matrix.mul_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v} [inst : NonUni
+talNonAssocSemiring α] [inst_1 : Fintype n]   (M : Matrix m n α), M * 0 = 0
+参数：M : Matrix m n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `dotProduct_zero`：dotProduct_zero : v ⬝ᵥ 0 = 0
 -/
 protected theorem mul_zero [Fintype n] (M : Matrix m n α) : M * (0 : Matrix n o α) = 0 := by
   ext
   apply dotProduct_zero
 
 @[simp]
-/--
-theorem `zero_mul` / 定理 `zero_mul`
-
-English:
-theorem zero_mul
-  given: [Fintype m] (M : Matrix m n α)
-  statement: (0 : Matrix l m α) * M = 0
-  proof: by
-  ext
-  apply zero_dotProduct
-
-中文:
-定理 zero_mul
-  条件: [有限类型 m] (M : 矩阵 m n α)
-  结论: (0 : 矩阵 l m α) * M = 0
-  证明: by
-  ext
-  apply zero_dotProduct
+/-
+**Matrix.zero_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type v} [inst : NonUni
+talNonAssocSemiring α] [inst_1 : Fintype m]   (M : Matrix m n α), 0 * M = 0
+参数：M : Matrix m n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `zero_dotProduct`：zero_dotProduct : 0 ⬝ᵥ v = 0
 -/
 protected theorem zero_mul [Fintype m] (M : Matrix m n α) : (0 : Matrix l m α) * M = 0 := by
   ext
   apply zero_dotProduct
-
-/--
-theorem `mul_add` / 定理 `mul_add`
-
-English:
-theorem mul_add
-  given: [Fintype n] (L : Matrix m n α) (M N : Matrix n o α)
-  proof: by
-  ext
-  apply dotProduct_add
-
-中文:
-定理 mul_add
-  条件: [有限类型 n] (L : 矩阵 m n α) (M N : 矩阵 n o α)
-  证明: by
-  ext
-  apply dotProduct_add
+/-
+**Matrix.mul_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v} [inst : NonUni
+talNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n α) (M N : Matrix n
+ o α), L * (M + N) = L * M + L * N
+参数：L : Matrix m n α；M N : Matrix n o α；M + N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `dotProduct_add`：dotProduct_add : u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w
 -/
 protected theorem mul_add [Fintype n] (L : Matrix m n α) (M N : Matrix n o α) :
     L * (M + N) = L * M + L * N := by
   ext
   apply dotProduct_add
-
-/--
-theorem `add_mul` / 定理 `add_mul`
-
-English:
-theorem add_mul
-  given: [Fintype m] (L M : Matrix l m α) (N : Matrix m n α)
-  proof: by
-  ext
-  apply add_dotProduct
-
-中文:
-定理 add_mul
-  条件: [有限类型 m] (L M : 矩阵 l m α) (N : 矩阵 m n α)
-  证明: by
-  ext
-  apply add_dotProduct
+/-
+**Matrix.add_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type v} [inst : NonUni
+talNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l m α) (N : Matrix m
+ n α), (L + M) * N = L * N + M * N
+参数：L M : Matrix l m α；N : Matrix m n α；L + M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `add_dotProduct`：add_dotProduct : (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w
 -/
 protected theorem add_mul [Fintype m] (L M : Matrix l m α) (N : Matrix m n α) :
     (L + M) * N = L * N + M * N := by
   ext
   apply add_dotProduct
-
-/--
-Instance `nonUnitalNonAssocSemiring` / 实例 `nonUnitalNonAssocSemiring`
-
-English:
-instance nonUnitalNonAssocSemiring
-  signature: [Fintype n]
-  body: { Matrix.addCommMonoid with
-    mul_zero := Matrix.mul_zero
-    zero_mul := Matrix.zero_mul
-    left_distrib := Matrix.mul_add
-    right_distrib := Matrix.add_mul }
-
-@[simp]
-
-中文:
-实例 nonUnitalNonAssocSemiring
-  签名: [有限类型 n]
-  定义体: { Matrix.addCommMonoid with
-    mul_zero := Matrix.mul_zero
-    zero_mul := Matrix.zero_mul
-    left_distrib := Matrix.mul_add
-    right_distrib := Matrix.add_mul }
-
-@[simp]
-
-Depends on / 依赖: Matrix, Matrix.addCommMonoid, Matrix.add_mul, Matrix.mul_add, Matrix.mul_zero, Matrix.zero_mul, addCommMonoid, add_mul, left_distrib, mul_add, mul_zero, right_distrib, zero_mul
+/-
+**Matrix.nonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：nonUnitalNonAssocSemiring [Fintype n] : NonUnitalNonAssocSemiring (Matrix 
+n n α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.mul_add`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n 
+α) (…
+· 使用定理 `Matrix.add_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l 
+m α)…
+· 使用定理 `Matrix.zero_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Typ
+e v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (M : Matrix m n
+ α), …
+· 使用定理 `Matrix.mul_zero`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Typ
+e v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (M : Matrix m n
+ α), …
 -/
 instance nonUnitalNonAssocSemiring [Fintype n] : NonUnitalNonAssocSemiring (Matrix n n α) :=
   { Matrix.addCommMonoid with
@@ -1284,163 +1265,152 @@ instance nonUnitalNonAssocSemiring [Fintype n] : NonUnitalNonAssocSemiring (Matr
     right_distrib := Matrix.add_mul }
 
 @[simp]
-/--
-theorem `diagonal_mul` / 定理 `diagonal_mul`
-
-English:
-theorem diagonal_mul
-  given: [Fintype m] [DecidableEq m] (d : m -> α) (M : Matrix m n α) (i j)
-  proof: diagonal_dotProduct _ _ _
-
-@[simp]
-
-中文:
-定理 diagonal_mul
-  条件: [有限类型 m] [DecidableEq m] (d : m -> α) (M : 矩阵 m n α) (i j)
-  证明: diagonal_dotProduct _ _ _
-
-@[simp]
-
-Depends on / 依赖: diagonal_dotProduct
+/-
+**Matrix.diagonal_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_mul [Fintype m] [DecidableEq m] (d : m -> α) (M : Matrix m n α) (
+i j) : (diagonal d * M) i j = d i * M i j
+参数：d : m -> α；M : Matrix m n α；i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `diagonal_dotProduct`：diagonal_dotProduct (i : m) : diagonal v i ⬝ᵥ w = v
+ i * w i
 -/
-theorem diagonal_mul [Fintype m] [DecidableEq m] (d : m -> α) (M : Matrix m n α) (i j) :
+theorem diagonal_mul [Fintype m] [DecidableEq m] (d : m → α) (M : Matrix m n α) (i j) :
     (diagonal d * M) i j = d i * M i j :=
   diagonal_dotProduct _ _ _
 
 @[simp]
-/--
-theorem `mul_diagonal` / 定理 `mul_diagonal`
-
-English:
-theorem mul_diagonal
-  given: [Fintype n] [DecidableEq n] (d : n -> α) (M : Matrix m n α) (i j)
-  proof: by
-  rw [← diagonal_transpose]
-  apply dotProduct_diagonal
-
-@[simp]
-
-中文:
-定理 mul_diagonal
-  条件: [有限类型 n] [DecidableEq n] (d : n -> α) (M : 矩阵 m n α) (i j)
-  证明: by
-  rw [← diagonal_transpose]
-  apply dotProduct_diagonal
-
-@[simp]
-
-Depends on / 依赖: diagonal_transpose, dotProduct_diagonal
+/-
+**Matrix.mul_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_diagonal [Fintype n] [DecidableEq n] (d : n -> α) (M : Matrix m n α) (
+i j) : (M * diagonal d) i j = M i j * d j
+参数：d : n -> α；M : Matrix m n α；i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_transpose`：diagonal_transpose [Zero α] (v : n -> α) : (d
+iagonal v)ᵀ = diagonal v
+· 使用定理 `dotProduct_diagonal`：dotProduct_diagonal (i : m) : v ⬝ᵥ diagonal w i = v
+ i * w i
 -/
-theorem mul_diagonal [Fintype n] [DecidableEq n] (d : n -> α) (M : Matrix m n α) (i j) :
+theorem mul_diagonal [Fintype n] [DecidableEq n] (d : n → α) (M : Matrix m n α) (i j) :
     (M * diagonal d) i j = M i j * d j := by
   rw [← diagonal_transpose]
   apply dotProduct_diagonal
 
 @[simp]
-/--
-theorem `diagonal_mul_diagonal` / 定理 `diagonal_mul_diagonal`
-
-English:
-theorem diagonal_mul_diagonal
-  given: [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α)
-  proof: by
-  ext i j
-  by_cases h : i = j <;>
-  simp [h]
-
-中文:
-定理 diagonal_mul_diagonal
-  条件: [有限类型 n] [DecidableEq n] (d₁ d₂ : n -> α)
-  证明: by
-  ext i j
-  by_cases h : i = j <;>
-  simp [h]
+/-
+**Matrix.diagonal_mul_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_mul_diagonal [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α) : diago
+nal d₁ * diagonal d₂ = diagonal fun i => d₁ i * d₂ i
+参数：d₁ d₂ : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.mul_diagonal`：mul_diagonal [Fintype n] [DecidableEq n] (d : n -> 
+α) (M : Matrix m n α) (i j) : (M * diagonal d) i j = M i j * d j
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `Matrix.diagonal.congr_simp`：∀ {n : Type u_3} {α : Type v} {inst : Decida
+bleEq n} [inst_1 : DecidableEq n] [inst_2 : Zero α] (d d_1 : n → α),   d = d_1 →
+ ∀ (a a_1 : n), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Matrix.diagonal_apply_ne`：diagonal_apply_ne [Zero α] (d : n -> α) {i j :
+ n} (h : i != j) : (diagonal d) i j = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem diagonal_mul_diagonal [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α) :
+theorem diagonal_mul_diagonal [Fintype n] [DecidableEq n] (d₁ d₂ : n → α) :
     diagonal d₁ * diagonal d₂ = diagonal fun i => d₁ i * d₂ i := by
   ext i j
   by_cases h : i = j <;>
   simp [h]
-
-/--
-theorem `diagonal_mul_diagonal'` / 定理 `diagonal_mul_diagonal'`
-
-English:
-theorem diagonal_mul_diagonal'
-  given: [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α)
-  proof: diagonal_mul_diagonal _ _
-
-中文:
-定理 diagonal_mul_diagonal'
-  条件: [有限类型 n] [DecidableEq n] (d₁ d₂ : n -> α)
-  证明: diagonal_mul_diagonal _ _
-
-Depends on / 依赖: diagonal_mul_diagonal
+/-
+**Matrix.diagonal_mul_diagonal'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_mul_diagonal' [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α) : diag
+onal d₁ * diagonal d₂ = diagonal fun i => d₁ i * d₂ i
+参数：d₁ d₂ : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.diagonal_mul_diagonal`：diagonal_mul_diagonal [Fintype n] [Decidab
+leEq n] (d₁ d₂ : n -> α) : diagonal d₁ * diagonal d₂ = diagonal fun i => d₁ i * 
+d₂ i
 -/
-theorem diagonal_mul_diagonal' [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α) :
+theorem diagonal_mul_diagonal' [Fintype n] [DecidableEq n] (d₁ d₂ : n → α) :
     diagonal d₁ * diagonal d₂ = diagonal fun i => d₁ i * d₂ i :=
   diagonal_mul_diagonal _ _
-
-/--
-theorem `commute_diagonal` / 定理 `commute_diagonal`
-
-English:
-theorem commute_diagonal
-  statement: {α : Type*} [NonUnitalNonAssocCommSemiring α]
-  proof: by
-  simp_rw [commute_iff_eq, diagonal_mul_diagonal, mul_comm]
-
-中文:
-定理 commute_diagonal
-  结论: {α : 类型} [非幺非结合交换半环 α]
-  证明: by
-  simp_rw [commute_iff_eq, diagonal_mul_diagonal, mul_comm]
-
-Depends on / 依赖: commute_iff_eq, diagonal_mul_diagonal, mul_comm, simp_rw
+/-
+**Matrix.commute_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：commute_diagonal {α : Type*} [NonUnitalNonAssocCommSemiring α] [Fintype n]
+ [DecidableEq n] (d₁ d₂ : n -> α) : Commute (diagonal d₁) (diagonal d₂)
+参数：d₁ d₂ : n -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_mul_diagonal`：diagonal_mul_diagonal [Fintype n] [Decidab
+leEq n] (d₁ d₂ : n -> α) : diagonal d₁ * diagonal d₂ = diagonal fun i => d₁ i * 
+d₂ i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem commute_diagonal {α : Type*} [NonUnitalNonAssocCommSemiring α]
-    [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α) :
+    [Fintype n] [DecidableEq n] (d₁ d₂ : n → α) :
     Commute (diagonal d₁) (diagonal d₂) := by
   simp_rw [commute_iff_eq, diagonal_mul_diagonal, mul_comm]
-
-/--
-theorem `smul_eq_diagonal_mul` / 定理 `smul_eq_diagonal_mul`
-
-English:
-theorem smul_eq_diagonal_mul
-  given: [Fintype m] [DecidableEq m] (M : Matrix m n α) (a : α)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 smul_eq_diagonal_mul
-  条件: [有限类型 m] [DecidableEq m] (M : 矩阵 m n α) (a : α)
-  证明: by
-  ext
-  simp
+/-
+**Matrix.smul_eq_diagonal_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_eq_diagonal_mul [Fintype m] [DecidableEq m] (M : Matrix m n α) (a : α
+) : a • M = (diagonal fun _ => a) * M
+参数：M : Matrix m n α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_mul`：diagonal_mul [Fintype m] [DecidableEq m] (d : m -> 
+α) (M : Matrix m n α) (i j) : (diagonal d * M) i j = d i * M i j
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_eq_diagonal_mul [Fintype m] [DecidableEq m] (M : Matrix m n α) (a : α) :
     a • M = (diagonal fun _ => a) * M := by
   ext
   simp
-
-/--
-theorem `op_smul_eq_mul_diagonal` / 定理 `op_smul_eq_mul_diagonal`
-
-English:
-theorem op_smul_eq_mul_diagonal
-  given: [Fintype n] [DecidableEq n] (M : Matrix m n α) (a : α)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 op_smul_eq_mul_diagonal
-  条件: [有限类型 n] [DecidableEq n] (M : 矩阵 m n α) (a : α)
-  证明: by
-  ext
-  simp
+/-
+**Matrix.op_smul_eq_mul_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：op_smul_eq_mul_diagonal [Fintype n] [DecidableEq n] (M : Matrix m n α) (a 
+: α) : MulOpposite.op a • M = M * (diagonal fun _ : n => a)
+参数：M : Matrix m n α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mul_diagonal`：mul_diagonal [Fintype n] [DecidableEq n] (d : n -> 
+α) (M : Matrix m n α) (i j) : (M * diagonal d) i j = M i j * d j
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem op_smul_eq_mul_diagonal [Fintype n] [DecidableEq n] (M : Matrix m n α) (a : α) :
     MulOpposite.op a • M = M * (diagonal fun _ : n => a) := by
@@ -1449,145 +1419,153 @@ theorem op_smul_eq_mul_diagonal [Fintype n] [DecidableEq n] (M : Matrix m n α) 
 
 /-- Left multiplication by a matrix, as an `AddMonoidHom` from matrices to matrices. -/
 @[simps]
-/--
-Definition of `addMonoidHomMulLeft` / `addMonoidHomMulLeft` 的定义
+/-
+**Matrix.addMonoidHomMulLeft** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：addMonoidHomMulLeft [Fintype m] (M : Matrix l m α) : Matrix m n α ->+ Matr
+ix l n α where toFun x
+参数：M : Matrix l m α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.mul_zero`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Typ
+e v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (M : Matrix m n
+ α), …
+· 使用定理 `Matrix.mul_add`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n 
+α) (…
 
-English:
-definition addMonoidHomMulLeft
-  signature: [Fintype m] (M : Matrix l m α)
-  body: M * x
-  map_zero' := Matrix.mul_zero _
-  map_add' := Matrix.mul_add _
-
-中文:
-定义 addMonoidHomMulLeft
-  签名: [有限类型 m] (M : 矩阵 l m α)
-  定义体: M * x
-  map_zero' := Matrix.mul_zero _
-  map_add' := Matrix.mul_add _
+--- 原说明 ---
+Left multiplication by a matrix, as an `AddMonoidHom` from matrices to matrices.
 -/
-def addMonoidHomMulLeft [Fintype m] (M : Matrix l m α) : Matrix m n α ->+ Matrix l n α where
+def addMonoidHomMulLeft [Fintype m] (M : Matrix l m α) : Matrix m n α →+ Matrix l n α where
   toFun x := M * x
   map_zero' := Matrix.mul_zero _
   map_add' := Matrix.mul_add _
 
 /-- Right multiplication by a matrix, as an `AddMonoidHom` from matrices to matrices. -/
 @[simps]
-/--
-Definition of `addMonoidHomMulRight` / `addMonoidHomMulRight` 的定义
+/-
+**Matrix.addMonoidHomMulRight** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：addMonoidHomMulRight [Fintype m] (M : Matrix m n α) : Matrix l m α ->+ Mat
+rix l n α where toFun x
+参数：M : Matrix m n α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.zero_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Typ
+e v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (M : Matrix m n
+ α), …
+· 使用定理 `Matrix.add_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l 
+m α)…
 
-English:
-definition addMonoidHomMulRight
-  signature: [Fintype m] (M : Matrix m n α)
-  body: x * M
-  map_zero' := Matrix.zero_mul _
-  map_add' _ _ := Matrix.add_mul _ _ _
-
-中文:
-定义 addMonoidHomMulRight
-  签名: [有限类型 m] (M : 矩阵 m n α)
-  定义体: x * M
-  map_zero' := Matrix.zero_mul _
-  map_add' _ _ := Matrix.add_mul _ _ _
+--- 原说明 ---
+Right multiplication by a matrix, as an `AddMonoidHom` from matrices to matrices
+.
 -/
-def addMonoidHomMulRight [Fintype m] (M : Matrix m n α) : Matrix l m α ->+ Matrix l n α where
+def addMonoidHomMulRight [Fintype m] (M : Matrix m n α) : Matrix l m α →+ Matrix l n α where
   toFun x := x * M
   map_zero' := Matrix.zero_mul _
   map_add' _ _ := Matrix.add_mul _ _ _
-
-/--
-theorem `sum_mul` / 定理 `sum_mul`
-
-English:
-theorem sum_mul
-  given: [Fintype m] (s : Finset β) (f : β -> Matrix l m α) (M : Matrix m n α)
-  proof: map_sum (addMonoidHomMulRight M) f s
-
-中文:
-定理 sum_mul
-  条件: [有限类型 m] (s : 有限集 β) (f : β -> 矩阵 l m α) (M : 矩阵 m n α)
-  证明: map_sum (addMonoidHomMulRight M) f s
+/-
+**Matrix.sum_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type v} {β : Type w} [
+inst : NonUnitalNonAssocSemiring α]   [inst_1 : Fintype m] (s : Finset β) (f : β
+ → Matrix l m α) (M : Matrix m n α), (∑ a ∈ s, f a) * M = ∑ a ∈ s, f a * M
+参数：s : Finset β；f : β → Matrix l m α；M : Matrix m n α；∑ a ∈ s, f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-protected theorem sum_mul [Fintype m] (s : Finset β) (f : β -> Matrix l m α) (M : Matrix m n α) :
-    (∑ a in s, f a) * M = ∑ a in s, f a * M :=
+protected theorem sum_mul [Fintype m] (s : Finset β) (f : β → Matrix l m α) (M : Matrix m n α) :
+    (∑ a ∈ s, f a) * M = ∑ a ∈ s, f a * M :=
   map_sum (addMonoidHomMulRight M) f s
-
-/--
-theorem `mul_sum` / 定理 `mul_sum`
-
-English:
-theorem mul_sum
-  given: [Fintype m] (s : Finset β) (f : β -> Matrix m n α) (M : Matrix l m α)
-  proof: map_sum (addMonoidHomMulLeft M) f s
-
-中文:
-定理 mul_sum
-  条件: [有限类型 m] (s : 有限集 β) (f : β -> 矩阵 m n α) (M : 矩阵 l m α)
-  证明: map_sum (addMonoidHomMulLeft M) f s
+/-
+**Matrix.mul_sum** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type v} {β : Type w} [
+inst : NonUnitalNonAssocSemiring α]   [inst_1 : Fintype m] (s : Finset β) (f : β
+ → Matrix m n α) (M : Matrix l m α), M * ∑ a ∈ s, f a = ∑ a ∈ s, M * f a
+参数：s : Finset β；f : β → Matrix m n α；M : Matrix l m α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-protected theorem mul_sum [Fintype m] (s : Finset β) (f : β -> Matrix m n α) (M : Matrix l m α) :
-    (M * ∑ a in s, f a) = ∑ a in s, M * f a :=
+protected theorem mul_sum [Fintype m] (s : Finset β) (f : β → Matrix m n α) (M : Matrix l m α) :
+    (M * ∑ a ∈ s, f a) = ∑ a ∈ s, M * f a :=
   map_sum (addMonoidHomMulLeft M) f s
 
-/--
-Instance `Semiring.isScalarTower` / 实例 `Semiring.isScalarTower`
+/-- This instance enables use with `smul_mul_assoc`. -/
+/-
+**Matrix.Semiring.isScalarTower** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.Semiring`。
+形式化陈述：∀ {n : Type u_3} {R : Type u_7} {α : Type v} [inst : NonUnitalNonAssocSemi
+ring α] [inst_1 : Fintype n]   [inst_2 : Monoid R] [inst_3 : DistribMulAction R 
+α] [IsScalarTower R α α],   IsScalarTower R (Matrix n n α) (Matrix n n α)
+参数：Matrix n n α；Matrix n n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.smul_mul`：smul_mul [Fintype n] [Monoid R] [DistribMulAction R α] 
+[IsScalarTower R α α] (a : R) (M : Matrix m n α) (N : Matrix n l α) : (a • M) * 
+N = a…
 
-English:
-instance Semiring.isScalarTower
-  signature: [Fintype n] [Monoid R] [DistribMulAction R α]
-  body: ⟨fun r m n => Matrix.smul_mul r m n⟩
-
-中文:
-实例 半环.isScalarTower
-  签名: [有限类型 n] [幺半群 R] [分配乘法作用 R α]
-  定义体: ⟨fun r m n => Matrix.smul_mul r m n⟩
-
-Depends on / 依赖: Matrix, Matrix.smul_mul, smul_mul
+--- 原说明 ---
+This instance enables use with `smul_mul_assoc`.
 -/
 instance Semiring.isScalarTower [Fintype n] [Monoid R] [DistribMulAction R α]
     [IsScalarTower R α α] : IsScalarTower R (Matrix n n α) (Matrix n n α) :=
   ⟨fun r m n => Matrix.smul_mul r m n⟩
 
-/--
-Instance `Semiring.smulCommClass` / 实例 `Semiring.smulCommClass`
+/-- This instance enables use with `mul_smul_comm`. -/
+/-
+**Matrix.Semiring.smulCommClass** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.Semiring`。
+形式化陈述：∀ {n : Type u_3} {R : Type u_7} {α : Type v} [inst : NonUnitalNonAssocSemi
+ring α] [inst_1 : Fintype n]   [inst_2 : Monoid R] [inst_3 : DistribMulAction R 
+α] [SMulCommClass R α α],   SMulCommClass R (Matrix n n α) (Matrix n n α)
+参数：Matrix n n α；Matrix n n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mul_smul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {R : Typ
+e u_7} {α : Type v} [inst : AddCommMonoid α] [inst_1 : Mul α]   [inst_2 : Fintyp
+e n] …
 
-English:
-instance Semiring.smulCommClass
-  signature: [Fintype n] [Monoid R] [DistribMulAction R α]
-  body: ⟨fun r m n => (Matrix.mul_smul m r n).symm⟩
-
-@[simp]
-
-中文:
-实例 半环.smulCommClass
-  签名: [有限类型 n] [幺半群 R] [分配乘法作用 R α]
-  定义体: ⟨fun r m n => (Matrix.mul_smul m r n).symm⟩
-
-@[simp]
-
-Depends on / 依赖: Matrix, Matrix.mul_smul, mul_smul
+--- 原说明 ---
+This instance enables use with `mul_smul_comm`.
 -/
 instance Semiring.smulCommClass [Fintype n] [Monoid R] [DistribMulAction R α]
     [SMulCommClass R α α] : SMulCommClass R (Matrix n n α) (Matrix n n α) :=
   ⟨fun r m n => (Matrix.mul_smul m r n).symm⟩
 
 @[simp]
-/--
-theorem `map_mul` / 定理 `map_mul`
-
-English:
-theorem map_mul
-  statement: [Fintype n] {L : Matrix m n α} {M : Matrix n o α}
-  proof: by
-  ext
-  simp [mul_apply, map_sum]
-
-中文:
-定理 map_mul
-  结论: [有限类型 n] {L : 矩阵 m n α} {M : 矩阵 n o α}
-  证明: by
-  ext
-  simp [mul_apply, map_sum]
+/-
+**Matrix.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v} {β : Type w} [
+inst : NonUnitalNonAssocSemiring α]   [inst_1 : Fintype n] {L : Matrix m n α} {M
+ : Matrix n o α} [inst_2 : NonUnitalNonAssocSemiring β] {F : Type u_10}   [inst_
+3 : FunLike F α β] [NonUnitalRingHomClass F α β] {f : F}, (L * M).map ⇑f = L.map
+ ⇑f * M.map ⇑f
+参数：L * M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `NonUnitalRingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outPara
+m (Type u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {
+inst_1 : NonUnitalNonAssocSemir…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem map_mul [Fintype n] {L : Matrix m n α} {M : Matrix n o α}
     [NonUnitalNonAssocSemiring β] {F} [FunLike F α β] [NonUnitalRingHomClass F α β] {f : F} :
@@ -1602,116 +1580,103 @@ section NonAssocSemiring
 variable [NonAssocSemiring α]
 
 @[simp]
-/--
-theorem `one_mul` / 定理 `one_mul`
-
-English:
-theorem one_mul
-  given: [Fintype m] [DecidableEq m] (M : Matrix m n α)
-  proof: by
-  ext
-  rw [← diagonal_one]; rw [diagonal_mul]; rw [one_mul]
-
-@[simp]
-
-中文:
-定理 one_mul
-  条件: [有限类型 m] [DecidableEq m] (M : 矩阵 m n α)
-  证明: by
-  ext
-  rw [← diagonal_one]; rw [diagonal_mul]; rw [one_mul]
-
-@[simp]
+/-
+**Matrix.one_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : NonAssocSemiring α] [
+inst_1 : Fintype m] [inst_2 : DecidableEq m]   (M : Matrix m n α), 1 * M = M
+参数：M : Matrix m n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_one`：diagonal_one : (diagonal fun _ => 1 : Matrix n n α)
+ = 1
+· 使用定理 `Matrix.diagonal_mul`：diagonal_mul [Fintype m] [DecidableEq m] (d : m -> 
+α) (M : Matrix m n α) (i j) : (diagonal d * M) i j = d i * M i j
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 protected theorem one_mul [Fintype m] [DecidableEq m] (M : Matrix m n α) :
     (1 : Matrix m m α) * M = M := by
   ext
-  rw [← diagonal_one]; rw [diagonal_mul]; rw [one_mul]
+  rw [← diagonal_one, diagonal_mul, one_mul]
 
 @[simp]
-/--
-theorem `mul_one` / 定理 `mul_one`
-
-English:
-theorem mul_one
-  given: [Fintype n] [DecidableEq n] (M : Matrix m n α)
-  proof: by
-  ext
-  rw [← diagonal_one]; rw [mul_diagonal]; rw [mul_one]
-
-中文:
-定理 mul_one
-  条件: [有限类型 n] [DecidableEq n] (M : 矩阵 m n α)
-  证明: by
-  ext
-  rw [← diagonal_one]; rw [mul_diagonal]; rw [mul_one]
+/-
+**Matrix.mul_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : NonAssocSemiring α] [
+inst_1 : Fintype n] [inst_2 : DecidableEq n]   (M : Matrix m n α), M * 1 = M
+参数：M : Matrix m n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_one`：diagonal_one : (diagonal fun _ => 1 : Matrix n n α)
+ = 1
+· 使用定理 `Matrix.mul_diagonal`：mul_diagonal [Fintype n] [DecidableEq n] (d : n -> 
+α) (M : Matrix m n α) (i j) : (M * diagonal d) i j = M i j * d j
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 protected theorem mul_one [Fintype n] [DecidableEq n] (M : Matrix m n α) :
     M * (1 : Matrix n n α) = M := by
   ext
-  rw [← diagonal_one]; rw [mul_diagonal]; rw [mul_one]
-
-/--
-Instance `nonAssocSemiring` / 实例 `nonAssocSemiring`
-
-English:
-instance nonAssocSemiring
-  signature: [Fintype n] [DecidableEq n]
-  body: { Matrix.nonUnitalNonAssocSemiring, Matrix.instAddCommMonoidWithOne with
-    one_mul := Matrix.one_mul
-    mul_one := Matrix.mul_one }
-
-中文:
-实例 nonAssocSemiring
-  签名: [有限类型 n] [DecidableEq n]
-  定义体: { Matrix.nonUnitalNonAssocSemiring, Matrix.instAddCommMonoidWithOne with
-    one_mul := Matrix.one_mul
-    mul_one := Matrix.mul_one }
-
-Depends on / 依赖: Matrix, Matrix.instAddCommMonoidWithOne, Matrix.mul_one, Matrix.nonUnitalNonAssocSemiring, Matrix.one_mul, instAddCommMonoidWithOne, mul_one, nonUnitalNonAssocSemiring, one_mul
+  rw [← diagonal_one, mul_diagonal, mul_one]
+/-
+**Matrix.nonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：nonAssocSemiring [Fintype n] [DecidableEq n] : NonAssocSemiring (Matrix n 
+n α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.one_mul`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype m] [inst_2 : DecidableEq m]   (M : Matrix m n
+ α),…
+· 使用定理 `Matrix.mul_one`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype n] [inst_2 : DecidableEq n]   (M : Matrix m n
+ α),…
 -/
 instance nonAssocSemiring [Fintype n] [DecidableEq n] : NonAssocSemiring (Matrix n n α) :=
   { Matrix.nonUnitalNonAssocSemiring, Matrix.instAddCommMonoidWithOne with
     one_mul := Matrix.one_mul
     mul_one := Matrix.mul_one }
-
-/--
-theorem `smul_one_eq_diagonal` / 定理 `smul_one_eq_diagonal`
-
-English:
-theorem smul_one_eq_diagonal
-  given: [DecidableEq m] (a : α)
-  proof: by
-  simp_rw [← diagonal_one, ← diagonal_smul, Pi.smul_def, smul_eq_mul, mul_one]
-
-中文:
-定理 smul_one_eq_diagonal
-  条件: [DecidableEq m] (a : α)
-  证明: by
-  simp_rw [← diagonal_one, ← diagonal_smul, Pi.smul_def, smul_eq_mul, mul_one]
-
-Depends on / 依赖: Pi.smul_def, diagonal_one, diagonal_smul, mul_one, simp_rw, smul_def, smul_eq_mul
+/-
+**Matrix.smul_one_eq_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_one_eq_diagonal [DecidableEq m] (a : α) : a • (1 : Matrix m m α) = di
+agonal fun _ => a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_one_eq_diagonal [DecidableEq m] (a : α) :
     a • (1 : Matrix m m α) = diagonal fun _ => a := by
   simp_rw [← diagonal_one, ← diagonal_smul, Pi.smul_def, smul_eq_mul, mul_one]
-
-/--
-theorem `op_smul_one_eq_diagonal` / 定理 `op_smul_one_eq_diagonal`
-
-English:
-theorem op_smul_one_eq_diagonal
-  given: [DecidableEq m] (a : α)
-  proof: by
-  simp_rw [← diagonal_one, ← diagonal_smul, Pi.smul_def, op_smul_eq_mul, one_mul]
-
-中文:
-定理 op_smul_one_eq_diagonal
-  条件: [DecidableEq m] (a : α)
-  证明: by
-  simp_rw [← diagonal_one, ← diagonal_smul, Pi.smul_def, op_smul_eq_mul, one_mul]
-
-Depends on / 依赖: Pi.smul_def, diagonal_one, diagonal_smul, one_mul, op_smul_eq_mul, simp_rw, smul_def
+/-
+**Matrix.op_smul_one_eq_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：op_smul_one_eq_diagonal [DecidableEq m] (a : α) : MulOpposite.op a • (1 : 
+Matrix m m α) = diagonal fun _ => a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem op_smul_one_eq_diagonal [DecidableEq m] (a : α) :
     MulOpposite.op a • (1 : Matrix m m α) = diagonal fun _ => a := by
@@ -1723,42 +1688,30 @@ section NonUnitalSemiring
 
 variable [NonUnitalSemiring α] [Fintype m] [Fintype n]
 
-/--
-theorem `mul_assoc` / 定理 `mul_assoc`
-
-English:
-theorem mul_assoc
-  given: (L : Matrix l m α) (M : Matrix m n α) (N : Matrix n o α)
-  proof: by
-  ext
-  apply dotProduct_assoc
-
-中文:
-定理 mul_assoc
-  条件: (L : 矩阵 l m α) (M : 矩阵 m n α) (N : 矩阵 n o α)
-  证明: by
-  ext
-  apply dotProduct_assoc
+/-
+**Matrix.mul_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v}
+ [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2 : Fintype n] (L : M
+atrix l m α) (M : Matrix m n α) (N : Matrix n o α),   L * M * N = L * (M * N)
+参数：L : Matrix l m α；M : Matrix m n α；N : Matrix n o α；M * N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `dotProduct_assoc`：dotProduct_assoc [NonUnitalSemiring α] (u : m -> α) (w
+ : n -> α) (v : Matrix m n α) : (fun j => u ⬝ᵥ fun i => v i j) ⬝ᵥ w = u ⬝ᵥ fun i
+ => v …
 -/
 protected theorem mul_assoc (L : Matrix l m α) (M : Matrix m n α) (N : Matrix n o α) :
     L * M * N = L * (M * N) := by
   ext
   apply dotProduct_assoc
-
-/--
-Instance `nonUnitalSemiring` / 实例 `nonUnitalSemiring`
-
-English:
-instance nonUnitalSemiring
-  signature: : NonUnitalSemiring (Matrix n n α)
-  body: { Matrix.nonUnitalNonAssocSemiring with mul_assoc := Matrix.mul_assoc }
-
-中文:
-实例 nonUnitalSemiring
-  签名: : 非幺半环 (矩阵 n n α)
-  定义体: { Matrix.nonUnitalNonAssocSemiring with mul_assoc := Matrix.mul_assoc }
-
-Depends on / 依赖: Matrix, Matrix.mul_assoc, Matrix.nonUnitalNonAssocSemiring, mul_assoc, nonUnitalNonAssocSemiring
+/-
+**Matrix.nonUnitalSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：nonUnitalSemiring : NonUnitalSemiring (Matrix n n α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
 -/
 instance nonUnitalSemiring : NonUnitalSemiring (Matrix n n α) :=
   { Matrix.nonUnitalNonAssocSemiring with mul_assoc := Matrix.mul_assoc }
@@ -1769,20 +1722,11 @@ section Semiring
 
 variable [Semiring α]
 
-/--
-Instance `semiring` / 实例 `semiring`
-
-English:
-instance semiring
-  signature: [Fintype n] [DecidableEq n]
-  body: { Matrix.nonUnitalSemiring, Matrix.nonAssocSemiring with }
-
-中文:
-实例 semiring
-  签名: [有限类型 n] [DecidableEq n]
-  定义体: { Matrix.nonUnitalSemiring, Matrix.nonAssocSemiring with }
-
-Depends on / 依赖: Matrix, Matrix.nonAssocSemiring, Matrix.nonUnitalSemiring, nonAssocSemiring, nonUnitalSemiring
+/-
+**Matrix.semiring** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：semiring [Fintype n] [DecidableEq n] : Semiring (Matrix n n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance semiring [Fintype n] [DecidableEq n] : Semiring (Matrix n n α) :=
   { Matrix.nonUnitalSemiring, Matrix.nonAssocSemiring with }
@@ -1794,166 +1738,111 @@ section NonUnitalNonAssocRing
 variable [NonUnitalNonAssocRing α] [Fintype n]
 
 @[simp]
-/--
-theorem `neg_mul` / 定理 `neg_mul`
-
-English:
-theorem neg_mul
-  given: (M : Matrix m n α) (N : Matrix n o α)
-  statement: (-M) * N = -(M * N)
-  proof: by
-  ext
-  apply neg_dotProduct
-
-@[simp]
-
-中文:
-定理 neg_mul
-  条件: (M : 矩阵 m n α) (N : 矩阵 n o α)
-  结论: (-M) * N = -(M * N)
-  证明: by
-  ext
-  apply neg_dotProduct
-
-@[simp]
+/-
+**Matrix.neg_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v} [inst : NonUni
+talNonAssocRing α] [inst_1 : Fintype n]   (M : Matrix m n α) (N : Matrix n o α),
+ -M * N = -(M * N)
+参数：M : Matrix m n α；N : Matrix n o α；M * N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `neg_dotProduct`：neg_dotProduct : -v ⬝ᵥ w = -(v ⬝ᵥ w)
 -/
 protected theorem neg_mul (M : Matrix m n α) (N : Matrix n o α) : (-M) * N = -(M * N) := by
   ext
   apply neg_dotProduct
 
 @[simp]
-/--
-theorem `mul_neg` / 定理 `mul_neg`
-
-English:
-theorem mul_neg
-  given: (M : Matrix m n α) (N : Matrix n o α)
-  statement: M * (-N) = -(M * N)
-  proof: by
-  ext
-  apply dotProduct_neg
-
-中文:
-定理 mul_neg
-  条件: (M : 矩阵 m n α) (N : 矩阵 n o α)
-  结论: M * (-N) = -(M * N)
-  证明: by
-  ext
-  apply dotProduct_neg
+/-
+**Matrix.mul_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v} [inst : NonUni
+talNonAssocRing α] [inst_1 : Fintype n]   (M : Matrix m n α) (N : Matrix n o α),
+ M * -N = -(M * N)
+参数：M : Matrix m n α；N : Matrix n o α；M * N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `dotProduct_neg`：dotProduct_neg : v ⬝ᵥ -w = -(v ⬝ᵥ w)
 -/
 protected theorem mul_neg (M : Matrix m n α) (N : Matrix n o α) : M * (-N) = -(M * N) := by
   ext
   apply dotProduct_neg
-
-/--
-theorem `sub_mul` / 定理 `sub_mul`
-
-English:
-theorem sub_mul
-  given: (M M' : Matrix m n α) (N : Matrix n o α)
-  proof: by
-  rw [sub_eq_add_neg]; rw [Matrix.add_mul]; rw [Matrix.neg_mul]; rw [sub_eq_add_neg]
-
-中文:
-定理 sub_mul
-  条件: (M M' : 矩阵 m n α) (N : 矩阵 n o α)
-  证明: by
-  rw [sub_eq_add_neg]; rw [Matrix.add_mul]; rw [Matrix.neg_mul]; rw [sub_eq_add_neg]
+/-
+**Matrix.sub_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v} [inst : NonUni
+talNonAssocRing α] [inst_1 : Fintype n]   (M M' : Matrix m n α) (N : Matrix n o 
+α), (M - M') * N = M * N - M' * N
+参数：M M' : Matrix m n α；N : Matrix n o α；M - M'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Matrix.add_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l 
+m α)…
+· 使用定理 `Matrix.neg_mul`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocRing α] [inst_1 : Fintype n]   (M : Matrix m n α) (
+N : …
 -/
 protected theorem sub_mul (M M' : Matrix m n α) (N : Matrix n o α) :
     (M - M') * N = M * N - M' * N := by
-  rw [sub_eq_add_neg]; rw [Matrix.add_mul]; rw [Matrix.neg_mul]; rw [sub_eq_add_neg]
-
-/--
-theorem `mul_sub` / 定理 `mul_sub`
-
-English:
-theorem mul_sub
-  given: (M : Matrix m n α) (N N' : Matrix n o α)
-  proof: by
-  rw [sub_eq_add_neg]; rw [Matrix.mul_add]; rw [Matrix.mul_neg]; rw [sub_eq_add_neg]
-
-中文:
-定理 mul_sub
-  条件: (M : 矩阵 m n α) (N N' : 矩阵 n o α)
-  证明: by
-  rw [sub_eq_add_neg]; rw [Matrix.mul_add]; rw [Matrix.mul_neg]; rw [sub_eq_add_neg]
+  rw [sub_eq_add_neg, Matrix.add_mul, Matrix.neg_mul, sub_eq_add_neg]
+/-
+**Matrix.mul_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type v} [inst : NonUni
+talNonAssocRing α] [inst_1 : Fintype n]   (M : Matrix m n α) (N N' : Matrix n o 
+α), M * (N - N') = M * N - M * N'
+参数：M : Matrix m n α；N N' : Matrix n o α；N - N'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Matrix.mul_add`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n 
+α) (…
+· 使用定理 `Matrix.mul_neg`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocRing α] [inst_1 : Fintype n]   (M : Matrix m n α) (
+N : …
 -/
 protected theorem mul_sub (M : Matrix m n α) (N N' : Matrix n o α) :
     M * (N - N') = M * N - M * N' := by
-  rw [sub_eq_add_neg]; rw [Matrix.mul_add]; rw [Matrix.mul_neg]; rw [sub_eq_add_neg]
-
-/--
-Instance `nonUnitalNonAssocRing` / 实例 `nonUnitalNonAssocRing`
-
-English:
-instance nonUnitalNonAssocRing
-  signature: : NonUnitalNonAssocRing (Matrix n n α)
-  body: { Matrix.nonUnitalNonAssocSemiring, Matrix.addCommGroup with }
-
-中文:
-实例 nonUnitalNonAssocRing
-  签名: : 非幺非结合环 (矩阵 n n α)
-  定义体: { Matrix.nonUnitalNonAssocSemiring, Matrix.addCommGroup with }
-
-Depends on / 依赖: Matrix, Matrix.addCommGroup, Matrix.nonUnitalNonAssocSemiring, addCommGroup, nonUnitalNonAssocSemiring
+  rw [sub_eq_add_neg, Matrix.mul_add, Matrix.mul_neg, sub_eq_add_neg]
+/-
+**Matrix.nonUnitalNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：nonUnitalNonAssocRing : NonUnitalNonAssocRing (Matrix n n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonUnitalNonAssocRing : NonUnitalNonAssocRing (Matrix n n α) :=
   { Matrix.nonUnitalNonAssocSemiring, Matrix.addCommGroup with }
 
 end NonUnitalNonAssocRing
 
-/--
-Instance `instNonUnitalRing` / 实例 `instNonUnitalRing`
-
-English:
-instance instNonUnitalRing
-  signature: [Fintype n] [NonUnitalRing α]
-  body: { Matrix.nonUnitalSemiring, Matrix.addCommGroup with }
-
-中文:
-实例 instNonUnitalRing
-  签名: [有限类型 n] [非幺环 α]
-  定义体: { Matrix.nonUnitalSemiring, Matrix.addCommGroup with }
-
-Depends on / 依赖: Matrix, Matrix.addCommGroup, Matrix.nonUnitalSemiring, addCommGroup, nonUnitalSemiring
+/-
+**Matrix.instNonUnitalRing** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：instNonUnitalRing [Fintype n] [NonUnitalRing α] : NonUnitalRing (Matrix n 
+n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalRing [Fintype n] [NonUnitalRing α] : NonUnitalRing (Matrix n n α) :=
   { Matrix.nonUnitalSemiring, Matrix.addCommGroup with }
-
-/--
-Instance `instNonAssocRing` / 实例 `instNonAssocRing`
-
-English:
-instance instNonAssocRing
-  signature: [Fintype n] [DecidableEq n] [NonAssocRing α]
-  body: { Matrix.nonAssocSemiring, Matrix.instAddCommGroupWithOne with }
-
-中文:
-实例 instNonAssocRing
-  签名: [有限类型 n] [DecidableEq n] [非结合环 α]
-  定义体: { Matrix.nonAssocSemiring, Matrix.instAddCommGroupWithOne with }
-
-Depends on / 依赖: Matrix, Matrix.instAddCommGroupWithOne, Matrix.nonAssocSemiring, instAddCommGroupWithOne, nonAssocSemiring
+/-
+**Matrix.instNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：instNonAssocRing [Fintype n] [DecidableEq n] [NonAssocRing α] : NonAssocRi
+ng (Matrix n n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocRing [Fintype n] [DecidableEq n] [NonAssocRing α] :
     NonAssocRing (Matrix n n α) :=
   { Matrix.nonAssocSemiring, Matrix.instAddCommGroupWithOne with }
-
-/--
-Instance `instRing` / 实例 `instRing`
-
-English:
-instance instRing
-  signature: [Fintype n] [DecidableEq n] [Ring α]
-  body: { Matrix.semiring, Matrix.instAddCommGroupWithOne with }
-
-中文:
-实例 instRing
-  签名: [有限类型 n] [DecidableEq n] [环 α]
-  定义体: { Matrix.semiring, Matrix.instAddCommGroupWithOne with }
-
-Depends on / 依赖: Matrix, Matrix.instAddCommGroupWithOne, Matrix.semiring, instAddCommGroupWithOne, semiring
+/-
+**Matrix.instRing** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：instRing [Fintype n] [DecidableEq n] [Ring α] : Ring (Matrix n n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRing [Fintype n] [DecidableEq n] [Ring α] : Ring (Matrix n n α) :=
   { Matrix.semiring, Matrix.instAddCommGroupWithOne with }
@@ -1963,52 +1852,55 @@ section Semiring
 variable [Semiring α]
 
 @[simp]
-/--
-theorem `mul_mul_left` / 定理 `mul_mul_left`
-
-English:
-theorem mul_mul_left
-  given: [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α)
-  proof: smul_mul a M N
-
-中文:
-定理 mul_mul_left
-  条件: [有限类型 n] (M : 矩阵 m n α) (N : 矩阵 n o α) (a : α)
-  证明: smul_mul a M N
-
-Depends on / 依赖: smul_mul
+/-
+**Matrix.mul_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_mul_left [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α) : (
+of fun i j => a * M i j) * N = a • (M * N)
+参数：M : Matrix m n α；N : Matrix n o α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.smul_mul`：smul_mul [Fintype n] [Monoid R] [DistribMulAction R α] 
+[IsScalarTower R α α] (a : R) (M : Matrix m n α) (N : Matrix n l α) : (a • M) * 
+N = a…
 -/
 theorem mul_mul_left [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α) :
     (of fun i j => a * M i j) * N = a • (M * N) :=
   smul_mul a M N
-
-/--
-lemma `pow_apply_nonneg` / 引理 `pow_apply_nonneg`
-
-English:
-lemma pow_apply_nonneg
-  statement: [Fintype n] [DecidableEq n] [PartialOrder α] [IsOrderedRing α]
-  proof: by
-  induction k with
-  | zero => aesop (add simp one_apply)
-  | succ m ih =>
-    intro i j; rw [pow_succ, mul_apply]
-    exact Finset.sum_nonneg fun l _ => mul_nonneg (ih i l) (hA l j)
-
-中文:
-引理 pow_apply_nonneg
-  结论: [有限类型 n] [DecidableEq n] [偏序 α] [是Ordered环 α]
-  证明: by
-  induction k with
-  | zero => aesop (add simp one_apply)
-  | succ m ih =>
-    intro i j; rw [pow_succ, mul_apply]
-    exact Finset.sum_nonneg fun l _ => mul_nonneg (ih i l) (hA l j)
-
-Depends on / 依赖: Finset, Finset.sum_nonneg, mul_apply, mul_nonneg, one_apply, pow_succ, sum_nonneg
+/-
+**Matrix.pow_apply_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：pow_apply_nonneg [Fintype n] [DecidableEq n] [PartialOrder α] [IsOrderedRi
+ng α] {A : Matrix n n α} (hA : forall i j, 0 <= A i j) (k : Nat) : forall i j, 0
+ <= (A ^ k) i j
+参数：hA : forall i j, 0 <= A i j；k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Matrix.mul_apply`：mul_apply [Fintype m] [Mul α] [AddCommMonoid α] {M : M
+atrix l m α} {N : Matrix m n α} {i k} : (M * N) i k = ∑ j, M i j * N j k
+· 使用定理 `Finset.sum_nonneg`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈ s
+, 0 ≤ f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
 -/
 lemma pow_apply_nonneg [Fintype n] [DecidableEq n] [PartialOrder α] [IsOrderedRing α]
-    {A : Matrix n n α} (hA : forall i j, 0 <= A i j) (k : Nat) : forall i j, 0 <= (A ^ k) i j := by
+    {A : Matrix n n α} (hA : ∀ i j, 0 ≤ A i j) (k : ℕ) : ∀ i j, 0 ≤ (A ^ k) i j := by
   induction k with
   | zero => aesop (add simp one_apply)
   | succ m ih =>
@@ -2021,28 +1913,22 @@ section CommSemiring
 
 variable [CommSemiring α]
 
-/--
-theorem `smul_eq_mul_diagonal` / 定理 `smul_eq_mul_diagonal`
-
-English:
-theorem smul_eq_mul_diagonal
-  given: [Fintype n] [DecidableEq n] (M : Matrix m n α) (a : α)
-  proof: by
-  ext
-  simp [mul_comm]
-
-@[simp]
-
-中文:
-定理 smul_eq_mul_diagonal
-  条件: [有限类型 n] [DecidableEq n] (M : 矩阵 m n α) (a : α)
-  证明: by
-  ext
-  simp [mul_comm]
-
-@[simp]
-
-Depends on / 依赖: mul_comm
+/-
+**Matrix.smul_eq_mul_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_eq_mul_diagonal [Fintype n] [DecidableEq n] (M : Matrix m n α) (a : α
+) : a • M = M * diagonal fun _ => a
+参数：M : Matrix m n α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mul_diagonal`：mul_diagonal [Fintype n] [DecidableEq n] (d : n -> 
+α) (M : Matrix m n α) (i j) : (M * diagonal d) i j = M i j * d j
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_eq_mul_diagonal [Fintype n] [DecidableEq n] (M : Matrix m n α) (a : α) :
     a • M = M * diagonal fun _ => a := by
@@ -2050,20 +1936,18 @@ theorem smul_eq_mul_diagonal [Fintype n] [DecidableEq n] (M : Matrix m n α) (a 
   simp [mul_comm]
 
 @[simp]
-/--
-theorem `mul_mul_right` / 定理 `mul_mul_right`
-
-English:
-theorem mul_mul_right
-  given: [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α)
-  proof: Matrix.mul_smul M a N
-
-中文:
-定理 mul_mul_right
-  条件: [有限类型 n] (M : 矩阵 m n α) (N : 矩阵 n o α) (a : α)
-  证明: Matrix.mul_smul M a N
-
-Depends on / 依赖: Matrix, Matrix.mul_smul, mul_smul
+/-
+**Matrix.mul_mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_mul_right [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α) : 
+(M * of fun i j => a * N i j) = a • (M * N)
+参数：M : Matrix m n α；N : Matrix n o α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.mul_smul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {R : Typ
+e u_7} {α : Type v} [inst : AddCommMonoid α] [inst_1 : Mul α]   [inst_2 : Fintyp
+e n] …
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
 -/
 theorem mul_mul_right [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α) :
     (M * of fun i j => a * N i j) = a • (M * N) :=
@@ -2075,82 +1959,107 @@ end Matrix
 
 section IsStablyFiniteRing
 
-/--
-Definition of `IsStablyFiniteRing` / `IsStablyFiniteRing` 的定义
+/-- A semiring is stably finite if every matrix ring over it is Dedekind-finite. -/
+/-
+**IsStablyFiniteRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_10) → [MulOne R] → [AddCommMonoid R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStablyFiniteRing
-  parameters: (R) [MulOne R] [AddCommMonoid R]
-  axioms and operations (1):
-    - isDedekindFiniteMonoid((n : Nat)) : IsDedekindFiniteMonoid (Matrix (Fin n) (Fin n) R)
-
-中文:
-类 是StablyFinite环
-  参数: (R) [MulOne R] [加法交换幺半群 R]
-  公理与运算 (1 个):
-    - isDedekindFiniteMonoid((n : 自然数)) : 是DedekindFinite幺半群 (矩阵 (有限集 n) (有限集 n) R)
+--- 原说明 ---
+A semiring is stably finite if every matrix ring over it is Dedekind-finite.
 -/
 @[mk_iff] class IsStablyFiniteRing (R) [MulOne R] [AddCommMonoid R] : Prop where
-  isDedekindFiniteMonoid (n : Nat) : IsDedekindFiniteMonoid (Matrix (Fin n) (Fin n) R)
+  isDedekindFiniteMonoid (n : ℕ) : IsDedekindFiniteMonoid (Matrix (Fin n) (Fin n) R)
 
 attribute [instance] IsStablyFiniteRing.isDedekindFiniteMonoid
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) (R) [NonAssocSemiring R] [IsStablyFiniteRing R] :
     IsDedekindFiniteMonoid R :=
-  let f : R ->* Matrix (Fin 1) (Fin 1) R :=
-    ⟨⟨fun r => diagonal fun _ => r, rfl⟩, fun _ _ => (diagonal_mul_diagonal ..).symm⟩
-  .of_injective f fun _ _ eq => by simpa [f] using congr($eq 0 0)
+  let f : R →* Matrix (Fin 1) (Fin 1) R :=
+    ⟨⟨fun r ↦ diagonal fun _ ↦ r, rfl⟩, fun _ _ ↦ (diagonal_mul_diagonal ..).symm⟩
+  .of_injective f fun _ _ eq ↦ by simpa [f] using congr($eq 0 0)
 
 variable {R S F : Type*} [NonAssocSemiring R] [NonAssocSemiring S]
-
-/--
-theorem `IsStablyFiniteRing.of_injective` / 定理 `IsStablyFiniteRing.of_injective`
-
-English:
-theorem IsStablyFiniteRing.of_injective
-  statement: [FunLike F R S] [RingHomClass F R S] (f : F)
-  proof: let f := MonoidHom.mk ⟨fun M : Matrix (Fin n) (Fin n) R => M.map f,
-    Matrix.map_one _ (map_zero f) (map_one f)⟩ fun _ _ => Matrix.map_mul
-.of_injective f Matrix.map_injective hf
-
-中文:
-定理 是StablyFinite环.of_injective
-  结论: [函数状 F R S] [环态射类 F R S] (f : F)
-  证明: let f := MonoidHom.mk ⟨fun M : Matrix (Fin n) (Fin n) R => M.map f,
-    Matrix.map_one _ (map_zero f) (map_one f)⟩ fun _ _ => Matrix.map_mul
-.of_injective f Matrix.map_injective hf
-
-Depends on / 依赖: M.map, Matrix, Matrix.map_injective, Matrix.map_mul, Matrix.map_one, MonoidHom, MonoidHom.mk, map_injective, map_mul, map_one, map_zero, of_injective
+/-
+**IsStablyFiniteRing.of_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsStablyFiniteRing.of_injective [FunLike F R S] [RingHomClass F R S] (f : 
+F) (hf : Function.Injective f) [IsStablyFiniteRing S] : IsStablyFiniteRing R whe
+re isDedekindFiniteMonoid n
+参数：f : F；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.map_one`：∀ {n : Type u_3} {α : Type v} {β : Type w} [inst : Decid
+ableEq n] [inst_1 : Zero α] [inst_2 : One α] [inst_3 : Zero β]   [inst_4 : One β
+] (f…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `Matrix.map_mul`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} {β : Type w} [inst : NonUnitalNonAssocSemiring α]   [inst_1 : Fintype n] {L 
+: Ma…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `IsDedekindFiniteMonoid.of_injective`：∀ {M : Type u_4} {N : Type u_5} {F 
+: Type u_9} [inst : MulOne M] [inst_1 : MulOne N] [inst_2 : FunLike F M N]   [Mo
+noidHomClass F M N] (f : …
+· 使用定理 `Matrix.map_injective`：map_injective {f : α -> β} (hf : Function.Injectiv
+e f) : Function.Injective fun M : Matrix m n α => M.map f
+· 使用定理 `IsStablyFiniteRing.isDedekindFiniteMonoid`：∀ {R : Type u_10} {inst : Mul
+One R} {inst_1 : AddCommMonoid R} [self : IsStablyFiniteRing R] (n : ℕ),   IsDed
+ekindFiniteMonoid (Matrix (Fin …
 -/
 theorem IsStablyFiniteRing.of_injective [FunLike F R S] [RingHomClass F R S] (f : F)
     (hf : Function.Injective f) [IsStablyFiniteRing S] : IsStablyFiniteRing R where
   isDedekindFiniteMonoid n :=
-  let f := MonoidHom.mk ⟨fun M : Matrix (Fin n) (Fin n) R => M.map f,
-    Matrix.map_one _ (map_zero f) (map_one f)⟩ fun _ _ => Matrix.map_mul
-.of_injective f Matrix.map_injective hf
-
-/--
-theorem `RingEquiv.isStablyFiniteRing_iff` / 定理 `RingEquiv.isStablyFiniteRing_iff`
-
-English:
-theorem RingEquiv.isStablyFiniteRing_iff
-  given: [EquivLike F R S] [RingEquivClass F R S] (f : F)
-  proof: .of_injective _ (RingEquivClass.toRingEquiv f).symm.injective
-  mpr _ := .of_injective f (EquivLike.injective f)
-
-中文:
-定理 环等价.isStablyFiniteRing_iff
-  条件: [等价状 F R S] [环等价类 F R S] (f : F)
-  证明: .of_injective _ (RingEquivClass.toRingEquiv f).symm.injective
-  mpr _ := .of_injective f (EquivLike.injective f)
-
-Depends on / 依赖: RingEquivClass, RingEquivClass.toRingEquiv, injective, of_injective, symm.injective, toRingEquiv
+  let f := MonoidHom.mk ⟨fun M : Matrix (Fin n) (Fin n) R ↦ M.map f,
+    Matrix.map_one _ (map_zero f) (map_one f)⟩ fun _ _ ↦ Matrix.map_mul
+  .of_injective f <| Matrix.map_injective hf
+/-
+**RingEquiv.isStablyFiniteRing_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingEquiv.isStablyFiniteRing_iff [EquivLike F R S] [RingEquivClass F R S] 
+(f : F) : IsStablyFiniteRing R ↔ IsStablyFiniteRing S where mp _
+参数：f : F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStablyFiniteRing.of_injective`：IsStablyFiniteRing.of_injective [FunLik
+e F R S] [RingHomClass F R S] (f : F) (hf : Function.Injective f) [IsStablyFinit
+eRing S] : IsStablyFi…
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `RingEquiv.injective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Injecti
+ve ⇑e
+· 使用定理 `EquivLike.injective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Injective ⇑e
 -/
 theorem RingEquiv.isStablyFiniteRing_iff [EquivLike F R S] [RingEquivClass F R S] (f : F) :
     IsStablyFiniteRing R ↔ IsStablyFiniteRing S where
   mp _ := .of_injective _ (RingEquivClass.toRingEquiv f).symm.injective
   mpr _ := .of_injective f (EquivLike.injective f)
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [SetLike F R] [SubsemiringClass F R] (S : F) [IsStablyFiniteRing R] :
     IsStablyFiniteRing S :=
   .of_injective _ (Subsemiring.subtype_injective <| .ofClass S)
@@ -2161,490 +2070,364 @@ open Matrix
 
 namespace Matrix
 
-/--
-Definition of `vecMulVec` / `vecMulVec` 的定义
+/-- For two vectors `w` and `v`, `vecMulVec w v i j` is defined to be `w i * v j`.
+Put another way, `vecMulVec w v` is exactly `replicateCol ι w * replicateRow ι v` for
+`Unique ι`; see `vecMulVec_eq`. -/
+/-
+**Matrix.vecMulVec** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec [Mul α] (w : m -> α) (v : n -> α) : Matrix m n α
+参数：w : m -> α；v : n -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vecMulVec
-  signature: [Mul α] (w : m -> α) (v : n -> α)
-  body: of fun x y => w x * v y
-
-中文:
-定义 vecMulVec
-  签名: [乘法 α] (w : m -> α) (v : n -> α)
-  定义体: of fun x y => w x * v y
+--- 原说明 ---
+For two vectors `w` and `v`, `vecMulVec w v i j` is defined to be `w i * v j`.
+Put another way, `vecMulVec w v` is exactly `replicateCol ι w * replicateRow ι v
+` for
+`Unique ι`; see `vecMulVec_eq`.
 -/
-def vecMulVec [Mul α] (w : m -> α) (v : n -> α) : Matrix m n α :=
+def vecMulVec [Mul α] (w : m → α) (v : n → α) : Matrix m n α :=
   of fun x y => w x * v y
 
 -- TODO: set as an equation lemma for `vecMulVec`, see https://github.com/leanprover-community/mathlib4/pull/3024
-/--
-theorem `vecMulVec_apply` / 定理 `vecMulVec_apply`
-
-English:
-theorem vecMulVec_apply
-  given: [Mul α] (w : m -> α) (v : n -> α) (i j)
-  statement: vecMulVec w v i j = w i * v j
-  proof: rfl
-
-中文:
-定理 vecMulVec_apply
-  条件: [乘法 α] (w : m -> α) (v : n -> α) (i j)
-  结论: vecMulVec w v i j = w i * v j
-  证明: rfl
+/-
+**Matrix.vecMulVec_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_apply [Mul α] (w : m -> α) (v : n -> α) (i j) : vecMulVec w v i 
+j = w i * v j
+参数：w : m -> α；v : n -> α；i j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vecMulVec_apply [Mul α] (w : m -> α) (v : n -> α) (i j) : vecMulVec w v i j = w i * v j :=
+theorem vecMulVec_apply [Mul α] (w : m → α) (v : n → α) (i j) : vecMulVec w v i j = w i * v j :=
   rfl
-
-/--
-lemma `row_vecMulVec` / 引理 `row_vecMulVec`
-
-English:
-lemma row_vecMulVec
-  given: [Mul α] (w : m -> α) (v : n -> α) (i : m)
-  proof: rfl
-
-中文:
-引理 row_vecMulVec
-  条件: [乘法 α] (w : m -> α) (v : n -> α) (i : m)
-  证明: rfl
+/-
+**Matrix.row_vecMulVec** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_vecMulVec [Mul α] (w : m -> α) (v : n -> α) (i : m) : (vecMulVec w v).
+row i = w i • v
+参数：w : m -> α；v : n -> α；i : m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma row_vecMulVec [Mul α] (w : m -> α) (v : n -> α) (i : m) :
+lemma row_vecMulVec [Mul α] (w : m → α) (v : n → α) (i : m) :
     (vecMulVec w v).row i = w i • v := rfl
-
-/--
-lemma `col_vecMulVec` / 引理 `col_vecMulVec`
-
-English:
-lemma col_vecMulVec
-  given: [Mul α] (w : m -> α) (v : n -> α) (j : n)
-  proof: rfl
-
-中文:
-引理 col_vecMulVec
-  条件: [乘法 α] (w : m -> α) (v : n -> α) (j : n)
-  证明: rfl
+/-
+**Matrix.col_vecMulVec** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_vecMulVec [Mul α] (w : m -> α) (v : n -> α) (j : n) : (vecMulVec w v).
+col j = MulOpposite.op (v j) • w
+参数：w : m -> α；v : n -> α；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma col_vecMulVec [Mul α] (w : m -> α) (v : n -> α) (j : n) :
+lemma col_vecMulVec [Mul α] (w : m → α) (v : n → α) (j : n) :
     (vecMulVec w v).col j = MulOpposite.op (v j) • w := rfl
-
-/--
-theorem `zero_vecMulVec` / 定理 `zero_vecMulVec`
-
-English:
-theorem zero_vecMulVec
-  given: [MulZeroClass α] (v : n -> α)
-  statement: vecMulVec (0 : m -> α) v = 0
-  proof: ext fun _ _ => zero_mul _
-
-中文:
-定理 zero_vecMulVec
-  条件: [乘零类 α] (v : n -> α)
-  结论: vecMulVec (0 : m -> α) v = 0
-  证明: ext fun _ _ => zero_mul _
+/-
+**Matrix.zero_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : MulZeroClass α] (v : 
+n → α), Matrix.vecMulVec 0 v = 0
+参数：v : n → α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-@[simp] theorem zero_vecMulVec [MulZeroClass α] (v : n -> α) : vecMulVec (0 : m -> α) v = 0 :=
+@[simp] theorem zero_vecMulVec [MulZeroClass α] (v : n → α) : vecMulVec (0 : m → α) v = 0 :=
   ext fun _ _ => zero_mul _
-
-/--
-theorem `vecMulVec_zero` / 定理 `vecMulVec_zero`
-
-English:
-theorem vecMulVec_zero
-  given: [MulZeroClass α] (w : m -> α)
-  statement: vecMulVec w (0 : m -> α) = 0
-  proof: ext fun _ _ => mul_zero _
-
-中文:
-定理 vecMulVec_zero
-  条件: [乘零类 α] (w : m -> α)
-  结论: vecMulVec w (0 : m -> α) = 0
-  证明: ext fun _ _ => mul_zero _
+/-
+**Matrix.vecMulVec_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {α : Type v} [inst : MulZeroClass α] (w : m → α), Matrix.
+vecMulVec w 0 = 0
+参数：w : m → α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-@[simp] theorem vecMulVec_zero [MulZeroClass α] (w : m -> α) : vecMulVec w (0 : m -> α) = 0 :=
+@[simp] theorem vecMulVec_zero [MulZeroClass α] (w : m → α) : vecMulVec w (0 : m → α) = 0 :=
   ext fun _ _ => mul_zero _
-
-/--
-theorem `vecMulVec_ne_zero` / 定理 `vecMulVec_ne_zero`
-
-English:
-theorem vecMulVec_ne_zero
-  statement: [Mul α] [Zero α] [NoZeroDivisors α] {a b : n -> α}
-  proof: by
-  intro h
-  obtain ⟨i, ha⟩ := Function.ne_iff.mp ha
-  obtain ⟨j, hb⟩ := Function.ne_iff.mp hb
-  exact mul_ne_zero ha hb congr($h i j)
-
-中文:
-定理 vecMulVec_ne_zero
-  结论: [乘法 α] [零 α] [无零因子 α] {a b : n -> α}
-  证明: by
-  intro h
-  obtain ⟨i, ha⟩ := Function.ne_iff.mp ha
-  obtain ⟨j, hb⟩ := Function.ne_iff.mp hb
-  exact mul_ne_zero ha hb congr($h i j)
-
-Depends on / 依赖: Function, Function.ne_iff.mp, mul_ne_zero, ne_iff
+/-
+**Matrix.vecMulVec_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_ne_zero [Mul α] [Zero α] [NoZeroDivisors α] {a b : n -> α} (ha :
+ a != 0) (hb : b != 0) : vecMulVec a b != 0
+参数：ha : a != 0；hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.ne_iff`：ne_iff {β : α -> Sort*} {f₁ f₂ : forall a, β a} : f₁ !=
+ f₂ ↔ exists a, f₁ a != f₂ a
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem vecMulVec_ne_zero [Mul α] [Zero α] [NoZeroDivisors α] {a b : n -> α}
-    (ha : a != 0) (hb : b != 0) : vecMulVec a b != 0 := by
+theorem vecMulVec_ne_zero [Mul α] [Zero α] [NoZeroDivisors α] {a b : n → α}
+    (ha : a ≠ 0) (hb : b ≠ 0) : vecMulVec a b ≠ 0 := by
   intro h
   obtain ⟨i, ha⟩ := Function.ne_iff.mp ha
   obtain ⟨j, hb⟩ := Function.ne_iff.mp hb
   exact mul_ne_zero ha hb congr($h i j)
-
-/--
-theorem `vecMulVec_eq_zero` / 定理 `vecMulVec_eq_zero`
-
-English:
-theorem vecMulVec_eq_zero
-  given: [MulZeroClass α] [NoZeroDivisors α] {a b : n -> α}
-  proof: by
-  simp only [← ext_iff, vecMulVec_apply, zero_apply, mul_eq_zero, funext_iff, Pi.zero_apply,
-    forall_or_left, forall_or_right]
-
-中文:
-定理 vecMulVec_eq_zero
-  条件: [乘零类 α] [无零因子 α] {a b : n -> α}
-  证明: by
-  simp only [← ext_iff, vecMulVec_apply, zero_apply, mul_eq_zero, funext_iff, Pi.zero_apply,
-    forall_or_left, forall_or_right]
+/-
+**Matrix.vecMulVec_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {n : Type u_3} {α : Type v} [inst : MulZeroClass α] [NoZeroDivisors α] {
+a b : n → α},   Matrix.vecMulVec a b = 0 ↔ a = 0 ∨ b = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] theorem vecMulVec_eq_zero [MulZeroClass α] [NoZeroDivisors α] {a b : n -> α} :
+@[simp] theorem vecMulVec_eq_zero [MulZeroClass α] [NoZeroDivisors α] {a b : n → α} :
     vecMulVec a b = 0 ↔ a = 0 ∨ b = 0 := by
   simp only [← ext_iff, vecMulVec_apply, zero_apply, mul_eq_zero, funext_iff, Pi.zero_apply,
     forall_or_left, forall_or_right]
-
-/--
-theorem `add_vecMulVec` / 定理 `add_vecMulVec`
-
-English:
-theorem add_vecMulVec
-  given: [Mul α] [Add α] [RightDistribClass α] (w₁ w₂ : m -> α) (v : n -> α)
-  proof: ext fun _ _ => add_mul _ _ _
-
-中文:
-定理 add_vecMulVec
-  条件: [乘法 α] [加法 α] [RightDistrib类 α] (w₁ w₂ : m -> α) (v : n -> α)
-  证明: ext fun _ _ => add_mul _ _ _
-
-Depends on / 依赖: add_mul
+/-
+**Matrix.add_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：add_vecMulVec [Mul α] [Add α] [RightDistribClass α] (w₁ w₂ : m -> α) (v : 
+n -> α) : vecMulVec (w₁ + w₂) v = vecMulVec w₁ v + vecMulVec w₂ v
+参数：w₁ w₂ : m -> α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
 -/
-theorem add_vecMulVec [Mul α] [Add α] [RightDistribClass α] (w₁ w₂ : m -> α) (v : n -> α) :
+theorem add_vecMulVec [Mul α] [Add α] [RightDistribClass α] (w₁ w₂ : m → α) (v : n → α) :
     vecMulVec (w₁ + w₂) v = vecMulVec w₁ v + vecMulVec w₂ v :=
   ext fun _ _ => add_mul _ _ _
-
-/--
-theorem `vecMulVec_add` / 定理 `vecMulVec_add`
-
-English:
-theorem vecMulVec_add
-  given: [Mul α] [Add α] [LeftDistribClass α] (w : m -> α) (v₁ v₂ : n -> α)
-  proof: ext fun _ _ => mul_add _ _ _
-
-@[simp]
-
-中文:
-定理 vecMulVec_add
-  条件: [乘法 α] [加法 α] [LeftDistrib类 α] (w : m -> α) (v₁ v₂ : n -> α)
-  证明: ext fun _ _ => mul_add _ _ _
-
-@[simp]
-
-Depends on / 依赖: mul_add
+/-
+**Matrix.vecMulVec_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_add [Mul α] [Add α] [LeftDistribClass α] (w : m -> α) (v₁ v₂ : n
+ -> α) : vecMulVec w (v₁ + v₂) = vecMulVec w v₁ + vecMulVec w v₂
+参数：w : m -> α；v₁ v₂ : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
 -/
-theorem vecMulVec_add [Mul α] [Add α] [LeftDistribClass α] (w : m -> α) (v₁ v₂ : n -> α) :
+theorem vecMulVec_add [Mul α] [Add α] [LeftDistribClass α] (w : m → α) (v₁ v₂ : n → α) :
     vecMulVec w (v₁ + v₂) = vecMulVec w v₁ + vecMulVec w v₂ :=
   ext fun _ _ => mul_add _ _ _
 
 @[simp]
-/--
-theorem `neg_vecMulVec` / 定理 `neg_vecMulVec`
-
-English:
-theorem neg_vecMulVec
-  given: [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α)
-  proof: ext fun _ _ => neg_mul _ _
-
-@[simp]
-
-中文:
-定理 neg_vecMulVec
-  条件: [乘法 α] [有DistribNeg α] (w : m -> α) (v : n -> α)
-  证明: ext fun _ _ => neg_mul _ _
-
-@[simp]
-
-Depends on / 依赖: neg_mul
+/-
+**Matrix.neg_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：neg_vecMulVec [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α) : vecMul
+Vec (-w) v = -vecMulVec w v
+参数：w : m -> α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
 -/
-theorem neg_vecMulVec [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α) :
+theorem neg_vecMulVec [Mul α] [HasDistribNeg α] (w : m → α) (v : n → α) :
     vecMulVec (-w) v = -vecMulVec w v :=
   ext fun _ _ => neg_mul _ _
 
 @[simp]
-/--
-theorem `vecMulVec_neg` / 定理 `vecMulVec_neg`
-
-English:
-theorem vecMulVec_neg
-  given: [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α)
-  proof: ext fun _ _ => mul_neg _ _
-
-@[simp]
-
-中文:
-定理 vecMulVec_neg
-  条件: [乘法 α] [有DistribNeg α] (w : m -> α) (v : n -> α)
-  证明: ext fun _ _ => mul_neg _ _
-
-@[simp]
-
-Depends on / 依赖: corec_eq, mul_neg
+/-
+**Matrix.vecMulVec_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_neg [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α) : vecMul
+Vec w (-v) = -vecMulVec w v
+参数：w : m -> α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
 -/
-theorem vecMulVec_neg [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α) :
+theorem vecMulVec_neg [Mul α] [HasDistribNeg α] (w : m → α) (v : n → α) :
     vecMulVec w (-v) = -vecMulVec w v :=
   ext fun _ _ => mul_neg _ _
 
 @[simp]
-/--
-theorem `smul_vecMulVec` / 定理 `smul_vecMulVec`
-
-English:
-theorem smul_vecMulVec
-  given: [Mul α] [SMul R α] [IsScalarTower R α α] (r : R) (w : m -> α) (v : n -> α)
-  proof: ext fun _ _ => smul_mul_assoc _ _ _
-
-@[simp]
-
-中文:
-定理 smul_vecMulVec
-  条件: [乘法 α] [标量乘法 R α] [标量塔 R α α] (r : R) (w : m -> α) (v : n -> α)
-  证明: ext fun _ _ => smul_mul_assoc _ _ _
-
-@[simp]
-
-Depends on / 依赖: smul_mul_assoc
+/-
+**Matrix.smul_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_vecMulVec [Mul α] [SMul R α] [IsScalarTower R α α] (r : R) (w : m -> 
+α) (v : n -> α) : vecMulVec (r • w) v = r • vecMulVec w v
+参数：r : R；w : m -> α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
 -/
-theorem smul_vecMulVec [Mul α] [SMul R α] [IsScalarTower R α α] (r : R) (w : m -> α) (v : n -> α) :
+theorem smul_vecMulVec [Mul α] [SMul R α] [IsScalarTower R α α] (r : R) (w : m → α) (v : n → α) :
     vecMulVec (r • w) v = r • vecMulVec w v :=
   ext fun _ _ => smul_mul_assoc _ _ _
 
 @[simp]
-/--
-theorem `vecMulVec_smul` / 定理 `vecMulVec_smul`
-
-English:
-theorem vecMulVec_smul
-  given: [Mul α] [SMul R α] [SMulCommClass R α α] (r : R) (w : m -> α) (v : n -> α)
-  proof: ext fun _ _ => mul_smul_comm _ _ _
-
-中文:
-定理 vecMulVec_smul
-  条件: [乘法 α] [标量乘法 R α] [标量交换类 R α α] (r : R) (w : m -> α) (v : n -> α)
-  证明: ext fun _ _ => mul_smul_comm _ _ _
-
-Depends on / 依赖: mul_smul_comm
+/-
+**Matrix.vecMulVec_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_smul [Mul α] [SMul R α] [SMulCommClass R α α] (r : R) (w : m -> 
+α) (v : n -> α) : vecMulVec w (r • v) = r • vecMulVec w v
+参数：r : R；w : m -> α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
 -/
-theorem vecMulVec_smul [Mul α] [SMul R α] [SMulCommClass R α α] (r : R) (w : m -> α) (v : n -> α) :
+theorem vecMulVec_smul [Mul α] [SMul R α] [SMulCommClass R α α] (r : R) (w : m → α) (v : n → α) :
     vecMulVec w (r • v) = r • vecMulVec w v :=
   ext fun _ _ => mul_smul_comm _ _ _
-
-/--
-theorem `vecMulVec_smul'` / 定理 `vecMulVec_smul'`
-
-English:
-theorem vecMulVec_smul'
-  given: [Semigroup α] (w : m -> α) (r : α) (v : n -> α)
-  proof: .symm ext fun _ _ => mul_assoc _ _ _
-
-@[simp]
-
-中文:
-定理 vecMulVec_smul'
-  条件: [半群 α] (w : m -> α) (r : α) (v : n -> α)
-  证明: .symm ext fun _ _ => mul_assoc _ _ _
-
-@[simp]
-
-Depends on / 依赖: mul_assoc
+/-
+**Matrix.vecMulVec_smul'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_smul' [Semigroup α] (w : m -> α) (r : α) (v : n -> α) : vecMulVe
+c w (r • v) = vecMulVec (MulOpposite.op r • w) v
+参数：w : m -> α；r : α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem vecMulVec_smul' [Semigroup α] (w : m -> α) (r : α) (v : n -> α) :
+theorem vecMulVec_smul' [Semigroup α] (w : m → α) (r : α) (v : n → α) :
     vecMulVec w (r • v) = vecMulVec (MulOpposite.op r • w) v :=
-.symm ext fun _ _ => mul_assoc _ _ _
+  ext fun _ _ => mul_assoc _ _ _ |>.symm
 
 @[simp]
-/--
-theorem `transpose_vecMulVec` / 定理 `transpose_vecMulVec`
-
-English:
-theorem transpose_vecMulVec
-  given: [CommMagma α] (w : m -> α) (v : n -> α)
-  proof: ext fun _ _ => mul_comm _ _
-
-@[simp]
-
-中文:
-定理 transpose_vecMulVec
-  条件: [交换原群 α] (w : m -> α) (v : n -> α)
-  证明: ext fun _ _ => mul_comm _ _
-
-@[simp]
-
-Depends on / 依赖: mul_comm
+/-
+**Matrix.transpose_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_vecMulVec [CommMagma α] (w : m -> α) (v : n -> α) : (vecMulVec w
+ v)ᵀ = vecMulVec v w
+参数：w : m -> α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem transpose_vecMulVec [CommMagma α] (w : m -> α) (v : n -> α) :
+theorem transpose_vecMulVec [CommMagma α] (w : m → α) (v : n → α) :
     (vecMulVec w v)ᵀ = vecMulVec v w :=
   ext fun _ _ => mul_comm _ _
 
 @[simp]
-/--
-theorem `diag_vecMulVec` / 定理 `diag_vecMulVec`
-
-English:
-theorem diag_vecMulVec
-  given: [Mul α] (u v : n -> α)
-  statement: diag (vecMulVec u v) = u * v
-  proof: rfl
-
-中文:
-定理 diag_vecMulVec
-  条件: [乘法 α] (u v : n -> α)
-  结论: diag (vecMulVec u v) = u * v
-  证明: rfl
+/-
+**Matrix.diag_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diag_vecMulVec [Mul α] (u v : n -> α) : diag (vecMulVec u v) = u * v
+参数：u v : n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem diag_vecMulVec [Mul α] (u v : n -> α) : diag (vecMulVec u v) = u * v := rfl
+theorem diag_vecMulVec [Mul α] (u v : n → α) : diag (vecMulVec u v) = u * v := rfl
 
 section NonUnitalNonAssocSemiring
 
 variable [NonUnitalNonAssocSemiring α]
 
 /--
-Definition of `mulVec` / `mulVec` 的定义
+`M *ᵥ v` (notation for `mulVec M v`) is the matrix-vector product of matrix `M` and vector `v`,
+where `v` is seen as a column vector.
 
-English:
-definition mulVec
-  signature: [Fintype n] (M : Matrix m n α) (v : n -> α)
-
-中文:
-定义 mulVec
-  签名: [有限类型 n] (M : 矩阵 m n α) (v : n -> α)
+The notation has precedence 73, which comes immediately before ` ⬝ᵥ ` for `dotProduct`,
+so that `A *ᵥ v ⬝ᵥ B *ᵥ w` is parsed as `(A *ᵥ v) ⬝ᵥ (B *ᵥ w)`.
 -/
-def mulVec [Fintype n] (M : Matrix m n α) (v : n -> α) : m -> α
+/-
+**Matrix.mulVec** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：{m : Type u_2} →   {n : Type u_3} → {α : Type v} → [NonUnitalNonAssocSemir
+ing α] → [Fintype n] → Matrix m n α → (n → α) → m → α
+参数：n → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`M *ᵥ v` (notation for `mulVec M v`) is the matrix-vector product of matrix `M` 
+and vector `v`,
+where `v` is seen as a column vector.
+
+The notation has precedence 73, which comes immediately before ` ⬝ᵥ ` for `dotPr
+oduct`,
+so that `A *ᵥ v ⬝ᵥ B *ᵥ w` is parsed as `(A *ᵥ v) ⬝ᵥ (B *ᵥ w)`.
+-/
+def mulVec [Fintype n] (M : Matrix m n α) (v : n → α) : m → α
   | i => (fun j => M i j) ⬝ᵥ v
 
 @[inherit_doc]
 scoped infixr:73 " *ᵥ " => Matrix.mulVec
-
-/--
-lemma `mulVec_apply` / 引理 `mulVec_apply`
-
-English:
-lemma mulVec_apply
-  given: [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m)
-  proof: rfl
-
-中文:
-引理 mulVec_apply
-  条件: [有限类型 n] (M : 矩阵 m n α) (v : n -> α) (i : m)
-  证明: rfl
+/-
+**Matrix.mulVec_apply** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_apply [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m) : (M *ᵥ v
+) i = M.row i ⬝ᵥ v
+参数：M : Matrix m n α；v : n -> α；i : m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mulVec_apply [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m) :
+lemma mulVec_apply [Fintype n] (M : Matrix m n α) (v : n → α) (i : m) :
     (M *ᵥ v) i = M.row i ⬝ᵥ v := rfl
-
-/--
-lemma `mulVec_apply_eq_sum` / 引理 `mulVec_apply_eq_sum`
-
-English:
-lemma mulVec_apply_eq_sum
-  given: [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m)
-  proof: rfl
-
-中文:
-引理 mulVec_apply_eq_sum
-  条件: [有限类型 n] (M : 矩阵 m n α) (v : n -> α) (i : m)
-  证明: rfl
+/-
+**Matrix.mulVec_apply_eq_sum** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_apply_eq_sum [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m) : 
+(M *ᵥ v) i = ∑ j : n, M i j * v j
+参数：M : Matrix m n α；v : n -> α；i : m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mulVec_apply_eq_sum [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m) :
+lemma mulVec_apply_eq_sum [Fintype n] (M : Matrix m n α) (v : n → α) (i : m) :
     (M *ᵥ v) i = ∑ j : n, M i j * v j := rfl
 
 /--
-Definition of `vecMul` / `vecMul` 的定义
+`v ᵥ* M` (notation for `vecMul v M`) is the vector-matrix product of vector `v` and matrix `M`,
+where `v` is seen as a row vector.
 
-English:
-definition vecMul
-  signature: [Fintype m] (v : m -> α) (M : Matrix m n α)
-
-中文:
-定义 vecMul
-  签名: [有限类型 m] (v : m -> α) (M : 矩阵 m n α)
+The notation has precedence 73, which comes immediately before ` ⬝ᵥ ` for `dotProduct`,
+so that `v ᵥ* A ⬝ᵥ w ᵥ* B` is parsed as `(v ᵥ* A) ⬝ᵥ (w ᵥ* B)`.
 -/
-def vecMul [Fintype m] (v : m -> α) (M : Matrix m n α) : n -> α
+/-
+**Matrix.vecMul** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：{m : Type u_2} →   {n : Type u_3} → {α : Type v} → [NonUnitalNonAssocSemir
+ing α] → [Fintype m] → (m → α) → Matrix m n α → n → α
+参数：m → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`v ᵥ* M` (notation for `vecMul v M`) is the vector-matrix product of vector `v` 
+and matrix `M`,
+where `v` is seen as a row vector.
+
+The notation has precedence 73, which comes immediately before ` ⬝ᵥ ` for `dotPr
+oduct`,
+so that `v ᵥ* A ⬝ᵥ w ᵥ* B` is parsed as `(v ᵥ* A) ⬝ᵥ (w ᵥ* B)`.
+-/
+def vecMul [Fintype m] (v : m → α) (M : Matrix m n α) : n → α
   | j => v ⬝ᵥ fun i => M i j
 
 @[inherit_doc]
 scoped infixl:73 " ᵥ* " => Matrix.vecMul
-
-/--
-lemma `vecMul_apply` / 引理 `vecMul_apply`
-
-English:
-lemma vecMul_apply
-  given: [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n)
-  proof: rfl
-
-中文:
-引理 vecMul_apply
-  条件: [有限类型 m] (v : m -> α) (M : 矩阵 m n α) (i : n)
-  证明: rfl
+/-
+**Matrix.vecMul_apply** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_apply [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n) : (v ᵥ* M
+) i = v ⬝ᵥ M.col i
+参数：v : m -> α；M : Matrix m n α；i : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma vecMul_apply [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n) :
+lemma vecMul_apply [Fintype m] (v : m → α) (M : Matrix m n α) (i : n) :
     (v ᵥ* M) i = v ⬝ᵥ M.col i := rfl
-
-/--
-lemma `vecMul_apply_eq_sum` / 引理 `vecMul_apply_eq_sum`
-
-English:
-lemma vecMul_apply_eq_sum
-  given: [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n)
-  proof: rfl
-
-中文:
-引理 vecMul_apply_eq_sum
-  条件: [有限类型 m] (v : m -> α) (M : 矩阵 m n α) (i : n)
-  证明: rfl
+/-
+**Matrix.vecMul_apply_eq_sum** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_apply_eq_sum [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n) : 
+(v ᵥ* M) i = ∑ j : m, v j * M j i
+参数：v : m -> α；M : Matrix m n α；i : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma vecMul_apply_eq_sum [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n) :
+lemma vecMul_apply_eq_sum [Fintype m] (v : m → α) (M : Matrix m n α) (i : n) :
     (v ᵥ* M) i = ∑ j : m, v j * M j i := rfl
 
 /-- Left multiplication by a matrix, as an `AddMonoidHom` from vectors to vectors. -/
 @[simps]
-/--
-Definition of `mulVec.addMonoidHomLeft` / `mulVec.addMonoidHomLeft` 的定义
+/-
+**Matrix.mulVec.addMonoidHomLeft** 是 Mathlib 中的一个定义，位于命名空间 `Matrix.mulVec`。
+形式化陈述：{m : Type u_2} →   {n : Type u_3} → {α : Type v} → [inst : NonUnitalNonAss
+ocSemiring α] → [Fintype n] → (n → α) → Matrix m n α →+ m → α
+参数：n → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulVec.addMonoidHomLeft
-  signature: [Fintype n] (v : n -> α)
-  body: M *ᵥ v
-  map_zero' := by
-    ext
-    simp [mulVec]
-  map_add' x y := by
-    ext m
-    apply add_dotProduct
-
-中文:
-定义 mulVec.addMonoidHomLeft
-  签名: [有限类型 n] (v : n -> α)
-  定义体: M *ᵥ v
-  map_zero' := by
-    ext
-    simp [mulVec]
-  map_add' x y := by
-    ext m
-    apply add_dotProduct
+--- 原说明 ---
+Left multiplication by a matrix, as an `AddMonoidHom` from vectors to vectors.
 -/
-def mulVec.addMonoidHomLeft [Fintype n] (v : n -> α) : Matrix m n α ->+ m -> α where
+def mulVec.addMonoidHomLeft [Fintype n] (v : n → α) : Matrix m n α →+ m → α where
   toFun M := M *ᵥ v
   map_zero' := by
     ext
@@ -2653,596 +2436,497 @@ def mulVec.addMonoidHomLeft [Fintype n] (v : n -> α) : Matrix m n α ->+ m -> �
     ext m
     apply add_dotProduct
 
-/--
-theorem `mul_apply_eq_vecMul` / 定理 `mul_apply_eq_vecMul`
+/-- The `i`th row of the multiplication is the same as the `vecMul` with the `i`th row of `A`. -/
+/-
+**Matrix.mul_apply_eq_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_apply_eq_vecMul [Fintype n] (A : Matrix m n α) (B : Matrix n o α) (i :
+ m) : (A * B) i = A i ᵥ* B
+参数：A : Matrix m n α；B : Matrix n o α；i : m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mul_apply_eq_vecMul
-  given: [Fintype n] (A : Matrix m n α) (B : Matrix n o α) (i : m)
-  proof: rfl
-
-中文:
-定理 mul_apply_eq_vecMul
-  条件: [有限类型 n] (A : 矩阵 m n α) (B : 矩阵 n o α) (i : m)
-  证明: rfl
+--- 原说明 ---
+The `i`th row of the multiplication is the same as the `vecMul` with the `i`th r
+ow of `A`.
 -/
 theorem mul_apply_eq_vecMul [Fintype n] (A : Matrix m n α) (B : Matrix n o α) (i : m) :
     (A * B) i = A i ᵥ* B :=
   rfl
-
-/--
-theorem `vecMul_eq_sum` / 定理 `vecMul_eq_sum`
-
-English:
-theorem vecMul_eq_sum
-  given: [Fintype m] (v : m -> α) (M : Matrix m n α)
-  statement: v ᵥ* M = ∑ i, v i • M i
-  proof: (Finset.sum_fn ..).symm
-
-中文:
-定理 vecMul_eq_sum
-  条件: [有限类型 m] (v : m -> α) (M : 矩阵 m n α)
-  结论: v ᵥ* M = ∑ i, v i • M i
-  证明: (Finset.sum_fn ..).symm
-
-Depends on / 依赖: Finset, Finset.sum_fn, sum_fn
+/-
+**Matrix.vecMul_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_eq_sum [Fintype m] (v : m -> α) (M : Matrix m n α) : v ᵥ* M = ∑ i, 
+v i • M i
+参数：v : m -> α；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_fn`：∀ {α : Type u_7} {M : α → Type u_8} {ι : Type u_9} [inst 
+: (a : α) → AddCommMonoid (M a)] (s : Finset ι)   (g : ι → (a : α) → M a), ∑ c ∈
+ s,…
 -/
-theorem vecMul_eq_sum [Fintype m] (v : m -> α) (M : Matrix m n α) : v ᵥ* M = ∑ i, v i • M i :=
+theorem vecMul_eq_sum [Fintype m] (v : m → α) (M : Matrix m n α) : v ᵥ* M = ∑ i, v i • M i :=
   (Finset.sum_fn ..).symm
-
-/--
-theorem `mulVec_eq_sum` / 定理 `mulVec_eq_sum`
-
-English:
-theorem mulVec_eq_sum
-  given: [Fintype n] (v : n -> α) (M : Matrix m n α)
-  proof: (Finset.sum_fn ..).symm
-
-中文:
-定理 mulVec_eq_sum
-  条件: [有限类型 n] (v : n -> α) (M : 矩阵 m n α)
-  证明: (Finset.sum_fn ..).symm
-
-Depends on / 依赖: Finset, Finset.sum_fn, sum_fn
+/-
+**Matrix.mulVec_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_eq_sum [Fintype n] (v : n -> α) (M : Matrix m n α) : M *ᵥ v = ∑ i, 
+MulOpposite.op (v i) • Mᵀ i
+参数：v : n -> α；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_fn`：∀ {α : Type u_7} {M : α → Type u_8} {ι : Type u_9} [inst 
+: (a : α) → AddCommMonoid (M a)] (s : Finset ι)   (g : ι → (a : α) → M a), ∑ c ∈
+ s,…
 -/
-theorem mulVec_eq_sum [Fintype n] (v : n -> α) (M : Matrix m n α) :
+theorem mulVec_eq_sum [Fintype n] (v : n → α) (M : Matrix m n α) :
     M *ᵥ v = ∑ i, MulOpposite.op (v i) • Mᵀ i :=
   (Finset.sum_fn ..).symm
-
-/--
-theorem `mulVec_diagonal` / 定理 `mulVec_diagonal`
-
-English:
-theorem mulVec_diagonal
-  given: [Fintype m] [DecidableEq m] (v w : m -> α) (x : m)
-  proof: diagonal_dotProduct v w x
-
-中文:
-定理 mulVec_diagonal
-  条件: [有限类型 m] [DecidableEq m] (v w : m -> α) (x : m)
-  证明: diagonal_dotProduct v w x
-
-Depends on / 依赖: diagonal_dotProduct
+/-
+**Matrix.mulVec_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_diagonal [Fintype m] [DecidableEq m] (v w : m -> α) (x : m) : (diag
+onal v *ᵥ w) x = v x * w x
+参数：v w : m -> α；x : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `diagonal_dotProduct`：diagonal_dotProduct (i : m) : diagonal v i ⬝ᵥ w = v
+ i * w i
 -/
-theorem mulVec_diagonal [Fintype m] [DecidableEq m] (v w : m -> α) (x : m) :
+theorem mulVec_diagonal [Fintype m] [DecidableEq m] (v w : m → α) (x : m) :
     (diagonal v *ᵥ w) x = v x * w x :=
   diagonal_dotProduct v w x
-
-/--
-theorem `vecMul_diagonal` / 定理 `vecMul_diagonal`
-
-English:
-theorem vecMul_diagonal
-  given: [Fintype m] [DecidableEq m] (v w : m -> α) (x : m)
-  proof: dotProduct_diagonal' v w x
-
-中文:
-定理 vecMul_diagonal
-  条件: [有限类型 m] [DecidableEq m] (v w : m -> α) (x : m)
-  证明: dotProduct_diagonal' v w x
-
-Depends on / 依赖: dotProduct_diagonal
+/-
+**Matrix.vecMul_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_diagonal [Fintype m] [DecidableEq m] (v w : m -> α) (x : m) : (v ᵥ*
+ diagonal w) x = v x * w x
+参数：v w : m -> α；x : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dotProduct_diagonal'`：dotProduct_diagonal' (i : m) : (v ⬝ᵥ fun j => diag
+onal w j i) = v i * w i
 -/
-theorem vecMul_diagonal [Fintype m] [DecidableEq m] (v w : m -> α) (x : m) :
+theorem vecMul_diagonal [Fintype m] [DecidableEq m] (v w : m → α) (x : m) :
     (v ᵥ* diagonal w) x = v x * w x :=
   dotProduct_diagonal' v w x
 
-/--
-theorem `dotProduct_mulVec` / 定理 `dotProduct_mulVec`
+/-- Associate the dot product of `mulVec` to the left. -/
+/-
+**Matrix.dotProduct_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：dotProduct_mulVec [Fintype n] [Fintype m] [NonUnitalSemiring R] (v : m -> 
+R) (A : Matrix m n R) (w : n -> R) : v ⬝ᵥ A *ᵥ w = v ᵥ* A ⬝ᵥ w
+参数：v : m -> R；A : Matrix m n R；w : n -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
 
-English:
-theorem dotProduct_mulVec
-  statement: [Fintype n] [Fintype m] [NonUnitalSemiring R] (v : m -> R)
-  proof: by
-  simp only [dotProduct, vecMul, mulVec, Finset.mul_sum, Finset.sum_mul, mul_assoc]
-  exact Finset.sum_comm
-
-中文:
-定理 dotProduct_mulVec
-  结论: [有限类型 n] [有限类型 m] [非幺半环 R] (v : m -> R)
-  证明: by
-  simp only [dotProduct, vecMul, mulVec, Finset.mul_sum, Finset.sum_mul, mul_assoc]
-  exact Finset.sum_comm
-
-Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_comm, Finset.sum_mul, dotProduct, mulVec, mul_assoc, mul_sum, sum_comm, sum_mul, vecMul
+--- 原说明 ---
+Associate the dot product of `mulVec` to the left.
 -/
-theorem dotProduct_mulVec [Fintype n] [Fintype m] [NonUnitalSemiring R] (v : m -> R)
-    (A : Matrix m n R) (w : n -> R) : v ⬝ᵥ A *ᵥ w = v ᵥ* A ⬝ᵥ w := by
+theorem dotProduct_mulVec [Fintype n] [Fintype m] [NonUnitalSemiring R] (v : m → R)
+    (A : Matrix m n R) (w : n → R) : v ⬝ᵥ A *ᵥ w = v ᵥ* A ⬝ᵥ w := by
   simp only [dotProduct, vecMul, mulVec, Finset.mul_sum, Finset.sum_mul, mul_assoc]
   exact Finset.sum_comm
-
-/--
-lemma `dot_mulVec_eq_sum_sum` / 引理 `dot_mulVec_eq_sum_sum`
-
-English:
-lemma dot_mulVec_eq_sum_sum
-  statement: [Fintype n] [Fintype m] [NonUnitalSemiring R]
-  proof: by
-  simp_rw [dotProduct_mulVec, dotProduct, vecMul_eq_sum, Finset.sum_apply, Pi.smul_apply,
-    smul_eq_mul, Finset.sum_mul]
-
-@[simp]
-
-中文:
-引理 dot_mulVec_eq_sum_sum
-  结论: [有限类型 n] [有限类型 m] [非幺半环 R]
-  证明: by
-  simp_rw [dotProduct_mulVec, dotProduct, vecMul_eq_sum, Finset.sum_apply, Pi.smul_apply,
-    smul_eq_mul, Finset.sum_mul]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_apply, Finset.sum_mul, Pi.smul_apply, dotProduct, dotProduct_mulVec, simp_rw, smul_apply, smul_eq_mul, sum_apply, sum_mul, vecMul_eq_sum
+/-
+**Matrix.dot_mulVec_eq_sum_sum** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：dot_mulVec_eq_sum_sum [Fintype n] [Fintype m] [NonUnitalSemiring R] (v : m
+ -> R) (A : Matrix m n R) (w : n -> R) : v ⬝ᵥ (A *ᵥ w) = ∑ j, ∑ i, v i * A i j *
+ w j
+参数：v : m -> R；A : Matrix m n R；w : n -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.dotProduct_mulVec`：dotProduct_mulVec [Fintype n] [Fintype m] [Non
+UnitalSemiring R] (v : m -> R) (A : Matrix m n R) (w : n -> R) : v ⬝ᵥ A *ᵥ w = v
+ ᵥ* A ⬝ᵥ w
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.vecMul_eq_sum`：vecMul_eq_sum [Fintype m] (v : m -> α) (M : Matrix
+ m n α) : v ᵥ* M = ∑ i, v i • M i
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma dot_mulVec_eq_sum_sum [Fintype n] [Fintype m] [NonUnitalSemiring R]
-    (v : m -> R) (A : Matrix m n R) (w : n -> R) :
+    (v : m → R) (A : Matrix m n R) (w : n → R) :
     v ⬝ᵥ (A *ᵥ w) = ∑ j, ∑ i, v i * A i j * w j := by
   simp_rw [dotProduct_mulVec, dotProduct, vecMul_eq_sum, Finset.sum_apply, Pi.smul_apply,
     smul_eq_mul, Finset.sum_mul]
 
 @[simp]
-/--
-theorem `mulVec_zero` / 定理 `mulVec_zero`
-
-English:
-theorem mulVec_zero
-  given: [Fintype n] (A : Matrix m n α)
-  statement: A *ᵥ 0 = 0
-  proof: by
-  ext
-  simp [mulVec]
-
-@[simp]
-
-中文:
-定理 mulVec_zero
-  条件: [有限类型 n] (A : 矩阵 m n α)
-  结论: A *ᵥ 0 = 0
-  证明: by
-  ext
-  simp [mulVec]
-
-@[simp]
-
-Depends on / 依赖: mulVec
+/-
+**Matrix.mulVec_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_zero [Fintype n] (A : Matrix m n α) : A *ᵥ 0 = 0
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dotProduct_zero`：dotProduct_zero : v ⬝ᵥ 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mulVec_zero [Fintype n] (A : Matrix m n α) : A *ᵥ 0 = 0 := by
   ext
   simp [mulVec]
 
 @[simp]
-/--
-theorem `zero_vecMul` / 定理 `zero_vecMul`
-
-English:
-theorem zero_vecMul
-  given: [Fintype m] (A : Matrix m n α)
-  statement: 0 ᵥ* A = 0
-  proof: by
-  ext
-  simp [vecMul]
-
-@[simp]
-
-中文:
-定理 zero_vecMul
-  条件: [有限类型 m] (A : 矩阵 m n α)
-  结论: 0 ᵥ* A = 0
-  证明: by
-  ext
-  simp [vecMul]
-
-@[simp]
-
-Depends on / 依赖: vecMul
+/-
+**Matrix.zero_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：zero_vecMul [Fintype m] (A : Matrix m n α) : 0 ᵥ* A = 0
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_dotProduct`：zero_dotProduct : 0 ⬝ᵥ v = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem zero_vecMul [Fintype m] (A : Matrix m n α) : 0 ᵥ* A = 0 := by
   ext
   simp [vecMul]
 
 @[simp]
-/--
-theorem `zero_mulVec` / 定理 `zero_mulVec`
-
-English:
-theorem zero_mulVec
-  given: [Fintype n] (v : n -> α)
-  statement: (0 : Matrix m n α) *ᵥ v = 0
-  proof: by
+/-
+**Matrix.zero_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：zero_mulVec [Fintype n] (v : n -> α) : (0 : Matrix m n α) *ᵥ v = 0
+参数：v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_dotProduct'`：zero_dotProduct' : (fun _ => (0 : α)) ⬝ᵥ v = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem zero_mulVec [Fintype n] (v : n → α) : (0 : Matrix m n α) *ᵥ v = 0 := by
   ext
   simp [mulVec]
 
 @[simp]
-
-中文:
-定理 zero_mulVec
-  条件: [有限类型 n] (v : n -> α)
-  结论: (0 : 矩阵 m n α) *ᵥ v = 0
-  证明: by
-  ext
-  simp [mulVec]
-
-@[simp]
-
-Depends on / 依赖: mulVec
+/-
+**Matrix.vecMul_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_zero [Fintype m] (v : m -> α) : v ᵥ* (0 : Matrix m n α) = 0
+参数：v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dotProduct_zero'`：dotProduct_zero' : (v ⬝ᵥ fun _ => 0) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zero_mulVec [Fintype n] (v : n -> α) : (0 : Matrix m n α) *ᵥ v = 0 := by
-  ext
-  simp [mulVec]
-
-@[simp]
-/--
-theorem `vecMul_zero` / 定理 `vecMul_zero`
-
-English:
-theorem vecMul_zero
-  given: [Fintype m] (v : m -> α)
-  statement: v ᵥ* (0 : Matrix m n α) = 0
-  proof: by
+theorem vecMul_zero [Fintype m] (v : m → α) : v ᵥ* (0 : Matrix m n α) = 0 := by
   ext
   simp [vecMul]
-
-中文:
-定理 vecMul_zero
-  条件: [有限类型 m] (v : m -> α)
-  结论: v ᵥ* (0 : 矩阵 m n α) = 0
-  证明: by
-  ext
-  simp [vecMul]
-
-Depends on / 依赖: vecMul
+/-
+**Matrix.mulVec_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_add [Fintype n] (A : Matrix m n α) (x y : n -> α) : A *ᵥ (x + y) = 
+A *ᵥ x + A *ᵥ y
+参数：A : Matrix m n α；x y : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_add`：dotProduct_add : u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w
 -/
-theorem vecMul_zero [Fintype m] (v : m -> α) : v ᵥ* (0 : Matrix m n α) = 0 := by
-  ext
-  simp [vecMul]
-
-/--
-theorem `mulVec_add` / 定理 `mulVec_add`
-
-English:
-theorem mulVec_add
-  given: [Fintype n] (A : Matrix m n α) (x y : n -> α)
-  proof: by
-  ext
-  apply dotProduct_add
-
-中文:
-定理 mulVec_add
-  条件: [有限类型 n] (A : 矩阵 m n α) (x y : n -> α)
-  证明: by
-  ext
-  apply dotProduct_add
-
-Depends on / 依赖: dotProduct_add
--/
-theorem mulVec_add [Fintype n] (A : Matrix m n α) (x y : n -> α) :
+theorem mulVec_add [Fintype n] (A : Matrix m n α) (x y : n → α) :
     A *ᵥ (x + y) = A *ᵥ x + A *ᵥ y := by
   ext
   apply dotProduct_add
-
-/--
-theorem `add_mulVec` / 定理 `add_mulVec`
-
-English:
-theorem add_mulVec
-  given: [Fintype n] (A B : Matrix m n α) (x : n -> α)
-  proof: by
-  ext
-  apply add_dotProduct
-
-中文:
-定理 add_mulVec
-  条件: [有限类型 n] (A B : 矩阵 m n α) (x : n -> α)
-  证明: by
-  ext
-  apply add_dotProduct
-
-Depends on / 依赖: add_dotProduct
+/-
+**Matrix.add_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：add_mulVec [Fintype n] (A B : Matrix m n α) (x : n -> α) : (A + B) *ᵥ x = 
+A *ᵥ x + B *ᵥ x
+参数：A B : Matrix m n α；x : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_dotProduct`：add_dotProduct : (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w
 -/
-theorem add_mulVec [Fintype n] (A B : Matrix m n α) (x : n -> α) :
+theorem add_mulVec [Fintype n] (A B : Matrix m n α) (x : n → α) :
     (A + B) *ᵥ x = A *ᵥ x + B *ᵥ x := by
   ext
   apply add_dotProduct
-
-/--
-theorem `vecMul_add` / 定理 `vecMul_add`
-
-English:
-theorem vecMul_add
-  given: [Fintype m] (A B : Matrix m n α) (x : m -> α)
-  proof: by
-  ext
-  apply dotProduct_add
-
-中文:
-定理 vecMul_add
-  条件: [有限类型 m] (A B : 矩阵 m n α) (x : m -> α)
-  证明: by
-  ext
-  apply dotProduct_add
-
-Depends on / 依赖: dotProduct_add
+/-
+**Matrix.vecMul_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_add [Fintype m] (A B : Matrix m n α) (x : m -> α) : x ᵥ* (A + B) = 
+x ᵥ* A + x ᵥ* B
+参数：A B : Matrix m n α；x : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_add`：dotProduct_add : u ⬝ᵥ (v + w) = u ⬝ᵥ v + u ⬝ᵥ w
 -/
-theorem vecMul_add [Fintype m] (A B : Matrix m n α) (x : m -> α) :
+theorem vecMul_add [Fintype m] (A B : Matrix m n α) (x : m → α) :
     x ᵥ* (A + B) = x ᵥ* A + x ᵥ* B := by
   ext
   apply dotProduct_add
-
-/--
-theorem `add_vecMul` / 定理 `add_vecMul`
-
-English:
-theorem add_vecMul
-  given: [Fintype m] (A : Matrix m n α) (x y : m -> α)
-  proof: by
-  ext
-  apply add_dotProduct
-
-中文:
-定理 add_vecMul
-  条件: [有限类型 m] (A : 矩阵 m n α) (x y : m -> α)
-  证明: by
-  ext
-  apply add_dotProduct
-
-Depends on / 依赖: add_dotProduct
+/-
+**Matrix.add_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：add_vecMul [Fintype m] (A : Matrix m n α) (x y : m -> α) : (x + y) ᵥ* A = 
+x ᵥ* A + y ᵥ* A
+参数：A : Matrix m n α；x y : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_dotProduct`：add_dotProduct : (u + v) ⬝ᵥ w = u ⬝ᵥ w + v ⬝ᵥ w
 -/
-theorem add_vecMul [Fintype m] (A : Matrix m n α) (x y : m -> α) :
+theorem add_vecMul [Fintype m] (A : Matrix m n α) (x y : m → α) :
     (x + y) ᵥ* A = x ᵥ* A + y ᵥ* A := by
   ext
   apply add_dotProduct
-
-/--
-theorem `mulVec_smul` / 定理 `mulVec_smul`
-
-English:
-theorem mulVec_smul
-  statement: [Fintype n] [DistribSMul R α] [SMulCommClass R α α]
-  proof: by
-  ext
-  exact dotProduct_smul _ _ _
-
-中文:
-定理 mulVec_smul
-  结论: [有限类型 n] [分配标量乘法 R α] [标量交换类 R α α]
-  证明: by
-  ext
-  exact dotProduct_smul _ _ _
-
-Depends on / 依赖: dotProduct_smul
+/-
+**Matrix.mulVec_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_smul [Fintype n] [DistribSMul R α] [SMulCommClass R α α] (M : Matri
+x m n α) (b : R) (v : n -> α) : M *ᵥ (b • v) = b • M *ᵥ v
+参数：M : Matrix m n α；b : R；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_smul`：dotProduct_smul [SMulCommClass R α α] (x : R) (v w : m 
+-> α) : v ⬝ᵥ x • w = x • (v ⬝ᵥ w)
 -/
 theorem mulVec_smul [Fintype n] [DistribSMul R α] [SMulCommClass R α α]
-    (M : Matrix m n α) (b : R) (v : n -> α) :
+    (M : Matrix m n α) (b : R) (v : n → α) :
     M *ᵥ (b • v) = b • M *ᵥ v := by
   ext
   exact dotProduct_smul _ _ _
-
-/--
-theorem `smul_mulVec` / 定理 `smul_mulVec`
-
-English:
-theorem smul_mulVec
-  statement: [Fintype n] [DistribSMul R α] [IsScalarTower R α α]
-  proof: by
-  ext
-  exact smul_dotProduct _ _ _
-
-中文:
-定理 smul_mulVec
-  结论: [有限类型 n] [分配标量乘法 R α] [标量塔 R α α]
-  证明: by
-  ext
-  exact smul_dotProduct _ _ _
-
-Depends on / 依赖: smul_dotProduct
+/-
+**Matrix.smul_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_mulVec [Fintype n] [DistribSMul R α] [IsScalarTower R α α] (b : R) (M
+ : Matrix m n α) (v : n -> α) : (b • M) *ᵥ v = b • M *ᵥ v
+参数：b : R；M : Matrix m n α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `smul_dotProduct`：smul_dotProduct [IsScalarTower R α α] (x : R) (v w : m 
+-> α) : x • v ⬝ᵥ w = x • (v ⬝ᵥ w)
 -/
 theorem smul_mulVec [Fintype n] [DistribSMul R α] [IsScalarTower R α α]
-    (b : R) (M : Matrix m n α) (v : n -> α) :
+    (b : R) (M : Matrix m n α) (v : n → α) :
     (b • M) *ᵥ v = b • M *ᵥ v := by
   ext
   exact smul_dotProduct _ _ _
-
-/--
-theorem `smul_vecMul` / 定理 `smul_vecMul`
-
-English:
-theorem smul_vecMul
-  statement: [Fintype m] [DistribSMul R α] [IsScalarTower R α α]
-  proof: by
-  ext
-  exact smul_dotProduct _ _ _
-
-中文:
-定理 smul_vecMul
-  结论: [有限类型 m] [分配标量乘法 R α] [标量塔 R α α]
-  证明: by
-  ext
-  exact smul_dotProduct _ _ _
-
-Depends on / 依赖: smul_dotProduct
+/-
+**Matrix.smul_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_vecMul [Fintype m] [DistribSMul R α] [IsScalarTower R α α] (b : R) (v
+ : m -> α) (M : Matrix m n α) : (b • v) ᵥ* M = b • v ᵥ* M
+参数：b : R；v : m -> α；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `smul_dotProduct`：smul_dotProduct [IsScalarTower R α α] (x : R) (v w : m 
+-> α) : x • v ⬝ᵥ w = x • (v ⬝ᵥ w)
 -/
 theorem smul_vecMul [Fintype m] [DistribSMul R α] [IsScalarTower R α α]
-    (b : R) (v : m -> α) (M : Matrix m n α) :
+    (b : R) (v : m → α) (M : Matrix m n α) :
     (b • v) ᵥ* M = b • v ᵥ* M := by
   ext
   exact smul_dotProduct _ _ _
-
-/--
-theorem `vecMul_smul` / 定理 `vecMul_smul`
-
-English:
-theorem vecMul_smul
-  statement: [Fintype m] [DistribSMul R α] [SMulCommClass R α α]
-  proof: by
-  ext
-  exact dotProduct_smul _ _ _
-
-@[simp]
-
-中文:
-定理 vecMul_smul
-  结论: [有限类型 m] [分配标量乘法 R α] [标量交换类 R α α]
-  证明: by
-  ext
-  exact dotProduct_smul _ _ _
-
-@[simp]
-
-Depends on / 依赖: dotProduct_smul
+/-
+**Matrix.vecMul_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_smul [Fintype m] [DistribSMul R α] [SMulCommClass R α α] (v : m -> 
+α) (b : R) (M : Matrix m n α) : v ᵥ* (b • M) = b • v ᵥ* M
+参数：v : m -> α；b : R；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_smul`：dotProduct_smul [SMulCommClass R α α] (x : R) (v w : m 
+-> α) : v ⬝ᵥ x • w = x • (v ⬝ᵥ w)
 -/
 theorem vecMul_smul [Fintype m] [DistribSMul R α] [SMulCommClass R α α]
-    (v : m -> α) (b : R) (M : Matrix m n α) :
+    (v : m → α) (b : R) (M : Matrix m n α) :
     v ᵥ* (b • M) = b • v ᵥ* M := by
   ext
   exact dotProduct_smul _ _ _
 
 @[simp]
-/--
-theorem `mulVec_single` / 定理 `mulVec_single`
-
-English:
-theorem mulVec_single
-  statement: [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (M : Matrix m n R)
-  proof: funext fun _ => dotProduct_single _ _ _
-
-@[simp]
-
-中文:
-定理 mulVec_single
-  结论: [有限类型 n] [DecidableEq n] [非幺非结合半环 R] (M : 矩阵 m n R)
-  证明: funext fun _ => dotProduct_single _ _ _
-
-@[simp]
-
-Depends on / 依赖: dotProduct_single
+/-
+**Matrix.mulVec_single** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_single [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (M
+ : Matrix m n R) (j : n) (x : R) : M *ᵥ Pi.single j x = MulOpposite.op x • M.col
+ j
+参数：M : Matrix m n R；j : n；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_single`：dotProduct_single (x : α) (i : m) : v ⬝ᵥ Pi.single i 
+x = v i * x
 -/
 theorem mulVec_single [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (M : Matrix m n R)
     (j : n) (x : R) : M *ᵥ Pi.single j x = MulOpposite.op x • M.col j :=
   funext fun _ => dotProduct_single _ _ _
 
 @[simp]
-/--
-theorem `single_vecMul` / 定理 `single_vecMul`
-
-English:
-theorem single_vecMul
-  statement: [Fintype m] [DecidableEq m] [NonUnitalNonAssocSemiring R] (M : Matrix m n R)
-  proof: funext fun _ => single_dotProduct _ _ _
-
-中文:
-定理 single_vecMul
-  结论: [有限类型 m] [DecidableEq m] [非幺非结合半环 R] (M : 矩阵 m n R)
-  证明: funext fun _ => single_dotProduct _ _ _
-
-Depends on / 依赖: single_dotProduct
+/-
+**Matrix.single_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：single_vecMul [Fintype m] [DecidableEq m] [NonUnitalNonAssocSemiring R] (M
+ : Matrix m n R) (i : m) (x : R) : Pi.single i x ᵥ* M = x • M.row i
+参数：M : Matrix m n R；i : m；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `single_dotProduct`：single_dotProduct (x : α) (i : m) : Pi.single i x ⬝ᵥ 
+v = x * v i
 -/
 theorem single_vecMul [Fintype m] [DecidableEq m] [NonUnitalNonAssocSemiring R] (M : Matrix m n R)
     (i : m) (x : R) : Pi.single i x ᵥ* M = x • M.row i :=
   funext fun _ => single_dotProduct _ _ _
-
-/--
-theorem `mulVec_single_one` / 定理 `mulVec_single_one`
-
-English:
-theorem mulVec_single_one
-  statement: [Fintype n] [DecidableEq n] [NonAssocSemiring R]
-  proof: by ext; simp
-
-中文:
-定理 mulVec_single_one
-  结论: [有限类型 n] [DecidableEq n] [非结合半环 R]
-  证明: by ext; simp
+/-
+**Matrix.mulVec_single_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_single_one [Fintype n] [DecidableEq n] [NonAssocSemiring R] (M : Ma
+trix m n R) (j : n) : M *ᵥ Pi.single j 1 = M.col j
+参数：M : Matrix m n R；j : n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.mulVec_single`：mulVec_single [Fintype n] [DecidableEq n] [NonUnit
+alNonAssocSemiring R] (M : Matrix m n R) (j : n) (x : R) : M *ᵥ Pi.single j x = 
+MulOpposit…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mulVec_single_one [Fintype n] [DecidableEq n] [NonAssocSemiring R]
     (M : Matrix m n R) (j : n) :
     M *ᵥ Pi.single j 1 = M.col j := by ext; simp
-
-/--
-theorem `single_one_vecMul` / 定理 `single_one_vecMul`
-
-English:
-theorem single_one_vecMul
-  statement: [Fintype m] [DecidableEq m] [NonAssocSemiring R]
-  proof: by ext; simp
-
-中文:
-定理 single_one_vecMul
-  结论: [有限类型 m] [DecidableEq m] [非结合半环 R]
-  证明: by ext; simp
+/-
+**Matrix.single_one_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：single_one_vecMul [Fintype m] [DecidableEq m] [NonAssocSemiring R] (i : m)
+ (M : Matrix m n R) : Pi.single i 1 ᵥ* M = M.row i
+参数：i : m；M : Matrix m n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.single_vecMul`：single_vecMul [Fintype m] [DecidableEq m] [NonUnit
+alNonAssocSemiring R] (M : Matrix m n R) (i : m) (x : R) : Pi.single i x ᵥ* M = 
+x • M.row …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem single_one_vecMul [Fintype m] [DecidableEq m] [NonAssocSemiring R]
     (i : m) (M : Matrix m n R) :
     Pi.single i 1 ᵥ* M = M.row i := by ext; simp
-
-/--
-theorem `diagonal_mulVec_single` / 定理 `diagonal_mulVec_single`
-
-English:
-theorem diagonal_mulVec_single
-  statement: [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n -> R)
-  proof: by
-  ext i
-  rw [mulVec_diagonal]
-  exact Pi.apply_single (fun i x => v i * x) (fun i => mul_zero _) j x i
-
-中文:
-定理 diagonal_mulVec_single
-  结论: [有限类型 n] [DecidableEq n] [非幺非结合半环 R] (v : n -> R)
-  证明: by
-  ext i
-  rw [mulVec_diagonal]
-  exact Pi.apply_single (fun i x => v i * x) (fun i => mul_zero _) j x i
-
-Depends on / 依赖: Pi.apply_single, apply_single, mulVec_diagonal, mul_zero
+/-
+**Matrix.diagonal_mulVec_single** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_mulVec_single [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemir
+ing R] (v : n -> R) (j : n) (x : R) : diagonal v *ᵥ Pi.single j x = Pi.single j 
+(v j * x)
+参数：v : n -> R；j : n；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mulVec_diagonal`：mulVec_diagonal [Fintype m] [DecidableEq m] (v w
+ : m -> α) (x : m) : (diagonal v *ᵥ w) x = v x * w x
+· 使用定理 `Pi.apply_single`：∀ {ι : Type u_1} {M : ι → Type u_6} {N : ι → Type u_7} 
+[inst : (i : ι) → Zero (M i)] [inst_1 : (i : ι) → Zero (N i)]   [inst_2 : Decida
+bleEq…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem diagonal_mulVec_single [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n -> R)
+theorem diagonal_mulVec_single [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n → R)
     (j : n) (x : R) : diagonal v *ᵥ Pi.single j x = Pi.single j (v j * x) := by
   ext i
   rw [mulVec_diagonal]
   exact Pi.apply_single (fun i x => v i * x) (fun i => mul_zero _) j x i
-
-/--
-theorem `single_vecMul_diagonal` / 定理 `single_vecMul_diagonal`
-
-English:
-theorem single_vecMul_diagonal
-  statement: [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n -> R)
-  proof: by
-  ext i
-  rw [vecMul_diagonal]
-  exact Pi.apply_single (fun i x => x * v i) (fun i => zero_mul _) j x i
-
-中文:
-定理 single_vecMul_diagonal
-  结论: [有限类型 n] [DecidableEq n] [非幺非结合半环 R] (v : n -> R)
-  证明: by
-  ext i
-  rw [vecMul_diagonal]
-  exact Pi.apply_single (fun i x => x * v i) (fun i => zero_mul _) j x i
-
-Depends on / 依赖: Pi.apply_single, apply_single, vecMul_diagonal, zero_mul
+/-
+**Matrix.single_vecMul_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：single_vecMul_diagonal [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemir
+ing R] (v : n -> R) (j : n) (x : R) : (Pi.single j x) ᵥ* (diagonal v) = Pi.singl
+e j (x * v j)
+参数：v : n -> R；j : n；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecMul_diagonal`：vecMul_diagonal [Fintype m] [DecidableEq m] (v w
+ : m -> α) (x : m) : (v ᵥ* diagonal w) x = v x * w x
+· 使用定理 `Pi.apply_single`：∀ {ι : Type u_1} {M : ι → Type u_6} {N : ι → Type u_7} 
+[inst : (i : ι) → Zero (M i)] [inst_1 : (i : ι) → Zero (N i)]   [inst_2 : Decida
+bleEq…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem single_vecMul_diagonal [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n -> R)
+theorem single_vecMul_diagonal [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n → R)
     (j : n) (x : R) : (Pi.single j x) ᵥ* (diagonal v) = Pi.single j (x * v j) := by
   ext i
   rw [vecMul_diagonal]
@@ -3255,229 +2939,211 @@ section NonUnitalSemiring
 variable [NonUnitalSemiring α]
 
 @[simp]
-/--
-theorem `vecMul_vecMul` / 定理 `vecMul_vecMul`
-
-English:
-theorem vecMul_vecMul
-  given: [Fintype n] [Fintype m] (v : m -> α) (M : Matrix m n α) (N : Matrix n o α)
-  proof: by
-  ext
-  apply dotProduct_assoc
-
-@[simp]
-
-中文:
-定理 vecMul_vecMul
-  条件: [有限类型 n] [有限类型 m] (v : m -> α) (M : 矩阵 m n α) (N : 矩阵 n o α)
-  证明: by
-  ext
-  apply dotProduct_assoc
-
-@[simp]
-
-Depends on / 依赖: dotProduct_assoc
+/-
+**Matrix.vecMul_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_vecMul [Fintype n] [Fintype m] (v : m -> α) (M : Matrix m n α) (N :
+ Matrix n o α) : v ᵥ* M ᵥ* N = v ᵥ* (M * N)
+参数：v : m -> α；M : Matrix m n α；N : Matrix n o α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_assoc`：dotProduct_assoc [NonUnitalSemiring α] (u : m -> α) (w
+ : n -> α) (v : Matrix m n α) : (fun j => u ⬝ᵥ fun i => v i j) ⬝ᵥ w = u ⬝ᵥ fun i
+ => v …
 -/
-theorem vecMul_vecMul [Fintype n] [Fintype m] (v : m -> α) (M : Matrix m n α) (N : Matrix n o α) :
+theorem vecMul_vecMul [Fintype n] [Fintype m] (v : m → α) (M : Matrix m n α) (N : Matrix n o α) :
     v ᵥ* M ᵥ* N = v ᵥ* (M * N) := by
   ext
   apply dotProduct_assoc
 
 @[simp]
-/--
-theorem `mulVec_mulVec` / 定理 `mulVec_mulVec`
-
-English:
-theorem mulVec_mulVec
-  given: [Fintype n] [Fintype o] (v : o -> α) (M : Matrix m n α) (N : Matrix n o α)
-  proof: by
-  ext
-  symm
-  apply dotProduct_assoc
-
-中文:
-定理 mulVec_mulVec
-  条件: [有限类型 n] [有限类型 o] (v : o -> α) (M : 矩阵 m n α) (N : 矩阵 n o α)
-  证明: by
-  ext
-  symm
-  apply dotProduct_assoc
-
-Depends on / 依赖: dotProduct_assoc
+/-
+**Matrix.mulVec_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_mulVec [Fintype n] [Fintype o] (v : o -> α) (M : Matrix m n α) (N :
+ Matrix n o α) : M *ᵥ N *ᵥ v = (M * N) *ᵥ v
+参数：v : o -> α；M : Matrix m n α；N : Matrix n o α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dotProduct_assoc`：dotProduct_assoc [NonUnitalSemiring α] (u : m -> α) (w
+ : n -> α) (v : Matrix m n α) : (fun j => u ⬝ᵥ fun i => v i j) ⬝ᵥ w = u ⬝ᵥ fun i
+ => v …
 -/
-theorem mulVec_mulVec [Fintype n] [Fintype o] (v : o -> α) (M : Matrix m n α) (N : Matrix n o α) :
+theorem mulVec_mulVec [Fintype n] [Fintype o] (v : o → α) (M : Matrix m n α) (N : Matrix n o α) :
     M *ᵥ N *ᵥ v = (M * N) *ᵥ v := by
   ext
   symm
   apply dotProduct_assoc
-
-/--
-theorem `mul_mul_apply` / 定理 `mul_mul_apply`
-
-English:
-theorem mul_mul_apply
-  given: [Fintype n] (A B C : Matrix n n α) (i j : n)
-  proof: by
-  rw [Matrix.mul_assoc]
-  simp [mul_apply, dotProduct, mulVec]
-
-中文:
-定理 mul_mul_apply
-  条件: [有限类型 n] (A B C : 矩阵 n n α) (i j : n)
-  证明: by
-  rw [Matrix.mul_assoc]
-  simp [mul_apply, dotProduct, mulVec]
-
-Depends on / 依赖: Matrix, Matrix.mul_assoc, dotProduct, mulVec, mul_apply, mul_assoc
+/-
+**Matrix.mul_mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_mul_apply [Fintype n] (A B C : Matrix n n α) (i j : n) : (A * B * C) i
+ j = A i ⬝ᵥ B *ᵥ (Cᵀ j)
+参数：A B C : Matrix n n α；i j : n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_mul_apply [Fintype n] (A B C : Matrix n n α) (i j : n) :
     (A * B * C) i j = A i ⬝ᵥ B *ᵥ (Cᵀ j) := by
   rw [Matrix.mul_assoc]
   simp [mul_apply, dotProduct, mulVec]
-
-/--
-theorem `vecMul_vecMulVec` / 定理 `vecMul_vecMulVec`
-
-English:
-theorem vecMul_vecMulVec
-  given: [Fintype m] (u v : m -> α) (w : n -> α)
-  proof: by
-  ext i
-  simp [vecMul, dotProduct, vecMulVec, Finset.sum_mul, mul_assoc]
-
-中文:
-定理 vecMul_vecMulVec
-  条件: [有限类型 m] (u v : m -> α) (w : n -> α)
-  证明: by
-  ext i
-  simp [vecMul, dotProduct, vecMulVec, Finset.sum_mul, mul_assoc]
-
-Depends on / 依赖: Finset, Finset.sum_mul, dotProduct, mul_assoc, sum_mul, vecMul, vecMulVec
+/-
+**Matrix.vecMul_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_vecMulVec [Fintype m] (u v : m -> α) (w : n -> α) : u ᵥ* vecMulVec 
+v w = (u ⬝ᵥ v) • w
+参数：u v : m -> α；w : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecMul_vecMulVec [Fintype m] (u v : m -> α) (w : n -> α) :
+theorem vecMul_vecMulVec [Fintype m] (u v : m → α) (w : n → α) :
     u ᵥ* vecMulVec v w = (u ⬝ᵥ v) • w := by
   ext i
   simp [vecMul, dotProduct, vecMulVec, Finset.sum_mul, mul_assoc]
-
-/--
-theorem `vecMulVec_mulVec` / 定理 `vecMulVec_mulVec`
-
-English:
-theorem vecMulVec_mulVec
-  given: [Fintype n] (u : m -> α) (v w : n -> α)
-  proof: by
-  ext i
-  simp [mulVec, dotProduct, vecMulVec, Finset.mul_sum, mul_assoc]
-
-中文:
-定理 vecMulVec_mulVec
-  条件: [有限类型 n] (u : m -> α) (v w : n -> α)
-  证明: by
-  ext i
-  simp [mulVec, dotProduct, vecMulVec, Finset.mul_sum, mul_assoc]
-
-Depends on / 依赖: Finset, Finset.mul_sum, dotProduct, mulVec, mul_assoc, mul_sum, vecMulVec
+/-
+**Matrix.vecMulVec_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_mulVec [Fintype n] (u : m -> α) (v w : n -> α) : vecMulVec u v *
+ᵥ w = MulOpposite.op (v ⬝ᵥ w) • u
+参数：u : m -> α；v w : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.op_sum`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M] 
+(s : Finset ι) (f : ι → M),   MulOpposite.op (∑ x ∈ s, f x) = ∑ x ∈ s, MulOpposi
+te.…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.unop_sum`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M
+] (s : Finset ι) (f : ι → Mᵐᵒᵖ),   MulOpposite.unop (∑ x ∈ s, f x) = ∑ x ∈ s, Mu
+lOppo…
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecMulVec_mulVec [Fintype n] (u : m -> α) (v w : n -> α) :
+theorem vecMulVec_mulVec [Fintype n] (u : m → α) (v w : n → α) :
     vecMulVec u v *ᵥ w = MulOpposite.op (v ⬝ᵥ w) • u := by
   ext i
   simp [mulVec, dotProduct, vecMulVec, Finset.mul_sum, mul_assoc]
-
-/--
-theorem `mul_vecMulVec` / 定理 `mul_vecMulVec`
-
-English:
-theorem mul_vecMulVec
-  given: [Fintype m] (M : Matrix l m α) (x : m -> α) (y : n -> α)
-  proof: by
-  ext
-  simp_rw [mul_apply, vecMulVec_apply, mulVec, dotProduct, Finset.sum_mul, mul_assoc]
-
-中文:
-定理 mul_vecMulVec
-  条件: [有限类型 m] (M : 矩阵 l m α) (x : m -> α) (y : n -> α)
-  证明: by
-  ext
-  simp_rw [mul_apply, vecMulVec_apply, mulVec, dotProduct, Finset.sum_mul, mul_assoc]
-
-Depends on / 依赖: Finset, Finset.sum_mul, dotProduct, mulVec, mul_apply, mul_assoc, simp_rw, sum_mul, vecMulVec_apply
+/-
+**Matrix.mul_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_vecMulVec [Fintype m] (M : Matrix l m α) (x : m -> α) (y : n -> α) : M
+ * vecMulVec x y = vecMulVec (M *ᵥ x) y
+参数：M : Matrix l m α；x : m -> α；y : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mul_vecMulVec [Fintype m] (M : Matrix l m α) (x : m -> α) (y : n -> α) :
+theorem mul_vecMulVec [Fintype m] (M : Matrix l m α) (x : m → α) (y : n → α) :
     M * vecMulVec x y = vecMulVec (M *ᵥ x) y := by
   ext
   simp_rw [mul_apply, vecMulVec_apply, mulVec, dotProduct, Finset.sum_mul, mul_assoc]
-
-/--
-theorem `vecMulVec_mul` / 定理 `vecMulVec_mul`
-
-English:
-theorem vecMulVec_mul
-  given: [Fintype m] (x : l -> α) (y : m -> α) (M : Matrix m n α)
-  proof: by
-  ext
-  simp_rw [mul_apply, vecMulVec_apply, vecMul, dotProduct, Finset.mul_sum, mul_assoc]
-
-中文:
-定理 vecMulVec_mul
-  条件: [有限类型 m] (x : l -> α) (y : m -> α) (M : 矩阵 m n α)
-  证明: by
-  ext
-  simp_rw [mul_apply, vecMulVec_apply, vecMul, dotProduct, Finset.mul_sum, mul_assoc]
-
-Depends on / 依赖: Finset, Finset.mul_sum, dotProduct, mul_apply, mul_assoc, mul_sum, simp_rw, vecMul, vecMulVec_apply
+/-
+**Matrix.vecMulVec_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_mul [Fintype m] (x : l -> α) (y : m -> α) (M : Matrix m n α) : v
+ecMulVec x y * M = vecMulVec x (y ᵥ* M)
+参数：x : l -> α；y : m -> α；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecMulVec_mul [Fintype m] (x : l -> α) (y : m -> α) (M : Matrix m n α) :
+theorem vecMulVec_mul [Fintype m] (x : l → α) (y : m → α) (M : Matrix m n α) :
     vecMulVec x y * M = vecMulVec x (y ᵥ* M) := by
   ext
   simp_rw [mul_apply, vecMulVec_apply, vecMul, dotProduct, Finset.mul_sum, mul_assoc]
-
-/--
-theorem `vecMulVec_mul_vecMulVec` / 定理 `vecMulVec_mul_vecMulVec`
-
-English:
-theorem vecMulVec_mul_vecMulVec
-  given: [Fintype m] (u : l -> α) (v w : m -> α) (x : n -> α)
-  proof: by
-  rw [vecMulVec_mul]; rw [vecMul_vecMulVec]
-
-中文:
-定理 vecMulVec_mul_vecMulVec
-  条件: [有限类型 m] (u : l -> α) (v w : m -> α) (x : n -> α)
-  证明: by
-  rw [vecMulVec_mul]; rw [vecMul_vecMulVec]
-
-Depends on / 依赖: vecMulVec_mul, vecMul_vecMulVec
+/-
+**Matrix.vecMulVec_mul_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_mul_vecMulVec [Fintype m] (u : l -> α) (v w : m -> α) (x : n -> 
+α) : vecMulVec u v * vecMulVec w x = vecMulVec u ((v ⬝ᵥ w) • x)
+参数：u : l -> α；v w : m -> α；x : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecMulVec_mul`：vecMulVec_mul [Fintype m] (x : l -> α) (y : m -> α
+) (M : Matrix m n α) : vecMulVec x y * M = vecMulVec x (y ᵥ* M)
+· 使用定理 `Matrix.vecMul_vecMulVec`：vecMul_vecMulVec [Fintype m] (u v : m -> α) (w 
+: n -> α) : u ᵥ* vecMulVec v w = (u ⬝ᵥ v) • w
 -/
-theorem vecMulVec_mul_vecMulVec [Fintype m] (u : l -> α) (v w : m -> α) (x : n -> α) :
+theorem vecMulVec_mul_vecMulVec [Fintype m] (u : l → α) (v w : m → α) (x : n → α) :
     vecMulVec u v * vecMulVec w x = vecMulVec u ((v ⬝ᵥ w) • x) := by
-  rw [vecMulVec_mul]; rw [vecMul_vecMulVec]
-
-/--
-lemma `mul_right_injective_iff_mulVec_injective` / 引理 `mul_right_injective_iff_mulVec_injective`
-
-English:
-lemma mul_right_injective_iff_mulVec_injective
-  given: [Fintype m] [Nonempty n] {A : Matrix l m α}
-  proof: by
-  refine ⟨fun ha v w hvw => ?_, fun ha B C hBC => ext_col fun j => ha congr(($hBC).col j)⟩
-  inhabit n
-  -- `replicateRow` is not available yet
-  suffices (of fun i j => v i) = (of fun i j => w i) from
-    funext fun i => congrFun₂ this i (default : n)
-exact ha ext fun _ _ => congrFun hvw _
-
-中文:
-引理 mul_right_injective_iff_mulVec_injective
-  条件: [有限类型 m] [非空 n] {A : 矩阵 l m α}
-  证明: by
-  refine ⟨fun ha v w hvw => ?_, fun ha B C hBC => ext_col fun j => ha congr(($hBC).col j)⟩
-  inhabit n
-  -- `replicateRow` is not available yet
-  suffices (of fun i j => v i) = (of fun i j => w i) from
-    funext fun i => congrFun₂ this i (default : n)
-exact ha ext fun _ _ => congrFun hvw _
-
-Depends on / 依赖: ext_col, inhabit
+  rw [vecMulVec_mul, vecMul_vecMulVec]
+/-
+**Matrix.mul_right_injective_iff_mulVec_injective** 是 Mathlib 中的一个引理，位于命名空间 `Mat
+rix`。
+形式化陈述：mul_right_injective_iff_mulVec_injective [Fintype m] [Nonempty n] {A : Mat
+rix l m α} : Function.Injective (fun B : Matrix m n α => A * B) ↔ Function.Injec
+tive A.mulVec
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
+· 使用引理 `Matrix.ext_col`：ext_col {A B : Matrix m n α} (h : forall j, A.col j = B.
+col j) : A = B
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma mul_right_injective_iff_mulVec_injective [Fintype m] [Nonempty n] {A : Matrix l m α} :
     Function.Injective (fun B : Matrix m n α => A * B) ↔ Function.Injective A.mulVec := by
@@ -3486,91 +3152,77 @@ lemma mul_right_injective_iff_mulVec_injective [Fintype m] [Nonempty n] {A : Mat
   -- `replicateRow` is not available yet
   suffices (of fun i j => v i) = (of fun i j => w i) from
     funext fun i => congrFun₂ this i (default : n)
-exact ha ext fun _ _ => congrFun hvw _
-
-/--
-lemma `mul_left_injective_iff_vecMul_injective` / 引理 `mul_left_injective_iff_vecMul_injective`
-
-English:
-lemma mul_left_injective_iff_vecMul_injective
-  given: [Nonempty l] [Fintype m] {A : Matrix m n α}
-  proof: by
-  refine ⟨fun ha v w hvw => ?_, fun ha B C hBC => ext_row fun i => ha congr(($hBC).row i)⟩
-  inhabit l
-  -- `replicateCol` is not available yet
-  suffices (of fun i j => v j) = (of fun i j => w j) from
-    funext fun j => congrFun₂ this (default : l) j
-exact ha ext fun _ _ => congrFun hvw _
-
-中文:
-引理 mul_left_injective_iff_vecMul_injective
-  条件: [非空 l] [有限类型 m] {A : 矩阵 m n α}
-  证明: by
-  refine ⟨fun ha v w hvw => ?_, fun ha B C hBC => ext_row fun i => ha congr(($hBC).row i)⟩
-  inhabit l
-  -- `replicateCol` is not available yet
-  suffices (of fun i j => v j) = (of fun i j => w j) from
-    funext fun j => congrFun₂ this (default : l) j
-exact ha ext fun _ _ => congrFun hvw _
-
-Depends on / 依赖: ext_row, inhabit
+  exact ha <| ext fun _ _ => congrFun hvw _
+/-
+**Matrix.mul_left_injective_iff_vecMul_injective** 是 Mathlib 中的一个引理，位于命名空间 `Matr
+ix`。
+形式化陈述：mul_left_injective_iff_vecMul_injective [Nonempty l] [Fintype m] {A : Matr
+ix m n α} : Function.Injective (fun B : Matrix l m α => B * A) ↔ Function.Inject
+ive A.vecMul
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
+· 使用引理 `Matrix.ext_row`：ext_row {A B : Matrix m n α} (h : forall i, A.row i = B.
+row i) : A = B
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma mul_left_injective_iff_vecMul_injective [Nonempty l] [Fintype m] {A : Matrix m n α} :
     Function.Injective (fun B : Matrix l m α => B * A) ↔ Function.Injective A.vecMul := by
   refine ⟨fun ha v w hvw => ?_, fun ha B C hBC => ext_row fun i => ha congr(($hBC).row i)⟩
   inhabit l
-  -- `replicateCol` is not available yet
+  --  `replicateCol` is not available yet
   suffices (of fun i j => v j) = (of fun i j => w j) from
     funext fun j => congrFun₂ this (default : l) j
-exact ha ext fun _ _ => congrFun hvw _
-
-/--
-lemma `isLeftRegular_iff_mulVec_injective` / 引理 `isLeftRegular_iff_mulVec_injective`
-
-English:
-lemma isLeftRegular_iff_mulVec_injective
-  given: [Fintype m] {A : Matrix m m α}
-  proof: by
-  cases isEmpty_or_nonempty m
-  · simp [IsLeftRegular, Function.injective_of_subsingleton]
-  exact mul_right_injective_iff_mulVec_injective
-
-中文:
-引理 isLeftRegular_iff_mulVec_injective
-  条件: [有限类型 m] {A : 矩阵 m m α}
-  证明: by
-  cases isEmpty_or_nonempty m
-  · simp [IsLeftRegular, Function.injective_of_subsingleton]
-  exact mul_right_injective_iff_mulVec_injective
-
-Depends on / 依赖: Function, Function.injective_of_subsingleton, IsLeftRegular, injective_of_subsingleton, isEmpty_or_nonempty, mul_right_injective_iff_mulVec_injective
+  exact ha <| ext fun _ _ => congrFun hvw _
+/-
+**Matrix.isLeftRegular_iff_mulVec_injective** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：isLeftRegular_iff_mulVec_injective [Fintype m] {A : Matrix m m α} : IsLeft
+Regular A ↔ Function.Injective A.mulVec
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `Matrix.mul_right_injective_iff_mulVec_injective`：mul_right_injective_iff
+_mulVec_injective [Fintype m] [Nonempty n] {A : Matrix l m α} : Function.Injecti
+ve (fun B : Matrix m n α => A * B) ↔ …
 -/
 lemma isLeftRegular_iff_mulVec_injective [Fintype m] {A : Matrix m m α} :
     IsLeftRegular A ↔ Function.Injective A.mulVec := by
   cases isEmpty_or_nonempty m
   · simp [IsLeftRegular, Function.injective_of_subsingleton]
   exact mul_right_injective_iff_mulVec_injective
-
-/--
-lemma `isRightRegular_iff_vecMul_injective` / 引理 `isRightRegular_iff_vecMul_injective`
-
-English:
-lemma isRightRegular_iff_vecMul_injective
-  given: [Fintype m] {A : Matrix m m α}
-  proof: by
-  cases isEmpty_or_nonempty m
-  · simp [IsRightRegular, Function.injective_of_subsingleton]
-  exact mul_left_injective_iff_vecMul_injective
-
-中文:
-引理 isRightRegular_iff_vecMul_injective
-  条件: [有限类型 m] {A : 矩阵 m m α}
-  证明: by
-  cases isEmpty_or_nonempty m
-  · simp [IsRightRegular, Function.injective_of_subsingleton]
-  exact mul_left_injective_iff_vecMul_injective
-
-Depends on / 依赖: Function, Function.injective_of_subsingleton, IsRightRegular, injective_of_subsingleton, isEmpty_or_nonempty, mul_left_injective_iff_vecMul_injective
+/-
+**Matrix.isRightRegular_iff_vecMul_injective** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：isRightRegular_iff_vecMul_injective [Fintype m] {A : Matrix m m α} : IsRig
+htRegular A ↔ Function.Injective A.vecMul
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `Matrix.mul_left_injective_iff_vecMul_injective`：mul_left_injective_iff_v
+ecMul_injective [Nonempty l] [Fintype m] {A : Matrix m n α} : Function.Injective
+ (fun B : Matrix l m α => B * A) ↔ F…
 -/
 lemma isRightRegular_iff_vecMul_injective [Fintype m] {A : Matrix m m α} :
     IsRightRegular A ↔ Function.Injective A.vecMul := by
@@ -3585,417 +3237,342 @@ section NonAssocSemiring
 variable [NonAssocSemiring α]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mulVec_one` / 定理 `mulVec_one`
-
-English:
-theorem mulVec_one
-  given: [Fintype n] (A : Matrix m n α)
-  statement: A *ᵥ 1 = ∑ j, Aᵀ j
-  proof: by
-  ext; simp [mulVec, dotProduct]
-
-中文:
-定理 mulVec_one
-  条件: [有限类型 n] (A : 矩阵 m n α)
-  结论: A *ᵥ 1 = ∑ j, Aᵀ j
-  证明: by
-  ext; simp [mulVec, dotProduct]
-
-Depends on / 依赖: dotProduct, mulVec
+/-
+**Matrix.mulVec_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_one [Fintype n] (A : Matrix m n α) : A *ᵥ 1 = ∑ j, Aᵀ j
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mulVec_one [Fintype n] (A : Matrix m n α) : A *ᵥ 1 = ∑ j, Aᵀ j := by
   ext; simp [mulVec, dotProduct]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `one_vecMul` / 定理 `one_vecMul`
-
-English:
-theorem one_vecMul
-  given: [Fintype m] (A : Matrix m n α)
-  statement: 1 ᵥ* A = ∑ i, A i
-  proof: by
-  ext; simp [vecMul, dotProduct]
-
-中文:
-定理 one_vecMul
-  条件: [有限类型 m] (A : 矩阵 m n α)
-  结论: 1 ᵥ* A = ∑ i, A i
-  证明: by
-  ext; simp [vecMul, dotProduct]
-
-Depends on / 依赖: dotProduct, vecMul
+/-
+**Matrix.one_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_vecMul [Fintype m] (A : Matrix m n α) : 1 ᵥ* A = ∑ i, A i
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem one_vecMul [Fintype m] (A : Matrix m n α) : 1 ᵥ* A = ∑ i, A i := by
   ext; simp [vecMul, dotProduct]
-
-/--
-lemma `ext_of_mulVec_single` / 引理 `ext_of_mulVec_single`
-
-English:
-lemma ext_of_mulVec_single
-  statement: [DecidableEq n] [Fintype n] {M N : Matrix m n α}
-  proof: by
-  ext i j
-  simp_rw [mulVec_single_one] at h
-  exact congrFun (h j) i
-
-中文:
-引理 ext_of_mulVec_single
-  结论: [DecidableEq n] [有限类型 n] {M N : 矩阵 m n α}
-  证明: by
-  ext i j
-  simp_rw [mulVec_single_one] at h
-  exact congrFun (h j) i
-
-Depends on / 依赖: mulVec_single_one, simp_rw
+/-
+**Matrix.ext_of_mulVec_single** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：ext_of_mulVec_single [DecidableEq n] [Fintype n] {M N : Matrix m n α} (h :
+ forall i, M *ᵥ Pi.single i 1 = N *ᵥ Pi.single i 1) : M = N
+参数：h : forall i, M *ᵥ Pi.single i 1 = N *ᵥ Pi.single i 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mulVec_single_one`：mulVec_single_one [Fintype n] [DecidableEq n] 
+[NonAssocSemiring R] (M : Matrix m n R) (j : n) : M *ᵥ Pi.single j 1 = M.col j
 -/
 lemma ext_of_mulVec_single [DecidableEq n] [Fintype n] {M N : Matrix m n α}
-    (h : forall i, M *ᵥ Pi.single i 1 = N *ᵥ Pi.single i 1) :
+    (h : ∀ i, M *ᵥ Pi.single i 1 = N *ᵥ Pi.single i 1) :
     M = N := by
   ext i j
   simp_rw [mulVec_single_one] at h
   exact congrFun (h j) i
-
-/--
-lemma `ext_of_single_vecMul` / 引理 `ext_of_single_vecMul`
-
-English:
-lemma ext_of_single_vecMul
-  statement: [DecidableEq m] [Fintype m] {M N : Matrix m n α}
-  proof: by
-  ext i j
-  simp_rw [single_one_vecMul] at h
-  exact congrFun (h i) j
-
-中文:
-引理 ext_of_single_vecMul
-  结论: [DecidableEq m] [有限类型 m] {M N : 矩阵 m n α}
-  证明: by
-  ext i j
-  simp_rw [single_one_vecMul] at h
-  exact congrFun (h i) j
-
-Depends on / 依赖: simp_rw, single_one_vecMul
+/-
+**Matrix.ext_of_single_vecMul** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：ext_of_single_vecMul [DecidableEq m] [Fintype m] {M N : Matrix m n α} (h :
+ forall i, Pi.single i 1 ᵥ* M = Pi.single i 1 ᵥ* N) : M = N
+参数：h : forall i, Pi.single i 1 ᵥ* M = Pi.single i 1 ᵥ* N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.single_one_vecMul`：single_one_vecMul [Fintype m] [DecidableEq m] 
+[NonAssocSemiring R] (i : m) (M : Matrix m n R) : Pi.single i 1 ᵥ* M = M.row i
 -/
 lemma ext_of_single_vecMul [DecidableEq m] [Fintype m] {M N : Matrix m n α}
-    (h : forall i, Pi.single i 1 ᵥ* M = Pi.single i 1 ᵥ* N) :
+    (h : ∀ i, Pi.single i 1 ᵥ* M = Pi.single i 1 ᵥ* N) :
     M = N := by
   ext i j
   simp_rw [single_one_vecMul] at h
   exact congrFun (h i) j
-
-/--
-theorem `mulVec_injective` / 定理 `mulVec_injective`
-
-English:
-theorem mulVec_injective
-  given: [Fintype n]
-  statement: (mulVec : Matrix m n α -> _).Injective
-  proof: by
-  intro A B h
-  ext i j
-  classical
-  simpa using congrFun₂ h (Pi.single j 1) i
-
-中文:
-定理 mulVec_injective
-  条件: [有限类型 n]
-  结论: (mulVec : 矩阵 m n α -> _).单射
-  证明: by
-  intro A B h
-  ext i j
-  classical
-  simpa using congrFun₂ h (Pi.single j 1) i
-
-Depends on / 依赖: Pi.single, classical, single
+/-
+**Matrix.mulVec_injective** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_injective [Fintype n] : (mulVec : Matrix m n α -> _).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.mulVec_single`：mulVec_single [Fintype n] [DecidableEq n] [NonUnit
+alNonAssocSemiring R] (M : Matrix m n R) (j : n) (x : R) : M *ᵥ Pi.single j x = 
+MulOpposit…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
 -/
-theorem mulVec_injective [Fintype n] : (mulVec : Matrix m n α -> _).Injective := by
+theorem mulVec_injective [Fintype n] : (mulVec : Matrix m n α → _).Injective := by
   intro A B h
   ext i j
   classical
   simpa using congrFun₂ h (Pi.single j 1) i
-
-/--
-theorem `ext_iff_mulVec` / 定理 `ext_iff_mulVec`
-
-English:
-theorem ext_iff_mulVec
-  given: [Fintype n] {A B : Matrix m n α}
-  statement: A = B ↔ forall v, A *ᵥ v = B *ᵥ v
-  proof: mulVec_injective.eq_iff.symm.trans funext_iff
-
-中文:
-定理 ext_iff_mulVec
-  条件: [有限类型 n] {A B : 矩阵 m n α}
-  结论: A = B ↔ 对任意 v, A *ᵥ v = B *ᵥ v
-  证明: mulVec_injective.eq_iff.symm.trans funext_iff
-
-Depends on / 依赖: eq_iff, funext_iff, mulVec_injective, mulVec_injective.eq_iff.symm.trans
+/-
+**Matrix.ext_iff_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ext_iff_mulVec [Fintype n] {A B : Matrix m n α} : A = B ↔ forall v, A *ᵥ v
+ = B *ᵥ v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Matrix.mulVec_injective`：mulVec_injective [Fintype n] : (mulVec : Matrix
+ m n α -> _).Injective
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
 -/
-theorem ext_iff_mulVec [Fintype n] {A B : Matrix m n α} : A = B ↔ forall v, A *ᵥ v = B *ᵥ v :=
+theorem ext_iff_mulVec [Fintype n] {A B : Matrix m n α} : A = B ↔ ∀ v, A *ᵥ v = B *ᵥ v :=
   mulVec_injective.eq_iff.symm.trans funext_iff
-
-/--
-theorem `vecMul_injective` / 定理 `vecMul_injective`
-
-English:
-theorem vecMul_injective
-  given: [Fintype m]
-  statement: (·.vecMul : Matrix m n α -> _).Injective
-  proof: by
-  intro A B h
-  ext i j
-  classical
-  simpa using congrFun₂ h (Pi.single i 1) j
-
-中文:
-定理 vecMul_injective
-  条件: [有限类型 m]
-  结论: (·.vecMul : 矩阵 m n α -> _).单射
-  证明: by
-  intro A B h
-  ext i j
-  classical
-  simpa using congrFun₂ h (Pi.single i 1) j
-
-Depends on / 依赖: Pi.single, classical, single
+/-
+**Matrix.vecMul_injective** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_injective [Fintype m] : (·.vecMul : Matrix m n α -> _).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.single_vecMul`：single_vecMul [Fintype m] [DecidableEq m] [NonUnit
+alNonAssocSemiring R] (M : Matrix m n R) (i : m) (x : R) : Pi.single i x ᵥ* M = 
+x • M.row …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
 -/
-theorem vecMul_injective [Fintype m] : (·.vecMul : Matrix m n α -> _).Injective := by
+theorem vecMul_injective [Fintype m] : (·.vecMul : Matrix m n α → _).Injective := by
   intro A B h
   ext i j
   classical
   simpa using congrFun₂ h (Pi.single i 1) j
-
-/--
-theorem `ext_iff_vecMul` / 定理 `ext_iff_vecMul`
-
-English:
-theorem ext_iff_vecMul
-  given: [Fintype m] {A B : Matrix m n α}
-  statement: A = B ↔ forall v, v ᵥ* A = v ᵥ* B
-  proof: vecMul_injective.eq_iff.symm.trans funext_iff
-
-中文:
-定理 ext_iff_vecMul
-  条件: [有限类型 m] {A B : 矩阵 m n α}
-  结论: A = B ↔ 对任意 v, v ᵥ* A = v ᵥ* B
-  证明: vecMul_injective.eq_iff.symm.trans funext_iff
-
-Depends on / 依赖: eq_iff, funext_iff, vecMul_injective, vecMul_injective.eq_iff.symm.trans
+/-
+**Matrix.ext_iff_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ext_iff_vecMul [Fintype m] {A B : Matrix m n α} : A = B ↔ forall v, v ᵥ* A
+ = v ᵥ* B
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Matrix.vecMul_injective`：vecMul_injective [Fintype m] : (·.vecMul : Matr
+ix m n α -> _).Injective
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
 -/
-theorem ext_iff_vecMul [Fintype m] {A B : Matrix m n α} : A = B ↔ forall v, v ᵥ* A = v ᵥ* B :=
+theorem ext_iff_vecMul [Fintype m] {A B : Matrix m n α} : A = B ↔ ∀ v, v ᵥ* A = v ᵥ* B :=
   vecMul_injective.eq_iff.symm.trans funext_iff
 
 variable [Fintype m] [DecidableEq m]
 
 @[simp]
-/--
-theorem `one_mulVec` / 定理 `one_mulVec`
-
-English:
-theorem one_mulVec
-  given: (v : m -> α)
-  statement: 1 *ᵥ v = v
-  proof: by
-  ext
-  rw [← diagonal_one]; rw [mulVec_diagonal]; rw [one_mul]
-
-@[simp]
-
-中文:
-定理 one_mulVec
-  条件: (v : m -> α)
-  结论: 1 *ᵥ v = v
-  证明: by
-  ext
-  rw [← diagonal_one]; rw [mulVec_diagonal]; rw [one_mul]
-
-@[simp]
-
-Depends on / 依赖: diagonal_one, mulVec_diagonal, one_mul
+/-
+**Matrix.one_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_mulVec (v : m -> α) : 1 *ᵥ v = v
+参数：v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_one`：diagonal_one : (diagonal fun _ => 1 : Matrix n n α)
+ = 1
+· 使用定理 `Matrix.mulVec_diagonal`：mulVec_diagonal [Fintype m] [DecidableEq m] (v w
+ : m -> α) (x : m) : (diagonal v *ᵥ w) x = v x * w x
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem one_mulVec (v : m -> α) : 1 *ᵥ v = v := by
+theorem one_mulVec (v : m → α) : 1 *ᵥ v = v := by
   ext
-  rw [← diagonal_one]; rw [mulVec_diagonal]; rw [one_mul]
+  rw [← diagonal_one, mulVec_diagonal, one_mul]
 
 @[simp]
-/--
-theorem `vecMul_one` / 定理 `vecMul_one`
-
-English:
-theorem vecMul_one
-  given: (v : m -> α)
-  statement: v ᵥ* 1 = v
-  proof: by
-  ext
-  rw [← diagonal_one]; rw [vecMul_diagonal]; rw [mul_one]
-
-@[simp]
-
-中文:
-定理 vecMul_one
-  条件: (v : m -> α)
-  结论: v ᵥ* 1 = v
-  证明: by
-  ext
-  rw [← diagonal_one]; rw [vecMul_diagonal]; rw [mul_one]
-
-@[simp]
-
-Depends on / 依赖: diagonal_one, mul_one, vecMul_diagonal
+/-
+**Matrix.vecMul_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_one (v : m -> α) : v ᵥ* 1 = v
+参数：v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.diagonal_one`：diagonal_one : (diagonal fun _ => 1 : Matrix n n α)
+ = 1
+· 使用定理 `Matrix.vecMul_diagonal`：vecMul_diagonal [Fintype m] [DecidableEq m] (v w
+ : m -> α) (x : m) : (v ᵥ* diagonal w) x = v x * w x
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem vecMul_one (v : m -> α) : v ᵥ* 1 = v := by
+theorem vecMul_one (v : m → α) : v ᵥ* 1 = v := by
   ext
-  rw [← diagonal_one]; rw [vecMul_diagonal]; rw [mul_one]
+  rw [← diagonal_one, vecMul_diagonal, mul_one]
 
 @[simp]
-/--
-theorem `diagonal_const_mulVec` / 定理 `diagonal_const_mulVec`
-
-English:
-theorem diagonal_const_mulVec
-  given: (x : α) (v : m -> α)
-  proof: by
-  ext; simp [mulVec_diagonal]
-
-@[simp]
-
-中文:
-定理 diagonal_const_mulVec
-  条件: (x : α) (v : m -> α)
-  证明: by
-  ext; simp [mulVec_diagonal]
-
-@[simp]
-
-Depends on / 依赖: mulVec_diagonal
+/-
+**Matrix.diagonal_const_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_const_mulVec (x : α) (v : m -> α) : (diagonal fun _ => x) *ᵥ v = 
+x • v
+参数：x : α；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mulVec_diagonal`：mulVec_diagonal [Fintype m] [DecidableEq m] (v w
+ : m -> α) (x : m) : (diagonal v *ᵥ w) x = v x * w x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem diagonal_const_mulVec (x : α) (v : m -> α) :
+theorem diagonal_const_mulVec (x : α) (v : m → α) :
     (diagonal fun _ => x) *ᵥ v = x • v := by
   ext; simp [mulVec_diagonal]
 
 @[simp]
-/--
-theorem `vecMul_diagonal_const` / 定理 `vecMul_diagonal_const`
-
-English:
-theorem vecMul_diagonal_const
-  given: (x : α) (v : m -> α)
-  proof: by
-  ext; simp [vecMul_diagonal]
-
-@[simp]
-
-中文:
-定理 vecMul_diagonal_const
-  条件: (x : α) (v : m -> α)
-  证明: by
-  ext; simp [vecMul_diagonal]
-
-@[simp]
-
-Depends on / 依赖: vecMul_diagonal
+/-
+**Matrix.vecMul_diagonal_const** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_diagonal_const (x : α) (v : m -> α) : v ᵥ* (diagonal fun _ => x) = 
+MulOpposite.op x • v
+参数：x : α；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecMul_diagonal`：vecMul_diagonal [Fintype m] [DecidableEq m] (v w
+ : m -> α) (x : m) : (v ᵥ* diagonal w) x = v x * w x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecMul_diagonal_const (x : α) (v : m -> α) :
+theorem vecMul_diagonal_const (x : α) (v : m → α) :
     v ᵥ* (diagonal fun _ => x) = MulOpposite.op x • v := by
   ext; simp [vecMul_diagonal]
 
 @[simp]
-/--
-theorem `natCast_mulVec` / 定理 `natCast_mulVec`
-
-English:
-theorem natCast_mulVec
-  given: (x : Nat) (v : m -> α)
-  statement: x *ᵥ v = (x : α) • v
-  proof: diagonal_const_mulVec _ _
-
-@[simp]
-
-中文:
-定理 natCast_mulVec
-  条件: (x : 自然数) (v : m -> α)
-  结论: x *ᵥ v = (x : α) • v
-  证明: diagonal_const_mulVec _ _
-
-@[simp]
-
-Depends on / 依赖: diagonal_const_mulVec
+/-
+**Matrix.natCast_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：natCast_mulVec (x : Nat) (v : m -> α) : x *ᵥ v = (x : α) • v
+参数：x : Nat；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.diagonal_const_mulVec`：diagonal_const_mulVec (x : α) (v : m -> α)
+ : (diagonal fun _ => x) *ᵥ v = x • v
 -/
-theorem natCast_mulVec (x : Nat) (v : m -> α) : x *ᵥ v = (x : α) • v :=
+theorem natCast_mulVec (x : ℕ) (v : m → α) : x *ᵥ v = (x : α) • v :=
   diagonal_const_mulVec _ _
 
 @[simp]
-/--
-theorem `vecMul_natCast` / 定理 `vecMul_natCast`
-
-English:
-theorem vecMul_natCast
-  given: (x : Nat) (v : m -> α)
-  statement: v ᵥ* x = MulOpposite.op (x : α) • v
-  proof: vecMul_diagonal_const _ _
-
-
-@[simp]
-
-中文:
-定理 vecMul_natCast
-  条件: (x : 自然数) (v : m -> α)
-  结论: v ᵥ* x = MulOpposite.op (x : α) • v
-  证明: vecMul_diagonal_const _ _
-
-
-@[simp]
-
-Depends on / 依赖: vecMul_diagonal_const
+/-
+**Matrix.vecMul_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_natCast (x : Nat) (v : m -> α) : v ᵥ* x = MulOpposite.op (x : α) • 
+v
+参数：x : Nat；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.vecMul_diagonal_const`：vecMul_diagonal_const (x : α) (v : m -> α)
+ : v ᵥ* (diagonal fun _ => x) = MulOpposite.op x • v
 -/
-theorem vecMul_natCast (x : Nat) (v : m -> α) : v ᵥ* x = MulOpposite.op (x : α) • v :=
+theorem vecMul_natCast (x : ℕ) (v : m → α) : v ᵥ* x = MulOpposite.op (x : α) • v :=
   vecMul_diagonal_const _ _
 
 
 @[simp]
-/--
-theorem `ofNat_mulVec` / 定理 `ofNat_mulVec`
-
-English:
-theorem ofNat_mulVec
-  given: (x : Nat) [x.AtLeastTwo] (v : m -> α)
-  proof: natCast_mulVec _ _
-
-@[simp]
-
-中文:
-定理 of自然数_mulVec
-  条件: (x : 自然数) [x.AtLeastTwo] (v : m -> α)
-  证明: natCast_mulVec _ _
-
-@[simp]
-
-Depends on / 依赖: natCast_mulVec
+/-
+**Matrix.ofNat_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ofNat_mulVec (x : Nat) [x.AtLeastTwo] (v : m -> α) : ofNat(x) *ᵥ v = (OfNa
+t.ofNat x : α) • v
+参数：x : Nat；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.natCast_mulVec`：natCast_mulVec (x : Nat) (v : m -> α) : x *ᵥ v = 
+(x : α) • v
 -/
-theorem ofNat_mulVec (x : Nat) [x.AtLeastTwo] (v : m -> α) :
+theorem ofNat_mulVec (x : ℕ) [x.AtLeastTwo] (v : m → α) :
     ofNat(x) *ᵥ v = (OfNat.ofNat x : α) • v :=
   natCast_mulVec _ _
 
 @[simp]
-/--
-theorem `vecMul_ofNat` / 定理 `vecMul_ofNat`
-
-English:
-theorem vecMul_ofNat
-  given: (x : Nat) [x.AtLeastTwo] (v : m -> α)
-  proof: vecMul_natCast _ _
-
-中文:
-定理 vecMul_of自然数
-  条件: (x : 自然数) [x.AtLeastTwo] (v : m -> α)
-  证明: vecMul_natCast _ _
-
-Depends on / 依赖: vecMul_natCast
+/-
+**Matrix.vecMul_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_ofNat (x : Nat) [x.AtLeastTwo] (v : m -> α) : v ᵥ* ofNat(x) = MulOp
+posite.op (OfNat.ofNat x : α) • v
+参数：x : Nat；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.vecMul_natCast`：vecMul_natCast (x : Nat) (v : m -> α) : v ᵥ* x = 
+MulOpposite.op (x : α) • v
 -/
-theorem vecMul_ofNat (x : Nat) [x.AtLeastTwo] (v : m -> α) :
+theorem vecMul_ofNat (x : ℕ) [x.AtLeastTwo] (v : m → α) :
     v ᵥ* ofNat(x) = MulOpposite.op (OfNat.ofNat x : α) • v :=
   vecMul_natCast _ _
 
@@ -4005,269 +3582,200 @@ section NonUnitalNonAssocRing
 
 variable [NonUnitalNonAssocRing α]
 
-/--
-theorem `neg_vecMul` / 定理 `neg_vecMul`
-
-English:
-theorem neg_vecMul
-  given: [Fintype m] (v : m -> α) (A : Matrix m n α)
-  statement: (-v) ᵥ* A = -(v ᵥ* A)
-  proof: by
+/-
+**Matrix.neg_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：neg_vecMul [Fintype m] (v : m -> α) (A : Matrix m n α) : (-v) ᵥ* A = -(v ᵥ
+* A)
+参数：v : m -> α；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `neg_dotProduct`：neg_dotProduct : -v ⬝ᵥ w = -(v ⬝ᵥ w)
+-/
+theorem neg_vecMul [Fintype m] (v : m → α) (A : Matrix m n α) : (-v) ᵥ* A = -(v ᵥ* A) := by
   ext
   apply neg_dotProduct
-
-中文:
-定理 neg_vecMul
-  条件: [有限类型 m] (v : m -> α) (A : 矩阵 m n α)
-  结论: (-v) ᵥ* A = -(v ᵥ* A)
-  证明: by
+/-
+**Matrix.vecMul_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_neg [Fintype m] (v : m -> α) (A : Matrix m n α) : v ᵥ* (-A) = -(v ᵥ
+* A)
+参数：v : m -> α；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_neg`：dotProduct_neg : v ⬝ᵥ -w = -(v ⬝ᵥ w)
+-/
+theorem vecMul_neg [Fintype m] (v : m → α) (A : Matrix m n α) : v ᵥ* (-A) = -(v ᵥ* A) := by
+  ext
+  apply dotProduct_neg
+/-
+**Matrix.neg_vecMul_neg** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：neg_vecMul_neg [Fintype m] (v : m -> α) (A : Matrix m n α) : (-v) ᵥ* (-A) 
+= v ᵥ* A
+参数：v : m -> α；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecMul_neg`：vecMul_neg [Fintype m] (v : m -> α) (A : Matrix m n α
+) : v ᵥ* (-A) = -(v ᵥ* A)
+· 使用定理 `Matrix.neg_vecMul`：neg_vecMul [Fintype m] (v : m -> α) (A : Matrix m n α
+) : (-v) ᵥ* A = -(v ᵥ* A)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+-/
+lemma neg_vecMul_neg [Fintype m] (v : m → α) (A : Matrix m n α) : (-v) ᵥ* (-A) = v ᵥ* A := by
+  rw [vecMul_neg, neg_vecMul, neg_neg]
+/-
+**Matrix.neg_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：neg_mulVec [Fintype n] (v : n -> α) (A : Matrix m n α) : (-A) *ᵥ v = -(A *
+ᵥ v)
+参数：v : n -> α；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `neg_dotProduct`：neg_dotProduct : -v ⬝ᵥ w = -(v ⬝ᵥ w)
+-/
+theorem neg_mulVec [Fintype n] (v : n → α) (A : Matrix m n α) : (-A) *ᵥ v = -(A *ᵥ v) := by
   ext
   apply neg_dotProduct
-
-Depends on / 依赖: neg_dotProduct
+/-
+**Matrix.mulVec_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_neg [Fintype n] (v : n -> α) (A : Matrix m n α) : A *ᵥ (-v) = -(A *
+ᵥ v)
+参数：v : n -> α；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_neg`：dotProduct_neg : v ⬝ᵥ -w = -(v ⬝ᵥ w)
 -/
-theorem neg_vecMul [Fintype m] (v : m -> α) (A : Matrix m n α) : (-v) ᵥ* A = -(v ᵥ* A) := by
-  ext
-  apply neg_dotProduct
-
-/--
-theorem `vecMul_neg` / 定理 `vecMul_neg`
-
-English:
-theorem vecMul_neg
-  given: [Fintype m] (v : m -> α) (A : Matrix m n α)
-  statement: v ᵥ* (-A) = -(v ᵥ* A)
-  proof: by
+theorem mulVec_neg [Fintype n] (v : n → α) (A : Matrix m n α) : A *ᵥ (-v) = -(A *ᵥ v) := by
   ext
   apply dotProduct_neg
-
-中文:
-定理 vecMul_neg
-  条件: [有限类型 m] (v : m -> α) (A : 矩阵 m n α)
-  结论: v ᵥ* (-A) = -(v ᵥ* A)
-  证明: by
-  ext
-  apply dotProduct_neg
-
-Depends on / 依赖: dotProduct_neg
+/-
+**Matrix.neg_mulVec_neg** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：neg_mulVec_neg [Fintype n] (v : n -> α) (A : Matrix m n α) : (-A) *ᵥ (-v) 
+= A *ᵥ v
+参数：v : n -> α；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mulVec_neg`：mulVec_neg [Fintype n] (v : n -> α) (A : Matrix m n α
+) : A *ᵥ (-v) = -(A *ᵥ v)
+· 使用定理 `Matrix.neg_mulVec`：neg_mulVec [Fintype n] (v : n -> α) (A : Matrix m n α
+) : (-A) *ᵥ v = -(A *ᵥ v)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
-theorem vecMul_neg [Fintype m] (v : m -> α) (A : Matrix m n α) : v ᵥ* (-A) = -(v ᵥ* A) := by
-  ext
-  apply dotProduct_neg
-
-/--
-lemma `neg_vecMul_neg` / 引理 `neg_vecMul_neg`
-
-English:
-lemma neg_vecMul_neg
-  given: [Fintype m] (v : m -> α) (A : Matrix m n α)
-  statement: (-v) ᵥ* (-A) = v ᵥ* A
-  proof: by
-  rw [vecMul_neg]; rw [neg_vecMul]; rw [neg_neg]
-
-中文:
-引理 neg_vecMul_neg
-  条件: [有限类型 m] (v : m -> α) (A : 矩阵 m n α)
-  结论: (-v) ᵥ* (-A) = v ᵥ* A
-  证明: by
-  rw [vecMul_neg]; rw [neg_vecMul]; rw [neg_neg]
-
-Depends on / 依赖: neg_neg, neg_vecMul, vecMul_neg
+lemma neg_mulVec_neg [Fintype n] (v : n → α) (A : Matrix m n α) : (-A) *ᵥ (-v) = A *ᵥ v := by
+  rw [mulVec_neg, neg_mulVec, neg_neg]
+/-
+**Matrix.mulVec_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_sub [Fintype n] (A : Matrix m n α) (x y : n -> α) : A *ᵥ (x - y) = 
+A *ᵥ x - A *ᵥ y
+参数：A : Matrix m n α；x y : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_sub`：dotProduct_sub : u ⬝ᵥ (v - w) = u ⬝ᵥ v - u ⬝ᵥ w
 -/
-lemma neg_vecMul_neg [Fintype m] (v : m -> α) (A : Matrix m n α) : (-v) ᵥ* (-A) = v ᵥ* A := by
-  rw [vecMul_neg]; rw [neg_vecMul]; rw [neg_neg]
-
-/--
-theorem `neg_mulVec` / 定理 `neg_mulVec`
-
-English:
-theorem neg_mulVec
-  given: [Fintype n] (v : n -> α) (A : Matrix m n α)
-  statement: (-A) *ᵥ v = -(A *ᵥ v)
-  proof: by
-  ext
-  apply neg_dotProduct
-
-中文:
-定理 neg_mulVec
-  条件: [有限类型 n] (v : n -> α) (A : 矩阵 m n α)
-  结论: (-A) *ᵥ v = -(A *ᵥ v)
-  证明: by
-  ext
-  apply neg_dotProduct
-
-Depends on / 依赖: neg_dotProduct
--/
-theorem neg_mulVec [Fintype n] (v : n -> α) (A : Matrix m n α) : (-A) *ᵥ v = -(A *ᵥ v) := by
-  ext
-  apply neg_dotProduct
-
-/--
-theorem `mulVec_neg` / 定理 `mulVec_neg`
-
-English:
-theorem mulVec_neg
-  given: [Fintype n] (v : n -> α) (A : Matrix m n α)
-  statement: A *ᵥ (-v) = -(A *ᵥ v)
-  proof: by
-  ext
-  apply dotProduct_neg
-
-中文:
-定理 mulVec_neg
-  条件: [有限类型 n] (v : n -> α) (A : 矩阵 m n α)
-  结论: A *ᵥ (-v) = -(A *ᵥ v)
-  证明: by
-  ext
-  apply dotProduct_neg
-
-Depends on / 依赖: dotProduct_neg
--/
-theorem mulVec_neg [Fintype n] (v : n -> α) (A : Matrix m n α) : A *ᵥ (-v) = -(A *ᵥ v) := by
-  ext
-  apply dotProduct_neg
-
-/--
-lemma `neg_mulVec_neg` / 引理 `neg_mulVec_neg`
-
-English:
-lemma neg_mulVec_neg
-  given: [Fintype n] (v : n -> α) (A : Matrix m n α)
-  statement: (-A) *ᵥ (-v) = A *ᵥ v
-  proof: by
-  rw [mulVec_neg]; rw [neg_mulVec]; rw [neg_neg]
-
-中文:
-引理 neg_mulVec_neg
-  条件: [有限类型 n] (v : n -> α) (A : 矩阵 m n α)
-  结论: (-A) *ᵥ (-v) = A *ᵥ v
-  证明: by
-  rw [mulVec_neg]; rw [neg_mulVec]; rw [neg_neg]
-
-Depends on / 依赖: mulVec_neg, neg_mulVec, neg_neg
--/
-lemma neg_mulVec_neg [Fintype n] (v : n -> α) (A : Matrix m n α) : (-A) *ᵥ (-v) = A *ᵥ v := by
-  rw [mulVec_neg]; rw [neg_mulVec]; rw [neg_neg]
-
-/--
-theorem `mulVec_sub` / 定理 `mulVec_sub`
-
-English:
-theorem mulVec_sub
-  given: [Fintype n] (A : Matrix m n α) (x y : n -> α)
-  proof: by
-  ext
-  apply dotProduct_sub
-
-中文:
-定理 mulVec_sub
-  条件: [有限类型 n] (A : 矩阵 m n α) (x y : n -> α)
-  证明: by
-  ext
-  apply dotProduct_sub
-
-Depends on / 依赖: dotProduct_sub
--/
-theorem mulVec_sub [Fintype n] (A : Matrix m n α) (x y : n -> α) :
+theorem mulVec_sub [Fintype n] (A : Matrix m n α) (x y : n → α) :
     A *ᵥ (x - y) = A *ᵥ x - A *ᵥ y := by
   ext
   apply dotProduct_sub
-
-/--
-theorem `sub_mulVec` / 定理 `sub_mulVec`
-
-English:
-theorem sub_mulVec
-  given: [Fintype n] (A B : Matrix m n α) (x : n -> α)
-  proof: by simp [sub_eq_add_neg, add_mulVec, neg_mulVec]
-
-中文:
-定理 sub_mulVec
-  条件: [有限类型 n] (A B : 矩阵 m n α) (x : n -> α)
-  证明: by simp [sub_eq_add_neg, add_mulVec, neg_mulVec]
-
-Depends on / 依赖: add_mulVec, neg_mulVec, sub_eq_add_neg
+/-
+**Matrix.sub_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：sub_mulVec [Fintype n] (A B : Matrix m n α) (x : n -> α) : (A - B) *ᵥ x = 
+A *ᵥ x - B *ᵥ x
+参数：A B : Matrix m n α；x : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Matrix.add_mulVec`：add_mulVec [Fintype n] (A B : Matrix m n α) (x : n ->
+ α) : (A + B) *ᵥ x = A *ᵥ x + B *ᵥ x
+· 使用定理 `Matrix.neg_mulVec`：neg_mulVec [Fintype n] (v : n -> α) (A : Matrix m n α
+) : (-A) *ᵥ v = -(A *ᵥ v)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sub_mulVec [Fintype n] (A B : Matrix m n α) (x : n -> α) :
+theorem sub_mulVec [Fintype n] (A B : Matrix m n α) (x : n → α) :
     (A - B) *ᵥ x = A *ᵥ x - B *ᵥ x := by simp [sub_eq_add_neg, add_mulVec, neg_mulVec]
-
-/--
-theorem `vecMul_sub` / 定理 `vecMul_sub`
-
-English:
-theorem vecMul_sub
-  given: [Fintype m] (A B : Matrix m n α) (x : m -> α)
-  proof: by simp [sub_eq_add_neg, vecMul_add, vecMul_neg]
-
-中文:
-定理 vecMul_sub
-  条件: [有限类型 m] (A B : 矩阵 m n α) (x : m -> α)
-  证明: by simp [sub_eq_add_neg, vecMul_add, vecMul_neg]
-
-Depends on / 依赖: sub_eq_add_neg, vecMul_add, vecMul_neg
+/-
+**Matrix.vecMul_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_sub [Fintype m] (A B : Matrix m n α) (x : m -> α) : x ᵥ* (A - B) = 
+x ᵥ* A - x ᵥ* B
+参数：A B : Matrix m n α；x : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Matrix.vecMul_add`：vecMul_add [Fintype m] (A B : Matrix m n α) (x : m ->
+ α) : x ᵥ* (A + B) = x ᵥ* A + x ᵥ* B
+· 使用定理 `Matrix.vecMul_neg`：vecMul_neg [Fintype m] (v : m -> α) (A : Matrix m n α
+) : v ᵥ* (-A) = -(v ᵥ* A)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecMul_sub [Fintype m] (A B : Matrix m n α) (x : m -> α) :
+theorem vecMul_sub [Fintype m] (A B : Matrix m n α) (x : m → α) :
     x ᵥ* (A - B) = x ᵥ* A - x ᵥ* B := by simp [sub_eq_add_neg, vecMul_add, vecMul_neg]
-
-/--
-theorem `sub_vecMul` / 定理 `sub_vecMul`
-
-English:
-theorem sub_vecMul
-  given: [Fintype m] (A : Matrix m n α) (x y : m -> α)
-  proof: by
-  ext
-  apply sub_dotProduct
-
-中文:
-定理 sub_vecMul
-  条件: [有限类型 m] (A : 矩阵 m n α) (x y : m -> α)
-  证明: by
-  ext
-  apply sub_dotProduct
-
-Depends on / 依赖: sub_dotProduct
+/-
+**Matrix.sub_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：sub_vecMul [Fintype m] (A : Matrix m n α) (x y : m -> α) : (x - y) ᵥ* A = 
+x ᵥ* A - y ᵥ* A
+参数：A : Matrix m n α；x y : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sub_dotProduct`：sub_dotProduct : (u - v) ⬝ᵥ w = u ⬝ᵥ w - v ⬝ᵥ w
 -/
-theorem sub_vecMul [Fintype m] (A : Matrix m n α) (x y : m -> α) :
+theorem sub_vecMul [Fintype m] (A : Matrix m n α) (x y : m → α) :
     (x - y) ᵥ* A = x ᵥ* A - y ᵥ* A := by
   ext
   apply sub_dotProduct
-
-/--
-theorem `sub_vecMulVec` / 定理 `sub_vecMulVec`
-
-English:
-theorem sub_vecMulVec
-  given: (w₁ w₂ : m -> α) (v : n -> α)
-  proof: ext fun _ _ => sub_mul _ _ _
-
-中文:
-定理 sub_vecMulVec
-  条件: (w₁ w₂ : m -> α) (v : n -> α)
-  证明: ext fun _ _ => sub_mul _ _ _
-
-Depends on / 依赖: sub_mul
+/-
+**Matrix.sub_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：sub_vecMulVec (w₁ w₂ : m -> α) (v : n -> α) : vecMulVec (w₁ - w₂) v = vecM
+ulVec w₁ v - vecMulVec w₂ v
+参数：w₁ w₂ : m -> α；v : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
 -/
-theorem sub_vecMulVec (w₁ w₂ : m -> α) (v : n -> α) :
+theorem sub_vecMulVec (w₁ w₂ : m → α) (v : n → α) :
     vecMulVec (w₁ - w₂) v = vecMulVec w₁ v - vecMulVec w₂ v :=
   ext fun _ _ => sub_mul _ _ _
-
-/--
-theorem `vecMulVec_sub` / 定理 `vecMulVec_sub`
-
-English:
-theorem vecMulVec_sub
-  given: (w : m -> α) (v₁ v₂ : n -> α)
-  proof: ext fun _ _ => mul_sub _ _ _
-
-中文:
-定理 vecMulVec_sub
-  条件: (w : m -> α) (v₁ v₂ : n -> α)
-  证明: ext fun _ _ => mul_sub _ _ _
-
-Depends on / 依赖: mul_sub
+/-
+**Matrix.vecMulVec_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_sub (w : m -> α) (v₁ v₂ : n -> α) : vecMulVec w (v₁ - v₂) = vecM
+ulVec w v₁ - vecMulVec w v₂
+参数：w : m -> α；v₁ v₂ : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
 -/
-theorem vecMulVec_sub (w : m -> α) (v₁ v₂ : n -> α) :
+theorem vecMulVec_sub (w : m → α) (v₁ v₂ : n → α) :
     vecMulVec w (v₁ - v₂) = vecMulVec w v₁ - vecMulVec w v₂ :=
   ext fun _ _ => mul_sub _ _ _
 
@@ -4277,132 +3785,121 @@ section NonUnitalCommSemiring
 
 variable [NonUnitalCommSemiring α]
 
-/--
-theorem `mulVec_transpose` / 定理 `mulVec_transpose`
-
-English:
-theorem mulVec_transpose
-  given: [Fintype m] (A : Matrix m n α) (x : m -> α)
-  statement: Aᵀ *ᵥ x = x ᵥ* A
-  proof: by
-  ext
-  apply dotProduct_comm
-
-中文:
-定理 mulVec_transpose
-  条件: [有限类型 m] (A : 矩阵 m n α) (x : m -> α)
-  结论: Aᵀ *ᵥ x = x ᵥ* A
-  证明: by
-  ext
-  apply dotProduct_comm
-
-Depends on / 依赖: dotProduct_comm
+/-
+**Matrix.mulVec_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_transpose [Fintype m] (A : Matrix m n α) (x : m -> α) : Aᵀ *ᵥ x = x
+ ᵥ* A
+参数：A : Matrix m n α；x : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_comm`：dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : 
+m -> α) : v ⬝ᵥ w = w ⬝ᵥ v
 -/
-theorem mulVec_transpose [Fintype m] (A : Matrix m n α) (x : m -> α) : Aᵀ *ᵥ x = x ᵥ* A := by
+theorem mulVec_transpose [Fintype m] (A : Matrix m n α) (x : m → α) : Aᵀ *ᵥ x = x ᵥ* A := by
   ext
   apply dotProduct_comm
-
-/--
-theorem `vecMul_transpose` / 定理 `vecMul_transpose`
-
-English:
-theorem vecMul_transpose
-  given: [Fintype n] (A : Matrix m n α) (x : n -> α)
-  statement: x ᵥ* Aᵀ = A *ᵥ x
-  proof: by
-  ext
-  apply dotProduct_comm
-
-中文:
-定理 vecMul_transpose
-  条件: [有限类型 n] (A : 矩阵 m n α) (x : n -> α)
-  结论: x ᵥ* Aᵀ = A *ᵥ x
-  证明: by
-  ext
-  apply dotProduct_comm
-
-Depends on / 依赖: dotProduct_comm
+/-
+**Matrix.vecMul_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_transpose [Fintype n] (A : Matrix m n α) (x : n -> α) : x ᵥ* Aᵀ = A
+ *ᵥ x
+参数：A : Matrix m n α；x : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dotProduct_comm`：dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : 
+m -> α) : v ⬝ᵥ w = w ⬝ᵥ v
 -/
-theorem vecMul_transpose [Fintype n] (A : Matrix m n α) (x : n -> α) : x ᵥ* Aᵀ = A *ᵥ x := by
+theorem vecMul_transpose [Fintype n] (A : Matrix m n α) (x : n → α) : x ᵥ* Aᵀ = A *ᵥ x := by
   ext
   apply dotProduct_comm
 
-/--
-theorem `dotProduct_transpose_mulVec` / 定理 `dotProduct_transpose_mulVec`
+/-- Bilinear form identity: `x ⬝ᵥ Aᵀ *ᵥ y = y ⬝ᵥ A *ᵥ x` for commutative semirings. -/
+/-
+**Matrix.dotProduct_transpose_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：dotProduct_transpose_mulVec [Fintype m] [Fintype n] (A : Matrix m n α) (x 
+: n -> α) (y : m -> α) : x ⬝ᵥ Aᵀ *ᵥ y = y ⬝ᵥ A *ᵥ x
+参数：A : Matrix m n α；x : n -> α；y : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.dotProduct_mulVec`：dotProduct_mulVec [Fintype n] [Fintype m] [Non
+UnitalSemiring R] (v : m -> R) (A : Matrix m n R) (w : n -> R) : v ⬝ᵥ A *ᵥ w = v
+ ᵥ* A ⬝ᵥ w
+· 使用定理 `dotProduct_comm`：dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : 
+m -> α) : v ⬝ᵥ w = w ⬝ᵥ v
+· 使用定理 `Matrix.vecMul_transpose`：vecMul_transpose [Fintype n] (A : Matrix m n α)
+ (x : n -> α) : x ᵥ* Aᵀ = A *ᵥ x
 
-English:
-theorem dotProduct_transpose_mulVec
-  statement: [Fintype m] [Fintype n] (A : Matrix m n α) (x : n -> α)
-  proof: by
-  rw [dotProduct_mulVec]; rw [dotProduct_comm]; rw [vecMul_transpose]
-
-中文:
-定理 dotProduct_transpose_mulVec
-  结论: [有限类型 m] [有限类型 n] (A : 矩阵 m n α) (x : n -> α)
-  证明: by
-  rw [dotProduct_mulVec]; rw [dotProduct_comm]; rw [vecMul_transpose]
-
-Depends on / 依赖: dotProduct_comm, dotProduct_mulVec, vecMul_transpose
+--- 原说明 ---
+Bilinear form identity: `x ⬝ᵥ Aᵀ *ᵥ y = y ⬝ᵥ A *ᵥ x` for commutative semirings.
 -/
-theorem dotProduct_transpose_mulVec [Fintype m] [Fintype n] (A : Matrix m n α) (x : n -> α)
-    (y : m -> α) : x ⬝ᵥ Aᵀ *ᵥ y = y ⬝ᵥ A *ᵥ x := by
-  rw [dotProduct_mulVec]; rw [dotProduct_comm]; rw [vecMul_transpose]
+theorem dotProduct_transpose_mulVec [Fintype m] [Fintype n] (A : Matrix m n α) (x : n → α)
+    (y : m → α) : x ⬝ᵥ Aᵀ *ᵥ y = y ⬝ᵥ A *ᵥ x := by
+  rw [dotProduct_mulVec, dotProduct_comm, vecMul_transpose]
 
-/--
-theorem `dotProduct_vecMul_transpose` / 定理 `dotProduct_vecMul_transpose`
+/-- Bilinear form identity: `(x ᵥ* Aᵀ) ⬝ᵥ y = (y ᵥ* A) ⬝ᵥ x` for commutative semirings. -/
+/-
+**Matrix.dotProduct_vecMul_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：dotProduct_vecMul_transpose [Fintype m] [Fintype n] (A : Matrix m n α) (x 
+: n -> α) (y : m -> α) : (x ᵥ* Aᵀ) ⬝ᵥ y = (y ᵥ* A) ⬝ᵥ x
+参数：A : Matrix m n α；x : n -> α；y : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.dotProduct_mulVec`：dotProduct_mulVec [Fintype n] [Fintype m] [Non
+UnitalSemiring R] (v : m -> R) (A : Matrix m n R) (w : n -> R) : v ⬝ᵥ A *ᵥ w = v
+ ᵥ* A ⬝ᵥ w
+· 使用定理 `Matrix.dotProduct_transpose_mulVec`：dotProduct_transpose_mulVec [Fintype
+ m] [Fintype n] (A : Matrix m n α) (x : n -> α) (y : m -> α) : x ⬝ᵥ Aᵀ *ᵥ y = y 
+⬝ᵥ A *ᵥ x
 
-English:
-theorem dotProduct_vecMul_transpose
-  statement: [Fintype m] [Fintype n] (A : Matrix m n α) (x : n -> α)
-  proof: by
+--- 原说明 ---
+Bilinear form identity: `(x ᵥ* Aᵀ) ⬝ᵥ y = (y ᵥ* A) ⬝ᵥ x` for commutative semirin
+gs.
+-/
+theorem dotProduct_vecMul_transpose [Fintype m] [Fintype n] (A : Matrix m n α) (x : n → α)
+    (y : m → α) : (x ᵥ* Aᵀ) ⬝ᵥ y = (y ᵥ* A) ⬝ᵥ x := by
   simpa [dotProduct_mulVec] using dotProduct_transpose_mulVec (A := A) (x := x) (y := y)
-
-中文:
-定理 dotProduct_vecMul_transpose
-  结论: [有限类型 m] [有限类型 n] (A : 矩阵 m n α) (x : n -> α)
-  证明: by
-  simpa [dotProduct_mulVec] using dotProduct_transpose_mulVec (A := A) (x := x) (y := y)
-
-Depends on / 依赖: dotProduct_mulVec, dotProduct_transpose_mulVec
+/-
+**Matrix.mulVec_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_vecMul [Fintype n] [Fintype o] (A : Matrix m n α) (B : Matrix o n α
+) (x : o -> α) : A *ᵥ (x ᵥ* B) = (A * Bᵀ) *ᵥ x
+参数：A : Matrix m n α；B : Matrix o n α；x : o -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mulVec_mulVec`：mulVec_mulVec [Fintype n] [Fintype o] (v : o -> α)
+ (M : Matrix m n α) (N : Matrix n o α) : M *ᵥ N *ᵥ v = (M * N) *ᵥ v
+· 使用定理 `Matrix.mulVec_transpose`：mulVec_transpose [Fintype m] (A : Matrix m n α)
+ (x : m -> α) : Aᵀ *ᵥ x = x ᵥ* A
 -/
-theorem dotProduct_vecMul_transpose [Fintype m] [Fintype n] (A : Matrix m n α) (x : n -> α)
-    (y : m -> α) : (x ᵥ* Aᵀ) ⬝ᵥ y = (y ᵥ* A) ⬝ᵥ x := by
-  simpa [dotProduct_mulVec] using dotProduct_transpose_mulVec (A := A) (x := x) (y := y)
-
-/--
-theorem `mulVec_vecMul` / 定理 `mulVec_vecMul`
-
-English:
-theorem mulVec_vecMul
-  given: [Fintype n] [Fintype o] (A : Matrix m n α) (B : Matrix o n α) (x : o -> α)
-  proof: by rw [← mulVec_mulVec, mulVec_transpose]
-
-中文:
-定理 mulVec_vecMul
-  条件: [有限类型 n] [有限类型 o] (A : 矩阵 m n α) (B : 矩阵 o n α) (x : o -> α)
-  证明: by rw [← mulVec_mulVec, mulVec_transpose]
-
-Depends on / 依赖: mulVec_mulVec, mulVec_transpose
--/
-theorem mulVec_vecMul [Fintype n] [Fintype o] (A : Matrix m n α) (B : Matrix o n α) (x : o -> α) :
+theorem mulVec_vecMul [Fintype n] [Fintype o] (A : Matrix m n α) (B : Matrix o n α) (x : o → α) :
     A *ᵥ (x ᵥ* B) = (A * Bᵀ) *ᵥ x := by rw [← mulVec_mulVec, mulVec_transpose]
-
-/--
-theorem `vecMul_mulVec` / 定理 `vecMul_mulVec`
-
-English:
-theorem vecMul_mulVec
-  given: [Fintype m] [Fintype n] (A : Matrix m n α) (B : Matrix m o α) (x : n -> α)
-  proof: by rw [← vecMul_vecMul, vecMul_transpose]
-
-中文:
-定理 vecMul_mulVec
-  条件: [有限类型 m] [有限类型 n] (A : 矩阵 m n α) (B : 矩阵 m o α) (x : n -> α)
-  证明: by rw [← vecMul_vecMul, vecMul_transpose]
-
-Depends on / 依赖: vecMul_transpose, vecMul_vecMul
+/-
+**Matrix.vecMul_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_mulVec [Fintype m] [Fintype n] (A : Matrix m n α) (B : Matrix m o α
+) (x : n -> α) : (A *ᵥ x) ᵥ* B = x ᵥ* (Aᵀ * B)
+参数：A : Matrix m n α；B : Matrix m o α；x : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.vecMul_vecMul`：vecMul_vecMul [Fintype n] [Fintype m] (v : m -> α)
+ (M : Matrix m n α) (N : Matrix n o α) : v ᵥ* M ᵥ* N = v ᵥ* (M * N)
+· 使用定理 `Matrix.vecMul_transpose`：vecMul_transpose [Fintype n] (A : Matrix m n α)
+ (x : n -> α) : x ᵥ* Aᵀ = A *ᵥ x
 -/
-theorem vecMul_mulVec [Fintype m] [Fintype n] (A : Matrix m n α) (B : Matrix m o α) (x : n -> α) :
+theorem vecMul_mulVec [Fintype m] [Fintype n] (A : Matrix m n α) (B : Matrix m o α) (x : n → α) :
     (A *ᵥ x) ᵥ* B = x ᵥ* (Aᵀ * B) := by rw [← vecMul_vecMul, vecMul_transpose]
 
 end NonUnitalCommSemiring
@@ -4411,99 +3908,92 @@ section Semiring
 
 variable [Semiring R]
 
-/--
-lemma `mulVec_injective_of_isUnit` / 引理 `mulVec_injective_of_isUnit`
-
-English:
-lemma mulVec_injective_of_isUnit
-  statement: [Fintype m] [DecidableEq m] {A : Matrix m m R}
-  proof: isLeftRegular_iff_mulVec_injective.1 ha.isRegular.left
-
-中文:
-引理 mulVec_injective_of_isUnit
-  结论: [有限类型 m] [DecidableEq m] {A : 矩阵 m m R}
-  证明: isLeftRegular_iff_mulVec_injective.1 ha.isRegular.left
-
-Depends on / 依赖: ha.isRegular.left, isLeftRegular_iff_mulVec_injective, isRegular
+/-
+**Matrix.mulVec_injective_of_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_injective_of_isUnit [Fintype m] [DecidableEq m] {A : Matrix m m R} 
+(ha : IsUnit A) : Function.Injective A.mulVec
+参数：ha : IsUnit A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matrix.isLeftRegular_iff_mulVec_injective`：isLeftRegular_iff_mulVec_inje
+ctive [Fintype m] {A : Matrix m m α} : IsLeftRegular A ↔ Function.Injective A.mu
+lVec
+· 使用定理 `IsRegular.left`：∀ {R : Type u_1} [inst : Mul R] {c : R}, IsRegular c → I
+sLeftRegular c
+· 使用定理 `IsUnit.isRegular`：IsUnit.isRegular (ua : IsUnit a) : IsRegular a
 -/
 lemma mulVec_injective_of_isUnit [Fintype m] [DecidableEq m] {A : Matrix m m R}
     (ha : IsUnit A) : Function.Injective A.mulVec :=
   isLeftRegular_iff_mulVec_injective.1 ha.isRegular.left
-
-/--
-lemma `vecMul_injective_of_isUnit` / 引理 `vecMul_injective_of_isUnit`
-
-English:
-lemma vecMul_injective_of_isUnit
-  statement: [Fintype m] [DecidableEq m] {A : Matrix m m R}
-  proof: isRightRegular_iff_vecMul_injective.1 ha.isRegular.right
-
-中文:
-引理 vecMul_injective_of_isUnit
-  结论: [有限类型 m] [DecidableEq m] {A : 矩阵 m m R}
-  证明: isRightRegular_iff_vecMul_injective.1 ha.isRegular.right
-
-Depends on / 依赖: ha.isRegular.right, isRegular, isRightRegular_iff_vecMul_injective
+/-
+**Matrix.vecMul_injective_of_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_injective_of_isUnit [Fintype m] [DecidableEq m] {A : Matrix m m R} 
+(ha : IsUnit A) : Function.Injective A.vecMul
+参数：ha : IsUnit A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matrix.isRightRegular_iff_vecMul_injective`：isRightRegular_iff_vecMul_in
+jective [Fintype m] {A : Matrix m m α} : IsRightRegular A ↔ Function.Injective A
+.vecMul
+· 使用定理 `IsRegular.right`：∀ {R : Type u_1} [inst : Mul R] {c : R}, IsRegular c → 
+IsRightRegular c
+· 使用定理 `IsUnit.isRegular`：IsUnit.isRegular (ua : IsUnit a) : IsRegular a
 -/
 lemma vecMul_injective_of_isUnit [Fintype m] [DecidableEq m] {A : Matrix m m R}
     (ha : IsUnit A) : Function.Injective A.vecMul :=
   isRightRegular_iff_vecMul_injective.1 ha.isRegular.right
-
-/--
-lemma `pow_row_eq_zero_of_le` / 引理 `pow_row_eq_zero_of_le`
-
-English:
-lemma pow_row_eq_zero_of_le
-  statement: [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : Nat} {i : n}
-  proof: by
-  replace h' : l = k + (l - k) := by lia
-  rw [← single_one_vecMul] at h ⊢
-  rw [h']; rw [pow_add]; rw [← vecMul_vecMul]; rw [h]; rw [zero_vecMul]
-
-中文:
-引理 pow_row_eq_zero_of_le
-  结论: [有限类型 n] [DecidableEq n] {M : 矩阵 n n R} {k l : 自然数} {i : n}
-  证明: by
-  replace h' : l = k + (l - k) := by lia
-  rw [← single_one_vecMul] at h ⊢
-  rw [h']; rw [pow_add]; rw [← vecMul_vecMul]; rw [h]; rw [zero_vecMul]
-
-Depends on / 依赖: pow_add, replace, single_one_vecMul, vecMul_vecMul, zero_vecMul
+/-
+**Matrix.pow_row_eq_zero_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：pow_row_eq_zero_of_le [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l 
+: Nat} {i : n} (h : (M ^ k).row i = 0) (h' : k <= l) : (M ^ l).row i = 0
+参数：h : (M ^ k).row i = 0；h' : k <= l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.single_one_vecMul`：single_one_vecMul [Fintype m] [DecidableEq m] 
+[NonAssocSemiring R] (i : m) (M : Matrix m n R) : Pi.single i 1 ᵥ* M = M.row i
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Matrix.vecMul_vecMul`：vecMul_vecMul [Fintype n] [Fintype m] (v : m -> α)
+ (M : Matrix m n α) (N : Matrix n o α) : v ᵥ* M ᵥ* N = v ᵥ* (M * N)
+· 使用定理 `Matrix.zero_vecMul`：zero_vecMul [Fintype m] (A : Matrix m n α) : 0 ᵥ* A 
+= 0
 -/
-lemma pow_row_eq_zero_of_le [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : Nat} {i : n}
-    (h : (M ^ k).row i = 0) (h' : k <= l) :
+lemma pow_row_eq_zero_of_le [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : ℕ} {i : n}
+    (h : (M ^ k).row i = 0) (h' : k ≤ l) :
     (M ^ l).row i = 0 := by
   replace h' : l = k + (l - k) := by lia
   rw [← single_one_vecMul] at h ⊢
-  rw [h']; rw [pow_add]; rw [← vecMul_vecMul]; rw [h]; rw [zero_vecMul]
-
-/--
-lemma `pow_col_eq_zero_of_le` / 引理 `pow_col_eq_zero_of_le`
-
-English:
-lemma pow_col_eq_zero_of_le
-  statement: [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : Nat} {i : n}
-  proof: by
-  replace h' : l = (l - k) + k := by lia
-  rw [← mulVec_single_one] at h ⊢
-  rw [h']; rw [pow_add]; rw [← mulVec_mulVec]; rw [h]; rw [mulVec_zero]
-
-中文:
-引理 pow_col_eq_zero_of_le
-  结论: [有限类型 n] [DecidableEq n] {M : 矩阵 n n R} {k l : 自然数} {i : n}
-  证明: by
-  replace h' : l = (l - k) + k := by lia
-  rw [← mulVec_single_one] at h ⊢
-  rw [h']; rw [pow_add]; rw [← mulVec_mulVec]; rw [h]; rw [mulVec_zero]
-
-Depends on / 依赖: mulVec_mulVec, mulVec_single_one, mulVec_zero, pow_add, replace
+  rw [h', pow_add, ← vecMul_vecMul, h, zero_vecMul]
+/-
+**Matrix.pow_col_eq_zero_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：pow_col_eq_zero_of_le [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l 
+: Nat} {i : n} (h : (M ^ k).col i = 0) (h' : k <= l) : (M ^ l).col i = 0
+参数：h : (M ^ k).col i = 0；h' : k <= l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mulVec_single_one`：mulVec_single_one [Fintype n] [DecidableEq n] 
+[NonAssocSemiring R] (M : Matrix m n R) (j : n) : M *ᵥ Pi.single j 1 = M.col j
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Matrix.mulVec_mulVec`：mulVec_mulVec [Fintype n] [Fintype o] (v : o -> α)
+ (M : Matrix m n α) (N : Matrix n o α) : M *ᵥ N *ᵥ v = (M * N) *ᵥ v
+· 使用定理 `Matrix.mulVec_zero`：mulVec_zero [Fintype n] (A : Matrix m n α) : A *ᵥ 0 
+= 0
 -/
-lemma pow_col_eq_zero_of_le [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : Nat} {i : n}
-    (h : (M ^ k).col i = 0) (h' : k <= l) :
+lemma pow_col_eq_zero_of_le [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : ℕ} {i : n}
+    (h : (M ^ k).col i = 0) (h' : k ≤ l) :
     (M ^ l).col i = 0 := by
   replace h' : l = (l - k) + k := by lia
   rw [← mulVec_single_one] at h ⊢
-  rw [h']; rw [pow_add]; rw [← mulVec_mulVec]; rw [h]; rw [mulVec_zero]
+  rw [h', pow_add, ← mulVec_mulVec, h, mulVec_zero]
 
 end Semiring
 
@@ -4514,49 +4004,30 @@ variable [NonAssocRing α]
 variable [Fintype m] [DecidableEq m]
 
 @[simp]
-/--
-theorem `intCast_mulVec` / 定理 `intCast_mulVec`
-
-English:
-theorem intCast_mulVec
-  given: (x : Int) (v : m -> α)
-  statement: x *ᵥ v = (x : α) • v
-  proof: diagonal_const_mulVec _ _
-
-@[simp]
-
-中文:
-定理 intCast_mulVec
-  条件: (x : 整数) (v : m -> α)
-  结论: x *ᵥ v = (x : α) • v
-  证明: diagonal_const_mulVec _ _
-
-@[simp]
-
-Depends on / 依赖: diagonal_const_mulVec
+/-
+**Matrix.intCast_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：intCast_mulVec (x : Int) (v : m -> α) : x *ᵥ v = (x : α) • v
+参数：x : Int；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.diagonal_const_mulVec`：diagonal_const_mulVec (x : α) (v : m -> α)
+ : (diagonal fun _ => x) *ᵥ v = x • v
 -/
-theorem intCast_mulVec (x : Int) (v : m -> α) : x *ᵥ v = (x : α) • v :=
+theorem intCast_mulVec (x : ℤ) (v : m → α) : x *ᵥ v = (x : α) • v :=
   diagonal_const_mulVec _ _
 
 @[simp]
-/--
-theorem `vecMul_intCast` / 定理 `vecMul_intCast`
-
-English:
-theorem vecMul_intCast
-  given: (x : Int) (v : m -> α)
-  statement: v ᵥ* x = MulOpposite.op (x : α) • v
-  proof: vecMul_diagonal_const _ _
-
-中文:
-定理 vecMul_intCast
-  条件: (x : 整数) (v : m -> α)
-  结论: v ᵥ* x = MulOpposite.op (x : α) • v
-  证明: vecMul_diagonal_const _ _
-
-Depends on / 依赖: vecMul_diagonal_const
+/-
+**Matrix.vecMul_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_intCast (x : Int) (v : m -> α) : v ᵥ* x = MulOpposite.op (x : α) • 
+v
+参数：x : Int；v : m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.vecMul_diagonal_const`：vecMul_diagonal_const (x : α) (v : m -> α)
+ : v ᵥ* (diagonal fun _ => x) = MulOpposite.op x • v
 -/
-theorem vecMul_intCast (x : Int) (v : m -> α) : v ᵥ* x = MulOpposite.op (x : α) • v :=
+theorem vecMul_intCast (x : ℤ) (v : m → α) : v ᵥ* x = MulOpposite.op (x : α) • v :=
   vecMul_diagonal_const _ _
 
 end NonAssocRing
@@ -4566,24 +4037,16 @@ section Transpose
 open Matrix
 
 @[simp]
-/--
-theorem `transpose_mul` / 定理 `transpose_mul`
-
-English:
-theorem transpose_mul
-  statement: [AddCommMonoid α] [CommMagma α] [Fintype n] (M : Matrix m n α)
-  proof: by
-  ext
-  apply dotProduct_comm
-
-中文:
-定理 transpose_mul
-  结论: [加法交换幺半群 α] [交换原群 α] [有限类型 n] (M : 矩阵 m n α)
-  证明: by
-  ext
-  apply dotProduct_comm
-
-Depends on / 依赖: dotProduct_comm
+/-
+**Matrix.transpose_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_mul [AddCommMonoid α] [CommMagma α] [Fintype n] (M : Matrix m n 
+α) (N : Matrix n l α) : (M * N)ᵀ = Nᵀ * Mᵀ
+参数：M : Matrix m n α；N : Matrix n l α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `dotProduct_comm`：dotProduct_comm [AddCommMonoid α] [CommMagma α] (v w : 
+m -> α) : v ⬝ᵥ w = w ⬝ᵥ v
 -/
 theorem transpose_mul [AddCommMonoid α] [CommMagma α] [Fintype n] (M : Matrix m n α)
     (N : Matrix n l α) : (M * N)ᵀ = Nᵀ * Mᵀ := by
@@ -4592,23 +4055,24 @@ theorem transpose_mul [AddCommMonoid α] [CommMagma α] [Fintype n] (M : Matrix 
 
 end Transpose
 
-/--
-theorem `submatrix_mul` / 定理 `submatrix_mul`
-
-English:
-theorem submatrix_mul
-  statement: [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p q : Type*}
-  proof: ext fun _ _ => (he₂.sum_comp _).symm
-
-中文:
-定理 submatrix_mul
-  结论: [有限类型 n] [有限类型 o] [乘法 α] [加法交换幺半群 α] {p q : 类型}
-  证明: ext fun _ _ => (he₂.sum_comp _).symm
-
-Depends on / 依赖: sum_comp
+/-
+**Matrix.submatrix_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_mul [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p q : Typ
+e*} (M : Matrix m n α) (N : Matrix n p α) (e₁ : l -> m) (e₂ : o -> n) (e₃ : q ->
+ p) (he₂ : Function.Bijective e₂) : (M * N).submatrix e₁ e₃ = M.submatrix e₁ e₂ 
+* N.submatrix e₂ e₃
+参数：M : Matrix m n α；N : Matrix n p α；e₁ : l -> m；e₂ : o -> n；e₃ : q -> p；he₂ : F
+unction.Bijective e₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Bijective.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u
+_3} [inst : Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   {e : ι 
+→ κ}, Function.Bi…
 -/
 theorem submatrix_mul [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p q : Type*}
-    (M : Matrix m n α) (N : Matrix n p α) (e₁ : l -> m) (e₂ : o -> n) (e₃ : q -> p)
+    (M : Matrix m n α) (N : Matrix n p α) (e₁ : l → m) (e₂ : o → n) (e₃ : q → p)
     (he₂ : Function.Bijective e₂) :
     (M * N).submatrix e₁ e₃ = M.submatrix e₁ e₂ * N.submatrix e₂ e₃ :=
   ext fun _ _ => (he₂.sum_comp _).symm
@@ -4617,288 +4081,317 @@ theorem submatrix_mul [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p q :
 for when the mappings are bundled. -/
 
 @[simp]
-/--
-theorem `submatrix_mul_equiv` / 定理 `submatrix_mul_equiv`
+/-
+**Matrix.submatrix_mul_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_mul_equiv [Fintype n] [Fintype o] [AddCommMonoid α] [Mul α] {p q
+ : Type*} (M : Matrix m n α) (N : Matrix n p α) (e₁ : l -> m) (e₂ : o ≃ n) (e₃ :
+ q -> p) : M.submatrix e₁ e₂ * N.submatrix e₂ e₃ = (M * N).submatrix e₁ e₃
+参数：M : Matrix m n α；N : Matrix n p α；e₁ : l -> m；e₂ : o ≃ n；e₃ : q -> p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.submatrix_mul`：submatrix_mul [Fintype n] [Fintype o] [Mul α] [Add
+CommMonoid α] {p q : Type*} (M : Matrix m n α) (N : Matrix n p α) (e₁ : l -> m) 
+(e₂ : o ->…
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 
-English:
-theorem submatrix_mul_equiv
-  statement: [Fintype n] [Fintype o] [AddCommMonoid α] [Mul α] {p q : Type*}
-  proof: (submatrix_mul M N e₁ e₂ e₃ e₂.bijective).symm
-
-中文:
-定理 submatrix_mul_equiv
-  结论: [有限类型 n] [有限类型 o] [加法交换幺半群 α] [乘法 α] {p q : 类型}
-  证明: (submatrix_mul M N e₁ e₂ e₃ e₂.bijective).symm
-
-Depends on / 依赖: bijective, submatrix_mul
+--- 原说明 ---
+`simp` lemmas for `Matrix.submatrix`s interaction with `Matrix.diagonal`, `1`, a
+nd `Matrix.mul`
+for when the mappings are bundled.
 -/
 theorem submatrix_mul_equiv [Fintype n] [Fintype o] [AddCommMonoid α] [Mul α] {p q : Type*}
-    (M : Matrix m n α) (N : Matrix n p α) (e₁ : l -> m) (e₂ : o ≃ n) (e₃ : q -> p) :
+    (M : Matrix m n α) (N : Matrix n p α) (e₁ : l → m) (e₂ : o ≃ n) (e₃ : q → p) :
     M.submatrix e₁ e₂ * N.submatrix e₂ e₃ = (M * N).submatrix e₁ e₃ :=
   (submatrix_mul M N e₁ e₂ e₃ e₂.bijective).symm
-
-/--
-theorem `submatrix_mulVec_equiv` / 定理 `submatrix_mulVec_equiv`
-
-English:
-theorem submatrix_mulVec_equiv
-  statement: [Fintype n] [Fintype o] [NonUnitalNonAssocSemiring α]
-  proof: funext fun _ => Eq.symm (dotProduct_comp_equiv_symm _ _ _)
-
-@[simp]
-
-中文:
-定理 submatrix_mulVec_equiv
-  结论: [有限类型 n] [有限类型 o] [非幺非结合半环 α]
-  证明: funext fun _ => Eq.symm (dotProduct_comp_equiv_symm _ _ _)
-
-@[simp]
-
-Depends on / 依赖: Eq.symm, dotProduct_comp_equiv_symm
+/-
+**Matrix.submatrix_mulVec_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_mulVec_equiv [Fintype n] [Fintype o] [NonUnitalNonAssocSemiring 
+α] (M : Matrix m n α) (v : o -> α) (e₁ : l -> m) (e₂ : o ≃ n) : M.submatrix e₁ e
+₂ *ᵥ v = (M *ᵥ (v ∘ e₂.symm)) ∘ e₁
+参数：M : Matrix m n α；v : o -> α；e₁ : l -> m；e₂ : o ≃ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dotProduct_comp_equiv_symm`：dotProduct_comp_equiv_symm (e : n ≃ m) : u ⬝
+ᵥ x ∘ e.symm = u ∘ e ⬝ᵥ x
 -/
 theorem submatrix_mulVec_equiv [Fintype n] [Fintype o] [NonUnitalNonAssocSemiring α]
-    (M : Matrix m n α) (v : o -> α) (e₁ : l -> m) (e₂ : o ≃ n) :
+    (M : Matrix m n α) (v : o → α) (e₁ : l → m) (e₂ : o ≃ n) :
     M.submatrix e₁ e₂ *ᵥ v = (M *ᵥ (v ∘ e₂.symm)) ∘ e₁ :=
   funext fun _ => Eq.symm (dotProduct_comp_equiv_symm _ _ _)
 
 @[simp]
-/--
-theorem `submatrix_id_mul_left` / 定理 `submatrix_id_mul_left`
-
-English:
-theorem submatrix_id_mul_left
-  statement: [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p : Type*}
-  proof: by
-  ext; simp [mul_apply, ← e₂.bijective.sum_comp]
-
-@[simp]
-
-中文:
-定理 submatrix_id_mul_left
-  结论: [有限类型 n] [有限类型 o] [乘法 α] [加法交换幺半群 α] {p : 类型}
-  证明: by
-  ext; simp [mul_apply, ← e₂.bijective.sum_comp]
-
-@[simp]
-
-Depends on / 依赖: bijective, bijective.sum_comp, mul_apply, sum_comp
+/-
+**Matrix.submatrix_id_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_id_mul_left [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p
+ : Type*} (M : Matrix m n α) (N : Matrix o p α) (e₁ : l -> m) (e₂ : n ≃ o) : M.s
+ubmatrix e₁ id * N.submatrix e₂ id = M.submatrix e₁ e₂.symm * N
+参数：M : Matrix m n α；N : Matrix o p α；e₁ : l -> m；e₂ : n ≃ o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Bijective.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u
+_3} [inst : Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   {e : ι 
+→ κ}, Function.Bi…
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem submatrix_id_mul_left [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p : Type*}
-    (M : Matrix m n α) (N : Matrix o p α) (e₁ : l -> m) (e₂ : n ≃ o) :
+    (M : Matrix m n α) (N : Matrix o p α) (e₁ : l → m) (e₂ : n ≃ o) :
     M.submatrix e₁ id * N.submatrix e₂ id = M.submatrix e₁ e₂.symm * N := by
   ext; simp [mul_apply, ← e₂.bijective.sum_comp]
 
 @[simp]
-/--
-theorem `submatrix_id_mul_right` / 定理 `submatrix_id_mul_right`
-
-English:
-theorem submatrix_id_mul_right
-  statement: [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p : Type*}
-  proof: by
-  ext; simp [mul_apply, ← e₂.bijective.sum_comp]
-
-中文:
-定理 submatrix_id_mul_right
-  结论: [有限类型 n] [有限类型 o] [乘法 α] [加法交换幺半群 α] {p : 类型}
-  证明: by
-  ext; simp [mul_apply, ← e₂.bijective.sum_comp]
-
-Depends on / 依赖: bijective, bijective.sum_comp, mul_apply, sum_comp
+/-
+**Matrix.submatrix_id_mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_id_mul_right [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {
+p : Type*} (M : Matrix m n α) (N : Matrix o p α) (e₁ : l -> p) (e₂ : o ≃ n) : M.
+submatrix id e₂ * N.submatrix id e₁ = M * N.submatrix e₂.symm e₁
+参数：M : Matrix m n α；N : Matrix o p α；e₁ : l -> p；e₂ : o ≃ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Bijective.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u
+_3} [inst : Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   {e : ι 
+→ κ}, Function.Bi…
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem submatrix_id_mul_right [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p : Type*}
-    (M : Matrix m n α) (N : Matrix o p α) (e₁ : l -> p) (e₂ : o ≃ n) :
+    (M : Matrix m n α) (N : Matrix o p α) (e₁ : l → p) (e₂ : o ≃ n) :
     M.submatrix id e₂ * N.submatrix id e₁ = M * N.submatrix e₂.symm e₁ := by
   ext; simp [mul_apply, ← e₂.bijective.sum_comp]
-
-/--
-theorem `submatrix_vecMul_equiv` / 定理 `submatrix_vecMul_equiv`
-
-English:
-theorem submatrix_vecMul_equiv
-  statement: [Fintype l] [Fintype m] [NonUnitalNonAssocSemiring α]
-  proof: funext fun _ => Eq.symm (comp_equiv_symm_dotProduct _ _ _)
-
-中文:
-定理 submatrix_vecMul_equiv
-  结论: [有限类型 l] [有限类型 m] [非幺非结合半环 α]
-  证明: funext fun _ => Eq.symm (comp_equiv_symm_dotProduct _ _ _)
-
-Depends on / 依赖: Eq.symm, comp_equiv_symm_dotProduct
+/-
+**Matrix.submatrix_vecMul_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_vecMul_equiv [Fintype l] [Fintype m] [NonUnitalNonAssocSemiring 
+α] (M : Matrix m n α) (v : l -> α) (e₁ : l ≃ m) (e₂ : o -> n) : v ᵥ* M.submatrix
+ e₁ e₂ = ((v ∘ e₁.symm) ᵥ* M) ∘ e₂
+参数：M : Matrix m n α；v : l -> α；e₁ : l ≃ m；e₂ : o -> n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `comp_equiv_symm_dotProduct`：comp_equiv_symm_dotProduct (e : m ≃ n) : u ∘
+ e.symm ⬝ᵥ x = u ⬝ᵥ x ∘ e
 -/
 theorem submatrix_vecMul_equiv [Fintype l] [Fintype m] [NonUnitalNonAssocSemiring α]
-    (M : Matrix m n α) (v : l -> α) (e₁ : l ≃ m) (e₂ : o -> n) :
+    (M : Matrix m n α) (v : l → α) (e₁ : l ≃ m) (e₂ : o → n) :
     v ᵥ* M.submatrix e₁ e₂ = ((v ∘ e₁.symm) ᵥ* M) ∘ e₂ :=
   funext fun _ => Eq.symm (comp_equiv_symm_dotProduct _ _ _)
-
-/--
-theorem `mul_submatrix_one` / 定理 `mul_submatrix_one`
-
-English:
-theorem mul_submatrix_one
-  statement: [Fintype n] [Finite o] [NonAssocSemiring α] [DecidableEq o] (e₁ : n ≃ o)
-  proof: by
-  cases nonempty_fintype o
-  let A := M.submatrix id e₁.symm
-  have : M = A.submatrix id e₁ := by
-    simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
-  rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.mul_one, submatrix_submatrix, Function.comp_id, submatrix_id_id,
-    Equiv.symm_comp_self]
-
-中文:
-定理 mul_submatrix_one
-  结论: [有限类型 n] [有限 o] [非结合半环 α] [DecidableEq o] (e₁ : n ≃ o)
-  证明: by
-  cases nonempty_fintype o
-  let A := M.submatrix id e₁.symm
-  have : M = A.submatrix id e₁ := by
-    simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
-  rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.mul_one, submatrix_submatrix, Function.comp_id, submatrix_id_id,
-    Equiv.symm_comp_self]
-
-Depends on / 依赖: A.submatrix, Equiv.symm_comp_self, Function, Function.comp_id, M.submatrix, Matrix, Matrix.mul_one, comp_id, mul_one, nonempty_fintype, submatrix, submatrix_id_id, submatrix_mul_equiv, submatrix_submatrix, symm_comp_self
+/-
+**Matrix.mul_submatrix_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_submatrix_one [Fintype n] [Finite o] [NonAssocSemiring α] [DecidableEq
+ o] (e₁ : n ≃ o) (e₂ : l -> o) (M : Matrix m n α) : M * (1 : Matrix o o α).subma
+trix e₁ e₂ = submatrix M id (e₁.symm ∘ e₂)
+参数：e₁ : n ≃ o；e₂ : l -> o；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.submatrix_submatrix`：submatrix_submatrix {l₂ o₂ : Type*} (A : Mat
+rix m n α) (r₁ : l -> m) (c₁ : o -> n) (r₂ : l₂ -> l) (c₂ : o₂ -> o) : (A.submat
+rix r₁ c₁).subma…
+· 使用定理 `Equiv.symm_comp_self`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e.symm ∘
+ ⇑e = id
+· 使用定理 `Matrix.submatrix_id_id`：submatrix_id_id (A : Matrix m n α) : A.submatrix
+ id id = A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Matrix.submatrix_mul_equiv`：submatrix_mul_equiv [Fintype n] [Fintype o] 
+[AddCommMonoid α] [Mul α] {p q : Type*} (M : Matrix m n α) (N : Matrix n p α) (e
+₁ : l -> m) (e₂ …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.mul_one`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype n] [inst_2 : DecidableEq n]   (M : Matrix m n
+ α),…
 -/
 theorem mul_submatrix_one [Fintype n] [Finite o] [NonAssocSemiring α] [DecidableEq o] (e₁ : n ≃ o)
-    (e₂ : l -> o) (M : Matrix m n α) :
+    (e₂ : l → o) (M : Matrix m n α) :
     M * (1 : Matrix o o α).submatrix e₁ e₂ = submatrix M id (e₁.symm ∘ e₂) := by
   cases nonempty_fintype o
   let A := M.submatrix id e₁.symm
   have : M = A.submatrix id e₁ := by
     simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
-  rw [this]; rw [submatrix_mul_equiv]
+  rw [this, submatrix_mul_equiv]
   simp only [A, Matrix.mul_one, submatrix_submatrix, Function.comp_id, submatrix_id_id,
     Equiv.symm_comp_self]
-
-/--
-theorem `one_submatrix_mul` / 定理 `one_submatrix_mul`
-
-English:
-theorem one_submatrix_mul
-  statement: [Fintype m] [Finite o] [NonAssocSemiring α] [DecidableEq o] (e₁ : l -> o)
-  proof: by
-  cases nonempty_fintype o
-  let A := M.submatrix e₂.symm id
-  have : M = A.submatrix e₂ id := by
-    simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
-  rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.one_mul, submatrix_submatrix, Function.comp_id, submatrix_id_id,
-    Equiv.symm_comp_self]
-
-中文:
-定理 one_submatrix_mul
-  结论: [有限类型 m] [有限 o] [非结合半环 α] [DecidableEq o] (e₁ : l -> o)
-  证明: by
-  cases nonempty_fintype o
-  let A := M.submatrix e₂.symm id
-  have : M = A.submatrix e₂ id := by
-    simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
-  rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.one_mul, submatrix_submatrix, Function.comp_id, submatrix_id_id,
-    Equiv.symm_comp_self]
-
-Depends on / 依赖: A.submatrix, Equiv.symm_comp_self, Function, Function.comp_id, M.submatrix, Matrix, Matrix.one_mul, comp_id, nonempty_fintype, one_mul, submatrix, submatrix_id_id, submatrix_mul_equiv, submatrix_submatrix, symm_comp_self
+/-
+**Matrix.one_submatrix_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_submatrix_mul [Fintype m] [Finite o] [NonAssocSemiring α] [DecidableEq
+ o] (e₁ : l -> o) (e₂ : m ≃ o) (M : Matrix m n α) : ((1 : Matrix o o α).submatri
+x e₁ e₂) * M = submatrix M (e₂.symm ∘ e₁) id
+参数：e₁ : l -> o；e₂ : m ≃ o；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.submatrix_submatrix`：submatrix_submatrix {l₂ o₂ : Type*} (A : Mat
+rix m n α) (r₁ : l -> m) (c₁ : o -> n) (r₂ : l₂ -> l) (c₂ : o₂ -> o) : (A.submat
+rix r₁ c₁).subma…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_comp_self`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e.symm ∘
+ ⇑e = id
+· 使用定理 `Matrix.submatrix_id_id`：submatrix_id_id (A : Matrix m n α) : A.submatrix
+ id id = A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Matrix.submatrix_mul_equiv`：submatrix_mul_equiv [Fintype n] [Fintype o] 
+[AddCommMonoid α] [Mul α] {p q : Type*} (M : Matrix m n α) (N : Matrix n p α) (e
+₁ : l -> m) (e₂ …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.one_mul`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype m] [inst_2 : DecidableEq m]   (M : Matrix m n
+ α),…
 -/
-theorem one_submatrix_mul [Fintype m] [Finite o] [NonAssocSemiring α] [DecidableEq o] (e₁ : l -> o)
+theorem one_submatrix_mul [Fintype m] [Finite o] [NonAssocSemiring α] [DecidableEq o] (e₁ : l → o)
     (e₂ : m ≃ o) (M : Matrix m n α) :
     ((1 : Matrix o o α).submatrix e₁ e₂) * M = submatrix M (e₂.symm ∘ e₁) id := by
   cases nonempty_fintype o
   let A := M.submatrix e₂.symm id
   have : M = A.submatrix e₂ id := by
     simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
-  rw [this]; rw [submatrix_mul_equiv]
+  rw [this, submatrix_mul_equiv]
   simp only [A, Matrix.one_mul, submatrix_submatrix, Function.comp_id, submatrix_id_id,
     Equiv.symm_comp_self]
-
-/--
-theorem `submatrix_mul_transpose_submatrix` / 定理 `submatrix_mul_transpose_submatrix`
-
-English:
-theorem submatrix_mul_transpose_submatrix
-  statement: [Fintype m] [Fintype n] [AddCommMonoid α] [Mul α]
-  proof: by
-  rw [submatrix_mul_equiv]; rw [submatrix_id_id]
-
-中文:
-定理 submatrix_mul_transpose_submatrix
-  结论: [有限类型 m] [有限类型 n] [加法交换幺半群 α] [乘法 α]
-  证明: by
-  rw [submatrix_mul_equiv]; rw [submatrix_id_id]
-
-Depends on / 依赖: submatrix_id_id, submatrix_mul_equiv
+/-
+**Matrix.submatrix_mul_transpose_submatrix** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_mul_transpose_submatrix [Fintype m] [Fintype n] [AddCommMonoid α
+] [Mul α] (e : m ≃ n) (M : Matrix m n α) : M.submatrix id e * Mᵀ.submatrix e id 
+= M * Mᵀ
+参数：e : m ≃ n；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.submatrix_mul_equiv`：submatrix_mul_equiv [Fintype n] [Fintype o] 
+[AddCommMonoid α] [Mul α] {p q : Type*} (M : Matrix m n α) (N : Matrix n p α) (e
+₁ : l -> m) (e₂ …
+· 使用定理 `Matrix.submatrix_id_id`：submatrix_id_id (A : Matrix m n α) : A.submatrix
+ id id = A
 -/
 theorem submatrix_mul_transpose_submatrix [Fintype m] [Fintype n] [AddCommMonoid α] [Mul α]
     (e : m ≃ n) (M : Matrix m n α) : M.submatrix id e * Mᵀ.submatrix e id = M * Mᵀ := by
-  rw [submatrix_mul_equiv]; rw [submatrix_id_id]
+  rw [submatrix_mul_equiv, submatrix_id_id]
 
 variable (m n R : Type*) [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
 variable [MulOne R] [AddCommMonoid R]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsStablyFiniteRing
-  signature: R] : IsDedekindFiniteMonoid (Matrix n n R)
-  body: let e := Fintype.equivFin n
-  let f := MonoidHom.mk ⟨reindex (α := R) e e, submatrix_one_equiv _⟩
-    fun _ _ => (submatrix_mul_equiv ..).symm
-  .of_injective f (reindex e e).injective
-
-中文:
-实例 [是StablyFinite环
-  签名: R] : 是DedekindFinite幺半群 (矩阵 n n R)
-  定义体: let e := Fintype.equivFin n
-  let f := MonoidHom.mk ⟨reindex (α := R) e e, submatrix_one_equiv _⟩
-    fun _ _ => (submatrix_mul_equiv ..).symm
-  .of_injective f (reindex e e).injective
-
-Depends on / 依赖: Fintype, Fintype.equivFin, MonoidHom, MonoidHom.mk, equivFin, injective, of_injective, reindex, submatrix_mul_equiv, submatrix_one_equiv
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsStablyFiniteRing R] : IsDedekindFiniteMonoid (Matrix n n R) :=
   let e := Fintype.equivFin n
   let f := MonoidHom.mk ⟨reindex (α := R) e e, submatrix_one_equiv _⟩
-    fun _ _ => (submatrix_mul_equiv ..).symm
+    fun _ _ ↦ (submatrix_mul_equiv ..).symm
   .of_injective f (reindex e e).injective
 
 variable {m n R} in
-/--
-theorem `mul_eq_one_comm_of_equiv` / 定理 `mul_eq_one_comm_of_equiv`
+/-- A version of `mul_eq_one_comm` that works for square matrices with rectangular types. -/
+/-
+**Matrix.mul_eq_one_comm_of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_eq_one_comm_of_equiv [IsStablyFiniteRing R] {A : Matrix m n R} {B : Ma
+trix n m R} (e : m ≃ n) : A * B = 1 ↔ B * A = 1
+参数：e : m ≃ n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.reindex_apply`：reindex_apply (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matri
+x m n α) : reindex eₘ eₙ M = M.submatrix eₘ.symm eₙ.symm
+· 使用定理 `Matrix.submatrix_one_equiv`：submatrix_one_equiv [Zero α] [One α] [Decida
+bleEq m] [DecidableEq l] (e : l ≃ m) : (1 : Matrix m m α).submatrix e e = 1
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.submatrix_mul_equiv`：submatrix_mul_equiv [Fintype n] [Fintype o] 
+[AddCommMonoid α] [Mul α] {p q : Type*} (M : Matrix m n α) (N : Matrix n p α) (e
+₁ : l -> m) (e₂ …
+· 使用定理 `mul_eq_one_comm`：∀ {M : Type u_2} [inst : MulOne M] [IsDedekindFiniteMon
+oid M] {a b : M}, a * b = 1 ↔ b * a = 1
+· 使用定理 `Matrix.instIsDedekindFiniteMonoidOfIsStablyFiniteRing`：∀ (n : Type u_11)
+ (R : Type u_12) [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : MulOne R]
+   [inst_3 : AddCommMonoid R] [IsStablyFini…
+· 使用定理 `Equiv.coe_refl`：∀ {α : Sort u}, ⇑(Equiv.refl α) = id
+· 使用定理 `Matrix.submatrix_id_id`：submatrix_id_id (A : Matrix m n α) : A.submatrix
+ id id = A
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mul_eq_one_comm_of_equiv
-  statement: [IsStablyFiniteRing R] {A : Matrix m n R} {B : Matrix n m R}
-  proof: (reindex e e).injective.eq_iff.symm.trans by
-    rw [reindex_apply]; rw [reindex_apply]; rw [submatrix_one_equiv]; rw [← submatrix_mul_equiv _ _ _ (.refl _)]; rw [mul_eq_one_comm]; rw [submatrix_mul_equiv]; rw [Equiv.coe_refl]; rw [submatrix_id_id]
-
-中文:
-定理 mul_eq_one_comm_of_equiv
-  结论: [是StablyFinite环 R] {A : 矩阵 m n R} {B : 矩阵 n m R}
-  证明: (reindex e e).injective.eq_iff.symm.trans by
-    rw [reindex_apply]; rw [reindex_apply]; rw [submatrix_one_equiv]; rw [← submatrix_mul_equiv _ _ _ (.refl _)]; rw [mul_eq_one_comm]; rw [submatrix_mul_equiv]; rw [Equiv.coe_refl]; rw [submatrix_id_id]
-
-Depends on / 依赖: Equiv.coe_refl, coe_refl, eq_iff, injective, injective.eq_iff.symm.trans, mul_eq_one_comm, reindex, reindex_apply, submatrix_id_id, submatrix_mul_equiv, submatrix_one_equiv
+--- 原说明 ---
+A version of `mul_eq_one_comm` that works for square matrices with rectangular t
+ypes.
 -/
 theorem mul_eq_one_comm_of_equiv [IsStablyFiniteRing R] {A : Matrix m n R} {B : Matrix n m R}
     (e : m ≃ n) : A * B = 1 ↔ B * A = 1 :=
-(reindex e e).injective.eq_iff.symm.trans by
-    rw [reindex_apply]; rw [reindex_apply]; rw [submatrix_one_equiv]; rw [← submatrix_mul_equiv _ _ _ (.refl _)]; rw [mul_eq_one_comm]; rw [submatrix_mul_equiv]; rw [Equiv.coe_refl]; rw [submatrix_id_id]
-
-/--
-theorem `mul_eq_one_comm_of_card_eq` / 定理 `mul_eq_one_comm_of_card_eq`
-
-English:
-theorem mul_eq_one_comm_of_card_eq
-  statement: [IsStablyFiniteRing R] {A : Matrix m n R} {B : Matrix n m R}
-  proof: mul_eq_one_comm_of_equiv (Fintype.card_eq.mp eq).some
-
-中文:
-定理 mul_eq_one_comm_of_card_eq
-  结论: [是StablyFinite环 R] {A : 矩阵 m n R} {B : 矩阵 n m R}
-  证明: mul_eq_one_comm_of_equiv (Fintype.card_eq.mp eq).some
-
-Depends on / 依赖: Fintype, Fintype.card_eq.mp, card_eq, mul_eq_one_comm_of_equiv
+  (reindex e e).injective.eq_iff.symm.trans <| by
+    rw [reindex_apply, reindex_apply, submatrix_one_equiv, ← submatrix_mul_equiv _ _ _ (.refl _),
+      mul_eq_one_comm, submatrix_mul_equiv, Equiv.coe_refl, submatrix_id_id]
+/-
+**Matrix.mul_eq_one_comm_of_card_eq** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_eq_one_comm_of_card_eq [IsStablyFiniteRing R] {A : Matrix m n R} {B : 
+Matrix n m R} (eq : Fintype.card m = Fintype.card n) : A * B = 1 ↔ B * A = 1
+参数：eq : Fintype.card m = Fintype.card n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.mul_eq_one_comm_of_equiv`：mul_eq_one_comm_of_equiv [IsStablyFinit
+eRing R] {A : Matrix m n R} {B : Matrix n m R} (e : m ≃ n) : A * B = 1 ↔ B * A =
+ 1
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Fintype.card_eq`：card_eq {α β} [_F : Fintype α] [_G : Fintype β] : card 
+α = card β ↔ Nonempty (α ≃ β)
 -/
 theorem mul_eq_one_comm_of_card_eq [IsStablyFiniteRing R] {A : Matrix m n R} {B : Matrix n m R}
     (eq : Fintype.card m = Fintype.card n) : A * B = 1 ↔ B * A = 1 :=
@@ -4910,88 +4403,108 @@ namespace RingHom
 
 variable [Fintype n] [NonAssocSemiring α] [NonAssocSemiring β]
 
-/--
-theorem `map_matrix_mul` / 定理 `map_matrix_mul`
-
-English:
-theorem map_matrix_mul
-  given: (M : Matrix m n α) (N : Matrix n o α) (i : m) (j : o) (f : α ->+* β)
-  proof: by
-  simp [Matrix.mul_apply, map_sum]
-
-中文:
-定理 map_matrix_mul
-  条件: (M : 矩阵 m n α) (N : 矩阵 n o α) (i : m) (j : o) (f : α ->+* β)
-  证明: by
-  simp [Matrix.mul_apply, map_sum]
-
-Depends on / 依赖: Matrix, Matrix.mul_apply, map_sum, mul_apply
+/-
+**RingHom.map_matrix_mul** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：map_matrix_mul (M : Matrix m n α) (N : Matrix n o α) (i : m) (j : o) (f : 
+α ->+* β) : f ((M * N) i j) = (M.map f * N.map f) i j
+参数：M : Matrix m n α；N : Matrix n o α；i : m；j : o；f : α ->+* β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_matrix_mul (M : Matrix m n α) (N : Matrix n o α) (i : m) (j : o) (f : α ->+* β) :
+theorem map_matrix_mul (M : Matrix m n α) (N : Matrix n o α) (i : m) (j : o) (f : α →+* β) :
     f ((M * N) i j) = (M.map f * N.map f) i j := by
   simp [Matrix.mul_apply, map_sum]
-
-/--
-theorem `map_dotProduct` / 定理 `map_dotProduct`
-
-English:
-theorem map_dotProduct
-  given: [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (v w : n -> R)
-  proof: by
-  simp only [dotProduct, map_sum f, f.map_mul, Function.comp]
-
-中文:
-定理 map_dotProduct
-  条件: [非结合半环 R] [非结合半环 S] (f : R ->+* S) (v w : n -> R)
-  证明: by
-  simp only [dotProduct, map_sum f, f.map_mul, Function.comp]
-
-Depends on / 依赖: Function, Function.comp, dotProduct, f.map_mul, map_mul, map_sum
+/-
+**RingHom.map_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：map_dotProduct [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (v
+ w : n -> R) : f (v ⬝ᵥ w) = f ∘ v ⬝ᵥ f ∘ w
+参数：f : R ->+* S；v w : n -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `RingHom.map_mul`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} (f : α →+* β) (a b : α),   f (a * b) = f a * f b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_dotProduct [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (v w : n -> R) :
+theorem map_dotProduct [NonAssocSemiring R] [NonAssocSemiring S] (f : R →+* S) (v w : n → R) :
     f (v ⬝ᵥ w) = f ∘ v ⬝ᵥ f ∘ w := by
   simp only [dotProduct, map_sum f, f.map_mul, Function.comp]
-
-/--
-theorem `map_vecMul` / 定理 `map_vecMul`
-
-English:
-theorem map_vecMul
-  statement: [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : Matrix n m R)
-  proof: by
-  simp only [Matrix.vecMul, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
-
-中文:
-定理 map_vecMul
-  结论: [非结合半环 R] [非结合半环 S] (f : R ->+* S) (M : 矩阵 n m R)
-  证明: by
-  simp only [Matrix.vecMul, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, Matrix, Matrix.map_apply, Matrix.vecMul, RingHom, RingHom.map_dotProduct, comp_def, map_apply, map_dotProduct, vecMul
+/-
+**RingHom.map_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：map_vecMul [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : M
+atrix n m R) (v : n -> R) (i : m) : f ((v ᵥ* M) i) = ((f ∘ v) ᵥ* M.map f) i
+参数：f : R ->+* S；M : Matrix n m R；v : n -> R；i : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.map_dotProduct`：map_dotProduct [NonAssocSemiring R] [NonAssocSem
+iring S] (f : R ->+* S) (v w : n -> R) : f (v ⬝ᵥ w) = f ∘ v ⬝ᵥ f ∘ w
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_vecMul [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : Matrix n m R)
-    (v : n -> R) (i : m) : f ((v ᵥ* M) i) = ((f ∘ v) ᵥ* M.map f) i := by
+theorem map_vecMul [NonAssocSemiring R] [NonAssocSemiring S] (f : R →+* S) (M : Matrix n m R)
+    (v : n → R) (i : m) : f ((v ᵥ* M) i) = ((f ∘ v) ᵥ* M.map f) i := by
   simp only [Matrix.vecMul, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
-
-/--
-theorem `map_mulVec` / 定理 `map_mulVec`
-
-English:
-theorem map_mulVec
-  statement: [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : Matrix m n R)
-  proof: by
-  simp only [Matrix.mulVec, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
-
-中文:
-定理 map_mulVec
-  结论: [非结合半环 R] [非结合半环 S] (f : R ->+* S) (M : 矩阵 m n R)
-  证明: by
-  simp only [Matrix.mulVec, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, Matrix, Matrix.map_apply, Matrix.mulVec, RingHom, RingHom.map_dotProduct, comp_def, map_apply, map_dotProduct, mulVec
+/-
+**RingHom.map_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：map_mulVec [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : M
+atrix m n R) (v : n -> R) (i : m) : f ((M *ᵥ v) i) = (M.map f *ᵥ (f ∘ v)) i
+参数：f : R ->+* S；M : Matrix m n R；v : n -> R；i : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.map_dotProduct`：map_dotProduct [NonAssocSemiring R] [NonAssocSem
+iring S] (f : R ->+* S) (v w : n -> R) : f (v ⬝ᵥ w) = f ∘ v ⬝ᵥ f ∘ w
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_mulVec [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : Matrix m n R)
-    (v : n -> R) (i : m) : f ((M *ᵥ v) i) = (M.map f *ᵥ (f ∘ v)) i := by
+theorem map_mulVec [NonAssocSemiring R] [NonAssocSemiring S] (f : R →+* S) (M : Matrix m n R)
+    (v : n → R) (i : m) : f ((M *ᵥ v) i) = (M.map f *ᵥ (f ∘ v)) i := by
   simp only [Matrix.mulVec, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
 
 end RingHom
+

@@ -13,7 +13,7 @@ public import Qq
 # The `bound` attribute
 
 Any lemma tagged with `@[bound]` is registered as an apply rule for the `bound` tactic, by
-converting it to either `norm apply` or `safe apply <priority>`. The classification is based
+converting it to either `norm apply` or `safe apply <priority>`.  The classification is based
 on the number and types of the lemma's hypotheses.
 -/
 
@@ -28,91 +28,53 @@ initialize Lean.registerTraceClass `bound.attribute
 
 variable {u : Lean.Level} {α : Q(Type u)}
 
-/--
-Definition of `isZero` / `isZero` 的定义
+/-- Check if an expression is zero -/
+/-
+**Mathlib.Tactic.Bound.isZero** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bound`。
+形式化陈述：isZero (e : Q($α)) : MetaM Bool
+参数：e : Q($α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isZero
-  signature: (e : Q($α))
-  body: match e with
-  | ~q(@OfNat.ofNat.{u} _ (nat_lit 0) $i) => return true
-  | _ => return false
-
-中文:
-定义 isZero
-  签名: (e : Q($α))
-  定义体: match e with
-  | ~q(@OfNat.ofNat.{u} _ (nat_lit 0) $i) => return true
-  | _ => return false
-
-Depends on / 依赖: OfNat.ofNat, nat_lit, return
+--- 原说明 ---
+Check if an expression is zero
 -/
 def isZero (e : Q($α)) : MetaM Bool :=
   match e with
   | ~q(@OfNat.ofNat.{u} _ (nat_lit 0) $i) => return true
   | _ => return false
 
-/--
-Definition of `ineqPriority` / `ineqPriority` 的定义
+/-- Map the arguments of an inequality expression to a score -/
+/-
+**Mathlib.Tactic.Bound.ineqPriority** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bo
+und`。
+形式化陈述：ineqPriority (a b : Q($α)) : MetaM Nat
+参数：a b : Q($α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ineqPriority
-  signature: (a b : Q($α))
-  body: do
-  return if (← isZero a) || (← isZero b) then 1 else 10
-
-中文:
-定义 ineqPriority
-  签名: (a b : Q($α))
-  定义体: do
-  return if (← isZero a) || (← isZero b) then 1 else 10
+--- 原说明 ---
+Map the arguments of an inequality expression to a score
 -/
 def ineqPriority (a b : Q($α)) : MetaM Nat := do
   return if (← isZero a) || (← isZero b) then 1 else 10
 
-/--
-Definition of `hypPriority` / `hypPriority` 的定义
+/-- Map a hypothesis type to a score -/
+/-
+**Mathlib.Tactic.Bound.hypPriority** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.
+Bound`。
+形式化陈述：Q(Prop) → MetaM ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hypPriority
-  signature: (hyp : Q(Prop))
-  body: do
-  match hyp with
-    -- Conjunctions add scores
-| ~q($a ∧ $b) => pure (← hypPriority a) + (← hypPriority b)
-    -- Guessing (disjunction) gets a big penalty
-| ~q($a ∨ $b) => pure 100 + (← hypPriority a) + (← hypPriority b)
-    -- Inequalities get score 1 if they contain zero, 10 otherwise
-    | ~q(@LE.le _ $i $a $b) => ineqPriority a b
-    | ~q(@LT.lt _ $i $a $b) => ineqPriority a b
-    | ~q(@GE.ge _ $i $b $a) => ineqPriority a b
-    | ~q(@GT.gt _ $i $b $a) => ineqPriority a b
-    -- Assume anything else is non-relevant
-    | _ => pure 0
-
-中文:
-定义 hypPriority
-  签名: (hyp : Q(命题))
-  定义体: do
-  match hyp with
-    -- Conjunctions add scores
-| ~q($a ∧ $b) => pure (← hypPriority a) + (← hypPriority b)
-    -- Guessing (disjunction) gets a big penalty
-| ~q($a ∨ $b) => pure 100 + (← hypPriority a) + (← hypPriority b)
-    -- Inequalities get score 1 if they contain zero, 10 otherwise
-    | ~q(@LE.le _ $i $a $b) => ineqPriority a b
-    | ~q(@LT.lt _ $i $a $b) => ineqPriority a b
-    | ~q(@GE.ge _ $i $b $a) => ineqPriority a b
-    | ~q(@GT.gt _ $i $b $a) => ineqPriority a b
-    -- Assume anything else is non-relevant
-    | _ => pure 0
+--- 原说明 ---
+Map a hypothesis type to a score
 -/
 partial def hypPriority (hyp : Q(Prop)) : MetaM Nat := do
   match hyp with
     -- Conjunctions add scores
-| ~q($a ∧ $b) => pure (← hypPriority a) + (← hypPriority b)
+    | ~q($a ∧ $b) => pure <| (← hypPriority a) + (← hypPriority b)
     -- Guessing (disjunction) gets a big penalty
-| ~q($a ∨ $b) => pure 100 + (← hypPriority a) + (← hypPriority b)
+    | ~q($a ∨ $b) => pure <| 100 + (← hypPriority a) + (← hypPriority b)
     -- Inequalities get score 1 if they contain zero, 10 otherwise
     | ~q(@LE.le _ $i $a $b) => ineqPriority a b
     | ~q(@LT.lt _ $i $a $b) => ineqPriority a b
@@ -121,29 +83,22 @@ partial def hypPriority (hyp : Q(Prop)) : MetaM Nat := do
     -- Assume anything else is non-relevant
     | _ => pure 0
 
-/--
-Definition of `typePriority` / `typePriority` 的定义
+/-- Map a type to a score -/
+/-
+**Mathlib.Tactic.Bound.typePriority** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bo
+und`。
+形式化陈述：typePriority (decl : Lean.Name) (type : Lean.Expr) : MetaM Nat
+参数：decl : Lean.Name；type : Lean.Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition typePriority
-  signature: (decl : Lean.Name) (type : Lean.Expr)
-  body: Lean.Meta.forallTelescope type fun xs t => do
-    checkResult t
-    xs.foldlM (fun (t : Nat) x => do return t + (← argPriority x)) 0
-
-中文:
-定义 typePriority
-  签名: (decl : Lean.Name) (type : Lean.Expr)
-  定义体: Lean.Meta.forallTelescope type fun xs t => do
-    checkResult t
-    xs.foldlM (fun (t : Nat) x => do return t + (← argPriority x)) 0
-
-Depends on / 依赖: Lean.Meta.forallTelescope, argPriority, checkResult, foldlM, forallTelescope, return, xs.foldlM
+--- 原说明 ---
+Map a type to a score
 -/
 def typePriority (decl : Lean.Name) (type : Lean.Expr) : MetaM Nat :=
-  Lean.Meta.forallTelescope type fun xs t => do
+  Lean.Meta.forallTelescope type fun xs t ↦ do
     checkResult t
-    xs.foldlM (fun (t : Nat) x => do return t + (← argPriority x)) 0
+    xs.foldlM (fun (t : Nat) x ↦ do return t + (← argPriority x)) 0
 where
   /-- Score the type of argument `x` -/
   argPriority (x : Lean.Expr) : MetaM Nat := do
@@ -157,26 +112,17 @@ where
     | _ => throwError (f!"`{decl}` has invalid type `{type}` as a 'bound' lemma: \
                           it should be an inequality")
 
-/--
-Definition of `declPriority` / `declPriority` 的定义
+/-- Map a theorem decl to a score (0 means `norm apply`, `0 <` means `safe apply`) -/
+/-
+**Mathlib.Tactic.Bound.declPriority** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bo
+und`。
+形式化陈述：declPriority (decl : Lean.Name) : Lean.MetaM Nat
+参数：decl : Lean.Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition declPriority
-  signature: (decl : Lean.Name)
-  body: do
-  match (← Lean.getEnv).find? decl with
-    | some info => do
-        typePriority decl info.type
-    | none => throwError "unknown declaration {decl}"
-
-中文:
-定义 declPriority
-  签名: (decl : Lean.Name)
-  定义体: do
-  match (← Lean.getEnv).find? decl with
-    | some info => do
-        typePriority decl info.type
-    | none => throwError "unknown declaration {decl}"
+--- 原说明 ---
+Map a theorem decl to a score (0 means `norm apply`, `0 <` means `safe apply`)
 -/
 def declPriority (decl : Lean.Name) : Lean.MetaM Nat := do
   match (← Lean.getEnv).find? decl with
@@ -184,40 +130,21 @@ def declPriority (decl : Lean.Name) : Lean.MetaM Nat := do
         typePriority decl info.type
     | none => throwError "unknown declaration {decl}"
 
-/--
-Definition of `scoreToConfig` / `scoreToConfig` 的定义
+/-- Map a score to either `norm apply` or `safe apply <priority>` -/
+/-
+**Mathlib.Tactic.Bound.scoreToConfig** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.B
+ound`。
+形式化陈述：scoreToConfig (decl : Lean.Name) (score : Nat) : Aesop.Frontend.RuleConfig
+参数：decl : Lean.Name；score : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition scoreToConfig
-  signature: (decl : Lean.Name) (score : Nat)
-  body: let (phase, priority) := match score with
-    | 0 => (Aesop.PhaseName.norm, 0) -- No hypotheses: this rule closes the goal immediately
-    | s => (Aesop.PhaseName.safe, s)
-  { term? := some (Lean.mkIdent decl)
-    phase? := phase
-    priority? := some (Aesop.Frontend.Priority.int priority)
-    builder? := some (.regular .apply)
-    builderOptions := {}
-    ruleSets := ⟨#[`Bound]⟩ }
-
-中文:
-定义 scoreToConfig
-  签名: (decl : Lean.Name) (score : 自然数)
-  定义体: let (phase, priority) := match score with
-    | 0 => (Aesop.PhaseName.norm, 0) -- No hypotheses: this rule closes the goal immediately
-    | s => (Aesop.PhaseName.safe, s)
-  { term? := some (Lean.mkIdent decl)
-    phase? := phase
-    priority? := some (Aesop.Frontend.Priority.int priority)
-    builder? := some (.regular .apply)
-    builderOptions := {}
-    ruleSets := ⟨#[`Bound]⟩ }
-
-Depends on / 依赖: Aesop.Frontend.Priority.int, Aesop.PhaseName.norm, Aesop.PhaseName.safe, Frontend, Lean.mkIdent, PhaseName, Priority, builder, builderOptions, closes, hypotheses, immediately, mkIdent, priority, regular, ruleSets
+--- 原说明 ---
+Map a score to either `norm apply` or `safe apply <priority>`
 -/
 def scoreToConfig (decl : Lean.Name) (score : Nat) : Aesop.Frontend.RuleConfig :=
   let (phase, priority) := match score with
-    | 0 => (Aesop.PhaseName.norm, 0) -- No hypotheses: this rule closes the goal immediately
+    | 0 => (Aesop.PhaseName.norm, 0)  -- No hypotheses: this rule closes the goal immediately
     | s => (Aesop.PhaseName.safe, s)
   { term? := some (Lean.mkIdent decl)
     phase? := phase
@@ -246,9 +173,9 @@ and the `aesop` implementation chooses lemmas with lower scores first:
 3. Disjunctions `a ∨ b` add `100` plus the sum of the scores of `a` and `b`.
 
 The functionality of `bound` overlaps with `positivity` and `gcongr`, but can jump back and forth
-between `0 ≤ x` and `x ≤ y`-type inequalities. For example, `bound` proves
+between `0 ≤ x` and `x ≤ y`-type inequalities.  For example, `bound` proves
   `0 ≤ c → b ≤ a → 0 ≤ a * c - b * c`
-by turning the goal into `b * c ≤ a * c`, then using `mul_le_mul_of_nonneg_right`. `bound` also
+by turning the goal into `b * c ≤ a * c`, then using `mul_le_mul_of_nonneg_right`.  `bound` also
 uses specialized lemmas for goals of the form `1 ≤ x, 1 < x, x ≤ 1, x < 1`.
 
 See also `@[bound_forward]` which marks a lemma as a forward rule for `bound`: these lemmas are
@@ -258,10 +185,10 @@ initialize Lean.registerBuiltinAttribute {
   descr := "Register a theorem as an apply rule for the `bound` tactic."
   applicationTime := .afterCompilation
   add := fun decl stx attrKind => Lean.withRef stx do
-let score ← Aesop.runTermElabMAsCoreM declPriority decl
+    let score ← Aesop.runTermElabMAsCoreM <| declPriority decl
     trace[bound.attribute] "'{decl}' has score '{score}'"
     let context ← Aesop.runMetaMAsCoreM Aesop.ElabM.Context.forAdditionalGlobalRules
-let (rule, ruleSets) ← Aesop.runTermElabMAsCoreM
+    let (rule, ruleSets) ← Aesop.runTermElabMAsCoreM <|
       (scoreToConfig decl score).buildGlobalRule.run context
     for ruleSet in ruleSets do
       Aesop.Frontend.addGlobalRule ruleSet rule attrKind (checkNotExists := true)
@@ -279,3 +206,4 @@ macro "bound_forward" : attr =>
   `(attr|aesop safe forward (rule_sets := [$(Lean.mkIdent `Bound):ident]))
 
 end Mathlib.Tactic.Bound
+

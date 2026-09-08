@@ -41,32 +41,59 @@ variable {D : Type u₂} [Category.{v₂} D]
 variable (G : C ⥤ D)
 variable {X Y : C} (f g : X ⟶ Y)
 
-/--
-Definition of `IsSplitEqualizer` / `IsSplitEqualizer` 的定义
+/-- A split equalizer diagram consists of morphisms
 
-English:
-structure IsSplitEqualizer
-  parameters: {W : C} (ι : W ⟶ X)
-  axioms and operations (6):
-    - leftRetraction : X ⟶ W
-    - rightRetraction : Y ⟶ X
-    - condition : ι ≫ f = ι ≫ g  [default: by cat_disch]
-    - ι_leftRetraction : ι ≫ leftRetraction = 𝟙 W  [default: by cat_disch]
-    - bottom_rightRetraction : g ≫ rightRetraction = 𝟙 X  [default: by cat_disch]
-    - top_rightRetraction : f ≫ rightRetraction = leftRetraction ≫ ι  [default: by cat_disch]
+```
+      ι   f
+    W → X ⇉ Y
+          g
+```
 
-中文:
-结构 是SplitEqualizer
-  参数: {W : C} (ι : W ⟶ X)
-  公理与运算 (6 个):
-    - leftRetraction : X ⟶ W
-    - rightRetraction : Y ⟶ X
-    - condition : ι ≫ f = ι ≫ g  [默认: by cat_disch]
-    - ι_leftRetraction : ι ≫ leftRetraction = 𝟙 W  [默认: by cat_disch]
-    - bottom_rightRetraction : g ≫ rightRetraction = 𝟙 X  [默认: by cat_disch]
-    - top_rightRetraction : f ≫ rightRetraction = leftRetraction ≫ ι  [默认: by cat_disch]
+satisfying `ι ≫ f = ι ≫ g` together with morphisms
 
-Depends on / 依赖: cat_disch
+```
+      r   t
+    W ← X ← Y
+```
+
+satisfying `ι ≫ r = 𝟙 W`, `g ≫ t = 𝟙 X` and `f ≫ t = r ≫ ι`.
+
+The name "equalizer" is appropriate, since any split equalizer is an equalizer, see
+`CategoryTheory.IsSplitEqualizer.isEqualizer`.
+Split equalizers are also absolute, since a functor preserves all the structure above.
+-/
+/-
+**CategoryTheory.IsSplitEqualizer** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：IsSplitEqualizer {W : C} (ι : W ⟶ X) where /-- A map from `X` to the equal
+izer -/ leftRetraction : X ⟶ W /-- A map in the opposite direction to `f` and `g
+` -/ rightRetraction : Y ⟶ X /-- Composition of `ι` with `f` and with `g` agree 
+-/ condition : ι ≫ f = ι ≫ g
+参数：ι : W ⟶ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A split equalizer diagram consists of morphisms
+
+```
+      ι   f
+    W → X ⇉ Y
+          g
+```
+
+satisfying `ι ≫ f = ι ≫ g` together with morphisms
+
+```
+      r   t
+    W ← X ← Y
+```
+
+satisfying `ι ≫ r = 𝟙 W`, `g ≫ t = 𝟙 X` and `f ≫ t = r ≫ ι`.
+
+The name "equalizer" is appropriate, since any split equalizer is an equalizer, 
+see
+`CategoryTheory.IsSplitEqualizer.isEqualizer`.
+Split equalizers are also absolute, since a functor preserves all the structure 
+above.
 -/
 structure IsSplitEqualizer {W : C} (ι : W ⟶ X) where
   /-- A map from `X` to the equalizer -/
@@ -81,7 +108,10 @@ structure IsSplitEqualizer {W : C} (ι : W ⟶ X) where
   bottom_rightRetraction : g ≫ rightRetraction = 𝟙 X := by cat_disch
   /-- `f` composed with `rightRetraction` is `leftRetraction` composed with `ι` -/
   top_rightRetraction : f ≫ rightRetraction = leftRetraction ≫ ι := by cat_disch
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : C} : Inhabited (IsSplitEqualizer (𝟙 X) (𝟙 X) (𝟙 X)) where
   default := { leftRetraction := 𝟙 X, rightRetraction := 𝟙 X }
 
@@ -95,30 +125,20 @@ variable {f g}
 
 /-- Split equalizers are absolute: they are preserved by any functor. -/
 @[simps]
-/--
-Definition of `IsSplitEqualizer.map` / `IsSplitEqualizer.map` 的定义
+/-
+**CategoryTheory.IsSplitEqualizer.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+IsSplitEqualizer`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {X Y : C} →
+           {f g : X ⟶ Y} →             {W : C} →               {ι : W ⟶ X} →    
+             CategoryTheory.IsSplitEqualizer f g ι →                   (F : Cate
+goryTheory.Functor C D) → CategoryTheory.IsSplitEqualizer (F.map f) (F.map g) (F
+.map ι)
+参数：F : CategoryTheory.Functor C D；F.map f；F.map g；F.map ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSplitEqualizer.map
-  signature: {W : C} {ι : W ⟶ X} (q : IsSplitEqualizer f g ι) (F : C ⥤ D)
-  body: F.map q.leftRetraction
-  rightRetraction := F.map q.rightRetraction
-  condition := by rw [← F.map_comp, q.condition, F.map_comp]
-  ι_leftRetraction := by rw [← F.map_comp, q.ι_leftRetraction, F.map_id]
-  bottom_rightRetraction := by rw [← F.map_comp, q.bottom_rightRetraction, F.map_id]
-  top_rightRetraction := by rw [← F.map_comp, q.top_rightRetraction, F.map_comp]
-
-中文:
-定义 是SplitEqualizer.map
-  签名: {W : C} {ι : W ⟶ X} (q : 是SplitEqualizer f g ι) (F : C ⥤ D)
-  定义体: F.map q.leftRetraction
-  rightRetraction := F.map q.rightRetraction
-  condition := by rw [← F.map_comp, q.condition, F.map_comp]
-  ι_leftRetraction := by rw [← F.map_comp, q.ι_leftRetraction, F.map_id]
-  bottom_rightRetraction := by rw [← F.map_comp, q.bottom_rightRetraction, F.map_id]
-  top_rightRetraction := by rw [← F.map_comp, q.top_rightRetraction, F.map_comp]
-
-Depends on / 依赖: F.map, leftRetraction, q.leftRetraction
+--- 原说明 ---
+Split equalizers are absolute: they are preserved by any functor.
 -/
 def IsSplitEqualizer.map {W : C} {ι : W ⟶ X} (q : IsSplitEqualizer f g ι) (F : C ⥤ D) :
     IsSplitEqualizer (F.map f) (F.map g) (F.map ι) where
@@ -135,41 +155,28 @@ open Limits
 
 /-- A split equalizer clearly induces a fork. -/
 @[simps! pt]
-/--
-Definition of `IsSplitEqualizer.asFork` / `IsSplitEqualizer.asFork` 的定义
+/-
+**CategoryTheory.IsSplitEqualizer.asFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.IsSplitEqualizer`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       {f g : X ⟶ Y} → {W : C} → {h : W ⟶ X} → CategoryTheory.IsSplitEqualizer
+ f g h → CategoryTheory.Limits.Fork f g
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsSplitEqualizer.condition`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {X Y : C} {f g : X ⟶ Y} {W : C} {ι : W ⟶ X}   (self 
+: CategoryTheory.IsSplitEqualiz…
 
-English:
-definition IsSplitEqualizer.asFork
-  signature: {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h)
-  body: Fork.ofι h t.condition
-
-@[simp]
-
-中文:
-定义 是SplitEqualizer.asFork
-  签名: {W : C} {h : W ⟶ X} (t : 是SplitEqualizer f g h)
-  定义体: Fork.ofι h t.condition
-
-@[simp]
-
-Depends on / 依赖: Fork.of, condition, t.condition
+--- 原说明 ---
+A split equalizer clearly induces a fork.
 -/
 def IsSplitEqualizer.asFork {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h) :
     Fork f g := Fork.ofι h t.condition
 
 @[simp]
-/--
-theorem `IsSplitEqualizer.asFork_ι` / 定理 `IsSplitEqualizer.asFork_ι`
-
-English:
-theorem IsSplitEqualizer.asFork_ι
-  given: {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h)
-  proof: rfl
-
-中文:
-定理 是SplitEqualizer.asFork_ι
-  条件: {W : C} {h : W ⟶ X} (t : 是SplitEqualizer f g h)
-  证明: rfl
+/-
+**CategoryTheory.IsSplitEqualizer.asFork_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsSplitEqualizer.asFork_ι {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h) :
     t.asFork.ι = h := rfl
@@ -177,25 +184,22 @@ theorem IsSplitEqualizer.asFork_ι {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /--
-Definition of `IsSplitEqualizer.isEqualizer` / `IsSplitEqualizer.isEqualizer` 的定义
+The fork induced by a split equalizer is an equalizer, justifying the name. In some cases it
+is more convenient to show a given fork is an equalizer by showing it is split.
+-/
+/-
+**CategoryTheory.IsSplitEqualizer.isEqualizer** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.IsSplitEqualizer`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       {f g : X ⟶ Y} →         {W : C} → {h : W ⟶ X} → (t : CategoryTheory.IsS
+plitEqualizer f g h) → CategoryTheory.Limits.IsLimit t.asFork
+参数：t : CategoryTheory.IsSplitEqualizer f g h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSplitEqualizer.isEqualizer
-  signature: {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h)
-  body: Fork.IsLimit.mk' _ fun s =>
-    ⟨ s.ι ≫ t.leftRetraction,
-      by simp [-top_rightRetraction, ← t.top_rightRetraction, s.condition_assoc],
-      fun hm => by simp [← hm] ⟩
-
-中文:
-定义 是SplitEqualizer.isEqualizer
-  签名: {W : C} {h : W ⟶ X} (t : 是SplitEqualizer f g h)
-  定义体: Fork.IsLimit.mk' _ fun s =>
-    ⟨ s.ι ≫ t.leftRetraction,
-      by simp [-top_rightRetraction, ← t.top_rightRetraction, s.condition_assoc],
-      fun hm => by simp [← hm] ⟩
-
-Depends on / 依赖: Cone.mk, Fork.IsLimit.mk, IsLimit, condition_assoc, hom_ext, isLimit, leftRetraction, naturality, p.isLimit.fac, p.isLimit.hom_ext, p.isLimit.lift, p.prop_diag_obj, prop_diag_obj, reassoc_of, s.condition_assoc, t.leftRetraction, t.top_rightRetraction, top_rightRetraction
+--- 原说明 ---
+The fork induced by a split equalizer is an equalizer, justifying the name. In s
+ome cases it
+is more convenient to show a given fork is an equalizer by showing it is split.
 -/
 def IsSplitEqualizer.isEqualizer {W : C} {h : W ⟶ X} (t : IsSplitEqualizer f g h) :
     IsLimit t.asFork :=
@@ -208,114 +212,105 @@ end
 variable (f g)
 
 /--
-Definition of `HasSplitEqualizer` / `HasSplitEqualizer` 的定义
+The pair `f,g` is a cosplit pair if there is an `h : W ⟶ X` so that `f, g, h` forms a split
+equalizer in `C`.
+-/
+/-
+**CategoryTheory.HasSplitEqualizer** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → (X 
+⟶ Y) → (X ⟶ Y) → Prop
+参数：X ⟶ Y；X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasSplitEqualizer
-  parameters: : Prop where
-  axioms and operations (1):
-    - splittable : exists (W : C) (h : W ⟶ X), Nonempty (IsSplitEqualizer f g h)
-
-中文:
-类 有SplitEqualizer
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - splittable : 存在 (W : C) (h : W ⟶ X), 非空 (是SplitEqualizer f g h)
-
-Depends on / 依赖: Cocone, Cocone.mk, fac_assoc, hom_ext, isColimit, naturality, p.isColimit.desc, p.isColimit.fac_assoc, p.isColimit.hom_ext, p.prop_diag_obj, prop_diag_obj
+--- 原说明 ---
+The pair `f,g` is a cosplit pair if there is an `h : W ⟶ X` so that `f, g, h` fo
+rms a split
+equalizer in `C`.
 -/
 class HasSplitEqualizer : Prop where
   /-- There is some split equalizer -/
-  splittable : exists (W : C) (h : W ⟶ X), Nonempty (IsSplitEqualizer f g h)
+  splittable : ∃ (W : C) (h : W ⟶ X), Nonempty (IsSplitEqualizer f g h)
 
 /--
-Definition of `Functor.IsCosplitPair` / `Functor.IsCosplitPair` 的定义
+The pair `f,g` is a `G`-cosplit pair if there is an `h : W ⟶ G X` so that `G f, G g, h` forms a
+split equalizer in `D`.
+-/
+/-
+**CategoryTheory.Functor.IsCosplitPair** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Func
+tor C D → {X Y : C} → (X ⟶ Y) → (X ⟶ Y) → Prop
+参数：X ⟶ Y；X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Functor.IsCosplitPair
-  signature: : Prop
-  body: HasSplitEqualizer (G.map f) (G.map g)
-
-中文:
-缩写 函子.IsCosplitPair
-  签名: : 命题
-  定义体: HasSplitEqualizer (G.map f) (G.map g)
-
-Depends on / 依赖: G.map, HasSplitEqualizer
+--- 原说明 ---
+The pair `f,g` is a `G`-cosplit pair if there is an `h : W ⟶ G X` so that `G f, 
+G g, h` forms a
+split equalizer in `D`.
 -/
 abbrev Functor.IsCosplitPair : Prop :=
   HasSplitEqualizer (G.map f) (G.map g)
 
-/--
-Definition of `HasSplitEqualizer.equalizerOfSplit` / `HasSplitEqualizer.equalizerOfSplit` 的定义
+/-- Get the equalizer object from the typeclass `IsCosplitPair`. -/
+/-
+**CategoryTheory.HasSplitEqualizer.equalizerOfSplit** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.HasSplitEqualizer`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → (
+f g : X ⟶ Y) → [CategoryTheory.HasSplitEqualizer f g] → C
+参数：f g : X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.HasSplitEqualizer.splittable`：∀ {C : Type u} {inst : Cate
+goryTheory.Category.{v, u} C} {X Y : C} {f g : X ⟶ Y}   [self : CategoryTheory.H
+asSplitEqualizer f g], ∃ W h, Non…
 
-English:
-definition HasSplitEqualizer.equalizerOfSplit
-  signature: [HasSplitEqualizer f g]
-  body: (splittable (f := f) (g := g)).choose
-
-中文:
-定义 有SplitEqualizer.equalizerOfSplit
-  签名: [有SplitEqualizer f g]
-  定义体: (splittable (f := f) (g := g)).choose
-
-Depends on / 依赖: splittable
+--- 原说明 ---
+Get the equalizer object from the typeclass `IsCosplitPair`.
 -/
 noncomputable def HasSplitEqualizer.equalizerOfSplit [HasSplitEqualizer f g] : C :=
   (splittable (f := f) (g := g)).choose
 
-/--
-Definition of `HasSplitEqualizer.equalizerι` / `HasSplitEqualizer.equalizerι` 的定义
+/-- Get the equalizer morphism from the typeclass `IsCosplitPair`. -/
+/-
+**CategoryTheory.HasSplitEqualizer.equalizer** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasSplitEqualizer.equalizerι
-  signature: [HasSplitEqualizer f g]
-  body: (splittable (f := f) (g := g)).choose_spec.choose
-
-中文:
-定义 有SplitEqualizer.equalizerι
-  签名: [有SplitEqualizer f g]
-  定义体: (splittable (f := f) (g := g)).choose_spec.choose
-
-Depends on / 依赖: choose_spec, choose_spec.choose, splittable
+--- 原说明 ---
+Get the equalizer morphism from the typeclass `IsCosplitPair`.
 -/
 noncomputable def HasSplitEqualizer.equalizerι [HasSplitEqualizer f g] :
     HasSplitEqualizer.equalizerOfSplit f g ⟶ X :=
   (splittable (f := f) (g := g)).choose_spec.choose
 
-/--
-Definition of `HasSplitEqualizer.isSplitEqualizer` / `HasSplitEqualizer.isSplitEqualizer` 的定义
+/-- The equalizer morphism `equalizerι` gives a split equalizer on `f,g`. -/
+/-
+**CategoryTheory.HasSplitEqualizer.isSplitEqualizer** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.HasSplitEqualizer`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (f g : X ⟶ Y) →         [inst_1 : CategoryTheory.HasSplitEqualizer f g]
+ →           CategoryTheory.IsSplitEqualizer f g (CategoryTheory.HasSplitEqualiz
+er.equalizerι f g)
+参数：f g : X ⟶ Y；CategoryTheory.HasSplitEqualizer.equalizerι f g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasSplitEqualizer.isSplitEqualizer
-  signature: [HasSplitEqualizer f g]
-  body: Classical.choice (splittable (f := f) (g := g)).choose_spec.choose_spec
-
-中文:
-定义 有SplitEqualizer.isSplitEqualizer
-  签名: [有SplitEqualizer f g]
-  定义体: Classical.choice (splittable (f := f) (g := g)).choose_spec.choose_spec
-
-Depends on / 依赖: Classical, Classical.choice, choice, choose_spec, choose_spec.choose_spec, splittable
+--- 原说明 ---
+The equalizer morphism `equalizerι` gives a split equalizer on `f,g`.
 -/
 noncomputable def HasSplitEqualizer.isSplitEqualizer [HasSplitEqualizer f g] :
     IsSplitEqualizer f g (HasSplitEqualizer.equalizerι f g) :=
   Classical.choice (splittable (f := f) (g := g)).choose_spec.choose_spec
 
-/--
-Instance `map_is_cosplit_pair` / 实例 `map_is_cosplit_pair`
+/-- If `f, g` is cosplit, then `G f, G g` is cosplit. -/
+/-
+**CategoryTheory.map_is_cosplit_pair** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：map_is_cosplit_pair [HasSplitEqualizer f g] : HasSplitEqualizer (G.map f) 
+(G.map g) where splittable
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance map_is_cosplit_pair
-  signature: [HasSplitEqualizer f g]
-  body: ⟨_, _, ⟨IsSplitEqualizer.map (HasSplitEqualizer.isSplitEqualizer f g) _⟩⟩
-
-中文:
-实例 map_is_cosplit_pair
-  签名: [有SplitEqualizer f g]
-  定义体: ⟨_, _, ⟨IsSplitEqualizer.map (HasSplitEqualizer.isSplitEqualizer f g) _⟩⟩
-
-Depends on / 依赖: HasSplitEqualizer, HasSplitEqualizer.isSplitEqualizer, IsSplitEqualizer, IsSplitEqualizer.map, isSplitEqualizer
+--- 原说明 ---
+If `f, g` is cosplit, then `G f, G g` is cosplit.
 -/
 instance map_is_cosplit_pair [HasSplitEqualizer f g] : HasSplitEqualizer (G.map f) (G.map g) where
   splittable :=
@@ -324,6 +319,13 @@ instance map_is_cosplit_pair [HasSplitEqualizer f g] : HasSplitEqualizer (G.map 
 namespace Limits
 
 /-- If a pair has a split equalizer, it has an equalizer. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If a pair has a split equalizer, it has an equalizer.
+-/
 instance (priority := 1) hasEqualizer_of_hasSplitEqualizer [HasSplitEqualizer f g] :
     HasEqualizer f g :=
   HasLimit.mk ⟨_, (HasSplitEqualizer.isSplitEqualizer f g).isEqualizer⟩
@@ -331,3 +333,4 @@ instance (priority := 1) hasEqualizer_of_hasSplitEqualizer [HasSplitEqualizer f 
 end Limits
 
 end CategoryTheory
+

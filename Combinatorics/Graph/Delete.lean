@@ -35,835 +35,708 @@ namespace Graph
 
 /-- Restrict `G : Graph α β` to the edges in a set `E₀` without removing vertices -/
 @[expose, simps (attr := grind =)]
-/--
-Definition of `restrict` / `restrict` 的定义
+/-
+**Graph.restrict** 是 Mathlib 中的一个定义，位于命名空间 `Graph`。
+形式化陈述：restrict (G : Graph α β) (E₀ : Set β) : Graph α β where vertexSet
+参数：G : Graph α β；E₀ : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (G : Graph α β) (E₀ : Set β)
-  body: V(G)
-  edgeSet := E(G) inter E₀
-  IsLink e x y := e in E₀ ∧ G.IsLink e x y
-  isLink_symm e he := { symm x y h := ⟨h.1, h.2.symm⟩ }
-  eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.2.left_eq_or_eq h'.2
-  edge_mem_iff_exists_isLink e := ⟨fun h => by simp [G.exists_isLink_of_mem_edgeSet h.1, h.2],
-    fun ⟨x, y, h⟩ => ⟨h.2.edge_mem, h.1⟩⟩
-
-@[simp]
-
-中文:
-定义 restrict
-  签名: (G : 图 α β) (E₀ : 集合 β)
-  定义体: V(G)
-  edgeSet := E(G) inter E₀
-  IsLink e x y := e in E₀ ∧ G.IsLink e x y
-  isLink_symm e he := { symm x y h := ⟨h.1, h.2.symm⟩ }
-  eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.2.left_eq_or_eq h'.2
-  edge_mem_iff_exists_isLink e := ⟨fun h => by simp [G.exists_isLink_of_mem_edgeSet h.1, h.2],
-    fun ⟨x, y, h⟩ => ⟨h.2.edge_mem, h.1⟩⟩
-
-@[simp]
+--- 原说明 ---
+Restrict `G : Graph α β` to the edges in a set `E₀` without removing vertices
 -/
 def restrict (G : Graph α β) (E₀ : Set β) : Graph α β where
   vertexSet := V(G)
-  edgeSet := E(G) inter E₀
-  IsLink e x y := e in E₀ ∧ G.IsLink e x y
+  edgeSet := E(G) ∩ E₀
+  IsLink e x y := e ∈ E₀ ∧ G.IsLink e x y
   isLink_symm e he := { symm x y h := ⟨h.1, h.2.symm⟩ }
   eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.2.left_eq_or_eq h'.2
-  edge_mem_iff_exists_isLink e := ⟨fun h => by simp [G.exists_isLink_of_mem_edgeSet h.1, h.2],
-    fun ⟨x, y, h⟩ => ⟨h.2.edge_mem, h.1⟩⟩
+  edge_mem_iff_exists_isLink e := ⟨fun h ↦ by simp [G.exists_isLink_of_mem_edgeSet h.1, h.2],
+    fun ⟨x, y, h⟩ ↦ ⟨h.2.edge_mem, h.1⟩⟩
 
 @[simp]
-/--
-lemma `restrict_le` / 引理 `restrict_le`
-
-English:
-lemma restrict_le
-  given: {E₀ : Set β}
-  statement: G.restrict E₀ <= G where
-  proof: le_rfl
-  isLink_mono := by simp
-
-@[simp]
-
-中文:
-引理 restrict_le
-  条件: {E₀ : 集合 β}
-  结论: G.restrict E₀ <= G where
-  证明: le_rfl
-  isLink_mono := by simp
-
-@[simp]
-
-Depends on / 依赖: le_rfl
+/-
+**Graph.restrict_le** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_le {E₀ : Set β} : G.restrict E₀ <= G where vertexSet_mono
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Graph.restrict_isLink`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) (
+E₀ : Set β) (e : β) (x y : α),   (G.restrict E₀).IsLink e x y = (e ∈ E₀ ∧ G.IsLi
+nk e x y)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma restrict_le {E₀ : Set β} : G.restrict E₀ <= G where
+lemma restrict_le {E₀ : Set β} : G.restrict E₀ ≤ G where
   vertexSet_mono := le_rfl
   isLink_mono := by simp
 
 @[simp]
-/--
-lemma `restrict_eq_self_iff` / 引理 `restrict_eq_self_iff`
-
-English:
-lemma restrict_eq_self_iff
-  given: (G : Graph α β) (E₀ : Set β)
-  statement: G.restrict E₀ = G ↔ E(G) subseteq E₀
-  proof: ⟨fun h => by simpa using h.ge.edgeSet_mono,
-    fun h => (Compatible.of_le restrict_le).ext (by simp) (by simpa)⟩
-
-@[simp]
-
-中文:
-引理 restrict_eq_self_iff
-  条件: (G : 图 α β) (E₀ : 集合 β)
-  结论: G.restrict E₀ = G ↔ E(G) subseteq E₀
-  证明: ⟨fun h => by simpa using h.ge.edgeSet_mono,
-    fun h => (Compatible.of_le restrict_le).ext (by simp) (by simpa)⟩
-
-@[simp]
-
-Depends on / 依赖: Compatible, Compatible.of_le, edgeSet_mono, h.ge.edgeSet_mono, of_le, restrict_le
+/-
+**Graph.restrict_eq_self_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_eq_self_iff (G : Graph α β) (E₀ : Set β) : G.restrict E₀ = G ↔ E(
+G) subseteq E₀
+参数：G : Graph α β；E₀ : Set β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.edgeSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) 
+(E₀ : Set β), (G.restrict E₀).edgeSet = G.edgeSet ∩ E₀
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Graph.vertexSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β
+) (E₀ : Set β), (G.restrict E₀).vertexSet = G.vertexSet
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Graph.Compatible.of_le`：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β
+}, H ≤ G → H.Compatible G
+· 使用引理 `Graph.restrict_le`：restrict_le {E₀ : Set β} : G.restrict E₀ <= G where v
+ertexSet_mono
 -/
-lemma restrict_eq_self_iff (G : Graph α β) (E₀ : Set β) : G.restrict E₀ = G ↔ E(G) subseteq E₀ :=
-  ⟨fun h => by simpa using h.ge.edgeSet_mono,
-    fun h => (Compatible.of_le restrict_le).ext (by simp) (by simpa)⟩
+lemma restrict_eq_self_iff (G : Graph α β) (E₀ : Set β) : G.restrict E₀ = G ↔ E(G) ⊆ E₀ :=
+  ⟨fun h ↦ by simpa using h.ge.edgeSet_mono,
+    fun h ↦ (Compatible.of_le restrict_le).ext (by simp) (by simpa)⟩
 
 @[simp]
-/--
-lemma `restrict_self` / 引理 `restrict_self`
-
-English:
-lemma restrict_self
-  given: (G : Graph α β)
-  statement: G.restrict E(G) = G
-  proof: (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl (by simp)
-
-@[simp]
-
-中文:
-引理 restrict_self
-  条件: (G : 图 α β)
-  结论: G.restrict E(G) = G
-  证明: (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl (by simp)
-
-@[simp]
-
-Depends on / 依赖: Compatible, Compatible.of_le_le, of_le_le
+/-
+**Graph.restrict_self** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_self (G : Graph α β) : G.restrict E(G) = G
+参数：G : Graph α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.edgeSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) 
+(E₀ : Set β), (G.restrict E₀).edgeSet = G.edgeSet ∩ E₀
+· 使用定理 `Set.inter_self`：inter_self (a : Set α) : a inter a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
 -/
 lemma restrict_self (G : Graph α β) : G.restrict E(G) = G :=
   (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl (by simp)
 
 @[simp]
-/--
-lemma `restrict_edgeSet_inter` / 引理 `restrict_edgeSet_inter`
-
-English:
-lemma restrict_edgeSet_inter
-  given: (G : Graph α β) (F : Set β)
-  statement: G.restrict (E(G) inter F) = G.restrict F
-  proof: (Compatible.of_le_le (G := G) (by simp) (by simp)).ext (by simp) (by simp)
-
-@[simp]
-
-中文:
-引理 restrict_edgeSet_inter
-  条件: (G : 图 α β) (F : 集合 β)
-  结论: G.restrict (E(G) inter F) = G.restrict F
-  证明: (Compatible.of_le_le (G := G) (by simp) (by simp)).ext (by simp) (by simp)
-
-@[simp]
-
-Depends on / 依赖: Compatible, Compatible.of_le_le, of_le_le
+/-
+**Graph.restrict_edgeSet_inter** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_edgeSet_inter (G : Graph α β) (F : Set β) : G.restrict (E(G) inte
+r F) = G.restrict F
+参数：G : Graph α β；F : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.vertexSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β
+) (E₀ : Set β), (G.restrict E₀).vertexSet = G.vertexSet
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Graph.edgeSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) 
+(E₀ : Set β), (G.restrict E₀).edgeSet = G.edgeSet ∩ E₀
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
 -/
-lemma restrict_edgeSet_inter (G : Graph α β) (F : Set β) : G.restrict (E(G) inter F) = G.restrict F :=
+lemma restrict_edgeSet_inter (G : Graph α β) (F : Set β) : G.restrict (E(G) ∩ F) = G.restrict F :=
   (Compatible.of_le_le (G := G) (by simp) (by simp)).ext (by simp) (by simp)
 
 @[simp]
-/--
-lemma `restrict_inter_edgeSet` / 引理 `restrict_inter_edgeSet`
-
-English:
-lemma restrict_inter_edgeSet
-  given: (G : Graph α β) (F : Set β)
-  proof: by
-  rw [inter_comm]; rw [restrict_edgeSet_inter]
-
-@[gcongr]
-
-中文:
-引理 restrict_inter_edgeSet
-  条件: (G : 图 α β) (F : 集合 β)
-  证明: by
-  rw [inter_comm]; rw [restrict_edgeSet_inter]
-
-@[gcongr]
-
-Depends on / 依赖: inter_comm, restrict_edgeSet_inter
+/-
+**Graph.restrict_inter_edgeSet** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_inter_edgeSet (G : Graph α β) (F : Set β) : G.restrict (F inter E
+(G)) = G.restrict F
+参数：G : Graph α β；F : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用引理 `Graph.restrict_edgeSet_inter`：restrict_edgeSet_inter (G : Graph α β) (F 
+: Set β) : G.restrict (E(G) inter F) = G.restrict F
 -/
 lemma restrict_inter_edgeSet (G : Graph α β) (F : Set β) :
-    G.restrict (F inter E(G)) = G.restrict F := by
-  rw [inter_comm]; rw [restrict_edgeSet_inter]
+    G.restrict (F ∩ E(G)) = G.restrict F := by
+  rw [inter_comm, restrict_edgeSet_inter]
 
 @[gcongr]
-/--
-lemma `restrict_mono_left` / 引理 `restrict_mono_left`
-
-English:
-lemma restrict_mono_left
-  given: (h : H <= G) (F : Set β)
-  statement: H.restrict F <= G.restrict F
-  proof: by
-  refine (Compatible.of_le_le (G := G) (restrict_le.trans h) (by simp)).le_iff.mpr ⟨?_, ?_⟩
-  · simpa using h.vertexSet_mono
-  simp [inter_subset_left.trans h.edgeSet_mono]
-
-@[gcongr]
-
-中文:
-引理 restrict_mono_left
-  条件: (h : H <= G) (F : 集合 β)
-  结论: H.restrict F <= G.restrict F
-  证明: by
-  refine (Compatible.of_le_le (G := G) (restrict_le.trans h) (by simp)).le_iff.mpr ⟨?_, ?_⟩
-  · simpa using h.vertexSet_mono
-  simp [inter_subset_left.trans h.edgeSet_mono]
-
-@[gcongr]
-
-Depends on / 依赖: Compatible, Compatible.of_le_le, edgeSet_mono, h.edgeSet_mono, h.vertexSet_mono, inter_subset_left, inter_subset_left.trans, le_iff, le_iff.mpr, of_le_le, restrict_le, restrict_le.trans, vertexSet_mono
+/-
+**Graph.restrict_mono_left** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_mono_left (h : H <= G) (F : Set β) : H.restrict F <= G.restrict F
+参数：h : H <= G；F : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Graph.Compatible.le_iff`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph 
+α β},   H₁.Compatible H₂ → (H₁ ≤ H₂ ↔ H₁.vertexSet ⊆ H₂.vertexSet ∧ H₁.edgeSet ⊆
+ H₂.edgeSet)
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Graph.restrict_le`：restrict_le {E₀ : Set β} : G.restrict E₀ <= G where v
+ertexSet_mono
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.vertexSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β
+) (E₀ : Set β), (G.restrict E₀).vertexSet = G.vertexSet
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Graph.edgeSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) 
+(E₀ : Set β), (G.restrict E₀).edgeSet = G.edgeSet ∩ E₀
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma restrict_mono_left (h : H <= G) (F : Set β) : H.restrict F <= G.restrict F := by
+lemma restrict_mono_left (h : H ≤ G) (F : Set β) : H.restrict F ≤ G.restrict F := by
   refine (Compatible.of_le_le (G := G) (restrict_le.trans h) (by simp)).le_iff.mpr ⟨?_, ?_⟩
   · simpa using h.vertexSet_mono
   simp [inter_subset_left.trans h.edgeSet_mono]
 
 @[gcongr]
-/--
-lemma `restrict_mono_right` / 引理 `restrict_mono_right`
-
-English:
-lemma restrict_mono_right
-  given: (G : Graph α β) (hss : F₀ subseteq F)
-  statement: G.restrict F₀ <= G.restrict F where
-  proof: subset_rfl
-  isLink_mono _ _ _ := fun h => ⟨hss h.1, h.2⟩
-
-@[simp, grind =]
-
-中文:
-引理 restrict_mono_right
-  条件: (G : 图 α β) (hss : F₀ subseteq F)
-  结论: G.restrict F₀ <= G.restrict F where
-  证明: subset_rfl
-  isLink_mono _ _ _ := fun h => ⟨hss h.1, h.2⟩
-
-@[simp, grind =]
-
-Depends on / 依赖: subset_rfl
+/-
+**Graph.restrict_mono_right** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_mono_right (G : Graph α β) (hss : F₀ subseteq F) : G.restrict F₀ 
+<= G.restrict F where vertexSet_mono
+参数：G : Graph α β；hss : F₀ subseteq F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma restrict_mono_right (G : Graph α β) (hss : F₀ subseteq F) : G.restrict F₀ <= G.restrict F where
+lemma restrict_mono_right (G : Graph α β) (hss : F₀ ⊆ F) : G.restrict F₀ ≤ G.restrict F where
   vertexSet_mono := subset_rfl
-  isLink_mono _ _ _ := fun h => ⟨hss h.1, h.2⟩
+  isLink_mono _ _ _ := fun h ↦ ⟨hss h.1, h.2⟩
 
 @[simp, grind =]
-/--
-lemma `restrict_inc` / 引理 `restrict_inc`
-
-English:
-lemma restrict_inc
-  statement: (G.restrict F).Inc e x ↔ G.Inc e x ∧ e in F
-  proof: by
-  simp [Inc, and_comm]
-
-@[simp, grind =]
-
-中文:
-引理 restrict_inc
-  结论: (G.restrict F).Inc e x ↔ G.Inc e x ∧ e in F
-  证明: by
-  simp [Inc, and_comm]
-
-@[simp, grind =]
-
-Depends on / 依赖: and_comm
+/-
+**Graph.restrict_inc** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_inc : (G.restrict F).Inc e x ↔ G.Inc e x ∧ e in F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.restrict_isLink`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) (
+E₀ : Set β) (e : β) (x y : α),   (G.restrict E₀).IsLink e x y = (e ∈ E₀ ∧ G.IsLi
+nk e x y)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma restrict_inc : (G.restrict F).Inc e x ↔ G.Inc e x ∧ e in F := by
+lemma restrict_inc : (G.restrict F).Inc e x ↔ G.Inc e x ∧ e ∈ F := by
   simp [Inc, and_comm]
 
 @[simp, grind =]
-/--
-lemma `restrict_isLoopAt` / 引理 `restrict_isLoopAt`
-
-English:
-lemma restrict_isLoopAt
-  statement: (G.restrict F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e in F
-  proof: by
-  simp [← isLink_self_iff, and_comm]
-
-@[simp]
-
-中文:
-引理 restrict_isLoopAt
-  结论: (G.restrict F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e in F
-  证明: by
-  simp [← isLink_self_iff, and_comm]
-
-@[simp]
-
-Depends on / 依赖: and_comm, isLink_self_iff
+/-
+**Graph.restrict_isLoopAt** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_isLoopAt : (G.restrict F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e in F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.restrict_isLink`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) (
+E₀ : Set β) (e : β) (x y : α),   (G.restrict E₀).IsLink e x y = (e ∈ E₀ ∧ G.IsLi
+nk e x y)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma restrict_isLoopAt : (G.restrict F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e in F := by
+lemma restrict_isLoopAt : (G.restrict F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e ∈ F := by
   simp [← isLink_self_iff, and_comm]
 
 @[simp]
-/--
-lemma `restrict_restrict` / 引理 `restrict_restrict`
-
-English:
-lemma restrict_restrict
-  given: (G : Graph α β) (F₁ F₂ : Set β)
-  proof: by
-  refine (Compatible.of_le_le (G := G) (restrict_le.trans (by simp)) (by simp)).ext (by simp) ?_
-  simp only [edgeSet_restrict]
-  rw [← inter_assoc]; rw [inter_comm _ F₂]
-
-中文:
-引理 restrict_restrict
-  条件: (G : 图 α β) (F₁ F₂ : 集合 β)
-  证明: by
-  refine (Compatible.of_le_le (G := G) (restrict_le.trans (by simp)) (by simp)).ext (by simp) ?_
-  simp only [edgeSet_restrict]
-  rw [← inter_assoc]; rw [inter_comm _ F₂]
-
-Depends on / 依赖: Compatible, Compatible.of_le_le, edgeSet_restrict, inter_assoc, inter_comm, of_le_le, restrict_le, restrict_le.trans
+/-
+**Graph.restrict_restrict** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_restrict (G : Graph α β) (F₁ F₂ : Set β) : (G.restrict F₁).restri
+ct F₂ = G.restrict (F₁ inter F₂)
+参数：G : Graph α β；F₁ F₂ : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.vertexSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β
+) (E₀ : Set β), (G.restrict E₀).vertexSet = G.vertexSet
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Graph.edgeSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) 
+(E₀ : Set β), (G.restrict E₀).edgeSet = G.edgeSet ∩ E₀
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Graph.restrict_le`：restrict_le {E₀ : Set β} : G.restrict E₀ <= G where v
+ertexSet_mono
 -/
 lemma restrict_restrict (G : Graph α β) (F₁ F₂ : Set β) :
-    (G.restrict F₁).restrict F₂ = G.restrict (F₁ inter F₂) := by
+    (G.restrict F₁).restrict F₂ = G.restrict (F₁ ∩ F₂) := by
   refine (Compatible.of_le_le (G := G) (restrict_le.trans (by simp)) (by simp)).ext (by simp) ?_
   simp only [edgeSet_restrict]
-  rw [← inter_assoc]; rw [inter_comm _ F₂]
+  rw [← inter_assoc, inter_comm _ F₂]
 
 /-- Delete a set `F` of edges from `G`. This is a special case of `restrict`,
 but we define it with `copy` so that the edge set is definitionally equal to `E(G) \ F`. -/
 @[expose, simps! (attr := grind =)]
-/--
-Definition of `deleteEdges` / `deleteEdges` 的定义
+/-
+**Graph.deleteEdges** 是 Mathlib 中的一个定义，位于命名空间 `Graph`。
+形式化陈述：deleteEdges (G : Graph α β) (F : Set β) : Graph α β
+参数：G : Graph α β；F : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deleteEdges
-  signature: (G : Graph α β) (F : Set β)
-  body: (G.restrict (E(G) \ F)).copy (edgeSet := E(G) \ F)
-  (IsLink := fun e x y => G.IsLink e x y ∧ e ∉ F) rfl (by simp)
-  (fun e x y => by
-    simp only [restrict_isLink, mem_sdiff, and_comm, and_congr_left_iff, and_iff_left_iff_imp]
-    exact fun h _ => h.edge_mem)
-
-@[simp]
-
-中文:
-定义 deleteEdges
-  签名: (G : 图 α β) (F : 集合 β)
-  定义体: (G.restrict (E(G) \ F)).copy (edgeSet := E(G) \ F)
-  (IsLink := fun e x y => G.IsLink e x y ∧ e ∉ F) rfl (by simp)
-  (fun e x y => by
-    simp only [restrict_isLink, mem_sdiff, and_comm, and_congr_left_iff, and_iff_left_iff_imp]
-    exact fun h _ => h.edge_mem)
-
-@[simp]
-
-Depends on / 依赖: G.IsLink, G.restrict, IsLink, and_comm, and_congr_left_iff, and_iff_left_iff_imp, edgeSet, edge_mem, h.edge_mem, mem_sdiff, restrict, restrict_isLink
+--- 原说明 ---
+Delete a set `F` of edges from `G`. This is a special case of `restrict`,
+but we define it with `copy` so that the edge set is definitionally equal to `E(
+G) \ F`.
 -/
 def deleteEdges (G : Graph α β) (F : Set β) : Graph α β :=
   (G.restrict (E(G) \ F)).copy (edgeSet := E(G) \ F)
-  (IsLink := fun e x y => G.IsLink e x y ∧ e ∉ F) rfl (by simp)
-  (fun e x y => by
+  (IsLink := fun e x y ↦ G.IsLink e x y ∧ e ∉ F) rfl (by simp)
+  (fun e x y ↦ by
     simp only [restrict_isLink, mem_sdiff, and_comm, and_congr_left_iff, and_iff_left_iff_imp]
-    exact fun h _ => h.edge_mem)
+    exact fun h _ ↦ h.edge_mem)
 
 @[simp]
-/--
-lemma `restrict_edgeSet_sdiff_eq_deleteEdges` / 引理 `restrict_edgeSet_sdiff_eq_deleteEdges`
-
-English:
-lemma restrict_edgeSet_sdiff_eq_deleteEdges
-  given: (G : Graph α β) (F : Set β)
-  proof: copy_eq ..
-
-@[deprecated (since := "2026-06-03")]
-alias restrict_edgeSet_diff_eq_deleteEdges := restrict_edgeSet_sdiff_eq_deleteEdges
-
-@[simp]
-
-中文:
-引理 restrict_edgeSet_sdiff_eq_deleteEdges
-  条件: (G : 图 α β) (F : 集合 β)
-  证明: copy_eq ..
-
-@[deprecated (since := "2026-06-03")]
-alias restrict_edgeSet_diff_eq_deleteEdges := restrict_edgeSet_sdiff_eq_deleteEdges
-
-@[simp]
-
-Depends on / 依赖: copy_eq
+/-
+**Graph.restrict_edgeSet_sdiff_eq_deleteEdges** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_edgeSet_sdiff_eq_deleteEdges (G : Graph α β) (F : Set β) : .symm 
+G.restrict (E(G) \ F) = G.deleteEdges F
+参数：G : Graph α β；F : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Graph.copy_eq`：copy_eq (G : Graph α β) {V : Set α} {E : Set β} {IsLink :
+ β -> α -> α -> Prop} (hV : V(G) = V) (hE : E(G) = E) (h_isLink : forall e x y, 
+G.I…
 -/
 lemma restrict_edgeSet_sdiff_eq_deleteEdges (G : Graph α β) (F : Set β) :
-.symm G.restrict (E(G) \ F) = G.deleteEdges F := copy_eq ..
+    G.restrict (E(G) \ F) = G.deleteEdges F := copy_eq .. |>.symm
 
 @[deprecated (since := "2026-06-03")]
 alias restrict_edgeSet_diff_eq_deleteEdges := restrict_edgeSet_sdiff_eq_deleteEdges
 
 @[simp]
-/--
-lemma `deleteEdges_le` / 引理 `deleteEdges_le`
-
-English:
-lemma deleteEdges_le
-  statement: G.deleteEdges F <= G
-  proof: by
-  simp [← restrict_edgeSet_sdiff_eq_deleteEdges]
-
-中文:
-引理 deleteEdges_le
-  结论: G.deleteEdges F <= G
-  证明: by
-  simp [← restrict_edgeSet_sdiff_eq_deleteEdges]
-
-Depends on / 依赖: restrict_edgeSet_sdiff_eq_deleteEdges
+/-
+**Graph.deleteEdges_le** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteEdges_le : G.deleteEdges F <= G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma deleteEdges_le : G.deleteEdges F <= G := by
+lemma deleteEdges_le : G.deleteEdges F ≤ G := by
   simp [← restrict_edgeSet_sdiff_eq_deleteEdges]
-
-/--
-lemma `restrict_eq_deleteEdges` / 引理 `restrict_eq_deleteEdges`
-
-English:
-lemma restrict_eq_deleteEdges
-  given: (G : Graph α β) (F : Set β)
-  proof: (Compatible.of_le_le restrict_le deleteEdges_le).ext rfl (by simp)
-
-@[simp, grind =]
-
-中文:
-引理 restrict_eq_deleteEdges
-  条件: (G : 图 α β) (F : 集合 β)
-  证明: (Compatible.of_le_le restrict_le deleteEdges_le).ext rfl (by simp)
-
-@[simp, grind =]
-
-Depends on / 依赖: Compatible, Compatible.of_le_le, deleteEdges_le, of_le_le, restrict_le
+/-
+**Graph.restrict_eq_deleteEdges** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：restrict_eq_deleteEdges (G : Graph α β) (F : Set β) : G.restrict F = G.del
+eteEdges (E(G) \ F)
+参数：G : Graph α β；F : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.edgeSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) 
+(E₀ : Set β), (G.restrict E₀).edgeSet = G.edgeSet ∩ E₀
+· 使用定理 `Graph.edgeSet_deleteEdges`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α 
+β) (F : Set β), (G.deleteEdges F).edgeSet = G.edgeSet \ F
+· 使用定理 `sdiff_sdiff_right_self`：sdiff_sdiff_right_self : x \ (x \ y) = x ⊓ y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
+· 使用引理 `Graph.restrict_le`：restrict_le {E₀ : Set β} : G.restrict E₀ <= G where v
+ertexSet_mono
+· 使用引理 `Graph.deleteEdges_le`：deleteEdges_le : G.deleteEdges F <= G
 -/
 lemma restrict_eq_deleteEdges (G : Graph α β) (F : Set β) :
     G.restrict F = G.deleteEdges (E(G) \ F) :=
   (Compatible.of_le_le restrict_le deleteEdges_le).ext rfl (by simp)
 
 @[simp, grind =]
-/--
-lemma `deleteEdges_empty` / 引理 `deleteEdges_empty`
-
-English:
-lemma deleteEdges_empty
-  statement: G.deleteEdges ∅ = G
-  proof: by
-  simp [← restrict_edgeSet_sdiff_eq_deleteEdges]
-
-@[gcongr]
-
-中文:
-引理 deleteEdges_empty
-  结论: G.deleteEdges ∅ = G
-  证明: by
-  simp [← restrict_edgeSet_sdiff_eq_deleteEdges]
-
-@[gcongr]
-
-Depends on / 依赖: restrict_edgeSet_sdiff_eq_deleteEdges
+/-
+**Graph.deleteEdges_empty** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteEdges_empty : G.deleteEdges ∅ = G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_empty`：sdiff_empty {s : Set α} : s \ ∅ = s
+· 使用引理 `Graph.restrict_self`：restrict_self (G : Graph α β) : G.restrict E(G) = G
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma deleteEdges_empty : G.deleteEdges ∅ = G := by
   simp [← restrict_edgeSet_sdiff_eq_deleteEdges]
 
 @[gcongr]
-/--
-lemma `deleteEdges_mono_left` / 引理 `deleteEdges_mono_left`
-
-English:
-lemma deleteEdges_mono_left
-  given: (h : H <= G) (F : Set β)
-  statement: H.deleteEdges F <= G.deleteEdges F
-  proof: by
-  simp_rw [← restrict_edgeSet_sdiff_eq_deleteEdges]
-  refine (restrict_mono_left h (E(H) \ F)).trans (G.restrict_mono_right ?_)
-  exact sdiff_subset_sdiff_left h.edgeSet_mono
-
-@[simp, grind =]
-
-中文:
-引理 deleteEdges_mono_left
-  条件: (h : H <= G) (F : 集合 β)
-  结论: H.deleteEdges F <= G.deleteEdges F
-  证明: by
-  simp_rw [← restrict_edgeSet_sdiff_eq_deleteEdges]
-  refine (restrict_mono_left h (E(H) \ F)).trans (G.restrict_mono_right ?_)
-  exact sdiff_subset_sdiff_left h.edgeSet_mono
-
-@[simp, grind =]
-
-Depends on / 依赖: G.restrict_mono_right, edgeSet_mono, h.edgeSet_mono, restrict_edgeSet_sdiff_eq_deleteEdges, restrict_mono_left, restrict_mono_right, sdiff_subset_sdiff_left, simp_rw
+/-
+**Graph.deleteEdges_mono_left** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteEdges_mono_left (h : H <= G) (F : Set β) : H.deleteEdges F <= G.dele
+teEdges F
+参数：h : H <= G；F : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Graph.restrict_mono_left`：restrict_mono_left (h : H <= G) (F : Set β) : 
+H.restrict F <= G.restrict F
+· 使用引理 `Graph.restrict_mono_right`：restrict_mono_right (G : Graph α β) (hss : F₀
+ subseteq F) : G.restrict F₀ <= G.restrict F where vertexSet_mono
+· 使用定理 `Set.sdiff_subset_sdiff_left`：sdiff_subset_sdiff_left {s₁ s₂ t : Set α} (
+h : s₁ subseteq s₂) : s₁ \ t subseteq s₂ \ t
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
 -/
-lemma deleteEdges_mono_left (h : H <= G) (F : Set β) : H.deleteEdges F <= G.deleteEdges F := by
+lemma deleteEdges_mono_left (h : H ≤ G) (F : Set β) : H.deleteEdges F ≤ G.deleteEdges F := by
   simp_rw [← restrict_edgeSet_sdiff_eq_deleteEdges]
   refine (restrict_mono_left h (E(H) \ F)).trans (G.restrict_mono_right ?_)
   exact sdiff_subset_sdiff_left h.edgeSet_mono
 
 @[simp, grind =]
-/--
-lemma `deleteEdges_inc` / 引理 `deleteEdges_inc`
-
-English:
-lemma deleteEdges_inc
-  statement: (G.deleteEdges F).Inc e x ↔ G.Inc e x ∧ e ∉ F
-  proof: by
-  simp [Inc, and_comm]
-
-@[simp, grind =]
-
-中文:
-引理 deleteEdges_inc
-  结论: (G.deleteEdges F).Inc e x ↔ G.Inc e x ∧ e ∉ F
-  证明: by
-  simp [Inc, and_comm]
-
-@[simp, grind =]
-
-Depends on / 依赖: and_comm
+/-
+**Graph.deleteEdges_inc** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteEdges_inc : (G.deleteEdges F).Inc e x ↔ G.Inc e x ∧ e ∉ F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.deleteEdges_isLink`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β
+) (F : Set β) (e : β) (x y : α),   (G.deleteEdges F).IsLink e x y = (G.IsLink e 
+x y ∧ e ∉ F)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma deleteEdges_inc : (G.deleteEdges F).Inc e x ↔ G.Inc e x ∧ e ∉ F := by
   simp [Inc, and_comm]
 
 @[simp, grind =]
-/--
-lemma `deleteEdges_isLoopAt` / 引理 `deleteEdges_isLoopAt`
-
-English:
-lemma deleteEdges_isLoopAt
-  statement: (G.deleteEdges F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e ∉ F
-  proof: by
-  simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, restrict_isLoopAt, mem_sdiff,
-    and_congr_right_iff, and_iff_right_iff_imp]
-  exact fun h _ => h.edge_mem
-
-@[simp]
-
-中文:
-引理 deleteEdges_isLoopAt
-  结论: (G.deleteEdges F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e ∉ F
-  证明: by
-  simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, restrict_isLoopAt, mem_sdiff,
-    and_congr_right_iff, and_iff_right_iff_imp]
-  exact fun h _ => h.edge_mem
-
-@[simp]
-
-Depends on / 依赖: and_congr_right_iff, and_iff_right_iff_imp, edge_mem, h.edge_mem, mem_sdiff, restrict_edgeSet_sdiff_eq_deleteEdges, restrict_isLoopAt
+/-
+**Graph.deleteEdges_isLoopAt** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteEdges_isLoopAt : (G.deleteEdges F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e
+ ∉ F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Graph.IsLoopAt.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β}
+ {G : Graph α β}, G.IsLoopAt e x → e ∈ G.edgeSet
 -/
 lemma deleteEdges_isLoopAt : (G.deleteEdges F).IsLoopAt e x ↔ G.IsLoopAt e x ∧ e ∉ F := by
   simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, restrict_isLoopAt, mem_sdiff,
     and_congr_right_iff, and_iff_right_iff_imp]
-  exact fun h _ => h.edge_mem
+  exact fun h _ ↦ h.edge_mem
 
 @[simp]
-/--
-lemma `deleteEdges_deleteEdges` / 引理 `deleteEdges_deleteEdges`
-
-English:
-lemma deleteEdges_deleteEdges
-  given: (G : Graph α β) (F₁ F₂ : Set β)
-  proof: by
-  simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, sdiff_eq_compl_inter, restrict_inter_edgeSet,
-    edgeSet_restrict, restrict_restrict, compl_union]
-  rw [← inter_comm]; rw [inter_comm F₁ᶜ]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_comm]; rw [inter_assoc]; rw [inter_comm]; rw [restrict_inter_edgeSet]; rw [inter_comm]
-
-中文:
-引理 deleteEdges_deleteEdges
-  条件: (G : 图 α β) (F₁ F₂ : 集合 β)
-  证明: by
-  simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, sdiff_eq_compl_inter, restrict_inter_edgeSet,
-    edgeSet_restrict, restrict_restrict, compl_union]
-  rw [← inter_comm]; rw [inter_comm F₁ᶜ]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_comm]; rw [inter_assoc]; rw [inter_comm]; rw [restrict_inter_edgeSet]; rw [inter_comm]
-
-Depends on / 依赖: compl_union, edgeSet_restrict, inter_assoc, inter_comm, inter_self, restrict_edgeSet_sdiff_eq_deleteEdges, restrict_inter_edgeSet, restrict_restrict, sdiff_eq_compl_inter
+/-
+**Graph.deleteEdges_deleteEdges** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteEdges_deleteEdges (G : Graph α β) (F₁ F₂ : Set β) : (G.deleteEdges F
+₁).deleteEdges F₂ = G.deleteEdges (F₁ union F₂)
+参数：G : Graph α β；F₁ F₂ : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.sdiff_eq_compl_inter`：sdiff_eq_compl_inter {s t : Set α} : s \ t = t
+ᶜ inter s
+· 使用引理 `Graph.restrict_inter_edgeSet`：restrict_inter_edgeSet (G : Graph α β) (F 
+: Set β) : G.restrict (F inter E(G)) = G.restrict F
+· 使用定理 `Graph.edgeSet_restrict`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) 
+(E₀ : Set β), (G.restrict E₀).edgeSet = G.edgeSet ∩ E₀
+· 使用引理 `Graph.restrict_restrict`：restrict_restrict (G : Graph α β) (F₁ F₂ : Set 
+β) : (G.restrict F₁).restrict F₂ = G.restrict (F₁ inter F₂)
+· 使用定理 `Set.compl_union`：compl_union (s t : Set α) : (s union t)ᶜ = sᶜ inter tᶜ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `Set.inter_self`：inter_self (a : Set α) : a inter a = a
 -/
 lemma deleteEdges_deleteEdges (G : Graph α β) (F₁ F₂ : Set β) :
-    (G.deleteEdges F₁).deleteEdges F₂ = G.deleteEdges (F₁ union F₂) := by
+    (G.deleteEdges F₁).deleteEdges F₂ = G.deleteEdges (F₁ ∪ F₂) := by
   simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, sdiff_eq_compl_inter, restrict_inter_edgeSet,
     edgeSet_restrict, restrict_restrict, compl_union]
-  rw [← inter_comm]; rw [inter_comm F₁ᶜ]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_comm]; rw [inter_assoc]; rw [inter_comm]; rw [restrict_inter_edgeSet]; rw [inter_comm]
+  rw [← inter_comm, inter_comm F₁ᶜ, inter_assoc, inter_assoc, inter_self, inter_comm,
+    inter_assoc, inter_comm, restrict_inter_edgeSet, inter_comm]
 
 /-- The subgraph of `G` induced by a set `X` of vertices.
 The edges are the edges of `G` with both ends in `X`.
 (`X` is not required to be a subset of `V(G)` for this definition to work,
 even though this is the standard use case) -/
 @[expose, simps! (attr := grind =) vertexSet isLink]
-/--
-Definition of `induce` / `induce` 的定义
+/-
+**Graph.induce** 是 Mathlib 中的一个定义，位于命名空间 `Graph`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Graph α β → Set α → Graph α β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition induce
-  signature: (G : Graph α β) (X : Set α)
-  body: X
-  IsLink e x y := G.IsLink e x y ∧ x in X ∧ y in X
-  isLink_symm := by simp +contextual [symm_def, G.isLink_comm]
-  eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.1.left_eq_or_eq h'.1
-
-中文:
-定义 induce
-  签名: (G : 图 α β) (X : 集合 α)
-  定义体: X
-  IsLink e x y := G.IsLink e x y ∧ x in X ∧ y in X
-  isLink_symm := by simp +contextual [symm_def, G.isLink_comm]
-  eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.1.left_eq_or_eq h'.1
+--- 原说明 ---
+The subgraph of `G` induced by a set `X` of vertices.
+The edges are the edges of `G` with both ends in `X`.
+(`X` is not required to be a subset of `V(G)` for this definition to work,
+even though this is the standard use case)
 -/
 protected def induce (G : Graph α β) (X : Set α) : Graph α β where
   vertexSet := X
-  IsLink e x y := G.IsLink e x y ∧ x in X ∧ y in X
+  IsLink e x y := G.IsLink e x y ∧ x ∈ X ∧ y ∈ X
   isLink_symm := by simp +contextual [symm_def, G.isLink_comm]
   eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.1.left_eq_or_eq h'.1
-
-/--
-lemma `induce_le` / 引理 `induce_le`
-
-English:
-lemma induce_le
-  given: (hX : X subseteq V(G))
-  statement: G.induce X <= G
-  proof: ⟨hX, fun _ _ _ h => h.1⟩
-
-@[simp, grind =]
-
-中文:
-引理 induce_le
-  条件: (hX : X subseteq V(G))
-  结论: G.induce X <= G
-  证明: ⟨hX, fun _ _ _ h => h.1⟩
-
-@[simp, grind =]
+/-
+**Graph.induce_le** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：induce_le (hX : X subseteq V(G)) : G.induce X <= G
+参数：hX : X subseteq V(G)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma induce_le (hX : X subseteq V(G)) : G.induce X <= G := ⟨hX, fun _ _ _ h => h.1⟩
+lemma induce_le (hX : X ⊆ V(G)) : G.induce X ≤ G := ⟨hX, fun _ _ _ h ↦ h.1⟩
 
 @[simp, grind =]
-/--
-lemma `induce_le_iff` / 引理 `induce_le_iff`
-
-English:
-lemma induce_le_iff
-  statement: G.induce X <= G ↔ X subseteq V(G)
-  proof: ⟨(·.vertexSet_mono), induce_le⟩
-
-中文:
-引理 induce_le_iff
-  结论: G.induce X <= G ↔ X subseteq V(G)
-  证明: ⟨(·.vertexSet_mono), induce_le⟩
-
-Depends on / 依赖: induce_le, vertexSet_mono
+/-
+**Graph.induce_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：induce_le_iff : G.induce X <= G ↔ X subseteq V(G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用引理 `Graph.induce_le`：induce_le (hX : X subseteq V(G)) : G.induce X <= G
 -/
-lemma induce_le_iff : G.induce X <= G ↔ X subseteq V(G) := ⟨(·.vertexSet_mono), induce_le⟩
-
-/--
-lemma `edgeSet_induce` / 引理 `edgeSet_induce`
-
-English:
-lemma edgeSet_induce
-  given: (G : Graph α β) (X : Set α)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-引理 edgeSet_induce
-  条件: (G : 图 α β) (X : 集合 α)
-  证明: rfl
-
-@[simp, grind =]
+lemma induce_le_iff : G.induce X ≤ G ↔ X ⊆ V(G) := ⟨(·.vertexSet_mono), induce_le⟩
+/-
+**Graph.edgeSet_induce** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：edgeSet_induce (G : Graph α β) (X : Set α) : E(G.induce X) = {e | exists x
+ y, G.IsLink e x y ∧ x in X ∧ y in X}
+参数：G : Graph α β；X : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma edgeSet_induce (G : Graph α β) (X : Set α) :
-    E(G.induce X) = {e | exists x y, G.IsLink e x y ∧ x in X ∧ y in X} := rfl
+    E(G.induce X) = {e | ∃ x y, G.IsLink e x y ∧ x ∈ X ∧ y ∈ X} := rfl
 
 @[simp, grind =]
-/--
-lemma `induce_vertexSet` / 引理 `induce_vertexSet`
-
-English:
-lemma induce_vertexSet
-  given: (G : Graph α β)
-  statement: G.induce V(G) = G
-  proof: by
-refine (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl Set.ext fun e =>
-    ⟨fun ⟨_, _, h⟩ => h.1.edge_mem, fun h => ?_⟩
-  obtain ⟨x, y, h⟩ := exists_isLink_of_mem_edgeSet h
-  exact ⟨x, y, h, h.left_mem, h.right_mem⟩
-
-中文:
-引理 induce_vertexSet
-  条件: (G : 图 α β)
-  结论: G.induce V(G) = G
-  证明: by
-refine (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl Set.ext fun e =>
-    ⟨fun ⟨_, _, h⟩ => h.1.edge_mem, fun h => ?_⟩
-  obtain ⟨x, y, h⟩ := exists_isLink_of_mem_edgeSet h
-  exact ⟨x, y, h, h.left_mem, h.right_mem⟩
-
-Depends on / 依赖: Compatible, Compatible.of_le_le, Set.ext, edge_mem, exists_isLink_of_mem_edgeSet, h.left_mem, h.right_mem, left_mem, of_le_le, right_mem
+/-
+**Graph.induce_vertexSet** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：induce_vertexSet (G : Graph α β) : G.induce V(G) = G
+参数：G : Graph α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `Graph.exists_isLink_of_mem_edgeSet`：exists_isLink_of_mem_edgeSet (h : e 
+in E(G)) : exists x y, G.IsLink e x y
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `Graph.IsLink.right_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β
+} {G : Graph α β}, G.IsLink e x y → y ∈ G.vertexSet
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 lemma induce_vertexSet (G : Graph α β) : G.induce V(G) = G := by
-refine (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl Set.ext fun e =>
-    ⟨fun ⟨_, _, h⟩ => h.1.edge_mem, fun h => ?_⟩
+  refine (Compatible.of_le_le (G := G) (by simp) (by simp)).ext rfl <| Set.ext fun e ↦
+    ⟨fun ⟨_, _, h⟩ ↦ h.1.edge_mem, fun h ↦ ?_⟩
   obtain ⟨x, y, h⟩ := exists_isLink_of_mem_edgeSet h
   exact ⟨x, y, h, h.left_mem, h.right_mem⟩
 
-/--
-Definition of `deleteVerts` / `deleteVerts` 的定义
+/-- The graph obtained from `G` by deleting a set of vertices. -/
+/-
+**Graph.deleteVerts** 是 Mathlib 中的一个定义，位于命名空间 `Graph`。
+形式化陈述：deleteVerts (G : Graph α β) (X : Set α) : Graph α β
+参数：G : Graph α β；X : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deleteVerts
-  signature: (G : Graph α β) (X : Set α)
-  body: G.induce (V(G) \ X)
-
-@[simp, grind =]
-
-中文:
-定义 deleteVerts
-  签名: (G : 图 α β) (X : 集合 α)
-  定义体: G.induce (V(G) \ X)
-
-@[simp, grind =]
-
-Depends on / 依赖: G.induce, induce
+--- 原说明 ---
+The graph obtained from `G` by deleting a set of vertices.
 -/
 def deleteVerts (G : Graph α β) (X : Set α) : Graph α β := G.induce (V(G) \ X)
 
 @[simp, grind =]
-/--
-lemma `vertexSet_deleteVerts` / 引理 `vertexSet_deleteVerts`
-
-English:
-lemma vertexSet_deleteVerts
-  given: (G : Graph α β) (X : Set α)
-  statement: V(G.deleteVerts X) = V(G) \ X
-  proof: by
-  unfold deleteVerts
-  rfl
-
-@[simp, grind =]
-
-中文:
-引理 vertexSet_deleteVerts
-  条件: (G : 图 α β) (X : 集合 α)
-  结论: V(G.deleteVerts X) = V(G) \ X
-  证明: by
-  unfold deleteVerts
-  rfl
-
-@[simp, grind =]
-
-Depends on / 依赖: deleteVerts
+/-
+**Graph.vertexSet_deleteVerts** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：vertexSet_deleteVerts (G : Graph α β) (X : Set α) : V(G.deleteVerts X) = V
+(G) \ X
+参数：G : Graph α β；X : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma vertexSet_deleteVerts (G : Graph α β) (X : Set α) : V(G.deleteVerts X) = V(G) \ X := by
   unfold deleteVerts
   rfl
 
 @[simp, grind =]
-/--
-lemma `deleteVerts_isLink` / 引理 `deleteVerts_isLink`
-
-English:
-lemma deleteVerts_isLink
-  given: (G : Graph α β) (X : Set α)
-  proof: by
-  simp only [deleteVerts, induce_isLink, mem_sdiff, and_congr_right_iff]
-  exact fun h => by simp [h.left_mem, h.right_mem]
-
-@[simp]
-
-中文:
-引理 deleteVerts_isLink
-  条件: (G : 图 α β) (X : 集合 α)
-  证明: by
-  simp only [deleteVerts, induce_isLink, mem_sdiff, and_congr_right_iff]
-  exact fun h => by simp [h.left_mem, h.right_mem]
-
-@[simp]
-
-Depends on / 依赖: Equiv.ulift.symm, StateT, StateT.uliftable, and_congr_right_iff, deleteVerts, h.left_mem, h.right_mem, induce_isLink, left_mem, mem_sdiff, right_mem, uliftable
+/-
+**Graph.deleteVerts_isLink** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteVerts_isLink (G : Graph α β) (X : Set α) : (G.deleteVerts X).IsLink 
+e x y ↔ (G.IsLink e x y ∧ x ∉ X ∧ y ∉ X)
+参数：G : Graph α β；X : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.induce_isLink`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β) (X 
+: Set α) (e : β) (x y : α),   (G.induce X).IsLink e x y = (G.IsLink e x y ∧ x ∈ 
+X ∧ y ∈ X…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Graph.IsLink.right_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β
+} {G : Graph α β}, G.IsLink e x y → y ∈ G.vertexSet
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma deleteVerts_isLink (G : Graph α β) (X : Set α) :
     (G.deleteVerts X).IsLink e x y ↔ (G.IsLink e x y ∧ x ∉ X ∧ y ∉ X) := by
   simp only [deleteVerts, induce_isLink, mem_sdiff, and_congr_right_iff]
-  exact fun h => by simp [h.left_mem, h.right_mem]
+  exact fun h ↦ by simp [h.left_mem, h.right_mem]
 
 @[simp]
-/--
-lemma `edgeSet_deleteVerts` / 引理 `edgeSet_deleteVerts`
-
-English:
-lemma edgeSet_deleteVerts
-  given: (G : Graph α β) (X : Set α)
-  proof: by
-  simp [edgeSet_eq_setOfPred_exists_isLink]
-
-@[simp, grind =]
-
-中文:
-引理 edgeSet_deleteVerts
-  条件: (G : 图 α β) (X : 集合 α)
-  证明: by
-  simp [edgeSet_eq_setOfPred_exists_isLink]
-
-@[simp, grind =]
-
-Depends on / 依赖: edgeSet_eq_setOfPred_exists_isLink
+/-
+**Graph.edgeSet_deleteVerts** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：edgeSet_deleteVerts (G : Graph α β) (X : Set α) : E(G.deleteVerts X) = {e 
+| exists x y, G.IsLink e x y ∧ x ∉ X ∧ y ∉ X}
+参数：G : Graph α β；X : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Graph.edgeSet_eq_setOfPred_exists_isLink`：edgeSet_eq_setOfPred_exists_is
+Link : E(G) = {e | exists x y, G.IsLink e x y}
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma edgeSet_deleteVerts (G : Graph α β) (X : Set α) :
-    E(G.deleteVerts X) = {e | exists x y, G.IsLink e x y ∧ x ∉ X ∧ y ∉ X} := by
+    E(G.deleteVerts X) = {e | ∃ x y, G.IsLink e x y ∧ x ∉ X ∧ y ∉ X} := by
   simp [edgeSet_eq_setOfPred_exists_isLink]
 
 @[simp, grind =]
-/--
-lemma `deleteVerts_empty` / 引理 `deleteVerts_empty`
-
-English:
-lemma deleteVerts_empty
-  given: (G : Graph α β)
-  statement: G.deleteVerts (∅ : Set α) = G
-  proof: by
-  simp [deleteVerts]
-
-中文:
-引理 deleteVerts_empty
-  条件: (G : 图 α β)
-  结论: G.deleteVerts (∅ : 集合 α) = G
-  证明: by
-  simp [deleteVerts]
-
-Depends on / 依赖: deleteVerts
+/-
+**Graph.deleteVerts_empty** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：deleteVerts_empty (G : Graph α β) : G.deleteVerts (∅ : Set α) = G
+参数：G : Graph α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_empty`：sdiff_empty {s : Set α} : s \ ∅ = s
+· 使用引理 `Graph.induce_vertexSet`：induce_vertexSet (G : Graph α β) : G.induce V(G)
+ = G
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma deleteVerts_empty (G : Graph α β) : G.deleteVerts (∅ : Set α) = G := by
   simp [deleteVerts]
-
-/--
-lemma `deleteVerts_le` / 引理 `deleteVerts_le`
-
-English:
-lemma deleteVerts_le
-  statement: G.deleteVerts X <= G
-  proof: G.induce_le sdiff_subset
-
-中文:
-引理 deleteVerts_le
-  结论: G.deleteVerts X <= G
-  证明: G.induce_le sdiff_subset
-
-Depends on / 依赖: Equiv.ulift.symm, ReaderT, ReaderT.uliftable, uliftable
+/-
+**Graph.deleteVerts_le** 是 Mathlib 中的一个定理，位于命名空间 `Graph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {X : Set α}, G.deleteVerts
+ X ≤ G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.induce_le`：induce_le (hX : X subseteq V(G)) : G.induce X <= G
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
-@[simp] lemma deleteVerts_le : G.deleteVerts X <= G := G.induce_le sdiff_subset
+@[simp] lemma deleteVerts_le : G.deleteVerts X ≤ G := G.induce_le sdiff_subset
 
 end Graph
+

@@ -12,7 +12,7 @@ public import Mathlib.Algebra.MonoidAlgebra.Opposite
 # Variations on non-zero divisors in `AddMonoidAlgebra`s
 
 This file studies the interaction between typeclass assumptions on two Types `R` and `A` and
-whether `R[A]` has non-zero zero-divisors. For some background on related
+whether `R[A]` has non-zero zero-divisors.  For some background on related
 questions, see [Kaplansky's Conjectures](https://en.wikipedia.org/wiki/Kaplansky%27s_conjectures),
 especially the *zero divisor conjecture*.
 
@@ -53,7 +53,7 @@ The conditions on `A` imposed in `NoZeroDivisors.of_left_ordered` are sometimes 
 The conditions on `A` imposed in `NoZeroDivisors.of_right_ordered` are sometimes referred to as
 `right-ordered`.
 
-These conditions are sufficient, but not necessary. As mentioned above, *Kaplansky's Conjecture*
+These conditions are sufficient, but not necessary.  As mentioned above, *Kaplansky's Conjecture*
 asserts that `A` being torsion-free may be enough.
 -/
 
@@ -70,44 +70,57 @@ as a product of monomials in the supports of `f` and `g` is a product. -/
 @[to_additive (dont_translate := R) coeff_mul_add_of_uniqueAdd
 /-- The coefficient of a monomial in a product `f * g` that can be reached in at most one way
 as a product of monomials in the supports of `f` and `g` is a product. -/]
-/--
-theorem `coeff_mul_mul_of_uniqueMul` / 定理 `coeff_mul_mul_of_uniqueMul`
-
-English:
-theorem coeff_mul_mul_of_uniqueMul
-  statement: [Mul A] {f g : R[A]} {a0 b0 : A}
-  proof: by
-  classical
-  simp_rw [coeff_mul, sum, ← Finset.sum_product']
-  refine (Finset.sum_eq_single (a0, b0) ?_ ?_).trans (if_pos rfl) <;> simp_rw [Finset.mem_product]
-  · refine fun ab hab hne => if_neg (fun he => hne <| Prod.ext ?_ ?_)
-    exacts [(h hab.1 hab.2 he).1, (h hab.1 hab.2 he).2]
-  · refine fun hnotMem => ite_eq_right_iff.mpr (fun _ => ?_)
-    rcases not_and_or.mp hnotMem with af | bg
-    · rw [notMem_support_iff.mp af, zero_mul]
-    · rw [notMem_support_iff.mp bg, mul_zero]
-
-@[deprecated (since := "2026-06-18")]
-alias mul_apply_mul_eq_mul_of_uniqueMul := coeff_mul_mul_of_uniqueMul
-
-中文:
-定理 coeff_mul_mul_of_uniqueMul
-  结论: [乘法 A] {f g : R[A]} {a0 b0 : A}
-  证明: by
-  classical
-  simp_rw [coeff_mul, sum, ← Finset.sum_product']
-  refine (Finset.sum_eq_single (a0, b0) ?_ ?_).trans (if_pos rfl) <;> simp_rw [Finset.mem_product]
-  · refine fun ab hab hne => if_neg (fun he => hne <| Prod.ext ?_ ?_)
-    exacts [(h hab.1 hab.2 he).1, (h hab.1 hab.2 he).2]
-  · refine fun hnotMem => ite_eq_right_iff.mpr (fun _ => ?_)
-    rcases not_and_or.mp hnotMem with af | bg
-    · rw [notMem_support_iff.mp af, zero_mul]
-    · rw [notMem_support_iff.mp bg, mul_zero]
-
-@[deprecated (since := "2026-06-18")]
-alias mul_apply_mul_eq_mul_of_uniqueMul := coeff_mul_mul_of_uniqueMul
-
-Depends on / 依赖: Finset, Finset.mem_product, Finset.sum_eq_single, Finset.sum_product, Prod.ext, classical, coeff_mul, exacts, hnotMem, if_neg, if_pos, ite_eq_right_iff, ite_eq_right_iff.mpr, mem_product, mul_zero, notMem_support_iff, notMem_support_iff.mp, not_and_or, not_and_or.mp, simp_rw
+/-
+**MonoidAlgebra.coeff_mul_mul_of_uniqueMul** 是 Mathlib 中的一个定理，位于命名空间 `MonoidAlge
+bra`。
+形式化陈述：coeff_mul_mul_of_uniqueMul [Mul A] {f g : R[A]} {a0 b0 : A} (h : UniqueMul
+ f.coeff.support g.coeff.support a0 b0) : (f * g).coeff (a0 * b0) = f.coeff a0 *
+ g.coeff b0
+参数：h : UniqueMul f.coeff.support g.coeff.support a0 b0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonoidAlgebra.coeff_mul`：coeff_mul [DecidableEq M] (x y : R[M]) (m : M) 
+: (x * y).coeff m = x.coeff.sum fun m₁ r₁ => y.coeff.sum fun m₂ r₂ => if m₁ * m₂
+ = m then r₁ …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ite_eq_right_iff`：∀ {α : Sort u_1} {p : Prop} [inst : Decidable p] {x y 
+: α}, (if p then x else y) = y ↔ p → x = y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `Finsupp.notMem_support_iff`：notMem_support_iff {f : α ->₀ M} {a} : a ∉ f
+.support ↔ f a = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem coeff_mul_mul_of_uniqueMul [Mul A] {f g : R[A]} {a0 b0 : A}
     (h : UniqueMul f.coeff.support g.coeff.support a0 b0) :
@@ -115,9 +128,9 @@ theorem coeff_mul_mul_of_uniqueMul [Mul A] {f g : R[A]} {a0 b0 : A}
   classical
   simp_rw [coeff_mul, sum, ← Finset.sum_product']
   refine (Finset.sum_eq_single (a0, b0) ?_ ?_).trans (if_pos rfl) <;> simp_rw [Finset.mem_product]
-  · refine fun ab hab hne => if_neg (fun he => hne <| Prod.ext ?_ ?_)
+  · refine fun ab hab hne ↦ if_neg (fun he ↦ hne <| Prod.ext ?_ ?_)
     exacts [(h hab.1 hab.2 he).1, (h hab.1 hab.2 he).2]
-  · refine fun hnotMem => ite_eq_right_iff.mpr (fun _ => ?_)
+  · refine fun hnotMem ↦ ite_eq_right_iff.mpr (fun _ ↦ ?_)
     rcases not_and_or.mp hnotMem with af | bg
     · rw [notMem_support_iff.mp af, zero_mul]
     · rw [notMem_support_iff.mp bg, mul_zero]
@@ -127,36 +140,9 @@ alias mul_apply_mul_eq_mul_of_uniqueMul := coeff_mul_mul_of_uniqueMul
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive (dont_translate := R)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NoZeroDivisors
-  signature: R] [Mul A] [UniqueProds A] : NoZeroDivisors R[A] where
-  body: by
-    contrapose! hab
-    simp only [ne_eq, ← coeff_eq_zero, ← support_nonempty_iff] at hab ⊢
-    obtain ⟨da, a0, db, b0, h⟩ := UniqueProds.uniqueMul_of_nonempty hab.1 hab.2
-    refine ⟨da * db, ?_⟩
-    rw [mem_support_iff] at a0 b0 ⊢
-    exact coeff_mul_mul_of_uniqueMul h ▸ mul_ne_zero a0 b0
-
-@[to_additive (dont_translate := R)]
-
-中文:
-实例 [无零因子
-  签名: R] [乘法 A] [UniqueProds A] : 无零因子 R[A] where
-  定义体: by
-    contrapose! hab
-    simp only [ne_eq, ← coeff_eq_zero, ← support_nonempty_iff] at hab ⊢
-    obtain ⟨da, a0, db, b0, h⟩ := UniqueProds.uniqueMul_of_nonempty hab.1 hab.2
-    refine ⟨da * db, ?_⟩
-    rw [mem_support_iff] at a0 b0 ⊢
-    exact coeff_mul_mul_of_uniqueMul h ▸ mul_ne_zero a0 b0
-
-@[to_additive (dont_translate := R)]
-
-Depends on / 依赖: UniqueProds, UniqueProds.uniqueMul_of_nonempty, coeff_eq_zero, coeff_mul_mul_of_uniqueMul, contrapose, mem_support_iff, mul_ne_zero, ne_eq, support_nonempty_iff, uniqueMul_of_nonempty
+/-
+**MonoidAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NoZeroDivisors R] [Mul A] [UniqueProds A] : NoZeroDivisors R[A] where
   eq_zero_or_eq_zero_of_mul_eq_zero {a b} hab := by
@@ -168,62 +154,15 @@ instance [NoZeroDivisors R] [Mul A] [UniqueProds A] : NoZeroDivisors R[A] where
     exact coeff_mul_mul_of_uniqueMul h ▸ mul_ne_zero a0 b0
 
 @[to_additive (dont_translate := R)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCancelAdd
-  signature: R] [IsLeftCancelMulZero R] [Mul A] [UniqueProds A] :
-  body: by
-    classical
-    induction hg : g₁.coeff.support union g₂.coeff.support
-      using Finset.eraseInduction generalizing g₁ g₂ with
-    | _ s ih =>
-    obtain h | h := s.eq_empty_or_nonempty <;> subst s
-    · simp_all
-    simp only [ne_eq, ← coeff_eq_zero, ← support_nonempty_iff] at hf
-    obtain ⟨af, haf, ag, hag, uniq⟩ := UniqueProds.uniqueMul_of_nonempty hf h
-    have h := coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_left)
-    dsimp only at eq
-    rw [eq]; rw [coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_right)] at h
-    have := mul_left_cancel₀ (mem_support_iff.mp haf) h
-    rw [← g₁.erase_add_single ag]; rw [← g₂.erase_add_single ag]; rw [this] at eq ⊢
-    simp_rw [mul_add, add_right_cancel_iff] at eq
-    rw [ih ag hag eq]
-    simp [Finset.erase_union_distrib]
-
-@[to_additive (dont_translate := R)]
-
-中文:
-实例 [是消去加法
-  签名: R] [是左消去MulZero R] [乘法 A] [UniqueProds A] :
-  定义体: by
-    classical
-    induction hg : g₁.coeff.support union g₂.coeff.support
-      using Finset.eraseInduction generalizing g₁ g₂ with
-    | _ s ih =>
-    obtain h | h := s.eq_empty_or_nonempty <;> subst s
-    · simp_all
-    simp only [ne_eq, ← coeff_eq_zero, ← support_nonempty_iff] at hf
-    obtain ⟨af, haf, ag, hag, uniq⟩ := UniqueProds.uniqueMul_of_nonempty hf h
-    have h := coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_left)
-    dsimp only at eq
-    rw [eq]; rw [coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_right)] at h
-    have := mul_left_cancel₀ (mem_support_iff.mp haf) h
-    rw [← g₁.erase_add_single ag]; rw [← g₂.erase_add_single ag]; rw [this] at eq ⊢
-    simp_rw [mul_add, add_right_cancel_iff] at eq
-    rw [ih ag hag eq]
-    simp [Finset.erase_union_distrib]
-
-@[to_additive (dont_translate := R)]
-
-Depends on / 依赖: Finset, Finset.eraseInduction, Finset.subset_union_left, UniqueProds, UniqueProds.uniqueMul_of_nonempty, classical, coeff.support, coeff_eq_zero, coeff_mul_mul_of_uniqueMul, eq_empty_or_nonempty, eraseInduction, generalizing, ne_eq, s.eq_empty_or_nonempty, subset_rfl, subset_union_left, support, support_nonempty_iff, uniq.mono, uniqueMul_of_nonempty
+/-
+**MonoidAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCancelAdd R] [IsLeftCancelMulZero R] [Mul A] [UniqueProds A] :
     IsLeftCancelMulZero R[A] where
   mul_left_cancel_of_ne_zero {f} hf {g₁ g₂} eq := by
     classical
-    induction hg : g₁.coeff.support union g₂.coeff.support
+    induction hg : g₁.coeff.support ∪ g₂.coeff.support
       using Finset.eraseInduction generalizing g₁ g₂ with
     | _ s ih =>
     obtain h | h := s.eq_empty_or_nonempty <;> subst s
@@ -232,66 +171,36 @@ instance [IsCancelAdd R] [IsLeftCancelMulZero R] [Mul A] [UniqueProds A] :
     obtain ⟨af, haf, ag, hag, uniq⟩ := UniqueProds.uniqueMul_of_nonempty hf h
     have h := coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_left)
     dsimp only at eq
-    rw [eq]; rw [coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_right)] at h
+    rw [eq, coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_right)] at h
     have := mul_left_cancel₀ (mem_support_iff.mp haf) h
-    rw [← g₁.erase_add_single ag]; rw [← g₂.erase_add_single ag]; rw [this] at eq ⊢
+    rw [← g₁.erase_add_single ag, ← g₂.erase_add_single ag, this] at eq ⊢
     simp_rw [mul_add, add_right_cancel_iff] at eq
     rw [ih ag hag eq]
     simp [Finset.erase_union_distrib]
 
 @[to_additive (dont_translate := R)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCancelAdd
-  signature: R] [IsRightCancelMulZero R] [Mul A] [UniqueProds A] :
-  body: MulOpposite.isLeftCancelMulZero_iff.mp
-    MonoidAlgebra.opRingEquiv.injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
-
-@[to_additive (dont_translate := R)]
-
-中文:
-实例 [是消去加法
-  签名: R] [是右消去MulZero R] [乘法 A] [UniqueProds A] :
-  定义体: MulOpposite.isLeftCancelMulZero_iff.mp
-    MonoidAlgebra.opRingEquiv.injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
-
-@[to_additive (dont_translate := R)]
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.opRingEquiv.injective.isLeftCancelMulZero, MulOpposite, MulOpposite.isLeftCancelMulZero_iff.mp, injective, isLeftCancelMulZero, isLeftCancelMulZero_iff, map_mul, map_zero, opRingEquiv
+/-
+**MonoidAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCancelAdd R] [IsRightCancelMulZero R] [Mul A] [UniqueProds A] :
     IsRightCancelMulZero R[A] :=
-MulOpposite.isLeftCancelMulZero_iff.mp
+  MulOpposite.isLeftCancelMulZero_iff.mp <|
     MonoidAlgebra.opRingEquiv.injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
 
 @[to_additive (dont_translate := R)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCancelAdd
-  signature: R] [IsCancelMulZero R] [Mul A] [UniqueProds A] : IsCancelMulZero R[A] where
-
-中文:
-实例 [是消去加法
-  签名: R] [是乘零消去 R] [乘法 A] [UniqueProds A] : 是乘零消去 R[A] where
+/-
+**MonoidAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCancelAdd R] [IsCancelMulZero R] [Mul A] [UniqueProds A] : IsCancelMulZero R[A] where
 
 @[to_additive (dont_translate := R)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCancelAdd
-  signature: R] [IsDomain R] [Monoid A] [UniqueProds A] : IsDomain R[A] where
-
-中文:
-实例 [是消去加法
-  签名: R] [是整环 R] [幺半群 A] [UniqueProds A] : 是整环 R[A] where
+/-
+**MonoidAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCancelAdd R] [IsDomain R] [Monoid A] [UniqueProds A] : IsDomain R[A] where
 
 end MonoidAlgebra
+

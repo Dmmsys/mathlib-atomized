@@ -31,18 +31,23 @@ open CategoryTheory Limits
 variable (C : Type*) [Category* C] [HasZeroMorphisms C]
   {I₁ I₂ : Type*} (c₁ : ComplexShape I₁) (c₂ : ComplexShape I₂)
 
-/--
-Definition of `HomologicalComplex₂` / `HomologicalComplex₂` 的定义
+/-- Given a category `C` and two complex shapes `c₁` and `c₂` on types `I₁` and `I₂`,
+the associated type of bicomplexes `HomologicalComplex₂ C c₁ c₂` is
+`K : HomologicalComplex (HomologicalComplex C c₂) c₁`. Then, the object in
+position `⟨i₁, i₂⟩` can be obtained as `(K.X i₁).X i₂`. -/
+/-
+**HomologicalComplex** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：HomologicalComplex (c : ComplexShape ι) where X : ι -> V d : forall i j, X
+ i ⟶ X j shape : forall i j, ¬c.Rel i j -> d i j = 0
+参数：c : ComplexShape ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HomologicalComplex₂
-  body: HomologicalComplex (HomologicalComplex C c₂) c₁
-
-中文:
-缩写 HomologicalComplex₂
-  定义体: HomologicalComplex (HomologicalComplex C c₂) c₁
-
-Depends on / 依赖: HomologicalComplex
+--- 原说明 ---
+Given a category `C` and two complex shapes `c₁` and `c₂` on types `I₁` and `I₂`
+,
+the associated type of bicomplexes `HomologicalComplex₂ C c₁ c₂` is
+`K : HomologicalComplex (HomologicalComplex C c₂) c₁`. Then, the object in
+position `⟨i₁, i₂⟩` can be obtained as `(K.X i₁).X i₂`.
 -/
 abbrev HomologicalComplex₂ :=
   HomologicalComplex (HomologicalComplex C c₂) c₁
@@ -53,57 +58,49 @@ open HomologicalComplex
 
 variable {C c₁ c₂}
 
-/--
-Definition of `toGradedObject` / `toGradedObject` 的定义
+/-- The graded object indexed by `I₁ × I₂` induced by a bicomplex. -/
+/-
+**HomologicalComplex₂.toGradedObject** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalCompl
+ex₂`。
+形式化陈述：toGradedObject (K : HomologicalComplex₂ C c₁ c₂) : GradedObject (I₁ × I₂) 
+C
+参数：K : HomologicalComplex₂ C c₁ c₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toGradedObject
-  signature: (K : HomologicalComplex₂ C c₁ c₂)
-  body: fun ⟨i₁, i₂⟩ => (K.X i₁).X i₂
-
-中文:
-定义 toGradedObject
-  签名: (K : HomologicalComplex₂ C c₁ c₂)
-  定义体: fun ⟨i₁, i₂⟩ => (K.X i₁).X i₂
+--- 原说明 ---
+The graded object indexed by `I₁ × I₂` induced by a bicomplex.
 -/
 def toGradedObject (K : HomologicalComplex₂ C c₁ c₂) :
     GradedObject (I₁ × I₂) C :=
   fun ⟨i₁, i₂⟩ => (K.X i₁).X i₂
 
-/--
-Definition of `toGradedObjectMap` / `toGradedObjectMap` 的定义
+/-- The morphism of graded objects induced by a morphism of bicomplexes. -/
+/-
+**HomologicalComplex₂.toGradedObjectMap** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalCo
+mplex₂`。
+形式化陈述：toGradedObjectMap {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L) : K.toGr
+adedObject ⟶ L.toGradedObject
+参数：φ : K ⟶ L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toGradedObjectMap
-  signature: {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L)
-  body: fun ⟨i₁, i₂⟩ => (φ.f i₁).f i₂
-
-@[simp]
-
-中文:
-定义 toGradedObjectMap
-  签名: {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L)
-  定义体: fun ⟨i₁, i₂⟩ => (φ.f i₁).f i₂
-
-@[simp]
+--- 原说明 ---
+The morphism of graded objects induced by a morphism of bicomplexes.
 -/
 def toGradedObjectMap {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L) :
     K.toGradedObject ⟶ L.toGradedObject :=
   fun ⟨i₁, i₂⟩ => (φ.f i₁).f i₂
 
 @[simp]
-/--
-lemma `toGradedObjectMap_apply` / 引理 `toGradedObjectMap_apply`
-
-English:
-lemma toGradedObjectMap_apply
-  given: {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L) (i₁ : I₁) (i₂ : I₂)
-  proof: rfl
-
-中文:
-引理 toGradedObjectMap_apply
-  条件: {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L) (i₁ : I₁) (i₂ : I₂)
-  证明: rfl
+/-
+**HomologicalComplex₂.toGradedObjectMap_apply** 是 Mathlib 中的一个引理，位于命名空间 `Homolog
+icalComplex₂`。
+形式化陈述：toGradedObjectMap_apply {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L) (i
+₁ : I₁) (i₂ : I₂) : toGradedObjectMap φ ⟨i₁, i₂⟩ = (φ.f i₁).f i₂
+参数：φ : K ⟶ L；i₁ : I₁；i₂ : I₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toGradedObjectMap_apply {K L : HomologicalComplex₂ C c₁ c₂} (φ : K ⟶ L) (i₁ : I₁) (i₂ : I₂) :
     toGradedObjectMap φ ⟨i₁, i₂⟩ = (φ.f i₁).f i₂ := rfl
@@ -111,45 +108,23 @@ lemma toGradedObjectMap_apply {K L : HomologicalComplex₂ C c₁ c₂} (φ : K 
 variable (C c₁ c₂) in
 /-- The functor which sends a bicomplex to its associated graded object. -/
 @[simps]
-/--
-Definition of `toGradedObjectFunctor` / `toGradedObjectFunctor` 的定义
+/-
+**HomologicalComplex₂.toGradedObjectFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Homologic
+alComplex₂`。
+形式化陈述：toGradedObjectFunctor : HomologicalComplex₂ C c₁ c₂ ⥤ GradedObject (I₁ × I
+₂) C where obj K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toGradedObjectFunctor
-  signature: : HomologicalComplex₂ C c₁ c₂ ⥤ GradedObject (I₁ × I₂) C where
-  body: K.toGradedObject
-  map φ := toGradedObjectMap φ
-
-中文:
-定义 toGradedObjectFunctor
-  签名: : HomologicalComplex₂ C c₁ c₂ ⥤ GradedObject (I₁ × I₂) C where
-  定义体: K.toGradedObject
-  map φ := toGradedObjectMap φ
-
-Depends on / 依赖: K.toGradedObject, toGradedObject
+--- 原说明 ---
+The functor which sends a bicomplex to its associated graded object.
 -/
 def toGradedObjectFunctor : HomologicalComplex₂ C c₁ c₂ ⥤ GradedObject (I₁ × I₂) C where
   obj K := K.toGradedObject
   map φ := toGradedObjectMap φ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toGradedObjectFunctor C c₁ c₂).Faithful
-  body: by
-    ext i₁ i₂
-    exact congr_fun h ⟨i₁, i₂⟩
-
-中文:
-实例 :
-  签名: (toGradedObjectFunctor C c₁ c₂).忠实
-  定义体: by
-    ext i₁ i₂
-    exact congr_fun h ⟨i₁, i₂⟩
-
-Depends on / 依赖: congr_fun
+/-
+**HomologicalComplex₂.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toGradedObjectFunctor C c₁ c₂).Faithful where
   map_injective {_ _ φ₁ φ₂} h := by
@@ -160,56 +135,29 @@ section OfGradedObject
 
 variable (c₁ c₂)
 variable (X : GradedObject (I₁ × I₂) C)
-    (d₁ : forall (i₁ i₁' : I₁) (i₂ : I₂), X ⟨i₁, i₂⟩ ⟶ X ⟨i₁', i₂⟩)
-    (d₂ : forall (i₁ : I₁) (i₂ i₂' : I₂), X ⟨i₁, i₂⟩ ⟶ X ⟨i₁, i₂'⟩)
-    (shape₁ : forall (i₁ i₁' : I₁) (_ : ¬c₁.Rel i₁ i₁') (i₂ : I₂), d₁ i₁ i₁' i₂ = 0)
-    (shape₂ : forall (i₁ : I₁) (i₂ i₂' : I₂) (_ : ¬c₂.Rel i₂ i₂'), d₂ i₁ i₂ i₂' = 0)
-    (d₁_comp_d₁ : forall (i₁ i₁' i₁'' : I₁) (i₂ : I₂), d₁ i₁ i₁' i₂ ≫ d₁ i₁' i₁'' i₂ = 0)
-    (d₂_comp_d₂ : forall (i₁ : I₁) (i₂ i₂' i₂'' : I₂), d₂ i₁ i₂ i₂' ≫ d₂ i₁ i₂' i₂'' = 0)
-    (comm : forall (i₁ i₁' : I₁) (i₂ i₂' : I₂), d₁ i₁ i₁' i₂ ≫ d₂ i₁' i₂ i₂' =
+    (d₁ : ∀ (i₁ i₁' : I₁) (i₂ : I₂), X ⟨i₁, i₂⟩ ⟶ X ⟨i₁', i₂⟩)
+    (d₂ : ∀ (i₁ : I₁) (i₂ i₂' : I₂), X ⟨i₁, i₂⟩ ⟶ X ⟨i₁, i₂'⟩)
+    (shape₁ : ∀ (i₁ i₁' : I₁) (_ : ¬c₁.Rel i₁ i₁') (i₂ : I₂), d₁ i₁ i₁' i₂ = 0)
+    (shape₂ : ∀ (i₁ : I₁) (i₂ i₂' : I₂) (_ : ¬c₂.Rel i₂ i₂'), d₂ i₁ i₂ i₂' = 0)
+    (d₁_comp_d₁ : ∀ (i₁ i₁' i₁'' : I₁) (i₂ : I₂), d₁ i₁ i₁' i₂ ≫ d₁ i₁' i₁'' i₂ = 0)
+    (d₂_comp_d₂ : ∀ (i₁ : I₁) (i₂ i₂' i₂'' : I₂), d₂ i₁ i₂ i₂' ≫ d₂ i₁ i₂' i₂'' = 0)
+    (comm : ∀ (i₁ i₁' : I₁) (i₂ i₂' : I₂), d₁ i₁ i₁' i₂ ≫ d₂ i₁' i₂ i₂' =
       d₂ i₁ i₂ i₂' ≫ d₁ i₁ i₁' i₂')
 
 /-- Constructor for bicomplexes taking as inputs a graded object, horizontal differentials
 and vertical differentials satisfying suitable relations. -/
 @[simps]
-/--
-Definition of `ofGradedObject` / `ofGradedObject` 的定义
+/-
+**HomologicalComplex₂.ofGradedObject** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalCompl
+ex₂`。
+形式化陈述：ofGradedObject : HomologicalComplex₂ C c₁ c₂ where X i₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofGradedObject
-  signature: :
-  body: { X := fun i₂ => X ⟨i₁, i₂⟩
-      d := fun i₂ i₂' => d₂ i₁ i₂ i₂'
-      shape := shape₂ i₁
-      d_comp_d' := by intros; apply d₂_comp_d₂ }
-  d i₁ i₁' :=
-    { f := fun i₂ => d₁ i₁ i₁' i₂
-      comm' := by intros; apply comm }
-  shape i₁ i₁' h := by
-    ext i₂
-    exact shape₁ i₁ i₁' h i₂
-  d_comp_d' i₁ i₁' i₁'' _ _ := by ext i₂; apply d₁_comp_d₁
-
-@[simp]
-
-中文:
-定义 ofGradedObject
-  签名: :
-  定义体: { X := fun i₂ => X ⟨i₁, i₂⟩
-      d := fun i₂ i₂' => d₂ i₁ i₂ i₂'
-      shape := shape₂ i₁
-      d_comp_d' := by intros; apply d₂_comp_d₂ }
-  d i₁ i₁' :=
-    { f := fun i₂ => d₁ i₁ i₁' i₂
-      comm' := by intros; apply comm }
-  shape i₁ i₁' h := by
-    ext i₂
-    exact shape₁ i₁ i₁' h i₂
-  d_comp_d' i₁ i₁' i₁'' _ _ := by ext i₂; apply d₁_comp_d₁
-
-@[simp]
-
-Depends on / 依赖: d_comp_d, intros
+--- 原说明 ---
+Constructor for bicomplexes taking as inputs a graded object, horizontal differe
+ntials
+and vertical differentials satisfying suitable relations.
 -/
 def ofGradedObject :
     HomologicalComplex₂ C c₁ c₂ where
@@ -227,16 +175,13 @@ def ofGradedObject :
   d_comp_d' i₁ i₁' i₁'' _ _ := by ext i₂; apply d₁_comp_d₁
 
 @[simp]
-/--
-lemma `ofGradedObject_toGradedObject` / 引理 `ofGradedObject_toGradedObject`
-
-English:
-lemma ofGradedObject_toGradedObject
-  proof: rfl
-
-中文:
-引理 ofGradedObject_toGradedObject
-  证明: rfl
+/-
+**HomologicalComplex₂.ofGradedObject_toGradedObject** 是 Mathlib 中的一个引理，位于命名空间 `H
+omologicalComplex₂`。
+形式化陈述：ofGradedObject_toGradedObject : (ofGradedObject c₁ c₂ X d₁ d₂ shape₁ shape
+₂ d₁_comp_d₁ d₂_comp_d₂ comm).toGradedObject = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofGradedObject_toGradedObject :
     (ofGradedObject c₁ c₂ X d₁ d₂ shape₁ shape₂ d₁_comp_d₁ d₂_comp_d₂ comm).toGradedObject = X :=
@@ -248,32 +193,31 @@ end OfGradedObject
 takes as inputs a morphism `f : K.toGradedObject ⟶ L.toGradedObject` and
 the compatibilities with both horizontal and vertical differentials. -/
 @[simps!]
-/--
-Definition of `homMk` / `homMk` 的定义
+/-
+**HomologicalComplex₂.homMk** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex₂`。
+形式化陈述：homMk {K L : HomologicalComplex₂ C c₁ c₂} (f : K.toGradedObject ⟶ L.toGrad
+edObject) (comm₁ : forall i₁ i₁' i₂, c₁.Rel i₁ i₁' -> f ⟨i₁, i₂⟩ ≫ (L.d i₁ i₁').
+f i₂ = (K.d i₁ i₁').f i₂ ≫ f ⟨i₁', i₂⟩) (comm₂ : forall i₁ i₂ i₂', c₂.Rel i₂ i₂'
+ -> f ⟨i₁, i₂⟩ ≫ (L.X i₁).d i₂ i₂' = (K.X i₁).d i₂ i₂' ≫ f ⟨i₁, i₂'⟩) : K ⟶ L wh
+ere f i₁
+参数：f : K.toGradedObject ⟶ L.toGradedObject；comm₁ : forall i₁ i₁' i₂, c₁.Rel i₁ i
+₁' -> f ⟨i₁, i₂⟩ ≫ (L.d i₁ i₁').f i₂ = (K.d i₁ i₁').f i₂ ≫ f ⟨i₁', i₂⟩；comm₂ : f
+orall i₁ i₂ i₂', c₂.Rel i₂ i₂' -> f ⟨i₁, i₂⟩ ≫ (L.X i₁).d i₂ i₂' = (K.X i₁).d i₂
+ i₂' ≫ f ⟨i₁, i₂'⟩。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: {K L : HomologicalComplex₂ C c₁ c₂}
-  body: { f := fun i₂ => f ⟨i₁, i₂⟩
-      comm' := comm₂ i₁ }
-  comm' i₁ i₁' h₁ := by
-    ext i₂
-    exact comm₁ i₁ i₁' i₂ h₁
-
-中文:
-定义 homMk
-  签名: {K L : HomologicalComplex₂ C c₁ c₂}
-  定义体: { f := fun i₂ => f ⟨i₁, i₂⟩
-      comm' := comm₂ i₁ }
-  comm' i₁ i₁' h₁ := by
-    ext i₂
-    exact comm₁ i₁ i₁' i₂ h₁
+--- 原说明 ---
+Constructor for a morphism `K ⟶ L` in the category `HomologicalComplex₂ C c₁ c₂`
+ which
+takes as inputs a morphism `f : K.toGradedObject ⟶ L.toGradedObject` and
+the compatibilities with both horizontal and vertical differentials.
 -/
 def homMk {K L : HomologicalComplex₂ C c₁ c₂}
     (f : K.toGradedObject ⟶ L.toGradedObject)
-    (comm₁ : forall i₁ i₁' i₂, c₁.Rel i₁ i₁' ->
+    (comm₁ : ∀ i₁ i₁' i₂, c₁.Rel i₁ i₁' →
       f ⟨i₁, i₂⟩ ≫ (L.d i₁ i₁').f i₂ = (K.d i₁ i₁').f i₂ ≫ f ⟨i₁', i₂⟩)
-    (comm₂ : forall i₁ i₂ i₂', c₂.Rel i₂ i₂' ->
+    (comm₂ : ∀ i₁ i₂ i₂', c₂.Rel i₂ i₂' →
       f ⟨i₁, i₂⟩ ≫ (L.X i₁).d i₂ i₂' = (K.X i₁).d i₂ i₂' ≫ f ⟨i₁, i₂'⟩) : K ⟶ L where
   f i₁ :=
     { f := fun i₂ => f ⟨i₁, i₂⟩
@@ -281,98 +225,85 @@ def homMk {K L : HomologicalComplex₂ C c₁ c₂}
   comm' i₁ i₁' h₁ := by
     ext i₂
     exact comm₁ i₁ i₁' i₂ h₁
-
-/--
-lemma `shape_f` / 引理 `shape_f`
-
-English:
-lemma shape_f
-  given: (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (h : ¬ c₁.Rel i₁ i₁') (i₂ : I₂)
-  proof: by
-  rw [K.shape _ _ h]; rw [zero_f]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 shape_f
-  条件: (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (h : ¬ c₁.关系 i₁ i₁') (i₂ : I₂)
-  证明: by
-  rw [K.shape _ _ h]; rw [zero_f]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: K.shape, zero_f
+/-
+**HomologicalComplex₂.shape_f** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex₂`。
+形式化陈述：shape_f (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (h : ¬ c₁.Rel i₁ i
+₁') (i₂ : I₂) : (K.d i₁ i₁').f i₂ = 0
+参数：K : HomologicalComplex₂ C c₁ c₂；i₁ i₁' : I₁；h : ¬ c₁.Rel i₁ i₁'；i₂ : I₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `HomologicalComplex.zero_f`：zero_f (C D : HomologicalComplex V c) (i : ι)
+ : (0 : C ⟶ D).f i = 0
 -/
 lemma shape_f (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (h : ¬ c₁.Rel i₁ i₁') (i₂ : I₂) :
     (K.d i₁ i₁').f i₂ = 0 := by
-  rw [K.shape _ _ h]; rw [zero_f]
+  rw [K.shape _ _ h, zero_f]
 
 @[reassoc (attr := simp)]
-/--
-lemma `d_f_comp_d_f` / 引理 `d_f_comp_d_f`
-
-English:
-lemma d_f_comp_d_f
-  statement: (K : HomologicalComplex₂ C c₁ c₂)
-  proof: by
-  rw [← comp_f]; rw [d_comp_d]; rw [zero_f]
-
-@[reassoc]
-
-中文:
-引理 d_f_comp_d_f
-  结论: (K : HomologicalComplex₂ C c₁ c₂)
-  证明: by
-  rw [← comp_f]; rw [d_comp_d]; rw [zero_f]
-
-@[reassoc]
-
-Depends on / 依赖: comp_f, d_comp_d, zero_f
+/-
+**HomologicalComplex₂.d_f_comp_d_f** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex
+₂`。
+形式化陈述：d_f_comp_d_f (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' i₁'' : I₁) (i₂ : I₂
+) : (K.d i₁ i₁').f i₂ ≫ (K.d i₁' i₁'').f i₂ = 0
+参数：K : HomologicalComplex₂ C c₁ c₂；i₁ i₁' i₁'' : I₁；i₂ : I₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HomologicalComplex.comp_f`：comp_f {C₁ C₂ C₃ : HomologicalComplex V c} (f
+ : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι) : (f ≫ g).f i = f.f i ≫ g.f i
+· 使用定理 `HomologicalComplex.d_comp_d`：d_comp_d (C : HomologicalComplex V c) (i j 
+k : ι) : C.d i j ≫ C.d j k = 0
+· 使用定理 `HomologicalComplex.zero_f`：zero_f (C D : HomologicalComplex V c) (i : ι)
+ : (0 : C ⟶ D).f i = 0
 -/
 lemma d_f_comp_d_f (K : HomologicalComplex₂ C c₁ c₂)
     (i₁ i₁' i₁'' : I₁) (i₂ : I₂) :
     (K.d i₁ i₁').f i₂ ≫ (K.d i₁' i₁'').f i₂ = 0 := by
-  rw [← comp_f]; rw [d_comp_d]; rw [zero_f]
+  rw [← comp_f, d_comp_d, zero_f]
 
 @[reassoc]
-/--
-lemma `d_comm` / 引理 `d_comm`
-
-English:
-lemma d_comm
-  given: (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (i₂ i₂' : I₂)
-  proof: by
-  simp
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 d_comm
-  条件: (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (i₂ i₂' : I₂)
-  证明: by
-  simp
-
-@[reassoc (attr := simp)]
+/-
+**HomologicalComplex₂.d_comm** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex₂`。
+形式化陈述：d_comm (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (i₂ i₂' : I₂) : (K.
+d i₁ i₁').f i₂ ≫ (K.X i₁').d i₂ i₂' = (K.X i₁).d i₂ i₂' ≫ (K.d i₁ i₁').f i₂'
+参数：K : HomologicalComplex₂ C c₁ c₂；i₁ i₁' : I₁；i₂ i₂' : I₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.Hom.comm`：∀ {ι : Type u_1} {V : Type u} [inst : Categ
+oryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+V] {c : ComplexSh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma d_comm (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (i₂ i₂' : I₂) :
     (K.d i₁ i₁').f i₂ ≫ (K.X i₁').d i₂ i₂' = (K.X i₁).d i₂ i₂' ≫ (K.d i₁ i₁').f i₂' := by
   simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `comm_f` / 引理 `comm_f`
-
-English:
-lemma comm_f
-  given: {K L : HomologicalComplex₂ C c₁ c₂} (f : K ⟶ L) (i₁ i₁' : I₁) (i₂ : I₂)
-  proof: congr_hom (f.comm i₁ i₁') i₂
-
-中文:
-引理 comm_f
-  条件: {K L : HomologicalComplex₂ C c₁ c₂} (f : K ⟶ L) (i₁ i₁' : I₁) (i₂ : I₂)
-  证明: congr_hom (f.comm i₁ i₁') i₂
-
-Depends on / 依赖: congr_hom, f.comm
+/-
+**HomologicalComplex₂.comm_f** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex₂`。
+形式化陈述：comm_f {K L : HomologicalComplex₂ C c₁ c₂} (f : K ⟶ L) (i₁ i₁' : I₁) (i₂ :
+ I₂) : (f.f i₁).f i₂ ≫ (L.d i₁ i₁').f i₂ = (K.d i₁ i₁').f i₂ ≫ (f.f i₁').f i₂
+参数：f : K ⟶ L；i₁ i₁' : I₁；i₂ : I₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.congr_hom`：congr_hom {C D : HomologicalComplex V c} {
+f g : C ⟶ D} (w : f = g) (i : ι) : f.f i = g.f i
+· 使用定理 `HomologicalComplex.Hom.comm`：∀ {ι : Type u_1} {V : Type u} [inst : Categ
+oryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+V] {c : ComplexSh…
 -/
 lemma comm_f {K L : HomologicalComplex₂ C c₁ c₂} (f : K ⟶ L) (i₁ i₁' : I₁) (i₂ : I₂) :
     (f.f i₁).f i₂ ≫ (L.d i₁ i₁').f i₂ = (K.d i₁ i₁').f i₂ ≫ (f.f i₁').f i₂ :=
@@ -382,36 +313,19 @@ lemma comm_f {K L : HomologicalComplex₂ C c₁ c₂} (f : K ⟶ L) (i₁ i₁'
 exchanging the horizontal and vertical directions.
 -/
 @[simps]
-/--
-Definition of `flip` / `flip` 的定义
+/-
+**HomologicalComplex₂.flip** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex₂`。
+形式化陈述：flip (K : HomologicalComplex₂ C c₁ c₂) : HomologicalComplex₂ C c₂ c₁ where
+ X i
+参数：K : HomologicalComplex₂ C c₁ c₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex₂.shape_f`：shape_f (K : HomologicalComplex₂ C c₁ c₂) (
+i₁ i₁' : I₁) (h : ¬ c₁.Rel i₁ i₁') (i₂ : I₂) : (K.d i₁ i₁').f i₂ = 0
 
-English:
-definition flip
-  signature: (K : HomologicalComplex₂ C c₁ c₂)
-  body: { X := fun j => (K.X j).X i
-      d := fun j j' => (K.d j j').f i
-      shape := fun _ _ w => K.shape_f _ _ w i }
-  d i i' := { f := fun j => (K.X j).d i i' }
-  shape i i' w := by
-    ext j
-    exact (K.X j).shape i i' w
-
-@[simp]
-
-中文:
-定义 flip
-  签名: (K : HomologicalComplex₂ C c₁ c₂)
-  定义体: { X := fun j => (K.X j).X i
-      d := fun j j' => (K.d j j').f i
-      shape := fun _ _ w => K.shape_f _ _ w i }
-  d i i' := { f := fun j => (K.X j).d i i' }
-  shape i i' w := by
-    ext j
-    exact (K.X j).shape i i' w
-
-@[simp]
-
-Depends on / 依赖: K.shape_f, shape_f
+--- 原说明 ---
+Flip a complex of complexes over the diagonal,
+exchanging the horizontal and vertical directions.
 -/
 def flip (K : HomologicalComplex₂ C c₁ c₂) : HomologicalComplex₂ C c₂ c₁ where
   X i :=
@@ -424,20 +338,12 @@ def flip (K : HomologicalComplex₂ C c₁ c₂) : HomologicalComplex₂ C c₂ 
     exact (K.X j).shape i i' w
 
 @[simp]
-/--
-lemma `flip_flip` / 引理 `flip_flip`
-
-English:
-lemma flip_flip
-  given: (K : HomologicalComplex₂ C c₁ c₂)
-  statement: K.flip.flip = K
-  proof: rfl
-
-中文:
-引理 flip_flip
-  条件: (K : HomologicalComplex₂ C c₁ c₂)
-  结论: K.flip.flip = K
-  证明: rfl
+/-
+**HomologicalComplex₂.flip_flip** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex₂`。
+形式化陈述：flip_flip (K : HomologicalComplex₂ C c₁ c₂) : K.flip.flip = K
+参数：K : HomologicalComplex₂ C c₁ c₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma flip_flip (K : HomologicalComplex₂ C c₁ c₂) : K.flip.flip = K := rfl
 
@@ -446,30 +352,16 @@ variable (C c₁ c₂)
 set_option backward.defeqAttrib.useBackward true in
 /-- Flipping a complex of complexes over the diagonal, as a functor. -/
 @[simps]
-/--
-Definition of `flipFunctor` / `flipFunctor` 的定义
+/-
+**HomologicalComplex₂.flipFunctor** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex₂
+`。
+形式化陈述：flipFunctor : HomologicalComplex₂ C c₁ c₂ ⥤ HomologicalComplex₂ C c₂ c₁ wh
+ere obj K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipFunctor
-  signature: :
-  body: K.flip
-  map {K L} f :=
-    { f := fun i =>
-        { f := fun j => (f.f j).f i
-          comm' := by intros; simp }
-      comm' := by intros; ext; simp }
-
-中文:
-定义 flipFunctor
-  签名: :
-  定义体: K.flip
-  map {K L} f :=
-    { f := fun i =>
-        { f := fun j => (f.f j).f i
-          comm' := by intros; simp }
-      comm' := by intros; ext; simp }
-
-Depends on / 依赖: K.flip
+--- 原说明 ---
+Flipping a complex of complexes over the diagonal, as a functor.
 -/
 def flipFunctor :
     HomologicalComplex₂ C c₁ c₂ ⥤ HomologicalComplex₂ C c₂ c₁ where
@@ -484,24 +376,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Auxiliary definition for `HomologicalComplex₂.flipEquivalence`. -/
 @[simps!]
-/--
-Definition of `flipEquivalenceUnitIso` / `flipEquivalenceUnitIso` 的定义
+/-
+**HomologicalComplex₂.flipEquivalenceUnitIso** 是 Mathlib 中的一个定义，位于命名空间 `Homologi
+calComplex₂`。
+形式化陈述：flipEquivalenceUnitIso : 𝟭 (HomologicalComplex₂ C c₁ c₂) ≅ flipFunctor C c
+₁ c₂ ⋙ flipFunctor C c₂ c₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipEquivalenceUnitIso
-  signature: :
-  body: NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents (fun i₁ =>
-    HomologicalComplex.Hom.isoOfComponents (fun _ => Iso.refl _)
-    (by simp)) (by cat_disch)) (by cat_disch)
-
-中文:
-定义 flipEquivalenceUnitIso
-  签名: :
-  定义体: NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents (fun i₁ =>
-    HomologicalComplex.Hom.isoOfComponents (fun _ => Iso.refl _)
-    (by simp)) (by cat_disch)) (by cat_disch)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, Iso.refl, NatIso, NatIso.ofComponents, cat_disch, isoOfComponents, ofComponents
+--- 原说明 ---
+Auxiliary definition for `HomologicalComplex₂.flipEquivalence`.
 -/
 def flipEquivalenceUnitIso :
     𝟭 (HomologicalComplex₂ C c₁ c₂) ≅ flipFunctor C c₁ c₂ ⋙ flipFunctor C c₂ c₁ :=
@@ -513,24 +397,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Auxiliary definition for `HomologicalComplex₂.flipEquivalence`. -/
 @[simps!]
-/--
-Definition of `flipEquivalenceCounitIso` / `flipEquivalenceCounitIso` 的定义
+/-
+**HomologicalComplex₂.flipEquivalenceCounitIso** 是 Mathlib 中的一个定义，位于命名空间 `Homolo
+gicalComplex₂`。
+形式化陈述：flipEquivalenceCounitIso : flipFunctor C c₂ c₁ ⋙ flipFunctor C c₁ c₂ ≅ 𝟭 (
+HomologicalComplex₂ C c₂ c₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipEquivalenceCounitIso
-  signature: :
-  body: NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents (fun i₂ =>
-    HomologicalComplex.Hom.isoOfComponents (fun _ => Iso.refl _)
-    (by simp)) (by cat_disch)) (by cat_disch)
-
-中文:
-定义 flipEquivalenceCounitIso
-  签名: :
-  定义体: NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents (fun i₂ =>
-    HomologicalComplex.Hom.isoOfComponents (fun _ => Iso.refl _)
-    (by simp)) (by cat_disch)) (by cat_disch)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, Iso.refl, NatIso, NatIso.ofComponents, cat_disch, isoOfComponents, ofComponents
+--- 原说明 ---
+Auxiliary definition for `HomologicalComplex₂.flipEquivalence`.
 -/
 def flipEquivalenceCounitIso :
     flipFunctor C c₂ c₁ ⋙ flipFunctor C c₁ c₂ ≅ 𝟭 (HomologicalComplex₂ C c₂ c₁) :=
@@ -542,26 +418,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Flipping a complex of complexes over the diagonal, as an equivalence of categories. -/
 @[simps]
-/--
-Definition of `flipEquivalence` / `flipEquivalence` 的定义
+/-
+**HomologicalComplex₂.flipEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComp
+lex₂`。
+形式化陈述：flipEquivalence : HomologicalComplex₂ C c₁ c₂ ≌ HomologicalComplex₂ C c₂ c
+₁ where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipEquivalence
-  signature: :
-  body: flipFunctor C c₁ c₂
-  inverse := flipFunctor C c₂ c₁
-  unitIso := flipEquivalenceUnitIso C c₁ c₂
-  counitIso := flipEquivalenceCounitIso C c₁ c₂
-
-中文:
-定义 flipEquivalence
-  签名: :
-  定义体: flipFunctor C c₁ c₂
-  inverse := flipFunctor C c₂ c₁
-  unitIso := flipEquivalenceUnitIso C c₁ c₂
-  counitIso := flipEquivalenceCounitIso C c₁ c₂
-
-Depends on / 依赖: flipFunctor
+--- 原说明 ---
+Flipping a complex of complexes over the diagonal, as an equivalence of categori
+es.
 -/
 def flipEquivalence :
     HomologicalComplex₂ C c₁ c₂ ≌ HomologicalComplex₂ C c₂ c₁ where
@@ -572,45 +439,36 @@ def flipEquivalence :
 
 variable (K : HomologicalComplex₂ C c₁ c₂)
 
-/--
-Definition of `XXIsoOfEq` / `XXIsoOfEq` 的定义
+/-- The obvious isomorphism `(K.X x₁).X x₂ ≅ (K.X y₁).X y₂` when `x₁ = y₁` and `x₂ = y₂`. -/
+/-
+**HomologicalComplex₂.XXIsoOfEq** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex₂`。
+形式化陈述：XXIsoOfEq {x₁ y₁ : I₁} (h₁ : x₁ = y₁) {x₂ y₂ : I₂} (h₂ : x₂ = y₂) : (K.X x
+₁).X x₂ ≅ (K.X y₁).X y₂
+参数：h₁ : x₁ = y₁；h₂ : x₂ = y₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition XXIsoOfEq
-  signature: {x₁ y₁ : I₁} (h₁ : x₁ = y₁) {x₂ y₂ : I₂} (h₂ : x₂ = y₂)
-  body: eqToIso (by subst h₁ h₂; rfl)
-
-@[simp]
-
-中文:
-定义 XXIsoOfEq
-  签名: {x₁ y₁ : I₁} (h₁ : x₁ = y₁) {x₂ y₂ : I₂} (h₂ : x₂ = y₂)
-  定义体: eqToIso (by subst h₁ h₂; rfl)
-
-@[simp]
-
-Depends on / 依赖: eqToIso
+--- 原说明 ---
+The obvious isomorphism `(K.X x₁).X x₂ ≅ (K.X y₁).X y₂` when `x₁ = y₁` and `x₂ =
+ y₂`.
 -/
 def XXIsoOfEq {x₁ y₁ : I₁} (h₁ : x₁ = y₁) {x₂ y₂ : I₂} (h₂ : x₂ = y₂) :
     (K.X x₁).X x₂ ≅ (K.X y₁).X y₂ :=
   eqToIso (by subst h₁ h₂; rfl)
 
 @[simp]
-/--
-lemma `XXIsoOfEq_rfl` / 引理 `XXIsoOfEq_rfl`
-
-English:
-lemma XXIsoOfEq_rfl
-  given: (i₁ : I₁) (i₂ : I₂)
-  proof: rfl
-
-中文:
-引理 XXIsoOfEq_rfl
-  条件: (i₁ : I₁) (i₂ : I₂)
-  证明: rfl
+/-
+**HomologicalComplex₂.XXIsoOfEq_rfl** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComple
+x₂`。
+形式化陈述：XXIsoOfEq_rfl (i₁ : I₁) (i₂ : I₂) : K.XXIsoOfEq _ _ _ (rfl : i₁ = i₁) (rfl
+ : i₂ = i₂) = Iso.refl _
+参数：i₁ : I₁；i₂ : I₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma XXIsoOfEq_rfl (i₁ : I₁) (i₂ : I₂) :
     K.XXIsoOfEq _ _ _ (rfl : i₁ = i₁) (rfl : i₂ = i₂) = Iso.refl _ := rfl
 
 
 end HomologicalComplex₂
+

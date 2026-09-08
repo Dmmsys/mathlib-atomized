@@ -23,252 +23,159 @@ Most algebraic facts are deferred to `Data.PNat.Basic`, as they need more import
 
 deriving instance LinearOrder for PNat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One Nat+
-  body: ⟨⟨1, Nat.zero_lt_one⟩⟩
-
-中文:
-实例 :
-  签名: 幺 自然数+
-  定义体: ⟨⟨1, Nat.zero_lt_one⟩⟩
-
-Depends on / 依赖: Nat.zero_lt_one, zero_lt_one
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : One Nat+ :=
+instance : One ℕ+ :=
   ⟨⟨1, Nat.zero_lt_one⟩⟩
-
-instance (n : Nat) [NeZero n] : OfNat Nat+ n :=
-⟨⟨n, Nat.pos_of_ne_zero NeZero.ne n⟩⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℕ) [NeZero n] : OfNat ℕ+ n :=
+  ⟨⟨n, Nat.pos_of_ne_zero <| NeZero.ne n⟩⟩
 
 namespace PNat
 
 -- Note: similar to Subtype.coe_mk
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (n h)
-  statement: (PNat.val (⟨n, h⟩ : Nat+) : Nat) = n
-  proof: rfl
-
-中文:
-定理 mk_coe
-  条件: (n h)
-  结论: (正自然数.val (⟨n, h⟩ : 自然数+) : 自然数) = n
-  证明: rfl
+/-
+**PNat.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：mk_coe (n h) : (PNat.val (⟨n, h⟩ : Nat+) : Nat) = n
+参数：n h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_coe (n h) : (PNat.val (⟨n, h⟩ : Nat+) : Nat) = n :=
+theorem mk_coe (n h) : (PNat.val (⟨n, h⟩ : ℕ+) : ℕ) = n :=
   rfl
 
-/--
-Definition of `natPred` / `natPred` 的定义
+/-- Predecessor of a `ℕ+`, as a `ℕ`. -/
+/-
+**PNat.natPred** 是 Mathlib 中的一个定义，位于命名空间 `PNat`。
+形式化陈述：natPred (i : Nat+) : Nat
+参数：i : Nat+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natPred
-  signature: (i : Nat+)
-  body: i - 1
-
-@[simp]
-
-中文:
-定义 natPred
-  签名: (i : 自然数+)
-  定义体: i - 1
-
-@[simp]
+--- 原说明 ---
+Predecessor of a `ℕ+`, as a `ℕ`.
 -/
-def natPred (i : Nat+) : Nat :=
+def natPred (i : ℕ+) : ℕ :=
   i - 1
 
 @[simp]
-/--
-theorem `natPred_eq_pred` / 定理 `natPred_eq_pred`
-
-English:
-theorem natPred_eq_pred
-  given: {n : Nat} (h : 0 < n)
-  statement: natPred (⟨n, h⟩ : Nat+) = n.pred
-  proof: rfl
-
-中文:
-定理 natPred_eq_pred
-  条件: {n : 自然数} (h : 0 < n)
-  结论: natPred (⟨n, h⟩ : 自然数+) = n.pred
-  证明: rfl
+/-
+**PNat.natPred_eq_pred** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：natPred_eq_pred {n : Nat} (h : 0 < n) : natPred (⟨n, h⟩ : Nat+) = n.pred
+参数：h : 0 < n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem natPred_eq_pred {n : Nat} (h : 0 < n) : natPred (⟨n, h⟩ : Nat+) = n.pred :=
+theorem natPred_eq_pred {n : ℕ} (h : 0 < n) : natPred (⟨n, h⟩ : ℕ+) = n.pred :=
   rfl
 
 end PNat
 
 namespace Nat
 
-/--
-Definition of `toPNat` / `toPNat` 的定义
+/-- Convert a natural number to a positive natural number. The
+  positivity assumption is inferred by `dec_trivial`. -/
+/-
+**Nat.toPNat** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：toPNat (n : Nat) (h : 0 < n
+参数：n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPNat
-  signature: (n : Nat) (h : 0 < n := by decide)
-  body: ⟨n, h⟩
-
-中文:
-定义 toP自然数
-  签名: (n : 自然数) (h : 0 < n := by decide)
-  定义体: ⟨n, h⟩
+--- 原说明 ---
+Convert a natural number to a positive natural number. The
+  positivity assumption is inferred by `dec_trivial`.
 -/
-def toPNat (n : Nat) (h : 0 < n := by decide) : Nat+ :=
+def toPNat (n : ℕ) (h : 0 < n := by decide) : ℕ+ :=
   ⟨n, h⟩
 
-/--
-Definition of `succPNat` / `succPNat` 的定义
+/-- Write a successor as an element of `ℕ+`. -/
+/-
+**Nat.succPNat** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：succPNat (n : Nat) : Nat+
+参数：n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
 
-English:
-definition succPNat
-  signature: (n : Nat)
-  body: ⟨succ n, succ_pos n⟩
-
-@[simp]
-
-中文:
-定义 succP自然数
-  签名: (n : 自然数)
-  定义体: ⟨succ n, succ_pos n⟩
-
-@[simp]
-
-Depends on / 依赖: succ_pos
+--- 原说明 ---
+Write a successor as an element of `ℕ+`.
 -/
-def succPNat (n : Nat) : Nat+ :=
+def succPNat (n : ℕ) : ℕ+ :=
   ⟨succ n, succ_pos n⟩
 
 @[simp]
-/--
-theorem `succPNat_coe` / 定理 `succPNat_coe`
-
-English:
-theorem succPNat_coe
-  given: (n : Nat)
-  statement: (succPNat n : Nat) = succ n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 succP自然数_coe
-  条件: (n : 自然数)
-  结论: (succP自然数 n : 自然数) = succ n
-  证明: rfl
-
-@[simp]
+/-
+**Nat.succPNat_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：succPNat_coe (n : Nat) : (succPNat n : Nat) = succ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem succPNat_coe (n : Nat) : (succPNat n : Nat) = succ n :=
+theorem succPNat_coe (n : ℕ) : (succPNat n : ℕ) = succ n :=
   rfl
 
 @[simp]
-/--
-theorem `natPred_succPNat` / 定理 `natPred_succPNat`
-
-English:
-theorem natPred_succPNat
-  given: (n : Nat)
-  statement: n.succPNat.natPred = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 natPred_succP自然数
-  条件: (n : 自然数)
-  结论: n.succP自然数.natPred = n
-  证明: rfl
-
-@[simp]
+/-
+**Nat.natPred_succPNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：natPred_succPNat (n : Nat) : n.succPNat.natPred = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem natPred_succPNat (n : Nat) : n.succPNat.natPred = n :=
+theorem natPred_succPNat (n : ℕ) : n.succPNat.natPred = n :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.PNat.succPNat_natPred` / 定理 `_root_.PNat.succPNat_natPred`
-
-English:
-theorem _root_.PNat.succPNat_natPred
-  given: (n : Nat+)
-  statement: n.natPred.succPNat = n
-  proof: Subtype.ext succ_pred_eq_of_pos n.2
-
-中文:
-定理 _root_.正自然数.succP自然数_natPred
-  条件: (n : 自然数+)
-  结论: n.natPred.succP自然数 = n
-  证明: Subtype.ext succ_pred_eq_of_pos n.2
-
-Depends on / 依赖: Subtype, Subtype.ext, succ_pred_eq_of_pos
+/-
+**Nat._root_.PNat.succPNat_natPred** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.PNat.succPNat_natPred (n : Nat+) : n.natPred.succPNat = n :=
-Subtype.ext succ_pred_eq_of_pos n.2
+theorem _root_.PNat.succPNat_natPred (n : ℕ+) : n.natPred.succPNat = n :=
+  Subtype.ext <| succ_pred_eq_of_pos n.2
 
-/--
-Definition of `toPNat'` / `toPNat'` 的定义
+/-- Convert a natural number to a `PNat`. `n+1` is mapped to itself,
+  and `0` becomes `1`. -/
+/-
+**Nat.toPNat'** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：toPNat' (n : Nat) : Nat+
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPNat'
-  signature: (n : Nat)
-  body: succPNat (pred n)
-
-@[simp]
-
-中文:
-定义 toP自然数'
-  签名: (n : 自然数)
-  定义体: succPNat (pred n)
-
-@[simp]
-
-Depends on / 依赖: succPNat
+--- 原说明 ---
+Convert a natural number to a `PNat`. `n+1` is mapped to itself,
+  and `0` becomes `1`.
 -/
-def toPNat' (n : Nat) : Nat+ :=
+def toPNat' (n : ℕ) : ℕ+ :=
   succPNat (pred n)
 
 @[simp]
-/--
-theorem `toPNat'_zero` / 定理 `toPNat'_zero`
-
-English:
-theorem toPNat'_zero
-  statement: Nat.toPNat' 0 = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toP自然数'_zero
-  结论: 自然数.toP自然数' 0 = 1
-  证明: rfl
-
-@[simp]
+/-
+**Nat.toPNat'_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.toPNat' 0 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toPNat'_zero : Nat.toPNat' 0 = 1 := rfl
 
 @[simp]
-/--
-theorem `toPNat'_coe` / 定理 `toPNat'_coe`
-
-English:
-theorem toPNat'_coe
-  statement: forall n : Nat, (toPNat' n : Nat) = ite (0 < n) n 1
-
-中文:
-定理 toP自然数'_coe
-  结论: 对任意 n : 自然数, (toP自然数' n : 自然数) = ite (0 < n) n 1
+/-
+**Nat.toPNat'_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (n : ℕ), ↑n.toPNat' = if 0 < n then n else 1
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
 -/
-theorem toPNat'_coe : forall n : Nat, (toPNat' n : Nat) = ite (0 < n) n 1
+theorem toPNat'_coe : ∀ n : ℕ, (toPNat' n : ℕ) = ite (0 < n) n 1
   | 0 => rfl
   | m + 1 => by
     rw [if_pos (succ_pos m)]
@@ -280,552 +187,378 @@ namespace PNat
 
 open Nat
 
-/--
-theorem `mk_le_mk` / 定理 `mk_le_mk`
-
-English:
-theorem mk_le_mk
-  given: (n k : Nat) (hn : 0 < n) (hk : 0 < k)
-  statement: (⟨n, hn⟩ : Nat+) <= ⟨k, hk⟩ ↔ n <= k
-  proof: by simp
-
-中文:
-定理 mk_le_mk
-  条件: (n k : 自然数) (hn : 0 < n) (hk : 0 < k)
-  结论: (⟨n, hn⟩ : 自然数+) <= ⟨k, hk⟩ ↔ n <= k
-  证明: by simp
+/-- We now define a long list of structures on ℕ+ induced by
+similar structures on ℕ. Most of these behave in a completely
+obvious way, but there are a few things to be said about
+subtraction, division and powers.
 -/
-theorem mk_le_mk (n k : Nat) (hn : 0 < n) (hk : 0 < k) : (⟨n, hn⟩ : Nat+) <= ⟨k, hk⟩ ↔ n <= k := by simp
+/-
+**PNat.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：mk_le_mk (n k : Nat) (hn : 0 < n) (hk : 0 < k) : (⟨n, hn⟩ : Nat+) <= ⟨k, h
+k⟩ ↔ n <= k
+参数：n k : Nat；hn : 0 < n；hk : 0 < k。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-/--
-theorem `mk_lt_mk` / 定理 `mk_lt_mk`
-
-English:
-theorem mk_lt_mk
-  given: (n k : Nat) (hn : 0 < n) (hk : 0 < k)
-  statement: (⟨n, hn⟩ : Nat+) < ⟨k, hk⟩ ↔ n < k
-  proof: by simp
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_lt_mk
-  条件: (n k : 自然数) (hn : 0 < n) (hk : 0 < k)
-  结论: (⟨n, hn⟩ : 自然数+) < ⟨k, hk⟩ ↔ n < k
-  证明: by simp
-
-@[simp, norm_cast]
+--- 原说明 ---
+We now define a long list of structures on ℕ+ induced by
+similar structures on ℕ. Most of these behave in a completely
+obvious way, but there are a few things to be said about
+subtraction, division and powers.
 -/
-theorem mk_lt_mk (n k : Nat) (hn : 0 < n) (hk : 0 < k) : (⟨n, hn⟩ : Nat+) < ⟨k, hk⟩ ↔ n < k := by simp
-
-@[simp, norm_cast]
-/--
-theorem `coe_le_coe` / 定理 `coe_le_coe`
-
-English:
-theorem coe_le_coe
-  given: (n k : Nat+)
-  statement: (n : Nat) <= k ↔ n <= k
-  proof: Iff.rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_le_coe
-  条件: (n k : 自然数+)
-  结论: (n : 自然数) <= k ↔ n <= k
-  证明: Iff.rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Iff.rfl
+theorem mk_le_mk (n k : ℕ) (hn : 0 < n) (hk : 0 < k) : (⟨n, hn⟩ : ℕ+) ≤ ⟨k, hk⟩ ↔ n ≤ k := by simp
+/-
+**PNat.mk_lt_mk** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：mk_lt_mk (n k : Nat) (hn : 0 < n) (hk : 0 < k) : (⟨n, hn⟩ : Nat+) < ⟨k, hk
+⟩ ↔ n < k
+参数：n k : Nat；hn : 0 < n；hk : 0 < k。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem coe_le_coe (n k : Nat+) : (n : Nat) <= k ↔ n <= k :=
+theorem mk_lt_mk (n k : ℕ) (hn : 0 < n) (hk : 0 < k) : (⟨n, hn⟩ : ℕ+) < ⟨k, hk⟩ ↔ n < k := by simp
+
+@[simp, norm_cast]
+/-
+**PNat.coe_le_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：coe_le_coe (n k : Nat+) : (n : Nat) <= k ↔ n <= k
+参数：n k : Nat+。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem coe_le_coe (n k : ℕ+) : (n : ℕ) ≤ k ↔ n ≤ k :=
   Iff.rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_lt_coe` / 定理 `coe_lt_coe`
-
-English:
-theorem coe_lt_coe
-  given: (n k : Nat+)
-  statement: (n : Nat) < k ↔ n < k
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 coe_lt_coe
-  条件: (n k : 自然数+)
-  结论: (n : 自然数) < k ↔ n < k
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**PNat.coe_lt_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：coe_lt_coe (n k : Nat+) : (n : Nat) < k ↔ n < k
+参数：n k : Nat+。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_lt_coe (n k : Nat+) : (n : Nat) < k ↔ n < k :=
+theorem coe_lt_coe (n k : ℕ+) : (n : ℕ) < k ↔ n < k :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `pos` / 定理 `pos`
-
-English:
-theorem pos
-  given: (n : Nat+)
-  statement: 0 < (n : Nat)
-  proof: n.2
-
-中文:
-定理 pos
-  条件: (n : 自然数+)
-  结论: 0 < (n : 自然数)
-  证明: n.2
+/-
+**PNat.pos** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：pos (n : Nat+) : 0 < (n : Nat)
+参数：n : Nat+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem pos (n : Nat+) : 0 < (n : Nat) :=
+theorem pos (n : ℕ+) : 0 < (n : ℕ) :=
   n.2
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: {m n : Nat+}
-  statement: (m : Nat) = n -> m = n
-  proof: Subtype.ext
-
-中文:
-定理 eq
-  条件: {m n : 自然数+}
-  结论: (m : 自然数) = n -> m = n
-  证明: Subtype.ext
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**PNat.eq** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：eq {m n : Nat+} : (m : Nat) = n -> m = n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
-theorem eq {m n : Nat+} : (m : Nat) = n -> m = n :=
+theorem eq {m n : ℕ+} : (m : ℕ) = n → m = n :=
   Subtype.ext
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Function.Injective PNat.val
-  proof: Subtype.coe_injective
-
-@[simp]
-
-中文:
-定理 coe_injective
-  结论: 函数.单射 正自然数.val
-  证明: Subtype.coe_injective
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**PNat.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：coe_injective : Function.Injective PNat.val
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 theorem coe_injective : Function.Injective PNat.val :=
   Subtype.coe_injective
 
 @[simp]
-/--
-theorem `ne_zero` / 定理 `ne_zero`
-
-English:
-theorem ne_zero
-  given: (n : Nat+)
-  statement: (n : Nat) != 0
-  proof: n.2.ne'
-
-中文:
-定理 ne_zero
-  条件: (n : 自然数+)
-  结论: (n : 自然数) != 0
-  证明: n.2.ne'
-
-Depends on / 依赖: isConvexSet_coe, subtype
+/-
+**PNat.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：ne_zero (n : Nat+) : (n : Nat) != 0
+参数：n : Nat+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem ne_zero (n : Nat+) : (n : Nat) != 0 :=
+theorem ne_zero (n : ℕ+) : (n : ℕ) ≠ 0 :=
   n.2.ne'
-
-/--
-Instance `_root_.NeZero.pnat` / 实例 `_root_.NeZero.pnat`
-
-English:
-instance _root_.NeZero.pnat
-  signature: {a : Nat+}
-  body: ⟨a.ne_zero⟩
-
-中文:
-实例 _root_.NeZero.pnat
-  签名: {a : 自然数+}
-  定义体: ⟨a.ne_zero⟩
-
-Depends on / 依赖: a.ne_zero, ne_zero
+/-
+**PNat._root_.NeZero.pnat** 是 Mathlib 中的一个实例，位于命名空间 `PNat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance _root_.NeZero.pnat {a : Nat+} : NeZero (a : Nat) :=
+instance _root_.NeZero.pnat {a : ℕ+} : NeZero (a : ℕ) :=
   ⟨a.ne_zero⟩
-
-/--
-theorem `toPNat'_coe` / 定理 `toPNat'_coe`
-
-English:
-theorem toPNat'_coe
-  given: {n : Nat}
-  statement: 0 < n -> (n.toPNat' : Nat) = n
-  proof: succ_pred_eq_of_pos
-
-@[simp]
-
-中文:
-定理 toP自然数'_coe
-  条件: {n : 自然数}
-  结论: 0 < n -> (n.toP自然数' : 自然数) = n
-  证明: succ_pred_eq_of_pos
-
-@[simp]
-
-Depends on / 依赖: succ_pred_eq_of_pos
+/-
+**PNat.toPNat'_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：∀ {n : ℕ}, 0 < n → ↑n.toPNat' = n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.succ_pred_eq_of_pos`：∀ {n : ℕ}, 0 < n → n.pred.succ = n
 -/
-theorem toPNat'_coe {n : Nat} : 0 < n -> (n.toPNat' : Nat) = n :=
+theorem toPNat'_coe {n : ℕ} : 0 < n → (n.toPNat' : ℕ) = n :=
   succ_pred_eq_of_pos
 
 @[simp]
-/--
-theorem `coe_toPNat'` / 定理 `coe_toPNat'`
-
-English:
-theorem coe_toPNat'
-  given: (n : Nat+)
-  statement: (n : Nat).toPNat' = n
-  proof: eq (toPNat'_coe n.pos)
-
-@[deprecated "use `one_le`" (since := "2026-05-07")]
-
-中文:
-定理 coe_toP自然数'
-  条件: (n : 自然数+)
-  结论: (n : 自然数).toP自然数' = n
-  证明: eq (toPNat'_coe n.pos)
-
-@[deprecated "use `one_le`" (since := "2026-05-07")]
-
-Depends on / 依赖: _coe, n.pos, toPNat
+/-
+**PNat.coe_toPNat'** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：coe_toPNat' (n : Nat+) : (n : Nat).toPNat' = n
+参数：n : Nat+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PNat.eq`：eq {m n : Nat+} : (m : Nat) = n -> m = n
+· 使用定理 `PNat.toPNat'_coe`：∀ {n : ℕ}, 0 < n → ↑n.toPNat' = n
+· 使用定理 `PNat.pos`：pos (n : Nat+) : 0 < (n : Nat)
 -/
-theorem coe_toPNat' (n : Nat+) : (n : Nat).toPNat' = n :=
+theorem coe_toPNat' (n : ℕ+) : (n : ℕ).toPNat' = n :=
   eq (toPNat'_coe n.pos)
 
 @[deprecated "use `one_le`" (since := "2026-05-07")]
-/--
-theorem `one_le` / 定理 `one_le`
-
-English:
-theorem one_le
-  given: (n : Nat+)
-  statement: (1 : Nat+) <= n
-  proof: n.2
-
-@[deprecated "use `not_lt_one`" (since := "2026-05-07")]
-
-中文:
-定理 one_le
-  条件: (n : 自然数+)
-  结论: (1 : 自然数+) <= n
-  证明: n.2
-
-@[deprecated "use `not_lt_one`" (since := "2026-05-07")]
-
-Depends on / 依赖: Finsupp, Finsupp.sum
+/-
+**PNat.one_le** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：∀ (n : ℕ+), 1 ≤ n
+参数：n : ℕ+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-protected theorem one_le (n : Nat+) : (1 : Nat+) <= n :=
+protected theorem one_le (n : ℕ+) : (1 : ℕ+) ≤ n :=
   n.2
 
 @[deprecated "use `not_lt_one`" (since := "2026-05-07")]
-/--
-theorem `not_lt_one` / 定理 `not_lt_one`
-
-English:
-theorem not_lt_one
-  given: (n : Nat+)
-  statement: ¬n < 1
-  proof: not_lt_of_ge n.2
-
-中文:
-定理 not_lt_one
-  条件: (n : 自然数+)
-  结论: ¬n < 1
-  证明: not_lt_of_ge n.2
+/-
+**PNat.not_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：∀ (n : ℕ+), ¬n < 1
+参数：n : ℕ+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-protected theorem not_lt_one (n : Nat+) : ¬n < 1 :=
+protected theorem not_lt_one (n : ℕ+) : ¬n < 1 :=
   not_lt_of_ge n.2
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Nat+
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 自然数+
-  定义体: ⟨1⟩
-
-Depends on / 依赖: Finsupp, Finsupp.sum
+/-
+**PNat.** 是 Mathlib 中的一个实例，位于命名空间 `PNat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited Nat+ :=
+instance : Inhabited ℕ+ :=
   ⟨1⟩
 
 -- Some lemmas that rewrite `PNat.mk n h`, for `n` an explicit numeral, into explicit numerals.
 @[simp]
-/--
-theorem `mk_one` / 定理 `mk_one`
-
-English:
-theorem mk_one
-  given: {h}
-  statement: (⟨1, h⟩ : Nat+) = (1 : Nat+)
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 mk_one
-  条件: {h}
-  结论: (⟨1, h⟩ : 自然数+) = (1 : 自然数+)
-  证明: rfl
-
-@[norm_cast]
-
-Depends on / 依赖: Finsupp, Finsupp.sum
+/-
+**PNat.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：mk_one {h} : (⟨1, h⟩ : Nat+) = (1 : Nat+)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_one {h} : (⟨1, h⟩ : Nat+) = (1 : Nat+) :=
+theorem mk_one {h} : (⟨1, h⟩ : ℕ+) = (1 : ℕ+) :=
   rfl
 
 @[norm_cast]
-/--
-theorem `one_coe` / 定理 `one_coe`
-
-English:
-theorem one_coe
-  statement: ((1 : Nat+) : Nat) = 1
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 one_coe
-  结论: ((1 : 自然数+) : 自然数) = 1
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**PNat.one_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：one_coe : ((1 : Nat+) : Nat) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-theorem one_coe : ((1 : Nat+) : Nat) = 1 :=
+theorem one_coe : ((1 : ℕ+) : ℕ) = 1 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_one_iff` / 定理 `coe_eq_one_iff`
-
-English:
-theorem coe_eq_one_iff
-  given: {m : Nat+}
-  statement: (m : Nat) = 1 ↔ m = 1
-  proof: Subtype.coe_injective.eq_iff' one_coe
-
-中文:
-定理 coe_eq_one_iff
-  条件: {m : 自然数+}
-  结论: (m : 自然数) = 1 ↔ m = 1
-  证明: Subtype.coe_injective.eq_iff' one_coe
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.eq_iff, coe_injective, eq_iff, one_coe
+/-
+**PNat.coe_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：coe_eq_one_iff {m : Nat+} : (m : Nat) = 1 ↔ m = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `PNat.one_coe`：one_coe : ((1 : Nat+) : Nat) = 1
 -/
-theorem coe_eq_one_iff {m : Nat+} : (m : Nat) = 1 ↔ m = 1 :=
+theorem coe_eq_one_iff {m : ℕ+} : (m : ℕ) = 1 ↔ m = 1 :=
   Subtype.coe_injective.eq_iff' one_coe
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WellFoundedRelation Nat+
-  body: measure (fun (a : Nat+) => (a : Nat))
-
-中文:
-实例 :
-  签名: 良基关系 自然数+
-  定义体: measure (fun (a : Nat+) => (a : Nat))
-
-Depends on / 依赖: measure
+/-
+**PNat.** 是 Mathlib 中的一个实例，位于命名空间 `PNat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : WellFoundedRelation Nat+ :=
-  measure (fun (a : Nat+) => (a : Nat))
+instance : WellFoundedRelation ℕ+ :=
+  measure (fun (a : ℕ+) => (a : ℕ))
 
-/--
-Definition of `strongInductionOn` / `strongInductionOn` 的定义
+/-- Strong induction on `ℕ+`. -/
+/-
+**PNat.strongInductionOn** 是 Mathlib 中的一个定义，位于命名空间 `PNat`。
+形式化陈述：{p : ℕ+ → Sort u_1} → (n : ℕ+) → ((k : ℕ+) → ((m : ℕ+) → m < k → p m) → p 
+k) → p n
+参数：n : ℕ+；(k : ℕ+) → ((m : ℕ+) → m < k → p m) → p k。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition strongInductionOn
-  signature: {p : Nat+ -> Sort*} (n : Nat+)
-
-中文:
-定义 strongInductionOn
-  签名: {p : 自然数+ -> 类型层*} (n : 自然数+)
+--- 原说明 ---
+Strong induction on `ℕ+`.
 -/
-def strongInductionOn {p : Nat+ -> Sort*} (n : Nat+) : (forall k, (forall m, m < k -> p m) -> p k) -> p n
+def strongInductionOn {p : ℕ+ → Sort*} (n : ℕ+) : (∀ k, (∀ m, m < k → p m) → p k) → p n
   | IH => IH _ fun a _ => strongInductionOn a IH
 termination_by n.1
 
-/--
-Definition of `modDivAux` / `modDivAux` 的定义
-
-English:
-definition modDivAux
-  signature: : Nat+ -> Nat -> Nat -> Nat+ × Nat
-
-中文:
-定义 modDivAux
-  签名: : 自然数+ -> 自然数 -> 自然数 -> 自然数+ × 自然数
+/-- We define `m % k` and `m / k` in the same way as for `ℕ`
+  except that when `m = n * k` we take `m % k = k` and
+  `m / k = n - 1`.  This ensures that `m % k` is always positive
+  and `m = (m % k) + k * (m / k)` in all cases.  Later we
+  define a function `div_exact` which gives the usual `m / k`
+  in the case where `k` divides `m`.
 -/
-def modDivAux : Nat+ -> Nat -> Nat -> Nat+ × Nat
+/-
+**PNat.modDivAux** 是 Mathlib 中的一个定义，位于命名空间 `PNat`。
+形式化陈述：ℕ+ → ℕ → ℕ → ℕ+ × ℕ
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
+
+--- 原说明 ---
+We define `m % k` and `m / k` in the same way as for `ℕ`
+  except that when `m = n * k` we take `m % k = k` and
+  `m / k = n - 1`.  This ensures that `m % k` is always positive
+  and `m = (m % k) + k * (m / k)` in all cases.  Later we
+  define a function `div_exact` which gives the usual `m / k`
+  in the case where `k` divides `m`.
+-/
+def modDivAux : ℕ+ → ℕ → ℕ → ℕ+ × ℕ
   | k, 0, q => ⟨k, q.pred⟩
   | _, r + 1, q => ⟨⟨r + 1, Nat.succ_pos r⟩, q⟩
 
-/--
-Definition of `modDiv` / `modDiv` 的定义
-
-English:
-definition modDiv
-  signature: (m k : Nat+)
-  body: modDivAux k ((m : Nat) % (k : Nat)) ((m : Nat) / (k : Nat))
-
-中文:
-定义 modDiv
-  签名: (m k : 自然数+)
-  定义体: modDivAux k ((m : Nat) % (k : Nat)) ((m : Nat) / (k : Nat))
-
-Depends on / 依赖: modDivAux
+/-- `mod_div m k = (m % k, m / k)`.
+  We define `m % k` and `m / k` in the same way as for `ℕ`
+  except that when `m = n * k` we take `m % k = k` and
+  `m / k = n - 1`.  This ensures that `m % k` is always positive
+  and `m = (m % k) + k * (m / k)` in all cases.  Later we
+  define a function `div_exact` which gives the usual `m / k`
+  in the case where `k` divides `m`.
 -/
-def modDiv (m k : Nat+) : Nat+ × Nat :=
-  modDivAux k ((m : Nat) % (k : Nat)) ((m : Nat) / (k : Nat))
+/-
+**PNat.modDiv** 是 Mathlib 中的一个定义，位于命名空间 `PNat`。
+形式化陈述：modDiv (m k : Nat+) : Nat+ × Nat
+参数：m k : Nat+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `mod` / `mod` 的定义
-
-English:
-definition mod
-  signature: (m k : Nat+)
-  body: (modDiv m k).1
-
-中文:
-定义 mod
-  签名: (m k : 自然数+)
-  定义体: (modDiv m k).1
-
-Depends on / 依赖: modDiv
+--- 原说明 ---
+`mod_div m k = (m % k, m / k)`.
+  We define `m % k` and `m / k` in the same way as for `ℕ`
+  except that when `m = n * k` we take `m % k = k` and
+  `m / k = n - 1`.  This ensures that `m % k` is always positive
+  and `m = (m % k) + k * (m / k)` in all cases.  Later we
+  define a function `div_exact` which gives the usual `m / k`
+  in the case where `k` divides `m`.
 -/
-def mod (m k : Nat+) : Nat+ :=
+def modDiv (m k : ℕ+) : ℕ+ × ℕ :=
+  modDivAux k ((m : ℕ) % (k : ℕ)) ((m : ℕ) / (k : ℕ))
+
+/-- We define `m % k` in the same way as for `ℕ`
+  except that when `m = n * k` we take `m % k = k` This ensures that `m % k` is always positive.
+-/
+/-
+**PNat.mod** 是 Mathlib 中的一个定义，位于命名空间 `PNat`。
+形式化陈述：mod (m k : Nat+) : Nat+
+参数：m k : Nat+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We define `m % k` in the same way as for `ℕ`
+  except that when `m = n * k` we take `m % k = k` This ensures that `m % k` is 
+always positive.
+-/
+def mod (m k : ℕ+) : ℕ+ :=
   (modDiv m k).1
 
-/--
-Definition of `div` / `div` 的定义
-
-English:
-definition div
-  signature: (m k : Nat+)
-  body: (modDiv m k).2
-
-中文:
-定义 div
-  签名: (m k : 自然数+)
-  定义体: (modDiv m k).2
-
-Depends on / 依赖: modDiv
+/-- We define `m / k` in the same way as for `ℕ` except that when `m = n * k` we take
+  `m / k = n - 1`. This ensures that `m = (m % k) + k * (m / k)` in all cases. Later we
+  define a function `div_exact` which gives the usual `m / k` in the case where `k` divides `m`.
 -/
-def div (m k : Nat+) : Nat :=
+/-
+**PNat.div** 是 Mathlib 中的一个定义，位于命名空间 `PNat`。
+形式化陈述：div (m k : Nat+) : Nat
+参数：m k : Nat+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We define `m / k` in the same way as for `ℕ` except that when `m = n * k` we tak
+e
+  `m / k = n - 1`. This ensures that `m = (m % k) + k * (m / k)` in all cases. L
+ater we
+  define a function `div_exact` which gives the usual `m / k` in the case where 
+`k` divides `m`.
+-/
+def div (m k : ℕ+) : ℕ :=
   (modDiv m k).2
-
-/--
-theorem `mod_coe` / 定理 `mod_coe`
-
-English:
-theorem mod_coe
-  given: (m k : Nat+)
-  proof: by
-  dsimp [mod, modDiv]
-  cases (m : Nat) % (k : Nat) with
-  | zero =>
-    rw [if_pos rfl]
-    rfl
-  | succ n =>
-    rw [if_neg n.succ_ne_zero]
-    rfl
-
-中文:
-定理 mod_coe
-  条件: (m k : 自然数+)
-  证明: by
-  dsimp [mod, modDiv]
-  cases (m : Nat) % (k : Nat) with
-  | zero =>
-    rw [if_pos rfl]
-    rfl
-  | succ n =>
-    rw [if_neg n.succ_ne_zero]
-    rfl
-
-Depends on / 依赖: if_neg, if_pos, modDiv, n.succ_ne_zero, succ_ne_zero
+/-
+**PNat.mod_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：mod_coe (m k : Nat+) : (mod m k : Nat) = ite ((m : Nat) % (k : Nat) = 0) (
+k : Nat) ((m : Nat) % (k : Nat))
+参数：m k : Nat+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
 -/
-theorem mod_coe (m k : Nat+) :
-    (mod m k : Nat) = ite ((m : Nat) % (k : Nat) = 0) (k : Nat) ((m : Nat) % (k : Nat)) := by
+theorem mod_coe (m k : ℕ+) :
+    (mod m k : ℕ) = ite ((m : ℕ) % (k : ℕ) = 0) (k : ℕ) ((m : ℕ) % (k : ℕ)) := by
   dsimp [mod, modDiv]
-  cases (m : Nat) % (k : Nat) with
+  cases (m : ℕ) % (k : ℕ) with
   | zero =>
     rw [if_pos rfl]
     rfl
   | succ n =>
     rw [if_neg n.succ_ne_zero]
     rfl
-
-/--
-theorem `div_coe` / 定理 `div_coe`
-
-English:
-theorem div_coe
-  given: (m k : Nat+)
-  proof: by
-  dsimp [div, modDiv]
-  cases (m : Nat) % (k : Nat) with
-  | zero =>
-    rw [if_pos rfl]
-    rfl
-  | succ n =>
-    rw [if_neg n.succ_ne_zero]
-    rfl
-
-中文:
-定理 div_coe
-  条件: (m k : 自然数+)
-  证明: by
-  dsimp [div, modDiv]
-  cases (m : Nat) % (k : Nat) with
-  | zero =>
-    rw [if_pos rfl]
-    rfl
-  | succ n =>
-    rw [if_neg n.succ_ne_zero]
-    rfl
-
-Depends on / 依赖: if_neg, if_pos, modDiv, n.succ_ne_zero, succ_ne_zero
+/-
+**PNat.div_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：div_coe (m k : Nat+) : (div m k : Nat) = ite ((m : Nat) % (k : Nat) = 0) (
+(m : Nat) / (k : Nat)).pred ((m : Nat) / (k : Nat))
+参数：m k : Nat+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
 -/
-theorem div_coe (m k : Nat+) :
-    (div m k : Nat) = ite ((m : Nat) % (k : Nat) = 0) ((m : Nat) / (k : Nat)).pred ((m : Nat) / (k : Nat)) := by
+theorem div_coe (m k : ℕ+) :
+    (div m k : ℕ) = ite ((m : ℕ) % (k : ℕ) = 0) ((m : ℕ) / (k : ℕ)).pred ((m : ℕ) / (k : ℕ)) := by
   dsimp [div, modDiv]
-  cases (m : Nat) % (k : Nat) with
+  cases (m : ℕ) % (k : ℕ) with
   | zero =>
     rw [if_pos rfl]
     rfl
@@ -833,68 +566,55 @@ theorem div_coe (m k : Nat+) :
     rw [if_neg n.succ_ne_zero]
     rfl
 
-/--
-Definition of `divExact` / `divExact` 的定义
+/-- If `h : k | m`, then `k * (div_exact m k) = m`. Note that this is not equal to `m / k`. -/
+/-
+**PNat.divExact** 是 Mathlib 中的一个定义，位于命名空间 `PNat`。
+形式化陈述：divExact (m k : Nat+) : Nat+
+参数：m k : Nat+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divExact
-  signature: (m k : Nat+)
-  body: ⟨(div m k).succ, Nat.succ_pos _⟩
-
-中文:
-定义 divExact
-  签名: (m k : 自然数+)
-  定义体: ⟨(div m k).succ, Nat.succ_pos _⟩
-
-Depends on / 依赖: Nat.succ_pos, succ_pos
+--- 原说明 ---
+If `h : k | m`, then `k * (div_exact m k) = m`. Note that this is not equal to `
+m / k`.
 -/
-def divExact (m k : Nat+) : Nat+ :=
+def divExact (m k : ℕ+) : ℕ+ :=
   ⟨(div m k).succ, Nat.succ_pos _⟩
 
 end PNat
 
 section CanLift
 
-/--
-Instance `Nat.canLiftPNat` / 实例 `Nat.canLiftPNat`
-
-English:
-instance Nat.canLiftPNat
-  signature: : CanLift Nat Nat+ (↑) (fun n => 0 < n)
-  body: ⟨fun n hn => ⟨Nat.toPNat' n, PNat.toPNat'_coe hn⟩⟩
-
-中文:
-实例 自然数.canLiftP自然数
-  签名: : CanLift 自然数 自然数+ (↑) (fun n => 0 < n)
-  定义体: ⟨fun n hn => ⟨Nat.toPNat' n, PNat.toPNat'_coe hn⟩⟩
-
-Depends on / 依赖: Nat.toPNat, PNat.toPNat, _coe, toPNat
+/-
+**Nat.canLiftPNat** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Nat.canLiftPNat : CanLift Nat Nat+ (↑) (fun n => 0 < n)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `PNat.toPNat'_coe`：∀ {n : ℕ}, 0 < n → ↑n.toPNat' = n
 -/
-instance Nat.canLiftPNat : CanLift Nat Nat+ (↑) (fun n => 0 < n) :=
+instance Nat.canLiftPNat : CanLift ℕ ℕ+ (↑) (fun n => 0 < n) :=
   ⟨fun n hn => ⟨Nat.toPNat' n, PNat.toPNat'_coe hn⟩⟩
-
-/--
-Instance `Int.canLiftPNat` / 实例 `Int.canLiftPNat`
-
-English:
-instance Int.canLiftPNat
-  signature: : CanLift Int Nat+ (↑) ((0 < ·))
-  body: ⟨fun n hn =>
-    ⟨Nat.toPNat' (Int.natAbs n), by
-      rw [Nat.toPNat'_coe]; rw [if_pos (Int.natAbs_pos.2 hn.ne')]; rw [Int.natAbs_of_nonneg hn.le]⟩⟩
-
-中文:
-实例 整数.canLiftP自然数
-  签名: : CanLift 整数 自然数+ (↑) ((0 < ·))
-  定义体: ⟨fun n hn =>
-    ⟨Nat.toPNat' (Int.natAbs n), by
-      rw [Nat.toPNat'_coe]; rw [if_pos (Int.natAbs_pos.2 hn.ne')]; rw [Int.natAbs_of_nonneg hn.le]⟩⟩
-
-Depends on / 依赖: Int.natAbs, Int.natAbs_of_nonneg, Int.natAbs_pos, Nat.toPNat, _coe, hn.le, hn.ne, if_pos, natAbs, natAbs_of_nonneg, natAbs_pos, toPNat
+/-
+**Int.canLiftPNat** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Int.canLiftPNat : CanLift Int Nat+ (↑) ((0 < ·))
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.toPNat'_coe`：∀ (n : ℕ), ↑n.toPNat' = if 0 < n then n else 1
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natAbs_pos`：∀ {a : ℤ}, 0 < a.natAbs ↔ a ≠ 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Int.natAbs_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.natAbs = a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-instance Int.canLiftPNat : CanLift Int Nat+ (↑) ((0 < ·)) :=
+instance Int.canLiftPNat : CanLift ℤ ℕ+ (↑) ((0 < ·)) :=
   ⟨fun n hn =>
     ⟨Nat.toPNat' (Int.natAbs n), by
-      rw [Nat.toPNat'_coe]; rw [if_pos (Int.natAbs_pos.2 hn.ne')]; rw [Int.natAbs_of_nonneg hn.le]⟩⟩
+      rw [Nat.toPNat'_coe, if_pos (Int.natAbs_pos.2 hn.ne'),
+        Int.natAbs_of_nonneg hn.le]⟩⟩
 
 end CanLift
+

@@ -36,28 +36,16 @@ variable (C)
 sending an object `X : C` to the `ModuleCat R`-valued presheaf on `C`,
 with value on `Y : Cᵒᵖ` given by `ModuleCat.of R (unop Y ⟶ X)`. -/
 @[simps]
-/--
-Definition of `linearYoneda` / `linearYoneda` 的定义
+/-
+**CategoryTheory.linearYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：linearYoneda : C ⥤ Cᵒᵖ ⥤ ModuleCat R where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearYoneda
-  signature: : C ⥤ Cᵒᵖ ⥤ ModuleCat R where
-  body: { obj := fun Y => ModuleCat.of R (unop Y ⟶ X)
-      map := fun f => ModuleCat.ofHom (Linear.leftComp R _ f.unop) }
-  map {X₁ X₂} f :=
-    { app := fun Y => @ModuleCat.ofHom R _ (Y.unop ⟶ X₁) (Y.unop ⟶ X₂) _ _ _ _
-        (Linear.rightComp R _ f) }
-
-中文:
-定义 linearYoneda
-  签名: : C ⥤ Cᵒᵖ ⥤ 模范畴 R where
-  定义体: { obj := fun Y => ModuleCat.of R (unop Y ⟶ X)
-      map := fun f => ModuleCat.ofHom (Linear.leftComp R _ f.unop) }
-  map {X₁ X₂} f :=
-    { app := fun Y => @ModuleCat.ofHom R _ (Y.unop ⟶ X₁) (Y.unop ⟶ X₂) _ _ _ _
-        (Linear.rightComp R _ f) }
-
-Depends on / 依赖: Linear, Linear.leftComp, Linear.rightComp, ModuleCat, ModuleCat.of, ModuleCat.ofHom, Y.unop, f.unop, leftComp, rightComp
+--- 原说明 ---
+The Yoneda embedding for `R`-linear categories `C`
+sending an object `X : C` to the `ModuleCat R`-valued presheaf on `C`,
+with value on `Y : Cᵒᵖ` given by `ModuleCat.of R (unop Y ⟶ X)`.
 -/
 def linearYoneda : C ⥤ Cᵒᵖ ⥤ ModuleCat R where
   obj X :=
@@ -71,28 +59,16 @@ def linearYoneda : C ⥤ Cᵒᵖ ⥤ ModuleCat R where
 sending an object `Y : Cᵒᵖ` to the `ModuleCat R`-valued copresheaf on `C`,
 with value on `X : C` given by `ModuleCat.of R (unop Y ⟶ X)`. -/
 @[simps]
-/--
-Definition of `linearCoyoneda` / `linearCoyoneda` 的定义
+/-
+**CategoryTheory.linearCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：linearCoyoneda : Cᵒᵖ ⥤ C ⥤ ModuleCat R where obj Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearCoyoneda
-  signature: : Cᵒᵖ ⥤ C ⥤ ModuleCat R where
-  body: { obj := fun X => ModuleCat.of R (unop Y ⟶ X)
-      map := fun f => ModuleCat.ofHom (Linear.rightComp R _ f) }
-  map {Y₁ Y₂} f :=
-    { app := fun X => @ModuleCat.ofHom R _ (unop Y₁ ⟶ X) (unop Y₂ ⟶ X) _ _ _ _
-        (Linear.leftComp _ _ f.unop) }
-
-中文:
-定义 linearCoyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ 模范畴 R where
-  定义体: { obj := fun X => ModuleCat.of R (unop Y ⟶ X)
-      map := fun f => ModuleCat.ofHom (Linear.rightComp R _ f) }
-  map {Y₁ Y₂} f :=
-    { app := fun X => @ModuleCat.ofHom R _ (unop Y₁ ⟶ X) (unop Y₂ ⟶ X) _ _ _ _
-        (Linear.leftComp _ _ f.unop) }
-
-Depends on / 依赖: Linear, Linear.leftComp, Linear.rightComp, ModuleCat, ModuleCat.of, ModuleCat.ofHom, f.unop, leftComp, rightComp
+--- 原说明 ---
+The Yoneda embedding for `R`-linear categories `C`,
+sending an object `Y : Cᵒᵖ` to the `ModuleCat R`-valued copresheaf on `C`,
+with value on `X : C` given by `ModuleCat.of R (unop Y ⟶ X)`.
 -/
 def linearCoyoneda : Cᵒᵖ ⥤ C ⥤ ModuleCat R where
   obj Y :=
@@ -101,68 +77,94 @@ def linearCoyoneda : Cᵒᵖ ⥤ C ⥤ ModuleCat R where
   map {Y₁ Y₂} f :=
     { app := fun X => @ModuleCat.ofHom R _ (unop Y₁ ⟶ X) (unop Y₂ ⟶ X) _ _ _ _
         (Linear.leftComp _ _ f.unop) }
-
-/--
-Instance `linearYoneda_obj_additive` / 实例 `linearYoneda_obj_additive`
-
-English:
-instance linearYoneda_obj_additive
-  signature: (X : C)
-
-中文:
-实例 linearYoneda_obj_additive
-  签名: (X : C)
+/-
+**CategoryTheory.linearYoneda_obj_additive** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：∀ (R : Type w) [inst : Ring R] (C : Type u) [inst_1 : CategoryTheory.Categ
+ory.{v, u} C]   [inst_2 : CategoryTheory.Preadditive C] [inst_3 : CategoryTheory
+.Linear R C] (X : C),   ((CategoryTheory.linearYoneda R C).obj X).Additive
+参数：R : Type w；C : Type u；X : C；(CategoryTheory.linearYoneda R C).obj X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.linearYoneda_obj_map`：∀ (R : Type w) [inst : Ring R] (C :
+ Type u) [inst_1 : CategoryTheory.Category.{v, u} C]   [inst_2 : CategoryTheory.
+Preadditive C] [inst_3 : …
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.Linear.leftComp_apply`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C] (R : Type w)   [i
+nst_2 : Semiring R] [inst_…
+· 使用定理 `CategoryTheory.Preadditive.add_comp`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C)   (f f' 
+: P ⟶ Q) (g : Q ⟶ R),   C…
 -/
 instance linearYoneda_obj_additive (X : C) : ((linearYoneda R C).obj X).Additive where
-
-/--
-Instance `linearCoyoneda_obj_additive` / 实例 `linearCoyoneda_obj_additive`
-
-English:
-instance linearCoyoneda_obj_additive
-  signature: (Y : Cᵒᵖ)
-
-中文:
-实例 linearCoyoneda_obj_additive
-  签名: (Y : Cᵒᵖ)
+/-
+**CategoryTheory.linearCoyoneda_obj_additive** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory`。
+形式化陈述：∀ (R : Type w) [inst : Ring R] (C : Type u) [inst_1 : CategoryTheory.Categ
+ory.{v, u} C]   [inst_2 : CategoryTheory.Preadditive C] [inst_3 : CategoryTheory
+.Linear R C] (Y : Cᵒᵖ),   ((CategoryTheory.linearCoyoneda R C).obj Y).Additive
+参数：R : Type w；C : Type u；Y : Cᵒᵖ；(CategoryTheory.linearCoyoneda R C).obj Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.linearCoyoneda_obj_map`：∀ (R : Type w) [inst : Ring R] (C
+ : Type u) [inst_1 : CategoryTheory.Category.{v, u} C]   [inst_2 : CategoryTheor
+y.Preadditive C] [inst_3 : …
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.Linear.rightComp_apply`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C] (R : Type w)   [
+inst_2 : Semiring R] [inst_…
+· 使用定理 `CategoryTheory.Preadditive.comp_add`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C) (f : P ⟶
+ Q)   (g g' : Q ⟶ R),   C…
 -/
 instance linearCoyoneda_obj_additive (Y : Cᵒᵖ) : ((linearCoyoneda R C).obj Y).Additive where
 
 @[simp]
-/--
-theorem `whiskering_linearYoneda` / 定理 `whiskering_linearYoneda`
-
-English:
-theorem whiskering_linearYoneda
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskering_linearYoneda
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.whiskering_linearYoneda** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：whiskering_linearYoneda : linearYoneda R C ⋙ (whiskeringRight _ _ _).obj (
+forget (ModuleCat.{v} R)) = yoneda
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskering_linearYoneda :
     linearYoneda R C ⋙ (whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)) = yoneda :=
   rfl
 
 @[simp]
-/--
-theorem `whiskering_linearYoneda₂` / 定理 `whiskering_linearYoneda₂`
-
-English:
-theorem whiskering_linearYoneda₂
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskering_linearYoneda₂
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.whiskering_linearYoneda** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：whiskering_linearYoneda : linearYoneda R C ⋙ (whiskeringRight _ _ _).obj (
+forget (ModuleCat.{v} R)) = yoneda
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskering_linearYoneda₂ :
     linearYoneda R C ⋙ (whiskeringRight _ _ _).obj (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v}) =
@@ -170,131 +172,95 @@ theorem whiskering_linearYoneda₂ :
   rfl
 
 @[simp]
-/--
-theorem `whiskering_linearCoyoneda` / 定理 `whiskering_linearCoyoneda`
-
-English:
-theorem whiskering_linearCoyoneda
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskering_linearCoyoneda
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.whiskering_linearCoyoneda** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：whiskering_linearCoyoneda : linearCoyoneda R C ⋙ (whiskeringRight _ _ _).o
+bj (forget (ModuleCat.{v} R)) = coyoneda
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskering_linearCoyoneda :
     linearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)) = coyoneda :=
   rfl
 
 @[simp]
-/--
-theorem `whiskering_linearCoyoneda₂` / 定理 `whiskering_linearCoyoneda₂`
-
-English:
-theorem whiskering_linearCoyoneda₂
-  proof: rfl
-
-中文:
-定理 whiskering_linearCoyoneda₂
-  证明: rfl
+/-
+**CategoryTheory.whiskering_linearCoyoneda** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：whiskering_linearCoyoneda : linearCoyoneda R C ⋙ (whiskeringRight _ _ _).o
+bj (forget (ModuleCat.{v} R)) = coyoneda
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskering_linearCoyoneda₂ :
     linearCoyoneda R C ⋙
         (whiskeringRight _ _ _).obj (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v}) =
       preadditiveCoyoneda :=
   rfl
-
-/--
-Instance `full_linearYoneda` / 实例 `full_linearYoneda`
-
-English:
-instance full_linearYoneda
-  signature: : (linearYoneda R C).Full
-  body: let _ : Functor.Full (linearYoneda R C ⋙ (whiskeringRight _ _ _).obj
-    (forget (ModuleCat.{v} R))) := Yoneda.yoneda_full
-  Functor.Full.of_comp_faithful (linearYoneda R C)
-    ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
-
-中文:
-实例 full_linearYoneda
-  签名: : (linearYoneda R C).满
-  定义体: let _ : Functor.Full (linearYoneda R C ⋙ (whiskeringRight _ _ _).obj
-    (forget (ModuleCat.{v} R))) := Yoneda.yoneda_full
-  Functor.Full.of_comp_faithful (linearYoneda R C)
-    ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
-
-Depends on / 依赖: Functor, Functor.Full, Functor.Full.of_comp_faithful, ModuleCat, Yoneda, Yoneda.yoneda_full, forget, linearYoneda, of_comp_faithful, whiskeringRight, yoneda_full
+/-
+**CategoryTheory.full_linearYoneda** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：full_linearYoneda : (linearYoneda R C).Full
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Full.of_comp_faithful`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
 -/
 instance full_linearYoneda : (linearYoneda R C).Full :=
   let _ : Functor.Full (linearYoneda R C ⋙ (whiskeringRight _ _ _).obj
     (forget (ModuleCat.{v} R))) := Yoneda.yoneda_full
   Functor.Full.of_comp_faithful (linearYoneda R C)
     ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
-
-/--
-Instance `full_linearCoyoneda` / 实例 `full_linearCoyoneda`
-
-English:
-instance full_linearCoyoneda
-  signature: : (linearCoyoneda R C).Full
-  body: let _ : Functor.Full (linearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj
-    (forget (ModuleCat.{v} R))) := Coyoneda.coyoneda_full
-  Functor.Full.of_comp_faithful (linearCoyoneda R C)
-    ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
-
-中文:
-实例 full_linearCoyoneda
-  签名: : (linearCoyoneda R C).满
-  定义体: let _ : Functor.Full (linearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj
-    (forget (ModuleCat.{v} R))) := Coyoneda.coyoneda_full
-  Functor.Full.of_comp_faithful (linearCoyoneda R C)
-    ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
-
-Depends on / 依赖: Coyoneda, Coyoneda.coyoneda_full, Functor, Functor.Full, Functor.Full.of_comp_faithful, ModuleCat, coyoneda_full, forget, linearCoyoneda, of_comp_faithful, whiskeringRight
+/-
+**CategoryTheory.full_linearCoyoneda** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：full_linearCoyoneda : (linearCoyoneda R C).Full
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Full.of_comp_faithful`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
 -/
 instance full_linearCoyoneda : (linearCoyoneda R C).Full :=
   let _ : Functor.Full (linearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj
     (forget (ModuleCat.{v} R))) := Coyoneda.coyoneda_full
   Functor.Full.of_comp_faithful (linearCoyoneda R C)
     ((whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)))
-
-/--
-Instance `faithful_linearYoneda` / 实例 `faithful_linearYoneda`
-
-English:
-instance faithful_linearYoneda
-  signature: : (linearYoneda R C).Faithful
-  body: Functor.Faithful.of_comp_eq (whiskering_linearYoneda R C)
-
-中文:
-实例 faithful_linearYoneda
-  签名: : (linearYoneda R C).忠实
-  定义体: Functor.Faithful.of_comp_eq (whiskering_linearYoneda R C)
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_eq, of_comp_eq, whiskering_linearYoneda
+/-
+**CategoryTheory.faithful_linearYoneda** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+`。
+形式化陈述：faithful_linearYoneda : (linearYoneda R C).Faithful
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.of_comp_eq`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.whiskering_linearYoneda`：whiskering_linearYoneda : linear
+Yoneda R C ⋙ (whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)) = yoneda
 -/
 instance faithful_linearYoneda : (linearYoneda R C).Faithful :=
   Functor.Faithful.of_comp_eq (whiskering_linearYoneda R C)
-
-/--
-Instance `faithful_linearCoyoneda` / 实例 `faithful_linearCoyoneda`
-
-English:
-instance faithful_linearCoyoneda
-  signature: : (linearCoyoneda R C).Faithful
-  body: Functor.Faithful.of_comp_eq (whiskering_linearCoyoneda R C)
-
-中文:
-实例 faithful_linearCoyoneda
-  签名: : (linearCoyoneda R C).忠实
-  定义体: Functor.Faithful.of_comp_eq (whiskering_linearCoyoneda R C)
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_eq, of_comp_eq, whiskering_linearCoyoneda
+/-
+**CategoryTheory.faithful_linearCoyoneda** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：faithful_linearCoyoneda : (linearCoyoneda R C).Faithful
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.of_comp_eq`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.whiskering_linearCoyoneda`：whiskering_linearCoyoneda : li
+nearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj (forget (ModuleCat.{v} R)) = coyo
+neda
 -/
 instance faithful_linearCoyoneda : (linearCoyoneda R C).Faithful :=
   Functor.Faithful.of_comp_eq (whiskering_linearCoyoneda R C)
 
 end CategoryTheory
+

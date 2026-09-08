@@ -90,276 +90,213 @@ syntax (name := peel)
   "peel" (num)? (ppSpace colGt term)?
   (" with" (ppSpace colGt (ident <|> hole))+)? (usingArg)? : tactic
 
-/--
-lemma `and_imp_left_of_imp_imp` / 引理 `and_imp_left_of_imp_imp`
-
-English:
-lemma and_imp_left_of_imp_imp
-  given: {p q r : Prop} (h : r -> p -> q)
-  statement: r ∧ p -> r ∧ q
-  proof: by tauto
-
-中文:
-引理 and_imp_left_of_imp_imp
-  条件: {p q r : 命题} (h : r -> p -> q)
-  结论: r ∧ p -> r ∧ q
-  证明: by tauto
+/-
+**Mathlib.Tactic.Peel.and_imp_left_of_imp_imp** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib
+.Tactic.Peel`。
+形式化陈述：and_imp_left_of_imp_imp {p q r : Prop} (h : r -> p -> q) : r ∧ p -> r ∧ q
+参数：h : r -> p -> q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.not_or_of_imp`：∀ {a b : Prop} [Decidable a], (a → b) → ¬a ∨ b
 -/
-lemma and_imp_left_of_imp_imp {p q r : Prop} (h : r -> p -> q) : r ∧ p -> r ∧ q := by tauto
-
-/--
-theorem `eventually_imp` / 定理 `eventually_imp`
-
-English:
-theorem eventually_imp
-  statement: {α : Type*} {p q : α -> Prop} {f : Filter α}
-  proof: Filter.Eventually.mp hp (Filter.Eventually.of_forall hq)
-
-中文:
-定理 eventually_imp
-  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
-  证明: Filter.Eventually.mp hp (Filter.Eventually.of_forall hq)
-
-Depends on / 依赖: Eventually, Filter, Filter.Eventually.mp, Filter.Eventually.of_forall, of_forall
+lemma and_imp_left_of_imp_imp {p q r : Prop} (h : r → p → q) : r ∧ p → r ∧ q := by tauto
+/-
+**Mathlib.Tactic.Peel.eventually_imp** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.P
+eel`。
+形式化陈述：eventually_imp {α : Type*} {p q : α -> Prop} {f : Filter α} (hq : forall (
+x : α), p x -> q x) (hp : forallᶠ (x : α) in f, p x) : forallᶠ (x : α) in f, q x
+参数：hq : forall (x : α), p x -> q x；hp : forallᶠ (x : α) in f, p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-theorem eventually_imp {α : Type*} {p q : α -> Prop} {f : Filter α}
-    (hq : forall (x : α), p x -> q x) (hp : forallᶠ (x : α) in f, p x) : forallᶠ (x : α) in f, q x :=
+theorem eventually_imp {α : Type*} {p q : α → Prop} {f : Filter α}
+    (hq : ∀ (x : α), p x → q x) (hp : ∀ᶠ (x : α) in f, p x) : ∀ᶠ (x : α) in f, q x :=
   Filter.Eventually.mp hp (Filter.Eventually.of_forall hq)
-
-/--
-theorem `frequently_imp` / 定理 `frequently_imp`
-
-English:
-theorem frequently_imp
-  statement: {α : Type*} {p q : α -> Prop} {f : Filter α}
-  proof: Filter.Frequently.mp hp (Filter.Eventually.of_forall hq)
-
-中文:
-定理 frequently_imp
-  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
-  证明: Filter.Frequently.mp hp (Filter.Eventually.of_forall hq)
-
-Depends on / 依赖: Eventually, Filter, Filter.Eventually.of_forall, Filter.Frequently.mp, Frequently, of_forall
+/-
+**Mathlib.Tactic.Peel.frequently_imp** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.P
+eel`。
+形式化陈述：frequently_imp {α : Type*} {p q : α -> Prop} {f : Filter α} (hq : forall (
+x : α), p x -> q x) (hp : existsᶠ (x : α) in f, p x) : existsᶠ (x : α) in f, q x
+参数：hq : forall (x : α), p x -> q x；hp : existsᶠ (x : α) in f, p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Frequently.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∃ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-theorem frequently_imp {α : Type*} {p q : α -> Prop} {f : Filter α}
-    (hq : forall (x : α), p x -> q x) (hp : existsᶠ (x : α) in f, p x) : existsᶠ (x : α) in f, q x :=
+theorem frequently_imp {α : Type*} {p q : α → Prop} {f : Filter α}
+    (hq : ∀ (x : α), p x → q x) (hp : ∃ᶠ (x : α) in f, p x) : ∃ᶠ (x : α) in f, q x :=
   Filter.Frequently.mp hp (Filter.Eventually.of_forall hq)
-
-/--
-theorem `eventually_congr` / 定理 `eventually_congr`
-
-English:
-theorem eventually_congr
-  statement: {α : Type*} {p q : α -> Prop} {f : Filter α}
-  proof: by
-  congr! 2; exact hq _
-
-中文:
-定理 eventually_congr
-  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
-  证明: by
-  congr! 2; exact hq _
+/-
+**Mathlib.Tactic.Peel.eventually_congr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Peel`。
+形式化陈述：eventually_congr {α : Type*} {p q : α -> Prop} {f : Filter α} (hq : forall
+ (x : α), p x ↔ q x) : (forallᶠ (x : α) in f, p x) ↔ forallᶠ (x : α) in f, q x
+参数：hq : forall (x : α), p x ↔ q x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem eventually_congr {α : Type*} {p q : α -> Prop} {f : Filter α}
-    (hq : forall (x : α), p x ↔ q x) : (forallᶠ (x : α) in f, p x) ↔ forallᶠ (x : α) in f, q x := by
+theorem eventually_congr {α : Type*} {p q : α → Prop} {f : Filter α}
+    (hq : ∀ (x : α), p x ↔ q x) : (∀ᶠ (x : α) in f, p x) ↔ ∀ᶠ (x : α) in f, q x := by
   congr! 2; exact hq _
-
-/--
-theorem `frequently_congr` / 定理 `frequently_congr`
-
-English:
-theorem frequently_congr
-  statement: {α : Type*} {p q : α -> Prop} {f : Filter α}
-  proof: by
-  congr! 2; exact hq _
-
-中文:
-定理 frequently_congr
-  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
-  证明: by
-  congr! 2; exact hq _
+/-
+**Mathlib.Tactic.Peel.frequently_congr** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Peel`。
+形式化陈述：frequently_congr {α : Type*} {p q : α -> Prop} {f : Filter α} (hq : forall
+ (x : α), p x ↔ q x) : (existsᶠ (x : α) in f, p x) ↔ existsᶠ (x : α) in f, q x
+参数：hq : forall (x : α), p x ↔ q x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem frequently_congr {α : Type*} {p q : α -> Prop} {f : Filter α}
-    (hq : forall (x : α), p x ↔ q x) : (existsᶠ (x : α) in f, p x) ↔ existsᶠ (x : α) in f, q x := by
+theorem frequently_congr {α : Type*} {p q : α → Prop} {f : Filter α}
+    (hq : ∀ (x : α), p x ↔ q x) : (∃ᶠ (x : α) in f, p x) ↔ ∃ᶠ (x : α) in f, q x := by
   congr! 2; exact hq _
 
-/--
-Definition of `quantifiers` / `quantifiers` 的定义
+/-- The list of constants that are regarded as being quantifiers. -/
+/-
+**Mathlib.Tactic.Peel.quantifiers** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Peel
+`。
+形式化陈述：quantifiers : List Name
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quantifiers
-  signature: : List Name
-  body: [``Exists, ``And, ``Filter.Eventually, ``Filter.Frequently]
-
-中文:
-定义 quantifiers
-  签名: : 列表 Name
-  定义体: [``Exists, ``And, ``Filter.Eventually, ``Filter.Frequently]
-
-Depends on / 依赖: Eventually, Exists, Filter, Filter.Eventually, Filter.Frequently, Frequently
+--- 原说明 ---
+The list of constants that are regarded as being quantifiers.
 -/
 def quantifiers : List Name :=
   [``Exists, ``And, ``Filter.Eventually, ``Filter.Frequently]
 
-/--
-Definition of `whnfQuantifier` / `whnfQuantifier` 的定义
+/-- If `unfold` is false then do `whnfR`, otherwise unfold everything that's not a quantifier,
+according to the `quantifiers` list. -/
+/-
+**Mathlib.Tactic.Peel.whnfQuantifier** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.P
+eel`。
+形式化陈述：whnfQuantifier (p : Expr) (unfold : Bool) : MetaM Expr
+参数：p : Expr；unfold : Bool。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Lean.Name.instLawfulBEq`：LawfulBEq Name
 
-English:
-definition whnfQuantifier
-  signature: (p : Expr) (unfold : Bool)
-  body: do
-  if unfold then
-    whnfHeadPred p fun e =>
-      if let .const n .. := e.getAppFn then
-        return !(n in quantifiers)
-      else
-        return false
-  else
-    whnfR p
-
-中文:
-定义 whnfQuantifier
-  签名: (p : Expr) (unfold : 布尔值)
-  定义体: do
-  if unfold then
-    whnfHeadPred p fun e =>
-      if let .const n .. := e.getAppFn then
-        return !(n in quantifiers)
-      else
-        return false
-  else
-    whnfR p
+--- 原说明 ---
+If `unfold` is false then do `whnfR`, otherwise unfold everything that's not a q
+uantifier,
+according to the `quantifiers` list.
 -/
 def whnfQuantifier (p : Expr) (unfold : Bool) : MetaM Expr := do
   if unfold then
     whnfHeadPred p fun e =>
       if let .const n .. := e.getAppFn then
-        return !(n in quantifiers)
+        return !(n ∈ quantifiers)
       else
         return false
   else
     whnfR p
 
-/--
-Definition of `throwPeelError` / `throwPeelError` 的定义
+/-- Throws an error saying `ty` and `target` could not be matched up. -/
+/-
+**Mathlib.Tactic.Peel.throwPeelError** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.P
+eel`。
+形式化陈述：throwPeelError {α : Type} (ty target : Expr) : MetaM α
+参数：ty target : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition throwPeelError
-  signature: {α : Type} (ty target : Expr)
-  body: throwError "Tactic 'peel' could not match quantifiers in{indentD ty}\nand{indentD target}"
-
-中文:
-定义 throwPeelError
-  签名: {α : 类型} (ty target : Expr)
-  定义体: throwError "Tactic 'peel' could not match quantifiers in{indentD ty}\nand{indentD target}"
-
-Depends on / 依赖: Tactic, indentD, quantifiers, target, throwError
+--- 原说明 ---
+Throws an error saying `ty` and `target` could not be matched up.
 -/
 def throwPeelError {α : Type} (ty target : Expr) : MetaM α :=
   throwError "Tactic 'peel' could not match quantifiers in{indentD ty}\nand{indentD target}"
 
-/--
-Definition of `mkFreshBinderName` / `mkFreshBinderName` 的定义
+/-- If `f` is a lambda then use its binding name to generate a new hygienic name,
+and otherwise choose a new hygienic name. -/
+/-
+**Mathlib.Tactic.Peel.mkFreshBinderName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Peel`。
+形式化陈述：mkFreshBinderName (f : Expr) : MetaM Name
+参数：f : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFreshBinderName
-  signature: (f : Expr)
-  body: mkFreshUserName (if let .lam n .. := f then n else `a)
-
-中文:
-定义 mkFreshBinderName
-  签名: (f : Expr)
-  定义体: mkFreshUserName (if let .lam n .. := f then n else `a)
-
-Depends on / 依赖: mkFreshUserName
+--- 原说明 ---
+If `f` is a lambda then use its binding name to generate a new hygienic name,
+and otherwise choose a new hygienic name.
 -/
 def mkFreshBinderName (f : Expr) : MetaM Name :=
   mkFreshUserName (if let .lam n .. := f then n else `a)
 
-/--
-Definition of `applyPeelThm` / `applyPeelThm` 的定义
+/-- Applies a "peel theorem" with two main arguments, where the first is the new goal
+and the second can be filled in using `e`. Then it intros two variables with the
+provided names.
 
-English:
-definition applyPeelThm
-  signature: (thm : Name) (goal : MVarId)
-  body: do
-let new_goal :: ge :: _ ← goal.applyConst thm > throwPeelError ty target
-    | throwError "peel: internal error"
-ge.assignIfDefEq e > throwPeelError ty target
-  let (fvars, new_goal) ← new_goal.introN 2 [n, n']
-  return (fvars[1]!, [new_goal])
+If, for example, `goal : ∃ y : α, q y` and `thm := Exists.imp`, the metavariable returned has
+type `q x` where `x : α` has been introduced into the context. -/
+/-
+**Mathlib.Tactic.Peel.applyPeelThm** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Pee
+l`。
+形式化陈述：applyPeelThm (thm : Name) (goal : MVarId) (e : Expr) (ty target : Expr) (n
+ : Name) (n' : Name) : MetaM (FVarId × List MVarId)
+参数：thm : Name；goal : MVarId；e : Expr；ty target : Expr；n : Name；n' : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 applyPeelThm
-  签名: (thm : Name) (goal : MVarId)
-  定义体: do
-let new_goal :: ge :: _ ← goal.applyConst thm > throwPeelError ty target
-    | throwError "peel: internal error"
-ge.assignIfDefEq e > throwPeelError ty target
-  let (fvars, new_goal) ← new_goal.introN 2 [n, n']
-  return (fvars[1]!, [new_goal])
+--- 原说明 ---
+Applies a "peel theorem" with two main arguments, where the first is the new goa
+l
+and the second can be filled in using `e`. Then it intros two variables with the
+provided names.
+
+If, for example, `goal : ∃ y : α, q y` and `thm := Exists.imp`, the metavariable
+ returned has
+type `q x` where `x : α` has been introduced into the context.
 -/
 def applyPeelThm (thm : Name) (goal : MVarId)
     (e : Expr) (ty target : Expr) (n : Name) (n' : Name) :
     MetaM (FVarId × List MVarId) := do
-let new_goal :: ge :: _ ← goal.applyConst thm > throwPeelError ty target
+  let new_goal :: ge :: _ ← goal.applyConst thm <|> throwPeelError ty target
     | throwError "peel: internal error"
-ge.assignIfDefEq e > throwPeelError ty target
+  ge.assignIfDefEq e <|> throwPeelError ty target
   let (fvars, new_goal) ← new_goal.introN 2 [n, n']
   return (fvars[1]!, [new_goal])
 
-/--
-Definition of `peelCore` / `peelCore` 的定义
+/-- This is the core to the `peel` tactic.
 
-English:
-definition peelCore
-  signature: (goal : MVarId) (e : Expr) (n? : Option Name) (n' : Name) (unfold : Bool)
-  body: goal.withContext do
-  let ty ← whnfQuantifier (← inferType e) unfold
-  let target ← whnfQuantifier (← goal.getType) unfold
-  if ty.isForall && target.isForall then
-    applyPeelThm ``forall_imp goal e ty target (← n?.getDM (mkFreshUserName target.bindingName!)) n'
-  else if ty.getAppFn.isConst
-            && ty.getAppNumArgs == target.getAppNumArgs
-            && ty.getAppFn == target.getAppFn then
-    match target.getAppFnArgs with
-    | (``Exists, #[_, p]) =>
-      applyPeelThm ``Exists.imp goal e ty target (← n?.getDM (mkFreshBinderName p)) n'
-    | (``And, #[_, _]) =>
-      applyPeelThm ``and_imp_left_of_imp_imp goal e ty target (← n?.getDM (mkFreshUserName `p)) n'
-    | (``Filter.Eventually, #[_, p, _]) =>
-      applyPeelThm ``eventually_imp goal e ty target (← n?.getDM (mkFreshBinderName p)) n'
-    | (``Filter.Frequently, #[_, p, _]) =>
-      applyPeelThm ``frequently_imp goal e ty target (← n?.getDM (mkFreshBinderName p)) n'
-    | _ => throwPeelError ty target
-  else
-    throwPeelError ty target
+It tries to match `e` and `goal` as quantified statements (using `∀` and the quantifiers in
+the `quantifiers` list), then applies "peel theorems" using `applyPeelThm`.
 
-中文:
-定义 peelCore
-  签名: (goal : MVarId) (e : Expr) (n? : 选项类型 Name) (n' : Name) (unfold : 布尔值)
-  定义体: goal.withContext do
-  let ty ← whnfQuantifier (← inferType e) unfold
-  let target ← whnfQuantifier (← goal.getType) unfold
-  if ty.isForall && target.isForall then
-    applyPeelThm ``forall_imp goal e ty target (← n?.getDM (mkFreshUserName target.bindingName!)) n'
-  else if ty.getAppFn.isConst
-            && ty.getAppNumArgs == target.getAppNumArgs
-            && ty.getAppFn == target.getAppFn then
-    match target.getAppFnArgs with
-    | (``Exists, #[_, p]) =>
-      applyPeelThm ``Exists.imp goal e ty target (← n?.getDM (mkFreshBinderName p)) n'
-    | (``And, #[_, _]) =>
-      applyPeelThm ``and_imp_left_of_imp_imp goal e ty target (← n?.getDM (mkFreshUserName `p)) n'
-    | (``Filter.Eventually, #[_, p, _]) =>
-      applyPeelThm ``eventually_imp goal e ty target (← n?.getDM (mkFreshBinderName p)) n'
-    | (``Filter.Frequently, #[_, p, _]) =>
-      applyPeelThm ``frequently_imp goal e ty target (← n?.getDM (mkFreshBinderName p)) n'
-    | _ => throwPeelError ty target
-  else
-    throwPeelError ty target
+We treat `∧` as a quantifier for sake of dealing with quantified statements
+like `∃ δ > (0 : ℝ), q δ`, which is notation for `∃ δ, δ > (0 : ℝ) ∧ q δ`. -/
+/-
+**Mathlib.Tactic.Peel.peelCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Peel`。
+形式化陈述：peelCore (goal : MVarId) (e : Expr) (n? : Option Name) (n' : Name) (unfold
+ : Bool) : MetaM (FVarId × List MVarId)
+参数：goal : MVarId；e : Expr；n? : Option Name；n' : Name；unfold : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: goal.withContext, withContext
+--- 原说明 ---
+This is the core to the `peel` tactic.
+
+It tries to match `e` and `goal` as quantified statements (using `∀` and the qua
+ntifiers in
+the `quantifiers` list), then applies "peel theorems" using `applyPeelThm`.
+
+We treat `∧` as a quantifier for sake of dealing with quantified statements
+like `∃ δ > (0 : ℝ), q δ`, which is notation for `∃ δ, δ > (0 : ℝ) ∧ q δ`.
 -/
 def peelCore (goal : MVarId) (e : Expr) (n? : Option Name) (n' : Name) (unfold : Bool) :
     MetaM (FVarId × List MVarId) := goal.withContext do
@@ -383,34 +320,25 @@ def peelCore (goal : MVarId) (e : Expr) (n? : Option Name) (n' : Name) (unfold :
   else
     throwPeelError ty target
 
-/--
-Definition of `peelArgs` / `peelArgs` 的定义
+/-- Given a list `l` of names, this peels `num` quantifiers off of the expression `e` and
+the main goal and introduces variables with the provided names until the list of names is exhausted.
+Note: the name `n?` (with default `this`) is used for the name of the expression `e` with
+quantifiers peeled. -/
+/-
+**Mathlib.Tactic.Peel.peelArgs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Peel`。
+形式化陈述：peelArgs (e : Expr) (num : Nat) (l : List Name) (n? : Option Name) (unfold
+ : Bool
+参数：e : Expr；num : Nat；l : List Name；n? : Option Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition peelArgs
-  signature: (e : Expr) (num : Nat) (l : List Name) (n? : Option Name) (unfold : Bool := true)
-  body: do
-  match num with
-    | 0 => return
-    | num + 1 =>
-      let fvarId ← liftMetaTacticAux (peelCore · e l.head? (n?.getD `this) unfold)
-      peelArgs (.fvar fvarId) num l.tail n?
-      unless num == 0 do
-        if let some mvarId ← observing? do (← getMainGoal).clear fvarId then
-          replaceMainGoal [mvarId]
-
-中文:
-定义 peelArgs
-  签名: (e : Expr) (num : 自然数) (l : 列表 Name) (n? : 选项类型 Name) (unfold : 布尔值 := true)
-  定义体: do
-  match num with
-    | 0 => return
-    | num + 1 =>
-      let fvarId ← liftMetaTacticAux (peelCore · e l.head? (n?.getD `this) unfold)
-      peelArgs (.fvar fvarId) num l.tail n?
-      unless num == 0 do
-        if let some mvarId ← observing? do (← getMainGoal).clear fvarId then
-          replaceMainGoal [mvarId]
+--- 原说明 ---
+Given a list `l` of names, this peels `num` quantifiers off of the expression `e
+` and
+the main goal and introduces variables with the provided names until the list of
+ names is exhausted.
+Note: the name `n?` (with default `this`) is used for the name of the expression
+ `e` with
+quantifiers peeled.
 -/
 def peelArgs (e : Expr) (num : Nat) (l : List Name) (n? : Option Name) (unfold : Bool := true) :
     TacticM Unit := do
@@ -423,40 +351,22 @@ def peelArgs (e : Expr) (num : Nat) (l : List Name) (n? : Option Name) (unfold :
         if let some mvarId ← observing? do (← getMainGoal).clear fvarId then
           replaceMainGoal [mvarId]
 
-/--
-Definition of `peelUnbounded` / `peelUnbounded` 的定义
+/-- Similar to `peelArgs` but peels arbitrarily many quantifiers. Returns whether or not
+any quantifiers were peeled. -/
+/-
+**Mathlib.Tactic.Peel.peelUnbounded** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic
+.Peel`。
+形式化陈述：Expr → Option Name → optParam Bool false → Elab.Tactic.TacticM Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition peelUnbounded
-  signature: (e : Expr) (n? : Option Name) (unfold : Bool := false)
-  body: do
-let fvarId? ← observing? liftMetaTacticAux (peelCore · e none (n?.getD `this) unfold)
-  if let some fvarId := fvarId? then
-    let peeled ← peelUnbounded (.fvar fvarId) n?
-    if peeled then
-      if let some mvarId ← observing? do (← getMainGoal).clear fvarId then
-        replaceMainGoal [mvarId]
-    return true
-  else
-    return false
-
-中文:
-定义 peelUnbounded
-  签名: (e : Expr) (n? : 选项类型 Name) (unfold : 布尔值 := false)
-  定义体: do
-let fvarId? ← observing? liftMetaTacticAux (peelCore · e none (n?.getD `this) unfold)
-  if let some fvarId := fvarId? then
-    let peeled ← peelUnbounded (.fvar fvarId) n?
-    if peeled then
-      if let some mvarId ← observing? do (← getMainGoal).clear fvarId then
-        replaceMainGoal [mvarId]
-    return true
-  else
-    return false
+--- 原说明 ---
+Similar to `peelArgs` but peels arbitrarily many quantifiers. Returns whether or
+ not
+any quantifiers were peeled.
 -/
 partial def peelUnbounded (e : Expr) (n? : Option Name) (unfold : Bool := false) :
     TacticM Bool := do
-let fvarId? ← observing? liftMetaTacticAux (peelCore · e none (n?.getD `this) unfold)
+  let fvarId? ← observing? <| liftMetaTacticAux (peelCore · e none (n?.getD `this) unfold)
   if let some fvarId := fvarId? then
     let peeled ← peelUnbounded (.fvar fvarId) n?
     if peeled then
@@ -466,32 +376,16 @@ let fvarId? ← observing? liftMetaTacticAux (peelCore · e none (n?.getD `this)
   else
     return false
 
-/--
-Definition of `peelIffAux` / `peelIffAux` 的定义
+/-- Peel off a single quantifier from an `↔`. -/
+/-
+**Mathlib.Tactic.Peel.peelIffAux** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Peel`
+。
+形式化陈述：peelIffAux : TacticM Unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition peelIffAux
-  signature: : TacticM Unit
-  body: do
-  evalTactic (← `(tactic| focus
-    first | apply forall_congr'
-          | apply exists_congr
-          | apply eventually_congr
-          | apply frequently_congr
-          | apply and_congr_right
-          | fail "failed to apply a quantifier congruence lemma."))
-
-中文:
-定义 peelIffAux
-  签名: : TacticM 单元
-  定义体: do
-  evalTactic (← `(tactic| focus
-    first | apply forall_congr'
-          | apply exists_congr
-          | apply eventually_congr
-          | apply frequently_congr
-          | apply and_congr_right
-          | fail "failed to apply a quantifier congruence lemma."))
+--- 原说明 ---
+Peel off a single quantifier from an `↔`.
 -/
 def peelIffAux : TacticM Unit := do
   evalTactic (← `(tactic| focus
@@ -502,80 +396,20 @@ def peelIffAux : TacticM Unit := do
           | apply and_congr_right
           | fail "failed to apply a quantifier congruence lemma."))
 
-/--
-Definition of `peelArgsIff` / `peelArgsIff` 的定义
+/-- Peel off quantifiers from an `↔` and assign the names given in `l` to the introduced
+variables. -/
+/-
+**Mathlib.Tactic.Peel.peelArgsIff** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Peel
+`。
+形式化陈述：peelArgsIff (l : List Name) : TacticM Unit
+参数：l : List Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition peelArgsIff
-  signature: (l : List Name)
-  body: withMainContext do
-  match l with
-    | [] => pure ()
-    | h :: hs =>
-      peelIffAux
-      let goal ← getMainGoal
-      let (_, new_goal) ← goal.intro h
-      replaceMainGoal [new_goal]
-      peelArgsIff hs
-
-elab_rules : tactic
-  | `(tactic| peel $[$num?:num]? $e:term $[with $l?* $n?]?) => withMainContext do
-    /- we use `elabTermForApply` instead of `elabTerm` so that terms passed to `peel` can contain
-    quantifiers with implicit bound variables without causing errors or requiring `@`. -/
-    let e ← elabTermForApply e false
-    let n? := n?.bind fun n => if n.raw.isIdent then pure n.raw.getId else none
-.toList let l := (l?.getD #[]).map getNameOfIdent'
-    -- If num is not present and if there are any provided variable names,
-    -- use the number of variable names.
-let num? := num?.map (·.getNat) > if l.isEmpty then none else l.length
-    if let some num := num? then
-      peelArgs e num l n?
-    else
-      unless ← peelUnbounded e n? do
-        throwPeelError (← inferType e) (← getMainTarget)
-| `(tactic| peel $n:num) => peelArgsIff .replicate n.getNat `_
-  | `(tactic| peel with $args*) => peelArgsIff (args.map getNameOfIdent').toList
-
-macro_rules
-  | `(tactic| peel $[$n:num]? $[$e:term]? $[with $h*]? using $u:term) =>
-    `(tactic| peel $[$n:num]? $[$e:term]? $[with $h*]?; exact $u)
-
-中文:
-定义 peelArgsIff
-  签名: (l : 列表 Name)
-  定义体: withMainContext do
-  match l with
-    | [] => pure ()
-    | h :: hs =>
-      peelIffAux
-      let goal ← getMainGoal
-      let (_, new_goal) ← goal.intro h
-      replaceMainGoal [new_goal]
-      peelArgsIff hs
-
-elab_rules : tactic
-  | `(tactic| peel $[$num?:num]? $e:term $[with $l?* $n?]?) => withMainContext do
-    /- we use `elabTermForApply` instead of `elabTerm` so that terms passed to `peel` can contain
-    quantifiers with implicit bound variables without causing errors or requiring `@`. -/
-    let e ← elabTermForApply e false
-    let n? := n?.bind fun n => if n.raw.isIdent then pure n.raw.getId else none
-.toList let l := (l?.getD #[]).map getNameOfIdent'
-    -- If num is not present and if there are any provided variable names,
-    -- use the number of variable names.
-let num? := num?.map (·.getNat) > if l.isEmpty then none else l.length
-    if let some num := num? then
-      peelArgs e num l n?
-    else
-      unless ← peelUnbounded e n? do
-        throwPeelError (← inferType e) (← getMainTarget)
-| `(tactic| peel $n:num) => peelArgsIff .replicate n.getNat `_
-  | `(tactic| peel with $args*) => peelArgsIff (args.map getNameOfIdent').toList
-
-macro_rules
-  | `(tactic| peel $[$n:num]? $[$e:term]? $[with $h*]? using $u:term) =>
-    `(tactic| peel $[$n:num]? $[$e:term]? $[with $h*]?; exact $u)
-
-Depends on / 依赖: withMainContext
+--- 原说明 ---
+Peel off quantifiers from an `↔` and assign the names given in `l` to the introd
+uced
+variables.
 -/
 def peelArgsIff (l : List Name) : TacticM Unit := withMainContext do
   match l with
@@ -593,16 +427,16 @@ elab_rules : tactic
     quantifiers with implicit bound variables without causing errors or requiring `@`. -/
     let e ← elabTermForApply e false
     let n? := n?.bind fun n => if n.raw.isIdent then pure n.raw.getId else none
-.toList let l := (l?.getD #[]).map getNameOfIdent'
+    let l := (l?.getD #[]).map getNameOfIdent' |>.toList
     -- If num is not present and if there are any provided variable names,
     -- use the number of variable names.
-let num? := num?.map (·.getNat) > if l.isEmpty then none else l.length
+    let num? := num?.map (·.getNat) <|> if l.isEmpty then none else l.length
     if let some num := num? then
       peelArgs e num l n?
     else
       unless ← peelUnbounded e n? do
         throwPeelError (← inferType e) (← getMainTarget)
-| `(tactic| peel $n:num) => peelArgsIff .replicate n.getNat `_
+  | `(tactic| peel $n:num) => peelArgsIff <| .replicate n.getNat `_
   | `(tactic| peel with $args*) => peelArgsIff (args.map getNameOfIdent').toList
 
 macro_rules
@@ -610,3 +444,4 @@ macro_rules
     `(tactic| peel $[$n:num]? $[$e:term]? $[with $h*]?; exact $u)
 
 end Mathlib.Tactic.Peel
+

@@ -46,26 +46,18 @@ variable (C : Type u) [Category.{v} C] [Limits.HasPullbacks C]
 and every morphism `f : X ⟶ Y` to the function `Subobject Y → Subobject X` that maps every
 subobject of `Y` to its pullback along `f`. -/
 @[simps]
-/--
-Definition of `presheaf` / `presheaf` 的定义
+/-
+**Subobject.presheaf** 是 Mathlib 中的一个定义，位于命名空间 `Subobject`。
+形式化陈述：presheaf : Cᵒᵖ ⥤ Type max u v where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presheaf
-  signature: : Cᵒᵖ ⥤ Type max u v where
-  body: Subobject X.unop
-  map f := ↾(pullback f.unop).obj
-  map_id _ := by ext : 3; simp [pullback_id]
-  map_comp _ _ := by ext : 3; simp [pullback_comp]
-
-中文:
-定义 presheaf
-  签名: : Cᵒᵖ ⥤ 类型 最大值 u v where
-  定义体: Subobject X.unop
-  map f := ↾(pullback f.unop).obj
-  map_id _ := by ext : 3; simp [pullback_id]
-  map_comp _ _ := by ext : 3; simp [pullback_comp]
-
-Depends on / 依赖: Subobject, X.unop
+--- 原说明 ---
+This is the presheaf that sends every object `X : C` to its type of subobjects `
+Subobject X`,
+and every morphism `f : X ⟶ Y` to the function `Subobject Y → Subobject X` that 
+maps every
+subobject of `Y` to its pullback along `f`.
 -/
 noncomputable def presheaf : Cᵒᵖ ⥤ Type max u v where
   obj X := Subobject X.unop
@@ -74,3 +66,4 @@ noncomputable def presheaf : Cᵒᵖ ⥤ Type max u v where
   map_comp _ _ := by ext : 3; simp [pullback_comp]
 
 end Subobject
+

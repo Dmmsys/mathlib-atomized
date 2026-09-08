@@ -42,18 +42,83 @@ section antisymm
 
 variable {α : Type u} {β : Type v}
 
-/--
-theorem `schroeder_bernstein_of_rel` / 定理 `schroeder_bernstein_of_rel`
+/-- **The Schröder-Bernstein Theorem**:
+Given injections `α → β` and `β → α` that satisfy a pointwise property `R`, we can get a bijection
+`α → β` that satisfies that same pointwise property. -/
+/-
+**Function.Embedding.schroeder_bernstein_of_rel** 是 Mathlib 中的一个定理，位于命名空间 `Funct
+ion.Embedding`。
+形式化陈述：schroeder_bernstein_of_rel {f : α -> β} {g : β -> α} (hf : Function.Inject
+ive f) (hg : Function.Injective g) (R : α -> β -> Prop) (hp₁ : forall a : α, R a
+ (f a)) (hp₂ : forall b : β, R (g b) b) : exists h : α -> β, Bijective h ∧ foral
+l a : α, R a (h a)
+参数：hf : Function.Injective f；hg : Function.Injective g；R : α -> β -> Prop；hp₁ : 
+forall a : α, R a (f a)；hp₂ : forall b : β, R (g b) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `Function.isEmpty`：∀ {α : Sort u} {β : Sort v} [IsEmpty β] (f : α → β), I
+sEmpty α
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `compl_le_compl`：compl_le_compl (h : a <= b) : bᶜ <= aᶜ
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `OrderHom.map_lfp`：map_lfp : f f.lfp = f.lfp
+· 使用定理 `compl_injective`：compl_injective : Function.Injective (compl : α -> α)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.leftInverse_invFun`：leftInverse_invFun (hf : Injective f) : Lef
+tInverse (invFun f) f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.LeftInverse.image_image`：∀ {α : Type u_1} {β : Type u_2} {f : α
+ → β} {g : β → α}, Function.LeftInverse g f → ∀ (s : Set α), g '' f '' s = s
+· 使用定理 `Set.range_eq_univ`：range_eq_univ : range f = univ ↔ Surjective f
+· 使用定理 `Set.range_piecewise`：range_piecewise (f g : α -> β) : range (s.piecewise
+ f g) = f '' s union g '' sᶜ
+· 使用定理 `Set.union_compl_self`：union_compl_self (s : Set α) : s union sᶜ = univ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.injective_piecewise_iff`：injective_piecewise_iff {f g : α -> β} : In
+jective (s.piecewise f g) ↔ InjOn f s ∧ InjOn g sᶜ ∧ forall x in s, forall y ∉ s
+, f x != g y
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Set.piecewise.eq_1`：∀ {α : Type u} {β : α → Sort v} (s : Set α) (f g : (
+i : α) → β i) [inst : (j : α) → Decidable (j ∈ s)] (i : α),   s.piecewise f g i 
+= if i ∈…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用定理 `Function.invFun_eq`：invFun_eq (h : exists a, f a = b) : f (invFun f b) =
+ b
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 
-English:
-theorem schroeder_bernstein_of_rel
-  statement: {f : α -> β} {g : β -> α} (hf : Function.Injective f)
-  proof: by
+--- 原说明 ---
+**The Schröder-Bernstein Theorem**:
+Given injections `α → β` and `β → α` that satisfy a pointwise property `R`, we c
+an get a bijection
+`α → β` that satisfies that same pointwise property.
+-/
+theorem schroeder_bernstein_of_rel {f : α → β} {g : β → α} (hf : Function.Injective f)
+    (hg : Function.Injective g) (R : α → β → Prop) (hp₁ : ∀ a : α, R a (f a))
+    (hp₂ : ∀ b : β, R (g b) b) :
+    ∃ h : α → β, Bijective h ∧ ∀ a : α, R a (h a) := by
   classical
   rcases isEmpty_or_nonempty β with hβ | hβ
   · have : IsEmpty α := Function.isEmpty f
     exact ⟨_, ((Equiv.equivEmpty α).trans (Equiv.equivEmpty β).symm).bijective, by simp⟩
-  set F : Set α ->o Set α :=
+  set F : Set α →o Set α :=
     { toFun := fun s => (g '' (f '' s)ᶜ)ᶜ
       monotone' := fun s t hst => by dsimp at hst ⊢; gcongr }
   set s : Set α := F.lfp
@@ -62,153 +127,72 @@ theorem schroeder_bernstein_of_rel
   set g' := invFun g
   have g'g : LeftInverse g' g := leftInverse_invFun hg
   have hg'ns : g' '' sᶜ = (f '' s)ᶜ := by rw [← hns, g'g.image_image]
-  set h : α -> β := s.piecewise f g'
+  set h : α → β := s.piecewise f g'
   have : Surjective h := by rw [← range_eq_univ, range_piecewise, hg'ns, union_compl_self]
   have : Injective h := by
     refine (injective_piecewise_iff _).2 ⟨hf.injOn, ?_, ?_⟩
     · intro x hx y hy hxy
-      obtain ⟨x', _, rfl⟩ : x in g '' (f '' s)ᶜ := by rwa [hns]
-      obtain ⟨y', _, rfl⟩ : y in g '' (f '' s)ᶜ := by rwa [hns]
-      rw [g'g _]; rw [g'g _] at hxy
+      obtain ⟨x', _, rfl⟩ : x ∈ g '' (f '' s)ᶜ := by rwa [hns]
+      obtain ⟨y', _, rfl⟩ : y ∈ g '' (f '' s)ᶜ := by rwa [hns]
+      rw [g'g _, g'g _] at hxy
       rw [hxy]
     · intro x hx y hy hxy
-      obtain ⟨y', hy', rfl⟩ : y in g '' (f '' s)ᶜ := by rwa [hns]
+      obtain ⟨y', hy', rfl⟩ : y ∈ g '' (f '' s)ᶜ := by rwa [hns]
       rw [g'g _] at hxy
       exact hy' ⟨x, hx, hxy⟩
-  refine ⟨h, ⟨‹Injective h›, ‹Surjective h›⟩, fun a => ?_⟩
+  refine ⟨h, ⟨‹Injective h›, ‹Surjective h›⟩, fun a ↦ ?_⟩
   simp only [h, Set.piecewise, g']
   split
   · exact hp₁ a
   · have : g (invFun g a) = a := by
-      have : a in g '' (f '' s)ᶜ := by grind
-.mp this obtain ⟨x, _, hx⟩ := mem_image _ _ _
+      have : a ∈ g '' (f '' s)ᶜ := by grind
+      obtain ⟨x, _, hx⟩ := mem_image _ _ _ |>.mp this
       exact Function.invFun_eq ⟨x, hx⟩
     grind
 
-中文:
-定理 schroeder_bernstein_of_rel
-  结论: {f : α -> β} {g : β -> α} (hf : 函数.单射 f)
-  证明: by
-  classical
-  rcases isEmpty_or_nonempty β with hβ | hβ
-  · have : IsEmpty α := Function.isEmpty f
-    exact ⟨_, ((Equiv.equivEmpty α).trans (Equiv.equivEmpty β).symm).bijective, by simp⟩
-  set F : Set α ->o Set α :=
-    { toFun := fun s => (g '' (f '' s)ᶜ)ᶜ
-      monotone' := fun s t hst => by dsimp at hst ⊢; gcongr }
-  set s : Set α := F.lfp
-  have hs : (g '' (f '' s)ᶜ)ᶜ = s := F.map_lfp
-  have hns : g '' (f '' s)ᶜ = sᶜ := compl_injective (by simp [hs])
-  set g' := invFun g
-  have g'g : LeftInverse g' g := leftInverse_invFun hg
-  have hg'ns : g' '' sᶜ = (f '' s)ᶜ := by rw [← hns, g'g.image_image]
-  set h : α -> β := s.piecewise f g'
-  have : Surjective h := by rw [← range_eq_univ, range_piecewise, hg'ns, union_compl_self]
-  have : Injective h := by
-    refine (injective_piecewise_iff _).2 ⟨hf.injOn, ?_, ?_⟩
-    · intro x hx y hy hxy
-      obtain ⟨x', _, rfl⟩ : x in g '' (f '' s)ᶜ := by rwa [hns]
-      obtain ⟨y', _, rfl⟩ : y in g '' (f '' s)ᶜ := by rwa [hns]
-      rw [g'g _]; rw [g'g _] at hxy
-      rw [hxy]
-    · intro x hx y hy hxy
-      obtain ⟨y', hy', rfl⟩ : y in g '' (f '' s)ᶜ := by rwa [hns]
-      rw [g'g _] at hxy
-      exact hy' ⟨x, hx, hxy⟩
-  refine ⟨h, ⟨‹Injective h›, ‹Surjective h›⟩, fun a => ?_⟩
-  simp only [h, Set.piecewise, g']
-  split
-  · exact hp₁ a
-  · have : g (invFun g a) = a := by
-      have : a in g '' (f '' s)ᶜ := by grind
-.mp this obtain ⟨x, _, hx⟩ := mem_image _ _ _
-      exact Function.invFun_eq ⟨x, hx⟩
-    grind
+/-- **The Schröder-Bernstein Theorem**:
+Given injections `α → β` and `β → α`, we can get a bijection `α → β`. -/
+/-
+**Function.Embedding.schroeder_bernstein** 是 Mathlib 中的一个定理，位于命名空间 `Function.Emb
+edding`。
+形式化陈述：schroeder_bernstein {f : α -> β} {g : β -> α} (hf : Function.Injective f) 
+(hg : Function.Injective g) : exists h : α -> β, Bijective h
+参数：hf : Function.Injective f；hg : Function.Injective g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Embedding.schroeder_bernstein_of_rel`：schroeder_bernstein_of_re
+l {f : α -> β} {g : β -> α} (hf : Function.Injective f) (hg : Function.Injective
+ g) (R : α -> β -> Prop) (hp₁ : for…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-Depends on / 依赖: Equiv.equivEmpty, F.lfp, F.map_lfp, Function, Function.isEmpty, IsEmpty, LeftInverse, bijective, classical, compl_injective, equivEmpty, invFun, isEmpty, isEmpty_or_nonempty, leftInverse_inv, map_lfp, monotone
+--- 原说明 ---
+**The Schröder-Bernstein Theorem**:
+Given injections `α → β` and `β → α`, we can get a bijection `α → β`.
 -/
-theorem schroeder_bernstein_of_rel {f : α -> β} {g : β -> α} (hf : Function.Injective f)
-    (hg : Function.Injective g) (R : α -> β -> Prop) (hp₁ : forall a : α, R a (f a))
-    (hp₂ : forall b : β, R (g b) b) :
-    exists h : α -> β, Bijective h ∧ forall a : α, R a (h a) := by
-  classical
-  rcases isEmpty_or_nonempty β with hβ | hβ
-  · have : IsEmpty α := Function.isEmpty f
-    exact ⟨_, ((Equiv.equivEmpty α).trans (Equiv.equivEmpty β).symm).bijective, by simp⟩
-  set F : Set α ->o Set α :=
-    { toFun := fun s => (g '' (f '' s)ᶜ)ᶜ
-      monotone' := fun s t hst => by dsimp at hst ⊢; gcongr }
-  set s : Set α := F.lfp
-  have hs : (g '' (f '' s)ᶜ)ᶜ = s := F.map_lfp
-  have hns : g '' (f '' s)ᶜ = sᶜ := compl_injective (by simp [hs])
-  set g' := invFun g
-  have g'g : LeftInverse g' g := leftInverse_invFun hg
-  have hg'ns : g' '' sᶜ = (f '' s)ᶜ := by rw [← hns, g'g.image_image]
-  set h : α -> β := s.piecewise f g'
-  have : Surjective h := by rw [← range_eq_univ, range_piecewise, hg'ns, union_compl_self]
-  have : Injective h := by
-    refine (injective_piecewise_iff _).2 ⟨hf.injOn, ?_, ?_⟩
-    · intro x hx y hy hxy
-      obtain ⟨x', _, rfl⟩ : x in g '' (f '' s)ᶜ := by rwa [hns]
-      obtain ⟨y', _, rfl⟩ : y in g '' (f '' s)ᶜ := by rwa [hns]
-      rw [g'g _]; rw [g'g _] at hxy
-      rw [hxy]
-    · intro x hx y hy hxy
-      obtain ⟨y', hy', rfl⟩ : y in g '' (f '' s)ᶜ := by rwa [hns]
-      rw [g'g _] at hxy
-      exact hy' ⟨x, hx, hxy⟩
-  refine ⟨h, ⟨‹Injective h›, ‹Surjective h›⟩, fun a => ?_⟩
-  simp only [h, Set.piecewise, g']
-  split
-  · exact hp₁ a
-  · have : g (invFun g a) = a := by
-      have : a in g '' (f '' s)ᶜ := by grind
-.mp this obtain ⟨x, _, hx⟩ := mem_image _ _ _
-      exact Function.invFun_eq ⟨x, hx⟩
-    grind
-
-/--
-theorem `schroeder_bernstein` / 定理 `schroeder_bernstein`
-
-English:
-theorem schroeder_bernstein
-  statement: {f : α -> β} {g : β -> α} (hf : Function.Injective f)
-  proof: by
-  obtain ⟨f, hf, _⟩ := schroeder_bernstein_of_rel hf hg (fun x y => True) (by simp) (by simp)
+theorem schroeder_bernstein {f : α → β} {g : β → α} (hf : Function.Injective f)
+    (hg : Function.Injective g) : ∃ h : α → β, Bijective h := by
+  obtain ⟨f, hf, _⟩ := schroeder_bernstein_of_rel hf hg (fun x y ↦ True) (by simp) (by simp)
   exact ⟨f, hf⟩
 
-中文:
-定理 schroeder_bernstein
-  结论: {f : α -> β} {g : β -> α} (hf : 函数.单射 f)
-  证明: by
-  obtain ⟨f, hf, _⟩ := schroeder_bernstein_of_rel hf hg (fun x y => True) (by simp) (by simp)
-  exact ⟨f, hf⟩
+/-- **The Schröder-Bernstein Theorem**: Given embeddings `α ↪ β` and `β ↪ α`, there exists an
+equivalence `α ≃ β`. -/
+/-
+**Function.Embedding.antisymm** 是 Mathlib 中的一个定理，位于命名空间 `Function.Embedding`。
+形式化陈述：antisymm : (α ↪ β) -> (β ↪ α) -> Nonempty (α ≃ β) | ⟨_, h₁⟩, ⟨_, h₂⟩ => le
+t ⟨f, hf⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Embedding.schroeder_bernstein`：schroeder_bernstein {f : α -> β}
+ {g : β -> α} (hf : Function.Injective f) (hg : Function.Injective g) : exists h
+ : α -> β, Bijective h
 
-Depends on / 依赖: schroeder_bernstein_of_rel
+--- 原说明 ---
+**The Schröder-Bernstein Theorem**: Given embeddings `α ↪ β` and `β ↪ α`, there 
+exists an
+equivalence `α ≃ β`.
 -/
-theorem schroeder_bernstein {f : α -> β} {g : β -> α} (hf : Function.Injective f)
-    (hg : Function.Injective g) : exists h : α -> β, Bijective h := by
-  obtain ⟨f, hf, _⟩ := schroeder_bernstein_of_rel hf hg (fun x y => True) (by simp) (by simp)
-  exact ⟨f, hf⟩
-
-/--
-theorem `antisymm` / 定理 `antisymm`
-
-English:
-theorem antisymm
-  statement: (α ↪ β) -> (β ↪ α) -> Nonempty (α ≃ β)
-  proof: schroeder_bernstein h₁ h₂
-    ⟨Equiv.ofBijective f hf⟩
-
-中文:
-定理 antisymm
-  结论: (α ↪ β) -> (β ↪ α) -> 非空 (α ≃ β)
-  证明: schroeder_bernstein h₁ h₂
-    ⟨Equiv.ofBijective f hf⟩
-
-Depends on / 依赖: schroeder_bernstein
--/
-theorem antisymm : (α ↪ β) -> (β ↪ α) -> Nonempty (α ≃ β)
+theorem antisymm : (α ↪ β) → (β ↪ α) → Nonempty (α ≃ β)
   | ⟨_, h₁⟩, ⟨_, h₂⟩ =>
     let ⟨f, hf⟩ := schroeder_bernstein h₁ h₂
     ⟨Equiv.ofBijective f hf⟩
@@ -217,99 +201,95 @@ end antisymm
 
 section Wo
 
-variable {ι : Type u} (β : ι -> Type v)
+variable {ι : Type u} (β : ι → Type v)
 
-/--
-Definition of `sets` / `sets` 的定义
+/-- `sets β` -/
+/-
+**Function.Embedding.sets** 是 Mathlib 中的一个缩写定义，位于命名空间 `Function.Embedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sets
-  body: { s : Set (forall i, β i) | forall i : ι, s.InjOn fun x => x i }
-
-中文:
-缩写 sets
-  定义体: { s : Set (forall i, β i) | forall i : ι, s.InjOn fun x => x i }
+--- 原说明 ---
+`sets β`
 -/
 private abbrev sets :=
-  { s : Set (forall i, β i) | forall i : ι, s.InjOn fun x => x i }
+  { s : Set (∀ i, β i) | ∀ i : ι, s.InjOn fun x => x i }
 
-/--
-theorem `min_injective` / 定理 `min_injective`
+/-- The cardinals are well-ordered. We express it here by the fact that in any set of cardinals
+there is an element that injects into the others.
+See `Cardinal.conditionallyCompleteLinearOrderBot` for (one of) the lattice instances. -/
+/-
+**Function.Embedding.min_injective** 是 Mathlib 中的一个定理，位于命名空间 `Function.Embedding
+`。
+形式化陈述：min_injective [I : Nonempty ι] : exists i, Nonempty (forall j, β i ↪ β j)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zorn_subset`：zorn_subset (S : Set (Set α)) (h : forall c subseteq S, IsC
+hain (· subseteq ·) c -> exists ub in S, forall s in c, s subseteq ub) : exists 
+m…
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `IsChain.total`：IsChain.total (h : IsChain r s) (hx : x in s) (hy : y in 
+s) : x ≺ y ∨ y ≺ x
+· 使用定理 `Set.subset_sUnion_of_mem`：subset_sUnion_of_mem {S : Set (Set α)} {t : Se
+t α} (tS : t in S) : t subseteq ⋃₀ S
+· 使用定理 `Classical.by_contradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Classical.axiom_of_choice`：∀ {α : Sort u} {β : α → Sort v} {r : (x : α) 
+→ β x → Prop}, (∀ (x : α), ∃ y, r x y) → ∃ f, ∀ (x : α), r x (f x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Maximal.prop`：∀ {α : Type u_1} [inst : LE α] {P : α → Prop} {x : α}, Max
+imal P x → P x
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `Maximal.eq_of_subset`：Maximal.eq_of_subset (h : Maximal P s) (ht : P t) 
+(hst : s subseteq t) : s = t
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Set.InjOn.injective`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α 
+→ β}, Set.InjOn f s → Function.Injective (s.domRestrict f)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Function.injective_surjInv`：injective_surjInv (h : Surjective f) : Injec
+tive (surjInv h)
 
-English:
-theorem min_injective
-  given: [I : Nonempty ι]
-  statement: exists i, Nonempty (forall j, β i ↪ β j)
-  proof: let ⟨s, hs⟩ := show exists s, Maximal (· in sets β) s by
-    refine zorn_subset _ fun c hc hcc =>
-      ⟨⋃₀ c, fun i x ⟨p, hpc, hxp⟩ y ⟨q, hqc, hyq⟩ hi => ?_, fun _ => subset_sUnion_of_mem⟩
-    exact (hcc.total hpc hqc).elim (fun h => hc hqc i (h hxp) hyq hi)
-      fun h => hc hpc i hxp (h hyq) hi
-  let ⟨i, e⟩ :=
-    show exists i, Surjective fun x : s => x.val i from
-      Classical.by_contradiction fun h =>
-        have h : forall i, exists y, forall x in s, (x : forall i, β i) i != y := by
-          simpa [Surjective] using h
-        let ⟨f, hf⟩ := Classical.axiom_of_choice h
-        have : f in s :=
-          have : insert f s in sets β := fun i x hx y hy => by
-            rcases hx with hx | hx <;> rcases hy with hy | hy; · simp [hx, hy]
-            · subst x
-              exact fun e => (hf i y hy e.symm).elim
-            · subst y
-              exact fun e => (hf i x hx e).elim
-            · exact hs.prop i hx hy
-          hs.eq_of_subset this (subset_insert _ _) ▸ mem_insert ..
-        let ⟨i⟩ := I
-        hf i f this rfl
-  ⟨i, ⟨fun j => ⟨s.domRestrict (fun x => x j) ∘ surjInv e,
-    ((hs.1 j).injective).comp (injective_surjInv _)⟩⟩⟩
-
-中文:
-定理 min_injective
-  条件: [I : 非空 ι]
-  结论: 存在 i, 非空 (对任意 j, β i ↪ β j)
-  证明: let ⟨s, hs⟩ := show exists s, Maximal (· in sets β) s by
-    refine zorn_subset _ fun c hc hcc =>
-      ⟨⋃₀ c, fun i x ⟨p, hpc, hxp⟩ y ⟨q, hqc, hyq⟩ hi => ?_, fun _ => subset_sUnion_of_mem⟩
-    exact (hcc.total hpc hqc).elim (fun h => hc hqc i (h hxp) hyq hi)
-      fun h => hc hpc i hxp (h hyq) hi
-  let ⟨i, e⟩ :=
-    show exists i, Surjective fun x : s => x.val i from
-      Classical.by_contradiction fun h =>
-        have h : forall i, exists y, forall x in s, (x : forall i, β i) i != y := by
-          simpa [Surjective] using h
-        let ⟨f, hf⟩ := Classical.axiom_of_choice h
-        have : f in s :=
-          have : insert f s in sets β := fun i x hx y hy => by
-            rcases hx with hx | hx <;> rcases hy with hy | hy; · simp [hx, hy]
-            · subst x
-              exact fun e => (hf i y hy e.symm).elim
-            · subst y
-              exact fun e => (hf i x hx e).elim
-            · exact hs.prop i hx hy
-          hs.eq_of_subset this (subset_insert _ _) ▸ mem_insert ..
-        let ⟨i⟩ := I
-        hf i f this rfl
-  ⟨i, ⟨fun j => ⟨s.domRestrict (fun x => x j) ∘ surjInv e,
-    ((hs.1 j).injective).comp (injective_surjInv _)⟩⟩⟩
-
-Depends on / 依赖: Classical, Classical.by_contradiction, Maximal, Surjective, by_contradiction, hcc.total, subset_sUnion_of_mem, x.val, zorn_subset
+--- 原说明 ---
+The cardinals are well-ordered. We express it here by the fact that in any set o
+f cardinals
+there is an element that injects into the others.
+See `Cardinal.conditionallyCompleteLinearOrderBot` for (one of) the lattice inst
+ances.
 -/
-theorem min_injective [I : Nonempty ι] : exists i, Nonempty (forall j, β i ↪ β j) :=
-  let ⟨s, hs⟩ := show exists s, Maximal (· in sets β) s by
-    refine zorn_subset _ fun c hc hcc =>
-      ⟨⋃₀ c, fun i x ⟨p, hpc, hxp⟩ y ⟨q, hqc, hyq⟩ hi => ?_, fun _ => subset_sUnion_of_mem⟩
-    exact (hcc.total hpc hqc).elim (fun h => hc hqc i (h hxp) hyq hi)
-      fun h => hc hpc i hxp (h hyq) hi
+theorem min_injective [I : Nonempty ι] : ∃ i, Nonempty (∀ j, β i ↪ β j) :=
+  let ⟨s, hs⟩ := show ∃ s, Maximal (· ∈ sets β) s by
+    refine zorn_subset _ fun c hc hcc ↦
+      ⟨⋃₀ c, fun i x ⟨p, hpc, hxp⟩ y ⟨q, hqc, hyq⟩ hi ↦ ?_, fun _ ↦ subset_sUnion_of_mem⟩
+    exact (hcc.total hpc hqc).elim (fun h ↦ hc hqc i (h hxp) hyq hi)
+      fun h ↦ hc hpc i hxp (h hyq) hi
   let ⟨i, e⟩ :=
-    show exists i, Surjective fun x : s => x.val i from
+    show ∃ i, Surjective fun x : s => x.val i from
       Classical.by_contradiction fun h =>
-        have h : forall i, exists y, forall x in s, (x : forall i, β i) i != y := by
+        have h : ∀ i, ∃ y, ∀ x ∈ s, (x : ∀ i, β i) i ≠ y := by
           simpa [Surjective] using h
         let ⟨f, hf⟩ := Classical.axiom_of_choice h
-        have : f in s :=
-          have : insert f s in sets β := fun i x hx y hy => by
+        have : f ∈ s :=
+          have : insert f s ∈ sets β := fun i x hx y hy => by
             rcases hx with hx | hx <;> rcases hy with hy | hy; · simp [hx, hy]
             · subst x
               exact fun e => (hf i y hy e.symm).elim
@@ -324,36 +304,22 @@ theorem min_injective [I : Nonempty ι] : exists i, Nonempty (forall j, β i ↪
 
 end Wo
 
-/--
-theorem `total` / 定理 `total`
+/-- The cardinals are totally ordered. See
+`Cardinal.conditionallyCompleteLinearOrderBot` for (one of) the lattice
+instance. -/
+/-
+**Function.Embedding.total** 是 Mathlib 中的一个定理，位于命名空间 `Function.Embedding`。
+形式化陈述：total (α : Type u) (β : Type v) : Nonempty (α ↪ β) ∨ Nonempty (β ↪ α)
+参数：α : Type u；β : Type v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Embedding.min_injective`：min_injective [I : Nonempty ι] : exist
+s i, Nonempty (forall j, β i ↪ β j)
 
-English:
-theorem total
-  given: (α : Type u) (β : Type v)
-  statement: Nonempty (α ↪ β) ∨ Nonempty (β ↪ α)
-  proof: match @min_injective Bool (fun b => cond b (ULift α) (ULift.{max u v, v} β)) ⟨true⟩
-    with
-  | ⟨true, ⟨h⟩⟩ =>
-    let ⟨f, hf⟩ := h false
-    Or.inl ⟨Embedding.congr Equiv.ulift Equiv.ulift ⟨f, hf⟩⟩
-  | ⟨false, ⟨h⟩⟩ =>
-    let ⟨f, hf⟩ := h true
-    Or.inr ⟨Embedding.congr Equiv.ulift Equiv.ulift ⟨f, hf⟩⟩
-
-中文:
-定理 total
-  条件: (α : 类型u) (β : 类型v)
-  结论: 非空 (α ↪ β) ∨ 非空 (β ↪ α)
-  证明: match @min_injective Bool (fun b => cond b (ULift α) (ULift.{max u v, v} β)) ⟨true⟩
-    with
-  | ⟨true, ⟨h⟩⟩ =>
-    let ⟨f, hf⟩ := h false
-    Or.inl ⟨Embedding.congr Equiv.ulift Equiv.ulift ⟨f, hf⟩⟩
-  | ⟨false, ⟨h⟩⟩ =>
-    let ⟨f, hf⟩ := h true
-    Or.inr ⟨Embedding.congr Equiv.ulift Equiv.ulift ⟨f, hf⟩⟩
-
-Depends on / 依赖: Embedding, Embedding.congr, Equiv.ulift, Or.inl, Or.inr, min_injective
+--- 原说明 ---
+The cardinals are totally ordered. See
+`Cardinal.conditionallyCompleteLinearOrderBot` for (one of) the lattice
+instance.
 -/
 theorem total (α : Type u) (β : Type v) : Nonempty (α ↪ β) ∨ Nonempty (β ↪ α) :=
   match @min_injective Bool (fun b => cond b (ULift α) (ULift.{max u v, v} β)) ⟨true⟩
@@ -368,3 +334,4 @@ theorem total (α : Type u) (β : Type v) : Nonempty (α ↪ β) ∨ Nonempty (�
 end Embedding
 
 end Function
+

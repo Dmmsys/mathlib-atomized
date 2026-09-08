@@ -22,51 +22,21 @@ namespace GroupWithZero
 
 variable {α : Type*} [GroupWithZero α] {a b : α}
 
-/--
-lemma `isConj_iff₀` / 引理 `isConj_iff₀`
-
-English:
-lemma isConj_iff₀
-  statement: IsConj a b ↔ exists c : α, c != 0 ∧ c * a * c⁻¹ = b
-  proof: by
-  rw [IsConj]; rw [Units.exists_iff_ne_zero (p := (SemiconjBy · a b))]
-  congr! 2 with c
-  exact and_congr_right (mul_inv_eq_iff_eq_mul₀ · |>.symm)
-
-中文:
-引理 isConj_iff₀
-  结论: IsConj a b ↔ 存在 c : α, c != 0 ∧ c * a * c⁻¹ = b
-  证明: by
-  rw [IsConj]; rw [Units.exists_iff_ne_zero (p := (SemiconjBy · a b))]
-  congr! 2 with c
-  exact and_congr_right (mul_inv_eq_iff_eq_mul₀ · |>.symm)
+/-
+**GroupWithZero.isConj_iff** 是 Mathlib 中的一个引理，位于命名空间 `GroupWithZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma isConj_iff₀ : IsConj a b ↔ exists c : α, c != 0 ∧ c * a * c⁻¹ = b := by
-  rw [IsConj]; rw [Units.exists_iff_ne_zero (p := (SemiconjBy · a b))]
+@[simp] lemma isConj_iff₀ : IsConj a b ↔ ∃ c : α, c ≠ 0 ∧ c * a * c⁻¹ = b := by
+  rw [IsConj, Units.exists_iff_ne_zero (p := (SemiconjBy · a b))]
   congr! 2 with c
   exact and_congr_right (mul_inv_eq_iff_eq_mul₀ · |>.symm)
-
-/--
-lemma `conj_pow₀` / 引理 `conj_pow₀`
-
-English:
-lemma conj_pow₀
-  given: {s : Nat} {a d : α} (ha : a != 0)
-  statement: (a⁻¹ * d * a) ^ s = a⁻¹ * d ^ s * a
-  proof: let u : αˣ := ⟨a, a⁻¹, mul_inv_cancel₀ ha, inv_mul_cancel₀ ha⟩
-  Units.conj_pow' u d s
-
-中文:
-引理 conj_pow₀
-  条件: {s : 自然数} {a d : α} (ha : a != 0)
-  结论: (a⁻¹ * d * a) ^ s = a⁻¹ * d ^ s * a
-  证明: let u : αˣ := ⟨a, a⁻¹, mul_inv_cancel₀ ha, inv_mul_cancel₀ ha⟩
-  Units.conj_pow' u d s
-
-Depends on / 依赖: Units.conj_pow, conj_pow
+/-
+**GroupWithZero.conj_pow** 是 Mathlib 中的一个引理，位于命名空间 `GroupWithZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma conj_pow₀ {s : Nat} {a d : α} (ha : a != 0) : (a⁻¹ * d * a) ^ s = a⁻¹ * d ^ s * a :=
+lemma conj_pow₀ {s : ℕ} {a d : α} (ha : a ≠ 0) : (a⁻¹ * d * a) ^ s = a⁻¹ * d ^ s * a :=
   let u : αˣ := ⟨a, a⁻¹, mul_inv_cancel₀ ha, inv_mul_cancel₀ ha⟩
   Units.conj_pow' u d s
 
 end GroupWithZero
+

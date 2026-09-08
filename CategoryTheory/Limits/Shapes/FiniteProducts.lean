@@ -25,50 +25,58 @@ namespace CategoryTheory.Limits
 
 variable (C : Type u) [Category.{v} C]
 
-/--
-Definition of `HasFiniteProducts` / `HasFiniteProducts` 的定义
+/-- A category has finite products if there exists a limit for every diagram
+with shape `Discrete J`, where we have `[Finite J]`.
 
-English:
-class HasFiniteProducts
-  parameters: : Prop where
-  axioms and operations (1):
-    - out((n : Nat)) : HasLimitsOfShape (Discrete (Fin n)) C
+We require this condition only for `J = Fin n` in the definition, then deduce a version for any
+`J : Type*` as a corollary of this definition.
+-/
+/-
+**CategoryTheory.Limits.HasFiniteProducts** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有FiniteProducts
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out((n : 自然数)) : 有形状极限 (离散 (有限集 n)) C
+--- 原说明 ---
+A category has finite products if there exists a limit for every diagram
+with shape `Discrete J`, where we have `[Finite J]`.
+
+We require this condition only for `J = Fin n` in the definition, then deduce a 
+version for any
+`J : Type*` as a corollary of this definition.
 -/
 class HasFiniteProducts : Prop where
   /-- `C` has finite products -/
-  out (n : Nat) : HasLimitsOfShape (Discrete (Fin n)) C
+  out (n : ℕ) : HasLimitsOfShape (Discrete (Fin n)) C
 
 /-- If `C` has finite limits then it has finite products. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `C` has finite limits then it has finite products.
+-/
 instance (priority := 10) hasFiniteProducts_of_hasFiniteLimits [HasFiniteLimits C] :
     HasFiniteProducts C :=
   ⟨fun _ => inferInstance⟩
-
-/--
-Instance `hasLimitsOfShape_discrete` / 实例 `hasLimitsOfShape_discrete`
-
-English:
-instance hasLimitsOfShape_discrete
-  signature: [HasFiniteProducts C] (ι : Type w) [Finite ι]
-  body: by
-  rcases Finite.exists_equiv_fin ι with ⟨n, ⟨e⟩⟩
-  have : HasLimitsOfShape (Discrete (Fin n)) C := HasFiniteProducts.out n
-  exact hasLimitsOfShape_of_equivalence (Discrete.equivalence e.symm)
-
-中文:
-实例 hasLimitsOfShape_discrete
-  签名: [有FiniteProducts C] (ι : 类型 w) [有限 ι]
-  定义体: by
-  rcases Finite.exists_equiv_fin ι with ⟨n, ⟨e⟩⟩
-  have : HasLimitsOfShape (Discrete (Fin n)) C := HasFiniteProducts.out n
-  exact hasLimitsOfShape_of_equivalence (Discrete.equivalence e.symm)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Finite, Finite.exists_equiv_fin, HasFiniteProducts, HasFiniteProducts.out, HasLimitsOfShape, e.symm, equivalence, exists_equiv_fin, hasLimitsOfShape_of_equivalence
+/-
+**CategoryTheory.Limits.hasLimitsOfShape_discrete** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：hasLimitsOfShape_discrete [HasFiniteProducts C] (ι : Type w) [Finite ι] : 
+HasLimitsOfShape (Discrete ι) C
+参数：ι : Type w。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.exists_equiv_fin`：Finite.exists_equiv_fin (α : Sort*) [h : Finite
+ α] : exists n : Nat, Nonempty (α ≃ Fin n)
+· 使用定理 `CategoryTheory.Limits.HasFiniteProducts.out`：∀ {C : Type u} {inst : Cate
+goryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasFiniteProducts C]
+ (n : ℕ),   CategoryTheory.Limits…
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance hasLimitsOfShape_discrete [HasFiniteProducts C] (ι : Type w) [Finite ι] :
     HasLimitsOfShape (Discrete ι) C := by
@@ -77,68 +85,74 @@ instance hasLimitsOfShape_discrete [HasFiniteProducts C] (ι : Type w) [Finite �
   exact hasLimitsOfShape_of_equivalence (Discrete.equivalence e.symm)
 
 /-- We can now write this for powers. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We can now write this for powers.
+-/
 noncomputable example [HasFiniteProducts C] (X : C) : C :=
   ∏ᶜ fun _ : Fin 5 => X
 
-/--
-theorem `hasFiniteProducts_of_hasProducts` / 定理 `hasFiniteProducts_of_hasProducts`
+/-- If a category has all products then in particular it has finite products.
+-/
+/-
+**CategoryTheory.Limits.hasFiniteProducts_of_hasProducts** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：hasFiniteProducts_of_hasProducts [HasProducts.{w} C] : HasFiniteProducts C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
 
-English:
-theorem hasFiniteProducts_of_hasProducts
-  given: [HasProducts.{w} C]
-  statement: HasFiniteProducts C
-  proof: ⟨fun _ => hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
-
-中文:
-定理 hasFiniteProducts_of_hasProducts
-  条件: [HasProducts.{w} C]
-  结论: 有FiniteProducts C
-  证明: ⟨fun _ => hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.ulift, equivalence, hasLimitsOfShape_of_equivalence
+--- 原说明 ---
+If a category has all products then in particular it has finite products.
 -/
 theorem hasFiniteProducts_of_hasProducts [HasProducts.{w} C] : HasFiniteProducts C :=
   ⟨fun _ => hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
 
-/--
-Definition of `HasFiniteCoproducts` / `HasFiniteCoproducts` 的定义
+/-- A category has finite coproducts if there exists a colimit for every diagram
+with shape `Discrete J`, where we have `[Fintype J]`.
 
-English:
-class HasFiniteCoproducts
-  parameters: : Prop where
-  axioms and operations (1):
-    - out((n : Nat)) : HasColimitsOfShape (Discrete (Fin n)) C
+We require this condition only for `J = Fin n` in the definition, then deduce a version for any
+`J : Type*` as a corollary of this definition.
+-/
+/-
+**CategoryTheory.Limits.HasFiniteCoproducts** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有FiniteCoproducts
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out((n : 自然数)) : 有形状余极限 (离散 (有限集 n)) C
+--- 原说明 ---
+A category has finite coproducts if there exists a colimit for every diagram
+with shape `Discrete J`, where we have `[Fintype J]`.
+
+We require this condition only for `J = Fin n` in the definition, then deduce a 
+version for any
+`J : Type*` as a corollary of this definition.
 -/
 class HasFiniteCoproducts : Prop where
   /-- `C` has all finite coproducts -/
-  out (n : Nat) : HasColimitsOfShape (Discrete (Fin n)) C
-
-/--
-Instance `hasColimitsOfShape_discrete` / 实例 `hasColimitsOfShape_discrete`
-
-English:
-instance hasColimitsOfShape_discrete
-  signature: [HasFiniteCoproducts C] (ι : Type w) [Finite ι]
-  body: by
-  rcases Finite.exists_equiv_fin ι with ⟨n, ⟨e⟩⟩
-  have : HasColimitsOfShape (Discrete (Fin n)) C := HasFiniteCoproducts.out n
-  exact hasColimitsOfShape_of_equivalence (Discrete.equivalence e.symm)
-
-中文:
-实例 hasColimitsOfShape_discrete
-  签名: [有FiniteCoproducts C] (ι : 类型 w) [有限 ι]
-  定义体: by
-  rcases Finite.exists_equiv_fin ι with ⟨n, ⟨e⟩⟩
-  have : HasColimitsOfShape (Discrete (Fin n)) C := HasFiniteCoproducts.out n
-  exact hasColimitsOfShape_of_equivalence (Discrete.equivalence e.symm)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Finite, Finite.exists_equiv_fin, HasColimitsOfShape, HasFiniteCoproducts, HasFiniteCoproducts.out, e.symm, equivalence, exists_equiv_fin, hasColimitsOfShape_of_equivalence
+  out (n : ℕ) : HasColimitsOfShape (Discrete (Fin n)) C
+/-
+**CategoryTheory.Limits.hasColimitsOfShape_discrete** 是 Mathlib 中的一个实例，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：hasColimitsOfShape_discrete [HasFiniteCoproducts C] (ι : Type w) [Finite ι
+] : HasColimitsOfShape (Discrete ι) C
+参数：ι : Type w。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.exists_equiv_fin`：Finite.exists_equiv_fin (α : Sort*) [h : Finite
+ α] : exists n : Nat, Nonempty (α ≃ Fin n)
+· 使用定理 `CategoryTheory.Limits.HasFiniteCoproducts.out`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasFiniteCoproduct
+s C] (n : ℕ),   CategoryTheory.Limi…
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance hasColimitsOfShape_discrete [HasFiniteCoproducts C] (ι : Type w) [Finite ι] :
     HasColimitsOfShape (Discrete ι) C := by
@@ -147,28 +161,35 @@ instance hasColimitsOfShape_discrete [HasFiniteCoproducts C] (ι : Type w) [Fini
   exact hasColimitsOfShape_of_equivalence (Discrete.equivalence e.symm)
 
 /-- If `C` has finite colimits then it has finite coproducts. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `C` has finite colimits then it has finite coproducts.
+-/
 instance (priority := 10) hasFiniteCoproducts_of_hasFiniteColimits [HasFiniteColimits C] :
     HasFiniteCoproducts C :=
   ⟨fun J => by infer_instance⟩
 
-/--
-theorem `hasFiniteCoproducts_of_hasCoproducts` / 定理 `hasFiniteCoproducts_of_hasCoproducts`
+/-- If a category has all coproducts then in particular it has finite coproducts.
+-/
+/-
+**CategoryTheory.Limits.hasFiniteCoproducts_of_hasCoproducts** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasFiniteCoproducts_of_hasCoproducts [HasCoproducts.{w} C] : HasFiniteCopr
+oducts C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
 
-English:
-theorem hasFiniteCoproducts_of_hasCoproducts
-  given: [HasCoproducts.{w} C]
-  statement: HasFiniteCoproducts C
-  proof: ⟨fun _ => hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
-
-中文:
-定理 hasFiniteCoproducts_of_hasCoproducts
-  条件: [HasCoproducts.{w} C]
-  结论: 有FiniteCoproducts C
-  证明: ⟨fun _ => hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.ulift, equivalence, hasColimitsOfShape_of_equivalence
+--- 原说明 ---
+If a category has all coproducts then in particular it has finite coproducts.
 -/
 theorem hasFiniteCoproducts_of_hasCoproducts [HasCoproducts.{w} C] : HasFiniteCoproducts C :=
   ⟨fun _ => hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{w})⟩
 
 end CategoryTheory.Limits
+

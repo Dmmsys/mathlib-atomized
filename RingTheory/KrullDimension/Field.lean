@@ -18,41 +18,27 @@ public section
 open Order
 
 @[simp]
-/--
-theorem `ringKrullDim_eq_zero_of_field` / 定理 `ringKrullDim_eq_zero_of_field`
-
-English:
-theorem ringKrullDim_eq_zero_of_field
-  given: (F : Type*) [Field F]
-  statement: ringKrullDim F = 0
-  proof: krullDim_eq_zero_of_unique
-
-中文:
-定理 ringKrullDim_eq_zero_of_field
-  条件: (F : 类型) [域 F]
-  结论: ringKrullDim F = 0
-  证明: krullDim_eq_zero_of_unique
-
-Depends on / 依赖: krullDim_eq_zero_of_unique
+/-
+**ringKrullDim_eq_zero_of_field** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ringKrullDim_eq_zero_of_field (F : Type*) [Field F] : ringKrullDim F = 0
+参数：F : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Order.krullDim_eq_zero_of_unique`：krullDim_eq_zero_of_unique [Unique α] 
+: krullDim α = 0
 -/
 theorem ringKrullDim_eq_zero_of_field (F : Type*) [Field F] : ringKrullDim F = 0 :=
   krullDim_eq_zero_of_unique
-
-/--
-theorem `ringKrullDim_eq_zero_of_isField` / 定理 `ringKrullDim_eq_zero_of_isField`
-
-English:
-theorem ringKrullDim_eq_zero_of_isField
-  given: {F : Type*} [CommRing F] (hF : IsField F)
-  proof: @krullDim_eq_zero_of_unique _ _ @PrimeSpectrum.instUnique _ hF.toField
-
-中文:
-定理 ringKrullDim_eq_zero_of_isField
-  条件: {F : 类型} [交换环 F] (hF : 是域 F)
-  证明: @krullDim_eq_zero_of_unique _ _ @PrimeSpectrum.instUnique _ hF.toField
-
-Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.instUnique, hF.toField, instUnique, krullDim_eq_zero_of_unique, toField
+/-
+**ringKrullDim_eq_zero_of_isField** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ringKrullDim_eq_zero_of_isField {F : Type*} [CommRing F] (hF : IsField F) 
+: ringKrullDim F = 0
+参数：hF : IsField F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Order.krullDim_eq_zero_of_unique`：krullDim_eq_zero_of_unique [Unique α] 
+: krullDim α = 0
 -/
 theorem ringKrullDim_eq_zero_of_isField {F : Type*} [CommRing F] (hF : IsField F) :
     ringKrullDim F = 0 :=
-@krullDim_eq_zero_of_unique _ _ @PrimeSpectrum.instUnique _ hF.toField
+  @krullDim_eq_zero_of_unique _ _ <| @PrimeSpectrum.instUnique _ hF.toField

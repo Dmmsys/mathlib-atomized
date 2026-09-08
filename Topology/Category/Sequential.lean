@@ -24,22 +24,15 @@ open CategoryTheory
 
 universe u
 
-/--
-Definition of `Sequential` / `Sequential` 的定义
+/-- The type sequential topological spaces. -/
+/-
+**Sequential** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Sequential
-  parameters: where
-  axioms and operations (2):
-    - toTop : TopCat.{u} -- TODO: turn this into `extends`
-    - [is_sequential : SequentialSpace toTop]
-
-中文:
-结构 Sequential
-  参数: where
-  公理与运算 (2 个):
-    - toTop : 顶元素范畴.{u} -- TODO: turn this into `extends`
-    - [is_sequential : Sequential空间 toTop]
+--- 原说明 ---
+The type sequential topological spaces.
 -/
 structure Sequential where
   /-- The underlying topological space of an object of `Sequential`. -/
@@ -49,98 +42,44 @@ structure Sequential where
 
 namespace Sequential
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Sequential.{u}
-  body: ⟨{ toTop := TopCat.of (ULift (Fin 37)) }⟩
-
-中文:
-实例 :
-  签名: 可居 Sequential.{u}
-  定义体: ⟨{ toTop := TopCat.of (ULift (Fin 37)) }⟩
-
-Depends on / 依赖: TopCat, TopCat.of
+/-
+**Sequential.** 是 Mathlib 中的一个实例，位于命名空间 `Sequential`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Sequential.{u} :=
   ⟨{ toTop := TopCat.of (ULift (Fin 37)) }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort Sequential Type*
-  body: ⟨fun X => X.toTop⟩
-
-中文:
-实例 :
-  签名: CoeSort Sequential 类型
-  定义体: ⟨fun X => X.toTop⟩
-
-Depends on / 依赖: X.toTop
+/-
+**Sequential.** 是 Mathlib 中的一个实例，位于命名空间 `Sequential`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort Sequential Type* :=
   ⟨fun X => X.toTop⟩
 
 attribute [instance] is_sequential
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category.{u, u + 1} Sequential.{u}
-  body: inferInstanceAs Category (InducedCategory _ toTop)
-
-中文:
-实例 :
-  签名: 范畴.{u, u + 1} Sequential.{u}
-  定义体: inferInstanceAs Category (InducedCategory _ toTop)
-
-Depends on / 依赖: Category, InducedCategory
+/-
+**Sequential.** 是 Mathlib 中的一个实例，位于命名空间 `Sequential`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category.{u, u + 1} Sequential.{u} :=
-inferInstanceAs Category (InducedCategory _ toTop)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory.{u} Sequential.{u} (C(·, ·))
-  body: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
-
-中文:
-实例 :
-  签名: 余ncrete范畴.{u} Sequential.{u} (C(·, ·))
-  定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
-
-Depends on / 依赖: ConcreteCategory, InducedCategory
+  inferInstanceAs <| Category (InducedCategory _ toTop)
+/-
+**Sequential.** 是 Mathlib 中的一个实例，位于命名空间 `Sequential`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConcreteCategory.{u} Sequential.{u} (C(·, ·)) :=
-inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
+  inferInstanceAs <| ConcreteCategory (InducedCategory _ toTop) _
 
 variable (X : Type u) [TopologicalSpace X] [SequentialSpace X]
 
-/--
-Definition of `of` / `of` 的定义
+/-- Constructor for objects of the category `Sequential`. -/
+/-
+**Sequential.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `Sequential`。
+形式化陈述：of : Sequential.{u} where toTop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: : Sequential.{u} where
-  body: TopCat.of X
-  is_sequential := ‹_›
-
-中文:
-缩写 of
-  签名: : Sequential.{u} where
-  定义体: TopCat.of X
-  is_sequential := ‹_›
-
-Depends on / 依赖: TopCat, TopCat.of
+--- 原说明 ---
+Constructor for objects of the category `Sequential`.
 -/
 abbrev of : Sequential.{u} where
   toTop := TopCat.of X
@@ -148,108 +87,55 @@ abbrev of : Sequential.{u} where
 
 /-- The fully faithful embedding of `Sequential` in `TopCat`. -/
 @[simps!]
-/--
-Definition of `sequentialToTop` / `sequentialToTop` 的定义
+/-
+**Sequential.sequentialToTop** 是 Mathlib 中的一个定义，位于命名空间 `Sequential`。
+形式化陈述：sequentialToTop : Sequential.{u} ⥤ TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sequentialToTop
-  signature: : Sequential.{u} ⥤ TopCat.{u}
-  body: inducedFunctor _
-
-中文:
-定义 sequentialToTop
-  签名: : Sequential.{u} ⥤ 顶元素范畴.{u}
-  定义体: inducedFunctor _
-
-Depends on / 依赖: inducedFunctor
+--- 原说明 ---
+The fully faithful embedding of `Sequential` in `TopCat`.
 -/
 def sequentialToTop : Sequential.{u} ⥤ TopCat.{u} :=
   inducedFunctor _
 
-/--
-Definition of `fullyFaithfulSequentialToTop` / `fullyFaithfulSequentialToTop` 的定义
+/-- The functor to `TopCat` is indeed fully faithful. -/
+/-
+**Sequential.fullyFaithfulSequentialToTop** 是 Mathlib 中的一个定义，位于命名空间 `Sequential`
+。
+形式化陈述：fullyFaithfulSequentialToTop : sequentialToTop.FullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulSequentialToTop
-  signature: : sequentialToTop.FullyFaithful
-  body: fullyFaithfulInducedFunctor _
-
-中文:
-定义 fullyFaithfulSequentialToTop
-  签名: : sequentialToTop.满忠实
-  定义体: fullyFaithfulInducedFunctor _
-
-Depends on / 依赖: fullyFaithfulInducedFunctor
+--- 原说明 ---
+The functor to `TopCat` is indeed fully faithful.
 -/
 def fullyFaithfulSequentialToTop : sequentialToTop.FullyFaithful :=
   fullyFaithfulInducedFunctor _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: sequentialToTop.{u}.Full
-  body: inferInstanceAs (inducedFunctor _).Full
-
-中文:
-实例 :
-  签名: sequentialToTop.{u}.满
-  定义体: inferInstanceAs (inducedFunctor _).Full
-
-Depends on / 依赖: inducedFunctor
+/-
+**Sequential.** 是 Mathlib 中的一个实例，位于命名空间 `Sequential`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : sequentialToTop.{u}.Full :=
   inferInstanceAs (inducedFunctor _).Full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: sequentialToTop.{u}.Faithful
-  body: inferInstanceAs (inducedFunctor _).Faithful
-
-中文:
-实例 :
-  签名: sequentialToTop.{u}.忠实
-  定义体: inferInstanceAs (inducedFunctor _).Faithful
-
-Depends on / 依赖: Faithful, inducedFunctor
+/-
+**Sequential.** 是 Mathlib 中的一个实例，位于命名空间 `Sequential`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : sequentialToTop.{u}.Faithful :=
   inferInstanceAs (inducedFunctor _).Faithful
 
 /-- Construct an isomorphism from a homeomorphism. -/
 @[simps hom inv]
-/--
-Definition of `isoOfHomeo` / `isoOfHomeo` 的定义
+/-
+**Sequential.isoOfHomeo** 是 Mathlib 中的一个定义，位于命名空间 `Sequential`。
+形式化陈述：isoOfHomeo {X Y : Sequential.{u}} (f : X ≃ₜ Y) : X ≅ Y where hom
+参数：f : X ≃ₜ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfHomeo
-  signature: {X Y : Sequential.{u}} (f : X ≃ₜ Y)
-  body: InducedCategory.homMk (TopCat.ofHom ⟨f, f.continuous⟩)
-  inv := InducedCategory.homMk (TopCat.ofHom ⟨f.symm, f.symm.continuous⟩)
-  hom_inv_id := by
-    ext x
-    exact f.symm_apply_apply x
-  inv_hom_id := by
-    ext x
-    exact f.apply_symm_apply x
-
-中文:
-定义 isoOfHomeo
-  签名: {X Y : Sequential.{u}} (f : X ≃ₜ Y)
-  定义体: InducedCategory.homMk (TopCat.ofHom ⟨f, f.continuous⟩)
-  inv := InducedCategory.homMk (TopCat.ofHom ⟨f.symm, f.symm.continuous⟩)
-  hom_inv_id := by
-    ext x
-    exact f.symm_apply_apply x
-  inv_hom_id := by
-    ext x
-    exact f.apply_symm_apply x
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk, TopCat, TopCat.ofHom, continuous, f.continuous
+--- 原说明 ---
+Construct an isomorphism from a homeomorphism.
 -/
 def isoOfHomeo {X Y : Sequential.{u}} (f : X ≃ₜ Y) : X ≅ Y where
   hom := InducedCategory.homMk (TopCat.ofHom ⟨f, f.continuous⟩)
@@ -263,30 +149,15 @@ def isoOfHomeo {X Y : Sequential.{u}} (f : X ≃ₜ Y) : X ≅ Y where
 
 /-- Construct a homeomorphism from an isomorphism. -/
 @[simps]
-/--
-Definition of `homeoOfIso` / `homeoOfIso` 的定义
+/-
+**Sequential.homeoOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Sequential`。
+形式化陈述：homeoOfIso {X Y : Sequential.{u}} (f : X ≅ Y) : X ≃ₜ Y where toFun
+参数：f : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homeoOfIso
-  signature: {X Y : Sequential.{u}} (f : X ≅ Y)
-  body: f.hom
-  invFun := f.inv
-  left_inv := f.hom_inv_id_apply
-  right_inv := f.inv_hom_id_apply
-  continuous_toFun := f.hom.hom.hom.continuous
-  continuous_invFun := f.inv.hom.hom.continuous
-
-中文:
-定义 homeoOfIso
-  签名: {X Y : Sequential.{u}} (f : X ≅ Y)
-  定义体: f.hom
-  invFun := f.inv
-  left_inv := f.hom_inv_id_apply
-  right_inv := f.inv_hom_id_apply
-  continuous_toFun := f.hom.hom.hom.continuous
-  continuous_invFun := f.inv.hom.hom.continuous
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+Construct a homeomorphism from an isomorphism.
 -/
 def homeoOfIso {X Y : Sequential.{u}} (f : X ≅ Y) : X ≃ₜ Y where
   toFun := f.hom
@@ -299,25 +170,19 @@ def homeoOfIso {X Y : Sequential.{u}} (f : X ≅ Y) : X ≃ₜ Y where
 /-- The equivalence between isomorphisms in `Sequential` and homeomorphisms
 of topological spaces. -/
 @[simps]
-/--
-Definition of `isoEquivHomeo` / `isoEquivHomeo` 的定义
+/-
+**Sequential.isoEquivHomeo** 是 Mathlib 中的一个定义，位于命名空间 `Sequential`。
+形式化陈述：isoEquivHomeo {X Y : Sequential.{u}} : (X ≅ Y) ≃ (X ≃ₜ Y) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoEquivHomeo
-  signature: {X Y : Sequential.{u}}
-  body: homeoOfIso
-  invFun := isoOfHomeo
-
-中文:
-定义 isoEquivHomeo
-  签名: {X Y : Sequential.{u}}
-  定义体: homeoOfIso
-  invFun := isoOfHomeo
-
-Depends on / 依赖: homeoOfIso
+--- 原说明 ---
+The equivalence between isomorphisms in `Sequential` and homeomorphisms
+of topological spaces.
 -/
 def isoEquivHomeo {X Y : Sequential.{u}} : (X ≅ Y) ≃ (X ≃ₜ Y) where
   toFun := homeoOfIso
   invFun := isoOfHomeo
 
 end Sequential
+

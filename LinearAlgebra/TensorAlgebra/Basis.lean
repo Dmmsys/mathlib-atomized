@@ -37,32 +37,20 @@ variable {κ : Type uκ} {R : Type uR} {M : Type uM}
 section CommSemiring
 variable [CommSemiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Definition of `equivFreeAlgebra` / `equivFreeAlgebra` 的定义
+/-- A basis provides an algebra isomorphism with the free algebra, replacing each basis vector
+with its index. -/
+/-
+**TensorAlgebra.equivFreeAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `TensorAlgebra`。
+形式化陈述：equivFreeAlgebra (b : Basis κ R M) : TensorAlgebra R M ≃ₐ[R] FreeAlgebra R
+ κ
+参数：b : Basis κ R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivFreeAlgebra
-  signature: (b : Basis κ R M)
-  body: AlgEquiv.ofAlgHom
-    (TensorAlgebra.lift _ (Finsupp.linearCombination _ (FreeAlgebra.ι _) ∘ₗ b.repr.toLinearMap))
-    (FreeAlgebra.lift _ (ι R ∘ b))
-    (by ext; simp)
-    (hom_ext <| b.ext fun i => by simp)
-
-@[simp]
-
-中文:
-定义 equivFreeAlgebra
-  签名: (b : 基 κ R M)
-  定义体: AlgEquiv.ofAlgHom
-    (TensorAlgebra.lift _ (Finsupp.linearCombination _ (FreeAlgebra.ι _) ∘ₗ b.repr.toLinearMap))
-    (FreeAlgebra.lift _ (ι R ∘ b))
-    (by ext; simp)
-    (hom_ext <| b.ext fun i => by simp)
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, Finsupp, Finsupp.linearCombination, FreeAlgebra, FreeAlgebra.lift, TensorAlgebra, TensorAlgebra.lift, b.ext, b.repr.toLinearMap, hom_ext, linearCombination, ofAlgHom, toLinearMap
+--- 原说明 ---
+A basis provides an algebra isomorphism with the free algebra, replacing each ba
+sis vector
+with its index.
 -/
 noncomputable def equivFreeAlgebra (b : Basis κ R M) :
     TensorAlgebra R M ≃ₐ[R] FreeAlgebra R κ :=
@@ -73,107 +61,74 @@ noncomputable def equivFreeAlgebra (b : Basis κ R M) :
     (hom_ext <| b.ext fun i => by simp)
 
 @[simp]
-/--
-lemma `equivFreeAlgebra_ι_apply` / 引理 `equivFreeAlgebra_ι_apply`
-
-English:
-lemma equivFreeAlgebra_ι_apply
-  given: (b : Basis κ R M) (i : κ)
-  proof: (TensorAlgebra.lift_ι_apply _ _).trans by simp
-
-@[simp]
-
-中文:
-引理 equivFreeAlgebra_ι_apply
-  条件: (b : 基 κ R M) (i : κ)
-  证明: (TensorAlgebra.lift_ι_apply _ _).trans by simp
-
-@[simp]
-
-Depends on / 依赖: TensorAlgebra, TensorAlgebra.lift_
+/-
+**TensorAlgebra.equivFreeAlgebra_** 是 Mathlib 中的一个引理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma equivFreeAlgebra_ι_apply (b : Basis κ R M) (i : κ) :
     equivFreeAlgebra b (ι R (b i)) = FreeAlgebra.ι R i :=
-(TensorAlgebra.lift_ι_apply _ _).trans by simp
+  (TensorAlgebra.lift_ι_apply _ _).trans <| by simp
 
 @[simp]
-/--
-lemma `equivFreeAlgebra_symm_ι` / 引理 `equivFreeAlgebra_symm_ι`
-
-English:
-lemma equivFreeAlgebra_symm_ι
-  given: (b : Basis κ R M) (i : κ)
-  proof: (equivFreeAlgebra b).toEquiv.symm_apply_eq.mpr .symm equivFreeAlgebra_ι_apply b i
-
-中文:
-引理 equivFreeAlgebra_symm_ι
-  条件: (b : 基 κ R M) (i : κ)
-  证明: (equivFreeAlgebra b).toEquiv.symm_apply_eq.mpr .symm equivFreeAlgebra_ι_apply b i
-
-Depends on / 依赖: equivFreeAlgebra, symm_apply_eq, toEquiv, toEquiv.symm_apply_eq.mpr
+/-
+**TensorAlgebra.equivFreeAlgebra_symm_** 是 Mathlib 中的一个引理，位于命名空间 `TensorAlgebra`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma equivFreeAlgebra_symm_ι (b : Basis κ R M) (i : κ) :
     (equivFreeAlgebra b).symm (FreeAlgebra.ι R i) = ι R (b i) :=
-(equivFreeAlgebra b).toEquiv.symm_apply_eq.mpr .symm equivFreeAlgebra_ι_apply b i
+  (equivFreeAlgebra b).toEquiv.symm_apply_eq.mpr <| equivFreeAlgebra_ι_apply b i |>.symm
 
 /-- A basis on `M` can be lifted to a basis on `TensorAlgebra R M` -/
 @[simps! repr_apply]
-/--
-Definition of `_root_.Module.Basis.tensorAlgebra` / `_root_.Module.Basis.tensorAlgebra` 的定义
+/-
+**TensorAlgebra._root_.Module.Basis.tensorAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `Ten
+sorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Module.Basis.tensorAlgebra
-  signature: (b : Basis κ R M)
-  body: (FreeAlgebra.basisFreeMonoid R κ).map (equivFreeAlgebra b).symm.toLinearEquiv
-
-中文:
-定义 _root_.模.基.tensorAlgebra
-  签名: (b : 基 κ R M)
-  定义体: (FreeAlgebra.basisFreeMonoid R κ).map (equivFreeAlgebra b).symm.toLinearEquiv
-
-Depends on / 依赖: FreeAlgebra, FreeAlgebra.basisFreeMonoid, basisFreeMonoid, equivFreeAlgebra, symm.toLinearEquiv, toLinearEquiv
+--- 原说明 ---
+A basis on `M` can be lifted to a basis on `TensorAlgebra R M`
 -/
 noncomputable def _root_.Module.Basis.tensorAlgebra (b : Basis κ R M) :
     Basis (FreeMonoid κ) R (TensorAlgebra R M) :=
-(FreeAlgebra.basisFreeMonoid R κ).map (equivFreeAlgebra b).symm.toLinearEquiv
+  (FreeAlgebra.basisFreeMonoid R κ).map <| (equivFreeAlgebra b).symm.toLinearEquiv
 
-/--
-Instance `instModuleFree` / 实例 `instModuleFree`
+/-- `TensorAlgebra R M` is free when `M` is. -/
+/-
+**TensorAlgebra.instModuleFree** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+形式化陈述：instModuleFree [Module.Free R M] : Module.Free R (TensorAlgebra R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Free.exists_basis`：∀ (R : Type u) (M : Type v) {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Free 
+R M], Nonempty…
+· 使用定理 `Module.Free.of_basis`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [i
+nst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {ι : Type w}   (b : Module
+.Basis ι R…
 
-English:
-instance instModuleFree
-  signature: [Module.Free R M]
-  body: let ⟨⟨_κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
-  .of_basis b.tensorAlgebra
-
-中文:
-实例 instModuleFree
-  签名: [模.自由 R M]
-  定义体: let ⟨⟨_κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
-  .of_basis b.tensorAlgebra
-
-Depends on / 依赖: Module, Module.Free.exists_basis, b.tensorAlgebra, exists_basis, of_basis, tensorAlgebra
+--- 原说明 ---
+`TensorAlgebra R M` is free when `M` is.
 -/
 instance instModuleFree [Module.Free R M] : Module.Free R (TensorAlgebra R M) :=
   let ⟨⟨_κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
   .of_basis b.tensorAlgebra
 
-/--
-Instance `instNoZeroDivisors` / 实例 `instNoZeroDivisors`
+/-- The `TensorAlgebra` of a free module over a commutative semiring with no zero-divisors has
+no zero-divisors. -/
+/-
+**TensorAlgebra.instNoZeroDivisors** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+形式化陈述：instNoZeroDivisors [NoZeroDivisors R] [Module.Free R M] : NoZeroDivisors (
+TensorAlgebra R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquiv.noZeroDivisors`：∀ {A : Type u_7} (B : Type u_8) [inst : MulZero
+Class A] [inst_1 : MulZeroClass B] [NoZeroDivisors B] (e : A ≃* B),   NoZeroDivi
+sors A
 
-English:
-instance instNoZeroDivisors
-  signature: [NoZeroDivisors R] [Module.Free R M]
-  body: have ⟨⟨_, b⟩⟩ := ‹Module.Free R M›
-  (equivFreeAlgebra b).toMulEquiv.noZeroDivisors
-
-中文:
-实例 instNoZeroDivisors
-  签名: [无零因子 R] [模.自由 R M]
-  定义体: have ⟨⟨_, b⟩⟩ := ‹Module.Free R M›
-  (equivFreeAlgebra b).toMulEquiv.noZeroDivisors
-
-Depends on / 依赖: Module, Module.Free, equivFreeAlgebra, noZeroDivisors, toMulEquiv, toMulEquiv.noZeroDivisors
+--- 原说明 ---
+The `TensorAlgebra` of a free module over a commutative semiring with no zero-di
+visors has
+no zero-divisors.
 -/
 instance instNoZeroDivisors [NoZeroDivisors R] [Module.Free R M] :
     NoZeroDivisors (TensorAlgebra R M) :=
@@ -185,20 +140,24 @@ end CommSemiring
 section CommRing
 variable [CommRing R] [AddCommGroup M] [Module R M]
 
-/--
-Instance `instIsDomain` / 实例 `instIsDomain`
+/-- The `TensorAlgebra` of a free module over an integral domain is a domain. -/
+/-
+**TensorAlgebra.instIsDomain** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+形式化陈述：instIsDomain [IsDomain R] [Module.Free R M] : IsDomain (TensorAlgebra R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `NoZeroDivisors.to_isDomain`：NoZeroDivisors.to_isDomain [Ring α] [h : Non
+trivial α] [NoZeroDivisors α] : IsDomain α
+· 使用定理 `TensorAlgebra.instNontrivial`：∀ {R : Type u_1} [inst : CommSemiring R] (
+M : Type u_2) [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Nontriv
+ial R], Nontrivial…
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
 
-English:
-instance instIsDomain
-  signature: [IsDomain R] [Module.Free R M]
-  body: NoZeroDivisors.to_isDomain _
-
-中文:
-实例 instIsDomain
-  签名: [是整环 R] [模.自由 R M]
-  定义体: NoZeroDivisors.to_isDomain _
-
-Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
+--- 原说明 ---
+The `TensorAlgebra` of a free module over an integral domain is a domain.
 -/
 instance instIsDomain [IsDomain R] [Module.Free R M] : IsDomain (TensorAlgebra R M) :=
   NoZeroDivisors.to_isDomain _
@@ -206,30 +165,35 @@ instance instIsDomain [IsDomain R] [Module.Free R M] : IsDomain (TensorAlgebra R
 attribute [pp_with_univ] Cardinal.lift
 
 open Cardinal in
-/--
-lemma `rank_eq` / 引理 `rank_eq`
-
-English:
-lemma rank_eq
-  given: [Nontrivial R] [Module.Free R M]
-  proof: by
-  let ⟨⟨κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
-  rw [(equivFreeAlgebra b).toLinearEquiv.rank_eq]; rw [FreeAlgebra.rank_eq]; rw [mk_list_eq_sum_pow]; rw [Basis.mk_eq_rank'' b]
-
-中文:
-引理 rank_eq
-  条件: [非平凡 R] [模.自由 R M]
-  证明: by
-  let ⟨⟨κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
-  rw [(equivFreeAlgebra b).toLinearEquiv.rank_eq]; rw [FreeAlgebra.rank_eq]; rw [mk_list_eq_sum_pow]; rw [Basis.mk_eq_rank'' b]
-
-Depends on / 依赖: Basis.mk_eq_rank, FreeAlgebra, FreeAlgebra.rank_eq, Module, Module.Free.exists_basis, equivFreeAlgebra, exists_basis, mk_eq_rank, mk_list_eq_sum_pow, rank_eq, toLinearEquiv, toLinearEquiv.rank_eq
+/-
+**TensorAlgebra.rank_eq** 是 Mathlib 中的一个引理，位于命名空间 `TensorAlgebra`。
+形式化陈述：rank_eq [Nontrivial R] [Module.Free R M] : Module.rank R (TensorAlgebra R 
+M) = Cardinal.lift.{uR} (sum fun n => Module.rank R M ^ n)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Free.exists_basis`：∀ (R : Type u) (M : Type v) {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Free 
+R M], Nonempty…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.rank_eq`：LinearEquiv.rank_eq (f : M ≃ₗ[R] M₁) : Module.rank 
+R M = Module.rank R M₁
+· 使用定理 `FreeAlgebra.rank_eq`：rank_eq [CommRing R] [Nontrivial R] : Module.rank R
+ (FreeAlgebra R X) = Cardinal.lift.{u} (Cardinal.mk (List X))
+· 使用定理 `Cardinal.mk_list_eq_sum_pow`：mk_list_eq_sum_pow (α : Type u) : #(List α)
+ = sum fun n => #α ^ n
+· 使用定理 `Module.Basis.mk_eq_rank''`：Module.Basis.mk_eq_rank'' {ι : Type v} (v : B
+asis ι R M) : #ι = Module.rank R M
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
 -/
 lemma rank_eq [Nontrivial R] [Module.Free R M] :
-    Module.rank R (TensorAlgebra R M) = Cardinal.lift.{uR} (sum fun n => Module.rank R M ^ n) := by
+    Module.rank R (TensorAlgebra R M) = Cardinal.lift.{uR} (sum fun n ↦ Module.rank R M ^ n) := by
   let ⟨⟨κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
-  rw [(equivFreeAlgebra b).toLinearEquiv.rank_eq]; rw [FreeAlgebra.rank_eq]; rw [mk_list_eq_sum_pow]; rw [Basis.mk_eq_rank'' b]
+  rw [(equivFreeAlgebra b).toLinearEquiv.rank_eq, FreeAlgebra.rank_eq, mk_list_eq_sum_pow,
+    Basis.mk_eq_rank'' b]
 
 end CommRing
 
 end TensorAlgebra
+

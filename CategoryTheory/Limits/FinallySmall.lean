@@ -39,209 +39,168 @@ section FinallySmall
 
 variable (J : Type u) [Category.{v} J]
 
-/--
-Definition of `FinallySmall` / `FinallySmall` 的定义
+/-- A category is `FinallySmall.{w}` if there is a final functor from a `w`-small category. -/
+/-
+**CategoryTheory.FinallySmall** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(J : Type u) → [CategoryTheory.Category.{v, u} J] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FinallySmall
-  parameters: : Prop where
-  axioms and operations (1):
-    - final_smallCategory : exists (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Final F
-
-中文:
-类 FinallySmall
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - final_smallCategory : 存在 (S : 类型 w) (_ : 小范畴 S) (F : S ⥤ J), 终 F
+--- 原说明 ---
+A category is `FinallySmall.{w}` if there is a final functor from a `w`-small ca
+tegory.
 -/
 class FinallySmall : Prop where
   /-- There is a final functor from a small category. -/
-  final_smallCategory : exists (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Final F
+  final_smallCategory : ∃ (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Final F
 
-/--
-theorem `FinallySmall.mk'` / 定理 `FinallySmall.mk'`
+/-- Constructor for `FinallySmall C` from an explicit small category witness. -/
+/-
+**CategoryTheory.FinallySmall.mk'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Fina
+llySmall`。
+形式化陈述：∀ {J : Type u} [inst : CategoryTheory.Category.{v, u} J] {S : Type w} [ins
+t_1 : CategoryTheory.SmallCategory S]   (F : CategoryTheory.Functor S J) [F.Fina
+l], CategoryTheory.FinallySmall J
+参数：F : CategoryTheory.Functor S J。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem FinallySmall.mk'
-  statement: {J : Type u} [Category.{v} J] {S : Type w} [SmallCategory S]
-  proof: ⟨S, _, F, inferInstance⟩
-
-中文:
-定理 FinallySmall.mk'
-  结论: {J : 类型u} [范畴.{v} J] {S : 类型 w} [小范畴 S]
-  证明: ⟨S, _, F, inferInstance⟩
+--- 原说明 ---
+Constructor for `FinallySmall C` from an explicit small category witness.
 -/
 theorem FinallySmall.mk' {J : Type u} [Category.{v} J] {S : Type w} [SmallCategory S]
     (F : S ⥤ J) [Final F] : FinallySmall.{w} J :=
   ⟨S, _, F, inferInstance⟩
 
-/--
-Definition of `FinalModel` / `FinalModel` 的定义
+/-- An arbitrarily chosen small model for a finally small category. -/
+/-
+**CategoryTheory.FinalModel** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：FinalModel [FinallySmall.{w} J] : Type w
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinallySmall.final_smallCategory`：∀ {J : Type u} {inst : 
+CategoryTheory.Category.{v, u} J} [self : CategoryTheory.FinallySmall J], ∃ S x 
+F, F.Final
 
-English:
-definition FinalModel
-  signature: [FinallySmall.{w} J]
-  body: Classical.choose (@FinallySmall.final_smallCategory J _ _)
-
-中文:
-定义 FinalModel
-  签名: [FinallySmall.{w} J]
-  定义体: Classical.choose (@FinallySmall.final_smallCategory J _ _)
-
-Depends on / 依赖: Classical, Classical.choose, FinallySmall, FinallySmall.final_smallCategory, final_smallCategory
+--- 原说明 ---
+An arbitrarily chosen small model for a finally small category.
 -/
 def FinalModel [FinallySmall.{w} J] : Type w :=
   Classical.choose (@FinallySmall.final_smallCategory J _ _)
-
-/--
-Instance `smallCategoryFinalModel` / 实例 `smallCategoryFinalModel`
-
-English:
-instance smallCategoryFinalModel
-  signature: [FinallySmall.{w} J]
-  body: Classical.choose (Classical.choose_spec (@FinallySmall.final_smallCategory J _ _))
-
-中文:
-实例 smallCategoryFinalModel
-  签名: [FinallySmall.{w} J]
-  定义体: Classical.choose (Classical.choose_spec (@FinallySmall.final_smallCategory J _ _))
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, FinallySmall, FinallySmall.final_smallCategory, choose_spec, final_smallCategory
+/-
+**CategoryTheory.smallCategoryFinalModel** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：smallCategoryFinalModel [FinallySmall.{w} J] : SmallCategory (FinalModel J
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinallySmall.final_smallCategory`：∀ {J : Type u} {inst : 
+CategoryTheory.Category.{v, u} J} [self : CategoryTheory.FinallySmall J], ∃ S x 
+F, F.Final
 -/
 noncomputable instance smallCategoryFinalModel [FinallySmall.{w} J] :
     SmallCategory (FinalModel J) :=
   Classical.choose (Classical.choose_spec (@FinallySmall.final_smallCategory J _ _))
 
-/--
-Definition of `fromFinalModel` / `fromFinalModel` 的定义
+/-- An arbitrarily chosen final functor `FinalModel J ⥤ J`. -/
+/-
+**CategoryTheory.fromFinalModel** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：fromFinalModel [FinallySmall.{w} J] : FinalModel J ⥤ J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinallySmall.final_smallCategory`：∀ {J : Type u} {inst : 
+CategoryTheory.Category.{v, u} J} [self : CategoryTheory.FinallySmall J], ∃ S x 
+F, F.Final
 
-English:
-definition fromFinalModel
-  signature: [FinallySmall.{w} J]
-  body: Classical.choose (Classical.choose_spec (Classical.choose_spec
-    (@FinallySmall.final_smallCategory J _ _)))
-
-中文:
-定义 fromFinalModel
-  签名: [FinallySmall.{w} J]
-  定义体: Classical.choose (Classical.choose_spec (Classical.choose_spec
-    (@FinallySmall.final_smallCategory J _ _)))
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, FinallySmall, FinallySmall.final_smallCategory, choose_spec, final_smallCategory
+--- 原说明 ---
+An arbitrarily chosen final functor `FinalModel J ⥤ J`.
 -/
 noncomputable def fromFinalModel [FinallySmall.{w} J] : FinalModel J ⥤ J :=
   Classical.choose (Classical.choose_spec (Classical.choose_spec
     (@FinallySmall.final_smallCategory J _ _)))
-
-/--
-Instance `final_fromFinalModel` / 实例 `final_fromFinalModel`
-
-English:
-instance final_fromFinalModel
-  signature: [FinallySmall.{w} J]
-  body: Classical.choose_spec (Classical.choose_spec (Classical.choose_spec
-    (@FinallySmall.final_smallCategory J _ _)))
-
-中文:
-实例 final_fromFinalModel
-  签名: [FinallySmall.{w} J]
-  定义体: Classical.choose_spec (Classical.choose_spec (Classical.choose_spec
-    (@FinallySmall.final_smallCategory J _ _)))
-
-Depends on / 依赖: Classical, Classical.choose_spec, FinallySmall, FinallySmall.final_smallCategory, choose_spec, final_smallCategory
+/-
+**CategoryTheory.final_fromFinalModel** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`
+。
+形式化陈述：final_fromFinalModel [FinallySmall.{w} J] : Final (fromFinalModel J)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `CategoryTheory.FinallySmall.final_smallCategory`：∀ {J : Type u} {inst : 
+CategoryTheory.Category.{v, u} J} [self : CategoryTheory.FinallySmall J], ∃ S x 
+F, F.Final
 -/
 instance final_fromFinalModel [FinallySmall.{w} J] : Final (fromFinalModel J) :=
   Classical.choose_spec (Classical.choose_spec (Classical.choose_spec
     (@FinallySmall.final_smallCategory J _ _)))
-
-/--
-theorem `finallySmall_of_essentiallySmall` / 定理 `finallySmall_of_essentiallySmall`
-
-English:
-theorem finallySmall_of_essentiallySmall
-  given: [EssentiallySmall.{w} J]
-  statement: FinallySmall.{w} J
-  proof: FinallySmall.mk' (equivSmallModel.{w} J).inverse
-
-中文:
-定理 finallySmall_of_essentiallySmall
-  条件: [EssentiallySmall.{w} J]
-  结论: FinallySmall.{w} J
-  证明: FinallySmall.mk' (equivSmallModel.{w} J).inverse
-
-Depends on / 依赖: FinallySmall, FinallySmall.mk, equivSmallModel, inverse
+/-
+**CategoryTheory.finallySmall_of_essentiallySmall** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：finallySmall_of_essentiallySmall [EssentiallySmall.{w} J] : FinallySmall.{
+w} J
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinallySmall.mk'`：∀ {J : Type u} [inst : CategoryTheory.C
+ategory.{v, u} J] {S : Type w} [inst_1 : CategoryTheory.SmallCategory S]   (F : 
+CategoryTheory.Functo…
+· 使用定理 `CategoryTheory.Functor.final_of_isRightAdjoint`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 theorem finallySmall_of_essentiallySmall [EssentiallySmall.{w} J] : FinallySmall.{w} J :=
   FinallySmall.mk' (equivSmallModel.{w} J).inverse
 
 variable {J}
 variable {K : Type u₁} [Category.{v₁} K]
-
-/--
-theorem `finallySmall_of_final_of_finallySmall` / 定理 `finallySmall_of_final_of_finallySmall`
-
-English:
-theorem finallySmall_of_final_of_finallySmall
-  given: [FinallySmall.{w} K] (F : K ⥤ J) [Final F]
-  proof: suffices Final ((fromFinalModel K) ⋙ F) from .mk' ((fromFinalModel K) ⋙ F)
-  final_comp _ _
-
-中文:
-定理 finallySmall_of_final_of_finallySmall
-  条件: [FinallySmall.{w} K] (F : K ⥤ J) [终 F]
-  证明: suffices Final ((fromFinalModel K) ⋙ F) from .mk' ((fromFinalModel K) ⋙ F)
-  final_comp _ _
-
-Depends on / 依赖: final_comp, fromFinalModel
+/-
+**CategoryTheory.finallySmall_of_final_of_finallySmall** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory`。
+形式化陈述：finallySmall_of_final_of_finallySmall [FinallySmall.{w} K] (F : K ⥤ J) [Fi
+nal F] : FinallySmall.{w} J
+参数：F : K ⥤ J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinallySmall.mk'`：∀ {J : Type u} [inst : CategoryTheory.C
+ategory.{v, u} J] {S : Type w} [inst_1 : CategoryTheory.SmallCategory S]   (F : 
+CategoryTheory.Functo…
 -/
 theorem finallySmall_of_final_of_finallySmall [FinallySmall.{w} K] (F : K ⥤ J) [Final F] :
     FinallySmall.{w} J :=
   suffices Final ((fromFinalModel K) ⋙ F) from .mk' ((fromFinalModel K) ⋙ F)
   final_comp _ _
-
-/--
-theorem `finallySmall_of_final_of_essentiallySmall` / 定理 `finallySmall_of_final_of_essentiallySmall`
-
-English:
-theorem finallySmall_of_final_of_essentiallySmall
-  given: [EssentiallySmall.{w} K] (F : K ⥤ J) [Final F]
-  proof: have := finallySmall_of_essentiallySmall K
-  finallySmall_of_final_of_finallySmall F
-
-中文:
-定理 finallySmall_of_final_of_essentiallySmall
-  条件: [EssentiallySmall.{w} K] (F : K ⥤ J) [终 F]
-  证明: have := finallySmall_of_essentiallySmall K
-  finallySmall_of_final_of_finallySmall F
-
-Depends on / 依赖: finallySmall_of_essentiallySmall, finallySmall_of_final_of_finallySmall
+/-
+**CategoryTheory.finallySmall_of_final_of_essentiallySmall** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory`。
+形式化陈述：finallySmall_of_final_of_essentiallySmall [EssentiallySmall.{w} K] (F : K 
+⥤ J) [Final F] : FinallySmall.{w} J
+参数：F : K ⥤ J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.finallySmall_of_essentiallySmall`：finallySmall_of_essenti
+allySmall [EssentiallySmall.{w} J] : FinallySmall.{w} J
+· 使用定理 `CategoryTheory.finallySmall_of_final_of_finallySmall`：finallySmall_of_fi
+nal_of_finallySmall [FinallySmall.{w} K] (F : K ⥤ J) [Final F] : FinallySmall.{w
+} J
 -/
 theorem finallySmall_of_final_of_essentiallySmall [EssentiallySmall.{w} K] (F : K ⥤ J) [Final F] :
     FinallySmall.{w} J :=
   have := finallySmall_of_essentiallySmall K
   finallySmall_of_final_of_finallySmall F
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Limits.HasTerminal
-  signature: J] : FinallySmall.{w} J
-  body: have := Functor.final_const_terminal (C := PUnit.{w + 1}) (D := J)
-  .mk' ((Functor.const PUnit.{w + 1}).obj (⊤_ J))
-
-中文:
-实例 [Limits.有终止
-  签名: J] : FinallySmall.{w} J
-  定义体: have := Functor.final_const_terminal (C := PUnit.{w + 1}) (D := J)
-  .mk' ((Functor.const PUnit.{w + 1}).obj (⊤_ J))
-
-Depends on / 依赖: Functor, Functor.const, Functor.final_const_terminal, final_const_terminal
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Limits.HasTerminal J] : FinallySmall.{w} J :=
   have := Functor.final_const_terminal (C := PUnit.{w + 1}) (D := J)
   .mk' ((Functor.const PUnit.{w + 1}).obj (⊤_ J))
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J' : Type*} [Category* J'] [FinallySmall.{w} J] [FinallySmall.{w'} J'] :
     FinallySmall.{max w w'} (J × J') :=
   finallySmall_of_final_of_essentiallySmall
@@ -253,231 +212,168 @@ section InitiallySmall
 
 variable (J : Type u) [Category.{v} J]
 
-/--
-Definition of `InitiallySmall` / `InitiallySmall` 的定义
+/-- A category is `InitiallySmall.{w}` if there is an initial functor from a `w`-small category. -/
+/-
+**CategoryTheory.InitiallySmall** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(J : Type u) → [CategoryTheory.Category.{v, u} J] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class InitiallySmall
-  parameters: : Prop where
-  axioms and operations (1):
-    - initial_smallCategory : exists (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Initial F
-
-中文:
-类 InitiallySmall
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - initial_smallCategory : 存在 (S : 类型 w) (_ : 小范畴 S) (F : S ⥤ J), 初始 F
+--- 原说明 ---
+A category is `InitiallySmall.{w}` if there is an initial functor from a `w`-sma
+ll category.
 -/
 class InitiallySmall : Prop where
   /-- There is an initial functor from a small category. -/
-  initial_smallCategory : exists (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Initial F
+  initial_smallCategory : ∃ (S : Type w) (_ : SmallCategory S) (F : S ⥤ J), Initial F
 
-/--
-theorem `InitiallySmall.mk'` / 定理 `InitiallySmall.mk'`
+/-- Constructor for `InitialSmall C` from an explicit small category witness. -/
+/-
+**CategoryTheory.InitiallySmall.mk'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.In
+itiallySmall`。
+形式化陈述：∀ {J : Type u} [inst : CategoryTheory.Category.{v, u} J] {S : Type w} [ins
+t_1 : CategoryTheory.SmallCategory S]   (F : CategoryTheory.Functor S J) [F.Init
+ial], CategoryTheory.InitiallySmall J
+参数：F : CategoryTheory.Functor S J。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem InitiallySmall.mk'
-  statement: {J : Type u} [Category.{v} J] {S : Type w} [SmallCategory S]
-  proof: ⟨S, _, F, inferInstance⟩
-
-中文:
-定理 InitiallySmall.mk'
-  结论: {J : 类型u} [范畴.{v} J] {S : 类型 w} [小范畴 S]
-  证明: ⟨S, _, F, inferInstance⟩
+--- 原说明 ---
+Constructor for `InitialSmall C` from an explicit small category witness.
 -/
 theorem InitiallySmall.mk' {J : Type u} [Category.{v} J] {S : Type w} [SmallCategory S]
     (F : S ⥤ J) [Initial F] : InitiallySmall.{w} J :=
   ⟨S, _, F, inferInstance⟩
 
-/--
-Definition of `InitialModel` / `InitialModel` 的定义
+/-- An arbitrarily chosen small model for an initially small category. -/
+/-
+**CategoryTheory.InitialModel** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：InitialModel [InitiallySmall.{w} J] : Type w
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InitiallySmall.initial_smallCategory`：∀ {J : Type u} {ins
+t : CategoryTheory.Category.{v, u} J} [self : CategoryTheory.InitiallySmall J], 
+∃ S x F, F.Initial
 
-English:
-definition InitialModel
-  signature: [InitiallySmall.{w} J]
-  body: Classical.choose (@InitiallySmall.initial_smallCategory J _ _)
-
-中文:
-定义 InitialModel
-  签名: [InitiallySmall.{w} J]
-  定义体: Classical.choose (@InitiallySmall.initial_smallCategory J _ _)
-
-Depends on / 依赖: Classical, Classical.choose, InitiallySmall, InitiallySmall.initial_smallCategory, initial_smallCategory
+--- 原说明 ---
+An arbitrarily chosen small model for an initially small category.
 -/
 def InitialModel [InitiallySmall.{w} J] : Type w :=
   Classical.choose (@InitiallySmall.initial_smallCategory J _ _)
-
-/--
-Instance `smallCategoryInitialModel` / 实例 `smallCategoryInitialModel`
-
-English:
-instance smallCategoryInitialModel
-  signature: [InitiallySmall.{w} J]
-  body: Classical.choose (Classical.choose_spec (@InitiallySmall.initial_smallCategory J _ _))
-
-中文:
-实例 smallCategoryInitialModel
-  签名: [InitiallySmall.{w} J]
-  定义体: Classical.choose (Classical.choose_spec (@InitiallySmall.initial_smallCategory J _ _))
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, InitiallySmall, InitiallySmall.initial_smallCategory, choose_spec, initial_smallCategory
+/-
+**CategoryTheory.smallCategoryInitialModel** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：smallCategoryInitialModel [InitiallySmall.{w} J] : SmallCategory (InitialM
+odel J)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InitiallySmall.initial_smallCategory`：∀ {J : Type u} {ins
+t : CategoryTheory.Category.{v, u} J} [self : CategoryTheory.InitiallySmall J], 
+∃ S x F, F.Initial
 -/
 noncomputable instance smallCategoryInitialModel [InitiallySmall.{w} J] :
     SmallCategory (InitialModel J) :=
   Classical.choose (Classical.choose_spec (@InitiallySmall.initial_smallCategory J _ _))
 
-/--
-Definition of `fromInitialModel` / `fromInitialModel` 的定义
+/-- An arbitrarily chosen initial functor `InitialModel J ⥤ J`. -/
+/-
+**CategoryTheory.fromInitialModel** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：fromInitialModel [InitiallySmall.{w} J] : InitialModel J ⥤ J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InitiallySmall.initial_smallCategory`：∀ {J : Type u} {ins
+t : CategoryTheory.Category.{v, u} J} [self : CategoryTheory.InitiallySmall J], 
+∃ S x F, F.Initial
 
-English:
-definition fromInitialModel
-  signature: [InitiallySmall.{w} J]
-  body: Classical.choose (Classical.choose_spec (Classical.choose_spec
-    (@InitiallySmall.initial_smallCategory J _ _)))
-
-中文:
-定义 fromInitialModel
-  签名: [InitiallySmall.{w} J]
-  定义体: Classical.choose (Classical.choose_spec (Classical.choose_spec
-    (@InitiallySmall.initial_smallCategory J _ _)))
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, InitiallySmall, InitiallySmall.initial_smallCategory, choose_spec, initial_smallCategory
+--- 原说明 ---
+An arbitrarily chosen initial functor `InitialModel J ⥤ J`.
 -/
 noncomputable def fromInitialModel [InitiallySmall.{w} J] : InitialModel J ⥤ J :=
   Classical.choose (Classical.choose_spec (Classical.choose_spec
     (@InitiallySmall.initial_smallCategory J _ _)))
-
-/--
-Instance `initial_fromInitialModel` / 实例 `initial_fromInitialModel`
-
-English:
-instance initial_fromInitialModel
-  signature: [InitiallySmall.{w} J]
-  body: Classical.choose_spec (Classical.choose_spec (Classical.choose_spec
-    (@InitiallySmall.initial_smallCategory J _ _)))
-
-中文:
-实例 initial_fromInitialModel
-  签名: [InitiallySmall.{w} J]
-  定义体: Classical.choose_spec (Classical.choose_spec (Classical.choose_spec
-    (@InitiallySmall.initial_smallCategory J _ _)))
-
-Depends on / 依赖: Classical, Classical.choose_spec, InitiallySmall, InitiallySmall.initial_smallCategory, choose_spec, initial_smallCategory
+/-
+**CategoryTheory.initial_fromInitialModel** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：initial_fromInitialModel [InitiallySmall.{w} J] : Initial (fromInitialMode
+l J)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `CategoryTheory.InitiallySmall.initial_smallCategory`：∀ {J : Type u} {ins
+t : CategoryTheory.Category.{v, u} J} [self : CategoryTheory.InitiallySmall J], 
+∃ S x F, F.Initial
 -/
 instance initial_fromInitialModel [InitiallySmall.{w} J] : Initial (fromInitialModel J) :=
   Classical.choose_spec (Classical.choose_spec (Classical.choose_spec
     (@InitiallySmall.initial_smallCategory J _ _)))
-
-/--
-theorem `initiallySmall_of_essentiallySmall` / 定理 `initiallySmall_of_essentiallySmall`
-
-English:
-theorem initiallySmall_of_essentiallySmall
-  given: [EssentiallySmall.{w} J]
-  statement: InitiallySmall.{w} J
-  proof: InitiallySmall.mk' (equivSmallModel.{w} J).inverse
-
-中文:
-定理 initiallySmall_of_essentiallySmall
-  条件: [EssentiallySmall.{w} J]
-  结论: InitiallySmall.{w} J
-  证明: InitiallySmall.mk' (equivSmallModel.{w} J).inverse
-
-Depends on / 依赖: InitiallySmall, InitiallySmall.mk, equivSmallModel, inverse
+/-
+**CategoryTheory.initiallySmall_of_essentiallySmall** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory`。
+形式化陈述：initiallySmall_of_essentiallySmall [EssentiallySmall.{w} J] : InitiallySma
+ll.{w} J
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InitiallySmall.mk'`：∀ {J : Type u} [inst : CategoryTheory
+.Category.{v, u} J] {S : Type w} [inst_1 : CategoryTheory.SmallCategory S]   (F 
+: CategoryTheory.Functo…
+· 使用定理 `CategoryTheory.Functor.initial_of_isLeftAdjoint`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 theorem initiallySmall_of_essentiallySmall [EssentiallySmall.{w} J] : InitiallySmall.{w} J :=
   InitiallySmall.mk' (equivSmallModel.{w} J).inverse
 
 variable {J}
 variable {K : Type u₁} [Category.{v₁} K]
-
-/--
-theorem `initiallySmall_of_initial_of_initiallySmall` / 定理 `initiallySmall_of_initial_of_initiallySmall`
-
-English:
-theorem initiallySmall_of_initial_of_initiallySmall
-  statement: [InitiallySmall.{w} K]
-  proof: suffices Initial ((fromInitialModel K) ⋙ F) from .mk' ((fromInitialModel K) ⋙ F)
-  initial_comp _ _
-
-中文:
-定理 initiallySmall_of_initial_of_initiallySmall
-  结论: [InitiallySmall.{w} K]
-  证明: suffices Initial ((fromInitialModel K) ⋙ F) from .mk' ((fromInitialModel K) ⋙ F)
-  initial_comp _ _
-
-Depends on / 依赖: Initial, fromInitialModel, initial_comp
+/-
+**CategoryTheory.initiallySmall_of_initial_of_initiallySmall** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory`。
+形式化陈述：initiallySmall_of_initial_of_initiallySmall [InitiallySmall.{w} K] (F : K 
+⥤ J) [Initial F] : InitiallySmall.{w} J
+参数：F : K ⥤ J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InitiallySmall.mk'`：∀ {J : Type u} [inst : CategoryTheory
+.Category.{v, u} J] {S : Type w} [inst_1 : CategoryTheory.SmallCategory S]   (F 
+: CategoryTheory.Functo…
 -/
 theorem initiallySmall_of_initial_of_initiallySmall [InitiallySmall.{w} K]
     (F : K ⥤ J) [Initial F] : InitiallySmall.{w} J :=
   suffices Initial ((fromInitialModel K) ⋙ F) from .mk' ((fromInitialModel K) ⋙ F)
   initial_comp _ _
-
-/--
-theorem `initiallySmall_of_initial_of_essentiallySmall` / 定理 `initiallySmall_of_initial_of_essentiallySmall`
-
-English:
-theorem initiallySmall_of_initial_of_essentiallySmall
-  statement: [EssentiallySmall.{w} K]
-  proof: have := initiallySmall_of_essentiallySmall K
-  initiallySmall_of_initial_of_initiallySmall F
-
-中文:
-定理 initiallySmall_of_initial_of_essentiallySmall
-  结论: [EssentiallySmall.{w} K]
-  证明: have := initiallySmall_of_essentiallySmall K
-  initiallySmall_of_initial_of_initiallySmall F
-
-Depends on / 依赖: initiallySmall_of_essentiallySmall, initiallySmall_of_initial_of_initiallySmall
+/-
+**CategoryTheory.initiallySmall_of_initial_of_essentiallySmall** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory`。
+形式化陈述：initiallySmall_of_initial_of_essentiallySmall [EssentiallySmall.{w} K] (F 
+: K ⥤ J) [Initial F] : InitiallySmall.{w} J
+参数：F : K ⥤ J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.initiallySmall_of_essentiallySmall`：initiallySmall_of_ess
+entiallySmall [EssentiallySmall.{w} J] : InitiallySmall.{w} J
+· 使用定理 `CategoryTheory.initiallySmall_of_initial_of_initiallySmall`：initiallySma
+ll_of_initial_of_initiallySmall [InitiallySmall.{w} K] (F : K ⥤ J) [Initial F] :
+ InitiallySmall.{w} J
 -/
 theorem initiallySmall_of_initial_of_essentiallySmall [EssentiallySmall.{w} K]
     (F : K ⥤ J) [Initial F] : InitiallySmall.{w} J :=
   have := initiallySmall_of_essentiallySmall K
   initiallySmall_of_initial_of_initiallySmall F
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Limits.HasInitial
-  signature: J] : InitiallySmall.{w} J
-  body: have := Functor.initial_const_initial (C := PUnit.{w + 1}) (D := J)
-  .mk' ((Functor.const PUnit.{w + 1}).obj (⊥_ J))
-
-中文:
-实例 [Limits.HasInitial
-  签名: J] : InitiallySmall.{w} J
-  定义体: have := Functor.initial_const_initial (C := PUnit.{w + 1}) (D := J)
-  .mk' ((Functor.const PUnit.{w + 1}).obj (⊥_ J))
-
-Depends on / 依赖: Functor, Functor.const, Functor.initial_const_initial, initial_const_initial
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Limits.HasInitial J] : InitiallySmall.{w} J :=
   have := Functor.initial_const_initial (C := PUnit.{w + 1}) (D := J)
   .mk' ((Functor.const PUnit.{w + 1}).obj (⊥_ J))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LocallySmall.{w}
-  signature: J] [InitiallySmall.{w} J] (X
-  body: by
-  have : InitiallySmall.{w} (CostructuredArrow (fromInitialModel.{w} J) X) :=
-    initiallySmall_of_essentiallySmall _
-  exact initiallySmall_of_initial_of_initiallySmall
-    (CostructuredArrow.toOver (fromInitialModel.{w} J) X)
-
-中文:
-实例 [LocallySmall.{w}
-  签名: J] [InitiallySmall.{w} J] (X
-  定义体: by
-  have : InitiallySmall.{w} (CostructuredArrow (fromInitialModel.{w} J) X) :=
-    initiallySmall_of_essentiallySmall _
-  exact initiallySmall_of_initial_of_initiallySmall
-    (CostructuredArrow.toOver (fromInitialModel.{w} J) X)
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.toOver, InitiallySmall, fromInitialModel, initiallySmall_of_essentiallySmall, initiallySmall_of_initial_of_initiallySmall, toOver
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LocallySmall.{w} J] [InitiallySmall.{w} J] (X : J) :
     InitiallySmall.{w} (Over X) := by
@@ -485,7 +381,10 @@ instance [LocallySmall.{w} J] [InitiallySmall.{w} J] (X : J) :
     initiallySmall_of_essentiallySmall _
   exact initiallySmall_of_initial_of_initiallySmall
     (CostructuredArrow.toOver (fromInitialModel.{w} J) X)
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J' : Type*} [Category* J'] [InitiallySmall.{w} J] [InitiallySmall.{w'} J'] :
     InitiallySmall.{max w w'} (J × J') :=
   initiallySmall_of_initial_of_essentiallySmall
@@ -493,9 +392,16 @@ instance {J' : Type*} [Category* J'] [InitiallySmall.{w} J] [InitiallySmall.{w'}
 
 end InitiallySmall
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J : Type u} [Category.{v} J] [InitiallySmall.{w} J] : FinallySmall.{w} Jᵒᵖ where
   final_smallCategory := ⟨_, _, (fromInitialModel.{w} J).op, inferInstance⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J : Type u} [Category.{v} J] [FinallySmall.{w} J] : InitiallySmall.{w} Jᵒᵖ where
   initial_smallCategory := ⟨_, _, (fromFinalModel.{w} J).op, inferInstance⟩
 
@@ -503,90 +409,77 @@ section WeaklyTerminal
 
 variable (J : Type u) [Category.{v} J]
 
-/--
-theorem `FinallySmall.exists_small_weakly_terminal_set` / 定理 `FinallySmall.exists_small_weakly_terminal_set`
+/-- The converse is true if `J` is filtered, see `finallySmall_of_small_weakly_terminal_set`. -/
+/-
+**CategoryTheory.FinallySmall.exists_small_weakly_terminal_set** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.FinallySmall`。
+形式化陈述：∀ (J : Type u) [inst : CategoryTheory.Category.{v, u} J] [CategoryTheory.F
+inallySmall J],   ∃ s, ∃ (_ : Small.{w, u} ↑s), ∀ (i : J), ∃ j ∈ s, Nonempty (i 
+⟶ j)
+参数：J : Type u；_ : Small.{w, u} ↑s；i : J；i ⟶ j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.IsConnected.is_nonempty`：∀ {J : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} J} [self : CategoryTheory.IsConnected J], Nonempty J
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 
-English:
-theorem FinallySmall.exists_small_weakly_terminal_set
-  given: [FinallySmall.{w} J]
-  proof: by
-  refine ⟨Set.range (fromFinalModel J).obj, inferInstance, fun i => ?_⟩
-  obtain ⟨f⟩ : Nonempty (StructuredArrow i (fromFinalModel J)) := IsConnected.is_nonempty
-  exact ⟨(fromFinalModel J).obj f.right, Set.mem_range_self _, ⟨f.hom⟩⟩
-
-中文:
-定理 FinallySmall.存在_small_weakly_terminal_set
-  条件: [FinallySmall.{w} J]
-  证明: by
-  refine ⟨Set.range (fromFinalModel J).obj, inferInstance, fun i => ?_⟩
-  obtain ⟨f⟩ : Nonempty (StructuredArrow i (fromFinalModel J)) := IsConnected.is_nonempty
-  exact ⟨(fromFinalModel J).obj f.right, Set.mem_range_self _, ⟨f.hom⟩⟩
-
-Depends on / 依赖: IsConnected, IsConnected.is_nonempty, Nonempty, Set.mem_range_self, Set.range, StructuredArrow, f.hom, f.right, fromFinalModel, is_nonempty, mem_range_self
+--- 原说明 ---
+The converse is true if `J` is filtered, see `finallySmall_of_small_weakly_termi
+nal_set`.
 -/
 theorem FinallySmall.exists_small_weakly_terminal_set [FinallySmall.{w} J] :
-    exists (s : Set J) (_ : Small.{w} s), forall i, exists j in s, Nonempty (i ⟶ j) := by
+    ∃ (s : Set J) (_ : Small.{w} s), ∀ i, ∃ j ∈ s, Nonempty (i ⟶ j) := by
   refine ⟨Set.range (fromFinalModel J).obj, inferInstance, fun i => ?_⟩
   obtain ⟨f⟩ : Nonempty (StructuredArrow i (fromFinalModel J)) := IsConnected.is_nonempty
   exact ⟨(fromFinalModel J).obj f.right, Set.mem_range_self _, ⟨f.hom⟩⟩
 
 variable {J} in
-/--
-theorem `finallySmall_of_small_weakly_terminal_set` / 定理 `finallySmall_of_small_weakly_terminal_set`
-
-English:
-theorem finallySmall_of_small_weakly_terminal_set
-  statement: [IsFilteredOrEmpty J] (s : Set J) [Small.{v} s]
-  proof: by
-  suffices Functor.Final (ObjectProperty.ι (· in s)) from
-    finallySmall_of_final_of_essentiallySmall (ObjectProperty.ι (· in s))
-  refine Functor.final_of_exists_of_isFiltered_of_fullyFaithful _ (fun i => ?_)
-  obtain ⟨j, hj₁, hj₂⟩ := hs i
-  exact ⟨⟨j, hj₁⟩, hj₂⟩
-
-中文:
-定理 finallySmall_of_small_weakly_terminal_set
-  结论: [是FilteredOrEmpty J] (s : 集合 J) [Small.{v} s]
-  证明: by
-  suffices Functor.Final (ObjectProperty.ι (· in s)) from
-    finallySmall_of_final_of_essentiallySmall (ObjectProperty.ι (· in s))
-  refine Functor.final_of_exists_of_isFiltered_of_fullyFaithful _ (fun i => ?_)
-  obtain ⟨j, hj₁, hj₂⟩ := hs i
-  exact ⟨⟨j, hj₁⟩, hj₂⟩
-
-Depends on / 依赖: Functor, Functor.Final, Functor.final_of_exists_of_isFiltered_of_fullyFaithful, ObjectProperty, final_of_exists_of_isFiltered_of_fullyFaithful, finallySmall_of_final_of_essentiallySmall
+/-
+**CategoryTheory.finallySmall_of_small_weakly_terminal_set** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory`。
+形式化陈述：finallySmall_of_small_weakly_terminal_set [IsFilteredOrEmpty J] (s : Set J
+) [Small.{v} s] (hs : forall i, exists j in s, Nonempty (i ⟶ j)) : FinallySmall.
+{v} J
+参数：s : Set J；hs : forall i, exists j in s, Nonempty (i ⟶ j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_exists_of_isFiltered_of_fullyFaithful`：∀
+ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1
+ : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.finallySmall_of_final_of_essentiallySmall`：finallySmall_o
+f_final_of_essentiallySmall [EssentiallySmall.{w} K] (F : K ⥤ J) [Final F] : Fin
+allySmall.{w} J
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
 -/
 theorem finallySmall_of_small_weakly_terminal_set [IsFilteredOrEmpty J] (s : Set J) [Small.{v} s]
-    (hs : forall i, exists j in s, Nonempty (i ⟶ j)) : FinallySmall.{v} J := by
-  suffices Functor.Final (ObjectProperty.ι (· in s)) from
-    finallySmall_of_final_of_essentiallySmall (ObjectProperty.ι (· in s))
+    (hs : ∀ i, ∃ j ∈ s, Nonempty (i ⟶ j)) : FinallySmall.{v} J := by
+  suffices Functor.Final (ObjectProperty.ι (· ∈ s)) from
+    finallySmall_of_final_of_essentiallySmall (ObjectProperty.ι (· ∈ s))
   refine Functor.final_of_exists_of_isFiltered_of_fullyFaithful _ (fun i => ?_)
   obtain ⟨j, hj₁, hj₂⟩ := hs i
   exact ⟨⟨j, hj₁⟩, hj₂⟩
-
-/--
-theorem `finallySmall_iff_exists_small_weakly_terminal_set` / 定理 `finallySmall_iff_exists_small_weakly_terminal_set`
-
-English:
-theorem finallySmall_iff_exists_small_weakly_terminal_set
-  given: [IsFilteredOrEmpty J]
-  proof: by
-  refine ⟨fun _ => FinallySmall.exists_small_weakly_terminal_set _, fun h => ?_⟩
-  rcases h with ⟨s, hs, hs'⟩
-  exact finallySmall_of_small_weakly_terminal_set s hs'
-
-中文:
-定理 finallySmall_iff_存在_small_weakly_terminal_set
-  条件: [是FilteredOrEmpty J]
-  证明: by
-  refine ⟨fun _ => FinallySmall.exists_small_weakly_terminal_set _, fun h => ?_⟩
-  rcases h with ⟨s, hs, hs'⟩
-  exact finallySmall_of_small_weakly_terminal_set s hs'
-
-Depends on / 依赖: FinallySmall, FinallySmall.exists_small_weakly_terminal_set, exists_small_weakly_terminal_set, finallySmall_of_small_weakly_terminal_set
+/-
+**CategoryTheory.finallySmall_iff_exists_small_weakly_terminal_set** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：finallySmall_iff_exists_small_weakly_terminal_set [IsFilteredOrEmpty J] : 
+FinallySmall.{v} J ↔ exists (s : Set J) (_ : Small.{v} s), forall i, exists j in
+ s, Nonempty (i ⟶ j)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinallySmall.exists_small_weakly_terminal_set`：∀ (J : Typ
+e u) [inst : CategoryTheory.Category.{v, u} J] [CategoryTheory.FinallySmall J], 
+  ∃ s, ∃ (_ : Small.{w, u} ↑s), ∀ (i : J), ∃ j ∈ s…
+· 使用定理 `CategoryTheory.finallySmall_of_small_weakly_terminal_set`：finallySmall_o
+f_small_weakly_terminal_set [IsFilteredOrEmpty J] (s : Set J) [Small.{v} s] (hs 
+: forall i, exists j in s, Nonempty (i ⟶ j)) :…
 -/
 theorem finallySmall_iff_exists_small_weakly_terminal_set [IsFilteredOrEmpty J] :
-    FinallySmall.{v} J ↔ exists (s : Set J) (_ : Small.{v} s), forall i, exists j in s, Nonempty (i ⟶ j) := by
+    FinallySmall.{v} J ↔ ∃ (s : Set J) (_ : Small.{v} s), ∀ i, ∃ j ∈ s, Nonempty (i ⟶ j) := by
   refine ⟨fun _ => FinallySmall.exists_small_weakly_terminal_set _, fun h => ?_⟩
   rcases h with ⟨s, hs, hs'⟩
   exact finallySmall_of_small_weakly_terminal_set s hs'
@@ -597,126 +490,104 @@ section WeaklyInitial
 
 variable (J : Type u) [Category.{v} J]
 
-/--
-theorem `InitiallySmall.exists_small_weakly_initial_set` / 定理 `InitiallySmall.exists_small_weakly_initial_set`
+/-- The converse is true if `J` is cofiltered, see `initiallySmall_of_small_weakly_initial_set`. -/
+/-
+**CategoryTheory.InitiallySmall.exists_small_weakly_initial_set** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.InitiallySmall`。
+形式化陈述：∀ (J : Type u) [inst : CategoryTheory.Category.{v, u} J] [CategoryTheory.I
+nitiallySmall J],   ∃ s, ∃ (_ : Small.{w, u} ↑s), ∀ (i : J), ∃ j ∈ s, Nonempty (
+j ⟶ i)
+参数：J : Type u；_ : Small.{w, u} ↑s；i : J；j ⟶ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.IsConnected.is_nonempty`：∀ {J : Type u₁} {inst : Category
+Theory.Category.{v₁, u₁} J} [self : CategoryTheory.IsConnected J], Nonempty J
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 
-English:
-theorem InitiallySmall.exists_small_weakly_initial_set
-  given: [InitiallySmall.{w} J]
-  proof: by
-  refine ⟨Set.range (fromInitialModel J).obj, inferInstance, fun i => ?_⟩
-  obtain ⟨f⟩ : Nonempty (CostructuredArrow (fromInitialModel J) i) := IsConnected.is_nonempty
-  exact ⟨(fromInitialModel J).obj f.left, Set.mem_range_self _, ⟨f.hom⟩⟩
-
-中文:
-定理 InitiallySmall.存在_small_weakly_initial_set
-  条件: [InitiallySmall.{w} J]
-  证明: by
-  refine ⟨Set.range (fromInitialModel J).obj, inferInstance, fun i => ?_⟩
-  obtain ⟨f⟩ : Nonempty (CostructuredArrow (fromInitialModel J) i) := IsConnected.is_nonempty
-  exact ⟨(fromInitialModel J).obj f.left, Set.mem_range_self _, ⟨f.hom⟩⟩
-
-Depends on / 依赖: CostructuredArrow, IsConnected, IsConnected.is_nonempty, Nonempty, Set.mem_range_self, Set.range, f.hom, f.left, fromInitialModel, is_nonempty, mem_range_self
+--- 原说明 ---
+The converse is true if `J` is cofiltered, see `initiallySmall_of_small_weakly_i
+nitial_set`.
 -/
 theorem InitiallySmall.exists_small_weakly_initial_set [InitiallySmall.{w} J] :
-    exists (s : Set J) (_ : Small.{w} s), forall i, exists j in s, Nonempty (j ⟶ i) := by
+    ∃ (s : Set J) (_ : Small.{w} s), ∀ i, ∃ j ∈ s, Nonempty (j ⟶ i) := by
   refine ⟨Set.range (fromInitialModel J).obj, inferInstance, fun i => ?_⟩
   obtain ⟨f⟩ : Nonempty (CostructuredArrow (fromInitialModel J) i) := IsConnected.is_nonempty
   exact ⟨(fromInitialModel J).obj f.left, Set.mem_range_self _, ⟨f.hom⟩⟩
 
 variable {J} in
-/--
-theorem `initiallySmall_of_small_weakly_initial_set` / 定理 `initiallySmall_of_small_weakly_initial_set`
-
-English:
-theorem initiallySmall_of_small_weakly_initial_set
-  statement: [IsCofilteredOrEmpty J] (s : Set J) [Small.{v} s]
-  proof: by
-  suffices Functor.Initial (ObjectProperty.ι (· in s)) from
-    initiallySmall_of_initial_of_essentiallySmall (ObjectProperty.ι (· in s))
-  refine Functor.initial_of_exists_of_isCofiltered_of_fullyFaithful _ (fun i => ?_)
-  obtain ⟨j, hj₁, hj₂⟩ := hs i
-  exact ⟨⟨j, hj₁⟩, hj₂⟩
-
-中文:
-定理 initiallySmall_of_small_weakly_initial_set
-  结论: [是余filteredOrEmpty J] (s : 集合 J) [Small.{v} s]
-  证明: by
-  suffices Functor.Initial (ObjectProperty.ι (· in s)) from
-    initiallySmall_of_initial_of_essentiallySmall (ObjectProperty.ι (· in s))
-  refine Functor.initial_of_exists_of_isCofiltered_of_fullyFaithful _ (fun i => ?_)
-  obtain ⟨j, hj₁, hj₂⟩ := hs i
-  exact ⟨⟨j, hj₁⟩, hj₂⟩
-
-Depends on / 依赖: Functor, Functor.Initial, Functor.initial_of_exists_of_isCofiltered_of_fullyFaithful, Initial, ObjectProperty, initial_of_exists_of_isCofiltered_of_fullyFaithful, initiallySmall_of_initial_of_essentiallySmall
+/-
+**CategoryTheory.initiallySmall_of_small_weakly_initial_set** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory`。
+形式化陈述：initiallySmall_of_small_weakly_initial_set [IsCofilteredOrEmpty J] (s : Se
+t J) [Small.{v} s] (hs : forall i, exists j in s, Nonempty (j ⟶ i)) : InitiallyS
+mall.{v} J
+参数：s : Set J；hs : forall i, exists j in s, Nonempty (j ⟶ i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_of_exists_of_isCofiltered_of_fullyFaithfu
+l`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [in
+st_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.initiallySmall_of_initial_of_essentiallySmall`：initiallyS
+mall_of_initial_of_essentiallySmall [EssentiallySmall.{w} K] (F : K ⥤ J) [Initia
+l F] : InitiallySmall.{w} J
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
 -/
 theorem initiallySmall_of_small_weakly_initial_set [IsCofilteredOrEmpty J] (s : Set J) [Small.{v} s]
-    (hs : forall i, exists j in s, Nonempty (j ⟶ i)) : InitiallySmall.{v} J := by
-  suffices Functor.Initial (ObjectProperty.ι (· in s)) from
-    initiallySmall_of_initial_of_essentiallySmall (ObjectProperty.ι (· in s))
+    (hs : ∀ i, ∃ j ∈ s, Nonempty (j ⟶ i)) : InitiallySmall.{v} J := by
+  suffices Functor.Initial (ObjectProperty.ι (· ∈ s)) from
+    initiallySmall_of_initial_of_essentiallySmall (ObjectProperty.ι (· ∈ s))
   refine Functor.initial_of_exists_of_isCofiltered_of_fullyFaithful _ (fun i => ?_)
   obtain ⟨j, hj₁, hj₂⟩ := hs i
   exact ⟨⟨j, hj₁⟩, hj₂⟩
 
 variable {J} in
-/--
-theorem `initiallySmall_of_essentiallySmall_weakly_initial_objectProperty` / 定理 `initiallySmall_of_essentiallySmall_weakly_initial_objectProperty`
-
-English:
-theorem initiallySmall_of_essentiallySmall_weakly_initial_objectProperty
-  proof: by
-  obtain ⟨Q, H, hQ⟩ := ObjectProperty.EssentiallySmall.exists_small_le'.{v} P
-  have : Small.{v} (show Set _ from Q) := by assumption
-  refine initiallySmall_of_small_weakly_initial_set Q (fun i => ?_)
-  obtain ⟨j, hj, ⟨f⟩⟩ := hP i
-  obtain ⟨k, hk, ⟨e⟩⟩ := hQ _ hj
-  exact ⟨k, hk, ⟨e.inv ≫ f⟩⟩
-
-中文:
-定理 initiallySmall_of_essentiallySmall_weakly_initial_objectProperty
-  证明: by
-  obtain ⟨Q, H, hQ⟩ := ObjectProperty.EssentiallySmall.exists_small_le'.{v} P
-  have : Small.{v} (show Set _ from Q) := by assumption
-  refine initiallySmall_of_small_weakly_initial_set Q (fun i => ?_)
-  obtain ⟨j, hj, ⟨f⟩⟩ := hP i
-  obtain ⟨k, hk, ⟨e⟩⟩ := hQ _ hj
-  exact ⟨k, hk, ⟨e.inv ≫ f⟩⟩
-
-Depends on / 依赖: EssentiallySmall, ObjectProperty, ObjectProperty.EssentiallySmall.exists_small_le, e.inv, exists_small_le, initiallySmall_of_small_weakly_initial_set
+/-
+**CategoryTheory.initiallySmall_of_essentiallySmall_weakly_initial_objectPropert
+y** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：initiallySmall_of_essentiallySmall_weakly_initial_objectProperty [IsCofilt
+eredOrEmpty J] (P : ObjectProperty J) [ObjectProperty.EssentiallySmall.{v} P] (h
+P : forall i, exists j, P j ∧ Nonempty (j ⟶ i)) : InitiallySmall.{v} J
+参数：P : ObjectProperty J；hP : forall i, exists j, P j ∧ Nonempty (j ⟶ i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.EssentiallySmall.exists_small_le'`：∀ {C : 
+Type u} {inst : CategoryTheory.Category.{v, u} C} (P : CategoryTheory.ObjectProp
+erty C)   [self : CategoryTheory.ObjectProperty.Essen…
+· 使用定理 `CategoryTheory.initiallySmall_of_small_weakly_initial_set`：initiallySmal
+l_of_small_weakly_initial_set [IsCofilteredOrEmpty J] (s : Set J) [Small.{v} s] 
+(hs : forall i, exists j in s, Nonempty (j ⟶ i)…
 -/
 theorem initiallySmall_of_essentiallySmall_weakly_initial_objectProperty
     [IsCofilteredOrEmpty J] (P : ObjectProperty J) [ObjectProperty.EssentiallySmall.{v} P]
-    (hP : forall i, exists j, P j ∧ Nonempty (j ⟶ i)) : InitiallySmall.{v} J := by
+    (hP : ∀ i, ∃ j, P j ∧ Nonempty (j ⟶ i)) : InitiallySmall.{v} J := by
   obtain ⟨Q, H, hQ⟩ := ObjectProperty.EssentiallySmall.exists_small_le'.{v} P
   have : Small.{v} (show Set _ from Q) := by assumption
-  refine initiallySmall_of_small_weakly_initial_set Q (fun i => ?_)
+  refine initiallySmall_of_small_weakly_initial_set Q (fun i ↦ ?_)
   obtain ⟨j, hj, ⟨f⟩⟩ := hP i
   obtain ⟨k, hk, ⟨e⟩⟩ := hQ _ hj
   exact ⟨k, hk, ⟨e.inv ≫ f⟩⟩
-
-/--
-theorem `initiallySmall_iff_exists_small_weakly_initial_set` / 定理 `initiallySmall_iff_exists_small_weakly_initial_set`
-
-English:
-theorem initiallySmall_iff_exists_small_weakly_initial_set
-  given: [IsCofilteredOrEmpty J]
-  proof: by
-  refine ⟨fun _ => InitiallySmall.exists_small_weakly_initial_set _, fun h => ?_⟩
-  rcases h with ⟨s, hs, hs'⟩
-  exact initiallySmall_of_small_weakly_initial_set s hs'
-
-中文:
-定理 initiallySmall_iff_存在_small_weakly_initial_set
-  条件: [是余filteredOrEmpty J]
-  证明: by
-  refine ⟨fun _ => InitiallySmall.exists_small_weakly_initial_set _, fun h => ?_⟩
-  rcases h with ⟨s, hs, hs'⟩
-  exact initiallySmall_of_small_weakly_initial_set s hs'
-
-Depends on / 依赖: InitiallySmall, InitiallySmall.exists_small_weakly_initial_set, exists_small_weakly_initial_set, initiallySmall_of_small_weakly_initial_set
+/-
+**CategoryTheory.initiallySmall_iff_exists_small_weakly_initial_set** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：initiallySmall_iff_exists_small_weakly_initial_set [IsCofilteredOrEmpty J]
+ : InitiallySmall.{v} J ↔ exists (s : Set J) (_ : Small.{v} s), forall i, exists
+ j in s, Nonempty (j ⟶ i)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InitiallySmall.exists_small_weakly_initial_set`：∀ (J : Ty
+pe u) [inst : CategoryTheory.Category.{v, u} J] [CategoryTheory.InitiallySmall J
+],   ∃ s, ∃ (_ : Small.{w, u} ↑s), ∀ (i : J), ∃ j ∈…
+· 使用定理 `CategoryTheory.initiallySmall_of_small_weakly_initial_set`：initiallySmal
+l_of_small_weakly_initial_set [IsCofilteredOrEmpty J] (s : Set J) [Small.{v} s] 
+(hs : forall i, exists j in s, Nonempty (j ⟶ i)…
 -/
 theorem initiallySmall_iff_exists_small_weakly_initial_set [IsCofilteredOrEmpty J] :
-    InitiallySmall.{v} J ↔ exists (s : Set J) (_ : Small.{v} s), forall i, exists j in s, Nonempty (j ⟶ i) := by
+    InitiallySmall.{v} J ↔ ∃ (s : Set J) (_ : Small.{v} s), ∀ i, ∃ j ∈ s, Nonempty (j ⟶ i) := by
   refine ⟨fun _ => InitiallySmall.exists_small_weakly_initial_set _, fun h => ?_⟩
   rcases h with ⟨s, hs, hs'⟩
   exact initiallySmall_of_small_weakly_initial_set s hs'
@@ -725,39 +596,39 @@ end WeaklyInitial
 
 namespace Limits
 
-/--
-theorem `hasColimitsOfShape_of_finallySmall` / 定理 `hasColimitsOfShape_of_finallySmall`
-
-English:
-theorem hasColimitsOfShape_of_finallySmall
-  statement: (J : Type u) [Category.{v} J] [FinallySmall.{w} J]
-  proof: Final.hasColimitsOfShape_of_final (fromFinalModel J)
-
-中文:
-定理 hasColimitsOfShape_of_finallySmall
-  结论: (J : 类型u) [范畴.{v} J] [FinallySmall.{w} J]
-  证明: Final.hasColimitsOfShape_of_final (fromFinalModel J)
-
-Depends on / 依赖: Final.hasColimitsOfShape_of_final, fromFinalModel, hasColimitsOfShape_of_final
+/-
+**CategoryTheory.Limits.hasColimitsOfShape_of_finallySmall** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasColimitsOfShape_of_finallySmall (J : Type u) [Category.{v} J] [FinallyS
+mall.{w} J] (C : Type u₁) [Category.{v₁} C] [HasColimitsOfSize.{w, w} C] : HasCo
+limitsOfShape J C
+参数：J : Type u；C : Type u₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.hasColimitsOfShape_of_final`：hasColimitsOfS
+hape_of_final [HasColimitsOfShape C E] : HasColimitsOfShape D E where has_colimi
+t
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem hasColimitsOfShape_of_finallySmall (J : Type u) [Category.{v} J] [FinallySmall.{w} J]
     (C : Type u₁) [Category.{v₁} C] [HasColimitsOfSize.{w, w} C] : HasColimitsOfShape J C :=
   Final.hasColimitsOfShape_of_final (fromFinalModel J)
-
-/--
-theorem `hasLimitsOfShape_of_initiallySmall` / 定理 `hasLimitsOfShape_of_initiallySmall`
-
-English:
-theorem hasLimitsOfShape_of_initiallySmall
-  statement: (J : Type u) [Category.{v} J] [InitiallySmall.{w} J]
-  proof: Initial.hasLimitsOfShape_of_initial (fromInitialModel J)
-
-中文:
-定理 hasLimitsOfShape_of_initiallySmall
-  结论: (J : 类型u) [范畴.{v} J] [InitiallySmall.{w} J]
-  证明: Initial.hasLimitsOfShape_of_initial (fromInitialModel J)
-
-Depends on / 依赖: Initial, Initial.hasLimitsOfShape_of_initial, fromInitialModel, hasLimitsOfShape_of_initial
+/-
+**CategoryTheory.Limits.hasLimitsOfShape_of_initiallySmall** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasLimitsOfShape_of_initiallySmall (J : Type u) [Category.{v} J] [Initiall
+ySmall.{w} J] (C : Type u₁) [Category.{v₁} C] [HasLimitsOfSize.{w, w} C] : HasLi
+mitsOfShape J C
+参数：J : Type u；C : Type u₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.hasLimitsOfShape_of_initial`：hasLimitsOfS
+hape_of_initial [HasLimitsOfShape C E] : HasLimitsOfShape D E where has_limit
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem hasLimitsOfShape_of_initiallySmall (J : Type u) [Category.{v} J] [InitiallySmall.{w} J]
     (C : Type u₁) [Category.{v₁} C] [HasLimitsOfSize.{w, w} C] : HasLimitsOfShape J C :=
@@ -766,3 +637,4 @@ theorem hasLimitsOfShape_of_initiallySmall (J : Type u) [Category.{v} J] [Initia
 end Limits
 
 end CategoryTheory
+

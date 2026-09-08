@@ -35,264 +35,147 @@ namespace AlgebraicGeometry.Scheme
 variable {X Y Z T : Scheme.{u}}
 
 variable (X) in
-/--
-Definition of `Modules` / `Modules` 的定义
+/-- The category of sheaves of modules over a scheme. -/
+/-
+**AlgebraicGeometry.Scheme.Modules** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.
+Scheme`。
+形式化陈述：Modules
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Modules
-  body: SheafOfModules.{u} X.ringCatSheaf
-
-中文:
-定义 Modules
-  定义体: SheafOfModules.{u} X.ringCatSheaf
-
-Depends on / 依赖: SheafOfModules, X.ringCatSheaf, ringCatSheaf
+--- 原说明 ---
+The category of sheaves of modules over a scheme.
 -/
 def Modules := SheafOfModules.{u} X.ringCatSheaf
 
 namespace Modules
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- Morphisms between `𝒪ₓ`-modules. Use `Hom.app` to act on sections. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeome
+try.Scheme.Modules`。
+形式化陈述：Hom (M N : X.Modules) : Type u
+参数：M N : X.Modules。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom
-  signature: (M N : X.Modules)
-  body: SheafOfModules.Hom M N
-
-中文:
-定义 态射
-  签名: (M N : X.Modules)
-  定义体: SheafOfModules.Hom M N
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.Hom
+--- 原说明 ---
+Morphisms between `𝒪ₓ`-modules. Use `Hom.app` to act on sections.
 -/
 def Hom (M N : X.Modules) : Type u := SheafOfModules.Hom M N
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category X.Modules
-  body: Modules.Hom
-  __ := (inferInstance : Category (SheafOfModules.{u} X.ringCatSheaf))
-
-中文:
-实例 :
-  签名: 范畴 X.Modules
-  定义体: Modules.Hom
-  __ := (inferInstance : Category (SheafOfModules.{u} X.ringCatSheaf))
-
-Depends on / 依赖: Modules, Modules.Hom
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category X.Modules where
   Hom := Modules.Hom
   __ := (inferInstance : Category (SheafOfModules.{u} X.ringCatSheaf))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Abelian X.Modules
-  body: inferInstanceAs Abelian (SheafOfModules.{u} X.ringCatSheaf)
-
-中文:
-实例 :
-  签名: 交换 X.Modules
-  定义体: inferInstanceAs Abelian (SheafOfModules.{u} X.ringCatSheaf)
-
-Depends on / 依赖: Abelian, SheafOfModules, X.ringCatSheaf, ringCatSheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Abelian X.Modules :=
-inferInstanceAs Abelian (SheafOfModules.{u} X.ringCatSheaf)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimits X.Modules
-  body: inferInstanceAs (HasLimits (SheafOfModules X.ringCatSheaf))
-
-中文:
-实例 :
-  签名: 有极限 X.Modules
-  定义体: inferInstanceAs (HasLimits (SheafOfModules X.ringCatSheaf))
-
-Depends on / 依赖: HasLimits, SheafOfModules, X.ringCatSheaf, ringCatSheaf
+  inferInstanceAs <| Abelian (SheafOfModules.{u} X.ringCatSheaf)
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimits X.Modules := inferInstanceAs (HasLimits (SheafOfModules X.ringCatSheaf))
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimits X.Modules
-  body: inferInstanceAs (HasColimits (SheafOfModules X.ringCatSheaf))
-
-中文:
-实例 :
-  签名: 有余极限 X.Modules
-  定义体: inferInstanceAs (HasColimits (SheafOfModules X.ringCatSheaf))
-
-Depends on / 依赖: HasColimits, SheafOfModules, X.ringCatSheaf, ringCatSheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimits X.Modules := inferInstanceAs (HasColimits (SheafOfModules X.ringCatSheaf))
 
 section Functor
 
 variable (X) in
-/--
-Definition of `toPresheafOfModules` / `toPresheafOfModules` 的定义
+/-- The forgetful functor from `𝒪ₓ`-modules to presheaves of modules.
+This is mostly useful to transport results from (pre)sheaves of modules to `𝒪ₓ`-modules and
+usually shouldn't be used directly when working with actual `𝒪ₓ`-modules. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.toPresheafOfModules** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：toPresheafOfModules : X.Modules ⥤ X.PresheafOfModules
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPresheafOfModules
-  signature: : X.Modules ⥤ X.PresheafOfModules
-  body: SheafOfModules.forget _
-
-中文:
-定义 toPresheafOfModules
-  签名: : X.Modules ⥤ X.预模层
-  定义体: SheafOfModules.forget _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.forget, forget
+--- 原说明 ---
+The forgetful functor from `𝒪ₓ`-modules to presheaves of modules.
+This is mostly useful to transport results from (pre)sheaves of modules to `𝒪ₓ`-
+modules and
+usually shouldn't be used directly when working with actual `𝒪ₓ`-modules.
 -/
 def toPresheafOfModules : X.Modules ⥤ X.PresheafOfModules := SheafOfModules.forget _
 
-/--
-Definition of `fullyFaithfulToPresheafOfModules` / `fullyFaithfulToPresheafOfModules` 的定义
+/-- The forgetful functor from `𝒪ₓ`-modules to presheaves of modules is fully faithful. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.fullyFaithfulToPresheafOfModules** 是 Mathlib 
+中的一个定义，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：fullyFaithfulToPresheafOfModules : (Modules.toPresheafOfModules X).FullyFa
+ithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulToPresheafOfModules
-  signature: : (Modules.toPresheafOfModules X).FullyFaithful
-  body: SheafOfModules.fullyFaithfulForget _
-
-中文:
-定义 fullyFaithfulToPresheafOfModules
-  签名: : (Modules.toPresheafOfModules X).满忠实
-  定义体: SheafOfModules.fullyFaithfulForget _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.fullyFaithfulForget, fullyFaithfulForget
+--- 原说明 ---
+The forgetful functor from `𝒪ₓ`-modules to presheaves of modules is fully faithf
+ul.
 -/
 def fullyFaithfulToPresheafOfModules : (Modules.toPresheafOfModules X).FullyFaithful :=
   SheafOfModules.fullyFaithfulForget _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toPresheafOfModules X).Full
-  body: fullyFaithfulToPresheafOfModules.full
-
-中文:
-实例 :
-  签名: (toPresheafOfModules X).满
-  定义体: fullyFaithfulToPresheafOfModules.full
-
-Depends on / 依赖: fullyFaithfulToPresheafOfModules, fullyFaithfulToPresheafOfModules.full
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toPresheafOfModules X).Full := fullyFaithfulToPresheafOfModules.full
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toPresheafOfModules X).Faithful
-  body: fullyFaithfulToPresheafOfModules.faithful
-
-中文:
-实例 :
-  签名: (toPresheafOfModules X).忠实
-  定义体: fullyFaithfulToPresheafOfModules.faithful
-
-Depends on / 依赖: faithful, fullyFaithfulToPresheafOfModules, fullyFaithfulToPresheafOfModules.faithful
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toPresheafOfModules X).Faithful := fullyFaithfulToPresheafOfModules.faithful
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toPresheafOfModules X).IsRightAdjoint
-  body: (PresheafOfModules.sheafificationAdjunction (𝟙 X.ringCatSheaf.obj)).isRightAdjoint
-
-中文:
-实例 :
-  签名: (toPresheafOfModules X).是右伴随
-  定义体: (PresheafOfModules.sheafificationAdjunction (𝟙 X.ringCatSheaf.obj)).isRightAdjoint
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.sheafificationAdjunction, X.ringCatSheaf.obj, isRightAdjoint, ringCatSheaf, sheafificationAdjunction
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toPresheafOfModules X).IsRightAdjoint :=
   (PresheafOfModules.sheafificationAdjunction (𝟙 X.ringCatSheaf.obj)).isRightAdjoint
 
 variable (X) in
-/--
-Definition of `toPresheaf` / `toPresheaf` 的定义
+/-- The forgetful functor from `𝒪ₓ`-modules to presheaves of abelian groups. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.toPresheaf** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.Scheme.Modules`。
+形式化陈述：toPresheaf : X.Modules ⥤ TopCat.Presheaf Ab X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPresheaf
-  signature: : X.Modules ⥤ TopCat.Presheaf Ab X
-  body: toPresheafOfModules X ⋙ PresheafOfModules.toPresheaf _
-
-中文:
-定义 toPresheaf
-  签名: : X.Modules ⥤ 顶元素范畴.预层 Ab X
-  定义体: toPresheafOfModules X ⋙ PresheafOfModules.toPresheaf _
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.toPresheaf, toPresheaf, toPresheafOfModules
+--- 原说明 ---
+The forgetful functor from `𝒪ₓ`-modules to presheaves of abelian groups.
 -/
 noncomputable def toPresheaf : X.Modules ⥤ TopCat.Presheaf Ab X :=
   toPresheafOfModules X ⋙ PresheafOfModules.toPresheaf _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toPresheaf X).Faithful
-  body: .comp _ (PresheafOfModules.toPresheaf _)
-
-中文:
-实例 :
-  签名: (toPresheaf X).忠实
-  定义体: .comp _ (PresheafOfModules.toPresheaf _)
-
-Depends on / 依赖: Finset, Finset.card_compl, PresheafOfModules, PresheafOfModules.toPresheaf, boundary_eq_iSup, card_compl, hasDimensionLT_face, hasDimensionLT_iSup_iff, stdSimplex, stdSimplex.hasDimensionLT_face, toPresheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toPresheaf X).Faithful := .comp _ (PresheafOfModules.toPresheaf _)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesLimits (toPresheaf X)
-  body: comp_preservesLimits _ (PresheafOfModules.toPresheaf _)
-
-中文:
-实例 :
-  签名: PreservesLimits (toPresheaf X)
-  定义体: comp_preservesLimits _ (PresheafOfModules.toPresheaf _)
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.toPresheaf, comp_preservesLimits, toPresheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesLimits (toPresheaf X) := comp_preservesLimits _ (PresheafOfModules.toPresheaf _)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toPresheaf X).ReflectsIsomorphisms
-  body: reflectsIsomorphisms_comp _ (PresheafOfModules.toPresheaf _)
-
-中文:
-实例 :
-  签名: (toPresheaf X).反映同构
-  定义体: reflectsIsomorphisms_comp _ (PresheafOfModules.toPresheaf _)
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.toPresheaf, reflectsIsomorphisms_comp, toPresheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toPresheaf X).ReflectsIsomorphisms :=
   reflectsIsomorphisms_comp _ (PresheafOfModules.toPresheaf _)
@@ -303,434 +186,342 @@ variable {M N K : X.Modules} {φ : M ⟶ N} {U V : X.Opens}
 
 section Presheaf
 
-/--
-Definition of `presheaf` / `presheaf` 的定义
+/-- The underlying abelian presheaf of an `𝒪ₓ`-module. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.presheaf** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.Scheme.Modules`。
+形式化陈述：presheaf (M : X.Modules) : TopCat.Presheaf Ab X
+参数：M : X.Modules。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presheaf
-  signature: (M : X.Modules)
-  body: M.1.presheaf
-
-中文:
-定义 presheaf
-  签名: (M : X.Modules)
-  定义体: M.1.presheaf
-
-Depends on / 依赖: presheaf
+--- 原说明 ---
+The underlying abelian presheaf of an `𝒪ₓ`-module.
 -/
 noncomputable def presheaf (M : X.Modules) : TopCat.Presheaf Ab X := M.1.presheaf
 
 /-- Notation for sections of a presheaf of module. -/
 scoped[AlgebraicGeometry] notation3 "Γ(" M ", " U ")" => (Scheme.Modules.presheaf M).obj (.op U)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module Γ(X, U) Γ(M, U)
-  body: (M.val.obj (.op U)).isModule
-
-中文:
-实例 :
-  签名: 模 Γ(X, U) Γ(M, U)
-  定义体: (M.val.obj (.op U)).isModule
-
-Depends on / 依赖: M.val.obj, isModule
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module Γ(X, U) Γ(M, U) := (M.val.obj (.op U)).isModule
 
 variable (M) in
-/--
-lemma `map_smul` / 引理 `map_smul`
-
-English:
-lemma map_smul
-  given: (i : U ⟶ V) (r : Γ(X, V)) (x : Γ(M, V))
-  proof: M.val.map_smul _ _ _
-
-中文:
-引理 map_smul
-  条件: (i : U ⟶ V) (r : Γ(X, V)) (x : Γ(M, V))
-  证明: M.val.map_smul _ _ _
+/-
+**AlgebraicGeometry.Scheme.Modules.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `Algebraic
+Geometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (M : X.Modules) {U V : X.Opens} (i : U ⟶ 
+V) (r : ↑(X.presheaf.obj (Opposite.op V)))   (x : ↑(M.presheaf.obj (Opposite.op 
+V))),   (CategoryTheory.ConcreteCategory.hom (M.presheaf.map i.op)) (r • x) =   
+  (CategoryTheory.ConcreteCategory.hom (X.presheaf.map i.op)) r •       (Categor
+yTheory.ConcreteCategory.hom (M.presheaf.map i.op)) x
+参数：M : X.Modules；i : U ⟶ V；r : ↑(X.presheaf.obj (Opposite.op V))；x : ↑(M.preshea
+f.obj (Opposite.op V))；CategoryTheory.ConcreteCategory.hom (M.presheaf.map i.op)
+；r • x；CategoryTheory.ConcreteCategory.hom (X.presheaf.map i.op)；CategoryTheory.
+ConcreteCategory.hom (M.presheaf.map i.op)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PresheafOfModules.map_smul`：∀ {C : Type u₁} [inst : CategoryTheory.Categ
+ory.{v₁, u₁} C] {R : CategoryTheory.Functor Cᵒᵖ RingCat}   (M : PresheafOfModule
+s R) {X Y : Cᵒᵖ}…
 -/
 @[simp] lemma map_smul (i : U ⟶ V) (r : Γ(X, V)) (x : Γ(M, V)) :
     M.presheaf.map i.op (r • x) = X.presheaf.map i.op r • M.presheaf.map i.op x :=
   M.val.map_smul _ _ _
 
-/--
-Definition of `smul` / `smul` 的定义
+/-- Scalar multiplication as an endomorphism of `Γ(M, U)`. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.smul** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.Scheme.Modules`。
+形式化陈述：smul : Γ(X, U) ->+* End Γ(M, U)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smul
-  signature: : Γ(X, U) ->+* End Γ(M, U)
-  body: (M.val.obj (.op U)).smul
-
-@[simp]
-
-中文:
-定义 smul
-  签名: : Γ(X, U) ->+* End Γ(M, U)
-  定义体: (M.val.obj (.op U)).smul
-
-@[simp]
-
-Depends on / 依赖: M.val.obj
+--- 原说明 ---
+Scalar multiplication as an endomorphism of `Γ(M, U)`.
 -/
-def smul : Γ(X, U) ->+* End Γ(M, U) :=
+def smul : Γ(X, U) →+* End Γ(M, U) :=
   (M.val.obj (.op U)).smul
 
 @[simp]
-/--
-lemma `smul_apply` / 引理 `smul_apply`
-
-English:
-lemma smul_apply
-  given: (r : Γ(X, U)) (x : Γ(M, U))
-  statement: (M.smul r).hom x = r • x
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 smul_apply
-  条件: (r : Γ(X, U)) (x : Γ(M, U))
-  结论: (M.smul r).hom x = r • x
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**AlgebraicGeometry.Scheme.Modules.smul_apply** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme.Modules`。
+形式化陈述：smul_apply (r : Γ(X, U)) (x : Γ(M, U)) : (M.smul r).hom x = r • x
+参数：r : Γ(X, U)；x : Γ(M, U)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_apply (r : Γ(X, U)) (x : Γ(M, U)) : (M.smul r).hom x = r • x := rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `map_comp_smul` / 引理 `map_comp_smul`
-
-English:
-lemma map_comp_smul
-  given: (i : U ⟶ V) (r : Γ(X, V))
-  proof: by
-  ext
-  simp
-
-中文:
-引理 map_comp_smul
-  条件: (i : U ⟶ V) (r : Γ(X, V))
-  证明: by
-  ext
-  simp
+/-
+**AlgebraicGeometry.Scheme.Modules.map_comp_smul** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry.Scheme.Modules`。
+形式化陈述：map_comp_smul (i : U ⟶ V) (r : Γ(X, V)) : M.smul r ≫ M.presheaf.map i.op =
+ M.presheaf.map i.op ≫ M.smul (X.presheaf.map i.op r)
+参数：i : U ⟶ V；r : Γ(X, V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGrpCat.hom_ext`：∀ {X Y : AddCommGrpCat} {f g : X ⟶ Y}, AddCommGrp
+Cat.Hom.hom f = AddCommGrpCat.Hom.hom g → f = g
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Modules.map_smul`：∀ {X : AlgebraicGeometry.Sche
+me} (M : X.Modules) {U V : X.Opens} (i : U ⟶ V) (r : ↑(X.presheaf.obj (Opposite.
+op V)))   (x : ↑(M.presheaf.obj…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_comp_smul (i : U ⟶ V) (r : Γ(X, V)) :
     M.smul r ≫ M.presheaf.map i.op = M.presheaf.map i.op ≫ M.smul (X.presheaf.map i.op r) := by
   ext
   simp
 
-/--
-Definition of `Hom.mapPresheaf` / `Hom.mapPresheaf` 的定义
+/-- The underlying map between abelian presheaves of a morphism of `𝒪ₓ`-modules. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.mapPresheaf** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.Scheme.Modules.Hom`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} → {M N : X.Modules} → (M ⟶ N) → (M.presheaf
+ ⟶ N.presheaf)
+参数：M ⟶ N；M.presheaf ⟶ N.presheaf。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.mapPresheaf
-  signature: (φ : M ⟶ N)
-  body: (toPresheaf X).map φ
-
-中文:
-定义 态射.mapPresheaf
-  签名: (φ : M ⟶ N)
-  定义体: (toPresheaf X).map φ
-
-Depends on / 依赖: toPresheaf
+--- 原说明 ---
+The underlying map between abelian presheaves of a morphism of `𝒪ₓ`-modules.
 -/
 noncomputable def Hom.mapPresheaf (φ : M ⟶ N) : M.presheaf ⟶ N.presheaf :=
   (toPresheaf X).map φ
 
-/--
-Definition of `Hom.app` / `Hom.app` 的定义
+/-- The application of a morphism of `𝒪ₓ`-modules to sections. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.app** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.Scheme.Modules.Hom`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} →   {M N : X.Modules} → (M ⟶ N) → (U : X.Op
+ens) → M.presheaf.obj (Opposite.op U) ⟶ N.presheaf.obj (Opposite.op U)
+参数：M ⟶ N；U : X.Opens；Opposite.op U；Opposite.op U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.app
-  signature: (φ : M ⟶ N) (U : X.Opens)
-  body: (forget₂ _ _).map (φ.val.app (.op U))
-
-中文:
-定义 态射.app
-  签名: (φ : M ⟶ N) (U : X.Opens)
-  定义体: (forget₂ _ _).map (φ.val.app (.op U))
-
-Depends on / 依赖: val.app
+--- 原说明 ---
+The application of a morphism of `𝒪ₓ`-modules to sections.
 -/
 def Hom.app (φ : M ⟶ N) (U : X.Opens) : Γ(M, U) ⟶ Γ(N, U) :=
   (forget₂ _ _).map (φ.val.app (.op U))
-
-/--
-lemma `mapPresheaf_app` / 引理 `mapPresheaf_app`
-
-English:
-lemma mapPresheaf_app
-  given: (φ : M ⟶ N) (U)
-  statement: φ.mapPresheaf.app U = φ.app U.unop
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapPresheaf_app
-  条件: (φ : M ⟶ N) (U)
-  结论: φ.mapPresheaf.app U = φ.app U.unop
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.mapPresheaf_app** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N : X.Modules} (φ : M ⟶ N) (U : (Topol
+ogicalSpace.Opens ↥X)ᵒᵖ),   (AlgebraicGeometry.Scheme.Modules.Hom.mapPresheaf φ)
+.app U =     AlgebraicGeometry.Scheme.Modules.Hom.app φ (Opposite.unop U)
+参数：φ : M ⟶ N；U : (TopologicalSpace.Opens ↥X)ᵒᵖ；AlgebraicGeometry.Scheme.Modules.
+Hom.mapPresheaf φ；Opposite.unop U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mapPresheaf_app (φ : M ⟶ N) (U) : φ.mapPresheaf.app U = φ.app U.unop := rfl
 
 @[simp]
-/--
-lemma `Hom.app_smul` / 引理 `Hom.app_smul`
-
-English:
-lemma Hom.app_smul
-  given: (φ : M ⟶ N) (r : Γ(X, U)) (x : Γ(M, U))
-  proof: (φ.val.app (.op U)).hom.map_smul r x
-
-中文:
-引理 态射.app_smul
-  条件: (φ : M ⟶ N) (r : Γ(X, U)) (x : Γ(M, U))
-  证明: (φ.val.app (.op U)).hom.map_smul r x
-
-Depends on / 依赖: hom.map_smul, infer_instance, map_smul, val.app
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.app_smul** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.Scheme.Modules.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N : X.Modules} {U : X.Opens} (φ : M ⟶ 
+N) (r : ↑(X.presheaf.obj (Opposite.op U)))   (x : ↑(M.presheaf.obj (Opposite.op 
+U))),   (CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.Scheme.Modules.H
+om.app φ U)) (r • x) =     r • (CategoryTheory.ConcreteCategory.hom (AlgebraicGe
+ometry.Scheme.Modules.Hom.app φ U)) x
+参数：φ : M ⟶ N；r : ↑(X.presheaf.obj (Opposite.op U))；x : ↑(M.presheaf.obj (Opposit
+e.op U))；CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.Scheme.Modules.H
+om.app φ U)；r • x；CategoryTheory.ConcreteCategory.hom (AlgebraicGeometry.Scheme.
+Modules.Hom.app φ U)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
 -/
 lemma Hom.app_smul (φ : M ⟶ N) (r : Γ(X, U)) (x : Γ(M, U)) :
     φ.app U (r • x) = r • φ.app U x :=
   (φ.val.app (.op U)).hom.map_smul r x
-
-/--
-lemma `Hom.add_app` / 引理 `Hom.add_app`
-
-English:
-lemma Hom.add_app
-  given: (φ ψ : M ⟶ N)
-  statement: (φ + ψ).app U = φ.app U + ψ.app U
-  proof: rfl
-
-中文:
-引理 态射.add_app
-  条件: (φ ψ : M ⟶ N)
-  结论: (φ + ψ).app U = φ.app U + ψ.app U
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.add_app** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.Scheme.Modules.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N : X.Modules} {U : X.Opens} (φ ψ : M 
+⟶ N),   AlgebraicGeometry.Scheme.Modules.Hom.app (φ + ψ) U =     AlgebraicGeomet
+ry.Scheme.Modules.Hom.app φ U + AlgebraicGeometry.Scheme.Modules.Hom.app ψ U
+参数：φ ψ : M ⟶ N；φ + ψ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma Hom.add_app (φ ψ : M ⟶ N) : (φ + ψ).app U = φ.app U + ψ.app U := rfl
-/--
-lemma `Hom.sub_app` / 引理 `Hom.sub_app`
-
-English:
-lemma Hom.sub_app
-  given: (φ ψ : M ⟶ N)
-  statement: (φ - ψ).app U = φ.app U - ψ.app U
-  proof: rfl
-
-中文:
-引理 态射.sub_app
-  条件: (φ ψ : M ⟶ N)
-  结论: (φ - ψ).app U = φ.app U - ψ.app U
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.sub_app** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.Scheme.Modules.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N : X.Modules} {U : X.Opens} (φ ψ : M 
+⟶ N),   AlgebraicGeometry.Scheme.Modules.Hom.app (φ - ψ) U =     AlgebraicGeomet
+ry.Scheme.Modules.Hom.app φ U - AlgebraicGeometry.Scheme.Modules.Hom.app ψ U
+参数：φ ψ : M ⟶ N；φ - ψ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma Hom.sub_app (φ ψ : M ⟶ N) : (φ - ψ).app U = φ.app U - ψ.app U := rfl
-/--
-lemma `Hom.zero_app` / 引理 `Hom.zero_app`
-
-English:
-lemma Hom.zero_app
-  statement: (0 : M ⟶ N).app U = 0
-  proof: rfl
-
-中文:
-引理 态射.zero_app
-  结论: (0 : M ⟶ N).app U = 0
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.zero_app** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.Scheme.Modules.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N : X.Modules} {U : X.Opens}, Algebrai
+cGeometry.Scheme.Modules.Hom.app 0 U = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma Hom.zero_app : (0 : M ⟶ N).app U = 0 := rfl
-/--
-lemma `Hom.id_app` / 引理 `Hom.id_app`
-
-English:
-lemma Hom.id_app
-  given: (M : X.Modules)
-  statement: (𝟙 M :).app U = 𝟙 _
-  proof: rfl
-
-中文:
-引理 态射.id_app
-  条件: (M : X.Modules)
-  结论: (𝟙 M :).app U = 𝟙 _
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.id_app** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.Scheme.Modules.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U : X.Opens} (M : X.Modules),   Algebrai
+cGeometry.Scheme.Modules.Hom.app (CategoryTheory.CategoryStruct.id M) U =     Ca
+tegoryTheory.CategoryStruct.id (M.presheaf.obj (Opposite.op U))
+参数：M : X.Modules；CategoryTheory.CategoryStruct.id M；M.presheaf.obj (Opposite.op 
+U)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma Hom.id_app (M : X.Modules) : (𝟙 M :).app U = 𝟙 _ := rfl
-/--
-lemma `Hom.comp_app` / 引理 `Hom.comp_app`
-
-English:
-lemma Hom.comp_app
-  given: (φ : M ⟶ N) (ψ : N ⟶ K)
-  statement: (φ ≫ ψ).app U = φ.app U ≫ ψ.app U
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 态射.comp_app
-  条件: (φ : M ⟶ N) (ψ : N ⟶ K)
-  结论: (φ ≫ ψ).app U = φ.app U ≫ ψ.app U
-  证明: rfl
-
-@[ext]
-
-Depends on / 依赖: faceSingletonComplIso, infer_instance, mono_comp_iff_of_isIso, stdSimplex, stdSimplex.faceSingletonComplIso
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.comp_app** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.Scheme.Modules.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N K : X.Modules} {U : X.Opens} (φ : M 
+⟶ N) (ψ : N ⟶ K),   AlgebraicGeometry.Scheme.Modules.Hom.app (CategoryTheory.Cat
+egoryStruct.comp φ ψ) U =     CategoryTheory.CategoryStruct.comp (AlgebraicGeome
+try.Scheme.Modules.Hom.app φ U)       (AlgebraicGeometry.Scheme.Modules.Hom.app 
+ψ U)
+参数：φ : M ⟶ N；ψ : N ⟶ K；CategoryTheory.CategoryStruct.comp φ ψ；AlgebraicGeometry.
+Scheme.Modules.Hom.app φ U；AlgebraicGeometry.Scheme.Modules.Hom.app ψ U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma Hom.comp_app (φ : M ⟶ N) (ψ : N ⟶ K) : (φ ≫ ψ).app U = φ.app U ≫ ψ.app U := rfl
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: (f g : M ⟶ N) (H : forall U, f.app U = g.app U)
-  statement: f = g
-  proof: by
-  apply SheafOfModules.hom_ext
-  ext U x
-  exact congr($(H U.unop) x)
-
-中文:
-引理 hom_ext
-  条件: (f g : M ⟶ N) (H : 对任意 U, f.app U = g.app U)
-  结论: f = g
-  证明: by
-  apply SheafOfModules.hom_ext
-  ext U x
-  exact congr($(H U.unop) x)
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.hom_ext, U.unop, hom_ext, infer_instance
+/-
+**AlgebraicGeometry.Scheme.Modules.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry.Scheme.Modules`。
+形式化陈述：hom_ext (f g : M ⟶ N) (H : forall U, f.app U = g.app U) : f = g
+参数：f g : M ⟶ N；H : forall U, f.app U = g.app U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SheafOfModules.hom_ext`：hom_ext {X Y : SheafOfModules.{v} R} {f g : X ⟶ 
+Y} (h : f.val = g.val) : f = g
+· 使用引理 `PresheafOfModules.hom_ext`：hom_ext {f g : M₁ ⟶ M₂} (h : forall (X : Cᵒᵖ)
+, f.app X = g.app X) : f = g
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma hom_ext (f g : M ⟶ N) (H : forall U, f.app U = g.app U) : f = g := by
+lemma hom_ext (f g : M ⟶ N) (H : ∀ U, f.app U = g.app U) : f = g := by
   apply SheafOfModules.hom_ext
   ext U x
   exact congr($(H U.unop) x)
-
-/--
-lemma `isSheaf` / 引理 `isSheaf`
-
-English:
-lemma isSheaf
-  given: (M : X.Modules)
-  statement: M.presheaf.IsSheaf
-  proof: SheafOfModules.isSheaf M
-
-中文:
-引理 isSheaf
-  条件: (M : X.Modules)
-  结论: M.presheaf.是层
-  证明: SheafOfModules.isSheaf M
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.isSheaf, isSheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.isSheaf** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry.Scheme.Modules`。
+形式化陈述：isSheaf (M : X.Modules) : M.presheaf.IsSheaf
+参数：M : X.Modules。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.isSheaf`：∀ {C : Type u₁} [inst : CategoryTheory.Category.
+{v₁, u₁} C] {J : CategoryTheory.GrothendieckTopology C}   {R : CategoryTheory.Sh
+eaf J RingCa…
 -/
 lemma isSheaf (M : X.Modules) : M.presheaf.IsSheaf := SheafOfModules.isSheaf M
-
-/--
-lemma `toPresheaf_obj` / 引理 `toPresheaf_obj`
-
-English:
-lemma toPresheaf_obj
-  statement: (toPresheaf X).obj M = M.presheaf
-  proof: rfl
-
-中文:
-引理 toPresheaf_obj
-  结论: (toPresheaf X).obj M = M.presheaf
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.toPresheaf_obj** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M : X.Modules}, (AlgebraicGeometry.Schem
+e.Modules.toPresheaf X).obj M = M.presheaf
+参数：AlgebraicGeometry.Scheme.Modules.toPresheaf X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toPresheaf_obj : (toPresheaf X).obj M = M.presheaf := rfl
-/--
-lemma `toPresheaf_map` / 引理 `toPresheaf_map`
-
-English:
-lemma toPresheaf_map
-  statement: (toPresheaf X).map φ = φ.mapPresheaf
-  proof: rfl
-
-中文:
-引理 toPresheaf_map
-  结论: (toPresheaf X).map φ = φ.mapPresheaf
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.toPresheaf_map** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N : X.Modules} {φ : M ⟶ N},   (Algebra
+icGeometry.Scheme.Modules.toPresheaf X).map φ = AlgebraicGeometry.Scheme.Modules
+.Hom.mapPresheaf φ
+参数：AlgebraicGeometry.Scheme.Modules.toPresheaf X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toPresheaf_map : (toPresheaf X).map φ = φ.mapPresheaf := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Hom.isIso_iff_isIso_app` / 引理 `Hom.isIso_iff_isIso_app`
-
-English:
-lemma Hom.isIso_iff_isIso_app
-  given: {M N : X.Modules} {φ : M ⟶ N}
-  proof: by
-  rw [← isIso_iff_of_reflects_iso _ (toPresheaf X)]; rw [NatTrans.isIso_iff_isIso_app]
-  simp [Opposite.op_surjective.forall]
-
-中文:
-引理 态射.isIso_iff_isIso_app
-  条件: {M N : X.Modules} {φ : M ⟶ N}
-  证明: by
-  rw [← isIso_iff_of_reflects_iso _ (toPresheaf X)]; rw [NatTrans.isIso_iff_isIso_app]
-  simp [Opposite.op_surjective.forall]
-
-Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, Opposite, Opposite.op_surjective.forall, isIso_iff_isIso_app, isIso_iff_of_reflects_iso, op_surjective, toPresheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.Hom.isIso_iff_isIso_app** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.Scheme.Modules.Hom`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M N : X.Modules} {φ : M ⟶ N},   Category
+Theory.IsIso φ ↔ ∀ (U : X.Opens), CategoryTheory.IsIso (AlgebraicGeometry.Scheme
+.Modules.Hom.app φ U)
+参数：U : X.Opens；AlgebraicGeometry.Scheme.Modules.Hom.app φ U。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
+· 使用定理 `AlgebraicGeometry.Scheme.Modules.instReflectsIsomorphismsPresheafAbCarri
+erCommRingCatToPresheaf`：∀ {X : AlgebraicGeometry.Scheme}, (AlgebraicGeometry.Sc
+heme.Modules.toPresheaf X).ReflectsIsomorphisms
+· 使用定理 `CategoryTheory.NatTrans.isIso_iff_isIso_app`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Opposite.op_surjective`：op_surjective : Function.Surjective (op : α -> α
+ᵒᵖ)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma Hom.isIso_iff_isIso_app {M N : X.Modules} {φ : M ⟶ N} :
-    IsIso φ ↔ forall U, IsIso (φ.app U) := by
-  rw [← isIso_iff_of_reflects_iso _ (toPresheaf X)]; rw [NatTrans.isIso_iff_isIso_app]
+    IsIso φ ↔ ∀ U, IsIso (φ.app U) := by
+  rw [← isIso_iff_of_reflects_iso _ (toPresheaf X), NatTrans.isIso_iff_isIso_app]
   simp [Opposite.op_surjective.forall]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIso
-  signature: φ] : IsIso (φ.app U)
-  body: Hom.isIso_iff_isIso_app.mp ‹_› _
-
-@[simp, push ←]
-
-中文:
-实例 [是同构
-  签名: φ] : 是同构 (φ.app U)
-  定义体: Hom.isIso_iff_isIso_app.mp ‹_› _
-
-@[simp, push ←]
-
-Depends on / 依赖: Hom.isIso_iff_isIso_app.mp, isIso_iff_isIso_app
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIso φ] : IsIso (φ.app U) := Hom.isIso_iff_isIso_app.mp ‹_› _
 
 @[simp, push ←]
-/--
-lemma `inv_app` / 引理 `inv_app`
-
-English:
-lemma inv_app
-  given: [IsIso φ]
-  statement: (inv φ).app U = inv (φ.app U)
-  proof: by
-  apply IsIso.eq_inv_of_hom_inv_id
-  simp [← Hom.comp_app]
-
-中文:
-引理 inv_app
-  条件: [是同构 φ]
-  结论: (inv φ).app U = inv (φ.app U)
-  证明: by
-  apply IsIso.eq_inv_of_hom_inv_id
-  simp [← Hom.comp_app]
-
-Depends on / 依赖: Hom.comp_app, IsIso.eq_inv_of_hom_inv_id, comp_app, eq_inv_of_hom_inv_id
+/-
+**AlgebraicGeometry.Scheme.Modules.inv_app** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry.Scheme.Modules`。
+形式化陈述：inv_app [IsIso φ] : (inv φ).app U = inv (φ.app U)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsIso.eq_inv_of_hom_inv_id`：eq_inv_of_hom_inv_id {f : X ⟶
+ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X) : g = inv f
+· 使用定理 `AlgebraicGeometry.Scheme.Modules.instIsIsoAbApp`：∀ {X : AlgebraicGeometr
+y.Scheme} {M N : X.Modules} {φ : M ⟶ N} {U : X.Opens} [CategoryTheory.IsIso φ], 
+  CategoryTheory.IsIso (AlgebraicGeom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_app [IsIso φ] : (inv φ).app U = inv (φ.app U) := by
   apply IsIso.eq_inv_of_hom_inv_id
@@ -742,121 +533,87 @@ noncomputable section Functorial
 
 variable (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ T)
 
-/--
-Definition of `pushforward` / `pushforward` 的定义
+/-- The pushforward functor for categories of sheaves of modules over schemes. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforward** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme.Modules`。
+形式化陈述：pushforward : X.Modules ⥤ Y.Modules
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforward
-  signature: : X.Modules ⥤ Y.Modules
-  body: SheafOfModules.pushforward f.toRingCatSheafHom
-
-@[simp]
-
-中文:
-定义 pushforward
-  签名: : X.Modules ⥤ Y.Modules
-  定义体: SheafOfModules.pushforward f.toRingCatSheafHom
-
-@[simp]
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.pushforward, f.toRingCatSheafHom, pushforward, toRingCatSheafHom
+--- 原说明 ---
+The pushforward functor for categories of sheaves of modules over schemes.
 -/
 def pushforward : X.Modules ⥤ Y.Modules :=
   SheafOfModules.pushforward f.toRingCatSheafHom
 
 @[simp]
-/--
-lemma `pushforward_obj_obj` / 引理 `pushforward_obj_obj`
-
-English:
-lemma pushforward_obj_obj
-  given: (M : X.Modules) (U : Y.Opens)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 pushforward_obj_obj
-  条件: (M : X.Modules) (U : Y.Opens)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforward_obj_obj** 是 Mathlib 中的一个引理，位于命名空间
+ `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：pushforward_obj_obj (M : X.Modules) (U : Y.Opens) : Γ((pushforward f).obj 
+M, U) = Γ(M, f ⁻¹ᵁ U)
+参数：M : X.Modules；U : Y.Opens。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pushforward_obj_obj (M : X.Modules) (U : Y.Opens) :
     Γ((pushforward f).obj M, U) = Γ(M, f ⁻¹ᵁ U) := rfl
 
 @[simp]
-/--
-lemma `pushforward_obj_presheaf_map` / 引理 `pushforward_obj_presheaf_map`
-
-English:
-lemma pushforward_obj_presheaf_map
-  given: {U V : Y.Opens} (i : U ⟶ V)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 pushforward_obj_presheaf_map
-  条件: {U V : Y.Opens} (i : U ⟶ V)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforward_obj_presheaf_map** 是 Mathlib 中的一个
+引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：pushforward_obj_presheaf_map {U V : Y.Opens} (i : U ⟶ V) : ((pushforward f
+).obj M).presheaf.map i.op = M.presheaf.map ((Opens.map f.base).map i).op
+参数：i : U ⟶ V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pushforward_obj_presheaf_map {U V : Y.Opens} (i : U ⟶ V) :
     ((pushforward f).obj M).presheaf.map i.op = M.presheaf.map ((Opens.map f.base).map i).op := rfl
 
 @[simp]
-/--
-lemma `pushforward_map_app` / 引理 `pushforward_map_app`
-
-English:
-lemma pushforward_map_app
-  given: (φ : M ⟶ N) (U : Y.Opens)
-  proof: rfl
-
-中文:
-引理 pushforward_map_app
-  条件: (φ : M ⟶ N) (U : Y.Opens)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforward_map_app** 是 Mathlib 中的一个引理，位于命名空间
+ `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：pushforward_map_app (φ : M ⟶ N) (U : Y.Opens) : ((pushforward f).map φ).ap
+p U = φ.app (f ⁻¹ᵁ U)
+参数：φ : M ⟶ N；U : Y.Opens。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pushforward_map_app (φ : M ⟶ N) (U : Y.Opens) :
     ((pushforward f).map φ).app U = φ.app (f ⁻¹ᵁ U) := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `pullback` / `pullback` 的定义
+/-- The pullback functor for categories of sheaves of modules over schemes. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pullback** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.Scheme.Modules`。
+形式化陈述：pullback : Y.Modules ⥤ X.Modules
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullback
-  signature: : Y.Modules ⥤ X.Modules
-  body: SheafOfModules.pullback f.toRingCatSheafHom
-
-中文:
-定义 pullback
-  签名: : Y.Modules ⥤ X.Modules
-  定义体: SheafOfModules.pullback f.toRingCatSheafHom
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.pullback, f.toRingCatSheafHom, pullback, toRingCatSheafHom
+--- 原说明 ---
+The pullback functor for categories of sheaves of modules over schemes.
 -/
 def pullback : Y.Modules ⥤ X.Modules :=
   SheafOfModules.pullback f.toRingCatSheafHom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `pullbackPushforwardAdjunction` / `pullbackPushforwardAdjunction` 的定义
+/-- The pullback functor for categories of sheaves of modules over schemes
+is left adjoint to the pushforward functor. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pullbackPushforwardAdjunction** 是 Mathlib 中的一
+个定义，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：pullbackPushforwardAdjunction : pullback f ⊣ pushforward f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackPushforwardAdjunction
-  signature: : pullback f ⊣ pushforward f
-  body: SheafOfModules.pullbackPushforwardAdjunction _
-
-中文:
-定义 pullbackPushforwardAdjunction
-  签名: : pullback f ⊣ pushforward f
-  定义体: SheafOfModules.pullbackPushforwardAdjunction _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.pullbackPushforwardAdjunction, pullbackPushforwardAdjunction
+--- 原说明 ---
+The pullback functor for categories of sheaves of modules over schemes
+is left adjoint to the pushforward functor.
 -/
 def pullbackPushforwardAdjunction : pullback f ⊣ pushforward f :=
   SheafOfModules.pullbackPushforwardAdjunction _
@@ -867,322 +624,254 @@ attribute [local instance] preservesBinaryBiproducts_of_preservesBinaryCoproduct
   preservesBinaryBiproducts_of_preservesBinaryProducts
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pullback f).IsLeftAdjoint
-  body: (pullbackPushforwardAdjunction f).isLeftAdjoint
-
-中文:
-实例 :
-  签名: (pullback f).是左伴随
-  定义体: (pullbackPushforwardAdjunction f).isLeftAdjoint
-
-Depends on / 依赖: isLeftAdjoint, pullbackPushforwardAdjunction
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pullback f).IsLeftAdjoint := (pullbackPushforwardAdjunction f).isLeftAdjoint
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward f).IsRightAdjoint
-  body: (pullbackPushforwardAdjunction f).isRightAdjoint
-
-中文:
-实例 :
-  签名: (pushforward f).是右伴随
-  定义体: (pullbackPushforwardAdjunction f).isRightAdjoint
-
-Depends on / 依赖: isRightAdjoint, pullbackPushforwardAdjunction
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward f).IsRightAdjoint := (pullbackPushforwardAdjunction f).isRightAdjoint
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward f).Additive
-  body: Functor.additive_of_preservesBinaryBiproducts _
-
-中文:
-实例 :
-  签名: (pushforward f).加性
-  定义体: Functor.additive_of_preservesBinaryBiproducts _
-
-Depends on / 依赖: Functor, Functor.additive_of_preservesBinaryBiproducts, additive_of_preservesBinaryBiproducts
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward f).Additive := Functor.additive_of_preservesBinaryBiproducts _
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pullback f).Additive
-  body: Functor.additive_of_preservesBinaryBiproducts _
-
-中文:
-实例 :
-  签名: (pullback f).加性
-  定义体: Functor.additive_of_preservesBinaryBiproducts _
-
-Depends on / 依赖: Functor, Functor.additive_of_preservesBinaryBiproducts, additive_of_preservesBinaryBiproducts
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pullback f).Additive := Functor.additive_of_preservesBinaryBiproducts _
 
 end
 
 variable (X) in
-/--
-Definition of `pushforwardId` / `pushforwardId` 的定义
+/-- The pushforward of sheaves of modules by the identity morphism identifies
+to the identity functor. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardId** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry.Scheme.Modules`。
+形式化陈述：pushforwardId : pushforward (𝟙 X) ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforwardId
-  signature: : pushforward (𝟙 X) ≅ 𝟭 _
-  body: SheafOfModules.pushforwardId _
-
-中文:
-定义 pushforwardId
-  签名: : pushforward (𝟙 X) ≅ 𝟭 _
-  定义体: SheafOfModules.pushforwardId _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.pushforwardId, pushforwardId
+--- 原说明 ---
+The pushforward of sheaves of modules by the identity morphism identifies
+to the identity functor.
 -/
 def pushforwardId : pushforward (𝟙 X) ≅ 𝟭 _ :=
   SheafOfModules.pushforwardId _
-
-/--
-lemma `pushforwardId_hom_app_app` / 引理 `pushforwardId_hom_app_app`
-
-English:
-lemma pushforwardId_hom_app_app
-  statement: ((pushforwardId X).hom.app M).app U = 𝟙 _
-  proof: rfl
-
-中文:
-引理 pushforwardId_hom_app_app
-  结论: ((pushforwardId X).hom.app M).app U = 𝟙 _
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardId_hom_app_app** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M : X.Modules} {U : X.Opens},   Algebrai
+cGeometry.Scheme.Modules.Hom.app ((AlgebraicGeometry.Scheme.Modules.pushforwardI
+d X).hom.app M) U =     CategoryTheory.CategoryStruct.id       (((AlgebraicGeome
+try.Scheme.Modules.pushforward (CategoryTheory.CategoryStruct.id X)).obj M).pres
+heaf.obj         (Opposite.op U))
+参数：(AlgebraicGeometry.Scheme.Modules.pushforwardId X).hom.app M；((AlgebraicGeome
+try.Scheme.Modules.pushforward (CategoryTheory.CategoryStruct.id X)).obj M).pres
+heaf.obj         (Opposite.op U)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforwardId_hom_app_app : ((pushforwardId X).hom.app M).app U = 𝟙 _ := rfl
-/--
-lemma `pushforwardId_inv_app_app` / 引理 `pushforwardId_inv_app_app`
-
-English:
-lemma pushforwardId_inv_app_app
-  statement: ((pushforwardId X).inv.app M).app U = 𝟙 _
-  proof: rfl
-
-中文:
-引理 pushforwardId_inv_app_app
-  结论: ((pushforwardId X).inv.app M).app U = 𝟙 _
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardId_inv_app_app** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {M : X.Modules} {U : X.Opens},   Algebrai
+cGeometry.Scheme.Modules.Hom.app ((AlgebraicGeometry.Scheme.Modules.pushforwardI
+d X).inv.app M) U =     CategoryTheory.CategoryStruct.id (((CategoryTheory.Funct
+or.id X.Modules).obj M).presheaf.obj (Opposite.op U))
+参数：(AlgebraicGeometry.Scheme.Modules.pushforwardId X).inv.app M；((CategoryTheory
+.Functor.id X.Modules).obj M).presheaf.obj (Opposite.op U)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforwardId_inv_app_app : ((pushforwardId X).inv.app M).app U = 𝟙 _ := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (X) in
-/--
-Definition of `pullbackId` / `pullbackId` 的定义
+/-- The pullback of sheaves of modules by the identity morphism identifies
+to the identity functor. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pullbackId** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.Scheme.Modules`。
+形式化陈述：pullbackId : pullback (𝟙 X) ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackId
-  signature: : pullback (𝟙 X) ≅ 𝟭 _
-  body: SheafOfModules.pullbackId _
-
-中文:
-定义 pullbackId
-  签名: : pullback (𝟙 X) ≅ 𝟭 _
-  定义体: SheafOfModules.pullbackId _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.pullbackId, fibration_iff, pullbackId, rlp_of_isIso
+--- 原说明 ---
+The pullback of sheaves of modules by the identity morphism identifies
+to the identity functor.
 -/
 def pullbackId : pullback (𝟙 X) ≅ 𝟭 _ :=
   SheafOfModules.pullbackId _
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (X) in
-/--
-lemma `conjugateEquiv_pullbackId_hom` / 引理 `conjugateEquiv_pullbackId_hom`
-
-English:
-lemma conjugateEquiv_pullbackId_hom
-  proof: SheafOfModules.conjugateEquiv_pullbackId_hom _
-
-中文:
-引理 conjugateEquiv_pullbackId_hom
-  证明: SheafOfModules.conjugateEquiv_pullbackId_hom _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.conjugateEquiv_pullbackId_hom, conjugateEquiv_pullbackId_hom
+/-
+**AlgebraicGeometry.Scheme.Modules.conjugateEquiv_pullbackId_hom** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：conjugateEquiv_pullbackId_hom : conjugateEquiv .id (pullbackPushforwardAdj
+unction (𝟙 X)) (pullbackId X).hom = (pushforwardId X).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SheafOfModules.conjugateEquiv_pullbackId_hom`：conjugateEquiv_pullbackId_
+hom : conjugateEquiv .id (pullbackPushforwardAdjunction.{v} _) (pullbackId S).ho
+m = (pushforwardId S).inv
 -/
 lemma conjugateEquiv_pullbackId_hom :
     conjugateEquiv .id (pullbackPushforwardAdjunction (𝟙 X)) (pullbackId X).hom =
       (pushforwardId X).inv :=
   SheafOfModules.conjugateEquiv_pullbackId_hom _
 
-/--
-Definition of `pushforwardComp` / `pushforwardComp` 的定义
+/-- The composition of two pushforward functors for sheaves of modules on schemes
+identify to the pushforward for the composition. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardComp** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.Scheme.Modules`。
+形式化陈述：pushforwardComp : pushforward f ⋙ pushforward g ≅ pushforward (f ≫ g)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforwardComp
-  signature: :
-  body: SheafOfModules.pushforwardComp _ _
-
-中文:
-定义 pushforwardComp
-  签名: :
-  定义体: SheafOfModules.pushforwardComp _ _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.pushforwardComp, pushforwardComp
+--- 原说明 ---
+The composition of two pushforward functors for sheaves of modules on schemes
+identify to the pushforward for the composition.
 -/
 def pushforwardComp :
     pushforward f ⋙ pushforward g ≅ pushforward (f ≫ g) :=
   SheafOfModules.pushforwardComp _ _
-
-/--
-lemma `pushforwardComp_hom_app_app` / 引理 `pushforwardComp_hom_app_app`
-
-English:
-lemma pushforwardComp_hom_app_app
-  given: (U)
-  statement: ((pushforwardComp f g).hom.app M).app U = 𝟙 _
-  proof: rfl
-
-中文:
-引理 pushforwardComp_hom_app_app
-  条件: (U)
-  结论: ((pushforwardComp f g).hom.app M).app U = 𝟙 _
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardComp_hom_app_app** 是 Mathlib 中的一个定
+理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} {M : X.Modules} (f : X ⟶ Y) (g : Y ⟶ 
+Z) (U : Z.Opens),   AlgebraicGeometry.Scheme.Modules.Hom.app ((AlgebraicGeometry
+.Scheme.Modules.pushforwardComp f g).hom.app M) U =     CategoryTheory.CategoryS
+truct.id       ((((AlgebraicGeometry.Scheme.Modules.pushforward f).comp (Algebra
+icGeometry.Scheme.Modules.pushforward g)).obj               M).presheaf.obj     
+    (Opposite.op U))
+参数：f : X ⟶ Y；g : Y ⟶ Z；U : Z.Opens；(AlgebraicGeometry.Scheme.Modules.pushforward
+Comp f g).hom.app M；(((AlgebraicGeometry.Scheme.Modules.pushforward f).comp (Alg
+ebraicGeometry.Scheme.Modules.pushforward g)).obj               M).presheaf.obj 
+        (Opposite.op U)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforwardComp_hom_app_app (U) : ((pushforwardComp f g).hom.app M).app U = 𝟙 _ := rfl
-/--
-lemma `pushforwardComp_inv_app_app` / 引理 `pushforwardComp_inv_app_app`
-
-English:
-lemma pushforwardComp_inv_app_app
-  given: (U)
-  statement: ((pushforwardComp f g).inv.app M).app U = 𝟙 _
-  proof: rfl
-
-中文:
-引理 pushforwardComp_inv_app_app
-  条件: (U)
-  结论: ((pushforwardComp f g).inv.app M).app U = 𝟙 _
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardComp_inv_app_app** 是 Mathlib 中的一个定
+理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X Y Z : AlgebraicGeometry.Scheme} {M : X.Modules} (f : X ⟶ Y) (g : Y ⟶ 
+Z) (U : Z.Opens),   AlgebraicGeometry.Scheme.Modules.Hom.app ((AlgebraicGeometry
+.Scheme.Modules.pushforwardComp f g).inv.app M) U =     CategoryTheory.CategoryS
+truct.id       (((AlgebraicGeometry.Scheme.Modules.pushforward (CategoryTheory.C
+ategoryStruct.comp f g)).obj M).presheaf.obj         (Opposite.op U))
+参数：f : X ⟶ Y；g : Y ⟶ Z；U : Z.Opens；(AlgebraicGeometry.Scheme.Modules.pushforward
+Comp f g).inv.app M；((AlgebraicGeometry.Scheme.Modules.pushforward (CategoryTheo
+ry.CategoryStruct.comp f g)).obj M).presheaf.obj         (Opposite.op U)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforwardComp_inv_app_app (U) : ((pushforwardComp f g).inv.app M).app U = 𝟙 _ := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `pullbackComp` / `pullbackComp` 的定义
+/-- The composition of two pullback functors for sheaves of modules on schemes
+identify to the pullback for the composition. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pullbackComp** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.Scheme.Modules`。
+形式化陈述：pullbackComp : pullback g ⋙ pullback f ≅ pullback (f ≫ g)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackComp
-  signature: :
-  body: SheafOfModules.pullbackComp _ _
-
-中文:
-定义 pullbackComp
-  签名: :
-  定义体: SheafOfModules.pullbackComp _ _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.pullbackComp, pullbackComp
+--- 原说明 ---
+The composition of two pullback functors for sheaves of modules on schemes
+identify to the pullback for the composition.
 -/
 def pullbackComp :
     pullback g ⋙ pullback f ≅ pullback (f ≫ g) :=
   SheafOfModules.pullbackComp _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `pushforwardCongr` / `pushforwardCongr` 的定义
+/-- Pushforwards along equal morphisms are isomorphic. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardCongr** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry.Scheme.Modules`。
+形式化陈述：pushforwardCongr {f g : X ⟶ Y} (hf : f = g) : pushforward f ≅ pushforward 
+g
+参数：hf : f = g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforwardCongr
-  signature: {f g : X ⟶ Y} (hf : f = g)
-  body: pushforwardNatIso _ (Opens.mapIso _ _ (hf ▸ rfl)) ≪≫
-      SheafOfModules.pushforwardCongr (by cat_disch)
-
-中文:
-定义 pushforwardCongr
-  签名: {f g : X ⟶ Y} (hf : f = g)
-  定义体: pushforwardNatIso _ (Opens.mapIso _ _ (hf ▸ rfl)) ≪≫
-      SheafOfModules.pushforwardCongr (by cat_disch)
-
-Depends on / 依赖: Opens.mapIso, SheafOfModules, SheafOfModules.pushforwardCongr, cat_disch, mapIso, pushforwardCongr, pushforwardNatIso
+--- 原说明 ---
+Pushforwards along equal morphisms are isomorphic.
 -/
 def pushforwardCongr {f g : X ⟶ Y} (hf : f = g) : pushforward f ≅ pushforward g :=
     pushforwardNatIso _ (Opens.mapIso _ _ (hf ▸ rfl)) ≪≫
       SheafOfModules.pushforwardCongr (by cat_disch)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `pushforwardCongr_hom_app_app` / 引理 `pushforwardCongr_hom_app_app`
-
-English:
-lemma pushforwardCongr_hom_app_app
-  given: {f g : X ⟶ Y} (hf : f = g) (U : Y.Opens)
-  proof: rfl
-
-中文:
-引理 pushforwardCongr_hom_app_app
-  条件: {f g : X ⟶ Y} (hf : f = g) (U : Y.Opens)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardCongr_hom_app_app** 是 Mathlib 中的一个
+定理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} {M : X.Modules} {f g : X ⟶ Y} (hf : f =
+ g) (U : Y.Opens),   AlgebraicGeometry.Scheme.Modules.Hom.app ((AlgebraicGeometr
+y.Scheme.Modules.pushforwardCongr hf).hom.app M) U =     M.presheaf.map (Categor
+yTheory.eqToHom ⋯).op
+参数：hf : f = g；U : Y.Opens；(AlgebraicGeometry.Scheme.Modules.pushforwardCongr hf)
+.hom.app M；CategoryTheory.eqToHom ⋯。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforwardCongr_hom_app_app {f g : X ⟶ Y} (hf : f = g) (U : Y.Opens) :
     ((pushforwardCongr hf).hom.app M).app U = M.presheaf.map (eqToHom (hf ▸ rfl)).op := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `pushforwardCongr_inv_app_app` / 引理 `pushforwardCongr_inv_app_app`
-
-English:
-lemma pushforwardCongr_inv_app_app
-  given: {f g : X ⟶ Y} (hf : f = g) (U : Y.Opens)
-  proof: rfl
-
-中文:
-引理 pushforwardCongr_inv_app_app
-  条件: {f g : X ⟶ Y} (hf : f = g) (U : Y.Opens)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.pushforwardCongr_inv_app_app** 是 Mathlib 中的一个
+定理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} {M : X.Modules} {f g : X ⟶ Y} (hf : f =
+ g) (U : Y.Opens),   AlgebraicGeometry.Scheme.Modules.Hom.app ((AlgebraicGeometr
+y.Scheme.Modules.pushforwardCongr hf).inv.app M) U =     M.presheaf.map (Categor
+yTheory.eqToHom ⋯).op
+参数：hf : f = g；U : Y.Opens；(AlgebraicGeometry.Scheme.Modules.pushforwardCongr hf)
+.inv.app M；CategoryTheory.eqToHom ⋯。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma pushforwardCongr_inv_app_app {f g : X ⟶ Y} (hf : f = g) (U : Y.Opens) :
     ((pushforwardCongr hf).inv.app M).app U = M.presheaf.map (eqToHom (hf ▸ rfl)).op := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `pullbackCongr` / `pullbackCongr` 的定义
+/-- Inverse images along equal morphisms are isomorphic. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.pullbackCongr** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry.Scheme.Modules`。
+形式化陈述：pullbackCongr {f g : X ⟶ Y} (hf : f = g) : pullback f ≅ pullback g
+参数：hf : f = g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackCongr
-  signature: {f g : X ⟶ Y} (hf : f = g)
-  body: eqToIso (hf ▸ rfl)
-
-中文:
-定义 pullbackCongr
-  签名: {f g : X ⟶ Y} (hf : f = g)
-  定义体: eqToIso (hf ▸ rfl)
-
-Depends on / 依赖: eqToIso
+--- 原说明 ---
+Inverse images along equal morphisms are isomorphic.
 -/
 def pullbackCongr {f g : X ⟶ Y} (hf : f = g) : pullback f ≅ pullback g :=
   eqToIso (hf ▸ rfl)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `conjugateEquiv_pullbackComp_inv` / 引理 `conjugateEquiv_pullbackComp_inv`
-
-English:
-lemma conjugateEquiv_pullbackComp_inv
-  proof: SheafOfModules.conjugateEquiv_pullbackComp_inv _ _
-
-中文:
-引理 conjugateEquiv_pullbackComp_inv
-  证明: SheafOfModules.conjugateEquiv_pullbackComp_inv _ _
-
-Depends on / 依赖: SheafOfModules, SheafOfModules.conjugateEquiv_pullbackComp_inv, conjugateEquiv_pullbackComp_inv
+/-
+**AlgebraicGeometry.Scheme.Modules.conjugateEquiv_pullbackComp_inv** 是 Mathlib 中
+的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：conjugateEquiv_pullbackComp_inv : conjugateEquiv ((pullbackPushforwardAdju
+nction g).comp (pullbackPushforwardAdjunction f)) (pullbackPushforwardAdjunction
+ (f ≫ g)) (pullbackComp f g).inv = (pushforwardComp f g).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SheafOfModules.conjugateEquiv_pullbackComp_inv`：conjugateEquiv_pullbackC
+omp_inv : conjugateEquiv ((pullbackPushforwardAdjunction.{v} φ).comp (pullbackPu
+shforwardAdjunction.{v} ψ)) (pullbac…
 -/
 lemma conjugateEquiv_pullbackComp_inv :
     conjugateEquiv ((pullbackPushforwardAdjunction g).comp (pullbackPushforwardAdjunction f))
@@ -1192,36 +881,93 @@ lemma conjugateEquiv_pullbackComp_inv :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `pseudofunctor_associativity` / 引理 `pseudofunctor_associativity`
-
-English:
-lemma pseudofunctor_associativity
-  proof: by
-  let e₁ := pullbackComp f (g ≫ h)
-  let e₂ := Functor.isoWhiskerRight (pullbackComp g h) (pullback f)
-  let e₃ := Functor.isoWhiskerLeft (pullback h) (pullbackComp f g)
-  let e₄ := pullbackComp (f ≫ g) h
-  change e₁.inv ≫ e₂.inv ≫ (Functor.associator _ _ _).hom ≫ e₃.hom ≫ e₄.hom = _
-  have : e₃.hom ≫ e₄.hom = (Functor.associator _ _ _).inv ≫ e₂.hom ≫ e₁.hom :=
-    congr_arg Iso.hom (SheafOfModules.pullback_assoc.{u}
-      h.toRingCatSheafHom g.toRingCatSheafHom f.toRingCatSheafHom)
-  simp [this]
-
-中文:
-引理 pseudofunctor_associativity
-  证明: by
-  let e₁ := pullbackComp f (g ≫ h)
-  let e₂ := Functor.isoWhiskerRight (pullbackComp g h) (pullback f)
-  let e₃ := Functor.isoWhiskerLeft (pullback h) (pullbackComp f g)
-  let e₄ := pullbackComp (f ≫ g) h
-  change e₁.inv ≫ e₂.inv ≫ (Functor.associator _ _ _).hom ≫ e₃.hom ≫ e₄.hom = _
-  have : e₃.hom ≫ e₄.hom = (Functor.associator _ _ _).inv ≫ e₂.hom ≫ e₁.hom :=
-    congr_arg Iso.hom (SheafOfModules.pullback_assoc.{u}
-      h.toRingCatSheafHom g.toRingCatSheafHom f.toRingCatSheafHom)
-  simp [this]
-
-Depends on / 依赖: Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Iso.hom, SheafOfModules, SheafOfModules.pullback_assoc, associator, congr_arg, f.toRingCatSheafHom, g.toRingCatSheafHom, h.toRingCatSheafHom, isoWhiskerLeft, isoWhiskerRight, pullback, pullbackComp, pullback_assoc, toRingCatSheafHom
+/-
+**AlgebraicGeometry.Scheme.Modules.pseudofunctor_associativity** 是 Mathlib 中的一个引
+理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：pseudofunctor_associativity : (pullbackComp f (g ≫ h)).inv ≫ Functor.whisk
+erRight (pullbackComp g h).inv _ ≫ (Functor.associator _ _ _).hom ≫ Functor.whis
+kerLeft _ (pullbackComp f g).hom ≫ (pullbackComp (f ≫ g) h).hom = eqToHom (by si
+mp)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforward`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {J : CategoryTheor…
+· 使用定理 `PresheafOfModules.instIsRightAdjointPushforward`：∀ {C D : Type u} [inst 
+: CategoryTheory.SmallCategory C] [inst_1 : CategoryTheory.SmallCategory D]   {F
+ : CategoryTheory.Functor C D} {R : C…
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.instHasSheafifyOfPreservesLimitsForgetOfHasFiniteLimitsOf
+SmallOppositeCover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J 
+: CategoryTheory.GrothendieckTopology C) (D : Type w)   [inst_1 : CategoryTheory
+…
+· 使用定理 `AddCommGrpCat.hasLimit`：∀ {J : Type v} [inst : CategoryTheory.Category.{
+w, v} J] (F : CategoryTheory.Functor J AddCommGrpCat)   [Small.{u, max u v} ↑(F.
+comp (Catego…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AddCommGrpCat.hasColimitsOfShape`：∀ {J : Type u} [inst : CategoryTheory.
+Category.{v, u} J] [Small.{w, u} J],   CategoryTheory.Limits.HasColimitsOfShape 
+J AddCommGrpCat
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `AddCommGrpCat.FilteredColimits.forget_preservesFilteredColimits`：Categor
+yTheory.Limits.PreservesFilteredColimits (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.isCofiltered_of_directed_ge_nonempty`：∀ (α : Type u) [ins
+t : Preorder α] [IsCodirectedOrder α] [Nonempty α], CategoryTheory.IsCofiltered 
+α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `AddCommGrpCat.forget_reflects_isos`：(CategoryTheory.forget AddCommGrpCat
+).ReflectsIsomorphisms
+· 使用定理 `AddCommGrpCat.forget_preservesLimitsOfShape`：∀ {J : Type v} [inst : Cate
+goryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.Preserve
+sLimitsOfShape J (CategoryTheory.…
+· 使用定理 `AddCommGrpCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLim
+its (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `AddCommGrpCat.hasLimits`：CategoryTheory.Limits.HasLimits AddCommGrpCat
+· 使用定理 `CategoryTheory.GrothendieckTopology.instWEqualsLocallyBijectiveOfHasWeak
+SheafifyOfHasSheafComposeOfPreservesSheafificationOfReflectsIsomorphismsForget`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Gro
+thendieckTopology C) {D : Type w}   [inst_1 : CategoryTheory…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.GrothendieckTopology.instPreservesSheafificationForgetOfP
+reservesLimitsOfHasColimitsOfShapeOfPreservesColimitsOfShapeOppositeCoverOfHasLi
+mitsOfShapeWalkingMulticospanOfReflectsIsomorphisms`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.GrothendieckTopology C) {D : T
+ype u_3}   [inst_1 : CategoryTheo…
+· 使用定理 `AddCommGrpCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Ca
+tegory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Ad
+dCommGrpCat
+· 使用定理 `TopologicalSpace.Opens.instIsContinuousCompGrothendieckTopology`：∀ {X : 
+Type u_1} {Y : Type u_2} {Z : Type u_3} [inst : TopologicalSpace X] [inst_1 : To
+pologicalSpace Y]   [inst_2 : TopologicalSpace Z] (F …
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardCompSheafRingCatMapSheafPush
+forwardContinuous`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {D' : Type u₃} [in…
+· 使用引理 `SheafOfModules.pullback_assoc`：pullback_assoc : isoWhiskerLeft _ (pullba
+ckComp.{v} ψ ψ') ≪≫ pullbackComp.{v} (G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+（共 35 条，此处仅展示前 30 条）
 -/
 lemma pseudofunctor_associativity :
     (pullbackComp f (g ≫ h)).inv ≫
@@ -1240,32 +986,92 @@ lemma pseudofunctor_associativity :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `pseudofunctor_left_unitality` / 引理 `pseudofunctor_left_unitality`
-
-English:
-lemma pseudofunctor_left_unitality
-  proof: by
-  let e₁ := pullbackComp f (𝟙 _)
-  let e₂ := Functor.isoWhiskerRight (pullbackId Y) (pullback f)
-  let e₃ := (pullback f).leftUnitor
-  change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
-  have : e₁.hom = e₂.hom ≫ e₃.hom :=
-    congr_arg Iso.hom (SheafOfModules.pullback_id_comp.{u} f.toRingCatSheafHom)
-  simp [← this]
-
-中文:
-引理 pseudofunctor_left_unitality
-  证明: by
-  let e₁ := pullbackComp f (𝟙 _)
-  let e₂ := Functor.isoWhiskerRight (pullbackId Y) (pullback f)
-  let e₃ := (pullback f).leftUnitor
-  change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
-  have : e₁.hom = e₂.hom ≫ e₃.hom :=
-    congr_arg Iso.hom (SheafOfModules.pullback_id_comp.{u} f.toRingCatSheafHom)
-  simp [← this]
-
-Depends on / 依赖: Functor, Functor.isoWhiskerRight, Iso.hom, SheafOfModules, SheafOfModules.pullback_id_comp, congr_arg, f.toRingCatSheafHom, isoWhiskerRight, leftUnitor, pullback, pullbackComp, pullbackId, pullback_id_comp, toRingCatSheafHom
+/-
+**AlgebraicGeometry.Scheme.Modules.pseudofunctor_left_unitality** 是 Mathlib 中的一个
+引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：pseudofunctor_left_unitality : (pullbackComp f (𝟙 Y)).inv ≫ Functor.whiske
+rRight (pullbackId Y).hom (pullback f) ≫ (Functor.leftUnitor _).hom = eqToHom (b
+y simp)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardIdSheafRingCat`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendieck
+Topology C}   {S : CategoryTheory.Sheaf J RingCa…
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforward`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {J : CategoryTheor…
+· 使用定理 `PresheafOfModules.instIsRightAdjointPushforward`：∀ {C D : Type u} [inst 
+: CategoryTheory.SmallCategory C] [inst_1 : CategoryTheory.SmallCategory D]   {F
+ : CategoryTheory.Functor C D} {R : C…
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.instHasSheafifyOfPreservesLimitsForgetOfHasFiniteLimitsOf
+SmallOppositeCover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J 
+: CategoryTheory.GrothendieckTopology C) (D : Type w)   [inst_1 : CategoryTheory
+…
+· 使用定理 `AddCommGrpCat.hasLimit`：∀ {J : Type v} [inst : CategoryTheory.Category.{
+w, v} J] (F : CategoryTheory.Functor J AddCommGrpCat)   [Small.{u, max u v} ↑(F.
+comp (Catego…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AddCommGrpCat.hasColimitsOfShape`：∀ {J : Type u} [inst : CategoryTheory.
+Category.{v, u} J] [Small.{w, u} J],   CategoryTheory.Limits.HasColimitsOfShape 
+J AddCommGrpCat
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `AddCommGrpCat.FilteredColimits.forget_preservesFilteredColimits`：Categor
+yTheory.Limits.PreservesFilteredColimits (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.isCofiltered_of_directed_ge_nonempty`：∀ (α : Type u) [ins
+t : Preorder α] [IsCodirectedOrder α] [Nonempty α], CategoryTheory.IsCofiltered 
+α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `AddCommGrpCat.forget_reflects_isos`：(CategoryTheory.forget AddCommGrpCat
+).ReflectsIsomorphisms
+· 使用定理 `AddCommGrpCat.forget_preservesLimitsOfShape`：∀ {J : Type v} [inst : Cate
+goryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.Preserve
+sLimitsOfShape J (CategoryTheory.…
+· 使用定理 `AddCommGrpCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLim
+its (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `AddCommGrpCat.hasLimits`：CategoryTheory.Limits.HasLimits AddCommGrpCat
+· 使用定理 `CategoryTheory.GrothendieckTopology.instWEqualsLocallyBijectiveOfHasWeak
+SheafifyOfHasSheafComposeOfPreservesSheafificationOfReflectsIsomorphismsForget`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Gro
+thendieckTopology C) {D : Type w}   [inst_1 : CategoryTheory…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.GrothendieckTopology.instPreservesSheafificationForgetOfP
+reservesLimitsOfHasColimitsOfShapeOfPreservesColimitsOfShapeOppositeCoverOfHasLi
+mitsOfShapeWalkingMulticospanOfReflectsIsomorphisms`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.GrothendieckTopology C) {D : T
+ype u_3}   [inst_1 : CategoryTheo…
+· 使用定理 `AddCommGrpCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Ca
+tegory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Ad
+dCommGrpCat
+· 使用定理 `CategoryTheory.Functor.instIsContinuousCompId_1`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardCompSheafRingCatMapSheafPush
+forwardContinuous`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {D' : Type u₃} [in…
+· 使用引理 `SheafOfModules.pullback_id_comp`：pullback_id_comp : pullbackComp.{v} (F
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+（共 35 条，此处仅展示前 30 条）
 -/
 lemma pseudofunctor_left_unitality :
     (pullbackComp f (𝟙 Y)).inv ≫
@@ -1281,32 +1087,92 @@ lemma pseudofunctor_left_unitality :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `pseudofunctor_right_unitality` / 引理 `pseudofunctor_right_unitality`
-
-English:
-lemma pseudofunctor_right_unitality
-  proof: by
-  let e₁ := pullbackComp (𝟙 _) f
-  let e₂ := Functor.isoWhiskerLeft (pullback f) (pullbackId _)
-  let e₃ := (pullback f).rightUnitor
-  change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
-  have : e₁.hom = e₂.hom ≫ e₃.hom :=
-    congr_arg Iso.hom (SheafOfModules.pullback_comp_id.{u} f.toRingCatSheafHom)
-  simp [← this]
-
-中文:
-引理 pseudofunctor_right_unitality
-  证明: by
-  let e₁ := pullbackComp (𝟙 _) f
-  let e₂ := Functor.isoWhiskerLeft (pullback f) (pullbackId _)
-  let e₃ := (pullback f).rightUnitor
-  change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
-  have : e₁.hom = e₂.hom ≫ e₃.hom :=
-    congr_arg Iso.hom (SheafOfModules.pullback_comp_id.{u} f.toRingCatSheafHom)
-  simp [← this]
-
-Depends on / 依赖: Functor, Functor.isoWhiskerLeft, Iso.hom, SheafOfModules, SheafOfModules.pullback_comp_id, congr_arg, f.toRingCatSheafHom, isoWhiskerLeft, pullback, pullbackComp, pullbackId, pullback_comp_id, rightUnitor, toRingCatSheafHom
+/-
+**AlgebraicGeometry.Scheme.Modules.pseudofunctor_right_unitality** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：pseudofunctor_right_unitality : (pullbackComp (𝟙 X) f).inv ≫ Functor.whisk
+erLeft (pullback f) (pullbackId X).hom ≫ (Functor.rightUnitor _).hom = eqToHom (
+by simp)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `instIsContinuousOpensCarrierMapGrothendieckTopology`：∀ {X Y : TopCat} (f
+ : X ⟶ Y),   (TopologicalSpace.Opens.map f).IsContinuous (Opens.grothendieckTopo
+logy ↑Y) (Opens.grothendieckTopology ↑X)
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforward`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {J : CategoryTheor…
+· 使用定理 `PresheafOfModules.instIsRightAdjointPushforward`：∀ {C D : Type u} [inst 
+: CategoryTheory.SmallCategory C] [inst_1 : CategoryTheory.SmallCategory D]   {F
+ : CategoryTheory.Functor C D} {R : C…
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.instHasSheafifyOfPreservesLimitsForgetOfHasFiniteLimitsOf
+SmallOppositeCover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J 
+: CategoryTheory.GrothendieckTopology C) (D : Type w)   [inst_1 : CategoryTheory
+…
+· 使用定理 `AddCommGrpCat.hasLimit`：∀ {J : Type v} [inst : CategoryTheory.Category.{
+w, v} J] (F : CategoryTheory.Functor J AddCommGrpCat)   [Small.{u, max u v} ↑(F.
+comp (Catego…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AddCommGrpCat.hasColimitsOfShape`：∀ {J : Type u} [inst : CategoryTheory.
+Category.{v, u} J] [Small.{w, u} J],   CategoryTheory.Limits.HasColimitsOfShape 
+J AddCommGrpCat
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `AddCommGrpCat.FilteredColimits.forget_preservesFilteredColimits`：Categor
+yTheory.Limits.PreservesFilteredColimits (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.isCofiltered_of_directed_ge_nonempty`：∀ (α : Type u) [ins
+t : Preorder α] [IsCodirectedOrder α] [Nonempty α], CategoryTheory.IsCofiltered 
+α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `AddCommGrpCat.forget_reflects_isos`：(CategoryTheory.forget AddCommGrpCat
+).ReflectsIsomorphisms
+· 使用定理 `AddCommGrpCat.forget_preservesLimitsOfShape`：∀ {J : Type v} [inst : Cate
+goryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.Preserve
+sLimitsOfShape J (CategoryTheory.…
+· 使用定理 `AddCommGrpCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLim
+its (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `AddCommGrpCat.hasLimits`：CategoryTheory.Limits.HasLimits AddCommGrpCat
+· 使用定理 `CategoryTheory.GrothendieckTopology.instWEqualsLocallyBijectiveOfHasWeak
+SheafifyOfHasSheafComposeOfPreservesSheafificationOfReflectsIsomorphismsForget`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Gro
+thendieckTopology C) {D : Type w}   [inst_1 : CategoryTheory…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.GrothendieckTopology.instPreservesSheafificationForgetOfP
+reservesLimitsOfHasColimitsOfShapeOfPreservesColimitsOfShapeOppositeCoverOfHasLi
+mitsOfShapeWalkingMulticospanOfReflectsIsomorphisms`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.GrothendieckTopology C) {D : T
+ype u_3}   [inst_1 : CategoryTheo…
+· 使用定理 `AddCommGrpCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Ca
+tegory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Ad
+dCommGrpCat
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardIdSheafRingCat`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendieck
+Topology C}   {S : CategoryTheory.Sheaf J RingCa…
+· 使用定理 `CategoryTheory.Functor.instIsContinuousCompId`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardCompSheafRingCatMapSheafPush
+forwardContinuous`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {D' : Type u₃} [in…
+· 使用引理 `SheafOfModules.pullback_comp_id`：pullback_comp_id : pullbackComp.{v} (G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+（共 35 条，此处仅展示前 30 条）
 -/
 lemma pseudofunctor_right_unitality :
     (pullbackComp (𝟙 X) f).inv ≫
@@ -1332,41 +1198,21 @@ these categories.) -/
 @[simps! obj_obj map_l map_r map_adj
   mapId_hom_τl mapId_hom_τr mapId_inv_τl mapId_inv_τr
   mapComp_hom_τl mapComp_hom_τr mapComp_inv_τl mapComp_inv_τr]
-/--
-Definition of `pseudofunctor` / `pseudofunctor` 的定义
-
-English:
-definition pseudofunctor
-  signature: :
-  body: LocallyDiscrete.mkPseudofunctor
-    (fun X => Adj.mk (Cat.of X.unop.Modules))
-    (fun f => .mk (pullbackPushforwardAdjunction f.unop).toCat)
-    (fun _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackId _))
-        (Cat.Hom.isoMk (pushforwardId _).symm))
-    (fun _ _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackComp _ _).symm)
-        (Cat.Hom.isoMk (pushforwardComp _ _)))
-
-中文:
-定义 pseudofunctor
-  签名: :
-  定义体: LocallyDiscrete.mkPseudofunctor
-    (fun X => Adj.mk (Cat.of X.unop.Modules))
-    (fun f => .mk (pullbackPushforwardAdjunction f.unop).toCat)
-    (fun _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackId _))
-        (Cat.Hom.isoMk (pushforwardId _).symm))
-    (fun _ _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackComp _ _).symm)
-        (Cat.Hom.isoMk (pushforwardComp _ _)))
-
-Depends on / 依赖: Adj.iso, Adj.mk, Cat.Hom.isoMk, Cat.of, LocallyDiscrete, LocallyDiscrete.mkPseudofunctor, Modules, X.unop.Modules, f.unop, mkPseudofunctor, pullbackComp, pullbackId, pullbackPushforwardAdjunction, pushforwardComp, pushforwardId
+/-
+**AlgebraicGeometry.Scheme.Modules.pseudofunctor** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry.Scheme.Modules`。
+形式化陈述：pseudofunctor : Pseudofunctor (LocallyDiscrete Scheme.{u}ᵒᵖ) (Adj Cat)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def pseudofunctor :
     Pseudofunctor (LocallyDiscrete Scheme.{u}ᵒᵖ) (Adj Cat) :=
   LocallyDiscrete.mkPseudofunctor
-    (fun X => Adj.mk (Cat.of X.unop.Modules))
-    (fun f => .mk (pullbackPushforwardAdjunction f.unop).toCat)
-    (fun _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackId _))
+    (fun X ↦ Adj.mk (Cat.of X.unop.Modules))
+    (fun f ↦ .mk (pullbackPushforwardAdjunction f.unop).toCat)
+    (fun _ ↦ Adj.iso₂Mk (Cat.Hom.isoMk (pullbackId _))
         (Cat.Hom.isoMk (pushforwardId _).symm))
-    (fun _ _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackComp _ _).symm)
+    (fun _ _ ↦ Adj.iso₂Mk (Cat.Hom.isoMk (pullbackComp _ _).symm)
         (Cat.Hom.isoMk (pushforwardComp _ _)))
 
 end Functorial
@@ -1376,87 +1222,72 @@ noncomputable section Restriction
 variable (f : X ⟶ Y) (g : Y ⟶ Z) [IsOpenImmersion f] [IsOpenImmersion g]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `restrictFunctor` / `restrictFunctor` 的定义
+/-- Restriction of an `𝒪ₓ`-module along an open immersion.
+This is isomorphic to the pullback functor (see `restrictFunctorIsoPullback`)
+but has better defeqs. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctor : Y.Modules ⥤ X.Modules
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.instIsContinuousOpensOpensFunctorGrothendie
+ckTopologyCarrierCarrierCommRingCat`：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶
+ Y) [H : AlgebraicGeometry.IsOpenImmersion f],   (AlgebraicGeometry.Scheme.Hom.o
+pensFunctor f).Is…
 
-English:
-definition restrictFunctor
-  signature: : Y.Modules ⥤ X.Modules
-  body: letI α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
-  SheafOfModules.pushforward (F := f.opensFunctor)
-    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCat)⟩
-
-中文:
-定义 restrictFunctor
-  签名: : Y.Modules ⥤ X.Modules
-  定义体: letI α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
-  SheafOfModules.pushforward (F := f.opensFunctor)
-    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCat)⟩
-
-Depends on / 依赖: CommRingCat, Functor, Functor.whiskerRight, RingCat, SheafOfModules, SheafOfModules.pushforward, U.unop, X.presheaf, Y.presheaf, appIso, f.appIso, f.opensFunctor, f.opensFunctor.op, opensFunctor, presheaf, pushforward, whiskerRight
+--- 原说明 ---
+Restriction of an `𝒪ₓ`-module along an open immersion.
+This is isomorphic to the pullback functor (see `restrictFunctorIsoPullback`)
+but has better defeqs.
 -/
 def restrictFunctor : Y.Modules ⥤ X.Modules :=
   letI α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
   SheafOfModules.pushforward (F := f.opensFunctor)
     ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCat)⟩
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- The restriction of a module along an open immersion. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrict** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra
+icGeometry.Scheme.Modules`。
+形式化陈述：restrict (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] : X.Modules
+参数：M : Y.Modules；f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation restrict
-  signature: (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f]
-  body: (restrictFunctor f).obj M
-
-中文:
-缩写 restrict
-  签名: (M : Y.Modules) (f : X ⟶ Y) [是开浸入 f]
-  定义体: (restrictFunctor f).obj M
-
-Depends on / 依赖: restrictFunctor
+--- 原说明 ---
+The restriction of a module along an open immersion.
 -/
 abbrev restrict (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] : X.Modules :=
   (restrictFunctor f).obj M
 
-/--
-Definition of `restrictAppIso` / `restrictAppIso` 的定义
+/-- The sections of the restriction of `M` over `U` are isomorphic to `Γ(M, f ''ᵁ U). -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictAppIso** 是 Mathlib 中的一个定义，位于命名空间 `Alg
+ebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictAppIso (M : Y.Modules) (U : X.Opens) : Γ(M.restrict f, U) ≅ Γ(M, f
+ ''ᵁ U)
+参数：M : Y.Modules；U : X.Opens。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictAppIso
-  signature: (M : Y.Modules) (U : X.Opens)
-  body: Iso.refl _
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
-
-中文:
-定义 restrictAppIso
-  签名: (M : Y.Modules) (U : X.Opens)
-  定义体: Iso.refl _
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The sections of the restriction of `M` over `U` are isomorphic to `Γ(M, f ''ᵁ U)
+.
 -/
 def restrictAppIso (M : Y.Modules) (U : X.Opens) : Γ(M.restrict f, U) ≅ Γ(M, f ''ᵁ U) :=
   Iso.refl _
 
 @[elementwise (attr := simp), reassoc (attr := simp)]
-/--
-lemma `smul_restrictAppIso_hom` / 引理 `smul_restrictAppIso_hom`
-
-English:
-lemma smul_restrictAppIso_hom
-  given: (M : Y.Modules) (U : X.Opens) (r : Γ(X, U))
-  proof: rfl
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
-
-中文:
-引理 smul_restrictAppIso_hom
-  条件: (M : Y.Modules) (U : X.Opens) (r : Γ(X, U))
-  证明: rfl
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
+/-
+**AlgebraicGeometry.Scheme.Modules.smul_restrictAppIso_hom** 是 Mathlib 中的一个引理，位于
+命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：smul_restrictAppIso_hom (M : Y.Modules) (U : X.Opens) (r : Γ(X, U)) : dsim
+p% (M.restrict f).smul r ≫ (M.restrictAppIso f U).hom = (M.restrictAppIso f U).h
+om ≫ M.smul ((f.appIso U).inv r)
+参数：M : Y.Modules；U : X.Opens；r : Γ(X, U)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_restrictAppIso_hom (M : Y.Modules) (U : X.Opens) (r : Γ(X, U)) :
     dsimp% (M.restrict f).smul r ≫ (M.restrictAppIso f U).hom =
@@ -1464,26 +1295,55 @@ lemma smul_restrictAppIso_hom (M : Y.Modules) (U : X.Opens) (r : Γ(X, U)) :
   rfl
 
 @[elementwise (attr := simp), reassoc (attr := simp)]
-/--
-lemma `smul_restrictAppIso_inv` / 引理 `smul_restrictAppIso_inv`
-
-English:
-lemma smul_restrictAppIso_inv
-  given: (M : Y.Modules) (U : X.Opens) (r : Γ(Y, f ''ᵁ U))
-  proof: by
-  simp [← cancel_mono (M.restrictAppIso f U).hom]
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
-
-中文:
-引理 smul_restrictAppIso_inv
-  条件: (M : Y.Modules) (U : X.Opens) (r : Γ(Y, f ''ᵁ U))
-  证明: by
-  simp [← cancel_mono (M.restrictAppIso f U).hom]
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
-
-Depends on / 依赖: M.restrictAppIso, cancel_mono, restrictAppIso
+/-
+**AlgebraicGeometry.Scheme.Modules.smul_restrictAppIso_inv** 是 Mathlib 中的一个引理，位于
+命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：smul_restrictAppIso_inv (M : Y.Modules) (U : X.Opens) (r : Γ(Y, f ''ᵁ U)) 
+: M.smul r ≫ (M.restrictAppIso f U).inv = (M.restrictAppIso f U).inv ≫ (M.restri
+ct f).smul ((f.appIso U).hom r)
+参数：M : Y.Modules；U : X.Opens；r : Γ(Y, f ''ᵁ U)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smul_restrictAppIso_inv (M : Y.Modules) (U : X.Opens) (r : Γ(Y, f ''ᵁ U)) :
     M.smul r ≫ (M.restrictAppIso f U).inv =
@@ -1491,24 +1351,16 @@ lemma smul_restrictAppIso_inv (M : Y.Modules) (U : X.Opens) (r : Γ(Y, f ''ᵁ U
   simp [← cancel_mono (M.restrictAppIso f U).hom]
 
 @[elementwise (attr := simp), reassoc (attr := simp)]
-/--
-lemma `map_restrictAppIso_hom` / 引理 `map_restrictAppIso_hom`
-
-English:
-lemma map_restrictAppIso_hom
-  statement: (M : Y.Modules) {U V : X.Opens}
-  proof: by
-  rfl
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
-
-中文:
-引理 map_restrictAppIso_hom
-  结论: (M : Y.Modules) {U V : X.Opens}
-  证明: by
-  rfl
-
-@[elementwise (attr := simp), reassoc (attr := simp)]
+/-
+**AlgebraicGeometry.Scheme.Modules.map_restrictAppIso_hom** 是 Mathlib 中的一个引理，位于命
+名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：map_restrictAppIso_hom (M : Y.Modules) {U V : X.Opens} (hUV : Opposite.op 
+V ⟶ .op U) : (M.restrict f).presheaf.map hUV ≫ (M.restrictAppIso f U).hom = (M.r
+estrictAppIso f V).hom ≫ M.presheaf.map (.op <| homOfLE <| Scheme.Hom.image_mono
+ _ (leOfHom hUV.unop))
+参数：M : Y.Modules；hUV : Opposite.op V ⟶ .op U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_restrictAppIso_hom (M : Y.Modules) {U V : X.Opens}
     (hUV : Opposite.op V ⟶ .op U) :
@@ -1518,18 +1370,16 @@ lemma map_restrictAppIso_hom (M : Y.Modules) {U V : X.Opens}
   rfl
 
 @[elementwise (attr := simp), reassoc (attr := simp)]
-/--
-lemma `restrictAppIso_inv_map` / 引理 `restrictAppIso_inv_map`
-
-English:
-lemma restrictAppIso_inv_map
-  given: (M : Y.Modules) {U V : X.Opens} (hUV : .op V ⟶ .op U)
-  proof: rfl
-
-中文:
-引理 restrictAppIso_inv_map
-  条件: (M : Y.Modules) {U V : X.Opens} (hUV : .op V ⟶ .op U)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictAppIso_inv_map** 是 Mathlib 中的一个引理，位于命
+名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictAppIso_inv_map (M : Y.Modules) {U V : X.Opens} (hUV : .op V ⟶ .op 
+U) : (M.restrictAppIso f V).inv ≫ (M.restrict f).presheaf.map hUV = M.presheaf.m
+ap (.op <| homOfLE <| Scheme.Hom.image_mono _ (leOfHom hUV.unop)) ≫ (M.restrictA
+ppIso f U).inv
+参数：M : Y.Modules；hUV : .op V ⟶ .op U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictAppIso_inv_map (M : Y.Modules) {U V : X.Opens} (hUV : .op V ⟶ .op U) :
     (M.restrictAppIso f V).inv ≫ (M.restrict f).presheaf.map hUV =
@@ -1537,82 +1387,61 @@ lemma restrictAppIso_inv_map (M : Y.Modules) {U V : X.Opens} (hUV : .op V ⟶ .o
       (M.restrictAppIso f U).inv :=
   rfl
 
-/--
-lemma `restrict_obj` / 引理 `restrict_obj`
+/-- Avoid using this. Use the isomorphism `AlgebraicGeometry.Scheme.Modules.restrictAppIso`
+instead. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrict_obj** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry.Scheme.Modules`。
+形式化陈述：restrict_obj (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] (U) : Γ(M.res
+trict f, U) = Γ(M, f ''ᵁ U)
+参数：M : Y.Modules；f : X ⟶ Y；U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma restrict_obj
-  given: (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] (U)
-  proof: rfl
-
-中文:
-引理 restrict_obj
-  条件: (M : Y.Modules) (f : X ⟶ Y) [是开浸入 f] (U)
-  证明: rfl
+--- 原说明 ---
+Avoid using this. Use the isomorphism `AlgebraicGeometry.Scheme.Modules.restrict
+AppIso`
+instead.
 -/
 lemma restrict_obj (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] (U) :
     Γ(M.restrict f, U) = Γ(M, f ''ᵁ U) := rfl
 
-/--
-lemma `restrict_map` / 引理 `restrict_map`
+/-- Avoid using this. Use the isomorphism `AlgebraicGeometry.Scheme.Modules.restrictAppIso`
+instead. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrict_map** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry.Scheme.Modules`。
+形式化陈述：restrict_map (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] {U V} (i : U 
+⟶ V) : (M.restrict f).presheaf.map i.op = M.presheaf.map (f.opensFunctor.map i).
+op
+参数：M : Y.Modules；f : X ⟶ Y；i : U ⟶ V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma restrict_map
-  given: (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] {U V} (i : U ⟶ V)
-  proof: rfl
-
-中文:
-引理 restrict_map
-  条件: (M : Y.Modules) (f : X ⟶ Y) [是开浸入 f] {U V} (i : U ⟶ V)
-  证明: rfl
+--- 原说明 ---
+Avoid using this. Use the isomorphism `AlgebraicGeometry.Scheme.Modules.restrict
+AppIso`
+instead.
 -/
 lemma restrict_map (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] {U V} (i : U ⟶ V) :
     (M.restrict f).presheaf.map i.op = M.presheaf.map (f.opensFunctor.map i).op := rfl
 
-/--
-Definition of `restrictUnitIso` / `restrictUnitIso` 的定义
+/-- `Scheme.Modules.restrict` along an open immersion `X ⟶ Y` sends `𝒪_Y` to `𝒪_X`. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictUnitIso** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictUnitIso (f : X ⟶ Y) [IsOpenImmersion f] : restrict (.unit <| Y.rin
+gCatSheaf) f ≅ .unit X.ringCatSheaf
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictUnitIso
-  signature: (f : X ⟶ Y) [IsOpenImmersion f]
-  body: by
-refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_) ?_
-  · refine ModuleCat.isoMk
-      ((forget₂ CommRingCat RingCat ⋙ forget₂ _ Ab).mapIso (f.appIso U.unop)) ?_
-    intro (r : Γ(X, U.unop))
-    ext (x : Γ(Y, f ''ᵁ U.unop))
-    change r * (f.appIso U.unop).hom x = (f.appIso U.unop).hom ((f.appIso U.unop).inv r * x)
-    simp
-  · intro U V g
-    have : Y.presheaf.map (homOfLE (by grw [leOfHom g.unop])).op ≫
-        (f.appIso _).hom = (f.appIso U.unop).hom ≫ X.presheaf.map g := by
-      simp [Hom.appIso_hom']
-    ext x
-    exact congr($(this) x)
-
-中文:
-定义 restrictUnitIso
-  签名: (f : X ⟶ Y) [是开浸入 f]
-  定义体: by
-refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_) ?_
-  · refine ModuleCat.isoMk
-      ((forget₂ CommRingCat RingCat ⋙ forget₂ _ Ab).mapIso (f.appIso U.unop)) ?_
-    intro (r : Γ(X, U.unop))
-    ext (x : Γ(Y, f ''ᵁ U.unop))
-    change r * (f.appIso U.unop).hom x = (f.appIso U.unop).hom ((f.appIso U.unop).inv r * x)
-    simp
-  · intro U V g
-    have : Y.presheaf.map (homOfLE (by grw [leOfHom g.unop])).op ≫
-        (f.appIso _).hom = (f.appIso U.unop).hom ≫ X.presheaf.map g := by
-      simp [Hom.appIso_hom']
-    ext x
-    exact congr($(this) x)
-
-Depends on / 依赖: CommRingCat, Hom.appIso_hom, ModuleCat, ModuleCat.isoMk, PresheafOfModules, PresheafOfModules.isoMk, RingCat, U.unop, X.presheaf.map, Y.presheaf.map, appIso, appIso_hom, f.appIso, fullyFaithfulForget, g.unop, homOfLE, leOfHom, mapIso, preimageIso, presheaf
+--- 原说明 ---
+`Scheme.Modules.restrict` along an open immersion `X ⟶ Y` sends `𝒪_Y` to `𝒪_X`.
 -/
 def restrictUnitIso (f : X ⟶ Y) [IsOpenImmersion f] :
     restrict (.unit <| Y.ringCatSheaf) f ≅ .unit X.ringCatSheaf := by
-refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_) ?_
+  refine (fullyFaithfulForget _).preimageIso <| PresheafOfModules.isoMk (fun U ↦ ?_) ?_
   · refine ModuleCat.isoMk
       ((forget₂ CommRingCat RingCat ⋙ forget₂ _ Ab).mapIso (f.appIso U.unop)) ?_
     intro (r : Γ(X, U.unop))
@@ -1626,67 +1455,43 @@ refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_)
     ext x
     exact congr($(this) x)
 
-/--
-Definition of `restrictFunctorAdjCounitIso` / `restrictFunctorAdjCounitIso` 的定义
+/-- The restriction of a module along an open immersion. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorAdjCounitIso** 是 Mathlib 中的一个定
+义，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorAdjCounitIso : pushforward f ⋙ restrictFunctor f ≅ 𝟭 _
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.instIsContinuousOpensOpensFunctorGrothendie
+ckTopologyCarrierCarrierCommRingCat`：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶
+ Y) [H : AlgebraicGeometry.IsOpenImmersion f],   (AlgebraicGeometry.Scheme.Hom.o
+pensFunctor f).Is…
 
-English:
-definition restrictFunctorAdjCounitIso
-  signature: : pushforward f ⋙ restrictFunctor f ≅ 𝟭 _
-  body: letI := CategoryTheory.Functor.isContinuous_comp.{u} f.opensFunctor (Opens.map f.base)
-    (Opens.grothendieckTopology X) (Opens.grothendieckTopology Y) (Opens.grothendieckTopology X)
-  (SheafOfModules.pushforwardComp _ _) ≪≫ pushforwardNatIso _ (NatIso.ofComponents
-      (fun U => eqToIso (f.preimage_image_eq U).symm) fun _ => rfl) ≪≫
-    SheafOfModules.pushforwardCongr (by ext U x; exact
-      congr($(f.appIso_inv_app_presheafMap U.unop) x)) ≪≫ SheafOfModules.pushforwardId _
-
-中文:
-定义 restrictFunctorAdjCounitIso
-  签名: : pushforward f ⋙ restrictFunctor f ≅ 𝟭 _
-  定义体: letI := CategoryTheory.Functor.isContinuous_comp.{u} f.opensFunctor (Opens.map f.base)
-    (Opens.grothendieckTopology X) (Opens.grothendieckTopology Y) (Opens.grothendieckTopology X)
-  (SheafOfModules.pushforwardComp _ _) ≪≫ pushforwardNatIso _ (NatIso.ofComponents
-      (fun U => eqToIso (f.preimage_image_eq U).symm) fun _ => rfl) ≪≫
-    SheafOfModules.pushforwardCongr (by ext U x; exact
-      congr($(f.appIso_inv_app_presheafMap U.unop) x)) ≪≫ SheafOfModules.pushforwardId _
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.isContinuous_comp, Functor, NatIso, NatIso.ofComponents, Opens.grothendieckTopology, Opens.map, SheafOfModules, SheafOfModules.pushforwardComp, SheafOfModules.pushforwardCongr, SheafOfModules.pushforwardId, U.unop, appIso_inv_app_presheafMap, eqToIso, f.appIso_inv_app_presheafMap, f.base, f.opensFunctor, f.preimage_image_eq, grothendieckTopology, isContinuous_comp
+--- 原说明 ---
+The restriction of a module along an open immersion.
 -/
 def restrictFunctorAdjCounitIso : pushforward f ⋙ restrictFunctor f ≅ 𝟭 _ :=
   letI := CategoryTheory.Functor.isContinuous_comp.{u} f.opensFunctor (Opens.map f.base)
     (Opens.grothendieckTopology X) (Opens.grothendieckTopology Y) (Opens.grothendieckTopology X)
   (SheafOfModules.pushforwardComp _ _) ≪≫ pushforwardNatIso _ (NatIso.ofComponents
-      (fun U => eqToIso (f.preimage_image_eq U).symm) fun _ => rfl) ≪≫
+      (fun U ↦ eqToIso (f.preimage_image_eq U).symm) fun _ ↦ rfl) ≪≫
     SheafOfModules.pushforwardCongr (by ext U x; exact
       congr($(f.appIso_inv_app_presheafMap U.unop) x)) ≪≫ SheafOfModules.pushforwardId _
 
-/--
-Definition of `restrictAdjunction` / `restrictAdjunction` 的定义
+/-- Restriction is right adjoint to pushforward. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictAdjunction** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictAdjunction : restrictFunctor f ⊣ pushforward f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.instIsContinuousOpensOpensFunctorGrothendie
+ckTopologyCarrierCarrierCommRingCat`：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶
+ Y) [H : AlgebraicGeometry.IsOpenImmersion f],   (AlgebraicGeometry.Scheme.Hom.o
+pensFunctor f).Is…
 
-English:
-definition restrictAdjunction
-  signature: : restrictFunctor f ⊣ pushforward f
-  body: by
-  refine pushforwardPushforwardAdj (by exact f.isOpenEmbedding.isOpenMap.adjunction) _ _ ?_ ?_
-  · ext U x; exact congr($((f.app_appIso_inv _).symm).hom x)
-  · ext U x
-    have : (f.appIso U.unop).inv ≫ f.app _ ≫
-      X.presheaf.map (eqToHom (f.preimage_image_eq U.unop).symm).op = 𝟙 _ := by
-      rw [Scheme.Hom.appIso_inv_app_assoc]; rw [← Functor.map_comp]; rw [← X.presheaf.map_id]; rfl
-    exact congr($this x)
-
-中文:
-定义 restrictAdjunction
-  签名: : restrictFunctor f ⊣ pushforward f
-  定义体: by
-  refine pushforwardPushforwardAdj (by exact f.isOpenEmbedding.isOpenMap.adjunction) _ _ ?_ ?_
-  · ext U x; exact congr($((f.app_appIso_inv _).symm).hom x)
-  · ext U x
-    have : (f.appIso U.unop).inv ≫ f.app _ ≫
-      X.presheaf.map (eqToHom (f.preimage_image_eq U.unop).symm).op = 𝟙 _ := by
-      rw [Scheme.Hom.appIso_inv_app_assoc]; rw [← Functor.map_comp]; rw [← X.presheaf.map_id]; rfl
-    exact congr($this x)
-
-Depends on / 依赖: Functor, Functor.map_comp, Scheme, Scheme.Hom.appIso_inv_app_assoc, U.unop, X.presheaf.map, X.presheaf.map_id, adjunction, appIso, appIso_inv_app_assoc, app_appIso_inv, eqToHom, f.app, f.appIso, f.app_appIso_inv, f.isOpenEmbedding.isOpenMap.adjunction, f.preimage_image_eq, isOpenEmbedding, isOpenMap, map_comp
+--- 原说明 ---
+Restriction is right adjoint to pushforward.
 -/
 def restrictAdjunction : restrictFunctor f ⊣ pushforward f := by
   refine pushforwardPushforwardAdj (by exact f.isOpenEmbedding.isOpenMap.adjunction) _ _ ?_ ?_
@@ -1694,203 +1499,123 @@ def restrictAdjunction : restrictFunctor f ⊣ pushforward f := by
   · ext U x
     have : (f.appIso U.unop).inv ≫ f.app _ ≫
       X.presheaf.map (eqToHom (f.preimage_image_eq U.unop).symm).op = 𝟙 _ := by
-      rw [Scheme.Hom.appIso_inv_app_assoc]; rw [← Functor.map_comp]; rw [← X.presheaf.map_id]; rfl
+      rw [Scheme.Hom.appIso_inv_app_assoc, ← Functor.map_comp, ← X.presheaf.map_id]; rfl
     exact congr($this x)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (restrictAdjunction f).counit
-  body: inferInstanceAs (IsIso <| (restrictFunctorAdjCounitIso f).hom)
-
-中文:
-实例 :
-  签名: 是同构 (restrictAdjunction f).counit
-  定义体: inferInstanceAs (IsIso <| (restrictFunctorAdjCounitIso f).hom)
-
-Depends on / 依赖: restrictFunctorAdjCounitIso
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (restrictAdjunction f).counit :=
   inferInstanceAs (IsIso <| (restrictFunctorAdjCounitIso f).hom)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (restrictFunctor f).IsLeftAdjoint
-  body: (restrictAdjunction f).isLeftAdjoint
-
-中文:
-实例 :
-  签名: (restrictFunctor f).是左伴随
-  定义体: (restrictAdjunction f).isLeftAdjoint
-
-Depends on / 依赖: isLeftAdjoint, restrictAdjunction
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (restrictFunctor f).IsLeftAdjoint := (restrictAdjunction f).isLeftAdjoint
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward f).Full
-  body: (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.full
-
-中文:
-实例 :
-  签名: (pushforward f).满
-  定义体: (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.full
-
-Depends on / 依赖: fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit.full, restrictAdjunction
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward f).Full := (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.full
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward f).Faithful
-  body: (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.faithful
-
-@[simp]
-
-中文:
-实例 :
-  签名: (pushforward f).忠实
-  定义体: (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.faithful
-
-@[simp]
-
-Depends on / 依赖: faithful, fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit.faithful, restrictAdjunction
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward f).Faithful := (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.faithful
 
 @[simp]
-/--
-lemma `restrictAdjunction_unit_app_app` / 引理 `restrictAdjunction_unit_app_app`
-
-English:
-lemma restrictAdjunction_unit_app_app
-  given: (M : Y.Modules) (U : Y.Opens)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 restrictAdjunction_unit_app_app
-  条件: (M : Y.Modules) (U : Y.Opens)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictAdjunction_unit_app_app** 是 Mathlib 中
+的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictAdjunction_unit_app_app (M : Y.Modules) (U : Y.Opens) : ((restrict
+Adjunction f).unit.app M).app U = M.presheaf.map (homOfLE (f.image_preimage_le U
+)).op
+参数：M : Y.Modules；U : Y.Opens。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictAdjunction_unit_app_app (M : Y.Modules) (U : Y.Opens) :
     ((restrictAdjunction f).unit.app M).app U =
       M.presheaf.map (homOfLE (f.image_preimage_le U)).op := rfl
 
 @[simp]
-/--
-lemma `restrictAdjunction_counit_app_app` / 引理 `restrictAdjunction_counit_app_app`
-
-English:
-lemma restrictAdjunction_counit_app_app
-  given: (M : X.Modules) (U : X.Opens)
-  proof: rfl
-
-中文:
-引理 restrictAdjunction_counit_app_app
-  条件: (M : X.Modules) (U : X.Opens)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictAdjunction_counit_app_app** 是 Mathlib
+ 中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictAdjunction_counit_app_app (M : X.Modules) (U : X.Opens) : ((restri
+ctAdjunction f).counit.app M).app U = M.presheaf.map (eqToHom (f.preimage_image_
+eq U).symm).op
+参数：M : X.Modules；U : X.Opens。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictAdjunction_counit_app_app (M : X.Modules) (U : X.Opens) :
     ((restrictAdjunction f).counit.app M).app U =
       M.presheaf.map (eqToHom (f.preimage_image_eq U).symm).op := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `restrictFunctorIsoPullback` / `restrictFunctorIsoPullback` 的定义
+/-- Restriction is naturally isomorphic to the inverse image. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorIsoPullback** 是 Mathlib 中的一个定义
+，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorIsoPullback : restrictFunctor f ≅ pullback f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictFunctorIsoPullback
-  signature: : restrictFunctor f ≅ pullback f
-  body: (restrictAdjunction f).leftAdjointUniq (pullbackPushforwardAdjunction f)
-
-中文:
-定义 restrictFunctorIsoPullback
-  签名: : restrictFunctor f ≅ pullback f
-  定义体: (restrictAdjunction f).leftAdjointUniq (pullbackPushforwardAdjunction f)
-
-Depends on / 依赖: leftAdjointUniq, pullbackPushforwardAdjunction, restrictAdjunction
+--- 原说明 ---
+Restriction is naturally isomorphic to the inverse image.
 -/
 def restrictFunctorIsoPullback : restrictFunctor f ≅ pullback f :=
   (restrictAdjunction f).leftAdjointUniq (pullbackPushforwardAdjunction f)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `restrictFunctorId` / `restrictFunctorId` 的定义
+/-- Restriction along the identity is isomorphic to the identity. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorId** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorId : restrictFunctor (𝟙 X) ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictFunctorId
-  signature: : restrictFunctor (𝟙 X) ≅ 𝟭 _
-  body: SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents (fun _ => eqToIso (by simp))) ≪≫
-    SheafOfModules.pushforwardCongr
-      (by ext : 3; simp [← Functor.map_comp, SheafedSpace.sheaf]) ≪≫
-    SheafOfModules.pushforwardId _
-
-@[simp]
-
-中文:
-定义 restrictFunctorId
-  签名: : restrictFunctor (𝟙 X) ≅ 𝟭 _
-  定义体: SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents (fun _ => eqToIso (by simp))) ≪≫
-    SheafOfModules.pushforwardCongr
-      (by ext : 3; simp [← Functor.map_comp, SheafedSpace.sheaf]) ≪≫
-    SheafOfModules.pushforwardId _
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.map_comp, NatIso, NatIso.ofComponents, SheafOfModules, SheafOfModules.pushforwardCongr, SheafOfModules.pushforwardId, SheafOfModules.pushforwardNatIso, SheafedSpace, SheafedSpace.sheaf, eqToIso, map_comp, ofComponents, pushforwardCongr, pushforwardId, pushforwardNatIso
+--- 原说明 ---
+Restriction along the identity is isomorphic to the identity.
 -/
 def restrictFunctorId : restrictFunctor (𝟙 X) ≅ 𝟭 _ :=
-  SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents (fun _ => eqToIso (by simp))) ≪≫
+  SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents (fun _ ↦ eqToIso (by simp))) ≪≫
     SheafOfModules.pushforwardCongr
       (by ext : 3; simp [← Functor.map_comp, SheafedSpace.sheaf]) ≪≫
     SheafOfModules.pushforwardId _
 
 @[simp]
-/--
-lemma `restrictFunctorId_hom_app_app` / 引理 `restrictFunctorId_hom_app_app`
-
-English:
-lemma restrictFunctorId_hom_app_app
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 restrictFunctorId_hom_app_app
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorId_hom_app_app** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorId_hom_app_app : (restrictFunctorId.hom.app M).app U = M.pr
+esheaf.map (eqToHom (show U = 𝟙 X ''ᵁ U by simp)).op
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
 -/
 lemma restrictFunctorId_hom_app_app :
     (restrictFunctorId.hom.app M).app U =
       M.presheaf.map (eqToHom (show U = 𝟙 X ''ᵁ U by simp)).op := rfl
 
 @[simp]
-/--
-lemma `restrictFunctorId_inv_app_app` / 引理 `restrictFunctorId_inv_app_app`
-
-English:
-lemma restrictFunctorId_inv_app_app
-  proof: rfl
-
-中文:
-引理 restrictFunctorId_inv_app_app
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorId_inv_app_app** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorId_inv_app_app : (restrictFunctorId.inv.app M).app U = M.pr
+esheaf.map (eqToHom (show 𝟙 X ''ᵁ U = U by simp)).op
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
 -/
 lemma restrictFunctorId_inv_app_app :
     (restrictFunctorId.inv.app M).app U =
@@ -1898,164 +1623,131 @@ lemma restrictFunctorId_inv_app_app :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `restrictFunctorComp` / `restrictFunctorComp` 的定义
+/-- Restriction along the composition is isomorphic to the composition of restrictions. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorComp** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorComp : restrictFunctor (f ≫ g) ≅ restrictFunctor g ⋙ restri
+ctFunctor f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.instIsContinuousOpensOpensFunctorGrothendie
+ckTopologyCarrierCarrierCommRingCat`：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶
+ Y) [H : AlgebraicGeometry.IsOpenImmersion f],   (AlgebraicGeometry.Scheme.Hom.o
+pensFunctor f).Is…
 
-English:
-definition restrictFunctorComp
-  signature: : restrictFunctor (f ≫ g) ≅ restrictFunctor g ⋙ restrictFunctor f
-  body: SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ => eqToIso (by simp)) ≪≫
-    SheafOfModules.pushforwardCongr (by ext : 3; simp [← Functor.map_comp, SheafedSpace.sheaf]) ≪≫
-    (SheafOfModules.pushforwardComp _ _).symm
-
-@[simp]
-
-中文:
-定义 restrictFunctorComp
-  签名: : restrictFunctor (f ≫ g) ≅ restrictFunctor g ⋙ restrictFunctor f
-  定义体: SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ => eqToIso (by simp)) ≪≫
-    SheafOfModules.pushforwardCongr (by ext : 3; simp [← Functor.map_comp, SheafedSpace.sheaf]) ≪≫
-    (SheafOfModules.pushforwardComp _ _).symm
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.map_comp, NatIso, NatIso.ofComponents, SheafOfModules, SheafOfModules.pushforwardComp, SheafOfModules.pushforwardCongr, SheafOfModules.pushforwardNatIso, SheafedSpace, SheafedSpace.sheaf, eqToIso, map_comp, ofComponents, pushforwardComp, pushforwardCongr, pushforwardNatIso
+--- 原说明 ---
+Restriction along the composition is isomorphic to the composition of restrictio
+ns.
 -/
 def restrictFunctorComp : restrictFunctor (f ≫ g) ≅ restrictFunctor g ⋙ restrictFunctor f :=
-  SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ => eqToIso (by simp)) ≪≫
+  SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ ↦ eqToIso (by simp)) ≪≫
     SheafOfModules.pushforwardCongr (by ext : 3; simp [← Functor.map_comp, SheafedSpace.sheaf]) ≪≫
     (SheafOfModules.pushforwardComp _ _).symm
 
 @[simp]
-/--
-lemma `restrictFunctorComp_hom_app_app` / 引理 `restrictFunctorComp_hom_app_app`
-
-English:
-lemma restrictFunctorComp_hom_app_app
-  given: (M : Z.Modules)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 restrictFunctorComp_hom_app_app
-  条件: (M : Z.Modules)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorComp_hom_app_app** 是 Mathlib 中
+的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorComp_hom_app_app (M : Z.Modules) : ((restrictFunctorComp f 
+g).hom.app M).app U = M.presheaf.map (eqToHom (by simp)).op
+参数：M : Z.Modules。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
 -/
 lemma restrictFunctorComp_hom_app_app (M : Z.Modules) :
     ((restrictFunctorComp f g).hom.app M).app U = M.presheaf.map (eqToHom (by simp)).op := rfl
 
 @[simp]
-/--
-lemma `restrictFunctorComp_inv_app_app` / 引理 `restrictFunctorComp_inv_app_app`
-
-English:
-lemma restrictFunctorComp_inv_app_app
-  given: (M : Z.Modules)
-  proof: rfl
-
-中文:
-引理 restrictFunctorComp_inv_app_app
-  条件: (M : Z.Modules)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorComp_inv_app_app** 是 Mathlib 中
+的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorComp_inv_app_app (M : Z.Modules) : ((restrictFunctorComp f 
+g).inv.app M).app U = M.presheaf.map (eqToHom (by simp)).op
+参数：M : Z.Modules。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
 -/
 lemma restrictFunctorComp_inv_app_app (M : Z.Modules) :
     ((restrictFunctorComp f g).inv.app M).app U = M.presheaf.map (eqToHom (by simp)).op := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `restrictFunctorCongr` / `restrictFunctorCongr` 的定义
+/-- Restriction along equal morphisms are isomorphic. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorCongr** 是 Mathlib 中的一个定义，位于命名空
+间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorCongr {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f] [IsOpe
+nImmersion g] : restrictFunctor f ≅ restrictFunctor g
+参数：hf : f = g。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.instIsContinuousOpensOpensFunctorGrothendie
+ckTopologyCarrierCarrierCommRingCat`：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶
+ Y) [H : AlgebraicGeometry.IsOpenImmersion f],   (AlgebraicGeometry.Scheme.Hom.o
+pensFunctor f).Is…
 
-English:
-definition restrictFunctorCongr
-  signature: {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f] [IsOpenImmersion g]
-  body: SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ => eqToIso (by simp [hf])) ≪≫
-    SheafOfModules.pushforwardCongr (by ext : 3; subst hf; simp)
-
-@[simp]
-
-中文:
-定义 restrictFunctorCongr
-  签名: {f g : X ⟶ Y} (hf : f = g) [是开浸入 f] [是开浸入 g]
-  定义体: SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ => eqToIso (by simp [hf])) ≪≫
-    SheafOfModules.pushforwardCongr (by ext : 3; subst hf; simp)
-
-@[simp]
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, SheafOfModules, SheafOfModules.pushforwardCongr, SheafOfModules.pushforwardNatIso, eqToIso, ofComponents, pushforwardCongr, pushforwardNatIso
+--- 原说明 ---
+Restriction along equal morphisms are isomorphic.
 -/
 def restrictFunctorCongr {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f] [IsOpenImmersion g] :
     restrictFunctor f ≅ restrictFunctor g :=
-  SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ => eqToIso (by simp [hf])) ≪≫
+  SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ ↦ eqToIso (by simp [hf])) ≪≫
     SheafOfModules.pushforwardCongr (by ext : 3; subst hf; simp)
 
 @[simp]
-/--
-lemma `restrictFunctorCongr_hom_app_app` / 引理 `restrictFunctorCongr_hom_app_app`
-
-English:
-lemma restrictFunctorCongr_hom_app_app
-  statement: {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 restrictFunctorCongr_hom_app_app
-  结论: {f g : X ⟶ Y} (hf : f = g) [是开浸入 f]
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorCongr_hom_app_app** 是 Mathlib 
+中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorCongr_hom_app_app {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersi
+on f] [IsOpenImmersion g] (M : Y.Modules) : ((restrictFunctorCongr hf).hom.app M
+).app U = M.presheaf.map (eqToHom (by simp [hf])).op
+参数：hf : f = g；M : Y.Modules。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictFunctorCongr_hom_app_app {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f]
     [IsOpenImmersion g] (M : Y.Modules) :
     ((restrictFunctorCongr hf).hom.app M).app U = M.presheaf.map (eqToHom (by simp [hf])).op := rfl
 
 @[simp]
-/--
-lemma `restrictFunctorCongr_inv_app_app` / 引理 `restrictFunctorCongr_inv_app_app`
-
-English:
-lemma restrictFunctorCongr_inv_app_app
-  statement: {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f]
-  proof: rfl
-
-中文:
-引理 restrictFunctorCongr_inv_app_app
-  结论: {f g : X ⟶ Y} (hf : f = g) [是开浸入 f]
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictFunctorCongr_inv_app_app** 是 Mathlib 
+中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictFunctorCongr_inv_app_app {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersi
+on f] [IsOpenImmersion g] (M : Y.Modules) : ((restrictFunctorCongr hf).inv.app M
+).app U = M.presheaf.map (eqToHom (by simp [hf])).op
+参数：hf : f = g；M : Y.Modules。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictFunctorCongr_inv_app_app {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f]
     [IsOpenImmersion g] (M : Y.Modules) :
     ((restrictFunctorCongr hf).inv.app M).app U = M.presheaf.map (eqToHom (by simp [hf])).op := rfl
 
-/--
-Definition of `restrictStalkNatIso` / `restrictStalkNatIso` 的定义
+/-- Restriction along open immersions commutes with taking stalks. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictStalkNatIso** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictStalkNatIso (x : X) : restrictFunctor f ⋙ toPresheaf _ ⋙ TopCat.Pr
+esheaf.stalkFunctor _ x ≅ toPresheaf _ ⋙ TopCat.Presheaf.stalkFunctor _ (f x)
+参数：x : X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isOpenEmbedding`：isOpenEmbedding : IsOpenEm
+bedding f
 
-English:
-definition restrictStalkNatIso
-  signature: (x : X)
-  body: haveI := Functor.initial_of_adjunction (f.isOpenEmbedding.adjunctionNhds x)
-  (toPresheaf _ ⋙ (Functor.whiskeringLeft (OpenNhds (f x))ᵒᵖ Y.Opensᵒᵖ Ab).obj
-      (OpenNhds.inclusion (f x)).op).isoWhiskerLeft
-      (Functor.Final.colimIso (f.isOpenEmbedding.functorNhds x).op)
-
-@[simp]
-
-中文:
-定义 restrictStalk自然数Iso
-  签名: (x : X)
-  定义体: haveI := Functor.initial_of_adjunction (f.isOpenEmbedding.adjunctionNhds x)
-  (toPresheaf _ ⋙ (Functor.whiskeringLeft (OpenNhds (f x))ᵒᵖ Y.Opensᵒᵖ Ab).obj
-      (OpenNhds.inclusion (f x)).op).isoWhiskerLeft
-      (Functor.Final.colimIso (f.isOpenEmbedding.functorNhds x).op)
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.Final.colimIso, Functor.initial_of_adjunction, Functor.whiskeringLeft, OpenNhds, OpenNhds.inclusion, Y.Opens, adjunctionNhds, colimIso, f.isOpenEmbedding.adjunctionNhds, f.isOpenEmbedding.functorNhds, functorNhds, inclusion, initial_of_adjunction, isOpenEmbedding, isoWhiskerLeft, toPresheaf, whiskeringLeft
+--- 原说明 ---
+Restriction along open immersions commutes with taking stalks.
 -/
 def restrictStalkNatIso (x : X) :
     restrictFunctor f ⋙ toPresheaf _ ⋙ TopCat.Presheaf.stalkFunctor _ x ≅
@@ -2066,28 +1758,28 @@ def restrictStalkNatIso (x : X) :
       (Functor.Final.colimIso (f.isOpenEmbedding.functorNhds x).op)
 
 @[simp]
-/--
-lemma `germ_restrictStalkNatIso_hom_app` / 引理 `germ_restrictStalkNatIso_hom_app`
-
-English:
-lemma germ_restrictStalkNatIso_hom_app
-  given: (x : X) (M : Y.Modules) (hxU : x in U)
-  proof: haveI := Functor.initial_of_adjunction (f.isOpenEmbedding.adjunctionNhds x)
-  Functor.Final.ι_colimitIso_hom
-    (f.isOpenEmbedding.functorNhds x).op
-    ((OpenNhds.inclusion ((ConcreteCategory.hom f.base) x)).op ⋙ M.presheaf) _
-
-中文:
-引理 germ_restrictStalk自然数Iso_hom_app
-  条件: (x : X) (M : Y.Modules) (hxU : x in U)
-  证明: haveI := Functor.initial_of_adjunction (f.isOpenEmbedding.adjunctionNhds x)
-  Functor.Final.ι_colimitIso_hom
-    (f.isOpenEmbedding.functorNhds x).op
-    ((OpenNhds.inclusion ((ConcreteCategory.hom f.base) x)).op ⋙ M.presheaf) _
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, Functor, Functor.Final, Functor.initial_of_adjunction, M.presheaf, OpenNhds, OpenNhds.inclusion, adjunctionNhds, f.base, f.isOpenEmbedding.adjunctionNhds, f.isOpenEmbedding.functorNhds, functorNhds, inclusion, initial_of_adjunction, isOpenEmbedding, presheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.germ_restrictStalkNatIso_hom_app** 是 Mathlib 
+中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：germ_restrictStalkNatIso_hom_app (x : X) (M : Y.Modules) (hxU : x in U) : 
+((restrictFunctor f).obj M).presheaf.germ U _ hxU ≫ (restrictStalkNatIso f x).ho
+m.app M = M.presheaf.germ _ _ (by simpa)
+参数：x : X；M : Y.Modules；hxU : x in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.ι_colimitIso_hom`：ι_colimitIso_hom [HasColi
+mit G] (X : C) : colimit.ι (F ⋙ G) X ≫ (colimitIso F G).hom = colimit.ι G (F.obj
+ X)
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isOpenEmbedding`：isOpenEmbedding : IsOpenEm
+bedding f
+· 使用定理 `CategoryTheory.Functor.initial_of_adjunction`：initial_of_adjunction {L :
+ C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R) : Initial L
+· 使用定理 `Topology.IsOpenEmbedding.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} {f :
+ X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.Is
+OpenEmbedding f → IsOpen…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-lemma germ_restrictStalkNatIso_hom_app (x : X) (M : Y.Modules) (hxU : x in U) :
+lemma germ_restrictStalkNatIso_hom_app (x : X) (M : Y.Modules) (hxU : x ∈ U) :
     ((restrictFunctor f).obj M).presheaf.germ U _ hxU ≫
       (restrictStalkNatIso f x).hom.app M = M.presheaf.germ _ _ (by simpa) :=
   haveI := Functor.initial_of_adjunction (f.isOpenEmbedding.adjunctionNhds x)
@@ -2098,61 +1790,65 @@ lemma germ_restrictStalkNatIso_hom_app (x : X) (M : Y.Modules) (hxU : x in U) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `germ_restrictStalkNatIso_inv_app` / 引理 `germ_restrictStalkNatIso_inv_app`
-
-English:
-lemma germ_restrictStalkNatIso_inv_app
-  given: (x : X) (M : Y.Modules) (hxU : x in U)
-  proof: by
-  rw [← germ_restrictStalkNatIso_hom_app f x M hxU]; rw [Category.assoc]; rw [← NatTrans.comp_app]; rw [Iso.hom_inv_id]
-  simp
-
-中文:
-引理 germ_restrictStalk自然数Iso_inv_app
-  条件: (x : X) (M : Y.Modules) (hxU : x in U)
-  证明: by
-  rw [← germ_restrictStalkNatIso_hom_app f x M hxU]; rw [Category.assoc]; rw [← NatTrans.comp_app]; rw [Iso.hom_inv_id]
-  simp
-
-Depends on / 依赖: Category, Category.assoc, Iso.hom_inv_id, NatTrans, NatTrans.comp_app, comp_app, germ_restrictStalkNatIso_hom_app, hom_inv_id
+/-
+**AlgebraicGeometry.Scheme.Modules.germ_restrictStalkNatIso_inv_app** 是 Mathlib 
+中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：germ_restrictStalkNatIso_inv_app (x : X) (M : Y.Modules) (hxU : x in U) : 
+M.presheaf.germ _ _ (by simpa) ≫ (restrictStalkNatIso f x).inv.app M = ((restric
+tFunctor f).obj M).presheaf.germ U _ hxU
+参数：x : X；M : Y.Modules；hxU : x in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGrpCat.hasColimitsOfSize`：∀ [UnivLE.{u, w}], CategoryTheory.Limit
+s.HasColimitsOfSize.{v, u, w, w + 1} AddCommGrpCat
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.Modules.germ_restrictStalkNatIso_hom_app`：germ_
+restrictStalkNatIso_hom_app (x : X) (M : Y.Modules) (hxU : x in U) : ((restrictF
+unctor f).obj M).presheaf.germ U _ hxU ≫ (restrictStalk…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.comp_app`：comp_app {F G H : C ⥤ D} (α : F ⟶ G) (
+β : G ⟶ H) (X : C) : (α ≫ β).app X = α.app X ≫ β.app X
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma germ_restrictStalkNatIso_inv_app (x : X) (M : Y.Modules) (hxU : x in U) :
+lemma germ_restrictStalkNatIso_inv_app (x : X) (M : Y.Modules) (hxU : x ∈ U) :
     M.presheaf.germ _ _ (by simpa) ≫ (restrictStalkNatIso f x).inv.app M =
       ((restrictFunctor f).obj M).presheaf.germ U _ hxU := by
-  rw [← germ_restrictStalkNatIso_hom_app f x M hxU]; rw [Category.assoc]; rw [← NatTrans.comp_app]; rw [Iso.hom_inv_id]
+  rw [← germ_restrictStalkNatIso_hom_app f x M hxU, Category.assoc, ← NatTrans.comp_app,
+    Iso.hom_inv_id]
   simp
 
 end Restriction
 
-/--
-Definition of `sheafComposePushforwardComp` / `sheafComposePushforwardComp` 的定义
+/-- `sheafCompose` commutes with `pushforward` -/
+/-
+**AlgebraicGeometry.Scheme.Modules.sheafComposePushforwardComp** 是 Mathlib 中的一个定
+义，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：sheafComposePushforwardComp {R S : CommRingCat.{u}} (φ : R ⟶ S) : sheafCom
+pose (Opens.grothendieckTopology (Spec S)) (ModuleCat.restrictScalars (Spec.map 
+φ).appTop.hom) ⋙ TopCat.Sheaf.pushforward _ (Spec.map φ).base ⋙ sheafCompose _ (
+ModuleCat.restrictScalars (Scheme.ΓSpecIso R).inv.hom) ≅ sheafCompose _ (ModuleC
+at.restrictScalars (Scheme.ΓSpecIso S).inv.hom) ⋙ TopCat.Sheaf.pushforward _ (Sp
+ec.map φ).base ⋙ sheafCompose _ (ModuleCat.restrictScalars φ.hom)
+参数：φ : R ⟶ S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafComposePushforwardComp
-  signature: {R S : CommRingCat.{u}} (φ : R ⟶ S)
-  body: by
-  refine NatIso.ofComponents (fun M => ObjectProperty.isoMk _ ?_) ?_
-  · refine NatIso.ofComponents (fun U => ?_) ?_
-    · refine (ModuleCat.restrictScalarsComp'App _ _ _ ?_ _).symm ≪≫
-        (ModuleCat.restrictScalarsComp φ.hom ((Scheme.ΓSpecIso S).inv).hom).app _
-      rw [← CommRingCat.hom_comp]; rw [Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.hom_comp]
-    · cat_disch
-  · cat_disch
-
-中文:
-定义 sheafComposePushforwardComp
-  签名: {R S : 交换环范畴.{u}} (φ : R ⟶ S)
-  定义体: by
-  refine NatIso.ofComponents (fun M => ObjectProperty.isoMk _ ?_) ?_
-  · refine NatIso.ofComponents (fun U => ?_) ?_
-    · refine (ModuleCat.restrictScalarsComp'App _ _ _ ?_ _).symm ≪≫
-        (ModuleCat.restrictScalarsComp φ.hom ((Scheme.ΓSpecIso S).inv).hom).app _
-      rw [← CommRingCat.hom_comp]; rw [Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.hom_comp]
-    · cat_disch
-  · cat_disch
-
-Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, ModuleCat, ModuleCat.restrictScalarsComp, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.isoMk, Scheme, cat_disch, hom_comp, ofComponents, restrictScalarsComp
+--- 原说明 ---
+`sheafCompose` commutes with `pushforward`
 -/
 noncomputable def sheafComposePushforwardComp {R S : CommRingCat.{u}} (φ : R ⟶ S) :
     sheafCompose (Opens.grothendieckTopology (Spec S))
@@ -2162,30 +1858,24 @@ noncomputable def sheafComposePushforwardComp {R S : CommRingCat.{u}} (φ : R �
     sheafCompose _ (ModuleCat.restrictScalars (Scheme.ΓSpecIso S).inv.hom) ⋙
       TopCat.Sheaf.pushforward _ (Spec.map φ).base ⋙
       sheafCompose _ (ModuleCat.restrictScalars φ.hom) := by
-  refine NatIso.ofComponents (fun M => ObjectProperty.isoMk _ ?_) ?_
-  · refine NatIso.ofComponents (fun U => ?_) ?_
+  refine NatIso.ofComponents (fun M ↦ ObjectProperty.isoMk _ ?_) ?_
+  · refine NatIso.ofComponents (fun U ↦ ?_) ?_
     · refine (ModuleCat.restrictScalarsComp'App _ _ _ ?_ _).symm ≪≫
         (ModuleCat.restrictScalarsComp φ.hom ((Scheme.ΓSpecIso S).inv).hom).app _
-      rw [← CommRingCat.hom_comp]; rw [Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.hom_comp]
+      rw [← CommRingCat.hom_comp, Scheme.ΓSpecIso_inv_naturality, CommRingCat.hom_comp]
     · cat_disch
   · cat_disch
 
 /-- Sheaves of modules on `𝒪_X` restricted to `U` are equivalent to sheaves of `𝒪_U`-modules. -/
 noncomputable
-/--
-Definition of `overEquiv` / `overEquiv` 的定义
-
-English:
-definition overEquiv
-  signature: {X : Scheme.{u}} (U : X.Opens)
-  body: TopologicalSpace.Opens.sheafOfModulesEquivOver _ _
-
-中文:
-定义 overEquiv
-  签名: {X : 概形.{u}} (U : X.Opens)
-  定义体: TopologicalSpace.Opens.sheafOfModulesEquivOver _ _
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.Opens.sheafOfModulesEquivOver, sheafOfModulesEquivOver
+/-
+**AlgebraicGeometry.Scheme.Modules.overEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry.Scheme.Modules`。
+形式化陈述：overEquiv {X : Scheme.{u}} (U : X.Opens) : SheafOfModules (X.ringCatSheaf.
+over U) ≌ (U : Scheme.{u}).Modules
+参数：U : X.Opens。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def overEquiv {X : Scheme.{u}} (U : X.Opens) :
     SheafOfModules (X.ringCatSheaf.over U) ≌ (U : Scheme.{u}).Modules :=
@@ -2195,104 +1885,35 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Up to `Scheme.Modules.overEquiv`, `SheafOfModules.overMap` is isomorphic to
 `Scheme.Modules.restrictFunctor`. -/
 noncomputable
-/--
-Definition of `overMapCompOverEquiv` / `overMapCompOverEquiv` 的定义
-
-English:
-definition overMapCompOverEquiv
-  signature: {X : Scheme.{u}} {U V : X.Opens} (f : V ⟶ U)
-  body: by
-  haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
-      (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.carrier) :=
-inferInstanceAs
-      (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous _
-      (Opens.grothendieckTopology U.toScheme)
-  haveI := U.instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence
-  haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
-      (Opens.grothendieckTopology ↥V) (Opens.grothendieckTopology U.toScheme) :=
-inferInstanceAs (X.homOfLE <| leOfHom f).opensFunctor.IsContinuous
-      (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.toScheme)
-  haveI : ((Opens.overEquivalence V).symm.functor ⋙ Over.map f).IsContinuous
-      (Opens.grothendieckTopology ↥V) ((Opens.grothendieckTopology X).over U) :=
-    Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) _) _
-  haveI : (Opens.overEquivalence U).symm.functor.IsContinuous (Opens.grothendieckTopology U)
-      ((Opens.grothendieckTopology X).over U) :=
-inferInstanceAs U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopology U.carrier)
-      ((Opens.grothendieckTopology X).over U)
-  haveI : ((X.homOfLE (leOfHom f)).opensFunctor ⋙
-        (Opens.overEquivalence U).symm.functor).IsContinuous (Opens.grothendieckTopology ↥V)
-      ((Opens.grothendieckTopology ↥X).over U) :=
-    Functor.isContinuous_comp _ _ _ (Opens.grothendieckTopology _) _
-  refine (SheafOfModules.pushforwardComp _ _) ≪≫ ?_ ≪≫ (SheafOfModules.pushforwardComp _ _).symm
-  refine SheafOfModules.pushforwardCongr₂ _ ?_ ?_
-  · refine NatIso.ofComponents (fun W => Over.isoMk (eqToIso ?_) ?_) ?_
-    · suffices U.ι ''ᵁ ((X.homOfLE (leOfHom f)) ''ᵁ W) = V.ι ''ᵁ W by simpa
-      simp [← Scheme.Hom.comp_image]
-    · cat_disch
-    · cat_disch
-  · ext W x
-    suffices X.presheaf.map _ x = ((X.homOfLE <| leOfHom f).appIso _).inv x by simpa
-    rw [Scheme.Hom.appIso_homOfLE_inv]
-    rfl
-
-中文:
-定义 overMapCompOverEquiv
-  签名: {X : 概形.{u}} {U V : X.Opens} (f : V ⟶ U)
-  定义体: by
-  haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
-      (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.carrier) :=
-inferInstanceAs
-      (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous _
-      (Opens.grothendieckTopology U.toScheme)
-  haveI := U.instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence
-  haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
-      (Opens.grothendieckTopology ↥V) (Opens.grothendieckTopology U.toScheme) :=
-inferInstanceAs (X.homOfLE <| leOfHom f).opensFunctor.IsContinuous
-      (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.toScheme)
-  haveI : ((Opens.overEquivalence V).symm.functor ⋙ Over.map f).IsContinuous
-      (Opens.grothendieckTopology ↥V) ((Opens.grothendieckTopology X).over U) :=
-    Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) _) _
-  haveI : (Opens.overEquivalence U).symm.functor.IsContinuous (Opens.grothendieckTopology U)
-      ((Opens.grothendieckTopology X).over U) :=
-inferInstanceAs U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopology U.carrier)
-      ((Opens.grothendieckTopology X).over U)
-  haveI : ((X.homOfLE (leOfHom f)).opensFunctor ⋙
-        (Opens.overEquivalence U).symm.functor).IsContinuous (Opens.grothendieckTopology ↥V)
-      ((Opens.grothendieckTopology ↥X).over U) :=
-    Functor.isContinuous_comp _ _ _ (Opens.grothendieckTopology _) _
-  refine (SheafOfModules.pushforwardComp _ _) ≪≫ ?_ ≪≫ (SheafOfModules.pushforwardComp _ _).symm
-  refine SheafOfModules.pushforwardCongr₂ _ ?_ ?_
-  · refine NatIso.ofComponents (fun W => Over.isoMk (eqToIso ?_) ?_) ?_
-    · suffices U.ι ''ᵁ ((X.homOfLE (leOfHom f)) ''ᵁ W) = V.ι ''ᵁ W by simpa
-      simp [← Scheme.Hom.comp_image]
-    · cat_disch
-    · cat_disch
-  · ext W x
-    suffices X.presheaf.map _ x = ((X.homOfLE <| leOfHom f).appIso _).inv x by simpa
-    rw [Scheme.Hom.appIso_homOfLE_inv]
-    rfl
-
-Depends on / 依赖: Hom.opensFunctor, IsContinuous, Opens.grothendieckTopology, U.carrier, U.instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence, U.toScheme, V.toScheme, X.homOfLE, carrier, grothendieckTopology, homOfLE, instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence, leOfHom, opensFunctor, toScheme
+/-
+**AlgebraicGeometry.Scheme.Modules.overMapCompOverEquiv** 是 Mathlib 中的一个定义，位于命名空
+间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：overMapCompOverEquiv {X : Scheme.{u}} {U V : X.Opens} (f : V ⟶ U) : overMa
+p X.ringCatSheaf f ⋙ (overEquiv V).functor ≅ (overEquiv U).functor ⋙ restrictFun
+ctor (X.homOfLE <| leOfHom f)
+参数：f : V ⟶ U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def overMapCompOverEquiv {X : Scheme.{u}} {U V : X.Opens} (f : V ⟶ U) :
     overMap X.ringCatSheaf f ⋙ (overEquiv V).functor ≅
       (overEquiv U).functor ⋙ restrictFunctor (X.homOfLE <| leOfHom f) := by
   haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
       (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.carrier) :=
-inferInstanceAs
+    inferInstanceAs <|
       (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous _
       (Opens.grothendieckTopology U.toScheme)
   haveI := U.instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence
   haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
       (Opens.grothendieckTopology ↥V) (Opens.grothendieckTopology U.toScheme) :=
-inferInstanceAs (X.homOfLE <| leOfHom f).opensFunctor.IsContinuous
+    inferInstanceAs <| (X.homOfLE <| leOfHom f).opensFunctor.IsContinuous
       (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.toScheme)
   haveI : ((Opens.overEquivalence V).symm.functor ⋙ Over.map f).IsContinuous
       (Opens.grothendieckTopology ↥V) ((Opens.grothendieckTopology X).over U) :=
     Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) _) _
   haveI : (Opens.overEquivalence U).symm.functor.IsContinuous (Opens.grothendieckTopology U)
       ((Opens.grothendieckTopology X).over U) :=
-inferInstanceAs U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopology U.carrier)
+    inferInstanceAs <| U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopology U.carrier)
       ((Opens.grothendieckTopology X).over U)
   haveI : ((X.homOfLE (leOfHom f)).opensFunctor ⋙
         (Opens.overEquivalence U).symm.functor).IsContinuous (Opens.grothendieckTopology ↥V)
@@ -2300,7 +1921,7 @@ inferInstanceAs U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopolo
     Functor.isContinuous_comp _ _ _ (Opens.grothendieckTopology _) _
   refine (SheafOfModules.pushforwardComp _ _) ≪≫ ?_ ≪≫ (SheafOfModules.pushforwardComp _ _).symm
   refine SheafOfModules.pushforwardCongr₂ _ ?_ ?_
-  · refine NatIso.ofComponents (fun W => Over.isoMk (eqToIso ?_) ?_) ?_
+  · refine NatIso.ofComponents (fun W ↦ Over.isoMk (eqToIso ?_) ?_) ?_
     · suffices U.ι ''ᵁ ((X.homOfLE (leOfHom f)) ''ᵁ W) = V.ι ''ᵁ W by simpa
       simp [← Scheme.Hom.comp_image]
     · cat_disch
@@ -2313,32 +1934,16 @@ inferInstanceAs U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopolo
 /-- Up to `Scheme.Modules.overEquiv`, `SheafOfModules.overFunctor` is isomorphic to
 `Scheme.Modules.restrictFunctor`. -/
 noncomputable
-/--
-Definition of `overFunctorEquiv` / `overFunctorEquiv` 的定义
-
-English:
-definition overFunctorEquiv
-  signature: {X : Scheme.{u}} (U : X.Opens)
-  body: by
-  have : ((Opens.overEquivalence U).symm.functor ⋙ Over.forget U).IsContinuous
-      (Opens.grothendieckTopology ↥U) (Opens.grothendieckTopology ↥X) :=
-    Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) U) _
-  refine SheafOfModules.pushforwardComp _ _ ≪≫ SheafOfModules.pushforwardCongr ?_
-  simp only [CategoryTheory.Functor.map_id, Opposite.op_unop, Opens.ι_appIso, Iso.refl_inv]
-  rfl
-
-中文:
-定义 overFunctorEquiv
-  签名: {X : 概形.{u}} (U : X.Opens)
-  定义体: by
-  have : ((Opens.overEquivalence U).symm.functor ⋙ Over.forget U).IsContinuous
-      (Opens.grothendieckTopology ↥U) (Opens.grothendieckTopology ↥X) :=
-    Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) U) _
-  refine SheafOfModules.pushforwardComp _ _ ≪≫ SheafOfModules.pushforwardCongr ?_
-  simp only [CategoryTheory.Functor.map_id, Opposite.op_unop, Opens.ι_appIso, Iso.refl_inv]
-  rfl
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, Functor.isContinuous_comp, IsContinuous, Iso.refl_inv, Opens.grothendieckTopology, Opens.overEquivalence, Opposite, Opposite.op_unop, Over.forget, SheafOfModules, SheafOfModules.pushforwardComp, SheafOfModules.pushforwardCongr, forget, functor, grothendieckTopology, isContinuous_comp, map_id, op_unop
+/-
+**AlgebraicGeometry.Scheme.Modules.overFunctorEquiv** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry.Scheme.Modules`。
+形式化陈述：overFunctorEquiv {X : Scheme.{u}} (U : X.Opens) : overFunctor X.ringCatShe
+af U ⋙ (overEquiv U).functor ≅ restrictFunctor U.ι
+参数：U : X.Opens。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
 -/
 def overFunctorEquiv {X : Scheme.{u}} (U : X.Opens) :
     overFunctor X.ringCatSheaf U ⋙ (overEquiv U).functor ≅ restrictFunctor U.ι := by
@@ -2350,3 +1955,4 @@ def overFunctorEquiv {X : Scheme.{u}} (U : X.Opens) :
   rfl
 
 end AlgebraicGeometry.Scheme.Modules
+

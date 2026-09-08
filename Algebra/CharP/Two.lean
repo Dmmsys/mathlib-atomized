@@ -33,34 +33,36 @@ section AddMonoidWithOne
 
 variable [AddMonoidWithOne R]
 
-/--
-theorem `of_one_ne_zero_of_two_eq_zero` / 定理 `of_one_ne_zero_of_two_eq_zero`
+/-- The only hypotheses required to build a `CharP R 2` instance are `1 ≠ 0` and `2 = 0`. -/
+/-
+**CharTwo.of_one_ne_zero_of_two_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：of_one_ne_zero_of_two_eq_zero (h₁ : (1 : R) != 0) (h₂ : (2 : R) = 0) : Cha
+rP R 2 where cast_eq_zero_iff n
+参数：h₁ : (1 : R) != 0；h₂ : (2 : R) = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `Nat.even_or_odd`：even_or_odd (n : Nat) : Even n ∨ Odd n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Even.two_dvd`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Even a → 2 ∣
+ a
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `natCast_eq_zero_of_even_of_two_eq_zero`：natCast_eq_zero_of_even_of_two_e
+q_zero {n : Nat} (hn : Even n) (h : (2 : R) = 0) : (n : R) = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Odd.not_two_dvd_nat`：∀ {n : ℕ}, Odd n → ¬2 ∣ n
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `natCast_eq_one_of_odd_of_two_eq_zero`：natCast_eq_one_of_odd_of_two_eq_ze
+ro {n : Nat} (hn : Odd n) (h : (2 : R) = 0) : (n : R) = 1
 
-English:
-theorem of_one_ne_zero_of_two_eq_zero
-  given: (h₁ : (1 : R) != 0) (h₂ : (2 : R) = 0)
-  statement: CharP R 2 where
-  proof: by
-    obtain hn | hn := Nat.even_or_odd n
-    · simp_rw [hn.two_dvd, iff_true]
-      exact natCast_eq_zero_of_even_of_two_eq_zero hn h₂
-    · simp_rw [hn.not_two_dvd_nat, iff_false]
-      rwa [natCast_eq_one_of_odd_of_two_eq_zero hn h₂]
-
-中文:
-定理 of_one_ne_zero_of_two_eq_zero
-  条件: (h₁ : (1 : R) != 0) (h₂ : (2 : R) = 0)
-  结论: 特征p R 2 where
-  证明: by
-    obtain hn | hn := Nat.even_or_odd n
-    · simp_rw [hn.two_dvd, iff_true]
-      exact natCast_eq_zero_of_even_of_two_eq_zero hn h₂
-    · simp_rw [hn.not_two_dvd_nat, iff_false]
-      rwa [natCast_eq_one_of_odd_of_two_eq_zero hn h₂]
-
-Depends on / 依赖: Nat.even_or_odd, even_or_odd, hn.not_two_dvd_nat, hn.two_dvd, iff_false, iff_true, natCast_eq_one_of_odd_of_two_eq_zero, natCast_eq_zero_of_even_of_two_eq_zero, not_two_dvd_nat, simp_rw, two_dvd
+--- 原说明 ---
+The only hypotheses required to build a `CharP R 2` instance are `1 ≠ 0` and `2 
+= 0`.
 -/
-theorem of_one_ne_zero_of_two_eq_zero (h₁ : (1 : R) != 0) (h₂ : (2 : R) = 0) : CharP R 2 where
+theorem of_one_ne_zero_of_two_eq_zero (h₁ : (1 : R) ≠ 0) (h₂ : (2 : R) = 0) : CharP R 2 where
   cast_eq_zero_iff n := by
     obtain hn | hn := Nat.even_or_odd n
     · simp_rw [hn.two_dvd, iff_true]
@@ -71,151 +73,136 @@ theorem of_one_ne_zero_of_two_eq_zero (h₁ : (1 : R) != 0) (h₂ : (2 : R) = 0)
 variable [CharP R 2]
 
 @[scoped simp]
-/--
-theorem `two_eq_zero` / 定理 `two_eq_zero`
-
-English:
-theorem two_eq_zero
-  statement: (2 : R) = 0
-  proof: by
-  rw [← Nat.cast_two]; rw [CharP.cast_eq_zero]
-
-中文:
-定理 two_eq_zero
-  结论: (2 : R) = 0
-  证明: by
-  rw [← Nat.cast_two]; rw [CharP.cast_eq_zero]
-
-Depends on / 依赖: CharP.cast_eq_zero, Nat.cast_two, cast_eq_zero, cast_two
+/-
+**CharTwo.two_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：two_eq_zero : (2 : R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_two`：cast_two [NatCast R] : ((2 : Nat) : R) = (2 : R)
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
 -/
 theorem two_eq_zero : (2 : R) = 0 := by
-  rw [← Nat.cast_two]; rw [CharP.cast_eq_zero]
-
-/--
-theorem `natCast_eq_ite` / 定理 `natCast_eq_ite`
-
-English:
-theorem natCast_eq_ite
-  given: (n : Nat)
-  statement: (n : R) = if Even n then 0 else 1
-  proof: by
-  induction n <;> aesop (add simp [one_add_one_eq_two])
-
-@[simp]
-
-中文:
-定理 natCast_eq_ite
-  条件: (n : 自然数)
-  结论: (n : R) = if Even n then 0 else 1
-  证明: by
-  induction n <;> aesop (add simp [one_add_one_eq_two])
-
-@[simp]
-
-Depends on / 依赖: one_add_one_eq_two
+  rw [← Nat.cast_two, CharP.cast_eq_zero]
+/-
+**CharTwo.natCast_eq_ite** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：natCast_eq_ite (n : Nat) : (n : R) = if Even n then 0 else 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用定理 `CharTwo.two_eq_zero`：two_eq_zero : (2 : R) = 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-theorem natCast_eq_ite (n : Nat) : (n : R) = if Even n then 0 else 1 := by
+theorem natCast_eq_ite (n : ℕ) : (n : R) = if Even n then 0 else 1 := by
   induction n <;> aesop (add simp [one_add_one_eq_two])
 
 @[simp]
-/--
-theorem `range_natCast` / 定理 `range_natCast`
-
-English:
-theorem range_natCast
-  statement: Set.range ((↑) : Nat -> R) = {0, 1}
-  proof: by
-  rw [funext natCast_eq_ite]; rw [Set.range_ite_const]
-  · use 0; simp
-  · use 1; simp
-
-中文:
-定理 range_natCast
-  结论: 集合.range ((↑) : 自然数 -> R) = {0, 1}
-  证明: by
-  rw [funext natCast_eq_ite]; rw [Set.range_ite_const]
-  · use 0; simp
-  · use 1; simp
-
-Depends on / 依赖: Set.range_ite_const, natCast_eq_ite, range_ite_const
+/-
+**CharTwo.range_natCast** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：range_natCast : Set.range ((↑) : Nat -> R) = {0, 1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CharTwo.natCast_eq_ite`：natCast_eq_ite (n : Nat) : (n : R) = if Even n t
+hen 0 else 1
+· 使用定理 `Set.range_ite_const`：range_ite_const {p : α -> Prop} [DecidablePred p] {
+x y : β} (hp : exists a, p a) (hn : exists a, ¬ p a) : Set.range (fun a => if p 
+a then x …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem range_natCast : Set.range ((↑) : Nat -> R) = {0, 1} := by
-  rw [funext natCast_eq_ite]; rw [Set.range_ite_const]
+theorem range_natCast : Set.range ((↑) : ℕ → R) = {0, 1} := by
+  rw [funext natCast_eq_ite, Set.range_ite_const]
   · use 0; simp
   · use 1; simp
 
 variable (R) in
-/--
-theorem `natCast_cases` / 定理 `natCast_cases`
-
-English:
-theorem natCast_cases
-  given: (n : Nat)
-  statement: (n : R) = 0 ∨ (n : R) = 1
-  proof: range_natCast.le (Set.mem_range_self _)
-
-中文:
-定理 natCast_cases
-  条件: (n : 自然数)
-  结论: (n : R) = 0 ∨ (n : R) = 1
-  证明: range_natCast.le (Set.mem_range_self _)
-
-Depends on / 依赖: Set.mem_range_self, mem_range_self, range_natCast, range_natCast.le
+/-
+**CharTwo.natCast_cases** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：natCast_cases (n : Nat) : (n : R) = 0 ∨ (n : R) = 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `CharTwo.range_natCast`：range_natCast : Set.range ((↑) : Nat -> R) = {0, 
+1}
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem natCast_cases (n : Nat) : (n : R) = 0 ∨ (n : R) = 1 :=
+theorem natCast_cases (n : ℕ) : (n : R) = 0 ∨ (n : R) = 1 :=
   range_natCast.le (Set.mem_range_self _)
-
-/--
-theorem `natCast_eq_mod` / 定理 `natCast_eq_mod`
-
-English:
-theorem natCast_eq_mod
-  given: (n : Nat)
-  statement: (n : R) = (n % 2 : Nat)
-  proof: by
-  simp [natCast_eq_ite, Nat.even_iff]
-
-@[scoped simp]
-
-中文:
-定理 natCast_eq_mod
-  条件: (n : 自然数)
-  结论: (n : R) = (n % 2 : 自然数)
-  证明: by
-  simp [natCast_eq_ite, Nat.even_iff]
-
-@[scoped simp]
-
-Depends on / 依赖: Nat.even_iff, even_iff, natCast_eq_ite
+/-
+**CharTwo.natCast_eq_mod** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：natCast_eq_mod (n : Nat) : (n : R) = (n % 2 : Nat)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CharTwo.natCast_eq_ite`：natCast_eq_ite (n : Nat) : (n : R) = if Even n t
+hen 0 else 1
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.mod_mod_of_dvd`：∀ {c b : ℕ} (a : ℕ), c ∣ b → a % b % c = a % c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem natCast_eq_mod (n : Nat) : (n : R) = (n % 2 : Nat) := by
+theorem natCast_eq_mod (n : ℕ) : (n : R) = (n % 2 : ℕ) := by
   simp [natCast_eq_ite, Nat.even_iff]
 
 @[scoped simp]
-/--
-theorem `ofNat_eq_mod` / 定理 `ofNat_eq_mod`
-
-English:
-theorem ofNat_eq_mod
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (OfNat.ofNat n : R) = (ofNat(n) % 2 : Nat)
-  proof: natCast_eq_mod n
-
-example : (37 : R) = 1 := by simp
-
-中文:
-定理 of自然数_eq_mod
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (Of自然数.of自然数 n : R) = (of自然数(n) % 2 : 自然数)
-  证明: natCast_eq_mod n
-
-example : (37 : R) = 1 := by simp
-
-Depends on / 依赖: natCast_eq_mod
+/-
+**CharTwo.ofNat_eq_mod** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：ofNat_eq_mod (n : Nat) [n.AtLeastTwo] : (OfNat.ofNat n : R) = (ofNat(n) % 
+2 : Nat)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CharTwo.natCast_eq_mod`：natCast_eq_mod (n : Nat) : (n : R) = (n % 2 : Na
+t)
 -/
-theorem ofNat_eq_mod (n : Nat) [n.AtLeastTwo] : (OfNat.ofNat n : R) = (ofNat(n) % 2 : Nat) :=
+theorem ofNat_eq_mod (n : ℕ) [n.AtLeastTwo] : (OfNat.ofNat n : R) = (ofNat(n) % 2 : ℕ) :=
   natCast_eq_mod n
-
+/-
+**CharTwo.** 是 Mathlib 中的一个示例，位于命名空间 `CharTwo`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (37 : R) = 1 := by simp
 
 end AddMonoidWithOne
@@ -225,96 +212,70 @@ section Semiring
 variable [Semiring R] [CharP R 2]
 
 @[scoped simp]
-/--
-theorem `add_self_eq_zero` / 定理 `add_self_eq_zero`
-
-English:
-theorem add_self_eq_zero
-  given: (x : R)
-  statement: x + x = 0
-  proof: by rw [← two_mul x, two_eq_zero, zero_mul]
-
-@[scoped simp]
-
-中文:
-定理 add_self_eq_zero
-  条件: (x : R)
-  结论: x + x = 0
-  证明: by rw [← two_mul x, two_eq_zero, zero_mul]
-
-@[scoped simp]
-
-Depends on / 依赖: two_eq_zero, two_mul, zero_mul
+/-
+**CharTwo.add_self_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：add_self_eq_zero (x : R) : x + x = 0
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `CharTwo.two_eq_zero`：two_eq_zero : (2 : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem add_self_eq_zero (x : R) : x + x = 0 := by rw [← two_mul x, two_eq_zero, zero_mul]
 
 @[scoped simp]
-/--
-theorem `two_nsmul` / 定理 `two_nsmul`
-
-English:
-theorem two_nsmul
-  given: (x : R)
-  statement: 2 • x = 0
-  proof: by rw [two_nsmul, add_self_eq_zero]
-
-@[scoped simp]
-
-中文:
-定理 two_nsmul
-  条件: (x : R)
-  结论: 2 • x = 0
-  证明: by rw [two_nsmul, add_self_eq_zero]
-
-@[scoped simp]
+/-
+**CharTwo.two_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [CharP R 2] (x : R), 2 • x = 0
+参数：x : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `CharTwo.add_self_eq_zero`：add_self_eq_zero (x : R) : x + x = 0
 -/
 protected theorem two_nsmul (x : R) : 2 • x = 0 := by rw [two_nsmul, add_self_eq_zero]
 
 @[scoped simp]
-/--
-theorem `add_cancel_left` / 定理 `add_cancel_left`
-
-English:
-theorem add_cancel_left
-  given: (a b : R)
-  statement: a + (a + b) = b
-  proof: by
-  rw [← add_assoc]; rw [add_self_eq_zero]; rw [zero_add]
-
-@[scoped simp]
-
-中文:
-定理 add_cancel_left
-  条件: (a b : R)
-  结论: a + (a + b) = b
-  证明: by
-  rw [← add_assoc]; rw [add_self_eq_zero]; rw [zero_add]
-
-@[scoped simp]
+/-
+**CharTwo.add_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [CharP R 2] (a b : R), a + (a + b) = 
+b
+参数：a b : R；a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `CharTwo.add_self_eq_zero`：add_self_eq_zero (x : R) : x + x = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 protected theorem add_cancel_left (a b : R) : a + (a + b) = b := by
-  rw [← add_assoc]; rw [add_self_eq_zero]; rw [zero_add]
+  rw [← add_assoc, add_self_eq_zero, zero_add]
 
 @[scoped simp]
-/--
-theorem `add_cancel_right` / 定理 `add_cancel_right`
-
-English:
-theorem add_cancel_right
-  given: (a b : R)
-  statement: a + b + b = a
-  proof: by
-  rw [add_assoc]; rw [add_self_eq_zero]; rw [add_zero]
-
-中文:
-定理 add_cancel_right
-  条件: (a b : R)
-  结论: a + b + b = a
-  证明: by
-  rw [add_assoc]; rw [add_self_eq_zero]; rw [add_zero]
+/-
+**CharTwo.add_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [CharP R 2] (a b : R), a + b + b = a
+参数：a b : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `CharTwo.add_self_eq_zero`：add_self_eq_zero (x : R) : x + x = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 protected theorem add_cancel_right (a b : R) : a + b + b = a := by
-  rw [add_assoc]; rw [add_self_eq_zero]; rw [add_zero]
+  rw [add_assoc, add_self_eq_zero, add_zero]
 
 end Semiring
 
@@ -323,253 +284,194 @@ section Ring
 variable [Ring R] [CharP R 2]
 
 @[scoped simp]
-/--
-theorem `neg_eq` / 定理 `neg_eq`
-
-English:
-theorem neg_eq
-  given: (x : R)
-  statement: -x = x
-  proof: by
-  rw [neg_eq_iff_add_eq_zero]; rw [add_self_eq_zero]
-
-中文:
-定理 neg_eq
-  条件: (x : R)
-  结论: -x = x
-  证明: by
-  rw [neg_eq_iff_add_eq_zero]; rw [add_self_eq_zero]
-
-Depends on / 依赖: add_self_eq_zero, neg_eq_iff_add_eq_zero
+/-
+**CharTwo.neg_eq** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：neg_eq (x : R) : -x = x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_eq_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+-a = b ↔ a + b = 0
+· 使用定理 `CharTwo.add_self_eq_zero`：add_self_eq_zero (x : R) : x + x = 0
 -/
 theorem neg_eq (x : R) : -x = x := by
-  rw [neg_eq_iff_add_eq_zero]; rw [add_self_eq_zero]
-
-/--
-theorem `neg_eq'` / 定理 `neg_eq'`
-
-English:
-theorem neg_eq'
-  statement: Neg.neg = (id : R -> R)
-  proof: funext neg_eq
-
-@[scoped simp]
-
-中文:
-定理 neg_eq'
-  结论: 取负.neg = (id : R -> R)
-  证明: funext neg_eq
-
-@[scoped simp]
-
-Depends on / 依赖: neg_eq
+  rw [neg_eq_iff_add_eq_zero, add_self_eq_zero]
+/-
+**CharTwo.neg_eq'** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：neg_eq' : Neg.neg = (id : R -> R)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CharTwo.neg_eq`：neg_eq (x : R) : -x = x
 -/
-theorem neg_eq' : Neg.neg = (id : R -> R) :=
+theorem neg_eq' : Neg.neg = (id : R → R) :=
   funext neg_eq
 
 @[scoped simp]
-/--
-theorem `sub_eq_add` / 定理 `sub_eq_add`
-
-English:
-theorem sub_eq_add
-  given: (x y : R)
-  statement: x - y = x + y
-  proof: by rw [sub_eq_add_neg, neg_eq]
-
-中文:
-定理 sub_eq_add
-  条件: (x y : R)
-  结论: x - y = x + y
-  证明: by rw [sub_eq_add_neg, neg_eq]
-
-Depends on / 依赖: neg_eq, sub_eq_add_neg
+/-
+**CharTwo.sub_eq_add** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：sub_eq_add (x y : R) : x - y = x + y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `CharTwo.neg_eq`：neg_eq (x : R) : -x = x
 -/
 theorem sub_eq_add (x y : R) : x - y = x + y := by rw [sub_eq_add_neg, neg_eq]
-
-/--
-theorem `add_eq_iff_eq_add` / 定理 `add_eq_iff_eq_add`
-
-English:
-theorem add_eq_iff_eq_add
-  given: {a b c : R}
-  statement: a + b = c ↔ a = c + b
-  proof: by
-  rw [← sub_eq_iff_eq_add]; rw [sub_eq_add]
-
-中文:
-定理 add_eq_iff_eq_add
-  条件: {a b c : R}
-  结论: a + b = c ↔ a = c + b
-  证明: by
-  rw [← sub_eq_iff_eq_add]; rw [sub_eq_add]
-
-Depends on / 依赖: sub_eq_add, sub_eq_iff_eq_add
+/-
+**CharTwo.add_eq_iff_eq_add** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：add_eq_iff_eq_add {a b c : R} : a + b = c ↔ a = c + b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `CharTwo.sub_eq_add`：sub_eq_add (x y : R) : x - y = x + y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem add_eq_iff_eq_add {a b c : R} : a + b = c ↔ a = c + b := by
-  rw [← sub_eq_iff_eq_add]; rw [sub_eq_add]
-
-/--
-theorem `eq_add_iff_add_eq` / 定理 `eq_add_iff_add_eq`
-
-English:
-theorem eq_add_iff_add_eq
-  given: {a b c : R}
-  statement: a = b + c ↔ a + c = b
-  proof: by
-  rw [← eq_sub_iff_add_eq]; rw [sub_eq_add]
-
-@[scoped simp]
-
-中文:
-定理 eq_add_iff_add_eq
-  条件: {a b c : R}
-  结论: a = b + c ↔ a + c = b
-  证明: by
-  rw [← eq_sub_iff_add_eq]; rw [sub_eq_add]
-
-@[scoped simp]
-
-Depends on / 依赖: eq_sub_iff_add_eq, sub_eq_add
+  rw [← sub_eq_iff_eq_add, sub_eq_add]
+/-
+**CharTwo.eq_add_iff_add_eq** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：eq_add_iff_add_eq {a b c : R} : a = b + c ↔ a + c = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `CharTwo.sub_eq_add`：sub_eq_add (x y : R) : x - y = x + y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem eq_add_iff_add_eq {a b c : R} : a = b + c ↔ a + c = b := by
-  rw [← eq_sub_iff_add_eq]; rw [sub_eq_add]
+  rw [← eq_sub_iff_add_eq, sub_eq_add]
 
 @[scoped simp]
-/--
-theorem `two_zsmul` / 定理 `two_zsmul`
-
-English:
-theorem two_zsmul
-  given: (x : R)
-  statement: (2 : Int) • x = 0
-  proof: by
-  rw [two_zsmul]; rw [add_self_eq_zero]
-
-中文:
-定理 two_zsmul
-  条件: (x : R)
-  结论: (2 : 整数) • x = 0
-  证明: by
-  rw [two_zsmul]; rw [add_self_eq_zero]
+/-
+**CharTwo.two_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] [CharP R 2] (x : R), 2 • x = 0
+参数：x : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `CharTwo.add_self_eq_zero`：add_self_eq_zero (x : R) : x + x = 0
 -/
-protected theorem two_zsmul (x : R) : (2 : Int) • x = 0 := by
-  rw [two_zsmul]; rw [add_self_eq_zero]
-
-/--
-theorem `add_eq_zero` / 定理 `add_eq_zero`
-
-English:
-theorem add_eq_zero
-  given: {a b : R}
-  statement: a + b = 0 ↔ a = b
-  proof: by
-  rw [← CharTwo.sub_eq_add]; rw [sub_eq_iff_eq_add]; rw [zero_add]
-
-中文:
-定理 add_eq_zero
-  条件: {a b : R}
-  结论: a + b = 0 ↔ a = b
-  证明: by
-  rw [← CharTwo.sub_eq_add]; rw [sub_eq_iff_eq_add]; rw [zero_add]
+protected theorem two_zsmul (x : R) : (2 : ℤ) • x = 0 := by
+  rw [two_zsmul, add_self_eq_zero]
+/-
+**CharTwo.add_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] [CharP R 2] {a b : R}, a + b = 0 ↔ a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CharTwo.sub_eq_add`：sub_eq_add (x y : R) : x - y = x + y
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 protected theorem add_eq_zero {a b : R} : a + b = 0 ↔ a = b := by
-  rw [← CharTwo.sub_eq_add]; rw [sub_eq_iff_eq_add]; rw [zero_add]
-
-/--
-theorem `intCast_eq_ite` / 定理 `intCast_eq_ite`
-
-English:
-theorem intCast_eq_ite
-  given: (n : Int)
-  statement: (n : R) = if Even n then 0 else 1
-  proof: by
-  obtain ⟨n, rfl | rfl⟩ := n.eq_nat_or_neg <;> simpa using natCast_eq_ite n
-
-@[simp]
-
-中文:
-定理 intCast_eq_ite
-  条件: (n : 整数)
-  结论: (n : R) = if Even n then 0 else 1
-  证明: by
-  obtain ⟨n, rfl | rfl⟩ := n.eq_nat_or_neg <;> simpa using natCast_eq_ite n
-
-@[simp]
-
-Depends on / 依赖: eq_nat_or_neg, n.eq_nat_or_neg, natCast_eq_ite
+  rw [← CharTwo.sub_eq_add, sub_eq_iff_eq_add, zero_add]
+/-
+**CharTwo.intCast_eq_ite** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：intCast_eq_ite (n : Int) : (n : R) = if Even n then 0 else 1
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.eq_nat_or_neg`：∀ (a : ℤ), ∃ n, a = ↑n ∨ a = -↑n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `CharTwo.natCast_eq_ite`：natCast_eq_ite (n : Nat) : (n : R) = if Even n t
+hen 0 else 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `CharTwo.neg_eq`：neg_eq (x : R) : -x = x
 -/
-theorem intCast_eq_ite (n : Int) : (n : R) = if Even n then 0 else 1 := by
+theorem intCast_eq_ite (n : ℤ) : (n : R) = if Even n then 0 else 1 := by
   obtain ⟨n, rfl | rfl⟩ := n.eq_nat_or_neg <;> simpa using natCast_eq_ite n
 
 @[simp]
-/--
-theorem `range_intCast` / 定理 `range_intCast`
-
-English:
-theorem range_intCast
-  statement: Set.range ((↑) : Int -> R) = {0, 1}
-  proof: by
-  rw [funext intCast_eq_ite]; rw [Set.range_ite_const]
-  · use 0; simp
-  · use 1; simp
-
-中文:
-定理 range_intCast
-  结论: 集合.range ((↑) : 整数 -> R) = {0, 1}
-  证明: by
-  rw [funext intCast_eq_ite]; rw [Set.range_ite_const]
-  · use 0; simp
-  · use 1; simp
-
-Depends on / 依赖: Set.range_ite_const, intCast_eq_ite, range_ite_const
+/-
+**CharTwo.range_intCast** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：range_intCast : Set.range ((↑) : Int -> R) = {0, 1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CharTwo.intCast_eq_ite`：intCast_eq_ite (n : Int) : (n : R) = if Even n t
+hen 0 else 1
+· 使用定理 `Set.range_ite_const`：range_ite_const {p : α -> Prop} [DecidablePred p] {
+x y : β} (hp : exists a, p a) (hn : exists a, ¬ p a) : Set.range (fun a => if p 
+a then x …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem range_intCast : Set.range ((↑) : Int -> R) = {0, 1} := by
-  rw [funext intCast_eq_ite]; rw [Set.range_ite_const]
+theorem range_intCast : Set.range ((↑) : ℤ → R) = {0, 1} := by
+  rw [funext intCast_eq_ite, Set.range_ite_const]
   · use 0; simp
   · use 1; simp
 
 variable (R) in
-/--
-theorem `intCast_cases` / 定理 `intCast_cases`
-
-English:
-theorem intCast_cases
-  given: (n : Int)
-  statement: (n : R) = 0 ∨ (n : R) = 1
-  proof: (Set.ext_iff.1 range_intCast _).1 (Set.mem_range_self _)
-
-中文:
-定理 intCast_cases
-  条件: (n : 整数)
-  结论: (n : R) = 0 ∨ (n : R) = 1
-  证明: (Set.ext_iff.1 range_intCast _).1 (Set.mem_range_self _)
-
-Depends on / 依赖: Set.ext_iff, Set.mem_range_self, ext_iff, mem_range_self, range_intCast
+/-
+**CharTwo.intCast_cases** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：intCast_cases (n : Int) : (n : R) = 0 ∨ (n : R) = 1
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
+· 使用定理 `CharTwo.range_intCast`：range_intCast : Set.range ((↑) : Int -> R) = {0, 
+1}
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem intCast_cases (n : Int) : (n : R) = 0 ∨ (n : R) = 1 :=
+theorem intCast_cases (n : ℤ) : (n : R) = 0 ∨ (n : R) = 1 :=
   (Set.ext_iff.1 range_intCast _).1 (Set.mem_range_self _)
-
-/--
-theorem `intCast_eq_mod` / 定理 `intCast_eq_mod`
-
-English:
-theorem intCast_eq_mod
-  given: (n : Int)
-  statement: (n : R) = (n % 2 : Int)
-  proof: by
-  simp [intCast_eq_ite, Int.even_iff]
-
-中文:
-定理 intCast_eq_mod
-  条件: (n : 整数)
-  结论: (n : R) = (n % 2 : 整数)
-  证明: by
-  simp [intCast_eq_ite, Int.even_iff]
-
-Depends on / 依赖: Int.even_iff, even_iff, intCast_eq_ite
+/-
+**CharTwo.intCast_eq_mod** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：intCast_eq_mod (n : Int) : (n : R) = (n % 2 : Int)
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CharTwo.intCast_eq_ite`：intCast_eq_ite (n : Int) : (n : R) = if Even n t
+hen 0 else 1
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.emod_emod_of_dvd`：∀ (n : ℤ) {m k : ℤ}, m ∣ k → n % k % m = n % m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem intCast_eq_mod (n : Int) : (n : R) = (n % 2 : Int) := by
+theorem intCast_eq_mod (n : ℤ) : (n : R) = (n % 2 : ℤ) := by
   simp [intCast_eq_ite, Int.even_iff]
 
 end Ring
@@ -578,189 +480,171 @@ section CommSemiring
 
 variable [CommSemiring R] [CharP R 2]
 
-/--
-theorem `add_sq` / 定理 `add_sq`
-
-English:
-theorem add_sq
-  given: (x y : R)
-  statement: (x + y) ^ 2 = x ^ 2 + y ^ 2
-  proof: by
-  simp [add_pow_two]
-
-中文:
-定理 add_sq
-  条件: (x y : R)
-  结论: (x + y) ^ 2 = x ^ 2 + y ^ 2
-  证明: by
-  simp [add_pow_two]
-
-Depends on / 依赖: add_pow_two
+/-
+**CharTwo.add_sq** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：add_sq (x y : R) : (x + y) ^ 2 = x ^ 2 + y ^ 2
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `add_pow_two`：∀ {α : Type u} [inst : CommSemiring α] (a b : α), (a + b) ^
+ 2 = a ^ 2 + 2 * a * b + b ^ 2
+· 使用定理 `CharTwo.ofNat_eq_mod`：ofNat_eq_mod (n : Nat) [n.AtLeastTwo] : (OfNat.ofN
+at n : R) = (ofNat(n) % 2 : Nat)
+· 使用定理 `Nat.mod_self`：∀ (n : ℕ), n % n = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem add_sq (x y : R) : (x + y) ^ 2 = x ^ 2 + y ^ 2 := by
   simp [add_pow_two]
-
-/--
-theorem `add_mul_self` / 定理 `add_mul_self`
-
-English:
-theorem add_mul_self
-  given: (x y : R)
-  statement: (x + y) * (x + y) = x * x + y * y
-  proof: by
-  rw [← pow_two]; rw [← pow_two]; rw [← pow_two]; rw [add_sq]
-
-中文:
-定理 add_mul_self
-  条件: (x y : R)
-  结论: (x + y) * (x + y) = x * x + y * y
-  证明: by
-  rw [← pow_two]; rw [← pow_two]; rw [← pow_two]; rw [add_sq]
-
-Depends on / 依赖: add_sq, pow_two
+/-
+**CharTwo.add_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：add_mul_self (x y : R) : (x + y) * (x + y) = x * x + y * y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `CharTwo.add_sq`：add_sq (x y : R) : (x + y) ^ 2 = x ^ 2 + y ^ 2
 -/
 theorem add_mul_self (x y : R) : (x + y) * (x + y) = x * x + y * y := by
-  rw [← pow_two]; rw [← pow_two]; rw [← pow_two]; rw [add_sq]
+  rw [← pow_two, ← pow_two, ← pow_two, add_sq]
 
-/--
-Definition of `sqAddMonoidHom` / `sqAddMonoidHom` 的定义
+/-- See `frobenius` for the Frobenius map. -/
+/-
+**CharTwo.sqAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `CharTwo`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sqAddMonoidHom
-  signature: : R ->+ R where
-  body: (· ^ 2)
-  map_zero' := zero_pow two_ne_zero
-  map_add' := add_sq
-
-中文:
-定义 sqAddMonoidHom
-  签名: : R ->+ R where
-  定义体: (· ^ 2)
-  map_zero' := zero_pow two_ne_zero
-  map_add' := add_sq
+--- 原说明 ---
+See `frobenius` for the Frobenius map.
 -/
-private def sqAddMonoidHom : R ->+ R where
+private def sqAddMonoidHom : R →+ R where
   toFun := (· ^ 2)
   map_zero' := zero_pow two_ne_zero
   map_add' := add_sq
-
-/--
-theorem `list_sum_sq` / 定理 `list_sum_sq`
-
-English:
-theorem list_sum_sq
-  given: (l : List R)
-  statement: l.sum ^ 2 = (l.map (· ^ 2)).sum
-  proof: map_list_sum sqAddMonoidHom _
-
-中文:
-定理 list_sum_sq
-  条件: (l : 列表 R)
-  结论: l.求和 ^ 2 = (l.map (· ^ 2)).求和
-  证明: map_list_sum sqAddMonoidHom _
-
-Depends on / 依赖: map_list_sum, sqAddMonoidHom
+/-
+**CharTwo.list_sum_sq** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：list_sum_sq (l : List R) : l.sum ^ 2 = (l.map (· ^ 2)).sum
+参数：l : List R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem list_sum_sq (l : List R) : l.sum ^ 2 = (l.map (· ^ 2)).sum :=
   map_list_sum sqAddMonoidHom _
-
-/--
-theorem `list_sum_mul_self` / 定理 `list_sum_mul_self`
-
-English:
-theorem list_sum_mul_self
-  given: (l : List R)
-  statement: l.sum * l.sum = (List.map (fun x => x * x) l).sum
-  proof: by
-  simp_rw [← pow_two, list_sum_sq]
-
-中文:
-定理 list_sum_mul_self
-  条件: (l : 列表 R)
-  结论: l.求和 * l.求和 = (列表.map (fun x => x * x) l).求和
-  证明: by
-  simp_rw [← pow_two, list_sum_sq]
-
-Depends on / 依赖: list_sum_sq, pow_two, simp_rw
+/-
+**CharTwo.list_sum_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：list_sum_mul_self (l : List R) : l.sum * l.sum = (List.map (fun x => x * x
+) l).sum
+参数：l : List R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CharTwo.list_sum_sq`：list_sum_sq (l : List R) : l.sum ^ 2 = (l.map (· ^ 
+2)).sum
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem list_sum_mul_self (l : List R) : l.sum * l.sum = (List.map (fun x => x * x) l).sum := by
   simp_rw [← pow_two, list_sum_sq]
-
-/--
-theorem `multiset_sum_sq` / 定理 `multiset_sum_sq`
-
-English:
-theorem multiset_sum_sq
-  given: (l : Multiset R)
-  statement: l.sum ^ 2 = (l.map (· ^ 2)).sum
-  proof: map_multiset_sum sqAddMonoidHom _
-
-中文:
-定理 multiset_sum_sq
-  条件: (l : Multiset R)
-  结论: l.求和 ^ 2 = (l.map (· ^ 2)).求和
-  证明: map_multiset_sum sqAddMonoidHom _
-
-Depends on / 依赖: map_multiset_sum, sqAddMonoidHom
+/-
+**CharTwo.multiset_sum_sq** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：multiset_sum_sq (l : Multiset R) : l.sum ^ 2 = (l.map (· ^ 2)).sum
+参数：l : Multiset R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem multiset_sum_sq (l : Multiset R) : l.sum ^ 2 = (l.map (· ^ 2)).sum :=
   map_multiset_sum sqAddMonoidHom _
-
-/--
-theorem `multiset_sum_mul_self` / 定理 `multiset_sum_mul_self`
-
-English:
-theorem multiset_sum_mul_self
-  given: (l : Multiset R)
-  proof: by simp_rw [← pow_two, multiset_sum_sq]
-
-中文:
-定理 multiset_sum_mul_self
-  条件: (l : Multiset R)
-  证明: by simp_rw [← pow_two, multiset_sum_sq]
-
-Depends on / 依赖: multiset_sum_sq, pow_two, simp_rw
+/-
+**CharTwo.multiset_sum_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：multiset_sum_mul_self (l : Multiset R) : l.sum * l.sum = (Multiset.map (fu
+n x => x * x) l).sum
+参数：l : Multiset R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CharTwo.multiset_sum_sq`：multiset_sum_sq (l : Multiset R) : l.sum ^ 2 = 
+(l.map (· ^ 2)).sum
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem multiset_sum_mul_self (l : Multiset R) :
     l.sum * l.sum = (Multiset.map (fun x => x * x) l).sum := by simp_rw [← pow_two, multiset_sum_sq]
-
-/--
-theorem `sum_sq` / 定理 `sum_sq`
-
-English:
-theorem sum_sq
-  given: (s : Finset ι) (f : ι -> R)
-  statement: (∑ i in s, f i) ^ 2 = ∑ i in s, f i ^ 2
-  proof: map_sum sqAddMonoidHom _ _
-
-中文:
-定理 sum_sq
-  条件: (s : 有限集 ι) (f : ι -> R)
-  结论: (∑ i in s, f i) ^ 2 = ∑ i in s, f i ^ 2
-  证明: map_sum sqAddMonoidHom _ _
-
-Depends on / 依赖: map_sum, sqAddMonoidHom
+/-
+**CharTwo.sum_sq** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：sum_sq (s : Finset ι) (f : ι -> R) : (∑ i in s, f i) ^ 2 = ∑ i in s, f i ^
+ 2
+参数：s : Finset ι；f : ι -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem sum_sq (s : Finset ι) (f : ι -> R) : (∑ i in s, f i) ^ 2 = ∑ i in s, f i ^ 2 :=
+theorem sum_sq (s : Finset ι) (f : ι → R) : (∑ i ∈ s, f i) ^ 2 = ∑ i ∈ s, f i ^ 2 :=
   map_sum sqAddMonoidHom _ _
-
-/--
-theorem `sum_mul_self` / 定理 `sum_mul_self`
-
-English:
-theorem sum_mul_self
-  given: (s : Finset ι) (f : ι -> R)
-  proof: by simp_rw [← pow_two, sum_sq]
-
-中文:
-定理 sum_mul_self
-  条件: (s : 有限集 ι) (f : ι -> R)
-  证明: by simp_rw [← pow_two, sum_sq]
-
-Depends on / 依赖: pow_two, simp_rw, sum_sq
+/-
+**CharTwo.sum_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：sum_mul_self (s : Finset ι) (f : ι -> R) : ((∑ i in s, f i) * ∑ i in s, f 
+i) = ∑ i in s, f i * f i
+参数：s : Finset ι；f : ι -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CharTwo.sum_sq`：sum_sq (s : Finset ι) (f : ι -> R) : (∑ i in s, f i) ^ 2
+ = ∑ i in s, f i ^ 2
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_mul_self (s : Finset ι) (f : ι -> R) :
-    ((∑ i in s, f i) * ∑ i in s, f i) = ∑ i in s, f i * f i := by simp_rw [← pow_two, sum_sq]
+theorem sum_mul_self (s : Finset ι) (f : ι → R) :
+    ((∑ i ∈ s, f i) * ∑ i ∈ s, f i) = ∑ i ∈ s, f i * f i := by simp_rw [← pow_two, sum_sq]
 
 end CommSemiring
 
@@ -768,50 +652,38 @@ section CommRing
 
 variable [CommRing R] [CharP R 2] [NoZeroDivisors R]
 
-/--
-theorem `sq_injective` / 定理 `sq_injective`
-
-English:
-theorem sq_injective
-  statement: Function.Injective fun x : R => x ^ 2
-  proof: by
-  intro x y h
-  rwa [← CharTwo.add_eq_zero, ← add_sq, pow_eq_zero_iff two_ne_zero, CharTwo.add_eq_zero] at h
-
-@[scoped simp]
-
-中文:
-定理 sq_injective
-  结论: 函数.单射 fun x : R => x ^ 2
-  证明: by
-  intro x y h
-  rwa [← CharTwo.add_eq_zero, ← add_sq, pow_eq_zero_iff two_ne_zero, CharTwo.add_eq_zero] at h
-
-@[scoped simp]
-
-Depends on / 依赖: CharTwo, CharTwo.add_eq_zero, add_eq_zero, add_sq, pow_eq_zero_iff, two_ne_zero
+/-
+**CharTwo.sq_injective** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：sq_injective : Function.Injective fun x : R => x ^ 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CharTwo.add_eq_zero`：∀ {R : Type u_1} [inst : Ring R] [CharP R 2] {a b :
+ R}, a + b = 0 ↔ a = b
+· 使用定理 `pow_eq_zero_iff`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀] {a : M₀} {
+n : ℕ} [IsReduced M₀], n ≠ 0 → (a ^ n = 0 ↔ a = 0)
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CharTwo.add_sq`：add_sq (x y : R) : (x + y) ^ 2 = x ^ 2 + y ^ 2
 -/
-theorem sq_injective : Function.Injective fun x : R => x ^ 2 := by
+theorem sq_injective : Function.Injective fun x : R ↦ x ^ 2 := by
   intro x y h
   rwa [← CharTwo.add_eq_zero, ← add_sq, pow_eq_zero_iff two_ne_zero, CharTwo.add_eq_zero] at h
 
 @[scoped simp]
-/--
-theorem `sq_inj` / 定理 `sq_inj`
-
-English:
-theorem sq_inj
-  given: {x y : R}
-  statement: x ^ 2 = y ^ 2 ↔ x = y
-  proof: sq_injective.eq_iff
-
-中文:
-定理 sq_inj
-  条件: {x y : R}
-  结论: x ^ 2 = y ^ 2 ↔ x = y
-  证明: sq_injective.eq_iff
-
-Depends on / 依赖: eq_iff, sq_injective, sq_injective.eq_iff
+/-
+**CharTwo.sq_inj** 是 Mathlib 中的一个定理，位于命名空间 `CharTwo`。
+形式化陈述：sq_inj {x y : R} : x ^ 2 = y ^ 2 ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `CharTwo.sq_injective`：sq_injective : Function.Injective fun x : R => x ^
+ 2
 -/
 theorem sq_inj {x y : R} : x ^ 2 = y ^ 2 ↔ x = y :=
   sq_injective.eq_iff
@@ -830,32 +702,35 @@ section ringChar
 
 variable [Ring R]
 
-/--
-theorem `neg_one_eq_one_iff` / 定理 `neg_one_eq_one_iff`
-
-English:
-theorem neg_one_eq_one_iff
-  given: [Nontrivial R]
-  statement: (-1 : R) = 1 ↔ ringChar R = 2
-  proof: by
-  refine ⟨fun h => ?_, fun h => @CharTwo.neg_eq _ _ (ringChar.of_eq h) 1⟩
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Nat.cast_one]; rw [← Nat.cast_add] at h
-  exact ((Nat.dvd_prime Nat.prime_two).mp (ringChar.dvd h)).resolve_left CharP.ringChar_ne_one
-
-中文:
-定理 neg_one_eq_one_iff
-  条件: [非平凡 R]
-  结论: (-1 : R) = 1 ↔ ringChar R = 2
-  证明: by
-  refine ⟨fun h => ?_, fun h => @CharTwo.neg_eq _ _ (ringChar.of_eq h) 1⟩
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Nat.cast_one]; rw [← Nat.cast_add] at h
-  exact ((Nat.dvd_prime Nat.prime_two).mp (ringChar.dvd h)).resolve_left CharP.ringChar_ne_one
-
-Depends on / 依赖: CharP.ringChar_ne_one, CharTwo, CharTwo.neg_eq, Nat.cast_add, Nat.cast_one, Nat.dvd_prime, Nat.prime_two, cast_add, cast_one, dvd_prime, eq_comm, neg_eq, of_eq, prime_two, resolve_left, ringChar, ringChar.dvd, ringChar.of_eq, ringChar_ne_one, sub_eq_zero
+/-
+**neg_one_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_one_eq_one_iff [Nontrivial R] : (-1 : R) = 1 ↔ ringChar R = 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.dvd_prime`：dvd_prime {p m : Nat} (pp : Prime p) : m ∣ p ↔ m = 1 ∨ m 
+= p
+· 使用定理 `Nat.prime_two`：prime_two : Prime 2
+· 使用引理 `ringChar.dvd`：dvd {x : Nat} (hx : (x : R) = 0) : ringChar R ∣ x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用引理 `CharP.ringChar_ne_one`：ringChar_ne_one [Nontrivial R] : ringChar R != 1
+· 使用定理 `CharTwo.neg_eq`：neg_eq (x : R) : -x = x
+· 使用引理 `ringChar.of_eq`：of_eq {p : Nat} (h : ringChar R = p) : CharP R p
 -/
 theorem neg_one_eq_one_iff [Nontrivial R] : (-1 : R) = 1 ↔ ringChar R = 2 := by
   refine ⟨fun h => ?_, fun h => @CharTwo.neg_eq _ _ (ringChar.of_eq h) 1⟩
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Nat.cast_one]; rw [← Nat.cast_add] at h
+  rw [eq_comm, ← sub_eq_zero, sub_neg_eq_add, ← Nat.cast_one, ← Nat.cast_add] at h
   exact ((Nat.dvd_prime Nat.prime_two).mp (ringChar.dvd h)).resolve_left CharP.ringChar_ne_one
 
 end ringChar
+

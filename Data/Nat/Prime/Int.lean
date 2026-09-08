@@ -21,43 +21,43 @@ public section
 
 namespace Nat
 
-/--
-theorem `prime_iff_prime_int` / 定理 `prime_iff_prime_int`
-
-English:
-theorem prime_iff_prime_int
-  given: {p : Nat}
-  statement: p.Prime ↔ _root_.Prime (p : Int)
-  proof: ⟨fun hp =>
-    ⟨Int.natCast_ne_zero_iff_pos.2 hp.pos, mt Int.isUnit_iff_natAbs_eq.1 hp.ne_one, fun a b h => by
-      rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_mul]; rw [hp.dvd_mul] at h
-      rwa [← Int.dvd_natAbs, Int.natCast_dvd_natCast, ← Int.dvd_natAbs, Int.natCast_dvd_natCast]⟩,
-    fun hp =>
-    Nat.prime_iff.2
-      ⟨Int.natCast_ne_zero.1 hp.1,
-        (mt Nat.isUnit_iff.1) fun h => by simp [h] at hp, fun a b => by
-        simpa only [Int.natCast_dvd_natCast, (Int.natCast_mul _ _).symm] using hp.2.2 a b⟩⟩
-
-中文:
-定理 prime_iff_prime_int
-  条件: {p : 自然数}
-  结论: p.素 ↔ _root_.素 (p : 整数)
-  证明: ⟨fun hp =>
-    ⟨Int.natCast_ne_zero_iff_pos.2 hp.pos, mt Int.isUnit_iff_natAbs_eq.1 hp.ne_one, fun a b h => by
-      rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_mul]; rw [hp.dvd_mul] at h
-      rwa [← Int.dvd_natAbs, Int.natCast_dvd_natCast, ← Int.dvd_natAbs, Int.natCast_dvd_natCast]⟩,
-    fun hp =>
-    Nat.prime_iff.2
-      ⟨Int.natCast_ne_zero.1 hp.1,
-        (mt Nat.isUnit_iff.1) fun h => by simp [h] at hp, fun a b => by
-        simpa only [Int.natCast_dvd_natCast, (Int.natCast_mul _ _).symm] using hp.2.2 a b⟩⟩
-
-Depends on / 依赖: Int.dvd_natAbs, Int.isUnit_iff_natAbs_eq, Int.natAbs_mul, Int.natCast_dvd_natCast, Int.natCast_mul, Int.natCast_ne_zero, Int.natCast_ne_zero_iff_pos, Nat.isUnit_iff, Nat.prime_iff, dvd_mul, dvd_natAbs, hp.dvd_mul, hp.ne_one, hp.pos, isUnit_iff, isUnit_iff_natAbs_eq, natAbs_mul, natCast_dvd_natCast, natCast_mul, natCast_ne_zero
+/-
+**Nat.prime_iff_prime_int** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root_.Prime (p : Int)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natCast_ne_zero_iff_pos`：∀ {n : ℕ}, ↑n ≠ 0 ↔ 0 < n
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Int.isUnit_iff_natAbs_eq`：isUnit_iff_natAbs_eq : IsUnit u ↔ u.natAbs = 1
+· 使用定理 `Nat.Prime.ne_one`：∀ {p : ℕ}, Nat.Prime p → p ≠ 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.dvd_natAbs`：∀ {a b : ℤ}, a ∣ ↑b.natAbs ↔ a ∣ b
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
+· 使用定理 `Nat.Prime.dvd_mul`：∀ {p m n : ℕ}, Nat.Prime p → (p ∣ m * n ↔ p ∣ m ∨ p ∣
+ n)
+· 使用定理 `Int.natAbs_mul`：∀ (a b : ℤ), (a * b).natAbs = a.natAbs * b.natAbs
+· 使用定理 `Nat.prime_iff`：prime_iff {p : Nat} : p.Prime ↔ _root_.Prime p
+· 使用定理 `Int.natCast_ne_zero`：∀ {n : ℕ}, ↑n ≠ 0 ↔ n ≠ 0
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Nat.isUnit_iff`：∀ {n : ℕ}, IsUnit n ↔ n = 1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Int.natCast_mul`：∀ (n m : ℕ), ↑(n * m) = ↑n * ↑m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem prime_iff_prime_int {p : Nat} : p.Prime ↔ _root_.Prime (p : Int) :=
+theorem prime_iff_prime_int {p : ℕ} : p.Prime ↔ _root_.Prime (p : ℤ) :=
   ⟨fun hp =>
     ⟨Int.natCast_ne_zero_iff_pos.2 hp.pos, mt Int.isUnit_iff_natAbs_eq.1 hp.ne_one, fun a b h => by
-      rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_mul]; rw [hp.dvd_mul] at h
+      rw [← Int.dvd_natAbs, Int.natCast_dvd_natCast, Int.natAbs_mul, hp.dvd_mul] at h
       rwa [← Int.dvd_natAbs, Int.natCast_dvd_natCast, ← Int.dvd_natAbs, Int.natCast_dvd_natCast]⟩,
     fun hp =>
     Nat.prime_iff.2
@@ -65,54 +65,55 @@ theorem prime_iff_prime_int {p : Nat} : p.Prime ↔ _root_.Prime (p : Int) :=
         (mt Nat.isUnit_iff.1) fun h => by simp [h] at hp, fun a b => by
         simpa only [Int.natCast_dvd_natCast, (Int.natCast_mul _ _).symm] using hp.2.2 a b⟩⟩
 
-/--
-lemma `Prime.pow_inj` / 引理 `Prime.pow_inj`
+/-- Two prime powers with positive exponents are equal only when the primes and the
+exponents are equal. -/
+/-
+**Nat.Prime.pow_inj** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：∀ {p q m n : ℕ}, Nat.Prime p → Nat.Prime q → p ^ (m + 1) = q ^ (n + 1) → p
+ = q ∧ m = n
+参数：m + 1；n + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_antisymm`：dvd_antisymm : a ∣ b -> b ∣ a -> a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Nat.Prime.dvd_of_dvd_pow`：∀ {p m n : ℕ}, Nat.Prime p → p ∣ m ^ n → p ∣ m
+· 使用引理 `dvd_pow_self`：dvd_pow_self (a : α) {n : Nat} (hn : n != 0) : a ∣ a ^ n
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.succ_inj`：∀ {a b : ℕ}, a.succ = b.succ ↔ a = b
+· 使用定理 `Nat.pow_right_injective`：∀ {a : ℕ}, 2 ≤ a → Function.Injective fun x => 
+a ^ x
+· 使用定理 `Nat.Prime.two_le`：∀ {p : ℕ}, Nat.Prime p → 2 ≤ p
 
-English:
-lemma Prime.pow_inj
-  statement: {p q m n : Nat} (hp : p.Prime) (hq : q.Prime)
-  proof: by
-  have H := dvd_antisymm (Prime.dvd_of_dvd_pow hp <| h ▸ dvd_pow_self p (succ_ne_zero m))
-    (Prime.dvd_of_dvd_pow hq <| h.symm ▸ dvd_pow_self q (succ_ne_zero n))
-exact ⟨H, succ_inj.mp Nat.pow_right_injective hq.two_le (H ▸ h)⟩
-
-中文:
-引理 素.pow_inj
-  结论: {p q m n : 自然数} (hp : p.素) (hq : q.素)
-  证明: by
-  have H := dvd_antisymm (Prime.dvd_of_dvd_pow hp <| h ▸ dvd_pow_self p (succ_ne_zero m))
-    (Prime.dvd_of_dvd_pow hq <| h.symm ▸ dvd_pow_self q (succ_ne_zero n))
-exact ⟨H, succ_inj.mp Nat.pow_right_injective hq.two_le (H ▸ h)⟩
-
-Depends on / 依赖: Nat.pow_right_injective, Prime.dvd_of_dvd_pow, dvd_antisymm, dvd_of_dvd_pow, dvd_pow_self, h.symm, hq.two_le, pow_right_injective, succ_inj, succ_inj.mp, succ_ne_zero, two_le
+--- 原说明 ---
+Two prime powers with positive exponents are equal only when the primes and the
+exponents are equal.
 -/
-lemma Prime.pow_inj {p q m n : Nat} (hp : p.Prime) (hq : q.Prime)
+lemma Prime.pow_inj {p q m n : ℕ} (hp : p.Prime) (hq : q.Prime)
     (h : p ^ (m + 1) = q ^ (n + 1)) : p = q ∧ m = n := by
   have H := dvd_antisymm (Prime.dvd_of_dvd_pow hp <| h ▸ dvd_pow_self p (succ_ne_zero m))
     (Prime.dvd_of_dvd_pow hq <| h.symm ▸ dvd_pow_self q (succ_ne_zero n))
-exact ⟨H, succ_inj.mp Nat.pow_right_injective hq.two_le (H ▸ h)⟩
+  exact ⟨H, succ_inj.mp <| Nat.pow_right_injective hq.two_le (H ▸ h)⟩
 
-/--
-lemma `Prime.pow_inj'` / 引理 `Prime.pow_inj'`
+/-- Version of `Nat.Prime.pow_inj` with an explicit nonzero assumption on the exponents. -/
+/-
+**Nat.Prime.pow_inj'** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：∀ {p q m n : ℕ}, Nat.Prime p → Nat.Prime q → m ≠ 0 → n ≠ 0 → p ^ m = q ^ n
+ → p = q ∧ m = n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_one_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k + 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.Prime.pow_inj`：∀ {p q m n : ℕ}, Nat.Prime p → Nat.Prime q → p ^ (m +
+ 1) = q ^ (n + 1) → p = q ∧ m = n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma Prime.pow_inj'
-  proof: by
-  obtain ⟨m, rfl⟩ := exists_eq_add_one_of_ne_zero hm
-  obtain ⟨n, rfl⟩ := exists_eq_add_one_of_ne_zero hn
-  simpa using hp.pow_inj hq h
-
-中文:
-引理 素.pow_inj'
-  证明: by
-  obtain ⟨m, rfl⟩ := exists_eq_add_one_of_ne_zero hm
-  obtain ⟨n, rfl⟩ := exists_eq_add_one_of_ne_zero hn
-  simpa using hp.pow_inj hq h
-
-Depends on / 依赖: exists_eq_add_one_of_ne_zero, hp.pow_inj, pow_inj
+--- 原说明 ---
+Version of `Nat.Prime.pow_inj` with an explicit nonzero assumption on the expone
+nts.
 -/
 lemma Prime.pow_inj'
-    {p q m n : Nat} (hp : Nat.Prime p) (hq : Nat.Prime q) (hm : m != 0) (hn : n != 0)
+    {p q m n : ℕ} (hp : Nat.Prime p) (hq : Nat.Prime q) (hm : m ≠ 0) (hn : n ≠ 0)
     (h : p ^ m = q ^ n) : p = q ∧ m = n := by
   obtain ⟨m, rfl⟩ := exists_eq_add_one_of_ne_zero hm
   obtain ⟨n, rfl⟩ := exists_eq_add_one_of_ne_zero hn
@@ -123,59 +124,43 @@ end Nat
 namespace Int
 
 @[simp]
-/--
-theorem `prime_ofNat_iff` / 定理 `prime_ofNat_iff`
-
-English:
-theorem prime_ofNat_iff
-  given: {n : Nat}
-  proof: Nat.prime_iff_prime_int.symm
-
-中文:
-定理 prime_of自然数_iff
-  条件: {n : 自然数}
-  证明: Nat.prime_iff_prime_int.symm
-
-Depends on / 依赖: Nat.prime_iff_prime_int.symm, prime_iff_prime_int
+/-
+**Int.prime_ofNat_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：prime_ofNat_iff {n : Nat} : Prime (ofNat(n) : Int) ↔ Nat.Prime (OfNat.ofNa
+t n)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Nat.prime_iff_prime_int`：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root
+_.Prime (p : Int)
 -/
-theorem prime_ofNat_iff {n : Nat} :
-    Prime (ofNat(n) : Int) ↔ Nat.Prime (OfNat.ofNat n) :=
+theorem prime_ofNat_iff {n : ℕ} :
+    Prime (ofNat(n) : ℤ) ↔ Nat.Prime (OfNat.ofNat n) :=
   Nat.prime_iff_prime_int.symm
-
-/--
-theorem `prime_two` / 定理 `prime_two`
-
-English:
-theorem prime_two
-  statement: Prime (2 : Int)
-  proof: prime_ofNat_iff.mpr Nat.prime_two
-
-中文:
-定理 prime_two
-  结论: 素 (2 : 整数)
-  证明: prime_ofNat_iff.mpr Nat.prime_two
-
-Depends on / 依赖: Nat.prime_two, prime_ofNat_iff, prime_ofNat_iff.mpr, prime_two
+/-
+**Int.prime_two** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：prime_two : Prime (2 : Int)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.prime_ofNat_iff`：prime_ofNat_iff {n : Nat} : Prime (ofNat(n) : Int) 
+↔ Nat.Prime (OfNat.ofNat n)
+· 使用定理 `Nat.prime_two`：prime_two : Prime 2
 -/
-theorem prime_two : Prime (2 : Int) :=
+theorem prime_two : Prime (2 : ℤ) :=
   prime_ofNat_iff.mpr Nat.prime_two
-
-/--
-theorem `prime_three` / 定理 `prime_three`
-
-English:
-theorem prime_three
-  statement: Prime (3 : Int)
-  proof: prime_ofNat_iff.mpr Nat.prime_three
-
-中文:
-定理 prime_three
-  结论: 素 (3 : 整数)
-  证明: prime_ofNat_iff.mpr Nat.prime_three
-
-Depends on / 依赖: Nat.prime_three, prime_ofNat_iff, prime_ofNat_iff.mpr, prime_three
+/-
+**Int.prime_three** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：prime_three : Prime (3 : Int)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.prime_ofNat_iff`：prime_ofNat_iff {n : Nat} : Prime (ofNat(n) : Int) 
+↔ Nat.Prime (OfNat.ofNat n)
+· 使用定理 `Nat.prime_three`：prime_three : Prime 3
 -/
-theorem prime_three : Prime (3 : Int) :=
+theorem prime_three : Prime (3 : ℤ) :=
   prime_ofNat_iff.mpr Nat.prime_three
 
 end Int
+

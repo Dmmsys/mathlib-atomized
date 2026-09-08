@@ -30,132 +30,135 @@ namespace Ideal
 
 variable {R S : Type*} [CommSemiring R] [CommSemiring S]
 
-/--
-Definition of `IsPrimary` / `IsPrimary` 的定义
+/-- A proper ideal `I` is primary as a submodule. -/
+/-
+**Ideal.IsPrimary** 是 Mathlib 中的一个缩写定义，位于命名空间 `Ideal`。
+形式化陈述：IsPrimary (I : Ideal R) : Prop
+参数：I : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsPrimary
-  signature: (I : Ideal R)
-  body: Submodule.IsPrimary I
-
-中文:
-缩写 是准素
-  签名: (I : 理想 R)
-  定义体: Submodule.IsPrimary I
-
-Depends on / 依赖: IsPrimary, Submodule, Submodule.IsPrimary
+--- 原说明 ---
+A proper ideal `I` is primary as a submodule.
 -/
 abbrev IsPrimary (I : Ideal R) : Prop :=
   Submodule.IsPrimary I
 
-/--
-lemma `isPrimary_iff` / 引理 `isPrimary_iff`
+/-- A proper ideal `I` is primary iff `xy ∈ I` implies `x ∈ I` or `y ∈ radical I`. -/
+/-
+**Ideal.isPrimary_iff** 是 Mathlib 中的一个引理，位于命名空间 `Ideal`。
+形式化陈述：isPrimary_iff {I : Ideal R} : I.IsPrimary ↔ I != ⊤ ∧ forall {x y : R}, x *
+ y in I -> x in I ∨ y in radical I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.IsPrimary.eq_1`：∀ {R : Type u_1} [inst : CommSemiring R] (I : Idea
+l R), I.IsPrimary = Submodule.IsPrimary I
+· 使用定理 `Submodule.IsPrimary.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst : CommSe
+miring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (S : Submodu
+le R M), S.IsP…
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Ideal.mul_top`：mul_top [I.IsTwoSided] : I * ⊤ = I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma isPrimary_iff
-  given: {I : Ideal R}
-  proof: by
-  rw [IsPrimary]; rw [Submodule.IsPrimary]; rw [forall_comm]
-  simp only [mul_comm, mem_radical_iff,
-    ← Submodule.ideal_span_singleton_smul, smul_eq_mul, mul_top, span_singleton_le_iff_mem]
-
-中文:
-引理 isPrimary_iff
-  条件: {I : 理想 R}
-  证明: by
-  rw [IsPrimary]; rw [Submodule.IsPrimary]; rw [forall_comm]
-  simp only [mul_comm, mem_radical_iff,
-    ← Submodule.ideal_span_singleton_smul, smul_eq_mul, mul_top, span_singleton_le_iff_mem]
-
-Depends on / 依赖: IsPrimary, Submodule, Submodule.IsPrimary, Submodule.ideal_span_singleton_smul, forall_comm, ideal_span_singleton_smul, mem_radical_iff, mul_comm, mul_top, smul_eq_mul, span_singleton_le_iff_mem
+--- 原说明 ---
+A proper ideal `I` is primary iff `xy ∈ I` implies `x ∈ I` or `y ∈ radical I`.
 -/
 lemma isPrimary_iff {I : Ideal R} :
-    I.IsPrimary ↔ I != ⊤ ∧ forall {x y : R}, x * y in I -> x in I ∨ y in radical I := by
-  rw [IsPrimary]; rw [Submodule.IsPrimary]; rw [forall_comm]
+    I.IsPrimary ↔ I ≠ ⊤ ∧ ∀ {x y : R}, x * y ∈ I → x ∈ I ∨ y ∈ radical I := by
+  rw [IsPrimary, Submodule.IsPrimary, forall_comm]
   simp only [mul_comm, mem_radical_iff,
     ← Submodule.ideal_span_singleton_smul, smul_eq_mul, mul_top, span_singleton_le_iff_mem]
-
-/--
-theorem `IsPrime.isPrimary` / 定理 `IsPrime.isPrimary`
-
-English:
-theorem IsPrime.isPrimary
-  given: {I : Ideal R} (hi : IsPrime I)
-  statement: I.IsPrimary
-  proof: isPrimary_iff.mpr
-  ⟨hi.1, fun {_ _} hxy => (hi.mem_or_mem hxy).imp id fun hyi => le_radical hyi⟩
-
-中文:
-定理 是素.isPrimary
-  条件: {I : 理想 R} (hi : 是素 I)
-  结论: I.是准素
-  证明: isPrimary_iff.mpr
-  ⟨hi.1, fun {_ _} hxy => (hi.mem_or_mem hxy).imp id fun hyi => le_radical hyi⟩
-
-Depends on / 依赖: hi.mem_or_mem, isPrimary_iff, isPrimary_iff.mpr, le_radical, mem_or_mem
+/-
+**Ideal.IsPrime.isPrimary** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsPrime`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {I : Ideal R}, I.IsPrime → I.IsPr
+imary
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Ideal.isPrimary_iff`：isPrimary_iff {I : Ideal R} : I.IsPrimary ↔ I != ⊤ 
+∧ forall {x y : R}, x * y in I -> x in I ∨ y in radical I
+· 使用定理 `Ideal.IsPrime.ne_top'`：∀ {α : Type u} {inst : Semiring α} {I : Ideal α} 
+[self : I.IsPrime], I ≠ ⊤
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Ideal.le_radical`：le_radical : I <= radical I
+· 使用定理 `Ideal.IsPrime.mem_or_mem`：∀ {α : Type u} [inst : Semiring α] {I : Ideal 
+α}, I.IsPrime → ∀ {x y : α}, x * y ∈ I → x ∈ I ∨ y ∈ I
 -/
 theorem IsPrime.isPrimary {I : Ideal R} (hi : IsPrime I) : I.IsPrimary :=
   isPrimary_iff.mpr
   ⟨hi.1, fun {_ _} hxy => (hi.mem_or_mem hxy).imp id fun hyi => le_radical hyi⟩
-
-/--
-theorem `isPrime_radical` / 定理 `isPrime_radical`
-
-English:
-theorem isPrime_radical
-  given: {I : Ideal R} (hi : I.IsPrimary)
-  statement: IsPrime (radical I)
-  proof: I.colon_univ ▸ hi.isPrime_radical_colon
-
-中文:
-定理 isPrime_radical
-  条件: {I : 理想 R} (hi : I.是准素)
-  结论: 是素 (radical I)
-  证明: I.colon_univ ▸ hi.isPrime_radical_colon
-
-Depends on / 依赖: I.colon_univ, colon_univ, hi.isPrime_radical_colon, isPrime_radical_colon
+/-
+**Ideal.isPrime_radical** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：isPrime_radical {I : Ideal R} (hi : I.IsPrimary) : IsPrime (radical I)
+参数：hi : I.IsPrimary。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsPrimary.isPrime_radical_colon`：∀ {R : Type u_1} {M : Type u_
+2} [inst : CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R 
+M]   {S : Submodule R M}, S.IsP…
+· 使用定理 `Submodule.colon_univ`：colon_univ {I : Ideal R} [I.IsTwoSided] : I.colon 
+Set.univ = I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
 -/
 theorem isPrime_radical {I : Ideal R} (hi : I.IsPrimary) : IsPrime (radical I) :=
   I.colon_univ ▸ hi.isPrime_radical_colon
-
-/--
-theorem `isPrimary_of_isMaximal_radical` / 定理 `isPrimary_of_isMaximal_radical`
-
-English:
-theorem isPrimary_of_isMaximal_radical
-  given: {I : Ideal R} (hi : IsMaximal (radical I))
-  proof: by
-  rw [isPrimary_iff]
-  constructor
-  · rintro rfl
-    exact (radical_top R ▸ hi).ne_top rfl
-  · intro x y hxy
-    by_cases h : I + span {y} = ⊤
-    · rw [← span_singleton_le_iff_mem, ← mul_top (span {x}), ← h, mul_add,
-        span_singleton_mul_span_singleton, add_le_iff, span_singleton_le_iff_mem]
-      exact Or.inl ⟨mul_le_right, hxy⟩
-    · obtain ⟨m, hm, hy⟩ := exists_le_maximal (I + span {y}) h
-      rw [add_le_iff]; rw [span_singleton_le_iff_mem]; rw [← hm.isPrime.radical_le_iff] at hy
-      exact Or.inr (hi.eq_of_le hm.ne_top hy.1 ▸ hy.2)
-
-中文:
-定理 isPrimary_of_isMaximal_radical
-  条件: {I : 理想 R} (hi : 是极大 (radical I))
-  证明: by
-  rw [isPrimary_iff]
-  constructor
-  · rintro rfl
-    exact (radical_top R ▸ hi).ne_top rfl
-  · intro x y hxy
-    by_cases h : I + span {y} = ⊤
-    · rw [← span_singleton_le_iff_mem, ← mul_top (span {x}), ← h, mul_add,
-        span_singleton_mul_span_singleton, add_le_iff, span_singleton_le_iff_mem]
-      exact Or.inl ⟨mul_le_right, hxy⟩
-    · obtain ⟨m, hm, hy⟩ := exists_le_maximal (I + span {y}) h
-      rw [add_le_iff]; rw [span_singleton_le_iff_mem]; rw [← hm.isPrime.radical_le_iff] at hy
-      exact Or.inr (hi.eq_of_le hm.ne_top hy.1 ▸ hy.2)
-
-Depends on / 依赖: Or.inl, Or.inr, add_le_iff, eq_of_le, exists_le_maximal, hi.eq_of_le, hm.isPrime.radical_le_iff, hm.ne_top, isPrimary_iff, isPrime, mul_add, mul_le_right, mul_top, ne_top, radical_le_iff, radical_top, span_singleton_le_iff_mem, span_singleton_mul_span_singleton
+/-
+**Ideal.isPrimary_of_isMaximal_radical** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：isPrimary_of_isMaximal_radical {I : Ideal R} (hi : IsMaximal (radical I)) 
+: I.IsPrimary
+参数：hi : IsMaximal (radical I)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Ideal.isPrimary_iff`：isPrimary_iff {I : Ideal R} : I.IsPrimary ↔ I != ⊤ 
+∧ forall {x y : R}, x * y in I -> x in I ∨ y in radical I
+· 使用定理 `Ideal.IsMaximal.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}
+, I.IsMaximal → I ≠ ⊤
+· 使用定理 `Ideal.radical_top`：radical_top : (radical ⊤ : Ideal R) = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_singleton_le_iff_mem`：span_singleton_le_iff_mem {x : α} : spa
+n {x} <= I ↔ x in I
+· 使用定理 `Ideal.mul_top`：mul_top [I.IsTwoSided] : I * ⊤ = I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Ideal.span_singleton_mul_span_singleton`：span_singleton_mul_span_singlet
+on (r s : R) [(span {r}).IsTwoSided] : span {r} * span {s} = (span {r * s} : Ide
+al R)
+· 使用定理 `add_le_iff`：add_le_iff : a + b <= c ↔ a <= c ∧ b <= c
+· 使用定理 `Ideal.mul_le_right`：mul_le_right : I * J <= J
+· 使用定理 `Ideal.exists_le_maximal`：exists_le_maximal (I : Ideal α) (hI : I != ⊤) :
+ exists M : Ideal α, M.IsMaximal ∧ I <= M
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ideal.IsPrime.radical_le_iff`：∀ {R : Type u} [inst : CommSemiring R] {I 
+J : Ideal R}, J.IsPrime → (I.radical ≤ J ↔ I ≤ J)
+· 使用定理 `Ideal.IsMaximal.isPrime`：∀ {α : Type u} [inst : CommSemiring α] {I : Ide
+al α}, I.IsMaximal → I.IsPrime
+· 使用定理 `Ideal.IsMaximal.eq_of_le`：∀ {α : Type u} [inst : Semiring α] {I J : Idea
+l α}, I.IsMaximal → J ≠ ⊤ → I ≤ J → I = J
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem isPrimary_of_isMaximal_radical {I : Ideal R} (hi : IsMaximal (radical I)) :
     I.IsPrimary := by
@@ -169,87 +172,99 @@ theorem isPrimary_of_isMaximal_radical {I : Ideal R} (hi : IsMaximal (radical I)
         span_singleton_mul_span_singleton, add_le_iff, span_singleton_le_iff_mem]
       exact Or.inl ⟨mul_le_right, hxy⟩
     · obtain ⟨m, hm, hy⟩ := exists_le_maximal (I + span {y}) h
-      rw [add_le_iff]; rw [span_singleton_le_iff_mem]; rw [← hm.isPrime.radical_le_iff] at hy
+      rw [add_le_iff, span_singleton_le_iff_mem, ← hm.isPrime.radical_le_iff] at hy
       exact Or.inr (hi.eq_of_le hm.ne_top hy.1 ▸ hy.2)
-
-/--
-theorem `IsPrimary.inf` / 定理 `IsPrimary.inf`
-
-English:
-theorem IsPrimary.inf
-  statement: {I J : Ideal R} (hi : I.IsPrimary) (hj : J.IsPrimary)
-  proof: Submodule.IsPrimary.inf hi hj (by simpa)
-
-中文:
-定理 是准素.下确界
-  结论: {I J : 理想 R} (hi : I.是准素) (hj : J.是准素)
-  证明: Submodule.IsPrimary.inf hi hj (by simpa)
-
-Depends on / 依赖: IsPrimary, Submodule, Submodule.IsPrimary.inf
+/-
+**Ideal.IsPrimary.inf** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsPrimary`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {I J : Ideal R},   I.IsPrimary → 
+J.IsPrimary → I.radical = J.radical → (I ⊓ J).IsPrimary
+参数：I ⊓ J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.IsPrimary.inf`：∀ {R : Type u_1} {M : Type u_2} [inst : CommSem
+iring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {S T : Submod
+ule R M},   S…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.colon_univ`：colon_univ {I : Ideal R} [I.IsTwoSided] : I.colon 
+Set.univ = I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
 -/
 theorem IsPrimary.inf {I J : Ideal R} (hi : I.IsPrimary) (hj : J.IsPrimary)
     (hij : radical I = radical J) : (I ⊓ J).IsPrimary :=
   Submodule.IsPrimary.inf hi hj (by simpa)
-
-/--
-lemma `isPrimary_finsetInf` / 引理 `isPrimary_finsetInf`
-
-English:
-lemma isPrimary_finsetInf
-  statement: {ι} {s : Finset ι} {f : ι -> Ideal R} {i : ι} (hi : i in s)
-  proof: Submodule.isPrimary_finsetInf hi hs (by simpa)
-
-@[deprecated (since := "2026-01-19")]
-alias isPrimary_finset_inf := isPrimary_finsetInf
-
-中文:
-引理 isPrimary_finsetInf
-  结论: {ι} {s : 有限集 ι} {f : ι -> 理想 R} {i : ι} (hi : i in s)
-  证明: Submodule.isPrimary_finsetInf hi hs (by simpa)
-
-@[deprecated (since := "2026-01-19")]
-alias isPrimary_finset_inf := isPrimary_finsetInf
-
-Depends on / 依赖: Submodule, Submodule.isPrimary_finsetInf, isPrimary_finsetInf
+/-
+**Ideal.isPrimary_finsetInf** 是 Mathlib 中的一个引理，位于命名空间 `Ideal`。
+形式化陈述：isPrimary_finsetInf {ι} {s : Finset ι} {f : ι -> Ideal R} {i : ι} (hi : i 
+in s) (hs : forall ⦃y⦄, y in s -> (f y).IsPrimary) (hs' : forall ⦃y⦄, y in s -> 
+(f y).radical = (f i).radical) : IsPrimary (s.inf f)
+参数：hi : i in s；hs : forall ⦃y⦄, y in s -> (f y).IsPrimary；hs' : forall ⦃y⦄, y in
+ s -> (f y).radical = (f i).radical。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Submodule.isPrimary_finsetInf`：isPrimary_finsetInf {ι : Type*} {s : Fins
+et ι} {f : ι -> Submodule R M} {i : ι} (hi : i in s) (hs : forall ⦃y⦄, y in s ->
+ (f y).IsPrimary) (…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.colon_univ`：colon_univ {I : Ideal R} [I.IsTwoSided] : I.colon 
+Set.univ = I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
 -/
-lemma isPrimary_finsetInf {ι} {s : Finset ι} {f : ι -> Ideal R} {i : ι} (hi : i in s)
-    (hs : forall ⦃y⦄, y in s -> (f y).IsPrimary)
-    (hs' : forall ⦃y⦄, y in s -> (f y).radical = (f i).radical) :
+lemma isPrimary_finsetInf {ι} {s : Finset ι} {f : ι → Ideal R} {i : ι} (hi : i ∈ s)
+    (hs : ∀ ⦃y⦄, y ∈ s → (f y).IsPrimary)
+    (hs' : ∀ ⦃y⦄, y ∈ s → (f y).radical = (f i).radical) :
     IsPrimary (s.inf f) :=
   Submodule.isPrimary_finsetInf hi hs (by simpa)
 
 @[deprecated (since := "2026-01-19")]
 alias isPrimary_finset_inf := isPrimary_finsetInf
-
-/--
-lemma `IsPrimary.comap` / 引理 `IsPrimary.comap`
-
-English:
-lemma IsPrimary.comap
-  given: {I : Ideal S} (hI : I.IsPrimary) (φ : R ->+* S)
-  statement: (I.comap φ).IsPrimary
-  proof: by
-  rw [isPrimary_iff] at hI ⊢
-  refine hI.imp (comap_ne_top φ) fun h => ?_
-  simp only [mem_comap, map_mul, ← comap_radical]
-  exact h
-
-中文:
-引理 是准素.comap
-  条件: {I : 理想 S} (hI : I.是准素) (φ : R ->+* S)
-  结论: (I.comap φ).是准素
-  证明: by
-  rw [isPrimary_iff] at hI ⊢
-  refine hI.imp (comap_ne_top φ) fun h => ?_
-  simp only [mem_comap, map_mul, ← comap_radical]
-  exact h
-
-Depends on / 依赖: comap_ne_top, comap_radical, hI.imp, isPrimary_iff, map_mul, mem_comap
+/-
+**Ideal.IsPrimary.comap** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsPrimary`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommSemiring R] [inst_1 : CommSemi
+ring S] {I : Ideal S},   I.IsPrimary → ∀ (φ : R →+* S), (Ideal.comap φ I).IsPrim
+ary
+参数：φ : R →+* S；Ideal.comap φ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Ideal.isPrimary_iff`：isPrimary_iff {I : Ideal R} : I.IsPrimary ↔ I != ⊤ 
+∧ forall {x y : R}, x * y in I -> x in I ∨ y in radical I
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `Ideal.comap_ne_top`：comap_ne_top [RingHomClass F R S] (hK : K != ⊤) : co
+map f K != ⊤
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma IsPrimary.comap {I : Ideal S} (hI : I.IsPrimary) (φ : R ->+* S) : (I.comap φ).IsPrimary := by
+lemma IsPrimary.comap {I : Ideal S} (hI : I.IsPrimary) (φ : R →+* S) : (I.comap φ).IsPrimary := by
   rw [isPrimary_iff] at hI ⊢
-  refine hI.imp (comap_ne_top φ) fun h => ?_
+  refine hI.imp (comap_ne_top φ) fun h ↦ ?_
   simp only [mem_comap, map_mul, ← comap_radical]
   exact h
 
 end Ideal
+

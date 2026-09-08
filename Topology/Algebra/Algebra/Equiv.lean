@@ -38,19 +38,22 @@ open scoped Topology
 
 
 /--
-Definition of `ContinuousAlgEquiv` / `ContinuousAlgEquiv` 的定义
+`ContinuousAlgEquiv R A B`, with notation `A ≃A[R] B`, is the type of bijections
+between the topological `R`-algebras `A` and `B` which are both homeomorphisms
+and `R`-algebra isomorphisms.
+-/
+/-
+**ContinuousAlgEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) →   (A : Type u_2) →     (B : Type u_3) →       [inst : Com
+mSemiring R] →         [inst_1 : Semiring A] →           [TopologicalSpace A] → 
+            [inst_3 : Semiring B] → [TopologicalSpace B] → [Algebra R A] → [Alge
+bra R B] → Type (max u_2 u_3)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ContinuousAlgEquiv
-  parameters: (R A B : Type*) [CommSemiring R]
-  extends: A ≃ₐ[R] B, A ≃ₜ B
-  (no additional axioms)
-
-中文:
-结构 余ntinuousAlg等价
-  参数: (R A B : 类型) [交换半环 R]
-  继承: A ≃ₐ[R] B, A ≃ₜ B
-  (无附加公理)
+--- 原说明 ---
+`ContinuousAlgEquiv R A B`, with notation `A ≃A[R] B`, is the type of bijections
+between the topological `R`-algebras `A` and `B` which are both homeomorphisms
+and `R`-algebra isomorphisms.
 -/
 structure ContinuousAlgEquiv (R A B : Type*) [CommSemiring R]
     [Semiring A] [TopologicalSpace A] [Semiring B] [TopologicalSpace B] [Algebra R A]
@@ -62,19 +65,25 @@ notation:50 A " ≃A[" R "] " B => ContinuousAlgEquiv R A B
 attribute [nolint docBlame] ContinuousAlgEquiv.toHomeomorph
 
 /--
-Definition of `ContinuousAlgEquivClass` / `ContinuousAlgEquivClass` 的定义
+`ContinuousAlgEquivClass F R A B` states that `F` is a type of topological algebra
+  structure-preserving equivalences. You should extend this class when you
+  extend `ContinuousAlgEquiv`.
+-/
+/-
+**ContinuousAlgEquivClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (R : outParam (Type u_2)) →     (A : outParam (Type u_3
+)) →       (B : outParam (Type u_4)) →         [inst : CommSemiring R] →        
+   [inst_1 : Semiring A] →             [TopologicalSpace A] →               [ins
+t_3 : Semiring B] → [TopologicalSpace B] → [Algebra R A] → [Algebra R B] → [Equi
+vLike F A B] → Prop
+参数：Type u_2；Type u_3；Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ContinuousAlgEquivClass
-  parameters: (F : Type*) (R A B : outParam Type*) [CommSemiring R]
-  extends: AlgEquivClass F R A B, HomeomorphClass F A B
-  (no additional axioms)
-
-中文:
-类 余ntinuousAlg等价类
-  参数: (F : 类型) (R A B : outParam 类型) [交换半环 R]
-  继承: 代数等价类 F R A B, 同胚类 F A B
-  (无附加公理)
+--- 原说明 ---
+`ContinuousAlgEquivClass F R A B` states that `F` is a type of topological algeb
+ra
+  structure-preserving equivalences. You should extend this class when you
+  extend `ContinuousAlgEquiv`.
 -/
 class ContinuousAlgEquivClass (F : Type*) (R A B : outParam Type*) [CommSemiring R]
     [Semiring A] [TopologicalSpace A] [Semiring B] [TopologicalSpace B]
@@ -91,92 +100,39 @@ variable {R A B C : Type*}
 /-- The natural coercion from a continuous algebra isomorphism to a continuous
 algebra morphism. -/
 @[coe]
-/--
-Definition of `toContinuousAlgHom` / `toContinuousAlgHom` 的定义
+/-
+**ContinuousAlgEquiv.toContinuousAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlg
+Equiv`。
+形式化陈述：toContinuousAlgHom (e : A ≃A[R] B) : A ->A[R] B where __
+参数：e : A ≃A[R] B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.continuous_toFun`：∀ {R : Type u_1} {A : Type u_2} {B 
+: Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologica
+lSpace A] [inst_3 : Semir…
 
-English:
-definition toContinuousAlgHom
-  signature: (e : A ≃A[R] B)
-  body: e.toAlgHom
-  cont := e.continuous_toFun
-
-中文:
-定义 toContinuousAlgHom
-  签名: (e : A ≃A[R] B)
-  定义体: e.toAlgHom
-  cont := e.continuous_toFun
-
-Depends on / 依赖: e.toAlgHom, toAlgHom
+--- 原说明 ---
+The natural coercion from a continuous algebra isomorphism to a continuous
+algebra morphism.
 -/
-def toContinuousAlgHom (e : A ≃A[R] B) : A ->A[R] B where
+def toContinuousAlgHom (e : A ≃A[R] B) : A →A[R] B where
   __ := e.toAlgHom
   cont := e.continuous_toFun
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (A ≃A[R] B) (A ->A[R] B)
-  body: toContinuousAlgHom
-
-中文:
-实例 :
-  签名: CoeOut (A ≃A[R] B) (A ->A[R] B)
-  定义体: toContinuousAlgHom
-
-Depends on / 依赖: toContinuousAlgHom
+/-
+**ContinuousAlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeOut (A ≃A[R] B) (A ->A[R] B) where coe := toContinuousAlgHom
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (A ≃A[R] B) (A ≃ₐ[R] B)
-  body: toAlgEquiv
-
-中文:
-实例 :
-  签名: CoeOut (A ≃A[R] B) (A ≃ₐ[R] B)
-  定义体: toAlgEquiv
-
-Depends on / 依赖: toAlgEquiv
+instance : CoeOut (A ≃A[R] B) (A →A[R] B) where coe := toContinuousAlgHom
+/-
+**ContinuousAlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (A ≃A[R] B) (A ≃ₐ[R] B) where coe := toAlgEquiv
-
-/--
-Instance `equivLike` / 实例 `equivLike`
-
-English:
-instance equivLike
-  signature: : EquivLike (A ≃A[R] B) A B where
-  body: f.toFun
-  inv f := f.invFun
-  coe_injective' f g h₁ h₂ := by
-    obtain ⟨f', _⟩ := f
-    obtain ⟨g', _⟩ := g
-    rcases f' with ⟨⟨_, _⟩, _⟩
-    rcases g' with ⟨⟨_, _⟩, _⟩
-    congr
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-
-中文:
-实例 equivLike
-  签名: : 等价状 (A ≃A[R] B) A B where
-  定义体: f.toFun
-  inv f := f.invFun
-  coe_injective' f g h₁ h₂ := by
-    obtain ⟨f', _⟩ := f
-    obtain ⟨g', _⟩ := g
-    rcases f' with ⟨⟨_, _⟩, _⟩
-    rcases g' with ⟨⟨_, _⟩, _⟩
-    congr
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-
-Depends on / 依赖: f.toFun
+/-
+**ContinuousAlgEquiv.equivLike** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：equivLike : EquivLike (A ≃A[R] B) A B where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance equivLike : EquivLike (A ≃A[R] B) A B where
   coe f := f.toFun
@@ -189,29 +145,28 @@ instance equivLike : EquivLike (A ≃A[R] B) A B where
     congr
   left_inv f := f.left_inv
   right_inv f := f.right_inv
-
-/--
-Instance `continuousAlgEquivClass` / 实例 `continuousAlgEquivClass`
-
-English:
-instance continuousAlgEquivClass
-  signature: : ContinuousAlgEquivClass (A ≃A[R] B) R A B where
-  body: f.map_add'
-  map_mul f := f.map_mul'
-  commutes f := f.commutes'
-  map_continuous := continuous_toFun
-  inv_continuous := continuous_invFun
-
-中文:
-实例 continuousAlgEquivClass
-  签名: : 余ntinuousAlg等价类 (A ≃A[R] B) R A B where
-  定义体: f.map_add'
-  map_mul f := f.map_mul'
-  commutes f := f.commutes'
-  map_continuous := continuous_toFun
-  inv_continuous := continuous_invFun
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**ContinuousAlgEquiv.continuousAlgEquivClass** 是 Mathlib 中的一个实例，位于命名空间 `Continuo
+usAlgEquiv`。
+形式化陈述：continuousAlgEquivClass : ContinuousAlgEquivClass (A ≃A[R] B) R A B where 
+map_add f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.map_mul'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Comm
+Semiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A]
+ [inst_…
+· 使用定理 `AlgEquiv.map_add'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Comm
+Semiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A]
+ [inst_…
+· 使用定理 `AlgEquiv.commutes'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A
+] [inst_…
+· 使用定理 `ContinuousAlgEquiv.continuous_toFun`：∀ {R : Type u_1} {A : Type u_2} {B 
+: Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologica
+lSpace A] [inst_3 : Semir…
+· 使用定理 `ContinuousAlgEquiv.continuous_invFun`：∀ {R : Type u_1} {A : Type u_2} {B
+ : Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologic
+alSpace A] [inst_3 : Semir…
 -/
 instance continuousAlgEquivClass : ContinuousAlgEquivClass (A ≃A[R] B) R A B where
   map_add f := f.map_add'
@@ -219,424 +174,262 @@ instance continuousAlgEquivClass : ContinuousAlgEquivClass (A ≃A[R] B) R A B w
   commutes f := f.commutes'
   map_continuous := continuous_toFun
   inv_continuous := continuous_invFun
-
-/--
-theorem `coe_apply` / 定理 `coe_apply`
-
-English:
-theorem coe_apply
-  given: (e : A ≃A[R] B) (a : A)
-  statement: (e : A ->A[R] B) a = e a
-  proof: rfl
-
-中文:
-定理 coe_apply
-  条件: (e : A ≃A[R] B) (a : A)
-  结论: (e : A ->A[R] B) a = e a
-  证明: rfl
+/-
+**ContinuousAlgEquiv.coe_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：coe_apply (e : A ≃A[R] B) (a : A) : (e : A ->A[R] B) a = e a
+参数：e : A ≃A[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_apply (e : A ≃A[R] B) (a : A) : (e : A ->A[R] B) a = e a := rfl
-
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (e : A ≃ₐ[R] B) (he he')
-  statement: ⇑(mk e he he') = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (e : A ≃ₐ[R] B) (he he')
-  结论: ⇑(mk e he he') = e
-  证明: rfl
-
-@[simp]
+theorem coe_apply (e : A ≃A[R] B) (a : A) : (e : A →A[R] B) a = e a := rfl
+/-
+**ContinuousAlgEquiv.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : CommSemiring R] [in
+st_1 : Semiring A]   [inst_2 : TopologicalSpace A] [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A]   [inst_6 : Algebra R B] (e : A ≃ₐ
+[R] B) (he : Continuous e.toFun) (he' : Continuous e.invFun),   ⇑{ toAlgEquiv :=
+ e, continuous_toFun := he, continuous_invFun := he' } = ⇑e
+参数：e : A ≃ₐ[R] B；he : Continuous e.toFun；he' : Continuous e.invFun。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_mk (e : A ≃ₐ[R] B) (he he') : ⇑(mk e he he') = e := rfl
 
 @[simp]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  given: (e : A ≃A[R] B)
-  statement: ⇑(e : A ->A[R] B) = e
-  proof: rfl
-
-中文:
-定理 coe_coe
-  条件: (e : A ≃A[R] B)
-  结论: ⇑(e : A ->A[R] B) = e
-  证明: rfl
+/-
+**ContinuousAlgEquiv.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：coe_coe (e : A ≃A[R] B) : ⇑(e : A ->A[R] B) = e
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coe (e : A ≃A[R] B) : ⇑(e : A ->A[R] B) = e := rfl
-
-/--
-theorem `toAlgEquiv_injective` / 定理 `toAlgEquiv_injective`
-
-English:
-theorem toAlgEquiv_injective
-  statement: Function.Injective (toAlgEquiv : (A ≃A[R] B) -> A ≃ₐ[R] B)
-  proof: by
-  rintro ⟨e, _, _⟩ ⟨e', _, _⟩ rfl
-  rfl
-
-@[ext]
-
-中文:
-定理 toAlgEquiv_injective
-  结论: 函数.单射 (toAlgEquiv : (A ≃A[R] B) -> A ≃ₐ[R] B)
-  证明: by
-  rintro ⟨e, _, _⟩ ⟨e', _, _⟩ rfl
-  rfl
-
-@[ext]
+theorem coe_coe (e : A ≃A[R] B) : ⇑(e : A →A[R] B) = e := rfl
+/-
+**ContinuousAlgEquiv.toAlgEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousA
+lgEquiv`。
+形式化陈述：toAlgEquiv_injective : Function.Injective (toAlgEquiv : (A ≃A[R] B) -> A ≃
+ₐ[R] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toAlgEquiv_injective : Function.Injective (toAlgEquiv : (A ≃A[R] B) -> A ≃ₐ[R] B) := by
+theorem toAlgEquiv_injective : Function.Injective (toAlgEquiv : (A ≃A[R] B) → A ≃ₐ[R] B) := by
   rintro ⟨e, _, _⟩ ⟨e', _, _⟩ rfl
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : A ≃A[R] B} (h : ⇑f = ⇑g)
-  statement: f = g
-  proof: toAlgEquiv_injective AlgEquiv.ext congr_fun h
-
-中文:
-定理 ext
-  条件: {f g : A ≃A[R] B} (h : ⇑f = ⇑g)
-  结论: f = g
-  证明: toAlgEquiv_injective AlgEquiv.ext congr_fun h
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ext, congr_fun, toAlgEquiv_injective
+/-
+**ContinuousAlgEquiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：ext {f g : A ≃A[R] B} (h : ⇑f = ⇑g) : f = g
+参数：h : ⇑f = ⇑g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.toAlgEquiv_injective`：toAlgEquiv_injective : Function
+.Injective (toAlgEquiv : (A ≃A[R] B) -> A ≃ₐ[R] B)
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
 -/
 theorem ext {f g : A ≃A[R] B} (h : ⇑f = ⇑g) : f = g :=
-toAlgEquiv_injective AlgEquiv.ext congr_fun h
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Function.Injective ((↑) : (A ≃A[R] B) -> A ->A[R] B)
-  proof: fun _ _ h => ext funext ContinuousAlgHom.ext_iff.1 h
-
-@[simp]
-
-中文:
-定理 coe_injective
-  结论: 函数.单射 ((↑) : (A ≃A[R] B) -> A ->A[R] B)
-  证明: fun _ _ h => ext funext ContinuousAlgHom.ext_iff.1 h
-
-@[simp]
-
-Depends on / 依赖: ContinuousAlgHom, ContinuousAlgHom.ext_iff, ext_iff
+  toAlgEquiv_injective <| AlgEquiv.ext <| congr_fun h
+/-
+**ContinuousAlgEquiv.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv
+`。
+形式化陈述：coe_injective : Function.Injective ((↑) : (A ≃A[R] B) -> A ->A[R] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.ext`：ext {f g : A ≃A[R] B} (h : ⇑f = ⇑g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ContinuousAlgHom.ext_iff`：∀ {R : Type u_1} [inst : CommSemiring R] {A : 
+Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Type u_3} [
+inst_3 : Semir…
 -/
-theorem coe_injective : Function.Injective ((↑) : (A ≃A[R] B) -> A ->A[R] B) :=
-fun _ _ h => ext funext ContinuousAlgHom.ext_iff.1 h
+theorem coe_injective : Function.Injective ((↑) : (A ≃A[R] B) → A →A[R] B) :=
+  fun _ _ h => ext <| funext <| ContinuousAlgHom.ext_iff.1 h
 
 @[simp]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {f g : A ≃A[R] B}
-  statement: (f : A ->A[R] B) = g ↔ f = g
-  proof: coe_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 coe_inj
-  条件: {f g : A ≃A[R] B}
-  结论: (f : A ->A[R] B) = g ↔ f = g
-  证明: coe_injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: coe_injective, coe_injective.eq_iff, eq_iff
+/-
+**ContinuousAlgEquiv.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：coe_inj {f g : A ≃A[R] B} : (f : A ->A[R] B) = g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `ContinuousAlgEquiv.coe_injective`：coe_injective : Function.Injective ((↑
+) : (A ≃A[R] B) -> A ->A[R] B)
 -/
-theorem coe_inj {f g : A ≃A[R] B} : (f : A ->A[R] B) = g ↔ f = g :=
+theorem coe_inj {f g : A ≃A[R] B} : (f : A →A[R] B) = g ↔ f = g :=
   coe_injective.eq_iff
 
 @[simp]
-/--
-theorem `coe_toAlgEquiv` / 定理 `coe_toAlgEquiv`
-
-English:
-theorem coe_toAlgEquiv
-  given: (e : A ≃A[R] B)
-  statement: ⇑e.toAlgEquiv = e
-  proof: rfl
-
-中文:
-定理 coe_toAlgEquiv
-  条件: (e : A ≃A[R] B)
-  结论: ⇑e.toAlgEquiv = e
-  证明: rfl
+/-
+**ContinuousAlgEquiv.coe_toAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqui
+v`。
+形式化陈述：coe_toAlgEquiv (e : A ≃A[R] B) : ⇑e.toAlgEquiv = e
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toAlgEquiv (e : A ≃A[R] B) : ⇑e.toAlgEquiv = e := rfl
 
 /-- The natural coercion from a continuous algebra isomorphism
 to a continuous linear isomorphism. -/
 @[coe]
-/--
-Definition of `toContinuousLinearEquiv` / `toContinuousLinearEquiv` 的定义
+/-
+**ContinuousAlgEquiv.toContinuousLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Continuo
+usAlgEquiv`。
+形式化陈述：toContinuousLinearEquiv (e : A ≃A[R] B) : A ≃L[R] B
+参数：e : A ≃A[R] B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.continuous_toFun`：∀ {R : Type u_1} {A : Type u_2} {B 
+: Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologica
+lSpace A] [inst_3 : Semir…
+· 使用定理 `ContinuousAlgEquiv.continuous_invFun`：∀ {R : Type u_1} {A : Type u_2} {B
+ : Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologic
+alSpace A] [inst_3 : Semir…
 
-English:
-definition toContinuousLinearEquiv
-  signature: (e : A ≃A[R] B)
-  body: { e with __ := e.toLinearEquiv }
-
-中文:
-定义 toContinuousLinearEquiv
-  签名: (e : A ≃A[R] B)
-  定义体: { e with __ := e.toLinearEquiv }
-
-Depends on / 依赖: e.toLinearEquiv, toLinearEquiv
+--- 原说明 ---
+The natural coercion from a continuous algebra isomorphism
+to a continuous linear isomorphism.
 -/
 def toContinuousLinearEquiv (e : A ≃A[R] B) : A ≃L[R] B :=
   { e with __ := e.toLinearEquiv }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (A ≃A[R] B) (A ≃L[R] B)
-  body: ⟨toContinuousLinearEquiv⟩
-
-中文:
-实例 :
-  签名: Coe (A ≃A[R] B) (A ≃L[R] B)
-  定义体: ⟨toContinuousLinearEquiv⟩
-
-Depends on / 依赖: toContinuousLinearEquiv
+/-
+**ContinuousAlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe (A ≃A[R] B) (A ≃L[R] B) := ⟨toContinuousLinearEquiv⟩
-
-/--
-theorem `coeCLE_apply` / 定理 `coeCLE_apply`
-
-English:
-theorem coeCLE_apply
-  given: (e : A ≃A[R] B) (a : A)
-  statement: (e : A ≃L[R] B) a = e a
-  proof: rfl
-
-中文:
-定理 coeCLE_apply
-  条件: (e : A ≃A[R] B) (a : A)
-  结论: (e : A ≃L[R] B) a = e a
-  证明: rfl
+/-
+**ContinuousAlgEquiv.coeCLE_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`
+。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : CommSemiring R] [in
+st_1 : Semiring A]   [inst_2 : TopologicalSpace A] [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A]   [inst_6 : Algebra R B] (e : A ≃A
+[R] B) (a : A), ↑e a = e a
+参数：e : A ≃A[R] B；a : A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coeCLE_apply (e : A ≃A[R] B) (a : A) : (e : A ≃L[R] B) a = e a := rfl
-
-/--
-theorem `coe_coeCLE` / 定理 `coe_coeCLE`
-
-English:
-theorem coe_coeCLE
-  given: (e : A ≃A[R] B)
-  statement: ⇑(e : A ≃L[R] B) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_coeCLE
-  条件: (e : A ≃A[R] B)
-  结论: ⇑(e : A ≃L[R] B) = e
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.coe_coeCLE** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst : CommSemiring R] [in
+st_1 : Semiring A]   [inst_2 : TopologicalSpace A] [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A]   [inst_6 : Algebra R B] (e : A ≃A
+[R] B), ⇑↑e = ⇑e
+参数：e : A ≃A[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_coeCLE (e : A ≃A[R] B) : ⇑(e : A ≃L[R] B) = e := rfl
 
 @[simp]
-/--
-theorem `toContinuousLinearEquiv_apply` / 定理 `toContinuousLinearEquiv_apply`
-
-English:
-theorem toContinuousLinearEquiv_apply
-  given: (e : A ≃A[R] B) (a : A)
-  proof: rfl
-
-中文:
-定理 toContinuousLinearEquiv_apply
-  条件: (e : A ≃A[R] B) (a : A)
-  证明: rfl
-
-Depends on / 依赖: UniformSpace
+/-
+**ContinuousAlgEquiv.toContinuousLinearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousAlgEquiv`。
+形式化陈述：toContinuousLinearEquiv_apply (e : A ≃A[R] B) (a : A) : e.toContinuousLine
+arEquiv a = e a
+参数：e : A ≃A[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toContinuousLinearEquiv_apply (e : A ≃A[R] B) (a : A) :
     e.toContinuousLinearEquiv a = e a := rfl
-
-/--
-theorem `toContinuousLinearMap_toContinuousLinearEquiv_eq` / 定理 `toContinuousLinearMap_toContinuousLinearEquiv_eq`
-
-English:
-theorem toContinuousLinearMap_toContinuousLinearEquiv_eq
-  given: (e : A ≃A[R] B)
-  proof: rfl
-
-中文:
-定理 toContinuousLinearMap_toContinuousLinearEquiv_eq
-  条件: (e : A ≃A[R] B)
-  证明: rfl
+/-
+**ContinuousAlgEquiv.toContinuousLinearMap_toContinuousLinearEquiv_eq** 是 Mathli
+b 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：toContinuousLinearMap_toContinuousLinearEquiv_eq (e : A ≃A[R] B) : e.toCon
+tinuousLinearEquiv.toContinuousLinearMap = e.toContinuousAlgHom.toContinuousLine
+arMap
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toContinuousLinearMap_toContinuousLinearEquiv_eq (e : A ≃A[R] B) :
     e.toContinuousLinearEquiv.toContinuousLinearMap
     = e.toContinuousAlgHom.toContinuousLinearMap := rfl
-
-/--
-theorem `toContinuousLinearEquiv_toLinearEquiv_eq` / 定理 `toContinuousLinearEquiv_toLinearEquiv_eq`
-
-English:
-theorem toContinuousLinearEquiv_toLinearEquiv_eq
-  given: (e : A ≃A[R] B)
-  proof: rfl
-
-中文:
-定理 toContinuousLinearEquiv_toLinearEquiv_eq
-  条件: (e : A ≃A[R] B)
-  证明: rfl
+/-
+**ContinuousAlgEquiv.toContinuousLinearEquiv_toLinearEquiv_eq** 是 Mathlib 中的一个定理
+，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：toContinuousLinearEquiv_toLinearEquiv_eq (e : A ≃A[R] B) : e.toContinuousL
+inearEquiv.toLinearEquiv = e.toAlgEquiv.toLinearEquiv
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toContinuousLinearEquiv_toLinearEquiv_eq (e : A ≃A[R] B) :
     e.toContinuousLinearEquiv.toLinearEquiv
     = e.toAlgEquiv.toLinearEquiv := rfl
-
-/--
-theorem `isOpenMap` / 定理 `isOpenMap`
-
-English:
-theorem isOpenMap
-  given: (e : A ≃A[R] B)
-  statement: IsOpenMap e
-  proof: e.toHomeomorph.isOpenMap
-
-中文:
-定理 isOpenMap
-  条件: (e : A ≃A[R] B)
-  结论: 是开映射 e
-  证明: e.toHomeomorph.isOpenMap
-
-Depends on / 依赖: e.toHomeomorph.isOpenMap, isOpenMap, toHomeomorph
+/-
+**ContinuousAlgEquiv.isOpenMap** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：isOpenMap (e : A ≃A[R] B) : IsOpenMap e
+参数：e : A ≃A[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologica
+lSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), IsOpenMap ⇑h
 -/
 theorem isOpenMap (e : A ≃A[R] B) : IsOpenMap e :=
   e.toHomeomorph.isOpenMap
-
-/--
-theorem `image_closure` / 定理 `image_closure`
-
-English:
-theorem image_closure
-  given: (e : A ≃A[R] B) (S : Set A)
-  statement: e '' closure S = closure (e '' S)
-  proof: e.toHomeomorph.image_closure S
-
-中文:
-定理 image_closure
-  条件: (e : A ≃A[R] B) (S : 集合 A)
-  结论: e '' closure S = closure (e '' S)
-  证明: e.toHomeomorph.image_closure S
-
-Depends on / 依赖: e.toHomeomorph.image_closure, image_closure, toHomeomorph
+/-
+**ContinuousAlgEquiv.image_closure** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv
+`。
+形式化陈述：image_closure (e : A ≃A[R] B) (S : Set A) : e '' closure S = closure (e ''
+ S)
+参数：e : A ≃A[R] B；S : Set A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.image_closure`：image_closure (h : X ≃ₜ Y) (s : Set X) : h '' 
+closure s = closure (h '' s)
 -/
 theorem image_closure (e : A ≃A[R] B) (S : Set A) : e '' closure S = closure (e '' S) :=
   e.toHomeomorph.image_closure S
-
-/--
-theorem `preimage_closure` / 定理 `preimage_closure`
-
-English:
-theorem preimage_closure
-  given: (e : A ≃A[R] B) (S : Set B)
-  statement: e ⁻¹' closure S = closure (e ⁻¹' S)
-  proof: e.toHomeomorph.preimage_closure S
-
-@[simp]
-
-中文:
-定理 preimage_closure
-  条件: (e : A ≃A[R] B) (S : 集合 B)
-  结论: e ⁻¹' closure S = closure (e ⁻¹' S)
-  证明: e.toHomeomorph.preimage_closure S
-
-@[simp]
-
-Depends on / 依赖: e.toHomeomorph.preimage_closure, preimage_closure, toHomeomorph
+/-
+**ContinuousAlgEquiv.preimage_closure** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：preimage_closure (e : A ≃A[R] B) (S : Set B) : e ⁻¹' closure S = closure (
+e ⁻¹' S)
+参数：e : A ≃A[R] B；S : Set B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.preimage_closure`：preimage_closure (h : X ≃ₜ Y) (s : Set Y) :
+ h ⁻¹' closure s = closure (h ⁻¹' s)
 -/
 theorem preimage_closure (e : A ≃A[R] B) (S : Set B) : e ⁻¹' closure S = closure (e ⁻¹' S) :=
   e.toHomeomorph.preimage_closure S
 
 @[simp]
-/--
-theorem `isClosed_image` / 定理 `isClosed_image`
-
-English:
-theorem isClosed_image
-  given: (e : A ≃A[R] B) {S : Set A}
-  statement: IsClosed (e '' S) ↔ IsClosed S
-  proof: e.toHomeomorph.isClosed_image
-
-中文:
-定理 isClosed_image
-  条件: (e : A ≃A[R] B) {S : 集合 A}
-  结论: 是闭集 (e '' S) ↔ 是闭集 S
-  证明: e.toHomeomorph.isClosed_image
-
-Depends on / 依赖: e.toHomeomorph.isClosed_image, isClosed_image, toHomeomorph
+/-
+**ContinuousAlgEquiv.isClosed_image** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqui
+v`。
+形式化陈述：isClosed_image (e : A ≃A[R] B) {S : Set A} : IsClosed (e '' S) ↔ IsClosed 
+S
+参数：e : A ≃A[R] B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isClosed_image`：isClosed_image (h : X ≃ₜ Y) {s : Set X} : IsC
+losed (h '' s) ↔ IsClosed s
 -/
 theorem isClosed_image (e : A ≃A[R] B) {S : Set A} : IsClosed (e '' S) ↔ IsClosed S :=
   e.toHomeomorph.isClosed_image
-
-/--
-theorem `map_nhds_eq` / 定理 `map_nhds_eq`
-
-English:
-theorem map_nhds_eq
-  given: (e : A ≃A[R] B) (a : A)
-  statement: Filter.map e (𝓝 a) = 𝓝 (e a)
-  proof: e.toHomeomorph.map_nhds_eq a
-
-中文:
-定理 map_nhds_eq
-  条件: (e : A ≃A[R] B) (a : A)
-  结论: 滤子.map e (𝓝 a) = 𝓝 (e a)
-  证明: e.toHomeomorph.map_nhds_eq a
-
-Depends on / 依赖: e.toHomeomorph.map_nhds_eq, map_nhds_eq, toHomeomorph
+/-
+**ContinuousAlgEquiv.map_nhds_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：map_nhds_eq (e : A ≃A[R] B) (a : A) : Filter.map e (𝓝 a) = 𝓝 (e a)
+参数：e : A ≃A[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.map_nhds_eq`：map_nhds_eq (h : X ≃ₜ Y) (x : X) : map h (𝓝 x) =
+ 𝓝 (h x)
 -/
 theorem map_nhds_eq (e : A ≃A[R] B) (a : A) : Filter.map e (𝓝 a) = 𝓝 (e a) :=
   e.toHomeomorph.map_nhds_eq a
-
-/--
-theorem `map_eq_zero_iff` / 定理 `map_eq_zero_iff`
-
-English:
-theorem map_eq_zero_iff
-  given: (e : A ≃A[R] B) {a : A}
-  statement: e a = 0 ↔ a = 0
-  proof: e.toAlgEquiv.toLinearEquiv.map_eq_zero_iff
-
-中文:
-定理 map_eq_zero_iff
-  条件: (e : A ≃A[R] B) {a : A}
-  结论: e a = 0 ↔ a = 0
-  证明: e.toAlgEquiv.toLinearEquiv.map_eq_zero_iff
-
-Depends on / 依赖: e.toAlgEquiv.toLinearEquiv.map_eq_zero_iff, map_eq_zero_iff, toAlgEquiv, toLinearEquiv
+/-
+**ContinuousAlgEquiv.map_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqu
+iv`。
+形式化陈述：map_eq_zero_iff (e : A ≃A[R] B) {a : A} : e a = 0 ↔ a = 0
+参数：e : A ≃A[R] B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.map_eq_zero_iff`：map_eq_zero_iff {x : M} : e x = 0 ↔ x = 0
 -/
 theorem map_eq_zero_iff (e : A ≃A[R] B) {a : A} : e a = 0 ↔ a = 0 :=
   e.toAlgEquiv.toLinearEquiv.map_eq_zero_iff
@@ -645,119 +438,84 @@ attribute [continuity]
   ContinuousAlgEquiv.continuous_invFun ContinuousAlgEquiv.continuous_toFun
 
 @[fun_prop]
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  given: (e : A ≃A[R] B)
-  statement: Continuous e
-  proof: e.continuous_toFun
-
-中文:
-定理 continuous
-  条件: (e : A ≃A[R] B)
-  结论: 连续 e
-  证明: e.continuous_toFun
-
-Depends on / 依赖: continuous_toFun, e.continuous_toFun
+/-
+**ContinuousAlgEquiv.continuous** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：continuous (e : A ≃A[R] B) : Continuous e
+参数：e : A ≃A[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.continuous_toFun`：∀ {R : Type u_1} {A : Type u_2} {B 
+: Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologica
+lSpace A] [inst_3 : Semir…
 -/
 theorem continuous (e : A ≃A[R] B) : Continuous e := e.continuous_toFun
-
-/--
-theorem `continuousOn` / 定理 `continuousOn`
-
-English:
-theorem continuousOn
-  given: (e : A ≃A[R] B) {S : Set A}
-  statement: ContinuousOn e S
-  proof: e.continuous.continuousOn
-
-中文:
-定理 continuousOn
-  条件: (e : A ≃A[R] B) {S : 集合 A}
-  结论: ContinuousOn e S
-  证明: e.continuous.continuousOn
-
-Depends on / 依赖: continuous, continuousOn, e.continuous.continuousOn
+/-
+**ContinuousAlgEquiv.continuousOn** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`
+。
+形式化陈述：continuousOn (e : A ≃A[R] B) {S : Set A} : ContinuousOn e S
+参数：e : A ≃A[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `ContinuousAlgEquiv.continuous`：continuous (e : A ≃A[R] B) : Continuous e
 -/
 theorem continuousOn (e : A ≃A[R] B) {S : Set A} : ContinuousOn e S :=
   e.continuous.continuousOn
-
-/--
-theorem `continuousAt` / 定理 `continuousAt`
-
-English:
-theorem continuousAt
-  given: (e : A ≃A[R] B) {a : A}
-  statement: ContinuousAt e a
-  proof: e.continuous.continuousAt
-
-中文:
-定理 continuousAt
-  条件: (e : A ≃A[R] B) {a : A}
-  结论: ContinuousAt e a
-  证明: e.continuous.continuousAt
-
-Depends on / 依赖: continuous, continuousAt, e.continuous.continuousAt
+/-
+**ContinuousAlgEquiv.continuousAt** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`
+。
+形式化陈述：continuousAt (e : A ≃A[R] B) {a : A} : ContinuousAt e a
+参数：e : A ≃A[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `ContinuousAlgEquiv.continuous`：continuous (e : A ≃A[R] B) : Continuous e
 -/
 theorem continuousAt (e : A ≃A[R] B) {a : A} : ContinuousAt e a :=
   e.continuous.continuousAt
-
-/--
-theorem `continuousWithinAt` / 定理 `continuousWithinAt`
-
-English:
-theorem continuousWithinAt
-  given: (e : A ≃A[R] B) {S : Set A} {a : A}
-  proof: e.continuous.continuousWithinAt
-
-中文:
-定理 continuousWithinAt
-  条件: (e : A ≃A[R] B) {S : 集合 A} {a : A}
-  证明: e.continuous.continuousWithinAt
-
-Depends on / 依赖: continuous, continuousWithinAt, e.continuous.continuousWithinAt
+/-
+**ContinuousAlgEquiv.continuousWithinAt** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlg
+Equiv`。
+形式化陈述：continuousWithinAt (e : A ≃A[R] B) {S : Set A} {a : A} : ContinuousWithinA
+t e S a
+参数：e : A ≃A[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuousWithinAt`：Continuous.continuousWithinAt (h : Contin
+uous f) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousAlgEquiv.continuous`：continuous (e : A ≃A[R] B) : Continuous e
 -/
 theorem continuousWithinAt (e : A ≃A[R] B) {S : Set A} {a : A} :
     ContinuousWithinAt e S a :=
   e.continuous.continuousWithinAt
-
-/--
-theorem `comp_continuous_iff` / 定理 `comp_continuous_iff`
-
-English:
-theorem comp_continuous_iff
-  given: {α : Type*} [TopologicalSpace α] (e : A ≃A[R] B) {f : α -> A}
-  proof: e.toHomeomorph.comp_continuous_iff
-
-中文:
-定理 comp_continuous_iff
-  条件: {α : 类型} [拓扑空间 α] (e : A ≃A[R] B) {f : α -> A}
-  证明: e.toHomeomorph.comp_continuous_iff
-
-Depends on / 依赖: comp_continuous_iff, e.toHomeomorph.comp_continuous_iff, toHomeomorph
+/-
+**ContinuousAlgEquiv.comp_continuous_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAl
+gEquiv`。
+形式化陈述：comp_continuous_iff {α : Type*} [TopologicalSpace α] (e : A ≃A[R] B) {f : 
+α -> A} : Continuous (e ∘ f) ↔ Continuous f
+参数：e : A ≃A[R] B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.comp_continuous_iff`：comp_continuous_iff (h : X ≃ₜ Y) {f : Z 
+-> X} : Continuous (h ∘ f) ↔ Continuous f
 -/
-theorem comp_continuous_iff {α : Type*} [TopologicalSpace α] (e : A ≃A[R] B) {f : α -> A} :
+theorem comp_continuous_iff {α : Type*} [TopologicalSpace α] (e : A ≃A[R] B) {f : α → A} :
     Continuous (e ∘ f) ↔ Continuous f :=
   e.toHomeomorph.comp_continuous_iff
-
-/--
-theorem `comp_continuous_iff'` / 定理 `comp_continuous_iff'`
-
-English:
-theorem comp_continuous_iff'
-  given: {β : Type*} [TopologicalSpace β] (e : A ≃A[R] B) {g : B -> β}
-  proof: e.toHomeomorph.comp_continuous_iff'
-
-中文:
-定理 comp_continuous_iff'
-  条件: {β : 类型} [拓扑空间 β] (e : A ≃A[R] B) {g : B -> β}
-  证明: e.toHomeomorph.comp_continuous_iff'
-
-Depends on / 依赖: comp_continuous_iff, e.toHomeomorph.comp_continuous_iff, toHomeomorph
+/-
+**ContinuousAlgEquiv.comp_continuous_iff'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousA
+lgEquiv`。
+形式化陈述：comp_continuous_iff' {β : Type*} [TopologicalSpace β] (e : A ≃A[R] B) {g :
+ B -> β} : Continuous (g ∘ e) ↔ Continuous g
+参数：e : A ≃A[R] B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.comp_continuous_iff'`：comp_continuous_iff' (h : X ≃ₜ Y) {f : 
+Y -> Z} : Continuous (f ∘ h) ↔ Continuous f
 -/
-theorem comp_continuous_iff' {β : Type*} [TopologicalSpace β] (e : A ≃A[R] B) {g : B -> β} :
+theorem comp_continuous_iff' {β : Type*} [TopologicalSpace β] (e : A ≃A[R] B) {g : B → β} :
     Continuous (g ∘ e) ↔ Continuous g :=
   e.toHomeomorph.comp_continuous_iff'
 
@@ -765,28 +523,15 @@ variable (R A)
 
 /-- The identity isomorphism as a continuous `R`-algebra equivalence. -/
 @[refl]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**ContinuousAlgEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：refl : A ≃A[R] A where __
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 
-English:
-definition refl
-  signature: : A ≃A[R] A where
-  body: AlgEquiv.refl
-  continuous_toFun := continuous_id
-  continuous_invFun := continuous_id
-
-@[simp]
-
-中文:
-定义 refl
-  签名: : A ≃A[R] A where
-  定义体: AlgEquiv.refl
-  continuous_toFun := continuous_id
-  continuous_invFun := continuous_id
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.refl
+--- 原说明 ---
+The identity isomorphism as a continuous `R`-algebra equivalence.
 -/
 def refl : A ≃A[R] A where
   __ := AlgEquiv.refl
@@ -794,98 +539,51 @@ def refl : A ≃A[R] A where
   continuous_invFun := continuous_id
 
 @[simp]
-/--
-theorem `refl_apply` / 定理 `refl_apply`
-
-English:
-theorem refl_apply
-  given: (a : A)
-  statement: refl R A a = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 refl_apply
-  条件: (a : A)
-  结论: refl R A a = a
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.refl_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：refl_apply (a : A) : refl R A a = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_apply (a : A) : refl R A a = a := rfl
 
 @[simp]
-/--
-theorem `coe_refl` / 定理 `coe_refl`
-
-English:
-theorem coe_refl
-  statement: refl R A = ContinuousAlgHom.id R A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_refl
-  结论: refl R A = 余ntinuousAlg态射.id R A
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.coe_refl** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：coe_refl : refl R A = ContinuousAlgHom.id R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_refl : refl R A = ContinuousAlgHom.id R A := rfl
 
 @[simp]
-/--
-theorem `coeCLE_refl` / 定理 `coeCLE_refl`
-
-English:
-theorem coeCLE_refl
-  statement: (refl R A).toContinuousLinearEquiv = ContinuousLinearEquiv.refl R A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coeCLE_refl
-  结论: (refl R A).toContinuousLinearEquiv = 连续线性等价.refl R A
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.coeCLE_refl** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：coeCLE_refl : (refl R A).toContinuousLinearEquiv = ContinuousLinearEquiv.r
+efl R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeCLE_refl : (refl R A).toContinuousLinearEquiv = ContinuousLinearEquiv.refl R A := rfl
 
 @[simp]
-/--
-theorem `coe_refl'` / 定理 `coe_refl'`
-
-English:
-theorem coe_refl'
-  statement: ⇑(refl R A) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_refl'
-  结论: ⇑(refl R A) = id
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.coe_refl'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：coe_refl' : ⇑(refl R A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_refl' : ⇑(refl R A) = id := rfl
 
 @[simp]
-/--
-theorem `refl_toContinuousLinearEquiv` / 定理 `refl_toContinuousLinearEquiv`
-
-English:
-theorem refl_toContinuousLinearEquiv
-  proof: rfl
-
-中文:
-定理 refl_toContinuousLinearEquiv
-  证明: rfl
+/-
+**ContinuousAlgEquiv.refl_toContinuousLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousAlgEquiv`。
+形式化陈述：refl_toContinuousLinearEquiv : (refl R A).toContinuousLinearEquiv = .refl 
+R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_toContinuousLinearEquiv :
     (refl R A).toContinuousLinearEquiv = .refl R A := rfl
@@ -894,28 +592,21 @@ variable {R A}
 
 /-- The inverse of a continuous algebra equivalence. -/
 @[symm]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**ContinuousAlgEquiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：symm (e : A ≃A[R] B) : B ≃A[R] A where __
+参数：e : A ≃A[R] B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.continuous_invFun`：∀ {R : Type u_1} {A : Type u_2} {B
+ : Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologic
+alSpace A] [inst_3 : Semir…
+· 使用定理 `ContinuousAlgEquiv.continuous_toFun`：∀ {R : Type u_1} {A : Type u_2} {B 
+: Type u_3} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Topologica
+lSpace A] [inst_3 : Semir…
 
-English:
-definition symm
-  signature: (e : A ≃A[R] B)
-  body: e.toAlgEquiv.symm
-  continuous_toFun := e.continuous_invFun
-  continuous_invFun := e.continuous_toFun
-
-@[simp]
-
-中文:
-定义 symm
-  签名: (e : A ≃A[R] B)
-  定义体: e.toAlgEquiv.symm
-  continuous_toFun := e.continuous_invFun
-  continuous_invFun := e.continuous_toFun
-
-@[simp]
-
-Depends on / 依赖: e.toAlgEquiv.symm, toAlgEquiv
+--- 原说明 ---
+The inverse of a continuous algebra equivalence.
 -/
 def symm (e : A ≃A[R] B) : B ≃A[R] A where
   __ := e.toAlgEquiv.symm
@@ -923,210 +614,121 @@ def symm (e : A ≃A[R] B) : B ≃A[R] A where
   continuous_invFun := e.continuous_toFun
 
 @[simp]
-/--
-theorem `apply_symm_apply` / 定理 `apply_symm_apply`
-
-English:
-theorem apply_symm_apply
-  given: (e : A ≃A[R] B) (b : B)
-  statement: e (e.symm b) = b
-  proof: e.1.right_inv b
-
-@[simp]
-
-中文:
-定理 apply_symm_apply
-  条件: (e : A ≃A[R] B) (b : B)
-  结论: e (e.symm b) = b
-  证明: e.1.right_inv b
-
-@[simp]
-
-Depends on / 依赖: right_inv
+/-
+**ContinuousAlgEquiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：apply_symm_apply (e : A ≃A[R] B) (b : B) : e (e.symm b) = b
+参数：e : A ≃A[R] B；b : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 theorem apply_symm_apply (e : A ≃A[R] B) (b : B) : e (e.symm b) = b :=
   e.1.right_inv b
 
 @[simp]
-/--
-theorem `symm_apply_apply` / 定理 `symm_apply_apply`
-
-English:
-theorem symm_apply_apply
-  given: (e : A ≃A[R] B) (a : A)
-  statement: e.symm (e a) = a
-  proof: e.1.left_inv a
-
-@[simp]
-
-中文:
-定理 symm_apply_apply
-  条件: (e : A ≃A[R] B) (a : A)
-  结论: e.symm (e a) = a
-  证明: e.1.left_inv a
-
-@[simp]
-
-Depends on / 依赖: left_inv
+/-
+**ContinuousAlgEquiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：symm_apply_apply (e : A ≃A[R] B) (a : A) : e.symm (e a) = a
+参数：e : A ≃A[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
 theorem symm_apply_apply (e : A ≃A[R] B) (a : A) : e.symm (e a) = a :=
   e.1.left_inv a
 
 @[simp]
-/--
-theorem `symm_image_image` / 定理 `symm_image_image`
-
-English:
-theorem symm_image_image
-  given: (e : A ≃A[R] B) (S : Set A)
-  statement: e.symm '' e '' S = S
-  proof: e.toEquiv.symm_image_image S
-
-@[simp]
-
-中文:
-定理 symm_image_image
-  条件: (e : A ≃A[R] B) (S : 集合 A)
-  结论: e.symm '' e '' S = S
-  证明: e.toEquiv.symm_image_image S
-
-@[simp]
-
-Depends on / 依赖: e.toEquiv.symm_image_image, symm_image_image, toEquiv
+/-
+**ContinuousAlgEquiv.symm_image_image** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：symm_image_image (e : A ≃A[R] B) (S : Set A) : e.symm '' e '' S = S
+参数：e : A ≃A[R] B；S : Set A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_image_image`：symm_image_image {α β} (e : α ≃ β) (s : Set α) :
+ e.symm '' e '' s = s
 -/
 theorem symm_image_image (e : A ≃A[R] B) (S : Set A) : e.symm '' e '' S = S :=
   e.toEquiv.symm_image_image S
 
 @[simp]
-/--
-theorem `image_symm_image` / 定理 `image_symm_image`
-
-English:
-theorem image_symm_image
-  given: (e : A ≃A[R] B) (S : Set B)
-  statement: e '' e.symm '' S = S
-  proof: e.symm.symm_image_image S
-
-@[simp]
-
-中文:
-定理 image_symm_image
-  条件: (e : A ≃A[R] B) (S : 集合 B)
-  结论: e '' e.symm '' S = S
-  证明: e.symm.symm_image_image S
-
-@[simp]
-
-Depends on / 依赖: e.symm.symm_image_image, symm_image_image
+/-
+**ContinuousAlgEquiv.image_symm_image** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：image_symm_image (e : A ≃A[R] B) (S : Set B) : e '' e.symm '' S = S
+参数：e : A ≃A[R] B；S : Set B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.symm_image_image`：symm_image_image (e : A ≃A[R] B) (S
+ : Set A) : e.symm '' e '' S = S
 -/
 theorem image_symm_image (e : A ≃A[R] B) (S : Set B) : e '' e.symm '' S = S :=
   e.symm.symm_image_image S
 
 @[simp]
-/--
-theorem `symm_toAlgEquiv` / 定理 `symm_toAlgEquiv`
-
-English:
-theorem symm_toAlgEquiv
-  given: (e : A ≃A[R] B)
-  statement: e.symm.toAlgEquiv = e.toAlgEquiv.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toAlgEquiv
-  条件: (e : A ≃A[R] B)
-  结论: e.symm.toAlgEquiv = e.toAlgEquiv.symm
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.symm_toAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqu
+iv`。
+形式化陈述：symm_toAlgEquiv (e : A ≃A[R] B) : e.symm.toAlgEquiv = e.toAlgEquiv.symm
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_toAlgEquiv (e : A ≃A[R] B) : e.symm.toAlgEquiv = e.toAlgEquiv.symm := rfl
 
 @[simp]
-/--
-theorem `symm_toHomeomorph` / 定理 `symm_toHomeomorph`
-
-English:
-theorem symm_toHomeomorph
-  given: (e : A ≃A[R] B)
-  statement: e.symm.toHomeomorph = e.toHomeomorph.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toHomeomorph
-  条件: (e : A ≃A[R] B)
-  结论: e.symm.toHomeomorph = e.toHomeomorph.symm
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.symm_toHomeomorph** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgE
+quiv`。
+形式化陈述：symm_toHomeomorph (e : A ≃A[R] B) : e.symm.toHomeomorph = e.toHomeomorph.s
+ymm
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_toHomeomorph (e : A ≃A[R] B) : e.symm.toHomeomorph = e.toHomeomorph.symm := rfl
 
 @[simp]
-/--
-theorem `toContinuousLinearEquiv_symm` / 定理 `toContinuousLinearEquiv_symm`
-
-English:
-theorem toContinuousLinearEquiv_symm
-  given: (e : A ≃A[R] B)
-  proof: rfl
-
-中文:
-定理 toContinuousLinearEquiv_symm
-  条件: (e : A ≃A[R] B)
-  证明: rfl
+/-
+**ContinuousAlgEquiv.toContinuousLinearEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousAlgEquiv`。
+形式化陈述：toContinuousLinearEquiv_symm (e : A ≃A[R] B) : e.symm.toContinuousLinearEq
+uiv = e.toContinuousLinearEquiv.symm
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toContinuousLinearEquiv_symm (e : A ≃A[R] B) :
     e.symm.toContinuousLinearEquiv = e.toContinuousLinearEquiv.symm := rfl
-
-/--
-theorem `symm_map_nhds_eq` / 定理 `symm_map_nhds_eq`
-
-English:
-theorem symm_map_nhds_eq
-  given: (e : A ≃A[R] B) (a : A)
-  statement: Filter.map e.symm (𝓝 (e a)) = 𝓝 a
-  proof: e.toHomeomorph.symm_map_nhds_eq a
-
-中文:
-定理 symm_map_nhds_eq
-  条件: (e : A ≃A[R] B) (a : A)
-  结论: 滤子.map e.symm (𝓝 (e a)) = 𝓝 a
-  证明: e.toHomeomorph.symm_map_nhds_eq a
-
-Depends on / 依赖: e.toHomeomorph.symm_map_nhds_eq, symm_map_nhds_eq, toHomeomorph
+/-
+**ContinuousAlgEquiv.symm_map_nhds_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：symm_map_nhds_eq (e : A ≃A[R] B) (a : A) : Filter.map e.symm (𝓝 (e a)) = 𝓝
+ a
+参数：e : A ≃A[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.symm_map_nhds_eq`：symm_map_nhds_eq (h : X ≃ₜ Y) (x : X) : map
+ h.symm (𝓝 (h x)) = 𝓝 x
 -/
 theorem symm_map_nhds_eq (e : A ≃A[R] B) (a : A) : Filter.map e.symm (𝓝 (e a)) = 𝓝 a :=
   e.toHomeomorph.symm_map_nhds_eq a
 
 /-- The composition of two continuous algebra equivalences. -/
 @[trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**ContinuousAlgEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：trans (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) : A ≃A[R] C where __
+参数：e₁ : A ≃A[R] B；e₂ : B ≃A[R] C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  body: e₁.toAlgEquiv.trans e₂.toAlgEquiv
-  continuous_toFun := e₂.continuous_toFun.comp e₁.continuous_toFun
-  continuous_invFun := e₁.continuous_invFun.comp e₂.continuous_invFun
-
-@[simp]
-
-中文:
-定义 trans
-  签名: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  定义体: e₁.toAlgEquiv.trans e₂.toAlgEquiv
-  continuous_toFun := e₂.continuous_toFun.comp e₁.continuous_toFun
-  continuous_invFun := e₁.continuous_invFun.comp e₂.continuous_invFun
-
-@[simp]
-
-Depends on / 依赖: toAlgEquiv, toAlgEquiv.trans
+--- 原说明 ---
+The composition of two continuous algebra equivalences.
 -/
 def trans (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) : A ≃A[R] C where
   __ := e₁.toAlgEquiv.trans e₂.toAlgEquiv
@@ -1134,458 +736,288 @@ def trans (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) : A ≃A[R] C where
   continuous_invFun := e₁.continuous_invFun.comp e₂.continuous_invFun
 
 @[simp]
-/--
-theorem `trans_toAlgEquiv` / 定理 `trans_toAlgEquiv`
-
-English:
-theorem trans_toAlgEquiv
-  given: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trans_toAlgEquiv
-  条件: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.trans_toAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：trans_toAlgEquiv (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) : (e₁.trans e₂).toAlgEq
+uiv = e₁.toAlgEquiv.trans e₂.toAlgEquiv
+参数：e₁ : A ≃A[R] B；e₂ : B ≃A[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_toAlgEquiv (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) :
     (e₁.trans e₂).toAlgEquiv = e₁.toAlgEquiv.trans e₂.toAlgEquiv :=
   rfl
 
 @[simp]
-/--
-theorem `trans_toContinuousLinearEquiv` / 定理 `trans_toContinuousLinearEquiv`
-
-English:
-theorem trans_toContinuousLinearEquiv
-  given: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trans_toContinuousLinearEquiv
-  条件: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.trans_toContinuousLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Co
+ntinuousAlgEquiv`。
+形式化陈述：trans_toContinuousLinearEquiv (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) : (e₁.tran
+s e₂).toContinuousLinearEquiv = e₁.toContinuousLinearEquiv.trans e₂.toContinuous
+LinearEquiv
+参数：e₁ : A ≃A[R] B；e₂ : B ≃A[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_toContinuousLinearEquiv (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) :
     (e₁.trans e₂).toContinuousLinearEquiv
     = e₁.toContinuousLinearEquiv.trans e₂.toContinuousLinearEquiv := rfl
 
 @[simp]
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) (a : A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trans_apply
-  条件: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) (a : A)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgEquiv.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：trans_apply (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) (a : A) : (e₁.trans e₂) a = 
+e₂ (e₁ a)
+参数：e₁ : A ≃A[R] B；e₂ : B ≃A[R] C；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_apply (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) (a : A) :
     (e₁.trans e₂) a = e₂ (e₁ a) :=
   rfl
 
 @[simp]
-/--
-theorem `symm_trans_apply` / 定理 `symm_trans_apply`
-
-English:
-theorem symm_trans_apply
-  given: (e₁ : B ≃A[R] A) (e₂ : C ≃A[R] B) (a : A)
-  proof: rfl
-
-中文:
-定理 symm_trans_apply
-  条件: (e₁ : B ≃A[R] A) (e₂ : C ≃A[R] B) (a : A)
-  证明: rfl
+/-
+**ContinuousAlgEquiv.symm_trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEq
+uiv`。
+形式化陈述：symm_trans_apply (e₁ : B ≃A[R] A) (e₂ : C ≃A[R] B) (a : A) : (e₂.trans e₁)
+.symm a = e₂.symm (e₁.symm a)
+参数：e₁ : B ≃A[R] A；e₂ : C ≃A[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_trans_apply (e₁ : B ≃A[R] A) (e₂ : C ≃A[R] B) (a : A) :
     (e₂.trans e₁).symm a = e₂.symm (e₁.symm a) :=
   rfl
-
-/--
-theorem `comp_coe` / 定理 `comp_coe`
-
-English:
-theorem comp_coe
-  given: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  proof: by
-  rfl
-
-@[simp high]
-
-中文:
-定理 comp_coe
-  条件: (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C)
-  证明: by
-  rfl
-
-@[simp high]
+/-
+**ContinuousAlgEquiv.comp_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：comp_coe (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) : e₂.toAlgHom.comp e₁.toAlgHom 
+= e₁.trans e₂
+参数：e₁ : A ≃A[R] B；e₂ : B ≃A[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_coe (e₁ : A ≃A[R] B) (e₂ : B ≃A[R] C) :
     e₂.toAlgHom.comp e₁.toAlgHom = e₁.trans e₂ := by
   rfl
 
 @[simp high]
-/--
-theorem `coe_comp_coe_symm` / 定理 `coe_comp_coe_symm`
-
-English:
-theorem coe_comp_coe_symm
-  given: (e : A ≃A[R] B)
-  proof: ContinuousAlgHom.ext e.apply_symm_apply
-
-@[simp high]
-
-中文:
-定理 coe_comp_coe_symm
-  条件: (e : A ≃A[R] B)
-  证明: ContinuousAlgHom.ext e.apply_symm_apply
-
-@[simp high]
-
-Depends on / 依赖: ContinuousAlgHom, ContinuousAlgHom.ext, apply_symm_apply, e.apply_symm_apply
+/-
+**ContinuousAlgEquiv.coe_comp_coe_symm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgE
+quiv`。
+形式化陈述：coe_comp_coe_symm (e : A ≃A[R] B) : e.toContinuousAlgHom.comp e.symm = Con
+tinuousAlgHom.id R B
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
+· 使用定理 `ContinuousAlgEquiv.apply_symm_apply`：apply_symm_apply (e : A ≃A[R] B) (b
+ : B) : e (e.symm b) = b
 -/
 theorem coe_comp_coe_symm (e : A ≃A[R] B) :
     e.toContinuousAlgHom.comp e.symm = ContinuousAlgHom.id R B :=
   ContinuousAlgHom.ext e.apply_symm_apply
 
 @[simp high]
-/--
-theorem `coe_symm_comp_coe` / 定理 `coe_symm_comp_coe`
-
-English:
-theorem coe_symm_comp_coe
-  given: (e : A ≃A[R] B)
-  proof: ContinuousAlgHom.ext e.symm_apply_apply
-
-@[simp]
-
-中文:
-定理 coe_symm_comp_coe
-  条件: (e : A ≃A[R] B)
-  证明: ContinuousAlgHom.ext e.symm_apply_apply
-
-@[simp]
-
-Depends on / 依赖: ContinuousAlgHom, ContinuousAlgHom.ext, e.symm_apply_apply, symm_apply_apply
+/-
+**ContinuousAlgEquiv.coe_symm_comp_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgE
+quiv`。
+形式化陈述：coe_symm_comp_coe (e : A ≃A[R] B) : e.symm.toContinuousAlgHom.comp e = Con
+tinuousAlgHom.id R A
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
+· 使用定理 `ContinuousAlgEquiv.symm_apply_apply`：symm_apply_apply (e : A ≃A[R] B) (a
+ : A) : e.symm (e a) = a
 -/
 theorem coe_symm_comp_coe (e : A ≃A[R] B) :
     e.symm.toContinuousAlgHom.comp e = ContinuousAlgHom.id R A :=
   ContinuousAlgHom.ext e.symm_apply_apply
 
 @[simp]
-/--
-theorem `symm_comp_self` / 定理 `symm_comp_self`
-
-English:
-theorem symm_comp_self
-  given: (e : A ≃A[R] B)
-  statement: (e.symm : B -> A) ∘ e = id
-  proof: by
-exact funext e.symm_apply_apply
-
-@[simp]
-
-中文:
-定理 symm_comp_self
-  条件: (e : A ≃A[R] B)
-  结论: (e.symm : B -> A) ∘ e = id
-  证明: by
-exact funext e.symm_apply_apply
-
-@[simp]
-
-Depends on / 依赖: e.symm_apply_apply, symm_apply_apply
+/-
+**ContinuousAlgEquiv.symm_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqui
+v`。
+形式化陈述：symm_comp_self (e : A ≃A[R] B) : (e.symm : B -> A) ∘ e = id
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ContinuousAlgEquiv.symm_apply_apply`：symm_apply_apply (e : A ≃A[R] B) (a
+ : A) : e.symm (e a) = a
 -/
-theorem symm_comp_self (e : A ≃A[R] B) : (e.symm : B -> A) ∘ e = id := by
-exact funext e.symm_apply_apply
+theorem symm_comp_self (e : A ≃A[R] B) : (e.symm : B → A) ∘ e = id := by
+  exact funext <| e.symm_apply_apply
 
 @[simp]
-/--
-theorem `self_comp_symm` / 定理 `self_comp_symm`
-
-English:
-theorem self_comp_symm
-  given: (e : A ≃A[R] B)
-  statement: (e : A -> B) ∘ e.symm = id
-  proof: funext e.apply_symm_apply
-
-@[simp]
-
-中文:
-定理 self_comp_symm
-  条件: (e : A ≃A[R] B)
-  结论: (e : A -> B) ∘ e.symm = id
-  证明: funext e.apply_symm_apply
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, e.apply_symm_apply
+/-
+**ContinuousAlgEquiv.self_comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqui
+v`。
+形式化陈述：self_comp_symm (e : A ≃A[R] B) : (e : A -> B) ∘ e.symm = id
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ContinuousAlgEquiv.apply_symm_apply`：apply_symm_apply (e : A ≃A[R] B) (b
+ : B) : e (e.symm b) = b
 -/
-theorem self_comp_symm (e : A ≃A[R] B) : (e : A -> B) ∘ e.symm = id :=
-funext e.apply_symm_apply
+theorem self_comp_symm (e : A ≃A[R] B) : (e : A → B) ∘ e.symm = id :=
+  funext <| e.apply_symm_apply
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (e : A ≃A[R] B)
-  statement: e.symm.symm = e
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (e : A ≃A[R] B)
-  结论: e.symm.symm = e
-  证明: rfl
+/-
+**ContinuousAlgEquiv.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：symm_symm (e : A ≃A[R] B) : e.symm.symm = e
+参数：e : A ≃A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm (e : A ≃A[R] B) : e.symm.symm = e := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (symm : (A ≃A[R] B) -> _)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (symm : (A ≃A[R] B) -> _)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**ContinuousAlgEquiv.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqui
+v`。
+形式化陈述：symm_bijective : Function.Bijective (symm : (A ≃A[R] B) -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `ContinuousAlgEquiv.symm_symm`：symm_symm (e : A ≃A[R] B) : e.symm.symm = 
+e
 -/
-theorem symm_bijective : Function.Bijective (symm : (A ≃A[R] B) -> _) :=
+theorem symm_bijective : Function.Bijective (symm : (A ≃A[R] B) → _) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  statement: (refl R A).symm = refl R A
-  proof: rfl
-
-中文:
-定理 refl_symm
-  结论: (refl R A).symm = refl R A
-  证明: rfl
+/-
+**ContinuousAlgEquiv.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：refl_symm : (refl R A).symm = refl R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_symm : (refl R A).symm = refl R A := rfl
-
-/--
-theorem `symm_symm_apply` / 定理 `symm_symm_apply`
-
-English:
-theorem symm_symm_apply
-  given: (e : A ≃A[R] B) (a : A)
-  statement: e.symm.symm a = e a
-  proof: rfl
-
-中文:
-定理 symm_symm_apply
-  条件: (e : A ≃A[R] B) (a : A)
-  结论: e.symm.symm a = e a
-  证明: rfl
+/-
+**ContinuousAlgEquiv.symm_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqu
+iv`。
+形式化陈述：symm_symm_apply (e : A ≃A[R] B) (a : A) : e.symm.symm a = e a
+参数：e : A ≃A[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm_apply (e : A ≃A[R] B) (a : A) : e.symm.symm a = e a := rfl
-
-/--
-theorem `symm_apply_eq` / 定理 `symm_apply_eq`
-
-English:
-theorem symm_apply_eq
-  given: (e : A ≃A[R] B) {a : A} {b : B}
-  statement: e.symm b = a ↔ b = e a
-  proof: e.toEquiv.symm_apply_eq
-
-中文:
-定理 symm_apply_eq
-  条件: (e : A ≃A[R] B) {a : A} {b : B}
-  结论: e.symm b = a ↔ b = e a
-  证明: e.toEquiv.symm_apply_eq
-
-Depends on / 依赖: e.toEquiv.symm_apply_eq, symm_apply_eq, toEquiv
+/-
+**ContinuousAlgEquiv.symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv
+`。
+形式化陈述：symm_apply_eq (e : A ≃A[R] B) {a : A} {b : B} : e.symm b = a ↔ b = e a
+参数：e : A ≃A[R] B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
 -/
 theorem symm_apply_eq (e : A ≃A[R] B) {a : A} {b : B} : e.symm b = a ↔ b = e a :=
   e.toEquiv.symm_apply_eq
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  given: (e : A ≃A[R] B) {a : A} {b : B}
-  statement: a = e.symm b ↔ e a = b
-  proof: e.toEquiv.eq_symm_apply
-
-中文:
-定理 eq_symm_apply
-  条件: (e : A ≃A[R] B) {a : A} {b : B}
-  结论: a = e.symm b ↔ e a = b
-  证明: e.toEquiv.eq_symm_apply
-
-Depends on / 依赖: e.toEquiv.eq_symm_apply, eq_symm_apply, toEquiv
+/-
+**ContinuousAlgEquiv.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv
+`。
+形式化陈述：eq_symm_apply (e : A ≃A[R] B) {a : A} {b : B} : a = e.symm b ↔ e a = b
+参数：e : A ≃A[R] B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem eq_symm_apply (e : A ≃A[R] B) {a : A} {b : B} : a = e.symm b ↔ e a = b :=
   e.toEquiv.eq_symm_apply
-
-/--
-theorem `image_eq_preimage_symm` / 定理 `image_eq_preimage_symm`
-
-English:
-theorem image_eq_preimage_symm
-  given: (e : A ≃A[R] B) (S : Set A)
-  statement: e '' S = e.symm ⁻¹' S
-  proof: e.toEquiv.image_eq_preimage_symm S
-
-中文:
-定理 image_eq_preimage_symm
-  条件: (e : A ≃A[R] B) (S : 集合 A)
-  结论: e '' S = e.symm ⁻¹' S
-  证明: e.toEquiv.image_eq_preimage_symm S
-
-Depends on / 依赖: e.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
+/-
+**ContinuousAlgEquiv.image_eq_preimage_symm** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sAlgEquiv`。
+形式化陈述：image_eq_preimage_symm (e : A ≃A[R] B) (S : Set A) : e '' S = e.symm ⁻¹' S
+参数：e : A ≃A[R] B；S : Set A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 theorem image_eq_preimage_symm (e : A ≃A[R] B) (S : Set A) : e '' S = e.symm ⁻¹' S :=
   e.toEquiv.image_eq_preimage_symm S
-
-/--
-theorem `image_symm_eq_preimage` / 定理 `image_symm_eq_preimage`
-
-English:
-theorem image_symm_eq_preimage
-  given: (e : A ≃A[R] B) (S : Set B)
-  statement: e.symm '' S = e ⁻¹' S
-  proof: by
-  rw [e.symm.image_eq_preimage_symm]; rw [e.symm_symm]
-
-@[simp]
-
-中文:
-定理 image_symm_eq_preimage
-  条件: (e : A ≃A[R] B) (S : 集合 B)
-  结论: e.symm '' S = e ⁻¹' S
-  证明: by
-  rw [e.symm.image_eq_preimage_symm]; rw [e.symm_symm]
-
-@[simp]
-
-Depends on / 依赖: e.symm.image_eq_preimage_symm, e.symm_symm, image_eq_preimage_symm, symm_symm
+/-
+**ContinuousAlgEquiv.image_symm_eq_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sAlgEquiv`。
+形式化陈述：image_symm_eq_preimage (e : A ≃A[R] B) (S : Set B) : e.symm '' S = e ⁻¹' S
+参数：e : A ≃A[R] B；S : Set B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousAlgEquiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : A
+ ≃A[R] B) (S : Set A) : e '' S = e.symm ⁻¹' S
+· 使用定理 `ContinuousAlgEquiv.symm_symm`：symm_symm (e : A ≃A[R] B) : e.symm.symm = 
+e
 -/
 theorem image_symm_eq_preimage (e : A ≃A[R] B) (S : Set B) : e.symm '' S = e ⁻¹' S := by
-  rw [e.symm.image_eq_preimage_symm]; rw [e.symm_symm]
+  rw [e.symm.image_eq_preimage_symm, e.symm_symm]
 
 @[simp]
-/--
-theorem `symm_preimage_preimage` / 定理 `symm_preimage_preimage`
-
-English:
-theorem symm_preimage_preimage
-  given: (e : A ≃A[R] B) (S : Set B)
-  statement: e.symm ⁻¹' e ⁻¹' S = S
-  proof: e.toEquiv.symm_preimage_preimage S
-
-@[simp]
-
-中文:
-定理 symm_preimage_preimage
-  条件: (e : A ≃A[R] B) (S : 集合 B)
-  结论: e.symm ⁻¹' e ⁻¹' S = S
-  证明: e.toEquiv.symm_preimage_preimage S
-
-@[simp]
-
-Depends on / 依赖: e.toEquiv.symm_preimage_preimage, symm_preimage_preimage, toEquiv
+/-
+**ContinuousAlgEquiv.symm_preimage_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sAlgEquiv`。
+形式化陈述：symm_preimage_preimage (e : A ≃A[R] B) (S : Set B) : e.symm ⁻¹' e ⁻¹' S = 
+S
+参数：e : A ≃A[R] B；S : Set B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_preimage_preimage`：symm_preimage_preimage {α β} (e : α ≃ β) (
+s : Set β) : e.symm ⁻¹' e ⁻¹' s = s
 -/
 theorem symm_preimage_preimage (e : A ≃A[R] B) (S : Set B) : e.symm ⁻¹' e ⁻¹' S = S :=
   e.toEquiv.symm_preimage_preimage S
 
 @[simp]
-/--
-theorem `preimage_symm_preimage` / 定理 `preimage_symm_preimage`
-
-English:
-theorem preimage_symm_preimage
-  given: (e : A ≃A[R] B) (S : Set A)
-  statement: e ⁻¹' e.symm ⁻¹' S = S
-  proof: e.symm.symm_preimage_preimage S
-
-中文:
-定理 preimage_symm_preimage
-  条件: (e : A ≃A[R] B) (S : 集合 A)
-  结论: e ⁻¹' e.symm ⁻¹' S = S
-  证明: e.symm.symm_preimage_preimage S
-
-Depends on / 依赖: e.symm.symm_preimage_preimage, symm_preimage_preimage
+/-
+**ContinuousAlgEquiv.preimage_symm_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sAlgEquiv`。
+形式化陈述：preimage_symm_preimage (e : A ≃A[R] B) (S : Set A) : e ⁻¹' e.symm ⁻¹' S = 
+S
+参数：e : A ≃A[R] B；S : Set A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgEquiv.symm_preimage_preimage`：symm_preimage_preimage (e : A
+ ≃A[R] B) (S : Set B) : e.symm ⁻¹' e ⁻¹' S = S
 -/
 theorem preimage_symm_preimage (e : A ≃A[R] B) (S : Set A) : e ⁻¹' e.symm ⁻¹' S = S :=
   e.symm.symm_preimage_preimage S
-
-/--
-theorem `isUniformEmbedding` / 定理 `isUniformEmbedding`
-
-English:
-theorem isUniformEmbedding
-  statement: {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂] [Ring E₁]
-  proof: e.toAlgEquiv.isUniformEmbedding e.toContinuousAlgHom.uniformContinuous
-    e.symm.toContinuousAlgHom.uniformContinuous
-
-中文:
-定理 isUniformEmbedding
-  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂] [环 E₁]
-  证明: e.toAlgEquiv.isUniformEmbedding e.toContinuousAlgHom.uniformContinuous
-    e.symm.toContinuousAlgHom.uniformContinuous
-
-Depends on / 依赖: e.symm.toContinuousAlgHom.uniformContinuous, e.toAlgEquiv.isUniformEmbedding, e.toContinuousAlgHom.uniformContinuous, isUniformEmbedding, toAlgEquiv, toContinuousAlgHom, uniformContinuous
+/-
+**ContinuousAlgEquiv.isUniformEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlg
+Equiv`。
+形式化陈述：isUniformEmbedding {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂] [Ri
+ng E₁] [IsUniformAddGroup E₁] [Algebra R E₁] [Ring E₂] [IsUniformAddGroup E₂] [A
+lgebra R E₂] (e : E₁ ≃A[R] E₂) : IsUniformEmbedding e
+参数：e : E₁ ≃A[R] E₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.isUniformEmbedding`：Equiv.isUniformEmbedding {α β : Type*} [Unifor
+mSpace α] [UniformSpace β] (f : α ≃ β) (h₁ : UniformContinuous f) (h₂ : UniformC
+ontinuous f.sy…
+· 使用定理 `ContinuousAlgHom.uniformContinuous`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {E₁ : Type u_4} {E₂ : Type u_5} [inst_1 : UniformSpace E₁]   [inst_2 : Unif
+ormSpace E₂] [inst_3 : R…
 -/
 theorem isUniformEmbedding {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂] [Ring E₁]
     [IsUniformAddGroup E₁] [Algebra R E₁] [Ring E₂] [IsUniformAddGroup E₂] [Algebra R E₂]
     (e : E₁ ≃A[R] E₂) : IsUniformEmbedding e :=
   e.toAlgEquiv.isUniformEmbedding e.toContinuousAlgHom.uniformContinuous
     e.symm.toContinuousAlgHom.uniformContinuous
-
-/--
-theorem `_root_.AlgEquiv.isUniformEmbedding` / 定理 `_root_.AlgEquiv.isUniformEmbedding`
-
-English:
-theorem _root_.AlgEquiv.isUniformEmbedding
-  statement: {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂]
-  proof: ContinuousAlgEquiv.isUniformEmbedding { e with
-    continuous_toFun := h₁
-    continuous_invFun := by dsimp; fun_prop }
-
-中文:
-定理 _root_.代数等价.isUniformEmbedding
-  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂]
-  证明: ContinuousAlgEquiv.isUniformEmbedding { e with
-    continuous_toFun := h₁
-    continuous_invFun := by dsimp; fun_prop }
-
-Depends on / 依赖: ContinuousAlgEquiv, ContinuousAlgEquiv.isUniformEmbedding, continuous_invFun, continuous_toFun, fun_prop, isUniformEmbedding
+/-
+**ContinuousAlgEquiv._root_.AlgEquiv.isUniformEmbedding** 是 Mathlib 中的一个定理，位于命名空
+间 `ContinuousAlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.AlgEquiv.isUniformEmbedding {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂]
     [Ring E₁] [IsUniformAddGroup E₁] [Algebra R E₁] [Ring E₂] [IsUniformAddGroup E₂] [Algebra R E₂]
@@ -1594,98 +1026,73 @@ theorem _root_.AlgEquiv.isUniformEmbedding {E₁ E₂ : Type*} [UniformSpace E�
   ContinuousAlgEquiv.isUniformEmbedding { e with
     continuous_toFun := h₁
     continuous_invFun := by dsimp; fun_prop }
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  given: (e : A ≃A[R] B)
-  statement: Function.Surjective e
-  proof: e.toAlgEquiv.surjective
-
-中文:
-定理 surjective
-  条件: (e : A ≃A[R] B)
-  结论: 函数.满射 e
-  证明: e.toAlgEquiv.surjective
-
-Depends on / 依赖: e.toAlgEquiv.surjective, surjective, toAlgEquiv
+/-
+**ContinuousAlgEquiv.surjective** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：surjective (e : A ≃A[R] B) : Function.Surjective e
+参数：e : A ≃A[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.surjective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [in
+st : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : A
+lgebra R …
 -/
 theorem surjective (e : A ≃A[R] B) : Function.Surjective e := e.toAlgEquiv.surjective
 
-/--
-Definition of `cast` / `cast` 的定义
+/-- `Equiv.cast (congrArg _ h)` as a continuous algebra equiv.
 
-English:
-definition cast
-  signature: {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)] [(i : ι) -> Algebra R (A i)]
-  body: AlgEquiv.cast h
-  continuous_toFun := by cases h; exact continuous_id
-  continuous_invFun := by cases h; exact continuous_id
+Note that unlike `Equiv.cast`, this takes an equality of indices rather than an equality of types,
+to avoid having to deal with an equality of the algebraic structure itself. -/
+/-
+**ContinuousAlgEquiv.cast** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：cast {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)] [(i : ι) -> 
+Algebra R (A i)] [(i : ι) -> TopologicalSpace (A i)] {i j : ι} (h : i = j) : A i
+ ≃A[R] A j where __
+参数：i : ι；A i；i : ι；A i；i : ι；A i；h : i = j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+`Equiv.cast (congrArg _ h)` as a continuous algebra equiv.
 
-中文:
-定义 cast
-  签名: {ι : 类型} {A : ι -> 类型} [(i : ι) -> 半环 (A i)] [(i : ι) -> 代数 R (A i)]
-  定义体: AlgEquiv.cast h
-  continuous_toFun := by cases h; exact continuous_id
-  continuous_invFun := by cases h; exact continuous_id
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.cast
+Note that unlike `Equiv.cast`, this takes an equality of indices rather than an 
+equality of types,
+to avoid having to deal with an equality of the algebraic structure itself.
 -/
-def cast {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)] [(i : ι) -> Algebra R (A i)]
-    [(i : ι) -> TopologicalSpace (A i)] {i j : ι} (h : i = j) :
+def cast {ι : Type*} {A : ι → Type*} [(i : ι) → Semiring (A i)] [(i : ι) → Algebra R (A i)]
+    [(i : ι) → TopologicalSpace (A i)] {i j : ι} (h : i = j) :
     A i ≃A[R] A j where
   __ := AlgEquiv.cast h
   continuous_toFun := by cases h; exact continuous_id
   continuous_invFun := by cases h; exact continuous_id
 
 @[simp]
-/--
-theorem `cast_apply` / 定理 `cast_apply`
-
-English:
-theorem cast_apply
-  statement: {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_apply
-  结论: {ι : 类型} {A : ι -> 类型} [(i : ι) -> 半环 (A i)]
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Equiv.cast
+/-
+**ContinuousAlgEquiv.cast_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEquiv`。
+形式化陈述：cast_apply {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)] [(i : 
+ι) -> Algebra R (A i)] [(i : ι) -> TopologicalSpace (A i)] {i j : ι} (h : i = j)
+ (x : A i) : cast (R
+参数：i : ι；A i；i : ι；A i；i : ι；A i；h : i = j；x : A i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cast_apply {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)]
-    [(i : ι) -> Algebra R (A i)] [(i : ι) -> TopologicalSpace (A i)] {i j : ι} (h : i = j) (x : A i) :
+theorem cast_apply {ι : Type*} {A : ι → Type*} [(i : ι) → Semiring (A i)]
+    [(i : ι) → Algebra R (A i)] [(i : ι) → TopologicalSpace (A i)] {i j : ι} (h : i = j) (x : A i) :
     cast (R := R) h x = Equiv.cast (congrArg A h) x := rfl
 
 @[simp]
-/--
-theorem `cast_symm_apply` / 定理 `cast_symm_apply`
-
-English:
-theorem cast_symm_apply
-  statement: {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)]
-  proof: rfl
-
-中文:
-定理 cast_symm_apply
-  结论: {ι : 类型} {A : ι -> 类型} [(i : ι) -> 半环 (A i)]
-  证明: rfl
-
-Depends on / 依赖: Equiv.cast, h.symm
+/-
+**ContinuousAlgEquiv.cast_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgEqu
+iv`。
+形式化陈述：cast_symm_apply {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)] [
+(i : ι) -> Algebra R (A i)] [(i : ι) -> TopologicalSpace (A i)] {i j : ι} (h : i
+ = j) (x : A j) : (cast (R
+参数：i : ι；A i；i : ι；A i；i : ι；A i；h : i = j；x : A j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cast_symm_apply {ι : Type*} {A : ι -> Type*} [(i : ι) -> Semiring (A i)]
-    [(i : ι) -> Algebra R (A i)] [(i : ι) -> TopologicalSpace (A i)] {i j : ι} (h : i = j)
+theorem cast_symm_apply {ι : Type*} {A : ι → Type*} [(i : ι) → Semiring (A i)]
+    [(i : ι) → Algebra R (A i)] [(i : ι) → TopologicalSpace (A i)] {i j : ι} (h : i = j)
     (x : A j) : (cast (R := R) h).symm x = Equiv.cast (congrArg A h.symm) x := rfl
 
 end ContinuousAlgEquiv
+

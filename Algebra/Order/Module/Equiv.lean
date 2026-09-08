@@ -18,94 +18,60 @@ public import Mathlib.Algebra.Order.Module.Synonym
 variable (α β : Type*)
 variable [Semiring α] [AddCommMonoid β] [Module α β]
 
-/--
-Definition of `toLexLinearEquiv` / `toLexLinearEquiv` 的定义
+/-- `toLex` as a linear equivalence -/
+/-
+**toLexLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toLexLinearEquiv : β ≃ₗ[α] Lex β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLexLinearEquiv
-  signature: : β ≃ₗ[α] Lex β
-  body: (toLexAddEquiv β).toLinearEquiv toLex_smul
-
-中文:
-定义 toLexLinearEquiv
-  签名: : β ≃ₗ[α] Lex β
-  定义体: (toLexAddEquiv β).toLinearEquiv toLex_smul
-
-Depends on / 依赖: toLexAddEquiv, toLex_smul, toLinearEquiv
+--- 原说明 ---
+`toLex` as a linear equivalence
 -/
 def toLexLinearEquiv : β ≃ₗ[α] Lex β := (toLexAddEquiv β).toLinearEquiv toLex_smul
 
-/--
-Definition of `ofLexLinearEquiv` / `ofLexLinearEquiv` 的定义
+/-- `ofLex` as a linear equivalence -/
+/-
+**ofLexLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ofLexLinearEquiv : Lex β ≃ₗ[α] β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLexLinearEquiv
-  signature: : Lex β ≃ₗ[α] β
-  body: (ofLexAddEquiv β).toLinearEquiv ofLex_smul
-
-中文:
-定义 ofLexLinearEquiv
-  签名: : Lex β ≃ₗ[α] β
-  定义体: (ofLexAddEquiv β).toLinearEquiv ofLex_smul
-
-Depends on / 依赖: ofLexAddEquiv, ofLex_smul, toLinearEquiv
+--- 原说明 ---
+`ofLex` as a linear equivalence
 -/
 def ofLexLinearEquiv : Lex β ≃ₗ[α] β := (ofLexAddEquiv β).toLinearEquiv ofLex_smul
-
-/--
-lemma `coe_toLexLinearEquiv` / 引理 `coe_toLexLinearEquiv`
-
-English:
-lemma coe_toLexLinearEquiv
-  statement: ⇑(toLexLinearEquiv α β) = toLex
-  proof: rfl
-
-中文:
-引理 coe_toLexLinearEquiv
-  结论: ⇑(toLexLinearEquiv α β) = toLex
-  证明: rfl
+/-
+**coe_toLexLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : Semiring α] [inst_1 : AddCommMonoi
+d β] [inst_2 : _root_.Module α β],   ⇑(toLexLinearEquiv α β) = ⇑toLex
+参数：α : Type u_1；β : Type u_2；toLexLinearEquiv α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toLexLinearEquiv : ⇑(toLexLinearEquiv α β) = toLex := rfl
-/--
-lemma `coe_ofLexLinearEquiv` / 引理 `coe_ofLexLinearEquiv`
-
-English:
-lemma coe_ofLexLinearEquiv
-  statement: ⇑(ofLexLinearEquiv α β) = ofLex
-  proof: rfl
-
-中文:
-引理 coe_ofLexLinearEquiv
-  结论: ⇑(ofLexLinearEquiv α β) = ofLex
-  证明: rfl
+/-
+**coe_ofLexLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : Semiring α] [inst_1 : AddCommMonoi
+d β] [inst_2 : _root_.Module α β],   ⇑(ofLexLinearEquiv α β) = ⇑ofLex
+参数：α : Type u_1；β : Type u_2；ofLexLinearEquiv α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_ofLexLinearEquiv : ⇑(ofLexLinearEquiv α β) = ofLex := rfl
-
-/--
-lemma `symm_toLexLinearEquiv` / 引理 `symm_toLexLinearEquiv`
-
-English:
-lemma symm_toLexLinearEquiv
-  statement: (toLexLinearEquiv α β).symm = ofLexLinearEquiv α β
-  proof: rfl
-
-中文:
-引理 symm_toLexLinearEquiv
-  结论: (toLexLinearEquiv α β).symm = ofLexLinearEquiv α β
-  证明: rfl
+/-
+**symm_toLexLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : Semiring α] [inst_1 : AddCommMonoi
+d β] [inst_2 : _root_.Module α β],   (toLexLinearEquiv α β).symm = ofLexLinearEq
+uiv α β
+参数：α : Type u_1；β : Type u_2；toLexLinearEquiv α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma symm_toLexLinearEquiv : (toLexLinearEquiv α β).symm = ofLexLinearEquiv α β := rfl
-/--
-lemma `symm_ofLexLinearEquiv` / 引理 `symm_ofLexLinearEquiv`
-
-English:
-lemma symm_ofLexLinearEquiv
-  statement: (ofLexLinearEquiv α β).symm = toLexLinearEquiv α β
-  proof: rfl
-
-中文:
-引理 symm_ofLexLinearEquiv
-  结论: (ofLexLinearEquiv α β).symm = toLexLinearEquiv α β
-  证明: rfl
+/-
+**symm_ofLexLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (α : Type u_1) (β : Type u_2) [inst : Semiring α] [inst_1 : AddCommMonoi
+d β] [inst_2 : _root_.Module α β],   (ofLexLinearEquiv α β).symm = toLexLinearEq
+uiv α β
+参数：α : Type u_1；β : Type u_2；ofLexLinearEquiv α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma symm_ofLexLinearEquiv : (ofLexLinearEquiv α β).symm = toLexLinearEquiv α β := rfl

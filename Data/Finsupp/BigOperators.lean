@@ -38,211 +38,183 @@ public section
 
 variable {ι M : Type*} [DecidableEq ι]
 
-/--
-theorem `List.support_sum_subset` / 定理 `List.support_sum_subset`
-
-English:
-theorem List.support_sum_subset
-  given: [AddZeroClass M] (l : List (ι ->₀ M))
-  proof: by
+/-
+**List.support_sum_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：List.support_sum_subset [AddZeroClass M] (l : List (ι ->₀ M)) : l.sum.supp
+ort subseteq l.foldr (Finsupp.support · ⊔ ·) ∅
+参数：l : List (ι ->₀ M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Finsupp.support_add`：support_add [DecidableEq ι] : (g₁ + g₂).support sub
+seteq g₁.support union g₂.support
+· 使用定理 `Finset.union_subset_union`：union_subset_union (hsu : s subseteq u) (htv 
+: t subseteq v) : s union t subseteq u union v
+· 使用定理 `Finset.Subset.rfl`：∀ {α : Type u_1} {s : Finset α}, s ⊆ s
+-/
+theorem List.support_sum_subset [AddZeroClass M] (l : List (ι →₀ M)) :
+    l.sum.support ⊆ l.foldr (Finsupp.support · ⊔ ·) ∅ := by
   induction l with
   | nil => simp
   | cons hd tl IH =>
     simp only [List.sum_cons]
     exact Finsupp.support_add.trans (Finset.union_subset_union Finset.Subset.rfl IH)
-
-中文:
-定理 列表.support_sum_subset
-  条件: [加法零类 M] (l : 列表 (ι ->₀ M))
-  证明: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH =>
-    simp only [List.sum_cons]
-    exact Finsupp.support_add.trans (Finset.union_subset_union Finset.Subset.rfl IH)
-
-Depends on / 依赖: Finset, Finset.Subset.rfl, Finset.union_subset_union, Finsupp, Finsupp.support_add.trans, List.sum_cons, Subset, sum_cons, support_add, union_subset_union
+/-
+**Multiset.support_sum_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.support_sum_subset [AddCommMonoid M] (s : Multiset (ι ->₀ M)) : s
+.sum.support subseteq (s.map Finsupp.support).sup
+参数：s : Multiset (ι ->₀ M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldr_map`：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β : Type u_3} {f : α₁
+ → α₂} {g : α₂ → β → β} {l : List α₁} {init : β},   List.foldr g init (List.map 
+f l)…
+· 使用定理 `List.support_sum_subset`：List.support_sum_subset [AddZeroClass M] (l : L
+ist (ι ->₀ M)) : l.sum.support subseteq l.foldr (Finsupp.support · ⊔ ·) ∅
 -/
-theorem List.support_sum_subset [AddZeroClass M] (l : List (ι ->₀ M)) :
-    l.sum.support subseteq l.foldr (Finsupp.support · ⊔ ·) ∅ := by
-  induction l with
-  | nil => simp
-  | cons hd tl IH =>
-    simp only [List.sum_cons]
-    exact Finsupp.support_add.trans (Finset.union_subset_union Finset.Subset.rfl IH)
-
-/--
-theorem `Multiset.support_sum_subset` / 定理 `Multiset.support_sum_subset`
-
-English:
-theorem Multiset.support_sum_subset
-  given: [AddCommMonoid M] (s : Multiset (ι ->₀ M))
-  proof: by
+theorem Multiset.support_sum_subset [AddCommMonoid M] (s : Multiset (ι →₀ M)) :
+    s.sum.support ⊆ (s.map Finsupp.support).sup := by
   induction s using Quot.inductionOn
   simpa only [Multiset.quot_mk_to_coe'', Multiset.sum_coe, Multiset.map_coe, Multiset.sup_coe,
     List.foldr_map] using! List.support_sum_subset _
-
-中文:
-定理 Multiset.support_sum_subset
-  条件: [加法交换幺半群 M] (s : Multiset (ι ->₀ M))
-  证明: by
-  induction s using Quot.inductionOn
-  simpa only [Multiset.quot_mk_to_coe'', Multiset.sum_coe, Multiset.map_coe, Multiset.sup_coe,
-    List.foldr_map] using! List.support_sum_subset _
-
-Depends on / 依赖: List.foldr_map, List.support_sum_subset, Multiset, Multiset.map_coe, Multiset.quot_mk_to_coe, Multiset.sum_coe, Multiset.sup_coe, Quot.inductionOn, foldr_map, inductionOn, map_coe, quot_mk_to_coe, sum_coe, sup_coe, support_sum_subset
+/-
+**Finset.support_sum_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.support_sum_subset [AddCommMonoid M] (s : Finset (ι ->₀ M)) : (s.su
+m id).support subseteq Finset.sup s Finsupp.support
+参数：s : Finset (ι ->₀ M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_val`：∀ {M : Type u_3} [inst : AddCommMonoid M] (s : Finset M)
+, s.val.sum = s.sum id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Multiset.support_sum_subset`：Multiset.support_sum_subset [AddCommMonoid 
+M] (s : Multiset (ι ->₀ M)) : s.sum.support subseteq (s.map Finsupp.support).sup
 -/
-theorem Multiset.support_sum_subset [AddCommMonoid M] (s : Multiset (ι ->₀ M)) :
-    s.sum.support subseteq (s.map Finsupp.support).sup := by
-  induction s using Quot.inductionOn
-  simpa only [Multiset.quot_mk_to_coe'', Multiset.sum_coe, Multiset.map_coe, Multiset.sup_coe,
-    List.foldr_map] using! List.support_sum_subset _
-
-/--
-theorem `Finset.support_sum_subset` / 定理 `Finset.support_sum_subset`
-
-English:
-theorem Finset.support_sum_subset
-  given: [AddCommMonoid M] (s : Finset (ι ->₀ M))
-  proof: by
+theorem Finset.support_sum_subset [AddCommMonoid M] (s : Finset (ι →₀ M)) :
+    (s.sum id).support ⊆ Finset.sup s Finsupp.support := by
   convert! Multiset.support_sum_subset s.1; simp
-
-中文:
-定理 有限集.support_sum_subset
-  条件: [加法交换幺半群 M] (s : 有限集 (ι ->₀ M))
-  证明: by
-  convert! Multiset.support_sum_subset s.1; simp
-
-Depends on / 依赖: Multiset, Multiset.support_sum_subset, convert, support_sum_subset
+/-
+**List.mem_foldr_sup_support_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：List.mem_foldr_sup_support_iff [Zero M] {l : List (ι ->₀ M)} {x : ι} : x i
+n l.foldr (Finsupp.support · ⊔ ·) ∅ ↔ exists f in l, x in f.support
+参数：ι ->₀ M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Finset.support_sum_subset [AddCommMonoid M] (s : Finset (ι ->₀ M)) :
-    (s.sum id).support subseteq Finset.sup s Finsupp.support := by
-  convert! Multiset.support_sum_subset s.1; simp
-
-/--
-theorem `List.mem_foldr_sup_support_iff` / 定理 `List.mem_foldr_sup_support_iff`
-
-English:
-theorem List.mem_foldr_sup_support_iff
-  given: [Zero M] {l : List (ι ->₀ M)} {x : ι}
-  proof: by
+theorem List.mem_foldr_sup_support_iff [Zero M] {l : List (ι →₀ M)} {x : ι} :
+    x ∈ l.foldr (Finsupp.support · ⊔ ·) ∅ ↔ ∃ f ∈ l, x ∈ f.support := by
   simp only [Finset.sup_eq_union, Finsupp.mem_support_iff]
   induction l with
   | nil => simp
   | cons hd tl IH =>
     simp only [foldr, Finset.mem_union, Finsupp.mem_support_iff, ne_eq, IH,
       mem_cons, exists_eq_or_imp]
-
-中文:
-定理 列表.mem_foldr_sup_support_iff
-  条件: [零 M] {l : 列表 (ι ->₀ M)} {x : ι}
-  证明: by
-  simp only [Finset.sup_eq_union, Finsupp.mem_support_iff]
-  induction l with
-  | nil => simp
-  | cons hd tl IH =>
-    simp only [foldr, Finset.mem_union, Finsupp.mem_support_iff, ne_eq, IH,
-      mem_cons, exists_eq_or_imp]
-
-Depends on / 依赖: Finset, Finset.mem_union, Finset.sup_eq_union, Finsupp, Finsupp.mem_support_iff, exists_eq_or_imp, mem_cons, mem_support_iff, mem_union, ne_eq, sup_eq_union
+/-
+**Multiset.mem_sup_map_support_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.mem_sup_map_support_iff [Zero M] {s : Multiset (ι ->₀ M)} {x : ι}
+ : x in (s.map Finsupp.support).sup ↔ exists f in s, x in f.support
+参数：ι ->₀ M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldr_map`：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β : Type u_3} {f : α₁
+ → α₂} {g : α₂ → β → β} {l : List α₁} {init : β},   List.foldr g init (List.map 
+f l)…
+· 使用定理 `List.mem_foldr_sup_support_iff`：List.mem_foldr_sup_support_iff [Zero M] 
+{l : List (ι ->₀ M)} {x : ι} : x in l.foldr (Finsupp.support · ⊔ ·) ∅ ↔ exists f
+ in l, x in f.suppor…
 -/
-theorem List.mem_foldr_sup_support_iff [Zero M] {l : List (ι ->₀ M)} {x : ι} :
-    x in l.foldr (Finsupp.support · ⊔ ·) ∅ ↔ exists f in l, x in f.support := by
-  simp only [Finset.sup_eq_union, Finsupp.mem_support_iff]
-  induction l with
-  | nil => simp
-  | cons hd tl IH =>
-    simp only [foldr, Finset.mem_union, Finsupp.mem_support_iff, ne_eq, IH,
-      mem_cons, exists_eq_or_imp]
-
-/--
-theorem `Multiset.mem_sup_map_support_iff` / 定理 `Multiset.mem_sup_map_support_iff`
-
-English:
-theorem Multiset.mem_sup_map_support_iff
-  given: [Zero M] {s : Multiset (ι ->₀ M)} {x : ι}
-  proof: Quot.inductionOn s fun _ => by
+theorem Multiset.mem_sup_map_support_iff [Zero M] {s : Multiset (ι →₀ M)} {x : ι} :
+    x ∈ (s.map Finsupp.support).sup ↔ ∃ f ∈ s, x ∈ f.support :=
+  Quot.inductionOn s fun _ ↦ by
     simpa only [Multiset.quot_mk_to_coe'', Multiset.map_coe, Multiset.sup_coe, List.foldr_map]
     using! List.mem_foldr_sup_support_iff
-
-中文:
-定理 Multiset.mem_sup_map_support_iff
-  条件: [零 M] {s : Multiset (ι ->₀ M)} {x : ι}
-  证明: Quot.inductionOn s fun _ => by
-    simpa only [Multiset.quot_mk_to_coe'', Multiset.map_coe, Multiset.sup_coe, List.foldr_map]
-    using! List.mem_foldr_sup_support_iff
-
-Depends on / 依赖: List.foldr_map, List.mem_foldr_sup_support_iff, Multiset, Multiset.map_coe, Multiset.quot_mk_to_coe, Multiset.sup_coe, Quot.inductionOn, foldr_map, inductionOn, map_coe, mem_foldr_sup_support_iff, quot_mk_to_coe, sup_coe
+/-
+**Finset.mem_sup_support_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.mem_sup_support_iff [Zero M] {s : Finset (ι ->₀ M)} {x : ι} : x in 
+s.sup Finsupp.support ↔ exists f in s, x in f.support
+参数：ι ->₀ M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_sup_map_support_iff`：Multiset.mem_sup_map_support_iff [Zero
+ M] {s : Multiset (ι ->₀ M)} {x : ι} : x in (s.map Finsupp.support).sup ↔ exists
+ f in s, x in f.suppor…
 -/
-theorem Multiset.mem_sup_map_support_iff [Zero M] {s : Multiset (ι ->₀ M)} {x : ι} :
-    x in (s.map Finsupp.support).sup ↔ exists f in s, x in f.support :=
-  Quot.inductionOn s fun _ => by
-    simpa only [Multiset.quot_mk_to_coe'', Multiset.map_coe, Multiset.sup_coe, List.foldr_map]
-    using! List.mem_foldr_sup_support_iff
-
-/--
-theorem `Finset.mem_sup_support_iff` / 定理 `Finset.mem_sup_support_iff`
-
-English:
-theorem Finset.mem_sup_support_iff
-  given: [Zero M] {s : Finset (ι ->₀ M)} {x : ι}
-  proof: Multiset.mem_sup_map_support_iff
-
-中文:
-定理 有限集.mem_sup_support_iff
-  条件: [零 M] {s : 有限集 (ι ->₀ M)} {x : ι}
-  证明: Multiset.mem_sup_map_support_iff
-
-Depends on / 依赖: Multiset, Multiset.mem_sup_map_support_iff, mem_sup_map_support_iff
--/
-theorem Finset.mem_sup_support_iff [Zero M] {s : Finset (ι ->₀ M)} {x : ι} :
-    x in s.sup Finsupp.support ↔ exists f in s, x in f.support :=
+theorem Finset.mem_sup_support_iff [Zero M] {s : Finset (ι →₀ M)} {x : ι} :
+    x ∈ s.sup Finsupp.support ↔ ∃ f ∈ s, x ∈ f.support :=
   Multiset.mem_sup_map_support_iff
 
 open scoped Function -- required for scoped `on` notation
-
-/--
-theorem `List.support_sum_eq` / 定理 `List.support_sum_eq`
-
-English:
-theorem List.support_sum_eq
-  statement: [AddZeroClass M] (l : List (ι ->₀ M))
-  proof: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH =>
-    simp only [List.pairwise_cons] at hl
-    simp only [List.sum_cons, List.foldr_cons]
-    rw [Finsupp.support_add_eq]; rw [IH hl.right]; rw [Finset.sup_eq_union]
-    suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.support x ⊔ y)) ∅) by
-      exact Finset.disjoint_of_subset_right (List.support_sum_subset _) this
-    rw [← List.foldr_map]; rw [← Finset.bot_eq_empty]; rw [List.foldr_sup_eq_sup_toFinset]; rw [Finset.disjoint_sup_right]
-    intro f hf
-    simp only [List.mem_toFinset, List.mem_map] at hf
-    obtain ⟨f, hf, rfl⟩ := hf
-    exact hl.left _ hf
-
-中文:
-定理 列表.support_sum_eq
-  结论: [加法零类 M] (l : 列表 (ι ->₀ M))
-  证明: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH =>
-    simp only [List.pairwise_cons] at hl
-    simp only [List.sum_cons, List.foldr_cons]
-    rw [Finsupp.support_add_eq]; rw [IH hl.right]; rw [Finset.sup_eq_union]
-    suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.support x ⊔ y)) ∅) by
-      exact Finset.disjoint_of_subset_right (List.support_sum_subset _) this
-    rw [← List.foldr_map]; rw [← Finset.bot_eq_empty]; rw [List.foldr_sup_eq_sup_toFinset]; rw [Finset.disjoint_sup_right]
-    intro f hf
-    simp only [List.mem_toFinset, List.mem_map] at hf
-    obtain ⟨f, hf, rfl⟩ := hf
-    exact hl.left _ hf
-
-Depends on / 依赖: Disjoint, Finset, Finset.bot_eq_empty, Finset.disjoint_of_subset_right, Finset.disjoint_sup_right, Finset.sup_eq_union, Finsupp, Finsupp.support, Finsupp.support_add_eq, List.foldr_cons, List.foldr_map, List.foldr_sup_eq_sup_toFinset, List.pairwise_cons, List.sum_cons, List.support_sum_subset, _root_, _root_.Disjoint, bot_eq_empty, disjoint_of_subset_right, disjoint_sup_right
+/-
+**List.support_sum_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：List.support_sum_eq [AddZeroClass M] (l : List (ι ->₀ M)) (hl : l.Pairwise
+ (_root_.Disjoint on Finsupp.support)) : l.sum.support = l.foldr (Finsupp.suppor
+t · ⊔ ·) ∅
+参数：l : List (ι ->₀ M)；hl : l.Pairwise (_root_.Disjoint on Finsupp.support)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.support_add_eq`：support_add_eq [DecidableEq ι] (h : Disjoint g₁.
+support g₂.support) : (g₁ + g₂).support = g₁.support union g₂.support
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.foldr_map`：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β : Type u_3} {f : α₁
+ → α₂} {g : α₂ → β → β} {l : List α₁} {init : β},   List.foldr g init (List.map 
+f l)…
+· 使用定理 `Finset.bot_eq_empty`：bot_eq_empty : (⊥ : Finset α) = ∅
+· 使用定理 `List.foldr_sup_eq_sup_toFinset`：∀ {α : Type u_2} [inst : SemilatticeSup 
+α] [inst_1 : OrderBot α] [inst_2 : DecidableEq α] (l : List α),   List.foldr (fu
+n x1 x2 => x1 ⊔ x2) …
+· 使用定理 `Finset.disjoint_sup_right`：∀ {α : Type u_2} {ι : Type u_5} [inst : Distr
+ibLattice α] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α} {a : α},   Disjoin
+t a (s.sup f) ↔…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.disjoint_of_subset_right`：disjoint_of_subset_right (h : t subsete
+q u) (d : Disjoint s u) : Disjoint s t
+· 使用定理 `List.support_sum_subset`：List.support_sum_subset [AddZeroClass M] (l : L
+ist (ι ->₀ M)) : l.sum.support subseteq l.foldr (Finsupp.support · ⊔ ·) ∅
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Finset.sup_eq_union`：sup_eq_union {s t : Finset α} : s ⊔ t = s union t
 -/
-theorem List.support_sum_eq [AddZeroClass M] (l : List (ι ->₀ M))
+theorem List.support_sum_eq [AddZeroClass M] (l : List (ι →₀ M))
     (hl : l.Pairwise (_root_.Disjoint on Finsupp.support)) :
     l.sum.support = l.foldr (Finsupp.support · ⊔ ·) ∅ := by
   induction l with
@@ -250,47 +222,49 @@ theorem List.support_sum_eq [AddZeroClass M] (l : List (ι ->₀ M))
   | cons hd tl IH =>
     simp only [List.pairwise_cons] at hl
     simp only [List.sum_cons, List.foldr_cons]
-    rw [Finsupp.support_add_eq]; rw [IH hl.right]; rw [Finset.sup_eq_union]
-    suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.support x ⊔ y)) ∅) by
+    rw [Finsupp.support_add_eq, IH hl.right, Finset.sup_eq_union]
+    suffices _root_.Disjoint hd.support (tl.foldr (fun x y ↦ (Finsupp.support x ⊔ y)) ∅) by
       exact Finset.disjoint_of_subset_right (List.support_sum_subset _) this
-    rw [← List.foldr_map]; rw [← Finset.bot_eq_empty]; rw [List.foldr_sup_eq_sup_toFinset]; rw [Finset.disjoint_sup_right]
+    rw [← List.foldr_map, ← Finset.bot_eq_empty, List.foldr_sup_eq_sup_toFinset,
+      Finset.disjoint_sup_right]
     intro f hf
     simp only [List.mem_toFinset, List.mem_map] at hf
     obtain ⟨f, hf, rfl⟩ := hf
     exact hl.left _ hf
-
-/--
-theorem `Multiset.support_sum_eq` / 定理 `Multiset.support_sum_eq`
-
-English:
-theorem Multiset.support_sum_eq
-  statement: [AddCommMonoid M] (s : Multiset (ι ->₀ M))
-  proof: by
-  induction s using Quot.inductionOn with | _ a
-  obtain ⟨l, hl, hd⟩ := hs
-  suffices a.Pairwise (_root_.Disjoint on Finsupp.support) by
-    convert! List.support_sum_eq a this
-    simp only [quot_mk_to_coe'', map_coe, sup_coe,
-      Finset.sup_eq_union, Finset.bot_eq_empty, List.foldr_map]
-  simp only [Multiset.quot_mk_to_coe'', Multiset.coe_eq_coe] at hl
-  exact hl.symm.pairwise hd fun h => _root_.Disjoint.symm h
-
-中文:
-定理 Multiset.support_sum_eq
-  结论: [加法交换幺半群 M] (s : Multiset (ι ->₀ M))
-  证明: by
-  induction s using Quot.inductionOn with | _ a
-  obtain ⟨l, hl, hd⟩ := hs
-  suffices a.Pairwise (_root_.Disjoint on Finsupp.support) by
-    convert! List.support_sum_eq a this
-    simp only [quot_mk_to_coe'', map_coe, sup_coe,
-      Finset.sup_eq_union, Finset.bot_eq_empty, List.foldr_map]
-  simp only [Multiset.quot_mk_to_coe'', Multiset.coe_eq_coe] at hl
-  exact hl.symm.pairwise hd fun h => _root_.Disjoint.symm h
-
-Depends on / 依赖: Disjoint, Finset, Finset.bot_eq_empty, Finset.sup_eq_union, Finsupp, Finsupp.support, List.foldr_map, List.support_sum_eq, Multiset, Multiset.coe_eq_coe, Multiset.quot_mk_to_coe, Pairwise, Quot.inductionOn, _root_, _root_.Disjoint, _root_.Disjoint.symm, a.Pairwise, bot_eq_empty, coe_eq_coe, convert
+/-
+**Multiset.support_sum_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.support_sum_eq [AddCommMonoid M] (s : Multiset (ι ->₀ M)) (hs : s
+.Pairwise (_root_.Disjoint on Finsupp.support)) : s.sum.support = (s.map Finsupp
+.support).sup
+参数：s : Multiset (ι ->₀ M)；hs : s.Pairwise (_root_.Disjoint on Finsupp.support)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.Perm.pairwise`：∀ {α : Type u_1} {R : α → α → Prop} {l l' : List α},
+   l.Perm l' → List.Pairwise R l → (∀ {x y : α}, R x y → R y x) → List.Pairwise 
+R l'
+· 使用定理 `List.Perm.symm`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₂.Perm 
+l₁
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldr_map`：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β : Type u_3} {f : α₁
+ → α₂} {g : α₂ → β → β} {l : List α₁} {init : β},   List.foldr g init (List.map 
+f l)…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.support_sum_eq`：List.support_sum_eq [AddZeroClass M] (l : List (ι -
+>₀ M)) (hl : l.Pairwise (_root_.Disjoint on Finsupp.support)) : l.sum.support = 
+l.foldr (…
 -/
-theorem Multiset.support_sum_eq [AddCommMonoid M] (s : Multiset (ι ->₀ M))
+theorem Multiset.support_sum_eq [AddCommMonoid M] (s : Multiset (ι →₀ M))
     (hs : s.Pairwise (_root_.Disjoint on Finsupp.support)) :
     s.sum.support = (s.map Finsupp.support).sup := by
   induction s using Quot.inductionOn with | _ a
@@ -300,51 +274,51 @@ theorem Multiset.support_sum_eq [AddCommMonoid M] (s : Multiset (ι ->₀ M))
     simp only [quot_mk_to_coe'', map_coe, sup_coe,
       Finset.sup_eq_union, Finset.bot_eq_empty, List.foldr_map]
   simp only [Multiset.quot_mk_to_coe'', Multiset.coe_eq_coe] at hl
-  exact hl.symm.pairwise hd fun h => _root_.Disjoint.symm h
-
-/--
-theorem `Finset.support_sum_eq` / 定理 `Finset.support_sum_eq`
-
-English:
-theorem Finset.support_sum_eq
-  statement: [AddCommMonoid M] (s : Finset (ι ->₀ M))
-  proof: by
-  classical
-  suffices s.1.Pairwise (_root_.Disjoint on Finsupp.support) by
-    convert! Multiset.support_sum_eq s.1 this
-    exact (Finset.sum_val _).symm
-  obtain ⟨l, hl, hn⟩ : exists l : List (ι ->₀ M), l.toFinset = s ∧ l.Nodup := by
-    refine ⟨s.toList, ?_, Finset.nodup_toList _⟩
-    simp
-  subst hl
-  rwa [List.toFinset_val, List.dedup_eq_self.mpr hn, Multiset.pairwise_coe_iff_pairwise,
-    ← List.pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint hn]
-
-中文:
-定理 有限集.support_sum_eq
-  结论: [加法交换幺半群 M] (s : 有限集 (ι ->₀ M))
-  证明: by
-  classical
-  suffices s.1.Pairwise (_root_.Disjoint on Finsupp.support) by
-    convert! Multiset.support_sum_eq s.1 this
-    exact (Finset.sum_val _).symm
-  obtain ⟨l, hl, hn⟩ : exists l : List (ι ->₀ M), l.toFinset = s ∧ l.Nodup := by
-    refine ⟨s.toList, ?_, Finset.nodup_toList _⟩
-    simp
-  subst hl
-  rwa [List.toFinset_val, List.dedup_eq_self.mpr hn, Multiset.pairwise_coe_iff_pairwise,
-    ← List.pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint hn]
-
-Depends on / 依赖: Disjoint, Finset, Finset.nodup_toList, Finset.sum_val, Finsupp, Finsupp.support, List.dedup_eq_self.mpr, List.pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint, List.toFinset_val, Multiset, Multiset.pairwise_coe_iff_pairwise, Multiset.support_sum_eq, Pairwise, _root_, _root_.Disjoint, classical, convert, dedup_eq_self, l.Nodup, l.toFinset
+  exact hl.symm.pairwise hd fun h ↦ _root_.Disjoint.symm h
+/-
+**Finset.support_sum_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.support_sum_eq [AddCommMonoid M] (s : Finset (ι ->₀ M)) (hs : (s : 
+Set (ι ->₀ M)).PairwiseDisjoint Finsupp.support) : (s.sum id).support = Finset.s
+up s Finsupp.support
+参数：s : Finset (ι ->₀ M)；hs : (s : Set (ι ->₀ M)).PairwiseDisjoint Finsupp.suppor
+t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.toList_toFinset`：toList_toFinset [DecidableEq α] (s : Finset α) :
+ s.toList.toFinset = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.nodup_toList`：nodup_toList (s : Finset α) : s.toList.Nodup
+· 使用定理 `List.toFinset_val`：toFinset_val (l : List α) : l.toFinset.1 = (l.dedup :
+ Multiset α)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.dedup_eq_self`：dedup_eq_self {l : List α} : dedup l = l ↔ Nodup l
+· 使用定理 `Multiset.pairwise_coe_iff_pairwise`：pairwise_coe_iff_pairwise {r : α -> 
+α -> Prop} [Std.Symm r] {l : List α} : Multiset.Pairwise r l ↔ l.Pairwise r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint`：pairwiseDisjoi
+nt_iff_coe_toFinset_pairwise_disjoint {α ι} [PartialOrder α] [OrderBot α] [Decid
+ableEq ι] {l : List ι} {f : ι -> α} (hn : l.No…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Finset.sum_val`：∀ {M : Type u_3} [inst : AddCommMonoid M] (s : Finset M)
+, s.val.sum = s.sum id
+· 使用定理 `Multiset.support_sum_eq`：Multiset.support_sum_eq [AddCommMonoid M] (s : 
+Multiset (ι ->₀ M)) (hs : s.Pairwise (_root_.Disjoint on Finsupp.support)) : s.s
+um.support = …
 -/
-theorem Finset.support_sum_eq [AddCommMonoid M] (s : Finset (ι ->₀ M))
-    (hs : (s : Set (ι ->₀ M)).PairwiseDisjoint Finsupp.support) :
+theorem Finset.support_sum_eq [AddCommMonoid M] (s : Finset (ι →₀ M))
+    (hs : (s : Set (ι →₀ M)).PairwiseDisjoint Finsupp.support) :
     (s.sum id).support = Finset.sup s Finsupp.support := by
   classical
   suffices s.1.Pairwise (_root_.Disjoint on Finsupp.support) by
     convert! Multiset.support_sum_eq s.1 this
     exact (Finset.sum_val _).symm
-  obtain ⟨l, hl, hn⟩ : exists l : List (ι ->₀ M), l.toFinset = s ∧ l.Nodup := by
+  obtain ⟨l, hl, hn⟩ : ∃ l : List (ι →₀ M), l.toFinset = s ∧ l.Nodup := by
     refine ⟨s.toList, ?_, Finset.nodup_toList _⟩
     simp
   subst hl

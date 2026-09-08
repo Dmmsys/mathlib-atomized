@@ -25,7 +25,7 @@ a monad. Consider for instance a functor `invite : email → IO response`
 that takes an email address, sends an email and waits for a
 response. If we have a list `guests : List email`, using calling
 `invite` using `map` gives us the following:
-`map invite guests : List (IO response)`. It is not what we need. We need something of
+`map invite guests : List (IO response)`.  It is not what we need. We need something of
 type `IO (List response)`. Instead of using `map`, we can use `traverse` to
 send all the invites: `traverse invite guests : IO (List response)`.
 `traverse` applies `invite` to every element of `guests` and combines
@@ -67,186 +67,132 @@ universe u v w
 
 section ApplicativeTransformation
 
-variable (F : Type u -> Type v) [Applicative F]
-variable (G : Type u -> Type w) [Applicative G]
+variable (F : Type u → Type v) [Applicative F]
+variable (G : Type u → Type w) [Applicative G]
 
-/--
-Definition of `ApplicativeTransformation` / `ApplicativeTransformation` 的定义
+/-- A transformation between applicative functors.  It is a natural
+transformation such that `app` preserves the `Pure.pure` and
+`Functor.map` (`<*>`) operations. See
+`ApplicativeTransformation.preserves_map` for naturality. -/
+/-
+**ApplicativeTransformation** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u → Type v) → [Applicative F] → (G : Type u → Type w) → [Applica
+tive G] → Type (max (u + 1) v w)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ApplicativeTransformation
-  parameters: : Type max (u + 1) v w where
-  axioms and operations (3):
-    - app : forall α : Type u, F α -> G α
-    - preserves_pure' : forall {α : Type u} (x : α), app _ (pure x) = pure x
-    - preserves_seq' : forall {α β : Type u} (x : F (α -> β)) (y : F α), app _ (x <*> y) = app _ x <*> app _ y
-
-中文:
-结构 ApplicativeTransformation
-  参数: : 类型 最大值 (u + 1) v w where
-  公理与运算 (3 个):
-    - app : 对任意 α : 类型u, F α -> G α
-    - preserves_pure' : 对任意 {α : 类型u} (x : α), app _ (pure x) = pure x
-    - preserves_seq' : 对任意 {α β : 类型u} (x : F (α -> β)) (y : F α), app _ (x <*> y) = app _ x <*> app _ y
+--- 原说明 ---
+A transformation between applicative functors.  It is a natural
+transformation such that `app` preserves the `Pure.pure` and
+`Functor.map` (`<*>`) operations. See
+`ApplicativeTransformation.preserves_map` for naturality.
 -/
 structure ApplicativeTransformation : Type max (u + 1) v w where
   /-- The function on objects defined by an `ApplicativeTransformation`. -/
-  app : forall α : Type u, F α -> G α
+  app : ∀ α : Type u, F α → G α
   /-- An `ApplicativeTransformation` preserves `pure`. -/
-  preserves_pure' : forall {α : Type u} (x : α), app _ (pure x) = pure x
+  preserves_pure' : ∀ {α : Type u} (x : α), app _ (pure x) = pure x
   /-- An `ApplicativeTransformation` intertwines `seq`. -/
-  preserves_seq' : forall {α β : Type u} (x : F (α -> β)) (y : F α), app _ (x <*> y) = app _ x <*> app _ y
+  preserves_seq' : ∀ {α β : Type u} (x : F (α → β)) (y : F α), app _ (x <*> y) = app _ x <*> app _ y
 
 end ApplicativeTransformation
 
 namespace ApplicativeTransformation
 
-variable (F : Type u -> Type v) [Applicative F]
-variable (G : Type u -> Type w) [Applicative G]
+variable (F : Type u → Type v) [Applicative F]
+variable (G : Type u → Type w) [Applicative G]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeFun (ApplicativeTransformation F G) fun _ => forall {α}, F α -> G α
-  body: ⟨fun η => η.app _⟩
-
-中文:
-实例 :
-  签名: CoeFun (ApplicativeTransformation F G) fun _ => 对任意 {α}, F α -> G α
-  定义体: ⟨fun η => η.app _⟩
+/-
+**ApplicativeTransformation.** 是 Mathlib 中的一个实例，位于命名空间 `ApplicativeTransformatio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeFun (ApplicativeTransformation F G) fun _ => forall {α}, F α -> G α :=
-  ⟨fun η => η.app _⟩
+instance : CoeFun (ApplicativeTransformation F G) fun _ => ∀ {α}, F α → G α :=
+  ⟨fun η ↦ η.app _⟩
 
 variable {F G}
 
 -- This cannot be a `simp` lemma, as the RHS is a coercion which contains `η.app`.
-/--
-theorem `app_eq_coe` / 定理 `app_eq_coe`
-
-English:
-theorem app_eq_coe
-  given: (η : ApplicativeTransformation F G)
-  statement: η.app = η
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 app_eq_coe
-  条件: (η : ApplicativeTransformation F G)
-  结论: η.app = η
-  证明: rfl
-
-@[simp]
+/-
+**ApplicativeTransformation.app_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTra
+nsformation`。
+形式化陈述：app_eq_coe (η : ApplicativeTransformation F G) : η.app = η
+参数：η : ApplicativeTransformation F G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem app_eq_coe (η : ApplicativeTransformation F G) : η.app = η :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : forall α : Type u, F α -> G α) (pp ps)
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (f : 对任意 α : 类型u, F α -> G α) (pp ps)
-  证明: rfl
+/-
+**ApplicativeTransformation.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTransfo
+rmation`。
+形式化陈述：coe_mk (f : forall α : Type u, F α -> G α) (pp ps) : (ApplicativeTransform
+ation.mk f @pp @ps) = f
+参数：f : forall α : Type u, F α -> G α；pp ps。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : forall α : Type u, F α -> G α) (pp ps) :
+theorem coe_mk (f : ∀ α : Type u, F α → G α) (pp ps) :
     (ApplicativeTransformation.mk f @pp @ps) = f :=
   rfl
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  statement: (η η' : ApplicativeTransformation F G) (h : η = η') {α : Type u}
-  proof: congrArg (fun η'' : ApplicativeTransformation F G => η'' x) h
-
-中文:
-定理 congr_fun
-  结论: (η η' : ApplicativeTransformation F G) (h : η = η') {α : 类型u}
-  证明: congrArg (fun η'' : ApplicativeTransformation F G => η'' x) h
+/-
+**ApplicativeTransformation.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTran
+sformation`。
+形式化陈述：∀ {F : Type u → Type v} [inst : Applicative F] {G : Type u → Type w} [inst
+_1 : Applicative G]   (η η' : ApplicativeTransformation F G),   η = η' → ∀ {α : 
+Type u} (x : F α), (fun {α} => η.app α) x = (fun {α} => η'.app α) x
+参数：η η' : ApplicativeTransformation F G；x : F α；fun {α} => η.app α；fun {α} => η'
+.app α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 protected theorem congr_fun (η η' : ApplicativeTransformation F G) (h : η = η') {α : Type u}
     (x : F α) : η x = η' x :=
   congrArg (fun η'' : ApplicativeTransformation F G => η'' x) h
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  statement: (η : ApplicativeTransformation F G) {α : Type u} {x y : F α}
-  proof: congrArg (fun z : F α => η z) h
-
-中文:
-定理 congr_arg
-  结论: (η : ApplicativeTransformation F G) {α : 类型u} {x y : F α}
-  证明: congrArg (fun z : F α => η z) h
+/-
+**ApplicativeTransformation.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTran
+sformation`。
+形式化陈述：∀ {F : Type u → Type v} [inst : Applicative F] {G : Type u → Type w} [inst
+_1 : Applicative G]   (η : ApplicativeTransformation F G) {α : Type u} {x y : F 
+α}, x = y → (fun {α} => η.app α) x = (fun {α} => η.app α) y
+参数：η : ApplicativeTransformation F G；fun {α} => η.app α；fun {α} => η.app α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 protected theorem congr_arg (η : ApplicativeTransformation F G) {α : Type u} {x y : F α}
     (h : x = y) : η x = η y :=
   congrArg (fun z : F α => η z) h
-
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: ⦃η η'
-  statement: ApplicativeTransformation F G⦄ (h : (η : forall α, F α -> G α) = η') :
-  proof: by
-  cases η
-  cases η'
-  congr
-
-@[ext]
-
-中文:
-定理 coe_inj
-  条件: ⦃η η'
-  结论: ApplicativeTransformation F G⦄ (h : (η : 对任意 α, F α -> G α) = η') :
-  证明: by
-  cases η
-  cases η'
-  congr
-
-@[ext]
+/-
+**ApplicativeTransformation.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTransf
+ormation`。
+形式化陈述：coe_inj ⦃η η' : ApplicativeTransformation F G⦄ (h : (η : forall α, F α -> 
+G α) = η') : η = η'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem coe_inj ⦃η η' : ApplicativeTransformation F G⦄ (h : (η : forall α, F α -> G α) = η') :
+theorem coe_inj ⦃η η' : ApplicativeTransformation F G⦄ (h : (η : ∀ α, F α → G α) = η') :
     η = η' := by
   cases η
   cases η'
   congr
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: ⦃η η'
-  statement: ApplicativeTransformation F G⦄ (h : forall (α : Type u) (x : F α), η x = η' x) :
-  proof: coe_inj (by grind)
-
-中文:
-定理 ext
-  条件: ⦃η η'
-  结论: ApplicativeTransformation F G⦄ (h : 对任意 (α : 类型u) (x : F α), η x = η' x) :
-  证明: coe_inj (by grind)
-
-Depends on / 依赖: coe_inj
+/-
+**ApplicativeTransformation.ext** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTransforma
+tion`。
+形式化陈述：ext ⦃η η' : ApplicativeTransformation F G⦄ (h : forall (α : Type u) (x : F
+ α), η x = η' x) : η = η'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ApplicativeTransformation.coe_inj`：coe_inj ⦃η η' : ApplicativeTransforma
+tion F G⦄ (h : (η : forall α, F α -> G α) = η') : η = η'
 -/
-theorem ext ⦃η η' : ApplicativeTransformation F G⦄ (h : forall (α : Type u) (x : F α), η x = η' x) :
+theorem ext ⦃η η' : ApplicativeTransformation F G⦄ (h : ∀ (α : Type u) (x : F α), η x = η' x) :
     η = η' := coe_inj (by grind)
 
 section Preserves
@@ -254,171 +200,115 @@ section Preserves
 variable (η : ApplicativeTransformation F G)
 
 @[functor_norm]
-/--
-theorem `preserves_pure` / 定理 `preserves_pure`
-
-English:
-theorem preserves_pure
-  given: {α}
-  statement: forall x : α, η (pure x) = pure x
-  proof: η.preserves_pure'
-
-@[functor_norm]
-
-中文:
-定理 preserves_pure
-  条件: {α}
-  结论: 对任意 x : α, η (pure x) = pure x
-  证明: η.preserves_pure'
-
-@[functor_norm]
-
-Depends on / 依赖: preserves_pure
+/-
+**ApplicativeTransformation.preserves_pure** 是 Mathlib 中的一个定理，位于命名空间 `Applicativ
+eTransformation`。
+形式化陈述：preserves_pure {α} : forall x : α, η (pure x) = pure x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ApplicativeTransformation.preserves_pure'`：∀ {F : Type u → Type v} [inst
+ : Applicative F] {G : Type u → Type w} [inst_1 : Applicative G]   (self : Appli
+cativeTransformation F G) {α : …
 -/
-theorem preserves_pure {α} : forall x : α, η (pure x) = pure x :=
+theorem preserves_pure {α} : ∀ x : α, η (pure x) = pure x :=
   η.preserves_pure'
 
 @[functor_norm]
-/--
-theorem `preserves_seq` / 定理 `preserves_seq`
-
-English:
-theorem preserves_seq
-  given: {α β : Type u}
-  statement: forall (x : F (α -> β)) (y : F α), η (x <*> y) = η x <*> η y
-  proof: η.preserves_seq'
-
-中文:
-定理 preserves_seq
-  条件: {α β : 类型u}
-  结论: 对任意 (x : F (α -> β)) (y : F α), η (x <*> y) = η x <*> η y
-  证明: η.preserves_seq'
-
-Depends on / 依赖: preserves_seq
+/-
+**ApplicativeTransformation.preserves_seq** 是 Mathlib 中的一个定理，位于命名空间 `Applicative
+Transformation`。
+形式化陈述：preserves_seq {α β : Type u} : forall (x : F (α -> β)) (y : F α), η (x <*>
+ y) = η x <*> η y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ApplicativeTransformation.preserves_seq'`：∀ {F : Type u → Type v} [inst 
+: Applicative F] {G : Type u → Type w} [inst_1 : Applicative G]   (self : Applic
+ativeTransformation F G) {α β …
 -/
-theorem preserves_seq {α β : Type u} : forall (x : F (α -> β)) (y : F α), η (x <*> y) = η x <*> η y :=
+theorem preserves_seq {α β : Type u} : ∀ (x : F (α → β)) (y : F α), η (x <*> y) = η x <*> η y :=
   η.preserves_seq'
 
 variable [LawfulApplicative F] [LawfulApplicative G]
 
 @[functor_norm]
-/--
-theorem `preserves_map` / 定理 `preserves_map`
-
-English:
-theorem preserves_map
-  given: {α β} (x : α -> β) (y : F α)
-  statement: η (x <$> y) = x < > η y
-  proof: by
-  rw [← pure_seq]; rw [η.preserves_seq]; rw [preserves_pure]; rw [pure_seq]
-
-中文:
-定理 preserves_map
-  条件: {α β} (x : α -> β) (y : F α)
-  结论: η (x <$> y) = x < > η y
-  证明: by
-  rw [← pure_seq]; rw [η.preserves_seq]; rw [preserves_pure]; rw [pure_seq]
-
-Depends on / 依赖: preserves_pure, preserves_seq, pure_seq
+/-
+**ApplicativeTransformation.preserves_map** 是 Mathlib 中的一个定理，位于命名空间 `Applicative
+Transformation`。
+形式化陈述：preserves_map {α β} (x : α -> β) (y : F α) : η (x <$> y) = x < > η y
+参数：x : α -> β；y : F α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LawfulApplicative.pure_seq`：∀ {f : Type u → Type v} {inst : Applicative 
+f} [self : LawfulApplicative f] {α β : Type u} (g : α → β) (x : f α),   pure g <
+*> x = g <$> x
+· 使用定理 `ApplicativeTransformation.preserves_seq`：preserves_seq {α β : Type u} : 
+forall (x : F (α -> β)) (y : F α), η (x <*> y) = η x <*> η y
+· 使用定理 `ApplicativeTransformation.preserves_pure`：preserves_pure {α} : forall x 
+: α, η (pure x) = pure x
 -/
-theorem preserves_map {α β} (x : α -> β) (y : F α) : η (x <$> y) = x < > η y := by
-  rw [← pure_seq]; rw [η.preserves_seq]; rw [preserves_pure]; rw [pure_seq]
-
-/--
-theorem `preserves_map'` / 定理 `preserves_map'`
-
-English:
-theorem preserves_map'
-  given: {α β} (x : α -> β)
-  statement: @η _ ∘ Functor.map x = Functor.map x ∘ @η _
-  proof: by
-  ext y
-  exact preserves_map η x y
-
-中文:
-定理 preserves_map'
-  条件: {α β} (x : α -> β)
-  结论: @η _ ∘ 函子.map x = 函子.map x ∘ @η _
-  证明: by
-  ext y
-  exact preserves_map η x y
-
-Depends on / 依赖: preserves_map
+theorem preserves_map {α β} (x : α → β) (y : F α) : η (x <$> y) = x <$> η y := by
+  rw [← pure_seq, η.preserves_seq, preserves_pure, pure_seq]
+/-
+**ApplicativeTransformation.preserves_map'** 是 Mathlib 中的一个定理，位于命名空间 `Applicativ
+eTransformation`。
+形式化陈述：preserves_map' {α β} (x : α -> β) : @η _ ∘ Functor.map x = Functor.map x ∘
+ @η _
+参数：x : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ApplicativeTransformation.preserves_map`：preserves_map {α β} (x : α -> β
+) (y : F α) : η (x <$> y) = x < > η y
 -/
-theorem preserves_map' {α β} (x : α -> β) : @η _ ∘ Functor.map x = Functor.map x ∘ @η _ := by
+theorem preserves_map' {α β} (x : α → β) : @η _ ∘ Functor.map x = Functor.map x ∘ @η _ := by
   ext y
   exact preserves_map η x y
 
 end Preserves
 
-/--
-Definition of `idTransformation` / `idTransformation` 的定义
+/-- The identity applicative transformation from an applicative functor to itself. -/
+/-
+**ApplicativeTransformation.idTransformation** 是 Mathlib 中的一个定义，位于命名空间 `Applicat
+iveTransformation`。
+形式化陈述：idTransformation : ApplicativeTransformation F F where app _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition idTransformation
-  signature: : ApplicativeTransformation F F where
-  body: id
-  preserves_pure' := by simp
-  preserves_seq' x y := by simp
-
-中文:
-定义 idTransformation
-  签名: : ApplicativeTransformation F F where
-  定义体: id
-  preserves_pure' := by simp
-  preserves_seq' x y := by simp
+--- 原说明 ---
+The identity applicative transformation from an applicative functor to itself.
 -/
 def idTransformation : ApplicativeTransformation F F where
   app _ := id
   preserves_pure' := by simp
   preserves_seq' x y := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (ApplicativeTransformation F F)
-  body: ⟨idTransformation⟩
-
-universe s t
-
-中文:
-实例 :
-  签名: 可居 (ApplicativeTransformation F F)
-  定义体: ⟨idTransformation⟩
-
-universe s t
-
-Depends on / 依赖: idTransformation
+/-
+**ApplicativeTransformation.** 是 Mathlib 中的一个实例，位于命名空间 `ApplicativeTransformatio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (ApplicativeTransformation F F) :=
   ⟨idTransformation⟩
 
 universe s t
 
-variable {H : Type u -> Type s} [Applicative H]
+variable {H : Type u → Type s} [Applicative H]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of applicative transformations. -/
+/-
+**ApplicativeTransformation.comp** 是 Mathlib 中的一个定义，位于命名空间 `ApplicativeTransform
+ation`。
+形式化陈述：comp (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F
+ G) : ApplicativeTransformation F H where app _ x
+参数：η' : ApplicativeTransformation G H；η : ApplicativeTransformation F G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F G)
-  body: η' (η x)
-  preserves_pure' x := by simp [functor_norm]
-  preserves_seq' x y := by simp [functor_norm]
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F G)
-  定义体: η' (η x)
-  preserves_pure' x := by simp [functor_norm]
-  preserves_seq' x y := by simp [functor_norm]
-
-@[simp]
+--- 原说明 ---
+The composition of applicative transformations.
 -/
 def comp (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F G) :
     ApplicativeTransformation F H where
@@ -427,83 +317,58 @@ def comp (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F
   preserves_seq' x y := by simp [functor_norm]
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  statement: (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F G)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  结论: (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F G)
-  证明: rfl
+/-
+**ApplicativeTransformation.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTra
+nsformation`。
+形式化陈述：comp_apply (η' : ApplicativeTransformation G H) (η : ApplicativeTransforma
+tion F G) {α : Type u} (x : F α) : η'.comp η x = η' (η x)
+参数：η' : ApplicativeTransformation G H；η : ApplicativeTransformation F G；x : F α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (η' : ApplicativeTransformation G H) (η : ApplicativeTransformation F G)
     {α : Type u} (x : F α) : η'.comp η x = η' (η x) :=
   rfl
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: {I : Type u -> Type t} [Applicative I]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  结论: {I : 类型u -> 类型 t} [适用 I]
-  证明: rfl
-
-@[simp]
+/-
+**ApplicativeTransformation.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTra
+nsformation`。
+形式化陈述：comp_assoc {I : Type u -> Type t} [Applicative I] (η'' : ApplicativeTransf
+ormation H I) (η' : ApplicativeTransformation G H) (η : ApplicativeTransformatio
+n F G) : (η''.comp η').comp η = η''.comp (η'.comp η)
+参数：η'' : ApplicativeTransformation H I；η' : ApplicativeTransformation G H；η : Ap
+plicativeTransformation F G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc {I : Type u -> Type t} [Applicative I]
+theorem comp_assoc {I : Type u → Type t} [Applicative I]
     (η'' : ApplicativeTransformation H I) (η' : ApplicativeTransformation G H)
     (η : ApplicativeTransformation F G) : (η''.comp η').comp η = η''.comp (η'.comp η) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (η : ApplicativeTransformation F G)
-  statement: η.comp idTransformation = η
-  proof: ext fun _ _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (η : ApplicativeTransformation F G)
-  结论: η.comp idTransformation = η
-  证明: ext fun _ _ => rfl
-
-@[simp]
+/-
+**ApplicativeTransformation.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTransf
+ormation`。
+形式化陈述：comp_id (η : ApplicativeTransformation F G) : η.comp idTransformation = η
+参数：η : ApplicativeTransformation F G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ApplicativeTransformation.ext`：ext ⦃η η' : ApplicativeTransformation F G
+⦄ (h : forall (α : Type u) (x : F α), η x = η' x) : η = η'
 -/
 theorem comp_id (η : ApplicativeTransformation F G) : η.comp idTransformation = η :=
   ext fun _ _ => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (η : ApplicativeTransformation F G)
-  statement: idTransformation.comp η = η
-  proof: ext fun _ _ => rfl
-
-中文:
-定理 id_comp
-  条件: (η : ApplicativeTransformation F G)
-  结论: idTransformation.comp η = η
-  证明: ext fun _ _ => rfl
+/-
+**ApplicativeTransformation.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `ApplicativeTransf
+ormation`。
+形式化陈述：id_comp (η : ApplicativeTransformation F G) : idTransformation.comp η = η
+参数：η : ApplicativeTransformation F G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ApplicativeTransformation.ext`：ext ⦃η η' : ApplicativeTransformation F G
+⦄ (h : forall (α : Type u) (x : F α), η x = η' x) : η = η'
 -/
 theorem id_comp (η : ApplicativeTransformation F G) : idTransformation.comp η = η :=
   ext fun _ _ => rfl
@@ -512,26 +377,26 @@ end ApplicativeTransformation
 
 open ApplicativeTransformation
 
-/--
-Definition of `Traversable` / `Traversable` 的定义
+/-- A traversable functor is a functor along with a way to commute
+with all applicative functors (see `sequence`).  For example, if `t`
+is the traversable functor `List` and `m` is the applicative functor
+`IO`, then given a function `f : α → IO β`, the function `Functor.map f` is
+`List α → List (IO β)`, but `traverse f` is `List α → IO (List β)`. -/
+/-
+**Traversable** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(Type u → Type u) → Type (u + 1)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Traversable
-  parameters: (t : Type u -> Type u)
-  extends: Functor t
-  axioms and operations (1):
-    - traverse : forall {m : Type u -> Type u} [Applicative m] {α β}, (α -> m β) -> t α -> m (t β)
-
-中文:
-类 可遍历
-  参数: (t : 类型u -> 类型u)
-  继承: 函子 t
-  公理与运算 (1 个):
-    - traverse : 对任意 {m : 类型u -> 类型u} [适用 m] {α β}, (α -> m β) -> t α -> m (t β)
+--- 原说明 ---
+A traversable functor is a functor along with a way to commute
+with all applicative functors (see `sequence`).  For example, if `t`
+is the traversable functor `List` and `m` is the applicative functor
+`IO`, then given a function `f : α → IO β`, the function `Functor.map f` is
+`List α → List (IO β)`, but `traverse f` is `List α → IO (List β)`.
 -/
-class Traversable (t : Type u -> Type u) extends Functor t where
+class Traversable (t : Type u → Type u) extends Functor t where
   /-- The function commuting a traversable functor `t` with an arbitrary applicative functor `m`. -/
-  traverse : forall {m : Type u -> Type u} [Applicative m] {α β}, (α -> m β) -> t α -> m (t β)
+  traverse : ∀ {m : Type u → Type u} [Applicative m] {α β}, (α → m β) → t α → m (t β)
 
 open Functor
 
@@ -539,105 +404,70 @@ export Traversable (traverse)
 
 section Functions
 
-variable {t : Type u -> Type u}
+variable {t : Type u → Type u}
 variable {α : Type u}
-variable {f : Type u -> Type u} [Applicative f]
+variable {f : Type u → Type u} [Applicative f]
 
-/--
-Definition of `sequence` / `sequence` 的定义
+/-- A traversable functor commutes with all applicative functors. -/
+/-
+**sequence** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：sequence [Traversable t] : t (f α) -> f (t α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sequence
-  signature: [Traversable t]
-  body: traverse id
-
-中文:
-定义 sequence
-  签名: [可遍历 t]
-  定义体: traverse id
-
-Depends on / 依赖: traverse
+--- 原说明 ---
+A traversable functor commutes with all applicative functors.
 -/
-def sequence [Traversable t] : t (f α) -> f (t α) :=
+def sequence [Traversable t] : t (f α) → f (t α) :=
   traverse id
 
 end Functions
 
-/--
-Definition of `LawfulTraversable` / `LawfulTraversable` 的定义
+/-- A traversable functor is lawful if its `traverse` satisfies a
+number of additional properties.  It must send `pure : α → Id α` to `pure`,
+send the composition of applicative functors to the composition of the
+`traverse` of each, send each function `f` to `fun x ↦ f <$> x`, and
+satisfy a naturality condition with respect to applicative
+transformations. -/
+/-
+**LawfulTraversable** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(t : Type u → Type u) → [Traversable t] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LawfulTraversable
-  parameters: (t : Type u -> Type u) [Traversable t]
-  extends: LawfulFunctor t
-  axioms and operations (4):
-    - id_traverse : forall {α} (x : t α), traverse (pure : α -> Id α) x = pure x
-    - comp_traverse : forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] {α β γ} (f : β -> F γ) (g : α -> G β) (x : t α), traverse (Functor.Comp.mk ∘ map f ∘ g) x = Comp.mk (map (traverse f) (traverse g x))
-    - traverse_eq_map_id : forall {α β} (f : α -> β) (x : t α), traverse ((pure : β -> Id β) ∘ f) x = pure (f <$> x)
-    - naturality : forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] (η : ApplicativeTransformation F G) {α β} (f : α -> F β) (x : t α), η (traverse f x) = traverse (@η _ ∘ f) x
-
-中文:
-类 合法可遍历
-  参数: (t : 类型u -> 类型u) [可遍历 t]
-  继承: Lawful函子 t
-  公理与运算 (4 个):
-    - id_traverse : 对任意 {α} (x : t α), traverse (pure : α -> Id α) x = pure x
-    - comp_traverse : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] {α β γ} (f : β -> F γ) (g : α -> G β) (x : t α), traverse (函子.复合.mk ∘ map f ∘ g) x = 复合.mk (map (traverse f) (traverse g x))
-    - traverse_eq_map_id : 对任意 {α β} (f : α -> β) (x : t α), traverse ((pure : β -> Id β) ∘ f) x = pure (f <$> x)
-    - naturality : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] (η : ApplicativeTransformation F G) {α β} (f : α -> F β) (x : t α), η (traverse f x) = traverse (@η _ ∘ f) x
+--- 原说明 ---
+A traversable functor is lawful if its `traverse` satisfies a
+number of additional properties.  It must send `pure : α → Id α` to `pure`,
+send the composition of applicative functors to the composition of the
+`traverse` of each, send each function `f` to `fun x ↦ f <$> x`, and
+satisfy a naturality condition with respect to applicative
+transformations.
 -/
-class LawfulTraversable (t : Type u -> Type u) [Traversable t] : Prop extends LawfulFunctor t where
+class LawfulTraversable (t : Type u → Type u) [Traversable t] : Prop extends LawfulFunctor t where
   /-- `traverse` plays well with `pure` of the identity monad -/
-  id_traverse : forall {α} (x : t α), traverse (pure : α -> Id α) x = pure x
+  id_traverse : ∀ {α} (x : t α), traverse (pure : α → Id α) x = pure x
   /-- `traverse` plays well with composition of applicative functors. -/
   comp_traverse :
-    forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] {α β γ}
-      (f : β -> F γ) (g : α -> G β) (x : t α),
+    ∀ {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] {α β γ}
+      (f : β → F γ) (g : α → G β) (x : t α),
       traverse (Functor.Comp.mk ∘ map f ∘ g) x = Comp.mk (map (traverse f) (traverse g x))
   /-- An axiom for `traverse` involving `pure : β → Id β`. -/
-  traverse_eq_map_id : forall {α β} (f : α -> β) (x : t α),
-    traverse ((pure : β -> Id β) ∘ f) x = pure (f <$> x)
+  traverse_eq_map_id : ∀ {α β} (f : α → β) (x : t α),
+    traverse ((pure : β → Id β) ∘ f) x = pure (f <$> x)
   /-- The naturality axiom explaining how lawful traversable functors should play with
   lawful applicative functors. -/
   naturality :
-    forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G]
-      (η : ApplicativeTransformation F G) {α β} (f : α -> F β) (x : t α),
+    ∀ {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G]
+      (η : ApplicativeTransformation F G) {α β} (f : α → F β) (x : t α),
       η (traverse f x) = traverse (@η _ ∘ f) x
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Traversable Id
-  body: ⟨id⟩
-
-中文:
-实例 :
-  签名: 可遍历 Id
-  定义体: ⟨id⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Traversable Id :=
   ⟨id⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulTraversable Id
-  body: rfl
-  comp_traverse _ _ _ := rfl
-  traverse_eq_map_id _ _ := rfl
-  naturality _ _ _ _ _ := rfl
-
-中文:
-实例 :
-  签名: 合法可遍历 Id
-  定义体: rfl
-  comp_traverse _ _ _ := rfl
-  traverse_eq_map_id _ _ := rfl
-  naturality _ _ _ _ _ := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulTraversable Id where
   id_traverse _ := rfl
@@ -647,38 +477,15 @@ instance : LawfulTraversable Id where
 
 section
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Traversable Option
-  body: ⟨Option.traverse⟩
-
-中文:
-实例 :
-  签名: 可遍历 选项类型
-  定义体: ⟨Option.traverse⟩
-
-Depends on / 依赖: Option.traverse, traverse
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Traversable Option :=
   ⟨Option.traverse⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Traversable List
-  body: ⟨List.traverse⟩
-
-中文:
-实例 :
-  签名: 可遍历 列表
-  定义体: ⟨List.traverse⟩
-
-Depends on / 依赖: List.traverse, traverse
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Traversable List :=
   ⟨List.traverse⟩
@@ -688,25 +495,31 @@ end
 namespace Sum
 
 variable {σ : Type u}
-variable {F : Type u -> Type u}
+variable {F : Type u → Type u}
 variable [Applicative F]
 
-/--
-Definition of `traverse` / `traverse` 的定义
+/-- Defines a `traverse` function on the second component of a sum type.
+This is used to give a `Traversable` instance for the functor `σ ⊕ -`. -/
+/-
+**Sum.traverse** 是 Mathlib 中的一个定义，位于命名空间 `Sum`。
+形式化陈述：{σ : Type u} → {F : Type u → Type u} → [Applicative F] → {α : Type u_1} → 
+{β : Type u} → (α → F β) → σ ⊕ α → F (σ ⊕ β)
+参数：α → F β；σ ⊕ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition traverse
-  signature: {α β} (f : α -> F β)
-
-中文:
-定义 traverse
-  签名: {α β} (f : α -> F β)
+--- 原说明 ---
+Defines a `traverse` function on the second component of a sum type.
+This is used to give a `Traversable` instance for the functor `σ ⊕ -`.
 -/
-protected def traverse {α β} (f : α -> F β) : σ oplus α -> F (σ oplus β)
+protected def traverse {α β} (f : α → F β) : σ ⊕ α → F (σ ⊕ β)
   | Sum.inl x => pure (Sum.inl x)
-| Sum.inr x => Sum.inr < > f x
+  | Sum.inr x => Sum.inr <$> f x
 
 end Sum
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {σ : Type u} : Traversable.{u} (Sum σ) :=
   ⟨@Sum.traverse _⟩

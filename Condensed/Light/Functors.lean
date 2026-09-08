@@ -29,93 +29,57 @@ universe u v
 
 open CategoryTheory Limits Functor
 
-/--
-Definition of `lightProfiniteToLightCondSet` / `lightProfiniteToLightCondSet` 的定义
+/-- The functor from `LightProfinite.{u}` to `LightCondSet.{u}` given by the Yoneda sheaf. -/
+/-
+**lightProfiniteToLightCondSet** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：lightProfiniteToLightCondSet : LightProfinite.{u} ⥤ LightCondSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lightProfiniteToLightCondSet
-  signature: : LightProfinite.{u} ⥤ LightCondSet.{u}
-  body: (coherentTopology LightProfinite).yoneda
-
-中文:
-定义 lightProfiniteToLightCondSet
-  签名: : LightProfinite.{u} ⥤ LightCondSet.{u}
-  定义体: (coherentTopology LightProfinite).yoneda
-
-Depends on / 依赖: LightProfinite, coherentTopology, yoneda
+--- 原说明 ---
+The functor from `LightProfinite.{u}` to `LightCondSet.{u}` given by the Yoneda 
+sheaf.
 -/
 def lightProfiniteToLightCondSet : LightProfinite.{u} ⥤ LightCondSet.{u} :=
   (coherentTopology LightProfinite).yoneda
 
-/--
-Definition of `LightProfinite.toCondensed` / `LightProfinite.toCondensed` 的定义
+/-- Dot notation for the value of `lightProfiniteToLightCondSet`. -/
+/-
+**LightProfinite.toCondensed** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LightProfinite.toCondensed (S : LightProfinite.{u}) : LightCondSet.{u}
+参数：S : LightProfinite.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LightProfinite.toCondensed
-  signature: (S : LightProfinite.{u})
-  body: lightProfiniteToLightCondSet.obj S
-
-中文:
-缩写 LightProfinite.toCondensed
-  签名: (S : LightProfinite.{u})
-  定义体: lightProfiniteToLightCondSet.obj S
-
-Depends on / 依赖: lightProfiniteToLightCondSet, lightProfiniteToLightCondSet.obj
+--- 原说明 ---
+Dot notation for the value of `lightProfiniteToLightCondSet`.
 -/
 abbrev LightProfinite.toCondensed (S : LightProfinite.{u}) : LightCondSet.{u} :=
   lightProfiniteToLightCondSet.obj S
 
-/--
-Definition of `lightProfiniteToLightCondSetFullyFaithful` / `lightProfiniteToLightCondSetFullyFaithful` 的定义
+/-- `lightProfiniteToLightCondSet` is fully faithful. -/
+/-
+**lightProfiniteToLightCondSetFullyFaithful** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：lightProfiniteToLightCondSetFullyFaithful : lightProfiniteToLightCondSet.F
+ullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lightProfiniteToLightCondSetFullyFaithful
-  signature: :
-  body: (coherentTopology LightProfinite).yonedaFullyFaithful
-
-中文:
-缩写 lightProfiniteToLightCondSetFullyFaithful
-  签名: :
-  定义体: (coherentTopology LightProfinite).yonedaFullyFaithful
-
-Depends on / 依赖: LightProfinite, coherentTopology, yonedaFullyFaithful
+--- 原说明 ---
+`lightProfiniteToLightCondSet` is fully faithful.
 -/
 abbrev lightProfiniteToLightCondSetFullyFaithful :
     lightProfiniteToLightCondSet.FullyFaithful :=
   (coherentTopology LightProfinite).yonedaFullyFaithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: lightProfiniteToLightCondSet.Full
-  body: inferInstanceAs ((coherentTopology LightProfinite).yoneda).Full
-
-中文:
-实例 :
-  签名: lightProfiniteToLightCondSet.满
-  定义体: inferInstanceAs ((coherentTopology LightProfinite).yoneda).Full
-
-Depends on / 依赖: LightProfinite, coherentTopology, yoneda
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : lightProfiniteToLightCondSet.Full :=
   inferInstanceAs ((coherentTopology LightProfinite).yoneda).Full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: lightProfiniteToLightCondSet.Faithful
-  body: inferInstanceAs ((coherentTopology LightProfinite).yoneda).Faithful
-
-中文:
-实例 :
-  签名: lightProfiniteToLightCondSet.忠实
-  定义体: inferInstanceAs ((coherentTopology LightProfinite).yoneda).Faithful
-
-Depends on / 依赖: Faithful, LightProfinite, coherentTopology, yoneda
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : lightProfiniteToLightCondSet.Faithful :=
   inferInstanceAs ((coherentTopology LightProfinite).yoneda).Faithful
@@ -125,35 +89,32 @@ set_option backward.isDefEq.respectTransparency.types false in
 The functor from `LightProfinite` to `LightCondSet` factors through `TopCat`.
 -/
 @[simps!]
-/--
-Definition of `lightProfiniteToLightCondSetIsoTopCatToLightCondSet` / `lightProfiniteToLightCondSetIsoTopCatToLightCondSet` 的定义
+/-
+**lightProfiniteToLightCondSetIsoTopCatToLightCondSet** 是 Mathlib 中的一个定义，位于命名空间 
+``。
+形式化陈述：lightProfiniteToLightCondSetIsoTopCatToLightCondSet : lightProfiniteToLigh
+tCondSet.{u} ≅ LightProfinite.toTopCat.{u} ⋙ topCatToLightCondSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lightProfiniteToLightCondSetIsoTopCatToLightCondSet
-  signature: :
-  body: dsimp% NatIso.ofComponents fun X => FullyFaithful.preimageIso (fullyFaithfulSheafToPresheaf _ _)
-    NatIso.ofComponents fun S => {
-      hom := ↾fun f => { toFun := f.hom }
-      inv := ↾fun f => InducedCategory.homMk (TopCat.ofHom f) }
-
-中文:
-定义 lightProfiniteToLightCondSetIsoTopCatToLightCondSet
-  签名: :
-  定义体: dsimp% NatIso.ofComponents fun X => FullyFaithful.preimageIso (fullyFaithfulSheafToPresheaf _ _)
-    NatIso.ofComponents fun S => {
-      hom := ↾fun f => { toFun := f.hom }
-      inv := ↾fun f => InducedCategory.homMk (TopCat.ofHom f) }
-
-Depends on / 依赖: FullyFaithful, FullyFaithful.preimageIso, InducedCategory, InducedCategory.homMk, NatIso, NatIso.ofComponents, TopCat, TopCat.ofHom, f.hom, fullyFaithfulSheafToPresheaf, ofComponents, preimageIso
+--- 原说明 ---
+The functor from `LightProfinite` to `LightCondSet` factors through `TopCat`.
 -/
 noncomputable def lightProfiniteToLightCondSetIsoTopCatToLightCondSet :
     lightProfiniteToLightCondSet.{u} ≅ LightProfinite.toTopCat.{u} ⋙ topCatToLightCondSet.{u} :=
-dsimp% NatIso.ofComponents fun X => FullyFaithful.preimageIso (fullyFaithfulSheafToPresheaf _ _)
-    NatIso.ofComponents fun S => {
-      hom := ↾fun f => { toFun := f.hom }
-      inv := ↾fun f => InducedCategory.homMk (TopCat.ofHom f) }
+  dsimp% NatIso.ofComponents fun X ↦ FullyFaithful.preimageIso (fullyFaithfulSheafToPresheaf _ _) <|
+    NatIso.ofComponents fun S ↦ {
+      hom := ↾fun f ↦ { toFun := f.hom }
+      inv := ↾fun f ↦ InducedCategory.homMk (TopCat.ofHom f) }
 
 /--
+The functor from `LightProfinite` to `LightCondSet` preserves countable limits.
+-/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
 The functor from `LightProfinite` to `LightCondSet` preserves countable limits.
 -/
 instance {J : Type} [SmallCategory J] [CountableCategory J] : PreservesLimitsOfShape J
@@ -165,53 +126,36 @@ instance {J : Type} [SmallCategory J] [CountableCategory J] : PreservesLimitsOfS
   preservesLimitsOfShape_of_natIso lightProfiniteToLightCondSetIsoTopCatToLightCondSet.symm
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor from `LightProfinite` to `LightCondSet` preserves finite limits.
+-/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PreservesFiniteLimits lightProfiniteToLightCondSet.{u}
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 保持FiniteLimits lightProfiniteToLightCondSet.{u}
-  定义体: inferInstance
+--- 原说明 ---
+The functor from `LightProfinite` to `LightCondSet` preserves finite limits.
 -/
 instance : PreservesFiniteLimits lightProfiniteToLightCondSet.{u} where
   preservesFiniteLimits _ := inferInstance
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor from `LightProfinite` to `LightCondSet` is monoidal with respect to the cartesian
+monoidal structure.
+-/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: lightProfiniteToLightCondSet.{u}.Monoidal
-  body: .some (Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts _).mpr inferInstance
-
-中文:
-实例 :
-  签名: lightProfiniteToLightCondSet.{u}.幺半群
-  定义体: .some (Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts _).mpr inferInstance
-
-Depends on / 依赖: Functor, Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts, Monoidal, nonempty_monoidal_iff_preservesFiniteProducts
+--- 原说明 ---
+The functor from `LightProfinite` to `LightCondSet` is monoidal with respect to 
+the cartesian
+monoidal structure.
 -/
 noncomputable instance : lightProfiniteToLightCondSet.{u}.Monoidal :=
-.some (Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts _).mpr inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteCoproducts lightProfiniteToLightCondSet.{u}
-  body: inferInstanceAs PreservesFiniteCoproducts (coherentTopology _).yoneda
-
-中文:
-实例 :
-  签名: 保持FiniteCoproducts lightProfiniteToLightCondSet.{u}
-  定义体: inferInstanceAs PreservesFiniteCoproducts (coherentTopology _).yoneda
-
-Depends on / 依赖: PreservesFiniteCoproducts, coherentTopology, yoneda
+  (Functor.Monoidal.nonempty_monoidal_iff_preservesFiniteProducts _).mpr inferInstance |>.some
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteCoproducts lightProfiniteToLightCondSet.{u} :=
-inferInstanceAs PreservesFiniteCoproducts (coherentTopology _).yoneda
+  inferInstanceAs <| PreservesFiniteCoproducts (coherentTopology _).yoneda

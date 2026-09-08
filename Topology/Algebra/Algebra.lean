@@ -46,167 +46,101 @@ variable [CommSemiring R] [Semiring A] [Algebra R A]
 variable [TopologicalSpace R] [TopologicalSpace A]
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_algebraMap` / 定理 `continuous_algebraMap`
-
-English:
-theorem continuous_algebraMap
-  given: [ContinuousSMul R A]
-  statement: Continuous (algebraMap R A)
-  proof: by
-  rw [algebraMap_eq_smul_one']
-  fun_prop
-
-中文:
-定理 continuous_algebraMap
-  条件: [连续标量乘法 R A]
-  结论: 连续 (algebraMap R A)
-  证明: by
-  rw [algebraMap_eq_smul_one']
-  fun_prop
-
-Depends on / 依赖: algebraMap_eq_smul_one, fun_prop
+/-
+**continuous_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_algebraMap [ContinuousSMul R A] : Continuous (algebraMap R A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.algebraMap_eq_smul_one'`：algebraMap_eq_smul_one' : ⇑(algebraMap 
+R A) = fun r => r • (1 : A)
+· 使用定理 `Continuous.fun_smul`：∀ {M : Type u_1} {X : Type u_2} {Y : Type u_3} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X]   [inst_2 : TopologicalSpa
+ce Y] [in…
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 -/
 theorem continuous_algebraMap [ContinuousSMul R A] : Continuous (algebraMap R A) := by
   rw [algebraMap_eq_smul_one']
   fun_prop
-
-/--
-theorem `continuous_algebraMap_iff_smul` / 定理 `continuous_algebraMap_iff_smul`
-
-English:
-theorem continuous_algebraMap_iff_smul
-  given: [ContinuousMul A]
-  proof: by
-  refine ⟨fun h => ?_, fun h => have : ContinuousSMul R A := ⟨h⟩; continuous_algebraMap _ _⟩
-  simp only [Algebra.smul_def]
-  exact (h.comp continuous_fst).mul continuous_snd
-
-中文:
-定理 continuous_algebraMap_iff_smul
-  条件: [连续乘法 A]
-  证明: by
-  refine ⟨fun h => ?_, fun h => have : ContinuousSMul R A := ⟨h⟩; continuous_algebraMap _ _⟩
-  simp only [Algebra.smul_def]
-  exact (h.comp continuous_fst).mul continuous_snd
-
-Depends on / 依赖: Algebra, Algebra.smul_def, ContinuousSMul, continuous_algebraMap, continuous_fst, continuous_snd, h.comp, smul_def
+/-
+**continuous_algebraMap_iff_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_algebraMap_iff_smul [ContinuousMul A] : Continuous (algebraMap 
+R A) ↔ Continuous fun p : R × A => p.1 • p.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `Continuous.mul`：Continuous.mul (hf : Continuous f) (hg : Continuous g) :
+ Continuous (f * g)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
+· 使用定理 `continuous_algebraMap`：continuous_algebraMap [ContinuousSMul R A] : Cont
+inuous (algebraMap R A)
 -/
 theorem continuous_algebraMap_iff_smul [ContinuousMul A] :
     Continuous (algebraMap R A) ↔ Continuous fun p : R × A => p.1 • p.2 := by
   refine ⟨fun h => ?_, fun h => have : ContinuousSMul R A := ⟨h⟩; continuous_algebraMap _ _⟩
   simp only [Algebra.smul_def]
   exact (h.comp continuous_fst).mul continuous_snd
-
-/--
-theorem `continuousSMul_of_algebraMap` / 定理 `continuousSMul_of_algebraMap`
-
-English:
-theorem continuousSMul_of_algebraMap
-  given: [ContinuousMul A] (h : Continuous (algebraMap R A))
-  proof: ⟨(continuous_algebraMap_iff_smul R A).1 h⟩
-
-中文:
-定理 continuousSMul_of_algebraMap
-  条件: [连续乘法 A] (h : 连续 (algebraMap R A))
-  证明: ⟨(continuous_algebraMap_iff_smul R A).1 h⟩
-
-Depends on / 依赖: continuous_algebraMap_iff_smul
+/-
+**continuousSMul_of_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousSMul_of_algebraMap [ContinuousMul A] (h : Continuous (algebraMap
+ R A)) : ContinuousSMul R A
+参数：h : Continuous (algebraMap R A)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuous_algebraMap_iff_smul`：continuous_algebraMap_iff_smul [Continuo
+usMul A] : Continuous (algebraMap R A) ↔ Continuous fun p : R × A => p.1 • p.2
 -/
 theorem continuousSMul_of_algebraMap [ContinuousMul A] (h : Continuous (algebraMap R A)) :
     ContinuousSMul R A :=
   ⟨(continuous_algebraMap_iff_smul R A).1 h⟩
-
-/--
-Instance `Subalgebra.continuousSMul` / 实例 `Subalgebra.continuousSMul`
-
-English:
-instance Subalgebra.continuousSMul
-  signature: (S : Subalgebra R A) (X) [TopologicalSpace X] [MulAction A X]
-  body: Subsemiring.continuousSMul S.toSubsemiring X
-
-中文:
-实例 子代数.continuousSMul
-  签名: (S : 子代数 R A) (X) [拓扑空间 X] [乘法作用 A X]
-  定义体: Subsemiring.continuousSMul S.toSubsemiring X
-
-Depends on / 依赖: S.toSubsemiring, Subsemiring, Subsemiring.continuousSMul, continuousSMul, toSubsemiring
+/-
+**Subalgebra.continuousSMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Subalgebra.continuousSMul (S : Subalgebra R A) (X) [TopologicalSpace X] [M
+ulAction A X] [ContinuousSMul A X] : ContinuousSMul S X
+参数：S : Subalgebra R A；X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Subalgebra.continuousSMul (S : Subalgebra R A) (X) [TopologicalSpace X] [MulAction A X]
     [ContinuousSMul A X] : ContinuousSMul S X :=
   Subsemiring.continuousSMul S.toSubsemiring X
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PartialOrder
-  signature: A] [IsOrderedRing A] [ContinuousMul A] :
-  body: Topology.IsInducing.subtypeVal.continuousMul Icc.coeMonoidWithZeroHom
-
-中文:
-实例 [偏序
-  签名: A] [是Ordered环 A] [连续乘法 A] :
-  定义体: Topology.IsInducing.subtypeVal.continuousMul Icc.coeMonoidWithZeroHom
-
-Depends on / 依赖: Icc.coeMonoidWithZeroHom, IsInducing, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMonoidWithZeroHom, continuousMul, subtypeVal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PartialOrder A] [IsOrderedRing A] [ContinuousMul A] :
     ContinuousMul (Icc (0 : A) 1) :=
   Topology.IsInducing.subtypeVal.continuousMul Icc.coeMonoidWithZeroHom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PartialOrder
-  signature: A] [IsOrderedRing A] [ContinuousMul A] :
-  body: Topology.IsInducing.subtypeVal.continuousMul Ico.coeMulHom
-
-中文:
-实例 [偏序
-  签名: A] [是Ordered环 A] [连续乘法 A] :
-  定义体: Topology.IsInducing.subtypeVal.continuousMul Ico.coeMulHom
-
-Depends on / 依赖: Ico.coeMulHom, IsInducing, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMulHom, continuousMul, subtypeVal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PartialOrder A] [IsOrderedRing A] [ContinuousMul A] :
     ContinuousMul (Ico (0 : A) 1) :=
   Topology.IsInducing.subtypeVal.continuousMul Ico.coeMulHom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PartialOrder
-  signature: A] [IsStrictOrderedRing A] [ContinuousMul A] :
-  body: Topology.IsInducing.subtypeVal.continuousMul Ioc.coeMonoidHom
-
-中文:
-实例 [偏序
-  签名: A] [是StrictOrdered环 A] [连续乘法 A] :
-  定义体: Topology.IsInducing.subtypeVal.continuousMul Ioc.coeMonoidHom
-
-Depends on / 依赖: Ioc.coeMonoidHom, IsInducing, Sum.uniformity, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMonoidHom, continuousMul, infer_instance, subtypeVal, uniformity
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PartialOrder A] [IsStrictOrderedRing A] [ContinuousMul A] :
     ContinuousMul (Ioc (0 : A) 1) :=
   Topology.IsInducing.subtypeVal.continuousMul Ioc.coeMonoidHom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PartialOrder
-  signature: A] [IsStrictOrderedRing A] [ContinuousMul A] :
-  body: Topology.IsInducing.subtypeVal.continuousMul Ioo.coeMulHom
-
-中文:
-实例 [偏序
-  签名: A] [是StrictOrdered环 A] [连续乘法 A] :
-  定义体: Topology.IsInducing.subtypeVal.continuousMul Ioo.coeMulHom
-
-Depends on / 依赖: Ioo.coeMulHom, IsInducing, Topology, Topology.IsInducing.subtypeVal.continuousMul, coeMulHom, continuousMul, subtypeVal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PartialOrder A] [IsStrictOrderedRing A] [ContinuousMul A] :
     ContinuousMul (Ioo (0 : A) 1) :=
@@ -217,75 +151,66 @@ variable [ContinuousSMul R A]
 
 /-- The inclusion of the base ring in a topological algebra as a continuous linear map. -/
 @[simps]
-/--
-Definition of `algebraMapCLM` / `algebraMapCLM` 的定义
+/-
+**algebraMapCLM** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：algebraMapCLM : R ->L[R] A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraMapCLM
-  signature: : R ->L[R] A
-  body: { Algebra.linearMap R A with
-    toFun := algebraMap R A }
-
-中文:
-定义 algebraMapCLM
-  签名: : R ->L[R] A
-  定义体: { Algebra.linearMap R A with
-    toFun := algebraMap R A }
-
-Depends on / 依赖: Algebra, Algebra.linearMap, algebraMap, linearMap
+--- 原说明 ---
+The inclusion of the base ring in a topological algebra as a continuous linear m
+ap.
 -/
-def algebraMapCLM : R ->L[R] A :=
+def algebraMapCLM : R →L[R] A :=
   { Algebra.linearMap R A with
     toFun := algebraMap R A }
-
-/--
-theorem `coe_algebraMapCLM` / 定理 `coe_algebraMapCLM`
-
-English:
-theorem coe_algebraMapCLM
-  statement: ⇑(algebraMapCLM R A) = algebraMap R A
-  proof: rfl
-
-中文:
-定理 coe_algebraMapCLM
-  结论: ⇑(algebraMapCLM R A) = algebraMap R A
-  证明: rfl
+/-
+**coe_algebraMapCLM** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_algebraMapCLM : ⇑(algebraMapCLM R A) = algebraMap R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_algebraMapCLM : ⇑(algebraMapCLM R A) = algebraMap R A :=
   rfl
-
-/--
-theorem `toLinearMap_algebraMapCLM` / 定理 `toLinearMap_algebraMapCLM`
-
-English:
-theorem toLinearMap_algebraMapCLM
-  statement: (algebraMapCLM R A).toLinearMap = Algebra.linearMap R A
-  proof: rfl
-
-中文:
-定理 toLinearMap_algebraMapCLM
-  结论: (algebraMapCLM R A).toLinearMap = 代数.linearMap R A
-  证明: rfl
-
-Depends on / 依赖: ContinuousAt, tendsto_nhds_left
+/-
+**toLinearMap_algebraMapCLM** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toLinearMap_algebraMapCLM : (algebraMapCLM R A).toLinearMap = Algebra.line
+arMap R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearMap_algebraMapCLM : (algebraMapCLM R A).toLinearMap = Algebra.linearMap R A :=
   rfl
-
-/--
-lemma `ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM` / 引理 `ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM`
-
-English:
-lemma ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM
-  proof: by
-  ext; simp
-
-中文:
-引理 连续线性映射.toSpanSingleton_one_eq_algebraMapCLM
-  证明: by
-  ext; simp
-
-Depends on / 依赖: algebraMapCLM
+/-
+**ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM** 是 Mathlib 中的一个引理，位于
+命名空间 ``。
+形式化陈述：ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM : toSpanSingleton
+ R (M₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext_ring`：ext_ring [TopologicalSpace R₁] {f g : R₁ -
+>L[R₁] M₁} (h : f 1 = g 1) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `algebraMapCLM_apply`：∀ (R : Type u_1) (A : Type u) [inst : CommSemiring 
+R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : TopologicalSpace R] 
+[inst_4 :…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM :
     toSpanSingleton R (M₁ := A) 1 = algebraMapCLM R A := by
@@ -293,20 +218,35 @@ lemma ContinuousLinearMap.toSpanSingleton_one_eq_algebraMapCLM :
 
 end
 
-/--
-theorem `DiscreteTopology.instContinuousSMul` / 定理 `DiscreteTopology.instContinuousSMul`
+/-- If `R` is a discrete topological ring, then any topological ring `S` which is an `R`-algebra
+is also a topological `R`-algebra.
 
-English:
-theorem DiscreteTopology.instContinuousSMul
-  given: [IsTopologicalSemiring A] [DiscreteTopology R]
-  proof: continuousSMul_of_algebraMap _ _ continuous_of_discreteTopology
+NB: This could be an instance but the signature makes it very expensive in search.
+See https://github.com/leanprover-community/mathlib4/pull/15339
+for the regressions caused by making this an instance. -/
+/-
+**DiscreteTopology.instContinuousSMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DiscreteTopology.instContinuousSMul [IsTopologicalSemiring A] [DiscreteTop
+ology R] : ContinuousSMul R A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuousSMul_of_algebraMap`：continuousSMul_of_algebraMap [ContinuousMu
+l A] (h : Continuous (algebraMap R A)) : ContinuousSMul R A
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `continuous_of_discreteTopology`：continuous_of_discreteTopology [Topologi
+calSpace β] {f : α -> β} : Continuous f
 
-中文:
-定理 离散拓扑.instContinuousSMul
-  条件: [是TopologicalSemiring A] [离散拓扑 R]
-  证明: continuousSMul_of_algebraMap _ _ continuous_of_discreteTopology
+--- 原说明 ---
+If `R` is a discrete topological ring, then any topological ring `S` which is an
+ `R`-algebra
+is also a topological `R`-algebra.
 
-Depends on / 依赖: continuousSMul_of_algebraMap, continuous_of_discreteTopology
+NB: This could be an instance but the signature makes it very expensive in searc
+h.
+See https://github.com/leanprover-community/mathlib4/pull/15339
+for the regressions caused by making this an instance.
 -/
 theorem DiscreteTopology.instContinuousSMul [IsTopologicalSemiring A] [DiscreteTopology R] :
     ContinuousSMul R A := continuousSMul_of_algebraMap _ _ continuous_of_discreteTopology
@@ -320,32 +260,32 @@ section
 variable (R : Type*) [CommSemiring R]
   (A : Type*) [Semiring A]
 
-/--
-Definition of `ContinuousAlgHom` / `ContinuousAlgHom` 的定义
+/-- Continuous algebra homomorphisms between algebras. We only put the type classes that are
+necessary for the definition, although in applications `M` and `B` will be topological algebras
+over the topological ring `R`. -/
+/-
+**ContinuousAlgHom** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：ContinuousAlgHom (R : Type*) [CommSemiring R] (A : Type*) [Semiring A] [To
+pologicalSpace A] (B : Type*) [Semiring B] [TopologicalSpace B] [Algebra R A] [A
+lgebra R B] extends A ->ₐ[R] B where cont : Continuous toFun
+参数：R : Type*；A : Type*；B : Type*。
+继承自：A ->ₐ[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ContinuousAlgHom
-  parameters: (R : Type*) [CommSemiring R] (A : Type*) [Semiring A]
-  extends: A ->ₐ[R] B
-  axioms and operations (1):
-    - cont : Continuous toFun  [default: by fun_prop]
-
-中文:
-结构 余ntinuousAlg态射
-  参数: (R : 类型) [交换半环 R] (A : 类型) [半环 A]
-  继承: A ->ₐ[R] B
-  公理与运算 (1 个):
-    - cont : 连续 toFun  [默认: by fun_prop]
-
-Depends on / 依赖: ContinuousWithinAt, fun_prop, tendsto_nhds_left
+--- 原说明 ---
+Continuous algebra homomorphisms between algebras. We only put the type classes 
+that are
+necessary for the definition, although in applications `M` and `B` will be topol
+ogical algebras
+over the topological ring `R`.
 -/
 structure ContinuousAlgHom (R : Type*) [CommSemiring R] (A : Type*) [Semiring A]
     [TopologicalSpace A] (B : Type*) [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B]
-    extends A ->ₐ[R] B where
+    extends A →ₐ[R] B where
   cont : Continuous toFun := by fun_prop
 
 @[inherit_doc]
-notation:25 A " ->A[" R "] " B => ContinuousAlgHom R A B
+notation:25 A " →A[" R "] " B => ContinuousAlgHom R A B
 
 namespace ContinuousAlgHom
 
@@ -358,30 +298,11 @@ variable [TopologicalSpace A]
 
 variable {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (A ->A[R] B) A B
-  body: f.toAlgHom
-  coe_injective f g h := by
-    cases f; cases g
-    simp only [mk.injEq]
-    exact AlgHom.ext (congrFun h)
-
-中文:
-实例 :
-  签名: 函数状 (A ->A[R] B) A B
-  定义体: f.toAlgHom
-  coe_injective f g h := by
-    cases f; cases g
-    simp only [mk.injEq]
-    exact AlgHom.ext (congrFun h)
-
-Depends on / 依赖: f.toAlgHom, toAlgHom
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (A ->A[R] B) A B where
+instance : FunLike (A →A[R] B) A B where
   coe f := f.toAlgHom
   coe_injective f g h := by
     cases f; cases g
@@ -389,584 +310,460 @@ instance : FunLike (A ->A[R] B) A B where
     exact AlgHom.ext (congrFun h)
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AlgHomClass (A ->A[R] B) R A B
-  body: map_mul f.toAlgHom x y
-  map_one f := map_one f.toAlgHom
-  map_add f := map_add f.toAlgHom
-  map_zero f := map_zero f.toAlgHom
-  commutes f r := f.toAlgHom.commutes r
-
-中文:
-实例 :
-  签名: 代数态射类 (A ->A[R] B) R A B
-  定义体: map_mul f.toAlgHom x y
-  map_one f := map_one f.toAlgHom
-  map_add f := map_add f.toAlgHom
-  map_zero f := map_zero f.toAlgHom
-  commutes f r := f.toAlgHom.commutes r
-
-Depends on / 依赖: ContinuousOn, _left, continuousWithinAt_iff, f.toAlgHom, map_mul, toAlgHom
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AlgHomClass (A ->A[R] B) R A B where
+instance : AlgHomClass (A →A[R] B) R A B where
   map_mul f x y := map_mul f.toAlgHom x y
-  map_one f := map_one f.toAlgHom
-  map_add f := map_add f.toAlgHom
-  map_zero f := map_zero f.toAlgHom
-  commutes f r := f.toAlgHom.commutes r
+  map_one f     := map_one f.toAlgHom
+  map_add f     := map_add f.toAlgHom
+  map_zero f    := map_zero f.toAlgHom
+  commutes f r  := f.toAlgHom.commutes r
 
 attribute [coe] ContinuousAlgHom.toAlgHom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (A ->A[R] B) (A ->ₐ[R] B)
-  body: toAlgHom
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : Coe (A →A[R] B) (A →ₐ[R] B) where coe := toAlgHom
 
 @[deprecated "Now a syntactic equality" (since := "2026-04-29"), nolint synTaut]
-
-中文:
-实例 :
-  签名: Coe (A ->A[R] B) (A ->ₐ[R] B)
-  定义体: toAlgHom
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-29"), nolint synTaut]
-
-Depends on / 依赖: toAlgHom
+/-
+**ContinuousAlgHom.toAlgHom_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：toAlgHom_eq_coe (f : A ->A[R] B) : f.toAlgHom = f
+参数：f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Coe (A ->A[R] B) (A ->ₐ[R] B) where coe := toAlgHom
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-29"), nolint synTaut]
-/--
-theorem `toAlgHom_eq_coe` / 定理 `toAlgHom_eq_coe`
-
-English:
-theorem toAlgHom_eq_coe
-  given: (f : A ->A[R] B)
-  statement: f.toAlgHom = f
-  proof: rfl
+theorem toAlgHom_eq_coe (f : A →A[R] B) : f.toAlgHom = f := rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 toAlgHom_eq_coe
-  条件: (f : A ->A[R] B)
-  结论: f.toAlgHom = f
-  证明: rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: continuous_iff_continuousAt, continuous_iff_continuousAt.trans, forall_congr, tendsto_nhds_left
+/-
+**ContinuousAlgHom.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_inj {f g : A ->A[R] B} : (f : A ->ₐ[R] B) = g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousAlgHom.mk.injEq`：∀ {R : Type u_3} [inst : CommSemiring R] {A :
+ Type u_4} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Type u_5} 
+[inst_3 : Semir…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem toAlgHom_eq_coe (f : A ->A[R] B) : f.toAlgHom = f := rfl
-
-@[simp, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {f g : A ->A[R] B}
-  statement: (f : A ->ₐ[R] B) = g ↔ f = g
-  proof: by
+theorem coe_inj {f g : A →A[R] B} : (f : A →ₐ[R] B) = g ↔ f = g := by
   cases f; cases g; simp only [mk.injEq]
-
-中文:
-定理 coe_inj
-  条件: {f g : A ->A[R] B}
-  结论: (f : A ->ₐ[R] B) = g ↔ f = g
-  证明: by
-  cases f; cases g; simp only [mk.injEq]
-
-Depends on / 依赖: mk.injEq
+/-
+**ContinuousAlgHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_mk (f : A ->ₐ[R] B) (h) : (mk f h : A ->ₐ[R] B) = f
+参数：f : A ->ₐ[R] B；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inj {f g : A ->A[R] B} : (f : A ->ₐ[R] B) = g ↔ f = g := by
-  cases f; cases g; simp only [mk.injEq]
-
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : A ->ₐ[R] B) (h)
-  statement: (mk f h : A ->ₐ[R] B) = f
-  proof: rfl
+theorem coe_mk (f : A →ₐ[R] B) (h) : (mk f h : A →ₐ[R] B) = f := rfl
 
 @[simp]
-
-中文:
-定理 coe_mk
-  条件: (f : A ->ₐ[R] B) (h)
-  结论: (mk f h : A ->ₐ[R] B) = f
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_mk' (f : A ->ₐ[R] B) (h) : (mk f h : A -> B) = f
+参数：f : A ->ₐ[R] B；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : A ->ₐ[R] B) (h) : (mk f h : A ->ₐ[R] B) = f := rfl
-
-@[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  given: (f : A ->ₐ[R] B) (h)
-  statement: (mk f h : A -> B) = f
-  proof: rfl
+theorem coe_mk' (f : A →ₐ[R] B) (h) : (mk f h : A → B) = f := rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 coe_mk'
-  条件: (f : A ->ₐ[R] B) (h)
-  结论: (mk f h : A -> B) = f
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_coe (f : A ->A[R] B) : ⇑(f : A ->ₐ[R] B) = f
+参数：f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk' (f : A ->ₐ[R] B) (h) : (mk f h : A -> B) = f := rfl
-
-@[simp, norm_cast]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  given: (f : A ->A[R] B)
-  statement: ⇑(f : A ->ₐ[R] B) = f
-  proof: rfl
-
-中文:
-定理 coe_coe
-  条件: (f : A ->A[R] B)
-  结论: ⇑(f : A ->ₐ[R] B) = f
-  证明: rfl
+theorem coe_coe (f : A →A[R] B) : ⇑(f : A →ₐ[R] B) = f := rfl
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coe (f : A ->A[R] B) : ⇑(f : A ->ₐ[R] B) = f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousMapClass (A ->A[R] B) A B
-  body: f.2
-
-@[fun_prop]
-
-中文:
-实例 :
-  签名: 连续映射类 (A ->A[R] B) A B
-  定义体: f.2
-
-@[fun_prop]
--/
-instance : ContinuousMapClass (A ->A[R] B) A B where
+instance : ContinuousMapClass (A →A[R] B) A B where
   map_continuous f := f.2
 
 @[fun_prop]
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  given: (f : A ->A[R] B)
-  statement: Continuous f
-  proof: f.2
-
-中文:
-定理 continuous
-  条件: (f : A ->A[R] B)
-  结论: 连续 f
-  证明: f.2
+/-
+**ContinuousAlgHom.continuous** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {A : Type u_2} [inst_1 : Semiring
+ A] [inst_2 : TopologicalSpace A]   {B : Type u_3} [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A] [inst_6 : Algebra R B]   (f : A →A
+[R] B), Continuous ⇑f
+参数：f : A →A[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.cont`：∀ {R : Type u_3} [inst : CommSemiring R] {A : Typ
+e u_4} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Type u_5} [ins
+t_3 : Semir…
 -/
-protected theorem continuous (f : A ->A[R] B) : Continuous f := f.2
-
-/--
-theorem `uniformContinuous` / 定理 `uniformContinuous`
-
-English:
-theorem uniformContinuous
-  statement: {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂]
-  proof: uniformContinuous_addMonoidHom_of_continuous f.continuous
-
-中文:
-定理 uniformContinuous
-  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂]
-  证明: uniformContinuous_addMonoidHom_of_continuous f.continuous
+protected theorem continuous (f : A →A[R] B) : Continuous f := f.2
+/-
+**ContinuousAlgHom.uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom
+`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {E₁ : Type u_4} {E₂ : Type u_5} [
+inst_1 : UniformSpace E₁]   [inst_2 : UniformSpace E₂] [inst_3 : Ring E₁] [inst_
+4 : Ring E₂] [inst_5 : Algebra R E₁] [inst_6 : Algebra R E₂]   [IsUniformAddGrou
+p E₁] [IsUniformAddGroup E₂] (f : E₁ →A[R] E₂), UniformContinuous ⇑f
+参数：f : E₁ →A[R] E₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_addMonoidHom_of_continuous`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom :
+ Type u_3}   [inst_3 : UniformSpac…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `ContinuousAlgHom.instAlgHomClass`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Typ
+e u_3} [inst_3 : Semir…
+· 使用定理 `ContinuousAlgHom.continuous`：∀ {R : Type u_1} [inst : CommSemiring R] {A
+ : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Type u_3
+} [inst_3 : Semir…
 -/
 protected theorem uniformContinuous {E₁ E₂ : Type*} [UniformSpace E₁] [UniformSpace E₂]
     [Ring E₁] [Ring E₂] [Algebra R E₁] [Algebra R E₂] [IsUniformAddGroup E₁]
-    [IsUniformAddGroup E₂] (f : E₁ ->A[R] E₂) : UniformContinuous f :=
+    [IsUniformAddGroup E₂] (f : E₁ →A[R] E₂) : UniformContinuous f :=
   uniformContinuous_addMonoidHom_of_continuous f.continuous
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection]. We need to specify this projection explicitly in this case,
+because it is a composition of multiple projections. -/
+/-
+**ContinuousAlgHom.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom.Simps
+`。
+形式化陈述：{R : Type u_1} →   [inst : CommSemiring R] →     {A : Type u_2} →       [i
+nst_1 : Semiring A] →         [inst_2 : TopologicalSpace A] →           {B : Typ
+e u_3} →             [inst_3 : Semiring B] →               [inst_4 : Topological
+Space B] → [inst_5 : Algebra R A] → [inst_6 : Algebra R B] → (A →A[R] B) → A → B
+参数：A →A[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (h : A ->A[R] B)
-  body: h
-
-中文:
-定义 Simps.apply
-  签名: (h : A ->A[R] B)
-  定义体: h
+--- 原说明 ---
+See Note [custom simps projection]. We need to specify this projection explicitl
+y in this case,
+because it is a composition of multiple projections.
 -/
-def Simps.apply (h : A ->A[R] B) : A -> B := h
+def Simps.apply (h : A →A[R] B) : A → B := h
 
-/--
-Definition of `Simps.coe` / `Simps.coe` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**ContinuousAlgHom.Simps.coe** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom.Simps`。
+形式化陈述：{R : Type u_1} →   [inst : CommSemiring R] →     {A : Type u_2} →       [i
+nst_1 : Semiring A] →         [inst_2 : TopologicalSpace A] →           {B : Typ
+e u_3} →             [inst_3 : Semiring B] →               [inst_4 : Topological
+Space B] → [inst_5 : Algebra R A] → [inst_6 : Algebra R B] → (A →A[R] B) → A →ₐ[
+R] B
+参数：A →A[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.coe
-  signature: (h : A ->A[R] B)
-  body: h
+--- 原说明 ---
+See Note [custom simps projection].
+-/
+def Simps.coe (h : A →A[R] B) : A →ₐ[R] B := h
 
-initialize_simps_projections ContinuousAlgHom (toFun -> apply, toAlgHom -> coe)
+initialize_simps_projections ContinuousAlgHom (toFun → apply, toAlgHom → coe)
 
 @[ext]
-
-中文:
-定义 Simps.coe
-  签名: (h : A ->A[R] B)
-  定义体: h
-
-initialize_simps_projections ContinuousAlgHom (toFun -> apply, toAlgHom -> coe)
-
-@[ext]
+/-
+**ContinuousAlgHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：ext {f g : A ->A[R] B} (h : forall x, f x = g x) : f = g
+参数：h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-def Simps.coe (h : A ->A[R] B) : A ->ₐ[R] B := h
+theorem ext {f g : A →A[R] B} (h : ∀ x, f x = g x) : f = g := DFunLike.ext f g h
 
-initialize_simps_projections ContinuousAlgHom (toFun -> apply, toAlgHom -> coe)
+/-- Copy of a `ContinuousAlgHom` with a new `toFun` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**ContinuousAlgHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：copy (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f) : A ->A[R] B where toAlg
+Hom
+参数：f : A ->A[R] B；f' : A -> B；h : f' = ⇑f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : A ->A[R] B} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : A ->A[R] B} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+--- 原说明 ---
+Copy of a `ContinuousAlgHom` with a new `toFun` equal to the old one. Useful to 
+fix
+definitional equalities.
 -/
-theorem ext {f g : A ->A[R] B} (h : forall x, f x = g x) : f = g := DFunLike.ext f g h
-
-/--
-Definition of `copy` / `copy` 的定义
-
-English:
-definition copy
-  signature: (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f)
-  body: {
-    toRingHom := (f : A ->A[R] B).toRingHom.copy f' h
-    commutes' := fun r => by
-      simp only [AlgHom.toRingHom_eq_coe, h, RingHom.toMonoidHom_eq_coe, OneHom.toFun_eq_coe,
-        MonoidHom.toOneHom_coe, MonoidHom.coe_coe, RingHom.coe_copy, AlgHomClass.commutes f r] }
-  cont := show Continuous f' from h.symm ▸ f.continuous
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f)
-  定义体: {
-    toRingHom := (f : A ->A[R] B).toRingHom.copy f' h
-    commutes' := fun r => by
-      simp only [AlgHom.toRingHom_eq_coe, h, RingHom.toMonoidHom_eq_coe, OneHom.toFun_eq_coe,
-        MonoidHom.toOneHom_coe, MonoidHom.coe_coe, RingHom.coe_copy, AlgHomClass.commutes f r] }
-  cont := show Continuous f' from h.symm ▸ f.continuous
-
-@[simp]
--/
-def copy (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f) : A ->A[R] B where
+def copy (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f) : A →A[R] B where
   toAlgHom := {
-    toRingHom := (f : A ->A[R] B).toRingHom.copy f' h
+    toRingHom := (f : A →A[R] B).toRingHom.copy f' h
     commutes' := fun r => by
       simp only [AlgHom.toRingHom_eq_coe, h, RingHom.toMonoidHom_eq_coe, OneHom.toFun_eq_coe,
         MonoidHom.toOneHom_coe, MonoidHom.coe_coe, RingHom.coe_copy, AlgHomClass.commutes f r] }
   cont := show Continuous f' from h.symm ▸ f.continuous
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**ContinuousAlgHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_copy (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f) : ⇑(f.copy f' h) = f
+'
+参数：f : A ->A[R] B；f' : A -> B；h : f' = ⇑f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f) : ⇑(f.copy f' h) = f' := rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+theorem coe_copy (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f) : ⇑(f.copy f' h) = f' := rfl
+/-
+**ContinuousAlgHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：copy_eq (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f) : f.copy f' h = f
+参数：f : A ->A[R] B；f' : A -> B；h : f' = ⇑f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : A ->A[R] B) (f' : A -> B) (h : f' = ⇑f) : f.copy f' h = f := DFunLike.ext' h
-
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : A ->A[R] B)
-  statement: f (0 : A) = 0
-  proof: map_zero f
-
-中文:
-定理 map_zero
-  条件: (f : A ->A[R] B)
-  结论: f (0 : A) = 0
-  证明: map_zero f
+theorem copy_eq (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f) : f.copy f' h = f := DFunLike.ext' h
+/-
+**ContinuousAlgHom.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {A : Type u_2} [inst_1 : Semiring
+ A] [inst_2 : TopologicalSpace A]   {B : Type u_3} [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A] [inst_6 : Algebra R B]   (f : A →A
+[R] B), f 0 = 0
+参数：f : A →A[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `ContinuousAlgHom.instAlgHomClass`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Typ
+e u_3} [inst_3 : Semir…
 -/
-protected theorem map_zero (f : A ->A[R] B) : f (0 : A) = 0 := map_zero f
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (f : A ->A[R] B) (x y : A)
-  statement: f (x + y) = f x + f y
-  proof: map_add f x y
-
-中文:
-定理 map_add
-  条件: (f : A ->A[R] B) (x y : A)
-  结论: f (x + y) = f x + f y
-  证明: map_add f x y
+protected theorem map_zero (f : A →A[R] B) : f (0 : A) = 0 := map_zero f
+/-
+**ContinuousAlgHom.map_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {A : Type u_2} [inst_1 : Semiring
+ A] [inst_2 : TopologicalSpace A]   {B : Type u_3} [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A] [inst_6 : Algebra R B]   (f : A →A
+[R] B) (x y : A), f (x + y) = f x + f y
+参数：f : A →A[R] B；x y : A；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `ContinuousAlgHom.instAlgHomClass`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Typ
+e u_3} [inst_3 : Semir…
 -/
-protected theorem map_add (f : A ->A[R] B) (x y : A) : f (x + y) = f x + f y := map_add f x y
-
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: (f : A ->A[R] B) (c : R) (x : A)
-  proof: map_smul ..
-
-中文:
-定理 map_smul
-  条件: (f : A ->A[R] B) (c : R) (x : A)
-  证明: map_smul ..
+protected theorem map_add (f : A →A[R] B) (x y : A) : f (x + y) = f x + f y := map_add f x y
+/-
+**ContinuousAlgHom.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {A : Type u_2} [inst_1 : Semiring
+ A] [inst_2 : TopologicalSpace A]   {B : Type u_3} [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A] [inst_6 : Algebra R B]   (f : A →A
+[R] B) (c : R) (x : A), f (c • x) = c • f x
+参数：f : A →A[R] B；c : R；x : A；c • x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `ContinuousAlgHom.instAlgHomClass`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Typ
+e u_3} [inst_3 : Semir…
 -/
-protected theorem map_smul (f : A ->A[R] B) (c : R) (x : A) :
+protected theorem map_smul (f : A →A[R] B) (c : R) (x : A) :
     f (c • x) = c • f x :=
   map_smul ..
-
-/--
-theorem `map_smul_of_tower` / 定理 `map_smul_of_tower`
-
-English:
-theorem map_smul_of_tower
-  statement: {R S : Type*} [CommSemiring S] [SMul R A] [Algebra S A] [SMul R B]
-  proof: map_smul f c x
-
-中文:
-定理 map_smul_of_tower
-  结论: {R S : 类型} [交换半环 S] [标量乘法 R A] [代数 S A] [标量乘法 R B]
-  证明: map_smul f c x
-
-Depends on / 依赖: map_smul
+/-
+**ContinuousAlgHom.map_smul_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom
+`。
+形式化陈述：map_smul_of_tower {R S : Type*} [CommSemiring S] [SMul R A] [Algebra S A] 
+[SMul R B] [Algebra S B] [MulActionHomClass (A ->A[S] B) R A B] (f : A ->A[S] B)
+ (c : R) (x : A) : f (c • x) = c • f x
+参数：A ->A[S] B；f : A ->A[S] B；c : R；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
 -/
 theorem map_smul_of_tower {R S : Type*} [CommSemiring S] [SMul R A] [Algebra S A] [SMul R B]
-    [Algebra S B] [MulActionHomClass (A ->A[S] B) R A B] (f : A ->A[S] B) (c : R) (x : A) :
+    [Algebra S B] [MulActionHomClass (A →A[S] B) R A B] (f : A →A[S] B) (c : R) (x : A) :
     f (c • x) = c • f x :=
   map_smul f c x
-
-/--
-theorem `map_sum` / 定理 `map_sum`
-
-English:
-theorem map_sum
-  given: {ι : Type*} (f : A ->A[R] B) (s : Finset ι) (g : ι -> A)
-  proof: map_sum ..
-
-中文:
-定理 map_sum
-  条件: {ι : 类型} (f : A ->A[R] B) (s : 有限集 ι) (g : ι -> A)
-  证明: map_sum ..
+/-
+**ContinuousAlgHom.map_sum** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {A : Type u_2} [inst_1 : Semiring
+ A] [inst_2 : TopologicalSpace A]   {B : Type u_3} [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A] [inst_6 : Algebra R B]   {ι : Type
+ u_4} (f : A →A[R] B) (s : Finset ι) (g : ι → A), f (∑ i ∈ s, g i) = ∑ i ∈ s, f 
+(g i)
+参数：f : A →A[R] B；s : Finset ι；g : ι → A；∑ i ∈ s, g i；g i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `ContinuousAlgHom.instAlgHomClass`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Typ
+e u_3} [inst_3 : Semir…
 -/
-protected theorem map_sum {ι : Type*} (f : A ->A[R] B) (s : Finset ι) (g : ι -> A) :
-    f (∑ i in s, g i) = ∑ i in s, f (g i) :=
+protected theorem map_sum {ι : Type*} (f : A →A[R] B) (s : Finset ι) (g : ι → A) :
+    f (∑ i ∈ s, g i) = ∑ i ∈ s, f (g i) :=
   map_sum ..
 
 /-- Any two continuous `R`-algebra morphisms from `R` are equal -/
 @[ext (iff := false)]
-/--
-theorem `ext_ring` / 定理 `ext_ring`
+/-
+**ContinuousAlgHom.ext_ring** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：ext_ring [TopologicalSpace R] {f g : R ->A[R] A} : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ContinuousAlgHom.coe_inj`：coe_inj {f g : A ->A[R] B} : (f : A ->ₐ[R] B) 
+= g ↔ f = g
+· 使用定理 `Algebra.ext_id`：ext_id (f g : R ->ₐ[R] A) : f = g
 
-English:
-theorem ext_ring
-  given: [TopologicalSpace R] {f g : R ->A[R] A}
-  statement: f = g
-  proof: coe_inj.mp (ext_id _ _ _)
-
-中文:
-定理 ext_ring
-  条件: [拓扑空间 R] {f g : R ->A[R] A}
-  结论: f = g
-  证明: coe_inj.mp (ext_id _ _ _)
-
-Depends on / 依赖: coe_inj, coe_inj.mp, ext_id
+--- 原说明 ---
+Any two continuous `R`-algebra morphisms from `R` are equal
 -/
-theorem ext_ring [TopologicalSpace R] {f g : R ->A[R] A} : f = g :=
+theorem ext_ring [TopologicalSpace R] {f g : R →A[R] A} : f = g :=
   coe_inj.mp (ext_id _ _ _)
-
-/--
-theorem `ext_ring_iff` / 定理 `ext_ring_iff`
-
-English:
-theorem ext_ring_iff
-  given: [TopologicalSpace R] {f g : R ->A[R] A}
-  statement: f = g ↔ f 1 = g 1
-  proof: ⟨fun h => h ▸ rfl, fun _ => ext_ring ⟩
-
-中文:
-定理 ext_ring_iff
-  条件: [拓扑空间 R] {f g : R ->A[R] A}
-  结论: f = g ↔ f 1 = g 1
-  证明: ⟨fun h => h ▸ rfl, fun _ => ext_ring ⟩
-
-Depends on / 依赖: ext_ring
+/-
+**ContinuousAlgHom.ext_ring_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：ext_ring_iff [TopologicalSpace R] {f g : R ->A[R] A} : f = g ↔ f 1 = g 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext_ring`：ext_ring [TopologicalSpace R] {f g : R ->A[R]
+ A} : f = g
 -/
-theorem ext_ring_iff [TopologicalSpace R] {f g : R ->A[R] A} : f = g ↔ f 1 = g 1 :=
+theorem ext_ring_iff [TopologicalSpace R] {f g : R →A[R] A} : f = g ↔ f 1 = g 1 :=
   ⟨fun h => h ▸ rfl, fun _ => ext_ring ⟩
 
-/--
-theorem `eqOn_closure_adjoin` / 定理 `eqOn_closure_adjoin`
+/-- If two continuous algebra maps are equal on a set `s`, then they are equal on the closure
+of the `Algebra.adjoin` of this set. -/
+/-
+**ContinuousAlgHom.eqOn_closure_adjoin** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgH
+om`。
+形式化陈述：eqOn_closure_adjoin [T2Space B] {s : Set A} {f g : A ->A[R] B} (h : Set.Eq
+On f g s) : Set.EqOn f g (closure (Algebra.adjoin R s : Set A))
+参数：h : Set.EqOn f g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.closure`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpa
+ce X] [inst_1 : TopologicalSpace Y] [T2Space X] {s : Set Y}   {f g : Y → X}, Set
+.EqOn …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AlgHom.eqOn_adjoin_iff`：eqOn_adjoin_iff {φ ψ : A ->ₐ[R] B} {s : Set A} :
+ Set.EqOn φ ψ (adjoin R s) ↔ Set.EqOn φ ψ s
+· 使用定理 `ContinuousAlgHom.continuous`：∀ {R : Type u_1} [inst : CommSemiring R] {A
+ : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Type u_3
+} [inst_3 : Semir…
 
-English:
-theorem eqOn_closure_adjoin
-  given: [T2Space B] {s : Set A} {f g : A ->A[R] B} (h : Set.EqOn f g s)
-  proof: Set.EqOn.closure (AlgHom.eqOn_adjoin_iff.mpr h) f.continuous g.continuous
-
-中文:
-定理 eqOn_closure_adjoin
-  条件: [T2空间 B] {s : 集合 A} {f g : A ->A[R] B} (h : 集合.EqOn f g s)
-  证明: Set.EqOn.closure (AlgHom.eqOn_adjoin_iff.mpr h) f.continuous g.continuous
-
-Depends on / 依赖: AlgHom, AlgHom.eqOn_adjoin_iff.mpr, Set.EqOn.closure, closure, continuous, eqOn_adjoin_iff, f.continuous, g.continuous
+--- 原说明 ---
+If two continuous algebra maps are equal on a set `s`, then they are equal on th
+e closure
+of the `Algebra.adjoin` of this set.
 -/
-theorem eqOn_closure_adjoin [T2Space B] {s : Set A} {f g : A ->A[R] B} (h : Set.EqOn f g s) :
+theorem eqOn_closure_adjoin [T2Space B] {s : Set A} {f g : A →A[R] B} (h : Set.EqOn f g s) :
     Set.EqOn f g (closure (Algebra.adjoin R s : Set A)) :=
   Set.EqOn.closure (AlgHom.eqOn_adjoin_iff.mpr h) f.continuous g.continuous
 
-/--
-theorem `ext_on` / 定理 `ext_on`
+/-- If the subalgebra generated by a set `s` is dense in the ambient module, then two continuous
+algebra maps equal on `s` are equal. -/
+/-
+**ContinuousAlgHom.ext_on** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：ext_on [T2Space B] {s : Set A} (hs : Dense (Algebra.adjoin R s : Set A)) {
+f g : A ->A[R] B} (h : Set.EqOn f g s) : f = g
+参数：hs : Dense (Algebra.adjoin R s : Set A)；h : Set.EqOn f g s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
+· 使用定理 `ContinuousAlgHom.eqOn_closure_adjoin`：eqOn_closure_adjoin [T2Space B] {s
+ : Set A} {f g : A ->A[R] B} (h : Set.EqOn f g s) : Set.EqOn f g (closure (Algeb
+ra.adjoin R s : Set A))
 
-English:
-theorem ext_on
-  statement: [T2Space B] {s : Set A} (hs : Dense (Algebra.adjoin R s : Set A))
-  proof: ext fun x => eqOn_closure_adjoin h (hs x)
-
-中文:
-定理 ext_on
-  结论: [T2空间 B] {s : 集合 A} (hs : 稠密 (代数.adjoin R s : 集合 A))
-  证明: ext fun x => eqOn_closure_adjoin h (hs x)
-
-Depends on / 依赖: eqOn_closure_adjoin
+--- 原说明 ---
+If the subalgebra generated by a set `s` is dense in the ambient module, then tw
+o continuous
+algebra maps equal on `s` are equal.
 -/
 theorem ext_on [T2Space B] {s : Set A} (hs : Dense (Algebra.adjoin R s : Set A))
-    {f g : A ->A[R] B} (h : Set.EqOn f g s) : f = g :=
+    {f g : A →A[R] B} (h : Set.EqOn f g s) : f = g :=
   ext fun x => eqOn_closure_adjoin h (hs x)
 
-/--
-Definition of `toContinuousLinearMap` / `toContinuousLinearMap` 的定义
+/-- Interpret a `ContinuousAlgHom` as a `ContinuousLinearMap`. -/
+/-
+**ContinuousAlgHom.toContinuousLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAl
+gHom`。
+形式化陈述：toContinuousLinearMap (e : A ->A[R] B) : A ->L[R] B where toLinearMap
+参数：e : A ->A[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toContinuousLinearMap
-  signature: (e : A ->A[R] B)
-  body: e.toAlgHom.toLinearMap
-
-中文:
-定义 toContinuousLinearMap
-  签名: (e : A ->A[R] B)
-  定义体: e.toAlgHom.toLinearMap
-
-Depends on / 依赖: e.toAlgHom.toLinearMap, toAlgHom, toLinearMap
+--- 原说明 ---
+Interpret a `ContinuousAlgHom` as a `ContinuousLinearMap`.
 -/
-def toContinuousLinearMap (e : A ->A[R] B) : A ->L[R] B where
+def toContinuousLinearMap (e : A →A[R] B) : A →L[R] B where
   toLinearMap := e.toAlgHom.toLinearMap
-
-/--
-theorem `coe_toContinuousLinearMap` / 定理 `coe_toContinuousLinearMap`
-
-English:
-theorem coe_toContinuousLinearMap
-  given: (e : A ->A[R] B)
-  statement: ⇑e.toContinuousLinearMap = e
-  proof: rfl
-
-中文:
-定理 coe_toContinuousLinearMap
-  条件: (e : A ->A[R] B)
-  结论: ⇑e.toContinuousLinearMap = e
-  证明: rfl
+/-
+**ContinuousAlgHom.coe_toContinuousLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usAlgHom`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {A : Type u_2} [inst_1 : Semiring
+ A] [inst_2 : TopologicalSpace A]   {B : Type u_3} [inst_3 : Semiring B] [inst_4
+ : TopologicalSpace B] [inst_5 : Algebra R A] [inst_6 : Algebra R B]   (e : A →A
+[R] B), ⇑e.toContinuousLinearMap = ⇑e
+参数：e : A →A[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_toContinuousLinearMap (e : A ->A[R] B) : ⇑e.toContinuousLinearMap = e := rfl
+@[simp] theorem coe_toContinuousLinearMap (e : A →A[R] B) : ⇑e.toContinuousLinearMap = e := rfl
 
 variable [IsSemitopologicalSemiring A]
 
-/--
-Definition of `_root_.Subalgebra.topologicalClosure` / `_root_.Subalgebra.topologicalClosure` 的定义
+/-- The topological closure of a subalgebra -/
+/-
+**ContinuousAlgHom._root_.Subalgebra.topologicalClosure** 是 Mathlib 中的一个定义，位于命名空
+间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Subalgebra.topologicalClosure
-  signature: (s : Subalgebra R A)
-  body: s.toSubsemiring.topologicalClosure
-  algebraMap_mem' r := by
-    simp only [Subsemiring.coe_carrier_toSubmonoid, Subsemiring.topologicalClosure_coe,
-      Subalgebra.coe_toSubsemiring]
-    apply subset_closure
-    exact algebraMap_mem s r
-
-中文:
-定义 _root_.子代数.topologicalClosure
-  签名: (s : 子代数 R A)
-  定义体: s.toSubsemiring.topologicalClosure
-  algebraMap_mem' r := by
-    simp only [Subsemiring.coe_carrier_toSubmonoid, Subsemiring.topologicalClosure_coe,
-      Subalgebra.coe_toSubsemiring]
-    apply subset_closure
-    exact algebraMap_mem s r
-
-Depends on / 依赖: s.toSubsemiring.topologicalClosure, toSubsemiring, topologicalClosure
+--- 原说明 ---
+The topological closure of a subalgebra
 -/
 def _root_.Subalgebra.topologicalClosure (s : Subalgebra R A) : Subalgebra R A where
   toSubsemiring := s.toSubsemiring.topologicalClosure
@@ -976,109 +773,67 @@ def _root_.Subalgebra.topologicalClosure (s : Subalgebra R A) : Subalgebra R A w
     apply subset_closure
     exact algebraMap_mem s r
 
-/--
-theorem `_root_.Subalgebra.map_topologicalClosure_le` / 定理 `_root_.Subalgebra.map_topologicalClosure_le`
+/-- Under a continuous algebra map, the image of the `TopologicalClosure` of a subalgebra is
+contained in the `TopologicalClosure` of its image. -/
+/-
+**ContinuousAlgHom._root_.Subalgebra.map_topologicalClosure_le** 是 Mathlib 中的一个定
+理，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Subalgebra.map_topologicalClosure_le
-  proof: image_closure_subset_closure_image f.continuous
-
-中文:
-定理 _root_.子代数.map_topologicalClosure_le
-  证明: image_closure_subset_closure_image f.continuous
-
-Depends on / 依赖: continuous, f.continuous, image_closure_subset_closure_image
+--- 原说明 ---
+Under a continuous algebra map, the image of the `TopologicalClosure` of a subal
+gebra is
+contained in the `TopologicalClosure` of its image.
 -/
 theorem _root_.Subalgebra.map_topologicalClosure_le
-    [IsSemitopologicalSemiring B] (f : A ->A[R] B) (s : Subalgebra R A) :
-    map f s.topologicalClosure <= (map f.toAlgHom s).topologicalClosure :=
+    [IsSemitopologicalSemiring B] (f : A →A[R] B) (s : Subalgebra R A) :
+    map f s.topologicalClosure ≤ (map f.toAlgHom s).topologicalClosure :=
   image_closure_subset_closure_image f.continuous
-
-/--
-lemma `_root_.Subalgebra.topologicalClosure_map_le` / 引理 `_root_.Subalgebra.topologicalClosure_map_le`
-
-English:
-lemma _root_.Subalgebra.topologicalClosure_map_le
-  statement: [IsSemitopologicalSemiring B]
-  proof: hf.closure_image_subset _
-
-中文:
-引理 _root_.子代数.topologicalClosure_map_le
-  结论: [是SemitopologicalSemiring B]
-  证明: hf.closure_image_subset _
-
-Depends on / 依赖: closure_image_subset, hf.closure_image_subset
+/-
+**ContinuousAlgHom._root_.Subalgebra.topologicalClosure_map_le** 是 Mathlib 中的一个引
+理，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Subalgebra.topologicalClosure_map_le [IsSemitopologicalSemiring B]
-    (f : A ->ₐ[R] B) (hf : IsClosedMap f) (s : Subalgebra R A) :
-    (map f s).topologicalClosure <= map f s.topologicalClosure :=
+    (f : A →ₐ[R] B) (hf : IsClosedMap f) (s : Subalgebra R A) :
+    (map f s).topologicalClosure ≤ map f s.topologicalClosure :=
   hf.closure_image_subset _
-
-/--
-lemma `_root_.Subalgebra.topologicalClosure_map` / 引理 `_root_.Subalgebra.topologicalClosure_map`
-
-English:
-lemma _root_.Subalgebra.topologicalClosure_map
-  statement: [IsSemitopologicalSemiring B]
-  proof: SetLike.coe_injective hf.closure_image_eq_of_continuous f.continuous _
-
-@[simp]
-
-中文:
-引理 _root_.子代数.topologicalClosure_map
-  结论: [是SemitopologicalSemiring B]
-  证明: SetLike.coe_injective hf.closure_image_eq_of_continuous f.continuous _
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, closure_image_eq_of_continuous, coe_injective, continuous, f.continuous, hf.closure_image_eq_of_continuous
+/-
+**ContinuousAlgHom._root_.Subalgebra.topologicalClosure_map** 是 Mathlib 中的一个引理，位
+于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Subalgebra.topologicalClosure_map [IsSemitopologicalSemiring B]
-    (f : A ->A[R] B) (hf : IsClosedMap f) (s : Subalgebra R A) :
+    (f : A →A[R] B) (hf : IsClosedMap f) (s : Subalgebra R A) :
     (map f.toAlgHom s).topologicalClosure = map f.toAlgHom s.topologicalClosure :=
-SetLike.coe_injective hf.closure_image_eq_of_continuous f.continuous _
+  SetLike.coe_injective <| hf.closure_image_eq_of_continuous f.continuous _
 
 @[simp]
-/--
-theorem `_root_.Subalgebra.topologicalClosure_coe` / 定理 `_root_.Subalgebra.topologicalClosure_coe`
-
-English:
-theorem _root_.Subalgebra.topologicalClosure_coe
-  given: (s : Subalgebra R A)
-  proof: rfl
-
-中文:
-定理 _root_.子代数.topologicalClosure_coe
-  条件: (s : 子代数 R A)
-  证明: rfl
+/-
+**ContinuousAlgHom._root_.Subalgebra.topologicalClosure_coe** 是 Mathlib 中的一个定理，位
+于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Subalgebra.topologicalClosure_coe (s : Subalgebra R A) :
     (s.topologicalClosure : Set A) = closure ↑s := rfl
 
-/--
-theorem `_root_.DenseRange.topologicalClosure_map_subalgebra` / 定理 `_root_.DenseRange.topologicalClosure_map_subalgebra`
+/-- Under a dense continuous algebra map, a subalgebra
+whose `TopologicalClosure` is `⊤` is sent to another such submodule.
+That is, the image of a dense subalgebra under a map with dense range is dense.
+-/
+/-
+**ContinuousAlgHom._root_.DenseRange.topologicalClosure_map_subalgebra** 是 Mathl
+ib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.DenseRange.topologicalClosure_map_subalgebra
-  proof: by
-  rw [SetLike.ext'_iff] at hs ⊢
-  simp only [Subalgebra.topologicalClosure_coe, coe_top, ← dense_iff_closure_eq,
-    Subalgebra.coe_map] at hs ⊢
-  exact hf'.dense_image f.continuous hs
-
-中文:
-定理 _root_.DenseRange.topologicalClosure_map_subalgebra
-  证明: by
-  rw [SetLike.ext'_iff] at hs ⊢
-  simp only [Subalgebra.topologicalClosure_coe, coe_top, ← dense_iff_closure_eq,
-    Subalgebra.coe_map] at hs ⊢
-  exact hf'.dense_image f.continuous hs
-
-Depends on / 依赖: SetLike, SetLike.ext, Subalgebra, Subalgebra.coe_map, Subalgebra.topologicalClosure_coe, _iff, coe_map, coe_top, continuous, dense_iff_closure_eq, dense_image, f.continuous, topologicalClosure_coe
+--- 原说明 ---
+Under a dense continuous algebra map, a subalgebra
+whose `TopologicalClosure` is `⊤` is sent to another such submodule.
+That is, the image of a dense subalgebra under a map with dense range is dense.
 -/
 theorem _root_.DenseRange.topologicalClosure_map_subalgebra
-    [IsSemitopologicalSemiring B] {f : A ->A[R] B} (hf' : DenseRange f) {s : Subalgebra R A}
-    (hs : s.topologicalClosure = ⊤) : (s.map (f : A ->ₐ[R] B)).topologicalClosure = ⊤ := by
+    [IsSemitopologicalSemiring B] {f : A →A[R] B} (hf' : DenseRange f) {s : Subalgebra R A}
+    (hs : s.topologicalClosure = ⊤) : (s.map (f : A →ₐ[R] B)).topologicalClosure = ⊤ := by
   rw [SetLike.ext'_iff] at hs ⊢
   simp only [Subalgebra.topologicalClosure_coe, coe_top, ← dense_iff_closure_eq,
     Subalgebra.coe_map] at hs ⊢
@@ -1091,157 +846,87 @@ section id
 variable [TopologicalSpace A]
 variable [Algebra R A]
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity map as a continuous algebra homomorphism. -/
+/-
+**ContinuousAlgHom.id** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：(R : Type u_1) →   [inst : CommSemiring R] →     (A : Type u_2) → [inst_1 
+: Semiring A] → [inst_2 : TopologicalSpace A] → [inst_3 : Algebra R A] → A →A[R]
+ A
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 
-English:
-definition id
-  signature: : A ->A[R] A
-  body: ⟨AlgHom.id R A, continuous_id⟩
-
-中文:
-定义 id
-  签名: : A ->A[R] A
-  定义体: ⟨AlgHom.id R A, continuous_id⟩
+--- 原说明 ---
+The identity map as a continuous algebra homomorphism.
 -/
-protected def id : A ->A[R] A := ⟨AlgHom.id R A, continuous_id⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (A ->A[R] A)
-  body: ⟨ContinuousAlgHom.id R A⟩
-
-中文:
-实例 :
-  签名: 幺 (A ->A[R] A)
-  定义体: ⟨ContinuousAlgHom.id R A⟩
-
-Depends on / 依赖: ContinuousAlgHom, ContinuousAlgHom.id
+protected def id : A →A[R] A := ⟨AlgHom.id R A, continuous_id⟩
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : One (A ->A[R] A) := ⟨ContinuousAlgHom.id R A⟩
-
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : A ->A[R] A) = ContinuousAlgHom.id R A
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : A ->A[R] A) = 余ntinuousAlg态射.id R A
-  证明: rfl
+instance : One (A →A[R] A) := ⟨ContinuousAlgHom.id R A⟩
+/-
+**ContinuousAlgHom.one_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：one_def : (1 : A ->A[R] A) = ContinuousAlgHom.id R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_def : (1 : A ->A[R] A) = ContinuousAlgHom.id R A := rfl
-
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (x : A)
-  statement: ContinuousAlgHom.id R A x = x
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 id_apply
-  条件: (x : A)
-  结论: 余ntinuousAlg态射.id R A x = x
-  证明: rfl
-
-@[simp, norm_cast]
+theorem one_def : (1 : A →A[R] A) = ContinuousAlgHom.id R A := rfl
+/-
+**ContinuousAlgHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：id_apply (x : A) : ContinuousAlgHom.id R A x = x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (x : A) : ContinuousAlgHom.id R A x = x := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ((ContinuousAlgHom.id R A) : A ->ₐ[R] A) = AlgHom.id R A
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_id
-  结论: ((余ntinuousAlg态射.id R A) : A ->ₐ[R] A) = 代数态射.id R A
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_id : ((ContinuousAlgHom.id R A) : A ->ₐ[R] A) = AlgHom.id R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_id : ((ContinuousAlgHom.id R A) : A ->ₐ[R] A) = AlgHom.id R A := rfl
+theorem coe_id : ((ContinuousAlgHom.id R A) : A →ₐ[R] A) = AlgHom.id R A := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_id'` / 定理 `coe_id'`
-
-English:
-theorem coe_id'
-  statement: ⇑(ContinuousAlgHom.id R A) = _root_.id
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_id'
-  结论: ⇑(余ntinuousAlg态射.id R A) = _root_.id
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_id'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_id' : ⇑(ContinuousAlgHom.id R A) = _root_.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id' : ⇑(ContinuousAlgHom.id R A) = _root_.id := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_id` / 定理 `coe_eq_id`
-
-English:
-theorem coe_eq_id
-  given: {f : A ->A[R] A}
-  proof: by
-  rw [← coe_id]; rw [coe_inj]
-
-@[simp]
-
-中文:
-定理 coe_eq_id
-  条件: {f : A ->A[R] A}
-  证明: by
-  rw [← coe_id]; rw [coe_inj]
-
-@[simp]
-
-Depends on / 依赖: coe_id, coe_inj
+/-
+**ContinuousAlgHom.coe_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_eq_id {f : A ->A[R] A} : (f : A ->ₐ[R] A) = AlgHom.id R A ↔ f = Contin
+uousAlgHom.id R A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousAlgHom.coe_id`：coe_id : ((ContinuousAlgHom.id R A) : A ->ₐ[R] 
+A) = AlgHom.id R A
+· 使用定理 `ContinuousAlgHom.coe_inj`：coe_inj {f g : A ->A[R] B} : (f : A ->ₐ[R] B) 
+= g ↔ f = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_eq_id {f : A ->A[R] A} :
-    (f : A ->ₐ[R] A) = AlgHom.id R A ↔ f = ContinuousAlgHom.id R A := by
-  rw [← coe_id]; rw [coe_inj]
+theorem coe_eq_id {f : A →A[R] A} :
+    (f : A →ₐ[R] A) = AlgHom.id R A ↔ f = ContinuousAlgHom.id R A := by
+  rw [← coe_id, coe_inj]
 
 @[simp]
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (x : A)
-  statement: (1 : A ->A[R] A) x = x
-  proof: rfl
-
-中文:
-定理 one_apply
-  条件: (x : A)
-  结论: (1 : A ->A[R] A) x = x
-  证明: rfl
+/-
+**ContinuousAlgHom.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：one_apply (x : A) : (1 : A ->A[R] A) x = x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_apply (x : A) : (1 : A ->A[R] A) x = x := rfl
+theorem one_apply (x : A) : (1 : A →A[R] A) x = x := rfl
 
 end id
 
@@ -1252,281 +937,156 @@ variable [TopologicalSpace A]
 variable {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B]
   {C : Type*} [Semiring C] [Algebra R C] [TopologicalSpace C]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of continuous algebra homomorphisms. -/
+/-
+**ContinuousAlgHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：comp (g : B ->A[R] C) (f : A ->A[R] B) : A ->A[R] C
+参数：g : B ->A[R] C；f : A ->A[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : B ->A[R] C) (f : A ->A[R] B)
-  body: ⟨(g : B ->ₐ[R] C).comp (f : A ->ₐ[R] B), g.2.comp f.2⟩
-
-@[simp, norm_cast]
-
-中文:
-定义 comp
-  签名: (g : B ->A[R] C) (f : A ->A[R] B)
-  定义体: ⟨(g : B ->ₐ[R] C).comp (f : A ->ₐ[R] B), g.2.comp f.2⟩
-
-@[simp, norm_cast]
+--- 原说明 ---
+Composition of continuous algebra homomorphisms.
 -/
-def comp (g : B ->A[R] C) (f : A ->A[R] B) : A ->A[R] C :=
-  ⟨(g : B ->ₐ[R] C).comp (f : A ->ₐ[R] B), g.2.comp f.2⟩
+def comp (g : B →A[R] C) (f : A →A[R] B) : A →A[R] C :=
+  ⟨(g : B →ₐ[R] C).comp (f : A →ₐ[R] B), g.2.comp f.2⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (h : B ->A[R] C) (f : A ->A[R] B)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_comp
-  条件: (h : B ->A[R] C) (f : A ->A[R] B)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_comp (h : B ->A[R] C) (f : A ->A[R] B) : (h.comp f : A ->ₐ[R] C) = (h 
+: B ->ₐ[R] C).comp (f : A ->ₐ[R] B)
+参数：h : B ->A[R] C；f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (h : B ->A[R] C) (f : A ->A[R] B) :
-    (h.comp f : A ->ₐ[R] C) = (h : B ->ₐ[R] C).comp (f : A ->ₐ[R] B) := rfl
+theorem coe_comp (h : B →A[R] C) (f : A →A[R] B) :
+    (h.comp f : A →ₐ[R] C) = (h : B →ₐ[R] C).comp (f : A →ₐ[R] B) := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_comp'` / 定理 `coe_comp'`
-
-English:
-theorem coe_comp'
-  given: (h : B ->A[R] C) (f : A ->A[R] B)
-  statement: ⇑(h.comp f) = h ∘ f
-  proof: rfl
-
-中文:
-定理 coe_comp'
-  条件: (h : B ->A[R] C) (f : A ->A[R] B)
-  结论: ⇑(h.comp f) = h ∘ f
-  证明: rfl
+/-
+**ContinuousAlgHom.coe_comp'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_comp' (h : B ->A[R] C) (f : A ->A[R] B) : ⇑(h.comp f) = h ∘ f
+参数：h : B ->A[R] C；f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp' (h : B ->A[R] C) (f : A ->A[R] B) : ⇑(h.comp f) = h ∘ f := rfl
-
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (g : B ->A[R] C) (f : A ->A[R] B) (x : A)
-  statement: (g.comp f) x = g (f x)
-  proof: rfl
+theorem coe_comp' (h : B →A[R] C) (f : A →A[R] B) : ⇑(h.comp f) = h ∘ f := rfl
+/-
+**ContinuousAlgHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：comp_apply (g : B ->A[R] C) (f : A ->A[R] B) (x : A) : (g.comp f) x = g (f
+ x)
+参数：g : B ->A[R] C；f : A ->A[R] B；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem comp_apply (g : B →A[R] C) (f : A →A[R] B) (x : A) : (g.comp f) x = g (f x) := rfl
 
 @[simp]
-
-中文:
-定理 comp_apply
-  条件: (g : B ->A[R] C) (f : A ->A[R] B) (x : A)
-  结论: (g.comp f) x = g (f x)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：comp_id (f : A ->A[R] B) : f.comp (ContinuousAlgHom.id R A) = f
+参数：f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
 -/
-theorem comp_apply (g : B ->A[R] C) (f : A ->A[R] B) (x : A) : (g.comp f) x = g (f x) := rfl
-
-@[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : A ->A[R] B)
-  statement: f.comp (ContinuousAlgHom.id R A) = f
-  proof: ext fun _x => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : A ->A[R] B)
-  结论: f.comp (余ntinuousAlg态射.id R A) = f
-  证明: ext fun _x => rfl
-
-@[simp]
--/
-theorem comp_id (f : A ->A[R] B) : f.comp (ContinuousAlgHom.id R A) = f :=
+theorem comp_id (f : A →A[R] B) : f.comp (ContinuousAlgHom.id R A) = f :=
   ext fun _x => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : A ->A[R] B)
-  statement: (ContinuousAlgHom.id R B).comp f = f
-  proof: ext fun _x => rfl
-
-中文:
-定理 id_comp
-  条件: (f : A ->A[R] B)
-  结论: (余ntinuousAlg态射.id R B).comp f = f
-  证明: ext fun _x => rfl
+/-
+**ContinuousAlgHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：id_comp (f : A ->A[R] B) : (ContinuousAlgHom.id R B).comp f = f
+参数：f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
 -/
-theorem id_comp (f : A ->A[R] B) : (ContinuousAlgHom.id R B).comp f = f :=
+theorem id_comp (f : A →A[R] B) : (ContinuousAlgHom.id R B).comp f = f :=
   ext fun _x => rfl
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: {D : Type*} [Semiring D] [Algebra R D] [TopologicalSpace D] (h : C ->A[R] D)
-  proof: rfl
-
-中文:
-定理 comp_assoc
-  结论: {D : 类型} [半环 D] [代数 R D] [拓扑空间 D] (h : C ->A[R] D)
-  证明: rfl
+/-
+**ContinuousAlgHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：comp_assoc {D : Type*} [Semiring D] [Algebra R D] [TopologicalSpace D] (h 
+: C ->A[R] D) (g : B ->A[R] C) (f : A ->A[R] B) : (h.comp g).comp f = h.comp (g.
+comp f)
+参数：h : C ->A[R] D；g : B ->A[R] C；f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc {D : Type*} [Semiring D] [Algebra R D] [TopologicalSpace D] (h : C ->A[R] D)
-    (g : B ->A[R] C) (f : A ->A[R] B) : (h.comp g).comp f = h.comp (g.comp f) :=
+theorem comp_assoc {D : Type*} [Semiring D] [Algebra R D] [TopologicalSpace D] (h : C →A[R] D)
+    (g : B →A[R] C) (f : A →A[R] B) : (h.comp g).comp f = h.comp (g.comp f) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (A ->A[R] A)
-  body: ⟨comp⟩
-
-中文:
-实例 :
-  签名: 乘法 (A ->A[R] A)
-  定义体: ⟨comp⟩
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Mul (A ->A[R] A) := ⟨comp⟩
-
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (f g : A ->A[R] A)
-  statement: f * g = f.comp g
-  proof: rfl
+instance : Mul (A →A[R] A) := ⟨comp⟩
+/-
+**ContinuousAlgHom.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：mul_def (f g : A ->A[R] A) : f * g = f.comp g
+参数：f g : A ->A[R] A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem mul_def (f g : A →A[R] A) : f * g = f.comp g := rfl
 
 @[simp]
-
-中文:
-定理 mul_def
-  条件: (f g : A ->A[R] A)
-  结论: f * g = f.comp g
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_mul (f g : A ->A[R] A) : ⇑(f * g) = f ∘ g
+参数：f g : A ->A[R] A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_def (f g : A ->A[R] A) : f * g = f.comp g := rfl
-
-@[simp]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (f g : A ->A[R] A)
-  statement: ⇑(f * g) = f ∘ g
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: (f g : A ->A[R] A)
-  结论: ⇑(f * g) = f ∘ g
-  证明: rfl
+theorem coe_mul (f g : A →A[R] A) : ⇑(f * g) = f ∘ g := rfl
+/-
+**ContinuousAlgHom.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：mul_apply (f g : A ->A[R] A) (x : A) : (f * g) x = f (g x)
+参数：f g : A ->A[R] A；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mul (f g : A ->A[R] A) : ⇑(f * g) = f ∘ g := rfl
-
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: (f g : A ->A[R] A) (x : A)
-  statement: (f * g) x = f (g x)
-  proof: rfl
-
-中文:
-定理 mul_apply
-  条件: (f g : A ->A[R] A) (x : A)
-  结论: (f * g) x = f (g x)
-  证明: rfl
+theorem mul_apply (f g : A →A[R] A) (x : A) : (f * g) x = f (g x) := rfl
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_apply (f g : A ->A[R] A) (x : A) : (f * g) x = f (g x) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid (A ->A[R] A)
-  body: ext fun _ => rfl
-  one_mul _ := ext fun _ => rfl
-  mul_assoc _ _ _ := ext fun _ => rfl
-
-中文:
-实例 :
-  签名: 幺半群 (A ->A[R] A)
-  定义体: ext fun _ => rfl
-  one_mul _ := ext fun _ => rfl
-  mul_assoc _ _ _ := ext fun _ => rfl
--/
-instance : Monoid (A ->A[R] A) where
+instance : Monoid (A →A[R] A) where
   mul_one _ := ext fun _ => rfl
   one_mul _ := ext fun _ => rfl
   mul_assoc _ _ _ := ext fun _ => rfl
-
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (f : A ->A[R] A) (n : Nat)
-  statement: ⇑(f ^ n) = f^[n]
-  proof: hom_coe_pow _ rfl (fun _ _ => rfl) _ _
-
-中文:
-定理 coe_pow
-  条件: (f : A ->A[R] A) (n : 自然数)
-  结论: ⇑(f ^ n) = f^[n]
-  证明: hom_coe_pow _ rfl (fun _ _ => rfl) _ _
-
-Depends on / 依赖: hom_coe_pow
+/-
+**ContinuousAlgHom.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_pow (f : A ->A[R] A) (n : Nat) : ⇑(f ^ n) = f^[n]
+参数：f : A ->A[R] A；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hom_coe_pow`：∀ {M : Type u_4} {F : Type u_5} [inst : Monoid F] (c : F → 
+M → M),   c 1 = id → (∀ (f g : F), c (f * g) = c f ∘ c g) → ∀ (f : F) (n : ℕ), c
+ …
 -/
-theorem coe_pow (f : A ->A[R] A) (n : Nat) : ⇑(f ^ n) = f^[n] :=
-  hom_coe_pow _ rfl (fun _ _ => rfl) _ _
+theorem coe_pow (f : A →A[R] A) (n : ℕ) : ⇑(f ^ n) = f^[n] :=
+  hom_coe_pow _ rfl (fun _ _ ↦ rfl) _ _
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
 /-- coercion from `ContinuousAlgHom` to `AlgHom` as a `RingHom`. -/
 @[simps]
-/--
-Definition of `toAlgHomMonoidHom` / `toAlgHomMonoidHom` 的定义
+/-
+**ContinuousAlgHom.toAlgHomMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom
+`。
+形式化陈述：toAlgHomMonoidHom : (A ->A[R] A) ->* A ->ₐ[R] A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAlgHomMonoidHom
-  signature: : (A ->A[R] A) ->* A ->ₐ[R] A where
-  body: (↑)
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 toAlgHomMonoidHom
-  签名: : (A ->A[R] A) ->* A ->ₐ[R] A where
-  定义体: (↑)
-  map_one' := rfl
-  map_mul' _ _ := rfl
+--- 原说明 ---
+coercion from `ContinuousAlgHom` to `AlgHom` as a `RingHom`.
 -/
-def toAlgHomMonoidHom : (A ->A[R] A) ->* A ->ₐ[R] A where
-  toFun := (↑)
-  map_one' := rfl
+def toAlgHomMonoidHom : (A →A[R] A) →* A →ₐ[R] A where
+  toFun        := (↑)
+  map_one'     := rfl
   map_mul' _ _ := rfl
 
 end comp
@@ -1538,349 +1098,241 @@ variable [TopologicalSpace A]
 variable {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B]
   {C : Type*} [Semiring C] [Algebra R C] [TopologicalSpace C]
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- The Cartesian product of two continuous algebra morphisms as a continuous algebra morphism. -/
+/-
+**ContinuousAlgHom.prod** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：{R : Type u_1} →   [inst : CommSemiring R] →     {A : Type u_2} →       [i
+nst_1 : Semiring A] →         [inst_2 : TopologicalSpace A] →           {B : Typ
+e u_3} →             [inst_3 : Semiring B] →               [inst_4 : Topological
+Space B] →                 [inst_5 : Algebra R A] →                   [inst_6 : 
+Algebra R B] →                     {C : Type u_4} →                       [inst_
+7 : Semiring C] →                         [inst_8 : Algebra R C] →              
+             [inst_9 : TopologicalSpace C] → (A →A[R] B) → (A →A[R] C) → A →A[R]
+ B × C
+参数：A →A[R] B；A →A[R] C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (f₁ : A ->A[R] B) (f₂ : A ->A[R] C)
-  body: ⟨(f₁ : A ->ₐ[R] B).prod f₂, f₁.2.prodMk f₂.2⟩
-
-@[simp, norm_cast]
-
-中文:
-定义 乘积
-  签名: (f₁ : A ->A[R] B) (f₂ : A ->A[R] C)
-  定义体: ⟨(f₁ : A ->ₐ[R] B).prod f₂, f₁.2.prodMk f₂.2⟩
-
-@[simp, norm_cast]
+--- 原说明 ---
+The Cartesian product of two continuous algebra morphisms as a continuous algebr
+a morphism.
 -/
-protected def prod (f₁ : A ->A[R] B) (f₂ : A ->A[R] C) :
-    A ->A[R] B × C :=
-  ⟨(f₁ : A ->ₐ[R] B).prod f₂, f₁.2.prodMk f₂.2⟩
+protected def prod (f₁ : A →A[R] B) (f₂ : A →A[R] C) :
+    A →A[R] B × C :=
+  ⟨(f₁ : A →ₐ[R] B).prod f₂, f₁.2.prodMk f₂.2⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (f₁ : A ->A[R] B) (f₂ : A ->A[R] C)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_prod
-  条件: (f₁ : A ->A[R] B) (f₂ : A ->A[R] C)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_prod (f₁ : A ->A[R] B) (f₂ : A ->A[R] C) : (f₁.prod f₂ : A ->ₐ[R] B × 
+C) = AlgHom.prod f₁ f₂
+参数：f₁ : A ->A[R] B；f₂ : A ->A[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_prod (f₁ : A ->A[R] B) (f₂ : A ->A[R] C) :
-    (f₁.prod f₂ : A ->ₐ[R] B × C) = AlgHom.prod f₁ f₂ :=
+theorem coe_prod (f₁ : A →A[R] B) (f₂ : A →A[R] C) :
+    (f₁.prod f₂ : A →ₐ[R] B × C) = AlgHom.prod f₁ f₂ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `prod_apply` / 定理 `prod_apply`
-
-English:
-theorem prod_apply
-  given: (f₁ : A ->A[R] B) (f₂ : A ->A[R] C) (x : A)
-  proof: rfl
-
-中文:
-定理 prod_apply
-  条件: (f₁ : A ->A[R] B) (f₂ : A ->A[R] C) (x : A)
-  证明: rfl
+/-
+**ContinuousAlgHom.prod_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：prod_apply (f₁ : A ->A[R] B) (f₂ : A ->A[R] C) (x : A) : f₁.prod f₂ x = (f
+₁ x, f₂ x)
+参数：f₁ : A ->A[R] B；f₂ : A ->A[R] C；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_apply (f₁ : A ->A[R] B) (f₂ : A ->A[R] C) (x : A) :
+theorem prod_apply (f₁ : A →A[R] B) (f₂ : A →A[R] C) (x : A) :
     f₁.prod f₂ x = (f₁ x, f₂ x) :=
   rfl
-
+/-
+**ContinuousAlgHom.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {D : Type*} [UniformSpace D] [CompleteSpace D]
     [Semiring D] [Algebra R D] [T2Space B]
-    (f g : D ->A[R] B) : CompleteSpace (AlgHom.equalizer f.toAlgHom g.toAlgHom) :=
-.completeSpace_coe isClosed_eq (map_continuous f) (map_continuous g)
+    (f g : D →A[R] B) : CompleteSpace (AlgHom.equalizer f.toAlgHom g.toAlgHom) :=
+  isClosed_eq (map_continuous f) (map_continuous g) |>.completeSpace_coe
 
 variable (R A B)
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `fst` / `fst` 的定义
+/-- `Prod.fst` as a `ContinuousAlgHom`. -/
+/-
+**ContinuousAlgHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：fst : A × B ->A[R] A where cont
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
 
-English:
-definition fst
-  signature: : A × B ->A[R] A where
-  body: continuous_fst
-  toAlgHom := AlgHom.fst R A B
-
-中文:
-定义 fst
-  签名: : A × B ->A[R] A where
-  定义体: continuous_fst
-  toAlgHom := AlgHom.fst R A B
-
-Depends on / 依赖: continuous_fst
+--- 原说明 ---
+`Prod.fst` as a `ContinuousAlgHom`.
 -/
-def fst : A × B ->A[R] A where
-  cont := continuous_fst
+def fst : A × B →A[R] A where
+  cont     := continuous_fst
   toAlgHom := AlgHom.fst R A B
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- `Prod.snd` as a `ContinuousAlgHom`. -/
+/-
+**ContinuousAlgHom.snd** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：snd : A × B ->A[R] B where cont
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
 
-English:
-definition snd
-  signature: : A × B ->A[R] B where
-  body: continuous_snd
-  toAlgHom := AlgHom.snd R A B
-
-中文:
-定义 snd
-  签名: : A × B ->A[R] B where
-  定义体: continuous_snd
-  toAlgHom := AlgHom.snd R A B
-
-Depends on / 依赖: continuous_snd
+--- 原说明 ---
+`Prod.snd` as a `ContinuousAlgHom`.
 -/
-def snd : A × B ->A[R] B where
+def snd : A × B →A[R] B where
   cont := continuous_snd
   toAlgHom := AlgHom.snd R A B
 
 variable {R A B}
 
 @[simp, norm_cast]
-/--
-theorem `coe_fst` / 定理 `coe_fst`
-
-English:
-theorem coe_fst
-  statement: ↑(fst R A B) = AlgHom.fst R A B
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_fst
-  结论: ↑(fst R A B) = 代数态射.fst R A B
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_fst** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_fst : ↑(fst R A B) = AlgHom.fst R A B
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_fst : ↑(fst R A B) = AlgHom.fst R A B :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_fst'` / 定理 `coe_fst'`
-
-English:
-theorem coe_fst'
-  statement: ⇑(fst R A B) = Prod.fst
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_fst'
-  结论: ⇑(fst R A B) = 积类型.fst
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_fst'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_fst' : ⇑(fst R A B) = Prod.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_fst' : ⇑(fst R A B) = Prod.fst :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_snd` / 定理 `coe_snd`
-
-English:
-theorem coe_snd
-  statement: ↑(snd R A B) = AlgHom.snd R A B
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_snd
-  结论: ↑(snd R A B) = 代数态射.snd R A B
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_snd** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_snd : ↑(snd R A B) = AlgHom.snd R A B
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_snd : ↑(snd R A B) = AlgHom.snd R A B :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_snd'` / 定理 `coe_snd'`
-
-English:
-theorem coe_snd'
-  statement: ⇑(snd R A B) = Prod.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_snd'
-  结论: ⇑(snd R A B) = 积类型.snd
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.coe_snd'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_snd' : ⇑(snd R A B) = Prod.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_snd' : ⇑(snd R A B) = Prod.snd :=
   rfl
 
 @[simp]
-/--
-theorem `fst_prod_snd` / 定理 `fst_prod_snd`
-
-English:
-theorem fst_prod_snd
-  statement: (fst R A B).prod (snd R A B) = ContinuousAlgHom.id R (A × B)
-  proof: ext fun ⟨_x, _y⟩ => rfl
-
-@[simp]
-
-中文:
-定理 fst_prod_snd
-  结论: (fst R A B).乘积 (snd R A B) = 余ntinuousAlg态射.id R (A × B)
-  证明: ext fun ⟨_x, _y⟩ => rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.fst_prod_snd** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：fst_prod_snd : (fst R A B).prod (snd R A B) = ContinuousAlgHom.id R (A × B
+)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
 -/
 theorem fst_prod_snd : (fst R A B).prod (snd R A B) = ContinuousAlgHom.id R (A × B) :=
   ext fun ⟨_x, _y⟩ => rfl
 
 @[simp]
-/--
-theorem `fst_comp_prod` / 定理 `fst_comp_prod`
-
-English:
-theorem fst_comp_prod
-  given: (f : A ->A[R] B) (g : A ->A[R] C)
-  proof: ext fun _x => rfl
-
-@[simp]
-
-中文:
-定理 fst_comp_prod
-  条件: (f : A ->A[R] B) (g : A ->A[R] C)
-  证明: ext fun _x => rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.fst_comp_prod** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：fst_comp_prod (f : A ->A[R] B) (g : A ->A[R] C) : (fst R B C).comp (f.prod
+ g) = f
+参数：f : A ->A[R] B；g : A ->A[R] C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
 -/
-theorem fst_comp_prod (f : A ->A[R] B) (g : A ->A[R] C) :
+theorem fst_comp_prod (f : A →A[R] B) (g : A →A[R] C) :
     (fst R B C).comp (f.prod g) = f :=
   ext fun _x => rfl
 
 @[simp]
-/--
-theorem `snd_comp_prod` / 定理 `snd_comp_prod`
-
-English:
-theorem snd_comp_prod
-  given: (f : A ->A[R] B) (g : A ->A[R] C)
-  proof: ext fun _x => rfl
-
-中文:
-定理 snd_comp_prod
-  条件: (f : A ->A[R] B) (g : A ->A[R] C)
-  证明: ext fun _x => rfl
+/-
+**ContinuousAlgHom.snd_comp_prod** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：snd_comp_prod (f : A ->A[R] B) (g : A ->A[R] C) : (snd R B C).comp (f.prod
+ g) = g
+参数：f : A ->A[R] B；g : A ->A[R] C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlgHom.ext`：ext {f g : A ->A[R] B} (h : forall x, f x = g x) :
+ f = g
 -/
-theorem snd_comp_prod (f : A ->A[R] B) (g : A ->A[R] C) :
+theorem snd_comp_prod (f : A →A[R] B) (g : A →A[R] C) :
     (snd R B C).comp (f.prod g) = g :=
   ext fun _x => rfl
 
-/--
-Definition of `prodMap` / `prodMap` 的定义
+/-- `Prod.map` of two continuous algebra homomorphisms. -/
+/-
+**ContinuousAlgHom.prodMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：prodMap {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : 
+A ->A[R] B) (f₂ : C ->A[R] D) : A × C ->A[R] B × D
+参数：f₁ : A ->A[R] B；f₂ : C ->A[R] D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodMap
-  signature: {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
-  body: (f₁.comp (fst R A C)).prod (f₂.comp (snd R A C))
-
-
-@[simp, norm_cast]
-
-中文:
-定义 prodMap
-  签名: {D : 类型} [半环 D] [拓扑空间 D] [代数 R D] (f₁ : A ->A[R] B)
-  定义体: (f₁.comp (fst R A C)).prod (f₂.comp (snd R A C))
-
-
-@[simp, norm_cast]
+--- 原说明 ---
+`Prod.map` of two continuous algebra homomorphisms.
 -/
-def prodMap {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
-    (f₂ : C ->A[R] D) : A × C ->A[R] B × D :=
+def prodMap {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A →A[R] B)
+    (f₂ : C →A[R] D) : A × C →A[R] B × D :=
   (f₁.comp (fst R A C)).prod (f₂.comp (snd R A C))
 
 
 @[simp, norm_cast]
-/--
-theorem `coe_prodMap` / 定理 `coe_prodMap`
-
-English:
-theorem coe_prodMap
-  statement: {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_prodMap
-  结论: {D : 类型} [半环 D] [拓扑空间 D] [代数 R D] (f₁ : A ->A[R] B)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ContinuousAlgHom.coe_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_prodMap {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f
+₁ : A ->A[R] B) (f₂ : C ->A[R] D) : (f₁.prodMap f₂ : A × C ->ₐ[R] B × D) = (f₁ :
+ A ->ₐ[R] B).prodMap (f₂ : C ->ₐ[R] D)
+参数：f₁ : A ->A[R] B；f₂ : C ->A[R] D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_prodMap {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
-    (f₂ : C ->A[R] D) :
-    (f₁.prodMap f₂ : A × C ->ₐ[R] B × D) = (f₁ : A ->ₐ[R] B).prodMap (f₂ : C ->ₐ[R] D) :=
+theorem coe_prodMap {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A →A[R] B)
+    (f₂ : C →A[R] D) :
+    (f₁.prodMap f₂ : A × C →ₐ[R] B × D) = (f₁ : A →ₐ[R] B).prodMap (f₂ : C →ₐ[R] D) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_prodMap'` / 定理 `coe_prodMap'`
-
-English:
-theorem coe_prodMap'
-  statement: {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
-  proof: rfl
-
-中文:
-定理 coe_prodMap'
-  结论: {D : 类型} [半环 D] [拓扑空间 D] [代数 R D] (f₁ : A ->A[R] B)
-  证明: rfl
+/-
+**ContinuousAlgHom.coe_prodMap'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_prodMap' {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (
+f₁ : A ->A[R] B) (f₂ : C ->A[R] D) : ⇑(f₁.prodMap f₂) = Prod.map f₁ f₂
+参数：f₁ : A ->A[R] B；f₂ : C ->A[R] D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_prodMap' {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A ->A[R] B)
-    (f₂ : C ->A[R] D) : ⇑(f₁.prodMap f₂) = Prod.map f₁ f₂ :=
+theorem coe_prodMap' {D : Type*} [Semiring D] [TopologicalSpace D] [Algebra R D] (f₁ : A →A[R] B)
+    (f₂ : C →A[R] D) : ⇑(f₁.prodMap f₂) = Prod.map f₁ f₂ :=
   rfl
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
 /-- `ContinuousAlgHom.prod` as an `Equiv`. -/
 @[simps apply]
-/--
-Definition of `prodEquiv` / `prodEquiv` 的定义
+/-
+**ContinuousAlgHom.prodEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：prodEquiv : (A ->A[R] B) × (A ->A[R] C) ≃ (A ->A[R] B × C) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodEquiv
-  signature: : (A ->A[R] B) × (A ->A[R] C) ≃ (A ->A[R] B × C) where
-  body: f.1.prod f.2
-  invFun f := ⟨(fst _ _ _).comp f, (snd _ _ _).comp f⟩
-
-中文:
-定义 prodEquiv
-  签名: : (A ->A[R] B) × (A ->A[R] C) ≃ (A ->A[R] B × C) where
-  定义体: f.1.prod f.2
-  invFun f := ⟨(fst _ _ _).comp f, (snd _ _ _).comp f⟩
+--- 原说明 ---
+`ContinuousAlgHom.prod` as an `Equiv`.
 -/
-def prodEquiv : (A ->A[R] B) × (A ->A[R] C) ≃ (A ->A[R] B × C) where
-  toFun f := f.1.prod f.2
+def prodEquiv : (A →A[R] B) × (A →A[R] C) ≃ (A →A[R] B × C) where
+  toFun f  := f.1.prod f.2
   invFun f := ⟨(fst _ _ _).comp f, (snd _ _ _).comp f⟩
 
 end prod
@@ -1892,223 +1344,123 @@ variable [TopologicalSpace A]
 variable {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B]
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `codRestrict` / `codRestrict` 的定义
+/-- Restrict codomain of a continuous algebra morphism. -/
+/-
+**ContinuousAlgHom.codRestrict** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：codRestrict (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p)
+ : A ->A[R] p where cont
+参数：f : A ->A[R] B；p : Subalgebra R B；h : forall x, f x in p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition codRestrict
-  signature: (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p)
-  body: f.continuous.subtype_mk _
-  toAlgHom := (f : A ->ₐ[R] B).codRestrict p h
-
-@[norm_cast]
-
-中文:
-定义 codRestrict
-  签名: (f : A ->A[R] B) (p : 子代数 R B) (h : 对任意 x, f x in p)
-  定义体: f.continuous.subtype_mk _
-  toAlgHom := (f : A ->ₐ[R] B).codRestrict p h
-
-@[norm_cast]
-
-Depends on / 依赖: continuous, f.continuous.subtype_mk, subtype_mk
+--- 原说明 ---
+Restrict codomain of a continuous algebra morphism.
 -/
-def codRestrict (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p) : A ->A[R] p where
-  cont := f.continuous.subtype_mk _
-  toAlgHom := (f : A ->ₐ[R] B).codRestrict p h
+def codRestrict (f : A →A[R] B) (p : Subalgebra R B) (h : ∀ x, f x ∈ p) : A →A[R] p where
+  cont     := f.continuous.subtype_mk _
+  toAlgHom := (f : A →ₐ[R] B).codRestrict p h
 
 @[norm_cast]
-/--
-theorem `coe_codRestrict` / 定理 `coe_codRestrict`
-
-English:
-theorem coe_codRestrict
-  given: (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_codRestrict
-  条件: (f : A ->A[R] B) (p : 子代数 R B) (h : 对任意 x, f x in p)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.coe_codRestrict** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：coe_codRestrict (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x i
+n p) : (f.codRestrict p h : A ->ₐ[R] p) = (f : A ->ₐ[R] B).codRestrict p h
+参数：f : A ->A[R] B；p : Subalgebra R B；h : forall x, f x in p。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_codRestrict (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p) :
-    (f.codRestrict p h : A ->ₐ[R] p) = (f : A ->ₐ[R] B).codRestrict p h :=
+theorem coe_codRestrict (f : A →A[R] B) (p : Subalgebra R B) (h : ∀ x, f x ∈ p) :
+    (f.codRestrict p h : A →ₐ[R] p) = (f : A →ₐ[R] B).codRestrict p h :=
   rfl
 
 @[simp]
-/--
-theorem `coe_codRestrict_apply` / 定理 `coe_codRestrict_apply`
-
-English:
-theorem coe_codRestrict_apply
-  given: (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p) (x)
-  proof: rfl
-
-中文:
-定理 coe_codRestrict_apply
-  条件: (f : A ->A[R] B) (p : 子代数 R B) (h : 对任意 x, f x in p) (x)
-  证明: rfl
+/-
+**ContinuousAlgHom.coe_codRestrict_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAl
+gHom`。
+形式化陈述：coe_codRestrict_apply (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x,
+ f x in p) (x) : (f.codRestrict p h x : B) = f x
+参数：f : A ->A[R] B；p : Subalgebra R B；h : forall x, f x in p；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_codRestrict_apply (f : A ->A[R] B) (p : Subalgebra R B) (h : forall x, f x in p) (x) :
+theorem coe_codRestrict_apply (f : A →A[R] B) (p : Subalgebra R B) (h : ∀ x, f x ∈ p) (x) :
     (f.codRestrict p h x : B) = f x :=
   rfl
 
 /-- Restrict the codomain of a continuous algebra homomorphism `f` to `f.range`. -/
 @[reducible]
-/--
-Definition of `rangeRestrict` / `rangeRestrict` 的定义
+/-
+**ContinuousAlgHom.rangeRestrict** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：rangeRestrict (f : A ->A[R] B)
+参数：f : A ->A[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rangeRestrict
-  signature: (f : A ->A[R] B)
-  body: f.codRestrict (@AlgHom.range R A B _ _ _ _ _ f) (@AlgHom.mem_range_self R A B _ _ _ _ _ f)
-
-@[simp]
-
-中文:
-定义 rangeRestrict
-  签名: (f : A ->A[R] B)
-  定义体: f.codRestrict (@AlgHom.range R A B _ _ _ _ _ f) (@AlgHom.mem_range_self R A B _ _ _ _ _ f)
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.mem_range_self, AlgHom.range, codRestrict, f.codRestrict, mem_range_self
+--- 原说明 ---
+Restrict the codomain of a continuous algebra homomorphism `f` to `f.range`.
 -/
-def rangeRestrict (f : A ->A[R] B) :=
+def rangeRestrict (f : A →A[R] B) :=
   f.codRestrict (@AlgHom.range R A B _ _ _ _ _ f) (@AlgHom.mem_range_self R A B _ _ _ _ _ f)
 
 @[simp]
-/--
-theorem `coe_rangeRestrict` / 定理 `coe_rangeRestrict`
-
-English:
-theorem coe_rangeRestrict
-  given: (f : A ->A[R] B)
-  proof: rfl
-
-中文:
-定理 coe_rangeRestrict
-  条件: (f : A ->A[R] B)
-  证明: rfl
+/-
+**ContinuousAlgHom.coe_rangeRestrict** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom
+`。
+形式化陈述：coe_rangeRestrict (f : A ->A[R] B) : (f.rangeRestrict : A ->ₐ[R] (@AlgHom.
+range R A B _ _ _ _ _ f)) = (f : A ->ₐ[R] B).rangeRestrict
+参数：f : A ->A[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_rangeRestrict (f : A ->A[R] B) :
-    (f.rangeRestrict : A ->ₐ[R] (@AlgHom.range R A B _ _ _ _ _ f)) =
-      (f : A ->ₐ[R] B).rangeRestrict :=
+theorem coe_rangeRestrict (f : A →A[R] B) :
+    (f.rangeRestrict : A →ₐ[R] (@AlgHom.range R A B _ _ _ _ _ f)) =
+      (f : A →ₐ[R] B).rangeRestrict :=
   rfl
 
-/--
-Definition of `_root_.Subalgebra.valA` / `_root_.Subalgebra.valA` 的定义
+/-- `Subalgebra.val` as a `ContinuousAlgHom`. -/
+/-
+**ContinuousAlgHom._root_.Subalgebra.valA** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousA
+lgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Subalgebra.valA
-  signature: (p : Subalgebra R A)
-  body: continuous_subtype_val
-  toAlgHom := p.val
-
-@[simp, norm_cast]
-
-中文:
-定义 _root_.子代数.valA
-  签名: (p : 子代数 R A)
-  定义体: continuous_subtype_val
-  toAlgHom := p.val
-
-@[simp, norm_cast]
-
-Depends on / 依赖: continuous_subtype_val
+--- 原说明 ---
+`Subalgebra.val` as a `ContinuousAlgHom`.
 -/
-def _root_.Subalgebra.valA (p : Subalgebra R A) : p ->A[R] A where
+def _root_.Subalgebra.valA (p : Subalgebra R A) : p →A[R] A where
   cont := continuous_subtype_val
   toAlgHom := p.val
 
 @[simp, norm_cast]
-/--
-theorem `_root_.Subalgebra.coe_valA` / 定理 `_root_.Subalgebra.coe_valA`
-
-English:
-theorem _root_.Subalgebra.coe_valA
-  given: (p : Subalgebra R A)
-  statement: p.valA = p.subtype
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 _root_.子代数.coe_valA
-  条件: (p : 子代数 R A)
-  结论: p.valA = p.subtype
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom._root_.Subalgebra.coe_valA** 是 Mathlib 中的一个定理，位于命名空间 `Continu
+ousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Subalgebra.coe_valA (p : Subalgebra R A) : p.valA = p.subtype :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.Subalgebra.coe_valA'` / 定理 `_root_.Subalgebra.coe_valA'`
-
-English:
-theorem _root_.Subalgebra.coe_valA'
-  given: (p : Subalgebra R A)
-  statement: ⇑p.valA = p.subtype
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 _root_.子代数.coe_valA'
-  条件: (p : 子代数 R A)
-  结论: ⇑p.valA = p.subtype
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom._root_.Subalgebra.coe_valA'** 是 Mathlib 中的一个定理，位于命名空间 `Contin
+uousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Subalgebra.coe_valA' (p : Subalgebra R A) : ⇑p.valA = p.subtype :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.Subalgebra.valA_apply` / 定理 `_root_.Subalgebra.valA_apply`
-
-English:
-theorem _root_.Subalgebra.valA_apply
-  given: (p : Subalgebra R A) (x : p)
-  statement: p.valA x = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 _root_.子代数.valA_apply
-  条件: (p : 子代数 R A) (x : p)
-  结论: p.valA x = x
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom._root_.Subalgebra.valA_apply** 是 Mathlib 中的一个定理，位于命名空间 `Conti
+nuousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Subalgebra.valA_apply (p : Subalgebra R A) (x : p) : p.valA x = x :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.Submodule.range_valA` / 定理 `_root_.Submodule.range_valA`
-
-English:
-theorem _root_.Submodule.range_valA
-  given: (p : Subalgebra R A)
-  proof: Subalgebra.range_val p
-
-中文:
-定理 _root_.子模.range_valA
-  条件: (p : 子代数 R A)
-  证明: Subalgebra.range_val p
-
-Depends on / 依赖: Subalgebra, Subalgebra.range_val, range_val
+/-
+**ContinuousAlgHom._root_.Submodule.range_valA** 是 Mathlib 中的一个定理，位于命名空间 `Contin
+uousAlgHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Submodule.range_valA (p : Subalgebra R A) :
     @AlgHom.range R p A _ _ _ _ _ p.valA = p :=
@@ -2122,39 +1474,54 @@ section Ring
 variable {S : Type*} [Ring S] [TopologicalSpace S] [Algebra R S] {B : Type*} [Ring B]
   [TopologicalSpace B] [Algebra R B]
 
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  given: (f : S ->A[R] B) (x : S)
-  statement: f (-x) = -f x
-  proof: map_neg f x
-
-中文:
-定理 map_neg
-  条件: (f : S ->A[R] B) (x : S)
-  结论: f (-x) = -f x
-  证明: map_neg f x
+/-
+**ContinuousAlgHom.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：∀ (R : Type u_1) [inst : CommSemiring R] {S : Type u_3} [inst_1 : Ring S] 
+[inst_2 : TopologicalSpace S]   [inst_3 : Algebra R S] {B : Type u_4} [inst_4 : 
+Ring B] [inst_5 : TopologicalSpace B] [inst_6 : Algebra R B]   (f : S →A[R] B) (
+x : S), f (-x) = -f x
+参数：R : Type u_1；f : S →A[R] B；x : S；-x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `ContinuousAlgHom.instAlgHomClass`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Typ
+e u_3} [inst_3 : Semir…
 -/
-protected theorem map_neg (f : S ->A[R] B) (x : S) : f (-x) = -f x := map_neg f x
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  given: (f : S ->A[R] B) (x y : S)
-  statement: f (x - y) = f x - f y
-  proof: map_sub f x y
-
-中文:
-定理 map_sub
-  条件: (f : S ->A[R] B) (x y : S)
-  结论: f (x - y) = f x - f y
-  证明: map_sub f x y
+protected theorem map_neg (f : S →A[R] B) (x : S) : f (-x) = -f x := map_neg f x
+/-
+**ContinuousAlgHom.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：∀ (R : Type u_1) [inst : CommSemiring R] {S : Type u_3} [inst_1 : Ring S] 
+[inst_2 : TopologicalSpace S]   [inst_3 : Algebra R S] {B : Type u_4} [inst_4 : 
+Ring B] [inst_5 : TopologicalSpace B] [inst_6 : Algebra R B]   (f : S →A[R] B) (
+x y : S), f (x - y) = f x - f y
+参数：R : Type u_1；f : S →A[R] B；x y : S；x - y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `ContinuousAlgHom.instAlgHomClass`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : TopologicalSpace A]   {B : Typ
+e u_3} [inst_3 : Semir…
 -/
-protected theorem map_sub (f : S ->A[R] B) (x y : S) : f (x - y) = f x - f y := map_sub f x y
+protected theorem map_sub (f : S →A[R] B) (x y : S) : f (x - y) = f x - f y := map_sub f x y
 
 end Ring
 
@@ -2165,65 +1532,49 @@ variable {S : Type*} [CommSemiring S] [Algebra R S] {B : Type*} [Ring B] [Topolo
   [Algebra R B] [Algebra S B] [IsScalarTower R S B] {C : Type*} [Ring C] [TopologicalSpace C]
   [Algebra R C] [Algebra S C] [IsScalarTower R S C]
 
-/--
-Definition of `restrictScalars` / `restrictScalars` 的定义
+/-- If `A` is an `R`-algebra, then a continuous `A`-algebra morphism can be interpreted as a
+continuous `R`-algebra morphism. -/
+/-
+**ContinuousAlgHom.restrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlgHom`。
+形式化陈述：restrictScalars (f : B ->A[S] C) : B ->A[R] C
+参数：f : B ->A[S] C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictScalars
-  signature: (f : B ->A[S] C)
-  body: ⟨(f : B ->ₐ[S] C).restrictScalars R, f.continuous⟩
-
-中文:
-定义 restrictScalars
-  签名: (f : B ->A[S] C)
-  定义体: ⟨(f : B ->ₐ[S] C).restrictScalars R, f.continuous⟩
-
-Depends on / 依赖: continuous, f.continuous, restrictScalars
+--- 原说明 ---
+If `A` is an `R`-algebra, then a continuous `A`-algebra morphism can be interpre
+ted as a
+continuous `R`-algebra morphism.
 -/
-def restrictScalars (f : B ->A[S] C) : B ->A[R] C :=
-  ⟨(f : B ->ₐ[S] C).restrictScalars R, f.continuous⟩
+def restrictScalars (f : B →A[S] C) : B →A[R] C :=
+  ⟨(f : B →ₐ[S] C).restrictScalars R, f.continuous⟩
 
 variable {R}
 
 @[simp]
-/--
-theorem `coe_restrictScalars` / 定理 `coe_restrictScalars`
-
-English:
-theorem coe_restrictScalars
-  given: (f : B ->A[S] C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_restrictScalars
-  条件: (f : B ->A[S] C)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlgHom.coe_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlgH
+om`。
+形式化陈述：coe_restrictScalars (f : B ->A[S] C) : (f.restrictScalars R : B ->ₐ[R] C) 
+= (f : B ->ₐ[S] C).restrictScalars R
+参数：f : B ->A[S] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_restrictScalars (f : B ->A[S] C) :
-    (f.restrictScalars R : B ->ₐ[R] C) = (f : B ->ₐ[S] C).restrictScalars R :=
+theorem coe_restrictScalars (f : B →A[S] C) :
+    (f.restrictScalars R : B →ₐ[R] C) = (f : B →ₐ[S] C).restrictScalars R :=
   rfl
 
 @[simp]
-/--
-theorem `coe_restrictScalars'` / 定理 `coe_restrictScalars'`
-
-English:
-theorem coe_restrictScalars'
-  given: (f : B ->A[S] C)
-  statement: ⇑(f.restrictScalars R) = f
-  proof: rfl
-
-中文:
-定理 coe_restrictScalars'
-  条件: (f : B ->A[S] C)
-  结论: ⇑(f.restrictScalars R) = f
-  证明: rfl
+/-
+**ContinuousAlgHom.coe_restrictScalars'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAlg
+Hom`。
+形式化陈述：coe_restrictScalars' (f : B ->A[S] C) : ⇑(f.restrictScalars R) = f
+参数：f : B ->A[S] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_restrictScalars' (f : B ->A[S] C) : ⇑(f.restrictScalars R) = f :=
+theorem coe_restrictScalars' (f : B →A[S] C) : ⇑(f.restrictScalars R) = f :=
   rfl
 
 end RestrictScalars
@@ -2236,193 +1587,159 @@ variable {R : Type*} [CommSemiring R]
 variable {A : Type u} [TopologicalSpace A]
 variable [Semiring A] [Algebra R A]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsTopologicalSemiring
-  signature: A] (s
-  body: s.toSubsemiring.topologicalSemiring
-
-中文:
-实例 [是TopologicalSemiring
-  签名: A] (s
-  定义体: s.toSubsemiring.topologicalSemiring
-
-Depends on / 依赖: s.toSubsemiring.topologicalSemiring, toSubsemiring, topologicalSemiring
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsTopologicalSemiring A] (s : Subalgebra R A) : IsTopologicalSemiring s :=
   s.toSubsemiring.topologicalSemiring
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsSemitopologicalSemiring
-  signature: A] (s
-  body: s.toSubsemiring.semitopologicalSemiring
-
-中文:
-实例 [是SemitopologicalSemiring
-  签名: A] (s
-  定义体: s.toSubsemiring.semitopologicalSemiring
-
-Depends on / 依赖: s.toSubsemiring.semitopologicalSemiring, semitopologicalSemiring, toSubsemiring
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsSemitopologicalSemiring A] (s : Subalgebra R A) : IsSemitopologicalSemiring s :=
   s.toSubsemiring.semitopologicalSemiring
 
 variable [IsSemitopologicalSemiring A]
-
-/--
-theorem `Subalgebra.le_topologicalClosure` / 定理 `Subalgebra.le_topologicalClosure`
-
-English:
-theorem Subalgebra.le_topologicalClosure
-  given: (s : Subalgebra R A)
-  statement: s <= s.topologicalClosure
-  proof: subset_closure
-
-中文:
-定理 子代数.le_topologicalClosure
-  条件: (s : 子代数 R A)
-  结论: s <= s.topologicalClosure
-  证明: subset_closure
-
-Depends on / 依赖: subset_closure
+/-
+**Subalgebra.le_topologicalClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subalgebra.le_topologicalClosure (s : Subalgebra R A) : s <= s.topological
+Closure
+参数：s : Subalgebra R A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 -/
-theorem Subalgebra.le_topologicalClosure (s : Subalgebra R A) : s <= s.topologicalClosure :=
+theorem Subalgebra.le_topologicalClosure (s : Subalgebra R A) : s ≤ s.topologicalClosure :=
   subset_closure
-
-/--
-theorem `Subalgebra.isClosed_topologicalClosure` / 定理 `Subalgebra.isClosed_topologicalClosure`
-
-English:
-theorem Subalgebra.isClosed_topologicalClosure
-  given: (s : Subalgebra R A)
-  proof: by convert! @isClosed_closure A _ s
-
-中文:
-定理 子代数.isClosed_topologicalClosure
-  条件: (s : 子代数 R A)
-  证明: by convert! @isClosed_closure A _ s
-
-Depends on / 依赖: convert, isClosed_closure
+/-
+**Subalgebra.isClosed_topologicalClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subalgebra.isClosed_topologicalClosure (s : Subalgebra R A) : IsClosed (s.
+topologicalClosure : Set A)
+参数：s : Subalgebra R A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
 -/
 theorem Subalgebra.isClosed_topologicalClosure (s : Subalgebra R A) :
     IsClosed (s.topologicalClosure : Set A) := by convert! @isClosed_closure A _ s
-
-/--
-theorem `Subalgebra.topologicalClosure_minimal` / 定理 `Subalgebra.topologicalClosure_minimal`
-
-English:
-theorem Subalgebra.topologicalClosure_minimal
-  statement: {s t : Subalgebra R A} (h : s <= t)
-  proof: closure_minimal h ht
-
-@[gcongr]
-
-中文:
-定理 子代数.topologicalClosure_minimal
-  结论: {s t : 子代数 R A} (h : s <= t)
-  证明: closure_minimal h ht
-
-@[gcongr]
-
-Depends on / 依赖: closure_minimal
+/-
+**Subalgebra.topologicalClosure_minimal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subalgebra.topologicalClosure_minimal {s t : Subalgebra R A} (h : s <= t) 
+(ht : IsClosed (t : Set A)) : s.topologicalClosure <= t
+参数：h : s <= t；ht : IsClosed (t : Set A)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
 -/
-theorem Subalgebra.topologicalClosure_minimal {s t : Subalgebra R A} (h : s <= t)
-    (ht : IsClosed (t : Set A)) : s.topologicalClosure <= t :=
+theorem Subalgebra.topologicalClosure_minimal {s t : Subalgebra R A} (h : s ≤ t)
+    (ht : IsClosed (t : Set A)) : s.topologicalClosure ≤ t :=
   closure_minimal h ht
 
 @[gcongr]
-/--
-theorem `Subalgebra.topologicalClosure_mono` / 定理 `Subalgebra.topologicalClosure_mono`
-
-English:
-theorem Subalgebra.topologicalClosure_mono
-  given: {s t : Subalgebra R A} (h : s <= t)
-  proof: closure_mono h
-
-中文:
-定理 子代数.topologicalClosure_mono
-  条件: {s t : 子代数 R A} (h : s <= t)
-  证明: closure_mono h
-
-Depends on / 依赖: closure_mono
+/-
+**Subalgebra.topologicalClosure_mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subalgebra.topologicalClosure_mono {s t : Subalgebra R A} (h : s <= t) : s
+.topologicalClosure <= t.topologicalClosure
+参数：h : s <= t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
 -/
-theorem Subalgebra.topologicalClosure_mono {s t : Subalgebra R A} (h : s <= t) :
-    s.topologicalClosure <= t.topologicalClosure :=
+theorem Subalgebra.topologicalClosure_mono {s t : Subalgebra R A} (h : s ≤ t) :
+    s.topologicalClosure ≤ t.topologicalClosure :=
   closure_mono h
 
 variable (R) in
 open Algebra in
-/--
-lemma `Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer` / 引理 `Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer`
-
-English:
-lemma Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer
-  given: [T2Space A] (s : Set A)
-  proof: topologicalClosure_minimal (adjoin_le_centralizer_centralizer R s) (Set.isClosed_centralizer _)
-
-中文:
-引理 子代数.topologicalClosure_adjoin_le_centralizer_centralizer
-  条件: [T2空间 A] (s : 集合 A)
-  证明: topologicalClosure_minimal (adjoin_le_centralizer_centralizer R s) (Set.isClosed_centralizer _)
-
-Depends on / 依赖: Set.isClosed_centralizer, adjoin_le_centralizer_centralizer, isClosed_centralizer, topologicalClosure_minimal
+/-
+**Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer** 是 Mathlib 中的
+一个引理，位于命名空间 ``。
+形式化陈述：Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer [T2Space A
+] (s : Set A) : (adjoin R s).topologicalClosure <= centralizer R (centralizer R 
+s)
+参数：s : Set A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.topologicalClosure_minimal`：Subalgebra.topologicalClosure_min
+imal {s t : Subalgebra R A} (h : s <= t) (ht : IsClosed (t : Set A)) : s.topolog
+icalClosure <= t
+· 使用引理 `Algebra.adjoin_le_centralizer_centralizer`：adjoin_le_centralizer_central
+izer (s : Set A) : adjoin R s <= Subalgebra.centralizer R (Subalgebra.centralize
+r R s)
+· 使用引理 `Set.isClosed_centralizer`：Set.isClosed_centralizer {M : Type*} (s : Set 
+M) [Mul M] [TopologicalSpace M] [SeparatelyContinuousMul M] [T2Space M] : IsClos
+ed (centralize…
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
 -/
 lemma Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer [T2Space A] (s : Set A) :
-    (adjoin R s).topologicalClosure <= centralizer R (centralizer R s) :=
+    (adjoin R s).topologicalClosure ≤ centralizer R (centralizer R s) :=
   topologicalClosure_minimal (adjoin_le_centralizer_centralizer R s) (Set.isClosed_centralizer _)
 
-/--
-Definition of `Subalgebra.commSemiringTopologicalClosure` / `Subalgebra.commSemiringTopologicalClosure` 的定义
+/-- If a subalgebra of a topological algebra is commutative, then so is its topological closure.
 
-English:
-abbreviation Subalgebra.commSemiringTopologicalClosure
-  signature: [T2Space A] (s : Subalgebra R A)
-  body: { s.topologicalClosure.toSemiring, s.toSubmonoid.commMonoidTopologicalClosure hs with }
+See note [reducible non-instances]. -/
+/-
+**Subalgebra.commSemiringTopologicalClosure** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Subalgebra.commSemiringTopologicalClosure [T2Space A] (s : Subalgebra R A)
+ (hs : forall x y : s, x * y = y * x) : CommSemiring s.topologicalClosure
+参数：s : Subalgebra R A；hs : forall x y : s, x * y = y * x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 子代数.commSemiringTopologicalClosure
-  签名: [T2空间 A] (s : 子代数 R A)
-  定义体: { s.topologicalClosure.toSemiring, s.toSubmonoid.commMonoidTopologicalClosure hs with }
+--- 原说明 ---
+If a subalgebra of a topological algebra is commutative, then so is its topologi
+cal closure.
 
-Depends on / 依赖: commMonoidTopologicalClosure, s.toSubmonoid.commMonoidTopologicalClosure, s.topologicalClosure.toSemiring, toSemiring, toSubmonoid, topologicalClosure
+See note [reducible non-instances].
 -/
 abbrev Subalgebra.commSemiringTopologicalClosure [T2Space A] (s : Subalgebra R A)
-    (hs : forall x y : s, x * y = y * x) : CommSemiring s.topologicalClosure :=
+    (hs : ∀ x y : s, x * y = y * x) : CommSemiring s.topologicalClosure :=
   { s.topologicalClosure.toSemiring, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
-/--
-theorem `Subalgebra.topologicalClosure_comap_homeomorph` / 定理 `Subalgebra.topologicalClosure_comap_homeomorph`
+/-- This is really a statement about topological algebra isomorphisms,
+but we don't have those, so we use the clunky approach of talking about
+an algebra homomorphism, and a separate homeomorphism,
+along with a witness that as functions they are the same.
+-/
+/-
+**Subalgebra.topologicalClosure_comap_homeomorph** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subalgebra.topologicalClosure_comap_homeomorph (s : Subalgebra R A) {B : T
+ype*} [TopologicalSpace B] [Ring B] [IsSemitopologicalRing B] [Algebra R B] (f :
+ B ->ₐ[R] A) (f' : B ≃ₜ A) (w : (f : B -> A) = f') : s.topologicalClosure.comap 
+f = (s.comap f).topologicalClosure
+参数：s : Subalgebra R A；f : B ->ₐ[R] A；f' : B ≃ₜ A；w : (f : B -> A) = f'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subalgebra.coe_comap`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : C
+ommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semiring
+ B] [inst_…
+· 使用定理 `Homeomorph.preimage_closure`：preimage_closure (h : X ≃ₜ Y) (s : Set Y) :
+ h ⁻¹' closure s = closure (h ⁻¹' s)
 
-English:
-theorem Subalgebra.topologicalClosure_comap_homeomorph
-  statement: (s : Subalgebra R A) {B : Type*}
-  proof: by
-  apply SetLike.ext'
-  simp only [Subalgebra.topologicalClosure_coe]
-  simp only [Subalgebra.coe_comap]
-  rw [w]
-  exact f'.preimage_closure _
-
-中文:
-定理 子代数.topologicalClosure_comap_homeomorph
-  结论: (s : 子代数 R A) {B : 类型}
-  证明: by
-  apply SetLike.ext'
-  simp only [Subalgebra.topologicalClosure_coe]
-  simp only [Subalgebra.coe_comap]
-  rw [w]
-  exact f'.preimage_closure _
-
-Depends on / 依赖: SetLike, SetLike.ext, Subalgebra, Subalgebra.coe_comap, Subalgebra.topologicalClosure_coe, coe_comap, preimage_closure, topologicalClosure_coe
+--- 原说明 ---
+This is really a statement about topological algebra isomorphisms,
+but we don't have those, so we use the clunky approach of talking about
+an algebra homomorphism, and a separate homeomorphism,
+along with a witness that as functions they are the same.
 -/
 theorem Subalgebra.topologicalClosure_comap_homeomorph (s : Subalgebra R A) {B : Type*}
-    [TopologicalSpace B] [Ring B] [IsSemitopologicalRing B] [Algebra R B] (f : B ->ₐ[R] A)
-    (f' : B ≃ₜ A) (w : (f : B -> A) = f') :
+    [TopologicalSpace B] [Ring B] [IsSemitopologicalRing B] [Algebra R B] (f : B →ₐ[R] A)
+    (f' : B ≃ₜ A) (w : (f : B → A) = f') :
     s.topologicalClosure.comap f = (s.comap f).topologicalClosure := by
   apply SetLike.ext'
   simp only [Subalgebra.topologicalClosure_coe]
@@ -2434,20 +1751,16 @@ variable (R)
 
 open Subalgebra
 
-/--
-Definition of `Algebra.elemental` / `Algebra.elemental` 的定义
+/-- The topological closure of the subalgebra generated by a single element. -/
+/-
+**Algebra.elemental** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Algebra.elemental (x : A) : Subalgebra R A
+参数：x : A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Algebra.elemental
-  signature: (x : A)
-  body: (Algebra.adjoin R ({x} : Set A)).topologicalClosure
-
-中文:
-定义 代数.elemental
-  签名: (x : A)
-  定义体: (Algebra.adjoin R ({x} : Set A)).topologicalClosure
-
-Depends on / 依赖: Algebra, Algebra.adjoin, adjoin, topologicalClosure
+--- 原说明 ---
+The topological closure of the subalgebra generated by a single element.
 -/
 def Algebra.elemental (x : A) : Subalgebra R A :=
   (Algebra.adjoin R ({x} : Set A)).topologicalClosure
@@ -2455,149 +1768,120 @@ def Algebra.elemental (x : A) : Subalgebra R A :=
 namespace Algebra.elemental
 
 @[simp, aesop safe (rule_sets := [SetLike])]
-/--
-theorem `self_mem` / 定理 `self_mem`
-
-English:
-theorem self_mem
-  given: (x : A)
-  statement: x in elemental R x
-  proof: le_topologicalClosure _ self_mem_adjoin_singleton R x
-
-中文:
-定理 self_mem
-  条件: (x : A)
-  结论: x in elemental R x
-  证明: le_topologicalClosure _ self_mem_adjoin_singleton R x
-
-Depends on / 依赖: le_topologicalClosure, self_mem_adjoin_singleton
+/-
+**Algebra.elemental.self_mem** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.elemental`。
+形式化陈述：self_mem (x : A) : x in elemental R x
+参数：x : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.le_topologicalClosure`：Subalgebra.le_topologicalClosure (s : 
+Subalgebra R A) : s <= s.topologicalClosure
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
 -/
-theorem self_mem (x : A) : x in elemental R x :=
-le_topologicalClosure _ self_mem_adjoin_singleton R x
+theorem self_mem (x : A) : x ∈ elemental R x :=
+  le_topologicalClosure _ <| self_mem_adjoin_singleton R x
 
 variable {R} in
-/--
-theorem `le_of_mem` / 定理 `le_of_mem`
-
-English:
-theorem le_of_mem
-  given: {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A)) (hx : x in s)
-  proof: topologicalClosure_minimal (adjoin_le <| by simpa using hx) hs
-
-中文:
-定理 le_of_mem
-  条件: {x : A} {s : 子代数 R A} (hs : 是闭集 (s : 集合 A)) (hx : x in s)
-  证明: topologicalClosure_minimal (adjoin_le <| by simpa using hx) hs
-
-Depends on / 依赖: adjoin_le, topologicalClosure_minimal
+/-
+**Algebra.elemental.le_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.elemental`。
+形式化陈述：le_of_mem {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A)) (hx : x
+ in s) : elemental R x <= s
+参数：hs : IsClosed (s : Set A)；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.topologicalClosure_minimal`：Subalgebra.topologicalClosure_min
+imal {s t : Subalgebra R A} (h : s <= t) (ht : IsClosed (t : Set A)) : s.topolog
+icalClosure <= t
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem le_of_mem {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A)) (hx : x in s) :
-    elemental R x <= s :=
+theorem le_of_mem {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A)) (hx : x ∈ s) :
+    elemental R x ≤ s :=
   topologicalClosure_minimal (adjoin_le <| by simpa using hx) hs
 
 variable {R} in
-/--
-theorem `le_iff_mem` / 定理 `le_iff_mem`
-
-English:
-theorem le_iff_mem
-  given: {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A))
-  proof: ⟨fun h => h (self_mem R x), fun h => le_of_mem hs h⟩
-
-中文:
-定理 le_iff_mem
-  条件: {x : A} {s : 子代数 R A} (hs : 是闭集 (s : 集合 A))
-  证明: ⟨fun h => h (self_mem R x), fun h => le_of_mem hs h⟩
-
-Depends on / 依赖: le_of_mem, self_mem
+/-
+**Algebra.elemental.le_iff_mem** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.elemental`。
+形式化陈述：le_iff_mem {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A)) : elem
+ental R x <= s ↔ x in s
+参数：hs : IsClosed (s : Set A)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.elemental.self_mem`：self_mem (x : A) : x in elemental R x
+· 使用定理 `Algebra.elemental.le_of_mem`：le_of_mem {x : A} {s : Subalgebra R A} (hs 
+: IsClosed (s : Set A)) (hx : x in s) : elemental R x <= s
 -/
 theorem le_iff_mem {x : A} {s : Subalgebra R A} (hs : IsClosed (s : Set A)) :
-    elemental R x <= s ↔ x in s :=
-  ⟨fun h => h (self_mem R x), fun h => le_of_mem hs h⟩
-
-/--
-Instance `isClosed` / 实例 `isClosed`
-
-English:
-instance isClosed
-  signature: (x : A)
-  body: isClosed_topologicalClosure _
-
-中文:
-实例 isClosed
-  签名: (x : A)
-  定义体: isClosed_topologicalClosure _
-
-Depends on / 依赖: isClosed_topologicalClosure
+    elemental R x ≤ s ↔ x ∈ s :=
+  ⟨fun h ↦ h (self_mem R x), fun h ↦ le_of_mem hs h⟩
+/-
+**Algebra.elemental.isClosed** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.elemental`。
+形式化陈述：isClosed (x : A) : IsClosed (elemental R x : Set A)
+参数：x : A。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.isClosed_topologicalClosure`：Subalgebra.isClosed_topologicalC
+losure (s : Subalgebra R A) : IsClosed (s.topologicalClosure : Set A)
 -/
 instance isClosed (x : A) : IsClosed (elemental R x : Set A) :=
   isClosed_topologicalClosure _
 
 open scoped IsMulCommutative in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T2Space
-  signature: A] {x
-  body: fast_instance% commSemiringTopologicalClosure _ mul_comm
-
-中文:
-实例 [T2空间
-  签名: A] {x
-  定义体: fast_instance% commSemiringTopologicalClosure _ mul_comm
-
-Depends on / 依赖: commSemiringTopologicalClosure, fast_instance, mul_comm
+/-
+**Algebra.elemental.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.elemental`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T2Space A] {x : A} : CommSemiring (elemental R x) :=
   fast_instance% commSemiringTopologicalClosure _ mul_comm
-
+/-
+**Algebra.elemental.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.elemental`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A : Type*} [UniformSpace A] [CompleteSpace A] [Semiring A]
     [IsSemitopologicalSemiring A] [Algebra R A] (x : A) :
     CompleteSpace (elemental R x) :=
   isClosed_closure.completeSpace_coe
 
-/--
-theorem `isClosedEmbedding_coe` / 定理 `isClosedEmbedding_coe`
+/-- The coercion from an elemental algebra to the full algebra is a `IsClosedEmbedding`. -/
+/-
+**Algebra.elemental.isClosedEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.ele
+mental`。
+形式化陈述：isClosedEmbedding_coe (x : A) : IsClosedEmbedding ((↑) : elemental R x -> 
+A) where eq_induced
+参数：x : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
 
-English:
-theorem isClosedEmbedding_coe
-  given: (x : A)
-  statement: IsClosedEmbedding ((↑) : elemental R x -> A) where
-  proof: rfl
-  injective := Subtype.coe_injective
-  isClosed_range := by simpa using isClosed R x
-
-中文:
-定理 isClosedEmbedding_coe
-  条件: (x : A)
-  结论: 是闭嵌入 ((↑) : elemental R x -> A) where
-  证明: rfl
-  injective := Subtype.coe_injective
-  isClosed_range := by simpa using isClosed R x
+--- 原说明 ---
+The coercion from an elemental algebra to the full algebra is a `IsClosedEmbeddi
+ng`.
 -/
-theorem isClosedEmbedding_coe (x : A) : IsClosedEmbedding ((↑) : elemental R x -> A) where
+theorem isClosedEmbedding_coe (x : A) : IsClosedEmbedding ((↑) : elemental R x → A) where
   eq_induced := rfl
   injective := Subtype.coe_injective
   isClosed_range := by simpa using isClosed R x
-
-/--
-lemma `le_centralizer_centralizer` / 引理 `le_centralizer_centralizer`
-
-English:
-lemma le_centralizer_centralizer
-  given: [T2Space A] (x : A)
-  proof: topologicalClosure_adjoin_le_centralizer_centralizer ..
-
-中文:
-引理 le_centralizer_centralizer
-  条件: [T2空间 A] (x : A)
-  证明: topologicalClosure_adjoin_le_centralizer_centralizer ..
-
-Depends on / 依赖: topologicalClosure_adjoin_le_centralizer_centralizer
+/-
+**Algebra.elemental.le_centralizer_centralizer** 是 Mathlib 中的一个引理，位于命名空间 `Algebr
+a.elemental`。
+形式化陈述：le_centralizer_centralizer [T2Space A] (x : A) : elemental R x <= centrali
+zer R (centralizer R {x})
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Subalgebra.topologicalClosure_adjoin_le_centralizer_centralizer`：Subalge
+bra.topologicalClosure_adjoin_le_centralizer_centralizer [T2Space A] (s : Set A)
+ : (adjoin R s).topologicalClosure <= centralizer R (…
 -/
 lemma le_centralizer_centralizer [T2Space A] (x : A) :
-    elemental R x <= centralizer R (centralizer R {x}) :=
+    elemental R x ≤ centralizer R (centralizer R {x}) :=
   topologicalClosure_adjoin_le_centralizer_centralizer ..
 
 end Algebra.elemental
@@ -2611,41 +1895,30 @@ variable {A : Type u} [TopologicalSpace A]
 variable [Ring A]
 variable [Algebra R A] [IsSemitopologicalRing A]
 
-/--
-Definition of `Subalgebra.commRingTopologicalClosure` / `Subalgebra.commRingTopologicalClosure` 的定义
+/-- If a subalgebra of a topological algebra is commutative, then so is its topological closure.
+See note [reducible non-instances]. -/
+/-
+**Subalgebra.commRingTopologicalClosure** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Subalgebra.commRingTopologicalClosure [T2Space A] (s : Subalgebra R A) (hs
+ : forall x y : s, x * y = y * x) : CommRing s.topologicalClosure
+参数：s : Subalgebra R A；hs : forall x y : s, x * y = y * x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Subalgebra.commRingTopologicalClosure
-  signature: [T2Space A] (s : Subalgebra R A)
-  body: { s.topologicalClosure.toRing, s.toSubmonoid.commMonoidTopologicalClosure hs with }
-
-中文:
-缩写 子代数.commRingTopologicalClosure
-  签名: [T2空间 A] (s : 子代数 R A)
-  定义体: { s.topologicalClosure.toRing, s.toSubmonoid.commMonoidTopologicalClosure hs with }
-
-Depends on / 依赖: commMonoidTopologicalClosure, s.toSubmonoid.commMonoidTopologicalClosure, s.topologicalClosure.toRing, toRing, toSubmonoid, topologicalClosure
+--- 原说明 ---
+If a subalgebra of a topological algebra is commutative, then so is its topologi
+cal closure.
+See note [reducible non-instances].
 -/
 abbrev Subalgebra.commRingTopologicalClosure [T2Space A] (s : Subalgebra R A)
-    (hs : forall x y : s, x * y = y * x) : CommRing s.topologicalClosure :=
+    (hs : ∀ x y : s, x * y = y * x) : CommRing s.topologicalClosure :=
   { s.topologicalClosure.toRing, s.toSubmonoid.commMonoidTopologicalClosure hs with }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T2Space
-  signature: A] {x
-  body: mul_comm
-
-中文:
-实例 [T2空间
-  签名: A] {x
-  定义体: mul_comm
-
-Depends on / 依赖: mul_comm
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T2Space A] {x : A} : CommRing (elemental R x) where
   mul_comm := mul_comm
 
 end Ring
+

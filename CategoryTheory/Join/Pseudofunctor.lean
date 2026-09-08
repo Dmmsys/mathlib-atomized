@@ -33,44 +33,36 @@ variable {A B C D : Type*} [Category* A] [Category* B] [Category* C] [Category* 
 
 
 variable (A) in
-/--
-Definition of `mapCompRight` / `mapCompRight` 的定义
+/-- The structural isomorphism for composition of `pseudofunctorRight`. -/
+/-
+**CategoryTheory.Join.mapCompRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Joi
+n`。
+形式化陈述：mapCompRight (F : B ⥤ C) (G : C ⥤ D) : mapPair (𝟭 A) (F ⋙ G) ≅ mapPair (𝟭 
+A) F ⋙ mapPair (𝟭 A) G
+参数：F : B ⥤ C；G : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCompRight
-  signature: (F : B ⥤ C) (G : C ⥤ D)
-  body: mapIsoWhiskerRight (Functor.leftUnitor _).symm _ ≪≫ mapPairComp (𝟭 A) F (𝟭 A) G
-
-中文:
-定义 mapCompRight
-  签名: (F : B ⥤ C) (G : C ⥤ D)
-  定义体: mapIsoWhiskerRight (Functor.leftUnitor _).symm _ ≪≫ mapPairComp (𝟭 A) F (𝟭 A) G
-
-Depends on / 依赖: Functor, Functor.leftUnitor, leftUnitor, mapIsoWhiskerRight, mapPairComp
+--- 原说明 ---
+The structural isomorphism for composition of `pseudofunctorRight`.
 -/
 def mapCompRight (F : B ⥤ C) (G : C ⥤ D) :
     mapPair (𝟭 A) (F ⋙ G) ≅ mapPair (𝟭 A) F ⋙ mapPair (𝟭 A) G :=
   mapIsoWhiskerRight (Functor.leftUnitor _).symm _ ≪≫ mapPairComp (𝟭 A) F (𝟭 A) G
 
 variable (D) in
-/--
-Definition of `mapCompLeft` / `mapCompLeft` 的定义
+/-- The structural isomorphism for composition of `pseudofunctorLeft`. -/
+/-
+**CategoryTheory.Join.mapCompLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Join
+`。
+形式化陈述：mapCompLeft (F : A ⥤ B) (G : B ⥤ C) : mapPair (F ⋙ G) (𝟭 D) ≅ mapPair F (𝟭
+ D) ⋙ mapPair G (𝟭 D)
+参数：F : A ⥤ B；G : B ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCompLeft
-  signature: (F : A ⥤ B) (G : B ⥤ C)
-  body: mapIsoWhiskerLeft _ (Functor.leftUnitor _).symm ≪≫ mapPairComp F (𝟭 D) G (𝟭 D)
-
-#adaptation_note
-
-中文:
-定义 mapCompLeft
-  签名: (F : A ⥤ B) (G : B ⥤ C)
-  定义体: mapIsoWhiskerLeft _ (Functor.leftUnitor _).symm ≪≫ mapPairComp F (𝟭 D) G (𝟭 D)
-
-#adaptation_note
-
-Depends on / 依赖: Functor, Functor.leftUnitor, leftUnitor, mapIsoWhiskerLeft, mapPairComp
+--- 原说明 ---
+The structural isomorphism for composition of `pseudofunctorLeft`.
 -/
 def mapCompLeft (F : A ⥤ B) (G : B ⥤ C) :
     mapPair (F ⋙ G) (𝟭 D) ≅ mapPair F (𝟭 D) ⋙ mapPair G (𝟭 D) :=
@@ -88,26 +80,69 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 variable (A) in
 @[reassoc]
-/--
-lemma `mapWhiskerLeft_whiskerLeft` / 引理 `mapWhiskerLeft_whiskerLeft`
-
-English:
-lemma mapWhiskerLeft_whiskerLeft
-  given: (F : B ⥤ C) {G H : C ⥤ D} (η : G ⟶ H)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-#adaptation_note
-
-中文:
-引理 mapWhiskerLeft_whiskerLeft
-  条件: (F : B ⥤ C) {G H : C ⥤ D} (η : G ⟶ H)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-#adaptation_note
-
-Depends on / 依赖: mapCompRight, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerLeft_whiskerLeft** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Join`。
+形式化陈述：mapWhiskerLeft_whiskerLeft (F : B ⥤ C) {G H : C ⥤ D} (η : G ⟶ H) : mapWhis
+kerLeft _ (whiskerLeft F η) = (mapCompRight A F G).hom ≫ whiskerLeft (mapPair (𝟭
+ A) F) (mapWhiskerLeft _ η) ≫ (mapCompRight A F H).inv
+参数：F : B ⥤ C；η : G ⟶ H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_hom_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_left`：mapPairComp_inv_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_inv_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_right`：mapPairComp_inv_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma mapWhiskerLeft_whiskerLeft (F : B ⥤ C) {G H : C ⥤ D} (η : G ⟶ H) :
     mapWhiskerLeft _ (whiskerLeft F η) =
@@ -127,22 +162,69 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 variable (D) in
 @[reassoc]
-/--
-lemma `mapWhiskerRight_whiskerLeft` / 引理 `mapWhiskerRight_whiskerLeft`
-
-English:
-lemma mapWhiskerRight_whiskerLeft
-  given: (F : A ⥤ B) {G H : B ⥤ C} (η : G ⟶ H)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-中文:
-引理 mapWhiskerRight_whiskerLeft
-  条件: (F : A ⥤ B) {G H : B ⥤ C} (η : G ⟶ H)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-Depends on / 依赖: mapCompLeft, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerRight_whiskerLeft** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Join`。
+形式化陈述：mapWhiskerRight_whiskerLeft (F : A ⥤ B) {G H : B ⥤ C} (η : G ⟶ H) : mapWhi
+skerRight (whiskerLeft F η) (𝟭 D) = (mapCompLeft D F G).hom ≫ whiskerLeft (mapPa
+ir F (𝟭 D)) (mapWhiskerRight η _) ≫ (mapCompLeft D F H).inv
+参数：F : A ⥤ B；η : G ⟶ H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_hom_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_left`：mapPairComp_inv_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_inv_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_right`：mapPairComp_inv_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerRight_whiskerLeft (F : A ⥤ B) {G H : B ⥤ C} (η : G ⟶ H) :
     mapWhiskerRight (whiskerLeft F η) (𝟭 D) =
@@ -154,22 +236,64 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable (A) in
 @[reassoc]
-/--
-lemma `mapWhiskerLeft_whiskerRight` / 引理 `mapWhiskerLeft_whiskerRight`
-
-English:
-lemma mapWhiskerLeft_whiskerRight
-  given: {F G : B ⥤ C} (η : F ⟶ G) (H : C ⥤ D)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-中文:
-引理 mapWhiskerLeft_whiskerRight
-  条件: {F G : B ⥤ C} (η : F ⟶ G) (H : C ⥤ D)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-Depends on / 依赖: mapCompRight, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerLeft_whiskerRight** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Join`。
+形式化陈述：mapWhiskerLeft_whiskerRight {F G : B ⥤ C} (η : F ⟶ G) (H : C ⥤ D) : mapWhi
+skerLeft _ (whiskerRight η H) = (mapCompRight A F H).hom ≫ whiskerRight (mapWhis
+kerLeft _ η) (mapPair (𝟭 A) H) ≫ (mapCompRight A G H).inv
+参数：η : F ⟶ G；H : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_hom_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_left`：mapPairComp_inv_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_inv_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_right`：mapPairComp_inv_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma mapWhiskerLeft_whiskerRight {F G : B ⥤ C} (η : F ⟶ G) (H : C ⥤ D) :
     mapWhiskerLeft _ (whiskerRight η H) =
@@ -181,22 +305,64 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable (D) in
 @[reassoc]
-/--
-lemma `mapWhiskerRight_whiskerRight` / 引理 `mapWhiskerRight_whiskerRight`
-
-English:
-lemma mapWhiskerRight_whiskerRight
-  given: {F G : A ⥤ B} (η : F ⟶ G) (H : B ⥤ C)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-中文:
-引理 mapWhiskerRight_whiskerRight
-  条件: {F G : A ⥤ B} (η : F ⟶ G) (H : B ⥤ C)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-Depends on / 依赖: mapCompLeft, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerRight_whiskerRight** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Join`。
+形式化陈述：mapWhiskerRight_whiskerRight {F G : A ⥤ B} (η : F ⟶ G) (H : B ⥤ C) : mapWh
+iskerRight (whiskerRight η H) _ = (mapCompLeft D F H).hom ≫ whiskerRight (mapWhi
+skerRight η _) (mapPair H (𝟭 D)) ≫ (mapCompLeft D G H).inv
+参数：η : F ⟶ G；H : B ⥤ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_hom_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_left`：mapPairComp_inv_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_inv_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_right`：mapPairComp_inv_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerRight_whiskerRight {F G : A ⥤ B} (η : F ⟶ G) (H : B ⥤ C) :
     mapWhiskerRight (whiskerRight η H) _ =
@@ -209,22 +375,74 @@ variable {E : Type*} [Category* E]
 set_option backward.defeqAttrib.useBackward true in
 variable (A) in
 @[reassoc]
-/--
-lemma `mapWhiskerLeft_associator_hom` / 引理 `mapWhiskerLeft_associator_hom`
-
-English:
-lemma mapWhiskerLeft_associator_hom
-  given: (F : B ⥤ C) (G : C ⥤ D) (H : D ⥤ E)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-中文:
-引理 mapWhiskerLeft_associator_hom
-  条件: (F : B ⥤ C) (G : C ⥤ D) (H : D ⥤ E)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-Depends on / 依赖: mapCompRight, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerLeft_associator_hom** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Join`。
+形式化陈述：mapWhiskerLeft_associator_hom (F : B ⥤ C) (G : C ⥤ D) (H : D ⥤ E) : mapWhi
+skerLeft _ (F.associator G H).hom = (mapCompRight A (F ⋙ G) H).hom ≫ whiskerRigh
+t (mapCompRight A F G).hom (mapPair (𝟭 A) H) ≫ ((mapPair (𝟭 A) F).associator (ma
+pPair (𝟭 A) G) (mapPair (𝟭 A) H)).hom ≫ whiskerLeft (mapPair (𝟭 A) F) (mapCompRi
+ght A G H).inv ≫ (mapCompRight A F (G ⋙ H)).inv
+参数：F : B ⥤ C；G : C ⥤ D；H : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerRight_comp`：whiskerRight_comp {G H K : C ⥤
+ D} (α : G ⟶ H) (β : H ⟶ K) (F : D ⥤ E) : whiskerRight (α ≫ β) F = whiskerRight 
+α F ≫ whiskerRight β F
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_hom_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_left`：mapPairComp_inv_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_inv_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_right`：mapPairComp_inv_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerLeft_associator_hom (F : B ⥤ C) (G : C ⥤ D) (H : D ⥤ E) :
     mapWhiskerLeft _ (F.associator G H).hom =
@@ -235,22 +453,74 @@ lemma mapWhiskerLeft_associator_hom (F : B ⥤ C) (G : C ⥤ D) (H : D ⥤ E) :
 
 set_option backward.defeqAttrib.useBackward true in
 variable (E) in
-/--
-lemma `mapWhiskerRight_associator_hom` / 引理 `mapWhiskerRight_associator_hom`
-
-English:
-lemma mapWhiskerRight_associator_hom
-  given: (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-中文:
-引理 mapWhiskerRight_associator_hom
-  条件: (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-Depends on / 依赖: mapCompLeft, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerRight_associator_hom** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Join`。
+形式化陈述：mapWhiskerRight_associator_hom (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D) : mapWh
+iskerRight (F.associator G H).hom _ = (mapCompLeft E (F ⋙ G) H).hom ≫ whiskerRig
+ht (mapCompLeft E F G).hom (mapPair H (𝟭 E)) ≫ ((mapPair F (𝟭 E)).associator (ma
+pPair G (𝟭 E)) (mapPair H (𝟭 E))).hom ≫ whiskerLeft (mapPair F (𝟭 E)) (mapCompLe
+ft E G H).inv ≫ (mapCompLeft E F (G ⋙ H)).inv
+参数：F : A ⥤ B；G : B ⥤ C；H : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerRight_comp`：whiskerRight_comp {G H K : C ⥤
+ D} (α : G ⟶ H) (β : H ⟶ K) (F : D ⥤ E) : whiskerRight (α ≫ β) F = whiskerRight 
+α F ≫ whiskerRight β F
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_hom_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_left`：mapPairComp_inv_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_inv_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
+· 使用引理 `CategoryTheory.Join.mapPairComp_inv_app_right`：mapPairComp_inv_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).inv.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerRight_associator_hom (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D) :
     mapWhiskerRight (F.associator G H).hom _ =
@@ -261,22 +531,57 @@ lemma mapWhiskerRight_associator_hom (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D) :
 
 set_option backward.defeqAttrib.useBackward true in
 variable (A) in
-/--
-lemma `mapWhiskerLeft_leftUnitor_hom` / 引理 `mapWhiskerLeft_leftUnitor_hom`
-
-English:
-lemma mapWhiskerLeft_leftUnitor_hom
-  given: (F : B ⥤ C)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-中文:
-引理 mapWhiskerLeft_leftUnitor_hom
-  条件: (F : B ⥤ C)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-Depends on / 依赖: mapCompRight, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerLeft_leftUnitor_hom** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Join`。
+形式化陈述：mapWhiskerLeft_leftUnitor_hom (F : B ⥤ C) : mapWhiskerLeft _ F.leftUnitor.
+hom = (mapCompRight A (𝟭 _) F).hom ≫ whiskerRight mapPairId.hom (mapPair _ F) ≫ 
+(mapPair _ F).leftUnitor.hom
+参数：F : B ⥤ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_hom_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Join.mapPairId_hom_app`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   (x : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerLeft_leftUnitor_hom (F : B ⥤ C) :
     mapWhiskerLeft _ F.leftUnitor.hom =
@@ -286,22 +591,57 @@ lemma mapWhiskerLeft_leftUnitor_hom (F : B ⥤ C) :
 
 set_option backward.defeqAttrib.useBackward true in
 variable (C) in
-/--
-lemma `mapWhiskerRight_leftUnitor_hom` / 引理 `mapWhiskerRight_leftUnitor_hom`
-
-English:
-lemma mapWhiskerRight_leftUnitor_hom
-  given: (F : A ⥤ B)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-中文:
-引理 mapWhiskerRight_leftUnitor_hom
-  条件: (F : A ⥤ B)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-Depends on / 依赖: mapCompLeft, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerRight_leftUnitor_hom** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Join`。
+形式化陈述：mapWhiskerRight_leftUnitor_hom (F : A ⥤ B) : mapWhiskerRight F.leftUnitor.
+hom (𝟭 C) = (mapCompLeft C (𝟭 A) F).hom ≫ whiskerRight mapPairId.hom (mapPair F 
+(𝟭 C)) ≫ (mapPair F (𝟭 C)).leftUnitor.hom
+参数：F : A ⥤ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_hom_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Join.mapPairId_hom_app`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   (x : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerRight_leftUnitor_hom (F : A ⥤ B) :
     mapWhiskerRight F.leftUnitor.hom (𝟭 C) =
@@ -311,22 +651,60 @@ lemma mapWhiskerRight_leftUnitor_hom (F : A ⥤ B) :
 
 set_option backward.defeqAttrib.useBackward true in
 variable (A) in
-/--
-lemma `mapWhiskerLeft_rightUnitor_hom` / 引理 `mapWhiskerLeft_rightUnitor_hom`
-
-English:
-lemma mapWhiskerLeft_rightUnitor_hom
-  given: (F : B ⥤ C)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-中文:
-引理 mapWhiskerLeft_rightUnitor_hom
-  条件: (F : B ⥤ C)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompRight]
-
-Depends on / 依赖: mapCompRight, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerLeft_rightUnitor_hom** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Join`。
+形式化陈述：mapWhiskerLeft_rightUnitor_hom (F : B ⥤ C) : mapWhiskerLeft _ F.rightUnito
+r.hom = (mapCompRight A F (𝟭 C)).hom ≫ whiskerLeft (mapPair _ F) mapPairId.hom ≫
+ (mapPair (𝟭 A) _).rightUnitor.hom
+参数：F : B ⥤ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerLeft_app`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerRight_hom_app`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapPairId_hom_app`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   (x : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerLeft_rightUnitor_hom (F : B ⥤ C) :
     mapWhiskerLeft _ F.rightUnitor.hom =
@@ -336,22 +714,60 @@ lemma mapWhiskerLeft_rightUnitor_hom (F : B ⥤ C) :
 
 set_option backward.defeqAttrib.useBackward true in
 variable (C) in
-/--
-lemma `mapWhiskerRight_rightUnitor_hom` / 引理 `mapWhiskerRight_rightUnitor_hom`
-
-English:
-lemma mapWhiskerRight_rightUnitor_hom
-  given: (F : A ⥤ B)
-  proof: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-中文:
-引理 mapWhiskerRight_rightUnitor_hom
-  条件: (F : A ⥤ B)
-  证明: by
-  apply natTrans_ext <;> ext <;> simp [mapCompLeft]
-
-Depends on / 依赖: mapCompLeft, natTrans_ext
+/-
+**CategoryTheory.Join.mapWhiskerRight_rightUnitor_hom** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Join`。
+形式化陈述：mapWhiskerRight_rightUnitor_hom (F : A ⥤ B) : mapWhiskerRight F.rightUnito
+r.hom _ = (mapCompLeft C F (𝟭 B)).hom ≫ whiskerLeft (mapPair F _) mapPairId.hom 
+≫ (mapPair _ (𝟭 C)).rightUnitor.hom
+参数：F : A ⥤ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Join.natTrans_ext`：natTrans_ext {F F' : C ⋆ D ⥤ E} {α β :
+ F ⟶ F'} (h₁ : whiskerLeft (inclLeft C D) α = whiskerLeft (inclLeft C D) β) (h₂ 
+: whiskerLeft (inclRig…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Join.mapWhiskerRight_app`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `CategoryTheory.Join.mapIsoWhiskerLeft_hom_app`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_left`：mapPairComp_hom_app_left (
+c : C) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (left c) = 𝟙 (left (Gₗ.obj (Fₗ.obj c)
+))
+· 使用定理 `CategoryTheory.Join.mapPairId_hom_app`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   (x : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Join.mapPairComp_hom_app_right`：mapPairComp_hom_app_right
+ (d : D) : (mapPairComp Fₗ Fᵣ Gₗ Gᵣ).hom.app (right d) = 𝟙 (right (Gᵣ.obj (Fᵣ.ob
+j d)))
 -/
 lemma mapWhiskerRight_rightUnitor_hom (F : A ⥤ B) :
     mapWhiskerRight F.rightUnitor.hom _ =
@@ -366,42 +782,17 @@ end
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The pseudofunctor sending `D` to `C ⋆ D`. -/
 @[simps!]
-/--
-Definition of `pseudofunctorRight` / `pseudofunctorRight` 的定义
+/-
+**CategoryTheory.Join.pseudofunctorRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Join`。
+形式化陈述：pseudofunctorRight (C : Type u₁) [Category.{v₁} C] : Pseudofunctor Cat.{v₂
+, u₂} Cat.{max v₁ v₂, max u₁ u₂} where obj D
+参数：C : Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pseudofunctorRight
-  signature: (C : Type u₁) [Category.{v₁} C]
-  body: Cat.of (C ⋆ D)
-  map F := (mapPair (𝟭 C) F.toFunctor).toCatHom
-  map₂ f := (mapWhiskerLeft (𝟭 C) f.toNatTrans).toCatHom₂
-  mapId D := Cat.Hom.isoMk mapPairId
-mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
-  map₂_whisker_left := by intros; exact congr($(mapWhiskerLeft_whiskerLeft C _ _).toCatHom₂)
-  map₂_whisker_right := by intros; exact congr($(mapWhiskerLeft_whiskerRight C _ _).toCatHom₂)
-  map₂_associator := by intros; exact congr($(mapWhiskerLeft_associator_hom C _ _ _).toCatHom₂)
-  map₂_left_unitor := by intros; exact congr($(mapWhiskerLeft_leftUnitor_hom C _).toCatHom₂)
-  map₂_right_unitor := by intros; exact congr($(mapWhiskerLeft_rightUnitor_hom C _).toCatHom₂)
-
-#adaptation_note
-
-中文:
-定义 pseudofunctorRight
-  签名: (C : 类型u₁) [范畴.{v₁} C]
-  定义体: Cat.of (C ⋆ D)
-  map F := (mapPair (𝟭 C) F.toFunctor).toCatHom
-  map₂ f := (mapWhiskerLeft (𝟭 C) f.toNatTrans).toCatHom₂
-  mapId D := Cat.Hom.isoMk mapPairId
-mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
-  map₂_whisker_left := by intros; exact congr($(mapWhiskerLeft_whiskerLeft C _ _).toCatHom₂)
-  map₂_whisker_right := by intros; exact congr($(mapWhiskerLeft_whiskerRight C _ _).toCatHom₂)
-  map₂_associator := by intros; exact congr($(mapWhiskerLeft_associator_hom C _ _ _).toCatHom₂)
-  map₂_left_unitor := by intros; exact congr($(mapWhiskerLeft_leftUnitor_hom C _).toCatHom₂)
-  map₂_right_unitor := by intros; exact congr($(mapWhiskerLeft_rightUnitor_hom C _).toCatHom₂)
-
-#adaptation_note
-
-Depends on / 依赖: Cat.of
+--- 原说明 ---
+The pseudofunctor sending `D` to `C ⋆ D`.
 -/
 def pseudofunctorRight (C : Type u₁) [Category.{v₁} C] :
     Pseudofunctor Cat.{v₂, u₂} Cat.{max v₁ v₂, max u₁ u₂} where
@@ -409,7 +800,7 @@ def pseudofunctorRight (C : Type u₁) [Category.{v₁} C] :
   map F := (mapPair (𝟭 C) F.toFunctor).toCatHom
   map₂ f := (mapWhiskerLeft (𝟭 C) f.toNatTrans).toCatHom₂
   mapId D := Cat.Hom.isoMk mapPairId
-mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
+  mapComp F G := Cat.Hom.isoMk <| mapCompRight C F.toFunctor G.toFunctor
   map₂_whisker_left := by intros; exact congr($(mapWhiskerLeft_whiskerLeft C _ _).toCatHom₂)
   map₂_whisker_right := by intros; exact congr($(mapWhiskerLeft_whiskerRight C _ _).toCatHom₂)
   map₂_associator := by intros; exact congr($(mapWhiskerLeft_associator_hom C _ _ _).toCatHom₂)
@@ -421,46 +812,25 @@ mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The pseudofunctor sending `C` to `C ⋆ D`. -/
 @[simps!]
-/--
-Definition of `pseudofunctorLeft` / `pseudofunctorLeft` 的定义
+/-
+**CategoryTheory.Join.pseudofunctorLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Join`。
+形式化陈述：pseudofunctorLeft (D : Type u₂) [Category.{v₂} D] : Pseudofunctor Cat.{v₁,
+ u₁} Cat.{max v₁ v₂, max u₁ u₂} where obj C
+参数：D : Type u₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pseudofunctorLeft
-  signature: (D : Type u₂) [Category.{v₂} D]
-  body: Cat.of (C ⋆ D)
-  map F := (mapPair F.toFunctor (𝟭 D)).toCatHom
-  map₂ := (mapWhiskerRight ·.toNatTrans _ |>.toCatHom₂)
-mapId D := Cat.Hom.isoMk mapPairId
-mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
-  map₂_whisker_left := by intros; exact congr($(mapWhiskerRight_whiskerLeft D _ _).toCatHom₂)
-  map₂_whisker_right := by intros; exact congr($(mapWhiskerRight_whiskerRight D _ _).toCatHom₂)
-  map₂_associator := by intros; exact congr($(mapWhiskerRight_associator_hom D _ _ _).toCatHom₂)
-  map₂_left_unitor := by intros; exact congr($(mapWhiskerRight_leftUnitor_hom D _).toCatHom₂)
-  map₂_right_unitor := by intros; exact congr($(mapWhiskerRight_rightUnitor_hom D _).toCatHom₂)
-
-中文:
-定义 pseudofunctorLeft
-  签名: (D : 类型u₂) [范畴.{v₂} D]
-  定义体: Cat.of (C ⋆ D)
-  map F := (mapPair F.toFunctor (𝟭 D)).toCatHom
-  map₂ := (mapWhiskerRight ·.toNatTrans _ |>.toCatHom₂)
-mapId D := Cat.Hom.isoMk mapPairId
-mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
-  map₂_whisker_left := by intros; exact congr($(mapWhiskerRight_whiskerLeft D _ _).toCatHom₂)
-  map₂_whisker_right := by intros; exact congr($(mapWhiskerRight_whiskerRight D _ _).toCatHom₂)
-  map₂_associator := by intros; exact congr($(mapWhiskerRight_associator_hom D _ _ _).toCatHom₂)
-  map₂_left_unitor := by intros; exact congr($(mapWhiskerRight_leftUnitor_hom D _).toCatHom₂)
-  map₂_right_unitor := by intros; exact congr($(mapWhiskerRight_rightUnitor_hom D _).toCatHom₂)
-
-Depends on / 依赖: Cat.of
+--- 原说明 ---
+The pseudofunctor sending `C` to `C ⋆ D`.
 -/
 def pseudofunctorLeft (D : Type u₂) [Category.{v₂} D] :
     Pseudofunctor Cat.{v₁, u₁} Cat.{max v₁ v₂, max u₁ u₂} where
   obj C := Cat.of (C ⋆ D)
   map F := (mapPair F.toFunctor (𝟭 D)).toCatHom
   map₂ := (mapWhiskerRight ·.toNatTrans _ |>.toCatHom₂)
-mapId D := Cat.Hom.isoMk mapPairId
-mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
+  mapId D := Cat.Hom.isoMk <| mapPairId
+  mapComp _ _ := Cat.Hom.isoMk <| mapCompLeft D _ _
   map₂_whisker_left := by intros; exact congr($(mapWhiskerRight_whiskerLeft D _ _).toCatHom₂)
   map₂_whisker_right := by intros; exact congr($(mapWhiskerRight_whiskerRight D _ _).toCatHom₂)
   map₂_associator := by intros; exact congr($(mapWhiskerRight_associator_hom D _ _ _).toCatHom₂)
@@ -468,3 +838,4 @@ mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
   map₂_right_unitor := by intros; exact congr($(mapWhiskerRight_rightUnitor_hom D _).toCatHom₂)
 
 end CategoryTheory.Join
+

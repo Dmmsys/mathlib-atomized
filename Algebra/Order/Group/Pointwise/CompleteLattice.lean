@@ -32,32 +32,21 @@ variable [ConditionallyCompleteLattice M]
 section One
 variable [One M]
 
-/--
-lemma `csSup_one` / 引理 `csSup_one`
-
-English:
-lemma csSup_one
-  statement: sSup (1 : Set M) = 1
-  proof: csSup_singleton _
-
-中文:
-引理 csSup_one
-  结论: sSup (1 : 集合 M) = 1
-  证明: csSup_singleton _
+/-
+**csSup_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} [inst : ConditionallyCompleteLattice M] [inst_1 : One M],
+ sSup 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csSup_singleton`：csSup_singleton (a : α) : sSup {a} = a
 -/
 @[to_additive (attr := simp)] lemma csSup_one : sSup (1 : Set M) = 1 := csSup_singleton _
-/--
-lemma `csInf_one` / 引理 `csInf_one`
-
-English:
-lemma csInf_one
-  statement: sInf (1 : Set M) = 1
-  proof: csInf_singleton _
-
-中文:
-引理 csInf_one
-  结论: sInf (1 : 集合 M) = 1
-  证明: csInf_singleton _
+/-
+**csInf_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} [inst : ConditionallyCompleteLattice M] [inst_1 : One M],
+ sInf 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csInf_singleton`：∀ {α : Type u_1} [inst : ConditionallyCompletePartialOr
+derInf α] (a : α), sInf {a} = a
 -/
 @[to_additive (attr := simp)] lemma csInf_one : sInf (1 : Set M) = 1 := csInf_singleton _
 
@@ -68,86 +57,54 @@ variable [Group M] [MulLeftMono M] [MulRightMono M]
   {s t : Set M}
 
 @[to_additive]
-/--
-lemma `csSup_inv` / 引理 `csSup_inv`
-
-English:
-lemma csSup_inv
-  given: (hs₀ : s.Nonempty) (hs₁ : BddBelow s)
-  statement: sSup s⁻¹ = (sInf s)⁻¹
-  proof: by
-  rw [← image_inv_eq_inv]
-  exact ((OrderIso.inv _).map_csInf' hs₀ hs₁).symm
-
-@[to_additive]
-
-中文:
-引理 csSup_inv
-  条件: (hs₀ : s.非空) (hs₁ : BddBelow s)
-  结论: sSup s⁻¹ = (sInf s)⁻¹
-  证明: by
-  rw [← image_inv_eq_inv]
-  exact ((OrderIso.inv _).map_csInf' hs₀ hs₁).symm
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, image_inv_eq_inv, map_csInf
+/-
+**csSup_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：csSup_inv (hs₀ : s.Nonempty) (hs₁ : BddBelow s) : sSup s⁻¹ = (sInf s)⁻¹
+参数：hs₀ : s.Nonempty；hs₁ : BddBelow s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_inv_eq_inv`：image_inv_eq_inv : (·⁻¹) '' s = s⁻¹
+· 使用定理 `OrderIso.map_csInf'`：map_csInf' (e : α ≃o β) {s : Set α} (hne : s.Nonemp
+ty) (hbdd : BddBelow s) : e (sInf s) = sInf (e '' s)
 -/
 lemma csSup_inv (hs₀ : s.Nonempty) (hs₁ : BddBelow s) : sSup s⁻¹ = (sInf s)⁻¹ := by
   rw [← image_inv_eq_inv]
   exact ((OrderIso.inv _).map_csInf' hs₀ hs₁).symm
 
 @[to_additive]
-/--
-lemma `csInf_inv` / 引理 `csInf_inv`
-
-English:
-lemma csInf_inv
-  given: (hs₀ : s.Nonempty) (hs₁ : BddAbove s)
-  statement: sInf s⁻¹ = (sSup s)⁻¹
-  proof: by
-  rw [← image_inv_eq_inv]
-  exact ((OrderIso.inv _).map_csSup' hs₀ hs₁).symm
-
-@[to_additive]
-
-中文:
-引理 csInf_inv
-  条件: (hs₀ : s.非空) (hs₁ : BddAbove s)
-  结论: sInf s⁻¹ = (sSup s)⁻¹
-  证明: by
-  rw [← image_inv_eq_inv]
-  exact ((OrderIso.inv _).map_csSup' hs₀ hs₁).symm
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, image_inv_eq_inv, map_csSup
+/-
+**csInf_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：csInf_inv (hs₀ : s.Nonempty) (hs₁ : BddAbove s) : sInf s⁻¹ = (sSup s)⁻¹
+参数：hs₀ : s.Nonempty；hs₁ : BddAbove s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_inv_eq_inv`：image_inv_eq_inv : (·⁻¹) '' s = s⁻¹
+· 使用定理 `OrderIso.map_csSup'`：map_csSup' (e : α ≃o β) {s : Set α} (hne : s.Nonemp
+ty) (hbdd : BddAbove s) : e (sSup s) = sSup (e '' s)
 -/
 lemma csInf_inv (hs₀ : s.Nonempty) (hs₁ : BddAbove s) : sInf s⁻¹ = (sSup s)⁻¹ := by
   rw [← image_inv_eq_inv]
   exact ((OrderIso.inv _).map_csSup' hs₀ hs₁).symm
 
 @[to_additive]
-/--
-lemma `csSup_mul` / 引理 `csSup_mul`
-
-English:
-lemma csSup_mul
-  given: (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : BddAbove t)
-  proof: csSup_image2_eq_csSup_csSup (fun _ => (OrderIso.mulRight _).to_galoisConnection)
-    (fun _ => (OrderIso.mulLeft _).to_galoisConnection) hs₀ hs₁ ht₀ ht₁
-
-@[to_additive]
-
-中文:
-引理 csSup_mul
-  条件: (hs₀ : s.非空) (hs₁ : BddAbove s) (ht₀ : t.非空) (ht₁ : BddAbove t)
-  证明: csSup_image2_eq_csSup_csSup (fun _ => (OrderIso.mulRight _).to_galoisConnection)
-    (fun _ => (OrderIso.mulLeft _).to_galoisConnection) hs₀ hs₁ ht₀ ht₁
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, OrderIso.mulRight, csSup_image2_eq_csSup_csSup, mulLeft, mulRight, to_galoisConnection
+/-
+**csSup_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：csSup_mul (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : 
+BddAbove t) : sSup (s * t) = sSup s * sSup t
+参数：hs₀ : s.Nonempty；hs₁ : BddAbove s；ht₀ : t.Nonempty；ht₁ : BddAbove t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csSup_image2_eq_csSup_csSup`：csSup_image2_eq_csSup_csSup (h₁ : forall b,
+ GaloisConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ 
+a)) (hs₀ : s.None…
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 -/
 lemma csSup_mul (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : BddAbove t) :
     sSup (s * t) = sSup s * sSup t :=
@@ -155,26 +112,18 @@ lemma csSup_mul (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (
     (fun _ => (OrderIso.mulLeft _).to_galoisConnection) hs₀ hs₁ ht₀ ht₁
 
 @[to_additive]
-/--
-lemma `csInf_mul` / 引理 `csInf_mul`
-
-English:
-lemma csInf_mul
-  given: (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : BddBelow t)
-  proof: csInf_image2_eq_csInf_csInf (fun _ => (OrderIso.mulRight _).symm.to_galoisConnection)
-    (fun _ => (OrderIso.mulLeft _).symm.to_galoisConnection) hs₀ hs₁ ht₀ ht₁
-
-@[to_additive]
-
-中文:
-引理 csInf_mul
-  条件: (hs₀ : s.非空) (hs₁ : BddBelow s) (ht₀ : t.非空) (ht₁ : BddBelow t)
-  证明: csInf_image2_eq_csInf_csInf (fun _ => (OrderIso.mulRight _).symm.to_galoisConnection)
-    (fun _ => (OrderIso.mulLeft _).symm.to_galoisConnection) hs₀ hs₁ ht₀ ht₁
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, OrderIso.mulRight, csInf_image2_eq_csInf_csInf, mulLeft, mulRight, symm.to_galoisConnection, to_galoisConnection
+/-
+**csInf_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：csInf_mul (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : 
+BddBelow t) : sInf (s * t) = sInf s * sInf t
+参数：hs₀ : s.Nonempty；hs₁ : BddBelow s；ht₀ : t.Nonempty；ht₁ : BddBelow t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csInf_image2_eq_csInf_csInf`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u
+_3} [inst : ConditionallyCompleteLattice α]   [inst_1 : ConditionallyCompleteLat
+tice β] [inst_2 :…
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 -/
 lemma csInf_mul (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : BddBelow t) :
     sInf (s * t) = sInf s * sInf t :=
@@ -182,52 +131,50 @@ lemma csInf_mul (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (
     (fun _ => (OrderIso.mulLeft _).symm.to_galoisConnection) hs₀ hs₁ ht₀ ht₁
 
 @[to_additive]
-/--
-lemma `csSup_div` / 引理 `csSup_div`
-
-English:
-lemma csSup_div
-  given: (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : BddBelow t)
-  proof: by
-  rw [div_eq_mul_inv]; rw [csSup_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csSup_inv ht₀ ht₁]; rw [div_eq_mul_inv]
-
-@[to_additive]
-
-中文:
-引理 csSup_div
-  条件: (hs₀ : s.非空) (hs₁ : BddAbove s) (ht₀ : t.非空) (ht₁ : BddBelow t)
-  证明: by
-  rw [div_eq_mul_inv]; rw [csSup_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csSup_inv ht₀ ht₁]; rw [div_eq_mul_inv]
-
-@[to_additive]
-
-Depends on / 依赖: csSup_inv, csSup_mul, div_eq_mul_inv
+/-
+**csSup_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：csSup_div (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : 
+BddBelow t) : sSup (s / t) = sSup s / sInf t
+参数：hs₀ : s.Nonempty；hs₁ : BddAbove s；ht₀ : t.Nonempty；ht₁ : BddBelow t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用引理 `csSup_mul`：csSup_mul (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.None
+mpty) (ht₁ : BddAbove t) : sSup (s * t) = sSup s * sSup t
+· 使用定理 `Set.Nonempty.inv`：∀ {α : Type u_2} [inst : InvolutiveInv α] {s : Set α},
+ s.Nonempty → s⁻¹.Nonempty
+· 使用定理 `BddBelow.inv`：BddBelow.inv (h : BddBelow s) : BddAbove s⁻¹
+· 使用引理 `csSup_inv`：csSup_inv (hs₀ : s.Nonempty) (hs₁ : BddBelow s) : sSup s⁻¹ = 
+(sInf s)⁻¹
 -/
 lemma csSup_div (hs₀ : s.Nonempty) (hs₁ : BddAbove s) (ht₀ : t.Nonempty) (ht₁ : BddBelow t) :
     sSup (s / t) = sSup s / sInf t := by
-  rw [div_eq_mul_inv]; rw [csSup_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csSup_inv ht₀ ht₁]; rw [div_eq_mul_inv]
+  rw [div_eq_mul_inv, csSup_mul hs₀ hs₁ ht₀.inv ht₁.inv, csSup_inv ht₀ ht₁, div_eq_mul_inv]
 
 @[to_additive]
-/--
-lemma `csInf_div` / 引理 `csInf_div`
-
-English:
-lemma csInf_div
-  given: (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : BddAbove t)
-  proof: by
-  rw [div_eq_mul_inv]; rw [csInf_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csInf_inv ht₀ ht₁]; rw [div_eq_mul_inv]
-
-中文:
-引理 csInf_div
-  条件: (hs₀ : s.非空) (hs₁ : BddBelow s) (ht₀ : t.非空) (ht₁ : BddAbove t)
-  证明: by
-  rw [div_eq_mul_inv]; rw [csInf_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csInf_inv ht₀ ht₁]; rw [div_eq_mul_inv]
-
-Depends on / 依赖: csInf_inv, csInf_mul, div_eq_mul_inv
+/-
+**csInf_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：csInf_div (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : 
+BddAbove t) : sInf (s / t) = sInf s / sSup t
+参数：hs₀ : s.Nonempty；hs₁ : BddBelow s；ht₀ : t.Nonempty；ht₁ : BddAbove t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用引理 `csInf_mul`：csInf_mul (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.None
+mpty) (ht₁ : BddBelow t) : sInf (s * t) = sInf s * sInf t
+· 使用定理 `Set.Nonempty.inv`：∀ {α : Type u_2} [inst : InvolutiveInv α] {s : Set α},
+ s.Nonempty → s⁻¹.Nonempty
+· 使用定理 `BddAbove.inv`：BddAbove.inv (h : BddAbove s) : BddBelow s⁻¹
+· 使用引理 `csInf_inv`：csInf_inv (hs₀ : s.Nonempty) (hs₁ : BddAbove s) : sInf s⁻¹ = 
+(sSup s)⁻¹
 -/
 lemma csInf_div (hs₀ : s.Nonempty) (hs₁ : BddBelow s) (ht₀ : t.Nonempty) (ht₁ : BddAbove t) :
     sInf (s / t) = sInf s / sSup t := by
-  rw [div_eq_mul_inv]; rw [csInf_mul hs₀ hs₁ ht₀.inv ht₁.inv]; rw [csInf_inv ht₀ ht₁]; rw [div_eq_mul_inv]
+  rw [div_eq_mul_inv, csInf_mul hs₀ hs₁ ht₀.inv ht₁.inv, csInf_inv ht₀ ht₁, div_eq_mul_inv]
 
 end Group
 end ConditionallyCompleteLattice
@@ -238,32 +185,19 @@ variable [CompleteLattice M]
 section One
 variable [One M]
 
-/--
-lemma `sSup_one` / 引理 `sSup_one`
-
-English:
-lemma sSup_one
-  statement: sSup (1 : Set M) = 1
-  proof: sSup_singleton
-
-中文:
-引理 sSup_one
-  结论: sSup (1 : 集合 M) = 1
-  证明: sSup_singleton
+/-
+**sSup_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} [inst : CompleteLattice M] [inst_1 : One M], sSup 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_singleton`：sSup_singleton {a : α} : sSup {a} = a
 -/
 @[to_additive] lemma sSup_one : sSup (1 : Set M) = 1 := sSup_singleton
-/--
-lemma `sInf_one` / 引理 `sInf_one`
-
-English:
-lemma sInf_one
-  statement: sInf (1 : Set M) = 1
-  proof: sInf_singleton
-
-中文:
-引理 sInf_one
-  结论: sInf (1 : 集合 M) = 1
-  证明: sInf_singleton
+/-
+**sInf_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} [inst : CompleteLattice M] [inst_1 : One M], sInf 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sInf_singleton`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {a : 
+α}, sInf {a} = a
 -/
 @[to_additive] lemma sInf_one : sInf (1 : Set M) = 1 := sInf_singleton
 
@@ -274,156 +208,120 @@ variable [Group M] [MulLeftMono M] [MulRightMono M]
   (s t : Set M)
 
 @[to_additive]
-/--
-lemma `sSup_inv` / 引理 `sSup_inv`
-
-English:
-lemma sSup_inv
-  given: (s : Set M)
-  statement: sSup s⁻¹ = (sInf s)⁻¹
-  proof: by
-  rw [← image_inv_eq_inv]; rw [sSup_image]
-  exact ((OrderIso.inv M).map_sInf _).symm
-
-@[to_additive]
-
-中文:
-引理 sSup_inv
-  条件: (s : 集合 M)
-  结论: sSup s⁻¹ = (sInf s)⁻¹
-  证明: by
-  rw [← image_inv_eq_inv]; rw [sSup_image]
-  exact ((OrderIso.inv M).map_sInf _).symm
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, image_inv_eq_inv, map_sInf, sSup_image
+/-
+**sSup_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sSup_inv (s : Set M) : sSup s⁻¹ = (sInf s)⁻¹
+参数：s : Set M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_inv_eq_inv`：image_inv_eq_inv : (·⁻¹) '' s = s⁻¹
+· 使用定理 `sSup_image`：sSup_image {s : Set β} {f : β -> α} : sSup (f '' s) = ⨆ a in
+ s, f a
+· 使用定理 `OrderIso.map_sInf`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLatti
+ce α] [inst_1 : CompleteLattice β] (f : α ≃o β) (s : Set α),   f (sInf s) = ⨅ a 
+∈ s, f …
 -/
 lemma sSup_inv (s : Set M) : sSup s⁻¹ = (sInf s)⁻¹ := by
-  rw [← image_inv_eq_inv]; rw [sSup_image]
+  rw [← image_inv_eq_inv, sSup_image]
   exact ((OrderIso.inv M).map_sInf _).symm
 
 @[to_additive]
-/--
-lemma `sInf_inv` / 引理 `sInf_inv`
-
-English:
-lemma sInf_inv
-  given: (s : Set M)
-  statement: sInf s⁻¹ = (sSup s)⁻¹
-  proof: by
-  rw [← image_inv_eq_inv]; rw [sInf_image]
-  exact ((OrderIso.inv M).map_sSup _).symm
-
-@[to_additive]
-
-中文:
-引理 sInf_inv
-  条件: (s : 集合 M)
-  结论: sInf s⁻¹ = (sSup s)⁻¹
-  证明: by
-  rw [← image_inv_eq_inv]; rw [sInf_image]
-  exact ((OrderIso.inv M).map_sSup _).symm
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, image_inv_eq_inv, map_sSup, sInf_image
+/-
+**sInf_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sInf_inv (s : Set M) : sInf s⁻¹ = (sSup s)⁻¹
+参数：s : Set M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_inv_eq_inv`：image_inv_eq_inv : (·⁻¹) '' s = s⁻¹
+· 使用定理 `sInf_image`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] {
+s : Set β} {f : β → α}, sInf (f '' s) = ⨅ a ∈ s, f a
+· 使用定理 `OrderIso.map_sSup`：OrderIso.map_sSup [CompleteLattice β] (f : α ≃o β) (s
+ : Set α) : f (sSup s) = ⨆ a in s, f a
 -/
 lemma sInf_inv (s : Set M) : sInf s⁻¹ = (sSup s)⁻¹ := by
-  rw [← image_inv_eq_inv]; rw [sInf_image]
+  rw [← image_inv_eq_inv, sInf_image]
   exact ((OrderIso.inv M).map_sSup _).symm
 
 @[to_additive]
-/--
-lemma `sSup_mul` / 引理 `sSup_mul`
-
-English:
-lemma sSup_mul
-  statement: sSup (s * t) = sSup s * sSup t
-  proof: (sSup_image2_eq_sSup_sSup fun _ => (OrderIso.mulRight _).to_galoisConnection) fun _ =>
-    (OrderIso.mulLeft _).to_galoisConnection
-
-@[to_additive]
-
-中文:
-引理 sSup_mul
-  结论: sSup (s * t) = sSup s * sSup t
-  证明: (sSup_image2_eq_sSup_sSup fun _ => (OrderIso.mulRight _).to_galoisConnection) fun _ =>
-    (OrderIso.mulLeft _).to_galoisConnection
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, OrderIso.mulRight, mulLeft, mulRight, sSup_image2_eq_sSup_sSup, to_galoisConnection
+/-
+**sSup_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sSup_mul : sSup (s * t) = sSup s * sSup t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_image2_eq_sSup_sSup`：sSup_image2_eq_sSup_sSup (h₁ : forall b, Galoi
+sConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : 
+sSup (image2 l…
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 -/
 lemma sSup_mul : sSup (s * t) = sSup s * sSup t :=
   (sSup_image2_eq_sSup_sSup fun _ => (OrderIso.mulRight _).to_galoisConnection) fun _ =>
     (OrderIso.mulLeft _).to_galoisConnection
 
 @[to_additive]
-/--
-lemma `sInf_mul` / 引理 `sInf_mul`
-
-English:
-lemma sInf_mul
-  statement: sInf (s * t) = sInf s * sInf t
-  proof: (sInf_image2_eq_sInf_sInf fun _ => (OrderIso.mulRight _).symm.to_galoisConnection) fun _ =>
-    (OrderIso.mulLeft _).symm.to_galoisConnection
-
-@[to_additive]
-
-中文:
-引理 sInf_mul
-  结论: sInf (s * t) = sInf s * sInf t
-  证明: (sInf_image2_eq_sInf_sInf fun _ => (OrderIso.mulRight _).symm.to_galoisConnection) fun _ =>
-    (OrderIso.mulLeft _).symm.to_galoisConnection
-
-@[to_additive]
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, OrderIso.mulRight, mulLeft, mulRight, sInf_image2_eq_sInf_sInf, symm.to_galoisConnection, to_galoisConnection
+/-
+**sInf_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sInf_mul : sInf (s * t) = sInf s * sInf t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sInf_image2_eq_sInf_sInf`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst
+ : CompleteLattice α] [inst_1 : CompleteLattice β]   [inst_2 : CompleteLattice γ
+] {s : Set α} …
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 -/
 lemma sInf_mul : sInf (s * t) = sInf s * sInf t :=
   (sInf_image2_eq_sInf_sInf fun _ => (OrderIso.mulRight _).symm.to_galoisConnection) fun _ =>
     (OrderIso.mulLeft _).symm.to_galoisConnection
 
 @[to_additive]
-/--
-lemma `sSup_div` / 引理 `sSup_div`
-
-English:
-lemma sSup_div
-  statement: sSup (s / t) = sSup s / sInf t
-  proof: by simp_rw [div_eq_mul_inv, sSup_mul, sSup_inv]
-
-@[to_additive]
-
-中文:
-引理 sSup_div
-  结论: sSup (s / t) = sSup s / sInf t
-  证明: by simp_rw [div_eq_mul_inv, sSup_mul, sSup_inv]
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, sSup_inv, sSup_mul, simp_rw
+/-
+**sSup_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sSup_div : sSup (s / t) = sSup s / sInf t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `sSup_mul`：sSup_mul : sSup (s * t) = sSup s * sSup t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `sSup_inv`：sSup_inv (s : Set M) : sSup s⁻¹ = (sInf s)⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sSup_div : sSup (s / t) = sSup s / sInf t := by simp_rw [div_eq_mul_inv, sSup_mul, sSup_inv]
 
 @[to_additive]
-/--
-lemma `sInf_div` / 引理 `sInf_div`
-
-English:
-lemma sInf_div
-  statement: sInf (s / t) = sInf s / sSup t
-  proof: by simp_rw [div_eq_mul_inv, sInf_mul, sInf_inv]
-
-中文:
-引理 sInf_div
-  结论: sInf (s / t) = sInf s / sSup t
-  证明: by simp_rw [div_eq_mul_inv, sInf_mul, sInf_inv]
-
-Depends on / 依赖: div_eq_mul_inv, sInf_inv, sInf_mul, simp_rw
+/-
+**sInf_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sInf_div : sInf (s / t) = sInf s / sSup t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `sInf_mul`：sInf_mul : sInf (s * t) = sInf s * sInf t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `sInf_inv`：sInf_inv (s : Set M) : sInf s⁻¹ = (sSup s)⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sInf_div : sInf (s / t) = sInf s / sSup t := by simp_rw [div_eq_mul_inv, sInf_mul, sInf_inv]
 
 end Group
 end CompleteLattice
+

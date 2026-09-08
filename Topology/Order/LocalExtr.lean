@@ -43,1011 +43,801 @@ open Set Filter Topology
 
 section Preorder
 
-variable [Preorder β] [Preorder γ] (f : α -> β) (s : Set α) (a : α)
+variable [Preorder β] [Preorder γ] (f : α → β) (s : Set α) (a : α)
 
-/--
-Definition of `IsLocalMinOn` / `IsLocalMinOn` 的定义
+/-- `IsLocalMinOn f s a` means that `f a ≤ f x` for all `x ∈ s` in some neighborhood of `a`. -/
+/-
+**IsLocalMinOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocalMinOn
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocalMinOn
-  body: IsMinFilter f (𝓝[s] a) a
-
-中文:
-定义 IsLocalMinOn
-  定义体: IsMinFilter f (𝓝[s] a) a
-
-Depends on / 依赖: IsMinFilter
+--- 原说明 ---
+`IsLocalMinOn f s a` means that `f a ≤ f x` for all `x ∈ s` in some neighborhood
+ of `a`.
 -/
 def IsLocalMinOn :=
   IsMinFilter f (𝓝[s] a) a
 
-/--
-Definition of `IsLocalMaxOn` / `IsLocalMaxOn` 的定义
+/-- `IsLocalMaxOn f s a` means that `f x ≤ f a` for all `x ∈ s` in some neighborhood of `a`. -/
+/-
+**IsLocalMaxOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocalMaxOn
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocalMaxOn
-  body: IsMaxFilter f (𝓝[s] a) a
-
-中文:
-定义 IsLocalMaxOn
-  定义体: IsMaxFilter f (𝓝[s] a) a
-
-Depends on / 依赖: IsMaxFilter
+--- 原说明 ---
+`IsLocalMaxOn f s a` means that `f x ≤ f a` for all `x ∈ s` in some neighborhood
+ of `a`.
 -/
 def IsLocalMaxOn :=
   IsMaxFilter f (𝓝[s] a) a
 
-/--
-Definition of `IsLocalExtrOn` / `IsLocalExtrOn` 的定义
+/-- `IsLocalExtrOn f s a` means `IsLocalMinOn f s a ∨ IsLocalMaxOn f s a`. -/
+/-
+**IsLocalExtrOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocalExtrOn
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocalExtrOn
-  body: IsExtrFilter f (𝓝[s] a) a
-
-中文:
-定义 IsLocalExtrOn
-  定义体: IsExtrFilter f (𝓝[s] a) a
-
-Depends on / 依赖: IsExtrFilter
+--- 原说明 ---
+`IsLocalExtrOn f s a` means `IsLocalMinOn f s a ∨ IsLocalMaxOn f s a`.
 -/
 def IsLocalExtrOn :=
   IsExtrFilter f (𝓝[s] a) a
 
-/--
-Definition of `IsLocalMin` / `IsLocalMin` 的定义
+/-- `IsLocalMin f a` means that `f a ≤ f x` for all `x` in some neighborhood of `a`. -/
+/-
+**IsLocalMin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocalMin
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocalMin
-  body: IsMinFilter f (𝓝 a) a
-
-中文:
-定义 IsLocalMin
-  定义体: IsMinFilter f (𝓝 a) a
-
-Depends on / 依赖: IsMinFilter
+--- 原说明 ---
+`IsLocalMin f a` means that `f a ≤ f x` for all `x` in some neighborhood of `a`.
 -/
 def IsLocalMin :=
   IsMinFilter f (𝓝 a) a
 
-/--
-Definition of `IsLocalMax` / `IsLocalMax` 的定义
+/-- `IsLocalMax f a` means that `f x ≤ f a` for all `x ∈ s` in some neighborhood of `a`. -/
+/-
+**IsLocalMax** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocalMax
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocalMax
-  body: IsMaxFilter f (𝓝 a) a
-
-中文:
-定义 IsLocalMax
-  定义体: IsMaxFilter f (𝓝 a) a
-
-Depends on / 依赖: IsMaxFilter
+--- 原说明 ---
+`IsLocalMax f a` means that `f x ≤ f a` for all `x ∈ s` in some neighborhood of 
+`a`.
 -/
 def IsLocalMax :=
   IsMaxFilter f (𝓝 a) a
 
-/--
-Definition of `IsLocalExtr` / `IsLocalExtr` 的定义
+/-- `IsLocalExtr f s a` means `IsLocalMin f s a ∨ IsLocalMax f s a`. -/
+/-
+**IsLocalExtr** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocalExtr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocalExtr
-  body: IsExtrFilter f (𝓝 a) a
-
-中文:
-定义 IsLocalExtr
-  定义体: IsExtrFilter f (𝓝 a) a
-
-Depends on / 依赖: IsExtrFilter
+--- 原说明 ---
+`IsLocalExtr f s a` means `IsLocalMin f s a ∨ IsLocalMax f s a`.
 -/
 def IsLocalExtr :=
   IsExtrFilter f (𝓝 a) a
 
 variable {f s a}
-
-/--
-theorem `IsLocalExtrOn.elim` / 定理 `IsLocalExtrOn.elim`
-
-English:
-theorem IsLocalExtrOn.elim
-  given: {p : Prop}
-  proof: Or.elim
-
-中文:
-定理 IsLocalExtrOn.elim
-  条件: {p : 命题}
-  证明: Or.elim
-
-Depends on / 依赖: Or.elim
+/-
+**IsLocalExtrOn.elim** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtrOn.elim {p : Prop} : IsLocalExtrOn f s a -> (IsLocalMinOn f s a
+ -> p) -> (IsLocalMaxOn f s a -> p) -> p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
 theorem IsLocalExtrOn.elim {p : Prop} :
-    IsLocalExtrOn f s a -> (IsLocalMinOn f s a -> p) -> (IsLocalMaxOn f s a -> p) -> p :=
+    IsLocalExtrOn f s a → (IsLocalMinOn f s a → p) → (IsLocalMaxOn f s a → p) → p :=
   Or.elim
-
-/--
-theorem `IsLocalExtr.elim` / 定理 `IsLocalExtr.elim`
-
-English:
-theorem IsLocalExtr.elim
-  given: {p : Prop}
-  proof: Or.elim
-
-中文:
-定理 IsLocalExtr.elim
-  条件: {p : 命题}
-  证明: Or.elim
-
-Depends on / 依赖: Or.elim
+/-
+**IsLocalExtr.elim** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtr.elim {p : Prop} : IsLocalExtr f a -> (IsLocalMin f a -> p) -> 
+(IsLocalMax f a -> p) -> p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
 theorem IsLocalExtr.elim {p : Prop} :
-    IsLocalExtr f a -> (IsLocalMin f a -> p) -> (IsLocalMax f a -> p) -> p :=
+    IsLocalExtr f a → (IsLocalMin f a → p) → (IsLocalMax f a → p) → p :=
   Or.elim
 
+/-! ### Restriction to (sub)sets -/
 
-/--
-theorem `IsLocalMin.on` / 定理 `IsLocalMin.on`
+/-
+**IsLocalMin.on** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMin.on (h : IsLocalMin f a) (s) : IsLocalMinOn f s a
+参数：h : IsLocalMin f a；s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMinFilter.filter_inf`：IsMinFilter.filter_inf (h : IsMinFilter f l a) (
+l') : IsMinFilter f (l ⊓ l') a
 
-English:
-theorem IsLocalMin.on
-  given: (h : IsLocalMin f a) (s)
-  statement: IsLocalMinOn f s a
-  proof: h.filter_inf _
-
-中文:
-定理 IsLocalMin.on
-  条件: (h : IsLocalMin f a) (s)
-  结论: IsLocalMinOn f s a
-  证明: h.filter_inf _
-
-Depends on / 依赖: filter_inf, h.filter_inf
+--- 原说明 ---
+### Restriction to (sub)sets
 -/
 theorem IsLocalMin.on (h : IsLocalMin f a) (s) : IsLocalMinOn f s a :=
   h.filter_inf _
-
-/--
-theorem `IsLocalMax.on` / 定理 `IsLocalMax.on`
-
-English:
-theorem IsLocalMax.on
-  given: (h : IsLocalMax f a) (s)
-  statement: IsLocalMaxOn f s a
-  proof: h.filter_inf _
-
-中文:
-定理 IsLocalMax.on
-  条件: (h : IsLocalMax f a) (s)
-  结论: IsLocalMaxOn f s a
-  证明: h.filter_inf _
-
-Depends on / 依赖: filter_inf, h.filter_inf
+/-
+**IsLocalMax.on** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMax.on (h : IsLocalMax f a) (s) : IsLocalMaxOn f s a
+参数：h : IsLocalMax f a；s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMaxFilter.filter_inf`：IsMaxFilter.filter_inf (h : IsMaxFilter f l a) (
+l') : IsMaxFilter f (l ⊓ l') a
 -/
 theorem IsLocalMax.on (h : IsLocalMax f a) (s) : IsLocalMaxOn f s a :=
   h.filter_inf _
-
-/--
-theorem `IsLocalExtr.on` / 定理 `IsLocalExtr.on`
-
-English:
-theorem IsLocalExtr.on
-  given: (h : IsLocalExtr f a) (s)
-  statement: IsLocalExtrOn f s a
-  proof: h.filter_inf _
-
-中文:
-定理 IsLocalExtr.on
-  条件: (h : IsLocalExtr f a) (s)
-  结论: IsLocalExtrOn f s a
-  证明: h.filter_inf _
-
-Depends on / 依赖: filter_inf, h.filter_inf
+/-
+**IsLocalExtr.on** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtr.on (h : IsLocalExtr f a) (s) : IsLocalExtrOn f s a
+参数：h : IsLocalExtr f a；s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.filter_inf`：IsExtrFilter.filter_inf (h : IsExtrFilter f l a
+) (l') : IsExtrFilter f (l ⊓ l') a
 -/
 theorem IsLocalExtr.on (h : IsLocalExtr f a) (s) : IsLocalExtrOn f s a :=
   h.filter_inf _
-
-/--
-theorem `IsLocalMinOn.on_subset` / 定理 `IsLocalMinOn.on_subset`
-
-English:
-theorem IsLocalMinOn.on_subset
-  given: {t : Set α} (hf : IsLocalMinOn f t a) (h : s subseteq t)
-  proof: hf.filter_mono nhdsWithin_mono a h
-
-中文:
-定理 IsLocalMinOn.on_subset
-  条件: {t : 集合 α} (hf : IsLocalMinOn f t a) (h : s subseteq t)
-  证明: hf.filter_mono nhdsWithin_mono a h
-
-Depends on / 依赖: filter_mono, hf.filter_mono, nhdsWithin_mono
+/-
+**IsLocalMinOn.on_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMinOn.on_subset {t : Set α} (hf : IsLocalMinOn f t a) (h : s subset
+eq t) : IsLocalMinOn f s a
+参数：hf : IsLocalMinOn f t a；h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMinFilter.filter_mono`：IsMinFilter.filter_mono (h : IsMinFilter f l a)
+ (hl : l' <= l) : IsMinFilter f l' a
+· 使用定理 `nhdsWithin_mono`：nhdsWithin_mono (x : X) {s t : Set X} (h : s subseteq t
+) : 𝓝[s] x <= 𝓝[t] x
 -/
-theorem IsLocalMinOn.on_subset {t : Set α} (hf : IsLocalMinOn f t a) (h : s subseteq t) :
+theorem IsLocalMinOn.on_subset {t : Set α} (hf : IsLocalMinOn f t a) (h : s ⊆ t) :
     IsLocalMinOn f s a :=
-hf.filter_mono nhdsWithin_mono a h
-
-/--
-theorem `IsLocalMaxOn.on_subset` / 定理 `IsLocalMaxOn.on_subset`
-
-English:
-theorem IsLocalMaxOn.on_subset
-  given: {t : Set α} (hf : IsLocalMaxOn f t a) (h : s subseteq t)
-  proof: hf.filter_mono nhdsWithin_mono a h
-
-中文:
-定理 IsLocalMaxOn.on_subset
-  条件: {t : 集合 α} (hf : IsLocalMaxOn f t a) (h : s subseteq t)
-  证明: hf.filter_mono nhdsWithin_mono a h
-
-Depends on / 依赖: filter_mono, hf.filter_mono, nhdsWithin_mono
+  hf.filter_mono <| nhdsWithin_mono a h
+/-
+**IsLocalMaxOn.on_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMaxOn.on_subset {t : Set α} (hf : IsLocalMaxOn f t a) (h : s subset
+eq t) : IsLocalMaxOn f s a
+参数：hf : IsLocalMaxOn f t a；h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMaxFilter.filter_mono`：IsMaxFilter.filter_mono (h : IsMaxFilter f l a)
+ (hl : l' <= l) : IsMaxFilter f l' a
+· 使用定理 `nhdsWithin_mono`：nhdsWithin_mono (x : X) {s t : Set X} (h : s subseteq t
+) : 𝓝[s] x <= 𝓝[t] x
 -/
-theorem IsLocalMaxOn.on_subset {t : Set α} (hf : IsLocalMaxOn f t a) (h : s subseteq t) :
+theorem IsLocalMaxOn.on_subset {t : Set α} (hf : IsLocalMaxOn f t a) (h : s ⊆ t) :
     IsLocalMaxOn f s a :=
-hf.filter_mono nhdsWithin_mono a h
-
-/--
-theorem `IsLocalExtrOn.on_subset` / 定理 `IsLocalExtrOn.on_subset`
-
-English:
-theorem IsLocalExtrOn.on_subset
-  given: {t : Set α} (hf : IsLocalExtrOn f t a) (h : s subseteq t)
-  proof: hf.filter_mono nhdsWithin_mono a h
-
-中文:
-定理 IsLocalExtrOn.on_subset
-  条件: {t : 集合 α} (hf : IsLocalExtrOn f t a) (h : s subseteq t)
-  证明: hf.filter_mono nhdsWithin_mono a h
-
-Depends on / 依赖: filter_mono, hf.filter_mono, nhdsWithin_mono
+  hf.filter_mono <| nhdsWithin_mono a h
+/-
+**IsLocalExtrOn.on_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtrOn.on_subset {t : Set α} (hf : IsLocalExtrOn f t a) (h : s subs
+eteq t) : IsLocalExtrOn f s a
+参数：hf : IsLocalExtrOn f t a；h : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.filter_mono`：IsExtrFilter.filter_mono (h : IsExtrFilter f l
+ a) (hl : l' <= l) : IsExtrFilter f l' a
+· 使用定理 `nhdsWithin_mono`：nhdsWithin_mono (x : X) {s t : Set X} (h : s subseteq t
+) : 𝓝[s] x <= 𝓝[t] x
 -/
-theorem IsLocalExtrOn.on_subset {t : Set α} (hf : IsLocalExtrOn f t a) (h : s subseteq t) :
+theorem IsLocalExtrOn.on_subset {t : Set α} (hf : IsLocalExtrOn f t a) (h : s ⊆ t) :
     IsLocalExtrOn f s a :=
-hf.filter_mono nhdsWithin_mono a h
-
-/--
-theorem `IsLocalMinOn.inter` / 定理 `IsLocalMinOn.inter`
-
-English:
-theorem IsLocalMinOn.inter
-  given: (hf : IsLocalMinOn f s a) (t)
-  statement: IsLocalMinOn f (s inter t) a
-  proof: hf.on_subset inter_subset_left
-
-中文:
-定理 IsLocalMinOn.inter
-  条件: (hf : IsLocalMinOn f s a) (t)
-  结论: IsLocalMinOn f (s inter t) a
-  证明: hf.on_subset inter_subset_left
-
-Depends on / 依赖: hf.on_subset, inter_subset_left, on_subset
+  hf.filter_mono <| nhdsWithin_mono a h
+/-
+**IsLocalMinOn.inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMinOn.inter (hf : IsLocalMinOn f s a) (t) : IsLocalMinOn f (s inter
+ t) a
+参数：hf : IsLocalMinOn f s a；t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalMinOn.on_subset`：IsLocalMinOn.on_subset {t : Set α} (hf : IsLocal
+MinOn f t a) (h : s subseteq t) : IsLocalMinOn f s a
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-theorem IsLocalMinOn.inter (hf : IsLocalMinOn f s a) (t) : IsLocalMinOn f (s inter t) a :=
+theorem IsLocalMinOn.inter (hf : IsLocalMinOn f s a) (t) : IsLocalMinOn f (s ∩ t) a :=
   hf.on_subset inter_subset_left
-
-/--
-theorem `IsLocalMaxOn.inter` / 定理 `IsLocalMaxOn.inter`
-
-English:
-theorem IsLocalMaxOn.inter
-  given: (hf : IsLocalMaxOn f s a) (t)
-  statement: IsLocalMaxOn f (s inter t) a
-  proof: hf.on_subset inter_subset_left
-
-中文:
-定理 IsLocalMaxOn.inter
-  条件: (hf : IsLocalMaxOn f s a) (t)
-  结论: IsLocalMaxOn f (s inter t) a
-  证明: hf.on_subset inter_subset_left
-
-Depends on / 依赖: hf.on_subset, inter_subset_left, on_subset
+/-
+**IsLocalMaxOn.inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMaxOn.inter (hf : IsLocalMaxOn f s a) (t) : IsLocalMaxOn f (s inter
+ t) a
+参数：hf : IsLocalMaxOn f s a；t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalMaxOn.on_subset`：IsLocalMaxOn.on_subset {t : Set α} (hf : IsLocal
+MaxOn f t a) (h : s subseteq t) : IsLocalMaxOn f s a
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-theorem IsLocalMaxOn.inter (hf : IsLocalMaxOn f s a) (t) : IsLocalMaxOn f (s inter t) a :=
+theorem IsLocalMaxOn.inter (hf : IsLocalMaxOn f s a) (t) : IsLocalMaxOn f (s ∩ t) a :=
   hf.on_subset inter_subset_left
-
-/--
-theorem `IsLocalExtrOn.inter` / 定理 `IsLocalExtrOn.inter`
-
-English:
-theorem IsLocalExtrOn.inter
-  given: (hf : IsLocalExtrOn f s a) (t)
-  statement: IsLocalExtrOn f (s inter t) a
-  proof: hf.on_subset inter_subset_left
-
-中文:
-定理 IsLocalExtrOn.inter
-  条件: (hf : IsLocalExtrOn f s a) (t)
-  结论: IsLocalExtrOn f (s inter t) a
-  证明: hf.on_subset inter_subset_left
-
-Depends on / 依赖: hf.on_subset, inter_subset_left, on_subset
+/-
+**IsLocalExtrOn.inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtrOn.inter (hf : IsLocalExtrOn f s a) (t) : IsLocalExtrOn f (s in
+ter t) a
+参数：hf : IsLocalExtrOn f s a；t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtrOn.on_subset`：IsLocalExtrOn.on_subset {t : Set α} (hf : IsLoc
+alExtrOn f t a) (h : s subseteq t) : IsLocalExtrOn f s a
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-theorem IsLocalExtrOn.inter (hf : IsLocalExtrOn f s a) (t) : IsLocalExtrOn f (s inter t) a :=
+theorem IsLocalExtrOn.inter (hf : IsLocalExtrOn f s a) (t) : IsLocalExtrOn f (s ∩ t) a :=
   hf.on_subset inter_subset_left
-
-/--
-theorem `IsMinOn.localize` / 定理 `IsMinOn.localize`
-
-English:
-theorem IsMinOn.localize
-  given: (hf : IsMinOn f s a)
-  statement: IsLocalMinOn f s a
-  proof: hf.filter_mono inf_le_right
-
-中文:
-定理 IsMinOn.localize
-  条件: (hf : IsMinOn f s a)
-  结论: IsLocalMinOn f s a
-  证明: hf.filter_mono inf_le_right
-
-Depends on / 依赖: filter_mono, hf.filter_mono, inf_le_right
+/-
+**IsMinOn.localize** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMinOn.localize (hf : IsMinOn f s a) : IsLocalMinOn f s a
+参数：hf : IsMinOn f s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMinFilter.filter_mono`：IsMinFilter.filter_mono (h : IsMinFilter f l a)
+ (hl : l' <= l) : IsMinFilter f l' a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
 -/
 theorem IsMinOn.localize (hf : IsMinOn f s a) : IsLocalMinOn f s a :=
-hf.filter_mono inf_le_right
-
-/--
-theorem `IsMaxOn.localize` / 定理 `IsMaxOn.localize`
-
-English:
-theorem IsMaxOn.localize
-  given: (hf : IsMaxOn f s a)
-  statement: IsLocalMaxOn f s a
-  proof: hf.filter_mono inf_le_right
-
-中文:
-定理 IsMaxOn.localize
-  条件: (hf : IsMaxOn f s a)
-  结论: IsLocalMaxOn f s a
-  证明: hf.filter_mono inf_le_right
-
-Depends on / 依赖: filter_mono, hf.filter_mono, inf_le_right
+  hf.filter_mono <| inf_le_right
+/-
+**IsMaxOn.localize** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxOn.localize (hf : IsMaxOn f s a) : IsLocalMaxOn f s a
+参数：hf : IsMaxOn f s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMaxFilter.filter_mono`：IsMaxFilter.filter_mono (h : IsMaxFilter f l a)
+ (hl : l' <= l) : IsMaxFilter f l' a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
 -/
 theorem IsMaxOn.localize (hf : IsMaxOn f s a) : IsLocalMaxOn f s a :=
-hf.filter_mono inf_le_right
-
-/--
-theorem `IsExtrOn.localize` / 定理 `IsExtrOn.localize`
-
-English:
-theorem IsExtrOn.localize
-  given: (hf : IsExtrOn f s a)
-  statement: IsLocalExtrOn f s a
-  proof: hf.filter_mono inf_le_right
-
-中文:
-定理 IsExtrOn.localize
-  条件: (hf : IsExtrOn f s a)
-  结论: IsLocalExtrOn f s a
-  证明: hf.filter_mono inf_le_right
-
-Depends on / 依赖: filter_mono, hf.filter_mono, inf_le_right
+  hf.filter_mono <| inf_le_right
+/-
+**IsExtrOn.localize** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrOn.localize (hf : IsExtrOn f s a) : IsLocalExtrOn f s a
+参数：hf : IsExtrOn f s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.filter_mono`：IsExtrFilter.filter_mono (h : IsExtrFilter f l
+ a) (hl : l' <= l) : IsExtrFilter f l' a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
 -/
 theorem IsExtrOn.localize (hf : IsExtrOn f s a) : IsLocalExtrOn f s a :=
-hf.filter_mono inf_le_right
-
-/--
-theorem `IsLocalMinOn.isLocalMin` / 定理 `IsLocalMinOn.isLocalMin`
-
-English:
-theorem IsLocalMinOn.isLocalMin
-  given: (hf : IsLocalMinOn f s a) (hs : s in 𝓝 a)
-  statement: IsLocalMin f a
-  proof: have : 𝓝 a <= 𝓟 s := le_principal_iff.2 hs
-hf.filter_mono le_inf le_rfl this
-
-中文:
-定理 IsLocalMinOn.isLocalMin
-  条件: (hf : IsLocalMinOn f s a) (hs : s in 𝓝 a)
-  结论: IsLocalMin f a
-  证明: have : 𝓝 a <= 𝓟 s := le_principal_iff.2 hs
-hf.filter_mono le_inf le_rfl this
-
-Depends on / 依赖: filter_mono, hf.filter_mono, le_inf, le_principal_iff, le_rfl
+  hf.filter_mono <| inf_le_right
+/-
+**IsLocalMinOn.isLocalMin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMinOn.isLocalMin (hf : IsLocalMinOn f s a) (hs : s in 𝓝 a) : IsLoca
+lMin f a
+参数：hf : IsLocalMinOn f s a；hs : s in 𝓝 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `IsMinFilter.filter_mono`：IsMinFilter.filter_mono (h : IsMinFilter f l a)
+ (hl : l' <= l) : IsMinFilter f l' a
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem IsLocalMinOn.isLocalMin (hf : IsLocalMinOn f s a) (hs : s in 𝓝 a) : IsLocalMin f a :=
-  have : 𝓝 a <= 𝓟 s := le_principal_iff.2 hs
-hf.filter_mono le_inf le_rfl this
-
-/--
-theorem `IsLocalMaxOn.isLocalMax` / 定理 `IsLocalMaxOn.isLocalMax`
-
-English:
-theorem IsLocalMaxOn.isLocalMax
-  given: (hf : IsLocalMaxOn f s a) (hs : s in 𝓝 a)
-  statement: IsLocalMax f a
-  proof: have : 𝓝 a <= 𝓟 s := le_principal_iff.2 hs
-hf.filter_mono le_inf le_rfl this
-
-中文:
-定理 IsLocalMaxOn.isLocalMax
-  条件: (hf : IsLocalMaxOn f s a) (hs : s in 𝓝 a)
-  结论: IsLocalMax f a
-  证明: have : 𝓝 a <= 𝓟 s := le_principal_iff.2 hs
-hf.filter_mono le_inf le_rfl this
-
-Depends on / 依赖: filter_mono, hf.filter_mono, le_inf, le_principal_iff, le_rfl
+theorem IsLocalMinOn.isLocalMin (hf : IsLocalMinOn f s a) (hs : s ∈ 𝓝 a) : IsLocalMin f a :=
+  have : 𝓝 a ≤ 𝓟 s := le_principal_iff.2 hs
+  hf.filter_mono <| le_inf le_rfl this
+/-
+**IsLocalMaxOn.isLocalMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMaxOn.isLocalMax (hf : IsLocalMaxOn f s a) (hs : s in 𝓝 a) : IsLoca
+lMax f a
+参数：hf : IsLocalMaxOn f s a；hs : s in 𝓝 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `IsMaxFilter.filter_mono`：IsMaxFilter.filter_mono (h : IsMaxFilter f l a)
+ (hl : l' <= l) : IsMaxFilter f l' a
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem IsLocalMaxOn.isLocalMax (hf : IsLocalMaxOn f s a) (hs : s in 𝓝 a) : IsLocalMax f a :=
-  have : 𝓝 a <= 𝓟 s := le_principal_iff.2 hs
-hf.filter_mono le_inf le_rfl this
-
-/--
-theorem `IsLocalExtrOn.isLocalExtr` / 定理 `IsLocalExtrOn.isLocalExtr`
-
-English:
-theorem IsLocalExtrOn.isLocalExtr
-  given: (hf : IsLocalExtrOn f s a) (hs : s in 𝓝 a)
-  statement: IsLocalExtr f a
-  proof: hf.elim (fun hf => (hf.isLocalMin hs).isExtr) fun hf => (hf.isLocalMax hs).isExtr
-
-中文:
-定理 IsLocalExtrOn.isLocalExtr
-  条件: (hf : IsLocalExtrOn f s a) (hs : s in 𝓝 a)
-  结论: IsLocalExtr f a
-  证明: hf.elim (fun hf => (hf.isLocalMin hs).isExtr) fun hf => (hf.isLocalMax hs).isExtr
-
-Depends on / 依赖: hf.elim, hf.isLocalMax, hf.isLocalMin, isExtr, isLocalMax, isLocalMin
+theorem IsLocalMaxOn.isLocalMax (hf : IsLocalMaxOn f s a) (hs : s ∈ 𝓝 a) : IsLocalMax f a :=
+  have : 𝓝 a ≤ 𝓟 s := le_principal_iff.2 hs
+  hf.filter_mono <| le_inf le_rfl this
+/-
+**IsLocalExtrOn.isLocalExtr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtrOn.isLocalExtr (hf : IsLocalExtrOn f s a) (hs : s in 𝓝 a) : IsL
+ocalExtr f a
+参数：hf : IsLocalExtrOn f s a；hs : s in 𝓝 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtrOn.elim`：IsLocalExtrOn.elim {p : Prop} : IsLocalExtrOn f s a 
+-> (IsLocalMinOn f s a -> p) -> (IsLocalMaxOn f s a -> p) -> p
+· 使用定理 `IsMinFilter.isExtr`：IsMinFilter.isExtr : IsMinFilter f l a -> IsExtrFilt
+er f l a
+· 使用定理 `IsLocalMinOn.isLocalMin`：IsLocalMinOn.isLocalMin (hf : IsLocalMinOn f s 
+a) (hs : s in 𝓝 a) : IsLocalMin f a
+· 使用定理 `IsMaxFilter.isExtr`：IsMaxFilter.isExtr : IsMaxFilter f l a -> IsExtrFilt
+er f l a
+· 使用定理 `IsLocalMaxOn.isLocalMax`：IsLocalMaxOn.isLocalMax (hf : IsLocalMaxOn f s 
+a) (hs : s in 𝓝 a) : IsLocalMax f a
 -/
-theorem IsLocalExtrOn.isLocalExtr (hf : IsLocalExtrOn f s a) (hs : s in 𝓝 a) : IsLocalExtr f a :=
+theorem IsLocalExtrOn.isLocalExtr (hf : IsLocalExtrOn f s a) (hs : s ∈ 𝓝 a) : IsLocalExtr f a :=
   hf.elim (fun hf => (hf.isLocalMin hs).isExtr) fun hf => (hf.isLocalMax hs).isExtr
-
-/--
-lemma `isLocalMinOn_univ_iff` / 引理 `isLocalMinOn_univ_iff`
-
-English:
-lemma isLocalMinOn_univ_iff
-  statement: IsLocalMinOn f univ a ↔ IsLocalMin f a
-  proof: by
-  simp only [IsLocalMinOn, IsLocalMin, nhdsWithin_univ]
-
-中文:
-引理 isLocalMinOn_univ_iff
-  结论: IsLocalMinOn f univ a ↔ IsLocalMin f a
-  证明: by
-  simp only [IsLocalMinOn, IsLocalMin, nhdsWithin_univ]
-
-Depends on / 依赖: IsLocalMin, IsLocalMinOn, nhdsWithin_univ
+/-
+**isLocalMinOn_univ_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isLocalMinOn_univ_iff : IsLocalMinOn f univ a ↔ IsLocalMin f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsWithin_univ`：∀ {α : Type u_1} [inst : TopologicalSpace α] (a : α), n
+hdsWithin a Set.univ = nhds a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isLocalMinOn_univ_iff : IsLocalMinOn f univ a ↔ IsLocalMin f a := by
   simp only [IsLocalMinOn, IsLocalMin, nhdsWithin_univ]
-
-/--
-lemma `isLocalMaxOn_univ_iff` / 引理 `isLocalMaxOn_univ_iff`
-
-English:
-lemma isLocalMaxOn_univ_iff
-  statement: IsLocalMaxOn f univ a ↔ IsLocalMax f a
-  proof: by
-  simp only [IsLocalMaxOn, IsLocalMax, nhdsWithin_univ]
-
-中文:
-引理 isLocalMaxOn_univ_iff
-  结论: IsLocalMaxOn f univ a ↔ IsLocalMax f a
-  证明: by
-  simp only [IsLocalMaxOn, IsLocalMax, nhdsWithin_univ]
-
-Depends on / 依赖: IsLocalMax, IsLocalMaxOn, nhdsWithin_univ
+/-
+**isLocalMaxOn_univ_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isLocalMaxOn_univ_iff : IsLocalMaxOn f univ a ↔ IsLocalMax f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsWithin_univ`：∀ {α : Type u_1} [inst : TopologicalSpace α] (a : α), n
+hdsWithin a Set.univ = nhds a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isLocalMaxOn_univ_iff : IsLocalMaxOn f univ a ↔ IsLocalMax f a := by
   simp only [IsLocalMaxOn, IsLocalMax, nhdsWithin_univ]
-
-/--
-lemma `isLocalExtrOn_univ_iff` / 引理 `isLocalExtrOn_univ_iff`
-
-English:
-lemma isLocalExtrOn_univ_iff
-  statement: IsLocalExtrOn f univ a ↔ IsLocalExtr f a
-  proof: isLocalMinOn_univ_iff.or isLocalMaxOn_univ_iff
-
-中文:
-引理 isLocalExtrOn_univ_iff
-  结论: IsLocalExtrOn f univ a ↔ IsLocalExtr f a
-  证明: isLocalMinOn_univ_iff.or isLocalMaxOn_univ_iff
-
-Depends on / 依赖: isLocalMaxOn_univ_iff, isLocalMinOn_univ_iff, isLocalMinOn_univ_iff.or
+/-
+**isLocalExtrOn_univ_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isLocalExtrOn_univ_iff : IsLocalExtrOn f univ a ↔ IsLocalExtr f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.or`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∨ b ↔ c ∨ d)
+· 使用引理 `isLocalMinOn_univ_iff`：isLocalMinOn_univ_iff : IsLocalMinOn f univ a ↔ I
+sLocalMin f a
+· 使用引理 `isLocalMaxOn_univ_iff`：isLocalMaxOn_univ_iff : IsLocalMaxOn f univ a ↔ I
+sLocalMax f a
 -/
 lemma isLocalExtrOn_univ_iff : IsLocalExtrOn f univ a ↔ IsLocalExtr f a :=
   isLocalMinOn_univ_iff.or isLocalMaxOn_univ_iff
-
-/--
-theorem `IsMinOn.isLocalMin` / 定理 `IsMinOn.isLocalMin`
-
-English:
-theorem IsMinOn.isLocalMin
-  given: (hf : IsMinOn f s a) (hs : s in 𝓝 a)
-  statement: IsLocalMin f a
-  proof: hf.localize.isLocalMin hs
-
-中文:
-定理 IsMinOn.isLocalMin
-  条件: (hf : IsMinOn f s a) (hs : s in 𝓝 a)
-  结论: IsLocalMin f a
-  证明: hf.localize.isLocalMin hs
-
-Depends on / 依赖: hf.localize.isLocalMin, isLocalMin, localize
+/-
+**IsMinOn.isLocalMin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMinOn.isLocalMin (hf : IsMinOn f s a) (hs : s in 𝓝 a) : IsLocalMin f a
+参数：hf : IsMinOn f s a；hs : s in 𝓝 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalMinOn.isLocalMin`：IsLocalMinOn.isLocalMin (hf : IsLocalMinOn f s 
+a) (hs : s in 𝓝 a) : IsLocalMin f a
+· 使用定理 `IsMinOn.localize`：IsMinOn.localize (hf : IsMinOn f s a) : IsLocalMinOn f
+ s a
 -/
-theorem IsMinOn.isLocalMin (hf : IsMinOn f s a) (hs : s in 𝓝 a) : IsLocalMin f a :=
+theorem IsMinOn.isLocalMin (hf : IsMinOn f s a) (hs : s ∈ 𝓝 a) : IsLocalMin f a :=
   hf.localize.isLocalMin hs
-
-/--
-theorem `IsMaxOn.isLocalMax` / 定理 `IsMaxOn.isLocalMax`
-
-English:
-theorem IsMaxOn.isLocalMax
-  given: (hf : IsMaxOn f s a) (hs : s in 𝓝 a)
-  statement: IsLocalMax f a
-  proof: hf.localize.isLocalMax hs
-
-中文:
-定理 IsMaxOn.isLocalMax
-  条件: (hf : IsMaxOn f s a) (hs : s in 𝓝 a)
-  结论: IsLocalMax f a
-  证明: hf.localize.isLocalMax hs
-
-Depends on / 依赖: hf.localize.isLocalMax, isLocalMax, localize
+/-
+**IsMaxOn.isLocalMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxOn.isLocalMax (hf : IsMaxOn f s a) (hs : s in 𝓝 a) : IsLocalMax f a
+参数：hf : IsMaxOn f s a；hs : s in 𝓝 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalMaxOn.isLocalMax`：IsLocalMaxOn.isLocalMax (hf : IsLocalMaxOn f s 
+a) (hs : s in 𝓝 a) : IsLocalMax f a
+· 使用定理 `IsMaxOn.localize`：IsMaxOn.localize (hf : IsMaxOn f s a) : IsLocalMaxOn f
+ s a
 -/
-theorem IsMaxOn.isLocalMax (hf : IsMaxOn f s a) (hs : s in 𝓝 a) : IsLocalMax f a :=
+theorem IsMaxOn.isLocalMax (hf : IsMaxOn f s a) (hs : s ∈ 𝓝 a) : IsLocalMax f a :=
   hf.localize.isLocalMax hs
-
-/--
-theorem `IsExtrOn.isLocalExtr` / 定理 `IsExtrOn.isLocalExtr`
-
-English:
-theorem IsExtrOn.isLocalExtr
-  given: (hf : IsExtrOn f s a) (hs : s in 𝓝 a)
-  statement: IsLocalExtr f a
-  proof: hf.localize.isLocalExtr hs
-
-中文:
-定理 IsExtrOn.isLocalExtr
-  条件: (hf : IsExtrOn f s a) (hs : s in 𝓝 a)
-  结论: IsLocalExtr f a
-  证明: hf.localize.isLocalExtr hs
-
-Depends on / 依赖: hf.localize.isLocalExtr, isLocalExtr, localize
+/-
+**IsExtrOn.isLocalExtr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrOn.isLocalExtr (hf : IsExtrOn f s a) (hs : s in 𝓝 a) : IsLocalExtr f
+ a
+参数：hf : IsExtrOn f s a；hs : s in 𝓝 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtrOn.isLocalExtr`：IsLocalExtrOn.isLocalExtr (hf : IsLocalExtrOn
+ f s a) (hs : s in 𝓝 a) : IsLocalExtr f a
+· 使用定理 `IsExtrOn.localize`：IsExtrOn.localize (hf : IsExtrOn f s a) : IsLocalExtr
+On f s a
 -/
-theorem IsExtrOn.isLocalExtr (hf : IsExtrOn f s a) (hs : s in 𝓝 a) : IsLocalExtr f a :=
+theorem IsExtrOn.isLocalExtr (hf : IsExtrOn f s a) (hs : s ∈ 𝓝 a) : IsLocalExtr f a :=
   hf.localize.isLocalExtr hs
-
-/--
-theorem `IsLocalMinOn.not_nhds_le_map` / 定理 `IsLocalMinOn.not_nhds_le_map`
-
-English:
-theorem IsLocalMinOn.not_nhds_le_map
-  statement: [TopologicalSpace β] (hf : IsLocalMinOn f s a)
-  proof: fun hle =>
-  have : forallᶠ y in 𝓝[<] f a, f a <= y := (eventually_map.2 hf).filter_mono (inf_le_left.trans hle)
-  let ⟨_y, hy⟩ := (this.and self_mem_nhdsWithin).exists
-  hy.1.not_gt hy.2
-
-中文:
-定理 IsLocalMinOn.not_nhds_le_map
-  结论: [拓扑空间 β] (hf : IsLocalMinOn f s a)
-  证明: fun hle =>
-  have : forallᶠ y in 𝓝[<] f a, f a <= y := (eventually_map.2 hf).filter_mono (inf_le_left.trans hle)
-  let ⟨_y, hy⟩ := (this.and self_mem_nhdsWithin).exists
-  hy.1.not_gt hy.2
+/-
+**IsLocalMinOn.not_nhds_le_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMinOn.not_nhds_le_map [TopologicalSpace β] (hf : IsLocalMinOn f s a
+) [NeBot (𝓝[<] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a)
+参数：hf : IsLocalMinOn f s a；𝓝[<] f a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.filter_mono`：∀ {α : Type u} {f₁ f₂ : Filter α}, f₁ ≤ f
+₂ → ∀ {p : α → Prop}, (∀ᶠ (x : α) in f₂, p x) → ∀ᶠ (x : α) in f₁, p x
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+· 使用定理 `Filter.Eventually.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α} [
+f.NeBot], (∀ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsLocalMinOn.not_nhds_le_map [TopologicalSpace β] (hf : IsLocalMinOn f s a)
-    [NeBot (𝓝[<] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a) := fun hle =>
-  have : forallᶠ y in 𝓝[<] f a, f a <= y := (eventually_map.2 hf).filter_mono (inf_le_left.trans hle)
+    [NeBot (𝓝[<] f a)] : ¬𝓝 (f a) ≤ map f (𝓝[s] a) := fun hle =>
+  have : ∀ᶠ y in 𝓝[<] f a, f a ≤ y := (eventually_map.2 hf).filter_mono (inf_le_left.trans hle)
   let ⟨_y, hy⟩ := (this.and self_mem_nhdsWithin).exists
   hy.1.not_gt hy.2
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `IsLocalMaxOn.not_nhds_le_map` / 定理 `IsLocalMaxOn.not_nhds_le_map`
-
-English:
-theorem IsLocalMaxOn.not_nhds_le_map
-  statement: [TopologicalSpace β] (hf : IsLocalMaxOn f s a)
-  proof: @IsLocalMinOn.not_nhds_le_map α βᵒᵈ _ _ _ _ _ ‹_› hf ‹_›
-
-中文:
-定理 IsLocalMaxOn.not_nhds_le_map
-  结论: [拓扑空间 β] (hf : IsLocalMaxOn f s a)
-  证明: @IsLocalMinOn.not_nhds_le_map α βᵒᵈ _ _ _ _ _ ‹_› hf ‹_›
-
-Depends on / 依赖: IsLocalMinOn, IsLocalMinOn.not_nhds_le_map, not_nhds_le_map
+/-
+**IsLocalMaxOn.not_nhds_le_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMaxOn.not_nhds_le_map [TopologicalSpace β] (hf : IsLocalMaxOn f s a
+) [NeBot (𝓝[>] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a)
+参数：hf : IsLocalMaxOn f s a；𝓝[>] f a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalMinOn.not_nhds_le_map`：IsLocalMinOn.not_nhds_le_map [TopologicalS
+pace β] (hf : IsLocalMinOn f s a) [NeBot (𝓝[<] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a
+)
 -/
 theorem IsLocalMaxOn.not_nhds_le_map [TopologicalSpace β] (hf : IsLocalMaxOn f s a)
-    [NeBot (𝓝[>] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a) :=
+    [NeBot (𝓝[>] f a)] : ¬𝓝 (f a) ≤ map f (𝓝[s] a) :=
   @IsLocalMinOn.not_nhds_le_map α βᵒᵈ _ _ _ _ _ ‹_› hf ‹_›
-
-/--
-theorem `IsLocalExtrOn.not_nhds_le_map` / 定理 `IsLocalExtrOn.not_nhds_le_map`
-
-English:
-theorem IsLocalExtrOn.not_nhds_le_map
-  statement: [TopologicalSpace β] (hf : IsLocalExtrOn f s a)
-  proof: hf.elim (fun h => h.not_nhds_le_map) fun h => h.not_nhds_le_map
-
-中文:
-定理 IsLocalExtrOn.not_nhds_le_map
-  结论: [拓扑空间 β] (hf : IsLocalExtrOn f s a)
-  证明: hf.elim (fun h => h.not_nhds_le_map) fun h => h.not_nhds_le_map
-
-Depends on / 依赖: h.not_nhds_le_map, hf.elim, not_nhds_le_map
+/-
+**IsLocalExtrOn.not_nhds_le_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtrOn.not_nhds_le_map [TopologicalSpace β] (hf : IsLocalExtrOn f s
+ a) [NeBot (𝓝[<] f a)] [NeBot (𝓝[>] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a)
+参数：hf : IsLocalExtrOn f s a；𝓝[<] f a；𝓝[>] f a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtrOn.elim`：IsLocalExtrOn.elim {p : Prop} : IsLocalExtrOn f s a 
+-> (IsLocalMinOn f s a -> p) -> (IsLocalMaxOn f s a -> p) -> p
+· 使用定理 `IsLocalMinOn.not_nhds_le_map`：IsLocalMinOn.not_nhds_le_map [TopologicalS
+pace β] (hf : IsLocalMinOn f s a) [NeBot (𝓝[<] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a
+)
+· 使用定理 `IsLocalMaxOn.not_nhds_le_map`：IsLocalMaxOn.not_nhds_le_map [TopologicalS
+pace β] (hf : IsLocalMaxOn f s a) [NeBot (𝓝[>] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a
+)
 -/
 theorem IsLocalExtrOn.not_nhds_le_map [TopologicalSpace β] (hf : IsLocalExtrOn f s a)
-    [NeBot (𝓝[<] f a)] [NeBot (𝓝[>] f a)] : ¬𝓝 (f a) <= map f (𝓝[s] a) :=
+    [NeBot (𝓝[<] f a)] [NeBot (𝓝[>] f a)] : ¬𝓝 (f a) ≤ map f (𝓝[s] a) :=
   hf.elim (fun h => h.not_nhds_le_map) fun h => h.not_nhds_le_map
 
+/-! ### Constant -/
 
 
-/--
-theorem `isLocalMinOn_const` / 定理 `isLocalMinOn_const`
+/-
+**isLocalMinOn_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocalMinOn_const {b : β} : IsLocalMinOn (fun _ => b) s a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isMinFilter_const`：isMinFilter_const {b : β} : IsMinFilter (fun _ => b) 
+l a
 
-English:
-theorem isLocalMinOn_const
-  given: {b : β}
-  statement: IsLocalMinOn (fun _ => b) s a
-  proof: isMinFilter_const
-
-中文:
-定理 isLocalMinOn_const
-  条件: {b : β}
-  结论: IsLocalMinOn (fun _ => b) s a
-  证明: isMinFilter_const
-
-Depends on / 依赖: isMinFilter_const
+--- 原说明 ---
+### Constant
 -/
 theorem isLocalMinOn_const {b : β} : IsLocalMinOn (fun _ => b) s a :=
   isMinFilter_const
-
-/--
-theorem `isLocalMaxOn_const` / 定理 `isLocalMaxOn_const`
-
-English:
-theorem isLocalMaxOn_const
-  given: {b : β}
-  statement: IsLocalMaxOn (fun _ => b) s a
-  proof: isMaxFilter_const
-
-中文:
-定理 isLocalMaxOn_const
-  条件: {b : β}
-  结论: IsLocalMaxOn (fun _ => b) s a
-  证明: isMaxFilter_const
-
-Depends on / 依赖: isMaxFilter_const
+/-
+**isLocalMaxOn_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocalMaxOn_const {b : β} : IsLocalMaxOn (fun _ => b) s a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isMaxFilter_const`：isMaxFilter_const {b : β} : IsMaxFilter (fun _ => b) 
+l a
 -/
 theorem isLocalMaxOn_const {b : β} : IsLocalMaxOn (fun _ => b) s a :=
   isMaxFilter_const
-
-/--
-theorem `isLocalExtrOn_const` / 定理 `isLocalExtrOn_const`
-
-English:
-theorem isLocalExtrOn_const
-  given: {b : β}
-  statement: IsLocalExtrOn (fun _ => b) s a
-  proof: isExtrFilter_const
-
-中文:
-定理 isLocalExtrOn_const
-  条件: {b : β}
-  结论: IsLocalExtrOn (fun _ => b) s a
-  证明: isExtrFilter_const
-
-Depends on / 依赖: isExtrFilter_const
+/-
+**isLocalExtrOn_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocalExtrOn_const {b : β} : IsLocalExtrOn (fun _ => b) s a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isExtrFilter_const`：isExtrFilter_const {b : β} : IsExtrFilter (fun _ => 
+b) l a
 -/
 theorem isLocalExtrOn_const {b : β} : IsLocalExtrOn (fun _ => b) s a :=
   isExtrFilter_const
-
-/--
-theorem `isLocalMin_const` / 定理 `isLocalMin_const`
-
-English:
-theorem isLocalMin_const
-  given: {b : β}
-  statement: IsLocalMin (fun _ => b) a
-  proof: isMinFilter_const
-
-中文:
-定理 isLocalMin_const
-  条件: {b : β}
-  结论: IsLocalMin (fun _ => b) a
-  证明: isMinFilter_const
-
-Depends on / 依赖: isMinFilter_const
+/-
+**isLocalMin_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocalMin_const {b : β} : IsLocalMin (fun _ => b) a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isMinFilter_const`：isMinFilter_const {b : β} : IsMinFilter (fun _ => b) 
+l a
 -/
 theorem isLocalMin_const {b : β} : IsLocalMin (fun _ => b) a :=
   isMinFilter_const
-
-/--
-theorem `isLocalMax_const` / 定理 `isLocalMax_const`
-
-English:
-theorem isLocalMax_const
-  given: {b : β}
-  statement: IsLocalMax (fun _ => b) a
-  proof: isMaxFilter_const
-
-中文:
-定理 isLocalMax_const
-  条件: {b : β}
-  结论: IsLocalMax (fun _ => b) a
-  证明: isMaxFilter_const
-
-Depends on / 依赖: isMaxFilter_const
+/-
+**isLocalMax_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocalMax_const {b : β} : IsLocalMax (fun _ => b) a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isMaxFilter_const`：isMaxFilter_const {b : β} : IsMaxFilter (fun _ => b) 
+l a
 -/
 theorem isLocalMax_const {b : β} : IsLocalMax (fun _ => b) a :=
   isMaxFilter_const
-
-/--
-theorem `isLocalExtr_const` / 定理 `isLocalExtr_const`
-
-English:
-theorem isLocalExtr_const
-  given: {b : β}
-  statement: IsLocalExtr (fun _ => b) a
-  proof: isExtrFilter_const
-
-中文:
-定理 isLocalExtr_const
-  条件: {b : β}
-  结论: IsLocalExtr (fun _ => b) a
-  证明: isExtrFilter_const
-
-Depends on / 依赖: isExtrFilter_const
+/-
+**isLocalExtr_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocalExtr_const {b : β} : IsLocalExtr (fun _ => b) a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isExtrFilter_const`：isExtrFilter_const {b : β} : IsExtrFilter (fun _ => 
+b) l a
 -/
 theorem isLocalExtr_const {b : β} : IsLocalExtr (fun _ => b) a :=
   isExtrFilter_const
 
 /-! ### Composition with (anti)monotone functions -/
 
-nonrec theorem IsLocalMin.comp_mono (hf : IsLocalMin f a) {g : β -> γ} (hg : Monotone g) :
+nonrec theorem IsLocalMin.comp_mono (hf : IsLocalMin f a) {g : β → γ} (hg : Monotone g) :
     IsLocalMin (g ∘ f) a :=
   hf.comp_mono hg
 
-nonrec theorem IsLocalMax.comp_mono (hf : IsLocalMax f a) {g : β -> γ} (hg : Monotone g) :
+nonrec theorem IsLocalMax.comp_mono (hf : IsLocalMax f a) {g : β → γ} (hg : Monotone g) :
     IsLocalMax (g ∘ f) a :=
   hf.comp_mono hg
 
-nonrec theorem IsLocalExtr.comp_mono (hf : IsLocalExtr f a) {g : β -> γ} (hg : Monotone g) :
+nonrec theorem IsLocalExtr.comp_mono (hf : IsLocalExtr f a) {g : β → γ} (hg : Monotone g) :
     IsLocalExtr (g ∘ f) a :=
   hf.comp_mono hg
 
-nonrec theorem IsLocalMin.comp_antitone (hf : IsLocalMin f a) {g : β -> γ} (hg : Antitone g) :
+nonrec theorem IsLocalMin.comp_antitone (hf : IsLocalMin f a) {g : β → γ} (hg : Antitone g) :
     IsLocalMax (g ∘ f) a :=
   hf.comp_antitone hg
 
-nonrec theorem IsLocalMax.comp_antitone (hf : IsLocalMax f a) {g : β -> γ} (hg : Antitone g) :
+nonrec theorem IsLocalMax.comp_antitone (hf : IsLocalMax f a) {g : β → γ} (hg : Antitone g) :
     IsLocalMin (g ∘ f) a :=
   hf.comp_antitone hg
 
-nonrec theorem IsLocalExtr.comp_antitone (hf : IsLocalExtr f a) {g : β -> γ} (hg : Antitone g) :
+nonrec theorem IsLocalExtr.comp_antitone (hf : IsLocalExtr f a) {g : β → γ} (hg : Antitone g) :
     IsLocalExtr (g ∘ f) a :=
   hf.comp_antitone hg
 
-nonrec theorem IsLocalMinOn.comp_mono (hf : IsLocalMinOn f s a) {g : β -> γ} (hg : Monotone g) :
+nonrec theorem IsLocalMinOn.comp_mono (hf : IsLocalMinOn f s a) {g : β → γ} (hg : Monotone g) :
     IsLocalMinOn (g ∘ f) s a :=
   hf.comp_mono hg
 
-nonrec theorem IsLocalMaxOn.comp_mono (hf : IsLocalMaxOn f s a) {g : β -> γ} (hg : Monotone g) :
+nonrec theorem IsLocalMaxOn.comp_mono (hf : IsLocalMaxOn f s a) {g : β → γ} (hg : Monotone g) :
     IsLocalMaxOn (g ∘ f) s a :=
   hf.comp_mono hg
 
-nonrec theorem IsLocalExtrOn.comp_mono (hf : IsLocalExtrOn f s a) {g : β -> γ} (hg : Monotone g) :
+nonrec theorem IsLocalExtrOn.comp_mono (hf : IsLocalExtrOn f s a) {g : β → γ} (hg : Monotone g) :
     IsLocalExtrOn (g ∘ f) s a :=
   hf.comp_mono hg
 
-nonrec theorem IsLocalMinOn.comp_antitone (hf : IsLocalMinOn f s a) {g : β -> γ} (hg : Antitone g) :
+nonrec theorem IsLocalMinOn.comp_antitone (hf : IsLocalMinOn f s a) {g : β → γ} (hg : Antitone g) :
     IsLocalMaxOn (g ∘ f) s a :=
   hf.comp_antitone hg
 
-nonrec theorem IsLocalMaxOn.comp_antitone (hf : IsLocalMaxOn f s a) {g : β -> γ} (hg : Antitone g) :
+nonrec theorem IsLocalMaxOn.comp_antitone (hf : IsLocalMaxOn f s a) {g : β → γ} (hg : Antitone g) :
     IsLocalMinOn (g ∘ f) s a :=
   hf.comp_antitone hg
 
-nonrec theorem IsLocalExtrOn.comp_antitone (hf : IsLocalExtrOn f s a) {g : β -> γ}
+nonrec theorem IsLocalExtrOn.comp_antitone (hf : IsLocalExtrOn f s a) {g : β → γ}
     (hg : Antitone g) : IsLocalExtrOn (g ∘ f) s a :=
   hf.comp_antitone hg
 
 open scoped Relator
 
-nonrec theorem IsLocalMin.bicomp_mono [Preorder δ] {op : β -> γ -> δ}
-    (hop : ((· <= ·) ⇒ (· <= ·) ⇒ (· <= ·)) op op) (hf : IsLocalMin f a) {g : α -> γ}
+nonrec theorem IsLocalMin.bicomp_mono [Preorder δ] {op : β → γ → δ}
+    (hop : ((· ≤ ·) ⇒ (· ≤ ·) ⇒ (· ≤ ·)) op op) (hf : IsLocalMin f a) {g : α → γ}
     (hg : IsLocalMin g a) : IsLocalMin (fun x => op (f x) (g x)) a :=
   hf.bicomp_mono hop hg
 
-nonrec theorem IsLocalMax.bicomp_mono [Preorder δ] {op : β -> γ -> δ}
-    (hop : ((· <= ·) ⇒ (· <= ·) ⇒ (· <= ·)) op op) (hf : IsLocalMax f a) {g : α -> γ}
+nonrec theorem IsLocalMax.bicomp_mono [Preorder δ] {op : β → γ → δ}
+    (hop : ((· ≤ ·) ⇒ (· ≤ ·) ⇒ (· ≤ ·)) op op) (hf : IsLocalMax f a) {g : α → γ}
     (hg : IsLocalMax g a) : IsLocalMax (fun x => op (f x) (g x)) a :=
   hf.bicomp_mono hop hg
 
-nonrec theorem IsLocalMinOn.bicomp_mono [Preorder δ] {op : β -> γ -> δ}
-    (hop : ((· <= ·) ⇒ (· <= ·) ⇒ (· <= ·)) op op) (hf : IsLocalMinOn f s a) {g : α -> γ}
+nonrec theorem IsLocalMinOn.bicomp_mono [Preorder δ] {op : β → γ → δ}
+    (hop : ((· ≤ ·) ⇒ (· ≤ ·) ⇒ (· ≤ ·)) op op) (hf : IsLocalMinOn f s a) {g : α → γ}
     (hg : IsLocalMinOn g s a) : IsLocalMinOn (fun x => op (f x) (g x)) s a :=
   hf.bicomp_mono hop hg
 
-nonrec theorem IsLocalMaxOn.bicomp_mono [Preorder δ] {op : β -> γ -> δ}
-    (hop : ((· <= ·) ⇒ (· <= ·) ⇒ (· <= ·)) op op) (hf : IsLocalMaxOn f s a) {g : α -> γ}
+nonrec theorem IsLocalMaxOn.bicomp_mono [Preorder δ] {op : β → γ → δ}
+    (hop : ((· ≤ ·) ⇒ (· ≤ ·) ⇒ (· ≤ ·)) op op) (hf : IsLocalMaxOn f s a) {g : α → γ}
     (hg : IsLocalMaxOn g s a) : IsLocalMaxOn (fun x => op (f x) (g x)) s a :=
   hf.bicomp_mono hop hg
 
+/-! ### Composition with `ContinuousAt` -/
 
 
-/--
-theorem `IsLocalMin.comp_continuous` / 定理 `IsLocalMin.comp_continuous`
+/-
+**IsLocalMin.comp_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMin.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ} (hf :
+ IsLocalMin f (g b)) (hg : ContinuousAt g b) : IsLocalMin (f ∘ g) b
+参数：hf : IsLocalMin f (g b)；hg : ContinuousAt g b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsLocalMin.comp_continuous
-  statement: [TopologicalSpace δ] {g : δ -> α} {b : δ}
-  proof: hg hf
-
-中文:
-定理 IsLocalMin.comp_continuous
-  结论: [拓扑空间 δ] {g : δ -> α} {b : δ}
-  证明: hg hf
+--- 原说明 ---
+### Composition with `ContinuousAt`
 -/
-theorem IsLocalMin.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ}
+theorem IsLocalMin.comp_continuous [TopologicalSpace δ] {g : δ → α} {b : δ}
     (hf : IsLocalMin f (g b)) (hg : ContinuousAt g b) : IsLocalMin (f ∘ g) b :=
   hg hf
-
-/--
-theorem `IsLocalMax.comp_continuous` / 定理 `IsLocalMax.comp_continuous`
-
-English:
-theorem IsLocalMax.comp_continuous
-  statement: [TopologicalSpace δ] {g : δ -> α} {b : δ}
-  proof: hg hf
-
-中文:
-定理 IsLocalMax.comp_continuous
-  结论: [拓扑空间 δ] {g : δ -> α} {b : δ}
-  证明: hg hf
+/-
+**IsLocalMax.comp_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMax.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ} (hf :
+ IsLocalMax f (g b)) (hg : ContinuousAt g b) : IsLocalMax (f ∘ g) b
+参数：hf : IsLocalMax f (g b)；hg : ContinuousAt g b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsLocalMax.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ}
+theorem IsLocalMax.comp_continuous [TopologicalSpace δ] {g : δ → α} {b : δ}
     (hf : IsLocalMax f (g b)) (hg : ContinuousAt g b) : IsLocalMax (f ∘ g) b :=
   hg hf
-
-/--
-theorem `IsLocalExtr.comp_continuous` / 定理 `IsLocalExtr.comp_continuous`
-
-English:
-theorem IsLocalExtr.comp_continuous
-  statement: [TopologicalSpace δ] {g : δ -> α} {b : δ}
-  proof: hf.comp_tendsto hg
-
-中文:
-定理 IsLocalExtr.comp_continuous
-  结论: [拓扑空间 δ] {g : δ -> α} {b : δ}
-  证明: hf.comp_tendsto hg
-
-Depends on / 依赖: comp_tendsto, hf.comp_tendsto
+/-
+**IsLocalExtr.comp_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtr.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ} (hf 
+: IsLocalExtr f (g b)) (hg : ContinuousAt g b) : IsLocalExtr (f ∘ g) b
+参数：hf : IsLocalExtr f (g b)；hg : ContinuousAt g b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.comp_tendsto`：IsExtrFilter.comp_tendsto {g : δ -> α} {l' : 
+Filter δ} {b : δ} (hf : IsExtrFilter f l (g b)) (hg : Tendsto g l' l) : IsExtrFi
+lter (f ∘ g) l'…
 -/
-theorem IsLocalExtr.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ}
+theorem IsLocalExtr.comp_continuous [TopologicalSpace δ] {g : δ → α} {b : δ}
     (hf : IsLocalExtr f (g b)) (hg : ContinuousAt g b) : IsLocalExtr (f ∘ g) b :=
   hf.comp_tendsto hg
-
-/--
-theorem `IsLocalMin.comp_continuousOn` / 定理 `IsLocalMin.comp_continuousOn`
-
-English:
-theorem IsLocalMin.comp_continuousOn
-  statement: [TopologicalSpace δ] {s : Set δ} {g : δ -> α} {b : δ}
-  proof: hf.comp_tendsto (hg b hb)
-
-中文:
-定理 IsLocalMin.comp_continuousOn
-  结论: [拓扑空间 δ] {s : 集合 δ} {g : δ -> α} {b : δ}
-  证明: hf.comp_tendsto (hg b hb)
-
-Depends on / 依赖: comp_tendsto, hf.comp_tendsto
+/-
+**IsLocalMin.comp_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMin.comp_continuousOn [TopologicalSpace δ] {s : Set δ} {g : δ -> α}
+ {b : δ} (hf : IsLocalMin f (g b)) (hg : ContinuousOn g s) (hb : b in s) : IsLoc
+alMinOn (f ∘ g) s b
+参数：hf : IsLocalMin f (g b)；hg : ContinuousOn g s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMinFilter.comp_tendsto`：IsMinFilter.comp_tendsto {g : δ -> α} {l' : Fi
+lter δ} {b : δ} (hf : IsMinFilter f l (g b)) (hg : Tendsto g l' l) : IsMinFilter
+ (f ∘ g) l' b
 -/
-theorem IsLocalMin.comp_continuousOn [TopologicalSpace δ] {s : Set δ} {g : δ -> α} {b : δ}
-    (hf : IsLocalMin f (g b)) (hg : ContinuousOn g s) (hb : b in s) : IsLocalMinOn (f ∘ g) s b :=
+theorem IsLocalMin.comp_continuousOn [TopologicalSpace δ] {s : Set δ} {g : δ → α} {b : δ}
+    (hf : IsLocalMin f (g b)) (hg : ContinuousOn g s) (hb : b ∈ s) : IsLocalMinOn (f ∘ g) s b :=
   hf.comp_tendsto (hg b hb)
-
-/--
-theorem `IsLocalMax.comp_continuousOn` / 定理 `IsLocalMax.comp_continuousOn`
-
-English:
-theorem IsLocalMax.comp_continuousOn
-  statement: [TopologicalSpace δ] {s : Set δ} {g : δ -> α} {b : δ}
-  proof: hf.comp_tendsto (hg b hb)
-
-中文:
-定理 IsLocalMax.comp_continuousOn
-  结论: [拓扑空间 δ] {s : 集合 δ} {g : δ -> α} {b : δ}
-  证明: hf.comp_tendsto (hg b hb)
-
-Depends on / 依赖: comp_tendsto, hf.comp_tendsto
+/-
+**IsLocalMax.comp_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMax.comp_continuousOn [TopologicalSpace δ] {s : Set δ} {g : δ -> α}
+ {b : δ} (hf : IsLocalMax f (g b)) (hg : ContinuousOn g s) (hb : b in s) : IsLoc
+alMaxOn (f ∘ g) s b
+参数：hf : IsLocalMax f (g b)；hg : ContinuousOn g s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMaxFilter.comp_tendsto`：IsMaxFilter.comp_tendsto {g : δ -> α} {l' : Fi
+lter δ} {b : δ} (hf : IsMaxFilter f l (g b)) (hg : Tendsto g l' l) : IsMaxFilter
+ (f ∘ g) l' b
 -/
-theorem IsLocalMax.comp_continuousOn [TopologicalSpace δ] {s : Set δ} {g : δ -> α} {b : δ}
-    (hf : IsLocalMax f (g b)) (hg : ContinuousOn g s) (hb : b in s) : IsLocalMaxOn (f ∘ g) s b :=
+theorem IsLocalMax.comp_continuousOn [TopologicalSpace δ] {s : Set δ} {g : δ → α} {b : δ}
+    (hf : IsLocalMax f (g b)) (hg : ContinuousOn g s) (hb : b ∈ s) : IsLocalMaxOn (f ∘ g) s b :=
   hf.comp_tendsto (hg b hb)
-
-/--
-theorem `IsLocalExtr.comp_continuousOn` / 定理 `IsLocalExtr.comp_continuousOn`
-
-English:
-theorem IsLocalExtr.comp_continuousOn
-  statement: [TopologicalSpace δ] {s : Set δ} (g : δ -> α) {b : δ}
-  proof: hf.elim (fun hf => (hf.comp_continuousOn hg hb).isExtr) fun hf =>
-    (IsLocalMax.comp_continuousOn hf hg hb).isExtr
-
-中文:
-定理 IsLocalExtr.comp_continuousOn
-  结论: [拓扑空间 δ] {s : 集合 δ} (g : δ -> α) {b : δ}
-  证明: hf.elim (fun hf => (hf.comp_continuousOn hg hb).isExtr) fun hf =>
-    (IsLocalMax.comp_continuousOn hf hg hb).isExtr
-
-Depends on / 依赖: IsLocalMax, IsLocalMax.comp_continuousOn, comp_continuousOn, hf.comp_continuousOn, hf.elim, isExtr
+/-
+**IsLocalExtr.comp_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtr.comp_continuousOn [TopologicalSpace δ] {s : Set δ} (g : δ -> α
+) {b : δ} (hf : IsLocalExtr f (g b)) (hg : ContinuousOn g s) (hb : b in s) : IsL
+ocalExtrOn (f ∘ g) s b
+参数：g : δ -> α；hf : IsLocalExtr f (g b)；hg : ContinuousOn g s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtr.elim`：IsLocalExtr.elim {p : Prop} : IsLocalExtr f a -> (IsLo
+calMin f a -> p) -> (IsLocalMax f a -> p) -> p
+· 使用定理 `IsMinFilter.isExtr`：IsMinFilter.isExtr : IsMinFilter f l a -> IsExtrFilt
+er f l a
+· 使用定理 `IsLocalMin.comp_continuousOn`：IsLocalMin.comp_continuousOn [TopologicalS
+pace δ] {s : Set δ} {g : δ -> α} {b : δ} (hf : IsLocalMin f (g b)) (hg : Continu
+ousOn g s) (hb : b…
+· 使用定理 `IsMaxFilter.isExtr`：IsMaxFilter.isExtr : IsMaxFilter f l a -> IsExtrFilt
+er f l a
+· 使用定理 `IsLocalMax.comp_continuousOn`：IsLocalMax.comp_continuousOn [TopologicalS
+pace δ] {s : Set δ} {g : δ -> α} {b : δ} (hf : IsLocalMax f (g b)) (hg : Continu
+ousOn g s) (hb : b…
 -/
-theorem IsLocalExtr.comp_continuousOn [TopologicalSpace δ] {s : Set δ} (g : δ -> α) {b : δ}
-    (hf : IsLocalExtr f (g b)) (hg : ContinuousOn g s) (hb : b in s) : IsLocalExtrOn (f ∘ g) s b :=
+theorem IsLocalExtr.comp_continuousOn [TopologicalSpace δ] {s : Set δ} (g : δ → α) {b : δ}
+    (hf : IsLocalExtr f (g b)) (hg : ContinuousOn g s) (hb : b ∈ s) : IsLocalExtrOn (f ∘ g) s b :=
   hf.elim (fun hf => (hf.comp_continuousOn hg hb).isExtr) fun hf =>
     (IsLocalMax.comp_continuousOn hf hg hb).isExtr
-
-/--
-theorem `IsLocalMinOn.comp_continuousOn` / 定理 `IsLocalMinOn.comp_continuousOn`
-
-English:
-theorem IsLocalMinOn.comp_continuousOn
-  statement: [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ -> α}
-  proof: hf.comp_tendsto
-    (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
-      (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
-
-中文:
-定理 IsLocalMinOn.comp_continuousOn
-  结论: [拓扑空间 δ] {t : 集合 α} {s : 集合 δ} {g : δ -> α}
-  证明: hf.comp_tendsto
-    (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
-      (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
-
-Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.tendsto_nhdsWithin_image, comp_tendsto, hf.comp_tendsto, image_subset_iff, image_subset_iff.mpr, tendsto_nhdsWithin_image, tendsto_nhdsWithin_mono_right
+/-
+**IsLocalMinOn.comp_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMinOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ
+} {g : δ -> α} {b : δ} (hf : IsLocalMinOn f t (g b)) (hst : s subseteq g ⁻¹' t) 
+(hg : ContinuousOn g s) (hb : b in s) : IsLocalMinOn (f ∘ g) s b
+参数：hf : IsLocalMinOn f t (g b)；hst : s subseteq g ⁻¹' t；hg : ContinuousOn g s；hb
+ : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMinFilter.comp_tendsto`：IsMinFilter.comp_tendsto {g : δ -> α} {l' : Fi
+lter δ} {b : δ} (hf : IsMinFilter f l (g b)) (hg : Tendsto g l' l) : IsMinFilter
+ (f ∘ g) l' b
+· 使用定理 `tendsto_nhdsWithin_mono_right`：tendsto_nhdsWithin_mono_right {f : β -> α
+} {l : Filter β} {a : α} {s t : Set α} (hst : s subseteq t) (h : Tendsto f l (𝓝[
+s] a)) : Tendsto f …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `ContinuousWithinAt.tendsto_nhdsWithin_image`：ContinuousWithinAt.tendsto_
+nhdsWithin_image (h : ContinuousWithinAt f s x) : Tendsto f (𝓝[s] x) (𝓝[f '' s] 
+f x)
 -/
-theorem IsLocalMinOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ -> α}
-    {b : δ} (hf : IsLocalMinOn f t (g b)) (hst : s subseteq g ⁻¹' t) (hg : ContinuousOn g s) (hb : b in s) :
+theorem IsLocalMinOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ → α}
+    {b : δ} (hf : IsLocalMinOn f t (g b)) (hst : s ⊆ g ⁻¹' t) (hg : ContinuousOn g s) (hb : b ∈ s) :
     IsLocalMinOn (f ∘ g) s b :=
   hf.comp_tendsto
     (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
       (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
-
-/--
-theorem `IsLocalMaxOn.comp_continuousOn` / 定理 `IsLocalMaxOn.comp_continuousOn`
-
-English:
-theorem IsLocalMaxOn.comp_continuousOn
-  statement: [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ -> α}
-  proof: hf.comp_tendsto
-    (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
-      (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
-
-中文:
-定理 IsLocalMaxOn.comp_continuousOn
-  结论: [拓扑空间 δ] {t : 集合 α} {s : 集合 δ} {g : δ -> α}
-  证明: hf.comp_tendsto
-    (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
-      (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
-
-Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.tendsto_nhdsWithin_image, comp_tendsto, hf.comp_tendsto, image_subset_iff, image_subset_iff.mpr, tendsto_nhdsWithin_image, tendsto_nhdsWithin_mono_right
+/-
+**IsLocalMaxOn.comp_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMaxOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ
+} {g : δ -> α} {b : δ} (hf : IsLocalMaxOn f t (g b)) (hst : s subseteq g ⁻¹' t) 
+(hg : ContinuousOn g s) (hb : b in s) : IsLocalMaxOn (f ∘ g) s b
+参数：hf : IsLocalMaxOn f t (g b)；hst : s subseteq g ⁻¹' t；hg : ContinuousOn g s；hb
+ : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMaxFilter.comp_tendsto`：IsMaxFilter.comp_tendsto {g : δ -> α} {l' : Fi
+lter δ} {b : δ} (hf : IsMaxFilter f l (g b)) (hg : Tendsto g l' l) : IsMaxFilter
+ (f ∘ g) l' b
+· 使用定理 `tendsto_nhdsWithin_mono_right`：tendsto_nhdsWithin_mono_right {f : β -> α
+} {l : Filter β} {a : α} {s t : Set α} (hst : s subseteq t) (h : Tendsto f l (𝓝[
+s] a)) : Tendsto f …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `ContinuousWithinAt.tendsto_nhdsWithin_image`：ContinuousWithinAt.tendsto_
+nhdsWithin_image (h : ContinuousWithinAt f s x) : Tendsto f (𝓝[s] x) (𝓝[f '' s] 
+f x)
 -/
-theorem IsLocalMaxOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ -> α}
-    {b : δ} (hf : IsLocalMaxOn f t (g b)) (hst : s subseteq g ⁻¹' t) (hg : ContinuousOn g s) (hb : b in s) :
+theorem IsLocalMaxOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ → α}
+    {b : δ} (hf : IsLocalMaxOn f t (g b)) (hst : s ⊆ g ⁻¹' t) (hg : ContinuousOn g s) (hb : b ∈ s) :
     IsLocalMaxOn (f ∘ g) s b :=
   hf.comp_tendsto
     (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
       (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
-
-/--
-theorem `IsLocalExtrOn.comp_continuousOn` / 定理 `IsLocalExtrOn.comp_continuousOn`
-
-English:
-theorem IsLocalExtrOn.comp_continuousOn
-  statement: [TopologicalSpace δ] {t : Set α} {s : Set δ} (g : δ -> α)
-  proof: hf.elim (fun hf => (hf.comp_continuousOn hst hg hb).isExtr) fun hf =>
-    (IsLocalMaxOn.comp_continuousOn hf hst hg hb).isExtr
-
-中文:
-定理 IsLocalExtrOn.comp_continuousOn
-  结论: [拓扑空间 δ] {t : 集合 α} {s : 集合 δ} (g : δ -> α)
-  证明: hf.elim (fun hf => (hf.comp_continuousOn hst hg hb).isExtr) fun hf =>
-    (IsLocalMaxOn.comp_continuousOn hf hst hg hb).isExtr
-
-Depends on / 依赖: IsLocalMaxOn, IsLocalMaxOn.comp_continuousOn, comp_continuousOn, hf.comp_continuousOn, hf.elim, isExtr
+/-
+**IsLocalExtrOn.comp_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtrOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set 
+δ} (g : δ -> α) {b : δ} (hf : IsLocalExtrOn f t (g b)) (hst : s subseteq g ⁻¹' t
+) (hg : ContinuousOn g s) (hb : b in s) : IsLocalExtrOn (f ∘ g) s b
+参数：g : δ -> α；hf : IsLocalExtrOn f t (g b)；hst : s subseteq g ⁻¹' t；hg : Continu
+ousOn g s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtrOn.elim`：IsLocalExtrOn.elim {p : Prop} : IsLocalExtrOn f s a 
+-> (IsLocalMinOn f s a -> p) -> (IsLocalMaxOn f s a -> p) -> p
+· 使用定理 `IsMinFilter.isExtr`：IsMinFilter.isExtr : IsMinFilter f l a -> IsExtrFilt
+er f l a
+· 使用定理 `IsLocalMinOn.comp_continuousOn`：IsLocalMinOn.comp_continuousOn [Topologi
+calSpace δ] {t : Set α} {s : Set δ} {g : δ -> α} {b : δ} (hf : IsLocalMinOn f t 
+(g b)) (hst : s subs…
+· 使用定理 `IsMaxFilter.isExtr`：IsMaxFilter.isExtr : IsMaxFilter f l a -> IsExtrFilt
+er f l a
+· 使用定理 `IsLocalMaxOn.comp_continuousOn`：IsLocalMaxOn.comp_continuousOn [Topologi
+calSpace δ] {t : Set α} {s : Set δ} {g : δ -> α} {b : δ} (hf : IsLocalMaxOn f t 
+(g b)) (hst : s subs…
 -/
-theorem IsLocalExtrOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ} (g : δ -> α)
-    {b : δ} (hf : IsLocalExtrOn f t (g b)) (hst : s subseteq g ⁻¹' t) (hg : ContinuousOn g s)
-    (hb : b in s) : IsLocalExtrOn (f ∘ g) s b :=
+theorem IsLocalExtrOn.comp_continuousOn [TopologicalSpace δ] {t : Set α} {s : Set δ} (g : δ → α)
+    {b : δ} (hf : IsLocalExtrOn f t (g b)) (hst : s ⊆ g ⁻¹' t) (hg : ContinuousOn g s)
+    (hb : b ∈ s) : IsLocalExtrOn (f ∘ g) s b :=
   hf.elim (fun hf => (hf.comp_continuousOn hst hg hb).isExtr) fun hf =>
     (IsLocalMaxOn.comp_continuousOn hf hst hg hb).isExtr
 
@@ -1059,7 +849,7 @@ end Preorder
 section OrderedAddCommMonoid
 
 variable [AddCommMonoid β] [PartialOrder β] [IsOrderedAddMonoid β]
-  {f g : α -> β} {a : α} {s : Set α} {l : Filter α}
+  {f g : α → β} {a : α} {s : Set α} {l : Filter α}
 
 nonrec theorem IsLocalMin.add (hf : IsLocalMin f a) (hg : IsLocalMin g a) :
     IsLocalMin (fun x => f x + g x) a :=
@@ -1085,7 +875,7 @@ end OrderedAddCommMonoid
 section OrderedAddCommGroup
 
 variable [AddCommGroup β] [PartialOrder β] [IsOrderedAddMonoid β]
-  {f g : α -> β} {a : α} {s : Set α} {l : Filter α}
+  {f g : α → β} {a : α} {s : Set α} {l : Filter α}
 
 nonrec theorem IsLocalMin.neg (hf : IsLocalMin f a) : IsLocalMax (fun x => -f x) a :=
   hf.neg
@@ -1128,7 +918,7 @@ end OrderedAddCommGroup
 
 section SemilatticeSup
 
-variable [SemilatticeSup β] {f g : α -> β} {a : α} {s : Set α} {l : Filter α}
+variable [SemilatticeSup β] {f g : α → β} {a : α} {s : Set α} {l : Filter α}
 
 nonrec theorem IsLocalMin.sup (hf : IsLocalMin f a) (hg : IsLocalMin g a) :
     IsLocalMin (fun x => f x ⊔ g x) a :=
@@ -1150,7 +940,7 @@ end SemilatticeSup
 
 section SemilatticeInf
 
-variable [SemilatticeInf β] {f g : α -> β} {a : α} {s : Set α} {l : Filter α}
+variable [SemilatticeInf β] {f g : α → β} {a : α} {s : Set α} {l : Filter α}
 
 nonrec theorem IsLocalMin.inf (hf : IsLocalMin f a) (hg : IsLocalMin g a) :
     IsLocalMin (fun x => f x ⊓ g x) a :=
@@ -1175,7 +965,7 @@ end SemilatticeInf
 
 section LinearOrder
 
-variable [LinearOrder β] {f g : α -> β} {a : α} {s : Set α} {l : Filter α}
+variable [LinearOrder β] {f g : α → β} {a : α} {s : Set α} {l : Filter α}
 
 nonrec theorem IsLocalMin.min (hf : IsLocalMin f a) (hg : IsLocalMin g a) :
     IsLocalMin (fun x => min (f x) (g x)) a :=
@@ -1218,313 +1008,251 @@ section Eventually
 
 variable [Preorder β] {s : Set α}
 
-/--
-theorem `Filter.EventuallyLE.isLocalMaxOn` / 定理 `Filter.EventuallyLE.isLocalMaxOn`
-
-English:
-theorem Filter.EventuallyLE.isLocalMaxOn
-  statement: {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝[s] a] f)
-  proof: hle.isMaxFilter hfga h
-
-nonrec theorem IsLocalMaxOn.congr {f g : α -> β} {a : α} (h : IsLocalMaxOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMaxOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-中文:
-定理 滤子.EventuallyLE.isLocalMaxOn
-  结论: {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝[s] a] f)
-  证明: hle.isMaxFilter hfga h
-
-nonrec theorem IsLocalMaxOn.congr {f g : α -> β} {a : α} (h : IsLocalMaxOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMaxOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-Depends on / 依赖: hle.isMaxFilter, isMaxFilter
+/-
+**Filter.EventuallyLE.isLocalMaxOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyLE.isLocalMaxOn {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝[s] 
+a] f) (hfga : f a = g a) (h : IsLocalMaxOn f s a) : IsLocalMaxOn g s a
+参数：hle : g <=ᶠ[𝓝[s] a] f；hfga : f a = g a；h : IsLocalMaxOn f s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.isMaxFilter`：Filter.EventuallyLE.isMaxFilter {α β : 
+Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (hle : g <=ᶠ[l] f) (hf
+ga : f a = g a) (h : …
 -/
-theorem Filter.EventuallyLE.isLocalMaxOn {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝[s] a] f)
+theorem Filter.EventuallyLE.isLocalMaxOn {f g : α → β} {a : α} (hle : g ≤ᶠ[𝓝[s] a] f)
     (hfga : f a = g a) (h : IsLocalMaxOn f s a) : IsLocalMaxOn g s a :=
   hle.isMaxFilter hfga h
 
-nonrec theorem IsLocalMaxOn.congr {f g : α -> β} {a : α} (h : IsLocalMaxOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMaxOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-/--
-theorem `Filter.EventuallyEq.isLocalMaxOn_iff` / 定理 `Filter.EventuallyEq.isLocalMaxOn_iff`
-
-English:
-theorem Filter.EventuallyEq.isLocalMaxOn_iff
-  statement: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-  proof: heq.isMaxFilter_iff heq.eq_of_nhdsWithin hmem
-
-中文:
-定理 滤子.EventuallyEq.isLocalMaxOn_iff
-  结论: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-  证明: heq.isMaxFilter_iff heq.eq_of_nhdsWithin hmem
-
-Depends on / 依赖: eq_of_nhdsWithin, heq.eq_of_nhdsWithin, heq.isMaxFilter_iff, isMaxFilter_iff
+nonrec theorem IsLocalMaxOn.congr {f g : α → β} {a : α} (h : IsLocalMaxOn f s a)
+    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a ∈ s) : IsLocalMaxOn g s a :=
+  h.congr heq <| heq.eq_of_nhdsWithin hmem
+/-
+**Filter.EventuallyEq.isLocalMaxOn_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.isLocalMaxOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[
+s] a] g) (hmem : a in s) : IsLocalMaxOn f s a ↔ IsLocalMaxOn g s a
+参数：heq : f =ᶠ[𝓝[s] a] g；hmem : a in s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.isMaxFilter_iff`：Filter.EventuallyEq.isMaxFilter_iff
+ {α β : Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (heq : f =ᶠ[l]
+ g) (hfga : f a = g a) : …
+· 使用定理 `Filter.EventuallyEq.eq_of_nhdsWithin`：Filter.EventuallyEq.eq_of_nhdsWith
+in {s : Set α} {f g : α -> β} {a : α} (h : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : f a
+ = g a
 -/
-theorem Filter.EventuallyEq.isLocalMaxOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-    (hmem : a in s) : IsLocalMaxOn f s a ↔ IsLocalMaxOn g s a :=
-heq.isMaxFilter_iff heq.eq_of_nhdsWithin hmem
-
-/--
-theorem `Filter.EventuallyLE.isLocalMinOn` / 定理 `Filter.EventuallyLE.isLocalMinOn`
-
-English:
-theorem Filter.EventuallyLE.isLocalMinOn
-  statement: {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝[s] a] g)
-  proof: hle.isMinFilter hfga h
-
-nonrec theorem IsLocalMinOn.congr {f g : α -> β} {a : α} (h : IsLocalMinOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMinOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-    (hmem : a in s) : IsLocalMinOn f s a ↔ IsLocalMinOn g s a :=
-heq.isMinFilter_iff heq.eq_of_nhdsWithin hmem
-
-nonrec theorem IsLocalExtrOn.congr {f g : α -> β} {a : α} (h : IsLocalExtrOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalExtrOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-中文:
-定理 滤子.EventuallyLE.isLocalMinOn
-  结论: {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝[s] a] g)
-  证明: hle.isMinFilter hfga h
-
-nonrec theorem IsLocalMinOn.congr {f g : α -> β} {a : α} (h : IsLocalMinOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMinOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-    (hmem : a in s) : IsLocalMinOn f s a ↔ IsLocalMinOn g s a :=
-heq.isMinFilter_iff heq.eq_of_nhdsWithin hmem
-
-nonrec theorem IsLocalExtrOn.congr {f g : α -> β} {a : α} (h : IsLocalExtrOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalExtrOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-Depends on / 依赖: hle.isMinFilter, isMinFilter
+theorem Filter.EventuallyEq.isLocalMaxOn_iff {f g : α → β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
+    (hmem : a ∈ s) : IsLocalMaxOn f s a ↔ IsLocalMaxOn g s a :=
+  heq.isMaxFilter_iff <| heq.eq_of_nhdsWithin hmem
+/-
+**Filter.EventuallyLE.isLocalMinOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyLE.isLocalMinOn {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝[s] 
+a] g) (hfga : f a = g a) (h : IsLocalMinOn f s a) : IsLocalMinOn g s a
+参数：hle : f <=ᶠ[𝓝[s] a] g；hfga : f a = g a；h : IsLocalMinOn f s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.isMinFilter`：Filter.EventuallyLE.isMinFilter {α β : 
+Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (hle : f <=ᶠ[l] g) (hf
+ga : f a = g a) (h : …
 -/
-theorem Filter.EventuallyLE.isLocalMinOn {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝[s] a] g)
+theorem Filter.EventuallyLE.isLocalMinOn {f g : α → β} {a : α} (hle : f ≤ᶠ[𝓝[s] a] g)
     (hfga : f a = g a) (h : IsLocalMinOn f s a) : IsLocalMinOn g s a :=
   hle.isMinFilter hfga h
 
-nonrec theorem IsLocalMinOn.congr {f g : α -> β} {a : α} (h : IsLocalMinOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMinOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
+nonrec theorem IsLocalMinOn.congr {f g : α → β} {a : α} (h : IsLocalMinOn f s a)
+    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a ∈ s) : IsLocalMinOn g s a :=
+  h.congr heq <| heq.eq_of_nhdsWithin hmem
 
-nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-    (hmem : a in s) : IsLocalMinOn f s a ↔ IsLocalMinOn g s a :=
-heq.isMinFilter_iff heq.eq_of_nhdsWithin hmem
+nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α → β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
+    (hmem : a ∈ s) : IsLocalMinOn f s a ↔ IsLocalMinOn g s a :=
+  heq.isMinFilter_iff <| heq.eq_of_nhdsWithin hmem
 
-nonrec theorem IsLocalExtrOn.congr {f g : α -> β} {a : α} (h : IsLocalExtrOn f s a)
-    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalExtrOn g s a :=
-h.congr heq heq.eq_of_nhdsWithin hmem
-
-/--
-theorem `Filter.EventuallyEq.isLocalExtrOn_iff` / 定理 `Filter.EventuallyEq.isLocalExtrOn_iff`
-
-English:
-theorem Filter.EventuallyEq.isLocalExtrOn_iff
-  statement: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-  proof: heq.isExtrFilter_iff heq.eq_of_nhdsWithin hmem
-
-中文:
-定理 滤子.EventuallyEq.isLocalExtrOn_iff
-  结论: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-  证明: heq.isExtrFilter_iff heq.eq_of_nhdsWithin hmem
-
-Depends on / 依赖: eq_of_nhdsWithin, heq.eq_of_nhdsWithin, heq.isExtrFilter_iff, isExtrFilter_iff
+nonrec theorem IsLocalExtrOn.congr {f g : α → β} {a : α} (h : IsLocalExtrOn f s a)
+    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a ∈ s) : IsLocalExtrOn g s a :=
+  h.congr heq <| heq.eq_of_nhdsWithin hmem
+/-
+**Filter.EventuallyEq.isLocalExtrOn_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.isLocalExtrOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝
+[s] a] g) (hmem : a in s) : IsLocalExtrOn f s a ↔ IsLocalExtrOn g s a
+参数：heq : f =ᶠ[𝓝[s] a] g；hmem : a in s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.isExtrFilter_iff`：Filter.EventuallyEq.isExtrFilter_i
+ff {α β : Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (heq : f =ᶠ[
+l] g) (hfga : f a = g a) :…
+· 使用定理 `Filter.EventuallyEq.eq_of_nhdsWithin`：Filter.EventuallyEq.eq_of_nhdsWith
+in {s : Set α} {f g : α -> β} {a : α} (h : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : f a
+ = g a
 -/
-theorem Filter.EventuallyEq.isLocalExtrOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
-    (hmem : a in s) : IsLocalExtrOn f s a ↔ IsLocalExtrOn g s a :=
-heq.isExtrFilter_iff heq.eq_of_nhdsWithin hmem
-
-/--
-theorem `Filter.EventuallyLE.isLocalMax` / 定理 `Filter.EventuallyLE.isLocalMax`
-
-English:
-theorem Filter.EventuallyLE.isLocalMax
-  statement: {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝 a] f) (hfga : f a = g a)
-  proof: hle.isMaxFilter hfga h
-
-nonrec theorem IsLocalMax.congr {f g : α -> β} {a : α} (h : IsLocalMax f a) (heq : f =ᶠ[𝓝 a] g) :
-    IsLocalMax g a :=
-  h.congr heq heq.eq_of_nhds
-
-中文:
-定理 滤子.EventuallyLE.isLocalMax
-  结论: {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝 a] f) (hfga : f a = g a)
-  证明: hle.isMaxFilter hfga h
-
-nonrec theorem IsLocalMax.congr {f g : α -> β} {a : α} (h : IsLocalMax f a) (heq : f =ᶠ[𝓝 a] g) :
-    IsLocalMax g a :=
-  h.congr heq heq.eq_of_nhds
-
-Depends on / 依赖: hle.isMaxFilter, isMaxFilter
+theorem Filter.EventuallyEq.isLocalExtrOn_iff {f g : α → β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
+    (hmem : a ∈ s) : IsLocalExtrOn f s a ↔ IsLocalExtrOn g s a :=
+  heq.isExtrFilter_iff <| heq.eq_of_nhdsWithin hmem
+/-
+**Filter.EventuallyLE.isLocalMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyLE.isLocalMax {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝 a] f)
+ (hfga : f a = g a) (h : IsLocalMax f a) : IsLocalMax g a
+参数：hle : g <=ᶠ[𝓝 a] f；hfga : f a = g a；h : IsLocalMax f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.isMaxFilter`：Filter.EventuallyLE.isMaxFilter {α β : 
+Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (hle : g <=ᶠ[l] f) (hf
+ga : f a = g a) (h : …
 -/
-theorem Filter.EventuallyLE.isLocalMax {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝 a] f) (hfga : f a = g a)
+theorem Filter.EventuallyLE.isLocalMax {f g : α → β} {a : α} (hle : g ≤ᶠ[𝓝 a] f) (hfga : f a = g a)
     (h : IsLocalMax f a) : IsLocalMax g a :=
   hle.isMaxFilter hfga h
 
-nonrec theorem IsLocalMax.congr {f g : α -> β} {a : α} (h : IsLocalMax f a) (heq : f =ᶠ[𝓝 a] g) :
+nonrec theorem IsLocalMax.congr {f g : α → β} {a : α} (h : IsLocalMax f a) (heq : f =ᶠ[𝓝 a] g) :
     IsLocalMax g a :=
   h.congr heq heq.eq_of_nhds
-
-/--
-theorem `Filter.EventuallyEq.isLocalMax_iff` / 定理 `Filter.EventuallyEq.isLocalMax_iff`
-
-English:
-theorem Filter.EventuallyEq.isLocalMax_iff
-  given: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
-  proof: heq.isMaxFilter_iff heq.eq_of_nhds
-
-中文:
-定理 滤子.EventuallyEq.isLocalMax_iff
-  条件: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
-  证明: heq.isMaxFilter_iff heq.eq_of_nhds
-
-Depends on / 依赖: eq_of_nhds, heq.eq_of_nhds, heq.isMaxFilter_iff, isMaxFilter_iff
+/-
+**Filter.EventuallyEq.isLocalMax_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.isLocalMax_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a]
+ g) : IsLocalMax f a ↔ IsLocalMax g a
+参数：heq : f =ᶠ[𝓝 a] g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.isMaxFilter_iff`：Filter.EventuallyEq.isMaxFilter_iff
+ {α β : Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (heq : f =ᶠ[l]
+ g) (hfga : f a = g a) : …
+· 使用定理 `Filter.EventuallyEq.eq_of_nhds`：Filter.EventuallyEq.eq_of_nhds {f g : X 
+-> α} (h : f =ᶠ[𝓝 x] g) : f x = g x
 -/
-theorem Filter.EventuallyEq.isLocalMax_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g) :
+theorem Filter.EventuallyEq.isLocalMax_iff {f g : α → β} {a : α} (heq : f =ᶠ[𝓝 a] g) :
     IsLocalMax f a ↔ IsLocalMax g a :=
   heq.isMaxFilter_iff heq.eq_of_nhds
-
-/--
-theorem `Filter.EventuallyLE.isLocalMin` / 定理 `Filter.EventuallyLE.isLocalMin`
-
-English:
-theorem Filter.EventuallyLE.isLocalMin
-  statement: {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝 a] g) (hfga : f a = g a)
-  proof: hle.isMinFilter hfga h
-
-nonrec theorem IsLocalMin.congr {f g : α -> β} {a : α} (h : IsLocalMin f a) (heq : f =ᶠ[𝓝 a] g) :
-    IsLocalMin g a :=
-  h.congr heq heq.eq_of_nhds
-
-中文:
-定理 滤子.EventuallyLE.isLocalMin
-  结论: {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝 a] g) (hfga : f a = g a)
-  证明: hle.isMinFilter hfga h
-
-nonrec theorem IsLocalMin.congr {f g : α -> β} {a : α} (h : IsLocalMin f a) (heq : f =ᶠ[𝓝 a] g) :
-    IsLocalMin g a :=
-  h.congr heq heq.eq_of_nhds
-
-Depends on / 依赖: hle.isMinFilter, isMinFilter
+/-
+**Filter.EventuallyLE.isLocalMin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyLE.isLocalMin {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝 a] g)
+ (hfga : f a = g a) (h : IsLocalMin f a) : IsLocalMin g a
+参数：hle : f <=ᶠ[𝓝 a] g；hfga : f a = g a；h : IsLocalMin f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.isMinFilter`：Filter.EventuallyLE.isMinFilter {α β : 
+Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (hle : f <=ᶠ[l] g) (hf
+ga : f a = g a) (h : …
 -/
-theorem Filter.EventuallyLE.isLocalMin {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝 a] g) (hfga : f a = g a)
+theorem Filter.EventuallyLE.isLocalMin {f g : α → β} {a : α} (hle : f ≤ᶠ[𝓝 a] g) (hfga : f a = g a)
     (h : IsLocalMin f a) : IsLocalMin g a :=
   hle.isMinFilter hfga h
 
-nonrec theorem IsLocalMin.congr {f g : α -> β} {a : α} (h : IsLocalMin f a) (heq : f =ᶠ[𝓝 a] g) :
+nonrec theorem IsLocalMin.congr {f g : α → β} {a : α} (h : IsLocalMin f a) (heq : f =ᶠ[𝓝 a] g) :
     IsLocalMin g a :=
   h.congr heq heq.eq_of_nhds
-
-/--
-theorem `Filter.EventuallyEq.isLocalMin_iff` / 定理 `Filter.EventuallyEq.isLocalMin_iff`
-
-English:
-theorem Filter.EventuallyEq.isLocalMin_iff
-  given: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
-  proof: heq.isMinFilter_iff heq.eq_of_nhds
-
-nonrec theorem IsLocalExtr.congr {f g : α -> β} {a : α} (h : IsLocalExtr f a) (heq : f =ᶠ[𝓝 a] g) :
-    IsLocalExtr g a :=
-  h.congr heq heq.eq_of_nhds
-
-中文:
-定理 滤子.EventuallyEq.isLocalMin_iff
-  条件: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
-  证明: heq.isMinFilter_iff heq.eq_of_nhds
-
-nonrec theorem IsLocalExtr.congr {f g : α -> β} {a : α} (h : IsLocalExtr f a) (heq : f =ᶠ[𝓝 a] g) :
-    IsLocalExtr g a :=
-  h.congr heq heq.eq_of_nhds
-
-Depends on / 依赖: eq_of_nhds, heq.eq_of_nhds, heq.isMinFilter_iff, isMinFilter_iff
+/-
+**Filter.EventuallyEq.isLocalMin_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.isLocalMin_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a]
+ g) : IsLocalMin f a ↔ IsLocalMin g a
+参数：heq : f =ᶠ[𝓝 a] g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.isMinFilter_iff`：Filter.EventuallyEq.isMinFilter_iff
+ {α β : Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (heq : f =ᶠ[l]
+ g) (hfga : f a = g a) : …
+· 使用定理 `Filter.EventuallyEq.eq_of_nhds`：Filter.EventuallyEq.eq_of_nhds {f g : X 
+-> α} (h : f =ᶠ[𝓝 x] g) : f x = g x
 -/
-theorem Filter.EventuallyEq.isLocalMin_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g) :
+theorem Filter.EventuallyEq.isLocalMin_iff {f g : α → β} {a : α} (heq : f =ᶠ[𝓝 a] g) :
     IsLocalMin f a ↔ IsLocalMin g a :=
   heq.isMinFilter_iff heq.eq_of_nhds
 
-nonrec theorem IsLocalExtr.congr {f g : α -> β} {a : α} (h : IsLocalExtr f a) (heq : f =ᶠ[𝓝 a] g) :
+nonrec theorem IsLocalExtr.congr {f g : α → β} {a : α} (h : IsLocalExtr f a) (heq : f =ᶠ[𝓝 a] g) :
     IsLocalExtr g a :=
   h.congr heq heq.eq_of_nhds
-
-/--
-theorem `Filter.EventuallyEq.isLocalExtr_iff` / 定理 `Filter.EventuallyEq.isLocalExtr_iff`
-
-English:
-theorem Filter.EventuallyEq.isLocalExtr_iff
-  given: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
-  proof: heq.isExtrFilter_iff heq.eq_of_nhds
-
-中文:
-定理 滤子.EventuallyEq.isLocalExtr_iff
-  条件: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
-  证明: heq.isExtrFilter_iff heq.eq_of_nhds
-
-Depends on / 依赖: eq_of_nhds, heq.eq_of_nhds, heq.isExtrFilter_iff, isExtrFilter_iff
+/-
+**Filter.EventuallyEq.isLocalExtr_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.isLocalExtr_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a
+] g) : IsLocalExtr f a ↔ IsLocalExtr g a
+参数：heq : f =ᶠ[𝓝 a] g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.isExtrFilter_iff`：Filter.EventuallyEq.isExtrFilter_i
+ff {α β : Type*} [Preorder β] {f g : α -> β} {a : α} {l : Filter α} (heq : f =ᶠ[
+l] g) (hfga : f a = g a) :…
+· 使用定理 `Filter.EventuallyEq.eq_of_nhds`：Filter.EventuallyEq.eq_of_nhds {f g : X 
+-> α} (h : f =ᶠ[𝓝 x] g) : f x = g x
 -/
-theorem Filter.EventuallyEq.isLocalExtr_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g) :
+theorem Filter.EventuallyEq.isLocalExtr_iff {f g : α → β} {a : α} (heq : f =ᶠ[𝓝 a] g) :
     IsLocalExtr f a ↔ IsLocalExtr g a :=
   heq.isExtrFilter_iff heq.eq_of_nhds
 
 end Eventually
 
-/--
-lemma `isLocalMax_of_mono_anti'` / 引理 `isLocalMax_of_mono_anti'`
+/-- If `f` is monotone to the left and antitone to the right, then it has a local maximum. -/
+/-
+**isLocalMax_of_mono_anti'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isLocalMax_of_mono_anti' {α : Type*} [TopologicalSpace α] [LinearOrder α] 
+{β : Type*} [Preorder β] {b : α} {f : α -> β} {a : Set α} (ha : a in 𝓝[<=] b) {c
+ : Set α} (hc : c in 𝓝[>=] b) (h₀ : MonotoneOn f a) (h₁ : AntitoneOn f c) : IsLo
+calMax f b
+参数：ha : a in 𝓝[<=] b；hc : c in 𝓝[>=] b；h₀ : MonotoneOn f a；h₁ : AntitoneOn f c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_of_mem_nhdsWithin`：mem_of_mem_nhdsWithin {a : α} {s t : Set α} (ha :
+ a in s) (ht : t in 𝓝[s] a) : a in t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `nhds_of_Ici_Iic`：nhds_of_Ici_Iic [LinearOrder α] {b : α} {L : Set α} (hL
+ : L in 𝓝[<=] b) {R : Set α} (hR : R in 𝓝[>=] b) : L inter Iic b union R inter I
+ci b …
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 
-English:
-lemma isLocalMax_of_mono_anti'
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: have : b in a := mem_of_mem_nhdsWithin (by simp) ha
-  have : b in c := mem_of_mem_nhdsWithin (by simp) hc
-  mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)
-
-中文:
-引理 isLocalMax_of_mono_anti'
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: have : b in a := mem_of_mem_nhdsWithin (by simp) ha
-  have : b in c := mem_of_mem_nhdsWithin (by simp) hc
-  mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)
-
-Depends on / 依赖: le_total, mem_of_mem_nhdsWithin, mem_of_superset, nhds_of_Ici_Iic
+--- 原说明 ---
+If `f` is monotone to the left and antitone to the right, then it has a local ma
+ximum.
 -/
 lemma isLocalMax_of_mono_anti' {α : Type*} [TopologicalSpace α] [LinearOrder α]
-    {β : Type*} [Preorder β] {b : α} {f : α -> β}
-    {a : Set α} (ha : a in 𝓝[<=] b) {c : Set α} (hc : c in 𝓝[>=] b)
+    {β : Type*} [Preorder β] {b : α} {f : α → β}
+    {a : Set α} (ha : a ∈ 𝓝[≤] b) {c : Set α} (hc : c ∈ 𝓝[≥] b)
     (h₀ : MonotoneOn f a) (h₁ : AntitoneOn f c) : IsLocalMax f b :=
-  have : b in a := mem_of_mem_nhdsWithin (by simp) ha
-  have : b in c := mem_of_mem_nhdsWithin (by simp) hc
+  have : b ∈ a := mem_of_mem_nhdsWithin (by simp) ha
+  have : b ∈ c := mem_of_mem_nhdsWithin (by simp) hc
   mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)
 
-/--
-lemma `isLocalMin_of_anti_mono'` / 引理 `isLocalMin_of_anti_mono'`
+/-- If `f` is antitone to the left and monotone to the right, then it has a local minimum. -/
+/-
+**isLocalMin_of_anti_mono'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isLocalMin_of_anti_mono' {α : Type*} [TopologicalSpace α] [LinearOrder α] 
+{β : Type*} [Preorder β] {b : α} {f : α -> β} {a : Set α} (ha : a in 𝓝[<=] b) {c
+ : Set α} (hc : c in 𝓝[>=] b) (h₀ : AntitoneOn f a) (h₁ : MonotoneOn f c) : IsLo
+calMin f b
+参数：ha : a in 𝓝[<=] b；hc : c in 𝓝[>=] b；h₀ : AntitoneOn f a；h₁ : MonotoneOn f c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_of_mem_nhdsWithin`：mem_of_mem_nhdsWithin {a : α} {s t : Set α} (ha :
+ a in s) (ht : t in 𝓝[s] a) : a in t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `nhds_of_Ici_Iic`：nhds_of_Ici_Iic [LinearOrder α] {b : α} {L : Set α} (hL
+ : L in 𝓝[<=] b) {R : Set α} (hR : R in 𝓝[>=] b) : L inter Iic b union R inter I
+ci b …
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 
-English:
-lemma isLocalMin_of_anti_mono'
-  statement: {α : Type*} [TopologicalSpace α] [LinearOrder α]
-  proof: have : b in a := mem_of_mem_nhdsWithin (by simp) ha
-  have : b in c := mem_of_mem_nhdsWithin (by simp) hc
-  mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)
-
-中文:
-引理 isLocalMin_of_anti_mono'
-  结论: {α : 类型} [拓扑空间 α] [线性序 α]
-  证明: have : b in a := mem_of_mem_nhdsWithin (by simp) ha
-  have : b in c := mem_of_mem_nhdsWithin (by simp) hc
-  mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)
-
-Depends on / 依赖: le_total, mem_of_mem_nhdsWithin, mem_of_superset, nhds_of_Ici_Iic
+--- 原说明 ---
+If `f` is antitone to the left and monotone to the right, then it has a local mi
+nimum.
 -/
 lemma isLocalMin_of_anti_mono' {α : Type*} [TopologicalSpace α] [LinearOrder α]
-    {β : Type*} [Preorder β] {b : α} {f : α -> β}
-    {a : Set α} (ha : a in 𝓝[<=] b) {c : Set α} (hc : c in 𝓝[>=] b)
+    {β : Type*} [Preorder β] {b : α} {f : α → β}
+    {a : Set α} (ha : a ∈ 𝓝[≤] b) {c : Set α} (hc : c ∈ 𝓝[≥] b)
     (h₀ : AntitoneOn f a) (h₁ : MonotoneOn f c) : IsLocalMin f b :=
-  have : b in a := mem_of_mem_nhdsWithin (by simp) ha
-  have : b in c := mem_of_mem_nhdsWithin (by simp) hc
+  have : b ∈ a := mem_of_mem_nhdsWithin (by simp) ha
+  have : b ∈ c := mem_of_mem_nhdsWithin (by simp) hc
   mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)

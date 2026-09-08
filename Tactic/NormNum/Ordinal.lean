@@ -30,57 +30,26 @@ updated and the extensions in this file are no longer needed. -/
 #guard_msgs in
 #norm_num (12 : Ordinal.{0}) * (5 : Ordinal.{0})
 
-/--
-lemma `isNat_ordinalMul.` / 引理 `isNat_ordinalMul.`
-
-English:
-lemma isNat_ordinalMul.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
-
-中文:
-引理 is自然数_ordinalMul.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalMul.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta
+.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalMul.{u} : forall {a b : Ordinal.{u}} {an bn rn : Nat},
-    IsNat a an -> IsNat b bn -> an * bn = rn -> IsNat (a * b) rn
-| _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm natCast_mul ..⟩
+lemma isNat_ordinalMul.{u} : ∀ {a b : Ordinal.{u}} {an bn rn : ℕ},
+    IsNat a an → IsNat b bn → an * bn = rn → IsNat (a * b) rn
+  | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm <| natCast_mul ..⟩
 
 /-- The `norm_num` extension for multiplication on ordinals. -/
 @[norm_num (_ : Ordinal) * (_ : Ordinal)]
-/--
-Definition of `evalOrdinalMul` / `evalOrdinalMul` 的定义
+/-
+**Mathlib.Meta.NormNum.evalOrdinalMul** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.No
+rmNum`。
+形式化陈述：evalOrdinalMul : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalMul
-  signature: : NormNumExt where
-  body: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) * ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! * bn.natLit!)
-have : ($an * $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalMul $pa $pb (.refl $rn)))
-    | _, _ => throwError "not multiplication on ordinals"
-
-中文:
-定义 evalOrdinalMul
-  签名: : NormNumExt where
-  定义体: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) * ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! * bn.natLit!)
-have : ($an * $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalMul $pa $pb (.refl $rn)))
-    | _, _ => throwError "not multiplication on ordinals"
+--- 原说明 ---
+The `norm_num` extension for multiplication on ordinals.
 -/
 def evalOrdinalMul : NormNumExt where
   eval {u α} e := do
@@ -91,176 +60,91 @@ def evalOrdinalMul : NormNumExt where
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! * bn.natLit!)
-have : ($an * $bn) =Q rn := ⟨⟩
+      have rn : Q(ℕ) := mkRawNatLit (an.natLit! * bn.natLit!)
+      have : ($an * $bn) =Q $rn := ⟨⟩
       pure (.isNat i rn q(isNat_ordinalMul $pa $pb (.refl $rn)))
     | _, _ => throwError "not multiplication on ordinals"
 
 /-- info: 5 ≤ 12 -/
 #guard_msgs in
-#norm_num (5 : Ordinal.{0}) <= 12
+#norm_num (5 : Ordinal.{0}) ≤ 12
 
 /-- info: 5 < 12 -/
 #guard_msgs in
 #norm_num (5 : Ordinal.{0}) < 12
 
-/--
-lemma `isNat_ordinalLE_true.` / 引理 `isNat_ordinalLE_true.`
-
-English:
-lemma isNat_ordinalLE_true.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn : Nat},
-
-中文:
-引理 is自然数_ordinalLE_true.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalLE_true.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalLE_true.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
-    IsNat a an -> IsNat b bn -> decide (an <= bn) = true -> a <= b
-| _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => Nat.cast_le.mpr of_decide_eq_true h
-
-/--
-lemma `isNat_ordinalLE_false.` / 引理 `isNat_ordinalLE_false.`
-
-English:
-lemma isNat_ordinalLE_false.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn : Nat},
-
-中文:
-引理 is自然数_ordinalLE_false.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
+lemma isNat_ordinalLE_true.{u} : ∀ {a b : Ordinal.{u}} {an bn : ℕ},
+    IsNat a an → IsNat b bn → decide (an ≤ bn) = true → a ≤ b
+  | _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => Nat.cast_le.mpr <| of_decide_eq_true h
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalLE_false.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib
+.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalLE_false.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
-    IsNat a an -> IsNat b bn -> decide (an <= bn) = false -> ¬a <= b
-.mpr of_decide_eq_false h | _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => not_iff_not.mpr Nat.cast_le
-
-/--
-lemma `isNat_ordinalLT_true.` / 引理 `isNat_ordinalLT_true.`
-
-English:
-lemma isNat_ordinalLT_true.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn : Nat},
-
-中文:
-引理 is自然数_ordinalLT_true.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
+lemma isNat_ordinalLE_false.{u} : ∀ {a b : Ordinal.{u}} {an bn : ℕ},
+    IsNat a an → IsNat b bn → decide (an ≤ bn) = false → ¬a ≤ b
+  | _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => not_iff_not.mpr Nat.cast_le |>.mpr <| of_decide_eq_false h
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalLT_true.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalLT_true.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
-    IsNat a an -> IsNat b bn -> decide (an < bn) = true -> a < b
-| _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => Nat.cast_lt.mpr of_decide_eq_true h
-
-/--
-lemma `isNat_ordinalLT_false.` / 引理 `isNat_ordinalLT_false.`
-
-English:
-lemma isNat_ordinalLT_false.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn : Nat},
-
-中文:
-引理 is自然数_ordinalLT_false.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
+lemma isNat_ordinalLT_true.{u} : ∀ {a b : Ordinal.{u}} {an bn : ℕ},
+    IsNat a an → IsNat b bn → decide (an < bn) = true → a < b
+  | _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => Nat.cast_lt.mpr <| of_decide_eq_true h
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalLT_false.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib
+.Meta.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalLT_false.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
-    IsNat a an -> IsNat b bn -> decide (an < bn) = false -> ¬a < b
-.mpr of_decide_eq_false h | _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => not_iff_not.mpr Nat.cast_lt
+lemma isNat_ordinalLT_false.{u} : ∀ {a b : Ordinal.{u}} {an bn : ℕ},
+    IsNat a an → IsNat b bn → decide (an < bn) = false → ¬a < b
+  | _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, h => not_iff_not.mpr Nat.cast_lt |>.mpr <| of_decide_eq_false h
 
 /-- The `norm_num` extension for inequality on ordinals. -/
-@[norm_num (_ : Ordinal) <= (_ : Ordinal)]
-/--
-Definition of `evalOrdinalLE` / `evalOrdinalLE` 的定义
+@[norm_num (_ : Ordinal) ≤ (_ : Ordinal)]
+/-
+**Mathlib.Meta.NormNum.evalOrdinalLE** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Nor
+mNum`。
+形式化陈述：evalOrdinalLE : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalLE
-  signature: : NormNumExt where
-  body: do
-    let ⟨_⟩ ← assertLevelDefEqQ u ql(0)
-    match α, e with
-    | ~q(Prop), ~q(($a : Ordinal) <= ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u_1}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      if an.natLit! <= bn.natLit! then
-        have : decide ($an <= $bn) =Q true := ⟨⟩
-        pure (.isTrue q(isNat_ordinalLE_true $pa $pb $this))
-      else
-        have : decide ($an <= $bn) =Q false := ⟨⟩
-        pure (.isFalse q(isNat_ordinalLE_false $pa $pb $this))
-    | _, _ => throwError "not inequality on ordinals"
-
-中文:
-定义 evalOrdinalLE
-  签名: : NormNumExt where
-  定义体: do
-    let ⟨_⟩ ← assertLevelDefEqQ u ql(0)
-    match α, e with
-    | ~q(Prop), ~q(($a : Ordinal) <= ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u_1}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      if an.natLit! <= bn.natLit! then
-        have : decide ($an <= $bn) =Q true := ⟨⟩
-        pure (.isTrue q(isNat_ordinalLE_true $pa $pb $this))
-      else
-        have : decide ($an <= $bn) =Q false := ⟨⟩
-        pure (.isFalse q(isNat_ordinalLE_false $pa $pb $this))
-    | _, _ => throwError "not inequality on ordinals"
+--- 原说明 ---
+The `norm_num` extension for inequality on ordinals.
 -/
 def evalOrdinalLE : NormNumExt where
   eval {u α} e := do
     let ⟨_⟩ ← assertLevelDefEqQ u ql(0)
     match α, e with
-    | ~q(Prop), ~q(($a : Ordinal) <= ($b : Ordinal)) =>
+    | ~q(Prop), ~q(($a : Ordinal) ≤ ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u_1}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
-      if an.natLit! <= bn.natLit! then
-        have : decide ($an <= $bn) =Q true := ⟨⟩
+      if an.natLit! ≤ bn.natLit! then
+        have : decide ($an ≤ $bn) =Q true := ⟨⟩
         pure (.isTrue q(isNat_ordinalLE_true $pa $pb $this))
       else
-        have : decide ($an <= $bn) =Q false := ⟨⟩
+        have : decide ($an ≤ $bn) =Q false := ⟨⟩
         pure (.isFalse q(isNat_ordinalLE_false $pa $pb $this))
     | _, _ => throwError "not inequality on ordinals"
 
 /-- The `norm_num` extension for strict inequality on ordinals. -/
 @[norm_num (_ : Ordinal) < (_ : Ordinal)]
-/--
-Definition of `evalOrdinalLT` / `evalOrdinalLT` 的定义
+/-
+**Mathlib.Meta.NormNum.evalOrdinalLT** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Nor
+mNum`。
+形式化陈述：evalOrdinalLT : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalLT
-  signature: : NormNumExt where
-  body: do
-    let ⟨_⟩ ← assertLevelDefEqQ u ql(0)
-    match α, e with
-    | ~q(Prop), ~q(($a : Ordinal) < ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u_1}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      if an.natLit! < bn.natLit! then
-        have : decide ($an < $bn) =Q true := ⟨⟩
-        pure (.isTrue q(isNat_ordinalLT_true $pa $pb $this))
-      else
-        have : decide ($an < $bn) =Q false := ⟨⟩
-        pure (.isFalse q(isNat_ordinalLT_false $pa $pb $this))
-    | _, _ => throwError "not strict inequality on ordinals"
-
-中文:
-定义 evalOrdinalLT
-  签名: : NormNumExt where
-  定义体: do
-    let ⟨_⟩ ← assertLevelDefEqQ u ql(0)
-    match α, e with
-    | ~q(Prop), ~q(($a : Ordinal) < ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u_1}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      if an.natLit! < bn.natLit! then
-        have : decide ($an < $bn) =Q true := ⟨⟩
-        pure (.isTrue q(isNat_ordinalLT_true $pa $pb $this))
-      else
-        have : decide ($an < $bn) =Q false := ⟨⟩
-        pure (.isFalse q(isNat_ordinalLT_false $pa $pb $this))
-    | _, _ => throwError "not strict inequality on ordinals"
+--- 原说明 ---
+The `norm_num` extension for strict inequality on ordinals.
 -/
 def evalOrdinalLT : NormNumExt where
   eval {u α} e := do
@@ -282,59 +166,26 @@ def evalOrdinalLT : NormNumExt where
 #guard_msgs in
 #norm_num (12 : Ordinal.{0}) - 5
 
-/--
-lemma `isNat_ordinalSub.` / 引理 `isNat_ordinalSub.`
-
-English:
-lemma isNat_ordinalSub.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
-
-中文:
-引理 is自然数_ordinalSub.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
-
-Depends on / 依赖: And.right, _closure_eq_self, closed_nhdsSet_basis
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalSub.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta
+.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalSub.{u} : forall {a b : Ordinal.{u}} {an bn rn : Nat},
-    IsNat a an -> IsNat b bn -> an - bn = rn -> IsNat (a - b) rn
-| _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm natCast_sub ..⟩
+lemma isNat_ordinalSub.{u} : ∀ {a b : Ordinal.{u}} {an bn rn : ℕ},
+    IsNat a an → IsNat b bn → an - bn = rn → IsNat (a - b) rn
+  | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm <| natCast_sub ..⟩
 
 /-- The `norm_num` extension for subtraction on ordinals. -/
 @[norm_num (_ : Ordinal) - (_ : Ordinal)]
-/--
-Definition of `evalOrdinalSub` / `evalOrdinalSub` 的定义
+/-
+**Mathlib.Meta.NormNum.evalOrdinalSub** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.No
+rmNum`。
+形式化陈述：evalOrdinalSub : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalSub
-  signature: : NormNumExt where
-  body: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) - ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! - bn.natLit!)
-have : ($an - $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalSub $pa $pb (.refl $rn)))
-    | _, _ => throwError "not subtration on ordinals"
-
-中文:
-定义 evalOrdinalSub
-  签名: : NormNumExt where
-  定义体: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) - ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! - bn.natLit!)
-have : ($an - $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalSub $pa $pb (.refl $rn)))
-    | _, _ => throwError "not subtration on ordinals"
+--- 原说明 ---
+The `norm_num` extension for subtraction on ordinals.
 -/
 def evalOrdinalSub : NormNumExt where
   eval {u α} e := do
@@ -345,8 +196,8 @@ def evalOrdinalSub : NormNumExt where
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! - bn.natLit!)
-have : ($an - $bn) =Q rn := ⟨⟩
+      have rn : Q(ℕ) := mkRawNatLit (an.natLit! - bn.natLit!)
+      have : ($an - $bn) =Q $rn := ⟨⟩
       pure (.isNat i rn q(isNat_ordinalSub $pa $pb (.refl $rn)))
     | _, _ => throwError "not subtration on ordinals"
 
@@ -354,59 +205,26 @@ have : ($an - $bn) =Q rn := ⟨⟩
 #guard_msgs in
 #norm_num (12 : Ordinal.{0}) / 5
 
-/--
-lemma `isNat_ordinalDiv.` / 引理 `isNat_ordinalDiv.`
-
-English:
-lemma isNat_ordinalDiv.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
-
-中文:
-引理 is自然数_ordinalDiv.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalDiv.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta
+.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalDiv.{u} : forall {a b : Ordinal.{u}} {an bn rn : Nat},
-    IsNat a an -> IsNat b bn -> an / bn = rn -> IsNat (a / b) rn
-| _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm natCast_div ..⟩
+lemma isNat_ordinalDiv.{u} : ∀ {a b : Ordinal.{u}} {an bn rn : ℕ},
+    IsNat a an → IsNat b bn → an / bn = rn → IsNat (a / b) rn
+  | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm <| natCast_div ..⟩
 
 /-- The `norm_num` extension for division on ordinals. -/
 @[norm_num (_ : Ordinal) / (_ : Ordinal)]
-/--
-Definition of `evalOrdinalDiv` / `evalOrdinalDiv` 的定义
+/-
+**Mathlib.Meta.NormNum.evalOrdinalDiv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.No
+rmNum`。
+形式化陈述：evalOrdinalDiv : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalDiv
-  signature: : NormNumExt where
-  body: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) / ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! / bn.natLit!)
-have : ($an / $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalDiv $pa $pb (.refl $rn)))
-    | _, _ => throwError "not division on ordinals"
-
-中文:
-定义 evalOrdinalDiv
-  签名: : NormNumExt where
-  定义体: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) / ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! / bn.natLit!)
-have : ($an / $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalDiv $pa $pb (.refl $rn)))
-    | _, _ => throwError "not division on ordinals"
-
-Depends on / 依赖: CompactSpace, NormalSpace, NormalSpace.of_compactSpace_r1Space, R1Space, of_compactSpace_r1Space
+--- 原说明 ---
+The `norm_num` extension for division on ordinals.
 -/
 def evalOrdinalDiv : NormNumExt where
   eval {u α} e := do
@@ -417,8 +235,8 @@ def evalOrdinalDiv : NormNumExt where
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! / bn.natLit!)
-have : ($an / $bn) =Q rn := ⟨⟩
+      have rn : Q(ℕ) := mkRawNatLit (an.natLit! / bn.natLit!)
+      have : ($an / $bn) =Q $rn := ⟨⟩
       pure (.isNat i rn q(isNat_ordinalDiv $pa $pb (.refl $rn)))
     | _, _ => throwError "not division on ordinals"
 
@@ -426,61 +244,26 @@ have : ($an / $bn) =Q rn := ⟨⟩
 #guard_msgs in
 #norm_num (12 : Ordinal.{0}) % 5
 
-/--
-lemma `isNat_ordinalMod.` / 引理 `isNat_ordinalMod.`
-
-English:
-lemma isNat_ordinalMod.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
-
-中文:
-引理 is自然数_ordinalMod.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
-
-Depends on / 依赖: NormalSpace, NormalSpace.of_regularSpace_lindelofSpace, of_regularSpace_lindelofSpace
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalMod.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta
+.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalMod.{u} : forall {a b : Ordinal.{u}} {an bn rn : Nat},
-    IsNat a an -> IsNat b bn -> an % bn = rn -> IsNat (a % b) rn
-| _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm natCast_mod ..⟩
+lemma isNat_ordinalMod.{u} : ∀ {a b : Ordinal.{u}} {an bn rn : ℕ},
+    IsNat a an → IsNat b bn → an % bn = rn → IsNat (a % b) rn
+  | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm <| natCast_mod ..⟩
 
 /-- The `norm_num` extension for modulo on ordinals. -/
 @[norm_num (_ : Ordinal) % (_ : Ordinal)]
-/--
-Definition of `evalOrdinalMod` / `evalOrdinalMod` 的定义
+/-
+**Mathlib.Meta.NormNum.evalOrdinalMod** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.No
+rmNum`。
+形式化陈述：evalOrdinalMod : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalMod
-  signature: : NormNumExt where
-  body: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) % ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! % bn.natLit!)
-have : ($an % $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalMod $pa $pb (.refl $rn)))
-    | _, _ => throwError "not modulo on ordinals"
-
-中文:
-定义 evalOrdinalMod
-  签名: : NormNumExt where
-  定义体: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) % ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! % bn.natLit!)
-have : ($an % $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalMod $pa $pb (.refl $rn)))
-    | _, _ => throwError "not modulo on ordinals"
-
-Depends on / 依赖: NormalSpace, NormalSpace.of_regularSpace_secondCountableTopology, of_regularSpace_secondCountableTopology
+--- 原说明 ---
+The `norm_num` extension for modulo on ordinals.
 -/
 def evalOrdinalMod : NormNumExt where
   eval {u α} e := do
@@ -491,66 +274,30 @@ def evalOrdinalMod : NormNumExt where
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! % bn.natLit!)
-have : ($an % $bn) =Q rn := ⟨⟩
+      have rn : Q(ℕ) := mkRawNatLit (an.natLit! % bn.natLit!)
+      have : ($an % $bn) =Q $rn := ⟨⟩
       pure (.isNat i rn q(isNat_ordinalMod $pa $pb (.refl $rn)))
     | _, _ => throwError "not modulo on ordinals"
-
-/--
-lemma `isNat_ordinalOPow.` / 引理 `isNat_ordinalOPow.`
-
-English:
-lemma isNat_ordinalOPow.{u}
-  statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
-
-中文:
-引理 is自然数_ordinalOPow.{u}
-  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
-
-Depends on / 依赖: NormalSpace, T1Space, T4Space
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalOPow.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Met
+a.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalOPow.{u} : forall {a b : Ordinal.{u}} {an bn rn : Nat},
-    IsNat a an -> IsNat b bn -> an ^ bn = rn -> IsNat (a ^ b) rn
+lemma isNat_ordinalOPow.{u} : ∀ {a b : Ordinal.{u}} {an bn rn : ℕ},
+    IsNat a an → IsNat b bn → an ^ bn = rn → IsNat (a ^ b) rn
   | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨(opow_natCast ..).trans (natCast_pow ..).symm⟩
 
 /-- The `norm_num` extension for homogeneous power on ordinals. -/
 @[norm_num (_ : Ordinal) ^ (_ : Ordinal)]
-/--
-Definition of `evalOrdinalOPow` / `evalOrdinalOPow` 的定义
+/-
+**Mathlib.Meta.NormNum.evalOrdinalOPow** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+形式化陈述：evalOrdinalOPow : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalOPow
-  signature: : NormNumExt where
-  body: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
-have : ($an ^ $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalOPow $pa $pb (.refl $rn)))
-    | _, _ => throwError "not homogeneous power on ordinals"
-
-中文:
-定义 evalOrdinalOPow
-  签名: : NormNumExt where
-  定义体: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Ordinal)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
-have : ($an ^ $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalOPow $pa $pb (.refl $rn)))
-    | _, _ => throwError "not homogeneous power on ordinals"
-
-Depends on / 依赖: T3Space, T4Space, T4Space.t3Space, t3Space
+--- 原说明 ---
+The `norm_num` extension for homogeneous power on ordinals.
 -/
 def evalOrdinalOPow : NormNumExt where
   eval {u α} e := do
@@ -561,79 +308,49 @@ def evalOrdinalOPow : NormNumExt where
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
-have : ($an ^ $bn) =Q rn := ⟨⟩
+      have rn : Q(ℕ) := mkRawNatLit (an.natLit! ^ bn.natLit!)
+      have : ($an ^ $bn) =Q $rn := ⟨⟩
       pure (.isNat i rn q(isNat_ordinalOPow $pa $pb (.refl $rn)))
     | _, _ => throwError "not homogeneous power on ordinals"
 
 /-- info: 12 ^ 2 -/
 #guard_msgs in
-#norm_num (12 : Ordinal.{0}) ^ (2 : Nat)
+#norm_num (12 : Ordinal.{0}) ^ (2 : ℕ)
 
-/--
-lemma `isNat_ordinalNPow.` / 引理 `isNat_ordinalNPow.`
-
-English:
-lemma isNat_ordinalNPow.{u}
-  statement: forall {a : Ordinal.{u}} {b an bn rn : Nat},
-
-中文:
-引理 is自然数_ordinalNPow.{u}
-  结论: 对任意 {a : 序数.{u}} {b an bn rn : 自然数},
+/-
+**Mathlib.Meta.NormNum.isNat_ordinalNPow.** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Met
+a.NormNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isNat_ordinalNPow.{u} : forall {a : Ordinal.{u}} {b an bn rn : Nat},
-    IsNat a an -> IsNat b bn -> an ^ bn = rn -> IsNat (a ^ b) rn
-| _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm natCast_pow ..⟩
+lemma isNat_ordinalNPow.{u} : ∀ {a : Ordinal.{u}} {b an bn rn : ℕ},
+    IsNat a an → IsNat b bn → an ^ bn = rn → IsNat (a ^ b) rn
+  | _, _, _, _, _, ⟨rfl⟩, ⟨rfl⟩, rfl => ⟨Eq.symm <| natCast_pow ..⟩
 
 /-- The `norm_num` extension for natural power on ordinals. -/
-@[norm_num (_ : Ordinal) ^ (_ : Nat)]
-/--
-Definition of `evalOrdinalNPow` / `evalOrdinalNPow` 的定义
+@[norm_num (_ : Ordinal) ^ (_ : ℕ)]
+/-
+**Mathlib.Meta.NormNum.evalOrdinalNPow** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.N
+ormNum`。
+形式化陈述：evalOrdinalNPow : NormNumExt where eval {u α} e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalOrdinalNPow
-  signature: : NormNumExt where
-  body: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Nat)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b q(inferInstance)
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
-have : ($an ^ $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalNPow $pa $pb (.refl $rn)))
-    | _, _ => throwError "not natural power on ordinals"
-
-中文:
-定义 evalOrdinalNPow
-  签名: : NormNumExt where
-  定义体: do
-    let some u' := u.dec | throwError "level is not succ"
-    haveI' : u =QL u' + 1 := ⟨⟩
-    match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Nat)) =>
-      let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
-      let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriveNat b q(inferInstance)
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
-have : ($an ^ $bn) =Q rn := ⟨⟩
-      pure (.isNat i rn q(isNat_ordinalNPow $pa $pb (.refl $rn)))
-    | _, _ => throwError "not natural power on ordinals"
+--- 原说明 ---
+The `norm_num` extension for natural power on ordinals.
 -/
 def evalOrdinalNPow : NormNumExt where
   eval {u α} e := do
     let some u' := u.dec | throwError "level is not succ"
     haveI' : u =QL u' + 1 := ⟨⟩
     match α, e with
-    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Nat)) =>
+    | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : ℕ)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b q(inferInstance)
-      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
-have : ($an ^ $bn) =Q rn := ⟨⟩
+      have rn : Q(ℕ) := mkRawNatLit (an.natLit! ^ bn.natLit!)
+      have : ($an ^ $bn) =Q $rn := ⟨⟩
       pure (.isNat i rn q(isNat_ordinalNPow $pa $pb (.refl $rn)))
     | _, _ => throwError "not natural power on ordinals"
 
 end Mathlib.Meta.NormNum
+

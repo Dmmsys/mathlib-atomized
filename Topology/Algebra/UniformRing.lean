@@ -50,75 +50,44 @@ open IsDenseInducing UniformSpace Function
 section one_and_mul
 variable (α : Type*) [Ring α] [UniformSpace α]
 
-/--
-Instance `one` / 实例 `one`
-
-English:
-instance one
-  signature: : One (Completion α)
-  body: ⟨(1 : α)⟩
-
-中文:
-实例 one
-  签名: : 幺 (完备化 α)
-  定义体: ⟨(1 : α)⟩
+/-
+**UniformSpace.Completion.one** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Completion
+`。
+形式化陈述：one : One (Completion α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance one : One (Completion α) :=
   ⟨(1 : α)⟩
-
-/--
-Instance `mul` / 实例 `mul`
-
-English:
-instance mul
-  signature: : Mul (Completion α)
-  body: ⟨curry (isDenseInducing_coe.prodMap isDenseInducing_coe).extend ((↑) ∘ uncurry (· * ·))⟩
-
-@[norm_cast]
-
-中文:
-实例 mul
-  签名: : 乘法 (完备化 α)
-  定义体: ⟨curry (isDenseInducing_coe.prodMap isDenseInducing_coe).extend ((↑) ∘ uncurry (· * ·))⟩
-
-@[norm_cast]
-
-Depends on / 依赖: extend, isDenseInducing_coe, isDenseInducing_coe.prodMap, prodMap, uncurry
+/-
+**UniformSpace.Completion.mul** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Completion
+`。
+形式化陈述：mul : Mul (Completion α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mul : Mul (Completion α) :=
-⟨curry (isDenseInducing_coe.prodMap isDenseInducing_coe).extend ((↑) ∘ uncurry (· * ·))⟩
+  ⟨curry <| (isDenseInducing_coe.prodMap isDenseInducing_coe).extend ((↑) ∘ uncurry (· * ·))⟩
 
 @[norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : α) : Completion α) = 1
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: ((1 : α) : 完备化 α) = 1
-  证明: rfl
+/-
+**UniformSpace.Completion.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace.Comple
+tion`。
+形式化陈述：coe_one : ((1 : α) : Completion α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : ((1 : α) : Completion α) = 1 :=
   rfl
-
-/--
-lemma `coe_eq_one_iff` / 引理 `coe_eq_one_iff`
-
-English:
-lemma coe_eq_one_iff
-  given: [T0Space α] {x : α}
-  statement: (x : Completion α) = 1 ↔ x = 1
-  proof: Completion.coe_inj
-
-中文:
-引理 coe_eq_one_iff
-  条件: [T0空间 α] {x : α}
-  结论: (x : 完备化 α) = 1 ↔ x = 1
-  证明: Completion.coe_inj
+/-
+**UniformSpace.Completion.coe_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace
+.Completion`。
+形式化陈述：∀ (α : Type u_1) [inst : Ring α] [inst_1 : UniformSpace α] [T0Space α] {x 
+: α}, ↑x = 1 ↔ x = 1
+参数：α : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `UniformSpace.Completion.coe_inj`：coe_inj [T0Space α] {a b : α} : (a : Co
+mpletion α) = b ↔ a = b
 -/
 @[simp] lemma coe_eq_one_iff [T0Space α] {x : α} : (x : Completion α) = 1 ↔ x = 1 :=
   Completion.coe_inj
@@ -128,129 +97,62 @@ end one_and_mul
 variable {α : Type*} [Ring α] [UniformSpace α] [IsTopologicalRing α]
 
 @[norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (a b : α)
-  statement: ((a * b : α) : Completion α) = a * b
-  proof: ((isDenseInducing_coe.prodMap isDenseInducing_coe).extend_eq
-      ((continuous_coe α).comp (@continuous_mul α _ _ _)) (a, b)).symm
-
-中文:
-定理 coe_mul
-  条件: (a b : α)
-  结论: ((a * b : α) : 完备化 α) = a * b
-  证明: ((isDenseInducing_coe.prodMap isDenseInducing_coe).extend_eq
-      ((continuous_coe α).comp (@continuous_mul α _ _ _)) (a, b)).symm
-
-Depends on / 依赖: continuous_coe, continuous_mul, extend_eq, isDenseInducing_coe, isDenseInducing_coe.prodMap, prodMap
+/-
+**UniformSpace.Completion.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace.Comple
+tion`。
+形式化陈述：coe_mul (a b : α) : ((a * b : α) : Completion α) = a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsDenseInducing.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} 
+{δ : Type u_4} [inst : TopologicalSpace α] [inst_1 : TopologicalSpace β]   [inst
+_2 : Topologi…
+· 使用定理 `UniformSpace.Completion.isDenseInducing_coe`：isDenseInducing_coe : IsDen
+seInducing ((↑) : α -> Completion α)
+· 使用定理 `IsDenseInducing.extend_eq`：extend_eq [T2Space γ] (di : IsDenseInducing i
+) {f : α -> γ} (hf : Continuous f) (a : α) : di.extend f (i a) = f a
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `UniformSpace.to_regularSpace`：∀ {α : Type u} [inst : UniformSpace α], Re
+gularSpace α
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `UniformSpace.Completion.continuous_coe`：continuous_coe : Continuous ((↑)
+ : α -> Completion α)
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
 -/
 theorem coe_mul (a b : α) : ((a * b : α) : Completion α) = a * b :=
   ((isDenseInducing_coe.prodMap isDenseInducing_coe).extend_eq
       ((continuous_coe α).comp (@continuous_mul α _ _ _)) (a, b)).symm
 
 variable [IsUniformAddGroup α]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousMul (Completion α)
-  body: by
-    let m := (AddMonoidHom.mul : α ->+ α ->+ α).compr₂ toCompl
-    have : Continuous fun p : α × α => m p.1 p.2 := (continuous_coe α).comp continuous_mul
-    have di : IsDenseInducing (toCompl : α -> Completion α) := isDenseInducing_coe
-    exact (di.extend_Z_bilin di this :)
-
-中文:
-实例 :
-  签名: 连续乘法 (完备化 α)
-  定义体: by
-    let m := (AddMonoidHom.mul : α ->+ α ->+ α).compr₂ toCompl
-    have : Continuous fun p : α × α => m p.1 p.2 := (continuous_coe α).comp continuous_mul
-    have di : IsDenseInducing (toCompl : α -> Completion α) := isDenseInducing_coe
-    exact (di.extend_Z_bilin di this :)
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mul, Completion, Continuous, IsDenseInducing, continuous_coe, continuous_mul, di.extend_Z_bilin, extend_Z_bilin, isDenseInducing_coe, toCompl
+/-
+**UniformSpace.Completion.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Completion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ContinuousMul (Completion α) where
   continuous_mul := by
-    let m := (AddMonoidHom.mul : α ->+ α ->+ α).compr₂ toCompl
+    let m := (AddMonoidHom.mul : α →+ α →+ α).compr₂ toCompl
     have : Continuous fun p : α × α => m p.1 p.2 := (continuous_coe α).comp continuous_mul
-    have di : IsDenseInducing (toCompl : α -> Completion α) := isDenseInducing_coe
+    have di : IsDenseInducing (toCompl : α → Completion α) := isDenseInducing_coe
     exact (di.extend_Z_bilin di this :)
-
-/--
-Instance `ring` / 实例 `ring`
-
-English:
-instance ring
-  signature: : Ring (Completion α)
-  body: { AddMonoidWithOne.unary, ((inferInstance : AddCommGroup (Completion α))),
-      ((inferInstance : Mul (Completion α))), ((inferInstance : One (Completion α))) with
-    zero_mul a :=
-      Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
-        fun a => by rw [← coe_zero, ← coe_mul, zero_mul]
-    mul_zero a :=
-      Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
-        fun a => by rw [← coe_zero, ← coe_mul, mul_zero]
-    one_mul a :=
-      Completion.induction_on a
-        (isClosed_eq (by fun_prop) continuous_id)
-        fun a => by rw [← coe_one, ← coe_mul, one_mul]
-    mul_one a :=
-      Completion.induction_on a
-        (isClosed_eq (by fun_prop) continuous_id)
-        fun a => by rw [← coe_one, ← coe_mul, mul_one]
-    mul_assoc a b c :=
-      Completion.induction_on₃ a b c
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b c => by rw [← coe_mul, ← coe_mul, ← coe_mul, ← coe_mul, mul_assoc]
-    left_distrib a b c :=
-      Completion.induction_on₃ a b c
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, mul_add]
-    right_distrib a b c :=
-      Completion.induction_on₃ a b c
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, add_mul] }
-
-中文:
-实例 ring
-  签名: : 环 (完备化 α)
-  定义体: { AddMonoidWithOne.unary, ((inferInstance : AddCommGroup (Completion α))),
-      ((inferInstance : Mul (Completion α))), ((inferInstance : One (Completion α))) with
-    zero_mul a :=
-      Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
-        fun a => by rw [← coe_zero, ← coe_mul, zero_mul]
-    mul_zero a :=
-      Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
-        fun a => by rw [← coe_zero, ← coe_mul, mul_zero]
-    one_mul a :=
-      Completion.induction_on a
-        (isClosed_eq (by fun_prop) continuous_id)
-        fun a => by rw [← coe_one, ← coe_mul, one_mul]
-    mul_one a :=
-      Completion.induction_on a
-        (isClosed_eq (by fun_prop) continuous_id)
-        fun a => by rw [← coe_one, ← coe_mul, mul_one]
-    mul_assoc a b c :=
-      Completion.induction_on₃ a b c
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b c => by rw [← coe_mul, ← coe_mul, ← coe_mul, ← coe_mul, mul_assoc]
-    left_distrib a b c :=
-      Completion.induction_on₃ a b c
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, mul_add]
-    right_distrib a b c :=
-      Completion.induction_on₃ a b c
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, add_mul] }
-
-Depends on / 依赖: AddCommGroup, AddMonoidWithOne, AddMonoidWithOne.unary, Completion, Completion.induction_on, coe_mul, coe_zero, continu, continuous_const, fun_prop, induction_on, isClosed_eq, mul_zero, one_mul, zero_mul
+/-
+**UniformSpace.Completion.ring** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Completio
+n`。
+形式化陈述：ring : Ring (Completion α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ring : Ring (Completion α) :=
   { AddMonoidWithOne.unary, ((inferInstance : AddCommGroup (Completion α))),
@@ -260,7 +162,7 @@ instance ring : Ring (Completion α) :=
         fun a => by rw [← coe_zero, ← coe_mul, zero_mul]
     mul_zero a :=
       Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
-        fun a => by rw [← coe_zero, ← coe_mul, mul_zero]
+        fun a ↦ by rw [← coe_zero, ← coe_mul, mul_zero]
     one_mul a :=
       Completion.induction_on a
         (isClosed_eq (by fun_prop) continuous_id)
@@ -282,98 +184,54 @@ instance ring : Ring (Completion α) :=
         (isClosed_eq (by fun_prop) (by fun_prop))
         fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, add_mul] }
 
-/--
-Definition of `coeRingHom` / `coeRingHom` 的定义
+/-- The map from a uniform ring to its completion, as a ring homomorphism. -/
+/-
+**UniformSpace.Completion.coeRingHom** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpace.Com
+pletion`。
+形式化陈述：coeRingHom : α ->+* Completion α where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.Completion.coe_one`：coe_one : ((1 : α) : Completion α) = 1
+· 使用定理 `UniformSpace.Completion.coe_mul`：coe_mul (a b : α) : ((a * b : α) : Comp
+letion α) = a * b
 
-English:
-definition coeRingHom
-  signature: : α ->+* Completion α where
-  body: (↑)
-  map_one' := coe_one α
-  map_zero' := coe_zero
-  map_add' := coe_add
-  map_mul' := coe_mul
-
-中文:
-定义 coeRingHom
-  签名: : α ->+* 完备化 α where
-  定义体: (↑)
-  map_one' := coe_one α
-  map_zero' := coe_zero
-  map_add' := coe_add
-  map_mul' := coe_mul
+--- 原说明 ---
+The map from a uniform ring to its completion, as a ring homomorphism.
 -/
-def coeRingHom : α ->+* Completion α where
+def coeRingHom : α →+* Completion α where
   toFun := (↑)
   map_one' := coe_one α
   map_zero' := coe_zero
   map_add' := coe_add
   map_mul' := coe_mul
-
-/--
-theorem `continuous_coeRingHom` / 定理 `continuous_coeRingHom`
-
-English:
-theorem continuous_coeRingHom
-  statement: Continuous (coeRingHom : α -> Completion α)
-  proof: continuous_coe α
-
-中文:
-定理 continuous_coeRingHom
-  结论: 连续 (coeRingHom : α -> 完备化 α)
-  证明: continuous_coe α
-
-Depends on / 依赖: continuous_coe
+/-
+**UniformSpace.Completion.continuous_coeRingHom** 是 Mathlib 中的一个定理，位于命名空间 `Unifo
+rmSpace.Completion`。
+形式化陈述：continuous_coeRingHom : Continuous (coeRingHom : α -> Completion α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.Completion.continuous_coe`：continuous_coe : Continuous ((↑)
+ : α -> Completion α)
 -/
-theorem continuous_coeRingHom : Continuous (coeRingHom : α -> Completion α) :=
+theorem continuous_coeRingHom : Continuous (coeRingHom : α → Completion α) :=
   continuous_coe α
 
 variable {β : Type u} [UniformSpace β] [Ring β] [IsUniformAddGroup β] [IsTopologicalRing β]
-  (f : α ->+* β) (hf : Continuous f)
+  (f : α →+* β) (hf : Continuous f)
 
-/--
-Definition of `extensionHom` / `extensionHom` 的定义
+/-- The completion extension as a ring morphism. -/
+/-
+**UniformSpace.Completion.extensionHom** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpace.C
+ompletion`。
+形式化陈述：extensionHom [CompleteSpace β] [T0Space β] : Completion α ->+* β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extensionHom
-  signature: [CompleteSpace β] [T0Space β]
-  body: have hf' : Continuous (f : α ->+ β) := hf
-  -- helping the elaborator
-  have hf : UniformContinuous f := uniformContinuous_addMonoidHom_of_continuous hf'
-  { toFun := Completion.extension f
-    map_zero' := by simp_rw [← coe_zero, extension_coe hf, f.map_zero]
-    map_add' a b :=
-      Completion.induction_on₂ a b
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b => by simp_rw [← coe_add, extension_coe hf, f.map_add]
-    map_one' := by rw [← coe_one, extension_coe hf, f.map_one]
-    map_mul' a b :=
-      Completion.induction_on₂ a b
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b => by simp_rw [← coe_mul, extension_coe hf, f.map_mul] }
-
-中文:
-定义 extensionHom
-  签名: [完备空间 β] [T0空间 β]
-  定义体: have hf' : Continuous (f : α ->+ β) := hf
-  -- helping the elaborator
-  have hf : UniformContinuous f := uniformContinuous_addMonoidHom_of_continuous hf'
-  { toFun := Completion.extension f
-    map_zero' := by simp_rw [← coe_zero, extension_coe hf, f.map_zero]
-    map_add' a b :=
-      Completion.induction_on₂ a b
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b => by simp_rw [← coe_add, extension_coe hf, f.map_add]
-    map_one' := by rw [← coe_one, extension_coe hf, f.map_one]
-    map_mul' a b :=
-      Completion.induction_on₂ a b
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b => by simp_rw [← coe_mul, extension_coe hf, f.map_mul] }
-
-Depends on / 依赖: Continuous
+--- 原说明 ---
+The completion extension as a ring morphism.
 -/
-def extensionHom [CompleteSpace β] [T0Space β] : Completion α ->+* β :=
-  have hf' : Continuous (f : α ->+ β) := hf
+def extensionHom [CompleteSpace β] [T0Space β] : Completion α →+* β :=
+  have hf' : Continuous (f : α →+ β) := hf
   -- helping the elaborator
   have hf : UniformContinuous f := uniformContinuous_addMonoidHom_of_continuous hf'
   { toFun := Completion.extension f
@@ -387,173 +245,169 @@ def extensionHom [CompleteSpace β] [T0Space β] : Completion α ->+* β :=
       Completion.induction_on₂ a b
         (isClosed_eq (by fun_prop) (by fun_prop))
         fun a b => by simp_rw [← coe_mul, extension_coe hf, f.map_mul] }
-
-/--
-theorem `extensionHom_coe` / 定理 `extensionHom_coe`
-
-English:
-theorem extensionHom_coe
-  given: [CompleteSpace β] [T0Space β] (a : α)
-  proof: by
-  simp only [Completion.extensionHom, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
-UniformSpace.Completion.extension_coe uniformContinuous_addMonoidHom_of_continuous hf]
-
-中文:
-定理 extensionHom_coe
-  条件: [完备空间 β] [T0空间 β] (a : α)
-  证明: by
-  simp only [Completion.extensionHom, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
-UniformSpace.Completion.extension_coe uniformContinuous_addMonoidHom_of_continuous hf]
-
-Depends on / 依赖: Completion, Completion.extensionHom, MonoidHom, MonoidHom.coe_mk, OneHom, OneHom.coe_mk, RingHom, RingHom.coe_mk, UniformSpace, UniformSpace.Completion.extension_coe, coe_mk, extensionHom, extension_coe, uniformContinuous_addMonoidHom_of_continuous
+/-
+**UniformSpace.Completion.extensionHom_coe** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpa
+ce.Completion`。
+形式化陈述：extensionHom_coe [CompleteSpace β] [T0Space β] (a : α) : Completion.extens
+ionHom f hf a = f a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.Completion.extension_coe`：extension_coe [T0Space β] (hf : U
+niformContinuous f) (a : α) : (Completion.extension f) a = f a
+· 使用定理 `uniformContinuous_addMonoidHom_of_continuous`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom :
+ Type u_3}   [inst_3 : UniformSpac…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem extensionHom_coe [CompleteSpace β] [T0Space β] (a : α) :
     Completion.extensionHom f hf a = f a := by
   simp only [Completion.extensionHom, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
-UniformSpace.Completion.extension_coe uniformContinuous_addMonoidHom_of_continuous hf]
-
-/--
-Instance `topologicalRing` / 实例 `topologicalRing`
-
-English:
-instance topologicalRing
-  signature: : IsTopologicalRing (Completion α) where
-  body: continuous_add
-  continuous_mul := continuous_mul
-
-中文:
-实例 topologicalRing
-  签名: : 是拓扑环 (完备化 α) where
-  定义体: continuous_add
-  continuous_mul := continuous_mul
-
-Depends on / 依赖: continuous_add
+    UniformSpace.Completion.extension_coe <| uniformContinuous_addMonoidHom_of_continuous hf]
+/-
+**UniformSpace.Completion.topologicalRing** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpac
+e.Completion`。
+形式化陈述：topologicalRing : IsTopologicalRing (Completion α) where continuous_add
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_add`：continuous_add : Continuous (fun x : X × X ↦ x.1 + x.2)
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `IsUniformAddGroup.to_topologicalAddGroup`：∀ {α : Type u_1} [inst : Unifo
+rmSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α], IsTopologicalAddGroup α
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
+· 使用定理 `UniformSpace.Completion.instContinuousMul`：∀ {α : Type u_1} [inst : Ring
+ α] [inst_1 : UniformSpace α] [IsTopologicalRing α] [IsUniformAddGroup α],   Con
+tinuousMul (UniformSpace.Comple…
+· 使用定理 `IsTopologicalAddGroup.toContinuousNeg`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousNeg 
+G
 -/
 instance topologicalRing : IsTopologicalRing (Completion α) where
   continuous_add := continuous_add
   continuous_mul := continuous_mul
 
-/--
-Definition of `mapRingHom` / `mapRingHom` 的定义
+/-- The completion map as a ring morphism. -/
+/-
+**UniformSpace.Completion.mapRingHom** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpace.Com
+pletion`。
+形式化陈述：mapRingHom (hf : Continuous f) : Completion α ->+* Completion β
+参数：hf : Continuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRingHom
-  signature: (hf : Continuous f)
-  body: extensionHom (coeRingHom.comp f) (continuous_coeRingHom.comp hf)
-
-中文:
-定义 mapRingHom
-  签名: (hf : 连续 f)
-  定义体: extensionHom (coeRingHom.comp f) (continuous_coeRingHom.comp hf)
-
-Depends on / 依赖: coeRingHom, coeRingHom.comp, continuous_coeRingHom, continuous_coeRingHom.comp, extensionHom
+--- 原说明 ---
+The completion map as a ring morphism.
 -/
-def mapRingHom (hf : Continuous f) : Completion α ->+* Completion β :=
+def mapRingHom (hf : Continuous f) : Completion α →+* Completion β :=
   extensionHom (coeRingHom.comp f) (continuous_coeRingHom.comp hf)
-
-/--
-theorem `mapRingHom_apply` / 定理 `mapRingHom_apply`
-
-English:
-theorem mapRingHom_apply
-  given: {x : Completion α}
-  statement: mapRingHom f hf x = .map f x
-  proof: rfl
-
-中文:
-定理 mapRingHom_apply
-  条件: {x : 完备化 α}
-  结论: mapRingHom f hf x = .map f x
-  证明: rfl
+/-
+**UniformSpace.Completion.mapRingHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpa
+ce.Completion`。
+形式化陈述：∀ {α : Type u_1} [inst : Ring α] [inst_1 : UniformSpace α] [inst_2 : IsTop
+ologicalRing α] [inst_3 : IsUniformAddGroup α]   {β : Type u} [inst_4 : UniformS
+pace β] [inst_5 : Ring β] [inst_6 : IsUniformAddGroup β] [inst_7 : IsTopological
+Ring β]   (f : α →+* β) (hf : Continuous ⇑f) {x : UniformSpace.Completion α},   
+(UniformSpace.Completion.mapRingHom f hf) x = UniformSpace.Completion.map (⇑f) x
+参数：f : α →+* β；hf : Continuous ⇑f；UniformSpace.Completion.mapRingHom f hf；⇑f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mapRingHom_apply {x : Completion α} : mapRingHom f hf x = .map f x := rfl
-/--
-theorem `coe_mapRingHom` / 定理 `coe_mapRingHom`
-
-English:
-theorem coe_mapRingHom
-  statement: mapRingHom f hf = Completion.map f
-  proof: rfl
-
-中文:
-定理 coe_mapRingHom
-  结论: mapRingHom f hf = 完备化.map f
-  证明: rfl
+/-
+**UniformSpace.Completion.coe_mapRingHom** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace
+.Completion`。
+形式化陈述：coe_mapRingHom : mapRingHom f hf = Completion.map f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mapRingHom : mapRingHom f hf = Completion.map f := rfl
 
 variable {f}
-
-/--
-theorem `mapRingHom_coe` / 定理 `mapRingHom_coe`
-
-English:
-theorem mapRingHom_coe
-  given: (hf : Continuous f) (a : α)
-  statement: mapRingHom f hf a = f a
-  proof: by
-  rw [mapRingHom_apply]; rw [map_coe (uniformContinuous_addMonoidHom_of_continuous hf)]
-
-中文:
-定理 mapRingHom_coe
-  条件: (hf : 连续 f) (a : α)
-  结论: mapRingHom f hf a = f a
-  证明: by
-  rw [mapRingHom_apply]; rw [map_coe (uniformContinuous_addMonoidHom_of_continuous hf)]
-
-Depends on / 依赖: mapRingHom_apply, map_coe, uniformContinuous_addMonoidHom_of_continuous
+/-
+**UniformSpace.Completion.mapRingHom_coe** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace
+.Completion`。
+形式化陈述：mapRingHom_coe (hf : Continuous f) (a : α) : mapRingHom f hf a = f a
+参数：hf : Continuous f；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.Completion.mapRingHom_apply`：∀ {α : Type u_1} [inst : Ring 
+α] [inst_1 : UniformSpace α] [inst_2 : IsTopologicalRing α] [inst_3 : IsUniformA
+ddGroup α]   {β : Type u} [ins…
+· 使用定理 `UniformSpace.Completion.map_coe`：map_coe (hf : UniformContinuous f) (a :
+ α) : (Completion.map f) a = f a
+· 使用定理 `uniformContinuous_addMonoidHom_of_continuous`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom :
+ Type u_3}   [inst_3 : UniformSpac…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
 theorem mapRingHom_coe (hf : Continuous f) (a : α) : mapRingHom f hf a = f a := by
-  rw [mapRingHom_apply]; rw [map_coe (uniformContinuous_addMonoidHom_of_continuous hf)]
-
-/--
-theorem `mapRingHom_comp` / 定理 `mapRingHom_comp`
-
-English:
-theorem mapRingHom_comp
-  statement: {γ : Type*} [UniformSpace γ] [Ring γ] [IsUniformAddGroup γ]
-  proof: DFunLike.ext' map_comp
-    (uniformContinuous_addMonoidHom_of_continuous hg)
-    (uniformContinuous_addMonoidHom_of_continuous hf)
-
-中文:
-定理 mapRingHom_comp
-  结论: {γ : 类型} [一致空间 γ] [环 γ] [是UniformAdd群 γ]
-  证明: DFunLike.ext' map_comp
-    (uniformContinuous_addMonoidHom_of_continuous hg)
-    (uniformContinuous_addMonoidHom_of_continuous hf)
-
-Depends on / 依赖: DFunLike, DFunLike.ext, map_comp, uniformContinuous_addMonoidHom_of_continuous
+  rw [mapRingHom_apply, map_coe (uniformContinuous_addMonoidHom_of_continuous hf)]
+/-
+**UniformSpace.Completion.mapRingHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpac
+e.Completion`。
+形式化陈述：mapRingHom_comp {γ : Type*} [UniformSpace γ] [Ring γ] [IsUniformAddGroup γ
+] [IsTopologicalRing γ] {g : β ->+* γ} (hg : Continuous g) (hf : Continuous f) :
+ (mapRingHom g hg).comp (mapRingHom f hf) = mapRingHom (g.comp f) (hg.comp hf)
+参数：hg : Continuous g；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `UniformSpace.Completion.map_comp`：map_comp {g : β -> γ} {f : α -> β} (hg
+ : UniformContinuous g) (hf : UniformContinuous f) : Completion.map g ∘ Completi
+on.map f = Completion.…
+· 使用定理 `uniformContinuous_addMonoidHom_of_continuous`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom :
+ Type u_3}   [inst_3 : UniformSpac…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
 theorem mapRingHom_comp {γ : Type*} [UniformSpace γ] [Ring γ] [IsUniformAddGroup γ]
-    [IsTopologicalRing γ] {g : β ->+* γ} (hg : Continuous g) (hf : Continuous f) :
+    [IsTopologicalRing γ] {g : β →+* γ} (hg : Continuous g) (hf : Continuous f) :
     (mapRingHom g hg).comp (mapRingHom f hf) = mapRingHom (g.comp f) (hg.comp hf) :=
-DFunLike.ext' map_comp
+  DFunLike.ext' <| map_comp
     (uniformContinuous_addMonoidHom_of_continuous hg)
     (uniformContinuous_addMonoidHom_of_continuous hf)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `mapRingHom_id` / 定理 `mapRingHom_id`
-
-English:
-theorem mapRingHom_id
-  statement: mapRingHom (.id α) continuous_id = .id (Completion α)
-  proof: by
-  simp [RingHom.ext_iff, mapRingHom_apply]
-
-#adaptation_note
-
-中文:
-定理 mapRingHom_id
-  结论: mapRingHom (.id α) continuous_id = .id (完备化 α)
-  证明: by
-  simp [RingHom.ext_iff, mapRingHom_apply]
-
-#adaptation_note
-
-Depends on / 依赖: RingHom, RingHom.ext_iff, ext_iff, mapRingHom_apply
+/-
+**UniformSpace.Completion.mapRingHom_id** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace.
+Completion`。
+形式化陈述：mapRingHom_id : mapRingHom (.id α) continuous_id = .id (Completion α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `UniformSpace.Completion.map_id`：map_id : Completion.map (@id α) = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem mapRingHom_id : mapRingHom (.id α) continuous_id = .id (Completion α) := by
   simp [RingHom.ext_iff, mapRingHom_apply]
@@ -564,22 +418,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- A ring isomorphism `α ≃+* β` between uniform rings, uniformly continuous in both directions,
 lifts to a ring isomorphism between corresponding uniform space completions. -/
 @[simps!]
-/--
-Definition of `mapRingEquiv` / `mapRingEquiv` 的定义
+/-
+**UniformSpace.Completion.mapRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpace.C
+ompletion`。
+形式化陈述：mapRingEquiv (f : α ≃+* β) (hf : Continuous f) (hf' : Continuous f.symm) :
+ Completion α ≃+* Completion β
+参数：f : α ≃+* β；hf : Continuous f；hf' : Continuous f.symm。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRingEquiv
-  signature: (f : α ≃+* β) (hf : Continuous f) (hf' : Continuous f.symm)
-  body: .ofRingHom (mapRingHom f.toRingHom hf) (mapRingHom f.symm.toRingHom hf')
-    (by simp [mapRingHom_comp]) (by simp [mapRingHom_comp])
-
-中文:
-定义 mapRingEquiv
-  签名: (f : α ≃+* β) (hf : 连续 f) (hf' : 连续 f.symm)
-  定义体: .ofRingHom (mapRingHom f.toRingHom hf) (mapRingHom f.symm.toRingHom hf')
-    (by simp [mapRingHom_comp]) (by simp [mapRingHom_comp])
-
-Depends on / 依赖: f.symm.toRingHom, f.toRingHom, mapRingHom, mapRingHom_comp, ofRingHom, toRingHom
+--- 原说明 ---
+A ring isomorphism `α ≃+* β` between uniform rings, uniformly continuous in both
+ directions,
+lifts to a ring isomorphism between corresponding uniform space completions.
 -/
 def mapRingEquiv (f : α ≃+* β) (hf : Continuous f) (hf' : Continuous f.symm) :
     Completion α ≃+* Completion β :=
@@ -592,28 +443,60 @@ variable (A : Type*) [Ring A] [UniformSpace A] [IsUniformAddGroup A] [IsTopologi
   (R : Type*) [CommSemiring R] [Algebra R A] [UniformContinuousConstSMul R A]
 
 @[simp]
-/--
-theorem `map_smul_eq_mul_coe` / 定理 `map_smul_eq_mul_coe`
-
-English:
-theorem map_smul_eq_mul_coe
-  given: (r : R)
-  proof: by
-  ext x
-  refine Completion.induction_on x ?_ fun a => ?_
-  · exact isClosed_eq Completion.continuous_map (continuous_const_mul _)
-  · simp_rw [map_coe (uniformContinuous_const_smul r) a, Algebra.smul_def, coe_mul]
-
-中文:
-定理 map_smul_eq_mul_coe
-  条件: (r : R)
-  证明: by
-  ext x
-  refine Completion.induction_on x ?_ fun a => ?_
-  · exact isClosed_eq Completion.continuous_map (continuous_const_mul _)
-  · simp_rw [map_coe (uniformContinuous_const_smul r) a, Algebra.smul_def, coe_mul]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, Completion, Completion.continuous_map, Completion.induction_on, coe_mul, continuous_const_mul, continuous_map, induction_on, isClosed_eq, map_coe, simp_rw, smul_def, uniformContinuous_const_smul
+/-
+**UniformSpace.Completion.map_smul_eq_mul_coe** 是 Mathlib 中的一个定理，位于命名空间 `Uniform
+Space.Completion`。
+形式化陈述：map_smul_eq_mul_coe (r : R) : Completion.map (r • ·) = ((algebraMap R A r 
+: Completion A) * ·)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `UniformSpace.Completion.induction_on`：induction_on {p : Completion α -> 
+Prop} (a : Completion α) (hp : IsClosed { a | p a }) (ih : forall a : α, p a) : 
+p a
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
+· 使用定理 `T25Space.t2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T25Space
+ X], T2Space X
+· 使用定理 `T3Space.t25Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T3Space 
+X], T25Space X
+· 使用定理 `instT3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T0Space X] [R
+egularSpace X], T3Space X
+· 使用定理 `IsTopologicalAddGroup.regularSpace`：∀ (G : Type w) [inst : TopologicalSp
+ace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], RegularSpace G
+· 使用定理 `IsSemitopologicalRing.toIsTopologicalAddGroup`：∀ {R : Type u_1} [inst : 
+NonUnitalNonAssocRing R] [inst_1 : TopologicalSpace R] [IsSemitopologicalRing R]
+,   IsTopologicalAddGroup R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `UniformSpace.Completion.continuous_map`：continuous_map : Continuous (Com
+pletion.map f)
+· 使用定理 `continuous_const_mul`：continuous_const_mul (m : M) : Continuous (m * ·)
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.Completion.map_coe`：map_coe (hf : UniformContinuous f) (a :
+ α) : (Completion.map f) a = f a
+· 使用定理 `UniformContinuousConstSMul.uniformContinuous_const_smul`：∀ {M : Type v} 
+{X : Type x} {inst : UniformSpace X} {inst_1 : SMul M X} [self : UniformContinuo
+usConstSMul M X] (c : M),   UniformContinuous…
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `UniformSpace.Completion.coe_mul`：coe_mul (a b : α) : ((a * b : α) : Comp
+letion α) = a * b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_smul_eq_mul_coe (r : R) :
     Completion.map (r • ·) = ((algebraMap R A r : Completion A) * ·) := by
@@ -621,52 +504,28 @@ theorem map_smul_eq_mul_coe (r : R) :
   refine Completion.induction_on x ?_ fun a => ?_
   · exact isClosed_eq Completion.continuous_map (continuous_const_mul _)
   · simp_rw [map_coe (uniformContinuous_const_smul r) a, Algebra.smul_def, coe_mul]
-
-/--
-Instance `algebra` / 实例 `algebra`
-
-English:
-instance algebra
-  signature: : Algebra R (Completion A) where
-  body: (UniformSpace.Completion.coeRingHom : A ->+* Completion A).comp (algebraMap R A)
-  commutes' := fun r x =>
-    Completion.induction_on x (isClosed_eq (continuous_const_mul _) (continuous_mul_const _))
-      fun a => by
-      simpa only [coe_mul] using! congr_arg ((↑) : A -> Completion A) (Algebra.commutes r a)
-  smul_def' := fun r x => congr_fun (map_smul_eq_mul_coe A R r) x
-
-中文:
-实例 algebra
-  签名: : 代数 R (完备化 A) where
-  定义体: (UniformSpace.Completion.coeRingHom : A ->+* Completion A).comp (algebraMap R A)
-  commutes' := fun r x =>
-    Completion.induction_on x (isClosed_eq (continuous_const_mul _) (continuous_mul_const _))
-      fun a => by
-      simpa only [coe_mul] using! congr_arg ((↑) : A -> Completion A) (Algebra.commutes r a)
-  smul_def' := fun r x => congr_fun (map_smul_eq_mul_coe A R r) x
-
-Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion.coeRingHom, algebraMap, coeRingHom
+/-
+**UniformSpace.Completion.algebra** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Comple
+tion`。
+形式化陈述：algebra : Algebra R (Completion A) where algebraMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance algebra : Algebra R (Completion A) where
-  algebraMap := (UniformSpace.Completion.coeRingHom : A ->+* Completion A).comp (algebraMap R A)
+  algebraMap := (UniformSpace.Completion.coeRingHom : A →+* Completion A).comp (algebraMap R A)
   commutes' := fun r x =>
     Completion.induction_on x (isClosed_eq (continuous_const_mul _) (continuous_mul_const _))
       fun a => by
-      simpa only [coe_mul] using! congr_arg ((↑) : A -> Completion A) (Algebra.commutes r a)
+      simpa only [coe_mul] using! congr_arg ((↑) : A → Completion A) (Algebra.commutes r a)
   smul_def' := fun r x => congr_fun (map_smul_eq_mul_coe A R r) x
-
-/--
-theorem `algebraMap_def` / 定理 `algebraMap_def`
-
-English:
-theorem algebraMap_def
-  given: (r : R)
-  proof: rfl
-
-中文:
-定理 algebraMap_def
-  条件: (r : R)
-  证明: rfl
+/-
+**UniformSpace.Completion.algebraMap_def** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace
+.Completion`。
+形式化陈述：algebraMap_def (r : R) : algebraMap R (Completion A) r = (algebraMap R A r
+ : Completion A)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_def (r : R) :
     algebraMap R (Completion A) r = (algebraMap R A r : Completion A) :=
@@ -678,28 +537,12 @@ section CommRing
 
 variable (R : Type*) [CommRing R] [UniformSpace R] [IsUniformAddGroup R] [IsTopologicalRing R]
 
-/--
-Instance `commRing` / 实例 `commRing`
-
-English:
-instance commRing
-  signature: : CommRing (Completion R)
-  body: { Completion.ring with
-    mul_comm a b :=
-      Completion.induction_on₂ a b
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b => by rw [← coe_mul, ← coe_mul, mul_comm] }
-
-中文:
-实例 commRing
-  签名: : 交换环 (完备化 R)
-  定义体: { Completion.ring with
-    mul_comm a b :=
-      Completion.induction_on₂ a b
-        (isClosed_eq (by fun_prop) (by fun_prop))
-        fun a b => by rw [← coe_mul, ← coe_mul, mul_comm] }
-
-Depends on / 依赖: Completion, Completion.induction_on, Completion.ring, coe_mul, fun_prop, isClosed_eq, mul_comm
+/-
+**UniformSpace.Completion.commRing** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Compl
+etion`。
+形式化陈述：commRing : CommRing (Completion R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commRing : CommRing (Completion R) :=
   { Completion.ring with
@@ -708,20 +551,16 @@ instance commRing : CommRing (Completion R) :=
         (isClosed_eq (by fun_prop) (by fun_prop))
         fun a b => by rw [← coe_mul, ← coe_mul, mul_comm] }
 
-/--
-Instance `algebra'` / 实例 `algebra'`
+/-- A shortcut instance for the common case -/
+/-
+**UniformSpace.Completion.algebra'** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Compl
+etion`。
+形式化陈述：algebra' : Algebra R (Completion R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance algebra'
-  signature: : Algebra R (Completion R)
-  body: by infer_instance
-
-中文:
-实例 algebra'
-  签名: : 代数 R (完备化 R)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A shortcut instance for the common case
 -/
 instance algebra' : Algebra R (Completion R) := by infer_instance
 
@@ -734,83 +573,86 @@ namespace UniformSpace
 variable {α : Type*}
 
 -- TODO: move (some of) these results to the file about topological rings
-/--
-theorem `inseparableSetoid_ring` / 定理 `inseparableSetoid_ring`
-
-English:
-theorem inseparableSetoid_ring
-  given: (α) [Ring α] [TopologicalSpace α] [IsTopologicalRing α]
-  proof: Setoid.ext fun x y =>
-addGroup_inseparable_iff.trans .trans (by rfl) (Submodule.quotientRel_def _).symm
-
-中文:
-定理 inseparableSetoid_ring
-  条件: (α) [环 α] [拓扑空间 α] [是拓扑环 α]
-  证明: Setoid.ext fun x y =>
-addGroup_inseparable_iff.trans .trans (by rfl) (Submodule.quotientRel_def _).symm
-
-Depends on / 依赖: Setoid, Setoid.ext, Submodule, Submodule.quotientRel_def, addGroup_inseparable_iff, addGroup_inseparable_iff.trans, quotientRel_def
+/-
+**UniformSpace.inseparableSetoid_ring** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：inseparableSetoid_ring (α) [Ring α] [TopologicalSpace α] [IsTopologicalRin
+g α] : inseparableSetoid α = Submodule.quotientRel (Ideal.closure ⊥)
+参数：α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Setoid.ext`：ext {α : Sort*} : forall {s t : Setoid α}, (forall a b, s a 
+b ↔ t a b) -> s = t | ⟨r, _⟩, ⟨p, _⟩, Eq => by have : r = p
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `addGroup_inseparable_iff`：∀ {G : Type w} [inst : TopologicalSpace G] [in
+st_1 : AddGroup G] [IsTopologicalAddGroup G] {x y : G},   Inseparable x y ↔ x - 
+y ∈ closure 0
+· 使用定理 `IsSemitopologicalRing.toIsTopologicalAddGroup`：∀ {R : Type u_1} [inst : 
+NonUnitalNonAssocRing R] [inst_1 : TopologicalSpace R] [IsSemitopologicalRing R]
+,   IsTopologicalAddGroup R
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Submodule.quotientRel_def`：quotientRel_def {x y : M} : p.quotientRel x y
+ ↔ x - y in p
 -/
 theorem inseparableSetoid_ring (α) [Ring α] [TopologicalSpace α] [IsTopologicalRing α] :
     inseparableSetoid α = Submodule.quotientRel (Ideal.closure ⊥) :=
   Setoid.ext fun x y =>
-addGroup_inseparable_iff.trans .trans (by rfl) (Submodule.quotientRel_def _).symm
+    addGroup_inseparable_iff.trans <| .trans (by rfl) (Submodule.quotientRel_def _).symm
 
-/--
-Definition of `sepQuotHomeomorphRingQuot` / `sepQuotHomeomorphRingQuot` 的定义
+/-- Given a topological ring `α` equipped with a uniform structure that makes subtraction uniformly
+continuous, get a homeomorphism between the separated quotient of `α` and the quotient ring
+corresponding to the closure of zero. -/
+/-
+**UniformSpace.sepQuotHomeomorphRingQuot** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpace
+`。
+形式化陈述：sepQuotHomeomorphRingQuot (α) [Ring α] [TopologicalSpace α] [IsTopological
+Ring α] : SeparationQuotient α ≃ₜ α ⧸ (⊥ : Ideal α).closure where toEquiv
+参数：α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sepQuotHomeomorphRingQuot
-  signature: (α) [Ring α] [TopologicalSpace α] [IsTopologicalRing α]
-  body: Quotient.congrRight fun x y => by rw [inseparableSetoid_ring]
-continuous_toFun := continuous_id.quotient_map' by
-    rw [inseparableSetoid_ring]; exact fun _ _ => id
-continuous_invFun := continuous_id.quotient_map' by
-    rw [inseparableSetoid_ring]; exact fun _ _ => id
-
-中文:
-定义 sepQuotHomeomorphRingQuot
-  签名: (α) [环 α] [拓扑空间 α] [是拓扑环 α]
-  定义体: Quotient.congrRight fun x y => by rw [inseparableSetoid_ring]
-continuous_toFun := continuous_id.quotient_map' by
-    rw [inseparableSetoid_ring]; exact fun _ _ => id
-continuous_invFun := continuous_id.quotient_map' by
-    rw [inseparableSetoid_ring]; exact fun _ _ => id
-
-Depends on / 依赖: Quotient, Quotient.congrRight, congrRight, inseparableSetoid_ring
+--- 原说明 ---
+Given a topological ring `α` equipped with a uniform structure that makes subtra
+ction uniformly
+continuous, get a homeomorphism between the separated quotient of `α` and the qu
+otient ring
+corresponding to the closure of zero.
 -/
 def sepQuotHomeomorphRingQuot (α) [Ring α] [TopologicalSpace α] [IsTopologicalRing α] :
     SeparationQuotient α ≃ₜ α ⧸ (⊥ : Ideal α).closure where
   toEquiv := Quotient.congrRight fun x y => by rw [inseparableSetoid_ring]
-continuous_toFun := continuous_id.quotient_map' by
-    rw [inseparableSetoid_ring]; exact fun _ _ => id
-continuous_invFun := continuous_id.quotient_map' by
-    rw [inseparableSetoid_ring]; exact fun _ _ => id
+  continuous_toFun := continuous_id.quotient_map' <| by
+    rw [inseparableSetoid_ring]; exact fun _ _ ↦ id
+  continuous_invFun := continuous_id.quotient_map' <| by
+    rw [inseparableSetoid_ring]; exact fun _ _ ↦ id
 
-/--
-Definition of `sepQuotRingEquivRingQuot` / `sepQuotRingEquivRingQuot` 的定义
+/-- Given a topological ring `α` equipped with a uniform structure that makes subtraction uniformly
+continuous, get an equivalence between the separated quotient of `α` and the quotient ring
+corresponding to the closure of zero. -/
+/-
+**UniformSpace.sepQuotRingEquivRingQuot** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpace`
+。
+形式化陈述：sepQuotRingEquivRingQuot (α) [CommRing α] [TopologicalSpace α] [IsTopologi
+calRing α] : SeparationQuotient α ≃+* α ⧸ (⊥ : Ideal α).closure where __
+参数：α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sepQuotRingEquivRingQuot
-  signature: (α) [CommRing α] [TopologicalSpace α] [IsTopologicalRing α]
-  body: sepQuotHomeomorphRingQuot α
-  map_mul' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
-  map_add' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
-
-中文:
-定义 sepQuotRingEquivRingQuot
-  签名: (α) [交换环 α] [拓扑空间 α] [是拓扑环 α]
-  定义体: sepQuotHomeomorphRingQuot α
-  map_mul' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
-  map_add' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
-
-Depends on / 依赖: sepQuotHomeomorphRingQuot
+--- 原说明 ---
+Given a topological ring `α` equipped with a uniform structure that makes subtra
+ction uniformly
+continuous, get an equivalence between the separated quotient of `α` and the quo
+tient ring
+corresponding to the closure of zero.
 -/
 def sepQuotRingEquivRingQuot (α) [CommRing α] [TopologicalSpace α] [IsTopologicalRing α] :
     SeparationQuotient α ≃+* α ⧸ (⊥ : Ideal α).closure where
   __ := sepQuotHomeomorphRingQuot α
-  map_mul' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
-  map_add' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
+  map_mul' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ ↦ rfl)
+  map_add' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ ↦ rfl)
 
 end UniformSpace
 
@@ -821,59 +663,21 @@ variable {β : Type*} [UniformSpace β] [Semiring β] [IsTopologicalSemiring β]
 variable {γ : Type*} [UniformSpace γ] [Semiring γ] [IsTopologicalSemiring γ]
 variable [T2Space γ] [CompleteSpace γ]
 
-/--
-Definition of `IsDenseInducing.extendRingHom` / `IsDenseInducing.extendRingHom` 的定义
+/-- The dense inducing extension as a ring homomorphism. -/
+/-
+**IsDenseInducing.extendRingHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsDenseInducing.extendRingHom {i : α ->+* β} {f : α ->+* γ} (ue : IsUnifor
+mInducing i) (dr : DenseRange i) (hf : UniformContinuous f) : β ->+* γ where toF
+un
+参数：ue : IsUniformInducing i；dr : DenseRange i；hf : UniformContinuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsDenseInducing.extendRingHom
-  signature: {i : α ->+* β} {f : α ->+* γ}
-  body: (ue.isDenseInducing dr).extend f
-  map_one' := by
-    convert! IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous 1
-    exacts [i.map_one.symm, f.map_one.symm]
-  map_zero' := by
-    convert! IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous 0 <;>
-    simp only [map_zero]
-  map_add' := by
-    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
-    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
-    · exact isClosed_eq (by fun_prop) (by fun_prop)
-    · simp_rw [← i.map_add, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
-        ← f.map_add]
-  map_mul' := by
-    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
-    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
-    · exact isClosed_eq (by fun_prop) (by fun_prop)
-    · simp_rw [← i.map_mul, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
-        ← f.map_mul]
-
-中文:
-定义 是DenseInducing.extendRingHom
-  签名: {i : α ->+* β} {f : α ->+* γ}
-  定义体: (ue.isDenseInducing dr).extend f
-  map_one' := by
-    convert! IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous 1
-    exacts [i.map_one.symm, f.map_one.symm]
-  map_zero' := by
-    convert! IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous 0 <;>
-    simp only [map_zero]
-  map_add' := by
-    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
-    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
-    · exact isClosed_eq (by fun_prop) (by fun_prop)
-    · simp_rw [← i.map_add, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
-        ← f.map_add]
-  map_mul' := by
-    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
-    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
-    · exact isClosed_eq (by fun_prop) (by fun_prop)
-    · simp_rw [← i.map_mul, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
-        ← f.map_mul]
-
-Depends on / 依赖: extend, isDenseInducing, ue.isDenseInducing
+--- 原说明 ---
+The dense inducing extension as a ring homomorphism.
 -/
-noncomputable def IsDenseInducing.extendRingHom {i : α ->+* β} {f : α ->+* γ}
-    (ue : IsUniformInducing i) (dr : DenseRange i) (hf : UniformContinuous f) : β ->+* γ where
+noncomputable def IsDenseInducing.extendRingHom {i : α →+* β} {f : α →+* γ}
+    (ue : IsUniformInducing i) (dr : DenseRange i) (hf : UniformContinuous f) : β →+* γ where
   toFun := (ue.isDenseInducing dr).extend f
   map_one' := by
     convert! IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous 1
@@ -895,3 +699,4 @@ noncomputable def IsDenseInducing.extendRingHom {i : α ->+* β} {f : α ->+* γ
         ← f.map_mul]
 
 end UniformExtension
+

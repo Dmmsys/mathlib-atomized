@@ -24,604 +24,375 @@ open Function
 
 namespace PLift
 
-variable {α : Sort u} {β : Sort v} {f : α -> β}
+variable {α : Sort u} {β : Sort v} {f : α → β}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] : Nonempty (PLift α)
-  body: Equiv.plift.nonempty
-
-中文:
-实例 [非空
-  签名: α] : 非空 (命题层提升 α)
-  定义体: Equiv.plift.nonempty
-
-Depends on / 依赖: Equiv.plift.nonempty, nonempty
+/-
+**PLift.** 是 Mathlib 中的一个实例，位于命名空间 `PLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty α] : Nonempty (PLift α) :=
   Equiv.plift.nonempty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: α] : Unique (PLift α)
-  body: Equiv.plift.unique
-
-中文:
-实例 [唯一
-  签名: α] : 唯一 (命题层提升 α)
-  定义体: Equiv.plift.unique
-
-Depends on / 依赖: Equiv.plift.unique, unique
+/-
+**PLift.** 是 Mathlib 中的一个实例，位于命名空间 `PLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique α] : Unique (PLift α) :=
   Equiv.plift.unique
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] : DecidableEq (PLift α)
-  body: Equiv.plift.decidableEq
-
-中文:
-实例 [DecidableEq
-  签名: α] : DecidableEq (命题层提升 α)
-  定义体: Equiv.plift.decidableEq
-
-Depends on / 依赖: Equiv.plift.decidableEq, decidableEq
+/-
+**PLift.** 是 Mathlib 中的一个实例，位于命名空间 `PLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] : DecidableEq (PLift α) :=
   Equiv.plift.decidableEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : IsEmpty (PLift α)
-  body: Equiv.plift.isEmpty
-
-中文:
-实例 [是空
-  签名: α] : 是空 (命题层提升 α)
-  定义体: Equiv.plift.isEmpty
-
-Depends on / 依赖: Equiv.plift.isEmpty, isEmpty
+/-
+**PLift.** 是 Mathlib 中的一个实例，位于命名空间 `PLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] : IsEmpty (PLift α) :=
   Equiv.plift.isEmpty
-
-/--
-theorem `up_injective` / 定理 `up_injective`
-
-English:
-theorem up_injective
-  statement: Injective (@up α)
-  proof: Equiv.plift.symm.injective
-
-中文:
-定理 up_injective
-  结论: 单射 (@up α)
-  证明: Equiv.plift.symm.injective
-
-Depends on / 依赖: Equiv.plift.symm.injective, injective
+/-
+**PLift.up_injective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：up_injective : Injective (@up α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem up_injective : Injective (@up α) :=
   Equiv.plift.symm.injective
-
-/--
-theorem `up_surjective` / 定理 `up_surjective`
-
-English:
-theorem up_surjective
-  statement: Surjective (@up α)
-  proof: Equiv.plift.symm.surjective
-
-中文:
-定理 up_surjective
-  结论: 满射 (@up α)
-  证明: Equiv.plift.symm.surjective
-
-Depends on / 依赖: Equiv.plift.symm.surjective, surjective
+/-
+**PLift.up_surjective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：up_surjective : Surjective (@up α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem up_surjective : Surjective (@up α) :=
   Equiv.plift.symm.surjective
-
-/--
-theorem `up_bijective` / 定理 `up_bijective`
-
-English:
-theorem up_bijective
-  statement: Bijective (@up α)
-  proof: Equiv.plift.symm.bijective
-
-中文:
-定理 up_bijective
-  结论: 双射 (@up α)
-  证明: Equiv.plift.symm.bijective
-
-Depends on / 依赖: Equiv.plift.symm.bijective, bijective
+/-
+**PLift.up_bijective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：up_bijective : Bijective (@up α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem up_bijective : Bijective (@up α) :=
   Equiv.plift.symm.bijective
-
-/--
-theorem `up_inj` / 定理 `up_inj`
-
-English:
-theorem up_inj
-  given: {x y : α}
-  statement: up x = up y ↔ x = y
-  proof: by simp
-
-中文:
-定理 up_inj
-  条件: {x y : α}
-  结论: up x = up y ↔ x = y
-  证明: by simp
+/-
+**PLift.up_inj** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：up_inj {x y : α} : up x = up y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PLift.up.injEq`：∀ {α : Sort u} (down down_1 : α), ({ down := down } = { 
+down := down_1 }) = (down = down_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem up_inj {x y : α} : up x = up y ↔ x = y := by simp
-
-/--
-theorem `down_surjective` / 定理 `down_surjective`
-
-English:
-theorem down_surjective
-  statement: Surjective (@down α)
-  proof: Equiv.plift.surjective
-
-中文:
-定理 down_surjective
-  结论: 满射 (@down α)
-  证明: Equiv.plift.surjective
-
-Depends on / 依赖: Equiv.plift.surjective, surjective
+/-
+**PLift.down_surjective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：down_surjective : Surjective (@down α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 theorem down_surjective : Surjective (@down α) :=
   Equiv.plift.surjective
-
-/--
-theorem `down_bijective` / 定理 `down_bijective`
-
-English:
-theorem down_bijective
-  statement: Bijective (@down α)
-  proof: Equiv.plift.bijective
-
-中文:
-定理 down_bijective
-  结论: 双射 (@down α)
-  证明: Equiv.plift.bijective
-
-Depends on / 依赖: Equiv.plift.bijective, bijective
+/-
+**PLift.down_bijective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：down_bijective : Bijective (@down α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 theorem down_bijective : Bijective (@down α) :=
   Equiv.plift.bijective
 
 -- This is not a good simp lemma, as its discrimination tree key is just an arrow.
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: {p : PLift α -> Prop}
-  statement: (forall x, p x) ↔ forall x : α, p (PLift.up x)
-  proof: up_surjective.forall
-
-@[simp]
-
-中文:
-定理 «对任意»
-  条件: {p : 命题层提升 α -> 命题}
-  结论: (对任意 x, p x) ↔ 对任意 x : α, p (命题层提升.up x)
-  证明: up_surjective.forall
-
-@[simp]
+/-
+**PLift.** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem «forall» {p : PLift α -> Prop} : (forall x, p x) ↔ forall x : α, p (PLift.up x) :=
+theorem «forall» {p : PLift α → Prop} : (∀ x, p x) ↔ ∀ x : α, p (PLift.up x) :=
   up_surjective.forall
 
 @[simp]
-/--
-theorem `«exists»` / 定理 `«exists»`
-
-English:
-theorem «exists»
-  given: {p : PLift α -> Prop}
-  statement: (exists x, p x) ↔ exists x : α, p (PLift.up x)
-  proof: up_surjective.exists
-
-中文:
-定理 «存在»
-  条件: {p : 命题层提升 α -> 命题}
-  结论: (存在 x, p x) ↔ 存在 x : α, p (命题层提升.up x)
-  证明: up_surjective.exists
+/-
+**PLift.** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem «exists» {p : PLift α -> Prop} : (exists x, p x) ↔ exists x : α, p (PLift.up x) :=
+theorem «exists» {p : PLift α → Prop} : (∃ x, p x) ↔ ∃ x : α, p (PLift.up x) :=
   up_surjective.exists
-
-/--
-lemma `map_injective` / 引理 `map_injective`
-
-English:
-lemma map_injective
-  statement: Injective (PLift.map f) ↔ Injective f
-  proof: (Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
-
-中文:
-引理 map_injective
-  结论: 单射 (命题层提升.map f) ↔ 单射 f
-  证明: (Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
+/-
+**PLift.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {f : α → β}, Function.Injective (PLift.map f) 
+↔ Function.Injective f
+参数：PLift.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Injective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Injective (f
+ ∘ g) ↔ Function.Inje…
+· 使用定理 `PLift.down_bijective`：down_bijective : Bijective (@down α)
+· 使用定理 `Function.Injective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} {f : α → β},   Function.Injective f → ∀ (g : γ → α), Function.Injective (
+f ∘ g) ↔ Function.In…
+· 使用定理 `PLift.up_injective`：up_injective : Injective (@up α)
 -/
 @[simp] lemma map_injective : Injective (PLift.map f) ↔ Injective f :=
-(Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
-
-/--
-lemma `map_surjective` / 引理 `map_surjective`
-
-English:
-lemma map_surjective
-  statement: Surjective (PLift.map f) ↔ Surjective f
-  proof: (down_surjective.of_comp_iff _).trans Surjective.of_comp_iff' up_bijective _
-
-中文:
-引理 map_surjective
-  结论: 满射 (命题层提升.map f) ↔ 满射 f
-  证明: (down_surjective.of_comp_iff _).trans Surjective.of_comp_iff' up_bijective _
+  (Injective.of_comp_iff' _ down_bijective).trans <| up_injective.of_comp_iff _
+/-
+**PLift.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {f : α → β}, Function.Surjective (PLift.map f)
+ ↔ Function.Surjective f
+参数：PLift.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Surjective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} (f : α → β) {g : γ → α},   Function.Surjective g → (Function.Surjective 
+(f ∘ g) ↔ Function.Su…
+· 使用定理 `PLift.down_surjective`：down_surjective : Surjective (@down α)
+· 使用定理 `Function.Surjective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : S
+ort u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Surjectiv
+e (f ∘ g) ↔ Function.S…
+· 使用定理 `PLift.up_bijective`：up_bijective : Bijective (@up α)
 -/
 @[simp] lemma map_surjective : Surjective (PLift.map f) ↔ Surjective f :=
-(down_surjective.of_comp_iff _).trans Surjective.of_comp_iff' up_bijective _
-
-/--
-lemma `map_bijective` / 引理 `map_bijective`
-
-English:
-lemma map_bijective
-  statement: Bijective (PLift.map f) ↔ Bijective f
-  proof: (down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
-
-中文:
-引理 map_bijective
-  结论: 双射 (命题层提升.map f) ↔ 双射 f
-  证明: (down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
+  (down_surjective.of_comp_iff _).trans <| Surjective.of_comp_iff' up_bijective _
+/-
+**PLift.map_bijective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {f : α → β}, Function.Bijective (PLift.map f) 
+↔ Function.Bijective f
+参数：PLift.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Bijective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Bijective (f 
+∘ g) ↔ Function.Bije…
+· 使用定理 `PLift.down_bijective`：down_bijective : Bijective (@down α)
+· 使用定理 `Function.Bijective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Bijective 
+(f ∘ g) ↔ Function.Bi…
+· 使用定理 `PLift.up_bijective`：up_bijective : Bijective (@up α)
 -/
 @[simp] lemma map_bijective : Bijective (PLift.map f) ↔ Bijective f :=
-(down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
+  (down_bijective.of_comp_iff _).trans <| Bijective.of_comp_iff' up_bijective _
 
 end PLift
 
 namespace ULift
 
-variable {α : Type u} {β : Type v} {f : α -> β}
+variable {α : Type u} {β : Type v} {f : α → β}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] : Nonempty (ULift α)
-  body: Equiv.ulift.nonempty
-
-中文:
-实例 [非空
-  签名: α] : 非空 (类型层提升 α)
-  定义体: Equiv.ulift.nonempty
-
-Depends on / 依赖: Equiv.ulift.nonempty, nonempty
+/-
+**ULift.** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty α] : Nonempty (ULift α) :=
   Equiv.ulift.nonempty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: α] : Unique (ULift α)
-  body: Equiv.ulift.unique
-
-中文:
-实例 [唯一
-  签名: α] : 唯一 (类型层提升 α)
-  定义体: Equiv.ulift.unique
-
-Depends on / 依赖: Equiv.ulift.unique, unique
+/-
+**ULift.** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique α] : Unique (ULift α) :=
   Equiv.ulift.unique
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] : DecidableEq (ULift α)
-  body: Equiv.ulift.decidableEq
-
-中文:
-实例 [DecidableEq
-  签名: α] : DecidableEq (类型层提升 α)
-  定义体: Equiv.ulift.decidableEq
-
-Depends on / 依赖: Equiv.ulift.decidableEq, decidableEq
+/-
+**ULift.** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] : DecidableEq (ULift α) :=
   Equiv.ulift.decidableEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : IsEmpty (ULift α)
-  body: Equiv.ulift.isEmpty
-
-中文:
-实例 [是空
-  签名: α] : 是空 (类型层提升 α)
-  定义体: Equiv.ulift.isEmpty
-
-Depends on / 依赖: Equiv.ulift.isEmpty, isEmpty
+/-
+**ULift.** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] : IsEmpty (ULift α) :=
   Equiv.ulift.isEmpty
-
-/--
-theorem `up_injective` / 定理 `up_injective`
-
-English:
-theorem up_injective
-  statement: Injective (@up α)
-  proof: Equiv.ulift.symm.injective
-
-中文:
-定理 up_injective
-  结论: 单射 (@up α)
-  证明: Equiv.ulift.symm.injective
-
-Depends on / 依赖: Equiv.ulift.symm.injective, injective
+/-
+**ULift.up_injective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：up_injective : Injective (@up α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem up_injective : Injective (@up α) :=
   Equiv.ulift.symm.injective
-
-/--
-theorem `up_surjective` / 定理 `up_surjective`
-
-English:
-theorem up_surjective
-  statement: Surjective (@up α)
-  proof: Equiv.ulift.symm.surjective
-
-中文:
-定理 up_surjective
-  结论: 满射 (@up α)
-  证明: Equiv.ulift.symm.surjective
-
-Depends on / 依赖: Equiv.ulift.symm.surjective, surjective
+/-
+**ULift.up_surjective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：up_surjective : Surjective (@up α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem up_surjective : Surjective (@up α) :=
   Equiv.ulift.symm.surjective
-
-/--
-theorem `up_bijective` / 定理 `up_bijective`
-
-English:
-theorem up_bijective
-  statement: Bijective (@up α)
-  proof: Equiv.ulift.symm.bijective
-
-中文:
-定理 up_bijective
-  结论: 双射 (@up α)
-  证明: Equiv.ulift.symm.bijective
-
-Depends on / 依赖: Equiv.ulift.symm.bijective, bijective
+/-
+**ULift.up_bijective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：up_bijective : Bijective (@up α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem up_bijective : Bijective (@up α) :=
   Equiv.ulift.symm.bijective
-
-/--
-theorem `up_inj` / 定理 `up_inj`
-
-English:
-theorem up_inj
-  given: {x y : α}
-  statement: up x = up y ↔ x = y
-  proof: by simp
-
-中文:
-定理 up_inj
-  条件: {x y : α}
-  结论: up x = up y ↔ x = y
-  证明: by simp
+/-
+**ULift.up_inj** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：up_inj {x y : α} : up x = up y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ULift.up.injEq`：∀ {α : Type s} (down down_1 : α), ({ down := down } = { 
+down := down_1 }) = (down = down_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem up_inj {x y : α} : up x = up y ↔ x = y := by simp
-
-/--
-theorem `down_surjective` / 定理 `down_surjective`
-
-English:
-theorem down_surjective
-  statement: Surjective (@down α)
-  proof: Equiv.ulift.surjective
-
-中文:
-定理 down_surjective
-  结论: 满射 (@down α)
-  证明: Equiv.ulift.surjective
-
-Depends on / 依赖: Equiv.ulift.surjective, surjective
+/-
+**ULift.down_surjective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：down_surjective : Surjective (@down α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 theorem down_surjective : Surjective (@down α) :=
   Equiv.ulift.surjective
-
-/--
-theorem `down_bijective` / 定理 `down_bijective`
-
-English:
-theorem down_bijective
-  statement: Bijective (@down α)
-  proof: Equiv.ulift.bijective
-
-@[simp]
-
-中文:
-定理 down_bijective
-  结论: 双射 (@down α)
-  证明: Equiv.ulift.bijective
-
-@[simp]
-
-Depends on / 依赖: Equiv.ulift.bijective, bijective
+/-
+**ULift.down_bijective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：down_bijective : Bijective (@down α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 theorem down_bijective : Bijective (@down α) :=
   Equiv.ulift.bijective
 
 @[simp]
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: {p : ULift α -> Prop}
-  statement: (forall x, p x) ↔ forall x : α, p (ULift.up x)
-  proof: up_surjective.forall
-
-@[simp]
-
-中文:
-定理 «对任意»
-  条件: {p : 类型层提升 α -> 命题}
-  结论: (对任意 x, p x) ↔ 对任意 x : α, p (类型层提升.up x)
-  证明: up_surjective.forall
-
-@[simp]
+/-
+**ULift.** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem «forall» {p : ULift α -> Prop} : (forall x, p x) ↔ forall x : α, p (ULift.up x) :=
+theorem «forall» {p : ULift α → Prop} : (∀ x, p x) ↔ ∀ x : α, p (ULift.up x) :=
   up_surjective.forall
 
 @[simp]
-/--
-theorem `«exists»` / 定理 `«exists»`
-
-English:
-theorem «exists»
-  given: {p : ULift α -> Prop}
-  statement: (exists x, p x) ↔ exists x : α, p (ULift.up x)
-  proof: up_surjective.exists
-
-中文:
-定理 «存在»
-  条件: {p : 类型层提升 α -> 命题}
-  结论: (存在 x, p x) ↔ 存在 x : α, p (类型层提升.up x)
-  证明: up_surjective.exists
+/-
+**ULift.** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem «exists» {p : ULift α -> Prop} : (exists x, p x) ↔ exists x : α, p (ULift.up x) :=
+theorem «exists» {p : ULift α → Prop} : (∃ x, p x) ↔ ∃ x : α, p (ULift.up x) :=
   up_surjective.exists
-
-/--
-lemma `map_injective` / 引理 `map_injective`
-
-English:
-lemma map_injective
-  statement: Injective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Injective f
-  proof: (Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
-
-中文:
-引理 map_injective
-  结论: 单射 (类型层提升.map f : 类型层提升.{u'} α -> 类型层提升.{v'} β) ↔ 单射 f
-  证明: (Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
+/-
+**ULift.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u} {β : Type v} {f : α → β}, Function.Injective (ULift.map f) 
+↔ Function.Injective f
+参数：ULift.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Injective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Injective (f
+ ∘ g) ↔ Function.Inje…
+· 使用定理 `ULift.down_bijective`：down_bijective : Bijective (@down α)
+· 使用定理 `Function.Injective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} {f : α → β},   Function.Injective f → ∀ (g : γ → α), Function.Injective (
+f ∘ g) ↔ Function.In…
+· 使用定理 `ULift.up_injective`：up_injective : Injective (@up α)
 -/
-@[simp] lemma map_injective : Injective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Injective f :=
-(Injective.of_comp_iff' _ down_bijective).trans up_injective.of_comp_iff _
-
-/--
-lemma `map_surjective` / 引理 `map_surjective`
-
-English:
-lemma map_surjective
-  proof: (down_surjective.of_comp_iff _).trans Surjective.of_comp_iff' up_bijective _
-
-中文:
-引理 map_surjective
-  证明: (down_surjective.of_comp_iff _).trans Surjective.of_comp_iff' up_bijective _
+@[simp] lemma map_injective : Injective (ULift.map f : ULift.{u'} α → ULift.{v'} β) ↔ Injective f :=
+  (Injective.of_comp_iff' _ down_bijective).trans <| up_injective.of_comp_iff _
+/-
+**ULift.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u} {β : Type v} {f : α → β}, Function.Surjective (ULift.map f)
+ ↔ Function.Surjective f
+参数：ULift.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Surjective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} (f : α → β) {g : γ → α},   Function.Surjective g → (Function.Surjective 
+(f ∘ g) ↔ Function.Su…
+· 使用定理 `ULift.down_surjective`：down_surjective : Surjective (@down α)
+· 使用定理 `Function.Surjective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : S
+ort u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Surjectiv
+e (f ∘ g) ↔ Function.S…
+· 使用定理 `ULift.up_bijective`：up_bijective : Bijective (@up α)
 -/
 @[simp] lemma map_surjective :
-    Surjective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Surjective f :=
-(down_surjective.of_comp_iff _).trans Surjective.of_comp_iff' up_bijective _
-
-/--
-lemma `map_bijective` / 引理 `map_bijective`
-
-English:
-lemma map_bijective
-  statement: Bijective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Bijective f
-  proof: (down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
-
-@[ext]
-
-中文:
-引理 map_bijective
-  结论: 双射 (类型层提升.map f : 类型层提升.{u'} α -> 类型层提升.{v'} β) ↔ 双射 f
-  证明: (down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
-
-@[ext]
+    Surjective (ULift.map f : ULift.{u'} α → ULift.{v'} β) ↔ Surjective f :=
+  (down_surjective.of_comp_iff _).trans <| Surjective.of_comp_iff' up_bijective _
+/-
+**ULift.map_bijective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u} {β : Type v} {f : α → β}, Function.Bijective (ULift.map f) 
+↔ Function.Bijective f
+参数：ULift.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Bijective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Bijective (f 
+∘ g) ↔ Function.Bije…
+· 使用定理 `ULift.down_bijective`：down_bijective : Bijective (@down α)
+· 使用定理 `Function.Bijective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Bijective 
+(f ∘ g) ↔ Function.Bi…
+· 使用定理 `ULift.up_bijective`：up_bijective : Bijective (@up α)
 -/
-@[simp] lemma map_bijective : Bijective (ULift.map f : ULift.{u'} α -> ULift.{v'} β) ↔ Bijective f :=
-(down_bijective.of_comp_iff _).trans Bijective.of_comp_iff' up_bijective _
+@[simp] lemma map_bijective : Bijective (ULift.map f : ULift.{u'} α → ULift.{v'} β) ↔ Bijective f :=
+  (down_bijective.of_comp_iff _).trans <| Bijective.of_comp_iff' up_bijective _
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (x y : ULift α) (h : x.down = y.down)
-  statement: x = y
-  proof: congrArg up h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: (x y : 类型层提升 α) (h : x.down = y.down)
-  结论: x = y
-  证明: congrArg up h
-
-@[simp]
+/-
+**ULift.ext** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：ext (x y : ULift α) (h : x.down = y.down) : x = y
+参数：x y : ULift α；h : x.down = y.down。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem ext (x y : ULift α) (h : x.down = y.down) : x = y :=
   congrArg up h
 
 @[simp]
-/--
-lemma `rec_update` / 引理 `rec_update`
-
-English:
-lemma rec_update
-  statement: {β : ULift α -> Type*} [DecidableEq α]
-  proof: Function.rec_update up_injective (ULift.rec ·) (fun _ _ => rfl) (fun
-    | _, _, .up _, h => (h _ rfl).elim) _ _ _
-
-中文:
-引理 rec_update
-  结论: {β : 类型层提升 α -> 类型} [DecidableEq α]
-  证明: Function.rec_update up_injective (ULift.rec ·) (fun _ _ => rfl) (fun
-    | _, _, .up _, h => (h _ rfl).elim) _ _ _
-
-Depends on / 依赖: Function, Function.rec_update, ULift.rec, rec_update, up_injective
+/-
+**ULift.rec_update** 是 Mathlib 中的一个引理，位于命名空间 `ULift`。
+形式化陈述：rec_update {β : ULift α -> Type*} [DecidableEq α] (f : forall a, β (.up a)
+) (a : α) (x : β (.up a)) : ULift.rec (update f a x) = update (ULift.rec f) (.up
+ a) x
+参数：f : forall a, β (.up a)；a : α；x : β (.up a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.rec_update`：rec_update {ι κ : Sort*} {α : κ -> Sort*} [Decidabl
+eEq ι] [DecidableEq κ] {ctor : ι -> κ} (_ : Function.Injective ctor) (recursor :
+ ((i : ι)…
+· 使用定理 `ULift.up_injective`：up_injective : Injective (@up α)
 -/
-lemma rec_update {β : ULift α -> Type*} [DecidableEq α]
-    (f : forall a, β (.up a)) (a : α) (x : β (.up a)) :
+lemma rec_update {β : ULift α → Type*} [DecidableEq α]
+    (f : ∀ a, β (.up a)) (a : α) (x : β (.up a)) :
     ULift.rec (update f a x) = update (ULift.rec f) (.up a) x :=
   Function.rec_update up_injective (ULift.rec ·) (fun _ _ => rfl) (fun
     | _, _, .up _, h => (h _ rfl).elim) _ _ _
 
 end ULift
+

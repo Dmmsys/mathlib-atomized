@@ -21,20 +21,12 @@ universe v
 
 namespace CategoryTheory.Limits
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AB5 (Type v)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 :
-  签名: AB5 (类型v)
-  定义体: ⟨inferInstance⟩
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AB5 (Type v) where
   ofShape _ _ _ := ⟨inferInstance⟩
 
 end CategoryTheory.Limits
+

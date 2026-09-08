@@ -37,60 +37,42 @@ variable {C : Type u} [Category.{v} C]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `threeδ₃Toδ₂` / `threeδ₃Toδ₂` 的定义
+/-- The morphism `mk₂ f₁ f₂ ⟶ mk₂ f₁ f₂₃` when `f₂ ≫ f₃ = f₂₃`. -/
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition threeδ₃Toδ₂
-  signature: (h₂₃ : f₂ ≫ f₃ = f₂₃ := by cat_disch)
-  body: homMk₂ (𝟙 _) (𝟙 _) f₃
-
-中文:
-定义 threeδ₃Toδ₂
-  签名: (h₂₃ : f₂ ≫ f₃ = f₂₃ := by cat_disch)
-  定义体: homMk₂ (𝟙 _) (𝟙 _) f₃
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The morphism `mk₂ f₁ f₂ ⟶ mk₂ f₁ f₂₃` when `f₂ ≫ f₃ = f₂₃`.
 -/
 def threeδ₃Toδ₂ (h₂₃ : f₂ ≫ f₃ = f₂₃ := by cat_disch) :
     mk₂ f₁ f₂ ⟶ mk₂ f₁ f₂₃ :=
   homMk₂ (𝟙 _) (𝟙 _) f₃
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `threeδ₂Toδ₁` / `threeδ₂Toδ₁` 的定义
+/-- The morphism `mk₂ f₁ f₂₃ ⟶ mk₂ f₁₂ f₃` when `f₁ ≫ f₂ = f₁₂` and `f₂ ≫ f₃ = f₂₃`. -/
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition threeδ₂Toδ₁
-  signature: (h₁₂ : f₁ ≫ f₂ = f₁₂ := by cat_disch) (h₂₃ : f₂ ≫ f₃ = f₂₃ := by cat_disch)
-  body: homMk₂ (𝟙 _) f₂ (𝟙 _)
-
-中文:
-定义 threeδ₂Toδ₁
-  签名: (h₁₂ : f₁ ≫ f₂ = f₁₂ := by cat_disch) (h₂₃ : f₂ ≫ f₃ = f₂₃ := by cat_disch)
-  定义体: homMk₂ (𝟙 _) f₂ (𝟙 _)
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The morphism `mk₂ f₁ f₂₃ ⟶ mk₂ f₁₂ f₃` when `f₁ ≫ f₂ = f₁₂` and `f₂ ≫ f₃ = f₂₃`.
 -/
 def threeδ₂Toδ₁ (h₁₂ : f₁ ≫ f₂ = f₁₂ := by cat_disch) (h₂₃ : f₂ ≫ f₃ = f₂₃ := by cat_disch) :
     mk₂ f₁ f₂₃ ⟶ mk₂ f₁₂ f₃ :=
   homMk₂ (𝟙 _) f₂ (𝟙 _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `threeδ₁Toδ₀` / `threeδ₁Toδ₀` 的定义
+/-- The morphism `mk₂ f₁₂ f₃ ⟶ mk₂ f₂ f₃` when `f₁ ≫ f₂ = f₁₂`. -/
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition threeδ₁Toδ₀
-  signature: (h₁₂ : f₁ ≫ f₂ = f₁₂ := by cat_disch)
-  body: homMk₂ f₁ (𝟙 _) (𝟙 _)
-
-中文:
-定义 threeδ₁Toδ₀
-  签名: (h₁₂ : f₁ ≫ f₂ = f₁₂ := by cat_disch)
-  定义体: homMk₂ f₁ (𝟙 _) (𝟙 _)
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The morphism `mk₂ f₁₂ f₃ ⟶ mk₂ f₂ f₃` when `f₁ ≫ f₂ = f₁₂`.
 -/
 def threeδ₁Toδ₀ (h₁₂ : f₁ ≫ f₂ = f₁₂ := by cat_disch) :
     mk₂ f₁₂ f₃ ⟶ mk₂ f₂ f₃ :=
@@ -100,166 +82,84 @@ variable (h₁₂ : f₁ ≫ f₂ = f₁₂) (h₂₃ : f₂ ≫ f₃ = f₂₃)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `threeδ₃Toδ₂_app_zero` / 引理 `threeδ₃Toδ₂_app_zero`
-
-English:
-lemma threeδ₃Toδ₂_app_zero
-  proof: rfl
-
-中文:
-引理 threeδ₃Toδ₂_app_zero
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₃Toδ₂_app_zero :
     (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃).app 0 = 𝟙 _ := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `threeδ₃Toδ₂_app_one` / 引理 `threeδ₃Toδ₂_app_one`
-
-English:
-lemma threeδ₃Toδ₂_app_one
-  proof: rfl
-
-中文:
-引理 threeδ₃Toδ₂_app_one
-  证明: rfl
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₃Toδ₂_app_one :
     (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃).app 1 = 𝟙 _ := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `threeδ₃Toδ₂_app_two` / 引理 `threeδ₃Toδ₂_app_two`
-
-English:
-lemma threeδ₃Toδ₂_app_two
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 threeδ₃Toδ₂_app_two
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ReflectsColimits, ReflectsColimits.reflectsFilteredColimits, reflectsFilteredColimits
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₃Toδ₂_app_two :
     (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃).app 2 = f₃ := rfl
 
 @[simp]
-/--
-lemma `threeδ₂Toδ₁_app_zero` / 引理 `threeδ₂Toδ₁_app_zero`
-
-English:
-lemma threeδ₂Toδ₁_app_zero
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 threeδ₂Toδ₁_app_zero
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₂Toδ₁_app_zero :
     (threeδ₂Toδ₁ f₁ f₂ f₃ f₁₂ f₂₃ h₁₂ h₂₃).app 0 = 𝟙 _ := rfl
 
 @[simp]
-/--
-lemma `threeδ₂Toδ₁_app_one` / 引理 `threeδ₂Toδ₁_app_one`
-
-English:
-lemma threeδ₂Toδ₁_app_one
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 threeδ₂Toδ₁_app_one
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₂Toδ₁_app_one :
     (threeδ₂Toδ₁ f₁ f₂ f₃ f₁₂ f₂₃ h₁₂ h₂₃).app 1 = f₂ := rfl
 
 @[simp]
-/--
-lemma `threeδ₂Toδ₁_app_two` / 引理 `threeδ₂Toδ₁_app_two`
-
-English:
-lemma threeδ₂Toδ₁_app_two
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 threeδ₂Toδ₁_app_two
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₂Toδ₁_app_two :
     (threeδ₂Toδ₁ f₁ f₂ f₃ f₁₂ f₂₃ h₁₂ h₂₃).app 2 = 𝟙 _ := rfl
 
 @[simp]
-/--
-lemma `threeδ₁Toδ₀_app_zero` / 引理 `threeδ₁Toδ₀_app_zero`
-
-English:
-lemma threeδ₁Toδ₀_app_zero
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 threeδ₁Toδ₀_app_zero
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₁Toδ₀_app_zero :
     (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂).app 0 = f₁ := rfl
 
 @[simp]
-/--
-lemma `threeδ₁Toδ₀_app_one` / 引理 `threeδ₁Toδ₀_app_one`
-
-English:
-lemma threeδ₁Toδ₀_app_one
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 threeδ₁Toδ₀_app_one
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₁Toδ₀_app_one :
     (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂).app 1 = (𝟙 _) := rfl
 
 @[simp]
-/--
-lemma `threeδ₁Toδ₀_app_two` / 引理 `threeδ₁Toδ₀_app_two`
-
-English:
-lemma threeδ₁Toδ₀_app_two
-  proof: rfl
-
-中文:
-引理 threeδ₁Toδ₀_app_two
-  证明: rfl
-
-Depends on / 依赖: PreservesLimits, PreservesLimits.preservesCofilteredLimits, preservesCofilteredLimits
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma threeδ₁Toδ₀_app_two :
     (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂).app 2 = (𝟙 _) := rfl
@@ -269,63 +169,45 @@ end
 section
 
 variable {ι : Type*} [Preorder ι]
-    (i₀ i₁ i₂ i₃ : ι) (hi₀₁ : i₀ <= i₁) (hi₁₂ : i₁ <= i₂) (hi₂₃ : i₂ <= i₃)
+    (i₀ i₁ i₂ i₃ : ι) (hi₀₁ : i₀ ≤ i₁) (hi₁₂ : i₁ ≤ i₂) (hi₂₃ : i₂ ≤ i₃)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `threeδ₃Toδ₂'` / `threeδ₃Toδ₂'` 的定义
+/-- Variant of `threeδ₃Toδ₂` for preorders. -/
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation threeδ₃Toδ₂'
-  signature: :
-  body: threeδ₃Toδ₂ _ _ (homOfLE hi₂₃) _ rfl
-
-中文:
-缩写 threeδ₃Toδ₂'
-  签名: :
-  定义体: threeδ₃Toδ₂ _ _ (homOfLE hi₂₃) _ rfl
-
-Depends on / 依赖: homOfLE
+--- 原说明 ---
+Variant of `threeδ₃Toδ₂` for preorders.
 -/
 abbrev threeδ₃Toδ₂' :
     mk₂ (homOfLE hi₀₁) (homOfLE hi₁₂) ⟶
       mk₂ (homOfLE hi₀₁) (homOfLE (hi₁₂.trans hi₂₃)) :=
   threeδ₃Toδ₂ _ _ (homOfLE hi₂₃) _ rfl
 
-/--
-Definition of `threeδ₂Toδ₁'` / `threeδ₂Toδ₁'` 的定义
+/-- Variant of `threeδ₂Toδ₁` for preorders. -/
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation threeδ₂Toδ₁'
-  signature: :
-  body: threeδ₂Toδ₁ _ (homOfLE hi₁₂) _ _ _ rfl rfl
-
-中文:
-缩写 threeδ₂Toδ₁'
-  签名: :
-  定义体: threeδ₂Toδ₁ _ (homOfLE hi₁₂) _ _ _ rfl rfl
-
-Depends on / 依赖: homOfLE
+--- 原说明 ---
+Variant of `threeδ₂Toδ₁` for preorders.
 -/
 abbrev threeδ₂Toδ₁' :
     mk₂ (homOfLE hi₀₁) (homOfLE (hi₁₂.trans hi₂₃)) ⟶
       mk₂ (homOfLE (hi₀₁.trans hi₁₂)) (homOfLE hi₂₃) :=
   threeδ₂Toδ₁ _ (homOfLE hi₁₂) _ _ _ rfl rfl
 
-/--
-Definition of `threeδ₁Toδ₀'` / `threeδ₁Toδ₀'` 的定义
+/-- Variant of `threeδ₁Toδ₀` for preorders. -/
+/-
+**CategoryTheory.ComposableArrows.three** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.ComposableArrows`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation threeδ₁Toδ₀'
-  signature: :
-  body: threeδ₁Toδ₀ (homOfLE hi₀₁) _ _ _ rfl
-
-中文:
-缩写 threeδ₁Toδ₀'
-  签名: :
-  定义体: threeδ₁Toδ₀ (homOfLE hi₀₁) _ _ _ rfl
-
-Depends on / 依赖: homOfLE
+--- 原说明 ---
+Variant of `threeδ₁Toδ₀` for preorders.
 -/
 abbrev threeδ₁Toδ₀' :
     mk₂ (homOfLE (hi₀₁.trans hi₁₂)) (homOfLE hi₂₃) ⟶
@@ -337,3 +219,4 @@ end
 end ComposableArrows
 
 end CategoryTheory
+

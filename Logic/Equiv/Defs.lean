@@ -65,38 +65,29 @@ universe u v w z
 
 variable {α : Sort u} {β : Sort v} {γ : Sort w}
 
-/--
-Definition of `Equiv` / `Equiv` 的定义
+/-- `α ≃ β` is the type of functions from `α → β` with a two-sided inverse. -/
+/-
+**Equiv** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Equiv (α β : Sort*) where /-- The forward map of an equivalence.  Do NOT u
+se directly. Use the coercion instead. -/ protected toFun : α -> β /-- The backw
+ard map of an equivalence.  Do NOT use `e.invFun` directly. Use the coercion of 
+`e.symm` instead. -/ protected invFun : β -> α protected left_inv : LeftInverse 
+invFun toFun
+参数：α β : Sort*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Equiv
-  parameters: (α β : Sort*)
-  axioms and operations (4):
-    - toFun : α -> β
-    - invFun : β -> α
-    - left_inv : LeftInverse invFun toFun  [default: by intro; first | rfl | ext <;> rfl]
-    - right_inv : RightInverse invFun toFun  [default: by intro; first | rfl | ext <;> rfl]
-
-中文:
-结构 等价
-  参数: (α β : 类型层*)
-  公理与运算 (4 个):
-    - toFun : α -> β
-    - invFun : β -> α
-    - left_inv : 左逆 invFun toFun  [默认: by intro; first | rfl | ext <;> rfl]
-    - right_inv : 右逆 invFun toFun  [默认: by intro; first | rfl | ext <;> rfl]
-
-Depends on / 依赖: RightInverse, invFun, protected, right_inv
+--- 原说明 ---
+`α ≃ β` is the type of functions from `α → β` with a two-sided inverse.
 -/
 structure Equiv (α β : Sort*) where
   /-- The forward map of an equivalence.
 
   Do NOT use directly. Use the coercion instead. -/
-  protected toFun : α -> β
+  protected toFun : α → β
   /-- The backward map of an equivalence.
 
   Do NOT use `e.invFun` directly. Use the coercion of `e.symm` instead. -/
-  protected invFun : β -> α
+  protected invFun : β → α
   protected left_inv : LeftInverse invFun toFun := by intro; first | rfl | ext <;> rfl
   protected right_inv : RightInverse invFun toFun := by intro; first | rfl | ext <;> rfl
 
@@ -106,24 +97,22 @@ infixl:25 " ≃ " => Equiv
 /-- Turn an element of a type `F` satisfying `EquivLike F α β` into an actual
 `Equiv`. This is declared as the default coercion from `F` to `α ≃ β`. -/
 @[coe]
-/--
-Definition of `EquivLike.toEquiv` / `EquivLike.toEquiv` 的定义
+/-
+**EquivLike.toEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：EquivLike.toEquiv {F} [EquivLike F α β] (f : F) : α ≃ β where toFun
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.left_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : outP
+aram (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.LeftInverse (Equiv
+Like.inv…
+· 使用定理 `EquivLike.right_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : out
+Param (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.RightInverse (Equ
+ivLike.in…
 
-English:
-definition EquivLike.toEquiv
-  signature: {F} [EquivLike F α β] (f : F)
-  body: f
-  invFun := EquivLike.inv f
-  left_inv := EquivLike.left_inv f
-  right_inv := EquivLike.right_inv f
-
-中文:
-定义 等价状.toEquiv
-  签名: {F} [等价状 F α β] (f : F)
-  定义体: f
-  invFun := EquivLike.inv f
-  left_inv := EquivLike.left_inv f
-  right_inv := EquivLike.right_inv f
+--- 原说明 ---
+Turn an element of a type `F` satisfying `EquivLike F α β` into an actual
+`Equiv`. This is declared as the default coercion from `F` to `α ≃ β`.
 -/
 def EquivLike.toEquiv {F} [EquivLike F α β] (f : F) : α ≃ β where
   toFun := f
@@ -132,53 +121,35 @@ def EquivLike.toEquiv {F} [EquivLike F α β] (f : F) : α ≃ β where
   right_inv := EquivLike.right_inv f
 
 /-- Any type satisfying `EquivLike` can be cast into `Equiv` via `EquivLike.toEquiv`. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Any type satisfying `EquivLike` can be cast into `Equiv` via `EquivLike.toEquiv`
+.
+-/
 instance {F} [EquivLike F α β] : CoeTC F (α ≃ β) :=
   ⟨EquivLike.toEquiv⟩
 
-/--
-Definition of `Equiv.Perm` / `Equiv.Perm` 的定义
+/-- `Perm α` is the type of bijections from `α` to itself. -/
+/-
+**Equiv.Perm** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Equiv.Perm (α : Sort*)
+参数：α : Sort*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Equiv.Perm
-  signature: (α : Sort*)
-  body: Equiv α α
-
-中文:
-缩写 等价.置换
-  签名: (α : 类型层*)
-  定义体: Equiv α α
+--- 原说明 ---
+`Perm α` is the type of bijections from `α` to itself.
 -/
 abbrev Equiv.Perm (α : Sort*) :=
   Equiv α α
 
 namespace Equiv
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (α ≃ β) α β
-  body: Equiv.toFun
-  inv := Equiv.invFun
-  left_inv := Equiv.left_inv
-  right_inv := Equiv.right_inv
-  coe_injective' e₁ e₂ h₁ h₂ := by cases e₁; cases e₂; congr
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 等价状 (α ≃ β) α β
-  定义体: Equiv.toFun
-  inv := Equiv.invFun
-  left_inv := Equiv.left_inv
-  right_inv := Equiv.right_inv
-  coe_injective' e₁ e₂ h₁ h₂ := by cases e₁; cases e₂; congr
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Equiv.toFun
+/-
+**Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (α ≃ β) α β where
   coe := Equiv.toFun
@@ -188,1667 +159,1025 @@ instance : EquivLike (α ≃ β) α β where
   coe_injective' e₁ e₂ h₁ h₂ := by cases e₁; cases e₂; congr
 
 @[simp, norm_cast]
-/--
-lemma `_root_.EquivLike.coe_coe` / 引理 `_root_.EquivLike.coe_coe`
-
-English:
-lemma _root_.EquivLike.coe_coe
-  given: {F} [EquivLike F α β] (e : F)
-  proof: rfl
-
-中文:
-引理 _root_.等价状.coe_coe
-  条件: {F} [等价状 F α β] (e : F)
-  证明: rfl
+/-
+**Equiv._root_.EquivLike.coe_coe** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.EquivLike.coe_coe {F} [EquivLike F α β] (e : F) :
-    ((e : α ≃ β) : α -> β) = e := rfl
-
-/--
-theorem `coe_fn_mk` / 定理 `coe_fn_mk`
-
-English:
-theorem coe_fn_mk
-  given: (f : α -> β) (g l r)
-  statement: (Equiv.mk f g l r : α -> β) = f
-  proof: rfl
-
-中文:
-定理 coe_fn_mk
-  条件: (f : α -> β) (g l r)
-  结论: (等价.mk f g l r : α -> β) = f
-  证明: rfl
+    ((e : α ≃ β) : α → β) = e := rfl
+/-
+**Equiv.coe_fn_mk** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (f : α → β) (g : β → α) (l : Function.LeftInve
+rse g f) (r : Function.RightInverse g f),   ⇑{ toFun := f, invFun := g, left_inv
+ := l, right_inv := r } = f
+参数：f : α → β；g : β → α；l : Function.LeftInverse g f；r : Function.RightInverse g 
+f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, grind =] theorem coe_fn_mk (f : α -> β) (g l r) : (Equiv.mk f g l r : α -> β) = f :=
+@[simp, grind =] theorem coe_fn_mk (f : α → β) (g l r) : (Equiv.mk f g l r : α → β) = f :=
   rfl
 
-/--
-theorem `coe_fn_injective` / 定理 `coe_fn_injective`
+/-- The map `(r ≃ s) → (r → s)` is injective. -/
+/-
+**Equiv.coe_fn_injective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：coe_fn_injective : @Function.Injective (α ≃ β) (α -> β) (fun e => e)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 
-English:
-theorem coe_fn_injective
-  statement: @Function.Injective (α ≃ β) (α -> β) (fun e => e)
-  proof: DFunLike.coe_injective
-
-中文:
-定理 coe_fn_injective
-  结论: @函数.单射 (α ≃ β) (α -> β) (fun e => e)
-  证明: DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+--- 原说明 ---
+The map `(r ≃ s) → (r → s)` is injective.
 -/
-theorem coe_fn_injective : @Function.Injective (α ≃ β) (α -> β) (fun e => e) :=
+theorem coe_fn_injective : @Function.Injective (α ≃ β) (α → β) (fun e => e) :=
   DFunLike.coe_injective
-
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {e₁ e₂ : α ≃ β}
-  statement: (e₁ : α -> β) = e₂ ↔ e₁ = e₂
-  proof: @DFunLike.coe_fn_eq _ _ _ _ e₁ e₂
-
-中文:
-定理 coe_inj
-  条件: {e₁ e₂ : α ≃ β}
-  结论: (e₁ : α -> β) = e₂ ↔ e₁ = e₂
-  证明: @DFunLike.coe_fn_eq _ _ _ _ e₁ e₂
+/-
+**Equiv.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {e₁ e₂ : α ≃ β}, ⇑e₁ = ⇑e₂ ↔ e₁ = e₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_fn_eq`：coe_fn_eq {f g : F} : (f : forall a : α, β a) = (g :
+ forall a : α, β a) ↔ f = g
 -/
-protected theorem coe_inj {e₁ e₂ : α ≃ β} : (e₁ : α -> β) = e₂ ↔ e₁ = e₂ :=
+protected theorem coe_inj {e₁ e₂ : α ≃ β} : (e₁ : α → β) = e₂ ↔ e₁ = e₂ :=
   @DFunLike.coe_fn_eq _ _ _ _ e₁ e₂
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : Equiv α β} (H : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext f g H
-
-中文:
-定理 ext
-  条件: {f g : 等价 α β} (H : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext f g H
+/-
+**Equiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `Stream'.WSeq`。
+形式化陈述：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) : s ~ʷ t
+参数：h : forall n, get? s n ~ get? t n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-@[ext, grind ext] theorem ext {f g : Equiv α β} (H : forall x, f x = g x) : f = g := DFunLike.ext f g H
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: {f : Equiv α β} {x x' : α}
-  statement: x = x' -> f x = f x'
-  proof: DFunLike.congr_arg f
-
-中文:
-定理 congr_arg
-  条件: {f : 等价 α β} {x x' : α}
-  结论: x = x' -> f x = f x'
-  证明: DFunLike.congr_arg f
+@[ext, grind ext] theorem ext {f g : Equiv α β} (H : ∀ x, f x = g x) : f = g := DFunLike.ext f g H
+/-
+**Equiv.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {f : α ≃ β} {x x' : α}, x = x' → f x = f x'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
 -/
-protected theorem congr_arg {f : Equiv α β} {x x' : α} : x = x' -> f x = f x' :=
+protected theorem congr_arg {f : Equiv α β} {x x' : α} : x = x' → f x = f x' :=
   DFunLike.congr_arg f
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : Equiv α β} (h : f = g) (x : α)
-  statement: f x = g x
-  proof: DFunLike.congr_fun h x
-
-中文:
-定理 congr_fun
-  条件: {f g : 等价 α β} (h : f = g) (x : α)
-  结论: f x = g x
-  证明: DFunLike.congr_fun h x
+/-
+**Equiv.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {f g : α ≃ β}, f = g → ∀ (x : α), f x = g x
+参数：x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 protected theorem congr_fun {f g : Equiv α β} (h : f = g) (x : α) : f x = g x :=
   DFunLike.congr_fun h x
-
-/--
-theorem `Perm.ext` / 定理 `Perm.ext`
-
-English:
-theorem Perm.ext
-  given: {σ τ : Equiv.Perm α} (H : forall x, σ x = τ x)
-  statement: σ = τ
-  proof: Equiv.ext H
-
-中文:
-定理 置换.ext
-  条件: {σ τ : 等价.置换 α} (H : 对任意 x, σ x = τ x)
-  结论: σ = τ
-  证明: Equiv.ext H
+/-
+**Equiv.Perm.ext** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ x) → σ = τ
+参数：∀ (x : α), σ x = τ x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
 -/
-@[ext] theorem Perm.ext {σ τ : Equiv.Perm α} (H : forall x, σ x = τ x) : σ = τ := Equiv.ext H
-
-/--
-theorem `Perm.congr_arg` / 定理 `Perm.congr_arg`
-
-English:
-theorem Perm.congr_arg
-  given: {f : Equiv.Perm α} {x x' : α}
-  statement: x = x' -> f x = f x'
-  proof: Equiv.congr_arg
-
-中文:
-定理 置换.congr_arg
-  条件: {f : 等价.置换 α} {x x' : α}
-  结论: x = x' -> f x = f x'
-  证明: Equiv.congr_arg
+@[ext] theorem Perm.ext {σ τ : Equiv.Perm α} (H : ∀ x, σ x = τ x) : σ = τ := Equiv.ext H
+/-
+**Equiv.Perm.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Sort u} {f : Equiv.Perm α} {x x' : α}, x = x' → f x = f x'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.congr_arg`：∀ {α : Sort u} {β : Sort v} {f : α ≃ β} {x x' : α}, x =
+ x' → f x = f x'
 -/
-protected theorem Perm.congr_arg {f : Equiv.Perm α} {x x' : α} : x = x' -> f x = f x' :=
+protected theorem Perm.congr_arg {f : Equiv.Perm α} {x x' : α} : x = x' → f x = f x' :=
   Equiv.congr_arg
-
-/--
-theorem `Perm.congr_fun` / 定理 `Perm.congr_fun`
-
-English:
-theorem Perm.congr_fun
-  given: {f g : Equiv.Perm α} (h : f = g) (x : α)
-  statement: f x = g x
-  proof: Equiv.congr_fun h x
-
-中文:
-定理 置换.congr_fun
-  条件: {f g : 等价.置换 α} (h : f = g) (x : α)
-  结论: f x = g x
-  证明: Equiv.congr_fun h x
+/-
+**Equiv.Perm.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Sort u} {f g : Equiv.Perm α}, f = g → ∀ (x : α), f x = g x
+参数：x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.congr_fun`：∀ {α : Sort u} {β : Sort v} {f g : α ≃ β}, f = g → ∀ (x
+ : α), f x = g x
 -/
 protected theorem Perm.congr_fun {f g : Equiv.Perm α} (h : f = g) (x : α) : f x = g x :=
   Equiv.congr_fun h x
 
-/--
-Definition of `refl` / `refl` 的定义
+/-- Any type is equivalent to itself. -/
+/-
+**Equiv.refl** 是 Mathlib 中的一个定理，位于命名空间 `Computation`。
+形式化陈述：Equiv.refl (s : Computation α) : s ~ s
+参数：s : Computation α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (α : Sort*)
-  body: ⟨id, id, fun _ => rfl, fun _ => rfl⟩
-
-中文:
-定义 refl
-  签名: (α : 类型层*)
-  定义体: ⟨id, id, fun _ => rfl, fun _ => rfl⟩
+--- 原说明 ---
+Any type is equivalent to itself.
 -/
 @[refl] protected def refl (α : Sort*) : α ≃ α := ⟨id, id, fun _ => rfl, fun _ => rfl⟩
+/-
+**Equiv.inhabited'** 是 Mathlib 中的一个实例，位于命名空间 `Equiv`。
+形式化陈述：inhabited' : Inhabited (α ≃ α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-/--
-Instance `inhabited'` / 实例 `inhabited'`
-
-English:
-instance inhabited'
-  signature: : Inhabited (α ≃ α)
-  body: ⟨Equiv.refl α⟩
-
-中文:
-实例 inhabited'
-  签名: : 可居 (α ≃ α)
-  定义体: ⟨Equiv.refl α⟩
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+Any type is equivalent to itself.
 -/
 instance inhabited' : Inhabited (α ≃ α) := ⟨Equiv.refl α⟩
 
 /-- Inverse of an equivalence `e : α ≃ β`. -/
 @[symm, implicit_reducible]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**Equiv.symm** 是 Mathlib 中的一个定理，位于命名空间 `Computation`。
+形式化陈述：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 
-English:
-definition symm
-  signature: (e : α ≃ β)
-  body: ⟨e.invFun, e.toFun, e.right_inv, e.left_inv⟩
-
-中文:
-定义 symm
-  签名: (e : α ≃ β)
-  定义体: ⟨e.invFun, e.toFun, e.right_inv, e.left_inv⟩
+--- 原说明 ---
+Inverse of an equivalence `e : α ≃ β`.
 -/
 protected def symm (e : α ≃ β) : β ≃ α := ⟨e.invFun, e.toFun, e.right_inv, e.left_inv⟩
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**Equiv.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Parser.Command`。
+形式化陈述：Equiv.Simps.symm_apply (e : α ≃ β) : β → α
+参数：e : α ≃ β。
+该定义给出了一个带前提的构造。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Simps.symm_apply
-  signature: (e : α ≃ β)
-  body: e.symm
-
-initialize_simps_projections Equiv (toFun -> apply, invFun -> symm_apply)
-
-中文:
-定义 Simps.symm_apply
-  签名: (e : α ≃ β)
-  定义体: e.symm
-
-initialize_simps_projections Equiv (toFun -> apply, invFun -> symm_apply)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.symm_apply (e : α ≃ β) : β -> α := e.symm
+def Simps.symm_apply (e : α ≃ β) : β → α := e.symm
 
-initialize_simps_projections Equiv (toFun -> apply, invFun -> symm_apply)
+initialize_simps_projections Equiv (toFun → apply, invFun → symm_apply)
 
-/--
-theorem `left_inv'` / 定理 `left_inv'`
+/-- Restatement of `Equiv.left_inv` in terms of `Function.LeftInverse`. -/
+/-
+**Equiv.left_inv'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：left_inv' (e : α ≃ β) : Function.LeftInverse e.symm e
+参数：e : α ≃ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 
-English:
-theorem left_inv'
-  given: (e : α ≃ β)
-  statement: Function.LeftInverse e.symm e
-  proof: e.left_inv
-
-中文:
-定理 left_inv'
-  条件: (e : α ≃ β)
-  结论: 函数.左逆 e.symm e
-  证明: e.left_inv
-
-Depends on / 依赖: e.left_inv, left_inv
+--- 原说明 ---
+Restatement of `Equiv.left_inv` in terms of `Function.LeftInverse`.
 -/
 theorem left_inv' (e : α ≃ β) : Function.LeftInverse e.symm e := e.left_inv
-/--
-theorem `right_inv'` / 定理 `right_inv'`
+/-- Restatement of `Equiv.right_inv` in terms of `Function.RightInverse`. -/
+/-
+**Equiv.right_inv'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：right_inv' (e : α ≃ β) : Function.RightInverse e.symm e
+参数：e : α ≃ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 
-English:
-theorem right_inv'
-  given: (e : α ≃ β)
-  statement: Function.RightInverse e.symm e
-  proof: e.right_inv
-
-中文:
-定理 right_inv'
-  条件: (e : α ≃ β)
-  结论: 函数.右逆 e.symm e
-  证明: e.right_inv
-
-Depends on / 依赖: e.right_inv, right_inv
+--- 原说明 ---
+Restatement of `Equiv.right_inv` in terms of `Function.RightInverse`.
 -/
 theorem right_inv' (e : α ≃ β) : Function.RightInverse e.symm e := e.right_inv
-
-/--
-lemma `symm_mk` / 引理 `symm_mk`
-
-English:
-lemma symm_mk
-  given: (f : α -> β) (g hl hr)
-  statement: (mk f g hl hr).symm = mk g f hr hl
-  proof: rfl
-
-中文:
-引理 symm_mk
-  条件: (f : α -> β) (g hl hr)
-  结论: (mk f g hl hr).symm = mk g f hr hl
-  证明: rfl
+/-
+**Equiv.symm_mk** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (f : α → β) (g : β → α) (hl : Function.LeftInv
+erse g f) (hr : Function.RightInverse g f),   { toFun := f, invFun := g, left_in
+v := hl, right_inv := hr }.symm =     { toFun := g, invFun := f, left_inv := hr,
+ right_inv := hl }
+参数：f : α → β；g : β → α；hl : Function.LeftInverse g f；hr : Function.RightInverse 
+g f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] lemma symm_mk (f : α -> β) (g hl hr) : (mk f g hl hr).symm = mk g f hr hl := rfl
+@[simp] lemma symm_mk (f : α → β) (g hl hr) : (mk f g hl hr).symm = mk g f hr hl := rfl
 
 /-- Composition of equivalences `e₁ : α ≃ β` and `e₂ : β ≃ γ`. -/
 @[trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**Equiv.trans** 是 Mathlib 中的一个定理，位于命名空间 `Computation`。
+形式化陈述：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~ u
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition trans
-  signature: (e₁ : α ≃ β) (e₂ : β ≃ γ)
-  body: ⟨e₂ ∘ e₁, e₁.symm ∘ e₂.symm, e₂.left_inv.comp e₁.left_inv, e₂.right_inv.comp e₁.right_inv⟩
-
-@[simps]
-
-中文:
-定义 trans
-  签名: (e₁ : α ≃ β) (e₂ : β ≃ γ)
-  定义体: ⟨e₂ ∘ e₁, e₁.symm ∘ e₂.symm, e₂.left_inv.comp e₁.left_inv, e₂.right_inv.comp e₁.right_inv⟩
-
-@[simps]
+--- 原说明 ---
+Composition of equivalences `e₁ : α ≃ β` and `e₂ : β ≃ γ`.
 -/
 protected def trans (e₁ : α ≃ β) (e₂ : β ≃ γ) : α ≃ γ :=
   ⟨e₂ ∘ e₁, e₁.symm ∘ e₂.symm, e₂.left_inv.comp e₁.left_inv, e₂.right_inv.comp e₁.right_inv⟩
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans Equiv Equiv Equiv
-  body: Equiv.trans
-
-中文:
-实例 :
-  签名: Trans 等价 等价 等价
-  定义体: Equiv.trans
-
-Depends on / 依赖: Equiv.trans
+/-
+**Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Trans Equiv Equiv Equiv where
   trans := Equiv.trans
 
 /-- `Equiv.symm` defines an equivalence between `α ≃ β` and `β ≃ α`. -/
 @[simps! (attr := grind =)]
-/--
-Definition of `symmEquiv` / `symmEquiv` 的定义
+/-
+**Equiv.symmEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：symmEquiv (α β : Sort*) : (α ≃ β) ≃ (β ≃ α) where toFun
+参数：α β : Sort*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition symmEquiv
-  signature: (α β : Sort*)
-  body: .symm
-  invFun := .symm
-
-中文:
-定义 symmEquiv
-  签名: (α β : 类型层*)
-  定义体: .symm
-  invFun := .symm
+--- 原说明 ---
+`Equiv.symm` defines an equivalence between `α ≃ β` and `β ≃ α`.
 -/
 def symmEquiv (α β : Sort*) : (α ≃ β) ≃ (β ≃ α) where
   toFun := .symm
   invFun := .symm
-
-/--
-theorem `toFun_as_coe` / 定理 `toFun_as_coe`
-
-English:
-theorem toFun_as_coe
-  given: (e : α ≃ β)
-  statement: e.toFun = e
-  proof: rfl
-
-中文:
-定理 toFun_as_coe
-  条件: (e : α ≃ β)
-  结论: e.toFun = e
-  证明: rfl
+/-
+**Equiv.toFun_as_coe** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.toFun = ⇑e
+参数：e : α ≃ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, mfld_simps] theorem toFun_as_coe (e : α ≃ β) : e.toFun = e := rfl
-
-/--
-theorem `invFun_as_coe` / 定理 `invFun_as_coe`
-
-English:
-theorem invFun_as_coe
-  given: (e : α ≃ β)
-  statement: e.invFun = e.symm
-  proof: rfl
-
-中文:
-定理 invFun_as_coe
-  条件: (e : α ≃ β)
-  结论: e.invFun = e.symm
-  证明: rfl
+/-
+**Equiv.invFun_as_coe** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.invFun = ⇑e.symm
+参数：e : α ≃ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, mfld_simps] theorem invFun_as_coe (e : α ≃ β) : e.invFun = e.symm := rfl
-
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  given: (e : α ≃ β)
-  statement: Injective e
-  proof: EquivLike.injective e
-
-中文:
-定理 injective
-  条件: (e : α ≃ β)
-  结论: 单射 e
-  证明: EquivLike.injective e
+/-
+**Equiv.injective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injective ⇑e
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.injective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Injective ⇑e
 -/
 protected theorem injective (e : α ≃ β) : Injective e := EquivLike.injective e
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  given: (e : α ≃ β)
-  statement: Surjective e
-  proof: EquivLike.surjective e
-
-中文:
-定理 surjective
-  条件: (e : α ≃ β)
-  结论: 满射 e
-  证明: EquivLike.surjective e
+/-
+**Equiv.surjective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surjective ⇑e
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.surjective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [in
+st : EquivLike E α β] (e : E), Function.Surjective ⇑e
 -/
 protected theorem surjective (e : α ≃ β) : Surjective e := EquivLike.surjective e
-
-/--
-theorem `bijective` / 定理 `bijective`
-
-English:
-theorem bijective
-  given: (e : α ≃ β)
-  statement: Bijective e
-  proof: EquivLike.bijective e
-
-中文:
-定理 bijective
-  条件: (e : α ≃ β)
-  结论: 双射 e
-  证明: EquivLike.bijective e
+/-
+**Equiv.bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijective ⇑e
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.bijective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Bijective ⇑e
 -/
 protected theorem bijective (e : α ≃ β) : Bijective e := EquivLike.bijective e
-
-/--
-theorem `subsingleton` / 定理 `subsingleton`
-
-English:
-theorem subsingleton
-  given: (e : α ≃ β) [Subsingleton β]
-  statement: Subsingleton α
-  proof: e.injective.subsingleton
-
-中文:
-定理 subsingleton
-  条件: (e : α ≃ β) [子单例 β]
-  结论: 子单例 α
-  证明: e.injective.subsingleton
+/-
+**Equiv.subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) [Subsingleton β], Subsingleton α
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β}, Function.Injective f → ∀ [Subsingleton β], Subsingleton α
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 protected theorem subsingleton (e : α ≃ β) [Subsingleton β] : Subsingleton α :=
   e.injective.subsingleton
-
-/--
-theorem `subsingleton.symm` / 定理 `subsingleton.symm`
-
-English:
-theorem subsingleton.symm
-  given: (e : α ≃ β) [Subsingleton α]
-  statement: Subsingleton β
-  proof: e.symm.injective.subsingleton
-
-中文:
-定理 subsingleton.symm
-  条件: (e : α ≃ β) [子单例 α]
-  结论: 子单例 β
-  证明: e.symm.injective.subsingleton
+/-
+**Equiv.subsingleton.symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.subsingleton`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) [Subsingleton α], Subsingleton β
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β}, Function.Injective f → ∀ [Subsingleton β], Subsingleton α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 protected theorem subsingleton.symm (e : α ≃ β) [Subsingleton α] : Subsingleton β :=
   e.symm.injective.subsingleton
-
-/--
-theorem `subsingleton_congr` / 定理 `subsingleton_congr`
-
-English:
-theorem subsingleton_congr
-  given: (e : α ≃ β)
-  statement: Subsingleton α ↔ Subsingleton β
-  proof: ⟨fun _ => e.symm.subsingleton, fun _ => e.subsingleton⟩
-
-中文:
-定理 subsingleton_congr
-  条件: (e : α ≃ β)
-  结论: 子单例 α ↔ 子单例 β
-  证明: ⟨fun _ => e.symm.subsingleton, fun _ => e.subsingleton⟩
-
-Depends on / 依赖: e.subsingleton, e.symm.subsingleton, subsingleton
+/-
+**Equiv.subsingleton_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：subsingleton_congr (e : α ≃ β) : Subsingleton α ↔ Subsingleton β
+参数：e : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.subsingleton`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) [Subsingleto
+n β], Subsingleton α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem subsingleton_congr (e : α ≃ β) : Subsingleton α ↔ Subsingleton β :=
   ⟨fun _ => e.symm.subsingleton, fun _ => e.subsingleton⟩
-
-/--
-Instance `equiv_subsingleton_cod` / 实例 `equiv_subsingleton_cod`
-
-English:
-instance equiv_subsingleton_cod
-  signature: [Subsingleton β]
-  body: ⟨fun _ _ => Equiv.ext fun _ => Subsingleton.elim _ _⟩
-
-中文:
-实例 equiv_subsingleton_cod
-  签名: [子单例 β]
-  定义体: ⟨fun _ _ => Equiv.ext fun _ => Subsingleton.elim _ _⟩
-
-Depends on / 依赖: Equiv.ext, Subsingleton, Subsingleton.elim
+/-
+**Equiv.equiv_subsingleton_cod** 是 Mathlib 中的一个实例，位于命名空间 `Equiv`。
+形式化陈述：equiv_subsingleton_cod [Subsingleton β] : Subsingleton (α ≃ β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 instance equiv_subsingleton_cod [Subsingleton β] : Subsingleton (α ≃ β) :=
   ⟨fun _ _ => Equiv.ext fun _ => Subsingleton.elim _ _⟩
-
-/--
-Instance `equiv_subsingleton_dom` / 实例 `equiv_subsingleton_dom`
-
-English:
-instance equiv_subsingleton_dom
-  signature: [Subsingleton α]
-  body: ⟨fun f _ => Equiv.ext fun _ => @Subsingleton.elim _ (Equiv.subsingleton.symm f) _ _⟩
-
-中文:
-实例 equiv_subsingleton_dom
-  签名: [子单例 α]
-  定义体: ⟨fun f _ => Equiv.ext fun _ => @Subsingleton.elim _ (Equiv.subsingleton.symm f) _ _⟩
-
-Depends on / 依赖: Equiv.ext, Equiv.subsingleton.symm, Subsingleton, Subsingleton.elim, subsingleton
+/-
+**Equiv.equiv_subsingleton_dom** 是 Mathlib 中的一个实例，位于命名空间 `Equiv`。
+形式化陈述：equiv_subsingleton_dom [Subsingleton α] : Subsingleton (α ≃ β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Equiv.subsingleton.symm`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) [Subsin
+gleton α], Subsingleton β
 -/
 instance equiv_subsingleton_dom [Subsingleton α] : Subsingleton (α ≃ β) :=
   ⟨fun f _ => Equiv.ext fun _ => @Subsingleton.elim _ (Equiv.subsingleton.symm f) _ _⟩
-
-/--
-Instance `permUnique` / 实例 `permUnique`
-
-English:
-instance permUnique
-  signature: [Subsingleton α]
-  body: uniqueOfSubsingleton (Equiv.refl α)
-
-中文:
-实例 permUnique
-  签名: [子单例 α]
-  定义体: uniqueOfSubsingleton (Equiv.refl α)
-
-Depends on / 依赖: Equiv.refl, uniqueOfSubsingleton
+/-
+**Equiv.permUnique** 是 Mathlib 中的一个实例，位于命名空间 `Equiv`。
+形式化陈述：permUnique [Subsingleton α] : Unique (Perm α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 instance permUnique [Subsingleton α] : Unique (Perm α) :=
   uniqueOfSubsingleton (Equiv.refl α)
-
-/--
-theorem `Perm.subsingleton_eq_refl` / 定理 `Perm.subsingleton_eq_refl`
-
-English:
-theorem Perm.subsingleton_eq_refl
-  given: [Subsingleton α] (e : Perm α)
-  statement: e = Equiv.refl α
-  proof: Subsingleton.elim _ _
-
-中文:
-定理 置换.subsingleton_eq_refl
-  条件: [子单例 α] (e : 置换 α)
-  结论: e = 等价.refl α
-  证明: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**Equiv.Perm.subsingleton_eq_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Sort u} [Subsingleton α] (e : Equiv.Perm α), e = Equiv.refl α
+参数：e : Equiv.Perm α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 theorem Perm.subsingleton_eq_refl [Subsingleton α] (e : Perm α) : e = Equiv.refl α :=
   Subsingleton.elim _ _
-
-/--
-theorem `nontrivial` / 定理 `nontrivial`
-
-English:
-theorem nontrivial
-  given: {α β} (e : α ≃ β) [Nontrivial β]
-  statement: Nontrivial α
-  proof: e.surjective.nontrivial
-
-中文:
-定理 nontrivial
-  条件: {α β} (e : α ≃ β) [非平凡 β]
-  结论: 非平凡 α
-  证明: e.surjective.nontrivial
+/-
+**Equiv.nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) [Nontrivial β], Nontrivial α
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontriv
+ial β] {f : α → β}, Function.Surjective f → Nontrivial α
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 protected theorem nontrivial {α β} (e : α ≃ β) [Nontrivial β] : Nontrivial α :=
   e.surjective.nontrivial
-
-/--
-theorem `nontrivial_congr` / 定理 `nontrivial_congr`
-
-English:
-theorem nontrivial_congr
-  given: {α β} (e : α ≃ β)
-  statement: Nontrivial α ↔ Nontrivial β
-  proof: ⟨fun _ => e.symm.nontrivial, fun _ => e.nontrivial⟩
-
-中文:
-定理 nontrivial_congr
-  条件: {α β} (e : α ≃ β)
-  结论: 非平凡 α ↔ 非平凡 β
-  证明: ⟨fun _ => e.symm.nontrivial, fun _ => e.nontrivial⟩
-
-Depends on / 依赖: e.nontrivial, e.symm.nontrivial, nontrivial
+/-
+**Equiv.nontrivial_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：nontrivial_congr {α β} (e : α ≃ β) : Nontrivial α ↔ Nontrivial β
+参数：e : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nontrivial`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) [Nontrivia
+l β], Nontrivial α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem nontrivial_congr {α β} (e : α ≃ β) : Nontrivial α ↔ Nontrivial β :=
-  ⟨fun _ => e.symm.nontrivial, fun _ => e.nontrivial⟩
+  ⟨fun _ ↦ e.symm.nontrivial, fun _ ↦ e.nontrivial⟩
 
-/--
-Definition of `decidableEq` / `decidableEq` 的定义
+/-- Transfer `DecidableEq` across an equivalence. -/
+/-
+**Equiv.decidableEq** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Sort u} → {β : Sort v} → α ≃ β → [DecidableEq β] → DecidableEq α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation decidableEq
-  signature: (e : α ≃ β) [DecidableEq β]
-  body: e.injective.decidableEq
-
-中文:
-缩写 decidableEq
-  签名: (e : α ≃ β) [DecidableEq β]
-  定义体: e.injective.decidableEq
+--- 原说明 ---
+Transfer `DecidableEq` across an equivalence.
 -/
 protected abbrev decidableEq (e : α ≃ β) [DecidableEq β] : DecidableEq α :=
   e.injective.decidableEq
-
-/--
-theorem `nonempty_congr` / 定理 `nonempty_congr`
-
-English:
-theorem nonempty_congr
-  given: (e : α ≃ β)
-  statement: Nonempty α ↔ Nonempty β
-  proof: Nonempty.congr e e.symm
-
-中文:
-定理 nonempty_congr
-  条件: (e : α ≃ β)
-  结论: 非空 α ↔ 非空 β
-  证明: Nonempty.congr e e.symm
-
-Depends on / 依赖: Nonempty, Nonempty.congr, e.symm
+/-
+**Equiv.nonempty_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty β
+参数：e : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.congr`：∀ {α : Sort u_3} {β : Sort u_4} (f : α → β) (g : β → α),
+ Nonempty α ↔ Nonempty β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty β := Nonempty.congr e e.symm
-
-/--
-theorem `nonempty` / 定理 `nonempty`
-
-English:
-theorem nonempty
-  given: (e : α ≃ β) [Nonempty β]
-  statement: Nonempty α
-  proof: e.nonempty_congr.mpr ‹_›
-
-中文:
-定理 nonempty
-  条件: (e : α ≃ β) [非空 β]
-  结论: 非空 α
-  证明: e.nonempty_congr.mpr ‹_›
+/-
+**Equiv.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) [Nonempty β], Nonempty α
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
 -/
 protected theorem nonempty (e : α ≃ β) [Nonempty β] : Nonempty α := e.nonempty_congr.mpr ‹_›
 
-/--
-Definition of `inhabited` / `inhabited` 的定义
+/-- If `α ≃ β` and `β` is inhabited, then so is `α`. -/
+/-
+**Equiv.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Sort u} → {β : Sort v} → [Inhabited β] → α ≃ β → Inhabited α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation inhabited
-  signature: [Inhabited β] (e : α ≃ β)
-  body: ⟨e.symm default⟩
-
-中文:
-缩写 inhabited
-  签名: [可居 β] (e : α ≃ β)
-  定义体: ⟨e.symm default⟩
+--- 原说明 ---
+If `α ≃ β` and `β` is inhabited, then so is `α`.
 -/
 protected abbrev inhabited [Inhabited β] (e : α ≃ β) : Inhabited α := ⟨e.symm default⟩
 
-/--
-Definition of `unique` / `unique` 的定义
+/-- If `α ≃ β` and `β` is a singleton type, then so is `α`. -/
+/-
+**Equiv.unique** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Sort u} → {β : Sort v} → [Unique β] → α ≃ β → Unique α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation unique
-  signature: [Unique β] (e : α ≃ β)
-  body: e.symm.surjective.unique
-
-中文:
-缩写 unique
-  签名: [唯一 β] (e : α ≃ β)
-  定义体: e.symm.surjective.unique
+--- 原说明 ---
+If `α ≃ β` and `β` is a singleton type, then so is `α`.
 -/
 protected abbrev unique [Unique β] (e : α ≃ β) : Unique α := e.symm.surjective.unique
 
-/--
-Definition of `cast` / `cast` 的定义
+/-- Equivalence between equal types. -/
+/-
+**Equiv.cast** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α β : Sort u_1} → α = β → α ≃ β
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-definition cast
-  signature: {α β : Sort _} (h : α = β)
-  body: cast h
-  invFun := cast h.symm
-  left_inv := by grind
-  right_inv := by grind
-
-中文:
-定义 cast
-  签名: {α β : 类型层 _} (h : α = β)
-  定义体: cast h
-  invFun := cast h.symm
-  left_inv := by grind
-  right_inv := by grind
+--- 原说明 ---
+Equivalence between equal types.
 -/
 protected def cast {α β : Sort _} (h : α = β) : α ≃ β where
   toFun := cast h
   invFun := cast h.symm
   left_inv := by grind
   right_inv := by grind
-
-/--
-theorem `coe_fn_symm_mk` / 定理 `coe_fn_symm_mk`
-
-English:
-theorem coe_fn_symm_mk
-  given: (f : α -> β) (g l r)
-  statement: ((Equiv.mk f g l r).symm : β -> α) = g
-  proof: rfl
-
-中文:
-定理 coe_fn_symm_mk
-  条件: (f : α -> β) (g l r)
-  结论: ((等价.mk f g l r).symm : β -> α) = g
-  证明: rfl
+/-
+**Equiv.coe_fn_symm_mk** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (f : α → β) (g : β → α) (l : Function.LeftInve
+rse g f) (r : Function.RightInverse g f),   ⇑{ toFun := f, invFun := g, left_inv
+ := l, right_inv := r }.symm = g
+参数：f : α → β；g : β → α；l : Function.LeftInverse g f；r : Function.RightInverse g 
+f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] theorem coe_fn_symm_mk (f : α -> β) (g l r) : ((Equiv.mk f g l r).symm : β -> α) = g := rfl
-
-/--
-theorem `coe_refl` / 定理 `coe_refl`
-
-English:
-theorem coe_refl
-  statement: (Equiv.refl α : α -> α) = id
-  proof: rfl
-
-中文:
-定理 coe_refl
-  结论: (等价.refl α : α -> α) = id
-  证明: rfl
+@[simp] theorem coe_fn_symm_mk (f : α → β) (g l r) : ((Equiv.mk f g l r).symm : β → α) = g := rfl
+/-
+**Equiv.coe_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u}, ⇑(Equiv.refl α) = id
+参数：Equiv.refl α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-@[simp] theorem coe_refl : (Equiv.refl α : α -> α) = id := rfl
+@[simp] theorem coe_refl : (Equiv.refl α : α → α) = id := rfl
 
-/--
-theorem `Perm.coe_subsingleton` / 定理 `Perm.coe_subsingleton`
+/-- This cannot be a `simp` lemmas as it incorrectly matches against `e : α ≃ synonym α`, when
+`synonym α` is semireducible. This makes a mess of `Multiplicative.ofAdd` etc. -/
+/-
+**Equiv.Perm.coe_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Type u_1} [Subsingleton α] (e : Equiv.Perm α), ⇑e = id
+参数：e : Equiv.Perm α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.subsingleton_eq_refl`：∀ {α : Sort u} [Subsingleton α] (e : Eq
+uiv.Perm α), e = Equiv.refl α
+· 使用定理 `Equiv.coe_refl`：∀ {α : Sort u}, ⇑(Equiv.refl α) = id
 
-English:
-theorem Perm.coe_subsingleton
-  given: {α : Type*} [Subsingleton α] (e : Perm α)
-  statement: (e : α -> α) = id
-  proof: by
-  rw [Perm.subsingleton_eq_refl e]; rw [coe_refl]
-
-中文:
-定理 置换.coe_subsingleton
-  条件: {α : 类型} [子单例 α] (e : 置换 α)
-  结论: (e : α -> α) = id
-  证明: by
-  rw [Perm.subsingleton_eq_refl e]; rw [coe_refl]
-
-Depends on / 依赖: Perm.subsingleton_eq_refl, coe_refl, subsingleton_eq_refl
+--- 原说明 ---
+This cannot be a `simp` lemmas as it incorrectly matches against `e : α ≃ synony
+m α`, when
+`synonym α` is semireducible. This makes a mess of `Multiplicative.ofAdd` etc.
 -/
-theorem Perm.coe_subsingleton {α : Type*} [Subsingleton α] (e : Perm α) : (e : α -> α) = id := by
-  rw [Perm.subsingleton_eq_refl e]; rw [coe_refl]
-
-/--
-theorem `refl_apply` / 定理 `refl_apply`
-
-English:
-theorem refl_apply
-  given: (x : α)
-  statement: Equiv.refl α x = x
-  proof: rfl
-
-中文:
-定理 refl_apply
-  条件: (x : α)
-  结论: 等价.refl α x = x
-  证明: rfl
+theorem Perm.coe_subsingleton {α : Type*} [Subsingleton α] (e : Perm α) : (e : α → α) = id := by
+  rw [Perm.subsingleton_eq_refl e, coe_refl]
+/-
+**Equiv.refl_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} (x : α), (Equiv.refl α) x = x
+参数：x : α；Equiv.refl α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 @[simp, grind =] theorem refl_apply (x : α) : Equiv.refl α x = x := rfl
-
-/--
-theorem `coe_trans` / 定理 `coe_trans`
-
-English:
-theorem coe_trans
-  given: (f : α ≃ β) (g : β ≃ γ)
-  statement: (f.trans g : α -> γ) = g ∘ f
-  proof: rfl
-
-中文:
-定理 coe_trans
-  条件: (f : α ≃ β) (g : β ≃ γ)
-  结论: (f.trans g : α -> γ) = g ∘ f
-  证明: rfl
+/-
+**Equiv.coe_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {γ : Sort w} (f : α ≃ β) (g : β ≃ γ), ⇑(f.tran
+s g) = ⇑g ∘ ⇑f
+参数：f : α ≃ β；g : β ≃ γ；f.trans g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
-@[simp] theorem coe_trans (f : α ≃ β) (g : β ≃ γ) : (f.trans g : α -> γ) = g ∘ f := rfl
-
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (f : α ≃ β) (g : β ≃ γ) (a : α)
-  proof: rfl
-
-中文:
-定理 trans_apply
-  条件: (f : α ≃ β) (g : β ≃ γ) (a : α)
-  证明: rfl
+@[simp] theorem coe_trans (f : α ≃ β) (g : β ≃ γ) : (f.trans g : α → γ) = g ∘ f := rfl
+/-
+**Equiv.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {γ : Sort w} (f : α ≃ β) (g : β ≃ γ) (a : α), 
+(f.trans g) a = g (f a)
+参数：f : α ≃ β；g : β ≃ γ；a : α；f.trans g；f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 @[simp, grind =] theorem trans_apply (f : α ≃ β) (g : β ≃ γ) (a : α) :
     (f.trans g) a = g (f a) := rfl
-
-/--
-theorem `apply_symm_apply` / 定理 `apply_symm_apply`
-
-English:
-theorem apply_symm_apply
-  given: (e : α ≃ β) (x : β)
-  statement: e (e.symm x) = x
-  proof: e.right_inv x
-
-中文:
-定理 apply_symm_apply
-  条件: (e : α ≃ β) (x : β)
-  结论: e (e.symm x) = x
-  证明: e.right_inv x
+/-
+**Equiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β), e (e.symm x) = x
+参数：e : α ≃ β；x : β；e.symm x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 @[simp, grind =] theorem apply_symm_apply (e : α ≃ β) (x : β) : e (e.symm x) = x := e.right_inv x
-
-/--
-theorem `symm_apply_apply` / 定理 `symm_apply_apply`
-
-English:
-theorem symm_apply_apply
-  given: (e : α ≃ β) (x : α)
-  statement: e.symm (e x) = x
-  proof: e.left_inv x
-
-中文:
-定理 symm_apply_apply
-  条件: (e : α ≃ β) (x : α)
-  结论: e.symm (e x) = x
-  证明: e.left_inv x
+/-
+**Equiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α), e.symm (e x) = x
+参数：e : α ≃ β；x : α；e x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
 @[simp, grind =] theorem symm_apply_apply (e : α ≃ β) (x : α) : e.symm (e x) = x := e.left_inv x
-
-/--
-theorem `symm_comp_self` / 定理 `symm_comp_self`
-
-English:
-theorem symm_comp_self
-  given: (e : α ≃ β)
-  statement: e.symm ∘ e = id
-  proof: funext e.symm_apply_apply
-
-中文:
-定理 symm_comp_self
-  条件: (e : α ≃ β)
-  结论: e.symm ∘ e = id
-  证明: funext e.symm_apply_apply
+/-
+**Equiv.symm_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e.symm ∘ ⇑e = id
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 @[simp] theorem symm_comp_self (e : α ≃ β) : e.symm ∘ e = id := funext e.symm_apply_apply
-
-/--
-theorem `self_comp_symm` / 定理 `self_comp_symm`
-
-English:
-theorem self_comp_symm
-  given: (e : α ≃ β)
-  statement: e ∘ e.symm = id
-  proof: funext e.apply_symm_apply
-
-中文:
-定理 self_comp_symm
-  条件: (e : α ≃ β)
-  结论: e ∘ e.symm = id
-  证明: funext e.apply_symm_apply
+/-
+**Equiv.self_comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e ∘ ⇑e.symm = id
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 @[simp] theorem self_comp_symm (e : α ≃ β) : e ∘ e.symm = id := funext e.apply_symm_apply
-
-/--
-lemma `_root_.EquivLike.apply_coe_symm_apply` / 引理 `_root_.EquivLike.apply_coe_symm_apply`
-
-English:
-lemma _root_.EquivLike.apply_coe_symm_apply
-  given: {F} [EquivLike F α β] (e : F) (x : β)
-  proof: (e : α ≃ β).apply_symm_apply x
-
-中文:
-引理 _root_.等价状.apply_coe_symm_apply
-  条件: {F} [等价状 F α β] (e : F) (x : β)
-  证明: (e : α ≃ β).apply_symm_apply x
+/-
+**Equiv._root_.EquivLike.apply_coe_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.EquivLike.apply_coe_symm_apply {F} [EquivLike F α β] (e : F) (x : β) :
     e ((e : α ≃ β).symm x) = x :=
   (e : α ≃ β).apply_symm_apply x
-
-/--
-lemma `_root_.EquivLike.coe_symm_apply_apply` / 引理 `_root_.EquivLike.coe_symm_apply_apply`
-
-English:
-lemma _root_.EquivLike.coe_symm_apply_apply
-  given: {F} [EquivLike F α β] (e : F) (x : α)
-  proof: (e : α ≃ β).symm_apply_apply x
-
-中文:
-引理 _root_.等价状.coe_symm_apply_apply
-  条件: {F} [等价状 F α β] (e : F) (x : α)
-  证明: (e : α ≃ β).symm_apply_apply x
+/-
+**Equiv._root_.EquivLike.coe_symm_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.EquivLike.coe_symm_apply_apply {F} [EquivLike F α β] (e : F) (x : α) :
     (e : α ≃ β).symm (e x) = x :=
   (e : α ≃ β).symm_apply_apply x
-
-/--
-lemma `_root_.EquivLike.coe_symm_comp_self` / 引理 `_root_.EquivLike.coe_symm_comp_self`
-
-English:
-lemma _root_.EquivLike.coe_symm_comp_self
-  given: {F} [EquivLike F α β] (e : F)
-  proof: (e : α ≃ β).symm_comp_self
-
-中文:
-引理 _root_.等价状.coe_symm_comp_self
-  条件: {F} [等价状 F α β] (e : F)
-  证明: (e : α ≃ β).symm_comp_self
+/-
+**Equiv._root_.EquivLike.coe_symm_comp_self** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.EquivLike.coe_symm_comp_self {F} [EquivLike F α β] (e : F) :
     (e : α ≃ β).symm ∘ e = id :=
   (e : α ≃ β).symm_comp_self
-
-/--
-lemma `_root_.EquivLike.self_comp_coe_symm` / 引理 `_root_.EquivLike.self_comp_coe_symm`
-
-English:
-lemma _root_.EquivLike.self_comp_coe_symm
-  given: {F} [EquivLike F α β] (e : F)
-  proof: (e : α ≃ β).self_comp_symm
-
-中文:
-引理 _root_.等价状.self_comp_coe_symm
-  条件: {F} [等价状 F α β] (e : F)
-  证明: (e : α ≃ β).self_comp_symm
+/-
+**Equiv._root_.EquivLike.self_comp_coe_symm** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.EquivLike.self_comp_coe_symm {F} [EquivLike F α β] (e : F) :
     e ∘ (e : α ≃ β).symm = id :=
   (e : α ≃ β).self_comp_symm
-
-/--
-theorem `symm_trans_apply` / 定理 `symm_trans_apply`
-
-English:
-theorem symm_trans_apply
-  given: (f : α ≃ β) (g : β ≃ γ) (a : γ)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 symm_trans_apply
-  条件: (f : α ≃ β) (g : β ≃ γ) (a : γ)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Equiv.symm_trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：symm_trans_apply (f : α ≃ β) (g : β ≃ γ) (a : γ) : (f.trans g).symm a = f.
+symm (g.symm a)
+参数：f : α ≃ β；g : β ≃ γ；a : γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem symm_trans_apply (f : α ≃ β) (g : β ≃ γ) (a : γ) :
     (f.trans g).symm a = f.symm (g.symm a) := rfl
 
 @[simp, grind =]
-/--
-theorem `symm_trans` / 定理 `symm_trans`
-
-English:
-theorem symm_trans
-  given: (f : α ≃ β) (g : β ≃ γ)
-  statement: (f.trans g).symm = g.symm.trans f.symm
-  proof: rfl
-
-中文:
-定理 symm_trans
-  条件: (f : α ≃ β) (g : β ≃ γ)
-  结论: (f.trans g).symm = g.symm.trans f.symm
-  证明: rfl
+/-
+**Equiv.symm_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：symm_trans (f : α ≃ β) (g : β ≃ γ) : (f.trans g).symm = g.symm.trans f.sym
+m
+参数：f : α ≃ β；g : β ≃ γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem symm_trans (f : α ≃ β) (g : β ≃ γ) : (f.trans g).symm = g.symm.trans f.symm := rfl
-
-/--
-theorem `symm_symm_apply` / 定理 `symm_symm_apply`
-
-English:
-theorem symm_symm_apply
-  given: (f : α ≃ β) (b : α)
-  statement: f.symm.symm b = f b
-  proof: rfl
-
-中文:
-定理 symm_symm_apply
-  条件: (f : α ≃ β) (b : α)
-  结论: f.symm.symm b = f b
-  证明: rfl
+/-
+**Equiv.symm_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：symm_symm_apply (f : α ≃ β) (b : α) : f.symm.symm b = f b
+参数：f : α ≃ β；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem symm_symm_apply (f : α ≃ β) (b : α) : f.symm.symm b = f b := rfl
-
-/--
-theorem `apply_eq_iff_eq` / 定理 `apply_eq_iff_eq`
-
-English:
-theorem apply_eq_iff_eq
-  given: (f : α ≃ β) {x y : α}
-  statement: f x = f y ↔ x = y
-  proof: EquivLike.apply_eq_iff_eq f
-
-中文:
-定理 apply_eq_iff_eq
-  条件: (f : α ≃ β) {x y : α}
-  结论: f x = f y ↔ x = y
-  证明: EquivLike.apply_eq_iff_eq f
-
-Depends on / 依赖: EquivLike, EquivLike.apply_eq_iff_eq, apply_eq_iff_eq
+/-
+**Equiv.apply_eq_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：apply_eq_iff_eq (f : α ≃ β) {x y : α} : f x = f y ↔ x = y
+参数：f : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.apply_eq_iff_eq`：apply_eq_iff_eq (f : E) {x y : α} : f x = f y
+ ↔ x = y
 -/
 theorem apply_eq_iff_eq (f : α ≃ β) {x y : α} : f x = f y ↔ x = y := EquivLike.apply_eq_iff_eq f
-
-/--
-theorem `cast_apply` / 定理 `cast_apply`
-
-English:
-theorem cast_apply
-  given: {α β} (h : α = β) (x : α)
-  statement: Equiv.cast h x = cast h x
-  proof: rfl
-
-中文:
-定理 cast_apply
-  条件: {α β} (h : α = β) (x : α)
-  结论: 等价.cast h x = cast h x
-  证明: rfl
+/-
+**Equiv.cast_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α β : Sort u_1} (h : α = β) (x : α), (Equiv.cast h) x = cast h x
+参数：h : α = β；x : α；Equiv.cast h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem cast_apply {α β} (h : α = β) (x : α) : Equiv.cast h x = cast h x := rfl
-
-/--
-theorem `cast_symm` / 定理 `cast_symm`
-
-English:
-theorem cast_symm
-  given: {α β} (h : α = β)
-  statement: Equiv.cast h.symm = (Equiv.cast h).symm
-  proof: rfl
-
-中文:
-定理 cast_symm
-  条件: {α β} (h : α = β)
-  结论: 等价.cast h.symm = (等价.cast h).symm
-  证明: rfl
+/-
+**Equiv.cast_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：cast_symm {α β} (h : α = β) : Equiv.cast h.symm = (Equiv.cast h).symm
+参数：h : α = β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem cast_symm {α β} (h : α = β) : Equiv.cast h.symm = (Equiv.cast h).symm := rfl
-
-/--
-theorem `cast_refl` / 定理 `cast_refl`
-
-English:
-theorem cast_refl
-  given: {α} (h : α = α := rfl)
-  statement: Equiv.cast h = Equiv.refl α
-  proof: rfl
-
-中文:
-定理 cast_refl
-  条件: {α} (h : α = α := rfl)
-  结论: 等价.cast h = 等价.refl α
-  证明: rfl
+/-
+**Equiv.cast_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u_1} (h : optParam (α = α) ⋯), Equiv.cast h = Equiv.refl α
+参数：h : optParam (α = α) ⋯。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem cast_refl {α} (h : α = α := rfl) : Equiv.cast h = Equiv.refl α := rfl
-
-/--
-theorem `cast_trans` / 定理 `cast_trans`
-
-English:
-theorem cast_trans
-  given: {α β γ} (h : α = β) (h2 : β = γ)
-  proof: ext fun x => by subst h h2; rfl
-
-中文:
-定理 cast_trans
-  条件: {α β γ} (h : α = β) (h2 : β = γ)
-  证明: ext fun x => by subst h h2; rfl
+/-
+**Equiv.cast_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：cast_trans {α β γ} (h : α = β) (h2 : β = γ) : Equiv.cast (h.trans h2) = (E
+quiv.cast h).trans (Equiv.cast h2)
+参数：h : α = β；h2 : β = γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem cast_trans {α β γ} (h : α = β) (h2 : β = γ) :
     Equiv.cast (h.trans h2) = (Equiv.cast h).trans (Equiv.cast h2) :=
   ext fun x => by subst h h2; rfl
-
-/--
-theorem `cast_eq_iff_heq` / 定理 `cast_eq_iff_heq`
-
-English:
-theorem cast_eq_iff_heq
-  given: {α β} (h : α = β) {a : α} {b : β}
-  statement: Equiv.cast h a = b ↔ a ≍ b
-  proof: by
-  subst h; simp
-
-中文:
-定理 cast_eq_iff_heq
-  条件: {α β} (h : α = β) {a : α} {b : β}
-  结论: 等价.cast h a = b ↔ a ≍ b
-  证明: by
-  subst h; simp
+/-
+**Equiv.cast_eq_iff_heq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：cast_eq_iff_heq {α β} (h : α = β) {a : α} {b : β} : Equiv.cast h a = b ↔ a
+ ≍ b
+参数：h : α = β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cast_eq_iff_heq {α β} (h : α = β) {a : α} {b : β} : Equiv.cast h a = b ↔ a ≍ b := by
   subst h; simp
-
-/--
-theorem `symm_apply_eq` / 定理 `symm_apply_eq`
-
-English:
-theorem symm_apply_eq
-  given: {α β} (e : α ≃ β) {x y}
-  statement: e.symm x = y ↔ x = e y
-  proof: by grind
-
-中文:
-定理 symm_apply_eq
-  条件: {α β} (e : α ≃ β) {x y}
-  结论: e.symm x = y ↔ x = e y
-  证明: by grind
+/-
+**Equiv.symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = y ↔ x = e y
+参数：e : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = y ↔ x = e y := by grind
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  given: {α β} (e : α ≃ β) {x y}
-  statement: y = e.symm x ↔ e y = x
-  proof: by grind
-
-@[deprecated eq_symm_apply (since := "2026-07-26")]
-
-中文:
-定理 eq_symm_apply
-  条件: {α β} (e : α ≃ β) {x y}
-  结论: y = e.symm x ↔ e y = x
-  证明: by grind
-
-@[deprecated eq_symm_apply (since := "2026-07-26")]
+/-
+**Equiv.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm x ↔ e y = x
+参数：e : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm x ↔ e y = x := by grind
 
 @[deprecated eq_symm_apply (since := "2026-07-26")]
-/--
-theorem `apply_eq_iff_eq_symm_apply` / 定理 `apply_eq_iff_eq_symm_apply`
-
-English:
-theorem apply_eq_iff_eq_symm_apply
-  given: {x : α} {y : β} (f : α ≃ β)
-  statement: f x = y ↔ x = f.symm y
-  proof: f.eq_symm_apply.symm
-
-中文:
-定理 apply_eq_iff_eq_symm_apply
-  条件: {x : α} {y : β} (f : α ≃ β)
-  结论: f x = y ↔ x = f.symm y
-  证明: f.eq_symm_apply.symm
-
-Depends on / 依赖: eq_symm_apply, f.eq_symm_apply.symm
+/-
+**Equiv.apply_eq_iff_eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：apply_eq_iff_eq_symm_apply {x : α} {y : β} (f : α ≃ β) : f x = y ↔ x = f.s
+ymm y
+参数：f : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem apply_eq_iff_eq_symm_apply {x : α} {y : β} (f : α ≃ β) : f x = y ↔ x = f.symm y :=
   f.eq_symm_apply.symm
-
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (e : α ≃ β)
-  statement: e.symm.symm = e
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (e : α ≃ β)
-  结论: e.symm.symm = e
-  证明: rfl
+/-
+**Equiv.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.symm.symm = e
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp, grind =] theorem symm_symm (e : α ≃ β) : e.symm.symm = e := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (Equiv.symm : (α ≃ β) -> β ≃ α)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (等价.symm : (α ≃ β) -> β ≃ α)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**Equiv.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：symm_bijective : Function.Bijective (Equiv.symm : (α ≃ β) -> β ≃ α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `Equiv.symm_symm`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.symm.symm = 
+e
 -/
-theorem symm_bijective : Function.Bijective (Equiv.symm : (α ≃ β) -> β ≃ α) :=
+theorem symm_bijective : Function.Bijective (Equiv.symm : (α ≃ β) → β ≃ α) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-/--
-theorem `trans_refl` / 定理 `trans_refl`
-
-English:
-theorem trans_refl
-  given: (e : α ≃ β)
-  statement: e.trans (Equiv.refl β) = e
-  proof: by grind
-
-中文:
-定理 trans_refl
-  条件: (e : α ≃ β)
-  结论: e.trans (等价.refl β) = e
-  证明: by grind
+/-
+**Equiv.trans_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.trans (Equiv.refl β) = e
+参数：e : α ≃ β；Equiv.refl β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem trans_refl (e : α ≃ β) : e.trans (Equiv.refl β) = e := by grind
-
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  statement: (Equiv.refl α).symm = Equiv.refl α
-  proof: rfl
-
-中文:
-定理 refl_symm
-  结论: (等价.refl α).symm = 等价.refl α
-  证明: rfl
+/-
+**Equiv.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u}, (Equiv.refl α).symm = Equiv.refl α
+参数：Equiv.refl α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 @[simp, grind =] theorem refl_symm : (Equiv.refl α).symm = Equiv.refl α := rfl
-
-/--
-theorem `refl_trans` / 定理 `refl_trans`
-
-English:
-theorem refl_trans
-  given: (e : α ≃ β)
-  statement: (Equiv.refl α).trans e = e
-  proof: by cases e; rfl
-
-中文:
-定理 refl_trans
-  条件: (e : α ≃ β)
-  结论: (等价.refl α).trans e = e
-  证明: by cases e; rfl
+/-
+**Equiv.refl_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), (Equiv.refl α).trans e = e
+参数：e : α ≃ β；Equiv.refl α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] theorem refl_trans (e : α ≃ β) : (Equiv.refl α).trans e = e := by cases e; rfl
-
-/--
-theorem `symm_trans_self` / 定理 `symm_trans_self`
-
-English:
-theorem symm_trans_self
-  given: (e : α ≃ β)
-  statement: e.symm.trans e = Equiv.refl β
-  proof: by grind
-
-中文:
-定理 symm_trans_self
-  条件: (e : α ≃ β)
-  结论: e.symm.trans e = 等价.refl β
-  证明: by grind
+/-
+**Equiv.symm_trans_self** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.symm.trans e = Equiv.refl β
+参数：e : α ≃ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem symm_trans_self (e : α ≃ β) : e.symm.trans e = Equiv.refl β := by grind
-
-/--
-theorem `self_trans_symm` / 定理 `self_trans_symm`
-
-English:
-theorem self_trans_symm
-  given: (e : α ≃ β)
-  statement: e.trans e.symm = Equiv.refl α
-  proof: by grind
-
-中文:
-定理 self_trans_symm
-  条件: (e : α ≃ β)
-  结论: e.trans e.symm = 等价.refl α
-  证明: by grind
+/-
+**Equiv.self_trans_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.trans e.symm = Equiv.refl α
+参数：e : α ≃ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem self_trans_symm (e : α ≃ β) : e.trans e.symm = Equiv.refl α := by grind
-
-/--
-theorem `trans_assoc` / 定理 `trans_assoc`
-
-English:
-theorem trans_assoc
-  given: {δ} (ab : α ≃ β) (bc : β ≃ γ) (cd : γ ≃ δ)
-  proof: by grind
-
-中文:
-定理 trans_assoc
-  条件: {δ} (ab : α ≃ β) (bc : β ≃ γ) (cd : γ ≃ δ)
-  证明: by grind
+/-
+**Equiv.trans_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：trans_assoc {δ} (ab : α ≃ β) (bc : β ≃ γ) (cd : γ ≃ δ) : (ab.trans bc).tra
+ns cd = ab.trans (bc.trans cd)
+参数：ab : α ≃ β；bc : β ≃ γ；cd : γ ≃ δ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_assoc {δ} (ab : α ≃ β) (bc : β ≃ γ) (cd : γ ≃ δ) :
     (ab.trans bc).trans cd = ab.trans (bc.trans cd) := by grind
-
-/--
-theorem `trans_cancel_left` / 定理 `trans_cancel_left`
-
-English:
-theorem trans_cancel_left
-  given: (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ)
-  proof: by
-  grind
-
-中文:
-定理 trans_cancel_left
-  条件: (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ)
-  证明: by
-  grind
+/-
+**Equiv.trans_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：trans_cancel_left (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ) : e.trans f = g ↔ f 
+= e.symm.trans g
+参数：e : α ≃ β；f : β ≃ γ；g : α ≃ γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_cancel_left (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ) :
     e.trans f = g ↔ f = e.symm.trans g := by
   grind
-
-/--
-theorem `trans_cancel_right` / 定理 `trans_cancel_right`
-
-English:
-theorem trans_cancel_right
-  given: (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ)
-  proof: by
-  grind
-
-中文:
-定理 trans_cancel_right
-  条件: (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ)
-  证明: by
-  grind
+/-
+**Equiv.trans_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：trans_cancel_right (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ) : e.trans f = g ↔ e
+ = g.trans f.symm
+参数：e : α ≃ β；f : β ≃ γ；g : α ≃ γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_cancel_right (e : α ≃ β) (f : β ≃ γ) (g : α ≃ γ) :
     e.trans f = g ↔ e = g.trans f.symm := by
   grind
-
-/--
-theorem `leftInverse_symm` / 定理 `leftInverse_symm`
-
-English:
-theorem leftInverse_symm
-  given: (f : α ≃ β)
-  statement: LeftInverse f.symm f
-  proof: f.left_inv
-
-中文:
-定理 leftInverse_symm
-  条件: (f : α ≃ β)
-  结论: 左逆 f.symm f
-  证明: f.left_inv
-
-Depends on / 依赖: f.left_inv, left_inv
+/-
+**Equiv.leftInverse_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：leftInverse_symm (f : α ≃ β) : LeftInverse f.symm f
+参数：f : α ≃ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
 theorem leftInverse_symm (f : α ≃ β) : LeftInverse f.symm f := f.left_inv
-
-/--
-theorem `rightInverse_symm` / 定理 `rightInverse_symm`
-
-English:
-theorem rightInverse_symm
-  given: (f : α ≃ β)
-  statement: Function.RightInverse f.symm f
-  proof: f.right_inv
-
-中文:
-定理 rightInverse_symm
-  条件: (f : α ≃ β)
-  结论: 函数.右逆 f.symm f
-  证明: f.right_inv
-
-Depends on / 依赖: f.right_inv, right_inv
+/-
+**Equiv.rightInverse_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：rightInverse_symm (f : α ≃ β) : Function.RightInverse f.symm f
+参数：f : α ≃ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 theorem rightInverse_symm (f : α ≃ β) : Function.RightInverse f.symm f := f.right_inv
-
-/--
-theorem `injective_comp` / 定理 `injective_comp`
-
-English:
-theorem injective_comp
-  given: (e : α ≃ β) (f : β -> γ)
-  statement: Injective (f ∘ e) ↔ Injective f
-  proof: EquivLike.injective_comp e f
-
-中文:
-定理 injective_comp
-  条件: (e : α ≃ β) (f : β -> γ)
-  结论: 单射 (f ∘ e) ↔ 单射 f
-  证明: EquivLike.injective_comp e f
-
-Depends on / 依赖: EquivLike, EquivLike.injective_comp, injective_comp
+/-
+**Equiv.injective_comp** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：injective_comp (e : α ≃ β) (f : β -> γ) : Injective (f ∘ e) ↔ Injective f
+参数：e : α ≃ β；f : β -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.injective_comp`：injective_comp (e : E) (f : β -> γ) : Function
+.Injective (f ∘ e) ↔ Function.Injective f
 -/
-theorem injective_comp (e : α ≃ β) (f : β -> γ) : Injective (f ∘ e) ↔ Injective f :=
+theorem injective_comp (e : α ≃ β) (f : β → γ) : Injective (f ∘ e) ↔ Injective f :=
   EquivLike.injective_comp e f
-
-/--
-theorem `comp_injective` / 定理 `comp_injective`
-
-English:
-theorem comp_injective
-  given: (f : α -> β) (e : β ≃ γ)
-  statement: Injective (e ∘ f) ↔ Injective f
-  proof: EquivLike.comp_injective f e
-
-中文:
-定理 comp_injective
-  条件: (f : α -> β) (e : β ≃ γ)
-  结论: 单射 (e ∘ f) ↔ 单射 f
-  证明: EquivLike.comp_injective f e
-
-Depends on / 依赖: EquivLike, EquivLike.comp_injective, comp_injective
+/-
+**Equiv.comp_injective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：comp_injective (f : α -> β) (e : β ≃ γ) : Injective (e ∘ f) ↔ Injective f
+参数：f : α -> β；e : β ≃ γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.comp_injective`：comp_injective (f : α -> β) (e : F) : Function
+.Injective (e ∘ f) ↔ Function.Injective f
 -/
-theorem comp_injective (f : α -> β) (e : β ≃ γ) : Injective (e ∘ f) ↔ Injective f :=
+theorem comp_injective (f : α → β) (e : β ≃ γ) : Injective (e ∘ f) ↔ Injective f :=
   EquivLike.comp_injective f e
-
-/--
-theorem `surjective_comp` / 定理 `surjective_comp`
-
-English:
-theorem surjective_comp
-  given: (e : α ≃ β) (f : β -> γ)
-  statement: Surjective (f ∘ e) ↔ Surjective f
-  proof: EquivLike.surjective_comp e f
-
-中文:
-定理 surjective_comp
-  条件: (e : α ≃ β) (f : β -> γ)
-  结论: 满射 (f ∘ e) ↔ 满射 f
-  证明: EquivLike.surjective_comp e f
-
-Depends on / 依赖: EquivLike, EquivLike.surjective_comp, surjective_comp
+/-
+**Equiv.surjective_comp** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：surjective_comp (e : α ≃ β) (f : β -> γ) : Surjective (f ∘ e) ↔ Surjective
+ f
+参数：e : α ≃ β；f : β -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.surjective_comp`：surjective_comp (e : E) (f : β -> γ) : Functi
+on.Surjective (f ∘ e) ↔ Function.Surjective f
 -/
-theorem surjective_comp (e : α ≃ β) (f : β -> γ) : Surjective (f ∘ e) ↔ Surjective f :=
+theorem surjective_comp (e : α ≃ β) (f : β → γ) : Surjective (f ∘ e) ↔ Surjective f :=
   EquivLike.surjective_comp e f
-
-/--
-theorem `comp_surjective` / 定理 `comp_surjective`
-
-English:
-theorem comp_surjective
-  given: (f : α -> β) (e : β ≃ γ)
-  statement: Surjective (e ∘ f) ↔ Surjective f
-  proof: EquivLike.comp_surjective f e
-
-中文:
-定理 comp_surjective
-  条件: (f : α -> β) (e : β ≃ γ)
-  结论: 满射 (e ∘ f) ↔ 满射 f
-  证明: EquivLike.comp_surjective f e
-
-Depends on / 依赖: EquivLike, EquivLike.comp_surjective, comp_surjective
+/-
+**Equiv.comp_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：comp_surjective (f : α -> β) (e : β ≃ γ) : Surjective (e ∘ f) ↔ Surjective
+ f
+参数：f : α -> β；e : β ≃ γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.comp_surjective`：comp_surjective (f : α -> β) (e : F) : Functi
+on.Surjective (e ∘ f) ↔ Function.Surjective f
 -/
-theorem comp_surjective (f : α -> β) (e : β ≃ γ) : Surjective (e ∘ f) ↔ Surjective f :=
+theorem comp_surjective (f : α → β) (e : β ≃ γ) : Surjective (e ∘ f) ↔ Surjective f :=
   EquivLike.comp_surjective f e
-
-/--
-theorem `bijective_comp` / 定理 `bijective_comp`
-
-English:
-theorem bijective_comp
-  given: (e : α ≃ β) (f : β -> γ)
-  statement: Bijective (f ∘ e) ↔ Bijective f
-  proof: EquivLike.bijective_comp e f
-
-中文:
-定理 bijective_comp
-  条件: (e : α ≃ β) (f : β -> γ)
-  结论: 双射 (f ∘ e) ↔ 双射 f
-  证明: EquivLike.bijective_comp e f
-
-Depends on / 依赖: EquivLike, EquivLike.bijective_comp, bijective_comp
+/-
+**Equiv.bijective_comp** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：bijective_comp (e : α ≃ β) (f : β -> γ) : Bijective (f ∘ e) ↔ Bijective f
+参数：e : α ≃ β；f : β -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.bijective_comp`：bijective_comp (e : E) (f : β -> γ) : Function
+.Bijective (f ∘ e) ↔ Function.Bijective f
 -/
-theorem bijective_comp (e : α ≃ β) (f : β -> γ) : Bijective (f ∘ e) ↔ Bijective f :=
+theorem bijective_comp (e : α ≃ β) (f : β → γ) : Bijective (f ∘ e) ↔ Bijective f :=
   EquivLike.bijective_comp e f
-
-/--
-theorem `comp_bijective` / 定理 `comp_bijective`
-
-English:
-theorem comp_bijective
-  given: (f : α -> β) (e : β ≃ γ)
-  statement: Bijective (e ∘ f) ↔ Bijective f
-  proof: EquivLike.comp_bijective f e
-
-@[simp]
-
-中文:
-定理 comp_bijective
-  条件: (f : α -> β) (e : β ≃ γ)
-  结论: 双射 (e ∘ f) ↔ 双射 f
-  证明: EquivLike.comp_bijective f e
-
-@[simp]
-
-Depends on / 依赖: EquivLike, EquivLike.comp_bijective, comp_bijective
+/-
+**Equiv.comp_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：comp_bijective (f : α -> β) (e : β ≃ γ) : Bijective (e ∘ f) ↔ Bijective f
+参数：f : α -> β；e : β ≃ γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.comp_bijective`：comp_bijective (f : α -> β) (e : F) : Function
+.Bijective (e ∘ f) ↔ Function.Bijective f
 -/
-theorem comp_bijective (f : α -> β) (e : β ≃ γ) : Bijective (e ∘ f) ↔ Bijective f :=
+theorem comp_bijective (f : α → β) (e : β ≃ γ) : Bijective (e ∘ f) ↔ Bijective f :=
   EquivLike.comp_bijective f e
 
 @[simp]
-/--
-theorem `extend_apply` / 定理 `extend_apply`
-
-English:
-theorem extend_apply
-  given: {f : α ≃ β} (g : α -> γ) (e' : β -> γ) (b : β)
-  proof: by
-  rw [← f.apply_symm_apply b]; rw [f.injective.extend_apply]; rw [apply_symm_apply]
-
-中文:
-定理 extend_apply
-  条件: {f : α ≃ β} (g : α -> γ) (e' : β -> γ) (b : β)
-  证明: by
-  rw [← f.apply_symm_apply b]; rw [f.injective.extend_apply]; rw [apply_symm_apply]
-
-Depends on / 依赖: apply_symm_apply, extend_apply, f.apply_symm_apply, f.injective.extend_apply, injective
+/-
+**Equiv.extend_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：extend_apply {f : α ≃ β} (g : α -> γ) (e' : β -> γ) (b : β) : extend f g e
+' b = g (f.symm b)
+参数：g : α -> γ；e' : β -> γ；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Function.Injective.extend_apply`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Injective f → ∀ (g : α → γ) (e' : β → γ) (a : α)
+, Function.extend f g…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-theorem extend_apply {f : α ≃ β} (g : α -> γ) (e' : β -> γ) (b : β) :
+theorem extend_apply {f : α ≃ β} (g : α → γ) (e' : β → γ) (b : β) :
     extend f g e' b = g (f.symm b) := by
-  rw [← f.apply_symm_apply b]; rw [f.injective.extend_apply]; rw [apply_symm_apply]
+  rw [← f.apply_symm_apply b, f.injective.extend_apply, apply_symm_apply]
 
-/--
-Definition of `equivCongr` / `equivCongr` 的定义
+/-- If `α` is equivalent to `β` and `γ` is equivalent to `δ`, then the type of equivalences `α ≃ γ`
+is equivalent to the type of equivalences `β ≃ δ`. -/
+/-
+**Equiv.equivCongr** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：equivCongr {δ : Sort*} (ab : α ≃ β) (cd : γ ≃ δ) : (α ≃ γ) ≃ (β ≃ δ) where
+ toFun ac
+参数：ab : α ≃ β；cd : γ ≃ δ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition equivCongr
-  signature: {δ : Sort*} (ab : α ≃ β) (cd : γ ≃ δ)
-  body: (ab.symm.trans ac).trans cd
-invFun bd := ab.trans bd.trans cd.symm
-  left_inv ac := by grind
-  right_inv ac := by grind
-
-中文:
-定义 equivCongr
-  签名: {δ : 类型层*} (ab : α ≃ β) (cd : γ ≃ δ)
-  定义体: (ab.symm.trans ac).trans cd
-invFun bd := ab.trans bd.trans cd.symm
-  left_inv ac := by grind
-  right_inv ac := by grind
-
-Depends on / 依赖: ab.symm.trans
+--- 原说明 ---
+If `α` is equivalent to `β` and `γ` is equivalent to `δ`, then the type of equiv
+alences `α ≃ γ`
+is equivalent to the type of equivalences `β ≃ δ`.
 -/
 def equivCongr {δ : Sort*} (ab : α ≃ β) (cd : γ ≃ δ) : (α ≃ γ) ≃ (β ≃ δ) where
   toFun ac := (ab.symm.trans ac).trans cd
-invFun bd := ab.trans bd.trans cd.symm
+  invFun bd := ab.trans <| bd.trans <| cd.symm
   left_inv ac := by grind
   right_inv ac := by grind
-
-/--
-theorem `equivCongr_apply_apply` / 定理 `equivCongr_apply_apply`
-
-English:
-theorem equivCongr_apply_apply
-  given: {δ} (ab : α ≃ β) (cd : γ ≃ δ) (e : α ≃ γ) (x)
-  proof: rfl
-
-中文:
-定理 equivCongr_apply_apply
-  条件: {δ} (ab : α ≃ β) (cd : γ ≃ δ) (e : α ≃ γ) (x)
-  证明: rfl
+/-
+**Equiv.equivCongr_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {γ : Sort w} {δ : Sort u_1} (ab : α ≃ β) (cd :
+ γ ≃ δ) (e : α ≃ γ) (x : β),   ((ab.equivCongr cd) e) x = cd (e (ab.symm x))
+参数：ab : α ≃ β；cd : γ ≃ δ；e : α ≃ γ；x : β；(ab.equivCongr cd) e；e (ab.symm x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, grind =] theorem equivCongr_apply_apply {δ} (ab : α ≃ β) (cd : γ ≃ δ) (e : α ≃ γ) (x) :
     ab.equivCongr cd e x = cd (e (ab.symm x)) := rfl
-
-/--
-theorem `equivCongr_symm` / 定理 `equivCongr_symm`
-
-English:
-theorem equivCongr_symm
-  given: {δ} (ab : α ≃ β) (cd : γ ≃ δ)
-  proof: by ext; rfl
-
-中文:
-定理 equivCongr_symm
-  条件: {δ} (ab : α ≃ β) (cd : γ ≃ δ)
-  证明: by ext; rfl
+/-
+**Equiv.equivCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {γ : Sort w} {δ : Sort u_1} (ab : α ≃ β) (cd :
+ γ ≃ δ),   (ab.equivCongr cd).symm = ab.symm.equivCongr cd.symm
+参数：ab : α ≃ β；cd : γ ≃ δ；ab.equivCongr cd。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp, grind =] theorem equivCongr_symm {δ} (ab : α ≃ β) (cd : γ ≃ δ) :
     (ab.equivCongr cd).symm = ab.symm.equivCongr cd.symm := by ext; rfl
-
-/--
-theorem `equivCongr_refl` / 定理 `equivCongr_refl`
-
-English:
-theorem equivCongr_refl
-  given: {α β}
-  proof: by grind
-
-中文:
-定理 equivCongr_refl
-  条件: {α β}
-  证明: by grind
+/-
+**Equiv.equivCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2}, (Equiv.refl α).equivCongr (Equiv.refl β) 
+= Equiv.refl (α ≃ β)
+参数：Equiv.refl α；Equiv.refl β；α ≃ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem equivCongr_refl {α β} :
     (Equiv.refl α).equivCongr (Equiv.refl β) = Equiv.refl (α ≃ β) := by grind
-
-/--
-theorem `equivCongr_trans` / 定理 `equivCongr_trans`
-
-English:
-theorem equivCongr_trans
-  given: {δ ε ζ} (ab : α ≃ β) (de : δ ≃ ε) (bc : β ≃ γ) (ef : ε ≃ ζ)
-  proof: by
-  grind
-
-中文:
-定理 equivCongr_trans
-  条件: {δ ε ζ} (ab : α ≃ β) (de : δ ≃ ε) (bc : β ≃ γ) (ef : ε ≃ ζ)
-  证明: by
-  grind
+/-
+**Equiv.equivCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {γ : Sort w} {δ : Sort u_1} {ε : Sort u_2} {ζ 
+: Sort u_3} (ab : α ≃ β) (de : δ ≃ ε)   (bc : β ≃ γ) (ef : ε ≃ ζ), (ab.equivCong
+r de).trans (bc.equivCongr ef) = (ab.trans bc).equivCongr (de.trans ef)
+参数：ab : α ≃ β；de : δ ≃ ε；bc : β ≃ γ；ef : ε ≃ ζ；ab.equivCongr de；bc.equivCongr ef
+；ab.trans bc；de.trans ef。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem equivCongr_trans {δ ε ζ} (ab : α ≃ β) (de : δ ≃ ε) (bc : β ≃ γ) (ef : ε ≃ ζ) :
     (ab.equivCongr de).trans (bc.equivCongr ef) = (ab.trans bc).equivCongr (de.trans ef) := by
   grind
-
-/--
-theorem `equivCongr_refl_left` / 定理 `equivCongr_refl_left`
-
-English:
-theorem equivCongr_refl_left
-  given: {α β γ} (bg : β ≃ γ) (e : α ≃ β)
-  proof: rfl
-
-中文:
-定理 equivCongr_refl_left
-  条件: {α β γ} (bg : β ≃ γ) (e : α ≃ β)
-  证明: rfl
+/-
+**Equiv.equivCongr_refl_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (bg : β ≃ γ) (e : α ≃ β), (
+(Equiv.refl α).equivCongr bg) e = e.trans bg
+参数：bg : β ≃ γ；e : α ≃ β；(Equiv.refl α).equivCongr bg。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 @[simp] theorem equivCongr_refl_left {α β γ} (bg : β ≃ γ) (e : α ≃ β) :
     (Equiv.refl α).equivCongr bg e = e.trans bg := rfl
-
-/--
-theorem `equivCongr_refl_right` / 定理 `equivCongr_refl_right`
-
-English:
-theorem equivCongr_refl_right
-  given: {α β} (ab e : α ≃ β)
-  proof: rfl
-
-中文:
-定理 equivCongr_refl_right
-  条件: {α β} (ab e : α ≃ β)
-  证明: rfl
+/-
+**Equiv.equivCongr_refl_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} (ab e : α ≃ β), (ab.equivCongr (Equiv.refl
+ β)) e = ab.symm.trans e
+参数：ab e : α ≃ β；ab.equivCongr (Equiv.refl β)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 @[simp] theorem equivCongr_refl_right {α β} (ab e : α ≃ β) :
     ab.equivCongr (Equiv.refl β) e = ab.symm.trans e := rfl
@@ -1856,230 +1185,171 @@ section permCongr
 
 variable {α' β' : Type*} (e : α' ≃ β')
 
-/--
-Definition of `permCongr` / `permCongr` 的定义
+/-- If `α` is equivalent to `β`, then `Perm α` is equivalent to `Perm β`. -/
+/-
+**Equiv.permCongr** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：permCongr : Perm α' ≃ Perm β'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition permCongr
-  signature: : Perm α' ≃ Perm β'
-  body: equivCongr e e
-
-中文:
-定义 permCongr
-  签名: : 置换 α' ≃ 置换 β'
-  定义体: equivCongr e e
-
-Depends on / 依赖: equivCongr
+--- 原说明 ---
+If `α` is equivalent to `β`, then `Perm α` is equivalent to `Perm β`.
 -/
 def permCongr : Perm α' ≃ Perm β' := equivCongr e e
-
-/--
-theorem `permCongr_def` / 定理 `permCongr_def`
-
-English:
-theorem permCongr_def
-  given: (p : Equiv.Perm α')
-  statement: e.permCongr p = (e.symm.trans p).trans e
-  proof: rfl
-
-中文:
-定理 permCongr_def
-  条件: (p : 等价.置换 α')
-  结论: e.permCongr p = (e.symm.trans p).trans e
-  证明: rfl
+/-
+**Equiv.permCongr_def** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：permCongr_def (p : Equiv.Perm α') : e.permCongr p = (e.symm.trans p).trans
+ e
+参数：p : Equiv.Perm α'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem permCongr_def (p : Equiv.Perm α') : e.permCongr p = (e.symm.trans p).trans e := rfl
-
-/--
-theorem `permCongr_refl` / 定理 `permCongr_refl`
-
-English:
-theorem permCongr_refl
-  statement: e.permCongr (Equiv.refl _) = Equiv.refl _
-  proof: by
-  simp [permCongr_def]
-
-中文:
-定理 permCongr_refl
-  结论: e.permCongr (等价.refl _) = 等价.refl _
-  证明: by
-  simp [permCongr_def]
+/-
+**Equiv.permCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α' : Type u_1} {β' : Type u_2} (e : α' ≃ β'), e.permCongr (Equiv.refl α
+') = Equiv.refl β'
+参数：e : α' ≃ β'；Equiv.refl α'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans_refl`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.trans (Equi
+v.refl β) = e
+· 使用定理 `Equiv.symm_trans_self`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.symm.t
+rans e = Equiv.refl β
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem permCongr_refl : e.permCongr (Equiv.refl _) = Equiv.refl _ := by
   simp [permCongr_def]
-
-/--
-theorem `permCongr_symm` / 定理 `permCongr_symm`
-
-English:
-theorem permCongr_symm
-  statement: e.permCongr.symm = e.symm.permCongr
-  proof: rfl
-
-中文:
-定理 permCongr_symm
-  结论: e.permCongr.symm = e.symm.permCongr
-  证明: rfl
+/-
+**Equiv.permCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α' : Type u_1} {β' : Type u_2} (e : α' ≃ β'), e.permCongr.symm = e.symm
+.permCongr
+参数：e : α' ≃ β'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp, grind =] theorem permCongr_symm : e.permCongr.symm = e.symm.permCongr := rfl
-
-/--
-theorem `permCongr_apply` / 定理 `permCongr_apply`
-
-English:
-theorem permCongr_apply
-  given: (p : Equiv.Perm α') (x)
-  proof: rfl
-
-中文:
-定理 permCongr_apply
-  条件: (p : 等价.置换 α') (x)
-  证明: rfl
+/-
+**Equiv.permCongr_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α' : Type u_1} {β' : Type u_2} (e : α' ≃ β') (p : Equiv.Perm α') (x : β
+'), (e.permCongr p) x = e (p (e.symm x))
+参数：e : α' ≃ β'；p : Equiv.Perm α'；x : β'；e.permCongr p；p (e.symm x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, grind =] theorem permCongr_apply (p : Equiv.Perm α') (x) :
     e.permCongr p x = e (p (e.symm x)) := rfl
-
-/--
-theorem `permCongr_symm_apply` / 定理 `permCongr_symm_apply`
-
-English:
-theorem permCongr_symm_apply
-  given: (p : Equiv.Perm β') (x)
-  proof: rfl
-
-中文:
-定理 permCongr_symm_apply
-  条件: (p : 等价.置换 β') (x)
-  证明: rfl
+/-
+**Equiv.permCongr_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：permCongr_symm_apply (p : Equiv.Perm β') (x) : e.permCongr.symm p x = e.sy
+mm (p (e x))
+参数：p : Equiv.Perm β'；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem permCongr_symm_apply (p : Equiv.Perm β') (x) :
     e.permCongr.symm p x = e.symm (p (e x)) := rfl
-
-/--
-theorem `permCongr_trans` / 定理 `permCongr_trans`
-
-English:
-theorem permCongr_trans
-  given: (p p' : Equiv.Perm α')
-  proof: by grind
-
-中文:
-定理 permCongr_trans
-  条件: (p p' : 等价.置换 α')
-  证明: by grind
+/-
+**Equiv.permCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：permCongr_trans (p p' : Equiv.Perm α') : (e.permCongr p).trans (e.permCong
+r p') = e.permCongr (p.trans p')
+参数：p p' : Equiv.Perm α'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem permCongr_trans (p p' : Equiv.Perm α') :
     (e.permCongr p).trans (e.permCongr p') = e.permCongr (p.trans p') := by grind
 
 end permCongr
 
-/--
-Definition of `equivOfIsEmpty` / `equivOfIsEmpty` 的定义
+/-- Two empty types are equivalent. -/
+/-
+**Equiv.equivOfIsEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：equivOfIsEmpty (α β : Sort*) [IsEmpty α] [IsEmpty β] : α ≃ β
+参数：α β : Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivOfIsEmpty
-  signature: (α β : Sort*) [IsEmpty α] [IsEmpty β]
-  body: ⟨isEmptyElim, isEmptyElim, isEmptyElim, isEmptyElim⟩
-
-中文:
-定义 equivOfIsEmpty
-  签名: (α β : 类型层*) [是空 α] [是空 β]
-  定义体: ⟨isEmptyElim, isEmptyElim, isEmptyElim, isEmptyElim⟩
-
-Depends on / 依赖: isEmptyElim
+--- 原说明 ---
+Two empty types are equivalent.
 -/
 def equivOfIsEmpty (α β : Sort*) [IsEmpty α] [IsEmpty β] : α ≃ β :=
   ⟨isEmptyElim, isEmptyElim, isEmptyElim, isEmptyElim⟩
 
-/--
-Definition of `equivEmpty` / `equivEmpty` 的定义
+/-- If `α` is an empty type, then it is equivalent to the `Empty` type. -/
+/-
+**Equiv.equivEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：equivEmpty (α : Sort u) [IsEmpty α] : α ≃ Empty
+参数：α : Sort u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivEmpty
-  signature: (α : Sort u) [IsEmpty α]
-  body: equivOfIsEmpty α _
-
-中文:
-定义 equivEmpty
-  签名: (α : 类型层 u) [是空 α]
-  定义体: equivOfIsEmpty α _
-
-Depends on / 依赖: equivOfIsEmpty
+--- 原说明 ---
+If `α` is an empty type, then it is equivalent to the `Empty` type.
 -/
 def equivEmpty (α : Sort u) [IsEmpty α] : α ≃ Empty := equivOfIsEmpty α _
 
-/--
-Definition of `equivPEmpty` / `equivPEmpty` 的定义
+/-- If `α` is an empty type, then it is equivalent to the `PEmpty` type in any universe. -/
+/-
+**Equiv.equivPEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：equivPEmpty (α : Sort v) [IsEmpty α] : α ≃ PEmpty.{u}
+参数：α : Sort v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivPEmpty
-  signature: (α : Sort v) [IsEmpty α]
-  body: equivOfIsEmpty α _
-
-中文:
-定义 equivPEmpty
-  签名: (α : 类型层 v) [是空 α]
-  定义体: equivOfIsEmpty α _
-
-Depends on / 依赖: equivOfIsEmpty
+--- 原说明 ---
+If `α` is an empty type, then it is equivalent to the `PEmpty` type in any unive
+rse.
 -/
 def equivPEmpty (α : Sort v) [IsEmpty α] : α ≃ PEmpty.{u} := equivOfIsEmpty α _
 
-/--
-Definition of `equivEmptyEquiv` / `equivEmptyEquiv` 的定义
+/-- `α` is equivalent to an empty type iff `α` is empty. -/
+/-
+**Equiv.equivEmptyEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：equivEmptyEquiv (α : Sort u) : α ≃ Empty ≃ IsEmpty α
+参数：α : Sort u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivEmptyEquiv
-  signature: (α : Sort u)
-  body: ⟨fun e => Function.isEmpty e, @equivEmpty α, fun e => ext fun x => (e x).elim, fun _ => rfl⟩
-
-中文:
-定义 equivEmptyEquiv
-  签名: (α : 类型层 u)
-  定义体: ⟨fun e => Function.isEmpty e, @equivEmpty α, fun e => ext fun x => (e x).elim, fun _ => rfl⟩
-
-Depends on / 依赖: Function, Function.isEmpty, equivEmpty, isEmpty
+--- 原说明 ---
+`α` is equivalent to an empty type iff `α` is empty.
 -/
 def equivEmptyEquiv (α : Sort u) : α ≃ Empty ≃ IsEmpty α :=
   ⟨fun e => Function.isEmpty e, @equivEmpty α, fun e => ext fun x => (e x).elim, fun _ => rfl⟩
 
-/--
-Definition of `propEquivPEmpty` / `propEquivPEmpty` 的定义
+/-- The `Sort` of proofs of a false proposition is equivalent to `PEmpty`. -/
+/-
+**Equiv.propEquivPEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：propEquivPEmpty {p : Prop} (h : ¬p) : p ≃ PEmpty
+参数：h : ¬p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition propEquivPEmpty
-  signature: {p : Prop} (h : ¬p)
-  body: @equivPEmpty p IsEmpty.prop_iff.2 h
-
-中文:
-定义 propEquivPEmpty
-  签名: {p : 命题} (h : ¬p)
-  定义体: @equivPEmpty p IsEmpty.prop_iff.2 h
-
-Depends on / 依赖: IsEmpty, IsEmpty.prop_iff, equivPEmpty, prop_iff
+--- 原说明 ---
+The `Sort` of proofs of a false proposition is equivalent to `PEmpty`.
 -/
-def propEquivPEmpty {p : Prop} (h : ¬p) : p ≃ PEmpty := @equivPEmpty p IsEmpty.prop_iff.2 h
+def propEquivPEmpty {p : Prop} (h : ¬p) : p ≃ PEmpty := @equivPEmpty p <| IsEmpty.prop_iff.2 h
 
 /-- If both `α` and `β` have a unique element, then `α ≃ β`. -/
 @[simps (attr := grind =)]
-/--
-Definition of `ofUnique` / `ofUnique` 的定义
+/-
+**Equiv.ofUnique** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：ofUnique (α β : Sort _) [Unique.{u} α] [Unique.{v} β] : α ≃ β where toFun
+参数：α β : Sort _。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofUnique
-  signature: (α β : Sort _) [Unique.{u} α] [Unique.{v} β]
-  body: default
-  invFun := default
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 ofUnique
-  签名: (α β : 类型层 _) [唯一.{u} α] [唯一.{v} β]
-  定义体: default
-  invFun := default
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
+--- 原说明 ---
+If both `α` and `β` have a unique element, then `α ≃ β`.
 -/
 def ofUnique (α β : Sort _) [Unique.{u} α] [Unique.{v} β] : α ≃ β where
   toFun := default
@@ -2089,182 +1359,142 @@ def ofUnique (α β : Sort _) [Unique.{u} α] [Unique.{v} β] : α ≃ β where
 
 /-- If `α` has a unique element, then it is equivalent to any `PUnit`. -/
 @[simps! (attr := grind =)]
-/--
-Definition of `equivPUnit` / `equivPUnit` 的定义
+/-
+**Equiv.equivPUnit** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：equivPUnit (α : Sort u) [Unique α] : α ≃ PUnit.{v}
+参数：α : Sort u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivPUnit
-  signature: (α : Sort u) [Unique α]
-  body: ofUnique α _
-
-中文:
-定义 equivPUnit
-  签名: (α : 类型层 u) [唯一 α]
-  定义体: ofUnique α _
-
-Depends on / 依赖: ofUnique
+--- 原说明 ---
+If `α` has a unique element, then it is equivalent to any `PUnit`.
 -/
 def equivPUnit (α : Sort u) [Unique α] : α ≃ PUnit.{v} := ofUnique α _
 
-/--
-Definition of `propEquivPUnit` / `propEquivPUnit` 的定义
+/-- The `Sort` of proofs of a true proposition is equivalent to `PUnit`. -/
+/-
+**Equiv.propEquivPUnit** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：propEquivPUnit {p : Prop} (h : p) : p ≃ PUnit.{0}
+参数：h : p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition propEquivPUnit
-  signature: {p : Prop} (h : p)
-  body: @equivPUnit p uniqueProp h
-
-中文:
-定义 propEquivPUnit
-  签名: {p : 命题} (h : p)
-  定义体: @equivPUnit p uniqueProp h
-
-Depends on / 依赖: equivPUnit, uniqueProp
+--- 原说明 ---
+The `Sort` of proofs of a true proposition is equivalent to `PUnit`.
 -/
-def propEquivPUnit {p : Prop} (h : p) : p ≃ PUnit.{0} := @equivPUnit p uniqueProp h
+def propEquivPUnit {p : Prop} (h : p) : p ≃ PUnit.{0} := @equivPUnit p <| uniqueProp h
 
 /-- `ULift α` is equivalent to `α`. -/
 @[simps (attr := grind =) -fullyApplied apply symm_apply]
-/--
-Definition of `ulift` / `ulift` 的定义
+/-
+**Equiv.ulift** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type v} → ULift.{u, v} α ≃ α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ULift.up_down`：∀ {α : Type u} (b : ULift.{v, u} α), { down := b.down } =
+ b
+· 使用定理 `ULift.down_up`：∀ {α : Type u} (a : α), { down := a }.down = a
 
-English:
-definition ulift
-  signature: {α : Type v}
-  body: ⟨ULift.down, ULift.up, ULift.up_down, ULift.down_up.{v, u}⟩
-
-中文:
-定义 ulift
-  签名: {α : 类型v}
-  定义体: ⟨ULift.down, ULift.up, ULift.up_down, ULift.down_up.{v, u}⟩
+--- 原说明 ---
+`ULift α` is equivalent to `α`.
 -/
 protected def ulift {α : Type v} : ULift.{u} α ≃ α :=
   ⟨ULift.down, ULift.up, ULift.up_down, ULift.down_up.{v, u}⟩
 
 /-- `PLift α` is equivalent to `α`. -/
 @[simps (attr := grind =) -fullyApplied apply symm_apply]
-/--
-Definition of `plift` / `plift` 的定义
+/-
+**Equiv.plift** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Sort u} → PLift α ≃ α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PLift.up_down`：∀ {α : Sort u} (b : PLift α), { down := b.down } = b
+· 使用定理 `PLift.down_up`：∀ {α : Sort u} (a : α), { down := a }.down = a
 
-English:
-definition plift
-  signature: : PLift α ≃ α
-  body: ⟨PLift.down, PLift.up, PLift.up_down, PLift.down_up⟩
-
-中文:
-定义 plift
-  签名: : 命题层提升 α ≃ α
-  定义体: ⟨PLift.down, PLift.up, PLift.up_down, PLift.down_up⟩
+--- 原说明 ---
+`PLift α` is equivalent to `α`.
 -/
 protected def plift : PLift α ≃ α := ⟨PLift.down, PLift.up, PLift.up_down, PLift.down_up⟩
 
-/--
-Definition of `ofIff` / `ofIff` 的定义
+/-- equivalence of propositions is the same as iff -/
+/-
+**Equiv.ofIff** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：ofIff {P Q : Prop} (h : P ↔ Q) : P ≃ Q
+参数：h : P ↔ Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-definition ofIff
-  signature: {P Q : Prop} (h : P ↔ Q)
-  body: ⟨h.mp, h.mpr, fun _ => rfl, fun _ => rfl⟩
-
-中文:
-定义 ofIff
-  签名: {P Q : 命题} (h : P ↔ Q)
-  定义体: ⟨h.mp, h.mpr, fun _ => rfl, fun _ => rfl⟩
-
-Depends on / 依赖: h.mp, h.mpr
+--- 原说明 ---
+equivalence of propositions is the same as iff
 -/
 def ofIff {P Q : Prop} (h : P ↔ Q) : P ≃ Q := ⟨h.mp, h.mpr, fun _ => rfl, fun _ => rfl⟩
 
 /-- If `α₁` is equivalent to `α₂` and `β₁` is equivalent to `β₂`, then the type of maps `α₁ → β₁`
 is equivalent to the type of maps `α₂ → β₂`. -/
 @[simps (attr := grind =) apply]
-/--
-Definition of `arrowCongr` / `arrowCongr` 的定义
+/-
+**Equiv.arrowCongr** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：arrowCongr {α₁ β₁ α₂ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂) : (α₁ -> β₁
+) ≃ (α₂ -> β₂) where toFun f
+参数：e₁ : α₁ ≃ α₂；e₂ : β₁ ≃ β₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition arrowCongr
-  signature: {α₁ β₁ α₂ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
-  body: e₂ ∘ f ∘ e₁.symm
-  invFun f := e₂.symm ∘ f ∘ e₁
-  left_inv f := by grind
-  right_inv f := by grind
-
-中文:
-定义 arrowCongr
-  签名: {α₁ β₁ α₂ β₂ : 类型层*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
-  定义体: e₂ ∘ f ∘ e₁.symm
-  invFun f := e₂.symm ∘ f ∘ e₁
-  left_inv f := by grind
-  right_inv f := by grind
+--- 原说明 ---
+If `α₁` is equivalent to `α₂` and `β₁` is equivalent to `β₂`, then the type of m
+aps `α₁ → β₁`
+is equivalent to the type of maps `α₂ → β₂`.
 -/
-def arrowCongr {α₁ β₁ α₂ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂) : (α₁ -> β₁) ≃ (α₂ -> β₂) where
+def arrowCongr {α₁ β₁ α₂ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂) : (α₁ → β₁) ≃ (α₂ → β₂) where
   toFun f := e₂ ∘ f ∘ e₁.symm
   invFun f := e₂.symm ∘ f ∘ e₁
   left_inv f := by grind
   right_inv f := by grind
-
-/--
-theorem `arrowCongr_comp` / 定理 `arrowCongr_comp`
-
-English:
-theorem arrowCongr_comp
-  statement: {α₁ β₁ γ₁ α₂ β₂ γ₂ : Sort*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) (ec : γ₁ ≃ γ₂)
-  proof: by grind
-
-中文:
-定理 arrowCongr_comp
-  结论: {α₁ β₁ γ₁ α₂ β₂ γ₂ : 类型层*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) (ec : γ₁ ≃ γ₂)
-  证明: by grind
+/-
+**Equiv.arrowCongr_comp** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：arrowCongr_comp {α₁ β₁ γ₁ α₂ β₂ γ₂ : Sort*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) 
+(ec : γ₁ ≃ γ₂) (f : α₁ -> β₁) (g : β₁ -> γ₁) : arrowCongr ea ec (g ∘ f) = arrowC
+ongr eb ec g ∘ arrowCongr ea eb f
+参数：ea : α₁ ≃ α₂；eb : β₁ ≃ β₂；ec : γ₁ ≃ γ₂；f : α₁ -> β₁；g : β₁ -> γ₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem arrowCongr_comp {α₁ β₁ γ₁ α₂ β₂ γ₂ : Sort*} (ea : α₁ ≃ α₂) (eb : β₁ ≃ β₂) (ec : γ₁ ≃ γ₂)
-    (f : α₁ -> β₁) (g : β₁ -> γ₁) :
+    (f : α₁ → β₁) (g : β₁ → γ₁) :
     arrowCongr ea ec (g ∘ f) = arrowCongr eb ec g ∘ arrowCongr ea eb f := by grind
-
-/--
-theorem `arrowCongr_refl` / 定理 `arrowCongr_refl`
-
-English:
-theorem arrowCongr_refl
-  given: {α β : Sort*}
-  proof: rfl
-
-中文:
-定理 arrowCongr_refl
-  条件: {α β : 类型层*}
-  证明: rfl
+/-
+**Equiv.arrowCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2}, (Equiv.refl α).arrowCongr (Equiv.refl β) 
+= Equiv.refl (α → β)
+参数：Equiv.refl α；Equiv.refl β；α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 @[simp] theorem arrowCongr_refl {α β : Sort*} :
-    arrowCongr (Equiv.refl α) (Equiv.refl β) = Equiv.refl (α -> β) := rfl
-
-/--
-theorem `arrowCongr_trans` / 定理 `arrowCongr_trans`
-
-English:
-theorem arrowCongr_trans
-  statement: {α₁ α₂ α₃ β₁ β₂ β₃ : Sort*}
-  proof: rfl
-
-中文:
-定理 arrowCongr_trans
-  结论: {α₁ α₂ α₃ β₁ β₂ β₃ : 类型层*}
-  证明: rfl
+    arrowCongr (Equiv.refl α) (Equiv.refl β) = Equiv.refl (α → β) := rfl
+/-
+**Equiv.arrowCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α₁ : Sort u_1} {α₂ : Sort u_2} {α₃ : Sort u_3} {β₁ : Sort u_4} {β₂ : So
+rt u_5} {β₃ : Sort u_6} (e₁ : α₁ ≃ α₂)   (e₁' : β₁ ≃ β₂) (e₂ : α₂ ≃ α₃) (e₂' : β
+₂ ≃ β₃),   (e₁.trans e₂).arrowCongr (e₁'.trans e₂') = (e₁.arrowCongr e₁').trans 
+(e₂.arrowCongr e₂')
+参数：e₁ : α₁ ≃ α₂；e₁' : β₁ ≃ β₂；e₂ : α₂ ≃ α₃；e₂' : β₂ ≃ β₃；e₁.trans e₂；e₁'.trans e
+₂'；e₁.arrowCongr e₁'；e₂.arrowCongr e₂'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 @[simp] theorem arrowCongr_trans {α₁ α₂ α₃ β₁ β₂ β₃ : Sort*}
     (e₁ : α₁ ≃ α₂) (e₁' : β₁ ≃ β₂) (e₂ : α₂ ≃ α₃) (e₂' : β₂ ≃ β₃) :
     arrowCongr (e₁.trans e₂) (e₁'.trans e₂') = (arrowCongr e₁ e₁').trans (arrowCongr e₂ e₂') := rfl
-
-/--
-theorem `arrowCongr_symm` / 定理 `arrowCongr_symm`
-
-English:
-theorem arrowCongr_symm
-  given: {α₁ α₂ β₁ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
-  proof: rfl
-
-中文:
-定理 arrowCongr_symm
-  条件: {α₁ α₂ β₁ β₂ : 类型层*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
-  证明: rfl
+/-
+**Equiv.arrowCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α₁ : Sort u_1} {α₂ : Sort u_2} {β₁ : Sort u_3} {β₂ : Sort u_4} (e₁ : α₁
+ ≃ α₂) (e₂ : β₁ ≃ β₂),   (e₁.arrowCongr e₂).symm = e₁.symm.arrowCongr e₂.symm
+参数：e₁ : α₁ ≃ α₂；e₂ : β₁ ≃ β₂；e₁.arrowCongr e₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp, grind =] theorem arrowCongr_symm {α₁ α₂ β₁ β₂ : Sort*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂) :
     (arrowCongr e₁ e₂).symm = arrowCongr e₁.symm e₂.symm := rfl
@@ -2275,133 +1505,104 @@ The `equiv_rw` tactic is not able to use the default `Sort` level `Equiv.arrowCo
 because Lean's universe rules will not unify `?l_1` with `imax (1 ?m_1)`.
 -/
 @[simps! (attr := grind =) apply]
-/--
-Definition of `arrowCongr'` / `arrowCongr'` 的定义
+/-
+**Equiv.arrowCongr'** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：arrowCongr' {α₁ β₁ α₂ β₂ : Type*} (hα : α₁ ≃ α₂) (hβ : β₁ ≃ β₂) : (α₁ -> β
+₁) ≃ (α₂ -> β₂)
+参数：hα : α₁ ≃ α₂；hβ : β₁ ≃ β₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowCongr'
-  signature: {α₁ β₁ α₂ β₂ : Type*} (hα : α₁ ≃ α₂) (hβ : β₁ ≃ β₂)
-  body: Equiv.arrowCongr hα hβ
+--- 原说明 ---
+A version of `Equiv.arrowCongr` in `Type`, rather than `Sort`.
 
-中文:
-定义 arrowCongr'
-  签名: {α₁ β₁ α₂ β₂ : 类型} (hα : α₁ ≃ α₂) (hβ : β₁ ≃ β₂)
-  定义体: Equiv.arrowCongr hα hβ
-
-Depends on / 依赖: Equiv.arrowCongr, arrowCongr
+The `equiv_rw` tactic is not able to use the default `Sort` level `Equiv.arrowCo
+ngr`,
+because Lean's universe rules will not unify `?l_1` with `imax (1 ?m_1)`.
 -/
-def arrowCongr' {α₁ β₁ α₂ β₂ : Type*} (hα : α₁ ≃ α₂) (hβ : β₁ ≃ β₂) : (α₁ -> β₁) ≃ (α₂ -> β₂) :=
+def arrowCongr' {α₁ β₁ α₂ β₂ : Type*} (hα : α₁ ≃ α₂) (hβ : β₁ ≃ β₂) : (α₁ → β₁) ≃ (α₂ → β₂) :=
   Equiv.arrowCongr hα hβ
-
-/--
-theorem `arrowCongr'_refl` / 定理 `arrowCongr'_refl`
-
-English:
-theorem arrowCongr'_refl
-  given: {α β : Type*}
-  proof: rfl
-
-中文:
-定理 arrowCongr'_refl
-  条件: {α β : 类型}
-  证明: rfl
+/-
+**Equiv.arrowCongr'_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, (Equiv.refl α).arrowCongr' (Equiv.refl β)
+ = Equiv.refl (α → β)
+参数：Equiv.refl α；Equiv.refl β；α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 @[simp] theorem arrowCongr'_refl {α β : Type*} :
-    arrowCongr' (Equiv.refl α) (Equiv.refl β) = Equiv.refl (α -> β) := rfl
-
-/--
-theorem `arrowCongr'_trans` / 定理 `arrowCongr'_trans`
-
-English:
-theorem arrowCongr'_trans
-  statement: {α₁ α₂ β₁ β₂ α₃ β₃ : Type*}
-  proof: rfl
-
-中文:
-定理 arrowCongr'_trans
-  结论: {α₁ α₂ β₁ β₂ α₃ β₃ : 类型}
-  证明: rfl
+    arrowCongr' (Equiv.refl α) (Equiv.refl β) = Equiv.refl (α → β) := rfl
+/-
+**Equiv.arrowCongr'_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β₁ : Type u_3} {β₂ : Type u_4} {α₃ : Ty
+pe u_5} {β₃ : Type u_6} (e₁ : α₁ ≃ α₂)   (e₁' : β₁ ≃ β₂) (e₂ : α₂ ≃ α₃) (e₂' : β
+₂ ≃ β₃),   (e₁.trans e₂).arrowCongr' (e₁'.trans e₂') = (e₁.arrowCongr' e₁').tran
+s (e₂.arrowCongr' e₂')
+参数：e₁ : α₁ ≃ α₂；e₁' : β₁ ≃ β₂；e₂ : α₂ ≃ α₃；e₂' : β₂ ≃ β₃；e₁.trans e₂；e₁'.trans e
+₂'；e₁.arrowCongr' e₁'；e₂.arrowCongr' e₂'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 @[simp] theorem arrowCongr'_trans {α₁ α₂ β₁ β₂ α₃ β₃ : Type*}
     (e₁ : α₁ ≃ α₂) (e₁' : β₁ ≃ β₂) (e₂ : α₂ ≃ α₃) (e₂' : β₂ ≃ β₃) :
     arrowCongr' (e₁.trans e₂) (e₁'.trans e₂') = (arrowCongr' e₁ e₁').trans (arrowCongr' e₂ e₂') :=
   rfl
-
-/--
-theorem `arrowCongr'_symm` / 定理 `arrowCongr'_symm`
-
-English:
-theorem arrowCongr'_symm
-  given: {α₁ α₂ β₁ β₂ : Type*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
-  proof: rfl
-
-中文:
-定理 arrowCongr'_symm
-  条件: {α₁ α₂ β₁ β₂ : 类型} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂)
-  证明: rfl
+/-
+**Equiv.arrowCongr'_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β₁ : Type u_3} {β₂ : Type u_4} (e₁ : α₁
+ ≃ α₂) (e₂ : β₁ ≃ β₂),   (e₁.arrowCongr' e₂).symm = e₁.symm.arrowCongr' e₂.symm
+参数：e₁ : α₁ ≃ α₂；e₂ : β₁ ≃ β₂；e₁.arrowCongr' e₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp, grind =] theorem arrowCongr'_symm {α₁ α₂ β₁ β₂ : Type*} (e₁ : α₁ ≃ α₂) (e₂ : β₁ ≃ β₂) :
     (arrowCongr' e₁ e₂).symm = arrowCongr' e₁.symm e₂.symm := rfl
 
-/--
-Definition of `conj` / `conj` 的定义
+/-- Conjugate a map `f : α → α` by an equivalence `α ≃ β`. -/
+/-
+**Equiv.conj** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Sort u} → {β : Sort v} → α ≃ β → (α → α) ≃ (β → β)
+参数：α → α；β → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conj
-  signature: (e : α ≃ β)
-  body: arrowCongr e e
-
-中文:
-定义 conj
-  签名: (e : α ≃ β)
-  定义体: arrowCongr e e
+--- 原说明 ---
+Conjugate a map `f : α → α` by an equivalence `α ≃ β`.
 -/
-@[simps! (attr := grind =) apply] def conj (e : α ≃ β) : (α -> α) ≃ (β -> β) := arrowCongr e e
+@[simps! (attr := grind =) apply] def conj (e : α ≃ β) : (α → α) ≃ (β → β) := arrowCongr e e
+/-
+**Equiv.conj_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u}, (Equiv.refl α).conj = Equiv.refl (α → α)
+参数：Equiv.refl α；α → α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-/--
-theorem `conj_refl` / 定理 `conj_refl`
-
-English:
-theorem conj_refl
-  statement: conj (Equiv.refl α) = Equiv.refl (α -> α)
-  proof: rfl
-
-中文:
-定理 conj_refl
-  结论: conj (等价.refl α) = 等价.refl (α -> α)
-  证明: rfl
+--- 原说明 ---
+Conjugate a map `f : α → α` by an equivalence `α ≃ β`.
 -/
-@[simp] theorem conj_refl : conj (Equiv.refl α) = Equiv.refl (α -> α) := rfl
+@[simp] theorem conj_refl : conj (Equiv.refl α) = Equiv.refl (α → α) := rfl
+/-
+**Equiv.conj_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.conj.symm = e.symm.conj
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-/--
-theorem `conj_symm` / 定理 `conj_symm`
-
-English:
-theorem conj_symm
-  given: (e : α ≃ β)
-  statement: e.conj.symm = e.symm.conj
-  proof: rfl
-
-中文:
-定理 conj_symm
-  条件: (e : α ≃ β)
-  结论: e.conj.symm = e.symm.conj
-  证明: rfl
+--- 原说明 ---
+Conjugate a map `f : α → α` by an equivalence `α ≃ β`.
 -/
 @[simp, grind =] theorem conj_symm (e : α ≃ β) : e.conj.symm = e.symm.conj := rfl
+/-
+**Equiv.conj_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {γ : Sort w} (e₁ : α ≃ β) (e₂ : β ≃ γ), (e₁.tr
+ans e₂).conj = e₁.conj.trans e₂.conj
+参数：e₁ : α ≃ β；e₂ : β ≃ γ；e₁.trans e₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-/--
-theorem `conj_trans` / 定理 `conj_trans`
-
-English:
-theorem conj_trans
-  given: (e₁ : α ≃ β) (e₂ : β ≃ γ)
-  proof: rfl
-
-中文:
-定理 conj_trans
-  条件: (e₁ : α ≃ β) (e₂ : β ≃ γ)
-  证明: rfl
+--- 原说明 ---
+Conjugate a map `f : α → α` by an equivalence `α ≃ β`.
 -/
 @[simp] theorem conj_trans (e₁ : α ≃ β) (e₂ : β ≃ γ) :
     (e₁.trans e₂).conj = e₁.conj.trans e₂.conj := rfl
@@ -2409,230 +1610,180 @@ theorem conj_trans
 -- This should not be a simp lemma as long as `(∘)` is reducible:
 -- when `(∘)` is reducible, Lean can unify `f₁ ∘ f₂` with any `g` using
 -- `f₁ := g` and `f₂ := fun x ↦ x`. This causes nontermination.
-/--
-theorem `conj_comp` / 定理 `conj_comp`
-
-English:
-theorem conj_comp
-  given: (e : α ≃ β) (f₁ f₂ : α -> α)
-  statement: e.conj (f₁ ∘ f₂) = e.conj f₁ ∘ e.conj f₂
-  proof: by
-  apply arrowCongr_comp
-
-中文:
-定理 conj_comp
-  条件: (e : α ≃ β) (f₁ f₂ : α -> α)
-  结论: e.conj (f₁ ∘ f₂) = e.conj f₁ ∘ e.conj f₂
-  证明: by
-  apply arrowCongr_comp
-
-Depends on / 依赖: arrowCongr_comp
+/-
+**Equiv.conj_comp** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：conj_comp (e : α ≃ β) (f₁ f₂ : α -> α) : e.conj (f₁ ∘ f₂) = e.conj f₁ ∘ e.
+conj f₂
+参数：e : α ≃ β；f₁ f₂ : α -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.arrowCongr_comp`：arrowCongr_comp {α₁ β₁ γ₁ α₂ β₂ γ₂ : Sort*} (ea :
+ α₁ ≃ α₂) (eb : β₁ ≃ β₂) (ec : γ₁ ≃ γ₂) (f : α₁ -> β₁) (g : β₁ -> γ₁) : arrowCon
+gr ea ec (g…
 -/
-theorem conj_comp (e : α ≃ β) (f₁ f₂ : α -> α) : e.conj (f₁ ∘ f₂) = e.conj f₁ ∘ e.conj f₂ := by
+theorem conj_comp (e : α ≃ β) (f₁ f₂ : α → α) : e.conj (f₁ ∘ f₂) = e.conj f₁ ∘ e.conj f₂ := by
   apply arrowCongr_comp
-
-/--
-theorem `eq_comp_symm` / 定理 `eq_comp_symm`
-
-English:
-theorem eq_comp_symm
-  given: {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ)
-  statement: f = g ∘ e.symm ↔ f ∘ e = g
-  proof: (e.arrowCongr (Equiv.refl γ)).symm_apply_eq.symm
-
-中文:
-定理 eq_comp_symm
-  条件: {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ)
-  结论: f = g ∘ e.symm ↔ f ∘ e = g
-  证明: (e.arrowCongr (Equiv.refl γ)).symm_apply_eq.symm
-
-Depends on / 依赖: Equiv.refl, arrowCongr, e.arrowCongr, symm_apply_eq, symm_apply_eq.symm
+/-
+**Equiv.eq_comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：eq_comp_symm {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ) : f = g ∘ e.sym
+m ↔ f ∘ e = g
+参数：e : α ≃ β；f : β -> γ；g : α -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
 -/
-theorem eq_comp_symm {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ) : f = g ∘ e.symm ↔ f ∘ e = g :=
+theorem eq_comp_symm {α β γ} (e : α ≃ β) (f : β → γ) (g : α → γ) : f = g ∘ e.symm ↔ f ∘ e = g :=
   (e.arrowCongr (Equiv.refl γ)).symm_apply_eq.symm
-
-/--
-theorem `comp_symm_eq` / 定理 `comp_symm_eq`
-
-English:
-theorem comp_symm_eq
-  given: {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ)
-  statement: g ∘ e.symm = f ↔ g = f ∘ e
-  proof: (e.arrowCongr (Equiv.refl γ)).eq_symm_apply.symm
-
-中文:
-定理 comp_symm_eq
-  条件: {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ)
-  结论: g ∘ e.symm = f ↔ g = f ∘ e
-  证明: (e.arrowCongr (Equiv.refl γ)).eq_symm_apply.symm
-
-Depends on / 依赖: Equiv.refl, arrowCongr, e.arrowCongr, eq_symm_apply, eq_symm_apply.symm
+/-
+**Equiv.comp_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：comp_symm_eq {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ) : g ∘ e.symm = 
+f ↔ g = f ∘ e
+参数：e : α ≃ β；f : β -> γ；g : α -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
-theorem comp_symm_eq {α β γ} (e : α ≃ β) (f : β -> γ) (g : α -> γ) : g ∘ e.symm = f ↔ g = f ∘ e :=
+theorem comp_symm_eq {α β γ} (e : α ≃ β) (f : β → γ) (g : α → γ) : g ∘ e.symm = f ↔ g = f ∘ e :=
   (e.arrowCongr (Equiv.refl γ)).eq_symm_apply.symm
-
-/--
-theorem `eq_symm_comp` / 定理 `eq_symm_comp`
-
-English:
-theorem eq_symm_comp
-  given: {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β)
-  statement: f = e.symm ∘ g ↔ e ∘ f = g
-  proof: ((Equiv.refl γ).arrowCongr e).eq_symm_apply
-
-中文:
-定理 eq_symm_comp
-  条件: {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β)
-  结论: f = e.symm ∘ g ↔ e ∘ f = g
-  证明: ((Equiv.refl γ).arrowCongr e).eq_symm_apply
-
-Depends on / 依赖: Equiv.refl, arrowCongr, eq_symm_apply
+/-
+**Equiv.eq_symm_comp** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：eq_symm_comp {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β) : f = e.symm ∘ 
+g ↔ e ∘ f = g
+参数：e : α ≃ β；f : γ -> α；g : γ -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-theorem eq_symm_comp {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β) : f = e.symm ∘ g ↔ e ∘ f = g :=
+theorem eq_symm_comp {α β γ} (e : α ≃ β) (f : γ → α) (g : γ → β) : f = e.symm ∘ g ↔ e ∘ f = g :=
   ((Equiv.refl γ).arrowCongr e).eq_symm_apply
-
-/--
-theorem `symm_comp_eq` / 定理 `symm_comp_eq`
-
-English:
-theorem symm_comp_eq
-  given: {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β)
-  statement: e.symm ∘ g = f ↔ g = e ∘ f
-  proof: ((Equiv.refl γ).arrowCongr e).symm_apply_eq
-
-中文:
-定理 symm_comp_eq
-  条件: {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β)
-  结论: e.symm ∘ g = f ↔ g = e ∘ f
-  证明: ((Equiv.refl γ).arrowCongr e).symm_apply_eq
-
-Depends on / 依赖: Equiv.refl, arrowCongr, symm_apply_eq
+/-
+**Equiv.symm_comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：symm_comp_eq {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β) : e.symm ∘ g = 
+f ↔ g = e ∘ f
+参数：e : α ≃ β；f : γ -> α；g : γ -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-theorem symm_comp_eq {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ -> β) : e.symm ∘ g = f ↔ g = e ∘ f :=
+theorem symm_comp_eq {α β γ} (e : α ≃ β) (f : γ → α) (g : γ → β) : e.symm ∘ g = f ↔ g = e ∘ f :=
   ((Equiv.refl γ).arrowCongr e).symm_apply_eq
-
-/--
-theorem `trans_eq_refl_iff_eq_symm` / 定理 `trans_eq_refl_iff_eq_symm`
-
-English:
-theorem trans_eq_refl_iff_eq_symm
-  given: {f : α ≃ β} {g : β ≃ α}
-  proof: by
-  rw [← Equiv.coe_inj]; rw [coe_trans]; rw [coe_refl]; rw [← eq_symm_comp]; rw [comp_id]; rw [Equiv.coe_inj]
-
-中文:
-定理 trans_eq_refl_iff_eq_symm
-  条件: {f : α ≃ β} {g : β ≃ α}
-  证明: by
-  rw [← Equiv.coe_inj]; rw [coe_trans]; rw [coe_refl]; rw [← eq_symm_comp]; rw [comp_id]; rw [Equiv.coe_inj]
-
-Depends on / 依赖: Equiv.coe_inj, coe_inj, coe_refl, coe_trans, comp_id, eq_symm_comp
+/-
+**Equiv.trans_eq_refl_iff_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：trans_eq_refl_iff_eq_symm {f : α ≃ β} {g : β ≃ α} : f.trans g = Equiv.refl
+ α ↔ f = g.symm
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.coe_inj`：∀ {α : Sort u} {β : Sort v} {e₁ e₂ : α ≃ β}, ⇑e₁ = ⇑e₂ ↔ 
+e₁ = e₂
+· 使用定理 `Equiv.coe_trans`：∀ {α : Sort u} {β : Sort v} {γ : Sort w} (f : α ≃ β) (g
+ : β ≃ γ), ⇑(f.trans g) = ⇑g ∘ ⇑f
+· 使用定理 `Equiv.coe_refl`：∀ {α : Sort u}, ⇑(Equiv.refl α) = id
+· 使用定理 `Equiv.eq_symm_comp`：eq_symm_comp {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ
+ -> β) : f = e.symm ∘ g ↔ e ∘ f = g
+· 使用定理 `Function.comp_id`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β), f ∘ id = 
+f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem trans_eq_refl_iff_eq_symm {f : α ≃ β} {g : β ≃ α} :
     f.trans g = Equiv.refl α ↔ f = g.symm := by
-  rw [← Equiv.coe_inj]; rw [coe_trans]; rw [coe_refl]; rw [← eq_symm_comp]; rw [comp_id]; rw [Equiv.coe_inj]
-
-/--
-theorem `trans_eq_refl_iff_symm_eq` / 定理 `trans_eq_refl_iff_symm_eq`
-
-English:
-theorem trans_eq_refl_iff_symm_eq
-  given: {f : α ≃ β} {g : β ≃ α}
-  proof: by
-  rw [trans_eq_refl_iff_eq_symm]
-  exact ⟨fun h => h ▸ rfl, fun h => h ▸ rfl⟩
-
-中文:
-定理 trans_eq_refl_iff_symm_eq
-  条件: {f : α ≃ β} {g : β ≃ α}
-  证明: by
-  rw [trans_eq_refl_iff_eq_symm]
-  exact ⟨fun h => h ▸ rfl, fun h => h ▸ rfl⟩
-
-Depends on / 依赖: trans_eq_refl_iff_eq_symm
+  rw [← Equiv.coe_inj, coe_trans, coe_refl, ← eq_symm_comp, comp_id, Equiv.coe_inj]
+/-
+**Equiv.trans_eq_refl_iff_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：trans_eq_refl_iff_symm_eq {f : α ≃ β} {g : β ≃ α} : f.trans g = Equiv.refl
+ α ↔ f.symm = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans_eq_refl_iff_eq_symm`：trans_eq_refl_iff_eq_symm {f : α ≃ β} {
+g : β ≃ α} : f.trans g = Equiv.refl α ↔ f = g.symm
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem trans_eq_refl_iff_symm_eq {f : α ≃ β} {g : β ≃ α} :
     f.trans g = Equiv.refl α ↔ f.symm = g := by
   rw [trans_eq_refl_iff_eq_symm]
-  exact ⟨fun h => h ▸ rfl, fun h => h ▸ rfl⟩
-
-/--
-theorem `eq_symm_iff_trans_eq_refl` / 定理 `eq_symm_iff_trans_eq_refl`
-
-English:
-theorem eq_symm_iff_trans_eq_refl
-  given: {f : α ≃ β} {g : β ≃ α}
-  proof: trans_eq_refl_iff_eq_symm.symm
-
-中文:
-定理 eq_symm_iff_trans_eq_refl
-  条件: {f : α ≃ β} {g : β ≃ α}
-  证明: trans_eq_refl_iff_eq_symm.symm
-
-Depends on / 依赖: trans_eq_refl_iff_eq_symm, trans_eq_refl_iff_eq_symm.symm
+  exact ⟨fun h ↦ h ▸ rfl, fun h ↦ h ▸ rfl⟩
+/-
+**Equiv.eq_symm_iff_trans_eq_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：eq_symm_iff_trans_eq_refl {f : α ≃ β} {g : β ≃ α} : f = g.symm ↔ f.trans g
+ = Equiv.refl α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans_eq_refl_iff_eq_symm`：trans_eq_refl_iff_eq_symm {f : α ≃ β} {
+g : β ≃ α} : f.trans g = Equiv.refl α ↔ f = g.symm
 -/
 theorem eq_symm_iff_trans_eq_refl {f : α ≃ β} {g : β ≃ α} :
     f = g.symm ↔ f.trans g = Equiv.refl α :=
   trans_eq_refl_iff_eq_symm.symm
-
-/--
-theorem `symm_eq_iff_trans_eq_refl` / 定理 `symm_eq_iff_trans_eq_refl`
-
-English:
-theorem symm_eq_iff_trans_eq_refl
-  given: {f : α ≃ β} {g : β ≃ α}
-  proof: trans_eq_refl_iff_symm_eq.symm
-
-中文:
-定理 symm_eq_iff_trans_eq_refl
-  条件: {f : α ≃ β} {g : β ≃ α}
-  证明: trans_eq_refl_iff_symm_eq.symm
-
-Depends on / 依赖: trans_eq_refl_iff_symm_eq, trans_eq_refl_iff_symm_eq.symm
+/-
+**Equiv.symm_eq_iff_trans_eq_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：symm_eq_iff_trans_eq_refl {f : α ≃ β} {g : β ≃ α} : f.symm = g ↔ f.trans g
+ = Equiv.refl α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans_eq_refl_iff_symm_eq`：trans_eq_refl_iff_symm_eq {f : α ≃ β} {
+g : β ≃ α} : f.trans g = Equiv.refl α ↔ f.symm = g
 -/
 theorem symm_eq_iff_trans_eq_refl {f : α ≃ β} {g : β ≃ α} :
     f.symm = g ↔ f.trans g = Equiv.refl α :=
   trans_eq_refl_iff_symm_eq.symm
 
-/--
-Definition of `punitEquivPUnit` / `punitEquivPUnit` 的定义
+/-- `PUnit` sorts in any two universes are equivalent. -/
+/-
+**Equiv.punitEquivPUnit** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：punitEquivPUnit : PUnit.{v} ≃ PUnit.{w} where toFun _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition punitEquivPUnit
-  signature: : PUnit.{v} ≃ PUnit.{w} where
-  body: .unit
-  invFun _ := .unit
-
-中文:
-定义 punitEquivPUnit
-  签名: : 命题单元.{v} ≃ 命题单元.{w} where
-  定义体: .unit
-  invFun _ := .unit
+--- 原说明 ---
+`PUnit` sorts in any two universes are equivalent.
 -/
 def punitEquivPUnit : PUnit.{v} ≃ PUnit.{w} where
   toFun _ := .unit
   invFun _ := .unit
 
-/--
-Definition of `propEquivBool` / `propEquivBool` 的定义
+/-- `Prop` is noncomputably equivalent to `Bool`. -/
+/-
+**Equiv.propEquivBool** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：propEquivBool : Prop ≃ Bool where toFun p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition propEquivBool
-  signature: : Prop ≃ Bool where
-  body: @decide p (Classical.propDecidable _)
-  invFun b := b
-  left_inv p := by simp
-  right_inv b := by simp
-
-中文:
-定义 propEquiv布尔
-  签名: : 命题 ≃ 布尔值 where
-  定义体: @decide p (Classical.propDecidable _)
-  invFun b := b
-  left_inv p := by simp
-  right_inv b := by simp
-
-Depends on / 依赖: Classical, Classical.propDecidable, propDecidable
+--- 原说明 ---
+`Prop` is noncomputably equivalent to `Bool`.
 -/
 noncomputable def propEquivBool : Prop ≃ Bool where
   toFun p := @decide p (Classical.propDecidable _)
@@ -2642,176 +1793,137 @@ noncomputable def propEquivBool : Prop ≃ Bool where
 
 section
 
-/--
-Definition of `arrowPUnitEquivPUnit` / `arrowPUnitEquivPUnit` 的定义
+/-- The sort of maps to `PUnit.{v}` is equivalent to `PUnit.{w}`. -/
+/-
+**Equiv.arrowPUnitEquivPUnit** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：arrowPUnitEquivPUnit (α : Sort*) : (α -> PUnit.{v}) ≃ PUnit.{w} where toFu
+n _
+参数：α : Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowPUnitEquivPUnit
-  signature: (α : Sort*)
-  body: .unit
-  invFun _ _ := .unit
-
-中文:
-定义 arrowPUnitEquivPUnit
-  签名: (α : 类型层*)
-  定义体: .unit
-  invFun _ _ := .unit
+--- 原说明 ---
+The sort of maps to `PUnit.{v}` is equivalent to `PUnit.{w}`.
 -/
-def arrowPUnitEquivPUnit (α : Sort*) : (α -> PUnit.{v}) ≃ PUnit.{w} where
+def arrowPUnitEquivPUnit (α : Sort*) : (α → PUnit.{v}) ≃ PUnit.{w} where
   toFun _ := .unit
   invFun _ _ := .unit
 
 /-- The equivalence `(∀ i, β i) ≃ β ⋆` when the domain of `β` only contains `⋆` -/
 @[simps (attr := grind =) -fullyApplied]
-/--
-Definition of `piUnique` / `piUnique` 的定义
+/-
+**Equiv.piUnique** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：piUnique [Unique α] (β : α -> Sort*) : (forall i, β i) ≃ β default where t
+oFun f
+参数：β : α -> Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piUnique
-  signature: [Unique α] (β : α -> Sort*)
-  body: f default
-  invFun := uniqueElim
-  left_inv f := by ext i; cases Unique.eq_default i; rfl
-
-中文:
-定义 piUnique
-  签名: [唯一 α] (β : α -> 类型层*)
-  定义体: f default
-  invFun := uniqueElim
-  left_inv f := by ext i; cases Unique.eq_default i; rfl
+--- 原说明 ---
+The equivalence `(∀ i, β i) ≃ β ⋆` when the domain of `β` only contains `⋆`
 -/
-def piUnique [Unique α] (β : α -> Sort*) : (forall i, β i) ≃ β default where
+def piUnique [Unique α] (β : α → Sort*) : (∀ i, β i) ≃ β default where
   toFun f := f default
   invFun := uniqueElim
   left_inv f := by ext i; cases Unique.eq_default i; rfl
 
 /-- If `α` has a unique term, then the type of function `α → β` is equivalent to `β`. -/
 @[simps! (attr := grind =) -fullyApplied apply symm_apply]
-/--
-Definition of `funUnique` / `funUnique` 的定义
+/-
+**Equiv.funUnique** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：funUnique (α β) [Unique.{u} α] : (α -> β) ≃ β
+参数：α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funUnique
-  signature: (α β) [Unique.{u} α]
-  body: piUnique _
-
-中文:
-定义 funUnique
-  签名: (α β) [唯一.{u} α]
-  定义体: piUnique _
-
-Depends on / 依赖: piUnique
+--- 原说明 ---
+If `α` has a unique term, then the type of function `α → β` is equivalent to `β`
+.
 -/
-def funUnique (α β) [Unique.{u} α] : (α -> β) ≃ β := piUnique _
+def funUnique (α β) [Unique.{u} α] : (α → β) ≃ β := piUnique _
 
-/--
-Definition of `punitArrowEquiv` / `punitArrowEquiv` 的定义
+/-- The sort of maps from `PUnit` is equivalent to the codomain. -/
+/-
+**Equiv.punitArrowEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：punitArrowEquiv (α : Sort*) : (PUnit.{u} -> α) ≃ α
+参数：α : Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition punitArrowEquiv
-  signature: (α : Sort*)
-  body: funUnique PUnit.{u} α
-
-中文:
-定义 punitArrowEquiv
-  签名: (α : 类型层*)
-  定义体: funUnique PUnit.{u} α
-
-Depends on / 依赖: funUnique
+--- 原说明 ---
+The sort of maps from `PUnit` is equivalent to the codomain.
 -/
-def punitArrowEquiv (α : Sort*) : (PUnit.{u} -> α) ≃ α := funUnique PUnit.{u} α
+def punitArrowEquiv (α : Sort*) : (PUnit.{u} → α) ≃ α := funUnique PUnit.{u} α
 
-/--
-Definition of `trueArrowEquiv` / `trueArrowEquiv` 的定义
+/-- The sort of maps from `True` is equivalent to the codomain. -/
+/-
+**Equiv.trueArrowEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：trueArrowEquiv (α : Sort*) : (True -> α) ≃ α
+参数：α : Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trueArrowEquiv
-  signature: (α : Sort*)
-  body: funUnique _ _
-
-中文:
-定义 trueArrowEquiv
-  签名: (α : 类型层*)
-  定义体: funUnique _ _
-
-Depends on / 依赖: funUnique
+--- 原说明 ---
+The sort of maps from `True` is equivalent to the codomain.
 -/
-def trueArrowEquiv (α : Sort*) : (True -> α) ≃ α := funUnique _ _
+def trueArrowEquiv (α : Sort*) : (True → α) ≃ α := funUnique _ _
 
-/--
-Definition of `arrowPUnitOfIsEmpty` / `arrowPUnitOfIsEmpty` 的定义
+/-- The sort of maps from a type that `IsEmpty` is equivalent to `PUnit`. -/
+/-
+**Equiv.arrowPUnitOfIsEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：arrowPUnitOfIsEmpty (α β : Sort*) [IsEmpty α] : (α -> β) ≃ PUnit.{u} where
+ toFun _
+参数：α β : Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowPUnitOfIsEmpty
-  signature: (α β : Sort*) [IsEmpty α]
-  body: PUnit.unit
-  invFun _ := isEmptyElim
-  left_inv _ := funext isEmptyElim
-
-中文:
-定义 arrowPUnitOfIsEmpty
-  签名: (α β : 类型层*) [是空 α]
-  定义体: PUnit.unit
-  invFun _ := isEmptyElim
-  left_inv _ := funext isEmptyElim
-
-Depends on / 依赖: PUnit.unit
+--- 原说明 ---
+The sort of maps from a type that `IsEmpty` is equivalent to `PUnit`.
 -/
-def arrowPUnitOfIsEmpty (α β : Sort*) [IsEmpty α] : (α -> β) ≃ PUnit.{u} where
+def arrowPUnitOfIsEmpty (α β : Sort*) [IsEmpty α] : (α → β) ≃ PUnit.{u} where
   toFun _ := PUnit.unit
   invFun _ := isEmptyElim
   left_inv _ := funext isEmptyElim
 
-/--
-Definition of `emptyArrowEquivPUnit` / `emptyArrowEquivPUnit` 的定义
+/-- The sort of maps from `Empty` is equivalent to `PUnit`. -/
+/-
+**Equiv.emptyArrowEquivPUnit** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：emptyArrowEquivPUnit (α : Sort*) : (Empty -> α) ≃ PUnit.{u}
+参数：α : Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition emptyArrowEquivPUnit
-  signature: (α : Sort*)
-  body: arrowPUnitOfIsEmpty _ _
-
-中文:
-定义 emptyArrowEquivPUnit
-  签名: (α : 类型层*)
-  定义体: arrowPUnitOfIsEmpty _ _
-
-Depends on / 依赖: arrowPUnitOfIsEmpty
+--- 原说明 ---
+The sort of maps from `Empty` is equivalent to `PUnit`.
 -/
-def emptyArrowEquivPUnit (α : Sort*) : (Empty -> α) ≃ PUnit.{u} := arrowPUnitOfIsEmpty _ _
+def emptyArrowEquivPUnit (α : Sort*) : (Empty → α) ≃ PUnit.{u} := arrowPUnitOfIsEmpty _ _
 
-/--
-Definition of `pemptyArrowEquivPUnit` / `pemptyArrowEquivPUnit` 的定义
+/-- The sort of maps from `PEmpty` is equivalent to `PUnit`. -/
+/-
+**Equiv.pemptyArrowEquivPUnit** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：pemptyArrowEquivPUnit (α : Sort*) : (PEmpty -> α) ≃ PUnit.{u}
+参数：α : Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pemptyArrowEquivPUnit
-  signature: (α : Sort*)
-  body: arrowPUnitOfIsEmpty _ _
-
-中文:
-定义 pemptyArrowEquivPUnit
-  签名: (α : 类型层*)
-  定义体: arrowPUnitOfIsEmpty _ _
-
-Depends on / 依赖: arrowPUnitOfIsEmpty
+--- 原说明 ---
+The sort of maps from `PEmpty` is equivalent to `PUnit`.
 -/
-def pemptyArrowEquivPUnit (α : Sort*) : (PEmpty -> α) ≃ PUnit.{u} := arrowPUnitOfIsEmpty _ _
+def pemptyArrowEquivPUnit (α : Sort*) : (PEmpty → α) ≃ PUnit.{u} := arrowPUnitOfIsEmpty _ _
 
-/--
-Definition of `falseArrowEquivPUnit` / `falseArrowEquivPUnit` 的定义
+/-- The sort of maps from `False` is equivalent to `PUnit`. -/
+/-
+**Equiv.falseArrowEquivPUnit** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：falseArrowEquivPUnit (α : Sort*) : (False -> α) ≃ PUnit.{u}
+参数：α : Sort*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
 
-English:
-definition falseArrowEquivPUnit
-  signature: (α : Sort*)
-  body: arrowPUnitOfIsEmpty _ _
-
-中文:
-定义 falseArrowEquivPUnit
-  签名: (α : 类型层*)
-  定义体: arrowPUnitOfIsEmpty _ _
-
-Depends on / 依赖: arrowPUnitOfIsEmpty
+--- 原说明 ---
+The sort of maps from `False` is equivalent to `PUnit`.
 -/
-def falseArrowEquivPUnit (α : Sort*) : (False -> α) ≃ PUnit.{u} := arrowPUnitOfIsEmpty _ _
+def falseArrowEquivPUnit (α : Sort*) : (False → α) ≃ PUnit.{u} := arrowPUnitOfIsEmpty _ _
 
 end
 
@@ -2819,352 +1931,276 @@ section
 
 /-- A `PSigma`-type is equivalent to the corresponding `Sigma`-type. -/
 @[simps (attr := grind =) apply symm_apply]
-/--
-Definition of `psigmaEquivSigma` / `psigmaEquivSigma` 的定义
+/-
+**Equiv.psigmaEquivSigma** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：psigmaEquivSigma {α} (β : α -> Type*) : (Σ' i, β i) ≃ Σ i, β i where toFun
+ a
+参数：β : α -> Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition psigmaEquivSigma
-  signature: {α} (β : α -> Type*)
-  body: ⟨a.1, a.2⟩
-  invFun a := ⟨a.1, a.2⟩
-
-中文:
-定义 psigmaEquivSigma
-  签名: {α} (β : α -> 类型)
-  定义体: ⟨a.1, a.2⟩
-  invFun a := ⟨a.1, a.2⟩
+--- 原说明 ---
+A `PSigma`-type is equivalent to the corresponding `Sigma`-type.
 -/
-def psigmaEquivSigma {α} (β : α -> Type*) : (Σ' i, β i) ≃ Σ i, β i where
+def psigmaEquivSigma {α} (β : α → Type*) : (Σ' i, β i) ≃ Σ i, β i where
   toFun a := ⟨a.1, a.2⟩
   invFun a := ⟨a.1, a.2⟩
 
 /-- A `PSigma`-type is equivalent to the corresponding `Sigma`-type. -/
 @[simps (attr := grind =) apply symm_apply]
-/--
-Definition of `psigmaEquivSigmaPLift` / `psigmaEquivSigmaPLift` 的定义
+/-
+**Equiv.psigmaEquivSigmaPLift** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：psigmaEquivSigmaPLift {α} (β : α -> Sort*) : (Σ' i, β i) ≃ Σ i : PLift α, 
+PLift (β i.down) where toFun a
+参数：β : α -> Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition psigmaEquivSigmaPLift
-  signature: {α} (β : α -> Sort*)
-  body: ⟨PLift.up a.1, PLift.up a.2⟩
-  invFun a := ⟨a.1.down, a.2.down⟩
-
-中文:
-定义 psigmaEquivSigmaPLift
-  签名: {α} (β : α -> 类型层*)
-  定义体: ⟨PLift.up a.1, PLift.up a.2⟩
-  invFun a := ⟨a.1.down, a.2.down⟩
-
-Depends on / 依赖: PLift.up
+--- 原说明 ---
+A `PSigma`-type is equivalent to the corresponding `Sigma`-type.
 -/
-def psigmaEquivSigmaPLift {α} (β : α -> Sort*) : (Σ' i, β i) ≃ Σ i : PLift α, PLift (β i.down) where
+def psigmaEquivSigmaPLift {α} (β : α → Sort*) : (Σ' i, β i) ≃ Σ i : PLift α, PLift (β i.down) where
   toFun a := ⟨PLift.up a.1, PLift.up a.2⟩
   invFun a := ⟨a.1.down, a.2.down⟩
 
 /-- A family of equivalences `Π a, β₁ a ≃ β₂ a` generates an equivalence between `Σ' a, β₁ a` and
 `Σ' a, β₂ a`. -/
 @[simps (attr := grind =) apply]
-/--
-Definition of `psigmaCongrRight` / `psigmaCongrRight` 的定义
+/-
+**Equiv.psigmaCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：psigmaCongrRight {β₁ β₂ : α -> Sort*} (F : forall a, β₁ a ≃ β₂ a) : (Σ' a,
+ β₁ a) ≃ Σ' a, β₂ a where toFun a
+参数：F : forall a, β₁ a ≃ β₂ a。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition psigmaCongrRight
-  signature: {β₁ β₂ : α -> Sort*} (F : forall a, β₁ a ≃ β₂ a)
-  body: ⟨a.1, F a.1 a.2⟩
-  invFun a := ⟨a.1, (F a.1).symm a.2⟩
-  left_inv := by grind
-  right_inv := by grind
-
-中文:
-定义 psigmaCongrRight
-  签名: {β₁ β₂ : α -> 类型层*} (F : 对任意 a, β₁ a ≃ β₂ a)
-  定义体: ⟨a.1, F a.1 a.2⟩
-  invFun a := ⟨a.1, (F a.1).symm a.2⟩
-  left_inv := by grind
-  right_inv := by grind
+--- 原说明 ---
+A family of equivalences `Π a, β₁ a ≃ β₂ a` generates an equivalence between `Σ'
+ a, β₁ a` and
+`Σ' a, β₂ a`.
 -/
-def psigmaCongrRight {β₁ β₂ : α -> Sort*} (F : forall a, β₁ a ≃ β₂ a) : (Σ' a, β₁ a) ≃ Σ' a, β₂ a where
+def psigmaCongrRight {β₁ β₂ : α → Sort*} (F : ∀ a, β₁ a ≃ β₂ a) : (Σ' a, β₁ a) ≃ Σ' a, β₂ a where
   toFun a := ⟨a.1, F a.1 a.2⟩
   invFun a := ⟨a.1, (F a.1).symm a.2⟩
   left_inv := by grind
   right_inv := by grind
-
-/--
-theorem `psigmaCongrRight_trans` / 定理 `psigmaCongrRight_trans`
-
-English:
-theorem psigmaCongrRight_trans
-  statement: {α} {β₁ β₂ β₃ : α -> Sort*}
-  proof: rfl
-
-@[grind =]
-
-中文:
-定理 psigmaCongrRight_trans
-  结论: {α} {β₁ β₂ β₃ : α -> 类型层*}
-  证明: rfl
-
-@[grind =]
+/-
+**Equiv.psigmaCongrRight_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：psigmaCongrRight_trans {α} {β₁ β₂ β₃ : α -> Sort*} (F : forall a, β₁ a ≃ β
+₂ a) (G : forall a, β₂ a ≃ β₃ a) : (psigmaCongrRight F).trans (psigmaCongrRight 
+G) = psigmaCongrRight fun a => (F a).trans (G a)
+参数：F : forall a, β₁ a ≃ β₂ a；G : forall a, β₂ a ≃ β₃ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
-theorem psigmaCongrRight_trans {α} {β₁ β₂ β₃ : α -> Sort*}
-    (F : forall a, β₁ a ≃ β₂ a) (G : forall a, β₂ a ≃ β₃ a) :
+theorem psigmaCongrRight_trans {α} {β₁ β₂ β₃ : α → Sort*}
+    (F : ∀ a, β₁ a ≃ β₂ a) (G : ∀ a, β₂ a ≃ β₃ a) :
     (psigmaCongrRight F).trans (psigmaCongrRight G) =
       psigmaCongrRight fun a => (F a).trans (G a) := rfl
 
 @[grind =]
-/--
-theorem `psigmaCongrRight_symm` / 定理 `psigmaCongrRight_symm`
-
-English:
-theorem psigmaCongrRight_symm
-  given: {α} {β₁ β₂ : α -> Sort*} (F : forall a, β₁ a ≃ β₂ a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 psigmaCongrRight_symm
-  条件: {α} {β₁ β₂ : α -> 类型层*} (F : 对任意 a, β₁ a ≃ β₂ a)
-  证明: rfl
-
-@[simp]
+/-
+**Equiv.psigmaCongrRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：psigmaCongrRight_symm {α} {β₁ β₂ : α -> Sort*} (F : forall a, β₁ a ≃ β₂ a)
+ : (psigmaCongrRight F).symm = psigmaCongrRight fun a => (F a).symm
+参数：F : forall a, β₁ a ≃ β₂ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem psigmaCongrRight_symm {α} {β₁ β₂ : α -> Sort*} (F : forall a, β₁ a ≃ β₂ a) :
+theorem psigmaCongrRight_symm {α} {β₁ β₂ : α → Sort*} (F : ∀ a, β₁ a ≃ β₂ a) :
     (psigmaCongrRight F).symm = psigmaCongrRight fun a => (F a).symm := rfl
 
 @[simp]
-/--
-theorem `psigmaCongrRight_refl` / 定理 `psigmaCongrRight_refl`
-
-English:
-theorem psigmaCongrRight_refl
-  given: {α} {β : α -> Sort*}
-  proof: rfl
-
-中文:
-定理 psigmaCongrRight_refl
-  条件: {α} {β : α -> 类型层*}
-  证明: rfl
+/-
+**Equiv.psigmaCongrRight_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：psigmaCongrRight_refl {α} {β : α -> Sort*} : (psigmaCongrRight fun a => Eq
+uiv.refl (β a)) = Equiv.refl (Σ' a, β a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-theorem psigmaCongrRight_refl {α} {β : α -> Sort*} :
+theorem psigmaCongrRight_refl {α} {β : α → Sort*} :
     (psigmaCongrRight fun a => Equiv.refl (β a)) = Equiv.refl (Σ' a, β a) := rfl
 
 /-- A family of equivalences `Π a, β₁ a ≃ β₂ a` generates an equivalence between `Σ a, β₁ a` and
 `Σ a, β₂ a`. -/
 @[simps (attr := grind =) apply]
-/--
-Definition of `sigmaCongrRight` / `sigmaCongrRight` 的定义
+/-
+**Equiv.sigmaCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaCongrRight {α} {β₁ β₂ : α -> Type*} (F : forall a, β₁ a ≃ β₂ a) : (Σ 
+a, β₁ a) ≃ Σ a, β₂ a where toFun a
+参数：F : forall a, β₁ a ≃ β₂ a。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sigmaCongrRight
-  signature: {α} {β₁ β₂ : α -> Type*} (F : forall a, β₁ a ≃ β₂ a)
-  body: ⟨a.1, F a.1 a.2⟩
-  invFun a := ⟨a.1, (F a.1).symm a.2⟩
-  left_inv := by grind
-  right_inv := by grind
-
-中文:
-定义 sigmaCongrRight
-  签名: {α} {β₁ β₂ : α -> 类型} (F : 对任意 a, β₁ a ≃ β₂ a)
-  定义体: ⟨a.1, F a.1 a.2⟩
-  invFun a := ⟨a.1, (F a.1).symm a.2⟩
-  left_inv := by grind
-  right_inv := by grind
+--- 原说明 ---
+A family of equivalences `Π a, β₁ a ≃ β₂ a` generates an equivalence between `Σ 
+a, β₁ a` and
+`Σ a, β₂ a`.
 -/
-def sigmaCongrRight {α} {β₁ β₂ : α -> Type*} (F : forall a, β₁ a ≃ β₂ a) : (Σ a, β₁ a) ≃ Σ a, β₂ a where
+def sigmaCongrRight {α} {β₁ β₂ : α → Type*} (F : ∀ a, β₁ a ≃ β₂ a) : (Σ a, β₁ a) ≃ Σ a, β₂ a where
   toFun a := ⟨a.1, F a.1 a.2⟩
   invFun a := ⟨a.1, (F a.1).symm a.2⟩
   left_inv := by grind
   right_inv := by grind
-
-/--
-theorem `sigmaCongrRight_trans` / 定理 `sigmaCongrRight_trans`
-
-English:
-theorem sigmaCongrRight_trans
-  statement: {α} {β₁ β₂ β₃ : α -> Type*}
-  proof: rfl
-
-@[grind =]
-
-中文:
-定理 sigmaCongrRight_trans
-  结论: {α} {β₁ β₂ β₃ : α -> 类型}
-  证明: rfl
-
-@[grind =]
+/-
+**Equiv.sigmaCongrRight_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：sigmaCongrRight_trans {α} {β₁ β₂ β₃ : α -> Type*} (F : forall a, β₁ a ≃ β₂
+ a) (G : forall a, β₂ a ≃ β₃ a) : (sigmaCongrRight F).trans (sigmaCongrRight G) 
+= sigmaCongrRight fun a => (F a).trans (G a)
+参数：F : forall a, β₁ a ≃ β₂ a；G : forall a, β₂ a ≃ β₃ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
-theorem sigmaCongrRight_trans {α} {β₁ β₂ β₃ : α -> Type*}
-    (F : forall a, β₁ a ≃ β₂ a) (G : forall a, β₂ a ≃ β₃ a) :
+theorem sigmaCongrRight_trans {α} {β₁ β₂ β₃ : α → Type*}
+    (F : ∀ a, β₁ a ≃ β₂ a) (G : ∀ a, β₂ a ≃ β₃ a) :
     (sigmaCongrRight F).trans (sigmaCongrRight G) =
       sigmaCongrRight fun a => (F a).trans (G a) := rfl
 
 @[grind =]
-/--
-theorem `sigmaCongrRight_symm` / 定理 `sigmaCongrRight_symm`
-
-English:
-theorem sigmaCongrRight_symm
-  given: {α} {β₁ β₂ : α -> Type*} (F : forall a, β₁ a ≃ β₂ a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sigmaCongrRight_symm
-  条件: {α} {β₁ β₂ : α -> 类型} (F : 对任意 a, β₁ a ≃ β₂ a)
-  证明: rfl
-
-@[simp]
+/-
+**Equiv.sigmaCongrRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：sigmaCongrRight_symm {α} {β₁ β₂ : α -> Type*} (F : forall a, β₁ a ≃ β₂ a) 
+: (sigmaCongrRight F).symm = sigmaCongrRight fun a => (F a).symm
+参数：F : forall a, β₁ a ≃ β₂ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem sigmaCongrRight_symm {α} {β₁ β₂ : α -> Type*} (F : forall a, β₁ a ≃ β₂ a) :
+theorem sigmaCongrRight_symm {α} {β₁ β₂ : α → Type*} (F : ∀ a, β₁ a ≃ β₂ a) :
     (sigmaCongrRight F).symm = sigmaCongrRight fun a => (F a).symm := rfl
 
 @[simp]
-/--
-theorem `sigmaCongrRight_refl` / 定理 `sigmaCongrRight_refl`
-
-English:
-theorem sigmaCongrRight_refl
-  given: {α} {β : α -> Type*}
-  proof: rfl
-
-中文:
-定理 sigmaCongrRight_refl
-  条件: {α} {β : α -> 类型}
-  证明: rfl
+/-
+**Equiv.sigmaCongrRight_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：sigmaCongrRight_refl {α} {β : α -> Type*} : (sigmaCongrRight fun a => Equi
+v.refl (β a)) = Equiv.refl (Σ a, β a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-theorem sigmaCongrRight_refl {α} {β : α -> Type*} :
+theorem sigmaCongrRight_refl {α} {β : α → Type*} :
     (sigmaCongrRight fun a => Equiv.refl (β a)) = Equiv.refl (Σ a, β a) := rfl
 
-/--
-Definition of `psigmaEquivSubtype` / `psigmaEquivSubtype` 的定义
+/-- A `PSigma` with `Prop` fibers is equivalent to the subtype. -/
+/-
+**Equiv.psigmaEquivSubtype** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：psigmaEquivSubtype {α : Type v} (P : α -> Prop) : (Σ' i, P i) ≃ Subtype P 
+where toFun x
+参数：P : α -> Prop。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-definition psigmaEquivSubtype
-  signature: {α : Type v} (P : α -> Prop)
-  body: ⟨x.1, x.2⟩
-  invFun x := ⟨x.1, x.2⟩
-
-中文:
-定义 psigmaEquivSubtype
-  签名: {α : 类型v} (P : α -> 命题)
-  定义体: ⟨x.1, x.2⟩
-  invFun x := ⟨x.1, x.2⟩
+--- 原说明 ---
+A `PSigma` with `Prop` fibers is equivalent to the subtype.
 -/
-def psigmaEquivSubtype {α : Type v} (P : α -> Prop) : (Σ' i, P i) ≃ Subtype P where
+def psigmaEquivSubtype {α : Type v} (P : α → Prop) : (Σ' i, P i) ≃ Subtype P where
   toFun x := ⟨x.1, x.2⟩
   invFun x := ⟨x.1, x.2⟩
 
-/--
-Definition of `sigmaPLiftEquivSubtype` / `sigmaPLiftEquivSubtype` 的定义
+/-- A `Sigma` with `PLift` fibers is equivalent to the subtype. -/
+/-
+**Equiv.sigmaPLiftEquivSubtype** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaPLiftEquivSubtype {α : Type v} (P : α -> Prop) : (Σ i, PLift (P i)) ≃
+ Subtype P
+参数：P : α -> Prop。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sigmaPLiftEquivSubtype
-  signature: {α : Type v} (P : α -> Prop)
-  body: ((psigmaEquivSigma _).symm.trans
-    (psigmaCongrRight fun _ => Equiv.plift)).trans (psigmaEquivSubtype P)
-
-中文:
-定义 sigmaPLiftEquivSubtype
-  签名: {α : 类型v} (P : α -> 命题)
-  定义体: ((psigmaEquivSigma _).symm.trans
-    (psigmaCongrRight fun _ => Equiv.plift)).trans (psigmaEquivSubtype P)
-
-Depends on / 依赖: Equiv.plift, psigmaCongrRight, psigmaEquivSigma, psigmaEquivSubtype, symm.trans
+--- 原说明 ---
+A `Sigma` with `PLift` fibers is equivalent to the subtype.
 -/
-def sigmaPLiftEquivSubtype {α : Type v} (P : α -> Prop) : (Σ i, PLift (P i)) ≃ Subtype P :=
+def sigmaPLiftEquivSubtype {α : Type v} (P : α → Prop) : (Σ i, PLift (P i)) ≃ Subtype P :=
   ((psigmaEquivSigma _).symm.trans
     (psigmaCongrRight fun _ => Equiv.plift)).trans (psigmaEquivSubtype P)
 
-/--
-Definition of `sigmaULiftPLiftEquivSubtype` / `sigmaULiftPLiftEquivSubtype` 的定义
-
-English:
-definition sigmaULiftPLiftEquivSubtype
-  signature: {α : Type v} (P : α -> Prop)
-  body: (sigmaCongrRight fun _ => Equiv.ulift).trans (sigmaPLiftEquivSubtype P)
-
-中文:
-定义 sigmaULiftPLiftEquivSubtype
-  签名: {α : 类型v} (P : α -> 命题)
-  定义体: (sigmaCongrRight fun _ => Equiv.ulift).trans (sigmaPLiftEquivSubtype P)
-
-Depends on / 依赖: Equiv.ulift, sigmaCongrRight, sigmaPLiftEquivSubtype
+/-- A `Sigma` with `fun i ↦ ULift (PLift (P i))` fibers is equivalent to `{ x // P x }`.
+Variant of `sigmaPLiftEquivSubtype`.
 -/
-def sigmaULiftPLiftEquivSubtype {α : Type v} (P : α -> Prop) :
+/-
+**Equiv.sigmaULiftPLiftEquivSubtype** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaULiftPLiftEquivSubtype {α : Type v} (P : α -> Prop) : (Σ i, ULift (PL
+ift (P i))) ≃ Subtype P
+参数：P : α -> Prop。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+
+--- 原说明 ---
+A `Sigma` with `fun i ↦ ULift (PLift (P i))` fibers is equivalent to `{ x // P x
+ }`.
+Variant of `sigmaPLiftEquivSubtype`.
+-/
+def sigmaULiftPLiftEquivSubtype {α : Type v} (P : α → Prop) :
     (Σ i, ULift (PLift (P i))) ≃ Subtype P :=
   (sigmaCongrRight fun _ => Equiv.ulift).trans (sigmaPLiftEquivSubtype P)
 
 namespace Perm
 
-/--
-Definition of `sigmaCongrRight` / `sigmaCongrRight` 的定义
+/-- A family of permutations `Π a, Perm (β a)` generates a permutation `Perm (Σ a, β₁ a)`. -/
+/-
+**Equiv.Perm.sigmaCongrRight** 是 Mathlib 中的一个缩写定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：sigmaCongrRight {α} {β : α -> Sort _} (F : forall a, Perm (β a)) : Perm (Σ
+ a, β a)
+参数：F : forall a, Perm (β a)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sigmaCongrRight
-  signature: {α} {β : α -> Sort _} (F : forall a, Perm (β a))
-  body: Equiv.sigmaCongrRight F
-
-中文:
-缩写 sigmaCongrRight
-  签名: {α} {β : α -> 类型层 _} (F : 对任意 a, 置换 (β a))
-  定义体: Equiv.sigmaCongrRight F
-
-Depends on / 依赖: Equiv.sigmaCongrRight, sigmaCongrRight
+--- 原说明 ---
+A family of permutations `Π a, Perm (β a)` generates a permutation `Perm (Σ a, β
+₁ a)`.
 -/
-abbrev sigmaCongrRight {α} {β : α -> Sort _} (F : forall a, Perm (β a)) : Perm (Σ a, β a) :=
+abbrev sigmaCongrRight {α} {β : α → Sort _} (F : ∀ a, Perm (β a)) : Perm (Σ a, β a) :=
   Equiv.sigmaCongrRight F
-
-/--
-theorem `sigmaCongrRight_trans` / 定理 `sigmaCongrRight_trans`
-
-English:
-theorem sigmaCongrRight_trans
-  statement: {α} {β : α -> Sort _}
-  proof: rfl
-
-中文:
-定理 sigmaCongrRight_trans
-  结论: {α} {β : α -> 类型层 _}
-  证明: rfl
+/-
+**Equiv.Perm.sigmaCongrRight_trans** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Type u_1} {β : α → Type u_2} (F G : (a : α) → Equiv.Perm (β a)),   
+Equiv.trans (Equiv.Perm.sigmaCongrRight F) (Equiv.Perm.sigmaCongrRight G) =     
+Equiv.Perm.sigmaCongrRight fun a => Equiv.trans (F a) (G a)
+参数：F G : (a : α) → Equiv.Perm (β a)；Equiv.Perm.sigmaCongrRight F；Equiv.Perm.sigm
+aCongrRight G；F a；G a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
-@[simp] theorem sigmaCongrRight_trans {α} {β : α -> Sort _}
-    (F : forall a, Perm (β a)) (G : forall a, Perm (β a)) :
+@[simp] theorem sigmaCongrRight_trans {α} {β : α → Sort _}
+    (F : ∀ a, Perm (β a)) (G : ∀ a, Perm (β a)) :
     (sigmaCongrRight F).trans (sigmaCongrRight G) = sigmaCongrRight fun a => (F a).trans (G a) :=
   rfl
-
-/--
-theorem `sigmaCongrRight_symm` / 定理 `sigmaCongrRight_symm`
-
-English:
-theorem sigmaCongrRight_symm
-  given: {α} {β : α -> Sort _} (F : forall a, Perm (β a))
-  proof: rfl
-
-中文:
-定理 sigmaCongrRight_symm
-  条件: {α} {β : α -> 类型层 _} (F : 对任意 a, 置换 (β a))
-  证明: rfl
+/-
+**Equiv.Perm.sigmaCongrRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Type u_1} {β : α → Type u_2} (F : (a : α) → Equiv.Perm (β a)),   Eq
+uiv.symm (Equiv.Perm.sigmaCongrRight F) = Equiv.Perm.sigmaCongrRight fun a => Eq
+uiv.symm (F a)
+参数：F : (a : α) → Equiv.Perm (β a)；Equiv.Perm.sigmaCongrRight F；F a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] theorem sigmaCongrRight_symm {α} {β : α -> Sort _} (F : forall a, Perm (β a)) :
+@[simp] theorem sigmaCongrRight_symm {α} {β : α → Sort _} (F : ∀ a, Perm (β a)) :
     (sigmaCongrRight F).symm = sigmaCongrRight fun a => (F a).symm :=
   rfl
-
-/--
-theorem `sigmaCongrRight_refl` / 定理 `sigmaCongrRight_refl`
-
-English:
-theorem sigmaCongrRight_refl
-  given: {α} {β : α -> Sort _}
-  proof: rfl
-
-中文:
-定理 sigmaCongrRight_refl
-  条件: {α} {β : α -> 类型层 _}
-  证明: rfl
+/-
+**Equiv.Perm.sigmaCongrRight_refl** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：∀ {α : Type u_1} {β : α → Type u_2}, (Equiv.Perm.sigmaCongrRight fun a => 
+Equiv.refl (β a)) = Equiv.refl ((a : α) × β a)
+参数：Equiv.Perm.sigmaCongrRight fun a => Equiv.refl (β a)；(a : α) × β a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-@[simp] theorem sigmaCongrRight_refl {α} {β : α -> Sort _} :
+@[simp] theorem sigmaCongrRight_refl {α} {β : α → Sort _} :
     (sigmaCongrRight fun a => Equiv.refl (β a)) = Equiv.refl (Σ a, β a) :=
   rfl
 
@@ -3172,438 +2208,432 @@ end Perm
 
 /-- `Function.swap` as an equivalence. -/
 @[simps (attr := grind =) -fullyApplied]
-/--
-Definition of `functionSwap` / `functionSwap` 的定义
+/-
+**Equiv.functionSwap** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：functionSwap (α β : Sort*) (γ : α -> β -> Sort*) : ((a : α) -> (b : β) -> 
+γ a b) ≃ ((b : β) -> (a : α) -> γ a b) where toFun
+参数：α β : Sort*；γ : α -> β -> Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functionSwap
-  signature: (α β : Sort*) (γ : α -> β -> Sort*)
-  body: Function.swap
-  invFun := Function.swap
-
-中文:
-定义 functionSwap
-  签名: (α β : 类型层*) (γ : α -> β -> 类型层*)
-  定义体: Function.swap
-  invFun := Function.swap
-
-Depends on / 依赖: Function, Function.swap
+--- 原说明 ---
+`Function.swap` as an equivalence.
 -/
-def functionSwap (α β : Sort*) (γ : α -> β -> Sort*) :
-    ((a : α) -> (b : β) -> γ a b) ≃ ((b : β) -> (a : α) -> γ a b) where
+def functionSwap (α β : Sort*) (γ : α → β → Sort*) :
+    ((a : α) → (b : β) → γ a b) ≃ ((b : β) → (a : α) → γ a b) where
   toFun := Function.swap
   invFun := Function.swap
-
-/--
-theorem `_root_.Function.swap_bijective` / 定理 `_root_.Function.swap_bijective`
-
-English:
-theorem _root_.Function.swap_bijective
-  given: {α β : Sort*} {γ : α -> β -> Sort*}
-  proof: .bijective functionSwap _ _ _
-
-中文:
-定理 _root_.函数.swap_bijective
-  条件: {α β : 类型层*} {γ : α -> β -> 类型层*}
-  证明: .bijective functionSwap _ _ _
-
-Depends on / 依赖: bijective, functionSwap
+/-
+**Equiv._root_.Function.swap_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Function.swap_bijective {α β : Sort*} {γ : α -> β -> Sort*} :
+theorem _root_.Function.swap_bijective {α β : Sort*} {γ : α → β → Sort*} :
     Function.Bijective (@Function.swap _ _ γ) :=
-.bijective functionSwap _ _ _
+  functionSwap _ _ _ |>.bijective
 
 /-- An equivalence `f : α₁ ≃ α₂` generates an equivalence between `Σ a, β (f a)` and `Σ a, β a`. -/
 @[simps (attr := grind =) apply]
-/--
-Definition of `sigmaCongrLeft` / `sigmaCongrLeft` 的定义
+/-
+**Equiv.sigmaCongrLeft** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaCongrLeft {α₁ α₂ : Type*} {β : α₂ -> Sort _} (e : α₁ ≃ α₂) : (Σ a : α
+₁, β (e a)) ≃ Σ a : α₂, β a where toFun a
+参数：e : α₁ ≃ α₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sigmaCongrLeft
-  signature: {α₁ α₂ : Type*} {β : α₂ -> Sort _} (e : α₁ ≃ α₂)
-  body: ⟨e a.1, a.2⟩
-  invFun a := ⟨e.symm a.1, (e.right_inv' a.1).symm ▸ a.2⟩
-  left_inv := fun ⟨a, b⟩ => by simp
-  right_inv := fun ⟨a, b⟩ => by simp
-
-中文:
-定义 sigmaCongrLeft
-  签名: {α₁ α₂ : 类型} {β : α₂ -> 类型层 _} (e : α₁ ≃ α₂)
-  定义体: ⟨e a.1, a.2⟩
-  invFun a := ⟨e.symm a.1, (e.right_inv' a.1).symm ▸ a.2⟩
-  left_inv := fun ⟨a, b⟩ => by simp
-  right_inv := fun ⟨a, b⟩ => by simp
+--- 原说明 ---
+An equivalence `f : α₁ ≃ α₂` generates an equivalence between `Σ a, β (f a)` and
+ `Σ a, β a`.
 -/
-def sigmaCongrLeft {α₁ α₂ : Type*} {β : α₂ -> Sort _} (e : α₁ ≃ α₂) :
+def sigmaCongrLeft {α₁ α₂ : Type*} {β : α₂ → Sort _} (e : α₁ ≃ α₂) :
     (Σ a : α₁, β (e a)) ≃ Σ a : α₂, β a where
   toFun a := ⟨e a.1, a.2⟩
   invFun a := ⟨e.symm a.1, (e.right_inv' a.1).symm ▸ a.2⟩
   left_inv := fun ⟨a, b⟩ => by simp
   right_inv := fun ⟨a, b⟩ => by simp
 
-/--
-Definition of `sigmaCongrLeft'` / `sigmaCongrLeft'` 的定义
+/-- Transporting a sigma type through an equivalence of the base -/
+/-
+**Equiv.sigmaCongrLeft'** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaCongrLeft' {α₁ α₂} {β : α₁ -> Sort _} (f : α₁ ≃ α₂) : (Σ a : α₁, β a)
+ ≃ Σ a : α₂, β (f.symm a)
+参数：f : α₁ ≃ α₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sigmaCongrLeft'
-  signature: {α₁ α₂} {β : α₁ -> Sort _} (f : α₁ ≃ α₂)
-  body: (sigmaCongrLeft f.symm).symm
-
-中文:
-定义 sigmaCongrLeft'
-  签名: {α₁ α₂} {β : α₁ -> 类型层 _} (f : α₁ ≃ α₂)
-  定义体: (sigmaCongrLeft f.symm).symm
-
-Depends on / 依赖: f.symm, sigmaCongrLeft
+--- 原说明 ---
+Transporting a sigma type through an equivalence of the base
 -/
-def sigmaCongrLeft' {α₁ α₂} {β : α₁ -> Sort _} (f : α₁ ≃ α₂) :
+def sigmaCongrLeft' {α₁ α₂} {β : α₁ → Sort _} (f : α₁ ≃ α₂) :
     (Σ a : α₁, β a) ≃ Σ a : α₂, β (f.symm a) := (sigmaCongrLeft f.symm).symm
 
-/--
-Definition of `sigmaCongr` / `sigmaCongr` 的定义
+/-- Transporting a sigma type through an equivalence of the base and a family of equivalences
+of matching fibers -/
+/-
+**Equiv.sigmaCongr** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaCongr {α₁ α₂} {β₁ : α₁ -> Sort _} {β₂ : α₂ -> Sort _} (f : α₁ ≃ α₂) (
+F : forall a, β₁ a ≃ β₂ (f a)) : Sigma β₁ ≃ Sigma β₂
+参数：f : α₁ ≃ α₂；F : forall a, β₁ a ≃ β₂ (f a)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition sigmaCongr
-  signature: {α₁ α₂} {β₁ : α₁ -> Sort _} {β₂ : α₂ -> Sort _} (f : α₁ ≃ α₂)
-  body: (sigmaCongrRight F).trans (sigmaCongrLeft f)
-
-中文:
-定义 sigmaCongr
-  签名: {α₁ α₂} {β₁ : α₁ -> 类型层 _} {β₂ : α₂ -> 类型层 _} (f : α₁ ≃ α₂)
-  定义体: (sigmaCongrRight F).trans (sigmaCongrLeft f)
-
-Depends on / 依赖: sigmaCongrLeft, sigmaCongrRight
+--- 原说明 ---
+Transporting a sigma type through an equivalence of the base and a family of equ
+ivalences
+of matching fibers
 -/
-def sigmaCongr {α₁ α₂} {β₁ : α₁ -> Sort _} {β₂ : α₂ -> Sort _} (f : α₁ ≃ α₂)
-    (F : forall a, β₁ a ≃ β₂ (f a)) : Sigma β₁ ≃ Sigma β₂ :=
+def sigmaCongr {α₁ α₂} {β₁ : α₁ → Sort _} {β₂ : α₂ → Sort _} (f : α₁ ≃ α₂)
+    (F : ∀ a, β₁ a ≃ β₂ (f a)) : Sigma β₁ ≃ Sigma β₂ :=
   (sigmaCongrRight F).trans (sigmaCongrLeft f)
 
 /-- `Sigma` type with a constant fiber is equivalent to the product. -/
 @[simps (attr := mfld_simps, grind =) apply symm_apply]
-/--
-Definition of `sigmaEquivProd` / `sigmaEquivProd` 的定义
+/-
+**Equiv.sigmaEquivProd** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaEquivProd (α β : Type*) : (Σ _ : α, β) ≃ α × β where toFun a
+参数：α β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaEquivProd
-  signature: (α β : Type*)
-  body: ⟨a.1, a.2⟩
-  invFun a := ⟨a.1, a.2⟩
-
-中文:
-定义 sigmaEquivProd
-  签名: (α β : 类型)
-  定义体: ⟨a.1, a.2⟩
-  invFun a := ⟨a.1, a.2⟩
+--- 原说明 ---
+`Sigma` type with a constant fiber is equivalent to the product.
 -/
 def sigmaEquivProd (α β : Type*) : (Σ _ : α, β) ≃ α × β where
   toFun a := ⟨a.1, a.2⟩
   invFun a := ⟨a.1, a.2⟩
 
-/--
-Definition of `sigmaEquivProdOfEquiv` / `sigmaEquivProdOfEquiv` 的定义
+/-- If each fiber of a `Sigma` type is equivalent to a fixed type, then the sigma type
+is equivalent to the product. -/
+/-
+**Equiv.sigmaEquivProdOfEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaEquivProdOfEquiv {α β} {β₁ : α -> Sort _} (F : forall a, β₁ a ≃ β) : 
+Sigma β₁ ≃ α × β
+参数：F : forall a, β₁ a ≃ β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition sigmaEquivProdOfEquiv
-  signature: {α β} {β₁ : α -> Sort _} (F : forall a, β₁ a ≃ β)
-  body: (sigmaCongrRight F).trans (sigmaEquivProd α β)
-
-中文:
-定义 sigmaEquivProdOfEquiv
-  签名: {α β} {β₁ : α -> 类型层 _} (F : 对任意 a, β₁ a ≃ β)
-  定义体: (sigmaCongrRight F).trans (sigmaEquivProd α β)
-
-Depends on / 依赖: sigmaCongrRight, sigmaEquivProd
+--- 原说明 ---
+If each fiber of a `Sigma` type is equivalent to a fixed type, then the sigma ty
+pe
+is equivalent to the product.
 -/
-def sigmaEquivProdOfEquiv {α β} {β₁ : α -> Sort _} (F : forall a, β₁ a ≃ β) : Sigma β₁ ≃ α × β :=
+def sigmaEquivProdOfEquiv {α β} {β₁ : α → Sort _} (F : ∀ a, β₁ a ≃ β) : Sigma β₁ ≃ α × β :=
   (sigmaCongrRight F).trans (sigmaEquivProd α β)
 
-/--
-Definition of `sigmaAssoc` / `sigmaAssoc` 的定义
+/-- The dependent product of types is associative up to an equivalence. -/
+/-
+**Equiv.sigmaAssoc** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sigmaAssoc {α : Type*} {β : α -> Type*} (γ : forall a : α, β a -> Type*) :
+ (Σ ab : Σ a : α, β a, γ ab.1 ab.2) ≃ Σ a : α, Σ b : β a, γ a b where toFun x
+参数：γ : forall a : α, β a -> Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaAssoc
-  signature: {α : Type*} {β : α -> Type*} (γ : forall a : α, β a -> Type*)
-  body: ⟨x.1.1, ⟨x.1.2, x.2⟩⟩
-  invFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
-
-中文:
-定义 sigmaAssoc
-  签名: {α : 类型} {β : α -> 类型} (γ : 对任意 a : α, β a -> 类型)
-  定义体: ⟨x.1.1, ⟨x.1.2, x.2⟩⟩
-  invFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
+--- 原说明 ---
+The dependent product of types is associative up to an equivalence.
 -/
-def sigmaAssoc {α : Type*} {β : α -> Type*} (γ : forall a : α, β a -> Type*) :
+def sigmaAssoc {α : Type*} {β : α → Type*} (γ : ∀ a : α, β a → Type*) :
     (Σ ab : Σ a : α, β a, γ ab.1 ab.2) ≃ Σ a : α, Σ b : β a, γ a b where
   toFun x := ⟨x.1.1, ⟨x.1.2, x.2⟩⟩
   invFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
 
-/--
-Definition of `pSigmaAssoc` / `pSigmaAssoc` 的定义
+/-- The dependent product of sorts is associative up to an equivalence. -/
+/-
+**Equiv.pSigmaAssoc** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：pSigmaAssoc {α : Sort*} {β : α -> Sort*} (γ : forall a : α, β a -> Sort*) 
+: (Σ' ab : Σ' a : α, β a, γ ab.1 ab.2) ≃ Σ' a : α, Σ' b : β a, γ a b where toFun
+ x
+参数：γ : forall a : α, β a -> Sort*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pSigmaAssoc
-  signature: {α : Sort*} {β : α -> Sort*} (γ : forall a : α, β a -> Sort*)
-  body: ⟨x.1.1, ⟨x.1.2, x.2⟩⟩
-  invFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
-
-中文:
-定义 pSigmaAssoc
-  签名: {α : 类型层*} {β : α -> 类型层*} (γ : 对任意 a : α, β a -> 类型层*)
-  定义体: ⟨x.1.1, ⟨x.1.2, x.2⟩⟩
-  invFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
+--- 原说明 ---
+The dependent product of sorts is associative up to an equivalence.
 -/
-def pSigmaAssoc {α : Sort*} {β : α -> Sort*} (γ : forall a : α, β a -> Sort*) :
+def pSigmaAssoc {α : Sort*} {β : α → Sort*} (γ : ∀ a : α, β a → Sort*) :
     (Σ' ab : Σ' a : α, β a, γ ab.1 ab.2) ≃ Σ' a : α, Σ' b : β a, γ a b where
   toFun x := ⟨x.1.1, ⟨x.1.2, x.2⟩⟩
   invFun x := ⟨⟨x.1, x.2.1⟩, x.2.2⟩
 
 end
 
-variable {p : α -> Prop} {q : β -> Prop} (e : α ≃ β)
+variable {p : α → Prop} {q : β → Prop} (e : α ≃ β)
 
-/--
-lemma `forall_congr_right` / 引理 `forall_congr_right`
-
-English:
-lemma forall_congr_right
-  statement: (forall a, q (e a)) ↔ forall b, q b
-  proof: ⟨fun h a => by simpa using h (e.symm a), fun h _ => h _⟩
-
-中文:
-引理 对任意_congr_right
-  结论: (对任意 a, q (e a)) ↔ 对任意 b, q b
-  证明: ⟨fun h a => by simpa using h (e.symm a), fun h _ => h _⟩
+/-
+**Equiv.forall_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e : α ≃ β), (∀ (a : α), q (e a
+)) ↔ ∀ (b : β), q b
+参数：e : α ≃ β；∀ (a : α), q (e a)；b : β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
-protected lemma forall_congr_right : (forall a, q (e a)) ↔ forall b, q b :=
-  ⟨fun h a => by simpa using h (e.symm a), fun h _ => h _⟩
-
-/--
-lemma `forall_congr_left` / 引理 `forall_congr_left`
-
-English:
-lemma forall_congr_left
-  statement: (forall a, p a) ↔ forall b, p (e.symm b)
-  proof: e.symm.forall_congr_right.symm
-
-中文:
-引理 对任意_congr_left
-  结论: (对任意 a, p a) ↔ 对任意 b, p (e.symm b)
-  证明: e.symm.forall_congr_right.symm
+protected lemma forall_congr_right : (∀ a, q (e a)) ↔ ∀ b, q b :=
+  ⟨fun h a ↦ by simpa using h (e.symm a), fun h _ ↦ h _⟩
+/-
+**Equiv.forall_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e : α ≃ β), (∀ (a : α), p a) ↔
+ ∀ (b : β), p (e.symm b)
+参数：e : α ≃ β；∀ (a : α), p a；b : β；e.symm b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.forall_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∀ (a : α), q (e a)) ↔ ∀ (b : β), q b
 -/
-protected lemma forall_congr_left : (forall a, p a) ↔ forall b, p (e.symm b) :=
+protected lemma forall_congr_left : (∀ a, p a) ↔ ∀ b, p (e.symm b) :=
   e.symm.forall_congr_right.symm
-
-/--
-lemma `forall_congr` / 引理 `forall_congr`
-
-English:
-lemma forall_congr
-  given: (h : forall a, p a ↔ q (e a))
-  statement: (forall a, p a) ↔ forall b, q b
-  proof: e.forall_congr_left.trans (by simp [h])
-
-中文:
-引理 对任意_congr
-  条件: (h : 对任意 a, p a ↔ q (e a))
-  结论: (对任意 a, p a) ↔ 对任意 b, q b
-  证明: e.forall_congr_left.trans (by simp [h])
+/-
+**Equiv.forall_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : α ≃ β),   (
+∀ (a : α), p a ↔ q (e a)) → ((∀ (a : α), p a) ↔ ∀ (b : β), q b)
+参数：e : α ≃ β；∀ (a : α), p a ↔ q (e a)；(∀ (a : α), p a) ↔ ∀ (b : β), q b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.forall_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∀ (a : α), p a) ↔ ∀ (b : β), p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected lemma forall_congr (h : forall a, p a ↔ q (e a)) : (forall a, p a) ↔ forall b, q b :=
+protected lemma forall_congr (h : ∀ a, p a ↔ q (e a)) : (∀ a, p a) ↔ ∀ b, q b :=
   e.forall_congr_left.trans (by simp [h])
-
-/--
-lemma `forall_congr'` / 引理 `forall_congr'`
-
-English:
-lemma forall_congr'
-  given: (h : forall b, p (e.symm b) ↔ q b)
-  statement: (forall a, p a) ↔ forall b, q b
-  proof: e.forall_congr_left.trans (by simp [h])
-
-中文:
-引理 对任意_congr'
-  条件: (h : 对任意 b, p (e.symm b) ↔ q b)
-  结论: (对任意 a, p a) ↔ 对任意 b, q b
-  证明: e.forall_congr_left.trans (by simp [h])
+/-
+**Equiv.forall_congr'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : α ≃ β),   (
+∀ (b : β), p (e.symm b) ↔ q b) → ((∀ (a : α), p a) ↔ ∀ (b : β), q b)
+参数：e : α ≃ β；∀ (b : β), p (e.symm b) ↔ q b；(∀ (a : α), p a) ↔ ∀ (b : β), q b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.forall_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∀ (a : α), p a) ↔ ∀ (b : β), p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected lemma forall_congr' (h : forall b, p (e.symm b) ↔ q b) : (forall a, p a) ↔ forall b, q b :=
+protected lemma forall_congr' (h : ∀ b, p (e.symm b) ↔ q b) : (∀ a, p a) ↔ ∀ b, q b :=
   e.forall_congr_left.trans (by simp [h])
-
-/--
-lemma `exists_congr_right` / 引理 `exists_congr_right`
-
-English:
-lemma exists_congr_right
-  statement: (exists a, q (e a)) ↔ exists b, q b
-  proof: ⟨fun ⟨_, h⟩ => ⟨_, h⟩, fun ⟨a, h⟩ => ⟨e.symm a, by simpa using h⟩⟩
-
-中文:
-引理 存在_congr_right
-  结论: (存在 a, q (e a)) ↔ 存在 b, q b
-  证明: ⟨fun ⟨_, h⟩ => ⟨_, h⟩, fun ⟨a, h⟩ => ⟨e.symm a, by simpa using h⟩⟩
+/-
+**Equiv.exists_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e : α ≃ β), (∃ a, q (e a)) ↔ ∃
+ b, q b
+参数：e : α ≃ β；∃ a, q (e a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
-protected lemma exists_congr_right : (exists a, q (e a)) ↔ exists b, q b :=
-  ⟨fun ⟨_, h⟩ => ⟨_, h⟩, fun ⟨a, h⟩ => ⟨e.symm a, by simpa using h⟩⟩
-
-/--
-lemma `exists_congr_left` / 引理 `exists_congr_left`
-
-English:
-lemma exists_congr_left
-  statement: (exists a, p a) ↔ exists b, p (e.symm b)
-  proof: e.symm.exists_congr_right.symm
-
-中文:
-引理 存在_congr_left
-  结论: (存在 a, p a) ↔ 存在 b, p (e.symm b)
-  证明: e.symm.exists_congr_right.symm
+protected lemma exists_congr_right : (∃ a, q (e a)) ↔ ∃ b, q b :=
+  ⟨fun ⟨_, h⟩ ↦ ⟨_, h⟩, fun ⟨a, h⟩ ↦ ⟨e.symm a, by simpa using h⟩⟩
+/-
+**Equiv.exists_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e : α ≃ β), (∃ a, p a) ↔ ∃ b, 
+p (e.symm b)
+参数：e : α ≃ β；∃ a, p a；e.symm b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.exists_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∃ a, q (e a)) ↔ ∃ b, q b
 -/
-protected lemma exists_congr_left : (exists a, p a) ↔ exists b, p (e.symm b) :=
+protected lemma exists_congr_left : (∃ a, p a) ↔ ∃ b, p (e.symm b) :=
   e.symm.exists_congr_right.symm
-
-/--
-lemma `exists_congr` / 引理 `exists_congr`
-
-English:
-lemma exists_congr
-  given: (h : forall a, p a ↔ q (e a))
-  statement: (exists a, p a) ↔ exists b, q b
-  proof: e.exists_congr_left.trans by simp [h]
-
-中文:
-引理 存在_congr
-  条件: (h : 对任意 a, p a ↔ q (e a))
-  结论: (存在 a, p a) ↔ 存在 b, q b
-  证明: e.exists_congr_left.trans by simp [h]
+/-
+**Equiv.exists_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : α ≃ β),   (
+∀ (a : α), p a ↔ q (e a)) → ((∃ a, p a) ↔ ∃ b, q b)
+参数：e : α ≃ β；∀ (a : α), p a ↔ q (e a)；(∃ a, p a) ↔ ∃ b, q b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected lemma exists_congr (h : forall a, p a ↔ q (e a)) : (exists a, p a) ↔ exists b, q b :=
-e.exists_congr_left.trans by simp [h]
-
-/--
-lemma `exists_congr'` / 引理 `exists_congr'`
-
-English:
-lemma exists_congr'
-  given: (h : forall b, p (e.symm b) ↔ q b)
-  statement: (exists a, p a) ↔ exists b, q b
-  proof: e.exists_congr_left.trans by simp [h]
-
-中文:
-引理 存在_congr'
-  条件: (h : 对任意 b, p (e.symm b) ↔ q b)
-  结论: (存在 a, p a) ↔ 存在 b, q b
-  证明: e.exists_congr_left.trans by simp [h]
+protected lemma exists_congr (h : ∀ a, p a ↔ q (e a)) : (∃ a, p a) ↔ ∃ b, q b :=
+  e.exists_congr_left.trans <| by simp [h]
+/-
+**Equiv.exists_congr'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : α ≃ β),   (
+∀ (b : β), p (e.symm b) ↔ q b) → ((∃ a, p a) ↔ ∃ b, q b)
+参数：e : α ≃ β；∀ (b : β), p (e.symm b) ↔ q b；(∃ a, p a) ↔ ∃ b, q b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected lemma exists_congr' (h : forall b, p (e.symm b) ↔ q b) : (exists a, p a) ↔ exists b, q b :=
-e.exists_congr_left.trans by simp [h]
-
-/--
-lemma `exists_subtype_congr` / 引理 `exists_subtype_congr`
-
-English:
-lemma exists_subtype_congr
-  given: (e : {a // p a} ≃ {b // q b})
-  statement: (exists a, p a) ↔ exists b, q b
-  proof: by
+protected lemma exists_congr' (h : ∀ b, p (e.symm b) ↔ q b) : (∃ a, p a) ↔ ∃ b, q b :=
+  e.exists_congr_left.trans <| by simp [h]
+/-
+**Equiv.exists_subtype_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : { a // p a 
+} ≃ { b // q b }), (∃ a, p a) ↔ ∃ b, q b
+参数：e : { a // p a } ≃ { b // q b }；∃ a, p a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+protected lemma exists_subtype_congr (e : {a // p a} ≃ {b // q b}) : (∃ a, p a) ↔ ∃ b, q b := by
   simp [← nonempty_subtype, nonempty_congr e]
-
-中文:
-引理 存在_subtype_congr
-  条件: (e : {a // p a} ≃ {b // q b})
-  结论: (存在 a, p a) ↔ 存在 b, q b
-  证明: by
-  simp [← nonempty_subtype, nonempty_congr e]
+/-
+**Equiv.existsUnique_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e : α ≃ β), (∃! a, q (e a)) ↔ 
+∃! b, q b
+参数：e : α ≃ β；∃! a, q (e a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.exists_congr`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → 
+Prop} (e : α ≃ β),   (∀ (a : α), p a ↔ q (e a)) → ((∃ a, p a) ↔ ∃ b, q b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Equiv.forall_congr`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → 
+Prop} (e : α ≃ β),   (∀ (a : α), p a ↔ q (e a)) → ((∀ (a : α), p a) ↔ ∀ (b : β),
+ q b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-protected lemma exists_subtype_congr (e : {a // p a} ≃ {b // q b}) : (exists a, p a) ↔ exists b, q b := by
-  simp [← nonempty_subtype, nonempty_congr e]
-
-/--
-lemma `existsUnique_congr_right` / 引理 `existsUnique_congr_right`
-
-English:
-lemma existsUnique_congr_right
-  statement: (exists! a, q (e a)) ↔ exists! b, q b
-  proof: e.exists_congr by simpa using fun _ _ => e.forall_congr (by simp)
-
-中文:
-引理 存在Unique_congr_right
-  结论: (存在! a, q (e a)) ↔ 存在! b, q b
-  证明: e.exists_congr by simpa using fun _ _ => e.forall_congr (by simp)
+protected lemma existsUnique_congr_right : (∃! a, q (e a)) ↔ ∃! b, q b :=
+  e.exists_congr <| by simpa using fun _ _ ↦ e.forall_congr (by simp)
+/-
+**Equiv.existsUnique_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e : α ≃ β), (∃! a, p a) ↔ ∃! b
+, p (e.symm b)
+参数：e : α ≃ β；∃! a, p a；e.symm b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.existsUnique_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Pro
+p} (e : α ≃ β), (∃! a, q (e a)) ↔ ∃! b, q b
 -/
-protected lemma existsUnique_congr_right : (exists! a, q (e a)) ↔ exists! b, q b :=
-e.exists_congr by simpa using fun _ _ => e.forall_congr (by simp)
-
-/--
-lemma `existsUnique_congr_left` / 引理 `existsUnique_congr_left`
-
-English:
-lemma existsUnique_congr_left
-  statement: (exists! a, p a) ↔ exists! b, p (e.symm b)
-  proof: e.symm.existsUnique_congr_right.symm
-
-中文:
-引理 存在Unique_congr_left
-  结论: (存在! a, p a) ↔ 存在! b, p (e.symm b)
-  证明: e.symm.existsUnique_congr_right.symm
--/
-protected lemma existsUnique_congr_left : (exists! a, p a) ↔ exists! b, p (e.symm b) :=
+protected lemma existsUnique_congr_left : (∃! a, p a) ↔ ∃! b, p (e.symm b) :=
   e.symm.existsUnique_congr_right.symm
-
-/--
-lemma `existsUnique_congr` / 引理 `existsUnique_congr`
-
-English:
-lemma existsUnique_congr
-  given: (h : forall a, p a ↔ q (e a))
-  statement: (exists! a, p a) ↔ exists! b, q b
-  proof: e.existsUnique_congr_left.trans by simp [h]
-
-中文:
-引理 存在Unique_congr
-  条件: (h : 对任意 a, p a ↔ q (e a))
-  结论: (存在! a, p a) ↔ 存在! b, q b
-  证明: e.existsUnique_congr_left.trans by simp [h]
+/-
+**Equiv.existsUnique_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : α ≃ β),   (
+∀ (a : α), p a ↔ q (e a)) → ((∃! a, p a) ↔ ∃! b, q b)
+参数：e : α ≃ β；∀ (a : α), p a ↔ q (e a)；(∃! a, p a) ↔ ∃! b, q b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.existsUnique_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop
+} (e : α ≃ β), (∃! a, p a) ↔ ∃! b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected lemma existsUnique_congr (h : forall a, p a ↔ q (e a)) : (exists! a, p a) ↔ exists! b, q b :=
-e.existsUnique_congr_left.trans by simp [h]
-
-/--
-lemma `existsUnique_congr'` / 引理 `existsUnique_congr'`
-
-English:
-lemma existsUnique_congr'
-  given: (h : forall b, p (e.symm b) ↔ q b)
-  statement: (exists! a, p a) ↔ exists! b, q b
-  proof: e.existsUnique_congr_left.trans by simp [h]
-
-中文:
-引理 存在Unique_congr'
-  条件: (h : 对任意 b, p (e.symm b) ↔ q b)
-  结论: (存在! a, p a) ↔ 存在! b, q b
-  证明: e.existsUnique_congr_left.trans by simp [h]
+protected lemma existsUnique_congr (h : ∀ a, p a ↔ q (e a)) : (∃! a, p a) ↔ ∃! b, q b :=
+  e.existsUnique_congr_left.trans <| by simp [h]
+/-
+**Equiv.existsUnique_congr'** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : α ≃ β),   (
+∀ (b : β), p (e.symm b) ↔ q b) → ((∃! a, p a) ↔ ∃! b, q b)
+参数：e : α ≃ β；∀ (b : β), p (e.symm b) ↔ q b；(∃! a, p a) ↔ ∃! b, q b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.existsUnique_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop
+} (e : α ≃ β), (∃! a, p a) ↔ ∃! b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected lemma existsUnique_congr' (h : forall b, p (e.symm b) ↔ q b) : (exists! a, p a) ↔ exists! b, q b :=
-e.existsUnique_congr_left.trans by simp [h]
-
-/--
-lemma `existsUnique_subtype_congr` / 引理 `existsUnique_subtype_congr`
-
-English:
-lemma existsUnique_subtype_congr
-  given: (e : {a // p a} ≃ {b // q b})
-  proof: by
-  simp [← unique_subtype_iff_existsUnique, unique_iff_subsingleton_and_nonempty,
-        nonempty_congr e, subsingleton_congr e]
-
-中文:
-引理 存在Unique_subtype_congr
-  条件: (e : {a // p a} ≃ {b // q b})
-  证明: by
-  simp [← unique_subtype_iff_existsUnique, unique_iff_subsingleton_and_nonempty,
-        nonempty_congr e, subsingleton_congr e]
+protected lemma existsUnique_congr' (h : ∀ b, p (e.symm b) ↔ q b) : (∃! a, p a) ↔ ∃! b, q b :=
+  e.existsUnique_congr_left.trans <| by simp [h]
+/-
+**Equiv.existsUnique_subtype_congr** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → Prop} (e : { a // p a 
+} ≃ { b // q b }), (∃! a, p a) ↔ ∃! b, q b
+参数：e : { a // p a } ≃ { b // q b }；∃! a, p a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.subsingleton_congr`：subsingleton_congr (e : α ≃ β) : Subsingleton 
+α ↔ Subsingleton β
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected lemma existsUnique_subtype_congr (e : {a // p a} ≃ {b // q b}) :
-    (exists! a, p a) ↔ exists! b, q b := by
+    (∃! a, p a) ↔ ∃! b, q b := by
   simp [← unique_subtype_iff_existsUnique, unique_iff_subsingleton_and_nonempty,
         nonempty_congr e, subsingleton_congr e]
 
@@ -3613,204 +2643,126 @@ protected lemma existsUnique_subtype_congr (e : {a // p a} ≃ {b // q b}) :
 -- In particular, they are necessary in `equiv_rw`.
 -- (Stopping at ternary functions seems reasonable: at least in 1-categorical mathematics,
 -- it's rare to have axioms involving more than 3 elements at once.)
-
-/--
-theorem `forall₂_congr` / 定理 `forall₂_congr`
-
-English:
-theorem forall₂_congr
-  statement: {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> Prop} {q : α₂ -> β₂ -> Prop}
-  proof: eα.forall_congr fun _ => eβ.forall_congr @h _
-
-中文:
-定理 对任意₂_congr
-  结论: {α₁ α₂ β₁ β₂ : 类型层*} {p : α₁ -> β₁ -> 命题} {q : α₂ -> β₂ -> 命题}
-  证明: eα.forall_congr fun _ => eβ.forall_congr @h _
+/-
+**Equiv.forall** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem forall₂_congr {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> Prop} {q : α₂ -> β₂ -> Prop}
-    (eα : α₁ ≃ α₂) (eβ : β₁ ≃ β₂) (h : forall {x y}, p x y ↔ q (eα x) (eβ y)) :
-    (forall x y, p x y) ↔ forall x y, q x y :=
-eα.forall_congr fun _ => eβ.forall_congr @h _
-
-/--
-theorem `forall₂_congr'` / 定理 `forall₂_congr'`
-
-English:
-theorem forall₂_congr'
-  statement: {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> Prop} {q : α₂ -> β₂ -> Prop}
-  proof: (Equiv.forall₂_congr eα.symm eβ.symm h.symm).symm
-
-中文:
-定理 对任意₂_congr'
-  结论: {α₁ α₂ β₁ β₂ : 类型层*} {p : α₁ -> β₁ -> 命题} {q : α₂ -> β₂ -> 命题}
-  证明: (Equiv.forall₂_congr eα.symm eβ.symm h.symm).symm
+protected theorem forall₂_congr {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ → β₁ → Prop} {q : α₂ → β₂ → Prop}
+    (eα : α₁ ≃ α₂) (eβ : β₁ ≃ β₂) (h : ∀ {x y}, p x y ↔ q (eα x) (eβ y)) :
+    (∀ x y, p x y) ↔ ∀ x y, q x y :=
+  eα.forall_congr fun _ ↦ eβ.forall_congr <| @h _
+/-
+**Equiv.forall** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem forall₂_congr' {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ -> β₁ -> Prop} {q : α₂ -> β₂ -> Prop}
-    (eα : α₁ ≃ α₂) (eβ : β₁ ≃ β₂) (h : forall {x y}, p (eα.symm x) (eβ.symm y) ↔ q x y) :
-    (forall x y, p x y) ↔ forall x y, q x y := (Equiv.forall₂_congr eα.symm eβ.symm h.symm).symm
-
-/--
-theorem `forall₃_congr` / 定理 `forall₃_congr`
-
-English:
-theorem forall₃_congr
-  proof: Equiv.forall₂_congr _ _ Equiv.forall_congr _ @h _ _
-
-中文:
-定理 对任意₃_congr
-  证明: Equiv.forall₂_congr _ _ Equiv.forall_congr _ @h _ _
+protected theorem forall₂_congr' {α₁ α₂ β₁ β₂ : Sort*} {p : α₁ → β₁ → Prop} {q : α₂ → β₂ → Prop}
+    (eα : α₁ ≃ α₂) (eβ : β₁ ≃ β₂) (h : ∀ {x y}, p (eα.symm x) (eβ.symm y) ↔ q x y) :
+    (∀ x y, p x y) ↔ ∀ x y, q x y := (Equiv.forall₂_congr eα.symm eβ.symm h.symm).symm
+/-
+**Equiv.forall** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem forall₃_congr
-    {α₁ α₂ β₁ β₂ γ₁ γ₂ : Sort*} {p : α₁ -> β₁ -> γ₁ -> Prop} {q : α₂ -> β₂ -> γ₂ -> Prop}
-    (eα : α₁ ≃ α₂) (eβ : β₁ ≃ β₂) (eγ : γ₁ ≃ γ₂) (h : forall {x y z}, p x y z ↔ q (eα x) (eβ y) (eγ z)) :
-    (forall x y z, p x y z) ↔ forall x y z, q x y z :=
-Equiv.forall₂_congr _ _ Equiv.forall_congr _ @h _ _
-
-/--
-theorem `forall₃_congr'` / 定理 `forall₃_congr'`
-
-English:
-theorem forall₃_congr'
-  proof: (Equiv.forall₃_congr eα.symm eβ.symm eγ.symm h.symm).symm
-
-中文:
-定理 对任意₃_congr'
-  证明: (Equiv.forall₃_congr eα.symm eβ.symm eγ.symm h.symm).symm
+    {α₁ α₂ β₁ β₂ γ₁ γ₂ : Sort*} {p : α₁ → β₁ → γ₁ → Prop} {q : α₂ → β₂ → γ₂ → Prop}
+    (eα : α₁ ≃ α₂) (eβ : β₁ ≃ β₂) (eγ : γ₁ ≃ γ₂) (h : ∀ {x y z}, p x y z ↔ q (eα x) (eβ y) (eγ z)) :
+    (∀ x y z, p x y z) ↔ ∀ x y z, q x y z :=
+  Equiv.forall₂_congr _ _ <| Equiv.forall_congr _ <| @h _ _
+/-
+**Equiv.forall** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem forall₃_congr'
-    {α₁ α₂ β₁ β₂ γ₁ γ₂ : Sort*} {p : α₁ -> β₁ -> γ₁ -> Prop} {q : α₂ -> β₂ -> γ₂ -> Prop}
+    {α₁ α₂ β₁ β₂ γ₁ γ₂ : Sort*} {p : α₁ → β₁ → γ₁ → Prop} {q : α₂ → β₂ → γ₂ → Prop}
     (eα : α₁ ≃ α₂) (eβ : β₁ ≃ β₂) (eγ : γ₁ ≃ γ₂)
-    (h : forall {x y z}, p (eα.symm x) (eβ.symm y) (eγ.symm z) ↔ q x y z) :
-    (forall x y z, p x y z) ↔ forall x y z, q x y z :=
+    (h : ∀ {x y z}, p (eα.symm x) (eβ.symm y) (eγ.symm z) ↔ q x y z) :
+    (∀ x y z, p x y z) ↔ ∀ x y z, q x y z :=
   (Equiv.forall₃_congr eα.symm eβ.symm eγ.symm h.symm).symm
 
 /-- If `f` is a bijective function, then its domain is equivalent to its codomain. -/
 @[simps (attr := grind =) apply]
-/--
-Definition of `ofBijective` / `ofBijective` 的定义
+/-
+**Equiv.ofBijective** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：ofBijective (f : α -> β) (hf : Bijective f) : α ≃ β where toFun
+参数：f : α -> β；hf : Bijective f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用定理 `Function.leftInverse_surjInv`：leftInverse_surjInv (hf : Bijective f) : L
+eftInverse (surjInv hf.2) f
 
-English:
-definition ofBijective
-  signature: (f : α -> β) (hf : Bijective f)
-  body: f
-  invFun := surjInv hf.surjective
-  left_inv := leftInverse_surjInv hf
-  right_inv := rightInverse_surjInv _
-
-中文:
-定义 ofBijective
-  签名: (f : α -> β) (hf : 双射 f)
-  定义体: f
-  invFun := surjInv hf.surjective
-  left_inv := leftInverse_surjInv hf
-  right_inv := rightInverse_surjInv _
+--- 原说明 ---
+If `f` is a bijective function, then its domain is equivalent to its codomain.
 -/
-noncomputable def ofBijective (f : α -> β) (hf : Bijective f) : α ≃ β where
+noncomputable def ofBijective (f : α → β) (hf : Bijective f) : α ≃ β where
   toFun := f
   invFun := surjInv hf.surjective
   left_inv := leftInverse_surjInv hf
   right_inv := rightInverse_surjInv _
-
-/--
-lemma `coe_ofBijective` / 引理 `coe_ofBijective`
-
-English:
-lemma coe_ofBijective
-  given: (f : α -> β) (hf : Bijective f)
-  statement: ⇑(ofBijective f hf) = f
-  proof: rfl
-
-中文:
-引理 coe_ofBijective
-  条件: (f : α -> β) (hf : 双射 f)
-  结论: ⇑(ofBijective f hf) = f
-  证明: rfl
+/-
+**Equiv.coe_ofBijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} (f : α → β) (hf : Function.Bijective f), ⇑(Equ
+iv.ofBijective f hf) = f
+参数：f : α → β；hf : Function.Bijective f；Equiv.ofBijective f hf。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_ofBijective (f : α -> β) (hf : Bijective f) : ⇑(ofBijective f hf) = f := rfl
-
-/--
-lemma `ofBijective_coe` / 引理 `ofBijective_coe`
-
-English:
-lemma ofBijective_coe
-  given: {f : α ≃ β}
-  proof: Equiv.ext (congrFun rfl)
-
-中文:
-引理 ofBijective_coe
-  条件: {f : α ≃ β}
-  证明: Equiv.ext (congrFun rfl)
+@[simp] lemma coe_ofBijective (f : α → β) (hf : Bijective f) : ⇑(ofBijective f hf) = f := rfl
+/-
+**Equiv.ofBijective_coe** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {f : α ≃ β}, Equiv.ofBijective ⇑f ⋯ = f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 -/
 @[simp] lemma ofBijective_coe {f : α ≃ β} :
     Equiv.ofBijective f f.bijective = f := Equiv.ext (congrFun rfl)
-
-/--
-lemma `ofBijective_apply_symm_apply` / 引理 `ofBijective_apply_symm_apply`
-
-English:
-lemma ofBijective_apply_symm_apply
-  given: (f : α -> β) (hf : Bijective f) (x : β)
-  proof: (ofBijective f hf).apply_symm_apply x
-
-@[simp]
-
-中文:
-引理 ofBijective_apply_symm_apply
-  条件: (f : α -> β) (hf : 双射 f) (x : β)
-  证明: (ofBijective f hf).apply_symm_apply x
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, ofBijective
+/-
+**Equiv.ofBijective_apply_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：ofBijective_apply_symm_apply (f : α -> β) (hf : Bijective f) (x : β) : f (
+(ofBijective f hf).symm x) = x
+参数：f : α -> β；hf : Bijective f；x : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
-lemma ofBijective_apply_symm_apply (f : α -> β) (hf : Bijective f) (x : β) :
+lemma ofBijective_apply_symm_apply (f : α → β) (hf : Bijective f) (x : β) :
     f ((ofBijective f hf).symm x) = x :=
   (ofBijective f hf).apply_symm_apply x
 
 @[simp]
-/--
-lemma `ofBijective_symm_apply_apply` / 引理 `ofBijective_symm_apply_apply`
-
-English:
-lemma ofBijective_symm_apply_apply
-  given: (f : α -> β) (hf : Bijective f) (x : α)
-  proof: (ofBijective f hf).symm_apply_apply x
-
-中文:
-引理 ofBijective_symm_apply_apply
-  条件: (f : α -> β) (hf : 双射 f) (x : α)
-  证明: (ofBijective f hf).symm_apply_apply x
-
-Depends on / 依赖: ofBijective, symm_apply_apply
+/-
+**Equiv.ofBijective_symm_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：ofBijective_symm_apply_apply (f : α -> β) (hf : Bijective f) (x : α) : (of
+Bijective f hf).symm (f x) = x
+参数：f : α -> β；hf : Bijective f；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-lemma ofBijective_symm_apply_apply (f : α -> β) (hf : Bijective f) (x : α) :
+lemma ofBijective_symm_apply_apply (f : α → β) (hf : Bijective f) (x : α) :
     (ofBijective f hf).symm (f x) = x :=
   (ofBijective f hf).symm_apply_apply x
 
 /-- Bijective functions are equivalent to equivalences. -/
 @[simps]
-/--
-Definition of `bijectiveEquiv` / `bijectiveEquiv` 的定义
+/-
+**Equiv.bijectiveEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：bijectiveEquiv : { f : α -> β // Bijective f } ≃ (α ≃ β) where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 
-English:
-definition bijectiveEquiv
-  signature: : { f : α -> β // Bijective f } ≃ (α ≃ β) where
-  body: .ofBijective f f.prop
-  invFun f := ⟨f, f.bijective⟩
-  left_inv _ := rfl
-  right_inv _ := by ext; rfl
-
-中文:
-定义 bijectiveEquiv
-  签名: : { f : α -> β // 双射 f } ≃ (α ≃ β) where
-  定义体: .ofBijective f f.prop
-  invFun f := ⟨f, f.bijective⟩
-  left_inv _ := rfl
-  right_inv _ := by ext; rfl
-
-Depends on / 依赖: f.prop, ofBijective
+--- 原说明 ---
+Bijective functions are equivalent to equivalences.
 -/
-noncomputable def bijectiveEquiv : { f : α -> β // Bijective f } ≃ (α ≃ β) where
+noncomputable def bijectiveEquiv : { f : α → β // Bijective f } ≃ (α ≃ β) where
   toFun f := .ofBijective f f.prop
   invFun f := ⟨f, f.bijective⟩
   left_inv _ := rfl
@@ -3820,85 +2772,77 @@ end Equiv
 
 namespace Quot
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- An equivalence `e : α ≃ β` generates an equivalence between quotient spaces,
+if `ra a₁ a₂ ↔ rb (e a₁) (e a₂)`. -/
+/-
+**Quot.congr** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} →   {β : Sort v} →     {ra : α → α → Prop} →       {rb : β → 
+β → Prop} → (e : α ≃ β) → (∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)) → Quot ra
+ ≃ Quot rb
+参数：e : α ≃ β；∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition congr
-  signature: {ra : α -> α -> Prop} {rb : β -> β -> Prop} (e : α ≃ β)
-  body: Quot.map e fun a₁ a₂ => (eq a₁ a₂).1
-  invFun := Quot.map e.symm fun b₁ b₂ h =>
-    (eq (e.symm b₁) (e.symm b₂)).2
-      ((e.apply_symm_apply b₁).symm ▸ (e.apply_symm_apply b₂).symm ▸ h)
-  left_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.symm_apply_apply]
-  right_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.apply_symm_apply]
-
-中文:
-定义 congr
-  签名: {ra : α -> α -> 命题} {rb : β -> β -> 命题} (e : α ≃ β)
-  定义体: Quot.map e fun a₁ a₂ => (eq a₁ a₂).1
-  invFun := Quot.map e.symm fun b₁ b₂ h =>
-    (eq (e.symm b₁) (e.symm b₂)).2
-      ((e.apply_symm_apply b₁).symm ▸ (e.apply_symm_apply b₂).symm ▸ h)
-  left_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.symm_apply_apply]
-  right_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.apply_symm_apply]
+--- 原说明 ---
+An equivalence `e : α ≃ β` generates an equivalence between quotient spaces,
+if `ra a₁ a₂ ↔ rb (e a₁) (e a₂)`.
 -/
-protected def congr {ra : α -> α -> Prop} {rb : β -> β -> Prop} (e : α ≃ β)
-    (eq : forall a₁ a₂, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) : Quot ra ≃ Quot rb where
+protected def congr {ra : α → α → Prop} {rb : β → β → Prop} (e : α ≃ β)
+    (eq : ∀ a₁ a₂, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) : Quot ra ≃ Quot rb where
   toFun := Quot.map e fun a₁ a₂ => (eq a₁ a₂).1
   invFun := Quot.map e.symm fun b₁ b₂ h =>
     (eq (e.symm b₁) (e.symm b₂)).2
       ((e.apply_symm_apply b₁).symm ▸ (e.apply_symm_apply b₂).symm ▸ h)
   left_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.symm_apply_apply]
   right_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.apply_symm_apply]
-
-/--
-theorem `congr_mk` / 定理 `congr_mk`
-
-English:
-theorem congr_mk
-  statement: {ra : α -> α -> Prop} {rb : β -> β -> Prop} (e : α ≃ β)
-  proof: rfl
-
-中文:
-定理 congr_mk
-  结论: {ra : α -> α -> 命题} {rb : β -> β -> 命题} (e : α ≃ β)
-  证明: rfl
+/-
+**Quot.congr_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quot`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {ra : α → α → Prop} {rb : β → β → Prop} (e : α
+ ≃ β)   (eq : ∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)) (a : α), (Quot.congr e
+ eq) (Quot.mk ra a) = Quot.mk rb (e a)
+参数：e : α ≃ β；eq : ∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)；a : α；Quot.congr e 
+eq；Quot.mk ra a；e a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem congr_mk {ra : α -> α -> Prop} {rb : β -> β -> Prop} (e : α ≃ β)
-    (eq : forall a₁ a₂ : α, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) (a : α) :
+@[simp] theorem congr_mk {ra : α → α → Prop} {rb : β → β → Prop} (e : α ≃ β)
+    (eq : ∀ a₁ a₂ : α, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) (a : α) :
     Quot.congr e eq (Quot.mk ra a) = Quot.mk rb (e a) := rfl
 
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-- Quotients are congruent on equivalences under equality of their relation.
+An alternative is just to use rewriting with `eq`, but then computational proofs get stuck. -/
+/-
+**Quot.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} → {r r' : α → α → Prop} → (∀ (a₁ a₂ : α), r a₁ a₂ ↔ r' a₁ a₂)
+ → Quot r ≃ Quot r'
+参数：∀ (a₁ a₂ : α), r a₁ a₂ ↔ r' a₁ a₂。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition congrRight
-  signature: {r r' : α -> α -> Prop} (eq : forall a₁ a₂, r a₁ a₂ ↔ r' a₁ a₂)
-  body: Quot.congr (Equiv.refl α) eq
-
-中文:
-定义 congrRight
-  签名: {r r' : α -> α -> 命题} (eq : 对任意 a₁ a₂, r a₁ a₂ ↔ r' a₁ a₂)
-  定义体: Quot.congr (Equiv.refl α) eq
+--- 原说明 ---
+Quotients are congruent on equivalences under equality of their relation.
+An alternative is just to use rewriting with `eq`, but then computational proofs
+ get stuck.
 -/
-protected def congrRight {r r' : α -> α -> Prop} (eq : forall a₁ a₂, r a₁ a₂ ↔ r' a₁ a₂) :
+protected def congrRight {r r' : α → α → Prop} (eq : ∀ a₁ a₂, r a₁ a₂ ↔ r' a₁ a₂) :
     Quot r ≃ Quot r' := Quot.congr (Equiv.refl α) eq
 
-/--
-Definition of `congrLeft` / `congrLeft` 的定义
+/-- An equivalence `e : α ≃ β` generates an equivalence between the quotient space of `α`
+by a relation `ra` and the quotient space of `β` by the image of this relation under `e`. -/
+/-
+**Quot.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `Quot`。
+形式化陈述：{α : Sort u} → {β : Sort v} → {r : α → α → Prop} → (e : α ≃ β) → Quot r ≃ 
+Quot fun b b' => r (e.symm b) (e.symm b')
+参数：e : α ≃ β；e.symm b；e.symm b'。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition congrLeft
-  signature: {r : α -> α -> Prop} (e : α ≃ β)
-  body: Quot.congr e fun _ _ => by simp only [e.symm_apply_apply]
-
-中文:
-定义 congrLeft
-  签名: {r : α -> α -> 命题} (e : α ≃ β)
-  定义体: Quot.congr e fun _ _ => by simp only [e.symm_apply_apply]
+--- 原说明 ---
+An equivalence `e : α ≃ β` generates an equivalence between the quotient space o
+f `α`
+by a relation `ra` and the quotient space of `β` by the image of this relation u
+nder `e`.
 -/
-protected def congrLeft {r : α -> α -> Prop} (e : α ≃ β) :
+protected def congrLeft {r : α → α → Prop} (e : α ≃ β) :
     Quot r ≃ Quot fun b b' => r (e.symm b) (e.symm b') :=
   Quot.congr e fun _ _ => by simp only [e.symm_apply_apply]
 
@@ -3906,128 +2850,101 @@ end Quot
 
 namespace Quotient
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- An equivalence `e : α ≃ β` generates an equivalence between quotient spaces,
+if `ra a₁ a₂ ↔ rb (e a₁) (e a₂)`. -/
+/-
+**Quotient.congr** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} →   {β : Sort v} →     {ra : Setoid α} →       {rb : Setoid β
+} → (e : α ≃ β) → (∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)) → Quotient ra ≃ Q
+uotient rb
+参数：e : α ≃ β；∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congr
-  signature: {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
-  body: Quot.congr e eq
-
-中文:
-定义 congr
-  签名: {ra : 集合等价关系 α} {rb : 集合等价关系 β} (e : α ≃ β)
-  定义体: Quot.congr e eq
+--- 原说明 ---
+An equivalence `e : α ≃ β` generates an equivalence between quotient spaces,
+if `ra a₁ a₂ ↔ rb (e a₁) (e a₂)`.
 -/
 protected def congr {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
-    (eq : forall a₁ a₂, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) :
+    (eq : ∀ a₁ a₂, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) :
     Quotient ra ≃ Quotient rb := Quot.congr e eq
-
-/--
-theorem `congr_mk` / 定理 `congr_mk`
-
-English:
-theorem congr_mk
-  statement: {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
-  proof: rfl
-
-中文:
-定理 congr_mk
-  结论: {ra : 集合等价关系 α} {rb : 集合等价关系 β} (e : α ≃ β)
-  证明: rfl
+/-
+**Quotient.congr_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：∀ {α : Sort u} {β : Sort v} {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)   
+(eq : ∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)) (a : α), (Quotient.congr e eq)
+ ⟦a⟧ = ⟦e a⟧
+参数：e : α ≃ β；eq : ∀ (a₁ a₂ : α), ra a₁ a₂ ↔ rb (e a₁) (e a₂)；a : α；Quotient.cong
+r e eq。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem congr_mk {ra : Setoid α} {rb : Setoid β} (e : α ≃ β)
-    (eq : forall a₁ a₂ : α, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) (a : α) :
+    (eq : ∀ a₁ a₂ : α, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) (a : α) :
     Quotient.congr e eq (Quotient.mk ra a) = Quotient.mk rb (e a) := rfl
 
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-- Quotients are congruent on equivalences under equality of their relation.
+An alternative is just to use rewriting with `eq`, but then computational proofs get stuck. -/
+/-
+**Quotient.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `Quotient`。
+形式化陈述：{α : Sort u} → {r r' : Setoid α} → (∀ (a₁ a₂ : α), r a₁ a₂ ↔ r' a₁ a₂) → Q
+uotient r ≃ Quotient r'
+参数：∀ (a₁ a₂ : α), r a₁ a₂ ↔ r' a₁ a₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRight
-  signature: {r r' : Setoid α}
-  body: Quot.congrRight eq
-
-中文:
-定义 congrRight
-  签名: {r r' : 集合等价关系 α}
-  定义体: Quot.congrRight eq
+--- 原说明 ---
+Quotients are congruent on equivalences under equality of their relation.
+An alternative is just to use rewriting with `eq`, but then computational proofs
+ get stuck.
 -/
 protected def congrRight {r r' : Setoid α}
-    (eq : forall a₁ a₂, r a₁ a₂ ↔ r' a₁ a₂) : Quotient r ≃ Quotient r' :=
+    (eq : ∀ a₁ a₂, r a₁ a₂ ↔ r' a₁ a₂) : Quotient r ≃ Quotient r' :=
   Quot.congrRight eq
 
 end Quotient
 
-/--
-Definition of `finZeroEquiv` / `finZeroEquiv` 的定义
+/-- Equivalence between `Fin 0` and `Empty`. -/
+/-
+**finZeroEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finZeroEquiv : Fin 0 ≃ Empty
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finZeroEquiv
-  signature: : Fin 0 ≃ Empty
-  body: .equivEmpty _
-
-中文:
-定义 finZeroEquiv
-  签名: : 有限集 0 ≃ 空
-  定义体: .equivEmpty _
-
-Depends on / 依赖: equivEmpty
+--- 原说明 ---
+Equivalence between `Fin 0` and `Empty`.
 -/
 def finZeroEquiv : Fin 0 ≃ Empty := .equivEmpty _
 
-/--
-Definition of `finZeroEquiv'` / `finZeroEquiv'` 的定义
+/-- Equivalence between `Fin 0` and `PEmpty`. -/
+/-
+**finZeroEquiv'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finZeroEquiv' : Fin 0 ≃ PEmpty.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finZeroEquiv'
-  signature: : Fin 0 ≃ PEmpty.{u}
-  body: .equivPEmpty _
-
-中文:
-定义 finZeroEquiv'
-  签名: : 有限集 0 ≃ 命题空.{u}
-  定义体: .equivPEmpty _
-
-Depends on / 依赖: equivPEmpty
+--- 原说明 ---
+Equivalence between `Fin 0` and `PEmpty`.
 -/
 def finZeroEquiv' : Fin 0 ≃ PEmpty.{u} := .equivPEmpty _
 
-/--
-Definition of `finOneEquiv` / `finOneEquiv` 的定义
+/-- Equivalence between `Fin 1` and `Unit`. -/
+/-
+**finOneEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finOneEquiv : Fin 1 ≃ Unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finOneEquiv
-  signature: : Fin 1 ≃ Unit
-  body: .equivPUnit _
-
-中文:
-定义 finOneEquiv
-  签名: : 有限集 1 ≃ 单元
-  定义体: .equivPUnit _
-
-Depends on / 依赖: equivPUnit
+--- 原说明 ---
+Equivalence between `Fin 1` and `Unit`.
 -/
 def finOneEquiv : Fin 1 ≃ Unit := .equivPUnit _
 
-/--
-Definition of `finTwoEquiv` / `finTwoEquiv` 的定义
+/-- Equivalence between `Fin 2` and `Bool`. -/
+/-
+**finTwoEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finTwoEquiv : Fin 2 ≃ Bool where toFun i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finTwoEquiv
-  signature: : Fin 2 ≃ Bool where
-  body: i == 1
-  invFun b := bif b then 1 else 0
-  left_inv i := by grind
-  right_inv b := by grind
-
-中文:
-定义 finTwoEquiv
-  签名: : 有限集 2 ≃ 布尔值 where
-  定义体: i == 1
-  invFun b := bif b then 1 else 0
-  left_inv i := by grind
-  right_inv b := by grind
+--- 原说明 ---
+Equivalence between `Fin 2` and `Bool`.
 -/
 def finTwoEquiv : Fin 2 ≃ Bool where
   toFun i := i == 1
@@ -4041,241 +2958,155 @@ variable {α β : Type*}
 
 /-- The left summand of `α ⊕ β` is equivalent to `α`. -/
 @[simps (attr := grind =)]
-/--
-Definition of `sumIsLeft` / `sumIsLeft` 的定义
+/-
+**Equiv.sumIsLeft** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sumIsLeft : {x : α oplus β // x.isLeft} ≃ α where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Sum.isLeft_inl`：∀ {α : Type u_1} {β : Type u_2} {x : α}, (Sum.inl x).isL
+eft = true
 
-English:
-definition sumIsLeft
-  signature: : {x : α oplus β // x.isLeft} ≃ α where
-  body: x.1.getLeft x.2
-  invFun a := ⟨.inl a, Sum.isLeft_inl⟩
-  left_inv | ⟨.inl _a, _⟩ => rfl
-
-中文:
-定义 sumIsLeft
-  签名: : {x : α oplus β // x.isLeft} ≃ α where
-  定义体: x.1.getLeft x.2
-  invFun a := ⟨.inl a, Sum.isLeft_inl⟩
-  left_inv | ⟨.inl _a, _⟩ => rfl
-
-Depends on / 依赖: getLeft
+--- 原说明 ---
+The left summand of `α ⊕ β` is equivalent to `α`.
 -/
-def sumIsLeft : {x : α oplus β // x.isLeft} ≃ α where
+def sumIsLeft : {x : α ⊕ β // x.isLeft} ≃ α where
   toFun x := x.1.getLeft x.2
   invFun a := ⟨.inl a, Sum.isLeft_inl⟩
   left_inv | ⟨.inl _a, _⟩ => rfl
 
 /-- The right summand of `α ⊕ β` is equivalent to `β`. -/
 @[simps (attr := grind =)]
-/--
-Definition of `sumIsRight` / `sumIsRight` 的定义
+/-
+**Equiv.sumIsRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：sumIsRight : {x : α oplus β // x.isRight} ≃ β where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Sum.isRight_inr`：∀ {α : Type u_1} {β : Type u_2} {x : β}, (Sum.inr x).is
+Right = true
 
-English:
-definition sumIsRight
-  signature: : {x : α oplus β // x.isRight} ≃ β where
-  body: x.1.getRight x.2
-  invFun b := ⟨.inr b, Sum.isRight_inr⟩
-  left_inv | ⟨.inr _b, _⟩ => rfl
-
-中文:
-定义 sumIsRight
-  签名: : {x : α oplus β // x.isRight} ≃ β where
-  定义体: x.1.getRight x.2
-  invFun b := ⟨.inr b, Sum.isRight_inr⟩
-  left_inv | ⟨.inr _b, _⟩ => rfl
-
-Depends on / 依赖: getRight
+--- 原说明 ---
+The right summand of `α ⊕ β` is equivalent to `β`.
 -/
-def sumIsRight : {x : α oplus β // x.isRight} ≃ β where
+def sumIsRight : {x : α ⊕ β // x.isRight} ≃ β where
   toFun x := x.1.getRight x.2
   invFun b := ⟨.inr b, Sum.isRight_inr⟩
   left_inv | ⟨.inr _b, _⟩ => rfl
 
 variable (e : α ≃ β)
 
-/--
-Definition of `le` / `le` 的定义
+/-- Transfer `LE` across an `Equiv`. -/
+/-
+**Equiv.le** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [LE β] → LE α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation le
-  signature: [LE β]
-  body: e a <= e b
-
-中文:
-缩写 le
-  签名: [LE β]
-  定义体: e a <= e b
+--- 原说明 ---
+Transfer `LE` across an `Equiv`.
 -/
 protected abbrev le [LE β] : LE α where
-  le a b := e a <= e b
-
-/--
-lemma `le_def` / 引理 `le_def`
-
-English:
-lemma le_def
-  given: [LE β] (a b : α)
-  proof: e.le
-    e a <= e b ↔ a <= b := Iff.rfl
-
-中文:
-引理 le_def
-  条件: [LE β] (a b : α)
-  证明: e.le
-    e a <= e b ↔ a <= b := Iff.rfl
-
-Depends on / 依赖: e.le
+  le a b := e a ≤ e b
+/-
+**Equiv.le_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：le_def [LE β] (a b : α) : letI
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma le_def [LE β] (a b : α) :
     letI := e.le
-    e a <= e b ↔ a <= b := Iff.rfl
+    e a ≤ e b ↔ a ≤ b := Iff.rfl
 
-/--
-Definition of `lt` / `lt` 的定义
+/-- Transfer `LT` across an `Equiv`. -/
+/-
+**Equiv.lt** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [LT β] → LT α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lt
-  signature: [LT β]
-  body: e a < e b
-
-中文:
-缩写 lt
-  签名: [LT β]
-  定义体: e a < e b
+--- 原说明 ---
+Transfer `LT` across an `Equiv`.
 -/
 protected abbrev lt [LT β] : LT α where
   lt a b := e a < e b
-
-/--
-lemma `lt_def` / 引理 `lt_def`
-
-English:
-lemma lt_def
-  given: [LT β] (a b : α)
-  proof: e.lt
-    e a < e b ↔ a < b := Iff.rfl
-
-中文:
-引理 lt_def
-  条件: [LT β] (a b : α)
-  证明: e.lt
-    e a < e b ↔ a < b := Iff.rfl
-
-Depends on / 依赖: e.lt
+/-
+**Equiv.lt_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：lt_def [LT β] (a b : α) : letI
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma lt_def [LT β] (a b : α) :
     letI := e.lt
     e a < e b ↔ a < b := Iff.rfl
 
-/--
-Definition of `max` / `max` 的定义
+/-- Transfer `Max` across an `Equiv`. -/
+/-
+**Equiv.max** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Max β] → Max α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation max
-  signature: [Max β]
-  body: e.symm (max (e a) (e b))
-
-中文:
-缩写 最大值
-  签名: [最大值 β]
-  定义体: e.symm (max (e a) (e b))
+--- 原说明 ---
+Transfer `Max` across an `Equiv`.
 -/
 protected abbrev max [Max β] : Max α where
   max a b := e.symm (max (e a) (e b))
-
-/--
-lemma `max_def` / 引理 `max_def`
-
-English:
-lemma max_def
-  given: [Max β] (a b : α)
-  proof: e.max
-    max a b = e.symm (max (e a) (e b)) := rfl
-
-中文:
-引理 max_def
-  条件: [最大值 β] (a b : α)
-  证明: e.max
-    max a b = e.symm (max (e a) (e b)) := rfl
-
-Depends on / 依赖: e.max
+/-
+**Equiv.max_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：max_def [Max β] (a b : α) : letI
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma max_def [Max β] (a b : α) :
     letI := e.max
     max a b = e.symm (max (e a) (e b)) := rfl
 
-/--
-Definition of `min` / `min` 的定义
+/-- Transfer `Min` across an `Equiv`. -/
+/-
+**Equiv.min** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Min β] → Min α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation min
-  signature: [Min β]
-  body: e.symm (min (e a) (e b))
-
-中文:
-缩写 最小值
-  签名: [最小值 β]
-  定义体: e.symm (min (e a) (e b))
+--- 原说明 ---
+Transfer `Min` across an `Equiv`.
 -/
 protected abbrev min [Min β] : Min α where
   min a b := e.symm (min (e a) (e b))
-
-/--
-lemma `min_def` / 引理 `min_def`
-
-English:
-lemma min_def
-  given: [Min β] (a b : α)
-  proof: e.min
-    min a b = e.symm (min (e a) (e b)) := rfl
-
-中文:
-引理 min_def
-  条件: [最小值 β] (a b : α)
-  证明: e.min
-    min a b = e.symm (min (e a) (e b)) := rfl
-
-Depends on / 依赖: e.min
+/-
+**Equiv.min_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：min_def [Min β] (a b : α) : letI
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma min_def [Min β] (a b : α) :
     letI := e.min
     min a b = e.symm (min (e a) (e b)) := rfl
 
-/--
-Definition of `ord` / `ord` 的定义
+/-- Transfer `Ord` across an `Equiv`. -/
+/-
+**Equiv.ord** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Ord β] → Ord α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ord
-  signature: [Ord β]
-  body: compare (e a) (e b)
-
-中文:
-缩写 ord
-  签名: [序 β]
-  定义体: compare (e a) (e b)
+--- 原说明 ---
+Transfer `Ord` across an `Equiv`.
 -/
 protected abbrev ord [Ord β] : Ord α where
   compare a b := compare (e a) (e b)
-
-/--
-lemma `ord_def` / 引理 `ord_def`
-
-English:
-lemma ord_def
-  given: [Ord β] (a b : α)
-  proof: e.ord
-    compare a b = compare (e a) (e b) := rfl
-
-中文:
-引理 ord_def
-  条件: [序 β] (a b : α)
-  证明: e.ord
-    compare a b = compare (e a) (e b) := rfl
-
-Depends on / 依赖: e.ord
+/-
+**Equiv.ord_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：ord_def [Ord β] (a b : α) : letI
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ord_def [Ord β] (a b : α) :
     letI := e.ord
     compare a b = compare (e a) (e b) := rfl
 
 end Equiv
+

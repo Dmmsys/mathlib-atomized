@@ -35,34 +35,19 @@ namespace CategoryTheory
 
 variable (Ω : Type w)
 
-/--
-Definition of `SmallCategoryOfSet` / `SmallCategoryOfSet` 的定义
+/-- Structure which allows to construct a category whose types
+of objects and morphisms are subtypes of a fixed type `Ω`. -/
+/-
+**CategoryTheory.SmallCategoryOfSet** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：SmallCategoryOfSet where /-- objects -/ obj : Set Ω /-- morphisms -/ hom (
+X Y : obj) : Set Ω /-- identity morphisms -/ id (X : obj) : hom X X /-- the comp
+osition of morphisms -/ comp {X Y Z : obj} (f : hom X Y) (g : hom Y Z) : hom X Z
+ id_comp {X Y : obj} (f : hom X Y) : comp (id _) f = f
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SmallCategoryOfSet
-  parameters: where
-  axioms and operations (7):
-    - obj : Set Ω
-    - hom((X Y : obj)) : Set Ω
-    - id((X : obj)) : hom X X
-    - comp({X Y Z : obj} (f : hom X Y) (g : hom Y Z)) : hom X Z
-    - id_comp({X Y : obj} (f : hom X Y)) : comp (id _) f = f  [default: by cat_disch]
-    - comp_id({X Y : obj} (f : hom X Y)) : comp f (id _) = f  [default: by cat_disch]
-    - assoc({X Y Z T : obj} (f : hom X Y) (g : hom Y Z) (h : hom Z T)) : comp (comp f g) h = comp f (comp g h)  [default: by cat_disch]
-
-中文:
-结构 SmallCategoryOfSet
-  参数: where
-  公理与运算 (7 个):
-    - obj : 集合 Ω
-    - hom((X Y : obj)) : 集合 Ω
-    - id((X : obj)) : hom X X
-    - comp({X Y Z : obj} (f : hom X Y) (g : hom Y Z)) : hom X Z
-    - id_comp({X Y : obj} (f : hom X Y)) : comp (id _) f = f  [默认: by cat_disch]
-    - comp_id({X Y : obj} (f : hom X Y)) : comp f (id _) = f  [默认: by cat_disch]
-    - assoc({X Y Z T : obj} (f : hom X Y) (g : hom Y Z) (h : hom Z T)) : comp (comp f g) h = comp f (comp g h)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, comp_id
+--- 原说明 ---
+Structure which allows to construct a category whose types
+of objects and morphisms are subtypes of a fixed type `Ω`.
 -/
 structure SmallCategoryOfSet where
   /-- objects -/
@@ -83,52 +68,50 @@ namespace SmallCategoryOfSet
 attribute [simp] id_comp comp_id assoc
 
 @[simps]
+/-
+**CategoryTheory.SmallCategoryOfSet.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.S
+mallCategoryOfSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : SmallCategoryOfSet Ω) : SmallCategory S.obj where
   Hom X Y := S.hom X Y
   id := S.id
   comp := S.comp
 
-/--
-Definition of `categoryFamily` / `categoryFamily` 的定义
+/-- The family of all categories such that the types of objects and
+morphisms are subtypes of a given type `Ω`. -/
+/-
+**CategoryTheory.SmallCategoryOfSet.categoryFamily** 是 Mathlib 中的一个缩写定义，位于命名空间 `
+CategoryTheory.SmallCategoryOfSet`。
+形式化陈述：categoryFamily : SmallCategoryOfSet Ω -> Type w
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation categoryFamily
-  signature: : SmallCategoryOfSet Ω -> Type w
-  body: fun S => S.obj
-
-中文:
-缩写 categoryFamily
-  签名: : SmallCategoryOfSet Ω -> 类型 w
-  定义体: fun S => S.obj
-
-Depends on / 依赖: S.obj
+--- 原说明 ---
+The family of all categories such that the types of objects and
+morphisms are subtypes of a given type `Ω`.
 -/
-abbrev categoryFamily : SmallCategoryOfSet Ω -> Type w := fun S => S.obj
+abbrev categoryFamily : SmallCategoryOfSet Ω → Type w := fun S ↦ S.obj
 
 end SmallCategoryOfSet
 
 variable (C : Type u) [Category.{v} C]
 
-/--
-Definition of `CoreSmallCategoryOfSet` / `CoreSmallCategoryOfSet` 的定义
+/-- Helper structure for the construction of a term in `SmallCategoryOfSet`.
+This involves the choice of bijections between types of objects and morphisms
+in a category `C` and subtypes of a type `Ω`. -/
+/-
+**CategoryTheory.CoreSmallCategoryOfSet** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：Type w → (C : Type u) → [CategoryTheory.Category.{v, u} C] → Type (max (ma
+x u v) w)
+参数：C : Type u；max (max u v) w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CoreSmallCategoryOfSet
-  parameters: where
-  axioms and operations (4):
-    - obj : Set Ω
-    - hom((X Y : obj)) : Set Ω
-    - objEquiv : obj ≃ C
-    - homEquiv({X Y : obj}) : hom X Y ≃ (objEquiv X ⟶ objEquiv Y)
-
-中文:
-结构 余reSmallCategoryOfSet
-  参数: where
-  公理与运算 (4 个):
-    - obj : 集合 Ω
-    - hom((X Y : obj)) : 集合 Ω
-    - objEquiv : obj ≃ C
-    - homEquiv({X Y : obj}) : hom X Y ≃ (objEquiv X ⟶ objEquiv Y)
+--- 原说明 ---
+Helper structure for the construction of a term in `SmallCategoryOfSet`.
+This involves the choice of bijections between types of objects and morphisms
+in a category `C` and subtypes of a type `Ω`.
 -/
 structure CoreSmallCategoryOfSet where
   /-- objects -/
@@ -147,26 +130,17 @@ variable {Ω C} (h : CoreSmallCategoryOfSet Ω C)
 /-- The `SmallCategoryOfSet` structure induced by a
 `CoreSmallCategoryOfSet` structure. -/
 @[simps]
-/--
-Definition of `smallCategoryOfSet` / `smallCategoryOfSet` 的定义
+/-
+**CategoryTheory.CoreSmallCategoryOfSet.smallCategoryOfSet** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.CoreSmallCategoryOfSet`。
+形式化陈述：smallCategoryOfSet : SmallCategoryOfSet Ω where obj
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition smallCategoryOfSet
-  signature: : SmallCategoryOfSet Ω where
-  body: h.obj
-  hom := h.hom
-  id X := h.homEquiv.symm (𝟙 _)
-  comp f g := h.homEquiv.symm (h.homEquiv f ≫ h.homEquiv g)
-
-中文:
-定义 smallCategoryOfSet
-  签名: : SmallCategoryOfSet Ω where
-  定义体: h.obj
-  hom := h.hom
-  id X := h.homEquiv.symm (𝟙 _)
-  comp f g := h.homEquiv.symm (h.homEquiv f ≫ h.homEquiv g)
-
-Depends on / 依赖: h.obj
+--- 原说明 ---
+The `SmallCategoryOfSet` structure induced by a
+`CoreSmallCategoryOfSet` structure.
 -/
 def smallCategoryOfSet : SmallCategoryOfSet Ω where
   obj := h.obj
@@ -178,26 +152,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- Given `h : CoreSmallCategoryOfSet Ω C`, this is the
 obvious functor `h.smallCategoryOfSet.obj ⥤ C`. -/
 @[simps!]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CategoryTheory.CoreSmallCategoryOfSet.functor** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.CoreSmallCategoryOfSet`。
+形式化陈述：functor : h.smallCategoryOfSet.obj ⥤ C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : h.smallCategoryOfSet.obj ⥤ C where
-  body: h.objEquiv
-  map := h.homEquiv
-  map_id _ := by rw [SmallCategoryOfSet.id_def]; simp
-  map_comp _ _ := by rw [SmallCategoryOfSet.comp_def]; simp
-
-中文:
-定义 functor
-  签名: : h.smallCategoryOfSet.obj ⥤ C where
-  定义体: h.objEquiv
-  map := h.homEquiv
-  map_id _ := by rw [SmallCategoryOfSet.id_def]; simp
-  map_comp _ _ := by rw [SmallCategoryOfSet.comp_def]; simp
-
-Depends on / 依赖: h.objEquiv, objEquiv
+--- 原说明 ---
+Given `h : CoreSmallCategoryOfSet Ω C`, this is the
+obvious functor `h.smallCategoryOfSet.obj ⥤ C`.
 -/
 def functor : h.smallCategoryOfSet.obj ⥤ C where
   obj := h.objEquiv
@@ -206,47 +170,28 @@ def functor : h.smallCategoryOfSet.obj ⥤ C where
   map_comp _ _ := by rw [SmallCategoryOfSet.comp_def]; simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `fullyFaithfulFunctor` / `fullyFaithfulFunctor` 的定义
+/-- Given `h : CoreSmallCategoryOfSet Ω C`,
+the obvious functor `h.smallCategoryOfSet.obj ⥤ C` is fully faithful. -/
+/-
+**CategoryTheory.CoreSmallCategoryOfSet.fullyFaithfulFunctor** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.CoreSmallCategoryOfSet`。
+形式化陈述：fullyFaithfulFunctor : h.functor.FullyFaithful where preimage
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition fullyFaithfulFunctor
-  signature: : h.functor.FullyFaithful where
-  body: h.homEquiv.symm
-
-中文:
-定义 fullyFaithfulFunctor
-  签名: : h.functor.满忠实 where
-  定义体: h.homEquiv.symm
-
-Depends on / 依赖: h.homEquiv.symm, homEquiv
+--- 原说明 ---
+Given `h : CoreSmallCategoryOfSet Ω C`,
+the obvious functor `h.smallCategoryOfSet.obj ⥤ C` is fully faithful.
 -/
 def fullyFaithfulFunctor : h.functor.FullyFaithful where
   preimage := h.homEquiv.symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: h.functor.IsEquivalence
-  body: h.fullyFaithfulFunctor.faithful
-  full := h.fullyFaithfulFunctor.full
-  essSurj.mem_essImage Y := by
-    obtain ⟨X, rfl⟩ := h.objEquiv.surjective Y
-    exact ⟨_, ⟨Iso.refl _⟩⟩
-
-中文:
-实例 :
-  签名: h.functor.是等价
-  定义体: h.fullyFaithfulFunctor.faithful
-  full := h.fullyFaithfulFunctor.full
-  essSurj.mem_essImage Y := by
-    obtain ⟨X, rfl⟩ := h.objEquiv.surjective Y
-    exact ⟨_, ⟨Iso.refl _⟩⟩
-
-Depends on / 依赖: faithful, fullyFaithfulFunctor, h.fullyFaithfulFunctor.faithful
+/-
+**CategoryTheory.CoreSmallCategoryOfSet.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.CoreSmallCategoryOfSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : h.functor.IsEquivalence where
   faithful := h.fullyFaithfulFunctor.faithful
@@ -255,62 +200,41 @@ instance : h.functor.IsEquivalence where
     obtain ⟨X, rfl⟩ := h.objEquiv.surjective Y
     exact ⟨_, ⟨Iso.refl _⟩⟩
 
-/--
-Definition of `equivalence` / `equivalence` 的定义
+/-- Given `h : CoreSmallCategoryOfSet Ω C`,
+the obvious functor `h.smallCategoryOfSet.obj ⥤ C` is an equivalence. -/
+/-
+**CategoryTheory.CoreSmallCategoryOfSet.equivalence** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.CoreSmallCategoryOfSet`。
+形式化陈述：equivalence : h.smallCategoryOfSet.obj ≌ C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CoreSmallCategoryOfSet.instIsEquivalenceElemObjSmallCateg
+oryOfSetFunctor`：∀ {Ω : Type w} {C : Type u} [inst : CategoryTheory.Category.{v,
+ u} C] (h : CategoryTheory.CoreSmallCategoryOfSet Ω C),   h.functor.IsEquival…
 
-English:
-definition equivalence
-  signature: : h.smallCategoryOfSet.obj ≌ C
-  body: h.functor.asEquivalence
-
-中文:
-定义 equivalence
-  签名: : h.smallCategoryOfSet.obj ≌ C
-  定义体: h.functor.asEquivalence
-
-Depends on / 依赖: asEquivalence, functor, h.functor.asEquivalence
+--- 原说明 ---
+Given `h : CoreSmallCategoryOfSet Ω C`,
+the obvious functor `h.smallCategoryOfSet.obj ⥤ C` is an equivalence.
 -/
 noncomputable def equivalence : h.smallCategoryOfSet.obj ≌ C :=
   h.functor.asEquivalence
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `arrowEquiv` / `arrowEquiv` 的定义
+/-- Given `h : CoreSmallCategoryOfSet Ω C`, the equivalence of categories
+`h.smallCategoryOfSet.obj ≌ C` is actually an isomorphism: it induces
+a bijection on the type of arrows. -/
+/-
+**CategoryTheory.CoreSmallCategoryOfSet.arrowEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.CoreSmallCategoryOfSet`。
+形式化陈述：arrowEquiv : Arrow h.smallCategoryOfSet.obj ≃ Arrow C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowEquiv
-  signature: : Arrow h.smallCategoryOfSet.obj ≃ Arrow C
-  body: Equiv.ofBijective h.functor.mapArrow.obj (by
-    constructor
-    · rintro ⟨x, y, f⟩ ⟨x', y', g⟩ hfg
-      obtain rfl : x = x' := by simpa using! congr_arg Arrow.leftFunc.obj hfg
-      obtain rfl : y = y' := by simpa using! congr_arg Arrow.rightFunc.obj hfg
-      obtain rfl : f = g := by simpa [Arrow.mk_eq_mk_iff] using! hfg
-      rfl
-    · rintro ⟨X, Y, f⟩
-      obtain ⟨x, rfl⟩ := h.objEquiv.surjective X
-      obtain ⟨y, rfl⟩ := h.objEquiv.surjective Y
-      obtain ⟨f, rfl⟩ := h.homEquiv.surjective f
-      exact ⟨Arrow.mk f, rfl⟩)
-
-中文:
-定义 arrowEquiv
-  签名: : 箭头 h.smallCategoryOfSet.obj ≃ 箭头 C
-  定义体: Equiv.ofBijective h.functor.mapArrow.obj (by
-    constructor
-    · rintro ⟨x, y, f⟩ ⟨x', y', g⟩ hfg
-      obtain rfl : x = x' := by simpa using! congr_arg Arrow.leftFunc.obj hfg
-      obtain rfl : y = y' := by simpa using! congr_arg Arrow.rightFunc.obj hfg
-      obtain rfl : f = g := by simpa [Arrow.mk_eq_mk_iff] using! hfg
-      rfl
-    · rintro ⟨X, Y, f⟩
-      obtain ⟨x, rfl⟩ := h.objEquiv.surjective X
-      obtain ⟨y, rfl⟩ := h.objEquiv.surjective Y
-      obtain ⟨f, rfl⟩ := h.homEquiv.surjective f
-      exact ⟨Arrow.mk f, rfl⟩)
-
-Depends on / 依赖: Arrow.leftFunc.obj, Arrow.mk, Arrow.mk_eq_mk_iff, Arrow.rightFunc.obj, Equiv.ofBijective, congr_arg, functor, h.functor.mapArrow.obj, h.homEquiv.surjective, h.objEquiv.surjective, homEquiv, leftFunc, mapArrow, mk_eq_mk_iff, objEquiv, ofBijective, rightFunc, surjective
+--- 原说明 ---
+Given `h : CoreSmallCategoryOfSet Ω C`, the equivalence of categories
+`h.smallCategoryOfSet.obj ≌ C` is actually an isomorphism: it induces
+a bijection on the type of arrows.
 -/
 noncomputable def arrowEquiv : Arrow h.smallCategoryOfSet.obj ≃ Arrow C :=
   Equiv.ofBijective h.functor.mapArrow.obj (by
@@ -330,44 +254,30 @@ end CoreSmallCategoryOfSet
 
 namespace SmallCategoryOfSet
 
-/--
-lemma `exists_equivalence` / 引理 `exists_equivalence`
-
-English:
-lemma exists_equivalence
-  statement: (C : Type u) [Category.{v} C]
-  proof: by
-  let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
-  let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
-  let e := Equiv.ofInjective _ f₁.injective
-  let h : CoreSmallCategoryOfSet Ω C :=
-    { obj := Set.range f₁
-      hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
-      objEquiv := e.symm
-      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
-  exact ⟨h.smallCategoryOfSet, ⟨h.equivalence⟩⟩
-
-中文:
-引理 存在_equivalence
-  结论: (C : 类型u) [范畴.{v} C]
-  证明: by
-  let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
-  let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
-  let e := Equiv.ofInjective _ f₁.injective
-  let h : CoreSmallCategoryOfSet Ω C :=
-    { obj := Set.range f₁
-      hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
-      objEquiv := e.symm
-      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
-  exact ⟨h.smallCategoryOfSet, ⟨h.equivalence⟩⟩
-
-Depends on / 依赖: Cardinal, Cardinal.lift_mk_le, CoreSmallCategoryOfSet, Equiv.ofInjective, Set.range, e.symm, equivalence, h.equivalence, h.smallCategoryOfSet, homEquiv, injective, lift_mk_le, objEquiv, ofInjective, smallCategoryOfSet
+/-
+**CategoryTheory.SmallCategoryOfSet.exists_equivalence** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.SmallCategoryOfSet`。
+形式化陈述：exists_equivalence (C : Type u) [Category.{v} C] (h₁ : Cardinal.lift.{w} (
+Cardinal.mk C) <= Cardinal.lift.{u} (Cardinal.mk Ω)) (h₂ : forall (X Y : C), Car
+dinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <= Cardinal.lift.{v} (Cardinal.mk Ω)) : exi
+sts (h : SmallCategoryOfSet Ω), Nonempty (categoryFamily Ω h ≌ C)
+参数：C : Type u；h₁ : Cardinal.lift.{w} (Cardinal.mk C) <= Cardinal.lift.{u} (Cardi
+nal.mk Ω)；h₂ : forall (X Y : C), Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <= Card
+inal.lift.{v} (Cardinal.mk Ω)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.lift_mk_le'`：lift_mk_le' {α : Type u} {β : Type v} : lift.{v} #
+α <= lift.{u} #β ↔ Nonempty (α ↪ β)
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma exists_equivalence (C : Type u) [Category.{v} C]
-    (h₁ : Cardinal.lift.{w} (Cardinal.mk C) <= Cardinal.lift.{u} (Cardinal.mk Ω))
-    (h₂ : forall (X Y : C), Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <=
+    (h₁ : Cardinal.lift.{w} (Cardinal.mk C) ≤ Cardinal.lift.{u} (Cardinal.mk Ω))
+    (h₂ : ∀ (X Y : C), Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) ≤
       Cardinal.lift.{v} (Cardinal.mk Ω)) :
-    exists (h : SmallCategoryOfSet Ω), Nonempty (categoryFamily Ω h ≌ C) := by
+    ∃ (h : SmallCategoryOfSet Ω), Nonempty (categoryFamily Ω h ≌ C) := by
   let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
   let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
   let e := Equiv.ofInjective _ f₁.injective
@@ -380,20 +290,19 @@ lemma exists_equivalence (C : Type u) [Category.{v} C]
 
 end SmallCategoryOfSet
 
-/--
-Definition of `SmallCategoryCardinalLT` / `SmallCategoryCardinalLT` 的定义
+/-- Index set of a representative set of all categories `C` which satisfy
+`HasCardinalLT C κ`, see `SmallCategoryCardinalLT.categoryFamily`. -/
+/-
+**CategoryTheory.SmallCategoryCardinalLT** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：SmallCategoryCardinalLT (κ : Cardinal.{w}) : Type w
+参数：κ : Cardinal.{w}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SmallCategoryCardinalLT
-  signature: (κ : Cardinal.{w})
-  body: { S : SmallCategoryOfSet κ.ord.ToType // HasCardinalLT (Arrow S.obj) κ}
-
-中文:
-定义 SmallCategoryCardinalLT
-  签名: (κ : 基数.{w})
-  定义体: { S : SmallCategoryOfSet κ.ord.ToType // HasCardinalLT (Arrow S.obj) κ}
-
-Depends on / 依赖: HasCardinalLT, S.obj, SmallCategoryOfSet, ToType, ord.ToType
+--- 原说明 ---
+Index set of a representative set of all categories `C` which satisfy
+`HasCardinalLT C κ`, see `SmallCategoryCardinalLT.categoryFamily`.
 -/
 def SmallCategoryCardinalLT (κ : Cardinal.{w}) : Type w :=
   { S : SmallCategoryOfSet κ.ord.ToType // HasCardinalLT (Arrow S.obj) κ}
@@ -402,118 +311,86 @@ namespace SmallCategoryCardinalLT
 
 variable (κ : Cardinal.{w})
 
-/--
-Definition of `categoryFamily` / `categoryFamily` 的定义
+/-- Given a cardinal `κ`, this is a representative family of all categories `C`
+such that `HasCardinalLT C κ`. -/
+/-
+**CategoryTheory.SmallCategoryCardinalLT.categoryFamily** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CategoryTheory.SmallCategoryCardinalLT`。
+形式化陈述：categoryFamily (S : SmallCategoryCardinalLT κ) : Type w
+参数：S : SmallCategoryCardinalLT κ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation categoryFamily
-  signature: (S : SmallCategoryCardinalLT κ)
-  body: S.1.obj
-
-中文:
-缩写 categoryFamily
-  签名: (S : SmallCategoryCardinalLT κ)
-  定义体: S.1.obj
+--- 原说明 ---
+Given a cardinal `κ`, this is a representative family of all categories `C`
+such that `HasCardinalLT C κ`.
 -/
 abbrev categoryFamily (S : SmallCategoryCardinalLT κ) : Type w := S.1.obj
-
-/--
-lemma `hasCardinalLT` / 引理 `hasCardinalLT`
-
-English:
-lemma hasCardinalLT
-  given: (S : SmallCategoryCardinalLT κ)
-  proof: S.2
-
-中文:
-引理 hasCardinalLT
-  条件: (S : SmallCategoryCardinalLT κ)
-  证明: S.2
+/-
+**CategoryTheory.SmallCategoryCardinalLT.hasCardinalLT** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.SmallCategoryCardinalLT`。
+形式化陈述：hasCardinalLT (S : SmallCategoryCardinalLT κ) : HasCardinalLT (Arrow (cate
+goryFamily κ S)) κ
+参数：S : SmallCategoryCardinalLT κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma hasCardinalLT (S : SmallCategoryCardinalLT κ) :
     HasCardinalLT (Arrow (categoryFamily κ S)) κ := S.2
-
-/--
-lemma `exists_equivalence` / 引理 `exists_equivalence`
-
-English:
-lemma exists_equivalence
-  given: (C : Type u) [Category.{v} C] (hC : HasCardinalLT (Arrow C) κ)
-  proof: by
-  let Ω := κ.ord.ToType
-  have ι : Arrow C ↪ Ω := Nonempty.some (by
-    rw [← Cardinal.lift_mk_le']
-    simpa [Ω] using hC.le)
-  have h₁ : Cardinal.lift.{w} (Cardinal.mk C) <=
-      Cardinal.lift.{u} (Cardinal.mk Ω) := by
-    rw [Cardinal.lift_mk_le']
-    refine ⟨Function.Embedding.trans { toFun X := Arrow.mk (𝟙 X), inj' := ?_ } ι⟩
-    intro X Y h
-    exact congr_arg Arrow.leftFunc.obj h
-  have h₂ (X Y : C) : Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <=
-      Cardinal.lift.{v} (Cardinal.mk Ω) := by
-    rw [Cardinal.lift_mk_le']
-    refine ⟨Function.Embedding.trans { toFun f := Arrow.mk f, inj' := ?_ } ι⟩
-    intro f g h
-    simpa [Arrow.mk_eq_mk_iff] using h
-  let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
-  let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
-  let e := Equiv.ofInjective _ f₁.injective
-  let h : CoreSmallCategoryOfSet Ω C :=
-    { obj := Set.range f₁
-      hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
-      objEquiv := e.symm
-      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
-  refine ⟨⟨h.smallCategoryOfSet, ?_⟩, ⟨h.equivalence⟩⟩
-  rwa [hasCardinalLT_iff_of_equiv h.arrowEquiv]
-
-中文:
-引理 存在_equivalence
-  条件: (C : 类型u) [范畴.{v} C] (hC : HasCardinalLT (箭头 C) κ)
-  证明: by
-  let Ω := κ.ord.ToType
-  have ι : Arrow C ↪ Ω := Nonempty.some (by
-    rw [← Cardinal.lift_mk_le']
-    simpa [Ω] using hC.le)
-  have h₁ : Cardinal.lift.{w} (Cardinal.mk C) <=
-      Cardinal.lift.{u} (Cardinal.mk Ω) := by
-    rw [Cardinal.lift_mk_le']
-    refine ⟨Function.Embedding.trans { toFun X := Arrow.mk (𝟙 X), inj' := ?_ } ι⟩
-    intro X Y h
-    exact congr_arg Arrow.leftFunc.obj h
-  have h₂ (X Y : C) : Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <=
-      Cardinal.lift.{v} (Cardinal.mk Ω) := by
-    rw [Cardinal.lift_mk_le']
-    refine ⟨Function.Embedding.trans { toFun f := Arrow.mk f, inj' := ?_ } ι⟩
-    intro f g h
-    simpa [Arrow.mk_eq_mk_iff] using h
-  let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
-  let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
-  let e := Equiv.ofInjective _ f₁.injective
-  let h : CoreSmallCategoryOfSet Ω C :=
-    { obj := Set.range f₁
-      hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
-      objEquiv := e.symm
-      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
-  refine ⟨⟨h.smallCategoryOfSet, ?_⟩, ⟨h.equivalence⟩⟩
-  rwa [hasCardinalLT_iff_of_equiv h.arrowEquiv]
-
-Depends on / 依赖: Arrow.leftFunc.obj, Arrow.mk, Cardinal, Cardinal.lift, Cardinal.lift_mk_le, Cardinal.mk, Embedding, Function, Function.Embedding.trans, Nonempty, Nonempty.some, ToType, congr_arg, hC.le, leftFunc, lift_mk_le, ord.ToType
+/-
+**CategoryTheory.SmallCategoryCardinalLT.exists_equivalence** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.SmallCategoryCardinalLT`。
+形式化陈述：exists_equivalence (C : Type u) [Category.{v} C] (hC : HasCardinalLT (Arro
+w C) κ) : exists (S : SmallCategoryCardinalLT κ), Nonempty (categoryFamily κ S ≌
+ C)
+参数：C : Type u；hC : HasCardinalLT (Arrow C) κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_mk_le'`：lift_mk_le' {α : Type u} {β : Type v} : lift.{v} #
+α <= lift.{u} #β ↔ Nonempty (α ↪ β)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.mk_toType`：∀ (o : Ordinal.{u_1}), Cardinal.mk o.ToType = o.card
+· 使用定理 `Cardinal.card_ord`：card_ord (c) : (ord c).card = c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `hasCardinalLT_iff_of_equiv`：hasCardinalLT_iff_of_equiv {X : Type u} {Y :
+ Type u'} (e : X ≃ Y) (κ : Cardinal.{v}) : HasCardinalLT X κ ↔ HasCardinalLT Y κ
 -/
 lemma exists_equivalence (C : Type u) [Category.{v} C] (hC : HasCardinalLT (Arrow C) κ) :
-    exists (S : SmallCategoryCardinalLT κ),
+    ∃ (S : SmallCategoryCardinalLT κ),
       Nonempty (categoryFamily κ S ≌ C) := by
   let Ω := κ.ord.ToType
   have ι : Arrow C ↪ Ω := Nonempty.some (by
     rw [← Cardinal.lift_mk_le']
     simpa [Ω] using hC.le)
-  have h₁ : Cardinal.lift.{w} (Cardinal.mk C) <=
+  have h₁ : Cardinal.lift.{w} (Cardinal.mk C) ≤
       Cardinal.lift.{u} (Cardinal.mk Ω) := by
     rw [Cardinal.lift_mk_le']
     refine ⟨Function.Embedding.trans { toFun X := Arrow.mk (𝟙 X), inj' := ?_ } ι⟩
     intro X Y h
     exact congr_arg Arrow.leftFunc.obj h
-  have h₂ (X Y : C) : Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <=
+  have h₂ (X Y : C) : Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) ≤
       Cardinal.lift.{v} (Cardinal.mk Ω) := by
     rw [Cardinal.lift_mk_le']
     refine ⟨Function.Embedding.trans { toFun f := Arrow.mk f, inj' := ?_ } ι⟩
@@ -533,3 +410,4 @@ lemma exists_equivalence (C : Type u) [Category.{v} C] (hC : HasCardinalLT (Arro
 end SmallCategoryCardinalLT
 
 end CategoryTheory
+

@@ -17,45 +17,17 @@ public section
 variable {α : Type*}
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: α] : Fintype (WithTop α)
-  body: inferInstanceAs Fintype (Option α)
-
-@[to_dual]
-
-中文:
-实例 [有限类型
-  签名: α] : 有限类型 (WithTop α)
-  定义体: inferInstanceAs Fintype (Option α)
-
-@[to_dual]
-
-Depends on / 依赖: Fintype
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fintype α] : Fintype (WithTop α) :=
-inferInstanceAs Fintype (Option α)
+  inferInstanceAs <| Fintype (Option α)
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: α] : Finite (WithTop α)
-  body: have := Fintype.ofFinite α
-  Finite.of_fintype _
-
-中文:
-实例 [有限
-  签名: α] : 有限 (WithTop α)
-  定义体: have := Fintype.ofFinite α
-  Finite.of_fintype _
-
-Depends on / 依赖: Finite, Finite.of_fintype, Fintype, Fintype.ofFinite, ofFinite, of_fintype
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite α] : Finite (WithTop α) :=
   have := Fintype.ofFinite α

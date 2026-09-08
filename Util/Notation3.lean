@@ -6,7 +6,7 @@ Authors: Mario Carneiro, Kyle Miller
 module
 
 public meta import Lean.Elab.MacroArgUtil
-public meta import Lean.PrettyPrinter.Delaborator -- shake: keep (dependency of elaborator output)
+public meta import Lean.PrettyPrinter.Delaborator  -- shake: keep (dependency of elaborator output)
 public meta import Mathlib.Lean.PrettyPrinter.Delaborator
 public meta import Batteries.Lean.Syntax
 public meta import Lean.PrettyPrinter.Delaborator.Builtins
@@ -49,38 +49,38 @@ macro_rules
 macro_rules
   | `(expand_binders% ($x => $term) ($y:ident $[: $ty]?) $binders*, $res) => do
     let ty := ty.getD (← `(_))
-    term.replaceM fun x' => do
+    term.replaceM fun x' ↦ do
       unless x == x' do return none
-      `(fun $y:ident : $ty => expand_binders% ($x => $term) $[$binders]*, $res)
+      `(fun $y:ident : $ty ↦ expand_binders% ($x => $term) $[$binders]*, $res)
   | `(expand_binders% ($x => $term) (_%$ph $[: $ty]?) $binders*, $res) => do
     let ty := ty.getD (← `(_))
-    term.replaceM fun x' => do
+    term.replaceM fun x' ↦ do
       unless x == x' do return none
-      `(fun _%$ph : $ty => expand_binders% ($x => $term) $[$binders]*, $res)
+      `(fun _%$ph : $ty ↦ expand_binders% ($x => $term) $[$binders]*, $res)
   | `(expand_binders% ($x => $term) ($y:binderIdent $pred:binderPred) $binders*, $res) => do
     let y ←
       match y with
       | `(binderIdent| $y:ident) => pure y
-      | `(binderIdent| _) => Term.mkFreshIdent y
-      | _ => Macro.throwUnsupported
-    term.replaceM fun x' => do
+      | `(binderIdent| _)        => Term.mkFreshIdent y
+      | _                        => Macro.throwUnsupported
+    term.replaceM fun x' ↦ do
       unless x == x' do return none
-      `(fun $y:ident => expand_binders% ($x => $term) (h : satisfies_binder_pred% $y $pred)
- [$binders]*, res)
+      `(fun $y:ident ↦ expand_binders% ($x => $term) (h : satisfies_binder_pred% $y $pred)
+        $[$binders]*, $res)
 
 macro (name := expandFoldl) "expand_foldl% "
   "(" x:ident ppSpace y:ident " => " term:term ") " init:term:max " [" args:term,* "]" : term =>
-  args.getElems.foldlM (init := init) fun res arg => do
-    term.replaceM fun e =>
+  args.getElems.foldlM (init := init) fun res arg ↦ do
+    term.replaceM fun e ↦
       return if e == x then some res else if e == y then some arg else none
 macro (name := expandFoldr) "expand_foldr% "
   "(" x:ident ppSpace y:ident " => " term:term ") " init:term:max " [" args:term,* "]" : term =>
-  args.getElems.foldrM (init := init) fun arg res => do
-    term.replaceM fun e =>
+  args.getElems.foldrM (init := init) fun arg res ↦ do
+    term.replaceM fun e ↦
       return if e == x then some arg else if e == y then some res else none
 
 /-- Keywording indicating whether to use a left- or right-fold. -/
-syntax foldKind := &"foldl" > &"foldr"
+syntax foldKind := &"foldl" <|> &"foldr"
 /-- `notation3` argument matching `extBinders`. -/
 syntax bindersItem := atomic("(" "..." ")")
 /-- `notation3` argument simulating a Lean 3 fold notation. -/
@@ -92,7 +92,7 @@ syntax identOptScoped :=
 /-- `notation3` argument. -/
 -- Note: there is deliberately no ppSpace between items
 -- so that the space in the literals themselves stands out
-syntax notation3Item := strLit > bindersItem > identOptScoped > foldAction
+syntax notation3Item := strLit <|> bindersItem <|> identOptScoped <|> foldAction
 
 /-! ### Expression matching
 
@@ -104,24 +104,14 @@ and whether it is `Prop`-valued, which are not things we can answer once we pass
 to app unexpanders).
 -/
 
-/--
-Definition of `MatchState` / `MatchState` 的定义
+/-- The dynamic state of a `Matcher`. -/
+/-
+**Mathlib.Notation3.MatchState** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MatchState
-  parameters: where
-  axioms and operations (3):
-    - vars : Std.HashMap Name (SubExpr × LocalContext × LocalInstances)
-    - scopeState : Option (Array (TSyntax ``extBinderParenthesized))
-    - foldState : Std.HashMap Name (Array Term)
-
-中文:
-结构 MatchState
-  参数: where
-  公理与运算 (3 个):
-    - vars : Std.HashMap Name (SubExpr × LocalContext × LocalInstances)
-    - scopeState : 选项类型 (数组 (TSyntax ``extBinderParenthesized))
-    - foldState : Std.HashMap Name (数组 项)
+--- 原说明 ---
+The dynamic state of a `Matcher`.
 -/
 structure MatchState where
   /-- This stores the assignments of variables to subexpressions (and their contexts)
@@ -135,388 +125,289 @@ structure MatchState where
   `foldl` and `foldr` expressions. For `foldl`, the arrays are stored in reverse order. -/
   foldState : Std.HashMap Name (Array Term)
 
-/--
-Definition of `Matcher` / `Matcher` 的定义
+/-- A matcher is a delaboration function that transforms `MatchState`s. -/
+/-
+**Mathlib.Notation3.Matcher** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Matcher
-  body: MatchState -> DelabM MatchState
-  deriving Inhabited
-
-中文:
-定义 Matcher
-  定义体: MatchState -> DelabM MatchState
-  deriving Inhabited
+--- 原说明 ---
+A matcher is a delaboration function that transforms `MatchState`s.
 -/
-@[expose] def Matcher := MatchState -> DelabM MatchState
+@[expose] def Matcher := MatchState → DelabM MatchState
   deriving Inhabited
 
-/--
-Definition of `MatchState.empty` / `MatchState.empty` 的定义
+/-- The initial state. -/
+/-
+**Mathlib.Notation3.MatchState.empty** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation
+3.MatchState`。
+形式化陈述：Mathlib.Notation3.MatchState
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchState.empty
-  signature: : MatchState where
-  body: {}
-  scopeState := none
-  foldState := {}
-
-中文:
-定义 MatchState.empty
-  签名: : MatchState where
-  定义体: {}
-  scopeState := none
-  foldState := {}
+--- 原说明 ---
+The initial state.
 -/
 def MatchState.empty : MatchState where
   vars := {}
   scopeState := none
   foldState := {}
 
-/--
-Definition of `MatchState.withVar` / `MatchState.withVar` 的定义
+/-- Evaluate `f` with the given variable's value as the `SubExpr` and within that subexpression's
+saved context. Fails if the variable has no value. -/
+/-
+**Mathlib.Notation3.MatchState.withVar** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notati
+on3.MatchState`。
+形式化陈述：{α : Type} →   Mathlib.Notation3.MatchState → Name → PrettyPrinter.Delabor
+ator.DelabM α → PrettyPrinter.Delaborator.DelabM α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchState.withVar
-  signature: {α : Type} (s : MatchState) (name : Name)
-  body: do
-  let some (se, lctx, linsts) := s.vars[name]? | failure
-withLCtx lctx linsts withTheReader SubExpr (fun _ => se) m
-
-中文:
-定义 MatchState.withVar
-  签名: {α : 类型} (s : MatchState) (name : Name)
-  定义体: do
-  let some (se, lctx, linsts) := s.vars[name]? | failure
-withLCtx lctx linsts withTheReader SubExpr (fun _ => se) m
+--- 原说明 ---
+Evaluate `f` with the given variable's value as the `SubExpr` and within that su
+bexpression's
+saved context. Fails if the variable has no value.
 -/
 def MatchState.withVar {α : Type} (s : MatchState) (name : Name)
     (m : DelabM α) : DelabM α := do
   let some (se, lctx, linsts) := s.vars[name]? | failure
-withLCtx lctx linsts withTheReader SubExpr (fun _ => se) m
+  withLCtx lctx linsts <| withTheReader SubExpr (fun _ => se) <| m
 
-/--
-Definition of `MatchState.delabVar` / `MatchState.delabVar` 的定义
+/-- Delaborate the given variable's value. Fails if the variable has no value.
+If `checkNot` is provided, then checks that the expression being delaborated is not
+the given one (this is used to prevent infinite loops). -/
+/-
+**Mathlib.Notation3.MatchState.delabVar** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notat
+ion3.MatchState`。
+形式化陈述：Mathlib.Notation3.MatchState → Name → optParam (Option Expr) none → Pretty
+Printer.Delaborator.DelabM Term
+参数：Option Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchState.delabVar
-  signature: (s : MatchState) (name : Name) (checkNot? : Option Expr := none)
-  body: s.withVar name do
-    if let some checkNot := checkNot? then
-guard checkNot != (← getExpr)
-    delab
-
-中文:
-定义 MatchState.delabVar
-  签名: (s : MatchState) (name : Name) (checkNot? : 选项类型 Expr := none)
-  定义体: s.withVar name do
-    if let some checkNot := checkNot? then
-guard checkNot != (← getExpr)
-    delab
+--- 原说明 ---
+Delaborate the given variable's value. Fails if the variable has no value.
+If `checkNot` is provided, then checks that the expression being delaborated is 
+not
+the given one (this is used to prevent infinite loops).
 -/
 def MatchState.delabVar (s : MatchState) (name : Name) (checkNot? : Option Expr := none) :
     DelabM Term :=
   s.withVar name do
     if let some checkNot := checkNot? then
-guard checkNot != (← getExpr)
+      guard <| checkNot != (← getExpr)
     delab
 
-/--
-Definition of `MatchState.captureSubexpr` / `MatchState.captureSubexpr` 的定义
+/-- Assign a variable to the current `SubExpr`, capturing the local context. -/
+/-
+**Mathlib.Notation3.MatchState.captureSubexpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Notation3.MatchState`。
+形式化陈述：Mathlib.Notation3.MatchState → Name → PrettyPrinter.Delaborator.DelabM Mat
+hlib.Notation3.MatchState
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchState.captureSubexpr
-  signature: (s : MatchState) (name : Name)
-  body: do
-  return {s with vars := s.vars.insert name (← readThe SubExpr, ← getLCtx, ← getLocalInstances)}
-
-中文:
-定义 MatchState.captureSubexpr
-  签名: (s : MatchState) (name : Name)
-  定义体: do
-  return {s with vars := s.vars.insert name (← readThe SubExpr, ← getLCtx, ← getLocalInstances)}
+--- 原说明 ---
+Assign a variable to the current `SubExpr`, capturing the local context.
 -/
 def MatchState.captureSubexpr (s : MatchState) (name : Name) : DelabM MatchState := do
   return {s with vars := s.vars.insert name (← readThe SubExpr, ← getLCtx, ← getLocalInstances)}
 
-/--
-Definition of `MatchState.getFoldArray` / `MatchState.getFoldArray` 的定义
+/-- Get the accumulated array of delaborated terms for a given foldr/foldl.
+Returns `#[]` if nothing has been pushed yet. -/
+/-
+**Mathlib.Notation3.MatchState.getFoldArray** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.N
+otation3.MatchState`。
+形式化陈述：Mathlib.Notation3.MatchState → Name → Array Term
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchState.getFoldArray
-  signature: (s : MatchState) (name : Name)
-  body: s.foldState[name]?.getD #[]
-
-中文:
-定义 MatchState.getFoldArray
-  签名: (s : MatchState) (name : Name)
-  定义体: s.foldState[name]?.getD #[]
-
-Depends on / 依赖: foldState, s.foldState
+--- 原说明 ---
+Get the accumulated array of delaborated terms for a given foldr/foldl.
+Returns `#[]` if nothing has been pushed yet.
 -/
 def MatchState.getFoldArray (s : MatchState) (name : Name) : Array Term :=
   s.foldState[name]?.getD #[]
 
-/--
-Definition of `MatchState.getBinders` / `MatchState.getBinders` 的定义
+/-- Get the accumulated array of delaborated terms for a given foldr/foldl.
+Returns `#[]` if nothing has been pushed yet. -/
+/-
+**Mathlib.Notation3.MatchState.getBinders** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Not
+ation3.MatchState`。
+形式化陈述：Mathlib.Notation3.MatchState → Array (TSyntax `Batteries.ExtendedBinder.ex
+tBinderParenthesized)
+参数：TSyntax `Batteries.ExtendedBinder.extBinderParenthesized。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchState.getBinders
-  signature: (s : MatchState)
-  body: s.scopeState.getD #[]
-
-中文:
-定义 MatchState.getBinders
-  签名: (s : MatchState)
-  定义体: s.scopeState.getD #[]
-
-Depends on / 依赖: s.scopeState.getD, scopeState
+--- 原说明 ---
+Get the accumulated array of delaborated terms for a given foldr/foldl.
+Returns `#[]` if nothing has been pushed yet.
 -/
 def MatchState.getBinders (s : MatchState) : Array (TSyntax ``extBinderParenthesized) :=
   s.scopeState.getD #[]
 
-/--
-Definition of `MatchState.pushFold` / `MatchState.pushFold` 的定义
+/-- Push a delaborated term onto a foldr/foldl array. -/
+/-
+**Mathlib.Notation3.MatchState.pushFold** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notat
+ion3.MatchState`。
+形式化陈述：Mathlib.Notation3.MatchState → Name → Term → Mathlib.Notation3.MatchState
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchState.pushFold
-  signature: (s : MatchState) (name : Name) (t : Term)
-  body: let ts := (s.getFoldArray name).push t
-  {s with foldState := s.foldState.insert name ts}
-
-中文:
-定义 MatchState.pushFold
-  签名: (s : MatchState) (name : Name) (t : 项)
-  定义体: let ts := (s.getFoldArray name).push t
-  {s with foldState := s.foldState.insert name ts}
-
-Depends on / 依赖: foldState, getFoldArray, insert, s.foldState.insert, s.getFoldArray
+--- 原说明 ---
+Push a delaborated term onto a foldr/foldl array.
 -/
 def MatchState.pushFold (s : MatchState) (name : Name) (t : Term) : MatchState :=
   let ts := (s.getFoldArray name).push t
   {s with foldState := s.foldState.insert name ts}
 
-/--
-Definition of `matchVar` / `matchVar` 的定义
+/-- Matcher that assigns the current `SubExpr` into the match state;
+if a value already exists, then it checks for equality. -/
+/-
+**Mathlib.Notation3.matchVar** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：matchVar (c : Name) : Matcher
+参数：c : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchVar
-  signature: (c : Name)
-  body: fun s => do
-  if let some (se, _, _) := s.vars[c]? then
-guard se.expr == (← getExpr)
-    return s
-  else
-    s.captureSubexpr c
-
-中文:
-定义 matchVar
-  签名: (c : Name)
-  定义体: fun s => do
-  if let some (se, _, _) := s.vars[c]? then
-guard se.expr == (← getExpr)
-    return s
-  else
-    s.captureSubexpr c
+--- 原说明 ---
+Matcher that assigns the current `SubExpr` into the match state;
+if a value already exists, then it checks for equality.
 -/
 def matchVar (c : Name) : Matcher := fun s => do
   if let some (se, _, _) := s.vars[c]? then
-guard se.expr == (← getExpr)
+    guard <| se.expr == (← getExpr)
     return s
   else
     s.captureSubexpr c
 
-/--
-Definition of `matchExpr` / `matchExpr` 的定义
+/-- Matcher for an expression satisfying a given predicate. -/
+/-
+**Mathlib.Notation3.matchExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：matchExpr (p : Expr -> Bool) : Matcher
+参数：p : Expr -> Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchExpr
-  signature: (p : Expr -> Bool)
-  body: fun s => do
-guard p (← getExpr)
-  return s
-
-中文:
-定义 matchExpr
-  签名: (p : Expr -> 布尔值)
-  定义体: fun s => do
-guard p (← getExpr)
-  return s
+--- 原说明 ---
+Matcher for an expression satisfying a given predicate.
 -/
-def matchExpr (p : Expr -> Bool) : Matcher := fun s => do
-guard p (← getExpr)
+def matchExpr (p : Expr → Bool) : Matcher := fun s => do
+  guard <| p (← getExpr)
   return s
 
-/--
-Definition of `matchFVar` / `matchFVar` 的定义
+/-- Matcher for `Expr.fvar`.
+It checks that the user name agrees and that the type of the expression is matched by `matchTy`. -/
+/-
+**Mathlib.Notation3.matchFVar** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：matchFVar (userName : Name) (matchTy : Matcher) : Matcher
+参数：userName : Name；matchTy : Matcher。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchFVar
-  signature: (userName : Name) (matchTy : Matcher)
-  body: fun s => do
-  let .fvar fvarId ← getExpr | failure
-guard userName == (← fvarId.getUserName)
-  withType (matchTy s)
-
-中文:
-定义 matchFVar
-  签名: (userName : Name) (matchTy : Matcher)
-  定义体: fun s => do
-  let .fvar fvarId ← getExpr | failure
-guard userName == (← fvarId.getUserName)
-  withType (matchTy s)
+--- 原说明 ---
+Matcher for `Expr.fvar`.
+It checks that the user name agrees and that the type of the expression is match
+ed by `matchTy`.
 -/
 def matchFVar (userName : Name) (matchTy : Matcher) : Matcher := fun s => do
   let .fvar fvarId ← getExpr | failure
-guard userName == (← fvarId.getUserName)
+  guard <| userName == (← fvarId.getUserName)
   withType (matchTy s)
 
-/--
-Definition of `matchTypeOf` / `matchTypeOf` 的定义
+/-- Matcher that checks that the type of the expression is matched by `matchTy`. -/
+/-
+**Mathlib.Notation3.matchTypeOf** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：matchTypeOf (matchTy : Matcher) : Matcher
+参数：matchTy : Matcher。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchTypeOf
-  signature: (matchTy : Matcher)
-  body: fun s => do
-  withType (matchTy s)
-
-中文:
-定义 matchTypeOf
-  签名: (matchTy : Matcher)
-  定义体: fun s => do
-  withType (matchTy s)
+--- 原说明 ---
+Matcher that checks that the type of the expression is matched by `matchTy`.
 -/
 def matchTypeOf (matchTy : Matcher) : Matcher := fun s => do
   withType (matchTy s)
 
-/--
-Definition of `natLitMatcher` / `natLitMatcher` 的定义
+/-- Matches raw `Nat` literals. -/
+/-
+**Mathlib.Notation3.natLitMatcher** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：natLitMatcher (n : Nat) : Matcher
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natLitMatcher
-  signature: (n : Nat)
-  body: fun s => do
-guard (← getExpr).rawNatLit? == n
-  return s
-
-中文:
-定义 natLitMatcher
-  签名: (n : 自然数)
-  定义体: fun s => do
-guard (← getExpr).rawNatLit? == n
-  return s
+--- 原说明 ---
+Matches raw `Nat` literals.
 -/
 def natLitMatcher (n : Nat) : Matcher := fun s => do
-guard (← getExpr).rawNatLit? == n
+  guard <| (← getExpr).rawNatLit? == n
   return s
 
-/--
-Definition of `matchApp` / `matchApp` 的定义
+/-- Matches applications. -/
+/-
+**Mathlib.Notation3.matchApp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：matchApp (matchFun matchArg : Matcher) : Matcher
+参数：matchFun matchArg : Matcher。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchApp
-  signature: (matchFun matchArg : Matcher)
-  body: fun s => do
-guard (← getExpr).isApp
-let s ← withAppFn matchFun s
-let s ← withAppArg matchArg s
-  return s
-
-中文:
-定义 matchApp
-  签名: (matchFun matchArg : Matcher)
-  定义体: fun s => do
-guard (← getExpr).isApp
-let s ← withAppFn matchFun s
-let s ← withAppArg matchArg s
-  return s
+--- 原说明 ---
+Matches applications.
 -/
 def matchApp (matchFun matchArg : Matcher) : Matcher := fun s => do
-guard (← getExpr).isApp
-let s ← withAppFn matchFun s
-let s ← withAppArg matchArg s
+  guard <| (← getExpr).isApp
+  let s ← withAppFn <| matchFun s
+  let s ← withAppArg <| matchArg s
   return s
 
-/--
-Definition of `matchForall` / `matchForall` 的定义
+/-- Matches pi types. The name `n` should be unique, and `matchBody` should use `n`
+as the `userName` of its fvar. -/
+/-
+**Mathlib.Notation3.matchForall** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：matchForall (matchDom : Matcher) (matchBody : Expr -> Matcher) : Matcher
+参数：matchDom : Matcher；matchBody : Expr -> Matcher。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchForall
-  signature: (matchDom : Matcher) (matchBody : Expr -> Matcher)
-  body: fun s => do
-guard (← getExpr).isForall
-let s ← withBindingDomain matchDom s
-  let s ← withBindingBodyUnusedName' fun _ arg => matchBody arg s
-  return s
-
-中文:
-定义 matchForall
-  签名: (matchDom : Matcher) (matchBody : Expr -> Matcher)
-  定义体: fun s => do
-guard (← getExpr).isForall
-let s ← withBindingDomain matchDom s
-  let s ← withBindingBodyUnusedName' fun _ arg => matchBody arg s
-  return s
+--- 原说明 ---
+Matches pi types. The name `n` should be unique, and `matchBody` should use `n`
+as the `userName` of its fvar.
 -/
-def matchForall (matchDom : Matcher) (matchBody : Expr -> Matcher) : Matcher := fun s => do
-guard (← getExpr).isForall
-let s ← withBindingDomain matchDom s
+def matchForall (matchDom : Matcher) (matchBody : Expr → Matcher) : Matcher := fun s => do
+  guard <| (← getExpr).isForall
+  let s ← withBindingDomain <| matchDom s
   let s ← withBindingBodyUnusedName' fun _ arg => matchBody arg s
   return s
 
-/--
-Definition of `matchLambda` / `matchLambda` 的定义
+/-- Matches lambdas. The `matchBody` takes the fvar introduced when visiting the body. -/
+/-
+**Mathlib.Notation3.matchLambda** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：matchLambda (matchDom : Matcher) (matchBody : Expr -> Matcher) : Matcher
+参数：matchDom : Matcher；matchBody : Expr -> Matcher。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchLambda
-  signature: (matchDom : Matcher) (matchBody : Expr -> Matcher)
-  body: fun s => do
-guard (← getExpr).isLambda
-let s ← withBindingDomain matchDom s
-  let s ← withBindingBodyUnusedName' fun _ arg => matchBody arg s
-  return s
-
-中文:
-定义 matchLambda
-  签名: (matchDom : Matcher) (matchBody : Expr -> Matcher)
-  定义体: fun s => do
-guard (← getExpr).isLambda
-let s ← withBindingDomain matchDom s
-  let s ← withBindingBodyUnusedName' fun _ arg => matchBody arg s
-  return s
+--- 原说明 ---
+Matches lambdas. The `matchBody` takes the fvar introduced when visiting the bod
+y.
 -/
-def matchLambda (matchDom : Matcher) (matchBody : Expr -> Matcher) : Matcher := fun s => do
-guard (← getExpr).isLambda
-let s ← withBindingDomain matchDom s
+def matchLambda (matchDom : Matcher) (matchBody : Expr → Matcher) : Matcher := fun s => do
+  guard <| (← getExpr).isLambda
+  let s ← withBindingDomain <| matchDom s
   let s ← withBindingBodyUnusedName' fun _ arg => matchBody arg s
   return s
 
-/--
-Definition of `setupLCtx` / `setupLCtx` 的定义
+/-- Adds all the names in `boundNames` to the local context
+with types that are fresh metavariables.
+This is used for example when initializing `p` in `(scoped p => ...)` when elaborating `...`. -/
+/-
+**Mathlib.Notation3.setupLCtx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：setupLCtx (lctx : LocalContext) (boundNames : Array Name) : MetaM (LocalCo
+ntext × Std.HashMap FVarId Name)
+参数：lctx : LocalContext；boundNames : Array Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setupLCtx
-  signature: (lctx : LocalContext) (boundNames : Array Name)
-  body: do
-  let mut lctx := lctx
-  let mut boundFVars := {}
-  for name in boundNames do
-    let fvarId ← mkFreshFVarId
-    lctx := lctx.mkLocalDecl fvarId name (← withLCtx lctx (← getLocalInstances) mkFreshTypeMVar)
-    boundFVars := boundFVars.insert fvarId name
-  return (lctx, boundFVars)
-
-中文:
-定义 setupLCtx
-  签名: (lctx : LocalContext) (boundNames : 数组 Name)
-  定义体: do
-  let mut lctx := lctx
-  let mut boundFVars := {}
-  for name in boundNames do
-    let fvarId ← mkFreshFVarId
-    lctx := lctx.mkLocalDecl fvarId name (← withLCtx lctx (← getLocalInstances) mkFreshTypeMVar)
-    boundFVars := boundFVars.insert fvarId name
-  return (lctx, boundFVars)
+--- 原说明 ---
+Adds all the names in `boundNames` to the local context
+with types that are fresh metavariables.
+This is used for example when initializing `p` in `(scoped p => ...)` when elabo
+rating `...`.
 -/
 def setupLCtx (lctx : LocalContext) (boundNames : Array Name) :
     MetaM (LocalContext × Std.HashMap FVarId Name) := do
@@ -529,36 +420,35 @@ def setupLCtx (lctx : LocalContext) (boundNames : Array Name) :
   return (lctx, boundFVars)
 
 /--
-Definition of `isType'` / `isType'` 的定义
-
-English:
-definition isType'
-  signature: : Expr -> Bool
-
-中文:
-定义 isType'
-  签名: : Expr -> 布尔值
+Like `Expr.isType`, but uses logic that normalizes the universe level.
+Mirrors the core `Sort` delaborator logic.
 -/
-def isType' : Expr -> Bool
+/-
+**Mathlib.Notation3.isType'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：Expr → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Like `Expr.isType`, but uses logic that normalizes the universe level.
+Mirrors the core `Sort` delaborator logic.
+-/
+def isType' : Expr → Bool
   | .sort u => u.dec.isSome
-  | _ => false
+  | _       => false
 
 /--
-Inductive type `DelabKey` / 归纳类型 `DelabKey`
+Represents a key to use when registering the `delab` attribute for a delaborator.
+We use this to handle overapplication.
+-/
+/-
+**Mathlib.Notation3.DelabKey** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive DelabKey
-  parameters: where
-  constructors (2):
-    - app: (const : Option Name) (arity : Nat)
-    - other: (key : Name)
-
-中文:
-归纳类型 DelabKey
-  参数: where
-  构造子 (2 个):
-    - app: (const : 选项类型 Name) (arity : 自然数)
-    - other: (key : Name)
+--- 原说明 ---
+Represents a key to use when registering the `delab` attribute for a delaborator
+.
+We use this to handle overapplication.
 -/
 inductive DelabKey where
   /-- The key `app.const` or `app` with a specific arity. -/
@@ -567,193 +457,51 @@ inductive DelabKey where
   deriving Repr
 
 /--
-Definition of `DelabKey.key` / `DelabKey.key` 的定义
-
-English:
-definition DelabKey.key
-  signature: : DelabKey -> Name
-
-中文:
-定义 DelabKey.key
-  签名: : DelabKey -> Name
+Turns the `DelabKey` into a key that the `delab` attribute accepts.
 -/
-def DelabKey.key : DelabKey -> Name
-  | .app none _ => `app
+/-
+**Mathlib.Notation3.DelabKey.key** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3.De
+labKey`。
+形式化陈述：Mathlib.Notation3.DelabKey → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Turns the `DelabKey` into a key that the `delab` attribute accepts.
+-/
+def DelabKey.key : DelabKey → Name
+  | .app none     _ => `app
   | .app (some n) _ => `app ++ n
-  | .other key => key
+  | .other key      => key
 
-/--
-Definition of `exprToMatcher` / `exprToMatcher` 的定义
+/-- Given an expression, generate a matcher for it.
+The `boundFVars` hash map records which state variables certain fvars correspond to.
+The `localFVars` hash map records which local variable the matcher should use for an exact
+expression match.
 
-English:
-definition exprToMatcher
-  signature: (boundFVars : Std.HashMap FVarId Name)
-  body: do
-  match e with
-  | .mvar .. => return ([], ← `(pure))
-  | .const n _ => return ([.app n 0], ← ``(matchExpr (Expr.isConstOf · $(quote n))))
-  | .sort u =>
-    /-
-    We should try being more accurate here.
-    Prop / Type / Type _ / Sort _ is at least an OK approximation.
-    We mimic the core Sort delaborator `Lean.PrettyPrinter.Delaborator.delabSort`.
-    -/
-    let matcher ←
-      if u.isZero then
-        ``(matchExpr Expr.isProp)
-      else if e.isType0 then
-        ``(matchExpr Expr.isType0)
-      else if u.dec.isSome then
-        ``(matchExpr isType')
-      else
-        ``(matchExpr Expr.isSort)
-    return ([.other `sort], matcher)
-  | .fvar fvarId =>
-    if let some n := boundFVars[fvarId]? then
-      -- This fvar is a pattern variable.
-      return ([], ← ``(matchVar $(quote n)))
-    else if let some s := localFVars[fvarId]? then
-      -- This fvar is bound by a lambda or forall expression in the pattern itself
-      return ([], ← ``(matchExpr (· == $s)))
-    else
-      let n ← fvarId.getUserName
-      if n.hasMacroScopes then
-        -- Match by just the type; this is likely an unnamed instance for example
-        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
-        return ([.other `fvar], ← ``(matchTypeOf $m))
-      else
-        -- This is an fvar from a `variable`. Match by name and type.
-        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
-        return ([.other `fvar], ← ``(matchFVar $(quote n) $m))
-  | .app .. =>
-    e.withApp fun f args => do
-      let (keys, matchF) ←
-        if let .const n _ := f then
-          pure ([.app n args.size], ← ``(matchExpr (Expr.isConstOf · $(quote n))))
-        else
-          let (_, matchF) ← exprToMatcher boundFVars localFVars f
-          pure ([.app none args.size], matchF)
-      let mut fty ← inferType f
-      let mut matcher := matchF
-      for arg in args do
-        fty ← whnf fty
-        guard fty.isForall
-        let bi := fty.bindingInfo!
-        fty := fty.bindingBody!.instantiate1 arg
-        if bi.isInstImplicit then
-          -- Assumption: elaborated instances are canonical, so no need to match.
-          -- The type of the instance is already accounted for by the previous arguments
-          -- and the type of `f`.
-          matcher ← ``(matchApp $matcher pure)
-        else
-          let (_, matchArg) ← exprToMatcher boundFVars localFVars arg
-          matcher ← ``(matchApp $matcher $matchArg)
-      return (keys, matcher)
-  | .lit (.natVal n) => return ([.other `lit], ← ``(natLitMatcher $(quote n)))
-  | .forallE n t b bi =>
-    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
-    withLocalDecl n bi t fun arg => withFreshMacroScope do
-      let n' ← `(n)
-      let body := b.instantiate1 arg
-      let localFVars' := localFVars.insert arg.fvarId! n'
-      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
-      return ([.other `forallE], ← ``(matchForall $matchDom (fun $n' => $matchBody)))
-  | .lam n t b bi =>
-    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
-    withLocalDecl n bi t fun arg => withFreshMacroScope do
-      let n' ← `(n)
-      let body := b.instantiate1 arg
-      let localFVars' := localFVars.insert arg.fvarId! n'
-      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
-      return ([.other `lam], ← ``(matchLambda $matchDom (fun $n' => $matchBody)))
-  | _ =>
-    trace[notation3] "can't generate matcher for {e}"
-    failure
+If it succeeds generating a matcher, returns
+1. a list of keys that should be used for the `delab` attribute
+   when defining the elaborator
+2. a `Term` that represents a `Matcher` for the given expression `e`. -/
+/-
+**Mathlib.Notation3.exprToMatcher** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Notation
+3`。
+形式化陈述：Std.HashMap FVarId Name →   Std.HashMap FVarId Term → Expr → OptionT Elab.
+TermElabM (List Mathlib.Notation3.DelabKey × Term)
+参数：List Mathlib.Notation3.DelabKey × Term。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 exprToMatcher
-  签名: (boundFVars : Std.HashMap FVarId Name)
-  定义体: do
-  match e with
-  | .mvar .. => return ([], ← `(pure))
-  | .const n _ => return ([.app n 0], ← ``(matchExpr (Expr.isConstOf · $(quote n))))
-  | .sort u =>
-    /-
-    We should try being more accurate here.
-    Prop / Type / Type _ / Sort _ is at least an OK approximation.
-    We mimic the core Sort delaborator `Lean.PrettyPrinter.Delaborator.delabSort`.
-    -/
-    let matcher ←
-      if u.isZero then
-        ``(matchExpr Expr.isProp)
-      else if e.isType0 then
-        ``(matchExpr Expr.isType0)
-      else if u.dec.isSome then
-        ``(matchExpr isType')
-      else
-        ``(matchExpr Expr.isSort)
-    return ([.other `sort], matcher)
-  | .fvar fvarId =>
-    if let some n := boundFVars[fvarId]? then
-      -- This fvar is a pattern variable.
-      return ([], ← ``(matchVar $(quote n)))
-    else if let some s := localFVars[fvarId]? then
-      -- This fvar is bound by a lambda or forall expression in the pattern itself
-      return ([], ← ``(matchExpr (· == $s)))
-    else
-      let n ← fvarId.getUserName
-      if n.hasMacroScopes then
-        -- Match by just the type; this is likely an unnamed instance for example
-        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
-        return ([.other `fvar], ← ``(matchTypeOf $m))
-      else
-        -- This is an fvar from a `variable`. Match by name and type.
-        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
-        return ([.other `fvar], ← ``(matchFVar $(quote n) $m))
-  | .app .. =>
-    e.withApp fun f args => do
-      let (keys, matchF) ←
-        if let .const n _ := f then
-          pure ([.app n args.size], ← ``(matchExpr (Expr.isConstOf · $(quote n))))
-        else
-          let (_, matchF) ← exprToMatcher boundFVars localFVars f
-          pure ([.app none args.size], matchF)
-      let mut fty ← inferType f
-      let mut matcher := matchF
-      for arg in args do
-        fty ← whnf fty
-        guard fty.isForall
-        let bi := fty.bindingInfo!
-        fty := fty.bindingBody!.instantiate1 arg
-        if bi.isInstImplicit then
-          -- Assumption: elaborated instances are canonical, so no need to match.
-          -- The type of the instance is already accounted for by the previous arguments
-          -- and the type of `f`.
-          matcher ← ``(matchApp $matcher pure)
-        else
-          let (_, matchArg) ← exprToMatcher boundFVars localFVars arg
-          matcher ← ``(matchApp $matcher $matchArg)
-      return (keys, matcher)
-  | .lit (.natVal n) => return ([.other `lit], ← ``(natLitMatcher $(quote n)))
-  | .forallE n t b bi =>
-    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
-    withLocalDecl n bi t fun arg => withFreshMacroScope do
-      let n' ← `(n)
-      let body := b.instantiate1 arg
-      let localFVars' := localFVars.insert arg.fvarId! n'
-      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
-      return ([.other `forallE], ← ``(matchForall $matchDom (fun $n' => $matchBody)))
-  | .lam n t b bi =>
-    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
-    withLocalDecl n bi t fun arg => withFreshMacroScope do
-      let n' ← `(n)
-      let body := b.instantiate1 arg
-      let localFVars' := localFVars.insert arg.fvarId! n'
-      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
-      return ([.other `lam], ← ``(matchLambda $matchDom (fun $n' => $matchBody)))
-  | _ =>
-    trace[notation3] "can't generate matcher for {e}"
-    failure
+--- 原说明 ---
+Given an expression, generate a matcher for it.
+The `boundFVars` hash map records which state variables certain fvars correspond
+ to.
+The `localFVars` hash map records which local variable the matcher should use fo
+r an exact
+expression match.
+
+If it succeeds generating a matcher, returns
+1. a list of keys that should be used for the `delab` attribute
+   when defining the elaborator
+2. a `Term` that represents a `Matcher` for the given expression `e`.
 -/
 partial def exprToMatcher (boundFVars : Std.HashMap FVarId Name)
     (localFVars : Std.HashMap FVarId Term) (e : Expr) :
@@ -839,44 +587,26 @@ partial def exprToMatcher (boundFVars : Std.HashMap FVarId Name)
     trace[notation3] "can't generate matcher for {e}"
     failure
 
-/--
-Definition of `mkExprMatcher` / `mkExprMatcher` 的定义
+/-- Returns a `Term` that represents a `Matcher` for the given pattern `stx`.
+The `boundNames` set determines which identifiers are variables in the pattern.
+Fails in the `OptionT` sense if it comes across something it's unable to handle.
 
-English:
-definition mkExprMatcher
-  signature: (stx : Term) (boundNames : Array Name)
-  body: do
-  let (lctx, boundFVars) ← setupLCtx (← getLCtx) boundNames
-  withLCtx lctx (← getLocalInstances) do
-    let patt ←
-      try
-        Term.elabPattern stx none
-      catch e =>
-        logException e
-        trace[notation3] "Could not elaborate pattern{indentD stx}\nError: {e.toMessageData}"
-        -- Convert the exception into an `OptionT` failure so that the `(prettyPrint := false)`
-        -- suggestion appears.
-        failure
-    trace[notation3] "Generating matcher for pattern {patt}"
-    exprToMatcher boundFVars {} patt
+Also returns constant names that could serve as a key for a delaborator.
+For example, if it's for a function `f`, then `app.f`. -/
+/-
+**Mathlib.Notation3.mkExprMatcher** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：Term → Array Name → OptionT Elab.TermElabM (List Mathlib.Notation3.DelabKe
+y × Term)
+参数：List Mathlib.Notation3.DelabKey × Term。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkExprMatcher
-  签名: (stx : 项) (boundNames : 数组 Name)
-  定义体: do
-  let (lctx, boundFVars) ← setupLCtx (← getLCtx) boundNames
-  withLCtx lctx (← getLocalInstances) do
-    let patt ←
-      try
-        Term.elabPattern stx none
-      catch e =>
-        logException e
-        trace[notation3] "Could not elaborate pattern{indentD stx}\nError: {e.toMessageData}"
-        -- Convert the exception into an `OptionT` failure so that the `(prettyPrint := false)`
-        -- suggestion appears.
-        failure
-    trace[notation3] "Generating matcher for pattern {patt}"
-    exprToMatcher boundFVars {} patt
+--- 原说明 ---
+Returns a `Term` that represents a `Matcher` for the given pattern `stx`.
+The `boundNames` set determines which identifiers are variables in the pattern.
+Fails in the `OptionT` sense if it comes across something it's unable to handle.
+
+Also returns constant names that could serve as a key for a delaborator.
+For example, if it's for a function `f`, then `app.f`.
 -/
 partial def mkExprMatcher (stx : Term) (boundNames : Array Name) :
     OptionT TermElabM (List DelabKey × Term) := do
@@ -894,90 +624,22 @@ partial def mkExprMatcher (stx : Term) (boundNames : Array Name) :
     trace[notation3] "Generating matcher for pattern {patt}"
     exprToMatcher boundFVars {} patt
 
-/--
-Definition of `matchScoped` / `matchScoped` 的定义
+/-- Matcher for processing `scoped` syntax. Assumes the expression to be matched
+against is in the `lit` variable.
 
-English:
-definition matchScoped
-  signature: (lit scopeId : Name) (smatcher : Matcher)
-  body: go #[] where
-  /-- Variant of `matchScoped` after some number of `binders` have already been captured. -/
-  go (binders : Array (TSyntax ``extBinderParenthesized)) : Matcher := fun s => do
-    -- `lit` is bound to the SubExpr that the `scoped` syntax produced
-    s.withVar lit do
-    try
-      -- Run `smatcher` at `lit`, clearing the `scopeId` variable so that it can get a fresh value
-      let s ← smatcher {s with vars := s.vars.erase scopeId}
-      s.withVar scopeId do
-        guard (← getExpr).isLambda
-        let prop ← try Meta.isProp (← getExpr).bindingDomain! catch _ => pure false
-        let isDep := (← getExpr).bindingBody!.hasLooseBVar 0
-        let ppTypes ← getPPOption getPPPiBinderTypes -- the same option controlling ∀
-        let dom ← withBindingDomain delab
-        withBindingBodyUnusedName fun x => do
-          let x : Ident := ⟨x⟩
-          let binder ←
-            if prop && !isDep then
-              -- this underscore is used to support binder predicates, since it indicates
-              -- the variable is unused and this binder is safe to merge into another
-              `(extBinderParenthesized|(_ : $dom))
-            else if prop || ppTypes then
-              `(extBinderParenthesized|($x:ident : $dom))
-            else
-              `(extBinderParenthesized|($x:ident))
-          -- Now use the body of the lambda for `lit` for the next iteration
-          let s ← s.captureSubexpr lit
-          -- TODO merge binders as an inverse to `satisfies_binder_pred%`
-          let binders := binders.push binder
-          go binders s
-    catch _ =>
-guard !binders.isEmpty
-      if let some binders₂ := s.scopeState then
-guard binders == binders₂-- TODO: this might be a bit too strict, but it seems to work
-        return s
-      else
-        return {s with scopeState := binders}
+Runs `smatcher`, extracts the resulting `scopeId` variable, processes this value
+(which must be a lambda) to produce a binder, and loops. -/
+/-
+**Mathlib.Notation3.matchScoped** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：Name → Name → Mathlib.Notation3.Matcher → Mathlib.Notation3.Matcher
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 matchScoped
-  签名: (lit scopeId : Name) (smatcher : Matcher)
-  定义体: go #[] where
-  /-- Variant of `matchScoped` after some number of `binders` have already been captured. -/
-  go (binders : Array (TSyntax ``extBinderParenthesized)) : Matcher := fun s => do
-    -- `lit` is bound to the SubExpr that the `scoped` syntax produced
-    s.withVar lit do
-    try
-      -- Run `smatcher` at `lit`, clearing the `scopeId` variable so that it can get a fresh value
-      let s ← smatcher {s with vars := s.vars.erase scopeId}
-      s.withVar scopeId do
-        guard (← getExpr).isLambda
-        let prop ← try Meta.isProp (← getExpr).bindingDomain! catch _ => pure false
-        let isDep := (← getExpr).bindingBody!.hasLooseBVar 0
-        let ppTypes ← getPPOption getPPPiBinderTypes -- the same option controlling ∀
-        let dom ← withBindingDomain delab
-        withBindingBodyUnusedName fun x => do
-          let x : Ident := ⟨x⟩
-          let binder ←
-            if prop && !isDep then
-              -- this underscore is used to support binder predicates, since it indicates
-              -- the variable is unused and this binder is safe to merge into another
-              `(extBinderParenthesized|(_ : $dom))
-            else if prop || ppTypes then
-              `(extBinderParenthesized|($x:ident : $dom))
-            else
-              `(extBinderParenthesized|($x:ident))
-          -- Now use the body of the lambda for `lit` for the next iteration
-          let s ← s.captureSubexpr lit
-          -- TODO merge binders as an inverse to `satisfies_binder_pred%`
-          let binders := binders.push binder
-          go binders s
-    catch _ =>
-guard !binders.isEmpty
-      if let some binders₂ := s.scopeState then
-guard binders == binders₂-- TODO: this might be a bit too strict, but it seems to work
-        return s
-      else
-        return {s with scopeState := binders}
+--- 原说明 ---
+Matcher for processing `scoped` syntax. Assumes the expression to be matched
+against is in the `lit` variable.
+
+Runs `smatcher`, extracts the resulting `scopeId` variable, processes this value
+(which must be a lambda) to produce a binder, and loops.
 -/
 partial def matchScoped (lit scopeId : Name) (smatcher : Matcher) : Matcher := go #[] where
   /-- Variant of `matchScoped` after some number of `binders` have already been captured. -/
@@ -1010,31 +672,30 @@ partial def matchScoped (lit scopeId : Name) (smatcher : Matcher) : Matcher := g
           let binders := binders.push binder
           go binders s
     catch _ =>
-guard !binders.isEmpty
+      guard <| !binders.isEmpty
       if let some binders₂ := s.scopeState then
-guard binders == binders₂-- TODO: this might be a bit too strict, but it seems to work
+        guard <| binders == binders₂ -- TODO: this might be a bit too strict, but it seems to work
         return s
       else
         return {s with scopeState := binders}
 
-/--
-Definition of `mkScopedMatcher` / `mkScopedMatcher` 的定义
+/-- Create a `Term` that represents a matcher for `scoped` notation.
+Fails in the `OptionT` sense if a matcher couldn't be constructed.
+Also returns a delaborator key like in `mkExprMatcher`.
+Reminder: `$lit:ident : (scoped $scopedId:ident => $scopedTerm:Term)` -/
+/-
+**Mathlib.Notation3.mkScopedMatcher** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3
+`。
+形式化陈述：Name → Name → Term → Array Name → OptionT Elab.TermElabM (List Mathlib.Not
+ation3.DelabKey × Term)
+参数：List Mathlib.Notation3.DelabKey × Term。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkScopedMatcher
-  signature: (lit scopeId : Name) (scopedTerm : Term) (boundNames : Array Name)
-  body: do
-  -- Build the matcher for `scopedTerm` with `scopeId` as an additional variable
-  let (keys, smatcher) ← mkExprMatcher scopedTerm (boundNames.push scopeId)
-  return (keys, ← ``(matchScoped $(quote lit) $(quote scopeId) $smatcher))
-
-中文:
-定义 mkScopedMatcher
-  签名: (lit scopeId : Name) (scopedTerm : 项) (boundNames : 数组 Name)
-  定义体: do
-  -- Build the matcher for `scopedTerm` with `scopeId` as an additional variable
-  let (keys, smatcher) ← mkExprMatcher scopedTerm (boundNames.push scopeId)
-  return (keys, ← ``(matchScoped $(quote lit) $(quote scopeId) $smatcher))
+--- 原说明 ---
+Create a `Term` that represents a matcher for `scoped` notation.
+Fails in the `OptionT` sense if a matcher couldn't be constructed.
+Also returns a delaborator key like in `mkExprMatcher`.
+Reminder: `$lit:ident : (scoped $scopedId:ident => $scopedTerm:Term)`
 -/
 partial def mkScopedMatcher (lit scopeId : Name) (scopedTerm : Term) (boundNames : Array Name) :
     OptionT TermElabM (List DelabKey × Term) := do
@@ -1042,52 +703,15 @@ partial def mkScopedMatcher (lit scopeId : Name) (scopedTerm : Term) (boundNames
   let (keys, smatcher) ← mkExprMatcher scopedTerm (boundNames.push scopeId)
   return (keys, ← ``(matchScoped $(quote lit) $(quote scopeId) $smatcher))
 
-/--
-Definition of `matchFoldl` / `matchFoldl` 的定义
+/-- Matcher for expressions produced by `foldl`. -/
+/-
+**Mathlib.Notation3.matchFoldl** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Notation3`。
+形式化陈述：Name → Name → Name → Mathlib.Notation3.Matcher → Mathlib.Notation3.Matcher
+ → Mathlib.Notation3.Matcher
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchFoldl
-  signature: (lit x y : Name) (smatcher : Matcher) (sinit : Matcher)
-  body: fun s => do
-  s.withVar lit do
-    let expr ← getExpr
-    -- Clear x and y state before running smatcher so it can store new values
-    let s := {s with vars := s.vars |>.erase x |>.erase y}
-let some s ← try some < > smatcher s catch _ => pure none
-      | -- We put this here rather than using a big try block to prevent backtracking.
-        -- We have `smatcher` match greedily, and then require that `sinit` *must* succeed
-        sinit s
-    -- y gives the next element of the list
-    let s := s.pushFold lit (← s.delabVar y expr)
-    -- x gives the next lit
-    let some newLit := s.vars[x]? | failure
-    -- If progress was not made, fail
-    if newLit.1.expr == expr then failure
-    -- Progress was made, so recurse
-    let s := {s with vars := s.vars.insert lit newLit}
-    matchFoldl lit x y smatcher sinit s
-
-中文:
-定义 matchFoldl
-  签名: (lit x y : Name) (smatcher : Matcher) (sinit : Matcher)
-  定义体: fun s => do
-  s.withVar lit do
-    let expr ← getExpr
-    -- Clear x and y state before running smatcher so it can store new values
-    let s := {s with vars := s.vars |>.erase x |>.erase y}
-let some s ← try some < > smatcher s catch _ => pure none
-      | -- We put this here rather than using a big try block to prevent backtracking.
-        -- We have `smatcher` match greedily, and then require that `sinit` *must* succeed
-        sinit s
-    -- y gives the next element of the list
-    let s := s.pushFold lit (← s.delabVar y expr)
-    -- x gives the next lit
-    let some newLit := s.vars[x]? | failure
-    -- If progress was not made, fail
-    if newLit.1.expr == expr then failure
-    -- Progress was made, so recurse
-    let s := {s with vars := s.vars.insert lit newLit}
-    matchFoldl lit x y smatcher sinit s
+--- 原说明 ---
+Matcher for expressions produced by `foldl`.
 -/
 partial def matchFoldl (lit x y : Name) (smatcher : Matcher) (sinit : Matcher) :
     Matcher := fun s => do
@@ -1095,7 +719,7 @@ partial def matchFoldl (lit x y : Name) (smatcher : Matcher) (sinit : Matcher) :
     let expr ← getExpr
     -- Clear x and y state before running smatcher so it can store new values
     let s := {s with vars := s.vars |>.erase x |>.erase y}
-let some s ← try some < > smatcher s catch _ => pure none
+    let some s ← try some <$> smatcher s catch _ => pure none
       | -- We put this here rather than using a big try block to prevent backtracking.
         -- We have `smatcher` match greedily, and then require that `sinit` *must* succeed
         sinit s
@@ -1109,66 +733,46 @@ let some s ← try some < > smatcher s catch _ => pure none
     let s := {s with vars := s.vars.insert lit newLit}
     matchFoldl lit x y smatcher sinit s
 
-/--
-Definition of `mkFoldlMatcher` / `mkFoldlMatcher` 的定义
+/-- Create a `Term` that represents a matcher for `foldl` notation.
+Reminder: `( lit ","* => foldl (x y => scopedTerm) init)` -/
+/-
+**Mathlib.Notation3.mkFoldlMatcher** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`
+。
+形式化陈述：Name → Name → Name → Term → Term → Array Name → OptionT Elab.TermElabM (Li
+st Mathlib.Notation3.DelabKey × Term)
+参数：List Mathlib.Notation3.DelabKey × Term。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFoldlMatcher
-  signature: (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name)
-  body: do
-  -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
-.push y .push x let boundNames' := boundNames
-  let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
-  let (keys', sinit) ← mkExprMatcher init boundNames
-  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote x) $(quote y) $smatcher $sinit))
-
-中文:
-定义 mkFoldlMatcher
-  签名: (lit x y : Name) (scopedTerm init : 项) (boundNames : 数组 Name)
-  定义体: do
-  -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
-.push y .push x let boundNames' := boundNames
-  let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
-  let (keys', sinit) ← mkExprMatcher init boundNames
-  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote x) $(quote y) $smatcher $sinit))
+--- 原说明 ---
+Create a `Term` that represents a matcher for `foldl` notation.
+Reminder: `( lit ","* => foldl (x y => scopedTerm) init)`
 -/
 partial def mkFoldlMatcher (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name) :
     OptionT TermElabM (List DelabKey × Term) := do
   -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
-.push y .push x let boundNames' := boundNames
+  let boundNames' := boundNames |>.push x |>.push y
   let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
   let (keys', sinit) ← mkExprMatcher init boundNames
   return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote x) $(quote y) $smatcher $sinit))
 
-/--
-Definition of `mkFoldrMatcher` / `mkFoldrMatcher` 的定义
+/-- Create a `Term` that represents a matcher for `foldr` notation.
+Reminder: `( lit ","* => foldr (x y => scopedTerm) init)` -/
+/-
+**Mathlib.Notation3.mkFoldrMatcher** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notation3`
+。
+形式化陈述：Name → Name → Name → Term → Term → Array Name → OptionT Elab.TermElabM (Li
+st Mathlib.Notation3.DelabKey × Term)
+参数：List Mathlib.Notation3.DelabKey × Term。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFoldrMatcher
-  signature: (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name)
-  body: do
-  -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
-.push y .push x let boundNames' := boundNames
-  let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
-  let (keys', sinit) ← mkExprMatcher init boundNames
-  -- N.B. by swapping `x` and `y` we can just use the foldl matcher
-  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote y) $(quote x) $smatcher $sinit))
-
-中文:
-定义 mkFoldrMatcher
-  签名: (lit x y : Name) (scopedTerm init : 项) (boundNames : 数组 Name)
-  定义体: do
-  -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
-.push y .push x let boundNames' := boundNames
-  let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
-  let (keys', sinit) ← mkExprMatcher init boundNames
-  -- N.B. by swapping `x` and `y` we can just use the foldl matcher
-  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote y) $(quote x) $smatcher $sinit))
+--- 原说明 ---
+Create a `Term` that represents a matcher for `foldr` notation.
+Reminder: `( lit ","* => foldr (x y => scopedTerm) init)`
 -/
 partial def mkFoldrMatcher (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name) :
     OptionT TermElabM (List DelabKey × Term) := do
   -- Build the `scopedTerm` matcher with `x` and `y` as additional variables
-.push y .push x let boundNames' := boundNames
+  let boundNames' := boundNames |>.push x |>.push y
   let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
   let (keys', sinit) ← mkExprMatcher init boundNames
   -- N.B. by swapping `x` and `y` we can just use the foldl matcher
@@ -1176,24 +780,21 @@ partial def mkFoldrMatcher (lit x y : Name) (scopedTerm init : Term) (boundNames
 
 /-! ### The `notation3` command -/
 
-/--
-Inductive type `BoundValueType` / 归纳类型 `BoundValueType`
+/-- Used when processing different kinds of variables when building the
+final delaborator. -/
+/-
+**Mathlib.Notation3.BoundValueType** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Notation
+3`。
+形式化陈述：BoundValueType /-- A normal variable, delaborate its expression. -/ | norm
+al /-- A fold variable, use the fold state (but reverse the array). -/ | foldl /
+-- A fold variable, use the fold state (do not reverse the array). -/ | foldr  s
+yntax prettyPrintOpt
+参数：but reverse the array；do not reverse the array。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive BoundValueType
-  constructors (3):
-    - normal: 
-    - foldl: 
-    - foldr: 
-
-中文:
-归纳类型 BoundValueType
-  构造子 (3 个):
-    - normal: 
-    - foldl: 
-    - foldr: 
-
-Depends on / 依赖: prettyPrint
+--- 原说明 ---
+Used when processing different kinds of variables when building the
+final delaborator.
 -/
 inductive BoundValueType
   /-- A normal variable, delaborate its expression. -/
@@ -1205,30 +806,17 @@ inductive BoundValueType
 
 syntax prettyPrintOpt := "(" &"prettyPrint" " := " (&"true" <|> &"false") ")"
 
-/--
-Definition of `getPrettyPrintOpt` / `getPrettyPrintOpt` 的定义
+/-- Interpret a `prettyPrintOpt`. The default value is `true`. -/
+/-
+**Mathlib.Notation3.getPrettyPrintOpt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Notatio
+n3`。
+形式化陈述：getPrettyPrintOpt (opt? : Option (TSyntax ``prettyPrintOpt)) : Bool
+参数：opt? : Option (TSyntax ``prettyPrintOpt)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getPrettyPrintOpt
-  signature: (opt? : Option (TSyntax ``prettyPrintOpt))
-  body: if let some opt := opt? then
-    match opt with
-    | `(prettyPrintOpt| (prettyPrint := false)) => false
-    | _ => true
-  else
-    true
-
-中文:
-定义 getPrettyPrintOpt
-  签名: (opt? : 选项类型 (TSyntax ``prettyPrintOpt))
-  定义体: if let some opt := opt? then
-    match opt with
-    | `(prettyPrintOpt| (prettyPrint := false)) => false
-    | _ => true
-  else
-    true
-
-Depends on / 依赖: prettyPrint, prettyPrintOpt
+--- 原说明 ---
+Interpret a `prettyPrintOpt`. The default value is `true`.
 -/
 def getPrettyPrintOpt (opt? : Option (TSyntax ``prettyPrintOpt)) : Bool :=
   if let some opt := opt? then
@@ -1239,44 +827,31 @@ def getPrettyPrintOpt (opt? : Option (TSyntax ``prettyPrintOpt)) : Bool :=
     true
 
 /--
-Definition of `withHeadRefIfTagAppFns` / `withHeadRefIfTagAppFns` 的定义
+If `pp.tagAppFns` is true and the head of the current expression is a constant,
+then delaborates the head and uses it for the ref.
+This causes tokens inside the syntax to refer to this constant.
+A consequence is that docgen will linkify the tokens.
+-/
+/-
+**Mathlib.Notation3.withHeadRefIfTagAppFns** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.No
+tation3`。
+形式化陈述：withHeadRefIfTagAppFns (d : Delab) : Delab
+参数：d : Delab。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withHeadRefIfTagAppFns
-  signature: (d : Delab)
-  body: do
-  let tagAppFns ← getPPOption getPPTagAppFns
-  if tagAppFns && (← getExpr).getAppFn.consumeMData.isConst then
-    -- Delaborate the head to register term info and get a syntax we can use for the ref.
-    -- The syntax `f` itself is thrown away.
-let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns true delab
-    let stx ← withRef f d
-    -- Annotate to ensure that the full syntax still refers to the whole expression.
-    annotateTermInfo stx
-  else
-    d
-
-中文:
-定义 withHeadRefIfTagAppFns
-  签名: (d : Delab)
-  定义体: do
-  let tagAppFns ← getPPOption getPPTagAppFns
-  if tagAppFns && (← getExpr).getAppFn.consumeMData.isConst then
-    -- Delaborate the head to register term info and get a syntax we can use for the ref.
-    -- The syntax `f` itself is thrown away.
-let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns true delab
-    let stx ← withRef f d
-    -- Annotate to ensure that the full syntax still refers to the whole expression.
-    annotateTermInfo stx
-  else
-    d
+--- 原说明 ---
+If `pp.tagAppFns` is true and the head of the current expression is a constant,
+then delaborates the head and uses it for the ref.
+This causes tokens inside the syntax to refer to this constant.
+A consequence is that docgen will linkify the tokens.
 -/
 def withHeadRefIfTagAppFns (d : Delab) : Delab := do
   let tagAppFns ← getPPOption getPPTagAppFns
   if tagAppFns && (← getExpr).getAppFn.consumeMData.isConst then
     -- Delaborate the head to register term info and get a syntax we can use for the ref.
     -- The syntax `f` itself is thrown away.
-let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns true delab
+    let f ← withNaryFn <| withOptionAtCurrPos `pp.tagAppFns true delab
     let stx ← withRef f d
     -- Annotate to ensure that the full syntax still refers to the whole expression.
     annotateTermInfo stx
@@ -1334,7 +909,7 @@ elab (name := notation3) doc:(docComment)? attrs?:(Parser.Term.attributes)? attr
       -- Can't use `pushMacro` since it inserts an extra variable into the pattern for `str`, which
       -- breaks our delaborator
       syntaxArgs := syntaxArgs.push (← `(stx| $lit:str))
-pattArgs := pattArgs.push mkAtomFrom lit lit.1.isStrLit?.get!
+      pattArgs := pattArgs.push <| mkAtomFrom lit lit.1.isStrLit?.get!
     | `(notation3Item| $_:bindersItem) =>
       if hasBindersItem then
         throwErrorAt item "Cannot have more than one `(...)` item."
@@ -1346,7 +921,7 @@ pattArgs := pattArgs.push mkAtomFrom lit lit.1.isStrLit?.get!
         syntaxArgs := syntaxArgs.pop.push (← `(stx| $(quote lit.getString.trimAsciiEnd.copy):str))
       (syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs (← `(macroArg| binders:extBinders))
     | `(notation3Item| ($id:ident $sep:str* $(prec?)? => $kind ($x $y => $scopedTerm) $init)) =>
-(syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs ←
+      (syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs <| ←
         `(macroArg| $id:ident:sepBy(term $(prec?)?, $sep:str))
       -- N.B. `Syntax.getId` returns `.anonymous` for non-idents
       let scopedTerm' ← scopedTerm.replaceM fun s => pure boundValues[s.getId]?
@@ -1354,37 +929,37 @@ pattArgs := pattArgs.push mkAtomFrom lit lit.1.isStrLit?.get!
       boundIdents := boundIdents.insert id.getId id
       match kind with
         | `(foldKind| foldl) =>
-boundValues := boundValues.insert id.getId ←
+          boundValues := boundValues.insert id.getId <| ←
             `(expand_foldl% ($x $y => $scopedTerm') $init' [$$(.ofElems $id),*])
           boundNames := boundNames.push id.getId
           boundType := boundType.insert id.getId .foldl
-matchers := matchers.push
+          matchers := matchers.push <|
             mkFoldlMatcher id.getId x.getId y.getId scopedTerm init boundNames
         | `(foldKind| foldr) =>
-boundValues := boundValues.insert id.getId ←
+          boundValues := boundValues.insert id.getId <| ←
             `(expand_foldr% ($x $y => $scopedTerm') $init' [$$(.ofElems $id),*])
           boundNames := boundNames.push id.getId
           boundType := boundType.insert id.getId .foldr
-matchers := matchers.push
+          matchers := matchers.push <|
             mkFoldrMatcher id.getId x.getId y.getId scopedTerm init boundNames
         | _ => throwUnsupportedSyntax
     | `(notation3Item| $lit:ident $(prec?)? : (scoped $scopedId:ident => $scopedTerm)) =>
       hasScoped := true
-(syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs ←
+      (syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs <|←
         `(macroArg| $lit:ident:term $(prec?)?)
-matchers := matchers.push
+      matchers := matchers.push <|
         mkScopedMatcher lit.getId scopedId.getId scopedTerm boundNames
       let scopedTerm' ← scopedTerm.replaceM fun s => pure boundValues[s.getId]?
       boundIdents := boundIdents.insert lit.getId lit
-boundValues := boundValues.insert lit.getId ←
+      boundValues := boundValues.insert lit.getId <| ←
         `(expand_binders% ($scopedId => $scopedTerm') $$binders:extBinders,
- (⟨lit.1.mkAntiquotNode `term⟩):term)
+          $(⟨lit.1.mkAntiquotNode `term⟩):term)
       boundNames := boundNames.push lit.getId
     | `(notation3Item| $lit:ident $(prec?)?) =>
-(syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs ←
+      (syntaxArgs, pattArgs) ← pushMacro syntaxArgs pattArgs <|←
         `(macroArg| $lit:ident:term $(prec?)?)
       boundIdents := boundIdents.insert lit.getId lit
-boundValues := boundValues.insert lit.getId lit.1.mkAntiquotNode `term
+      boundValues := boundValues.insert lit.getId <| lit.1.mkAntiquotNode `term
       boundNames := boundNames.push lit.getId
     | _stx => throwUnsupportedSyntax
   if hasScoped && !hasBindersItem then
@@ -1392,8 +967,8 @@ boundValues := boundValues.insert lit.getId lit.1.mkAntiquotNode `term
 
   -- 1. The `syntax` command
   let fullName ← elabSyntax (← `(command|
- [$doc]? (attrs?)? attrKind
-syntax (prec?)? [$name?:namedName]? (prio?)? [$syntaxArgs]* : term))
+    $[$doc]? $(attrs?)? $attrKind
+    syntax $(prec?)? $[$name?:namedName]? $(prio?)? $[$syntaxArgs]* : term))
 
   -- 2. The `macro_rules`
   trace[notation3] "syntax declaration has name {fullName}"
@@ -1407,7 +982,7 @@ syntax (prec?)? [$name?:namedName]? (prio?)? [$syntaxArgs]* : term))
 
   -- 3. Create a delaborator
   if getPrettyPrintOpt pp? then
-matchers := matchers.push Mathlib.Notation3.mkExprMatcher val boundNames
+    matchers := matchers.push <| Mathlib.Notation3.mkExprMatcher val boundNames
     -- The matchers need to run in reverse order, so may as well reverse them here.
     let matchersM? := (matchers.reverse.mapM id).run
     -- We let local notations have access to `variable` declarations
@@ -1438,12 +1013,12 @@ matchers := matchers.push Mathlib.Notation3.mkExprMatcher val boundNames
         let body ←
           match key with
           | .app _ arity => ``(withOverApp $(quote arity) $bodyCore)
-          | _ => pure bodyCore
-elabCommand ← `(
+          | _            => pure bodyCore
+        elabCommand <| ← `(
           /-- Pretty printer defined by `notation3` command. -/
           @[$attrKind delab $(mkIdent key.key)]
- vis:visibility aux_def delab_app (mkIdent fullName) : Delab :=
-whenPPOption getPPNotation whenNotPPOption getPPExplicit body)
+          $vis:visibility aux_def delab_app $(mkIdent fullName) : Delab :=
+            whenPPOption getPPNotation <| whenNotPPOption getPPExplicit <| $body)
     else
       logWarning s!"\
         Was not able to generate a pretty printer for this notation. \
@@ -1461,8 +1036,9 @@ initialize Batteries.Linter.UnreachableTactic.addIgnoreTacticKind ``«notation3�
 macro_rules
   | `($[$doc]? $(attr)? scoped[$ns] notation3 $(prec)? $(n)? $(prio)? $(pp)? $items* => $t) =>
     `(with_weak_namespace $(mkIdentFrom ns <| rootNamespace ++ ns.getId)
- [$doc]? (attr)? scoped notation3 (prec)? (n)? (prio)? (pp)? items* => t)
+      $[$doc]? $(attr)? scoped notation3 $(prec)? $(n)? $(prio)? $(pp)? $items* => $t)
 
 end Notation3
 
 end Mathlib
+

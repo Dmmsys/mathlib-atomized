@@ -11,7 +11,7 @@ public import Mathlib.CategoryTheory.Monoidal.Functor
 # Constructing monoidal functors from natural transformations between multifunctors
 
 This file provides alternative constructors for (op/lax) monoidal functors, given tensorators
-`μ : F - ⊗ F - ⟶ F (- ⊗ -)` / `δ : F (- ⊗ -) ⟶ F - ⊗ F -` as natural transformations between
+`μ : F - ⊗ F - ⟶  F (- ⊗ -)` / `δ : F (- ⊗ -) ⟶ F - ⊗ F -` as natural transformations between
 bifunctors. The associativity conditions are phrased as equalities of natural transformations
 between trifunctors `(F - ⊗ F -) ⊗ F - ⟶ F (- ⊗ (- ⊗ -))` / `F ((- ⊗ -) ⊗ -) ⟶ F - ⊗ (F - ⊗ F -)`,
 and the unitality conditions are phrased as equalities of natural transformation between functors.
@@ -31,182 +31,146 @@ namespace MonoidalCategory
 
 open CategoryTheory.Functor
 
-/--
-Definition of `curriedTensorInsertFunctor₁` / `curriedTensorInsertFunctor₁` 的定义
+/-- The bifunctor `(F -) ⊗ -`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorInsertFunctor** 是 Mathlib 中的一个缩写定
+义，位于命名空间 `CategoryTheory.MonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorInsertFunctor₁
-  signature: (F : C ⥤ D)
-  body: (((whiskeringLeft₂ _).obj F).obj (𝟭 D)).obj (curriedTensor D)
-
-中文:
-缩写 curriedTensorInsertFunctor₁
-  签名: (F : C ⥤ D)
-  定义体: (((whiskeringLeft₂ _).obj F).obj (𝟭 D)).obj (curriedTensor D)
-
-Depends on / 依赖: curriedTensor
+--- 原说明 ---
+The bifunctor `(F -) ⊗ -`.
 -/
 abbrev curriedTensorInsertFunctor₁ (F : C ⥤ D) : C ⥤ D ⥤ D :=
   (((whiskeringLeft₂ _).obj F).obj (𝟭 D)).obj (curriedTensor D)
 
-/--
-Definition of `curriedTensorInsertFunctor₂` / `curriedTensorInsertFunctor₂` 的定义
+/-- The bifunctor `- ⊗ (F -)`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorInsertFunctor** 是 Mathlib 中的一个缩写定
+义，位于命名空间 `CategoryTheory.MonoidalCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorInsertFunctor₂
-  signature: (F : C ⥤ D)
-  body: (((whiskeringLeft₂ _).obj (𝟭 D)).obj F).obj (curriedTensor D)
-
-中文:
-缩写 curriedTensorInsertFunctor₂
-  签名: (F : C ⥤ D)
-  定义体: (((whiskeringLeft₂ _).obj (𝟭 D)).obj F).obj (curriedTensor D)
-
-Depends on / 依赖: curriedTensor
+--- 原说明 ---
+The bifunctor `- ⊗ (F -)`.
 -/
 abbrev curriedTensorInsertFunctor₂ (F : C ⥤ D) : D ⥤ C ⥤ D :=
   (((whiskeringLeft₂ _).obj (𝟭 D)).obj F).obj (curriedTensor D)
 
-/--
-Definition of `curriedTensorPre` / `curriedTensorPre` 的定义
+/-- The bifunctor `F - ⊗ F -`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPre** 是 Mathlib 中的一个缩写定义，位于命名空间 `
+CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPre (F : C ⥤ D) : C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPre
-  signature: (F : C ⥤ D)
-  body: .obj (curriedTensor D) .obj F (whiskeringLeft₂ _).obj F
-
-中文:
-缩写 curriedTensorPre
-  签名: (F : C ⥤ D)
-  定义体: .obj (curriedTensor D) .obj F (whiskeringLeft₂ _).obj F
-
-Depends on / 依赖: curriedTensor
+--- 原说明 ---
+The bifunctor `F - ⊗ F -`.
 -/
 abbrev curriedTensorPre (F : C ⥤ D) : C ⥤ C ⥤ D :=
-.obj (curriedTensor D) .obj F (whiskeringLeft₂ _).obj F
+  (whiskeringLeft₂ _).obj F |>.obj F |>.obj (curriedTensor D)
 
-/--
-Definition of `curriedTensorPost` / `curriedTensorPost` 的定义
+/-- The bifunctor `F (- ⊗ -)`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPost** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPost (F : C ⥤ D) : C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPost
-  signature: (F : C ⥤ D)
-  body: (Functor.postcompose₂.obj F).obj (curriedTensor C)
-
-中文:
-缩写 curriedTensorPost
-  签名: (F : C ⥤ D)
-  定义体: (Functor.postcompose₂.obj F).obj (curriedTensor C)
-
-Depends on / 依赖: Functor, Functor.postcompose, curriedTensor
+--- 原说明 ---
+The bifunctor `F (- ⊗ -)`.
 -/
 abbrev curriedTensorPost (F : C ⥤ D) : C ⥤ C ⥤ D :=
   (Functor.postcompose₂.obj F).obj (curriedTensor C)
 
-/--
-Definition of `curriedTensorPrePre` / `curriedTensorPrePre` 的定义
+/-- The trifunctor `(F - ⊗ F -) ⊗ F -`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPrePre** 是 Mathlib 中的一个缩写定义，位于命名空
+间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPrePre (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPrePre
-  signature: (F : C ⥤ D)
-  body: bifunctorComp₁₂ (curriedTensorPre F) (curriedTensorInsertFunctor₂ F)
-
-中文:
-缩写 curriedTensorPrePre
-  签名: (F : C ⥤ D)
-  定义体: bifunctorComp₁₂ (curriedTensorPre F) (curriedTensorInsertFunctor₂ F)
-
-Depends on / 依赖: curriedTensorPre
+--- 原说明 ---
+The trifunctor `(F - ⊗ F -) ⊗ F -`.
 -/
 abbrev curriedTensorPrePre (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D :=
   bifunctorComp₁₂ (curriedTensorPre F) (curriedTensorInsertFunctor₂ F)
 
-/--
-Definition of `curriedTensorPrePre'` / `curriedTensorPrePre'` 的定义
+/-- The trifunctor `F - ⊗ (F - ⊗ F -)`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPrePre'** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPrePre' (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPrePre'
-  signature: (F : C ⥤ D)
-  body: bifunctorComp₂₃ (curriedTensorInsertFunctor₁ F) (curriedTensorPre F)
-
-中文:
-缩写 curriedTensorPrePre'
-  签名: (F : C ⥤ D)
-  定义体: bifunctorComp₂₃ (curriedTensorInsertFunctor₁ F) (curriedTensorPre F)
-
-Depends on / 依赖: curriedTensorPre
+--- 原说明 ---
+The trifunctor `F - ⊗ (F - ⊗ F -)`.
 -/
 abbrev curriedTensorPrePre' (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D :=
   bifunctorComp₂₃ (curriedTensorInsertFunctor₁ F) (curriedTensorPre F)
 
-/--
-Definition of `curriedTensorPostPre` / `curriedTensorPostPre` 的定义
+/-- The trifunctor `F (- ⊗ -) ⊗ F -`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPostPre** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPostPre (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPostPre
-  signature: (F : C ⥤ D)
-  body: bifunctorComp₁₂ (curriedTensor C) (curriedTensorPre F)
-
-中文:
-缩写 curriedTensorPostPre
-  签名: (F : C ⥤ D)
-  定义体: bifunctorComp₁₂ (curriedTensor C) (curriedTensorPre F)
-
-Depends on / 依赖: curriedTensor, curriedTensorPre
+--- 原说明 ---
+The trifunctor `F (- ⊗ -) ⊗ F -`.
 -/
 abbrev curriedTensorPostPre (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D :=
   bifunctorComp₁₂ (curriedTensor C) (curriedTensorPre F)
 
-/--
-Definition of `curriedTensorPrePost` / `curriedTensorPrePost` 的定义
+/-- The trifunctor `F - ⊗ F (- ⊗ -)`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPrePost** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPrePost (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPrePost
-  signature: (F : C ⥤ D)
-  body: bifunctorComp₂₃ (curriedTensorPre F) (curriedTensor C)
-
-中文:
-缩写 curriedTensorPrePost
-  签名: (F : C ⥤ D)
-  定义体: bifunctorComp₂₃ (curriedTensorPre F) (curriedTensor C)
-
-Depends on / 依赖: curriedTensor, curriedTensorPre
+--- 原说明 ---
+The trifunctor `F - ⊗ F (- ⊗ -)`.
 -/
 abbrev curriedTensorPrePost (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D :=
   bifunctorComp₂₃ (curriedTensorPre F) (curriedTensor C)
 
-/--
-Definition of `curriedTensorPostPost` / `curriedTensorPostPost` 的定义
+/-- The trifunctor `F ((- ⊗ -) ⊗ -)` -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPostPost** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPostPost (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPostPost
-  signature: (F : C ⥤ D)
-  body: bifunctorComp₁₂ (curriedTensor C) (curriedTensorPost F)
-
-中文:
-缩写 curriedTensorPostPost
-  签名: (F : C ⥤ D)
-  定义体: bifunctorComp₁₂ (curriedTensor C) (curriedTensorPost F)
-
-Depends on / 依赖: curriedTensor, curriedTensorPost
+--- 原说明 ---
+The trifunctor `F ((- ⊗ -) ⊗ -)`
 -/
 abbrev curriedTensorPostPost (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D :=
   bifunctorComp₁₂ (curriedTensor C) (curriedTensorPost F)
 
-/--
-Definition of `curriedTensorPostPost'` / `curriedTensorPostPost'` 的定义
+/-- The trifunctor `F (- ⊗ (- ⊗ -))` -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPostPost'** 是 Mathlib 中的一个缩写定义，位于
+命名空间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPostPost' (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPostPost'
-  signature: (F : C ⥤ D)
-  body: bifunctorComp₂₃ (curriedTensorPost F) (curriedTensor C)
-
-中文:
-缩写 curriedTensorPostPost'
-  签名: (F : C ⥤ D)
-  定义体: bifunctorComp₂₃ (curriedTensorPost F) (curriedTensor C)
-
-Depends on / 依赖: curriedTensor, curriedTensorPost
+--- 原说明 ---
+The trifunctor `F (- ⊗ (- ⊗ -))`
 -/
 abbrev curriedTensorPostPost' (F : C ⥤ D) : C ⥤ C ⥤ C ⥤ D :=
   bifunctorComp₂₃ (curriedTensorPost F) (curriedTensor C)
@@ -215,81 +179,59 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The natural isomorphism of bifunctors `F - ⊗ F - ≅ F (- ⊗ -)`, given a monoidal functor `F`. -/
 @[simps!]
-/--
-Definition of `Functor.curriedTensorPreIsoPost` / `Functor.curriedTensorPreIsoPost` 的定义
+/-
+**CategoryTheory.MonoidalCategory.Functor.curriedTensorPreIsoPost** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.Functor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             (F : CategoryTheory.Functor C D) →            
+   [F.Monoidal] →                 CategoryTheory.MonoidalCategory.curriedTensorP
+re F ≅ CategoryTheory.MonoidalCategory.curriedTensorPost F
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.curriedTensorPreIsoPost
-  signature: (F : C ⥤ D) [F.Monoidal]
-  body: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Monoidal.μIso F _ _))
-
-中文:
-定义 函子.curriedTensorPreIsoPost
-  签名: (F : C ⥤ D) [F.幺半群]
-  定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Monoidal.μIso F _ _))
-
-Depends on / 依赖: Monoidal, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The natural isomorphism of bifunctors `F - ⊗ F - ≅ F (- ⊗ -)`, given a monoidal 
+functor `F`.
 -/
 def Functor.curriedTensorPreIsoPost (F : C ⥤ D) [F.Monoidal] :
     curriedTensorPre F ≅ curriedTensorPost F :=
-  NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Monoidal.μIso F _ _))
+  NatIso.ofComponents (fun _ ↦ NatIso.ofComponents (fun _ ↦ Monoidal.μIso F _ _))
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The functor which associates to a functor `F` the bifunctor `F - ⊗ F -`. -/
 @[simps]
-/--
-Definition of `curriedTensorPreFunctor` / `curriedTensorPreFunctor` 的定义
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPreFunctor** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPreFunctor : (C ⥤ D) ⥤ C ⥤ C ⥤ D where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curriedTensorPreFunctor
-  signature: : (C ⥤ D) ⥤ C ⥤ C ⥤ D where
-  body: curriedTensorPre F
-  map {F₁ F₂} f :=
-    { app X₁ :=
-        { app X₂ := f.app _ otimesₘ f.app _
-          naturality := by simp [← id_tensorHom] }
-      naturality _ _ _ := by
-        ext
-        simp [← tensorHom_id] }
-
-中文:
-定义 curriedTensorPreFunctor
-  签名: : (C ⥤ D) ⥤ C ⥤ C ⥤ D where
-  定义体: curriedTensorPre F
-  map {F₁ F₂} f :=
-    { app X₁ :=
-        { app X₂ := f.app _ otimesₘ f.app _
-          naturality := by simp [← id_tensorHom] }
-      naturality _ _ _ := by
-        ext
-        simp [← tensorHom_id] }
-
-Depends on / 依赖: curriedTensorPre
+--- 原说明 ---
+The functor which associates to a functor `F` the bifunctor `F - ⊗ F -`.
 -/
 def curriedTensorPreFunctor : (C ⥤ D) ⥤ C ⥤ C ⥤ D where
   obj F := curriedTensorPre F
   map {F₁ F₂} f :=
     { app X₁ :=
-        { app X₂ := f.app _ otimesₘ f.app _
+        { app X₂ := f.app _ ⊗ₘ f.app _
           naturality := by simp [← id_tensorHom] }
       naturality _ _ _ := by
         ext
         simp [← tensorHom_id] }
 
-/--
-Definition of `curriedTensorPostFunctor` / `curriedTensorPostFunctor` 的定义
+/-- The functor which associates to a functor `F` the bifunctor `F (- ⊗ -)`. -/
+/-
+**CategoryTheory.MonoidalCategory.curriedTensorPostFunctor** 是 Mathlib 中的一个缩写定义，
+位于命名空间 `CategoryTheory.MonoidalCategory`。
+形式化陈述：curriedTensorPostFunctor : (C ⥤ D) ⥤ C ⥤ C ⥤ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curriedTensorPostFunctor
-  signature: : (C ⥤ D) ⥤ C ⥤ C ⥤ D
-  body: Functor.postcompose₂.flip.obj (curriedTensor C)
-
-中文:
-缩写 curriedTensorPostFunctor
-  签名: : (C ⥤ D) ⥤ C ⥤ C ⥤ D
-  定义体: Functor.postcompose₂.flip.obj (curriedTensor C)
-
-Depends on / 依赖: Functor, Functor.postcompose, curriedTensor, flip.obj
+--- 原说明 ---
+The functor which associates to a functor `F` the bifunctor `F (- ⊗ -)`.
 -/
 abbrev curriedTensorPostFunctor : (C ⥤ D) ⥤ C ⥤ C ⥤ D :=
   Functor.postcompose₂.flip.obj (curriedTensor C)
@@ -312,14 +254,14 @@ such that the diagrams below commute, we define
 
 ```
       (F - ⊗ F -) ⊗ F -
-        / \
-       v v
-F (- ⊗ -) ⊗ F - F - ⊗ (F - ⊗ F -)
-       | |
-       v v
-F ((- ⊗ -) ⊗ -) F - ⊗ F (- ⊗ -)
-        \ /
-         v v
+        /           \
+       v             v
+F (- ⊗ -) ⊗ F -    F - ⊗ (F - ⊗ F -)
+       |             |
+       v             v
+F ((- ⊗ -) ⊗ -)    F - ⊗ F (- ⊗ -)
+        \            /
+         v          v
        F (- ⊗ (- ⊗ -))
 ```
 
@@ -327,18 +269,18 @@ F ((- ⊗ -) ⊗ -) F - ⊗ F (- ⊗ -)
 
 ```
 𝟙 ⊗ F - ⟶ F 𝟙 ⊗ F -
-  | |
-  v v
-  F ← F (𝟙 ⊗ -)
+  |           |
+  v           v
+  F    ←   F (𝟙 ⊗ -)
 ```
 
 ### Right unitality square
 
 ```
 F - ⊗ 𝟙 ⟶ F - ⊗ F 𝟙
-  | |
-  v v
-  F ← F (- ⊗ 𝟙)
+  |           |
+  v           v
+  F   ←   F (- ⊗ 𝟙)
 ```
 -/
 
@@ -348,20 +290,17 @@ namespace ofBifunctor
 The top left map in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap₁` / `firstMap₁` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：firstMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : curr
+iedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap₁
-  signature: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  body: (bifunctorComp₁₂Functor.map μ).app (curriedTensorInsertFunctor₂ F)
-
-中文:
-定义 firstMap₁
-  签名: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  定义体: (bifunctorComp₁₂Functor.map μ).app (curriedTensorInsertFunctor₂ F)
-
-Depends on / 依赖: Functor.map
+--- 原说明 ---
+The top left map in the associativity hexagon.
 -/
 def firstMap₁ {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
     curriedTensorPrePre F ⟶ curriedTensorPostPre F :=
@@ -371,20 +310,17 @@ def firstMap₁ {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) 
 The middle left map in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap₂` / `firstMap₂` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：firstMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : curr
+iedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap₂
-  signature: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  body: (bifunctorComp₁₂Functor.obj _).map μ
-
-中文:
-定义 firstMap₂
-  签名: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  定义体: (bifunctorComp₁₂Functor.obj _).map μ
-
-Depends on / 依赖: Functor.obj
+--- 原说明 ---
+The middle left map in the associativity hexagon.
 -/
 def firstMap₂ {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
     (curriedTensorPostPre F) ⟶ curriedTensorPostPost F :=
@@ -394,24 +330,17 @@ def firstMap₂ {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) 
 The bottom left map in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap₃` / `firstMap₃` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：firstMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : curr
+iedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap₃
-  signature: (F : C ⥤ D)
-  body: (postcompose₃.obj _).map (curriedAssociatorNatIso _).hom
-
-#adaptation_note
-
-中文:
-定义 firstMap₃
-  签名: (F : C ⥤ D)
-  定义体: (postcompose₃.obj _).map (curriedAssociatorNatIso _).hom
-
-#adaptation_note
-
-Depends on / 依赖: curriedAssociatorNatIso
+--- 原说明 ---
+The bottom left map in the associativity hexagon.
 -/
 def firstMap₃ (F : C ⥤ D) : curriedTensorPostPost F ⟶ curriedTensorPostPost' F :=
   (postcompose₃.obj _).map (curriedAssociatorNatIso _).hom
@@ -423,18 +352,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 The composition of the left maps in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap` / `firstMap` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：firstMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : curr
+iedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap
-  signature: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  body: firstMap₁ μ ≫ firstMap₂ μ ≫ firstMap₃ F
-
-中文:
-定义 firstMap
-  签名: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  定义体: firstMap₁ μ ≫ firstMap₂ μ ≫ firstMap₃ F
+--- 原说明 ---
+The composition of the left maps in the associativity hexagon.
 -/
 def firstMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
     curriedTensorPrePre F ⟶ curriedTensorPostPost' F :=
@@ -444,20 +372,17 @@ def firstMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
 The top right map in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap₁` / `secondMap₁` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：secondMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : cur
+riedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap₁
-  signature: (F : C ⥤ D)
-  body: ((((whiskeringLeft₃ D).obj F).obj F).obj F).map (curriedAssociatorNatIso D).hom
-
-中文:
-定义 secondMap₁
-  签名: (F : C ⥤ D)
-  定义体: ((((whiskeringLeft₃ D).obj F).obj F).obj F).map (curriedAssociatorNatIso D).hom
-
-Depends on / 依赖: curriedAssociatorNatIso
+--- 原说明 ---
+The top right map in the associativity hexagon.
 -/
 def secondMap₁ (F : C ⥤ D) : curriedTensorPrePre F ⟶ curriedTensorPrePre' F :=
   ((((whiskeringLeft₃ D).obj F).obj F).obj F).map (curriedAssociatorNatIso D).hom
@@ -466,20 +391,17 @@ def secondMap₁ (F : C ⥤ D) : curriedTensorPrePre F ⟶ curriedTensorPrePre' 
 The middle right map in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap₂` / `secondMap₂` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：secondMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : cur
+riedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap₂
-  signature: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  body: (bifunctorComp₂₃Functor.obj _).map μ
-
-中文:
-定义 secondMap₂
-  签名: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  定义体: (bifunctorComp₂₃Functor.obj _).map μ
-
-Depends on / 依赖: Functor.obj
+--- 原说明 ---
+The middle right map in the associativity hexagon.
 -/
 def secondMap₂ {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
     curriedTensorPrePre' F ⟶ curriedTensorPrePost F :=
@@ -489,24 +411,17 @@ def secondMap₂ {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
 The bottom right map in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap₃` / `secondMap₃` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：secondMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : cur
+riedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap₃
-  signature: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  body: (bifunctorComp₂₃Functor.map μ).app _
-
-#adaptation_note
-
-中文:
-定义 secondMap₃
-  签名: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  定义体: (bifunctorComp₂₃Functor.map μ).app _
-
-#adaptation_note
-
-Depends on / 依赖: Functor.map
+--- 原说明 ---
+The bottom right map in the associativity hexagon.
 -/
 def secondMap₃ {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
     curriedTensorPrePost F ⟶ curriedTensorPostPost' F :=
@@ -519,18 +434,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 The composition of the right maps in the associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap` / `secondMap` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+形式化陈述：secondMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) : cur
+riedTensorPrePre F ⟶ curriedTensorPostPost' F
+参数：μ : curriedTensorPre F ⟶ curriedTensorPost F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap
-  signature: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  body: secondMap₁ F ≫ secondMap₂ μ ≫ secondMap₃ μ
-
-中文:
-定义 secondMap
-  签名: {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F)
-  定义体: secondMap₁ F ≫ secondMap₂ μ ≫ secondMap₃ μ
+--- 原说明 ---
+The composition of the right maps in the associativity hexagon.
 -/
 def secondMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
     curriedTensorPrePre F ⟶ curriedTensorPostPost' F :=
@@ -540,20 +454,13 @@ def secondMap {F : C ⥤ D} (μ : curriedTensorPre F ⟶ curriedTensorPost F) :
 The left map in the left unitality square.
 -/
 @[simps!]
-/--
-Definition of `leftMapₗ` / `leftMapₗ` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.leftMap** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftMapₗ
-  signature: (F : C ⥤ D)
-  body: whiskerLeft F (leftUnitorNatIso D).hom
-
-中文:
-定义 leftMapₗ
-  签名: (F : C ⥤ D)
-  定义体: whiskerLeft F (leftUnitorNatIso D).hom
-
-Depends on / 依赖: leftUnitorNatIso, whiskerLeft
+--- 原说明 ---
+The left map in the left unitality square.
 -/
 def leftMapₗ (F : C ⥤ D) : F ⋙ tensorUnitLeft D ⟶ F :=
   whiskerLeft F (leftUnitorNatIso D).hom
@@ -562,20 +469,13 @@ def leftMapₗ (F : C ⥤ D) : F ⋙ tensorUnitLeft D ⟶ F :=
 The top map in the left unitality square.
 -/
 @[simps!]
-/--
-Definition of `topMapₗ` / `topMapₗ` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.topMap** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topMapₗ
-  signature: {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C))
-  body: whiskerLeft F ((curriedTensor _).map ε)
-
-中文:
-定义 topMapₗ
-  签名: {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C))
-  定义体: whiskerLeft F ((curriedTensor _).map ε)
-
-Depends on / 依赖: curriedTensor, whiskerLeft
+--- 原说明 ---
+The top map in the left unitality square.
 -/
 def topMapₗ {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C)) :
     F ⋙ tensorUnitLeft D ⟶ (curriedTensorPre F).obj (𝟙_ C) :=
@@ -585,20 +485,13 @@ def topMapₗ {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C)) :
 The bottom map in the left unitality square.
 -/
 @[simps!]
-/--
-Definition of `bottomMapₗ` / `bottomMapₗ` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.bottomMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bottomMapₗ
-  signature: (F : C ⥤ D)
-  body: whiskerRight (leftUnitorNatIso C).hom F
-
-中文:
-定义 bottomMapₗ
-  签名: (F : C ⥤ D)
-  定义体: whiskerRight (leftUnitorNatIso C).hom F
-
-Depends on / 依赖: leftUnitorNatIso, whiskerRight
+--- 原说明 ---
+The bottom map in the left unitality square.
 -/
 def bottomMapₗ (F : C ⥤ D) : (curriedTensor C).obj (𝟙_ C) ⋙ F ⟶ F :=
   whiskerRight (leftUnitorNatIso C).hom F
@@ -607,20 +500,13 @@ def bottomMapₗ (F : C ⥤ D) : (curriedTensor C).obj (𝟙_ C) ⋙ F ⟶ F :=
 The left map in the right unitality square.
 -/
 @[simps!]
-/--
-Definition of `leftMapᵣ` / `leftMapᵣ` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.leftMap** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftMapᵣ
-  signature: (F : C ⥤ D)
-  body: whiskerLeft F (rightUnitorNatIso D).hom
-
-中文:
-定义 leftMapᵣ
-  签名: (F : C ⥤ D)
-  定义体: whiskerLeft F (rightUnitorNatIso D).hom
-
-Depends on / 依赖: rightUnitorNatIso, whiskerLeft
+--- 原说明 ---
+The left map in the right unitality square.
 -/
 def leftMapᵣ (F : C ⥤ D) : F ⋙ tensorUnitRight D ⟶ F :=
   whiskerLeft F (rightUnitorNatIso D).hom
@@ -629,20 +515,13 @@ def leftMapᵣ (F : C ⥤ D) : F ⋙ tensorUnitRight D ⟶ F :=
 The top map in the right unitality square.
 -/
 @[simps!]
-/--
-Definition of `topMapᵣ` / `topMapᵣ` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.topMap** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topMapᵣ
-  signature: {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C))
-  body: whiskerLeft F ((curriedTensor _).flip.map ε)
-
-中文:
-定义 topMapᵣ
-  签名: {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C))
-  定义体: whiskerLeft F ((curriedTensor _).flip.map ε)
-
-Depends on / 依赖: curriedTensor, flip.map, whiskerLeft
+--- 原说明 ---
+The top map in the right unitality square.
 -/
 def topMapᵣ {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C)) :
     F ⋙ tensorUnitRight D ⟶ (curriedTensorPre F).flip.obj (𝟙_ C) :=
@@ -652,20 +531,13 @@ def topMapᵣ {F : C ⥤ D} (ε : 𝟙_ D ⟶ F.obj (𝟙_ C)) :
 The bottom map in the right unitality square.
 -/
 @[simps!]
-/--
-Definition of `bottomMapᵣ` / `bottomMapᵣ` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor.bottomMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.LaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bottomMapᵣ
-  signature: (F : C ⥤ D)
-  body: whiskerRight (rightUnitorNatIso C).hom F
-
-中文:
-定义 bottomMapᵣ
-  签名: (F : C ⥤ D)
-  定义体: whiskerRight (rightUnitorNatIso C).hom F
-
-Depends on / 依赖: rightUnitorNatIso, whiskerRight
+--- 原说明 ---
+The bottom map in the right unitality square.
 -/
 def bottomMapᵣ (F : C ⥤ D) : (curriedTensor C).flip.obj (𝟙_ C) ⋙ F ⟶ F :=
   whiskerRight (rightUnitorNatIso C).hom F
@@ -693,32 +565,19 @@ variable {F : C ⥤ D}
 relevant compatibilities.
 -/
 @[instance_reducible]
-/--
-Definition of `ofBifunctor` / `ofBifunctor` 的定义
+/-
+**CategoryTheory.Functor.LaxMonoidal.ofBifunctor** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.LaxMonoidal`。
+形式化陈述：ofBifunctor : F.LaxMonoidal where ε
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBifunctor
-  signature: : F.LaxMonoidal where
-  body: ε
-  μ X Y := (μ.app X).app Y
-  μ_natural_left f X := NatTrans.congr_app (μ.naturality f) X
-  μ_natural_right X f := (μ.app X).naturality f
-  associativity X Y Z :=
-    NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatTrans.congr_app left_unitality X
-  right_unitality X := NatTrans.congr_app right_unitality X
-
-中文:
-定义 ofBifunctor
-  签名: : F.松弛幺半群 where
-  定义体: ε
-  μ X Y := (μ.app X).app Y
-  μ_natural_left f X := NatTrans.congr_app (μ.naturality f) X
-  μ_natural_right X f := (μ.app X).naturality f
-  associativity X Y Z :=
-    NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatTrans.congr_app left_unitality X
-  right_unitality X := NatTrans.congr_app right_unitality X
+--- 原说明 ---
+`F` is lax monoidal given a unit morphism `ε : 𝟙_ D ⟶ F.obj (𝟙_ C))` and a tenso
+rator
+`μ : F - ⊗ F - ⟶ F (- ⊗ -)` as a natural transformation between bifunctors, sati
+sfying the
+relevant compatibilities.
 -/
 def ofBifunctor : F.LaxMonoidal where
   ε := ε
@@ -746,32 +605,32 @@ such that the diagrams below commute, we define
 
 ```
       F ((- ⊗ -) ⊗ -)
-        / \
-       v v
-F (- ⊗ -) ⊗ F - F (- ⊗ (- ⊗ -))
-       | |
-       v v
-(F - ⊗ F -) ⊗ F - F - ⊗ F (- ⊗ -)
-        \ /
-         v v
+        /           \
+       v             v
+F (- ⊗ -) ⊗ F -      F (- ⊗ (- ⊗ -))
+       |                |
+       v                v
+(F - ⊗ F -) ⊗ F -    F - ⊗ F (- ⊗ -)
+        \            /
+         v          v
        F - ⊗ (F - ⊗ F -)
 ```
 
 ### Oplax left unitality square
 
 ```
-  F ⟶ F (𝟙 ⊗ -)
-  | |
-  v v
+  F   ⟶  F (𝟙 ⊗ -)
+  |           |
+  v           v
 𝟙 ⊗ F - ← F 𝟙 ⊗ F -
 ```
 
 ### Oplax right unitality square
 
 ```
-  F ⟶ F (- ⊗ 𝟙)
-  | |
-  v v
+  F  ⟶   F (- ⊗ 𝟙)
+  |           |
+  v           v
 F - ⊗ 𝟙 ← F - ⊗ F 𝟙
 ```
 -/
@@ -782,20 +641,25 @@ namespace ofBifunctor
 The top left map in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap₁` / `firstMap₁` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap₁
-  signature: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  body: (bifunctorComp₁₂Functor.obj (curriedTensor C)).map δ
-
-中文:
-定义 firstMap₁
-  签名: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  定义体: (bifunctorComp₁₂Functor.obj (curriedTensor C)).map δ
-
-Depends on / 依赖: Functor.obj, curriedTensor
+--- 原说明 ---
+The top left map in the oplax associativity hexagon.
 -/
 def firstMap₁ {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
     curriedTensorPostPost F ⟶ curriedTensorPostPre F :=
@@ -805,20 +669,25 @@ def firstMap₁ {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) 
 The middle left map in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap₂` / `firstMap₂` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap₂
-  signature: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  body: (bifunctorComp₁₂Functor.map δ).app (curriedTensorInsertFunctor₂ F)
-
-中文:
-定义 firstMap₂
-  签名: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  定义体: (bifunctorComp₁₂Functor.map δ).app (curriedTensorInsertFunctor₂ F)
-
-Depends on / 依赖: Functor.map
+--- 原说明 ---
+The middle left map in the oplax associativity hexagon.
 -/
 def firstMap₂ {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
     (curriedTensorPostPre F) ⟶ curriedTensorPrePre F :=
@@ -828,24 +697,25 @@ def firstMap₂ {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) 
 The bottom left map in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap₃` / `firstMap₃` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap₃
-  signature: (F : C ⥤ D)
-  body: ((((whiskeringLeft₃ D).obj F).obj F).obj F).map (curriedAssociatorNatIso D).hom
-
-#adaptation_note
-
-中文:
-定义 firstMap₃
-  签名: (F : C ⥤ D)
-  定义体: ((((whiskeringLeft₃ D).obj F).obj F).obj F).map (curriedAssociatorNatIso D).hom
-
-#adaptation_note
-
-Depends on / 依赖: curriedAssociatorNatIso
+--- 原说明 ---
+The bottom left map in the oplax associativity hexagon.
 -/
 def firstMap₃ (F : C ⥤ D) : curriedTensorPrePre F ⟶ curriedTensorPrePre' F :=
   ((((whiskeringLeft₃ D).obj F).obj F).obj F).map (curriedAssociatorNatIso D).hom
@@ -857,18 +727,25 @@ set_option backward.isDefEq.respectTransparency.types false in
 The composition of the three left maps in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `firstMap` / `firstMap` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.firstMap** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstMap
-  signature: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  body: firstMap₁ δ ≫ firstMap₂ δ ≫ firstMap₃ F
-
-中文:
-定义 firstMap
-  签名: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  定义体: firstMap₁ δ ≫ firstMap₂ δ ≫ firstMap₃ F
+--- 原说明 ---
+The composition of the three left maps in the oplax associativity hexagon.
 -/
 def firstMap {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
     curriedTensorPostPost F ⟶ curriedTensorPrePre' F :=
@@ -878,20 +755,25 @@ def firstMap {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
 The top right map in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap₁` / `secondMap₁` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap₁
-  signature: (F : C ⥤ D)
-  body: (postcompose₃.obj _).map (curriedAssociatorNatIso _).hom
-
-中文:
-定义 secondMap₁
-  签名: (F : C ⥤ D)
-  定义体: (postcompose₃.obj _).map (curriedAssociatorNatIso _).hom
-
-Depends on / 依赖: curriedAssociatorNatIso
+--- 原说明 ---
+The top right map in the oplax associativity hexagon.
 -/
 def secondMap₁ (F : C ⥤ D) : curriedTensorPostPost F ⟶ curriedTensorPostPost' F :=
   (postcompose₃.obj _).map (curriedAssociatorNatIso _).hom
@@ -900,20 +782,25 @@ def secondMap₁ (F : C ⥤ D) : curriedTensorPostPost F ⟶ curriedTensorPostPo
 The middle right map in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap₂` / `secondMap₂` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap₂
-  signature: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  body: (bifunctorComp₂₃Functor.map δ).app _
-
-中文:
-定义 secondMap₂
-  签名: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  定义体: (bifunctorComp₂₃Functor.map δ).app _
-
-Depends on / 依赖: Functor.map
+--- 原说明 ---
+The middle right map in the oplax associativity hexagon.
 -/
 def secondMap₂ {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
     curriedTensorPostPost' F ⟶ curriedTensorPrePost F :=
@@ -923,24 +810,25 @@ def secondMap₂ {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
 The bottom right map in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap₃` / `secondMap₃` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap₃
-  signature: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  body: (bifunctorComp₂₃Functor.obj (curriedTensorInsertFunctor₁ F)).map δ
-
-#adaptation_note
-
-中文:
-定义 secondMap₃
-  签名: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  定义体: (bifunctorComp₂₃Functor.obj (curriedTensorInsertFunctor₁ F)).map δ
-
-#adaptation_note
-
-Depends on / 依赖: Functor.obj
+--- 原说明 ---
+The bottom right map in the oplax associativity hexagon.
 -/
 def secondMap₃ {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
     curriedTensorPrePost F ⟶ curriedTensorPrePre' F :=
@@ -953,18 +841,25 @@ set_option backward.isDefEq.respectTransparency.types false in
 The composition of the three right maps in the oplax associativity hexagon.
 -/
 @[simps!]
-/--
-Definition of `secondMap` / `secondMap` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.secondMap** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Cate
+goryTheory.MonoidalCategory.curriedTensorPre F) →                 (CategoryTheor
+y.MonoidalCategory.curriedTensorPostPost F ⟶                   CategoryTheory.Mo
+noidalCategory.curriedTensorPrePre' F)
+参数：CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶                   Categ
+oryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.cu
+rriedTensorPostPost F ⟶                   CategoryTheory.MonoidalCategory.currie
+dTensorPrePre' F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition secondMap
-  signature: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  body: secondMap₁ F ≫ secondMap₂ δ ≫ secondMap₃ δ
-
-中文:
-定义 secondMap
-  签名: {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F)
-  定义体: secondMap₁ F ≫ secondMap₂ δ ≫ secondMap₃ δ
+--- 原说明 ---
+The composition of the three right maps in the oplax associativity hexagon.
 -/
 def secondMap {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
     curriedTensorPostPost F ⟶ curriedTensorPrePre' F :=
@@ -974,20 +869,13 @@ def secondMap {F : C ⥤ D} (δ : curriedTensorPost F ⟶ curriedTensorPre F) :
 The left map in the oplax left unitality square.
 -/
 @[simps!]
-/--
-Definition of `leftMapₗ` / `leftMapₗ` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.leftMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftMapₗ
-  signature: (F : C ⥤ D)
-  body: whiskerLeft F (leftUnitorNatIso D).inv
-
-中文:
-定义 leftMapₗ
-  签名: (F : C ⥤ D)
-  定义体: whiskerLeft F (leftUnitorNatIso D).inv
-
-Depends on / 依赖: leftUnitorNatIso, whiskerLeft
+--- 原说明 ---
+The left map in the oplax left unitality square.
 -/
 def leftMapₗ (F : C ⥤ D) : F ⟶ F ⋙ tensorUnitLeft D :=
   whiskerLeft F (leftUnitorNatIso D).inv
@@ -996,20 +884,13 @@ def leftMapₗ (F : C ⥤ D) : F ⟶ F ⋙ tensorUnitLeft D :=
 The top map in the oplax left unitality square.
 -/
 @[simps!]
-/--
-Definition of `topMapₗ` / `topMapₗ` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.topMap** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topMapₗ
-  signature: (F : C ⥤ D)
-  body: whiskerRight (leftUnitorNatIso C).inv F
-
-中文:
-定义 topMapₗ
-  签名: (F : C ⥤ D)
-  定义体: whiskerRight (leftUnitorNatIso C).inv F
-
-Depends on / 依赖: leftUnitorNatIso, whiskerRight
+--- 原说明 ---
+The top map in the oplax left unitality square.
 -/
 def topMapₗ (F : C ⥤ D) : F ⟶ (curriedTensor C).obj (𝟙_ C) ⋙ F :=
   whiskerRight (leftUnitorNatIso C).inv F
@@ -1018,20 +899,13 @@ def topMapₗ (F : C ⥤ D) : F ⟶ (curriedTensor C).obj (𝟙_ C) ⋙ F :=
 The bottom map in the oplax left unitality square.
 -/
 @[simps!]
-/--
-Definition of `bottomMapₗ` / `bottomMapₗ` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.bottomMap** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bottomMapₗ
-  signature: {F : C ⥤ D} (η : F.obj (𝟙_ C) ⟶ 𝟙_ D)
-  body: whiskerLeft F ((curriedTensor _).map η)
-
-中文:
-定义 bottomMapₗ
-  签名: {F : C ⥤ D} (η : F.obj (𝟙_ C) ⟶ 𝟙_ D)
-  定义体: whiskerLeft F ((curriedTensor _).map η)
-
-Depends on / 依赖: curriedTensor, whiskerLeft
+--- 原说明 ---
+The bottom map in the oplax left unitality square.
 -/
 def bottomMapₗ {F : C ⥤ D} (η : F.obj (𝟙_ C) ⟶ 𝟙_ D) :
     (curriedTensorPre F).obj (𝟙_ C) ⟶ F ⋙ tensorUnitLeft D :=
@@ -1041,20 +915,13 @@ def bottomMapₗ {F : C ⥤ D} (η : F.obj (𝟙_ C) ⟶ 𝟙_ D) :
 The left map in the oplax right unitality square.
 -/
 @[simps!]
-/--
-Definition of `leftMapᵣ` / `leftMapᵣ` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.leftMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftMapᵣ
-  signature: (F : C ⥤ D)
-  body: whiskerLeft F (rightUnitorNatIso D).inv
-
-中文:
-定义 leftMapᵣ
-  签名: (F : C ⥤ D)
-  定义体: whiskerLeft F (rightUnitorNatIso D).inv
-
-Depends on / 依赖: rightUnitorNatIso, whiskerLeft
+--- 原说明 ---
+The left map in the oplax right unitality square.
 -/
 def leftMapᵣ (F : C ⥤ D) : F ⟶ F ⋙ tensorUnitRight D :=
   whiskerLeft F (rightUnitorNatIso D).inv
@@ -1063,20 +930,13 @@ def leftMapᵣ (F : C ⥤ D) : F ⟶ F ⋙ tensorUnitRight D :=
 The top map in the oplax right unitality square.
 -/
 @[simps!]
-/--
-Definition of `topMapᵣ` / `topMapᵣ` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.topMap** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topMapᵣ
-  signature: (F : C ⥤ D)
-  body: whiskerRight (rightUnitorNatIso C).inv F
-
-中文:
-定义 topMapᵣ
-  签名: (F : C ⥤ D)
-  定义体: whiskerRight (rightUnitorNatIso C).inv F
-
-Depends on / 依赖: rightUnitorNatIso, whiskerRight
+--- 原说明 ---
+The top map in the oplax right unitality square.
 -/
 def topMapᵣ (F : C ⥤ D) : F ⟶ (curriedTensor C).flip.obj (𝟙_ C) ⋙ F :=
   whiskerRight (rightUnitorNatIso C).inv F
@@ -1085,20 +945,13 @@ def topMapᵣ (F : C ⥤ D) : F ⟶ (curriedTensor C).flip.obj (𝟙_ C) ⋙ F :
 The bottom map in the oplax right unitality square.
 -/
 @[simps!]
-/--
-Definition of `bottomMapᵣ` / `bottomMapᵣ` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.bottomMap** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.OplaxMonoidal.ofBifunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bottomMapᵣ
-  signature: {F : C ⥤ D} (η : F.obj (𝟙_ C) ⟶ 𝟙_ D)
-  body: whiskerLeft F ((curriedTensor _).flip.map η)
-
-中文:
-定义 bottomMapᵣ
-  签名: {F : C ⥤ D} (η : F.obj (𝟙_ C) ⟶ 𝟙_ D)
-  定义体: whiskerLeft F ((curriedTensor _).flip.map η)
-
-Depends on / 依赖: curriedTensor, flip.map, whiskerLeft
+--- 原说明 ---
+The bottom map in the oplax right unitality square.
 -/
 def bottomMapᵣ {F : C ⥤ D} (η : F.obj (𝟙_ C) ⟶ 𝟙_ D) :
     (curriedTensorPre F).flip.obj (𝟙_ C) ⟶ F ⋙ tensorUnitRight D :=
@@ -1127,32 +980,53 @@ variable {F : C ⥤ D}
 relevant compatibilities.
 -/
 @[instance_reducible]
-/--
-Definition of `ofBifunctor` / `ofBifunctor` 的定义
+/-
+**CategoryTheory.Functor.OplaxMonoidal.ofBifunctor** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor.OplaxMonoidal`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (η :                   F.obj (CategoryTheory.MonoidalCategoryStruct.tensorUni
+t C) ⟶                     CategoryTheory.MonoidalCategoryStruct.tensorUnit D) →
+                 (δ :                     CategoryTheory.MonoidalCategory.currie
+dTensorPost F ⟶                       CategoryTheory.MonoidalCategory.curriedTen
+sorPre F) →                   CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.f
+irstMap δ =                       CategoryTheory.Functor.OplaxMonoidal.ofBifunct
+or.secondMap δ →                     CategoryTheory.Functor.OplaxMonoidal.ofBifu
+nctor.leftMapₗ F =                         CategoryTheory.CategoryStruct.comp (C
+ategoryTheory.Functor.OplaxMonoidal.ofBifunctor.topMapₗ F)                      
+     (CategoryTheory.CategoryStruct.comp                             (δ.app (Cat
+egoryTheory.MonoidalCategoryStruct.tensorUnit C))                             (C
+ategoryTheory.Functor.OplaxMonoidal.ofBifunctor.bottomMapₗ η)) →                
+       CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.leftMapᵣ F =            
+               CategoryTheory.CategoryStruct.comp                             (C
+ategoryTheory.Functor.OplaxMonoidal.ofBifunctor.topMapᵣ F)                      
+       (CategoryTheory.CategoryStruct.comp                               (((Cate
+goryTheory.flipFunctor C C D).map δ).app                                 (Catego
+ryTheory.MonoidalCategoryStruct.tensorUnit C))                               (Ca
+tegoryTheory.Functor.OplaxMonoidal.ofBifunctor.bottomMapᵣ η)) →                 
+        F.OplaxMonoidal
+参数：η :                   F.obj (CategoryTheory.MonoidalCategoryStruct.tensorUnit
+ C) ⟶                     CategoryTheory.MonoidalCategoryStruct.tensorUnit D；δ :
+                     CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶      
+                 CategoryTheory.MonoidalCategory.curriedTensorPre F；CategoryTheo
+ry.Functor.OplaxMonoidal.ofBifunctor.topMapₗ F；CategoryTheory.CategoryStruct.com
+p                             (δ.app (CategoryTheory.MonoidalCategoryStruct.tens
+orUnit C))                             (CategoryTheory.Functor.OplaxMonoidal.ofB
+ifunctor.bottomMapₗ η)；CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.topMapᵣ 
+F；CategoryTheory.CategoryStruct.comp                               (((CategoryTh
+eory.flipFunctor C C D).map δ).app                                 (CategoryTheo
+ry.MonoidalCategoryStruct.tensorUnit C))                               (Category
+Theory.Functor.OplaxMonoidal.ofBifunctor.bottomMapᵣ η)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBifunctor
-  signature: : F.OplaxMonoidal where
-  body: η
-  δ X Y := (δ.app X).app Y
-  δ_natural_left f X := (NatTrans.congr_app (δ.naturality f) X).symm
-  δ_natural_right X f := ((δ.app X).naturality f).symm
-  oplax_associativity X Y Z :=
-    NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app oplax_associativity X) Y) Z
-  oplax_left_unitality X := NatTrans.congr_app oplax_left_unitality X
-  oplax_right_unitality X := NatTrans.congr_app oplax_right_unitality X
-
-中文:
-定义 ofBifunctor
-  签名: : F.反松弛幺半群 where
-  定义体: η
-  δ X Y := (δ.app X).app Y
-  δ_natural_left f X := (NatTrans.congr_app (δ.naturality f) X).symm
-  δ_natural_right X f := ((δ.app X).naturality f).symm
-  oplax_associativity X Y Z :=
-    NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app oplax_associativity X) Y) Z
-  oplax_left_unitality X := NatTrans.congr_app oplax_left_unitality X
-  oplax_right_unitality X := NatTrans.congr_app oplax_right_unitality X
+--- 原说明 ---
+`F` is oplax monoidal given a counit morphism `η : F.obj (𝟙_ C) ⟶ 𝟙_ D` and a te
+nsorator
+`δ : F (- ⊗ -) ⟶ F - ⊗ F -` as a natural transformation between bifunctors, sati
+sfying the
+relevant compatibilities.
 -/
 def ofBifunctor : F.OplaxMonoidal where
   η := η
@@ -1201,30 +1075,103 @@ variable {F : C ⥤ D}
 relevant compatibilities.
 -/
 @[instance_reducible]
-/--
-Definition of `ofBifunctor` / `ofBifunctor` 的定义
+/-
+**CategoryTheory.Functor.Monoidal.ofBifunctor** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor.Monoidal`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (ε :                   CategoryTheory.MonoidalCategoryStruct.tensorUnit D ⟶  
+                   F.obj (CategoryTheory.MonoidalCategoryStruct.tensorUnit C)) →
+                 (μ :                     CategoryTheory.MonoidalCategory.currie
+dTensorPre F ⟶                       CategoryTheory.MonoidalCategory.curriedTens
+orPost F) →                   CategoryTheory.Functor.LaxMonoidal.ofBifunctor.fir
+stMap μ =                       CategoryTheory.Functor.LaxMonoidal.ofBifunctor.s
+econdMap μ →                     CategoryTheory.Functor.LaxMonoidal.ofBifunctor.
+leftMapₗ F =                         CategoryTheory.CategoryStruct.comp (Categor
+yTheory.Functor.LaxMonoidal.ofBifunctor.topMapₗ ε)                           (Ca
+tegoryTheory.CategoryStruct.comp                             (μ.app (CategoryThe
+ory.MonoidalCategoryStruct.tensorUnit C))                             (CategoryT
+heory.Functor.LaxMonoidal.ofBifunctor.bottomMapₗ F)) →                       Cat
+egoryTheory.Functor.LaxMonoidal.ofBifunctor.leftMapᵣ F =                        
+   CategoryTheory.CategoryStruct.comp (CategoryTheory.Functor.LaxMonoidal.ofBifu
+nctor.topMapᵣ ε)                             (CategoryTheory.CategoryStruct.comp
+                               (((CategoryTheory.flipFunctor C C D).map μ).app  
+                               (CategoryTheory.MonoidalCategoryStruct.tensorUnit
+ C))                               (CategoryTheory.Functor.LaxMonoidal.ofBifunct
+or.bottomMapᵣ F)) →                         (η :                             F.o
+bj (CategoryTheory.MonoidalCategoryStruct.tensorUnit C) ⟶                       
+        CategoryTheory.MonoidalCategoryStruct.tensorUnit D) →                   
+        (δ :                               CategoryTheory.MonoidalCategory.curri
+edTensorPost F ⟶                                 CategoryTheory.MonoidalCategory
+.curriedTensorPre F) →                             CategoryTheory.Functor.OplaxM
+onoidal.ofBifunctor.firstMap δ =                                 CategoryTheory.
+Functor.OplaxMonoidal.ofBifunctor.secondMap δ →                               Ca
+tegoryTheory.Functor.OplaxMonoidal.ofBifunctor.leftMapₗ F =                     
+              CategoryTheory.CategoryStruct.comp                                
+     (CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.topMapₗ F)               
+                      (CategoryTheory.CategoryStruct.comp                       
+                (δ.app (CategoryTheory.MonoidalCategoryStruct.tensorUnit C))    
+                                   (CategoryTheory.Functor.OplaxMonoidal.ofBifun
+ctor.bottomMapₗ η)) →                                 CategoryTheory.Functor.Opl
+axMonoidal.ofBifunctor.leftMapᵣ F =                                     Category
+Theory.CategoryStruct.comp                                       (CategoryTheory
+.Functor.OplaxMonoidal.ofBifunctor.topMapᵣ F)                                   
+    (CategoryTheory.CategoryStruct.comp                                         
+(((CategoryTheory.flipFunctor C C D).map δ).app                                 
+          (CategoryTheory.MonoidalCategoryStruct.tensorUnit C))                 
+                        (CategoryTheory.Functor.OplaxMonoidal.ofBifunctor.bottom
+Mapᵣ η)) →                                   CategoryTheory.CategoryStruct.comp 
+ε η =                                       CategoryTheory.CategoryStruct.id    
+                                     (CategoryTheory.MonoidalCategoryStruct.tens
+orUnit D) →                                     CategoryTheory.CategoryStruct.co
+mp η ε =                                         CategoryTheory.CategoryStruct.i
+d                                           (F.obj (CategoryTheory.MonoidalCateg
+oryStruct.tensorUnit C)) →                                       CategoryTheory.
+CategoryStruct.comp μ δ =                                           CategoryTheo
+ry.CategoryStruct.id                                             (CategoryTheory
+.MonoidalCategory.curriedTensorPre F) →                                         
+CategoryTheory.CategoryStruct.comp δ μ =                                        
+     CategoryTheory.CategoryStruct.id                                           
+    (CategoryTheory.MonoidalCategory.curriedTensorPost F) →                     
+                      F.Monoidal
+参数：ε :                   CategoryTheory.MonoidalCategoryStruct.tensorUnit D ⟶   
+                  F.obj (CategoryTheory.MonoidalCategoryStruct.tensorUnit C)；μ :
+                     CategoryTheory.MonoidalCategory.curriedTensorPre F ⟶       
+                CategoryTheory.MonoidalCategory.curriedTensorPost F；CategoryTheo
+ry.Functor.LaxMonoidal.ofBifunctor.topMapₗ ε；CategoryTheory.CategoryStruct.comp 
+                            (μ.app (CategoryTheory.MonoidalCategoryStruct.tensor
+Unit C))                             (CategoryTheory.Functor.LaxMonoidal.ofBifun
+ctor.bottomMapₗ F)；CategoryTheory.Functor.LaxMonoidal.ofBifunctor.topMapᵣ ε；Cate
+goryTheory.CategoryStruct.comp                               (((CategoryTheory.f
+lipFunctor C C D).map μ).app                                 (CategoryTheory.Mon
+oidalCategoryStruct.tensorUnit C))                               (CategoryTheory
+.Functor.LaxMonoidal.ofBifunctor.bottomMapᵣ F)；η :                             F
+.obj (CategoryTheory.MonoidalCategoryStruct.tensorUnit C) ⟶                     
+          CategoryTheory.MonoidalCategoryStruct.tensorUnit D；δ :                
+               CategoryTheory.MonoidalCategory.curriedTensorPost F ⟶            
+                     CategoryTheory.MonoidalCategory.curriedTensorPre F；Category
+Theory.Functor.OplaxMonoidal.ofBifunctor.topMapₗ F；CategoryTheory.CategoryStruct
+.comp                                       (δ.app (CategoryTheory.MonoidalCateg
+oryStruct.tensorUnit C))                                       (CategoryTheory.F
+unctor.OplaxMonoidal.ofBifunctor.bottomMapₗ η)；CategoryTheory.Functor.OplaxMonoi
+dal.ofBifunctor.topMapᵣ F；CategoryTheory.CategoryStruct.comp                    
+                     (((CategoryTheory.flipFunctor C C D).map δ).app            
+                               (CategoryTheory.MonoidalCategoryStruct.tensorUnit
+ C))                                         (CategoryTheory.Functor.OplaxMonoid
+al.ofBifunctor.bottomMapᵣ η)；CategoryTheory.MonoidalCategoryStruct.tensorUnit D；
+F.obj (CategoryTheory.MonoidalCategoryStruct.tensorUnit C)；CategoryTheory.Monoid
+alCategory.curriedTensorPre F；CategoryTheory.MonoidalCategory.curriedTensorPost 
+F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBifunctor
-  signature: (ε_η : ε ≫ η = 𝟙 _) (η_ε : η ≫ ε = 𝟙 _) (μ_δ : μ ≫ δ = 𝟙 _)
-  body: .ofBifunctor ε μ associativity left_unitality right_unitality
-  toOplaxMonoidal := .ofBifunctor η δ oplax_associativity oplax_left_unitality oplax_right_unitality
-  ε_η := ε_η
-  η_ε := η_ε
-  μ_δ X Y := NatTrans.congr_app ((NatTrans.congr_app μ_δ) X) Y
-  δ_μ X Y := NatTrans.congr_app ((NatTrans.congr_app δ_μ) X) Y
-
-中文:
-定义 ofBifunctor
-  签名: (ε_η : ε ≫ η = 𝟙 _) (η_ε : η ≫ ε = 𝟙 _) (μ_δ : μ ≫ δ = 𝟙 _)
-  定义体: .ofBifunctor ε μ associativity left_unitality right_unitality
-  toOplaxMonoidal := .ofBifunctor η δ oplax_associativity oplax_left_unitality oplax_right_unitality
-  ε_η := ε_η
-  η_ε := η_ε
-  μ_δ X Y := NatTrans.congr_app ((NatTrans.congr_app μ_δ) X) Y
-  δ_μ X Y := NatTrans.congr_app ((NatTrans.congr_app δ_μ) X) Y
-
-Depends on / 依赖: associativity, left_unitality, ofBifunctor, right_unitality
+--- 原说明 ---
+`F` is monoidal given a co/unit morphisms `ε/η : 𝟙_ D ↔ F.obj (𝟙_ C)` and tensor
+ators
+`μ / δ : F - ⊗ F - ↔ F (- ⊗ -)` as natural transformations between bifunctors, s
+atisfying the
+relevant compatibilities.
 -/
 def ofBifunctor (ε_η : ε ≫ η = 𝟙 _) (η_ε : η ≫ ε = 𝟙 _) (μ_δ : μ ≫ δ = 𝟙 _)
     (δ_μ : δ ≫ μ = 𝟙 _) : F.Monoidal where
@@ -1254,31 +1201,57 @@ variable {F : C ⥤ D}
       topMapᵣ ε.hom ≫ ((flipFunctor _ _ _).map μ.hom).app (𝟙_ C) ≫ bottomMapᵣ F)
 
 /--
-Definition of `ofBifunctor` / `ofBifunctor` 的定义
+`F` is monoidal given a unit isomorphism `ε : 𝟙_ D ≅ F.obj (𝟙_ C)` and a tensorator isomorphism
+`μ : F - ⊗ F - ≅ F (- ⊗ -)` as a natural isomorphism between bifunctors, satisfying the
+relevant compatibilities.
+-/
+/-
+**CategoryTheory.Functor.CoreMonoidal.ofBifunctor** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.CoreMonoidal`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {D : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} D] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             {F : CategoryTheory.Functor C D} →            
+   (ε :                   CategoryTheory.MonoidalCategoryStruct.tensorUnit D ≅  
+                   F.obj (CategoryTheory.MonoidalCategoryStruct.tensorUnit C)) →
+                 (μ :                     CategoryTheory.MonoidalCategory.currie
+dTensorPre F ≅                       CategoryTheory.MonoidalCategory.curriedTens
+orPost F) →                   CategoryTheory.Functor.LaxMonoidal.ofBifunctor.fir
+stMap μ.hom =                       CategoryTheory.Functor.LaxMonoidal.ofBifunct
+or.secondMap μ.hom →                     CategoryTheory.Functor.LaxMonoidal.ofBi
+functor.leftMapₗ F =                         CategoryTheory.CategoryStruct.comp 
+                          (CategoryTheory.Functor.LaxMonoidal.ofBifunctor.topMap
+ₗ ε.hom)                           (CategoryTheory.CategoryStruct.comp          
+                   (μ.hom.app (CategoryTheory.MonoidalCategoryStruct.tensorUnit 
+C))                             (CategoryTheory.Functor.LaxMonoidal.ofBifunctor.
+bottomMapₗ F)) →                       CategoryTheory.Functor.LaxMonoidal.ofBifu
+nctor.leftMapᵣ F =                           CategoryTheory.CategoryStruct.comp 
+                            (CategoryTheory.Functor.LaxMonoidal.ofBifunctor.topM
+apᵣ ε.hom)                             (CategoryTheory.CategoryStruct.comp      
+                         (((CategoryTheory.flipFunctor C C D).map μ.hom).app    
+                             (CategoryTheory.MonoidalCategoryStruct.tensorUnit C
+))                               (CategoryTheory.Functor.LaxMonoidal.ofBifunctor
+.bottomMapᵣ F)) →                         F.CoreMonoidal
+参数：ε :                   CategoryTheory.MonoidalCategoryStruct.tensorUnit D ≅   
+                  F.obj (CategoryTheory.MonoidalCategoryStruct.tensorUnit C)；μ :
+                     CategoryTheory.MonoidalCategory.curriedTensorPre F ≅       
+                CategoryTheory.MonoidalCategory.curriedTensorPost F；CategoryTheo
+ry.Functor.LaxMonoidal.ofBifunctor.topMapₗ ε.hom；CategoryTheory.CategoryStruct.c
+omp                             (μ.hom.app (CategoryTheory.MonoidalCategoryStruc
+t.tensorUnit C))                             (CategoryTheory.Functor.LaxMonoidal
+.ofBifunctor.bottomMapₗ F)；CategoryTheory.Functor.LaxMonoidal.ofBifunctor.topMap
+ᵣ ε.hom；CategoryTheory.CategoryStruct.comp                               (((Cate
+goryTheory.flipFunctor C C D).map μ.hom).app                                 (Ca
+tegoryTheory.MonoidalCategoryStruct.tensorUnit C))                              
+ (CategoryTheory.Functor.LaxMonoidal.ofBifunctor.bottomMapᵣ F)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBifunctor
-  signature: : F.CoreMonoidal where
-  body: ε
-  μIso X Y := (μ.app X).app Y
-  μIso_hom_natural_left f X := NatTrans.congr_app (μ.hom.naturality f) X
-  μIso_hom_natural_right X f := (μ.hom.app X).naturality f
-  associativity X Y Z :=
-    NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatTrans.congr_app left_unitality X
-  right_unitality X := NatTrans.congr_app right_unitality X
-
-中文:
-定义 ofBifunctor
-  签名: : F.余reMonoidal where
-  定义体: ε
-  μIso X Y := (μ.app X).app Y
-  μIso_hom_natural_left f X := NatTrans.congr_app (μ.hom.naturality f) X
-  μIso_hom_natural_right X f := (μ.hom.app X).naturality f
-  associativity X Y Z :=
-    NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatTrans.congr_app left_unitality X
-  right_unitality X := NatTrans.congr_app right_unitality X
+--- 原说明 ---
+`F` is monoidal given a unit isomorphism `ε : 𝟙_ D ≅ F.obj (𝟙_ C)` and a tensora
+tor isomorphism
+`μ : F - ⊗ F - ≅ F (- ⊗ -)` as a natural isomorphism between bifunctors, satisfy
+ing the
+relevant compatibilities.
 -/
 def ofBifunctor : F.CoreMonoidal where
   εIso := ε
@@ -1291,3 +1264,4 @@ def ofBifunctor : F.CoreMonoidal where
   right_unitality X := NatTrans.congr_app right_unitality X
 
 end CategoryTheory.Functor.CoreMonoidal
+

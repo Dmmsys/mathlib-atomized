@@ -58,37 +58,32 @@ namespace Mathlib.Tactic.ClickSuggestions
 
 open Lean Meta Server Widget ProofWidgets Jsx
 
-/--
-Definition of `viewKAbstractSubExpr'` / `viewKAbstractSubExpr'` 的定义
+/-- Run `k` with the `RwKind` of the selected position, and the subexpression at that position.
+If the subexpression contains bound variables, then they are introduced as free variables. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.viewKAbstractSubExpr'** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.ClickSuggestions`。
+形式化陈述：viewKAbstractSubExpr' {m α} [Monad m] [MonadLiftT MetaM m] [MonadControlT 
+MetaM m] [MonadError m] (e : Expr) (pos : SubExpr.Pos) (k : Expr -> RwKind -> m 
+α) : m α
+参数：e : Expr；pos : SubExpr.Pos；k : Expr -> RwKind -> m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition viewKAbstractSubExpr'
-  signature: {m α}
-  body: do
-  if let some (subExpr, occ) ← viewKAbstractSubExpr e pos then
-    let tpCorrect ← kabstractIsTypeCorrect e subExpr pos
-    k subExpr (.valid tpCorrect occ)
-  else
-    Meta.viewSubexpr (fun _ e => k e .hasBVars) pos e
-
-中文:
-定义 viewKAbstractSubExpr'
-  签名: {m α}
-  定义体: do
-  if let some (subExpr, occ) ← viewKAbstractSubExpr e pos then
-    let tpCorrect ← kabstractIsTypeCorrect e subExpr pos
-    k subExpr (.valid tpCorrect occ)
-  else
-    Meta.viewSubexpr (fun _ e => k e .hasBVars) pos e
+--- 原说明 ---
+Run `k` with the `RwKind` of the selected position, and the subexpression at tha
+t position.
+If the subexpression contains bound variables, then they are introduced as free 
+variables.
 -/
 def viewKAbstractSubExpr' {m α}
     [Monad m] [MonadLiftT MetaM m] [MonadControlT MetaM m] [MonadError m]
-    (e : Expr) (pos : SubExpr.Pos) (k : Expr -> RwKind -> m α) : m α := do
+    (e : Expr) (pos : SubExpr.Pos) (k : Expr → RwKind → m α) : m α := do
   if let some (subExpr, occ) ← viewKAbstractSubExpr e pos then
     let tpCorrect ← kabstractIsTypeCorrect e subExpr pos
     k subExpr (.valid tpCorrect occ)
   else
-    Meta.viewSubexpr (fun _ e => k e .hasBVars) pos e
+    Meta.viewSubexpr (fun _ e ↦ k e .hasBVars) pos e
 
 /-- Compute the suggestions. Use `token` for the output. -/
 public def generateSuggestions (loc : SubExpr.GoalsLocation) (parentDecl? : Option Name)
@@ -102,18 +97,18 @@ public def generateSuggestions (loc : SubExpr.GoalsLocation) (parentDecl? : Opti
   Meta.withLCtx' lctx do
   trackingComputation "click_suggestions" do
   let (fvarId?, pos) ← match loc.loc with
-    | .hypType fvarId pos => pure (some fvarId, pos)
+    | .hypType fvarId pos  => pure (some fvarId, pos)
     | .target pos => pure (none, pos)
     | .hyp _fvarId =>
       -- In a follow-up PR: suggestions for `induction`/`cases`, `contrapose`
       return
     | .hypValue .. =>
-token.update .text "internal click_suggestions error: selected location is a `.hypValue`"
+      token.update <| .text "internal click_suggestions error: selected location is a `.hypValue`"
       return
   let rootExpr ← match fvarId? with
     | some fvarId => fvarId.getType
     | none => loc.mvarId.getType
-  viewKAbstractSubExpr' rootExpr pos fun subExpr rwKind => do
+  viewKAbstractSubExpr' rootExpr pos fun subExpr rwKind ↦ do
   let mut htmls : Array Html := #[]
 
   -- In a follow-up PR: suggestions for
@@ -147,7 +142,7 @@ public def rpc (props : PanelWidgetProps) : RequestM (RequestTask Html) :=
   let some goalsAt := (FileWorker.findGoalsAt? doc (doc.meta.text.lspPosToUtf8Pos props.pos)).get |
     return .text "Internal #click_suggestions error: could not find any goal at the cursor position"
   let some { ctxInfo := { parentDecl?, .. }, useAfter, tacticInfo := { stx, .. }, .. } :=
-    goalsAt.find? fun { useAfter, tacticInfo, .. } =>
+    goalsAt.find? fun { useAfter, tacticInfo, .. } ↦
       let goals := if useAfter then tacticInfo.goalsAfter else tacticInfo.goalsBefore
       goals.contains loc.mvarId
     | return .text "#click_suggestions: Please reload the tactic state"
@@ -158,9 +153,9 @@ public def rpc (props : PanelWidgetProps) : RequestM (RequestTask Html) :=
       if let .hyp h := loc.loc then
         pure <span> hypothesis {← exprToHtml (.fvar h)} </span>
       else
-        Meta.viewSubexpr (fun _ e => exprToHtml e) loc.pos (← loc.rootExpr)
+        Meta.viewSubexpr (fun _ e ↦ exprToHtml e) loc.pos (← loc.rootExpr)
     let html ← mkRefreshComponentM
-      (.text "#click_suggestions has started searching.") fun masterToken => do
+      (.text "#click_suggestions has started searching.") fun masterToken ↦ do
       (generateSuggestions loc parentDecl? masterToken).run {
         onGoal, masterToken, statusToken, solvedToken
         stx := if useAfter then some ⟨stx⟩ else none
@@ -195,8 +190,9 @@ are filtered out, as well as suggestions that create new goal(s) with metavariab
 To see all suggestions, click on the filter button (▼) in the top right.
 -/
 elab "#click_suggestions" : command => do
-let widget ← Elab.Command.liftCoreM
+  let widget ← Elab.Command.liftCoreM <|
     WidgetInstance.ofHash clickSuggestionsComponent.javascriptHash (return json% {})
   addPanelWidgetLocal widget
 
 end Mathlib.Tactic.ClickSuggestions
+

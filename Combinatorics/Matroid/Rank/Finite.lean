@@ -10,7 +10,7 @@ public import Mathlib.Combinatorics.Matroid.Closure
 /-!
 # Finite-rank sets
 
-`Matroid.IsRkFinite M X` means that every basis of the set `X` in the matroid `M` is finite,
+`Matroid.IsRkFinite M X`  means that every basis of the set `X` in the matroid `M` is finite,
 or equivalently that the restriction of `M` to `X` is `Matroid.RankFinite`.
 Sets in a matroid with `IsRkFinite` are the largest class of sets for which one can do nontrivial
 integer arithmetic involving the rank function.
@@ -29,373 +29,275 @@ open Set
 
 namespace Matroid
 
-/--
-Definition of `IsRkFinite` / `IsRkFinite` 的定义
+/-- `Matroid.IsRkFinite M X` means that every basis of `X` in `M` is finite. -/
+/-
+**Matroid.IsRkFinite** 是 Mathlib 中的一个定义，位于命名空间 `Matroid`。
+形式化陈述：IsRkFinite (M : Matroid α) (X : Set α) : Prop
+参数：M : Matroid α；X : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRkFinite
-  signature: (M : Matroid α) (X : Set α)
-  body: (M ↾ X).RankFinite
-
-中文:
-定义 IsRkFinite
-  签名: (M : 拟阵 α) (X : 集合 α)
-  定义体: (M ↾ X).RankFinite
-
-Depends on / 依赖: RankFinite
+--- 原说明 ---
+`Matroid.IsRkFinite M X` means that every basis of `X` in `M` is finite.
 -/
 def IsRkFinite (M : Matroid α) (X : Set α) : Prop := (M ↾ X).RankFinite
-
-/--
-lemma `IsRkFinite.rankFinite` / 引理 `IsRkFinite.rankFinite`
-
-English:
-lemma IsRkFinite.rankFinite
-  given: (hX : M.IsRkFinite X)
-  statement: (M ↾ X).RankFinite
-  proof: hX
-
-中文:
-引理 IsRkFinite.rankFinite
-  条件: (hX : M.IsRkFinite X)
-  结论: (M ↾ X).RankFinite
-  证明: hX
+/-
+**Matroid.IsRkFinite.rankFinite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X : Set α}, M.IsRkFinite X → (M.restrict
+ X).RankFinite
+参数：M.restrict X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsRkFinite.rankFinite (hX : M.IsRkFinite X) : (M ↾ X).RankFinite :=
   hX
-
-/--
-lemma `RankFinite.isRkFinite` / 引理 `RankFinite.isRkFinite`
-
-English:
-lemma RankFinite.isRkFinite
-  given: [RankFinite M] (X : Set α)
-  statement: M.IsRkFinite X
-  proof: inferInstanceAs (M ↾ X).RankFinite
-
-中文:
-引理 RankFinite.isRkFinite
-  条件: [RankFinite M] (X : 集合 α)
-  结论: M.IsRkFinite X
-  证明: inferInstanceAs (M ↾ X).RankFinite
+/-
+**Matroid.RankFinite.isRkFinite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.RankFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} [M.RankFinite] (X : Set α), M.IsRkFinite 
+X
+参数：X : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma RankFinite.isRkFinite [RankFinite M] (X : Set α) : M.IsRkFinite X :=
   inferInstanceAs (M ↾ X).RankFinite
-
-/--
-lemma `IsBasis'.finite_iff_isRkFinite` / 引理 `IsBasis'.finite_iff_isRkFinite`
-
-English:
-lemma IsBasis'.finite_iff_isRkFinite
-  given: (hI : M.IsBasis' I X)
-  statement: I.Finite ↔ M.IsRkFinite X
-  proof: ⟨fun h => ⟨I, hI, h⟩, fun (_ : (M ↾ X).RankFinite) => hI.isBase_restrict.finite⟩
-
-alias ⟨_, IsBasis'.finite_of_isRkFinite⟩ := IsBasis'.finite_iff_isRkFinite
-
-中文:
-引理 是基'.finite_iff_isRkFinite
-  条件: (hI : M.是基' I X)
-  结论: I.有限 ↔ M.IsRkFinite X
-  证明: ⟨fun h => ⟨I, hI, h⟩, fun (_ : (M ↾ X).RankFinite) => hI.isBase_restrict.finite⟩
-
-alias ⟨_, IsBasis'.finite_of_isRkFinite⟩ := IsBasis'.finite_iff_isRkFinite
+/-
+**Matroid.IsBasis'.finite_iff_isRkFinite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsBa
+sis'`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.IsBasis' I X → (I.Finite
+ ↔ M.IsRkFinite X)
+参数：I.Finite ↔ M.IsRkFinite X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsBase.finite`：∀ {α : Type u_1} {M : Matroid α} {B : Set α} [M.R
+ankFinite], M.IsBase B → B.Finite
+· 使用定理 `Matroid.IsBasis'.isBase_restrict`：∀ {α : Type u_1} {M : Matroid α} {I X 
+: Set α}, M.IsBasis' I X → (M.restrict X).IsBase I
 -/
 lemma IsBasis'.finite_iff_isRkFinite (hI : M.IsBasis' I X) : I.Finite ↔ M.IsRkFinite X :=
-  ⟨fun h => ⟨I, hI, h⟩, fun (_ : (M ↾ X).RankFinite) => hI.isBase_restrict.finite⟩
+  ⟨fun h ↦ ⟨I, hI, h⟩, fun (_ : (M ↾ X).RankFinite) ↦ hI.isBase_restrict.finite⟩
 
 alias ⟨_, IsBasis'.finite_of_isRkFinite⟩ := IsBasis'.finite_iff_isRkFinite
-
-/--
-lemma `IsBasis.finite_iff_isRkFinite` / 引理 `IsBasis.finite_iff_isRkFinite`
-
-English:
-lemma IsBasis.finite_iff_isRkFinite
-  given: (hI : M.IsBasis I X)
-  statement: I.Finite ↔ M.IsRkFinite X
-  proof: hI.isBasis'.finite_iff_isRkFinite
-
-alias ⟨_, IsBasis.finite_of_isRkFinite⟩ := IsBasis.finite_iff_isRkFinite
-
-中文:
-引理 是基.finite_iff_isRkFinite
-  条件: (hI : M.是基 I X)
-  结论: I.有限 ↔ M.IsRkFinite X
-  证明: hI.isBasis'.finite_iff_isRkFinite
-
-alias ⟨_, IsBasis.finite_of_isRkFinite⟩ := IsBasis.finite_iff_isRkFinite
-
-Depends on / 依赖: finite_iff_isRkFinite, hI.isBasis, isBasis
+/-
+**Matroid.IsBasis.finite_iff_isRkFinite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsBas
+is`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.IsBasis I X → (I.Finite 
+↔ M.IsRkFinite X)
+参数：I.Finite ↔ M.IsRkFinite X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsBasis'.finite_iff_isRkFinite`：∀ {α : Type u_1} {M : Matroid α}
+ {X I : Set α}, M.IsBasis' I X → (I.Finite ↔ M.IsRkFinite X)
+· 使用定理 `Matroid.IsBasis.isBasis'`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α}
+, M.IsBasis I X → M.IsBasis' I X
 -/
 lemma IsBasis.finite_iff_isRkFinite (hI : M.IsBasis I X) : I.Finite ↔ M.IsRkFinite X :=
   hI.isBasis'.finite_iff_isRkFinite
 
 alias ⟨_, IsBasis.finite_of_isRkFinite⟩ := IsBasis.finite_iff_isRkFinite
-
-/--
-lemma `IsBasis'.isRkFinite_of_finite` / 引理 `IsBasis'.isRkFinite_of_finite`
-
-English:
-lemma IsBasis'.isRkFinite_of_finite
-  given: (hI : M.IsBasis' I X) (hIfin : I.Finite)
-  statement: M.IsRkFinite X
-  proof: ⟨I, hI, hIfin⟩
-
-中文:
-引理 是基'.isRkFinite_of_finite
-  条件: (hI : M.是基' I X) (hIfin : I.有限)
-  结论: M.IsRkFinite X
-  证明: ⟨I, hI, hIfin⟩
+/-
+**Matroid.IsBasis'.isRkFinite_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsBas
+is'`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.IsBasis' I X → I.Finite 
+→ M.IsRkFinite X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsBasis'.isRkFinite_of_finite (hI : M.IsBasis' I X) (hIfin : I.Finite) : M.IsRkFinite X :=
   ⟨I, hI, hIfin⟩
-
-/--
-lemma `IsBasis.isRkFinite_of_finite` / 引理 `IsBasis.isRkFinite_of_finite`
-
-English:
-lemma IsBasis.isRkFinite_of_finite
-  given: (hI : M.IsBasis I X) (hIfin : I.Finite)
-  statement: M.IsRkFinite X
-  proof: ⟨I, hI.isBasis', hIfin⟩
-
-中文:
-引理 是基.isRkFinite_of_finite
-  条件: (hI : M.是基 I X) (hIfin : I.有限)
-  结论: M.IsRkFinite X
-  证明: ⟨I, hI.isBasis', hIfin⟩
-
-Depends on / 依赖: hI.isBasis, isBasis
+/-
+**Matroid.IsBasis.isRkFinite_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsBasi
+s`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.IsBasis I X → I.Finite →
+ M.IsRkFinite X
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsBasis.isBasis'`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α}
+, M.IsBasis I X → M.IsBasis' I X
 -/
 lemma IsBasis.isRkFinite_of_finite (hI : M.IsBasis I X) (hIfin : I.Finite) : M.IsRkFinite X :=
   ⟨I, hI.isBasis', hIfin⟩
 
-/--
-lemma `IsRkFinite.finite_of_isBasis'` / 引理 `IsRkFinite.finite_of_isBasis'`
+/-- A basis' of an `IsRkFinite` set is finite. -/
+/-
+**Matroid.IsRkFinite.finite_of_isBasis'** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkF
+inite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.IsRkFinite X → M.IsBasis
+' I X → I.Finite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.rankFinite`：∀ {α : Type u_1} {M : Matroid α} {X : Set
+ α}, M.IsRkFinite X → (M.restrict X).RankFinite
+· 使用定理 `Matroid.IsBase.finite`：∀ {α : Type u_1} {M : Matroid α} {B : Set α} [M.R
+ankFinite], M.IsBase B → B.Finite
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Matroid.isBase_restrict_iff'`：isBase_restrict_iff' : (M ↾ X).IsBase I ↔ 
+M.IsBasis' I X
 
-English:
-lemma IsRkFinite.finite_of_isBasis'
-  given: (h : M.IsRkFinite X) (hI : M.IsBasis' I X)
-  statement: I.Finite
-  proof: have := h.rankFinite
-  (isBase_restrict_iff'.2 hI).finite
-
-中文:
-引理 IsRkFinite.finite_of_isBasis'
-  条件: (h : M.IsRkFinite X) (hI : M.是基' I X)
-  结论: I.有限
-  证明: have := h.rankFinite
-  (isBase_restrict_iff'.2 hI).finite
-
-Depends on / 依赖: finite, h.rankFinite, isBase_restrict_iff, rankFinite
+--- 原说明 ---
+A basis' of an `IsRkFinite` set is finite.
 -/
 lemma IsRkFinite.finite_of_isBasis' (h : M.IsRkFinite X) (hI : M.IsBasis' I X) : I.Finite :=
   have := h.rankFinite
   (isBase_restrict_iff'.2 hI).finite
-
-/--
-lemma `IsRkFinite.finite_of_isBasis` / 引理 `IsRkFinite.finite_of_isBasis`
-
-English:
-lemma IsRkFinite.finite_of_isBasis
-  given: (h : M.IsRkFinite X) (hI : M.IsBasis I X)
-  statement: I.Finite
-  proof: h.finite_of_isBasis' hI.isBasis'
-
-中文:
-引理 IsRkFinite.finite_of_isBasis
-  条件: (h : M.IsRkFinite X) (hI : M.是基 I X)
-  结论: I.有限
-  证明: h.finite_of_isBasis' hI.isBasis'
-
-Depends on / 依赖: finite_of_isBasis, h.finite_of_isBasis, hI.isBasis, isBasis
+/-
+**Matroid.IsRkFinite.finite_of_isBasis** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFi
+nite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.IsRkFinite X → M.IsBasis
+ I X → I.Finite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.finite_of_isBasis'`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsRkFinite X → M.IsBasis' I X → I.Finite
+· 使用定理 `Matroid.IsBasis.isBasis'`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α}
+, M.IsBasis I X → M.IsBasis' I X
 -/
 lemma IsRkFinite.finite_of_isBasis (h : M.IsRkFinite X) (hI : M.IsBasis I X) : I.Finite :=
   h.finite_of_isBasis' hI.isBasis'
 
-/--
-lemma `IsRkFinite.exists_finite_isBasis'` / 引理 `IsRkFinite.exists_finite_isBasis'`
+/-- An `IsRkFinite` set has a finite basis' -/
+/-
+**Matroid.IsRkFinite.exists_finite_isBasis'** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.I
+sRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X : Set α}, M.IsRkFinite X → ∃ I, M.IsBa
+sis' I X ∧ I.Finite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.RankFinite.exists_finite_isBase`：∀ {α : Type u_1} {M : Matroid α
+} [self : M.RankFinite], ∃ B, M.IsBase B ∧ B.Finite
 
-English:
-lemma IsRkFinite.exists_finite_isBasis'
-  given: (h : M.IsRkFinite X)
-  statement: exists I, M.IsBasis' I X ∧ I.Finite
-  proof: h.exists_finite_isBase
-
-中文:
-引理 IsRkFinite.存在_finite_isBasis'
-  条件: (h : M.IsRkFinite X)
-  结论: 存在 I, M.是基' I X ∧ I.有限
-  证明: h.exists_finite_isBase
-
-Depends on / 依赖: exists_finite_isBase, h.exists_finite_isBase
+--- 原说明 ---
+An `IsRkFinite` set has a finite basis'
 -/
-lemma IsRkFinite.exists_finite_isBasis' (h : M.IsRkFinite X) : exists I, M.IsBasis' I X ∧ I.Finite :=
+lemma IsRkFinite.exists_finite_isBasis' (h : M.IsRkFinite X) : ∃ I, M.IsBasis' I X ∧ I.Finite :=
   h.exists_finite_isBase
 
-/--
-lemma `IsRkFinite.exists_finset_isBasis'` / 引理 `IsRkFinite.exists_finset_isBasis'`
+/-- An `IsRkFinite` set has a finset basis' -/
+/-
+**Matroid.IsRkFinite.exists_finset_isBasis'** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.I
+sRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X : Set α}, M.IsRkFinite X → ∃ I, M.IsBa
+sis' (↑I) X
+参数：↑I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.exists_finite_isBasis'`：∀ {α : Type u_1} {M : Matroid
+ α} {X : Set α}, M.IsRkFinite X → ∃ I, M.IsBasis' I X ∧ I.Finite
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
 
-English:
-lemma IsRkFinite.exists_finset_isBasis'
-  given: (h : M.IsRkFinite X)
-  statement: exists (I : Finset α), M.IsBasis' I X
-  proof: let ⟨I, hI, hIfin⟩ := h.exists_finite_isBasis'
-  ⟨hIfin.toFinset, by simpa⟩
-
-中文:
-引理 IsRkFinite.存在_finset_isBasis'
-  条件: (h : M.IsRkFinite X)
-  结论: 存在 (I : 有限集 α), M.是基' I X
-  证明: let ⟨I, hI, hIfin⟩ := h.exists_finite_isBasis'
-  ⟨hIfin.toFinset, by simpa⟩
-
-Depends on / 依赖: exists_finite_isBasis, h.exists_finite_isBasis, hIfin.toFinset, toFinset
+--- 原说明 ---
+An `IsRkFinite` set has a finset basis'
 -/
-lemma IsRkFinite.exists_finset_isBasis' (h : M.IsRkFinite X) : exists (I : Finset α), M.IsBasis' I X :=
+lemma IsRkFinite.exists_finset_isBasis' (h : M.IsRkFinite X) : ∃ (I : Finset α), M.IsBasis' I X :=
   let ⟨I, hI, hIfin⟩ := h.exists_finite_isBasis'
   ⟨hIfin.toFinset, by simpa⟩
 
-/--
-lemma `isRkFinite_iff_exists_isBasis'` / 引理 `isRkFinite_iff_exists_isBasis'`
+/-- A set satisfies `IsRkFinite` iff it has a finite basis' -/
+/-
+**Matroid.isRkFinite_iff_exists_isBasis'** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_iff_exists_isBasis' : M.IsRkFinite X ↔ exists I, M.IsBasis' I X
+ ∧ I.Finite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.exists_finite_isBasis'`：∀ {α : Type u_1} {M : Matroid
+ α} {X : Set α}, M.IsRkFinite X → ∃ I, M.IsBasis' I X ∧ I.Finite
+· 使用定理 `Matroid.IsBasis'.isRkFinite_of_finite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → I.Finite → M.IsRkFinite X
 
-English:
-lemma isRkFinite_iff_exists_isBasis'
-  statement: M.IsRkFinite X ↔ exists I, M.IsBasis' I X ∧ I.Finite
-  proof: ⟨IsRkFinite.exists_finite_isBasis', fun ⟨_, hIX, hI⟩ => hIX.isRkFinite_of_finite hI⟩
-
-中文:
-引理 isRkFinite_iff_存在_isBasis'
-  结论: M.IsRkFinite X ↔ 存在 I, M.是基' I X ∧ I.有限
-  证明: ⟨IsRkFinite.exists_finite_isBasis', fun ⟨_, hIX, hI⟩ => hIX.isRkFinite_of_finite hI⟩
-
-Depends on / 依赖: IsRkFinite, IsRkFinite.exists_finite_isBasis, exists_finite_isBasis, hIX.isRkFinite_of_finite, isRkFinite_of_finite
+--- 原说明 ---
+A set satisfies `IsRkFinite` iff it has a finite basis'
 -/
-lemma isRkFinite_iff_exists_isBasis' : M.IsRkFinite X ↔ exists I, M.IsBasis' I X ∧ I.Finite :=
-  ⟨IsRkFinite.exists_finite_isBasis', fun ⟨_, hIX, hI⟩ => hIX.isRkFinite_of_finite hI⟩
-
-/--
-lemma `IsRkFinite.subset` / 引理 `IsRkFinite.subset`
-
-English:
-lemma IsRkFinite.subset
-  given: (h : M.IsRkFinite X) (hXY : Y subseteq X)
-  statement: M.IsRkFinite Y
-  proof: by
+lemma isRkFinite_iff_exists_isBasis' : M.IsRkFinite X ↔ ∃ I, M.IsBasis' I X ∧ I.Finite :=
+  ⟨IsRkFinite.exists_finite_isBasis', fun ⟨_, hIX, hI⟩ ↦ hIX.isRkFinite_of_finite hI⟩
+/-
+**Matroid.IsRkFinite.subset** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}, M.IsRkFinite X → Y ⊆ X → M
+.IsRkFinite Y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.exists_isBasis'`：exists_isBasis' (M : Matroid α) (X : Set α) : e
+xists I, M.IsBasis' I X
+· 使用定理 `Matroid.Indep.subset_isBasis'_of_subset`：∀ {α : Type u_1} {M : Matroid α
+} {I X : Set α}, M.Indep I → I ⊆ X → ∃ J, M.IsBasis' J X ∧ I ⊆ J
+· 使用定理 `Matroid.IsBasis'.indep`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α}, 
+M.IsBasis' I X → M.Indep I
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Matroid.IsBasis'.subset`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α},
+ M.IsBasis' I X → I ⊆ X
+· 使用定理 `Matroid.IsBasis'.isRkFinite_of_finite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → I.Finite → M.IsRkFinite X
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Matroid.IsBasis'.finite_of_isRkFinite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → M.IsRkFinite X → I.Finite
+-/
+lemma IsRkFinite.subset (h : M.IsRkFinite X) (hXY : Y ⊆ X) : M.IsRkFinite Y := by
   obtain ⟨I, hI⟩ := M.exists_isBasis' Y
   obtain ⟨J, hJ, hIJ⟩ := hI.indep.subset_isBasis'_of_subset (hI.subset.trans hXY)
-exact hI.isRkFinite_of_finite (hJ.finite_of_isRkFinite h).subset hIJ
+  exact hI.isRkFinite_of_finite <| (hJ.finite_of_isRkFinite h).subset hIJ
 
 @[simp]
-
-中文:
-引理 IsRkFinite.subset
-  条件: (h : M.IsRkFinite X) (hXY : Y subseteq X)
-  结论: M.IsRkFinite Y
-  证明: by
-  obtain ⟨I, hI⟩ := M.exists_isBasis' Y
-  obtain ⟨J, hJ, hIJ⟩ := hI.indep.subset_isBasis'_of_subset (hI.subset.trans hXY)
-exact hI.isRkFinite_of_finite (hJ.finite_of_isRkFinite h).subset hIJ
-
-@[simp]
-
-Depends on / 依赖: M.exists_isBasis, _of_subset, exists_isBasis, finite_of_isRkFinite, hI.indep.subset_isBasis, hI.isRkFinite_of_finite, hI.subset.trans, hJ.finite_of_isRkFinite, isRkFinite_of_finite, subset, subset_isBasis
+/-
+**Matroid.isRkFinite_inter_ground_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_inter_ground_iff : M.IsRkFinite (X inter M.E) ↔ M.IsRkFinite X
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.exists_isBasis'`：exists_isBasis' (M : Matroid α) (X : Set α) : e
+xists I, M.IsBasis' I X
+· 使用定理 `Matroid.IsBasis'.isRkFinite_of_finite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → I.Finite → M.IsRkFinite X
+· 使用定理 `Matroid.IsBasis.finite_of_isRkFinite`：∀ {α : Type u_1} {M : Matroid α} {
+X I : Set α}, M.IsBasis I X → M.IsRkFinite X → I.Finite
+· 使用定理 `Matroid.IsBasis'.isBasis_inter_ground`：∀ {α : Type u_1} {M : Matroid α} 
+{I X : Set α}, M.IsBasis' I X → M.IsBasis I (X ∩ M.E)
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-lemma IsRkFinite.subset (h : M.IsRkFinite X) (hXY : Y subseteq X) : M.IsRkFinite Y := by
-  obtain ⟨I, hI⟩ := M.exists_isBasis' Y
-  obtain ⟨J, hJ, hIJ⟩ := hI.indep.subset_isBasis'_of_subset (hI.subset.trans hXY)
-exact hI.isRkFinite_of_finite (hJ.finite_of_isRkFinite h).subset hIJ
-
-@[simp]
-/--
-lemma `isRkFinite_inter_ground_iff` / 引理 `isRkFinite_inter_ground_iff`
-
-English:
-lemma isRkFinite_inter_ground_iff
-  statement: M.IsRkFinite (X inter M.E) ↔ M.IsRkFinite X
-  proof: let ⟨_I, hI⟩ := M.exists_isBasis' X
-  ⟨fun h => hI.isRkFinite_of_finite (hI.isBasis_inter_ground.finite_of_isRkFinite h),
-    fun h => h.subset inter_subset_left⟩
-
-中文:
-引理 isRkFinite_inter_ground_iff
-  结论: M.IsRkFinite (X inter M.E) ↔ M.IsRkFinite X
-  证明: let ⟨_I, hI⟩ := M.exists_isBasis' X
-  ⟨fun h => hI.isRkFinite_of_finite (hI.isBasis_inter_ground.finite_of_isRkFinite h),
-    fun h => h.subset inter_subset_left⟩
-
-Depends on / 依赖: M.exists_isBasis, exists_isBasis, finite_of_isRkFinite, h.subset, hI.isBasis_inter_ground.finite_of_isRkFinite, hI.isRkFinite_of_finite, inter_subset_left, isBasis_inter_ground, isRkFinite_of_finite, subset
--/
-lemma isRkFinite_inter_ground_iff : M.IsRkFinite (X inter M.E) ↔ M.IsRkFinite X :=
+lemma isRkFinite_inter_ground_iff : M.IsRkFinite (X ∩ M.E) ↔ M.IsRkFinite X :=
   let ⟨_I, hI⟩ := M.exists_isBasis' X
-  ⟨fun h => hI.isRkFinite_of_finite (hI.isBasis_inter_ground.finite_of_isRkFinite h),
-    fun h => h.subset inter_subset_left⟩
-
-/--
-lemma `IsRkFinite.inter_ground` / 引理 `IsRkFinite.inter_ground`
-
-English:
-lemma IsRkFinite.inter_ground
-  given: (h : M.IsRkFinite X)
-  statement: M.IsRkFinite (X inter M.E)
-  proof: isRkFinite_inter_ground_iff.2 h
-
-中文:
-引理 IsRkFinite.inter_ground
-  条件: (h : M.IsRkFinite X)
-  结论: M.IsRkFinite (X inter M.E)
-  证明: isRkFinite_inter_ground_iff.2 h
-
-Depends on / 依赖: isRkFinite_inter_ground_iff
+  ⟨fun h ↦ hI.isRkFinite_of_finite (hI.isBasis_inter_ground.finite_of_isRkFinite h),
+    fun h ↦ h.subset inter_subset_left⟩
+/-
+**Matroid.IsRkFinite.inter_ground** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`
+。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X : Set α}, M.IsRkFinite X → M.IsRkFinit
+e (X ∩ M.E)
+参数：X ∩ M.E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Matroid.isRkFinite_inter_ground_iff`：isRkFinite_inter_ground_iff : M.IsR
+kFinite (X inter M.E) ↔ M.IsRkFinite X
 -/
-lemma IsRkFinite.inter_ground (h : M.IsRkFinite X) : M.IsRkFinite (X inter M.E) :=
+lemma IsRkFinite.inter_ground (h : M.IsRkFinite X) : M.IsRkFinite (X ∩ M.E) :=
   isRkFinite_inter_ground_iff.2 h
-
-/--
-lemma `isRkFinite_iff` / 引理 `isRkFinite_iff`
-
-English:
-lemma isRkFinite_iff
-  given: (hX : X subseteq M.E := by aesop_mat)
-  proof: by
-  simp_rw [isRkFinite_iff_exists_isBasis', M.isBasis'_iff_isBasis hX]
-
-中文:
-引理 isRkFinite_iff
-  条件: (hX : X subseteq M.E := by aesop_mat)
-  证明: by
-  simp_rw [isRkFinite_iff_exists_isBasis', M.isBasis'_iff_isBasis hX]
-
-Depends on / 依赖: Finite, I.Finite, IsBasis, IsRkFinite, M.IsBasis, M.IsRkFinite, M.isBasis, _iff_isBasis, aesop_mat, isBasis, isRkFinite_iff_exists_isBasis, simp_rw
+/-
+**Matroid.isRkFinite_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_iff (hX : X subseteq M.E
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matroid.isBasis'_iff_isBasis`：∀ {α : Type u_1} {M : Matroid α} {I X : Se
+t α},   autoParam (X ⊆ M.E) Matroid.isBasis'_iff_isBasis._auto_1 → (M.IsBasis' I
+ X ↔ M.IsBasis I X…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma isRkFinite_iff (hX : X subseteq M.E := by aesop_mat) :
-    M.IsRkFinite X ↔ exists I, M.IsBasis I X ∧ I.Finite := by
+lemma isRkFinite_iff (hX : X ⊆ M.E := by aesop_mat) :
+    M.IsRkFinite X ↔ ∃ I, M.IsBasis I X ∧ I.Finite := by
   simp_rw [isRkFinite_iff_exists_isBasis', M.isBasis'_iff_isBasis hX]
-
-/--
-lemma `Indep.isRkFinite_iff_finite` / 引理 `Indep.isRkFinite_iff_finite`
-
-English:
-lemma Indep.isRkFinite_iff_finite
-  given: (hI : M.Indep I)
-  statement: M.IsRkFinite I ↔ I.Finite
-  proof: hI.isBasis_self.finite_iff_isRkFinite.symm
-
-alias ⟨Indep.finite_of_isRkFinite, _⟩ := Indep.isRkFinite_iff_finite
-
-@[simp]
-
-中文:
-引理 Indep.isRkFinite_iff_finite
-  条件: (hI : M.Indep I)
-  结论: M.IsRkFinite I ↔ I.有限
-  证明: hI.isBasis_self.finite_iff_isRkFinite.symm
-
-alias ⟨Indep.finite_of_isRkFinite, _⟩ := Indep.isRkFinite_iff_finite
-
-@[simp]
-
-Depends on / 依赖: finite_iff_isRkFinite, hI.isBasis_self.finite_iff_isRkFinite.symm, isBasis_self
+/-
+**Matroid.Indep.isRkFinite_iff_finite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.Indep`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {I : Set α}, M.Indep I → (M.IsRkFinite I 
+↔ I.Finite)
+参数：M.IsRkFinite I ↔ I.Finite。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Matroid.IsBasis.finite_iff_isRkFinite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis I X → (I.Finite ↔ M.IsRkFinite X)
+· 使用定理 `Matroid.Indep.isBasis_self`：∀ {α : Type u_1} {M : Matroid α} {I : Set α}
+, M.Indep I → M.IsBasis I I
 -/
 lemma Indep.isRkFinite_iff_finite (hI : M.Indep I) : M.IsRkFinite I ↔ I.Finite :=
   hI.isBasis_self.finite_iff_isRkFinite.symm
@@ -403,530 +305,426 @@ lemma Indep.isRkFinite_iff_finite (hI : M.Indep I) : M.IsRkFinite I ↔ I.Finite
 alias ⟨Indep.finite_of_isRkFinite, _⟩ := Indep.isRkFinite_iff_finite
 
 @[simp]
-/--
-lemma `isRkFinite_of_finite` / 引理 `isRkFinite_of_finite`
-
-English:
-lemma isRkFinite_of_finite
-  given: (M : Matroid α) (hX : X.Finite)
-  statement: M.IsRkFinite X
-  proof: let ⟨_, hI⟩ := M.exists_isBasis' X
-  hI.isRkFinite_of_finite (hX.subset hI.subset)
-
-中文:
-引理 isRkFinite_of_finite
-  条件: (M : 拟阵 α) (hX : X.有限)
-  结论: M.IsRkFinite X
-  证明: let ⟨_, hI⟩ := M.exists_isBasis' X
-  hI.isRkFinite_of_finite (hX.subset hI.subset)
-
-Depends on / 依赖: M.exists_isBasis, exists_isBasis, hI.isRkFinite_of_finite, hI.subset, hX.subset, isRkFinite_of_finite, subset
+/-
+**Matroid.isRkFinite_of_finite** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_of_finite (M : Matroid α) (hX : X.Finite) : M.IsRkFinite X
+参数：M : Matroid α；hX : X.Finite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.exists_isBasis'`：exists_isBasis' (M : Matroid α) (X : Set α) : e
+xists I, M.IsBasis' I X
+· 使用定理 `Matroid.IsBasis'.isRkFinite_of_finite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → I.Finite → M.IsRkFinite X
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Matroid.IsBasis'.subset`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α},
+ M.IsBasis' I X → I ⊆ X
 -/
 lemma isRkFinite_of_finite (M : Matroid α) (hX : X.Finite) : M.IsRkFinite X :=
   let ⟨_, hI⟩ := M.exists_isBasis' X
   hI.isRkFinite_of_finite (hX.subset hI.subset)
-
-/--
-lemma `Indep.subset_finite_isBasis'_of_subset_of_isRkFinite` / 引理 `Indep.subset_finite_isBasis'_of_subset_of_isRkFinite`
-
-English:
-lemma Indep.subset_finite_isBasis'_of_subset_of_isRkFinite
-  statement: (hI : M.Indep I) (hIX : I subseteq X)
-  proof: (hI.subset_isBasis'_of_subset hIX).imp fun _ hJ => ⟨hJ.1, hJ.2, hJ.1.finite_of_isRkFinite hX⟩
-
-中文:
-引理 Indep.subset_finite_isBasis'_of_subset_of_isRkFinite
-  结论: (hI : M.Indep I) (hIX : I subseteq X)
-  证明: (hI.subset_isBasis'_of_subset hIX).imp fun _ hJ => ⟨hJ.1, hJ.2, hJ.1.finite_of_isRkFinite hX⟩
-
-Depends on / 依赖: _of_subset, finite_of_isRkFinite, hI.subset_isBasis, subset_isBasis
+/-
+**Matroid.Indep.subset_finite_isBasis'_of_subset_of_isRkFinite** 是 Mathlib 中的一个定
+理，位于命名空间 `Matroid.Indep`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α},   M.Indep I → I ⊆ X → M.Is
+RkFinite X → ∃ J, M.IsBasis' J X ∧ I ⊆ J ∧ J.Finite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Matroid.IsBasis'.finite_of_isRkFinite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → M.IsRkFinite X → I.Finite
+· 使用定理 `Matroid.Indep.subset_isBasis'_of_subset`：∀ {α : Type u_1} {M : Matroid α
+} {I X : Set α}, M.Indep I → I ⊆ X → ∃ J, M.IsBasis' J X ∧ I ⊆ J
 -/
-lemma Indep.subset_finite_isBasis'_of_subset_of_isRkFinite (hI : M.Indep I) (hIX : I subseteq X)
-    (hX : M.IsRkFinite X) : exists J, M.IsBasis' J X ∧ I subseteq J ∧ J.Finite :=
+lemma Indep.subset_finite_isBasis'_of_subset_of_isRkFinite (hI : M.Indep I) (hIX : I ⊆ X)
+    (hX : M.IsRkFinite X) : ∃ J, M.IsBasis' J X ∧ I ⊆ J ∧ J.Finite :=
   (hI.subset_isBasis'_of_subset hIX).imp fun _ hJ => ⟨hJ.1, hJ.2, hJ.1.finite_of_isRkFinite hX⟩
-
-/--
-lemma `Indep.subset_finite_isBasis_of_subset_of_isRkFinite` / 引理 `Indep.subset_finite_isBasis_of_subset_of_isRkFinite`
-
-English:
-lemma Indep.subset_finite_isBasis_of_subset_of_isRkFinite
-  statement: (hI : M.Indep I) (hIX : I subseteq X)
-  proof: (hI.subset_isBasis_of_subset hIX).imp fun _ hJ => ⟨hJ.1, hJ.2, hJ.1.finite_of_isRkFinite hX⟩
-
-中文:
-引理 Indep.subset_finite_isBasis_of_subset_of_isRkFinite
-  结论: (hI : M.Indep I) (hIX : I subseteq X)
-  证明: (hI.subset_isBasis_of_subset hIX).imp fun _ hJ => ⟨hJ.1, hJ.2, hJ.1.finite_of_isRkFinite hX⟩
-
-Depends on / 依赖: Finite, IsBasis, J.Finite, M.IsBasis, aesop_mat, finite_of_isRkFinite, hI.subset_isBasis_of_subset, subset_isBasis_of_subset, subseteq
+/-
+**Matroid.Indep.subset_finite_isBasis_of_subset_of_isRkFinite** 是 Mathlib 中的一个定理
+，位于命名空间 `Matroid.Indep`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α},   M.Indep I →     I ⊆ X → 
+      M.IsRkFinite X →         autoParam (X ⊆ M.E) Matroid.Indep.subset_finite_i
+sBasis_of_subset_of_isRkFinite._auto_1 →           ∃ J, M.IsBasis J X ∧ I ⊆ J ∧ 
+J.Finite
+参数：X ⊆ M.E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Matroid.IsBasis.finite_of_isRkFinite`：∀ {α : Type u_1} {M : Matroid α} {
+X I : Set α}, M.IsBasis I X → M.IsRkFinite X → I.Finite
+· 使用定理 `Matroid.Indep.subset_isBasis_of_subset`：∀ {α : Type u_1} {M : Matroid α}
+ {I X : Set α},   M.Indep I → I ⊆ X → autoParam (X ⊆ M.E) Matroid.Indep.subset_i
+sBasis_of_subset._auto_1 → ∃…
 -/
-lemma Indep.subset_finite_isBasis_of_subset_of_isRkFinite (hI : M.Indep I) (hIX : I subseteq X)
-    (hX : M.IsRkFinite X) (hXE : X subseteq M.E := by aesop_mat) : exists J, M.IsBasis J X ∧ I subseteq J ∧ J.Finite :=
+lemma Indep.subset_finite_isBasis_of_subset_of_isRkFinite (hI : M.Indep I) (hIX : I ⊆ X)
+    (hX : M.IsRkFinite X) (hXE : X ⊆ M.E := by aesop_mat) : ∃ J, M.IsBasis J X ∧ I ⊆ J ∧ J.Finite :=
   (hI.subset_isBasis_of_subset hIX).imp fun _ hJ => ⟨hJ.1, hJ.2, hJ.1.finite_of_isRkFinite hX⟩
-
-/--
-lemma `isRkFinite_singleton` / 引理 `isRkFinite_singleton`
-
-English:
-lemma isRkFinite_singleton
-  statement: M.IsRkFinite {e}
-  proof: by
-  simp
-
-中文:
-引理 isRkFinite_singleton
-  结论: M.IsRkFinite {e}
-  证明: by
-  simp
+/-
+**Matroid.isRkFinite_singleton** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_singleton : M.IsRkFinite {e}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 lemma isRkFinite_singleton : M.IsRkFinite {e} := by
   simp
-
-/--
-lemma `IsRkFinite.empty` / 引理 `IsRkFinite.empty`
-
-English:
-lemma IsRkFinite.empty
-  given: (M : Matroid α)
-  statement: M.IsRkFinite ∅
-  proof: isRkFinite_of_finite M finite_empty
-
-中文:
-引理 IsRkFinite.empty
-  条件: (M : 拟阵 α)
-  结论: M.IsRkFinite ∅
-  证明: isRkFinite_of_finite M finite_empty
-
-Depends on / 依赖: finite_empty, isRkFinite_of_finite
+/-
+**Matroid.IsRkFinite.empty** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} (M : Matroid α), M.IsRkFinite ∅
+参数：M : Matroid α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Matroid.isRkFinite_of_finite`：isRkFinite_of_finite (M : Matroid α) (hX :
+ X.Finite) : M.IsRkFinite X
+· 使用定理 `Set.finite_empty`：finite_empty : (∅ : Set α).Finite
 -/
 lemma IsRkFinite.empty (M : Matroid α) : M.IsRkFinite ∅ :=
   isRkFinite_of_finite M finite_empty
-
-/--
-lemma `IsRkFinite.finite_of_indep_subset` / 引理 `IsRkFinite.finite_of_indep_subset`
-
-English:
-lemma IsRkFinite.finite_of_indep_subset
-  given: (hX : M.IsRkFinite X) (hI : M.Indep I) (hIX : I subseteq X)
-  proof: hI.finite_of_isRkFinite hX.subset hIX
-
-@[simp]
-
-中文:
-引理 IsRkFinite.finite_of_indep_subset
-  条件: (hX : M.IsRkFinite X) (hI : M.Indep I) (hIX : I subseteq X)
-  证明: hI.finite_of_isRkFinite hX.subset hIX
-
-@[simp]
-
-Depends on / 依赖: finite_of_isRkFinite, hI.finite_of_isRkFinite, hX.subset, subset
+/-
+**Matroid.IsRkFinite.finite_of_indep_subset** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.I
+sRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.IsRkFinite X → M.Indep I
+ → I ⊆ X → I.Finite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.Indep.finite_of_isRkFinite`：∀ {α : Type u_1} {M : Matroid α} {I 
+: Set α}, M.Indep I → M.IsRkFinite I → I.Finite
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
 -/
-lemma IsRkFinite.finite_of_indep_subset (hX : M.IsRkFinite X) (hI : M.Indep I) (hIX : I subseteq X) :
+lemma IsRkFinite.finite_of_indep_subset (hX : M.IsRkFinite X) (hI : M.Indep I) (hIX : I ⊆ X) :
     I.Finite :=
-hI.finite_of_isRkFinite hX.subset hIX
+  hI.finite_of_isRkFinite <| hX.subset hIX
 
 @[simp]
-/--
-lemma `isRkFinite_ground_iff_rankFinite` / 引理 `isRkFinite_ground_iff_rankFinite`
-
-English:
-lemma isRkFinite_ground_iff_rankFinite
-  statement: M.IsRkFinite M.E ↔ M.RankFinite
-  proof: by
-  rw [IsRkFinite]; rw [restrict_ground_eq_self]
-
-中文:
-引理 isRkFinite_ground_iff_rankFinite
-  结论: M.IsRkFinite M.E ↔ M.RankFinite
-  证明: by
-  rw [IsRkFinite]; rw [restrict_ground_eq_self]
-
-Depends on / 依赖: IsRkFinite, restrict_ground_eq_self
+/-
+**Matroid.isRkFinite_ground_iff_rankFinite** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_ground_iff_rankFinite : M.IsRkFinite M.E ↔ M.RankFinite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matroid.IsRkFinite.eq_1`：∀ {α : Type u_1} (M : Matroid α) (X : Set α), M
+.IsRkFinite X = (M.restrict X).RankFinite
+· 使用定理 `Matroid.restrict_ground_eq_self`：∀ {α : Type u_1} (M : Matroid α), M.res
+trict M.E = M
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isRkFinite_ground_iff_rankFinite : M.IsRkFinite M.E ↔ M.RankFinite := by
-  rw [IsRkFinite]; rw [restrict_ground_eq_self]
-
-/--
-lemma `isRkFinite_ground` / 引理 `isRkFinite_ground`
-
-English:
-lemma isRkFinite_ground
-  given: (M : Matroid α) [RankFinite M]
-  statement: M.IsRkFinite M.E
-  proof: by
-  rwa [isRkFinite_ground_iff_rankFinite]
-
-中文:
-引理 isRkFinite_ground
-  条件: (M : 拟阵 α) [RankFinite M]
-  结论: M.IsRkFinite M.E
-  证明: by
-  rwa [isRkFinite_ground_iff_rankFinite]
-
-Depends on / 依赖: isRkFinite_ground_iff_rankFinite
+  rw [IsRkFinite, restrict_ground_eq_self]
+/-
+**Matroid.isRkFinite_ground** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_ground (M : Matroid α) [RankFinite M] : M.IsRkFinite M.E
+参数：M : Matroid α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Matroid.isRkFinite_ground_iff_rankFinite`：isRkFinite_ground_iff_rankFini
+te : M.IsRkFinite M.E ↔ M.RankFinite
 -/
 lemma isRkFinite_ground (M : Matroid α) [RankFinite M] : M.IsRkFinite M.E := by
   rwa [isRkFinite_ground_iff_rankFinite]
-
-/--
-lemma `Indep.finite_of_subset_isRkFinite` / 引理 `Indep.finite_of_subset_isRkFinite`
-
-English:
-lemma Indep.finite_of_subset_isRkFinite
-  given: (hI : M.Indep I) (hIX : I subseteq X) (hX : M.IsRkFinite X)
-  proof: hX.finite_of_indep_subset hI hIX
-
-中文:
-引理 Indep.finite_of_subset_isRkFinite
-  条件: (hI : M.Indep I) (hIX : I subseteq X) (hX : M.IsRkFinite X)
-  证明: hX.finite_of_indep_subset hI hIX
-
-Depends on / 依赖: finite_of_indep_subset, hX.finite_of_indep_subset
+/-
+**Matroid.Indep.finite_of_subset_isRkFinite** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.I
+ndep`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X I : Set α}, M.Indep I → I ⊆ X → M.IsRk
+Finite X → I.Finite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.finite_of_indep_subset`：∀ {α : Type u_1} {M : Matroid
+ α} {X I : Set α}, M.IsRkFinite X → M.Indep I → I ⊆ X → I.Finite
 -/
-lemma Indep.finite_of_subset_isRkFinite (hI : M.Indep I) (hIX : I subseteq X) (hX : M.IsRkFinite X) :
+lemma Indep.finite_of_subset_isRkFinite (hI : M.Indep I) (hIX : I ⊆ X) (hX : M.IsRkFinite X) :
     I.Finite :=
   hX.finite_of_indep_subset hI hIX
-
-/--
-lemma `IsRkFinite.closure` / 引理 `IsRkFinite.closure`
-
-English:
-lemma IsRkFinite.closure
-  given: (h : M.IsRkFinite X)
-  statement: M.IsRkFinite (M.closure X)
-  proof: let ⟨_, hI⟩ := M.exists_isBasis' X
-hI.isBasis_closure_right.isRkFinite_of_finite hI.finite_of_isRkFinite h
-
-@[simp]
-
-中文:
-引理 IsRkFinite.closure
-  条件: (h : M.IsRkFinite X)
-  结论: M.IsRkFinite (M.closure X)
-  证明: let ⟨_, hI⟩ := M.exists_isBasis' X
-hI.isBasis_closure_right.isRkFinite_of_finite hI.finite_of_isRkFinite h
-
-@[simp]
-
-Depends on / 依赖: M.exists_isBasis, exists_isBasis, finite_of_isRkFinite, hI.finite_of_isRkFinite, hI.isBasis_closure_right.isRkFinite_of_finite, isBasis_closure_right, isRkFinite_of_finite
+/-
+**Matroid.IsRkFinite.closure** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X : Set α}, M.IsRkFinite X → M.IsRkFinit
+e (M.closure X)
+参数：M.closure X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.exists_isBasis'`：exists_isBasis' (M : Matroid α) (X : Set α) : e
+xists I, M.IsBasis' I X
+· 使用定理 `Matroid.IsBasis.isRkFinite_of_finite`：∀ {α : Type u_1} {M : Matroid α} {
+X I : Set α}, M.IsBasis I X → I.Finite → M.IsRkFinite X
+· 使用定理 `Matroid.IsBasis'.isBasis_closure_right`：∀ {α : Type u_2} {M : Matroid α}
+ {X I : Set α}, M.IsBasis' I X → M.IsBasis I (M.closure X)
+· 使用定理 `Matroid.IsBasis'.finite_of_isRkFinite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → M.IsRkFinite X → I.Finite
 -/
 lemma IsRkFinite.closure (h : M.IsRkFinite X) : M.IsRkFinite (M.closure X) :=
   let ⟨_, hI⟩ := M.exists_isBasis' X
-hI.isBasis_closure_right.isRkFinite_of_finite hI.finite_of_isRkFinite h
+  hI.isBasis_closure_right.isRkFinite_of_finite <| hI.finite_of_isRkFinite h
 
 @[simp]
-/--
-lemma `isRkFinite_closure_iff` / 引理 `isRkFinite_closure_iff`
-
-English:
-lemma isRkFinite_closure_iff
-  statement: M.IsRkFinite (M.closure X) ↔ M.IsRkFinite X
-  proof: by
-  rw [← isRkFinite_inter_ground_iff (X := X)]
-exact ⟨fun h => h.subset M.inter_ground_subset_closure X, fun h => by simpa using h.closure⟩
-
-中文:
-引理 isRkFinite_closure_iff
-  结论: M.IsRkFinite (M.closure X) ↔ M.IsRkFinite X
-  证明: by
-  rw [← isRkFinite_inter_ground_iff (X := X)]
-exact ⟨fun h => h.subset M.inter_ground_subset_closure X, fun h => by simpa using h.closure⟩
-
-Depends on / 依赖: M.inter_ground_subset_closure, closure, h.closure, h.subset, inter_ground_subset_closure, isRkFinite_inter_ground_iff, subset
+/-
+**Matroid.isRkFinite_closure_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_closure_iff : M.IsRkFinite (M.closure X) ↔ M.IsRkFinite X
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.isRkFinite_inter_ground_iff`：isRkFinite_inter_ground_iff : M.IsR
+kFinite (X inter M.E) ↔ M.IsRkFinite X
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用引理 `Matroid.inter_ground_subset_closure`：inter_ground_subset_closure (M : Ma
+troid α) (X : Set α) : X inter M.E subseteq M.closure X
+· 使用定理 `Matroid.closure_inter_ground`：∀ {α : Type u_2} (M : Matroid α) (X : Set 
+α), M.closure (X ∩ M.E) = M.closure X
+· 使用定理 `Matroid.IsRkFinite.closure`：∀ {α : Type u_1} {M : Matroid α} {X : Set α}
+, M.IsRkFinite X → M.IsRkFinite (M.closure X)
 -/
 lemma isRkFinite_closure_iff : M.IsRkFinite (M.closure X) ↔ M.IsRkFinite X := by
   rw [← isRkFinite_inter_ground_iff (X := X)]
-exact ⟨fun h => h.subset M.inter_ground_subset_closure X, fun h => by simpa using h.closure⟩
-
-/--
-lemma `IsRkFinite.union` / 引理 `IsRkFinite.union`
-
-English:
-lemma IsRkFinite.union
-  given: (hX : M.IsRkFinite X) (hY : M.IsRkFinite Y)
-  statement: M.IsRkFinite (X union Y)
-  proof: by
-  obtain ⟨I, hI, hIfin⟩ := hX.exists_finite_isBasis'
-  obtain ⟨J, hJ, hJfin⟩ := hY.exists_finite_isBasis'
-  rw [← isRkFinite_inter_ground_iff]
-  refine (M.isRkFinite_of_finite (hIfin.union hJfin)).closure.subset ?_
-  rw [closure_union_congr_left hI.closure_eq_closure]; rw [closure_union_congr_right hJ.closure_eq_closure]
-  exact inter_ground_subset_closure M (X union Y)
-
-中文:
-引理 IsRkFinite.union
-  条件: (hX : M.IsRkFinite X) (hY : M.IsRkFinite Y)
-  结论: M.IsRkFinite (X union Y)
-  证明: by
-  obtain ⟨I, hI, hIfin⟩ := hX.exists_finite_isBasis'
-  obtain ⟨J, hJ, hJfin⟩ := hY.exists_finite_isBasis'
-  rw [← isRkFinite_inter_ground_iff]
-  refine (M.isRkFinite_of_finite (hIfin.union hJfin)).closure.subset ?_
-  rw [closure_union_congr_left hI.closure_eq_closure]; rw [closure_union_congr_right hJ.closure_eq_closure]
-  exact inter_ground_subset_closure M (X union Y)
-
-Depends on / 依赖: M.isRkFinite_of_finite, closure, closure.subset, closure_eq_closure, closure_union_congr_left, closure_union_congr_right, exists_finite_isBasis, hI.closure_eq_closure, hIfin.union, hJ.closure_eq_closure, hX.exists_finite_isBasis, hY.exists_finite_isBasis, inter_ground_subset_closure, isRkFinite_inter_ground_iff, isRkFinite_of_finite, subset
+  exact ⟨fun h ↦ h.subset <| M.inter_ground_subset_closure X, fun h ↦ by simpa using h.closure⟩
+/-
+**Matroid.IsRkFinite.union** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}, M.IsRkFinite X → M.IsRkFin
+ite Y → M.IsRkFinite (X ∪ Y)
+参数：X ∪ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.exists_finite_isBasis'`：∀ {α : Type u_1} {M : Matroid
+ α} {X : Set α}, M.IsRkFinite X → ∃ I, M.IsBasis' I X ∧ I.Finite
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Matroid.isRkFinite_inter_ground_iff`：isRkFinite_inter_ground_iff : M.IsR
+kFinite (X inter M.E) ↔ M.IsRkFinite X
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用定理 `Matroid.IsRkFinite.closure`：∀ {α : Type u_1} {M : Matroid α} {X : Set α}
+, M.IsRkFinite X → M.IsRkFinite (M.closure X)
+· 使用引理 `Matroid.isRkFinite_of_finite`：isRkFinite_of_finite (M : Matroid α) (hX :
+ X.Finite) : M.IsRkFinite X
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用引理 `Matroid.closure_union_congr_left`：closure_union_congr_left {X' : Set α} 
+(h : M.closure X = M.closure X') : M.closure (X union Y) = M.closure (X' union Y
+)
+· 使用定理 `Matroid.IsBasis'.closure_eq_closure`：∀ {α : Type u_2} {M : Matroid α} {X
+ I : Set α}, M.IsBasis' I X → M.closure I = M.closure X
+· 使用引理 `Matroid.closure_union_congr_right`：closure_union_congr_right {Y' : Set α
+} (h : M.closure Y = M.closure Y') : M.closure (X union Y) = M.closure (X union 
+Y')
+· 使用引理 `Matroid.inter_ground_subset_closure`：inter_ground_subset_closure (M : Ma
+troid α) (X : Set α) : X inter M.E subseteq M.closure X
 -/
-lemma IsRkFinite.union (hX : M.IsRkFinite X) (hY : M.IsRkFinite Y) : M.IsRkFinite (X union Y) := by
+lemma IsRkFinite.union (hX : M.IsRkFinite X) (hY : M.IsRkFinite Y) : M.IsRkFinite (X ∪ Y) := by
   obtain ⟨I, hI, hIfin⟩ := hX.exists_finite_isBasis'
   obtain ⟨J, hJ, hJfin⟩ := hY.exists_finite_isBasis'
   rw [← isRkFinite_inter_ground_iff]
   refine (M.isRkFinite_of_finite (hIfin.union hJfin)).closure.subset ?_
-  rw [closure_union_congr_left hI.closure_eq_closure]; rw [closure_union_congr_right hJ.closure_eq_closure]
-  exact inter_ground_subset_closure M (X union Y)
-
-/--
-lemma `IsRkFinite.isRkFinite_union_iff` / 引理 `IsRkFinite.isRkFinite_union_iff`
-
-English:
-lemma IsRkFinite.isRkFinite_union_iff
-  given: (hX : M.IsRkFinite X)
-  proof: ⟨fun h => h.subset subset_union_right, fun h => hX.union h⟩
-
-中文:
-引理 IsRkFinite.isRkFinite_union_iff
-  条件: (hX : M.IsRkFinite X)
-  证明: ⟨fun h => h.subset subset_union_right, fun h => hX.union h⟩
-
-Depends on / 依赖: h.subset, hX.union, subset, subset_union_right
+  rw [closure_union_congr_left hI.closure_eq_closure,
+    closure_union_congr_right hJ.closure_eq_closure]
+  exact inter_ground_subset_closure M (X ∪ Y)
+/-
+**Matroid.IsRkFinite.isRkFinite_union_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsR
+kFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}, M.IsRkFinite X → (M.IsRkFi
+nite (X ∪ Y) ↔ M.IsRkFinite Y)
+参数：M.IsRkFinite (X ∪ Y) ↔ M.IsRkFinite Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
+· 使用定理 `Matroid.IsRkFinite.union`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}
+, M.IsRkFinite X → M.IsRkFinite Y → M.IsRkFinite (X ∪ Y)
 -/
 lemma IsRkFinite.isRkFinite_union_iff (hX : M.IsRkFinite X) :
-    M.IsRkFinite (X union Y) ↔ M.IsRkFinite Y :=
-  ⟨fun h => h.subset subset_union_right, fun h => hX.union h⟩
-
-/--
-lemma `IsRkFinite.isRkFinite_sdiff_iff` / 引理 `IsRkFinite.isRkFinite_sdiff_iff`
-
-English:
-lemma IsRkFinite.isRkFinite_sdiff_iff
-  given: (hX : M.IsRkFinite X)
-  proof: by
-  rw [← hX.isRkFinite_union_iff]; rw [union_sdiff_self]; rw [hX.isRkFinite_union_iff]
-
-@[deprecated (since := "2026-06-03")]
-alias IsRkFinite.isRkFinite_diff_iff := IsRkFinite.isRkFinite_sdiff_iff
-
-中文:
-引理 IsRkFinite.isRkFinite_sdiff_iff
-  条件: (hX : M.IsRkFinite X)
-  证明: by
-  rw [← hX.isRkFinite_union_iff]; rw [union_sdiff_self]; rw [hX.isRkFinite_union_iff]
-
-@[deprecated (since := "2026-06-03")]
-alias IsRkFinite.isRkFinite_diff_iff := IsRkFinite.isRkFinite_sdiff_iff
-
-Depends on / 依赖: hX.isRkFinite_union_iff, isRkFinite_union_iff, union_sdiff_self
+    M.IsRkFinite (X ∪ Y) ↔ M.IsRkFinite Y :=
+  ⟨fun h ↦ h.subset subset_union_right, fun h ↦ hX.union h⟩
+/-
+**Matroid.IsRkFinite.isRkFinite_sdiff_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsR
+kFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}, M.IsRkFinite X → (M.IsRkFi
+nite (Y \ X) ↔ M.IsRkFinite Y)
+参数：M.IsRkFinite (Y \ X) ↔ M.IsRkFinite Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matroid.IsRkFinite.isRkFinite_union_iff`：∀ {α : Type u_1} {M : Matroid α
+} {X Y : Set α}, M.IsRkFinite X → (M.IsRkFinite (X ∪ Y) ↔ M.IsRkFinite Y)
+· 使用定理 `Set.union_sdiff_self`：union_sdiff_self {s t : Set α} : s union t \ s = s
+ union t
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma IsRkFinite.isRkFinite_sdiff_iff (hX : M.IsRkFinite X) :
     M.IsRkFinite (Y \ X) ↔ M.IsRkFinite Y := by
-  rw [← hX.isRkFinite_union_iff]; rw [union_sdiff_self]; rw [hX.isRkFinite_union_iff]
+  rw [← hX.isRkFinite_union_iff, union_sdiff_self, hX.isRkFinite_union_iff]
 
 @[deprecated (since := "2026-06-03")]
 alias IsRkFinite.isRkFinite_diff_iff := IsRkFinite.isRkFinite_sdiff_iff
-
-/--
-lemma `IsRkFinite.inter_right` / 引理 `IsRkFinite.inter_right`
-
-English:
-lemma IsRkFinite.inter_right
-  given: (hX : M.IsRkFinite X)
-  statement: M.IsRkFinite (X inter Y)
-  proof: hX.subset inter_subset_left
-
-中文:
-引理 IsRkFinite.inter_right
-  条件: (hX : M.IsRkFinite X)
-  结论: M.IsRkFinite (X inter Y)
-  证明: hX.subset inter_subset_left
-
-Depends on / 依赖: hX.subset, inter_subset_left, subset
+/-
+**Matroid.IsRkFinite.inter_right** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}, M.IsRkFinite X → M.IsRkFin
+ite (X ∩ Y)
+参数：X ∩ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-lemma IsRkFinite.inter_right (hX : M.IsRkFinite X) : M.IsRkFinite (X inter Y) :=
+lemma IsRkFinite.inter_right (hX : M.IsRkFinite X) : M.IsRkFinite (X ∩ Y) :=
   hX.subset inter_subset_left
-
-/--
-lemma `IsRkFinite.inter_left` / 引理 `IsRkFinite.inter_left`
-
-English:
-lemma IsRkFinite.inter_left
-  given: (hX : M.IsRkFinite X)
-  statement: M.IsRkFinite (Y inter X)
-  proof: hX.subset inter_subset_right
-
-中文:
-引理 IsRkFinite.inter_left
-  条件: (hX : M.IsRkFinite X)
-  结论: M.IsRkFinite (Y inter X)
-  证明: hX.subset inter_subset_right
-
-Depends on / 依赖: hX.subset, inter_subset_right, subset
+/-
+**Matroid.IsRkFinite.inter_left** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}, M.IsRkFinite X → M.IsRkFin
+ite (Y ∩ X)
+参数：Y ∩ X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
-lemma IsRkFinite.inter_left (hX : M.IsRkFinite X) : M.IsRkFinite (Y inter X) :=
+lemma IsRkFinite.inter_left (hX : M.IsRkFinite X) : M.IsRkFinite (Y ∩ X) :=
   hX.subset inter_subset_right
-
-/--
-lemma `IsRkFinite.diff` / 引理 `IsRkFinite.diff`
-
-English:
-lemma IsRkFinite.diff
-  given: (hX : M.IsRkFinite X)
-  statement: M.IsRkFinite (X \ Y)
-  proof: hX.subset sdiff_subset
-
-中文:
-引理 IsRkFinite.diff
-  条件: (hX : M.IsRkFinite X)
-  结论: M.IsRkFinite (X \ Y)
-  证明: hX.subset sdiff_subset
-
-Depends on / 依赖: hX.subset, sdiff_subset, subset
+/-
+**Matroid.IsRkFinite.diff** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}, M.IsRkFinite X → M.IsRkFin
+ite (X \ Y)
+参数：X \ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
 lemma IsRkFinite.diff (hX : M.IsRkFinite X) : M.IsRkFinite (X \ Y) :=
   hX.subset sdiff_subset
-
-/--
-lemma `IsRkFinite.insert` / 引理 `IsRkFinite.insert`
-
-English:
-lemma IsRkFinite.insert
-  given: (hX : M.IsRkFinite X) (e : α)
-  statement: M.IsRkFinite (insert e X)
-  proof: by
-  rw [← union_singleton]
-  exact hX.union M.isRkFinite_singleton
-
-@[simp]
-
-中文:
-引理 IsRkFinite.insert
-  条件: (hX : M.IsRkFinite X) (e : α)
-  结论: M.IsRkFinite (insert e X)
-  证明: by
-  rw [← union_singleton]
-  exact hX.union M.isRkFinite_singleton
-
-@[simp]
-
-Depends on / 依赖: M.isRkFinite_singleton, hX.union, isRkFinite_singleton, union_singleton
+/-
+**Matroid.IsRkFinite.insert** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X : Set α}, M.IsRkFinite X → ∀ (e : α), 
+M.IsRkFinite (insert e X)
+参数：e : α；insert e X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `Matroid.IsRkFinite.union`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α}
+, M.IsRkFinite X → M.IsRkFinite Y → M.IsRkFinite (X ∪ Y)
+· 使用引理 `Matroid.isRkFinite_singleton`：isRkFinite_singleton : M.IsRkFinite {e}
 -/
 lemma IsRkFinite.insert (hX : M.IsRkFinite X) (e : α) : M.IsRkFinite (insert e X) := by
   rw [← union_singleton]
   exact hX.union M.isRkFinite_singleton
 
 @[simp]
-/--
-lemma `isRkFinite_insert_iff` / 引理 `isRkFinite_insert_iff`
-
-English:
-lemma isRkFinite_insert_iff
-  given: {e : α}
-  statement: M.IsRkFinite (insert e X) ↔ M.IsRkFinite X
-  proof: by
-  rw [← singleton_union]; rw [isRkFinite_singleton.isRkFinite_union_iff]
-
-@[simp]
-
-中文:
-引理 isRkFinite_insert_iff
-  条件: {e : α}
-  结论: M.IsRkFinite (insert e X) ↔ M.IsRkFinite X
-  证明: by
-  rw [← singleton_union]; rw [isRkFinite_singleton.isRkFinite_union_iff]
-
-@[simp]
-
-Depends on / 依赖: isRkFinite_singleton, isRkFinite_singleton.isRkFinite_union_iff, isRkFinite_union_iff, singleton_union
+/-
+**Matroid.isRkFinite_insert_iff** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_insert_iff {e : α} : M.IsRkFinite (insert e X) ↔ M.IsRkFinite X
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.singleton_union`：singleton_union : {a} union s = insert a s
+· 使用定理 `Matroid.IsRkFinite.isRkFinite_union_iff`：∀ {α : Type u_1} {M : Matroid α
+} {X Y : Set α}, M.IsRkFinite X → (M.IsRkFinite (X ∪ Y) ↔ M.IsRkFinite Y)
+· 使用引理 `Matroid.isRkFinite_singleton`：isRkFinite_singleton : M.IsRkFinite {e}
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isRkFinite_insert_iff {e : α} : M.IsRkFinite (insert e X) ↔ M.IsRkFinite X := by
-  rw [← singleton_union]; rw [isRkFinite_singleton.isRkFinite_union_iff]
+  rw [← singleton_union, isRkFinite_singleton.isRkFinite_union_iff]
 
 @[simp]
-/--
-lemma `IsRkFinite.sdiff_singleton_iff` / 引理 `IsRkFinite.sdiff_singleton_iff`
-
-English:
-lemma IsRkFinite.sdiff_singleton_iff
-  statement: M.IsRkFinite (X \ {e}) ↔ M.IsRkFinite X
-  proof: by
-  rw [isRkFinite_singleton.isRkFinite_sdiff_iff]
-
-@[deprecated (since := "2026-06-03")]
-alias IsRkFinite.diff_singleton_iff := IsRkFinite.sdiff_singleton_iff
-
-中文:
-引理 IsRkFinite.sdiff_singleton_iff
-  结论: M.IsRkFinite (X \ {e}) ↔ M.IsRkFinite X
-  证明: by
-  rw [isRkFinite_singleton.isRkFinite_sdiff_iff]
-
-@[deprecated (since := "2026-06-03")]
-alias IsRkFinite.diff_singleton_iff := IsRkFinite.sdiff_singleton_iff
-
-Depends on / 依赖: isRkFinite_sdiff_iff, isRkFinite_singleton, isRkFinite_singleton.isRkFinite_sdiff_iff
+/-
+**Matroid.IsRkFinite.sdiff_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRk
+Finite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {X : Set α} {e : α}, M.IsRkFinite (X \ {e
+}) ↔ M.IsRkFinite X
+参数：X \ {e}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matroid.IsRkFinite.isRkFinite_sdiff_iff`：∀ {α : Type u_1} {M : Matroid α
+} {X Y : Set α}, M.IsRkFinite X → (M.IsRkFinite (Y \ X) ↔ M.IsRkFinite Y)
+· 使用引理 `Matroid.isRkFinite_singleton`：isRkFinite_singleton : M.IsRkFinite {e}
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma IsRkFinite.sdiff_singleton_iff : M.IsRkFinite (X \ {e}) ↔ M.IsRkFinite X := by
   rw [isRkFinite_singleton.isRkFinite_sdiff_iff]
 
 @[deprecated (since := "2026-06-03")]
 alias IsRkFinite.diff_singleton_iff := IsRkFinite.sdiff_singleton_iff
-
-/--
-lemma `isRkFinite_set` / 引理 `isRkFinite_set`
-
-English:
-lemma isRkFinite_set
-  given: (M : Matroid α) [RankFinite M] (X : Set α)
-  statement: M.IsRkFinite X
-  proof: let ⟨_, hI⟩ := M.exists_isBasis' X
-  hI.isRkFinite_of_finite hI.indep.finite
-
-中文:
-引理 isRkFinite_set
-  条件: (M : 拟阵 α) [RankFinite M] (X : 集合 α)
-  结论: M.IsRkFinite X
-  证明: let ⟨_, hI⟩ := M.exists_isBasis' X
-  hI.isRkFinite_of_finite hI.indep.finite
-
-Depends on / 依赖: M.exists_isBasis, exists_isBasis, finite, hI.indep.finite, hI.isRkFinite_of_finite, isRkFinite_of_finite
+/-
+**Matroid.isRkFinite_set** 是 Mathlib 中的一个引理，位于命名空间 `Matroid`。
+形式化陈述：isRkFinite_set (M : Matroid α) [RankFinite M] (X : Set α) : M.IsRkFinite X
+参数：M : Matroid α；X : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matroid.exists_isBasis'`：exists_isBasis' (M : Matroid α) (X : Set α) : e
+xists I, M.IsBasis' I X
+· 使用定理 `Matroid.IsBasis'.isRkFinite_of_finite`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsBasis' I X → I.Finite → M.IsRkFinite X
+· 使用定理 `Matroid.Indep.finite`：∀ {α : Type u_1} {M : Matroid α} {I : Set α} [M.Ra
+nkFinite], M.Indep I → I.Finite
+· 使用定理 `Matroid.IsBasis'.indep`：∀ {α : Type u_1} {M : Matroid α} {I X : Set α}, 
+M.IsBasis' I X → M.Indep I
 -/
 lemma isRkFinite_set (M : Matroid α) [RankFinite M] (X : Set α) : M.IsRkFinite X :=
   let ⟨_, hI⟩ := M.exists_isBasis' X
   hI.isRkFinite_of_finite hI.indep.finite
 
-/--
-lemma `IsRkFinite.iUnion` / 引理 `IsRkFinite.iUnion`
+/-- A union of finitely many `IsRkFinite` sets is `IsRkFinite`. -/
+/-
+**Matroid.IsRkFinite.iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Matroid.IsRkFinite`。
+形式化陈述：∀ {α : Type u_1} {M : Matroid α} {ι : Type u_2} [Finite ι] {Xs : ι → Set α
+},   (∀ (i : ι), M.IsRkFinite (Xs i)) → M.IsRkFinite (⋃ i, Xs i)
+参数：∀ (i : ι), M.IsRkFinite (Xs i)；⋃ i, Xs i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.finite_iUnion`：finite_iUnion [Finite ι] {f : ι -> Set α} (H : forall
+ i, (f i).Finite) : (⋃ i, f i).Finite
+· 使用定理 `Matroid.IsRkFinite.finite_of_isBasis'`：∀ {α : Type u_1} {M : Matroid α} 
+{X I : Set α}, M.IsRkFinite X → M.IsBasis' I X → I.Finite
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Matroid.isRkFinite_inter_ground_iff`：isRkFinite_inter_ground_iff : M.IsR
+kFinite (X inter M.E) ↔ M.IsRkFinite X
+· 使用定理 `Matroid.IsRkFinite.subset`：∀ {α : Type u_1} {M : Matroid α} {X Y : Set α
+}, M.IsRkFinite X → Y ⊆ X → M.IsRkFinite Y
+· 使用定理 `Matroid.IsRkFinite.closure`：∀ {α : Type u_1} {M : Matroid α} {X : Set α}
+, M.IsRkFinite X → M.IsRkFinite (M.closure X)
+· 使用引理 `Matroid.isRkFinite_of_finite`：isRkFinite_of_finite (M : Matroid α) (hX :
+ X.Finite) : M.IsRkFinite X
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.iUnion_inter`：iUnion_inter (s : Set β) (t : ι -> Set β) : (⋃ i, t i)
+ inter s = ⋃ i, t i inter s
+· 使用定理 `Set.iUnion_subset_iff`：iUnion_subset_iff {s : ι -> Set α} {t : Set α} : 
+⋃ i, s i subseteq t ↔ forall i, s i subseteq t
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Matroid.IsBasis.subset_closure`：∀ {α : Type u_2} {M : Matroid α} {X I : 
+Set α}, M.IsBasis I X → X ⊆ M.closure I
+· 使用定理 `Matroid.IsBasis'.isBasis_inter_ground`：∀ {α : Type u_1} {M : Matroid α} 
+{I X : Set α}, M.IsBasis' I X → M.IsBasis I (X ∩ M.E)
+· 使用引理 `Matroid.closure_subset_closure`：closure_subset_closure (M : Matroid α) (
+h : X subseteq Y) : M.closure X subseteq M.closure Y
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
+· 使用定理 `Matroid.exists_isBasis'`：exists_isBasis' (M : Matroid α) (X : Set α) : e
+xists I, M.IsBasis' I X
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-lemma IsRkFinite.iUnion
-  given: {ι : Type*} [Finite ι] {Xs : ι -> Set α} (h : forall i, M.IsRkFinite (Xs i))
-  proof: by
-  choose Is hIs using fun i => M.exists_isBasis' (Xs i)
-have hfin : (⋃ i, Is i).Finite := finite_iUnion fun i => (h i).finite_of_isBasis' (hIs i)
-refine isRkFinite_inter_ground_iff.1 (M.isRkFinite_of_finite hfin).closure.subset ?_
-  rw [iUnion_inter]; rw [iUnion_subset_iff]
-exact fun i => (hIs i).isBasis_inter_ground.subset_closure.trans M.closure_subset_closure
-    subset_iUnion ..
-
-中文:
-引理 IsRkFinite.iUnion
-  条件: {ι : 类型} [有限 ι] {Xs : ι -> 集合 α} (h : 对任意 i, M.IsRkFinite (Xs i))
-  证明: by
-  choose Is hIs using fun i => M.exists_isBasis' (Xs i)
-have hfin : (⋃ i, Is i).Finite := finite_iUnion fun i => (h i).finite_of_isBasis' (hIs i)
-refine isRkFinite_inter_ground_iff.1 (M.isRkFinite_of_finite hfin).closure.subset ?_
-  rw [iUnion_inter]; rw [iUnion_subset_iff]
-exact fun i => (hIs i).isBasis_inter_ground.subset_closure.trans M.closure_subset_closure
-    subset_iUnion ..
-
-Depends on / 依赖: Finite, M.closure_subset_closure, M.exists_isBasis, M.isRkFinite_of_finite, closure, closure.subset, closure_subset_closure, exists_isBasis, finite_iUnion, finite_of_isBasis, iUnion_inter, iUnion_subset_iff, isBasis_inter_ground, isBasis_inter_ground.subset_closure.trans, isRkFinite_inter_ground_iff, isRkFinite_of_finite, subset, subset_closure, subset_iUnion
+--- 原说明 ---
+A union of finitely many `IsRkFinite` sets is `IsRkFinite`.
 -/
-lemma IsRkFinite.iUnion {ι : Type*} [Finite ι] {Xs : ι -> Set α} (h : forall i, M.IsRkFinite (Xs i)) :
+lemma IsRkFinite.iUnion {ι : Type*} [Finite ι] {Xs : ι → Set α} (h : ∀ i, M.IsRkFinite (Xs i)) :
     M.IsRkFinite (⋃ i, Xs i) := by
-  choose Is hIs using fun i => M.exists_isBasis' (Xs i)
-have hfin : (⋃ i, Is i).Finite := finite_iUnion fun i => (h i).finite_of_isBasis' (hIs i)
-refine isRkFinite_inter_ground_iff.1 (M.isRkFinite_of_finite hfin).closure.subset ?_
-  rw [iUnion_inter]; rw [iUnion_subset_iff]
-exact fun i => (hIs i).isBasis_inter_ground.subset_closure.trans M.closure_subset_closure
+  choose Is hIs using fun i ↦ M.exists_isBasis' (Xs i)
+  have hfin : (⋃ i, Is i).Finite := finite_iUnion <| fun i ↦ (h i).finite_of_isBasis' (hIs i)
+  refine isRkFinite_inter_ground_iff.1 <| (M.isRkFinite_of_finite hfin).closure.subset ?_
+  rw [iUnion_inter, iUnion_subset_iff]
+  exact fun i ↦ (hIs i).isBasis_inter_ground.subset_closure.trans <| M.closure_subset_closure <|
     subset_iUnion ..
 
 end Matroid
+

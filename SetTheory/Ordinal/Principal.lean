@@ -50,241 +50,172 @@ variable {a b c o : Ordinal.{u}}
 
 section Arbitrary
 
-variable {op : Ordinal -> Ordinal -> Ordinal}
+variable {op : Ordinal → Ordinal → Ordinal}
 
 /-! ### Principal ordinals under an arbitrary operation -/
 
-/--
-Definition of `IsPrincipal` / `IsPrincipal` 的定义
+/-- An ordinal `o` is said to be principal (or indecomposable) under an operation when `Iio o` is
+closed under that operation.
 
-English:
-definition IsPrincipal
-  signature: (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal)
-  body: forall ⦃a b⦄, a < o -> b < o -> op a b < o
+For simplicity, we break usual convention and regard `0` as principal. -/
+/-
+**Ordinal.IsPrincipal** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：IsPrincipal (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal) : Prop
+参数：op : Ordinal -> Ordinal -> Ordinal；o : Ordinal。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[deprecated (since := "2026-03-17")]
-alias Principal := IsPrincipal
+--- 原说明 ---
+An ordinal `o` is said to be principal (or indecomposable) under an operation wh
+en `Iio o` is
+closed under that operation.
 
-中文:
-定义 是Principal
-  签名: (op : 序数 -> 序数 -> 序数) (o : 序数)
-  定义体: forall ⦃a b⦄, a < o -> b < o -> op a b < o
-
-@[deprecated (since := "2026-03-17")]
-alias Principal := IsPrincipal
+For simplicity, we break usual convention and regard `0` as principal.
 -/
-def IsPrincipal (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal) : Prop :=
-  forall ⦃a b⦄, a < o -> b < o -> op a b < o
+def IsPrincipal (op : Ordinal → Ordinal → Ordinal) (o : Ordinal) : Prop :=
+  ∀ ⦃a b⦄, a < o → b < o → op a b < o
 
 @[deprecated (since := "2026-03-17")]
 alias Principal := IsPrincipal
-
-/--
-theorem `isPrincipal_swap_iff` / 定理 `isPrincipal_swap_iff`
-
-English:
-theorem isPrincipal_swap_iff
-  statement: IsPrincipal (Function.swap op) o ↔ IsPrincipal op o
-  proof: by
-  constructor <;> exact fun h a b ha hb => h hb ha
-
-@[deprecated (since := "2026-03-17")]
-alias principal_swap_iff := isPrincipal_swap_iff
-
-中文:
-定理 isPrincipal_swap_iff
-  结论: 是Principal (函数.swap op) o ↔ 是Principal op o
-  证明: by
-  constructor <;> exact fun h a b ha hb => h hb ha
-
-@[deprecated (since := "2026-03-17")]
-alias principal_swap_iff := isPrincipal_swap_iff
+/-
+**Ordinal.isPrincipal_swap_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_swap_iff : IsPrincipal (Function.swap op) o ↔ IsPrincipal op o
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isPrincipal_swap_iff : IsPrincipal (Function.swap op) o ↔ IsPrincipal op o := by
   constructor <;> exact fun h a b ha hb => h hb ha
 
 @[deprecated (since := "2026-03-17")]
 alias principal_swap_iff := isPrincipal_swap_iff
-
-/--
-theorem `not_isPrincipal_iff` / 定理 `not_isPrincipal_iff`
-
-English:
-theorem not_isPrincipal_iff
-  statement: ¬ IsPrincipal op o ↔ exists a < o, exists b < o, o <= op a b
-  proof: by
-  simp [IsPrincipal]
-
-@[deprecated (since := "2026-03-17")]
-alias not_principal_iff := not_isPrincipal_iff
-
-中文:
-定理 not_isPrincipal_iff
-  结论: ¬ 是Principal op o ↔ 存在 a < o, 存在 b < o, o <= op a b
-  证明: by
-  simp [IsPrincipal]
-
-@[deprecated (since := "2026-03-17")]
-alias not_principal_iff := not_isPrincipal_iff
-
-Depends on / 依赖: IsPrincipal
+/-
+**Ordinal.not_isPrincipal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：not_isPrincipal_iff : ¬ IsPrincipal op o ↔ exists a < o, exists b < o, o <
+= op a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem not_isPrincipal_iff : ¬ IsPrincipal op o ↔ exists a < o, exists b < o, o <= op a b := by
+theorem not_isPrincipal_iff : ¬ IsPrincipal op o ↔ ∃ a < o, ∃ b < o, o ≤ op a b := by
   simp [IsPrincipal]
 
 @[deprecated (since := "2026-03-17")]
 alias not_principal_iff := not_isPrincipal_iff
-
-/--
-theorem `isPrincipal_iff_of_monotone` / 定理 `isPrincipal_iff_of_monotone`
-
-English:
-theorem isPrincipal_iff_of_monotone
-  proof: by
-  use fun h a ha => h ha ha
-  intro H a b ha hb
-  obtain hab | hba := le_or_gt a b
-· exact (h₂ b hab).trans_lt H b hb
-· exact (h₁ a hba.le).trans_lt H a ha
-
-@[deprecated (since := "2026-03-17")]
-alias principal_iff_of_monotone := isPrincipal_iff_of_monotone
-
-中文:
-定理 isPrincipal_iff_of_monotone
-  证明: by
-  use fun h a ha => h ha ha
-  intro H a b ha hb
-  obtain hab | hba := le_or_gt a b
-· exact (h₂ b hab).trans_lt H b hb
-· exact (h₁ a hba.le).trans_lt H a ha
-
-@[deprecated (since := "2026-03-17")]
-alias principal_iff_of_monotone := isPrincipal_iff_of_monotone
-
-Depends on / 依赖: hba.le, le_or_gt, trans_lt
+/-
+**Ordinal.isPrincipal_iff_of_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_iff_of_monotone (h₁ : forall a, Monotone (op a)) (h₂ : forall 
+a, Monotone (Function.swap op a)) : IsPrincipal op o ↔ forall a < o, op a a < o
+参数：h₁ : forall a, Monotone (op a)；h₂ : forall a, Monotone (Function.swap op a)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem isPrincipal_iff_of_monotone
-    (h₁ : forall a, Monotone (op a)) (h₂ : forall a, Monotone (Function.swap op a)) :
-    IsPrincipal op o ↔ forall a < o, op a a < o := by
+    (h₁ : ∀ a, Monotone (op a)) (h₂ : ∀ a, Monotone (Function.swap op a)) :
+    IsPrincipal op o ↔ ∀ a < o, op a a < o := by
   use fun h a ha => h ha ha
   intro H a b ha hb
   obtain hab | hba := le_or_gt a b
-· exact (h₂ b hab).trans_lt H b hb
-· exact (h₁ a hba.le).trans_lt H a ha
+  · exact (h₂ b hab).trans_lt <| H b hb
+  · exact (h₁ a hba.le).trans_lt <| H a ha
 
 @[deprecated (since := "2026-03-17")]
 alias principal_iff_of_monotone := isPrincipal_iff_of_monotone
-
-/--
-theorem `not_isPrincipal_iff_of_monotone` / 定理 `not_isPrincipal_iff_of_monotone`
-
-English:
-theorem not_isPrincipal_iff_of_monotone
-  proof: by
-  simp [isPrincipal_iff_of_monotone h₁ h₂]
-
-@[deprecated (since := "2026-03-17")]
-alias not_principal_iff_of_monotone := not_isPrincipal_iff_of_monotone
-
-中文:
-定理 not_isPrincipal_iff_of_monotone
-  证明: by
-  simp [isPrincipal_iff_of_monotone h₁ h₂]
-
-@[deprecated (since := "2026-03-17")]
-alias not_principal_iff_of_monotone := not_isPrincipal_iff_of_monotone
-
-Depends on / 依赖: isPrincipal_iff_of_monotone
+/-
+**Ordinal.not_isPrincipal_iff_of_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：not_isPrincipal_iff_of_monotone (h₁ : forall a, Monotone (op a)) (h₂ : for
+all a, Monotone (Function.swap op a)) : ¬ IsPrincipal op o ↔ exists a < o, o <= 
+op a a
+参数：h₁ : forall a, Monotone (op a)；h₂ : forall a, Monotone (Function.swap op a)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.isPrincipal_iff_of_monotone`：isPrincipal_iff_of_monotone (h₁ : f
+orall a, Monotone (op a)) (h₂ : forall a, Monotone (Function.swap op a)) : IsPri
+ncipal op o ↔ forall a < …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem not_isPrincipal_iff_of_monotone
-    (h₁ : forall a, Monotone (op a)) (h₂ : forall a, Monotone (Function.swap op a)) :
-    ¬ IsPrincipal op o ↔ exists a < o, o <= op a a := by
+    (h₁ : ∀ a, Monotone (op a)) (h₂ : ∀ a, Monotone (Function.swap op a)) :
+    ¬ IsPrincipal op o ↔ ∃ a < o, o ≤ op a a := by
   simp [isPrincipal_iff_of_monotone h₁ h₂]
 
 @[deprecated (since := "2026-03-17")]
 alias not_principal_iff_of_monotone := not_isPrincipal_iff_of_monotone
-
-/--
-lemma `isPrincipal_zero` / 引理 `isPrincipal_zero`
-
-English:
-lemma isPrincipal_zero
-  statement: IsPrincipal op 0
-  proof: by simp [IsPrincipal]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_zero := isPrincipal_zero
-
-中文:
-引理 isPrincipal_zero
-  结论: 是Principal op 0
-  证明: by simp [IsPrincipal]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_zero := isPrincipal_zero
+/-
+**Ordinal.isPrincipal_zero** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordinal.{u_1}}, Ordinal.IsPrincipa
+l op 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[simp] lemma isPrincipal_zero : IsPrincipal op 0 := by simp [IsPrincipal]
 
 @[deprecated (since := "2026-03-17")]
 alias principal_zero := isPrincipal_zero
-
-/--
-theorem `isPrincipal_one_iff` / 定理 `isPrincipal_one_iff`
-
-English:
-theorem isPrincipal_one_iff
-  statement: IsPrincipal op 1 ↔ op 0 0 = 0
-  proof: by simp [IsPrincipal]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_one_iff := isPrincipal_one_iff
-
-中文:
-定理 isPrincipal_one_iff
-  结论: 是Principal op 1 ↔ op 0 0 = 0
-  证明: by simp [IsPrincipal]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_one_iff := isPrincipal_one_iff
+/-
+**Ordinal.isPrincipal_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordinal.{u_1}}, Ordinal.IsPrincipa
+l op 1 ↔ op 0 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] theorem isPrincipal_one_iff : IsPrincipal op 1 ↔ op 0 0 = 0 := by simp [IsPrincipal]
 
 @[deprecated (since := "2026-03-17")]
 alias principal_one_iff := isPrincipal_one_iff
-
-/--
-theorem `IsPrincipal.iterate_lt` / 定理 `IsPrincipal.iterate_lt`
-
-English:
-theorem IsPrincipal.iterate_lt
-  given: (hao : a < o) (ho : IsPrincipal op o) (n : Nat)
-  proof: by
-  induction n with
-  | zero => rwa [Function.iterate_zero]
-  | succ n hn =>
-    rw [Function.iterate_succ']
-    exact ho hao hn
-
-@[deprecated (since := "2026-03-17")]
-alias Principal.iterate_lt := IsPrincipal.iterate_lt
-
-中文:
-定理 是Principal.iterate_lt
-  条件: (hao : a < o) (ho : 是Principal op o) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => rwa [Function.iterate_zero]
-  | succ n hn =>
-    rw [Function.iterate_succ']
-    exact ho hao hn
-
-@[deprecated (since := "2026-03-17")]
-alias Principal.iterate_lt := IsPrincipal.iterate_lt
-
-Depends on / 依赖: Function, Function.iterate_succ, Function.iterate_zero, iterate_succ, iterate_zero
+/-
+**Ordinal.IsPrincipal.iterate_lt** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsPrincipal`
+。
+形式化陈述：∀ {a o : Ordinal.{u}} {op : Ordinal.{u} → Ordinal.{u} → Ordinal.{u}},   a 
+< o → Ordinal.IsPrincipal op o → ∀ (n : ℕ), (op a)^[n] a < o
+参数：n : ℕ；op a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.iterate_zero`：iterate_zero : f^[0] = id
+· 使用定理 `Function.iterate_succ'`：iterate_succ' (n : Nat) : f^[n.succ] = f ∘ f^[n]
 -/
-theorem IsPrincipal.iterate_lt (hao : a < o) (ho : IsPrincipal op o) (n : Nat) :
+theorem IsPrincipal.iterate_lt (hao : a < o) (ho : IsPrincipal op o) (n : ℕ) :
     (op a)^[n] a < o := by
   induction n with
   | zero => rwa [Function.iterate_zero]
@@ -294,110 +225,84 @@ theorem IsPrincipal.iterate_lt (hao : a < o) (ho : IsPrincipal op o) (n : Nat) :
 
 @[deprecated (since := "2026-03-17")]
 alias Principal.iterate_lt := IsPrincipal.iterate_lt
-
-/--
-theorem `op_eq_self_of_isPrincipal` / 定理 `op_eq_self_of_isPrincipal`
-
-English:
-theorem op_eq_self_of_isPrincipal
-  statement: (hao : a < o) (H : IsNormal (op a))
-  proof: by
-  apply H.strictMono.le_apply.antisymm'
-  rw [H.apply_of_isSuccLimit ho']; rw [Ordinal.iSup_le_iff]
-  exact fun ⟨b, hbo⟩ => (ho hao hbo).le
-
-@[deprecated (since := "2026-03-17")]
-alias op_eq_self_of_principal := op_eq_self_of_isPrincipal
-
-中文:
-定理 op_eq_self_of_isPrincipal
-  结论: (hao : a < o) (H : 是正规 (op a))
-  证明: by
-  apply H.strictMono.le_apply.antisymm'
-  rw [H.apply_of_isSuccLimit ho']; rw [Ordinal.iSup_le_iff]
-  exact fun ⟨b, hbo⟩ => (ho hao hbo).le
-
-@[deprecated (since := "2026-03-17")]
-alias op_eq_self_of_principal := op_eq_self_of_isPrincipal
-
-Depends on / 依赖: H.apply_of_isSuccLimit, H.strictMono.le_apply.antisymm, Ordinal, Ordinal.iSup_le_iff, antisymm, apply_of_isSuccLimit, iSup_le_iff, le_apply, strictMono
+/-
+**Ordinal.op_eq_self_of_isPrincipal** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：op_eq_self_of_isPrincipal (hao : a < o) (H : IsNormal (op a)) (ho : IsPrin
+cipal op o) (ho' : IsSuccLimit o) : op a o = o
+参数：hao : a < o；H : IsNormal (op a)；ho : IsPrincipal op o；ho' : IsSuccLimit o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用定理 `StrictMono.le_apply`：StrictMono.le_apply [WellFoundedLT β] {f : β -> β} 
+(hf : StrictMono f) {x} : x <= f x
+· 使用定理 `Order.IsNormal.strictMono`：∀ {α : Type u_1} {β : Type u_2} [inst : Linea
+rOrder α] [inst_1 : LinearOrder β] {f : α → β},   Order.IsNormal f → StrictMono 
+f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.IsNormal.apply_of_isSuccLimit`：apply_of_isSuccLimit (hf : IsNormal
+ f) (ha : IsSuccLimit a) : f a = ⨆ b : Iio a, f b
+· 使用定理 `Ordinal.iSup_le_iff`：∀ {ι : Type u_3} {f : ι → Ordinal.{u}} {a : Ordinal
+.{u}} [Small.{u, u_3} ι], ⨆ i, f i ≤ a ↔ ∀ (i : ι), f i ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem op_eq_self_of_isPrincipal (hao : a < o) (H : IsNormal (op a))
     (ho : IsPrincipal op o) (ho' : IsSuccLimit o) : op a o = o := by
   apply H.strictMono.le_apply.antisymm'
-  rw [H.apply_of_isSuccLimit ho']; rw [Ordinal.iSup_le_iff]
-  exact fun ⟨b, hbo⟩ => (ho hao hbo).le
+  rw [H.apply_of_isSuccLimit ho', Ordinal.iSup_le_iff]
+  exact fun ⟨b, hbo⟩ ↦ (ho hao hbo).le
 
 @[deprecated (since := "2026-03-17")]
 alias op_eq_self_of_principal := op_eq_self_of_isPrincipal
-
-/--
-theorem `nfp_le_of_isPrincipal` / 定理 `nfp_le_of_isPrincipal`
-
-English:
-theorem nfp_le_of_isPrincipal
-  given: (hao : a < o) (ho : IsPrincipal op o)
-  statement: nfp (op a) a <= o
-  proof: nfp_le fun n => (ho.iterate_lt hao n).le
-
-@[deprecated (since := "2026-03-17")]
-alias nfp_le_of_principal := nfp_le_of_isPrincipal
-
-中文:
-定理 nfp_le_of_isPrincipal
-  条件: (hao : a < o) (ho : 是Principal op o)
-  结论: nfp (op a) a <= o
-  证明: nfp_le fun n => (ho.iterate_lt hao n).le
-
-@[deprecated (since := "2026-03-17")]
-alias nfp_le_of_principal := nfp_le_of_isPrincipal
-
-Depends on / 依赖: ho.iterate_lt, iterate_lt, nfp_le
+/-
+**Ordinal.nfp_le_of_isPrincipal** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：nfp_le_of_isPrincipal (hao : a < o) (ho : IsPrincipal op o) : nfp (op a) a
+ <= o
+参数：hao : a < o；ho : IsPrincipal op o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.nfp_le`：nfp_le {a b} : (forall n, f^[n] a <= b) -> nfp f a <= b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Ordinal.IsPrincipal.iterate_lt`：∀ {a o : Ordinal.{u}} {op : Ordinal.{u} 
+→ Ordinal.{u} → Ordinal.{u}},   a < o → Ordinal.IsPrincipal op o → ∀ (n : ℕ), (o
+p a)^[n] a < o
 -/
-theorem nfp_le_of_isPrincipal (hao : a < o) (ho : IsPrincipal op o) : nfp (op a) a <= o :=
+theorem nfp_le_of_isPrincipal (hao : a < o) (ho : IsPrincipal op o) : nfp (op a) a ≤ o :=
   nfp_le fun n => (ho.iterate_lt hao n).le
 
 @[deprecated (since := "2026-03-17")]
 alias nfp_le_of_principal := nfp_le_of_isPrincipal
-
-/--
-theorem `IsPrincipal.sSup` / 定理 `IsPrincipal.sSup`
-
-English:
-theorem IsPrincipal.sSup
-  given: {s : Set Ordinal} (H : forall x in s, IsPrincipal op x)
-  proof: by
-  have : IsPrincipal op (sSup ∅) := by simp
-  by_cases hs : BddAbove s
-  · obtain rfl | hs' := s.eq_empty_or_nonempty
-    · assumption
-    simp only [IsPrincipal, lt_csSup_iff hs hs', forall_exists_index, and_imp]
-    intro x y a has ha b hbs hb
-    have h : max a b in s := max_rec' _ has hbs
-    exact ⟨_, h, H (max a b) h (lt_max_of_lt_left ha) (lt_max_of_lt_right hb)⟩
-  · rwa [csSup_of_not_bddAbove hs]
-
-@[deprecated (since := "2026-03-17")]
-protected alias Principal.sSup := IsPrincipal.sSup
-
-中文:
-定理 是Principal.sSup
-  条件: {s : 集合 序数} (H : 对任意 x in s, 是Principal op x)
-  证明: by
-  have : IsPrincipal op (sSup ∅) := by simp
-  by_cases hs : BddAbove s
-  · obtain rfl | hs' := s.eq_empty_or_nonempty
-    · assumption
-    simp only [IsPrincipal, lt_csSup_iff hs hs', forall_exists_index, and_imp]
-    intro x y a has ha b hbs hb
-    have h : max a b in s := max_rec' _ has hbs
-    exact ⟨_, h, H (max a b) h (lt_max_of_lt_left ha) (lt_max_of_lt_right hb)⟩
-  · rwa [csSup_of_not_bddAbove hs]
-
-@[deprecated (since := "2026-03-17")]
-protected alias Principal.sSup := IsPrincipal.sSup
+/-
+**Ordinal.IsPrincipal.sSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsPrincipal`。
+形式化陈述：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordinal.{u_1}} {s : Set Ordinal.{u
+_1}},   (∀ x ∈ s, Ordinal.IsPrincipal op x) → Ordinal.IsPrincipal op (sSup s)
+参数：∀ x ∈ s, Ordinal.IsPrincipal op x；sSup s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `csSup_empty`：csSup_empty : (sSup ∅ : α) = ⊥
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `lt_csSup_iff`：lt_csSup_iff (hb : BddAbove s) (hs : s.Nonempty) : a < sSu
+p s ↔ exists b in s, a < b
+· 使用定理 `max_rec'`：∀ {α : Type u_2} [inst : LinearOrder α] {a b : α} (p : α → Pro
+p), p a → p b → p (max a b)
+· 使用定理 `lt_max_of_lt_left`：lt_max_of_lt_left (h : a < b) : a < max b c
+· 使用定理 `lt_max_of_lt_right`：lt_max_of_lt_right (h : a < c) : a < max b c
+· 使用引理 `csSup_of_not_bddAbove`：csSup_of_not_bddAbove (hs : ¬BddAbove s) : sSup s
+ = sSup ∅
 -/
-protected theorem IsPrincipal.sSup {s : Set Ordinal} (H : forall x in s, IsPrincipal op x) :
+protected theorem IsPrincipal.sSup {s : Set Ordinal} (H : ∀ x ∈ s, IsPrincipal op x) :
     IsPrincipal op (sSup s) := by
   have : IsPrincipal op (sSup ∅) := by simp
   by_cases hs : BddAbove s
@@ -405,33 +310,29 @@ protected theorem IsPrincipal.sSup {s : Set Ordinal} (H : forall x in s, IsPrinc
     · assumption
     simp only [IsPrincipal, lt_csSup_iff hs hs', forall_exists_index, and_imp]
     intro x y a has ha b hbs hb
-    have h : max a b in s := max_rec' _ has hbs
+    have h : max a b ∈ s := max_rec' _ has hbs
     exact ⟨_, h, H (max a b) h (lt_max_of_lt_left ha) (lt_max_of_lt_right hb)⟩
   · rwa [csSup_of_not_bddAbove hs]
 
 @[deprecated (since := "2026-03-17")]
 protected alias Principal.sSup := IsPrincipal.sSup
-
-/--
-theorem `IsPrincipal.iSup` / 定理 `IsPrincipal.iSup`
-
-English:
-theorem IsPrincipal.iSup
-  given: {ι} {f : ι -> Ordinal} (H : forall i, IsPrincipal op (f i))
-  proof: IsPrincipal.sSup (by simpa)
-
-@[deprecated (since := "2026-03-17")]
-protected alias Principal.iSup := IsPrincipal.iSup
-
-中文:
-定理 是Principal.iSup
-  条件: {ι} {f : ι -> 序数} (H : 对任意 i, 是Principal op (f i))
-  证明: IsPrincipal.sSup (by simpa)
-
-@[deprecated (since := "2026-03-17")]
-protected alias Principal.iSup := IsPrincipal.iSup
+/-
+**Ordinal.IsPrincipal.iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsPrincipal`。
+形式化陈述：∀ {op : Ordinal.{u_2} → Ordinal.{u_2} → Ordinal.{u_2}} {ι : Sort u_1} {f :
+ ι → Ordinal.{u_2}},   (∀ (i : ι), Ordinal.IsPrincipal op (f i)) → Ordinal.IsPri
+ncipal op (⨆ i, f i)
+参数：∀ (i : ι), Ordinal.IsPrincipal op (f i)；⨆ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.IsPrincipal.sSup`：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordina
+l.{u_1}} {s : Set Ordinal.{u_1}},   (∀ x ∈ s, Ordinal.IsPrincipal op x) → Ordina
+l.IsPrincipal …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-protected theorem IsPrincipal.iSup {ι} {f : ι -> Ordinal} (H : forall i, IsPrincipal op (f i)) :
+protected theorem IsPrincipal.iSup {ι} {f : ι → Ordinal} (H : ∀ i, IsPrincipal op (f i)) :
     IsPrincipal op (⨆ i, f i) := IsPrincipal.sSup (by simpa)
 
 @[deprecated (since := "2026-03-17")]
@@ -439,105 +340,59 @@ protected alias Principal.iSup := IsPrincipal.iSup
 
 end Arbitrary
 
-/--
-theorem `isPrincipal_nfp_iSup` / 定理 `isPrincipal_nfp_iSup`
+/-- We give an explicit construction for a principal ordinal larger or equal than `o`. -/
+/-
+**Ordinal.isPrincipal_nfp_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem isPrincipal_nfp_iSup
-  given: (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal)
-  proof: by
-  intro a b ha hb
-  rw [lt_nfp_iff] at *
-  obtain ⟨m, ha⟩ := ha
-  obtain ⟨n, hb⟩ := hb
-  obtain h | h := le_total
-    ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[m] o)
-    ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[n] o)
-  · use n + 1
-    rw [Function.iterate_succ']
-    apply (lt_succ _).trans_le
-    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
-      ⟨_, Set.mk_mem_prod (ha.trans_le h) hb⟩
-  · use m + 1
-    rw [Function.iterate_succ']
-    apply (lt_succ _).trans_le
-    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
-      ⟨_, Set.mk_mem_prod ha (hb.trans_le h)⟩
-
-中文:
-定理 isPrincipal_nfp_iSup
-  条件: (op : 序数 -> 序数 -> 序数) (o : 序数)
-  证明: by
-  intro a b ha hb
-  rw [lt_nfp_iff] at *
-  obtain ⟨m, ha⟩ := ha
-  obtain ⟨n, hb⟩ := hb
-  obtain h | h := le_total
-    ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[m] o)
-    ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[n] o)
-  · use n + 1
-    rw [Function.iterate_succ']
-    apply (lt_succ _).trans_le
-    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
-      ⟨_, Set.mk_mem_prod (ha.trans_le h) hb⟩
-  · use m + 1
-    rw [Function.iterate_succ']
-    apply (lt_succ _).trans_le
-    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
-      ⟨_, Set.mk_mem_prod ha (hb.trans_le h)⟩
+--- 原说明 ---
+We give an explicit construction for a principal ordinal larger or equal than `o
+`.
 -/
-private theorem isPrincipal_nfp_iSup (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal) :
-    IsPrincipal op (nfp (fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2)) o) := by
+private theorem isPrincipal_nfp_iSup (op : Ordinal → Ordinal → Ordinal) (o : Ordinal) :
+    IsPrincipal op (nfp (fun x ↦ ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2)) o) := by
   intro a b ha hb
   rw [lt_nfp_iff] at *
   obtain ⟨m, ha⟩ := ha
   obtain ⟨n, hb⟩ := hb
   obtain h | h := le_total
-    ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[m] o)
-    ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[n] o)
+    ((fun x ↦ ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[m] o)
+    ((fun x ↦ ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[n] o)
   · use n + 1
     rw [Function.iterate_succ']
     apply (lt_succ _).trans_le
-    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
+    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ ↦ succ (op y.1.1 y.1.2))
       ⟨_, Set.mk_mem_prod (ha.trans_le h) hb⟩
   · use m + 1
     rw [Function.iterate_succ']
     apply (lt_succ _).trans_le
-    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
+    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ ↦ succ (op y.1.1 y.1.2))
       ⟨_, Set.mk_mem_prod ha (hb.trans_le h)⟩
 
-/--
-theorem `not_bddAbove_setOfPred_isPrincipal` / 定理 `not_bddAbove_setOfPred_isPrincipal`
+/-- Principal ordinals under any operation are unbounded. -/
+/-
+**Ordinal.not_bddAbove_setOfPred_isPrincipal** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`
+。
+形式化陈述：not_bddAbove_setOfPred_isPrincipal (op : Ordinal -> Ordinal -> Ordinal) : 
+¬ BddAbove { o | IsPrincipal op o }
+参数：op : Ordinal -> Ordinal -> Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Ordinal.le_nfp`：le_nfp (f a) : a <= nfp f a
+· 使用定理 `_private.Mathlib.SetTheory.Ordinal.Principal.0.Ordinal.isPrincipal_nfp_i
+Sup`：∀ (op : Ordinal.{u_1} → Ordinal.{u_1} → Ordinal.{u_1}) (o : Ordinal.{u_1}),
+   Ordinal.IsPrincipal op (Ordinal.nfp (fun x => ⨆ y, Order.succ …
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
 
-English:
-theorem not_bddAbove_setOfPred_isPrincipal
-  given: (op : Ordinal -> Ordinal -> Ordinal)
-  proof: by
-  rintro ⟨a, ha⟩
-  exact ((le_nfp _ _).trans (ha (isPrincipal_nfp_iSup op (succ a)))).not_gt (lt_succ a)
-
-@[deprecated (since := "2026-07-09")]
-alias not_bddAbove_setOf_isPrincipal := not_bddAbove_setOfPred_isPrincipal
-
-@[deprecated (since := "2026-03-17")]
-alias not_bddAbove_principal := not_bddAbove_setOfPred_isPrincipal
-
-中文:
-定理 not_bddAbove_setOfPred_isPrincipal
-  条件: (op : 序数 -> 序数 -> 序数)
-  证明: by
-  rintro ⟨a, ha⟩
-  exact ((le_nfp _ _).trans (ha (isPrincipal_nfp_iSup op (succ a)))).not_gt (lt_succ a)
-
-@[deprecated (since := "2026-07-09")]
-alias not_bddAbove_setOf_isPrincipal := not_bddAbove_setOfPred_isPrincipal
-
-@[deprecated (since := "2026-03-17")]
-alias not_bddAbove_principal := not_bddAbove_setOfPred_isPrincipal
-
-Depends on / 依赖: isPrincipal_nfp_iSup, le_nfp, lt_succ, not_gt
+--- 原说明 ---
+Principal ordinals under any operation are unbounded.
 -/
-theorem not_bddAbove_setOfPred_isPrincipal (op : Ordinal -> Ordinal -> Ordinal) :
+theorem not_bddAbove_setOfPred_isPrincipal (op : Ordinal → Ordinal → Ordinal) :
     ¬ BddAbove { o | IsPrincipal op o } := by
   rintro ⟨a, ha⟩
   exact ((le_nfp _ _).trans (ha (isPrincipal_nfp_iSup op (succ a)))).not_gt (lt_succ a)
@@ -548,191 +403,155 @@ alias not_bddAbove_setOf_isPrincipal := not_bddAbove_setOfPred_isPrincipal
 @[deprecated (since := "2026-03-17")]
 alias not_bddAbove_principal := not_bddAbove_setOfPred_isPrincipal
 
+/-! ### Additive principal ordinals -/
 
-/--
-theorem `isPrincipal_add_iff_add_self_lt` / 定理 `isPrincipal_add_iff_add_self_lt`
+/-
+**Ordinal.isPrincipal_add_iff_add_self_lt** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_add_iff_add_self_lt : IsPrincipal (· + ·) a ↔ forall b < a, b 
++ b < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.isPrincipal_iff_of_monotone`：isPrincipal_iff_of_monotone (h₁ : f
+orall a, Monotone (op a)) (h₂ : forall a, Monotone (Function.swap op a)) : IsPri
+ncipal op o ↔ forall a < …
+· 使用定理 `add_le_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [AddLe
+ftMono α] {b c : α}, b ≤ c → ∀ (a : α), a + b ≤ a + c
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
 
-English:
-theorem isPrincipal_add_iff_add_self_lt
-  statement: IsPrincipal (· + ·) a ↔ forall b < a, b + b < a
-  proof: isPrincipal_iff_of_monotone
-    (fun x _ _ h => add_le_add_right h x) (fun x _ _ h => add_le_add_left h x)
-
-中文:
-定理 isPrincipal_add_iff_add_self_lt
-  结论: 是Principal (· + ·) a ↔ 对任意 b < a, b + b < a
-  证明: isPrincipal_iff_of_monotone
-    (fun x _ _ h => add_le_add_right h x) (fun x _ _ h => add_le_add_left h x)
-
-Depends on / 依赖: add_le_add_left, add_le_add_right, isPrincipal_iff_of_monotone
+--- 原说明 ---
+### Additive principal ordinals
 -/
-theorem isPrincipal_add_iff_add_self_lt : IsPrincipal (· + ·) a ↔ forall b < a, b + b < a :=
+theorem isPrincipal_add_iff_add_self_lt : IsPrincipal (· + ·) a ↔ ∀ b < a, b + b < a :=
   isPrincipal_iff_of_monotone
-    (fun x _ _ h => add_le_add_right h x) (fun x _ _ h => add_le_add_left h x)
-
-/--
-theorem `IsPrincipal.mul_natCast_lt` / 定理 `IsPrincipal.mul_natCast_lt`
-
-English:
-theorem IsPrincipal.mul_natCast_lt
-  given: (ho : IsPrincipal (· + ·) o) (ha : a < o) (n : Nat)
-  proof: by
-  induction n with
-  | zero => simpa using ha.pos
-  | succ n h =>
-    rw [Nat.cast_add_one]; rw [mul_add_one]
-    exact ho h ha
-
-中文:
-定理 是Principal.mul_natCast_lt
-  条件: (ho : 是Principal (· + ·) o) (ha : a < o) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simpa using ha.pos
-  | succ n h =>
-    rw [Nat.cast_add_one]; rw [mul_add_one]
-    exact ho h ha
-
-Depends on / 依赖: Nat.cast_add_one, cast_add_one, ha.pos, mul_add_one
+    (fun x _ _ h ↦ add_le_add_right h x) (fun x _ _ h ↦ add_le_add_left h x)
+/-
+**Ordinal.IsPrincipal.mul_natCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsPrinci
+pal`。
+形式化陈述：∀ {a o : Ordinal.{u}}, Ordinal.IsPrincipal (fun x1 x2 => x1 + x2) o → a < 
+o → ∀ (n : ℕ), a * ↑n < o
+参数：fun x1 x2 => x1 + x2；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `LT.lt.pos`：∀ {α : Type u_1} {a b : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], a < b → 0 < b
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Nat.cast_add_one`：cast_add_one (n : Nat) : ((n + 1 : Nat) : R) = n + 1
+· 使用定理 `mul_add_one`：mul_add_one [LeftDistribClass α] (a b : α) : a * (b + 1) = 
+a * b + a
 -/
-theorem IsPrincipal.mul_natCast_lt (ho : IsPrincipal (· + ·) o) (ha : a < o) (n : Nat) :
+theorem IsPrincipal.mul_natCast_lt (ho : IsPrincipal (· + ·) o) (ha : a < o) (n : ℕ) :
     a * n < o := by
   induction n with
   | zero => simpa using ha.pos
   | succ n h =>
-    rw [Nat.cast_add_one]; rw [mul_add_one]
+    rw [Nat.cast_add_one, mul_add_one]
     exact ho h ha
-
-/--
-theorem `isPrincipal_add_one` / 定理 `isPrincipal_add_one`
-
-English:
-theorem isPrincipal_add_one
-  statement: IsPrincipal (· + ·) 1
-  proof: by simp
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_one := isPrincipal_add_one
-
-中文:
-定理 isPrincipal_add_one
-  结论: 是Principal (· + ·) 1
-  证明: by simp
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_one := isPrincipal_add_one
+/-
+**Ordinal.isPrincipal_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_add_one : IsPrincipal (· + ·) 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isPrincipal_add_one : IsPrincipal (· + ·) 1 := by simp
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_one := isPrincipal_add_one
-
-/--
-theorem `isPrincipal_add_of_le_one` / 定理 `isPrincipal_add_of_le_one`
-
-English:
-theorem isPrincipal_add_of_le_one
-  given: (ho : o <= 1)
-  statement: IsPrincipal (· + ·) o
-  proof: by
-  rcases le_one_iff.1 ho with (rfl | rfl)
-  · exact isPrincipal_zero
-  · exact isPrincipal_add_one
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_of_le_one := isPrincipal_add_of_le_one
-
-中文:
-定理 isPrincipal_add_of_le_one
-  条件: (ho : o <= 1)
-  结论: 是Principal (· + ·) o
-  证明: by
-  rcases le_one_iff.1 ho with (rfl | rfl)
-  · exact isPrincipal_zero
-  · exact isPrincipal_add_one
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_of_le_one := isPrincipal_add_of_le_one
-
-Depends on / 依赖: isPrincipal_add_one, isPrincipal_zero, le_one_iff
+/-
+**Ordinal.isPrincipal_add_of_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_add_of_le_one (ho : o <= 1) : IsPrincipal (· + ·) o
+参数：ho : o <= 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.le_one_iff`：le_one_iff : x <= 1 ↔ x = 0 ∨ x = 1
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.isPrincipal_zero`：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordina
+l.{u_1}}, Ordinal.IsPrincipal op 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.isPrincipal_add_one`：isPrincipal_add_one : IsPrincipal (· + ·) 1
 -/
-theorem isPrincipal_add_of_le_one (ho : o <= 1) : IsPrincipal (· + ·) o := by
+theorem isPrincipal_add_of_le_one (ho : o ≤ 1) : IsPrincipal (· + ·) o := by
   rcases le_one_iff.1 ho with (rfl | rfl)
   · exact isPrincipal_zero
   · exact isPrincipal_add_one
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_of_le_one := isPrincipal_add_of_le_one
-
-/--
-theorem `isSuccLimit_of_isPrincipal_add` / 定理 `isSuccLimit_of_isPrincipal_add`
-
-English:
-theorem isSuccLimit_of_isPrincipal_add
-  given: (ho₁ : 1 < o) (ho : IsPrincipal (· + ·) o)
-  proof: by
-  rw [isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_lt]
-  exact ⟨ho₁.ne_bot, fun _ ha => ho ha ho₁⟩
-
-@[deprecated (since := "2026-03-17")]
-alias isSuccLimit_of_principal_add := isSuccLimit_of_isPrincipal_add
-
-中文:
-定理 isSuccLimit_of_isPrincipal_add
-  条件: (ho₁ : 1 < o) (ho : 是Principal (· + ·) o)
-  证明: by
-  rw [isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_lt]
-  exact ⟨ho₁.ne_bot, fun _ ha => ho ha ho₁⟩
-
-@[deprecated (since := "2026-03-17")]
-alias isSuccLimit_of_principal_add := isSuccLimit_of_isPrincipal_add
-
-Depends on / 依赖: isSuccLimit_iff, isSuccPrelimit_iff_succ_lt, ne_bot
+/-
+**Ordinal.isSuccLimit_of_isPrincipal_add** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isSuccLimit_of_isPrincipal_add (ho₁ : 1 < o) (ho : IsPrincipal (· + ·) o) 
+: IsSuccLimit o
+参数：ho₁ : 1 < o；ho : IsPrincipal (· + ·) o。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.isSuccLimit_iff`：isSuccLimit_iff {o : Ordinal} : IsSuccLimit o ↔
+ o != 0 ∧ IsSuccPrelimit o
+· 使用定理 `Order.isSuccPrelimit_iff_succ_lt`：isSuccPrelimit_iff_succ_lt : IsSuccPre
+limit b ↔ forall a < b, succ a < b
+· 使用定理 `LT.lt.ne_bot`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α] {
+a b : α}, b < a → a ≠ ⊥
 -/
 theorem isSuccLimit_of_isPrincipal_add (ho₁ : 1 < o) (ho : IsPrincipal (· + ·) o) :
     IsSuccLimit o := by
-  rw [isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_lt]
-  exact ⟨ho₁.ne_bot, fun _ ha => ho ha ho₁⟩
+  rw [isSuccLimit_iff, isSuccPrelimit_iff_succ_lt]
+  exact ⟨ho₁.ne_bot, fun _ ha ↦ ho ha ho₁⟩
 
 @[deprecated (since := "2026-03-17")]
 alias isSuccLimit_of_principal_add := isSuccLimit_of_isPrincipal_add
-
-/--
-theorem `isPrincipal_add_iff_add_left_eq_self` / 定理 `isPrincipal_add_iff_add_left_eq_self`
-
-English:
-theorem isPrincipal_add_iff_add_left_eq_self
-  statement: IsPrincipal (· + ·) o ↔ forall a < o, a + o = o
-  proof: by
-  refine ⟨fun ho a hao => ?_, fun h a b hao hbo => ?_⟩
-  · rcases lt_or_ge 1 o with ho₁ | ho₁
-    · exact op_eq_self_of_isPrincipal hao (isNormal_add_right a) ho
-        (isSuccLimit_of_isPrincipal_add ho₁ ho)
-    · cases le_one_iff.1 ho₁ <;> simp_all
-  · rw [← h a hao]
-    exact (isNormal_add_right a).strictMono hbo
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_iff_add_left_eq_self := isPrincipal_add_iff_add_left_eq_self
-
-中文:
-定理 isPrincipal_add_iff_add_left_eq_self
-  结论: 是Principal (· + ·) o ↔ 对任意 a < o, a + o = o
-  证明: by
-  refine ⟨fun ho a hao => ?_, fun h a b hao hbo => ?_⟩
-  · rcases lt_or_ge 1 o with ho₁ | ho₁
-    · exact op_eq_self_of_isPrincipal hao (isNormal_add_right a) ho
-        (isSuccLimit_of_isPrincipal_add ho₁ ho)
-    · cases le_one_iff.1 ho₁ <;> simp_all
-  · rw [← h a hao]
-    exact (isNormal_add_right a).strictMono hbo
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_iff_add_left_eq_self := isPrincipal_add_iff_add_left_eq_self
-
-Depends on / 依赖: isNormal_add_right, isSuccLimit_of_isPrincipal_add, le_one_iff, lt_or_ge, op_eq_self_of_isPrincipal, strictMono
+/-
+**Ordinal.isPrincipal_add_iff_add_left_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Ordina
+l`。
+形式化陈述：isPrincipal_add_iff_add_left_eq_self : IsPrincipal (· + ·) o ↔ forall a < 
+o, a + o = o
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `Ordinal.op_eq_self_of_isPrincipal`：op_eq_self_of_isPrincipal (hao : a < 
+o) (H : IsNormal (op a)) (ho : IsPrincipal op o) (ho' : IsSuccLimit o) : op a o 
+= o
+· 使用定理 `Ordinal.isNormal_add_right`：isNormal_add_right (a : Ordinal) : IsNormal 
+(a + ·)
+· 使用定理 `Ordinal.isSuccLimit_of_isPrincipal_add`：isSuccLimit_of_isPrincipal_add (
+ho₁ : 1 < o) (ho : IsPrincipal (· + ·) o) : IsSuccLimit o
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.le_one_iff`：le_one_iff : x <= 1 ↔ x = 0 ∨ x = 1
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.IsNormal.strictMono`：∀ {α : Type u_1} {β : Type u_2} [inst : Linea
+rOrder α] [inst_1 : LinearOrder β] {f : α → β},   Order.IsNormal f → StrictMono 
+f
 -/
-theorem isPrincipal_add_iff_add_left_eq_self : IsPrincipal (· + ·) o ↔ forall a < o, a + o = o := by
+theorem isPrincipal_add_iff_add_left_eq_self : IsPrincipal (· + ·) o ↔ ∀ a < o, a + o = o := by
   refine ⟨fun ho a hao => ?_, fun h a b hao hbo => ?_⟩
   · rcases lt_or_ge 1 o with ho₁ | ho₁
     · exact op_eq_self_of_isPrincipal hao (isNormal_add_right a) ho
@@ -743,121 +562,88 @@ theorem isPrincipal_add_iff_add_left_eq_self : IsPrincipal (· + ·) o ↔ foral
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_iff_add_left_eq_self := isPrincipal_add_iff_add_left_eq_self
-
-/--
-theorem `IsPrincipal.add_eq_right` / 定理 `IsPrincipal.add_eq_right`
-
-English:
-theorem IsPrincipal.add_eq_right
-  given: (ho : IsPrincipal (· + ·) o) (ha : a < o)
-  statement: a + o = o
-  proof: isPrincipal_add_iff_add_left_eq_self.1 ho a ha
-
-中文:
-定理 是Principal.add_eq_right
-  条件: (ho : 是Principal (· + ·) o) (ha : a < o)
-  结论: a + o = o
-  证明: isPrincipal_add_iff_add_left_eq_self.1 ho a ha
-
-Depends on / 依赖: isPrincipal_add_iff_add_left_eq_self
+/-
+**Ordinal.IsPrincipal.add_eq_right** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsPrincipa
+l`。
+形式化陈述：∀ {a o : Ordinal.{u}}, Ordinal.IsPrincipal (fun x1 x2 => x1 + x2) o → a < 
+o → a + o = o
+参数：fun x1 x2 => x1 + x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.isPrincipal_add_iff_add_left_eq_self`：isPrincipal_add_iff_add_le
+ft_eq_self : IsPrincipal (· + ·) o ↔ forall a < o, a + o = o
 -/
 theorem IsPrincipal.add_eq_right (ho : IsPrincipal (· + ·) o) (ha : a < o) : a + o = o :=
   isPrincipal_add_iff_add_left_eq_self.1 ho a ha
-
-/--
-theorem `IsPrincipal.add_eq_right_of_le` / 定理 `IsPrincipal.add_eq_right_of_le`
-
-English:
-theorem IsPrincipal.add_eq_right_of_le
-  statement: (hb : IsPrincipal (· + ·) b)
-  proof: by
-  rw [← Ordinal.add_sub_cancel_of_le hbc]; rw [← add_assoc]; rw [hb.add_eq_right hab]; rw [Ordinal.add_sub_cancel_of_le hbc]
-
-中文:
-定理 是Principal.add_eq_right_of_le
-  结论: (hb : 是Principal (· + ·) b)
-  证明: by
-  rw [← Ordinal.add_sub_cancel_of_le hbc]; rw [← add_assoc]; rw [hb.add_eq_right hab]; rw [Ordinal.add_sub_cancel_of_le hbc]
-
-Depends on / 依赖: Ordinal, Ordinal.add_sub_cancel_of_le, add_assoc, add_eq_right, add_sub_cancel_of_le, hb.add_eq_right
+/-
+**Ordinal.IsPrincipal.add_eq_right_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsPr
+incipal`。
+形式化陈述：∀ {a b c : Ordinal.{u}}, Ordinal.IsPrincipal (fun x1 x2 => x1 + x2) b → a 
+< b → b ≤ c → a + c = c
+参数：fun x1 x2 => x1 + x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.add_sub_cancel_of_le`：∀ {a b : Ordinal.{u_4}}, b ≤ a → b + (a - 
+b) = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Ordinal.IsPrincipal.add_eq_right`：∀ {a o : Ordinal.{u}}, Ordinal.IsPrinc
+ipal (fun x1 x2 => x1 + x2) o → a < o → a + o = o
 -/
 theorem IsPrincipal.add_eq_right_of_le (hb : IsPrincipal (· + ·) b)
-    (hab : a < b) (hbc : b <= c) : a + c = c := by
-  rw [← Ordinal.add_sub_cancel_of_le hbc]; rw [← add_assoc]; rw [hb.add_eq_right hab]; rw [Ordinal.add_sub_cancel_of_le hbc]
-
-/--
-theorem `exists_lt_add_of_not_isPrincipal_add` / 定理 `exists_lt_add_of_not_isPrincipal_add`
-
-English:
-theorem exists_lt_add_of_not_isPrincipal_add
-  given: (ha : ¬ IsPrincipal (· + ·) a)
-  proof: by
-  rw [not_isPrincipal_iff] at ha
-  rcases ha with ⟨b, hb, c, hc, H⟩
-  refine
-    ⟨b, hb, _, lt_of_le_of_ne (sub_le_self a b) fun hab => ?_, Ordinal.add_sub_cancel_of_le hb.le⟩
-  rw [← sub_le]; rw [hab] at H
-  exact H.not_gt hc
-
-@[deprecated (since := "2026-03-17")]
-alias exists_lt_add_of_not_principal_add := exists_lt_add_of_not_isPrincipal_add
-
-中文:
-定理 存在_lt_add_of_not_isPrincipal_add
-  条件: (ha : ¬ 是Principal (· + ·) a)
-  证明: by
-  rw [not_isPrincipal_iff] at ha
-  rcases ha with ⟨b, hb, c, hc, H⟩
-  refine
-    ⟨b, hb, _, lt_of_le_of_ne (sub_le_self a b) fun hab => ?_, Ordinal.add_sub_cancel_of_le hb.le⟩
-  rw [← sub_le]; rw [hab] at H
-  exact H.not_gt hc
-
-@[deprecated (since := "2026-03-17")]
-alias exists_lt_add_of_not_principal_add := exists_lt_add_of_not_isPrincipal_add
-
-Depends on / 依赖: H.not_gt, Ordinal, Ordinal.add_sub_cancel_of_le, add_sub_cancel_of_le, hb.le, lt_of_le_of_ne, not_gt, not_isPrincipal_iff, sub_le, sub_le_self
+    (hab : a < b) (hbc : b ≤ c) : a + c = c := by
+  rw [← Ordinal.add_sub_cancel_of_le hbc, ← add_assoc, hb.add_eq_right hab,
+    Ordinal.add_sub_cancel_of_le hbc]
+/-
+**Ordinal.exists_lt_add_of_not_isPrincipal_add** 是 Mathlib 中的一个定理，位于命名空间 `Ordina
+l`。
+形式化陈述：exists_lt_add_of_not_isPrincipal_add (ha : ¬ IsPrincipal (· + ·) a) : exis
+ts b < a, exists c < a, b + c = a
+参数：ha : ¬ IsPrincipal (· + ·) a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.not_isPrincipal_iff`：not_isPrincipal_iff : ¬ IsPrincipal op o ↔ 
+exists a < o, exists b < o, o <= op a b
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Ordinal.sub_le_self`：sub_le_self (a b : Ordinal) : a - b <= a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.sub_le`：sub_le {a b c : Ordinal} : a - b <= c ↔ a <= b + c
+· 使用定理 `Ordinal.add_sub_cancel_of_le`：∀ {a b : Ordinal.{u_4}}, b ≤ a → b + (a - 
+b) = a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem exists_lt_add_of_not_isPrincipal_add (ha : ¬ IsPrincipal (· + ·) a) :
-    exists b < a, exists c < a, b + c = a := by
+    ∃ b < a, ∃ c < a, b + c = a := by
   rw [not_isPrincipal_iff] at ha
   rcases ha with ⟨b, hb, c, hc, H⟩
   refine
     ⟨b, hb, _, lt_of_le_of_ne (sub_le_self a b) fun hab => ?_, Ordinal.add_sub_cancel_of_le hb.le⟩
-  rw [← sub_le]; rw [hab] at H
+  rw [← sub_le, hab] at H
   exact H.not_gt hc
 
 @[deprecated (since := "2026-03-17")]
 alias exists_lt_add_of_not_principal_add := exists_lt_add_of_not_isPrincipal_add
-
-/--
-theorem `isPrincipal_add_iff_add_lt_ne_self` / 定理 `isPrincipal_add_iff_add_lt_ne_self`
-
-English:
-theorem isPrincipal_add_iff_add_lt_ne_self
-  statement: IsPrincipal (· + ·) a ↔ forall b < a, forall c < a, b + c != a
-  proof: ⟨fun ha _ hb _ hc => (ha hb hc).ne, fun H => by
-    by_contra ha
-    rcases exists_lt_add_of_not_isPrincipal_add ha with ⟨b, hb, c, hc, rfl⟩
-    exact (H b hb c hc).irrefl⟩
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_iff_add_lt_ne_self := isPrincipal_add_iff_add_lt_ne_self
-
-中文:
-定理 isPrincipal_add_iff_add_lt_ne_self
-  结论: 是Principal (· + ·) a ↔ 对任意 b < a, 对任意 c < a, b + c != a
-  证明: ⟨fun ha _ hb _ hc => (ha hb hc).ne, fun H => by
-    by_contra ha
-    rcases exists_lt_add_of_not_isPrincipal_add ha with ⟨b, hb, c, hc, rfl⟩
-    exact (H b hb c hc).irrefl⟩
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_iff_add_lt_ne_self := isPrincipal_add_iff_add_lt_ne_self
-
-Depends on / 依赖: exists_lt_add_of_not_isPrincipal_add, irrefl
+/-
+**Ordinal.isPrincipal_add_iff_add_lt_ne_self** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`
+。
+形式化陈述：isPrincipal_add_iff_add_lt_ne_self : IsPrincipal (· + ·) a ↔ forall b < a,
+ forall c < a, b + c != a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Ordinal.exists_lt_add_of_not_isPrincipal_add`：exists_lt_add_of_not_isPri
+ncipal_add (ha : ¬ IsPrincipal (· + ·) a) : exists b < a, exists c < a, b + c = 
+a
+· 使用定理 `Ne.irrefl`：∀ {α : Sort u} {a : α}, a ≠ a → False
 -/
-theorem isPrincipal_add_iff_add_lt_ne_self : IsPrincipal (· + ·) a ↔ forall b < a, forall c < a, b + c != a :=
+theorem isPrincipal_add_iff_add_lt_ne_self : IsPrincipal (· + ·) a ↔ ∀ b < a, ∀ c < a, b + c ≠ a :=
   ⟨fun ha _ hb _ hc => (ha hb hc).ne, fun H => by
     by_contra ha
     rcases exists_lt_add_of_not_isPrincipal_add ha with ⟨b, hb, c, hc, rfl⟩
@@ -865,27 +651,15 @@ theorem isPrincipal_add_iff_add_lt_ne_self : IsPrincipal (· + ·) a ↔ forall 
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_iff_add_lt_ne_self := isPrincipal_add_iff_add_lt_ne_self
-
-/--
-theorem `isPrincipal_add_omega0` / 定理 `isPrincipal_add_omega0`
-
-English:
-theorem isPrincipal_add_omega0
-  statement: IsPrincipal (· + ·) ω
-  proof: isPrincipal_add_iff_add_left_eq_self.2 fun _ => add_omega0
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_omega0 := isPrincipal_add_omega0
-
-中文:
-定理 isPrincipal_add_omega0
-  结论: 是Principal (· + ·) ω
-  证明: isPrincipal_add_iff_add_left_eq_self.2 fun _ => add_omega0
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_omega0 := isPrincipal_add_omega0
-
-Depends on / 依赖: add_omega0, isPrincipal_add_iff_add_left_eq_self
+/-
+**Ordinal.isPrincipal_add_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_add_omega0 : IsPrincipal (· + ·) ω
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.isPrincipal_add_iff_add_left_eq_self`：isPrincipal_add_iff_add_le
+ft_eq_self : IsPrincipal (· + ·) o ↔ forall a < o, a + o = o
+· 使用定理 `Ordinal.add_omega0`：add_omega0 {a : Ordinal} (h : a < ω) : a + ω = ω
 -/
 theorem isPrincipal_add_omega0 : IsPrincipal (· + ·) ω :=
   isPrincipal_add_iff_add_left_eq_self.2 fun _ => add_omega0
@@ -894,63 +668,49 @@ theorem isPrincipal_add_omega0 : IsPrincipal (· + ·) ω :=
 alias principal_add_omega0 := isPrincipal_add_omega0
 
 -- `add_omega0` is proven in the Arithmetic file.
-
-/--
-theorem `add_of_omega0_le` / 定理 `add_of_omega0_le`
-
-English:
-theorem add_of_omega0_le
-  statement: a < ω -> ω <= b -> a + b = b
-  proof: isPrincipal_add_omega0.add_eq_right_of_le
-
-中文:
-定理 add_of_omega0_le
-  结论: a < ω -> ω <= b -> a + b = b
-  证明: isPrincipal_add_omega0.add_eq_right_of_le
-
-Depends on / 依赖: add_eq_right_of_le, isPrincipal_add_omega0, isPrincipal_add_omega0.add_eq_right_of_le
+/-
+**Ordinal.add_of_omega0_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：add_of_omega0_le : a < ω -> ω <= b -> a + b = b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.IsPrincipal.add_eq_right_of_le`：∀ {a b c : Ordinal.{u}}, Ordinal
+.IsPrincipal (fun x1 x2 => x1 + x2) b → a < b → b ≤ c → a + c = c
+· 使用定理 `Ordinal.isPrincipal_add_omega0`：isPrincipal_add_omega0 : IsPrincipal (· 
++ ·) ω
 -/
-theorem add_of_omega0_le : a < ω -> ω <= b -> a + b = b :=
+theorem add_of_omega0_le : a < ω → ω ≤ b → a + b = b :=
   isPrincipal_add_omega0.add_eq_right_of_le
-
-/--
-theorem `isPrincipal_add_omega0_opow` / 定理 `isPrincipal_add_omega0_opow`
-
-English:
-theorem isPrincipal_add_omega0_opow
-  given: (o : Ordinal)
-  statement: IsPrincipal (· + ·) (ω ^ o)
-  proof: by
-  obtain rfl | ha' := eq_or_ne o 0
-  · rw [opow_zero, isPrincipal_one_iff, add_zero]
-  · rw [isPrincipal_add_iff_add_self_lt]
-    intro a ha
-    obtain ⟨c, hc, m, hm⟩ := (lt_omega0_opow ha').1 ha
-    apply (add_lt_add_of_le_of_lt hm.le hm).trans_le
-    rw [← mul_add]; rw [← Nat.cast_add]
-    exact (opow_mul_lt_opow (natCast_lt_omega0 _) hc).le
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_omega0_opow := isPrincipal_add_omega0_opow
-
-中文:
-定理 isPrincipal_add_omega0_opow
-  条件: (o : 序数)
-  结论: 是Principal (· + ·) (ω ^ o)
-  证明: by
-  obtain rfl | ha' := eq_or_ne o 0
-  · rw [opow_zero, isPrincipal_one_iff, add_zero]
-  · rw [isPrincipal_add_iff_add_self_lt]
-    intro a ha
-    obtain ⟨c, hc, m, hm⟩ := (lt_omega0_opow ha').1 ha
-    apply (add_lt_add_of_le_of_lt hm.le hm).trans_le
-    rw [← mul_add]; rw [← Nat.cast_add]
-    exact (opow_mul_lt_opow (natCast_lt_omega0 _) hc).le
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_omega0_opow := isPrincipal_add_omega0_opow
-
-Depends on / 依赖: Nat.cast_add, add_lt_add_of_le_of_lt, add_zero, cast_add, eq_or_ne, hm.le, isPrincipal_add_iff_add_self_lt, isPrincipal_one_iff, lt_omega0_opow, mul_add, natCast_lt_omega0, opow_mul_lt_opow, opow_zero, trans_le
+/-
+**Ordinal.isPrincipal_add_omega0_opow** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_add_omega0_opow (o : Ordinal) : IsPrincipal (· + ·) (ω ^ o)
+参数：o : Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.opow_zero`：opow_zero (a : Ordinal) : a ^ (0 : Ordinal) = 1
+· 使用定理 `Ordinal.isPrincipal_one_iff`：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ord
+inal.{u_1}}, Ordinal.IsPrincipal op 1 ↔ op 0 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.isPrincipal_add_iff_add_self_lt`：isPrincipal_add_iff_add_self_lt
+ : IsPrincipal (· + ·) a ↔ forall b < a, b + b < a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.lt_omega0_opow`：lt_omega0_opow {a b : Ordinal} (hb : b != 0) : a
+ < ω ^ b ↔ exists c < b, exists n : Nat, a < ω ^ c * n
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `add_lt_add_of_le_of_lt`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preord
+er α] [AddLeftStrictMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c < d → a 
++ c < b + d
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Ordinal.opow_mul_lt_opow`：opow_mul_lt_opow {b u v x : Ordinal} (hv : v <
+ b) (hu : u < x) : b ^ u * v < b ^ x
+· 使用定理 `Ordinal.natCast_lt_omega0`：natCast_lt_omega0 (n : Nat) : ↑n < ω
 -/
 theorem isPrincipal_add_omega0_opow (o : Ordinal) : IsPrincipal (· + ·) (ω ^ o) := by
   obtain rfl | ha' := eq_or_ne o 0
@@ -959,169 +719,143 @@ theorem isPrincipal_add_omega0_opow (o : Ordinal) : IsPrincipal (· + ·) (ω ^ 
     intro a ha
     obtain ⟨c, hc, m, hm⟩ := (lt_omega0_opow ha').1 ha
     apply (add_lt_add_of_le_of_lt hm.le hm).trans_le
-    rw [← mul_add]; rw [← Nat.cast_add]
+    rw [← mul_add, ← Nat.cast_add]
     exact (opow_mul_lt_opow (natCast_lt_omega0 _) hc).le
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_omega0_opow := isPrincipal_add_omega0_opow
-
-/--
-theorem `add_omega0_opow` / 定理 `add_omega0_opow`
-
-English:
-theorem add_omega0_opow
-  given: (h : a < ω ^ b)
-  statement: a + ω ^ b = ω ^ b
-  proof: (isPrincipal_add_omega0_opow b).add_eq_right h
-
-中文:
-定理 add_omega0_opow
-  条件: (h : a < ω ^ b)
-  结论: a + ω ^ b = ω ^ b
-  证明: (isPrincipal_add_omega0_opow b).add_eq_right h
-
-Depends on / 依赖: add_eq_right, isPrincipal_add_omega0_opow
+/-
+**Ordinal.add_omega0_opow** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：add_omega0_opow (h : a < ω ^ b) : a + ω ^ b = ω ^ b
+参数：h : a < ω ^ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.IsPrincipal.add_eq_right`：∀ {a o : Ordinal.{u}}, Ordinal.IsPrinc
+ipal (fun x1 x2 => x1 + x2) o → a < o → a + o = o
+· 使用定理 `Ordinal.isPrincipal_add_omega0_opow`：isPrincipal_add_omega0_opow (o : Or
+dinal) : IsPrincipal (· + ·) (ω ^ o)
 -/
 theorem add_omega0_opow (h : a < ω ^ b) : a + ω ^ b = ω ^ b :=
   (isPrincipal_add_omega0_opow b).add_eq_right h
-
-/--
-theorem `add_of_omega0_opow_le` / 定理 `add_of_omega0_opow_le`
-
-English:
-theorem add_of_omega0_opow_le
-  given: (h₁ : a < ω ^ b) (h₂ : ω ^ b <= c)
-  statement: a + c = c
-  proof: (isPrincipal_add_omega0_opow b).add_eq_right_of_le h₁ h₂
-
-@[deprecated (since := "2026-03-18")]
-alias add_absorp := add_of_omega0_opow_le
-
-中文:
-定理 add_of_omega0_opow_le
-  条件: (h₁ : a < ω ^ b) (h₂ : ω ^ b <= c)
-  结论: a + c = c
-  证明: (isPrincipal_add_omega0_opow b).add_eq_right_of_le h₁ h₂
-
-@[deprecated (since := "2026-03-18")]
-alias add_absorp := add_of_omega0_opow_le
-
-Depends on / 依赖: add_eq_right_of_le, isPrincipal_add_omega0_opow
+/-
+**Ordinal.add_of_omega0_opow_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：add_of_omega0_opow_le (h₁ : a < ω ^ b) (h₂ : ω ^ b <= c) : a + c = c
+参数：h₁ : a < ω ^ b；h₂ : ω ^ b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.IsPrincipal.add_eq_right_of_le`：∀ {a b c : Ordinal.{u}}, Ordinal
+.IsPrincipal (fun x1 x2 => x1 + x2) b → a < b → b ≤ c → a + c = c
+· 使用定理 `Ordinal.isPrincipal_add_omega0_opow`：isPrincipal_add_omega0_opow (o : Or
+dinal) : IsPrincipal (· + ·) (ω ^ o)
 -/
-theorem add_of_omega0_opow_le (h₁ : a < ω ^ b) (h₂ : ω ^ b <= c) : a + c = c :=
+theorem add_of_omega0_opow_le (h₁ : a < ω ^ b) (h₂ : ω ^ b ≤ c) : a + c = c :=
   (isPrincipal_add_omega0_opow b).add_eq_right_of_le h₁ h₂
 
 @[deprecated (since := "2026-03-18")]
 alias add_absorp := add_of_omega0_opow_le
 
-/--
-theorem `isLeast_sub_lt_omega0_opow_log` / 定理 `isLeast_sub_lt_omega0_opow_log`
+/-- For `a ≠ 0`, the largest power of `ω` which is less or equal to it is also the smallest ordinal
+`b` with `a - b < a`. -/
+/-
+**Ordinal.isLeast_sub_lt_omega0_opow_log** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isLeast_sub_lt_omega0_opow_log (h : a != 0) : IsLeast {b | a - b < a} (ω ^
+ log ω a)
+参数：h : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.sub_omega0_opow_log_lt`：sub_omega0_opow_log_lt {a : Ordinal} (ha
+ : a != 0) : a - ω ^ log ω a < a
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Ordinal.le_sub_of_add_le`：le_sub_of_add_le {a b c : Ordinal} (h : b + c 
+<= a) : c <= a - b
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Ordinal.add_of_omega0_opow_le`：add_of_omega0_opow_le (h₁ : a < ω ^ b) (h
+₂ : ω ^ b <= c) : a + c = c
+· 使用定理 `Ordinal.opow_log_le_self`：opow_log_le_self (b : Ordinal) {x : Ordinal} (
+hx : x != 0) : b ^ log b x <= x
 
-English:
-theorem isLeast_sub_lt_omega0_opow_log
-  given: (h : a != 0)
-  statement: IsLeast {b | a - b < a} (ω ^ log ω a)
-  proof: by
-  refine ⟨sub_omega0_opow_log_lt h, fun c (hc : a - _ < _) => ?_⟩
-  contrapose! hc
-  exact le_sub_of_add_le (add_of_omega0_opow_le hc (opow_log_le_self ω h)).le
-
-中文:
-定理 isLeast_sub_lt_omega0_opow_log
-  条件: (h : a != 0)
-  结论: IsLeast {b | a - b < a} (ω ^ log ω a)
-  证明: by
-  refine ⟨sub_omega0_opow_log_lt h, fun c (hc : a - _ < _) => ?_⟩
-  contrapose! hc
-  exact le_sub_of_add_le (add_of_omega0_opow_le hc (opow_log_le_self ω h)).le
-
-Depends on / 依赖: add_of_omega0_opow_le, contrapose, le_sub_of_add_le, opow_log_le_self, sub_omega0_opow_log_lt
+--- 原说明 ---
+For `a ≠ 0`, the largest power of `ω` which is less or equal to it is also the s
+mallest ordinal
+`b` with `a - b < a`.
 -/
-theorem isLeast_sub_lt_omega0_opow_log (h : a != 0) : IsLeast {b | a - b < a} (ω ^ log ω a) := by
-  refine ⟨sub_omega0_opow_log_lt h, fun c (hc : a - _ < _) => ?_⟩
+theorem isLeast_sub_lt_omega0_opow_log (h : a ≠ 0) : IsLeast {b | a - b < a} (ω ^ log ω a) := by
+  refine ⟨sub_omega0_opow_log_lt h, fun c (hc : a - _ < _) ↦ ?_⟩
   contrapose! hc
   exact le_sub_of_add_le (add_of_omega0_opow_le hc (opow_log_le_self ω h)).le
 
-/--
-theorem `isPrincipal_add_iff_zero_or_omega0_opow` / 定理 `isPrincipal_add_iff_zero_or_omega0_opow`
+/-- The main characterization theorem for additive principal ordinals. -/
+/-
+**Ordinal.isPrincipal_add_iff_zero_or_omega0_opow** 是 Mathlib 中的一个定理，位于命名空间 `Ord
+inal`。
+形式化陈述：isPrincipal_add_iff_zero_or_omega0_opow : IsPrincipal (· + ·) o ↔ o = 0 ∨ 
+o in Set.range (ω ^ · : Ordinal -> Ordinal)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `LE.le.eq_of_not_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, 
+a ≤ b → ¬a < b → a = b
+· 使用定理 `Ordinal.opow_log_le_self`：opow_log_le_self (b : Ordinal) {x : Ordinal} (
+hx : x != 0) : b ^ log b x <= x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.lt_omega0_opow_succ`：lt_omega0_opow_succ {a b : Ordinal} : a < ω
+ ^ succ b ↔ exists n : Nat, a < ω ^ b * n
+· 使用定理 `Ordinal.lt_opow_succ_log_self`：lt_opow_succ_log_self {b : Ordinal} (hb :
+ 1 < b) (x : Ordinal) : x < b ^ succ (log b x)
+· 使用定理 `Ordinal.one_lt_omega0`：one_lt_omega0 : 1 < ω
+· 使用定理 `LT.lt.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ < a
+· 使用定理 `Ordinal.IsPrincipal.mul_natCast_lt`：∀ {a o : Ordinal.{u}}, Ordinal.IsPri
+ncipal (fun x1 x2 => x1 + x2) o → a < o → ∀ (n : ℕ), a * ↑n < o
+· 使用定理 `Ordinal.isPrincipal_zero`：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordina
+l.{u_1}}, Ordinal.IsPrincipal op 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.isPrincipal_add_omega0_opow`：isPrincipal_add_omega0_opow (o : Or
+dinal) : IsPrincipal (· + ·) (ω ^ o)
 
-English:
-theorem isPrincipal_add_iff_zero_or_omega0_opow
-  proof: by
-  constructor
-  · rw [or_iff_not_imp_left]
-    refine fun H ho => ⟨log ω o, (opow_log_le_self ω ho).eq_of_not_lt ?_⟩
-    obtain ⟨n, hn⟩ := lt_omega0_opow_succ.1 (lt_opow_succ_log_self one_lt_omega0 o)
-exact fun h => hn.not_gt H.mul_natCast_lt h n
-  · rintro (rfl | ⟨a, rfl⟩)
-    exacts [isPrincipal_zero, isPrincipal_add_omega0_opow a]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_iff_zero_or_omega0_opow := isPrincipal_add_iff_zero_or_omega0_opow
-
-中文:
-定理 isPrincipal_add_iff_zero_or_omega0_opow
-  证明: by
-  constructor
-  · rw [or_iff_not_imp_left]
-    refine fun H ho => ⟨log ω o, (opow_log_le_self ω ho).eq_of_not_lt ?_⟩
-    obtain ⟨n, hn⟩ := lt_omega0_opow_succ.1 (lt_opow_succ_log_self one_lt_omega0 o)
-exact fun h => hn.not_gt H.mul_natCast_lt h n
-  · rintro (rfl | ⟨a, rfl⟩)
-    exacts [isPrincipal_zero, isPrincipal_add_omega0_opow a]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_iff_zero_or_omega0_opow := isPrincipal_add_iff_zero_or_omega0_opow
-
-Depends on / 依赖: H.mul_natCast_lt, eq_of_not_lt, exacts, hn.not_gt, isPrincipal_add_omega0_opow, isPrincipal_zero, lt_omega0_opow_succ, lt_opow_succ_log_self, mul_natCast_lt, not_gt, one_lt_omega0, opow_log_le_self, or_iff_not_imp_left
+--- 原说明 ---
+The main characterization theorem for additive principal ordinals.
 -/
 theorem isPrincipal_add_iff_zero_or_omega0_opow :
-    IsPrincipal (· + ·) o ↔ o = 0 ∨ o in Set.range (ω ^ · : Ordinal -> Ordinal) := by
+    IsPrincipal (· + ·) o ↔ o = 0 ∨ o ∈ Set.range (ω ^ · : Ordinal → Ordinal) := by
   constructor
   · rw [or_iff_not_imp_left]
-    refine fun H ho => ⟨log ω o, (opow_log_le_self ω ho).eq_of_not_lt ?_⟩
+    refine fun H ho ↦ ⟨log ω o, (opow_log_le_self ω ho).eq_of_not_lt ?_⟩
     obtain ⟨n, hn⟩ := lt_omega0_opow_succ.1 (lt_opow_succ_log_self one_lt_omega0 o)
-exact fun h => hn.not_gt H.mul_natCast_lt h n
+    exact fun h ↦ hn.not_gt <| H.mul_natCast_lt h n
   · rintro (rfl | ⟨a, rfl⟩)
     exacts [isPrincipal_zero, isPrincipal_add_omega0_opow a]
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_iff_zero_or_omega0_opow := isPrincipal_add_iff_zero_or_omega0_opow
-
-/--
-theorem `isPrincipal_add_opow_of_isPrincipal_add` / 定理 `isPrincipal_add_opow_of_isPrincipal_add`
-
-English:
-theorem isPrincipal_add_opow_of_isPrincipal_add
-  given: {a} (ha : IsPrincipal (· + ·) a) (b : Ordinal)
-  proof: by
-  rcases isPrincipal_add_iff_zero_or_omega0_opow.1 ha with (rfl | ⟨c, rfl⟩)
-  · rcases eq_or_ne b 0 with (rfl | hb)
-    · rw [opow_zero]
-      exact isPrincipal_add_one
-    · rwa [zero_opow hb]
-  · rw [← opow_mul]
-    exact isPrincipal_add_omega0_opow _
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_opow_of_principal_add := isPrincipal_add_opow_of_isPrincipal_add
-
-中文:
-定理 isPrincipal_add_opow_of_isPrincipal_add
-  条件: {a} (ha : 是Principal (· + ·) a) (b : 序数)
-  证明: by
-  rcases isPrincipal_add_iff_zero_or_omega0_opow.1 ha with (rfl | ⟨c, rfl⟩)
-  · rcases eq_or_ne b 0 with (rfl | hb)
-    · rw [opow_zero]
-      exact isPrincipal_add_one
-    · rwa [zero_opow hb]
-  · rw [← opow_mul]
-    exact isPrincipal_add_omega0_opow _
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_opow_of_principal_add := isPrincipal_add_opow_of_isPrincipal_add
-
-Depends on / 依赖: eq_or_ne, isPrincipal_add_iff_zero_or_omega0_opow, isPrincipal_add_omega0_opow, isPrincipal_add_one, opow_mul, opow_zero, zero_opow
+/-
+**Ordinal.isPrincipal_add_opow_of_isPrincipal_add** 是 Mathlib 中的一个定理，位于命名空间 `Ord
+inal`。
+形式化陈述：isPrincipal_add_opow_of_isPrincipal_add {a} (ha : IsPrincipal (· + ·) a) (
+b : Ordinal) : IsPrincipal (· + ·) (a ^ b)
+参数：ha : IsPrincipal (· + ·) a；b : Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.isPrincipal_add_iff_zero_or_omega0_opow`：isPrincipal_add_iff_zer
+o_or_omega0_opow : IsPrincipal (· + ·) o ↔ o = 0 ∨ o in Set.range (ω ^ · : Ordin
+al -> Ordinal)
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.opow_zero`：opow_zero (a : Ordinal) : a ^ (0 : Ordinal) = 1
+· 使用定理 `Ordinal.isPrincipal_add_one`：isPrincipal_add_one : IsPrincipal (· + ·) 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.zero_opow`：zero_opow {a : Ordinal} (a0 : a != 0) : (0 : Ordinal)
+ ^ a = 0
+· 使用定理 `Ordinal.opow_mul`：opow_mul (a b c : Ordinal) : a ^ (b * c) = (a ^ b) ^ c
+· 使用定理 `Ordinal.isPrincipal_add_omega0_opow`：isPrincipal_add_omega0_opow (o : Or
+dinal) : IsPrincipal (· + ·) (ω ^ o)
 -/
 theorem isPrincipal_add_opow_of_isPrincipal_add {a} (ha : IsPrincipal (· + ·) a) (b : Ordinal) :
     IsPrincipal (· + ·) (a ^ b) := by
@@ -1135,59 +869,44 @@ theorem isPrincipal_add_opow_of_isPrincipal_add {a} (ha : IsPrincipal (· + ·) 
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_opow_of_principal_add := isPrincipal_add_opow_of_isPrincipal_add
-
-/--
-theorem `isPrincipal_add_mul_of_isPrincipal_add` / 定理 `isPrincipal_add_mul_of_isPrincipal_add`
-
-English:
-theorem isPrincipal_add_mul_of_isPrincipal_add
-  statement: (a : Ordinal.{u}) {b : Ordinal.{u}} (hb₁ : b != 1)
-  proof: by
-  rcases eq_zero_or_pos a with (rfl | _)
-  · rw [zero_mul]
-    exact isPrincipal_zero
-  · rcases eq_zero_or_pos b with (rfl | hb₁')
-    · rw [mul_zero]
-      exact isPrincipal_zero
-    · rw [← one_le_iff_pos] at hb₁'
-      intro c d hc hd
-      rw [lt_mul_iff_of_isSuccLimit
-        (isSuccLimit_of_isPrincipal_add (lt_of_le_of_ne hb₁' hb₁.symm) hb)] at *
-      rcases hc with ⟨x, hx, hx'⟩
-      rcases hd with ⟨y, hy, hy'⟩
-      use x + y, hb hx hy
-      rw [mul_add]
-      exact Left.add_lt_add hx' hy'
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_mul_of_principal_add := isPrincipal_add_mul_of_isPrincipal_add
-
-中文:
-定理 isPrincipal_add_mul_of_isPrincipal_add
-  结论: (a : 序数.{u}) {b : 序数.{u}} (hb₁ : b != 1)
-  证明: by
-  rcases eq_zero_or_pos a with (rfl | _)
-  · rw [zero_mul]
-    exact isPrincipal_zero
-  · rcases eq_zero_or_pos b with (rfl | hb₁')
-    · rw [mul_zero]
-      exact isPrincipal_zero
-    · rw [← one_le_iff_pos] at hb₁'
-      intro c d hc hd
-      rw [lt_mul_iff_of_isSuccLimit
-        (isSuccLimit_of_isPrincipal_add (lt_of_le_of_ne hb₁' hb₁.symm) hb)] at *
-      rcases hc with ⟨x, hx, hx'⟩
-      rcases hd with ⟨y, hy, hy'⟩
-      use x + y, hb hx hy
-      rw [mul_add]
-      exact Left.add_lt_add hx' hy'
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_mul_of_principal_add := isPrincipal_add_mul_of_isPrincipal_add
-
-Depends on / 依赖: Left.add_lt_add, add_lt_add, eq_zero_or_pos, isPrincipal_zero, isSuccLimit_of_isPrincipal_add, lt_mul_iff_of_isSuccLimit, lt_of_le_of_ne, mul_add, mul_zero, one_le_iff_pos, zero_mul
+/-
+**Ordinal.isPrincipal_add_mul_of_isPrincipal_add** 是 Mathlib 中的一个定理，位于命名空间 `Ordi
+nal`。
+形式化陈述：isPrincipal_add_mul_of_isPrincipal_add (a : Ordinal.{u}) {b : Ordinal.{u}}
+ (hb₁ : b != 1) (hb : IsPrincipal (· + ·) b) : IsPrincipal (· + ·) (a * b)
+参数：a : Ordinal.{u}；hb₁ : b != 1；hb : IsPrincipal (· + ·) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_zero_or_pos`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero 
+α] [IsBotZeroClass α] (a : α), a = 0 ∨ 0 < a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Ordinal.isPrincipal_zero`：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordina
+l.{u_1}}, Ordinal.IsPrincipal op 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Ordinal.lt_mul_iff_of_isSuccLimit`：lt_mul_iff_of_isSuccLimit {a b c : Or
+dinal} (h : IsSuccLimit c) : a < b * c ↔ exists c' < c, a < b * c'
+· 使用定理 `Ordinal.isSuccLimit_of_isPrincipal_add`：isSuccLimit_of_isPrincipal_add (
+ho₁ : 1 < o) (ho : IsPrincipal (· + ·) o) : IsSuccLimit o
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Left.add_lt_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [
+AddLeftStrictMono α] [AddRightMono α] {a b c d : α},   a < b → c < d → a + c < b
+ + d
 -/
-theorem isPrincipal_add_mul_of_isPrincipal_add (a : Ordinal.{u}) {b : Ordinal.{u}} (hb₁ : b != 1)
+theorem isPrincipal_add_mul_of_isPrincipal_add (a : Ordinal.{u}) {b : Ordinal.{u}} (hb₁ : b ≠ 1)
     (hb : IsPrincipal (· + ·) b) : IsPrincipal (· + ·) (a * b) := by
   rcases eq_zero_or_pos a with (rfl | _)
   · rw [zero_mul]
@@ -1208,57 +927,45 @@ theorem isPrincipal_add_mul_of_isPrincipal_add (a : Ordinal.{u}) {b : Ordinal.{u
 @[deprecated (since := "2026-03-17")]
 alias principal_add_mul_of_principal_add := isPrincipal_add_mul_of_isPrincipal_add
 
+/-! ### Multiplicative principal ordinals -/
 
-/--
-theorem `isPrincipal_mul_one` / 定理 `isPrincipal_mul_one`
+/-
+**Ordinal.isPrincipal_mul_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_mul_one : IsPrincipal (· * ·) 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem isPrincipal_mul_one
-  statement: IsPrincipal (· * ·) 1
-  proof: by simp
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_one := isPrincipal_mul_one
-
-中文:
-定理 isPrincipal_mul_one
-  结论: 是Principal (· * ·) 1
-  证明: by simp
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_one := isPrincipal_mul_one
+--- 原说明 ---
+### Multiplicative principal ordinals
 -/
 theorem isPrincipal_mul_one : IsPrincipal (· * ·) 1 := by simp
 
 @[deprecated (since := "2026-03-17")]
 alias principal_mul_one := isPrincipal_mul_one
-
-/--
-theorem `isPrincipal_mul_two` / 定理 `isPrincipal_mul_two`
-
-English:
-theorem isPrincipal_mul_two
-  statement: IsPrincipal (· * ·) 2
-  proof: by
-  intro a b ha hb
-  rw [lt_two_iff] at *
-  simpa using mul_le_mul' ha hb
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_two := isPrincipal_mul_two
-
-中文:
-定理 isPrincipal_mul_two
-  结论: 是Principal (· * ·) 2
-  证明: by
-  intro a b ha hb
-  rw [lt_two_iff] at *
-  simpa using mul_le_mul' ha hb
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_two := isPrincipal_mul_two
-
-Depends on / 依赖: lt_two_iff, mul_le_mul
+/-
+**Ordinal.isPrincipal_mul_two** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_mul_two : IsPrincipal (· * ·) 2
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.lt_two_iff`：lt_two_iff [AddMonoidWithOne α] [SuccAddOrder α] [NoMa
+xOrder α] : x < 2 ↔ x <= 1
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
 -/
 theorem isPrincipal_mul_two : IsPrincipal (· * ·) 2 := by
   intro a b ha hb
@@ -1267,104 +974,87 @@ theorem isPrincipal_mul_two : IsPrincipal (· * ·) 2 := by
 
 @[deprecated (since := "2026-03-17")]
 alias principal_mul_two := isPrincipal_mul_two
-
-/--
-theorem `isPrincipal_mul_of_le_two` / 定理 `isPrincipal_mul_of_le_two`
-
-English:
-theorem isPrincipal_mul_of_le_two
-  given: (ho : o <= 2)
-  statement: IsPrincipal (· * ·) o
-  proof: by
-  obtain rfl | rfl | rfl := le_two_iff.1 ho
-  exacts [isPrincipal_zero, isPrincipal_mul_one, isPrincipal_mul_two]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_of_le_two := isPrincipal_mul_of_le_two
-
-中文:
-定理 isPrincipal_mul_of_le_two
-  条件: (ho : o <= 2)
-  结论: 是Principal (· * ·) o
-  证明: by
-  obtain rfl | rfl | rfl := le_two_iff.1 ho
-  exacts [isPrincipal_zero, isPrincipal_mul_one, isPrincipal_mul_two]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_of_le_two := isPrincipal_mul_of_le_two
-
-Depends on / 依赖: exacts, isPrincipal_mul_one, isPrincipal_mul_two, isPrincipal_zero, le_two_iff
+/-
+**Ordinal.isPrincipal_mul_of_le_two** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_mul_of_le_two (ho : o <= 2) : IsPrincipal (· * ·) o
+参数：ho : o <= 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.le_two_iff`：le_two_iff : x <= 2 ↔ x = 0 ∨ x = 1 ∨ x = 2
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.isPrincipal_zero`：∀ {op : Ordinal.{u_1} → Ordinal.{u_1} → Ordina
+l.{u_1}}, Ordinal.IsPrincipal op 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.isPrincipal_mul_one`：isPrincipal_mul_one : IsPrincipal (· * ·) 1
+· 使用定理 `Ordinal.isPrincipal_mul_two`：isPrincipal_mul_two : IsPrincipal (· * ·) 2
 -/
-theorem isPrincipal_mul_of_le_two (ho : o <= 2) : IsPrincipal (· * ·) o := by
+theorem isPrincipal_mul_of_le_two (ho : o ≤ 2) : IsPrincipal (· * ·) o := by
   obtain rfl | rfl | rfl := le_two_iff.1 ho
   exacts [isPrincipal_zero, isPrincipal_mul_one, isPrincipal_mul_two]
 
 @[deprecated (since := "2026-03-17")]
 alias principal_mul_of_le_two := isPrincipal_mul_of_le_two
-
-/--
-theorem `isPrincipal_add_of_isPrincipal_mul` / 定理 `isPrincipal_add_of_isPrincipal_mul`
-
-English:
-theorem isPrincipal_add_of_isPrincipal_mul
-  given: (ho : IsPrincipal (· * ·) o) (ho₂ : o != 2)
-  proof: by
-  rcases lt_or_gt_of_ne ho₂ with ho₁ | ho₂
-· exact isPrincipal_add_of_le_one lt_two_iff.mp ho₁
-  · simp_rw [isPrincipal_add_iff_add_self_lt, ← Ordinal.mul_two]
-    exact fun a ha => ho ha ho₂
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_of_principal_mul := isPrincipal_add_of_isPrincipal_mul
-
-中文:
-定理 isPrincipal_add_of_isPrincipal_mul
-  条件: (ho : 是Principal (· * ·) o) (ho₂ : o != 2)
-  证明: by
-  rcases lt_or_gt_of_ne ho₂ with ho₁ | ho₂
-· exact isPrincipal_add_of_le_one lt_two_iff.mp ho₁
-  · simp_rw [isPrincipal_add_iff_add_self_lt, ← Ordinal.mul_two]
-    exact fun a ha => ho ha ho₂
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_of_principal_mul := isPrincipal_add_of_isPrincipal_mul
-
-Depends on / 依赖: Ordinal, Ordinal.mul_two, isPrincipal_add_iff_add_self_lt, isPrincipal_add_of_le_one, lt_or_gt_of_ne, lt_two_iff, lt_two_iff.mp, mul_two, simp_rw
+/-
+**Ordinal.isPrincipal_add_of_isPrincipal_mul** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`
+。
+形式化陈述：isPrincipal_add_of_isPrincipal_mul (ho : IsPrincipal (· * ·) o) (ho₂ : o !
+= 2) : IsPrincipal (· + ·) o
+参数：ho : IsPrincipal (· * ·) o；ho₂ : o != 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `lt_or_gt_of_ne`：lt_or_gt_of_ne (h : a != b) : a < b ∨ b < a
+· 使用定理 `Ordinal.isPrincipal_add_of_le_one`：isPrincipal_add_of_le_one (ho : o <= 
+1) : IsPrincipal (· + ·) o
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.lt_two_iff`：lt_two_iff [AddMonoidWithOne α] [SuccAddOrder α] [NoMa
+xOrder α] : x < 2 ↔ x <= 1
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem isPrincipal_add_of_isPrincipal_mul (ho : IsPrincipal (· * ·) o) (ho₂ : o != 2) :
+theorem isPrincipal_add_of_isPrincipal_mul (ho : IsPrincipal (· * ·) o) (ho₂ : o ≠ 2) :
     IsPrincipal (· + ·) o := by
   rcases lt_or_gt_of_ne ho₂ with ho₁ | ho₂
-· exact isPrincipal_add_of_le_one lt_two_iff.mp ho₁
+  · exact isPrincipal_add_of_le_one <| lt_two_iff.mp ho₁
   · simp_rw [isPrincipal_add_iff_add_self_lt, ← Ordinal.mul_two]
-    exact fun a ha => ho ha ho₂
+    exact fun a ha ↦ ho ha ho₂
 
 @[deprecated (since := "2026-03-17")]
 alias principal_add_of_principal_mul := isPrincipal_add_of_isPrincipal_mul
-
-/--
-theorem `isSuccLimit_of_isPrincipal_mul` / 定理 `isSuccLimit_of_isPrincipal_mul`
-
-English:
-theorem isSuccLimit_of_isPrincipal_mul
-  given: (ho₂ : 2 < o) (ho : IsPrincipal (· * ·) o)
-  statement: IsSuccLimit o
-  proof: isSuccLimit_of_isPrincipal_add (one_lt_two.trans ho₂)
-    (isPrincipal_add_of_isPrincipal_mul ho (ne_of_gt ho₂))
-
-@[deprecated (since := "2026-03-17")]
-alias isSuccLimit_of_principal_mul := isSuccLimit_of_isPrincipal_mul
-
-中文:
-定理 isSuccLimit_of_isPrincipal_mul
-  条件: (ho₂ : 2 < o) (ho : 是Principal (· * ·) o)
-  结论: 是SuccLimit o
-  证明: isSuccLimit_of_isPrincipal_add (one_lt_two.trans ho₂)
-    (isPrincipal_add_of_isPrincipal_mul ho (ne_of_gt ho₂))
-
-@[deprecated (since := "2026-03-17")]
-alias isSuccLimit_of_principal_mul := isSuccLimit_of_isPrincipal_mul
-
-Depends on / 依赖: isPrincipal_add_of_isPrincipal_mul, isSuccLimit_of_isPrincipal_add, ne_of_gt, one_lt_two, one_lt_two.trans
+/-
+**Ordinal.isSuccLimit_of_isPrincipal_mul** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isSuccLimit_of_isPrincipal_mul (ho₂ : 2 < o) (ho : IsPrincipal (· * ·) o) 
+: IsSuccLimit o
+参数：ho₂ : 2 < o；ho : IsPrincipal (· * ·) o。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Ordinal.isSuccLimit_of_isPrincipal_add`：isSuccLimit_of_isPrincipal_add (
+ho₁ : 1 < o) (ho : IsPrincipal (· + ·) o) : IsSuccLimit o
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用引理 `one_lt_two`：one_lt_two [AddLeftStrictMono α] : (1 : α) < 2
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.isPrincipal_add_of_isPrincipal_mul`：isPrincipal_add_of_isPrincip
+al_mul (ho : IsPrincipal (· * ·) o) (ho₂ : o != 2) : IsPrincipal (· + ·) o
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
 theorem isSuccLimit_of_isPrincipal_mul (ho₂ : 2 < o) (ho : IsPrincipal (· * ·) o) : IsSuccLimit o :=
   isSuccLimit_of_isPrincipal_add (one_lt_two.trans ho₂)
@@ -1372,56 +1062,52 @@ theorem isSuccLimit_of_isPrincipal_mul (ho₂ : 2 < o) (ho : IsPrincipal (· * �
 
 @[deprecated (since := "2026-03-17")]
 alias isSuccLimit_of_principal_mul := isSuccLimit_of_isPrincipal_mul
-
-/--
-theorem `isPrincipal_mul_iff_mul_left_eq` / 定理 `isPrincipal_mul_iff_mul_left_eq`
-
-English:
-theorem isPrincipal_mul_iff_mul_left_eq
-  proof: by
-  refine ⟨fun h a ha₀ hao => ?_, fun h a b hao hbo => ?_⟩
-  · rcases le_or_gt o 2 with ho | ho
-    · convert! one_mul o
-      apply le_antisymm
-      · rw [← lt_add_one_iff, one_add_one_eq_two]
-        exact hao.trans_le ho
-      · rwa [one_le_iff_pos]
-    · exact op_eq_self_of_isPrincipal hao (isNormal_mul_right ha₀) h
-        (isSuccLimit_of_isPrincipal_mul ho h)
-  · rcases eq_or_ne a 0 with (rfl | ha)
-    · dsimp only; rwa [zero_mul]
-    rw [← pos_iff_ne_zero] at ha
-    rw [← h a ha hao]
-    exact (isNormal_mul_right ha).strictMono hbo
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_iff_mul_left_eq := isPrincipal_mul_iff_mul_left_eq
-
-中文:
-定理 isPrincipal_mul_iff_mul_left_eq
-  证明: by
-  refine ⟨fun h a ha₀ hao => ?_, fun h a b hao hbo => ?_⟩
-  · rcases le_or_gt o 2 with ho | ho
-    · convert! one_mul o
-      apply le_antisymm
-      · rw [← lt_add_one_iff, one_add_one_eq_two]
-        exact hao.trans_le ho
-      · rwa [one_le_iff_pos]
-    · exact op_eq_self_of_isPrincipal hao (isNormal_mul_right ha₀) h
-        (isSuccLimit_of_isPrincipal_mul ho h)
-  · rcases eq_or_ne a 0 with (rfl | ha)
-    · dsimp only; rwa [zero_mul]
-    rw [← pos_iff_ne_zero] at ha
-    rw [← h a ha hao]
-    exact (isNormal_mul_right ha).strictMono hbo
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_iff_mul_left_eq := isPrincipal_mul_iff_mul_left_eq
-
-Depends on / 依赖: convert, eq_or_ne, hao.trans_le, isNormal_mul_right, isSuccLimit_of_isPrincipal_mul, le_antisymm, le_or_gt, lt_add_one_iff, one_add_one_eq_two, one_le_iff_pos, one_mul, op_eq_self_of_isPrincipal, pos_iff_ne_zero, strictMono, trans_le, zero_mul
+/-
+**Ordinal.isPrincipal_mul_iff_mul_left_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_mul_iff_mul_left_eq : IsPrincipal (· * ·) o ↔ forall a, 0 < a 
+-> a < o -> a * o = o
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.lt_add_one_iff`：lt_add_one_iff [NoMaxOrder α] : x < y + 1 ↔ x <= y
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Ordinal.op_eq_self_of_isPrincipal`：op_eq_self_of_isPrincipal (hao : a < 
+o) (H : IsNormal (op a)) (ho : IsPrincipal op o) (ho' : IsSuccLimit o) : op a o 
+= o
+· 使用定理 `Ordinal.isNormal_mul_right`：isNormal_mul_right {a : Ordinal} (h : 0 < a)
+ : IsNormal (a * ·)
+· 使用定理 `Ordinal.isSuccLimit_of_isPrincipal_mul`：isSuccLimit_of_isPrincipal_mul (
+ho₂ : 2 < o) (ho : IsPrincipal (· * ·) o) : IsSuccLimit o
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `Order.IsNormal.strictMono`：∀ {α : Type u_1} {β : Type u_2} [inst : Linea
+rOrder α] [inst_1 : LinearOrder β] {f : α → β},   Order.IsNormal f → StrictMono 
+f
 -/
 theorem isPrincipal_mul_iff_mul_left_eq :
-    IsPrincipal (· * ·) o ↔ forall a, 0 < a -> a < o -> a * o = o := by
+    IsPrincipal (· * ·) o ↔ ∀ a, 0 < a → a < o → a * o = o := by
   refine ⟨fun h a ha₀ hao => ?_, fun h a b hao hbo => ?_⟩
   · rcases le_or_gt o 2 with ho | ho
     · convert! one_mul o
@@ -1439,33 +1125,19 @@ theorem isPrincipal_mul_iff_mul_left_eq :
 
 @[deprecated (since := "2026-03-17")]
 alias principal_mul_iff_mul_left_eq := isPrincipal_mul_iff_mul_left_eq
-
-/--
-theorem `isPrincipal_mul_omega0` / 定理 `isPrincipal_mul_omega0`
-
-English:
-theorem isPrincipal_mul_omega0
-  statement: IsPrincipal (· * ·) ω
-  proof: fun a b ha hb =>
-  match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
-  | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by
-    dsimp only; rw [← natCast_mul]
-    apply natCast_lt_omega0
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_omega0 := isPrincipal_mul_omega0
-
-中文:
-定理 isPrincipal_mul_omega0
-  结论: 是Principal (· * ·) ω
-  证明: fun a b ha hb =>
-  match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
-  | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by
-    dsimp only; rw [← natCast_mul]
-    apply natCast_lt_omega0
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_omega0 := isPrincipal_mul_omega0
+/-
+**Ordinal.isPrincipal_mul_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_mul_omega0 : IsPrincipal (· * ·) ω
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.lt_omega0`：lt_omega0 {o : Ordinal} : o < ω ↔ exists n : Nat, o =
+ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.natCast_mul`：∀ (m n : ℕ), ↑(m * n) = ↑m * ↑n
+· 使用定理 `Ordinal.natCast_lt_omega0`：natCast_lt_omega0 (n : Nat) : ↑n < ω
 -/
 theorem isPrincipal_mul_omega0 : IsPrincipal (· * ·) ω := fun a b ha hb =>
   match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
@@ -1475,87 +1147,86 @@ theorem isPrincipal_mul_omega0 : IsPrincipal (· * ·) ω := fun a b ha hb =>
 
 @[deprecated (since := "2026-03-17")]
 alias principal_mul_omega0 := isPrincipal_mul_omega0
-
-/--
-theorem `mul_omega0` / 定理 `mul_omega0`
-
-English:
-theorem mul_omega0
-  given: (a0 : 0 < a) (ha : a < ω)
-  statement: a * ω = ω
-  proof: isPrincipal_mul_iff_mul_left_eq.1 isPrincipal_mul_omega0 a a0 ha
-
-中文:
-定理 mul_omega0
-  条件: (a0 : 0 < a) (ha : a < ω)
-  结论: a * ω = ω
-  证明: isPrincipal_mul_iff_mul_left_eq.1 isPrincipal_mul_omega0 a a0 ha
-
-Depends on / 依赖: isPrincipal_mul_iff_mul_left_eq, isPrincipal_mul_omega0
+/-
+**Ordinal.mul_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：mul_omega0 (a0 : 0 < a) (ha : a < ω) : a * ω = ω
+参数：a0 : 0 < a；ha : a < ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.isPrincipal_mul_iff_mul_left_eq`：isPrincipal_mul_iff_mul_left_eq
+ : IsPrincipal (· * ·) o ↔ forall a, 0 < a -> a < o -> a * o = o
+· 使用定理 `Ordinal.isPrincipal_mul_omega0`：isPrincipal_mul_omega0 : IsPrincipal (· 
+* ·) ω
 -/
 theorem mul_omega0 (a0 : 0 < a) (ha : a < ω) : a * ω = ω :=
   isPrincipal_mul_iff_mul_left_eq.1 isPrincipal_mul_omega0 a a0 ha
-
-/--
-theorem `natCast_mul_omega0` / 定理 `natCast_mul_omega0`
-
-English:
-theorem natCast_mul_omega0
-  given: {n : Nat} (hn : 0 < n)
-  statement: n * ω = ω
-  proof: mul_omega0 (mod_cast hn) (natCast_lt_omega0 n)
-
-中文:
-定理 natCast_mul_omega0
-  条件: {n : 自然数} (hn : 0 < n)
-  结论: n * ω = ω
-  证明: mul_omega0 (mod_cast hn) (natCast_lt_omega0 n)
-
-Depends on / 依赖: mod_cast, mul_omega0, natCast_lt_omega0
+/-
+**Ordinal.natCast_mul_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：natCast_mul_omega0 {n : Nat} (hn : 0 < n) : n * ω = ω
+参数：hn : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.mul_omega0`：mul_omega0 (a0 : 0 < a) (ha : a < ω) : a * ω = ω
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.natCast_lt_omega0`：natCast_lt_omega0 (n : Nat) : ↑n < ω
 -/
-theorem natCast_mul_omega0 {n : Nat} (hn : 0 < n) : n * ω = ω :=
+theorem natCast_mul_omega0 {n : ℕ} (hn : 0 < n) : n * ω = ω :=
   mul_omega0 (mod_cast hn) (natCast_lt_omega0 n)
-
-/--
-theorem `mul_lt_omega0_opow` / 定理 `mul_lt_omega0_opow`
-
-English:
-theorem mul_lt_omega0_opow
-  given: (c0 : 0 < c) (ha : a < ω ^ c) (hb : b < ω)
-  statement: a * b < ω ^ c
-  proof: by
-  rcases zero_or_succ_or_isSuccLimit c with (rfl | ⟨c, rfl⟩ | l)
-  · exact (lt_irrefl _).elim c0
-  · rw [opow_succ] at ha
-    obtain ⟨n, hn, an⟩ :=
-      ((isNormal_mul_right <| opow_pos _ omega0_pos).lt_iff_exists_lt isSuccLimit_omega0).1 ha
-    grw [an, opow_succ, mul_assoc]
-    gcongr
-    exacts [opow_pos _ omega0_pos, isPrincipal_mul_omega0 hn hb]
-  · rcases ((isNormal_opow one_lt_omega0).lt_iff_exists_lt l).1 ha with ⟨x, hx, ax⟩
-    refine (mul_le_mul' (le_of_lt ax) (le_of_lt hb)).trans_lt ?_
-    rw [← opow_succ]; rw [opow_lt_opow_iff_right one_lt_omega0]
-    exact l.succ_lt hx
-
-中文:
-定理 mul_lt_omega0_opow
-  条件: (c0 : 0 < c) (ha : a < ω ^ c) (hb : b < ω)
-  结论: a * b < ω ^ c
-  证明: by
-  rcases zero_or_succ_or_isSuccLimit c with (rfl | ⟨c, rfl⟩ | l)
-  · exact (lt_irrefl _).elim c0
-  · rw [opow_succ] at ha
-    obtain ⟨n, hn, an⟩ :=
-      ((isNormal_mul_right <| opow_pos _ omega0_pos).lt_iff_exists_lt isSuccLimit_omega0).1 ha
-    grw [an, opow_succ, mul_assoc]
-    gcongr
-    exacts [opow_pos _ omega0_pos, isPrincipal_mul_omega0 hn hb]
-  · rcases ((isNormal_opow one_lt_omega0).lt_iff_exists_lt l).1 ha with ⟨x, hx, ax⟩
-    refine (mul_le_mul' (le_of_lt ax) (le_of_lt hb)).trans_lt ?_
-    rw [← opow_succ]; rw [opow_lt_opow_iff_right one_lt_omega0]
-    exact l.succ_lt hx
-
-Depends on / 依赖: exacts, isNormal_mul_right, isNormal_opow, isPrincipal_mul_omega0, isSuccLimit_omega0, le_of_lt, lt_iff_exists_lt, lt_irrefl, mul_assoc, mul_le_mul, omega0_pos, one_lt_omega0, opow_l, opow_pos, opow_succ, trans_lt, zero_or_succ_or_isSuccLimit
+/-
+**Ordinal.mul_lt_omega0_opow** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：mul_lt_omega0_opow (c0 : 0 < c) (ha : a < ω ^ c) (hb : b < ω) : a * b < ω 
+^ c
+参数：c0 : 0 < c；ha : a < ω ^ c；hb : b < ω。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.zero_or_succ_or_isSuccLimit`：zero_or_succ_or_isSuccLimit (o : Or
+dinal) : o = 0 ∨ o in range succ ∨ IsSuccLimit o
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.IsNormal.lt_iff_exists_lt`：lt_iff_exists_lt (hf : IsNormal f) (ha 
+: IsSuccLimit a) {b : β} : b < f a ↔ exists a' < a, b < f a'
+· 使用定理 `Ordinal.isNormal_mul_right`：isNormal_mul_right {a : Ordinal} (h : 0 < a)
+ : IsNormal (a * ·)
+· 使用定理 `Ordinal.opow_pos`：opow_pos {a : Ordinal} (b : Ordinal) (a0 : 0 < a) : 0 
+< a ^ b
+· 使用定理 `Ordinal.omega0_pos`：omega0_pos : 0 < ω
+· 使用定理 `Ordinal.isSuccLimit_omega0`：isSuccLimit_omega0 : IsSuccLimit ω
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.opow_succ`：opow_succ (a b : Ordinal) : a ^ succ b = a ^ b * a
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_lt_mul_of_pos_left`：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc
+ : b < c) (ha : 0 < a) : a * b < a * c
+· 使用定理 `Ordinal.instPosMulStrictMono`：PosMulStrictMono Ordinal.{u_4}
+· 使用定理 `Ordinal.isPrincipal_mul_omega0`：isPrincipal_mul_omega0 : IsPrincipal (· 
+* ·) ω
+· 使用定理 `Ordinal.isNormal_opow`：isNormal_opow {a : Ordinal} (h : 1 < a) : IsNorma
+l (a ^ · : Ordinal -> Ordinal)
+· 使用定理 `Ordinal.one_lt_omega0`：one_lt_omega0 : 1 < ω
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Ordinal.opow_lt_opow_iff_right`：opow_lt_opow_iff_right {a b c : Ordinal}
+ (a1 : 1 < a) : a ^ b < a ^ c ↔ b < c
+· 使用定理 `Order.IsSuccLimit.succ_lt`：∀ {α : Type u_1} {a b : α} [inst : PartialOrd
+er α] [inst_1 : SuccOrder α],   Order.IsSuccLimit b → a < b → Order.succ a < b
 -/
 theorem mul_lt_omega0_opow (c0 : 0 < c) (ha : a < ω ^ c) (hb : b < ω) : a * b < ω ^ c := by
   rcases zero_or_succ_or_isSuccLimit c with (rfl | ⟨c, rfl⟩ | l)
@@ -1568,43 +1239,49 @@ theorem mul_lt_omega0_opow (c0 : 0 < c) (ha : a < ω ^ c) (hb : b < ω) : a * b 
     exacts [opow_pos _ omega0_pos, isPrincipal_mul_omega0 hn hb]
   · rcases ((isNormal_opow one_lt_omega0).lt_iff_exists_lt l).1 ha with ⟨x, hx, ax⟩
     refine (mul_le_mul' (le_of_lt ax) (le_of_lt hb)).trans_lt ?_
-    rw [← opow_succ]; rw [opow_lt_opow_iff_right one_lt_omega0]
+    rw [← opow_succ, opow_lt_opow_iff_right one_lt_omega0]
     exact l.succ_lt hx
-
-/--
-theorem `mul_omega0_opow_opow` / 定理 `mul_omega0_opow_opow`
-
-English:
-theorem mul_omega0_opow_opow
-  given: (a0 : 0 < a) (h : a < ω ^ ω ^ b)
-  statement: a * ω ^ ω ^ b = ω ^ ω ^ b
-  proof: by
-  obtain rfl | b0 := eq_or_ne b 0
-  · rw [opow_zero, opow_one] at h ⊢
-    exact mul_omega0 a0 h
-  · apply le_antisymm
-    · obtain ⟨x, xb, ax⟩ :=
-        (lt_opow_of_isSuccLimit omega0_ne_zero (isSuccLimit_opow_left isSuccLimit_omega0 b0)).1 h
-      grw [ax, ← opow_add, add_omega0_opow xb]
-    · conv_lhs => rw [← one_mul (ω ^ _)]
-      grw [one_le_iff_pos.2 a0]
-
-中文:
-定理 mul_omega0_opow_opow
-  条件: (a0 : 0 < a) (h : a < ω ^ ω ^ b)
-  结论: a * ω ^ ω ^ b = ω ^ ω ^ b
-  证明: by
-  obtain rfl | b0 := eq_or_ne b 0
-  · rw [opow_zero, opow_one] at h ⊢
-    exact mul_omega0 a0 h
-  · apply le_antisymm
-    · obtain ⟨x, xb, ax⟩ :=
-        (lt_opow_of_isSuccLimit omega0_ne_zero (isSuccLimit_opow_left isSuccLimit_omega0 b0)).1 h
-      grw [ax, ← opow_add, add_omega0_opow xb]
-    · conv_lhs => rw [← one_mul (ω ^ _)]
-      grw [one_le_iff_pos.2 a0]
-
-Depends on / 依赖: add_omega0_opow, conv_lhs, eq_or_ne, isSuccLimit_omega0, isSuccLimit_opow_left, le_antisymm, lt_opow_of_isSuccLimit, mul_omega0, omega0_ne_zero, one_le_iff_pos, one_mul, opow_add, opow_one, opow_zero
+/-
+**Ordinal.mul_omega0_opow_opow** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：mul_omega0_opow_opow (a0 : 0 < a) (h : a < ω ^ ω ^ b) : a * ω ^ ω ^ b = ω 
+^ ω ^ b
+参数：a0 : 0 < a；h : a < ω ^ ω ^ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.opow_zero`：opow_zero (a : Ordinal) : a ^ (0 : Ordinal) = 1
+· 使用定理 `Ordinal.opow_one`：opow_one (a : Ordinal) : a ^ (1 : Ordinal) = a
+· 使用定理 `Ordinal.mul_omega0`：mul_omega0 (a0 : 0 < a) (ha : a < ω) : a * ω = ω
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.lt_opow_of_isSuccLimit`：lt_opow_of_isSuccLimit {a b c : Ordinal}
+ (b0 : b != 0) (h : IsSuccLimit c) : a < b ^ c ↔ exists c' < c, a < b ^ c'
+· 使用定理 `Ordinal.omega0_ne_zero`：omega0_ne_zero : ω != 0
+· 使用定理 `Ordinal.isSuccLimit_opow_left`：isSuccLimit_opow_left {a b : Ordinal} (l 
+: IsSuccLimit a) (hb : b != 0) : IsSuccLimit (a ^ b)
+· 使用定理 `Ordinal.isSuccLimit_omega0`：isSuccLimit_omega0 : IsSuccLimit ω
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Ordinal.opow_add`：opow_add (a b c : Ordinal) : a ^ (b + c) = a ^ b * a ^
+ c
+· 使用定理 `Ordinal.add_omega0_opow`：add_omega0_opow (h : a < ω ^ b) : a + ω ^ b = ω
+ ^ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
 -/
 theorem mul_omega0_opow_opow (a0 : 0 < a) (h : a < ω ^ ω ^ b) : a * ω ^ ω ^ b = ω ^ ω ^ b := by
   obtain rfl | b0 := eq_or_ne b 0
@@ -1616,64 +1293,40 @@ theorem mul_omega0_opow_opow (a0 : 0 < a) (h : a < ω ^ ω ^ b) : a * ω ^ ω ^ 
       grw [ax, ← opow_add, add_omega0_opow xb]
     · conv_lhs => rw [← one_mul (ω ^ _)]
       grw [one_le_iff_pos.2 a0]
-
-/--
-theorem `isPrincipal_mul_omega0_opow_opow` / 定理 `isPrincipal_mul_omega0_opow_opow`
-
-English:
-theorem isPrincipal_mul_omega0_opow_opow
-  given: (o : Ordinal)
-  statement: IsPrincipal (· * ·) (ω ^ ω ^ o)
-  proof: isPrincipal_mul_iff_mul_left_eq.2 fun _ => mul_omega0_opow_opow
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_omega0_opow_opow := isPrincipal_mul_omega0_opow_opow
-
-中文:
-定理 isPrincipal_mul_omega0_opow_opow
-  条件: (o : 序数)
-  结论: 是Principal (· * ·) (ω ^ ω ^ o)
-  证明: isPrincipal_mul_iff_mul_left_eq.2 fun _ => mul_omega0_opow_opow
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_omega0_opow_opow := isPrincipal_mul_omega0_opow_opow
-
-Depends on / 依赖: isPrincipal_mul_iff_mul_left_eq, mul_omega0_opow_opow
+/-
+**Ordinal.isPrincipal_mul_omega0_opow_opow** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_mul_omega0_opow_opow (o : Ordinal) : IsPrincipal (· * ·) (ω ^ 
+ω ^ o)
+参数：o : Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.isPrincipal_mul_iff_mul_left_eq`：isPrincipal_mul_iff_mul_left_eq
+ : IsPrincipal (· * ·) o ↔ forall a, 0 < a -> a < o -> a * o = o
+· 使用定理 `Ordinal.mul_omega0_opow_opow`：mul_omega0_opow_opow (a0 : 0 < a) (h : a <
+ ω ^ ω ^ b) : a * ω ^ ω ^ b = ω ^ ω ^ b
 -/
 theorem isPrincipal_mul_omega0_opow_opow (o : Ordinal) : IsPrincipal (· * ·) (ω ^ ω ^ o) :=
   isPrincipal_mul_iff_mul_left_eq.2 fun _ => mul_omega0_opow_opow
 
 @[deprecated (since := "2026-03-17")]
 alias principal_mul_omega0_opow_opow := isPrincipal_mul_omega0_opow_opow
-
-/--
-theorem `isPrincipal_add_of_isPrincipal_mul_opow` / 定理 `isPrincipal_add_of_isPrincipal_mul_opow`
-
-English:
-theorem isPrincipal_add_of_isPrincipal_mul_opow
-  given: (hb : 1 < b) (ho : IsPrincipal (· * ·) (b ^ o))
-  proof: by
-  intro x y hx hy
-  have := ho ((opow_lt_opow_iff_right hb).2 hx) ((opow_lt_opow_iff_right hb).2 hy)
-  dsimp only at *
-  rwa [← opow_add, opow_lt_opow_iff_right hb] at this
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_of_principal_mul_opow := isPrincipal_add_of_isPrincipal_mul_opow
-
-中文:
-定理 isPrincipal_add_of_isPrincipal_mul_opow
-  条件: (hb : 1 < b) (ho : 是Principal (· * ·) (b ^ o))
-  证明: by
-  intro x y hx hy
-  have := ho ((opow_lt_opow_iff_right hb).2 hx) ((opow_lt_opow_iff_right hb).2 hy)
-  dsimp only at *
-  rwa [← opow_add, opow_lt_opow_iff_right hb] at this
-
-@[deprecated (since := "2026-03-17")]
-alias principal_add_of_principal_mul_opow := isPrincipal_add_of_isPrincipal_mul_opow
-
-Depends on / 依赖: opow_add, opow_lt_opow_iff_right
+/-
+**Ordinal.isPrincipal_add_of_isPrincipal_mul_opow** 是 Mathlib 中的一个定理，位于命名空间 `Ord
+inal`。
+形式化陈述：isPrincipal_add_of_isPrincipal_mul_opow (hb : 1 < b) (ho : IsPrincipal (· 
+* ·) (b ^ o)) : IsPrincipal (· + ·) o
+参数：hb : 1 < b；ho : IsPrincipal (· * ·) (b ^ o)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.opow_lt_opow_iff_right`：opow_lt_opow_iff_right {a b c : Ordinal}
+ (a1 : 1 < a) : a ^ b < a ^ c ↔ b < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.opow_add`：opow_add (a b c : Ordinal) : a ^ (b + c) = a ^ b * a ^
+ c
 -/
 theorem isPrincipal_add_of_isPrincipal_mul_opow (hb : 1 < b) (ho : IsPrincipal (· * ·) (b ^ o)) :
     IsPrincipal (· + ·) o := by
@@ -1685,53 +1338,61 @@ theorem isPrincipal_add_of_isPrincipal_mul_opow (hb : 1 < b) (ho : IsPrincipal (
 @[deprecated (since := "2026-03-17")]
 alias principal_add_of_principal_mul_opow := isPrincipal_add_of_isPrincipal_mul_opow
 
-/--
-theorem `isPrincipal_mul_iff_le_two_or_omega0_opow_opow` / 定理 `isPrincipal_mul_iff_le_two_or_omega0_opow_opow`
+/-- The main characterization theorem for multiplicative principal ordinals. -/
+/-
+**Ordinal.isPrincipal_mul_iff_le_two_or_omega0_opow_opow** 是 Mathlib 中的一个定理，位于命名
+空间 `Ordinal`。
+形式化陈述：isPrincipal_mul_iff_le_two_or_omega0_opow_opow : IsPrincipal (· * ·) o ↔ o
+ <= 2 ∨ o in Set.range (ω ^ ω ^ · : Ordinal -> Ordinal)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.isPrincipal_add_iff_zero_or_omega0_opow`：isPrincipal_add_iff_zer
+o_or_omega0_opow : IsPrincipal (· + ·) o ↔ o = 0 ∨ o in Set.range (ω ^ · : Ordin
+al -> Ordinal)
+· 使用定理 `Ordinal.isPrincipal_add_of_isPrincipal_mul`：isPrincipal_add_of_isPrincip
+al_mul (ho : IsPrincipal (· * ·) o) (ho₂ : o != 2) : IsPrincipal (· + ·) o
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `not_lt_zero`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], ¬a < 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.isPrincipal_add_of_isPrincipal_mul_opow`：isPrincipal_add_of_isPr
+incipal_mul_opow (hb : 1 < b) (ho : IsPrincipal (· * ·) (b ^ o)) : IsPrincipal (
+· + ·) o
+· 使用定理 `Ordinal.one_lt_omega0`：one_lt_omega0 : 1 < ω
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Ordinal.opow_zero`：opow_zero (a : Ordinal) : a ^ (0 : Ordinal) = 1
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Ordinal.isPrincipal_mul_of_le_two`：isPrincipal_mul_of_le_two (ho : o <= 
+2) : IsPrincipal (· * ·) o
+· 使用定理 `Ordinal.isPrincipal_mul_omega0_opow_opow`：isPrincipal_mul_omega0_opow_op
+ow (o : Ordinal) : IsPrincipal (· * ·) (ω ^ ω ^ o)
 
-English:
-theorem isPrincipal_mul_iff_le_two_or_omega0_opow_opow
-  proof: by
-  refine ⟨fun ho => ?_, ?_⟩
-  · rcases le_or_gt o 2 with ho₂ | ho₂
-    · exact Or.inl ho₂
-    · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
-        (isPrincipal_add_of_isPrincipal_mul ho ho₂.ne') with (rfl | ⟨a, rfl⟩)
-      · exact (not_lt_zero ho₂).elim
-      · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
-          (isPrincipal_add_of_isPrincipal_mul_opow one_lt_omega0 ho) with (rfl | ⟨b, rfl⟩)
-        · simp
-        · exact Or.inr ⟨b, rfl⟩
-  · rintro (ho₂ | ⟨a, rfl⟩)
-    · exact isPrincipal_mul_of_le_two ho₂
-    · exact isPrincipal_mul_omega0_opow_opow a
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_iff_le_two_or_omega0_opow_opow := isPrincipal_mul_iff_le_two_or_omega0_opow_opow
-
-中文:
-定理 isPrincipal_mul_iff_le_two_or_omega0_opow_opow
-  证明: by
-  refine ⟨fun ho => ?_, ?_⟩
-  · rcases le_or_gt o 2 with ho₂ | ho₂
-    · exact Or.inl ho₂
-    · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
-        (isPrincipal_add_of_isPrincipal_mul ho ho₂.ne') with (rfl | ⟨a, rfl⟩)
-      · exact (not_lt_zero ho₂).elim
-      · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
-          (isPrincipal_add_of_isPrincipal_mul_opow one_lt_omega0 ho) with (rfl | ⟨b, rfl⟩)
-        · simp
-        · exact Or.inr ⟨b, rfl⟩
-  · rintro (ho₂ | ⟨a, rfl⟩)
-    · exact isPrincipal_mul_of_le_two ho₂
-    · exact isPrincipal_mul_omega0_opow_opow a
-
-@[deprecated (since := "2026-03-17")]
-alias principal_mul_iff_le_two_or_omega0_opow_opow := isPrincipal_mul_iff_le_two_or_omega0_opow_opow
-
-Depends on / 依赖: Or.inl, Or.inr, isPrincipal_add_iff_zero_or_omega0_opow, isPrincipal_add_of_isPrincipal_mul, isPrincipal_add_of_isPrincipal_mul_opow, isPrincipal_mul_of_le_two, isPrincipal_mul_omega0_opow_, le_or_gt, not_lt_zero, one_lt_omega0
+--- 原说明 ---
+The main characterization theorem for multiplicative principal ordinals.
 -/
 theorem isPrincipal_mul_iff_le_two_or_omega0_opow_opow :
-    IsPrincipal (· * ·) o ↔ o <= 2 ∨ o in Set.range (ω ^ ω ^ · : Ordinal -> Ordinal) := by
+    IsPrincipal (· * ·) o ↔ o ≤ 2 ∨ o ∈ Set.range (ω ^ ω ^ · : Ordinal → Ordinal) := by
   refine ⟨fun ho => ?_, ?_⟩
   · rcases le_or_gt o 2 with ho₂ | ho₂
     · exact Or.inl ho₂
@@ -1748,103 +1409,114 @@ theorem isPrincipal_mul_iff_le_two_or_omega0_opow_opow :
 
 @[deprecated (since := "2026-03-17")]
 alias principal_mul_iff_le_two_or_omega0_opow_opow := isPrincipal_mul_iff_le_two_or_omega0_opow_opow
-
-/--
-theorem `mul_omega0_dvd` / 定理 `mul_omega0_dvd`
-
-English:
-theorem mul_omega0_dvd
-  given: (a0 : 0 < a) (ha : a < ω)
-  statement: forall {b}, ω ∣ b -> a * b = b
-
-中文:
-定理 mul_omega0_dvd
-  条件: (a0 : 0 < a) (ha : a < ω)
-  结论: 对任意 {b}, ω ∣ b -> a * b = b
+/-
+**Ordinal.mul_omega0_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {a : Ordinal.{u}}, 0 < a → a < Ordinal.omega0 → ∀ {b : Ordinal.{u}}, Ord
+inal.omega0 ∣ b → a * b = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Ordinal.mul_omega0`：mul_omega0 (a0 : 0 < a) (ha : a < ω) : a * ω = ω
 -/
-theorem mul_omega0_dvd (a0 : 0 < a) (ha : a < ω) : forall {b}, ω ∣ b -> a * b = b
+theorem mul_omega0_dvd (a0 : 0 < a) (ha : a < ω) : ∀ {b}, ω ∣ b → a * b = b
   | _, ⟨b, rfl⟩ => by rw [← mul_assoc, mul_omega0 a0 ha]
-
-/--
-theorem `mul_eq_opow_log_succ` / 定理 `mul_eq_opow_log_succ`
-
-English:
-theorem mul_eq_opow_log_succ
-  given: (ha : a != 0) (hb : IsPrincipal (· * ·) b) (hb₂ : 2 < b)
-  proof: by
-  apply le_antisymm
-  · have hbl := isSuccLimit_of_isPrincipal_mul hb₂ hb
-    rw [(isNormal_mul_right (pos_iff_ne_zero.2 ha)).apply_of_isSuccLimit hbl]; rw [Ordinal.iSup_le_iff]
-    intro ⟨c, hcb⟩
-    have hb₁ : 1 < b := one_lt_two.trans hb₂
-    have hbo₀ : b ^ log b a != 0 := pos_iff_ne_zero.1 (opow_pos _ (zero_lt_one.trans hb₁))
-    apply (mul_le_mul_left (le_of_lt (lt_mul_succ_div a hbo₀)) c).trans
-    rw [mul_assoc]; rw [opow_succ]
-    gcongr
-    refine (hb (hbl.succ_lt ?_) hcb).le
-    rw [← lt_mul_iff_div_lt hbo₀]; rw [← opow_succ]
-    exact lt_opow_succ_log_self hb₁ _
-  · grw [opow_succ, opow_log_le_self b ha]
-
-中文:
-定理 mul_eq_opow_log_succ
-  条件: (ha : a != 0) (hb : 是Principal (· * ·) b) (hb₂ : 2 < b)
-  证明: by
-  apply le_antisymm
-  · have hbl := isSuccLimit_of_isPrincipal_mul hb₂ hb
-    rw [(isNormal_mul_right (pos_iff_ne_zero.2 ha)).apply_of_isSuccLimit hbl]; rw [Ordinal.iSup_le_iff]
-    intro ⟨c, hcb⟩
-    have hb₁ : 1 < b := one_lt_two.trans hb₂
-    have hbo₀ : b ^ log b a != 0 := pos_iff_ne_zero.1 (opow_pos _ (zero_lt_one.trans hb₁))
-    apply (mul_le_mul_left (le_of_lt (lt_mul_succ_div a hbo₀)) c).trans
-    rw [mul_assoc]; rw [opow_succ]
-    gcongr
-    refine (hb (hbl.succ_lt ?_) hcb).le
-    rw [← lt_mul_iff_div_lt hbo₀]; rw [← opow_succ]
-    exact lt_opow_succ_log_self hb₁ _
-  · grw [opow_succ, opow_log_le_self b ha]
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le_iff, apply_of_isSuccLimit, hbl.succ_lt, iSup_le_iff, isNormal_mul_right, isSuccLimit_of_isPrincipal_mul, le_antisymm, le_of_lt, lt_mul_iff_div_lt, lt_mul_succ_div, mul_assoc, mul_le_mul_left, one_lt_two, one_lt_two.trans, opow_, opow_pos, opow_succ, pos_iff_ne_zero, succ_lt
+/-
+**Ordinal.mul_eq_opow_log_succ** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：mul_eq_opow_log_succ (ha : a != 0) (hb : IsPrincipal (· * ·) b) (hb₂ : 2 <
+ b) : a * b = b ^ succ (log b a)
+参数：ha : a != 0；hb : IsPrincipal (· * ·) b；hb₂ : 2 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.isSuccLimit_of_isPrincipal_mul`：isSuccLimit_of_isPrincipal_mul (
+ho₂ : 2 < o) (ho : IsPrincipal (· * ·) o) : IsSuccLimit o
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.IsNormal.apply_of_isSuccLimit`：apply_of_isSuccLimit (hf : IsNormal
+ f) (ha : IsSuccLimit a) : f a = ⨆ b : Iio a, f b
+· 使用定理 `Ordinal.isNormal_mul_right`：isNormal_mul_right {a : Ordinal} (h : 0 < a)
+ : IsNormal (a * ·)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.iSup_le_iff`：∀ {ι : Type u_3} {f : ι → Ordinal.{u}} {a : Ordinal
+.{u}} [Small.{u, u_3} ι], ⨆ i, f i ≤ a ↔ ∀ (i : ι), f i ≤ a
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用引理 `one_lt_two`：one_lt_two [AddLeftStrictMono α] : (1 : α) < 2
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.opow_pos`：opow_pos {a : Ordinal} (b : Ordinal) (a0 : 0 < a) : 0 
+< a ^ b
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_left`：mul_le_mul_left [i : MulRightMono α] {b c : α} (bc : b 
+<= c) (a : α) : b * a <= c * a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Ordinal.lt_mul_succ_div`：lt_mul_succ_div (a) {b : Ordinal} (h : b != 0) 
+: a < b * succ (a / b)
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Ordinal.opow_succ`：opow_succ (a b : Ordinal) : a ^ succ b = a ^ b * a
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Order.IsSuccLimit.succ_lt`：∀ {α : Type u_1} {a b : α} [inst : PartialOrd
+er α] [inst_1 : SuccOrder α],   Order.IsSuccLimit b → a < b → Order.succ a < b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.lt_mul_iff_div_lt`：lt_mul_iff_div_lt {a b c : Ordinal} (ha : a !
+= 0) : c < a * b ↔ c / a < b
+· 使用定理 `Ordinal.lt_opow_succ_log_self`：lt_opow_succ_log_self {b : Ordinal} (hb :
+ 1 < b) (x : Ordinal) : x < b ^ succ (log b x)
+（共 32 条，此处仅展示前 30 条）
 -/
-theorem mul_eq_opow_log_succ (ha : a != 0) (hb : IsPrincipal (· * ·) b) (hb₂ : 2 < b) :
+theorem mul_eq_opow_log_succ (ha : a ≠ 0) (hb : IsPrincipal (· * ·) b) (hb₂ : 2 < b) :
     a * b = b ^ succ (log b a) := by
   apply le_antisymm
   · have hbl := isSuccLimit_of_isPrincipal_mul hb₂ hb
-    rw [(isNormal_mul_right (pos_iff_ne_zero.2 ha)).apply_of_isSuccLimit hbl]; rw [Ordinal.iSup_le_iff]
+    rw [(isNormal_mul_right (pos_iff_ne_zero.2 ha)).apply_of_isSuccLimit hbl,
+      Ordinal.iSup_le_iff]
     intro ⟨c, hcb⟩
     have hb₁ : 1 < b := one_lt_two.trans hb₂
-    have hbo₀ : b ^ log b a != 0 := pos_iff_ne_zero.1 (opow_pos _ (zero_lt_one.trans hb₁))
+    have hbo₀ : b ^ log b a ≠ 0 := pos_iff_ne_zero.1 (opow_pos _ (zero_lt_one.trans hb₁))
     apply (mul_le_mul_left (le_of_lt (lt_mul_succ_div a hbo₀)) c).trans
-    rw [mul_assoc]; rw [opow_succ]
+    rw [mul_assoc, opow_succ]
     gcongr
     refine (hb (hbl.succ_lt ?_) hcb).le
-    rw [← lt_mul_iff_div_lt hbo₀]; rw [← opow_succ]
+    rw [← lt_mul_iff_div_lt hbo₀, ← opow_succ]
     exact lt_opow_succ_log_self hb₁ _
   · grw [opow_succ, opow_log_le_self b ha]
 
+/-! #### Exponential principal ordinals -/
 
-/--
-theorem `isPrincipal_opow_omega0` / 定理 `isPrincipal_opow_omega0`
+/-
+**Ordinal.isPrincipal_opow_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isPrincipal_opow_omega0 : IsPrincipal (· ^ ·) ω
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.lt_omega0`：lt_omega0 {o : Ordinal} : o < ω ↔ exists n : Nat, o =
+ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.opow_natCast`：opow_natCast (a : Ordinal) (n : Nat) : a ^ (n : Or
+dinal) = a ^ n
 
-English:
-theorem isPrincipal_opow_omega0
-  statement: IsPrincipal (· ^ ·) ω
-  proof: fun a b ha hb =>
-  match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
-  | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by simp [← natCast_pow]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_opow_omega0 := isPrincipal_opow_omega0
-
-中文:
-定理 isPrincipal_opow_omega0
-  结论: 是Principal (· ^ ·) ω
-  证明: fun a b ha hb =>
-  match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
-  | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by simp [← natCast_pow]
-
-@[deprecated (since := "2026-03-17")]
-alias principal_opow_omega0 := isPrincipal_opow_omega0
+--- 原说明 ---
+#### Exponential principal ordinals
 -/
 theorem isPrincipal_opow_omega0 : IsPrincipal (· ^ ·) ω := fun a b ha hb =>
   match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
@@ -1852,51 +1524,56 @@ theorem isPrincipal_opow_omega0 : IsPrincipal (· ^ ·) ω := fun a b ha hb =>
 
 @[deprecated (since := "2026-03-17")]
 alias principal_opow_omega0 := isPrincipal_opow_omega0
-
-/--
-theorem `opow_omega0` / 定理 `opow_omega0`
-
-English:
-theorem opow_omega0
-  given: (a1 : 1 < a) (h : a < ω)
-  statement: a ^ ω = ω
-  proof: ((opow_le_of_isSuccLimit (one_le_iff_ne_zero.1 <| le_of_lt a1) isSuccLimit_omega0).2 fun _ hb =>
-      (isPrincipal_opow_omega0 h hb).le).antisymm
-  (right_le_opow _ a1)
-
-中文:
-定理 opow_omega0
-  条件: (a1 : 1 < a) (h : a < ω)
-  结论: a ^ ω = ω
-  证明: ((opow_le_of_isSuccLimit (one_le_iff_ne_zero.1 <| le_of_lt a1) isSuccLimit_omega0).2 fun _ hb =>
-      (isPrincipal_opow_omega0 h hb).le).antisymm
-  (right_le_opow _ a1)
-
-Depends on / 依赖: antisymm, isPrincipal_opow_omega0, isSuccLimit_omega0, le_of_lt, one_le_iff_ne_zero, opow_le_of_isSuccLimit, right_le_opow
+/-
+**Ordinal.opow_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：opow_omega0 (a1 : 1 < a) (h : a < ω) : a ^ ω = ω
+参数：a1 : 1 < a；h : a < ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.opow_le_of_isSuccLimit`：opow_le_of_isSuccLimit {a b c : Ordinal}
+ (a0 : a != 0) (h : IsSuccLimit b) : a ^ b <= c ↔ forall b' < b, a ^ b' <= c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.one_le_iff_ne_zero`：one_le_iff_ne_zero [AddMonoidWithOne α] [NeZer
+o (1 : α)] [SuccAddOrder α] [IsBotZeroClass α] : 1 <= x ↔ x != 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Ordinal.isSuccLimit_omega0`：isSuccLimit_omega0 : IsSuccLimit ω
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Ordinal.isPrincipal_opow_omega0`：isPrincipal_opow_omega0 : IsPrincipal (
+· ^ ·) ω
+· 使用定理 `Ordinal.right_le_opow`：right_le_opow {a : Ordinal} (b : Ordinal) (a1 : 1
+ < a) : b <= a ^ b
 -/
 theorem opow_omega0 (a1 : 1 < a) (h : a < ω) : a ^ ω = ω :=
   ((opow_le_of_isSuccLimit (one_le_iff_ne_zero.1 <| le_of_lt a1) isSuccLimit_omega0).2 fun _ hb =>
       (isPrincipal_opow_omega0 h hb).le).antisymm
   (right_le_opow _ a1)
-
-/--
-theorem `natCast_opow_omega0` / 定理 `natCast_opow_omega0`
-
-English:
-theorem natCast_opow_omega0
-  given: {n : Nat} (hn : 1 < n)
-  statement: n ^ ω = ω
-  proof: opow_omega0 (mod_cast hn) (natCast_lt_omega0 n)
-
-中文:
-定理 natCast_opow_omega0
-  条件: {n : 自然数} (hn : 1 < n)
-  结论: n ^ ω = ω
-  证明: opow_omega0 (mod_cast hn) (natCast_lt_omega0 n)
-
-Depends on / 依赖: mod_cast, natCast_lt_omega0, opow_omega0
+/-
+**Ordinal.natCast_opow_omega0** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：natCast_opow_omega0 {n : Nat} (hn : 1 < n) : n ^ ω = ω
+参数：hn : 1 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.opow_omega0`：opow_omega0 (a1 : 1 < a) (h : a < ω) : a ^ ω = ω
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.natCast_lt_omega0`：natCast_lt_omega0 (n : Nat) : ↑n < ω
 -/
-theorem natCast_opow_omega0 {n : Nat} (hn : 1 < n) : n ^ ω = ω :=
+theorem natCast_opow_omega0 {n : ℕ} (hn : 1 < n) : n ^ ω = ω :=
   opow_omega0 (mod_cast hn) (natCast_lt_omega0 n)
 
 end Ordinal
+

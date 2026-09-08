@@ -19,22 +19,17 @@ variable [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 variable [MetricSpace P] [NormedAddTorsor E P]
 variable [FiniteDimensional 𝕜 E]
 
-/--
-theorem `smooth_barycentric_coord` / 定理 `smooth_barycentric_coord`
-
-English:
-theorem smooth_barycentric_coord
-  given: (b : AffineBasis ι 𝕜 E) (i : ι)
-  statement: ContDiff 𝕜 ⊤ (b.coord i)
-  proof: (⟨b.coord i, continuous_barycentric_coord b i⟩ : E ->ᴬ[𝕜] 𝕜).contDiff
-
-中文:
-定理 smooth_barycentric_coord
-  条件: (b : 仿射基 ι 𝕜 E) (i : ι)
-  结论: 连续可微 𝕜 ⊤ (b.coord i)
-  证明: (⟨b.coord i, continuous_barycentric_coord b i⟩ : E ->ᴬ[𝕜] 𝕜).contDiff
-
-Depends on / 依赖: b.coord, contDiff, continuous_barycentric_coord
+/-
+**smooth_barycentric_coord** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smooth_barycentric_coord (b : AffineBasis ι 𝕜 E) (i : ι) : ContDiff 𝕜 ⊤ (b
+.coord i)
+参数：b : AffineBasis ι 𝕜 E；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAffineMap.contDiff`：contDiff {n : WithTop Nat∞} (f : V ->ᴬ[𝕜] 
+W) : ContDiff 𝕜 n f
+· 使用定理 `continuous_barycentric_coord`：continuous_barycentric_coord (i : ι) : Con
+tinuous (b.coord i)
 -/
 theorem smooth_barycentric_coord (b : AffineBasis ι 𝕜 E) (i : ι) : ContDiff 𝕜 ⊤ (b.coord i) :=
-  (⟨b.coord i, continuous_barycentric_coord b i⟩ : E ->ᴬ[𝕜] 𝕜).contDiff
+  (⟨b.coord i, continuous_barycentric_coord b i⟩ : E →ᴬ[𝕜] 𝕜).contDiff

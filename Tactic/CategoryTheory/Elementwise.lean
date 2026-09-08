@@ -45,52 +45,36 @@ section theorems
 
 universe u
 
-/--
-theorem `hom_elementwise` / 定理 `hom_elementwise`
-
-English:
-theorem hom_elementwise
-  statement: {C : Type*} [Category* C]
-  proof: by rw [h]
-
-中文:
-定理 hom_elementwise
-  结论: {C : 类型} [范畴* C]
-  证明: by rw [h]
+/-
+**Mathlib.Tactic.Elementwise.hom_elementwise** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.Elementwise`。
+形式化陈述：hom_elementwise {C : Type*} [Category* C] {FC : outParam <| C -> C -> Type
+*} {CC : outParam <| C -> Type*} {_ : outParam <| forall X Y, FunLike (FC X Y) (
+CC X) (CC Y)} [ConcreteCategory C FC] {X Y : C} {f g : X ⟶ Y} (h : f = g) (x : C
+C X) : f x = g x
+参数：FC X Y；CC X；CC Y；h : f = g；x : CC X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem hom_elementwise {C : Type*} [Category* C]
-    {FC : outParam <| C -> C -> Type*} {CC : outParam <| C -> Type*}
-    {_ : outParam <| forall X Y, FunLike (FC X Y) (CC X) (CC Y)} [ConcreteCategory C FC]
+    {FC : outParam <| C → C → Type*} {CC : outParam <| C → Type*}
+    {_ : outParam <| ∀ X Y, FunLike (FC X Y) (CC X) (CC Y)} [ConcreteCategory C FC]
     {X Y : C} {f g : X ⟶ Y} (h : f = g) (x : CC X) : f x = g x := by rw [h]
 
 end theorems
 
-/--
-Definition of `elementwiseThms` / `elementwiseThms` 的定义
+/-- List of simp lemmas to apply to the elementwise theorem. -/
+/-
+**Mathlib.Tactic.Elementwise.elementwiseThms** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Elementwise`。
+形式化陈述：elementwiseThms : List Name
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elementwiseThms
-  signature: : List Name
-  body: [ -- ConcreteCategory lemmas
-    ``ConcreteCategory.coe_id, ``ConcreteCategory.coe_comp,
-    ``CategoryTheory.comp_apply, ``CategoryTheory.id_apply,
-    ``CategoryTheory.hom_id, ``CategoryTheory.hom_comp, ``id_eq, ``Function.comp_apply,
-    -- simp can itself simplify trivial equalities into `true`. Adding this lemma makes it
-    -- easier to detect when this has occurred.
-    ``implies_true]
-
-中文:
-定义 elementwiseThms
-  签名: : 列表 Name
-  定义体: [ -- ConcreteCategory lemmas
-    ``ConcreteCategory.coe_id, ``ConcreteCategory.coe_comp,
-    ``CategoryTheory.comp_apply, ``CategoryTheory.id_apply,
-    ``CategoryTheory.hom_id, ``CategoryTheory.hom_comp, ``id_eq, ``Function.comp_apply,
-    -- simp can itself simplify trivial equalities into `true`. Adding this lemma makes it
-    -- easier to detect when this has occurred.
-    ``implies_true]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, CategoryTheory.hom_comp, CategoryTheory.hom_id, CategoryTheory.id_apply, ConcreteCategory, ConcreteCategory.coe_comp, ConcreteCategory.coe_id, ConditionallyCompleteLinearOrder, ConditionallyCompleteLinearOrder.toCompactIccSpace, Function, Function.comp_apply, coe_comp, coe_id, comp_apply, hom_comp, hom_id, id_apply, id_eq, lemmas
+--- 原说明 ---
+List of simp lemmas to apply to the elementwise theorem.
 -/
 def elementwiseThms : List Name :=
   [ -- ConcreteCategory lemmas
@@ -102,67 +86,38 @@ def elementwiseThms : List Name :=
     ``implies_true]
 
 /--
-Definition of `elementwiseExpr` / `elementwiseExpr` 的定义
+Given an equation `f = g` between morphisms `X ⟶ Y` in a category `C`
+(possibly after a `∀` binder), produce the equation `∀ (x : X), f x = g x` or
+`∀ FC CC _ [ConcreteCategory C FC] (x : X), f x = g x` as needed (after the `∀` binder), but
+with compositions fully right associated and identities removed.
 
-English:
-definition elementwiseExpr
-  signature: (src : Name) (pf : Expr) (simpSides := true)
-  body: do
-  let type := (← instantiateMVars (← inferType pf)).cleanupAnnotations
-  forallTelescope type fun fvars type' => do
-    mkHomElementwise type' (mkAppN pf fvars) fun eqPf instConcr? => do
-      -- First simplify using elementwise-specific lemmas
-      let mut eqPf' ← simpType (simpOnlyNames elementwiseThms (config := { decide := false })) eqPf
-      if (← inferType eqPf') == .const ``True [] then
-        throwError "elementwise lemma for {src} is trivial after applying ConcreteCategory \
-          lemmas, which can be caused by how applications are unfolded. \
-          Using elementwise is unnecessary."
-      if simpSides then
-        let ctx ← Simp.Context.mkDefault
-        let (ty', eqPf'') ← simpEq (fun e => return (← simp e ctx).1) (← inferType eqPf') eqPf'
-        -- check that it's not a simp-trivial equality:
-        forallTelescope ty' fun _ ty' => do
-          if let some (_, lhs, rhs) := ty'.eq? then
-            if ← Batteries.Tactic.Lint.isSimpEq lhs rhs then
-              throwError "applying simp to both sides reduces elementwise lemma for {src} \
-                to the trivial equality {ty'}. \
-                Either add `nosimp` or remove the `elementwise` attribute."
-        eqPf' ← mkExpectedTypeHint eqPf'' ty'
-      if let some (w, uF, insts) := instConcr? then
-        return (← Meta.mkLambdaFVars (fvars.append insts) eqPf', (w, uF))
-      else
-        return (← Meta.mkLambdaFVars fvars eqPf', none)
+Returns the proof of the new theorem along with (optionally) a new level metavariable
+for the first universe parameter to `ConcreteCategory`.
 
-中文:
-定义 elementwiseExpr
-  签名: (src : Name) (pf : Expr) (simpSides := true)
-  定义体: do
-  let type := (← instantiateMVars (← inferType pf)).cleanupAnnotations
-  forallTelescope type fun fvars type' => do
-    mkHomElementwise type' (mkAppN pf fvars) fun eqPf instConcr? => do
-      -- First simplify using elementwise-specific lemmas
-      let mut eqPf' ← simpType (simpOnlyNames elementwiseThms (config := { decide := false })) eqPf
-      if (← inferType eqPf') == .const ``True [] then
-        throwError "elementwise lemma for {src} is trivial after applying ConcreteCategory \
-          lemmas, which can be caused by how applications are unfolded. \
-          Using elementwise is unnecessary."
-      if simpSides then
-        let ctx ← Simp.Context.mkDefault
-        let (ty', eqPf'') ← simpEq (fun e => return (← simp e ctx).1) (← inferType eqPf') eqPf'
-        -- check that it's not a simp-trivial equality:
-        forallTelescope ty' fun _ ty' => do
-          if let some (_, lhs, rhs) := ty'.eq? then
-            if ← Batteries.Tactic.Lint.isSimpEq lhs rhs then
-              throwError "applying simp to both sides reduces elementwise lemma for {src} \
-                to the trivial equality {ty'}. \
-                Either add `nosimp` or remove the `elementwise` attribute."
-        eqPf' ← mkExpectedTypeHint eqPf'' ty'
-      if let some (w, uF, insts) := instConcr? then
-        return (← Meta.mkLambdaFVars (fvars.append insts) eqPf', (w, uF))
-      else
-        return (← Meta.mkLambdaFVars fvars eqPf', none)
+The `simpSides` option controls whether to simplify both sides of the equality, for simpNF
+purposes.
+-/
+/-
+**Mathlib.Tactic.Elementwise.elementwiseExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Elementwise`。
+形式化陈述：elementwiseExpr (src : Name) (pf : Expr) (simpSides
+参数：src : Name；pf : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: isCompact_Icc, isCompact_univ_pi, pi_univ_Icc
+--- 原说明 ---
+Given an equation `f = g` between morphisms `X ⟶ Y` in a category `C`
+(possibly after a `∀` binder), produce the equation `∀ (x : X), f x = g x` or
+`∀ FC CC _ [ConcreteCategory C FC] (x : X), f x = g x` as needed (after the `∀` 
+binder), but
+with compositions fully right associated and identities removed.
+
+Returns the proof of the new theorem along with (optionally) a new level metavar
+iable
+for the first universe parameter to `ConcreteCategory`.
+
+The `simpSides` option controls whether to simplify both sides of the equality, 
+for simpNF
+purposes.
 -/
 def elementwiseExpr (src : Name) (pf : Expr) (simpSides := true) :
     MetaM (Expr × Option (Level × Level)) := do
@@ -200,7 +155,7 @@ where
     let (``CategoryTheory.Category.toCategoryStruct, #[C, instC]) := instCS.getAppFnArgs | failure
     return (C, instC)
   mkHomElementwise {α} [Inhabited α] (eqTy eqPf : Expr)
-      (k : Expr -> Option (Level × Level × Array Expr) -> MetaM α) :
+      (k : Expr → Option (Level × Level × Array Expr) → MetaM α) :
       MetaM α := do
     let (C, instC) ← try extractCatInstance eqTy catch _ =>
       throwError "elementwise expects equality of morphisms in a category"
@@ -234,36 +189,14 @@ where
           let eqPf' ← mkAppM ``hom_elementwise #[eqPf]
           k eqPf' (some (w, uF, cfvars))
 
-/--
-Definition of `mkUnusedName` / `mkUnusedName` 的定义
+/-- Gives a name based on `baseName` that's not already in the list. -/
+/-
+**Mathlib.Tactic.Elementwise.mkUnusedName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Elementwise`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkUnusedName
-  signature: (names : List Name) (baseName : Name)
-  body: if not (names.contains baseName) then
-    baseName
-  else
-    let rec loop (i : Nat := 0) : Name :=
-      let w := Name.appendIndexAfter baseName i
-      if names.contains w then
-        loop (i + 1)
-      else
-        w
-    loop 1
-
-中文:
-定义 mkUnusedName
-  签名: (names : 列表 Name) (baseName : Name)
-  定义体: if not (names.contains baseName) then
-    baseName
-  else
-    let rec loop (i : Nat := 0) : Name :=
-      let w := Name.appendIndexAfter baseName i
-      if names.contains w then
-        loop (i + 1)
-      else
-        w
-    loop 1
+--- 原说明 ---
+Gives a name based on `baseName` that's not already in the list.
 -/
 private partial def mkUnusedName (names : List Name) (baseName : Name) : Name :=
   if not (names.contains baseName) then
@@ -334,7 +267,7 @@ initialize registerBuiltinAttribute {
           throwError "Could not create level parameter `w` for ConcreteCategory instance"
         unless ← isLevelDefEq levelUF (mkLevelParam uF) do
           throwError "Could not create level parameter `uF` for ConcreteCategory instance"
-pure uF :: w :: levels
+        pure <| uF :: w :: levels
       else
         pure levels
       pure (newValue, newLevels)
@@ -368,3 +301,4 @@ elab "elementwise_of% " t:term : term => do
   return pf
 
 end Mathlib.Tactic.Elementwise
+

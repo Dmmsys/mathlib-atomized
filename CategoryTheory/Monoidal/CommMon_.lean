@@ -22,24 +22,17 @@ namespace CategoryTheory
 variable {C : Type u₁} [Category.{v₁} C] [MonoidalCategory.{v₁} C] [BraidedCategory.{v₁} C]
 
 variable (C) in
-/--
-Definition of `CommMon` / `CommMon` 的定义
+/-- A commutative monoid object internal to a monoidal category.
+-/
+/-
+**CategoryTheory.CommMon** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.MonoidalCategory C] → [CategoryTheory.BraidedCategory C] → Ty
+pe (max u₁ v₁)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommMon
-  parameters: where
-  axioms and operations (3):
-    - X : C
-    - [mon : MonObj X]
-    - [comm : IsCommMonObj X]
-
-中文:
-结构 交换幺半群
-  参数: where
-  公理与运算 (3 个):
-    - X : C
-    - [mon : MonObj X]
-    - [comm : 是交换MonObj X]
+--- 原说明 ---
+A commutative monoid object internal to a monoidal category.
 -/
 structure CommMon where
   /-- The underlying object in the ambient monoidal category -/
@@ -53,18 +46,16 @@ namespace CommMon
 
 /-- A commutative monoid object is a monoid object. -/
 @[simps X]
-/--
-Definition of `toMon` / `toMon` 的定义
+/-
+**CategoryTheory.CommMon.toMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMon
+`。
+形式化陈述：toMon (A : CommMon C) : Mon C
+参数：A : CommMon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMon
-  signature: (A : CommMon C)
-  body: ⟨A.X⟩
-
-中文:
-定义 toMon
-  签名: (A : 交换幺半群 C)
-  定义体: ⟨A.X⟩
+--- 原说明 ---
+A commutative monoid object is a monoid object.
 -/
 def toMon (A : CommMon C) : Mon C := ⟨A.X⟩
 
@@ -72,141 +63,93 @@ variable (C) in
 /-- The trivial commutative monoid object. We later show this is initial in `CommMon C`.
 -/
 @[simps!]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.CommMon.trivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommM
+on`。
+形式化陈述：trivial : CommMon C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCommMonObj.instTensorUnit`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   [
+inst_2 : CategoryTheory.BraidedC…
 
-English:
-definition trivial
-  signature: : CommMon C
-  body: { X := 𝟙_ C }
-
-中文:
-定义 trivial
-  签名: : 交换幺半群 C
-  定义体: { X := 𝟙_ C }
+--- 原说明 ---
+The trivial commutative monoid object. We later show this is initial in `CommMon
+ C`.
 -/
 def trivial : CommMon C := { X := 𝟙_ C }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (CommMon C)
-  body: ⟨trivial C⟩
-
-中文:
-实例 :
-  签名: 可居 (交换幺半群 C)
-  定义体: ⟨trivial C⟩
+/-
+**CategoryTheory.CommMon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (CommMon C) :=
   ⟨trivial C⟩
 
 variable {M : CommMon C}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (CommMon C)
-  body: inferInstanceAs (Category (InducedCategory _ CommMon.toMon))
-
-@[simp]
-
-中文:
-实例 :
-  签名: 范畴 (交换幺半群 C)
-  定义体: inferInstanceAs (Category (InducedCategory _ CommMon.toMon))
-
-@[simp]
-
-Depends on / 依赖: Category, CommMon, CommMon.toMon, InducedCategory
+/-
+**CategoryTheory.CommMon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (CommMon C) :=
   inferInstanceAs (Category (InducedCategory _ CommMon.toMon))
 
 @[simp]
-/--
-theorem `id_hom` / 定理 `id_hom`
-
-English:
-theorem id_hom
-  given: (A : CommMon C)
-  statement: Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_hom
-  条件: (A : 交换幺半群 C)
-  结论: 幺半群.态射.hom (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommMon.id_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：id_hom (A : CommMon C) : Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A
+.X
+参数：A : CommMon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom (A : CommMon C) : Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X :=
   rfl
 
 @[simp]
-/--
-theorem `comp_hom` / 定理 `comp_hom`
-
-English:
-theorem comp_hom
-  given: {R S T : CommMon C} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 comp_hom
-  条件: {R S T : 交换幺半群 C} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
-
-@[ext]
+/-
+**CategoryTheory.CommMon.comp_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comm
+Mon`。
+形式化陈述：comp_hom {R S T : CommMon C} (f : R ⟶ S) (g : S ⟶ T) : Mon.Hom.hom (f ≫ g)
+.hom = f.hom.hom ≫ g.hom.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom {R S T : CommMon C} (f : R ⟶ S) (g : S ⟶ T) :
     Mon.Hom.hom (f ≫ g).hom = f.hom.hom ≫ g.hom.hom :=
   rfl
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {A B : CommMon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
-  statement: f = g
-  proof: InducedCategory.hom_ext (Mon.Hom.ext h)
-
-中文:
-引理 hom_ext
-  条件: {A B : 交换幺半群 C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
-  结论: f = g
-  证明: InducedCategory.hom_ext (Mon.Hom.ext h)
-
-Depends on / 依赖: InducedCategory, InducedCategory.hom_ext, Mon.Hom.ext, hom_ext
+/-
+**CategoryTheory.CommMon.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CommM
+on`。
+形式化陈述：hom_ext {A B : CommMon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom) : f = 
+g
+参数：f g : A ⟶ B；h : f.hom.hom = g.hom.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `CategoryTheory.Mon.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Categ
+ory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {M N : CategoryTh
+eory.Mon C} {x y…
 -/
 lemma hom_ext {A B : CommMon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom) : f = g :=
   InducedCategory.hom_ext (Mon.Hom.ext h)
 
 /-- Constructor for morphisms in `CommMon C`. -/
 @[simps]
-/--
-Definition of `homMk` / `homMk` 的定义
+/-
+**CategoryTheory.CommMon.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMon
+`。
+形式化陈述：homMk {A B : CommMon C} (f : A.toMon ⟶ B.toMon) : A ⟶ B where hom
+参数：f : A.toMon ⟶ B.toMon。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: {A B : CommMon C} (f : A.toMon ⟶ B.toMon)
-  body: f
-
-中文:
-定义 homMk
-  签名: {A B : 交换幺半群 C} (f : A.toMon ⟶ B.toMon)
-  定义体: f
+--- 原说明 ---
+Constructor for morphisms in `CommMon C`.
 -/
 def homMk {A B : CommMon C} (f : A.toMon ⟶ B.toMon) : A ⟶ B where
   hom := f
@@ -217,140 +160,74 @@ variable (C)
 
 /-- The forgetful functor from commutative monoid objects to monoid objects. -/
 @[simps! obj_X]
-/--
-Definition of `forget₂Mon` / `forget₂Mon` 的定义
+/-
+**CategoryTheory.CommMon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：forget : CommMon C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂Mon
-  signature: : CommMon C ⥤ Mon C
-  body: inducedFunctor CommMon.toMon
-
-中文:
-定义 forget₂Mon
-  签名: : 交换幺半群 C ⥤ 幺半群 C
-  定义体: inducedFunctor CommMon.toMon
-
-Depends on / 依赖: CommMon, CommMon.toMon, inducedFunctor
+--- 原说明 ---
+The forgetful functor from commutative monoid objects to monoid objects.
 -/
 def forget₂Mon : CommMon C ⥤ Mon C :=
   inducedFunctor CommMon.toMon
 
-/--
-Definition of `fullyFaithfulForget₂Mon` / `fullyFaithfulForget₂Mon` 的定义
+/-- The forgetful functor from commutative monoid objects to monoid objects
+is fully faithful. -/
+/-
+**CategoryTheory.CommMon.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget₂Mon
-  signature: : (forget₂Mon C).FullyFaithful
-  body: fullyFaithfulInducedFunctor _
-
-中文:
-定义 fullyFaithfulForget₂Mon
-  签名: : (forget₂Mon C).满忠实
-  定义体: fullyFaithfulInducedFunctor _
-
-Depends on / 依赖: fullyFaithfulInducedFunctor
+--- 原说明 ---
+The forgetful functor from commutative monoid objects to monoid objects
+is fully faithful.
 -/
 def fullyFaithfulForget₂Mon : (forget₂Mon C).FullyFaithful :=
   fullyFaithfulInducedFunctor _
 -- The `Full, Faithful` instances should be constructed by a deriving handler.
 -- https://github.com/leanprover-community/mathlib4/issues/380
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂Mon C).Full
-  body: InducedCategory.full _
-
-中文:
-实例 :
-  签名: (forget₂Mon C).满
-  定义体: InducedCategory.full _
-
-Depends on / 依赖: InducedCategory, InducedCategory.full
+/-
+**CategoryTheory.CommMon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂Mon C).Full := InducedCategory.full _
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂Mon C).Faithful
-  body: InducedCategory.faithful _
-
-@[simp]
-
-中文:
-实例 :
-  签名: (forget₂Mon C).忠实
-  定义体: InducedCategory.faithful _
-
-@[simp]
-
-Depends on / 依赖: InducedCategory, InducedCategory.faithful, faithful
+/-
+**CategoryTheory.CommMon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂Mon C).Faithful := InducedCategory.faithful _
 
 @[simp]
-/--
-theorem `forget₂Mon_obj_one` / 定理 `forget₂Mon_obj_one`
-
-English:
-theorem forget₂Mon_obj_one
-  given: (A : CommMon C)
-  statement: η[((forget₂Mon C).obj A).X] = η[A.X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂Mon_obj_one
-  条件: (A : 交换幺半群 C)
-  结论: η[((forget₂Mon C).obj A).X] = η[A.X]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommMon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：forget : CommMon C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_obj_one (A : CommMon C) : η[((forget₂Mon C).obj A).X] = η[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂Mon_obj_mul` / 定理 `forget₂Mon_obj_mul`
-
-English:
-theorem forget₂Mon_obj_mul
-  given: (A : CommMon C)
-  statement: μ[((forget₂Mon C).obj A).X] = μ[A.X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂Mon_obj_mul
-  条件: (A : 交换幺半群 C)
-  结论: μ[((forget₂Mon C).obj A).X] = μ[A.X]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommMon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：forget : CommMon C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_obj_mul (A : CommMon C) : μ[((forget₂Mon C).obj A).X] = μ[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂Mon_map_hom` / 定理 `forget₂Mon_map_hom`
-
-English:
-theorem forget₂Mon_map_hom
-  given: {A B : CommMon C} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-定理 forget₂Mon_map_hom
-  条件: {A B : 交换幺半群 C} (f : A ⟶ B)
-  证明: rfl
+/-
+**CategoryTheory.CommMon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：forget : CommMon C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_map_hom {A B : CommMon C} (f : A ⟶ B) :
     ((forget₂Mon C).map f).hom = f.hom.hom :=
@@ -358,139 +235,103 @@ theorem forget₂Mon_map_hom {A B : CommMon C} (f : A ⟶ B) :
 
 /-- The forgetful functor from commutative monoid objects to the ambient category. -/
 @[simps!]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.CommMon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：forget : CommMon C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : CommMon C ⥤ C
-  body: forget₂Mon C ⋙ Mon.forget C
-
-中文:
-定义 forget
-  签名: : 交换幺半群 C ⥤ C
-  定义体: forget₂Mon C ⋙ Mon.forget C
-
-Depends on / 依赖: Mon.forget, forget
+--- 原说明 ---
+The forgetful functor from commutative monoid objects to the ambient category.
 -/
 def forget : CommMon C ⥤ C :=
   forget₂Mon C ⋙ Mon.forget C
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget C).Faithful
-
-中文:
-实例 :
-  签名: (forget C).忠实
+/-
+**CategoryTheory.CommMon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget C).Faithful where
 
 @[simp]
-/--
-theorem `forget₂Mon_comp_forget` / 定理 `forget₂Mon_comp_forget`
-
-English:
-theorem forget₂Mon_comp_forget
-  statement: forget₂Mon C ⋙ Mon.forget C = forget C
-  proof: rfl
-
-中文:
-定理 forget₂Mon_comp_forget
-  结论: forget₂Mon C ⋙ 幺半群.forget C = forget C
-  证明: rfl
+/-
+**CategoryTheory.CommMon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：forget : CommMon C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂Mon_comp_forget : forget₂Mon C ⋙ Mon.forget C = forget C := rfl
-
+/-
+**CategoryTheory.CommMon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {M N : CommMon C} {f : M ⟶ N} [IsIso f] : IsIso f.hom.hom :=
-inferInstanceAs IsIso (forget C).map f
+  inferInstanceAs <| IsIso <| (forget C).map f
 
 end
 
 /-- Construct an isomorphism of commutative monoid objects by giving a monoid isomorphism between
 the underlying objects. -/
 @[simps!]
-/--
-Definition of `mkIso'` / `mkIso'` 的定义
+/-
+**CategoryTheory.CommMon.mkIso'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMo
+n`。
+形式化陈述：mkIso' {M N : C} (e : M ≅ N) [MonObj M] [IsCommMonObj M] [MonObj N] [IsCom
+mMonObj N] [IsMonHom e.hom] : mk M ≅ mk N
+参数：e : M ≅ N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIso'
-  signature: {M N : C} (e : M ≅ N) [MonObj M] [IsCommMonObj M] [MonObj N] [IsCommMonObj N]
-  body: (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
-
-中文:
-定义 mkIso'
-  签名: {M N : C} (e : M ≅ N) [MonObj M] [是交换MonObj M] [MonObj N] [是交换MonObj N]
-  定义体: (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
-
-Depends on / 依赖: Mon.mkIso, preimageIso
+--- 原说明 ---
+Construct an isomorphism of commutative monoid objects by giving a monoid isomor
+phism between
+the underlying objects.
 -/
 def mkIso' {M N : C} (e : M ≅ N) [MonObj M] [IsCommMonObj M] [MonObj N] [IsCommMonObj N]
     [IsMonHom e.hom] : mk M ≅ mk N :=
   (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
 
-/--
-Definition of `mkIso` / `mkIso` 的定义
+/-- Construct an isomorphism of commutative monoid objects by giving an isomorphism between the
+underlying objects and checking compatibility with unit and multiplication only in the forward
+direction. -/
+/-
+**CategoryTheory.CommMon.mkIso** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.CommM
+on`。
+形式化陈述：mkIso {M N : CommMon C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X]
+参数：e : M.X ≅ N.X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommMon.comm`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   [inst_2 : Catego
+ryTheory.BraidedC…
 
-English:
-abbreviation mkIso
-  signature: {M N : CommMon C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X] := by cat_disch)
-  body: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
-  mkIso' e
-
-中文:
-缩写 mkIso
-  签名: {M N : 交换幺半群 C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X] := by cat_disch)
-  定义体: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
-  mkIso' e
-
-Depends on / 依赖: IsMonHom, cat_disch, e.hom, mul_f, one_f
+--- 原说明 ---
+Construct an isomorphism of commutative monoid objects by giving an isomorphism 
+between the
+underlying objects and checking compatibility with unit and multiplication only 
+in the forward
+direction.
 -/
 abbrev mkIso {M N : CommMon C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X] := by cat_disch)
-    (mul_f : μ[M.X] ≫ e.hom = (e.hom otimesₘ e.hom) ≫ μ[N.X] := by cat_disch) : M ≅ N :=
+    (mul_f : μ[M.X] ≫ e.hom = (e.hom ⊗ₘ e.hom) ≫ μ[N.X] := by cat_disch) : M ≅ N :=
   have : IsMonHom e.hom := ⟨one_f, mul_f⟩
   mkIso' e
-
-/--
-Instance `uniqueHomFromTrivial` / 实例 `uniqueHomFromTrivial`
-
-English:
-instance uniqueHomFromTrivial
-  signature: (A : CommMon C)
-  body: Equiv.unique (show _ ≃ (Mon.trivial C ⟶ A.toMon) from
-    InducedCategory.homEquiv)
-
-中文:
-实例 uniqueHomFromTrivial
-  签名: (A : 交换幺半群 C)
-  定义体: Equiv.unique (show _ ≃ (Mon.trivial C ⟶ A.toMon) from
-    InducedCategory.homEquiv)
-
-Depends on / 依赖: A.toMon, Equiv.unique, InducedCategory, InducedCategory.homEquiv, Mon.trivial, homEquiv, unique
+/-
+**CategoryTheory.CommMon.uniqueHomFromTrivial** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.CommMon`。
+形式化陈述：uniqueHomFromTrivial (A : CommMon C) : Unique (trivial C ⟶ A)
+参数：A : CommMon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance uniqueHomFromTrivial (A : CommMon C) : Unique (trivial C ⟶ A) :=
   Equiv.unique (show _ ≃ (Mon.trivial C ⟶ A.toMon) from
     InducedCategory.homEquiv)
 
 open CategoryTheory.Limits
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasInitial (CommMon C)
-  body: hasInitial_of_unique (trivial C)
-
-中文:
-实例 :
-  签名: HasInitial (交换幺半群 C)
-  定义体: hasInitial_of_unique (trivial C)
-
-Depends on / 依赖: hasInitial_of_unique
+/-
+**CategoryTheory.CommMon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommMon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasInitial (CommMon C) :=
   hasInitial_of_unique (trivial C)
@@ -508,22 +349,25 @@ variable [F.LaxBraided] [F'.LaxBraided] [G.LaxBraided]
 
 open scoped Obj
 
-/--
-Instance `isCommMonObj_obj` / 实例 `isCommMonObj_obj`
-
-English:
-instance isCommMonObj_obj
-  signature: {M : C} [MonObj M] [IsCommMonObj M]
-  body: by
-    dsimp; rw [← Functor.LaxBraided.braided_assoc, ← Functor.map_comp, IsCommMonObj.mul_comm]
-
-中文:
-实例 isCommMonObj_obj
-  签名: {M : C} [MonObj M] [是交换MonObj M]
-  定义体: by
-    dsimp; rw [← Functor.LaxBraided.braided_assoc, ← Functor.map_comp, IsCommMonObj.mul_comm]
-
-Depends on / 依赖: Functor, Functor.LaxBraided.braided_assoc, Functor.map_comp, IsCommMonObj, IsCommMonObj.mul_comm, LaxBraided, braided_assoc, map_comp, mul_comm
+/-
+**CategoryTheory.Functor.isCommMonObj_obj** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：isCommMonObj_obj {M : C} [MonObj M] [IsCommMonObj M] : IsCommMonObj (F.obj
+ M) where mul_comm
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.LaxBraided.braided_assoc`：∀ {C : Type u₁} {inst :
+ CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C
+}   {inst_2 : CategoryTheory.BraidedC…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.IsCommMonObj.mul_comm`：∀ {C : Type u₁} {inst : CategoryTh
+eory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {inst_2
+ : CategoryTheory.BraidedC…
 -/
 instance isCommMonObj_obj {M : C} [MonObj M] [IsCommMonObj M] : IsCommMonObj (F.obj M) where
   mul_comm := by
@@ -537,34 +381,19 @@ variable (F) in
 That is, a lax braided functor `F : C ⥤ D` induces a functor `CommMon C ⥤ CommMon D`.
 -/
 @[simps!]
-/--
-Definition of `mapCommMon` / `mapCommMon` 的定义
+/-
+**CategoryTheory.Functor.mapCommMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：mapCommMon : CommMon C ⥤ CommMon D where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMon
-  signature: : CommMon C ⥤ CommMon D where
-  body: { F.mapMon.obj A.toMon with
-      comm :=
-        { mul_comm := by
-            dsimp
-            rw [← Functor.LaxBraided.braided_assoc]; rw [← Functor.map_comp]; rw [IsCommMonObj.mul_comm] } }
-  map f := CommMon.homMk (F.mapMon.map f.hom)
+--- 原说明 ---
+A lax braided functor takes commutative monoid objects to commutative monoid obj
+ects.
 
-@[simp]
-
-中文:
-定义 mapCommMon
-  签名: : 交换幺半群 C ⥤ 交换幺半群 D where
-  定义体: { F.mapMon.obj A.toMon with
-      comm :=
-        { mul_comm := by
-            dsimp
-            rw [← Functor.LaxBraided.braided_assoc]; rw [← Functor.map_comp]; rw [IsCommMonObj.mul_comm] } }
-  map f := CommMon.homMk (F.mapMon.map f.hom)
-
-@[simp]
-
-Depends on / 依赖: A.toMon, CommMon, CommMon.homMk, F.mapMon.map, F.mapMon.obj, Functor, Functor.LaxBraided.braided_assoc, Functor.map_comp, IsCommMonObj, IsCommMonObj.mul_comm, LaxBraided, braided_assoc, f.hom, mapMon, map_comp, mul_comm
+That is, a lax braided functor `F : C ⥤ D` induces a functor `CommMon C ⥤ CommMo
+n D`.
 -/
 def mapCommMon : CommMon C ⥤ CommMon D where
   obj A :=
@@ -572,88 +401,60 @@ def mapCommMon : CommMon C ⥤ CommMon D where
       comm :=
         { mul_comm := by
             dsimp
-            rw [← Functor.LaxBraided.braided_assoc]; rw [← Functor.map_comp]; rw [IsCommMonObj.mul_comm] } }
+            rw [← Functor.LaxBraided.braided_assoc, ← Functor.map_comp, IsCommMonObj.mul_comm] } }
   map f := CommMon.homMk (F.mapMon.map f.hom)
 
 @[simp]
-/--
-theorem `mapCommMon_id_one` / 定理 `mapCommMon_id_one`
-
-English:
-theorem mapCommMon_id_one
-  given: (A : CommMon C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapCommMon_id_one
-  条件: (A : 交换幺半群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.mapCommMon_id_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：mapCommMon_id_one (A : CommMon C) : η[((𝟭 C).mapCommMon.obj A).X] = 𝟙 _ ≫ 
+η[A.X]
+参数：A : CommMon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapCommMon_id_one (A : CommMon C) :
     η[((𝟭 C).mapCommMon.obj A).X] = 𝟙 _ ≫ η[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `mapCommMon_id_mul` / 定理 `mapCommMon_id_mul`
-
-English:
-theorem mapCommMon_id_mul
-  given: (A : CommMon C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapCommMon_id_mul
-  条件: (A : 交换幺半群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.mapCommMon_id_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：mapCommMon_id_mul (A : CommMon C) : μ[((𝟭 C).mapCommMon.obj A).X] = 𝟙 _ ≫ 
+μ[A.X]
+参数：A : CommMon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapCommMon_id_mul (A : CommMon C) :
     μ[((𝟭 C).mapCommMon.obj A).X] = 𝟙 _ ≫ μ[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `comp_mapCommMon_one` / 定理 `comp_mapCommMon_one`
-
-English:
-theorem comp_mapCommMon_one
-  given: (A : CommMon C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_mapCommMon_one
-  条件: (A : 交换幺半群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.comp_mapCommMon_one** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：comp_mapCommMon_one (A : CommMon C) : η[((F ⋙ G).mapCommMon.obj A).X] = La
+xMonoidal.ε (F ⋙ G) ≫ (F ⋙ G).map η[A.X]
+参数：A : CommMon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_mapCommMon_one (A : CommMon C) :
     η[((F ⋙ G).mapCommMon.obj A).X] = LaxMonoidal.ε (F ⋙ G) ≫ (F ⋙ G).map η[A.X] :=
   rfl
 
 @[simp]
-/--
-theorem `comp_mapCommMon_mul` / 定理 `comp_mapCommMon_mul`
-
-English:
-theorem comp_mapCommMon_mul
-  given: (A : CommMon C)
-  proof: rfl
-
-中文:
-定理 comp_mapCommMon_mul
-  条件: (A : 交换幺半群 C)
-  证明: rfl
+/-
+**CategoryTheory.Functor.comp_mapCommMon_mul** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：comp_mapCommMon_mul (A : CommMon C) : μ[((F ⋙ G).mapCommMon.obj A).X] = La
+xMonoidal.μ (F ⋙ G) _ _ ≫ (F ⋙ G).map μ[A.X]
+参数：A : CommMon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_mapCommMon_mul (A : CommMon C) :
     μ[((F ⋙ G).mapCommMon.obj A).X] = LaxMonoidal.μ (F ⋙ G) _ _ ≫ (F ⋙ G).map μ[A.X] :=
@@ -663,84 +464,78 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The identity functor is also the identity on commutative monoid objects. -/
 @[simps!]
-/--
-Definition of `mapCommMonIdIso` / `mapCommMonIdIso` 的定义
+/-
+**CategoryTheory.Functor.mapCommMonIdIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：mapCommMonIdIso : mapCommMon (𝟭 C) ≅ 𝟭 (CommMon C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMonIdIso
-  signature: : mapCommMon (𝟭 C) ≅ 𝟭 (CommMon C)
-  body: NatIso.ofComponents fun X => CommMon.mkIso (.refl _)
-
-中文:
-定义 mapCommMonIdIso
-  签名: : mapCommMon (𝟭 C) ≅ 𝟭 (交换幺半群 C)
-  定义体: NatIso.ofComponents fun X => CommMon.mkIso (.refl _)
-
-Depends on / 依赖: CommMon, CommMon.mkIso, G.IsContinuous, IsContinuous, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The identity functor is also the identity on commutative monoid objects.
 -/
 def mapCommMonIdIso : mapCommMon (𝟭 C) ≅ 𝟭 (CommMon C) :=
-  NatIso.ofComponents fun X => CommMon.mkIso (.refl _)
+  NatIso.ofComponents fun X ↦ CommMon.mkIso (.refl _)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The composition functor is also the composition on commutative monoid objects. -/
 @[simps!]
-/--
-Definition of `mapCommMonCompIso` / `mapCommMonCompIso` 的定义
+/-
+**CategoryTheory.Functor.mapCommMonCompIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：mapCommMonCompIso : (F ⋙ G).mapCommMon ≅ F.mapCommMon ⋙ G.mapCommMon
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMonCompIso
-  signature: : (F ⋙ G).mapCommMon ≅ F.mapCommMon ⋙ G.mapCommMon
-  body: NatIso.ofComponents fun X => CommMon.mkIso (.refl _)
-
-中文:
-定义 mapCommMonCompIso
-  签名: : (F ⋙ G).mapCommMon ≅ F.mapCommMon ⋙ G.mapCommMon
-  定义体: NatIso.ofComponents fun X => CommMon.mkIso (.refl _)
-
-Depends on / 依赖: CommMon, CommMon.mkIso, G.IsCocontinuous, IsCocontinuous, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The composition functor is also the composition on commutative monoid objects.
 -/
 def mapCommMonCompIso : (F ⋙ G).mapCommMon ≅ F.mapCommMon ⋙ G.mapCommMon :=
-  NatIso.ofComponents fun X => CommMon.mkIso (.refl _)
+  NatIso.ofComponents fun X ↦ CommMon.mkIso (.refl _)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable (C D) in
 /-- `mapCommMon` is functorial in the lax braided functor. -/
 @[simps]
-/--
-Definition of `mapCommMonFunctor` / `mapCommMonFunctor` 的定义
+/-
+**CategoryTheory.Functor.mapCommMonFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：mapCommMonFunctor : LaxBraidedFunctor C D ⥤ CommMon C ⥤ CommMon D where ob
+j F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMonFunctor
-  signature: : LaxBraidedFunctor C D ⥤ CommMon C ⥤ CommMon D where
-  body: F.mapCommMon
-  map α := { app A := CommMon.homMk (.mk' (α.hom.hom.app A.X)) }
-
-中文:
-定义 mapCommMonFunctor
-  签名: : 松弛辫函子 C D ⥤ 交换幺半群 C ⥤ 交换幺半群 D where
-  定义体: F.mapCommMon
-  map α := { app A := CommMon.homMk (.mk' (α.hom.hom.app A.X)) }
-
-Depends on / 依赖: F.mapCommMon, mapCommMon
+--- 原说明 ---
+`mapCommMon` is functorial in the lax braided functor.
 -/
 def mapCommMonFunctor : LaxBraidedFunctor C D ⥤ CommMon C ⥤ CommMon D where
   obj F := F.mapCommMon
   map α := { app A := CommMon.homMk (.mk' (α.hom.hom.app A.X)) }
-
-/--
-Instance `Faithful.mapCommMon` / 实例 `Faithful.mapCommMon`
-
-English:
-instance Faithful.mapCommMon
-  signature: [F.Faithful]
-  body: (CommMon.forget₂Mon _ ⋙ F.mapMon).map_injective ((CommMon.forget₂Mon _).congr_map hfg)
-
-中文:
-实例 忠实.mapCommMon
-  签名: [F.忠实]
-  定义体: (CommMon.forget₂Mon _ ⋙ F.mapMon).map_injective ((CommMon.forget₂Mon _).congr_map hfg)
+/-
+**CategoryTheory.Functor.Faithful.mapCommMon** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCategory C] {D 
+: Type u₂} [inst_3 : CategoryTheory.Category.{v₂, u₂} D]   [inst_4 : CategoryThe
+ory.MonoidalCategory D] [inst_5 : CategoryTheory.BraidedCategory D]   {F : Categ
+oryTheory.Functor C D} [inst_6 : F.LaxBraided] [F.Faithful], F.mapCommMon.Faithf
+ul
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.Functor.Faithful.comp`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.CommMon.instFaithfulMonForget₂Mon`：∀ (C : Type u₁) [inst 
+: CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory 
+C]   [inst_2 : CategoryTheory.BraidedC…
+· 使用定理 `CategoryTheory.Functor.Faithful.mapMon`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {D : Ty
+pe u₂}   [inst_2 : CategoryT…
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
 -/
 protected instance Faithful.mapCommMon [F.Faithful] : F.mapCommMon.Faithful where
   map_injective hfg :=
@@ -750,20 +545,17 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Natural transformations between functors lift to monoid objects. -/
 @[simps!]
-/--
-Definition of `mapCommMonNatTrans` / `mapCommMonNatTrans` 的定义
+/-
+**CategoryTheory.Functor.mapCommMonNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：mapCommMonNatTrans (f : F ⟶ F') [NatTrans.IsMonoidal f] : F.mapCommMon ⟶ F
+'.mapCommMon where app X
+参数：f : F ⟶ F'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMonNatTrans
-  signature: (f : F ⟶ F') [NatTrans.IsMonoidal f]
-  body: CommMon.homMk (.mk' (f.app _))
-
-中文:
-定义 mapCommMon自然数Trans
-  签名: (f : F ⟶ F') [自然变换.是幺半群 f]
-  定义体: CommMon.homMk (.mk' (f.app _))
-
-Depends on / 依赖: CommMon, CommMon.homMk, f.app
+--- 原说明 ---
+Natural transformations between functors lift to monoid objects.
 -/
 def mapCommMonNatTrans (f : F ⟶ F') [NatTrans.IsMonoidal f] :
     F.mapCommMon ⟶ F'.mapCommMon where
@@ -773,23 +565,20 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Natural isomorphisms between functors lift to monoid objects. -/
 @[simps!]
-/--
-Definition of `mapCommMonNatIso` / `mapCommMonNatIso` 的定义
+/-
+**CategoryTheory.Functor.mapCommMonNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：mapCommMonNatIso (e : F ≅ F') [NatTrans.IsMonoidal e.hom] : F.mapCommMon ≅
+ F'.mapCommMon
+参数：e : F ≅ F'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMonNatIso
-  signature: (e : F ≅ F') [NatTrans.IsMonoidal e.hom]
-  body: NatIso.ofComponents fun X => CommMon.mkIso (e.app _)
-
-中文:
-定义 mapCommMon自然数Iso
-  签名: (e : F ≅ F') [自然变换.是幺半群 e.hom]
-  定义体: NatIso.ofComponents fun X => CommMon.mkIso (e.app _)
-
-Depends on / 依赖: CommMon, CommMon.mkIso, NatIso, NatIso.ofComponents, e.app, ofComponents
+--- 原说明 ---
+Natural isomorphisms between functors lift to monoid objects.
 -/
 def mapCommMonNatIso (e : F ≅ F') [NatTrans.IsMonoidal e.hom] : F.mapCommMon ≅ F'.mapCommMon :=
-  NatIso.ofComponents fun X => CommMon.mkIso (e.app _)
+  NatIso.ofComponents fun X ↦ CommMon.mkIso (e.app _)
 
 end LaxBraided
 
@@ -801,34 +590,36 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `F : C ⥤ D` is a fully faithful monoidal functor, then
 `CommMonCat(F) : CommMonCat C ⥤ CommMonCat D` is fully faithful too. -/
 @[simps]
-/--
-Definition of `FullyFaithful.mapCommMon` / `FullyFaithful.mapCommMon` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.mapCommMon** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.FullyFaithful`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.MonoidalCategory C] →       [inst_2 : CategoryTheory.BraidedC
+ategory C] →         {D : Type u₂} →           [inst_3 : CategoryTheory.Category
+.{v₂, u₂} D] →             [inst_4 : CategoryTheory.MonoidalCategory D] →       
+        [inst_5 : CategoryTheory.BraidedCategory D] →                 {F : Categ
+oryTheory.Functor C D} → [inst_6 : F.Braided] → F.FullyFaithful → F.mapCommMon.F
+ullyFaithful
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FullyFaithful.mapCommMon
-  signature: (hF : F.FullyFaithful)
-  body: CommMon.homMk (hF.mapMon.preimage f.hom)
-
-中文:
-定义 满忠实.mapCommMon
-  签名: (hF : F.满忠实)
-  定义体: CommMon.homMk (hF.mapMon.preimage f.hom)
+--- 原说明 ---
+If `F : C ⥤ D` is a fully faithful monoidal functor, then
+`CommMonCat(F) : CommMonCat C ⥤ CommMonCat D` is fully faithful too.
 -/
 protected def FullyFaithful.mapCommMon (hF : F.FullyFaithful) : F.mapCommMon.FullyFaithful where
   preimage f := CommMon.homMk (hF.mapMon.preimage f.hom)
-
-/--
-Instance `Full.mapCommMon` / 实例 `Full.mapCommMon`
-
-English:
-instance Full.mapCommMon
-  signature: [F.Full] [F.Faithful]
-  body: (FullyFaithful.ofFullyFaithful F).mapCommMon.full
-
-中文:
-实例 满.mapCommMon
-  签名: [F.满] [F.忠实]
-  定义体: (FullyFaithful.ofFullyFaithful F).mapCommMon.full
+/-
+**CategoryTheory.Functor.Full.mapCommMon** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCategory C] {D 
+: Type u₂} [inst_3 : CategoryTheory.Category.{v₂, u₂} D]   [inst_4 : CategoryThe
+ory.MonoidalCategory D] [inst_5 : CategoryTheory.BraidedCategory D]   {F : Categ
+oryTheory.Functor C D} [inst_6 : F.Braided] [F.Full] [F.Faithful], F.mapCommMon.
+Full
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 protected instance Full.mapCommMon [F.Full] [F.Faithful] : F.mapCommMon.Full :=
     (FullyFaithful.ofFullyFaithful F).mapCommMon.full
@@ -843,20 +634,26 @@ namespace Adjunction
 variable {F : C ⥤ D} {G : D ⥤ C} (a : F ⊣ G) [F.Braided] [G.LaxBraided] [a.IsMonoidal]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `mapCommMon` / `mapCommMon` 的定义
+/-- An adjunction of braided functors lifts to an adjunction of their lifts to commutative monoid
+objects. -/
+/-
+**CategoryTheory.Adjunction.mapCommMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Adjunction`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.MonoidalCategory C] →       [inst_2 : CategoryTheory.BraidedC
+ategory C] →         {D : Type u₂} →           [inst_3 : CategoryTheory.Category
+.{v₂, u₂} D] →             [inst_4 : CategoryTheory.MonoidalCategory D] →       
+        [inst_5 : CategoryTheory.BraidedCategory D] →                 {F : Categ
+oryTheory.Functor C D} →                   {G : CategoryTheory.Functor D C} →   
+                  (a : F ⊣ G) →                       [inst_6 : F.Braided] → [in
+st_7 : G.LaxBraided] → [a.IsMonoidal] → F.mapCommMon ⊣ G.mapCommMon
+参数：a : F ⊣ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMon
-  signature: : F.mapCommMon ⊣ G.mapCommMon where
-  body: mapCommMonIdIso.inv ≫ mapCommMonNatTrans a.unit ≫ mapCommMonCompIso.hom
-  counit := mapCommMonCompIso.inv ≫ mapCommMonNatTrans a.counit ≫ mapCommMonIdIso.hom
-
-中文:
-定义 mapCommMon
-  签名: : F.mapCommMon ⊣ G.mapCommMon where
-  定义体: mapCommMonIdIso.inv ≫ mapCommMonNatTrans a.unit ≫ mapCommMonCompIso.hom
-  counit := mapCommMonCompIso.inv ≫ mapCommMonNatTrans a.counit ≫ mapCommMonIdIso.hom
+--- 原说明 ---
+An adjunction of braided functors lifts to an adjunction of their lifts to commu
+tative monoid
+objects.
 -/
 @[simps] def mapCommMon : F.mapCommMon ⊣ G.mapCommMon where
   unit := mapCommMonIdIso.inv ≫ mapCommMonNatTrans a.unit ≫ mapCommMonCompIso.hom
@@ -869,26 +666,18 @@ namespace Equivalence
 set_option backward.defeqAttrib.useBackward true in
 /-- An equivalence of categories lifts to an equivalence of their commutative monoid objects. -/
 @[simps]
-/--
-Definition of `mapCommMon` / `mapCommMon` 的定义
+/-
+**CategoryTheory.Equivalence.mapCommMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Equivalence`。
+形式化陈述：mapCommMon (e : C ≌ D) [e.functor.Braided] [e.inverse.Braided] [e.IsMonoid
+al] : CommMon C ≌ CommMon D where functor
+参数：e : C ≌ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCommMon
-  signature: (e : C ≌ D) [e.functor.Braided] [e.inverse.Braided] [e.IsMonoidal]
-  body: e.functor.mapCommMon
-  inverse := e.inverse.mapCommMon
-  unitIso := mapCommMonIdIso.symm ≪≫ mapCommMonNatIso e.unitIso ≪≫ mapCommMonCompIso
-  counitIso := mapCommMonCompIso.symm ≪≫ mapCommMonNatIso e.counitIso ≪≫ mapCommMonIdIso
-
-中文:
-定义 mapCommMon
-  签名: (e : C ≌ D) [e.functor.辫] [e.inverse.辫] [e.是幺半群]
-  定义体: e.functor.mapCommMon
-  inverse := e.inverse.mapCommMon
-  unitIso := mapCommMonIdIso.symm ≪≫ mapCommMonNatIso e.unitIso ≪≫ mapCommMonCompIso
-  counitIso := mapCommMonCompIso.symm ≪≫ mapCommMonNatIso e.counitIso ≪≫ mapCommMonIdIso
-
-Depends on / 依赖: e.functor.mapCommMon, functor, mapCommMon
+--- 原说明 ---
+An equivalence of categories lifts to an equivalence of their commutative monoid
+ objects.
 -/
 def mapCommMon (e : C ≌ D) [e.functor.Braided] [e.inverse.Braided] [e.IsMonoidal] :
     CommMon C ≌ CommMon D where
@@ -908,22 +697,16 @@ namespace EquivLaxBraidedFunctorPUnit
 variable (C) in
 /-- Implementation of `CommMon.equivLaxBraidedFunctorPUnit`. -/
 @[simps]
-/--
-Definition of `laxBraidedToCommMon` / `laxBraidedToCommMon` 的定义
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.laxBraidedToCommMon** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+形式化陈述：laxBraidedToCommMon : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ⥤ CommM
+on C where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition laxBraidedToCommMon
-  signature: : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ⥤ CommMon C where
-  body: (F.mapCommMon : CommMon _ ⥤ CommMon C).obj (trivial (Discrete PUnit.{u + 1}))
-  map α := ((Functor.mapCommMonFunctor (Discrete PUnit) C).map α).app _
-
-中文:
-定义 laxBraidedToCommMon
-  签名: : 松弛辫函子 (离散 命题单元.{u + 1}) C ⥤ 交换幺半群 C where
-  定义体: (F.mapCommMon : CommMon _ ⥤ CommMon C).obj (trivial (Discrete PUnit.{u + 1}))
-  map α := ((Functor.mapCommMonFunctor (Discrete PUnit) C).map α).app _
-
-Depends on / 依赖: CommMon, Discrete, F.mapCommMon, mapCommMon
+--- 原说明 ---
+Implementation of `CommMon.equivLaxBraidedFunctorPUnit`.
 -/
 def laxBraidedToCommMon : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ⥤ CommMon C where
   obj F := (F.mapCommMon : CommMon _ ⥤ CommMon C).obj (trivial (Discrete PUnit.{u + 1}))
@@ -931,25 +714,26 @@ def laxBraidedToCommMon : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ⥤ CommM
 
 /-- Implementation of `CommMon.equivLaxBraidedFunctorPUnit`. -/
 @[simps!]
-/--
-Definition of `commMonToLaxBraidedObj` / `commMonToLaxBraidedObj` 的定义
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.commMonToLaxBraidedObj** 是 
+Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+形式化陈述：commMonToLaxBraidedObj (A : CommMon C) : Discrete PUnit.{u + 1} ⥤ C
+参数：A : CommMon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commMonToLaxBraidedObj
-  signature: (A : CommMon C)
-  body: (Functor.const _).obj A.X
-
-中文:
-定义 commMonToLaxBraidedObj
-  签名: (A : 交换幺半群 C)
-  定义体: (Functor.const _).obj A.X
-
-Depends on / 依赖: Functor, Functor.const
+--- 原说明 ---
+Implementation of `CommMon.equivLaxBraidedFunctorPUnit`.
 -/
 def commMonToLaxBraidedObj (A : CommMon C) :
     Discrete PUnit.{u + 1} ⥤ C := (Functor.const _).obj A.X
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.** 是 Mathlib 中的一个实例，位于命名空间 
+`CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : CommMon C) : (commMonToLaxBraidedObj A).LaxMonoidal where
   ε := η[A.X]
   «μ» _ _ := μ[A.X]
@@ -957,44 +741,29 @@ instance (A : CommMon C) : (commMonToLaxBraidedObj A).LaxMonoidal where
 open Functor.LaxMonoidal
 
 @[simp]
-/--
-lemma `commMonToLaxBraidedObj_ε` / 引理 `commMonToLaxBraidedObj_ε`
-
-English:
-lemma commMonToLaxBraidedObj_ε
-  given: (A : CommMon C)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 commMonToLaxBraidedObj_ε
-  条件: (A : 交换幺半群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.commMonToLaxBraidedObj_** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma commMonToLaxBraidedObj_ε (A : CommMon C) :
     ε (commMonToLaxBraidedObj A) = η[A.X] := rfl
 
 @[simp]
-/--
-lemma `commMonToLaxBraidedObj_μ` / 引理 `commMonToLaxBraidedObj_μ`
-
-English:
-lemma commMonToLaxBraidedObj_μ
-  given: (A : CommMon C) (X Y)
-  proof: rfl
-
-中文:
-引理 commMonToLaxBraidedObj_μ
-  条件: (A : 交换幺半群 C) (X Y)
-  证明: rfl
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.commMonToLaxBraidedObj_** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma commMonToLaxBraidedObj_μ (A : CommMon C) (X Y) :
     «μ» (commMonToLaxBraidedObj A) X Y = μ[A.X] := rfl
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.** 是 Mathlib 中的一个实例，位于命名空间 
+`CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : CommMon C) : (commMonToLaxBraidedObj A).LaxBraided where
 
 variable (C)
@@ -1003,28 +772,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `CommMon.equivLaxBraidedFunctorPUnit`. -/
 @[simps]
-/--
-Definition of `commMonToLaxBraided` / `commMonToLaxBraided` 的定义
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.commMonToLaxBraided** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+形式化陈述：commMonToLaxBraided : CommMon C ⥤ LaxBraidedFunctor (Discrete PUnit.{u + 1
+}) C where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commMonToLaxBraided
-  signature: : CommMon C ⥤ LaxBraidedFunctor (Discrete PUnit.{u + 1}) C where
-  body: LaxBraidedFunctor.of (commMonToLaxBraidedObj A)
-  map f :=
-    { hom :=
-      { hom := { app _ := f.hom.hom }
-        isMonoidal := { } } }
-
-中文:
-定义 commMonToLaxBraided
-  签名: : 交换幺半群 C ⥤ 松弛辫函子 (离散 命题单元.{u + 1}) C where
-  定义体: LaxBraidedFunctor.of (commMonToLaxBraidedObj A)
-  map f :=
-    { hom :=
-      { hom := { app _ := f.hom.hom }
-        isMonoidal := { } } }
-
-Depends on / 依赖: LaxBraidedFunctor, LaxBraidedFunctor.of, commMonToLaxBraidedObj
+--- 原说明 ---
+Implementation of `CommMon.equivLaxBraidedFunctorPUnit`.
 -/
 def commMonToLaxBraided : CommMon C ⥤ LaxBraidedFunctor (Discrete PUnit.{u + 1}) C where
   obj A := LaxBraidedFunctor.of (commMonToLaxBraidedObj A)
@@ -1037,71 +794,47 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `CommMon.equivLaxBraidedFunctorPUnit`. -/
 @[simps!]
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.unitIso** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+形式化陈述：unitIso : 𝟭 (LaxBraidedFunctor (Discrete PUnit.{u + 1}) C) ≅ laxBraidedToC
+ommMon C ⋙ commMonToLaxBraided C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIso
-  signature: :
-  body: NatIso.ofComponents
-    (fun F => LaxBraidedFunctor.isoOfComponents (fun _ => F.mapIso (eqToIso (by ext))))
-    (fun f => by ext ⟨⟨⟩⟩; dsimp; simp)
-
-@[simp]
-
-中文:
-定义 unitIso
-  签名: :
-  定义体: NatIso.ofComponents
-    (fun F => LaxBraidedFunctor.isoOfComponents (fun _ => F.mapIso (eqToIso (by ext))))
-    (fun f => by ext ⟨⟨⟩⟩; dsimp; simp)
-
-@[simp]
-
-Depends on / 依赖: F.mapIso, LaxBraidedFunctor, LaxBraidedFunctor.isoOfComponents, NatIso, NatIso.ofComponents, eqToIso, isoOfComponents, mapIso, ofComponents
+--- 原说明 ---
+Implementation of `CommMon.equivLaxBraidedFunctorPUnit`.
 -/
 def unitIso :
     𝟭 (LaxBraidedFunctor (Discrete PUnit.{u + 1}) C) ≅
         laxBraidedToCommMon C ⋙ commMonToLaxBraided C :=
   NatIso.ofComponents
-    (fun F => LaxBraidedFunctor.isoOfComponents (fun _ => F.mapIso (eqToIso (by ext))))
-    (fun f => by ext ⟨⟨⟩⟩; dsimp; simp)
+    (fun F ↦ LaxBraidedFunctor.isoOfComponents (fun _ ↦ F.mapIso (eqToIso (by ext))))
+    (fun f ↦ by ext ⟨⟨⟩⟩; dsimp; simp)
 
 @[simp]
-/--
-theorem `counitIso_aux_one` / 定理 `counitIso_aux_one`
-
-English:
-theorem counitIso_aux_one
-  given: (A : CommMon C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 counitIso_aux_one
-  条件: (A : 交换幺半群 C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.counitIso_aux_one** 是 Mathl
+ib 中的一个定理，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+形式化陈述：counitIso_aux_one (A : CommMon C) : η[((commMonToLaxBraided C ⋙ laxBraided
+ToCommMon C).obj A).X] = η[A.X] ≫ 𝟙 _
+参数：A : CommMon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem counitIso_aux_one (A : CommMon C) :
     η[((commMonToLaxBraided C ⋙ laxBraidedToCommMon C).obj A).X] = η[A.X] ≫ 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `counitIso_aux_mul` / 定理 `counitIso_aux_mul`
-
-English:
-theorem counitIso_aux_mul
-  given: (A : CommMon C)
-  proof: rfl
-
-中文:
-定理 counitIso_aux_mul
-  条件: (A : 交换幺半群 C)
-  证明: rfl
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.counitIso_aux_mul** 是 Mathl
+ib 中的一个定理，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+形式化陈述：counitIso_aux_mul (A : CommMon C) : μ[((commMonToLaxBraided C ⋙ laxBraided
+ToCommMon C).obj A).X] = μ[A.X] ≫ 𝟙 _
+参数：A : CommMon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem counitIso_aux_mul (A : CommMon C) :
     μ[((commMonToLaxBraided C ⋙ laxBraidedToCommMon C).obj A).X] = μ[A.X] ≫ 𝟙 _ :=
@@ -1111,23 +844,18 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `CommMon.equivLaxBraidedFunctorPUnit`. -/
 @[simps!]
-/--
-Definition of `counitIso` / `counitIso` 的定义
+/-
+**CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit.counitIso** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.CommMon.EquivLaxBraidedFunctorPUnit`。
+形式化陈述：counitIso : commMonToLaxBraided C ⋙ laxBraidedToCommMon C ≅ 𝟭 (CommMon C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIso
-  signature: : commMonToLaxBraided C ⋙ laxBraidedToCommMon C ≅ 𝟭 (CommMon C)
-  body: NatIso.ofComponents (fun F => mkIso (Iso.refl _))
-
-中文:
-定义 counitIso
-  签名: : commMonToLaxBraided C ⋙ laxBraidedToCommMon C ≅ 𝟭 (交换幺半群 C)
-  定义体: NatIso.ofComponents (fun F => mkIso (Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Implementation of `CommMon.equivLaxBraidedFunctorPUnit`.
 -/
 def counitIso : commMonToLaxBraided C ⋙ laxBraidedToCommMon C ≅ 𝟭 (CommMon C) :=
-  NatIso.ofComponents (fun F => mkIso (Iso.refl _))
+  NatIso.ofComponents (fun F ↦ mkIso (Iso.refl _))
 
 end EquivLaxBraidedFunctorPUnit
 
@@ -1139,26 +867,18 @@ set_option backward.defeqAttrib.useBackward true in
 braided monoidal category to `C`.
 -/
 @[simps]
-/--
-Definition of `equivLaxBraidedFunctorPUnit` / `equivLaxBraidedFunctorPUnit` 的定义
+/-
+**CategoryTheory.CommMon.equivLaxBraidedFunctorPUnit** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.CommMon`。
+形式化陈述：equivLaxBraidedFunctorPUnit : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C
+ ≌ CommMon C where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivLaxBraidedFunctorPUnit
-  signature: : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ≌ CommMon C where
-  body: laxBraidedToCommMon C
-  inverse := commMonToLaxBraided C
-  unitIso := unitIso C
-  counitIso := counitIso C
-
-中文:
-定义 equivLaxBraidedFunctorPUnit
-  签名: : 松弛辫函子 (离散 命题单元.{u + 1}) C ≌ 交换幺半群 C where
-  定义体: laxBraidedToCommMon C
-  inverse := commMonToLaxBraided C
-  unitIso := unitIso C
-  counitIso := counitIso C
-
-Depends on / 依赖: laxBraidedToCommMon
+--- 原说明 ---
+Commutative monoid objects in `C` are "just" braided lax monoidal functors from 
+the trivial
+braided monoidal category to `C`.
 -/
 def equivLaxBraidedFunctorPUnit : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ≌ CommMon C where
   functor := laxBraidedToCommMon C
@@ -1168,3 +888,4 @@ def equivLaxBraidedFunctorPUnit : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C �
 
 end CommMon
 end CategoryTheory
+

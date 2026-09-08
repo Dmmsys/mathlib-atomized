@@ -32,118 +32,85 @@ open Lean Meta Qq
 
 namespace ExistsAndEq
 
-/--
-Inductive type `GoTo` / 归纳类型 `GoTo`
+/-- Type for storing the chosen branch at `And` nodes. -/
+/-
+**ExistsAndEq.GoTo** 是 Mathlib 中的一个归纳类型，位于命名空间 `ExistsAndEq`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive GoTo
-  constructors (1):
-    - left: | right
-
-中文:
-归纳类型 GoTo
-  构造子 (1 个):
-    - left: | right
+--- 原说明 ---
+Type for storing the chosen branch at `And` nodes.
 -/
 inductive GoTo
 | left | right
 deriving BEq, Inhabited
 
-/--
-Definition of `Path` / `Path` 的定义
+/-- Type for storing the path in the body expression leading to `a = a'`. We store only the chosen
+directions at each `And` node because there is no branching at `Exists` nodes, and `Exists` nodes
+will be removed from the body. -/
+/-
+**ExistsAndEq.Path** 是 Mathlib 中的一个缩写定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：Path
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Path
-  body: List GoTo
-
-中文:
-缩写 道路
-  定义体: List GoTo
-
-Depends on / 依赖: Algebra, F.obj, G.obj, Localization
+--- 原说明 ---
+Type for storing the path in the body expression leading to `a = a'`. We store o
+nly the chosen
+directions at each `And` node because there is no branching at `Exists` nodes, a
+nd `Exists` nodes
+will be removed from the body.
 -/
 abbrev Path := List GoTo
 
-/--
-Definition of `VarQ` / `VarQ` 的定义
+/-- Qq-fied version of `Expr`. Here, we use it to store free variables introduced when unpacking
+existential quantifiers. -/
+/-
+**ExistsAndEq.VarQ** 是 Mathlib 中的一个缩写定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：VarQ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation VarQ
-  body: (u : Level) × (α : Q(Sort u)) × Q($α)
-
-中文:
-缩写 VarQ
-  定义体: (u : Level) × (α : Q(Sort u)) × Q($α)
-
-Depends on / 依赖: G.obj, IsLocalization, Localization
+--- 原说明 ---
+Qq-fied version of `Expr`. Here, we use it to store free variables introduced wh
+en unpacking
+existential quantifiers.
 -/
 abbrev VarQ := (u : Level) × (α : Q(Sort u)) × Q($α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited VarQ
-  body: ⟨default, default, default⟩
-
-中文:
-实例 :
-  签名: 可居 VarQ
-  定义体: ⟨default, default, default⟩
+/-
+**ExistsAndEq.** 是 Mathlib 中的一个实例，位于命名空间 `ExistsAndEq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited VarQ where
   default := ⟨default, default, default⟩
 
-/--
-Definition of `HypQ` / `HypQ` 的定义
+/-- Qq-fied version of `Expr` proving some `P : Prop`. -/
+/-
+**ExistsAndEq.HypQ** 是 Mathlib 中的一个缩写定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：HypQ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HypQ
-  body: (P : Q(Prop)) × Q($P)
-
-中文:
-缩写 HypQ
-  定义体: (P : Q(Prop)) × Q($P)
+--- 原说明 ---
+Qq-fied version of `Expr` proving some `P : Prop`.
 -/
 abbrev HypQ := (P : Q(Prop)) × Q($P)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited HypQ
-  body: ⟨default, default⟩
-
-中文:
-实例 :
-  签名: 可居 HypQ
-  定义体: ⟨default, default⟩
+/-
+**ExistsAndEq.** 是 Mathlib 中的一个实例，位于命名空间 `ExistsAndEq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited HypQ where
   default := ⟨default, default⟩
 
-/--
-Definition of `assertUnreachable` / `assertUnreachable` 的定义
+/-- Used to indicate the current case should be unreachable, unless an invariant is violated.
+`context` should be used to indicate which case is asserted to be unreachable.
+For example, `"findEq: path for a conjunction should be nonempty"`. -/
+/-
+**ExistsAndEq.assertUnreachable** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition assertUnreachable
-  signature: {α : Type} (context : String)
-  body: do
-  let e := s!"existsAndEq: internal error, unreachable case has occurred:\n{context}."
-  logError e
-  -- the following error will be caught by `simp` so we additionally log it above
-  throwError e
-
-中文:
-定义 assertUnreachable
-  签名: {α : 类型} (context : String)
-  定义体: do
-  let e := s!"existsAndEq: internal error, unreachable case has occurred:\n{context}."
-  logError e
-  -- the following error will be caught by `simp` so we additionally log it above
-  throwError e
+--- 原说明 ---
+Used to indicate the current case should be unreachable, unless an invariant is 
+violated.
+`context` should be used to indicate which case is asserted to be unreachable.
+For example, `"findEq: path for a conjunction should be nonempty"`.
 -/
 private def assertUnreachable {α : Type} (context : String) : MetaM α := do
   let e := s!"existsAndEq: internal error, unreachable case has occurred:\n{context}."
@@ -151,95 +118,46 @@ private def assertUnreachable {α : Type} (context : String) : MetaM α := do
   -- the following error will be caught by `simp` so we additionally log it above
   throwError e
 
-/--
-Definition of `mkNestedExists` / `mkNestedExists` 的定义
+/-- Constructs `∃ f₁ f₂ ... fₙ, body`, where `[f₁, ..., fₙ] = fvars`. -/
+/-
+**ExistsAndEq.mkNestedExists** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：mkNestedExists (fvars : List VarQ) (body : Q(Prop)) : MetaM Q(Prop)
+参数：fvars : List VarQ；body : Q(Prop)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkNestedExists
-  signature: (fvars : List VarQ) (body : Q(Prop))
-  body: do
-  match fvars with
-  | [] => pure body
-  | ⟨_, β, b⟩ :: tl =>
-    let res ← mkNestedExists tl body
-.get!.userName let name := (← getLCtx).findFVar? b
-    let p : Q($β -> Prop) ← Impl.mkLambdaQ name b res
-    pure q(Exists $p)
-
-中文:
-定义 mkNestedExists
-  签名: (fvars : 列表 VarQ) (body : Q(命题))
-  定义体: do
-  match fvars with
-  | [] => pure body
-  | ⟨_, β, b⟩ :: tl =>
-    let res ← mkNestedExists tl body
-.get!.userName let name := (← getLCtx).findFVar? b
-    let p : Q($β -> Prop) ← Impl.mkLambdaQ name b res
-    pure q(Exists $p)
+--- 原说明 ---
+Constructs `∃ f₁ f₂ ... fₙ, body`, where `[f₁, ..., fₙ] = fvars`.
 -/
 def mkNestedExists (fvars : List VarQ) (body : Q(Prop)) : MetaM Q(Prop) := do
   match fvars with
   | [] => pure body
   | ⟨_, β, b⟩ :: tl =>
     let res ← mkNestedExists tl body
-.get!.userName let name := (← getLCtx).findFVar? b
-    let p : Q($β -> Prop) ← Impl.mkLambdaQ name b res
+    let name := (← getLCtx).findFVar? b |>.get!.userName
+    let p : Q($β → Prop) ← Impl.mkLambdaQ name b res
     pure q(Exists $p)
 
-/--
-Definition of `findEqPath` / `findEqPath` 的定义
+/-- Finds a `Path` for `findEq`. It leads to a subexpression `a = a'` or `a' = a`, where
+`a'` doesn't contain the free variable `a`.
+This is a fast version that quickly returns `none` when the simproc
+is not applicable. -/
+/-
+**ExistsAndEq.findEqPath** 是 Mathlib 中的一个不透明定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：{u : Level} → {α : Q(Sort u)} → Q(«$α») → Q(Prop) → MetaM (Option ExistsAn
+dEq.Path)
+参数：Sort u；«$α»；Prop；Option ExistsAndEq.Path。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findEqPath
-  signature: {u : Level} {α : Q(Sort u)} (a : Q($α)) (P : Q(Prop))
-  body: do
-  match_expr P with
-  | Eq _ x y =>
-    if a == x && !(y.containsFVar a.fvarId!) then
-      return some []
-    if a == y && !(x.containsFVar a.fvarId!) then
-      return some []
-    return none
-  | And L R =>
-    if let some path ← findEqPath a L then
-      return some (.left :: path)
-    if let some path ← findEqPath a R then
-      return some (.right :: path)
-    return none
-  | Exists tb pb =>
-    if (tb.containsFVar a.fvarId!) then
-      return none
-    let .lam _ _ body _ := pb | return none
-    findEqPath a body
-  | _ => return none
-
-中文:
-定义 findEqPath
-  签名: {u : Level} {α : Q(类型层 u)} (a : Q($α)) (P : Q(命题))
-  定义体: do
-  match_expr P with
-  | Eq _ x y =>
-    if a == x && !(y.containsFVar a.fvarId!) then
-      return some []
-    if a == y && !(x.containsFVar a.fvarId!) then
-      return some []
-    return none
-  | And L R =>
-    if let some path ← findEqPath a L then
-      return some (.left :: path)
-    if let some path ← findEqPath a R then
-      return some (.right :: path)
-    return none
-  | Exists tb pb =>
-    if (tb.containsFVar a.fvarId!) then
-      return none
-    let .lam _ _ body _ := pb | return none
-    findEqPath a body
-  | _ => return none
+--- 原说明 ---
+Finds a `Path` for `findEq`. It leads to a subexpression `a = a'` or `a' = a`, w
+here
+`a'` doesn't contain the free variable `a`.
+This is a fast version that quickly returns `none` when the simproc
+is not applicable.
 -/
 partial def findEqPath {u : Level} {α : Q(Sort u)} (a : Q($α)) (P : Q(Prop)) :
-MetaM Option Path := do
+    MetaM <| Option Path := do
   match_expr P with
   | Eq _ x y =>
     if a == x && !(y.containsFVar a.fvarId!) then
@@ -260,22 +178,40 @@ MetaM Option Path := do
     findEqPath a body
   | _ => return none
 
-/--
-Definition of `findEq` / `findEq` 的定义
+/-- Given `P : Prop` and `a : α`, traverses the expression `P` to find a subexpression of
+the form `a = a'` or `a' = a` for some `a'`. It branches at each `And` and walks into
+existential quantifiers.
 
-English:
-definition findEq
-  signature: {u : Level} {α : Q(Sort u)} (a : Q($α)) (P : Q(Prop)) (path : Path)
-  body: do
-   go a P path
+Returns a tuple `(fvars, lctx, P', a')`, where:
+* `fvars` is a list of all variables bound by existential quantifiers along the path.
+* `lctx` is the local context containing all these free variables.
+* `P'` is `P` with all existential quantifiers along the path removed, and corresponding bound
+  variables replaced with `fvars`.
+* `a'` is the expression found that must be equal to `a`.
+  It may contain free variables from `fvars`. -/
+/-
+**ExistsAndEq.findEq** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：{u : Level} →   {α : Q(Sort u)} →     Q(«$α») → Q(Prop) → ExistsAndEq.Path
+ → MetaM (List ExistsAndEq.VarQ × LocalContext × Q(Prop) × Q(«$α»))
+参数：Sort u；«$α»；Prop；List ExistsAndEq.VarQ × LocalContext × Q(Prop) × Q(«$α»)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findEq
-  签名: {u : Level} {α : Q(类型层 u)} (a : Q($α)) (P : Q(命题)) (path : 道路)
-  定义体: do
-   go a P path
+--- 原说明 ---
+Given `P : Prop` and `a : α`, traverses the expression `P` to find a subexpressi
+on of
+the form `a = a'` or `a' = a` for some `a'`. It branches at each `And` and walks
+ into
+existential quantifiers.
 
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, NatTrans, NatTrans.mono_of_mono_app, allowSynthFailures, mono_of_injective, mono_of_mono_app, toTotalQuotientPresheaf
+Returns a tuple `(fvars, lctx, P', a')`, where:
+* `fvars` is a list of all variables bound by existential quantifiers along the 
+path.
+* `lctx` is the local context containing all these free variables.
+* `P'` is `P` with all existential quantifiers along the path removed, and corre
+sponding bound
+  variables replaced with `fvars`.
+* `a'` is the expression found that must be equal to `a`.
+  It may contain free variables from `fvars`.
 -/
 partial def findEq {u : Level} {α : Q(Sort u)} (a : Q($α)) (P : Q(Prop)) (path : Path) :
     MetaM (List VarQ × LocalContext × Q(Prop) × Q($α)) := do
@@ -308,89 +244,130 @@ where
       return (⟨_, _, b⟩ :: fvars, lctx, P', a')
   | _ => assertUnreachable s!"findEq: unexpected P = {← ppExpr P}"
 
-/--
-Definition of `withNestedExistsElim` / `withNestedExistsElim` 的定义
+/-- When `P = ∃ f₁ ... fₙ, body`, where `exs = [f₁, ..., fₙ]`, this function takes
+`act : body → goal` and proves `P → goal` using `Exists.elim`.
 
-English:
-definition withNestedExistsElim
-  signature: {P body goal : Q(Prop)} (exs : List VarQ) (h : Q($P))
-  body: do
-  match exs with
-  | [] =>
-let _ : P =Q body := ⟨⟩
-    act q($h)
-  | ⟨u, β, b⟩ :: tl =>
-    let ~q(@Exists.{u} $γ $p) := P
-| assertUnreachable "withNestedExistsElim: exs is not empty but P is not `Exists`.\n" ++
-          s!"P = {← ppExpr P}"
-let _ : β =Q γ := ⟨⟩
-    withLocalDeclQ .anonymous .default q($p $b) fun hb => do
-      let pf1 ← withNestedExistsElim tl hb act
-      let pf2 : Q(forall b, $p b -> $goal) ← mkLambdaFVars #[b, hb] pf1
-      return q(Exists.elim $h $pf2)
+Example:
+```
+exs = []: act h
+exs = [b]:
+  P := ∃ b, body
+  Exists.elim h (fun b hb ↦ act hb)
+exs = [b, c]:
+  P := ∃ b c, body
+  Exists.elim h (fun b hb ↦
+    Exists.elim hb (fun c hc ↦ act hc)
+  )
+...
+``` -/
+/-
+**ExistsAndEq.withNestedExistsElim** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：withNestedExistsElim {P body goal : Q(Prop)} (exs : List VarQ) (h : Q($P))
+ (act : Q($body) -> MetaM Q($goal)) : MetaM Q($goal)
+参数：Prop；exs : List VarQ；h : Q($P)；act : Q($body) -> MetaM Q($goal)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 withNestedExistsElim
-  签名: {P body goal : Q(命题)} (exs : 列表 VarQ) (h : Q($P))
-  定义体: do
-  match exs with
-  | [] =>
-let _ : P =Q body := ⟨⟩
-    act q($h)
-  | ⟨u, β, b⟩ :: tl =>
-    let ~q(@Exists.{u} $γ $p) := P
-| assertUnreachable "withNestedExistsElim: exs is not empty but P is not `Exists`.\n" ++
-          s!"P = {← ppExpr P}"
-let _ : β =Q γ := ⟨⟩
-    withLocalDeclQ .anonymous .default q($p $b) fun hb => do
-      let pf1 ← withNestedExistsElim tl hb act
-      let pf2 : Q(forall b, $p b -> $goal) ← mkLambdaFVars #[b, hb] pf1
-      return q(Exists.elim $h $pf2)
+--- 原说明 ---
+When `P = ∃ f₁ ... fₙ, body`, where `exs = [f₁, ..., fₙ]`, this function takes
+`act : body → goal` and proves `P → goal` using `Exists.elim`.
+
+Example:
+```
+exs = []: act h
+exs = [b]:
+  P := ∃ b, body
+  Exists.elim h (fun b hb ↦ act hb)
+exs = [b, c]:
+  P := ∃ b c, body
+  Exists.elim h (fun b hb ↦
+    Exists.elim hb (fun c hc ↦ act hc)
+  )
+...
+```
 -/
 def withNestedExistsElim {P body goal : Q(Prop)} (exs : List VarQ) (h : Q($P))
-    (act : Q($body) -> MetaM Q($goal)) : MetaM Q($goal) := do
+    (act : Q($body) → MetaM Q($goal)) : MetaM Q($goal) := do
   match exs with
   | [] =>
-let _ : P =Q body := ⟨⟩
+    let _ : $P =Q $body := ⟨⟩
     act q($h)
   | ⟨u, β, b⟩ :: tl =>
     let ~q(@Exists.{u} $γ $p) := P
-| assertUnreachable "withNestedExistsElim: exs is not empty but P is not `Exists`.\n" ++
+      | assertUnreachable <| "withNestedExistsElim: exs is not empty but P is not `Exists`.\n" ++
           s!"P = {← ppExpr P}"
-let _ : β =Q γ := ⟨⟩
+    let _ : $β =Q $γ := ⟨⟩
     withLocalDeclQ .anonymous .default q($p $b) fun hb => do
       let pf1 ← withNestedExistsElim tl hb act
-      let pf2 : Q(forall b, $p b -> $goal) ← mkLambdaFVars #[b, hb] pf1
+      let pf2 : Q(∀ b, $p b → $goal) ← mkLambdaFVars #[b, hb] pf1
       return q(Exists.elim $h $pf2)
 
-/--
-Definition of `mkAfterToBefore` / `mkAfterToBefore` 的定义
+/-- Generates a proof of `P' → ∃ a, p a`. We assume that `fvars = [f₁, ..., fₙ]` are free variables
+and `P' = ∃ f₁ ... fₙ, newBody`, and `path` leads to `a = a'` in `∃ a, p a`.
 
-English:
-definition mkAfterToBefore
-  signature: {u : Level} {α : Q(Sort u)} {p : Q($α -> Prop)}
-  body: do
-  withLocalDeclQ .anonymous .default P' fun (h : Q($P')) => do
-    let pf : Q(exists a, $p a) ← withNestedExistsElim fvars h fun (h : Q($newBody)) => do
-      let pf1 : Q($p $a') ← go h fvars path
-      return q(Exists.intro $a' $pf1)
-    mkLambdaFVars #[h] pf
+The proof follows the following structure:
+```
+example {α β : Type} (f : β → α) {p : α → Prop} :
+    (∃ b, p (f b) ∧ f b = f b) → (∃ a, p a ∧ ∃ b, a = f b) := by
+  -- withLocalDeclQ
+  intro h
+  -- withNestedExistsElim : we unpack all quantifiers in `P` to get `h : newBody`.
+  refine h.elim (fun b h ↦ ?_)
+  -- use `a'` in the leading existential quantifier
+  refine Exists.intro (f b) ?_
+  -- then we traverse `newBody` and goal simultaneously
+  refine And.intro ?_ ?_
+  -- at branches outside the path `h` must coincide with goal
+  · replace h := h.left
+    exact h
+  -- inside path we substitute variables from `fvars` into existential quantifiers.
+  · replace h := h.right
+    refine Exists.intro b ?_
+    -- at the end the goal must be `x' = x'`.
+    rfl
+``` -/
+/-
+**ExistsAndEq.mkAfterToBefore** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：{u : Level} →   {α : Q(Sort u)} →     {p : Q(«$α» → Prop)} →       {P' : Q
+(Prop)} → Q(«$α») → Q(Prop) → List ExistsAndEq.VarQ → ExistsAndEq.Path → MetaM Q
+(«$P'» → ∃ a, «$p» a)
+参数：Sort u；«$α» → Prop；Prop；«$α»；Prop；«$P'» → ∃ a, «$p» a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkAfterToBefore
-  签名: {u : Level} {α : Q(类型层 u)} {p : Q($α -> 命题)}
-  定义体: do
-  withLocalDeclQ .anonymous .default P' fun (h : Q($P')) => do
-    let pf : Q(exists a, $p a) ← withNestedExistsElim fvars h fun (h : Q($newBody)) => do
-      let pf1 : Q($p $a') ← go h fvars path
-      return q(Exists.intro $a' $pf1)
-    mkLambdaFVars #[h] pf
+--- 原说明 ---
+Generates a proof of `P' → ∃ a, p a`. We assume that `fvars = [f₁, ..., fₙ]` are
+ free variables
+and `P' = ∃ f₁ ... fₙ, newBody`, and `path` leads to `a = a'` in `∃ a, p a`.
+
+The proof follows the following structure:
+```
+example {α β : Type} (f : β → α) {p : α → Prop} :
+    (∃ b, p (f b) ∧ f b = f b) → (∃ a, p a ∧ ∃ b, a = f b) := by
+  -- withLocalDeclQ
+  intro h
+  -- withNestedExistsElim : we unpack all quantifiers in `P` to get `h : newBody
+`.
+  refine h.elim (fun b h ↦ ?_)
+  -- use `a'` in the leading existential quantifier
+  refine Exists.intro (f b) ?_
+  -- then we traverse `newBody` and goal simultaneously
+  refine And.intro ?_ ?_
+  -- at branches outside the path `h` must coincide with goal
+  · replace h := h.left
+    exact h
+  -- inside path we substitute variables from `fvars` into existential quantifie
+rs.
+  · replace h := h.right
+    refine Exists.intro b ?_
+    -- at the end the goal must be `x' = x'`.
+    rfl
+```
 -/
-partial def mkAfterToBefore {u : Level} {α : Q(Sort u)} {p : Q($α -> Prop)}
+partial def mkAfterToBefore {u : Level} {α : Q(Sort u)} {p : Q($α → Prop)}
     {P' : Q(Prop)} (a' : Q($α)) (newBody : Q(Prop)) (fvars : List VarQ) (path : Path) :
-MetaM Q($P' -> (exists a, $p a)) := do
+    MetaM <| Q($P' → (∃ a, $p a)) := do
   withLocalDeclQ .anonymous .default P' fun (h : Q($P')) => do
-    let pf : Q(exists a, $p a) ← withNestedExistsElim fvars h fun (h : Q($newBody)) => do
+    let pf : Q(∃ a, $p a) ← withNestedExistsElim fvars h fun (h : Q($newBody)) => do
       let pf1 : Q($p $a') ← go h fvars path
       return q(Exists.intro $a' $pf1)
     mkLambdaFVars #[h] pf
@@ -404,7 +381,7 @@ where
     | [] => assertUnreachable "mkAfterToBefore: goal is `Exists` but `exs` is empty"
     | ⟨v, γ, c⟩ :: exsTail =>
     let _ : u_1 =QL v := ⟨⟩
-let _ : γ =Q β := ⟨⟩
+    let _ : $γ =Q $β := ⟨⟩
     let pf1 : Q($pb $c) ← go h exsTail path
     return q(Exists.intro $c $pf1)
   | ~q(And $L $R) =>
@@ -413,12 +390,12 @@ let _ : γ =Q β := ⟨⟩
     match path with
     | [] => assertUnreachable "mkAfterToBefore: goal is `And` but `exs` is empty"
     | .left :: tl =>
-let _ : R =Q R' := ⟨⟩
+      let _ : $R =Q $R' := ⟨⟩
       let pfRight : Q($R) := q(And.right $h)
       let pfLeft : Q($L) ← go q(And.left $h) exs tl
       return q(And.intro $pfLeft $pfRight)
     | .right :: tl =>
-let _ : L =Q L' := ⟨⟩
+      let _ : $L =Q $L' := ⟨⟩
       let pfLeft : Q($L) := q(And.left $h)
       let pfRight : Q($R) ← go q(And.right $h) exs tl
       return q(And.intro $pfLeft $pfRight)
@@ -427,94 +404,28 @@ let _ : L =Q L' := ⟨⟩
       | assertUnreachable "mkAfterToBefore: unexpected goal: {← ppExpr goal}"
     if !path.isEmpty then
       assertUnreachable "mkAfterToBefore: `goal` is equality but `path` is not empty"
-let _ : x =Q y := ⟨⟩
+    let _ : $x =Q $y := ⟨⟩
     return q(rfl)
 
-/--
-Definition of `withExistsElimAlongPathImp` / `withExistsElimAlongPathImp` 的定义
+/-- Recursive implementation for `withExistsElimAlongPath`. -/
+/-
+**ExistsAndEq.withExistsElimAlongPathImp** 是 Mathlib 中的一个不透明定义，位于命名空间 `ExistsAnd
+Eq`。
+形式化陈述：{u : Level} →   {α : Q(Sort u)} →     {P goal : Q(Prop)} →       Q(«$P») →
+         {a a' : Q(«$α»)} →           List ExistsAndEq.VarQ →             Exists
+AndEq.Path →               List ExistsAndEq.HypQ → (Q(«$a» = «$a'») → List Exist
+sAndEq.HypQ → MetaM Q(«$goal»)) → MetaM Q(«$goal»)
+参数：Sort u；Prop；«$P»；«$α»；Q(«$a» = «$a'») → List ExistsAndEq.HypQ → MetaM Q(«$goa
+l»)；«$goal»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withExistsElimAlongPathImp
-  signature: {u : Level} {α : Q(Sort u)}
-  body: do
-  match P with
-  | ~q(@Exists $β $pb) =>
-    match exs with
-    | [] => assertUnreachable "withExistsElimAlongPathImp: `P` is `Exists` but `exs` is empty"
-    | ⟨v, γ, b⟩ :: exsTail =>
-    let _ : u_1 =QL v := ⟨⟩
-let _ : γ =Q β := ⟨⟩
-    withLocalDeclQ .anonymous .default q($pb $b) fun hb => do
-      let newHs := hs ++ [⟨_, hb⟩]
-      let pf1 ← withExistsElimAlongPathImp (P := q($pb $b)) hb exsTail path newHs act
-      let pf2 : Q(forall b, $pb b -> $goal) ← mkLambdaFVars #[b, hb] pf1
-      return q(Exists.elim $h $pf2)
-  | ~q(And $L' $R') =>
-      match path with
-      | [] => assertUnreachable "withExistsElimAlongPathImp: `P` is `And` but `path` is empty"
-      | .left :: tl =>
-        withExistsElimAlongPathImp q(And.left $h) exs tl hs act
-      | .right :: tl =>
-        withExistsElimAlongPathImp q(And.right $h) exs tl hs act
-  | ~q(@Eq.{u} $γ $x $y) =>
-let _ : γ =Q α := ⟨⟩
-    if !path.isEmpty then
-      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but `path` is not empty"
-    if a == x then
-let _ : a =Q x := ⟨⟩
-let _ : a' =Q y := ⟨⟩
-      act q($h) hs
-    else if a == y then
-let _ : a =Q y := ⟨⟩
-let _ : a' =Q x := ⟨⟩
-      act q(Eq.symm $h) hs
-    else
-      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but neither of sides is `a`"
-  | _ => assertUnreachable s!"withExistsElimAlongPathImp: unexpected P = {← ppExpr P}"
-
-中文:
-定义 withExistsElimAlongPathImp
-  签名: {u : Level} {α : Q(类型层 u)}
-  定义体: do
-  match P with
-  | ~q(@Exists $β $pb) =>
-    match exs with
-    | [] => assertUnreachable "withExistsElimAlongPathImp: `P` is `Exists` but `exs` is empty"
-    | ⟨v, γ, b⟩ :: exsTail =>
-    let _ : u_1 =QL v := ⟨⟩
-let _ : γ =Q β := ⟨⟩
-    withLocalDeclQ .anonymous .default q($pb $b) fun hb => do
-      let newHs := hs ++ [⟨_, hb⟩]
-      let pf1 ← withExistsElimAlongPathImp (P := q($pb $b)) hb exsTail path newHs act
-      let pf2 : Q(forall b, $pb b -> $goal) ← mkLambdaFVars #[b, hb] pf1
-      return q(Exists.elim $h $pf2)
-  | ~q(And $L' $R') =>
-      match path with
-      | [] => assertUnreachable "withExistsElimAlongPathImp: `P` is `And` but `path` is empty"
-      | .left :: tl =>
-        withExistsElimAlongPathImp q(And.left $h) exs tl hs act
-      | .right :: tl =>
-        withExistsElimAlongPathImp q(And.right $h) exs tl hs act
-  | ~q(@Eq.{u} $γ $x $y) =>
-let _ : γ =Q α := ⟨⟩
-    if !path.isEmpty then
-      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but `path` is not empty"
-    if a == x then
-let _ : a =Q x := ⟨⟩
-let _ : a' =Q y := ⟨⟩
-      act q($h) hs
-    else if a == y then
-let _ : a =Q y := ⟨⟩
-let _ : a' =Q x := ⟨⟩
-      act q(Eq.symm $h) hs
-    else
-      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but neither of sides is `a`"
-  | _ => assertUnreachable s!"withExistsElimAlongPathImp: unexpected P = {← ppExpr P}"
+--- 原说明 ---
+Recursive implementation for `withExistsElimAlongPath`.
 -/
 partial def withExistsElimAlongPathImp {u : Level} {α : Q(Sort u)}
     {P goal : Q(Prop)} (h : Q($P)) {a a' : Q($α)} (exs : List VarQ) (path : Path)
     (hs : List HypQ)
-    (act : Q($a = $a') -> List HypQ -> MetaM Q($goal)) :
+    (act : Q($a = $a') → List HypQ → MetaM Q($goal)) :
     MetaM Q($goal) := do
   match P with
   | ~q(@Exists $β $pb) =>
@@ -522,11 +433,11 @@ partial def withExistsElimAlongPathImp {u : Level} {α : Q(Sort u)}
     | [] => assertUnreachable "withExistsElimAlongPathImp: `P` is `Exists` but `exs` is empty"
     | ⟨v, γ, b⟩ :: exsTail =>
     let _ : u_1 =QL v := ⟨⟩
-let _ : γ =Q β := ⟨⟩
+    let _ : $γ =Q $β := ⟨⟩
     withLocalDeclQ .anonymous .default q($pb $b) fun hb => do
       let newHs := hs ++ [⟨_, hb⟩]
       let pf1 ← withExistsElimAlongPathImp (P := q($pb $b)) hb exsTail path newHs act
-      let pf2 : Q(forall b, $pb b -> $goal) ← mkLambdaFVars #[b, hb] pf1
+      let pf2 : Q(∀ b, $pb b → $goal) ← mkLambdaFVars #[b, hb] pf1
       return q(Exists.elim $h $pf2)
   | ~q(And $L' $R') =>
       match path with
@@ -536,127 +447,179 @@ let _ : γ =Q β := ⟨⟩
       | .right :: tl =>
         withExistsElimAlongPathImp q(And.right $h) exs tl hs act
   | ~q(@Eq.{u} $γ $x $y) =>
-let _ : γ =Q α := ⟨⟩
+    let _ : $γ =Q $α := ⟨⟩
     if !path.isEmpty then
       assertUnreachable "withExistsElimAlongPathImp: `P` is equality but `path` is not empty"
     if a == x then
-let _ : a =Q x := ⟨⟩
-let _ : a' =Q y := ⟨⟩
+      let _ : $a =Q $x := ⟨⟩
+      let _ : $a' =Q $y := ⟨⟩
       act q($h) hs
     else if a == y then
-let _ : a =Q y := ⟨⟩
-let _ : a' =Q x := ⟨⟩
+      let _ : $a =Q $y := ⟨⟩
+      let _ : $a' =Q $x := ⟨⟩
       act q(Eq.symm $h) hs
     else
       assertUnreachable "withExistsElimAlongPathImp: `P` is equality but neither of sides is `a`"
   | _ => assertUnreachable s!"withExistsElimAlongPathImp: unexpected P = {← ppExpr P}"
 
-/--
-Definition of `withExistsElimAlongPath` / `withExistsElimAlongPath` 的定义
+/-- Given `act : (a = a') → hb₁ → hb₂ → ... → hbₙ → goal` where `hb₁, ..., hbₙ` are hypotheses
+obtained when unpacking existential quantifiers with variables from `exs`, it proves `goal` using
+`Exists.elim`. We use this to prove implication in the forward direction. -/
+/-
+**ExistsAndEq.withExistsElimAlongPath** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：withExistsElimAlongPath {u : Level} {α : Q(Sort u)} {P goal : Q(Prop)} (h 
+: Q($P)) {a a' : Q($α)} (exs : List VarQ) (path : Path) (act : Q($a = $a') -> Li
+st HypQ -> MetaM Q($goal)) : MetaM Q($goal)
+参数：Sort u；Prop；h : Q($P)；$α；exs : List VarQ；path : Path；act : Q($a = $a') -> Lis
+t HypQ -> MetaM Q($goal)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withExistsElimAlongPath
-  signature: {u : Level} {α : Q(Sort u)}
-  body: withExistsElimAlongPathImp h exs path [] act
-
-中文:
-定义 withExistsElimAlongPath
-  签名: {u : Level} {α : Q(类型层 u)}
-  定义体: withExistsElimAlongPathImp h exs path [] act
-
-Depends on / 依赖: withExistsElimAlongPathImp
+--- 原说明 ---
+Given `act : (a = a') → hb₁ → hb₂ → ... → hbₙ → goal` where `hb₁, ..., hbₙ` are 
+hypotheses
+obtained when unpacking existential quantifiers with variables from `exs`, it pr
+oves `goal` using
+`Exists.elim`. We use this to prove implication in the forward direction.
 -/
 def withExistsElimAlongPath {u : Level} {α : Q(Sort u)}
     {P goal : Q(Prop)} (h : Q($P)) {a a' : Q($α)} (exs : List VarQ) (path : Path)
-    (act : Q($a = $a') -> List HypQ -> MetaM Q($goal)) :
+    (act : Q($a = $a') → List HypQ → MetaM Q($goal)) :
     MetaM Q($goal) :=
   withExistsElimAlongPathImp h exs path [] act
 
-/--
-Definition of `withNestedExistsIntro` / `withNestedExistsIntro` 的定义
+/-- When `P = ∃ f₁ ... fₙ, body`, where `exs = [f₁, ..., fₙ]`, this function takes
+`act : body` and proves `P` using `Exists.intro`.
 
-English:
-definition withNestedExistsIntro
-  signature: {P body : Q(Prop)} (exs : List VarQ)
-  body: do
-  match exs with
-  | [] =>
-let _ : P =Q body := ⟨⟩
-    act
-  | ⟨u, β, b⟩ :: tl =>
-    let ~q(@Exists.{u} $γ $p) := P
-      | assertUnreachable "withNestedExistsIntro: `exs` is not empty but `P` is not `Exists`"
-let _ : β =Q γ := ⟨⟩
-    let pf ← withNestedExistsIntro tl act
-    return q(Exists.intro $b $pf)
+Example:
+```
+exs = []: act
+exs = [b]:
+  P := ∃ b, body
+  Exists.intro b act
+exs = [b, c]:
+  P := ∃ b c, body
+  Exists.intro b (Exists.intro c act)
+...
+``` -/
+/-
+**ExistsAndEq.withNestedExistsIntro** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：withNestedExistsIntro {P body : Q(Prop)} (exs : List VarQ) (act : MetaM Q(
+$body)) : MetaM Q($P)
+参数：Prop；exs : List VarQ；act : MetaM Q($body)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 withNestedExists整数ro
-  签名: {P body : Q(命题)} (exs : 列表 VarQ)
-  定义体: do
-  match exs with
-  | [] =>
-let _ : P =Q body := ⟨⟩
-    act
-  | ⟨u, β, b⟩ :: tl =>
-    let ~q(@Exists.{u} $γ $p) := P
-      | assertUnreachable "withNestedExistsIntro: `exs` is not empty but `P` is not `Exists`"
-let _ : β =Q γ := ⟨⟩
-    let pf ← withNestedExistsIntro tl act
-    return q(Exists.intro $b $pf)
+--- 原说明 ---
+When `P = ∃ f₁ ... fₙ, body`, where `exs = [f₁, ..., fₙ]`, this function takes
+`act : body` and proves `P` using `Exists.intro`.
+
+Example:
+```
+exs = []: act
+exs = [b]:
+  P := ∃ b, body
+  Exists.intro b act
+exs = [b, c]:
+  P := ∃ b c, body
+  Exists.intro b (Exists.intro c act)
+...
+```
 -/
 def withNestedExistsIntro {P body : Q(Prop)} (exs : List VarQ)
     (act : MetaM Q($body)) : MetaM Q($P) := do
   match exs with
   | [] =>
-let _ : P =Q body := ⟨⟩
+    let _ : $P =Q $body := ⟨⟩
     act
   | ⟨u, β, b⟩ :: tl =>
     let ~q(@Exists.{u} $γ $p) := P
       | assertUnreachable "withNestedExistsIntro: `exs` is not empty but `P` is not `Exists`"
-let _ : β =Q γ := ⟨⟩
+    let _ : $β =Q $γ := ⟨⟩
     let pf ← withNestedExistsIntro tl act
     return q(Exists.intro $b $pf)
 
-/--
-Definition of `mkBeforeToAfter` / `mkBeforeToAfter` 的定义
+/-- Generates a proof of `∃ a, p a → P'`. We assume that `fvars = [f₁, ..., fₙ]` are free variables
+and `P' = ∃ f₁ ... fₙ, newBody`, and `path` leads to `a = a'` in `∃ a, p a`.
 
-English:
-definition mkBeforeToAfter
-  signature: {u : Level} {α : Q(Sort u)} {p : Q($α -> Prop)}
-  body: do
-  withLocalDeclQ .anonymous .default q(exists a, $p a) fun h => do
-  withLocalDeclQ .anonymous .default q($α) fun a => do
-  withLocalDeclQ .anonymous .default q($p $a) fun ha => do
-    let pf1 ← withExistsElimAlongPath ha fvars path fun (h_eq : Q($a = $a')) hs => do
-      let pf1 : Q($P') ← withNestedExistsIntro fvars (body := newBody) do
-        let pf ← go ha fvars hs path h_eq
-        pure pf
-      pure pf1
-    let pf2 : Q(forall a : $α, $p a -> $P') ← mkLambdaFVars #[a, ha] pf1
-    let pf3 : Q($P') := q(Exists.elim $h $pf2)
-    mkLambdaFVars #[h] pf3
+The proof follows the following structure:
+```
+example {α β : Type} (f : β → α) {p : α → Prop} :
+    (∃ a, p a ∧ ∃ b, a = f b) → (∃ b, p (f b) ∧ f b = f b) := by
+  -- withLocalDeclQ
+  intro h
+  refine h.elim (fun a ha ↦ ?_)
+  -- withExistsElimAlongPath: following the path we unpack all existential quantifiers.
+  -- at the end `hs = [hb]`.
+  have h' := ha
+  replace h' := h'.right
+  refine Exists.elim h' (fun b hb ↦ ?_)
+  replace h' := hb
+  have h_eq := h'
+  clear h'
+  -- go: we traverse `P` and `goal` simultaneously
+  have h' := ha
+  refine Exists.intro b ?_
+  refine And.intro ?_ ?_
+  -- outside the path goal must coincide with `h_eq ▸ h'`
+  · replace h' := h'.left
+    exact Eq.mp (congrArg (fun t ↦ p t) h_eq) h'
+  -- inside the path:
+  · replace h' := h'.right
+    -- when `h'` starts with existential quantifier we replace it with next hypothesis from `hs`.
+    replace h' := hb
+    -- at the end the goal must be `x' = x'`.
+    rfl
+``` -/
+/-
+**ExistsAndEq.mkBeforeToAfter** 是 Mathlib 中的一个定义，位于命名空间 `ExistsAndEq`。
+形式化陈述：{u : Level} →   {α : Q(Sort u)} →     {p : Q(«$α» → Prop)} →       {P' : Q
+(Prop)} → Q(«$α») → Q(Prop) → List ExistsAndEq.VarQ → ExistsAndEq.Path → MetaM Q
+((∃ a, «$p» a) → «$P'»)
+参数：Sort u；«$α» → Prop；Prop；«$α»；Prop；(∃ a, «$p» a) → «$P'»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkBeforeToAfter
-  签名: {u : Level} {α : Q(类型层 u)} {p : Q($α -> 命题)}
-  定义体: do
-  withLocalDeclQ .anonymous .default q(exists a, $p a) fun h => do
-  withLocalDeclQ .anonymous .default q($α) fun a => do
-  withLocalDeclQ .anonymous .default q($p $a) fun ha => do
-    let pf1 ← withExistsElimAlongPath ha fvars path fun (h_eq : Q($a = $a')) hs => do
-      let pf1 : Q($P') ← withNestedExistsIntro fvars (body := newBody) do
-        let pf ← go ha fvars hs path h_eq
-        pure pf
-      pure pf1
-    let pf2 : Q(forall a : $α, $p a -> $P') ← mkLambdaFVars #[a, ha] pf1
-    let pf3 : Q($P') := q(Exists.elim $h $pf2)
-    mkLambdaFVars #[h] pf3
+--- 原说明 ---
+Generates a proof of `∃ a, p a → P'`. We assume that `fvars = [f₁, ..., fₙ]` are
+ free variables
+and `P' = ∃ f₁ ... fₙ, newBody`, and `path` leads to `a = a'` in `∃ a, p a`.
+
+The proof follows the following structure:
+```
+example {α β : Type} (f : β → α) {p : α → Prop} :
+    (∃ a, p a ∧ ∃ b, a = f b) → (∃ b, p (f b) ∧ f b = f b) := by
+  -- withLocalDeclQ
+  intro h
+  refine h.elim (fun a ha ↦ ?_)
+  -- withExistsElimAlongPath: following the path we unpack all existential quant
+ifiers.
+  -- at the end `hs = [hb]`.
+  have h' := ha
+  replace h' := h'.right
+  refine Exists.elim h' (fun b hb ↦ ?_)
+  replace h' := hb
+  have h_eq := h'
+  clear h'
+  -- go: we traverse `P` and `goal` simultaneously
+  have h' := ha
+  refine Exists.intro b ?_
+  refine And.intro ?_ ?_
+  -- outside the path goal must coincide with `h_eq ▸ h'`
+  · replace h' := h'.left
+    exact Eq.mp (congrArg (fun t ↦ p t) h_eq) h'
+  -- inside the path:
+  · replace h' := h'.right
+    -- when `h'` starts with existential quantifier we replace it with next hypo
+thesis from `hs`.
+    replace h' := hb
+    -- at the end the goal must be `x' = x'`.
+    rfl
+```
 -/
-partial def mkBeforeToAfter {u : Level} {α : Q(Sort u)} {p : Q($α -> Prop)}
+partial def mkBeforeToAfter {u : Level} {α : Q(Sort u)} {p : Q($α → Prop)}
     {P' : Q(Prop)} (a' : Q($α)) (newBody : Q(Prop)) (fvars : List VarQ) (path : Path) :
-MetaM Q((exists a, $p a) -> $P') := do
-  withLocalDeclQ .anonymous .default q(exists a, $p a) fun h => do
+    MetaM <| Q((∃ a, $p a) → $P') := do
+  withLocalDeclQ .anonymous .default q(∃ a, $p a) fun h => do
   withLocalDeclQ .anonymous .default q($α) fun a => do
   withLocalDeclQ .anonymous .default q($p $a) fun ha => do
     let pf1 ← withExistsElimAlongPath ha fvars path fun (h_eq : Q($a = $a')) hs => do
@@ -664,7 +627,7 @@ MetaM Q((exists a, $p a) -> $P') := do
         let pf ← go ha fvars hs path h_eq
         pure pf
       pure pf1
-    let pf2 : Q(forall a : $α, $p a -> $P') ← mkLambdaFVars #[a, ha] pf1
+    let pf2 : Q(∀ a : $α, $p a → $P') ← mkLambdaFVars #[a, ha] pf1
     let pf3 : Q($P') := q(Exists.elim $h $pf2)
     mkLambdaFVars #[h] pf3
 where
@@ -678,11 +641,11 @@ where
     | [] => assertUnreachable "mkBeforeToAfter: `P` is `Exists` but `exs` is empty"
     | ⟨v, γ, b⟩ :: exsTail =>
     let _ : u_1 =QL v := ⟨⟩
-let _ : γ =Q β := ⟨⟩
+    let _ : $γ =Q $β := ⟨⟩
     match hs with
     | [] => assertUnreachable "mkBeforeToAfter: `P` is `Exists` but `hs` is empty"
     | ⟨H, hb⟩ :: hsTail =>
-let _ : H =Q pb b := ⟨⟩
+    let _ : $H =Q $pb $b := ⟨⟩
     let pf : Q($goal) ← go hb exsTail hsTail path h_eq
     return pf
   | ~q(And $L $R) =>
@@ -691,17 +654,17 @@ let _ : H =Q pb b := ⟨⟩
     match path with
     | [] => assertUnreachable "mkBeforeToAfter: `P` is `And` but `path` is empty"
     | .left :: tl =>
-      let pa : Q($α -> Prop) ← mkLambdaFVars #[a] R
-let _ : R =Q pa a := ⟨⟩
-let _ : R' =Q pa a' := ⟨⟩
+      let pa : Q($α → Prop) ← mkLambdaFVars #[a] R
+      let _ : $R =Q $pa $a := ⟨⟩
+      let _ : $R' =Q $pa $a' := ⟨⟩
       let pfRight : Q($R) := q(And.right $h)
       let pfRight' : Q($R') := q(Eq.mp (congrArg $pa $h_eq) $pfRight)
       let pfLeft' : Q($L') ← go q(And.left $h) exs hs tl h_eq
       return q(And.intro $pfLeft' $pfRight')
     | .right :: tl =>
-      let pa : Q($α -> Prop) ← mkLambdaFVars #[a] L
-let _ : L =Q pa a := ⟨⟩
-let _ : L' =Q pa a' := ⟨⟩
+      let pa : Q($α → Prop) ← mkLambdaFVars #[a] L
+      let _ : $L =Q $pa $a := ⟨⟩
+      let _ : $L' =Q $pa $a' := ⟨⟩
       let pfLeft : Q($L) := q(And.left $h)
       let pfLeft' : Q($L') := q(Eq.mp (congrArg $pa $h_eq) $pfLeft)
       let pfRight' : Q($R') ← go q(And.right $h) exs hs tl h_eq
@@ -711,7 +674,7 @@ let _ : L' =Q pa a' := ⟨⟩
       | assertUnreachable s!"mkBeforeToAfter: unexpected goal = {← ppExpr goal}"
     if !path.isEmpty then
       assertUnreachable "mkBeforeToAfter: goal is equality but path is not empty"
-let _ : x =Q y := ⟨⟩
+    let _ : $x =Q $y := ⟨⟩
     return q(rfl)
 
 /-- Triggers at goals of the form `∃ a, body` and checks if `body` allows a single value `a'`
@@ -723,18 +686,19 @@ simproc ↓ existsAndEq (Exists _) := fun e => do
   let_expr f@Exists α p := e | return .continue
   lambdaBoundedTelescope p 1 fun xs (body : Q(Prop)) => withNewMCtxDepth do
     let some u := f.constLevels![0]? | unreachable!
-    have α : Q(Sort $u) := α; have p : Q($α -> Prop) := p
+    have α : Q(Sort $u) := α; have p : Q($α → Prop) := p
     let some (a : Q($α)) := xs[0]? | return .continue
     let some path ← findEqPath a body | return .continue
     let (fvars, lctx, newBody, a') ← findEq a body path
     withLCtx' lctx do
       let newBody := newBody.replaceFVar a a'
       let P' : Q(Prop) ← mkNestedExists fvars newBody
-      let pfBeforeAfter : Q((exists a, $p a) -> $P') ← mkBeforeToAfter a' newBody fvars path
-      let pfAfterBefore : Q($P' -> (exists a, $p a)) ← mkAfterToBefore a' newBody fvars path
+      let pfBeforeAfter : Q((∃ a, $p a) → $P') ← mkBeforeToAfter a' newBody fvars path
+      let pfAfterBefore : Q($P' → (∃ a, $p a)) ← mkAfterToBefore a' newBody fvars path
       let pf := q(propext (Iff.intro $pfBeforeAfter $pfAfterBefore))
-return .visit Simp.ResultQ.mk _ some q($pf)
+      return .visit <| Simp.ResultQ.mk _ <| some q($pf)
 
 end ExistsAndEq
 
 export ExistsAndEq (existsAndEq)
+

@@ -31,70 +31,60 @@ Ring involution
 
 variable {F : Type*} (R : Type*)
 
-/--
-Definition of `RingInvo` / `RingInvo` 的定义
+/-- A ring involution -/
+/-
+**RingInvo** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_2) → [Semiring R] → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingInvo
-  parameters: [Semiring R]
-  extends: R ≃+* Rᵐᵒᵖ
-  axioms and operations (1):
-    - involution' : forall x, (toFun (toFun x).unop).unop = x
-
-中文:
-结构 RingInvo
-  参数: [半环 R]
-  继承: R ≃+* Rᵐᵒᵖ
-  公理与运算 (1 个):
-    - involution' : 对任意 x, (toFun (toFun x).unop).unop = x
+--- 原说明 ---
+A ring involution
 -/
 structure RingInvo [Semiring R] extends R ≃+* Rᵐᵒᵖ where
   /-- The requirement that the ring homomorphism is its own inverse -/
-  involution' : forall x, (toFun (toFun x).unop).unop = x
+  involution' : ∀ x, (toFun (toFun x).unop).unop = x
 
 /-- The equivalence of rings underlying a ring involution. -/
 add_decl_doc RingInvo.toRingEquiv
 
-/--
-Definition of `RingInvoClass` / `RingInvoClass` 的定义
+/-- `RingInvoClass F R` states that `F` is a type of ring involutions.
+You should extend this class when you extend `RingInvo`. -/
+/-
+**RingInvoClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_3) → (R : Type u_4) → [Semiring R] → [EquivLike F R Rᵐᵒᵖ] → Pr
+op
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RingInvoClass
-  parameters: (F R : Type*) [Semiring R] [EquivLike F R Rᵐᵒᵖ]
-  extends: RingEquivClass F R Rᵐᵒᵖ
-  axioms and operations (1):
-    - involution : forall (f : F) (x), (f (f x).unop).unop = x
-
-中文:
-类 RingInvo类
-  参数: (F R : 类型) [半环 R] [等价状 F R Rᵐᵒᵖ]
-  继承: 环等价类 F R Rᵐᵒᵖ
-  公理与运算 (1 个):
-    - involution : 对任意 (f : F) (x), (f (f x).unop).unop = x
+--- 原说明 ---
+`RingInvoClass F R` states that `F` is a type of ring involutions.
+You should extend this class when you extend `RingInvo`.
 -/
 class RingInvoClass (F R : Type*) [Semiring R] [EquivLike F R Rᵐᵒᵖ] : Prop
   extends RingEquivClass F R Rᵐᵒᵖ where
   /-- Every ring involution must be its own inverse -/
-  involution : forall (f : F) (x), (f (f x).unop).unop = x
+  involution : ∀ (f : F) (x), (f (f x).unop).unop = x
 
 
 /-- Turn an element of a type `F` satisfying `RingInvoClass F R` into an actual
 `RingInvo`. This is declared as the default coercion from `F` to `RingInvo R`. -/
 @[coe]
-/--
-Definition of `RingInvoClass.toRingInvo` / `RingInvoClass.toRingInvo` 的定义
+/-
+**RingInvoClass.toRingInvo** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingInvoClass.toRingInvo {R} [Semiring R] [EquivLike F R Rᵐᵒᵖ] [RingInvoCl
+ass F R] (f : F) : RingInvo R
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RingInvoClass.toRingEquivClass`：∀ {F : Type u_3} {R : Type u_4} {inst : 
+Semiring R} {inst_1 : EquivLike F R Rᵐᵒᵖ} [self : RingInvoClass F R],   RingEqui
+vClass F R Rᵐᵒᵖ
+· 使用定理 `RingInvoClass.involution`：∀ {F : Type u_3} {R : Type u_4} {inst : Semiri
+ng R} {inst_1 : EquivLike F R Rᵐᵒᵖ} [self : RingInvoClass F R] (f : F)   (x : R)
+, MulOpposite.…
 
-English:
-definition RingInvoClass.toRingInvo
-  signature: {R} [Semiring R] [EquivLike F R Rᵐᵒᵖ] [RingInvoClass F R] (f : F)
-  body: { (RingEquivClass.toRingEquiv f : R ≃+* Rᵐᵒᵖ) with involution' := RingInvoClass.involution f }
-
-中文:
-定义 RingInvo类.toRingInvo
-  签名: {R} [半环 R] [等价状 F R Rᵐᵒᵖ] [RingInvo类 F R] (f : F)
-  定义体: { (RingEquivClass.toRingEquiv f : R ≃+* Rᵐᵒᵖ) with involution' := RingInvoClass.involution f }
-
-Depends on / 依赖: RingEquivClass, RingEquivClass.toRingEquiv, RingInvoClass, RingInvoClass.involution, involution, toRingEquiv
+--- 原说明 ---
+Turn an element of a type `F` satisfying `RingInvoClass F R` into an actual
+`RingInvo`. This is declared as the default coercion from `F` to `RingInvo R`.
 -/
 def RingInvoClass.toRingInvo {R} [Semiring R] [EquivLike F R Rᵐᵒᵖ] [RingInvoClass F R] (f : F) :
     RingInvo R :=
@@ -104,54 +94,21 @@ namespace RingInvo
 
 variable {R} [Semiring R] [EquivLike F R Rᵐᵒᵖ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Any type satisfying `RingInvoClass` can be cast into `RingInvo` via
+`RingInvoClass.toRingInvo`. -/
+/-
+**RingInvo.** 是 Mathlib 中的一个实例，位于命名空间 `RingInvo`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [RingInvoClass
-  signature: F R] : CoeTC F (RingInvo R)
-  body: ⟨RingInvoClass.toRingInvo⟩
-
-中文:
-实例 [RingInvo类
-  签名: F R] : CoeTC F (RingInvo R)
-  定义体: ⟨RingInvoClass.toRingInvo⟩
-
-Depends on / 依赖: RingInvoClass, RingInvoClass.toRingInvo, toRingInvo
+--- 原说明 ---
+Any type satisfying `RingInvoClass` can be cast into `RingInvo` via
+`RingInvoClass.toRingInvo`.
 -/
 instance [RingInvoClass F R] : CoeTC F (RingInvo R) :=
   ⟨RingInvoClass.toRingInvo⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (RingInvo R) R Rᵐᵒᵖ
-  body: f.toFun
-  inv f := f.invFun
-  coe_injective' e f h₁ h₂ := by
-    rcases e with ⟨⟨tE, _⟩, _⟩; rcases f with ⟨⟨tF, _⟩, _⟩
-    cases tE
-    cases tF
-    congr
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-
-中文:
-实例 :
-  签名: 等价状 (RingInvo R) R Rᵐᵒᵖ
-  定义体: f.toFun
-  inv f := f.invFun
-  coe_injective' e f h₁ h₂ := by
-    rcases e with ⟨⟨tE, _⟩, _⟩; rcases f with ⟨⟨tF, _⟩, _⟩
-    cases tE
-    cases tF
-    congr
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-
-Depends on / 依赖: f.toFun
+/-
+**RingInvo.** 是 Mathlib 中的一个实例，位于命名空间 `RingInvo`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (RingInvo R) R Rᵐᵒᵖ where
   coe f := f.toFun
@@ -163,137 +120,70 @@ instance : EquivLike (RingInvo R) R Rᵐᵒᵖ where
     congr
   left_inv f := f.left_inv
   right_inv f := f.right_inv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: RingInvoClass (RingInvo R) R
-  body: f.map_add'
-  map_mul f := f.map_mul'
-  involution f := f.involution'
-
-中文:
-实例 :
-  签名: RingInvo类 (RingInvo R) R
-  定义体: f.map_add'
-  map_mul f := f.map_mul'
-  involution f := f.involution'
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**RingInvo.** 是 Mathlib 中的一个实例，位于命名空间 `RingInvo`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : RingInvoClass (RingInvo R) R where
   map_add f := f.map_add'
   map_mul f := f.map_mul'
   involution f := f.involution'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (RingInvo R) (R ≃+* Rᵐᵒᵖ)
-  body: toRingEquiv
-
-中文:
-实例 :
-  签名: CoeOut (RingInvo R) (R ≃+* Rᵐᵒᵖ)
-  定义体: toRingEquiv
-
-Depends on / 依赖: toRingEquiv
+/-
+**RingInvo.** 是 Mathlib 中的一个实例，位于命名空间 `RingInvo`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (RingInvo R) (R ≃+* Rᵐᵒᵖ) where coe := toRingEquiv
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- Construct a ring involution from a ring homomorphism. -/
+/-
+**RingInvo.mk'** 是 Mathlib 中的一个定义，位于命名空间 `RingInvo`。
+形式化陈述：mk' (f : R ->+* Rᵐᵒᵖ) (involution : forall r, (f (f r).unop).unop = r) : R
+ingInvo R
+参数：f : R ->+* Rᵐᵒᵖ；involution : forall r, (f (f r).unop).unop = r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: (f : R ->+* Rᵐᵒᵖ) (involution : forall r, (f (f r).unop).unop = r)
-  body: { f with
-    invFun := fun r => (f r.unop).unop
-    left_inv := fun r => involution r
-right_inv := fun _ => MulOpposite.unop_injective involution _
-    involution' := involution }
-
-@[simp]
-
-中文:
-定义 mk'
-  签名: (f : R ->+* Rᵐᵒᵖ) (involution : 对任意 r, (f (f r).unop).unop = r)
-  定义体: { f with
-    invFun := fun r => (f r.unop).unop
-    left_inv := fun r => involution r
-right_inv := fun _ => MulOpposite.unop_injective involution _
-    involution' := involution }
-
-@[simp]
-
-Depends on / 依赖: MulOpposite, MulOpposite.unop_injective, invFun, involution, left_inv, r.unop, right_inv, unop_injective
+--- 原说明 ---
+Construct a ring involution from a ring homomorphism.
 -/
-def mk' (f : R ->+* Rᵐᵒᵖ) (involution : forall r, (f (f r).unop).unop = r) : RingInvo R :=
+def mk' (f : R →+* Rᵐᵒᵖ) (involution : ∀ r, (f (f r).unop).unop = r) : RingInvo R :=
   { f with
     invFun := fun r => (f r.unop).unop
     left_inv := fun r => involution r
-right_inv := fun _ => MulOpposite.unop_injective involution _
+    right_inv := fun _ => MulOpposite.unop_injective <| involution _
     involution' := involution }
 
 @[simp]
-/--
-theorem `involution` / 定理 `involution`
-
-English:
-theorem involution
-  given: (f : RingInvo R) (x : R)
-  statement: (f (f x).unop).unop = x
-  proof: f.involution' x
-
-中文:
-定理 involution
-  条件: (f : RingInvo R) (x : R)
-  结论: (f (f x).unop).unop = x
-  证明: f.involution' x
-
-Depends on / 依赖: f.involution, involution
+/-
+**RingInvo.involution** 是 Mathlib 中的一个定理，位于命名空间 `RingInvo`。
+形式化陈述：involution (f : RingInvo R) (x : R) : (f (f x).unop).unop = x
+参数：f : RingInvo R；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingInvo.involution'`：∀ {R : Type u_2} [inst : Semiring R] (self : RingI
+nvo R) (x : R),   MulOpposite.unop (self.toFun (MulOpposite.unop (self.toFun x))
+) = x
 -/
 theorem involution (f : RingInvo R) (x : R) : (f (f x).unop).unop = x :=
   f.involution' x
-
-/--
-theorem `coe_ringEquiv` / 定理 `coe_ringEquiv`
-
-English:
-theorem coe_ringEquiv
-  given: (f : RingInvo R) (a : R)
-  statement: (f : R ≃+* Rᵐᵒᵖ) a = f a
-  proof: rfl
-
-中文:
-定理 coe_ringEquiv
-  条件: (f : RingInvo R) (a : R)
-  结论: (f : R ≃+* Rᵐᵒᵖ) a = f a
-  证明: rfl
+/-
+**RingInvo.coe_ringEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingInvo`。
+形式化陈述：coe_ringEquiv (f : RingInvo R) (a : R) : (f : R ≃+* Rᵐᵒᵖ) a = f a
+参数：f : RingInvo R；a : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ringEquiv (f : RingInvo R) (a : R) : (f : R ≃+* Rᵐᵒᵖ) a = f a :=
   rfl
-
-/--
-theorem `map_eq_zero_iff` / 定理 `map_eq_zero_iff`
-
-English:
-theorem map_eq_zero_iff
-  given: (f : RingInvo R) {x : R}
-  statement: f x = 0 ↔ x = 0
-  proof: f.toRingEquiv.map_eq_zero_iff
-
-中文:
-定理 map_eq_zero_iff
-  条件: (f : RingInvo R) {x : R}
-  结论: f x = 0 ↔ x = 0
-  证明: f.toRingEquiv.map_eq_zero_iff
-
-Depends on / 依赖: f.toRingEquiv.map_eq_zero_iff, map_eq_zero_iff, toRingEquiv
+/-
+**RingInvo.map_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `RingInvo`。
+形式化陈述：map_eq_zero_iff (f : RingInvo R) {x : R} : f x = 0 ↔ x = 0
+参数：f : RingInvo R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquiv.map_eq_zero_iff`：∀ {R : Type u_4} {S : Type u_5} [inst : NonUn
+italNonAssocSemiring R] [inst_1 : NonUnitalNonAssocSemiring S]   (f : R ≃+* S) {
+x : R}, f x = 0…
 -/
 theorem map_eq_zero_iff (f : RingInvo R) {x : R} : f x = 0 ↔ x = 0 :=
   f.toRingEquiv.map_eq_zero_iff
@@ -306,38 +196,23 @@ section CommRing
 
 variable [CommRing R]
 
-/--
-Definition of `RingInvo.id` / `RingInvo.id` 的定义
+/-- The identity function of a `CommRing` is a ring involution. -/
+/-
+**RingInvo.id** 是 Mathlib 中的一个定义，位于命名空间 `RingInvo`。
+形式化陈述：(R : Type u_2) → [inst : CommRing R] → RingInvo R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RingInvo.id
-  signature: : RingInvo R
-  body: { RingEquiv.toOpposite R with involution' := fun _ => rfl }
-
-中文:
-定义 RingInvo.id
-  签名: : RingInvo R
-  定义体: { RingEquiv.toOpposite R with involution' := fun _ => rfl }
+--- 原说明 ---
+The identity function of a `CommRing` is a ring involution.
 -/
 protected def RingInvo.id : RingInvo R :=
   { RingEquiv.toOpposite R with involution' := fun _ => rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (RingInvo R)
-  body: ⟨RingInvo.id _⟩
-
-中文:
-实例 :
-  签名: 可居 (RingInvo R)
-  定义体: ⟨RingInvo.id _⟩
-
-Depends on / 依赖: RingInvo, RingInvo.id
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (RingInvo R) :=
   ⟨RingInvo.id _⟩
 
 end CommRing
+

@@ -41,47 +41,53 @@ variable {C : Type*} [Category* C]
 variable {P : MorphismProperty C} {S : C} [P.IsStableUnderComposition]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `exists_map_eq_of_presieve` / 引理 `exists_map_eq_of_presieve`
-
-English:
-lemma exists_map_eq_of_presieve
-  statement: (K : Precoverage C) (H : K <= P.precoverage)
-  proof: by
-  rw [Precoverage.mem_iff_exists_zeroHypercover] at hR
-  obtain ⟨𝒰, rfl⟩ := hR
-  let 𝒱 : PreZeroHypercover X :=
-    ⟨𝒰.I₀, fun i => Over.mk _ (𝒰.X i).hom ?_, fun i => Over.homMk (𝒰.f i).left (by simp) trivial⟩
-  · use 𝒱.presieve₀
-    rw [Presieve.map_ofArrows]
-    rfl
-  · rw [← CategoryTheory.Over.w (𝒰.f i)]
-    exact P.comp_mem _ _ (H _ 𝒰.mem₀ ⟨⟨i⟩⟩) X.prop
-
-中文:
-引理 存在_map_eq_of_presieve
-  结论: (K : Precoverage C) (H : K <= P.precoverage)
-  证明: by
-  rw [Precoverage.mem_iff_exists_zeroHypercover] at hR
-  obtain ⟨𝒰, rfl⟩ := hR
-  let 𝒱 : PreZeroHypercover X :=
-    ⟨𝒰.I₀, fun i => Over.mk _ (𝒰.X i).hom ?_, fun i => Over.homMk (𝒰.f i).left (by simp) trivial⟩
-  · use 𝒱.presieve₀
-    rw [Presieve.map_ofArrows]
-    rfl
-  · rw [← CategoryTheory.Over.w (𝒰.f i)]
-    exact P.comp_mem _ _ (H _ 𝒰.mem₀ ⟨⟨i⟩⟩) X.prop
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Over.w, Over.homMk, Over.mk, P.comp_mem, PreZeroHypercover, Precoverage, Precoverage.mem_iff_exists_zeroHypercover, Presieve, Presieve.map_ofArrows, X.prop, comp_mem, map_ofArrows, mem_iff_exists_zeroHypercover
+/-
+**CategoryTheory.MorphismProperty.exists_map_eq_of_presieve** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：exists_map_eq_of_presieve (K : Precoverage C) (H : K <= P.precoverage) {X 
+: P.Over ⊤ S} {R : Presieve ((MorphismProperty.Over.forget P ⊤ S).obj X)} (hR : 
+R in (K.comap <| CategoryTheory.Over.forget S) _) : exists T : Presieve X, T.map
+ (MorphismProperty.Over.forget P ⊤ S) = R
+参数：K : Precoverage C；H : K <= P.precoverage；(MorphismProperty.Over.forget P ⊤ S)
+.obj X；hR : R in (K.comap <| CategoryTheory.Over.forget S) _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Precoverage.mem_iff_exists_zeroHypercover`：mem_iff_exists
+_zeroHypercover {X : C} {R : Presieve X} : R in J X ↔ exists (𝒰 : ZeroHypercover
+.{max u v} J X), R = Presieve.ofArrows 𝒰.X 𝒰.f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
+· 使用引理 `CategoryTheory.MorphismProperty.comp_mem`：comp_mem (W : MorphismProperty
+ C) [W.IsStableUnderComposition] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W f) 
+(hg : W g) : W (f ≫ g)
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.mem₀`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {J : CategoryTheory.Precoverage C} {S : C}   (s
+elf : J.ZeroHypercover S), self.pres…
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.prop`：∀ {A : Type u_1} [inst : Cat
+egoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} B] {T : Type u_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `trivial`：True
+· 使用引理 `CategoryTheory.Presieve.map_ofArrows`：map_ofArrows {X : C} {ι : Type*} {
+Y : ι -> C} (f : forall i, Y i ⟶ X) : (ofArrows Y f).map F = ofArrows _ (fun i =
+> F.map (f i))
 -/
-lemma exists_map_eq_of_presieve (K : Precoverage C) (H : K <= P.precoverage)
+lemma exists_map_eq_of_presieve (K : Precoverage C) (H : K ≤ P.precoverage)
     {X : P.Over ⊤ S} {R : Presieve ((MorphismProperty.Over.forget P ⊤ S).obj X)}
-    (hR : R in (K.comap <| CategoryTheory.Over.forget S) _) :
-    exists T : Presieve X, T.map (MorphismProperty.Over.forget P ⊤ S) = R := by
+    (hR : R ∈ (K.comap <| CategoryTheory.Over.forget S) _) :
+    ∃ T : Presieve X, T.map (MorphismProperty.Over.forget P ⊤ S) = R := by
   rw [Precoverage.mem_iff_exists_zeroHypercover] at hR
   obtain ⟨𝒰, rfl⟩ := hR
   let 𝒱 : PreZeroHypercover X :=
-    ⟨𝒰.I₀, fun i => Over.mk _ (𝒰.X i).hom ?_, fun i => Over.homMk (𝒰.f i).left (by simp) trivial⟩
+    ⟨𝒰.I₀, fun i ↦ Over.mk _ (𝒰.X i).hom ?_, fun i ↦ Over.homMk (𝒰.f i).left (by simp) trivial⟩
   · use 𝒱.presieve₀
     rw [Presieve.map_ofArrows]
     rfl
@@ -90,75 +96,118 @@ lemma exists_map_eq_of_presieve (K : Precoverage C) (H : K <= P.precoverage)
 
 variable (K : Precoverage C) [K.HasIsos] [K.IsStableUnderBaseChange] [K.IsStableUnderComposition]
   [K.HasPullbacks]
-
-/--
-lemma `locallyCoverDense_forget_of_le` / 引理 `locallyCoverDense_forget_of_le`
-
-English:
-lemma locallyCoverDense_forget_of_le
-  given: (H : K <= P.precoverage)
-  proof: by
-  rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]
-  apply Precoverage.locallyCoverDense_of_map_functorPullback_mem
-  intro X R hR
-  obtain ⟨R, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve _ H hR
-  simpa
-
-中文:
-引理 locallyCoverDense_forget_of_le
-  条件: (H : K <= P.precoverage)
-  证明: by
-  rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]
-  apply Precoverage.locallyCoverDense_of_map_functorPullback_mem
-  intro X R hR
-  obtain ⟨R, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve _ H hR
-  simpa
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.exists_map_eq_of_presieve, Precoverage, Precoverage.locallyCoverDense_of_map_functorPullback_mem, exists_map_eq_of_presieve, locallyCoverDense_of_map_functorPullback_mem, over_toGrothendieck_eq_toGrothendieck_comap_forget
+/-
+**CategoryTheory.MorphismProperty.locallyCoverDense_forget_of_le** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：locallyCoverDense_forget_of_le (H : K <= P.precoverage) : (MorphismPropert
+y.Over.forget P ⊤ S).LocallyCoverDense (K.toGrothendieck.over S)
+参数：H : K <= P.precoverage。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.over_toGrothendieck_eq_toGrothendieck_comap_forget`：over_
+toGrothendieck_eq_toGrothendieck_comap_forget (X : C) : K.toGrothendieck.over X 
+= (K.comap (Over.forget X)).toGrothendieck
+· 使用引理 `CategoryTheory.Precoverage.locallyCoverDense_of_map_functorPullback_mem`
+：locallyCoverDense_of_map_functorPullback_mem (H : forall {S : C} {R : Presieve 
+(F.obj S)}, R in K (F.obj S) -> Presieve.map F (Presieve.func…
+· 使用定理 `CategoryTheory.Precoverage.instHasIsosComap`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{
+v_1, u_1} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Precoverage.instIsStableUnderBaseChangeComapOfPreservesLi
+mitsOfShapeWalkingCospan`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} 
+C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1, u_1} D]   {F : Categor
+yTheor…
+· 使用定理 `CategoryTheory.Over.preservesLimitsOfShape_forget_of_isConnected`：∀ {J :
+ Type u'} [inst : CategoryTheory.Category.{v', u'} J] {C : Type u} [inst_1 : Cat
+egoryTheory.Category.{v, u} C]   [CategoryTheory.IsCon…
+· 使用定理 `CategoryTheory.instIsConnectedWidePullbackShape`：∀ {J : Type u_1}, Categ
+oryTheory.IsConnected (CategoryTheory.Limits.WidePullbackShape J)
+· 使用定理 `CategoryTheory.Precoverage.instIsStableUnderCompositionComap`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : Category
+Theory.Category.{v_1, u_1} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Precoverage.instHasPullbacksComapOfCreatesLimitsOfShapeWa
+lkingCospan`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type 
+u_1} [inst_1 : CategoryTheory.Category.{v_1, u_1} D]   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.MorphismProperty.exists_map_eq_of_presieve`：exists_map_eq
+_of_presieve (K : Precoverage C) (H : K <= P.precoverage) {X : P.Over ⊤ S} {R : 
+Presieve ((MorphismProperty.Over.forget P ⊤ S).…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.Presieve.map_functorPullback_map`：map_functorPullback_map
+ {X : C} (R : Presieve X) : Presieve.map F (Presieve.functorPullback F (R.map F)
+) = R.map F
 -/
-lemma locallyCoverDense_forget_of_le (H : K <= P.precoverage) :
+lemma locallyCoverDense_forget_of_le (H : K ≤ P.precoverage) :
     (MorphismProperty.Over.forget P ⊤ S).LocallyCoverDense (K.toGrothendieck.over S) := by
   rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]
   apply Precoverage.locallyCoverDense_of_map_functorPullback_mem
   intro X R hR
   obtain ⟨R, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve _ H hR
   simpa
-
-/--
-lemma `toGrothendieck_comap_forget_eq_restrictedTopology` / 引理 `toGrothendieck_comap_forget_eq_restrictedTopology`
-
-English:
-lemma toGrothendieck_comap_forget_eq_restrictedTopology
-  proof: by
-  have : (Over.forget P ⊤ S).LocallyCoverDense
-      (K.comap (CategoryTheory.Over.forget S)).toGrothendieck := by
-    rw [← over_toGrothendieck_eq_toGrothendieck_comap_forget]
-    exact MorphismProperty.locallyCoverDense_forget_of_le (S := S) K H
-  rw [Precoverage.comap_comp]
-  simp_rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]
-  apply Precoverage.toGrothendieck_comap_eq_restrictedTopology
-  intro X R hR
-  obtain ⟨T, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve K H hR
-  simpa
-
-中文:
-引理 toGrothendieck_comap_forget_eq_restrictedTopology
-  证明: by
-  have : (Over.forget P ⊤ S).LocallyCoverDense
-      (K.comap (CategoryTheory.Over.forget S)).toGrothendieck := by
-    rw [← over_toGrothendieck_eq_toGrothendieck_comap_forget]
-    exact MorphismProperty.locallyCoverDense_forget_of_le (S := S) K H
-  rw [Precoverage.comap_comp]
-  simp_rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]
-  apply Precoverage.toGrothendieck_comap_eq_restrictedTopology
-  intro X R hR
-  obtain ⟨T, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve K H hR
-  simpa
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Over.forget, K.comap, LocallyCoverDense, MorphismProperty, MorphismProperty.exists_map_eq_of_presieve, MorphismProperty.locallyCoverDense_forget_of_le, Over.forget, Precoverage, Precoverage.comap_comp, Precoverage.toGrothendieck_comap_eq_restrictedTopology, comap_comp, exists_map_eq_of_presieve, forget, locallyCoverDense_forget_of_le, over_toGrothendieck_eq_toGrothendieck_comap_forget, simp_rw, toGrothendieck, toGrothendieck_comap_eq_restrictedTopology
+/-
+**CategoryTheory.MorphismProperty.toGrothendieck_comap_forget_eq_restrictedTopol
+ogy** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：toGrothendieck_comap_forget_eq_restrictedTopology (H : K <= P.precoverage)
+ : (K.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.Over.forget S))
+.toGrothendieck = (MorphismProperty.Over.forget P ⊤ _).restrictedTopology (K.toG
+rothendieck.over S)
+参数：H : K <= P.precoverage。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.over_toGrothendieck_eq_toGrothendieck_comap_forget`：over_
+toGrothendieck_eq_toGrothendieck_comap_forget (X : C) : K.toGrothendieck.over X 
+= (K.comap (Over.forget X)).toGrothendieck
+· 使用引理 `CategoryTheory.MorphismProperty.locallyCoverDense_forget_of_le`：locallyC
+overDense_forget_of_le (H : K <= P.precoverage) : (MorphismProperty.Over.forget 
+P ⊤ S).LocallyCoverDense (K.toGrothendieck.over S)
+· 使用引理 `CategoryTheory.Precoverage.comap_comp`：comap_comp {E : Type*} [Category*
+ E] (F : C ⥤ D) (G : D ⥤ E) (J : Precoverage E) : J.comap (F ⋙ G) = (J.comap G).
+comap F
+· 使用引理 `CategoryTheory.Precoverage.toGrothendieck_comap_eq_restrictedTopology`：t
+oGrothendieck_comap_eq_restrictedTopology [F.Faithful] [F.Full] (H : forall {S :
+ C} {R : Presieve (F.obj S)}, R in K (F.obj S) -> Presieve.…
+· 使用定理 `CategoryTheory.Precoverage.instHasIsosComap`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{
+v_1, u_1} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Precoverage.instIsStableUnderBaseChangeComapOfPreservesLi
+mitsOfShapeWalkingCospan`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} 
+C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1, u_1} D]   {F : Categor
+yTheor…
+· 使用定理 `CategoryTheory.Over.preservesLimitsOfShape_forget_of_isConnected`：∀ {J :
+ Type u'} [inst : CategoryTheory.Category.{v', u'} J] {C : Type u} [inst_1 : Cat
+egoryTheory.Category.{v, u} C]   [CategoryTheory.IsCon…
+· 使用定理 `CategoryTheory.instIsConnectedWidePullbackShape`：∀ {J : Type u_1}, Categ
+oryTheory.IsConnected (CategoryTheory.Limits.WidePullbackShape J)
+· 使用定理 `CategoryTheory.Precoverage.instIsStableUnderCompositionComap`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : Category
+Theory.Category.{v_1, u_1} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Precoverage.instHasPullbacksComapOfCreatesLimitsOfShapeWa
+lkingCospan`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type 
+u_1} [inst_1 : CategoryTheory.Category.{v_1, u_1} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.MorphismProperty.instFaithfulOverOverForget`：∀ {T : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P Q : CategoryTheory.Morphis
+mProperty T) (X : T)   [inst_1 : Q.IsMultiplicat…
+· 使用定理 `CategoryTheory.MorphismProperty.instFullOverTopOverForget`：∀ {T : Type u
+_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryTheory.MorphismPr
+operty T) (X : T),   (CategoryTheory.MorphismPr…
+· 使用引理 `CategoryTheory.MorphismProperty.exists_map_eq_of_presieve`：exists_map_eq
+_of_presieve (K : Precoverage C) (H : K <= P.precoverage) {X : P.Over ⊤ S} {R : 
+Presieve ((MorphismProperty.Over.forget P ⊤ S).…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.Presieve.map_functorPullback_map`：map_functorPullback_map
+ {X : C} (R : Presieve X) : Presieve.map F (Presieve.functorPullback F (R.map F)
+) = R.map F
 -/
 lemma toGrothendieck_comap_forget_eq_restrictedTopology
-    (H : K <= P.precoverage) :
+    (H : K ≤ P.precoverage) :
     (K.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.Over.forget S)).toGrothendieck =
       (MorphismProperty.Over.forget P ⊤ _).restrictedTopology (K.toGrothendieck.over S) := by
   have : (Over.forget P ⊤ S).LocallyCoverDense
@@ -171,29 +220,42 @@ lemma toGrothendieck_comap_forget_eq_restrictedTopology
   intro X R hR
   obtain ⟨T, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve K H hR
   simpa
-
-/--
-lemma `coverPreserving_comap_forget` / 引理 `coverPreserving_comap_forget`
-
-English:
-lemma coverPreserving_comap_forget
-  given: (H : K <= P.precoverage)
-  proof: by
-  have := MorphismProperty.locallyCoverDense_forget_of_le (S := S) K H
-  rw [toGrothendieck_comap_forget_eq_restrictedTopology _ H]
-  exact Functor.coverPreserving_restrictedTopology (Over.forget P ⊤ S) (K.toGrothendieck.over S)
-
-中文:
-引理 coverPreserving_comap_forget
-  条件: (H : K <= P.precoverage)
-  证明: by
-  have := MorphismProperty.locallyCoverDense_forget_of_le (S := S) K H
-  rw [toGrothendieck_comap_forget_eq_restrictedTopology _ H]
-  exact Functor.coverPreserving_restrictedTopology (Over.forget P ⊤ S) (K.toGrothendieck.over S)
-
-Depends on / 依赖: Functor, Functor.coverPreserving_restrictedTopology, K.toGrothendieck.over, MorphismProperty, MorphismProperty.locallyCoverDense_forget_of_le, Over.forget, coverPreserving_restrictedTopology, forget, locallyCoverDense_forget_of_le, toGrothendieck, toGrothendieck_comap_forget_eq_restrictedTopology
+/-
+**CategoryTheory.MorphismProperty.coverPreserving_comap_forget** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：coverPreserving_comap_forget (H : K <= P.precoverage) : CoverPreserving (K
+.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.Over.forget S)).toGr
+othendieck (K.toGrothendieck.over S) (MorphismProperty.Over.forget P ⊤ S)
+参数：H : K <= P.precoverage。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用引理 `CategoryTheory.MorphismProperty.locallyCoverDense_forget_of_le`：locallyC
+overDense_forget_of_le (H : K <= P.precoverage) : (MorphismProperty.Over.forget 
+P ⊤ S).LocallyCoverDense (K.toGrothendieck.over S)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.toGrothendieck_comap_forget_eq_restricte
+dTopology`：toGrothendieck_comap_forget_eq_restrictedTopology (H : K <= P.precove
+rage) : (K.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.O…
+· 使用定理 `CategoryTheory.Functor.coverPreserving_restrictedTopology`：coverPreservi
+ng_restrictedTopology : CoverPreserving (G.restrictedTopology K) K G where cover
+_preserve hS
+· 使用定理 `CategoryTheory.Functor.IsLocallyFull.of_full`：∀ {C : Type uC} [inst : Ca
+tegoryTheory.Category.{vC, uC} C] {D : Type uD} [inst_1 : CategoryTheory.Categor
+y.{vD, uD} D]   {K : CategoryTheor…
+· 使用定理 `CategoryTheory.MorphismProperty.instFullOverTopOverForget`：∀ {T : Type u
+_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : CategoryTheory.MorphismPr
+operty T) (X : T),   (CategoryTheory.MorphismPr…
+· 使用定理 `CategoryTheory.Functor.IsLocallyFaithful.of_faithful`：∀ {C : Type uC} [i
+nst : CategoryTheory.Category.{vC, uC} C] {D : Type uD} [inst_1 : CategoryTheory
+.Category.{vD, uD} D]   {K : CategoryTheor…
+· 使用定理 `CategoryTheory.MorphismProperty.instFaithfulOverOverForget`：∀ {T : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P Q : CategoryTheory.Morphis
+mProperty T) (X : T)   [inst_1 : Q.IsMultiplicat…
 -/
-lemma coverPreserving_comap_forget (H : K <= P.precoverage) :
+lemma coverPreserving_comap_forget (H : K ≤ P.precoverage) :
     CoverPreserving
       (K.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.Over.forget S)).toGrothendieck
       (K.toGrothendieck.over S)
@@ -207,30 +269,67 @@ variable [HasFiniteWidePullbacks C] [P.HasOfPostcompProperty P] [P.IsStableUnder
 
 attribute [local instance] hasFiniteLimits_of_hasTerminal_and_pullbacks
   preservesFiniteLimits_of_preservesTerminal_and_pullbacks in
-/--
-lemma `isContinuous_comap_forget` / 引理 `isContinuous_comap_forget`
-
-English:
-lemma isContinuous_comap_forget
-  given: (H : K <= P.precoverage)
-  proof: by
-  have : RepresentablyFlat (Over.forget P ⊤ S) :=
-    flat_of_preservesFiniteLimits _
-  rw [Functor.isContinuous_iff_coverPreserving]
-  exact coverPreserving_comap_forget _ H
-
-中文:
-引理 isContinuous_comap_forget
-  条件: (H : K <= P.precoverage)
-  证明: by
-  have : RepresentablyFlat (Over.forget P ⊤ S) :=
-    flat_of_preservesFiniteLimits _
-  rw [Functor.isContinuous_iff_coverPreserving]
-  exact coverPreserving_comap_forget _ H
-
-Depends on / 依赖: Functor, Functor.isContinuous_iff_coverPreserving, Over.forget, RepresentablyFlat, coverPreserving_comap_forget, flat_of_preservesFiniteLimits, forget, isContinuous_iff_coverPreserving
+/-
+**CategoryTheory.MorphismProperty.isContinuous_comap_forget** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：isContinuous_comap_forget (H : K <= P.precoverage) : (Over.forget P ⊤ S).I
+sContinuous (Precoverage.comap (Over.forget P ⊤ S ⋙ CategoryTheory.Over.forget S
+) K).toGrothendieck (K.toGrothendieck.over S)
+参数：H : K <= P.precoverage。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.flat_of_preservesFiniteLimits`：flat_of_preservesFiniteLim
+its [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F] : RepresentablyFla
+t F
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasTerminal_and_pullbacks`：hasF
+initeLimits_of_hasTerminal_and_pullbacks [HasTerminal C] [HasPullbacks C] : HasF
+initeLimits C
+· 使用定理 `CategoryTheory.MorphismProperty.Over.instHasTerminalTopOfContainsIdentit
+ies`：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P : Categor
+yTheory.MorphismProperty T) (X : T)   [P.ContainsIdentities], Cat…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Functor.instPreservesLimitsOfShapeOfIsRightAdjoint`：∀ {J 
+: Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1, 
+u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_preservesTerminal_and_pul
+lbacks`：preservesFiniteLimits_of_preservesTerminal_and_pullbacks [HasTerminal C]
+ [HasPullbacks C] (G : C ⥤ D) [PreservesLimitsOfShape (Discrete.{0} …
+· 使用定理 `CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimi
+tsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type
+ u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.MorphismProperty.instRespectsOfRespectsLeftOfRespectsRigh
+t`：∀ {C : Type u} [inst : CategoryTheory.CategoryStruct.{v, u} C] (P Q : Categor
+yTheory.MorphismProperty C)   [P.RespectsLeft Q] [P.RespectsRig…
+· 使用定理 `CategoryTheory.MorphismProperty.Respects.toRespectsLeft`：∀ {C : Type u} 
+{inst : CategoryTheory.CategoryStruct.{v, u} C} {P Q : CategoryTheory.MorphismPr
+operty C}   [self : P.Respects Q], P.Respects…
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderBaseChange.respectsIso`：∀ {
+C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.Morphi
+smProperty C}   [P.IsStableUnderBaseChange], P.RespectsIs…
+· 使用定理 `CategoryTheory.MorphismProperty.Respects.toRespectsRight`：∀ {C : Type u}
+ {inst : CategoryTheory.CategoryStruct.{v, u} C} {P Q : CategoryTheory.MorphismP
+roperty C}   [self : P.Respects Q], P.Respects…
+· 使用定理 `CategoryTheory.Over.instHasTerminal`：∀ {T : Type u₃} [inst : CategoryThe
+ory.Category.{v₃, u₃} T] {X : T},   CategoryTheory.Limits.HasTerminal (CategoryT
+heory.Over X)
+· 使用定理 `CategoryTheory.Over.instHasPullbacks`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {B : C} [CategoryTheory.Limits.HasPullbacks C],   Categor
+yTheory.Limits.HasPullback…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.isContinuous_iff_coverPreserving`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.MorphismProperty.coverPreserving_comap_forget`：coverPrese
+rving_comap_forget (H : K <= P.precoverage) : CoverPreserving (K.comap (Morphism
+Property.Over.forget P ⊤ _ ⋙ CategoryTheory.Over.f…
 -/
-lemma isContinuous_comap_forget (H : K <= P.precoverage) :
+lemma isContinuous_comap_forget (H : K ≤ P.precoverage) :
     (Over.forget P ⊤ S).IsContinuous
         (Precoverage.comap (Over.forget P ⊤ S ⋙ CategoryTheory.Over.forget S) K).toGrothendieck
         (K.toGrothendieck.over S) := by
@@ -238,29 +337,32 @@ lemma isContinuous_comap_forget (H : K <= P.precoverage) :
     flat_of_preservesFiniteLimits _
   rw [Functor.isContinuous_iff_coverPreserving]
   exact coverPreserving_comap_forget _ H
-
-/--
-lemma `toGrothendieck_comap_forget_eq_inducedTopology` / 引理 `toGrothendieck_comap_forget_eq_inducedTopology`
-
-English:
-lemma toGrothendieck_comap_forget_eq_inducedTopology
-  given: (H : K <= P.precoverage)
-  proof: by
-  have := isContinuous_comap_forget (S := S) _ H
-  refine (Functor.restrictedTopology_eq_inducedTopology_of_isContinuous ?_).symm
-  rw [toGrothendieck_comap_forget_eq_restrictedTopology _ H]
-
-中文:
-引理 toGrothendieck_comap_forget_eq_inducedTopology
-  条件: (H : K <= P.precoverage)
-  证明: by
-  have := isContinuous_comap_forget (S := S) _ H
-  refine (Functor.restrictedTopology_eq_inducedTopology_of_isContinuous ?_).symm
-  rw [toGrothendieck_comap_forget_eq_restrictedTopology _ H]
-
-Depends on / 依赖: Functor, Functor.restrictedTopology_eq_inducedTopology_of_isContinuous, isContinuous_comap_forget, restrictedTopology_eq_inducedTopology_of_isContinuous, toGrothendieck_comap_forget_eq_restrictedTopology
+/-
+**CategoryTheory.MorphismProperty.toGrothendieck_comap_forget_eq_inducedTopology
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：toGrothendieck_comap_forget_eq_inducedTopology (H : K <= P.precoverage) : 
+(K.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.Over.forget S)).to
+Grothendieck = (MorphismProperty.Over.forget P ⊤ _).inducedTopology (K.toGrothen
+dieck.over S)
+参数：H : K <= P.precoverage。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用引理 `CategoryTheory.MorphismProperty.isContinuous_comap_forget`：isContinuous_
+comap_forget (H : K <= P.precoverage) : (Over.forget P ⊤ S).IsContinuous (Precov
+erage.comap (Over.forget P ⊤ S ⋙ CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.restrictedTopology_eq_inducedTopology_of_isContin
+uous`：restrictedTopology_eq_inducedTopology_of_isContinuous [F.IsContinuous J K]
+ (h : F.restrictedTopology K = J) : F.inducedTopology K = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.toGrothendieck_comap_forget_eq_restricte
+dTopology`：toGrothendieck_comap_forget_eq_restrictedTopology (H : K <= P.precove
+rage) : (K.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.O…
 -/
-lemma toGrothendieck_comap_forget_eq_inducedTopology (H : K <= P.precoverage) :
+lemma toGrothendieck_comap_forget_eq_inducedTopology (H : K ≤ P.precoverage) :
     (K.comap (MorphismProperty.Over.forget P ⊤ _ ⋙ CategoryTheory.Over.forget S)).toGrothendieck =
       (MorphismProperty.Over.forget P ⊤ _).inducedTopology (K.toGrothendieck.over S) := by
   have := isContinuous_comap_forget (S := S) _ H
@@ -268,3 +370,4 @@ lemma toGrothendieck_comap_forget_eq_inducedTopology (H : K <= P.precoverage) :
   rw [toGrothendieck_comap_forget_eq_restrictedTopology _ H]
 
 end CategoryTheory.MorphismProperty
+

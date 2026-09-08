@@ -36,74 +36,78 @@ namespace SheafedSpace
 variable {C : Type u} [Category.{v} C]
 variable {J : Type w} [Category.{w'} J] [Small.{v} J] (F : J ⥤ SheafedSpace.{_, _, v} C)
 
-/--
-theorem `isColimit_exists_rep` / 定理 `isColimit_exists_rep`
-
-English:
-theorem isColimit_exists_rep
-  given: [HasLimitsOfShape Jᵒᵖ C] {c : Cocone F} (hc : IsColimit c) (x : c.pt)
-  proof: Concrete.isColimit_exists_rep (F ⋙ forget C) (isColimitOfPreserves (forget C) hc) x
-
-中文:
-定理 isColimit_存在_rep
-  条件: [有形状极限 Jᵒᵖ C] {c : 余锥 F} (hc : 是余极限 c) (x : c.pt)
-  证明: Concrete.isColimit_exists_rep (F ⋙ forget C) (isColimitOfPreserves (forget C) hc) x
-
-Depends on / 依赖: Concrete, Concrete.isColimit_exists_rep, forget, isColimitOfPreserves, isColimit_exists_rep
+/-
+**AlgebraicGeometry.SheafedSpace.isColimit_exists_rep** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.SheafedSpace`。
+形式化陈述：isColimit_exists_rep [HasLimitsOfShape Jᵒᵖ C] {c : Cocone F} (hc : IsColim
+it c) (x : c.pt) : exists (i : J) (y : F.obj i), (c.ι.app i).hom.base y = x
+参数：hc : IsColimit c；x : c.pt。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Concrete.isColimit_exists_rep`：isColimit_exists_re
+p {D : Cocone F} (hD : IsColimit D) (x : ToType D.pt) : exists (j : J) (y : ToTy
+pe (F.obj j)), D.ι.app j y = x
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfShapeOfIsLeftAdjoint`：∀ {J
+ : Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1,
+ u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `TopCat.instIsLeftAdjointForgetContinuousMapCarrier`：(CategoryTheory.forg
+et TopCat).IsLeftAdjoint
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instPreservesColimitsOfShapeTopCatForgetO
+fSmallOfHasLimitsOfShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] (J : Type w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v
+, w} J] [Categ…
 -/
 theorem isColimit_exists_rep [HasLimitsOfShape Jᵒᵖ C] {c : Cocone F} (hc : IsColimit c) (x : c.pt) :
-    exists (i : J) (y : F.obj i), (c.ι.app i).hom.base y = x :=
+    ∃ (i : J) (y : F.obj i), (c.ι.app i).hom.base y = x :=
   Concrete.isColimit_exists_rep (F ⋙ forget C) (isColimitOfPreserves (forget C) hc) x
 
 -- Porting note: argument `C` of colimit need to be made explicit, otherwise we get universe issues
-/--
-theorem `colimit_exists_rep` / 定理 `colimit_exists_rep`
-
-English:
-theorem colimit_exists_rep
-  given: [HasLimitsOfShape Jᵒᵖ C] (x : colimit (C := SheafedSpace C) F)
-  proof: Concrete.isColimit_exists_rep (F ⋙ SheafedSpace.forget C)
-    (isColimitOfPreserves (SheafedSpace.forget _) (colimit.isColimit F)) x
-
-中文:
-定理 colimit_存在_rep
-  条件: [有形状极限 Jᵒᵖ C] (x : colimit (C := Sheafed空间 C) F)
-  证明: Concrete.isColimit_exists_rep (F ⋙ SheafedSpace.forget C)
-    (isColimitOfPreserves (SheafedSpace.forget _) (colimit.isColimit F)) x
-
-Depends on / 依赖: SheafedSpace
+/-
+**AlgebraicGeometry.SheafedSpace.colimit_exists_rep** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.SheafedSpace`。
+形式化陈述：colimit_exists_rep [HasLimitsOfShape Jᵒᵖ C] (x : colimit (C
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instHasColimitsOfShapeOfSmallOfHasLimitsO
+fShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : Ty
+pe w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v, w} J] [Categ…
+· 使用定理 `CategoryTheory.Limits.Concrete.isColimit_exists_rep`：isColimit_exists_re
+p {D : Cocone F} (hD : IsColimit D) (x : ToType D.pt) : exists (j : J) (y : ToTy
+pe (F.obj j)), D.ι.app j y = x
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfShapeOfIsLeftAdjoint`：∀ {J
+ : Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1,
+ u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `TopCat.instIsLeftAdjointForgetContinuousMapCarrier`：(CategoryTheory.forg
+et TopCat).IsLeftAdjoint
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instPreservesColimitsOfShapeTopCatForgetO
+fSmallOfHasLimitsOfShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] (J : Type w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v
+, w} J] [Categ…
 -/
 theorem colimit_exists_rep [HasLimitsOfShape Jᵒᵖ C] (x : colimit (C := SheafedSpace C) F) :
-    exists (i : J) (y : F.obj i), (colimit.ι F i).hom.base y = x :=
+    ∃ (i : J) (y : F.obj i), (colimit.ι F i).hom.base y = x :=
   Concrete.isColimit_exists_rep (F ⋙ SheafedSpace.forget C)
     (isColimitOfPreserves (SheafedSpace.forget _) (colimit.isColimit F)) x
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimits
-  signature: C] {X Y
-  body: by
-  rw [← show _ = (coequalizer.π f g).hom.base from
-      ι_comp_coequalizerComparison f g (SheafedSpace.forget C)]; rw [← PreservesCoequalizer.iso_hom]
-  apply epi_comp
-
-中文:
-实例 [有极限
-  签名: C] {X Y
-  定义体: by
-  rw [← show _ = (coequalizer.π f g).hom.base from
-      ι_comp_coequalizerComparison f g (SheafedSpace.forget C)]; rw [← PreservesCoequalizer.iso_hom]
-  apply epi_comp
-
-Depends on / 依赖: PreservesCoequalizer, PreservesCoequalizer.iso_hom, SheafedSpace, SheafedSpace.forget, coequalizer, epi_comp, forget, hom.base, iso_hom
+/-
+**AlgebraicGeometry.SheafedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.S
+heafedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasLimits C] {X Y : SheafedSpace C} (f g : X ⟶ Y) :
     Epi (coequalizer.π f g).hom.base := by
   rw [← show _ = (coequalizer.π f g).hom.base from
-      ι_comp_coequalizerComparison f g (SheafedSpace.forget C)]; rw [← PreservesCoequalizer.iso_hom]
+      ι_comp_coequalizerComparison f g (SheafedSpace.forget C),
+      ← PreservesCoequalizer.iso_hom]
   apply epi_comp
 
 end SheafedSpace
@@ -114,36 +118,16 @@ section HasCoproducts
 
 variable {ι : Type v} [Small.{u} ι] (F : Discrete ι ⥤ LocallyRingedSpace.{u})
 
-/--
-Definition of `coproduct` / `coproduct` 的定义
+/-- The explicit coproduct for `F : discrete ι ⥤ LocallyRingedSpace`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.coproduct** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry.LocallyRingedSpace`。
+形式化陈述：coproduct : LocallyRingedSpace where toSheafedSpace
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coproduct
-  signature: : LocallyRingedSpace where
-  body: colimit (C := SheafedSpace.{u + 1, u, u} CommRingCat.{u})
-    (F ⋙ forgetToSheafedSpace)
-  isLocalRing x := by
-    obtain ⟨i, y, ⟨⟩⟩ := SheafedSpace.colimit_exists_rep (F ⋙ forgetToSheafedSpace) x
-    have : IsLocalRing (((F ⋙ forgetToSheafedSpace).obj i).presheaf.stalk y) :=
-      (F.obj i).isLocalRing _
-    exact
-      (asIso ((colimit.ι (C := SheafedSpace.{u + 1, u, u} CommRingCat.{u})
-        (F ⋙ forgetToSheafedSpace) i :).hom.stalkMap y)).symm.commRingCatIsoToRingEquiv.isLocalRing
-
-中文:
-定义 coproduct
-  签名: : LocallyRinged空间 where
-  定义体: colimit (C := SheafedSpace.{u + 1, u, u} CommRingCat.{u})
-    (F ⋙ forgetToSheafedSpace)
-  isLocalRing x := by
-    obtain ⟨i, y, ⟨⟩⟩ := SheafedSpace.colimit_exists_rep (F ⋙ forgetToSheafedSpace) x
-    have : IsLocalRing (((F ⋙ forgetToSheafedSpace).obj i).presheaf.stalk y) :=
-      (F.obj i).isLocalRing _
-    exact
-      (asIso ((colimit.ι (C := SheafedSpace.{u + 1, u, u} CommRingCat.{u})
-        (F ⋙ forgetToSheafedSpace) i :).hom.stalkMap y)).symm.commRingCatIsoToRingEquiv.isLocalRing
-
-Depends on / 依赖: CommRingCat, SheafedSpace, colimit
+--- 原说明 ---
+The explicit coproduct for `F : discrete ι ⥤ LocallyRingedSpace`.
 -/
 noncomputable def coproduct : LocallyRingedSpace where
   toSheafedSpace := colimit (C := SheafedSpace.{u + 1, u, u} CommRingCat.{u})
@@ -157,26 +141,16 @@ noncomputable def coproduct : LocallyRingedSpace where
         (F ⋙ forgetToSheafedSpace) i :).hom.stalkMap y)).symm.commRingCatIsoToRingEquiv.isLocalRing
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coproductCofan` / `coproductCofan` 的定义
+/-- The explicit coproduct cofan for `F : discrete ι ⥤ LocallyRingedSpace`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.coproductCofan** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：coproductCofan : Cocone F where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coproductCofan
-  signature: : Cocone F where
-  body: coproduct F
-  ι :=
-    { app j := LocallyRingedSpace.homMk (colimit.ι (F ⋙ forgetToSheafedSpace) j)
-      naturality := fun ⟨j⟩ ⟨j'⟩ ⟨⟨(f : j = j')⟩⟩ => by subst f; simp }
-
-中文:
-定义 coproductCofan
-  签名: : 余锥 F where
-  定义体: coproduct F
-  ι :=
-    { app j := LocallyRingedSpace.homMk (colimit.ι (F ⋙ forgetToSheafedSpace) j)
-      naturality := fun ⟨j⟩ ⟨j'⟩ ⟨⟨(f : j = j')⟩⟩ => by subst f; simp }
-
-Depends on / 依赖: coproduct
+--- 原说明 ---
+The explicit coproduct cofan for `F : discrete ι ⥤ LocallyRingedSpace`.
 -/
 noncomputable def coproductCofan : Cocone F where
   pt := coproduct F
@@ -186,62 +160,17 @@ noncomputable def coproductCofan : Cocone F where
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coproductCofanIsColimit` / `coproductCofanIsColimit` 的定义
+/-- The explicit coproduct cofan constructed in `coproductCofan` is indeed a colimit. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.coproductCofanIsColimit** 是 Mathlib 中的一个定
+义，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：coproductCofanIsColimit : IsColimit (coproductCofan F) where desc s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coproductCofanIsColimit
-  signature: : IsColimit (coproductCofan F) where
-  body: LocallyRingedSpace.homMk (colimit.desc
-      (F ⋙ forgetToSheafedSpace) (forgetToSheafedSpace.mapCocone s)) (by
-        intro x
-        obtain ⟨i, y, ⟨⟩⟩ := SheafedSpace.colimit_exists_rep (F ⋙ forgetToSheafedSpace) x
-        have := PresheafedSpace.stalkMap.comp
-          (colimit.ι (F ⋙ forgetToSheafedSpace) i).hom
-          (colimit.desc (F ⋙ forgetToSheafedSpace) (forgetToSheafedSpace.mapCocone s)).hom y
-        simp only [← IsIso.comp_inv_eq,
-          ← InducedCategory.comp_hom,
-          PresheafedSpace.stalkMap.congr_hom _ _
-            (congr_arg (InducedCategory.Hom.hom) (colimit.ι_desc
-              (forgetToSheafedSpace.mapCocone s) i))] at this
-        rw [← this]
-        dsimp
-        infer_instance)
-  fac _ _ :=
-    LocallyRingedSpace.forgetToSheafedSpace.map_injective
-     (colimit.ι_desc (C := SheafedSpace _) _ _)
-  uniq s f h :=
-    LocallyRingedSpace.forgetToSheafedSpace.map_injective
-      (IsColimit.uniq _ (forgetToSheafedSpace.mapCocone s) f.toShHom fun j =>
-        congr_arg LocallyRingedSpace.Hom.toShHom (h j))
-
-中文:
-定义 coproductCofanIsColimit
-  签名: : 是余极限 (coproductCofan F) where
-  定义体: LocallyRingedSpace.homMk (colimit.desc
-      (F ⋙ forgetToSheafedSpace) (forgetToSheafedSpace.mapCocone s)) (by
-        intro x
-        obtain ⟨i, y, ⟨⟩⟩ := SheafedSpace.colimit_exists_rep (F ⋙ forgetToSheafedSpace) x
-        have := PresheafedSpace.stalkMap.comp
-          (colimit.ι (F ⋙ forgetToSheafedSpace) i).hom
-          (colimit.desc (F ⋙ forgetToSheafedSpace) (forgetToSheafedSpace.mapCocone s)).hom y
-        simp only [← IsIso.comp_inv_eq,
-          ← InducedCategory.comp_hom,
-          PresheafedSpace.stalkMap.congr_hom _ _
-            (congr_arg (InducedCategory.Hom.hom) (colimit.ι_desc
-              (forgetToSheafedSpace.mapCocone s) i))] at this
-        rw [← this]
-        dsimp
-        infer_instance)
-  fac _ _ :=
-    LocallyRingedSpace.forgetToSheafedSpace.map_injective
-     (colimit.ι_desc (C := SheafedSpace _) _ _)
-  uniq s f h :=
-    LocallyRingedSpace.forgetToSheafedSpace.map_injective
-      (IsColimit.uniq _ (forgetToSheafedSpace.mapCocone s) f.toShHom fun j =>
-        congr_arg LocallyRingedSpace.Hom.toShHom (h j))
-
-Depends on / 依赖: InducedCategory, InducedCategory.Hom.hom, InducedCategory.comp_hom, IsIso.comp_inv_eq, LocallyRingedSpace, LocallyRingedSpace.homMk, PresheafedSpace, PresheafedSpace.stalkMap.comp, PresheafedSpace.stalkMap.congr_hom, SheafedSpace, SheafedSpace.colimit_exists_rep, colimit, colimit.desc, colimit_exists_rep, comp_hom, comp_inv_eq, congr_arg, congr_hom, forgetToSheafedSpace, forgetToSheafedSpace.mapCocone
+--- 原说明 ---
+The explicit coproduct cofan constructed in `coproductCofan` is indeed a colimit
+.
 -/
 noncomputable def coproductCofanIsColimit : IsColimit (coproductCofan F) where
   desc s :=
@@ -267,45 +196,17 @@ noncomputable def coproductCofanIsColimit : IsColimit (coproductCofan F) where
     LocallyRingedSpace.forgetToSheafedSpace.map_injective
       (IsColimit.uniq _ (forgetToSheafedSpace.mapCocone s) f.toShHom fun j =>
         congr_arg LocallyRingedSpace.Hom.toShHom (h j))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimitsOfShape (Discrete ι) LocallyRingedSpace.{u}
-  body: ⟨fun F => ⟨⟨⟨_, coproductCofanIsColimit F⟩⟩⟩⟩
-
-中文:
-实例 :
-  签名: 有形状余极限 (离散 ι) LocallyRinged空间.{u}
-  定义体: ⟨fun F => ⟨⟨⟨_, coproductCofanIsColimit F⟩⟩⟩⟩
-
-Depends on / 依赖: coproductCofanIsColimit
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimitsOfShape (Discrete ι) LocallyRingedSpace.{u} :=
   ⟨fun F => ⟨⟨⟨_, coproductCofanIsColimit F⟩⟩⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimitsOfShape (Discrete.{v} ι) forgetToSheafedSpace.{u}
-  body: ⟨fun {G} =>
-    preservesColimit_of_preserves_colimit_cocone (coproductCofanIsColimit G)
-      ((colimit.isColimit (C := SheafedSpace.{u+1, u, u} CommRingCat.{u}) _).ofIsoColimit
-        (Cocone.ext (Iso.refl _) fun _ => Category.comp_id _))⟩
-
-中文:
-实例 :
-  签名: 保持形状余极限 (离散.{v} ι) forgetToSheafedSpace.{u}
-  定义体: ⟨fun {G} =>
-    preservesColimit_of_preserves_colimit_cocone (coproductCofanIsColimit G)
-      ((colimit.isColimit (C := SheafedSpace.{u+1, u, u} CommRingCat.{u}) _).ofIsoColimit
-        (Cocone.ext (Iso.refl _) fun _ => Category.comp_id _))⟩
-
-Depends on / 依赖: Category, Category.comp_id, Cocone, Cocone.ext, CommRingCat, Iso.refl, SheafedSpace, colimit, colimit.isColimit, comp_id, coproductCofanIsColimit, isColimit, ofIsoColimit, preservesColimit_of_preserves_colimit_cocone
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PreservesColimitsOfShape (Discrete.{v} ι) forgetToSheafedSpace.{u} :=
   ⟨fun {G} =>
@@ -324,44 +225,10 @@ namespace HasCoequalizer
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[instance]
-/--
-theorem `coequalizer_π_app_isLocalHom` / 定理 `coequalizer_π_app_isLocalHom`
-
-English:
-theorem coequalizer_π_app_isLocalHom
-  proof: by
-  have := ι_comp_coequalizerComparison f.toShHom g.toShHom SheafedSpace.forgetToPresheafedSpace
-  dsimp at this
-  rw [← PreservesCoequalizer.iso_hom] at this
-  rw [← this]; rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10754): this instance has to be manually added
-  have : IsIso (PreservesCoequalizer.iso
-      SheafedSpace.forgetToPresheafedSpace f.toShHom g.toShHom).hom.c :=
-    inferInstance
-  apply +allowSynthFailures RingHom.isLocalHom_comp
-  · apply +allowSynthFailures RingHom.isLocalHom_comp
-    · apply CommRingCat.equalizer_ι_isLocalHom'
-    · apply isLocalHom_of_isIso
-  · apply isLocalHom_of_isIso
-
-中文:
-定理 coequalizer_π_app_isLocalHom
-  证明: by
-  have := ι_comp_coequalizerComparison f.toShHom g.toShHom SheafedSpace.forgetToPresheafedSpace
-  dsimp at this
-  rw [← PreservesCoequalizer.iso_hom] at this
-  rw [← this]; rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10754): this instance has to be manually added
-  have : IsIso (PreservesCoequalizer.iso
-      SheafedSpace.forgetToPresheafedSpace f.toShHom g.toShHom).hom.c :=
-    inferInstance
-  apply +allowSynthFailures RingHom.isLocalHom_comp
-  · apply +allowSynthFailures RingHom.isLocalHom_comp
-    · apply CommRingCat.equalizer_ι_isLocalHom'
-    · apply isLocalHom_of_isIso
-  · apply isLocalHom_of_isIso
-
-Depends on / 依赖: PreservesCoequalizer, PreservesCoequalizer.iso_hom, PresheafedSpace, PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_, PresheafedSpace.comp_c_app, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, comp_c_app, f.toShHom, forgetToPresheafedSpace, g.toShHom, iso_hom, toShHom
+/-
+**AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.coequalizer_** 是 Mathlib 中
+的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coequalizer_π_app_isLocalHom
     (U : TopologicalSpace.Opens (coequalizer f.toShHom g.toShHom).carrier) :
@@ -369,7 +236,8 @@ theorem coequalizer_π_app_isLocalHom
   have := ι_comp_coequalizerComparison f.toShHom g.toShHom SheafedSpace.forgetToPresheafedSpace
   dsimp at this
   rw [← PreservesCoequalizer.iso_hom] at this
-  rw [← this]; rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
+  rw [← this, PresheafedSpace.comp_c_app,
+    ← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10754): this instance has to be manually added
   have : IsIso (PreservesCoequalizer.iso
       SheafedSpace.forgetToPresheafedSpace f.toShHom g.toShHom).hom.c :=
@@ -402,24 +270,16 @@ are local ring homs.
 variable (U : Opens (coequalizer f.toShHom g.toShHom).carrier)
 variable (s : (coequalizer f.toShHom g.toShHom).presheaf.obj (op U))
 
-/--
-Definition of `imageBasicOpen` / `imageBasicOpen` 的定义
+/-- (Implementation). The basic open set of the section `π꙳ s`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.imageBasicOpen** 是 Mathlib
+ 中的一个定义，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer`。
+形式化陈述：imageBasicOpen : Opens Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageBasicOpen
-  signature: : Opens Y
-  body: Y.toRingedSpace.basicOpen
-    (show Y.presheaf.obj (op (unop _)) from
-      ((coequalizer.π f.toShHom g.toShHom).hom.c.app (op U)) s)
-
-中文:
-定义 imageBasicOpen
-  签名: : Opens Y
-  定义体: Y.toRingedSpace.basicOpen
-    (show Y.presheaf.obj (op (unop _)) from
-      ((coequalizer.π f.toShHom g.toShHom).hom.c.app (op U)) s)
-
-Depends on / 依赖: Y.presheaf.obj, Y.toRingedSpace.basicOpen, basicOpen, coequalizer, f.toShHom, g.toShHom, hom.c.app, presheaf, toRingedSpace, toShHom
+--- 原说明 ---
+(Implementation). The basic open set of the section `π꙳ s`.
 -/
 noncomputable def imageBasicOpen : Opens Y :=
   Y.toRingedSpace.basicOpen
@@ -428,68 +288,90 @@ noncomputable def imageBasicOpen : Opens Y :=
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `imageBasicOpen_image_preimage` / 定理 `imageBasicOpen_image_preimage`
-
-English:
-theorem imageBasicOpen_image_preimage
-  proof: by
-  fapply Types.coequalizer_preimage_image_eq_of_preimage_eq (↾f.base)
-    (↾g.base) (↾(coequalizer.π f.toShHom g.toShHom).hom.base)
-  · ext
-    simp only [TypeCat.Fun.toFun_apply, comp_apply, ConcreteCategory.hom_ofHom,
-      TypeCat.Fun.coe_mk, ← TopCat.comp_app, ← PresheafedSpace.comp_base]
-    congr 3
-    exact SheafedSpace.forgetToPresheafedSpace.congr_map
-      (coequalizer.condition f.toShHom g.toShHom)
-  · exact isColimitCoforkMapOfIsColimit (forget TopCat) _
-      (isColimitCoforkMapOfIsColimit (SheafedSpace.forget _)
-      _ (coequalizerIsCoequalizer f.toShHom g.toShHom))
-  · suffices
-      (TopologicalSpace.Opens.map f.base).obj (imageBasicOpen f g U s) =
-        (TopologicalSpace.Opens.map g.base).obj (imageBasicOpen f g U s)
-      by injection this
-    delta imageBasicOpen
-    rw [preimage_basicOpen f]; rw [preimage_basicOpen g]
-    dsimp
-    rw [← ConcreteCategory.comp_apply]; rw [← PresheafedSpace.comp_c_app]; rw [← CommRingCat.comp_apply]; rw [← PresheafedSpace.comp_c_app]
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
-    erw [SheafedSpace.congr_hom_app (coequalizer.condition f.toShHom g.toShHom),
-      CommRingCat.comp_apply, X.toRingedSpace.basicOpen_res]
-    apply inf_eq_right.mpr
-    refine (RingedSpace.basicOpen_le _ _).trans ?_
-    rw [coequalizer.condition f.toShHom g.toShHom]
-
-中文:
-定理 imageBasicOpen_image_preimage
-  证明: by
-  fapply Types.coequalizer_preimage_image_eq_of_preimage_eq (↾f.base)
-    (↾g.base) (↾(coequalizer.π f.toShHom g.toShHom).hom.base)
-  · ext
-    simp only [TypeCat.Fun.toFun_apply, comp_apply, ConcreteCategory.hom_ofHom,
-      TypeCat.Fun.coe_mk, ← TopCat.comp_app, ← PresheafedSpace.comp_base]
-    congr 3
-    exact SheafedSpace.forgetToPresheafedSpace.congr_map
-      (coequalizer.condition f.toShHom g.toShHom)
-  · exact isColimitCoforkMapOfIsColimit (forget TopCat) _
-      (isColimitCoforkMapOfIsColimit (SheafedSpace.forget _)
-      _ (coequalizerIsCoequalizer f.toShHom g.toShHom))
-  · suffices
-      (TopologicalSpace.Opens.map f.base).obj (imageBasicOpen f g U s) =
-        (TopologicalSpace.Opens.map g.base).obj (imageBasicOpen f g U s)
-      by injection this
-    delta imageBasicOpen
-    rw [preimage_basicOpen f]; rw [preimage_basicOpen g]
-    dsimp
-    rw [← ConcreteCategory.comp_apply]; rw [← PresheafedSpace.comp_c_app]; rw [← CommRingCat.comp_apply]; rw [← PresheafedSpace.comp_c_app]
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
-    erw [SheafedSpace.congr_hom_app (coequalizer.condition f.toShHom g.toShHom),
-      CommRingCat.comp_apply, X.toRingedSpace.basicOpen_res]
-    apply inf_eq_right.mpr
-    refine (RingedSpace.basicOpen_le _ _).trans ?_
-    rw [coequalizer.condition f.toShHom g.toShHom]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, PresheafedSpace, PresheafedSpace.comp_base, SheafedSpace, SheafedSpace.forget, SheafedSpace.forgetToPresheafedSpace.congr_map, TopCat, TopCat.comp_app, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply, Types.coequalizer_preimage_image_eq_of_preimage_eq, coe_mk, coequalizer, coequalizer.condition, coequalizer_preimage_image_eq_of_preimage_eq, comp_app, comp_apply, comp_base
+/-
+**AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.imageBasicOpen_image_preim
+age** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.HasCoequaliz
+er`。
+形式化陈述：imageBasicOpen_image_preimage : (coequalizer.π f.toShHom g.toShHom).hom.ba
+se ⁻¹' ((coequalizer.π f.toShHom g.toShHom).hom.base '' (imageBasicOpen f g U s)
+.1) = (imageBasicOpen f g U s).1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instHasColimitsOfShapeOfSmallOfHasLimitsO
+fShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : Ty
+pe w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v, w} J] [Categ…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CommRingCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Cate
+gory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Comm
+RingCat
+· 使用定理 `CategoryTheory.Limits.Types.coequalizer_preimage_image_eq_of_preimage_eq
+`：coequalizer_preimage_image_eq_of_preimage_eq (π : Y ⟶ Z) (e : f ≫ π = g ≫ π) (
+h : IsColimit (Cofork.ofπ π e)) (U : Set Y) (H : f ⁻¹' U = g ⁻…
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteColimits.preservesFiniteColimits`：∀
+ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1
+ : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFiniteColimits`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `TopCat.forget_preservesColimits`：CategoryTheory.Limits.PreservesColimits
+ (CategoryTheory.forget TopCat)
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instPreservesColimitsOfShapeTopCatForgetO
+fSmallOfHasLimitsOfShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] (J : Type w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v
+, w} J] [Categ…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.preimage_basicOpen`：preimage_basicO
+pen {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) {U : Opens Y} (s : Y.presheaf.obj
+ (op U)) : (Opens.map f.base).obj (Y.toRinged…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.comp_c_app`：comp_c_app {X Y Z : Preshe
+afedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) : (α ≫ β).c.app U = β.c.app U ≫ α.c.app
+ (op ((Opens.map β.base).obj (unop…
+· 使用引理 `CommRingCat.comp_apply`：comp_apply {R S T : CommRingCat} (f : R ⟶ S) (g 
+: S ⟶ T) (r : R) : (f ≫ g) r = g (f r)
+· 使用定理 `AlgebraicGeometry.SheafedSpace.congr_hom_app`：congr_hom_app {X Y : Sheaf
+edSpace C} {α β : X ⟶ Y} (h : α = β) (U) : α.hom.c.app U = β.hom.c.app U ≫ X.pre
+sheaf.map (eqToHom (by subst h; rf…
+· 使用定理 `AlgebraicGeometry.RingedSpace.basicOpen_res`：basicOpen_res {U V : (Opens
+ X)ᵒᵖ} (i : U ⟶ V) (f : X.presheaf.obj U) : @basicOpen X (unop V) (X.presheaf.ma
+p i f) = unop V ⊓ @basicOpen X (u…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inf_eq_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+= b ↔ b ≤ a
+（共 34 条，此处仅展示前 30 条）
 -/
 theorem imageBasicOpen_image_preimage :
     (coequalizer.π f.toShHom g.toShHom).hom.base ⁻¹'
@@ -511,9 +393,10 @@ theorem imageBasicOpen_image_preimage :
         (TopologicalSpace.Opens.map g.base).obj (imageBasicOpen f g U s)
       by injection this
     delta imageBasicOpen
-    rw [preimage_basicOpen f]; rw [preimage_basicOpen g]
+    rw [preimage_basicOpen f, preimage_basicOpen g]
     dsimp
-    rw [← ConcreteCategory.comp_apply]; rw [← PresheafedSpace.comp_c_app]; rw [← CommRingCat.comp_apply]; rw [← PresheafedSpace.comp_c_app]
+    rw [← ConcreteCategory.comp_apply, ← PresheafedSpace.comp_c_app,
+      ← CommRingCat.comp_apply, ← PresheafedSpace.comp_c_app]
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
     erw [SheafedSpace.congr_hom_app (coequalizer.condition f.toShHom g.toShHom),
       CommRingCat.comp_apply, X.toRingedSpace.basicOpen_res]
@@ -522,109 +405,70 @@ theorem imageBasicOpen_image_preimage :
     rw [coequalizer.condition f.toShHom g.toShHom]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `imageBasicOpen_image_open` / 定理 `imageBasicOpen_image_open`
-
-English:
-theorem imageBasicOpen_image_open
-  proof: by
-  rw [← (TopCat.homeoOfIso (PreservesCoequalizer.iso (SheafedSpace.forget _) f.toShHom
-    g.toShHom)).isOpen_preimage]; rw [TopCat.coequalizer_isOpen_iff]; rw [← Set.preimage_comp]
-  erw [← TopCat.coe_comp]
-  rw [PreservesCoequalizer.iso_hom]; rw [ι_comp_coequalizerComparison]
-  dsimp only [SheafedSpace.forget]
-  rw [imageBasicOpen_image_preimage]
-  exact (imageBasicOpen f g U s).2
-
-中文:
-定理 imageBasicOpen_image_open
-  证明: by
-  rw [← (TopCat.homeoOfIso (PreservesCoequalizer.iso (SheafedSpace.forget _) f.toShHom
-    g.toShHom)).isOpen_preimage]; rw [TopCat.coequalizer_isOpen_iff]; rw [← Set.preimage_comp]
-  erw [← TopCat.coe_comp]
-  rw [PreservesCoequalizer.iso_hom]; rw [ι_comp_coequalizerComparison]
-  dsimp only [SheafedSpace.forget]
-  rw [imageBasicOpen_image_preimage]
-  exact (imageBasicOpen f g U s).2
-
-Depends on / 依赖: PreservesCoequalizer, PreservesCoequalizer.iso, PreservesCoequalizer.iso_hom, Set.preimage_comp, SheafedSpace, SheafedSpace.forget, TopCat, TopCat.coe_comp, TopCat.coequalizer_isOpen_iff, TopCat.homeoOfIso, coe_comp, coequalizer_isOpen_iff, f.toShHom, forget, g.toShHom, homeoOfIso, imageBasicOpen, imageBasicOpen_image_preimage, isOpen_preimage, iso_hom
+/-
+**AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.imageBasicOpen_image_open*
+* 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer`。
+形式化陈述：imageBasicOpen_image_open : IsOpen ((coequalizer.π f.toShHom g.toShHom).ho
+m.base '' (imageBasicOpen f g U s).1)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instHasColimitsOfShapeOfSmallOfHasLimitsO
+fShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : Ty
+pe w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v, w} J] [Categ…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CommRingCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Cate
+gory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Comm
+RingCat
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `AlgebraicGeometry.SheafedSpace.instPreservesColimitsOfShapeTopCatForgetO
+fSmallOfHasLimitsOfShapeOpposite`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] (J : Type w) [inst_1 : CategoryTheory.Category.{w', w} J]   [Small.{v
+, w} J] [Categ…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.isOpen_preimage`：isOpen_preimage (h : X ≃ₜ Y) {s : Set Y} : I
+sOpen (h ⁻¹' s) ↔ IsOpen s
+· 使用定理 `TopCat.coequalizer_isOpen_iff`：coequalizer_isOpen_iff (U : Set ((coequal
+izer f g :) : Type u)) : IsOpen U ↔ IsOpen (coequalizer.π f g ⁻¹' U)
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `TopCat.coe_comp`：∀ {X Y Z : TopCat} (f : X ⟶ Y) (g : Y ⟶ Z),   ⇑(Categor
+yTheory.ConcreteCategory.hom (CategoryTheory.CategoryStruct.comp f g)) =     ⇑(C
+atego…
+· 使用定理 `CategoryTheory.Limits.PreservesCoequalizer.iso_hom`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   (G : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.ι_comp_coequalizerComparison`：ι_comp_coequalizerCo
+mparison [HasCoequalizer f g] [HasCoequalizer (G.map f) (G.map g)] : coequalizer
+.π _ _ ≫ coequalizerComparison f g G = G…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.imageBasicOpen_image
+_preimage`：imageBasicOpen_image_preimage : (coequalizer.π f.toShHom g.toShHom).h
+om.base ⁻¹' ((coequalizer.π f.toShHom g.toShHom).hom.base '' (imageBasi…
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
 -/
 theorem imageBasicOpen_image_open :
     IsOpen ((coequalizer.π f.toShHom g.toShHom).hom.base '' (imageBasicOpen f g U s).1) := by
   rw [← (TopCat.homeoOfIso (PreservesCoequalizer.iso (SheafedSpace.forget _) f.toShHom
-    g.toShHom)).isOpen_preimage]; rw [TopCat.coequalizer_isOpen_iff]; rw [← Set.preimage_comp]
+    g.toShHom)).isOpen_preimage, TopCat.coequalizer_isOpen_iff, ← Set.preimage_comp]
   erw [← TopCat.coe_comp]
-  rw [PreservesCoequalizer.iso_hom]; rw [ι_comp_coequalizerComparison]
+  rw [PreservesCoequalizer.iso_hom, ι_comp_coequalizerComparison]
   dsimp only [SheafedSpace.forget]
   rw [imageBasicOpen_image_preimage]
   exact (imageBasicOpen f g U s).2
 
 set_option backward.isDefEq.respectTransparency false in
 @[instance]
-/--
-theorem `coequalizer_π_stalk_isLocalHom` / 定理 `coequalizer_π_stalk_isLocalHom`
-
-English:
-theorem coequalizer_π_stalk_isLocalHom
-  given: (x : Y)
-  proof: by
-  constructor
-  rintro a ha
-  rcases TopCat.Presheaf.exists_germ_eq _ a with ⟨U, hU, s, rfl⟩
-  rw [PresheafedSpace.stalkMap_germ_apply (coequalizer.π f.toShHom g.toShHom).hom U _ hU] at ha
-  let V := imageBasicOpen f g U s
-  have hV : (coequalizer.π f.toShHom g.toShHom).hom.base ⁻¹'
-      ((coequalizer.π f.toShHom g.toShHom).hom.base '' V.1) = V.1 :=
-    imageBasicOpen_image_preimage f g U s
-  have hV' : V = ⟨(coequalizer.π f.toShHom g.toShHom).hom.base ⁻¹'
-      ((coequalizer.π f.toShHom g.toShHom).hom.base '' V.1), hV.symm ▸ V.2⟩ :=
-    SetLike.ext' hV.symm
-  have V_open : IsOpen ((coequalizer.π f.toShHom g.toShHom).hom.base '' V.1) :=
-    imageBasicOpen_image_open f g U s
-  have VleU : ⟨(coequalizer.π f.toShHom g.toShHom).hom.base '' V.1, V_open⟩ <= U :=
-    Set.image_subset_iff.mpr (Y.toRingedSpace.basicOpen_le _)
-  have hxV : x in V := ⟨hU, ha⟩
-  rw [← (coequalizer f.toShHom g.toShHom).presheaf.germ_res_apply (homOfLE VleU) _
-      (@Set.mem_image_of_mem _ _ (coequalizer.π f.toShHom g.toShHom).hom.base x V.1 hxV) s]
-  apply RingHom.isUnit_map
-  rw [← isUnit_map_iff ((coequalizer.π f.toShHom g.toShHom).hom.c.app _).hom]; rw [← CommRingCat.comp_apply]; rw [NatTrans.naturality]; rw [CommRingCat.comp_apply]; rw [← isUnit_map_iff (Y.presheaf.map (eqToHom hV').op).hom]
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
-  erw [← CommRingCat.comp_apply, ← CommRingCat.comp_apply, ← Y.presheaf.map_comp]
-  convert!
-    @RingedSpace.isUnit_res_basicOpen Y.toRingedSpace (unop _)
-      (((coequalizer.π f.toShHom g.toShHom).hom.c.app (op U)) s)
-
-中文:
-定理 coequalizer_π_stalk_isLocalHom
-  条件: (x : Y)
-  证明: by
-  constructor
-  rintro a ha
-  rcases TopCat.Presheaf.exists_germ_eq _ a with ⟨U, hU, s, rfl⟩
-  rw [PresheafedSpace.stalkMap_germ_apply (coequalizer.π f.toShHom g.toShHom).hom U _ hU] at ha
-  let V := imageBasicOpen f g U s
-  have hV : (coequalizer.π f.toShHom g.toShHom).hom.base ⁻¹'
-      ((coequalizer.π f.toShHom g.toShHom).hom.base '' V.1) = V.1 :=
-    imageBasicOpen_image_preimage f g U s
-  have hV' : V = ⟨(coequalizer.π f.toShHom g.toShHom).hom.base ⁻¹'
-      ((coequalizer.π f.toShHom g.toShHom).hom.base '' V.1), hV.symm ▸ V.2⟩ :=
-    SetLike.ext' hV.symm
-  have V_open : IsOpen ((coequalizer.π f.toShHom g.toShHom).hom.base '' V.1) :=
-    imageBasicOpen_image_open f g U s
-  have VleU : ⟨(coequalizer.π f.toShHom g.toShHom).hom.base '' V.1, V_open⟩ <= U :=
-    Set.image_subset_iff.mpr (Y.toRingedSpace.basicOpen_le _)
-  have hxV : x in V := ⟨hU, ha⟩
-  rw [← (coequalizer f.toShHom g.toShHom).presheaf.germ_res_apply (homOfLE VleU) _
-      (@Set.mem_image_of_mem _ _ (coequalizer.π f.toShHom g.toShHom).hom.base x V.1 hxV) s]
-  apply RingHom.isUnit_map
-  rw [← isUnit_map_iff ((coequalizer.π f.toShHom g.toShHom).hom.c.app _).hom]; rw [← CommRingCat.comp_apply]; rw [NatTrans.naturality]; rw [CommRingCat.comp_apply]; rw [← isUnit_map_iff (Y.presheaf.map (eqToHom hV').op).hom]
-  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
-  erw [← CommRingCat.comp_apply, ← CommRingCat.comp_apply, ← Y.presheaf.map_comp]
-  convert!
-    @RingedSpace.isUnit_res_basicOpen Y.toRingedSpace (unop _)
-      (((coequalizer.π f.toShHom g.toShHom).hom.c.app (op U)) s)
-
-Depends on / 依赖: Presheaf, PresheafedSpace, PresheafedSpace.stalkMap_germ_apply, TopCat, TopCat.Presheaf.exists_germ_eq, coequalizer, exists_germ_eq, f.toShHom, g.toShHom, hV.s, hom.base, imageBasicOpen, imageBasicOpen_image_preimage, stalkMap_germ_apply, toShHom
+/-
+**AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.coequalizer_** 是 Mathlib 中
+的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coequalizer_π_stalk_isLocalHom (x : Y) :
     IsLocalHom ((coequalizer.π f.toShHom g.toShHom :).hom.stalkMap x).hom := by
@@ -641,13 +485,15 @@ theorem coequalizer_π_stalk_isLocalHom (x : Y) :
     SetLike.ext' hV.symm
   have V_open : IsOpen ((coequalizer.π f.toShHom g.toShHom).hom.base '' V.1) :=
     imageBasicOpen_image_open f g U s
-  have VleU : ⟨(coequalizer.π f.toShHom g.toShHom).hom.base '' V.1, V_open⟩ <= U :=
+  have VleU : ⟨(coequalizer.π f.toShHom g.toShHom).hom.base '' V.1, V_open⟩ ≤ U :=
     Set.image_subset_iff.mpr (Y.toRingedSpace.basicOpen_le _)
-  have hxV : x in V := ⟨hU, ha⟩
+  have hxV : x ∈ V := ⟨hU, ha⟩
   rw [← (coequalizer f.toShHom g.toShHom).presheaf.germ_res_apply (homOfLE VleU) _
       (@Set.mem_image_of_mem _ _ (coequalizer.π f.toShHom g.toShHom).hom.base x V.1 hxV) s]
   apply RingHom.isUnit_map
-  rw [← isUnit_map_iff ((coequalizer.π f.toShHom g.toShHom).hom.c.app _).hom]; rw [← CommRingCat.comp_apply]; rw [NatTrans.naturality]; rw [CommRingCat.comp_apply]; rw [← isUnit_map_iff (Y.presheaf.map (eqToHom hV').op).hom]
+  rw [← isUnit_map_iff ((coequalizer.π f.toShHom g.toShHom).hom.c.app _).hom,
+    ← CommRingCat.comp_apply, NatTrans.naturality, CommRingCat.comp_apply,
+    ← isUnit_map_iff (Y.presheaf.map (eqToHom hV').op).hom]
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
   erw [← CommRingCat.comp_apply, ← CommRingCat.comp_apply, ← Y.presheaf.map_comp]
   convert!
@@ -657,28 +503,19 @@ theorem coequalizer_π_stalk_isLocalHom (x : Y) :
 end HasCoequalizer
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `coequalizer` / `coequalizer` 的定义
+/-- The coequalizer of two locally ringed spaces in the category of sheafed spaces is a locally
+ringed space. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.coequalizer** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry.LocallyRingedSpace`。
+形式化陈述：coequalizer : LocallyRingedSpace where toSheafedSpace
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coequalizer
-  signature: : LocallyRingedSpace where
-  body: Limits.coequalizer f.toShHom g.toShHom
-  isLocalRing x := by
-    obtain ⟨y, rfl⟩ :=
-      (TopCat.epi_iff_surjective (coequalizer.π f.toShHom g.toShHom).hom.base).mp inferInstance x
-    exact ((coequalizer.π f.toShHom g.toShHom :).hom.stalkMap y).hom.domain_isLocalRing
-
-中文:
-定义 coequalizer
-  签名: : LocallyRinged空间 where
-  定义体: Limits.coequalizer f.toShHom g.toShHom
-  isLocalRing x := by
-    obtain ⟨y, rfl⟩ :=
-      (TopCat.epi_iff_surjective (coequalizer.π f.toShHom g.toShHom).hom.base).mp inferInstance x
-    exact ((coequalizer.π f.toShHom g.toShHom :).hom.stalkMap y).hom.domain_isLocalRing
-
-Depends on / 依赖: Limits, Limits.coequalizer, coequalizer, f.toShHom, g.toShHom, toShHom
+--- 原说明 ---
+The coequalizer of two locally ringed spaces in the category of sheafed spaces i
+s a locally
+ringed space.
 -/
 noncomputable def coequalizer : LocallyRingedSpace where
   toSheafedSpace := Limits.coequalizer f.toShHom g.toShHom
@@ -687,28 +524,19 @@ noncomputable def coequalizer : LocallyRingedSpace where
       (TopCat.epi_iff_surjective (coequalizer.π f.toShHom g.toShHom).hom.base).mp inferInstance x
     exact ((coequalizer.π f.toShHom g.toShHom :).hom.stalkMap y).hom.domain_isLocalRing
 
-/--
-Definition of `coequalizerCofork` / `coequalizerCofork` 的定义
+/-- The explicit coequalizer cofork of locally ringed spaces. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.coequalizerCofork** 是 Mathlib 中的一个定义，位于命名
+空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：coequalizerCofork : Cofork f g
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.coequalizer_π_stalk_
+isLocalHom`：coequalizer_π_stalk_isLocalHom (x : Y) : IsLocalHom ((coequalizer.π 
+f.toShHom g.toShHom :).hom.stalkMap x).hom
 
-English:
-definition coequalizerCofork
-  signature: : Cofork f g
-  body: Cofork.ofπ (P := coequalizer f g)
-    (homMk (coequalizer.π f.toShHom g.toShHom)
-      -- Porting note: this used to be automatic
-      (HasCoequalizer.coequalizer_π_stalk_isLocalHom _ _))
-    (forgetToSheafedSpace.map_injective (coequalizer.condition f.toShHom g.toShHom))
-
-中文:
-定义 coequalizerCofork
-  签名: : 余叉 f g
-  定义体: Cofork.ofπ (P := coequalizer f g)
-    (homMk (coequalizer.π f.toShHom g.toShHom)
-      -- Porting note: this used to be automatic
-      (HasCoequalizer.coequalizer_π_stalk_isLocalHom _ _))
-    (forgetToSheafedSpace.map_injective (coequalizer.condition f.toShHom g.toShHom))
-
-Depends on / 依赖: Cofork, Cofork.of, coequalizer, f.toShHom, g.toShHom, toShHom
+--- 原说明 ---
+The explicit coequalizer cofork of locally ringed spaces.
 -/
 noncomputable def coequalizerCofork : Cofork f g :=
   Cofork.ofπ (P := coequalizer f g)
@@ -716,25 +544,30 @@ noncomputable def coequalizerCofork : Cofork f g :=
       -- Porting note: this used to be automatic
       (HasCoequalizer.coequalizer_π_stalk_isLocalHom _ _))
     (forgetToSheafedSpace.map_injective (coequalizer.condition f.toShHom g.toShHom))
-
-/--
-theorem `isLocalHom_stalkMap_congr` / 定理 `isLocalHom_stalkMap_congr`
-
-English:
-theorem isLocalHom_stalkMap_congr
-  statement: {X Y : RingedSpace} (f g : X ⟶ Y) (H : f = g) (x)
-  proof: by
-  rw [PresheafedSpace.stalkMap.congr_hom _ _ (congr_arg InducedCategory.Hom.hom H.symm) x]
-  infer_instance
-
-中文:
-定理 isLocalHom_stalkMap_congr
-  结论: {X Y : RingedSpace} (f g : X ⟶ Y) (H : f = g) (x)
-  证明: by
-  rw [PresheafedSpace.stalkMap.congr_hom _ _ (congr_arg InducedCategory.Hom.hom H.symm) x]
-  infer_instance
-
-Depends on / 依赖: H.symm, InducedCategory, InducedCategory.Hom.hom, PresheafedSpace, PresheafedSpace.stalkMap.congr_hom, congr_arg, congr_hom, infer_instance, stalkMap
+/-
+**AlgebraicGeometry.LocallyRingedSpace.isLocalHom_stalkMap_congr** 是 Mathlib 中的一
+个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：isLocalHom_stalkMap_congr {X Y : RingedSpace} (f g : X ⟶ Y) (H : f = g) (x
+) (h : IsLocalHom (f.hom.stalkMap x).hom) : IsLocalHom (g.hom.stalkMap x).hom
+参数：f g : X ⟶ Y；H : f = g；x；h : IsLocalHom (f.hom.stalkMap x).hom。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.PresheafedSpace.stalkMap.congr_hom`：congr_hom {X Y : P
+resheafedSpace.{_, _, v} C} (α β : X ⟶ Y) (h : α = β) (x : X) : α.stalkMap x = e
+qToHom (show Y.presheaf.stalk (α.base x) =…
+· 使用定理 `CommRingCat.isLocalHom_comp`：CommRingCat.isLocalHom_comp {R S T : CommRi
+ngCat} (f : R ⟶ S) (g : S ⟶ T) [IsLocalHom g.hom] [IsLocalHom f.hom] : IsLocalHo
+m (f ≫ g).hom
+· 使用定理 `isLocalHom_of_isIso`：isLocalHom_of_isIso {R S : CommRingCat} (f : R ⟶ S)
+ [IsIso f] : IsLocalHom f.hom
+· 使用定理 `CategoryTheory.instIsIsoEqToHom`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (h : X = Y),   CategoryTheory.IsIso (CategoryTheo
+ry.eqToHom h)
 -/
 theorem isLocalHom_stalkMap_congr {X Y : RingedSpace} (f g : X ⟶ Y) (H : f = g) (x)
     (h : IsLocalHom (f.hom.stalkMap x).hom) :
@@ -743,75 +576,25 @@ theorem isLocalHom_stalkMap_congr {X Y : RingedSpace} (f g : X ⟶ Y) (H : f = g
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coequalizerCoforkIsColimit` / `coequalizerCoforkIsColimit` 的定义
+/-- The cofork constructed in `coequalizerCofork` is indeed a colimit cocone. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.coequalizerCoforkIsColimit** 是 Mathlib 中的
+一个定义，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：coequalizerCoforkIsColimit : IsColimit (coequalizerCofork f g)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coequalizerCoforkIsColimit
-  signature: : IsColimit (coequalizerCofork f g)
-  body: by
-  refine Cofork.IsColimit.mk' _ (fun s => ?_)
-  have e : f.toShHom ≫ s.π.toShHom = g.toShHom ≫ s.π.toShHom := by
-    simp only [← comp_toShHom, s.condition]
-  refine ⟨⟨(coequalizer.desc s.π.toShHom e).hom, fun x => ?_⟩,
-    ⟨Hom.ext' (Functor.congr_map SheafedSpace.forgetToPresheafedSpace
-      (coequalizer.π_desc (Hom.toShHom s.π) e)),
-      fun {m} hm => LocallyRingedSpace.forgetToSheafedSpace.map_injective
-        (coequalizer.hom_ext ((LocallyRingedSpace.forgetToSheafedSpace.congr_map hm).trans
-      ((coequalizer.π_desc _ _).symm)))⟩⟩
-  rcases (TopCat.epi_iff_surjective
-    (coequalizer.π f.toShHom g.toShHom).hom.base).mp inferInstance x with ⟨y, rfl⟩
-  -- Porting note: was `apply isLocalHom_of_comp _ (PresheafedSpace.stalkMap ...)`, this
-  -- used to allow you to provide the proof that `... ≫ ...` is a local ring homomorphism later,
-  -- but this is no longer possible
-  set h := _
-  change IsLocalHom h
-  suffices _ : IsLocalHom (((coequalizerCofork f g).π.1.stalkMap _).hom.comp h) by
-    apply isLocalHom_of_comp _ ((coequalizerCofork f g).π.1.stalkMap _).hom
-  rw [← CommRingCat.hom_ofHom h]; rw [← CommRingCat.hom_comp]
-  erw [← PresheafedSpace.stalkMap.comp]
-  apply isLocalHom_stalkMap_congr _ _ (coequalizer.π_desc s.π.toShHom e).symm y
-  change IsLocalHom (s.π.stalkMap y).hom
-  infer_instance
-
-中文:
-定义 coequalizerCoforkIsColimit
-  签名: : 是余极限 (coequalizerCofork f g)
-  定义体: by
-  refine Cofork.IsColimit.mk' _ (fun s => ?_)
-  have e : f.toShHom ≫ s.π.toShHom = g.toShHom ≫ s.π.toShHom := by
-    simp only [← comp_toShHom, s.condition]
-  refine ⟨⟨(coequalizer.desc s.π.toShHom e).hom, fun x => ?_⟩,
-    ⟨Hom.ext' (Functor.congr_map SheafedSpace.forgetToPresheafedSpace
-      (coequalizer.π_desc (Hom.toShHom s.π) e)),
-      fun {m} hm => LocallyRingedSpace.forgetToSheafedSpace.map_injective
-        (coequalizer.hom_ext ((LocallyRingedSpace.forgetToSheafedSpace.congr_map hm).trans
-      ((coequalizer.π_desc _ _).symm)))⟩⟩
-  rcases (TopCat.epi_iff_surjective
-    (coequalizer.π f.toShHom g.toShHom).hom.base).mp inferInstance x with ⟨y, rfl⟩
-  -- Porting note: was `apply isLocalHom_of_comp _ (PresheafedSpace.stalkMap ...)`, this
-  -- used to allow you to provide the proof that `... ≫ ...` is a local ring homomorphism later,
-  -- but this is no longer possible
-  set h := _
-  change IsLocalHom h
-  suffices _ : IsLocalHom (((coequalizerCofork f g).π.1.stalkMap _).hom.comp h) by
-    apply isLocalHom_of_comp _ ((coequalizerCofork f g).π.1.stalkMap _).hom
-  rw [← CommRingCat.hom_ofHom h]; rw [← CommRingCat.hom_comp]
-  erw [← PresheafedSpace.stalkMap.comp]
-  apply isLocalHom_stalkMap_congr _ _ (coequalizer.π_desc s.π.toShHom e).symm y
-  change IsLocalHom (s.π.stalkMap y).hom
-  infer_instance
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.mk, Decidable, Functor, Functor.congr_map, Hom.ext, Hom.toShHom, IsColimit, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace.congr_map, LocallyRingedSpace.forgetToSheafedSpace.map_injective, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, coequalizer, coequalizer.desc, coequalizer.hom_ext, comp_toShHom, condition, congr_map, f.toShHom
+--- 原说明 ---
+The cofork constructed in `coequalizerCofork` is indeed a colimit cocone.
 -/
 noncomputable def coequalizerCoforkIsColimit : IsColimit (coequalizerCofork f g) := by
-  refine Cofork.IsColimit.mk' _ (fun s => ?_)
+  refine Cofork.IsColimit.mk' _ (fun s ↦ ?_)
   have e : f.toShHom ≫ s.π.toShHom = g.toShHom ≫ s.π.toShHom := by
     simp only [← comp_toShHom, s.condition]
-  refine ⟨⟨(coequalizer.desc s.π.toShHom e).hom, fun x => ?_⟩,
+  refine ⟨⟨(coequalizer.desc s.π.toShHom e).hom, fun x ↦ ?_⟩,
     ⟨Hom.ext' (Functor.congr_map SheafedSpace.forgetToPresheafedSpace
       (coequalizer.π_desc (Hom.toShHom s.π) e)),
-      fun {m} hm => LocallyRingedSpace.forgetToSheafedSpace.map_injective
+      fun {m} hm ↦ LocallyRingedSpace.forgetToSheafedSpace.map_injective
         (coequalizer.hom_ext ((LocallyRingedSpace.forgetToSheafedSpace.congr_map hm).trans
       ((coequalizer.π_desc _ _).symm)))⟩⟩
   rcases (TopCat.epi_iff_surjective
@@ -823,78 +606,42 @@ noncomputable def coequalizerCoforkIsColimit : IsColimit (coequalizerCofork f g)
   change IsLocalHom h
   suffices _ : IsLocalHom (((coequalizerCofork f g).π.1.stalkMap _).hom.comp h) by
     apply isLocalHom_of_comp _ ((coequalizerCofork f g).π.1.stalkMap _).hom
-  rw [← CommRingCat.hom_ofHom h]; rw [← CommRingCat.hom_comp]
+  rw [← CommRingCat.hom_ofHom h, ← CommRingCat.hom_comp]
   erw [← PresheafedSpace.stalkMap.comp]
   apply isLocalHom_stalkMap_congr _ _ (coequalizer.π_desc s.π.toShHom e).symm y
   change IsLocalHom (s.π.stalkMap y).hom
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasCoequalizer f g
-  body: ⟨⟨⟨_, coequalizerCoforkIsColimit f g⟩⟩⟩
-
-中文:
-实例 :
-  签名: HasCoequalizer f g
-  定义体: ⟨⟨⟨_, coequalizerCoforkIsColimit f g⟩⟩⟩
-
-Depends on / 依赖: coequalizerCoforkIsColimit
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasCoequalizer f g :=
   ⟨⟨⟨_, coequalizerCoforkIsColimit f g⟩⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasCoequalizers LocallyRingedSpace
-  body: hasCoequalizers_of_hasColimit_parallelPair _
-
-中文:
-实例 :
-  签名: HasCoequalizers LocallyRinged空间
-  定义体: hasCoequalizers_of_hasColimit_parallelPair _
-
-Depends on / 依赖: hasCoequalizers_of_hasColimit_parallelPair
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasCoequalizers LocallyRingedSpace :=
   hasCoequalizers_of_hasColimit_parallelPair _
-
-/--
-Instance `preservesCoequalizer` / 实例 `preservesCoequalizer`
-
-English:
-instance preservesCoequalizer
-  signature: :
-  body: ⟨fun {F} => by
-    -- Porting note: was `apply preservesColimitOfIsoDiagram ...` and the proof that preservation
-    -- of colimit is provided later
-    suffices PreservesColimit (parallelPair (F.map WalkingParallelPairHom.left)
-        (F.map WalkingParallelPairHom.right)) forgetToSheafedSpace from
-      preservesColimit_of_iso_diagram _ (diagramIsoParallelPair F).symm
-    apply preservesColimit_of_preserves_colimit_cocone (coequalizerCoforkIsColimit _ _)
-    apply (isColimitMapCoconeCoforkEquiv _ _).symm _
-    dsimp only [forgetToSheafedSpace]
-    exact coequalizerIsCoequalizer _ _⟩
-
-中文:
-实例 preservesCoequalizer
-  签名: :
-  定义体: ⟨fun {F} => by
-    -- Porting note: was `apply preservesColimitOfIsoDiagram ...` and the proof that preservation
-    -- of colimit is provided later
-    suffices PreservesColimit (parallelPair (F.map WalkingParallelPairHom.left)
-        (F.map WalkingParallelPairHom.right)) forgetToSheafedSpace from
-      preservesColimit_of_iso_diagram _ (diagramIsoParallelPair F).symm
-    apply preservesColimit_of_preserves_colimit_cocone (coequalizerCoforkIsColimit _ _)
-    apply (isColimitMapCoconeCoforkEquiv _ _).symm _
-    dsimp only [forgetToSheafedSpace]
-    exact coequalizerIsCoequalizer _ _⟩
+/-
+**AlgebraicGeometry.LocallyRingedSpace.preservesCoequalizer** 是 Mathlib 中的一个实例，位
+于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：preservesCoequalizer : PreservesColimitsOfShape WalkingParallelPair forget
+ToSheafedSpace.{v}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone`：pres
+ervesColimit_of_preserves_colimit_cocone {F : C ⥤ D} {t : Cocone K} (h : IsColim
+it t) (hF : IsColimit (F.mapCocone t)) : PreservesColimi…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.HasCoequalizer.coequalizer_π_stalk_
+isLocalHom`：coequalizer_π_stalk_isLocalHom (x : Y) : IsLocalHom ((coequalizer.π 
+f.toShHom g.toShHom :).hom.stalkMap x).hom
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_iso_diagram`：preservesColimit_
+of_iso_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesColimit K₁ F]
+ : PreservesColimit K₂ F where preserves {c…
 -/
 noncomputable instance preservesCoequalizer :
     PreservesColimitsOfShape WalkingParallelPair forgetToSheafedSpace.{v} :=
@@ -911,38 +658,33 @@ noncomputable instance preservesCoequalizer :
 
 end HasCoequalizer
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimits LocallyRingedSpace
-  body: has_colimits_of_hasCoequalizers_and_coproducts
-
-中文:
-实例 :
-  签名: 有余极限 LocallyRinged空间
-  定义体: has_colimits_of_hasCoequalizers_and_coproducts
-
-Depends on / 依赖: has_colimits_of_hasCoequalizers_and_coproducts
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimits LocallyRingedSpace :=
   has_colimits_of_hasCoequalizers_and_coproducts
-
-/--
-Instance `preservesColimits_forgetToSheafedSpace` / 实例 `preservesColimits_forgetToSheafedSpace`
-
-English:
-instance preservesColimits_forgetToSheafedSpace
-  signature: :
-  body: preservesColimits_of_preservesCoequalizers_and_coproducts _
-
-中文:
-实例 preservesColimits_forgetToSheafedSpace
-  签名: :
-  定义体: preservesColimits_of_preservesCoequalizers_and_coproducts _
-
-Depends on / 依赖: preservesColimits_of_preservesCoequalizers_and_coproducts
+/-
+**AlgebraicGeometry.LocallyRingedSpace.preservesColimits_forgetToSheafedSpace** 
+是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：preservesColimits_forgetToSheafedSpace : PreservesColimits LocallyRingedSp
+ace.forgetToSheafedSpace.{u}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimits_of_preservesCoequalizers_and_cop
+roducts`：preservesColimits_of_preservesCoequalizers_and_coproducts [HasCoequaliz
+ers C] [HasCoproducts.{w} C] (G : C ⥤ D) [PreservesColimitsOfShape Wa…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instHasCoequalizers`：CategoryTheory
+.Limits.HasCoequalizers AlgebraicGeometry.LocallyRingedSpace
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instHasColimitsOfShapeDiscrete`：∀ {
+ι : Type v} [Small.{u, v} ι],   CategoryTheory.Limits.HasColimitsOfShape (Catego
+ryTheory.Discrete ι) AlgebraicGeometry.LocallyRingedSpace
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instPreservesColimitsOfShapeSheafed
+SpaceCommRingCatDiscreteForgetToSheafedSpace`：∀ {ι : Type v} [Small.{u, v} ι],  
+ CategoryTheory.Limits.PreservesColimitsOfShape (CategoryTheory.Discrete ι)     
+AlgebraicGeometry.LocallyR…
 -/
 noncomputable instance preservesColimits_forgetToSheafedSpace :
     PreservesColimits LocallyRingedSpace.forgetToSheafedSpace.{u} :=
@@ -951,3 +693,4 @@ noncomputable instance preservesColimits_forgetToSheafedSpace :
 end LocallyRingedSpace
 
 end AlgebraicGeometry
+

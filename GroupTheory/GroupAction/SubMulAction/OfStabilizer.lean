@@ -51,118 +51,63 @@ variable (G : Type*) [Group G] {α : Type*} [MulAction G α]
 
 /-- Action of the stabilizer of a point on the complement. -/
 @[to_additive /-- Action of the stabilizer of a point on the complement. -/]
-/--
-Definition of `ofStabilizer` / `ofStabilizer` 的定义
+/-
+**SubMulAction.ofStabilizer** 是 Mathlib 中的一个定义，位于命名空间 `SubMulAction`。
+形式化陈述：ofStabilizer (a : α) : SubMulAction (stabilizer G a) α where carrier
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofStabilizer
-  signature: (a : α)
-  body: {a}ᶜ
-  smul_mem' g x := by
-    simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
-    rw [not_imp_not]; rw [smul_eq_iff_eq_inv_smul]
-    intro hgx
-    apply symm
-    rw [hgx]; rw [← smul_eq_iff_eq_inv_smul]
-    exact g.prop
-
-@[to_additive]
-
-中文:
-定义 ofStabilizer
-  签名: (a : α)
-  定义体: {a}ᶜ
-  smul_mem' g x := by
-    simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
-    rw [not_imp_not]; rw [smul_eq_iff_eq_inv_smul]
-    intro hgx
-    apply symm
-    rw [hgx]; rw [← smul_eq_iff_eq_inv_smul]
-    exact g.prop
-
-@[to_additive]
+--- 原说明 ---
+Action of the stabilizer of a point on the complement.
 -/
 def ofStabilizer (a : α) : SubMulAction (stabilizer G a) α where
   carrier := {a}ᶜ
   smul_mem' g x := by
     simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
-    rw [not_imp_not]; rw [smul_eq_iff_eq_inv_smul]
+    rw [not_imp_not, smul_eq_iff_eq_inv_smul]
     intro hgx
     apply symm
-    rw [hgx]; rw [← smul_eq_iff_eq_inv_smul]
+    rw [hgx, ← smul_eq_iff_eq_inv_smul]
     exact g.prop
 
 @[to_additive]
-/--
-theorem `ofStabilizer_carrier` / 定理 `ofStabilizer_carrier`
-
-English:
-theorem ofStabilizer_carrier
-  given: (a : α)
-  statement: (ofStabilizer G a).carrier = {a}ᶜ
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 ofStabilizer_carrier
-  条件: (a : α)
-  结论: (ofStabilizer G a).carrier = {a}ᶜ
-  证明: rfl
-
-@[to_additive]
+/-
+**SubMulAction.ofStabilizer_carrier** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：ofStabilizer_carrier (a : α) : (ofStabilizer G a).carrier = {a}ᶜ
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofStabilizer_carrier (a : α) : (ofStabilizer G a).carrier = {a}ᶜ :=
   rfl
 
 @[to_additive]
-/--
-theorem `mem_ofStabilizer_iff` / 定理 `mem_ofStabilizer_iff`
-
-English:
-theorem mem_ofStabilizer_iff
-  given: (a : α) {x : α}
-  statement: x in ofStabilizer G a ↔ x != a
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_ofStabilizer_iff
-  条件: (a : α) {x : α}
-  结论: x in ofStabilizer G a ↔ x != a
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**SubMulAction.mem_ofStabilizer_iff** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：mem_ofStabilizer_iff (a : α) {x : α} : x in ofStabilizer G a ↔ x != a
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_ofStabilizer_iff (a : α) {x : α} : x in ofStabilizer G a ↔ x != a :=
+theorem mem_ofStabilizer_iff (a : α) {x : α} : x ∈ ofStabilizer G a ↔ x ≠ a :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `notMem_val_image` / 定理 `notMem_val_image`
-
-English:
-theorem notMem_val_image
-  given: {a : α} (t : Set (ofStabilizer G a))
-  proof: by
-  rintro ⟨b, hb⟩
-  exact b.prop (by simp [hb])
-
-@[to_additive]
-
-中文:
-定理 notMem_val_image
-  条件: {a : α} (t : 集合 (ofStabilizer G a))
-  证明: by
-  rintro ⟨b, hb⟩
-  exact b.prop (by simp [hb])
-
-@[to_additive]
-
-Depends on / 依赖: b.prop
+/-
+**SubMulAction.notMem_val_image** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：notMem_val_image {a : α} (t : Set (ofStabilizer G a)) : a ∉ Subtype.val ''
+ t
+参数：t : Set (ofStabilizer G a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem notMem_val_image {a : α} (t : Set (ofStabilizer G a)) :
     a ∉ Subtype.val '' t := by
@@ -170,115 +115,121 @@ theorem notMem_val_image {a : α} (t : Set (ofStabilizer G a)) :
   exact b.prop (by simp [hb])
 
 @[to_additive]
-/--
-theorem `neq_of_mem_ofStabilizer` / 定理 `neq_of_mem_ofStabilizer`
-
-English:
-theorem neq_of_mem_ofStabilizer
-  given: (a : α) {x : ofStabilizer G a}
-  statement: ↑x != a
-  proof: x.prop
-
-@[to_additive]
-
-中文:
-定理 neq_of_mem_ofStabilizer
-  条件: (a : α) {x : ofStabilizer G a}
-  结论: ↑x != a
-  证明: x.prop
-
-@[to_additive]
-
-Depends on / 依赖: x.prop
+/-
+**SubMulAction.neq_of_mem_ofStabilizer** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction`。
+形式化陈述：neq_of_mem_ofStabilizer (a : α) {x : ofStabilizer G a} : ↑x != a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
-theorem neq_of_mem_ofStabilizer (a : α) {x : ofStabilizer G a} : ↑x != a :=
+theorem neq_of_mem_ofStabilizer (a : α) {x : ofStabilizer G a} : ↑x ≠ a :=
   x.prop
 
 @[to_additive]
-/--
-lemma `ENat_card_ofStabilizer_add_one_eq` / 引理 `ENat_card_ofStabilizer_add_one_eq`
-
-English:
-lemma ENat_card_ofStabilizer_add_one_eq
-  given: (a : α)
-  proof: by
-  dsimp only [ENat.card]
-  rw [← Cardinal.mk_sum_compl {a}]; rw [map_add]; rw [add_comm]; rw [eq_comm]
-  congr
-  simp
-
-@[to_additive]
-
-中文:
-引理 E自然数_card_ofStabilizer_add_one_eq
-  条件: (a : α)
-  证明: by
-  dsimp only [ENat.card]
-  rw [← Cardinal.mk_sum_compl {a}]; rw [map_add]; rw [add_comm]; rw [eq_comm]
-  congr
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: Cardinal, Cardinal.mk_sum_compl, ENat.card, add_comm, eq_comm, map_add, mk_sum_compl
+/-
+**SubMulAction.ENat_card_ofStabilizer_add_one_eq** 是 Mathlib 中的一个引理，位于命名空间 `SubM
+ulAction`。
+形式化陈述：ENat_card_ofStabilizer_add_one_eq (a : α) : ENat.card (ofStabilizer G a) +
+ 1 = ENat.card α
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_sum_compl`：mk_sum_compl {α} (s : Set α) : #s + #(sᶜ : Set α)
+ = #α
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `OrderRingHom.instRingHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : N
+onAssocSemiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3
+ : Preorder β], Rin…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Cardinal.mk_fintype`：mk_fintype (α : Type u) [h : Fintype α] : #α = Fint
+ype.card α
+· 使用定理 `Fintype.card_unique`：card_unique [Unique α] [h : Fintype α] : Fintype.ca
+rd α = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ENat_card_ofStabilizer_add_one_eq (a : α) :
     ENat.card (ofStabilizer G a) + 1 = ENat.card α := by
   dsimp only [ENat.card]
-  rw [← Cardinal.mk_sum_compl {a}]; rw [map_add]; rw [add_comm]; rw [eq_comm]
+  rw [← Cardinal.mk_sum_compl {a}, map_add, add_comm, eq_comm]
   congr
   simp
 
 @[to_additive]
-/--
-lemma `nat_card_ofStabilizer_add_one_eq` / 引理 `nat_card_ofStabilizer_add_one_eq`
-
-English:
-lemma nat_card_ofStabilizer_add_one_eq
-  given: [Finite α] (a : α)
-  proof: by
-  classical
-  let := Fintype.ofFinite α
-  rw [Nat.subtype_card {a}ᶜ]; rw [← Finset.card_singleton a]; rw [Finset.card_compl_add_card]; rw [Nat.card_eq_fintype_card]
-  simp [mem_ofStabilizer_iff]
-
-@[to_additive]
-
-中文:
-引理 nat_card_ofStabilizer_add_one_eq
-  条件: [有限 α] (a : α)
-  证明: by
-  classical
-  let := Fintype.ofFinite α
-  rw [Nat.subtype_card {a}ᶜ]; rw [← Finset.card_singleton a]; rw [Finset.card_compl_add_card]; rw [Nat.card_eq_fintype_card]
-  simp [mem_ofStabilizer_iff]
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.card_compl_add_card, Finset.card_singleton, Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, Nat.subtype_card, card_compl_add_card, card_eq_fintype_card, card_singleton, classical, mem_ofStabilizer_iff, ofFinite, subtype_card
+/-
+**SubMulAction.nat_card_ofStabilizer_add_one_eq** 是 Mathlib 中的一个引理，位于命名空间 `SubMu
+lAction`。
+形式化陈述：nat_card_ofStabilizer_add_one_eq [Finite α] (a : α) : Nat.card (ofStabiliz
+er G a) + 1 = Nat.card α
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.subtype_card`：subtype_card {p : α -> Prop} (s : Finset α) (H : foral
+l x : α, x in s ↔ p x) : Nat.card { x // p x } = Finset.card s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用定理 `Finset.card_compl_add_card`：Finset.card_compl_add_card [DecidableEq α] [
+Fintype α] (s : Finset α) : #sᶜ + #s = Fintype.card α
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
 -/
 lemma nat_card_ofStabilizer_add_one_eq [Finite α] (a : α) :
     Nat.card (ofStabilizer G a) + 1 = Nat.card α := by
   classical
   let := Fintype.ofFinite α
-  rw [Nat.subtype_card {a}ᶜ]; rw [← Finset.card_singleton a]; rw [Finset.card_compl_add_card]; rw [Nat.card_eq_fintype_card]
+  rw [Nat.subtype_card {a}ᶜ, ← Finset.card_singleton a, Finset.card_compl_add_card,
+    Nat.card_eq_fintype_card]
   simp [mem_ofStabilizer_iff]
 
 @[to_additive]
-/--
-lemma `nat_card_ofStabilizer_eq` / 引理 `nat_card_ofStabilizer_eq`
-
-English:
-lemma nat_card_ofStabilizer_eq
-  given: [Finite α] (a : α)
-  proof: Nat.eq_sub_of_add_eq (nat_card_ofStabilizer_add_one_eq G a)
-
-中文:
-引理 nat_card_ofStabilizer_eq
-  条件: [有限 α] (a : α)
-  证明: Nat.eq_sub_of_add_eq (nat_card_ofStabilizer_add_one_eq G a)
-
-Depends on / 依赖: Nat.eq_sub_of_add_eq, eq_sub_of_add_eq, nat_card_ofStabilizer_add_one_eq
+/-
+**SubMulAction.nat_card_ofStabilizer_eq** 是 Mathlib 中的一个引理，位于命名空间 `SubMulAction`
+。
+形式化陈述：nat_card_ofStabilizer_eq [Finite α] (a : α) : Nat.card (ofStabilizer G a) 
+= Nat.card α - 1
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_sub_of_add_eq`：∀ {a b c : ℕ}, c + b = a → c = a - b
+· 使用引理 `SubMulAction.nat_card_ofStabilizer_add_one_eq`：nat_card_ofStabilizer_add
+_one_eq [Finite α] (a : α) : Nat.card (ofStabilizer G a) + 1 = Nat.card α
 -/
 lemma nat_card_ofStabilizer_eq [Finite α] (a : α) :
     Nat.card (ofStabilizer G a) = Nat.card α - 1 :=
@@ -286,101 +237,72 @@ lemma nat_card_ofStabilizer_eq [Finite α] (a : α) :
 
 variable {G}
 
-/--
-Definition of `_root_.SubAddAction.ofStabilizer.conjMap` / `_root_.SubAddAction.ofStabilizer.conjMap` 的定义
+/-- Conjugation induces an equivariant map between the SubAddAction of
+the stabilizer of a point and that of its translate. -/
+/-
+**SubMulAction._root_.SubAddAction.ofStabilizer.conjMap** 是 Mathlib 中的一个定义，位于命名空
+间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.SubAddAction.ofStabilizer.conjMap
-  signature: {G : Type*} [AddGroup G] {α : Type*} [AddAction G α]
-  body: ⟨g +ᵥ x.val, fun hy => x.prop (by simpa [hg] using hy)⟩
-  map_vadd' := fun ⟨k, hk⟩ x => by
-    simp [← SetLike.coe_eq_coe, AddAction.addSubgroup_vadd_def,
-      AddAction.stabilizerEquivStabilizer_apply, ← vadd_assoc]
-
-中文:
-定义 _root_.SubAdd作用.ofStabilizer.conjMap
-  签名: {G : 类型} [加法群 G] {α : 类型} [加法作用 G α]
-  定义体: ⟨g +ᵥ x.val, fun hy => x.prop (by simpa [hg] using hy)⟩
-  map_vadd' := fun ⟨k, hk⟩ x => by
-    simp [← SetLike.coe_eq_coe, AddAction.addSubgroup_vadd_def,
-      AddAction.stabilizerEquivStabilizer_apply, ← vadd_assoc]
-
-Depends on / 依赖: x.prop, x.val
+--- 原说明 ---
+Conjugation induces an equivariant map between the SubAddAction of
+the stabilizer of a point and that of its translate.
 -/
 def _root_.SubAddAction.ofStabilizer.conjMap {G : Type*} [AddGroup G] {α : Type*} [AddAction G α]
     {g : G} {a b : α} (hg : b = g +ᵥ a) :
     AddActionHom (AddAction.stabilizerEquivStabilizer hg)
       (SubAddAction.ofStabilizer G a) (SubAddAction.ofStabilizer G b) where
-  toFun x := ⟨g +ᵥ x.val, fun hy => x.prop (by simpa [hg] using hy)⟩
-  map_vadd' := fun ⟨k, hk⟩ x => by
+  toFun x := ⟨g +ᵥ x.val, fun hy ↦ x.prop (by simpa [hg] using hy)⟩
+  map_vadd' := fun ⟨k, hk⟩ x ↦ by
     simp [← SetLike.coe_eq_coe, AddAction.addSubgroup_vadd_def,
       AddAction.stabilizerEquivStabilizer_apply, ← vadd_assoc]
 
 /-- Conjugation induces an equivariant map between the SubMulAction of
 the stabilizer of a point and that of its translate. -/
 @[to_additive existing SubAddAction.ofStabilizer.conjMap]
-/--
-Definition of `ofStabilizer.conjMap` / `ofStabilizer.conjMap` 的定义
+/-
+**SubMulAction.ofStabilizer.conjMap** 是 Mathlib 中的一个定义，位于命名空间 `SubMulAction.ofSt
+abilizer`。
+形式化陈述：{G : Type u_1} →   [inst : Group G] →     {α : Type u_2} →       [inst_1 :
+ MulAction G α] →         {g : G} →           {a b : α} →             (hg : b = 
+g • a) →               ↥(SubMulAction.ofStabilizer G a) →ₑ[⇑(MulAction.stabilize
+rEquivStabilizer hg)]                 ↥(SubMulAction.ofStabilizer G b)
+参数：hg : b = g • a；SubMulAction.ofStabilizer G a；MulAction.stabilizerEquivStabili
+zer hg；SubMulAction.ofStabilizer G b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofStabilizer.conjMap
-  signature: {g : G} {a b : α} (hg : b = g • a)
-  body: ⟨g • x.val, fun hy => x.prop (by simpa [hg] using hy)⟩
-  map_smul' := fun ⟨k, hk⟩ => by
-    simp [← SetLike.coe_eq_coe, subgroup_smul_def, stabilizerEquivStabilizer, ← smul_assoc]
-
-中文:
-定义 ofStabilizer.conjMap
-  签名: {g : G} {a b : α} (hg : b = g • a)
-  定义体: ⟨g • x.val, fun hy => x.prop (by simpa [hg] using hy)⟩
-  map_smul' := fun ⟨k, hk⟩ => by
-    simp [← SetLike.coe_eq_coe, subgroup_smul_def, stabilizerEquivStabilizer, ← smul_assoc]
-
-Depends on / 依赖: x.prop, x.val
+--- 原说明 ---
+Conjugation induces an equivariant map between the SubMulAction of
+the stabilizer of a point and that of its translate.
 -/
 def ofStabilizer.conjMap {g : G} {a b : α} (hg : b = g • a) :
     MulActionHom (stabilizerEquivStabilizer hg) (ofStabilizer G a) (ofStabilizer G b) where
-  toFun x := ⟨g • x.val, fun hy => x.prop (by simpa [hg] using hy)⟩
-  map_smul' := fun ⟨k, hk⟩ => by
+  toFun x := ⟨g • x.val, fun hy ↦ x.prop (by simpa [hg] using hy)⟩
+  map_smul' := fun ⟨k, hk⟩ ↦ by
     simp [← SetLike.coe_eq_coe, subgroup_smul_def, stabilizerEquivStabilizer, ← smul_assoc]
 
 variable {g h k : G} {a b c : α}
 variable (hg : b = g • a) (hh : c = h • b) (hk : c = k • a)
 
 @[to_additive]
-/--
-theorem `ofStabilizer.conjMap_apply` / 定理 `ofStabilizer.conjMap_apply`
-
-English:
-theorem ofStabilizer.conjMap_apply
-  given: (x : ofStabilizer G a)
-  proof: rfl
-
-中文:
-定理 ofStabilizer.conjMap_apply
-  条件: (x : ofStabilizer G a)
-  证明: rfl
+/-
+**SubMulAction.ofStabilizer.conjMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `SubMulActio
+n.ofStabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{g : G} {a b : α} (hg : b = g • a)   (x : ↥(SubMulAction.ofStabilizer G a)), ↑((
+SubMulAction.ofStabilizer.conjMap hg) x) = g • ↑x
+参数：hg : b = g • a；x : ↥(SubMulAction.ofStabilizer G a)；(SubMulAction.ofStabilize
+r.conjMap hg) x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofStabilizer.conjMap_apply (x : ofStabilizer G a) :
     (conjMap hg x : α) = g • x := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `_root_.AddAction.stabilizerEquivStabilizer_compTriple` / 定理 `_root_.AddAction.stabilizerEquivStabilizer_compTriple`
-
-English:
-theorem _root_.AddAction.stabilizerEquivStabilizer_compTriple
-  proof: by
-    ext
-    simp [AddAction.stabilizerEquivStabilizer, H, AddAut.addConj, ← add_assoc]
-
-中文:
-定理 _root_.加法作用.stabilizerEquivStabilizer_compTriple
-  证明: by
-    ext
-    simp [AddAction.stabilizerEquivStabilizer, H, AddAut.addConj, ← add_assoc]
-
-Depends on / 依赖: AddAction, AddAction.stabilizerEquivStabilizer, AddAut, AddAut.addConj, addConj, add_assoc, stabilizerEquivStabilizer
+/-
+**SubMulAction._root_.AddAction.stabilizerEquivStabilizer_compTriple** 是 Mathlib
+ 中的一个定理，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.AddAction.stabilizerEquivStabilizer_compTriple
     {G : Type*} [AddGroup G] {α : Type*} [AddAction G α]
@@ -394,24 +316,10 @@ theorem _root_.AddAction.stabilizerEquivStabilizer_compTriple
 set_option backward.isDefEq.respectTransparency false in
 variable {hg hh hk} in
 @[to_additive existing]
-/--
-theorem `_root_.MulAction.stabilizerEquivStabilizer_compTriple` / 定理 `_root_.MulAction.stabilizerEquivStabilizer_compTriple`
-
-English:
-theorem _root_.MulAction.stabilizerEquivStabilizer_compTriple
-  given: (H : k = h * g)
-  proof: by
-    ext
-    simp [stabilizerEquivStabilizer, H, MulAut.conj, ← mul_assoc]
-
-中文:
-定理 _root_.乘法作用.stabilizerEquivStabilizer_compTriple
-  条件: (H : k = h * g)
-  证明: by
-    ext
-    simp [stabilizerEquivStabilizer, H, MulAut.conj, ← mul_assoc]
-
-Depends on / 依赖: MulAut, MulAut.conj, mul_assoc, stabilizerEquivStabilizer
+/-
+**SubMulAction._root_.MulAction.stabilizerEquivStabilizer_compTriple** 是 Mathlib
+ 中的一个定理，位于命名空间 `SubMulAction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MulAction.stabilizerEquivStabilizer_compTriple (H : k = h * g) :
     CompTriple (stabilizerEquivStabilizer hg)
@@ -422,106 +330,109 @@ theorem _root_.MulAction.stabilizerEquivStabilizer_compTriple (H : k = h * g) :
 
 variable {hg hh hk} in
 @[to_additive]
-/--
-theorem `ofStabilizer.conjMap_comp_apply` / 定理 `ofStabilizer.conjMap_comp_apply`
-
-English:
-theorem ofStabilizer.conjMap_comp_apply
-  given: (H : k = h * g) (x : ofStabilizer G a)
-  proof: by
-  simp [← Subtype.coe_inj, conjMap_apply, H, mul_smul]
-
-@[to_additive]
-
-中文:
-定理 ofStabilizer.conjMap_comp_apply
-  条件: (H : k = h * g) (x : ofStabilizer G a)
-  证明: by
-  simp [← Subtype.coe_inj, conjMap_apply, H, mul_smul]
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj, conjMap_apply, mul_smul
+/-
+**SubMulAction.ofStabilizer.conjMap_comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `SubMul
+Action.ofStabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{g h k : G} {a b c : α} {hg : b = g • a}   {hh : c = h • b} {hk : c = k • a},   
+k = h * g →     ∀ (x : ↥(SubMulAction.ofStabilizer G a)),       (SubMulAction.of
+Stabilizer.conjMap hh) ((SubMulAction.ofStabilizer.conjMap hg) x) =         (Sub
+MulAction.ofStabilizer.conjMap hk) x
+参数：x : ↥(SubMulAction.ofStabilizer G a)；SubMulAction.ofStabilizer.conjMap hh；(Su
+bMulAction.ofStabilizer.conjMap hg) x；SubMulAction.ofStabilizer.conjMap hk。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofStabilizer.conjMap_comp_apply (H : k = h * g) (x : ofStabilizer G a) :
     conjMap hh (conjMap hg x) = conjMap hk x := by
   simp [← Subtype.coe_inj, conjMap_apply, H, mul_smul]
 
 @[to_additive]
-/--
-theorem `ofStabilizer.conjMap_comp_inv_apply` / 定理 `ofStabilizer.conjMap_comp_inv_apply`
-
-English:
-theorem ofStabilizer.conjMap_comp_inv_apply
-  given: (x : ofStabilizer G a)
-  proof: by
-  simp [← Subtype.coe_inj, conjMap_apply]
-
-@[to_additive]
-
-中文:
-定理 ofStabilizer.conjMap_comp_inv_apply
-  条件: (x : ofStabilizer G a)
-  证明: by
-  simp [← Subtype.coe_inj, conjMap_apply]
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj, conjMap_apply
+/-
+**SubMulAction.ofStabilizer.conjMap_comp_inv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Su
+bMulAction.ofStabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{g : G} {a b : α} (hg : b = g • a)   (x : ↥(SubMulAction.ofStabilizer G a)),   (
+SubMulAction.ofStabilizer.conjMap ⋯) ((SubMulAction.ofStabilizer.conjMap hg) x) 
+= x
+参数：hg : b = g • a；x : ↥(SubMulAction.ofStabilizer G a)；SubMulAction.ofStabilizer
+.conjMap ⋯；(SubMulAction.ofStabilizer.conjMap hg) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_inv_smul_iff`：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_
+1 : MulAction G α] {g : G} {a b : α}, a = g⁻¹ • b ↔ g • a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofStabilizer.conjMap_comp_inv_apply (x : ofStabilizer G a) :
     (conjMap (eq_inv_smul_iff.mpr hg.symm)) (conjMap hg x) = x := by
   simp [← Subtype.coe_inj, conjMap_apply]
 
 @[to_additive]
-/--
-theorem `ofStabilizer.inv_conjMap_comp_apply` / 定理 `ofStabilizer.inv_conjMap_comp_apply`
-
-English:
-theorem ofStabilizer.inv_conjMap_comp_apply
-  given: (x : ofStabilizer G b)
-  proof: by
-  simp [← Subtype.coe_inj, conjMap_apply]
-
-@[to_additive]
-
-中文:
-定理 ofStabilizer.inv_conjMap_comp_apply
-  条件: (x : ofStabilizer G b)
-  证明: by
-  simp [← Subtype.coe_inj, conjMap_apply]
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj, conjMap_apply
+/-
+**SubMulAction.ofStabilizer.inv_conjMap_comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Su
+bMulAction.ofStabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{g : G} {a b : α} (hg : b = g • a)   (x : ↥(SubMulAction.ofStabilizer G b)),   (
+SubMulAction.ofStabilizer.conjMap hg) ((SubMulAction.ofStabilizer.conjMap ⋯) x) 
+= x
+参数：hg : b = g • a；x : ↥(SubMulAction.ofStabilizer G b)；SubMulAction.ofStabilizer
+.conjMap hg；(SubMulAction.ofStabilizer.conjMap ⋯) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_inv_smul_iff`：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_
+1 : MulAction G α] {g : G} {a b : α}, a = g⁻¹ • b ↔ g • a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofStabilizer.inv_conjMap_comp_apply (x : ofStabilizer G b) :
     conjMap hg (conjMap (eq_inv_smul_iff.mpr hg.symm) x) = x := by
   simp [← Subtype.coe_inj, conjMap_apply]
 
 @[to_additive]
-/--
-theorem `ofStabilizer.conjMap_comp` / 定理 `ofStabilizer.conjMap_comp`
-
-English:
-theorem ofStabilizer.conjMap_comp
-  given: (H : k = h * g)
-  proof: by
-  ext x
-  simpa using conjMap_comp_apply H x
-
-@[to_additive]
-
-中文:
-定理 ofStabilizer.conjMap_comp
-  条件: (H : k = h * g)
-  证明: by
-  ext x
-  simpa using conjMap_comp_apply H x
-
-@[to_additive]
-
-Depends on / 依赖: conjMap, conjMap_comp_apply, stabilizerEquivStabilizer_compTriple
+/-
+**SubMulAction.ofStabilizer.conjMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction
+.ofStabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{g h k : G} {a b c : α} (hg : b = g • a)   (hh : c = h • b) (hk : c = k • a) (H 
+: k = h * g),   (SubMulAction.ofStabilizer.conjMap hh).comp (SubMulAction.ofStab
+ilizer.conjMap hg) =     SubMulAction.ofStabilizer.conjMap hk
+参数：hg : b = g • a；hh : c = h • b；hk : c = k • a；H : k = h * g；SubMulAction.ofSta
+bilizer.conjMap hh；SubMulAction.ofStabilizer.conjMap hg。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionHom.ext`：ext {f g : X ->ₑ[φ] Y} : (forall x, f x = g x) -> f = 
+g
+· 使用定理 `MulAction.stabilizerEquivStabilizer_compTriple`：∀ {G : Type u_1} [inst :
+ Group G] {α : Type u_2} [inst_1 : MulAction G α] {g h k : G} {a b c : α} {hg : 
+b = g • a}   {hh : c = h • b} {hk : …
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `SubMulAction.ofStabilizer.conjMap_comp_apply`：∀ {G : Type u_1} [inst : G
+roup G] {α : Type u_2} [inst_1 : MulAction G α] {g h k : G} {a b c : α} {hg : b 
+= g • a}   {hh : c = h • b} {hk : …
 -/
 theorem ofStabilizer.conjMap_comp (H : k = h * g) :
     (conjMap hh).comp (conjMap hg) (κ := stabilizerEquivStabilizer_compTriple H) = conjMap hk := by
@@ -529,34 +440,29 @@ theorem ofStabilizer.conjMap_comp (H : k = h * g) :
   simpa using conjMap_comp_apply H x
 
 @[to_additive]
-/--
-theorem `ofStabilizer.conjMap_bijective` / 定理 `ofStabilizer.conjMap_bijective`
-
-English:
-theorem ofStabilizer.conjMap_bijective
-  statement: Function.Bijective (conjMap hg)
-  proof: by
-  constructor
-  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
-    simp only [Subtype.mk_eq_mk]
-    apply (MulAction.injective g)
-    rwa [← SetLike.coe_eq_coe, conjMap_apply] at hxy
-  · intro x
-    exact ⟨conjMap _ x, inv_conjMap_comp_apply _ x⟩
-
-中文:
-定理 ofStabilizer.conjMap_bijective
-  结论: 函数.双射 (conjMap hg)
-  证明: by
-  constructor
-  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
-    simp only [Subtype.mk_eq_mk]
-    apply (MulAction.injective g)
-    rwa [← SetLike.coe_eq_coe, conjMap_apply] at hxy
-  · intro x
-    exact ⟨conjMap _ x, inv_conjMap_comp_apply _ x⟩
-
-Depends on / 依赖: MulAction, MulAction.injective, SetLike, SetLike.coe_eq_coe, Subtype, Subtype.mk_eq_mk, coe_eq_coe, conjMap, conjMap_apply, injective, inv_conjMap_comp_apply, mk_eq_mk
+/-
+**SubMulAction.ofStabilizer.conjMap_bijective** 是 Mathlib 中的一个定理，位于命名空间 `SubMulA
+ction.ofStabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{g : G} {a b : α} (hg : b = g • a),   Function.Bijective ⇑(SubMulAction.ofStabil
+izer.conjMap hg)
+参数：hg : b = g • a；SubMulAction.ofStabilizer.conjMap hg。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.injective`：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [i
+nst_1 : MulAction α β] (g : α), Function.Injective fun x => g • x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SubMulAction.ofStabilizer.conjMap_apply`：∀ {G : Type u_1} [inst : Group 
+G] {α : Type u_2} [inst_1 : MulAction G α] {g : G} {a b : α} (hg : b = g • a)   
+(x : ↥(SubMulAction.ofStabili…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.coe_eq_coe`：coe_eq_coe {x y : p} : (x : B) = y ↔ x = y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_inv_smul_iff`：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_
+1 : MulAction G α] {g : G} {a b : α}, a = g⁻¹ • b ↔ g • a = b
+· 使用定理 `SubMulAction.ofStabilizer.inv_conjMap_comp_apply`：∀ {G : Type u_1} [inst
+ : Group G] {α : Type u_2} [inst_1 : MulAction G α] {g : G} {a b : α} (hg : b = 
+g • a)   (x : ↥(SubMulAction.ofStabili…
 -/
 theorem ofStabilizer.conjMap_bijective : Function.Bijective (conjMap hg) := by
   constructor
@@ -567,129 +473,114 @@ theorem ofStabilizer.conjMap_bijective : Function.Bijective (conjMap hg) := by
   · intro x
     exact ⟨conjMap _ x, inv_conjMap_comp_apply _ x⟩
 
-/-- Append `a` to `x : Fin n ↪ ofStabilizer G a` to get an element of `Fin n.succ ↪ α`. -/
+/-- Append `a` to `x : Fin n ↪ ofStabilizer G a`  to get an element of `Fin n.succ ↪ α`. -/
 @[to_additive
-  /-- Append `a` to `x : Fin n ↪ ofStabilizer G a` to get an element of `Fin n.succ ↪ α`. -/]
-/--
-Definition of `ofStabilizer.snoc` / `ofStabilizer.snoc` 的定义
-
-English:
-definition ofStabilizer.snoc
-  signature: {n : Nat} (x : Fin n ↪ ofStabilizer G a)
-  body: Fin.Embedding.snoc (x.trans (subtype _)) (a := a) (by
-    simp only [Set.mem_range, trans_apply, Function.Embedding.subtype_apply, not_exists]
-    exact fun i => (x i).prop)
-
-@[to_additive]
-
-中文:
-定义 ofStabilizer.snoc
-  签名: {n : 自然数} (x : 有限集 n ↪ ofStabilizer G a)
-  定义体: Fin.Embedding.snoc (x.trans (subtype _)) (a := a) (by
-    simp only [Set.mem_range, trans_apply, Function.Embedding.subtype_apply, not_exists]
-    exact fun i => (x i).prop)
-
-@[to_additive]
-
-Depends on / 依赖: Embedding, Fin.Embedding.snoc, Function, Function.Embedding.subtype_apply, Set.mem_range, mem_range, not_exists, subtype, subtype_apply, trans_apply, x.trans
+  /-- Append `a` to `x : Fin n ↪ ofStabilizer G a`  to get an element of `Fin n.succ ↪ α`. -/]
+/-
+**SubMulAction.ofStabilizer.snoc** 是 Mathlib 中的一个定义，位于命名空间 `SubMulAction.ofStabi
+lizer`。
+形式化陈述：{G : Type u_1} →   [inst : Group G] →     {α : Type u_2} →       [inst_1 :
+ MulAction G α] → {a : α} → {n : ℕ} → (Fin n ↪ ↥(SubMulAction.ofStabilizer G a))
+ → Fin n.succ ↪ α
+参数：Fin n ↪ ↥(SubMulAction.ofStabilizer G a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ofStabilizer.snoc {n : Nat} (x : Fin n ↪ ofStabilizer G a) :
+def ofStabilizer.snoc {n : ℕ} (x : Fin n ↪ ofStabilizer G a) :
     Fin n.succ ↪ α :=
   Fin.Embedding.snoc (x.trans (subtype _)) (a := a) (by
     simp only [Set.mem_range, trans_apply, Function.Embedding.subtype_apply, not_exists]
-    exact fun i => (x i).prop)
+    exact fun i ↦ (x i).prop)
 
 @[to_additive]
-/--
-theorem `ofStabilizer.snoc_castSucc` / 定理 `ofStabilizer.snoc_castSucc`
-
-English:
-theorem ofStabilizer.snoc_castSucc
-  given: {n : Nat} (x : Fin n ↪ ofStabilizer G a) (i : Fin n)
-  proof: by
-  simp [snoc]
-
-@[to_additive]
-
-中文:
-定理 ofStabilizer.snoc_castSucc
-  条件: {n : 自然数} (x : 有限集 n ↪ ofStabilizer G a) (i : 有限集 n)
-  证明: by
-  simp [snoc]
-
-@[to_additive]
+/-
+**SubMulAction.ofStabilizer.snoc_castSucc** 是 Mathlib 中的一个定理，位于命名空间 `SubMulActio
+n.ofStabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{a : α} {n : ℕ}   (x : Fin n ↪ ↥(SubMulAction.ofStabilizer G a)) (i : Fin n), (S
+ubMulAction.ofStabilizer.snoc x) i.castSucc = ↑(x i)
+参数：x : Fin n ↪ ↥(SubMulAction.ofStabilizer G a)；i : Fin n；SubMulAction.ofStabili
+zer.snoc x；x i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.snoc_castSucc`：snoc_castSucc : snoc p x i.castSucc = p i
+· 使用定理 `Function.Embedding.trans_apply`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α ↪ β) (g : β ↪ γ) (a : α), (f.trans g) a = g (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofStabilizer.snoc_castSucc {n : Nat} (x : Fin n ↪ ofStabilizer G a) (i : Fin n) :
+theorem ofStabilizer.snoc_castSucc {n : ℕ} (x : Fin n ↪ ofStabilizer G a) (i : Fin n) :
     snoc x i.castSucc = x i := by
   simp [snoc]
 
 @[to_additive]
-/--
-theorem `ofStabilizer.snoc_last` / 定理 `ofStabilizer.snoc_last`
-
-English:
-theorem ofStabilizer.snoc_last
-  given: {n : Nat} (x : Fin n ↪ ofStabilizer G a)
-  proof: by
-  simp [snoc]
-
-中文:
-定理 ofStabilizer.snoc_last
-  条件: {n : 自然数} (x : 有限集 n ↪ ofStabilizer G a)
-  证明: by
-  simp [snoc]
+/-
+**SubMulAction.ofStabilizer.snoc_last** 是 Mathlib 中的一个定理，位于命名空间 `SubMulAction.of
+Stabilizer`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] {α : Type u_2} [inst_1 : MulAction G α] 
+{a : α} {n : ℕ}   (x : Fin n ↪ ↥(SubMulAction.ofStabilizer G a)), (SubMulAction.
+ofStabilizer.snoc x) (Fin.last n) = a
+参数：x : Fin n ↪ ↥(SubMulAction.ofStabilizer G a)；SubMulAction.ofStabilizer.snoc x
+；Fin.last n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.snoc_last`：snoc_last : snoc p x (last n) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofStabilizer.snoc_last {n : Nat} (x : Fin n ↪ ofStabilizer G a) :
+theorem ofStabilizer.snoc_last {n : ℕ} (x : Fin n ↪ ofStabilizer G a) :
     snoc x (Fin.last n) = a := by
   simp [snoc]
 
 variable (G) in
 @[to_additive]
-/--
-lemma `exists_smul_of_last_eq` / 引理 `exists_smul_of_last_eq`
-
-English:
-lemma exists_smul_of_last_eq
-  given: [IsPretransitive G α] {n : Nat} (a : α) (x : Fin n.succ ↪ α)
-  proof: by
-  obtain ⟨g, hgx⟩ := exists_smul_eq G (x (Fin.last n)) a
-  have H : forall i, Fin.Embedding.init (g • x) i in ofStabilizer G a := fun i => by
-    simp only [mem_ofStabilizer_iff,
-      Nat.succ_eq_add_one, ← hgx, ← smul_apply, ne_eq]
-    suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc by
-      simp [this]
-    simp [Fin.Embedding.init, Fin.init_def]
-  use g, (Fin.Embedding.init (g • x)).codRestrict (ofStabilizer G a) H
-  ext i
-  rcases Fin.eq_castSucc_or_eq_last i with ⟨i, rfl⟩ | ⟨rfl⟩
-  · simpa [ofStabilizer.snoc] using!
-Subtype.ext_iff.mp Function.Embedding.codRestrict_apply _ _ H i
-  · simpa only [smul_apply, ofStabilizer.snoc, Fin.Embedding.snoc_last]
-
-中文:
-引理 存在_smul_of_last_eq
-  条件: [是Pretransitive G α] {n : 自然数} (a : α) (x : 有限集 n.succ ↪ α)
-  证明: by
-  obtain ⟨g, hgx⟩ := exists_smul_eq G (x (Fin.last n)) a
-  have H : forall i, Fin.Embedding.init (g • x) i in ofStabilizer G a := fun i => by
-    simp only [mem_ofStabilizer_iff,
-      Nat.succ_eq_add_one, ← hgx, ← smul_apply, ne_eq]
-    suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc by
-      simp [this]
-    simp [Fin.Embedding.init, Fin.init_def]
-  use g, (Fin.Embedding.init (g • x)).codRestrict (ofStabilizer G a) H
-  ext i
-  rcases Fin.eq_castSucc_or_eq_last i with ⟨i, rfl⟩ | ⟨rfl⟩
-  · simpa [ofStabilizer.snoc] using!
-Subtype.ext_iff.mp Function.Embedding.codRestrict_apply _ _ H i
-  · simpa only [smul_apply, ofStabilizer.snoc, Fin.Embedding.snoc_last]
-
-Depends on / 依赖: Embedding, Fin.Embedding.init, Fin.eq_castSucc_or_eq_last, Fin.init_def, Fin.last, Nat.succ_eq_add_one, castSucc, codRestrict, eq_castSucc_or_eq_last, exists_smul_eq, i.castSucc, init_def, mem_ofStabilizer_iff, ne_eq, ofStabilizer, ofStabilizer.snoc, smul_apply, succ_eq_add_one
+/-
+**SubMulAction.exists_smul_of_last_eq** 是 Mathlib 中的一个引理，位于命名空间 `SubMulAction`。
+形式化陈述：exists_smul_of_last_eq [IsPretransitive G α] {n : Nat} (a : α) (x : Fin n.
+succ ↪ α) : exists (g : G) (y : Fin n ↪ ofStabilizer G a), g • x = ofStabilizer.
+snoc y
+参数：a : α；x : Fin n.succ ↪ α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MulAction.exists_smul_eq`：exists_smul_eq (x y : α) : exists m : M, m • x
+ = y
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.instEmbeddingLikeEmbedding`：∀ {α : Sort u} {β : Sort v}, Embedd
+ingLike (α ↪ β) α β
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Function.Embedding.ext`：ext {α β} {f g : Embedding α β} (h : forall x, f
+ x = g x) : f = g
+· 使用定理 `Fin.eq_castSucc_or_eq_last`：eq_castSucc_or_eq_last {n : Nat} (i : Fin (n
+ + 1)) : (exists j : Fin n, i = j.castSucc) ∨ i = last n
+· 使用定理 `Fin.snoc_castSucc`：snoc_castSucc : snoc p x i.castSucc = p i
+· 使用定理 `Function.Embedding.trans_apply`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α ↪ β) (g : β ↪ γ) (a : α), (f.trans g) a = g (f a)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Function.Embedding.codRestrict_apply`：codRestrict_apply {α β} (p) (f : α
+ ↪ β) (H a) : codRestrict p f H a = ⟨f a, H a⟩
+· 使用定理 `Fin.Embedding.snoc_last`：snoc_last {n : Nat} {x : Fin n ↪ α} {a : α} {ha
+ : a ∉ range x} : snoc x ha (last n) = a
 -/
-lemma exists_smul_of_last_eq [IsPretransitive G α] {n : Nat} (a : α) (x : Fin n.succ ↪ α) :
-    exists (g : G) (y : Fin n ↪ ofStabilizer G a), g • x = ofStabilizer.snoc y := by
+lemma exists_smul_of_last_eq [IsPretransitive G α] {n : ℕ} (a : α) (x : Fin n.succ ↪ α) :
+    ∃ (g : G) (y : Fin n ↪ ofStabilizer G a), g • x = ofStabilizer.snoc y := by
   obtain ⟨g, hgx⟩ := exists_smul_eq G (x (Fin.last n)) a
-  have H : forall i, Fin.Embedding.init (g • x) i in ofStabilizer G a := fun i => by
+  have H : ∀ i, Fin.Embedding.init (g • x) i ∈ ofStabilizer G a := fun i ↦ by
     simp only [mem_ofStabilizer_iff,
       Nat.succ_eq_add_one, ← hgx, ← smul_apply, ne_eq]
     suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc by
@@ -699,7 +590,7 @@ lemma exists_smul_of_last_eq [IsPretransitive G α] {n : Nat} (a : α) (x : Fin 
   ext i
   rcases Fin.eq_castSucc_or_eq_last i with ⟨i, rfl⟩ | ⟨rfl⟩
   · simpa [ofStabilizer.snoc] using!
-Subtype.ext_iff.mp Function.Embedding.codRestrict_apply _ _ H i
+      Subtype.ext_iff.mp <| Function.Embedding.codRestrict_apply _ _ H i
   · simpa only [smul_apply, ofStabilizer.snoc, Fin.Embedding.snoc_last]
 
 end SubMulAction
@@ -712,28 +603,16 @@ variable (G : Type*) [Group G] (α : Type*) [MulAction G α]
 
 /-- The stabilizer of a set acts on that set. -/
 @[to_additive /-- The stabilizer of a set acts on that set. -/]
-/--
-Instance `_root_.SMul.ofStabilizer` / 实例 `_root_.SMul.ofStabilizer`
+/-
+**_root_.SMul.ofStabilizer** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：_root_.SMul.ofStabilizer (s : Set α) : SMul (stabilizer G s) s where smul 
+g x
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance _root_.SMul.ofStabilizer
-  signature: (s : Set α)
-  body: ⟨g • ↑x, by
-    convert! Set.smul_mem_smul_set x.prop
-    exact (mem_stabilizer_iff.mp g.prop).symm⟩
-
-@[simp]
-
-中文:
-实例 _root_.标量乘法.ofStabilizer
-  签名: (s : 集合 α)
-  定义体: ⟨g • ↑x, by
-    convert! Set.smul_mem_smul_set x.prop
-    exact (mem_stabilizer_iff.mp g.prop).symm⟩
-
-@[simp]
-
-Depends on / 依赖: Set.smul_mem_smul_set, convert, g.prop, mem_stabilizer_iff, mem_stabilizer_iff.mp, smul_mem_smul_set, x.prop
+--- 原说明 ---
+The stabilizer of a set acts on that set.
 -/
 instance _root_.SMul.ofStabilizer (s : Set α) :
     SMul (stabilizer G s) s where
@@ -742,18 +621,13 @@ instance _root_.SMul.ofStabilizer (s : Set α) :
     exact (mem_stabilizer_iff.mp g.prop).symm⟩
 
 @[simp]
-/--
-theorem `_root_.SMul.smul_stabilizer_def` / 定理 `_root_.SMul.smul_stabilizer_def`
-
-English:
-theorem _root_.SMul.smul_stabilizer_def
-  given: (s : Set α) (g : stabilizer G s) (x : s)
-  proof: rfl
-
-中文:
-定理 _root_.标量乘法.smul_stabilizer_def
-  条件: (s : 集合 α) (g : stabilizer G s) (x : s)
-  证明: rfl
+/-
+**_root_.SMul.smul_stabilizer_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：_root_.SMul.smul_stabilizer_def (s : Set α) (g : stabilizer G s) (x : s) :
+ ((g • x : ↥s) : α) = (g : G) • (x : α)
+参数：s : Set α；g : stabilizer G s；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.SMul.smul_stabilizer_def (s : Set α) (g : stabilizer G s) (x : s) :
     ((g • x : ↥s) : α) = (g : G) • (x : α) :=
@@ -761,41 +635,59 @@ theorem _root_.SMul.smul_stabilizer_def (s : Set α) (g : stabilizer G s) (x : s
 
 /-- The stabilizer of a set acts on that set -/
 @[to_additive /-- The stabilizer of a set acts on that set. -/]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The stabilizer of a set acts on that set
+-/
 instance (s : Set α) : MulAction (stabilizer G s) s where
   one_smul x := by
     simp only [← Subtype.coe_inj, SMul.smul_stabilizer_def, OneMemClass.coe_one, one_smul]
   mul_smul g k x := by
     simp only [← Subtype.coe_inj, SMul.smul_stabilizer_def, Subgroup.coe_mul, mul_smul]
-
-/--
-theorem `stabilizer_empty_eq_top` / 定理 `stabilizer_empty_eq_top`
-
-English:
-theorem stabilizer_empty_eq_top
-  proof: by
-  aesop
-
-中文:
-定理 stabilizer_empty_eq_top
-  证明: by
-  aesop
+/-
+**stabilizer_empty_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：stabilizer_empty_eq_top : stabilizer G (∅ : Set α) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.smul_set_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {a
+ : α}, a • ∅ = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem stabilizer_empty_eq_top :
     stabilizer G (∅ : Set α) = ⊤ := by
   aesop
-
-/--
-theorem `stabilizer_univ_eq_top` / 定理 `stabilizer_univ_eq_top`
-
-English:
-theorem stabilizer_univ_eq_top
-  proof: by
-  aesop
-
-中文:
-定理 stabilizer_univ_eq_top
-  证明: by
-  aesop
+/-
+**stabilizer_univ_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：stabilizer_univ_eq_top : stabilizer G (Set.univ : Set α) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.smul_set_univ`：smul_set_univ : a • (univ : Set β) = univ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem stabilizer_univ_eq_top :
     stabilizer G (Set.univ : Set α) = ⊤ := by
@@ -803,37 +695,37 @@ theorem stabilizer_univ_eq_top :
 
 /-- The stabilizer of the complement is the stabilizer of the set. -/
 @[simp]
-/--
-theorem `stabilizer_compl` / 定理 `stabilizer_compl`
+/-
+**stabilizer_compl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：stabilizer_compl {s : Set α} : stabilizer G sᶜ = stabilizer G s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.smul_set_compl`：smul_set_compl : a • sᶜ = (a • s)ᶜ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MulAction.mem_stabilizer_iff`：mem_stabilizer_iff {a : α} {g : G} : g in 
+stabilizer G a ↔ g • a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_of_le_of_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
 
-English:
-theorem stabilizer_compl
-  given: {s : Set α}
-  proof: by
-  have (s : Set α) : stabilizer G s <= stabilizer G (sᶜ) := by
-    intro g h
-    simp [Set.smul_set_compl, mem_stabilizer_iff.1 h]
-  refine le_antisymm (le_of_le_of_eq (this _) ?_) (this _)
-  rw [compl_compl]
-
-中文:
-定理 stabilizer_compl
-  条件: {s : 集合 α}
-  证明: by
-  have (s : Set α) : stabilizer G s <= stabilizer G (sᶜ) := by
-    intro g h
-    simp [Set.smul_set_compl, mem_stabilizer_iff.1 h]
-  refine le_antisymm (le_of_le_of_eq (this _) ?_) (this _)
-  rw [compl_compl]
-
-Depends on / 依赖: Set.smul_set_compl, compl_compl, le_antisymm, le_of_le_of_eq, mem_stabilizer_iff, smul_set_compl, stabilizer
+--- 原说明 ---
+The stabilizer of the complement is the stabilizer of the set.
 -/
 theorem stabilizer_compl {s : Set α} :
     stabilizer G sᶜ = stabilizer G s := by
-  have (s : Set α) : stabilizer G s <= stabilizer G (sᶜ) := by
+  have (s : Set α) : stabilizer G s ≤ stabilizer G (sᶜ) := by
     intro g h
     simp [Set.smul_set_compl, mem_stabilizer_iff.1 h]
   refine le_antisymm (le_of_le_of_eq (this _) ?_) (this _)
   rw [compl_compl]
 
 end Pointwise
+

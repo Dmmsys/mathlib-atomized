@@ -48,91 +48,100 @@ section Ring
 
 variable [Ring R]
 
-/--
-Definition of `inv.aux` / `inv.aux` 的定义
+/-- Auxiliary function used for computing inverse of a power series -/
+/-
+**PowerSeries.inv.aux** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries.inv`。
+形式化陈述：{R : Type u_1} → [Ring R] → R → PowerSeries R → PowerSeries R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv.aux
-  signature: : R -> R⟦X⟧ -> R⟦X⟧
-  body: MvPowerSeries.inv.aux
-
-中文:
-定义 inv.aux
-  签名: : R -> R⟦X⟧ -> R⟦X⟧
-  定义体: MvPowerSeries.inv.aux
+--- 原说明 ---
+Auxiliary function used for computing inverse of a power series
 -/
-protected def inv.aux : R -> R⟦X⟧ -> R⟦X⟧ :=
+protected def inv.aux : R → R⟦X⟧ → R⟦X⟧ :=
   MvPowerSeries.inv.aux
-
-/--
-theorem `coeff_inv_aux` / 定理 `coeff_inv_aux`
-
-English:
-theorem coeff_inv_aux
-  given: (n : Nat) (a : R) (φ : R⟦X⟧)
-  proof: by
-  rw [coeff]; rw [inv.aux]; rw [MvPowerSeries.coeff_inv_aux]
-  simp only [Finsupp.single_eq_zero]
-  split_ifs; · rfl
-  congr 1
-  symm
-  apply Finset.sum_nbij' (fun (a, b) => (single () a, single () b))
-    fun (f, g) => (f (), g ())
-  · aesop
-  · aesop
-  · aesop
-  · aesop
-  · rintro ⟨i, j⟩ _hij
-    obtain H | H := le_or_gt n j
-    · aesop
-    rw [if_pos H]; rw [if_pos]
-    · rfl
-    refine ⟨?_, fun hh => H.not_ge ?_⟩
-    · rintro ⟨⟩
-      simpa [Finsupp.single_eq_same] using le_of_lt H
-    · simpa [Finsupp.single_eq_same] using hh ()
-
-中文:
-定理 coeff_inv_aux
-  条件: (n : 自然数) (a : R) (φ : R⟦X⟧)
-  证明: by
-  rw [coeff]; rw [inv.aux]; rw [MvPowerSeries.coeff_inv_aux]
-  simp only [Finsupp.single_eq_zero]
-  split_ifs; · rfl
-  congr 1
-  symm
-  apply Finset.sum_nbij' (fun (a, b) => (single () a, single () b))
-    fun (f, g) => (f (), g ())
-  · aesop
-  · aesop
-  · aesop
-  · aesop
-  · rintro ⟨i, j⟩ _hij
-    obtain H | H := le_or_gt n j
-    · aesop
-    rw [if_pos H]; rw [if_pos]
-    · rfl
-    refine ⟨?_, fun hh => H.not_ge ?_⟩
-    · rintro ⟨⟩
-      simpa [Finsupp.single_eq_same] using le_of_lt H
-    · simpa [Finsupp.single_eq_same] using hh ()
-
-Depends on / 依赖: Finset, Finset.sum_nbij, Finsupp, Finsupp.single_eq_same, Finsupp.single_eq_zero, H.not_ge, MvPowerSeries, MvPowerSeries.coeff_inv_aux, _hij, coeff_inv_aux, if_pos, inv.aux, le_of_lt, le_or_gt, not_ge, single, single_eq_same, single_eq_zero, split_ifs, sum_nbij
+/-
+**PowerSeries.coeff_inv_aux** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_inv_aux (n : Nat) (a : R) (φ : R⟦X⟧) : coeff n (inv.aux a φ) = if n 
+= 0 then a else -a * ∑ x in antidiagonal n, if x.2 < n then coeff x.1 φ * coeff 
+x.2 (inv.aux a φ) else 0
+参数：n : Nat；a : R；φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff.eq_1`：∀ {R : Type u_1} [inst : Semiring R] (n : ℕ), Po
+werSeries.coeff n = MvPowerSeries.coeff fun₀ | () => n
+· 使用定理 `PowerSeries.inv.aux.eq_1`：∀ {R : Type u_1} [inst : Ring R], PowerSeries.
+inv.aux = MvPowerSeries.inv.aux
+· 使用定理 `MvPowerSeries.coeff_inv_aux`：coeff_inv_aux [DecidableEq σ] (n : σ ->₀ Na
+t) (a : R) (φ : MvPowerSeries σ R) : coeff n (inv.aux a φ) = if n = 0 then a els
+e -a * ∑ x in ant…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_nbij'`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst :
+ AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (i : ι
+ → κ) …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finsupp.single_injective`：single_injective (a : α) : Function.Injective 
+(single a : M -> α ->₀ M)
+· 使用定理 `Finsupp.antidiagonal_single`：antidiagonal_single (a : α) (n : Nat) : ant
+idiagonal (single a n) = (antidiagonal n).map (Function.Embedding.prodMap ⟨_, si
+ngle_injective a⟩…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `Prod.mk.eta`：∀ {α : Type u_1} {β : Type u_2} {p : α × β}, (p.1, p.2) = p
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+（共 35 条，此处仅展示前 30 条）
 -/
-theorem coeff_inv_aux (n : Nat) (a : R) (φ : R⟦X⟧) :
+theorem coeff_inv_aux (n : ℕ) (a : R) (φ : R⟦X⟧) :
     coeff n (inv.aux a φ) =
       if n = 0 then a
       else
         -a *
-          ∑ x in antidiagonal n,
+          ∑ x ∈ antidiagonal n,
             if x.2 < n then coeff x.1 φ * coeff x.2 (inv.aux a φ) else 0 := by
-  rw [coeff]; rw [inv.aux]; rw [MvPowerSeries.coeff_inv_aux]
+  rw [coeff, inv.aux, MvPowerSeries.coeff_inv_aux]
   simp only [Finsupp.single_eq_zero]
   split_ifs; · rfl
   congr 1
   symm
-  apply Finset.sum_nbij' (fun (a, b) => (single () a, single () b))
-    fun (f, g) => (f (), g ())
+  apply Finset.sum_nbij' (fun (a, b) ↦ (single () a, single () b))
+    fun (f, g) ↦ (f (), g ())
   · aesop
   · aesop
   · aesop
@@ -140,184 +149,146 @@ theorem coeff_inv_aux (n : Nat) (a : R) (φ : R⟦X⟧) :
   · rintro ⟨i, j⟩ _hij
     obtain H | H := le_or_gt n j
     · aesop
-    rw [if_pos H]; rw [if_pos]
+    rw [if_pos H, if_pos]
     · rfl
-    refine ⟨?_, fun hh => H.not_ge ?_⟩
+    refine ⟨?_, fun hh ↦ H.not_ge ?_⟩
     · rintro ⟨⟩
       simpa [Finsupp.single_eq_same] using le_of_lt H
     · simpa [Finsupp.single_eq_same] using hh ()
 
-/--
-Definition of `invOfUnit` / `invOfUnit` 的定义
+/-- A formal power series is invertible if the constant coefficient is invertible. -/
+/-
+**PowerSeries.invOfUnit** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：invOfUnit (φ : R⟦X⟧) (u : Rˣ) : R⟦X⟧
+参数：φ : R⟦X⟧；u : Rˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invOfUnit
-  signature: (φ : R⟦X⟧) (u : Rˣ)
-  body: MvPowerSeries.invOfUnit φ u
-
-中文:
-定义 invOfUnit
-  签名: (φ : R⟦X⟧) (u : Rˣ)
-  定义体: MvPowerSeries.invOfUnit φ u
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.invOfUnit, invOfUnit
+--- 原说明 ---
+A formal power series is invertible if the constant coefficient is invertible.
 -/
 def invOfUnit (φ : R⟦X⟧) (u : Rˣ) : R⟦X⟧ :=
   MvPowerSeries.invOfUnit φ u
-
-/--
-theorem `coeff_invOfUnit` / 定理 `coeff_invOfUnit`
-
-English:
-theorem coeff_invOfUnit
-  given: (n : Nat) (φ : R⟦X⟧) (u : Rˣ)
-  proof: coeff_inv_aux n (↑u⁻¹ : R) φ
-
-@[simp]
-
-中文:
-定理 coeff_invOfUnit
-  条件: (n : 自然数) (φ : R⟦X⟧) (u : Rˣ)
-  证明: coeff_inv_aux n (↑u⁻¹ : R) φ
-
-@[simp]
-
-Depends on / 依赖: coeff_inv_aux
+/-
+**PowerSeries.coeff_invOfUnit** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_invOfUnit (n : Nat) (φ : R⟦X⟧) (u : Rˣ) : coeff n (invOfUnit φ u) = 
+if n = 0 then ↑u⁻¹ else -↑u⁻¹ * ∑ x in antidiagonal n, if x.2 < n then coeff x.1
+ φ * coeff x.2 (invOfUnit φ u) else 0
+参数：n : Nat；φ : R⟦X⟧；u : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.coeff_inv_aux`：coeff_inv_aux (n : Nat) (a : R) (φ : R⟦X⟧) : 
+coeff n (inv.aux a φ) = if n = 0 then a else -a * ∑ x in antidiagonal n, if x.2 
+< n then coeff …
 -/
-theorem coeff_invOfUnit (n : Nat) (φ : R⟦X⟧) (u : Rˣ) :
+theorem coeff_invOfUnit (n : ℕ) (φ : R⟦X⟧) (u : Rˣ) :
     coeff n (invOfUnit φ u) =
       if n = 0 then ↑u⁻¹
       else
         -↑u⁻¹ *
-          ∑ x in antidiagonal n,
+          ∑ x ∈ antidiagonal n,
             if x.2 < n then coeff x.1 φ * coeff x.2 (invOfUnit φ u) else 0 :=
   coeff_inv_aux n (↑u⁻¹ : R) φ
 
 @[simp]
-/--
-theorem `constantCoeff_invOfUnit` / 定理 `constantCoeff_invOfUnit`
-
-English:
-theorem constantCoeff_invOfUnit
-  given: (φ : R⟦X⟧) (u : Rˣ)
-  proof: by
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_invOfUnit]; rw [if_pos rfl]
-
-@[simp]
-
-中文:
-定理 constantCoeff_invOfUnit
-  条件: (φ : R⟦X⟧) (u : Rˣ)
-  证明: by
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_invOfUnit]; rw [if_pos rfl]
-
-@[simp]
-
-Depends on / 依赖: coeff_invOfUnit, coeff_zero_eq_constantCoeff_apply, if_pos
+/-
+**PowerSeries.constantCoeff_invOfUnit** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_invOfUnit (φ : R⟦X⟧) (u : Rˣ) : constantCoeff (invOfUnit φ u
+) = ↑u⁻¹
+参数：φ : R⟦X⟧；u : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff_apply`：coeff_zero_eq_constantCoe
+ff_apply (φ : R⟦X⟧) : coeff 0 φ = constantCoeff φ
+· 使用定理 `PowerSeries.coeff_invOfUnit`：coeff_invOfUnit (n : Nat) (φ : R⟦X⟧) (u : R
+ˣ) : coeff n (invOfUnit φ u) = if n = 0 then ↑u⁻¹ else -↑u⁻¹ * ∑ x in antidiagon
+al n, if x.2 < n …
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem constantCoeff_invOfUnit (φ : R⟦X⟧) (u : Rˣ) :
     constantCoeff (invOfUnit φ u) = ↑u⁻¹ := by
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_invOfUnit]; rw [if_pos rfl]
+  rw [← coeff_zero_eq_constantCoeff_apply, coeff_invOfUnit, if_pos rfl]
 
 @[simp]
-/--
-theorem `mul_invOfUnit` / 定理 `mul_invOfUnit`
-
-English:
-theorem mul_invOfUnit
-  given: (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u)
-  proof: MvPowerSeries.mul_invOfUnit φ u h
-
-@[simp]
-
-中文:
-定理 mul_invOfUnit
-  条件: (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u)
-  证明: MvPowerSeries.mul_invOfUnit φ u h
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.mul_invOfUnit, mul_invOfUnit
+/-
+**PowerSeries.mul_invOfUnit** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mul_invOfUnit (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u) : φ * invOfUni
+t φ u = 1
+参数：φ : R⟦X⟧；u : Rˣ；h : constantCoeff φ = u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.mul_invOfUnit`：mul_invOfUnit (φ : MvPowerSeries σ R) (u : 
+Rˣ) (h : constantCoeff φ = u) : φ * invOfUnit φ u = 1
 -/
 theorem mul_invOfUnit (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u) :
     φ * invOfUnit φ u = 1 :=
-MvPowerSeries.mul_invOfUnit φ u h
+  MvPowerSeries.mul_invOfUnit φ u <| h
 
 @[simp]
-/--
-theorem `invOfUnit_mul` / 定理 `invOfUnit_mul`
-
-English:
-theorem invOfUnit_mul
-  given: (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u)
-  proof: MvPowerSeries.invOfUnit_mul φ u h
-
-中文:
-定理 invOfUnit_mul
-  条件: (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u)
-  证明: MvPowerSeries.invOfUnit_mul φ u h
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.invOfUnit_mul, invOfUnit_mul
+/-
+**PowerSeries.invOfUnit_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：invOfUnit_mul (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u) : invOfUnit φ 
+u * φ = 1
+参数：φ : R⟦X⟧；u : Rˣ；h : constantCoeff φ = u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.invOfUnit_mul`：invOfUnit_mul (φ : MvPowerSeries σ R) (u : 
+Rˣ) (h : constantCoeff φ = u) : invOfUnit φ u * φ = 1
 -/
 theorem invOfUnit_mul (φ : R⟦X⟧) (u : Rˣ) (h : constantCoeff φ = u) :
     invOfUnit φ u * φ = 1 :=
   MvPowerSeries.invOfUnit_mul φ u h
-
-/--
-theorem `isUnit_iff_constantCoeff` / 定理 `isUnit_iff_constantCoeff`
-
-English:
-theorem isUnit_iff_constantCoeff
-  given: {φ : R⟦X⟧}
-  proof: MvPowerSeries.isUnit_iff_constantCoeff
-
-中文:
-定理 isUnit_iff_constantCoeff
-  条件: {φ : R⟦X⟧}
-  证明: MvPowerSeries.isUnit_iff_constantCoeff
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.isUnit_iff_constantCoeff, isUnit_iff_constantCoeff
+/-
+**PowerSeries.isUnit_iff_constantCoeff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：isUnit_iff_constantCoeff {φ : R⟦X⟧} : IsUnit φ ↔ IsUnit (constantCoeff φ)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.isUnit_iff_constantCoeff`：isUnit_iff_constantCoeff {φ : Mv
+PowerSeries σ R} : IsUnit φ ↔ IsUnit (constantCoeff φ)
 -/
 theorem isUnit_iff_constantCoeff {φ : R⟦X⟧} :
     IsUnit φ ↔ IsUnit (constantCoeff φ) :=
   MvPowerSeries.isUnit_iff_constantCoeff
 
-/--
-theorem `sub_const_eq_shift_mul_X` / 定理 `sub_const_eq_shift_mul_X`
+/-- Two ways of removing the constant coefficient of a power series are the same. -/
+/-
+**PowerSeries.sub_const_eq_shift_mul_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：sub_const_eq_shift_mul_X (φ : R⟦X⟧) : φ - C (constantCoeff φ) = (mk fun p 
+=> coeff (p + 1) φ) * X
+参数：φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `PowerSeries.eq_shift_mul_X_add_const`：eq_shift_mul_X_add_const (φ : R⟦X⟧
+) : φ = (mk fun p => coeff (p + 1) φ) * X + C (constantCoeff φ)
 
-English:
-theorem sub_const_eq_shift_mul_X
-  given: (φ : R⟦X⟧)
-  proof: sub_eq_iff_eq_add.mpr (eq_shift_mul_X_add_const φ)
-
-中文:
-定理 sub_const_eq_shift_mul_X
-  条件: (φ : R⟦X⟧)
-  证明: sub_eq_iff_eq_add.mpr (eq_shift_mul_X_add_const φ)
-
-Depends on / 依赖: eq_shift_mul_X_add_const, sub_eq_iff_eq_add, sub_eq_iff_eq_add.mpr
+--- 原说明 ---
+Two ways of removing the constant coefficient of a power series are the same.
 -/
 theorem sub_const_eq_shift_mul_X (φ : R⟦X⟧) :
-    φ - C (constantCoeff φ) = (mk fun p => coeff (p + 1) φ) * X :=
+    φ - C (constantCoeff φ) = (mk fun p ↦ coeff (p + 1) φ) * X :=
   sub_eq_iff_eq_add.mpr (eq_shift_mul_X_add_const φ)
-
-/--
-theorem `sub_const_eq_X_mul_shift` / 定理 `sub_const_eq_X_mul_shift`
-
-English:
-theorem sub_const_eq_X_mul_shift
-  given: (φ : R⟦X⟧)
-  proof: sub_eq_iff_eq_add.mpr (eq_X_mul_shift_add_const φ)
-
-中文:
-定理 sub_const_eq_X_mul_shift
-  条件: (φ : R⟦X⟧)
-  证明: sub_eq_iff_eq_add.mpr (eq_X_mul_shift_add_const φ)
-
-Depends on / 依赖: eq_X_mul_shift_add_const, sub_eq_iff_eq_add, sub_eq_iff_eq_add.mpr
+/-
+**PowerSeries.sub_const_eq_X_mul_shift** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：sub_const_eq_X_mul_shift (φ : R⟦X⟧) : φ - C (constantCoeff φ) = X * mk fun
+ p => coeff (p + 1) φ
+参数：φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `PowerSeries.eq_X_mul_shift_add_const`：eq_X_mul_shift_add_const (φ : R⟦X⟧
+) : φ = (X * mk fun p => coeff (p + 1) φ) + C (constantCoeff φ)
 -/
 theorem sub_const_eq_X_mul_shift (φ : R⟦X⟧) :
-    φ - C (constantCoeff φ) = X * mk fun p => coeff (p + 1) φ :=
+    φ - C (constantCoeff φ) = X * mk fun p ↦ coeff (p + 1) φ :=
   sub_eq_iff_eq_add.mpr (eq_X_mul_shift_add_const φ)
 
 end Ring
@@ -326,487 +297,325 @@ section Field
 
 variable {k : Type*} [Field k]
 
-/--
-Definition of `inv` / `inv` 的定义
+/-- The inverse 1/f of a power series f defined over a field -/
+/-
+**PowerSeries.inv** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：{k : Type u_2} → [Field k] → PowerSeries k → PowerSeries k
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation inv
-  signature: : k⟦X⟧ -> k⟦X⟧
-  body: MvPowerSeries.inv
-
-中文:
-缩写 inv
-  签名: : k⟦X⟧ -> k⟦X⟧
-  定义体: MvPowerSeries.inv
+--- 原说明 ---
+The inverse 1/f of a power series f defined over a field
 -/
-protected abbrev inv : k⟦X⟧ -> k⟦X⟧ :=
+protected abbrev inv : k⟦X⟧ → k⟦X⟧ :=
   MvPowerSeries.inv
-
-/--
-theorem `inv_eq_inv_aux` / 定理 `inv_eq_inv_aux`
-
-English:
-theorem inv_eq_inv_aux
-  given: (φ : k⟦X⟧)
-  statement: φ⁻¹ = inv.aux (constantCoeff φ)⁻¹ φ
-  proof: rfl
-
-中文:
-定理 inv_eq_inv_aux
-  条件: (φ : k⟦X⟧)
-  结论: φ⁻¹ = inv.aux (constantCoeff φ)⁻¹ φ
-  证明: rfl
+/-
+**PowerSeries.inv_eq_inv_aux** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：inv_eq_inv_aux (φ : k⟦X⟧) : φ⁻¹ = inv.aux (constantCoeff φ)⁻¹ φ
+参数：φ : k⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_eq_inv_aux (φ : k⟦X⟧) : φ⁻¹ = inv.aux (constantCoeff φ)⁻¹ φ :=
   rfl
-
-/--
-theorem `coeff_inv` / 定理 `coeff_inv`
-
-English:
-theorem coeff_inv
-  given: (n) (φ : k⟦X⟧)
-  proof: by
-  rw [inv_eq_inv_aux]; rw [coeff_inv_aux n (constantCoeff φ)⁻¹ φ]
-
-@[simp]
-
-中文:
-定理 coeff_inv
-  条件: (n) (φ : k⟦X⟧)
-  证明: by
-  rw [inv_eq_inv_aux]; rw [coeff_inv_aux n (constantCoeff φ)⁻¹ φ]
-
-@[simp]
-
-Depends on / 依赖: coeff_inv_aux, constantCoeff, inv_eq_inv_aux
+/-
+**PowerSeries.coeff_inv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_inv (n) (φ : k⟦X⟧) : coeff n φ⁻¹ = if n = 0 then (constantCoeff φ)⁻¹
+ else -(constantCoeff φ)⁻¹ * ∑ x in antidiagonal n, if x.2 < n then coeff x.1 φ 
+* coeff x.2 φ⁻¹ else 0
+参数：n；φ : k⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.inv_eq_inv_aux`：inv_eq_inv_aux (φ : k⟦X⟧) : φ⁻¹ = inv.aux (c
+onstantCoeff φ)⁻¹ φ
+· 使用定理 `PowerSeries.coeff_inv_aux`：coeff_inv_aux (n : Nat) (a : R) (φ : R⟦X⟧) : 
+coeff n (inv.aux a φ) = if n = 0 then a else -a * ∑ x in antidiagonal n, if x.2 
+< n then coeff …
 -/
 theorem coeff_inv (n) (φ : k⟦X⟧) :
     coeff n φ⁻¹ =
       if n = 0 then (constantCoeff φ)⁻¹
       else
         -(constantCoeff φ)⁻¹ *
-          ∑ x in antidiagonal n,
+          ∑ x ∈ antidiagonal n,
             if x.2 < n then coeff x.1 φ * coeff x.2 φ⁻¹ else 0 := by
-  rw [inv_eq_inv_aux]; rw [coeff_inv_aux n (constantCoeff φ)⁻¹ φ]
+  rw [inv_eq_inv_aux, coeff_inv_aux n (constantCoeff φ)⁻¹ φ]
 
 @[simp]
-/--
-theorem `constantCoeff_inv` / 定理 `constantCoeff_inv`
-
-English:
-theorem constantCoeff_inv
-  given: (φ : k⟦X⟧)
-  statement: constantCoeff φ⁻¹ = (constantCoeff φ)⁻¹
-  proof: MvPowerSeries.constantCoeff_inv φ
-
-中文:
-定理 constantCoeff_inv
-  条件: (φ : k⟦X⟧)
-  结论: constantCoeff φ⁻¹ = (constantCoeff φ)⁻¹
-  证明: MvPowerSeries.constantCoeff_inv φ
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.constantCoeff_inv, constantCoeff_inv
+/-
+**PowerSeries.constantCoeff_inv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_inv (φ : k⟦X⟧) : constantCoeff φ⁻¹ = (constantCoeff φ)⁻¹
+参数：φ : k⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.constantCoeff_inv`：constantCoeff_inv (φ : MvPowerSeries σ 
+k) : constantCoeff φ⁻¹ = (constantCoeff φ)⁻¹
 -/
 theorem constantCoeff_inv (φ : k⟦X⟧) : constantCoeff φ⁻¹ = (constantCoeff φ)⁻¹ :=
   MvPowerSeries.constantCoeff_inv φ
-
-/--
-theorem `inv_eq_zero` / 定理 `inv_eq_zero`
-
-English:
-theorem inv_eq_zero
-  given: {φ : k⟦X⟧}
-  statement: φ⁻¹ = 0 ↔ constantCoeff φ = 0
-  proof: MvPowerSeries.inv_eq_zero
-
-中文:
-定理 inv_eq_zero
-  条件: {φ : k⟦X⟧}
-  结论: φ⁻¹ = 0 ↔ constantCoeff φ = 0
-  证明: MvPowerSeries.inv_eq_zero
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.inv_eq_zero, inv_eq_zero
+/-
+**PowerSeries.inv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：inv_eq_zero {φ : k⟦X⟧} : φ⁻¹ = 0 ↔ constantCoeff φ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.inv_eq_zero`：inv_eq_zero {φ : MvPowerSeries σ k} : φ⁻¹ = 0
+ ↔ constantCoeff φ = 0
 -/
 theorem inv_eq_zero {φ : k⟦X⟧} : φ⁻¹ = 0 ↔ constantCoeff φ = 0 :=
   MvPowerSeries.inv_eq_zero
-
-/--
-theorem `zero_inv` / 定理 `zero_inv`
-
-English:
-theorem zero_inv
-  statement: (0 : k⟦X⟧)⁻¹ = 0
-  proof: MvPowerSeries.zero_inv
-
-@[simp]
-
-中文:
-定理 zero_inv
-  结论: (0 : k⟦X⟧)⁻¹ = 0
-  证明: MvPowerSeries.zero_inv
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.zero_inv, zero_inv
+/-
+**PowerSeries.zero_inv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：zero_inv : (0 : k⟦X⟧)⁻¹ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.zero_inv`：zero_inv : (0 : MvPowerSeries σ k)⁻¹ = 0
 -/
 theorem zero_inv : (0 : k⟦X⟧)⁻¹ = 0 :=
   MvPowerSeries.zero_inv
 
 @[simp]
-/--
-theorem `invOfUnit_eq` / 定理 `invOfUnit_eq`
-
-English:
-theorem invOfUnit_eq
-  given: (φ : k⟦X⟧) (h : constantCoeff φ != 0)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 invOfUnit_eq
-  条件: (φ : k⟦X⟧) (h : constantCoeff φ != 0)
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.invOfUnit_eq** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：invOfUnit_eq (φ : k⟦X⟧) (h : constantCoeff φ != 0) : invOfUnit φ (Units.mk
+0 _ h) = φ⁻¹
+参数：φ : k⟦X⟧；h : constantCoeff φ != 0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem invOfUnit_eq (φ : k⟦X⟧) (h : constantCoeff φ != 0) :
+theorem invOfUnit_eq (φ : k⟦X⟧) (h : constantCoeff φ ≠ 0) :
     invOfUnit φ (Units.mk0 _ h) = φ⁻¹ :=
   rfl
 
 @[simp]
-/--
-theorem `invOfUnit_eq'` / 定理 `invOfUnit_eq'`
-
-English:
-theorem invOfUnit_eq'
-  given: (φ : k⟦X⟧) (u : Units k) (h : constantCoeff φ = u)
-  proof: MvPowerSeries.invOfUnit_eq' φ _ h
-
-@[simp]
-
-中文:
-定理 invOfUnit_eq'
-  条件: (φ : k⟦X⟧) (u : 单位群 k) (h : constantCoeff φ = u)
-  证明: MvPowerSeries.invOfUnit_eq' φ _ h
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.invOfUnit_eq, invOfUnit_eq
+/-
+**PowerSeries.invOfUnit_eq'** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：invOfUnit_eq' (φ : k⟦X⟧) (u : Units k) (h : constantCoeff φ = u) : invOfUn
+it φ u = φ⁻¹
+参数：φ : k⟦X⟧；u : Units k；h : constantCoeff φ = u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.invOfUnit_eq'`：invOfUnit_eq' (φ : MvPowerSeries σ k) (u : 
+Units k) (h : constantCoeff φ = u) : invOfUnit φ u = φ⁻¹
 -/
 theorem invOfUnit_eq' (φ : k⟦X⟧) (u : Units k) (h : constantCoeff φ = u) :
     invOfUnit φ u = φ⁻¹ :=
   MvPowerSeries.invOfUnit_eq' φ _ h
 
 @[simp]
-/--
-theorem `mul_inv_cancel` / 定理 `mul_inv_cancel`
-
-English:
-theorem mul_inv_cancel
-  given: (φ : k⟦X⟧) (h : constantCoeff φ != 0)
-  statement: φ * φ⁻¹ = 1
-  proof: MvPowerSeries.mul_inv_cancel φ h
-
-@[simp]
-
-中文:
-定理 mul_inv_cancel
-  条件: (φ : k⟦X⟧) (h : constantCoeff φ != 0)
-  结论: φ * φ⁻¹ = 1
-  证明: MvPowerSeries.mul_inv_cancel φ h
-
-@[simp]
+/-
+**PowerSeries.mul_inv_cancel** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：∀ {k : Type u_2} [inst : Field k] (φ : PowerSeries k), PowerSeries.constan
+tCoeff φ ≠ 0 → φ * φ⁻¹ = 1
+参数：φ : PowerSeries k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.mul_inv_cancel`：∀ {σ : Type u_1} {k : Type u_3} [inst : Fi
+eld k] (φ : MvPowerSeries σ k),   MvPowerSeries.constantCoeff φ ≠ 0 → φ * φ⁻¹ = 
+1
 -/
-protected theorem mul_inv_cancel (φ : k⟦X⟧) (h : constantCoeff φ != 0) : φ * φ⁻¹ = 1 :=
+protected theorem mul_inv_cancel (φ : k⟦X⟧) (h : constantCoeff φ ≠ 0) : φ * φ⁻¹ = 1 :=
   MvPowerSeries.mul_inv_cancel φ h
 
 @[simp]
-/--
-theorem `inv_mul_cancel` / 定理 `inv_mul_cancel`
-
-English:
-theorem inv_mul_cancel
-  given: (φ : k⟦X⟧) (h : constantCoeff φ != 0)
-  statement: φ⁻¹ * φ = 1
-  proof: MvPowerSeries.inv_mul_cancel φ h
-
-中文:
-定理 inv_mul_cancel
-  条件: (φ : k⟦X⟧) (h : constantCoeff φ != 0)
-  结论: φ⁻¹ * φ = 1
-  证明: MvPowerSeries.inv_mul_cancel φ h
+/-
+**PowerSeries.inv_mul_cancel** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：∀ {k : Type u_2} [inst : Field k] (φ : PowerSeries k), PowerSeries.constan
+tCoeff φ ≠ 0 → φ⁻¹ * φ = 1
+参数：φ : PowerSeries k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.inv_mul_cancel`：∀ {σ : Type u_1} {k : Type u_3} [inst : Fi
+eld k] (φ : MvPowerSeries σ k),   MvPowerSeries.constantCoeff φ ≠ 0 → φ⁻¹ * φ = 
+1
 -/
-protected theorem inv_mul_cancel (φ : k⟦X⟧) (h : constantCoeff φ != 0) : φ⁻¹ * φ = 1 :=
+protected theorem inv_mul_cancel (φ : k⟦X⟧) (h : constantCoeff φ ≠ 0) : φ⁻¹ * φ = 1 :=
   MvPowerSeries.inv_mul_cancel φ h
-
-/--
-theorem `eq_mul_inv_iff_mul_eq` / 定理 `eq_mul_inv_iff_mul_eq`
-
-English:
-theorem eq_mul_inv_iff_mul_eq
-  given: {φ₁ φ₂ φ₃ : k⟦X⟧} (h : constantCoeff φ₃ != 0)
-  proof: MvPowerSeries.eq_mul_inv_iff_mul_eq h
-
-中文:
-定理 eq_mul_inv_iff_mul_eq
-  条件: {φ₁ φ₂ φ₃ : k⟦X⟧} (h : constantCoeff φ₃ != 0)
-  证明: MvPowerSeries.eq_mul_inv_iff_mul_eq h
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.eq_mul_inv_iff_mul_eq, eq_mul_inv_iff_mul_eq
+/-
+**PowerSeries.eq_mul_inv_iff_mul_eq** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：eq_mul_inv_iff_mul_eq {φ₁ φ₂ φ₃ : k⟦X⟧} (h : constantCoeff φ₃ != 0) : φ₁ =
+ φ₂ * φ₃⁻¹ ↔ φ₁ * φ₃ = φ₂
+参数：h : constantCoeff φ₃ != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.eq_mul_inv_iff_mul_eq`：∀ {σ : Type u_1} {k : Type u_3} [in
+st : Field k] {φ₁ φ₂ φ₃ : MvPowerSeries σ k},   MvPowerSeries.constantCoeff φ₃ ≠
+ 0 → (φ₁ = φ₂ * φ₃⁻¹ ↔ φ₁…
 -/
-theorem eq_mul_inv_iff_mul_eq {φ₁ φ₂ φ₃ : k⟦X⟧} (h : constantCoeff φ₃ != 0) :
+theorem eq_mul_inv_iff_mul_eq {φ₁ φ₂ φ₃ : k⟦X⟧} (h : constantCoeff φ₃ ≠ 0) :
     φ₁ = φ₂ * φ₃⁻¹ ↔ φ₁ * φ₃ = φ₂ :=
   MvPowerSeries.eq_mul_inv_iff_mul_eq h
-
-/--
-theorem `eq_inv_iff_mul_eq_one` / 定理 `eq_inv_iff_mul_eq_one`
-
-English:
-theorem eq_inv_iff_mul_eq_one
-  given: {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0)
-  proof: MvPowerSeries.eq_inv_iff_mul_eq_one h
-
-中文:
-定理 eq_inv_iff_mul_eq_one
-  条件: {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0)
-  证明: MvPowerSeries.eq_inv_iff_mul_eq_one h
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, MvPowerSeries, MvPowerSeries.eq_inv_iff_mul_eq_one, UniformSpaceCat, eq_inv_iff_mul_eq_one
+/-
+**PowerSeries.eq_inv_iff_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：eq_inv_iff_mul_eq_one {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0) : φ = ψ⁻¹ ↔ 
+φ * ψ = 1
+参数：h : constantCoeff ψ != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.eq_inv_iff_mul_eq_one`：∀ {σ : Type u_1} {k : Type u_3} [in
+st : Field k] {φ ψ : MvPowerSeries σ k},   MvPowerSeries.constantCoeff ψ ≠ 0 → (
+φ = ψ⁻¹ ↔ φ * ψ = 1)
 -/
-theorem eq_inv_iff_mul_eq_one {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0) :
+theorem eq_inv_iff_mul_eq_one {φ ψ : k⟦X⟧} (h : constantCoeff ψ ≠ 0) :
     φ = ψ⁻¹ ↔ φ * ψ = 1 :=
   MvPowerSeries.eq_inv_iff_mul_eq_one h
-
-/--
-theorem `inv_eq_iff_mul_eq_one` / 定理 `inv_eq_iff_mul_eq_one`
-
-English:
-theorem inv_eq_iff_mul_eq_one
-  given: {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0)
-  proof: MvPowerSeries.inv_eq_iff_mul_eq_one h
-
-中文:
-定理 inv_eq_iff_mul_eq_one
-  条件: {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0)
-  证明: MvPowerSeries.inv_eq_iff_mul_eq_one h
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.inv_eq_iff_mul_eq_one, inv_eq_iff_mul_eq_one
+/-
+**PowerSeries.inv_eq_iff_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：inv_eq_iff_mul_eq_one {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0) : ψ⁻¹ = φ ↔ 
+φ * ψ = 1
+参数：h : constantCoeff ψ != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.inv_eq_iff_mul_eq_one`：∀ {σ : Type u_1} {k : Type u_3} [in
+st : Field k] {φ ψ : MvPowerSeries σ k},   MvPowerSeries.constantCoeff ψ ≠ 0 → (
+ψ⁻¹ = φ ↔ φ * ψ = 1)
 -/
-theorem inv_eq_iff_mul_eq_one {φ ψ : k⟦X⟧} (h : constantCoeff ψ != 0) :
+theorem inv_eq_iff_mul_eq_one {φ ψ : k⟦X⟧} (h : constantCoeff ψ ≠ 0) :
     ψ⁻¹ = φ ↔ φ * ψ = 1 :=
   MvPowerSeries.inv_eq_iff_mul_eq_one h
-
-/--
-theorem `mul_inv_rev` / 定理 `mul_inv_rev`
-
-English:
-theorem mul_inv_rev
-  given: (φ ψ : k⟦X⟧)
-  statement: (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹
-  proof: MvPowerSeries.mul_inv_rev _ _
-
-@[simp]
-
-中文:
-定理 mul_inv_rev
-  条件: (φ ψ : k⟦X⟧)
-  结论: (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹
-  证明: MvPowerSeries.mul_inv_rev _ _
-
-@[simp]
+/-
+**PowerSeries.mul_inv_rev** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：∀ {k : Type u_2} [inst : Field k] (φ ψ : PowerSeries k), (φ * ψ)⁻¹ = ψ⁻¹ *
+ φ⁻¹
+参数：φ ψ : PowerSeries k；φ * ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.mul_inv_rev`：∀ {σ : Type u_1} {k : Type u_3} [inst : Field
+ k] (φ ψ : MvPowerSeries σ k), (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹
 -/
 protected theorem mul_inv_rev (φ ψ : k⟦X⟧) : (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹ :=
   MvPowerSeries.mul_inv_rev _ _
 
 @[simp]
-/--
-theorem `C_inv` / 定理 `C_inv`
-
-English:
-theorem C_inv
-  given: (r : k)
-  statement: (C r)⁻¹ = C r⁻¹
-  proof: MvPowerSeries.C_inv _
-
-@[simp]
-
-中文:
-定理 C_inv
-  条件: (r : k)
-  结论: (C r)⁻¹ = C r⁻¹
-  证明: MvPowerSeries.C_inv _
-
-@[simp]
-
-Depends on / 依赖: C_inv, MvPowerSeries, MvPowerSeries.C_inv
+/-
+**PowerSeries.C_inv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：C_inv (r : k) : (C r)⁻¹ = C r⁻¹
+参数：r : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.C_inv`：C_inv (r : k) : (C (σ
 -/
 theorem C_inv (r : k) : (C r)⁻¹ = C r⁻¹ :=
   MvPowerSeries.C_inv _
 
 @[simp]
-/--
-theorem `X_inv` / 定理 `X_inv`
-
-English:
-theorem X_inv
-  statement: (X : k⟦X⟧)⁻¹ = 0
-  proof: MvPowerSeries.X_inv _
-
-中文:
-定理 X_inv
-  结论: (X : k⟦X⟧)⁻¹ = 0
-  证明: MvPowerSeries.X_inv _
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.X_inv, X_inv
+/-
+**PowerSeries.X_inv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_inv : (X : k⟦X⟧)⁻¹ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.X_inv`：X_inv (s : σ) : (X s : MvPowerSeries σ k)⁻¹ = 0
 -/
 theorem X_inv : (X : k⟦X⟧)⁻¹ = 0 :=
   MvPowerSeries.X_inv _
-
-/--
-theorem `smul_inv` / 定理 `smul_inv`
-
-English:
-theorem smul_inv
-  given: (r : k) (φ : k⟦X⟧)
-  statement: (r • φ)⁻¹ = r⁻¹ • φ⁻¹
-  proof: MvPowerSeries.smul_inv _ _
-
-中文:
-定理 smul_inv
-  条件: (r : k) (φ : k⟦X⟧)
-  结论: (r • φ)⁻¹ = r⁻¹ • φ⁻¹
-  证明: MvPowerSeries.smul_inv _ _
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.smul_inv, smul_inv
+/-
+**PowerSeries.smul_inv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：smul_inv (r : k) (φ : k⟦X⟧) : (r • φ)⁻¹ = r⁻¹ • φ⁻¹
+参数：r : k；φ : k⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.smul_inv`：smul_inv (r : k) (φ : MvPowerSeries σ k) : (r • 
+φ)⁻¹ = r⁻¹ • φ⁻¹
 -/
 theorem smul_inv (r : k) (φ : k⟦X⟧) : (r • φ)⁻¹ = r⁻¹ • φ⁻¹ :=
   MvPowerSeries.smul_inv _ _
 
-/--
-Definition of `firstUnitCoeff` / `firstUnitCoeff` 的定义
+/-- `firstUnitCoeff` is the non-zero coefficient whose index is `f.order`, seen as a unit of the
+  field. It is obtained using `divided_by_X_pow_order`, defined in `PowerSeries.Order`. -/
+/-
+**PowerSeries.firstUnitCoeff** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：firstUnitCoeff {f : k⟦X⟧} (hf : f != 0) : kˣ
+参数：hf : f != 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition firstUnitCoeff
-  signature: {f : k⟦X⟧} (hf : f != 0)
-  body: have : Invertible (constantCoeff (divXPowOrder f)) := by
-    apply invertibleOfNonzero
-    simpa [constantCoeff_divXPowOrder_eq_zero_iff.not]
-  unitOfInvertible (constantCoeff (divXPowOrder f))
-
-中文:
-定义 firstUnitCoeff
-  签名: {f : k⟦X⟧} (hf : f != 0)
-  定义体: have : Invertible (constantCoeff (divXPowOrder f)) := by
-    apply invertibleOfNonzero
-    simpa [constantCoeff_divXPowOrder_eq_zero_iff.not]
-  unitOfInvertible (constantCoeff (divXPowOrder f))
-
-Depends on / 依赖: Invertible, constantCoeff, constantCoeff_divXPowOrder_eq_zero_iff, constantCoeff_divXPowOrder_eq_zero_iff.not, divXPowOrder, invertibleOfNonzero, unitOfInvertible
+--- 原说明 ---
+`firstUnitCoeff` is the non-zero coefficient whose index is `f.order`, seen as a
+ unit of the
+  field. It is obtained using `divided_by_X_pow_order`, defined in `PowerSeries.
+Order`.
 -/
-def firstUnitCoeff {f : k⟦X⟧} (hf : f != 0) : kˣ :=
+def firstUnitCoeff {f : k⟦X⟧} (hf : f ≠ 0) : kˣ :=
   have : Invertible (constantCoeff (divXPowOrder f)) := by
     apply invertibleOfNonzero
     simpa [constantCoeff_divXPowOrder_eq_zero_iff.not]
   unitOfInvertible (constantCoeff (divXPowOrder f))
 
-/--
-Definition of `Inv_divided_by_X_pow_order` / `Inv_divided_by_X_pow_order` 的定义
+/-- `Inv_divided_by_X_pow_order` is the inverse of the element obtained by diving a non-zero power
+series by the largest power of `X` dividing it. Useful to create a term of type `Units`, done in
+`Unit_divided_by_X_pow_order` -/
+/-
+**PowerSeries.Inv_divided_by_X_pow_order** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`
+。
+形式化陈述：Inv_divided_by_X_pow_order {f : k⟦X⟧} (hf : f != 0) : k⟦X⟧
+参数：hf : f != 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Inv_divided_by_X_pow_order
-  signature: {f : k⟦X⟧} (hf : f != 0)
-  body: invOfUnit (divXPowOrder f) (firstUnitCoeff hf)
-
-@[simp]
-
-中文:
-定义 Inv_divided_by_X_pow_order
-  签名: {f : k⟦X⟧} (hf : f != 0)
-  定义体: invOfUnit (divXPowOrder f) (firstUnitCoeff hf)
-
-@[simp]
-
-Depends on / 依赖: divXPowOrder, firstUnitCoeff, invOfUnit
+--- 原说明 ---
+`Inv_divided_by_X_pow_order` is the inverse of the element obtained by diving a 
+non-zero power
+series by the largest power of `X` dividing it. Useful to create a term of type 
+`Units`, done in
+`Unit_divided_by_X_pow_order`
 -/
-def Inv_divided_by_X_pow_order {f : k⟦X⟧} (hf : f != 0) : k⟦X⟧ :=
+def Inv_divided_by_X_pow_order {f : k⟦X⟧} (hf : f ≠ 0) : k⟦X⟧ :=
   invOfUnit (divXPowOrder f) (firstUnitCoeff hf)
 
 @[simp]
-/--
-theorem `Inv_divided_by_X_pow_order_rightInv` / 定理 `Inv_divided_by_X_pow_order_rightInv`
-
-English:
-theorem Inv_divided_by_X_pow_order_rightInv
-  given: {f : k⟦X⟧} (hf : f != 0)
-  proof: mul_invOfUnit (divXPowOrder f) (firstUnitCoeff hf) rfl
-
-@[simp]
-
-中文:
-定理 Inv_divided_by_X_pow_order_rightInv
-  条件: {f : k⟦X⟧} (hf : f != 0)
-  证明: mul_invOfUnit (divXPowOrder f) (firstUnitCoeff hf) rfl
-
-@[simp]
-
-Depends on / 依赖: divXPowOrder, firstUnitCoeff, mul_invOfUnit
+/-
+**PowerSeries.Inv_divided_by_X_pow_order_rightInv** 是 Mathlib 中的一个定理，位于命名空间 `Pow
+erSeries`。
+形式化陈述：Inv_divided_by_X_pow_order_rightInv {f : k⟦X⟧} (hf : f != 0) : divXPowOrde
+r f * Inv_divided_by_X_pow_order hf = 1
+参数：hf : f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.mul_invOfUnit`：mul_invOfUnit (φ : R⟦X⟧) (u : Rˣ) (h : consta
+ntCoeff φ = u) : φ * invOfUnit φ u = 1
 -/
-theorem Inv_divided_by_X_pow_order_rightInv {f : k⟦X⟧} (hf : f != 0) :
+theorem Inv_divided_by_X_pow_order_rightInv {f : k⟦X⟧} (hf : f ≠ 0) :
     divXPowOrder f * Inv_divided_by_X_pow_order hf = 1 :=
   mul_invOfUnit (divXPowOrder f) (firstUnitCoeff hf) rfl
 
 @[simp]
-/--
-theorem `Inv_divided_by_X_pow_order_leftInv` / 定理 `Inv_divided_by_X_pow_order_leftInv`
-
-English:
-theorem Inv_divided_by_X_pow_order_leftInv
-  given: {f : k⟦X⟧} (hf : f != 0)
-  proof: by
-  rw [mul_comm]
-  exact mul_invOfUnit (divXPowOrder f) (firstUnitCoeff hf) rfl
-
-中文:
-定理 Inv_divided_by_X_pow_order_leftInv
-  条件: {f : k⟦X⟧} (hf : f != 0)
-  证明: by
-  rw [mul_comm]
-  exact mul_invOfUnit (divXPowOrder f) (firstUnitCoeff hf) rfl
-
-Depends on / 依赖: divXPowOrder, firstUnitCoeff, mul_comm, mul_invOfUnit
+/-
+**PowerSeries.Inv_divided_by_X_pow_order_leftInv** 是 Mathlib 中的一个定理，位于命名空间 `Powe
+rSeries`。
+形式化陈述：Inv_divided_by_X_pow_order_leftInv {f : k⟦X⟧} (hf : f != 0) : Inv_divided_
+by_X_pow_order hf * divXPowOrder f = 1
+参数：hf : f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `PowerSeries.mul_invOfUnit`：mul_invOfUnit (φ : R⟦X⟧) (u : Rˣ) (h : consta
+ntCoeff φ = u) : φ * invOfUnit φ u = 1
 -/
-theorem Inv_divided_by_X_pow_order_leftInv {f : k⟦X⟧} (hf : f != 0) :
+theorem Inv_divided_by_X_pow_order_leftInv {f : k⟦X⟧} (hf : f ≠ 0) :
     Inv_divided_by_X_pow_order hf * divXPowOrder f = 1 := by
   rw [mul_comm]
   exact mul_invOfUnit (divXPowOrder f) (firstUnitCoeff hf) rfl
 
 open scoped Classical in
-/--
-Definition of `Unit_of_divided_by_X_pow_order` / `Unit_of_divided_by_X_pow_order` 的定义
+/-- `Unit_of_divided_by_X_pow_order` is the unit power series obtained by dividing a non-zero
+power series by the largest power of `X` that divides it. -/
+/-
+**PowerSeries.Unit_of_divided_by_X_pow_order** 是 Mathlib 中的一个定义，位于命名空间 `PowerSer
+ies`。
+形式化陈述：Unit_of_divided_by_X_pow_order (f : k⟦X⟧) : k⟦X⟧ˣ
+参数：f : k⟦X⟧。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_rightInv`：Inv_divided_by_X_pow_or
+der_rightInv {f : k⟦X⟧} (hf : f != 0) : divXPowOrder f * Inv_divided_by_X_pow_or
+der hf = 1
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_leftInv`：Inv_divided_by_X_pow_ord
+er_leftInv {f : k⟦X⟧} (hf : f != 0) : Inv_divided_by_X_pow_order hf * divXPowOrd
+er f = 1
 
-English:
-definition Unit_of_divided_by_X_pow_order
-  signature: (f : k⟦X⟧)
-  body: if hf : f = 0 then 1
-  else
-    { val := divXPowOrder f
-      inv := Inv_divided_by_X_pow_order hf
-      val_inv := Inv_divided_by_X_pow_order_rightInv hf
-      inv_val := Inv_divided_by_X_pow_order_leftInv hf }
-
-中文:
-定义 Unit_of_divided_by_X_pow_order
-  签名: (f : k⟦X⟧)
-  定义体: if hf : f = 0 then 1
-  else
-    { val := divXPowOrder f
-      inv := Inv_divided_by_X_pow_order hf
-      val_inv := Inv_divided_by_X_pow_order_rightInv hf
-      inv_val := Inv_divided_by_X_pow_order_leftInv hf }
-
-Depends on / 依赖: Inv_divided_by_X_pow_order, Inv_divided_by_X_pow_order_leftInv, Inv_divided_by_X_pow_order_rightInv, divXPowOrder, inv_val, val_inv
+--- 原说明 ---
+`Unit_of_divided_by_X_pow_order` is the unit power series obtained by dividing a
+ non-zero
+power series by the largest power of `X` that divides it.
 -/
 def Unit_of_divided_by_X_pow_order (f : k⟦X⟧) : k⟦X⟧ˣ :=
   if hf : f = 0 then 1
@@ -815,101 +624,124 @@ def Unit_of_divided_by_X_pow_order (f : k⟦X⟧) : k⟦X⟧ˣ :=
       inv := Inv_divided_by_X_pow_order hf
       val_inv := Inv_divided_by_X_pow_order_rightInv hf
       inv_val := Inv_divided_by_X_pow_order_leftInv hf }
-
-/--
-theorem `isUnit_divided_by_X_pow_order` / 定理 `isUnit_divided_by_X_pow_order`
-
-English:
-theorem isUnit_divided_by_X_pow_order
-  given: {f : k⟦X⟧} (hf : f != 0)
-  proof: ⟨Unit_of_divided_by_X_pow_order f,
-    by simp only [Unit_of_divided_by_X_pow_order, dif_neg hf, Units.val_mk]⟩
-
-中文:
-定理 isUnit_divided_by_X_pow_order
-  条件: {f : k⟦X⟧} (hf : f != 0)
-  证明: ⟨Unit_of_divided_by_X_pow_order f,
-    by simp only [Unit_of_divided_by_X_pow_order, dif_neg hf, Units.val_mk]⟩
-
-Depends on / 依赖: Unit_of_divided_by_X_pow_order, Units.val_mk, dif_neg, val_mk
+/-
+**PowerSeries.isUnit_divided_by_X_pow_order** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeri
+es`。
+形式化陈述：isUnit_divided_by_X_pow_order {f : k⟦X⟧} (hf : f != 0) : IsUnit (divXPowOr
+der f)
+参数：hf : f != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_rightInv`：Inv_divided_by_X_pow_or
+der_rightInv {f : k⟦X⟧} (hf : f != 0) : divXPowOrder f * Inv_divided_by_X_pow_or
+der hf = 1
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_leftInv`：Inv_divided_by_X_pow_ord
+er_leftInv {f : k⟦X⟧} (hf : f != 0) : Inv_divided_by_X_pow_order hf * divXPowOrd
+er f = 1
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem isUnit_divided_by_X_pow_order {f : k⟦X⟧} (hf : f != 0) :
+theorem isUnit_divided_by_X_pow_order {f : k⟦X⟧} (hf : f ≠ 0) :
     IsUnit (divXPowOrder f) :=
   ⟨Unit_of_divided_by_X_pow_order f,
     by simp only [Unit_of_divided_by_X_pow_order, dif_neg hf, Units.val_mk]⟩
-
-/--
-theorem `Unit_of_divided_by_X_pow_order_nonzero` / 定理 `Unit_of_divided_by_X_pow_order_nonzero`
-
-English:
-theorem Unit_of_divided_by_X_pow_order_nonzero
-  given: {f : k⟦X⟧} (hf : f != 0)
-  proof: by
-  simp only [Unit_of_divided_by_X_pow_order, dif_neg hf, Units.val_mk]
-
-@[simp]
-
-中文:
-定理 Unit_of_divided_by_X_pow_order_nonzero
-  条件: {f : k⟦X⟧} (hf : f != 0)
-  证明: by
-  simp only [Unit_of_divided_by_X_pow_order, dif_neg hf, Units.val_mk]
-
-@[simp]
-
-Depends on / 依赖: Unit_of_divided_by_X_pow_order, Units.val_mk, dif_neg, val_mk
+/-
+**PowerSeries.Unit_of_divided_by_X_pow_order_nonzero** 是 Mathlib 中的一个定理，位于命名空间 `
+PowerSeries`。
+形式化陈述：Unit_of_divided_by_X_pow_order_nonzero {f : k⟦X⟧} (hf : f != 0) : ↑(Unit_o
+f_divided_by_X_pow_order f) = divXPowOrder f
+参数：hf : f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_rightInv`：Inv_divided_by_X_pow_or
+der_rightInv {f : k⟦X⟧} (hf : f != 0) : divXPowOrder f * Inv_divided_by_X_pow_or
+der hf = 1
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_leftInv`：Inv_divided_by_X_pow_ord
+er_leftInv {f : k⟦X⟧} (hf : f != 0) : Inv_divided_by_X_pow_order hf * divXPowOrd
+er f = 1
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Unit_of_divided_by_X_pow_order_nonzero {f : k⟦X⟧} (hf : f != 0) :
+theorem Unit_of_divided_by_X_pow_order_nonzero {f : k⟦X⟧} (hf : f ≠ 0) :
     ↑(Unit_of_divided_by_X_pow_order f) = divXPowOrder f := by
   simp only [Unit_of_divided_by_X_pow_order, dif_neg hf, Units.val_mk]
 
 @[simp]
-/--
-theorem `Unit_of_divided_by_X_pow_order_zero` / 定理 `Unit_of_divided_by_X_pow_order_zero`
-
-English:
-theorem Unit_of_divided_by_X_pow_order_zero
-  statement: Unit_of_divided_by_X_pow_order (0 : k⟦X⟧) = 1
-  proof: by
-  simp only [Unit_of_divided_by_X_pow_order, dif_pos]
-
-中文:
-定理 Unit_of_divided_by_X_pow_order_zero
-  结论: Unit_of_divided_by_X_pow_order (0 : k⟦X⟧) = 1
-  证明: by
-  simp only [Unit_of_divided_by_X_pow_order, dif_pos]
-
-Depends on / 依赖: Unit_of_divided_by_X_pow_order, dif_pos
+/-
+**PowerSeries.Unit_of_divided_by_X_pow_order_zero** 是 Mathlib 中的一个定理，位于命名空间 `Pow
+erSeries`。
+形式化陈述：Unit_of_divided_by_X_pow_order_zero : Unit_of_divided_by_X_pow_order (0 : 
+k⟦X⟧) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_rightInv`：Inv_divided_by_X_pow_or
+der_rightInv {f : k⟦X⟧} (hf : f != 0) : divXPowOrder f * Inv_divided_by_X_pow_or
+der hf = 1
+· 使用定理 `PowerSeries.Inv_divided_by_X_pow_order_leftInv`：Inv_divided_by_X_pow_ord
+er_leftInv {f : k⟦X⟧} (hf : f != 0) : Inv_divided_by_X_pow_order hf * divXPowOrd
+er f = 1
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
 theorem Unit_of_divided_by_X_pow_order_zero : Unit_of_divided_by_X_pow_order (0 : k⟦X⟧) = 1 := by
   simp only [Unit_of_divided_by_X_pow_order, dif_pos]
-
-/--
-theorem `eq_divided_by_X_pow_order_Iff_Unit` / 定理 `eq_divided_by_X_pow_order_Iff_Unit`
-
-English:
-theorem eq_divided_by_X_pow_order_Iff_Unit
-  given: {f : k⟦X⟧} (hf : f != 0)
-  proof: ⟨fun h => by rw [h]; exact isUnit_divided_by_X_pow_order hf, fun h => by
-    have : f.order = 0 := by
-      simp [order_zero_of_unit h]
-    conv_lhs => rw [← X_pow_order_mul_divXPowOrder (f := f), this, ENat.toNat_zero,
-      pow_zero, one_mul]⟩
-
-中文:
-定理 eq_divided_by_X_pow_order_Iff_Unit
-  条件: {f : k⟦X⟧} (hf : f != 0)
-  证明: ⟨fun h => by rw [h]; exact isUnit_divided_by_X_pow_order hf, fun h => by
-    have : f.order = 0 := by
-      simp [order_zero_of_unit h]
-    conv_lhs => rw [← X_pow_order_mul_divXPowOrder (f := f), this, ENat.toNat_zero,
-      pow_zero, one_mul]⟩
-
-Depends on / 依赖: ENat.toNat_zero, X_pow_order_mul_divXPowOrder, conv_lhs, f.order, isUnit_divided_by_X_pow_order, one_mul, order_zero_of_unit, pow_zero, toNat_zero
+/-
+**PowerSeries.eq_divided_by_X_pow_order_Iff_Unit** 是 Mathlib 中的一个定理，位于命名空间 `Powe
+rSeries`。
+形式化陈述：eq_divided_by_X_pow_order_Iff_Unit {f : k⟦X⟧} (hf : f != 0) : f = divXPowO
+rder f ↔ IsUnit f
+参数：hf : f != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.isUnit_divided_by_X_pow_order`：isUnit_divided_by_X_pow_order
+ {f : k⟦X⟧} (hf : f != 0) : IsUnit (divXPowOrder f)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PowerSeries.order_zero_of_unit`：order_zero_of_unit {f : R⟦X⟧} : IsUnit f
+ -> f.order = 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.X_pow_order_mul_divXPowOrder`：X_pow_order_mul_divXPowOrder {
+f : R⟦X⟧} : X ^ f.order.toNat * divXPowOrder f = f
+· 使用定理 `ENat.toNat_zero`：toNat_zero : toNat 0 = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem eq_divided_by_X_pow_order_Iff_Unit {f : k⟦X⟧} (hf : f != 0) :
+theorem eq_divided_by_X_pow_order_Iff_Unit {f : k⟦X⟧} (hf : f ≠ 0) :
     f = divXPowOrder f ↔ IsUnit f :=
-  ⟨fun h => by rw [h]; exact isUnit_divided_by_X_pow_order hf, fun h => by
+  ⟨fun h ↦ by rw [h]; exact isUnit_divided_by_X_pow_order hf, fun h ↦ by
     have : f.order = 0 := by
       simp [order_zero_of_unit h]
     conv_lhs => rw [← X_pow_order_mul_divXPowOrder (f := f), this, ENat.toNat_zero,
@@ -919,21 +751,18 @@ end Field
 
 section IsLocalRing
 
-variable {S : Type*} [CommRing R] [CommRing S] (f : R ->+* S) [IsLocalHom f]
+variable {S : Type*} [CommRing R] [CommRing S] (f : R →+* S) [IsLocalHom f]
 
 @[instance]
-/--
-theorem `map.isLocalHom` / 定理 `map.isLocalHom`
-
-English:
-theorem map.isLocalHom
-  statement: IsLocalHom (map f)
-  proof: MvPowerSeries.map.isLocalHom f
-
-中文:
-定理 map.isLocalHom
-  结论: 是Local态射 (map f)
-  证明: MvPowerSeries.map.isLocalHom f
+/-
+**PowerSeries.map.isLocalHom** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.map`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+(f : R →+* S) [IsLocalHom f],   IsLocalHom (PowerSeries.map f)
+参数：f : R →+* S；PowerSeries.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.map.isLocalHom`：∀ {σ : Type u_1} {R : Type u_2} {S : Type 
+u_3} [inst : CommRing R] [inst_1 : CommRing S] (f : R →+* S) [IsLocalHom f],   I
+sLocalHom (MvPower…
 -/
 theorem map.isLocalHom : IsLocalHom (map f) :=
   MvPowerSeries.map.isLocalHom f
@@ -946,30 +775,24 @@ variable {k : Type*} [Field k]
 
 open IsDiscreteValuationRing
 
-/--
-theorem `hasUnitMulPowIrreducibleFactorization` / 定理 `hasUnitMulPowIrreducibleFactorization`
-
-English:
-theorem hasUnitMulPowIrreducibleFactorization
-  proof: ⟨X, And.intro X_irreducible
-      (by
-        intro f hf
-        use f.order.toNat
-        use Unit_of_divided_by_X_pow_order f
-        simp only [Unit_of_divided_by_X_pow_order_nonzero hf]
-        exact X_pow_order_mul_divXPowOrder)⟩
-
-中文:
-定理 hasUnitMulPowIrreducibleFactorization
-  证明: ⟨X, And.intro X_irreducible
-      (by
-        intro f hf
-        use f.order.toNat
-        use Unit_of_divided_by_X_pow_order f
-        simp only [Unit_of_divided_by_X_pow_order_nonzero hf]
-        exact X_pow_order_mul_divXPowOrder)⟩
-
-Depends on / 依赖: And.intro, Unit_of_divided_by_X_pow_order, Unit_of_divided_by_X_pow_order_nonzero, X_irreducible, X_pow_order_mul_divXPowOrder, f.order.toNat
+/-
+**PowerSeries.hasUnitMulPowIrreducibleFactorization** 是 Mathlib 中的一个定理，位于命名空间 `P
+owerSeries`。
+形式化陈述：hasUnitMulPowIrreducibleFactorization : HasUnitMulPowIrreducibleFactorizat
+ion k⟦X⟧
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.X_irreducible`：X_irreducible : Irreducible (X : R⟦X⟧)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.Unit_of_divided_by_X_pow_order_nonzero`：Unit_of_divided_by_X
+_pow_order_nonzero {f : k⟦X⟧} (hf : f != 0) : ↑(Unit_of_divided_by_X_pow_order f
+) = divXPowOrder f
+· 使用定理 `PowerSeries.X_pow_order_mul_divXPowOrder`：X_pow_order_mul_divXPowOrder {
+f : R⟦X⟧} : X ^ f.order.toNat * divXPowOrder f = f
 -/
 theorem hasUnitMulPowIrreducibleFactorization :
     HasUnitMulPowIrreducibleFactorization k⟦X⟧ :=
@@ -980,99 +803,87 @@ theorem hasUnitMulPowIrreducibleFactorization :
         use Unit_of_divided_by_X_pow_order f
         simp only [Unit_of_divided_by_X_pow_order_nonzero hf]
         exact X_pow_order_mul_divXPowOrder)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: UniqueFactorizationMonoid k⟦X⟧
-  body: hasUnitMulPowIrreducibleFactorization.toUniqueFactorizationMonoid
-
-中文:
-实例 :
-  签名: 唯一分解幺半群 k⟦X⟧
-  定义体: hasUnitMulPowIrreducibleFactorization.toUniqueFactorizationMonoid
-
-Depends on / 依赖: hasUnitMulPowIrreducibleFactorization, hasUnitMulPowIrreducibleFactorization.toUniqueFactorizationMonoid, toUniqueFactorizationMonoid
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : UniqueFactorizationMonoid k⟦X⟧ :=
   hasUnitMulPowIrreducibleFactorization.toUniqueFactorizationMonoid
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsDiscreteValuationRing k⟦X⟧
-  body: ofHasUnitMulPowIrreducibleFactorization hasUnitMulPowIrreducibleFactorization
-
-example : IsNoetherianRing k⟦X⟧ := inferInstance
-
-中文:
-实例 :
-  签名: 是离散赋值环 k⟦X⟧
-  定义体: ofHasUnitMulPowIrreducibleFactorization hasUnitMulPowIrreducibleFactorization
-
-example : IsNoetherianRing k⟦X⟧ := inferInstance
-
-Depends on / 依赖: hasUnitMulPowIrreducibleFactorization, ofHasUnitMulPowIrreducibleFactorization
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsDiscreteValuationRing k⟦X⟧ :=
   ofHasUnitMulPowIrreducibleFactorization hasUnitMulPowIrreducibleFactorization
-
+/-
+**PowerSeries.** 是 Mathlib 中的一个示例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : IsNoetherianRing k⟦X⟧ := inferInstance
 
-/--
-theorem `maximalIdeal_eq_span_X` / 定理 `maximalIdeal_eq_span_X`
+/-- The maximal ideal of `k⟦X⟧` is generated by `X`. -/
+/-
+**PowerSeries.maximalIdeal_eq_span_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：maximalIdeal_eq_span_X : IsLocalRing.maximalIdeal (k⟦X⟧) = Ideal.span {X}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.isMaximal_iff`：isMaximal_iff {I : Ideal α} : I.IsMaximal ↔ (1 : α)
+ ∉ I ∧ forall (J : Ideal α) (x), I <= J -> x ∉ I -> x in J -> (1 : α) in J
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `Prime.not_dvd_one`：not_dvd_one : ¬p ∣ 1
+· 使用定理 `PowerSeries.X_prime`：X_prime : Prime (X : R⟦X⟧)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `Ideal.sub_mem`：∀ {α : Type u} [inst : Ring α] (I : Ideal α) {a b : α}, a
+ ∈ I → b ∈ I → a - b ∈ I
+· 使用定理 `PowerSeries.X_dvd_iff`：X_dvd_iff {φ : R⟦X⟧} : (X : R⟦X⟧) ∣ φ ↔ constantC
+oeff φ = 0
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `PowerSeries.constantCoeff_C`：constantCoeff_C (a : R) : constantCoeff (C 
+a) = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff_apply`：coeff_zero_eq_constantCoe
+ff_apply (φ : R⟦X⟧) : coeff 0 φ = constantCoeff φ
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `Ideal.eq_top_iff_one`：eq_top_iff_one : I = ⊤ ↔ (1 : α) in I
+· 使用定理 `Ideal.eq_top_of_isUnit_mem`：eq_top_of_isUnit_mem {x} (hx : x in I) (h : 
+IsUnit x) : I = ⊤
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
+· 使用定理 `MvPowerSeries.instIsLocalRing`：∀ {σ : Type u_1} {R : Type u_2} [inst : C
+ommRing R] [IsLocalRing R], IsLocalRing (MvPowerSeries σ R)
+· 使用定理 `ValuationRing.isLocalRing`：∀ (A : Type u) [inst : CommRing A] [Nontrivia
+l A] [PreValuationRing A], IsLocalRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `ValuationRing.toPreValuationRing`：∀ {A : Type u} {inst : CommRing A} {in
+st_1 : IsDomain A} [self : ValuationRing A], PreValuationRing A
+· 使用定理 `ValuationRing.of_field`：∀ (K : Type u) [inst : Field K], ValuationRing K
+· 使用定理 `IsLocalRing.eq_maximalIdeal`：eq_maximalIdeal {I : Ideal R} (hI : I.IsMax
+imal) : I = maximalIdeal R
 
-English:
-theorem maximalIdeal_eq_span_X
-  statement: IsLocalRing.maximalIdeal (k⟦X⟧) = Ideal.span {X}
-  proof: by
-  have hX : (Ideal.span {(X : k⟦X⟧)}).IsMaximal := by
-    rw [Ideal.isMaximal_iff]
-    constructor
-    · rw [Ideal.mem_span_singleton]
-      exact Prime.not_dvd_one X_prime
-    · intro I f hI hfX hfI
-      rw [Ideal.mem_span_singleton]; rw [X_dvd_iff] at hfX
-      have hfI0 : C (f 0) in I := by
-        have : C (f 0) = f - (f - C (f 0)) := by rw [sub_sub_cancel]
-        rw [this]
-        apply Ideal.sub_mem I hfI
-        apply hI
-        rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]; rw [map_sub]; rw [constantCoeff_C]; rw [←
-          coeff_zero_eq_constantCoeff_apply]; rw [sub_eq_zero]; rw [coeff_zero_eq_constantCoeff]
-        rfl
-      rw [← Ideal.eq_top_iff_one]
-      apply Ideal.eq_top_of_isUnit_mem I hfI0 (IsUnit.map C (Ne.isUnit hfX))
-  rw [IsLocalRing.eq_maximalIdeal hX]
-
-中文:
-定理 maximalIdeal_eq_span_X
-  结论: 是局部环.maximalIdeal (k⟦X⟧) = 理想.span {X}
-  证明: by
-  have hX : (Ideal.span {(X : k⟦X⟧)}).IsMaximal := by
-    rw [Ideal.isMaximal_iff]
-    constructor
-    · rw [Ideal.mem_span_singleton]
-      exact Prime.not_dvd_one X_prime
-    · intro I f hI hfX hfI
-      rw [Ideal.mem_span_singleton]; rw [X_dvd_iff] at hfX
-      have hfI0 : C (f 0) in I := by
-        have : C (f 0) = f - (f - C (f 0)) := by rw [sub_sub_cancel]
-        rw [this]
-        apply Ideal.sub_mem I hfI
-        apply hI
-        rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]; rw [map_sub]; rw [constantCoeff_C]; rw [←
-          coeff_zero_eq_constantCoeff_apply]; rw [sub_eq_zero]; rw [coeff_zero_eq_constantCoeff]
-        rfl
-      rw [← Ideal.eq_top_iff_one]
-      apply Ideal.eq_top_of_isUnit_mem I hfI0 (IsUnit.map C (Ne.isUnit hfX))
-  rw [IsLocalRing.eq_maximalIdeal hX]
-
-Depends on / 依赖: Ideal.isMaximal_iff, Ideal.mem_span_singleton, Ideal.span, Ideal.sub_mem, IsMaximal, Prime.not_dvd_one, X_dvd_iff, X_prime, coeff_zero_eq_constantCoeff_apply, constantCoeff_C, isMaximal_iff, map_sub, mem_span_singleton, not_dvd_one, sub_mem, sub_sub_cancel
+--- 原说明 ---
+The maximal ideal of `k⟦X⟧` is generated by `X`.
 -/
 theorem maximalIdeal_eq_span_X : IsLocalRing.maximalIdeal (k⟦X⟧) = Ideal.span {X} := by
   have hX : (Ideal.span {(X : k⟦X⟧)}).IsMaximal := by
@@ -1081,55 +892,21 @@ theorem maximalIdeal_eq_span_X : IsLocalRing.maximalIdeal (k⟦X⟧) = Ideal.spa
     · rw [Ideal.mem_span_singleton]
       exact Prime.not_dvd_one X_prime
     · intro I f hI hfX hfI
-      rw [Ideal.mem_span_singleton]; rw [X_dvd_iff] at hfX
-      have hfI0 : C (f 0) in I := by
+      rw [Ideal.mem_span_singleton, X_dvd_iff] at hfX
+      have hfI0 : C (f 0) ∈ I := by
         have : C (f 0) = f - (f - C (f 0)) := by rw [sub_sub_cancel]
         rw [this]
         apply Ideal.sub_mem I hfI
         apply hI
-        rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]; rw [map_sub]; rw [constantCoeff_C]; rw [←
-          coeff_zero_eq_constantCoeff_apply]; rw [sub_eq_zero]; rw [coeff_zero_eq_constantCoeff]
+        rw [Ideal.mem_span_singleton, X_dvd_iff, map_sub, constantCoeff_C, ←
+          coeff_zero_eq_constantCoeff_apply, sub_eq_zero, coeff_zero_eq_constantCoeff]
         rfl
       rw [← Ideal.eq_top_iff_one]
       apply Ideal.eq_top_of_isUnit_mem I hfI0 (IsUnit.map C (Ne.isUnit hfX))
   rw [IsLocalRing.eq_maximalIdeal hX]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StrongNormalizationMonoid k⟦X⟧
-  body: (Unit_of_divided_by_X_pow_order f)⁻¹
-  normUnit_zero := by simp only [Unit_of_divided_by_X_pow_order_zero, inv_one]
-  normUnit_mul hf hg := by
-    simp only [← mul_inv, inv_inj]
-    simp only [Unit_of_divided_by_X_pow_order_nonzero (mul_ne_zero hf hg),
-      Unit_of_divided_by_X_pow_order_nonzero hf, Unit_of_divided_by_X_pow_order_nonzero hg,
-      Units.ext_iff, Units.val_mul, ← divXPowOrder_mul]
-  normUnit_coe_units u := by
-    set u₀ := u.1 with hu
-    have h₀ : IsUnit u₀ := ⟨u, hu.symm⟩
-    rw [inv_inj]; rw [Units.ext_iff]; rw [← hu]; rw [Unit_of_divided_by_X_pow_order_nonzero h₀.ne_zero]
-    exact ((eq_divided_by_X_pow_order_Iff_Unit h₀.ne_zero).mpr h₀).symm
-
-中文:
-实例 :
-  签名: StrongNormalization幺半群 k⟦X⟧
-  定义体: (Unit_of_divided_by_X_pow_order f)⁻¹
-  normUnit_zero := by simp only [Unit_of_divided_by_X_pow_order_zero, inv_one]
-  normUnit_mul hf hg := by
-    simp only [← mul_inv, inv_inj]
-    simp only [Unit_of_divided_by_X_pow_order_nonzero (mul_ne_zero hf hg),
-      Unit_of_divided_by_X_pow_order_nonzero hf, Unit_of_divided_by_X_pow_order_nonzero hg,
-      Units.ext_iff, Units.val_mul, ← divXPowOrder_mul]
-  normUnit_coe_units u := by
-    set u₀ := u.1 with hu
-    have h₀ : IsUnit u₀ := ⟨u, hu.symm⟩
-    rw [inv_inj]; rw [Units.ext_iff]; rw [← hu]; rw [Unit_of_divided_by_X_pow_order_nonzero h₀.ne_zero]
-    exact ((eq_divided_by_X_pow_order_Iff_Unit h₀.ne_zero).mpr h₀).symm
-
-Depends on / 依赖: Unit_of_divided_by_X_pow_order
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StrongNormalizationMonoid k⟦X⟧ where
   normUnit f := (Unit_of_divided_by_X_pow_order f)⁻¹
@@ -1142,45 +919,43 @@ instance : StrongNormalizationMonoid k⟦X⟧ where
   normUnit_coe_units u := by
     set u₀ := u.1 with hu
     have h₀ : IsUnit u₀ := ⟨u, hu.symm⟩
-    rw [inv_inj]; rw [Units.ext_iff]; rw [← hu]; rw [Unit_of_divided_by_X_pow_order_nonzero h₀.ne_zero]
+    rw [inv_inj, Units.ext_iff, ← hu, Unit_of_divided_by_X_pow_order_nonzero h₀.ne_zero]
     exact ((eq_divided_by_X_pow_order_Iff_Unit h₀.ne_zero).mpr h₀).symm
-
-/--
-theorem `normUnit_X` / 定理 `normUnit_X`
-
-English:
-theorem normUnit_X
-  statement: normUnit (X : k⟦X⟧) = 1
-  proof: by
-  simp [normUnit, ← Units.val_eq_one, Unit_of_divided_by_X_pow_order_nonzero]
-
-中文:
-定理 normUnit_X
-  结论: normUnit (X : k⟦X⟧) = 1
-  证明: by
-  simp [normUnit, ← Units.val_eq_one, Unit_of_divided_by_X_pow_order_nonzero]
-
-Depends on / 依赖: Unit_of_divided_by_X_pow_order_nonzero, Units.val_eq_one, normUnit, val_eq_one
+/-
+**PowerSeries.normUnit_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：normUnit_X : normUnit (X : k⟦X⟧) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.Unit_of_divided_by_X_pow_order_nonzero`：Unit_of_divided_by_X
+_pow_order_nonzero {f : k⟦X⟧} (hf : f != 0) : ↑(Unit_of_divided_by_X_pow_order f
+) = divXPowOrder f
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `PowerSeries.divXPowOrder_X`：divXPowOrder_X : divXPowOrder X = (1 : R⟦X⟧)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem normUnit_X : normUnit (X : k⟦X⟧) = 1 := by
   simp [normUnit, ← Units.val_eq_one, Unit_of_divided_by_X_pow_order_nonzero]
-
-/--
-theorem `X_eq_normalizeX` / 定理 `X_eq_normalizeX`
-
-English:
-theorem X_eq_normalizeX
-  statement: (X : k⟦X⟧) = normalize X
-  proof: by
-  simp only [normalize_apply, normUnit_X, Units.val_one, mul_one]
-
-中文:
-定理 X_eq_normalizeX
-  结论: (X : k⟦X⟧) = normalize X
-  证明: by
-  simp only [normalize_apply, normUnit_X, Units.val_one, mul_one]
-
-Depends on / 依赖: Units.val_one, mul_one, normUnit_X, normalize_apply, val_one
+/-
+**PowerSeries.X_eq_normalizeX** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_eq_normalizeX : (X : k⟦X⟧) = normalize X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.normUnit_X`：normUnit_X : normUnit (X : k⟦X⟧) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem X_eq_normalizeX : (X : k⟦X⟧) = normalize X := by
   simp only [normalize_apply, normUnit_X, Units.val_one, mul_one]
@@ -1188,88 +963,124 @@ theorem X_eq_normalizeX : (X : k⟦X⟧) = normalize X := by
 open UniqueFactorizationMonoid
 
 open scoped Classical in
-/--
-theorem `normalized_count_X_eq_of_coe` / 定理 `normalized_count_X_eq_of_coe`
-
-English:
-theorem normalized_count_X_eq_of_coe
-  given: {P : k[X]} (hP : P != 0)
-  proof: by
-  apply eq_of_forall_le_iff
-  simp only [← Nat.cast_le (α := Nat∞)]
-  rw [X_eq_normalize]; rw [PowerSeries.X_eq_normalizeX]; rw [← emultiplicity_eq_count_normalizedFactors
-    irreducible_X hP]; rw [← emultiplicity_eq_count_normalizedFactors X_irreducible] <;>
-  simp only [← pow_dvd_iff_le_emultiplicity, Polynomial.X_pow_dvd_iff,
-    PowerSeries.X_pow_dvd_iff, Polynomial.coeff_coe P, implies_true, ne_eq, coe_eq_zero_iff, hP,
-    not_false_eq_true]
-
-中文:
-定理 normalized_count_X_eq_of_coe
-  条件: {P : k[X]} (hP : P != 0)
-  证明: by
-  apply eq_of_forall_le_iff
-  simp only [← Nat.cast_le (α := Nat∞)]
-  rw [X_eq_normalize]; rw [PowerSeries.X_eq_normalizeX]; rw [← emultiplicity_eq_count_normalizedFactors
-    irreducible_X hP]; rw [← emultiplicity_eq_count_normalizedFactors X_irreducible] <;>
-  simp only [← pow_dvd_iff_le_emultiplicity, Polynomial.X_pow_dvd_iff,
-    PowerSeries.X_pow_dvd_iff, Polynomial.coeff_coe P, implies_true, ne_eq, coe_eq_zero_iff, hP,
-    not_false_eq_true]
-
-Depends on / 依赖: Nat.cast_le, Polynomial, Polynomial.X_pow_dvd_iff, Polynomial.coeff_coe, PowerSeries, PowerSeries.X_eq_normalizeX, PowerSeries.X_pow_dvd_iff, X_eq_normalize, X_eq_normalizeX, X_irreducible, X_pow_dvd_iff, cast_le, coe_eq_zero_iff, coeff_coe, emultiplicity_eq_count_normalizedFactors, eq_of_forall_le_iff, implies_true, irreducible_X, ne_eq, not_false_eq_true
+/-
+**PowerSeries.normalized_count_X_eq_of_coe** 是 Mathlib 中的一个定理，位于命名空间 `PowerSerie
+s`。
+形式化陈述：normalized_count_X_eq_of_coe {P : k[X]} (hP : P != 0) : Multiset.count Pow
+erSeries.X (normalizedFactors (P : k⟦X⟧)) = Multiset.count Polynomial.X (normali
+zedFactors P)
+参数：hP : P != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `eq_of_forall_le_iff`：eq_of_forall_le_iff (H : forall c, c <= a ↔ c <= b)
+ : a = b
+· 使用定理 `PowerSeries.instUniqueFactorizationMonoid`：∀ {k : Type u_2} [inst : Fiel
+d k], UniqueFactorizationMonoid (PowerSeries k)
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `PrincipalIdealRing.to_uniqueFactorizationMonoid`：∀ {R : Type u} [inst : 
+CommRing R] [IsDomain R] [IsPrincipalIdealRing R], UniqueFactorizationMonoid R
+· 使用定理 `Polynomial.instIsDomainOfIsCancelAdd`：∀ {R : Type u} [inst : Semiring R]
+ [IsCancelAdd R] [IsDomain R], IsDomain (Polynomial R)
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `Polynomial.X_eq_normalize`：X_eq_normalize : X = normalize (X : R[X])
+· 使用定理 `PowerSeries.X_eq_normalizeX`：X_eq_normalizeX : (X : k⟦X⟧) = normalize X
+· 使用定理 `UniqueFactorizationMonoid.emultiplicity_eq_count_normalizedFactors`：emul
+tiplicity_eq_count_normalizedFactors {a b : R} (ha : Irreducible a) (hb : b != 0
+) : emultiplicity a b = (normalizedFactors b).count (nor…
+· 使用定理 `Polynomial.irreducible_X`：irreducible_X : Irreducible (X : R[X])
+· 使用定理 `PowerSeries.X_irreducible`：X_irreducible : Irreducible (X : R⟦X⟧)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem normalized_count_X_eq_of_coe {P : k[X]} (hP : P != 0) :
+theorem normalized_count_X_eq_of_coe {P : k[X]} (hP : P ≠ 0) :
     Multiset.count PowerSeries.X (normalizedFactors (P : k⟦X⟧)) =
       Multiset.count Polynomial.X (normalizedFactors P) := by
   apply eq_of_forall_le_iff
-  simp only [← Nat.cast_le (α := Nat∞)]
-  rw [X_eq_normalize]; rw [PowerSeries.X_eq_normalizeX]; rw [← emultiplicity_eq_count_normalizedFactors
-    irreducible_X hP]; rw [← emultiplicity_eq_count_normalizedFactors X_irreducible] <;>
+  simp only [← Nat.cast_le (α := ℕ∞)]
+  rw [X_eq_normalize, PowerSeries.X_eq_normalizeX, ← emultiplicity_eq_count_normalizedFactors
+    irreducible_X hP, ← emultiplicity_eq_count_normalizedFactors X_irreducible] <;>
   simp only [← pow_dvd_iff_le_emultiplicity, Polynomial.X_pow_dvd_iff,
     PowerSeries.X_pow_dvd_iff, Polynomial.coeff_coe P, implies_true, ne_eq, coe_eq_zero_iff, hP,
     not_false_eq_true]
 
 open IsLocalRing
-
-/--
-theorem `ker_coeff_eq_max_ideal` / 定理 `ker_coeff_eq_max_ideal`
-
-English:
-theorem ker_coeff_eq_max_ideal
-  statement: RingHom.ker (constantCoeff (R := k)) = maximalIdeal _
-  proof: Ideal.ext fun _ => by
-    rw [RingHom.mem_ker]; rw [maximalIdeal_eq_span_X]; rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]
-
-中文:
-定理 ker_coeff_eq_max_ideal
-  结论: 环态射.ker (constantCoeff (R := k)) = maximalIdeal _
-  证明: Ideal.ext fun _ => by
-    rw [RingHom.mem_ker]; rw [maximalIdeal_eq_span_X]; rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]
-
-Depends on / 依赖: maximalIdeal
+/-
+**PowerSeries.ker_coeff_eq_max_ideal** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：ker_coeff_eq_max_ideal : RingHom.ker (constantCoeff (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `MvPowerSeries.instIsLocalRing`：∀ {σ : Type u_1} {R : Type u_2} [inst : C
+ommRing R] [IsLocalRing R], IsLocalRing (MvPowerSeries σ R)
+· 使用定理 `ValuationRing.isLocalRing`：∀ (A : Type u) [inst : CommRing A] [Nontrivia
+l A] [PreValuationRing A], IsLocalRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `ValuationRing.toPreValuationRing`：∀ {A : Type u} {inst : CommRing A} {in
+st_1 : IsDomain A} [self : ValuationRing A], PreValuationRing A
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `ValuationRing.of_field`：∀ (K : Type u) [inst : Field K], ValuationRing K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `PowerSeries.maximalIdeal_eq_span_X`：maximalIdeal_eq_span_X : IsLocalRing
+.maximalIdeal (k⟦X⟧) = Ideal.span {X}
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `PowerSeries.X_dvd_iff`：X_dvd_iff {φ : R⟦X⟧} : (X : R⟦X⟧) ∣ φ ↔ constantC
+oeff φ = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ker_coeff_eq_max_ideal : RingHom.ker (constantCoeff (R := k)) = maximalIdeal _ :=
-  Ideal.ext fun _ => by
-    rw [RingHom.mem_ker]; rw [maximalIdeal_eq_span_X]; rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]
+  Ideal.ext fun _ ↦ by
+    rw [RingHom.mem_ker, maximalIdeal_eq_span_X, Ideal.mem_span_singleton, X_dvd_iff]
 
-/--
-Definition of `residueFieldOfPowerSeries` / `residueFieldOfPowerSeries` 的定义
+/-- The ring isomorphism between the residue field of the ring of power series valued in a field `K`
+and `K` itself. -/
+/-
+**PowerSeries.residueFieldOfPowerSeries** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：residueFieldOfPowerSeries : ResidueField k⟦X⟧ ≃+* k
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition residueFieldOfPowerSeries
-  signature: : ResidueField k⟦X⟧ ≃+* k
-  body: .trans Ideal.quotEquivOfEq (ker_coeff_eq_max_ideal).symm
-    (RingHom.quotientKerEquivOfSurjective constantCoeff_surj)
-
-中文:
-定义 residueFieldOfPowerSeries
-  签名: : ResidueField k⟦X⟧ ≃+* k
-  定义体: .trans Ideal.quotEquivOfEq (ker_coeff_eq_max_ideal).symm
-    (RingHom.quotientKerEquivOfSurjective constantCoeff_surj)
-
-Depends on / 依赖: Ideal.quotEquivOfEq, RingHom, RingHom.quotientKerEquivOfSurjective, constantCoeff_surj, ker_coeff_eq_max_ideal, quotEquivOfEq, quotientKerEquivOfSurjective
+--- 原说明 ---
+The ring isomorphism between the residue field of the ring of power series value
+d in a field `K`
+and `K` itself.
 -/
 def residueFieldOfPowerSeries : ResidueField k⟦X⟧ ≃+* k :=
-.trans Ideal.quotEquivOfEq (ker_coeff_eq_max_ideal).symm
+  Ideal.quotEquivOfEq (ker_coeff_eq_max_ideal).symm |>.trans
     (RingHom.quotientKerEquivOfSurjective constantCoeff_surj)
 
 end IsDiscreteValuationRing
@@ -1278,3 +1089,4 @@ end IsDiscreteValuationRing
 end PowerSeries
 
 end
+

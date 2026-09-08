@@ -42,247 +42,267 @@ variable (R L : Type*) [CommRing R] [LieRing L] [LieAlgebra R L]
 `L` to its derivations.
 Note the minus sign: this is chosen to so that `ad ⁅x, y⁆ = ⁅ad x, ad y⁆`. -/
 @[simps!]
-/--
-Definition of `ad` / `ad` 的定义
+/-
+**LieDerivation.ad** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation`。
+形式化陈述：ad : L ->ₗ⁅R⁆ LieDerivation R L L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ad
-  signature: : L ->ₗ⁅R⁆ LieDerivation R L L
-  body: { __ := - inner R L L
-    map_lie' := by
-      intro x y
-      ext z
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.neg_apply, coe_neg,
-        Pi.neg_apply, inner_apply_apply, commutator_apply]
-      rw [leibniz_lie]; rw [neg_lie]; rw [neg_lie]; rw [← lie_skew x]
-      abel }
-
-中文:
-定义 ad
-  签名: : L ->ₗ⁅R⁆ LieDerivation R L L
-  定义体: { __ := - inner R L L
-    map_lie' := by
-      intro x y
-      ext z
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.neg_apply, coe_neg,
-        Pi.neg_apply, inner_apply_apply, commutator_apply]
-      rw [leibniz_lie]; rw [neg_lie]; rw [neg_lie]; rw [← lie_skew x]
-      abel }
-
-Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, LinearMap, LinearMap.coe_toAddHom, LinearMap.neg_apply, Pi.neg_apply, coe_neg, coe_toAddHom, commutator_apply, inner_apply_apply, leibniz_lie, lie_skew, map_lie, neg_apply, neg_lie, toFun_eq_coe
+--- 原说明 ---
+The adjoint action of a Lie algebra `L` on itself, seen as a morphism of Lie alg
+ebras from
+`L` to its derivations.
+Note the minus sign: this is chosen to so that `ad ⁅x, y⁆ = ⁅ad x, ad y⁆`.
 -/
-def ad : L ->ₗ⁅R⁆ LieDerivation R L L :=
+def ad : L →ₗ⁅R⁆ LieDerivation R L L :=
   { __ := - inner R L L
     map_lie' := by
       intro x y
       ext z
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.neg_apply, coe_neg,
         Pi.neg_apply, inner_apply_apply, commutator_apply]
-      rw [leibniz_lie]; rw [neg_lie]; rw [neg_lie]; rw [← lie_skew x]
+      rw [leibniz_lie, neg_lie, neg_lie, ← lie_skew x]
       abel }
 
 variable {R L}
 
-/--
-lemma `coe_ad_apply_eq_ad_apply` / 引理 `coe_ad_apply_eq_ad_apply`
+/-- The definitions `LieDerivation.ad` and `LieAlgebra.ad` agree. -/
+/-
+**LieDerivation.coe_ad_apply_eq_ad_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivatio
+n`。
+形式化陈述：∀ {R : Type u_1} {L : Type u_2} [inst : CommRing R] [inst_1 : LieRing L] [
+inst_2 : LieAlgebra R L] (x : L),   ↑((LieDerivation.ad R L) x) = (LieAlgebra.ad
+ R L) x
+参数：x : L；(LieDerivation.ad R L) x；LieAlgebra.ad R L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieDerivation.ad_apply_apply`：∀ (R : Type u_1) (L : Type u_2) [inst : Co
+mmRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (a a_1 : L),   ((LieDer
+ivation.ad R L) a)…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma coe_ad_apply_eq_ad_apply
-  given: (x : L)
-  statement: ad R L x = LieAlgebra.ad R L x
-  proof: by ext; simp
-
-中文:
-引理 coe_ad_apply_eq_ad_apply
-  条件: (x : L)
-  结论: ad R L x = Lie代数.ad R L x
-  证明: by ext; simp
+--- 原说明 ---
+The definitions `LieDerivation.ad` and `LieAlgebra.ad` agree.
 -/
 @[simp] lemma coe_ad_apply_eq_ad_apply (x : L) : ad R L x = LieAlgebra.ad R L x := by ext; simp
+/-
+**LieDerivation.ad_apply_lieDerivation** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`
+。
+形式化陈述：ad_apply_lieDerivation (x : L) (D : LieDerivation R L L) : ad R L (D x) = 
+-⁅x, D⁆
+参数：x : L；D : LieDerivation R L L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `ad_apply_lieDerivation` / 引理 `ad_apply_lieDerivation`
-
-English:
-lemma ad_apply_lieDerivation
-  given: (x : L) (D : LieDerivation R L L)
-  statement: ad R L (D x) = -⁅x, D⁆
-  proof: rfl
-
-中文:
-引理 ad_apply_lieDerivation
-  条件: (x : L) (D : LieDerivation R L L)
-  结论: ad R L (D x) = -⁅x, D⁆
-  证明: rfl
+--- 原说明 ---
+The definitions `LieDerivation.ad` and `LieAlgebra.ad` agree.
 -/
 lemma ad_apply_lieDerivation (x : L) (D : LieDerivation R L L) : ad R L (D x) = -⁅x, D⁆ := rfl
-
-/--
-lemma `lie_ad` / 引理 `lie_ad`
-
-English:
-lemma lie_ad
-  given: (x : L) (D : LieDerivation R L L)
-  statement: ⁅ad R L x, D⁆ = ⁅x, D⁆
-  proof: by ext; simp
-
-中文:
-引理 lie_ad
-  条件: (x : L) (D : LieDerivation R L L)
-  结论: ⁅ad R L x, D⁆ = ⁅x, D⁆
-  证明: by ext; simp
+/-
+**LieDerivation.lie_ad** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：lie_ad (x : L) (D : LieDerivation R L L) : ⁅ad R L x, D⁆ = ⁅x, D⁆
+参数：x : L；D : LieDerivation R L L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LieDerivation.ad_apply_apply`：∀ (R : Type u_1) (L : Type u_2) [inst : Co
+mmRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (a a_1 : L),   ((LieDer
+ivation.ad R L) a)…
+· 使用引理 `LieDerivation.apply_lie_eq_sub`：apply_lie_eq_sub (D : LieDerivation R L 
+M) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆ - ⁅b, D a⁆
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lie_ad (x : L) (D : LieDerivation R L L) : ⁅ad R L x, D⁆ = ⁅x, D⁆ := by ext; simp
 
 variable (R L) in
-/--
-lemma `ad_ker_eq_center` / 引理 `ad_ker_eq_center`
+/-- The kernel of the adjoint action on a Lie algebra is equal to its center. -/
+/-
+**LieDerivation.ad_ker_eq_center** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：ad_ker_eq_center : (ad R L).ker = LieAlgebra.center R L
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.ext`：ext (h : forall m, m in N ↔ m in N') : N = N'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieAlgebra.self_module_ker_eq_center`：self_module_ker_eq_center : LieMod
+ule.ker R L L = center R L
+· 使用定理 `LieHom.mem_ker`：mem_ker {x : L} : x in ker f ↔ f x = 0
+· 使用定理 `LieModule.mem_ker`：∀ (R : Type u) (L : Type v) (M : Type w) [inst : Comm
+Ring R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup 
+M] [ins…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `LieDerivation.ad_apply_apply`：∀ (R : Type u_1) (L : Type u_2) [inst : Co
+mmRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (a a_1 : L),   ((LieDer
+ivation.ad R L) a)…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma ad_ker_eq_center
-  statement: (ad R L).ker = LieAlgebra.center R L
-  proof: by
-  ext x
-  rw [← LieAlgebra.self_module_ker_eq_center]; rw [LieHom.mem_ker]; rw [LieModule.mem_ker]
-  simp [DFunLike.ext_iff]
-
-中文:
-引理 ad_ker_eq_center
-  结论: (ad R L).ker = Lie代数.center R L
-  证明: by
-  ext x
-  rw [← LieAlgebra.self_module_ker_eq_center]; rw [LieHom.mem_ker]; rw [LieModule.mem_ker]
-  simp [DFunLike.ext_iff]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, LieAlgebra, LieAlgebra.self_module_ker_eq_center, LieHom, LieHom.mem_ker, LieModule, LieModule.mem_ker, ext_iff, mem_ker, self_module_ker_eq_center
+--- 原说明 ---
+The kernel of the adjoint action on a Lie algebra is equal to its center.
 -/
 lemma ad_ker_eq_center : (ad R L).ker = LieAlgebra.center R L := by
   ext x
-  rw [← LieAlgebra.self_module_ker_eq_center]; rw [LieHom.mem_ker]; rw [LieModule.mem_ker]
+  rw [← LieAlgebra.self_module_ker_eq_center, LieHom.mem_ker, LieModule.mem_ker]
   simp [DFunLike.ext_iff]
 
-/--
-lemma `injective_ad_of_center_eq_bot` / 引理 `injective_ad_of_center_eq_bot`
+/-- If the center of a Lie algebra is trivial, then the adjoint action is injective. -/
+/-
+**LieDerivation.injective_ad_of_center_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 `LieDeri
+vation`。
+形式化陈述：injective_ad_of_center_eq_bot (h : LieAlgebra.center R L = ⊥) : Function.I
+njective (ad R L)
+参数：h : LieAlgebra.center R L = ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieHom.ker_eq_bot`：ker_eq_bot : f.ker = ⊥ ↔ Function.Injective f
+· 使用引理 `LieDerivation.ad_ker_eq_center`：ad_ker_eq_center : (ad R L).ker = LieAlg
+ebra.center R L
 
-English:
-lemma injective_ad_of_center_eq_bot
-  given: (h : LieAlgebra.center R L = ⊥)
-  proof: by
-  rw [← LieHom.ker_eq_bot]; rw [ad_ker_eq_center]; rw [h]
-
-中文:
-引理 injective_ad_of_center_eq_bot
-  条件: (h : Lie代数.center R L = ⊥)
-  证明: by
-  rw [← LieHom.ker_eq_bot]; rw [ad_ker_eq_center]; rw [h]
-
-Depends on / 依赖: LieHom, LieHom.ker_eq_bot, ad_ker_eq_center, ker_eq_bot
+--- 原说明 ---
+If the center of a Lie algebra is trivial, then the adjoint action is injective.
 -/
 lemma injective_ad_of_center_eq_bot (h : LieAlgebra.center R L = ⊥) :
     Function.Injective (ad R L) := by
-  rw [← LieHom.ker_eq_bot]; rw [ad_ker_eq_center]; rw [h]
+  rw [← LieHom.ker_eq_bot, ad_ker_eq_center, h]
 
-/--
-lemma `lie_der_ad_eq_ad_der` / 引理 `lie_der_ad_eq_ad_der`
+/-- The commutator of a derivation `D` and a derivation of the form `ad x` is `ad (D x)`. -/
+/-
+**LieDerivation.lie_der_ad_eq_ad_der** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：lie_der_ad_eq_ad_der (D : LieDerivation R L L) (x : L) : ⁅D, ad R L x⁆ = a
+d R L (D x)
+参数：D : LieDerivation R L L；x : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LieDerivation.ad_apply_lieDerivation`：ad_apply_lieDerivation (x : L) (D 
+: LieDerivation R L L) : ad R L (D x) = -⁅x, D⁆
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LieDerivation.lie_ad`：lie_ad (x : L) (D : LieDerivation R L L) : ⁅ad R L
+ x, D⁆ = ⁅x, D⁆
+· 使用定理 `lie_skew`：lie_skew : -⁅y, x⁆ = ⁅x, y⁆
 
-English:
-lemma lie_der_ad_eq_ad_der
-  given: (D : LieDerivation R L L) (x : L)
-  statement: ⁅D, ad R L x⁆ = ad R L (D x)
-  proof: by
-  rw [ad_apply_lieDerivation]; rw [← lie_ad]; rw [lie_skew]
-
-中文:
-引理 lie_der_ad_eq_ad_der
-  条件: (D : LieDerivation R L L) (x : L)
-  结论: ⁅D, ad R L x⁆ = ad R L (D x)
-  证明: by
-  rw [ad_apply_lieDerivation]; rw [← lie_ad]; rw [lie_skew]
-
-Depends on / 依赖: ad_apply_lieDerivation, lie_ad, lie_skew
+--- 原说明 ---
+The commutator of a derivation `D` and a derivation of the form `ad x` is `ad (D
+ x)`.
 -/
 lemma lie_der_ad_eq_ad_der (D : LieDerivation R L L) (x : L) : ⁅D, ad R L x⁆ = ad R L (D x) := by
-  rw [ad_apply_lieDerivation]; rw [← lie_ad]; rw [lie_skew]
+  rw [ad_apply_lieDerivation, ← lie_ad, lie_skew]
 
 variable (R L) in
-/--
-lemma `ad_isIdealMorphism` / 引理 `ad_isIdealMorphism`
+/-- The range of the adjoint action homomorphism from a Lie algebra `L` to the Lie algebra of its
+derivations is an ideal of the latter. -/
+/-
+**LieDerivation.ad_isIdealMorphism** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：ad_isIdealMorphism : (ad R L).IsIdealMorphism
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `LieDerivation.lie_der_ad_eq_ad_der`：lie_der_ad_eq_ad_der (D : LieDerivat
+ion R L L) (x : L) : ⁅D, ad R L x⁆ = ad R L (D x)
 
-English:
-lemma ad_isIdealMorphism
-  statement: (ad R L).IsIdealMorphism
-  proof: by
-  simp_rw [LieHom.isIdealMorphism_iff, lie_der_ad_eq_ad_der]
-  tauto
-
-中文:
-引理 ad_isIdealMorphism
-  结论: (ad R L).IsIdealMorphism
-  证明: by
-  simp_rw [LieHom.isIdealMorphism_iff, lie_der_ad_eq_ad_der]
-  tauto
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, LieHom, LieHom.isIdealMorphism_iff, isIdealMorphism_iff, lie_der_ad_eq_ad_der, ofFinite, simp_rw
+--- 原说明 ---
+The range of the adjoint action homomorphism from a Lie algebra `L` to the Lie a
+lgebra of its
+derivations is an ideal of the latter.
 -/
 lemma ad_isIdealMorphism : (ad R L).IsIdealMorphism := by
   simp_rw [LieHom.isIdealMorphism_iff, lie_der_ad_eq_ad_der]
   tauto
 
-/--
-lemma `mem_ad_idealRange_iff` / 引理 `mem_ad_idealRange_iff`
+/-- A derivation `D` belongs to the ideal range of the adjoint action iff it is of the form `ad x`
+for some `x` in the Lie algebra `L`. -/
+/-
+**LieDerivation.mem_ad_idealRange_iff** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：mem_ad_idealRange_iff {D : LieDerivation R L L} : D in (ad R L).idealRange
+ ↔ exists x : L, ad R L x = D
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieHom.mem_idealRange_iff`：mem_idealRange_iff (h : IsIdealMorphism f) {y
+ : L'} : y in idealRange f ↔ exists x : L, f x = y
+· 使用引理 `LieDerivation.ad_isIdealMorphism`：ad_isIdealMorphism : (ad R L).IsIdealM
+orphism
 
-English:
-lemma mem_ad_idealRange_iff
-  given: {D : LieDerivation R L L}
-  proof: (ad R L).mem_idealRange_iff (ad_isIdealMorphism R L)
-
-中文:
-引理 mem_ad_idealRange_iff
-  条件: {D : LieDerivation R L L}
-  证明: (ad R L).mem_idealRange_iff (ad_isIdealMorphism R L)
-
-Depends on / 依赖: ad_isIdealMorphism, mem_idealRange_iff
+--- 原说明 ---
+A derivation `D` belongs to the ideal range of the adjoint action iff it is of t
+he form `ad x`
+for some `x` in the Lie algebra `L`.
 -/
 lemma mem_ad_idealRange_iff {D : LieDerivation R L L} :
-    D in (ad R L).idealRange ↔ exists x : L, ad R L x = D :=
+    D ∈ (ad R L).idealRange ↔ ∃ x : L, ad R L x = D :=
   (ad R L).mem_idealRange_iff (ad_isIdealMorphism R L)
-
-/--
-lemma `maxTrivSubmodule_eq_bot_of_center_eq_bot` / 引理 `maxTrivSubmodule_eq_bot_of_center_eq_bot`
-
-English:
-lemma maxTrivSubmodule_eq_bot_of_center_eq_bot
-  given: (h : LieAlgebra.center R L = ⊥)
-  proof: by
-  refine (LieSubmodule.eq_bot_iff _).mpr fun D hD => ext fun x => ?_
-  have : ad R L (D x) = 0 := by
-    rw [LieModule.mem_maxTrivSubmodule] at hD
-    simp [ad_apply_lieDerivation, hD]
-  rw [← LieHom.mem_ker]; rw [ad_ker_eq_center]; rw [h]; rw [LieSubmodule.mem_bot] at this
-  simp [this]
-
-中文:
-引理 maxTrivSubmodule_eq_bot_of_center_eq_bot
-  条件: (h : Lie代数.center R L = ⊥)
-  证明: by
-  refine (LieSubmodule.eq_bot_iff _).mpr fun D hD => ext fun x => ?_
-  have : ad R L (D x) = 0 := by
-    rw [LieModule.mem_maxTrivSubmodule] at hD
-    simp [ad_apply_lieDerivation, hD]
-  rw [← LieHom.mem_ker]; rw [ad_ker_eq_center]; rw [h]; rw [LieSubmodule.mem_bot] at this
-  simp [this]
-
-Depends on / 依赖: LieHom, LieHom.mem_ker, LieModule, LieModule.mem_maxTrivSubmodule, LieSubmodule, LieSubmodule.eq_bot_iff, LieSubmodule.mem_bot, ad_apply_lieDerivation, ad_ker_eq_center, eq_bot_iff, mem_bot, mem_ker, mem_maxTrivSubmodule
+/-
+**LieDerivation.maxTrivSubmodule_eq_bot_of_center_eq_bot** 是 Mathlib 中的一个引理，位于命名
+空间 `LieDerivation`。
+形式化陈述：maxTrivSubmodule_eq_bot_of_center_eq_bot (h : LieAlgebra.center R L = ⊥) :
+ LieModule.maxTrivSubmodule R L (LieDerivation R L L) = ⊥
+参数：h : LieAlgebra.center R L = ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LieSubmodule.eq_bot_iff`：∀ {R : Type u} {L : Type v} {M : Type w} [inst 
+: CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3 : _root_.
+Module R M] […
+· 使用定理 `LieDerivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieModule.mem_maxTrivSubmodule`：mem_maxTrivSubmodule (m : M) : m in maxT
+rivSubmodule R L M ↔ forall x : L, ⁅x, m⁆ = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LieSubmodule.mem_bot`：mem_bot (x : M) : x in (⊥ : LieSubmodule R L M) ↔ 
+x = 0
+· 使用引理 `LieDerivation.ad_ker_eq_center`：ad_ker_eq_center : (ad R L).ker = LieAlg
+ebra.center R L
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieHom.mem_ker`：mem_ker {x : L} : x in ker f ↔ f x = 0
 -/
 lemma maxTrivSubmodule_eq_bot_of_center_eq_bot (h : LieAlgebra.center R L = ⊥) :
     LieModule.maxTrivSubmodule R L (LieDerivation R L L) = ⊥ := by
-  refine (LieSubmodule.eq_bot_iff _).mpr fun D hD => ext fun x => ?_
+  refine (LieSubmodule.eq_bot_iff _).mpr fun D hD ↦ ext fun x ↦ ?_
   have : ad R L (D x) = 0 := by
     rw [LieModule.mem_maxTrivSubmodule] at hD
     simp [ad_apply_lieDerivation, hD]
-  rw [← LieHom.mem_ker]; rw [ad_ker_eq_center]; rw [h]; rw [LieSubmodule.mem_bot] at this
+  rw [← LieHom.mem_ker, ad_ker_eq_center, h, LieSubmodule.mem_bot] at this
   simp [this]
 
 end AdjointAction
 
 end LieDerivation
+

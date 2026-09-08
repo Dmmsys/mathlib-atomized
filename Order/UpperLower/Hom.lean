@@ -28,64 +28,38 @@ section SemilatticeSup
 
 variable [SemilatticeSup α]
 
-/--
-Definition of `iciSupHom` / `iciSupHom` 的定义
+/-- `UpperSet.Ici` as a `SupHom`. -/
+/-
+**UpperSet.iciSupHom** 是 Mathlib 中的一个定义，位于命名空间 `UpperSet`。
+形式化陈述：iciSupHom : SupHom α (UpperSet α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UpperSet.Ici_sup`：Ici_sup [SemilatticeSup α] (a b : α) : Ici (a ⊔ b) = I
+ci a ⊔ Ici b
 
-English:
-definition iciSupHom
-  signature: : SupHom α (UpperSet α)
-  body: ⟨Ici, Ici_sup⟩
-
-@[simp]
-
-中文:
-定义 iciSupHom
-  签名: : 并态射 α (上集 α)
-  定义体: ⟨Ici, Ici_sup⟩
-
-@[simp]
-
-Depends on / 依赖: Ici_sup
+--- 原说明 ---
+`UpperSet.Ici` as a `SupHom`.
 -/
 def iciSupHom : SupHom α (UpperSet α) :=
   ⟨Ici, Ici_sup⟩
 
 @[simp]
-/--
-theorem `coe_iciSupHom` / 定理 `coe_iciSupHom`
-
-English:
-theorem coe_iciSupHom
-  statement: (iciSupHom : α -> UpperSet α) = Ici
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_iciSupHom
-  结论: (iciSupHom : α -> 上集 α) = 左闭右无界区间
-  证明: rfl
-
-@[simp]
+/-
+**UpperSet.coe_iciSupHom** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：coe_iciSupHom : (iciSupHom : α -> UpperSet α) = Ici
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_iciSupHom : (iciSupHom : α -> UpperSet α) = Ici :=
+theorem coe_iciSupHom : (iciSupHom : α → UpperSet α) = Ici :=
   rfl
 
 @[simp]
-/--
-theorem `iciSupHom_apply` / 定理 `iciSupHom_apply`
-
-English:
-theorem iciSupHom_apply
-  given: (a : α)
-  statement: iciSupHom a = Ici a
-  proof: rfl
-
-中文:
-定理 iciSupHom_apply
-  条件: (a : α)
-  结论: iciSupHom a = 左闭右无界区间 a
-  证明: rfl
+/-
+**UpperSet.iciSupHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：iciSupHom_apply (a : α) : iciSupHom a = Ici a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iciSupHom_apply (a : α) : iciSupHom a = Ici a :=
   rfl
@@ -94,64 +68,36 @@ end SemilatticeSup
 
 variable [CompleteLattice α]
 
-/--
-Definition of `icisSupHom` / `icisSupHom` 的定义
+/-- `UpperSet.Ici` as a `sSupHom`. -/
+/-
+**UpperSet.icisSupHom** 是 Mathlib 中的一个定义，位于命名空间 `UpperSet`。
+形式化陈述：icisSupHom : sSupHom α (UpperSet α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition icisSupHom
-  signature: : sSupHom α (UpperSet α)
-  body: ⟨Ici, fun s => (Ici_sSup s).trans sSup_image.symm⟩
-
-@[simp]
-
-中文:
-定义 icisSupHom
-  签名: : sSup态射 α (上集 α)
-  定义体: ⟨Ici, fun s => (Ici_sSup s).trans sSup_image.symm⟩
-
-@[simp]
-
-Depends on / 依赖: Ici_sSup, sSup_image, sSup_image.symm
+--- 原说明 ---
+`UpperSet.Ici` as a `sSupHom`.
 -/
 def icisSupHom : sSupHom α (UpperSet α) :=
   ⟨Ici, fun s => (Ici_sSup s).trans sSup_image.symm⟩
 
 @[simp]
-/--
-theorem `coe_icisSupHom` / 定理 `coe_icisSupHom`
-
-English:
-theorem coe_icisSupHom
-  statement: (icisSupHom : α -> UpperSet α) = Ici
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_icisSupHom
-  结论: (icisSupHom : α -> 上集 α) = 左闭右无界区间
-  证明: rfl
-
-@[simp]
+/-
+**UpperSet.coe_icisSupHom** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：coe_icisSupHom : (icisSupHom : α -> UpperSet α) = Ici
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_icisSupHom : (icisSupHom : α -> UpperSet α) = Ici :=
+theorem coe_icisSupHom : (icisSupHom : α → UpperSet α) = Ici :=
   rfl
 
 @[simp]
-/--
-theorem `icisSupHom_apply` / 定理 `icisSupHom_apply`
-
-English:
-theorem icisSupHom_apply
-  given: (a : α)
-  statement: icisSupHom a = Ici a
-  proof: rfl
-
-中文:
-定理 icisSupHom_apply
-  条件: (a : α)
-  结论: icisSupHom a = 左闭右无界区间 a
-  证明: rfl
+/-
+**UpperSet.icisSupHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：icisSupHom_apply (a : α) : icisSupHom a = Ici a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem icisSupHom_apply (a : α) : icisSupHom a = Ici a :=
   rfl
@@ -164,64 +110,38 @@ section SemilatticeInf
 
 variable [SemilatticeInf α]
 
-/--
-Definition of `iicInfHom` / `iicInfHom` 的定义
+/-- `LowerSet.Iic` as an `InfHom`. -/
+/-
+**LowerSet.iicInfHom** 是 Mathlib 中的一个定义，位于命名空间 `LowerSet`。
+形式化陈述：iicInfHom : InfHom α (LowerSet α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LowerSet.Iic_inf`：∀ {α : Type u_1} [inst : SemilatticeInf α] (a b : α), 
+LowerSet.Iic (a ⊓ b) = LowerSet.Iic a ⊓ LowerSet.Iic b
 
-English:
-definition iicInfHom
-  signature: : InfHom α (LowerSet α)
-  body: ⟨Iic, Iic_inf⟩
-
-@[simp]
-
-中文:
-定义 iicInfHom
-  签名: : 交态射 α (下集 α)
-  定义体: ⟨Iic, Iic_inf⟩
-
-@[simp]
-
-Depends on / 依赖: Iic_inf
+--- 原说明 ---
+`LowerSet.Iic` as an `InfHom`.
 -/
 def iicInfHom : InfHom α (LowerSet α) :=
   ⟨Iic, Iic_inf⟩
 
 @[simp]
-/--
-theorem `coe_iicInfHom` / 定理 `coe_iicInfHom`
-
-English:
-theorem coe_iicInfHom
-  statement: (iicInfHom : α -> LowerSet α) = Iic
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_iicInfHom
-  结论: (iicInfHom : α -> 下集 α) = 左无界右闭区间
-  证明: rfl
-
-@[simp]
+/-
+**LowerSet.coe_iicInfHom** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+形式化陈述：coe_iicInfHom : (iicInfHom : α -> LowerSet α) = Iic
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_iicInfHom : (iicInfHom : α -> LowerSet α) = Iic :=
+theorem coe_iicInfHom : (iicInfHom : α → LowerSet α) = Iic :=
   rfl
 
 @[simp]
-/--
-theorem `iicInfHom_apply` / 定理 `iicInfHom_apply`
-
-English:
-theorem iicInfHom_apply
-  given: (a : α)
-  statement: iicInfHom a = Iic a
-  proof: rfl
-
-中文:
-定理 iicInfHom_apply
-  条件: (a : α)
-  结论: iicInfHom a = 左无界右闭区间 a
-  证明: rfl
+/-
+**LowerSet.iicInfHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+形式化陈述：iicInfHom_apply (a : α) : iicInfHom a = Iic a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iicInfHom_apply (a : α) : iicInfHom a = Iic a :=
   rfl
@@ -230,66 +150,39 @@ end SemilatticeInf
 
 variable [CompleteLattice α]
 
-/--
-Definition of `iicsInfHom` / `iicsInfHom` 的定义
+/-- `LowerSet.Iic` as an `sInfHom`. -/
+/-
+**LowerSet.iicsInfHom** 是 Mathlib 中的一个定义，位于命名空间 `LowerSet`。
+形式化陈述：iicsInfHom : sInfHom α (LowerSet α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iicsInfHom
-  signature: : sInfHom α (LowerSet α)
-  body: ⟨Iic, fun s => (Iic_sInf s).trans sInf_image.symm⟩
-
-@[simp]
-
-中文:
-定义 iicsInfHom
-  签名: : sInf态射 α (下集 α)
-  定义体: ⟨Iic, fun s => (Iic_sInf s).trans sInf_image.symm⟩
-
-@[simp]
-
-Depends on / 依赖: Iic_sInf, sInf_image, sInf_image.symm
+--- 原说明 ---
+`LowerSet.Iic` as an `sInfHom`.
 -/
 def iicsInfHom : sInfHom α (LowerSet α) :=
   ⟨Iic, fun s => (Iic_sInf s).trans sInf_image.symm⟩
 
 @[simp]
-/--
-theorem `coe_iicsInfHom` / 定理 `coe_iicsInfHom`
-
-English:
-theorem coe_iicsInfHom
-  statement: (iicsInfHom : α -> LowerSet α) = Iic
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_iicsInfHom
-  结论: (iicsInfHom : α -> 下集 α) = 左无界右闭区间
-  证明: rfl
-
-@[simp]
+/-
+**LowerSet.coe_iicsInfHom** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+形式化陈述：coe_iicsInfHom : (iicsInfHom : α -> LowerSet α) = Iic
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_iicsInfHom : (iicsInfHom : α -> LowerSet α) = Iic :=
+theorem coe_iicsInfHom : (iicsInfHom : α → LowerSet α) = Iic :=
   rfl
 
 @[simp]
-/--
-theorem `iicsInfHom_apply` / 定理 `iicsInfHom_apply`
-
-English:
-theorem iicsInfHom_apply
-  given: (a : α)
-  statement: iicsInfHom a = Iic a
-  proof: rfl
-
-中文:
-定理 iicsInfHom_apply
-  条件: (a : α)
-  结论: iicsInfHom a = 左无界右闭区间 a
-  证明: rfl
+/-
+**LowerSet.iicsInfHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `LowerSet`。
+形式化陈述：iicsInfHom_apply (a : α) : iicsInfHom a = Iic a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iicsInfHom_apply (a : α) : iicsInfHom a = Iic a :=
   rfl
 
 end LowerSet
+

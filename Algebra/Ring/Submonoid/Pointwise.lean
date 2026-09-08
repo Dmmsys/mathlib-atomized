@@ -51,110 +51,76 @@ variable [AddMonoidWithOne R]
 /-- If `R` is an additive monoid with one (e.g., a semiring), then `1 : AddSubmonoid R` is the range
 of `Nat.cast : ℕ → R`. -/
 @[instance_reducible]
-/--
-Definition of `one` / `one` 的定义
+/-
+**AddSubmonoid.one** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：{R : Type u_2} → [inst : AddMonoidWithOne R] → One (AddSubmonoid R)
+参数：AddSubmonoid R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition one
-  signature: : One (AddSubmonoid R)
-  body: ⟨AddMonoidHom.mrange (Nat.castAddMonoidHom R)⟩
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.one
-
-中文:
-定义 one
-  签名: : 幺 (加法子幺半群 R)
-  定义体: ⟨AddMonoidHom.mrange (Nat.castAddMonoidHom R)⟩
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.one
+--- 原说明 ---
+If `R` is an additive monoid with one (e.g., a semiring), then `1 : AddSubmonoid
+ R` is the range
+of `Nat.cast : ℕ → R`.
 -/
 protected def one : One (AddSubmonoid R) := ⟨AddMonoidHom.mrange (Nat.castAddMonoidHom R)⟩
 
 scoped[Pointwise] attribute [instance] AddSubmonoid.one
-
-/--
-lemma `one_eq_mrange` / 引理 `one_eq_mrange`
-
-English:
-lemma one_eq_mrange
-  statement: (1 : AddSubmonoid R) = AddMonoidHom.mrange (Nat.castAddMonoidHom R)
-  proof: rfl
-
-中文:
-引理 one_eq_mrange
-  结论: (1 : 加法子幺半群 R) = 加法幺半群态射.mrange (自然数.castAddMonoidHom R)
-  证明: rfl
+/-
+**AddSubmonoid.one_eq_mrange** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：one_eq_mrange : (1 : AddSubmonoid R) = AddMonoidHom.mrange (Nat.castAddMon
+oidHom R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_eq_mrange : (1 : AddSubmonoid R) = AddMonoidHom.mrange (Nat.castAddMonoidHom R) := rfl
-
-/--
-lemma `natCast_mem_one` / 引理 `natCast_mem_one`
-
-English:
-lemma natCast_mem_one
-  given: (n : Nat)
-  statement: (n : R) in (1 : AddSubmonoid R)
-  proof: ⟨_, rfl⟩
-
-中文:
-引理 natCast_mem_one
-  条件: (n : 自然数)
-  结论: (n : R) in (1 : 加法子幺半群 R)
-  证明: ⟨_, rfl⟩
+/-
+**AddSubmonoid.natCast_mem_one** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：natCast_mem_one (n : Nat) : (n : R) in (1 : AddSubmonoid R)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natCast_mem_one (n : Nat) : (n : R) in (1 : AddSubmonoid R) := ⟨_, rfl⟩
-
-/--
-lemma `mem_one` / 引理 `mem_one`
-
-English:
-lemma mem_one
-  given: {x : R}
-  statement: x in (1 : AddSubmonoid R) ↔ exists n : Nat, ↑n = x
-  proof: .rfl
-
-中文:
-引理 mem_one
-  条件: {x : R}
-  结论: x in (1 : 加法子幺半群 R) ↔ 存在 n : 自然数, ↑n = x
-  证明: .rfl
+lemma natCast_mem_one (n : ℕ) : (n : R) ∈ (1 : AddSubmonoid R) := ⟨_, rfl⟩
+/-
+**AddSubmonoid.mem_one** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：∀ {R : Type u_2} [inst : AddMonoidWithOne R] {x : R}, x ∈ 1 ↔ ∃ n, ↑n = x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_one {x : R} : x in (1 : AddSubmonoid R) ↔ exists n : Nat, ↑n = x := .rfl
-
-/--
-lemma `one_eq_closure` / 引理 `one_eq_closure`
-
-English:
-lemma one_eq_closure
-  statement: (1 : AddSubmonoid R) = closure {1}
-  proof: by
-  rw [closure_singleton_eq]; rw [one_eq_mrange]; congr 1; ext; simp
-
-中文:
-引理 one_eq_closure
-  结论: (1 : 加法子幺半群 R) = closure {1}
-  证明: by
-  rw [closure_singleton_eq]; rw [one_eq_mrange]; congr 1; ext; simp
-
-Depends on / 依赖: closure_singleton_eq, one_eq_mrange
+@[simp] lemma mem_one {x : R} : x ∈ (1 : AddSubmonoid R) ↔ ∃ n : ℕ, ↑n = x := .rfl
+/-
+**AddSubmonoid.one_eq_closure** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：one_eq_closure : (1 : AddSubmonoid R) = closure {1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubmonoid.closure_singleton_eq`：closure_singleton_eq (x : A) : closur
+e ({x} : Set A) = AddMonoidHom.mrange (multiplesHom A x)
+· 使用引理 `AddSubmonoid.one_eq_mrange`：one_eq_mrange : (1 : AddSubmonoid R) = AddMo
+noidHom.mrange (Nat.castAddMonoidHom R)
+· 使用引理 `AddMonoidHom.ext_nat`：AddMonoidHom.ext_nat [AddZeroClass A] {f g : Nat -
+>+ A} : f 1 = g 1 -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `nsmul_one`：∀ {A : Type u_2} [inst : AddMonoidWithOne A] (n : ℕ), n • 1 =
+ ↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma one_eq_closure : (1 : AddSubmonoid R) = closure {1} := by
-  rw [closure_singleton_eq]; rw [one_eq_mrange]; congr 1; ext; simp
-
-/--
-lemma `one_eq_closure_one_set` / 引理 `one_eq_closure_one_set`
-
-English:
-lemma one_eq_closure_one_set
-  statement: (1 : AddSubmonoid R) = closure 1
-  proof: one_eq_closure
-
-中文:
-引理 one_eq_closure_one_set
-  结论: (1 : 加法子幺半群 R) = closure 1
-  证明: one_eq_closure
-
-Depends on / 依赖: one_eq_closure
+  rw [closure_singleton_eq, one_eq_mrange]; congr 1; ext; simp
+/-
+**AddSubmonoid.one_eq_closure_one_set** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：one_eq_closure_one_set : (1 : AddSubmonoid R) = closure 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.one_eq_closure`：one_eq_closure : (1 : AddSubmonoid R) = clo
+sure {1}
 -/
 lemma one_eq_closure_one_set : (1 : AddSubmonoid R) = closure 1 := one_eq_closure
 
@@ -166,22 +132,17 @@ variable [AddMonoid R] [AddMonoid A] [DistribSMul R A]
 /-- For `M : Submonoid R` and `N : AddSubmonoid A`, `M • N` is the additive submonoid
 generated by all `m • n` where `m ∈ M` and `n ∈ N`. -/
 @[instance_reducible]
-/--
-Definition of `smul` / `smul` 的定义
+/-
+**AddSubmonoid.smul** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：{R : Type u_2} →   {A : Type u_3} →     [inst : AddMonoid R] → [inst_1 : A
+ddMonoid A] → [DistribSMul R A] → SMul (AddSubmonoid R) (AddSubmonoid A)
+参数：AddSubmonoid R；AddSubmonoid A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smul
-  signature: : SMul (AddSubmonoid R) (AddSubmonoid A) where
-  body: ⨆ s : M, N.map (DistribSMul.toAddMonoidHom A s.1)
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.smul
-
-中文:
-定义 smul
-  签名: : 标量乘法 (加法子幺半群 R) (加法子幺半群 A) where
-  定义体: ⨆ s : M, N.map (DistribSMul.toAddMonoidHom A s.1)
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.smul
+--- 原说明 ---
+For `M : Submonoid R` and `N : AddSubmonoid A`, `M • N` is the additive submonoi
+d
+generated by all `m • n` where `m ∈ M` and `n ∈ N`.
 -/
 protected def smul : SMul (AddSubmonoid R) (AddSubmonoid A) where
   smul M N := ⨆ s : M, N.map (DistribSMul.toAddMonoidHom A s.1)
@@ -189,208 +150,171 @@ protected def smul : SMul (AddSubmonoid R) (AddSubmonoid A) where
 scoped[Pointwise] attribute [instance] AddSubmonoid.smul
 
 variable {M M' : AddSubmonoid R} {N P : AddSubmonoid A} {m : R} {n : A}
-
-/--
-lemma `smul_mem_smul` / 引理 `smul_mem_smul`
-
-English:
-lemma smul_mem_smul
-  given: (hm : m in M) (hn : n in N)
-  statement: m • n in M • N
-  proof: (le_iSup _ ⟨m, hm⟩ : _ <= M • N) ⟨n, hn, by rfl⟩
-
-中文:
-引理 smul_mem_smul
-  条件: (hm : m in M) (hn : n in N)
-  结论: m • n in M • N
-  证明: (le_iSup _ ⟨m, hm⟩ : _ <= M • N) ⟨n, hn, by rfl⟩
-
-Depends on / 依赖: le_iSup
+/-
+**AddSubmonoid.smul_mem_smul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：smul_mem_smul (hm : m in M) (hn : n in N) : m • n in M • N
+参数：hm : m in M；hn : n in N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-lemma smul_mem_smul (hm : m in M) (hn : n in N) : m • n in M • N :=
-  (le_iSup _ ⟨m, hm⟩ : _ <= M • N) ⟨n, hn, by rfl⟩
-
-/--
-lemma `smul_le` / 引理 `smul_le`
-
-English:
-lemma smul_le
-  statement: M • N <= P ↔ forall m in M, forall n in N, m • n in P
-  proof: ⟨fun H _m hm _n hn => H smul_mem_smul hm hn, fun H =>
+lemma smul_mem_smul (hm : m ∈ M) (hn : n ∈ N) : m • n ∈ M • N :=
+  (le_iSup _ ⟨m, hm⟩ : _ ≤ M • N) ⟨n, hn, by rfl⟩
+/-
+**AddSubmonoid.smul_le** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：smul_le : M • N <= P ↔ forall m in M, forall n in N, m • n in P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_mem_smul`：smul_mem_smul (hm : m in M) (hn : n in N) : 
+m • n in M • N
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AddSubmonoid.map_le_iff_le_comap`：∀ {M : Type u_1} {N : Type u_2} [inst 
+: AddZeroClass M] [inst_1 : AddZeroClass N] {F : Type u_4}   [inst_2 : FunLike F
+ M N] [mc : AddMonoidH…
+-/
+lemma smul_le : M • N ≤ P ↔ ∀ m ∈ M, ∀ n ∈ N, m • n ∈ P :=
+  ⟨fun H _m hm _n hn => H <| smul_mem_smul hm hn, fun H =>
     iSup_le fun ⟨m, hm⟩ => map_le_iff_le_comap.2 fun n hn => H m hm n hn⟩
 
 @[elab_as_elim]
-
-中文:
-引理 smul_le
-  结论: M • N <= P ↔ 对任意 m in M, 对任意 n in N, m • n in P
-  证明: ⟨fun H _m hm _n hn => H smul_mem_smul hm hn, fun H =>
-    iSup_le fun ⟨m, hm⟩ => map_le_iff_le_comap.2 fun n hn => H m hm n hn⟩
-
-@[elab_as_elim]
-
-Depends on / 依赖: iSup_le, map_le_iff_le_comap, smul_mem_smul
+/-
+**AddSubmonoid.smul_induction_on** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：∀ {R : Type u_2} {A : Type u_3} [inst : AddMonoid R] [inst_1 : AddMonoid A
+] [inst_2 : DistribSMul R A]   {M : AddSubmonoid R} {N : AddSubmonoid A} {C : A 
+→ Prop} {a : A},   a ∈ M • N → (∀ m ∈ M, ∀ n ∈ N, C (m • n)) → (∀ (x y : A), C x
+ → C y → C (x + y)) → C a
+参数：∀ m ∈ M, ∀ n ∈ N, C (m • n)；∀ (x y : A), C x → C y → C (x + y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubmonoid.instAddSubmonoidClass`：∀ {M : Type u_1} [inst : AddZeroClas
+s M], AddSubmonoidClass (AddSubmonoid M) M
+· 使用引理 `AddSubmonoid.smul_le`：smul_le : M • N <= P ↔ forall m in M, forall n in 
+N, m • n in P
 -/
-lemma smul_le : M • N <= P ↔ forall m in M, forall n in N, m • n in P :=
-⟨fun H _m hm _n hn => H smul_mem_smul hm hn, fun H =>
-    iSup_le fun ⟨m, hm⟩ => map_le_iff_le_comap.2 fun n hn => H m hm n hn⟩
-
-@[elab_as_elim]
-/--
-lemma `smul_induction_on` / 引理 `smul_induction_on`
-
-English:
-lemma smul_induction_on
-  statement: {C : A -> Prop} {a : A} (ha : a in M • N)
-  proof: (@smul_le _ _ _ _ _ _ _ ⟨⟨Set.ofPred C, hadd _ _⟩, by
-    simpa only [smul_zero] using! hm _ (zero_mem _) _ (zero_mem _)⟩).2 hm ha
-
-@[simp]
-
-中文:
-引理 smul_induction_on
-  结论: {C : A -> 命题} {a : A} (ha : a in M • N)
-  证明: (@smul_le _ _ _ _ _ _ _ ⟨⟨Set.ofPred C, hadd _ _⟩, by
-    simpa only [smul_zero] using! hm _ (zero_mem _) _ (zero_mem _)⟩).2 hm ha
-
-@[simp]
--/
-protected lemma smul_induction_on {C : A -> Prop} {a : A} (ha : a in M • N)
-    (hm : forall m in M, forall n in N, C (m • n)) (hadd : forall x y, C x -> C y -> C (x + y)) : C a :=
+protected lemma smul_induction_on {C : A → Prop} {a : A} (ha : a ∈ M • N)
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m • n)) (hadd : ∀ x y, C x → C y → C (x + y)) : C a :=
   (@smul_le _ _ _ _ _ _ _ ⟨⟨Set.ofPred C, hadd _ _⟩, by
     simpa only [smul_zero] using! hm _ (zero_mem _) _ (zero_mem _)⟩).2 hm ha
 
 @[simp]
-/--
-lemma `addSubmonoid_smul_bot` / 引理 `addSubmonoid_smul_bot`
-
-English:
-lemma addSubmonoid_smul_bot
-  given: (S : AddSubmonoid R)
-  statement: S • (⊥ : AddSubmonoid A) = ⊥
-  proof: eq_bot_iff.2 smul_le.2 fun m _ n hn => by
-    rw [AddSubmonoid.mem_bot] at hn ⊢; rw [hn, smul_zero]
-
-中文:
-引理 addSubmonoid_smul_bot
-  条件: (S : 加法子幺半群 R)
-  结论: S • (⊥ : 加法子幺半群 A) = ⊥
-  证明: eq_bot_iff.2 smul_le.2 fun m _ n hn => by
-    rw [AddSubmonoid.mem_bot] at hn ⊢; rw [hn, smul_zero]
-
-Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_bot, eq_bot_iff, mem_bot, smul_le, smul_zero
+/-
+**AddSubmonoid.addSubmonoid_smul_bot** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：addSubmonoid_smul_bot (S : AddSubmonoid R) : S • (⊥ : AddSubmonoid A) = ⊥
+参数：S : AddSubmonoid R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用引理 `AddSubmonoid.smul_le`：smul_le : M • N <= P ↔ forall m in M, forall n in 
+N, m • n in P
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubmonoid.mem_bot`：∀ {M : Type u_1} [inst : AddZeroClass M] {x : M}, 
+x ∈ ⊥ ↔ x = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 lemma addSubmonoid_smul_bot (S : AddSubmonoid R) : S • (⊥ : AddSubmonoid A) = ⊥ :=
-eq_bot_iff.2 smul_le.2 fun m _ n hn => by
+  eq_bot_iff.2 <| smul_le.2 fun m _ n hn => by
     rw [AddSubmonoid.mem_bot] at hn ⊢; rw [hn, smul_zero]
-
-/--
-lemma `smul_le_smul` / 引理 `smul_le_smul`
-
-English:
-lemma smul_le_smul
-  given: (h : M <= M') (hnp : N <= P)
-  statement: M • N <= M' • P
-  proof: smul_le.2 fun _m hm _n hn => smul_mem_smul (h hm) (hnp hn)
-
-中文:
-引理 smul_le_smul
-  条件: (h : M <= M') (hnp : N <= P)
-  结论: M • N <= M' • P
-  证明: smul_le.2 fun _m hm _n hn => smul_mem_smul (h hm) (hnp hn)
-
-Depends on / 依赖: smul_le, smul_mem_smul
+/-
+**AddSubmonoid.smul_le_smul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：smul_le_smul (h : M <= M') (hnp : N <= P) : M • N <= M' • P
+参数：h : M <= M'；hnp : N <= P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AddSubmonoid.smul_le`：smul_le : M • N <= P ↔ forall m in M, forall n in 
+N, m • n in P
+· 使用引理 `AddSubmonoid.smul_mem_smul`：smul_mem_smul (hm : m in M) (hn : n in N) : 
+m • n in M • N
 -/
-lemma smul_le_smul (h : M <= M') (hnp : N <= P) : M • N <= M' • P :=
+lemma smul_le_smul (h : M ≤ M') (hnp : N ≤ P) : M • N ≤ M' • P :=
   smul_le.2 fun _m hm _n hn => smul_mem_smul (h hm) (hnp hn)
-
-/--
-lemma `smul_le_smul_left` / 引理 `smul_le_smul_left`
-
-English:
-lemma smul_le_smul_left
-  given: (h : M <= M')
-  statement: M • P <= M' • P
-  proof: smul_le_smul h le_rfl
-
-中文:
-引理 smul_le_smul_left
-  条件: (h : M <= M')
-  结论: M • P <= M' • P
-  证明: smul_le_smul h le_rfl
-
-Depends on / 依赖: le_rfl, smul_le_smul
+/-
+**AddSubmonoid.smul_le_smul_left** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：smul_le_smul_left (h : M <= M') : M • P <= M' • P
+参数：h : M <= M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_le_smul`：smul_le_smul (h : M <= M') (hnp : N <= P) : M
+ • N <= M' • P
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma smul_le_smul_left (h : M <= M') : M • P <= M' • P := smul_le_smul h le_rfl
-/--
-lemma `smul_le_smul_right` / 引理 `smul_le_smul_right`
-
-English:
-lemma smul_le_smul_right
-  given: (h : N <= P)
-  statement: M • N <= M • P
-  proof: smul_le_smul le_rfl h
-
-中文:
-引理 smul_le_smul_right
-  条件: (h : N <= P)
-  结论: M • N <= M • P
-  证明: smul_le_smul le_rfl h
-
-Depends on / 依赖: le_rfl, smul_le_smul
+lemma smul_le_smul_left (h : M ≤ M') : M • P ≤ M' • P := smul_le_smul h le_rfl
+/-
+**AddSubmonoid.smul_le_smul_right** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：smul_le_smul_right (h : N <= P) : M • N <= M • P
+参数：h : N <= P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_le_smul`：smul_le_smul (h : M <= M') (hnp : N <= P) : M
+ • N <= M' • P
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma smul_le_smul_right (h : N <= P) : M • N <= M • P := smul_le_smul le_rfl h
-
-/--
-lemma `smul_subset_smul` / 引理 `smul_subset_smul`
-
-English:
-lemma smul_subset_smul
-  statement: (↑M : Set R) • (↑N : Set A) subseteq (↑(M • N) : Set A)
-  proof: smul_subset_iff.2 fun _i hi _j hj => smul_mem_smul hi hj
-
-中文:
-引理 smul_subset_smul
-  结论: (↑M : 集合 R) • (↑N : 集合 A) subseteq (↑(M • N) : 集合 A)
-  证明: smul_subset_iff.2 fun _i hi _j hj => smul_mem_smul hi hj
-
-Depends on / 依赖: smul_mem_smul, smul_subset_iff
+lemma smul_le_smul_right (h : N ≤ P) : M • N ≤ M • P := smul_le_smul le_rfl h
+/-
+**AddSubmonoid.smul_subset_smul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：smul_subset_smul : (↑M : Set R) • (↑N : Set A) subseteq (↑(M • N) : Set A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.smul_subset_iff`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {
+s : Set α} {t u : Set β}, s • t ⊆ u ↔ ∀ a ∈ s, ∀ b ∈ t, a • b ∈ u
+· 使用引理 `AddSubmonoid.smul_mem_smul`：smul_mem_smul (hm : m in M) (hn : n in N) : 
+m • n in M • N
 -/
-lemma smul_subset_smul : (↑M : Set R) • (↑N : Set A) subseteq (↑(M • N) : Set A) :=
-  smul_subset_iff.2 fun _i hi _j hj => smul_mem_smul hi hj
-
-/--
-lemma `addSubmonoid_smul_sup` / 引理 `addSubmonoid_smul_sup`
-
-English:
-lemma addSubmonoid_smul_sup
-  statement: M • (N ⊔ P) = M • N ⊔ M • P
-  proof: le_antisymm (smul_le.mpr fun m hm np hnp => by
-    refine closure_induction (motive := (fun _ => _ • · in _)) ?_ ?_ ?_ (sup_eq_closure N P ▸ hnp)
-    · rintro x (hx | hx)
-      exacts [le_sup_left (a := M • N) (smul_mem_smul hm hx),
-        le_sup_right (a := M • N) (smul_mem_smul hm hx)]
-    · apply (smul_zero (A := A) m).symm ▸ (M • N ⊔ M • P).zero_mem
-    · intro _ _ _ _ h1 h2; rw [smul_add]; exact add_mem h1 h2)
-  (sup_le (smul_le_smul_right le_sup_left) <| smul_le_smul_right le_sup_right)
-
-中文:
-引理 addSubmonoid_smul_sup
-  结论: M • (N ⊔ P) = M • N ⊔ M • P
-  证明: le_antisymm (smul_le.mpr fun m hm np hnp => by
-    refine closure_induction (motive := (fun _ => _ • · in _)) ?_ ?_ ?_ (sup_eq_closure N P ▸ hnp)
-    · rintro x (hx | hx)
-      exacts [le_sup_left (a := M • N) (smul_mem_smul hm hx),
-        le_sup_right (a := M • N) (smul_mem_smul hm hx)]
-    · apply (smul_zero (A := A) m).symm ▸ (M • N ⊔ M • P).zero_mem
-    · intro _ _ _ _ h1 h2; rw [smul_add]; exact add_mem h1 h2)
-  (sup_le (smul_le_smul_right le_sup_left) <| smul_le_smul_right le_sup_right)
-
-Depends on / 依赖: add_mem, closure_induction, exacts, le_antisymm, le_sup_left, le_sup_right, motive, smul_add, smul_le, smul_le.mpr, smul_le_smul_right, smul_mem_smul, smul_zero, sup_eq_closure, sup_le, zero_mem
+lemma smul_subset_smul : (↑M : Set R) • (↑N : Set A) ⊆ (↑(M • N) : Set A) :=
+  smul_subset_iff.2 fun _i hi _j hj ↦ smul_mem_smul hi hj
+/-
+**AddSubmonoid.addSubmonoid_smul_sup** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：addSubmonoid_smul_sup : M • (N ⊔ P) = M • N ⊔ M • P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AddSubmonoid.smul_le`：smul_le : M • N <= P ↔ forall m in M, forall n in 
+N, m • n in P
+· 使用定理 `AddSubmonoid.closure_induction`：∀ {M : Type u_1} [inst : AddZeroClass M]
+ {s : Set M} {motive : (x : M) → x ∈ AddSubmonoid.closure s → Prop},   (∀ (x : M
+) (h : x ∈ s), motiv…
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用引理 `AddSubmonoid.smul_mem_smul`：smul_mem_smul (hm : m in M) (hn : n in N) : 
+m • n in M • N
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `AddSubmonoid.zero_mem`：∀ {M : Type u_1} [inst : AddZeroClass M] (S : Add
+Submonoid M), 0 ∈ S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `AddSubmonoid.instAddSubmonoidClass`：∀ {M : Type u_1} [inst : AddZeroClas
+s M], AddSubmonoidClass (AddSubmonoid M) M
+· 使用定理 `AddSubmonoid.sup_eq_closure`：∀ {M : Type u_1} [inst : AddZeroClass M] (N
+ N' : AddSubmonoid M), N ⊔ N' = AddSubmonoid.closure (↑N ∪ ↑N')
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用引理 `AddSubmonoid.smul_le_smul_right`：smul_le_smul_right (h : N <= P) : M • N
+ <= M • P
 -/
 lemma addSubmonoid_smul_sup : M • (N ⊔ P) = M • N ⊔ M • P :=
-  le_antisymm (smul_le.mpr fun m hm np hnp => by
-    refine closure_induction (motive := (fun _ => _ • · in _)) ?_ ?_ ?_ (sup_eq_closure N P ▸ hnp)
+  le_antisymm (smul_le.mpr fun m hm np hnp ↦ by
+    refine closure_induction (motive := (fun _ ↦ _ • · ∈ _)) ?_ ?_ ?_ (sup_eq_closure N P ▸ hnp)
     · rintro x (hx | hx)
       exacts [le_sup_left (a := M • N) (smul_mem_smul hm hx),
         le_sup_right (a := M • N) (smul_mem_smul hm hx)]
@@ -399,35 +323,53 @@ lemma addSubmonoid_smul_sup : M • (N ⊔ P) = M • N ⊔ M • P :=
   (sup_le (smul_le_smul_right le_sup_left) <| smul_le_smul_right le_sup_right)
 
 variable {ι : Sort*}
-
-/--
-lemma `smul_iSup` / 引理 `smul_iSup`
-
-English:
-lemma smul_iSup
-  given: (T : AddSubmonoid R) (S : ι -> AddSubmonoid A)
-  statement: (T • ⨆ i, S i) = ⨆ i, T • S i
-  proof: le_antisymm (smul_le.mpr fun t ht s hs => iSup_induction _ (motive := (t • · in _)) hs
-    (fun i s hs => mem_iSup_of_mem i <| smul_mem_smul ht hs)
-    (by simp_rw [smul_zero]; apply zero_mem) fun x y => by simp_rw [smul_add]; apply add_mem)
-  (iSup_le fun i => smul_le_smul_right <| le_iSup _ i)
-
-中文:
-引理 smul_iSup
-  条件: (T : 加法子幺半群 R) (S : ι -> 加法子幺半群 A)
-  结论: (T • ⨆ i, S i) = ⨆ i, T • S i
-  证明: le_antisymm (smul_le.mpr fun t ht s hs => iSup_induction _ (motive := (t • · in _)) hs
-    (fun i s hs => mem_iSup_of_mem i <| smul_mem_smul ht hs)
-    (by simp_rw [smul_zero]; apply zero_mem) fun x y => by simp_rw [smul_add]; apply add_mem)
-  (iSup_le fun i => smul_le_smul_right <| le_iSup _ i)
-
-Depends on / 依赖: add_mem, iSup_induction, iSup_le, le_antisymm, le_iSup, mem_iSup_of_mem, motive, simp_rw, smul_add, smul_le, smul_le.mpr, smul_le_smul_right, smul_mem_smul, smul_zero, zero_mem
+/-
+**AddSubmonoid.smul_iSup** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：smul_iSup (T : AddSubmonoid R) (S : ι -> AddSubmonoid A) : (T • ⨆ i, S i) 
+= ⨆ i, T • S i
+参数：T : AddSubmonoid R；S : ι -> AddSubmonoid A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AddSubmonoid.smul_le`：smul_le : M • N <= P ↔ forall m in M, forall n in 
+N, m • n in P
+· 使用定理 `AddSubmonoid.iSup_induction`：∀ {M : Type u_1} [inst : AddZeroClass M] {ι
+ : Sort u_4} (S : ι → AddSubmonoid M) {motive : M → Prop} {x : M},   x ∈ ⨆ i, S 
+i →     (∀ (i : ι…
+· 使用定理 `AddSubmonoid.mem_iSup_of_mem`：∀ {M : Type u_1} [inst : AddZeroClass M] {
+ι : Sort u_4} {S : ι → AddSubmonoid M} (i : ι) {x : M}, x ∈ S i → x ∈ iSup S
+· 使用引理 `AddSubmonoid.smul_mem_smul`：smul_mem_smul (hm : m in M) (hn : n in N) : 
+m • n in M • N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubmonoid.instAddSubmonoidClass`：∀ {M : Type u_1} [inst : AddZeroClas
+s M], AddSubmonoidClass (AddSubmonoid M) M
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用引理 `AddSubmonoid.smul_le_smul_right`：smul_le_smul_right (h : N <= P) : M • N
+ <= M • P
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-lemma smul_iSup (T : AddSubmonoid R) (S : ι -> AddSubmonoid A) : (T • ⨆ i, S i) = ⨆ i, T • S i :=
-  le_antisymm (smul_le.mpr fun t ht s hs => iSup_induction _ (motive := (t • · in _)) hs
-    (fun i s hs => mem_iSup_of_mem i <| smul_mem_smul ht hs)
-    (by simp_rw [smul_zero]; apply zero_mem) fun x y => by simp_rw [smul_add]; apply add_mem)
-  (iSup_le fun i => smul_le_smul_right <| le_iSup _ i)
+lemma smul_iSup (T : AddSubmonoid R) (S : ι → AddSubmonoid A) : (T • ⨆ i, S i) = ⨆ i, T • S i :=
+  le_antisymm (smul_le.mpr fun t ht s hs ↦ iSup_induction _ (motive := (t • · ∈ _)) hs
+    (fun i s hs ↦ mem_iSup_of_mem i <| smul_mem_smul ht hs)
+    (by simp_rw [smul_zero]; apply zero_mem) fun x y ↦ by simp_rw [smul_add]; apply add_mem)
+  (iSup_le fun i ↦ smul_le_smul_right <| le_iSup _ i)
 
 end SMul
 
@@ -437,391 +379,319 @@ variable [NonUnitalNonAssocSemiring R] {M N P : AddSubmonoid R}
 /-- Multiplication of additive submonoids of a semiring R. The additive submonoid `S * T` is the
 smallest R-submodule of `R` containing the elements `s * t` for `s ∈ S` and `t ∈ T`. -/
 @[instance_reducible]
-/--
-Definition of `mul` / `mul` 的定义
+/-
+**AddSubmonoid.mul** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：{R : Type u_2} → [inst : NonUnitalNonAssocSemiring R] → Mul (AddSubmonoid 
+R)
+参数：AddSubmonoid R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mul
-  signature: : Mul (AddSubmonoid R)
-  body: ⟨fun M N => ⨆ s : M, N.map (AddMonoidHom.mul s.1)⟩
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.mul
-
-中文:
-定义 mul
-  签名: : 乘法 (加法子幺半群 R)
-  定义体: ⟨fun M N => ⨆ s : M, N.map (AddMonoidHom.mul s.1)⟩
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.mul
+--- 原说明 ---
+Multiplication of additive submonoids of a semiring R. The additive submonoid `S
+ * T` is the
+smallest R-submodule of `R` containing the elements `s * t` for `s ∈ S` and `t ∈
+ T`.
 -/
 protected def mul : Mul (AddSubmonoid R) := ⟨fun M N => ⨆ s : M, N.map (AddMonoidHom.mul s.1)⟩
 
 scoped[Pointwise] attribute [instance] AddSubmonoid.mul
-
-/--
-lemma `mul_mem_mul` / 引理 `mul_mem_mul`
-
-English:
-lemma mul_mem_mul
-  given: {m n : R} (hm : m in M) (hn : n in N)
-  statement: m * n in M * N
-  proof: smul_mem_smul hm hn
-
-中文:
-引理 mul_mem_mul
-  条件: {m n : R} (hm : m in M) (hn : n in N)
-  结论: m * n in M * N
-  证明: smul_mem_smul hm hn
-
-Depends on / 依赖: smul_mem_smul
+/-
+**AddSubmonoid.mul_mem_mul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_mem_mul {m n : R} (hm : m in M) (hn : n in N) : m * n in M * N
+参数：hm : m in M；hn : n in N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_mem_smul`：smul_mem_smul (hm : m in M) (hn : n in N) : 
+m • n in M • N
 -/
-lemma mul_mem_mul {m n : R} (hm : m in M) (hn : n in N) : m * n in M * N := smul_mem_smul hm hn
-
-/--
-lemma `mul_le` / 引理 `mul_le`
-
-English:
-lemma mul_le
-  statement: M * N <= P ↔ forall m in M, forall n in N, m * n in P
-  proof: smul_le
+lemma mul_mem_mul {m n : R} (hm : m ∈ M) (hn : n ∈ N) : m * n ∈ M * N := smul_mem_smul hm hn
+/-
+**AddSubmonoid.mul_le** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_le : M * N <= P ↔ forall m in M, forall n in N, m * n in P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_le`：smul_le : M • N <= P ↔ forall m in M, forall n in 
+N, m • n in P
+-/
+lemma mul_le : M * N ≤ P ↔ ∀ m ∈ M, ∀ n ∈ N, m * n ∈ P := smul_le
 
 @[elab_as_elim]
-
-中文:
-引理 mul_le
-  结论: M * N <= P ↔ 对任意 m in M, 对任意 n in N, m * n in P
-  证明: smul_le
-
-@[elab_as_elim]
-
-Depends on / 依赖: smul_le
+/-
+**AddSubmonoid.mul_induction_on** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：∀ {R : Type u_2} [inst : NonUnitalNonAssocSemiring R] {M N : AddSubmonoid 
+R} {C : R → Prop} {r : R},   r ∈ M * N → (∀ m ∈ M, ∀ n ∈ N, C (m * n)) → (∀ (x y
+ : R), C x → C y → C (x + y)) → C r
+参数：∀ m ∈ M, ∀ n ∈ N, C (m * n)；∀ (x y : R), C x → C y → C (x + y)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoid.smul_induction_on`：∀ {R : Type u_2} {A : Type u_3} [inst : 
+AddMonoid R] [inst_1 : AddMonoid A] [inst_2 : DistribSMul R A]   {M : AddSubmono
+id R} {N : AddSubmon…
 -/
-lemma mul_le : M * N <= P ↔ forall m in M, forall n in N, m * n in P := smul_le
-
-@[elab_as_elim]
-/--
-lemma `mul_induction_on` / 引理 `mul_induction_on`
-
-English:
-lemma mul_induction_on
-  statement: {C : R -> Prop} {r : R} (hr : r in M * N)
-  proof: AddSubmonoid.smul_induction_on hr hm ha
-
-中文:
-引理 mul_induction_on
-  结论: {C : R -> 命题} {r : R} (hr : r in M * N)
-  证明: AddSubmonoid.smul_induction_on hr hm ha
--/
-protected lemma mul_induction_on {C : R -> Prop} {r : R} (hr : r in M * N)
-    (hm : forall m in M, forall n in N, C (m * n)) (ha : forall x y, C x -> C y -> C (x + y)) : C r :=
+protected lemma mul_induction_on {C : R → Prop} {r : R} (hr : r ∈ M * N)
+    (hm : ∀ m ∈ M, ∀ n ∈ N, C (m * n)) (ha : ∀ x y, C x → C y → C (x + y)) : C r :=
   AddSubmonoid.smul_induction_on hr hm ha
 
 -- need `add_smul` to generalize to `SMul`
-/--
-lemma `closure_mul_closure` / 引理 `closure_mul_closure`
-
-English:
-lemma closure_mul_closure
-  given: (S T : Set R)
-  statement: closure S * closure T = closure (S * T)
-  proof: by
-  apply le_antisymm
-  · refine mul_le.2 fun a ha b hb => ?_
-    rw [← AddMonoidHom.mulRight_apply]; rw [← AddSubmonoid.mem_comap]
-    refine (closure_le.2 fun a' ha' => ?_) ha
-    change b in (closure (S * T)).comap (AddMonoidHom.mulLeft a')
-    refine (closure_le.2 fun b' hb' => ?_) hb
-    change a' * b' in closure (S * T)
-    exact subset_closure (Set.mul_mem_mul ha' hb')
-  · rw [closure_le]
-    rintro _ ⟨a, ha, b, hb, rfl⟩
-    exact mul_mem_mul (subset_closure ha) (subset_closure hb)
-
-中文:
-引理 closure_mul_closure
-  条件: (S T : 集合 R)
-  结论: closure S * closure T = closure (S * T)
-  证明: by
-  apply le_antisymm
-  · refine mul_le.2 fun a ha b hb => ?_
-    rw [← AddMonoidHom.mulRight_apply]; rw [← AddSubmonoid.mem_comap]
-    refine (closure_le.2 fun a' ha' => ?_) ha
-    change b in (closure (S * T)).comap (AddMonoidHom.mulLeft a')
-    refine (closure_le.2 fun b' hb' => ?_) hb
-    change a' * b' in closure (S * T)
-    exact subset_closure (Set.mul_mem_mul ha' hb')
-  · rw [closure_le]
-    rintro _ ⟨a, ha, b, hb, rfl⟩
-    exact mul_mem_mul (subset_closure ha) (subset_closure hb)
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, AddMonoidHom.mulRight_apply, AddSubmonoid, AddSubmonoid.mem_comap, Set.mul_mem_mul, closure, closure_le, le_antisymm, mem_comap, mulLeft, mulRight_apply, mul_le, mul_mem_mul, subset_closure
+/-
+**AddSubmonoid.closure_mul_closure** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：closure_mul_closure (S T : Set R) : closure S * closure T = closure (S * T
+)
+参数：S T : Set R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AddSubmonoid.mul_le`：mul_le : M * N <= P ↔ forall m in M, forall n in N,
+ m * n in P
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AddMonoidHom.mulRight_apply`：mulRight_apply (a r : R) : mulRight r a = a
+ * r
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `AddSubmonoid.mem_comap`：∀ {M : Type u_1} {N : Type u_2} [inst : AddZeroC
+lass M] [inst_1 : AddZeroClass N] {F : Type u_4}   [inst_2 : FunLike F M N] [mc 
+: AddMonoidH…
+· 使用定理 `AddSubmonoid.closure_le`：∀ {M : Type u_1} [inst : AddZeroClass M] {s : S
+et M} {S : AddSubmonoid M}, AddSubmonoid.closure s ≤ S ↔ s ⊆ ↑S
+· 使用定理 `AddSubmonoid.subset_closure`：∀ {M : Type u_1} [inst : AddZeroClass M] {s
+ : Set M}, s ⊆ ↑(AddSubmonoid.closure s)
+· 使用定理 `Set.mul_mem_mul`：mul_mem_mul : a in s -> b in t -> a * b in s * t
+· 使用引理 `AddSubmonoid.mul_mem_mul`：mul_mem_mul {m n : R} (hm : m in M) (hn : n in
+ N) : m * n in M * N
 -/
 lemma closure_mul_closure (S T : Set R) : closure S * closure T = closure (S * T) := by
   apply le_antisymm
   · refine mul_le.2 fun a ha b hb => ?_
-    rw [← AddMonoidHom.mulRight_apply]; rw [← AddSubmonoid.mem_comap]
+    rw [← AddMonoidHom.mulRight_apply, ← AddSubmonoid.mem_comap]
     refine (closure_le.2 fun a' ha' => ?_) ha
-    change b in (closure (S * T)).comap (AddMonoidHom.mulLeft a')
+    change b ∈ (closure (S * T)).comap (AddMonoidHom.mulLeft a')
     refine (closure_le.2 fun b' hb' => ?_) hb
-    change a' * b' in closure (S * T)
+    change a' * b' ∈ closure (S * T)
     exact subset_closure (Set.mul_mem_mul ha' hb')
   · rw [closure_le]
     rintro _ ⟨a, ha, b, hb, rfl⟩
     exact mul_mem_mul (subset_closure ha) (subset_closure hb)
-
-/--
-lemma `mul_eq_closure_mul_set` / 引理 `mul_eq_closure_mul_set`
-
-English:
-lemma mul_eq_closure_mul_set
-  given: (M N : AddSubmonoid R)
-  statement: M * N = closure (M * N : Set R)
-  proof: by
-  rw [← closure_mul_closure]; rw [closure_eq]; rw [closure_eq]
-
-中文:
-引理 mul_eq_closure_mul_set
-  条件: (M N : 加法子幺半群 R)
-  结论: M * N = closure (M * N : 集合 R)
-  证明: by
-  rw [← closure_mul_closure]; rw [closure_eq]; rw [closure_eq]
-
-Depends on / 依赖: closure_eq, closure_mul_closure
+/-
+**AddSubmonoid.mul_eq_closure_mul_set** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_eq_closure_mul_set (M N : AddSubmonoid R) : M * N = closure (M * N : S
+et R)
+参数：M N : AddSubmonoid R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AddSubmonoid.closure_mul_closure`：closure_mul_closure (S T : Set R) : cl
+osure S * closure T = closure (S * T)
+· 使用定理 `AddSubmonoid.closure_eq`：∀ {M : Type u_1} [inst : AddZeroClass M] (S : A
+ddSubmonoid M), AddSubmonoid.closure ↑S = S
 -/
 lemma mul_eq_closure_mul_set (M N : AddSubmonoid R) : M * N = closure (M * N : Set R) := by
-  rw [← closure_mul_closure]; rw [closure_eq]; rw [closure_eq]
-
-/--
-lemma `mul_bot` / 引理 `mul_bot`
-
-English:
-lemma mul_bot
-  given: (S : AddSubmonoid R)
-  statement: S * ⊥ = ⊥
-  proof: addSubmonoid_smul_bot S
-
-中文:
-引理 mul_bot
-  条件: (S : 加法子幺半群 R)
-  结论: S * ⊥ = ⊥
-  证明: addSubmonoid_smul_bot S
+  rw [← closure_mul_closure, closure_eq, closure_eq]
+/-
+**AddSubmonoid.mul_bot** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：∀ {R : Type u_2} [inst : NonUnitalNonAssocSemiring R] (S : AddSubmonoid R)
+, S * ⊥ = ⊥
+参数：S : AddSubmonoid R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.addSubmonoid_smul_bot`：addSubmonoid_smul_bot (S : AddSubmon
+oid R) : S • (⊥ : AddSubmonoid A) = ⊥
 -/
 @[simp] lemma mul_bot (S : AddSubmonoid R) : S * ⊥ = ⊥ := addSubmonoid_smul_bot S
 
 -- need `zero_smul` to generalize to `SMul`
 @[simp]
-/--
-lemma `bot_mul` / 引理 `bot_mul`
-
-English:
-lemma bot_mul
-  given: (S : AddSubmonoid R)
-  statement: ⊥ * S = ⊥
-  proof: eq_bot_iff.2 mul_le.2 fun m hm n _ => by rw [AddSubmonoid.mem_bot] at hm ⊢; rw [hm, zero_mul]
-
-中文:
-引理 bot_mul
-  条件: (S : 加法子幺半群 R)
-  结论: ⊥ * S = ⊥
-  证明: eq_bot_iff.2 mul_le.2 fun m hm n _ => by rw [AddSubmonoid.mem_bot] at hm ⊢; rw [hm, zero_mul]
-
-Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_bot, eq_bot_iff, mem_bot, mul_le, zero_mul
+/-
+**AddSubmonoid.bot_mul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：bot_mul (S : AddSubmonoid R) : ⊥ * S = ⊥
+参数：S : AddSubmonoid R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用引理 `AddSubmonoid.mul_le`：mul_le : M * N <= P ↔ forall m in M, forall n in N,
+ m * n in P
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubmonoid.mem_bot`：∀ {M : Type u_1} [inst : AddZeroClass M] {x : M}, 
+x ∈ ⊥ ↔ x = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 lemma bot_mul (S : AddSubmonoid R) : ⊥ * S = ⊥ :=
-eq_bot_iff.2 mul_le.2 fun m hm n _ => by rw [AddSubmonoid.mem_bot] at hm ⊢; rw [hm, zero_mul]
+  eq_bot_iff.2 <| mul_le.2 fun m hm n _ => by rw [AddSubmonoid.mem_bot] at hm ⊢; rw [hm, zero_mul]
 
 variable {M N P Q : AddSubmonoid R}
-
-/--
-lemma `mul_le_mul` / 引理 `mul_le_mul`
-
-English:
-lemma mul_le_mul
-  given: (hmp : M <= P) (hnq : N <= Q)
-  statement: M * N <= P * Q
-  proof: smul_le_smul hmp hnq
-
-中文:
-引理 mul_le_mul
-  条件: (hmp : M <= P) (hnq : N <= Q)
-  结论: M * N <= P * Q
-  证明: smul_le_smul hmp hnq
+/-
+**AddSubmonoid.mul_le_mul** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：∀ {R : Type u_2} [inst : NonUnitalNonAssocSemiring R] {M N P Q : AddSubmon
+oid R}, M ≤ P → N ≤ Q → M * N ≤ P * Q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_le_smul`：smul_le_smul (h : M <= M') (hnp : N <= P) : M
+ • N <= M' • P
 -/
-@[mono, gcongr] lemma mul_le_mul (hmp : M <= P) (hnq : N <= Q) : M * N <= P * Q := smul_le_smul hmp hnq
-
-/--
-lemma `mul_le_mul_left` / 引理 `mul_le_mul_left`
-
-English:
-lemma mul_le_mul_left
-  given: (h : M <= N)
-  statement: M * P <= N * P
-  proof: smul_le_smul_left h
-
-中文:
-引理 mul_le_mul_left
-  条件: (h : M <= N)
-  结论: M * P <= N * P
-  证明: smul_le_smul_left h
-
-Depends on / 依赖: smul_le_smul_left
+@[mono, gcongr] lemma mul_le_mul (hmp : M ≤ P) (hnq : N ≤ Q) : M * N ≤ P * Q := smul_le_smul hmp hnq
+/-
+**AddSubmonoid.mul_le_mul_left** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_le_mul_left (h : M <= N) : M * P <= N * P
+参数：h : M <= N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_le_smul_left`：smul_le_smul_left (h : M <= M') : M • P 
+<= M' • P
 -/
-lemma mul_le_mul_left (h : M <= N) : M * P <= N * P := smul_le_smul_left h
-/--
-lemma `mul_le_mul_right` / 引理 `mul_le_mul_right`
-
-English:
-lemma mul_le_mul_right
-  given: (h : N <= P)
-  statement: M * N <= M * P
-  proof: smul_le_smul_right h
-
-中文:
-引理 mul_le_mul_right
-  条件: (h : N <= P)
-  结论: M * N <= M * P
-  证明: smul_le_smul_right h
-
-Depends on / 依赖: smul_le_smul_right
+lemma mul_le_mul_left (h : M ≤ N) : M * P ≤ N * P := smul_le_smul_left h
+/-
+**AddSubmonoid.mul_le_mul_right** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_le_mul_right (h : N <= P) : M * N <= M * P
+参数：h : N <= P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_le_smul_right`：smul_le_smul_right (h : N <= P) : M • N
+ <= M • P
 -/
-lemma mul_le_mul_right (h : N <= P) : M * N <= M * P := smul_le_smul_right h
-
-/--
-lemma `mul_subset_mul` / 引理 `mul_subset_mul`
-
-English:
-lemma mul_subset_mul
-  statement: (↑M : Set R) * (↑N : Set R) subseteq (↑(M * N) : Set R)
-  proof: smul_subset_smul
-
-中文:
-引理 mul_subset_mul
-  结论: (↑M : 集合 R) * (↑N : 集合 R) subseteq (↑(M * N) : 集合 R)
-  证明: smul_subset_smul
-
-Depends on / 依赖: smul_subset_smul
+lemma mul_le_mul_right (h : N ≤ P) : M * N ≤ M * P := smul_le_smul_right h
+/-
+**AddSubmonoid.mul_subset_mul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_subset_mul : (↑M : Set R) * (↑N : Set R) subseteq (↑(M * N) : Set R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_subset_smul`：smul_subset_smul : (↑M : Set R) • (↑N : S
+et A) subseteq (↑(M • N) : Set A)
 -/
-lemma mul_subset_mul : (↑M : Set R) * (↑N : Set R) subseteq (↑(M * N) : Set R) := smul_subset_smul
-
-/--
-lemma `mul_sup` / 引理 `mul_sup`
-
-English:
-lemma mul_sup
-  statement: M * (N ⊔ P) = M * N ⊔ M * P
-  proof: addSubmonoid_smul_sup
-
-中文:
-引理 mul_sup
-  结论: M * (N ⊔ P) = M * N ⊔ M * P
-  证明: addSubmonoid_smul_sup
-
-Depends on / 依赖: addSubmonoid_smul_sup, infer_instance, morphismRestrict
+lemma mul_subset_mul : (↑M : Set R) * (↑N : Set R) ⊆ (↑(M * N) : Set R) := smul_subset_smul
+/-
+**AddSubmonoid.mul_sup** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_sup : M * (N ⊔ P) = M * N ⊔ M * P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.addSubmonoid_smul_sup`：addSubmonoid_smul_sup : M • (N ⊔ P) 
+= M • N ⊔ M • P
 -/
 lemma mul_sup : M * (N ⊔ P) = M * N ⊔ M * P := addSubmonoid_smul_sup
 
 -- need `zero_smul` and `add_smul` to generalize to `SMul`
-/--
-lemma `sup_mul` / 引理 `sup_mul`
-
-English:
-lemma sup_mul
-  statement: (M ⊔ N) * P = M * P ⊔ N * P
-  proof: le_antisymm (mul_le.mpr fun mn hmn p hp => by
-    obtain ⟨m, hm, n, hn, rfl⟩ := mem_sup.mp hmn
-rw [right_distrib]; exact add_mem_sup (mul_mem_mul hm hp) mul_mem_mul hn hp)
-    (sup_le (mul_le_mul_left le_sup_left) <| mul_le_mul_left le_sup_right)
-
-中文:
-引理 sup_mul
-  结论: (M ⊔ N) * P = M * P ⊔ N * P
-  证明: le_antisymm (mul_le.mpr fun mn hmn p hp => by
-    obtain ⟨m, hm, n, hn, rfl⟩ := mem_sup.mp hmn
-rw [right_distrib]; exact add_mem_sup (mul_mem_mul hm hp) mul_mem_mul hn hp)
-    (sup_le (mul_le_mul_left le_sup_left) <| mul_le_mul_left le_sup_right)
-
-Depends on / 依赖: add_mem_sup, le_antisymm, le_sup_left, le_sup_right, mem_sup, mem_sup.mp, mul_le, mul_le.mpr, mul_le_mul_left, mul_mem_mul, right_distrib, sup_le
+/-
+**AddSubmonoid.sup_mul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：sup_mul : (M ⊔ N) * P = M * P ⊔ N * P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AddSubmonoid.mul_le`：mul_le : M * N <= P ↔ forall m in M, forall n in N,
+ m * n in P
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AddSubmonoid.mem_sup`：∀ {N : Type u_4} [inst : AddCommMonoid N] {s t : A
+ddSubmonoid N} {x : N}, x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y + z = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `AddSubmonoid.add_mem_sup`：∀ {M : Type u_1} [inst : AddZeroClass M] {S T 
+: AddSubmonoid M} {x y : M}, x ∈ S → y ∈ T → x + y ∈ S ⊔ T
+· 使用引理 `AddSubmonoid.mul_mem_mul`：mul_mem_mul {m n : R} (hm : m in M) (hn : n in
+ N) : m * n in M * N
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用引理 `AddSubmonoid.mul_le_mul_left`：mul_le_mul_left (h : M <= N) : M * P <= N 
+* P
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
 -/
 lemma sup_mul : (M ⊔ N) * P = M * P ⊔ N * P :=
-  le_antisymm (mul_le.mpr fun mn hmn p hp => by
+  le_antisymm (mul_le.mpr fun mn hmn p hp ↦ by
     obtain ⟨m, hm, n, hn, rfl⟩ := mem_sup.mp hmn
-rw [right_distrib]; exact add_mem_sup (mul_mem_mul hm hp) mul_mem_mul hn hp)
+    rw [right_distrib]; exact add_mem_sup (mul_mem_mul hm hp) <| mul_mem_mul hn hp)
     (sup_le (mul_le_mul_left le_sup_left) <| mul_le_mul_left le_sup_right)
 
 variable {ι : Sort*}
 
 -- need `zero_smul` and `add_smul` to generalize to `SMul`
-/--
-lemma `iSup_mul` / 引理 `iSup_mul`
-
-English:
-lemma iSup_mul
-  given: (S : ι -> AddSubmonoid R) (T : AddSubmonoid R)
-  statement: (⨆ i, S i) * T = ⨆ i, S i * T
-  proof: le_antisymm (mul_le.mpr fun s hs t ht => iSup_induction _ (motive := (· * t in _)) hs
-      (fun i s hs => mem_iSup_of_mem i <| mul_mem_mul hs ht) (by simp_rw [zero_mul]; apply zero_mem)
-      fun _ _ => by simp_rw [right_distrib]; apply add_mem) <|
-    iSup_le fun i => mul_le_mul_left (le_iSup _ i)
-
-中文:
-引理 iSup_mul
-  条件: (S : ι -> 加法子幺半群 R) (T : 加法子幺半群 R)
-  结论: (⨆ i, S i) * T = ⨆ i, S i * T
-  证明: le_antisymm (mul_le.mpr fun s hs t ht => iSup_induction _ (motive := (· * t in _)) hs
-      (fun i s hs => mem_iSup_of_mem i <| mul_mem_mul hs ht) (by simp_rw [zero_mul]; apply zero_mem)
-      fun _ _ => by simp_rw [right_distrib]; apply add_mem) <|
-    iSup_le fun i => mul_le_mul_left (le_iSup _ i)
-
-Depends on / 依赖: add_mem, iSup_induction, iSup_le, le_antisymm, le_iSup, mem_iSup_of_mem, motive, mul_le, mul_le.mpr, mul_le_mul_left, mul_mem_mul, right_distrib, simp_rw, zero_mem, zero_mul
+/-
+**AddSubmonoid.iSup_mul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：iSup_mul (S : ι -> AddSubmonoid R) (T : AddSubmonoid R) : (⨆ i, S i) * T =
+ ⨆ i, S i * T
+参数：S : ι -> AddSubmonoid R；T : AddSubmonoid R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AddSubmonoid.mul_le`：mul_le : M * N <= P ↔ forall m in M, forall n in N,
+ m * n in P
+· 使用定理 `AddSubmonoid.iSup_induction`：∀ {M : Type u_1} [inst : AddZeroClass M] {ι
+ : Sort u_4} (S : ι → AddSubmonoid M) {motive : M → Prop} {x : M},   x ∈ ⨆ i, S 
+i →     (∀ (i : ι…
+· 使用定理 `AddSubmonoid.mem_iSup_of_mem`：∀ {M : Type u_1} [inst : AddZeroClass M] {
+ι : Sort u_4} {S : ι → AddSubmonoid M} (i : ι) {x : M}, x ∈ S i → x ∈ iSup S
+· 使用引理 `AddSubmonoid.mul_mem_mul`：mul_mem_mul {m n : R} (hm : m in M) (hn : n in
+ N) : m * n in M * N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubmonoid.instAddSubmonoidClass`：∀ {M : Type u_1} [inst : AddZeroClas
+s M], AddSubmonoidClass (AddSubmonoid M) M
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用引理 `AddSubmonoid.mul_le_mul_left`：mul_le_mul_left (h : M <= N) : M * P <= N 
+* P
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-lemma iSup_mul (S : ι -> AddSubmonoid R) (T : AddSubmonoid R) : (⨆ i, S i) * T = ⨆ i, S i * T :=
-  le_antisymm (mul_le.mpr fun s hs t ht => iSup_induction _ (motive := (· * t in _)) hs
-      (fun i s hs => mem_iSup_of_mem i <| mul_mem_mul hs ht) (by simp_rw [zero_mul]; apply zero_mem)
-      fun _ _ => by simp_rw [right_distrib]; apply add_mem) <|
-    iSup_le fun i => mul_le_mul_left (le_iSup _ i)
-
-/--
-lemma `mul_iSup` / 引理 `mul_iSup`
-
-English:
-lemma mul_iSup
-  given: (T : AddSubmonoid R) (S : ι -> AddSubmonoid R)
-  statement: (T * ⨆ i, S i) = ⨆ i, T * S i
-  proof: smul_iSup T S
-
-中文:
-引理 mul_iSup
-  条件: (T : 加法子幺半群 R) (S : ι -> 加法子幺半群 R)
-  结论: (T * ⨆ i, S i) = ⨆ i, T * S i
-  证明: smul_iSup T S
-
-Depends on / 依赖: smul_iSup
+lemma iSup_mul (S : ι → AddSubmonoid R) (T : AddSubmonoid R) : (⨆ i, S i) * T = ⨆ i, S i * T :=
+  le_antisymm (mul_le.mpr fun s hs t ht ↦ iSup_induction _ (motive := (· * t ∈ _)) hs
+      (fun i s hs ↦ mem_iSup_of_mem i <| mul_mem_mul hs ht) (by simp_rw [zero_mul]; apply zero_mem)
+      fun _ _ ↦ by simp_rw [right_distrib]; apply add_mem) <|
+    iSup_le fun i ↦ mul_le_mul_left (le_iSup _ i)
+/-
+**AddSubmonoid.mul_iSup** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_iSup (T : AddSubmonoid R) (S : ι -> AddSubmonoid R) : (T * ⨆ i, S i) =
+ ⨆ i, T * S i
+参数：T : AddSubmonoid R；S : ι -> AddSubmonoid R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddSubmonoid.smul_iSup`：smul_iSup (T : AddSubmonoid R) (S : ι -> AddSubm
+onoid A) : (T • ⨆ i, S i) = ⨆ i, T • S i
 -/
-lemma mul_iSup (T : AddSubmonoid R) (S : ι -> AddSubmonoid R) : (T * ⨆ i, S i) = ⨆ i, T * S i :=
+lemma mul_iSup (T : AddSubmonoid R) (S : ι → AddSubmonoid R) : (T * ⨆ i, S i) = ⨆ i, T * S i :=
   smul_iSup T S
-
-/--
-lemma `mul_comm_of_commute` / 引理 `mul_comm_of_commute`
-
-English:
-lemma mul_comm_of_commute
-  given: (h : forall m in M, forall n in N, Commute m n)
-  statement: M * N = N * M
-  proof: le_antisymm (mul_le.mpr fun m hm n hn => h m hm n hn ▸ mul_mem_mul hn hm)
-    (mul_le.mpr fun n hn m hm => h m hm n hn ▸ mul_mem_mul hm hn)
-
-中文:
-引理 mul_comm_of_commute
-  条件: (h : 对任意 m in M, 对任意 n in N, Commute m n)
-  结论: M * N = N * M
-  证明: le_antisymm (mul_le.mpr fun m hm n hn => h m hm n hn ▸ mul_mem_mul hn hm)
-    (mul_le.mpr fun n hn m hm => h m hm n hn ▸ mul_mem_mul hm hn)
-
-Depends on / 依赖: le_antisymm, mul_le, mul_le.mpr, mul_mem_mul
+/-
+**AddSubmonoid.mul_comm_of_commute** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mul_comm_of_commute (h : forall m in M, forall n in N, Commute m n) : M * 
+N = N * M
+参数：h : forall m in M, forall n in N, Commute m n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `AddSubmonoid.mul_le`：mul_le : M * N <= P ↔ forall m in M, forall n in N,
+ m * n in P
+· 使用引理 `AddSubmonoid.mul_mem_mul`：mul_mem_mul {m n : R} (hm : m in M) (hn : n in
+ N) : m * n in M * N
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma mul_comm_of_commute (h : forall m in M, forall n in N, Commute m n) : M * N = N * M :=
-  le_antisymm (mul_le.mpr fun m hm n hn => h m hm n hn ▸ mul_mem_mul hn hm)
-    (mul_le.mpr fun n hn m hm => h m hm n hn ▸ mul_mem_mul hm hn)
+lemma mul_comm_of_commute (h : ∀ m ∈ M, ∀ n ∈ N, Commute m n) : M * N = N * M :=
+  le_antisymm (mul_le.mpr fun m hm n hn ↦ h m hm n hn ▸ mul_mem_mul hn hm)
+    (mul_le.mpr fun n hn m hm ↦ h m hm n hn ▸ mul_mem_mul hm hn)
 
 end NonUnitalNonAssocSemiring
 
@@ -832,44 +702,17 @@ variable [NonUnitalNonAssocRing R]
 
 This is available as an instance in the `Pointwise` locale. -/
 @[instance_reducible]
-/--
-Definition of `hasDistribNeg` / `hasDistribNeg` 的定义
+/-
+**AddSubmonoid.hasDistribNeg** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：{R : Type u_2} → [inst : NonUnitalNonAssocRing R] → HasDistribNeg (AddSubm
+onoid R)
+参数：AddSubmonoid R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasDistribNeg
-  signature: : HasDistribNeg (AddSubmonoid R) where
-  body: by
-    refine le_antisymm (mul_le.2 fun m hm n hn => ?_)
-      ((AddSubmonoid.neg_le _ _).2 <| mul_le.2 fun m hm n hn => ?_) <;>
-        simp only [AddSubmonoid.mem_neg, ← neg_mul] at *
-    · exact mul_mem_mul hm hn
-    · exact mul_mem_mul (neg_mem_neg.2 hm) hn
-  mul_neg x y := by
-    refine le_antisymm (mul_le.2 fun m hm n hn => ?_)
-      ((AddSubmonoid.neg_le _ _).2 <| mul_le.2 fun m hm n hn => ?_) <;>
-        simp only [AddSubmonoid.mem_neg, ← mul_neg] at *
-    · exact mul_mem_mul hm hn
-    · exact mul_mem_mul hm (neg_mem_neg.2 hn)
+--- 原说明 ---
+`AddSubmonoid.neg` distributes over multiplication.
 
-scoped[Pointwise] attribute [instance] AddSubmonoid.hasDistribNeg
-
-中文:
-定义 hasDistribNeg
-  签名: : 有DistribNeg (加法子幺半群 R) where
-  定义体: by
-    refine le_antisymm (mul_le.2 fun m hm n hn => ?_)
-      ((AddSubmonoid.neg_le _ _).2 <| mul_le.2 fun m hm n hn => ?_) <;>
-        simp only [AddSubmonoid.mem_neg, ← neg_mul] at *
-    · exact mul_mem_mul hm hn
-    · exact mul_mem_mul (neg_mem_neg.2 hm) hn
-  mul_neg x y := by
-    refine le_antisymm (mul_le.2 fun m hm n hn => ?_)
-      ((AddSubmonoid.neg_le _ _).2 <| mul_le.2 fun m hm n hn => ?_) <;>
-        simp only [AddSubmonoid.mem_neg, ← mul_neg] at *
-    · exact mul_mem_mul hm hn
-    · exact mul_mem_mul hm (neg_mem_neg.2 hn)
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.hasDistribNeg
+This is available as an instance in the `Pointwise` locale.
 -/
 protected def hasDistribNeg : HasDistribNeg (AddSubmonoid R) where
   neg_mul x y := by
@@ -894,24 +737,16 @@ variable [NonAssocSemiring R]
 
 /-- A `MulOneClass` structure on additive submonoids of a (possibly, non-associative) semiring. -/
 @[instance_reducible]
-/--
-Definition of `mulOneClass` / `mulOneClass` 的定义
+/-
+**AddSubmonoid.mulOneClass** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：{R : Type u_2} → [inst : NonAssocSemiring R] → MulOneClass (AddSubmonoid R
+)
+参数：AddSubmonoid R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulOneClass
-  signature: : MulOneClass (AddSubmonoid R) where
-  body: by rw [one_eq_closure_one_set, ← closure_eq M, closure_mul_closure, one_mul]
-  mul_one M := by rw [one_eq_closure_one_set, ← closure_eq M, closure_mul_closure, mul_one]
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.mulOneClass
-
-中文:
-定义 mulOneClass
-  签名: : MulOne类 (加法子幺半群 R) where
-  定义体: by rw [one_eq_closure_one_set, ← closure_eq M, closure_mul_closure, one_mul]
-  mul_one M := by rw [one_eq_closure_one_set, ← closure_eq M, closure_mul_closure, mul_one]
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.mulOneClass
+--- 原说明 ---
+A `MulOneClass` structure on additive submonoids of a (possibly, non-associative
+) semiring.
 -/
 protected def mulOneClass : MulOneClass (AddSubmonoid R) where
   one_mul M := by rw [one_eq_closure_one_set, ← closure_eq M, closure_mul_closure, one_mul]
@@ -926,44 +761,24 @@ variable [NonUnitalSemiring R]
 
 /-- Semigroup structure on additive submonoids of a (possibly, non-unital) semiring. -/
 @[instance_reducible]
-/--
-Definition of `semigroup` / `semigroup` 的定义
+/-
+**AddSubmonoid.semigroup** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：{R : Type u_2} → [inst : NonUnitalSemiring R] → Semigroup (AddSubmonoid R)
+参数：AddSubmonoid R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition semigroup
-  signature: : Semigroup (AddSubmonoid R) where
-  body: le_antisymm
-      (mul_le.2 fun _mn hmn p hp => AddSubmonoid.mul_induction_on hmn
-        (fun m hm n hn => mul_assoc m n p ▸ mul_mem_mul hm <| mul_mem_mul hn hp)
-        fun x y => (add_mul x y p).symm ▸ add_mem)
-      (mul_le.2 fun m hm _np hnp => AddSubmonoid.mul_induction_on hnp
-        (fun n hn p hp => mul_assoc m n p ▸ mul_mem_mul (mul_mem_mul hm hn) hp)
-        fun x y => (mul_add m x y) ▸ add_mem)
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.semigroup
-
-中文:
-定义 semigroup
-  签名: : 半群 (加法子幺半群 R) where
-  定义体: le_antisymm
-      (mul_le.2 fun _mn hmn p hp => AddSubmonoid.mul_induction_on hmn
-        (fun m hm n hn => mul_assoc m n p ▸ mul_mem_mul hm <| mul_mem_mul hn hp)
-        fun x y => (add_mul x y p).symm ▸ add_mem)
-      (mul_le.2 fun m hm _np hnp => AddSubmonoid.mul_induction_on hnp
-        (fun n hn p hp => mul_assoc m n p ▸ mul_mem_mul (mul_mem_mul hm hn) hp)
-        fun x y => (mul_add m x y) ▸ add_mem)
-
-scoped[Pointwise] attribute [instance] AddSubmonoid.semigroup
+--- 原说明 ---
+Semigroup structure on additive submonoids of a (possibly, non-unital) semiring.
 -/
 protected def semigroup : Semigroup (AddSubmonoid R) where
   mul_assoc _M _N _P :=
     le_antisymm
       (mul_le.2 fun _mn hmn p hp => AddSubmonoid.mul_induction_on hmn
-        (fun m hm n hn => mul_assoc m n p ▸ mul_mem_mul hm <| mul_mem_mul hn hp)
-        fun x y => (add_mul x y p).symm ▸ add_mem)
+        (fun m hm n hn ↦ mul_assoc m n p ▸ mul_mem_mul hm <| mul_mem_mul hn hp)
+        fun x y ↦ (add_mul x y p).symm ▸ add_mem)
       (mul_le.2 fun m hm _np hnp => AddSubmonoid.mul_induction_on hnp
-        (fun n hn p hp => mul_assoc m n p ▸ mul_mem_mul (mul_mem_mul hm hn) hp)
-        fun x y => (mul_add m x y) ▸ add_mem)
+        (fun n hn p hp ↦ mul_assoc m n p ▸ mul_mem_mul (mul_mem_mul hm hn) hp)
+        fun x y ↦ (mul_add m x y) ▸ add_mem)
 
 scoped[Pointwise] attribute [instance] AddSubmonoid.semigroup
 
@@ -974,78 +789,61 @@ variable [Semiring R]
 
 /-- Monoid structure on additive submonoids of a semiring. -/
 @[instance_reducible]
-/--
-Definition of `monoid` / `monoid` 的定义
+/-
+**AddSubmonoid.monoid** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：{R : Type u_2} → [inst : Semiring R] → Monoid (AddSubmonoid R)
+参数：AddSubmonoid R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monoid
-  signature: : Monoid (AddSubmonoid R) where
-
-中文:
-定义 monoid
-  签名: : 幺半群 (加法子幺半群 R) where
+--- 原说明 ---
+Monoid structure on additive submonoids of a semiring.
 -/
 protected def monoid : Monoid (AddSubmonoid R) where
 
 scoped[Pointwise] attribute [instance] AddSubmonoid.monoid
-
-/--
-lemma `closure_pow` / 引理 `closure_pow`
-
-English:
-lemma closure_pow
-  given: (s : Set R)
-  statement: forall n : Nat, closure s ^ n = closure (s ^ n)
-
-中文:
-引理 closure_pow
-  条件: (s : 集合 R)
-  结论: 对任意 n : 自然数, closure s ^ n = closure (s ^ n)
+/-
+**AddSubmonoid.closure_pow** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：∀ {R : Type u_2} [inst : Semiring R] (s : Set R) (n : ℕ), AddSubmonoid.clo
+sure s ^ n = AddSubmonoid.closure (s ^ n)
+参数：s : Set R；n : ℕ；s ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma closure_pow (s : Set R) : forall n : Nat, closure s ^ n = closure (s ^ n)
+lemma closure_pow (s : Set R) : ∀ n : ℕ, closure s ^ n = closure (s ^ n)
   | 0 => by rw [pow_zero, pow_zero, one_eq_closure_one_set]
   | n + 1 => by rw [pow_succ, pow_succ, closure_pow s n, closure_mul_closure]
-
-/--
-lemma `pow_eq_closure_pow_set` / 引理 `pow_eq_closure_pow_set`
-
-English:
-lemma pow_eq_closure_pow_set
-  given: (s : AddSubmonoid R) (n : Nat)
-  proof: by
-  rw [← closure_pow]; rw [closure_eq]
-
-中文:
-引理 pow_eq_closure_pow_set
-  条件: (s : 加法子幺半群 R) (n : 自然数)
-  证明: by
-  rw [← closure_pow]; rw [closure_eq]
-
-Depends on / 依赖: closure_eq, closure_pow
+/-
+**AddSubmonoid.pow_eq_closure_pow_set** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：pow_eq_closure_pow_set (s : AddSubmonoid R) (n : Nat) : s ^ n = closure ((
+s : Set R) ^ n)
+参数：s : AddSubmonoid R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddSubmonoid.closure_pow`：∀ {R : Type u_2} [inst : Semiring R] (s : Set 
+R) (n : ℕ), AddSubmonoid.closure s ^ n = AddSubmonoid.closure (s ^ n)
+· 使用定理 `AddSubmonoid.closure_eq`：∀ {M : Type u_1} [inst : AddZeroClass M] (S : A
+ddSubmonoid M), AddSubmonoid.closure ↑S = S
 -/
-lemma pow_eq_closure_pow_set (s : AddSubmonoid R) (n : Nat) :
+lemma pow_eq_closure_pow_set (s : AddSubmonoid R) (n : ℕ) :
     s ^ n = closure ((s : Set R) ^ n) := by
-  rw [← closure_pow]; rw [closure_eq]
-
-/--
-lemma `pow_subset_pow` / 引理 `pow_subset_pow`
-
-English:
-lemma pow_subset_pow
-  given: {s : AddSubmonoid R} {n : Nat}
-  statement: (↑s : Set R) ^ n subseteq ↑(s ^ n)
-  proof: (pow_eq_closure_pow_set s n).symm ▸ subset_closure
-
-中文:
-引理 pow_subset_pow
-  条件: {s : 加法子幺半群 R} {n : 自然数}
-  结论: (↑s : 集合 R) ^ n subseteq ↑(s ^ n)
-  证明: (pow_eq_closure_pow_set s n).symm ▸ subset_closure
-
-Depends on / 依赖: pow_eq_closure_pow_set, subset_closure
+  rw [← closure_pow, closure_eq]
+/-
+**AddSubmonoid.pow_subset_pow** 是 Mathlib 中的一个引理，位于命名空间 `AddSubmonoid`。
+形式化陈述：pow_subset_pow {s : AddSubmonoid R} {n : Nat} : (↑s : Set R) ^ n subseteq 
+↑(s ^ n)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoid.subset_closure`：∀ {M : Type u_1} [inst : AddZeroClass M] {s
+ : Set M}, s ⊆ ↑(AddSubmonoid.closure s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AddSubmonoid.pow_eq_closure_pow_set`：pow_eq_closure_pow_set (s : AddSubm
+onoid R) (n : Nat) : s ^ n = closure ((s : Set R) ^ n)
 -/
-lemma pow_subset_pow {s : AddSubmonoid R} {n : Nat} : (↑s : Set R) ^ n subseteq ↑(s ^ n) :=
+lemma pow_subset_pow {s : AddSubmonoid R} {n : ℕ} : (↑s : Set R) ^ n ⊆ ↑(s ^ n) :=
   (pow_eq_closure_pow_set s n).symm ▸ subset_closure
 
 end Semiring
 end AddSubmonoid
+

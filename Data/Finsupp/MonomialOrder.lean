@@ -58,34 +58,16 @@ it is customary to order them using the opposite order : `MvPolynomial.X 0 > MvP
 
 @[expose] public section
 
-/--
-Definition of `MonomialOrder` / `MonomialOrder` 的定义
+/-- Monomial orders : equivalence of `σ →₀ ℕ` with a well-ordered type -/
+/-
+**MonomialOrder** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：MonomialOrder (σ : Type*) where /-- The synonym type -/ syn : Type* /-- `s
+yn` is an additive commutative monoid -/ addCommMonoidSyn : AddCommMonoid syn
+参数：σ : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MonomialOrder
-  parameters: (σ : Type*)
-  axioms and operations (7):
-    - syn : Type*
-    - addCommMonoidSyn : AddCommMonoid syn  [default: by infer_instance]
-    - linearOrderSyn : LinearOrder syn  [default: by infer_instance]
-    - isOrderedAddMonoid_syn : IsOrderedAddMonoid syn  [default: by infer_instance]
-    - toSyn : (σ ->₀ Nat) ≃+ syn
-    - toSyn_monotone : Monotone toSyn
-    - wellFoundedLT_syn : WellFoundedLT syn  [default: by infer_instance]
-
-中文:
-结构 单项式序
-  参数: (σ : 类型)
-  公理与运算 (7 个):
-    - syn : 类型
-    - addCommMonoidSyn : 加法交换幺半群 syn  [默认: by infer_instance]
-    - linearOrderSyn : 线性序 syn  [默认: by infer_instance]
-    - isOrderedAddMonoid_syn : 是OrderedAdd幺半群 syn  [默认: by infer_instance]
-    - toSyn : (σ ->₀ 自然数) ≃+ syn
-    - toSyn_monotone : 递增 toSyn
-    - wellFoundedLT_syn : WellFoundedLT syn  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+Monomial orders : equivalence of `σ →₀ ℕ` with a well-ordered type
 -/
 structure MonomialOrder (σ : Type*) where
   /-- The synonym type -/
@@ -97,7 +79,7 @@ structure MonomialOrder (σ : Type*) where
   /-- `syn` is a linearly ordered cancellative additive commutative monoid -/
   isOrderedAddMonoid_syn : IsOrderedAddMonoid syn := by infer_instance
   /-- the additive equivalence from `σ →₀ ℕ` to `syn` -/
-  toSyn : (σ ->₀ Nat) ≃+ syn
+  toSyn : (σ →₀ ℕ) ≃+ syn
   /-- `toSyn` is monotone -/
   toSyn_monotone : Monotone toSyn
   /-- `syn` is a well ordering -/
@@ -116,111 +98,78 @@ variable {σ : Type*} (m : MonomialOrder σ)
 
 @[deprecated (since := "2026-07-07")] alias wf := MonomialOrder.wellFoundedLT_syn
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCancelCommMonoid m.syn
-  body: m.toSyn.symm.injective.isLeftCancelAdd _ (map_add _)
-
-中文:
-实例 :
-  签名: 加法消去交换幺半群 m.syn
-  定义体: m.toSyn.symm.injective.isLeftCancelAdd _ (map_add _)
-
-Depends on / 依赖: injective, isLeftCancelAdd, m.toSyn.symm.injective.isLeftCancelAdd, map_add
+/-
+**MonomialOrder.** 是 Mathlib 中的一个实例，位于命名空间 `MonomialOrder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCancelCommMonoid m.syn where
-.add_left_cancel add_left_cancel := m.toSyn.symm.injective.isLeftCancelAdd _ (map_add _)
-
-/--
-Instance `isOrderedCancelAddMonoid_syn` / 实例 `isOrderedCancelAddMonoid_syn`
-
-English:
-instance isOrderedCancelAddMonoid_syn
-  signature: : IsOrderedCancelAddMonoid m.syn
-  body: IsOrderedAddMonoid.toIsOrderedCancelAddMonoid'
-
-@[deprecated (since := "2026-07-07")] alias iocam := MonomialOrder.isOrderedCancelAddMonoid_syn
-
-中文:
-实例 isOrderedCancelAddMonoid_syn
-  签名: : 是OrderedCancelAdd幺半群 m.syn
-  定义体: IsOrderedAddMonoid.toIsOrderedCancelAddMonoid'
-
-@[deprecated (since := "2026-07-07")] alias iocam := MonomialOrder.isOrderedCancelAddMonoid_syn
-
-Depends on / 依赖: IsOrderedAddMonoid, IsOrderedAddMonoid.toIsOrderedCancelAddMonoid, toIsOrderedCancelAddMonoid
+  add_left_cancel := m.toSyn.symm.injective.isLeftCancelAdd _ (map_add _) |>.add_left_cancel
+/-
+**MonomialOrder.isOrderedCancelAddMonoid_syn** 是 Mathlib 中的一个实例，位于命名空间 `Monomial
+Order`。
+形式化陈述：isOrderedCancelAddMonoid_syn : IsOrderedCancelAddMonoid m.syn
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid'`：∀ {α : Type u} [inst : A
+ddCancelCommMonoid α] [inst_1 : LinearOrder α] [IsOrderedAddMonoid α],   IsOrder
+edCancelAddMonoid α
+· 使用定理 `MonomialOrder.isOrderedAddMonoid_syn`：∀ {σ : Type u_1} (self : MonomialO
+rder σ), IsOrderedAddMonoid self.syn
 -/
 instance isOrderedCancelAddMonoid_syn : IsOrderedCancelAddMonoid m.syn :=
   IsOrderedAddMonoid.toIsOrderedCancelAddMonoid'
 
 @[deprecated (since := "2026-07-07")] alias iocam := MonomialOrder.isOrderedCancelAddMonoid_syn
 
-/--
-Definition of `toWithBotSyn` / `toWithBotSyn` 的定义
+/-- A `WithBot m.syn` version of `m.toSyn`. -/
+/-
+**MonomialOrder.toWithBotSyn** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder`。
+形式化陈述：toWithBotSyn : WithBot (σ ->₀ Nat) ≃+ WithBot m.syn
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toWithBotSyn
-  signature: : WithBot (σ ->₀ Nat) ≃+ WithBot m.syn
-  body: m.toSyn.withBotCongr
-
-中文:
-定义 toWithBotSyn
-  签名: : WithBot (σ ->₀ 自然数) ≃+ WithBot m.syn
-  定义体: m.toSyn.withBotCongr
-
-Depends on / 依赖: m.toSyn.withBotCongr, withBotCongr
+--- 原说明 ---
+A `WithBot m.syn` version of `m.toSyn`.
 -/
-noncomputable def toWithBotSyn : WithBot (σ ->₀ Nat) ≃+ WithBot m.syn := m.toSyn.withBotCongr
-
-/--
-lemma `le_add_right` / 引理 `le_add_right`
-
-English:
-lemma le_add_right
-  given: (a b : σ ->₀ Nat)
-  proof: by
-  rw [← map_add]
-  exact m.toSyn_monotone le_self_add
-
-中文:
-引理 le_add_right
-  条件: (a b : σ ->₀ 自然数)
-  证明: by
-  rw [← map_add]
-  exact m.toSyn_monotone le_self_add
-
-Depends on / 依赖: le_self_add, m.toSyn_monotone, map_add, toSyn_monotone
+noncomputable def toWithBotSyn : WithBot (σ →₀ ℕ) ≃+ WithBot m.syn := m.toSyn.withBotCongr
+/-
+**MonomialOrder.le_add_right** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：le_add_right (a b : σ ->₀ Nat) : m.toSyn a <= m.toSyn a + m.toSyn b
+参数：a b : σ ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `MonomialOrder.toSyn_monotone`：∀ {σ : Type u_1} (self : MonomialOrder σ),
+ Monotone ⇑self.toSyn
+· 使用定理 `le_self_add`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [CanonicallyO
+rderedAdd α] {a b : α}, a ≤ a + b
+· 使用定理 `Finsupp.instCanonicallyOrderedAddOfAddLeftMono`：∀ {ι : Type u_1} {α : Ty
+pe u_3} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [CanonicallyOrderedAd
+d α]   [inst_3 : Sub α] [OrderedSub …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
-lemma le_add_right (a b : σ ->₀ Nat) :
-    m.toSyn a <= m.toSyn a + m.toSyn b := by
+lemma le_add_right (a b : σ →₀ ℕ) :
+    m.toSyn a ≤ m.toSyn a + m.toSyn b := by
   rw [← map_add]
   exact m.toSyn_monotone le_self_add
-
-/--
-Instance `orderBot` / 实例 `orderBot`
-
-English:
-instance orderBot
-  signature: : OrderBot (m.syn) where
-  body: 0
-  bot_le a := by
-    have := m.le_add_right 0 (m.toSyn.symm a)
-    simpa [map_add, zero_add]
-
-@[simp]
-
-中文:
-实例 orderBot
-  签名: : 有底序 (m.syn) where
-  定义体: 0
-  bot_le a := by
-    have := m.le_add_right 0 (m.toSyn.symm a)
-    simpa [map_add, zero_add]
-
-@[simp]
+/-
+**MonomialOrder.orderBot** 是 Mathlib 中的一个实例，位于命名空间 `MonomialOrder`。
+形式化陈述：orderBot : OrderBot (m.syn) where bot
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance orderBot : OrderBot (m.syn) where
   bot := 0
@@ -229,299 +178,188 @@ instance orderBot : OrderBot (m.syn) where
     simpa [map_add, zero_add]
 
 @[simp]
-/--
-theorem `bot_eq_zero` / 定理 `bot_eq_zero`
-
-English:
-theorem bot_eq_zero
-  statement: (⊥ : m.syn) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bot_eq_zero
-  结论: (⊥ : m.syn) = 0
-  证明: rfl
-
-@[simp]
+/-
+**MonomialOrder.bot_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：bot_eq_zero : (⊥ : m.syn) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_eq_zero : (⊥ : m.syn) = 0 := rfl
 
 @[simp]
-/--
-lemma `zero_le` / 引理 `zero_le`
-
-English:
-lemma zero_le
-  given: (a : m.syn)
-  statement: 0 <= a
-  proof: bot_le
-
-中文:
-引理 zero_le
-  条件: (a : m.syn)
-  结论: 0 <= a
-  证明: bot_le
-
-Depends on / 依赖: bot_le
+/-
+**MonomialOrder.zero_le** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：zero_le (a : m.syn) : 0 <= a
+参数：a : m.syn。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
-lemma zero_le (a : m.syn) : 0 <= a := bot_le
-
-/--
-theorem `eq_zero_iff` / 定理 `eq_zero_iff`
-
-English:
-theorem eq_zero_iff
-  given: {a : m.syn}
-  statement: a = 0 ↔ a <= 0
-  proof: eq_bot_iff
-
-中文:
-定理 eq_zero_iff
-  条件: {a : m.syn}
-  结论: a = 0 ↔ a <= 0
-  证明: eq_bot_iff
-
-Depends on / 依赖: eq_bot_iff
+lemma zero_le (a : m.syn) : 0 ≤ a := bot_le
+/-
+**MonomialOrder.eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：eq_zero_iff {a : m.syn} : a = 0 ↔ a <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
 -/
-theorem eq_zero_iff {a : m.syn} : a = 0 ↔ a <= 0 := eq_bot_iff
-
-/--
-lemma `toSyn_eq_zero_iff` / 引理 `toSyn_eq_zero_iff`
-
-English:
-lemma toSyn_eq_zero_iff
-  given: (a : σ ->₀ Nat)
-  proof: AddEquiv.map_eq_zero_iff m.toSyn
-
-中文:
-引理 toSyn_eq_zero_iff
-  条件: (a : σ ->₀ 自然数)
-  证明: AddEquiv.map_eq_zero_iff m.toSyn
-
-Depends on / 依赖: AddEquiv, AddEquiv.map_eq_zero_iff, m.toSyn, map_eq_zero_iff
+theorem eq_zero_iff {a : m.syn} : a = 0 ↔ a ≤ 0 := eq_bot_iff
+/-
+**MonomialOrder.toSyn_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：toSyn_eq_zero_iff (a : σ ->₀ Nat) : m.toSyn a = 0 ↔ a = 0
+参数：a : σ ->₀ Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.map_eq_zero_iff`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZer
+oClass M] [inst_1 : AddZeroClass N] (h : M ≃+ N) {x : M}, h x = 0 ↔ x = 0
 -/
-lemma toSyn_eq_zero_iff (a : σ ->₀ Nat) :
+lemma toSyn_eq_zero_iff (a : σ →₀ ℕ) :
     m.toSyn a = 0 ↔ a = 0 := AddEquiv.map_eq_zero_iff m.toSyn
-
-/--
-lemma `toSyn_lt_iff_ne_zero` / 引理 `toSyn_lt_iff_ne_zero`
-
-English:
-lemma toSyn_lt_iff_ne_zero
-  given: {a : m.syn}
-  proof: bot_lt_iff_ne_bot
-
-中文:
-引理 toSyn_lt_iff_ne_zero
-  条件: {a : m.syn}
-  证明: bot_lt_iff_ne_bot
-
-Depends on / 依赖: bot_lt_iff_ne_bot
+/-
+**MonomialOrder.toSyn_lt_iff_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：toSyn_lt_iff_ne_zero {a : m.syn} : 0 < a ↔ a != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
 -/
 lemma toSyn_lt_iff_ne_zero {a : m.syn} :
-    0 < a ↔ a != 0 := bot_lt_iff_ne_bot
-
-/--
-lemma `toSyn_strictMono` / 引理 `toSyn_strictMono`
-
-English:
-lemma toSyn_strictMono
-  statement: StrictMono (m.toSyn)
-  proof: by
-  apply m.toSyn_monotone.strictMono_of_injective m.toSyn.injective
-
-@[simp]
-
-中文:
-引理 toSyn_strictMono
-  结论: 严格递增 (m.toSyn)
-  证明: by
-  apply m.toSyn_monotone.strictMono_of_injective m.toSyn.injective
-
-@[simp]
-
-Depends on / 依赖: injective, m.toSyn.injective, m.toSyn_monotone.strictMono_of_injective, strictMono_of_injective, toSyn_monotone
+    0 < a ↔ a ≠ 0 := bot_lt_iff_ne_bot
+/-
+**MonomialOrder.toSyn_strictMono** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：toSyn_strictMono : StrictMono (m.toSyn)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.strictMono_of_injective`：Monotone.strictMono_of_injective (h₁ :
+ Monotone f) (h₂ : Injective f) : StrictMono f
+· 使用定理 `MonomialOrder.toSyn_monotone`：∀ {σ : Type u_1} (self : MonomialOrder σ),
+ Monotone ⇑self.toSyn
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
 -/
 lemma toSyn_strictMono : StrictMono (m.toSyn) := by
   apply m.toSyn_monotone.strictMono_of_injective m.toSyn.injective
 
 @[simp]
-/--
-lemma `toWithBotSyn_apply_bot` / 引理 `toWithBotSyn_apply_bot`
-
-English:
-lemma toWithBotSyn_apply_bot
-  statement: m.toWithBotSyn ⊥ = ⊥
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toWithBotSyn_apply_bot
-  结论: m.toWithBotSyn ⊥ = ⊥
-  证明: rfl
-
-@[simp]
+/-
+**MonomialOrder.toWithBotSyn_apply_bot** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：toWithBotSyn_apply_bot : m.toWithBotSyn ⊥ = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toWithBotSyn_apply_bot : m.toWithBotSyn ⊥ = ⊥ := rfl
 
 @[simp]
-/--
-lemma `toWithBotSyn_symm_apply_bot` / 引理 `toWithBotSyn_symm_apply_bot`
-
-English:
-lemma toWithBotSyn_symm_apply_bot
-  statement: m.toWithBotSyn.symm ⊥ = ⊥
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toWithBotSyn_symm_apply_bot
-  结论: m.toWithBotSyn.symm ⊥ = ⊥
-  证明: rfl
-
-@[simp]
+/-
+**MonomialOrder.toWithBotSyn_symm_apply_bot** 是 Mathlib 中的一个引理，位于命名空间 `MonomialO
+rder`。
+形式化陈述：toWithBotSyn_symm_apply_bot : m.toWithBotSyn.symm ⊥ = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toWithBotSyn_symm_apply_bot : m.toWithBotSyn.symm ⊥ = ⊥ := rfl
 
 @[simp]
-/--
-lemma `toWithBotSyn_apply_eq_bot_iff` / 引理 `toWithBotSyn_apply_eq_bot_iff`
-
-English:
-lemma toWithBotSyn_apply_eq_bot_iff
-  given: (a)
-  statement: m.toWithBotSyn a = ⊥ ↔ a = ⊥
-  proof: by
-  simp [← m.toWithBotSyn.eq_symm_apply]
-
-中文:
-引理 toWithBotSyn_apply_eq_bot_iff
-  条件: (a)
-  结论: m.toWithBotSyn a = ⊥ ↔ a = ⊥
-  证明: by
-  simp [← m.toWithBotSyn.eq_symm_apply]
-
-Depends on / 依赖: eq_symm_apply, m.toWithBotSyn.eq_symm_apply, toWithBotSyn
+/-
+**MonomialOrder.toWithBotSyn_apply_eq_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：toWithBotSyn_apply_eq_bot_iff (a) : m.toWithBotSyn a = ⊥ ↔ a = ⊥
+参数：a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddEquiv.eq_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [
+inst_1 : Add N] (e : M ≃+ N) {x : N} {y : M}, y = e.symm x ↔ e y = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma toWithBotSyn_apply_eq_bot_iff (a) : m.toWithBotSyn a = ⊥ ↔ a = ⊥ := by
   simp [← m.toWithBotSyn.eq_symm_apply]
-
-/--
-lemma `toWithBotSyn_apply_le_bot_iff` / 引理 `toWithBotSyn_apply_le_bot_iff`
-
-English:
-lemma toWithBotSyn_apply_le_bot_iff
-  given: (a)
-  statement: m.toWithBotSyn a <= ⊥ ↔ a = ⊥
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-引理 toWithBotSyn_apply_le_bot_iff
-  条件: (a)
-  结论: m.toWithBotSyn a <= ⊥ ↔ a = ⊥
-  证明: by
-  simp
-
-@[simp]
+/-
+**MonomialOrder.toWithBotSyn_apply_le_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：toWithBotSyn_apply_le_bot_iff (a) : m.toWithBotSyn a <= ⊥ ↔ a = ⊥
+参数：a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma toWithBotSyn_apply_le_bot_iff (a) : m.toWithBotSyn a <= ⊥ ↔ a = ⊥ := by
+lemma toWithBotSyn_apply_le_bot_iff (a) : m.toWithBotSyn a ≤ ⊥ ↔ a = ⊥ := by
   simp
 
 @[simp]
-/--
-lemma `toWithBotSyn_apply_coe` / 引理 `toWithBotSyn_apply_coe`
-
-English:
-lemma toWithBotSyn_apply_coe
-  given: (a : σ ->₀ Nat)
-  statement: m.toWithBotSyn a = m.toSyn a
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toWithBotSyn_apply_coe
-  条件: (a : σ ->₀ 自然数)
-  结论: m.toWithBotSyn a = m.toSyn a
-  证明: rfl
-
-@[simp]
+/-
+**MonomialOrder.toWithBotSyn_apply_coe** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：toWithBotSyn_apply_coe (a : σ ->₀ Nat) : m.toWithBotSyn a = m.toSyn a
+参数：a : σ ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toWithBotSyn_apply_coe (a : σ ->₀ Nat) : m.toWithBotSyn a = m.toSyn a := rfl
+lemma toWithBotSyn_apply_coe (a : σ →₀ ℕ) : m.toWithBotSyn a = m.toSyn a := rfl
 
 @[simp]
-/--
-lemma `bot_lt_toWithBotSyn_apply_iff` / 引理 `bot_lt_toWithBotSyn_apply_iff`
-
-English:
-lemma bot_lt_toWithBotSyn_apply_iff
-  given: (a)
-  statement: ⊥ < m.toWithBotSyn a ↔ ⊥ < a
-  proof: by
-  simp [bot_lt_iff_ne_bot]
-
-@[simp]
-
-中文:
-引理 bot_lt_toWithBotSyn_apply_iff
-  条件: (a)
-  结论: ⊥ < m.toWithBotSyn a ↔ ⊥ < a
-  证明: by
-  simp [bot_lt_iff_ne_bot]
-
-@[simp]
-
-Depends on / 依赖: bot_lt_iff_ne_bot
+/-
+**MonomialOrder.bot_lt_toWithBotSyn_apply_iff** 是 Mathlib 中的一个引理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：bot_lt_toWithBotSyn_apply_iff (a) : ⊥ < m.toWithBotSyn a ↔ ⊥ < a
+参数：a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma bot_lt_toWithBotSyn_apply_iff (a) : ⊥ < m.toWithBotSyn a ↔ ⊥ < a := by
   simp [bot_lt_iff_ne_bot]
 
 @[simp]
-/--
-lemma `toWithBotSyn_symm_apply_eq_bot` / 引理 `toWithBotSyn_symm_apply_eq_bot`
-
-English:
-lemma toWithBotSyn_symm_apply_eq_bot
-  given: (a)
-  statement: m.toWithBotSyn.symm a = ⊥ ↔ a = ⊥
-  proof: by
-  simp [m.toWithBotSyn.symm_apply_eq]
-
-中文:
-引理 toWithBotSyn_symm_apply_eq_bot
-  条件: (a)
-  结论: m.toWithBotSyn.symm a = ⊥ ↔ a = ⊥
-  证明: by
-  simp [m.toWithBotSyn.symm_apply_eq]
-
-Depends on / 依赖: m.toWithBotSyn.symm_apply_eq, symm_apply_eq, toWithBotSyn
+/-
+**MonomialOrder.toWithBotSyn_symm_apply_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 `Monomi
+alOrder`。
+形式化陈述：toWithBotSyn_symm_apply_eq_bot (a) : m.toWithBotSyn.symm a = ⊥ ↔ a = ⊥
+参数：a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.symm_apply_eq`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [
+inst_1 : Add N] (e : M ≃+ N) {x : N} {y : M}, e.symm x = y ↔ x = e y
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma toWithBotSyn_symm_apply_eq_bot (a) : m.toWithBotSyn.symm a = ⊥ ↔ a = ⊥ := by
   simp [m.toWithBotSyn.symm_apply_eq]
-
-/--
-lemma `toWithBotSyn_apply` / 引理 `toWithBotSyn_apply`
-
-English:
-lemma toWithBotSyn_apply
-  given: (a : WithBot (σ ->₀ Nat))
-  statement: m.toWithBotSyn a = a.map m.toSyn
-  proof: rfl
-
-中文:
-引理 toWithBotSyn_apply
-  条件: (a : WithBot (σ ->₀ 自然数))
-  结论: m.toWithBotSyn a = a.map m.toSyn
-  证明: rfl
+/-
+**MonomialOrder.toWithBotSyn_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：toWithBotSyn_apply (a : WithBot (σ ->₀ Nat)) : m.toWithBotSyn a = a.map m.
+toSyn
+参数：a : WithBot (σ ->₀ Nat)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toWithBotSyn_apply (a : WithBot (σ ->₀ Nat)) : m.toWithBotSyn a = a.map m.toSyn := rfl
+lemma toWithBotSyn_apply (a : WithBot (σ →₀ ℕ)) : m.toWithBotSyn a = a.map m.toSyn := rfl
 
 /-- Given a monomial order, notation for the corresponding strict order relation on `σ →₀ ℕ` -/
 scoped
@@ -529,7 +367,7 @@ notation:50 c " ≺[" m:25 "] " d:50 => (MonomialOrder.toSyn m c < MonomialOrder
 
 /-- Given a monomial order, notation for the corresponding order relation on `σ →₀ ℕ` -/
 scoped
-notation:50 c " ≼[" m:25 "] " d:50 => (MonomialOrder.toSyn m c <= MonomialOrder.toSyn m d)
+notation:50 c " ≼[" m:25 "] " d:50 => (MonomialOrder.toSyn m c ≤ MonomialOrder.toSyn m d)
 
 /-- Given a monomial order with bot, notation for the corresponding strict order relation on
 `WithBot (σ →₀ ℕ)` -/
@@ -541,7 +379,7 @@ notation:50 c " ≺'[" m:25 "] " d:50 =>
 `WithBot (σ →₀ ℕ)` -/
 scoped
 notation:50 c " ≼'[" m:25 "] " d:50 =>
-  (MonomialOrder.toWithBotSyn m c <= MonomialOrder.toWithBotSyn m d)
+  (MonomialOrder.toWithBotSyn m c ≤ MonomialOrder.toWithBotSyn m d)
 
 end MonomialOrder
 
@@ -554,7 +392,7 @@ open scoped MonomialOrder
 -- The linear order on `Finsupp`s obtained by the lexicographic ordering. -/
 noncomputable instance {α N : Type*} [LinearOrder α]
     [AddCommMonoid N] [PartialOrder N] [IsOrderedCancelAddMonoid N] :
-    IsOrderedCancelAddMonoid (Lex (α ->₀ N)) where
+    IsOrderedCancelAddMonoid (Lex (α →₀ N)) where
   le_of_add_le_add_left a b c h := by simpa only [add_le_add_iff_left] using h
   add_le_add_left a b h c := by simpa using h
 
@@ -572,111 +410,28 @@ example : toLex (Finsupp.single 1 1) < toLex (Finsupp.single 0 2) := by
 
 variable {σ : Type*} [LinearOrder σ]
 
-/--
-Definition of `MonomialOrder.lex` / `MonomialOrder.lex` 的定义
-
-English:
-definition MonomialOrder.lex
-  signature: [WellFoundedGT σ]
-  body: Lex (σ ->₀ Nat)
-  toSyn :=
-  { toEquiv := toLex
-    map_add' := toLex_add }
-  toSyn_monotone := Finsupp.toLex_monotone
-
-中文:
-定义 单项式序.lex
-  签名: [WellFoundedGT σ]
-  定义体: Lex (σ ->₀ Nat)
-  toSyn :=
-  { toEquiv := toLex
-    map_add' := toLex_add }
-  toSyn_monotone := Finsupp.toLex_monotone
--/
+/-- The lexicographic order on `σ →₀ ℕ`, as a `MonomialOrder` -/
 noncomputable def MonomialOrder.lex [WellFoundedGT σ] :
     MonomialOrder σ where
-  syn := Lex (σ ->₀ Nat)
+  syn := Lex (σ →₀ ℕ)
   toSyn :=
   { toEquiv := toLex
     map_add' := toLex_add }
   toSyn_monotone := Finsupp.toLex_monotone
 
-/--
-theorem `MonomialOrder.lex_le_iff` / 定理 `MonomialOrder.lex_le_iff`
+theorem MonomialOrder.lex_le_iff [WellFoundedGT σ] {c d : σ →₀ ℕ} :
+    c ≼[lex] d ↔ toLex c ≤ toLex d := Iff.rfl
 
-English:
-theorem MonomialOrder.lex_le_iff
-  given: [WellFoundedGT σ] {c d : σ ->₀ Nat}
-  proof: Iff.rfl
-
-中文:
-定理 单项式序.lex_le_iff
-  条件: [WellFoundedGT σ] {c d : σ ->₀ 自然数}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
--/
-theorem MonomialOrder.lex_le_iff [WellFoundedGT σ] {c d : σ ->₀ Nat} :
-    c ≼[lex] d ↔ toLex c <= toLex d := Iff.rfl
-
-/--
-theorem `MonomialOrder.lex_lt_iff` / 定理 `MonomialOrder.lex_lt_iff`
-
-English:
-theorem MonomialOrder.lex_lt_iff
-  given: [WellFoundedGT σ] {c d : σ ->₀ Nat}
-  proof: Iff.rfl
-
-中文:
-定理 单项式序.lex_lt_iff
-  条件: [WellFoundedGT σ] {c d : σ ->₀ 自然数}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
--/
-theorem MonomialOrder.lex_lt_iff [WellFoundedGT σ] {c d : σ ->₀ Nat} :
+theorem MonomialOrder.lex_lt_iff [WellFoundedGT σ] {c d : σ →₀ ℕ} :
     c ≺[lex] d ↔ toLex c < toLex d := Iff.rfl
 
-/--
-theorem `MonomialOrder.lex_lt_iff_of_unique` / 定理 `MonomialOrder.lex_lt_iff_of_unique`
-
-English:
-theorem MonomialOrder.lex_lt_iff_of_unique
-  given: [Unique σ] {c d : σ ->₀ Nat}
-  proof: by
-  simp only [MonomialOrder.lex_lt_iff, Finsupp.Lex.lt_iff_of_unique, ofLex_toLex]
-
-中文:
-定理 单项式序.lex_lt_iff_of_unique
-  条件: [唯一 σ] {c d : σ ->₀ 自然数}
-  证明: by
-  simp only [MonomialOrder.lex_lt_iff, Finsupp.Lex.lt_iff_of_unique, ofLex_toLex]
-
-Depends on / 依赖: Finsupp, Finsupp.Lex.lt_iff_of_unique, MonomialOrder, MonomialOrder.lex_lt_iff, lex_lt_iff, lt_iff_of_unique, ofLex_toLex
--/
-theorem MonomialOrder.lex_lt_iff_of_unique [Unique σ] {c d : σ ->₀ Nat} :
+theorem MonomialOrder.lex_lt_iff_of_unique [Unique σ] {c d : σ →₀ ℕ} :
     c ≺[lex] d ↔ c default < d default := by
   simp only [MonomialOrder.lex_lt_iff, Finsupp.Lex.lt_iff_of_unique, ofLex_toLex]
 
-/--
-theorem `MonomialOrder.lex_le_iff_of_unique` / 定理 `MonomialOrder.lex_le_iff_of_unique`
-
-English:
-theorem MonomialOrder.lex_le_iff_of_unique
-  given: [Unique σ] {c d : σ ->₀ Nat}
-  proof: by
-  simp only [MonomialOrder.lex_le_iff, Finsupp.Lex.le_iff_of_unique, ofLex_toLex]
-
-中文:
-定理 单项式序.lex_le_iff_of_unique
-  条件: [唯一 σ] {c d : σ ->₀ 自然数}
-  证明: by
-  simp only [MonomialOrder.lex_le_iff, Finsupp.Lex.le_iff_of_unique, ofLex_toLex]
-
-Depends on / 依赖: Finsupp, Finsupp.Lex.le_iff_of_unique, MonomialOrder, MonomialOrder.lex_le_iff, le_iff_of_unique, lex_le_iff, ofLex_toLex
--/
-theorem MonomialOrder.lex_le_iff_of_unique [Unique σ] {c d : σ ->₀ Nat} :
-    c ≼[lex] d ↔ c default <= d default := by
+theorem MonomialOrder.lex_le_iff_of_unique [Unique σ] {c d : σ →₀ ℕ} :
+    c ≼[lex] d ↔ c default ≤ d default := by
   simp only [MonomialOrder.lex_le_iff, Finsupp.Lex.le_iff_of_unique, ofLex_toLex]
 
 end Lex
+

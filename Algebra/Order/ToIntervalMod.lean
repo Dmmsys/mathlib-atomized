@@ -39,3169 +39,2800 @@ section LinearOrderedAddCommGroup
 
 variable {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [hα : Archimedean α]
   {p : α} (hp : 0 < p)
-  {a b c : α} {n : Int}
+  {a b c : α} {n : ℤ}
 
 section
 include hp
 
 /--
-Definition of `toIcoDiv` / `toIcoDiv` 的定义
+The unique integer such that this multiple of `p`, subtracted from `b`, is in `Ico a (a + p)`. -/
+/-
+**toIcoDiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toIcoDiv (a b : α) : Int
+参数：a b : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `existsUnique_sub_zsmul_mem_Ico`：∀ {G : Type u_1} [inst : AddCommGroup G]
+ [inst_1 : LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G] {a : G},   0 < 
+a → ∀ (b c : G), ∃! …
 
-English:
-definition toIcoDiv
-  signature: (a b : α)
-  body: (existsUnique_sub_zsmul_mem_Ico hp b a).choose
-
-中文:
-定义 toIcoDiv
-  签名: (a b : α)
-  定义体: (existsUnique_sub_zsmul_mem_Ico hp b a).choose
-
-Depends on / 依赖: existsUnique_sub_zsmul_mem_Ico
+--- 原说明 ---
+The unique integer such that this multiple of `p`, subtracted from `b`, is in `I
+co a (a + p)`.
 -/
-def toIcoDiv (a b : α) : Int :=
+def toIcoDiv (a b : α) : ℤ :=
   (existsUnique_sub_zsmul_mem_Ico hp b a).choose
-
-/--
-theorem `sub_toIcoDiv_zsmul_mem_Ico` / 定理 `sub_toIcoDiv_zsmul_mem_Ico`
-
-English:
-theorem sub_toIcoDiv_zsmul_mem_Ico
-  given: (a b : α)
-  statement: b - toIcoDiv hp a b • p in Set.Ico a (a + p)
-  proof: (existsUnique_sub_zsmul_mem_Ico hp b a).choose_spec.1
-
-中文:
-定理 sub_toIcoDiv_zsmul_mem_Ico
-  条件: (a b : α)
-  结论: b - toIcoDiv hp a b • p in 集合.左闭右开区间 a (a + p)
-  证明: (existsUnique_sub_zsmul_mem_Ico hp b a).choose_spec.1
-
-Depends on / 依赖: choose_spec, existsUnique_sub_zsmul_mem_Ico
+/-
+**sub_toIcoDiv_zsmul_mem_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - toIcoDiv hp a b • p in Set.Ico 
+a (a + p)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `existsUnique_sub_zsmul_mem_Ico`：∀ {G : Type u_1} [inst : AddCommGroup G]
+ [inst_1 : LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G] {a : G},   0 < 
+a → ∀ (b c : G), ∃! …
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - toIcoDiv hp a b • p in Set.Ico a (a + p) :=
+theorem sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - toIcoDiv hp a b • p ∈ Set.Ico a (a + p) :=
   (existsUnique_sub_zsmul_mem_Ico hp b a).choose_spec.1
-
-/--
-theorem `toIcoDiv_eq_iff` / 定理 `toIcoDiv_eq_iff`
-
-English:
-theorem toIcoDiv_eq_iff
-  statement: toIcoDiv hp a b = n ↔ b - n • p in Set.Ico a (a + p)
-  proof: (existsUnique_sub_zsmul_mem_Ico hp b a).choose_eq_iff
-
-alias ⟨_, toIcoDiv_eq_of_sub_zsmul_mem_Ico⟩ := toIcoDiv_eq_iff
-
-中文:
-定理 toIcoDiv_eq_iff
-  结论: toIcoDiv hp a b = n ↔ b - n • p in 集合.左闭右开区间 a (a + p)
-  证明: (existsUnique_sub_zsmul_mem_Ico hp b a).choose_eq_iff
-
-alias ⟨_, toIcoDiv_eq_of_sub_zsmul_mem_Ico⟩ := toIcoDiv_eq_iff
-
-Depends on / 依赖: choose_eq_iff, existsUnique_sub_zsmul_mem_Ico
+/-
+**toIcoDiv_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_eq_iff : toIcoDiv hp a b = n ↔ b - n • p in Set.Ico a (a + p)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ExistsUnique.choose_eq_iff`：ExistsUnique.choose_eq_iff {p : α -> Prop} {
+a : α} (h : exists! x, p x) : h.choose = a ↔ p a
+· 使用定理 `existsUnique_sub_zsmul_mem_Ico`：∀ {G : Type u_1} [inst : AddCommGroup G]
+ [inst_1 : LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G] {a : G},   0 < 
+a → ∀ (b c : G), ∃! …
 -/
-theorem toIcoDiv_eq_iff : toIcoDiv hp a b = n ↔ b - n • p in Set.Ico a (a + p) :=
+theorem toIcoDiv_eq_iff : toIcoDiv hp a b = n ↔ b - n • p ∈ Set.Ico a (a + p) :=
   (existsUnique_sub_zsmul_mem_Ico hp b a).choose_eq_iff
 
 alias ⟨_, toIcoDiv_eq_of_sub_zsmul_mem_Ico⟩ := toIcoDiv_eq_iff
 
 /--
-Definition of `toIocDiv` / `toIocDiv` 的定义
+The unique integer such that this multiple of `p`, subtracted from `b`, is in `Ioc a (a + p)`. -/
+/-
+**toIocDiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toIocDiv (a b : α) : Int
+参数：a b : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `existsUnique_sub_zsmul_mem_Ioc`：∀ {G : Type u_1} [inst : AddCommGroup G]
+ [inst_1 : LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G] {a : G},   0 < 
+a → ∀ (b c : G), ∃! …
 
-English:
-definition toIocDiv
-  signature: (a b : α)
-  body: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose
-
-中文:
-定义 toIocDiv
-  签名: (a b : α)
-  定义体: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose
-
-Depends on / 依赖: existsUnique_sub_zsmul_mem_Ioc
+--- 原说明 ---
+The unique integer such that this multiple of `p`, subtracted from `b`, is in `I
+oc a (a + p)`.
 -/
-def toIocDiv (a b : α) : Int :=
+def toIocDiv (a b : α) : ℤ :=
   (existsUnique_sub_zsmul_mem_Ioc hp b a).choose
-
-/--
-theorem `sub_toIocDiv_zsmul_mem_Ioc` / 定理 `sub_toIocDiv_zsmul_mem_Ioc`
-
-English:
-theorem sub_toIocDiv_zsmul_mem_Ioc
-  given: (a b : α)
-  statement: b - toIocDiv hp a b • p in Set.Ioc a (a + p)
-  proof: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_spec.1
-
-中文:
-定理 sub_toIocDiv_zsmul_mem_Ioc
-  条件: (a b : α)
-  结论: b - toIocDiv hp a b • p in 集合.左开右闭区间 a (a + p)
-  证明: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_spec.1
-
-Depends on / 依赖: choose_spec, existsUnique_sub_zsmul_mem_Ioc
+/-
+**sub_toIocDiv_zsmul_mem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - toIocDiv hp a b • p in Set.Ioc 
+a (a + p)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `existsUnique_sub_zsmul_mem_Ioc`：∀ {G : Type u_1} [inst : AddCommGroup G]
+ [inst_1 : LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G] {a : G},   0 < 
+a → ∀ (b c : G), ∃! …
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - toIocDiv hp a b • p in Set.Ioc a (a + p) :=
+theorem sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - toIocDiv hp a b • p ∈ Set.Ioc a (a + p) :=
   (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_spec.1
-
-/--
-theorem `toIocDiv_eq_iff` / 定理 `toIocDiv_eq_iff`
-
-English:
-theorem toIocDiv_eq_iff
-  statement: toIocDiv hp a b = n ↔ b - n • p in Set.Ioc a (a + p)
-  proof: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_eq_iff
-
-alias ⟨_, toIocDiv_eq_of_sub_zsmul_mem_Ioc⟩ := toIocDiv_eq_iff
-
-中文:
-定理 toIocDiv_eq_iff
-  结论: toIocDiv hp a b = n ↔ b - n • p in 集合.左开右闭区间 a (a + p)
-  证明: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_eq_iff
-
-alias ⟨_, toIocDiv_eq_of_sub_zsmul_mem_Ioc⟩ := toIocDiv_eq_iff
-
-Depends on / 依赖: choose_eq_iff, existsUnique_sub_zsmul_mem_Ioc
+/-
+**toIocDiv_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_eq_iff : toIocDiv hp a b = n ↔ b - n • p in Set.Ioc a (a + p)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ExistsUnique.choose_eq_iff`：ExistsUnique.choose_eq_iff {p : α -> Prop} {
+a : α} (h : exists! x, p x) : h.choose = a ↔ p a
+· 使用定理 `existsUnique_sub_zsmul_mem_Ioc`：∀ {G : Type u_1} [inst : AddCommGroup G]
+ [inst_1 : LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G] {a : G},   0 < 
+a → ∀ (b c : G), ∃! …
 -/
-theorem toIocDiv_eq_iff : toIocDiv hp a b = n ↔ b - n • p in Set.Ioc a (a + p) :=
+theorem toIocDiv_eq_iff : toIocDiv hp a b = n ↔ b - n • p ∈ Set.Ioc a (a + p) :=
   (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_eq_iff
 
 alias ⟨_, toIocDiv_eq_of_sub_zsmul_mem_Ioc⟩ := toIocDiv_eq_iff
 
-/--
-Definition of `toIcoMod` / `toIcoMod` 的定义
+/-- Reduce `b` to the interval `Ico a (a + p)`. -/
+/-
+**toIcoMod** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toIcoMod (a b : α) : α
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toIcoMod
-  signature: (a b : α)
-  body: b - toIcoDiv hp a b • p
-
-中文:
-定义 toIcoMod
-  签名: (a b : α)
-  定义体: b - toIcoDiv hp a b • p
-
-Depends on / 依赖: toIcoDiv
+--- 原说明 ---
+Reduce `b` to the interval `Ico a (a + p)`.
 -/
 def toIcoMod (a b : α) : α :=
   b - toIcoDiv hp a b • p
 
-/--
-Definition of `toIocMod` / `toIocMod` 的定义
+/-- Reduce `b` to the interval `Ioc a (a + p)`. -/
+/-
+**toIocMod** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toIocMod (a b : α) : α
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toIocMod
-  signature: (a b : α)
-  body: b - toIocDiv hp a b • p
-
-中文:
-定义 toIocMod
-  签名: (a b : α)
-  定义体: b - toIocDiv hp a b • p
-
-Depends on / 依赖: toIocDiv
+--- 原说明 ---
+Reduce `b` to the interval `Ioc a (a + p)`.
 -/
 def toIocMod (a b : α) : α :=
   b - toIocDiv hp a b • p
-
-/--
-theorem `toIcoMod_mem_Ico` / 定理 `toIcoMod_mem_Ico`
-
-English:
-theorem toIcoMod_mem_Ico
-  given: (a b : α)
-  statement: toIcoMod hp a b in Set.Ico a (a + p)
-  proof: sub_toIcoDiv_zsmul_mem_Ico hp a b
-
-中文:
-定理 toIcoMod_mem_Ico
-  条件: (a b : α)
-  结论: toIcoMod hp a b in 集合.左闭右开区间 a (a + p)
-  证明: sub_toIcoDiv_zsmul_mem_Ico hp a b
-
-Depends on / 依赖: sub_toIcoDiv_zsmul_mem_Ico
+/-
+**toIcoMod_mem_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b in Set.Ico a (a + p)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_toIcoDiv_zsmul_mem_Ico`：sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - t
+oIcoDiv hp a b • p in Set.Ico a (a + p)
 -/
-theorem toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b in Set.Ico a (a + p) :=
+theorem toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b ∈ Set.Ico a (a + p) :=
   sub_toIcoDiv_zsmul_mem_Ico hp a b
-
-/--
-theorem `toIcoMod_mem_Ico'` / 定理 `toIcoMod_mem_Ico'`
-
-English:
-theorem toIcoMod_mem_Ico'
-  given: (b : α)
-  statement: toIcoMod hp 0 b in Set.Ico 0 p
-  proof: by
-  convert! toIcoMod_mem_Ico hp 0 b
-  exact (zero_add p).symm
-
-中文:
-定理 toIcoMod_mem_Ico'
-  条件: (b : α)
-  结论: toIcoMod hp 0 b in 集合.左闭右开区间 0 p
-  证明: by
-  convert! toIcoMod_mem_Ico hp 0 b
-  exact (zero_add p).symm
-
-Depends on / 依赖: convert, toIcoMod_mem_Ico, zero_add
+/-
+**toIcoMod_mem_Ico'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_mem_Ico' (b : α) : toIcoMod hp 0 b in Set.Ico 0 p
+参数：b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `toIcoMod_mem_Ico`：toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b in Set.Ic
+o a (a + p)
 -/
-theorem toIcoMod_mem_Ico' (b : α) : toIcoMod hp 0 b in Set.Ico 0 p := by
+theorem toIcoMod_mem_Ico' (b : α) : toIcoMod hp 0 b ∈ Set.Ico 0 p := by
   convert! toIcoMod_mem_Ico hp 0 b
   exact (zero_add p).symm
-
-/--
-theorem `toIocMod_mem_Ioc` / 定理 `toIocMod_mem_Ioc`
-
-English:
-theorem toIocMod_mem_Ioc
-  given: (a b : α)
-  statement: toIocMod hp a b in Set.Ioc a (a + p)
-  proof: sub_toIocDiv_zsmul_mem_Ioc hp a b
-
-中文:
-定理 toIocMod_mem_Ioc
-  条件: (a b : α)
-  结论: toIocMod hp a b in 集合.左开右闭区间 a (a + p)
-  证明: sub_toIocDiv_zsmul_mem_Ioc hp a b
-
-Depends on / 依赖: sub_toIocDiv_zsmul_mem_Ioc
+/-
+**toIocMod_mem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_mem_Ioc (a b : α) : toIocMod hp a b in Set.Ioc a (a + p)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_toIocDiv_zsmul_mem_Ioc`：sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - t
+oIocDiv hp a b • p in Set.Ioc a (a + p)
 -/
-theorem toIocMod_mem_Ioc (a b : α) : toIocMod hp a b in Set.Ioc a (a + p) :=
+theorem toIocMod_mem_Ioc (a b : α) : toIocMod hp a b ∈ Set.Ioc a (a + p) :=
   sub_toIocDiv_zsmul_mem_Ioc hp a b
-
-/--
-theorem `left_le_toIcoMod` / 定理 `left_le_toIcoMod`
-
-English:
-theorem left_le_toIcoMod
-  given: (a b : α)
-  statement: a <= toIcoMod hp a b
-  proof: (Set.mem_Ico.1 (toIcoMod_mem_Ico hp a b)).1
-
-中文:
-定理 left_le_toIcoMod
-  条件: (a b : α)
-  结论: a <= toIcoMod hp a b
-  证明: (Set.mem_Ico.1 (toIcoMod_mem_Ico hp a b)).1
-
-Depends on / 依赖: Set.mem_Ico, mem_Ico, toIcoMod_mem_Ico
+/-
+**left_le_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：left_le_toIcoMod (a b : α) : a <= toIcoMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Ico`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+co a b ↔ a ≤ x ∧ x < b
+· 使用定理 `toIcoMod_mem_Ico`：toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b in Set.Ic
+o a (a + p)
 -/
-theorem left_le_toIcoMod (a b : α) : a <= toIcoMod hp a b :=
+theorem left_le_toIcoMod (a b : α) : a ≤ toIcoMod hp a b :=
   (Set.mem_Ico.1 (toIcoMod_mem_Ico hp a b)).1
-
-/--
-theorem `left_lt_toIocMod` / 定理 `left_lt_toIocMod`
-
-English:
-theorem left_lt_toIocMod
-  given: (a b : α)
-  statement: a < toIocMod hp a b
-  proof: (Set.mem_Ioc.1 (toIocMod_mem_Ioc hp a b)).1
-
-中文:
-定理 left_lt_toIocMod
-  条件: (a b : α)
-  结论: a < toIocMod hp a b
-  证明: (Set.mem_Ioc.1 (toIocMod_mem_Ioc hp a b)).1
-
-Depends on / 依赖: AEval.of, Set.mem_Ioc, mem_Ioc, toIocMod_mem_Ioc
+/-
+**left_lt_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：left_lt_toIocMod (a b : α) : a < toIocMod hp a b
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用定理 `toIocMod_mem_Ioc`：toIocMod_mem_Ioc (a b : α) : toIocMod hp a b in Set.Io
+c a (a + p)
 -/
 theorem left_lt_toIocMod (a b : α) : a < toIocMod hp a b :=
   (Set.mem_Ioc.1 (toIocMod_mem_Ioc hp a b)).1
-
-/--
-theorem `toIcoMod_lt_right` / 定理 `toIcoMod_lt_right`
-
-English:
-theorem toIcoMod_lt_right
-  given: (a b : α)
-  statement: toIcoMod hp a b < a + p
-  proof: (Set.mem_Ico.1 (toIcoMod_mem_Ico hp a b)).2
-
-中文:
-定理 toIcoMod_lt_right
-  条件: (a b : α)
-  结论: toIcoMod hp a b < a + p
-  证明: (Set.mem_Ico.1 (toIcoMod_mem_Ico hp a b)).2
-
-Depends on / 依赖: Set.mem_Ico, mem_Ico, toIcoMod_mem_Ico
+/-
+**toIcoMod_lt_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_lt_right (a b : α) : toIcoMod hp a b < a + p
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Ico`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+co a b ↔ a ≤ x ∧ x < b
+· 使用定理 `toIcoMod_mem_Ico`：toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b in Set.Ic
+o a (a + p)
 -/
 theorem toIcoMod_lt_right (a b : α) : toIcoMod hp a b < a + p :=
   (Set.mem_Ico.1 (toIcoMod_mem_Ico hp a b)).2
-
-/--
-theorem `toIocMod_le_right` / 定理 `toIocMod_le_right`
-
-English:
-theorem toIocMod_le_right
-  given: (a b : α)
-  statement: toIocMod hp a b <= a + p
-  proof: (Set.mem_Ioc.1 (toIocMod_mem_Ioc hp a b)).2
-
-@[simp]
-
-中文:
-定理 toIocMod_le_right
-  条件: (a b : α)
-  结论: toIocMod hp a b <= a + p
-  证明: (Set.mem_Ioc.1 (toIocMod_mem_Ioc hp a b)).2
-
-@[simp]
-
-Depends on / 依赖: AEval.X_smul_of, Set.mem_Ioc, X_smul_of, mem_Ioc, toIocMod_mem_Ioc
+/-
+**toIocMod_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_le_right (a b : α) : toIocMod hp a b <= a + p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用定理 `toIocMod_mem_Ioc`：toIocMod_mem_Ioc (a b : α) : toIocMod hp a b in Set.Io
+c a (a + p)
 -/
-theorem toIocMod_le_right (a b : α) : toIocMod hp a b <= a + p :=
+theorem toIocMod_le_right (a b : α) : toIocMod hp a b ≤ a + p :=
   (Set.mem_Ioc.1 (toIocMod_mem_Ioc hp a b)).2
 
 @[simp]
-/--
-theorem `self_sub_toIcoDiv_zsmul` / 定理 `self_sub_toIcoDiv_zsmul`
-
-English:
-theorem self_sub_toIcoDiv_zsmul
-  given: (a b : α)
-  statement: b - toIcoDiv hp a b • p = toIcoMod hp a b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 self_sub_toIcoDiv_zsmul
-  条件: (a b : α)
-  结论: b - toIcoDiv hp a b • p = toIcoMod hp a b
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: AEval.X_pow_smul_of, X_pow_smul_of
+/-
+**self_sub_toIcoDiv_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIcoDiv_zsmul (a b : α) : b - toIcoDiv hp a b • p = toIcoMod hp 
+a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem self_sub_toIcoDiv_zsmul (a b : α) : b - toIcoDiv hp a b • p = toIcoMod hp a b :=
   rfl
 
 @[simp]
-/--
-theorem `self_sub_toIocDiv_zsmul` / 定理 `self_sub_toIocDiv_zsmul`
-
-English:
-theorem self_sub_toIocDiv_zsmul
-  given: (a b : α)
-  statement: b - toIocDiv hp a b • p = toIocMod hp a b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 self_sub_toIocDiv_zsmul
-  条件: (a b : α)
-  结论: b - toIocDiv hp a b • p = toIocMod hp a b
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: AEval.of_symm_X_smul, of_symm_X_smul
+/-
+**self_sub_toIocDiv_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIocDiv_zsmul (a b : α) : b - toIocDiv hp a b • p = toIocMod hp 
+a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem self_sub_toIocDiv_zsmul (a b : α) : b - toIocDiv hp a b • p = toIocMod hp a b :=
   rfl
 
 @[simp]
-/--
-theorem `toIcoDiv_zsmul_sub_self` / 定理 `toIcoDiv_zsmul_sub_self`
-
-English:
-theorem toIcoDiv_zsmul_sub_self
-  given: (a b : α)
-  statement: toIcoDiv hp a b • p - b = -toIcoMod hp a b
-  proof: by
-  rw [toIcoMod]; rw [neg_sub]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_zsmul_sub_self
-  条件: (a b : α)
-  结论: toIcoDiv hp a b • p - b = -toIcoMod hp a b
-  证明: by
-  rw [toIcoMod]; rw [neg_sub]
-
-@[simp]
-
-Depends on / 依赖: neg_sub, toIcoMod
+/-
+**toIcoDiv_zsmul_sub_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_zsmul_sub_self (a b : α) : toIcoDiv hp a b • p - b = -toIcoMod hp
+ a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
 -/
 theorem toIcoDiv_zsmul_sub_self (a b : α) : toIcoDiv hp a b • p - b = -toIcoMod hp a b := by
-  rw [toIcoMod]; rw [neg_sub]
+  rw [toIcoMod, neg_sub]
 
 @[simp]
-/--
-theorem `toIocDiv_zsmul_sub_self` / 定理 `toIocDiv_zsmul_sub_self`
-
-English:
-theorem toIocDiv_zsmul_sub_self
-  given: (a b : α)
-  statement: toIocDiv hp a b • p - b = -toIocMod hp a b
-  proof: by
-  rw [toIocMod]; rw [neg_sub]
-
-@[simp]
-
-中文:
-定理 toIocDiv_zsmul_sub_self
-  条件: (a b : α)
-  结论: toIocDiv hp a b • p - b = -toIocMod hp a b
-  证明: by
-  rw [toIocMod]; rw [neg_sub]
-
-@[simp]
-
-Depends on / 依赖: neg_sub, toIocMod
+/-
+**toIocDiv_zsmul_sub_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_zsmul_sub_self (a b : α) : toIocDiv hp a b • p - b = -toIocMod hp
+ a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
 -/
 theorem toIocDiv_zsmul_sub_self (a b : α) : toIocDiv hp a b • p - b = -toIocMod hp a b := by
-  rw [toIocMod]; rw [neg_sub]
+  rw [toIocMod, neg_sub]
 
 @[simp]
-/--
-theorem `toIcoMod_sub_self` / 定理 `toIcoMod_sub_self`
-
-English:
-theorem toIcoMod_sub_self
-  given: (a b : α)
-  statement: toIcoMod hp a b - b = -toIcoDiv hp a b • p
-  proof: by
-  rw [toIcoMod]; rw [sub_sub_cancel_left]; rw [neg_smul]
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_self
-  条件: (a b : α)
-  结论: toIcoMod hp a b - b = -toIcoDiv hp a b • p
-  证明: by
-  rw [toIcoMod]; rw [sub_sub_cancel_left]; rw [neg_smul]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_sub_cancel_left, toIcoMod
+/-
+**toIcoMod_sub_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_self (a b : α) : toIcoMod hp a b - b = -toIcoDiv hp a b • p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a - b - a = -b
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
 -/
 theorem toIcoMod_sub_self (a b : α) : toIcoMod hp a b - b = -toIcoDiv hp a b • p := by
-  rw [toIcoMod]; rw [sub_sub_cancel_left]; rw [neg_smul]
+  rw [toIcoMod, sub_sub_cancel_left, neg_smul]
 
 @[simp]
-/--
-theorem `toIocMod_sub_self` / 定理 `toIocMod_sub_self`
-
-English:
-theorem toIocMod_sub_self
-  given: (a b : α)
-  statement: toIocMod hp a b - b = -toIocDiv hp a b • p
-  proof: by
-  rw [toIocMod]; rw [sub_sub_cancel_left]; rw [neg_smul]
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_self
-  条件: (a b : α)
-  结论: toIocMod hp a b - b = -toIocDiv hp a b • p
-  证明: by
-  rw [toIocMod]; rw [sub_sub_cancel_left]; rw [neg_smul]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_sub_cancel_left, toIocMod
+/-
+**toIocMod_sub_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_self (a b : α) : toIocMod hp a b - b = -toIocDiv hp a b • p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a - b - a = -b
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
 -/
 theorem toIocMod_sub_self (a b : α) : toIocMod hp a b - b = -toIocDiv hp a b • p := by
-  rw [toIocMod]; rw [sub_sub_cancel_left]; rw [neg_smul]
+  rw [toIocMod, sub_sub_cancel_left, neg_smul]
 
 @[simp]
-/--
-theorem `self_sub_toIcoMod` / 定理 `self_sub_toIcoMod`
-
-English:
-theorem self_sub_toIcoMod
-  given: (a b : α)
-  statement: b - toIcoMod hp a b = toIcoDiv hp a b • p
-  proof: by
-  rw [toIcoMod]; rw [sub_sub_cancel]
-
-@[simp]
-
-中文:
-定理 self_sub_toIcoMod
-  条件: (a b : α)
-  结论: b - toIcoMod hp a b = toIcoDiv hp a b • p
-  证明: by
-  rw [toIcoMod]; rw [sub_sub_cancel]
-
-@[simp]
-
-Depends on / 依赖: sub_sub_cancel, toIcoMod
+/-
+**self_sub_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIcoMod (a b : α) : b - toIcoMod hp a b = toIcoDiv hp a b • p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
 -/
 theorem self_sub_toIcoMod (a b : α) : b - toIcoMod hp a b = toIcoDiv hp a b • p := by
-  rw [toIcoMod]; rw [sub_sub_cancel]
+  rw [toIcoMod, sub_sub_cancel]
 
 @[simp]
-/--
-theorem `self_sub_toIocMod` / 定理 `self_sub_toIocMod`
-
-English:
-theorem self_sub_toIocMod
-  given: (a b : α)
-  statement: b - toIocMod hp a b = toIocDiv hp a b • p
-  proof: by
-  rw [toIocMod]; rw [sub_sub_cancel]
-
-@[simp]
-
-中文:
-定理 self_sub_toIocMod
-  条件: (a b : α)
-  结论: b - toIocMod hp a b = toIocDiv hp a b • p
-  证明: by
-  rw [toIocMod]; rw [sub_sub_cancel]
-
-@[simp]
-
-Depends on / 依赖: sub_sub_cancel, toIocMod
+/-
+**self_sub_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIocMod (a b : α) : b - toIocMod hp a b = toIocDiv hp a b • p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
 -/
 theorem self_sub_toIocMod (a b : α) : b - toIocMod hp a b = toIocDiv hp a b • p := by
-  rw [toIocMod]; rw [sub_sub_cancel]
+  rw [toIocMod, sub_sub_cancel]
 
 @[simp]
-/--
-theorem `toIcoMod_add_toIcoDiv_zsmul` / 定理 `toIcoMod_add_toIcoDiv_zsmul`
-
-English:
-theorem toIcoMod_add_toIcoDiv_zsmul
-  given: (a b : α)
-  statement: toIcoMod hp a b + toIcoDiv hp a b • p = b
-  proof: by
-  rw [toIcoMod]; rw [sub_add_cancel]
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_toIcoDiv_zsmul
-  条件: (a b : α)
-  结论: toIcoMod hp a b + toIcoDiv hp a b • p = b
-  证明: by
-  rw [toIcoMod]; rw [sub_add_cancel]
-
-@[simp]
-
-Depends on / 依赖: sub_add_cancel, toIcoMod
+/-
+**toIcoMod_add_toIcoDiv_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_toIcoDiv_zsmul (a b : α) : toIcoMod hp a b + toIcoDiv hp a b 
+• p = b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem toIcoMod_add_toIcoDiv_zsmul (a b : α) : toIcoMod hp a b + toIcoDiv hp a b • p = b := by
-  rw [toIcoMod]; rw [sub_add_cancel]
+  rw [toIcoMod, sub_add_cancel]
 
 @[simp]
-/--
-theorem `toIocMod_add_toIocDiv_zsmul` / 定理 `toIocMod_add_toIocDiv_zsmul`
-
-English:
-theorem toIocMod_add_toIocDiv_zsmul
-  given: (a b : α)
-  statement: toIocMod hp a b + toIocDiv hp a b • p = b
-  proof: by
-  rw [toIocMod]; rw [sub_add_cancel]
-
-@[simp]
-
-中文:
-定理 toIocMod_add_toIocDiv_zsmul
-  条件: (a b : α)
-  结论: toIocMod hp a b + toIocDiv hp a b • p = b
-  证明: by
-  rw [toIocMod]; rw [sub_add_cancel]
-
-@[simp]
-
-Depends on / 依赖: sub_add_cancel, toIocMod
+/-
+**toIocMod_add_toIocDiv_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_toIocDiv_zsmul (a b : α) : toIocMod hp a b + toIocDiv hp a b 
+• p = b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem toIocMod_add_toIocDiv_zsmul (a b : α) : toIocMod hp a b + toIocDiv hp a b • p = b := by
-  rw [toIocMod]; rw [sub_add_cancel]
+  rw [toIocMod, sub_add_cancel]
 
 @[simp]
-/--
-theorem `toIcoDiv_zsmul_sub_toIcoMod` / 定理 `toIcoDiv_zsmul_sub_toIcoMod`
-
-English:
-theorem toIcoDiv_zsmul_sub_toIcoMod
-  given: (a b : α)
-  statement: toIcoDiv hp a b • p + toIcoMod hp a b = b
-  proof: by
-  rw [add_comm]; rw [toIcoMod_add_toIcoDiv_zsmul]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_zsmul_sub_toIcoMod
-  条件: (a b : α)
-  结论: toIcoDiv hp a b • p + toIcoMod hp a b = b
-  证明: by
-  rw [add_comm]; rw [toIcoMod_add_toIcoDiv_zsmul]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoMod_add_toIcoDiv_zsmul
+/-
+**toIcoDiv_zsmul_sub_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_zsmul_sub_toIcoMod (a b : α) : toIcoDiv hp a b • p + toIcoMod hp 
+a b = b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_toIcoDiv_zsmul`：toIcoMod_add_toIcoDiv_zsmul (a b : α) : toI
+coMod hp a b + toIcoDiv hp a b • p = b
 -/
 theorem toIcoDiv_zsmul_sub_toIcoMod (a b : α) : toIcoDiv hp a b • p + toIcoMod hp a b = b := by
-  rw [add_comm]; rw [toIcoMod_add_toIcoDiv_zsmul]
+  rw [add_comm, toIcoMod_add_toIcoDiv_zsmul]
 
 @[simp]
-/--
-theorem `toIocDiv_zsmul_sub_toIocMod` / 定理 `toIocDiv_zsmul_sub_toIocMod`
-
-English:
-theorem toIocDiv_zsmul_sub_toIocMod
-  given: (a b : α)
-  statement: toIocDiv hp a b • p + toIocMod hp a b = b
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_toIocDiv_zsmul]
-
-中文:
-定理 toIocDiv_zsmul_sub_toIocMod
-  条件: (a b : α)
-  结论: toIocDiv hp a b • p + toIocMod hp a b = b
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_toIocDiv_zsmul]
-
-Depends on / 依赖: add_comm, toIocMod_add_toIocDiv_zsmul
+/-
+**toIocDiv_zsmul_sub_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_zsmul_sub_toIocMod (a b : α) : toIocDiv hp a b • p + toIocMod hp 
+a b = b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_toIocDiv_zsmul`：toIocMod_add_toIocDiv_zsmul (a b : α) : toI
+ocMod hp a b + toIocDiv hp a b • p = b
 -/
 theorem toIocDiv_zsmul_sub_toIocMod (a b : α) : toIocDiv hp a b • p + toIocMod hp a b = b := by
-  rw [add_comm]; rw [toIocMod_add_toIocDiv_zsmul]
-
-/--
-theorem `toIcoMod_eq_iff` / 定理 `toIcoMod_eq_iff`
-
-English:
-theorem toIcoMod_eq_iff
-  statement: toIcoMod hp a b = c ↔ c in Set.Ico a (a + p) ∧ exists z : Int, b = c + z • p
-  proof: by
-  refine
-    ⟨fun h =>
-      ⟨h ▸ toIcoMod_mem_Ico hp a b, toIcoDiv hp a b, h ▸ (toIcoMod_add_toIcoDiv_zsmul _ _ _).symm⟩,
-      ?_⟩
-  simp_rw [← @sub_eq_iff_eq_add]
-  rintro ⟨hc, n, rfl⟩
-  rw [← toIcoDiv_eq_of_sub_zsmul_mem_Ico hp hc]; rw [toIcoMod]
-
-中文:
-定理 toIcoMod_eq_iff
-  结论: toIcoMod hp a b = c ↔ c in 集合.左闭右开区间 a (a + p) ∧ 存在 z : 整数, b = c + z • p
-  证明: by
-  refine
-    ⟨fun h =>
-      ⟨h ▸ toIcoMod_mem_Ico hp a b, toIcoDiv hp a b, h ▸ (toIcoMod_add_toIcoDiv_zsmul _ _ _).symm⟩,
-      ?_⟩
-  simp_rw [← @sub_eq_iff_eq_add]
-  rintro ⟨hc, n, rfl⟩
-  rw [← toIcoDiv_eq_of_sub_zsmul_mem_Ico hp hc]; rw [toIcoMod]
-
-Depends on / 依赖: simp_rw, sub_eq_iff_eq_add, toIcoDiv, toIcoDiv_eq_of_sub_zsmul_mem_Ico, toIcoMod, toIcoMod_add_toIcoDiv_zsmul, toIcoMod_mem_Ico
+  rw [add_comm, toIocMod_add_toIocDiv_zsmul]
+/-
+**toIcoMod_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_eq_iff : toIcoMod hp a b = c ↔ c in Set.Ico a (a + p) ∧ exists z 
+: Int, b = c + z • p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_mem_Ico`：toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b in Set.Ic
+o a (a + p)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `toIcoMod_add_toIcoDiv_zsmul`：toIcoMod_add_toIcoDiv_zsmul (a b : α) : toI
+coMod hp a b + toIcoDiv hp a b • p = b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `toIcoDiv_eq_of_sub_zsmul_mem_Ico`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
 -/
-theorem toIcoMod_eq_iff : toIcoMod hp a b = c ↔ c in Set.Ico a (a + p) ∧ exists z : Int, b = c + z • p := by
+theorem toIcoMod_eq_iff : toIcoMod hp a b = c ↔ c ∈ Set.Ico a (a + p) ∧ ∃ z : ℤ, b = c + z • p := by
   refine
     ⟨fun h =>
       ⟨h ▸ toIcoMod_mem_Ico hp a b, toIcoDiv hp a b, h ▸ (toIcoMod_add_toIcoDiv_zsmul _ _ _).symm⟩,
       ?_⟩
   simp_rw [← @sub_eq_iff_eq_add]
   rintro ⟨hc, n, rfl⟩
-  rw [← toIcoDiv_eq_of_sub_zsmul_mem_Ico hp hc]; rw [toIcoMod]
-
-/--
-theorem `toIocMod_eq_iff` / 定理 `toIocMod_eq_iff`
-
-English:
-theorem toIocMod_eq_iff
-  statement: toIocMod hp a b = c ↔ c in Set.Ioc a (a + p) ∧ exists z : Int, b = c + z • p
-  proof: by
-  refine
-    ⟨fun h =>
-      ⟨h ▸ toIocMod_mem_Ioc hp a b, toIocDiv hp a b, h ▸ (toIocMod_add_toIocDiv_zsmul hp _ _).symm⟩,
-      ?_⟩
-  simp_rw [← @sub_eq_iff_eq_add]
-  rintro ⟨hc, n, rfl⟩
-  rw [← toIocDiv_eq_of_sub_zsmul_mem_Ioc hp hc]; rw [toIocMod]
-
-@[simp]
-
-中文:
-定理 toIocMod_eq_iff
-  结论: toIocMod hp a b = c ↔ c in 集合.左开右闭区间 a (a + p) ∧ 存在 z : 整数, b = c + z • p
-  证明: by
-  refine
-    ⟨fun h =>
-      ⟨h ▸ toIocMod_mem_Ioc hp a b, toIocDiv hp a b, h ▸ (toIocMod_add_toIocDiv_zsmul hp _ _).symm⟩,
-      ?_⟩
-  simp_rw [← @sub_eq_iff_eq_add]
-  rintro ⟨hc, n, rfl⟩
-  rw [← toIocDiv_eq_of_sub_zsmul_mem_Ioc hp hc]; rw [toIocMod]
-
-@[simp]
-
-Depends on / 依赖: simp_rw, sub_eq_iff_eq_add, toIocDiv, toIocDiv_eq_of_sub_zsmul_mem_Ioc, toIocMod, toIocMod_add_toIocDiv_zsmul, toIocMod_mem_Ioc
+  rw [← toIcoDiv_eq_of_sub_zsmul_mem_Ico hp hc, toIcoMod]
+/-
+**toIocMod_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_eq_iff : toIocMod hp a b = c ↔ c in Set.Ioc a (a + p) ∧ exists z 
+: Int, b = c + z • p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_mem_Ioc`：toIocMod_mem_Ioc (a b : α) : toIocMod hp a b in Set.Io
+c a (a + p)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `toIocMod_add_toIocDiv_zsmul`：toIocMod_add_toIocDiv_zsmul (a b : α) : toI
+ocMod hp a b + toIocDiv hp a b • p = b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
 -/
-theorem toIocMod_eq_iff : toIocMod hp a b = c ↔ c in Set.Ioc a (a + p) ∧ exists z : Int, b = c + z • p := by
+theorem toIocMod_eq_iff : toIocMod hp a b = c ↔ c ∈ Set.Ioc a (a + p) ∧ ∃ z : ℤ, b = c + z • p := by
   refine
     ⟨fun h =>
       ⟨h ▸ toIocMod_mem_Ioc hp a b, toIocDiv hp a b, h ▸ (toIocMod_add_toIocDiv_zsmul hp _ _).symm⟩,
       ?_⟩
   simp_rw [← @sub_eq_iff_eq_add]
   rintro ⟨hc, n, rfl⟩
-  rw [← toIocDiv_eq_of_sub_zsmul_mem_Ioc hp hc]; rw [toIocMod]
+  rw [← toIocDiv_eq_of_sub_zsmul_mem_Ioc hp hc, toIocMod]
 
 @[simp]
-/--
-theorem `toIcoDiv_apply_left` / 定理 `toIcoDiv_apply_left`
-
-English:
-theorem toIcoDiv_apply_left
-  given: (a : α)
-  statement: toIcoDiv hp a a = 0
-  proof: toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by simp [hp]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_apply_left
-  条件: (a : α)
-  结论: toIcoDiv hp a a = 0
-  证明: toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by simp [hp]
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_eq_of_sub_zsmul_mem_Ico
+/-
+**toIcoDiv_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_apply_left (a : α) : toIcoDiv hp a a = 0
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_eq_of_sub_zsmul_mem_Ico`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem toIcoDiv_apply_left (a : α) : toIcoDiv hp a a = 0 :=
-toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by simp [hp]
+  toIcoDiv_eq_of_sub_zsmul_mem_Ico hp <| by simp [hp]
 
 @[simp]
-/--
-theorem `toIocDiv_apply_left` / 定理 `toIocDiv_apply_left`
-
-English:
-theorem toIocDiv_apply_left
-  given: (a : α)
-  statement: toIocDiv hp a a = -1
-  proof: toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by simp [hp]
-
-@[simp]
-
-中文:
-定理 toIocDiv_apply_left
-  条件: (a : α)
-  结论: toIocDiv hp a a = -1
-  证明: toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by simp [hp]
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_eq_of_sub_zsmul_mem_Ioc
+/-
+**toIocDiv_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_apply_left (a : α) : toIocDiv hp a a = -1
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem toIocDiv_apply_left (a : α) : toIocDiv hp a a = -1 :=
-toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by simp [hp]
+  toIocDiv_eq_of_sub_zsmul_mem_Ioc hp <| by simp [hp]
 
 @[simp]
-/--
-theorem `toIcoMod_apply_left` / 定理 `toIcoMod_apply_left`
-
-English:
-theorem toIcoMod_apply_left
-  given: (a : α)
-  statement: toIcoMod hp a a = a
-  proof: by
-  rw [toIcoMod_eq_iff hp]; rw [Set.left_mem_Ico]
-  exact ⟨lt_add_of_pos_right _ hp, 0, by simp⟩
-
-@[simp]
-
-中文:
-定理 toIcoMod_apply_left
-  条件: (a : α)
-  结论: toIcoMod hp a a = a
-  证明: by
-  rw [toIcoMod_eq_iff hp]; rw [Set.left_mem_Ico]
-  exact ⟨lt_add_of_pos_right _ hp, 0, by simp⟩
-
-@[simp]
-
-Depends on / 依赖: Set.left_mem_Ico, left_mem_Ico, lt_add_of_pos_right, toIcoMod_eq_iff
+/-
+**toIcoMod_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_apply_left (a : α) : toIcoMod hp a a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_eq_iff`：toIcoMod_eq_iff : toIcoMod hp a b = c ↔ c in Set.Ico a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `Set.left_mem_Ico`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Ico a b ↔ a < b
+· 使用定理 `lt_add_of_pos_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : 
+LT α] [AddLeftStrictMono α] (a : α) {b : α}, 0 < b → a < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoMod_apply_left (a : α) : toIcoMod hp a a = a := by
-  rw [toIcoMod_eq_iff hp]; rw [Set.left_mem_Ico]
+  rw [toIcoMod_eq_iff hp, Set.left_mem_Ico]
   exact ⟨lt_add_of_pos_right _ hp, 0, by simp⟩
 
 @[simp]
-/--
-theorem `toIocMod_apply_left` / 定理 `toIocMod_apply_left`
-
-English:
-theorem toIocMod_apply_left
-  given: (a : α)
-  statement: toIocMod hp a a = a + p
-  proof: by
-  rw [toIocMod_eq_iff hp]; rw [Set.right_mem_Ioc]
-  exact ⟨lt_add_of_pos_right _ hp, -1, by simp⟩
-
-中文:
-定理 toIocMod_apply_left
-  条件: (a : α)
-  结论: toIocMod hp a a = a + p
-  证明: by
-  rw [toIocMod_eq_iff hp]; rw [Set.right_mem_Ioc]
-  exact ⟨lt_add_of_pos_right _ hp, -1, by simp⟩
-
-Depends on / 依赖: Set.right_mem_Ioc, lt_add_of_pos_right, right_mem_Ioc, toIocMod_eq_iff
+/-
+**toIocMod_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_apply_left (a : α) : toIocMod hp a a = a + p
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod_eq_iff`：toIocMod_eq_iff : toIocMod hp a b = c ↔ c in Set.Ioc a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `Set.right_mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Ioc b a ↔ b < a
+· 使用定理 `lt_add_of_pos_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : 
+LT α] [AddLeftStrictMono α] (a : α) {b : α}, 0 < b → a < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `add_neg_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b + -b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIocMod_apply_left (a : α) : toIocMod hp a a = a + p := by
-  rw [toIocMod_eq_iff hp]; rw [Set.right_mem_Ioc]
+  rw [toIocMod_eq_iff hp, Set.right_mem_Ioc]
   exact ⟨lt_add_of_pos_right _ hp, -1, by simp⟩
-
-/--
-theorem `toIcoDiv_apply_right` / 定理 `toIcoDiv_apply_right`
-
-English:
-theorem toIcoDiv_apply_right
-  given: (a : α)
-  statement: toIcoDiv hp a (a + p) = 1
-  proof: toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by simp [hp]
-
-中文:
-定理 toIcoDiv_apply_right
-  条件: (a : α)
-  结论: toIcoDiv hp a (a + p) = 1
-  证明: toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by simp [hp]
-
-Depends on / 依赖: toIcoDiv_eq_of_sub_zsmul_mem_Ico
+/-
+**toIcoDiv_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_apply_right (a : α) : toIcoDiv hp a (a + p) = 1
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_eq_of_sub_zsmul_mem_Ico`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem toIcoDiv_apply_right (a : α) : toIcoDiv hp a (a + p) = 1 :=
-toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by simp [hp]
-
-/--
-theorem `toIocDiv_apply_right` / 定理 `toIocDiv_apply_right`
-
-English:
-theorem toIocDiv_apply_right
-  given: (a : α)
-  statement: toIocDiv hp a (a + p) = 0
-  proof: toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by simp [hp]
-
-中文:
-定理 toIocDiv_apply_right
-  条件: (a : α)
-  结论: toIocDiv hp a (a + p) = 0
-  证明: toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by simp [hp]
-
-Depends on / 依赖: toIocDiv_eq_of_sub_zsmul_mem_Ioc
+  toIcoDiv_eq_of_sub_zsmul_mem_Ico hp <| by simp [hp]
+/-
+**toIocDiv_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_apply_right (a : α) : toIocDiv hp a (a + p) = 0
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem toIocDiv_apply_right (a : α) : toIocDiv hp a (a + p) = 0 :=
-toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by simp [hp]
-
-/--
-theorem `toIcoMod_apply_right` / 定理 `toIcoMod_apply_right`
-
-English:
-theorem toIcoMod_apply_right
-  given: (a : α)
-  statement: toIcoMod hp a (a + p) = a
-  proof: by
-  rw [toIcoMod_eq_iff hp]; rw [Set.left_mem_Ico]
-  exact ⟨lt_add_of_pos_right _ hp, 1, by simp⟩
-
-中文:
-定理 toIcoMod_apply_right
-  条件: (a : α)
-  结论: toIcoMod hp a (a + p) = a
-  证明: by
-  rw [toIcoMod_eq_iff hp]; rw [Set.left_mem_Ico]
-  exact ⟨lt_add_of_pos_right _ hp, 1, by simp⟩
-
-Depends on / 依赖: Set.left_mem_Ico, left_mem_Ico, lt_add_of_pos_right, toIcoMod_eq_iff
+  toIocDiv_eq_of_sub_zsmul_mem_Ioc hp <| by simp [hp]
+/-
+**toIcoMod_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_apply_right (a : α) : toIcoMod hp a (a + p) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_eq_iff`：toIcoMod_eq_iff : toIcoMod hp a b = c ↔ c in Set.Ico a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `Set.left_mem_Ico`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Ico a b ↔ a < b
+· 使用定理 `lt_add_of_pos_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : 
+LT α] [AddLeftStrictMono α] (a : α) {b : α}, 0 < b → a < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoMod_apply_right (a : α) : toIcoMod hp a (a + p) = a := by
-  rw [toIcoMod_eq_iff hp]; rw [Set.left_mem_Ico]
+  rw [toIcoMod_eq_iff hp, Set.left_mem_Ico]
   exact ⟨lt_add_of_pos_right _ hp, 1, by simp⟩
-
-/--
-theorem `toIocMod_apply_right` / 定理 `toIocMod_apply_right`
-
-English:
-theorem toIocMod_apply_right
-  given: (a : α)
-  statement: toIocMod hp a (a + p) = a + p
-  proof: by
-  rw [toIocMod_eq_iff hp]; rw [Set.right_mem_Ioc]
-  exact ⟨lt_add_of_pos_right _ hp, 0, by simp⟩
-
-@[simp]
-
-中文:
-定理 toIocMod_apply_right
-  条件: (a : α)
-  结论: toIocMod hp a (a + p) = a + p
-  证明: by
-  rw [toIocMod_eq_iff hp]; rw [Set.right_mem_Ioc]
-  exact ⟨lt_add_of_pos_right _ hp, 0, by simp⟩
-
-@[simp]
-
-Depends on / 依赖: Set.right_mem_Ioc, lt_add_of_pos_right, right_mem_Ioc, toIocMod_eq_iff
+/-
+**toIocMod_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_apply_right (a : α) : toIocMod hp a (a + p) = a + p
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod_eq_iff`：toIocMod_eq_iff : toIocMod hp a b = c ↔ c in Set.Ioc a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `Set.right_mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Ioc b a ↔ b < a
+· 使用定理 `lt_add_of_pos_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : 
+LT α] [AddLeftStrictMono α] (a : α) {b : α}, 0 < b → a < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIocMod_apply_right (a : α) : toIocMod hp a (a + p) = a + p := by
-  rw [toIocMod_eq_iff hp]; rw [Set.right_mem_Ioc]
+  rw [toIocMod_eq_iff hp, Set.right_mem_Ioc]
   exact ⟨lt_add_of_pos_right _ hp, 0, by simp⟩
 
 @[simp]
-/--
-theorem `toIcoDiv_add_zsmul` / 定理 `toIcoDiv_add_zsmul`
-
-English:
-theorem toIcoDiv_add_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m
-  proof: toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by
-    simpa only [add_smul, add_sub_add_right_eq_sub] using sub_toIcoDiv_zsmul_mem_Ico hp a b
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m
-  证明: toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by
-    simpa only [add_smul, add_sub_add_right_eq_sub] using sub_toIcoDiv_zsmul_mem_Ico hp a b
-
-@[simp]
-
-Depends on / 依赖: add_smul, add_sub_add_right_eq_sub, sub_toIcoDiv_zsmul_mem_Ico, toIcoDiv_eq_of_sub_zsmul_mem_Ico
+/-
+**toIcoDiv_add_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp a (b + m • p) = toIco
+Div hp a b + m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_eq_of_sub_zsmul_mem_Ico`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `add_sub_add_right_eq_sub`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : 
+G), a + c - (b + c) = a - b
+· 使用定理 `sub_toIcoDiv_zsmul_mem_Ico`：sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - t
+oIcoDiv hp a b • p in Set.Ico a (a + p)
 -/
-theorem toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m :=
-toIcoDiv_eq_of_sub_zsmul_mem_Ico hp by
+theorem toIcoDiv_add_zsmul (a b : α) (m : ℤ) : toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m :=
+  toIcoDiv_eq_of_sub_zsmul_mem_Ico hp <| by
     simpa only [add_smul, add_sub_add_right_eq_sub] using sub_toIcoDiv_zsmul_mem_Ico hp a b
 
 @[simp]
-/--
-theorem `toIcoDiv_add_nsmul` / 定理 `toIcoDiv_add_nsmul`
-
-English:
-theorem toIcoDiv_add_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m
-  proof: mod_cast toIcoDiv_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m
-  证明: mod_cast toIcoDiv_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: coeffEquiv, isScalarTower, mod_cast, toIcoDiv_add_zsmul
+/-
+**toIcoDiv_add_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_nsmul (a b : α) (m : Nat) : toIcoDiv hp a (b + m • p) = toIco
+Div hp a b + m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoDiv_add_zsmul`：toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b + m • p) = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_add_nsmul (a b : α) (m : Nat) : toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m :=
+theorem toIcoDiv_add_nsmul (a b : α) (m : ℕ) : toIcoDiv hp a (b + m • p) = toIcoDiv hp a b + m :=
   mod_cast toIcoDiv_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_add_zsmul'` / 定理 `toIcoDiv_add_zsmul'`
-
-English:
-theorem toIcoDiv_add_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  refine toIcoDiv_eq_of_sub_zsmul_mem_Ico _ ?_
-  rw [sub_smul]; rw [← sub_add]; rw [add_right_comm]
-  simpa using sub_toIcoDiv_zsmul_mem_Ico hp a b
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  refine toIcoDiv_eq_of_sub_zsmul_mem_Ico _ ?_
-  rw [sub_smul]; rw [← sub_add]; rw [add_right_comm]
-  simpa using sub_toIcoDiv_zsmul_mem_Ico hp a b
-
-@[simp]
-
-Depends on / 依赖: add_right_comm, sub_add, sub_smul, sub_toIcoDiv_zsmul_mem_Ico, toIcoDiv_eq_of_sub_zsmul_mem_Ico
+/-
+**toIcoDiv_add_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_zsmul' (a b : α) (m : Int) : toIcoDiv hp (a + m • p) b = toIc
+oDiv hp a b - m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_eq_of_sub_zsmul_mem_Ico`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b + c = a - (b - c)
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `sub_toIcoDiv_zsmul_mem_Ico`：sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - t
+oIcoDiv hp a b • p in Set.Ico a (a + p)
 -/
-theorem toIcoDiv_add_zsmul' (a b : α) (m : Int) :
+theorem toIcoDiv_add_zsmul' (a b : α) (m : ℤ) :
     toIcoDiv hp (a + m • p) b = toIcoDiv hp a b - m := by
   refine toIcoDiv_eq_of_sub_zsmul_mem_Ico _ ?_
-  rw [sub_smul]; rw [← sub_add]; rw [add_right_comm]
+  rw [sub_smul, ← sub_add, add_right_comm]
   simpa using sub_toIcoDiv_zsmul_mem_Ico hp a b
 
 @[simp]
-/--
-theorem `toIcoDiv_add_nsmul'` / 定理 `toIcoDiv_add_nsmul'`
-
-English:
-theorem toIcoDiv_add_nsmul'
-  given: (a b : α) (m : Nat)
-  statement: toIcoDiv hp (a + m • p) b = toIcoDiv hp a b - m
-  proof: mod_cast toIcoDiv_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_nsmul'
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoDiv hp (a + m • p) b = toIcoDiv hp a b - m
-  证明: mod_cast toIcoDiv_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_add_zsmul
+/-
+**toIcoDiv_add_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_nsmul' (a b : α) (m : Nat) : toIcoDiv hp (a + m • p) b = toIc
+oDiv hp a b - m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoDiv_add_zsmul'`：toIcoDiv_add_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a + m • p) b = toIcoDiv hp a b - m
 -/
-theorem toIcoDiv_add_nsmul' (a b : α) (m : Nat) : toIcoDiv hp (a + m • p) b = toIcoDiv hp a b - m :=
+theorem toIcoDiv_add_nsmul' (a b : α) (m : ℕ) : toIcoDiv hp (a + m • p) b = toIcoDiv hp a b - m :=
   mod_cast toIcoDiv_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_zsmul` / 定理 `toIocDiv_add_zsmul`
-
-English:
-theorem toIocDiv_add_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIocDiv hp a (b + m • p) = toIocDiv hp a b + m
-  proof: toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by
-    simpa only [add_smul, add_sub_add_right_eq_sub] using sub_toIocDiv_zsmul_mem_Ioc hp a b
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIocDiv hp a (b + m • p) = toIocDiv hp a b + m
-  证明: toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by
-    simpa only [add_smul, add_sub_add_right_eq_sub] using sub_toIocDiv_zsmul_mem_Ioc hp a b
-
-@[simp]
-
-Depends on / 依赖: add_smul, add_sub_add_right_eq_sub, sub_toIocDiv_zsmul_mem_Ioc, toIocDiv_eq_of_sub_zsmul_mem_Ioc
+/-
+**toIocDiv_add_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp a (b + m • p) = toIoc
+Div hp a b + m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `add_sub_add_right_eq_sub`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : 
+G), a + c - (b + c) = a - b
+· 使用定理 `sub_toIocDiv_zsmul_mem_Ioc`：sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - t
+oIocDiv hp a b • p in Set.Ioc a (a + p)
 -/
-theorem toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp a (b + m • p) = toIocDiv hp a b + m :=
-toIocDiv_eq_of_sub_zsmul_mem_Ioc hp by
+theorem toIocDiv_add_zsmul (a b : α) (m : ℤ) : toIocDiv hp a (b + m • p) = toIocDiv hp a b + m :=
+  toIocDiv_eq_of_sub_zsmul_mem_Ioc hp <| by
     simpa only [add_smul, add_sub_add_right_eq_sub] using sub_toIocDiv_zsmul_mem_Ioc hp a b
 
 @[simp]
-/--
-theorem `toIocDiv_add_nsmul` / 定理 `toIocDiv_add_nsmul`
-
-English:
-theorem toIocDiv_add_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIocDiv hp a (b + m • p) = toIocDiv hp a b + m
-  proof: mod_cast toIocDiv_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIocDiv hp a (b + m • p) = toIocDiv hp a b + m
-  证明: mod_cast toIocDiv_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_add_zsmul
+/-
+**toIocDiv_add_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_nsmul (a b : α) (m : Nat) : toIocDiv hp a (b + m • p) = toIoc
+Div hp a b + m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocDiv_add_zsmul`：toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b + m • p) = toIocDiv hp a b + m
 -/
-theorem toIocDiv_add_nsmul (a b : α) (m : Nat) : toIocDiv hp a (b + m • p) = toIocDiv hp a b + m :=
+theorem toIocDiv_add_nsmul (a b : α) (m : ℕ) : toIocDiv hp a (b + m • p) = toIocDiv hp a b + m :=
   mod_cast toIocDiv_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_zsmul'` / 定理 `toIocDiv_add_zsmul'`
-
-English:
-theorem toIocDiv_add_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  refine toIocDiv_eq_of_sub_zsmul_mem_Ioc _ ?_
-  rw [sub_smul]; rw [← sub_add]; rw [add_right_comm]
-  simpa using sub_toIocDiv_zsmul_mem_Ioc hp a b
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  refine toIocDiv_eq_of_sub_zsmul_mem_Ioc _ ?_
-  rw [sub_smul]; rw [← sub_add]; rw [add_right_comm]
-  simpa using sub_toIocDiv_zsmul_mem_Ioc hp a b
-
-@[simp]
-
-Depends on / 依赖: add_right_comm, sub_add, sub_smul, sub_toIocDiv_zsmul_mem_Ioc, toIocDiv_eq_of_sub_zsmul_mem_Ioc
+/-
+**toIocDiv_add_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_zsmul' (a b : α) (m : Int) : toIocDiv hp (a + m • p) b = toIo
+cDiv hp a b - m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b + c = a - (b - c)
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `sub_toIocDiv_zsmul_mem_Ioc`：sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - t
+oIocDiv hp a b • p in Set.Ioc a (a + p)
 -/
-theorem toIocDiv_add_zsmul' (a b : α) (m : Int) :
+theorem toIocDiv_add_zsmul' (a b : α) (m : ℤ) :
     toIocDiv hp (a + m • p) b = toIocDiv hp a b - m := by
   refine toIocDiv_eq_of_sub_zsmul_mem_Ioc _ ?_
-  rw [sub_smul]; rw [← sub_add]; rw [add_right_comm]
+  rw [sub_smul, ← sub_add, add_right_comm]
   simpa using sub_toIocDiv_zsmul_mem_Ioc hp a b
 
 @[simp]
-/--
-theorem `toIocDiv_add_nsmul'` / 定理 `toIocDiv_add_nsmul'`
-
-English:
-theorem toIocDiv_add_nsmul'
-  given: (a b : α) (m : Nat)
-  statement: toIocDiv hp (a + m • p) b = toIocDiv hp a b - m
-  proof: mod_cast toIocDiv_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_nsmul'
-  条件: (a b : α) (m : 自然数)
-  结论: toIocDiv hp (a + m • p) b = toIocDiv hp a b - m
-  证明: mod_cast toIocDiv_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_add_zsmul
+/-
+**toIocDiv_add_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_nsmul' (a b : α) (m : Nat) : toIocDiv hp (a + m • p) b = toIo
+cDiv hp a b - m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocDiv_add_zsmul'`：toIocDiv_add_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a + m • p) b = toIocDiv hp a b - m
 -/
-theorem toIocDiv_add_nsmul' (a b : α) (m : Nat) : toIocDiv hp (a + m • p) b = toIocDiv hp a b - m :=
+theorem toIocDiv_add_nsmul' (a b : α) (m : ℕ) : toIocDiv hp (a + m • p) b = toIocDiv hp a b - m :=
   mod_cast toIocDiv_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_zsmul_add` / 定理 `toIcoDiv_zsmul_add`
-
-English:
-theorem toIcoDiv_zsmul_add
-  given: (a b : α) (m : Int)
-  statement: toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b
-  proof: by
-  rw [add_comm]; rw [toIcoDiv_add_zsmul]; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_zsmul_add
-  条件: (a b : α) (m : 整数)
-  结论: toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b
-  证明: by
-  rw [add_comm]; rw [toIcoDiv_add_zsmul]; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoDiv_add_zsmul
+/-
+**toIcoDiv_zsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_zsmul_add (a b : α) (m : Int) : toIcoDiv hp a (m • p + b) = m + t
+oIcoDiv hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoDiv_add_zsmul`：toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b + m • p) = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_zsmul_add (a b : α) (m : Int) : toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b := by
-  rw [add_comm]; rw [toIcoDiv_add_zsmul]; rw [add_comm]
+theorem toIcoDiv_zsmul_add (a b : α) (m : ℤ) : toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b := by
+  rw [add_comm, toIcoDiv_add_zsmul, add_comm]
 
 @[simp]
-/--
-theorem `toIcoDiv_nsmul_add` / 定理 `toIcoDiv_nsmul_add`
-
-English:
-theorem toIcoDiv_nsmul_add
-  given: (a b : α) (m : Nat)
-  statement: toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b
-  proof: mod_cast toIcoDiv_zsmul_add hp a b m
-
-中文:
-定理 toIcoDiv_nsmul_add
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b
-  证明: mod_cast toIcoDiv_zsmul_add hp a b m
-
-Depends on / 依赖: mod_cast, toIcoDiv_zsmul_add
+/-
+**toIcoDiv_nsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_nsmul_add (a b : α) (m : Nat) : toIcoDiv hp a (m • p + b) = m + t
+oIcoDiv hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoDiv_zsmul_add`：toIcoDiv_zsmul_add (a b : α) (m : Int) : toIcoDiv hp
+ a (m • p + b) = m + toIcoDiv hp a b
 -/
-theorem toIcoDiv_nsmul_add (a b : α) (m : Nat) : toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b :=
+theorem toIcoDiv_nsmul_add (a b : α) (m : ℕ) : toIcoDiv hp a (m • p + b) = m + toIcoDiv hp a b :=
   mod_cast toIcoDiv_zsmul_add hp a b m
 
 /-! Note we omit `toIcoDiv_zsmul_add'` as `-m + toIcoDiv hp a b` is not very convenient. -/
 
 
 @[simp]
-/--
-theorem `toIocDiv_zsmul_add` / 定理 `toIocDiv_zsmul_add`
+/-
+**toIocDiv_zsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_zsmul_add (a b : α) (m : Int) : toIocDiv hp a (m • p + b) = m + t
+oIocDiv hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocDiv_add_zsmul`：toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b + m • p) = toIocDiv hp a b + m
 
-English:
-theorem toIocDiv_zsmul_add
-  given: (a b : α) (m : Int)
-  statement: toIocDiv hp a (m • p + b) = m + toIocDiv hp a b
-  proof: by
-  rw [add_comm]; rw [toIocDiv_add_zsmul]; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIocDiv_zsmul_add
-  条件: (a b : α) (m : 整数)
-  结论: toIocDiv hp a (m • p + b) = m + toIocDiv hp a b
-  证明: by
-  rw [add_comm]; rw [toIocDiv_add_zsmul]; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocDiv_add_zsmul
+--- 原说明 ---
+Note we omit `toIcoDiv_zsmul_add'` as `-m + toIcoDiv hp a b` is not very conveni
+ent.
 -/
-theorem toIocDiv_zsmul_add (a b : α) (m : Int) : toIocDiv hp a (m • p + b) = m + toIocDiv hp a b := by
-  rw [add_comm]; rw [toIocDiv_add_zsmul]; rw [add_comm]
+theorem toIocDiv_zsmul_add (a b : α) (m : ℤ) : toIocDiv hp a (m • p + b) = m + toIocDiv hp a b := by
+  rw [add_comm, toIocDiv_add_zsmul, add_comm]
 
 @[simp]
-/--
-theorem `toIocDiv_nsmul_add` / 定理 `toIocDiv_nsmul_add`
-
-English:
-theorem toIocDiv_nsmul_add
-  given: (a b : α) (m : Nat)
-  statement: toIocDiv hp a (m • p + b) = m + toIocDiv hp a b
-  proof: mod_cast toIocDiv_zsmul_add hp a b m
-
-中文:
-定理 toIocDiv_nsmul_add
-  条件: (a b : α) (m : 自然数)
-  结论: toIocDiv hp a (m • p + b) = m + toIocDiv hp a b
-  证明: mod_cast toIocDiv_zsmul_add hp a b m
-
-Depends on / 依赖: mod_cast, toIocDiv_zsmul_add
+/-
+**toIocDiv_nsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_nsmul_add (a b : α) (m : Nat) : toIocDiv hp a (m • p + b) = m + t
+oIocDiv hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocDiv_zsmul_add`：toIocDiv_zsmul_add (a b : α) (m : Int) : toIocDiv hp
+ a (m • p + b) = m + toIocDiv hp a b
 -/
-theorem toIocDiv_nsmul_add (a b : α) (m : Nat) : toIocDiv hp a (m • p + b) = m + toIocDiv hp a b :=
+theorem toIocDiv_nsmul_add (a b : α) (m : ℕ) : toIocDiv hp a (m • p + b) = m + toIocDiv hp a b :=
   mod_cast toIocDiv_zsmul_add hp a b m
 
 /-! Note we omit `toIocDiv_zsmul_add'` as `-m + toIocDiv hp a b` is not very convenient. -/
 
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_zsmul` / 定理 `toIcoDiv_sub_zsmul`
+/-
+**toIcoDiv_sub_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_zsmul (a b : α) (m : Int) : toIcoDiv hp a (b - m • p) = toIco
+Div hp a b - m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `toIcoDiv_add_zsmul`：toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b + m • p) = toIcoDiv hp a b + m
 
-English:
-theorem toIcoDiv_sub_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m
-  proof: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoDiv_add_zsmul]; rw [sub_eq_add_neg]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m
-  证明: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoDiv_add_zsmul]; rw [sub_eq_add_neg]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_eq_add_neg, toIcoDiv_add_zsmul
+--- 原说明 ---
+Note we omit `toIocDiv_zsmul_add'` as `-m + toIocDiv hp a b` is not very conveni
+ent.
 -/
-theorem toIcoDiv_sub_zsmul (a b : α) (m : Int) : toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m := by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoDiv_add_zsmul]; rw [sub_eq_add_neg]
+theorem toIcoDiv_sub_zsmul (a b : α) (m : ℤ) : toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m := by
+  rw [sub_eq_add_neg, ← neg_smul, toIcoDiv_add_zsmul, sub_eq_add_neg]
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_nsmul` / 定理 `toIcoDiv_sub_nsmul`
-
-English:
-theorem toIcoDiv_sub_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m
-  proof: mod_cast toIcoDiv_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m
-  证明: mod_cast toIcoDiv_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_sub_zsmul
+/-
+**toIcoDiv_sub_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_nsmul (a b : α) (m : Nat) : toIcoDiv hp a (b - m • p) = toIco
+Div hp a b - m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoDiv_sub_zsmul`：toIcoDiv_sub_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b - m • p) = toIcoDiv hp a b - m
 -/
-theorem toIcoDiv_sub_nsmul (a b : α) (m : Nat) : toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m :=
+theorem toIcoDiv_sub_nsmul (a b : α) (m : ℕ) : toIcoDiv hp a (b - m • p) = toIcoDiv hp a b - m :=
   mod_cast toIcoDiv_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_zsmul'` / 定理 `toIcoDiv_sub_zsmul'`
-
-English:
-theorem toIcoDiv_sub_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoDiv_add_zsmul']; rw [sub_neg_eq_add]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoDiv_add_zsmul']; rw [sub_neg_eq_add]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_eq_add_neg, sub_neg_eq_add, toIcoDiv_add_zsmul
+/-
+**toIcoDiv_sub_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_zsmul' (a b : α) (m : Int) : toIcoDiv hp (a - m • p) b = toIc
+oDiv hp a b + m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `toIcoDiv_add_zsmul'`：toIcoDiv_add_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a + m • p) b = toIcoDiv hp a b - m
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
 -/
-theorem toIcoDiv_sub_zsmul' (a b : α) (m : Int) :
+theorem toIcoDiv_sub_zsmul' (a b : α) (m : ℤ) :
     toIcoDiv hp (a - m • p) b = toIcoDiv hp a b + m := by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoDiv_add_zsmul']; rw [sub_neg_eq_add]
+  rw [sub_eq_add_neg, ← neg_smul, toIcoDiv_add_zsmul', sub_neg_eq_add]
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_nsmul'` / 定理 `toIcoDiv_sub_nsmul'`
-
-English:
-theorem toIcoDiv_sub_nsmul'
-  given: (a b : α) (m : Nat)
-  statement: toIcoDiv hp (a - m • p) b = toIcoDiv hp a b + m
-  proof: mod_cast toIcoDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_nsmul'
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoDiv hp (a - m • p) b = toIcoDiv hp a b + m
-  证明: mod_cast toIcoDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_sub_zsmul
+/-
+**toIcoDiv_sub_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_nsmul' (a b : α) (m : Nat) : toIcoDiv hp (a - m • p) b = toIc
+oDiv hp a b + m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoDiv_sub_zsmul'`：toIcoDiv_sub_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a - m • p) b = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_sub_nsmul' (a b : α) (m : Nat) : toIcoDiv hp (a - m • p) b = toIcoDiv hp a b + m :=
+theorem toIcoDiv_sub_nsmul' (a b : α) (m : ℕ) : toIcoDiv hp (a - m • p) b = toIcoDiv hp a b + m :=
   mod_cast toIcoDiv_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_zsmul` / 定理 `toIocDiv_sub_zsmul`
-
-English:
-theorem toIocDiv_sub_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIocDiv hp a (b - m • p) = toIocDiv hp a b - m
-  proof: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocDiv_add_zsmul]; rw [sub_eq_add_neg]
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIocDiv hp a (b - m • p) = toIocDiv hp a b - m
-  证明: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocDiv_add_zsmul]; rw [sub_eq_add_neg]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_eq_add_neg, toIocDiv_add_zsmul
+/-
+**toIocDiv_sub_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_zsmul (a b : α) (m : Int) : toIocDiv hp a (b - m • p) = toIoc
+Div hp a b - m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `toIocDiv_add_zsmul`：toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b + m • p) = toIocDiv hp a b + m
 -/
-theorem toIocDiv_sub_zsmul (a b : α) (m : Int) : toIocDiv hp a (b - m • p) = toIocDiv hp a b - m := by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocDiv_add_zsmul]; rw [sub_eq_add_neg]
+theorem toIocDiv_sub_zsmul (a b : α) (m : ℤ) : toIocDiv hp a (b - m • p) = toIocDiv hp a b - m := by
+  rw [sub_eq_add_neg, ← neg_smul, toIocDiv_add_zsmul, sub_eq_add_neg]
 
 @[simp]
-/--
-theorem `toIocDiv_sub_nsmul` / 定理 `toIocDiv_sub_nsmul`
-
-English:
-theorem toIocDiv_sub_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIocDiv hp a (b - m • p) = toIocDiv hp a b - m
-  proof: mod_cast toIocDiv_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIocDiv hp a (b - m • p) = toIocDiv hp a b - m
-  证明: mod_cast toIocDiv_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_sub_zsmul
+/-
+**toIocDiv_sub_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_nsmul (a b : α) (m : Nat) : toIocDiv hp a (b - m • p) = toIoc
+Div hp a b - m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocDiv_sub_zsmul`：toIocDiv_sub_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b - m • p) = toIocDiv hp a b - m
 -/
-theorem toIocDiv_sub_nsmul (a b : α) (m : Nat) : toIocDiv hp a (b - m • p) = toIocDiv hp a b - m :=
+theorem toIocDiv_sub_nsmul (a b : α) (m : ℕ) : toIocDiv hp a (b - m • p) = toIocDiv hp a b - m :=
   mod_cast toIocDiv_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_zsmul'` / 定理 `toIocDiv_sub_zsmul'`
-
-English:
-theorem toIocDiv_sub_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocDiv_add_zsmul']; rw [sub_neg_eq_add]
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocDiv_add_zsmul']; rw [sub_neg_eq_add]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_eq_add_neg, sub_neg_eq_add, toIocDiv_add_zsmul
+/-
+**toIocDiv_sub_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_zsmul' (a b : α) (m : Int) : toIocDiv hp (a - m • p) b = toIo
+cDiv hp a b + m
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `toIocDiv_add_zsmul'`：toIocDiv_add_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a + m • p) b = toIocDiv hp a b - m
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
 -/
-theorem toIocDiv_sub_zsmul' (a b : α) (m : Int) :
+theorem toIocDiv_sub_zsmul' (a b : α) (m : ℤ) :
     toIocDiv hp (a - m • p) b = toIocDiv hp a b + m := by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocDiv_add_zsmul']; rw [sub_neg_eq_add]
+  rw [sub_eq_add_neg, ← neg_smul, toIocDiv_add_zsmul', sub_neg_eq_add]
 
 @[simp]
-/--
-theorem `toIocDiv_sub_nsmul'` / 定理 `toIocDiv_sub_nsmul'`
-
-English:
-theorem toIocDiv_sub_nsmul'
-  given: (a b : α) (m : Nat)
-  statement: toIocDiv hp (a - m • p) b = toIocDiv hp a b + m
-  proof: mod_cast toIocDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_nsmul'
-  条件: (a b : α) (m : 自然数)
-  结论: toIocDiv hp (a - m • p) b = toIocDiv hp a b + m
-  证明: mod_cast toIocDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_sub_zsmul
+/-
+**toIocDiv_sub_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_nsmul' (a b : α) (m : Nat) : toIocDiv hp (a - m • p) b = toIo
+cDiv hp a b + m
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocDiv_sub_zsmul'`：toIocDiv_sub_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a - m • p) b = toIocDiv hp a b + m
 -/
-theorem toIocDiv_sub_nsmul' (a b : α) (m : Nat) : toIocDiv hp (a - m • p) b = toIocDiv hp a b + m :=
+theorem toIocDiv_sub_nsmul' (a b : α) (m : ℕ) : toIocDiv hp (a - m • p) b = toIocDiv hp a b + m :=
   mod_cast toIocDiv_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_add_right` / 定理 `toIcoDiv_add_right`
-
-English:
-theorem toIcoDiv_add_right
-  given: (a b : α)
-  statement: toIcoDiv hp a (b + p) = toIcoDiv hp a b + 1
-  proof: by
-  simpa only [one_zsmul] using toIcoDiv_add_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_right
-  条件: (a b : α)
-  结论: toIcoDiv hp a (b + p) = toIcoDiv hp a b + 1
-  证明: by
-  simpa only [one_zsmul] using toIcoDiv_add_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoDiv_add_zsmul
+/-
+**toIcoDiv_add_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_right (a b : α) : toIcoDiv hp a (b + p) = toIcoDiv hp a b + 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoDiv_add_zsmul`：toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b + m • p) = toIcoDiv hp a b + m
 -/
 theorem toIcoDiv_add_right (a b : α) : toIcoDiv hp a (b + p) = toIcoDiv hp a b + 1 := by
   simpa only [one_zsmul] using toIcoDiv_add_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIcoDiv_add_right'` / 定理 `toIcoDiv_add_right'`
-
-English:
-theorem toIcoDiv_add_right'
-  given: (a b : α)
-  statement: toIcoDiv hp (a + p) b = toIcoDiv hp a b - 1
-  proof: by
-  simpa only [one_zsmul] using toIcoDiv_add_zsmul' hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_right'
-  条件: (a b : α)
-  结论: toIcoDiv hp (a + p) b = toIcoDiv hp a b - 1
-  证明: by
-  simpa only [one_zsmul] using toIcoDiv_add_zsmul' hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoDiv_add_zsmul
+/-
+**toIcoDiv_add_right'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_right' (a b : α) : toIcoDiv hp (a + p) b = toIcoDiv hp a b - 
+1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoDiv_add_zsmul'`：toIcoDiv_add_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a + m • p) b = toIcoDiv hp a b - m
 -/
 theorem toIcoDiv_add_right' (a b : α) : toIcoDiv hp (a + p) b = toIcoDiv hp a b - 1 := by
   simpa only [one_zsmul] using toIcoDiv_add_zsmul' hp a b 1
 
 @[simp]
-/--
-theorem `toIocDiv_add_right` / 定理 `toIocDiv_add_right`
-
-English:
-theorem toIocDiv_add_right
-  given: (a b : α)
-  statement: toIocDiv hp a (b + p) = toIocDiv hp a b + 1
-  proof: by
-  simpa only [one_zsmul] using toIocDiv_add_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_right
-  条件: (a b : α)
-  结论: toIocDiv hp a (b + p) = toIocDiv hp a b + 1
-  证明: by
-  simpa only [one_zsmul] using toIocDiv_add_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIocDiv_add_zsmul
+/-
+**toIocDiv_add_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_right (a b : α) : toIocDiv hp a (b + p) = toIocDiv hp a b + 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocDiv_add_zsmul`：toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b + m • p) = toIocDiv hp a b + m
 -/
 theorem toIocDiv_add_right (a b : α) : toIocDiv hp a (b + p) = toIocDiv hp a b + 1 := by
   simpa only [one_zsmul] using toIocDiv_add_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIocDiv_add_right'` / 定理 `toIocDiv_add_right'`
-
-English:
-theorem toIocDiv_add_right'
-  given: (a b : α)
-  statement: toIocDiv hp (a + p) b = toIocDiv hp a b - 1
-  proof: by
-  simpa only [one_zsmul] using toIocDiv_add_zsmul' hp a b 1
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_right'
-  条件: (a b : α)
-  结论: toIocDiv hp (a + p) b = toIocDiv hp a b - 1
-  证明: by
-  simpa only [one_zsmul] using toIocDiv_add_zsmul' hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIocDiv_add_zsmul
+/-
+**toIocDiv_add_right'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_right' (a b : α) : toIocDiv hp (a + p) b = toIocDiv hp a b - 
+1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocDiv_add_zsmul'`：toIocDiv_add_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a + m • p) b = toIocDiv hp a b - m
 -/
 theorem toIocDiv_add_right' (a b : α) : toIocDiv hp (a + p) b = toIocDiv hp a b - 1 := by
   simpa only [one_zsmul] using toIocDiv_add_zsmul' hp a b 1
 
 @[simp]
-/--
-theorem `toIcoDiv_add_left` / 定理 `toIcoDiv_add_left`
-
-English:
-theorem toIcoDiv_add_left
-  given: (a b : α)
-  statement: toIcoDiv hp a (p + b) = toIcoDiv hp a b + 1
-  proof: by
-  rw [add_comm]; rw [toIcoDiv_add_right]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_left
-  条件: (a b : α)
-  结论: toIcoDiv hp a (p + b) = toIcoDiv hp a b + 1
-  证明: by
-  rw [add_comm]; rw [toIcoDiv_add_right]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoDiv_add_right
+/-
+**toIcoDiv_add_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_left (a b : α) : toIcoDiv hp a (p + b) = toIcoDiv hp a b + 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoDiv_add_right`：toIcoDiv_add_right (a b : α) : toIcoDiv hp a (b + p)
+ = toIcoDiv hp a b + 1
 -/
 theorem toIcoDiv_add_left (a b : α) : toIcoDiv hp a (p + b) = toIcoDiv hp a b + 1 := by
-  rw [add_comm]; rw [toIcoDiv_add_right]
+  rw [add_comm, toIcoDiv_add_right]
 
 @[simp]
-/--
-theorem `toIcoDiv_add_left'` / 定理 `toIcoDiv_add_left'`
-
-English:
-theorem toIcoDiv_add_left'
-  given: (a b : α)
-  statement: toIcoDiv hp (p + a) b = toIcoDiv hp a b - 1
-  proof: by
-  rw [add_comm]; rw [toIcoDiv_add_right']
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_left'
-  条件: (a b : α)
-  结论: toIcoDiv hp (p + a) b = toIcoDiv hp a b - 1
-  证明: by
-  rw [add_comm]; rw [toIcoDiv_add_right']
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoDiv_add_right
+/-
+**toIcoDiv_add_left'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_left' (a b : α) : toIcoDiv hp (p + a) b = toIcoDiv hp a b - 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoDiv_add_right'`：toIcoDiv_add_right' (a b : α) : toIcoDiv hp (a + p)
+ b = toIcoDiv hp a b - 1
 -/
 theorem toIcoDiv_add_left' (a b : α) : toIcoDiv hp (p + a) b = toIcoDiv hp a b - 1 := by
-  rw [add_comm]; rw [toIcoDiv_add_right']
+  rw [add_comm, toIcoDiv_add_right']
 
 @[simp]
-/--
-theorem `toIocDiv_add_left` / 定理 `toIocDiv_add_left`
-
-English:
-theorem toIocDiv_add_left
-  given: (a b : α)
-  statement: toIocDiv hp a (p + b) = toIocDiv hp a b + 1
-  proof: by
-  rw [add_comm]; rw [toIocDiv_add_right]
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_left
-  条件: (a b : α)
-  结论: toIocDiv hp a (p + b) = toIocDiv hp a b + 1
-  证明: by
-  rw [add_comm]; rw [toIocDiv_add_right]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocDiv_add_right
+/-
+**toIocDiv_add_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_left (a b : α) : toIocDiv hp a (p + b) = toIocDiv hp a b + 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocDiv_add_right`：toIocDiv_add_right (a b : α) : toIocDiv hp a (b + p)
+ = toIocDiv hp a b + 1
 -/
 theorem toIocDiv_add_left (a b : α) : toIocDiv hp a (p + b) = toIocDiv hp a b + 1 := by
-  rw [add_comm]; rw [toIocDiv_add_right]
+  rw [add_comm, toIocDiv_add_right]
 
 @[simp]
-/--
-theorem `toIocDiv_add_left'` / 定理 `toIocDiv_add_left'`
-
-English:
-theorem toIocDiv_add_left'
-  given: (a b : α)
-  statement: toIocDiv hp (p + a) b = toIocDiv hp a b - 1
-  proof: by
-  rw [add_comm]; rw [toIocDiv_add_right']
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_left'
-  条件: (a b : α)
-  结论: toIocDiv hp (p + a) b = toIocDiv hp a b - 1
-  证明: by
-  rw [add_comm]; rw [toIocDiv_add_right']
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocDiv_add_right
+/-
+**toIocDiv_add_left'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_left' (a b : α) : toIocDiv hp (p + a) b = toIocDiv hp a b - 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocDiv_add_right'`：toIocDiv_add_right' (a b : α) : toIocDiv hp (a + p)
+ b = toIocDiv hp a b - 1
 -/
 theorem toIocDiv_add_left' (a b : α) : toIocDiv hp (p + a) b = toIocDiv hp a b - 1 := by
-  rw [add_comm]; rw [toIocDiv_add_right']
+  rw [add_comm, toIocDiv_add_right']
 
 @[simp]
-/--
-theorem `toIcoDiv_sub` / 定理 `toIcoDiv_sub`
-
-English:
-theorem toIcoDiv_sub
-  given: (a b : α)
-  statement: toIcoDiv hp a (b - p) = toIcoDiv hp a b - 1
-  proof: by
-  simpa only [one_zsmul] using toIcoDiv_sub_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub
-  条件: (a b : α)
-  结论: toIcoDiv hp a (b - p) = toIcoDiv hp a b - 1
-  证明: by
-  simpa only [one_zsmul] using toIcoDiv_sub_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoDiv_sub_zsmul
+/-
+**toIcoDiv_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub (a b : α) : toIcoDiv hp a (b - p) = toIcoDiv hp a b - 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoDiv_sub_zsmul`：toIcoDiv_sub_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b - m • p) = toIcoDiv hp a b - m
 -/
 theorem toIcoDiv_sub (a b : α) : toIcoDiv hp a (b - p) = toIcoDiv hp a b - 1 := by
   simpa only [one_zsmul] using toIcoDiv_sub_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIcoDiv_sub'` / 定理 `toIcoDiv_sub'`
-
-English:
-theorem toIcoDiv_sub'
-  given: (a b : α)
-  statement: toIcoDiv hp (a - p) b = toIcoDiv hp a b + 1
-  proof: by
-  simpa only [one_zsmul] using toIcoDiv_sub_zsmul' hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub'
-  条件: (a b : α)
-  结论: toIcoDiv hp (a - p) b = toIcoDiv hp a b + 1
-  证明: by
-  simpa only [one_zsmul] using toIcoDiv_sub_zsmul' hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoDiv_sub_zsmul
+/-
+**toIcoDiv_sub'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub' (a b : α) : toIcoDiv hp (a - p) b = toIcoDiv hp a b + 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoDiv_sub_zsmul'`：toIcoDiv_sub_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a - m • p) b = toIcoDiv hp a b + m
 -/
 theorem toIcoDiv_sub' (a b : α) : toIcoDiv hp (a - p) b = toIcoDiv hp a b + 1 := by
   simpa only [one_zsmul] using toIcoDiv_sub_zsmul' hp a b 1
 
 @[simp]
-/--
-theorem `toIocDiv_sub` / 定理 `toIocDiv_sub`
-
-English:
-theorem toIocDiv_sub
-  given: (a b : α)
-  statement: toIocDiv hp a (b - p) = toIocDiv hp a b - 1
-  proof: by
-  simpa only [one_zsmul] using toIocDiv_sub_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub
-  条件: (a b : α)
-  结论: toIocDiv hp a (b - p) = toIocDiv hp a b - 1
-  证明: by
-  simpa only [one_zsmul] using toIocDiv_sub_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIocDiv_sub_zsmul
+/-
+**toIocDiv_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub (a b : α) : toIocDiv hp a (b - p) = toIocDiv hp a b - 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocDiv_sub_zsmul`：toIocDiv_sub_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b - m • p) = toIocDiv hp a b - m
 -/
 theorem toIocDiv_sub (a b : α) : toIocDiv hp a (b - p) = toIocDiv hp a b - 1 := by
   simpa only [one_zsmul] using toIocDiv_sub_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIocDiv_sub'` / 定理 `toIocDiv_sub'`
-
-English:
-theorem toIocDiv_sub'
-  given: (a b : α)
-  statement: toIocDiv hp (a - p) b = toIocDiv hp a b + 1
-  proof: by
-  simpa only [one_zsmul] using toIocDiv_sub_zsmul' hp a b 1
-
-中文:
-定理 toIocDiv_sub'
-  条件: (a b : α)
-  结论: toIocDiv hp (a - p) b = toIocDiv hp a b + 1
-  证明: by
-  simpa only [one_zsmul] using toIocDiv_sub_zsmul' hp a b 1
-
-Depends on / 依赖: one_zsmul, toIocDiv_sub_zsmul
+/-
+**toIocDiv_sub'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub' (a b : α) : toIocDiv hp (a - p) b = toIocDiv hp a b + 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocDiv_sub_zsmul'`：toIocDiv_sub_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a - m • p) b = toIocDiv hp a b + m
 -/
 theorem toIocDiv_sub' (a b : α) : toIocDiv hp (a - p) b = toIocDiv hp a b + 1 := by
   simpa only [one_zsmul] using toIocDiv_sub_zsmul' hp a b 1
-
-/--
-theorem `toIcoDiv_sub_eq_toIcoDiv_add` / 定理 `toIcoDiv_sub_eq_toIcoDiv_add`
-
-English:
-theorem toIcoDiv_sub_eq_toIcoDiv_add
-  given: (a b c : α)
-  proof: by
-  apply toIcoDiv_eq_of_sub_zsmul_mem_Ico
-  rw [← sub_right_comm]; rw [Set.sub_mem_Ico_iff_left]; rw [add_right_comm]
-  exact sub_toIcoDiv_zsmul_mem_Ico hp (a + c) b
-
-中文:
-定理 toIcoDiv_sub_eq_toIcoDiv_add
-  条件: (a b c : α)
-  证明: by
-  apply toIcoDiv_eq_of_sub_zsmul_mem_Ico
-  rw [← sub_right_comm]; rw [Set.sub_mem_Ico_iff_left]; rw [add_right_comm]
-  exact sub_toIcoDiv_zsmul_mem_Ico hp (a + c) b
-
-Depends on / 依赖: Set.sub_mem_Ico_iff_left, add_right_comm, sub_mem_Ico_iff_left, sub_right_comm, sub_toIcoDiv_zsmul_mem_Ico, toIcoDiv_eq_of_sub_zsmul_mem_Ico
+/-
+**toIcoDiv_sub_eq_toIcoDiv_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_eq_toIcoDiv_add (a b c : α) : toIcoDiv hp a (b - c) = toIcoDi
+v hp (a + c) b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_eq_of_sub_zsmul_mem_Ico`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c
+ : α), a - b - c = a - c - b
+· 使用定理 `Set.sub_mem_Ico_iff_left`：sub_mem_Ico_iff_left : a - b in Set.Ico c d ↔ 
+a in Set.Ico (c + b) (d + b)
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `sub_toIcoDiv_zsmul_mem_Ico`：sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - t
+oIcoDiv hp a b • p in Set.Ico a (a + p)
 -/
 theorem toIcoDiv_sub_eq_toIcoDiv_add (a b c : α) :
     toIcoDiv hp a (b - c) = toIcoDiv hp (a + c) b := by
   apply toIcoDiv_eq_of_sub_zsmul_mem_Ico
-  rw [← sub_right_comm]; rw [Set.sub_mem_Ico_iff_left]; rw [add_right_comm]
+  rw [← sub_right_comm, Set.sub_mem_Ico_iff_left, add_right_comm]
   exact sub_toIcoDiv_zsmul_mem_Ico hp (a + c) b
-
-/--
-theorem `toIocDiv_sub_eq_toIocDiv_add` / 定理 `toIocDiv_sub_eq_toIocDiv_add`
-
-English:
-theorem toIocDiv_sub_eq_toIocDiv_add
-  given: (a b c : α)
-  proof: by
-  apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
-  rw [← sub_right_comm]; rw [Set.sub_mem_Ioc_iff_left]; rw [add_right_comm]
-  exact sub_toIocDiv_zsmul_mem_Ioc hp (a + c) b
-
-中文:
-定理 toIocDiv_sub_eq_toIocDiv_add
-  条件: (a b c : α)
-  证明: by
-  apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
-  rw [← sub_right_comm]; rw [Set.sub_mem_Ioc_iff_left]; rw [add_right_comm]
-  exact sub_toIocDiv_zsmul_mem_Ioc hp (a + c) b
-
-Depends on / 依赖: Set.sub_mem_Ioc_iff_left, add_right_comm, sub_mem_Ioc_iff_left, sub_right_comm, sub_toIocDiv_zsmul_mem_Ioc, toIocDiv_eq_of_sub_zsmul_mem_Ioc
+/-
+**toIocDiv_sub_eq_toIocDiv_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_eq_toIocDiv_add (a b c : α) : toIocDiv hp a (b - c) = toIocDi
+v hp (a + c) b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c
+ : α), a - b - c = a - c - b
+· 使用定理 `Set.sub_mem_Ioc_iff_left`：sub_mem_Ioc_iff_left : a - b in Set.Ioc c d ↔ 
+a in Set.Ioc (c + b) (d + b)
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `sub_toIocDiv_zsmul_mem_Ioc`：sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - t
+oIocDiv hp a b • p in Set.Ioc a (a + p)
 -/
 theorem toIocDiv_sub_eq_toIocDiv_add (a b c : α) :
     toIocDiv hp a (b - c) = toIocDiv hp (a + c) b := by
   apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
-  rw [← sub_right_comm]; rw [Set.sub_mem_Ioc_iff_left]; rw [add_right_comm]
+  rw [← sub_right_comm, Set.sub_mem_Ioc_iff_left, add_right_comm]
   exact sub_toIocDiv_zsmul_mem_Ioc hp (a + c) b
-
-/--
-theorem `toIcoDiv_sub_eq_toIcoDiv_add'` / 定理 `toIcoDiv_sub_eq_toIcoDiv_add'`
-
-English:
-theorem toIcoDiv_sub_eq_toIcoDiv_add'
-  given: (a b c : α)
-  proof: by
-  rw [← sub_neg_eq_add]; rw [toIcoDiv_sub_eq_toIcoDiv_add]; rw [sub_eq_add_neg]
-
-中文:
-定理 toIcoDiv_sub_eq_toIcoDiv_add'
-  条件: (a b c : α)
-  证明: by
-  rw [← sub_neg_eq_add]; rw [toIcoDiv_sub_eq_toIcoDiv_add]; rw [sub_eq_add_neg]
-
-Depends on / 依赖: sub_eq_add_neg, sub_neg_eq_add, toIcoDiv_sub_eq_toIcoDiv_add
+/-
+**toIcoDiv_sub_eq_toIcoDiv_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_eq_toIcoDiv_add' (a b c : α) : toIcoDiv hp (a - c) b = toIcoD
+iv hp a (b + c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `toIcoDiv_sub_eq_toIcoDiv_add`：toIcoDiv_sub_eq_toIcoDiv_add (a b c : α) :
+ toIcoDiv hp a (b - c) = toIcoDiv hp (a + c) b
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
 theorem toIcoDiv_sub_eq_toIcoDiv_add' (a b c : α) :
     toIcoDiv hp (a - c) b = toIcoDiv hp a (b + c) := by
-  rw [← sub_neg_eq_add]; rw [toIcoDiv_sub_eq_toIcoDiv_add]; rw [sub_eq_add_neg]
-
-/--
-theorem `toIocDiv_sub_eq_toIocDiv_add'` / 定理 `toIocDiv_sub_eq_toIocDiv_add'`
-
-English:
-theorem toIocDiv_sub_eq_toIocDiv_add'
-  given: (a b c : α)
-  proof: by
-  rw [← sub_neg_eq_add]; rw [toIocDiv_sub_eq_toIocDiv_add]; rw [sub_eq_add_neg]
-
-中文:
-定理 toIocDiv_sub_eq_toIocDiv_add'
-  条件: (a b c : α)
-  证明: by
-  rw [← sub_neg_eq_add]; rw [toIocDiv_sub_eq_toIocDiv_add]; rw [sub_eq_add_neg]
-
-Depends on / 依赖: sub_eq_add_neg, sub_neg_eq_add, toIocDiv_sub_eq_toIocDiv_add
+  rw [← sub_neg_eq_add, toIcoDiv_sub_eq_toIcoDiv_add, sub_eq_add_neg]
+/-
+**toIocDiv_sub_eq_toIocDiv_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_eq_toIocDiv_add' (a b c : α) : toIocDiv hp (a - c) b = toIocD
+iv hp a (b + c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `toIocDiv_sub_eq_toIocDiv_add`：toIocDiv_sub_eq_toIocDiv_add (a b c : α) :
+ toIocDiv hp a (b - c) = toIocDiv hp (a + c) b
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
 theorem toIocDiv_sub_eq_toIocDiv_add' (a b c : α) :
     toIocDiv hp (a - c) b = toIocDiv hp a (b + c) := by
-  rw [← sub_neg_eq_add]; rw [toIocDiv_sub_eq_toIocDiv_add]; rw [sub_eq_add_neg]
-
-/--
-theorem `toIcoDiv_neg` / 定理 `toIcoDiv_neg`
-
-English:
-theorem toIcoDiv_neg
-  given: (a b : α)
-  statement: toIcoDiv hp a (-b) = -(toIocDiv hp (-a) b + 1)
-  proof: by
-  suffices toIcoDiv hp a (-b) = -toIocDiv hp (-(a + p)) b by
-    rwa [neg_add, ← sub_eq_add_neg, toIocDiv_sub_eq_toIocDiv_add', toIocDiv_add_right] at this
-  rw [← neg_eq_iff_eq_neg]; rw [eq_comm]
-  apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
-  obtain ⟨hc, ho⟩ := sub_toIcoDiv_zsmul_mem_Ico hp a (-b)
-  rw [← neg_lt_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at ho
-  rw [← neg_le_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at hc
-  refine ⟨ho, hc.trans_eq ?_⟩
-  rw [neg_add]; rw [neg_add_cancel_right]
-
-中文:
-定理 toIcoDiv_neg
-  条件: (a b : α)
-  结论: toIcoDiv hp a (-b) = -(toIocDiv hp (-a) b + 1)
-  证明: by
-  suffices toIcoDiv hp a (-b) = -toIocDiv hp (-(a + p)) b by
-    rwa [neg_add, ← sub_eq_add_neg, toIocDiv_sub_eq_toIocDiv_add', toIocDiv_add_right] at this
-  rw [← neg_eq_iff_eq_neg]; rw [eq_comm]
-  apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
-  obtain ⟨hc, ho⟩ := sub_toIcoDiv_zsmul_mem_Ico hp a (-b)
-  rw [← neg_lt_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at ho
-  rw [← neg_le_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at hc
-  refine ⟨ho, hc.trans_eq ?_⟩
-  rw [neg_add]; rw [neg_add_cancel_right]
-
-Depends on / 依赖: eq_comm, hc.trans_eq, neg_add, neg_add_c, neg_eq_iff_eq_neg, neg_le_neg_iff, neg_lt_neg_iff, neg_neg, neg_smul, neg_sub, sub_eq_add_neg, sub_toIcoDiv_zsmul_mem_Ico, toIcoDiv, toIocDiv, toIocDiv_add_right, toIocDiv_eq_of_sub_zsmul_mem_Ioc, toIocDiv_sub_eq_toIocDiv_add, trans_eq
+  rw [← sub_neg_eq_add, toIocDiv_sub_eq_toIocDiv_add, sub_eq_add_neg]
+/-
+**toIcoDiv_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_neg (a b : α) : toIcoDiv hp a (-b) = -(toIocDiv hp (-a) b + 1)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_eq_iff_eq_neg`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, 
+-a = b ↔ a = -b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `sub_toIcoDiv_zsmul_mem_Ico`：sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - t
+oIcoDiv hp a b • p in Set.Ico a (a + p)
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `neg_sub'`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b : α), -
+(a - b) = -a - -b
+· 使用定理 `neg_lt_neg_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddL
+eftStrictMono α] {a b : α} [AddRightStrictMono α],   -a < -b ↔ b < a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `neg_le_neg_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddL
+eftMono α] {a b : α} [AddRightMono α], -a ≤ -b ↔ b ≤ a
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `neg_add_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ -b + b = a
+· 使用定理 `toIocDiv_add_right`：toIocDiv_add_right (a b : α) : toIocDiv hp a (b + p)
+ = toIocDiv hp a b + 1
+· 使用定理 `toIocDiv_sub_eq_toIocDiv_add'`：toIocDiv_sub_eq_toIocDiv_add' (a b c : α)
+ : toIocDiv hp (a - c) b = toIocDiv hp a (b + c)
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
 theorem toIcoDiv_neg (a b : α) : toIcoDiv hp a (-b) = -(toIocDiv hp (-a) b + 1) := by
   suffices toIcoDiv hp a (-b) = -toIocDiv hp (-(a + p)) b by
     rwa [neg_add, ← sub_eq_add_neg, toIocDiv_sub_eq_toIocDiv_add', toIocDiv_add_right] at this
-  rw [← neg_eq_iff_eq_neg]; rw [eq_comm]
+  rw [← neg_eq_iff_eq_neg, eq_comm]
   apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
   obtain ⟨hc, ho⟩ := sub_toIcoDiv_zsmul_mem_Ico hp a (-b)
-  rw [← neg_lt_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at ho
-  rw [← neg_le_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at hc
+  rw [← neg_lt_neg_iff, neg_sub' (-b), neg_neg, ← neg_smul] at ho
+  rw [← neg_le_neg_iff, neg_sub' (-b), neg_neg, ← neg_smul] at hc
   refine ⟨ho, hc.trans_eq ?_⟩
-  rw [neg_add]; rw [neg_add_cancel_right]
-
-/--
-theorem `toIcoDiv_neg'` / 定理 `toIcoDiv_neg'`
-
-English:
-theorem toIcoDiv_neg'
-  given: (a b : α)
-  statement: toIcoDiv hp (-a) b = -(toIocDiv hp a (-b) + 1)
-  proof: by
-  simpa only [neg_neg] using toIcoDiv_neg hp (-a) (-b)
-
-中文:
-定理 toIcoDiv_neg'
-  条件: (a b : α)
-  结论: toIcoDiv hp (-a) b = -(toIocDiv hp a (-b) + 1)
-  证明: by
-  simpa only [neg_neg] using toIcoDiv_neg hp (-a) (-b)
-
-Depends on / 依赖: neg_neg, toIcoDiv_neg
+  rw [neg_add, neg_add_cancel_right]
+/-
+**toIcoDiv_neg'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_neg' (a b : α) : toIcoDiv hp (-a) b = -(toIocDiv hp a (-b) + 1)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `toIcoDiv_neg`：toIcoDiv_neg (a b : α) : toIcoDiv hp a (-b) = -(toIocDiv h
+p (-a) b + 1)
 -/
 theorem toIcoDiv_neg' (a b : α) : toIcoDiv hp (-a) b = -(toIocDiv hp a (-b) + 1) := by
   simpa only [neg_neg] using toIcoDiv_neg hp (-a) (-b)
-
-/--
-theorem `toIocDiv_neg` / 定理 `toIocDiv_neg`
-
-English:
-theorem toIocDiv_neg
-  given: (a b : α)
-  statement: toIocDiv hp a (-b) = -(toIcoDiv hp (-a) b + 1)
-  proof: by
-  rw [← neg_neg b]; rw [toIcoDiv_neg]; rw [neg_neg]; rw [neg_neg]; rw [neg_add']; rw [neg_neg]; rw [add_sub_cancel_right]
-
-中文:
-定理 toIocDiv_neg
-  条件: (a b : α)
-  结论: toIocDiv hp a (-b) = -(toIcoDiv hp (-a) b + 1)
-  证明: by
-  rw [← neg_neg b]; rw [toIcoDiv_neg]; rw [neg_neg]; rw [neg_neg]; rw [neg_add']; rw [neg_neg]; rw [add_sub_cancel_right]
-
-Depends on / 依赖: add_sub_cancel_right, neg_add, neg_neg, toIcoDiv_neg
+/-
+**toIocDiv_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_neg (a b : α) : toIocDiv hp a (-b) = -(toIcoDiv hp (-a) b + 1)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `toIcoDiv_neg`：toIcoDiv_neg (a b : α) : toIcoDiv hp a (-b) = -(toIocDiv h
+p (-a) b + 1)
+· 使用定理 `neg_add'`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b : α), -
+(a + b) = -a - b
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
 -/
 theorem toIocDiv_neg (a b : α) : toIocDiv hp a (-b) = -(toIcoDiv hp (-a) b + 1) := by
-  rw [← neg_neg b]; rw [toIcoDiv_neg]; rw [neg_neg]; rw [neg_neg]; rw [neg_add']; rw [neg_neg]; rw [add_sub_cancel_right]
-
-/--
-theorem `toIocDiv_neg'` / 定理 `toIocDiv_neg'`
-
-English:
-theorem toIocDiv_neg'
-  given: (a b : α)
-  statement: toIocDiv hp (-a) b = -(toIcoDiv hp a (-b) + 1)
-  proof: by
-  simpa only [neg_neg] using toIocDiv_neg hp (-a) (-b)
-
-@[simp]
-
-中文:
-定理 toIocDiv_neg'
-  条件: (a b : α)
-  结论: toIocDiv hp (-a) b = -(toIcoDiv hp a (-b) + 1)
-  证明: by
-  simpa only [neg_neg] using toIocDiv_neg hp (-a) (-b)
-
-@[simp]
-
-Depends on / 依赖: neg_neg, toIocDiv_neg
+  rw [← neg_neg b, toIcoDiv_neg, neg_neg, neg_neg, neg_add', neg_neg, add_sub_cancel_right]
+/-
+**toIocDiv_neg'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_neg' (a b : α) : toIocDiv hp (-a) b = -(toIcoDiv hp a (-b) + 1)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `toIocDiv_neg`：toIocDiv_neg (a b : α) : toIocDiv hp a (-b) = -(toIcoDiv h
+p (-a) b + 1)
 -/
 theorem toIocDiv_neg' (a b : α) : toIocDiv hp (-a) b = -(toIcoDiv hp a (-b) + 1) := by
   simpa only [neg_neg] using toIocDiv_neg hp (-a) (-b)
 
 @[simp]
-/--
-theorem `toIcoMod_add_zsmul` / 定理 `toIcoMod_add_zsmul`
-
-English:
-theorem toIcoMod_add_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIcoMod hp a (b + m • p) = toIcoMod hp a b
-  proof: by
-  rw [toIcoMod]; rw [toIcoDiv_add_zsmul]; rw [toIcoMod]; rw [add_smul]
-  abel
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIcoMod hp a (b + m • p) = toIcoMod hp a b
-  证明: by
-  rw [toIcoMod]; rw [toIcoDiv_add_zsmul]; rw [toIcoMod]; rw [add_smul]
-  abel
-
-@[simp]
-
-Depends on / 依赖: add_smul, toIcoDiv_add_zsmul, toIcoMod
+/-
+**toIcoMod_add_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp a (b + m • p) = toIco
+Mod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIcoDiv_add_zsmul`：toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b + m • p) = toIcoDiv hp a b + m
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.toIcoMod_add_zsmul._abel_
+1_2`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2 :
+ IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 < p…
 -/
-theorem toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp a (b + m • p) = toIcoMod hp a b := by
-  rw [toIcoMod]; rw [toIcoDiv_add_zsmul]; rw [toIcoMod]; rw [add_smul]
+theorem toIcoMod_add_zsmul (a b : α) (m : ℤ) : toIcoMod hp a (b + m • p) = toIcoMod hp a b := by
+  rw [toIcoMod, toIcoDiv_add_zsmul, toIcoMod, add_smul]
   abel
 
 @[simp]
-/--
-theorem `toIcoMod_add_nsmul` / 定理 `toIcoMod_add_nsmul`
-
-English:
-theorem toIcoMod_add_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIcoMod hp a (b + m • p) = toIcoMod hp a b
-  proof: mod_cast toIcoMod_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoMod hp a (b + m • p) = toIcoMod hp a b
-  证明: mod_cast toIcoMod_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: Monoid, Quotient, conGen, mod_cast, toIcoMod_add_zsmul
+/-
+**toIcoMod_add_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_nsmul (a b : α) (m : Nat) : toIcoMod hp a (b + m • p) = toIco
+Mod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoMod_add_zsmul`：toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b + m • p) = toIcoMod hp a b
 -/
-theorem toIcoMod_add_nsmul (a b : α) (m : Nat) : toIcoMod hp a (b + m • p) = toIcoMod hp a b :=
+theorem toIcoMod_add_nsmul (a b : α) (m : ℕ) : toIcoMod hp a (b + m • p) = toIcoMod hp a b :=
   mod_cast toIcoMod_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_zsmul'` / 定理 `toIcoMod_add_zsmul'`
-
-English:
-theorem toIcoMod_add_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  simp only [toIcoMod, toIcoDiv_add_zsmul', sub_smul, sub_add]
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  simp only [toIcoMod, toIcoDiv_add_zsmul', sub_smul, sub_add]
-
-@[simp]
-
-Depends on / 依赖: sub_add, sub_smul, toIcoDiv_add_zsmul, toIcoMod
+/-
+**toIcoMod_add_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_zsmul' (a b : α) (m : Int) : toIcoMod hp (a + m • p) b = toIc
+oMod hp a b + m • p
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIcoDiv_add_zsmul'`：toIcoDiv_add_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a + m • p) b = toIcoDiv hp a b - m
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `sub_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b + c = a - (b - c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toIcoMod_add_zsmul' (a b : α) (m : Int) :
+theorem toIcoMod_add_zsmul' (a b : α) (m : ℤ) :
     toIcoMod hp (a + m • p) b = toIcoMod hp a b + m • p := by
   simp only [toIcoMod, toIcoDiv_add_zsmul', sub_smul, sub_add]
 
 @[simp]
-/--
-theorem `toIcoMod_add_nsmul'` / 定理 `toIcoMod_add_nsmul'`
-
-English:
-theorem toIcoMod_add_nsmul'
-  given: (a b : α) (m : Nat)
-  proof: mod_cast toIcoMod_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_nsmul'
-  条件: (a b : α) (m : 自然数)
-  证明: mod_cast toIcoMod_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_add_zsmul
+/-
+**toIcoMod_add_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_nsmul' (a b : α) (m : Nat) : toIcoMod hp (a + m • p) b = toIc
+oMod hp a b + m • p
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoMod_add_zsmul'`：toIcoMod_add_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a + m • p) b = toIcoMod hp a b + m • p
 -/
-theorem toIcoMod_add_nsmul' (a b : α) (m : Nat) :
+theorem toIcoMod_add_nsmul' (a b : α) (m : ℕ) :
     toIcoMod hp (a + m • p) b = toIcoMod hp a b + m • p :=
   mod_cast toIcoMod_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_zsmul` / 定理 `toIocMod_add_zsmul`
-
-English:
-theorem toIocMod_add_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIocMod hp a (b + m • p) = toIocMod hp a b
-  proof: by
-  rw [toIocMod]; rw [toIocDiv_add_zsmul]; rw [toIocMod]; rw [add_smul]
-  abel
-
-@[simp]
-
-中文:
-定理 toIocMod_add_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIocMod hp a (b + m • p) = toIocMod hp a b
-  证明: by
-  rw [toIocMod]; rw [toIocDiv_add_zsmul]; rw [toIocMod]; rw [add_smul]
-  abel
-
-@[simp]
-
-Depends on / 依赖: add_smul, toIocDiv_add_zsmul, toIocMod
+/-
+**toIocMod_add_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp a (b + m • p) = toIoc
+Mod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIocDiv_add_zsmul`：toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b + m • p) = toIocDiv hp a b + m
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.toIocMod_add_zsmul._abel_
+1_2`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2 :
+ IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 < p…
 -/
-theorem toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp a (b + m • p) = toIocMod hp a b := by
-  rw [toIocMod]; rw [toIocDiv_add_zsmul]; rw [toIocMod]; rw [add_smul]
+theorem toIocMod_add_zsmul (a b : α) (m : ℤ) : toIocMod hp a (b + m • p) = toIocMod hp a b := by
+  rw [toIocMod, toIocDiv_add_zsmul, toIocMod, add_smul]
   abel
 
 @[simp]
-/--
-theorem `toIocMod_add_nsmul` / 定理 `toIocMod_add_nsmul`
-
-English:
-theorem toIocMod_add_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIocMod hp a (b + m • p) = toIocMod hp a b
-  proof: mod_cast toIocMod_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIocMod hp a (b + m • p) = toIocMod hp a b
-  证明: mod_cast toIocMod_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_add_zsmul
+/-
+**toIocMod_add_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_nsmul (a b : α) (m : Nat) : toIocMod hp a (b + m • p) = toIoc
+Mod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocMod_add_zsmul`：toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b + m • p) = toIocMod hp a b
 -/
-theorem toIocMod_add_nsmul (a b : α) (m : Nat) : toIocMod hp a (b + m • p) = toIocMod hp a b :=
+theorem toIocMod_add_nsmul (a b : α) (m : ℕ) : toIocMod hp a (b + m • p) = toIocMod hp a b :=
   mod_cast toIocMod_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_zsmul'` / 定理 `toIocMod_add_zsmul'`
-
-English:
-theorem toIocMod_add_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  simp only [toIocMod, toIocDiv_add_zsmul', sub_smul, sub_add]
-
-@[simp]
-
-中文:
-定理 toIocMod_add_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  simp only [toIocMod, toIocDiv_add_zsmul', sub_smul, sub_add]
-
-@[simp]
-
-Depends on / 依赖: sub_add, sub_smul, toIocDiv_add_zsmul, toIocMod
+/-
+**toIocMod_add_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_zsmul' (a b : α) (m : Int) : toIocMod hp (a + m • p) b = toIo
+cMod hp a b + m • p
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIocDiv_add_zsmul'`：toIocDiv_add_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a + m • p) b = toIocDiv hp a b - m
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `sub_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b + c = a - (b - c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toIocMod_add_zsmul' (a b : α) (m : Int) :
+theorem toIocMod_add_zsmul' (a b : α) (m : ℤ) :
     toIocMod hp (a + m • p) b = toIocMod hp a b + m • p := by
   simp only [toIocMod, toIocDiv_add_zsmul', sub_smul, sub_add]
 
 @[simp]
-/--
-theorem `toIocMod_add_nsmul'` / 定理 `toIocMod_add_nsmul'`
-
-English:
-theorem toIocMod_add_nsmul'
-  given: (a b : α) (m : Nat)
-  proof: mod_cast toIocMod_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_nsmul'
-  条件: (a b : α) (m : 自然数)
-  证明: mod_cast toIocMod_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_add_zsmul
+/-
+**toIocMod_add_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_nsmul' (a b : α) (m : Nat) : toIocMod hp (a + m • p) b = toIo
+cMod hp a b + m • p
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocMod_add_zsmul'`：toIocMod_add_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a + m • p) b = toIocMod hp a b + m • p
 -/
-theorem toIocMod_add_nsmul' (a b : α) (m : Nat) :
+theorem toIocMod_add_nsmul' (a b : α) (m : ℕ) :
     toIocMod hp (a + m • p) b = toIocMod hp a b + m • p :=
   mod_cast toIocMod_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_zsmul_add` / 定理 `toIcoMod_zsmul_add`
-
-English:
-theorem toIcoMod_zsmul_add
-  given: (a b : α) (m : Int)
-  statement: toIcoMod hp a (m • p + b) = toIcoMod hp a b
-  proof: by
-  rw [add_comm]; rw [toIcoMod_add_zsmul]
-
-@[simp]
-
-中文:
-定理 toIcoMod_zsmul_add
-  条件: (a b : α) (m : 整数)
-  结论: toIcoMod hp a (m • p + b) = toIcoMod hp a b
-  证明: by
-  rw [add_comm]; rw [toIcoMod_add_zsmul]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoMod_add_zsmul
+/-
+**toIcoMod_zsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_zsmul_add (a b : α) (m : Int) : toIcoMod hp a (m • p + b) = toIco
+Mod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_zsmul`：toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b + m • p) = toIcoMod hp a b
 -/
-theorem toIcoMod_zsmul_add (a b : α) (m : Int) : toIcoMod hp a (m • p + b) = toIcoMod hp a b := by
-  rw [add_comm]; rw [toIcoMod_add_zsmul]
+theorem toIcoMod_zsmul_add (a b : α) (m : ℤ) : toIcoMod hp a (m • p + b) = toIcoMod hp a b := by
+  rw [add_comm, toIcoMod_add_zsmul]
 
 @[simp]
-/--
-theorem `toIcoMod_nsmul_add` / 定理 `toIcoMod_nsmul_add`
-
-English:
-theorem toIcoMod_nsmul_add
-  given: (a b : α) (m : Nat)
-  statement: toIcoMod hp a (m • p + b) = toIcoMod hp a b
-  proof: mod_cast toIcoMod_zsmul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_nsmul_add
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoMod hp a (m • p + b) = toIcoMod hp a b
-  证明: mod_cast toIcoMod_zsmul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_zsmul_add
+/-
+**toIcoMod_nsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_nsmul_add (a b : α) (m : Nat) : toIcoMod hp a (m • p + b) = toIco
+Mod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoMod_zsmul_add`：toIcoMod_zsmul_add (a b : α) (m : Int) : toIcoMod hp
+ a (m • p + b) = toIcoMod hp a b
 -/
-theorem toIcoMod_nsmul_add (a b : α) (m : Nat) : toIcoMod hp a (m • p + b) = toIcoMod hp a b :=
+theorem toIcoMod_nsmul_add (a b : α) (m : ℕ) : toIcoMod hp a (m • p + b) = toIcoMod hp a b :=
   mod_cast toIcoMod_zsmul_add hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_zsmul_add'` / 定理 `toIcoMod_zsmul_add'`
-
-English:
-theorem toIcoMod_zsmul_add'
-  given: (a b : α) (m : Int)
-  proof: by
-  rw [add_comm]; rw [toIcoMod_add_zsmul']; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIcoMod_zsmul_add'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  rw [add_comm]; rw [toIcoMod_add_zsmul']; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoMod_add_zsmul
+/-
+**toIcoMod_zsmul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_zsmul_add' (a b : α) (m : Int) : toIcoMod hp (m • p + a) b = m • 
+p + toIcoMod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_zsmul'`：toIcoMod_add_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a + m • p) b = toIcoMod hp a b + m • p
 -/
-theorem toIcoMod_zsmul_add' (a b : α) (m : Int) :
+theorem toIcoMod_zsmul_add' (a b : α) (m : ℤ) :
     toIcoMod hp (m • p + a) b = m • p + toIcoMod hp a b := by
-  rw [add_comm]; rw [toIcoMod_add_zsmul']; rw [add_comm]
+  rw [add_comm, toIcoMod_add_zsmul', add_comm]
 
 @[simp]
-/--
-theorem `toIcoMod_nsmul_add'` / 定理 `toIcoMod_nsmul_add'`
-
-English:
-theorem toIcoMod_nsmul_add'
-  given: (a b : α) (m : Nat)
-  proof: mod_cast toIcoMod_zsmul_add' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_nsmul_add'
-  条件: (a b : α) (m : 自然数)
-  证明: mod_cast toIcoMod_zsmul_add' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_zsmul_add
+/-
+**toIcoMod_nsmul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_nsmul_add' (a b : α) (m : Nat) : toIcoMod hp (m • p + a) b = m • 
+p + toIcoMod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoMod_zsmul_add'`：toIcoMod_zsmul_add' (a b : α) (m : Int) : toIcoMod 
+hp (m • p + a) b = m • p + toIcoMod hp a b
 -/
-theorem toIcoMod_nsmul_add' (a b : α) (m : Nat) :
+theorem toIcoMod_nsmul_add' (a b : α) (m : ℕ) :
     toIcoMod hp (m • p + a) b = m • p + toIcoMod hp a b :=
   mod_cast toIcoMod_zsmul_add' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_zsmul_add` / 定理 `toIocMod_zsmul_add`
-
-English:
-theorem toIocMod_zsmul_add
-  given: (a b : α) (m : Int)
-  statement: toIocMod hp a (m • p + b) = toIocMod hp a b
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_zsmul]
-
-@[simp]
-
-中文:
-定理 toIocMod_zsmul_add
-  条件: (a b : α) (m : 整数)
-  结论: toIocMod hp a (m • p + b) = toIocMod hp a b
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_zsmul]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocMod_add_zsmul
+/-
+**toIocMod_zsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_zsmul_add (a b : α) (m : Int) : toIocMod hp a (m • p + b) = toIoc
+Mod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_zsmul`：toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b + m • p) = toIocMod hp a b
 -/
-theorem toIocMod_zsmul_add (a b : α) (m : Int) : toIocMod hp a (m • p + b) = toIocMod hp a b := by
-  rw [add_comm]; rw [toIocMod_add_zsmul]
+theorem toIocMod_zsmul_add (a b : α) (m : ℤ) : toIocMod hp a (m • p + b) = toIocMod hp a b := by
+  rw [add_comm, toIocMod_add_zsmul]
 
 @[simp]
-/--
-theorem `toIocMod_nsmul_add` / 定理 `toIocMod_nsmul_add`
-
-English:
-theorem toIocMod_nsmul_add
-  given: (a b : α) (m : Nat)
-  statement: toIocMod hp a (m • p + b) = toIocMod hp a b
-  proof: mod_cast toIocMod_zsmul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_nsmul_add
-  条件: (a b : α) (m : 自然数)
-  结论: toIocMod hp a (m • p + b) = toIocMod hp a b
-  证明: mod_cast toIocMod_zsmul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_zsmul_add
+/-
+**toIocMod_nsmul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_nsmul_add (a b : α) (m : Nat) : toIocMod hp a (m • p + b) = toIoc
+Mod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocMod_zsmul_add`：toIocMod_zsmul_add (a b : α) (m : Int) : toIocMod hp
+ a (m • p + b) = toIocMod hp a b
 -/
-theorem toIocMod_nsmul_add (a b : α) (m : Nat) : toIocMod hp a (m • p + b) = toIocMod hp a b :=
+theorem toIocMod_nsmul_add (a b : α) (m : ℕ) : toIocMod hp a (m • p + b) = toIocMod hp a b :=
   mod_cast toIocMod_zsmul_add hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_zsmul_add'` / 定理 `toIocMod_zsmul_add'`
-
-English:
-theorem toIocMod_zsmul_add'
-  given: (a b : α) (m : Int)
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_zsmul']; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIocMod_zsmul_add'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_zsmul']; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocMod_add_zsmul
+/-
+**toIocMod_zsmul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_zsmul_add' (a b : α) (m : Int) : toIocMod hp (m • p + a) b = m • 
+p + toIocMod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_zsmul'`：toIocMod_add_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a + m • p) b = toIocMod hp a b + m • p
 -/
-theorem toIocMod_zsmul_add' (a b : α) (m : Int) :
+theorem toIocMod_zsmul_add' (a b : α) (m : ℤ) :
     toIocMod hp (m • p + a) b = m • p + toIocMod hp a b := by
-  rw [add_comm]; rw [toIocMod_add_zsmul']; rw [add_comm]
+  rw [add_comm, toIocMod_add_zsmul', add_comm]
 
 @[simp]
-/--
-theorem `toIocMod_nsmul_add'` / 定理 `toIocMod_nsmul_add'`
-
-English:
-theorem toIocMod_nsmul_add'
-  given: (a b : α) (m : Nat)
-  proof: mod_cast toIocMod_zsmul_add' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_nsmul_add'
-  条件: (a b : α) (m : 自然数)
-  证明: mod_cast toIocMod_zsmul_add' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_zsmul_add
+/-
+**toIocMod_nsmul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_nsmul_add' (a b : α) (m : Nat) : toIocMod hp (m • p + a) b = m • 
+p + toIocMod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocMod_zsmul_add'`：toIocMod_zsmul_add' (a b : α) (m : Int) : toIocMod 
+hp (m • p + a) b = m • p + toIocMod hp a b
 -/
-theorem toIocMod_nsmul_add' (a b : α) (m : Nat) :
+theorem toIocMod_nsmul_add' (a b : α) (m : ℕ) :
     toIocMod hp (m • p + a) b = m • p + toIocMod hp a b :=
   mod_cast toIocMod_zsmul_add' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_zsmul` / 定理 `toIcoMod_sub_zsmul`
-
-English:
-theorem toIcoMod_sub_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIcoMod hp a (b - m • p) = toIcoMod hp a b
-  proof: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoMod_add_zsmul]
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIcoMod hp a (b - m • p) = toIcoMod hp a b
-  证明: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoMod_add_zsmul]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_eq_add_neg, toIcoMod_add_zsmul
+/-
+**toIcoMod_sub_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_zsmul (a b : α) (m : Int) : toIcoMod hp a (b - m • p) = toIco
+Mod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `toIcoMod_add_zsmul`：toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b + m • p) = toIcoMod hp a b
 -/
-theorem toIcoMod_sub_zsmul (a b : α) (m : Int) : toIcoMod hp a (b - m • p) = toIcoMod hp a b := by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIcoMod_add_zsmul]
+theorem toIcoMod_sub_zsmul (a b : α) (m : ℤ) : toIcoMod hp a (b - m • p) = toIcoMod hp a b := by
+  rw [sub_eq_add_neg, ← neg_smul, toIcoMod_add_zsmul]
 
 @[simp]
-/--
-theorem `toIcoMod_sub_nsmul` / 定理 `toIcoMod_sub_nsmul`
-
-English:
-theorem toIcoMod_sub_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIcoMod hp a (b - m • p) = toIcoMod hp a b
-  proof: mod_cast toIcoMod_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIcoMod hp a (b - m • p) = toIcoMod hp a b
-  证明: mod_cast toIcoMod_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_sub_zsmul
+/-
+**toIcoMod_sub_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_nsmul (a b : α) (m : Nat) : toIcoMod hp a (b - m • p) = toIco
+Mod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoMod_sub_zsmul`：toIcoMod_sub_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b - m • p) = toIcoMod hp a b
 -/
-theorem toIcoMod_sub_nsmul (a b : α) (m : Nat) : toIcoMod hp a (b - m • p) = toIcoMod hp a b :=
+theorem toIcoMod_sub_nsmul (a b : α) (m : ℕ) : toIcoMod hp a (b - m • p) = toIcoMod hp a b :=
   mod_cast toIcoMod_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_zsmul'` / 定理 `toIcoMod_sub_zsmul'`
-
-English:
-theorem toIcoMod_sub_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  simp_rw [sub_eq_add_neg, ← neg_smul, toIcoMod_add_zsmul']
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  simp_rw [sub_eq_add_neg, ← neg_smul, toIcoMod_add_zsmul']
-
-@[simp]
-
-Depends on / 依赖: neg_smul, simp_rw, sub_eq_add_neg, toIcoMod_add_zsmul
+/-
+**toIcoMod_sub_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_zsmul' (a b : α) (m : Int) : toIcoMod hp (a - m • p) b = toIc
+oMod hp a b - m • p
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIcoMod_add_zsmul'`：toIcoMod_add_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a + m • p) b = toIcoMod hp a b + m • p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toIcoMod_sub_zsmul' (a b : α) (m : Int) :
+theorem toIcoMod_sub_zsmul' (a b : α) (m : ℤ) :
     toIcoMod hp (a - m • p) b = toIcoMod hp a b - m • p := by
   simp_rw [sub_eq_add_neg, ← neg_smul, toIcoMod_add_zsmul']
 
 @[simp]
-/--
-theorem `toIcoMod_sub_nsmul'` / 定理 `toIcoMod_sub_nsmul'`
-
-English:
-theorem toIcoMod_sub_nsmul'
-  given: (a b : α) (m : Nat)
-  proof: mod_cast toIcoMod_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_nsmul'
-  条件: (a b : α) (m : 自然数)
-  证明: mod_cast toIcoMod_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_sub_zsmul
+/-
+**toIcoMod_sub_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_nsmul' (a b : α) (m : Nat) : toIcoMod hp (a - m • p) b = toIc
+oMod hp a b - m • p
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIcoMod_sub_zsmul'`：toIcoMod_sub_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a - m • p) b = toIcoMod hp a b - m • p
 -/
-theorem toIcoMod_sub_nsmul' (a b : α) (m : Nat) :
+theorem toIcoMod_sub_nsmul' (a b : α) (m : ℕ) :
     toIcoMod hp (a - m • p) b = toIcoMod hp a b - m • p :=
   mod_cast toIcoMod_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_zsmul` / 定理 `toIocMod_sub_zsmul`
-
-English:
-theorem toIocMod_sub_zsmul
-  given: (a b : α) (m : Int)
-  statement: toIocMod hp a (b - m • p) = toIocMod hp a b
-  proof: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocMod_add_zsmul]
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_zsmul
-  条件: (a b : α) (m : 整数)
-  结论: toIocMod hp a (b - m • p) = toIocMod hp a b
-  证明: by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocMod_add_zsmul]
-
-@[simp]
-
-Depends on / 依赖: neg_smul, sub_eq_add_neg, toIocMod_add_zsmul
+/-
+**toIocMod_sub_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_zsmul (a b : α) (m : Int) : toIocMod hp a (b - m • p) = toIoc
+Mod hp a b
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `toIocMod_add_zsmul`：toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b + m • p) = toIocMod hp a b
 -/
-theorem toIocMod_sub_zsmul (a b : α) (m : Int) : toIocMod hp a (b - m • p) = toIocMod hp a b := by
-  rw [sub_eq_add_neg]; rw [← neg_smul]; rw [toIocMod_add_zsmul]
+theorem toIocMod_sub_zsmul (a b : α) (m : ℤ) : toIocMod hp a (b - m • p) = toIocMod hp a b := by
+  rw [sub_eq_add_neg, ← neg_smul, toIocMod_add_zsmul]
 
 @[simp]
-/--
-theorem `toIocMod_sub_nsmul` / 定理 `toIocMod_sub_nsmul`
-
-English:
-theorem toIocMod_sub_nsmul
-  given: (a b : α) (m : Nat)
-  statement: toIocMod hp a (b - m • p) = toIocMod hp a b
-  proof: mod_cast toIocMod_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_nsmul
-  条件: (a b : α) (m : 自然数)
-  结论: toIocMod hp a (b - m • p) = toIocMod hp a b
-  证明: mod_cast toIocMod_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_sub_zsmul
+/-
+**toIocMod_sub_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_nsmul (a b : α) (m : Nat) : toIocMod hp a (b - m • p) = toIoc
+Mod hp a b
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocMod_sub_zsmul`：toIocMod_sub_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b - m • p) = toIocMod hp a b
 -/
-theorem toIocMod_sub_nsmul (a b : α) (m : Nat) : toIocMod hp a (b - m • p) = toIocMod hp a b :=
+theorem toIocMod_sub_nsmul (a b : α) (m : ℕ) : toIocMod hp a (b - m • p) = toIocMod hp a b :=
   mod_cast toIocMod_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_zsmul'` / 定理 `toIocMod_sub_zsmul'`
-
-English:
-theorem toIocMod_sub_zsmul'
-  given: (a b : α) (m : Int)
-  proof: by
-  simp_rw [sub_eq_add_neg, ← neg_smul, toIocMod_add_zsmul']
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_zsmul'
-  条件: (a b : α) (m : 整数)
-  证明: by
-  simp_rw [sub_eq_add_neg, ← neg_smul, toIocMod_add_zsmul']
-
-@[simp]
-
-Depends on / 依赖: neg_smul, simp_rw, sub_eq_add_neg, toIocMod_add_zsmul
+/-
+**toIocMod_sub_zsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_zsmul' (a b : α) (m : Int) : toIocMod hp (a - m • p) b = toIo
+cMod hp a b - m • p
+参数：a b : α；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIocMod_add_zsmul'`：toIocMod_add_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a + m • p) b = toIocMod hp a b + m • p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toIocMod_sub_zsmul' (a b : α) (m : Int) :
+theorem toIocMod_sub_zsmul' (a b : α) (m : ℤ) :
     toIocMod hp (a - m • p) b = toIocMod hp a b - m • p := by
   simp_rw [sub_eq_add_neg, ← neg_smul, toIocMod_add_zsmul']
 
 @[simp]
-/--
-theorem `toIocMod_sub_nsmul'` / 定理 `toIocMod_sub_nsmul'`
-
-English:
-theorem toIocMod_sub_nsmul'
-  given: (a b : α) (m : Nat)
-  proof: mod_cast toIocMod_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_nsmul'
-  条件: (a b : α) (m : 自然数)
-  证明: mod_cast toIocMod_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_sub_zsmul
+/-
+**toIocMod_sub_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_nsmul' (a b : α) (m : Nat) : toIocMod hp (a - m • p) b = toIo
+cMod hp a b - m • p
+参数：a b : α；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `toIocMod_sub_zsmul'`：toIocMod_sub_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a - m • p) b = toIocMod hp a b - m • p
 -/
-theorem toIocMod_sub_nsmul' (a b : α) (m : Nat) :
+theorem toIocMod_sub_nsmul' (a b : α) (m : ℕ) :
     toIocMod hp (a - m • p) b = toIocMod hp a b - m • p :=
   mod_cast toIocMod_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_right` / 定理 `toIcoMod_add_right`
-
-English:
-theorem toIcoMod_add_right
-  given: (a b : α)
-  statement: toIcoMod hp a (b + p) = toIcoMod hp a b
-  proof: by
-  simpa only [one_zsmul] using toIcoMod_add_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_right
-  条件: (a b : α)
-  结论: toIcoMod hp a (b + p) = toIcoMod hp a b
-  证明: by
-  simpa only [one_zsmul] using toIcoMod_add_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoMod_add_zsmul
+/-
+**toIcoMod_add_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_right (a b : α) : toIcoMod hp a (b + p) = toIcoMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoMod_add_zsmul`：toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b + m • p) = toIcoMod hp a b
 -/
 theorem toIcoMod_add_right (a b : α) : toIcoMod hp a (b + p) = toIcoMod hp a b := by
   simpa only [one_zsmul] using toIcoMod_add_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIcoMod_add_right'` / 定理 `toIcoMod_add_right'`
-
-English:
-theorem toIcoMod_add_right'
-  given: (a b : α)
-  statement: toIcoMod hp (a + p) b = toIcoMod hp a b + p
-  proof: by
-  simpa only [one_zsmul] using toIcoMod_add_zsmul' hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_right'
-  条件: (a b : α)
-  结论: toIcoMod hp (a + p) b = toIcoMod hp a b + p
-  证明: by
-  simpa only [one_zsmul] using toIcoMod_add_zsmul' hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoMod_add_zsmul
+/-
+**toIcoMod_add_right'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_right' (a b : α) : toIcoMod hp (a + p) b = toIcoMod hp a b + 
+p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoMod_add_zsmul'`：toIcoMod_add_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a + m • p) b = toIcoMod hp a b + m • p
 -/
 theorem toIcoMod_add_right' (a b : α) : toIcoMod hp (a + p) b = toIcoMod hp a b + p := by
   simpa only [one_zsmul] using toIcoMod_add_zsmul' hp a b 1
 
 @[simp]
-/--
-theorem `toIocMod_add_right` / 定理 `toIocMod_add_right`
-
-English:
-theorem toIocMod_add_right
-  given: (a b : α)
-  statement: toIocMod hp a (b + p) = toIocMod hp a b
-  proof: by
-  simpa only [one_zsmul] using toIocMod_add_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIocMod_add_right
-  条件: (a b : α)
-  结论: toIocMod hp a (b + p) = toIocMod hp a b
-  证明: by
-  simpa only [one_zsmul] using toIocMod_add_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIocMod_add_zsmul
+/-
+**toIocMod_add_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_right (a b : α) : toIocMod hp a (b + p) = toIocMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocMod_add_zsmul`：toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b + m • p) = toIocMod hp a b
 -/
 theorem toIocMod_add_right (a b : α) : toIocMod hp a (b + p) = toIocMod hp a b := by
   simpa only [one_zsmul] using toIocMod_add_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIocMod_add_right'` / 定理 `toIocMod_add_right'`
-
-English:
-theorem toIocMod_add_right'
-  given: (a b : α)
-  statement: toIocMod hp (a + p) b = toIocMod hp a b + p
-  proof: by
-  simpa only [one_zsmul] using toIocMod_add_zsmul' hp a b 1
-
-@[simp]
-
-中文:
-定理 toIocMod_add_right'
-  条件: (a b : α)
-  结论: toIocMod hp (a + p) b = toIocMod hp a b + p
-  证明: by
-  simpa only [one_zsmul] using toIocMod_add_zsmul' hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIocMod_add_zsmul
+/-
+**toIocMod_add_right'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_right' (a b : α) : toIocMod hp (a + p) b = toIocMod hp a b + 
+p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocMod_add_zsmul'`：toIocMod_add_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a + m • p) b = toIocMod hp a b + m • p
 -/
 theorem toIocMod_add_right' (a b : α) : toIocMod hp (a + p) b = toIocMod hp a b + p := by
   simpa only [one_zsmul] using toIocMod_add_zsmul' hp a b 1
 
 @[simp]
-/--
-theorem `toIcoMod_add_left` / 定理 `toIcoMod_add_left`
-
-English:
-theorem toIcoMod_add_left
-  given: (a b : α)
-  statement: toIcoMod hp a (p + b) = toIcoMod hp a b
-  proof: by
-  rw [add_comm]; rw [toIcoMod_add_right]
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_left
-  条件: (a b : α)
-  结论: toIcoMod hp a (p + b) = toIcoMod hp a b
-  证明: by
-  rw [add_comm]; rw [toIcoMod_add_right]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoMod_add_right
+/-
+**toIcoMod_add_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_left (a b : α) : toIcoMod hp a (p + b) = toIcoMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_right`：toIcoMod_add_right (a b : α) : toIcoMod hp a (b + p)
+ = toIcoMod hp a b
 -/
 theorem toIcoMod_add_left (a b : α) : toIcoMod hp a (p + b) = toIcoMod hp a b := by
-  rw [add_comm]; rw [toIcoMod_add_right]
+  rw [add_comm, toIcoMod_add_right]
 
 @[simp]
-/--
-theorem `toIcoMod_add_left'` / 定理 `toIcoMod_add_left'`
-
-English:
-theorem toIcoMod_add_left'
-  given: (a b : α)
-  statement: toIcoMod hp (p + a) b = p + toIcoMod hp a b
-  proof: by
-  rw [add_comm]; rw [toIcoMod_add_right']; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_left'
-  条件: (a b : α)
-  结论: toIcoMod hp (p + a) b = p + toIcoMod hp a b
-  证明: by
-  rw [add_comm]; rw [toIcoMod_add_right']; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoMod_add_right
+/-
+**toIcoMod_add_left'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_left' (a b : α) : toIcoMod hp (p + a) b = p + toIcoMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_right'`：toIcoMod_add_right' (a b : α) : toIcoMod hp (a + p)
+ b = toIcoMod hp a b + p
 -/
 theorem toIcoMod_add_left' (a b : α) : toIcoMod hp (p + a) b = p + toIcoMod hp a b := by
-  rw [add_comm]; rw [toIcoMod_add_right']; rw [add_comm]
+  rw [add_comm, toIcoMod_add_right', add_comm]
 
 @[simp]
-/--
-theorem `toIocMod_add_left` / 定理 `toIocMod_add_left`
-
-English:
-theorem toIocMod_add_left
-  given: (a b : α)
-  statement: toIocMod hp a (p + b) = toIocMod hp a b
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_right]
-
-@[simp]
-
-中文:
-定理 toIocMod_add_left
-  条件: (a b : α)
-  结论: toIocMod hp a (p + b) = toIocMod hp a b
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_right]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocMod_add_right
+/-
+**toIocMod_add_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_left (a b : α) : toIocMod hp a (p + b) = toIocMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_right`：toIocMod_add_right (a b : α) : toIocMod hp a (b + p)
+ = toIocMod hp a b
 -/
 theorem toIocMod_add_left (a b : α) : toIocMod hp a (p + b) = toIocMod hp a b := by
-  rw [add_comm]; rw [toIocMod_add_right]
+  rw [add_comm, toIocMod_add_right]
 
 @[simp]
-/--
-theorem `toIocMod_add_left'` / 定理 `toIocMod_add_left'`
-
-English:
-theorem toIocMod_add_left'
-  given: (a b : α)
-  statement: toIocMod hp (p + a) b = p + toIocMod hp a b
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_right']; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIocMod_add_left'
-  条件: (a b : α)
-  结论: toIocMod hp (p + a) b = p + toIocMod hp a b
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_right']; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocMod_add_right
+/-
+**toIocMod_add_left'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_left' (a b : α) : toIocMod hp (p + a) b = p + toIocMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_right'`：toIocMod_add_right' (a b : α) : toIocMod hp (a + p)
+ b = toIocMod hp a b + p
 -/
 theorem toIocMod_add_left' (a b : α) : toIocMod hp (p + a) b = p + toIocMod hp a b := by
-  rw [add_comm]; rw [toIocMod_add_right']; rw [add_comm]
+  rw [add_comm, toIocMod_add_right', add_comm]
 
 @[simp]
-/--
-theorem `toIcoMod_sub` / 定理 `toIcoMod_sub`
-
-English:
-theorem toIcoMod_sub
-  given: (a b : α)
-  statement: toIcoMod hp a (b - p) = toIcoMod hp a b
-  proof: by
-  simpa only [one_zsmul] using toIcoMod_sub_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub
-  条件: (a b : α)
-  结论: toIcoMod hp a (b - p) = toIcoMod hp a b
-  证明: by
-  simpa only [one_zsmul] using toIcoMod_sub_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoMod_sub_zsmul
+/-
+**toIcoMod_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub (a b : α) : toIcoMod hp a (b - p) = toIcoMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoMod_sub_zsmul`：toIcoMod_sub_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b - m • p) = toIcoMod hp a b
 -/
 theorem toIcoMod_sub (a b : α) : toIcoMod hp a (b - p) = toIcoMod hp a b := by
   simpa only [one_zsmul] using toIcoMod_sub_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIcoMod_sub'` / 定理 `toIcoMod_sub'`
-
-English:
-theorem toIcoMod_sub'
-  given: (a b : α)
-  statement: toIcoMod hp (a - p) b = toIcoMod hp a b - p
-  proof: by
-  simpa only [one_zsmul] using toIcoMod_sub_zsmul' hp a b 1
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub'
-  条件: (a b : α)
-  结论: toIcoMod hp (a - p) b = toIcoMod hp a b - p
-  证明: by
-  simpa only [one_zsmul] using toIcoMod_sub_zsmul' hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIcoMod_sub_zsmul
+/-
+**toIcoMod_sub'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub' (a b : α) : toIcoMod hp (a - p) b = toIcoMod hp a b - p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIcoMod_sub_zsmul'`：toIcoMod_sub_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a - m • p) b = toIcoMod hp a b - m • p
 -/
 theorem toIcoMod_sub' (a b : α) : toIcoMod hp (a - p) b = toIcoMod hp a b - p := by
   simpa only [one_zsmul] using toIcoMod_sub_zsmul' hp a b 1
 
 @[simp]
-/--
-theorem `toIocMod_sub` / 定理 `toIocMod_sub`
-
-English:
-theorem toIocMod_sub
-  given: (a b : α)
-  statement: toIocMod hp a (b - p) = toIocMod hp a b
-  proof: by
-  simpa only [one_zsmul] using toIocMod_sub_zsmul hp a b 1
-
-@[simp]
-
-中文:
-定理 toIocMod_sub
-  条件: (a b : α)
-  结论: toIocMod hp a (b - p) = toIocMod hp a b
-  证明: by
-  simpa only [one_zsmul] using toIocMod_sub_zsmul hp a b 1
-
-@[simp]
-
-Depends on / 依赖: one_zsmul, toIocMod_sub_zsmul
+/-
+**toIocMod_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub (a b : α) : toIocMod hp a (b - p) = toIocMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocMod_sub_zsmul`：toIocMod_sub_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b - m • p) = toIocMod hp a b
 -/
 theorem toIocMod_sub (a b : α) : toIocMod hp a (b - p) = toIocMod hp a b := by
   simpa only [one_zsmul] using toIocMod_sub_zsmul hp a b 1
 
 @[simp]
-/--
-theorem `toIocMod_sub'` / 定理 `toIocMod_sub'`
-
-English:
-theorem toIocMod_sub'
-  given: (a b : α)
-  statement: toIocMod hp (a - p) b = toIocMod hp a b - p
-  proof: by
-  simpa only [one_zsmul] using toIocMod_sub_zsmul' hp a b 1
-
-中文:
-定理 toIocMod_sub'
-  条件: (a b : α)
-  结论: toIocMod hp (a - p) b = toIocMod hp a b - p
-  证明: by
-  simpa only [one_zsmul] using toIocMod_sub_zsmul' hp a b 1
-
-Depends on / 依赖: one_zsmul, toIocMod_sub_zsmul
+/-
+**toIocMod_sub'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub' (a b : α) : toIocMod hp (a - p) b = toIocMod hp a b - p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `one_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 1 • a = a
+· 使用定理 `toIocMod_sub_zsmul'`：toIocMod_sub_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a - m • p) b = toIocMod hp a b - m • p
 -/
 theorem toIocMod_sub' (a b : α) : toIocMod hp (a - p) b = toIocMod hp a b - p := by
   simpa only [one_zsmul] using toIocMod_sub_zsmul' hp a b 1
-
-/--
-theorem `toIcoMod_sub_eq_sub` / 定理 `toIcoMod_sub_eq_sub`
-
-English:
-theorem toIcoMod_sub_eq_sub
-  given: (a b c : α)
-  statement: toIcoMod hp a (b - c) = toIcoMod hp (a + c) b - c
-  proof: by
-  simp_rw [toIcoMod, toIcoDiv_sub_eq_toIcoDiv_add, sub_right_comm]
-
-中文:
-定理 toIcoMod_sub_eq_sub
-  条件: (a b c : α)
-  结论: toIcoMod hp a (b - c) = toIcoMod hp (a + c) b - c
-  证明: by
-  simp_rw [toIcoMod, toIcoDiv_sub_eq_toIcoDiv_add, sub_right_comm]
-
-Depends on / 依赖: simp_rw, sub_right_comm, toIcoDiv_sub_eq_toIcoDiv_add, toIcoMod
+/-
+**toIcoMod_sub_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_eq_sub (a b c : α) : toIcoMod hp a (b - c) = toIcoMod hp (a +
+ c) b - c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv_sub_eq_toIcoDiv_add`：toIcoDiv_sub_eq_toIcoDiv_add (a b c : α) :
+ toIcoDiv hp a (b - c) = toIcoDiv hp (a + c) b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c
+ : α), a - b - c = a - c - b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoMod_sub_eq_sub (a b c : α) : toIcoMod hp a (b - c) = toIcoMod hp (a + c) b - c := by
   simp_rw [toIcoMod, toIcoDiv_sub_eq_toIcoDiv_add, sub_right_comm]
-
-/--
-theorem `toIocMod_sub_eq_sub` / 定理 `toIocMod_sub_eq_sub`
-
-English:
-theorem toIocMod_sub_eq_sub
-  given: (a b c : α)
-  statement: toIocMod hp a (b - c) = toIocMod hp (a + c) b - c
-  proof: by
-  simp_rw [toIocMod, toIocDiv_sub_eq_toIocDiv_add, sub_right_comm]
-
-中文:
-定理 toIocMod_sub_eq_sub
-  条件: (a b c : α)
-  结论: toIocMod hp a (b - c) = toIocMod hp (a + c) b - c
-  证明: by
-  simp_rw [toIocMod, toIocDiv_sub_eq_toIocDiv_add, sub_right_comm]
-
-Depends on / 依赖: simp_rw, sub_right_comm, toIocDiv_sub_eq_toIocDiv_add, toIocMod
+/-
+**toIocMod_sub_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_eq_sub (a b c : α) : toIocMod hp a (b - c) = toIocMod hp (a +
+ c) b - c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv_sub_eq_toIocDiv_add`：toIocDiv_sub_eq_toIocDiv_add (a b c : α) :
+ toIocDiv hp a (b - c) = toIocDiv hp (a + c) b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c
+ : α), a - b - c = a - c - b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIocMod_sub_eq_sub (a b c : α) : toIocMod hp a (b - c) = toIocMod hp (a + c) b - c := by
   simp_rw [toIocMod, toIocDiv_sub_eq_toIocDiv_add, sub_right_comm]
-
-/--
-theorem `toIcoMod_add_right_eq_add` / 定理 `toIcoMod_add_right_eq_add`
-
-English:
-theorem toIcoMod_add_right_eq_add
-  given: (a b c : α)
-  proof: by
-  simp_rw [toIcoMod, toIcoDiv_sub_eq_toIcoDiv_add', sub_add_eq_add_sub]
-
-中文:
-定理 toIcoMod_add_right_eq_add
-  条件: (a b c : α)
-  证明: by
-  simp_rw [toIcoMod, toIcoDiv_sub_eq_toIcoDiv_add', sub_add_eq_add_sub]
-
-Depends on / 依赖: simp_rw, sub_add_eq_add_sub, toIcoDiv_sub_eq_toIcoDiv_add, toIcoMod
+/-
+**toIcoMod_add_right_eq_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_right_eq_add (a b c : α) : toIcoMod hp a (b + c) = toIcoMod h
+p (a - c) b + c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIcoDiv_sub_eq_toIcoDiv_add'`：toIcoDiv_sub_eq_toIcoDiv_add' (a b c : α)
+ : toIcoDiv hp (a - c) b = toIcoDiv hp a (b + c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_add_eq_add_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a - b + c = a + c - b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoMod_add_right_eq_add (a b c : α) :
     toIcoMod hp a (b + c) = toIcoMod hp (a - c) b + c := by
   simp_rw [toIcoMod, toIcoDiv_sub_eq_toIcoDiv_add', sub_add_eq_add_sub]
-
-/--
-theorem `toIocMod_add_right_eq_add` / 定理 `toIocMod_add_right_eq_add`
-
-English:
-theorem toIocMod_add_right_eq_add
-  given: (a b c : α)
-  proof: by
-  simp_rw [toIocMod, toIocDiv_sub_eq_toIocDiv_add', sub_add_eq_add_sub]
-
-中文:
-定理 toIocMod_add_right_eq_add
-  条件: (a b c : α)
-  证明: by
-  simp_rw [toIocMod, toIocDiv_sub_eq_toIocDiv_add', sub_add_eq_add_sub]
-
-Depends on / 依赖: simp_rw, sub_add_eq_add_sub, toIocDiv_sub_eq_toIocDiv_add, toIocMod
+/-
+**toIocMod_add_right_eq_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_right_eq_add (a b c : α) : toIocMod hp a (b + c) = toIocMod h
+p (a - c) b + c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toIocDiv_sub_eq_toIocDiv_add'`：toIocDiv_sub_eq_toIocDiv_add' (a b c : α)
+ : toIocDiv hp (a - c) b = toIocDiv hp a (b + c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_add_eq_add_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a - b + c = a + c - b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIocMod_add_right_eq_add (a b c : α) :
     toIocMod hp a (b + c) = toIocMod hp (a - c) b + c := by
   simp_rw [toIocMod, toIocDiv_sub_eq_toIocDiv_add', sub_add_eq_add_sub]
-
-/--
-theorem `toIcoMod_neg` / 定理 `toIcoMod_neg`
-
-English:
-theorem toIcoMod_neg
-  given: (a b : α)
-  statement: toIcoMod hp a (-b) = p - toIocMod hp (-a) b
-  proof: by
-  simp_rw [toIcoMod, toIocMod, toIcoDiv_neg, neg_smul, add_smul]
-  abel
-
-中文:
-定理 toIcoMod_neg
-  条件: (a b : α)
-  结论: toIcoMod hp a (-b) = p - toIocMod hp (-a) b
-  证明: by
-  simp_rw [toIcoMod, toIocMod, toIcoDiv_neg, neg_smul, add_smul]
-  abel
-
-Depends on / 依赖: add_smul, neg_smul, simp_rw, toIcoDiv_neg, toIcoMod, toIocMod
+/-
+**toIcoMod_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_neg (a b : α) : toIcoMod hp a (-b) = p - toIocMod hp (-a) b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv_neg`：toIcoDiv_neg (a b : α) : toIcoDiv hp a (-b) = -(toIocDiv h
+p (-a) b + 1)
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.toIcoMod_neg._abel_1_7`：∀
+ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2 : IsOrd
+eredAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 < p…
 -/
 theorem toIcoMod_neg (a b : α) : toIcoMod hp a (-b) = p - toIocMod hp (-a) b := by
   simp_rw [toIcoMod, toIocMod, toIcoDiv_neg, neg_smul, add_smul]
   abel
-
-/--
-theorem `toIcoMod_neg'` / 定理 `toIcoMod_neg'`
-
-English:
-theorem toIcoMod_neg'
-  given: (a b : α)
-  statement: toIcoMod hp (-a) b = p - toIocMod hp a (-b)
-  proof: by
-  simpa only [neg_neg] using toIcoMod_neg hp (-a) (-b)
-
-中文:
-定理 toIcoMod_neg'
-  条件: (a b : α)
-  结论: toIcoMod hp (-a) b = p - toIocMod hp a (-b)
-  证明: by
-  simpa only [neg_neg] using toIcoMod_neg hp (-a) (-b)
-
-Depends on / 依赖: neg_neg, toIcoMod_neg
+/-
+**toIcoMod_neg'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_neg' (a b : α) : toIcoMod hp (-a) b = p - toIocMod hp a (-b)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `toIcoMod_neg`：toIcoMod_neg (a b : α) : toIcoMod hp a (-b) = p - toIocMod
+ hp (-a) b
 -/
 theorem toIcoMod_neg' (a b : α) : toIcoMod hp (-a) b = p - toIocMod hp a (-b) := by
   simpa only [neg_neg] using toIcoMod_neg hp (-a) (-b)
-
-/--
-theorem `toIocMod_neg` / 定理 `toIocMod_neg`
-
-English:
-theorem toIocMod_neg
-  given: (a b : α)
-  statement: toIocMod hp a (-b) = p - toIcoMod hp (-a) b
-  proof: by
-  simp_rw [toIocMod, toIcoMod, toIocDiv_neg, neg_smul, add_smul]
-  abel
-
-中文:
-定理 toIocMod_neg
-  条件: (a b : α)
-  结论: toIocMod hp a (-b) = p - toIcoMod hp (-a) b
-  证明: by
-  simp_rw [toIocMod, toIcoMod, toIocDiv_neg, neg_smul, add_smul]
-  abel
-
-Depends on / 依赖: add_smul, neg_smul, simp_rw, toIcoMod, toIocDiv_neg, toIocMod
+/-
+**toIocMod_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_neg (a b : α) : toIocMod hp a (-b) = p - toIcoMod hp (-a) b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv_neg`：toIocDiv_neg (a b : α) : toIocDiv hp a (-b) = -(toIcoDiv h
+p (-a) b + 1)
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.toIocMod_neg._abel_1_7`：∀
+ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2 : IsOrd
+eredAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 < p…
 -/
 theorem toIocMod_neg (a b : α) : toIocMod hp a (-b) = p - toIcoMod hp (-a) b := by
   simp_rw [toIocMod, toIcoMod, toIocDiv_neg, neg_smul, add_smul]
   abel
-
-/--
-theorem `toIocMod_neg'` / 定理 `toIocMod_neg'`
-
-English:
-theorem toIocMod_neg'
-  given: (a b : α)
-  statement: toIocMod hp (-a) b = p - toIcoMod hp a (-b)
-  proof: by
-  simpa only [neg_neg] using toIocMod_neg hp (-a) (-b)
-
-中文:
-定理 toIocMod_neg'
-  条件: (a b : α)
-  结论: toIocMod hp (-a) b = p - toIcoMod hp a (-b)
-  证明: by
-  simpa only [neg_neg] using toIocMod_neg hp (-a) (-b)
-
-Depends on / 依赖: neg_neg, toIocMod_neg
+/-
+**toIocMod_neg'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_neg' (a b : α) : toIocMod hp (-a) b = p - toIcoMod hp a (-b)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `toIocMod_neg`：toIocMod_neg (a b : α) : toIocMod hp a (-b) = p - toIcoMod
+ hp (-a) b
 -/
 theorem toIocMod_neg' (a b : α) : toIocMod hp (-a) b = p - toIcoMod hp a (-b) := by
   simpa only [neg_neg] using toIocMod_neg hp (-a) (-b)
-
-/--
-theorem `toIcoMod_eq_toIcoMod` / 定理 `toIcoMod_eq_toIcoMod`
-
-English:
-theorem toIcoMod_eq_toIcoMod
-  statement: toIcoMod hp a b = toIcoMod hp a c ↔ exists n : Int, c - b = n • p
-  proof: by
-  refine ⟨fun h => ⟨toIcoDiv hp a c - toIcoDiv hp a b, ?_⟩, fun h => ?_⟩
-  · conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, ← toIcoMod_add_toIcoDiv_zsmul hp a c]
-    rw [h]; rw [sub_smul]
-    abel
-  · rcases h with ⟨z, hz⟩
-    rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIcoMod_zsmul_add]
-
-中文:
-定理 toIcoMod_eq_toIcoMod
-  结论: toIcoMod hp a b = toIcoMod hp a c ↔ 存在 n : 整数, c - b = n • p
-  证明: by
-  refine ⟨fun h => ⟨toIcoDiv hp a c - toIcoDiv hp a b, ?_⟩, fun h => ?_⟩
-  · conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, ← toIcoMod_add_toIcoDiv_zsmul hp a c]
-    rw [h]; rw [sub_smul]
-    abel
-  · rcases h with ⟨z, hz⟩
-    rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIcoMod_zsmul_add]
-
-Depends on / 依赖: conv_lhs, sub_eq_iff_eq_add, sub_smul, toIcoDiv, toIcoMod_add_toIcoDiv_zsmul, toIcoMod_zsmul_add
+/-
+**toIcoMod_eq_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_eq_toIcoMod : toIcoMod hp a b = toIcoMod hp a c ↔ exists n : Int,
+ c - b = n • p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `toIcoMod_add_toIcoDiv_zsmul`：toIcoMod_add_toIcoDiv_zsmul (a b : α) : toI
+coMod hp a b + toIcoDiv hp a b • p = b
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.toIcoMod_eq_toIcoMod._abe
+l_1_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2
+ : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 < p…
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `toIcoMod_zsmul_add`：toIcoMod_zsmul_add (a b : α) (m : Int) : toIcoMod hp
+ a (m • p + b) = toIcoMod hp a b
 -/
-theorem toIcoMod_eq_toIcoMod : toIcoMod hp a b = toIcoMod hp a c ↔ exists n : Int, c - b = n • p := by
+theorem toIcoMod_eq_toIcoMod : toIcoMod hp a b = toIcoMod hp a c ↔ ∃ n : ℤ, c - b = n • p := by
   refine ⟨fun h => ⟨toIcoDiv hp a c - toIcoDiv hp a b, ?_⟩, fun h => ?_⟩
   · conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, ← toIcoMod_add_toIcoDiv_zsmul hp a c]
-    rw [h]; rw [sub_smul]
+    rw [h, sub_smul]
     abel
   · rcases h with ⟨z, hz⟩
     rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIcoMod_zsmul_add]
-
-/--
-theorem `toIocMod_eq_toIocMod` / 定理 `toIocMod_eq_toIocMod`
-
-English:
-theorem toIocMod_eq_toIocMod
-  statement: toIocMod hp a b = toIocMod hp a c ↔ exists n : Int, c - b = n • p
-  proof: by
-  refine ⟨fun h => ⟨toIocDiv hp a c - toIocDiv hp a b, ?_⟩, fun h => ?_⟩
-  · conv_lhs => rw [← toIocMod_add_toIocDiv_zsmul hp a b, ← toIocMod_add_toIocDiv_zsmul hp a c]
-    rw [h]; rw [sub_smul]
-    abel
-  · rcases h with ⟨z, hz⟩
-    rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIocMod_zsmul_add]
-
-中文:
-定理 toIocMod_eq_toIocMod
-  结论: toIocMod hp a b = toIocMod hp a c ↔ 存在 n : 整数, c - b = n • p
-  证明: by
-  refine ⟨fun h => ⟨toIocDiv hp a c - toIocDiv hp a b, ?_⟩, fun h => ?_⟩
-  · conv_lhs => rw [← toIocMod_add_toIocDiv_zsmul hp a b, ← toIocMod_add_toIocDiv_zsmul hp a c]
-    rw [h]; rw [sub_smul]
-    abel
-  · rcases h with ⟨z, hz⟩
-    rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIocMod_zsmul_add]
-
-Depends on / 依赖: conv_lhs, sub_eq_iff_eq_add, sub_smul, toIocDiv, toIocMod_add_toIocDiv_zsmul, toIocMod_zsmul_add
+    rw [hz, toIcoMod_zsmul_add]
+/-
+**toIocMod_eq_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_eq_toIocMod : toIocMod hp a b = toIocMod hp a c ↔ exists n : Int,
+ c - b = n • p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `toIocMod_add_toIocDiv_zsmul`：toIocMod_add_toIocDiv_zsmul (a b : α) : toI
+ocMod hp a b + toIocDiv hp a b • p = b
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.toIocMod_eq_toIocMod._abe
+l_1_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2
+ : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 < p…
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `toIocMod_zsmul_add`：toIocMod_zsmul_add (a b : α) (m : Int) : toIocMod hp
+ a (m • p + b) = toIocMod hp a b
 -/
-theorem toIocMod_eq_toIocMod : toIocMod hp a b = toIocMod hp a c ↔ exists n : Int, c - b = n • p := by
+theorem toIocMod_eq_toIocMod : toIocMod hp a b = toIocMod hp a c ↔ ∃ n : ℤ, c - b = n • p := by
   refine ⟨fun h => ⟨toIocDiv hp a c - toIocDiv hp a b, ?_⟩, fun h => ?_⟩
   · conv_lhs => rw [← toIocMod_add_toIocDiv_zsmul hp a b, ← toIocMod_add_toIocDiv_zsmul hp a c]
-    rw [h]; rw [sub_smul]
+    rw [h, sub_smul]
     abel
   · rcases h with ⟨z, hz⟩
     rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIocMod_zsmul_add]
+    rw [hz, toIocMod_zsmul_add]
 
 /-! ### Links between the `Ico` and `Ioc` variants applied to the same element -/
 
@@ -3210,68 +2841,56 @@ section IcoIoc
 
 namespace AddCommGroup
 
-/--
-theorem `modEq_iff_toIcoMod_eq_left` / 定理 `modEq_iff_toIcoMod_eq_left`
-
-English:
-theorem modEq_iff_toIcoMod_eq_left
-  statement: a ≡ b [PMOD p] ↔ toIcoMod hp a b = a
-  proof: modEq_iff_eq_add_zsmul.trans
-    ⟨by
-      rintro ⟨n, rfl⟩
-      rw [toIcoMod_add_zsmul]; rw [toIcoMod_apply_left], fun h => ⟨toIcoDiv hp a b, eq_add_of_sub_eq h⟩⟩
-
-中文:
-定理 modEq_iff_toIcoMod_eq_left
-  结论: a ≡ b [PMOD p] ↔ toIcoMod hp a b = a
-  证明: modEq_iff_eq_add_zsmul.trans
-    ⟨by
-      rintro ⟨n, rfl⟩
-      rw [toIcoMod_add_zsmul]; rw [toIcoMod_apply_left], fun h => ⟨toIcoDiv hp a b, eq_add_of_sub_eq h⟩⟩
-
-Depends on / 依赖: eq_add_of_sub_eq, modEq_iff_eq_add_zsmul, modEq_iff_eq_add_zsmul.trans, toIcoDiv, toIcoMod_add_zsmul, toIcoMod_apply_left
+/-
+**AddCommGroup.modEq_iff_toIcoMod_eq_left** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrou
+p`。
+形式化陈述：modEq_iff_toIcoMod_eq_left : a ≡ b [PMOD p] ↔ toIcoMod hp a b = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `AddCommGroup.modEq_iff_eq_add_zsmul`：modEq_iff_eq_add_zsmul : a ≡ b [PMO
+D p] ↔ exists z : Int, b = a + z • p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_add_zsmul`：toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b + m • p) = toIcoMod hp a b
+· 使用定理 `toIcoMod_apply_left`：toIcoMod_apply_left (a : α) : toIcoMod hp a a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_add_of_sub_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a - 
+c = b → a = b + c
 -/
 theorem modEq_iff_toIcoMod_eq_left : a ≡ b [PMOD p] ↔ toIcoMod hp a b = a :=
   modEq_iff_eq_add_zsmul.trans
     ⟨by
       rintro ⟨n, rfl⟩
-      rw [toIcoMod_add_zsmul]; rw [toIcoMod_apply_left], fun h => ⟨toIcoDiv hp a b, eq_add_of_sub_eq h⟩⟩
-
-/--
-theorem `modEq_iff_toIocMod_eq_right` / 定理 `modEq_iff_toIocMod_eq_right`
-
-English:
-theorem modEq_iff_toIocMod_eq_right
-  statement: a ≡ b [PMOD p] ↔ toIocMod hp a b = a + p
-  proof: by
-  refine modEq_iff_eq_add_zsmul.trans ⟨?_, fun h => ⟨toIocDiv hp a b + 1, ?_⟩⟩
-  · rintro ⟨z, rfl⟩
-    rw [toIocMod_add_zsmul]; rw [toIocMod_apply_left]
-  · rwa [add_one_zsmul, add_left_comm, ← sub_eq_iff_eq_add']
-
-alias ⟨ModEq.toIcoMod_eq_left, _⟩ := modEq_iff_toIcoMod_eq_left
-
-alias ⟨ModEq.toIcoMod_eq_right, _⟩ := modEq_iff_toIocMod_eq_right
-
-中文:
-定理 modEq_iff_toIocMod_eq_right
-  结论: a ≡ b [PMOD p] ↔ toIocMod hp a b = a + p
-  证明: by
-  refine modEq_iff_eq_add_zsmul.trans ⟨?_, fun h => ⟨toIocDiv hp a b + 1, ?_⟩⟩
-  · rintro ⟨z, rfl⟩
-    rw [toIocMod_add_zsmul]; rw [toIocMod_apply_left]
-  · rwa [add_one_zsmul, add_left_comm, ← sub_eq_iff_eq_add']
-
-alias ⟨ModEq.toIcoMod_eq_left, _⟩ := modEq_iff_toIcoMod_eq_left
-
-alias ⟨ModEq.toIcoMod_eq_right, _⟩ := modEq_iff_toIocMod_eq_right
-
-Depends on / 依赖: add_left_comm, add_one_zsmul, modEq_iff_eq_add_zsmul, modEq_iff_eq_add_zsmul.trans, sub_eq_iff_eq_add, toIocDiv, toIocMod_add_zsmul, toIocMod_apply_left
+      rw [toIcoMod_add_zsmul, toIcoMod_apply_left], fun h => ⟨toIcoDiv hp a b, eq_add_of_sub_eq h⟩⟩
+/-
+**AddCommGroup.modEq_iff_toIocMod_eq_right** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGro
+up`。
+形式化陈述：modEq_iff_toIocMod_eq_right : a ≡ b [PMOD p] ↔ toIocMod hp a b = a + p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `AddCommGroup.modEq_iff_eq_add_zsmul`：modEq_iff_eq_add_zsmul : a ≡ b [PMO
+D p] ↔ exists z : Int, b = a + z • p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod_add_zsmul`：toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b + m • p) = toIocMod hp a b
+· 使用定理 `toIocMod_apply_left`：toIocMod_apply_left (a : α) : toIocMod hp a a = a +
+ p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_one_zsmul`：∀ {G : Type u_3} [inst : AddGroup G] (a : G) (n : ℤ), (n 
++ 1) • a = n • a + a
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `sub_eq_iff_eq_add'`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}
+, a - b = c ↔ a = b + c
 -/
 theorem modEq_iff_toIocMod_eq_right : a ≡ b [PMOD p] ↔ toIocMod hp a b = a + p := by
   refine modEq_iff_eq_add_zsmul.trans ⟨?_, fun h => ⟨toIocDiv hp a b + 1, ?_⟩⟩
   · rintro ⟨z, rfl⟩
-    rw [toIocMod_add_zsmul]; rw [toIocMod_apply_left]
+    rw [toIocMod_add_zsmul, toIocMod_apply_left]
   · rwa [add_one_zsmul, add_left_comm, ← sub_eq_iff_eq_add']
 
 alias ⟨ModEq.toIcoMod_eq_left, _⟩ := modEq_iff_toIcoMod_eq_left
@@ -3281,196 +2900,220 @@ alias ⟨ModEq.toIcoMod_eq_right, _⟩ := modEq_iff_toIocMod_eq_right
 variable (a b)
 
 open List in
-/--
-theorem `tfae_modEq` / 定理 `tfae_modEq`
-
-English:
-theorem tfae_modEq
-  proof: by
-  rw [modEq_iff_toIcoMod_eq_left hp]
-  tfae_have 3 -> 2 := by
-    rw [← not_exists]; rw [not_imp_not]
-    exact fun ⟨i, hi⟩ =>
-      ((toIcoMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ico_self hi, i, (sub_add_cancel b _).symm⟩).trans
-        ((toIocMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ioc_self hi, i, (sub_add_cancel b _).symm⟩).symm
-  tfae_have 4 -> 3
-  | h => by
-    rw [← h]; rw [Ne]; rw [eq_comm]; rw [add_eq_left]
-    exact hp.ne'
-  tfae_have 1 -> 4
-  | h => by
-    rw [h]; rw [eq_comm]; rw [toIocMod_eq_iff]; rw [Set.right_mem_Ioc]
-    refine ⟨lt_add_of_pos_right a hp, toIcoDiv hp a b - 1, ?_⟩
-    rw [sub_one_zsmul]; rw [add_add_add_comm]; rw [add_neg_cancel]; rw [add_zero]
-    conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, h]
-  tfae_have 2 -> 1 := by
-    rw [← not_exists]; rw [not_imp_comm]
-    have h' := toIcoMod_mem_Ico hp a b
-    exact fun h => ⟨_, h'.1.lt_of_ne' h, h'.2⟩
-  tfae_finish
-
-中文:
-定理 tfae_modEq
-  证明: by
-  rw [modEq_iff_toIcoMod_eq_left hp]
-  tfae_have 3 -> 2 := by
-    rw [← not_exists]; rw [not_imp_not]
-    exact fun ⟨i, hi⟩ =>
-      ((toIcoMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ico_self hi, i, (sub_add_cancel b _).symm⟩).trans
-        ((toIocMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ioc_self hi, i, (sub_add_cancel b _).symm⟩).symm
-  tfae_have 4 -> 3
-  | h => by
-    rw [← h]; rw [Ne]; rw [eq_comm]; rw [add_eq_left]
-    exact hp.ne'
-  tfae_have 1 -> 4
-  | h => by
-    rw [h]; rw [eq_comm]; rw [toIocMod_eq_iff]; rw [Set.right_mem_Ioc]
-    refine ⟨lt_add_of_pos_right a hp, toIcoDiv hp a b - 1, ?_⟩
-    rw [sub_one_zsmul]; rw [add_add_add_comm]; rw [add_neg_cancel]; rw [add_zero]
-    conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, h]
-  tfae_have 2 -> 1 := by
-    rw [← not_exists]; rw [not_imp_comm]
-    have h' := toIcoMod_mem_Ico hp a b
-    exact fun h => ⟨_, h'.1.lt_of_ne' h, h'.2⟩
-  tfae_finish
-
-Depends on / 依赖: Ioo_subset_Ico_self, Ioo_subset_Ioc_self, Set.Ioo_subset_Ico_self, Set.Ioo_subset_Ioc_self, Set.right_mem_Ioc, add_eq_left, eq_comm, hp.ne, lt_add_of_p, modEq_iff_toIcoMod_eq_left, not_exists, not_imp_not, right_mem_Ioc, sub_add_cancel, tfae_have, toIcoMod_eq_iff, toIocMod_eq_iff
+/-
+**AddCommGroup.tfae_modEq** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGroup`。
+形式化陈述：tfae_modEq : TFAE [a ≡ b [PMOD p], forall z : Int, b - z • p ∉ Set.Ioo a (
+a + p), toIcoMod hp a b != toIocMod hp a b, toIcoMod hp a b + p = toIocMod hp a 
+b]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddCommGroup.modEq_iff_toIcoMod_eq_left`：modEq_iff_toIcoMod_eq_left : a 
+≡ b [PMOD p] ↔ toIcoMod hp a b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_exists`：∀ {α : Sort u_1} {p : α → Prop}, (¬∃ x, p x) ↔ ∀ (x : α), ¬p
+ x
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `toIcoMod_eq_iff`：toIcoMod_eq_iff : toIcoMod hp a b = c ↔ c in Set.Ico a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `Set.Ioo_subset_Ico_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo a b ⊆ Set.Ico a b
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `toIocMod_eq_iff`：toIocMod_eq_iff : toIocMod hp a b = c ↔ c in Set.Ioc a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `Set.Ioo_subset_Ioc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo b a ⊆ Set.Ioc b a
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `add_eq_left`：∀ {M : Type u_4} [inst : AddMonoid M] [IsLeftCancelAdd M] {
+a b : M}, a + b = a ↔ b = 0
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Set.right_mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Ioc b a ↔ b < a
+· 使用定理 `lt_add_of_pos_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : 
+LT α] [AddLeftStrictMono α] (a : α) {b : α}, 0 < b → a < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `sub_one_zsmul`：∀ {G : Type u_3} [inst : AddGroup G] (a : G) (n : ℤ), (n 
+- 1) • a = n • a + -a
+· 使用定理 `add_add_add_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c d 
+: G), a + b + (c + d) = a + c + (b + d)
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `toIcoMod_add_toIcoDiv_zsmul`：toIcoMod_add_toIcoDiv_zsmul (a b : α) : toI
+coMod hp a b + toIcoDiv hp a b • p = b
+· 使用定理 `not_imp_comm`：not_imp_comm : ¬a -> b ↔ ¬b -> a
+· 使用定理 `toIcoMod_mem_Ico`：toIcoMod_mem_Ico (a b : α) : toIcoMod hp a b in Set.Ic
+o a (a + p)
+· 使用定理 `LE.le.lt_of_ne'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≠ b → b < a
+（共 33 条，此处仅展示前 30 条）
 -/
 theorem tfae_modEq :
     TFAE
-      [a ≡ b [PMOD p], forall z : Int, b - z • p ∉ Set.Ioo a (a + p), toIcoMod hp a b != toIocMod hp a b,
+      [a ≡ b [PMOD p], ∀ z : ℤ, b - z • p ∉ Set.Ioo a (a + p), toIcoMod hp a b ≠ toIocMod hp a b,
         toIcoMod hp a b + p = toIocMod hp a b] := by
   rw [modEq_iff_toIcoMod_eq_left hp]
-  tfae_have 3 -> 2 := by
-    rw [← not_exists]; rw [not_imp_not]
+  tfae_have 3 → 2 := by
+    rw [← not_exists, not_imp_not]
     exact fun ⟨i, hi⟩ =>
       ((toIcoMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ico_self hi, i, (sub_add_cancel b _).symm⟩).trans
         ((toIocMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ioc_self hi, i, (sub_add_cancel b _).symm⟩).symm
-  tfae_have 4 -> 3
+  tfae_have 4 → 3
   | h => by
-    rw [← h]; rw [Ne]; rw [eq_comm]; rw [add_eq_left]
+    rw [← h, Ne, eq_comm, add_eq_left]
     exact hp.ne'
-  tfae_have 1 -> 4
+  tfae_have 1 → 4
   | h => by
-    rw [h]; rw [eq_comm]; rw [toIocMod_eq_iff]; rw [Set.right_mem_Ioc]
+    rw [h, eq_comm, toIocMod_eq_iff, Set.right_mem_Ioc]
     refine ⟨lt_add_of_pos_right a hp, toIcoDiv hp a b - 1, ?_⟩
-    rw [sub_one_zsmul]; rw [add_add_add_comm]; rw [add_neg_cancel]; rw [add_zero]
+    rw [sub_one_zsmul, add_add_add_comm, add_neg_cancel, add_zero]
     conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, h]
-  tfae_have 2 -> 1 := by
-    rw [← not_exists]; rw [not_imp_comm]
+  tfae_have 2 → 1 := by
+    rw [← not_exists, not_imp_comm]
     have h' := toIcoMod_mem_Ico hp a b
     exact fun h => ⟨_, h'.1.lt_of_ne' h, h'.2⟩
   tfae_finish
 
 variable {a b}
-
-/--
-theorem `modEq_iff_forall_notMem_Ioo_mod` / 定理 `modEq_iff_forall_notMem_Ioo_mod`
-
-English:
-theorem modEq_iff_forall_notMem_Ioo_mod
-  proof: (tfae_modEq hp a b).out 0 1
-
-中文:
-定理 modEq_iff_对任意_notMem_Ioo_mod
-  证明: (tfae_modEq hp a b).out 0 1
-
-Depends on / 依赖: tfae_modEq
+/-
+**AddCommGroup.modEq_iff_forall_notMem_Ioo_mod** 是 Mathlib 中的一个定理，位于命名空间 `AddCom
+mGroup`。
+形式化陈述：modEq_iff_forall_notMem_Ioo_mod : a ≡ b [PMOD p] ↔ forall z : Int, b - z •
+ p ∉ Set.Ioo a (a + p)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `AddCommGroup.tfae_modEq`：tfae_modEq : TFAE [a ≡ b [PMOD p], forall z : I
+nt, b - z • p ∉ Set.Ioo a (a + p), toIcoMod hp a b != toIocMod hp a b, toIcoMod 
+hp a b + p = …
 -/
 theorem modEq_iff_forall_notMem_Ioo_mod :
-    a ≡ b [PMOD p] ↔ forall z : Int, b - z • p ∉ Set.Ioo a (a + p) :=
+    a ≡ b [PMOD p] ↔ ∀ z : ℤ, b - z • p ∉ Set.Ioo a (a + p) :=
   (tfae_modEq hp a b).out 0 1
-
-/--
-theorem `modEq_iff_toIcoMod_ne_toIocMod` / 定理 `modEq_iff_toIcoMod_ne_toIocMod`
-
-English:
-theorem modEq_iff_toIcoMod_ne_toIocMod
-  statement: a ≡ b [PMOD p] ↔ toIcoMod hp a b != toIocMod hp a b
-  proof: (tfae_modEq hp a b).out 0 2
-
-中文:
-定理 modEq_iff_toIcoMod_ne_toIocMod
-  结论: a ≡ b [PMOD p] ↔ toIcoMod hp a b != toIocMod hp a b
-  证明: (tfae_modEq hp a b).out 0 2
-
-Depends on / 依赖: tfae_modEq
+/-
+**AddCommGroup.modEq_iff_toIcoMod_ne_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 `AddComm
+Group`。
+形式化陈述：modEq_iff_toIcoMod_ne_toIocMod : a ≡ b [PMOD p] ↔ toIcoMod hp a b != toIoc
+Mod hp a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `AddCommGroup.tfae_modEq`：tfae_modEq : TFAE [a ≡ b [PMOD p], forall z : I
+nt, b - z • p ∉ Set.Ioo a (a + p), toIcoMod hp a b != toIocMod hp a b, toIcoMod 
+hp a b + p = …
 -/
-theorem modEq_iff_toIcoMod_ne_toIocMod : a ≡ b [PMOD p] ↔ toIcoMod hp a b != toIocMod hp a b :=
+theorem modEq_iff_toIcoMod_ne_toIocMod : a ≡ b [PMOD p] ↔ toIcoMod hp a b ≠ toIocMod hp a b :=
   (tfae_modEq hp a b).out 0 2
-
-/--
-theorem `modEq_iff_toIcoMod_add_period_eq_toIocMod` / 定理 `modEq_iff_toIcoMod_add_period_eq_toIocMod`
-
-English:
-theorem modEq_iff_toIcoMod_add_period_eq_toIocMod
-  proof: (tfae_modEq hp a b).out 0 3
-
-中文:
-定理 modEq_iff_toIcoMod_add_period_eq_toIocMod
-  证明: (tfae_modEq hp a b).out 0 3
-
-Depends on / 依赖: tfae_modEq
+/-
+**AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod** 是 Mathlib 中的一个定理，位于命名
+空间 `AddCommGroup`。
+形式化陈述：modEq_iff_toIcoMod_add_period_eq_toIocMod : a ≡ b [PMOD p] ↔ toIcoMod hp a
+ b + p = toIocMod hp a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `AddCommGroup.tfae_modEq`：tfae_modEq : TFAE [a ≡ b [PMOD p], forall z : I
+nt, b - z • p ∉ Set.Ioo a (a + p), toIcoMod hp a b != toIocMod hp a b, toIcoMod 
+hp a b + p = …
 -/
 theorem modEq_iff_toIcoMod_add_period_eq_toIocMod :
     a ≡ b [PMOD p] ↔ toIcoMod hp a b + p = toIocMod hp a b :=
   (tfae_modEq hp a b).out 0 3
-
-/--
-theorem `not_modEq_iff_toIcoMod_eq_toIocMod` / 定理 `not_modEq_iff_toIcoMod_eq_toIocMod`
-
-English:
-theorem not_modEq_iff_toIcoMod_eq_toIocMod
-  statement: ¬a ≡ b [PMOD p] ↔ toIcoMod hp a b = toIocMod hp a b
-  proof: (modEq_iff_toIcoMod_ne_toIocMod _).not_left
-
-中文:
-定理 not_modEq_iff_toIcoMod_eq_toIocMod
-  结论: ¬a ≡ b [PMOD p] ↔ toIcoMod hp a b = toIocMod hp a b
-  证明: (modEq_iff_toIcoMod_ne_toIocMod _).not_left
-
-Depends on / 依赖: modEq_iff_toIcoMod_ne_toIocMod, not_left
+/-
+**AddCommGroup.not_modEq_iff_toIcoMod_eq_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 `Add
+CommGroup`。
+形式化陈述：not_modEq_iff_toIcoMod_eq_toIocMod : ¬a ≡ b [PMOD p] ↔ toIcoMod hp a b = t
+oIocMod hp a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not_left`：Iff.not_left (h : a ↔ ¬b) : ¬a ↔ b
+· 使用定理 `AddCommGroup.modEq_iff_toIcoMod_ne_toIocMod`：modEq_iff_toIcoMod_ne_toIoc
+Mod : a ≡ b [PMOD p] ↔ toIcoMod hp a b != toIocMod hp a b
 -/
 theorem not_modEq_iff_toIcoMod_eq_toIocMod : ¬a ≡ b [PMOD p] ↔ toIcoMod hp a b = toIocMod hp a b :=
   (modEq_iff_toIcoMod_ne_toIocMod _).not_left
-
-/--
-theorem `not_modEq_iff_toIcoDiv_eq_toIocDiv` / 定理 `not_modEq_iff_toIcoDiv_eq_toIocDiv`
-
-English:
-theorem not_modEq_iff_toIcoDiv_eq_toIocDiv
-  proof: by
-  rw [not_modEq_iff_toIcoMod_eq_toIocMod hp]; rw [toIcoMod]; rw [toIocMod]; rw [sub_right_inj]; rw [zsmul_left_inj hp]
-
-中文:
-定理 not_modEq_iff_toIcoDiv_eq_toIocDiv
-  证明: by
-  rw [not_modEq_iff_toIcoMod_eq_toIocMod hp]; rw [toIcoMod]; rw [toIocMod]; rw [sub_right_inj]; rw [zsmul_left_inj hp]
-
-Depends on / 依赖: not_modEq_iff_toIcoMod_eq_toIocMod, sub_right_inj, toIcoMod, toIocMod, zsmul_left_inj
+/-
+**AddCommGroup.not_modEq_iff_toIcoDiv_eq_toIocDiv** 是 Mathlib 中的一个定理，位于命名空间 `Add
+CommGroup`。
+形式化陈述：not_modEq_iff_toIcoDiv_eq_toIocDiv : ¬a ≡ b [PMOD p] ↔ toIcoDiv hp a b = t
+oIocDiv hp a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddCommGroup.not_modEq_iff_toIcoMod_eq_toIocMod`：not_modEq_iff_toIcoMod_
+eq_toIocMod : ¬a ≡ b [PMOD p] ↔ toIcoMod hp a b = toIocMod hp a b
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_right_inj`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a - b =
+ a - c ↔ b = c
+· 使用定理 `zsmul_left_inj`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Parti
+alOrder α] [IsOrderedAddMonoid α] {a : α},   0 < a → ∀ {m n : ℤ}, m • a = n • a 
+↔ m …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem not_modEq_iff_toIcoDiv_eq_toIocDiv :
     ¬a ≡ b [PMOD p] ↔ toIcoDiv hp a b = toIocDiv hp a b := by
-  rw [not_modEq_iff_toIcoMod_eq_toIocMod hp]; rw [toIcoMod]; rw [toIocMod]; rw [sub_right_inj]; rw [zsmul_left_inj hp]
-
-/--
-theorem `modEq_iff_toIcoDiv_eq_toIocDiv_add_one` / 定理 `modEq_iff_toIcoDiv_eq_toIocDiv_add_one`
-
-English:
-theorem modEq_iff_toIcoDiv_eq_toIocDiv_add_one
-  proof: by
-  rw [modEq_iff_toIcoMod_add_period_eq_toIocMod hp]; rw [toIcoMod]; rw [toIocMod]; rw [← eq_sub_iff_add_eq]; rw [sub_sub]; rw [sub_right_inj]; rw [← add_one_zsmul]; rw [zsmul_left_inj hp]
-
-中文:
-定理 modEq_iff_toIcoDiv_eq_toIocDiv_add_one
-  证明: by
-  rw [modEq_iff_toIcoMod_add_period_eq_toIocMod hp]; rw [toIcoMod]; rw [toIocMod]; rw [← eq_sub_iff_add_eq]; rw [sub_sub]; rw [sub_right_inj]; rw [← add_one_zsmul]; rw [zsmul_left_inj hp]
-
-Depends on / 依赖: add_one_zsmul, eq_sub_iff_add_eq, modEq_iff_toIcoMod_add_period_eq_toIocMod, sub_right_inj, sub_sub, toIcoMod, toIocMod, zsmul_left_inj
+  rw [not_modEq_iff_toIcoMod_eq_toIocMod hp, toIcoMod, toIocMod, sub_right_inj,
+    zsmul_left_inj hp]
+/-
+**AddCommGroup.modEq_iff_toIcoDiv_eq_toIocDiv_add_one** 是 Mathlib 中的一个定理，位于命名空间 
+`AddCommGroup`。
+形式化陈述：modEq_iff_toIcoDiv_eq_toIocDiv_add_one : a ≡ b [PMOD p] ↔ toIcoDiv hp a b 
+= toIocDiv hp a b + 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod`：modEq_iff_toIcoM
+od_add_period_eq_toIocMod : a ≡ b [PMOD p] ↔ toIcoMod hp a b + p = toIocMod hp a
+ b
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `sub_right_inj`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a - b =
+ a - c ↔ b = c
+· 使用定理 `add_one_zsmul`：∀ {G : Type u_3} [inst : AddGroup G] (a : G) (n : ℤ), (n 
++ 1) • a = n • a + a
+· 使用定理 `zsmul_left_inj`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Parti
+alOrder α] [IsOrderedAddMonoid α] {a : α},   0 < a → ∀ {m n : ℤ}, m • a = n • a 
+↔ m …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem modEq_iff_toIcoDiv_eq_toIocDiv_add_one :
     a ≡ b [PMOD p] ↔ toIcoDiv hp a b = toIocDiv hp a b + 1 := by
-  rw [modEq_iff_toIcoMod_add_period_eq_toIocMod hp]; rw [toIcoMod]; rw [toIocMod]; rw [← eq_sub_iff_add_eq]; rw [sub_sub]; rw [sub_right_inj]; rw [← add_one_zsmul]; rw [zsmul_left_inj hp]
+  rw [modEq_iff_toIcoMod_add_period_eq_toIocMod hp, toIcoMod, toIocMod, ← eq_sub_iff_add_eq,
+    sub_sub, sub_right_inj, ← add_one_zsmul, zsmul_left_inj hp]
 
 end AddCommGroup
 
@@ -3478,332 +3121,286 @@ open AddCommGroup
 
 /-- If `a` and `b` fall within the same cycle w.r.t. `c`, then they are congruent modulo `p`. -/
 @[simp]
-/--
-theorem `toIcoMod_inj` / 定理 `toIcoMod_inj`
+/-
+**toIcoMod_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_inj {c : α} : toIcoMod hp c a = toIcoMod hp c b ↔ a ≡ b [PMOD p]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_eq_toIcoMod`：toIcoMod_eq_toIcoMod : toIcoMod hp a b = toIcoMod 
+hp a c ↔ exists n : Int, c - b = n • p
+· 使用定理 `AddCommGroup.modEq_iff_zsmul'`：modEq_iff_zsmul' : a ≡ b [PMOD p] ↔ exist
+s m : Int, b - a = m • p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem toIcoMod_inj
-  given: {c : α}
-  statement: toIcoMod hp c a = toIcoMod hp c b ↔ a ≡ b [PMOD p]
-  proof: by
-  rw [toIcoMod_eq_toIcoMod]; rw [AddCommGroup.modEq_iff_zsmul']
-
-alias ⟨_, AddCommGroup.ModEq.toIcoMod_eq_toIcoMod⟩ := toIcoMod_inj
-
-中文:
-定理 toIcoMod_inj
-  条件: {c : α}
-  结论: toIcoMod hp c a = toIcoMod hp c b ↔ a ≡ b [PMOD p]
-  证明: by
-  rw [toIcoMod_eq_toIcoMod]; rw [AddCommGroup.modEq_iff_zsmul']
-
-alias ⟨_, AddCommGroup.ModEq.toIcoMod_eq_toIcoMod⟩ := toIcoMod_inj
-
-Depends on / 依赖: AddCommGroup, AddCommGroup.modEq_iff_zsmul, modEq_iff_zsmul, toIcoMod_eq_toIcoMod
+--- 原说明 ---
+If `a` and `b` fall within the same cycle w.r.t. `c`, then they are congruent mo
+dulo `p`.
 -/
 theorem toIcoMod_inj {c : α} : toIcoMod hp c a = toIcoMod hp c b ↔ a ≡ b [PMOD p] := by
-  rw [toIcoMod_eq_toIcoMod]; rw [AddCommGroup.modEq_iff_zsmul']
+  rw [toIcoMod_eq_toIcoMod, AddCommGroup.modEq_iff_zsmul']
 
 alias ⟨_, AddCommGroup.ModEq.toIcoMod_eq_toIcoMod⟩ := toIcoMod_inj
-
-/--
-theorem `Ico_eq_locus_Ioc_eq_iUnion_Ioo` / 定理 `Ico_eq_locus_Ioc_eq_iUnion_Ioo`
-
-English:
-theorem Ico_eq_locus_Ioc_eq_iUnion_Ioo
-  proof: by
-  ext1
-  simp_rw [Set.mem_ofPred, Set.mem_iUnion, ← Set.sub_mem_Ioo_iff_left, ←
-    not_modEq_iff_toIcoMod_eq_toIocMod, modEq_iff_forall_notMem_Ioo_mod hp, not_forall,
-    Classical.not_not]
-
-中文:
-定理 Ico_eq_locus_Ioc_eq_iUnion_Ioo
-  证明: by
-  ext1
-  simp_rw [Set.mem_ofPred, Set.mem_iUnion, ← Set.sub_mem_Ioo_iff_left, ←
-    not_modEq_iff_toIcoMod_eq_toIocMod, modEq_iff_forall_notMem_Ioo_mod hp, not_forall,
-    Classical.not_not]
-
-Depends on / 依赖: Classical, Classical.not_not, Set.mem_iUnion, Set.mem_ofPred, Set.sub_mem_Ioo_iff_left, mem_iUnion, mem_ofPred, modEq_iff_forall_notMem_Ioo_mod, not_forall, not_modEq_iff_toIcoMod_eq_toIocMod, not_not, simp_rw, sub_mem_Ioo_iff_left
+/-
+**Ico_eq_locus_Ioc_eq_iUnion_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ico_eq_locus_Ioc_eq_iUnion_Ioo : { b | toIcoMod hp a b = toIocMod hp a b }
+ = ⋃ z : Int, Set.Ioo (a + z • p) (a + p + z • p)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AddCommGroup.modEq_iff_forall_notMem_Ioo_mod`：modEq_iff_forall_notMem_Io
+o_mod : a ≡ b [PMOD p] ↔ forall z : Int, b - z • p ∉ Set.Ioo a (a + p)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Ico_eq_locus_Ioc_eq_iUnion_Ioo :
-    { b | toIcoMod hp a b = toIocMod hp a b } = ⋃ z : Int, Set.Ioo (a + z • p) (a + p + z • p) := by
+    { b | toIcoMod hp a b = toIocMod hp a b } = ⋃ z : ℤ, Set.Ioo (a + z • p) (a + p + z • p) := by
   ext1
   simp_rw [Set.mem_ofPred, Set.mem_iUnion, ← Set.sub_mem_Ioo_iff_left, ←
     not_modEq_iff_toIcoMod_eq_toIocMod, modEq_iff_forall_notMem_Ioo_mod hp, not_forall,
     Classical.not_not]
-
-/--
-theorem `toIocDiv_wcovBy_toIcoDiv` / 定理 `toIocDiv_wcovBy_toIcoDiv`
-
-English:
-theorem toIocDiv_wcovBy_toIcoDiv
-  given: (a b : α)
-  statement: toIocDiv hp a b ⩿ toIcoDiv hp a b
-  proof: by
-  suffices toIocDiv hp a b = toIcoDiv hp a b ∨ toIocDiv hp a b + 1 = toIcoDiv hp a b by
-    rwa [wcovBy_iff_eq_or_covBy, ← Order.succ_eq_iff_covBy]
-  rw [eq_comm]; rw [← not_modEq_iff_toIcoDiv_eq_toIocDiv]; rw [eq_comm]; rw [←
-    modEq_iff_toIcoDiv_eq_toIocDiv_add_one]
-  exact em' _
-
-中文:
-定理 toIocDiv_wcovBy_toIcoDiv
-  条件: (a b : α)
-  结论: toIocDiv hp a b ⩿ toIcoDiv hp a b
-  证明: by
-  suffices toIocDiv hp a b = toIcoDiv hp a b ∨ toIocDiv hp a b + 1 = toIcoDiv hp a b by
-    rwa [wcovBy_iff_eq_or_covBy, ← Order.succ_eq_iff_covBy]
-  rw [eq_comm]; rw [← not_modEq_iff_toIcoDiv_eq_toIocDiv]; rw [eq_comm]; rw [←
-    modEq_iff_toIcoDiv_eq_toIocDiv_add_one]
-  exact em' _
-
-Depends on / 依赖: Order.succ_eq_iff_covBy, eq_comm, modEq_iff_toIcoDiv_eq_toIocDiv_add_one, not_modEq_iff_toIcoDiv_eq_toIocDiv, succ_eq_iff_covBy, toIcoDiv, toIocDiv, wcovBy_iff_eq_or_covBy
+/-
+**toIocDiv_wcovBy_toIcoDiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_wcovBy_toIcoDiv (a b : α) : toIocDiv hp a b ⩿ toIcoDiv hp a b
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddCommGroup.not_modEq_iff_toIcoDiv_eq_toIocDiv`：not_modEq_iff_toIcoDiv_
+eq_toIocDiv : ¬a ≡ b [PMOD p] ↔ toIcoDiv hp a b = toIocDiv hp a b
+· 使用定理 `AddCommGroup.modEq_iff_toIcoDiv_eq_toIocDiv_add_one`：modEq_iff_toIcoDiv_
+eq_toIocDiv_add_one : a ≡ b [PMOD p] ↔ toIcoDiv hp a b = toIocDiv hp a b + 1
+· 使用定理 `em'`：em' (p : Prop) : ¬p ∨ p
+· 使用定理 `wcovBy_iff_eq_or_covBy`：wcovBy_iff_eq_or_covBy : a ⩿ b ↔ a = b ∨ a ⋖ b
+· 使用定理 `Order.succ_eq_iff_covBy`：succ_eq_iff_covBy : succ a = b ↔ a ⋖ b
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
 -/
 theorem toIocDiv_wcovBy_toIcoDiv (a b : α) : toIocDiv hp a b ⩿ toIcoDiv hp a b := by
   suffices toIocDiv hp a b = toIcoDiv hp a b ∨ toIocDiv hp a b + 1 = toIcoDiv hp a b by
     rwa [wcovBy_iff_eq_or_covBy, ← Order.succ_eq_iff_covBy]
-  rw [eq_comm]; rw [← not_modEq_iff_toIcoDiv_eq_toIocDiv]; rw [eq_comm]; rw [←
+  rw [eq_comm, ← not_modEq_iff_toIcoDiv_eq_toIocDiv, eq_comm, ←
     modEq_iff_toIcoDiv_eq_toIocDiv_add_one]
   exact em' _
-
-/--
-theorem `toIcoMod_le_toIocMod` / 定理 `toIcoMod_le_toIocMod`
-
-English:
-theorem toIcoMod_le_toIocMod
-  given: (a b : α)
-  statement: toIcoMod hp a b <= toIocMod hp a b
-  proof: by
-  rw [toIcoMod]; rw [toIocMod]; rw [sub_le_sub_iff_left]
-  exact zsmul_left_mono hp.le (toIocDiv_wcovBy_toIcoDiv _ _ _).le
-
-中文:
-定理 toIcoMod_le_toIocMod
-  条件: (a b : α)
-  结论: toIcoMod hp a b <= toIocMod hp a b
-  证明: by
-  rw [toIcoMod]; rw [toIocMod]; rw [sub_le_sub_iff_left]
-  exact zsmul_left_mono hp.le (toIocDiv_wcovBy_toIcoDiv _ _ _).le
-
-Depends on / 依赖: hp.le, sub_le_sub_iff_left, toIcoMod, toIocDiv_wcovBy_toIcoDiv, toIocMod, zsmul_left_mono
+/-
+**toIcoMod_le_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_le_toIocMod (a b : α) : toIcoMod hp a b <= toIocMod hp a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_le_sub_iff_left`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] 
+[AddLeftMono α] [AddRightMono α] {b c : α} (a : α),   a - b ≤ a - c ↔ c ≤ b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `zsmul_left_mono`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Part
+ialOrder α] [IsOrderedAddMonoid α] {a : α},   0 ≤ a → Monotone fun n => n • a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `WCovBy.le`：WCovBy.le (h : a ⩿ b) : a <= b
+· 使用定理 `toIocDiv_wcovBy_toIcoDiv`：toIocDiv_wcovBy_toIcoDiv (a b : α) : toIocDiv 
+hp a b ⩿ toIcoDiv hp a b
 -/
-theorem toIcoMod_le_toIocMod (a b : α) : toIcoMod hp a b <= toIocMod hp a b := by
-  rw [toIcoMod]; rw [toIocMod]; rw [sub_le_sub_iff_left]
+theorem toIcoMod_le_toIocMod (a b : α) : toIcoMod hp a b ≤ toIocMod hp a b := by
+  rw [toIcoMod, toIocMod, sub_le_sub_iff_left]
   exact zsmul_left_mono hp.le (toIocDiv_wcovBy_toIcoDiv _ _ _).le
-
-/--
-theorem `toIocMod_le_toIcoMod_add` / 定理 `toIocMod_le_toIcoMod_add`
-
-English:
-theorem toIocMod_le_toIcoMod_add
-  given: (a b : α)
-  statement: toIocMod hp a b <= toIcoMod hp a b + p
-  proof: by
-  rw [toIcoMod]; rw [toIocMod]; rw [sub_add]; rw [sub_le_sub_iff_left]; rw [sub_le_iff_le_add]; rw [← add_one_zsmul]; rw [(zsmul_left_strictMono hp).le_iff_le]
-  apply (toIocDiv_wcovBy_toIcoDiv _ _ _).le_succ
-
-中文:
-定理 toIocMod_le_toIcoMod_add
-  条件: (a b : α)
-  结论: toIocMod hp a b <= toIcoMod hp a b + p
-  证明: by
-  rw [toIcoMod]; rw [toIocMod]; rw [sub_add]; rw [sub_le_sub_iff_left]; rw [sub_le_iff_le_add]; rw [← add_one_zsmul]; rw [(zsmul_left_strictMono hp).le_iff_le]
-  apply (toIocDiv_wcovBy_toIcoDiv _ _ _).le_succ
-
-Depends on / 依赖: add_one_zsmul, le_iff_le, le_succ, sub_add, sub_le_iff_le_add, sub_le_sub_iff_left, toIcoMod, toIocDiv_wcovBy_toIcoDiv, toIocMod, zsmul_left_strictMono
+/-
+**toIocMod_le_toIcoMod_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_le_toIcoMod_add (a b : α) : toIocMod hp a b <= toIcoMod hp a b + 
+p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `sub_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b + c = a - (b - c)
+· 使用定理 `sub_le_sub_iff_left`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] 
+[AddLeftMono α] [AddRightMono α] {b c : α} (a : α),   a - b ≤ a - c ↔ c ≤ b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `sub_le_iff_le_add`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [A
+ddRightMono α] {a b c : α}, a - c ≤ b ↔ a ≤ b + c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_one_zsmul`：∀ {G : Type u_3} [inst : AddGroup G] (a : G) (n : ℤ), (n 
++ 1) • a = n • a + a
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `zsmul_left_strictMono`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 
+: PartialOrder α] [IsOrderedAddMonoid α] {a : α},   0 < a → StrictMono fun n => 
+n • a
+· 使用定理 `WCovBy.le_succ`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : SuccOrder
+ α] {a b : α}, a ⩿ b → b ≤ Order.succ a
+· 使用定理 `toIocDiv_wcovBy_toIcoDiv`：toIocDiv_wcovBy_toIcoDiv (a b : α) : toIocDiv 
+hp a b ⩿ toIcoDiv hp a b
 -/
-theorem toIocMod_le_toIcoMod_add (a b : α) : toIocMod hp a b <= toIcoMod hp a b + p := by
-  rw [toIcoMod]; rw [toIocMod]; rw [sub_add]; rw [sub_le_sub_iff_left]; rw [sub_le_iff_le_add]; rw [← add_one_zsmul]; rw [(zsmul_left_strictMono hp).le_iff_le]
+theorem toIocMod_le_toIcoMod_add (a b : α) : toIocMod hp a b ≤ toIcoMod hp a b + p := by
+  rw [toIcoMod, toIocMod, sub_add, sub_le_sub_iff_left, sub_le_iff_le_add, ← add_one_zsmul,
+    (zsmul_left_strictMono hp).le_iff_le]
   apply (toIocDiv_wcovBy_toIcoDiv _ _ _).le_succ
 
 end IcoIoc
 
 open AddCommGroup
 
-/--
-theorem `toIcoMod_eq_self` / 定理 `toIcoMod_eq_self`
-
-English:
-theorem toIcoMod_eq_self
-  statement: toIcoMod hp a b = b ↔ b in Set.Ico a (a + p)
-  proof: by
-  rw [toIcoMod_eq_iff]; rw [and_iff_left]
-  exact ⟨0, by simp⟩
-
-中文:
-定理 toIcoMod_eq_self
-  结论: toIcoMod hp a b = b ↔ b in 集合.左闭右开区间 a (a + p)
-  证明: by
-  rw [toIcoMod_eq_iff]; rw [and_iff_left]
-  exact ⟨0, by simp⟩
-
-Depends on / 依赖: and_iff_left, toIcoMod_eq_iff
+/-
+**toIcoMod_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_eq_self : toIcoMod hp a b = b ↔ b in Set.Ico a (a + p)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_eq_iff`：toIcoMod_eq_iff : toIcoMod hp a b = c ↔ c in Set.Ico a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toIcoMod_eq_self : toIcoMod hp a b = b ↔ b in Set.Ico a (a + p) := by
-  rw [toIcoMod_eq_iff]; rw [and_iff_left]
+theorem toIcoMod_eq_self : toIcoMod hp a b = b ↔ b ∈ Set.Ico a (a + p) := by
+  rw [toIcoMod_eq_iff, and_iff_left]
   exact ⟨0, by simp⟩
-
-/--
-theorem `toIocMod_eq_self` / 定理 `toIocMod_eq_self`
-
-English:
-theorem toIocMod_eq_self
-  statement: toIocMod hp a b = b ↔ b in Set.Ioc a (a + p)
-  proof: by
-  rw [toIocMod_eq_iff]; rw [and_iff_left]
-  exact ⟨0, by simp⟩
-
-@[simp]
-
-中文:
-定理 toIocMod_eq_self
-  结论: toIocMod hp a b = b ↔ b in 集合.左开右闭区间 a (a + p)
-  证明: by
-  rw [toIocMod_eq_iff]; rw [and_iff_left]
-  exact ⟨0, by simp⟩
-
-@[simp]
-
-Depends on / 依赖: and_iff_left, toIocMod_eq_iff
+/-
+**toIocMod_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_eq_self : toIocMod hp a b = b ↔ b in Set.Ioc a (a + p)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod_eq_iff`：toIocMod_eq_iff : toIocMod hp a b = c ↔ c in Set.Ioc a 
+(a + p) ∧ exists z : Int, b = c + z • p
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toIocMod_eq_self : toIocMod hp a b = b ↔ b in Set.Ioc a (a + p) := by
-  rw [toIocMod_eq_iff]; rw [and_iff_left]
+theorem toIocMod_eq_self : toIocMod hp a b = b ↔ b ∈ Set.Ioc a (a + p) := by
+  rw [toIocMod_eq_iff, and_iff_left]
   exact ⟨0, by simp⟩
 
 @[simp]
-/--
-theorem `toIcoMod_toIcoMod` / 定理 `toIcoMod_toIcoMod`
-
-English:
-theorem toIcoMod_toIcoMod
-  given: (a₁ a₂ b : α)
-  statement: toIcoMod hp a₁ (toIcoMod hp a₂ b) = toIcoMod hp a₁ b
-  proof: (toIcoMod_eq_toIcoMod _).2 ⟨toIcoDiv hp a₂ b, self_sub_toIcoMod hp a₂ b⟩
-
-@[simp]
-
-中文:
-定理 toIcoMod_toIcoMod
-  条件: (a₁ a₂ b : α)
-  结论: toIcoMod hp a₁ (toIcoMod hp a₂ b) = toIcoMod hp a₁ b
-  证明: (toIcoMod_eq_toIcoMod _).2 ⟨toIcoDiv hp a₂ b, self_sub_toIcoMod hp a₂ b⟩
-
-@[simp]
-
-Depends on / 依赖: self_sub_toIcoMod, toIcoDiv, toIcoMod_eq_toIcoMod
+/-
+**toIcoMod_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_toIcoMod (a₁ a₂ b : α) : toIcoMod hp a₁ (toIcoMod hp a₂ b) = toIc
+oMod hp a₁ b
+参数：a₁ a₂ b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `toIcoMod_eq_toIcoMod`：toIcoMod_eq_toIcoMod : toIcoMod hp a b = toIcoMod 
+hp a c ↔ exists n : Int, c - b = n • p
+· 使用定理 `self_sub_toIcoMod`：self_sub_toIcoMod (a b : α) : b - toIcoMod hp a b = t
+oIcoDiv hp a b • p
 -/
 theorem toIcoMod_toIcoMod (a₁ a₂ b : α) : toIcoMod hp a₁ (toIcoMod hp a₂ b) = toIcoMod hp a₁ b :=
   (toIcoMod_eq_toIcoMod _).2 ⟨toIcoDiv hp a₂ b, self_sub_toIcoMod hp a₂ b⟩
 
 @[simp]
-/--
-theorem `toIcoMod_toIocMod` / 定理 `toIcoMod_toIocMod`
-
-English:
-theorem toIcoMod_toIocMod
-  given: (a₁ a₂ b : α)
-  statement: toIcoMod hp a₁ (toIocMod hp a₂ b) = toIcoMod hp a₁ b
-  proof: (toIcoMod_eq_toIcoMod _).2 ⟨toIocDiv hp a₂ b, self_sub_toIocMod hp a₂ b⟩
-
-@[simp]
-
-中文:
-定理 toIcoMod_toIocMod
-  条件: (a₁ a₂ b : α)
-  结论: toIcoMod hp a₁ (toIocMod hp a₂ b) = toIcoMod hp a₁ b
-  证明: (toIcoMod_eq_toIcoMod _).2 ⟨toIocDiv hp a₂ b, self_sub_toIocMod hp a₂ b⟩
-
-@[simp]
-
-Depends on / 依赖: self_sub_toIocMod, toIcoMod_eq_toIcoMod, toIocDiv
+/-
+**toIcoMod_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_toIocMod (a₁ a₂ b : α) : toIcoMod hp a₁ (toIocMod hp a₂ b) = toIc
+oMod hp a₁ b
+参数：a₁ a₂ b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `toIcoMod_eq_toIcoMod`：toIcoMod_eq_toIcoMod : toIcoMod hp a b = toIcoMod 
+hp a c ↔ exists n : Int, c - b = n • p
+· 使用定理 `self_sub_toIocMod`：self_sub_toIocMod (a b : α) : b - toIocMod hp a b = t
+oIocDiv hp a b • p
 -/
 theorem toIcoMod_toIocMod (a₁ a₂ b : α) : toIcoMod hp a₁ (toIocMod hp a₂ b) = toIcoMod hp a₁ b :=
   (toIcoMod_eq_toIcoMod _).2 ⟨toIocDiv hp a₂ b, self_sub_toIocMod hp a₂ b⟩
 
 @[simp]
-/--
-theorem `toIocMod_toIocMod` / 定理 `toIocMod_toIocMod`
-
-English:
-theorem toIocMod_toIocMod
-  given: (a₁ a₂ b : α)
-  statement: toIocMod hp a₁ (toIocMod hp a₂ b) = toIocMod hp a₁ b
-  proof: (toIocMod_eq_toIocMod _).2 ⟨toIocDiv hp a₂ b, self_sub_toIocMod hp a₂ b⟩
-
-@[simp]
-
-中文:
-定理 toIocMod_toIocMod
-  条件: (a₁ a₂ b : α)
-  结论: toIocMod hp a₁ (toIocMod hp a₂ b) = toIocMod hp a₁ b
-  证明: (toIocMod_eq_toIocMod _).2 ⟨toIocDiv hp a₂ b, self_sub_toIocMod hp a₂ b⟩
-
-@[simp]
-
-Depends on / 依赖: self_sub_toIocMod, toIocDiv, toIocMod_eq_toIocMod
+/-
+**toIocMod_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_toIocMod (a₁ a₂ b : α) : toIocMod hp a₁ (toIocMod hp a₂ b) = toIo
+cMod hp a₁ b
+参数：a₁ a₂ b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `toIocMod_eq_toIocMod`：toIocMod_eq_toIocMod : toIocMod hp a b = toIocMod 
+hp a c ↔ exists n : Int, c - b = n • p
+· 使用定理 `self_sub_toIocMod`：self_sub_toIocMod (a b : α) : b - toIocMod hp a b = t
+oIocDiv hp a b • p
 -/
 theorem toIocMod_toIocMod (a₁ a₂ b : α) : toIocMod hp a₁ (toIocMod hp a₂ b) = toIocMod hp a₁ b :=
   (toIocMod_eq_toIocMod _).2 ⟨toIocDiv hp a₂ b, self_sub_toIocMod hp a₂ b⟩
 
 @[simp]
-/--
-theorem `toIocMod_toIcoMod` / 定理 `toIocMod_toIcoMod`
-
-English:
-theorem toIocMod_toIcoMod
-  given: (a₁ a₂ b : α)
-  statement: toIocMod hp a₁ (toIcoMod hp a₂ b) = toIocMod hp a₁ b
-  proof: (toIocMod_eq_toIocMod _).2 ⟨toIcoDiv hp a₂ b, self_sub_toIcoMod hp a₂ b⟩
-
-中文:
-定理 toIocMod_toIcoMod
-  条件: (a₁ a₂ b : α)
-  结论: toIocMod hp a₁ (toIcoMod hp a₂ b) = toIocMod hp a₁ b
-  证明: (toIocMod_eq_toIocMod _).2 ⟨toIcoDiv hp a₂ b, self_sub_toIcoMod hp a₂ b⟩
-
-Depends on / 依赖: self_sub_toIcoMod, toIcoDiv, toIocMod_eq_toIocMod
+/-
+**toIocMod_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_toIcoMod (a₁ a₂ b : α) : toIocMod hp a₁ (toIcoMod hp a₂ b) = toIo
+cMod hp a₁ b
+参数：a₁ a₂ b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `toIocMod_eq_toIocMod`：toIocMod_eq_toIocMod : toIocMod hp a b = toIocMod 
+hp a c ↔ exists n : Int, c - b = n • p
+· 使用定理 `self_sub_toIcoMod`：self_sub_toIcoMod (a b : α) : b - toIcoMod hp a b = t
+oIcoDiv hp a b • p
 -/
 theorem toIocMod_toIcoMod (a₁ a₂ b : α) : toIocMod hp a₁ (toIcoMod hp a₂ b) = toIocMod hp a₁ b :=
   (toIocMod_eq_toIocMod _).2 ⟨toIcoDiv hp a₂ b, self_sub_toIcoMod hp a₂ b⟩
-
-/--
-theorem `toIcoMod_periodic` / 定理 `toIcoMod_periodic`
-
-English:
-theorem toIcoMod_periodic
-  given: (a : α)
-  statement: Function.Periodic (toIcoMod hp a) p
-  proof: toIcoMod_add_right hp a
-
-中文:
-定理 toIcoMod_periodic
-  条件: (a : α)
-  结论: 函数.周期 (toIcoMod hp a) p
-  证明: toIcoMod_add_right hp a
-
-Depends on / 依赖: toIcoMod_add_right
+/-
+**toIcoMod_periodic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_periodic (a : α) : Function.Periodic (toIcoMod hp a) p
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_add_right`：toIcoMod_add_right (a b : α) : toIcoMod hp a (b + p)
+ = toIcoMod hp a b
 -/
 theorem toIcoMod_periodic (a : α) : Function.Periodic (toIcoMod hp a) p :=
   toIcoMod_add_right hp a
-
-/--
-theorem `toIocMod_periodic` / 定理 `toIocMod_periodic`
-
-English:
-theorem toIocMod_periodic
-  given: (a : α)
-  statement: Function.Periodic (toIocMod hp a) p
-  proof: toIocMod_add_right hp a
-
-中文:
-定理 toIocMod_periodic
-  条件: (a : α)
-  结论: 函数.周期 (toIocMod hp a) p
-  证明: toIocMod_add_right hp a
-
-Depends on / 依赖: toIocMod_add_right
+/-
+**toIocMod_periodic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_periodic (a : α) : Function.Periodic (toIocMod hp a) p
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_add_right`：toIocMod_add_right (a b : α) : toIocMod hp a (b + p)
+ = toIocMod hp a b
 -/
 theorem toIocMod_periodic (a : α) : Function.Periodic (toIocMod hp a) p :=
   toIocMod_add_right hp a
@@ -3811,263 +3408,186 @@ theorem toIocMod_periodic (a : α) : Function.Periodic (toIocMod hp a) p :=
 -- helper lemmas for when `a = 0`
 section Zero
 
-/--
-theorem `toIcoMod_zero_sub_comm` / 定理 `toIcoMod_zero_sub_comm`
-
-English:
-theorem toIcoMod_zero_sub_comm
-  given: (a b : α)
-  statement: toIcoMod hp 0 (a - b) = p - toIocMod hp 0 (b - a)
-  proof: by
-  rw [← neg_sub]; rw [toIcoMod_neg]; rw [neg_zero]
-
-中文:
-定理 toIcoMod_zero_sub_comm
-  条件: (a b : α)
-  结论: toIcoMod hp 0 (a - b) = p - toIocMod hp 0 (b - a)
-  证明: by
-  rw [← neg_sub]; rw [toIcoMod_neg]; rw [neg_zero]
-
-Depends on / 依赖: neg_sub, neg_zero, toIcoMod_neg
+/-
+**toIcoMod_zero_sub_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_zero_sub_comm (a b : α) : toIcoMod hp 0 (a - b) = p - toIocMod hp
+ 0 (b - a)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `toIcoMod_neg`：toIcoMod_neg (a b : α) : toIcoMod hp a (-b) = p - toIocMod
+ hp (-a) b
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem toIcoMod_zero_sub_comm (a b : α) : toIcoMod hp 0 (a - b) = p - toIocMod hp 0 (b - a) := by
-  rw [← neg_sub]; rw [toIcoMod_neg]; rw [neg_zero]
-
-/--
-theorem `toIocMod_zero_sub_comm` / 定理 `toIocMod_zero_sub_comm`
-
-English:
-theorem toIocMod_zero_sub_comm
-  given: (a b : α)
-  statement: toIocMod hp 0 (a - b) = p - toIcoMod hp 0 (b - a)
-  proof: by
-  rw [← neg_sub]; rw [toIocMod_neg]; rw [neg_zero]
-
-中文:
-定理 toIocMod_zero_sub_comm
-  条件: (a b : α)
-  结论: toIocMod hp 0 (a - b) = p - toIcoMod hp 0 (b - a)
-  证明: by
-  rw [← neg_sub]; rw [toIocMod_neg]; rw [neg_zero]
-
-Depends on / 依赖: neg_sub, neg_zero, toIocMod_neg
+  rw [← neg_sub, toIcoMod_neg, neg_zero]
+/-
+**toIocMod_zero_sub_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_zero_sub_comm (a b : α) : toIocMod hp 0 (a - b) = p - toIcoMod hp
+ 0 (b - a)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `toIocMod_neg`：toIocMod_neg (a b : α) : toIocMod hp a (-b) = p - toIcoMod
+ hp (-a) b
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem toIocMod_zero_sub_comm (a b : α) : toIocMod hp 0 (a - b) = p - toIcoMod hp 0 (b - a) := by
-  rw [← neg_sub]; rw [toIocMod_neg]; rw [neg_zero]
-
-/--
-theorem `toIcoDiv_eq_sub` / 定理 `toIcoDiv_eq_sub`
-
-English:
-theorem toIcoDiv_eq_sub
-  given: (a b : α)
-  statement: toIcoDiv hp a b = toIcoDiv hp 0 (b - a)
-  proof: by
-  rw [toIcoDiv_sub_eq_toIcoDiv_add]; rw [zero_add]
-
-中文:
-定理 toIcoDiv_eq_sub
-  条件: (a b : α)
-  结论: toIcoDiv hp a b = toIcoDiv hp 0 (b - a)
-  证明: by
-  rw [toIcoDiv_sub_eq_toIcoDiv_add]; rw [zero_add]
-
-Depends on / 依赖: toIcoDiv_sub_eq_toIcoDiv_add, zero_add
+  rw [← neg_sub, toIocMod_neg, neg_zero]
+/-
+**toIcoDiv_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_eq_sub (a b : α) : toIcoDiv hp a b = toIcoDiv hp 0 (b - a)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv_sub_eq_toIcoDiv_add`：toIcoDiv_sub_eq_toIcoDiv_add (a b c : α) :
+ toIcoDiv hp a (b - c) = toIcoDiv hp (a + c) b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem toIcoDiv_eq_sub (a b : α) : toIcoDiv hp a b = toIcoDiv hp 0 (b - a) := by
-  rw [toIcoDiv_sub_eq_toIcoDiv_add]; rw [zero_add]
-
-/--
-theorem `toIocDiv_eq_sub` / 定理 `toIocDiv_eq_sub`
-
-English:
-theorem toIocDiv_eq_sub
-  given: (a b : α)
-  statement: toIocDiv hp a b = toIocDiv hp 0 (b - a)
-  proof: by
-  rw [toIocDiv_sub_eq_toIocDiv_add]; rw [zero_add]
-
-中文:
-定理 toIocDiv_eq_sub
-  条件: (a b : α)
-  结论: toIocDiv hp a b = toIocDiv hp 0 (b - a)
-  证明: by
-  rw [toIocDiv_sub_eq_toIocDiv_add]; rw [zero_add]
-
-Depends on / 依赖: toIocDiv_sub_eq_toIocDiv_add, zero_add
+  rw [toIcoDiv_sub_eq_toIcoDiv_add, zero_add]
+/-
+**toIocDiv_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_eq_sub (a b : α) : toIocDiv hp a b = toIocDiv hp 0 (b - a)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv_sub_eq_toIocDiv_add`：toIocDiv_sub_eq_toIocDiv_add (a b c : α) :
+ toIocDiv hp a (b - c) = toIocDiv hp (a + c) b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem toIocDiv_eq_sub (a b : α) : toIocDiv hp a b = toIocDiv hp 0 (b - a) := by
-  rw [toIocDiv_sub_eq_toIocDiv_add]; rw [zero_add]
-
-/--
-theorem `toIcoMod_eq_sub` / 定理 `toIcoMod_eq_sub`
-
-English:
-theorem toIcoMod_eq_sub
-  given: (a b : α)
-  statement: toIcoMod hp a b = toIcoMod hp 0 (b - a) + a
-  proof: by
-  rw [toIcoMod_sub_eq_sub]; rw [zero_add]; rw [sub_add_cancel]
-
-中文:
-定理 toIcoMod_eq_sub
-  条件: (a b : α)
-  结论: toIcoMod hp a b = toIcoMod hp 0 (b - a) + a
-  证明: by
-  rw [toIcoMod_sub_eq_sub]; rw [zero_add]; rw [sub_add_cancel]
-
-Depends on / 依赖: sub_add_cancel, toIcoMod_sub_eq_sub, zero_add
+  rw [toIocDiv_sub_eq_toIocDiv_add, zero_add]
+/-
+**toIcoMod_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_eq_sub (a b : α) : toIcoMod hp a b = toIcoMod hp 0 (b - a) + a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_sub_eq_sub`：toIcoMod_sub_eq_sub (a b c : α) : toIcoMod hp a (b 
+- c) = toIcoMod hp (a + c) b - c
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem toIcoMod_eq_sub (a b : α) : toIcoMod hp a b = toIcoMod hp 0 (b - a) + a := by
-  rw [toIcoMod_sub_eq_sub]; rw [zero_add]; rw [sub_add_cancel]
-
-/--
-theorem `toIocMod_eq_sub` / 定理 `toIocMod_eq_sub`
-
-English:
-theorem toIocMod_eq_sub
-  given: (a b : α)
-  statement: toIocMod hp a b = toIocMod hp 0 (b - a) + a
-  proof: by
-  rw [toIocMod_sub_eq_sub]; rw [zero_add]; rw [sub_add_cancel]
-
-中文:
-定理 toIocMod_eq_sub
-  条件: (a b : α)
-  结论: toIocMod hp a b = toIocMod hp 0 (b - a) + a
-  证明: by
-  rw [toIocMod_sub_eq_sub]; rw [zero_add]; rw [sub_add_cancel]
-
-Depends on / 依赖: sub_add_cancel, toIocMod_sub_eq_sub, zero_add
+  rw [toIcoMod_sub_eq_sub, zero_add, sub_add_cancel]
+/-
+**toIocMod_eq_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_eq_sub (a b : α) : toIocMod hp a b = toIocMod hp 0 (b - a) + a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod_sub_eq_sub`：toIocMod_sub_eq_sub (a b c : α) : toIocMod hp a (b 
+- c) = toIocMod hp (a + c) b - c
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem toIocMod_eq_sub (a b : α) : toIocMod hp a b = toIocMod hp 0 (b - a) + a := by
-  rw [toIocMod_sub_eq_sub]; rw [zero_add]; rw [sub_add_cancel]
-
-/--
-theorem `toIcoMod_add_toIocMod_zero` / 定理 `toIcoMod_add_toIocMod_zero`
-
-English:
-theorem toIcoMod_add_toIocMod_zero
-  given: (a b : α)
-  proof: by
-  rw [toIcoMod_zero_sub_comm]; rw [sub_add_cancel]
-
-中文:
-定理 toIcoMod_add_toIocMod_zero
-  条件: (a b : α)
-  证明: by
-  rw [toIcoMod_zero_sub_comm]; rw [sub_add_cancel]
-
-Depends on / 依赖: sub_add_cancel, toIcoMod_zero_sub_comm
+  rw [toIocMod_sub_eq_sub, zero_add, sub_add_cancel]
+/-
+**toIcoMod_add_toIocMod_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_toIocMod_zero (a b : α) : toIcoMod hp 0 (a - b) + toIocMod hp
+ 0 (b - a) = p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_zero_sub_comm`：toIcoMod_zero_sub_comm (a b : α) : toIcoMod hp 0
+ (a - b) = p - toIocMod hp 0 (b - a)
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem toIcoMod_add_toIocMod_zero (a b : α) :
     toIcoMod hp 0 (a - b) + toIocMod hp 0 (b - a) = p := by
-  rw [toIcoMod_zero_sub_comm]; rw [sub_add_cancel]
-
-/--
-theorem `toIocMod_add_toIcoMod_zero` / 定理 `toIocMod_add_toIcoMod_zero`
-
-English:
-theorem toIocMod_add_toIcoMod_zero
-  given: (a b : α)
-  proof: by
-  rw [_root_.add_comm]; rw [toIcoMod_add_toIocMod_zero]
-
-中文:
-定理 toIocMod_add_toIcoMod_zero
-  条件: (a b : α)
-  证明: by
-  rw [_root_.add_comm]; rw [toIcoMod_add_toIocMod_zero]
-
-Depends on / 依赖: _root_, _root_.add_comm, add_comm, toIcoMod_add_toIocMod_zero
+  rw [toIcoMod_zero_sub_comm, sub_add_cancel]
+/-
+**toIocMod_add_toIcoMod_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_toIcoMod_zero (a b : α) : toIocMod hp 0 (a - b) + toIcoMod hp
+ 0 (b - a) = p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_toIocMod_zero`：toIcoMod_add_toIocMod_zero (a b : α) : toIco
+Mod hp 0 (a - b) + toIocMod hp 0 (b - a) = p
 -/
 theorem toIocMod_add_toIcoMod_zero (a b : α) :
     toIocMod hp 0 (a - b) + toIcoMod hp 0 (b - a) = p := by
-  rw [_root_.add_comm]; rw [toIcoMod_add_toIocMod_zero]
+  rw [_root_.add_comm, toIcoMod_add_toIocMod_zero]
 
 end Zero
 
 /-- `toIcoMod` as an equiv from the quotient. -/
 @[simps symm_apply]
-/--
-Definition of `QuotientAddGroup.equivIcoMod` / `QuotientAddGroup.equivIcoMod` 的定义
+/-
+**QuotientAddGroup.equivIcoMod** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：QuotientAddGroup.equivIcoMod (a : α) : α ⧸ AddSubgroup.zmultiples p ≃ Set.
+Ico a (a + p) where toFun b
+参数：a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_periodic`：toIcoMod_periodic (a : α) : Function.Periodic (toIcoM
+od hp a) p
 
-English:
-definition QuotientAddGroup.equivIcoMod
-  signature: (a : α)
-  body: ⟨(toIcoMod_periodic hp a).lift b, QuotientAddGroup.induction_on b toIcoMod_mem_Ico hp a⟩
-  invFun := (↑)
-right_inv b := Subtype.ext (toIcoMod_eq_self hp).mpr b.prop
-  left_inv b := by
-    induction b using QuotientAddGroup.induction_on
-    dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIcoMod_sub_self]
-    apply AddSubgroup.zsmul_mem_zmultiples
-
-@[simp]
-
-中文:
-定义 QuotientAddGroup.equivIcoMod
-  签名: (a : α)
-  定义体: ⟨(toIcoMod_periodic hp a).lift b, QuotientAddGroup.induction_on b toIcoMod_mem_Ico hp a⟩
-  invFun := (↑)
-right_inv b := Subtype.ext (toIcoMod_eq_self hp).mpr b.prop
-  left_inv b := by
-    induction b using QuotientAddGroup.induction_on
-    dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIcoMod_sub_self]
-    apply AddSubgroup.zsmul_mem_zmultiples
-
-@[simp]
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.zsmul_mem_zmultiples, QuotientAddGroup, QuotientAddGroup.eq_iff_sub_mem, QuotientAddGroup.induction_on, Subtype, Subtype.ext, b.prop, eq_iff_sub_mem, induction_on, invFun, left_inv, right_inv, toIcoMod_eq_self, toIcoMod_mem_Ico, toIcoMod_periodic, toIcoMod_sub_self, zsmul_mem_zmultiples
+--- 原说明 ---
+`toIcoMod` as an equiv from the quotient.
 -/
 def QuotientAddGroup.equivIcoMod (a : α) : α ⧸ AddSubgroup.zmultiples p ≃ Set.Ico a (a + p) where
   toFun b :=
-⟨(toIcoMod_periodic hp a).lift b, QuotientAddGroup.induction_on b toIcoMod_mem_Ico hp a⟩
+    ⟨(toIcoMod_periodic hp a).lift b, QuotientAddGroup.induction_on b <| toIcoMod_mem_Ico hp a⟩
   invFun := (↑)
-right_inv b := Subtype.ext (toIcoMod_eq_self hp).mpr b.prop
+  right_inv b := Subtype.ext <| (toIcoMod_eq_self hp).mpr b.prop
   left_inv b := by
     induction b using QuotientAddGroup.induction_on
     dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIcoMod_sub_self]
+    rw [QuotientAddGroup.eq_iff_sub_mem, toIcoMod_sub_self]
     apply AddSubgroup.zsmul_mem_zmultiples
 
 @[simp]
-/--
-theorem `QuotientAddGroup.equivIcoMod_coe` / 定理 `QuotientAddGroup.equivIcoMod_coe`
-
-English:
-theorem QuotientAddGroup.equivIcoMod_coe
-  given: (a b : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 QuotientAddGroup.equivIcoMod_coe
-  条件: (a b : α)
-  证明: rfl
-
-@[simp]
+/-
+**QuotientAddGroup.equivIcoMod_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：QuotientAddGroup.equivIcoMod_coe (a b : α) : QuotientAddGroup.equivIcoMod 
+hp a ↑b = ⟨toIcoMod hp a b, toIcoMod_mem_Ico hp a _⟩
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem QuotientAddGroup.equivIcoMod_coe (a b : α) :
     QuotientAddGroup.equivIcoMod hp a ↑b = ⟨toIcoMod hp a b, toIcoMod_mem_Ico hp a _⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `QuotientAddGroup.equivIcoMod_zero` / 定理 `QuotientAddGroup.equivIcoMod_zero`
-
-English:
-theorem QuotientAddGroup.equivIcoMod_zero
-  given: (a : α)
-  proof: rfl
-
-中文:
-定理 QuotientAddGroup.equivIcoMod_zero
-  条件: (a : α)
-  证明: rfl
+/-
+**QuotientAddGroup.equivIcoMod_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：QuotientAddGroup.equivIcoMod_zero (a : α) : QuotientAddGroup.equivIcoMod h
+p a 0 = ⟨toIcoMod hp a 0, toIcoMod_mem_Ico hp a _⟩
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem QuotientAddGroup.equivIcoMod_zero (a : α) :
     QuotientAddGroup.equivIcoMod hp a 0 = ⟨toIcoMod hp a 0, toIcoMod_mem_Ico hp a _⟩ :=
@@ -4075,85 +3595,51 @@ theorem QuotientAddGroup.equivIcoMod_zero (a : α) :
 
 /-- `toIocMod` as an equiv from the quotient. -/
 @[simps symm_apply]
-/--
-Definition of `QuotientAddGroup.equivIocMod` / `QuotientAddGroup.equivIocMod` 的定义
+/-
+**QuotientAddGroup.equivIocMod** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：QuotientAddGroup.equivIocMod (a : α) : α ⧸ AddSubgroup.zmultiples p ≃ Set.
+Ioc a (a + p) where toFun b
+参数：a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_periodic`：toIocMod_periodic (a : α) : Function.Periodic (toIocM
+od hp a) p
 
-English:
-definition QuotientAddGroup.equivIocMod
-  signature: (a : α)
-  body: ⟨(toIocMod_periodic hp a).lift b, QuotientAddGroup.induction_on b toIocMod_mem_Ioc hp a⟩
-  invFun := (↑)
-right_inv b := Subtype.ext (toIocMod_eq_self hp).mpr b.prop
-  left_inv b := by
-    induction b using QuotientAddGroup.induction_on
-    dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIocMod_sub_self]
-    apply AddSubgroup.zsmul_mem_zmultiples
-
-@[simp]
-
-中文:
-定义 QuotientAddGroup.equivIocMod
-  签名: (a : α)
-  定义体: ⟨(toIocMod_periodic hp a).lift b, QuotientAddGroup.induction_on b toIocMod_mem_Ioc hp a⟩
-  invFun := (↑)
-right_inv b := Subtype.ext (toIocMod_eq_self hp).mpr b.prop
-  left_inv b := by
-    induction b using QuotientAddGroup.induction_on
-    dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIocMod_sub_self]
-    apply AddSubgroup.zsmul_mem_zmultiples
-
-@[simp]
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.zsmul_mem_zmultiples, QuotientAddGroup, QuotientAddGroup.eq_iff_sub_mem, QuotientAddGroup.induction_on, Subtype, Subtype.ext, b.prop, eq_iff_sub_mem, induction_on, invFun, left_inv, right_inv, toIocMod_eq_self, toIocMod_mem_Ioc, toIocMod_periodic, toIocMod_sub_self, zsmul_mem_zmultiples
+--- 原说明 ---
+`toIocMod` as an equiv from the quotient.
 -/
 def QuotientAddGroup.equivIocMod (a : α) : α ⧸ AddSubgroup.zmultiples p ≃ Set.Ioc a (a + p) where
   toFun b :=
-⟨(toIocMod_periodic hp a).lift b, QuotientAddGroup.induction_on b toIocMod_mem_Ioc hp a⟩
+    ⟨(toIocMod_periodic hp a).lift b, QuotientAddGroup.induction_on b <| toIocMod_mem_Ioc hp a⟩
   invFun := (↑)
-right_inv b := Subtype.ext (toIocMod_eq_self hp).mpr b.prop
+  right_inv b := Subtype.ext <| (toIocMod_eq_self hp).mpr b.prop
   left_inv b := by
     induction b using QuotientAddGroup.induction_on
     dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIocMod_sub_self]
+    rw [QuotientAddGroup.eq_iff_sub_mem, toIocMod_sub_self]
     apply AddSubgroup.zsmul_mem_zmultiples
 
 @[simp]
-/--
-theorem `QuotientAddGroup.equivIocMod_coe` / 定理 `QuotientAddGroup.equivIocMod_coe`
-
-English:
-theorem QuotientAddGroup.equivIocMod_coe
-  given: (a b : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 QuotientAddGroup.equivIocMod_coe
-  条件: (a b : α)
-  证明: rfl
-
-@[simp]
+/-
+**QuotientAddGroup.equivIocMod_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：QuotientAddGroup.equivIocMod_coe (a b : α) : QuotientAddGroup.equivIocMod 
+hp a ↑b = ⟨toIocMod hp a b, toIocMod_mem_Ioc hp a _⟩
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem QuotientAddGroup.equivIocMod_coe (a b : α) :
     QuotientAddGroup.equivIocMod hp a ↑b = ⟨toIocMod hp a b, toIocMod_mem_Ioc hp a _⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `QuotientAddGroup.equivIocMod_zero` / 定理 `QuotientAddGroup.equivIocMod_zero`
-
-English:
-theorem QuotientAddGroup.equivIocMod_zero
-  given: (a : α)
-  proof: rfl
-
-中文:
-定理 QuotientAddGroup.equivIocMod_zero
-  条件: (a : α)
-  证明: rfl
+/-
+**QuotientAddGroup.equivIocMod_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：QuotientAddGroup.equivIocMod_zero (a : α) : QuotientAddGroup.equivIocMod h
+p a 0 = ⟨toIocMod hp a 0, toIocMod_mem_Ioc hp a _⟩
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem QuotientAddGroup.equivIocMod_zero (a : α) :
     QuotientAddGroup.equivIocMod hp a 0 = ⟨toIocMod hp a 0, toIocMod_mem_Ioc hp a _⟩ :=
@@ -4169,41 +3655,27 @@ section Circular
 
 open AddCommGroup
 
-/--
-theorem `toIxxMod_iff` / 定理 `toIxxMod_iff`
-
-English:
-theorem toIxxMod_iff
-  given: (x₁ x₂ x₃ : α)
-  statement: toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃ ↔
-  proof: by
-  rw [toIcoMod_eq_sub]; rw [toIocMod_eq_sub _ x₁]; rw [add_le_add_iff_right]; rw [← neg_sub x₁ x₃]; rw [toIocMod_neg]; rw [neg_zero]; rw [le_sub_iff_add_le]
-
-中文:
-定理 toIxxMod_iff
-  条件: (x₁ x₂ x₃ : α)
-  结论: toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃ ↔
-  证明: by
-  rw [toIcoMod_eq_sub]; rw [toIocMod_eq_sub _ x₁]; rw [add_le_add_iff_right]; rw [← neg_sub x₁ x₃]; rw [toIocMod_neg]; rw [neg_zero]; rw [le_sub_iff_add_le]
+/-
+**toIxxMod_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem toIxxMod_iff (x₁ x₂ x₃ : α) : toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃ ↔
-    toIcoMod hp 0 (x₂ - x₁) + toIcoMod hp 0 (x₁ - x₃) <= p := by
-  rw [toIcoMod_eq_sub]; rw [toIocMod_eq_sub _ x₁]; rw [add_le_add_iff_right]; rw [← neg_sub x₁ x₃]; rw [toIocMod_neg]; rw [neg_zero]; rw [le_sub_iff_add_le]
-
-/--
-theorem `toIxxMod_cyclic_left` / 定理 `toIxxMod_cyclic_left`
-
-English:
-theorem toIxxMod_cyclic_left
-  given: {x₁ x₂ x₃ : α} (h : toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃)
-  proof: by
+private theorem toIxxMod_iff (x₁ x₂ x₃ : α) : toIcoMod hp x₁ x₂ ≤ toIocMod hp x₁ x₃ ↔
+    toIcoMod hp 0 (x₂ - x₁) + toIcoMod hp 0 (x₁ - x₃) ≤ p := by
+  rw [toIcoMod_eq_sub, toIocMod_eq_sub _ x₁, add_le_add_iff_right, ← neg_sub x₁ x₃, toIocMod_neg,
+    neg_zero, le_sub_iff_add_le]
+/-
+**toIxxMod_cyclic_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+private theorem toIxxMod_cyclic_left {x₁ x₂ x₃ : α} (h : toIcoMod hp x₁ x₂ ≤ toIocMod hp x₁ x₃) :
+    toIcoMod hp x₂ x₃ ≤ toIocMod hp x₂ x₁ := by
   let x₂' := toIcoMod hp x₁ x₂
   let x₃' := toIcoMod hp x₂' x₃
-  have h : x₂' <= toIocMod hp x₁ x₃' := by simpa [x₃']
+  have h : x₂' ≤ toIocMod hp x₁ x₃' := by simpa [x₃']
   have h₂₁ : x₂' < x₁ + p := toIcoMod_lt_right _ _ _
   have h₃₂ : x₃' - p < x₂' := sub_lt_iff_lt_add.2 (toIcoMod_lt_right _ _ _)
-  suffices hequiv : x₃' <= toIocMod hp x₂' x₁ by
-    obtain ⟨z, hd⟩ : exists z : Int, x₂ = x₂' + z • p := ((toIcoMod_eq_iff hp).1 rfl).2
+  suffices hequiv : x₃' ≤ toIocMod hp x₂' x₁ by
+    obtain ⟨z, hd⟩ : ∃ z : ℤ, x₂ = x₂' + z • p := ((toIcoMod_eq_iff hp).1 rfl).2
     simpa [hd, toIocMod_add_zsmul', toIcoMod_add_zsmul', add_le_add_iff_right]
   rcases le_or_gt x₃' (x₁ + p) with h₃₁ | h₁₃
   · suffices hIoc₂₁ : toIocMod hp x₂' x₁ = x₁ + p from hIoc₂₁.trans_ge h₃₁
@@ -4214,186 +3686,50 @@ theorem toIxxMod_cyclic_left
     exact ⟨⟨lt_sub_iff_add_lt.2 h₁₃, le_of_lt (h₃₂.trans h₂₁)⟩, 1, by simp⟩
   have not_h₃₂ := (h.trans hIoc₁₃.le).not_gt
   contradiction
-
-中文:
-定理 toIxxMod_cyclic_left
-  条件: {x₁ x₂ x₃ : α} (h : toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃)
-  证明: by
-  let x₂' := toIcoMod hp x₁ x₂
-  let x₃' := toIcoMod hp x₂' x₃
-  have h : x₂' <= toIocMod hp x₁ x₃' := by simpa [x₃']
-  have h₂₁ : x₂' < x₁ + p := toIcoMod_lt_right _ _ _
-  have h₃₂ : x₃' - p < x₂' := sub_lt_iff_lt_add.2 (toIcoMod_lt_right _ _ _)
-  suffices hequiv : x₃' <= toIocMod hp x₂' x₁ by
-    obtain ⟨z, hd⟩ : exists z : Int, x₂ = x₂' + z • p := ((toIcoMod_eq_iff hp).1 rfl).2
-    simpa [hd, toIocMod_add_zsmul', toIcoMod_add_zsmul', add_le_add_iff_right]
-  rcases le_or_gt x₃' (x₁ + p) with h₃₁ | h₁₃
-  · suffices hIoc₂₁ : toIocMod hp x₂' x₁ = x₁ + p from hIoc₂₁.trans_ge h₃₁
-    apply (toIocMod_eq_iff hp).2
-    exact ⟨⟨h₂₁, by simp [x₂', left_le_toIcoMod]⟩, -1, by simp⟩
-  have hIoc₁₃ : toIocMod hp x₁ x₃' = x₃' - p := by
-    apply (toIocMod_eq_iff hp).2
-    exact ⟨⟨lt_sub_iff_add_lt.2 h₁₃, le_of_lt (h₃₂.trans h₂₁)⟩, 1, by simp⟩
-  have not_h₃₂ := (h.trans hIoc₁₃.le).not_gt
-  contradiction
+/-
+**toIxxMod_antisymm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem toIxxMod_cyclic_left {x₁ x₂ x₃ : α} (h : toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃) :
-    toIcoMod hp x₂ x₃ <= toIocMod hp x₂ x₁ := by
-  let x₂' := toIcoMod hp x₁ x₂
-  let x₃' := toIcoMod hp x₂' x₃
-  have h : x₂' <= toIocMod hp x₁ x₃' := by simpa [x₃']
-  have h₂₁ : x₂' < x₁ + p := toIcoMod_lt_right _ _ _
-  have h₃₂ : x₃' - p < x₂' := sub_lt_iff_lt_add.2 (toIcoMod_lt_right _ _ _)
-  suffices hequiv : x₃' <= toIocMod hp x₂' x₁ by
-    obtain ⟨z, hd⟩ : exists z : Int, x₂ = x₂' + z • p := ((toIcoMod_eq_iff hp).1 rfl).2
-    simpa [hd, toIocMod_add_zsmul', toIcoMod_add_zsmul', add_le_add_iff_right]
-  rcases le_or_gt x₃' (x₁ + p) with h₃₁ | h₁₃
-  · suffices hIoc₂₁ : toIocMod hp x₂' x₁ = x₁ + p from hIoc₂₁.trans_ge h₃₁
-    apply (toIocMod_eq_iff hp).2
-    exact ⟨⟨h₂₁, by simp [x₂', left_le_toIcoMod]⟩, -1, by simp⟩
-  have hIoc₁₃ : toIocMod hp x₁ x₃' = x₃' - p := by
-    apply (toIocMod_eq_iff hp).2
-    exact ⟨⟨lt_sub_iff_add_lt.2 h₁₃, le_of_lt (h₃₂.trans h₂₁)⟩, 1, by simp⟩
-  have not_h₃₂ := (h.trans hIoc₁₃.le).not_gt
-  contradiction
-
-/--
-theorem `toIxxMod_antisymm` / 定理 `toIxxMod_antisymm`
-
-English:
-theorem toIxxMod_antisymm
-  statement: (h₁₂₃ : toIcoMod hp a b <= toIocMod hp a c)
-  proof: by
-  by_contra! h
-  rw [modEq_comm] at h
-  rw [← (not_modEq_iff_toIcoMod_eq_toIocMod hp).mp h.2.2] at h₁₂₃
-  rw [← (not_modEq_iff_toIcoMod_eq_toIocMod hp).mp h.1] at h₁₃₂
-  exact h.2.1 ((toIcoMod_inj _).1 <| h₁₃₂.antisymm h₁₂₃)
-
-中文:
-定理 toIxxMod_antisymm
-  结论: (h₁₂₃ : toIcoMod hp a b <= toIocMod hp a c)
-  证明: by
-  by_contra! h
-  rw [modEq_comm] at h
-  rw [← (not_modEq_iff_toIcoMod_eq_toIocMod hp).mp h.2.2] at h₁₂₃
-  rw [← (not_modEq_iff_toIcoMod_eq_toIocMod hp).mp h.1] at h₁₃₂
-  exact h.2.1 ((toIcoMod_inj _).1 <| h₁₃₂.antisymm h₁₂₃)
--/
-private theorem toIxxMod_antisymm (h₁₂₃ : toIcoMod hp a b <= toIocMod hp a c)
-    (h₁₃₂ : toIcoMod hp a c <= toIocMod hp a b) :
+private theorem toIxxMod_antisymm (h₁₂₃ : toIcoMod hp a b ≤ toIocMod hp a c)
+    (h₁₃₂ : toIcoMod hp a c ≤ toIocMod hp a b) :
     b ≡ a [PMOD p] ∨ c ≡ b [PMOD p] ∨ a ≡ c [PMOD p] := by
   by_contra! h
   rw [modEq_comm] at h
   rw [← (not_modEq_iff_toIcoMod_eq_toIocMod hp).mp h.2.2] at h₁₂₃
   rw [← (not_modEq_iff_toIcoMod_eq_toIocMod hp).mp h.1] at h₁₃₂
   exact h.2.1 ((toIcoMod_inj _).1 <| h₁₃₂.antisymm h₁₂₃)
-
-/--
-theorem `toIxxMod_total'` / 定理 `toIxxMod_total'`
-
-English:
-theorem toIxxMod_total'
-  given: (a b c : α)
-  proof: by
-  /- an essential ingredient is the lemma saying {a-b} + {b-a} = period if a ≠ b (and = 0 if a = b).
-    Thus if a ≠ b and b ≠ c then ({a-b} + {b-c}) + ({c-b} + {b-a}) = 2 * period, so one of
-    `{a-b} + {b-c}` and `{c-b} + {b-a}` must be `≤ period` -/
-  have := congr_arg₂ (· + ·) (toIcoMod_add_toIocMod_zero hp a b) (toIcoMod_add_toIocMod_zero hp c b)
-  simp only [add_add_add_comm] at this
-  rw [_root_.add_comm (toIocMod _ _ _)]; rw [add_add_add_comm]; rw [← two_nsmul] at this
-  replace := min_le_of_add_le_two_nsmul this.le
-  rw [min_le_iff] at this
-  rw [toIxxMod_iff]; rw [toIxxMod_iff]
-  grw [← toIcoMod_le_toIocMod, ← toIcoMod_le_toIocMod] at this
-  exact this
-
-中文:
-定理 toIxxMod_total'
-  条件: (a b c : α)
-  证明: by
-  /- an essential ingredient is the lemma saying {a-b} + {b-a} = period if a ≠ b (and = 0 if a = b).
-    Thus if a ≠ b and b ≠ c then ({a-b} + {b-c}) + ({c-b} + {b-a}) = 2 * period, so one of
-    `{a-b} + {b-c}` and `{c-b} + {b-a}` must be `≤ period` -/
-  have := congr_arg₂ (· + ·) (toIcoMod_add_toIocMod_zero hp a b) (toIcoMod_add_toIocMod_zero hp c b)
-  simp only [add_add_add_comm] at this
-  rw [_root_.add_comm (toIocMod _ _ _)]; rw [add_add_add_comm]; rw [← two_nsmul] at this
-  replace := min_le_of_add_le_two_nsmul this.le
-  rw [min_le_iff] at this
-  rw [toIxxMod_iff]; rw [toIxxMod_iff]
-  grw [← toIcoMod_le_toIocMod, ← toIcoMod_le_toIocMod] at this
-  exact this
+/-
+**toIxxMod_total'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem toIxxMod_total' (a b c : α) :
-    toIcoMod hp b a <= toIocMod hp b c ∨ toIcoMod hp b c <= toIocMod hp b a := by
+    toIcoMod hp b a ≤ toIocMod hp b c ∨ toIcoMod hp b c ≤ toIocMod hp b a := by
   /- an essential ingredient is the lemma saying {a-b} + {b-a} = period if a ≠ b (and = 0 if a = b).
     Thus if a ≠ b and b ≠ c then ({a-b} + {b-c}) + ({c-b} + {b-a}) = 2 * period, so one of
     `{a-b} + {b-c}` and `{c-b} + {b-a}` must be `≤ period` -/
   have := congr_arg₂ (· + ·) (toIcoMod_add_toIocMod_zero hp a b) (toIcoMod_add_toIocMod_zero hp c b)
   simp only [add_add_add_comm] at this
-  rw [_root_.add_comm (toIocMod _ _ _)]; rw [add_add_add_comm]; rw [← two_nsmul] at this
+  rw [_root_.add_comm (toIocMod _ _ _), add_add_add_comm, ← two_nsmul] at this
   replace := min_le_of_add_le_two_nsmul this.le
   rw [min_le_iff] at this
-  rw [toIxxMod_iff]; rw [toIxxMod_iff]
+  rw [toIxxMod_iff, toIxxMod_iff]
   grw [← toIcoMod_le_toIocMod, ← toIcoMod_le_toIocMod] at this
   exact this
-
-/--
-theorem `toIxxMod_total` / 定理 `toIxxMod_total`
-
-English:
-theorem toIxxMod_total
-  given: (a b c : α)
-  proof: (toIxxMod_total' _ _ _ _).imp_right toIxxMod_cyclic_left _
-
-中文:
-定理 toIxxMod_total
-  条件: (a b c : α)
-  证明: (toIxxMod_total' _ _ _ _).imp_right toIxxMod_cyclic_left _
+/-
+**toIxxMod_total** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem toIxxMod_total (a b c : α) :
-    toIcoMod hp a b <= toIocMod hp a c ∨ toIcoMod hp c b <= toIocMod hp c a :=
-(toIxxMod_total' _ _ _ _).imp_right toIxxMod_cyclic_left _
-
-/--
-theorem `toIxxMod_trans` / 定理 `toIxxMod_trans`
-
-English:
-theorem toIxxMod_trans
-  statement: {x₁ x₂ x₃ x₄ : α}
-  proof: by
-  constructor
-  · suffices h : ¬x₃ ≡ x₂ [PMOD p] by
-      have h₁₂₃' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₁₂₃.1)
-      have h₂₃₄' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₂₃₄.1)
-      rw [(not_modEq_iff_toIcoMod_eq_toIocMod hp).1 h] at h₂₃₄'
-      exact toIxxMod_cyclic_left _ (h₁₂₃'.trans h₂₃₄')
-    by_contra h
-    rw [(modEq_iff_toIcoMod_eq_left hp).1 h] at h₁₂₃
-    exact h₁₂₃.2 (left_lt_toIocMod _ _ _).le
-  · rw [not_le] at h₁₂₃ h₂₃₄ ⊢
-    exact (h₁₂₃.2.trans_le (toIcoMod_le_toIocMod _ x₃ x₂)).trans h₂₃₄.2
-
-中文:
-定理 toIxxMod_trans
-  结论: {x₁ x₂ x₃ x₄ : α}
-  证明: by
-  constructor
-  · suffices h : ¬x₃ ≡ x₂ [PMOD p] by
-      have h₁₂₃' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₁₂₃.1)
-      have h₂₃₄' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₂₃₄.1)
-      rw [(not_modEq_iff_toIcoMod_eq_toIocMod hp).1 h] at h₂₃₄'
-      exact toIxxMod_cyclic_left _ (h₁₂₃'.trans h₂₃₄')
-    by_contra h
-    rw [(modEq_iff_toIcoMod_eq_left hp).1 h] at h₁₂₃
-    exact h₁₂₃.2 (left_lt_toIocMod _ _ _).le
-  · rw [not_le] at h₁₂₃ h₂₃₄ ⊢
-    exact (h₁₂₃.2.trans_le (toIcoMod_le_toIocMod _ x₃ x₂)).trans h₂₃₄.2
+    toIcoMod hp a b ≤ toIocMod hp a c ∨ toIcoMod hp c b ≤ toIocMod hp c a :=
+  (toIxxMod_total' _ _ _ _).imp_right <| toIxxMod_cyclic_left _
+/-
+**toIxxMod_trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem toIxxMod_trans {x₁ x₂ x₃ x₄ : α}
-    (h₁₂₃ : toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃ ∧ ¬toIcoMod hp x₃ x₂ <= toIocMod hp x₃ x₁)
-    (h₂₃₄ : toIcoMod hp x₂ x₄ <= toIocMod hp x₂ x₃ ∧ ¬toIcoMod hp x₃ x₄ <= toIocMod hp x₃ x₂) :
-    toIcoMod hp x₁ x₄ <= toIocMod hp x₁ x₃ ∧ ¬toIcoMod hp x₃ x₄ <= toIocMod hp x₃ x₁ := by
+    (h₁₂₃ : toIcoMod hp x₁ x₂ ≤ toIocMod hp x₁ x₃ ∧ ¬toIcoMod hp x₃ x₂ ≤ toIocMod hp x₃ x₁)
+    (h₂₃₄ : toIcoMod hp x₂ x₄ ≤ toIocMod hp x₂ x₃ ∧ ¬toIcoMod hp x₃ x₄ ≤ toIocMod hp x₃ x₂) :
+    toIcoMod hp x₁ x₄ ≤ toIocMod hp x₁ x₃ ∧ ¬toIcoMod hp x₃ x₄ ≤ toIocMod hp x₃ x₁ := by
   constructor
   · suffices h : ¬x₃ ≡ x₂ [PMOD p] by
       have h₁₂₃' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₁₂₃.1)
@@ -4410,116 +3746,66 @@ namespace QuotientAddGroup
 
 variable [hp' : Fact (0 < p)]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Btw (α ⧸ AddSubgroup.zmultiples p)
-  body: (equivIcoMod hp'.out 0 (x₂ - x₁) : α) <= equivIocMod hp'.out 0 (x₃ - x₁)
-
-中文:
-实例 :
-  签名: Btw (α ⧸ 加法子群.zmultiples p)
-  定义体: (equivIcoMod hp'.out 0 (x₂ - x₁) : α) <= equivIocMod hp'.out 0 (x₃ - x₁)
-
-Depends on / 依赖: equivIcoMod, equivIocMod
+/-
+**QuotientAddGroup.** 是 Mathlib 中的一个实例，位于命名空间 `QuotientAddGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Btw (α ⧸ AddSubgroup.zmultiples p) where
-  btw x₁ x₂ x₃ := (equivIcoMod hp'.out 0 (x₂ - x₁) : α) <= equivIocMod hp'.out 0 (x₃ - x₁)
-
-/--
-theorem `btw_coe_iff'` / 定理 `btw_coe_iff'`
-
-English:
-theorem btw_coe_iff'
-  given: {x₁ x₂ x₃ : α}
-  proof: Iff.rfl
-
-中文:
-定理 btw_coe_iff'
-  条件: {x₁ x₂ x₃ : α}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+  btw x₁ x₂ x₃ := (equivIcoMod hp'.out 0 (x₂ - x₁) : α) ≤ equivIocMod hp'.out 0 (x₃ - x₁)
+/-
+**QuotientAddGroup.btw_coe_iff'** 是 Mathlib 中的一个定理，位于命名空间 `QuotientAddGroup`。
+形式化陈述：btw_coe_iff' {x₁ x₂ x₃ : α} : Btw.btw (x₁ : α ⧸ AddSubgroup.zmultiples p) 
+x₂ x₃ ↔ toIcoMod hp'.out 0 (x₂ - x₁) <= toIocMod hp'.out 0 (x₃ - x₁)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem btw_coe_iff' {x₁ x₂ x₃ : α} :
     Btw.btw (x₁ : α ⧸ AddSubgroup.zmultiples p) x₂ x₃ ↔
-      toIcoMod hp'.out 0 (x₂ - x₁) <= toIocMod hp'.out 0 (x₃ - x₁) :=
+      toIcoMod hp'.out 0 (x₂ - x₁) ≤ toIocMod hp'.out 0 (x₃ - x₁) :=
   Iff.rfl
 
 -- maybe harder to use than the primed one?
-/--
-theorem `btw_coe_iff` / 定理 `btw_coe_iff`
-
-English:
-theorem btw_coe_iff
-  given: {x₁ x₂ x₃ : α}
-  proof: by
-  rw [btw_coe_iff']; rw [toIocMod_sub_eq_sub]; rw [toIcoMod_sub_eq_sub]; rw [zero_add]; rw [sub_le_sub_iff_right]
-
-中文:
-定理 btw_coe_iff
-  条件: {x₁ x₂ x₃ : α}
-  证明: by
-  rw [btw_coe_iff']; rw [toIocMod_sub_eq_sub]; rw [toIcoMod_sub_eq_sub]; rw [zero_add]; rw [sub_le_sub_iff_right]
-
-Depends on / 依赖: btw_coe_iff, sub_le_sub_iff_right, toIcoMod_sub_eq_sub, toIocMod_sub_eq_sub, zero_add
+/-
+**QuotientAddGroup.btw_coe_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuotientAddGroup`。
+形式化陈述：btw_coe_iff {x₁ x₂ x₃ : α} : Btw.btw (x₁ : α ⧸ AddSubgroup.zmultiples p) x
+₂ x₃ ↔ toIcoMod hp'.out x₁ x₂ <= toIocMod hp'.out x₁ x₃
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuotientAddGroup.btw_coe_iff'`：btw_coe_iff' {x₁ x₂ x₃ : α} : Btw.btw (x₁
+ : α ⧸ AddSubgroup.zmultiples p) x₂ x₃ ↔ toIcoMod hp'.out 0 (x₂ - x₁) <= toIocMo
+d hp'.out 0 (x₃ - x…
+· 使用定理 `toIocMod_sub_eq_sub`：toIocMod_sub_eq_sub (a b c : α) : toIocMod hp a (b 
+- c) = toIocMod hp (a + c) b - c
+· 使用定理 `toIcoMod_sub_eq_sub`：toIcoMod_sub_eq_sub (a b c : α) : toIcoMod hp a (b 
+- c) = toIcoMod hp (a + c) b - c
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `sub_le_sub_iff_right`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α]
+ [AddRightMono α] {a b : α} (c : α), a - c ≤ b - c ↔ a ≤ b
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem btw_coe_iff {x₁ x₂ x₃ : α} :
     Btw.btw (x₁ : α ⧸ AddSubgroup.zmultiples p) x₂ x₃ ↔
-      toIcoMod hp'.out x₁ x₂ <= toIocMod hp'.out x₁ x₃ := by
-  rw [btw_coe_iff']; rw [toIocMod_sub_eq_sub]; rw [toIcoMod_sub_eq_sub]; rw [zero_add]; rw [sub_le_sub_iff_right]
-
-/--
-Instance `circularPreorder` / 实例 `circularPreorder`
-
-English:
-instance circularPreorder
-  signature: : CircularPreorder (α ⧸ AddSubgroup.zmultiples p) where
-  body: show _ <= _ by simp [sub_self, hp'.out.le]
-  btw_cyclic_left {x₁ x₂ x₃} h := by
-    induction x₁ using QuotientAddGroup.induction_on
-    induction x₂ using QuotientAddGroup.induction_on
-    induction x₃ using QuotientAddGroup.induction_on
-    simp_rw [btw_coe_iff] at h ⊢
-    apply toIxxMod_cyclic_left _ h
-  sbtw := _
-  sbtw_iff_btw_not_btw := Iff.rfl
-  sbtw_trans_left {x₁ x₂ x₃ x₄} (h₁₂₃ : _ ∧ _) (h₂₃₄ : _ ∧ _) :=
-    show _ ∧ _ by
-      induction x₁ using QuotientAddGroup.induction_on
-      induction x₂ using QuotientAddGroup.induction_on
-      induction x₃ using QuotientAddGroup.induction_on
-      induction x₄ using QuotientAddGroup.induction_on
-      simp_rw [btw_coe_iff] at h₁₂₃ h₂₃₄ ⊢
-      apply toIxxMod_trans _ h₁₂₃ h₂₃₄
-
-中文:
-实例 circularPreorder
-  签名: : 循环预序 (α ⧸ 加法子群.zmultiples p) where
-  定义体: show _ <= _ by simp [sub_self, hp'.out.le]
-  btw_cyclic_left {x₁ x₂ x₃} h := by
-    induction x₁ using QuotientAddGroup.induction_on
-    induction x₂ using QuotientAddGroup.induction_on
-    induction x₃ using QuotientAddGroup.induction_on
-    simp_rw [btw_coe_iff] at h ⊢
-    apply toIxxMod_cyclic_left _ h
-  sbtw := _
-  sbtw_iff_btw_not_btw := Iff.rfl
-  sbtw_trans_left {x₁ x₂ x₃ x₄} (h₁₂₃ : _ ∧ _) (h₂₃₄ : _ ∧ _) :=
-    show _ ∧ _ by
-      induction x₁ using QuotientAddGroup.induction_on
-      induction x₂ using QuotientAddGroup.induction_on
-      induction x₃ using QuotientAddGroup.induction_on
-      induction x₄ using QuotientAddGroup.induction_on
-      simp_rw [btw_coe_iff] at h₁₂₃ h₂₃₄ ⊢
-      apply toIxxMod_trans _ h₁₂₃ h₂₃₄
-
-Depends on / 依赖: out.le, sub_self
+      toIcoMod hp'.out x₁ x₂ ≤ toIocMod hp'.out x₁ x₃ := by
+  rw [btw_coe_iff', toIocMod_sub_eq_sub, toIcoMod_sub_eq_sub, zero_add, sub_le_sub_iff_right]
+/-
+**QuotientAddGroup.circularPreorder** 是 Mathlib 中的一个实例，位于命名空间 `QuotientAddGroup`
+。
+形式化陈述：circularPreorder : CircularPreorder (α ⧸ AddSubgroup.zmultiples p) where b
+tw_refl x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance circularPreorder : CircularPreorder (α ⧸ AddSubgroup.zmultiples p) where
-  btw_refl x := show _ <= _ by simp [sub_self, hp'.out.le]
+  btw_refl x := show _ ≤ _ by simp [sub_self, hp'.out.le]
   btw_cyclic_left {x₁ x₂ x₃} h := by
     induction x₁ using QuotientAddGroup.induction_on
     induction x₂ using QuotientAddGroup.induction_on
@@ -4536,49 +3822,11 @@ instance circularPreorder : CircularPreorder (α ⧸ AddSubgroup.zmultiples p) w
       induction x₄ using QuotientAddGroup.induction_on
       simp_rw [btw_coe_iff] at h₁₂₃ h₂₃₄ ⊢
       apply toIxxMod_trans _ h₁₂₃ h₂₃₄
-
-/--
-Instance `circularOrder` / 实例 `circularOrder`
-
-English:
-instance circularOrder
-  signature: : CircularOrder (α ⧸ AddSubgroup.zmultiples p)
-  body: { QuotientAddGroup.circularPreorder with
-    btw_antisymm := fun {x₁ x₂ x₃} h₁₂₃ h₃₂₁ => by
-      induction x₁ using QuotientAddGroup.induction_on
-      induction x₂ using QuotientAddGroup.induction_on
-      induction x₃ using QuotientAddGroup.induction_on
-      rw [btw_cyclic] at h₃₂₁
-      simp_rw [btw_coe_iff] at h₁₂₃ h₃₂₁
-      simp_rw [← modEq_iff_eq_mod_zmultiples]
-      simpa only [modEq_comm] using toIxxMod_antisymm _ h₁₂₃ h₃₂₁
-    btw_total := fun x₁ x₂ x₃ => by
-      induction x₁ using QuotientAddGroup.induction_on
-      induction x₂ using QuotientAddGroup.induction_on
-      induction x₃ using QuotientAddGroup.induction_on
-      simp_rw [btw_coe_iff]
-      apply toIxxMod_total }
-
-中文:
-实例 circularOrder
-  签名: : Circular序 (α ⧸ 加法子群.zmultiples p)
-  定义体: { QuotientAddGroup.circularPreorder with
-    btw_antisymm := fun {x₁ x₂ x₃} h₁₂₃ h₃₂₁ => by
-      induction x₁ using QuotientAddGroup.induction_on
-      induction x₂ using QuotientAddGroup.induction_on
-      induction x₃ using QuotientAddGroup.induction_on
-      rw [btw_cyclic] at h₃₂₁
-      simp_rw [btw_coe_iff] at h₁₂₃ h₃₂₁
-      simp_rw [← modEq_iff_eq_mod_zmultiples]
-      simpa only [modEq_comm] using toIxxMod_antisymm _ h₁₂₃ h₃₂₁
-    btw_total := fun x₁ x₂ x₃ => by
-      induction x₁ using QuotientAddGroup.induction_on
-      induction x₂ using QuotientAddGroup.induction_on
-      induction x₃ using QuotientAddGroup.induction_on
-      simp_rw [btw_coe_iff]
-      apply toIxxMod_total }
-
-Depends on / 依赖: Quotie, QuotientAddGroup, QuotientAddGroup.circularPreorder, QuotientAddGroup.induction_on, btw_antisymm, btw_coe_iff, btw_cyclic, btw_total, circularPreorder, induction_on, modEq_comm, modEq_iff_eq_mod_zmultiples, simp_rw, toIxxMod_antisymm
+/-
+**QuotientAddGroup.circularOrder** 是 Mathlib 中的一个实例，位于命名空间 `QuotientAddGroup`。
+形式化陈述：circularOrder : CircularOrder (α ⧸ AddSubgroup.zmultiples p)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance circularOrder : CircularOrder (α ⧸ AddSubgroup.zmultiples p) :=
   { QuotientAddGroup.circularPreorder with
@@ -4617,1918 +3865,1630 @@ variable {R : Type*} [NonAssocRing R] [LinearOrder R] [IsOrderedAddMonoid R] [Ar
   (hp : 0 < p)
 
 @[simp]
-/--
-theorem `self_sub_toIcoDiv_mul` / 定理 `self_sub_toIcoDiv_mul`
-
-English:
-theorem self_sub_toIcoDiv_mul
-  given: (a b : R)
-  statement: b - toIcoDiv hp a b * p = toIcoMod hp a b
-  proof: by
-  simpa using self_sub_toIcoDiv_zsmul hp a b
-
-@[simp]
-
-中文:
-定理 self_sub_toIcoDiv_mul
-  条件: (a b : R)
-  结论: b - toIcoDiv hp a b * p = toIcoMod hp a b
-  证明: by
-  simpa using self_sub_toIcoDiv_zsmul hp a b
-
-@[simp]
-
-Depends on / 依赖: self_sub_toIcoDiv_zsmul
+/-
+**self_sub_toIcoDiv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIcoDiv_mul (a b : R) : b - toIcoDiv hp a b * p = toIcoMod hp a 
+b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `self_sub_toIcoDiv_zsmul`：self_sub_toIcoDiv_zsmul (a b : α) : b - toIcoDi
+v hp a b • p = toIcoMod hp a b
 -/
 theorem self_sub_toIcoDiv_mul (a b : R) : b - toIcoDiv hp a b * p = toIcoMod hp a b := by
   simpa using self_sub_toIcoDiv_zsmul hp a b
 
 @[simp]
-/--
-theorem `self_sub_toIocDiv_mul` / 定理 `self_sub_toIocDiv_mul`
-
-English:
-theorem self_sub_toIocDiv_mul
-  given: (a b : R)
-  statement: b - toIocDiv hp a b * p = toIocMod hp a b
-  proof: by
-  simpa using self_sub_toIocDiv_zsmul hp a b
-
-@[simp]
-
-中文:
-定理 self_sub_toIocDiv_mul
-  条件: (a b : R)
-  结论: b - toIocDiv hp a b * p = toIocMod hp a b
-  证明: by
-  simpa using self_sub_toIocDiv_zsmul hp a b
-
-@[simp]
-
-Depends on / 依赖: self_sub_toIocDiv_zsmul
+/-
+**self_sub_toIocDiv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIocDiv_mul (a b : R) : b - toIocDiv hp a b * p = toIocMod hp a 
+b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `self_sub_toIocDiv_zsmul`：self_sub_toIocDiv_zsmul (a b : α) : b - toIocDi
+v hp a b • p = toIocMod hp a b
 -/
 theorem self_sub_toIocDiv_mul (a b : R) : b - toIocDiv hp a b * p = toIocMod hp a b := by
   simpa using self_sub_toIocDiv_zsmul hp a b
 
 @[simp]
-/--
-theorem `toIcoDiv_mul_sub_self` / 定理 `toIcoDiv_mul_sub_self`
-
-English:
-theorem toIcoDiv_mul_sub_self
-  given: (a b : R)
-  statement: toIcoDiv hp a b * p - b = -toIcoMod hp a b
-  proof: by
-  simpa using toIcoDiv_zsmul_sub_self hp a b
-
-@[simp]
-
-中文:
-定理 toIcoDiv_mul_sub_self
-  条件: (a b : R)
-  结论: toIcoDiv hp a b * p - b = -toIcoMod hp a b
-  证明: by
-  simpa using toIcoDiv_zsmul_sub_self hp a b
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_zsmul_sub_self
+/-
+**toIcoDiv_mul_sub_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_mul_sub_self (a b : R) : toIcoDiv hp a b * p - b = -toIcoMod hp a
+ b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoDiv_zsmul_sub_self`：toIcoDiv_zsmul_sub_self (a b : α) : toIcoDiv hp
+ a b • p - b = -toIcoMod hp a b
 -/
 theorem toIcoDiv_mul_sub_self (a b : R) : toIcoDiv hp a b * p - b = -toIcoMod hp a b := by
   simpa using toIcoDiv_zsmul_sub_self hp a b
 
 @[simp]
-/--
-theorem `toIocDiv_mul_sub_self` / 定理 `toIocDiv_mul_sub_self`
-
-English:
-theorem toIocDiv_mul_sub_self
-  given: (a b : R)
-  statement: toIocDiv hp a b * p - b = -toIocMod hp a b
-  proof: by
-  simpa using toIocDiv_zsmul_sub_self hp a b
-
-中文:
-定理 toIocDiv_mul_sub_self
-  条件: (a b : R)
-  结论: toIocDiv hp a b * p - b = -toIocMod hp a b
-  证明: by
-  simpa using toIocDiv_zsmul_sub_self hp a b
-
-Depends on / 依赖: toIocDiv_zsmul_sub_self
+/-
+**toIocDiv_mul_sub_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_mul_sub_self (a b : R) : toIocDiv hp a b * p - b = -toIocMod hp a
+ b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocDiv_zsmul_sub_self`：toIocDiv_zsmul_sub_self (a b : α) : toIocDiv hp
+ a b • p - b = -toIocMod hp a b
 -/
 theorem toIocDiv_mul_sub_self (a b : R) : toIocDiv hp a b * p - b = -toIocMod hp a b := by
   simpa using toIocDiv_zsmul_sub_self hp a b
-
-/--
-theorem `toIcoMod_sub_self_eq_mul` / 定理 `toIcoMod_sub_self_eq_mul`
-
-English:
-theorem toIcoMod_sub_self_eq_mul
-  given: (a b : R)
-  statement: toIcoMod hp a b - b = -toIcoDiv hp a b * p
-  proof: by
-  simp
-
-中文:
-定理 toIcoMod_sub_self_eq_mul
-  条件: (a b : R)
-  结论: toIcoMod hp a b - b = -toIcoDiv hp a b * p
-  证明: by
-  simp
+/-
+**toIcoMod_sub_self_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_self_eq_mul (a b : R) : toIcoMod hp a b - b = -toIcoDiv hp a 
+b * p
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_sub_self`：toIcoMod_sub_self (a b : α) : toIcoMod hp a b - b = -
+toIcoDiv hp a b • p
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoMod_sub_self_eq_mul (a b : R) : toIcoMod hp a b - b = -toIcoDiv hp a b * p := by
   simp
-
-/--
-theorem `toIocMod_sub_self_eq_mul` / 定理 `toIocMod_sub_self_eq_mul`
-
-English:
-theorem toIocMod_sub_self_eq_mul
-  given: (a b : R)
-  statement: toIocMod hp a b - b = -toIocDiv hp a b * p
-  proof: by
-  simp
-
-中文:
-定理 toIocMod_sub_self_eq_mul
-  条件: (a b : R)
-  结论: toIocMod hp a b - b = -toIocDiv hp a b * p
-  证明: by
-  simp
+/-
+**toIocMod_sub_self_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_self_eq_mul (a b : R) : toIocMod hp a b - b = -toIocDiv hp a 
+b * p
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod_sub_self`：toIocMod_sub_self (a b : α) : toIocMod hp a b - b = -
+toIocDiv hp a b • p
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIocMod_sub_self_eq_mul (a b : R) : toIocMod hp a b - b = -toIocDiv hp a b * p := by
   simp
-
-/--
-theorem `self_sub_toIcoMod_eq_mul` / 定理 `self_sub_toIcoMod_eq_mul`
-
-English:
-theorem self_sub_toIcoMod_eq_mul
-  given: (a b : R)
-  statement: b - toIcoMod hp a b = toIcoDiv hp a b * p
-  proof: by
-  simp
-
-中文:
-定理 self_sub_toIcoMod_eq_mul
-  条件: (a b : R)
-  结论: b - toIcoMod hp a b = toIcoDiv hp a b * p
-  证明: by
-  simp
+/-
+**self_sub_toIcoMod_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIcoMod_eq_mul (a b : R) : b - toIcoMod hp a b = toIcoDiv hp a b
+ * p
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `self_sub_toIcoMod`：self_sub_toIcoMod (a b : α) : b - toIcoMod hp a b = t
+oIcoDiv hp a b • p
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem self_sub_toIcoMod_eq_mul (a b : R) : b - toIcoMod hp a b = toIcoDiv hp a b * p := by
   simp
-
-/--
-theorem `self_sub_toIocMod_eq_mul` / 定理 `self_sub_toIocMod_eq_mul`
-
-English:
-theorem self_sub_toIocMod_eq_mul
-  given: (a b : R)
-  statement: b - toIocMod hp a b = toIocDiv hp a b * p
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-定理 self_sub_toIocMod_eq_mul
-  条件: (a b : R)
-  结论: b - toIocMod hp a b = toIocDiv hp a b * p
-  证明: by
-  simp
-
-@[simp]
+/-
+**self_sub_toIocMod_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：self_sub_toIocMod_eq_mul (a b : R) : b - toIocMod hp a b = toIocDiv hp a b
+ * p
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `self_sub_toIocMod`：self_sub_toIocMod (a b : α) : b - toIocMod hp a b = t
+oIocDiv hp a b • p
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem self_sub_toIocMod_eq_mul (a b : R) : b - toIocMod hp a b = toIocDiv hp a b * p := by
   simp
 
 @[simp]
-/--
-theorem `toIcoMod_add_toIcoDiv_mul` / 定理 `toIcoMod_add_toIcoDiv_mul`
-
-English:
-theorem toIcoMod_add_toIcoDiv_mul
-  given: (a b : R)
-  statement: toIcoMod hp a b + toIcoDiv hp a b * p = b
-  proof: by
-  simpa using toIcoMod_add_toIcoDiv_zsmul hp a b
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_toIcoDiv_mul
-  条件: (a b : R)
-  结论: toIcoMod hp a b + toIcoDiv hp a b * p = b
-  证明: by
-  simpa using toIcoMod_add_toIcoDiv_zsmul hp a b
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_add_toIcoDiv_zsmul
+/-
+**toIcoMod_add_toIcoDiv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_toIcoDiv_mul (a b : R) : toIcoMod hp a b + toIcoDiv hp a b * 
+p = b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoMod_add_toIcoDiv_zsmul`：toIcoMod_add_toIcoDiv_zsmul (a b : α) : toI
+coMod hp a b + toIcoDiv hp a b • p = b
 -/
 theorem toIcoMod_add_toIcoDiv_mul (a b : R) : toIcoMod hp a b + toIcoDiv hp a b * p = b := by
   simpa using toIcoMod_add_toIcoDiv_zsmul hp a b
 
 @[simp]
-/--
-theorem `toIocMod_add_toIocDiv_mul` / 定理 `toIocMod_add_toIocDiv_mul`
-
-English:
-theorem toIocMod_add_toIocDiv_mul
-  given: (a b : R)
-  statement: toIocMod hp a b + toIocDiv hp a b * p = b
-  proof: by
-  simpa using toIocMod_add_toIocDiv_zsmul hp a b
-
-@[simp]
-
-中文:
-定理 toIocMod_add_toIocDiv_mul
-  条件: (a b : R)
-  结论: toIocMod hp a b + toIocDiv hp a b * p = b
-  证明: by
-  simpa using toIocMod_add_toIocDiv_zsmul hp a b
-
-@[simp]
-
-Depends on / 依赖: toIocMod_add_toIocDiv_zsmul
+/-
+**toIocMod_add_toIocDiv_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_toIocDiv_mul (a b : R) : toIocMod hp a b + toIocDiv hp a b * 
+p = b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocMod_add_toIocDiv_zsmul`：toIocMod_add_toIocDiv_zsmul (a b : α) : toI
+ocMod hp a b + toIocDiv hp a b • p = b
 -/
 theorem toIocMod_add_toIocDiv_mul (a b : R) : toIocMod hp a b + toIocDiv hp a b * p = b := by
   simpa using toIocMod_add_toIocDiv_zsmul hp a b
 
 @[simp]
-/--
-theorem `toIcoDiv_mul_sub_toIcoMod` / 定理 `toIcoDiv_mul_sub_toIcoMod`
-
-English:
-theorem toIcoDiv_mul_sub_toIcoMod
-  given: (a b : R)
-  statement: toIcoDiv hp a b * p + toIcoMod hp a b = b
-  proof: by
-  rw [add_comm]; rw [toIcoMod_add_toIcoDiv_mul]
-
-@[simp]
-
-中文:
-定理 toIcoDiv_mul_sub_toIcoMod
-  条件: (a b : R)
-  结论: toIcoDiv hp a b * p + toIcoMod hp a b = b
-  证明: by
-  rw [add_comm]; rw [toIcoMod_add_toIcoDiv_mul]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoMod_add_toIcoDiv_mul
+/-
+**toIcoDiv_mul_sub_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_mul_sub_toIcoMod (a b : R) : toIcoDiv hp a b * p + toIcoMod hp a 
+b = b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_toIcoDiv_mul`：toIcoMod_add_toIcoDiv_mul (a b : R) : toIcoMo
+d hp a b + toIcoDiv hp a b * p = b
 -/
 theorem toIcoDiv_mul_sub_toIcoMod (a b : R) : toIcoDiv hp a b * p + toIcoMod hp a b = b := by
-  rw [add_comm]; rw [toIcoMod_add_toIcoDiv_mul]
+  rw [add_comm, toIcoMod_add_toIcoDiv_mul]
 
 @[simp]
-/--
-theorem `toIocDiv_mul_sub_toIocMod` / 定理 `toIocDiv_mul_sub_toIocMod`
-
-English:
-theorem toIocDiv_mul_sub_toIocMod
-  given: (a b : R)
-  statement: toIocDiv hp a b * p + toIocMod hp a b = b
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_toIocDiv_mul]
-
-@[simp]
-
-中文:
-定理 toIocDiv_mul_sub_toIocMod
-  条件: (a b : R)
-  结论: toIocDiv hp a b * p + toIocMod hp a b = b
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_toIocDiv_mul]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocMod_add_toIocDiv_mul
+/-
+**toIocDiv_mul_sub_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_mul_sub_toIocMod (a b : R) : toIocDiv hp a b * p + toIocMod hp a 
+b = b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_toIocDiv_mul`：toIocMod_add_toIocDiv_mul (a b : R) : toIocMo
+d hp a b + toIocDiv hp a b * p = b
 -/
 theorem toIocDiv_mul_sub_toIocMod (a b : R) : toIocDiv hp a b * p + toIocMod hp a b = b := by
-  rw [add_comm]; rw [toIocMod_add_toIocDiv_mul]
+  rw [add_comm, toIocMod_add_toIocDiv_mul]
 
 @[simp]
-/--
-theorem `toIcoDiv_add_intCast_mul` / 定理 `toIcoDiv_add_intCast_mul`
-
-English:
-theorem toIcoDiv_add_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoDiv_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoDiv_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_add_zsmul
+/-
+**toIcoDiv_add_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_intCast_mul (a b : R) (m : Int) : toIcoDiv hp a (b + m * p) =
+ toIcoDiv hp a b + m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoDiv_add_zsmul`：toIcoDiv_add_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b + m • p) = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_add_intCast_mul (a b : R) (m : Int) :
+theorem toIcoDiv_add_intCast_mul (a b : R) (m : ℤ) :
     toIcoDiv hp a (b + m * p) = toIcoDiv hp a b + m := by
   simpa using toIcoDiv_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_add_natCast_mul` / 定理 `toIcoDiv_add_natCast_mul`
-
-English:
-theorem toIcoDiv_add_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoDiv_add_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoDiv_add_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_add_intCast_mul
+/-
+**toIcoDiv_add_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_natCast_mul (a b : R) (m : Nat) : toIcoDiv hp a (b + m * p) =
+ toIcoDiv hp a b + m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoDiv_add_intCast_mul`：toIcoDiv_add_intCast_mul (a b : R) (m : Int) :
+ toIcoDiv hp a (b + m * p) = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_add_natCast_mul (a b : R) (m : Nat) :
+theorem toIcoDiv_add_natCast_mul (a b : R) (m : ℕ) :
     toIcoDiv hp a (b + m * p) = toIcoDiv hp a b + m :=
   mod_cast toIcoDiv_add_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_add_ofNat_mul` / 定理 `toIcoDiv_add_ofNat_mul`
-
-English:
-theorem toIcoDiv_add_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoDiv_add_natCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoDiv_add_natCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_add_natCast_mul
+/-
+**toIcoDiv_add_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoDiv hp a 
+(b + ofNat(m) * p) = toIcoDiv hp a b + ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_add_natCast_mul`：toIcoDiv_add_natCast_mul (a b : R) (m : Nat) :
+ toIcoDiv hp a (b + m * p) = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoDiv_add_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoDiv hp a (b + ofNat(m) * p) = toIcoDiv hp a b + ofNat(m) :=
   toIcoDiv_add_natCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_add_intCast_mul'` / 定理 `toIcoDiv_add_intCast_mul'`
-
-English:
-theorem toIcoDiv_add_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoDiv_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoDiv_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_add_zsmul
+/-
+**toIcoDiv_add_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_intCast_mul' (a b : R) (m : Int) : toIcoDiv hp (a + m * p) b 
+= toIcoDiv hp a b - m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoDiv_add_zsmul'`：toIcoDiv_add_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a + m • p) b = toIcoDiv hp a b - m
 -/
-theorem toIcoDiv_add_intCast_mul' (a b : R) (m : Int) :
+theorem toIcoDiv_add_intCast_mul' (a b : R) (m : ℤ) :
     toIcoDiv hp (a + m * p) b = toIcoDiv hp a b - m := by
   simpa using toIcoDiv_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_add_natCast_mul'` / 定理 `toIcoDiv_add_natCast_mul'`
-
-English:
-theorem toIcoDiv_add_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoDiv_add_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoDiv_add_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_add_intCast_mul
+/-
+**toIcoDiv_add_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_natCast_mul' (a b : R) (m : Nat) : toIcoDiv hp (a + m * p) b 
+= toIcoDiv hp a b - m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoDiv_add_intCast_mul'`：toIcoDiv_add_intCast_mul' (a b : R) (m : Int)
+ : toIcoDiv hp (a + m * p) b = toIcoDiv hp a b - m
 -/
-theorem toIcoDiv_add_natCast_mul' (a b : R) (m : Nat) :
+theorem toIcoDiv_add_natCast_mul' (a b : R) (m : ℕ) :
     toIcoDiv hp (a + m * p) b = toIcoDiv hp a b - m :=
   mod_cast toIcoDiv_add_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_add_ofNat_mul'` / 定理 `toIcoDiv_add_ofNat_mul'`
-
-English:
-theorem toIcoDiv_add_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoDiv_add_natCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_add_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoDiv_add_natCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_add_natCast_mul
+/-
+**toIcoDiv_add_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoDiv hp (
+a + ofNat(m) * p) b = toIcoDiv hp a b - ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_add_natCast_mul'`：toIcoDiv_add_natCast_mul' (a b : R) (m : Nat)
+ : toIcoDiv hp (a + m * p) b = toIcoDiv hp a b - m
 -/
-theorem toIcoDiv_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoDiv_add_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoDiv hp (a + ofNat(m) * p) b = toIcoDiv hp a b - ofNat(m) :=
   toIcoDiv_add_natCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_intCast_mul` / 定理 `toIocDiv_add_intCast_mul`
-
-English:
-theorem toIocDiv_add_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocDiv_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocDiv_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_add_zsmul
+/-
+**toIocDiv_add_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_intCast_mul (a b : R) (m : Int) : toIocDiv hp a (b + m * p) =
+ toIocDiv hp a b + m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocDiv_add_zsmul`：toIocDiv_add_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b + m • p) = toIocDiv hp a b + m
 -/
-theorem toIocDiv_add_intCast_mul (a b : R) (m : Int) :
+theorem toIocDiv_add_intCast_mul (a b : R) (m : ℤ) :
     toIocDiv hp a (b + m * p) = toIocDiv hp a b + m := by
   simpa using toIocDiv_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_natCast_mul` / 定理 `toIocDiv_add_natCast_mul`
-
-English:
-theorem toIocDiv_add_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocDiv_add_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocDiv_add_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_add_intCast_mul
+/-
+**toIocDiv_add_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_natCast_mul (a b : R) (m : Nat) : toIocDiv hp a (b + m * p) =
+ toIocDiv hp a b + m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocDiv_add_intCast_mul`：toIocDiv_add_intCast_mul (a b : R) (m : Int) :
+ toIocDiv hp a (b + m * p) = toIocDiv hp a b + m
 -/
-theorem toIocDiv_add_natCast_mul (a b : R) (m : Nat) :
+theorem toIocDiv_add_natCast_mul (a b : R) (m : ℕ) :
     toIocDiv hp a (b + m * p) = toIocDiv hp a b + m :=
   mod_cast toIocDiv_add_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_ofNat_mul` / 定理 `toIocDiv_add_ofNat_mul`
-
-English:
-theorem toIocDiv_add_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocDiv_add_natCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocDiv_add_natCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_add_natCast_mul
+/-
+**toIocDiv_add_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIocDiv hp a 
+(b + ofNat(m) * p) = toIocDiv hp a b + ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_add_natCast_mul`：toIocDiv_add_natCast_mul (a b : R) (m : Nat) :
+ toIocDiv hp a (b + m * p) = toIocDiv hp a b + m
 -/
-theorem toIocDiv_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocDiv_add_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocDiv hp a (b + ofNat(m) * p) = toIocDiv hp a b + ofNat(m) :=
   toIocDiv_add_natCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_intCast_mul'` / 定理 `toIocDiv_add_intCast_mul'`
-
-English:
-theorem toIocDiv_add_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocDiv_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocDiv_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_add_zsmul
+/-
+**toIocDiv_add_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_intCast_mul' (a b : R) (m : Int) : toIocDiv hp (a + m * p) b 
+= toIocDiv hp a b - m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocDiv_add_zsmul'`：toIocDiv_add_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a + m • p) b = toIocDiv hp a b - m
 -/
-theorem toIocDiv_add_intCast_mul' (a b : R) (m : Int) :
+theorem toIocDiv_add_intCast_mul' (a b : R) (m : ℤ) :
     toIocDiv hp (a + m * p) b = toIocDiv hp a b - m := by
   simpa using toIocDiv_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_natCast_mul'` / 定理 `toIocDiv_add_natCast_mul'`
-
-English:
-theorem toIocDiv_add_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocDiv_add_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocDiv_add_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_add_intCast_mul
+/-
+**toIocDiv_add_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_natCast_mul' (a b : R) (m : Nat) : toIocDiv hp (a + m * p) b 
+= toIocDiv hp a b - m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocDiv_add_intCast_mul'`：toIocDiv_add_intCast_mul' (a b : R) (m : Int)
+ : toIocDiv hp (a + m * p) b = toIocDiv hp a b - m
 -/
-theorem toIocDiv_add_natCast_mul' (a b : R) (m : Nat) :
+theorem toIocDiv_add_natCast_mul' (a b : R) (m : ℕ) :
     toIocDiv hp (a + m * p) b = toIocDiv hp a b - m :=
   mod_cast toIocDiv_add_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_add_ofNat_mul'` / 定理 `toIocDiv_add_ofNat_mul'`
-
-English:
-theorem toIocDiv_add_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocDiv_add_natCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_add_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocDiv_add_natCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_add_natCast_mul
+/-
+**toIocDiv_add_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIocDiv hp (
+a + ofNat(m) * p) b = toIocDiv hp a b - ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_add_natCast_mul'`：toIocDiv_add_natCast_mul' (a b : R) (m : Nat)
+ : toIocDiv hp (a + m * p) b = toIocDiv hp a b - m
 -/
-theorem toIocDiv_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocDiv_add_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocDiv hp (a + ofNat(m) * p) b = toIocDiv hp a b - ofNat(m) :=
   toIocDiv_add_natCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_intCast_mul_add` / 定理 `toIcoDiv_intCast_mul_add`
-
-English:
-theorem toIcoDiv_intCast_mul_add
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoDiv_zsmul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_intCast_mul_add
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoDiv_zsmul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_zsmul_add
+/-
+**toIcoDiv_intCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_intCast_mul_add (a b : R) (m : Int) : toIcoDiv hp a (m * p + b) =
+ m + toIcoDiv hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoDiv_zsmul_add`：toIcoDiv_zsmul_add (a b : α) (m : Int) : toIcoDiv hp
+ a (m • p + b) = m + toIcoDiv hp a b
 -/
-theorem toIcoDiv_intCast_mul_add (a b : R) (m : Int) :
+theorem toIcoDiv_intCast_mul_add (a b : R) (m : ℤ) :
     toIcoDiv hp a (m * p + b) = m + toIcoDiv hp a b := by
   simpa using toIcoDiv_zsmul_add hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_natCast_mul_add` / 定理 `toIcoDiv_natCast_mul_add`
-
-English:
-theorem toIcoDiv_natCast_mul_add
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoDiv_intCast_mul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_natCast_mul_add
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoDiv_intCast_mul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_intCast_mul_add
+/-
+**toIcoDiv_natCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_natCast_mul_add (a b : R) (m : Nat) : toIcoDiv hp a (m * p + b) =
+ m + toIcoDiv hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoDiv_intCast_mul_add`：toIcoDiv_intCast_mul_add (a b : R) (m : Int) :
+ toIcoDiv hp a (m * p + b) = m + toIcoDiv hp a b
 -/
-theorem toIcoDiv_natCast_mul_add (a b : R) (m : Nat) :
+theorem toIcoDiv_natCast_mul_add (a b : R) (m : ℕ) :
     toIcoDiv hp a (m * p + b) = m + toIcoDiv hp a b :=
   mod_cast toIcoDiv_intCast_mul_add hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_ofNat_mul_add` / 定理 `toIcoDiv_ofNat_mul_add`
-
-English:
-theorem toIcoDiv_ofNat_mul_add
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoDiv_natCast_mul_add hp a b m
-
-中文:
-定理 toIcoDiv_of自然数_mul_add
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoDiv_natCast_mul_add hp a b m
-
-Depends on / 依赖: toIcoDiv_natCast_mul_add
+/-
+**toIcoDiv_ofNat_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoDiv hp a 
+(ofNat(m) * p + b) = ofNat(m) + toIcoDiv hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_natCast_mul_add`：toIcoDiv_natCast_mul_add (a b : R) (m : Nat) :
+ toIcoDiv hp a (m * p + b) = m + toIcoDiv hp a b
 -/
-theorem toIcoDiv_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoDiv_ofNat_mul_add (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoDiv hp a (ofNat(m) * p + b) = ofNat(m) + toIcoDiv hp a b :=
   toIcoDiv_natCast_mul_add hp a b m
 
 /-! Note we omit `toIcoDiv_intCast_mul_add'` as `-m + toIcoDiv hp a b` is not very convenient. -/
 
 @[simp]
-/--
-theorem `toIocDiv_intCast_mul_add` / 定理 `toIocDiv_intCast_mul_add`
+/-
+**toIocDiv_intCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_intCast_mul_add (a b : R) (m : Int) : toIocDiv hp a (m * p + b) =
+ m + toIocDiv hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocDiv_zsmul_add`：toIocDiv_zsmul_add (a b : α) (m : Int) : toIocDiv hp
+ a (m • p + b) = m + toIocDiv hp a b
 
-English:
-theorem toIocDiv_intCast_mul_add
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocDiv_zsmul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_intCast_mul_add
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocDiv_zsmul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_zsmul_add
+--- 原说明 ---
+Note we omit `toIcoDiv_intCast_mul_add'` as `-m + toIcoDiv hp a b` is not very c
+onvenient.
 -/
-theorem toIocDiv_intCast_mul_add (a b : R) (m : Int) :
+theorem toIocDiv_intCast_mul_add (a b : R) (m : ℤ) :
     toIocDiv hp a (m * p + b) = m + toIocDiv hp a b := by
   simpa using toIocDiv_zsmul_add hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_natCast_mul_add` / 定理 `toIocDiv_natCast_mul_add`
-
-English:
-theorem toIocDiv_natCast_mul_add
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocDiv_intCast_mul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_natCast_mul_add
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocDiv_intCast_mul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_intCast_mul_add
+/-
+**toIocDiv_natCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_natCast_mul_add (a b : R) (m : Nat) : toIocDiv hp a (m * p + b) =
+ m + toIocDiv hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocDiv_intCast_mul_add`：toIocDiv_intCast_mul_add (a b : R) (m : Int) :
+ toIocDiv hp a (m * p + b) = m + toIocDiv hp a b
 -/
-theorem toIocDiv_natCast_mul_add (a b : R) (m : Nat) :
+theorem toIocDiv_natCast_mul_add (a b : R) (m : ℕ) :
     toIocDiv hp a (m * p + b) = m + toIocDiv hp a b :=
   mod_cast toIocDiv_intCast_mul_add hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_ofNat_mul_add` / 定理 `toIocDiv_ofNat_mul_add`
-
-English:
-theorem toIocDiv_ofNat_mul_add
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocDiv_natCast_mul_add hp a b m
-
-中文:
-定理 toIocDiv_of自然数_mul_add
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocDiv_natCast_mul_add hp a b m
-
-Depends on / 依赖: toIocDiv_natCast_mul_add
+/-
+**toIocDiv_ofNat_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] : toIocDiv hp a 
+(ofNat(m) * p + b) = ofNat(m) + toIocDiv hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_natCast_mul_add`：toIocDiv_natCast_mul_add (a b : R) (m : Nat) :
+ toIocDiv hp a (m * p + b) = m + toIocDiv hp a b
 -/
-theorem toIocDiv_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocDiv_ofNat_mul_add (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocDiv hp a (ofNat(m) * p + b) = ofNat(m) + toIocDiv hp a b :=
   toIocDiv_natCast_mul_add hp a b m
 
 /-! Note we omit `toIocDiv_intCast_mul_add'` as `-m + toIocDiv hp a b` is not very convenient. -/
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_intCast_mul` / 定理 `toIcoDiv_sub_intCast_mul`
+/-
+**toIcoDiv_sub_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_intCast_mul (a b : R) (m : Int) : toIcoDiv hp a (b - m * p) =
+ toIcoDiv hp a b - m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoDiv_sub_zsmul`：toIcoDiv_sub_zsmul (a b : α) (m : Int) : toIcoDiv hp
+ a (b - m • p) = toIcoDiv hp a b - m
 
-English:
-theorem toIcoDiv_sub_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoDiv_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoDiv_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_sub_zsmul
+--- 原说明 ---
+Note we omit `toIocDiv_intCast_mul_add'` as `-m + toIocDiv hp a b` is not very c
+onvenient.
 -/
-theorem toIcoDiv_sub_intCast_mul (a b : R) (m : Int) :
+theorem toIcoDiv_sub_intCast_mul (a b : R) (m : ℤ) :
     toIcoDiv hp a (b - m * p) = toIcoDiv hp a b - m := by
   simpa using toIcoDiv_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_natCast_mul` / 定理 `toIcoDiv_sub_natCast_mul`
-
-English:
-theorem toIcoDiv_sub_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoDiv_sub_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoDiv_sub_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_sub_intCast_mul
+/-
+**toIcoDiv_sub_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_natCast_mul (a b : R) (m : Nat) : toIcoDiv hp a (b - m * p) =
+ toIcoDiv hp a b - m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoDiv_sub_intCast_mul`：toIcoDiv_sub_intCast_mul (a b : R) (m : Int) :
+ toIcoDiv hp a (b - m * p) = toIcoDiv hp a b - m
 -/
-theorem toIcoDiv_sub_natCast_mul (a b : R) (m : Nat) :
+theorem toIcoDiv_sub_natCast_mul (a b : R) (m : ℕ) :
     toIcoDiv hp a (b - m * p) = toIcoDiv hp a b - m :=
   mod_cast toIcoDiv_sub_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_ofNat_mul` / 定理 `toIcoDiv_sub_ofNat_mul`
-
-English:
-theorem toIcoDiv_sub_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoDiv_sub_natCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoDiv_sub_natCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_sub_natCast_mul
+/-
+**toIcoDiv_sub_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoDiv hp a 
+(b - ofNat(m) * p) = toIcoDiv hp a b - ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_sub_natCast_mul`：toIcoDiv_sub_natCast_mul (a b : R) (m : Nat) :
+ toIcoDiv hp a (b - m * p) = toIcoDiv hp a b - m
 -/
-theorem toIcoDiv_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoDiv_sub_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoDiv hp a (b - ofNat(m) * p) = toIcoDiv hp a b - ofNat(m) :=
   toIcoDiv_sub_natCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_intCast_mul'` / 定理 `toIcoDiv_sub_intCast_mul'`
-
-English:
-theorem toIcoDiv_sub_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_sub_zsmul
+/-
+**toIcoDiv_sub_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_intCast_mul' (a b : R) (m : Int) : toIcoDiv hp (a - m * p) b 
+= toIcoDiv hp a b + m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoDiv_sub_zsmul'`：toIcoDiv_sub_zsmul' (a b : α) (m : Int) : toIcoDiv 
+hp (a - m • p) b = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_sub_intCast_mul' (a b : R) (m : Int) :
+theorem toIcoDiv_sub_intCast_mul' (a b : R) (m : ℤ) :
     toIcoDiv hp (a - m * p) b = toIcoDiv hp a b + m := by
   simpa using toIcoDiv_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_natCast_mul'` / 定理 `toIcoDiv_sub_natCast_mul'`
-
-English:
-theorem toIcoDiv_sub_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoDiv_sub_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoDiv_sub_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoDiv_sub_intCast_mul
+/-
+**toIcoDiv_sub_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_natCast_mul' (a b : R) (m : Nat) : toIcoDiv hp (a - m * p) b 
+= toIcoDiv hp a b + m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoDiv_sub_intCast_mul'`：toIcoDiv_sub_intCast_mul' (a b : R) (m : Int)
+ : toIcoDiv hp (a - m * p) b = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_sub_natCast_mul' (a b : R) (m : Nat) :
+theorem toIcoDiv_sub_natCast_mul' (a b : R) (m : ℕ) :
     toIcoDiv hp (a - m * p) b = toIcoDiv hp a b + m :=
   mod_cast toIcoDiv_sub_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoDiv_sub_ofNat_mul'` / 定理 `toIcoDiv_sub_ofNat_mul'`
-
-English:
-theorem toIcoDiv_sub_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoDiv_sub_natCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoDiv_sub_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoDiv_sub_natCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoDiv_sub_natCast_mul
+/-
+**toIcoDiv_sub_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoDiv hp (
+a - ofNat(m) * p) b = toIcoDiv hp a b + ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_sub_natCast_mul'`：toIcoDiv_sub_natCast_mul' (a b : R) (m : Nat)
+ : toIcoDiv hp (a - m * p) b = toIcoDiv hp a b + m
 -/
-theorem toIcoDiv_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoDiv_sub_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoDiv hp (a - ofNat(m) * p) b = toIcoDiv hp a b + ofNat(m) :=
   toIcoDiv_sub_natCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_intCast_mul` / 定理 `toIocDiv_sub_intCast_mul`
-
-English:
-theorem toIocDiv_sub_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocDiv_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocDiv_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_sub_zsmul
+/-
+**toIocDiv_sub_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_intCast_mul (a b : R) (m : Int) : toIocDiv hp a (b - m * p) =
+ toIocDiv hp a b - m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocDiv_sub_zsmul`：toIocDiv_sub_zsmul (a b : α) (m : Int) : toIocDiv hp
+ a (b - m • p) = toIocDiv hp a b - m
 -/
-theorem toIocDiv_sub_intCast_mul (a b : R) (m : Int) :
+theorem toIocDiv_sub_intCast_mul (a b : R) (m : ℤ) :
     toIocDiv hp a (b - m * p) = toIocDiv hp a b - m := by
   simpa using toIocDiv_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_natCast_mul` / 定理 `toIocDiv_sub_natCast_mul`
-
-English:
-theorem toIocDiv_sub_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocDiv_sub_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocDiv_sub_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_sub_intCast_mul
+/-
+**toIocDiv_sub_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_natCast_mul (a b : R) (m : Nat) : toIocDiv hp a (b - m * p) =
+ toIocDiv hp a b - m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocDiv_sub_intCast_mul`：toIocDiv_sub_intCast_mul (a b : R) (m : Int) :
+ toIocDiv hp a (b - m * p) = toIocDiv hp a b - m
 -/
-theorem toIocDiv_sub_natCast_mul (a b : R) (m : Nat) :
+theorem toIocDiv_sub_natCast_mul (a b : R) (m : ℕ) :
     toIocDiv hp a (b - m * p) = toIocDiv hp a b - m :=
   mod_cast toIocDiv_sub_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_ofNat_mul` / 定理 `toIocDiv_sub_ofNat_mul`
-
-English:
-theorem toIocDiv_sub_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocDiv_sub_natCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocDiv_sub_natCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_sub_natCast_mul
+/-
+**toIocDiv_sub_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIocDiv hp a 
+(b - ofNat(m) * p) = toIocDiv hp a b - ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_sub_natCast_mul`：toIocDiv_sub_natCast_mul (a b : R) (m : Nat) :
+ toIocDiv hp a (b - m * p) = toIocDiv hp a b - m
 -/
-theorem toIocDiv_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocDiv_sub_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocDiv hp a (b - ofNat(m) * p) = toIocDiv hp a b - ofNat(m) :=
   toIocDiv_sub_natCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_intCast_mul'` / 定理 `toIocDiv_sub_intCast_mul'`
-
-English:
-theorem toIocDiv_sub_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocDiv_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_sub_zsmul
+/-
+**toIocDiv_sub_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_intCast_mul' (a b : R) (m : Int) : toIocDiv hp (a - m * p) b 
+= toIocDiv hp a b + m
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocDiv_sub_zsmul'`：toIocDiv_sub_zsmul' (a b : α) (m : Int) : toIocDiv 
+hp (a - m • p) b = toIocDiv hp a b + m
 -/
-theorem toIocDiv_sub_intCast_mul' (a b : R) (m : Int) :
+theorem toIocDiv_sub_intCast_mul' (a b : R) (m : ℤ) :
     toIocDiv hp (a - m * p) b = toIocDiv hp a b + m := by
   simpa using toIocDiv_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_natCast_mul'` / 定理 `toIocDiv_sub_natCast_mul'`
-
-English:
-theorem toIocDiv_sub_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocDiv_sub_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocDiv_sub_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocDiv_sub_intCast_mul
+/-
+**toIocDiv_sub_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_natCast_mul' (a b : R) (m : Nat) : toIocDiv hp (a - m * p) b 
+= toIocDiv hp a b + m
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocDiv.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocDiv_sub_intCast_mul'`：toIocDiv_sub_intCast_mul' (a b : R) (m : Int)
+ : toIocDiv hp (a - m * p) b = toIocDiv hp a b + m
 -/
-theorem toIocDiv_sub_natCast_mul' (a b : R) (m : Nat) :
+theorem toIocDiv_sub_natCast_mul' (a b : R) (m : ℕ) :
     toIocDiv hp (a - m * p) b = toIocDiv hp a b + m :=
   mod_cast toIocDiv_sub_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocDiv_sub_ofNat_mul'` / 定理 `toIocDiv_sub_ofNat_mul'`
-
-English:
-theorem toIocDiv_sub_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocDiv_sub_natCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocDiv_sub_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocDiv_sub_natCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocDiv_sub_natCast_mul
+/-
+**toIocDiv_sub_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIocDiv hp (
+a - ofNat(m) * p) b = toIocDiv hp a b + ofNat(m)
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_sub_natCast_mul'`：toIocDiv_sub_natCast_mul' (a b : R) (m : Nat)
+ : toIocDiv hp (a - m * p) b = toIocDiv hp a b + m
 -/
-theorem toIocDiv_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocDiv_sub_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocDiv hp (a - ofNat(m) * p) b = toIocDiv hp a b + ofNat(m) :=
   toIocDiv_sub_natCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_intCast_mul` / 定理 `toIcoMod_add_intCast_mul`
-
-English:
-theorem toIcoMod_add_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoMod_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoMod_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_add_zsmul
+/-
+**toIcoMod_add_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_intCast_mul (a b : R) (m : Int) : toIcoMod hp a (b + m * p) =
+ toIcoMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoMod_add_zsmul`：toIcoMod_add_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b + m • p) = toIcoMod hp a b
 -/
-theorem toIcoMod_add_intCast_mul (a b : R) (m : Int) :
+theorem toIcoMod_add_intCast_mul (a b : R) (m : ℤ) :
     toIcoMod hp a (b + m * p) = toIcoMod hp a b := by
   simpa using toIcoMod_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_natCast_mul` / 定理 `toIcoMod_add_natCast_mul`
-
-English:
-theorem toIcoMod_add_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoMod_add_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoMod_add_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_add_intCast_mul
+/-
+**toIcoMod_add_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_natCast_mul (a b : R) (m : Nat) : toIcoMod hp a (b + m * p) =
+ toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoMod_add_intCast_mul`：toIcoMod_add_intCast_mul (a b : R) (m : Int) :
+ toIcoMod hp a (b + m * p) = toIcoMod hp a b
 -/
-theorem toIcoMod_add_natCast_mul (a b : R) (m : Nat) :
+theorem toIcoMod_add_natCast_mul (a b : R) (m : ℕ) :
     toIcoMod hp a (b + m * p) = toIcoMod hp a b :=
   mod_cast toIcoMod_add_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_ofNat_mul` / 定理 `toIcoMod_add_ofNat_mul`
-
-English:
-theorem toIcoMod_add_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: mod_cast toIcoMod_add_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: mod_cast toIcoMod_add_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_add_intCast_mul
+/-
+**toIcoMod_add_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoMod hp a 
+(b + ofNat(m) * p) = toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoMod_add_intCast_mul`：toIcoMod_add_intCast_mul (a b : R) (m : Int) :
+ toIcoMod hp a (b + m * p) = toIcoMod hp a b
 -/
-theorem toIcoMod_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoMod_add_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoMod hp a (b + ofNat(m) * p) = toIcoMod hp a b :=
   mod_cast toIcoMod_add_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_intCast_mul'` / 定理 `toIcoMod_add_intCast_mul'`
-
-English:
-theorem toIcoMod_add_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoMod_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoMod_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_add_zsmul
+/-
+**toIcoMod_add_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_intCast_mul' (a b : R) (m : Int) : toIcoMod hp (a + m * p) b 
+= toIcoMod hp a b + m * p
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoMod_add_zsmul'`：toIcoMod_add_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a + m • p) b = toIcoMod hp a b + m • p
 -/
-theorem toIcoMod_add_intCast_mul' (a b : R) (m : Int) :
+theorem toIcoMod_add_intCast_mul' (a b : R) (m : ℤ) :
     toIcoMod hp (a + m * p) b = toIcoMod hp a b + m * p := by
   simpa using toIcoMod_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_natCast_mul'` / 定理 `toIcoMod_add_natCast_mul'`
-
-English:
-theorem toIcoMod_add_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoMod_add_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoMod_add_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_add_intCast_mul
+/-
+**toIcoMod_add_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_natCast_mul' (a b : R) (m : Nat) : toIcoMod hp (a + m * p) b 
+= toIcoMod hp a b + m * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoMod_add_intCast_mul'`：toIcoMod_add_intCast_mul' (a b : R) (m : Int)
+ : toIcoMod hp (a + m * p) b = toIcoMod hp a b + m * p
 -/
-theorem toIcoMod_add_natCast_mul' (a b : R) (m : Nat) :
+theorem toIcoMod_add_natCast_mul' (a b : R) (m : ℕ) :
     toIcoMod hp (a + m * p) b = toIcoMod hp a b + m * p :=
   mod_cast toIcoMod_add_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_add_ofNat_mul'` / 定理 `toIcoMod_add_ofNat_mul'`
-
-English:
-theorem toIcoMod_add_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoMod_add_natCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_add_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoMod_add_natCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_add_natCast_mul
+/-
+**toIcoMod_add_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoMod hp (
+a + ofNat(m) * p) b = toIcoMod hp a b + ofNat(m) * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_add_natCast_mul'`：toIcoMod_add_natCast_mul' (a b : R) (m : Nat)
+ : toIcoMod hp (a + m * p) b = toIcoMod hp a b + m * p
 -/
-theorem toIcoMod_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoMod_add_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoMod hp (a + ofNat(m) * p) b = toIcoMod hp a b + ofNat(m) * p :=
   toIcoMod_add_natCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_intCast_mul` / 定理 `toIocMod_add_intCast_mul`
-
-English:
-theorem toIocMod_add_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocMod_add_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocMod_add_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_add_zsmul
+/-
+**toIocMod_add_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_intCast_mul (a b : R) (m : Int) : toIocMod hp a (b + m * p) =
+ toIocMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocMod_add_zsmul`：toIocMod_add_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b + m • p) = toIocMod hp a b
 -/
-theorem toIocMod_add_intCast_mul (a b : R) (m : Int) :
+theorem toIocMod_add_intCast_mul (a b : R) (m : ℤ) :
     toIocMod hp a (b + m * p) = toIocMod hp a b := by
   simpa using toIocMod_add_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_natCast_mul` / 定理 `toIocMod_add_natCast_mul`
-
-English:
-theorem toIocMod_add_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocMod_add_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocMod_add_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_add_intCast_mul
+/-
+**toIocMod_add_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_natCast_mul (a b : R) (m : Nat) : toIocMod hp a (b + m * p) =
+ toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocMod_add_intCast_mul`：toIocMod_add_intCast_mul (a b : R) (m : Int) :
+ toIocMod hp a (b + m * p) = toIocMod hp a b
 -/
-theorem toIocMod_add_natCast_mul (a b : R) (m : Nat) :
+theorem toIocMod_add_natCast_mul (a b : R) (m : ℕ) :
     toIocMod hp a (b + m * p) = toIocMod hp a b :=
   mod_cast toIocMod_add_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_ofNat_mul` / 定理 `toIocMod_add_ofNat_mul`
-
-English:
-theorem toIocMod_add_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocMod_add_natCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocMod_add_natCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_add_natCast_mul
+/-
+**toIocMod_add_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIocMod hp a 
+(b + ofNat(m) * p) = toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_add_natCast_mul`：toIocMod_add_natCast_mul (a b : R) (m : Nat) :
+ toIocMod hp a (b + m * p) = toIocMod hp a b
 -/
-theorem toIocMod_add_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocMod_add_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocMod hp a (b + ofNat(m) * p) = toIocMod hp a b :=
   toIocMod_add_natCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_intCast_mul'` / 定理 `toIocMod_add_intCast_mul'`
-
-English:
-theorem toIocMod_add_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocMod_add_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocMod_add_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_add_zsmul
+/-
+**toIocMod_add_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_intCast_mul' (a b : R) (m : Int) : toIocMod hp (a + m * p) b 
+= toIocMod hp a b + m * p
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocMod_add_zsmul'`：toIocMod_add_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a + m • p) b = toIocMod hp a b + m • p
 -/
-theorem toIocMod_add_intCast_mul' (a b : R) (m : Int) :
+theorem toIocMod_add_intCast_mul' (a b : R) (m : ℤ) :
     toIocMod hp (a + m * p) b = toIocMod hp a b + m * p := by
   simpa using toIocMod_add_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_natCast_mul'` / 定理 `toIocMod_add_natCast_mul'`
-
-English:
-theorem toIocMod_add_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocMod_add_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocMod_add_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_add_intCast_mul
+/-
+**toIocMod_add_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_natCast_mul' (a b : R) (m : Nat) : toIocMod hp (a + m * p) b 
+= toIocMod hp a b + m * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocMod_add_intCast_mul'`：toIocMod_add_intCast_mul' (a b : R) (m : Int)
+ : toIocMod hp (a + m * p) b = toIocMod hp a b + m * p
 -/
-theorem toIocMod_add_natCast_mul' (a b : R) (m : Nat) :
+theorem toIocMod_add_natCast_mul' (a b : R) (m : ℕ) :
     toIocMod hp (a + m * p) b = toIocMod hp a b + m * p :=
   mod_cast toIocMod_add_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_add_ofNat_mul'` / 定理 `toIocMod_add_ofNat_mul'`
-
-English:
-theorem toIocMod_add_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocMod_add_natCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_add_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocMod_add_natCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_add_natCast_mul
+/-
+**toIocMod_add_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIocMod hp (
+a + ofNat(m) * p) b = toIocMod hp a b + ofNat(m) * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_add_natCast_mul'`：toIocMod_add_natCast_mul' (a b : R) (m : Nat)
+ : toIocMod hp (a + m * p) b = toIocMod hp a b + m * p
 -/
-theorem toIocMod_add_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocMod_add_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocMod hp (a + ofNat(m) * p) b = toIocMod hp a b + ofNat(m) * p :=
   toIocMod_add_natCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_intCast_mul_add` / 定理 `toIcoMod_intCast_mul_add`
-
-English:
-theorem toIcoMod_intCast_mul_add
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoMod_zsmul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_intCast_mul_add
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoMod_zsmul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_zsmul_add
+/-
+**toIcoMod_intCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_intCast_mul_add (a b : R) (m : Int) : toIcoMod hp a (m * p + b) =
+ toIcoMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoMod_zsmul_add`：toIcoMod_zsmul_add (a b : α) (m : Int) : toIcoMod hp
+ a (m • p + b) = toIcoMod hp a b
 -/
-theorem toIcoMod_intCast_mul_add (a b : R) (m : Int) :
+theorem toIcoMod_intCast_mul_add (a b : R) (m : ℤ) :
     toIcoMod hp a (m * p + b) = toIcoMod hp a b := by
   simpa using toIcoMod_zsmul_add hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_natCast_mul_add` / 定理 `toIcoMod_natCast_mul_add`
-
-English:
-theorem toIcoMod_natCast_mul_add
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoMod_intCast_mul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_natCast_mul_add
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoMod_intCast_mul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_intCast_mul_add
+/-
+**toIcoMod_natCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_natCast_mul_add (a b : R) (m : Nat) : toIcoMod hp a (m * p + b) =
+ toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoMod_intCast_mul_add`：toIcoMod_intCast_mul_add (a b : R) (m : Int) :
+ toIcoMod hp a (m * p + b) = toIcoMod hp a b
 -/
-theorem toIcoMod_natCast_mul_add (a b : R) (m : Nat) :
+theorem toIcoMod_natCast_mul_add (a b : R) (m : ℕ) :
     toIcoMod hp a (m * p + b) = toIcoMod hp a b :=
   mod_cast toIcoMod_intCast_mul_add hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_ofNat_mul_add` / 定理 `toIcoMod_ofNat_mul_add`
-
-English:
-theorem toIcoMod_ofNat_mul_add
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoMod_natCast_mul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_of自然数_mul_add
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoMod_natCast_mul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_natCast_mul_add
+/-
+**toIcoMod_ofNat_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoMod hp a 
+(ofNat(m) * p + b) = toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_natCast_mul_add`：toIcoMod_natCast_mul_add (a b : R) (m : Nat) :
+ toIcoMod hp a (m * p + b) = toIcoMod hp a b
 -/
-theorem toIcoMod_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoMod_ofNat_mul_add (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoMod hp a (ofNat(m) * p + b) = toIcoMod hp a b :=
   toIcoMod_natCast_mul_add hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_intCast_mul_add'` / 定理 `toIcoMod_intCast_mul_add'`
-
-English:
-theorem toIcoMod_intCast_mul_add'
-  given: (a b : R) (m : Int)
-  proof: by
-  rw [add_comm]; rw [toIcoMod_add_intCast_mul']; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIcoMod_intCast_mul_add'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  rw [add_comm]; rw [toIcoMod_add_intCast_mul']; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIcoMod_add_intCast_mul
+/-
+**toIcoMod_intCast_mul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_intCast_mul_add' (a b : R) (m : Int) : toIcoMod hp (m * p + a) b 
+= m * p + toIcoMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIcoMod_add_intCast_mul'`：toIcoMod_add_intCast_mul' (a b : R) (m : Int)
+ : toIcoMod hp (a + m * p) b = toIcoMod hp a b + m * p
 -/
-theorem toIcoMod_intCast_mul_add' (a b : R) (m : Int) :
+theorem toIcoMod_intCast_mul_add' (a b : R) (m : ℤ) :
     toIcoMod hp (m * p + a) b = m * p + toIcoMod hp a b := by
-  rw [add_comm]; rw [toIcoMod_add_intCast_mul']; rw [add_comm]
+  rw [add_comm, toIcoMod_add_intCast_mul', add_comm]
 
 @[simp]
-/--
-theorem `toIcoMod_natCast_mul_add'` / 定理 `toIcoMod_natCast_mul_add'`
-
-English:
-theorem toIcoMod_natCast_mul_add'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoMod_intCast_mul_add' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_natCast_mul_add'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoMod_intCast_mul_add' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_intCast_mul_add
+/-
+**toIcoMod_natCast_mul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_natCast_mul_add' (a b : R) (m : Nat) : toIcoMod hp (m * p + a) b 
+= m * p + toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoMod_intCast_mul_add'`：toIcoMod_intCast_mul_add' (a b : R) (m : Int)
+ : toIcoMod hp (m * p + a) b = m * p + toIcoMod hp a b
 -/
-theorem toIcoMod_natCast_mul_add' (a b : R) (m : Nat) :
+theorem toIcoMod_natCast_mul_add' (a b : R) (m : ℕ) :
     toIcoMod hp (m * p + a) b = m * p + toIcoMod hp a b :=
   mod_cast toIcoMod_intCast_mul_add' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_ofNat_mul_add'` / 定理 `toIcoMod_ofNat_mul_add'`
-
-English:
-theorem toIcoMod_ofNat_mul_add'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoMod_natCast_mul_add' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_of自然数_mul_add'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoMod_natCast_mul_add' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_natCast_mul_add
+/-
+**toIcoMod_ofNat_mul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_ofNat_mul_add' (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoMod hp (
+ofNat(m) * p + a) b = ofNat(m) * p + toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_natCast_mul_add'`：toIcoMod_natCast_mul_add' (a b : R) (m : Nat)
+ : toIcoMod hp (m * p + a) b = m * p + toIcoMod hp a b
 -/
-theorem toIcoMod_ofNat_mul_add' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoMod_ofNat_mul_add' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoMod hp (ofNat(m) * p + a) b = ofNat(m) * p + toIcoMod hp a b :=
   toIcoMod_natCast_mul_add' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_intCast_mul_add` / 定理 `toIocMod_intCast_mul_add`
-
-English:
-theorem toIocMod_intCast_mul_add
-  given: (a b : R) (m : Int)
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_intCast_mul]
-
-@[simp]
-
-中文:
-定理 toIocMod_intCast_mul_add
-  条件: (a b : R) (m : 整数)
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_intCast_mul]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocMod_add_intCast_mul
+/-
+**toIocMod_intCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_intCast_mul_add (a b : R) (m : Int) : toIocMod hp a (m * p + b) =
+ toIocMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_intCast_mul`：toIocMod_add_intCast_mul (a b : R) (m : Int) :
+ toIocMod hp a (b + m * p) = toIocMod hp a b
 -/
-theorem toIocMod_intCast_mul_add (a b : R) (m : Int) :
+theorem toIocMod_intCast_mul_add (a b : R) (m : ℤ) :
     toIocMod hp a (m * p + b) = toIocMod hp a b := by
-  rw [add_comm]; rw [toIocMod_add_intCast_mul]
+  rw [add_comm, toIocMod_add_intCast_mul]
 
 @[simp]
-/--
-theorem `toIocMod_natCast_mul_add` / 定理 `toIocMod_natCast_mul_add`
-
-English:
-theorem toIocMod_natCast_mul_add
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocMod_intCast_mul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_natCast_mul_add
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocMod_intCast_mul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_intCast_mul_add
+/-
+**toIocMod_natCast_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_natCast_mul_add (a b : R) (m : Nat) : toIocMod hp a (m * p + b) =
+ toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocMod_intCast_mul_add`：toIocMod_intCast_mul_add (a b : R) (m : Int) :
+ toIocMod hp a (m * p + b) = toIocMod hp a b
 -/
-theorem toIocMod_natCast_mul_add (a b : R) (m : Nat) :
+theorem toIocMod_natCast_mul_add (a b : R) (m : ℕ) :
     toIocMod hp a (m * p + b) = toIocMod hp a b :=
   mod_cast toIocMod_intCast_mul_add hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_ofNat_mul_add` / 定理 `toIocMod_ofNat_mul_add`
-
-English:
-theorem toIocMod_ofNat_mul_add
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocMod_natCast_mul_add hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_of自然数_mul_add
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocMod_natCast_mul_add hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_natCast_mul_add
+/-
+**toIocMod_ofNat_mul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] : toIocMod hp a 
+(ofNat(m) * p + b) = toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_natCast_mul_add`：toIocMod_natCast_mul_add (a b : R) (m : Nat) :
+ toIocMod hp a (m * p + b) = toIocMod hp a b
 -/
-theorem toIocMod_ofNat_mul_add (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocMod_ofNat_mul_add (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocMod hp a (ofNat(m) * p + b) = toIocMod hp a b :=
   toIocMod_natCast_mul_add hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_intCast_mul_add'` / 定理 `toIocMod_intCast_mul_add'`
-
-English:
-theorem toIocMod_intCast_mul_add'
-  given: (a b : R) (m : Int)
-  proof: by
-  rw [add_comm]; rw [toIocMod_add_intCast_mul']; rw [add_comm]
-
-@[simp]
-
-中文:
-定理 toIocMod_intCast_mul_add'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  rw [add_comm]; rw [toIocMod_add_intCast_mul']; rw [add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, toIocMod_add_intCast_mul
+/-
+**toIocMod_intCast_mul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_intCast_mul_add' (a b : R) (m : Int) : toIocMod hp (m * p + a) b 
+= m * p + toIocMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `toIocMod_add_intCast_mul'`：toIocMod_add_intCast_mul' (a b : R) (m : Int)
+ : toIocMod hp (a + m * p) b = toIocMod hp a b + m * p
 -/
-theorem toIocMod_intCast_mul_add' (a b : R) (m : Int) :
+theorem toIocMod_intCast_mul_add' (a b : R) (m : ℤ) :
     toIocMod hp (m * p + a) b = m * p + toIocMod hp a b := by
-  rw [add_comm]; rw [toIocMod_add_intCast_mul']; rw [add_comm]
+  rw [add_comm, toIocMod_add_intCast_mul', add_comm]
 
 @[simp]
-/--
-theorem `toIocMod_natCast_mul_add'` / 定理 `toIocMod_natCast_mul_add'`
-
-English:
-theorem toIocMod_natCast_mul_add'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocMod_intCast_mul_add' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_natCast_mul_add'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocMod_intCast_mul_add' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_intCast_mul_add
+/-
+**toIocMod_natCast_mul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_natCast_mul_add' (a b : R) (m : Nat) : toIocMod hp (m * p + a) b 
+= m * p + toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocMod_intCast_mul_add'`：toIocMod_intCast_mul_add' (a b : R) (m : Int)
+ : toIocMod hp (m * p + a) b = m * p + toIocMod hp a b
 -/
-theorem toIocMod_natCast_mul_add' (a b : R) (m : Nat) :
+theorem toIocMod_natCast_mul_add' (a b : R) (m : ℕ) :
     toIocMod hp (m * p + a) b = m * p + toIocMod hp a b :=
   mod_cast toIocMod_intCast_mul_add' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_ofNat_mul_add'` / 定理 `toIocMod_ofNat_mul_add'`
-
-English:
-theorem toIocMod_ofNat_mul_add'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocMod_natCast_mul_add' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_of自然数_mul_add'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocMod_natCast_mul_add' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_natCast_mul_add
+/-
+**toIocMod_ofNat_mul_add'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_ofNat_mul_add' (a b : R) (m : Nat) [m.AtLeastTwo] : toIocMod hp (
+ofNat(m) * p + a) b = ofNat(m) * p + toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_natCast_mul_add'`：toIocMod_natCast_mul_add' (a b : R) (m : Nat)
+ : toIocMod hp (m * p + a) b = m * p + toIocMod hp a b
 -/
-theorem toIocMod_ofNat_mul_add' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocMod_ofNat_mul_add' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocMod hp (ofNat(m) * p + a) b = ofNat(m) * p + toIocMod hp a b :=
   toIocMod_natCast_mul_add' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_intCast_mul` / 定理 `toIcoMod_sub_intCast_mul`
-
-English:
-theorem toIcoMod_sub_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoMod_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoMod_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_sub_zsmul
+/-
+**toIcoMod_sub_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_intCast_mul (a b : R) (m : Int) : toIcoMod hp a (b - m * p) =
+ toIcoMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoMod_sub_zsmul`：toIcoMod_sub_zsmul (a b : α) (m : Int) : toIcoMod hp
+ a (b - m • p) = toIcoMod hp a b
 -/
-theorem toIcoMod_sub_intCast_mul (a b : R) (m : Int) :
+theorem toIcoMod_sub_intCast_mul (a b : R) (m : ℤ) :
     toIcoMod hp a (b - m * p) = toIcoMod hp a b := by
   simpa using toIcoMod_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_natCast_mul` / 定理 `toIcoMod_sub_natCast_mul`
-
-English:
-theorem toIcoMod_sub_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoMod_sub_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoMod_sub_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_sub_intCast_mul
+/-
+**toIcoMod_sub_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_natCast_mul (a b : R) (m : Nat) : toIcoMod hp a (b - m * p) =
+ toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoMod_sub_intCast_mul`：toIcoMod_sub_intCast_mul (a b : R) (m : Int) :
+ toIcoMod hp a (b - m * p) = toIcoMod hp a b
 -/
-theorem toIcoMod_sub_natCast_mul (a b : R) (m : Nat) :
+theorem toIcoMod_sub_natCast_mul (a b : R) (m : ℕ) :
     toIcoMod hp a (b - m * p) = toIcoMod hp a b :=
   mod_cast toIcoMod_sub_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_ofNat_mul` / 定理 `toIcoMod_sub_ofNat_mul`
-
-English:
-theorem toIcoMod_sub_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoMod_sub_natCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoMod_sub_natCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_sub_natCast_mul
+/-
+**toIcoMod_sub_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoMod hp a 
+(b - ofNat(m) * p) = toIcoMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_sub_natCast_mul`：toIcoMod_sub_natCast_mul (a b : R) (m : Nat) :
+ toIcoMod hp a (b - m * p) = toIcoMod hp a b
 -/
-theorem toIcoMod_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoMod_sub_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoMod hp a (b - ofNat(m) * p) = toIcoMod hp a b :=
   toIcoMod_sub_natCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_intCast_mul'` / 定理 `toIcoMod_sub_intCast_mul'`
-
-English:
-theorem toIcoMod_sub_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIcoMod_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIcoMod_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_sub_zsmul
+/-
+**toIcoMod_sub_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_intCast_mul' (a b : R) (m : Int) : toIcoMod hp (a - m * p) b 
+= toIcoMod hp a b - m * p
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIcoMod_sub_zsmul'`：toIcoMod_sub_zsmul' (a b : α) (m : Int) : toIcoMod 
+hp (a - m • p) b = toIcoMod hp a b - m • p
 -/
-theorem toIcoMod_sub_intCast_mul' (a b : R) (m : Int) :
+theorem toIcoMod_sub_intCast_mul' (a b : R) (m : ℤ) :
     toIcoMod hp (a - m * p) b = toIcoMod hp a b - m * p := by
   simpa using toIcoMod_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_natCast_mul'` / 定理 `toIcoMod_sub_natCast_mul'`
-
-English:
-theorem toIcoMod_sub_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIcoMod_sub_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIcoMod_sub_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIcoMod_sub_intCast_mul
+/-
+**toIcoMod_sub_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_natCast_mul' (a b : R) (m : Nat) : toIcoMod hp (a - m * p) b 
+= toIcoMod hp a b - m * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIcoMod_sub_intCast_mul'`：toIcoMod_sub_intCast_mul' (a b : R) (m : Int)
+ : toIcoMod hp (a - m * p) b = toIcoMod hp a b - m * p
 -/
-theorem toIcoMod_sub_natCast_mul' (a b : R) (m : Nat) :
+theorem toIcoMod_sub_natCast_mul' (a b : R) (m : ℕ) :
     toIcoMod hp (a - m * p) b = toIcoMod hp a b - m * p :=
   mod_cast toIcoMod_sub_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIcoMod_sub_ofNat_mul'` / 定理 `toIcoMod_sub_ofNat_mul'`
-
-English:
-theorem toIcoMod_sub_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIcoMod_sub_natCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIcoMod_sub_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIcoMod_sub_natCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIcoMod_sub_natCast_mul
+/-
+**toIcoMod_sub_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIcoMod hp (
+a - ofNat(m) * p) b = toIcoMod hp a b - ofNat(m) * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoMod_sub_natCast_mul'`：toIcoMod_sub_natCast_mul' (a b : R) (m : Nat)
+ : toIcoMod hp (a - m * p) b = toIcoMod hp a b - m * p
 -/
-theorem toIcoMod_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIcoMod_sub_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIcoMod hp (a - ofNat(m) * p) b = toIcoMod hp a b - ofNat(m) * p :=
   toIcoMod_sub_natCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_intCast_mul` / 定理 `toIocMod_sub_intCast_mul`
-
-English:
-theorem toIocMod_sub_intCast_mul
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocMod_sub_zsmul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_intCast_mul
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocMod_sub_zsmul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_sub_zsmul
+/-
+**toIocMod_sub_intCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_intCast_mul (a b : R) (m : Int) : toIocMod hp a (b - m * p) =
+ toIocMod hp a b
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocMod_sub_zsmul`：toIocMod_sub_zsmul (a b : α) (m : Int) : toIocMod hp
+ a (b - m • p) = toIocMod hp a b
 -/
-theorem toIocMod_sub_intCast_mul (a b : R) (m : Int) :
+theorem toIocMod_sub_intCast_mul (a b : R) (m : ℤ) :
     toIocMod hp a (b - m * p) = toIocMod hp a b := by
   simpa using toIocMod_sub_zsmul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_natCast_mul` / 定理 `toIocMod_sub_natCast_mul`
-
-English:
-theorem toIocMod_sub_natCast_mul
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocMod_sub_intCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_natCast_mul
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocMod_sub_intCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_sub_intCast_mul
+/-
+**toIocMod_sub_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_natCast_mul (a b : R) (m : Nat) : toIocMod hp a (b - m * p) =
+ toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocMod_sub_intCast_mul`：toIocMod_sub_intCast_mul (a b : R) (m : Int) :
+ toIocMod hp a (b - m * p) = toIocMod hp a b
 -/
-theorem toIocMod_sub_natCast_mul (a b : R) (m : Nat) :
+theorem toIocMod_sub_natCast_mul (a b : R) (m : ℕ) :
     toIocMod hp a (b - m * p) = toIocMod hp a b :=
   mod_cast toIocMod_sub_intCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_ofNat_mul` / 定理 `toIocMod_sub_ofNat_mul`
-
-English:
-theorem toIocMod_sub_ofNat_mul
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocMod_sub_natCast_mul hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_of自然数_mul
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocMod_sub_natCast_mul hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_sub_natCast_mul
+/-
+**toIocMod_sub_ofNat_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] : toIocMod hp a 
+(b - ofNat(m) * p) = toIocMod hp a b
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_sub_natCast_mul`：toIocMod_sub_natCast_mul (a b : R) (m : Nat) :
+ toIocMod hp a (b - m * p) = toIocMod hp a b
 -/
-theorem toIocMod_sub_ofNat_mul (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocMod_sub_ofNat_mul (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocMod hp a (b - ofNat(m) * p) = toIocMod hp a b :=
   toIocMod_sub_natCast_mul hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_intCast_mul'` / 定理 `toIocMod_sub_intCast_mul'`
-
-English:
-theorem toIocMod_sub_intCast_mul'
-  given: (a b : R) (m : Int)
-  proof: by
-  simpa using toIocMod_sub_zsmul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_intCast_mul'
-  条件: (a b : R) (m : 整数)
-  证明: by
-  simpa using toIocMod_sub_zsmul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: toIocMod_sub_zsmul
+/-
+**toIocMod_sub_intCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_intCast_mul' (a b : R) (m : Int) : toIocMod hp (a - m * p) b 
+= toIocMod hp a b - m * p
+参数：a b : R；m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `toIocMod_sub_zsmul'`：toIocMod_sub_zsmul' (a b : α) (m : Int) : toIocMod 
+hp (a - m • p) b = toIocMod hp a b - m • p
 -/
-theorem toIocMod_sub_intCast_mul' (a b : R) (m : Int) :
+theorem toIocMod_sub_intCast_mul' (a b : R) (m : ℤ) :
     toIocMod hp (a - m * p) b = toIocMod hp a b - m * p := by
   simpa using toIocMod_sub_zsmul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_natCast_mul'` / 定理 `toIocMod_sub_natCast_mul'`
-
-English:
-theorem toIocMod_sub_natCast_mul'
-  given: (a b : R) (m : Nat)
-  proof: mod_cast toIocMod_sub_intCast_mul' hp a b m
-
-@[simp]
-
-中文:
-定理 toIocMod_sub_natCast_mul'
-  条件: (a b : R) (m : 自然数)
-  证明: mod_cast toIocMod_sub_intCast_mul' hp a b m
-
-@[simp]
-
-Depends on / 依赖: mod_cast, toIocMod_sub_intCast_mul
+/-
+**toIocMod_sub_natCast_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_natCast_mul' (a b : R) (m : Nat) : toIocMod hp (a - m * p) b 
+= toIocMod hp a b - m * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.congr_simp`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : 
+LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p p_1 : α
+} (e_p : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `toIocMod_sub_intCast_mul'`：toIocMod_sub_intCast_mul' (a b : R) (m : Int)
+ : toIocMod hp (a - m * p) b = toIocMod hp a b - m * p
 -/
-theorem toIocMod_sub_natCast_mul' (a b : R) (m : Nat) :
+theorem toIocMod_sub_natCast_mul' (a b : R) (m : ℕ) :
     toIocMod hp (a - m * p) b = toIocMod hp a b - m * p :=
   mod_cast toIocMod_sub_intCast_mul' hp a b m
 
 @[simp]
-/--
-theorem `toIocMod_sub_ofNat_mul'` / 定理 `toIocMod_sub_ofNat_mul'`
-
-English:
-theorem toIocMod_sub_ofNat_mul'
-  given: (a b : R) (m : Nat) [m.AtLeastTwo]
-  proof: toIocMod_sub_natCast_mul' hp a b m
-
-中文:
-定理 toIocMod_sub_of自然数_mul'
-  条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
-  证明: toIocMod_sub_natCast_mul' hp a b m
-
-Depends on / 依赖: toIocMod_sub_natCast_mul
+/-
+**toIocMod_sub_ofNat_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] : toIocMod hp (
+a - ofNat(m) * p) b = toIocMod hp a b - ofNat(m) * p
+参数：a b : R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocMod_sub_natCast_mul'`：toIocMod_sub_natCast_mul' (a b : R) (m : Nat)
+ : toIocMod hp (a - m * p) b = toIocMod hp a b - m * p
 -/
-theorem toIocMod_sub_ofNat_mul' (a b : R) (m : Nat) [m.AtLeastTwo] :
+theorem toIocMod_sub_ofNat_mul' (a b : R) (m : ℕ) [m.AtLeastTwo] :
     toIocMod hp (a - ofNat(m) * p) b = toIocMod hp a b - ofNat(m) * p :=
   toIocMod_sub_natCast_mul' hp a b m
 
@@ -6544,187 +5504,385 @@ section LinearOrderedField
 variable {α : Type*} [Field α] [LinearOrder α] [IsStrictOrderedRing α] [FloorRing α]
   {p : α} (hp : 0 < p)
 
-/--
-theorem `toIcoDiv_eq_floor` / 定理 `toIcoDiv_eq_floor`
-
-English:
-theorem toIcoDiv_eq_floor
-  given: (a b : α)
-  statement: toIcoDiv hp a b = ⌊(b - a) / p⌋
-  proof: by
-  refine toIcoDiv_eq_of_sub_zsmul_mem_Ico hp ?_
-  rw [Set.mem_Ico]; rw [zsmul_eq_mul]; rw [← sub_nonneg]; rw [add_comm]; rw [sub_right_comm]; rw [← sub_lt_iff_lt_add]; rw [sub_right_comm _ _ a]
-  exact ⟨Int.sub_floor_div_mul_nonneg _ hp, Int.sub_floor_div_mul_lt _ hp⟩
-
-中文:
-定理 toIcoDiv_eq_floor
-  条件: (a b : α)
-  结论: toIcoDiv hp a b = ⌊(b - a) / p⌋
-  证明: by
-  refine toIcoDiv_eq_of_sub_zsmul_mem_Ico hp ?_
-  rw [Set.mem_Ico]; rw [zsmul_eq_mul]; rw [← sub_nonneg]; rw [add_comm]; rw [sub_right_comm]; rw [← sub_lt_iff_lt_add]; rw [sub_right_comm _ _ a]
-  exact ⟨Int.sub_floor_div_mul_nonneg _ hp, Int.sub_floor_div_mul_lt _ hp⟩
-
-Depends on / 依赖: Int.sub_floor_div_mul_lt, Int.sub_floor_div_mul_nonneg, Set.mem_Ico, add_comm, mem_Ico, sub_floor_div_mul_lt, sub_floor_div_mul_nonneg, sub_lt_iff_lt_add, sub_nonneg, sub_right_comm, toIcoDiv_eq_of_sub_zsmul_mem_Ico, zsmul_eq_mul
+/-
+**toIcoDiv_eq_floor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_eq_floor (a b : α) : toIcoDiv hp a b = ⌊(b - a) / p⌋
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIcoDiv_eq_of_sub_zsmul_mem_Ico`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorRing.archimedean`：∀ (K : Type u_5) [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K] [FloorRing K], Archimedean K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_Ico`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+co a b ↔ a ≤ x ∧ x < b
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c
+ : α), a - b - c = a - c - b
+· 使用定理 `sub_lt_iff_lt_add`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [A
+ddRightStrictMono α] {a b c : α}, a - c < b ↔ a < b + c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Int.sub_floor_div_mul_nonneg`：sub_floor_div_mul_nonneg (a : k) (hb : 0 <
+ b) : 0 <= a - ⌊a / b⌋ * b
+· 使用定理 `Int.sub_floor_div_mul_lt`：sub_floor_div_mul_lt (a : k) (hb : 0 < b) : a 
+- ⌊a / b⌋ * b < b
 -/
 theorem toIcoDiv_eq_floor (a b : α) : toIcoDiv hp a b = ⌊(b - a) / p⌋ := by
   refine toIcoDiv_eq_of_sub_zsmul_mem_Ico hp ?_
-  rw [Set.mem_Ico]; rw [zsmul_eq_mul]; rw [← sub_nonneg]; rw [add_comm]; rw [sub_right_comm]; rw [← sub_lt_iff_lt_add]; rw [sub_right_comm _ _ a]
+  rw [Set.mem_Ico, zsmul_eq_mul, ← sub_nonneg, add_comm, sub_right_comm, ← sub_lt_iff_lt_add,
+    sub_right_comm _ _ a]
   exact ⟨Int.sub_floor_div_mul_nonneg _ hp, Int.sub_floor_div_mul_lt _ hp⟩
-
-/--
-theorem `toIocDiv_eq_neg_floor` / 定理 `toIocDiv_eq_neg_floor`
-
-English:
-theorem toIocDiv_eq_neg_floor
-  given: (a b : α)
-  statement: toIocDiv hp a b = -⌊(a + p - b) / p⌋
-  proof: by
-  refine toIocDiv_eq_of_sub_zsmul_mem_Ioc hp ?_
-  rw [Set.mem_Ioc]; rw [zsmul_eq_mul]; rw [Int.cast_neg]; rw [neg_mul]; rw [sub_neg_eq_add]; rw [← sub_nonneg]; rw [sub_add_eq_sub_sub]
-  refine ⟨?_, Int.sub_floor_div_mul_nonneg _ hp⟩
-  rw [← add_lt_add_iff_right p]; rw [add_assoc]; rw [add_comm b]; rw [← sub_lt_iff_lt_add]; rw [add_comm (_ * _)]; rw [←
-    sub_lt_iff_lt_add]
-  exact Int.sub_floor_div_mul_lt _ hp
-
-中文:
-定理 toIocDiv_eq_neg_floor
-  条件: (a b : α)
-  结论: toIocDiv hp a b = -⌊(a + p - b) / p⌋
-  证明: by
-  refine toIocDiv_eq_of_sub_zsmul_mem_Ioc hp ?_
-  rw [Set.mem_Ioc]; rw [zsmul_eq_mul]; rw [Int.cast_neg]; rw [neg_mul]; rw [sub_neg_eq_add]; rw [← sub_nonneg]; rw [sub_add_eq_sub_sub]
-  refine ⟨?_, Int.sub_floor_div_mul_nonneg _ hp⟩
-  rw [← add_lt_add_iff_right p]; rw [add_assoc]; rw [add_comm b]; rw [← sub_lt_iff_lt_add]; rw [add_comm (_ * _)]; rw [←
-    sub_lt_iff_lt_add]
-  exact Int.sub_floor_div_mul_lt _ hp
-
-Depends on / 依赖: Int.cast_neg, Int.sub_floor_div_mul_lt, Int.sub_floor_div_mul_nonneg, Set.mem_Ioc, add_assoc, add_comm, add_lt_add_iff_right, cast_neg, mem_Ioc, neg_mul, sub_add_eq_sub_sub, sub_floor_div_mul_lt, sub_floor_div_mul_nonneg, sub_lt_iff_lt_add, sub_neg_eq_add, sub_nonneg, toIocDiv_eq_of_sub_zsmul_mem_Ioc, zsmul_eq_mul
+/-
+**toIocDiv_eq_neg_floor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocDiv_eq_neg_floor (a b : α) : toIocDiv hp a b = -⌊(a + p - b) / p⌋
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `toIocDiv_eq_of_sub_zsmul_mem_Ioc`：∀ {α : Type u_1} [inst : AddCommGroup 
+α] [inst_1 : LinearOrder α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]
+   {p : α} (hp : 0 < p…
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorRing.archimedean`：∀ (K : Type u_5) [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K] [FloorRing K], Archimedean K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `sub_add_eq_sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a - (b + c) = a - b - c
+· 使用定理 `add_lt_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [A
+ddRightStrictMono α] [AddRightReflectLT α] (a : α) {b c : α},   b + a < c + a ↔ 
+b < c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_lt_iff_lt_add`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [A
+ddRightStrictMono α] {a b c : α}, a - c < b ↔ a < b + c
+· 使用定理 `Int.sub_floor_div_mul_lt`：sub_floor_div_mul_lt (a : k) (hb : 0 < b) : a 
+- ⌊a / b⌋ * b < b
+· 使用定理 `Int.sub_floor_div_mul_nonneg`：sub_floor_div_mul_nonneg (a : k) (hb : 0 <
+ b) : 0 <= a - ⌊a / b⌋ * b
 -/
 theorem toIocDiv_eq_neg_floor (a b : α) : toIocDiv hp a b = -⌊(a + p - b) / p⌋ := by
   refine toIocDiv_eq_of_sub_zsmul_mem_Ioc hp ?_
-  rw [Set.mem_Ioc]; rw [zsmul_eq_mul]; rw [Int.cast_neg]; rw [neg_mul]; rw [sub_neg_eq_add]; rw [← sub_nonneg]; rw [sub_add_eq_sub_sub]
+  rw [Set.mem_Ioc, zsmul_eq_mul, Int.cast_neg, neg_mul, sub_neg_eq_add, ← sub_nonneg,
+    sub_add_eq_sub_sub]
   refine ⟨?_, Int.sub_floor_div_mul_nonneg _ hp⟩
-  rw [← add_lt_add_iff_right p]; rw [add_assoc]; rw [add_comm b]; rw [← sub_lt_iff_lt_add]; rw [add_comm (_ * _)]; rw [←
+  rw [← add_lt_add_iff_right p, add_assoc, add_comm b, ← sub_lt_iff_lt_add, add_comm (_ * _), ←
     sub_lt_iff_lt_add]
   exact Int.sub_floor_div_mul_lt _ hp
-
-/--
-theorem `toIcoDiv_zero_one` / 定理 `toIcoDiv_zero_one`
-
-English:
-theorem toIcoDiv_zero_one
-  given: (b : α)
-  statement: toIcoDiv (zero_lt_one' α) 0 b = ⌊b⌋
-  proof: by
-  simp [toIcoDiv_eq_floor]
-
-中文:
-定理 toIcoDiv_zero_one
-  条件: (b : α)
-  结论: toIcoDiv (zero_lt_one' α) 0 b = ⌊b⌋
-  证明: by
-  simp [toIcoDiv_eq_floor]
-
-Depends on / 依赖: toIcoDiv_eq_floor
+/-
+**toIcoDiv_zero_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoDiv_zero_one (b : α) : toIcoDiv (zero_lt_one' α) 0 b = ⌊b⌋
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorRing.archimedean`：∀ (K : Type u_5) [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K] [FloorRing K], Archimedean K
+· 使用引理 `zero_lt_one'`：zero_lt_one' : (0 : α) < 1
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoDiv_eq_floor`：toIcoDiv_eq_floor (a b : α) : toIcoDiv hp a b = ⌊(b -
+ a) / p⌋
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoDiv_zero_one (b : α) : toIcoDiv (zero_lt_one' α) 0 b = ⌊b⌋ := by
   simp [toIcoDiv_eq_floor]
-
-/--
-theorem `toIcoMod_eq_add_fract_mul` / 定理 `toIcoMod_eq_add_fract_mul`
-
-English:
-theorem toIcoMod_eq_add_fract_mul
-  given: (a b : α)
-  proof: by
-  rw [toIcoMod]; rw [toIcoDiv_eq_floor]; rw [Int.fract]
-  simp [field, -Int.self_sub_floor]
-  ring
-
-中文:
-定理 toIcoMod_eq_add_fract_mul
-  条件: (a b : α)
-  证明: by
-  rw [toIcoMod]; rw [toIcoDiv_eq_floor]; rw [Int.fract]
-  simp [field, -Int.self_sub_floor]
-  ring
-
-Depends on / 依赖: Int.fract, Int.self_sub_floor, self_sub_floor, toIcoDiv_eq_floor, toIcoMod
+/-
+**toIcoMod_eq_add_fract_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_eq_add_fract_mul (a b : α) : toIcoMod hp a b = a + Int.fract ((b 
+- a) / p) * p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorRing.archimedean`：∀ (K : Type u_5) [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K] [FloorRing K], Archimedean K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIcoDiv_eq_floor`：toIcoDiv_eq_floor (a b : α) : toIcoDiv hp a b = ⌊(b -
+ a) / p⌋
+· 使用定理 `Int.fract.eq_1`：∀ {α : Type u_2} [inst : Ring α] [inst_1 : LinearOrder α
+] [inst_2 : FloorRing α] (a : α), Int.fract a = a - ↑⌊a⌋
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_sub`：subst_sub {M : Type*} [Ring M] {x₁ x
+₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ - X₂ = Y) 
+(hy : a * Y = y) : x₁ - …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval`：mul_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al * l₂.eval = l.eval) : x₁ *…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval₃`：mul_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval * l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_add`：subst_add {M : Type*} [Semiring M] {
+x₁ x₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ + X₂ =
+ Y) (hy : a * Y = y) : x…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval`：div_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al / l₂.eval = l.eval) : x₁ /…
+（共 72 条，此处仅展示前 30 条）
 -/
 theorem toIcoMod_eq_add_fract_mul (a b : α) :
     toIcoMod hp a b = a + Int.fract ((b - a) / p) * p := by
-  rw [toIcoMod]; rw [toIcoDiv_eq_floor]; rw [Int.fract]
+  rw [toIcoMod, toIcoDiv_eq_floor, Int.fract]
   simp [field, -Int.self_sub_floor]
   ring
-
-/--
-theorem `toIcoMod_eq_fract_mul` / 定理 `toIcoMod_eq_fract_mul`
-
-English:
-theorem toIcoMod_eq_fract_mul
-  given: (b : α)
-  statement: toIcoMod hp 0 b = Int.fract (b / p) * p
-  proof: by
-  simp [toIcoMod_eq_add_fract_mul]
-
-中文:
-定理 toIcoMod_eq_fract_mul
-  条件: (b : α)
-  结论: toIcoMod hp 0 b = 整数.fract (b / p) * p
-  证明: by
-  simp [toIcoMod_eq_add_fract_mul]
-
-Depends on / 依赖: toIcoMod_eq_add_fract_mul
+/-
+**toIcoMod_eq_fract_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_eq_fract_mul (b : α) : toIcoMod hp 0 b = Int.fract (b / p) * p
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorRing.archimedean`：∀ (K : Type u_5) [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K] [FloorRing K], Archimedean K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_eq_add_fract_mul`：toIcoMod_eq_add_fract_mul (a b : α) : toIcoMo
+d hp a b = a + Int.fract ((b - a) / p) * p
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoMod_eq_fract_mul (b : α) : toIcoMod hp 0 b = Int.fract (b / p) * p := by
   simp [toIcoMod_eq_add_fract_mul]
-
-/--
-theorem `toIocMod_eq_sub_fract_mul` / 定理 `toIocMod_eq_sub_fract_mul`
-
-English:
-theorem toIocMod_eq_sub_fract_mul
-  given: (a b : α)
-  proof: by
-  rw [toIocMod]; rw [toIocDiv_eq_neg_floor]; rw [Int.fract]
-  simp [field, -Int.self_sub_floor]
-  ring
-
-中文:
-定理 toIocMod_eq_sub_fract_mul
-  条件: (a b : α)
-  证明: by
-  rw [toIocMod]; rw [toIocDiv_eq_neg_floor]; rw [Int.fract]
-  simp [field, -Int.self_sub_floor]
-  ring
-
-Depends on / 依赖: Int.fract, Int.self_sub_floor, self_sub_floor, toIocDiv_eq_neg_floor, toIocMod
+/-
+**toIocMod_eq_sub_fract_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIocMod_eq_sub_fract_mul (a b : α) : toIocMod hp a b = a + p - Int.fract 
+((a + p - b) / p) * p
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorRing.archimedean`：∀ (K : Type u_5) [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K] [FloorRing K], Archimedean K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIocMod.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : Linear
+Order α] [inst_2 : IsOrderedAddMonoid α] [hα : Archimedean α]   {p : α} (hp : 0 
+< p…
+· 使用定理 `toIocDiv_eq_neg_floor`：toIocDiv_eq_neg_floor (a b : α) : toIocDiv hp a b
+ = -⌊(a + p - b) / p⌋
+· 使用定理 `Int.fract.eq_1`：∀ {α : Type u_2} [inst : Ring α] [inst_1 : LinearOrder α
+] [inst_2 : FloorRing α] (a : α), Int.fract a = a - ↑⌊a⌋
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_add`：subst_add {M : Type*} [Semiring M] {
+x₁ x₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ + X₂ =
+ Y) (hy : a * Y = y) : x…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval`：mul_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al * l₂.eval = l.eval) : x₁ *…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval₃`：mul_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval * l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+（共 74 条，此处仅展示前 30 条）
 -/
 theorem toIocMod_eq_sub_fract_mul (a b : α) :
     toIocMod hp a b = a + p - Int.fract ((a + p - b) / p) * p := by
-  rw [toIocMod]; rw [toIocDiv_eq_neg_floor]; rw [Int.fract]
+  rw [toIocMod, toIocDiv_eq_neg_floor, Int.fract]
   simp [field, -Int.self_sub_floor]
   ring
-
-/--
-theorem `toIcoMod_zero_one` / 定理 `toIcoMod_zero_one`
-
-English:
-theorem toIcoMod_zero_one
-  given: (b : α)
-  statement: toIcoMod (zero_lt_one' α) 0 b = Int.fract b
-  proof: by
-  simp [toIcoMod_eq_add_fract_mul]
-
-中文:
-定理 toIcoMod_zero_one
-  条件: (b : α)
-  结论: toIcoMod (zero_lt_one' α) 0 b = 整数.fract b
-  证明: by
-  simp [toIcoMod_eq_add_fract_mul]
-
-Depends on / 依赖: toIcoMod_eq_add_fract_mul
+/-
+**toIcoMod_zero_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toIcoMod_zero_one (b : α) : toIcoMod (zero_lt_one' α) 0 b = Int.fract b
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorRing.archimedean`：∀ (K : Type u_5) [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K] [FloorRing K], Archimedean K
+· 使用引理 `zero_lt_one'`：zero_lt_one' : (0 : α) < 1
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `toIcoMod_eq_add_fract_mul`：toIcoMod_eq_add_fract_mul (a b : α) : toIcoMo
+d hp a b = a + Int.fract ((b - a) / p) * p
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toIcoMod_zero_one (b : α) : toIcoMod (zero_lt_one' α) 0 b = Int.fract b := by
   simp [toIcoMod_eq_add_fract_mul]
@@ -6744,151 +5902,186 @@ variable {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
   {p : α} (hp : 0 < p) (a : α)
 include hp
 
-/--
-theorem `iUnion_Ioc_add_zsmul` / 定理 `iUnion_Ioc_add_zsmul`
-
-English:
-theorem iUnion_Ioc_add_zsmul
-  statement: ⋃ n : Int, Ioc (a + n • p) (a + (n + 1) • p) = univ
-  proof: by
+/-
+**iUnion_Ioc_add_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ioc_add_zsmul : ⋃ n : Int, Ioc (a + n • p) (a + (n + 1) • p) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `sub_toIocDiv_zsmul_mem_Ioc`：sub_toIocDiv_zsmul_mem_Ioc (a b : α) : b - t
+oIocDiv hp a b • p in Set.Ioc a (a + p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `lt_sub_iff_add_lt`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [A
+ddRightStrictMono α] {a b c : α}, a < c - b ↔ a + b < c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.iUnion_Ioc_add_zsmul._abe
+l_1_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2
+ : IsOrderedAddMonoid α]   [inst_3 : Archimedean α] {p : α} (hp : 0…
+· 使用定理 `sub_le_iff_le_add`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [A
+ddRightMono α] {a b c : α}, a - c ≤ b ↔ a ≤ b + c
+-/
+theorem iUnion_Ioc_add_zsmul : ⋃ n : ℤ, Ioc (a + n • p) (a + (n + 1) • p) = univ := by
   refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
   rcases sub_toIocDiv_zsmul_mem_Ioc hp a b with ⟨hl, hr⟩
   refine ⟨toIocDiv hp a b, ⟨lt_sub_iff_add_lt.mp hl, ?_⟩⟩
-  rw [add_smul]; rw [one_smul]; rw [← add_assoc]
+  rw [add_smul, one_smul, ← add_assoc]
   convert! sub_le_iff_le_add.mp hr using 1; abel
-
-中文:
-定理 iUnion_Ioc_add_zsmul
-  结论: ⋃ n : 整数, 左开右闭区间 (a + n • p) (a + (n + 1) • p) = univ
-  证明: by
-  refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
-  rcases sub_toIocDiv_zsmul_mem_Ioc hp a b with ⟨hl, hr⟩
-  refine ⟨toIocDiv hp a b, ⟨lt_sub_iff_add_lt.mp hl, ?_⟩⟩
-  rw [add_smul]; rw [one_smul]; rw [← add_assoc]
-  convert! sub_le_iff_le_add.mp hr using 1; abel
-
-Depends on / 依赖: add_assoc, add_smul, convert, eq_univ_iff_forall, eq_univ_iff_forall.mpr, lt_sub_iff_add_lt, lt_sub_iff_add_lt.mp, mem_iUnion, mem_iUnion.mpr, one_smul, sub_le_iff_le_add, sub_le_iff_le_add.mp, sub_toIocDiv_zsmul_mem_Ioc, toIocDiv
+/-
+**iUnion_Ico_add_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ico_add_zsmul : ⋃ n : Int, Ico (a + n • p) (a + (n + 1) • p) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `sub_toIcoDiv_zsmul_mem_Ico`：sub_toIcoDiv_zsmul_mem_Ico (a b : α) : b - t
+oIcoDiv hp a b • p in Set.Ico a (a + p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_sub_iff_add_le`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [A
+ddRightMono α] {a b c : α}, a ≤ c - b ↔ a + b ≤ c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `_private.Mathlib.Algebra.Order.ToIntervalMod.0.iUnion_Ico_add_zsmul._abe
+l_1_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 : LinearOrder α] [inst_2
+ : IsOrderedAddMonoid α]   [inst_3 : Archimedean α] {p : α} (hp : 0…
+· 使用定理 `sub_lt_iff_lt_add`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [A
+ddRightStrictMono α] {a b c : α}, a - c < b ↔ a < b + c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
-theorem iUnion_Ioc_add_zsmul : ⋃ n : Int, Ioc (a + n • p) (a + (n + 1) • p) = univ := by
-  refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
-  rcases sub_toIocDiv_zsmul_mem_Ioc hp a b with ⟨hl, hr⟩
-  refine ⟨toIocDiv hp a b, ⟨lt_sub_iff_add_lt.mp hl, ?_⟩⟩
-  rw [add_smul]; rw [one_smul]; rw [← add_assoc]
-  convert! sub_le_iff_le_add.mp hr using 1; abel
-
-/--
-theorem `iUnion_Ico_add_zsmul` / 定理 `iUnion_Ico_add_zsmul`
-
-English:
-theorem iUnion_Ico_add_zsmul
-  statement: ⋃ n : Int, Ico (a + n • p) (a + (n + 1) • p) = univ
-  proof: by
+theorem iUnion_Ico_add_zsmul : ⋃ n : ℤ, Ico (a + n • p) (a + (n + 1) • p) = univ := by
   refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
   rcases sub_toIcoDiv_zsmul_mem_Ico hp a b with ⟨hl, hr⟩
   refine ⟨toIcoDiv hp a b, ⟨le_sub_iff_add_le.mp hl, ?_⟩⟩
-  rw [add_smul]; rw [one_smul]; rw [← add_assoc]
+  rw [add_smul, one_smul, ← add_assoc]
   convert! sub_lt_iff_lt_add.mp hr using 1; abel
-
-中文:
-定理 iUnion_Ico_add_zsmul
-  结论: ⋃ n : 整数, 左闭右开区间 (a + n • p) (a + (n + 1) • p) = univ
-  证明: by
-  refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
-  rcases sub_toIcoDiv_zsmul_mem_Ico hp a b with ⟨hl, hr⟩
-  refine ⟨toIcoDiv hp a b, ⟨le_sub_iff_add_le.mp hl, ?_⟩⟩
-  rw [add_smul]; rw [one_smul]; rw [← add_assoc]
-  convert! sub_lt_iff_lt_add.mp hr using 1; abel
-
-Depends on / 依赖: add_assoc, add_smul, convert, eq_univ_iff_forall, eq_univ_iff_forall.mpr, le_sub_iff_add_le, le_sub_iff_add_le.mp, mem_iUnion, mem_iUnion.mpr, one_smul, sub_lt_iff_lt_add, sub_lt_iff_lt_add.mp, sub_toIcoDiv_zsmul_mem_Ico, toIcoDiv
+/-
+**iUnion_Icc_add_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Icc_add_zsmul : ⋃ n : Int, Icc (a + n • p) (a + (n + 1) • p) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iUnion_Ioc_add_zsmul`：iUnion_Ioc_add_zsmul : ⋃ n : Int, Ioc (a + n • p) 
+(a + (n + 1) • p) = univ
+· 使用定理 `Set.iUnion_mono`：iUnion_mono {s t : ι -> Set α} (h : forall i, s i subse
+teq t i) : ⋃ i, s i subseteq ⋃ i, t i
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
 -/
-theorem iUnion_Ico_add_zsmul : ⋃ n : Int, Ico (a + n • p) (a + (n + 1) • p) = univ := by
-  refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
-  rcases sub_toIcoDiv_zsmul_mem_Ico hp a b with ⟨hl, hr⟩
-  refine ⟨toIcoDiv hp a b, ⟨le_sub_iff_add_le.mp hl, ?_⟩⟩
-  rw [add_smul]; rw [one_smul]; rw [← add_assoc]
-  convert! sub_lt_iff_lt_add.mp hr using 1; abel
-
-/--
-theorem `iUnion_Icc_add_zsmul` / 定理 `iUnion_Icc_add_zsmul`
-
-English:
-theorem iUnion_Icc_add_zsmul
-  statement: ⋃ n : Int, Icc (a + n • p) (a + (n + 1) • p) = univ
-  proof: by
+theorem iUnion_Icc_add_zsmul : ⋃ n : ℤ, Icc (a + n • p) (a + (n + 1) • p) = univ := by
   simpa only [iUnion_Ioc_add_zsmul hp a, univ_subset_iff] using
-    iUnion_mono fun n : Int => (Ioc_subset_Icc_self : Ioc (a + n • p) (a + (n + 1) • p) subseteq Icc _ _)
-
-中文:
-定理 iUnion_Icc_add_zsmul
-  结论: ⋃ n : 整数, 闭区间 (a + n • p) (a + (n + 1) • p) = univ
-  证明: by
-  simpa only [iUnion_Ioc_add_zsmul hp a, univ_subset_iff] using
-    iUnion_mono fun n : Int => (Ioc_subset_Icc_self : Ioc (a + n • p) (a + (n + 1) • p) subseteq Icc _ _)
-
-Depends on / 依赖: Ioc_subset_Icc_self, iUnion_Ioc_add_zsmul, iUnion_mono, subseteq, univ_subset_iff
+    iUnion_mono fun n : ℤ => (Ioc_subset_Icc_self : Ioc (a + n • p) (a + (n + 1) • p) ⊆ Icc _ _)
+/-
+**iUnion_Ioc_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ioc_zsmul : ⋃ n : Int, Ioc (n • p) ((n + 1) • p) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iUnion_Ioc_add_zsmul`：iUnion_Ioc_add_zsmul : ⋃ n : Int, Ioc (a + n • p) 
+(a + (n + 1) • p) = univ
 -/
-theorem iUnion_Icc_add_zsmul : ⋃ n : Int, Icc (a + n • p) (a + (n + 1) • p) = univ := by
-  simpa only [iUnion_Ioc_add_zsmul hp a, univ_subset_iff] using
-    iUnion_mono fun n : Int => (Ioc_subset_Icc_self : Ioc (a + n • p) (a + (n + 1) • p) subseteq Icc _ _)
-
-/--
-theorem `iUnion_Ioc_zsmul` / 定理 `iUnion_Ioc_zsmul`
-
-English:
-theorem iUnion_Ioc_zsmul
-  statement: ⋃ n : Int, Ioc (n • p) ((n + 1) • p) = univ
-  proof: by
+theorem iUnion_Ioc_zsmul : ⋃ n : ℤ, Ioc (n • p) ((n + 1) • p) = univ := by
   simpa only [zero_add] using iUnion_Ioc_add_zsmul hp 0
-
-中文:
-定理 iUnion_Ioc_zsmul
-  结论: ⋃ n : 整数, 左开右闭区间 (n • p) ((n + 1) • p) = univ
-  证明: by
-  simpa only [zero_add] using iUnion_Ioc_add_zsmul hp 0
-
-Depends on / 依赖: iUnion_Ioc_add_zsmul, zero_add
+/-
+**iUnion_Ico_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ico_zsmul : ⋃ n : Int, Ico (n • p) ((n + 1) • p) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iUnion_Ico_add_zsmul`：iUnion_Ico_add_zsmul : ⋃ n : Int, Ico (a + n • p) 
+(a + (n + 1) • p) = univ
 -/
-theorem iUnion_Ioc_zsmul : ⋃ n : Int, Ioc (n • p) ((n + 1) • p) = univ := by
-  simpa only [zero_add] using iUnion_Ioc_add_zsmul hp 0
-
-/--
-theorem `iUnion_Ico_zsmul` / 定理 `iUnion_Ico_zsmul`
-
-English:
-theorem iUnion_Ico_zsmul
-  statement: ⋃ n : Int, Ico (n • p) ((n + 1) • p) = univ
-  proof: by
+theorem iUnion_Ico_zsmul : ⋃ n : ℤ, Ico (n • p) ((n + 1) • p) = univ := by
   simpa only [zero_add] using iUnion_Ico_add_zsmul hp 0
-
-中文:
-定理 iUnion_Ico_zsmul
-  结论: ⋃ n : 整数, 左闭右开区间 (n • p) ((n + 1) • p) = univ
-  证明: by
-  simpa only [zero_add] using iUnion_Ico_add_zsmul hp 0
-
-Depends on / 依赖: iUnion_Ico_add_zsmul, zero_add
+/-
+**iUnion_Icc_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Icc_zsmul : ⋃ n : Int, Icc (n • p) ((n + 1) • p) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iUnion_Icc_add_zsmul`：iUnion_Icc_add_zsmul : ⋃ n : Int, Icc (a + n • p) 
+(a + (n + 1) • p) = univ
 -/
-theorem iUnion_Ico_zsmul : ⋃ n : Int, Ico (n • p) ((n + 1) • p) = univ := by
-  simpa only [zero_add] using iUnion_Ico_add_zsmul hp 0
-
-/--
-theorem `iUnion_Icc_zsmul` / 定理 `iUnion_Icc_zsmul`
-
-English:
-theorem iUnion_Icc_zsmul
-  statement: ⋃ n : Int, Icc (n • p) ((n + 1) • p) = univ
-  proof: by
-  simpa only [zero_add] using iUnion_Icc_add_zsmul hp 0
-
-中文:
-定理 iUnion_Icc_zsmul
-  结论: ⋃ n : 整数, 闭区间 (n • p) ((n + 1) • p) = univ
-  证明: by
-  simpa only [zero_add] using iUnion_Icc_add_zsmul hp 0
-
-Depends on / 依赖: iUnion_Icc_add_zsmul, zero_add
--/
-theorem iUnion_Icc_zsmul : ⋃ n : Int, Icc (n • p) ((n + 1) • p) = univ := by
+theorem iUnion_Icc_zsmul : ⋃ n : ℤ, Icc (n • p) ((n + 1) • p) = univ := by
   simpa only [zero_add] using iUnion_Icc_add_zsmul hp 0
 
 end LinearOrderedAddCommGroup
@@ -6897,137 +6090,172 @@ section LinearOrderedRing
 
 variable {α : Type*} [Ring α] [LinearOrder α] [IsStrictOrderedRing α] [Archimedean α] (a : α)
 
-/--
-theorem `iUnion_Ioc_add_intCast` / 定理 `iUnion_Ioc_add_intCast`
-
-English:
-theorem iUnion_Ioc_add_intCast
-  statement: ⋃ n : Int, Ioc (a + n) (a + n + 1) = Set.univ
-  proof: by
+/-
+**iUnion_Ioc_add_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ioc_add_intCast : ⋃ n : Int, Ioc (a + n) (a + n + 1) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zsmul_one`：∀ {R : Type u_1} [inst : AddGroupWithOne R] (n : ℤ), n • 1 = 
+↑n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `iUnion_Ioc_add_zsmul`：iUnion_Ioc_add_zsmul : ⋃ n : Int, Ioc (a + n • p) 
+(a + (n + 1) • p) = univ
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+-/
+theorem iUnion_Ioc_add_intCast : ⋃ n : ℤ, Ioc (a + n) (a + n + 1) = Set.univ := by
   simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
     iUnion_Ioc_add_zsmul zero_lt_one a
-
-中文:
-定理 iUnion_Ioc_add_intCast
-  结论: ⋃ n : 整数, 左开右闭区间 (a + n) (a + n + 1) = 集合.univ
-  证明: by
-  simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
-    iUnion_Ioc_add_zsmul zero_lt_one a
-
-Depends on / 依赖: Int.cast_add, Int.cast_one, add_assoc, cast_add, cast_one, iUnion_Ioc_add_zsmul, zero_lt_one, zsmul_one
+/-
+**iUnion_Ico_add_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ico_add_intCast : ⋃ n : Int, Ico (a + n) (a + n + 1) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zsmul_one`：∀ {R : Type u_1} [inst : AddGroupWithOne R] (n : ℤ), n • 1 = 
+↑n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `iUnion_Ico_add_zsmul`：iUnion_Ico_add_zsmul : ⋃ n : Int, Ico (a + n • p) 
+(a + (n + 1) • p) = univ
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
 -/
-theorem iUnion_Ioc_add_intCast : ⋃ n : Int, Ioc (a + n) (a + n + 1) = Set.univ := by
-  simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
-    iUnion_Ioc_add_zsmul zero_lt_one a
-
-/--
-theorem `iUnion_Ico_add_intCast` / 定理 `iUnion_Ico_add_intCast`
-
-English:
-theorem iUnion_Ico_add_intCast
-  statement: ⋃ n : Int, Ico (a + n) (a + n + 1) = Set.univ
-  proof: by
+theorem iUnion_Ico_add_intCast : ⋃ n : ℤ, Ico (a + n) (a + n + 1) = Set.univ := by
   simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
     iUnion_Ico_add_zsmul zero_lt_one a
-
-中文:
-定理 iUnion_Ico_add_intCast
-  结论: ⋃ n : 整数, 左闭右开区间 (a + n) (a + n + 1) = 集合.univ
-  证明: by
-  simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
-    iUnion_Ico_add_zsmul zero_lt_one a
-
-Depends on / 依赖: Int.cast_add, Int.cast_one, add_assoc, cast_add, cast_one, iUnion_Ico_add_zsmul, zero_lt_one, zsmul_one
+/-
+**iUnion_Icc_add_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Icc_add_intCast : ⋃ n : Int, Icc (a + n) (a + n + 1) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zsmul_one`：∀ {R : Type u_1} [inst : AddGroupWithOne R] (n : ℤ), n • 1 = 
+↑n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `iUnion_Icc_add_zsmul`：iUnion_Icc_add_zsmul : ⋃ n : Int, Icc (a + n • p) 
+(a + (n + 1) • p) = univ
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
 -/
-theorem iUnion_Ico_add_intCast : ⋃ n : Int, Ico (a + n) (a + n + 1) = Set.univ := by
-  simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
-    iUnion_Ico_add_zsmul zero_lt_one a
-
-/--
-theorem `iUnion_Icc_add_intCast` / 定理 `iUnion_Icc_add_intCast`
-
-English:
-theorem iUnion_Icc_add_intCast
-  statement: ⋃ n : Int, Icc (a + n) (a + n + 1) = Set.univ
-  proof: by
-  simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
-    iUnion_Icc_add_zsmul zero_lt_one a
-
-中文:
-定理 iUnion_Icc_add_intCast
-  结论: ⋃ n : 整数, 闭区间 (a + n) (a + n + 1) = 集合.univ
-  证明: by
-  simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
-    iUnion_Icc_add_zsmul zero_lt_one a
-
-Depends on / 依赖: Int.cast_add, Int.cast_one, add_assoc, cast_add, cast_one, iUnion_Icc_add_zsmul, zero_lt_one, zsmul_one
--/
-theorem iUnion_Icc_add_intCast : ⋃ n : Int, Icc (a + n) (a + n + 1) = Set.univ := by
+theorem iUnion_Icc_add_intCast : ⋃ n : ℤ, Icc (a + n) (a + n + 1) = Set.univ := by
   simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
     iUnion_Icc_add_zsmul zero_lt_one a
 
 variable (α)
-
-/--
-theorem `iUnion_Ioc_intCast` / 定理 `iUnion_Ioc_intCast`
-
-English:
-theorem iUnion_Ioc_intCast
-  statement: ⋃ n : Int, Ioc (n : α) (n + 1) = Set.univ
-  proof: by
-  simpa only [zero_add] using iUnion_Ioc_add_intCast (0 : α)
-
-中文:
-定理 iUnion_Ioc_intCast
-  结论: ⋃ n : 整数, 左开右闭区间 (n : α) (n + 1) = 集合.univ
-  证明: by
-  simpa only [zero_add] using iUnion_Ioc_add_intCast (0 : α)
-
-Depends on / 依赖: iUnion_Ioc_add_intCast, zero_add
+/-
+**iUnion_Ioc_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ioc_intCast : ⋃ n : Int, Ioc (n : α) (n + 1) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iUnion_Ioc_add_intCast`：iUnion_Ioc_add_intCast : ⋃ n : Int, Ioc (a + n) 
+(a + n + 1) = Set.univ
 -/
-theorem iUnion_Ioc_intCast : ⋃ n : Int, Ioc (n : α) (n + 1) = Set.univ := by
+theorem iUnion_Ioc_intCast : ⋃ n : ℤ, Ioc (n : α) (n + 1) = Set.univ := by
   simpa only [zero_add] using iUnion_Ioc_add_intCast (0 : α)
-
-/--
-theorem `iUnion_Ico_intCast` / 定理 `iUnion_Ico_intCast`
-
-English:
-theorem iUnion_Ico_intCast
-  statement: ⋃ n : Int, Ico (n : α) (n + 1) = Set.univ
-  proof: by
-  simpa only [zero_add] using iUnion_Ico_add_intCast (0 : α)
-
-中文:
-定理 iUnion_Ico_intCast
-  结论: ⋃ n : 整数, 左闭右开区间 (n : α) (n + 1) = 集合.univ
-  证明: by
-  simpa only [zero_add] using iUnion_Ico_add_intCast (0 : α)
-
-Depends on / 依赖: iUnion_Ico_add_intCast, zero_add
+/-
+**iUnion_Ico_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Ico_intCast : ⋃ n : Int, Ico (n : α) (n + 1) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iUnion_Ico_add_intCast`：iUnion_Ico_add_intCast : ⋃ n : Int, Ico (a + n) 
+(a + n + 1) = Set.univ
 -/
-theorem iUnion_Ico_intCast : ⋃ n : Int, Ico (n : α) (n + 1) = Set.univ := by
+theorem iUnion_Ico_intCast : ⋃ n : ℤ, Ico (n : α) (n + 1) = Set.univ := by
   simpa only [zero_add] using iUnion_Ico_add_intCast (0 : α)
-
-/--
-theorem `iUnion_Icc_intCast` / 定理 `iUnion_Icc_intCast`
-
-English:
-theorem iUnion_Icc_intCast
-  statement: ⋃ n : Int, Icc (n : α) (n + 1) = Set.univ
-  proof: by
-  simpa only [zero_add] using iUnion_Icc_add_intCast (0 : α)
-
-中文:
-定理 iUnion_Icc_intCast
-  结论: ⋃ n : 整数, 闭区间 (n : α) (n + 1) = 集合.univ
-  证明: by
-  simpa only [zero_add] using iUnion_Icc_add_intCast (0 : α)
-
-Depends on / 依赖: iUnion_Icc_add_intCast, zero_add
+/-
+**iUnion_Icc_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iUnion_Icc_intCast : ⋃ n : Int, Icc (n : α) (n + 1) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iUnion_Icc_add_intCast`：iUnion_Icc_add_intCast : ⋃ n : Int, Icc (a + n) 
+(a + n + 1) = Set.univ
 -/
-theorem iUnion_Icc_intCast : ⋃ n : Int, Icc (n : α) (n + 1) = Set.univ := by
+theorem iUnion_Icc_intCast : ⋃ n : ℤ, Icc (n : α) (n + 1) = Set.univ := by
   simpa only [zero_add] using iUnion_Icc_add_intCast (0 : α)
 
 end LinearOrderedRing
 
 end Union
+

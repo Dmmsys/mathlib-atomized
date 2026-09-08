@@ -37,143 +37,138 @@ variable [Module R M₁] [Module S M₁] [IsScalarTower R S M₁] [Module R M₂
 attribute [ext] TensorProduct.ext
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `prodRight` / `prodRight` 的定义
+/-- Tensor products distribute over a product on the right. -/
+/-
+**TensorProduct.prodRight** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：prodRight : M₁ otimes[R] (M₂ × M₃) ≃ₗ[S] (M₁ otimes[R] M₂) × (M₁ otimes[R]
+ M₃)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition prodRight
-  signature: : M₁ otimes[R] (M₂ × M₃) ≃ₗ[S] (M₁ otimes[R] M₂) × (M₁ otimes[R] M₃)
-  body: LinearEquiv.ofLinearMap
-    (TensorProduct.AlgebraTensorModule.lift <|
-      LinearMap.prodMapLinear R M₂ M₃ (M₁ otimes[R] M₂) (M₁ otimes[R] M₃) S ∘ₗ
-        LinearMap.prod (AlgebraTensorModule.mk R S M₁ M₂) (AlgebraTensorModule.mk R S M₁ M₃))
-    (LinearMap.coprod
-      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inl _ _ _)
-      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inr _ _ _))
-    (by ext <;> simp)
-    (by ext <;> simp)
-
-中文:
-定义 prodRight
-  签名: : M₁ otimes[R] (M₂ × M₃) ≃ₗ[S] (M₁ otimes[R] M₂) × (M₁ otimes[R] M₃)
-  定义体: LinearEquiv.ofLinearMap
-    (TensorProduct.AlgebraTensorModule.lift <|
-      LinearMap.prodMapLinear R M₂ M₃ (M₁ otimes[R] M₂) (M₁ otimes[R] M₃) S ∘ₗ
-        LinearMap.prod (AlgebraTensorModule.mk R S M₁ M₂) (AlgebraTensorModule.mk R S M₁ M₃))
-    (LinearMap.coprod
-      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inl _ _ _)
-      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inr _ _ _))
-    (by ext <;> simp)
-    (by ext <;> simp)
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lTensor, AlgebraTensorModule.mk, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.coprod, LinearMap.inl, LinearMap.inr, LinearMap.prod, LinearMap.prodMapLinear, TensorProduct, TensorProduct.AlgebraTensorModule.lift, coprod, lTensor, ofLinearMap, otimes, prodMapLinear
+--- 原说明 ---
+Tensor products distribute over a product on the right.
 -/
-def prodRight : M₁ otimes[R] (M₂ × M₃) ≃ₗ[S] (M₁ otimes[R] M₂) × (M₁ otimes[R] M₃) :=
+def prodRight : M₁ ⊗[R] (M₂ × M₃) ≃ₗ[S] (M₁ ⊗[R] M₂) × (M₁ ⊗[R] M₃) :=
   LinearEquiv.ofLinearMap
     (TensorProduct.AlgebraTensorModule.lift <|
-      LinearMap.prodMapLinear R M₂ M₃ (M₁ otimes[R] M₂) (M₁ otimes[R] M₃) S ∘ₗ
+      LinearMap.prodMapLinear R M₂ M₃ (M₁ ⊗[R] M₂) (M₁ ⊗[R] M₃) S ∘ₗ
         LinearMap.prod (AlgebraTensorModule.mk R S M₁ M₂) (AlgebraTensorModule.mk R S M₁ M₃))
     (LinearMap.coprod
       (AlgebraTensorModule.lTensor _ _ <| LinearMap.inl _ _ _)
       (AlgebraTensorModule.lTensor _ _ <| LinearMap.inr _ _ _))
     (by ext <;> simp)
     (by ext <;> simp)
-
-/--
-theorem `prodRight_tmul` / 定理 `prodRight_tmul`
-
-English:
-theorem prodRight_tmul
-  given: (m₁ : M₁) (m : M₂ × M₃)
-  proof: rfl
-
-中文:
-定理 prodRight_tmul
-  条件: (m₁ : M₁) (m : M₂ × M₃)
-  证明: rfl
+/-
+**TensorProduct.prodRight_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：∀ (R : Type u_1) (S : Type u_2) (M₁ : Type u_3) (M₂ : Type u_4) (M₃ : Type
+ u_5) [inst : CommSemiring R]   [inst_1 : Semiring S] [inst_2 : AddCommMonoid M₁
+] [inst_3 : AddCommMonoid M₂] [inst_4 : AddCommMonoid M₃]   [inst_5 : Algebra R 
+S] [inst_6 : _root_.Module R M₁] [inst_7 : _root_.Module S M₁] [inst_8 : IsScala
+rTower R S M₁]   [inst_9 : _root_.Module R M₂] [inst_10 : _root_.Module R M₃] (m
+₁ : M₁) (m : M₂ × M₃),   (TensorProduct.prodRight R S M₁ M₂ M₃) (m₁ ⊗ₜ[R] m) = (
+m₁ ⊗ₜ[R] m.1, m₁ ⊗ₜ[R] m.2)
+参数：R : Type u_1；S : Type u_2；M₁ : Type u_3；M₂ : Type u_4；M₃ : Type u_5；m₁ : M₁；m
+ : M₂ × M₃；TensorProduct.prodRight R S M₁ M₂ M₃；m₁ ⊗ₜ[R] m；m₁ ⊗ₜ[R] m.1, m₁ ⊗ₜ[R
+] m.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 @[simp] theorem prodRight_tmul (m₁ : M₁) (m : M₂ × M₃) :
-    prodRight R S M₁ M₂ M₃ (m₁ otimesₜ m) = (m₁ otimesₜ m.1, m₁ otimesₜ m.2) :=
+    prodRight R S M₁ M₂ M₃ (m₁ ⊗ₜ m) = (m₁ ⊗ₜ m.1, m₁ ⊗ₜ m.2) :=
   rfl
-
-/--
-theorem `prodRight_symm_tmul` / 定理 `prodRight_symm_tmul`
-
-English:
-theorem prodRight_symm_tmul
-  given: (m₁ : M₁) (m₂ : M₂) (m₃ : M₃)
-  proof: (LinearEquiv.symm_apply_eq _).mpr rfl
-
-中文:
-定理 prodRight_symm_tmul
-  条件: (m₁ : M₁) (m₂ : M₂) (m₃ : M₃)
-  证明: (LinearEquiv.symm_apply_eq _).mpr rfl
+/-
+**TensorProduct.prodRight_symm_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：∀ (R : Type u_1) (S : Type u_2) (M₁ : Type u_3) (M₂ : Type u_4) (M₃ : Type
+ u_5) [inst : CommSemiring R]   [inst_1 : Semiring S] [inst_2 : AddCommMonoid M₁
+] [inst_3 : AddCommMonoid M₂] [inst_4 : AddCommMonoid M₃]   [inst_5 : Algebra R 
+S] [inst_6 : _root_.Module R M₁] [inst_7 : _root_.Module S M₁] [inst_8 : IsScala
+rTower R S M₁]   [inst_9 : _root_.Module R M₂] [inst_10 : _root_.Module R M₃] (m
+₁ : M₁) (m₂ : M₂) (m₃ : M₃),   (TensorProduct.prodRight R S M₁ M₂ M₃).symm (m₁ ⊗
+ₜ[R] m₂, m₁ ⊗ₜ[R] m₃) = m₁ ⊗ₜ[R] (m₂, m₃)
+参数：R : Type u_1；S : Type u_2；M₁ : Type u_3；M₂ : Type u_4；M₃ : Type u_5；m₁ : M₁；m
+₂ : M₂；m₃ : M₃；TensorProduct.prodRight R S M₁ M₂ M₃；m₁ ⊗ₜ[R] m₂, m₁ ⊗ₜ[R] m₃；m₂,
+ m₃。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearEquiv.symm_apply_eq`：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
 -/
 @[simp] theorem prodRight_symm_tmul (m₁ : M₁) (m₂ : M₂) (m₃ : M₃) :
-    (prodRight R S M₁ M₂ M₃).symm (m₁ otimesₜ m₂, m₁ otimesₜ m₃) = (m₁ otimesₜ (m₂, m₃)) :=
+    (prodRight R S M₁ M₂ M₃).symm (m₁ ⊗ₜ m₂, m₁ ⊗ₜ m₃) = (m₁ ⊗ₜ (m₂, m₃)) :=
   (LinearEquiv.symm_apply_eq _).mpr rfl
 
 variable [Module S M₂] [IsScalarTower R S M₂]
 
-/--
-Definition of `prodLeft` / `prodLeft` 的定义
+/-- Tensor products distribute over a product on the left . -/
+/-
+**TensorProduct.prodLeft** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：prodLeft : (M₁ × M₂) otimes[R] M₃ ≃ₗ[S] (M₁ otimes[R] M₃) × (M₂ otimes[R] 
+M₃)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 
-English:
-definition prodLeft
-  signature: : (M₁ × M₂) otimes[R] M₃ ≃ₗ[S] (M₁ otimes[R] M₃) × (M₂ otimes[R] M₃)
-  body: AddEquiv.toLinearEquiv (TensorProduct.comm _ _ _ ≪≫ₗ
-      TensorProduct.prodRight R R _ _ _ ≪≫ₗ
-      (TensorProduct.comm R _ _).prodCongr (TensorProduct.comm R _ _)).toAddEquiv
-    fun c x => x.induction_on (by simp) (by simp [TensorProduct.smul_tmul']) (by simp_all)
-
-中文:
-定义 prodLeft
-  签名: : (M₁ × M₂) otimes[R] M₃ ≃ₗ[S] (M₁ otimes[R] M₃) × (M₂ otimes[R] M₃)
-  定义体: AddEquiv.toLinearEquiv (TensorProduct.comm _ _ _ ≪≫ₗ
-      TensorProduct.prodRight R R _ _ _ ≪≫ₗ
-      (TensorProduct.comm R _ _).prodCongr (TensorProduct.comm R _ _)).toAddEquiv
-    fun c x => x.induction_on (by simp) (by simp [TensorProduct.smul_tmul']) (by simp_all)
-
-Depends on / 依赖: AddEquiv, AddEquiv.toLinearEquiv, TensorProduct, TensorProduct.comm, TensorProduct.prodRight, TensorProduct.smul_tmul, induction_on, prodCongr, prodRight, smul_tmul, toAddEquiv, toLinearEquiv, x.induction_on
+--- 原说明 ---
+Tensor products distribute over a product on the left .
 -/
-def prodLeft : (M₁ × M₂) otimes[R] M₃ ≃ₗ[S] (M₁ otimes[R] M₃) × (M₂ otimes[R] M₃) :=
+def prodLeft : (M₁ × M₂) ⊗[R] M₃ ≃ₗ[S] (M₁ ⊗[R] M₃) × (M₂ ⊗[R] M₃) :=
   AddEquiv.toLinearEquiv (TensorProduct.comm _ _ _ ≪≫ₗ
       TensorProduct.prodRight R R _ _ _ ≪≫ₗ
       (TensorProduct.comm R _ _).prodCongr (TensorProduct.comm R _ _)).toAddEquiv
-    fun c x => x.induction_on (by simp) (by simp [TensorProduct.smul_tmul']) (by simp_all)
-
-/--
-theorem `prodLeft_tmul` / 定理 `prodLeft_tmul`
-
-English:
-theorem prodLeft_tmul
-  given: (m₁ : M₁) (m₂ : M₂) (m₃ : M₃)
-  proof: rfl
-
-中文:
-定理 prodLeft_tmul
-  条件: (m₁ : M₁) (m₂ : M₂) (m₃ : M₃)
-  证明: rfl
+    fun c x ↦ x.induction_on (by simp) (by simp [TensorProduct.smul_tmul']) (by simp_all)
+/-
+**TensorProduct.prodLeft_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：∀ (R : Type u_1) (S : Type u_2) (M₁ : Type u_3) (M₂ : Type u_4) (M₃ : Type
+ u_5) [inst : CommSemiring R]   [inst_1 : Semiring S] [inst_2 : AddCommMonoid M₁
+] [inst_3 : AddCommMonoid M₂] [inst_4 : AddCommMonoid M₃]   [inst_5 : Algebra R 
+S] [inst_6 : _root_.Module R M₁] [inst_7 : _root_.Module S M₁] [inst_8 : IsScala
+rTower R S M₁]   [inst_9 : _root_.Module R M₂] [inst_10 : _root_.Module R M₃] [i
+nst_11 : _root_.Module S M₂]   [inst_12 : IsScalarTower R S M₂] (m₁ : M₁) (m₂ : 
+M₂) (m₃ : M₃),   (TensorProduct.prodLeft R S M₁ M₂ M₃) ((m₁, m₂) ⊗ₜ[R] m₃) = (m₁
+ ⊗ₜ[R] m₃, m₂ ⊗ₜ[R] m₃)
+参数：R : Type u_1；S : Type u_2；M₁ : Type u_3；M₂ : Type u_4；M₃ : Type u_5；m₁ : M₁；m
+₂ : M₂；m₃ : M₃；TensorProduct.prodLeft R S M₁ M₂ M₃；(m₁, m₂) ⊗ₜ[R] m₃；m₁ ⊗ₜ[R] m₃
+, m₂ ⊗ₜ[R] m₃。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 @[simp] theorem prodLeft_tmul (m₁ : M₁) (m₂ : M₂) (m₃ : M₃) :
-    prodLeft R S M₁ M₂ M₃ ((m₁, m₂) otimesₜ m₃) = (m₁ otimesₜ m₃, m₂ otimesₜ m₃) :=
+    prodLeft R S M₁ M₂ M₃ ((m₁, m₂) ⊗ₜ m₃) = (m₁ ⊗ₜ m₃, m₂ ⊗ₜ m₃) :=
   rfl
-
-/--
-theorem `prodLeft_symm_tmul` / 定理 `prodLeft_symm_tmul`
-
-English:
-theorem prodLeft_symm_tmul
-  given: (m₁ : M₁) (m₂ : M₂) (m₃ : M₃)
-  proof: (LinearEquiv.symm_apply_eq _).mpr rfl
-
-中文:
-定理 prodLeft_symm_tmul
-  条件: (m₁ : M₁) (m₂ : M₂) (m₃ : M₃)
-  证明: (LinearEquiv.symm_apply_eq _).mpr rfl
+/-
+**TensorProduct.prodLeft_symm_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：∀ (R : Type u_1) (S : Type u_2) (M₁ : Type u_3) (M₂ : Type u_4) (M₃ : Type
+ u_5) [inst : CommSemiring R]   [inst_1 : Semiring S] [inst_2 : AddCommMonoid M₁
+] [inst_3 : AddCommMonoid M₂] [inst_4 : AddCommMonoid M₃]   [inst_5 : Algebra R 
+S] [inst_6 : _root_.Module R M₁] [inst_7 : _root_.Module S M₁] [inst_8 : IsScala
+rTower R S M₁]   [inst_9 : _root_.Module R M₂] [inst_10 : _root_.Module R M₃] [i
+nst_11 : _root_.Module S M₂]   [inst_12 : IsScalarTower R S M₂] (m₁ : M₁) (m₂ : 
+M₂) (m₃ : M₃),   (TensorProduct.prodLeft R S M₁ M₂ M₃).symm (m₁ ⊗ₜ[R] m₃, m₂ ⊗ₜ[
+R] m₃) = (m₁, m₂) ⊗ₜ[R] m₃
+参数：R : Type u_1；S : Type u_2；M₁ : Type u_3；M₂ : Type u_4；M₃ : Type u_5；m₁ : M₁；m
+₂ : M₂；m₃ : M₃；TensorProduct.prodLeft R S M₁ M₂ M₃；m₁ ⊗ₜ[R] m₃, m₂ ⊗ₜ[R] m₃；m₁, 
+m₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearEquiv.symm_apply_eq`：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
 -/
 @[simp] theorem prodLeft_symm_tmul (m₁ : M₁) (m₂ : M₂) (m₃ : M₃) :
-    (prodLeft R S M₁ M₂ M₃).symm (m₁ otimesₜ m₃, m₂ otimesₜ m₃) = ((m₁, m₂) otimesₜ m₃) :=
+    (prodLeft R S M₁ M₂ M₃).symm (m₁ ⊗ₜ m₃, m₂ ⊗ₜ m₃) = ((m₁, m₂) ⊗ₜ m₃) :=
   (LinearEquiv.symm_apply_eq _).mpr rfl
 
 end TensorProduct
+

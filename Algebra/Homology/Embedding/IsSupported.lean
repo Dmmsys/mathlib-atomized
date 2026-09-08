@@ -38,116 +38,84 @@ section
 variable {C : Type*} [Category* C] [HasZeroMorphisms C]
   (K L : HomologicalComplex C c') (e' : K ≅ L) (φ : K ⟶ L) (e : c.Embedding c')
 
-/--
-Definition of `IsStrictlySupported` / `IsStrictlySupported` 的定义
+/-- If `K : HomologicalComplex C c'`, then `K.IsStrictlySupported e` holds for
+an embedding `e : c.Embedding c'` of complex shapes if `K.X i'` is zero
+whenever `i'` is not of the form `e.f i` for some `i`. -/
+/-
+**HomologicalComplex.IsStrictlySupported** 是 Mathlib 中的一个归纳类型，位于命名空间 `Homologica
+lComplex`。
+形式化陈述：{ι : Type u_1} →   {ι' : Type u_2} →     {c : ComplexShape ι} →       {c' 
+: ComplexShape ι'} →         {C : Type u_3} →           [inst : CategoryTheory.C
+ategory.{v_1, u_3} C] →             [inst_1 : CategoryTheory.Limits.HasZeroMorph
+isms C] → HomologicalComplex C c' → c.Embedding c' → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStrictlySupported
-  parameters: : Prop where
-  axioms and operations (1):
-    - isZero((i' : ι') (hi' : forall i, e.f i != i')) : IsZero (K.X i')
-
-中文:
-类 是StrictlySupported
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isZero((i' : ι') (hi' : 对任意 i, e.f i != i')) : 是零 (K.X i')
+--- 原说明 ---
+If `K : HomologicalComplex C c'`, then `K.IsStrictlySupported e` holds for
+an embedding `e : c.Embedding c'` of complex shapes if `K.X i'` is zero
+whenever `i'` is not of the form `e.f i` for some `i`.
 -/
 class IsStrictlySupported : Prop where
-  isZero (i' : ι') (hi' : forall i, e.f i != i') : IsZero (K.X i')
-
-/--
-lemma `isZero_X_of_isStrictlySupported` / 引理 `isZero_X_of_isStrictlySupported`
-
-English:
-lemma isZero_X_of_isStrictlySupported
-  statement: [K.IsStrictlySupported e]
-  proof: IsStrictlySupported.isZero i' hi'
-
-include e' in
-
-中文:
-引理 isZero_X_of_isStrictlySupported
-  结论: [K.是StrictlySupported e]
-  证明: IsStrictlySupported.isZero i' hi'
-
-include e' in
-
-Depends on / 依赖: IsStrictlySupported, IsStrictlySupported.isZero, isZero
+  isZero (i' : ι') (hi' : ∀ i, e.f i ≠ i') : IsZero (K.X i')
+/-
+**HomologicalComplex.isZero_X_of_isStrictlySupported** 是 Mathlib 中的一个引理，位于命名空间 `
+HomologicalComplex`。
+形式化陈述：isZero_X_of_isStrictlySupported [K.IsStrictlySupported e] (i' : ι') (hi' :
+ forall i, e.f i != i') : IsZero (K.X i')
+参数：i' : ι'；hi' : forall i, e.f i != i'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.IsStrictlySupported.isZero`：∀ {ι : Type u_1} {ι' : Ty
+pe u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   {inst : Cat
+egoryTheory.Category.{v_1, u_3} C} …
 -/
 lemma isZero_X_of_isStrictlySupported [K.IsStrictlySupported e]
-    (i' : ι') (hi' : forall i, e.f i != i') :
+    (i' : ι') (hi' : ∀ i, e.f i ≠ i') :
     IsZero (K.X i') :=
   IsStrictlySupported.isZero i' hi'
 
 include e' in
 variable {K L} in
-/--
-lemma `isStrictlySupported_of_iso` / 引理 `isStrictlySupported_of_iso`
-
-English:
-lemma isStrictlySupported_of_iso
-  given: [K.IsStrictlySupported e]
-  statement: L.IsStrictlySupported e where
-  proof: (K.isZero_X_of_isStrictlySupported e i' hi').of_iso
-    ((eval _ _ i').mapIso e'.symm)
-
-@[simp]
-
-中文:
-引理 isStrictlySupported_of_iso
-  条件: [K.是StrictlySupported e]
-  结论: L.是StrictlySupported e where
-  证明: (K.isZero_X_of_isStrictlySupported e i' hi').of_iso
-    ((eval _ _ i').mapIso e'.symm)
-
-@[simp]
-
-Depends on / 依赖: K.isZero_X_of_isStrictlySupported, isZero_X_of_isStrictlySupported, of_iso
+/-
+**HomologicalComplex.isStrictlySupported_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `Homol
+ogicalComplex`。
+形式化陈述：isStrictlySupported_of_iso [K.IsStrictlySupported e] : L.IsStrictlySupport
+ed e where isZero i' hi'
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.of_iso`：of_iso (hY : IsZero Y) (e : X ≅ Y) 
+: IsZero X
+· 使用引理 `HomologicalComplex.isZero_X_of_isStrictlySupported`：isZero_X_of_isStrict
+lySupported [K.IsStrictlySupported e] (i' : ι') (hi' : forall i, e.f i != i') : 
+IsZero (K.X i')
 -/
 lemma isStrictlySupported_of_iso [K.IsStrictlySupported e] : L.IsStrictlySupported e where
   isZero i' hi' := (K.isZero_X_of_isStrictlySupported e i' hi').of_iso
     ((eval _ _ i').mapIso e'.symm)
 
 @[simp]
-/--
-lemma `isStrictlySupported_op_iff` / 引理 `isStrictlySupported_op_iff`
-
-English:
-lemma isStrictlySupported_op_iff
-  proof: ⟨(fun _ => ⟨fun i' hi' => (K.op.isZero_X_of_isStrictlySupported e.op i' hi').unop⟩),
-    (fun _ => ⟨fun i' hi' => (K.isZero_X_of_isStrictlySupported e i' hi').op⟩)⟩
-
-中文:
-引理 isStrictlySupported_op_iff
-  证明: ⟨(fun _ => ⟨fun i' hi' => (K.op.isZero_X_of_isStrictlySupported e.op i' hi').unop⟩),
-    (fun _ => ⟨fun i' hi' => (K.isZero_X_of_isStrictlySupported e i' hi').op⟩)⟩
-
-Depends on / 依赖: K.isZero_X_of_isStrictlySupported, K.op.isZero_X_of_isStrictlySupported, e.op, isZero_X_of_isStrictlySupported
+/-
+**HomologicalComplex.isStrictlySupported_op_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homol
+ogicalComplex`。
+形式化陈述：isStrictlySupported_op_iff : K.op.IsStrictlySupported e.op ↔ K.IsStrictlyS
+upported e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.unop`：unop {X : Cᵒᵖ} (h : IsZero X) : IsZer
+o (Opposite.unop X)
+· 使用引理 `HomologicalComplex.isZero_X_of_isStrictlySupported`：isZero_X_of_isStrict
+lySupported [K.IsStrictlySupported e] (i' : ι') (hi' : forall i, e.f i != i') : 
+IsZero (K.X i')
+· 使用定理 `CategoryTheory.Limits.IsZero.op`：op (h : IsZero X) : IsZero (Opposite.op
+ X)
 -/
 lemma isStrictlySupported_op_iff :
     K.op.IsStrictlySupported e.op ↔ K.IsStrictlySupported e :=
-  ⟨(fun _ => ⟨fun i' hi' => (K.op.isZero_X_of_isStrictlySupported e.op i' hi').unop⟩),
-    (fun _ => ⟨fun i' hi' => (K.isZero_X_of_isStrictlySupported e i' hi').op⟩)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [K.IsStrictlySupported
-  signature: e] : K.op.IsStrictlySupported e.op
-  body: by
-  rw [isStrictlySupported_op_iff]
-  infer_instance
-
-中文:
-实例 [K.是StrictlySupported
-  签名: e] : K.op.是StrictlySupported e.op
-  定义体: by
-  rw [isStrictlySupported_op_iff]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isStrictlySupported_op_iff
+  ⟨(fun _ ↦ ⟨fun i' hi' ↦ (K.op.isZero_X_of_isStrictlySupported e.op i' hi').unop⟩),
+    (fun _ ↦ ⟨fun i' hi' ↦ (K.isZero_X_of_isStrictlySupported e i' hi').op⟩)⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [K.IsStrictlySupported e] : K.op.IsStrictlySupported e.op := by
   rw [isStrictlySupported_op_iff]
@@ -157,115 +125,90 @@ instance [K.IsStrictlySupported e] : K.op.IsStrictlySupported e.op := by
 an embedding `e : c.Embedding c'` of complex shapes if `K` is exact at `i'`
 whenever `i'` is not of the form `e.f i` for some `i`. -/
 @[mk_iff]
-/--
-Definition of `IsSupported` / `IsSupported` 的定义
+/-
+**HomologicalComplex.IsSupported** 是 Mathlib 中的一个归纳类型，位于命名空间 `HomologicalComplex
+`。
+形式化陈述：{ι : Type u_1} →   {ι' : Type u_2} →     {c : ComplexShape ι} →       {c' 
+: ComplexShape ι'} →         {C : Type u_3} →           [inst : CategoryTheory.C
+ategory.{v_1, u_3} C] →             [inst_1 : CategoryTheory.Limits.HasZeroMorph
+isms C] → HomologicalComplex C c' → c.Embedding c' → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSupported
-  parameters: : Prop where
-  axioms and operations (1):
-    - exactAt((i' : ι') (hi' : forall i, e.f i != i')) : K.ExactAt i'
-
-中文:
-类 是Supported
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - exactAt((i' : ι') (hi' : 对任意 i, e.f i != i')) : K.ExactAt i'
+--- 原说明 ---
+If `K : HomologicalComplex C c'`, then `K.IsStrictlySupported e` holds for
+an embedding `e : c.Embedding c'` of complex shapes if `K` is exact at `i'`
+whenever `i'` is not of the form `e.f i` for some `i`.
 -/
 class IsSupported : Prop where
-  exactAt (i' : ι') (hi' : forall i, e.f i != i') : K.ExactAt i'
-
-/--
-lemma `exactAt_of_isSupported` / 引理 `exactAt_of_isSupported`
-
-English:
-lemma exactAt_of_isSupported
-  given: [K.IsSupported e] (i' : ι') (hi' : forall i, e.f i != i')
-  proof: IsSupported.exactAt i' hi'
-
-include e' in
-
-中文:
-引理 exactAt_of_isSupported
-  条件: [K.是Supported e] (i' : ι') (hi' : 对任意 i, e.f i != i')
-  证明: IsSupported.exactAt i' hi'
-
-include e' in
-
-Depends on / 依赖: IsSupported, IsSupported.exactAt, exactAt
+  exactAt (i' : ι') (hi' : ∀ i, e.f i ≠ i') : K.ExactAt i'
+/-
+**HomologicalComplex.exactAt_of_isSupported** 是 Mathlib 中的一个引理，位于命名空间 `Homologic
+alComplex`。
+形式化陈述：exactAt_of_isSupported [K.IsSupported e] (i' : ι') (hi' : forall i, e.f i 
+!= i') : K.ExactAt i'
+参数：i' : ι'；hi' : forall i, e.f i != i'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.IsSupported.exactAt`：∀ {ι : Type u_1} {ι' : Type u_2}
+ {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   {inst : CategoryTh
+eory.Category.{v_1, u_3} C} …
 -/
-lemma exactAt_of_isSupported [K.IsSupported e] (i' : ι') (hi' : forall i, e.f i != i') :
+lemma exactAt_of_isSupported [K.IsSupported e] (i' : ι') (hi' : ∀ i, e.f i ≠ i') :
     K.ExactAt i' :=
   IsSupported.exactAt i' hi'
 
 include e' in
 variable {K L} in
-/--
-lemma `isSupported_of_iso` / 引理 `isSupported_of_iso`
-
-English:
-lemma isSupported_of_iso
-  given: [K.IsSupported e]
-  statement: L.IsSupported e where
-  proof: (K.exactAt_of_isSupported e i' hi').of_iso e'
-
-中文:
-引理 isSupported_of_iso
-  条件: [K.是Supported e]
-  结论: L.是Supported e where
-  证明: (K.exactAt_of_isSupported e i' hi').of_iso e'
-
-Depends on / 依赖: K.exactAt_of_isSupported, exactAt_of_isSupported, of_iso
+/-
+**HomologicalComplex.isSupported_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalCo
+mplex`。
+形式化陈述：isSupported_of_iso [K.IsSupported e] : L.IsSupported e where exactAt i' hi
+'
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.ExactAt.of_iso`：∀ {C : Type u_1} [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C]   
+{ι : Type u_2} {c : Com…
+· 使用引理 `HomologicalComplex.exactAt_of_isSupported`：exactAt_of_isSupported [K.IsS
+upported e] (i' : ι') (hi' : forall i, e.f i != i') : K.ExactAt i'
 -/
 lemma isSupported_of_iso [K.IsSupported e] : L.IsSupported e where
   exactAt i' hi' :=
     (K.exactAt_of_isSupported e i' hi').of_iso e'
 
 variable {K L} in
-/--
-lemma `isSupported_iff_of_quasiIso` / 引理 `isSupported_iff_of_quasiIso`
-
-English:
-lemma isSupported_iff_of_quasiIso
-  statement: [forall i, K.HasHomology i] [forall i, L.HasHomology i]
-  proof: by
-  simp [isSupported_iff, exactAt_iff_of_quasiIsoAt φ]
-
-中文:
-引理 isSupported_iff_of_quasiIso
-  结论: [对任意 i, K.有同调 i] [对任意 i, L.有同调 i]
-  证明: by
-  simp [isSupported_iff, exactAt_iff_of_quasiIsoAt φ]
-
-Depends on / 依赖: exactAt_iff_of_quasiIsoAt, isSupported_iff
+/-
+**HomologicalComplex.isSupported_iff_of_quasiIso** 是 Mathlib 中的一个引理，位于命名空间 `Homo
+logicalComplex`。
+形式化陈述：isSupported_iff_of_quasiIso [forall i, K.HasHomology i] [forall i, L.HasHo
+mology i] [QuasiIso φ] : K.IsSupported e ↔ L.IsSupported e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `exactAt_iff_of_quasiIsoAt`：exactAt_iff_of_quasiIsoAt (f : K ⟶ L) (i : ι)
+ [K.HasHomology i] [L.HasHomology i] [QuasiIsoAt f i] : K.ExactAt i ↔ L.ExactAt 
+i
+· 使用定理 `QuasiIso.quasiIsoAt`：∀ {ι : Type u_1} {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C} {c : 
+ComplexSh…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma isSupported_iff_of_quasiIso [forall i, K.HasHomology i] [forall i, L.HasHomology i]
+lemma isSupported_iff_of_quasiIso [∀ i, K.HasHomology i] [∀ i, L.HasHomology i]
     [QuasiIso φ] :
     K.IsSupported e ↔ L.IsSupported e := by
   simp [isSupported_iff, exactAt_iff_of_quasiIsoAt φ]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [K.IsStrictlySupported
-  signature: e] : K.IsSupported e where
-  body: by
-    rw [exactAt_iff]
-    exact ShortComplex.exact_of_isZero_X₂ _ (K.isZero_X_of_isStrictlySupported e i' hi')
-
-@[simp]
-
-中文:
-实例 [K.是StrictlySupported
-  签名: e] : K.是Supported e where
-  定义体: by
-    rw [exactAt_iff]
-    exact ShortComplex.exact_of_isZero_X₂ _ (K.isZero_X_of_isStrictlySupported e i' hi')
-
-@[simp]
-
-Depends on / 依赖: K.isZero_X_of_isStrictlySupported, ShortComplex, ShortComplex.exact_of_isZero_X, exactAt_iff, isZero_X_of_isStrictlySupported
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [K.IsStrictlySupported e] : K.IsSupported e where
   exactAt i' hi' := by
@@ -273,178 +216,157 @@ instance [K.IsStrictlySupported e] : K.IsSupported e where
     exact ShortComplex.exact_of_isZero_X₂ _ (K.isZero_X_of_isStrictlySupported e i' hi')
 
 @[simp]
-/--
-lemma `isSupported_op_iff` / 引理 `isSupported_op_iff`
-
-English:
-lemma isSupported_op_iff
-  proof: ⟨fun _ => ⟨fun i' hi' => (K.op.exactAt_of_isSupported e.op i' hi').unop⟩,
-    fun _ => ⟨fun i' hi' => (K.exactAt_of_isSupported e i' hi').op⟩⟩
-
-中文:
-引理 isSupported_op_iff
-  证明: ⟨fun _ => ⟨fun i' hi' => (K.op.exactAt_of_isSupported e.op i' hi').unop⟩,
-    fun _ => ⟨fun i' hi' => (K.exactAt_of_isSupported e i' hi').op⟩⟩
-
-Depends on / 依赖: K.exactAt_of_isSupported, K.op.exactAt_of_isSupported, e.op, exactAt_of_isSupported
+/-
+**HomologicalComplex.isSupported_op_iff** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalCo
+mplex`。
+形式化陈述：isSupported_op_iff : K.op.IsSupported e.op ↔ K.IsSupported e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.ExactAt.unop`：∀ {ι : Type u_1} {V : Type u_2} [inst :
+ CategoryTheory.Category.{v_1, u_2} V] {c : ComplexShape ι}   [inst_1 : Category
+Theory.Limits.HasZero…
+· 使用引理 `HomologicalComplex.exactAt_of_isSupported`：exactAt_of_isSupported [K.IsS
+upported e] (i' : ι') (hi' : forall i, e.f i != i') : K.ExactAt i'
+· 使用定理 `HomologicalComplex.ExactAt.op`：∀ {ι : Type u_1} {V : Type u_2} [inst : C
+ategoryTheory.Category.{v_1, u_2} V] {c : ComplexShape ι}   [inst_1 : CategoryTh
+eory.Limits.HasZero…
 -/
 lemma isSupported_op_iff :
     K.op.IsSupported e.op ↔ K.IsSupported e :=
-  ⟨fun _ => ⟨fun i' hi' => (K.op.exactAt_of_isSupported e.op i' hi').unop⟩,
-    fun _ => ⟨fun i' hi' => (K.exactAt_of_isSupported e i' hi').op⟩⟩
+  ⟨fun _ ↦ ⟨fun i' hi' ↦ (K.op.exactAt_of_isSupported e.op i' hi').unop⟩,
+    fun _ ↦ ⟨fun i' hi' ↦ (K.exactAt_of_isSupported e i' hi').op⟩⟩
 
-/--
-Definition of `IsStrictlySupportedOutside` / `IsStrictlySupportedOutside` 的定义
+/-- If `K : HomologicalComplex C c'`, then `K.IsStrictlySupportedOutside e` holds for
+an embedding `e : c.Embedding c'` of complex shapes if `K.X (e.f i)` is zero for all `i`. -/
+/-
+**HomologicalComplex.IsStrictlySupportedOutside** 是 Mathlib 中的一个归纳类型，位于命名空间 `Hom
+ologicalComplex`。
+形式化陈述：{ι : Type u_1} →   {ι' : Type u_2} →     {c : ComplexShape ι} →       {c' 
+: ComplexShape ι'} →         {C : Type u_3} →           [inst : CategoryTheory.C
+ategory.{v_1, u_3} C] →             [inst_1 : CategoryTheory.Limits.HasZeroMorph
+isms C] → HomologicalComplex C c' → c.Embedding c' → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsStrictlySupportedOutside
-  parameters: : Prop where
-  axioms and operations (1):
-    - isZero((i : ι)) : IsZero (K.X (e.f i))
-
-中文:
-结构 是StrictlySupportedOutside
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isZero((i : ι)) : 是零 (K.X (e.f i))
+--- 原说明 ---
+If `K : HomologicalComplex C c'`, then `K.IsStrictlySupportedOutside e` holds fo
+r
+an embedding `e : c.Embedding c'` of complex shapes if `K.X (e.f i)` is zero for
+ all `i`.
 -/
 structure IsStrictlySupportedOutside : Prop where
   isZero (i : ι) : IsZero (K.X (e.f i))
 
 @[simp]
-/--
-lemma `isStrictlySupportedOutside_op_iff` / 引理 `isStrictlySupportedOutside_op_iff`
-
-English:
-lemma isStrictlySupportedOutside_op_iff
-  proof: ⟨fun h => ⟨fun i => (h.isZero i).unop⟩, fun h => ⟨fun i => (h.isZero i).op⟩⟩
-
-中文:
-引理 isStrictlySupportedOutside_op_iff
-  证明: ⟨fun h => ⟨fun i => (h.isZero i).unop⟩, fun h => ⟨fun i => (h.isZero i).op⟩⟩
-
-Depends on / 依赖: h.isZero, isZero
+/-
+**HomologicalComplex.isStrictlySupportedOutside_op_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `HomologicalComplex`。
+形式化陈述：isStrictlySupportedOutside_op_iff : K.op.IsStrictlySupportedOutside e.op ↔
+ K.IsStrictlySupportedOutside e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.unop`：unop {X : Cᵒᵖ} (h : IsZero X) : IsZer
+o (Opposite.unop X)
+· 使用定理 `HomologicalComplex.IsStrictlySupportedOutside.isZero`：∀ {ι : Type u_1} {
+ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   [ins
+t : CategoryTheory.Category.{v_1, u_3} C] …
+· 使用定理 `CategoryTheory.Limits.IsZero.op`：op (h : IsZero X) : IsZero (Opposite.op
+ X)
 -/
 lemma isStrictlySupportedOutside_op_iff :
     K.op.IsStrictlySupportedOutside e.op ↔ K.IsStrictlySupportedOutside e :=
-  ⟨fun h => ⟨fun i => (h.isZero i).unop⟩, fun h => ⟨fun i => (h.isZero i).op⟩⟩
+  ⟨fun h ↦ ⟨fun i ↦ (h.isZero i).unop⟩, fun h ↦ ⟨fun i ↦ (h.isZero i).op⟩⟩
 
-/--
-Definition of `IsSupportedOutside` / `IsSupportedOutside` 的定义
+/-- If `K : HomologicalComplex C c'`, then `K.IsSupportedOutside e` holds for
+an embedding `e : c.Embedding c'` of complex shapes if `K` is exact at `e.f i` for all `i`. -/
+/-
+**HomologicalComplex.IsSupportedOutside** 是 Mathlib 中的一个归纳类型，位于命名空间 `Homological
+Complex`。
+形式化陈述：{ι : Type u_1} →   {ι' : Type u_2} →     {c : ComplexShape ι} →       {c' 
+: ComplexShape ι'} →         {C : Type u_3} →           [inst : CategoryTheory.C
+ategory.{v_1, u_3} C] →             [inst_1 : CategoryTheory.Limits.HasZeroMorph
+isms C] → HomologicalComplex C c' → c.Embedding c' → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSupportedOutside
-  parameters: : Prop where
-  axioms and operations (1):
-    - exactAt((i : ι)) : K.ExactAt (e.f i)
-
-中文:
-结构 是SupportedOutside
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - exactAt((i : ι)) : K.ExactAt (e.f i)
+--- 原说明 ---
+If `K : HomologicalComplex C c'`, then `K.IsSupportedOutside e` holds for
+an embedding `e : c.Embedding c'` of complex shapes if `K` is exact at `e.f i` f
+or all `i`.
 -/
 structure IsSupportedOutside : Prop where
   exactAt (i : ι) : K.ExactAt (e.f i)
 
 @[simp]
-/--
-lemma `isSupportedOutside_op_iff` / 引理 `isSupportedOutside_op_iff`
-
-English:
-lemma isSupportedOutside_op_iff
-  proof: ⟨fun h => ⟨fun i => (h.exactAt i).unop⟩, fun h => ⟨fun i => (h.exactAt i).op⟩⟩
-
-中文:
-引理 isSupportedOutside_op_iff
-  证明: ⟨fun h => ⟨fun i => (h.exactAt i).unop⟩, fun h => ⟨fun i => (h.exactAt i).op⟩⟩
-
-Depends on / 依赖: exactAt, h.exactAt
+/-
+**HomologicalComplex.isSupportedOutside_op_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homolo
+gicalComplex`。
+形式化陈述：isSupportedOutside_op_iff : K.op.IsSupportedOutside e.op ↔ K.IsSupportedOu
+tside e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.ExactAt.unop`：∀ {ι : Type u_1} {V : Type u_2} [inst :
+ CategoryTheory.Category.{v_1, u_2} V] {c : ComplexShape ι}   [inst_1 : Category
+Theory.Limits.HasZero…
+· 使用定理 `HomologicalComplex.IsSupportedOutside.exactAt`：∀ {ι : Type u_1} {ι' : Ty
+pe u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   [inst : Cat
+egoryTheory.Category.{v_1, u_3} C] …
+· 使用定理 `HomologicalComplex.ExactAt.op`：∀ {ι : Type u_1} {V : Type u_2} [inst : C
+ategoryTheory.Category.{v_1, u_2} V] {c : ComplexShape ι}   [inst_1 : CategoryTh
+eory.Limits.HasZero…
 -/
 lemma isSupportedOutside_op_iff :
     K.op.IsSupportedOutside e.op ↔ K.IsSupportedOutside e :=
-  ⟨fun h => ⟨fun i => (h.exactAt i).unop⟩, fun h => ⟨fun i => (h.exactAt i).op⟩⟩
+  ⟨fun h ↦ ⟨fun i ↦ (h.exactAt i).unop⟩, fun h ↦ ⟨fun i ↦ (h.exactAt i).op⟩⟩
 
 variable {K e} in
-/--
-lemma `IsStrictlySupportedOutside.isSupportedOutside` / 引理 `IsStrictlySupportedOutside.isSupportedOutside`
-
-English:
-lemma IsStrictlySupportedOutside.isSupportedOutside
-  given: (h : K.IsStrictlySupportedOutside e)
-  proof: ShortComplex.exact_of_isZero_X₂ _ (h.isZero i)
-
-中文:
-引理 是StrictlySupportedOutside.isSupportedOutside
-  条件: (h : K.是StrictlySupportedOutside e)
-  证明: ShortComplex.exact_of_isZero_X₂ _ (h.isZero i)
-
-Depends on / 依赖: ShortComplex, ShortComplex.exact_of_isZero_X, h.isZero, isZero
+/-
+**HomologicalComplex.IsStrictlySupportedOutside.isSupportedOutside** 是 Mathlib 中
+的一个定理，位于命名空间 `HomologicalComplex.IsStrictlySupportedOutside`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι
+'} {C : Type u_3}   [inst : CategoryTheory.Category.{v_1, u_3} C] [inst_1 : Cate
+goryTheory.Limits.HasZeroMorphisms C]   {K : HomologicalComplex C c'} {e : c.Emb
+edding c'}, K.IsStrictlySupportedOutside e → K.IsSupportedOutside e
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.exact_of_isZero_X₂`：exact_of_isZero_X₂ (h : 
+IsZero S.X₂) : S.Exact
+· 使用定理 `HomologicalComplex.IsStrictlySupportedOutside.isZero`：∀ {ι : Type u_1} {
+ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   [ins
+t : CategoryTheory.Category.{v_1, u_3} C] …
 -/
 lemma IsStrictlySupportedOutside.isSupportedOutside (h : K.IsStrictlySupportedOutside e) :
     K.IsSupportedOutside e where
   exactAt i := ShortComplex.exact_of_isZero_X₂ _ (h.isZero i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroObject
-  signature: C] : (0
-  body: (eval _ _ i).map_isZero (Limits.isZero_zero _)
-
-中文:
-实例 [有ZeroObject
-  签名: C] : (0
-  定义体: (eval _ _ i).map_isZero (Limits.isZero_zero _)
-
-Depends on / 依赖: Limits, Limits.isZero_zero, isZero_zero, map_isZero
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasZeroObject C] : (0 : HomologicalComplex C c').IsStrictlySupported e where
   isZero i _ := (eval _ _ i).map_isZero (Limits.isZero_zero _)
-
-/--
-lemma `isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside` / 引理 `isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside`
-
-English:
-lemma isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside
-  proof: by
-  constructor
-  · intro hK
-    constructor
-    all_goals
-      constructor
-      intros
-      exact (eval _ _ _).map_isZero hK
-  · rintro ⟨h₁, h₂⟩
-    rw [IsZero.iff_id_eq_zero]
-    ext n
-    apply IsZero.eq_of_src
-    by_cases hn : exists i, e.f i = n
-    · obtain ⟨i, rfl⟩ := hn
-      exact h₂.isZero i
-    · exact K.isZero_X_of_isStrictlySupported e _ (by simpa using hn)
-
-中文:
-引理 isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside
-  证明: by
-  constructor
-  · intro hK
-    constructor
-    all_goals
-      constructor
-      intros
-      exact (eval _ _ _).map_isZero hK
-  · rintro ⟨h₁, h₂⟩
-    rw [IsZero.iff_id_eq_zero]
-    ext n
-    apply IsZero.eq_of_src
-    by_cases hn : exists i, e.f i = n
-    · obtain ⟨i, rfl⟩ := hn
-      exact h₂.isZero i
-    · exact K.isZero_X_of_isStrictlySupported e _ (by simpa using hn)
-
-Depends on / 依赖: IsZero, IsZero.eq_of_src, IsZero.iff_id_eq_zero, K.isZero_X_of_isStrictlySupported, all_goals, eq_of_src, iff_id_eq_zero, intros, isZero, isZero_X_of_isStrictlySupported, map_isZero
+/-
+**HomologicalComplex.isZero_iff_isStrictlySupported_and_isStrictlySupportedOutsi
+de** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex`。
+形式化陈述：isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside : IsZero K ↔
+ K.IsStrictlySupported e ∧ K.IsStrictlySupportedOutside e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.map_isZero`：map_isZero (F : C ⥤ D) [PreservesZero
+Morphisms F] {X : C} (hX : IsZero X) : IsZero (F.obj X)
+· 使用定理 `HomologicalComplex.instPreservesZeroMorphismsEval`：∀ {ι : Type u_1} (V :
+ Type u) [inst : CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms V] (c : ComplexSh…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsZero.iff_id_eq_zero`：iff_id_eq_zero (X : C) : Is
+Zero X ↔ 𝟙 X = 0
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用定理 `HomologicalComplex.IsStrictlySupportedOutside.isZero`：∀ {ι : Type u_1} {
+ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   [ins
+t : CategoryTheory.Category.{v_1, u_3} C] …
+· 使用引理 `HomologicalComplex.isZero_X_of_isStrictlySupported`：isZero_X_of_isStrict
+lySupported [K.IsStrictlySupported e] (i' : ι') (hi' : forall i, e.f i != i') : 
+IsZero (K.X i')
 -/
 lemma isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside :
     IsZero K ↔ K.IsStrictlySupported e ∧ K.IsStrictlySupportedOutside e := by
@@ -459,7 +381,7 @@ lemma isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside :
     rw [IsZero.iff_id_eq_zero]
     ext n
     apply IsZero.eq_of_src
-    by_cases hn : exists i, e.f i = n
+    by_cases hn : ∃ i, e.f i = n
     · obtain ⟨i, rfl⟩ := hn
       exact h₂.isZero i
     · exact K.isZero_X_of_isStrictlySupported e _ (by simpa using hn)
@@ -473,60 +395,58 @@ variable {C D : Type*} [Category* C] [Category* D] [HasZeroMorphisms C] [HasZero
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `map_isStrictlySupported` / 实例 `map_isStrictlySupported`
-
-English:
-instance map_isStrictlySupported
-  signature: [K.IsStrictlySupported e]
-  body: by
-    rw [IsZero.iff_id_eq_zero]
-    dsimp
-    rw [← F.map_id]; rw [(K.isZero_X_of_isStrictlySupported e i' hi').eq_of_src (𝟙 _) 0]; rw [F.map_zero]
-
-中文:
-实例 map_isStrictlySupported
-  签名: [K.是StrictlySupported e]
-  定义体: by
-    rw [IsZero.iff_id_eq_zero]
-    dsimp
-    rw [← F.map_id]; rw [(K.isZero_X_of_isStrictlySupported e i' hi').eq_of_src (𝟙 _) 0]; rw [F.map_zero]
-
-Depends on / 依赖: F.map_id, F.map_zero, IsZero, IsZero.iff_id_eq_zero, K.isZero_X_of_isStrictlySupported, eq_of_src, iff_id_eq_zero, isZero_X_of_isStrictlySupported, map_id, map_zero
+/-
+**HomologicalComplex.map_isStrictlySupported** 是 Mathlib 中的一个实例，位于命名空间 `Homologi
+calComplex`。
+形式化陈述：map_isStrictlySupported [K.IsStrictlySupported e] : ((F.mapHomologicalComp
+lex c').obj K).IsStrictlySupported e where isZero i' hi'
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsZero.iff_id_eq_zero`：iff_id_eq_zero (X : C) : Is
+Zero X ↔ 𝟙 X = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用引理 `HomologicalComplex.isZero_X_of_isStrictlySupported`：isZero_X_of_isStrict
+lySupported [K.IsStrictlySupported e] (i' : ι') (hi' : forall i, e.f i != i') : 
+IsZero (K.X i')
+· 使用定理 `CategoryTheory.Functor.map_zero`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   [inst_2 : Category…
 -/
 instance map_isStrictlySupported [K.IsStrictlySupported e] :
     ((F.mapHomologicalComplex c').obj K).IsStrictlySupported e where
   isZero i' hi' := by
     rw [IsZero.iff_id_eq_zero]
     dsimp
-    rw [← F.map_id]; rw [(K.isZero_X_of_isStrictlySupported e i' hi').eq_of_src (𝟙 _) 0]; rw [F.map_zero]
-
-/--
-lemma `isStrictlySupported_mapHomologicalComplex_obj_iff` / 引理 `isStrictlySupported_mapHomologicalComplex_obj_iff`
-
-English:
-lemma isStrictlySupported_mapHomologicalComplex_obj_iff
-  given: [F.Faithful]
-  proof: by
-  refine ⟨fun _ => ⟨fun i' hi' => ?_⟩, fun _ => inferInstance⟩
-  rw [IsZero.iff_id_eq_zero]
-  exact F.map_injective ((isZero_X_of_isStrictlySupported
-    ((F.mapHomologicalComplex c').obj K) e i' hi').eq_of_src _ _)
-
-中文:
-引理 isStrictlySupported_mapHomologicalComplex_obj_iff
-  条件: [F.忠实]
-  证明: by
-  refine ⟨fun _ => ⟨fun i' hi' => ?_⟩, fun _ => inferInstance⟩
-  rw [IsZero.iff_id_eq_zero]
-  exact F.map_injective ((isZero_X_of_isStrictlySupported
-    ((F.mapHomologicalComplex c').obj K) e i' hi').eq_of_src _ _)
-
-Depends on / 依赖: F.mapHomologicalComplex, F.map_injective, IsZero, IsZero.iff_id_eq_zero, eq_of_src, iff_id_eq_zero, isZero_X_of_isStrictlySupported, mapHomologicalComplex, map_injective
+    rw [← F.map_id, (K.isZero_X_of_isStrictlySupported e i' hi').eq_of_src (𝟙 _) 0, F.map_zero]
+/-
+**HomologicalComplex.isStrictlySupported_mapHomologicalComplex_obj_iff** 是 Mathl
+ib 中的一个引理，位于命名空间 `HomologicalComplex`。
+形式化陈述：isStrictlySupported_mapHomologicalComplex_obj_iff [F.Faithful] : ((F.mapHo
+mologicalComplex c').obj K).IsStrictlySupported e ↔ K.IsStrictlySupported e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsZero.iff_id_eq_zero`：iff_id_eq_zero (X : C) : Is
+Zero X ↔ 𝟙 X = 0
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用引理 `HomologicalComplex.isZero_X_of_isStrictlySupported`：isZero_X_of_isStrict
+lySupported [K.IsStrictlySupported e] (i' : ι') (hi' : forall i, e.f i != i') : 
+IsZero (K.X i')
 -/
 lemma isStrictlySupported_mapHomologicalComplex_obj_iff [F.Faithful] :
     ((F.mapHomologicalComplex c').obj K).IsStrictlySupported e ↔ K.IsStrictlySupported e := by
-  refine ⟨fun _ => ⟨fun i' hi' => ?_⟩, fun _ => inferInstance⟩
+  refine ⟨fun _ ↦ ⟨fun i' hi' ↦ ?_⟩, fun _ ↦ inferInstance⟩
   rw [IsZero.iff_id_eq_zero]
   exact F.map_injective ((isZero_X_of_isStrictlySupported
     ((F.mapHomologicalComplex c').obj K) e i' hi').eq_of_src _ _)
@@ -534,3 +454,4 @@ lemma isStrictlySupported_mapHomologicalComplex_obj_iff [F.Faithful] :
 end
 
 end HomologicalComplex
+

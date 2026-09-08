@@ -5,7 +5,7 @@ Authors: Kim Morrison
 -/
 module
 
-public import Mathlib.CategoryTheory.Category.Basic -- shake: keep (tactic output dependency)
+public import Mathlib.CategoryTheory.Category.Basic  -- shake: keep (tactic output dependency)
 
 /-!
 # The `slice` tactic
@@ -33,39 +33,37 @@ Thus if the current focus is `(a ≫ b) ≫ ((c ≫ d) ≫ e)`, then `slice 2 3`
 syntax (name := slice) "slice " num ppSpace num : conv
 
 /--
-Definition of `evalSlice` / `evalSlice` 的定义
+`evalSlice`
+- rewrites the target expression using `Category.assoc`.
+- uses `congr` to split off the first `a-1` terms and rotates to `a`-th (last) term
+- counts the number `k` of rewrites as it uses `← Category.assoc` to bring the target to
+  left associated form; from the first step this is the total number of remaining terms from `C`
+- it now splits off `b-a` terms from target using `congr` leaving the desired subterm
+- finally, it rewrites it once more using `Category.assoc` to bring it to right-associated
+  normal form
+-/
+/-
+**Mathlib.Tactic.Slice.evalSlice** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Slice
+`。
+形式化陈述：evalSlice (a b : Nat) : TacticM Unit
+参数：a b : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalSlice
-  signature: (a b : Nat)
-  body: do
-  let _ ← iterateUntilFailureWithResults do
-    evalTactic (← `(conv| rw [Category.assoc]))
-  iterateRange (a - 1) (a - 1) do
-      evalTactic (← `(conv| congr))
-      evalTactic (← `(tactic| rotate_left))
-  let k ← iterateUntilFailureCount
- evalTactic (← `(conv| rw [← Category.assoc]))
-  let c := k+1+a-b
-iterateRange c c evalTactic (← `(conv| congr))
-  let _ ← iterateUntilFailureWithResults do
-    evalTactic (← `(conv| rw [Category.assoc]))
-
-中文:
-定义 evalSlice
-  签名: (a b : 自然数)
-  定义体: do
-  let _ ← iterateUntilFailureWithResults do
-    evalTactic (← `(conv| rw [Category.assoc]))
-  iterateRange (a - 1) (a - 1) do
-      evalTactic (← `(conv| congr))
-      evalTactic (← `(tactic| rotate_left))
-  let k ← iterateUntilFailureCount
- evalTactic (← `(conv| rw [← Category.assoc]))
-  let c := k+1+a-b
-iterateRange c c evalTactic (← `(conv| congr))
-  let _ ← iterateUntilFailureWithResults do
-    evalTactic (← `(conv| rw [Category.assoc]))
+--- 原说明 ---
+`evalSlice`
+- rewrites the target expression using `Category.assoc`.
+- uses `congr` to split off the first `a-1` terms and rotates to `a`-th (last) t
+erm
+- counts the number `k` of rewrites as it uses `← Category.assoc` to bring the t
+arget to
+  left associated form; from the first step this is the total number of remainin
+g terms from `C`
+- it now splits off `b-a` terms from target using `congr` leaving the desired su
+bterm
+- finally, it rewrites it once more using `Category.assoc` to bring it to right-
+associated
+  normal form
 -/
 def evalSlice (a b : Nat) : TacticM Unit := do
   let _ ← iterateUntilFailureWithResults do
@@ -74,9 +72,9 @@ def evalSlice (a b : Nat) : TacticM Unit := do
       evalTactic (← `(conv| congr))
       evalTactic (← `(tactic| rotate_left))
   let k ← iterateUntilFailureCount
- evalTactic (← `(conv| rw [← Category.assoc]))
+    <| evalTactic (← `(conv| rw [← Category.assoc]))
   let c := k+1+a-b
-iterateRange c c evalTactic (← `(conv| congr))
+  iterateRange c c <| evalTactic (← `(conv| congr))
   let _ ← iterateUntilFailureWithResults do
     evalTactic (← `(conv| rw [Category.assoc]))
 
@@ -103,9 +101,10 @@ macro_rules
 
 /- Porting note: update when `add_tactic_doc` is supported` -/
 -- add_tactic_doc
--- { Name := "slice"
--- category := DocCategory.tactic
--- declNames := [`tactic.interactive.sliceLHS, `tactic.interactive.sliceRHS]
--- tags := ["category theory"] }
+--   { Name := "slice"
+--     category := DocCategory.tactic
+--     declNames := [`tactic.interactive.sliceLHS, `tactic.interactive.sliceRHS]
+--     tags := ["category theory"] }
 --
 end Mathlib.Tactic.Slice
+

@@ -18,24 +18,17 @@ use the x′ notation for the derivative of x.
 
 /-- A derivation from a ring to itself, as a typeclass. -/
 @[ext]
-/--
-Definition of `Differential` / `Differential` 的定义
+/-
+**Differential** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [CommRing R] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Differential
-  parameters: (R : Type*) [CommRing R]
-  axioms and operations (1):
-    - deriv : Derivation Int R R
-
-中文:
-类 微分
-  参数: (R : 类型) [交换环 R]
-  公理与运算 (1 个):
-    - deriv : 导子 整数 R R
+--- 原说明 ---
+A derivation from a ring to itself, as a typeclass.
 -/
 class Differential (R : Type*) [CommRing R] where
   /-- The `Derivation` associated with the ring. -/
-  deriv : Derivation Int R R
+  deriv : Derivation ℤ R R
 
 @[inherit_doc]
 scoped[Differential] postfix:max "′" => Differential.deriv
@@ -50,47 +43,43 @@ so the default delaborator doesn't work.
 @[app_delab DFunLike.coe]
 meta def delabDeriv : Delab := do
   let e ← getExpr
-guard e.isAppOfArity' ``DFunLike.coe 6
-guard (e.getArg!' 4).isAppOf' ``Differential.deriv
+  guard <| e.isAppOfArity' ``DFunLike.coe 6
+  guard <| (e.getArg!' 4).isAppOf' ``Differential.deriv
   let arg ← withAppArg delab
   `($arg′)
 
 /--
-Definition of `DifferentialAlgebra` / `DifferentialAlgebra` 的定义
+A differential algebra is an `Algebra` where the derivation commutes with `algebraMap`.
+-/
+/-
+**DifferentialAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u_1) →   (B : Type u_2) →     [inst : CommRing A] → [inst_1 : Co
+mmRing B] → [Algebra A B] → [Differential A] → [Differential B] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class DifferentialAlgebra
-  parameters: (A B : Type*) [CommRing A] [CommRing B] [Algebra A B]
-  axioms and operations (1):
-    - deriv_algebraMap : forall a : A, (algebraMap A B a)′ = algebraMap A B a′
-
-中文:
-类 微分代数
-  参数: (A B : 类型) [交换环 A] [交换环 B] [代数 A B]
-  公理与运算 (1 个):
-    - deriv_algebraMap : 对任意 a : A, (algebraMap A B a)′ = algebraMap A B a′
+--- 原说明 ---
+A differential algebra is an `Algebra` where the derivation commutes with `algeb
+raMap`.
 -/
 class DifferentialAlgebra (A B : Type*) [CommRing A] [CommRing B] [Algebra A B]
     [Differential A] [Differential B] : Prop where
-  deriv_algebraMap : forall a : A, (algebraMap A B a)′ = algebraMap A B a′
+  deriv_algebraMap : ∀ a : A, (algebraMap A B a)′ = algebraMap A B a′
 
 export DifferentialAlgebra (deriv_algebraMap)
 
 @[norm_cast]
-/--
-lemma `algebraMap.coe_deriv` / 引理 `algebraMap.coe_deriv`
-
-English:
-lemma algebraMap.coe_deriv
-  statement: {A : Type*} {B : Type*} [CommRing A] [CommRing B] [Algebra A B]
-  proof: (DifferentialAlgebra.deriv_algebraMap _).symm
-
-中文:
-引理 algebraMap.coe_deriv
-  结论: {A : 类型} {B : 类型} [交换环 A] [交换环 B] [代数 A B]
-  证明: (DifferentialAlgebra.deriv_algebraMap _).symm
-
-Depends on / 依赖: DifferentialAlgebra, DifferentialAlgebra.deriv_algebraMap, deriv_algebraMap
+/-
+**algebraMap.coe_deriv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：algebraMap.coe_deriv {A : Type*} {B : Type*} [CommRing A] [CommRing B] [Al
+gebra A B] [Differential A] [Differential B] [DifferentialAlgebra A B] (a : A) :
+ (a′ : A) = (a : B)′
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DifferentialAlgebra.deriv_algebraMap`：∀ {A : Type u_1} {B : Type u_2} {i
+nst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}   {inst_3 : Diffe
+rential A} {inst_4 : Diffe…
 -/
 lemma algebraMap.coe_deriv {A : Type*} {B : Type*} [CommRing A] [CommRing B] [Algebra A B]
     [Differential A] [Differential B] [DifferentialAlgebra A B] (a : A) :
@@ -98,69 +87,64 @@ lemma algebraMap.coe_deriv {A : Type*} {B : Type*} [CommRing A] [CommRing B] [Al
   (DifferentialAlgebra.deriv_algebraMap _).symm
 
 /--
-Definition of `Differential.ContainConstants` / `Differential.ContainConstants` 的定义
+A differential ring `A` and an algebra over it `B` share constants if all
+constants in B are in the range of `algebraMap A B`.
+-/
+/-
+**Differential.ContainConstants** 是 Mathlib 中的一个归纳类型，位于命名空间 `Differential`。
+形式化陈述：(A : Type u_1) → (B : Type u_2) → [inst : CommRing A] → [inst_1 : CommRing
+ B] → [Algebra A B] → [Differential B] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Differential.ContainConstants
-  parameters: (A B : Type*) [CommRing A] [CommRing B]
-  axioms and operations (1):
-    - mem_range_of_deriv_eq_zero({x : B} (h : x′ = 0)) : x in (algebraMap A B).range
-
-中文:
-类 微分.余ntainConstants
-  参数: (A B : 类型) [交换环 A] [交换环 B]
-  公理与运算 (1 个):
-    - mem_range_of_deriv_eq_zero({x : B} (h : x′ = 0)) : x in (algebraMap A B).range
+--- 原说明 ---
+A differential ring `A` and an algebra over it `B` share constants if all
+constants in B are in the range of `algebraMap A B`.
 -/
 class Differential.ContainConstants (A B : Type*) [CommRing A] [CommRing B]
     [Algebra A B] [Differential B] : Prop where
   /-- If the derivative of x is 0, then it's in the range of `algebraMap A B`. -/
-  protected mem_range_of_deriv_eq_zero {x : B} (h : x′ = 0) : x in (algebraMap A B).range
-
-/--
-lemma `mem_range_of_deriv_eq_zero` / 引理 `mem_range_of_deriv_eq_zero`
-
-English:
-lemma mem_range_of_deriv_eq_zero
-  statement: (A : Type*) {B : Type*} [CommRing A] [CommRing B] [Algebra A B]
-  proof: Differential.ContainConstants.mem_range_of_deriv_eq_zero h
-
-中文:
-引理 mem_range_of_deriv_eq_zero
-  结论: (A : 类型) {B : 类型} [交换环 A] [交换环 B] [代数 A B]
-  证明: Differential.ContainConstants.mem_range_of_deriv_eq_zero h
-
-Depends on / 依赖: ContainConstants, Differential, Differential.ContainConstants.mem_range_of_deriv_eq_zero, mem_range_of_deriv_eq_zero
+  protected mem_range_of_deriv_eq_zero {x : B} (h : x′ = 0) : x ∈ (algebraMap A B).range
+/-
+**mem_range_of_deriv_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_range_of_deriv_eq_zero (A : Type*) {B : Type*} [CommRing A] [CommRing 
+B] [Algebra A B] [Differential B] [Differential.ContainConstants A B] {x : B} (h
+ : x′ = 0) : x in (algebraMap A B).range
+参数：A : Type*；h : x′ = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Differential.ContainConstants.mem_range_of_deriv_eq_zero`：∀ {A : Type u_
+1} {B : Type u_2} {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A 
+B}   {inst_3 : Differential B} [self : Differe…
 -/
 lemma mem_range_of_deriv_eq_zero (A : Type*) {B : Type*} [CommRing A] [CommRing B] [Algebra A B]
     [Differential B] [Differential.ContainConstants A B] {x : B} (h : x′ = 0) :
-    x in (algebraMap A B).range :=
+    x ∈ (algebraMap A B).range :=
   Differential.ContainConstants.mem_range_of_deriv_eq_zero h
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : Type*) [CommRing A] [Differential A] : DifferentialAlgebra A A where
   deriv_algebraMap _ := rfl
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : Type*) [CommRing A] [Differential A] : Differential.ContainConstants A A where
   mem_range_of_deriv_eq_zero {x} _ := ⟨x, rfl⟩
 
 /-- Transfer a `Differential` instance across a `RingEquiv`. -/
 @[reducible]
-/--
-Definition of `Differential.equiv` / `Differential.equiv` 的定义
+/-
+**Differential.equiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Differential.equiv {R R₂ : Type*} [CommRing R] [CommRing R₂] [Differential
+ R₂] (h : R ≃+* R₂) : Differential R
+参数：h : R ≃+* R₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Differential.equiv
-  signature: {R R₂ : Type*} [CommRing R] [CommRing R₂] [Differential R₂]
-  body: ⟨Derivation.mk' (h.symm.toAddMonoidHom.toIntLinearMap ∘ₗ
-    Differential.deriv.toLinearMap ∘ₗ h.toAddMonoidHom.toIntLinearMap) (by simp)⟩
-
-中文:
-定义 微分.equiv
-  签名: {R R₂ : 类型} [交换环 R] [交换环 R₂] [微分 R₂]
-  定义体: ⟨Derivation.mk' (h.symm.toAddMonoidHom.toIntLinearMap ∘ₗ
-    Differential.deriv.toLinearMap ∘ₗ h.toAddMonoidHom.toIntLinearMap) (by simp)⟩
-
-Depends on / 依赖: Derivation, Derivation.mk, Differential, Differential.deriv.toLinearMap, h.symm.toAddMonoidHom.toIntLinearMap, h.toAddMonoidHom.toIntLinearMap, toAddMonoidHom, toIntLinearMap, toLinearMap
+--- 原说明 ---
+Transfer a `Differential` instance across a `RingEquiv`.
 -/
 def Differential.equiv {R R₂ : Type*} [CommRing R] [CommRing R₂] [Differential R₂]
     (h : R ≃+* R₂) : Differential R :=
@@ -168,29 +152,31 @@ def Differential.equiv {R R₂ : Type*} [CommRing R] [CommRing R₂] [Differenti
     Differential.deriv.toLinearMap ∘ₗ h.toAddMonoidHom.toIntLinearMap) (by simp)⟩
 
 /--
-lemma `DifferentialAlgebra.equiv` / 引理 `DifferentialAlgebra.equiv`
+Transfer a `DifferentialAlgebra` instance across a `AlgEquiv`.
+-/
+/-
+**DifferentialAlgebra.equiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：DifferentialAlgebra.equiv {A : Type*} [CommRing A] [Differential A] {R R₂ 
+: Type*} [CommRing R] [CommRing R₂] [Differential R₂] [Algebra A R] [Algebra A R
+₂] [DifferentialAlgebra A R₂] (h : R ≃ₐ[A] R₂) : letI
+参数：h : R ≃ₐ[A] R₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.commutes`：commutes : forall r : R, e (algebraMap R A₁ r) = alge
+braMap R A₂ r
+· 使用定理 `DifferentialAlgebra.deriv_algebraMap`：∀ {A : Type u_1} {B : Type u_2} {i
+nst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}   {inst_3 : Diffe
+rential A} {inst_4 : Diffe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma DifferentialAlgebra.equiv
-  statement: {A : Type*} [CommRing A] [Differential A]
-  proof: Differential.equiv h.toRingEquiv
-    DifferentialAlgebra A R :=
-  letI := Differential.equiv h.toRingEquiv
-  ⟨fun a => by
-    change (LinearMap.comp ..) _ = _
-    simp [deriv_algebraMap]⟩
-
-中文:
-引理 微分代数.equiv
-  结论: {A : 类型} [交换环 A] [微分 A]
-  证明: Differential.equiv h.toRingEquiv
-    DifferentialAlgebra A R :=
-  letI := Differential.equiv h.toRingEquiv
-  ⟨fun a => by
-    change (LinearMap.comp ..) _ = _
-    simp [deriv_algebraMap]⟩
-
-Depends on / 依赖: Differential, Differential.equiv, h.toRingEquiv, toRingEquiv
+--- 原说明 ---
+Transfer a `DifferentialAlgebra` instance across a `AlgEquiv`.
 -/
 lemma DifferentialAlgebra.equiv {A : Type*} [CommRing A] [Differential A]
     {R R₂ : Type*} [CommRing R] [CommRing R₂] [Differential R₂] [Algebra A R]
@@ -198,6 +184,6 @@ lemma DifferentialAlgebra.equiv {A : Type*} [CommRing A] [Differential A]
     letI := Differential.equiv h.toRingEquiv
     DifferentialAlgebra A R :=
   letI := Differential.equiv h.toRingEquiv
-  ⟨fun a => by
+  ⟨fun a ↦ by
     change (LinearMap.comp ..) _ = _
     simp [deriv_algebraMap]⟩

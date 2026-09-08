@@ -30,204 +30,273 @@ variable {X : Type*} [UniformSpace X] {x y z : X}
 
 namespace Path
 
-/--
-Instance `instUniformSpace` / 实例 `instUniformSpace`
-
-English:
-instance instUniformSpace
-  signature: : UniformSpace (Path x y)
-  body: .comap ((↑) : _ -> C(I, X)) ContinuousMap.compactConvergenceUniformSpace
-
-中文:
-实例 instUniformSpace
-  签名: : 一致空间 (道路 x y)
-  定义体: .comap ((↑) : _ -> C(I, X)) ContinuousMap.compactConvergenceUniformSpace
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.compactConvergenceUniformSpace, compactConvergenceUniformSpace
+/-
+**Path.instUniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `Path`。
+形式化陈述：instUniformSpace : UniformSpace (Path x y)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instUniformSpace : UniformSpace (Path x y) :=
-  .comap ((↑) : _ -> C(I, X)) ContinuousMap.compactConvergenceUniformSpace
-
-/--
-theorem `isUniformEmbedding_coe` / 定理 `isUniformEmbedding_coe`
-
-English:
-theorem isUniformEmbedding_coe
-  statement: IsUniformEmbedding ((↑) : Path x y -> C(I, X)) where
-  proof: rfl
-  injective := ContinuousMap.coe_injective'
-
-中文:
-定理 isUniformEmbedding_coe
-  结论: 是一致嵌入 ((↑) : 道路 x y -> C(I, X)) where
-  证明: rfl
-  injective := ContinuousMap.coe_injective'
+  .comap ((↑) : _ → C(I, X)) ContinuousMap.compactConvergenceUniformSpace
+/-
+**Path.isUniformEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：isUniformEmbedding_coe : IsUniformEmbedding ((↑) : Path x y -> C(I, X)) wh
+ere comap_uniformity
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.coe_injective'`：∀ {X : Type u_1} {Y : Type u_2} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] {F : Type u_3}   [inst_2 : FunLi
+ke F X Y] [inst_3 …
 -/
-theorem isUniformEmbedding_coe : IsUniformEmbedding ((↑) : Path x y -> C(I, X)) where
+theorem isUniformEmbedding_coe : IsUniformEmbedding ((↑) : Path x y → C(I, X)) where
   comap_uniformity := rfl
   injective := ContinuousMap.coe_injective'
-
-/--
-theorem `uniformContinuous` / 定理 `uniformContinuous`
-
-English:
-theorem uniformContinuous
-  given: (γ : Path x y)
-  statement: UniformContinuous γ
-  proof: CompactSpace.uniformContinuous_of_continuous map_continuous _
-
-中文:
-定理 uniformContinuous
-  条件: (γ : 道路 x y)
-  结论: 一致连续 γ
-  证明: CompactSpace.uniformContinuous_of_continuous map_continuous _
-
-Depends on / 依赖: CompactSpace, CompactSpace.uniformContinuous_of_continuous, map_continuous, uniformContinuous_of_continuous
+/-
+**Path.uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：uniformContinuous (γ : Path x y) : UniformContinuous γ
+参数：γ : Path x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactSpace.uniformContinuous_of_continuous`：CompactSpace.uniformContin
+uous_of_continuous [CompactSpace α] {f : α -> β} (h : Continuous f) : UniformCon
+tinuous f
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
 -/
 theorem uniformContinuous (γ : Path x y) : UniformContinuous γ :=
-CompactSpace.uniformContinuous_of_continuous map_continuous _
+  CompactSpace.uniformContinuous_of_continuous <| map_continuous _
 
-/--
-theorem `uniformContinuous_extend` / 定理 `uniformContinuous_extend`
+/-- Given a path `γ`, it extension to the real line `γ.extend : C(ℝ, X)`
+is a uniformly continuous function. -/
+/-
+**Path.uniformContinuous_extend** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：uniformContinuous_extend (γ : Path x y) : UniformContinuous γ.extend
+参数：γ : Path x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `Path.uniformContinuous`：uniformContinuous (γ : Path x y) : UniformContin
+uous γ
+· 使用定理 `LipschitzWith.uniformContinuous`：∀ {α : Type u} {β : Type v} [inst : Pse
+udoEMetricSpace α] [inst_1 : PseudoEMetricSpace β] {K : NNReal} {f : α → β},   L
+ipschitzWith K f → Un…
+· 使用定理 `LipschitzWith.projIcc`：∀ {a b : ℝ} (h : a ≤ b), LipschitzWith 1 (Set.pro
+jIcc a b h)
 
-English:
-theorem uniformContinuous_extend
-  given: (γ : Path x y)
-  statement: UniformContinuous γ.extend
-  proof: γ.uniformContinuous.comp .uniformContinuous LipschitzWith.projIcc _
-
-中文:
-定理 uniformContinuous_extend
-  条件: (γ : 道路 x y)
-  结论: 一致连续 γ.extend
-  证明: γ.uniformContinuous.comp .uniformContinuous LipschitzWith.projIcc _
-
-Depends on / 依赖: LipschitzWith, LipschitzWith.projIcc, projIcc, uniformContinuous, uniformContinuous.comp
+--- 原说明 ---
+Given a path `γ`, it extension to the real line `γ.extend : C(ℝ, X)`
+is a uniformly continuous function.
 -/
 theorem uniformContinuous_extend (γ : Path x y) : UniformContinuous γ.extend :=
-γ.uniformContinuous.comp .uniformContinuous LipschitzWith.projIcc _
+  γ.uniformContinuous.comp <| LipschitzWith.projIcc _ |>.uniformContinuous
 
-/--
-theorem `uniformContinuous_extend_left` / 定理 `uniformContinuous_extend_left`
+/-- The function sending a path `γ` to its extension `γ.extend : ℝ → X`
+is uniformly continuous in `γ`. -/
+/-
+**Path.uniformContinuous_extend_left** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：uniformContinuous_extend_left : UniformContinuous (Path.extend : Path x y 
+-> C(Real, X))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `ContinuousMap.uniformContinuous_comp_left`：uniformContinuous_comp_left (
+g : C(α, γ)) : UniformContinuous (fun f => f.comp g : C(γ, β) -> C(α, β))
+· 使用定理 `IsUniformInducing.uniformContinuous`：IsUniformInducing.uniformContinuous
+ {f : α -> β} (hf : IsUniformInducing f) : UniformContinuous f
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `Path.isUniformEmbedding_coe`：isUniformEmbedding_coe : IsUniformEmbedding
+ ((↑) : Path x y -> C(I, X)) where comap_uniformity
 
-English:
-theorem uniformContinuous_extend_left
-  statement: UniformContinuous (Path.extend : Path x y -> C(Real, X))
-  proof: ContinuousMap.projIccCM.uniformContinuous_comp_left.comp isUniformEmbedding_coe.uniformContinuous
-
-中文:
-定理 uniformContinuous_extend_left
-  结论: 一致连续 (道路.extend : 道路 x y -> C(实数, X))
-  证明: ContinuousMap.projIccCM.uniformContinuous_comp_left.comp isUniformEmbedding_coe.uniformContinuous
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.projIccCM.uniformContinuous_comp_left.comp, isUniformEmbedding_coe, isUniformEmbedding_coe.uniformContinuous, projIccCM, uniformContinuous, uniformContinuous_comp_left
+--- 原说明 ---
+The function sending a path `γ` to its extension `γ.extend : ℝ → X`
+is uniformly continuous in `γ`.
 -/
-theorem uniformContinuous_extend_left : UniformContinuous (Path.extend : Path x y -> C(Real, X)) :=
+theorem uniformContinuous_extend_left : UniformContinuous (Path.extend : Path x y → C(ℝ, X)) :=
   ContinuousMap.projIccCM.uniformContinuous_comp_left.comp isUniformEmbedding_coe.uniformContinuous
 
-/--
-theorem `_root_.Filter.HasBasis.uniformityPath` / 定理 `_root_.Filter.HasBasis.uniformityPath`
+/-- If `{U i | p i}` form a basis of entourages of `X`,
+then the entourages `{V i | p i}`, `V i = {(γ₁, γ₂) | ∀ t, (γ₁ t, γ₂ t) ∈ U i}`,
+form a basis of entourages of paths between `x` and `y`. -/
+/-
+**Path._root_.Filter.HasBasis.uniformityPath** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Filter.HasBasis.uniformityPath
-  statement: {ι : Sort*} {p : ι -> Prop} {U : ι -> Set (X × X)}
-  proof: hU.compactConvergenceUniformity_of_compact.comap _
-
-中文:
-定理 _root_.滤子.有基.uniformityPath
-  结论: {ι : 类型层*} {p : ι -> 命题} {U : ι -> 集合 (X × X)}
-  证明: hU.compactConvergenceUniformity_of_compact.comap _
-
-Depends on / 依赖: compactConvergenceUniformity_of_compact, hU.compactConvergenceUniformity_of_compact.comap
+--- 原说明 ---
+If `{U i | p i}` form a basis of entourages of `X`,
+then the entourages `{V i | p i}`, `V i = {(γ₁, γ₂) | ∀ t, (γ₁ t, γ₂ t) ∈ U i}`,
+form a basis of entourages of paths between `x` and `y`.
 -/
-theorem _root_.Filter.HasBasis.uniformityPath {ι : Sort*} {p : ι -> Prop} {U : ι -> Set (X × X)}
+theorem _root_.Filter.HasBasis.uniformityPath {ι : Sort*} {p : ι → Prop} {U : ι → Set (X × X)}
     (hU : (𝓤 X).HasBasis p U) :
-    (𝓤 (Path x y)).HasBasis p fun i => {γ | forall t, (γ.1 t, γ.2 t) in U i} :=
+    (𝓤 (Path x y)).HasBasis p fun i ↦ {γ | ∀ t, (γ.1 t, γ.2 t) ∈ U i} :=
   hU.compactConvergenceUniformity_of_compact.comap _
-
-/--
-theorem `hasBasis_uniformity` / 定理 `hasBasis_uniformity`
-
-English:
-theorem hasBasis_uniformity
-  proof: (𝓤 X).basis_sets.uniformityPath
-
-中文:
-定理 hasBasis_uniformity
-  证明: (𝓤 X).basis_sets.uniformityPath
-
-Depends on / 依赖: basis_sets, basis_sets.uniformityPath, uniformityPath
+/-
+**Path.hasBasis_uniformity** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：hasBasis_uniformity : (𝓤 (Path x y)).HasBasis (· in 𝓤 X) ({γ | forall t, (
+γ.1 t, γ.2 t) in ·})
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.uniformityPath`：∀ {X : Type u_1} [inst : UniformSpace X]
+ {x y : X} {ι : Sort u_2} {p : ι → Prop} {U : ι → Set (X × X)},   (uniformity X)
+.HasBasis p U →     …
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
 theorem hasBasis_uniformity :
-    (𝓤 (Path x y)).HasBasis (· in 𝓤 X) ({γ | forall t, (γ.1 t, γ.2 t) in ·}) :=
+    (𝓤 (Path x y)).HasBasis (· ∈ 𝓤 X) ({γ | ∀ t, (γ.1 t, γ.2 t) ∈ ·}) :=
   (𝓤 X).basis_sets.uniformityPath
-
-/--
-theorem `uniformContinuous_symm` / 定理 `uniformContinuous_symm`
-
-English:
-theorem uniformContinuous_symm
-  statement: UniformContinuous (Path.symm : Path x y -> Path y x)
-  proof: .mpr fun U hU => hasBasis_uniformity.uniformContinuous_iff hasBasis_uniformity
-    ⟨U, hU, fun _ _ h x => h (σ x)⟩
-
-中文:
-定理 uniformContinuous_symm
-  结论: 一致连续 (道路.symm : 道路 x y -> 道路 y x)
-  证明: .mpr fun U hU => hasBasis_uniformity.uniformContinuous_iff hasBasis_uniformity
-    ⟨U, hU, fun _ _ h x => h (σ x)⟩
-
-Depends on / 依赖: hasBasis_uniformity, hasBasis_uniformity.uniformContinuous_iff, uniformContinuous_iff
+/-
+**Path.uniformContinuous_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：uniformContinuous_symm : UniformContinuous (Path.symm : Path x y -> Path y
+ x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.uniformContinuous_iff`：Filter.HasBasis.uniformContinuous
+_iff {ι'} {p : ι -> Prop} {s : ι -> SetRel α α} (ha : (𝓤 α).HasBasis p s) {q : ι
+' -> Prop} {t : ι' -> Set (…
+· 使用定理 `Path.hasBasis_uniformity`：hasBasis_uniformity : (𝓤 (Path x y)).HasBasis 
+(· in 𝓤 X) ({γ | forall t, (γ.1 t, γ.2 t) in ·})
 -/
-theorem uniformContinuous_symm : UniformContinuous (Path.symm : Path x y -> Path y x) :=
-.mpr fun U hU => hasBasis_uniformity.uniformContinuous_iff hasBasis_uniformity
-    ⟨U, hU, fun _ _ h x => h (σ x)⟩
+theorem uniformContinuous_symm : UniformContinuous (Path.symm : Path x y → Path y x) :=
+  hasBasis_uniformity.uniformContinuous_iff hasBasis_uniformity |>.mpr fun U hU ↦
+    ⟨U, hU, fun _ _ h x ↦ h (σ x)⟩
 
-/--
-theorem `uniformContinuous_trans` / 定理 `uniformContinuous_trans`
+/-- The function `Path.trans` that concatenates two paths `γ₁ : Path x y` and `γ₂ : Path y z`
+is uniformly continuous in `(γ₁, γ₂)`. -/
+/-
+**Path.uniformContinuous_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：uniformContinuous_trans : UniformContinuous (Path.trans : Path x y -> Path
+ y z -> Path x z).uncurry
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.uniformContinuous_iff`：Filter.HasBasis.uniformContinuous
+_iff {ι'} {p : ι -> Prop} {s : ι -> SetRel α α} (ha : (𝓤 α).HasBasis p s) {q : ι
+' -> Prop} {t : ι' -> Set (…
+· 使用定理 `Filter.HasBasis.uniformity_prod`：Filter.HasBasis.uniformity_prod {ιa ιb 
+: Type*} [UniformSpace α] [UniformSpace β] {pa : ιa -> Prop} {pb : ιb -> Prop} {
+sa : ιa -> SetRel α α…
+· 使用定理 `Path.hasBasis_uniformity`：hasBasis_uniformity : (𝓤 (Path x y)).HasBasis 
+(· in 𝓤 X) ({γ | forall t, (γ.1 t, γ.2 t) in ·})
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `unitInterval.mul_pos_mem_iff`：mul_pos_mem_iff {a t : Real} (ha : 0 < a) 
+: a * t in I ↔ t in Set.Icc (0 : Real) (1 / a)
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `unitInterval.two_mul_sub_one_mem_iff`：two_mul_sub_one_mem_iff {t : Real}
+ : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Path.trans_apply`：trans_apply (γ : Path x y) (γ' : Path y z) (t : I) : (
+γ.trans γ') t = if h : (t : Real) <= 1 / 2 then γ ⟨2 * t, (mul_pos_mem_iff zero_
+lt_two…
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
 
-English:
-theorem uniformContinuous_trans
-  proof: hasBasis_uniformity.uniformity_prod hasBasis_uniformity
-.mpr fun U hU => .uniformContinuous_iff hasBasis_uniformity
-      ⟨(U, U), ⟨hU, hU⟩, fun ⟨_, _⟩ ⟨_, _⟩ ⟨h₁, h₂⟩ t => by
-        by_cases ht : (t : Real) <= 2⁻¹ <;> simp [Path.trans_apply, ht, h₁ _, h₂ _]⟩
-
-中文:
-定理 uniformContinuous_trans
-  证明: hasBasis_uniformity.uniformity_prod hasBasis_uniformity
-.mpr fun U hU => .uniformContinuous_iff hasBasis_uniformity
-      ⟨(U, U), ⟨hU, hU⟩, fun ⟨_, _⟩ ⟨_, _⟩ ⟨h₁, h₂⟩ t => by
-        by_cases ht : (t : Real) <= 2⁻¹ <;> simp [Path.trans_apply, ht, h₁ _, h₂ _]⟩
-
-Depends on / 依赖: Path.trans_apply, hasBasis_uniformity, hasBasis_uniformity.uniformity_prod, trans_apply, uniformContinuous_iff, uniformity_prod
+--- 原说明 ---
+The function `Path.trans` that concatenates two paths `γ₁ : Path x y` and `γ₂ : 
+Path y z`
+is uniformly continuous in `(γ₁, γ₂)`.
 -/
 theorem uniformContinuous_trans :
-    UniformContinuous (Path.trans : Path x y -> Path y z -> Path x z).uncurry :=
+    UniformContinuous (Path.trans : Path x y → Path y z → Path x z).uncurry :=
   hasBasis_uniformity.uniformity_prod hasBasis_uniformity
-.mpr fun U hU => .uniformContinuous_iff hasBasis_uniformity
-      ⟨(U, U), ⟨hU, hU⟩, fun ⟨_, _⟩ ⟨_, _⟩ ⟨h₁, h₂⟩ t => by
-        by_cases ht : (t : Real) <= 2⁻¹ <;> simp [Path.trans_apply, ht, h₁ _, h₂ _]⟩
+    |>.uniformContinuous_iff hasBasis_uniformity |>.mpr fun U hU ↦
+      ⟨(U, U), ⟨hU, hU⟩, fun ⟨_, _⟩ ⟨_, _⟩ ⟨h₁, h₂⟩ t ↦ by
+        by_cases ht : (t : ℝ) ≤ 2⁻¹ <;> simp [Path.trans_apply, ht, h₁ _, h₂ _]⟩
 
-/--
-Instance `instCompleteSpace` / 实例 `instCompleteSpace`
+/-- The space of paths between two points in a complete uniform space
+is a complete uniform space. -/
+/-
+**Path.instCompleteSpace** 是 Mathlib 中的一个实例，位于命名空间 `Path`。
+形式化陈述：instCompleteSpace [CompleteSpace X] : CompleteSpace (Path x y)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.completeSpace`：∀ {α : Type u} {β : Type v} [inst : Uni
+formSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformInducing f → IsCo
+mplete (Set.range f) …
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
+· 使用定理 `Path.isUniformEmbedding_coe`：isUniformEmbedding_coe : IsUniformEmbedding
+ ((↑) : Path x y -> C(I, X)) where comap_uniformity
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.range_coe`：range_coe : range ((↑) : Path x y -> C(I, X)) = {f | f 0
+ = x ∧ f 1 = y}
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `unitInterval.instNontrivialElemReal`：Nontrivial ↑unitInterval
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `ContinuousMap.isComplete_setOfPred_eqOn`：isComplete_setOfPred_eqOn [Comp
+leteSpace C(α, β)] (f : α -> β) (s : Set α) : IsComplete {g : C(α, β) | EqOn g f
+ s}
+· 使用定理 `instWeaklyLocallyCompactSpaceOfLocallyCompactSpace`：∀ {X : Type u_1} [in
+st : TopologicalSpace X] [LocallyCompactSpace X], WeaklyLocallyCompactSpace X
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `proper_of_compact`：∀ {α : Type u} [inst : PseudoMetricSpace α] [CompactS
+pace α], ProperSpace α
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
 
-English:
-instance instCompleteSpace
-  signature: [CompleteSpace X]
-  body: isUniformEmbedding_coe.completeSpace by simpa [Set.EqOn, range_coe]
-    using ContinuousMap.isComplete_setOfPred_eqOn (Function.update (fun _ : I => y) 0 x) {0, 1}
-
-中文:
-实例 instCompleteSpace
-  签名: [完备空间 X]
-  定义体: isUniformEmbedding_coe.completeSpace by simpa [Set.EqOn, range_coe]
-    using ContinuousMap.isComplete_setOfPred_eqOn (Function.update (fun _ : I => y) 0 x) {0, 1}
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.isComplete_setOfPred_eqOn, Function, Function.update, Set.EqOn, completeSpace, isComplete_setOfPred_eqOn, isUniformEmbedding_coe, isUniformEmbedding_coe.completeSpace, range_coe, update
+--- 原说明 ---
+The space of paths between two points in a complete uniform space
+is a complete uniform space.
 -/
 instance instCompleteSpace [CompleteSpace X] : CompleteSpace (Path x y) :=
-isUniformEmbedding_coe.completeSpace by simpa [Set.EqOn, range_coe]
-    using ContinuousMap.isComplete_setOfPred_eqOn (Function.update (fun _ : I => y) 0 x) {0, 1}
+  isUniformEmbedding_coe.completeSpace <| by simpa [Set.EqOn, range_coe]
+    using ContinuousMap.isComplete_setOfPred_eqOn (Function.update (fun _ : I ↦ y) 0 x) {0, 1}
 
 end Path
+

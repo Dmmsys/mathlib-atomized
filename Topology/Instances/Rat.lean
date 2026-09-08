@@ -24,622 +24,428 @@ open Filter Metric Set Topology
 
 namespace Rat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MetricSpace Rat
-  body: fast_instance% MetricSpace.induced (↑) Rat.cast_injective Real.metricSpace
-
-中文:
-实例 :
-  签名: 度量空间 有理数
-  定义体: fast_instance% MetricSpace.induced (↑) Rat.cast_injective Real.metricSpace
-
-Depends on / 依赖: MetricSpace, MetricSpace.induced, Rat.cast_injective, Real.metricSpace, cast_injective, fast_instance, induced, metricSpace
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MetricSpace Rat :=
+instance : MetricSpace ℚ :=
   fast_instance% MetricSpace.induced (↑) Rat.cast_injective Real.metricSpace
-
-/--
-theorem `dist_eq` / 定理 `dist_eq`
-
-English:
-theorem dist_eq
-  given: (x y : Rat)
-  statement: dist x y = |(x : Real) - y|
-  proof: rfl
-
-@[norm_cast, simp]
-
-中文:
-定理 dist_eq
-  条件: (x y : 有理数)
-  结论: dist x y = |(x : 实数) - y|
-  证明: rfl
-
-@[norm_cast, simp]
+/-
+**Rat.dist_eq** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：dist_eq (x y : Rat) : dist x y = |(x : Real) - y|
+参数：x y : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dist_eq (x y : Rat) : dist x y = |(x : Real) - y| := rfl
+theorem dist_eq (x y : ℚ) : dist x y = |(x : ℝ) - y| := rfl
 
 @[norm_cast, simp]
-/--
-theorem `dist_cast` / 定理 `dist_cast`
-
-English:
-theorem dist_cast
-  given: (x y : Rat)
-  statement: dist (x : Real) y = dist x y
-  proof: rfl
-
-中文:
-定理 dist_cast
-  条件: (x y : 有理数)
-  结论: dist (x : 实数) y = dist x y
-  证明: rfl
+/-
+**Rat.dist_cast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：dist_cast (x y : Rat) : dist (x : Real) y = dist x y
+参数：x y : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dist_cast (x y : Rat) : dist (x : Real) y = dist x y :=
+theorem dist_cast (x y : ℚ) : dist (x : ℝ) y = dist x y :=
   rfl
-
-/--
-theorem `uniformContinuous_coe_real` / 定理 `uniformContinuous_coe_real`
-
-English:
-theorem uniformContinuous_coe_real
-  statement: UniformContinuous ((↑) : Rat -> Real)
-  proof: uniformContinuous_comap
-
-中文:
-定理 uniformContinuous_coe_real
-  结论: 一致连续 ((↑) : 有理数 -> 实数)
-  证明: uniformContinuous_comap
-
-Depends on / 依赖: uniformContinuous_comap
+/-
+**Rat.uniformContinuous_coe_real** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：uniformContinuous_coe_real : UniformContinuous ((↑) : Rat -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_comap`：uniformContinuous_comap {f : α -> β} [u : Unifo
+rmSpace β] : @UniformContinuous α β (UniformSpace.comap f u) u f
 -/
-theorem uniformContinuous_coe_real : UniformContinuous ((↑) : Rat -> Real) :=
+theorem uniformContinuous_coe_real : UniformContinuous ((↑) : ℚ → ℝ) :=
   uniformContinuous_comap
-
-/--
-theorem `isUniformEmbedding_coe_real` / 定理 `isUniformEmbedding_coe_real`
-
-English:
-theorem isUniformEmbedding_coe_real
-  statement: IsUniformEmbedding ((↑) : Rat -> Real)
-  proof: isUniformEmbedding_comap Rat.cast_injective
-
-中文:
-定理 isUniformEmbedding_coe_real
-  结论: 是一致嵌入 ((↑) : 有理数 -> 实数)
-  证明: isUniformEmbedding_comap Rat.cast_injective
-
-Depends on / 依赖: Rat.cast_injective, cast_injective, isUniformEmbedding_comap
+/-
+**Rat.isUniformEmbedding_coe_real** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：isUniformEmbedding_coe_real : IsUniformEmbedding ((↑) : Rat -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isUniformEmbedding_comap`：isUniformEmbedding_comap {α : Type*} {β : Type
+*} {f : α -> β} [u : UniformSpace β] (hf : Function.Injective f) : @IsUniformEmb
+edding α β (Un…
+· 使用引理 `Rat.cast_injective`：cast_injective : Injective ((↑) : Rat -> α) | ⟨n₁, d
+₁, d₁0, c₁⟩, ⟨n₂, d₂, d₂0, c₂⟩, h => by have d₁a : (d₁ : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem isUniformEmbedding_coe_real : IsUniformEmbedding ((↑) : Rat -> Real) :=
+theorem isUniformEmbedding_coe_real : IsUniformEmbedding ((↑) : ℚ → ℝ) :=
   isUniformEmbedding_comap Rat.cast_injective
-
-/--
-theorem `isDenseEmbedding_coe_real` / 定理 `isDenseEmbedding_coe_real`
-
-English:
-theorem isDenseEmbedding_coe_real
-  statement: IsDenseEmbedding ((↑) : Rat -> Real)
-  proof: isUniformEmbedding_coe_real.isDenseEmbedding Rat.denseRange_cast
-
-中文:
-定理 isDenseEmbedding_coe_real
-  结论: 是稠密嵌入 ((↑) : 有理数 -> 实数)
-  证明: isUniformEmbedding_coe_real.isDenseEmbedding Rat.denseRange_cast
-
-Depends on / 依赖: Rat.denseRange_cast, denseRange_cast, isDenseEmbedding, isUniformEmbedding_coe_real, isUniformEmbedding_coe_real.isDenseEmbedding
+/-
+**Rat.isDenseEmbedding_coe_real** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：isDenseEmbedding_coe_real : IsDenseEmbedding ((↑) : Rat -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.isDenseEmbedding`：IsUniformEmbedding.isDenseEmbedding
+ {f : α -> β} (h : IsUniformEmbedding f) (hd : DenseRange f) : IsDenseEmbedding 
+f
+· 使用定理 `Rat.isUniformEmbedding_coe_real`：isUniformEmbedding_coe_real : IsUniform
+Embedding ((↑) : Rat -> Real)
+· 使用定理 `Rat.denseRange_cast`：Rat.denseRange_cast {𝕜} [Field 𝕜] [LinearOrder 𝕜] [
+IsStrictOrderedRing 𝕜] [TopologicalSpace 𝕜] [OrderTopology 𝕜] [Archimedean 𝕜] : 
+DenseRang…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
 -/
-theorem isDenseEmbedding_coe_real : IsDenseEmbedding ((↑) : Rat -> Real) :=
+theorem isDenseEmbedding_coe_real : IsDenseEmbedding ((↑) : ℚ → ℝ) :=
   isUniformEmbedding_coe_real.isDenseEmbedding Rat.denseRange_cast
-
-/--
-theorem `isEmbedding_coe_real` / 定理 `isEmbedding_coe_real`
-
-English:
-theorem isEmbedding_coe_real
-  statement: IsEmbedding ((↑) : Rat -> Real)
-  proof: isDenseEmbedding_coe_real.isEmbedding
-
-中文:
-定理 isEmbedding_coe_real
-  结论: 是嵌入 ((↑) : 有理数 -> 实数)
-  证明: isDenseEmbedding_coe_real.isEmbedding
-
-Depends on / 依赖: isDenseEmbedding_coe_real, isDenseEmbedding_coe_real.isEmbedding, isEmbedding
+/-
+**Rat.isEmbedding_coe_real** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：isEmbedding_coe_real : IsEmbedding ((↑) : Rat -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsDenseEmbedding.isEmbedding`：isEmbedding (de : IsDenseEmbedding e) : Is
+Embedding e where __
+· 使用定理 `Rat.isDenseEmbedding_coe_real`：isDenseEmbedding_coe_real : IsDenseEmbedd
+ing ((↑) : Rat -> Real)
 -/
-theorem isEmbedding_coe_real : IsEmbedding ((↑) : Rat -> Real) :=
+theorem isEmbedding_coe_real : IsEmbedding ((↑) : ℚ → ℝ) :=
   isDenseEmbedding_coe_real.isEmbedding
-
-/--
-theorem `continuous_coe_real` / 定理 `continuous_coe_real`
-
-English:
-theorem continuous_coe_real
-  statement: Continuous ((↑) : Rat -> Real)
-  proof: uniformContinuous_coe_real.continuous
-
-中文:
-定理 continuous_coe_real
-  结论: 连续 ((↑) : 有理数 -> 实数)
-  证明: uniformContinuous_coe_real.continuous
-
-Depends on / 依赖: continuous, uniformContinuous_coe_real, uniformContinuous_coe_real.continuous
+/-
+**Rat.continuous_coe_real** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：continuous_coe_real : Continuous ((↑) : Rat -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `Rat.uniformContinuous_coe_real`：uniformContinuous_coe_real : UniformCont
+inuous ((↑) : Rat -> Real)
 -/
-theorem continuous_coe_real : Continuous ((↑) : Rat -> Real) :=
+theorem continuous_coe_real : Continuous ((↑) : ℚ → ℝ) :=
   uniformContinuous_coe_real.continuous
 
 end Rat
 
 @[norm_cast, simp]
-/--
-theorem `Nat.dist_cast_rat` / 定理 `Nat.dist_cast_rat`
-
-English:
-theorem Nat.dist_cast_rat
-  given: (x y : Nat)
-  statement: dist (x : Rat) y = dist x y
-  proof: by
-  rw [← Nat.dist_cast_real]; rw [← Rat.dist_cast]; congr
-
-中文:
-定理 自然数.dist_cast_rat
-  条件: (x y : 自然数)
-  结论: dist (x : 有理数) y = dist x y
-  证明: by
-  rw [← Nat.dist_cast_real]; rw [← Rat.dist_cast]; congr
-
-Depends on / 依赖: Nat.dist_cast_real, Rat.dist_cast, dist_cast, dist_cast_real
+/-
+**Nat.dist_cast_rat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.dist_cast_rat (x y : Nat) : dist (x : Rat) y = dist x y
+参数：x y : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.dist_cast_real`：dist_cast_real (x y : Nat) : dist (x : Real) y = dis
+t x y
+· 使用定理 `Rat.dist_cast`：dist_cast (x y : Rat) : dist (x : Real) y = dist x y
 -/
-theorem Nat.dist_cast_rat (x y : Nat) : dist (x : Rat) y = dist x y := by
-  rw [← Nat.dist_cast_real]; rw [← Rat.dist_cast]; congr
-
-/--
-theorem `Nat.isUniformEmbedding_coe_rat` / 定理 `Nat.isUniformEmbedding_coe_rat`
-
-English:
-theorem Nat.isUniformEmbedding_coe_rat
-  statement: IsUniformEmbedding ((↑) : Nat -> Rat)
-  proof: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
-
-中文:
-定理 自然数.isUniformEmbedding_coe_rat
-  结论: 是一致嵌入 ((↑) : 自然数 -> 有理数)
-  证明: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
-
-Depends on / 依赖: Nat.pairwise_one_le_dist, isUniformEmbedding_bot_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
+theorem Nat.dist_cast_rat (x y : ℕ) : dist (x : ℚ) y = dist x y := by
+  rw [← Nat.dist_cast_real, ← Rat.dist_cast]; congr
+/-
+**Nat.isUniformEmbedding_coe_rat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.isUniformEmbedding_coe_rat : IsUniformEmbedding ((↑) : Nat -> Rat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isUniformEmbedding_bot_of_pairwise_le_dist`：isUniformEmbedding_bo
+t_of_pairwise_le_dist {β : Type*} {ε : Real} (hε : 0 < ε) {f : β -> α} (hf : Pai
+rwise fun x y => ε <= dist (f x) (f y))…
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.dist_cast_rat`：Nat.dist_cast_rat (x y : Nat) : dist (x : Rat) y = di
+st x y
+· 使用定理 `Nat.pairwise_one_le_dist`：pairwise_one_le_dist : Pairwise fun m n : Nat 
+=> 1 <= dist m n
 -/
-theorem Nat.isUniformEmbedding_coe_rat : IsUniformEmbedding ((↑) : Nat -> Rat) :=
-isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
-
-/--
-theorem `Nat.isClosedEmbedding_coe_rat` / 定理 `Nat.isClosedEmbedding_coe_rat`
-
-English:
-theorem Nat.isClosedEmbedding_coe_rat
-  statement: IsClosedEmbedding ((↑) : Nat -> Rat)
-  proof: isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
+theorem Nat.isUniformEmbedding_coe_rat : IsUniformEmbedding ((↑) : ℕ → ℚ) :=
+  isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one <| by simpa using Nat.pairwise_one_le_dist
+/-
+**Nat.isClosedEmbedding_coe_rat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.isClosedEmbedding_coe_rat : IsClosedEmbedding ((↑) : Nat -> Rat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isClosedEmbedding_of_pairwise_le_dist`：isClosedEmbedding_of_pairw
+ise_le_dist {α : Type*} [TopologicalSpace α] [DiscreteTopology α] {ε : Real} (hε
+ : 0 < ε) {f : α -> γ} (hf : Pairw…
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.dist_cast_rat`：Nat.dist_cast_rat (x y : Nat) : dist (x : Rat) y = di
+st x y
+· 使用定理 `Nat.pairwise_one_le_dist`：pairwise_one_le_dist : Pairwise fun m n : Nat 
+=> 1 <= dist m n
+-/
+theorem Nat.isClosedEmbedding_coe_rat : IsClosedEmbedding ((↑) : ℕ → ℚ) :=
+  isClosedEmbedding_of_pairwise_le_dist zero_lt_one <| by simpa using Nat.pairwise_one_le_dist
 
 @[norm_cast, simp]
-
-中文:
-定理 自然数.isClosedEmbedding_coe_rat
-  结论: 是闭嵌入 ((↑) : 自然数 -> 有理数)
-  证明: isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
-
-@[norm_cast, simp]
-
-Depends on / 依赖: Nat.pairwise_one_le_dist, isClosedEmbedding_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
+/-
+**Int.dist_cast_rat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.dist_cast_rat (x y : Int) : dist (x : Rat) y = dist x y
+参数：x y : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.dist_cast_real`：dist_cast_real (x y : Int) : dist (x : Real) y = dis
+t x y
+· 使用定理 `Rat.dist_cast`：dist_cast (x y : Rat) : dist (x : Real) y = dist x y
 -/
-theorem Nat.isClosedEmbedding_coe_rat : IsClosedEmbedding ((↑) : Nat -> Rat) :=
-isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Nat.pairwise_one_le_dist
-
-@[norm_cast, simp]
-/--
-theorem `Int.dist_cast_rat` / 定理 `Int.dist_cast_rat`
-
-English:
-theorem Int.dist_cast_rat
-  given: (x y : Int)
-  statement: dist (x : Rat) y = dist x y
-  proof: by
-  rw [← Int.dist_cast_real]; rw [← Rat.dist_cast]; congr
-
-中文:
-定理 整数.dist_cast_rat
-  条件: (x y : 整数)
-  结论: dist (x : 有理数) y = dist x y
-  证明: by
-  rw [← Int.dist_cast_real]; rw [← Rat.dist_cast]; congr
-
-Depends on / 依赖: Int.dist_cast_real, Rat.dist_cast, dist_cast, dist_cast_real
+theorem Int.dist_cast_rat (x y : ℤ) : dist (x : ℚ) y = dist x y := by
+  rw [← Int.dist_cast_real, ← Rat.dist_cast]; congr
+/-
+**Int.isUniformEmbedding_coe_rat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.isUniformEmbedding_coe_rat : IsUniformEmbedding ((↑) : Int -> Rat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isUniformEmbedding_bot_of_pairwise_le_dist`：isUniformEmbedding_bo
+t_of_pairwise_le_dist {β : Type*} {ε : Real} (hε : 0 < ε) {f : β -> α} (hf : Pai
+rwise fun x y => ε <= dist (f x) (f y))…
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Int.dist_cast_rat`：Int.dist_cast_rat (x y : Int) : dist (x : Rat) y = di
+st x y
+· 使用定理 `Int.pairwise_one_le_dist`：pairwise_one_le_dist : Pairwise fun m n : Int 
+=> 1 <= dist m n
 -/
-theorem Int.dist_cast_rat (x y : Int) : dist (x : Rat) y = dist x y := by
-  rw [← Int.dist_cast_real]; rw [← Rat.dist_cast]; congr
-
-/--
-theorem `Int.isUniformEmbedding_coe_rat` / 定理 `Int.isUniformEmbedding_coe_rat`
-
-English:
-theorem Int.isUniformEmbedding_coe_rat
-  statement: IsUniformEmbedding ((↑) : Int -> Rat)
-  proof: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
-
-中文:
-定理 整数.isUniformEmbedding_coe_rat
-  结论: 是一致嵌入 ((↑) : 整数 -> 有理数)
-  证明: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
-
-Depends on / 依赖: Int.pairwise_one_le_dist, isUniformEmbedding_bot_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
+theorem Int.isUniformEmbedding_coe_rat : IsUniformEmbedding ((↑) : ℤ → ℚ) :=
+  isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one <| by simpa using Int.pairwise_one_le_dist
+/-
+**Int.isClosedEmbedding_coe_rat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.isClosedEmbedding_coe_rat : IsClosedEmbedding ((↑) : Int -> Rat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isClosedEmbedding_of_pairwise_le_dist`：isClosedEmbedding_of_pairw
+ise_le_dist {α : Type*} [TopologicalSpace α] [DiscreteTopology α] {ε : Real} (hε
+ : 0 < ε) {f : α -> γ} (hf : Pairw…
+· 使用定理 `instDiscreteTopologyInt`：DiscreteTopology ℤ
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Int.dist_cast_rat`：Int.dist_cast_rat (x y : Int) : dist (x : Rat) y = di
+st x y
+· 使用定理 `Int.pairwise_one_le_dist`：pairwise_one_le_dist : Pairwise fun m n : Int 
+=> 1 <= dist m n
 -/
-theorem Int.isUniformEmbedding_coe_rat : IsUniformEmbedding ((↑) : Int -> Rat) :=
-isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
-
-/--
-theorem `Int.isClosedEmbedding_coe_rat` / 定理 `Int.isClosedEmbedding_coe_rat`
-
-English:
-theorem Int.isClosedEmbedding_coe_rat
-  statement: IsClosedEmbedding ((↑) : Int -> Rat)
-  proof: isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
-
-中文:
-定理 整数.isClosedEmbedding_coe_rat
-  结论: 是闭嵌入 ((↑) : 整数 -> 有理数)
-  证明: isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
-
-Depends on / 依赖: Int.pairwise_one_le_dist, isClosedEmbedding_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
--/
-theorem Int.isClosedEmbedding_coe_rat : IsClosedEmbedding ((↑) : Int -> Rat) :=
-isClosedEmbedding_of_pairwise_le_dist zero_lt_one by simpa using Int.pairwise_one_le_dist
+theorem Int.isClosedEmbedding_coe_rat : IsClosedEmbedding ((↑) : ℤ → ℚ) :=
+  isClosedEmbedding_of_pairwise_le_dist zero_lt_one <| by simpa using Int.pairwise_one_le_dist
 
 namespace Rat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NoncompactSpace Rat
-  body: Int.isClosedEmbedding_coe_rat.noncompactSpace
-
-中文:
-实例 :
-  签名: Noncompact空间 有理数
-  定义体: Int.isClosedEmbedding_coe_rat.noncompactSpace
-
-Depends on / 依赖: Int.isClosedEmbedding_coe_rat.noncompactSpace, isClosedEmbedding_coe_rat, noncompactSpace
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NoncompactSpace Rat := Int.isClosedEmbedding_coe_rat.noncompactSpace
-
-/--
-theorem `uniformContinuous_add` / 定理 `uniformContinuous_add`
-
-English:
-theorem uniformContinuous_add
-  statement: UniformContinuous fun p : Rat × Rat => p.1 + p.2
-  proof: Rat.isUniformEmbedding_coe_real.isUniformInducing.uniformContinuous_iff.2 by
+instance : NoncompactSpace ℚ := Int.isClosedEmbedding_coe_rat.noncompactSpace
+/-
+**Rat.uniformContinuous_add** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：uniformContinuous_add : UniformContinuous fun p : Rat × Rat => p.1 + p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsUniformInducing.uniformContinuous_iff`：IsUniformInducing.uniformContin
+uous_iff {f : α -> β} {g : β -> γ} (hg : IsUniformInducing g) : UniformContinuou
+s f ↔ UniformContinuous (g ∘ …
+· 使用引理 `IsUniformEmbedding.isUniformInducing`：IsUniformEmbedding.isUniformInduci
+ng {f : α -> β} (hf : IsUniformEmbedding f) : IsUniformInducing f
+· 使用定理 `Rat.isUniformEmbedding_coe_real`：isUniformEmbedding_coe_real : IsUniform
+Embedding ((↑) : Rat -> Real)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Rat.cast_add`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p + q) = ↑p + ↑q
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `Real.uniformContinuous_add`：Real.uniformContinuous_add : UniformContinuo
+us fun p : Real × Real => p.1 + p.2
+· 使用定理 `UniformContinuous.prodMap`：UniformContinuous.prodMap [UniformSpace δ] {f
+ : α -> γ} {g : β -> δ} (hf : UniformContinuous f) (hg : UniformContinuous g) : 
+UniformContinuo…
+· 使用定理 `Rat.uniformContinuous_coe_real`：uniformContinuous_coe_real : UniformCont
+inuous ((↑) : Rat -> Real)
+-/
+theorem uniformContinuous_add : UniformContinuous fun p : ℚ × ℚ => p.1 + p.2 :=
+  Rat.isUniformEmbedding_coe_real.isUniformInducing.uniformContinuous_iff.2 <| by
     simp only [Function.comp_def, Rat.cast_add]
     exact Real.uniformContinuous_add.comp
       (Rat.uniformContinuous_coe_real.prodMap Rat.uniformContinuous_coe_real)
-
-中文:
-定理 uniformContinuous_add
-  结论: 一致连续 fun p : 有理数 × 有理数 => p.1 + p.2
-  证明: Rat.isUniformEmbedding_coe_real.isUniformInducing.uniformContinuous_iff.2 by
-    simp only [Function.comp_def, Rat.cast_add]
-    exact Real.uniformContinuous_add.comp
-      (Rat.uniformContinuous_coe_real.prodMap Rat.uniformContinuous_coe_real)
-
-Depends on / 依赖: Function, Function.comp_def, Rat.cast_add, Rat.isUniformEmbedding_coe_real.isUniformInducing.uniformContinuous_iff, Rat.uniformContinuous_coe_real, Rat.uniformContinuous_coe_real.prodMap, Real.uniformContinuous_add.comp, cast_add, comp_def, isUniformEmbedding_coe_real, isUniformInducing, prodMap, uniformContinuous_add, uniformContinuous_coe_real, uniformContinuous_iff
+/-
+**Rat.uniformContinuous_neg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：uniformContinuous_neg : UniformContinuous (@Neg.neg Rat _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.uniformContinuous_iff`：uniformContinuous_iff [PseudoMetricSpace β
+] {f : α -> β} : UniformContinuous f ↔ forall ε > 0, exists δ > 0, forall ⦃a b :
+ α⦄, dist a b < δ …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Rat.cast_neg`：∀ {α : Type u_3} [inst : DivisionRing α] (q : ℚ), ↑(-q) = 
+-↑q
+· 使用定理 `neg_sub_neg`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b : α)
+, -a - -b = b - a
+· 使用定理 `abs_sub_comm`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] 
+(a b : α), |a - b| = |b - a|
 -/
-theorem uniformContinuous_add : UniformContinuous fun p : Rat × Rat => p.1 + p.2 :=
-Rat.isUniformEmbedding_coe_real.isUniformInducing.uniformContinuous_iff.2 by
-    simp only [Function.comp_def, Rat.cast_add]
-    exact Real.uniformContinuous_add.comp
-      (Rat.uniformContinuous_coe_real.prodMap Rat.uniformContinuous_coe_real)
-
-/--
-theorem `uniformContinuous_neg` / 定理 `uniformContinuous_neg`
-
-English:
-theorem uniformContinuous_neg
-  statement: UniformContinuous (@Neg.neg Rat _)
-  proof: Metric.uniformContinuous_iff.2 fun ε ε0 =>
-    ⟨_, ε0, fun _ _ h => by
-      simpa only [abs_sub_comm, dist_eq, cast_neg, neg_sub_neg] using h⟩
-
-中文:
-定理 uniformContinuous_neg
-  结论: 一致连续 (@取负.neg 有理数 _)
-  证明: Metric.uniformContinuous_iff.2 fun ε ε0 =>
-    ⟨_, ε0, fun _ _ h => by
-      simpa only [abs_sub_comm, dist_eq, cast_neg, neg_sub_neg] using h⟩
-
-Depends on / 依赖: Metric, Metric.uniformContinuous_iff, abs_sub_comm, cast_neg, dist_eq, neg_sub_neg, uniformContinuous_iff
--/
-theorem uniformContinuous_neg : UniformContinuous (@Neg.neg Rat _) :=
+theorem uniformContinuous_neg : UniformContinuous (@Neg.neg ℚ _) :=
   Metric.uniformContinuous_iff.2 fun ε ε0 =>
     ⟨_, ε0, fun _ _ h => by
       simpa only [abs_sub_comm, dist_eq, cast_neg, neg_sub_neg] using h⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsUniformAddGroup Rat
-  body: IsUniformAddGroup.mk' Rat.uniformContinuous_add Rat.uniformContinuous_neg
-
-中文:
-实例 :
-  签名: 是UniformAdd群 有理数
-  定义体: IsUniformAddGroup.mk' Rat.uniformContinuous_add Rat.uniformContinuous_neg
-
-Depends on / 依赖: IsUniformAddGroup, IsUniformAddGroup.mk, Rat.uniformContinuous_add, Rat.uniformContinuous_neg, uniformContinuous_add, uniformContinuous_neg
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsUniformAddGroup Rat :=
+instance : IsUniformAddGroup ℚ :=
   IsUniformAddGroup.mk' Rat.uniformContinuous_add Rat.uniformContinuous_neg
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTopologicalAddGroup Rat
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 是拓扑加群 有理数
-  定义体: inferInstance
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsTopologicalAddGroup Rat := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderTopology Rat
-  body: induced_orderTopology _ Rat.cast_lt exists_rat_btwn
-
-中文:
-实例 :
-  签名: Order拓扑 有理数
-  定义体: induced_orderTopology _ Rat.cast_lt exists_rat_btwn
-
-Depends on / 依赖: Rat.cast_lt, cast_lt, exists_rat_btwn, induced_orderTopology
+instance : IsTopologicalAddGroup ℚ := inferInstance
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : OrderTopology Rat := induced_orderTopology _ Rat.cast_lt exists_rat_btwn
-
-/--
-theorem `uniformContinuous_abs` / 定理 `uniformContinuous_abs`
-
-English:
-theorem uniformContinuous_abs
-  statement: UniformContinuous (abs : Rat -> Rat)
-  proof: Metric.uniformContinuous_iff.2 fun ε ε0 =>
-    ⟨ε, ε0, fun _ _ h =>
-      lt_of_le_of_lt (by simpa [Rat.dist_eq] using abs_abs_sub_abs_le_abs_sub _ _) h⟩
-
-中文:
-定理 uniformContinuous_abs
-  结论: 一致连续 (abs : 有理数 -> 有理数)
-  证明: Metric.uniformContinuous_iff.2 fun ε ε0 =>
-    ⟨ε, ε0, fun _ _ h =>
-      lt_of_le_of_lt (by simpa [Rat.dist_eq] using abs_abs_sub_abs_le_abs_sub _ _) h⟩
-
-Depends on / 依赖: Metric, Metric.uniformContinuous_iff, Rat.dist_eq, abs_abs_sub_abs_le_abs_sub, dist_eq, lt_of_le_of_lt, uniformContinuous_iff
+instance : OrderTopology ℚ := induced_orderTopology _ Rat.cast_lt exists_rat_btwn
+/-
+**Rat.uniformContinuous_abs** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：uniformContinuous_abs : UniformContinuous (abs : Rat -> Rat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.uniformContinuous_iff`：uniformContinuous_iff [PseudoMetricSpace β
+] {f : α -> β} : UniformContinuous f ↔ forall ε > 0, exists δ > 0, forall ⦃a b :
+ α⦄, dist a b < δ …
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Rat.cast_abs`：∀ {K : Type u_5} [inst : Field K] [inst_1 : LinearOrder K]
+ [IsStrictOrderedRing K] (q : ℚ), ↑|q| = |↑q|
+· 使用定理 `abs_abs_sub_abs_le_abs_sub`：∀ {G : Type u_1} [inst : AddCommGroup G] [in
+st_1 : LinearOrder G] [IsOrderedAddMonoid G] (a b : G),   ||a| - |b|| ≤ |a - b|
 -/
-theorem uniformContinuous_abs : UniformContinuous (abs : Rat -> Rat) :=
+theorem uniformContinuous_abs : UniformContinuous (abs : ℚ → ℚ) :=
   Metric.uniformContinuous_iff.2 fun ε ε0 =>
     ⟨ε, ε0, fun _ _ h =>
       lt_of_le_of_lt (by simpa [Rat.dist_eq] using abs_abs_sub_abs_le_abs_sub _ _) h⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTopologicalRing Rat
-  body: inferInstance
-
-nonrec theorem totallyBounded_Icc (a b : Rat) : TotallyBounded (Icc a b) := by
-  simpa only [preimage_cast_Icc]
-    using totallyBounded_preimage Rat.isUniformEmbedding_coe_real.isUniformInducing
-      (totallyBounded_Icc (a : Real) b)
-
-中文:
-实例 :
-  签名: 是拓扑环 有理数
-  定义体: inferInstance
-
-nonrec theorem totallyBounded_Icc (a b : Rat) : TotallyBounded (Icc a b) := by
-  simpa only [preimage_cast_Icc]
-    using totallyBounded_preimage Rat.isUniformEmbedding_coe_real.isUniformInducing
-      (totallyBounded_Icc (a : Real) b)
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsTopologicalRing Rat := inferInstance
+instance : IsTopologicalRing ℚ := inferInstance
 
-nonrec theorem totallyBounded_Icc (a b : Rat) : TotallyBounded (Icc a b) := by
+nonrec theorem totallyBounded_Icc (a b : ℚ) : TotallyBounded (Icc a b) := by
   simpa only [preimage_cast_Icc]
     using totallyBounded_preimage Rat.isUniformEmbedding_coe_real.isUniformInducing
-      (totallyBounded_Icc (a : Real) b)
+      (totallyBounded_Icc (a : ℝ) b)
 
 end Rat
 
 namespace NNRat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MetricSpace Rat>=0
-  body: inferInstanceAs MetricSpace (Subtype _)
-
-中文:
-实例 :
-  签名: 度量空间 有理数>=0
-  定义体: inferInstanceAs MetricSpace (Subtype _)
-
-Depends on / 依赖: MetricSpace, Subtype
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MetricSpace Rat>=0 :=
-inferInstanceAs MetricSpace (Subtype _)
+instance : MetricSpace ℚ≥0 :=
+  inferInstanceAs <| MetricSpace (Subtype _)
 
 set_option linter.style.whitespace false in -- linter false positive
 @[simp ←, push_cast]
-/--
-lemma `dist_eq` / 引理 `dist_eq`
-
-English:
-lemma dist_eq
-  given: (p q : Rat>=0)
-  statement: dist p q = dist (p : Rat) (q : Rat)
-  proof: rfl
-
-中文:
-引理 dist_eq
-  条件: (p q : 有理数>=0)
-  结论: dist p q = dist (p : 有理数) (q : 有理数)
-  证明: rfl
+/-
+**NNRat.dist_eq** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：dist_eq (p q : Rat>=0) : dist p q = dist (p : Rat) (q : Rat)
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma dist_eq (p q : Rat>=0) : dist p q = dist (p : Rat) (q : Rat) := rfl
+lemma dist_eq (p q : ℚ≥0) : dist p q = dist (p : ℚ) (q : ℚ) := rfl
 
 set_option linter.style.whitespace false in -- linter false positive
 @[simp ←, push_cast]
-/--
-lemma `nndist_eq` / 引理 `nndist_eq`
-
-English:
-lemma nndist_eq
-  given: (p q : Rat>=0)
-  statement: nndist p q = nndist (p : Rat) (q : Rat)
-  proof: rfl
-
-中文:
-引理 nndist_eq
-  条件: (p q : 有理数>=0)
-  结论: nndist p q = nndist (p : 有理数) (q : 有理数)
-  证明: rfl
+/-
+**NNRat.nndist_eq** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：nndist_eq (p q : Rat>=0) : nndist p q = nndist (p : Rat) (q : Rat)
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma nndist_eq (p q : Rat>=0) : nndist p q = nndist (p : Rat) (q : Rat) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTopologicalSemiring Rat>=0
-  body: continuousAdd_induced Nonneg.coeRingHom
-  toContinuousMul := continuousMul_induced Nonneg.coeRingHom
-
-中文:
-实例 :
-  签名: 是TopologicalSemiring 有理数>=0
-  定义体: continuousAdd_induced Nonneg.coeRingHom
-  toContinuousMul := continuousMul_induced Nonneg.coeRingHom
-
-Depends on / 依赖: Nonneg, Nonneg.coeRingHom, coeRingHom, continuousAdd_induced
+lemma nndist_eq (p q : ℚ≥0) : nndist p q = nndist (p : ℚ) (q : ℚ) := rfl
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsTopologicalSemiring Rat>=0 where
+instance : IsTopologicalSemiring ℚ≥0 where
   toContinuousAdd := continuousAdd_induced Nonneg.coeRingHom
   toContinuousMul := continuousMul_induced Nonneg.coeRingHom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousSub Rat>=0
-  body: ⟨Continuous.subtype_mk (by fun_prop) _⟩
-
-中文:
-实例 :
-  签名: 余ntinuousSub 有理数>=0
-  定义体: ⟨Continuous.subtype_mk (by fun_prop) _⟩
-
-Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ContinuousSub Rat>=0 := ⟨Continuous.subtype_mk (by fun_prop) _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderTopology Rat>=0
-  body: orderTopology_of_ordConnected (t := Set.Ici 0)
-
-中文:
-实例 :
-  签名: Order拓扑 有理数>=0
-  定义体: orderTopology_of_ordConnected (t := Set.Ici 0)
-
-Depends on / 依赖: Set.Ici, orderTopology_of_ordConnected
+instance : ContinuousSub ℚ≥0 := ⟨Continuous.subtype_mk (by fun_prop) _⟩
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : OrderTopology Rat>=0 := orderTopology_of_ordConnected (t := Set.Ici 0)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousInv₀ Rat>=0
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 余ntinuousInv₀ 有理数>=0
-  定义体: inferInstance
+instance : OrderTopology ℚ≥0 := orderTopology_of_ordConnected (t := Set.Ici 0)
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ContinuousInv₀ Rat>=0 := inferInstance
+instance : ContinuousInv₀ ℚ≥0 := inferInstance
 
 -- Special case of `IsBoundedSMul.continuousSMul` but this shortcut instance reduces dependencies
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousSMul Rat Real
-  body: continuous_induced_dom.fst'.smul (M := Real) (X := Real) continuous_snd
-
-中文:
-实例 :
-  签名: 连续标量乘法 有理数 实数
-  定义体: continuous_induced_dom.fst'.smul (M := Real) (X := Real) continuous_snd
-
-Depends on / 依赖: continuous_induced_dom, continuous_induced_dom.fst, continuous_snd
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ContinuousSMul Rat Real where
-  continuous_smul := continuous_induced_dom.fst'.smul (M := Real) (X := Real) continuous_snd
-
-instance {R : Type*} [TopologicalSpace R] [MulAction Rat R] [MulAction Rat>=0 R] [IsScalarTower Rat>=0 Rat R]
-    [ContinuousSMul Rat R] : ContinuousSMul Rat>=0 R where
+instance : ContinuousSMul ℚ ℝ where
+  continuous_smul := continuous_induced_dom.fst'.smul (M := ℝ) (X := ℝ) continuous_snd
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {R : Type*} [TopologicalSpace R] [MulAction ℚ R] [MulAction ℚ≥0 R] [IsScalarTower ℚ≥0 ℚ R]
+    [ContinuousSMul ℚ R] : ContinuousSMul ℚ≥0 R where
   continuous_smul := by
-    conv in _ • _ => rw [← NNRat.cast_smul_eq_nnqsmul Rat]
+    conv in _ • _ => rw [← NNRat.cast_smul_eq_nnqsmul ℚ]
     fun_prop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousSMul Rat>=0 NNReal
-  body: Continuous.subtype_mk (by fun_prop) _
-
-中文:
-实例 :
-  签名: 连续标量乘法 有理数>=0 非负实数
-  定义体: Continuous.subtype_mk (by fun_prop) _
-
-Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
+/-
+**NNRat.** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ContinuousSMul Rat>=0 NNReal where
+instance : ContinuousSMul ℚ≥0 NNReal where
   continuous_smul := Continuous.subtype_mk (by fun_prop) _
 
 end NNRat
+

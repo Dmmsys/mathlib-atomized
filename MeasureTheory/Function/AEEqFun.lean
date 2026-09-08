@@ -51,16 +51,16 @@ See `Mathlib/MeasureTheory/Function/L1Space/AEEqFun.lean` for `L¹` space.
 
 ## Implementation notes
 
-* `f.cast`: To find a representative of `f : α →ₘ β`, use the coercion `(f : α → β)`, which
+* `f.cast`:      To find a representative of `f : α →ₘ β`, use the coercion `(f : α → β)`, which
                  is implemented as `f.toFun`.
                  For each operation `op` in `L⁰`, there is a lemma called `coe_fn_op`,
                  characterizing, say, `(f op g : α → β)`.
-* `AEEqFun.mk`: To construct an `L⁰` function `α →ₘ β` from an almost everywhere strongly
+* `AEEqFun.mk`:  To construct an `L⁰` function `α →ₘ β` from an almost everywhere strongly
                  measurable function `f : α → β`, use `ae_eq_fun.mk`
-* `comp`: Use `comp g f` to get `[g ∘ f]` from `g : β → γ` and `[f] : α →ₘ γ` when `g` is
+* `comp`:        Use `comp g f` to get `[g ∘ f]` from `g : β → γ` and `[f] : α →ₘ γ` when `g` is
                  continuous. Use `compMeasurable` if `g` is only measurable (this requires the
                  target space to be second countable).
-* `comp₂`: Use `comp₂ g f₁ f₂` to get `[fun a ↦ g (f₁ a) (f₂ a)]`.
+* `comp₂`:       Use `comp₂ g f₁ f₂` to get `[fun a ↦ g (f₁ a) (f₂ a)]`.
                  For example, `[f + g]` is `comp₂ (+)`
 
 
@@ -91,43 +91,44 @@ variable (β)
 /-- The equivalence relation of being almost everywhere equal for almost everywhere strongly
 measurable functions. -/
 @[instance_reducible]
-/--
-Definition of `Measure.aeEqSetoid` / `Measure.aeEqSetoid` 的定义
+/-
+**MeasureTheory.Measure.aeEqSetoid** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：{α : Type u_1} →   (β : Type u_2) →     [inst : MeasurableSpace α] →      
+ [inst_1 : TopologicalSpace β] →         (μ : MeasureTheory.Measure α) → Setoid 
+{ f // MeasureTheory.AEStronglyMeasurable f μ }
+参数：β : Type u_2；μ : MeasureTheory.Measure α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 
-English:
-definition Measure.aeEqSetoid
-  signature: (μ : Measure α)
-  body: ⟨fun f g => (f : α -> β) =ᵐ[μ] g, fun {f} => ae_eq_refl f.val, fun {_ _} => ae_eq_symm,
-    fun {_ _ _} => ae_eq_trans⟩
-
-中文:
-定义 测度.aeEqSetoid
-  签名: (μ : 测度 α)
-  定义体: ⟨fun f g => (f : α -> β) =ᵐ[μ] g, fun {f} => ae_eq_refl f.val, fun {_ _} => ae_eq_symm,
-    fun {_ _ _} => ae_eq_trans⟩
-
-Depends on / 依赖: ae_eq_refl, ae_eq_symm, ae_eq_trans, f.val
+--- 原说明 ---
+The equivalence relation of being almost everywhere equal for almost everywhere 
+strongly
+measurable functions.
 -/
-def Measure.aeEqSetoid (μ : Measure α) : Setoid { f : α -> β // AEStronglyMeasurable f μ } :=
-  ⟨fun f g => (f : α -> β) =ᵐ[μ] g, fun {f} => ae_eq_refl f.val, fun {_ _} => ae_eq_symm,
+def Measure.aeEqSetoid (μ : Measure α) : Setoid { f : α → β // AEStronglyMeasurable f μ } :=
+  ⟨fun f g => (f : α → β) =ᵐ[μ] g, fun {f} => ae_eq_refl f.val, fun {_ _} => ae_eq_symm,
     fun {_ _ _} => ae_eq_trans⟩
 
 variable (α)
 
-/--
-Definition of `AEEqFun` / `AEEqFun` 的定义
+/-- The space of equivalence classes of almost everywhere strongly measurable functions, where two
+strongly measurable functions are equivalent if they agree almost everywhere, i.e.,
+they differ on a set of measure `0`. -/
+/-
+**MeasureTheory.AEEqFun** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：AEEqFun (μ : Measure α) : Type _
+参数：μ : Measure α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AEEqFun
-  signature: (μ : Measure α)
-  body: Quotient (μ.aeEqSetoid β)
-
-中文:
-定义 AEEqFun
-  签名: (μ : 测度 α)
-  定义体: Quotient (μ.aeEqSetoid β)
-
-Depends on / 依赖: Quotient, aeEqSetoid
+--- 原说明 ---
+The space of equivalence classes of almost everywhere strongly measurable functi
+ons, where two
+strongly measurable functions are equivalent if they agree almost everywhere, i.
+e.,
+they differ on a set of measure `0`.
 -/
 def AEEqFun (μ : Measure α) : Type _ :=
   Quotient (μ.aeEqSetoid β)
@@ -135,7 +136,7 @@ def AEEqFun (μ : Measure α) : Type _ :=
 variable {α β}
 
 @[inherit_doc MeasureTheory.AEEqFun]
-notation:25 α " ->ₘ[" μ "] " β => AEEqFun α β μ
+notation:25 α " →ₘ[" μ "] " β => AEEqFun α β μ
 
 end MeasurableSpace
 
@@ -146,22 +147,24 @@ namespace AEEqFun
 section
 variable [TopologicalSpace β]
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Construct the equivalence class `[f]` of an almost everywhere measurable function `f`, based
+on the equivalence relation of being almost everywhere equal. -/
+/-
+**MeasureTheory.AEEqFun.mk** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：mk {β : Type*} [TopologicalSpace β] (f : α -> β) (hf : AEStronglyMeasurabl
+e f μ) : α ->ₘ[μ] β
+参数：f : α -> β；hf : AEStronglyMeasurable f μ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 
-English:
-definition mk
-  signature: {β : Type*} [TopologicalSpace β] (f : α -> β) (hf : AEStronglyMeasurable f μ)
-  body: Quotient.mk'' ⟨f, hf⟩
-
-中文:
-定义 mk
-  签名: {β : 类型} [拓扑空间 β] (f : α -> β) (hf : AEStronglyMeasurable f μ)
-  定义体: Quotient.mk'' ⟨f, hf⟩
-
-Depends on / 依赖: Quotient, Quotient.mk
+--- 原说明 ---
+Construct the equivalence class `[f]` of an almost everywhere measurable functio
+n `f`, based
+on the equivalence relation of being almost everywhere equal.
 -/
-def mk {β : Type*} [TopologicalSpace β] (f : α -> β) (hf : AEStronglyMeasurable f μ) : α ->ₘ[μ] β :=
+def mk {β : Type*} [TopologicalSpace β] (f : α → β) (hf : AEStronglyMeasurable f μ) : α →ₘ[μ] β :=
   Quotient.mk'' ⟨f, hf⟩
 
 open scoped Classical in
@@ -169,360 +172,318 @@ open scoped Classical in
 functions to functions. We ensure that if `f` has a constant representative,
 then we choose that one. -/
 @[coe]
-/--
-Definition of `cast` / `cast` 的定义
+/-
+**MeasureTheory.AEEqFun.cast** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：cast (f : α ->ₘ[μ] β) : α -> β
+参数：f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
 
-English:
-definition cast
-  signature: (f : α ->ₘ[μ] β)
-  body: if h : exists (b : β), f = mk (const α b) aestronglyMeasurable_const then
-const α Classical.choose h else
-    AEStronglyMeasurable.mk _ (Quotient.out f : { f : α -> β // AEStronglyMeasurable f μ }).2
-
-中文:
-定义 cast
-  签名: (f : α ->ₘ[μ] β)
-  定义体: if h : exists (b : β), f = mk (const α b) aestronglyMeasurable_const then
-const α Classical.choose h else
-    AEStronglyMeasurable.mk _ (Quotient.out f : { f : α -> β // AEStronglyMeasurable f μ }).2
-
-Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.mk, Classical, Classical.choose, Quotient, Quotient.out, aestronglyMeasurable_const
+--- 原说明 ---
+Coercion from a space of equivalence classes of almost everywhere strongly measu
+rable
+functions to functions. We ensure that if `f` has a constant representative,
+then we choose that one.
 -/
-def cast (f : α ->ₘ[μ] β) : α -> β :=
-  if h : exists (b : β), f = mk (const α b) aestronglyMeasurable_const then
-const α Classical.choose h else
-    AEStronglyMeasurable.mk _ (Quotient.out f : { f : α -> β // AEStronglyMeasurable f μ }).2
+def cast (f : α →ₘ[μ] β) : α → β :=
+  if h : ∃ (b : β), f = mk (const α b) aestronglyMeasurable_const then
+    const α <| Classical.choose h else
+    AEStronglyMeasurable.mk _ (Quotient.out f : { f : α → β // AEStronglyMeasurable f μ }).2
 
-/--
-Instance `instCoeFun` / 实例 `instCoeFun`
+/-- A measurable representative of an `AEEqFun` [f] -/
+/-
+**MeasureTheory.AEEqFun.instCoeFun** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：instCoeFun : CoeFun (α ->ₘ[μ] β) fun _ => α -> β
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCoeFun
-  signature: : CoeFun (α ->ₘ[μ] β) fun _ => α -> β
-  body: ⟨cast⟩
-
-@[fun_prop]
-
-中文:
-实例 instCoeFun
-  签名: : CoeFun (α ->ₘ[μ] β) fun _ => α -> β
-  定义体: ⟨cast⟩
-
-@[fun_prop]
+--- 原说明 ---
+A measurable representative of an `AEEqFun` [f]
 -/
-instance instCoeFun : CoeFun (α ->ₘ[μ] β) fun _ => α -> β := ⟨cast⟩
+instance instCoeFun : CoeFun (α →ₘ[μ] β) fun _ => α → β := ⟨cast⟩
 
 @[fun_prop]
-/--
-theorem `stronglyMeasurable` / 定理 `stronglyMeasurable`
-
-English:
-theorem stronglyMeasurable
-  given: (f : α ->ₘ[μ] β)
-  statement: StronglyMeasurable f
-  proof: by
+/-
+**MeasureTheory.AEEqFun.stronglyMeasurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.AEEqFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   (f : α →ₘ[μ] β), MeasureTheory.St
+ronglyMeasurable ↑f
+参数：f : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `MeasureTheory.stronglyMeasurable_const`：stronglyMeasurable_const {b : β}
+ : StronglyMeasurable fun _ : α => b
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用引理 `MeasureTheory.AEStronglyMeasurable.stronglyMeasurable_mk`：stronglyMeasur
+able_mk (hf : AEStronglyMeasurable[m] f μ) : StronglyMeasurable[m] (hf.mk f)
+-/
+protected theorem stronglyMeasurable (f : α →ₘ[μ] β) : StronglyMeasurable f := by
   simp only [cast]
   split_ifs with h
   · exact stronglyMeasurable_const
   · apply AEStronglyMeasurable.stronglyMeasurable_mk
 
 @[fun_prop]
-
-中文:
-定理 stronglyMeasurable
-  条件: (f : α ->ₘ[μ] β)
-  结论: StronglyMeasurable f
-  证明: by
-  simp only [cast]
-  split_ifs with h
-  · exact stronglyMeasurable_const
-  · apply AEStronglyMeasurable.stronglyMeasurable_mk
-
-@[fun_prop]
+/-
+**MeasureTheory.AEEqFun.aestronglyMeasurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.AEEqFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   (f : α →ₘ[μ] β), MeasureTheory.AE
+StronglyMeasurable (↑f) μ
+参数：f : α →ₘ[μ] β；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.AEEqFun.stronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2
+} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topological
+Space β]   (f : α →ₘ[μ] β), Me…
 -/
-protected theorem stronglyMeasurable (f : α ->ₘ[μ] β) : StronglyMeasurable f := by
-  simp only [cast]
-  split_ifs with h
-  · exact stronglyMeasurable_const
-  · apply AEStronglyMeasurable.stronglyMeasurable_mk
-
-@[fun_prop]
-/--
-theorem `aestronglyMeasurable` / 定理 `aestronglyMeasurable`
-
-English:
-theorem aestronglyMeasurable
-  given: (f : α ->ₘ[μ] β)
-  statement: AEStronglyMeasurable f μ
-  proof: f.stronglyMeasurable.aestronglyMeasurable
-
-@[fun_prop]
-
-中文:
-定理 aestronglyMeasurable
-  条件: (f : α ->ₘ[μ] β)
-  结论: AEStronglyMeasurable f μ
-  证明: f.stronglyMeasurable.aestronglyMeasurable
-
-@[fun_prop]
--/
-protected theorem aestronglyMeasurable (f : α ->ₘ[μ] β) : AEStronglyMeasurable f μ :=
+protected theorem aestronglyMeasurable (f : α →ₘ[μ] β) : AEStronglyMeasurable f μ :=
   f.stronglyMeasurable.aestronglyMeasurable
 
 @[fun_prop]
-/--
-theorem `measurable` / 定理 `measurable`
-
-English:
-theorem measurable
-  statement: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
-  proof: f.stronglyMeasurable.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable
-  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
-  证明: f.stronglyMeasurable.measurable
-
-@[fun_prop]
+/-
+**MeasureTheory.AEEqFun.measurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [TopologicalSpace.PseudoMetrizabl
+eSpace β] [inst_3 : MeasurableSpace β] [BorelSpace β] (f : α →ₘ[μ] β), Measurabl
+e ↑f
+参数：f : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.StronglyMeasurable.measurable`：∀ {α : Type u_1} {β : Type 
+u_2} {f : α → β} {x : MeasurableSpace α} [inst : TopologicalSpace β]   [Topologi
+calSpace.PseudoMetrizableSpace β]…
+· 使用定理 `MeasureTheory.AEEqFun.stronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2
+} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topological
+Space β]   (f : α →ₘ[μ] β), Me…
 -/
 protected theorem measurable [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
-    (f : α ->ₘ[μ] β) : Measurable f :=
+    (f : α →ₘ[μ] β) : Measurable f :=
   f.stronglyMeasurable.measurable
 
 @[fun_prop]
-/--
-theorem `aemeasurable` / 定理 `aemeasurable`
-
-English:
-theorem aemeasurable
-  statement: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
-  proof: f.measurable.aemeasurable
-
-@[simp]
-
-中文:
-定理 aemeasurable
-  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
-  证明: f.measurable.aemeasurable
-
-@[simp]
+/-
+**MeasureTheory.AEEqFun.aemeasurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [TopologicalSpace.PseudoMetrizabl
+eSpace β] [inst_3 : MeasurableSpace β] [BorelSpace β] (f : α →ₘ[μ] β),   AEMeasu
+rable (↑f) μ
+参数：f : α →ₘ[μ] β；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `MeasureTheory.AEEqFun.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst 
+: MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : TopologicalSpace β]
+   [TopologicalSpace.P…
 -/
 protected theorem aemeasurable [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
-    (f : α ->ₘ[μ] β) : AEMeasurable f μ :=
+    (f : α →ₘ[μ] β) : AEMeasurable f μ :=
   f.measurable.aemeasurable
 
 @[simp]
-/--
-theorem `quot_mk_eq_mk` / 定理 `quot_mk_eq_mk`
-
-English:
-theorem quot_mk_eq_mk
-  given: (f : α -> β) (hf)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 quot_mk_eq_mk
-  条件: (f : α -> β) (hf)
-  证明: rfl
-
-@[simp]
+/-
+**MeasureTheory.AEEqFun.quot_mk_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：quot_mk_eq_mk (f : α -> β) (hf) : (Quot.mk (@Setoid.r _ <| μ.aeEqSetoid β)
+ ⟨f, hf⟩ : α ->ₘ[μ] β) = mk f hf
+参数：f : α -> β；hf。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem quot_mk_eq_mk (f : α -> β) (hf) :
-    (Quot.mk (@Setoid.r _ <| μ.aeEqSetoid β) ⟨f, hf⟩ : α ->ₘ[μ] β) = mk f hf :=
+theorem quot_mk_eq_mk (f : α → β) (hf) :
+    (Quot.mk (@Setoid.r _ <| μ.aeEqSetoid β) ⟨f, hf⟩ : α →ₘ[μ] β) = mk f hf :=
   rfl
 
 @[simp]
-/--
-theorem `mk_eq_mk` / 定理 `mk_eq_mk`
-
-English:
-theorem mk_eq_mk
-  given: {f g : α -> β} {hf hg}
-  statement: (mk f hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g
-  proof: Quotient.eq''
-
-@[simp]
-
-中文:
-定理 mk_eq_mk
-  条件: {f g : α -> β} {hf hg}
-  结论: (mk f hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g
-  证明: Quotient.eq''
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**MeasureTheory.AEEqFun.mk_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFu
+n`。
+形式化陈述：mk_eq_mk {f g : α -> β} {hf hg} : (mk f hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[
+μ] g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq''`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk''
+ a = Quotient.mk'' b ↔ s₁ a b
 -/
-theorem mk_eq_mk {f g : α -> β} {hf hg} : (mk f hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g :=
+theorem mk_eq_mk {f g : α → β} {hf hg} : (mk f hf : α →ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g :=
   Quotient.eq''
 
 @[simp]
-/--
-theorem `mk_coeFn` / 定理 `mk_coeFn`
-
-English:
-theorem mk_coeFn
-  given: (f : α ->ₘ[μ] β)
-  statement: mk f f.aestronglyMeasurable = f
-  proof: by
+/-
+**MeasureTheory.AEEqFun.mk_coeFn** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFu
+n`。
+形式化陈述：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestronglyMeasurable = f
+参数：f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.mk.congr_simp`：∀ {α : Type u_1} [inst : Measurable
+Space α] {μ : MeasureTheory.Measure α} {β : Type u_5} [inst_1 : TopologicalSpace
+ β]   (f f_1 : α → β) (e_…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Quotient.out_eq'`：out_eq' (q : Quotient s₁) : Quotient.mk'' q.out = q
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `MeasureTheory.AEEqFun.mk.eq_1`：∀ {α : Type u_1} [inst : MeasurableSpace 
+α] {μ : MeasureTheory.Measure α} {β : Type u_5} [inst_1 : TopologicalSpace β]   
+(f : α → β) (hf : M…
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.mk_eq_mk`：mk_eq_mk {f g : α -> β} {hf hg} : (mk f 
+hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.ae_eq_mk`：ae_eq_mk (hf : AEStronglyMe
+asurable[m] f μ) : f =ᵐ[μ] hf.mk f
+-/
+theorem mk_coeFn (f : α →ₘ[μ] β) : mk f f.aestronglyMeasurable = f := by
   conv_lhs => simp only [cast]
   split_ifs with h
-.symm · exact Classical.choose_spec h
+  · exact Classical.choose_spec h |>.symm
   conv_rhs => rw [← Quotient.out_eq' f]
-  rw [← mk]; rw [mk_eq_mk]
+  rw [← mk, mk_eq_mk]
   exact (AEStronglyMeasurable.ae_eq_mk _).symm
 
 @[ext]
-
-中文:
-定理 mk_coeFn
-  条件: (f : α ->ₘ[μ] β)
-  结论: mk f f.aestronglyMeasurable = f
-  证明: by
-  conv_lhs => simp only [cast]
-  split_ifs with h
-.symm · exact Classical.choose_spec h
-  conv_rhs => rw [← Quotient.out_eq' f]
-  rw [← mk]; rw [mk_eq_mk]
-  exact (AEStronglyMeasurable.ae_eq_mk _).symm
-
-@[ext]
-
-Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.ae_eq_mk, Classical, Classical.choose_spec, Quotient, Quotient.out_eq, ae_eq_mk, choose_spec, conv_lhs, conv_rhs, mk_eq_mk, out_eq, split_ifs
+/-
+**MeasureTheory.AEEqFun.ext** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：ext {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g) : f = g
+参数：h : f =ᵐ[μ] g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
+· 使用定理 `MeasureTheory.AEEqFun.mk_eq_mk`：mk_eq_mk {f g : α -> β} {hf hg} : (mk f 
+hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g
 -/
-theorem mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestronglyMeasurable = f := by
-  conv_lhs => simp only [cast]
-  split_ifs with h
-.symm · exact Classical.choose_spec h
-  conv_rhs => rw [← Quotient.out_eq' f]
-  rw [← mk]; rw [mk_eq_mk]
-  exact (AEStronglyMeasurable.ae_eq_mk _).symm
-
-@[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g)
-  statement: f = g
-  proof: by
+theorem ext {f g : α →ₘ[μ] β} (h : f =ᵐ[μ] g) : f = g := by
   rwa [← f.mk_coeFn, ← g.mk_coeFn, mk_eq_mk]
-
-中文:
-定理 ext
-  条件: {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g)
-  结论: f = g
-  证明: by
-  rwa [← f.mk_coeFn, ← g.mk_coeFn, mk_eq_mk]
-
-Depends on / 依赖: f.mk_coeFn, g.mk_coeFn, mk_coeFn, mk_eq_mk
+/-
+**MeasureTheory.AEEqFun.coeFn_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFu
+n`。
+形式化陈述：coeFn_mk (f : α -> β) (hf) : (mk f hf : α ->ₘ[μ] β) =ᵐ[μ] f
+参数：f : α -> β；hf。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.mk_eq_mk`：mk_eq_mk {f g : α -> β} {hf hg} : (mk f 
+hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
 -/
-theorem ext {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g) : f = g := by
-  rwa [← f.mk_coeFn, ← g.mk_coeFn, mk_eq_mk]
-
-/--
-theorem `coeFn_mk` / 定理 `coeFn_mk`
-
-English:
-theorem coeFn_mk
-  given: (f : α -> β) (hf)
-  statement: (mk f hf : α ->ₘ[μ] β) =ᵐ[μ] f
-  proof: by
-  rw [← mk_eq_mk (hf := AEEqFun.aestronglyMeasurable ..) (hg := hf)]; rw [mk_coeFn]
+theorem coeFn_mk (f : α → β) (hf) : (mk f hf : α →ₘ[μ] β) =ᵐ[μ] f := by
+  rw [← mk_eq_mk (hf := AEEqFun.aestronglyMeasurable ..) (hg := hf), mk_coeFn]
 
 @[elab_as_elim]
-
-中文:
-定理 coeFn_mk
-  条件: (f : α -> β) (hf)
-  结论: (mk f hf : α ->ₘ[μ] β) =ᵐ[μ] f
-  证明: by
-  rw [← mk_eq_mk (hf := AEEqFun.aestronglyMeasurable ..) (hg := hf)]; rw [mk_coeFn]
-
-@[elab_as_elim]
-
-Depends on / 依赖: AEEqFun, AEEqFun.aestronglyMeasurable, aestronglyMeasurable, mk_coeFn, mk_eq_mk
+/-
+**MeasureTheory.AEEqFun.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：induction_on (f : α ->ₘ[μ] β) {p : (α ->ₘ[μ] β) -> Prop} (H : forall f hf,
+ p (mk f hf)) : p f
+参数：f : α ->ₘ[μ] β；α ->ₘ[μ] β；H : forall f hf, p (mk f hf)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
 -/
-theorem coeFn_mk (f : α -> β) (hf) : (mk f hf : α ->ₘ[μ] β) =ᵐ[μ] f := by
-  rw [← mk_eq_mk (hf := AEEqFun.aestronglyMeasurable ..) (hg := hf)]; rw [mk_coeFn]
+theorem induction_on (f : α →ₘ[μ] β) {p : (α →ₘ[μ] β) → Prop} (H : ∀ f hf, p (mk f hf)) : p f :=
+  Quotient.inductionOn' f <| Subtype.forall.2 H
 
 @[elab_as_elim]
-/--
-theorem `induction_on` / 定理 `induction_on`
-
-English:
-theorem induction_on
-  given: (f : α ->ₘ[μ] β) {p : (α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf))
-  statement: p f
-  proof: Quotient.inductionOn' f Subtype.forall.2 H
-
-@[elab_as_elim]
-
-中文:
-定理 induction_on
-  条件: (f : α ->ₘ[μ] β) {p : (α ->ₘ[μ] β) -> 命题} (H : 对任意 f hf, p (mk f hf))
-  结论: p f
-  证明: Quotient.inductionOn' f Subtype.forall.2 H
-
-@[elab_as_elim]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Subtype, Subtype.forall, inductionOn
--/
-theorem induction_on (f : α ->ₘ[μ] β) {p : (α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf)) : p f :=
-Quotient.inductionOn' f Subtype.forall.2 H
-
-@[elab_as_elim]
-/--
-theorem `induction_on₂` / 定理 `induction_on₂`
-
-English:
-theorem induction_on₂
-  statement: {α' β' : Type*} [MeasurableSpace α'] [TopologicalSpace β'] {μ' : Measure α'}
-  proof: induction_on f fun f hf => induction_on f' H f hf
-
-@[elab_as_elim]
-
-中文:
-定理 induction_on₂
-  结论: {α' β' : 类型} [可测空间 α'] [拓扑空间 β'] {μ' : 测度 α'}
-  证明: induction_on f fun f hf => induction_on f' H f hf
-
-@[elab_as_elim]
-
-Depends on / 依赖: induction_on
+/-
+**MeasureTheory.AEEqFun.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：induction_on (f : α ->ₘ[μ] β) {p : (α ->ₘ[μ] β) -> Prop} (H : forall f hf,
+ p (mk f hf)) : p f
+参数：f : α ->ₘ[μ] β；α ->ₘ[μ] β；H : forall f hf, p (mk f hf)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
 -/
 theorem induction_on₂ {α' β' : Type*} [MeasurableSpace α'] [TopologicalSpace β'] {μ' : Measure α'}
-    (f : α ->ₘ[μ] β) (f' : α' ->ₘ[μ'] β') {p : (α ->ₘ[μ] β) -> (α' ->ₘ[μ'] β') -> Prop}
-    (H : forall f hf f' hf', p (mk f hf) (mk f' hf')) : p f f' :=
-induction_on f fun f hf => induction_on f' H f hf
+    (f : α →ₘ[μ] β) (f' : α' →ₘ[μ'] β') {p : (α →ₘ[μ] β) → (α' →ₘ[μ'] β') → Prop}
+    (H : ∀ f hf f' hf', p (mk f hf) (mk f' hf')) : p f f' :=
+  induction_on f fun f hf => induction_on f' <| H f hf
 
 @[elab_as_elim]
-/--
-theorem `induction_on₃` / 定理 `induction_on₃`
-
-English:
-theorem induction_on₃
-  statement: {α' β' : Type*} [MeasurableSpace α'] [TopologicalSpace β'] {μ' : Measure α'}
-  proof: induction_on f fun f hf => induction_on₂ f' f'' H f hf
-
-中文:
-定理 induction_on₃
-  结论: {α' β' : 类型} [可测空间 α'] [拓扑空间 β'] {μ' : 测度 α'}
-  证明: induction_on f fun f hf => induction_on₂ f' f'' H f hf
-
-Depends on / 依赖: induction_on
+/-
+**MeasureTheory.AEEqFun.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：induction_on (f : α ->ₘ[μ] β) {p : (α ->ₘ[μ] β) -> Prop} (H : forall f hf,
+ p (mk f hf)) : p f
+参数：f : α ->ₘ[μ] β；α ->ₘ[μ] β；H : forall f hf, p (mk f hf)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
 -/
 theorem induction_on₃ {α' β' : Type*} [MeasurableSpace α'] [TopologicalSpace β'] {μ' : Measure α'}
     {α'' β'' : Type*} [MeasurableSpace α''] [TopologicalSpace β''] {μ'' : Measure α''}
-    (f : α ->ₘ[μ] β) (f' : α' ->ₘ[μ'] β') (f'' : α'' ->ₘ[μ''] β'')
-    {p : (α ->ₘ[μ] β) -> (α' ->ₘ[μ'] β') -> (α'' ->ₘ[μ''] β'') -> Prop}
-    (H : forall f hf f' hf' f'' hf'', p (mk f hf) (mk f' hf') (mk f'' hf'')) : p f f' f'' :=
-induction_on f fun f hf => induction_on₂ f' f'' H f hf
+    (f : α →ₘ[μ] β) (f' : α' →ₘ[μ'] β') (f'' : α'' →ₘ[μ''] β'')
+    {p : (α →ₘ[μ] β) → (α' →ₘ[μ'] β') → (α'' →ₘ[μ''] β'') → Prop}
+    (H : ∀ f hf f' hf' f'' hf'', p (mk f hf) (mk f' hf') (mk f'' hf'')) : p f f' f'' :=
+  induction_on f fun f hf => induction_on₂ f' f'' <| H f hf
 
 end
 
@@ -532,212 +493,246 @@ end
 
 section compQuasiMeasurePreserving
 
-variable [TopologicalSpace γ] [MeasurableSpace β] {ν : MeasureTheory.Measure β} {f : α -> β}
+variable [TopologicalSpace γ] [MeasurableSpace β] {ν : MeasureTheory.Measure β} {f : α → β}
 
 open MeasureTheory.Measure (QuasiMeasurePreserving)
 
-/--
-Definition of `compQuasiMeasurePreserving` / `compQuasiMeasurePreserving` 的定义
+/-- Composition of an almost everywhere equal function and a quasi-measure-preserving function.
 
-English:
-definition compQuasiMeasurePreserving
-  signature: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : QuasiMeasurePreserving f μ ν)
-  body: Quotient.liftOn' g (fun g => mk (g ∘ f) <| g.2.comp_quasiMeasurePreserving hf) fun _ _ h =>
-mk_eq_mk.2 h.comp_tendsto hf.tendsto_ae
+See also `AEEqFun.compMeasurePreserving`. -/
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving** 是 Mathlib 中的一个定义，位于命名空间 `Me
+asureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving (g : β ->ₘ[ν] γ) (f : α -> β) (hf : QuasiMeasur
+ePreserving f μ ν) : α ->ₘ[μ] γ
+参数：g : β ->ₘ[ν] γ；f : α -> β；hf : QuasiMeasurePreserving f μ ν。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Composition of an almost everywhere equal function and a quasi-measure-preservin
+g function.
 
-中文:
-定义 compQuasiMeasurePreserving
-  签名: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : 拟保测 f μ ν)
-  定义体: Quotient.liftOn' g (fun g => mk (g ∘ f) <| g.2.comp_quasiMeasurePreserving hf) fun _ _ h =>
-mk_eq_mk.2 h.comp_tendsto hf.tendsto_ae
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.liftOn, comp_quasiMeasurePreserving, comp_tendsto, h.comp_tendsto, hf.tendsto_ae, liftOn, mk_eq_mk, tendsto_ae
+See also `AEEqFun.compMeasurePreserving`.
 -/
-def compQuasiMeasurePreserving (g : β ->ₘ[ν] γ) (f : α -> β) (hf : QuasiMeasurePreserving f μ ν) :
-    α ->ₘ[μ] γ :=
-  Quotient.liftOn' g (fun g => mk (g ∘ f) <| g.2.comp_quasiMeasurePreserving hf) fun _ _ h =>
-mk_eq_mk.2 h.comp_tendsto hf.tendsto_ae
+def compQuasiMeasurePreserving (g : β →ₘ[ν] γ) (f : α → β) (hf : QuasiMeasurePreserving f μ ν) :
+    α →ₘ[μ] γ :=
+  Quotient.liftOn' g (fun g ↦ mk (g ∘ f) <| g.2.comp_quasiMeasurePreserving hf) fun _ _ h ↦
+    mk_eq_mk.2 <| h.comp_tendsto hf.tendsto_ae
 
 @[simp]
-/--
-theorem `compQuasiMeasurePreserving_mk` / 定理 `compQuasiMeasurePreserving_mk`
-
-English:
-theorem compQuasiMeasurePreserving_mk
-  statement: {g : β -> γ} (hg : AEStronglyMeasurable g ν)
-  proof: rfl
-
-中文:
-定理 compQuasiMeasurePreserving_mk
-  结论: {g : β -> γ} (hg : AEStronglyMeasurable g ν)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving_mk** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving_mk {g : β -> γ} (hg : AEStronglyMeasurable g ν)
+ (hf : QuasiMeasurePreserving f μ ν) : (mk g hg).compQuasiMeasurePreserving f hf
+ = mk (g ∘ f) (hg.comp_quasiMeasurePreserving hf)
+参数：hg : AEStronglyMeasurable g ν；hf : QuasiMeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem compQuasiMeasurePreserving_mk {g : β -> γ} (hg : AEStronglyMeasurable g ν)
+theorem compQuasiMeasurePreserving_mk {g : β → γ} (hg : AEStronglyMeasurable g ν)
     (hf : QuasiMeasurePreserving f μ ν) :
     (mk g hg).compQuasiMeasurePreserving f hf = mk (g ∘ f) (hg.comp_quasiMeasurePreserving hf) :=
   rfl
-
-/--
-theorem `compQuasiMeasurePreserving_eq_mk` / 定理 `compQuasiMeasurePreserving_eq_mk`
-
-English:
-theorem compQuasiMeasurePreserving_eq_mk
-  given: (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
-  proof: by
-  rw [← compQuasiMeasurePreserving_mk g.aestronglyMeasurable hf]; rw [mk_coeFn]
-
-中文:
-定理 compQuasiMeasurePreserving_eq_mk
-  条件: (g : β ->ₘ[ν] γ) (hf : 拟保测 f μ ν)
-  证明: by
-  rw [← compQuasiMeasurePreserving_mk g.aestronglyMeasurable hf]; rw [mk_coeFn]
-
-Depends on / 依赖: aestronglyMeasurable, compQuasiMeasurePreserving_mk, g.aestronglyMeasurable, mk_coeFn
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving_eq_mk** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving_eq_mk (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreser
+ving f μ ν) : g.compQuasiMeasurePreserving f hf = mk (g ∘ f) (g.aestronglyMeasur
+able.comp_quasiMeasurePreserving hf)
+参数：g : β ->ₘ[ν] γ；hf : QuasiMeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.comp_quasiMeasurePreserving`：comp_qua
+siMeasurePreserving {γ : Type*} {_ : MeasurableSpace γ} {_ : MeasurableSpace α} 
+{f : γ -> α} {μ : Measure γ} {ν : Measure α} (hg : A…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_mk`：compQuasiMeasurePre
+serving_mk {g : β -> γ} (hg : AEStronglyMeasurable g ν) (hf : QuasiMeasurePreser
+ving f μ ν) : (mk g hg).compQuasiMeasureP…
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
 -/
-theorem compQuasiMeasurePreserving_eq_mk (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) :
+theorem compQuasiMeasurePreserving_eq_mk (g : β →ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) :
     g.compQuasiMeasurePreserving f hf =
       mk (g ∘ f) (g.aestronglyMeasurable.comp_quasiMeasurePreserving hf) := by
-  rw [← compQuasiMeasurePreserving_mk g.aestronglyMeasurable hf]; rw [mk_coeFn]
-
-/--
-theorem `coeFn_compQuasiMeasurePreserving` / 定理 `coeFn_compQuasiMeasurePreserving`
-
-English:
-theorem coeFn_compQuasiMeasurePreserving
-  given: (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
-  proof: by
-  rw [compQuasiMeasurePreserving_eq_mk]
-  apply coeFn_mk
-
-中文:
-定理 coeFn_compQuasiMeasurePreserving
-  条件: (g : β ->ₘ[ν] γ) (hf : 拟保测 f μ ν)
-  证明: by
-  rw [compQuasiMeasurePreserving_eq_mk]
-  apply coeFn_mk
-
-Depends on / 依赖: coeFn_mk, compQuasiMeasurePreserving_eq_mk
+  rw [← compQuasiMeasurePreserving_mk g.aestronglyMeasurable hf, mk_coeFn]
+/-
+**MeasureTheory.AEEqFun.coeFn_compQuasiMeasurePreserving** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.AEEqFun`。
+形式化陈述：coeFn_compQuasiMeasurePreserving (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreser
+ving f μ ν) : g.compQuasiMeasurePreserving f hf =ᵐ[μ] g ∘ f
+参数：g : β ->ₘ[ν] γ；hf : QuasiMeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.comp_quasiMeasurePreserving`：comp_qua
+siMeasurePreserving {γ : Type*} {_ : MeasurableSpace γ} {_ : MeasurableSpace α} 
+{f : γ -> α} {μ : Measure γ} {ν : Measure α} (hg : A…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_eq_mk`：compQuasiMeasure
+Preserving_eq_mk (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) : g.compQu
+asiMeasurePreserving f hf = mk (g ∘ f) (g.ae…
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
-theorem coeFn_compQuasiMeasurePreserving (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) :
+theorem coeFn_compQuasiMeasurePreserving (g : β →ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) :
     g.compQuasiMeasurePreserving f hf =ᵐ[μ] g ∘ f := by
   rw [compQuasiMeasurePreserving_eq_mk]
   apply coeFn_mk
-
-/--
-theorem `compQuasiMeasurePreserving_congr` / 定理 `compQuasiMeasurePreserving_congr`
-
-English:
-theorem compQuasiMeasurePreserving_congr
-  statement: (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
-  proof: by
-  ext
-  grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving, h]
-
-@[simp]
-
-中文:
-定理 compQuasiMeasurePreserving_congr
-  结论: (g : β ->ₘ[ν] γ) (hf : 拟保测 f μ ν)
-  证明: by
-  ext
-  grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving, h]
-
-@[simp]
-
-Depends on / 依赖: coeFn_compQuasiMeasurePreserving
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving_congr** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving_congr (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreser
+ving f μ ν) {f' : α -> β} (hf' : Measurable f') (h : f =ᵐ[μ] f') : compQuasiMeas
+urePreserving g f hf = compQuasiMeasurePreserving g f' (hf.congr hf' h)
+参数：g : β ->ₘ[ν] γ；hf : QuasiMeasurePreserving f μ ν；hf' : Measurable f'；h : f =ᵐ
+[μ] f'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.ext`：ext {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g) : f = 
+g
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.congr`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {μa : MeasureTheor
+y.Measure α}   {μb : MeasureTheory.Measu…
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `instIsTransOfTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [Trans r r r], I
+sTrans α r
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_compQuasiMeasurePreserving`：coeFn_compQuasiM
+easurePreserving (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) : g.compQu
+asiMeasurePreserving f hf =ᵐ[μ] g ∘ f
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `Filter.EventuallyEq.fun_comp`：∀ {α : Type u} {β : Type v} {γ : Type w} {
+f g : α → β} {l : Filter α}, f =ᶠ[l] g → ∀ (h : β → γ), h ∘ f =ᶠ[l] h ∘ g
 -/
-theorem compQuasiMeasurePreserving_congr (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
-    {f' : α -> β} (hf' : Measurable f') (h : f =ᵐ[μ] f') :
+theorem compQuasiMeasurePreserving_congr (g : β →ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν)
+    {f' : α → β} (hf' : Measurable f') (h : f =ᵐ[μ] f') :
     compQuasiMeasurePreserving g f hf = compQuasiMeasurePreserving g f' (hf.congr hf' h) := by
   ext
   grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving, h]
 
 @[simp]
-/--
-theorem `compQuasiMeasurePreserving_id` / 定理 `compQuasiMeasurePreserving_id`
-
-English:
-theorem compQuasiMeasurePreserving_id
-  given: (g : β ->ₘ[ν] γ)
-  proof: by
-  ext
-  exact coeFn_compQuasiMeasurePreserving _ _
-
-中文:
-定理 compQuasiMeasurePreserving_id
-  条件: (g : β ->ₘ[ν] γ)
-  证明: by
-  ext
-  exact coeFn_compQuasiMeasurePreserving _ _
-
-Depends on / 依赖: coeFn_compQuasiMeasurePreserving
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving_id** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving_id (g : β ->ₘ[ν] γ) : compQuasiMeasurePreservin
+g g id (.id ν) = g
+参数：g : β ->ₘ[ν] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.ext`：ext {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g) : f = 
+g
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.id`：∀ {α : Type u_1} {_m0 :
+ MeasurableSpace α} (μ : MeasureTheory.Measure α),   MeasureTheory.Measure.Quasi
+MeasurePreserving id μ μ
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_compQuasiMeasurePreserving`：coeFn_compQuasiM
+easurePreserving (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) : g.compQu
+asiMeasurePreserving f hf =ᵐ[μ] g ∘ f
 -/
-theorem compQuasiMeasurePreserving_id (g : β ->ₘ[ν] γ) :
+theorem compQuasiMeasurePreserving_id (g : β →ₘ[ν] γ) :
     compQuasiMeasurePreserving g id (.id ν) = g := by
   ext
   exact coeFn_compQuasiMeasurePreserving _ _
-
-/--
-theorem `compQuasiMeasurePreserving_comp` / 定理 `compQuasiMeasurePreserving_comp`
-
-English:
-theorem compQuasiMeasurePreserving_comp
-  statement: {γ : Type*} {mγ : MeasurableSpace γ}
-  proof: by
-  ext
-  grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving,
-    coeFn_compQuasiMeasurePreserving, comp_assoc]
-
-中文:
-定理 compQuasiMeasurePreserving_comp
-  结论: {γ : 类型} {mγ : 可测空间 γ}
-  证明: by
-  ext
-  grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving,
-    coeFn_compQuasiMeasurePreserving, comp_assoc]
-
-Depends on / 依赖: coeFn_compQuasiMeasurePreserving, comp_assoc
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving_comp** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving_comp {γ : Type*} {mγ : MeasurableSpace γ} {ξ : 
+Measure γ} (g : γ ->ₘ[ξ] δ) {f : β -> γ} (hf : QuasiMeasurePreserving f ν ξ) {f'
+ : α -> β} (hf' : QuasiMeasurePreserving f' μ ν) : compQuasiMeasurePreserving g 
+(f ∘ f') (hf.comp hf') = compQuasiMeasurePreserving (compQuasiMeasurePreserving 
+g f hf) f' hf'
+参数：g : γ ->ₘ[ξ] δ；hf : QuasiMeasurePreserving f ν ξ；hf' : QuasiMeasurePreserving
+ f' μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.ext`：ext {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g) : f = 
+g
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.comp`：∀ {α : Type u_1} {β :
+ Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {m
+γ : MeasurableSpace γ} {μa : MeasureThe…
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `instIsTransOfTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [Trans r r r], I
+sTrans α r
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_compQuasiMeasurePreserving`：coeFn_compQuasiM
+easurePreserving (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) : g.compQu
+asiMeasurePreserving f hf =ᵐ[μ] g ∘ f
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.ae_eq`：ae_eq (h : QuasiMeas
+urePreserving f μa μb) {g₁ g₂ : β -> δ} (hg : g₁ =ᵐ[μb] g₂) : g₁ ∘ f =ᵐ[μa] g₂ ∘
+ f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_assoc`：comp_assoc (f : φ -> δ) (g : β -> φ) (h : α -> β) :
+ (f ∘ g) ∘ h = f ∘ g ∘ h
 -/
 theorem compQuasiMeasurePreserving_comp {γ : Type*} {mγ : MeasurableSpace γ}
-    {ξ : Measure γ} (g : γ ->ₘ[ξ] δ) {f : β -> γ} (hf : QuasiMeasurePreserving f ν ξ) {f' : α -> β}
+    {ξ : Measure γ} (g : γ →ₘ[ξ] δ) {f : β → γ} (hf : QuasiMeasurePreserving f ν ξ) {f' : α → β}
     (hf' : QuasiMeasurePreserving f' μ ν) :
     compQuasiMeasurePreserving g (f ∘ f') (hf.comp hf') =
     compQuasiMeasurePreserving (compQuasiMeasurePreserving g f hf) f' hf' := by
   ext
   grw [coeFn_compQuasiMeasurePreserving, coeFn_compQuasiMeasurePreserving,
     coeFn_compQuasiMeasurePreserving, comp_assoc]
-
-/--
-theorem `compQuasiMeasurePreserving_iterate` / 定理 `compQuasiMeasurePreserving_iterate`
-
-English:
-theorem compQuasiMeasurePreserving_iterate
-  statement: (g : α ->ₘ[μ] γ) {f : α -> α}
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n hind =>
-    nth_rewrite 1 [add_comm]
-    simp [iterate_add, hind, ← compQuasiMeasurePreserving_comp]
-
-中文:
-定理 compQuasiMeasurePreserving_iterate
-  结论: (g : α ->ₘ[μ] γ) {f : α -> α}
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n hind =>
-    nth_rewrite 1 [add_comm]
-    simp [iterate_add, hind, ← compQuasiMeasurePreserving_comp]
-
-Depends on / 依赖: add_comm, compQuasiMeasurePreserving_comp, iterate_add, nth_rewrite
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving_iterate** 是 Mathlib 中的一个定理，位于
+命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving_iterate (g : α ->ₘ[μ] γ) {f : α -> α} (hf : Qua
+siMeasurePreserving f μ μ) (n : Nat) : (compQuasiMeasurePreserving · f hf)^[n] g
+ = compQuasiMeasurePreserving g (f^[n]) (hf.iterate n)
+参数：g : α ->ₘ[μ] γ；hf : QuasiMeasurePreserving f μ μ；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.iterate`：∀ {α : Type u_1} {
+mα : MeasurableSpace α} {μa : MeasureTheory.Measure α} {f : α → α},   MeasureThe
+ory.Measure.QuasiMeasurePreserving f μa μa…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_id`：compQuasiMeasurePre
+serving_id (g : β ->ₘ[ν] γ) : compQuasiMeasurePreserving g id (.id ν) = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.comp`：∀ {α : Type u_1} {β :
+ Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {m
+γ : MeasurableSpace γ} {μa : MeasureThe…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Function.iterate_add`：∀ {α : Type u} (f : α → α) (m n : ℕ), f^[m + n] = 
+f^[m] ∘ f^[n]
+· 使用定理 `Function.iterate_one`：iterate_one : f^[1] = f
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving.congr_simp`：∀ {α : Type
+ u_1} {β : Type u_2} {γ : Type u_3} [inst : MeasurableSpace α] {μ : MeasureTheor
+y.Measure α}   [inst_1 : TopologicalSpace γ] [ins…
 -/
-theorem compQuasiMeasurePreserving_iterate (g : α ->ₘ[μ] γ) {f : α -> α}
-    (hf : QuasiMeasurePreserving f μ μ) (n : Nat) :
+theorem compQuasiMeasurePreserving_iterate (g : α →ₘ[μ] γ) {f : α → α}
+    (hf : QuasiMeasurePreserving f μ μ) (n : ℕ) :
     (compQuasiMeasurePreserving · f hf)^[n] g =
     compQuasiMeasurePreserving g (f^[n]) (hf.iterate n) := by
   induction n with
@@ -751,171 +746,169 @@ end compQuasiMeasurePreserving
 section compMeasurePreserving
 
 variable [TopologicalSpace γ] [MeasurableSpace β] {ν : MeasureTheory.Measure β}
-  {f : α -> β} {g : β -> γ}
+  {f : α → β} {g : β → γ}
 
-/--
-Definition of `compMeasurePreserving` / `compMeasurePreserving` 的定义
+/-- Composition of an almost everywhere equal function and a quasi-measure-preserving function.
 
-English:
-definition compMeasurePreserving
-  signature: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : MeasurePreserving f μ ν)
-  body: g.compQuasiMeasurePreserving f hf.quasiMeasurePreserving
+This is an important special case of `AEEqFun.compQuasiMeasurePreserving`. We use a separate
+definition so that lemmas that need `f` to be measure preserving can be `@[simp]` lemmas. -/
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving** 是 Mathlib 中的一个定义，位于命名空间 `Measure
+Theory.AEEqFun`。
+形式化陈述：compMeasurePreserving (g : β ->ₘ[ν] γ) (f : α -> β) (hf : MeasurePreservin
+g f μ ν) : α ->ₘ[μ] γ
+参数：g : β ->ₘ[ν] γ；f : α -> β；hf : MeasurePreserving f μ ν。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 
-@[simp]
+--- 原说明 ---
+Composition of an almost everywhere equal function and a quasi-measure-preservin
+g function.
 
-中文:
-定义 compMeasurePreserving
-  签名: (g : β ->ₘ[ν] γ) (f : α -> β) (hf : 保测 f μ ν)
-  定义体: g.compQuasiMeasurePreserving f hf.quasiMeasurePreserving
-
-@[simp]
-
-Depends on / 依赖: compQuasiMeasurePreserving, g.compQuasiMeasurePreserving, hf.quasiMeasurePreserving, quasiMeasurePreserving
+This is an important special case of `AEEqFun.compQuasiMeasurePreserving`. We us
+e a separate
+definition so that lemmas that need `f` to be measure preserving can be `@[simp]
+` lemmas.
 -/
-def compMeasurePreserving (g : β ->ₘ[ν] γ) (f : α -> β) (hf : MeasurePreserving f μ ν) : α ->ₘ[μ] γ :=
+def compMeasurePreserving (g : β →ₘ[ν] γ) (f : α → β) (hf : MeasurePreserving f μ ν) : α →ₘ[μ] γ :=
   g.compQuasiMeasurePreserving f hf.quasiMeasurePreserving
 
 @[simp]
-/--
-theorem `compMeasurePreserving_mk` / 定理 `compMeasurePreserving_mk`
-
-English:
-theorem compMeasurePreserving_mk
-  given: (hg : AEStronglyMeasurable g ν) (hf : MeasurePreserving f μ ν)
-  proof: rfl
-
-中文:
-定理 compMeasurePreserving_mk
-  条件: (hg : AEStronglyMeasurable g ν) (hf : 保测 f μ ν)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving_mk** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.AEEqFun`。
+形式化陈述：compMeasurePreserving_mk (hg : AEStronglyMeasurable g ν) (hf : MeasurePres
+erving f μ ν) : (mk g hg).compMeasurePreserving f hf = mk (g ∘ f) (hg.comp_quasi
+MeasurePreserving hf.quasiMeasurePreserving)
+参数：hg : AEStronglyMeasurable g ν；hf : MeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compMeasurePreserving_mk (hg : AEStronglyMeasurable g ν) (hf : MeasurePreserving f μ ν) :
     (mk g hg).compMeasurePreserving f hf =
       mk (g ∘ f) (hg.comp_quasiMeasurePreserving hf.quasiMeasurePreserving) :=
   rfl
-
-/--
-theorem `compMeasurePreserving_eq_mk` / 定理 `compMeasurePreserving_eq_mk`
-
-English:
-theorem compMeasurePreserving_eq_mk
-  given: (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
-  proof: g.compQuasiMeasurePreserving_eq_mk _
-
-中文:
-定理 compMeasurePreserving_eq_mk
-  条件: (g : β ->ₘ[ν] γ) (hf : 保测 f μ ν)
-  证明: g.compQuasiMeasurePreserving_eq_mk _
-
-Depends on / 依赖: compQuasiMeasurePreserving_eq_mk, g.compQuasiMeasurePreserving_eq_mk
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.AEEqFun`。
+形式化陈述：compMeasurePreserving_eq_mk (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν
+) : g.compMeasurePreserving f hf = mk (g ∘ f) (g.aestronglyMeasurable.comp_quasi
+MeasurePreserving hf.quasiMeasurePreserving)
+参数：g : β ->ₘ[ν] γ；hf : MeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_eq_mk`：compQuasiMeasure
+Preserving_eq_mk (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) : g.compQu
+asiMeasurePreserving f hf = mk (g ∘ f) (g.ae…
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 -/
-theorem compMeasurePreserving_eq_mk (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν) :
+theorem compMeasurePreserving_eq_mk (g : β →ₘ[ν] γ) (hf : MeasurePreserving f μ ν) :
     g.compMeasurePreserving f hf =
       mk (g ∘ f) (g.aestronglyMeasurable.comp_quasiMeasurePreserving hf.quasiMeasurePreserving) :=
   g.compQuasiMeasurePreserving_eq_mk _
-
-/--
-theorem `coeFn_compMeasurePreserving` / 定理 `coeFn_compMeasurePreserving`
-
-English:
-theorem coeFn_compMeasurePreserving
-  given: (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
-  proof: g.coeFn_compQuasiMeasurePreserving _
-
-中文:
-定理 coeFn_compMeasurePreserving
-  条件: (g : β ->ₘ[ν] γ) (hf : 保测 f μ ν)
-  证明: g.coeFn_compQuasiMeasurePreserving _
-
-Depends on / 依赖: coeFn_compQuasiMeasurePreserving, g.coeFn_compQuasiMeasurePreserving
+/-
+**MeasureTheory.AEEqFun.coeFn_compMeasurePreserving** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.AEEqFun`。
+形式化陈述：coeFn_compMeasurePreserving (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν
+) : g.compMeasurePreserving f hf =ᵐ[μ] g ∘ f
+参数：g : β ->ₘ[ν] γ；hf : MeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_compQuasiMeasurePreserving`：coeFn_compQuasiM
+easurePreserving (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) : g.compQu
+asiMeasurePreserving f hf =ᵐ[μ] g ∘ f
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 -/
-theorem coeFn_compMeasurePreserving (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν) :
+theorem coeFn_compMeasurePreserving (g : β →ₘ[ν] γ) (hf : MeasurePreserving f μ ν) :
     g.compMeasurePreserving f hf =ᵐ[μ] g ∘ f :=
   g.coeFn_compQuasiMeasurePreserving _
-
-/--
-theorem `compMeasurePreserving_congr` / 定理 `compMeasurePreserving_congr`
-
-English:
-theorem compMeasurePreserving_congr
-  statement: (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
-  proof: compQuasiMeasurePreserving_congr _ _ hf' h
-
-@[simp]
-
-中文:
-定理 compMeasurePreserving_congr
-  结论: (g : β ->ₘ[ν] γ) (hf : 保测 f μ ν)
-  证明: compQuasiMeasurePreserving_congr _ _ hf' h
-
-@[simp]
-
-Depends on / 依赖: compQuasiMeasurePreserving_congr
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving_congr** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.AEEqFun`。
+形式化陈述：compMeasurePreserving_congr (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν
+) {f' : α -> β} (hf' : Measurable f') (h : f =ᵐ[μ] f') : compMeasurePreserving g
+ f hf = compMeasurePreserving g f' (hf.congr hf' h)
+参数：g : β ->ₘ[ν] γ；hf : MeasurePreserving f μ ν；hf' : Measurable f'；h : f =ᵐ[μ] f
+'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_congr`：compQuasiMeasure
+Preserving_congr (g : β ->ₘ[ν] γ) (hf : QuasiMeasurePreserving f μ ν) {f' : α ->
+ β} (hf' : Measurable f') (h : f =ᵐ[μ] f') :…
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 -/
-theorem compMeasurePreserving_congr (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
-    {f' : α -> β} (hf' : Measurable f') (h : f =ᵐ[μ] f') :
+theorem compMeasurePreserving_congr (g : β →ₘ[ν] γ) (hf : MeasurePreserving f μ ν)
+    {f' : α → β} (hf' : Measurable f') (h : f =ᵐ[μ] f') :
     compMeasurePreserving g f hf = compMeasurePreserving g f' (hf.congr hf' h) :=
   compQuasiMeasurePreserving_congr _ _ hf' h
 
 @[simp]
-/--
-theorem `compMeasurePreserving_id` / 定理 `compMeasurePreserving_id`
-
-English:
-theorem compMeasurePreserving_id
-  given: (g : β ->ₘ[ν] γ)
-  proof: compQuasiMeasurePreserving_id _
-
-中文:
-定理 compMeasurePreserving_id
-  条件: (g : β ->ₘ[ν] γ)
-  证明: compQuasiMeasurePreserving_id _
-
-Depends on / 依赖: compQuasiMeasurePreserving_id
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving_id** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.AEEqFun`。
+形式化陈述：compMeasurePreserving_id (g : β ->ₘ[ν] γ) : compMeasurePreserving g id (.i
+d ν) = g
+参数：g : β ->ₘ[ν] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_id`：compQuasiMeasurePre
+serving_id (g : β ->ₘ[ν] γ) : compQuasiMeasurePreserving g id (.id ν) = g
 -/
-theorem compMeasurePreserving_id (g : β ->ₘ[ν] γ) :
+theorem compMeasurePreserving_id (g : β →ₘ[ν] γ) :
     compMeasurePreserving g id (.id ν) = g :=
   compQuasiMeasurePreserving_id _
-
-/--
-theorem `compMeasurePreserving_comp` / 定理 `compMeasurePreserving_comp`
-
-English:
-theorem compMeasurePreserving_comp
-  statement: {γ : Type*} {mγ : MeasurableSpace γ}
-  proof: compQuasiMeasurePreserving_comp _ _ _
-
-中文:
-定理 compMeasurePreserving_comp
-  结论: {γ : 类型} {mγ : 可测空间 γ}
-  证明: compQuasiMeasurePreserving_comp _ _ _
-
-Depends on / 依赖: compQuasiMeasurePreserving_comp
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving_comp** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.AEEqFun`。
+形式化陈述：compMeasurePreserving_comp {γ : Type*} {mγ : MeasurableSpace γ} {ξ : Measu
+re γ} (g : γ ->ₘ[ξ] δ) {f : β -> γ} (hf : MeasurePreserving f ν ξ) {f' : α -> β}
+ (hf' : MeasurePreserving f' μ ν) : compMeasurePreserving g (f ∘ f') (hf.comp hf
+') = compMeasurePreserving (compMeasurePreserving g f hf) f' hf'
+参数：g : γ ->ₘ[ξ] δ；hf : MeasurePreserving f ν ξ；hf' : MeasurePreserving f' μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_comp`：compQuasiMeasureP
+reserving_comp {γ : Type*} {mγ : MeasurableSpace γ} {ξ : Measure γ} (g : γ ->ₘ[ξ
+] δ) {f : β -> γ} (hf : QuasiMeasurePreserv…
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 -/
 theorem compMeasurePreserving_comp {γ : Type*} {mγ : MeasurableSpace γ}
-    {ξ : Measure γ} (g : γ ->ₘ[ξ] δ) {f : β -> γ} (hf : MeasurePreserving f ν ξ) {f' : α -> β}
+    {ξ : Measure γ} (g : γ →ₘ[ξ] δ) {f : β → γ} (hf : MeasurePreserving f ν ξ) {f' : α → β}
     (hf' : MeasurePreserving f' μ ν) :
     compMeasurePreserving g (f ∘ f') (hf.comp hf') =
     compMeasurePreserving (compMeasurePreserving g f hf) f' hf' :=
   compQuasiMeasurePreserving_comp _ _ _
-
-/--
-theorem `compMeasurePreserving_iterate` / 定理 `compMeasurePreserving_iterate`
-
-English:
-theorem compMeasurePreserving_iterate
-  statement: (g : α ->ₘ[μ] γ) {f : α -> α}
-  proof: compQuasiMeasurePreserving_iterate _ _ _
-
-中文:
-定理 compMeasurePreserving_iterate
-  结论: (g : α ->ₘ[μ] γ) {f : α -> α}
-  证明: compQuasiMeasurePreserving_iterate _ _ _
-
-Depends on / 依赖: compQuasiMeasurePreserving_iterate
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving_iterate** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.AEEqFun`。
+形式化陈述：compMeasurePreserving_iterate (g : α ->ₘ[μ] γ) {f : α -> α} (hf : MeasureP
+reserving f μ μ) (n : Nat) : (compMeasurePreserving · f hf)^[n] g = compMeasureP
+reserving g (f^[n]) (hf.iterate n)
+参数：g : α ->ₘ[μ] γ；hf : MeasurePreserving f μ μ；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_iterate`：compQuasiMeasu
+rePreserving_iterate (g : α ->ₘ[μ] γ) {f : α -> α} (hf : QuasiMeasurePreserving 
+f μ μ) (n : Nat) : (compQuasiMeasurePreserving…
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 -/
-theorem compMeasurePreserving_iterate (g : α ->ₘ[μ] γ) {f : α -> α}
-    (hf : MeasurePreserving f μ μ) (n : Nat) :
+theorem compMeasurePreserving_iterate (g : α →ₘ[μ] γ) {f : α → α}
+    (hf : MeasurePreserving f μ μ) (n : ℕ) :
     (compMeasurePreserving · f hf)^[n] g = compMeasurePreserving g (f^[n]) (hf.iterate n) :=
   compQuasiMeasurePreserving_iterate _ _ _
 
@@ -923,160 +916,138 @@ end compMeasurePreserving
 
 variable [TopologicalSpace β] [TopologicalSpace γ]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Given a continuous function `g : β → γ`, and an almost everywhere equal function `[f] : α →ₘ β`,
+return the equivalence class of `g ∘ f`, i.e., the almost everywhere equal function
+`[g ∘ f] : α →ₘ γ`. -/
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
-  body: Quotient.liftOn' f (fun f => mk (g ∘ (f : α -> β)) (hg.comp_aestronglyMeasurable f.2))
-fun _ _ H => mk_eq_mk.2 H.fun_comp g
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
-  定义体: Quotient.liftOn' f (fun f => mk (g ∘ (f : α -> β)) (hg.comp_aestronglyMeasurable f.2))
-fun _ _ H => mk_eq_mk.2 H.fun_comp g
-
-@[simp]
-
-Depends on / 依赖: H.fun_comp, Quotient, Quotient.liftOn, comp_aestronglyMeasurable, fun_comp, hg.comp_aestronglyMeasurable, liftOn, mk_eq_mk
+--- 原说明 ---
+Given a continuous function `g : β → γ`, and an almost everywhere equal function
+ `[f] : α →ₘ β`,
+return the equivalence class of `g ∘ f`, i.e., the almost everywhere equal funct
+ion
+`[g ∘ f] : α →ₘ γ`.
 -/
-def comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ :=
-  Quotient.liftOn' f (fun f => mk (g ∘ (f : α -> β)) (hg.comp_aestronglyMeasurable f.2))
-fun _ _ H => mk_eq_mk.2 H.fun_comp g
+def comp (g : β → γ) (hg : Continuous g) (f : α →ₘ[μ] β) : α →ₘ[μ] γ :=
+  Quotient.liftOn' f (fun f => mk (g ∘ (f : α → β)) (hg.comp_aestronglyMeasurable f.2))
+    fun _ _ H => mk_eq_mk.2 <| H.fun_comp g
 
 @[simp]
-/--
-theorem `comp_mk` / 定理 `comp_mk`
-
-English:
-theorem comp_mk
-  given: (g : β -> γ) (hg : Continuous g) (f : α -> β) (hf)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_mk
-  条件: (g : β -> γ) (hg : 连续 g) (f : α -> β) (hf)
-  证明: rfl
-
-@[simp]
+/-
+**MeasureTheory.AEEqFun.comp_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：comp_mk (g : β -> γ) (hg : Continuous g) (f : α -> β) (hf) : comp g hg (mk
+ f hf : α ->ₘ[μ] β) = mk (g ∘ f) (hg.comp_aestronglyMeasurable hf)
+参数：g : β -> γ；hg : Continuous g；f : α -> β；hf。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_mk (g : β -> γ) (hg : Continuous g) (f : α -> β) (hf) :
-    comp g hg (mk f hf : α ->ₘ[μ] β) = mk (g ∘ f) (hg.comp_aestronglyMeasurable hf) :=
+theorem comp_mk (g : β → γ) (hg : Continuous g) (f : α → β) (hf) :
+    comp g hg (mk f hf : α →ₘ[μ] β) = mk (g ∘ f) (hg.comp_aestronglyMeasurable hf) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : α ->ₘ[μ] β)
-  statement: comp id (continuous_id) f = f
-  proof: by
+/-
+**MeasureTheory.AEEqFun.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：comp_id (f : α ->ₘ[μ] β) : comp id (continuous_id) f = f
+参数：f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+-/
+theorem comp_id (f : α →ₘ[μ] β) : comp id (continuous_id) f = f := by
   rcases f; rfl
 
 @[simp]
-
-中文:
-定理 comp_id
-  条件: (f : α ->ₘ[μ] β)
-  结论: comp id (continuous_id) f = f
-  证明: by
-  rcases f; rfl
-
-@[simp]
+/-
+**MeasureTheory.AEEqFun.comp_comp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：comp_comp (g : γ -> δ) (g' : β -> γ) (hg : Continuous g) (hg' : Continuous
+ g') (f : α ->ₘ[μ] β) : comp g hg (comp g' hg' f) = comp (g ∘ g') (hg.comp hg') 
+f
+参数：g : γ -> δ；g' : β -> γ；hg : Continuous g；hg' : Continuous g'；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
 -/
-theorem comp_id (f : α ->ₘ[μ] β) : comp id (continuous_id) f = f := by
+theorem comp_comp (g : γ → δ) (g' : β → γ) (hg : Continuous g) (hg' : Continuous g')
+    (f : α →ₘ[μ] β) : comp g hg (comp g' hg' f) = comp (g ∘ g') (hg.comp hg') f := by
   rcases f; rfl
-
-@[simp]
-/--
-theorem `comp_comp` / 定理 `comp_comp`
-
-English:
-theorem comp_comp
-  statement: (g : γ -> δ) (g' : β -> γ) (hg : Continuous g) (hg' : Continuous g')
-  proof: by
-  rcases f; rfl
-
-中文:
-定理 comp_comp
-  结论: (g : γ -> δ) (g' : β -> γ) (hg : 连续 g) (hg' : 连续 g')
-  证明: by
-  rcases f; rfl
+/-
+**MeasureTheory.AEEqFun.comp_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：comp_eq_mk (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : comp g hg f
+ = mk (g ∘ f) (hg.comp_aestronglyMeasurable f.aestronglyMeasurable)
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp_aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} {γ
+ : Type u_3} [inst : TopologicalSpace β] [inst_1 : TopologicalSpace γ]   {m m₀ :
+ MeasurableSpace α} {μ : M…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.comp_mk`：comp_mk (g : β -> γ) (hg : Continuous g) 
+(f : α -> β) (hf) : comp g hg (mk f hf : α ->ₘ[μ] β) = mk (g ∘ f) (hg.comp_aestr
+onglyMeasurable hf)
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
 -/
-theorem comp_comp (g : γ -> δ) (g' : β -> γ) (hg : Continuous g) (hg' : Continuous g')
-    (f : α ->ₘ[μ] β) : comp g hg (comp g' hg' f) = comp (g ∘ g') (hg.comp hg') f := by
-  rcases f; rfl
-
-/--
-theorem `comp_eq_mk` / 定理 `comp_eq_mk`
-
-English:
-theorem comp_eq_mk
-  given: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
-  proof: by
-  rw [← comp_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-中文:
-定理 comp_eq_mk
-  条件: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
-  证明: by
-  rw [← comp_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-Depends on / 依赖: aestronglyMeasurable, comp_mk, f.aestronglyMeasurable, mk_coeFn
--/
-theorem comp_eq_mk (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) :
+theorem comp_eq_mk (g : β → γ) (hg : Continuous g) (f : α →ₘ[μ] β) :
     comp g hg f = mk (g ∘ f) (hg.comp_aestronglyMeasurable f.aestronglyMeasurable) := by
-  rw [← comp_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-/--
-theorem `coeFn_comp` / 定理 `coeFn_comp`
-
-English:
-theorem coeFn_comp
-  given: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
-  statement: comp g hg f =ᵐ[μ] g ∘ f
-  proof: by
-  rw [comp_eq_mk]
-  apply coeFn_mk
-
-中文:
-定理 coeFn_comp
-  条件: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
-  结论: comp g hg f =ᵐ[μ] g ∘ f
-  证明: by
-  rw [comp_eq_mk]
-  apply coeFn_mk
-
-Depends on / 依赖: coeFn_mk, comp_eq_mk
+  rw [← comp_mk g hg f f.aestronglyMeasurable, mk_coeFn]
+/-
+**MeasureTheory.AEEqFun.coeFn_comp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：coeFn_comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : comp g hg f
+ =ᵐ[μ] g ∘ f
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Continuous.comp_aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} {γ
+ : Type u_3} [inst : TopologicalSpace β] [inst_1 : TopologicalSpace γ]   {m m₀ :
+ MeasurableSpace α} {μ : M…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.comp_eq_mk`：comp_eq_mk (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f = mk (g ∘ f) (hg.comp_aestronglyMeasurable 
+f.aestronglyMeasurable…
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
-theorem coeFn_comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f := by
+theorem coeFn_comp (g : β → γ) (hg : Continuous g) (f : α →ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f := by
   rw [comp_eq_mk]
   apply coeFn_mk
-
-/--
-theorem `comp_compQuasiMeasurePreserving` / 定理 `comp_compQuasiMeasurePreserving`
-
-English:
-theorem comp_compQuasiMeasurePreserving
-  proof: by
-  rcases f; rfl
-
-中文:
-定理 comp_compQuasiMeasurePreserving
-  证明: by
-  rcases f; rfl
+/-
+**MeasureTheory.AEEqFun.comp_compQuasiMeasurePreserving** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp_compQuasiMeasurePreserving {β : Type*} [MeasurableSpace β] {ν} (g : γ
+ -> δ) (hg : Continuous g) (f : β ->ₘ[ν] γ) {φ : α -> β} (hφ : Measure.QuasiMeas
+urePreserving φ μ ν) : (comp g hg f).compQuasiMeasurePreserving φ hφ = comp g hg
+ (f.compQuasiMeasurePreserving φ hφ)
+参数：g : γ -> δ；hg : Continuous g；f : β ->ₘ[ν] γ；hφ : Measure.QuasiMeasurePreservi
+ng φ μ ν。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_compQuasiMeasurePreserving
-    {β : Type*} [MeasurableSpace β] {ν} (g : γ -> δ) (hg : Continuous g)
-    (f : β ->ₘ[ν] γ) {φ : α -> β} (hφ : Measure.QuasiMeasurePreserving φ μ ν) :
+    {β : Type*} [MeasurableSpace β] {ν} (g : γ → δ) (hg : Continuous g)
+    (f : β →ₘ[ν] γ) {φ : α → β} (hφ : Measure.QuasiMeasurePreserving φ μ ν) :
     (comp g hg f).compQuasiMeasurePreserving φ hφ =
       comp g hg (f.compQuasiMeasurePreserving φ hφ) := by
   rcases f; rfl
@@ -1086,293 +1057,284 @@ section CompMeasurable
 variable [MeasurableSpace β] [PseudoMetrizableSpace β] [BorelSpace β] [MeasurableSpace γ]
   [PseudoMetrizableSpace γ] [OpensMeasurableSpace γ] [SecondCountableTopology γ]
 
-/--
-Definition of `compMeasurable` / `compMeasurable` 的定义
+/-- Given a measurable function `g : β → γ`, and an almost everywhere equal function `[f] : α →ₘ β`,
+return the equivalence class of `g ∘ f`, i.e., the almost everywhere equal function
+`[g ∘ f] : α →ₘ γ`. This requires that `γ` has a second countable topology. -/
+/-
+**MeasureTheory.AEEqFun.compMeasurable** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.
+AEEqFun`。
+形式化陈述：compMeasurable (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) : α ->ₘ[μ
+] γ
+参数：g : β -> γ；hg : Measurable g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compMeasurable
-  signature: (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β)
-  body: Quotient.liftOn' f
-    (fun f' => mk (g ∘ (f' : α -> β)) (hg.comp_aemeasurable f'.2.aemeasurable).aestronglyMeasurable)
-fun _ _ H => mk_eq_mk.2 H.fun_comp g
-
-@[simp]
-
-中文:
-定义 compMeasurable
-  签名: (g : β -> γ) (hg : 可测 g) (f : α ->ₘ[μ] β)
-  定义体: Quotient.liftOn' f
-    (fun f' => mk (g ∘ (f' : α -> β)) (hg.comp_aemeasurable f'.2.aemeasurable).aestronglyMeasurable)
-fun _ _ H => mk_eq_mk.2 H.fun_comp g
-
-@[simp]
-
-Depends on / 依赖: H.fun_comp, Quotient, Quotient.liftOn, aemeasurable, aestronglyMeasurable, comp_aemeasurable, fun_comp, hg.comp_aemeasurable, liftOn, mk_eq_mk
+--- 原说明 ---
+Given a measurable function `g : β → γ`, and an almost everywhere equal function
+ `[f] : α →ₘ β`,
+return the equivalence class of `g ∘ f`, i.e., the almost everywhere equal funct
+ion
+`[g ∘ f] : α →ₘ γ`. This requires that `γ` has a second countable topology.
 -/
-def compMeasurable (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ :=
+def compMeasurable (g : β → γ) (hg : Measurable g) (f : α →ₘ[μ] β) : α →ₘ[μ] γ :=
   Quotient.liftOn' f
-    (fun f' => mk (g ∘ (f' : α -> β)) (hg.comp_aemeasurable f'.2.aemeasurable).aestronglyMeasurable)
-fun _ _ H => mk_eq_mk.2 H.fun_comp g
+    (fun f' => mk (g ∘ (f' : α → β)) (hg.comp_aemeasurable f'.2.aemeasurable).aestronglyMeasurable)
+    fun _ _ H => mk_eq_mk.2 <| H.fun_comp g
 
 @[simp]
-/--
-theorem `compMeasurable_mk` / 定理 `compMeasurable_mk`
-
-English:
-theorem compMeasurable_mk
-  statement: (g : β -> γ) (hg : Measurable g) (f : α -> β)
-  proof: rfl
-
-中文:
-定理 compMeasurable_mk
-  结论: (g : β -> γ) (hg : 可测 g) (f : α -> β)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.compMeasurable_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.AEEqFun`。
+形式化陈述：compMeasurable_mk (g : β -> γ) (hg : Measurable g) (f : α -> β) (hf : AESt
+ronglyMeasurable f μ) : compMeasurable g hg (mk f hf : α ->ₘ[μ] β) = mk (g ∘ f) 
+(hg.comp_aemeasurable hf.aemeasurable).aestronglyMeasurable
+参数：g : β -> γ；hg : Measurable g；f : α -> β；hf : AEStronglyMeasurable f μ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem compMeasurable_mk (g : β -> γ) (hg : Measurable g) (f : α -> β)
+theorem compMeasurable_mk (g : β → γ) (hg : Measurable g) (f : α → β)
     (hf : AEStronglyMeasurable f μ) :
-    compMeasurable g hg (mk f hf : α ->ₘ[μ] β) =
+    compMeasurable g hg (mk f hf : α →ₘ[μ] β) =
       mk (g ∘ f) (hg.comp_aemeasurable hf.aemeasurable).aestronglyMeasurable :=
   rfl
-
-/--
-theorem `compMeasurable_eq_mk` / 定理 `compMeasurable_eq_mk`
-
-English:
-theorem compMeasurable_eq_mk
-  given: (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β)
-  proof: by
-  rw [← compMeasurable_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-中文:
-定理 compMeasurable_eq_mk
-  条件: (g : β -> γ) (hg : 可测 g) (f : α ->ₘ[μ] β)
-  证明: by
-  rw [← compMeasurable_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-Depends on / 依赖: aestronglyMeasurable, compMeasurable_mk, f.aestronglyMeasurable, mk_coeFn
+/-
+**MeasureTheory.AEEqFun.compMeasurable_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.AEEqFun`。
+形式化陈述：compMeasurable_eq_mk (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) : c
+ompMeasurable g hg f = mk (g ∘ f) (hg.comp_aemeasurable f.aemeasurable).aestrong
+lyMeasurable
+参数：g : β -> γ；hg : Measurable g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst
+ : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 : M…
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `MeasureTheory.AEEqFun.aemeasurable`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : TopologicalSpace 
+β]   [TopologicalSpace.P…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.aemeasurable`：∀ {α : Type u_1} {m₀ : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} {β : Type u_5} [inst : Measurab
+leSpace β]   [inst_1 : TopologicalSpa…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.compMeasurable_mk`：compMeasurable_mk (g : β -> γ) 
+(hg : Measurable g) (f : α -> β) (hf : AEStronglyMeasurable f μ) : compMeasurabl
+e g hg (mk f hf : α ->ₘ[μ] β)…
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
 -/
-theorem compMeasurable_eq_mk (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) :
+theorem compMeasurable_eq_mk (g : β → γ) (hg : Measurable g) (f : α →ₘ[μ] β) :
     compMeasurable g hg f =
     mk (g ∘ f) (hg.comp_aemeasurable f.aemeasurable).aestronglyMeasurable := by
-  rw [← compMeasurable_mk g hg f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-/--
-theorem `coeFn_compMeasurable` / 定理 `coeFn_compMeasurable`
-
-English:
-theorem coeFn_compMeasurable
-  given: (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β)
-  proof: by
-  rw [compMeasurable_eq_mk]
-  apply coeFn_mk
-
-中文:
-定理 coeFn_compMeasurable
-  条件: (g : β -> γ) (hg : 可测 g) (f : α ->ₘ[μ] β)
-  证明: by
-  rw [compMeasurable_eq_mk]
-  apply coeFn_mk
-
-Depends on / 依赖: coeFn_mk, compMeasurable_eq_mk
+  rw [← compMeasurable_mk g hg f f.aestronglyMeasurable, mk_coeFn]
+/-
+**MeasureTheory.AEEqFun.coeFn_compMeasurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.AEEqFun`。
+形式化陈述：coeFn_compMeasurable (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) : c
+ompMeasurable g hg f =ᵐ[μ] g ∘ f
+参数：g : β -> γ；hg : Measurable g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `AEMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst
+ : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 : M…
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `MeasureTheory.AEEqFun.aemeasurable`：∀ {α : Type u_1} {β : Type u_2} [ins
+t : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : TopologicalSpace 
+β]   [TopologicalSpace.P…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.compMeasurable_eq_mk`：compMeasurable_eq_mk (g : β 
+-> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) : compMeasurable g hg f = mk (g ∘ f) 
+(hg.comp_aemeasurable f.aemeasur…
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
-theorem coeFn_compMeasurable (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) :
+theorem coeFn_compMeasurable (g : β → γ) (hg : Measurable g) (f : α →ₘ[μ] β) :
     compMeasurable g hg f =ᵐ[μ] g ∘ f := by
   rw [compMeasurable_eq_mk]
   apply coeFn_mk
 
 end CompMeasurable
 
-/--
-Definition of `pair` / `pair` 的定义
+/-- The class of `x ↦ (f x, g x)`. -/
+/-
+**MeasureTheory.AEEqFun.pair** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：pair (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) : α ->ₘ[μ] β × γ
+参数：f : α ->ₘ[μ] β；g : α ->ₘ[μ] γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pair
-  signature: (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  body: Quotient.liftOn₂' f g (fun f g => mk (fun x => (f.1 x, g.1 x)) (f.2.prodMk g.2))
-fun _f _g _f' _g' Hf Hg => mk_eq_mk.2 Hf.prodMk Hg
-
-@[simp]
-
-中文:
-定义 pair
-  签名: (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  定义体: Quotient.liftOn₂' f g (fun f g => mk (fun x => (f.1 x, g.1 x)) (f.2.prodMk g.2))
-fun _f _g _f' _g' Hf Hg => mk_eq_mk.2 Hf.prodMk Hg
-
-@[simp]
-
-Depends on / 依赖: Hf.prodMk, Quotient, Quotient.liftOn, mk_eq_mk, prodMk
+--- 原说明 ---
+The class of `x ↦ (f x, g x)`.
 -/
-def pair (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) : α ->ₘ[μ] β × γ :=
+def pair (f : α →ₘ[μ] β) (g : α →ₘ[μ] γ) : α →ₘ[μ] β × γ :=
   Quotient.liftOn₂' f g (fun f g => mk (fun x => (f.1 x, g.1 x)) (f.2.prodMk g.2))
-fun _f _g _f' _g' Hf Hg => mk_eq_mk.2 Hf.prodMk Hg
+    fun _f _g _f' _g' Hf Hg => mk_eq_mk.2 <| Hf.prodMk Hg
 
 @[simp]
-/--
-theorem `pair_mk_mk` / 定理 `pair_mk_mk`
-
-English:
-theorem pair_mk_mk
-  given: (f : α -> β) (hf) (g : α -> γ) (hg)
-  proof: rfl
-
-中文:
-定理 pair_mk_mk
-  条件: (f : α -> β) (hf) (g : α -> γ) (hg)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.pair_mk_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：pair_mk_mk (f : α -> β) (hf) (g : α -> γ) (hg) : (mk f hf : α ->ₘ[μ] β).pa
+ir (mk g hg) = mk (fun x => (f x, g x)) (hf.prodMk hg)
+参数：f : α -> β；hf；g : α -> γ；hg。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pair_mk_mk (f : α -> β) (hf) (g : α -> γ) (hg) :
-    (mk f hf : α ->ₘ[μ] β).pair (mk g hg) = mk (fun x => (f x, g x)) (hf.prodMk hg) :=
+theorem pair_mk_mk (f : α → β) (hf) (g : α → γ) (hg) :
+    (mk f hf : α →ₘ[μ] β).pair (mk g hg) = mk (fun x => (f x, g x)) (hf.prodMk hg) :=
   rfl
-
-/--
-theorem `pair_eq_mk` / 定理 `pair_eq_mk`
-
-English:
-theorem pair_eq_mk
-  given: (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  proof: by
-  simp only [← pair_mk_mk, mk_coeFn, f.aestronglyMeasurable, g.aestronglyMeasurable]
-
-中文:
-定理 pair_eq_mk
-  条件: (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  证明: by
-  simp only [← pair_mk_mk, mk_coeFn, f.aestronglyMeasurable, g.aestronglyMeasurable]
-
-Depends on / 依赖: aestronglyMeasurable, f.aestronglyMeasurable, g.aestronglyMeasurable, mk_coeFn, pair_mk_mk
+/-
+**MeasureTheory.AEEqFun.pair_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：pair_eq_mk (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) : f.pair g = mk (fun x => (f 
+x, g x)) (f.aestronglyMeasurable.prodMk g.aestronglyMeasurable)
+参数：f : α ->ₘ[μ] β；g : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.prodMk`：∀ {α : Type u_1} {β : Type u_
+2} {γ : Type u_3} [inst : TopologicalSpace β] [inst_1 : TopologicalSpace γ]   {m
+ m₀ : MeasurableSpace α} {μ : M…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem pair_eq_mk (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) :
+theorem pair_eq_mk (f : α →ₘ[μ] β) (g : α →ₘ[μ] γ) :
     f.pair g =
       mk (fun x => (f x, g x)) (f.aestronglyMeasurable.prodMk g.aestronglyMeasurable) := by
   simp only [← pair_mk_mk, mk_coeFn, f.aestronglyMeasurable, g.aestronglyMeasurable]
-
-/--
-theorem `coeFn_pair` / 定理 `coeFn_pair`
-
-English:
-theorem coeFn_pair
-  given: (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  statement: f.pair g =ᵐ[μ] fun x => (f x, g x)
-  proof: by
-  rw [pair_eq_mk]
-  apply coeFn_mk
-
-中文:
-定理 coeFn_pair
-  条件: (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  结论: f.pair g =ᵐ[μ] fun x => (f x, g x)
-  证明: by
-  rw [pair_eq_mk]
-  apply coeFn_mk
-
-Depends on / 依赖: coeFn_mk, pair_eq_mk
+/-
+**MeasureTheory.AEEqFun.coeFn_pair** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：coeFn_pair (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) : f.pair g =ᵐ[μ] fun x => (f 
+x, g x)
+参数：f : α ->ₘ[μ] β；g : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.prodMk`：∀ {α : Type u_1} {β : Type u_
+2} {γ : Type u_3} [inst : TopologicalSpace β] [inst_1 : TopologicalSpace γ]   {m
+ m₀ : MeasurableSpace α} {μ : M…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.pair_eq_mk`：pair_eq_mk (f : α ->ₘ[μ] β) (g : α ->ₘ
+[μ] γ) : f.pair g = mk (fun x => (f x, g x)) (f.aestronglyMeasurable.prodMk g.ae
+stronglyMeasurable)
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
-theorem coeFn_pair (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) : f.pair g =ᵐ[μ] fun x => (f x, g x) := by
+theorem coeFn_pair (f : α →ₘ[μ] β) (g : α →ₘ[μ] γ) : f.pair g =ᵐ[μ] fun x => (f x, g x) := by
   rw [pair_eq_mk]
   apply coeFn_mk
 
-/--
-Definition of `comp₂` / `comp₂` 的定义
+/-- Given a continuous function `g : β → γ → δ`, and almost everywhere equal functions
+`[f₁] : α →ₘ β` and `[f₂] : α →ₘ γ`, return the equivalence class of the function
+`fun a => g (f₁ a) (f₂ a)`, i.e., the almost everywhere equal function
+`[fun a => g (f₁ a) (f₂ a)] : α →ₘ γ` -/
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp₂
-  signature: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ)
-  body: comp _ hg (f₁.pair f₂)
-
-@[simp]
-
-中文:
-定义 comp₂
-  签名: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ)
-  定义体: comp _ hg (f₁.pair f₂)
-
-@[simp]
+--- 原说明 ---
+Given a continuous function `g : β → γ → δ`, and almost everywhere equal functio
+ns
+`[f₁] : α →ₘ β` and `[f₂] : α →ₘ γ`, return the equivalence class of the functio
+n
+`fun a => g (f₁ a) (f₂ a)`, i.e., the almost everywhere equal function
+`[fun a => g (f₁ a) (f₂ a)] : α →ₘ γ`
 -/
-def comp₂ (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) :
-    α ->ₘ[μ] δ :=
+def comp₂ (g : β → γ → δ) (hg : Continuous (uncurry g)) (f₁ : α →ₘ[μ] β) (f₂ : α →ₘ[μ] γ) :
+    α →ₘ[μ] δ :=
   comp _ hg (f₁.pair f₂)
 
 @[simp]
-/--
-theorem `comp₂_mk_mk` / 定理 `comp₂_mk_mk`
-
-English:
-theorem comp₂_mk_mk
-  statement: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α -> β) (f₂ : α -> γ)
-  proof: rfl
-
-中文:
-定理 comp₂_mk_mk
-  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α -> β) (f₂ : α -> γ)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp₂_mk_mk (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α -> β) (f₂ : α -> γ)
+theorem comp₂_mk_mk (g : β → γ → δ) (hg : Continuous (uncurry g)) (f₁ : α → β) (f₂ : α → γ)
     (hf₁ hf₂) :
-    comp₂ g hg (mk f₁ hf₁ : α ->ₘ[μ] β) (mk f₂ hf₂) =
+    comp₂ g hg (mk f₁ hf₁ : α →ₘ[μ] β) (mk f₂ hf₂) =
       mk (fun a => g (f₁ a) (f₂ a)) (hg.comp_aestronglyMeasurable (hf₁.prodMk hf₂)) :=
   rfl
-
-/--
-theorem `comp₂_eq_pair` / 定理 `comp₂_eq_pair`
-
-English:
-theorem comp₂_eq_pair
-  statement: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  proof: rfl
-
-中文:
-定理 comp₂_eq_pair
-  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp₂_eq_pair (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) : comp₂ g hg f₁ f₂ = comp _ hg (f₁.pair f₂) :=
+theorem comp₂_eq_pair (g : β → γ → δ) (hg : Continuous (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) : comp₂ g hg f₁ f₂ = comp _ hg (f₁.pair f₂) :=
   rfl
-
-/--
-theorem `comp₂_eq_mk` / 定理 `comp₂_eq_mk`
-
-English:
-theorem comp₂_eq_mk
-  statement: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  proof: by
-  rw [comp₂_eq_pair]; rw [pair_eq_mk]; rw [comp_mk]; rfl
-
-中文:
-定理 comp₂_eq_mk
-  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  证明: by
-  rw [comp₂_eq_pair]; rw [pair_eq_mk]; rw [comp_mk]; rfl
-
-Depends on / 依赖: comp_mk, pair_eq_mk
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp₂_eq_mk (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) : comp₂ g hg f₁ f₂ = mk (fun a => g (f₁ a) (f₂ a))
+theorem comp₂_eq_mk (g : β → γ → δ) (hg : Continuous (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) : comp₂ g hg f₁ f₂ = mk (fun a => g (f₁ a) (f₂ a))
       (hg.comp_aestronglyMeasurable (f₁.aestronglyMeasurable.prodMk f₂.aestronglyMeasurable)) := by
-  rw [comp₂_eq_pair]; rw [pair_eq_mk]; rw [comp_mk]; rfl
-
-/--
-theorem `coeFn_comp₂` / 定理 `coeFn_comp₂`
-
-English:
-theorem coeFn_comp₂
-  statement: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  proof: by
-  rw [comp₂_eq_mk]
-  apply coeFn_mk
-
-中文:
-定理 coeFn_comp₂
-  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  证明: by
-  rw [comp₂_eq_mk]
-  apply coeFn_mk
-
-Depends on / 依赖: coeFn_mk
+  rw [comp₂_eq_pair, pair_eq_mk, comp_mk]; rfl
+/-
+**MeasureTheory.AEEqFun.coeFn_comp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：coeFn_comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : comp g hg f
+ =ᵐ[μ] g ∘ f
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Continuous.comp_aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} {γ
+ : Type u_3} [inst : TopologicalSpace β] [inst_1 : TopologicalSpace γ]   {m m₀ :
+ MeasurableSpace α} {μ : M…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.comp_eq_mk`：comp_eq_mk (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f = mk (g ∘ f) (hg.comp_aestronglyMeasurable 
+f.aestronglyMeasurable…
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
-theorem coeFn_comp₂ (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) : comp₂ g hg f₁ f₂ =ᵐ[μ] fun a => g (f₁ a) (f₂ a) := by
+theorem coeFn_comp₂ (g : β → γ → δ) (hg : Continuous (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) : comp₂ g hg f₁ f₂ =ᵐ[μ] fun a => g (f₁ a) (f₂ a) := by
   rw [comp₂_eq_mk]
   apply coeFn_mk
 
@@ -1382,491 +1344,419 @@ variable [MeasurableSpace β] [PseudoMetrizableSpace β] [BorelSpace β]
   [MeasurableSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ] [SecondCountableTopologyEither β γ]
   [MeasurableSpace δ] [PseudoMetrizableSpace δ] [OpensMeasurableSpace δ] [SecondCountableTopology δ]
 
-/--
-Definition of `comp₂Measurable` / `comp₂Measurable` 的定义
+/-- Given a measurable function `g : β → γ → δ`, and almost everywhere equal functions
+`[f₁] : α →ₘ β` and `[f₂] : α →ₘ γ`, return the equivalence class of the function
+`fun a => g (f₁ a) (f₂ a)`, i.e., the almost everywhere equal function
+`[fun a => g (f₁ a) (f₂ a)] : α →ₘ γ`. This requires `δ` to have second-countable topology. -/
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp₂Measurable
-  signature: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  body: compMeasurable _ hg (f₁.pair f₂)
-
-@[simp]
-
-中文:
-定义 comp₂Measurable
-  签名: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  定义体: compMeasurable _ hg (f₁.pair f₂)
-
-@[simp]
-
-Depends on / 依赖: compMeasurable
+--- 原说明 ---
+Given a measurable function `g : β → γ → δ`, and almost everywhere equal functio
+ns
+`[f₁] : α →ₘ β` and `[f₂] : α →ₘ γ`, return the equivalence class of the functio
+n
+`fun a => g (f₁ a) (f₂ a)`, i.e., the almost everywhere equal function
+`[fun a => g (f₁ a) (f₂ a)] : α →ₘ γ`. This requires `δ` to have second-countabl
+e topology.
 -/
-def comp₂Measurable (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) : α ->ₘ[μ] δ :=
+def comp₂Measurable (g : β → γ → δ) (hg : Measurable (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) : α →ₘ[μ] δ :=
   compMeasurable _ hg (f₁.pair f₂)
 
 @[simp]
-/--
-theorem `comp₂Measurable_mk_mk` / 定理 `comp₂Measurable_mk_mk`
-
-English:
-theorem comp₂Measurable_mk_mk
-  statement: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α -> β)
-  proof: rfl
-
-中文:
-定理 comp₂Measurable_mk_mk
-  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α -> β)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp₂Measurable_mk_mk (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α -> β)
-    (f₂ : α -> γ) (hf₁ hf₂) :
-    comp₂Measurable g hg (mk f₁ hf₁ : α ->ₘ[μ] β) (mk f₂ hf₂) =
+theorem comp₂Measurable_mk_mk (g : β → γ → δ) (hg : Measurable (uncurry g)) (f₁ : α → β)
+    (f₂ : α → γ) (hf₁ hf₂) :
+    comp₂Measurable g hg (mk f₁ hf₁ : α →ₘ[μ] β) (mk f₂ hf₂) =
       mk (fun a => g (f₁ a) (f₂ a))
         (hg.comp_aemeasurable (hf₁.aemeasurable.prodMk hf₂.aemeasurable)).aestronglyMeasurable :=
   rfl
-
-/--
-theorem `comp₂Measurable_eq_pair` / 定理 `comp₂Measurable_eq_pair`
-
-English:
-theorem comp₂Measurable_eq_pair
-  statement: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  proof: rfl
-
-中文:
-定理 comp₂Measurable_eq_pair
-  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp₂Measurable_eq_pair (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) : comp₂Measurable g hg f₁ f₂ = compMeasurable _ hg (f₁.pair f₂) :=
+theorem comp₂Measurable_eq_pair (g : β → γ → δ) (hg : Measurable (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) : comp₂Measurable g hg f₁ f₂ = compMeasurable _ hg (f₁.pair f₂) :=
   rfl
-
-/--
-theorem `comp₂Measurable_eq_mk` / 定理 `comp₂Measurable_eq_mk`
-
-English:
-theorem comp₂Measurable_eq_mk
-  statement: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  proof: by
-  rw [comp₂Measurable_eq_pair]; rw [pair_eq_mk]; rw [compMeasurable_mk]; rfl
-
-中文:
-定理 comp₂Measurable_eq_mk
-  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  证明: by
-  rw [comp₂Measurable_eq_pair]; rw [pair_eq_mk]; rw [compMeasurable_mk]; rfl
-
-Depends on / 依赖: compMeasurable_mk, pair_eq_mk
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp₂Measurable_eq_mk (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) :
+theorem comp₂Measurable_eq_mk (g : β → γ → δ) (hg : Measurable (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) :
     comp₂Measurable g hg f₁ f₂ =
       mk (fun a => g (f₁ a) (f₂ a))
         (hg.comp_aemeasurable (f₁.aemeasurable.prodMk f₂.aemeasurable)).aestronglyMeasurable := by
-  rw [comp₂Measurable_eq_pair]; rw [pair_eq_mk]; rw [compMeasurable_mk]; rfl
-
-/--
-theorem `coeFn_comp₂Measurable` / 定理 `coeFn_comp₂Measurable`
-
-English:
-theorem coeFn_comp₂Measurable
-  statement: (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  proof: by
-  rw [comp₂Measurable_eq_mk]
-  apply coeFn_mk
-
-中文:
-定理 coeFn_comp₂Measurable
-  结论: (g : β -> γ -> δ) (hg : 可测 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  证明: by
-  rw [comp₂Measurable_eq_mk]
-  apply coeFn_mk
-
-Depends on / 依赖: coeFn_mk
+  rw [comp₂Measurable_eq_pair, pair_eq_mk, compMeasurable_mk]; rfl
+/-
+**MeasureTheory.AEEqFun.coeFn_comp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：coeFn_comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : comp g hg f
+ =ᵐ[μ] g ∘ f
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Continuous.comp_aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} {γ
+ : Type u_3} [inst : TopologicalSpace β] [inst_1 : TopologicalSpace γ]   {m m₀ :
+ MeasurableSpace α} {μ : M…
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.comp_eq_mk`：comp_eq_mk (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f = mk (g ∘ f) (hg.comp_aestronglyMeasurable 
+f.aestronglyMeasurable…
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
-theorem coeFn_comp₂Measurable (g : β -> γ -> δ) (hg : Measurable (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) : comp₂Measurable g hg f₁ f₂ =ᵐ[μ] fun a => g (f₁ a) (f₂ a) := by
+theorem coeFn_comp₂Measurable (g : β → γ → δ) (hg : Measurable (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) : comp₂Measurable g hg f₁ f₂ =ᵐ[μ] fun a => g (f₁ a) (f₂ a) := by
   rw [comp₂Measurable_eq_mk]
   apply coeFn_mk
 
 end
 
-/--
-Definition of `toGerm` / `toGerm` 的定义
+/-- Interpret `f : α →ₘ[μ] β` as a germ at `ae μ` forgetting that `f` is almost everywhere
+strongly measurable. -/
+/-
+**MeasureTheory.AEEqFun.toGerm** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`
+。
+形式化陈述：toGerm (f : α ->ₘ[μ] β) : Germ (ae μ) β
+参数：f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 
-English:
-definition toGerm
-  signature: (f : α ->ₘ[μ] β)
-  body: Quotient.liftOn' f (fun f => ((f : α -> β) : Germ (ae μ) β)) fun _ _ H => Germ.coe_eq.2 H
-
-@[simp]
-
-中文:
-定义 toGerm
-  签名: (f : α ->ₘ[μ] β)
-  定义体: Quotient.liftOn' f (fun f => ((f : α -> β) : Germ (ae μ) β)) fun _ _ H => Germ.coe_eq.2 H
-
-@[simp]
-
-Depends on / 依赖: Germ.coe_eq, Quotient, Quotient.liftOn, coe_eq, liftOn
+--- 原说明 ---
+Interpret `f : α →ₘ[μ] β` as a germ at `ae μ` forgetting that `f` is almost ever
+ywhere
+strongly measurable.
 -/
-def toGerm (f : α ->ₘ[μ] β) : Germ (ae μ) β :=
-  Quotient.liftOn' f (fun f => ((f : α -> β) : Germ (ae μ) β)) fun _ _ H => Germ.coe_eq.2 H
+def toGerm (f : α →ₘ[μ] β) : Germ (ae μ) β :=
+  Quotient.liftOn' f (fun f => ((f : α → β) : Germ (ae μ) β)) fun _ _ H => Germ.coe_eq.2 H
 
 @[simp]
-/--
-theorem `mk_toGerm` / 定理 `mk_toGerm`
-
-English:
-theorem mk_toGerm
-  given: (f : α -> β) (hf)
-  statement: (mk f hf : α ->ₘ[μ] β).toGerm = f
-  proof: rfl
-
-中文:
-定理 mk_toGerm
-  条件: (f : α -> β) (hf)
-  结论: (mk f hf : α ->ₘ[μ] β).toGerm = f
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.mk_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：mk_toGerm (f : α -> β) (hf) : (mk f hf : α ->ₘ[μ] β).toGerm = f
+参数：f : α -> β；hf。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 -/
-theorem mk_toGerm (f : α -> β) (hf) : (mk f hf : α ->ₘ[μ] β).toGerm = f :=
+theorem mk_toGerm (f : α → β) (hf) : (mk f hf : α →ₘ[μ] β).toGerm = f :=
   rfl
-
-/--
-theorem `toGerm_eq` / 定理 `toGerm_eq`
-
-English:
-theorem toGerm_eq
-  given: (f : α ->ₘ[μ] β)
-  statement: f.toGerm = (f : α -> β)
-  proof: by
-  rw [← mk_toGerm f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-中文:
-定理 toGerm_eq
-  条件: (f : α ->ₘ[μ] β)
-  结论: f.toGerm = (f : α -> β)
-  证明: by
-  rw [← mk_toGerm f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-Depends on / 依赖: aestronglyMeasurable, f.aestronglyMeasurable, mk_coeFn, mk_toGerm
+/-
+**MeasureTheory.AEEqFun.toGerm_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：toGerm_eq (f : α ->ₘ[μ] β) : f.toGerm = (f : α -> β)
+参数：f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.mk_toGerm`：mk_toGerm (f : α -> β) (hf) : (mk f hf 
+: α ->ₘ[μ] β).toGerm = f
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
 -/
-theorem toGerm_eq (f : α ->ₘ[μ] β) : f.toGerm = (f : α -> β) := by
-  rw [← mk_toGerm f f.aestronglyMeasurable]; rw [mk_coeFn]
-
-/--
-theorem `toGerm_injective` / 定理 `toGerm_injective`
-
-English:
-theorem toGerm_injective
-  statement: Injective (toGerm : (α ->ₘ[μ] β) -> Germ (ae μ) β)
-  proof: fun f g H =>
-ext Germ.coe_eq.1 by rwa [← toGerm_eq, ← toGerm_eq]
-
-@[simp]
-
-中文:
-定理 toGerm_injective
-  结论: 单射 (toGerm : (α ->ₘ[μ] β) -> Germ (ae μ) β)
-  证明: fun f g H =>
-ext Germ.coe_eq.1 by rwa [← toGerm_eq, ← toGerm_eq]
-
-@[simp]
+theorem toGerm_eq (f : α →ₘ[μ] β) : f.toGerm = (f : α → β) := by
+  rw [← mk_toGerm f f.aestronglyMeasurable, mk_coeFn]
+/-
+**MeasureTheory.AEEqFun.toGerm_injective** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.AEEqFun`。
+形式化陈述：toGerm_injective : Injective (toGerm : (α ->ₘ[μ] β) -> Germ (ae μ) β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.ext`：ext {f g : α ->ₘ[μ] β} (h : f =ᵐ[μ] g) : f = 
+g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.Germ.coe_eq`：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_eq`：toGerm_eq (f : α ->ₘ[μ] β) : f.toGerm =
+ (f : α -> β)
 -/
-theorem toGerm_injective : Injective (toGerm : (α ->ₘ[μ] β) -> Germ (ae μ) β) := fun f g H =>
-ext Germ.coe_eq.1 by rwa [← toGerm_eq, ← toGerm_eq]
+theorem toGerm_injective : Injective (toGerm : (α →ₘ[μ] β) → Germ (ae μ) β) := fun f g H =>
+  ext <| Germ.coe_eq.1 <| by rwa [← toGerm_eq, ← toGerm_eq]
 
 @[simp]
-/--
-theorem `compQuasiMeasurePreserving_toGerm` / 定理 `compQuasiMeasurePreserving_toGerm`
-
-English:
-theorem compQuasiMeasurePreserving_toGerm
-  statement: {β : Type*} [MeasurableSpace β] {f : α -> β} {ν}
-  proof: by
-  rcases g; rfl
-
-@[simp]
-
-中文:
-定理 compQuasiMeasurePreserving_toGerm
-  结论: {β : 类型} [可测空间 β] {f : α -> β} {ν}
-  证明: by
-  rcases g; rfl
-
-@[simp]
+/-
+**MeasureTheory.AEEqFun.compQuasiMeasurePreserving_toGerm** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：compQuasiMeasurePreserving_toGerm {β : Type*} [MeasurableSpace β] {f : α -
+> β} {ν} (g : β ->ₘ[ν] γ) (hf : Measure.QuasiMeasurePreserving f μ ν) : (g.compQ
+uasiMeasurePreserving f hf).toGerm = g.toGerm.compTendsto f hf.tendsto_ae
+参数：g : β ->ₘ[ν] γ；hf : Measure.QuasiMeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.QuasiMeasurePreserving.tendsto_ae`：tendsto_ae (h :
+ QuasiMeasurePreserving f μa μb) : Tendsto f (ae μa) (ae μb)
 -/
-theorem compQuasiMeasurePreserving_toGerm {β : Type*} [MeasurableSpace β] {f : α -> β} {ν}
-    (g : β ->ₘ[ν] γ) (hf : Measure.QuasiMeasurePreserving f μ ν) :
+theorem compQuasiMeasurePreserving_toGerm {β : Type*} [MeasurableSpace β] {f : α → β} {ν}
+    (g : β →ₘ[ν] γ) (hf : Measure.QuasiMeasurePreserving f μ ν) :
     (g.compQuasiMeasurePreserving f hf).toGerm = g.toGerm.compTendsto f hf.tendsto_ae := by
   rcases g; rfl
 
 @[simp]
-/--
-theorem `compMeasurePreserving_toGerm` / 定理 `compMeasurePreserving_toGerm`
-
-English:
-theorem compMeasurePreserving_toGerm
-  statement: {β : Type*} [MeasurableSpace β] {f : α -> β} {ν}
-  proof: compQuasiMeasurePreserving_toGerm _ _
-
-中文:
-定理 compMeasurePreserving_toGerm
-  结论: {β : 类型} [可测空间 β] {f : α -> β} {ν}
-  证明: compQuasiMeasurePreserving_toGerm _ _
-
-Depends on / 依赖: compQuasiMeasurePreserving_toGerm
+/-
+**MeasureTheory.AEEqFun.compMeasurePreserving_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.AEEqFun`。
+形式化陈述：compMeasurePreserving_toGerm {β : Type*} [MeasurableSpace β] {f : α -> β} 
+{ν} (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν) : (g.compMeasurePreserving f
+ hf).toGerm = g.toGerm.compTendsto f hf.quasiMeasurePreserving.tendsto_ae
+参数：g : β ->ₘ[ν] γ；hf : MeasurePreserving f μ ν。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.compQuasiMeasurePreserving_toGerm`：compQuasiMeasur
+ePreserving_toGerm {β : Type*} [MeasurableSpace β] {f : α -> β} {ν} (g : β ->ₘ[ν
+] γ) (hf : Measure.QuasiMeasurePreserving f μ…
+· 使用定理 `MeasureTheory.MeasurePreserving.quasiMeasurePreserving`：∀ {α : Type u_1}
+ {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {μa : Me
+asureTheory.Measure α}   {μb : MeasureTheory…
 -/
-theorem compMeasurePreserving_toGerm {β : Type*} [MeasurableSpace β] {f : α -> β} {ν}
-    (g : β ->ₘ[ν] γ) (hf : MeasurePreserving f μ ν) :
+theorem compMeasurePreserving_toGerm {β : Type*} [MeasurableSpace β] {f : α → β} {ν}
+    (g : β →ₘ[ν] γ) (hf : MeasurePreserving f μ ν) :
     (g.compMeasurePreserving f hf).toGerm =
       g.toGerm.compTendsto f hf.quasiMeasurePreserving.tendsto_ae :=
   compQuasiMeasurePreserving_toGerm _ _
-
-/--
-theorem `comp_toGerm` / 定理 `comp_toGerm`
-
-English:
-theorem comp_toGerm
-  given: (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β)
-  proof: induction_on f fun f _ => by simp
-
-中文:
-定理 comp_toGerm
-  条件: (g : β -> γ) (hg : 连续 g) (f : α ->ₘ[μ] β)
-  证明: induction_on f fun f _ => by simp
-
-Depends on / 依赖: induction_on
+/-
+**MeasureTheory.AEEqFun.comp_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEE
+qFun`。
+形式化陈述：comp_toGerm (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : (comp g hg
+ f).toGerm = f.toGerm.map g
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on`：induction_on (f : α ->ₘ[μ] β) {p : (
+α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf)) : p f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_toGerm (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) :
+theorem comp_toGerm (g : β → γ) (hg : Continuous g) (f : α →ₘ[μ] β) :
     (comp g hg f).toGerm = f.toGerm.map g :=
   induction_on f fun f _ => by simp
-
-/--
-theorem `compMeasurable_toGerm` / 定理 `compMeasurable_toGerm`
-
-English:
-theorem compMeasurable_toGerm
-  statement: [MeasurableSpace β] [BorelSpace β] [PseudoMetrizableSpace β]
-  proof: induction_on f fun f _ => by simp
-
-中文:
-定理 compMeasurable_toGerm
-  结论: [可测空间 β] [Borel空间 β] [PseudoMetrizable空间 β]
-  证明: induction_on f fun f _ => by simp
-
-Depends on / 依赖: induction_on
+/-
+**MeasureTheory.AEEqFun.compMeasurable_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.AEEqFun`。
+形式化陈述：compMeasurable_toGerm [MeasurableSpace β] [BorelSpace β] [PseudoMetrizable
+Space β] [PseudoMetrizableSpace γ] [SecondCountableTopology γ] [MeasurableSpace 
+γ] [OpensMeasurableSpace γ] (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) : 
+(compMeasurable g hg f).toGerm = f.toGerm.map g
+参数：g : β -> γ；hg : Measurable g；f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on`：induction_on (f : α ->ₘ[μ] β) {p : (
+α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf)) : p f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem compMeasurable_toGerm [MeasurableSpace β] [BorelSpace β] [PseudoMetrizableSpace β]
     [PseudoMetrizableSpace γ] [SecondCountableTopology γ] [MeasurableSpace γ]
-    [OpensMeasurableSpace γ] (g : β -> γ) (hg : Measurable g) (f : α ->ₘ[μ] β) :
+    [OpensMeasurableSpace γ] (g : β → γ) (hg : Measurable g) (f : α →ₘ[μ] β) :
     (compMeasurable g hg f).toGerm = f.toGerm.map g :=
   induction_on f fun f _ => by simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comp₂_toGerm` / 定理 `comp₂_toGerm`
-
-English:
-theorem comp₂_toGerm
-  statement: (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  proof: induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
-
-中文:
-定理 comp₂_toGerm
-  结论: (g : β -> γ -> δ) (hg : 连续 (uncurry g)) (f₁ : α ->ₘ[μ] β)
-  证明: induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp₂_toGerm (g : β -> γ -> δ) (hg : Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β)
-    (f₂ : α ->ₘ[μ] γ) : (comp₂ g hg f₁ f₂).toGerm = f₁.toGerm.map₂ g f₂.toGerm :=
+theorem comp₂_toGerm (g : β → γ → δ) (hg : Continuous (uncurry g)) (f₁ : α →ₘ[μ] β)
+    (f₂ : α →ₘ[μ] γ) : (comp₂ g hg f₁ f₂).toGerm = f₁.toGerm.map₂ g f₂.toGerm :=
   induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comp₂Measurable_toGerm` / 定理 `comp₂Measurable_toGerm`
-
-English:
-theorem comp₂Measurable_toGerm
-  statement: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
-  proof: induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
-
-中文:
-定理 comp₂Measurable_toGerm
-  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
-  证明: induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
+/-
+**MeasureTheory.AEEqFun.comp** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：comp (g : β -> γ) (hg : Continuous g) (f : α ->ₘ[μ] β) : α ->ₘ[μ] γ
+参数：g : β -> γ；hg : Continuous g；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp₂Measurable_toGerm [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
     [PseudoMetrizableSpace γ] [SecondCountableTopologyEither β γ]
     [MeasurableSpace γ] [BorelSpace γ] [PseudoMetrizableSpace δ] [SecondCountableTopology δ]
-    [MeasurableSpace δ] [OpensMeasurableSpace δ] (g : β -> γ -> δ) (hg : Measurable (uncurry g))
-    (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) :
+    [MeasurableSpace δ] [OpensMeasurableSpace δ] (g : β → γ → δ) (hg : Measurable (uncurry g))
+    (f₁ : α →ₘ[μ] β) (f₂ : α →ₘ[μ] γ) :
     (comp₂Measurable g hg f₁ f₂).toGerm = f₁.toGerm.map₂ g f₂.toGerm :=
   induction_on₂ f₁ f₂ fun f₁ _ f₂ _ => by simp
 
-/--
-Definition of `LiftPred` / `LiftPred` 的定义
+/-- Given a predicate `p` and an equivalence class `[f]`, return true if `p` holds of `f a`
+for almost all `a` -/
+/-
+**MeasureTheory.AEEqFun.LiftPred** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFu
+n`。
+形式化陈述：LiftPred (p : β -> Prop) (f : α ->ₘ[μ] β) : Prop
+参数：p : β -> Prop；f : α ->ₘ[μ] β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 
-English:
-definition LiftPred
-  signature: (p : β -> Prop) (f : α ->ₘ[μ] β)
-  body: f.toGerm.LiftPred p
-
-中文:
-定义 LiftPred
-  签名: (p : β -> 命题) (f : α ->ₘ[μ] β)
-  定义体: f.toGerm.LiftPred p
-
-Depends on / 依赖: LiftPred, f.toGerm.LiftPred, toGerm
+--- 原说明 ---
+Given a predicate `p` and an equivalence class `[f]`, return true if `p` holds o
+f `f a`
+for almost all `a`
 -/
-def LiftPred (p : β -> Prop) (f : α ->ₘ[μ] β) : Prop :=
+def LiftPred (p : β → Prop) (f : α →ₘ[μ] β) : Prop :=
   f.toGerm.LiftPred p
 
-/--
-Definition of `LiftRel` / `LiftRel` 的定义
+/-- Given a relation `r` and equivalence class `[f]` and `[g]`, return true if `r` holds of
+`(f a, g a)` for almost all `a` -/
+/-
+**MeasureTheory.AEEqFun.LiftRel** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：LiftRel (r : β -> γ -> Prop) (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) : Prop
+参数：r : β -> γ -> Prop；f : α ->ₘ[μ] β；g : α ->ₘ[μ] γ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 
-English:
-definition LiftRel
-  signature: (r : β -> γ -> Prop) (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  body: f.toGerm.LiftRel r g.toGerm
-
-中文:
-定义 LiftRel
-  签名: (r : β -> γ -> 命题) (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ)
-  定义体: f.toGerm.LiftRel r g.toGerm
-
-Depends on / 依赖: LiftRel, f.toGerm.LiftRel, g.toGerm, toGerm
+--- 原说明 ---
+Given a relation `r` and equivalence class `[f]` and `[g]`, return true if `r` h
+olds of
+`(f a, g a)` for almost all `a`
 -/
-def LiftRel (r : β -> γ -> Prop) (f : α ->ₘ[μ] β) (g : α ->ₘ[μ] γ) : Prop :=
+def LiftRel (r : β → γ → Prop) (f : α →ₘ[μ] β) (g : α →ₘ[μ] γ) : Prop :=
   f.toGerm.LiftRel r g.toGerm
-
-/--
-theorem `liftRel_mk_mk` / 定理 `liftRel_mk_mk`
-
-English:
-theorem liftRel_mk_mk
-  given: {r : β -> γ -> Prop} {f : α -> β} {g : α -> γ} {hf hg}
-  proof: Iff.rfl
-
-中文:
-定理 liftRel_mk_mk
-  条件: {r : β -> γ -> 命题} {f : α -> β} {g : α -> γ} {hf hg}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**MeasureTheory.AEEqFun.liftRel_mk_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：liftRel_mk_mk {r : β -> γ -> Prop} {f : α -> β} {g : α -> γ} {hf hg} : Lif
+tRel r (mk f hf : α ->ₘ[μ] β) (mk g hg) ↔ forallᵐ a ∂μ, r (f a) (g a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem liftRel_mk_mk {r : β -> γ -> Prop} {f : α -> β} {g : α -> γ} {hf hg} :
-    LiftRel r (mk f hf : α ->ₘ[μ] β) (mk g hg) ↔ forallᵐ a ∂μ, r (f a) (g a) :=
+theorem liftRel_mk_mk {r : β → γ → Prop} {f : α → β} {g : α → γ} {hf hg} :
+    LiftRel r (mk f hf : α →ₘ[μ] β) (mk g hg) ↔ ∀ᵐ a ∂μ, r (f a) (g a) :=
   Iff.rfl
-
-/--
-theorem `liftRel_iff_coeFn` / 定理 `liftRel_iff_coeFn`
-
-English:
-theorem liftRel_iff_coeFn
-  given: {r : β -> γ -> Prop} {f : α ->ₘ[μ] β} {g : α ->ₘ[μ] γ}
-  proof: by
-  rw [← liftRel_mk_mk (hf := f.aestronglyMeasurable) (hg := g.aestronglyMeasurable)]; rw [mk_coeFn]; rw [mk_coeFn]
-
-中文:
-定理 liftRel_iff_coeFn
-  条件: {r : β -> γ -> 命题} {f : α ->ₘ[μ] β} {g : α ->ₘ[μ] γ}
-  证明: by
-  rw [← liftRel_mk_mk (hf := f.aestronglyMeasurable) (hg := g.aestronglyMeasurable)]; rw [mk_coeFn]; rw [mk_coeFn]
-
-Depends on / 依赖: aestronglyMeasurable, f.aestronglyMeasurable, g.aestronglyMeasurable, liftRel_mk_mk, mk_coeFn
+/-
+**MeasureTheory.AEEqFun.liftRel_iff_coeFn** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.AEEqFun`。
+形式化陈述：liftRel_iff_coeFn {r : β -> γ -> Prop} {f : α ->ₘ[μ] β} {g : α ->ₘ[μ] γ} :
+ LiftRel r f g ↔ forallᵐ a ∂μ, r (f a) (g a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.liftRel_mk_mk`：liftRel_mk_mk {r : β -> γ -> Prop} 
+{f : α -> β} {g : α -> γ} {hf hg} : LiftRel r (mk f hf : α ->ₘ[μ] β) (mk g hg) ↔
+ forallᵐ a ∂μ, r (f a) (g…
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem liftRel_iff_coeFn {r : β -> γ -> Prop} {f : α ->ₘ[μ] β} {g : α ->ₘ[μ] γ} :
-    LiftRel r f g ↔ forallᵐ a ∂μ, r (f a) (g a) := by
-  rw [← liftRel_mk_mk (hf := f.aestronglyMeasurable) (hg := g.aestronglyMeasurable)]; rw [mk_coeFn]; rw [mk_coeFn]
+theorem liftRel_iff_coeFn {r : β → γ → Prop} {f : α →ₘ[μ] β} {g : α →ₘ[μ] γ} :
+    LiftRel r f g ↔ ∀ᵐ a ∂μ, r (f a) (g a) := by
+  rw [← liftRel_mk_mk (hf := f.aestronglyMeasurable) (hg := g.aestronglyMeasurable),
+    mk_coeFn, mk_coeFn]
 
 section Order
 
-/--
-Instance `instPreorder` / 实例 `instPreorder`
-
-English:
-instance instPreorder
-  signature: [Preorder β]
-  body: Preorder.lift toGerm
-
-@[simp]
-
-中文:
-实例 instPreorder
-  签名: [预序 β]
-  定义体: Preorder.lift toGerm
-
-@[simp]
-
-Depends on / 依赖: Preorder, Preorder.lift, toGerm
+/-
+**MeasureTheory.AEEqFun.instPreorder** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：instPreorder [Preorder β] : Preorder (α ->ₘ[μ] β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 -/
-instance instPreorder [Preorder β] : Preorder (α ->ₘ[μ] β) :=
+instance instPreorder [Preorder β] : Preorder (α →ₘ[μ] β) :=
   Preorder.lift toGerm
 
 @[simp]
-/--
-theorem `mk_le_mk` / 定理 `mk_le_mk`
-
-English:
-theorem mk_le_mk
-  given: [Preorder β] {f g : α -> β} (hf hg)
-  statement: (mk f hf : α ->ₘ[μ] β) <= mk g hg ↔ f <=ᵐ[μ] g
-  proof: Iff.rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_le_mk
-  条件: [预序 β] {f g : α -> β} (hf hg)
-  结论: (mk f hf : α ->ₘ[μ] β) <= mk g hg ↔ f <=ᵐ[μ] g
-  证明: Iff.rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**MeasureTheory.AEEqFun.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFu
+n`。
+形式化陈述：mk_le_mk [Preorder β] {f g : α -> β} (hf hg) : (mk f hf : α ->ₘ[μ] β) <= m
+k g hg ↔ f <=ᵐ[μ] g
+参数：hf hg。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mk_le_mk [Preorder β] {f g : α -> β} (hf hg) : (mk f hf : α ->ₘ[μ] β) <= mk g hg ↔ f <=ᵐ[μ] g :=
+theorem mk_le_mk [Preorder β] {f g : α → β} (hf hg) : (mk f hf : α →ₘ[μ] β) ≤ mk g hg ↔ f ≤ᵐ[μ] g :=
   Iff.rfl
 
 @[simp, norm_cast]
-/--
-theorem `coeFn_le` / 定理 `coeFn_le`
-
-English:
-theorem coeFn_le
-  given: [Preorder β] {f g : α ->ₘ[μ] β}
-  statement: (f : α -> β) <=ᵐ[μ] g ↔ f <= g
-  proof: liftRel_iff_coeFn.symm
-
-中文:
-定理 coeFn_le
-  条件: [预序 β] {f g : α ->ₘ[μ] β}
-  结论: (f : α -> β) <=ᵐ[μ] g ↔ f <= g
-  证明: liftRel_iff_coeFn.symm
-
-Depends on / 依赖: liftRel_iff_coeFn, liftRel_iff_coeFn.symm
+/-
+**MeasureTheory.AEEqFun.coeFn_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFu
+n`。
+形式化陈述：coeFn_le [Preorder β] {f g : α ->ₘ[μ] β} : (f : α -> β) <=ᵐ[μ] g ↔ f <= g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.liftRel_iff_coeFn`：liftRel_iff_coeFn {r : β -> γ -
+> Prop} {f : α ->ₘ[μ] β} {g : α ->ₘ[μ] γ} : LiftRel r f g ↔ forallᵐ a ∂μ, r (f a
+) (g a)
 -/
-theorem coeFn_le [Preorder β] {f g : α ->ₘ[μ] β} : (f : α -> β) <=ᵐ[μ] g ↔ f <= g :=
+theorem coeFn_le [Preorder β] {f g : α →ₘ[μ] β} : (f : α → β) ≤ᵐ[μ] g ↔ f ≤ g :=
   liftRel_iff_coeFn.symm
-
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: [PartialOrder β]
-  body: PartialOrder.lift toGerm toGerm_injective
-
-中文:
-实例 instPartialOrder
-  签名: [偏序 β]
-  定义体: PartialOrder.lift toGerm toGerm_injective
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, toGerm, toGerm_injective
+/-
+**MeasureTheory.AEEqFun.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheor
+y.AEEqFun`。
+形式化陈述：instPartialOrder [PartialOrder β] : PartialOrder (α ->ₘ[μ] β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
 -/
-instance instPartialOrder [PartialOrder β] : PartialOrder (α ->ₘ[μ] β) :=
+instance instPartialOrder [PartialOrder β] : PartialOrder (α →ₘ[μ] β) :=
   PartialOrder.lift toGerm toGerm_injective
 
 section Lattice
@@ -1875,123 +1765,104 @@ section Sup
 
 variable [SemilatticeSup β] [ContinuousSup β]
 
-/--
-Instance `instSup` / 实例 `instSup`
-
-English:
-instance instSup
-  signature: : Max (α ->ₘ[μ] β) where max f g
-  body: AEEqFun.comp₂ (· ⊔ ·) continuous_sup f g
-
-中文:
-实例 instSup
-  签名: : 最大值 (α ->ₘ[μ] β) where 最大值 f g
-  定义体: AEEqFun.comp₂ (· ⊔ ·) continuous_sup f g
-
-Depends on / 依赖: AEEqFun, AEEqFun.comp, continuous_sup
+/-
+**MeasureTheory.AEEqFun.instSup** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：instSup : Max (α ->ₘ[μ] β) where max f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSup : Max (α ->ₘ[μ] β) where max f g := AEEqFun.comp₂ (· ⊔ ·) continuous_sup f g
-
-/--
-theorem `coeFn_sup` / 定理 `coeFn_sup`
-
-English:
-theorem coeFn_sup
-  given: (f g : α ->ₘ[μ] β)
-  statement: ⇑(f ⊔ g) =ᵐ[μ] fun x => f x ⊔ g x
-  proof: coeFn_comp₂ _ _ _ _
-
-中文:
-定理 coeFn_sup
-  条件: (f g : α ->ₘ[μ] β)
-  结论: ⇑(f ⊔ g) =ᵐ[μ] fun x => f x ⊔ g x
-  证明: coeFn_comp₂ _ _ _ _
+instance instSup : Max (α →ₘ[μ] β) where max f g := AEEqFun.comp₂ (· ⊔ ·) continuous_sup f g
+/-
+**MeasureTheory.AEEqFun.coeFn_sup** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_sup (f g : α ->ₘ[μ] β) : ⇑(f ⊔ g) =ᵐ[μ] fun x => f x ⊔ g x
+参数：f g : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp₂`：coeFn_comp₂ (g : β -> γ -> δ) (hg : C
+ontinuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) : comp₂ g hg f₁ f₂ =ᵐ
+[μ] fun a => g (f₁ a) (…
 -/
-theorem coeFn_sup (f g : α ->ₘ[μ] β) : ⇑(f ⊔ g) =ᵐ[μ] fun x => f x ⊔ g x :=
+theorem coeFn_sup (f g : α →ₘ[μ] β) : ⇑(f ⊔ g) =ᵐ[μ] fun x => f x ⊔ g x :=
   coeFn_comp₂ _ _ _ _
-
-/--
-theorem `le_sup_left` / 定理 `le_sup_left`
-
-English:
-theorem le_sup_left
-  given: (f g : α ->ₘ[μ] β)
-  statement: f <= f ⊔ g
-  proof: by
+/-
+**MeasureTheory.AEEqFun.le_sup_left** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEE
+qFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [inst_2 : SemilatticeSup β] [inst
+_3 : ContinuousSup β] (f g : α →ₘ[μ] β), f ≤ f ⊔ g
+参数：f g : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_le`：coeFn_le [Preorder β] {f g : α ->ₘ[μ] β}
+ : (f : α -> β) <=ᵐ[μ] g ↔ f <= g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_sup`：coeFn_sup (f g : α ->ₘ[μ] β) : ⇑(f ⊔ g)
+ =ᵐ[μ] fun x => f x ⊔ g x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+-/
+protected theorem le_sup_left (f g : α →ₘ[μ] β) : f ≤ f ⊔ g := by
   rw [← coeFn_le]
   filter_upwards [coeFn_sup f g] with _ ha
   rw [ha]
   exact le_sup_left
-
-中文:
-定理 le_sup_left
-  条件: (f g : α ->ₘ[μ] β)
-  结论: f <= f ⊔ g
-  证明: by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_sup f g] with _ ha
-  rw [ha]
-  exact le_sup_left
+/-
+**MeasureTheory.AEEqFun.le_sup_right** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [inst_2 : SemilatticeSup β] [inst
+_3 : ContinuousSup β] (f g : α →ₘ[μ] β), g ≤ f ⊔ g
+参数：f g : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_le`：coeFn_le [Preorder β] {f g : α ->ₘ[μ] β}
+ : (f : α -> β) <=ᵐ[μ] g ↔ f <= g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_sup`：coeFn_sup (f g : α ->ₘ[μ] β) : ⇑(f ⊔ g)
+ =ᵐ[μ] fun x => f x ⊔ g x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
 -/
-protected theorem le_sup_left (f g : α ->ₘ[μ] β) : f <= f ⊔ g := by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_sup f g] with _ ha
-  rw [ha]
-  exact le_sup_left
-
-/--
-theorem `le_sup_right` / 定理 `le_sup_right`
-
-English:
-theorem le_sup_right
-  given: (f g : α ->ₘ[μ] β)
-  statement: g <= f ⊔ g
-  proof: by
+protected theorem le_sup_right (f g : α →ₘ[μ] β) : g ≤ f ⊔ g := by
   rw [← coeFn_le]
   filter_upwards [coeFn_sup f g] with _ ha
   rw [ha]
   exact le_sup_right
-
-中文:
-定理 le_sup_right
-  条件: (f g : α ->ₘ[μ] β)
-  结论: g <= f ⊔ g
-  证明: by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_sup f g] with _ ha
-  rw [ha]
-  exact le_sup_right
+/-
+**MeasureTheory.AEEqFun.sup_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun`
+。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [inst_2 : SemilatticeSup β] [inst
+_3 : ContinuousSup β] (f g f' : α →ₘ[μ] β), f ≤ f' → g ≤ f' → f ⊔ g ≤ f'
+参数：f g f' : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_le`：coeFn_le [Preorder β] {f g : α ->ₘ[μ] β}
+ : (f : α -> β) <=ᵐ[μ] g ↔ f <= g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_sup`：coeFn_sup (f g : α ->ₘ[μ] β) : ⇑(f ⊔ g)
+ =ᵐ[μ] fun x => f x ⊔ g x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
 -/
-protected theorem le_sup_right (f g : α ->ₘ[μ] β) : g <= f ⊔ g := by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_sup f g] with _ ha
-  rw [ha]
-  exact le_sup_right
-
-/--
-theorem `sup_le` / 定理 `sup_le`
-
-English:
-theorem sup_le
-  given: (f g f' : α ->ₘ[μ] β) (hf : f <= f') (hg : g <= f')
-  statement: f ⊔ g <= f'
-  proof: by
-  rw [← coeFn_le] at hf hg ⊢
-  filter_upwards [hf, hg, coeFn_sup f g] with _ haf hag ha_sup
-  rw [ha_sup]
-  exact sup_le haf hag
-
-中文:
-定理 sup_le
-  条件: (f g f' : α ->ₘ[μ] β) (hf : f <= f') (hg : g <= f')
-  结论: f ⊔ g <= f'
-  证明: by
-  rw [← coeFn_le] at hf hg ⊢
-  filter_upwards [hf, hg, coeFn_sup f g] with _ haf hag ha_sup
-  rw [ha_sup]
-  exact sup_le haf hag
--/
-protected theorem sup_le (f g f' : α ->ₘ[μ] β) (hf : f <= f') (hg : g <= f') : f ⊔ g <= f' := by
+protected theorem sup_le (f g f' : α →ₘ[μ] β) (hf : f ≤ f') (hg : g ≤ f') : f ⊔ g ≤ f' := by
   rw [← coeFn_le] at hf hg ⊢
   filter_upwards [hf, hg, coeFn_sup f g] with _ haf hag ha_sup
   rw [ha_sup]
@@ -2003,123 +1874,107 @@ section Inf
 
 variable [SemilatticeInf β] [ContinuousInf β]
 
-/--
-Instance `instInf` / 实例 `instInf`
-
-English:
-instance instInf
-  signature: : Min (α ->ₘ[μ] β) where min f g
-  body: AEEqFun.comp₂ (· ⊓ ·) continuous_inf f g
-
-中文:
-实例 instInf
-  签名: : 最小值 (α ->ₘ[μ] β) where 最小值 f g
-  定义体: AEEqFun.comp₂ (· ⊓ ·) continuous_inf f g
-
-Depends on / 依赖: AEEqFun, AEEqFun.comp, continuous_inf
+/-
+**MeasureTheory.AEEqFun.instInf** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：instInf : Min (α ->ₘ[μ] β) where min f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instInf : Min (α ->ₘ[μ] β) where min f g := AEEqFun.comp₂ (· ⊓ ·) continuous_inf f g
-
-/--
-theorem `coeFn_inf` / 定理 `coeFn_inf`
-
-English:
-theorem coeFn_inf
-  given: (f g : α ->ₘ[μ] β)
-  statement: ⇑(f ⊓ g) =ᵐ[μ] fun x => f x ⊓ g x
-  proof: coeFn_comp₂ _ _ _ _
-
-中文:
-定理 coeFn_inf
-  条件: (f g : α ->ₘ[μ] β)
-  结论: ⇑(f ⊓ g) =ᵐ[μ] fun x => f x ⊓ g x
-  证明: coeFn_comp₂ _ _ _ _
+instance instInf : Min (α →ₘ[μ] β) where min f g := AEEqFun.comp₂ (· ⊓ ·) continuous_inf f g
+/-
+**MeasureTheory.AEEqFun.coeFn_inf** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_inf (f g : α ->ₘ[μ] β) : ⇑(f ⊓ g) =ᵐ[μ] fun x => f x ⊓ g x
+参数：f g : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp₂`：coeFn_comp₂ (g : β -> γ -> δ) (hg : C
+ontinuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) : comp₂ g hg f₁ f₂ =ᵐ
+[μ] fun a => g (f₁ a) (…
 -/
-theorem coeFn_inf (f g : α ->ₘ[μ] β) : ⇑(f ⊓ g) =ᵐ[μ] fun x => f x ⊓ g x :=
+theorem coeFn_inf (f g : α →ₘ[μ] β) : ⇑(f ⊓ g) =ᵐ[μ] fun x => f x ⊓ g x :=
   coeFn_comp₂ _ _ _ _
-
-/--
-theorem `inf_le_left` / 定理 `inf_le_left`
-
-English:
-theorem inf_le_left
-  given: (f g : α ->ₘ[μ] β)
-  statement: f ⊓ g <= f
-  proof: by
+/-
+**MeasureTheory.AEEqFun.inf_le_left** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEE
+qFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [inst_2 : SemilatticeInf β] [inst
+_3 : ContinuousInf β] (f g : α →ₘ[μ] β), f ⊓ g ≤ f
+参数：f g : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_le`：coeFn_le [Preorder β] {f g : α ->ₘ[μ] β}
+ : (f : α -> β) <=ᵐ[μ] g ↔ f <= g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_inf`：coeFn_inf (f g : α ->ₘ[μ] β) : ⇑(f ⊓ g)
+ =ᵐ[μ] fun x => f x ⊓ g x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+-/
+protected theorem inf_le_left (f g : α →ₘ[μ] β) : f ⊓ g ≤ f := by
   rw [← coeFn_le]
   filter_upwards [coeFn_inf f g] with _ ha
   rw [ha]
   exact inf_le_left
-
-中文:
-定理 inf_le_left
-  条件: (f g : α ->ₘ[μ] β)
-  结论: f ⊓ g <= f
-  证明: by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_inf f g] with _ ha
-  rw [ha]
-  exact inf_le_left
+/-
+**MeasureTheory.AEEqFun.inf_le_right** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [inst_2 : SemilatticeInf β] [inst
+_3 : ContinuousInf β] (f g : α →ₘ[μ] β), f ⊓ g ≤ g
+参数：f g : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_le`：coeFn_le [Preorder β] {f g : α ->ₘ[μ] β}
+ : (f : α -> β) <=ᵐ[μ] g ↔ f <= g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_inf`：coeFn_inf (f g : α ->ₘ[μ] β) : ⇑(f ⊓ g)
+ =ᵐ[μ] fun x => f x ⊓ g x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
 -/
-protected theorem inf_le_left (f g : α ->ₘ[μ] β) : f ⊓ g <= f := by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_inf f g] with _ ha
-  rw [ha]
-  exact inf_le_left
-
-/--
-theorem `inf_le_right` / 定理 `inf_le_right`
-
-English:
-theorem inf_le_right
-  given: (f g : α ->ₘ[μ] β)
-  statement: f ⊓ g <= g
-  proof: by
+protected theorem inf_le_right (f g : α →ₘ[μ] β) : f ⊓ g ≤ g := by
   rw [← coeFn_le]
   filter_upwards [coeFn_inf f g] with _ ha
   rw [ha]
   exact inf_le_right
-
-中文:
-定理 inf_le_right
-  条件: (f g : α ->ₘ[μ] β)
-  结论: f ⊓ g <= g
-  证明: by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_inf f g] with _ ha
-  rw [ha]
-  exact inf_le_right
+/-
+**MeasureTheory.AEEqFun.le_inf** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun`
+。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] {μ : MeasureThe
+ory.Measure α} [inst_1 : TopologicalSpace β]   [inst_2 : SemilatticeInf β] [inst
+_3 : ContinuousInf β] (f' f g : α →ₘ[μ] β), f' ≤ f → f' ≤ g → f' ≤ f ⊓ g
+参数：f' f g : α →ₘ[μ] β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_le`：coeFn_le [Preorder β] {f g : α ->ₘ[μ] β}
+ : (f : α -> β) <=ᵐ[μ] g ↔ f <= g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_inf`：coeFn_inf (f g : α ->ₘ[μ] β) : ⇑(f ⊓ g)
+ =ᵐ[μ] fun x => f x ⊓ g x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
 -/
-protected theorem inf_le_right (f g : α ->ₘ[μ] β) : f ⊓ g <= g := by
-  rw [← coeFn_le]
-  filter_upwards [coeFn_inf f g] with _ ha
-  rw [ha]
-  exact inf_le_right
-
-/--
-theorem `le_inf` / 定理 `le_inf`
-
-English:
-theorem le_inf
-  given: (f' f g : α ->ₘ[μ] β) (hf : f' <= f) (hg : f' <= g)
-  statement: f' <= f ⊓ g
-  proof: by
-  rw [← coeFn_le] at hf hg ⊢
-  filter_upwards [hf, hg, coeFn_inf f g] with _ haf hag ha_inf
-  rw [ha_inf]
-  exact le_inf haf hag
-
-中文:
-定理 le_inf
-  条件: (f' f g : α ->ₘ[μ] β) (hf : f' <= f) (hg : f' <= g)
-  结论: f' <= f ⊓ g
-  证明: by
-  rw [← coeFn_le] at hf hg ⊢
-  filter_upwards [hf, hg, coeFn_inf f g] with _ haf hag ha_inf
-  rw [ha_inf]
-  exact le_inf haf hag
--/
-protected theorem le_inf (f' f g : α ->ₘ[μ] β) (hf : f' <= f) (hg : f' <= g) : f' <= f ⊓ g := by
+protected theorem le_inf (f' f g : α →ₘ[μ] β) (hf : f' ≤ f) (hg : f' ≤ g) : f' ≤ f ⊓ g := by
   rw [← coeFn_le] at hf hg ⊢
   filter_upwards [hf, hg, coeFn_inf f g] with _ haf hag ha_inf
   rw [ha_inf]
@@ -2127,38 +1982,18 @@ protected theorem le_inf (f' f g : α ->ₘ[μ] β) (hf : f' <= f) (hg : f' <= g
 
 end Inf
 
-/--
-Instance `instLattice` / 实例 `instLattice`
-
-English:
-instance instLattice
-  signature: [Lattice β] [TopologicalLattice β]
-  body: { AEEqFun.instPartialOrder with
-    sup := max
-    le_sup_left := AEEqFun.le_sup_left
-    le_sup_right := AEEqFun.le_sup_right
-    sup_le := AEEqFun.sup_le
-    inf := min
-    inf_le_left := AEEqFun.inf_le_left
-    inf_le_right := AEEqFun.inf_le_right
-    le_inf := AEEqFun.le_inf }
-
-中文:
-实例 instLattice
-  签名: [格 β] [拓扑格 β]
-  定义体: { AEEqFun.instPartialOrder with
-    sup := max
-    le_sup_left := AEEqFun.le_sup_left
-    le_sup_right := AEEqFun.le_sup_right
-    sup_le := AEEqFun.sup_le
-    inf := min
-    inf_le_left := AEEqFun.inf_le_left
-    inf_le_right := AEEqFun.inf_le_right
-    le_inf := AEEqFun.le_inf }
-
-Depends on / 依赖: AEEqFun, AEEqFun.inf_le_left, AEEqFun.inf_le_right, AEEqFun.instPartialOrder, AEEqFun.le_inf, AEEqFun.le_sup_left, AEEqFun.le_sup_right, AEEqFun.sup_le, inf_le_left, inf_le_right, instPartialOrder, le_inf, le_sup_left, le_sup_right, sup_le
+/-
+**MeasureTheory.AEEqFun.instLattice** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEE
+qFun`。
+形式化陈述：instLattice [Lattice β] [TopologicalLattice β] : Lattice (α ->ₘ[μ] β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalLattice.toContinuousSup`：∀ {L : Type u_1} {inst : Topological
+Space L} {inst_1 : Lattice L} [self : TopologicalLattice L], ContinuousSup L
+· 使用定理 `TopologicalLattice.toContinuousInf`：∀ {L : Type u_1} {inst : Topological
+Space L} {inst_1 : Lattice L} [self : TopologicalLattice L], ContinuousInf L
 -/
-instance instLattice [Lattice β] [TopologicalLattice β] : Lattice (α ->ₘ[μ] β) :=
+instance instLattice [Lattice β] [TopologicalLattice β] : Lattice (α →ₘ[μ] β) :=
   { AEEqFun.instPartialOrder with
     sup := max
     le_sup_left := AEEqFun.le_sup_left
@@ -2175,251 +2010,181 @@ end Order
 
 variable (α)
 
-/--
-Definition of `const` / `const` 的定义
+/-- The equivalence class of a constant function: `[fun _ : α => b]`, based on the equivalence
+relation of being almost everywhere equal -/
+/-
+**MeasureTheory.AEEqFun.const** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun`。
+形式化陈述：const (b : β) : α ->ₘ[μ] β
+参数：b : β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
 
-English:
-definition const
-  signature: (b : β)
-  body: mk (fun _ : α => b) aestronglyMeasurable_const
-
-中文:
-定义 const
-  签名: (b : β)
-  定义体: mk (fun _ : α => b) aestronglyMeasurable_const
-
-Depends on / 依赖: aestronglyMeasurable_const
+--- 原说明 ---
+The equivalence class of a constant function: `[fun _ : α => b]`, based on the e
+quivalence
+relation of being almost everywhere equal
 -/
-def const (b : β) : α ->ₘ[μ] β :=
-  mk (fun _ : α => b) aestronglyMeasurable_const
-
-/--
-theorem `coeFn_const` / 定理 `coeFn_const`
-
-English:
-theorem coeFn_const
-  given: (b : β)
-  statement: (const α b : α ->ₘ[μ] β) =ᵐ[μ] Function.const α b
-  proof: coeFn_mk _ _
-
-中文:
-定理 coeFn_const
-  条件: (b : β)
-  结论: (const α b : α ->ₘ[μ] β) =ᵐ[μ] 函数.const α b
-  证明: coeFn_mk _ _
-
-Depends on / 依赖: coeFn_mk
+def const (b : β) : α →ₘ[μ] β :=
+  mk (fun _ : α ↦ b) aestronglyMeasurable_const
+/-
+**MeasureTheory.AEEqFun.coeFn_const** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEE
+qFun`。
+形式化陈述：coeFn_const (b : β) : (const α b : α ->ₘ[μ] β) =ᵐ[μ] Function.const α b
+参数：b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
 -/
-theorem coeFn_const (b : β) : (const α b : α ->ₘ[μ] β) =ᵐ[μ] Function.const α b :=
+theorem coeFn_const (b : β) : (const α b : α →ₘ[μ] β) =ᵐ[μ] Function.const α b :=
   coeFn_mk _ _
 
 set_option backward.isDefEq.respectTransparency false in
 /-- If the measure is nonzero, we can strengthen `coeFn_const` to get an equality. -/
 @[simp]
-/--
-theorem `coeFn_const_eq` / 定理 `coeFn_const_eq`
+/-
+**MeasureTheory.AEEqFun.coeFn_const_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+AEEqFun`。
+形式化陈述：coeFn_const_eq [NeZero μ] (b : β) (x : α) : (const α b : α ->ₘ[μ] β) x = b
+参数：b : β；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Function.const.eq_1`：∀ {α : Sort u} (β : Sort v) (a : α) (x : β), Functi
+on.const β a x = a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.ae.neBot`：∀ {α : Type u_1} {m0 : MeasurableSpace α
+} {μ : MeasureTheory.Measure α} [NeZero μ], (MeasureTheory.ae μ).NeBot
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 
-English:
-theorem coeFn_const_eq
-  given: [NeZero μ] (b : β) (x : α)
-  statement: (const α b : α ->ₘ[μ] β) x = b
-  proof: by
-  simp only [cast]
-  split_ifs with h
-  case neg => exact h.elim ⟨b, rfl⟩
-  have := Classical.choose_spec h
-  set b' := Classical.choose h
-  simp_rw [const, mk_eq_mk, EventuallyEq, ← const_def, eventually_const] at this
-  rw [Function.const]; rw [this]
-
-中文:
-定理 coeFn_const_eq
-  条件: [NeZero μ] (b : β) (x : α)
-  结论: (const α b : α ->ₘ[μ] β) x = b
-  证明: by
-  simp only [cast]
-  split_ifs with h
-  case neg => exact h.elim ⟨b, rfl⟩
-  have := Classical.choose_spec h
-  set b' := Classical.choose h
-  simp_rw [const, mk_eq_mk, EventuallyEq, ← const_def, eventually_const] at this
-  rw [Function.const]; rw [this]
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, EventuallyEq, Function, Function.const, choose_spec, const_def, eventually_const, h.elim, mk_eq_mk, simp_rw, split_ifs
+--- 原说明 ---
+If the measure is nonzero, we can strengthen `coeFn_const` to get an equality.
 -/
-theorem coeFn_const_eq [NeZero μ] (b : β) (x : α) : (const α b : α ->ₘ[μ] β) x = b := by
+theorem coeFn_const_eq [NeZero μ] (b : β) (x : α) : (const α b : α →ₘ[μ] β) x = b := by
   simp only [cast]
   split_ifs with h
   case neg => exact h.elim ⟨b, rfl⟩
   have := Classical.choose_spec h
   set b' := Classical.choose h
   simp_rw [const, mk_eq_mk, EventuallyEq, ← const_def, eventually_const] at this
-  rw [Function.const]; rw [this]
-
-/--
-theorem `coeFn_const_eq'` / 定理 `coeFn_const_eq'`
-
-English:
-theorem coeFn_const_eq'
-  given: (b : β)
-  statement: exists b', ((const α b : α ->ₘ[μ] β) : α -> β) = fun _ => b'
-  proof: by
-  simp only [cast]
-  split_ifs with h
-  case neg => exact h.elim ⟨b, rfl⟩
-  exact ⟨Classical.choose h, by ext; simp⟩
-
-中文:
-定理 coeFn_const_eq'
-  条件: (b : β)
-  结论: 存在 b', ((const α b : α ->ₘ[μ] β) : α -> β) = fun _ => b'
-  证明: by
-  simp only [cast]
-  split_ifs with h
-  case neg => exact h.elim ⟨b, rfl⟩
-  exact ⟨Classical.choose h, by ext; simp⟩
-
-Depends on / 依赖: Classical, Classical.choose, h.elim, split_ifs
+  rw [Function.const, this]
+/-
+**MeasureTheory.AEEqFun.coeFn_const_eq'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.AEEqFun`。
+形式化陈述：coeFn_const_eq' (b : β) : exists b', ((const α b : α ->ₘ[μ] β) : α -> β) =
+ fun _ => b'
+参数：b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem coeFn_const_eq' (b : β) : exists b', ((const α b : α ->ₘ[μ] β) : α -> β) = fun _ => b' := by
+theorem coeFn_const_eq' (b : β) : ∃ b', ((const α b : α →ₘ[μ] β) : α → β) = fun _ ↦ b' := by
   simp only [cast]
   split_ifs with h
   case neg => exact h.elim ⟨b, rfl⟩
   exact ⟨Classical.choose h, by ext; simp⟩
 
 variable {α}
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: [Inhabited β]
-  body: ⟨const α default⟩
-
-@[to_additive]
-
-中文:
-实例 instInhabited
-  签名: [可居 β]
-  定义体: ⟨const α default⟩
-
-@[to_additive]
+/-
+**MeasureTheory.AEEqFun.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：instInhabited [Inhabited β] : Inhabited (α ->ₘ[μ] β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instInhabited [Inhabited β] : Inhabited (α ->ₘ[μ] β) :=
+instance instInhabited [Inhabited β] : Inhabited (α →ₘ[μ] β) :=
   ⟨const α default⟩
 
 @[to_additive]
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: [One β]
-  body: ⟨const α 1⟩
-
-@[to_additive]
-
-中文:
-实例 instOne
-  签名: [幺 β]
-  定义体: ⟨const α 1⟩
-
-@[to_additive]
+/-
+**MeasureTheory.AEEqFun.instOne** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：instOne [One β] : One (α ->ₘ[μ] β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instOne [One β] : One (α ->ₘ[μ] β) :=
+instance instOne [One β] : One (α →ₘ[μ] β) :=
   ⟨const α 1⟩
 
 @[to_additive]
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  given: [One β]
-  statement: (1 : α ->ₘ[μ] β) = mk (fun _ : α => 1) aestronglyMeasurable_const
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 one_def
-  条件: [幺 β]
-  结论: (1 : α ->ₘ[μ] β) = mk (fun _ : α => 1) aestronglyMeasurable_const
-  证明: rfl
-
-@[to_additive]
+/-
+**MeasureTheory.AEEqFun.one_def** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：one_def [One β] : (1 : α ->ₘ[μ] β) = mk (fun _ : α => 1) aestronglyMeasura
+ble_const
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_def [One β] : (1 : α ->ₘ[μ] β) = mk (fun _ : α => 1) aestronglyMeasurable_const :=
+theorem one_def [One β] : (1 : α →ₘ[μ] β) = mk (fun _ : α => 1) aestronglyMeasurable_const :=
   rfl
 
 @[to_additive]
-/--
-theorem `coeFn_one` / 定理 `coeFn_one`
-
-English:
-theorem coeFn_one
-  given: [One β]
-  statement: ⇑(1 : α ->ₘ[μ] β) =ᵐ[μ] 1
-  proof: coeFn_const ..
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coeFn_one
-  条件: [幺 β]
-  结论: ⇑(1 : α ->ₘ[μ] β) =ᵐ[μ] 1
-  证明: coeFn_const ..
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: coeFn_const
+/-
+**MeasureTheory.AEEqFun.coeFn_one** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_one [One β] : ⇑(1 : α ->ₘ[μ] β) =ᵐ[μ] 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_const`：coeFn_const (b : β) : (const α b : α 
+->ₘ[μ] β) =ᵐ[μ] Function.const α b
 -/
-theorem coeFn_one [One β] : ⇑(1 : α ->ₘ[μ] β) =ᵐ[μ] 1 :=
+theorem coeFn_one [One β] : ⇑(1 : α →ₘ[μ] β) =ᵐ[μ] 1 :=
   coeFn_const ..
 
 @[to_additive (attr := simp)]
-/--
-theorem `coeFn_one_eq` / 定理 `coeFn_one_eq`
-
-English:
-theorem coeFn_one_eq
-  given: [NeZero μ] [One β] {x : α}
-  statement: (1 : α ->ₘ[μ] β) x = 1
-  proof: coeFn_const_eq ..
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coeFn_one_eq
-  条件: [NeZero μ] [幺 β] {x : α}
-  结论: (1 : α ->ₘ[μ] β) x = 1
-  证明: coeFn_const_eq ..
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: coeFn_const_eq
+/-
+**MeasureTheory.AEEqFun.coeFn_one_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：coeFn_one_eq [NeZero μ] [One β] {x : α} : (1 : α ->ₘ[μ] β) x = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_const_eq`：coeFn_const_eq [NeZero μ] (b : β) 
+(x : α) : (const α b : α ->ₘ[μ] β) x = b
 -/
-theorem coeFn_one_eq [NeZero μ] [One β] {x : α} : (1 : α ->ₘ[μ] β) x = 1 :=
+theorem coeFn_one_eq [NeZero μ] [One β] {x : α} : (1 : α →ₘ[μ] β) x = 1 :=
   coeFn_const_eq ..
 
 @[to_additive (attr := simp)]
-/--
-theorem `one_toGerm` / 定理 `one_toGerm`
-
-English:
-theorem one_toGerm
-  given: [One β]
-  statement: (1 : α ->ₘ[μ] β).toGerm = 1
-  proof: rfl
-
-中文:
-定理 one_toGerm
-  条件: [幺 β]
-  结论: (1 : α ->ₘ[μ] β).toGerm = 1
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.one_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：one_toGerm [One β] : (1 : α ->ₘ[μ] β).toGerm = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 -/
-theorem one_toGerm [One β] : (1 : α ->ₘ[μ] β).toGerm = 1 :=
+theorem one_toGerm [One β] : (1 : α →ₘ[μ] β).toGerm = 1 :=
   rfl
 
 -- Note we set up the scalar actions before the `Monoid` structures in case we want to
@@ -2430,138 +2195,134 @@ variable {𝕜 𝕜' : Type*}
 variable [SMul 𝕜 γ] [ContinuousConstSMul 𝕜 γ]
 variable [SMul 𝕜' γ] [ContinuousConstSMul 𝕜' γ]
 
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: : SMul 𝕜 (α ->ₘ[μ] γ)
-  body: ⟨fun c f => comp (c • ·) (continuous_id.const_smul c) f⟩
-
-@[simp]
-
-中文:
-实例 instSMul
-  签名: : 标量乘法 𝕜 (α ->ₘ[μ] γ)
-  定义体: ⟨fun c f => comp (c • ·) (continuous_id.const_smul c) f⟩
-
-@[simp]
-
-Depends on / 依赖: const_smul, continuous_id, continuous_id.const_smul
+/-
+**MeasureTheory.AEEqFun.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFu
+n`。
+形式化陈述：instSMul : SMul 𝕜 (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSMul : SMul 𝕜 (α ->ₘ[μ] γ) :=
+instance instSMul : SMul 𝕜 (α →ₘ[μ] γ) :=
   ⟨fun c f => comp (c • ·) (continuous_id.const_smul c) f⟩
 
 @[simp]
-/--
-theorem `smul_mk` / 定理 `smul_mk`
-
-English:
-theorem smul_mk
-  given: (c : 𝕜) (f : α -> γ) (hf : AEStronglyMeasurable f μ)
-  proof: rfl
-
-中文:
-定理 smul_mk
-  条件: (c : 𝕜) (f : α -> γ) (hf : AEStronglyMeasurable f μ)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.smul_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：smul_mk (c : 𝕜) (f : α -> γ) (hf : AEStronglyMeasurable f μ) : c • (mk f h
+f : α ->ₘ[μ] γ) = mk (c • f) (hf.const_smul _)
+参数：c : 𝕜；f : α -> γ；hf : AEStronglyMeasurable f μ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_mk (c : 𝕜) (f : α -> γ) (hf : AEStronglyMeasurable f μ) :
-    c • (mk f hf : α ->ₘ[μ] γ) = mk (c • f) (hf.const_smul _) :=
+theorem smul_mk (c : 𝕜) (f : α → γ) (hf : AEStronglyMeasurable f μ) :
+    c • (mk f hf : α →ₘ[μ] γ) = mk (c • f) (hf.const_smul _) :=
   rfl
-
-/--
-theorem `coeFn_smul` / 定理 `coeFn_smul`
-
-English:
-theorem coeFn_smul
-  given: (c : 𝕜) (f : α ->ₘ[μ] γ)
-  statement: ⇑(c • f) =ᵐ[μ] c • ⇑f
-  proof: coeFn_comp _ _ _
-
-中文:
-定理 coeFn_smul
-  条件: (c : 𝕜) (f : α ->ₘ[μ] γ)
-  结论: ⇑(c • f) =ᵐ[μ] c • ⇑f
-  证明: coeFn_comp _ _ _
-
-Depends on / 依赖: coeFn_comp
+/-
+**MeasureTheory.AEEqFun.coeFn_smul** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：coeFn_smul (c : 𝕜) (f : α ->ₘ[μ] γ) : ⇑(c • f) =ᵐ[μ] c • ⇑f
+参数：c : 𝕜；f : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp`：coeFn_comp (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f
 -/
-theorem coeFn_smul (c : 𝕜) (f : α ->ₘ[μ] γ) : ⇑(c • f) =ᵐ[μ] c • ⇑f :=
+theorem coeFn_smul (c : 𝕜) (f : α →ₘ[μ] γ) : ⇑(c • f) =ᵐ[μ] c • ⇑f :=
   coeFn_comp _ _ _
-
-/--
-theorem `smul_toGerm` / 定理 `smul_toGerm`
-
-English:
-theorem smul_toGerm
-  given: (c : 𝕜) (f : α ->ₘ[μ] γ)
-  statement: (c • f).toGerm = c • f.toGerm
-  proof: comp_toGerm _ _ _
-
-中文:
-定理 smul_toGerm
-  条件: (c : 𝕜) (f : α ->ₘ[μ] γ)
-  结论: (c • f).toGerm = c • f.toGerm
-  证明: comp_toGerm _ _ _
-
-Depends on / 依赖: comp_toGerm
+/-
+**MeasureTheory.AEEqFun.smul_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEE
+qFun`。
+形式化陈述：smul_toGerm (c : 𝕜) (f : α ->ₘ[μ] γ) : (c • f).toGerm = c • f.toGerm
+参数：c : 𝕜；f : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.comp_toGerm`：comp_toGerm (g : β -> γ) (hg : Contin
+uous g) (f : α ->ₘ[μ] β) : (comp g hg f).toGerm = f.toGerm.map g
 -/
-theorem smul_toGerm (c : 𝕜) (f : α ->ₘ[μ] γ) : (c • f).toGerm = c • f.toGerm :=
+theorem smul_toGerm (c : 𝕜) (f : α →ₘ[μ] γ) : (c • f).toGerm = c • f.toGerm :=
   comp_toGerm _ _ _
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: [SMulCommClass 𝕜 𝕜' γ]
-  body: ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_comm]⟩
-
-中文:
-实例 instSMulCommClass
-  签名: [标量交换类 𝕜 𝕜' γ]
-  定义体: ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_comm]⟩
-
-Depends on / 依赖: induction_on, simp_rw, smul_comm, smul_mk
+/-
+**MeasureTheory.AEEqFun.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheo
+ry.AEEqFun`。
+形式化陈述：instSMulCommClass [SMulCommClass 𝕜 𝕜' γ] : SMulCommClass 𝕜 𝕜' (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on`：induction_on (f : α ->ₘ[μ] β) {p : (
+α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf)) : p f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.const_smul`：∀ {α : Type u_1} {β : Typ
+e u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory
+.Measure α}   {f : α → β} {𝕜 : Type…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.mk.congr_simp`：∀ {α : Type u_1} [inst : Measurable
+Space α] {μ : MeasureTheory.Measure α} {β : Type u_5} [inst_1 : TopologicalSpace
+ β]   (f f_1 : α → β) (e_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-instance instSMulCommClass [SMulCommClass 𝕜 𝕜' γ] : SMulCommClass 𝕜 𝕜' (α ->ₘ[μ] γ) :=
+instance instSMulCommClass [SMulCommClass 𝕜 𝕜' γ] : SMulCommClass 𝕜 𝕜' (α →ₘ[μ] γ) :=
   ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_comm]⟩
-
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: [SMul 𝕜 𝕜'] [IsScalarTower 𝕜 𝕜' γ]
-  body: ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_assoc]⟩
-
-中文:
-实例 instIsScalarTower
-  签名: [标量乘法 𝕜 𝕜'] [标量塔 𝕜 𝕜' γ]
-  定义体: ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_assoc]⟩
-
-Depends on / 依赖: induction_on, simp_rw, smul_assoc, smul_mk
+/-
+**MeasureTheory.AEEqFun.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheo
+ry.AEEqFun`。
+形式化陈述：instIsScalarTower [SMul 𝕜 𝕜'] [IsScalarTower 𝕜 𝕜' γ] : IsScalarTower 𝕜 𝕜' 
+(α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on`：induction_on (f : α ->ₘ[μ] β) {p : (
+α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf)) : p f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.const_smul`：∀ {α : Type u_1} {β : Typ
+e u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory
+.Measure α}   {f : α → β} {𝕜 : Type…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.mk.congr_simp`：∀ {α : Type u_1} [inst : Measurable
+Space α] {μ : MeasureTheory.Measure α} {β : Type u_5} [inst_1 : TopologicalSpace
+ β]   (f f_1 : α → β) (e_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-instance instIsScalarTower [SMul 𝕜 𝕜'] [IsScalarTower 𝕜 𝕜' γ] : IsScalarTower 𝕜 𝕜' (α ->ₘ[μ] γ) :=
+instance instIsScalarTower [SMul 𝕜 𝕜'] [IsScalarTower 𝕜 𝕜' γ] : IsScalarTower 𝕜 𝕜' (α →ₘ[μ] γ) :=
   ⟨fun a b f => induction_on f fun f hf => by simp_rw [smul_mk, smul_assoc]⟩
-
-/--
-Instance `instIsCentralScalar` / 实例 `instIsCentralScalar`
-
-English:
-instance instIsCentralScalar
-  signature: [SMul 𝕜ᵐᵒᵖ γ] [IsCentralScalar 𝕜 γ]
-  body: ⟨fun a f => induction_on f fun f hf => by simp_rw [smul_mk, op_smul_eq_smul]⟩
-
-中文:
-实例 instIsCentralScalar
-  签名: [标量乘法 𝕜ᵐᵒᵖ γ] [中心标量 𝕜 γ]
-  定义体: ⟨fun a f => induction_on f fun f hf => by simp_rw [smul_mk, op_smul_eq_smul]⟩
-
-Depends on / 依赖: induction_on, op_smul_eq_smul, simp_rw, smul_mk
+/-
+**MeasureTheory.AEEqFun.instIsCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTh
+eory.AEEqFun`。
+形式化陈述：instIsCentralScalar [SMul 𝕜ᵐᵒᵖ γ] [IsCentralScalar 𝕜 γ] : IsCentralScalar 
+𝕜 (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on`：induction_on (f : α ->ₘ[μ] β) {p : (
+α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf)) : p f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.const_smul`：∀ {α : Type u_1} {β : Typ
+e u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory
+.Measure α}   {f : α → β} {𝕜 : Type…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.AEEqFun.mk.congr_simp`：∀ {α : Type u_1} [inst : Measurable
+Space α] {μ : MeasureTheory.Measure α} {β : Type u_5} [inst_1 : TopologicalSpace
+ β]   (f f_1 : α → β) (e_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-instance instIsCentralScalar [SMul 𝕜ᵐᵒᵖ γ] [IsCentralScalar 𝕜 γ] : IsCentralScalar 𝕜 (α ->ₘ[μ] γ) :=
+instance instIsCentralScalar [SMul 𝕜ᵐᵒᵖ γ] [IsCentralScalar 𝕜 γ] : IsCentralScalar 𝕜 (α →ₘ[μ] γ) :=
   ⟨fun a f => induction_on f fun f hf => by simp_rw [smul_mk, op_smul_eq_smul]⟩
 
 end SMul
@@ -2571,265 +2332,186 @@ section Mul
 variable [Mul γ] [ContinuousMul γ]
 
 @[to_additive]
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (α ->ₘ[μ] γ)
-  body: ⟨comp₂ (· * ·) continuous_mul⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instMul
-  签名: : 乘法 (α ->ₘ[μ] γ)
-  定义体: ⟨comp₂ (· * ·) continuous_mul⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: continuous_mul
+/-
+**MeasureTheory.AEEqFun.instMul** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：instMul : Mul (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
 -/
-instance instMul : Mul (α ->ₘ[μ] γ) :=
+instance instMul : Mul (α →ₘ[μ] γ) :=
   ⟨comp₂ (· * ·) continuous_mul⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_mul_mk` / 定理 `mk_mul_mk`
-
-English:
-theorem mk_mul_mk
-  given: (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mk_mul_mk
-  条件: (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ)
-  证明: rfl
-
-@[to_additive]
+/-
+**MeasureTheory.AEEqFun.mk_mul_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：mk_mul_mk (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyM
+easurable g μ) : (mk f hf : α ->ₘ[μ] γ) * mk g hg = mk (f * g) (hf.mul hg)
+参数：f g : α -> γ；hf : AEStronglyMeasurable f μ；hg : AEStronglyMeasurable g μ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_mul_mk (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ) :
-    (mk f hf : α ->ₘ[μ] γ) * mk g hg = mk (f * g) (hf.mul hg) :=
+theorem mk_mul_mk (f g : α → γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ) :
+    (mk f hf : α →ₘ[μ] γ) * mk g hg = mk (f * g) (hf.mul hg) :=
   rfl
 
 @[to_additive]
-/--
-theorem `coeFn_mul` / 定理 `coeFn_mul`
-
-English:
-theorem coeFn_mul
-  given: (f g : α ->ₘ[μ] γ)
-  statement: ⇑(f * g) =ᵐ[μ] f * g
-  proof: coeFn_comp₂ _ _ _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coeFn_mul
-  条件: (f g : α ->ₘ[μ] γ)
-  结论: ⇑(f * g) =ᵐ[μ] f * g
-  证明: coeFn_comp₂ _ _ _ _
-
-@[to_additive (attr := simp)]
+/-
+**MeasureTheory.AEEqFun.coeFn_mul** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_mul (f g : α ->ₘ[μ] γ) : ⇑(f * g) =ᵐ[μ] f * g
+参数：f g : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp₂`：coeFn_comp₂ (g : β -> γ -> δ) (hg : C
+ontinuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) : comp₂ g hg f₁ f₂ =ᵐ
+[μ] fun a => g (f₁ a) (…
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
 -/
-theorem coeFn_mul (f g : α ->ₘ[μ] γ) : ⇑(f * g) =ᵐ[μ] f * g :=
+theorem coeFn_mul (f g : α →ₘ[μ] γ) : ⇑(f * g) =ᵐ[μ] f * g :=
   coeFn_comp₂ _ _ _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_toGerm` / 定理 `mul_toGerm`
-
-English:
-theorem mul_toGerm
-  given: (f g : α ->ₘ[μ] γ)
-  statement: (f * g).toGerm = f.toGerm * g.toGerm
-  proof: comp₂_toGerm _ _ _ _
-
-中文:
-定理 mul_toGerm
-  条件: (f g : α ->ₘ[μ] γ)
-  结论: (f * g).toGerm = f.toGerm * g.toGerm
-  证明: comp₂_toGerm _ _ _ _
+/-
+**MeasureTheory.AEEqFun.mul_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：mul_toGerm (f g : α ->ₘ[μ] γ) : (f * g).toGerm = f.toGerm * g.toGerm
+参数：f g : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.comp₂_toGerm`：comp₂_toGerm (g : β -> γ -> δ) (hg :
+ Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) : (comp₂ g hg f₁ f₂
+).toGerm = f₁.toGerm.map…
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
 -/
-theorem mul_toGerm (f g : α ->ₘ[μ] γ) : (f * g).toGerm = f.toGerm * g.toGerm :=
+theorem mul_toGerm (f g : α →ₘ[μ] γ) : (f * g).toGerm = f.toGerm * g.toGerm :=
   comp₂_toGerm _ _ _ _
 
 end Mul
 
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: [AddMonoid γ] [ContinuousAdd γ]
-  body: toGerm_injective.addMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
-
-中文:
-实例 instAddMonoid
-  签名: [加法幺半群 γ] [连续加法 γ]
-  定义体: toGerm_injective.addMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
-
-Depends on / 依赖: addMonoid, add_toGerm, smul_toGerm, toGerm, toGerm_injective, toGerm_injective.addMonoid, zero_toGerm
+/-
+**MeasureTheory.AEEqFun.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：instAddMonoid [AddMonoid γ] [ContinuousAdd γ] : AddMonoid (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
 -/
-instance instAddMonoid [AddMonoid γ] [ContinuousAdd γ] : AddMonoid (α ->ₘ[μ] γ) :=
+instance instAddMonoid [AddMonoid γ] [ContinuousAdd γ] : AddMonoid (α →ₘ[μ] γ) :=
   toGerm_injective.addMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
-
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: [AddCommMonoid γ] [ContinuousAdd γ]
-  body: toGerm_injective.addCommMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
-
-中文:
-实例 instAddCommMonoid
-  签名: [加法交换幺半群 γ] [连续加法 γ]
-  定义体: toGerm_injective.addCommMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
-
-Depends on / 依赖: addCommMonoid, add_toGerm, smul_toGerm, toGerm, toGerm_injective, toGerm_injective.addCommMonoid, zero_toGerm
+/-
+**MeasureTheory.AEEqFun.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheo
+ry.AEEqFun`。
+形式化陈述：instAddCommMonoid [AddCommMonoid γ] [ContinuousAdd γ] : AddCommMonoid (α -
+>ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
 -/
-instance instAddCommMonoid [AddCommMonoid γ] [ContinuousAdd γ] : AddCommMonoid (α ->ₘ[μ] γ) :=
+instance instAddCommMonoid [AddCommMonoid γ] [ContinuousAdd γ] : AddCommMonoid (α →ₘ[μ] γ) :=
   toGerm_injective.addCommMonoid toGerm zero_toGerm add_toGerm fun _ _ => smul_toGerm _ _
 
 section Monoid
 
 variable [Monoid γ] [ContinuousMul γ]
 
-/--
-Instance `instPowNat` / 实例 `instPowNat`
-
-English:
-instance instPowNat
-  signature: : Pow (α ->ₘ[μ] γ) Nat
-  body: ⟨fun f n => comp _ (continuous_pow n) f⟩
-
-@[simp]
-
-中文:
-实例 instPow自然数
-  签名: : 幂 (α ->ₘ[μ] γ) 自然数
-  定义体: ⟨fun f n => comp _ (continuous_pow n) f⟩
-
-@[simp]
-
-Depends on / 依赖: continuous_pow
+/-
+**MeasureTheory.AEEqFun.instPowNat** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：instPowNat : Pow (α ->ₘ[μ] γ) Nat
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_pow`：∀ {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : M
+onoid M] [ContinuousMul M] (n : ℕ), Continuous fun a => a ^ n
 -/
-instance instPowNat : Pow (α ->ₘ[μ] γ) Nat :=
+instance instPowNat : Pow (α →ₘ[μ] γ) ℕ :=
   ⟨fun f n => comp _ (continuous_pow n) f⟩
 
 @[simp]
-/--
-theorem `mk_pow` / 定理 `mk_pow`
-
-English:
-theorem mk_pow
-  given: (f : α -> γ) (hf) (n : Nat)
-  proof: rfl
-
-中文:
-定理 mk_pow
-  条件: (f : α -> γ) (hf) (n : 自然数)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.mk_pow** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun`
+。
+形式化陈述：mk_pow (f : α -> γ) (hf) (n : Nat) : (mk f hf : α ->ₘ[μ] γ) ^ n = mk (f ^ 
+n) ((_root_.continuous_pow n).comp_aestronglyMeasurable hf)
+参数：f : α -> γ；hf；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_pow (f : α -> γ) (hf) (n : Nat) :
-    (mk f hf : α ->ₘ[μ] γ) ^ n =
+theorem mk_pow (f : α → γ) (hf) (n : ℕ) :
+    (mk f hf : α →ₘ[μ] γ) ^ n =
       mk (f ^ n) ((_root_.continuous_pow n).comp_aestronglyMeasurable hf) :=
   rfl
-
-/--
-theorem `coeFn_pow` / 定理 `coeFn_pow`
-
-English:
-theorem coeFn_pow
-  given: (f : α ->ₘ[μ] γ) (n : Nat)
-  statement: ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n
-  proof: coeFn_comp _ _ _
-
-@[simp]
-
-中文:
-定理 coeFn_pow
-  条件: (f : α ->ₘ[μ] γ) (n : 自然数)
-  结论: ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n
-  证明: coeFn_comp _ _ _
-
-@[simp]
-
-Depends on / 依赖: coeFn_comp
+/-
+**MeasureTheory.AEEqFun.coeFn_pow** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_pow (f : α ->ₘ[μ] γ) (n : Nat) : ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n
+参数：f : α ->ₘ[μ] γ；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp`：coeFn_comp (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f
+· 使用定理 `continuous_pow`：∀ {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : M
+onoid M] [ContinuousMul M] (n : ℕ), Continuous fun a => a ^ n
 -/
-theorem coeFn_pow (f : α ->ₘ[μ] γ) (n : Nat) : ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n :=
+theorem coeFn_pow (f : α →ₘ[μ] γ) (n : ℕ) : ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n :=
   coeFn_comp _ _ _
 
 @[simp]
-/--
-theorem `pow_toGerm` / 定理 `pow_toGerm`
-
-English:
-theorem pow_toGerm
-  given: (f : α ->ₘ[μ] γ) (n : Nat)
-  statement: (f ^ n).toGerm = f.toGerm ^ n
-  proof: comp_toGerm _ _ _
-
-@[to_additive existing]
-
-中文:
-定理 pow_toGerm
-  条件: (f : α ->ₘ[μ] γ) (n : 自然数)
-  结论: (f ^ n).toGerm = f.toGerm ^ n
-  证明: comp_toGerm _ _ _
-
-@[to_additive existing]
-
-Depends on / 依赖: comp_toGerm
+/-
+**MeasureTheory.AEEqFun.pow_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：pow_toGerm (f : α ->ₘ[μ] γ) (n : Nat) : (f ^ n).toGerm = f.toGerm ^ n
+参数：f : α ->ₘ[μ] γ；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.comp_toGerm`：comp_toGerm (g : β -> γ) (hg : Contin
+uous g) (f : α ->ₘ[μ] β) : (comp g hg f).toGerm = f.toGerm.map g
+· 使用定理 `continuous_pow`：∀ {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : M
+onoid M] [ContinuousMul M] (n : ℕ), Continuous fun a => a ^ n
 -/
-theorem pow_toGerm (f : α ->ₘ[μ] γ) (n : Nat) : (f ^ n).toGerm = f.toGerm ^ n :=
+theorem pow_toGerm (f : α →ₘ[μ] γ) (n : ℕ) : (f ^ n).toGerm = f.toGerm ^ n :=
   comp_toGerm _ _ _
 
 @[to_additive existing]
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: : Monoid (α ->ₘ[μ] γ)
-  body: toGerm_injective.monoid toGerm one_toGerm mul_toGerm pow_toGerm
-
-中文:
-实例 instMonoid
-  签名: : 幺半群 (α ->ₘ[μ] γ)
-  定义体: toGerm_injective.monoid toGerm one_toGerm mul_toGerm pow_toGerm
-
-Depends on / 依赖: monoid, mul_toGerm, one_toGerm, pow_toGerm, toGerm, toGerm_injective, toGerm_injective.monoid
+/-
+**MeasureTheory.AEEqFun.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：instMonoid : Monoid (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
+· 使用定理 `MeasureTheory.AEEqFun.pow_toGerm`：pow_toGerm (f : α ->ₘ[μ] γ) (n : Nat) 
+: (f ^ n).toGerm = f.toGerm ^ n
 -/
-instance instMonoid : Monoid (α ->ₘ[μ] γ) :=
+instance instMonoid : Monoid (α →ₘ[μ] γ) :=
   toGerm_injective.monoid toGerm one_toGerm mul_toGerm pow_toGerm
 
 /-- `AEEqFun.toGerm` as a `MonoidHom`. -/
 @[to_additive (attr := simps) /-- `AEEqFun.toGerm` as an `AddMonoidHom`. -/]
-/--
-Definition of `toGermMonoidHom` / `toGermMonoidHom` 的定义
+/-
+**MeasureTheory.AEEqFun.toGermMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory
+.AEEqFun`。
+形式化陈述：toGermMonoidHom : (α ->ₘ[μ] γ) ->* (ae μ).Germ γ where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 
-English:
-definition toGermMonoidHom
-  signature: : (α ->ₘ[μ] γ) ->* (ae μ).Germ γ where
-  body: toGerm
-  map_one' := one_toGerm
-  map_mul' := mul_toGerm
-
-中文:
-定义 toGermMonoidHom
-  签名: : (α ->ₘ[μ] γ) ->* (ae μ).Germ γ where
-  定义体: toGerm
-  map_one' := one_toGerm
-  map_mul' := mul_toGerm
-
-Depends on / 依赖: toGerm
+--- 原说明 ---
+`AEEqFun.toGerm` as a `MonoidHom`.
 -/
-def toGermMonoidHom : (α ->ₘ[μ] γ) ->* (ae μ).Germ γ where
+def toGermMonoidHom : (α →ₘ[μ] γ) →* (ae μ).Germ γ where
   toFun := toGerm
   map_one' := one_toGerm
   map_mul' := mul_toGerm
@@ -2837,63 +2519,58 @@ def toGermMonoidHom : (α ->ₘ[μ] γ) ->* (ae μ).Germ γ where
 end Monoid
 
 @[to_additive existing]
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: [CommMonoid γ] [ContinuousMul γ]
-  body: toGerm_injective.commMonoid toGerm one_toGerm mul_toGerm pow_toGerm
-
-@[to_additive]
-
-中文:
-实例 instCommMonoid
-  签名: [交换幺半群 γ] [连续乘法 γ]
-  定义体: toGerm_injective.commMonoid toGerm one_toGerm mul_toGerm pow_toGerm
-
-@[to_additive]
-
-Depends on / 依赖: commMonoid, mul_toGerm, one_toGerm, pow_toGerm, toGerm, toGerm_injective, toGerm_injective.commMonoid
+/-
+**MeasureTheory.AEEqFun.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.
+AEEqFun`。
+形式化陈述：instCommMonoid [CommMonoid γ] [ContinuousMul γ] : CommMonoid (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
 -/
-instance instCommMonoid [CommMonoid γ] [ContinuousMul γ] : CommMonoid (α ->ₘ[μ] γ) :=
+instance instCommMonoid [CommMonoid γ] [ContinuousMul γ] : CommMonoid (α →ₘ[μ] γ) :=
   toGerm_injective.commMonoid toGerm one_toGerm mul_toGerm pow_toGerm
 
 @[to_additive]
-/--
-theorem `coeFn_finsetProd` / 定理 `coeFn_finsetProd`
-
-English:
-theorem coeFn_finsetProd
-  statement: [CommMonoid γ] [ContinuousMul γ]
-  proof: by
-  classical
-  induction s using Finset.induction with
-  | empty => simp [coeFn_one]
-  | insert a s ha ih =>
-    simp only [ha, not_false_eq_true, Finset.prod_insert]
-    grw [coeFn_mul, ih]
-
-@[to_additive]
-
-中文:
-定理 coeFn_finsetProd
-  结论: [交换幺半群 γ] [连续乘法 γ]
-  证明: by
-  classical
-  induction s using Finset.induction with
-  | empty => simp [coeFn_one]
-  | insert a s ha ih =>
-    simp only [ha, not_false_eq_true, Finset.prod_insert]
-    grw [coeFn_mul, ih]
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.induction, Finset.prod_insert, classical, coeFn_mul, coeFn_one, insert, not_false_eq_true, prod_insert
+/-
+**MeasureTheory.AEEqFun.coeFn_finsetProd** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.AEEqFun`。
+形式化陈述：coeFn_finsetProd [CommMonoid γ] [ContinuousMul γ] {ι : Type*} (s : Finset 
+ι) (f : ι -> α ->ₘ[μ] γ) : ⇑(∏ i in s, f i) =ᵐ[μ] ∏ i in s, ⇑(f i)
+参数：s : Finset ι；f : ι -> α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `instIsTransOfTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [Trans r r r], I
+sTrans α r
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mul`：coeFn_mul (f g : α ->ₘ[μ] γ) : ⇑(f * g)
+ =ᵐ[μ] f * g
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `Filter.EventuallyEq.mul`：∀ {α : Type u} {β : Type v} [inst : Mul β] {f f
+' g g' : α → β} {l : Filter α},   f =ᶠ[l] g → f' =ᶠ[l] g' → f * f' =ᶠ[l] g * g'
 -/
 theorem coeFn_finsetProd [CommMonoid γ] [ContinuousMul γ]
-    {ι : Type*} (s : Finset ι) (f : ι -> α ->ₘ[μ] γ) :
-    ⇑(∏ i in s, f i) =ᵐ[μ] ∏ i in s, ⇑(f i) := by
+    {ι : Type*} (s : Finset ι) (f : ι → α →ₘ[μ] γ) :
+    ⇑(∏ i ∈ s, f i) =ᵐ[μ] ∏ i ∈ s, ⇑(f i) := by
   classical
   induction s using Finset.induction with
   | empty => simp [coeFn_one]
@@ -2902,28 +2579,40 @@ theorem coeFn_finsetProd [CommMonoid γ] [ContinuousMul γ]
     grw [coeFn_mul, ih]
 
 @[to_additive]
-/--
-theorem `coeFn_fun_finsetProd` / 定理 `coeFn_fun_finsetProd`
-
-English:
-theorem coeFn_fun_finsetProd
-  statement: [CommMonoid γ] [ContinuousMul γ]
-  proof: by
-  grw [coeFn_finsetProd]
-  filter_upwards with x using by simp
-
-中文:
-定理 coeFn_fun_finsetProd
-  结论: [交换幺半群 γ] [连续乘法 γ]
-  证明: by
-  grw [coeFn_finsetProd]
-  filter_upwards with x using by simp
-
-Depends on / 依赖: coeFn_finsetProd, filter_upwards
+/-
+**MeasureTheory.AEEqFun.coeFn_fun_finsetProd** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.AEEqFun`。
+形式化陈述：coeFn_fun_finsetProd [CommMonoid γ] [ContinuousMul γ] {ι : Type*} (s : Fin
+set ι) (f : ι -> α ->ₘ[μ] γ) : ⇑(∏ i in s, f i) =ᵐ[μ] fun x => ∏ i in s, f i x
+参数：s : Finset ι；f : ι -> α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `instIsTransOfTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [Trans r r r], I
+sTrans α r
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_finsetProd`：coeFn_finsetProd [CommMonoid γ] 
+[ContinuousMul γ] {ι : Type*} (s : Finset ι) (f : ι -> α ->ₘ[μ] γ) : ⇑(∏ i in s,
+ f i) =ᵐ[μ] ∏ i in s, ⇑(f i)
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_apply`：Finset.prod_apply {α : Type*} {M : α -> Type*} [foral
+l a, CommMonoid (M a)] (a : α) (s : Finset ι) (g : ι -> forall a, M a) : (∏ c in
+ s, g c…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coeFn_fun_finsetProd [CommMonoid γ] [ContinuousMul γ]
-    {ι : Type*} (s : Finset ι) (f : ι -> α ->ₘ[μ] γ) :
-    ⇑(∏ i in s, f i) =ᵐ[μ] fun x => ∏ i in s, f i x := by
+    {ι : Type*} (s : Finset ι) (f : ι → α →ₘ[μ] γ) :
+    ⇑(∏ i ∈ s, f i) =ᵐ[μ] fun x ↦ ∏ i ∈ s, f i x := by
   grw [coeFn_finsetProd]
   filter_upwards with x using by simp
 
@@ -2934,95 +2623,54 @@ variable [Group γ] [IsTopologicalGroup γ]
 section Inv
 
 @[to_additive]
-/--
-Instance `instInv` / 实例 `instInv`
-
-English:
-instance instInv
-  signature: : Inv (α ->ₘ[μ] γ)
-  body: ⟨comp Inv.inv continuous_inv⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instInv
-  签名: : 取逆 (α ->ₘ[μ] γ)
-  定义体: ⟨comp Inv.inv continuous_inv⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Inv.inv, continuous_inv
+/-
+**MeasureTheory.AEEqFun.instInv** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：instInv : Inv (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instInv : Inv (α ->ₘ[μ] γ) :=
+instance instInv : Inv (α →ₘ[μ] γ) :=
   ⟨comp Inv.inv continuous_inv⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_mk` / 定理 `inv_mk`
-
-English:
-theorem inv_mk
-  given: (f : α -> γ) (hf)
-  statement: (mk f hf : α ->ₘ[μ] γ)⁻¹ = mk f⁻¹ hf.inv
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 inv_mk
-  条件: (f : α -> γ) (hf)
-  结论: (mk f hf : α ->ₘ[μ] γ)⁻¹ = mk f⁻¹ hf.inv
-  证明: rfl
-
-@[to_additive]
+/-
+**MeasureTheory.AEEqFun.inv_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun`
+。
+形式化陈述：inv_mk (f : α -> γ) (hf) : (mk f hf : α ->ₘ[μ] γ)⁻¹ = mk f⁻¹ hf.inv
+参数：f : α -> γ；hf。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inv_mk (f : α -> γ) (hf) : (mk f hf : α ->ₘ[μ] γ)⁻¹ = mk f⁻¹ hf.inv :=
+theorem inv_mk (f : α → γ) (hf) : (mk f hf : α →ₘ[μ] γ)⁻¹ = mk f⁻¹ hf.inv :=
   rfl
 
 @[to_additive]
-/--
-theorem `coeFn_inv` / 定理 `coeFn_inv`
-
-English:
-theorem coeFn_inv
-  given: (f : α ->ₘ[μ] γ)
-  statement: ⇑f⁻¹ =ᵐ[μ] f⁻¹
-  proof: coeFn_comp _ _ _
-
-@[to_additive]
-
-中文:
-定理 coeFn_inv
-  条件: (f : α ->ₘ[μ] γ)
-  结论: ⇑f⁻¹ =ᵐ[μ] f⁻¹
-  证明: coeFn_comp _ _ _
-
-@[to_additive]
-
-Depends on / 依赖: coeFn_comp
+/-
+**MeasureTheory.AEEqFun.coeFn_inv** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_inv (f : α ->ₘ[μ] γ) : ⇑f⁻¹ =ᵐ[μ] f⁻¹
+参数：f : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp`：coeFn_comp (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f
 -/
-theorem coeFn_inv (f : α ->ₘ[μ] γ) : ⇑f⁻¹ =ᵐ[μ] f⁻¹ :=
+theorem coeFn_inv (f : α →ₘ[μ] γ) : ⇑f⁻¹ =ᵐ[μ] f⁻¹ :=
   coeFn_comp _ _ _
 
 @[to_additive]
-/--
-theorem `inv_toGerm` / 定理 `inv_toGerm`
-
-English:
-theorem inv_toGerm
-  given: (f : α ->ₘ[μ] γ)
-  statement: f⁻¹.toGerm = f.toGerm⁻¹
-  proof: comp_toGerm _ _ _
-
-中文:
-定理 inv_toGerm
-  条件: (f : α ->ₘ[μ] γ)
-  结论: f⁻¹.toGerm = f.toGerm⁻¹
-  证明: comp_toGerm _ _ _
-
-Depends on / 依赖: comp_toGerm
+/-
+**MeasureTheory.AEEqFun.inv_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：inv_toGerm (f : α ->ₘ[μ] γ) : f⁻¹.toGerm = f.toGerm⁻¹
+参数：f : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.comp_toGerm`：comp_toGerm (g : β -> γ) (hg : Contin
+uous g) (f : α ->ₘ[μ] β) : (comp g hg f).toGerm = f.toGerm.map g
 -/
-theorem inv_toGerm (f : α ->ₘ[μ] γ) : f⁻¹.toGerm = f.toGerm⁻¹ :=
+theorem inv_toGerm (f : α →ₘ[μ] γ) : f⁻¹.toGerm = f.toGerm⁻¹ :=
   comp_toGerm _ _ _
 
 end Inv
@@ -3030,506 +2678,413 @@ end Inv
 section Div
 
 @[to_additive]
-/--
-Instance `instDiv` / 实例 `instDiv`
-
-English:
-instance instDiv
-  signature: : Div (α ->ₘ[μ] γ)
-  body: ⟨comp₂ Div.div continuous_div'⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instDiv
-  签名: : 除法 (α ->ₘ[μ] γ)
-  定义体: ⟨comp₂ Div.div continuous_div'⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Div.div, continuous_div
+/-
+**MeasureTheory.AEEqFun.instDiv** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：instDiv : Div (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instDiv : Div (α ->ₘ[μ] γ) :=
+instance instDiv : Div (α →ₘ[μ] γ) :=
   ⟨comp₂ Div.div continuous_div'⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `mk_div` / 定理 `mk_div`
-
-English:
-theorem mk_div
-  given: (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mk_div
-  条件: (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ)
-  证明: rfl
-
-@[to_additive]
+/-
+**MeasureTheory.AEEqFun.mk_div** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun`
+。
+形式化陈述：mk_div (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeas
+urable g μ) : mk (f / g) (hf.div hg) = (mk f hf : α ->ₘ[μ] γ) / mk g hg
+参数：f g : α -> γ；hf : AEStronglyMeasurable f μ；hg : AEStronglyMeasurable g μ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.div`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measur
+e α}   {f g : α → β} [inst_1…
 -/
-theorem mk_div (f g : α -> γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ) :
-    mk (f / g) (hf.div hg) = (mk f hf : α ->ₘ[μ] γ) / mk g hg :=
+theorem mk_div (f g : α → γ) (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ) :
+    mk (f / g) (hf.div hg) = (mk f hf : α →ₘ[μ] γ) / mk g hg :=
   rfl
 
 @[to_additive]
-/--
-theorem `coeFn_div` / 定理 `coeFn_div`
-
-English:
-theorem coeFn_div
-  given: (f g : α ->ₘ[μ] γ)
-  statement: ⇑(f / g) =ᵐ[μ] f / g
-  proof: coeFn_comp₂ _ _ _ _
-
-@[to_additive]
-
-中文:
-定理 coeFn_div
-  条件: (f g : α ->ₘ[μ] γ)
-  结论: ⇑(f / g) =ᵐ[μ] f / g
-  证明: coeFn_comp₂ _ _ _ _
-
-@[to_additive]
+/-
+**MeasureTheory.AEEqFun.coeFn_div** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_div (f g : α ->ₘ[μ] γ) : ⇑(f / g) =ᵐ[μ] f / g
+参数：f g : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp₂`：coeFn_comp₂ (g : β -> γ -> δ) (hg : C
+ontinuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) : comp₂ g hg f₁ f₂ =ᵐ
+[μ] fun a => g (f₁ a) (…
 -/
-theorem coeFn_div (f g : α ->ₘ[μ] γ) : ⇑(f / g) =ᵐ[μ] f / g :=
+theorem coeFn_div (f g : α →ₘ[μ] γ) : ⇑(f / g) =ᵐ[μ] f / g :=
   coeFn_comp₂ _ _ _ _
 
 @[to_additive]
-/--
-theorem `div_toGerm` / 定理 `div_toGerm`
-
-English:
-theorem div_toGerm
-  given: (f g : α ->ₘ[μ] γ)
-  statement: (f / g).toGerm = f.toGerm / g.toGerm
-  proof: comp₂_toGerm _ _ _ _
-
-中文:
-定理 div_toGerm
-  条件: (f g : α ->ₘ[μ] γ)
-  结论: (f / g).toGerm = f.toGerm / g.toGerm
-  证明: comp₂_toGerm _ _ _ _
+/-
+**MeasureTheory.AEEqFun.div_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：div_toGerm (f g : α ->ₘ[μ] γ) : (f / g).toGerm = f.toGerm / g.toGerm
+参数：f g : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.comp₂_toGerm`：comp₂_toGerm (g : β -> γ -> δ) (hg :
+ Continuous (uncurry g)) (f₁ : α ->ₘ[μ] β) (f₂ : α ->ₘ[μ] γ) : (comp₂ g hg f₁ f₂
+).toGerm = f₁.toGerm.map…
 -/
-theorem div_toGerm (f g : α ->ₘ[μ] γ) : (f / g).toGerm = f.toGerm / g.toGerm :=
+theorem div_toGerm (f g : α →ₘ[μ] γ) : (f / g).toGerm = f.toGerm / g.toGerm :=
   comp₂_toGerm _ _ _ _
 
 end Div
 
 section ZPow
 
-/--
-Instance `instPowInt` / 实例 `instPowInt`
-
-English:
-instance instPowInt
-  signature: : Pow (α ->ₘ[μ] γ) Int
-  body: ⟨fun f n => comp _ (continuous_zpow n) f⟩
-
-@[simp]
-
-中文:
-实例 instPow整数
-  签名: : 幂 (α ->ₘ[μ] γ) 整数
-  定义体: ⟨fun f n => comp _ (continuous_zpow n) f⟩
-
-@[simp]
-
-Depends on / 依赖: continuous_zpow
+/-
+**MeasureTheory.AEEqFun.instPowInt** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：instPowInt : Pow (α ->ₘ[μ] γ) Int
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_zpow`：∀ {G : Type w} [inst : TopologicalSpace G] [inst_1 : Gr
+oup G] [IsTopologicalGroup G] (z : ℤ), Continuous fun a => a ^ z
 -/
-instance instPowInt : Pow (α ->ₘ[μ] γ) Int :=
+instance instPowInt : Pow (α →ₘ[μ] γ) ℤ :=
   ⟨fun f n => comp _ (continuous_zpow n) f⟩
 
 @[simp]
-/--
-theorem `mk_zpow` / 定理 `mk_zpow`
-
-English:
-theorem mk_zpow
-  given: (f : α -> γ) (hf) (n : Int)
-  proof: rfl
-
-中文:
-定理 mk_zpow
-  条件: (f : α -> γ) (hf) (n : 整数)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.mk_zpow** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：mk_zpow (f : α -> γ) (hf) (n : Int) : (mk f hf : α ->ₘ[μ] γ) ^ n = mk (f ^
+ n) ((continuous_zpow n).comp_aestronglyMeasurable hf)
+参数：f : α -> γ；hf；n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_zpow (f : α -> γ) (hf) (n : Int) :
-    (mk f hf : α ->ₘ[μ] γ) ^ n = mk (f ^ n) ((continuous_zpow n).comp_aestronglyMeasurable hf) :=
+theorem mk_zpow (f : α → γ) (hf) (n : ℤ) :
+    (mk f hf : α →ₘ[μ] γ) ^ n = mk (f ^ n) ((continuous_zpow n).comp_aestronglyMeasurable hf) :=
   rfl
-
-/--
-theorem `coeFn_zpow` / 定理 `coeFn_zpow`
-
-English:
-theorem coeFn_zpow
-  given: (f : α ->ₘ[μ] γ) (n : Int)
-  statement: ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n
-  proof: coeFn_comp _ _ _
-
-@[simp]
-
-中文:
-定理 coeFn_zpow
-  条件: (f : α ->ₘ[μ] γ) (n : 整数)
-  结论: ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n
-  证明: coeFn_comp _ _ _
-
-@[simp]
-
-Depends on / 依赖: coeFn_comp
+/-
+**MeasureTheory.AEEqFun.coeFn_zpow** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：coeFn_zpow (f : α ->ₘ[μ] γ) (n : Int) : ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n
+参数：f : α ->ₘ[μ] γ；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp`：coeFn_comp (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f
+· 使用定理 `continuous_zpow`：∀ {G : Type w} [inst : TopologicalSpace G] [inst_1 : Gr
+oup G] [IsTopologicalGroup G] (z : ℤ), Continuous fun a => a ^ z
 -/
-theorem coeFn_zpow (f : α ->ₘ[μ] γ) (n : Int) : ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n :=
+theorem coeFn_zpow (f : α →ₘ[μ] γ) (n : ℤ) : ⇑(f ^ n) =ᵐ[μ] (⇑f) ^ n :=
   coeFn_comp _ _ _
 
 @[simp]
-/--
-theorem `zpow_toGerm` / 定理 `zpow_toGerm`
-
-English:
-theorem zpow_toGerm
-  given: (f : α ->ₘ[μ] γ) (n : Int)
-  statement: (f ^ n).toGerm = f.toGerm ^ n
-  proof: comp_toGerm _ _ _
-
-中文:
-定理 zpow_toGerm
-  条件: (f : α ->ₘ[μ] γ) (n : 整数)
-  结论: (f ^ n).toGerm = f.toGerm ^ n
-  证明: comp_toGerm _ _ _
-
-Depends on / 依赖: comp_toGerm
+/-
+**MeasureTheory.AEEqFun.zpow_toGerm** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEE
+qFun`。
+形式化陈述：zpow_toGerm (f : α ->ₘ[μ] γ) (n : Int) : (f ^ n).toGerm = f.toGerm ^ n
+参数：f : α ->ₘ[μ] γ；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.comp_toGerm`：comp_toGerm (g : β -> γ) (hg : Contin
+uous g) (f : α ->ₘ[μ] β) : (comp g hg f).toGerm = f.toGerm.map g
+· 使用定理 `continuous_zpow`：∀ {G : Type w} [inst : TopologicalSpace G] [inst_1 : Gr
+oup G] [IsTopologicalGroup G] (z : ℤ), Continuous fun a => a ^ z
 -/
-theorem zpow_toGerm (f : α ->ₘ[μ] γ) (n : Int) : (f ^ n).toGerm = f.toGerm ^ n :=
+theorem zpow_toGerm (f : α →ₘ[μ] γ) (n : ℤ) : (f ^ n).toGerm = f.toGerm ^ n :=
   comp_toGerm _ _ _
 
 end ZPow
 
 end Group
 
-/--
-Instance `instAddGroup` / 实例 `instAddGroup`
-
-English:
-instance instAddGroup
-  signature: [AddGroup γ] [IsTopologicalAddGroup γ]
-  body: toGerm_injective.addGroup toGerm zero_toGerm add_toGerm neg_toGerm sub_toGerm
-    (fun _ _ => smul_toGerm _ _) fun _ _ => smul_toGerm _ _
-
-中文:
-实例 instAddGroup
-  签名: [加法群 γ] [是拓扑加群 γ]
-  定义体: toGerm_injective.addGroup toGerm zero_toGerm add_toGerm neg_toGerm sub_toGerm
-    (fun _ _ => smul_toGerm _ _) fun _ _ => smul_toGerm _ _
-
-Depends on / 依赖: addGroup, add_toGerm, neg_toGerm, smul_toGerm, sub_toGerm, toGerm, toGerm_injective, toGerm_injective.addGroup, zero_toGerm
+/-
+**MeasureTheory.AEEqFun.instAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：instAddGroup [AddGroup γ] [IsTopologicalAddGroup γ] : AddGroup (α ->ₘ[μ] γ
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
+· 使用定理 `MeasureTheory.AEEqFun.neg_toGerm`：∀ {α : Type u_1} {γ : Type u_3} [inst 
+: MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : TopologicalSpace γ]
+   [inst_2 : AddGroup …
+· 使用定理 `MeasureTheory.AEEqFun.sub_toGerm`：∀ {α : Type u_1} {γ : Type u_3} [inst 
+: MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : TopologicalSpace γ]
+   [inst_2 : AddGroup …
 -/
-instance instAddGroup [AddGroup γ] [IsTopologicalAddGroup γ] : AddGroup (α ->ₘ[μ] γ) :=
+instance instAddGroup [AddGroup γ] [IsTopologicalAddGroup γ] : AddGroup (α →ₘ[μ] γ) :=
   toGerm_injective.addGroup toGerm zero_toGerm add_toGerm neg_toGerm sub_toGerm
     (fun _ _ => smul_toGerm _ _) fun _ _ => smul_toGerm _ _
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup γ] [IsTopologicalAddGroup γ]
-  body: { add_comm := add_comm }
-
-@[to_additive existing]
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 γ] [是拓扑加群 γ]
-  定义体: { add_comm := add_comm }
-
-@[to_additive existing]
-
-Depends on / 依赖: add_comm
+/-
+**MeasureTheory.AEEqFun.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheor
+y.AEEqFun`。
+形式化陈述：instAddCommGroup [AddCommGroup γ] [IsTopologicalAddGroup γ] : AddCommGroup
+ (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddCommGroup [AddCommGroup γ] [IsTopologicalAddGroup γ] : AddCommGroup (α ->ₘ[μ] γ) :=
+instance instAddCommGroup [AddCommGroup γ] [IsTopologicalAddGroup γ] : AddCommGroup (α →ₘ[μ] γ) :=
   { add_comm := add_comm }
 
 @[to_additive existing]
-/--
-Instance `instGroup` / 实例 `instGroup`
-
-English:
-instance instGroup
-  signature: [Group γ] [IsTopologicalGroup γ]
-  body: toGerm_injective.group _ one_toGerm mul_toGerm inv_toGerm div_toGerm pow_toGerm zpow_toGerm
-
-@[to_additive existing]
-
-中文:
-实例 instGroup
-  签名: [群 γ] [是拓扑群 γ]
-  定义体: toGerm_injective.group _ one_toGerm mul_toGerm inv_toGerm div_toGerm pow_toGerm zpow_toGerm
-
-@[to_additive existing]
-
-Depends on / 依赖: div_toGerm, inv_toGerm, mul_toGerm, one_toGerm, pow_toGerm, toGerm_injective, toGerm_injective.group, zpow_toGerm
+/-
+**MeasureTheory.AEEqFun.instGroup** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：instGroup [Group γ] [IsTopologicalGroup γ] : Group (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
+· 使用定理 `MeasureTheory.AEEqFun.inv_toGerm`：inv_toGerm (f : α ->ₘ[μ] γ) : f⁻¹.toGe
+rm = f.toGerm⁻¹
+· 使用定理 `MeasureTheory.AEEqFun.div_toGerm`：div_toGerm (f g : α ->ₘ[μ] γ) : (f / g
+).toGerm = f.toGerm / g.toGerm
+· 使用定理 `MeasureTheory.AEEqFun.zpow_toGerm`：zpow_toGerm (f : α ->ₘ[μ] γ) (n : Int
+) : (f ^ n).toGerm = f.toGerm ^ n
 -/
-instance instGroup [Group γ] [IsTopologicalGroup γ] : Group (α ->ₘ[μ] γ) :=
+instance instGroup [Group γ] [IsTopologicalGroup γ] : Group (α →ₘ[μ] γ) :=
   toGerm_injective.group _ one_toGerm mul_toGerm inv_toGerm div_toGerm pow_toGerm zpow_toGerm
 
 @[to_additive existing]
-/--
-Instance `instCommGroup` / 实例 `instCommGroup`
-
-English:
-instance instCommGroup
-  signature: [CommGroup γ] [IsTopologicalGroup γ]
-  body: { mul_comm := mul_comm }
-
-中文:
-实例 instCommGroup
-  签名: [交换群 γ] [是拓扑群 γ]
-  定义体: { mul_comm := mul_comm }
-
-Depends on / 依赖: mul_comm
+/-
+**MeasureTheory.AEEqFun.instCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：instCommGroup [CommGroup γ] [IsTopologicalGroup γ] : CommGroup (α ->ₘ[μ] γ
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCommGroup [CommGroup γ] [IsTopologicalGroup γ] : CommGroup (α ->ₘ[μ] γ) :=
+instance instCommGroup [CommGroup γ] [IsTopologicalGroup γ] : CommGroup (α →ₘ[μ] γ) :=
   { mul_comm := mul_comm }
 
 section Module
 
 variable {𝕜 : Type*}
 
-/--
-Instance `instMulAction` / 实例 `instMulAction`
-
-English:
-instance instMulAction
-  signature: [Monoid 𝕜] [MulAction 𝕜 γ] [ContinuousConstSMul 𝕜 γ]
-  body: toGerm_injective.mulAction toGerm smul_toGerm
-
-中文:
-实例 instMulAction
-  签名: [幺半群 𝕜] [乘法作用 𝕜 γ] [连续常数标量乘法 𝕜 γ]
-  定义体: toGerm_injective.mulAction toGerm smul_toGerm
-
-Depends on / 依赖: mulAction, smul_toGerm, toGerm, toGerm_injective, toGerm_injective.mulAction
+/-
+**MeasureTheory.AEEqFun.instMulAction** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：instMulAction [Monoid 𝕜] [MulAction 𝕜 γ] [ContinuousConstSMul 𝕜 γ] : MulAc
+tion 𝕜 (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
 -/
 instance instMulAction [Monoid 𝕜] [MulAction 𝕜 γ] [ContinuousConstSMul 𝕜 γ] :
-    MulAction 𝕜 (α ->ₘ[μ] γ) :=
+    MulAction 𝕜 (α →ₘ[μ] γ) :=
   toGerm_injective.mulAction toGerm smul_toGerm
-
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [Monoid 𝕜] [AddMonoid γ] [ContinuousAdd γ] [DistribMulAction 𝕜 γ]
-  body: toGerm_injective.distribMulAction (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) fun c : 𝕜 =>
-    smul_toGerm c
-
-中文:
-实例 instDistribMulAction
-  签名: [幺半群 𝕜] [加法幺半群 γ] [连续加法 γ] [分配乘法作用 𝕜 γ]
-  定义体: toGerm_injective.distribMulAction (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) fun c : 𝕜 =>
-    smul_toGerm c
-
-Depends on / 依赖: distribMulAction, smul_toGerm, toGermAddMonoidHom, toGerm_injective, toGerm_injective.distribMulAction
+/-
+**MeasureTheory.AEEqFun.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `MeasureT
+heory.AEEqFun`。
+形式化陈述：instDistribMulAction [Monoid 𝕜] [AddMonoid γ] [ContinuousAdd γ] [DistribMu
+lAction 𝕜 γ] [ContinuousConstSMul 𝕜 γ] : DistribMulAction 𝕜 (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
 -/
 instance instDistribMulAction [Monoid 𝕜] [AddMonoid γ] [ContinuousAdd γ] [DistribMulAction 𝕜 γ]
-    [ContinuousConstSMul 𝕜 γ] : DistribMulAction 𝕜 (α ->ₘ[μ] γ) :=
-  toGerm_injective.distribMulAction (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) fun c : 𝕜 =>
+    [ContinuousConstSMul 𝕜 γ] : DistribMulAction 𝕜 (α →ₘ[μ] γ) :=
+  toGerm_injective.distribMulAction (toGermAddMonoidHom : (α →ₘ[μ] γ) →+ _) fun c : 𝕜 =>
     smul_toGerm c
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [Semiring 𝕜] [AddCommMonoid γ] [ContinuousAdd γ] [Module 𝕜 γ]
-  body: toGerm_injective.module 𝕜 (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) smul_toGerm
-
-中文:
-实例 instModule
-  签名: [半环 𝕜] [加法交换幺半群 γ] [连续加法 γ] [模 𝕜 γ]
-  定义体: toGerm_injective.module 𝕜 (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) smul_toGerm
-
-Depends on / 依赖: module, smul_toGerm, toGermAddMonoidHom, toGerm_injective, toGerm_injective.module
+/-
+**MeasureTheory.AEEqFun.instModule** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：instModule [Semiring 𝕜] [AddCommMonoid γ] [ContinuousAdd γ] [Module 𝕜 γ] [
+ContinuousConstSMul 𝕜 γ] : Module 𝕜 (α ->ₘ[μ] γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.AEEqFun.toGerm_injective`：toGerm_injective : Injective (to
+Germ : (α ->ₘ[μ] β) -> Germ (ae μ) β)
 -/
 instance instModule [Semiring 𝕜] [AddCommMonoid γ] [ContinuousAdd γ] [Module 𝕜 γ]
-    [ContinuousConstSMul 𝕜 γ] : Module 𝕜 (α ->ₘ[μ] γ) :=
-  toGerm_injective.module 𝕜 (toGermAddMonoidHom : (α ->ₘ[μ] γ) ->+ _) smul_toGerm
+    [ContinuousConstSMul 𝕜 γ] : Module 𝕜 (α →ₘ[μ] γ) :=
+  toGerm_injective.module 𝕜 (toGermAddMonoidHom : (α →ₘ[μ] γ) →+ _) smul_toGerm
 
 end Module
 
 open ENNReal
 
-/--
-Definition of `lintegral` / `lintegral` 的定义
+/-- For `f : α → ℝ≥0∞`, define `∫ [f]` to be `∫ f` -/
+/-
+**MeasureTheory.AEEqFun.lintegral** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：lintegral (f : α ->ₘ[μ] Real>=0∞) : Real>=0∞
+参数：f : α ->ₘ[μ] Real>=0∞。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lintegral
-  signature: (f : α ->ₘ[μ] Real>=0∞)
-  body: Quotient.liftOn' f (fun f => ∫⁻ a, (f : α -> Real>=0∞) a ∂μ) fun _ _ => lintegral_congr_ae
-
-@[simp]
-
-中文:
-定义 lintegral
-  签名: (f : α ->ₘ[μ] 实数>=0∞)
-  定义体: Quotient.liftOn' f (fun f => ∫⁻ a, (f : α -> Real>=0∞) a ∂μ) fun _ _ => lintegral_congr_ae
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.liftOn, liftOn, lintegral_congr_ae
+--- 原说明 ---
+For `f : α → ℝ≥0∞`, define `∫ [f]` to be `∫ f`
 -/
-def lintegral (f : α ->ₘ[μ] Real>=0∞) : Real>=0∞ :=
-  Quotient.liftOn' f (fun f => ∫⁻ a, (f : α -> Real>=0∞) a ∂μ) fun _ _ => lintegral_congr_ae
+def lintegral (f : α →ₘ[μ] ℝ≥0∞) : ℝ≥0∞ :=
+  Quotient.liftOn' f (fun f => ∫⁻ a, (f : α → ℝ≥0∞) a ∂μ) fun _ _ => lintegral_congr_ae
 
 @[simp]
-/--
-theorem `lintegral_mk` / 定理 `lintegral_mk`
-
-English:
-theorem lintegral_mk
-  given: (f : α -> Real>=0∞) (hf)
-  statement: (mk f hf : α ->ₘ[μ] Real>=0∞).lintegral = ∫⁻ a, f a ∂μ
-  proof: rfl
-
-中文:
-定理 lintegral_mk
-  条件: (f : α -> 实数>=0∞) (hf)
-  结论: (mk f hf : α ->ₘ[μ] 实数>=0∞).lintegral = ∫⁻ a, f a ∂μ
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.lintegral_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AE
+EqFun`。
+形式化陈述：lintegral_mk (f : α -> Real>=0∞) (hf) : (mk f hf : α ->ₘ[μ] Real>=0∞).lint
+egral = ∫⁻ a, f a ∂μ
+参数：f : α -> Real>=0∞；hf。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lintegral_mk (f : α -> Real>=0∞) (hf) : (mk f hf : α ->ₘ[μ] Real>=0∞).lintegral = ∫⁻ a, f a ∂μ :=
+theorem lintegral_mk (f : α → ℝ≥0∞) (hf) : (mk f hf : α →ₘ[μ] ℝ≥0∞).lintegral = ∫⁻ a, f a ∂μ :=
   rfl
-
-/--
-theorem `lintegral_coeFn` / 定理 `lintegral_coeFn`
-
-English:
-theorem lintegral_coeFn
-  given: (f : α ->ₘ[μ] Real>=0∞)
-  statement: ∫⁻ a, f a ∂μ = f.lintegral
-  proof: by
-  rw [← lintegral_mk (hf := f.aestronglyMeasurable)]; rw [mk_coeFn]
-
-@[simp]
-nonrec theorem lintegral_zero : lintegral (0 : α ->ₘ[μ] Real>=0∞) = 0 :=
-  lintegral_zero
-
-@[simp]
-
-中文:
-定理 lintegral_coeFn
-  条件: (f : α ->ₘ[μ] 实数>=0∞)
-  结论: ∫⁻ a, f a ∂μ = f.lintegral
-  证明: by
-  rw [← lintegral_mk (hf := f.aestronglyMeasurable)]; rw [mk_coeFn]
-
-@[simp]
-nonrec theorem lintegral_zero : lintegral (0 : α ->ₘ[μ] Real>=0∞) = 0 :=
-  lintegral_zero
-
-@[simp]
-
-Depends on / 依赖: aestronglyMeasurable, f.aestronglyMeasurable, lintegral_mk, mk_coeFn
+/-
+**MeasureTheory.AEEqFun.lintegral_coeFn** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.AEEqFun`。
+形式化陈述：lintegral_coeFn (f : α ->ₘ[μ] Real>=0∞) : ∫⁻ a, f a ∂μ = f.lintegral
+参数：f : α ->ₘ[μ] Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u
+_2} [inst : MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : Topologic
+alSpace β]   (f : α →ₘ[μ] β), Me…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.AEEqFun.lintegral_mk`：lintegral_mk (f : α -> Real>=0∞) (hf
+) : (mk f hf : α ->ₘ[μ] Real>=0∞).lintegral = ∫⁻ a, f a ∂μ
+· 使用定理 `MeasureTheory.AEEqFun.mk_coeFn`：mk_coeFn (f : α ->ₘ[μ] β) : mk f f.aestr
+onglyMeasurable = f
 -/
-theorem lintegral_coeFn (f : α ->ₘ[μ] Real>=0∞) : ∫⁻ a, f a ∂μ = f.lintegral := by
-  rw [← lintegral_mk (hf := f.aestronglyMeasurable)]; rw [mk_coeFn]
+theorem lintegral_coeFn (f : α →ₘ[μ] ℝ≥0∞) : ∫⁻ a, f a ∂μ = f.lintegral := by
+  rw [← lintegral_mk (hf := f.aestronglyMeasurable), mk_coeFn]
 
 @[simp]
-nonrec theorem lintegral_zero : lintegral (0 : α ->ₘ[μ] Real>=0∞) = 0 :=
+nonrec theorem lintegral_zero : lintegral (0 : α →ₘ[μ] ℝ≥0∞) = 0 :=
   lintegral_zero
 
 @[simp]
-/--
-theorem `lintegral_eq_zero_iff` / 定理 `lintegral_eq_zero_iff`
-
-English:
-theorem lintegral_eq_zero_iff
-  given: {f : α ->ₘ[μ] Real>=0∞}
-  statement: lintegral f = 0 ↔ f = 0
-  proof: induction_on f fun _f hf => (lintegral_eq_zero_iff' hf.aemeasurable).trans mk_eq_mk.symm
-
-中文:
-定理 lintegral_eq_zero_iff
-  条件: {f : α ->ₘ[μ] 实数>=0∞}
-  结论: lintegral f = 0 ↔ f = 0
-  证明: induction_on f fun _f hf => (lintegral_eq_zero_iff' hf.aemeasurable).trans mk_eq_mk.symm
-
-Depends on / 依赖: aemeasurable, hf.aemeasurable, induction_on, lintegral_eq_zero_iff, mk_eq_mk, mk_eq_mk.symm
+/-
+**MeasureTheory.AEEqFun.lintegral_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.AEEqFun`。
+形式化陈述：lintegral_eq_zero_iff {f : α ->ₘ[μ] Real>=0∞} : lintegral f = 0 ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on`：induction_on (f : α ->ₘ[μ] β) {p : (
+α ->ₘ[μ] β) -> Prop} (H : forall f hf, p (mk f hf)) : p f
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.lintegral_eq_zero_iff'`：lintegral_eq_zero_iff' {f : α -> R
+eal>=0∞} (hf : AEMeasurable f μ) : ∫⁻ a, f a ∂μ = 0 ↔ f =ᵐ[μ] 0
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.aemeasurable`：∀ {α : Type u_1} {m₀ : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} {β : Type u_5} [inst : Measurab
+leSpace β]   [inst_1 : TopologicalSpa…
+· 使用定理 `TopologicalSpace.MetrizableSpace.toPseudoMetrizableSpace`：∀ {X : Type u_
+5} {t : TopologicalSpace X} [self : TopologicalSpace.MetrizableSpace X],   Topol
+ogicalSpace.PseudoMetrizableSpace X
+· 使用定理 `ENNReal.instMetrizableSpace`：TopologicalSpace.MetrizableSpace ENNReal
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `MeasureTheory.aestronglyMeasurable_const`：aestronglyMeasurable_const {b 
+: β} : AEStronglyMeasurable[m] (fun _ : α => b) μ
+· 使用定理 `MeasureTheory.AEEqFun.mk_eq_mk`：mk_eq_mk {f g : α -> β} {hf hg} : (mk f 
+hf : α ->ₘ[μ] β) = mk g hg ↔ f =ᵐ[μ] g
 -/
-theorem lintegral_eq_zero_iff {f : α ->ₘ[μ] Real>=0∞} : lintegral f = 0 ↔ f = 0 :=
+theorem lintegral_eq_zero_iff {f : α →ₘ[μ] ℝ≥0∞} : lintegral f = 0 ↔ f = 0 :=
   induction_on f fun _f hf => (lintegral_eq_zero_iff' hf.aemeasurable).trans mk_eq_mk.symm
-
-/--
-theorem `lintegral_add` / 定理 `lintegral_add`
-
-English:
-theorem lintegral_add
-  given: (f g : α ->ₘ[μ] Real>=0∞)
-  statement: lintegral (f + g) = lintegral f + lintegral g
-  proof: induction_on₂ f g fun f hf g _ => by simp [lintegral_add_left' hf.aemeasurable]
-
-中文:
-定理 lintegral_add
-  条件: (f g : α ->ₘ[μ] 实数>=0∞)
-  结论: lintegral (f + g) = lintegral f + lintegral g
-  证明: induction_on₂ f g fun f hf g _ => by simp [lintegral_add_left' hf.aemeasurable]
-
-Depends on / 依赖: aemeasurable, hf.aemeasurable, lintegral_add_left
+/-
+**MeasureTheory.AEEqFun.lintegral_add** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：lintegral_add (f g : α ->ₘ[μ] Real>=0∞) : lintegral (f + g) = lintegral f 
++ lintegral g
+参数：f g : α ->ₘ[μ] Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on₂`：induction_on₂ {α' β' : Type*} [Meas
+urableSpace α'] [TopologicalSpace β'] {μ' : Measure α'} (f : α ->ₘ[μ] β) (f' : α
+' ->ₘ[μ'] β') {p : (α ->ₘ…
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.lintegral_add_left'`：lintegral_add_left' {f : α -> Real>=0
+∞} (hf : AEMeasurable f μ) (g : α -> Real>=0∞) : ∫⁻ a, f a + g a ∂μ = ∫⁻ a, f a 
+∂μ + ∫⁻ a, g a ∂μ
+· 使用定理 `MeasureTheory.AEStronglyMeasurable.aemeasurable`：∀ {α : Type u_1} {m₀ : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} {β : Type u_5} [inst : Measurab
+leSpace β]   [inst_1 : TopologicalSpa…
+· 使用定理 `TopologicalSpace.MetrizableSpace.toPseudoMetrizableSpace`：∀ {X : Type u_
+5} {t : TopologicalSpace X} [self : TopologicalSpace.MetrizableSpace X],   Topol
+ogicalSpace.PseudoMetrizableSpace X
+· 使用定理 `ENNReal.instMetrizableSpace`：TopologicalSpace.MetrizableSpace ENNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lintegral_add (f g : α ->ₘ[μ] Real>=0∞) : lintegral (f + g) = lintegral f + lintegral g :=
+theorem lintegral_add (f g : α →ₘ[μ] ℝ≥0∞) : lintegral (f + g) = lintegral f + lintegral g :=
   induction_on₂ f g fun f hf g _ => by simp [lintegral_add_left' hf.aemeasurable]
-
-/--
-theorem `lintegral_mono` / 定理 `lintegral_mono`
-
-English:
-theorem lintegral_mono
-  given: {f g : α ->ₘ[μ] Real>=0∞}
-  statement: f <= g -> lintegral f <= lintegral g
-  proof: induction_on₂ f g fun _f _ _g _ hfg => lintegral_mono_ae hfg
-
-中文:
-定理 lintegral_mono
-  条件: {f g : α ->ₘ[μ] 实数>=0∞}
-  结论: f <= g -> lintegral f <= lintegral g
-  证明: induction_on₂ f g fun _f _ _g _ hfg => lintegral_mono_ae hfg
-
-Depends on / 依赖: lintegral_mono_ae
+/-
+**MeasureTheory.AEEqFun.lintegral_mono** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+AEEqFun`。
+形式化陈述：lintegral_mono {f g : α ->ₘ[μ] Real>=0∞} : f <= g -> lintegral f <= linteg
+ral g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.induction_on₂`：induction_on₂ {α' β' : Type*} [Meas
+urableSpace α'] [TopologicalSpace β'] {μ' : Measure α'} (f : α ->ₘ[μ] β) (f' : α
+' ->ₘ[μ'] β') {p : (α ->ₘ…
+· 使用定理 `MeasureTheory.lintegral_mono_ae`：lintegral_mono_ae {f g : α -> Real>=0∞}
+ (h : forallᵐ a ∂μ, f a <= g a) : ∫⁻ a, f a ∂μ <= ∫⁻ a, g a ∂μ
 -/
-theorem lintegral_mono {f g : α ->ₘ[μ] Real>=0∞} : f <= g -> lintegral f <= lintegral g :=
+theorem lintegral_mono {f g : α →ₘ[μ] ℝ≥0∞} : f ≤ g → lintegral f ≤ lintegral g :=
   induction_on₂ f g fun _f _ _g _ hfg => lintegral_mono_ae hfg
 
 section Abs
 
-/--
-theorem `coeFn_abs` / 定理 `coeFn_abs`
-
-English:
-theorem coeFn_abs
-  statement: {β} [TopologicalSpace β] [Lattice β] [TopologicalLattice β] [AddGroup β]
-  proof: by
-  simp_rw [abs]
-  filter_upwards [AEEqFun.coeFn_sup f (-f), AEEqFun.coeFn_neg f] with x hx_sup hx_neg
-  rw [hx_sup]; rw [hx_neg]; rw [Pi.neg_apply]
-
-中文:
-定理 coeFn_abs
-  结论: {β} [拓扑空间 β] [格 β] [拓扑格 β] [加法群 β]
-  证明: by
-  simp_rw [abs]
-  filter_upwards [AEEqFun.coeFn_sup f (-f), AEEqFun.coeFn_neg f] with x hx_sup hx_neg
-  rw [hx_sup]; rw [hx_neg]; rw [Pi.neg_apply]
-
-Depends on / 依赖: AEEqFun, AEEqFun.coeFn_neg, AEEqFun.coeFn_sup, Pi.neg_apply, coeFn_neg, coeFn_sup, filter_upwards, hx_neg, hx_sup, neg_apply, simp_rw
+/-
+**MeasureTheory.AEEqFun.coeFn_abs** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEqF
+un`。
+形式化陈述：coeFn_abs {β} [TopologicalSpace β] [Lattice β] [TopologicalLattice β] [Add
+Group β] [IsTopologicalAddGroup β] (f : α ->ₘ[μ] β) : ⇑|f| =ᵐ[μ] fun x => |f x|
+参数：f : α ->ₘ[μ] β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_neg`：∀ {α : Type u_1} {γ : Type u_3} [inst :
+ MeasurableSpace α] {μ : MeasureTheory.Measure α} [inst_1 : TopologicalSpace γ] 
+  [inst_2 : AddGroup …
+· 使用定理 `TopologicalLattice.toContinuousSup`：∀ {L : Type u_1} {inst : Topological
+Space L} {inst_1 : Lattice L} [self : TopologicalLattice L], ContinuousSup L
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_sup`：coeFn_sup (f g : α ->ₘ[μ] β) : ⇑(f ⊔ g)
+ =ᵐ[μ] fun x => f x ⊔ g x
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.neg_apply`：∀ {ι : Type u_1} {G : ι → Type u_4} [inst : (i : ι) → Neg 
+(G i)] (f : (i : ι) → G i) (i : ι), (-f) i = -f i
 -/
 theorem coeFn_abs {β} [TopologicalSpace β] [Lattice β] [TopologicalLattice β] [AddGroup β]
-    [IsTopologicalAddGroup β] (f : α ->ₘ[μ] β) : ⇑|f| =ᵐ[μ] fun x => |f x| := by
+    [IsTopologicalAddGroup β] (f : α →ₘ[μ] β) : ⇑|f| =ᵐ[μ] fun x => |f x| := by
   simp_rw [abs]
   filter_upwards [AEEqFun.coeFn_sup f (-f), AEEqFun.coeFn_neg f] with x hx_sup hx_neg
-  rw [hx_sup]; rw [hx_neg]; rw [Pi.neg_apply]
+  rw [hx_sup, hx_neg, Pi.neg_apply]
 
 end Abs
 
@@ -3537,78 +3092,38 @@ section Star
 
 variable {R : Type*} [TopologicalSpace R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Star
-  signature: R] [ContinuousStar R] : Star (α ->ₘ[μ] R) where
-  body: (AEEqFun.comp _ continuous_star f)
-
-中文:
-实例 [对合
-  签名: R] [余ntinuousStar R] : 对合 (α ->ₘ[μ] R) where
-  定义体: (AEEqFun.comp _ continuous_star f)
-
-Depends on / 依赖: AEEqFun, AEEqFun.comp, continuous_star
+/-
+**MeasureTheory.AEEqFun.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Star R] [ContinuousStar R] : Star (α ->ₘ[μ] R) where
+instance [Star R] [ContinuousStar R] : Star (α →ₘ[μ] R) where
   star f := (AEEqFun.comp _ continuous_star f)
-
-/--
-lemma `coeFn_star` / 引理 `coeFn_star`
-
-English:
-lemma coeFn_star
-  given: [Star R] [ContinuousStar R] (f : α ->ₘ[μ] R)
-  statement: ↑(star f) =ᵐ[μ] (star f : α -> R)
-  proof: coeFn_comp _ (continuous_star) f
-
-中文:
-引理 coeFn_star
-  条件: [对合 R] [余ntinuousStar R] (f : α ->ₘ[μ] R)
-  结论: ↑(star f) =ᵐ[μ] (star f : α -> R)
-  证明: coeFn_comp _ (continuous_star) f
-
-Depends on / 依赖: coeFn_comp, continuous_star
+/-
+**MeasureTheory.AEEqFun.coeFn_star** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：coeFn_star [Star R] [ContinuousStar R] (f : α ->ₘ[μ] R) : ↑(star f) =ᵐ[μ] 
+(star f : α -> R)
+参数：f : α ->ₘ[μ] R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp`：coeFn_comp (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f
+· 使用定理 `ContinuousStar.continuous_star`：∀ {R : Type u_1} {inst : TopologicalSpac
+e R} {inst_1 : Star R} [self : ContinuousStar R], Continuous star
 -/
-lemma coeFn_star [Star R] [ContinuousStar R] (f : α ->ₘ[μ] R) : ↑(star f) =ᵐ[μ] (star f : α -> R) :=
+lemma coeFn_star [Star R] [ContinuousStar R] (f : α →ₘ[μ] R) : ↑(star f) =ᵐ[μ] (star f : α → R) :=
   coeFn_comp _ (continuous_star) f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [InvolutiveStar
-  signature: R] [ContinuousStar R] : InvolutiveStar (α ->ₘ[μ] R) where
-  body: comp_comp _ _ _ _ f
-
-中文:
-实例 [InvolutiveStar
-  签名: R] [余ntinuousStar R] : InvolutiveStar (α ->ₘ[μ] R) where
-  定义体: comp_comp _ _ _ _ f
-
-Depends on / 依赖: comp_comp
+/-
+**MeasureTheory.AEEqFun.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [InvolutiveStar R] [ContinuousStar R] : InvolutiveStar (α ->ₘ[μ] R) where
-.trans by simp [star_involutive.comp_self] star_involutive f := comp_comp _ _ _ _ f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Star
-  signature: R] [TrivialStar R] [ContinuousStar R] : TrivialStar (α ->ₘ[μ] R) where
-  body: show comp _ _ f = f by simp [funext star_trivial, ← Function.id_def]
-
-中文:
-实例 [对合
-  签名: R] [TrivialStar R] [余ntinuousStar R] : TrivialStar (α ->ₘ[μ] R) where
-  定义体: show comp _ _ f = f by simp [funext star_trivial, ← Function.id_def]
-
-Depends on / 依赖: Function, Function.id_def, id_def, star_trivial
+instance [InvolutiveStar R] [ContinuousStar R] : InvolutiveStar (α →ₘ[μ] R) where
+  star_involutive f := comp_comp _ _ _ _ f |>.trans <| by simp [star_involutive.comp_self]
+/-
+**MeasureTheory.AEEqFun.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.AEEqFun`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Star R] [TrivialStar R] [ContinuousStar R] : TrivialStar (α ->ₘ[μ] R) where
+instance [Star R] [TrivialStar R] [ContinuousStar R] : TrivialStar (α →ₘ[μ] R) where
   star_trivial f := show comp _ _ f = f by simp [funext star_trivial, ← Function.id_def]
 
 end Star
@@ -3617,91 +3132,78 @@ section PosPart
 
 variable [LinearOrder γ] [OrderClosedTopology γ] [Zero γ]
 
-/--
-Definition of `posPart` / `posPart` 的定义
+/-- Positive part of an `AEEqFun`. -/
+/-
+**MeasureTheory.AEEqFun.posPart** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.AEEqFun
+`。
+形式化陈述：posPart (f : α ->ₘ[μ] γ) : α ->ₘ[μ] γ
+参数：f : α ->ₘ[μ] γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition posPart
-  signature: (f : α ->ₘ[μ] γ)
-  body: comp (fun x => max x 0) (by fun_prop) f
-
-@[simp]
-
-中文:
-定义 posPart
-  签名: (f : α ->ₘ[μ] γ)
-  定义体: comp (fun x => max x 0) (by fun_prop) f
-
-@[simp]
-
-Depends on / 依赖: fun_prop
+--- 原说明 ---
+Positive part of an `AEEqFun`.
 -/
-def posPart (f : α ->ₘ[μ] γ) : α ->ₘ[μ] γ :=
+def posPart (f : α →ₘ[μ] γ) : α →ₘ[μ] γ :=
   comp (fun x => max x 0) (by fun_prop) f
 
 @[simp]
-/--
-theorem `posPart_mk` / 定理 `posPart_mk`
-
-English:
-theorem posPart_mk
-  given: (f : α -> γ) (hf)
-  proof: rfl
-
-中文:
-定理 posPart_mk
-  条件: (f : α -> γ) (hf)
-  证明: rfl
+/-
+**MeasureTheory.AEEqFun.posPart_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.AEEq
+Fun`。
+形式化陈述：posPart_mk (f : α -> γ) (hf) : posPart (mk f hf : α ->ₘ[μ] γ) = mk (fun x 
+=> max (f x) 0) (by fun_prop)
+参数：f : α -> γ；hf。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem posPart_mk (f : α -> γ) (hf) :
-    posPart (mk f hf : α ->ₘ[μ] γ) = mk (fun x => max (f x) 0) (by fun_prop) :=
+theorem posPart_mk (f : α → γ) (hf) :
+    posPart (mk f hf : α →ₘ[μ] γ) = mk (fun x ↦ max (f x) 0) (by fun_prop) :=
   rfl
-
-/--
-theorem `coeFn_posPart` / 定理 `coeFn_posPart`
-
-English:
-theorem coeFn_posPart
-  given: (f : α ->ₘ[μ] γ)
-  statement: ⇑(posPart f) =ᵐ[μ] fun a => max (f a) 0
-  proof: coeFn_comp _ _ _
-
-中文:
-定理 coeFn_posPart
-  条件: (f : α ->ₘ[μ] γ)
-  结论: ⇑(posPart f) =ᵐ[μ] fun a => 最大值 (f a) 0
-  证明: coeFn_comp _ _ _
-
-Depends on / 依赖: coeFn_comp
+/-
+**MeasureTheory.AEEqFun.coeFn_posPart** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.A
+EEqFun`。
+形式化陈述：coeFn_posPart (f : α ->ₘ[μ] γ) : ⇑(posPart f) =ᵐ[μ] fun a => max (f a) 0
+参数：f : α ->ₘ[μ] γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_comp`：coeFn_comp (g : β -> γ) (hg : Continuo
+us g) (f : α ->ₘ[μ] β) : comp g hg f =ᵐ[μ] g ∘ f
 -/
-theorem coeFn_posPart (f : α ->ₘ[μ] γ) : ⇑(posPart f) =ᵐ[μ] fun a => max (f a) 0 :=
+theorem coeFn_posPart (f : α →ₘ[μ] γ) : ⇑(posPart f) =ᵐ[μ] fun a => max (f a) 0 :=
   coeFn_comp _ _ _
 
 end PosPart
 
 section AELimit
 
-/--
-theorem `tendsto_ae_unique` / 定理 `tendsto_ae_unique`
+/-- The ae-limit is ae-unique. -/
+/-
+**MeasureTheory.AEEqFun.tendsto_ae_unique** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.AEEqFun`。
+形式化陈述：tendsto_ae_unique {ι : Type*} [T2Space β] {g h : α -> β} {f : ι -> α -> β}
+ {l : Filter ι} [l.NeBot] (hg : forallᵐ ω ∂μ, Tendsto (fun i => f i ω) l (𝓝 (g ω
+))) (hh : forallᵐ ω ∂μ, Tendsto (fun i => f i ω) l (𝓝 (h ω))) : g =ᵐ[μ] h
+参数：hg : forallᵐ ω ∂μ, Tendsto (fun i => f i ω) l (𝓝 (g ω))；hh : forallᵐ ω ∂μ, Te
+ndsto (fun i => f i ω) l (𝓝 (h ω))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `tendsto_nhds_unique`：tendsto_nhds_unique [T2Space X] {f : Y -> X} {l : F
+ilter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝 b)) :
+ a = b
 
-English:
-theorem tendsto_ae_unique
-  statement: {ι : Type*} [T2Space β]
-  proof: by
-  filter_upwards [hg, hh] with ω hg1 hh1 using tendsto_nhds_unique hg1 hh1
-
-中文:
-定理 tendsto_ae_unique
-  结论: {ι : 类型} [T2空间 β]
-  证明: by
-  filter_upwards [hg, hh] with ω hg1 hh1 using tendsto_nhds_unique hg1 hh1
-
-Depends on / 依赖: filter_upwards, tendsto_nhds_unique
+--- 原说明 ---
+The ae-limit is ae-unique.
 -/
 theorem tendsto_ae_unique {ι : Type*} [T2Space β]
-    {g h : α -> β} {f : ι -> α -> β} {l : Filter ι} [l.NeBot]
-    (hg : forallᵐ ω ∂μ, Tendsto (fun i => f i ω) l (𝓝 (g ω)))
-    (hh : forallᵐ ω ∂μ, Tendsto (fun i => f i ω) l (𝓝 (h ω))) : g =ᵐ[μ] h := by
+    {g h : α → β} {f : ι → α → β} {l : Filter ι} [l.NeBot]
+    (hg : ∀ᵐ ω ∂μ, Tendsto (fun i => f i ω) l (𝓝 (g ω)))
+    (hh : ∀ᵐ ω ∂μ, Tendsto (fun i => f i ω) l (𝓝 (h ω))) : g =ᵐ[μ] h := by
   filter_upwards [hg, hh] with ω hg1 hh1 using tendsto_nhds_unique hg1 hh1
 
 end AELimit
@@ -3717,40 +3219,30 @@ open MeasureTheory
 variable [TopologicalSpace α] [BorelSpace α] (μ)
 variable [TopologicalSpace β] [SecondCountableTopologyEither α β] [PseudoMetrizableSpace β]
 
-/--
-Definition of `toAEEqFun` / `toAEEqFun` 的定义
+/-- The equivalence class of `μ`-almost-everywhere measurable functions associated to a continuous
+map. -/
+/-
+**ContinuousMap.toAEEqFun** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：toAEEqFun (f : C(α, β)) : α ->ₘ[μ] β
+参数：f : C(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAEEqFun
-  signature: (f : C(α, β))
-  body: AEEqFun.mk f f.continuous.aestronglyMeasurable
-
-中文:
-定义 toAEEqFun
-  签名: (f : C(α, β))
-  定义体: AEEqFun.mk f f.continuous.aestronglyMeasurable
-
-Depends on / 依赖: AEEqFun, AEEqFun.mk, aestronglyMeasurable, continuous, f.continuous.aestronglyMeasurable
+--- 原说明 ---
+The equivalence class of `μ`-almost-everywhere measurable functions associated t
+o a continuous
+map.
 -/
-def toAEEqFun (f : C(α, β)) : α ->ₘ[μ] β :=
+def toAEEqFun (f : C(α, β)) : α →ₘ[μ] β :=
   AEEqFun.mk f f.continuous.aestronglyMeasurable
-
-/--
-theorem `coeFn_toAEEqFun` / 定理 `coeFn_toAEEqFun`
-
-English:
-theorem coeFn_toAEEqFun
-  given: (f : C(α, β))
-  statement: f.toAEEqFun μ =ᵐ[μ] f
-  proof: AEEqFun.coeFn_mk f _
-
-中文:
-定理 coeFn_toAEEqFun
-  条件: (f : C(α, β))
-  结论: f.toAEEqFun μ =ᵐ[μ] f
-  证明: AEEqFun.coeFn_mk f _
-
-Depends on / 依赖: AEEqFun, AEEqFun.coeFn_mk, coeFn_mk
+/-
+**ContinuousMap.coeFn_toAEEqFun** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：coeFn_toAEEqFun (f : C(α, β)) : f.toAEEqFun μ =ᵐ[μ] f
+参数：f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.AEEqFun.coeFn_mk`：coeFn_mk (f : α -> β) (hf) : (mk f hf : 
+α ->ₘ[μ] β) =ᵐ[μ] f
 -/
 theorem coeFn_toAEEqFun (f : C(α, β)) : f.toAEEqFun μ =ᵐ[μ] f :=
   AEEqFun.coeFn_mk f _
@@ -3761,28 +3253,15 @@ variable [Group β] [IsTopologicalGroup β]
 classes of `μ`-almost-everywhere measurable functions. -/
 @[to_additive /-- The `AddHom` from the group of continuous maps from `α` to `β` to the group of
 equivalence classes of `μ`-almost-everywhere measurable functions. -/]
-/--
-Definition of `toAEEqFunMulHom` / `toAEEqFunMulHom` 的定义
-
-English:
-definition toAEEqFunMulHom
-  signature: : C(α, β) ->* α ->ₘ[μ] β where
-  body: ContinuousMap.toAEEqFun μ
-  map_one' := rfl
-  map_mul' f g :=
-    AEEqFun.mk_mul_mk _ _ f.continuous.aestronglyMeasurable g.continuous.aestronglyMeasurable
-
-中文:
-定义 toAEEqFunMulHom
-  签名: : C(α, β) ->* α ->ₘ[μ] β where
-  定义体: ContinuousMap.toAEEqFun μ
-  map_one' := rfl
-  map_mul' f g :=
-    AEEqFun.mk_mul_mk _ _ f.continuous.aestronglyMeasurable g.continuous.aestronglyMeasurable
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.toAEEqFun, toAEEqFun
+/-
+**ContinuousMap.toAEEqFunMulHom** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：toAEEqFunMulHom : C(α, β) ->* α ->ₘ[μ] β where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
 -/
-def toAEEqFunMulHom : C(α, β) ->* α ->ₘ[μ] β where
+def toAEEqFunMulHom : C(α, β) →* α →ₘ[μ] β where
   toFun := ContinuousMap.toAEEqFun μ
   map_one' := rfl
   map_mul' f g :=
@@ -3792,25 +3271,22 @@ variable {𝕜 : Type*} [Semiring 𝕜]
 variable [TopologicalSpace γ] [PseudoMetrizableSpace γ] [AddCommGroup γ] [Module 𝕜 γ]
   [IsTopologicalAddGroup γ] [ContinuousConstSMul 𝕜 γ] [SecondCountableTopologyEither α γ]
 
-/--
-Definition of `toAEEqFunLinearMap` / `toAEEqFunLinearMap` 的定义
+/-- The linear map from the group of continuous maps from `α` to `β` to the group of equivalence
+classes of `μ`-almost-everywhere measurable functions. -/
+/-
+**ContinuousMap.toAEEqFunLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：toAEEqFunLinearMap : C(α, γ) ->ₗ[𝕜] α ->ₘ[μ] γ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAEEqFunLinearMap
-  signature: : C(α, γ) ->ₗ[𝕜] α ->ₘ[μ] γ
-  body: { toAEEqFunAddHom μ with
-    map_smul' := fun c f => AEEqFun.smul_mk c f f.continuous.aestronglyMeasurable }
-
-中文:
-定义 toAEEqFunLinearMap
-  签名: : C(α, γ) ->ₗ[𝕜] α ->ₘ[μ] γ
-  定义体: { toAEEqFunAddHom μ with
-    map_smul' := fun c f => AEEqFun.smul_mk c f f.continuous.aestronglyMeasurable }
-
-Depends on / 依赖: AEEqFun, AEEqFun.smul_mk, aestronglyMeasurable, continuous, f.continuous.aestronglyMeasurable, map_smul, smul_mk, toAEEqFunAddHom
+--- 原说明 ---
+The linear map from the group of continuous maps from `α` to `β` to the group of
+ equivalence
+classes of `μ`-almost-everywhere measurable functions.
 -/
-def toAEEqFunLinearMap : C(α, γ) ->ₗ[𝕜] α ->ₘ[μ] γ :=
+def toAEEqFunLinearMap : C(α, γ) →ₗ[𝕜] α →ₘ[μ] γ :=
   { toAEEqFunAddHom μ with
     map_smul' := fun c f => AEEqFun.smul_mk c f f.continuous.aestronglyMeasurable }
 
 end ContinuousMap
+

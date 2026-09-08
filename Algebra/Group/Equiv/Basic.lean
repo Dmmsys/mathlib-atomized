@@ -31,53 +31,52 @@ variable {F α β M M₁ M₂ M₃ N N₁ N₂ N₃ P Q G H : Type*}
 variable [EquivLike F α β]
 
 @[to_additive]
-/--
-theorem `MulEquivClass.toMulEquiv_injective` / 定理 `MulEquivClass.toMulEquiv_injective`
-
-English:
-theorem MulEquivClass.toMulEquiv_injective
-  given: [Mul α] [Mul β] [MulEquivClass F α β]
-  proof: fun _ _ e => DFunLike.ext _ _ fun a => congr_arg (fun e : α ≃* β => e.toFun a) e
-
-中文:
-定理 乘法等价类.toMulEquiv_injective
-  条件: [乘法 α] [乘法 β] [乘法等价类 F α β]
-  证明: fun _ _ e => DFunLike.ext _ _ fun a => congr_arg (fun e : α ≃* β => e.toFun a) e
-
-Depends on / 依赖: DFunLike, DFunLike.ext, congr_arg, e.toFun
+/-
+**MulEquivClass.toMulEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulEquivClass.toMulEquiv_injective [Mul α] [Mul β] [MulEquivClass F α β] :
+ Function.Injective ((↑) : F -> α ≃* β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem MulEquivClass.toMulEquiv_injective [Mul α] [Mul β] [MulEquivClass F α β] :
-    Function.Injective ((↑) : F -> α ≃* β) :=
-  fun _ _ e => DFunLike.ext _ _ fun a => congr_arg (fun e : α ≃* β => e.toFun a) e
-
-/--
-theorem `MulEquivClass.isDedekindFiniteMonoid_iff` / 定理 `MulEquivClass.isDedekindFiniteMonoid_iff`
-
-English:
-theorem MulEquivClass.isDedekindFiniteMonoid_iff
-  statement: [MulOne α] [MulOne β]
-  proof: let e := MulEquivClass.toMulEquiv f
-let g : β ->* α := ⟨⟨e.symm, e.injective (e.right_inv ..).trans (map_one f).symm⟩, map_mul _⟩
-    .of_injective g e.symm.injective
-  mpr _ := let g : α ->* β := ⟨⟨f, map_one f⟩, map_mul f⟩
-    .of_injective g (EquivLike.injective f)
-
-中文:
-定理 乘法等价类.isDedekindFiniteMonoid_iff
-  结论: [MulOne α] [MulOne β]
-  证明: let e := MulEquivClass.toMulEquiv f
-let g : β ->* α := ⟨⟨e.symm, e.injective (e.right_inv ..).trans (map_one f).symm⟩, map_mul _⟩
-    .of_injective g e.symm.injective
-  mpr _ := let g : α ->* β := ⟨⟨f, map_one f⟩, map_mul f⟩
-    .of_injective g (EquivLike.injective f)
+    Function.Injective ((↑) : F → α ≃* β) :=
+  fun _ _ e ↦ DFunLike.ext _ _ fun a ↦ congr_arg (fun e : α ≃* β ↦ e.toFun a) e
+/-
+**MulEquivClass.isDedekindFiniteMonoid_iff** 是 Mathlib 中的一个定理，位于命名空间 `MulEquivCl
+ass`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : EquivLike F α β] [i
+nst_1 : MulOne α] [inst_2 : MulOne β]   [MulEquivClass F α β] [OneHomClass F α β
+] (f : F), IsDedekindFiniteMonoid α ↔ IsDedekindFiniteMonoid β
+参数：f : F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [inst
+_1 : Mul N] (e : M ≃* N), Function.Injective ⇑e
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MulEquivClass.map_mul`：∀ {F : Type u_9} {A : outParam (Type u_10)} {B : 
+outParam (Type u_11)} {inst : Mul A} {inst_1 : Mul B}   {inst_2 : EquivLike F A 
+B} [self : …
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `IsDedekindFiniteMonoid.of_injective`：∀ {M : Type u_4} {N : Type u_5} {F 
+: Type u_9} [inst : MulOne M] [inst_1 : MulOne N] [inst_2 : FunLike F M N]   [Mo
+noidHomClass F M N] (f : …
+· 使用定理 `EquivLike.injective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Injective ⇑e
 -/
 @[to_additive] theorem MulEquivClass.isDedekindFiniteMonoid_iff [MulOne α] [MulOne β]
     [MulEquivClass F α β] [OneHomClass F α β] (f : F) :
     IsDedekindFiniteMonoid α ↔ IsDedekindFiniteMonoid β where
   mp _ := let e := MulEquivClass.toMulEquiv f
-let g : β ->* α := ⟨⟨e.symm, e.injective (e.right_inv ..).trans (map_one f).symm⟩, map_mul _⟩
+    let g : β →* α := ⟨⟨e.symm, e.injective <| (e.right_inv ..).trans (map_one f).symm⟩, map_mul _⟩
     .of_injective g e.symm.injective
-  mpr _ := let g : α ->* β := ⟨⟨f, map_one f⟩, map_mul f⟩
+  mpr _ := let g : α →* β := ⟨⟨f, map_one f⟩, map_mul f⟩
     .of_injective g (EquivLike.injective f)
 
 namespace MulEquiv
@@ -86,20 +85,14 @@ variable [Mul M] [Mul N] [Mul P]
 
 /-- The `MulEquiv` between two monoids with a unique element. -/
 @[to_additive /-- The `AddEquiv` between two `AddMonoid`s with a unique element. -/]
-/--
-Definition of `ofUnique` / `ofUnique` 的定义
+/-
+**MulEquiv.ofUnique** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：ofUnique {M N} [Unique M] [Unique N] [Mul M] [Mul N] : M ≃* N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofUnique
-  signature: {M N} [Unique M] [Unique N] [Mul M] [Mul N]
-  body: { Equiv.ofUnique M N with map_mul' := fun _ _ => Subsingleton.elim _ _ }
-
-中文:
-定义 ofUnique
-  签名: {M N} [唯一 M] [唯一 N] [乘法 M] [乘法 N]
-  定义体: { Equiv.ofUnique M N with map_mul' := fun _ _ => Subsingleton.elim _ _ }
-
-Depends on / 依赖: Equiv.ofUnique, Subsingleton, Subsingleton.elim, map_mul, ofUnique
+--- 原说明 ---
+The `MulEquiv` between two monoids with a unique element.
 -/
 def ofUnique {M N} [Unique M] [Unique N] [Mul M] [Mul N] : M ≃* N :=
   { Equiv.ofUnique M N with map_mul' := fun _ _ => Subsingleton.elim _ _ }
@@ -107,6 +100,10 @@ def ofUnique {M N} [Unique M] [Unique N] [Mul M] [Mul N] : M ≃* N :=
 /-- There is a unique monoid homomorphism between two monoids with a unique element. -/
 @[to_additive /-- There is a unique additive monoid homomorphism between two additive monoids with
   a unique element. -/]
+/-
+**MulEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `MulEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {M N} [Unique M] [Unique N] [Mul M] [Mul N] : Unique (M ≃* N) where
   default := ofUnique
   uniq _ := ext fun _ => Subsingleton.elim _ _
@@ -115,24 +112,13 @@ variable (α M) in
 /-- If `α` has a unique term, then the product of magmas `α → M` is isomorphic to `M`. -/
 @[to_additive (attr := simps!)
 /-- If `α` has a unique term, then the product of magmas `α → M` is isomorphic to `M`. -/]
-/--
-Definition of `funUnique` / `funUnique` 的定义
-
-English:
-definition funUnique
-  signature: [Unique α]
-  body: .funUnique ..
-  map_mul' := by simp
-
-中文:
-定义 funUnique
-  签名: [唯一 α]
-  定义体: .funUnique ..
-  map_mul' := by simp
-
-Depends on / 依赖: funUnique
+/-
+**MulEquiv.funUnique** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：funUnique [Unique α] : (α -> M) ≃* M where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def funUnique [Unique α] : (α -> M) ≃* M where
+def funUnique [Unique α] : (α → M) ≃* M where
   toEquiv := .funUnique ..
   map_mul' := by simp
 
@@ -147,31 +133,17 @@ where the equivalence between the targets is multiplicative.
 -/
 @[to_additive (attr := simps apply) /-- An additive analogue of `Equiv.arrowCongr`,
   where the equivalence between the targets is additive. -/]
-/--
-Definition of `arrowCongr` / `arrowCongr` 的定义
-
-English:
-definition arrowCongr
-  signature: {M N P Q : Type*} [Mul P] [Mul Q] (f : M ≃ N) (g : P ≃* Q)
-  body: g (h (f.symm n))
-  invFun k m := g.symm (k (f m))
-  left_inv h := by ext; simp
-  right_inv k := by ext; simp
-  map_mul' h k := by ext; simp
-
-中文:
-定义 arrowCongr
-  签名: {M N P Q : 类型} [乘法 P] [乘法 Q] (f : M ≃ N) (g : P ≃* Q)
-  定义体: g (h (f.symm n))
-  invFun k m := g.symm (k (f m))
-  left_inv h := by ext; simp
-  right_inv k := by ext; simp
-  map_mul' h k := by ext; simp
-
-Depends on / 依赖: f.symm
+/-
+**MulEquiv.arrowCongr** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：arrowCongr {M N P Q : Type*} [Mul P] [Mul Q] (f : M ≃ N) (g : P ≃* Q) : (M
+ -> P) ≃* (N -> Q) where toFun h n
+参数：f : M ≃ N；g : P ≃* Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def arrowCongr {M N P Q : Type*} [Mul P] [Mul Q] (f : M ≃ N) (g : P ≃* Q) :
-    (M -> P) ≃* (N -> Q) where
+    (M → P) ≃* (N → Q) where
   toFun h n := g (h (f.symm n))
   invFun k m := g.symm (k (f m))
   left_inv h := by ext; simp
@@ -187,28 +159,15 @@ a multiplicative equivalence `e : M₁ ≃* M₂`. -/
 @[to_additive (attr := simps apply)
 /-- The equivalence `(M₁ →+ N) ≃ (M₂ →+ N)` obtained by postcomposition with
 an additive equivalence `e : M₁ ≃+ M₂`. -/]
-/--
-Definition of `monoidHomCongrLeftEquiv` / `monoidHomCongrLeftEquiv` 的定义
-
-English:
-definition monoidHomCongrLeftEquiv
-  signature: (e : M₁ ≃* M₂)
-  body: f.comp e.symm.toMonoidHom
-  invFun f := f.comp e.toMonoidHom
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-中文:
-定义 monoidHomCongrLeftEquiv
-  签名: (e : M₁ ≃* M₂)
-  定义体: f.comp e.symm.toMonoidHom
-  invFun f := f.comp e.toMonoidHom
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-Depends on / 依赖: e.symm.toMonoidHom, f.comp, toMonoidHom
+/-
+**MulEquiv.monoidHomCongrLeftEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrLeftEquiv (e : M₁ ≃* M₂) : (M₁ ->* N) ≃ (M₂ ->* N) where toF
+un f
+参数：e : M₁ ≃* M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def monoidHomCongrLeftEquiv (e : M₁ ≃* M₂) : (M₁ ->* N) ≃ (M₂ ->* N) where
+def monoidHomCongrLeftEquiv (e : M₁ ≃* M₂) : (M₁ →* N) ≃ (M₂ →* N) where
   toFun f := f.comp e.symm.toMonoidHom
   invFun f := f.comp e.toMonoidHom
   left_inv f := by ext; simp
@@ -219,158 +178,87 @@ a multiplicative equivalence `e : N₁ ≃* N₂`. -/
 @[to_additive (attr := simps apply)
 /-- The equivalence `(M →+ N₁) ≃ (M →+ N₂)` obtained by postcomposition with
 an additive equivalence `e : N₁ ≃+ N₂`. -/]
-/--
-Definition of `monoidHomCongrRightEquiv` / `monoidHomCongrRightEquiv` 的定义
-
-English:
-definition monoidHomCongrRightEquiv
-  signature: (e : N₁ ≃* N₂)
-  body: e.toMonoidHom.comp
-  invFun := e.symm.toMonoidHom.comp
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 monoidHomCongrRightEquiv
-  签名: (e : N₁ ≃* N₂)
-  定义体: e.toMonoidHom.comp
-  invFun := e.symm.toMonoidHom.comp
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: e.toMonoidHom.comp, toMonoidHom
+/-
+**MulEquiv.monoidHomCongrRightEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrRightEquiv (e : N₁ ≃* N₂) : (M ->* N₁) ≃ (M ->* N₂) where to
+Fun
+参数：e : N₁ ≃* N₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def monoidHomCongrRightEquiv (e : N₁ ≃* N₂) : (M ->* N₁) ≃ (M ->* N₂) where
+def monoidHomCongrRightEquiv (e : N₁ ≃* N₂) : (M →* N₁) ≃ (M →* N₂) where
   toFun := e.toMonoidHom.comp
   invFun := e.symm.toMonoidHom.comp
   left_inv f := by ext; simp
   right_inv f := by ext; simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrLeftEquiv_refl` / 引理 `monoidHomCongrLeftEquiv_refl`
-
-English:
-lemma monoidHomCongrLeftEquiv_refl
-  statement: monoidHomCongrLeftEquiv (.refl M) = .refl (M ->* N)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 monoidHomCongrLeftEquiv_refl
-  结论: monoidHomCongrLeftEquiv (.refl M) = .refl (M ->* N)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.monoidHomCongrLeftEquiv_refl** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrLeftEquiv_refl : monoidHomCongrLeftEquiv (.refl M) = .refl (
+M ->* N)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monoidHomCongrLeftEquiv_refl : monoidHomCongrLeftEquiv (.refl M) = .refl (M ->* N) := rfl
+lemma monoidHomCongrLeftEquiv_refl : monoidHomCongrLeftEquiv (.refl M) = .refl (M →* N) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrRightEquiv_refl` / 引理 `monoidHomCongrRightEquiv_refl`
-
-English:
-lemma monoidHomCongrRightEquiv_refl
-  statement: monoidHomCongrRightEquiv (.refl N) = .refl (M ->* N)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 monoidHomCongrRightEquiv_refl
-  结论: monoidHomCongrRightEquiv (.refl N) = .refl (M ->* N)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.monoidHomCongrRightEquiv_refl** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrRightEquiv_refl : monoidHomCongrRightEquiv (.refl N) = .refl
+ (M ->* N)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monoidHomCongrRightEquiv_refl : monoidHomCongrRightEquiv (.refl N) = .refl (M ->* N) := rfl
+lemma monoidHomCongrRightEquiv_refl : monoidHomCongrRightEquiv (.refl N) = .refl (M →* N) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_monoidHomCongrLeftEquiv` / 引理 `symm_monoidHomCongrLeftEquiv`
-
-English:
-lemma symm_monoidHomCongrLeftEquiv
-  given: (e : M₁ ≃* M₂)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_monoidHomCongrLeftEquiv
-  条件: (e : M₁ ≃* M₂)
-  证明: rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: e.symm
+/-
+**MulEquiv.symm_monoidHomCongrLeftEquiv** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：symm_monoidHomCongrLeftEquiv (e : M₁ ≃* M₂) : (monoidHomCongrLeftEquiv e).
+symm = monoidHomCongrLeftEquiv (N
+参数：e : M₁ ≃* M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma symm_monoidHomCongrLeftEquiv (e : M₁ ≃* M₂) :
     (monoidHomCongrLeftEquiv e).symm = monoidHomCongrLeftEquiv (N := N) e.symm := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_monoidHomCongrRightEquiv` / 引理 `symm_monoidHomCongrRightEquiv`
-
-English:
-lemma symm_monoidHomCongrRightEquiv
-  given: (e : N₁ ≃* N₂)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_monoidHomCongrRightEquiv
-  条件: (e : N₁ ≃* N₂)
-  证明: rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: e.symm
+/-
+**MulEquiv.symm_monoidHomCongrRightEquiv** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：symm_monoidHomCongrRightEquiv (e : N₁ ≃* N₂) : (monoidHomCongrRightEquiv e
+).symm = monoidHomCongrRightEquiv (M
+参数：e : N₁ ≃* N₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma symm_monoidHomCongrRightEquiv (e : N₁ ≃* N₂) :
     (monoidHomCongrRightEquiv e).symm = monoidHomCongrRightEquiv (M := M) e.symm := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrLeftEquiv_trans` / 引理 `monoidHomCongrLeftEquiv_trans`
-
-English:
-lemma monoidHomCongrLeftEquiv_trans
-  given: (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 monoidHomCongrLeftEquiv_trans
-  条件: (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.monoidHomCongrLeftEquiv_trans** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrLeftEquiv_trans (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃) : monoidHo
+mCongrLeftEquiv (N
+参数：e₁₂ : M₁ ≃* M₂；e₂₃ : M₂ ≃* M₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma monoidHomCongrLeftEquiv_trans (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃) :
     monoidHomCongrLeftEquiv (N := N) (e₁₂.trans e₂₃) =
       (monoidHomCongrLeftEquiv e₁₂).trans (monoidHomCongrLeftEquiv e₂₃) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrRightEquiv_trans` / 引理 `monoidHomCongrRightEquiv_trans`
-
-English:
-lemma monoidHomCongrRightEquiv_trans
-  given: (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃)
-  proof: rfl
-
-中文:
-引理 monoidHomCongrRightEquiv_trans
-  条件: (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃)
-  证明: rfl
+/-
+**MulEquiv.monoidHomCongrRightEquiv_trans** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrRightEquiv_trans (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃) : monoidH
+omCongrRightEquiv (M
+参数：e₁₂ : N₁ ≃* N₂；e₂₃ : N₂ ≃* N₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma monoidHomCongrRightEquiv_trans (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃) :
     monoidHomCongrRightEquiv (M := M) (e₁₂.trans e₂₃) =
@@ -387,24 +275,14 @@ a multiplicative equivalence `e : M₁ ≃* M₂`. -/
 @[to_additive (attr := simps! apply)
 /-- The isomorphism `(M₁ →+ N) ≃+ (M₂ →+ N)` obtained by postcomposition with
 an additive equivalence `e : M₁ ≃+ M₂`. -/]
-/--
-Definition of `monoidHomCongrLeft` / `monoidHomCongrLeft` 的定义
-
-English:
-definition monoidHomCongrLeft
-  signature: (e : M₁ ≃* M₂)
-  body: e.monoidHomCongrLeftEquiv
-  map_mul' f g := by ext; simp
-
-中文:
-定义 monoidHomCongrLeft
-  签名: (e : M₁ ≃* M₂)
-  定义体: e.monoidHomCongrLeftEquiv
-  map_mul' f g := by ext; simp
-
-Depends on / 依赖: e.monoidHomCongrLeftEquiv, monoidHomCongrLeftEquiv
+/-
+**MulEquiv.monoidHomCongrLeft** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrLeft (e : M₁ ≃* M₂) : (M₁ ->* N) ≃* (M₂ ->* N) where __
+参数：e : M₁ ≃* M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def monoidHomCongrLeft (e : M₁ ≃* M₂) : (M₁ ->* N) ≃* (M₂ ->* N) where
+def monoidHomCongrLeft (e : M₁ ≃* M₂) : (M₁ →* N) ≃* (M₂ →* N) where
   __ := e.monoidHomCongrLeftEquiv
   map_mul' f g := by ext; simp
 
@@ -413,152 +291,80 @@ a multiplicative equivalence `e : N₁ ≃* N₂`. -/
 @[to_additive (attr := simps! apply)
 /-- The isomorphism `(M →+ N₁) ≃+ (M →+ N₂)` obtained by postcomposition with
 an additive equivalence `e : N₁ ≃+ N₂`. -/]
-/--
-Definition of `monoidHomCongrRight` / `monoidHomCongrRight` 的定义
-
-English:
-definition monoidHomCongrRight
-  signature: (e : N₁ ≃* N₂)
-  body: e.monoidHomCongrRightEquiv
-  map_mul' f g := by ext; simp
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 monoidHomCongrRight
-  签名: (e : N₁ ≃* N₂)
-  定义体: e.monoidHomCongrRightEquiv
-  map_mul' f g := by ext; simp
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: e.monoidHomCongrRightEquiv, monoidHomCongrRightEquiv
+/-
+**MulEquiv.monoidHomCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrRight (e : N₁ ≃* N₂) : (M ->* N₁) ≃* (M ->* N₂) where __
+参数：e : N₁ ≃* N₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def monoidHomCongrRight (e : N₁ ≃* N₂) : (M ->* N₁) ≃* (M ->* N₂) where
+def monoidHomCongrRight (e : N₁ ≃* N₂) : (M →* N₁) ≃* (M →* N₂) where
   __ := e.monoidHomCongrRightEquiv
   map_mul' f g := by ext; simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrLeft_refl` / 引理 `monoidHomCongrLeft_refl`
-
-English:
-lemma monoidHomCongrLeft_refl
-  statement: monoidHomCongrLeft (.refl M) = .refl (M ->* N)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 monoidHomCongrLeft_refl
-  结论: monoidHomCongrLeft (.refl M) = .refl (M ->* N)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.monoidHomCongrLeft_refl** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrLeft_refl : monoidHomCongrLeft (.refl M) = .refl (M ->* N)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monoidHomCongrLeft_refl : monoidHomCongrLeft (.refl M) = .refl (M ->* N) := rfl
+lemma monoidHomCongrLeft_refl : monoidHomCongrLeft (.refl M) = .refl (M →* N) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrRight_refl` / 引理 `monoidHomCongrRight_refl`
-
-English:
-lemma monoidHomCongrRight_refl
-  statement: monoidHomCongrRight (.refl N) = .refl (M ->* N)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 monoidHomCongrRight_refl
-  结论: monoidHomCongrRight (.refl N) = .refl (M ->* N)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.monoidHomCongrRight_refl** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrRight_refl : monoidHomCongrRight (.refl N) = .refl (M ->* N)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monoidHomCongrRight_refl : monoidHomCongrRight (.refl N) = .refl (M ->* N) := rfl
+lemma monoidHomCongrRight_refl : monoidHomCongrRight (.refl N) = .refl (M →* N) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_monoidHomCongrLeft` / 引理 `symm_monoidHomCongrLeft`
-
-English:
-lemma symm_monoidHomCongrLeft
-  given: (e : M₁ ≃* M₂)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_monoidHomCongrLeft
-  条件: (e : M₁ ≃* M₂)
-  证明: rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: e.symm
+/-
+**MulEquiv.symm_monoidHomCongrLeft** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：symm_monoidHomCongrLeft (e : M₁ ≃* M₂) : (monoidHomCongrLeft e).symm = mon
+oidHomCongrLeft (N
+参数：e : M₁ ≃* M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma symm_monoidHomCongrLeft (e : M₁ ≃* M₂) :
     (monoidHomCongrLeft e).symm = monoidHomCongrLeft (N := N) e.symm := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_monoidHomCongrRight` / 引理 `symm_monoidHomCongrRight`
-
-English:
-lemma symm_monoidHomCongrRight
-  given: (e : N₁ ≃* N₂)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_monoidHomCongrRight
-  条件: (e : N₁ ≃* N₂)
-  证明: rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: e.symm
+/-
+**MulEquiv.symm_monoidHomCongrRight** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：symm_monoidHomCongrRight (e : N₁ ≃* N₂) : (monoidHomCongrRight e).symm = m
+onoidHomCongrRight (M
+参数：e : N₁ ≃* N₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma symm_monoidHomCongrRight (e : N₁ ≃* N₂) :
     (monoidHomCongrRight e).symm = monoidHomCongrRight (M := M) e.symm := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrLeft_trans` / 引理 `monoidHomCongrLeft_trans`
-
-English:
-lemma monoidHomCongrLeft_trans
-  given: (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 monoidHomCongrLeft_trans
-  条件: (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.monoidHomCongrLeft_trans** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrLeft_trans (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃) : monoidHomCong
+rLeft (N
+参数：e₁₂ : M₁ ≃* M₂；e₂₃ : M₂ ≃* M₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma monoidHomCongrLeft_trans (e₁₂ : M₁ ≃* M₂) (e₂₃ : M₂ ≃* M₃) :
     monoidHomCongrLeft (N := N) (e₁₂.trans e₂₃) =
       (monoidHomCongrLeft e₁₂).trans (monoidHomCongrLeft e₂₃) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `monoidHomCongrRight_trans` / 引理 `monoidHomCongrRight_trans`
-
-English:
-lemma monoidHomCongrRight_trans
-  given: (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃)
-  proof: rfl
-
-中文:
-引理 monoidHomCongrRight_trans
-  条件: (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃)
-  证明: rfl
+/-
+**MulEquiv.monoidHomCongrRight_trans** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：monoidHomCongrRight_trans (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃) : monoidHomCon
+grRight (M
+参数：e₁₂ : N₁ ≃* N₂；e₂₃ : N₂ ≃* N₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma monoidHomCongrRight_trans (e₁₂ : N₁ ≃* N₂) (e₂₃ : N₂ ≃* N₃) :
     monoidHomCongrRight (M := M) (e₁₂.trans e₂₃) =
@@ -578,96 +384,60 @@ This is the `MulEquiv` version of `Equiv.piCongrRight`, and the dependent versio
 
   This is the `AddEquiv` version of `Equiv.piCongrRight`, and the dependent version of
   `AddEquiv.arrowCongr`. -/]
-/--
-Definition of `piCongrRight` / `piCongrRight` 的定义
-
-English:
-definition piCongrRight
-  signature: {η : Type*} {Ms Ns : η -> Type*} [forall j, Mul (Ms j)] [forall j, Mul (Ns j)]
-  body: { Equiv.piCongrRight fun j => (es j).toEquiv with
-    toFun := fun x j => es j (x j),
-    invFun := fun x j => (es j).symm (x j),
-    map_mul' := fun x y => funext fun j => map_mul (es j) (x j) (y j) }
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 piCongrRight
-  签名: {η : 类型} {Ms Ns : η -> 类型} [对任意 j, 乘法 (Ms j)] [对任意 j, 乘法 (Ns j)]
-  定义体: { Equiv.piCongrRight fun j => (es j).toEquiv with
-    toFun := fun x j => es j (x j),
-    invFun := fun x j => (es j).symm (x j),
-    map_mul' := fun x y => funext fun j => map_mul (es j) (x j) (y j) }
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.piCongrRight, invFun, map_mul, piCongrRight, toEquiv
+/-
+**MulEquiv.piCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：piCongrRight {η : Type*} {Ms Ns : η -> Type*} [forall j, Mul (Ms j)] [fora
+ll j, Mul (Ns j)] (es : forall j, Ms j ≃* Ns j) : (forall j, Ms j) ≃* forall j, 
+Ns j
+参数：Ms j；Ns j；es : forall j, Ms j ≃* Ns j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def piCongrRight {η : Type*} {Ms Ns : η -> Type*} [forall j, Mul (Ms j)] [forall j, Mul (Ns j)]
-    (es : forall j, Ms j ≃* Ns j) : (forall j, Ms j) ≃* forall j, Ns j :=
+def piCongrRight {η : Type*} {Ms Ns : η → Type*} [∀ j, Mul (Ms j)] [∀ j, Mul (Ns j)]
+    (es : ∀ j, Ms j ≃* Ns j) : (∀ j, Ms j) ≃* ∀ j, Ns j :=
   { Equiv.piCongrRight fun j => (es j).toEquiv with
     toFun := fun x j => es j (x j),
     invFun := fun x j => (es j).symm (x j),
     map_mul' := fun x y => funext fun j => map_mul (es j) (x j) (y j) }
 
 @[to_additive (attr := simp)]
-/--
-theorem `piCongrRight_refl` / 定理 `piCongrRight_refl`
-
-English:
-theorem piCongrRight_refl
-  given: {η : Type*} {Ms : η -> Type*} [forall j, Mul (Ms j)]
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 piCongrRight_refl
-  条件: {η : 类型} {Ms : η -> 类型} [对任意 j, 乘法 (Ms j)]
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.piCongrRight_refl** 是 Mathlib 中的一个定理，位于命名空间 `MulEquiv`。
+形式化陈述：piCongrRight_refl {η : Type*} {Ms : η -> Type*} [forall j, Mul (Ms j)] : (
+piCongrRight fun j => MulEquiv.refl (Ms j)) = MulEquiv.refl _
+参数：Ms j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_refl {η : Type*} {Ms : η -> Type*} [forall j, Mul (Ms j)] :
+theorem piCongrRight_refl {η : Type*} {Ms : η → Type*} [∀ j, Mul (Ms j)] :
     (piCongrRight fun j => MulEquiv.refl (Ms j)) = MulEquiv.refl _ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `piCongrRight_symm` / 定理 `piCongrRight_symm`
-
-English:
-theorem piCongrRight_symm
-  statement: {η : Type*} {Ms Ns : η -> Type*} [forall j, Mul (Ms j)] [forall j, Mul (Ns j)]
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 piCongrRight_symm
-  结论: {η : 类型} {Ms Ns : η -> 类型} [对任意 j, 乘法 (Ms j)] [对任意 j, 乘法 (Ns j)]
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulEquiv.piCongrRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `MulEquiv`。
+形式化陈述：piCongrRight_symm {η : Type*} {Ms Ns : η -> Type*} [forall j, Mul (Ms j)] 
+[forall j, Mul (Ns j)] (es : forall j, Ms j ≃* Ns j) : (piCongrRight es).symm = 
+piCongrRight fun i => (es i).symm
+参数：Ms j；Ns j；es : forall j, Ms j ≃* Ns j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_symm {η : Type*} {Ms Ns : η -> Type*} [forall j, Mul (Ms j)] [forall j, Mul (Ns j)]
-    (es : forall j, Ms j ≃* Ns j) : (piCongrRight es).symm = piCongrRight fun i => (es i).symm := rfl
+theorem piCongrRight_symm {η : Type*} {Ms Ns : η → Type*} [∀ j, Mul (Ms j)] [∀ j, Mul (Ns j)]
+    (es : ∀ j, Ms j ≃* Ns j) : (piCongrRight es).symm = piCongrRight fun i => (es i).symm := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `piCongrRight_trans` / 定理 `piCongrRight_trans`
-
-English:
-theorem piCongrRight_trans
-  statement: {η : Type*} {Ms Ns Ps : η -> Type*} [forall j, Mul (Ms j)]
-  proof: rfl
-
-中文:
-定理 piCongrRight_trans
-  结论: {η : 类型} {Ms Ns Ps : η -> 类型} [对任意 j, 乘法 (Ms j)]
-  证明: rfl
+/-
+**MulEquiv.piCongrRight_trans** 是 Mathlib 中的一个定理，位于命名空间 `MulEquiv`。
+形式化陈述：piCongrRight_trans {η : Type*} {Ms Ns Ps : η -> Type*} [forall j, Mul (Ms 
+j)] [forall j, Mul (Ns j)] [forall j, Mul (Ps j)] (es : forall j, Ms j ≃* Ns j) 
+(fs : forall j, Ns j ≃* Ps j) : (piCongrRight es).trans (piCongrRight fs) = piCo
+ngrRight fun i => (es i).trans (fs i)
+参数：Ms j；Ns j；Ps j；es : forall j, Ms j ≃* Ns j；fs : forall j, Ns j ≃* Ps j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_trans {η : Type*} {Ms Ns Ps : η -> Type*} [forall j, Mul (Ms j)]
-    [forall j, Mul (Ns j)] [forall j, Mul (Ps j)] (es : forall j, Ms j ≃* Ns j) (fs : forall j, Ns j ≃* Ps j) :
+theorem piCongrRight_trans {η : Type*} {Ms Ns Ps : η → Type*} [∀ j, Mul (Ms j)]
+    [∀ j, Mul (Ns j)] [∀ j, Mul (Ps j)] (es : ∀ j, Ms j ≃* Ns j) (fs : ∀ j, Ns j ≃* Ps j) :
     (piCongrRight es).trans (piCongrRight fs) = piCongrRight fun i => (es i).trans (fs i) := rfl
 
 /-- A family indexed by a type with a unique element
@@ -675,23 +445,16 @@ is `MulEquiv` to the element at the single index. -/
 @[to_additive (attr := simps!)
   /-- A family indexed by a type with a unique element
   is `AddEquiv` to the element at the single index. -/]
-/--
-Definition of `piUnique` / `piUnique` 的定义
-
-English:
-definition piUnique
-  signature: {ι : Type*} (M : ι -> Type*) [forall j, Mul (M j)] [Unique ι]
-  body: { Equiv.piUnique M with map_mul' := fun _ _ => Pi.mul_apply _ _ _ }
-
-中文:
-定义 piUnique
-  签名: {ι : 类型} (M : ι -> 类型) [对任意 j, 乘法 (M j)] [唯一 ι]
-  定义体: { Equiv.piUnique M with map_mul' := fun _ _ => Pi.mul_apply _ _ _ }
-
-Depends on / 依赖: Equiv.piUnique, Pi.mul_apply, map_mul, mul_apply, piUnique
+/-
+**MulEquiv.piUnique** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：piUnique {ι : Type*} (M : ι -> Type*) [forall j, Mul (M j)] [Unique ι] : (
+forall j, M j) ≃* M default
+参数：M : ι -> Type*；M j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def piUnique {ι : Type*} (M : ι -> Type*) [forall j, Mul (M j)] [Unique ι] :
-    (forall j, M j) ≃* M default :=
+def piUnique {ι : Type*} (M : ι → Type*) [∀ j, Mul (M j)] [Unique ι] :
+    (∀ j, M j) ≃* M default :=
   { Equiv.piUnique M with map_mul' := fun _ _ => Pi.mul_apply _ _ _ }
 
 end MulEquiv
@@ -705,18 +468,11 @@ variable (G) [InvolutiveInv G]
 /-- Inversion on a `Group` or `GroupWithZero` is a permutation of the underlying type. -/
 @[to_additive (attr := simps! -fullyApplied apply)
     /-- Negation on an `AddGroup` is a permutation of the underlying type. -/]
-/--
-Definition of `inv` / `inv` 的定义
-
-English:
-definition inv
-  signature: : Perm G
-  body: inv_involutive.toPerm _
-
-中文:
-定义 inv
-  签名: : 置换 G
-  定义体: inv_involutive.toPerm _
+/-
+**Equiv.inv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：(G : Type u_14) → [InvolutiveInv G] → Equiv.Perm G
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_involutive`：inv_involutive : Function.Involutive (Inv.inv : G -> G)
 -/
 protected def inv : Perm G :=
   inv_involutive.toPerm _
@@ -724,21 +480,16 @@ protected def inv : Perm G :=
 variable {G}
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_symm` / 定理 `inv_symm`
-
-English:
-theorem inv_symm
-  statement: (Equiv.inv G).symm = Equiv.inv G
-  proof: rfl
-
-中文:
-定理 inv_symm
-  结论: (等价.inv G).symm = 等价.inv G
-  证明: rfl
+/-
+**Equiv.inv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：inv_symm : (Equiv.inv G).symm = Equiv.inv G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem inv_symm : (Equiv.inv G).symm = Equiv.inv G := rfl
 
 end InvolutiveInv
 
 end Equiv
+

@@ -46,32 +46,20 @@ namespace HomotopicalAlgebra
 
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `Precylinder` / `Precylinder` 的定义
+/-- A precylinder for `A : C` is the data of a morphism
+`π : I ⟶ A` equipped with two sections. -/
+/-
+**HomotopicalAlgebra.Precylinder** 是 Mathlib 中的一个结构，位于命名空间 `HomotopicalAlgebra`。
+形式化陈述：Precylinder (A : C) where /-- the underlying object of a (pre)cylinder -/ 
+I : C /-- the first "inclusion" in the (pre)cylinder -/ i₀ : A ⟶ I /-- the secon
+d "inclusion" in the (pre)cylinder -/ i₁ : A ⟶ I /-- the codiagonal of the (pre)
+cylinder -/ π : I ⟶ A i₀_π : i₀ ≫ π = 𝟙 A
+参数：A : C；pre。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Precylinder
-  parameters: (A : C)
-  axioms and operations (6):
-    - I : C
-    - i₀ : A ⟶ I
-    - i₁ : A ⟶ I
-    - π : I ⟶ A
-    - i₀_π : i₀ ≫ π = 𝟙 A  [default: by cat_disch]
-    - i₁_π : i₁ ≫ π = 𝟙 A  [default: by cat_disch]
-
-中文:
-结构 Precylinder
-  参数: (A : C)
-  公理与运算 (6 个):
-    - I : C
-    - i₀ : A ⟶ I
-    - i₁ : A ⟶ I
-    - π : I ⟶ A
-    - i₀_π : i₀ ≫ π = 𝟙 A  [默认: by cat_disch]
-    - i₁_π : i₁ ≫ π = 𝟙 A  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A precylinder for `A : C` is the data of a morphism
+`π : I ⟶ A` equipped with two sections.
 -/
 structure Precylinder (A : C) where
   /-- the underlying object of a (pre)cylinder -/
@@ -93,24 +81,15 @@ variable {A : C} (P : Precylinder A)
 
 /-- The precylinder object obtained by switching the two inclusions. -/
 @[simps]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**HomotopicalAlgebra.Precylinder.symm** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlge
+bra.Precylinder`。
+形式化陈述：symm : Precylinder A where I
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: : Precylinder A where
-  body: P.I
-  i₀ := P.i₁
-  i₁ := P.i₀
-  π := P.π
-
-中文:
-定义 symm
-  签名: : Precylinder A where
-  定义体: P.I
-  i₀ := P.i₁
-  i₁ := P.i₀
-  π := P.π
+--- 原说明 ---
+The precylinder object obtained by switching the two inclusions.
 -/
 def symm : Precylinder A where
   I := P.I
@@ -121,26 +100,16 @@ def symm : Precylinder A where
 set_option backward.isDefEq.respectTransparency false in
 /-- The gluing of two precylinders. -/
 @[simps]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**HomotopicalAlgebra.Precylinder.trans** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlg
+ebra.Precylinder`。
+形式化陈述：trans (P' : Precylinder A) [HasPushout P.i₁ P'.i₀] : Precylinder A where I
+参数：P' : Precylinder A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (P' : Precylinder A) [HasPushout P.i₁ P'.i₀]
-  body: pushout P.i₁ P'.i₀
-  i₀ := P.i₀ ≫ pushout.inl _ _
-  i₁ := P'.i₁ ≫ pushout.inr _ _
-  π := pushout.desc P.π P'.π (by simp)
-
-中文:
-定义 trans
-  签名: (P' : Precylinder A) [HasPushout P.i₁ P'.i₀]
-  定义体: pushout P.i₁ P'.i₀
-  i₀ := P.i₀ ≫ pushout.inl _ _
-  i₁ := P'.i₁ ≫ pushout.inr _ _
-  π := pushout.desc P.π P'.π (by simp)
-
-Depends on / 依赖: pushout
+--- 原说明 ---
+The gluing of two precylinders.
 -/
 noncomputable def trans (P' : Precylinder A) [HasPushout P.i₁ P'.i₀] :
     Precylinder A where
@@ -153,100 +122,111 @@ section
 
 variable [HasBinaryCoproduct A A]
 
-/--
-Definition of `i` / `i` 的定义
+/-- the map from the coproduct of two copies of `A` to `P.I`, when `P` is
+a cylinder object for `A`. `P` shall be a *good* cylinder object
+when this morphism is a cofibration. -/
+/-
+**HomotopicalAlgebra.Precylinder.i** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgebra
+.Precylinder`。
+形式化陈述：i : A ⨿ A ⟶ P.I
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition i
-  signature: : A ⨿ A ⟶ P.I
-  body: coprod.desc P.i₀ P.i₁
-
-中文:
-定义 i
-  签名: : A ⨿ A ⟶ P.I
-  定义体: coprod.desc P.i₀ P.i₁
-
-Depends on / 依赖: coprod, coprod.desc
+--- 原说明 ---
+the map from the coproduct of two copies of `A` to `P.I`, when `P` is
+a cylinder object for `A`. `P` shall be a *good* cylinder object
+when this morphism is a cofibration.
 -/
 noncomputable def i : A ⨿ A ⟶ P.I := coprod.desc P.i₀ P.i₁
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `inl_i` / 引理 `inl_i`
-
-English:
-lemma inl_i
-  statement: coprod.inl ≫ P.i = P.i₀
-  proof: by simp [i]
-
-中文:
-引理 inl_i
-  结论: coprod.inl ≫ P.i = P.i₀
-  证明: by simp [i]
+/-
+**HomotopicalAlgebra.Precylinder.inl_i** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlg
+ebra.Precylinder`。
+形式化陈述：inl_i : coprod.inl ≫ P.i = P.i₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inl_i : coprod.inl ≫ P.i = P.i₀ := by simp [i]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `inr_i` / 引理 `inr_i`
-
-English:
-lemma inr_i
-  statement: coprod.inr ≫ P.i = P.i₁
-  proof: by simp [i]
-
-中文:
-引理 inr_i
-  结论: coprod.inr ≫ P.i = P.i₁
-  证明: by simp [i]
+/-
+**HomotopicalAlgebra.Precylinder.inr_i** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlg
+ebra.Precylinder`。
+形式化陈述：inr_i : coprod.inr ≫ P.i = P.i₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inr_i : coprod.inr ≫ P.i = P.i₁ := by simp [i]
 
 end
 
 @[simp, reassoc]
-/--
-lemma `symm_i` / 引理 `symm_i`
-
-English:
-lemma symm_i
-  given: [HasBinaryCoproducts C]
-  statement: P.symm.i = (coprod.braiding A A).hom ≫ P.i
-  proof: by cat_disch
-
-中文:
-引理 symm_i
-  条件: [HasBinaryCoproducts C]
-  结论: P.symm.i = (coprod.braiding A A).hom ≫ P.i
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**HomotopicalAlgebra.Precylinder.symm_i** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAl
+gebra.Precylinder`。
+形式化陈述：symm_i [HasBinaryCoproducts C] : P.symm.i = (coprod.braiding A A).hom ≫ P.
+i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.coprod.braiding_hom`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasBinaryCoproducts 
+C]   (P Q : C),   (CategoryTheo…
+· 使用定理 `CategoryTheory.Limits.coprod.desc_comp`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {V W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBina
+ryCoproduct X Y] (f : V ⟶ W)…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `HomotopicalAlgebra.Precylinder.inr_i`：inr_i : coprod.inr ≫ P.i = P.i₁
+· 使用引理 `HomotopicalAlgebra.Precylinder.inl_i`：inl_i : coprod.inl ≫ P.i = P.i₀
 -/
 lemma symm_i [HasBinaryCoproducts C] : P.symm.i = (coprod.braiding A A).hom ≫ P.i := by cat_disch
 
 /-- The precylinder in a full subcategory of `C` induced by a precylinder
 in the category `C`. -/
 @[simps]
-/--
-Definition of `toFullSubcategory` / `toFullSubcategory` 的定义
+/-
+**HomotopicalAlgebra.Precylinder.toFullSubcategory** 是 Mathlib 中的一个定义，位于命名空间 `Ho
+motopicalAlgebra.Precylinder`。
+形式化陈述：toFullSubcategory {P : ObjectProperty C} {X : P.FullSubcategory} (Q : Prec
+ylinder X.obj) (hQ : P Q.I) : Precylinder X where I
+参数：Q : Precylinder X.obj；hQ : P Q.I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFullSubcategory
-  signature: {P : ObjectProperty C} {X : P.FullSubcategory} (Q : Precylinder X.obj)
-  body: ⟨Q.I, hQ⟩
-  i₀ := P.homMk Q.i₀
-  i₁ := P.homMk Q.i₁
-  π := P.homMk Q.π
-
-中文:
-定义 toFullSubcategory
-  签名: {P : ObjectProperty C} {X : P.满子范畴} (Q : Precylinder X.obj)
-  定义体: ⟨Q.I, hQ⟩
-  i₀ := P.homMk Q.i₀
-  i₁ := P.homMk Q.i₁
-  π := P.homMk Q.π
+--- 原说明 ---
+The precylinder in a full subcategory of `C` induced by a precylinder
+in the category `C`.
 -/
 def toFullSubcategory {P : ObjectProperty C} {X : P.FullSubcategory} (Q : Precylinder X.obj)
     (hQ : P Q.I) :
@@ -258,30 +238,17 @@ def toFullSubcategory {P : ObjectProperty C} {X : P.FullSubcategory} (Q : Precyl
 
 /-- The image of a precylinder by a functor. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**HomotopicalAlgebra.Precylinder.map** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgeb
+ra.Precylinder`。
+形式化陈述：map {X : C} (P : Precylinder X) {D : Type*} [Category* D] (F : C ⥤ D) : Pr
+ecylinder (F.obj X) where I
+参数：P : Precylinder X；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {X : C} (P : Precylinder X) {D : Type*} [Category* D] (F : C ⥤ D)
-  body: F.obj P.I
-  i₀ := F.map P.i₀
-  i₁ := F.map P.i₁
-  π := F.map P.π
-  i₀_π := by simp [← F.map_comp]
-  i₁_π := by simp [← F.map_comp]
-
-中文:
-定义 map
-  签名: {X : C} (P : Precylinder X) {D : 类型} [范畴* D] (F : C ⥤ D)
-  定义体: F.obj P.I
-  i₀ := F.map P.i₀
-  i₁ := F.map P.i₁
-  π := F.map P.π
-  i₀_π := by simp [← F.map_comp]
-  i₁_π := by simp [← F.map_comp]
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+The image of a precylinder by a functor.
 -/
 def map {X : C} (P : Precylinder X) {D : Type*} [Category* D] (F : C ⥤ D) :
     Precylinder (F.obj X) where
@@ -294,24 +261,19 @@ def map {X : C} (P : Precylinder X) {D : Type*} [Category* D] (F : C ⥤ D) :
 
 end Precylinder
 
-/--
-Definition of `Cylinder` / `Cylinder` 的定义
+/-- In a category with weak equivalences, a cylinder is the
+data of a weak equivalence `π : I ⟶ A` equipped with two sections -/
+/-
+**HomotopicalAlgebra.Cylinder** 是 Mathlib 中的一个结构，位于命名空间 `HomotopicalAlgebra`。
+形式化陈述：Cylinder [CategoryWithWeakEquivalences C] (A : C) extends Precylinder A wh
+ere weakEquivalence_π : WeakEquivalence π
+参数：A : C。
+继承自：Precylinder A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Cylinder
-  parameters: [CategoryWithWeakEquivalences C] (A : C)
-  extends: Precylinder A
-  axioms and operations (1):
-    - weakEquivalence_π : WeakEquivalence π  [default: by infer_instance]
-
-中文:
-结构 柱
-  参数: [带弱等价范畴 C] (A : C)
-  继承: Precylinder A
-  公理与运算 (1 个):
-    - weakEquivalence_π : 弱等价 π  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+In a category with weak equivalences, a cylinder is the
+data of a weak equivalence `π : I ⟶ A` equipped with two sections
 -/
 structure Cylinder [CategoryWithWeakEquivalences C] (A : C) extends Precylinder A where
   weakEquivalence_π : WeakEquivalence π := by infer_instance
@@ -327,46 +289,30 @@ variable {A : C} [CategoryWithWeakEquivalences C] (P : Cylinder A)
 set_option backward.defeqAttrib.useBackward true in
 /-- The cylinder object obtained by switching the two inclusions. -/
 @[simps!]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**HomotopicalAlgebra.Cylinder.symm** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgebra
+.Cylinder`。
+形式化陈述：symm : Cylinder A where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: : Cylinder A where
-  body: P.toPrecylinder.symm
-  weakEquivalence_π := by dsimp; infer_instance
-
-@[simp, reassoc]
-
-中文:
-定义 symm
-  签名: : 柱 A where
-  定义体: P.toPrecylinder.symm
-  weakEquivalence_π := by dsimp; infer_instance
-
-@[simp, reassoc]
-
-Depends on / 依赖: P.toPrecylinder.symm, toPrecylinder
+--- 原说明 ---
+The cylinder object obtained by switching the two inclusions.
 -/
 def symm : Cylinder A where
   __ := P.toPrecylinder.symm
   weakEquivalence_π := by dsimp; infer_instance
 
 @[simp, reassoc]
-/--
-lemma `symm_i` / 引理 `symm_i`
-
-English:
-lemma symm_i
-  given: [HasBinaryCoproducts C]
-  proof: P.toPrecylinder.symm_i
-
-中文:
-引理 symm_i
-  条件: [HasBinaryCoproducts C]
-  证明: P.toPrecylinder.symm_i
-
-Depends on / 依赖: P.toPrecylinder.symm_i, symm_i, toPrecylinder
+/-
+**HomotopicalAlgebra.Cylinder.symm_i** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlgeb
+ra.Cylinder`。
+形式化陈述：symm_i [HasBinaryCoproducts C] : P.symm.i = (coprod.braiding A A).hom ≫ P.
+i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomotopicalAlgebra.Precylinder.symm_i`：symm_i [HasBinaryCoproducts C] : 
+P.symm.i = (coprod.braiding A A).hom ≫ P.i
 -/
 lemma symm_i [HasBinaryCoproducts C] :
     P.symm.i = (coprod.braiding A A).hom ≫ P.i :=
@@ -377,82 +323,50 @@ section
 variable [(weakEquivalences C).HasTwoOutOfThreeProperty]
   [(weakEquivalences C).ContainsIdentities]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WeakEquivalence P.i₀
-  body: weakEquivalence_of_postcomp_of_fac P.i₀_π
-
-中文:
-实例 :
-  签名: 弱等价 P.i₀
-  定义体: weakEquivalence_of_postcomp_of_fac P.i₀_π
-
-Depends on / 依赖: weakEquivalence_of_postcomp_of_fac
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WeakEquivalence P.i₀ :=
   weakEquivalence_of_postcomp_of_fac P.i₀_π
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WeakEquivalence P.i₁
-  body: weakEquivalence_of_postcomp_of_fac P.i₁_π
-
-中文:
-实例 :
-  签名: 弱等价 P.i₁
-  定义体: weakEquivalence_of_postcomp_of_fac P.i₁_π
-
-Depends on / 依赖: weakEquivalence_of_postcomp_of_fac
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WeakEquivalence P.i₁ :=
   weakEquivalence_of_postcomp_of_fac P.i₁_π
 
 end
 
-/--
-Definition of `IsGood` / `IsGood` 的定义
+/-- A cylinder object `P` is good if the morphism
+`P.i : A ⨿ A ⟶ P.I` is a cofibration. -/
+/-
+**HomotopicalAlgebra.Cylinder.IsGood** 是 Mathlib 中的一个类，位于命名空间 `HomotopicalAlgebr
+a.Cylinder`。
+形式化陈述：IsGood [HasBinaryCoproduct A A] [CategoryWithCofibrations C] : Prop where 
+cofibration_i : Cofibration P.i
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsGood
-  parameters: [HasBinaryCoproduct A A] [CategoryWithCofibrations C]
-  axioms and operations (1):
-    - cofibration_i : Cofibration P.i  [default: by infer_instance]
-
-中文:
-类 是Good
-  参数: [HasBinaryCoproduct A A] [带余纤维化范畴 C]
-  公理与运算 (1 个):
-    - cofibration_i : 余纤维化 P.i  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A cylinder object `P` is good if the morphism
+`P.i : A ⨿ A ⟶ P.I` is a cofibration.
 -/
 class IsGood [HasBinaryCoproduct A A] [CategoryWithCofibrations C] : Prop where
   cofibration_i : Cofibration P.i := by infer_instance
 
-/--
-Definition of `IsVeryGood` / `IsVeryGood` 的定义
+/-- A good cylinder object `P` is very good if `P.π` is a (trivial) fibration. -/
+/-
+**HomotopicalAlgebra.Cylinder.IsVeryGood** 是 Mathlib 中的一个类，位于命名空间 `HomotopicalAl
+gebra.Cylinder`。
+形式化陈述：IsVeryGood [HasBinaryCoproduct A A] [CategoryWithCofibrations C] [Category
+WithFibrations C] : Prop extends P.IsGood where fibration_π : Fibration P.π
+继承自：P.IsGood。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsVeryGood
-  parameters: [HasBinaryCoproduct A A] [CategoryWithCofibrations C]
-  extends: P.IsGood
-  axioms and operations (1):
-    - fibration_π : Fibration P.π  [default: by infer_instance]
-
-中文:
-类 是VeryGood
-  参数: [HasBinaryCoproduct A A] [带余纤维化范畴 C]
-  继承: P.是Good
-  公理与运算 (1 个):
-    - fibration_π : 纤维化 P.π  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A good cylinder object `P` is very good if `P.π` is a (trivial) fibration.
 -/
 class IsVeryGood [HasBinaryCoproduct A A] [CategoryWithCofibrations C]
     [CategoryWithFibrations C] : Prop extends P.IsGood where
@@ -467,66 +381,26 @@ variable [HasBinaryCoproduct A A] [CategoryWithCofibrations C]
   [(cofibrations C).IsStableUnderCobaseChange]
   [IsCofibrant A] [P.IsGood]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Cofibration P.i₀
-  body: by
-  rw [← P.inl_i]
-  infer_instance
-
-中文:
-实例 :
-  签名: 余纤维化 P.i₀
-  定义体: by
-  rw [← P.inl_i]
-  infer_instance
-
-Depends on / 依赖: P.inl_i, infer_instance, inl_i
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Cofibration P.i₀ := by
   rw [← P.inl_i]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Cofibration P.i₁
-  body: by
-  rw [← P.inr_i]
-  infer_instance
-
-中文:
-实例 :
-  签名: 余纤维化 P.i₁
-  定义体: by
-  rw [← P.inr_i]
-  infer_instance
-
-Depends on / 依赖: P.inr_i, infer_instance, inr_i
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Cofibration P.i₁ := by
   rw [← P.inr_i]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsCofibrant P.I
-  body: isCofibrant_of_cofibration P.i₀
-
-中文:
-实例 :
-  签名: IsCofibrant P.I
-  定义体: isCofibrant_of_cofibration P.i₀
-
-Depends on / 依赖: isCofibrant_of_cofibration
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsCofibrant P.I :=
   isCofibrant_of_cofibration P.i₀
@@ -535,34 +409,16 @@ end
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasBinaryCoproducts
-  signature: C] [CategoryWithCofibrations C] [P.IsGood]
-  body: by
-    have hi : cofibrations C P.i := by rw [← cofibration_iff]; infer_instance
-    rw [P.symm_i]; rw [cofibration_iff]
-    refine ((cofibrations C).arrow_mk_iso_iff ?_).2 hi
-    exact Arrow.isoMk (coprod.braiding A A) (Iso.refl _)
-
-中文:
-实例 [HasBinaryCoproducts
-  签名: C] [带余纤维化范畴 C] [P.是Good]
-  定义体: by
-    have hi : cofibrations C P.i := by rw [← cofibration_iff]; infer_instance
-    rw [P.symm_i]; rw [cofibration_iff]
-    refine ((cofibrations C).arrow_mk_iso_iff ?_).2 hi
-    exact Arrow.isoMk (coprod.braiding A A) (Iso.refl _)
-
-Depends on / 依赖: Arrow.isoMk, Iso.refl, P.symm_i, arrow_mk_iso_iff, braiding, cofibration_iff, cofibrations, coprod, coprod.braiding, infer_instance, symm_i
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasBinaryCoproducts C] [CategoryWithCofibrations C] [P.IsGood]
     [(cofibrations C).RespectsIso] : P.symm.IsGood where
   cofibration_i := by
     have hi : cofibrations C P.i := by rw [← cofibration_iff]; infer_instance
-    rw [P.symm_i]; rw [cofibration_iff]
+    rw [P.symm_i, cofibration_iff]
     refine ((cofibrations C).arrow_mk_iso_iff ?_).2 hi
     exact Arrow.isoMk (coprod.braiding A A) (Iso.refl _)
 
@@ -571,39 +427,19 @@ section
 variable [CategoryWithCofibrations C] [CategoryWithFibrations C]
   [(fibrations C).IsStableUnderComposition]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasBinaryCoproduct
-  signature: A A] [HasTerminal C] [IsFibrant A] [P.IsVeryGood] : IsFibrant P.I
-  body: isFibrant_of_fibration P.π
-
-中文:
-实例 [HasBinaryCoproduct
-  签名: A A] [有终止 C] [IsFibrant A] [P.是VeryGood] : IsFibrant P.I
-  定义体: isFibrant_of_fibration P.π
-
-Depends on / 依赖: isFibrant_of_fibration
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasBinaryCoproduct A A] [HasTerminal C] [IsFibrant A] [P.IsVeryGood] : IsFibrant P.I :=
   isFibrant_of_fibration P.π
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(cofibrations
-  signature: C).RespectsIso] [HasBinaryCoproducts C] [P.IsVeryGood] :
-  body: by dsimp; infer_instance
-
-中文:
-实例 [(cofibrations
-  签名: C).RespectsIso] [HasBinaryCoproducts C] [P.是VeryGood] :
-  定义体: by dsimp; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(cofibrations C).RespectsIso] [HasBinaryCoproducts C] [P.IsVeryGood] :
     P.symm.IsVeryGood where
@@ -624,28 +460,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- A cylinder object for `A` can be obtained from a factorization of the obvious
 map `A ⨿ A ⟶ A` as a cofibration followed by a trivial fibration. -/
 @[simps]
-/--
-Definition of `ofFactorizationData` / `ofFactorizationData` 的定义
+/-
+**HomotopicalAlgebra.Cylinder.ofFactorizationData** 是 Mathlib 中的一个定义，位于命名空间 `Hom
+otopicalAlgebra.Cylinder`。
+形式化陈述：ofFactorizationData : Cylinder A where I
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFactorizationData
-  signature: : Cylinder A where
-  body: h.Z
-  i₀ := coprod.inl ≫ h.i
-  i₁ := coprod.inr ≫ h.i
-  π := h.p
-
-@[simp]
-
-中文:
-定义 ofFactorizationData
-  签名: : 柱 A where
-  定义体: h.Z
-  i₀ := coprod.inl ≫ h.i
-  i₁ := coprod.inr ≫ h.i
-  π := h.p
-
-@[simp]
+--- 原说明 ---
+A cylinder object for `A` can be obtained from a factorization of the obvious
+map `A ⨿ A ⟶ A` as a cofibration followed by a trivial fibration.
 -/
 noncomputable def ofFactorizationData : Cylinder A where
   I := h.Z
@@ -654,59 +478,54 @@ noncomputable def ofFactorizationData : Cylinder A where
   π := h.p
 
 @[simp]
-/--
-lemma `ofFactorizationData_i` / 引理 `ofFactorizationData_i`
-
-English:
-lemma ofFactorizationData_i
-  statement: (ofFactorizationData h).i = h.i
-  proof: by cat_disch
-
-中文:
-引理 ofFactorizationData_i
-  结论: (ofFactorizationData h).i = h.i
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**HomotopicalAlgebra.Cylinder.ofFactorizationData_i** 是 Mathlib 中的一个引理，位于命名空间 `H
+omotopicalAlgebra.Cylinder`。
+形式化陈述：ofFactorizationData_i : (ofFactorizationData h).i = h.i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasFiniteCoproducts_of_hasFiniteColimits`：∀ (C : T
+ype u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFinit
+eColimits C],   CategoryTheory.Limits.HasFiniteCopro…
+· 使用定理 `HomotopicalAlgebra.ModelCategory.cm1b`：∀ {C : Type u} {inst : CategoryTh
+eory.Category.{v, u} C} [self : HomotopicalAlgebra.ModelCategory C],   CategoryT
+heory.Limits.HasFiniteColim…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.coprod.hom_ext`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinaryCo
+product X Y] {f g : X ⨿ Y …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `HomotopicalAlgebra.Precylinder.inl_i`：inl_i : coprod.inl ≫ P.i = P.i₀
+· 使用定理 `HomotopicalAlgebra.Cylinder.ofFactorizationData_i₀`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : HomotopicalAlgebra.ModelCategory 
+C] {A : C}   (h :     (HomotopicalAlgebr…
+· 使用引理 `HomotopicalAlgebra.Precylinder.inr_i`：inr_i : coprod.inr ≫ P.i = P.i₁
+· 使用定理 `HomotopicalAlgebra.Cylinder.ofFactorizationData_i₁`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : HomotopicalAlgebra.ModelCategory 
+C] {A : C}   (h :     (HomotopicalAlgebr…
 -/
 lemma ofFactorizationData_i : (ofFactorizationData h).i = h.i := by cat_disch
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (ofFactorizationData h).IsVeryGood
-  body: by simpa using inferInstanceAs (Cofibration h.i)
-  fibration_π := by dsimp; infer_instance
-
-中文:
-实例 :
-  签名: (ofFactorizationData h).是VeryGood
-  定义体: by simpa using inferInstanceAs (Cofibration h.i)
-  fibration_π := by dsimp; infer_instance
-
-Depends on / 依赖: Cofibration, infer_instance
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (ofFactorizationData h).IsVeryGood where
   cofibration_i := by simpa using inferInstanceAs (Cofibration h.i)
   fibration_π := by dsimp; infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasTerminal
-  signature: C] [IsFibrant A] [(fibrations C).IsStableUnderComposition] :
-  body: isFibrant_of_fibration (ofFactorizationData h).π
-
-中文:
-实例 [有终止
-  签名: C] [IsFibrant A] [(fibrations C).是StableUnderComposition] :
-  定义体: isFibrant_of_fibration (ofFactorizationData h).π
-
-Depends on / 依赖: isFibrant_of_fibration, ofFactorizationData
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasTerminal C] [IsFibrant A] [(fibrations C).IsStableUnderComposition] :
     IsFibrant (ofFactorizationData h).I :=
@@ -715,40 +534,37 @@ instance [HasTerminal C] [IsFibrant A] [(fibrations C).IsStableUnderComposition]
 end
 
 variable (A) in
-/--
-lemma `exists_very_good` / 引理 `exists_very_good`
-
-English:
-lemma exists_very_good
-  proof: ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
-    inferInstance⟩
-
-中文:
-引理 存在_very_good
-  证明: ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
-    inferInstance⟩
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.factorizationData, factorizationData, ofFactorizationData
+/-
+**HomotopicalAlgebra.Cylinder.exists_very_good** 是 Mathlib 中的一个引理，位于命名空间 `Homoto
+picalAlgebra.Cylinder`。
+形式化陈述：exists_very_good : exists (P : Cylinder A), P.IsVeryGood
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasFiniteCoproducts_of_hasFiniteColimits`：∀ (C : T
+ype u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFinit
+eColimits C],   CategoryTheory.Limits.HasFiniteCopro…
+· 使用定理 `HomotopicalAlgebra.ModelCategory.cm1b`：∀ {C : Type u} {inst : CategoryTh
+eory.Category.{v, u} C} [self : HomotopicalAlgebra.ModelCategory C],   CategoryT
+heory.Limits.HasFiniteColim…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `HomotopicalAlgebra.ModelCategory.cm5b`：∀ {C : Type u} {inst : CategoryTh
+eory.Category.{v, u} C} [self : HomotopicalAlgebra.ModelCategory C],   (Homotopi
+calAlgebra.cofibrations C).…
+· 使用定理 `HomotopicalAlgebra.Cylinder.instIsVeryGoodOfFactorizationData`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : HomotopicalAlgebra.Mod
+elCategory C] {A : C}   (h :     (HomotopicalAlgebr…
 -/
 lemma exists_very_good :
-    exists (P : Cylinder A), P.IsVeryGood :=
+    ∃ (P : Cylinder A), P.IsVeryGood :=
   ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
     inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nonempty (Cylinder A)
-  body: ⟨(exists_very_good A).choose⟩
-
-中文:
-实例 :
-  签名: 非空 (柱 A)
-  定义体: ⟨(exists_very_good A).choose⟩
-
-Depends on / 依赖: exists_very_good
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nonempty (Cylinder A) := ⟨(exists_very_good A).choose⟩
 
@@ -756,36 +572,17 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The gluing of two good cylinders. -/
 @[simps!]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**HomotopicalAlgebra.Cylinder.trans** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgebr
+a.Cylinder`。
+形式化陈述：trans [IsCofibrant A] (P P' : Cylinder A) [P'.IsGood] : Cylinder A where _
+_
+参数：P P' : Cylinder A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: [IsCofibrant A] (P P' : Cylinder A) [P'.IsGood]
-  body: P.toPrecylinder.trans P'.toPrecylinder
-  weakEquivalence_π := by
-    have : WeakEquivalence ((P.i₀ ≫ pushout.inl P.i₁ P'.i₀) ≫
-        pushout.desc P.π P'.π (by simp)) := by
-      simp only [assoc, colimit.ι_desc, PushoutCocone.mk_ι_app,
-        Precylinder.i₀_π]
-      infer_instance
-    dsimp
-    apply weakEquivalence_of_precomp (P.i₀ ≫ pushout.inl _ _)
-
-中文:
-定义 trans
-  签名: [IsCofibrant A] (P P' : 柱 A) [P'.是Good]
-  定义体: P.toPrecylinder.trans P'.toPrecylinder
-  weakEquivalence_π := by
-    have : WeakEquivalence ((P.i₀ ≫ pushout.inl P.i₁ P'.i₀) ≫
-        pushout.desc P.π P'.π (by simp)) := by
-      simp only [assoc, colimit.ι_desc, PushoutCocone.mk_ι_app,
-        Precylinder.i₀_π]
-      infer_instance
-    dsimp
-    apply weakEquivalence_of_precomp (P.i₀ ≫ pushout.inl _ _)
-
-Depends on / 依赖: P.toPrecylinder.trans, toPrecylinder
+--- 原说明 ---
+The gluing of two good cylinders.
 -/
 noncomputable def trans [IsCofibrant A] (P P' : Cylinder A) [P'.IsGood] :
     Cylinder A where
@@ -800,54 +597,16 @@ noncomputable def trans [IsCofibrant A] (P P' : Cylinder A) [P'.IsGood] :
     apply weakEquivalence_of_precomp (P.i₀ ≫ pushout.inl _ _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofibrant
-  signature: A] (P P'
-  body: by
-    let ψ : P.I ⨿ A ⟶ (P.trans P').I := coprod.desc (pushout.inl _ _) (P'.i₁ ≫ pushout.inr _ _)
-    rw [show (P.trans P').i = coprod.map P.i₀ (𝟙 A) ≫ ψ by simp [Precylinder.i]; rw [ψ]]
-    have fac : coprod.map P.i₁ (𝟙 A) ≫ ψ = P'.i ≫ pushout.inr _ _ := by
-      ext
-      · simp [ψ, pushout.condition]
-      · simp [ψ]
-    have sq : IsPushout P.i₁ (coprod.inl ≫ P'.i) (coprod.inl ≫ ψ) (pushout.inr _ _) := by
-      simpa [ψ] using IsPushout.of_hasPushout P.i₁ P'.i₀
-    have : Cofibration ψ := by
-      rw [cofibration_iff]
-      exact (cofibrations C).of_isPushout
-        (IsPushout.of_top sq fac (IsPushout.of_coprod_inl_with_id P.i₁ A).flip)
-        (by rw [← cofibration_iff]; infer_instance)
-    infer_instance
-
-中文:
-实例 [IsCofibrant
-  签名: A] (P P'
-  定义体: by
-    let ψ : P.I ⨿ A ⟶ (P.trans P').I := coprod.desc (pushout.inl _ _) (P'.i₁ ≫ pushout.inr _ _)
-    rw [show (P.trans P').i = coprod.map P.i₀ (𝟙 A) ≫ ψ by simp [Precylinder.i]; rw [ψ]]
-    have fac : coprod.map P.i₁ (𝟙 A) ≫ ψ = P'.i ≫ pushout.inr _ _ := by
-      ext
-      · simp [ψ, pushout.condition]
-      · simp [ψ]
-    have sq : IsPushout P.i₁ (coprod.inl ≫ P'.i) (coprod.inl ≫ ψ) (pushout.inr _ _) := by
-      simpa [ψ] using IsPushout.of_hasPushout P.i₁ P'.i₀
-    have : Cofibration ψ := by
-      rw [cofibration_iff]
-      exact (cofibrations C).of_isPushout
-        (IsPushout.of_top sq fac (IsPushout.of_coprod_inl_with_id P.i₁ A).flip)
-        (by rw [← cofibration_iff]; infer_instance)
-    infer_instance
-
-Depends on / 依赖: Cofibration, IsPushout, IsPushout.of_hasPushout, P.trans, Precylinder, Precylinder.i, cofibration_iff, cofibrations, condition, coprod, coprod.desc, coprod.inl, coprod.map, of_hasPushout, pushout, pushout.condition, pushout.inl, pushout.inr
+/-
+**HomotopicalAlgebra.Cylinder.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.Cyl
+inder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofibrant A] (P P' : Cylinder A) [P.IsGood] [P'.IsGood] :
     (P.trans P').IsGood where
   cofibration_i := by
     let ψ : P.I ⨿ A ⟶ (P.trans P').I := coprod.desc (pushout.inl _ _) (P'.i₁ ≫ pushout.inr _ _)
-    rw [show (P.trans P').i = coprod.map P.i₀ (𝟙 A) ≫ ψ by simp [Precylinder.i]; rw [ψ]]
+    rw [show (P.trans P').i = coprod.map P.i₀ (𝟙 A) ≫ ψ by simp [Precylinder.i, ψ]]
     have fac : coprod.map P.i₁ (𝟙 A) ≫ ψ = P'.i ≫ pushout.inr _ _ := by
       ext
       · simp [ψ, pushout.condition]
@@ -864,3 +623,4 @@ instance [IsCofibrant A] (P P' : Cylinder A) [P.IsGood] [P'.IsGood] :
 end Cylinder
 
 end HomotopicalAlgebra
+

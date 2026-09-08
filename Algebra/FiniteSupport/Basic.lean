@@ -30,596 +30,505 @@ namespace Function
 variable {α M : Type*} [One M]
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `hasFiniteMulSupport_fun_one` / 引理 `hasFiniteMulSupport_fun_one`
-
-English:
-lemma hasFiniteMulSupport_fun_one
-  statement: HasFiniteMulSupport (1 : α -> M)
-  proof: by
-  simp [HasFiniteMulSupport]
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 hasFiniteMulSupport_fun_one
-  结论: HasFiniteMulSupport (1 : α -> M)
-  证明: by
-  simp [HasFiniteMulSupport]
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: HasFiniteMulSupport
+/-
+**Function.hasFiniteMulSupport_fun_one** 是 Mathlib 中的一个引理，位于命名空间 `Function`。
+形式化陈述：hasFiniteMulSupport_fun_one : HasFiniteMulSupport (1 : α -> M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Function.mulSupport_one`：mulSupport_one : mulSupport (1 : ι -> M) = ∅
 -/
-lemma hasFiniteMulSupport_fun_one : HasFiniteMulSupport (1 : α -> M) := by
+lemma hasFiniteMulSupport_fun_one : HasFiniteMulSupport (1 : α → M) := by
   simp [HasFiniteMulSupport]
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.fun_comp` / 引理 `HasFiniteMulSupport.fun_comp`
-
-English:
-lemma HasFiniteMulSupport.fun_comp
-  statement: {N : Type*} [One N] {g : M -> N} {f : α -> M}
-  proof: hf.subset mulSupport_comp_subset hg f
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.fun_comp
-  结论: {N : 类型} [幺 N] {g : M -> N} {f : α -> M}
-  证明: hf.subset mulSupport_comp_subset hg f
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.subset, mulSupport_comp_subset, subset
+/-
+**Function.HasFiniteMulSupport.fun_comp** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasF
+initeMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {N : Type u_3} [inst_1 : On
+e N] {g : M → N} {f : α → M},   Function.HasFiniteMulSupport f → g 1 = 1 → Funct
+ion.HasFiniteMulSupport fun a => g (f a)
+参数：f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用引理 `Function.mulSupport_comp_subset`：mulSupport_comp_subset {g : M -> N} (hg
+ : g 1 = 1) (f : ι -> M) : mulSupport (g ∘ f) subseteq mulSupport f
 -/
-lemma HasFiniteMulSupport.fun_comp {N : Type*} [One N] {g : M -> N} {f : α -> M}
+lemma HasFiniteMulSupport.fun_comp {N : Type*} [One N] {g : M → N} {f : α → M}
     (hf : HasFiniteMulSupport f) (hg : g 1 = 1) :
-    HasFiniteMulSupport fun a => g (f a) :=
-hf.subset mulSupport_comp_subset hg f
+    HasFiniteMulSupport fun a ↦ g (f a) :=
+  hf.subset <| mulSupport_comp_subset hg f
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.comp` / 引理 `HasFiniteMulSupport.comp`
-
-English:
-lemma HasFiniteMulSupport.comp
-  statement: {N : Type*} [One N] {g : M -> N} {f : α -> M}
-  proof: hf.subset mulSupport_comp_subset hg f
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.comp
-  结论: {N : 类型} [幺 N] {g : M -> N} {f : α -> M}
-  证明: hf.subset mulSupport_comp_subset hg f
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.subset, mulSupport_comp_subset, subset
+/-
+**Function.HasFiniteMulSupport.comp** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinit
+eMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {N : Type u_3} [inst_1 : On
+e N] {g : M → N} {f : α → M},   Function.HasFiniteMulSupport f → g 1 = 1 → Funct
+ion.HasFiniteMulSupport (g ∘ f)
+参数：g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用引理 `Function.mulSupport_comp_subset`：mulSupport_comp_subset {g : M -> N} (hg
+ : g 1 = 1) (f : ι -> M) : mulSupport (g ∘ f) subseteq mulSupport f
 -/
-lemma HasFiniteMulSupport.comp {N : Type*} [One N] {g : M -> N} {f : α -> M}
+lemma HasFiniteMulSupport.comp {N : Type*} [One N] {g : M → N} {f : α → M}
     (hf : HasFiniteMulSupport f) (hg : g 1 = 1) :
     HasFiniteMulSupport (g ∘ f) :=
-hf.subset mulSupport_comp_subset hg f
+  hf.subset <| mulSupport_comp_subset hg f
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.fst` / 引理 `HasFiniteMulSupport.fst`
-
-English:
-lemma HasFiniteMulSupport.fst
-  given: {M' : Type*} [One M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
-  proof: hf.comp rfl
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.fst
-  条件: {M' : 类型} [幺 M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
-  证明: hf.comp rfl
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.comp
+/-
+**Function.HasFiniteMulSupport.fst** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {M' : Type u_3} [inst_1 : O
+ne M'] {f : α → M × M'},   Function.HasFiniteMulSupport f → Function.HasFiniteMu
+lSupport fun a => (f a).1
+参数：f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.HasFiniteMulSupport.comp`：∀ {α : Type u_1} {M : Type u_2} [inst
+ : One M] {N : Type u_3} [inst_1 : One N] {g : M → N} {f : α → M},   Function.Ha
+sFiniteMulSupport f → g…
 -/
-lemma HasFiniteMulSupport.fst {M' : Type*} [One M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f) :
-    HasFiniteMulSupport fun a => (f a).fst :=
+lemma HasFiniteMulSupport.fst {M' : Type*} [One M'] {f : α → M × M'} (hf : HasFiniteMulSupport f) :
+    HasFiniteMulSupport fun a ↦ (f a).fst :=
   hf.comp rfl
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.snd` / 引理 `HasFiniteMulSupport.snd`
-
-English:
-lemma HasFiniteMulSupport.snd
-  given: {M' : Type*} [One M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
-  proof: hf.comp rfl
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.snd
-  条件: {M' : 类型} [幺 M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f)
-  证明: hf.comp rfl
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.comp
+/-
+**Function.HasFiniteMulSupport.snd** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {M' : Type u_3} [inst_1 : O
+ne M'] {f : α → M × M'},   Function.HasFiniteMulSupport f → Function.HasFiniteMu
+lSupport fun a => (f a).2
+参数：f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.HasFiniteMulSupport.comp`：∀ {α : Type u_1} {M : Type u_2} [inst
+ : One M] {N : Type u_3} [inst_1 : One N] {g : M → N} {f : α → M},   Function.Ha
+sFiniteMulSupport f → g…
 -/
-lemma HasFiniteMulSupport.snd {M' : Type*} [One M'] {f : α -> M × M'} (hf : HasFiniteMulSupport f) :
-    HasFiniteMulSupport fun a => (f a).snd :=
+lemma HasFiniteMulSupport.snd {M' : Type*} [One M'] {f : α → M × M'} (hf : HasFiniteMulSupport f) :
+    HasFiniteMulSupport fun a ↦ (f a).snd :=
   hf.comp rfl
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.prodMk` / 引理 `HasFiniteMulSupport.prodMk`
-
-English:
-lemma HasFiniteMulSupport.prodMk
-  statement: {M' : Type*} [One M'] {f : α -> M} {g : α -> M'}
-  proof: by
-  simp only [HasFiniteMulSupport] at hf hg ⊢
-  rw [mulSupport_prodMk f g]
-  exact hf.union hg
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-中文:
-引理 HasFiniteMulSupport.prodMk
-  结论: {M' : 类型} [幺 M'] {f : α -> M} {g : α -> M'}
-  证明: by
-  simp only [HasFiniteMulSupport] at hf hg ⊢
-  rw [mulSupport_prodMk f g]
-  exact hf.union hg
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-Depends on / 依赖: HasFiniteMulSupport, hf.union, mulSupport_prodMk
+/-
+**Function.HasFiniteMulSupport.prodMk** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFin
+iteMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {M' : Type u_3} [inst_1 : O
+ne M'] {f : α → M} {g : α → M'},   Function.HasFiniteMulSupport f → Function.Has
+FiniteMulSupport g → Function.HasFiniteMulSupport fun a => (f a, g a)
+参数：f a, g a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Function.mulSupport_prodMk`：mulSupport_prodMk (f : ι -> M) (g : ι -> N) 
+: mulSupport (fun x => (f x, g x)) = mulSupport f union mulSupport g
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
 -/
-lemma HasFiniteMulSupport.prodMk {M' : Type*} [One M'] {f : α -> M} {g : α -> M'}
+lemma HasFiniteMulSupport.prodMk {M' : Type*} [One M'] {f : α → M} {g : α → M'}
     (hf : HasFiniteMulSupport f) (hg : HasFiniteMulSupport g) :
-    HasFiniteMulSupport fun a => (f a, g a) := by
+    HasFiniteMulSupport fun a ↦ (f a, g a) := by
   simp only [HasFiniteMulSupport] at hf hg ⊢
   rw [mulSupport_prodMk f g]
   exact hf.union hg
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
-/--
-lemma `HasFiniteMulSupport.mul` / 引理 `HasFiniteMulSupport.mul`
-
-English:
-lemma HasFiniteMulSupport.mul
-  statement: {M : Type*} [MulOneClass M] {f g : α -> M}
-  proof: (hf.union hg).subset mulSupport_mul ..
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-中文:
-引理 HasFiniteMulSupport.mul
-  结论: {M : 类型} [MulOne类 M] {f g : α -> M}
-  证明: (hf.union hg).subset mulSupport_mul ..
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-Depends on / 依赖: hf.union, mulSupport_mul, subset
+/-
+**Function.HasFiniteMulSupport.mul** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_3} [inst : MulOneClass M] {f g : α → M},   Fu
+nction.HasFiniteMulSupport f → Function.HasFiniteMulSupport g → Function.HasFini
+teMulSupport (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用定理 `Function.mulSupport_mul`：mulSupport_mul [MulOneClass M] (f g : α -> M) :
+ (mulSupport fun x => f x * g x) subseteq mulSupport f union mulSupport g
 -/
-lemma HasFiniteMulSupport.mul {M : Type*} [MulOneClass M] {f g : α -> M}
+lemma HasFiniteMulSupport.mul {M : Type*} [MulOneClass M] {f g : α → M}
     (hf : HasFiniteMulSupport f) (hg : HasFiniteMulSupport g) :
     HasFiniteMulSupport (f * g) :=
-(hf.union hg).subset mulSupport_mul ..
+  (hf.union hg).subset <| mulSupport_mul ..
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
-/--
-lemma `HasFiniteMulSupport.inv` / 引理 `HasFiniteMulSupport.inv`
-
-English:
-lemma HasFiniteMulSupport.inv
-  statement: {M : Type*} [DivisionMonoid M] {f : α -> M}
-  proof: hf.comp inv_one
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.inv
-  结论: {M : 类型} [Division幺半群 M] {f : α -> M}
-  证明: hf.comp inv_one
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.comp, inv_one
+/-
+**Function.HasFiniteMulSupport.inv** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_3} [inst : DivisionMonoid M] {f : α → M},   F
+unction.HasFiniteMulSupport f → Function.HasFiniteMulSupport f⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.HasFiniteMulSupport.comp`：∀ {α : Type u_1} {M : Type u_2} [inst
+ : One M] {N : Type u_3} [inst_1 : One N] {g : M → N} {f : α → M},   Function.Ha
+sFiniteMulSupport f → g…
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
 -/
-lemma HasFiniteMulSupport.inv {M : Type*} [DivisionMonoid M] {f : α -> M}
+lemma HasFiniteMulSupport.inv {M : Type*} [DivisionMonoid M] {f : α → M}
     (hf : HasFiniteMulSupport f) :
     HasFiniteMulSupport f⁻¹ :=
   hf.comp inv_one
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.prod` / 引理 `HasFiniteMulSupport.prod`
-
-English:
-lemma HasFiniteMulSupport.prod
-  statement: {M : Type*} [CommMonoid M] {ι : Type*} {f : ι -> α -> M}
-  proof: (s.finite_toSet.biUnion fun i _ => hf i).subset s.mulSupport_prod f
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-中文:
-引理 HasFiniteMulSupport.乘积
-  结论: {M : 类型} [交换幺半群 M] {ι : 类型} {f : ι -> α -> M}
-  证明: (s.finite_toSet.biUnion fun i _ => hf i).subset s.mulSupport_prod f
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-Depends on / 依赖: biUnion, finite_toSet, mulSupport_prod, s.finite_toSet.biUnion, s.mulSupport_prod, subset
+/-
+**Function.HasFiniteMulSupport.prod** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinit
+eMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_3} [inst : CommMonoid M] {ι : Type u_4} {f : 
+ι → α → M},   (∀ (i : ι), Function.HasFiniteMulSupport (f i)) →     ∀ (s : Finse
+t ι), Function.HasFiniteMulSupport fun a => ∏ i ∈ s, f i a
+参数：∀ (i : ι), Function.HasFiniteMulSupport (f i)；s : Finset ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.biUnion`：∀ {α : Type u} {ι : Type u_1} {s : Set ι}, s.Finite 
+→ ∀ {t : ι → Set α}, (∀ i ∈ s, (t i).Finite) → (⋃ i ∈ s, t i).Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用引理 `Finset.mulSupport_prod`：mulSupport_prod (s : Finset ι) (f : ι -> κ -> M)
+ : mulSupport (fun x => ∏ i in s, f i x) subseteq ⋃ i in s, mulSupport (f i)
 -/
-lemma HasFiniteMulSupport.prod {M : Type*} [CommMonoid M] {ι : Type*} {f : ι -> α -> M}
-    (hf : forall i, HasFiniteMulSupport (f i)) (s : Finset ι) :
-    HasFiniteMulSupport fun a => ∏ i in s, f i a :=
-(s.finite_toSet.biUnion fun i _ => hf i).subset s.mulSupport_prod f
+lemma HasFiniteMulSupport.prod {M : Type*} [CommMonoid M] {ι : Type*} {f : ι → α → M}
+    (hf : ∀ i, HasFiniteMulSupport (f i)) (s : Finset ι) :
+    HasFiniteMulSupport fun a ↦ ∏ i ∈ s, f i a :=
+  (s.finite_toSet.biUnion fun i _ ↦ hf i).subset <| s.mulSupport_prod f
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
-/--
-lemma `HasFiniteMulSupport.div` / 引理 `HasFiniteMulSupport.div`
-
-English:
-lemma HasFiniteMulSupport.div
-  statement: {M : Type*} [DivisionMonoid M] {f g : α -> M}
-  proof: (hf.union hg).subset mulSupport_div ..
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-中文:
-引理 HasFiniteMulSupport.div
-  结论: {M : 类型} [Division幺半群 M] {f g : α -> M}
-  证明: (hf.union hg).subset mulSupport_div ..
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-Depends on / 依赖: hf.union, mulSupport_div, subset
+/-
+**Function.HasFiniteMulSupport.div** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_3} [inst : DivisionMonoid M] {f g : α → M},  
+ Function.HasFiniteMulSupport f → Function.HasFiniteMulSupport g → Function.HasF
+initeMulSupport (f / g)
+参数：f / g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用定理 `Function.mulSupport_div`：mulSupport_div : (mulSupport fun x => f x / g x
+) subseteq mulSupport f union mulSupport g
 -/
-lemma HasFiniteMulSupport.div {M : Type*} [DivisionMonoid M] {f g : α -> M}
+lemma HasFiniteMulSupport.div {M : Type*} [DivisionMonoid M] {f g : α → M}
     (hf : HasFiniteMulSupport f) (hg : HasFiniteMulSupport g) :
     HasFiniteMulSupport (f / g) :=
-(hf.union hg).subset mulSupport_div ..
+  (hf.union hg).subset <| mulSupport_div ..
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
-/--
-lemma `HasFiniteMulSupport.pow` / 引理 `HasFiniteMulSupport.pow`
-
-English:
-lemma HasFiniteMulSupport.pow
-  statement: {M : Type*} [Monoid M] {f : α -> M} (hf : HasFiniteMulSupport f)
-  proof: hf.comp (one_pow n)
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-中文:
-引理 HasFiniteMulSupport.pow
-  结论: {M : 类型} [幺半群 M] {f : α -> M} (hf : HasFiniteMulSupport f)
-  证明: hf.comp (one_pow n)
-
-@[to_additive (attr := to_fun (attr := fun_prop))]
-
-Depends on / 依赖: hf.comp, one_pow
+/-
+**Function.HasFiniteMulSupport.pow** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_3} [inst : Monoid M] {f : α → M},   Function.
+HasFiniteMulSupport f → ∀ (n : ℕ), Function.HasFiniteMulSupport (f ^ n)
+参数：n : ℕ；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.HasFiniteMulSupport.comp`：∀ {α : Type u_1} {M : Type u_2} [inst
+ : One M] {N : Type u_3} [inst_1 : One N] {g : M → N} {f : α → M},   Function.Ha
+sFiniteMulSupport f → g…
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
 -/
-lemma HasFiniteMulSupport.pow {M : Type*} [Monoid M] {f : α -> M} (hf : HasFiniteMulSupport f)
-    (n : Nat) :
+lemma HasFiniteMulSupport.pow {M : Type*} [Monoid M] {f : α → M} (hf : HasFiniteMulSupport f)
+    (n : ℕ) :
     HasFiniteMulSupport (f ^ n) :=
   hf.comp (one_pow n)
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
-/--
-lemma `HasFiniteMulSupport.zpow` / 引理 `HasFiniteMulSupport.zpow`
-
-English:
-lemma HasFiniteMulSupport.zpow
-  statement: {M : Type*} [DivisionMonoid M] {f : α -> M}
-  proof: hf.comp (one_zpow n)
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.zpow
-  结论: {M : 类型} [Division幺半群 M] {f : α -> M}
-  证明: hf.comp (one_zpow n)
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.comp, one_zpow
+/-
+**Function.HasFiniteMulSupport.zpow** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinit
+eMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_3} [inst : DivisionMonoid M] {f : α → M},   F
+unction.HasFiniteMulSupport f → ∀ (n : ℤ), Function.HasFiniteMulSupport (f ^ n)
+参数：n : ℤ；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.HasFiniteMulSupport.comp`：∀ {α : Type u_1} {M : Type u_2} [inst
+ : One M] {N : Type u_3} [inst_1 : One N] {g : M → N} {f : α → M},   Function.Ha
+sFiniteMulSupport f → g…
+· 使用定理 `one_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (n : ℤ), 1 ^ n = 1
 -/
-lemma HasFiniteMulSupport.zpow {M : Type*} [DivisionMonoid M] {f : α -> M}
-    (hf : HasFiniteMulSupport f) (n : Int) :
+lemma HasFiniteMulSupport.zpow {M : Type*} [DivisionMonoid M] {f : α → M}
+    (hf : HasFiniteMulSupport f) (n : ℤ) :
     HasFiniteMulSupport (f ^ n) :=
   hf.comp (one_zpow n)
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.max` / 引理 `HasFiniteMulSupport.max`
-
-English:
-lemma HasFiniteMulSupport.max
-  statement: [LinearOrder M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  proof: (hf.union hg).subset mulSupport_max ..
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.最大值
-  结论: [线性序 M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  证明: (hf.union hg).subset mulSupport_max ..
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.union, mulSupport_max, subset
+/-
+**Function.HasFiniteMulSupport.max** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : LinearOrder M] {f
+ g : α → M},   Function.HasFiniteMulSupport f →     Function.HasFiniteMulSupport
+ g → Function.HasFiniteMulSupport fun a => max (f a) (g a)
+参数：f a；g a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用引理 `Function.mulSupport_max`：mulSupport_max [LinearOrder M] (f g : α -> M) :
+ mulSupport (fun x => max (f x) (g x)) subseteq mulSupport f union mulSupport g
 -/
-lemma HasFiniteMulSupport.max [LinearOrder M] {f g : α -> M} (hf : HasFiniteMulSupport f)
+lemma HasFiniteMulSupport.max [LinearOrder M] {f g : α → M} (hf : HasFiniteMulSupport f)
     (hg : HasFiniteMulSupport g) :
-    HasFiniteMulSupport fun a => max (f a) (g a) :=
-(hf.union hg).subset mulSupport_max ..
+    HasFiniteMulSupport fun a ↦ max (f a) (g a) :=
+  (hf.union hg).subset <| mulSupport_max ..
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.min` / 引理 `HasFiniteMulSupport.min`
-
-English:
-lemma HasFiniteMulSupport.min
-  statement: [LinearOrder M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  proof: (hf.union hg).subset mulSupport_min ..
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.最小值
-  结论: [线性序 M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  证明: (hf.union hg).subset mulSupport_min ..
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.union, mulSupport_min, subset
+/-
+**Function.HasFiniteMulSupport.min** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : LinearOrder M] {f
+ g : α → M},   Function.HasFiniteMulSupport f →     Function.HasFiniteMulSupport
+ g → Function.HasFiniteMulSupport fun a => min (f a) (g a)
+参数：f a；g a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用引理 `Function.mulSupport_min`：mulSupport_min [LinearOrder M] (f g : α -> M) :
+ mulSupport (fun x => min (f x) (g x)) subseteq mulSupport f union mulSupport g
 -/
-lemma HasFiniteMulSupport.min [LinearOrder M] {f g : α -> M} (hf : HasFiniteMulSupport f)
+lemma HasFiniteMulSupport.min [LinearOrder M] {f g : α → M} (hf : HasFiniteMulSupport f)
     (hg : HasFiniteMulSupport g) :
-    HasFiniteMulSupport fun a => min (f a) (g a) :=
-(hf.union hg).subset mulSupport_min ..
+    HasFiniteMulSupport fun a ↦ min (f a) (g a) :=
+  (hf.union hg).subset <| mulSupport_min ..
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.sup` / 引理 `HasFiniteMulSupport.sup`
-
-English:
-lemma HasFiniteMulSupport.sup
-  statement: [SemilatticeSup M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  proof: (hf.union hg).subset mulSupport_sup ..
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.上确界
-  结论: [SemilatticeSup M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  证明: (hf.union hg).subset mulSupport_sup ..
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.union, mulSupport_sup, subset
+/-
+**Function.HasFiniteMulSupport.sup** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : SemilatticeSup M]
+ {f g : α → M},   Function.HasFiniteMulSupport f → Function.HasFiniteMulSupport 
+g → Function.HasFiniteMulSupport fun a => f a ⊔ g a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用引理 `Function.mulSupport_sup`：mulSupport_sup [SemilatticeSup M] (f g : α -> M
+) : mulSupport (fun x => f x ⊔ g x) subseteq mulSupport f union mulSupport g
 -/
-lemma HasFiniteMulSupport.sup [SemilatticeSup M] {f g : α -> M} (hf : HasFiniteMulSupport f)
+lemma HasFiniteMulSupport.sup [SemilatticeSup M] {f g : α → M} (hf : HasFiniteMulSupport f)
     (hg : HasFiniteMulSupport g) :
-    HasFiniteMulSupport fun a => f a ⊔ g a :=
-(hf.union hg).subset mulSupport_sup ..
+    HasFiniteMulSupport fun a ↦ f a ⊔ g a :=
+  (hf.union hg).subset <| mulSupport_sup ..
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.inf` / 引理 `HasFiniteMulSupport.inf`
-
-English:
-lemma HasFiniteMulSupport.inf
-  statement: [SemilatticeInf M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  proof: (hf.union hg).subset mulSupport_inf ..
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.下确界
-  结论: [SemilatticeInf M] {f g : α -> M} (hf : HasFiniteMulSupport f)
-  证明: (hf.union hg).subset mulSupport_inf ..
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: hf.union, mulSupport_inf, subset
+/-
+**Function.HasFiniteMulSupport.inf** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinite
+MulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : SemilatticeInf M]
+ {f g : α → M},   Function.HasFiniteMulSupport f → Function.HasFiniteMulSupport 
+g → Function.HasFiniteMulSupport fun a => f a ⊓ g a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用引理 `Function.mulSupport_inf`：mulSupport_inf [SemilatticeInf M] (f g : α -> M
+) : mulSupport (fun x => f x ⊓ g x) subseteq mulSupport f union mulSupport g
 -/
-lemma HasFiniteMulSupport.inf [SemilatticeInf M] {f g : α -> M} (hf : HasFiniteMulSupport f)
+lemma HasFiniteMulSupport.inf [SemilatticeInf M] {f g : α → M} (hf : HasFiniteMulSupport f)
     (hg : HasFiniteMulSupport g) :
-    HasFiniteMulSupport fun a => f a ⊓ g a :=
-(hf.union hg).subset mulSupport_inf ..
+    HasFiniteMulSupport fun a ↦ f a ⊓ g a :=
+  (hf.union hg).subset <| mulSupport_inf ..
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.iSup` / 引理 `HasFiniteMulSupport.iSup`
-
-English:
-lemma HasFiniteMulSupport.iSup
-  statement: [ConditionallyCompleteLattice M] {ι : Sort*} [Nonempty ι]
-  proof: (Set.finite_iUnion hf).subset mulSupport_iSup f
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.iSup
-  结论: [条件完备格 M] {ι : 类型层*} [非空 ι]
-  证明: (Set.finite_iUnion hf).subset mulSupport_iSup f
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: Set.finite_iUnion, finite_iUnion, mulSupport_iSup, subset
+/-
+**Function.HasFiniteMulSupport.iSup** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinit
+eMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : ConditionallyComp
+leteLattice M] {ι : Sort u_3} [Nonempty ι]   [Finite ι] {f : ι → α → M},   (∀ (i
+ : ι), Function.HasFiniteMulSupport (f i)) → Function.HasFiniteMulSupport fun a 
+=> ⨆ i, f i a
+参数：∀ (i : ι), Function.HasFiniteMulSupport (f i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.finite_iUnion`：finite_iUnion [Finite ι] {f : ι -> Set α} (H : forall
+ i, (f i).Finite) : (⋃ i, f i).Finite
+· 使用引理 `Function.mulSupport_iSup`：mulSupport_iSup [ConditionallyCompleteLattice 
+M] [Nonempty ι] (f : ι -> α -> M) : mulSupport (fun x => ⨆ i, f i x) subseteq ⋃ 
+i, mulSupport …
 -/
 lemma HasFiniteMulSupport.iSup [ConditionallyCompleteLattice M] {ι : Sort*} [Nonempty ι]
-    [Finite ι] {f : ι -> α -> M} (hf : forall i, HasFiniteMulSupport (f i)) :
-    HasFiniteMulSupport fun a => ⨆ i, f i a :=
-(Set.finite_iUnion hf).subset mulSupport_iSup f
+    [Finite ι] {f : ι → α → M} (hf : ∀ i, HasFiniteMulSupport (f i)) :
+    HasFiniteMulSupport fun a ↦ ⨆ i, f i a :=
+  (Set.finite_iUnion hf).subset <| mulSupport_iSup f
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.iInf` / 引理 `HasFiniteMulSupport.iInf`
-
-English:
-lemma HasFiniteMulSupport.iInf
-  statement: [ConditionallyCompleteLattice M] {ι : Sort*} [Nonempty ι]
-  proof: (Set.finite_iUnion hf).subset mulSupport_iInf f
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.iInf
-  结论: [条件完备格 M] {ι : 类型层*} [非空 ι]
-  证明: (Set.finite_iUnion hf).subset mulSupport_iInf f
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: Set.finite_iUnion, finite_iUnion, mulSupport_iInf, subset
+/-
+**Function.HasFiniteMulSupport.iInf** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinit
+eMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : ConditionallyComp
+leteLattice M] {ι : Sort u_3} [Nonempty ι]   [Finite ι] {f : ι → α → M},   (∀ (i
+ : ι), Function.HasFiniteMulSupport (f i)) → Function.HasFiniteMulSupport fun a 
+=> ⨅ i, f i a
+参数：∀ (i : ι), Function.HasFiniteMulSupport (f i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.finite_iUnion`：finite_iUnion [Finite ι] {f : ι -> Set α} (H : forall
+ i, (f i).Finite) : (⋃ i, f i).Finite
+· 使用引理 `Function.mulSupport_iInf`：mulSupport_iInf [ConditionallyCompleteLattice 
+M] [Nonempty ι] (f : ι -> α -> M) : mulSupport (fun x => ⨅ i, f i x) subseteq ⋃ 
+i, mulSupport …
 -/
 lemma HasFiniteMulSupport.iInf [ConditionallyCompleteLattice M] {ι : Sort*} [Nonempty ι]
-    [Finite ι] {f : ι -> α -> M} (hf : forall i, HasFiniteMulSupport (f i)) :
-    HasFiniteMulSupport fun a => ⨅ i, f i a :=
-(Set.finite_iUnion hf).subset mulSupport_iInf f
+    [Finite ι] {f : ι → α → M} (hf : ∀ i, HasFiniteMulSupport (f i)) :
+    HasFiniteMulSupport fun a ↦ ⨅ i, f i a :=
+  (Set.finite_iUnion hf).subset <| mulSupport_iInf f
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.pi` / 引理 `HasFiniteMulSupport.pi`
-
-English:
-lemma HasFiniteMulSupport.pi
-  statement: {ι : Type*} [Finite α] {f : ι -> α -> M}
-  proof: by
-  simp only [HasFiniteMulSupport] at hf ⊢
-  refine (Set.finite_iUnion hf).subset fun i hi => ?_
-  simp only [mem_mulSupport, Set.mem_iUnion] at hi ⊢
-  exact ne_iff.mp hi
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.pi
-  结论: {ι : 类型} [有限 α] {f : ι -> α -> M}
-  证明: by
-  simp only [HasFiniteMulSupport] at hf ⊢
-  refine (Set.finite_iUnion hf).subset fun i hi => ?_
-  simp only [mem_mulSupport, Set.mem_iUnion] at hi ⊢
-  exact ne_iff.mp hi
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: HasFiniteMulSupport, Set.finite_iUnion, Set.mem_iUnion, finite_iUnion, mem_iUnion, mem_mulSupport, ne_iff, ne_iff.mp, subset
+/-
+**Function.HasFiniteMulSupport.pi** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFiniteM
+ulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {ι : Type u_3} [Finite α] {
+f : ι → α → M},   (∀ (a : α), Function.HasFiniteMulSupport fun x => f x a) → Fun
+ction.HasFiniteMulSupport f
+参数：∀ (a : α), Function.HasFiniteMulSupport fun x => f x a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.finite_iUnion`：finite_iUnion [Finite ι] {f : ι -> Set α} (H : forall
+ i, (f i).Finite) : (⋃ i, f i).Finite
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.ne_iff`：ne_iff {β : α -> Sort*} {f₁ f₂ : forall a, β a} : f₁ !=
+ f₂ ↔ exists a, f₁ a != f₂ a
 -/
-lemma HasFiniteMulSupport.pi {ι : Type*} [Finite α] {f : ι -> α -> M}
-    (hf : forall a, HasFiniteMulSupport (f · a)) :
+lemma HasFiniteMulSupport.pi {ι : Type*} [Finite α] {f : ι → α → M}
+    (hf : ∀ a, HasFiniteMulSupport (f · a)) :
     HasFiniteMulSupport f := by
   simp only [HasFiniteMulSupport] at hf ⊢
-  refine (Set.finite_iUnion hf).subset fun i hi => ?_
+  refine (Set.finite_iUnion hf).subset fun i hi ↦ ?_
   simp only [mem_mulSupport, Set.mem_iUnion] at hi ⊢
   exact ne_iff.mp hi
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.sup'` / 引理 `HasFiniteMulSupport.sup'`
-
-English:
-lemma HasFiniteMulSupport.sup'
-  statement: [SemilatticeSup M] {ι : Type*} {f : ι -> α -> M}
-  proof: by
-  simp only [HasFiniteMulSupport] at hf ⊢
-  refine (s.finite_toSet.biUnion hf).subset fun a ha => ?_
-  simp only [mem_mulSupport, SetLike.mem_coe, Set.mem_iUnion, exists_prop] at ha ⊢
-  contrapose! ha
-  exact Finset.sup'_eq_of_forall hs (fun x => f x a) ha
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.上确界'
-  结论: [SemilatticeSup M] {ι : 类型} {f : ι -> α -> M}
-  证明: by
-  simp only [HasFiniteMulSupport] at hf ⊢
-  refine (s.finite_toSet.biUnion hf).subset fun a ha => ?_
-  simp only [mem_mulSupport, SetLike.mem_coe, Set.mem_iUnion, exists_prop] at ha ⊢
-  contrapose! ha
-  exact Finset.sup'_eq_of_forall hs (fun x => f x a) ha
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: Finset, Finset.sup, HasFiniteMulSupport, Set.mem_iUnion, SetLike, SetLike.mem_coe, _eq_of_forall, biUnion, contrapose, exists_prop, finite_toSet, mem_coe, mem_iUnion, mem_mulSupport, s.finite_toSet.biUnion, subset
+/-
+**Function.HasFiniteMulSupport.sup'** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinit
+eMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : SemilatticeSup M]
+ {ι : Type u_3} {f : ι → α → M}   (s : Finset ι),   (∀ i ∈ s, Function.HasFinite
+MulSupport (f i)) →     ∀ (hs : s.Nonempty), Function.HasFiniteMulSupport fun a 
+=> s.sup' hs fun x => f x a
+参数：s : Finset ι；∀ i ∈ s, Function.HasFiniteMulSupport (f i)；hs : s.Nonempty。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.biUnion`：∀ {α : Type u} {ι : Type u_1} {s : Set ι}, s.Finite 
+→ ∀ {t : ι → Set α}, (∀ i ∈ s, (t i).Finite) → (⋃ i ∈ s, t i).Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `Finset.sup'_eq_of_forall`：∀ {α : Type u_2} {β : Type u_3} [inst : Semila
+tticeSup α] {s : Finset β} (H : s.Nonempty) (f : β → α) {a : α},   (∀ b ∈ s, f b
+ = a) → s.sup'…
 -/
-lemma HasFiniteMulSupport.sup' [SemilatticeSup M] {ι : Type*} {f : ι -> α -> M}
-    (s : Finset ι) (hf : forall i in s, HasFiniteMulSupport (f i)) (hs : s.Nonempty) :
-    HasFiniteMulSupport fun a => s.sup' hs (f · a) := by
+lemma HasFiniteMulSupport.sup' [SemilatticeSup M] {ι : Type*} {f : ι → α → M}
+    (s : Finset ι) (hf : ∀ i ∈ s, HasFiniteMulSupport (f i)) (hs : s.Nonempty) :
+    HasFiniteMulSupport fun a ↦ s.sup' hs (f · a) := by
   simp only [HasFiniteMulSupport] at hf ⊢
-  refine (s.finite_toSet.biUnion hf).subset fun a ha => ?_
+  refine (s.finite_toSet.biUnion hf).subset fun a ha ↦ ?_
   simp only [mem_mulSupport, SetLike.mem_coe, Set.mem_iUnion, exists_prop] at ha ⊢
   contrapose! ha
-  exact Finset.sup'_eq_of_forall hs (fun x => f x a) ha
+  exact Finset.sup'_eq_of_forall hs (fun x ↦ f x a) ha
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.inf'` / 引理 `HasFiniteMulSupport.inf'`
-
-English:
-lemma HasFiniteMulSupport.inf'
-  statement: [SemilatticeInf M] {ι : Type*} {f : ι -> α -> M}
-  proof: by
-  simp only [HasFiniteMulSupport] at hf ⊢
-  refine (s.finite_toSet.biUnion hf).subset fun a ha => ?_
-  simp only [mem_mulSupport, SetLike.mem_coe, Set.mem_iUnion, exists_prop] at ha ⊢
-  contrapose! ha
-  exact Finset.inf'_eq_of_forall hs (fun x => f x a) ha
-
-中文:
-引理 HasFiniteMulSupport.下确界'
-  结论: [SemilatticeInf M] {ι : 类型} {f : ι -> α -> M}
-  证明: by
-  simp only [HasFiniteMulSupport] at hf ⊢
-  refine (s.finite_toSet.biUnion hf).subset fun a ha => ?_
-  simp only [mem_mulSupport, SetLike.mem_coe, Set.mem_iUnion, exists_prop] at ha ⊢
-  contrapose! ha
-  exact Finset.inf'_eq_of_forall hs (fun x => f x a) ha
-
-Depends on / 依赖: Finset, Finset.inf, HasFiniteMulSupport, Set.mem_iUnion, SetLike, SetLike.mem_coe, _eq_of_forall, biUnion, contrapose, exists_prop, finite_toSet, mem_coe, mem_iUnion, mem_mulSupport, s.finite_toSet.biUnion, subset
+/-
+**Function.HasFiniteMulSupport.inf'** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFinit
+eMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] [inst_1 : SemilatticeInf M]
+ {ι : Type u_3} {f : ι → α → M}   (s : Finset ι),   (∀ i ∈ s, Function.HasFinite
+MulSupport (f i)) →     ∀ (hs : s.Nonempty), Function.HasFiniteMulSupport fun a 
+=> s.inf' hs fun x => f x a
+参数：s : Finset ι；∀ i ∈ s, Function.HasFiniteMulSupport (f i)；hs : s.Nonempty。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.biUnion`：∀ {α : Type u} {ι : Type u_1} {s : Set ι}, s.Finite 
+→ ∀ {t : ι → Set α}, (∀ i ∈ s, (t i).Finite) → (⋃ i ∈ s, t i).Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `Finset.inf'_eq_of_forall`：∀ {α : Type u_2} {β : Type u_3} [inst : Semila
+tticeInf α] {s : Finset β} (H : s.Nonempty) (f : β → α) {a : α},   (∀ b ∈ s, f b
+ = a) → s.inf'…
 -/
-lemma HasFiniteMulSupport.inf' [SemilatticeInf M] {ι : Type*} {f : ι -> α -> M}
-    (s : Finset ι) (hf : forall i in s, HasFiniteMulSupport (f i)) (hs : s.Nonempty) :
-    HasFiniteMulSupport fun a => s.inf' hs (f · a) := by
+lemma HasFiniteMulSupport.inf' [SemilatticeInf M] {ι : Type*} {f : ι → α → M}
+    (s : Finset ι) (hf : ∀ i ∈ s, HasFiniteMulSupport (f i)) (hs : s.Nonempty) :
+    HasFiniteMulSupport fun a ↦ s.inf' hs (f · a) := by
   simp only [HasFiniteMulSupport] at hf ⊢
-  refine (s.finite_toSet.biUnion hf).subset fun a ha => ?_
+  refine (s.finite_toSet.biUnion hf).subset fun a ha ↦ ?_
   simp only [mem_mulSupport, SetLike.mem_coe, Set.mem_iUnion, exists_prop] at ha ⊢
   contrapose! ha
-  exact Finset.inf'_eq_of_forall hs (fun x => f x a) ha
+  exact Finset.inf'_eq_of_forall hs (fun x ↦ f x a) ha
 
-variable {β : Type*} {f : β -> M} {g : α -> β}
-
-@[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.comp_of_injective` / 引理 `HasFiniteMulSupport.comp_of_injective`
-
-English:
-lemma HasFiniteMulSupport.comp_of_injective
-  given: (hg : Injective g) (hf : f.HasFiniteMulSupport)
-  proof: by
-  refine Set.Finite.of_injOn ?_ (Set.injOn_of_injective hg) hf
-  grind [Set.mapsTo_iff_subset_preimage, Function.mulSupport]
+variable {β : Type*} {f : β → M} {g : α → β}
 
 @[to_additive (attr := fun_prop)]
-
-中文:
-引理 HasFiniteMulSupport.comp_of_injective
-  条件: (hg : 单射 g) (hf : f.HasFiniteMulSupport)
-  证明: by
-  refine Set.Finite.of_injOn ?_ (Set.injOn_of_injective hg) hf
-  grind [Set.mapsTo_iff_subset_preimage, Function.mulSupport]
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: Finite, Function, Function.mulSupport, Set.Finite.of_injOn, Set.injOn_of_injective, Set.mapsTo_iff_subset_preimage, injOn_of_injective, mapsTo_iff_subset_preimage, mulSupport, of_injOn
+/-
+**Function.HasFiniteMulSupport.comp_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Func
+tion.HasFiniteMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {β : Type u_3} {f : β → M} 
+{g : α → β},   Function.Injective g → Function.HasFiniteMulSupport f → Function.
+HasFiniteMulSupport (f ∘ g)
+参数：f ∘ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.of_injOn`：∀ {α : Type u} {β : Type v} {f : α → β} {s : Set α}
+ {t : Set β}, Set.MapsTo f s t → Set.InjOn f s → t.Finite → s.Finite
+· 使用定理 `Set.injOn_of_injective`：injOn_of_injective (h : Injective f) {s : Set α}
+ : InjOn f s
 -/
 lemma HasFiniteMulSupport.comp_of_injective (hg : Injective g) (hf : f.HasFiniteMulSupport) :
     (f ∘ g).HasFiniteMulSupport := by
@@ -627,148 +536,139 @@ lemma HasFiniteMulSupport.comp_of_injective (hg : Injective g) (hf : f.HasFinite
   grind [Set.mapsTo_iff_subset_preimage, Function.mulSupport]
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `HasFiniteMulSupport.fun_comp_of_injective` / 引理 `HasFiniteMulSupport.fun_comp_of_injective`
-
-English:
-lemma HasFiniteMulSupport.fun_comp_of_injective
-  given: (hg : Injective g) (hf : f.HasFiniteMulSupport)
-  proof: hf.comp_of_injective hg
-
-@[to_additive]
-
-中文:
-引理 HasFiniteMulSupport.fun_comp_of_injective
-  条件: (hg : 单射 g) (hf : f.HasFiniteMulSupport)
-  证明: hf.comp_of_injective hg
-
-@[to_additive]
-
-Depends on / 依赖: comp_of_injective, hf.comp_of_injective
+/-
+**Function.HasFiniteMulSupport.fun_comp_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `
+Function.HasFiniteMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {β : Type u_3} {f : β → M} 
+{g : α → β},   Function.Injective g → Function.HasFiniteMulSupport f → Function.
+HasFiniteMulSupport fun a => f (g a)
+参数：g a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.HasFiniteMulSupport.comp_of_injective`：∀ {α : Type u_1} {M : Ty
+pe u_2} [inst : One M] {β : Type u_3} {f : β → M} {g : α → β},   Function.Inject
+ive g → Function.HasFiniteMulSupport…
 -/
 lemma HasFiniteMulSupport.fun_comp_of_injective (hg : Injective g) (hf : f.HasFiniteMulSupport) :
-    (fun a => f (g a)).HasFiniteMulSupport :=
+    (fun a ↦ f (g a)).HasFiniteMulSupport :=
   hf.comp_of_injective hg
 
 @[to_additive]
-/--
-lemma `HasFiniteMulSupport.of_comp` / 引理 `HasFiniteMulSupport.of_comp`
-
-English:
-lemma HasFiniteMulSupport.of_comp
-  statement: [One β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
-  proof: by
-  refine Set.Finite.subset hfg fun _ ha => Set.mem_ofPred.mpr fun H => Set.mem_ofPred.mp ha ?_
-  grind
-
-中文:
-引理 HasFiniteMulSupport.of_comp
-  结论: [幺 β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
-  证明: by
-  refine Set.Finite.subset hfg fun _ ha => Set.mem_ofPred.mpr fun H => Set.mem_ofPred.mp ha ?_
-  grind
-
-Depends on / 依赖: Finite, Set.Finite.subset, Set.mem_ofPred.mp, Set.mem_ofPred.mpr, mem_ofPred, subset
+/-
+**Function.HasFiniteMulSupport.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFi
+niteMulSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_2} [inst : One M] {β : Type u_3} {f : β → M} 
+{g : α → β} [inst_1 : One β],   Function.HasFiniteMulSupport (f ∘ g) → f 1 = 1 →
+ Function.Injective f → Function.HasFiniteMulSupport g
+参数：f ∘ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 lemma HasFiniteMulSupport.of_comp [One β] (hfg : (f ∘ g).HasFiniteMulSupport) (h : f 1 = 1)
     (hf : Injective f) :
     g.HasFiniteMulSupport := by
-  refine Set.Finite.subset hfg fun _ ha => Set.mem_ofPred.mpr fun H => Set.mem_ofPred.mp ha ?_
+  refine Set.Finite.subset hfg fun _ ha ↦ Set.mem_ofPred.mpr fun H ↦ Set.mem_ofPred.mp ha ?_
   grind
 
 -- The additive version is a special case of `Function.HasFiniteSupport.smul_left`.
 @[fun_prop]
-/--
-lemma `HasFiniteSupport.hasFiniteMulSupport_fun_pow` / 引理 `HasFiniteSupport.hasFiniteMulSupport_fun_pow`
-
-English:
-lemma HasFiniteSupport.hasFiniteMulSupport_fun_pow
-  statement: {M : Type*} [Monoid M] (f : α -> M) {g : α -> Nat}
-  proof: Set.Finite.subset hg fun a ha => by contrapose! ha; simp_all
-
-中文:
-引理 HasFiniteSupport.hasFiniteMulSupport_fun_pow
-  结论: {M : 类型} [幺半群 M] (f : α -> M) {g : α -> 自然数}
-  证明: Set.Finite.subset hg fun a ha => by contrapose! ha; simp_all
-
-Depends on / 依赖: Finite, Set.Finite.subset, contrapose, subset
+/-
+**Function.HasFiniteSupport.hasFiniteMulSupport_fun_pow** 是 Mathlib 中的一个定理，位于命名空
+间 `Function.HasFiniteSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_4} [inst : Monoid M] (f : α → M) {g : α → ℕ},
+   Function.HasFiniteSupport g → Function.HasFiniteMulSupport fun a => f a ^ g a
+参数：f : α → M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma HasFiniteSupport.hasFiniteMulSupport_fun_pow {M : Type*} [Monoid M] (f : α -> M) {g : α -> Nat}
+lemma HasFiniteSupport.hasFiniteMulSupport_fun_pow {M : Type*} [Monoid M] (f : α → M) {g : α → ℕ}
     (hg : g.HasFiniteSupport) :
-    (fun a : α => f a ^ g a).HasFiniteMulSupport :=
-  Set.Finite.subset hg fun a ha => by contrapose! ha; simp_all
+    (fun a : α ↦ f a ^ g a).HasFiniteMulSupport :=
+  Set.Finite.subset hg fun a ha ↦ by contrapose! ha; simp_all
 
 section MulZeroClass
 
 variable {M : Type*} [MulZeroClass M]
 
 @[to_fun (attr := fun_prop)]
-/--
-lemma `HasFiniteSupport.mul_left` / 引理 `HasFiniteSupport.mul_left`
-
-English:
-lemma HasFiniteSupport.mul_left
-  given: {f : α -> M} (hf : f.HasFiniteSupport) (g : α -> M)
-  proof: Set.Finite.subset hf fun _ ha => support_mul_subset_left f g ha
-
-@[to_fun (attr := fun_prop)]
-
-中文:
-引理 HasFiniteSupport.mul_left
-  条件: {f : α -> M} (hf : f.HasFiniteSupport) (g : α -> M)
-  证明: Set.Finite.subset hf fun _ ha => support_mul_subset_left f g ha
-
-@[to_fun (attr := fun_prop)]
-
-Depends on / 依赖: Finite, Set.Finite.subset, subset, support_mul_subset_left
+/-
+**Function.HasFiniteSupport.mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFini
+teSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_4} [inst : MulZeroClass M] {f : α → M},   Fun
+ction.HasFiniteSupport f → ∀ (g : α → M), Function.HasFiniteSupport (f * g)
+参数：g : α → M；f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用引理 `Function.support_mul_subset_left`：support_mul_subset_left (f g : ι -> M₀
+) : support (fun x => f x * g x) subseteq support f
 -/
-lemma HasFiniteSupport.mul_left {f : α -> M} (hf : f.HasFiniteSupport) (g : α -> M) :
+lemma HasFiniteSupport.mul_left {f : α → M} (hf : f.HasFiniteSupport) (g : α → M) :
     (f * g).HasFiniteSupport :=
-  Set.Finite.subset hf fun _ ha => support_mul_subset_left f g ha
+  Set.Finite.subset hf fun _ ha ↦ support_mul_subset_left f g ha
 
 @[to_fun (attr := fun_prop)]
-/--
-lemma `HasFiniteSupport.mul_right` / 引理 `HasFiniteSupport.mul_right`
-
-English:
-lemma HasFiniteSupport.mul_right
-  given: (f : α -> M) {g : α -> M} (hg : g.HasFiniteSupport)
-  proof: Set.Finite.subset hg fun _ ha => support_mul_subset_right f g ha
-
-中文:
-引理 HasFiniteSupport.mul_right
-  条件: (f : α -> M) {g : α -> M} (hg : g.HasFiniteSupport)
-  证明: Set.Finite.subset hg fun _ ha => support_mul_subset_right f g ha
-
-Depends on / 依赖: Finite, Set.Finite.subset, subset, support_mul_subset_right
+/-
+**Function.HasFiniteSupport.mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Function.HasFin
+iteSupport`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_4} [inst : MulZeroClass M] (f : α → M) {g : α
+ → M},   Function.HasFiniteSupport g → Function.HasFiniteSupport (f * g)
+参数：f : α → M；f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用引理 `Function.support_mul_subset_right`：support_mul_subset_right (f g : ι -> 
+M₀) : support (fun x => f x * g x) subseteq support g
 -/
-lemma HasFiniteSupport.mul_right (f : α -> M) {g : α -> M} (hg : g.HasFiniteSupport) :
+lemma HasFiniteSupport.mul_right (f : α → M) {g : α → M} (hg : g.HasFiniteSupport) :
     (f * g).HasFiniteSupport :=
-  Set.Finite.subset hg fun _ ha => support_mul_subset_right f g ha
+  Set.Finite.subset hg fun _ ha ↦ support_mul_subset_right f g ha
 
 end MulZeroClass
 
 end Function
 
 @[fun_prop]
-/--
-lemma `Multiset.hasFiniteSupport_count` / 引理 `Multiset.hasFiniteSupport_count`
-
-English:
-lemma Multiset.hasFiniteSupport_count
-  given: {α : Type*} [DecidableEq α] (s : Multiset α)
-  proof: s.toFinset.finite_toSet.subset by simp
-
-中文:
-引理 Multiset.hasFiniteSupport_count
-  条件: {α : 类型} [DecidableEq α] (s : Multiset α)
-  证明: s.toFinset.finite_toSet.subset by simp
-
-Depends on / 依赖: finite_toSet, s.toFinset.finite_toSet.subset, subset, toFinset
+/-
+**Multiset.hasFiniteSupport_count** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Multiset.hasFiniteSupport_count {α : Type*} [DecidableEq α] (s : Multiset 
+α) : (count · s).HasFiniteSupport
+参数：s : Multiset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma Multiset.hasFiniteSupport_count {α : Type*} [DecidableEq α] (s : Multiset α) :
     (count · s).HasFiniteSupport :=
-s.toFinset.finite_toSet.subset by simp
+  s.toFinset.finite_toSet.subset <| by simp
 
 end
 
@@ -779,49 +679,44 @@ public section SMul
 variable {α R M : Type*} [Zero M]
 
 @[to_fun (attr := fun_prop)]
-/--
-lemma `smul_left` / 引理 `smul_left`
-
-English:
-lemma smul_left
-  given: [Zero R] [SMulWithZero R M] {f : α -> R} (hf : f.HasFiniteSupport) (g : α -> M)
-  proof: Set.Finite.subset hf fun _ ha => support_smul_subset_left f g ha
-
-@[to_fun (attr := fun_prop)]
-
-中文:
-引理 smul_left
-  条件: [零 R] [带零标量乘法 R M] {f : α -> R} (hf : f.HasFiniteSupport) (g : α -> M)
-  证明: Set.Finite.subset hf fun _ ha => support_smul_subset_left f g ha
-
-@[to_fun (attr := fun_prop)]
-
-Depends on / 依赖: Finite, Set.Finite.subset, subset, support_smul_subset_left
+/-
+**Function.HasFiniteSupport.smul_left** 是 Mathlib 中的一个引理，位于命名空间 `Function.HasFin
+iteSupport`。
+形式化陈述：smul_left [Zero R] [SMulWithZero R M] {f : α -> R} (hf : f.HasFiniteSuppor
+t) (g : α -> M) : (f • g).HasFiniteSupport
+参数：hf : f.HasFiniteSupport；g : α -> M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用引理 `Function.support_smul_subset_left`：support_smul_subset_left [Zero R] [Ze
+ro M] [SMulWithZero R M] (f : α -> R) (g : α -> M) : support (f • g) subseteq su
+pport f
 -/
-lemma smul_left [Zero R] [SMulWithZero R M] {f : α -> R} (hf : f.HasFiniteSupport) (g : α -> M) :
+lemma smul_left [Zero R] [SMulWithZero R M] {f : α → R} (hf : f.HasFiniteSupport) (g : α → M) :
     (f • g).HasFiniteSupport :=
-  Set.Finite.subset hf fun _ ha => support_smul_subset_left f g ha
+  Set.Finite.subset hf fun _ ha ↦ support_smul_subset_left f g ha
 
 @[to_fun (attr := fun_prop)]
-/--
-lemma `smul_right` / 引理 `smul_right`
-
-English:
-lemma smul_right
-  given: [SMulZeroClass R M] (f : α -> R) {g : α -> M} (hg : g.HasFiniteSupport)
-  proof: Set.Finite.subset hg fun _ ha => support_smul_subset_right f g ha
-
-中文:
-引理 smul_right
-  条件: [SMulZero类 R M] (f : α -> R) {g : α -> M} (hg : g.HasFiniteSupport)
-  证明: Set.Finite.subset hg fun _ ha => support_smul_subset_right f g ha
-
-Depends on / 依赖: Finite, Set.Finite.subset, subset, support_smul_subset_right
+/-
+**Function.HasFiniteSupport.smul_right** 是 Mathlib 中的一个引理，位于命名空间 `Function.HasFi
+niteSupport`。
+形式化陈述：smul_right [SMulZeroClass R M] (f : α -> R) {g : α -> M} (hg : g.HasFinite
+Support) : (f • g).HasFiniteSupport
+参数：f : α -> R；hg : g.HasFiniteSupport。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用引理 `Function.support_smul_subset_right`：support_smul_subset_right [Zero M] [
+SMulZeroClass R M] (f : α -> R) (g : α -> M) : support (f • g) subseteq support 
+g
 -/
-lemma smul_right [SMulZeroClass R M] (f : α -> R) {g : α -> M} (hg : g.HasFiniteSupport) :
+lemma smul_right [SMulZeroClass R M] (f : α → R) {g : α → M} (hg : g.HasFiniteSupport) :
     (f • g).HasFiniteSupport :=
-  Set.Finite.subset hg fun _ ha => support_smul_subset_right f g ha
+  Set.Finite.subset hg fun _ ha ↦ support_smul_subset_right f g ha
 
 end SMul
 
 end Function.HasFiniteSupport
+

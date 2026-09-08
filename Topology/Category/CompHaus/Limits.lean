@@ -23,83 +23,59 @@ universe u w
 
 open CategoryTheory Limits CompHausLike
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasExplicitPullbacks (fun _ => True)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 有ExplicitPullbacks (fun _ => 真)
-  定义体: inferInstance
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : HasExplicitPullbacks (fun _ => True) where
+instance : HasExplicitPullbacks (fun _ ↦ True) where
   hasProp _ _ := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasExplicitFiniteCoproducts.{w, u} (fun _ => True)
-  body: inferInstance
-
-example : FinitaryExtensive CompHaus.{u} := inferInstance
-
-中文:
-实例 :
-  签名: 有ExplicitFiniteCoproducts.{w, u} (fun _ => 真)
-  定义体: inferInstance
-
-example : FinitaryExtensive CompHaus.{u} := inferInstance
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : HasExplicitFiniteCoproducts.{w, u} (fun _ => True) where
+instance : HasExplicitFiniteCoproducts.{w, u} (fun _ ↦ True) where
   hasProp _ := inferInstance
-
+/-
+**CompHaus.** 是 Mathlib 中的一个示例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : FinitaryExtensive CompHaus.{u} := inferInstance
 
-/--
-Definition of `isTerminalPUnit` / `isTerminalPUnit` 的定义
+/-- A one-element space is terminal in `CompHaus` -/
+/-
+**CompHaus.isTerminalPUnit** 是 Mathlib 中的一个缩写定义，位于命名空间 `CompHaus`。
+形式化陈述：isTerminalPUnit : IsTerminal (CompHaus.of PUnit.{u + 1})
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instHasPropTrue`：∀ (X : Type u_1) [inst : TopologicalSpace X], 
+CompHausLike.HasProp (fun x => True) X
 
-English:
-abbreviation isTerminalPUnit
-  signature: : IsTerminal (CompHaus.of PUnit.{u + 1})
-  body: CompHausLike.isTerminalPUnit
-
-中文:
-缩写 isTerminalPUnit
-  签名: : 是终止 (CompHaus.of 命题单元.{u + 1})
-  定义体: CompHausLike.isTerminalPUnit
-
-Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit, isTerminalPUnit
+--- 原说明 ---
+A one-element space is terminal in `CompHaus`
 -/
 abbrev isTerminalPUnit : IsTerminal (CompHaus.of PUnit.{u + 1}) := CompHausLike.isTerminalPUnit
 
-/--
-Definition of `terminalIsoPUnit` / `terminalIsoPUnit` 的定义
+/-- The isomorphism from an arbitrary terminal object of `CompHaus` to a one-element space. -/
+/-
+**CompHaus.terminalIsoPUnit** 是 Mathlib 中的一个定义，位于命名空间 `CompHaus`。
+形式化陈述：terminalIsoPUnit : ⊤_ CompHaus.{u} ≅ CompHaus.of PUnit
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition terminalIsoPUnit
-  signature: : ⊤_ CompHaus.{u} ≅ CompHaus.of PUnit
-  body: terminalIsTerminal.uniqueUpToIso CompHaus.isTerminalPUnit
-
-noncomputable example : PreservesFiniteCoproducts compHausToTop := inferInstance
-
-中文:
-定义 terminalIsoPUnit
-  签名: : ⊤_ CompHaus.{u} ≅ CompHaus.of 命题单元
-  定义体: terminalIsTerminal.uniqueUpToIso CompHaus.isTerminalPUnit
-
-noncomputable example : PreservesFiniteCoproducts compHausToTop := inferInstance
-
-Depends on / 依赖: CompHaus, CompHaus.isTerminalPUnit, isTerminalPUnit, terminalIsTerminal, terminalIsTerminal.uniqueUpToIso, uniqueUpToIso
+--- 原说明 ---
+The isomorphism from an arbitrary terminal object of `CompHaus` to a one-element
+ space.
 -/
 noncomputable def terminalIsoPUnit : ⊤_ CompHaus.{u} ≅ CompHaus.of PUnit :=
   terminalIsTerminal.uniqueUpToIso CompHaus.isTerminalPUnit
-
+/-
+**CompHaus.** 是 Mathlib 中的一个示例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example : PreservesFiniteCoproducts compHausToTop := inferInstance
 
 end CompHaus
+

@@ -67,205 +67,225 @@ open scoped Pointwise
 
 variable {G : Type*} [Group G]
 
-/--
-Definition of `IsHeckeTriple` / `IsHeckeTriple` 的定义
+/-- A *Hecke triple* `(H₁, Δ, H₂)`: the compatibility conditions on a submonoid `Δ` and a pair
+of subgroups `H₁, H₂` of `G` making the double cosets `H₁\Δ/H₂` finite unions of left cosets:
+both subgroups are contained in `Δ`, they are commensurable, and `Δ` commensurates them. The
+classical Hecke pair `(H, Δ)` of [Shimura][shimura1971], Chapter 3, is the diagonal case
+`IsHeckeTriple Δ H H`. -/
+/-
+**IsHeckeTriple** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{G : Type u_1} → [inst : Group G] → Submonoid G → Subgroup G → Subgroup G 
+→ Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsHeckeTriple
-  parameters: (Δ : Submonoid G) (H₁ H₂ : Subgroup G)
-  axioms and operations (4):
-    - left_le : H₁.toSubmonoid <= Δ
-    - right_le : H₂.toSubmonoid <= Δ
-    - commensurable : Commensurable H₁ H₂
-    - le_commensurator_right : Δ <= (commensurator H₂).toSubmonoid
-
-中文:
-类 是HeckeTriple
-  参数: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G)
-  公理与运算 (4 个):
-    - left_le : H₁.toSubmonoid <= Δ
-    - right_le : H₂.toSubmonoid <= Δ
-    - commensurable : Commensurable H₁ H₂
-    - le_commensurator_right : Δ <= (commensurator H₂).toSubmonoid
+--- 原说明 ---
+A *Hecke triple* `(H₁, Δ, H₂)`: the compatibility conditions on a submonoid `Δ` 
+and a pair
+of subgroups `H₁, H₂` of `G` making the double cosets `H₁\Δ/H₂` finite unions of
+ left cosets:
+both subgroups are contained in `Δ`, they are commensurable, and `Δ` commensurat
+es them. The
+classical Hecke pair `(H, Δ)` of [Shimura][shimura1971], Chapter 3, is the diago
+nal case
+`IsHeckeTriple Δ H H`.
 -/
 class IsHeckeTriple (Δ : Submonoid G) (H₁ H₂ : Subgroup G) : Prop where
   /-- The left subgroup is contained in `Δ`. -/
-  left_le : H₁.toSubmonoid <= Δ
+  left_le : H₁.toSubmonoid ≤ Δ
   /-- The right subgroup is contained in `Δ`. -/
-  right_le : H₂.toSubmonoid <= Δ
+  right_le : H₂.toSubmonoid ≤ Δ
   /-- The two subgroups are commensurable. -/
   commensurable : Commensurable H₁ H₂
   /-- The submonoid `Δ` lies in the commensurator of the right subgroup (hence, the subgroups
   being commensurable, also in that of the left one; see `le_commensurator_left`). -/
-  le_commensurator_right : Δ <= (commensurator H₂).toSubmonoid
+  le_commensurator_right : Δ ≤ (commensurator H₂).toSubmonoid
 
 namespace IsHeckeTriple
 
 variable {Δ : Submonoid G} {H₁ H₂ H₃ : Subgroup G}
 
-/--
-theorem `of_diagonal` / 定理 `of_diagonal`
+/-- The Hecke triple `(H, Δ, H)` coming from a pair `(H, Δ)` with `H ≤ Δ ≤ commensurator H`. -/
+/-
+**IsHeckeTriple.of_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`。
+形式化陈述：of_diagonal {H : Subgroup G} (h : H.toSubmonoid <= Δ) (hc : Δ <= (commensu
+rator H).toSubmonoid) : IsHeckeTriple Δ H H
+参数：h : H.toSubmonoid <= Δ；hc : Δ <= (commensurator H).toSubmonoid。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.Commensurable.refl`：∀ {G : Type u_1} [inst : Group G] (H : Subg
+roup G), H.Commensurable H
 
-English:
-theorem of_diagonal
-  statement: {H : Subgroup G} (h : H.toSubmonoid <= Δ)
-  proof: ⟨h, h, .refl H, hc⟩
-
-中文:
-定理 of_diagonal
-  结论: {H : 子群 G} (h : H.toSubmonoid <= Δ)
-  证明: ⟨h, h, .refl H, hc⟩
+--- 原说明 ---
+The Hecke triple `(H, Δ, H)` coming from a pair `(H, Δ)` with `H ≤ Δ ≤ commensur
+ator H`.
 -/
-theorem of_diagonal {H : Subgroup G} (h : H.toSubmonoid <= Δ)
-    (hc : Δ <= (commensurator H).toSubmonoid) : IsHeckeTriple Δ H H :=
+theorem of_diagonal {H : Subgroup G} (h : H.toSubmonoid ≤ Δ)
+    (hc : Δ ≤ (commensurator H).toSubmonoid) : IsHeckeTriple Δ H H :=
   ⟨h, h, .refl H, hc⟩
 
-/--
-theorem `mem_of_mem_left` / 定理 `mem_of_mem_left`
+/-- Elements of the left subgroup lie in `Δ`. -/
+/-
+**IsHeckeTriple.mem_of_mem_left** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`。
+形式化陈述：mem_of_mem_left (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x 
+in H₁) : x in Δ
+参数：H₂ : Subgroup G；hx : x in H₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.left_le`：∀ {G : Type u_1} {inst : Group G} {Δ : Submonoid 
+G} {H₁ : Subgroup G} (H₂ : Subgroup G) [self : IsHeckeTriple Δ H₁ H₂],   H₁.toSu
+bmonoid ≤ Δ
 
-English:
-theorem mem_of_mem_left
-  given: (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₁)
-  statement: x in Δ
-  proof: left_le H₂ hx
-
-中文:
-定理 mem_of_mem_left
-  条件: (H₂ : 子群 G) [是HeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₁)
-  结论: x in Δ
-  证明: left_le H₂ hx
-
-Depends on / 依赖: left_le
+--- 原说明 ---
+Elements of the left subgroup lie in `Δ`.
 -/
-theorem mem_of_mem_left (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₁) : x in Δ :=
+theorem mem_of_mem_left (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x ∈ H₁) : x ∈ Δ :=
   left_le H₂ hx
 
-/--
-theorem `mem_of_mem_right` / 定理 `mem_of_mem_right`
+/-- Elements of the right subgroup lie in `Δ`. -/
+/-
+**IsHeckeTriple.mem_of_mem_right** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`。
+形式化陈述：mem_of_mem_right (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x
+ in H₂) : x in Δ
+参数：H₁ : Subgroup G；hx : x in H₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.right_le`：∀ {G : Type u_1} {inst : Group G} {Δ : Submonoid
+ G} (H₁ : Subgroup G) {H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁ H₂],   H₂.toS
+ubmonoid ≤ Δ
 
-English:
-theorem mem_of_mem_right
-  given: (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₂)
-  statement: x in Δ
-  proof: right_le H₁ hx
-
-中文:
-定理 mem_of_mem_right
-  条件: (H₁ : 子群 G) [是HeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₂)
-  结论: x in Δ
-  证明: right_le H₁ hx
-
-Depends on / 依赖: right_le
+--- 原说明 ---
+Elements of the right subgroup lie in `Δ`.
 -/
-theorem mem_of_mem_right (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x in H₂) : x in Δ :=
+theorem mem_of_mem_right (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] {x : G} (hx : x ∈ H₂) : x ∈ Δ :=
   right_le H₁ hx
 
-/--
-theorem `le_commensurator_left` / 定理 `le_commensurator_left`
+/-- The submonoid `Δ` lies in the commensurator of the left subgroup. -/
+/-
+**IsHeckeTriple.le_commensurator_left** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`。
+形式化陈述：le_commensurator_left (H₂ : Subgroup G) [h : IsHeckeTriple Δ H₁ H₂] : Δ <=
+ (commensurator H₁).toSubmonoid
+参数：H₂ : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.Commensurable.eq`：eq {H K : Subgroup G} (hk : Commensurable H K
+) : commensurator H = commensurator K
+· 使用定理 `IsHeckeTriple.commensurable`：∀ {G : Type u_1} {inst : Group G} (Δ : Subm
+onoid G) {H₁ H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁ H₂],   H₁.Commensurable
+ H₂
+· 使用定理 `IsHeckeTriple.le_commensurator_right`：∀ {G : Type u_1} {inst : Group G} 
+{Δ : Submonoid G} (H₁ : Subgroup G) {H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁
+ H₂],   Δ ≤ (Subgroup.Comm…
 
-English:
-theorem le_commensurator_left
-  given: (H₂ : Subgroup G) [h : IsHeckeTriple Δ H₁ H₂]
-  proof: by
-  rw [h.commensurable.eq]
-  exact h.le_commensurator_right
-
-中文:
-定理 le_commensurator_left
-  条件: (H₂ : 子群 G) [h : 是HeckeTriple Δ H₁ H₂]
-  证明: by
-  rw [h.commensurable.eq]
-  exact h.le_commensurator_right
-
-Depends on / 依赖: commensurable, h.commensurable.eq, h.le_commensurator_right, le_commensurator_right
+--- 原说明 ---
+The submonoid `Δ` lies in the commensurator of the left subgroup.
 -/
 theorem le_commensurator_left (H₂ : Subgroup G) [h : IsHeckeTriple Δ H₁ H₂] :
-    Δ <= (commensurator H₁).toSubmonoid := by
+    Δ ≤ (commensurator H₁).toSubmonoid := by
   rw [h.commensurable.eq]
   exact h.le_commensurator_right
 
-/--
-theorem `mem_commensurator_right` / 定理 `mem_commensurator_right`
+/-- Elements of `Δ` lie in the commensurator of the right subgroup. -/
+/-
+**IsHeckeTriple.mem_commensurator_right** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple
+`。
+形式化陈述：mem_commensurator_right (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ) 
+: (g : G) in commensurator H₂
+参数：H₁ : Subgroup G；g : Δ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.le_commensurator_right`：∀ {G : Type u_1} {inst : Group G} 
+{Δ : Submonoid G} (H₁ : Subgroup G) {H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁
+ H₂],   Δ ≤ (Subgroup.Comm…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem mem_commensurator_right
-  given: (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ)
-  proof: le_commensurator_right H₁ g.2
-
-中文:
-定理 mem_commensurator_right
-  条件: (H₁ : 子群 G) [是HeckeTriple Δ H₁ H₂] (g : Δ)
-  证明: le_commensurator_right H₁ g.2
-
-Depends on / 依赖: le_commensurator_right
+--- 原说明 ---
+Elements of `Δ` lie in the commensurator of the right subgroup.
 -/
 theorem mem_commensurator_right (H₁ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ) :
-    (g : G) in commensurator H₂ :=
+    (g : G) ∈ commensurator H₂ :=
   le_commensurator_right H₁ g.2
 
-/--
-theorem `mem_commensurator_left` / 定理 `mem_commensurator_left`
+/-- Elements of `Δ` lie in the commensurator of the left subgroup. -/
+/-
+**IsHeckeTriple.mem_commensurator_left** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`
+。
+形式化陈述：mem_commensurator_left (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ) :
+ (g : G) in commensurator H₁
+参数：H₂ : Subgroup G；g : Δ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.le_commensurator_left`：le_commensurator_left (H₂ : Subgrou
+p G) [h : IsHeckeTriple Δ H₁ H₂] : Δ <= (commensurator H₁).toSubmonoid
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem mem_commensurator_left
-  given: (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ)
-  proof: le_commensurator_left H₂ g.2
-
-中文:
-定理 mem_commensurator_left
-  条件: (H₂ : 子群 G) [是HeckeTriple Δ H₁ H₂] (g : Δ)
-  证明: le_commensurator_left H₂ g.2
-
-Depends on / 依赖: le_commensurator_left
+--- 原说明 ---
+Elements of `Δ` lie in the commensurator of the left subgroup.
 -/
 theorem mem_commensurator_left (H₂ : Subgroup G) [IsHeckeTriple Δ H₁ H₂] (g : Δ) :
-    (g : G) in commensurator H₁ :=
+    (g : G) ∈ commensurator H₁ :=
   le_commensurator_left H₂ g.2
 
-/--
-theorem `commensurable_conjAct_right` / 定理 `commensurable_conjAct_right`
+/-- Conjugating the right subgroup of a Hecke triple `(H₁, Δ, H₂)` by an element of `Δ` gives a
+subgroup commensurable with the left one. -/
+/-
+**IsHeckeTriple.commensurable_conjAct_right** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTr
+iple`。
+形式化陈述：commensurable_conjAct_right [IsHeckeTriple Δ H₁ H₂] (g : Δ) : Commensurabl
+e (ConjAct.toConjAct (g : G) • H₂) H₁
+参数：g : Δ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.mem_commensurator_right`：mem_commensurator_right (H₁ : Sub
+group G) [IsHeckeTriple Δ H₁ H₂] (g : Δ) : (g : G) in commensurator H₂
+· 使用定理 `Subgroup.Commensurable.trans`：trans {H K L : Subgroup G} (hhk : Commensu
+rable H K) (hkl : Commensurable K L) : Commensurable H L
+· 使用定理 `Subgroup.Commensurable.symm`：symm {H K : Subgroup G} : Commensurable H K
+ -> Commensurable K H
+· 使用定理 `IsHeckeTriple.commensurable`：∀ {G : Type u_1} {inst : Group G} (Δ : Subm
+onoid G) {H₁ H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁ H₂],   H₁.Commensurable
+ H₂
 
-English:
-theorem commensurable_conjAct_right
-  given: [IsHeckeTriple Δ H₁ H₂] (g : Δ)
-  proof: by
-  have hg : Commensurable (ConjAct.toConjAct (g : G) • H₂) H₂ := mem_commensurator_right H₁ g
-  exact hg.trans (commensurable (Δ := Δ)).symm
-
-中文:
-定理 commensurable_conjAct_right
-  条件: [是HeckeTriple Δ H₁ H₂] (g : Δ)
-  证明: by
-  have hg : Commensurable (ConjAct.toConjAct (g : G) • H₂) H₂ := mem_commensurator_right H₁ g
-  exact hg.trans (commensurable (Δ := Δ)).symm
-
-Depends on / 依赖: Commensurable, ConjAct, ConjAct.toConjAct, commensurable, hg.trans, mem_commensurator_right, toConjAct
+--- 原说明 ---
+Conjugating the right subgroup of a Hecke triple `(H₁, Δ, H₂)` by an element of 
+`Δ` gives a
+subgroup commensurable with the left one.
 -/
 theorem commensurable_conjAct_right [IsHeckeTriple Δ H₁ H₂] (g : Δ) :
     Commensurable (ConjAct.toConjAct (g : G) • H₂) H₁ := by
   have hg : Commensurable (ConjAct.toConjAct (g : G) • H₂) H₂ := mem_commensurator_right H₁ g
   exact hg.trans (commensurable (Δ := Δ)).symm
 
-/--
-theorem `trans` / 定理 `trans`
+/-- Hecke coset module data compose. Not an instance, since the middle subgroup cannot be
+inferred from the goal. -/
+/-
+**IsHeckeTriple.trans** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`。
+形式化陈述：trans [IsHeckeTriple Δ H₁ H₂] [IsHeckeTriple Δ H₂ H₃] : IsHeckeTriple Δ H₁
+ H₃
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.left_le`：∀ {G : Type u_1} {inst : Group G} {Δ : Submonoid 
+G} {H₁ : Subgroup G} (H₂ : Subgroup G) [self : IsHeckeTriple Δ H₁ H₂],   H₁.toSu
+bmonoid ≤ Δ
+· 使用定理 `IsHeckeTriple.right_le`：∀ {G : Type u_1} {inst : Group G} {Δ : Submonoid
+ G} (H₁ : Subgroup G) {H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁ H₂],   H₂.toS
+ubmonoid ≤ Δ
+· 使用定理 `Subgroup.Commensurable.trans`：trans {H K L : Subgroup G} (hhk : Commensu
+rable H K) (hkl : Commensurable K L) : Commensurable H L
+· 使用定理 `IsHeckeTriple.commensurable`：∀ {G : Type u_1} {inst : Group G} (Δ : Subm
+onoid G) {H₁ H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁ H₂],   H₁.Commensurable
+ H₂
+· 使用定理 `IsHeckeTriple.le_commensurator_right`：∀ {G : Type u_1} {inst : Group G} 
+{Δ : Submonoid G} (H₁ : Subgroup G) {H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁
+ H₂],   Δ ≤ (Subgroup.Comm…
 
-English:
-theorem trans
-  given: [IsHeckeTriple Δ H₁ H₂] [IsHeckeTriple Δ H₂ H₃]
-  proof: ⟨left_le H₂, right_le H₂,
-    (commensurable (Δ := Δ) (H₁ := H₁) (H₂ := H₂)).trans
-      (commensurable (Δ := Δ) (H₁ := H₂) (H₂ := H₃)),
-    le_commensurator_right H₂⟩
-
-中文:
-定理 trans
-  条件: [是HeckeTriple Δ H₁ H₂] [是HeckeTriple Δ H₂ H₃]
-  证明: ⟨left_le H₂, right_le H₂,
-    (commensurable (Δ := Δ) (H₁ := H₁) (H₂ := H₂)).trans
-      (commensurable (Δ := Δ) (H₁ := H₂) (H₂ := H₃)),
-    le_commensurator_right H₂⟩
-
-Depends on / 依赖: commensurable, le_commensurator_right, left_le, right_le
+--- 原说明 ---
+Hecke coset module data compose. Not an instance, since the middle subgroup cann
+ot be
+inferred from the goal.
 -/
 theorem trans [IsHeckeTriple Δ H₁ H₂] [IsHeckeTriple Δ H₂ H₃] :
     IsHeckeTriple Δ H₁ H₃ :=
@@ -274,80 +294,93 @@ theorem trans [IsHeckeTriple Δ H₁ H₂] [IsHeckeTriple Δ H₂ H₃] :
       (commensurable (Δ := Δ) (H₁ := H₂) (H₂ := H₃)),
     le_commensurator_right H₂⟩
 
-/--
-theorem `diag_left` / 定理 `diag_left`
+/-- The left diagonal datum `(H₁, Δ, H₁)`. Not an instance, since `H₂` cannot be inferred. -/
+/-
+**IsHeckeTriple.diag_left** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`。
+形式化陈述：diag_left [IsHeckeTriple Δ H₁ H₂] : IsHeckeTriple Δ H₁ H₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.left_le`：∀ {G : Type u_1} {inst : Group G} {Δ : Submonoid 
+G} {H₁ : Subgroup G} (H₂ : Subgroup G) [self : IsHeckeTriple Δ H₁ H₂],   H₁.toSu
+bmonoid ≤ Δ
+· 使用定理 `Subgroup.Commensurable.refl`：∀ {G : Type u_1} [inst : Group G] (H : Subg
+roup G), H.Commensurable H
+· 使用定理 `IsHeckeTriple.le_commensurator_left`：le_commensurator_left (H₂ : Subgrou
+p G) [h : IsHeckeTriple Δ H₁ H₂] : Δ <= (commensurator H₁).toSubmonoid
 
-English:
-theorem diag_left
-  given: [IsHeckeTriple Δ H₁ H₂]
-  statement: IsHeckeTriple Δ H₁ H₁
-  proof: ⟨left_le H₂, left_le H₂, .refl H₁, le_commensurator_left H₂⟩
-
-中文:
-定理 diag_left
-  条件: [是HeckeTriple Δ H₁ H₂]
-  结论: 是HeckeTriple Δ H₁ H₁
-  证明: ⟨left_le H₂, left_le H₂, .refl H₁, le_commensurator_left H₂⟩
-
-Depends on / 依赖: le_commensurator_left, left_le
+--- 原说明 ---
+The left diagonal datum `(H₁, Δ, H₁)`. Not an instance, since `H₂` cannot be inf
+erred.
 -/
 theorem diag_left [IsHeckeTriple Δ H₁ H₂] : IsHeckeTriple Δ H₁ H₁ :=
   ⟨left_le H₂, left_le H₂, .refl H₁, le_commensurator_left H₂⟩
 
-/--
-theorem `diag_right` / 定理 `diag_right`
+/-- The right diagonal datum `(H₂, Δ, H₂)`. Not an instance, since `H₁` cannot be inferred. -/
+/-
+**IsHeckeTriple.diag_right** 是 Mathlib 中的一个定理，位于命名空间 `IsHeckeTriple`。
+形式化陈述：diag_right [IsHeckeTriple Δ H₁ H₂] : IsHeckeTriple Δ H₂ H₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHeckeTriple.right_le`：∀ {G : Type u_1} {inst : Group G} {Δ : Submonoid
+ G} (H₁ : Subgroup G) {H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁ H₂],   H₂.toS
+ubmonoid ≤ Δ
+· 使用定理 `Subgroup.Commensurable.refl`：∀ {G : Type u_1} [inst : Group G] (H : Subg
+roup G), H.Commensurable H
+· 使用定理 `IsHeckeTriple.le_commensurator_right`：∀ {G : Type u_1} {inst : Group G} 
+{Δ : Submonoid G} (H₁ : Subgroup G) {H₂ : Subgroup G} [self : IsHeckeTriple Δ H₁
+ H₂],   Δ ≤ (Subgroup.Comm…
 
-English:
-theorem diag_right
-  given: [IsHeckeTriple Δ H₁ H₂]
-  statement: IsHeckeTriple Δ H₂ H₂
-  proof: ⟨right_le H₁, right_le H₁, .refl H₂, le_commensurator_right H₁⟩
-
-中文:
-定理 diag_right
-  条件: [是HeckeTriple Δ H₁ H₂]
-  结论: 是HeckeTriple Δ H₂ H₂
-  证明: ⟨right_le H₁, right_le H₁, .refl H₂, le_commensurator_right H₁⟩
-
-Depends on / 依赖: le_commensurator_right, right_le
+--- 原说明 ---
+The right diagonal datum `(H₂, Δ, H₂)`. Not an instance, since `H₁` cannot be in
+ferred.
 -/
 theorem diag_right [IsHeckeTriple Δ H₁ H₂] : IsHeckeTriple Δ H₂ H₂ :=
   ⟨right_le H₁, right_le H₁, .refl H₂, le_commensurator_right H₁⟩
 
 end IsHeckeTriple
 
-/--
-Definition of `HeckeCoset.setoid` / `HeckeCoset.setoid` 的定义
+/-- The setoid on `Δ` identifying elements with the same double coset `H₁gH₂ = H₁hH₂`, pulled
+back from `DoubleCoset.setoid` along the inclusion `Δ ↪ G`.
 
-English:
-abbreviation HeckeCoset.setoid
-  signature: (Δ : Submonoid G) (H₁ H₂ : Subgroup G)
-  body: (DoubleCoset.setoid (H₁ : Set G) H₂).comap Subtype.val
+This is an `abbrev` rather than a global instance: the subgroups `H₁, H₂` cannot be inferred
+from the submonoid `Δ`, so this cannot participate in instance search (and a global instance
+would also create a `Setoid` diamond on `↥Δ` with the left-coset setoid). The quotient map is
+`HeckeCoset.mk`. -/
+/-
+**HeckeCoset.setoid** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：HeckeCoset.setoid (Δ : Submonoid G) (H₁ H₂ : Subgroup G) : Setoid Δ
+参数：Δ : Submonoid G；H₁ H₂ : Subgroup G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 HeckeCoset.setoid
-  签名: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G)
-  定义体: (DoubleCoset.setoid (H₁ : Set G) H₂).comap Subtype.val
+--- 原说明 ---
+The setoid on `Δ` identifying elements with the same double coset `H₁gH₂ = H₁hH₂
+`, pulled
+back from `DoubleCoset.setoid` along the inclusion `Δ ↪ G`.
 
-Depends on / 依赖: DoubleCoset, DoubleCoset.setoid, Subtype, Subtype.val, setoid
+This is an `abbrev` rather than a global instance: the subgroups `H₁, H₂` cannot
+ be inferred
+from the submonoid `Δ`, so this cannot participate in instance search (and a glo
+bal instance
+would also create a `Setoid` diamond on `↥Δ` with the left-coset setoid). The qu
+otient map is
+`HeckeCoset.mk`.
 -/
 abbrev HeckeCoset.setoid (Δ : Submonoid G) (H₁ H₂ : Subgroup G) : Setoid Δ :=
   (DoubleCoset.setoid (H₁ : Set G) H₂).comap Subtype.val
 
-/--
-Definition of `HeckeCoset` / `HeckeCoset` 的定义
+/-- A Hecke double coset: an equivalence class of `Δ`-elements under `H₁gH₂ = H₁hH₂`. This is
+the basis type for the `HeckeCosetModule`. -/
+/-
+**HeckeCoset** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HeckeCoset (Δ : Submonoid G) (H₁ H₂ : Subgroup G)
+参数：Δ : Submonoid G；H₁ H₂ : Subgroup G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HeckeCoset
-  signature: (Δ : Submonoid G) (H₁ H₂ : Subgroup G)
-  body: Quotient (HeckeCoset.setoid Δ H₁ H₂)
-
-中文:
-定义 HeckeCoset
-  签名: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G)
-  定义体: Quotient (HeckeCoset.setoid Δ H₁ H₂)
-
-Depends on / 依赖: HeckeCoset, HeckeCoset.setoid, Quotient, setoid
+--- 原说明 ---
+A Hecke double coset: an equivalence class of `Δ`-elements under `H₁gH₂ = H₁hH₂`
+. This is
+the basis type for the `HeckeCosetModule`.
 -/
 def HeckeCoset (Δ : Submonoid G) (H₁ H₂ : Subgroup G) := Quotient (HeckeCoset.setoid Δ H₁ H₂)
 
@@ -355,88 +388,89 @@ namespace HeckeCoset
 
 variable {Δ : Submonoid G}
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The double coset `H₁gH₂` of an element `g : Δ`. -/
+/-
+**HeckeCoset.mk** 是 Mathlib 中的一个定义，位于命名空间 `HeckeCoset`。
+形式化陈述：mk (H₁ H₂ : Subgroup G) (g : Δ) : HeckeCoset Δ H₁ H₂
+参数：H₁ H₂ : Subgroup G；g : Δ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (H₁ H₂ : Subgroup G) (g : Δ)
-  body: Quotient.mk (setoid Δ H₁ H₂) g
-
-中文:
-定义 mk
-  签名: (H₁ H₂ : 子群 G) (g : Δ)
-  定义体: Quotient.mk (setoid Δ H₁ H₂) g
-
-Depends on / 依赖: Quotient, Quotient.mk, setoid
+--- 原说明 ---
+The double coset `H₁gH₂` of an element `g : Δ`.
 -/
 def mk (H₁ H₂ : Subgroup G) (g : Δ) : HeckeCoset Δ H₁ H₂ :=
   Quotient.mk (setoid Δ H₁ H₂) g
 
 variable (Δ) in
+/-
+**HeckeCoset.** 是 Mathlib 中的一个实例，位于命名空间 `HeckeCoset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (H₁ H₂ : Subgroup G) : Inhabited (HeckeCoset Δ H₁ H₂) := ⟨mk H₁ H₂ ⟨1, Δ.one_mem⟩⟩
 
 variable (Δ) in
 /-- The identity double coset `H1H = H` of the diagonal (Hecke pair) case. -/
+/-
+**HeckeCoset.** 是 Mathlib 中的一个实例，位于命名空间 `HeckeCoset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The identity double coset `H1H = H` of the diagonal (Hecke pair) case.
+-/
 instance (H : Subgroup G) : One (HeckeCoset Δ H H) := ⟨mk H H ⟨1, Δ.one_mem⟩⟩
-
-/--
-lemma `one_def` / 引理 `one_def`
-
-English:
-lemma one_def
-  given: (H : Subgroup G)
-  statement: (1 : HeckeCoset Δ H H) = mk H H ⟨1, Δ.one_mem⟩
-  proof: rfl
-
-中文:
-引理 one_def
-  条件: (H : 子群 G)
-  结论: (1 : HeckeCoset Δ H H) = mk H H ⟨1, Δ.one_mem⟩
-  证明: rfl
+/-
+**HeckeCoset.one_def** 是 Mathlib 中的一个引理，位于命名空间 `HeckeCoset`。
+形式化陈述：one_def (H : Subgroup G) : (1 : HeckeCoset Δ H H) = mk H H ⟨1, Δ.one_mem⟩
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_def (H : Subgroup G) : (1 : HeckeCoset Δ H H) = mk H H ⟨1, Δ.one_mem⟩ := rfl
 
 end HeckeCoset
 
-/--
-Definition of `HeckeCosetModule` / `HeckeCosetModule` 的定义
+/-- The Hecke coset module with coefficients in `Z`: the finitely-supported `Z`-linear
+combinations of double cosets `H₁\Δ/H₂`. For `H₁ = H₂` this is the underlying module of the
+Hecke ring `𝕋 Δ H Z` (see `HeckeRing`). The coefficients `Z` need only carry a `Zero` for the
+type to make sense; algebraic structure is added by the instances below at the weakest level each
+requires. -/
+/-
+**HeckeCosetModule** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HeckeCosetModule (Δ : Submonoid G) (H₁ H₂ : Subgroup G) (Z : Type*) [Zero 
+Z]
+参数：Δ : Submonoid G；H₁ H₂ : Subgroup G；Z : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HeckeCosetModule
-  signature: (Δ : Submonoid G) (H₁ H₂ : Subgroup G) (Z : Type*) [Zero Z]
-  body: HeckeCoset Δ H₁ H₂ ->₀ Z
-
-中文:
-定义 HeckeCosetModule
-  签名: (Δ : 子幺半群 G) (H₁ H₂ : 子群 G) (Z : 类型) [零 Z]
-  定义体: HeckeCoset Δ H₁ H₂ ->₀ Z
-
-Depends on / 依赖: HeckeCoset
+--- 原说明 ---
+The Hecke coset module with coefficients in `Z`: the finitely-supported `Z`-line
+ar
+combinations of double cosets `H₁\Δ/H₂`. For `H₁ = H₂` this is the underlying mo
+dule of the
+Hecke ring `𝕋 Δ H Z` (see `HeckeRing`). The coefficients `Z` need only carry a `
+Zero` for the
+type to make sense; algebraic structure is added by the instances below at the w
+eakest level each
+requires.
 -/
 def HeckeCosetModule (Δ : Submonoid G) (H₁ H₂ : Subgroup G) (Z : Type*) [Zero Z] :=
-  HeckeCoset Δ H₁ H₂ ->₀ Z
+  HeckeCoset Δ H₁ H₂ →₀ Z
 
-/--
-Definition of `HeckeRing` / `HeckeRing` 的定义
+/-- The Hecke ring `𝕋 Δ H Z` with coefficients in `Z`: the diagonal Hecke coset module
+`HeckeCosetModule Δ H H Z`, the finitely-supported `Z`-linear combinations of double cosets
+`H\Δ/H`. The convolution product making it a ring is developed in later files. -/
+/-
+**HeckeRing** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：HeckeRing (Δ : Submonoid G) (H : Subgroup G) (Z : Type*) [Zero Z]
+参数：Δ : Submonoid G；H : Subgroup G；Z : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HeckeRing
-  signature: (Δ : Submonoid G) (H : Subgroup G) (Z : Type*) [Zero Z]
-  body: HeckeCosetModule Δ H H Z
-
-@[inherit_doc]
-scoped[HeckeCosetModule] notation "𝕋" => HeckeRing
-
-中文:
-缩写 HeckeRing
-  签名: (Δ : 子幺半群 G) (H : 子群 G) (Z : 类型) [零 Z]
-  定义体: HeckeCosetModule Δ H H Z
-
-@[inherit_doc]
-scoped[HeckeCosetModule] notation "𝕋" => HeckeRing
-
-Depends on / 依赖: HeckeCosetModule
+--- 原说明 ---
+The Hecke ring `𝕋 Δ H Z` with coefficients in `Z`: the diagonal Hecke coset modu
+le
+`HeckeCosetModule Δ H H Z`, the finitely-supported `Z`-linear combinations of do
+uble cosets
+`H\Δ/H`. The convolution product making it a ring is developed in later files.
 -/
 abbrev HeckeRing (Δ : Submonoid G) (H : Subgroup G) (Z : Type*) [Zero Z] :=
   HeckeCosetModule Δ H H Z
@@ -448,123 +482,80 @@ namespace HeckeCosetModule
 
 variable (Δ : Submonoid G) (H₁ H₂ : Subgroup G) (Z : Type*)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Elements of `HeckeCosetModule Δ H₁ H₂ Z` are functions `HeckeCoset Δ H₁ H₂ → Z` (finitely
+supported). -/
+/-
+**HeckeCosetModule.** 是 Mathlib 中的一个实例，位于命名空间 `HeckeCosetModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Zero
-  signature: Z] : FunLike (HeckeCosetModule Δ H₁ H₂ Z) (HeckeCoset Δ H₁ H₂) Z
-  body: inferInstanceAs (FunLike (HeckeCoset Δ H₁ H₂ ->₀ Z) (HeckeCoset Δ H₁ H₂) Z)
-
-中文:
-实例 [零
-  签名: Z] : 函数状 (HeckeCosetModule Δ H₁ H₂ Z) (HeckeCoset Δ H₁ H₂) Z
-  定义体: inferInstanceAs (FunLike (HeckeCoset Δ H₁ H₂ ->₀ Z) (HeckeCoset Δ H₁ H₂) Z)
-
-Depends on / 依赖: FunLike, HeckeCoset
+--- 原说明 ---
+Elements of `HeckeCosetModule Δ H₁ H₂ Z` are functions `HeckeCoset Δ H₁ H₂ → Z` 
+(finitely
+supported).
 -/
 instance [Zero Z] : FunLike (HeckeCosetModule Δ H₁ H₂ Z) (HeckeCoset Δ H₁ H₂) Z :=
-  inferInstanceAs (FunLike (HeckeCoset Δ H₁ H₂ ->₀ Z) (HeckeCoset Δ H₁ H₂) Z)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: Z] : AddCommMonoid (HeckeCosetModule Δ H₁ H₂ Z)
-  body: inferInstanceAs (AddCommMonoid (HeckeCoset Δ H₁ H₂ ->₀ Z))
-
-中文:
-实例 [加法交换幺半群
-  签名: Z] : 加法交换幺半群 (HeckeCosetModule Δ H₁ H₂ Z)
-  定义体: inferInstanceAs (AddCommMonoid (HeckeCoset Δ H₁ H₂ ->₀ Z))
-
-Depends on / 依赖: AddCommMonoid, HeckeCoset
+  inferInstanceAs (FunLike (HeckeCoset Δ H₁ H₂ →₀ Z) (HeckeCoset Δ H₁ H₂) Z)
+/-
+**HeckeCosetModule.** 是 Mathlib 中的一个实例，位于命名空间 `HeckeCosetModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [AddCommMonoid Z] : AddCommMonoid (HeckeCosetModule Δ H₁ H₂ Z) :=
-  inferInstanceAs (AddCommMonoid (HeckeCoset Δ H₁ H₂ ->₀ Z))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: Z] : AddCommGroup (HeckeCosetModule Δ H₁ H₂ Z)
-  body: inferInstanceAs (AddCommGroup (HeckeCoset Δ H₁ H₂ ->₀ Z))
-
-中文:
-实例 [加法交换群
-  签名: Z] : 加法交换群 (HeckeCosetModule Δ H₁ H₂ Z)
-  定义体: inferInstanceAs (AddCommGroup (HeckeCoset Δ H₁ H₂ ->₀ Z))
-
-Depends on / 依赖: AddCommGroup, HeckeCoset
+  inferInstanceAs (AddCommMonoid (HeckeCoset Δ H₁ H₂ →₀ Z))
+/-
+**HeckeCosetModule.** 是 Mathlib 中的一个实例，位于命名空间 `HeckeCosetModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [AddCommGroup Z] : AddCommGroup (HeckeCosetModule Δ H₁ H₂ Z) :=
-  inferInstanceAs (AddCommGroup (HeckeCoset Δ H₁ H₂ ->₀ Z))
+  inferInstanceAs (AddCommGroup (HeckeCoset Δ H₁ H₂ →₀ Z))
 
-/--
-Definition of `of` / `of` 的定义
+/-- The sanctioned constructor of `HeckeCosetModule Δ H₁ H₂ Z` from a finitely-supported function
+on double cosets. Build elements through `of` rather than relying on the definitional unfolding
+`HeckeCosetModule Δ H₁ H₂ Z = (HeckeCoset Δ H₁ H₂ →₀ Z)`. -/
+/-
+**HeckeCosetModule.of** 是 Mathlib 中的一个定义，位于命名空间 `HeckeCosetModule`。
+形式化陈述：of {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z] : (HeckeCos
+et Δ H₁ H₂ ->₀ Z) ≃ HeckeCosetModule Δ H₁ H₂ Z
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition of
-  signature: {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z]
-  body: Equiv.refl _
-
-@[simp]
-
-中文:
-定义 of
-  签名: {Δ : 子幺半群 G} {H₁ H₂ : 子群 G} {Z : 类型} [零 Z]
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The sanctioned constructor of `HeckeCosetModule Δ H₁ H₂ Z` from a finitely-suppo
+rted function
+on double cosets. Build elements through `of` rather than relying on the definit
+ional unfolding
+`HeckeCosetModule Δ H₁ H₂ Z = (HeckeCoset Δ H₁ H₂ →₀ Z)`.
 -/
 def of {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z] :
-    (HeckeCoset Δ H₁ H₂ ->₀ Z) ≃ HeckeCosetModule Δ H₁ H₂ Z :=
+    (HeckeCoset Δ H₁ H₂ →₀ Z) ≃ HeckeCosetModule Δ H₁ H₂ Z :=
   Equiv.refl _
 
 @[simp]
-/--
-lemma `of_apply` / 引理 `of_apply`
-
-English:
-lemma of_apply
-  statement: {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z]
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 of_apply
-  结论: {Δ : 子幺半群 G} {H₁ H₂ : 子群 G} {Z : 类型} [零 Z]
-  证明: rfl
-
-@[ext]
+/-
+**HeckeCosetModule.of_apply** 是 Mathlib 中的一个引理，位于命名空间 `HeckeCosetModule`。
+形式化陈述：of_apply {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z] (f : 
+HeckeCoset Δ H₁ H₂ ->₀ Z) (D : HeckeCoset Δ H₁ H₂) : of f D = f D
+参数：f : HeckeCoset Δ H₁ H₂ ->₀ Z；D : HeckeCoset Δ H₁ H₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_apply {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z]
-    (f : HeckeCoset Δ H₁ H₂ ->₀ Z) (D : HeckeCoset Δ H₁ H₂) : of f D = f D :=
+    (f : HeckeCoset Δ H₁ H₂ →₀ Z) (D : HeckeCoset Δ H₁ H₂) : of f D = f D :=
   rfl
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  statement: {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z]
-  proof: Finsupp.ext h
-
-中文:
-引理 ext
-  结论: {Δ : 子幺半群 G} {H₁ H₂ : 子群 G} {Z : 类型} [零 Z]
-  证明: Finsupp.ext h
-
-Depends on / 依赖: Finsupp, Finsupp.ext
+/-
+**HeckeCosetModule.ext** 是 Mathlib 中的一个引理，位于命名空间 `HeckeCosetModule`。
+形式化陈述：ext {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z] {f g : Hec
+keCosetModule Δ H₁ H₂ Z} (h : forall D, f D = g D) : f = g
+参数：h : forall D, f D = g D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 -/
 lemma ext {Δ : Submonoid G} {H₁ H₂ : Subgroup G} {Z : Type*} [Zero Z]
-    {f g : HeckeCosetModule Δ H₁ H₂ Z} (h : forall D, f D = g D) : f = g :=
+    {f g : HeckeCosetModule Δ H₁ H₂ Z} (h : ∀ D, f D = g D) : f = g :=
   Finsupp.ext h
 
 end HeckeCosetModule
+

@@ -6,11 +6,11 @@ Authors: Mario Carneiro, Heather Macbeth, Yaël Dillies
 module
 
 public meta import Qq
-public import Mathlib.Algebra.Order.Group.PosPart -- shake: keep (Qq dependency)
-public import Mathlib.Data.Nat.Factorial.Basic -- shake: keep (Qq dependency)
-public import Mathlib.Data.Int.CharZero -- shake: keep (Qq dependency)
-public import Mathlib.Data.PNat.Defs -- shake: keep (Qq dependency)
-public import Mathlib.Algebra.Order.Ring.Basic -- shake: keep (Qq dependency)
+public import Mathlib.Algebra.Order.Group.PosPart  -- shake: keep (Qq dependency)
+public import Mathlib.Data.Nat.Factorial.Basic  -- shake: keep (Qq dependency)
+public import Mathlib.Data.Int.CharZero  -- shake: keep (Qq dependency)
+public import Mathlib.Data.PNat.Defs  -- shake: keep (Qq dependency)
+public import Mathlib.Algebra.Order.Ring.Basic  -- shake: keep (Qq dependency)
 public import Mathlib.Algebra.Order.Hom.Basic
 public import Mathlib.Data.NNRat.Defs
 public import Mathlib.Tactic.Positivity.Core
@@ -31,193 +31,148 @@ open Lean Meta Qq Function
 section ite
 variable [Zero α] (p : Prop) [Decidable p] {a b : α}
 
-/--
-lemma `ite_pos` / 引理 `ite_pos`
-
-English:
-lemma ite_pos
-  given: [LT α] (ha : 0 < a) (hb : 0 < b)
-  statement: 0 < ite p a b
-  proof: by
-  by_cases p <;> simp [*]
-
-中文:
-引理 ite_pos
-  条件: [LT α] (ha : 0 < a) (hb : 0 < b)
-  结论: 0 < ite p a b
-  证明: by
-  by_cases p <;> simp [*]
+/-
+**Mathlib.Meta.Positivity.ite_pos** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：ite_pos [LT α] (ha : 0 < a) (hb : 0 < b) : 0 < ite p a b
+参数：ha : 0 < a；hb : 0 < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
 lemma ite_pos [LT α] (ha : 0 < a) (hb : 0 < b) : 0 < ite p a b := by
   by_cases p <;> simp [*]
-
-/--
-lemma `ite_nonneg` / 引理 `ite_nonneg`
-
-English:
-lemma ite_nonneg
-  given: [LE α] (ha : 0 <= a) (hb : 0 <= b)
-  statement: 0 <= ite p a b
-  proof: by
-  by_cases p <;> simp [*]
-
-中文:
-引理 ite_nonneg
-  条件: [LE α] (ha : 0 <= a) (hb : 0 <= b)
-  结论: 0 <= ite p a b
-  证明: by
-  by_cases p <;> simp [*]
+/-
+**Mathlib.Meta.Positivity.ite_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.Pos
+itivity`。
+形式化陈述：ite_nonneg [LE α] (ha : 0 <= a) (hb : 0 <= b) : 0 <= ite p a b
+参数：ha : 0 <= a；hb : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
-lemma ite_nonneg [LE α] (ha : 0 <= a) (hb : 0 <= b) : 0 <= ite p a b := by
+lemma ite_nonneg [LE α] (ha : 0 ≤ a) (hb : 0 ≤ b) : 0 ≤ ite p a b := by
   by_cases p <;> simp [*]
-
-/--
-lemma `ite_nonneg_of_pos_of_nonneg` / 引理 `ite_nonneg_of_pos_of_nonneg`
-
-English:
-lemma ite_nonneg_of_pos_of_nonneg
-  given: [Preorder α] (ha : 0 < a) (hb : 0 <= b)
-  statement: 0 <= ite p a b
-  proof: ite_nonneg _ ha.le hb
-
-中文:
-引理 ite_nonneg_of_pos_of_nonneg
-  条件: [预序 α] (ha : 0 < a) (hb : 0 <= b)
-  结论: 0 <= ite p a b
-  证明: ite_nonneg _ ha.le hb
-
-Depends on / 依赖: ha.le, ite_nonneg
+/-
+**Mathlib.Meta.Positivity.ite_nonneg_of_pos_of_nonneg** 是 Mathlib 中的一个引理，位于命名空间 
+`Mathlib.Meta.Positivity`。
+形式化陈述：ite_nonneg_of_pos_of_nonneg [Preorder α] (ha : 0 < a) (hb : 0 <= b) : 0 <=
+ ite p a b
+参数：ha : 0 < a；hb : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Meta.Positivity.ite_nonneg`：ite_nonneg [LE α] (ha : 0 <= a) (hb 
+: 0 <= b) : 0 <= ite p a b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma ite_nonneg_of_pos_of_nonneg [Preorder α] (ha : 0 < a) (hb : 0 <= b) : 0 <= ite p a b :=
+lemma ite_nonneg_of_pos_of_nonneg [Preorder α] (ha : 0 < a) (hb : 0 ≤ b) : 0 ≤ ite p a b :=
   ite_nonneg _ ha.le hb
-
-/--
-lemma `ite_nonneg_of_nonneg_of_pos` / 引理 `ite_nonneg_of_nonneg_of_pos`
-
-English:
-lemma ite_nonneg_of_nonneg_of_pos
-  given: [Preorder α] (ha : 0 <= a) (hb : 0 < b)
-  statement: 0 <= ite p a b
-  proof: ite_nonneg _ ha hb.le
-
-中文:
-引理 ite_nonneg_of_nonneg_of_pos
-  条件: [预序 α] (ha : 0 <= a) (hb : 0 < b)
-  结论: 0 <= ite p a b
-  证明: ite_nonneg _ ha hb.le
-
-Depends on / 依赖: hb.le, ite_nonneg
+/-
+**Mathlib.Meta.Positivity.ite_nonneg_of_nonneg_of_pos** 是 Mathlib 中的一个引理，位于命名空间 
+`Mathlib.Meta.Positivity`。
+形式化陈述：ite_nonneg_of_nonneg_of_pos [Preorder α] (ha : 0 <= a) (hb : 0 < b) : 0 <=
+ ite p a b
+参数：ha : 0 <= a；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Meta.Positivity.ite_nonneg`：ite_nonneg [LE α] (ha : 0 <= a) (hb 
+: 0 <= b) : 0 <= ite p a b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma ite_nonneg_of_nonneg_of_pos [Preorder α] (ha : 0 <= a) (hb : 0 < b) : 0 <= ite p a b :=
+lemma ite_nonneg_of_nonneg_of_pos [Preorder α] (ha : 0 ≤ a) (hb : 0 < b) : 0 ≤ ite p a b :=
   ite_nonneg _ ha hb.le
-
-/--
-lemma `ite_ne_zero` / 引理 `ite_ne_zero`
-
-English:
-lemma ite_ne_zero
-  given: (ha : a != 0) (hb : b != 0)
-  statement: ite p a b != 0
-  proof: by by_cases p <;> simp [*]
-
-中文:
-引理 ite_ne_zero
-  条件: (ha : a != 0) (hb : b != 0)
-  结论: ite p a b != 0
-  证明: by by_cases p <;> simp [*]
+/-
+**Mathlib.Meta.Positivity.ite_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.Po
+sitivity`。
+形式化陈述：ite_ne_zero (ha : a != 0) (hb : b != 0) : ite p a b != 0
+参数：ha : a != 0；hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
 -/
-lemma ite_ne_zero (ha : a != 0) (hb : b != 0) : ite p a b != 0 := by by_cases p <;> simp [*]
-
-/--
-lemma `ite_ne_zero_of_pos_of_ne_zero` / 引理 `ite_ne_zero_of_pos_of_ne_zero`
-
-English:
-lemma ite_ne_zero_of_pos_of_ne_zero
-  given: [Preorder α] (ha : 0 < a) (hb : b != 0)
-  proof: ite_ne_zero _ ha.ne' hb
-
-中文:
-引理 ite_ne_zero_of_pos_of_ne_zero
-  条件: [预序 α] (ha : 0 < a) (hb : b != 0)
-  证明: ite_ne_zero _ ha.ne' hb
-
-Depends on / 依赖: Set.subset_inter, U1.property, U1.val, U2.property, U2.val, ha.ne, ite_ne_zero, property, subset_inter
+lemma ite_ne_zero (ha : a ≠ 0) (hb : b ≠ 0) : ite p a b ≠ 0 := by by_cases p <;> simp [*]
+/-
+**Mathlib.Meta.Positivity.ite_ne_zero_of_pos_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空
+间 `Mathlib.Meta.Positivity`。
+形式化陈述：ite_ne_zero_of_pos_of_ne_zero [Preorder α] (ha : 0 < a) (hb : b != 0) : it
+e p a b != 0
+参数：ha : 0 < a；hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Meta.Positivity.ite_ne_zero`：ite_ne_zero (ha : a != 0) (hb : b !
+= 0) : ite p a b != 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-lemma ite_ne_zero_of_pos_of_ne_zero [Preorder α] (ha : 0 < a) (hb : b != 0) :
-    ite p a b != 0 :=
+lemma ite_ne_zero_of_pos_of_ne_zero [Preorder α] (ha : 0 < a) (hb : b ≠ 0) :
+    ite p a b ≠ 0 :=
   ite_ne_zero _ ha.ne' hb
-
-/--
-lemma `ite_ne_zero_of_ne_zero_of_pos` / 引理 `ite_ne_zero_of_ne_zero_of_pos`
-
-English:
-lemma ite_ne_zero_of_ne_zero_of_pos
-  given: [Preorder α] (ha : a != 0) (hb : 0 < b)
-  proof: ite_ne_zero _ ha hb.ne'
-
-中文:
-引理 ite_ne_zero_of_ne_zero_of_pos
-  条件: [预序 α] (ha : a != 0) (hb : 0 < b)
-  证明: ite_ne_zero _ ha hb.ne'
-
-Depends on / 依赖: Set.subset_univ, hb.ne, ite_ne_zero, subset_univ
+/-
+**Mathlib.Meta.Positivity.ite_ne_zero_of_ne_zero_of_pos** 是 Mathlib 中的一个引理，位于命名空
+间 `Mathlib.Meta.Positivity`。
+形式化陈述：ite_ne_zero_of_ne_zero_of_pos [Preorder α] (ha : a != 0) (hb : 0 < b) : it
+e p a b != 0
+参数：ha : a != 0；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Meta.Positivity.ite_ne_zero`：ite_ne_zero (ha : a != 0) (hb : b !
+= 0) : ite p a b != 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-lemma ite_ne_zero_of_ne_zero_of_pos [Preorder α] (ha : a != 0) (hb : 0 < b) :
-    ite p a b != 0 :=
+lemma ite_ne_zero_of_ne_zero_of_pos [Preorder α] (ha : a ≠ 0) (hb : 0 < b) :
+    ite p a b ≠ 0 :=
   ite_ne_zero _ ha hb.ne'
 
 end ite
 
-/--
-Definition of `evalIte` / `evalIte` 的定义
+/-- The `positivity` extension which identifies expressions of the form `ite p a b`,
+such that `positivity` successfully recognises both `a` and `b`. -/
+/-
+**Mathlib.Meta.Positivity.evalIte** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：Mathlib.Meta.Positivity.PositivityExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalIte
-  signature: : PositivityExt where eval {u α} zα pα? e
-  body: do
-  let .app (.app (.app (.app f (p : Q(Prop))) (_ : Q(Decidable $p))) (a : Q($α))) (b : Q($α))
-    ← whnfR e | throwError "not ite"
-haveI' : e =Q ite p a b := ⟨⟩
-  let ra ← core zα pα? a; let rb ← core zα pα? b
-guard ← withDefault withNewMCtxDepth isDefEq f q(ite (α := $α))
-id
-  match ra, rb with
-  | .positive pa, .positive pb => pure (.positive q(ite_pos $p $pa $pb))
-  | .positive pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg_of_pos_of_nonneg $p $pa $pb))
-  | .nonnegative pa, .positive pb => pure (.nonnegative q(ite_nonneg_of_nonneg_of_pos $p $pa $pb))
-  | .nonnegative pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg $p $pa $pb))
-  | .positive pa, .nonzero pb => pure (.nonzero q(ite_ne_zero_of_pos_of_ne_zero $p $pa $pb))
-  | .nonzero pa, .positive pb => pure (.nonzero q(ite_ne_zero_of_ne_zero_of_pos $p $pa $pb))
-  | .nonzero pa, .nonzero pb => pure (.nonzero q(ite_ne_zero $p $pa $pb))
-  | _, _ => pure .none
-
-中文:
-定义 evalIte
-  签名: : PositivityExt where eval {u α} zα pα? e
-  定义体: do
-  let .app (.app (.app (.app f (p : Q(Prop))) (_ : Q(Decidable $p))) (a : Q($α))) (b : Q($α))
-    ← whnfR e | throwError "not ite"
-haveI' : e =Q ite p a b := ⟨⟩
-  let ra ← core zα pα? a; let rb ← core zα pα? b
-guard ← withDefault withNewMCtxDepth isDefEq f q(ite (α := $α))
-id
-  match ra, rb with
-  | .positive pa, .positive pb => pure (.positive q(ite_pos $p $pa $pb))
-  | .positive pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg_of_pos_of_nonneg $p $pa $pb))
-  | .nonnegative pa, .positive pb => pure (.nonnegative q(ite_nonneg_of_nonneg_of_pos $p $pa $pb))
-  | .nonnegative pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg $p $pa $pb))
-  | .positive pa, .nonzero pb => pure (.nonzero q(ite_ne_zero_of_pos_of_ne_zero $p $pa $pb))
-  | .nonzero pa, .positive pb => pure (.nonzero q(ite_ne_zero_of_ne_zero_of_pos $p $pa $pb))
-  | .nonzero pa, .nonzero pb => pure (.nonzero q(ite_ne_zero $p $pa $pb))
-  | _, _ => pure .none
+--- 原说明 ---
+The `positivity` extension which identifies expressions of the form `ite p a b`,
+such that `positivity` successfully recognises both `a` and `b`.
 -/
 @[positivity ite _ _ _] def evalIte : PositivityExt where eval {u α} zα pα? e := do
   let .app (.app (.app (.app f (p : Q(Prop))) (_ : Q(Decidable $p))) (a : Q($α))) (b : Q($α))
     ← whnfR e | throwError "not ite"
-haveI' : e =Q ite p a b := ⟨⟩
+  haveI' : $e =Q ite $p $a $b := ⟨⟩
   let ra ← core zα pα? a; let rb ← core zα pα? b
-guard ← withDefault withNewMCtxDepth isDefEq f q(ite (α := $α))
-id
+  guard <|← withDefault <| withNewMCtxDepth <| isDefEq f q(ite (α := $α))
+  id <|
   match ra, rb with
   | .positive pa, .positive pb => pure (.positive q(ite_pos $p $pa $pb))
   | .positive pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg_of_pos_of_nonneg $p $pa $pb))
@@ -231,187 +186,90 @@ id
 section LinearOrder
 variable {R : Type*} [LinearOrder R] {a b c : R}
 
-/--
-lemma `le_min_of_lt_of_le` / 引理 `le_min_of_lt_of_le`
-
-English:
-lemma le_min_of_lt_of_le
-  given: (ha : a < b) (hb : a <= c)
-  statement: a <= min b c
-  proof: le_min ha.le hb
-
-中文:
-引理 le_min_of_lt_of_le
-  条件: (ha : a < b) (hb : a <= c)
-  结论: a <= 最小值 b c
-  证明: le_min ha.le hb
-
-Depends on / 依赖: ha.le, le_min
+/-
+**Mathlib.Meta.Positivity.le_min_of_lt_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Meta.Positivity`。
+形式化陈述：le_min_of_lt_of_le (ha : a < b) (hb : a <= c) : a <= min b c
+参数：ha : a < b；hb : a <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_min`：le_min (h₁ : c <= a) (h₂ : c <= b) : c <= min a b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma le_min_of_lt_of_le (ha : a < b) (hb : a <= c) : a <= min b c := le_min ha.le hb
-/--
-lemma `le_min_of_le_of_lt` / 引理 `le_min_of_le_of_lt`
-
-English:
-lemma le_min_of_le_of_lt
-  given: (ha : a <= b) (hb : a < c)
-  statement: a <= min b c
-  proof: le_min ha hb.le
-
-中文:
-引理 le_min_of_le_of_lt
-  条件: (ha : a <= b) (hb : a < c)
-  结论: a <= 最小值 b c
-  证明: le_min ha hb.le
-
-Depends on / 依赖: hb.le, le_min
+lemma le_min_of_lt_of_le (ha : a < b) (hb : a ≤ c) : a ≤ min b c := le_min ha.le hb
+/-
+**Mathlib.Meta.Positivity.le_min_of_le_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Meta.Positivity`。
+形式化陈述：le_min_of_le_of_lt (ha : a <= b) (hb : a < c) : a <= min b c
+参数：ha : a <= b；hb : a < c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_min`：le_min (h₁ : c <= a) (h₂ : c <= b) : c <= min a b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma le_min_of_le_of_lt (ha : a <= b) (hb : a < c) : a <= min b c := le_min ha hb.le
-/--
-lemma `min_ne` / 引理 `min_ne`
-
-English:
-lemma min_ne
-  given: (ha : a != c) (hb : b != c)
-  statement: min a b != c
-  proof: by grind
-
-中文:
-引理 min_ne
-  条件: (ha : a != c) (hb : b != c)
-  结论: 最小值 a b != c
-  证明: by grind
+lemma le_min_of_le_of_lt (ha : a ≤ b) (hb : a < c) : a ≤ min b c := le_min ha hb.le
+/-
+**Mathlib.Meta.Positivity.min_ne** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.Positiv
+ity`。
+形式化陈述：min_ne (ha : a != c) (hb : b != c) : min a b != c
+参数：ha : a != c；hb : b != c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma min_ne (ha : a != c) (hb : b != c) : min a b != c := by grind
-
-/--
-lemma `min_ne_of_ne_of_lt` / 引理 `min_ne_of_ne_of_lt`
-
-English:
-lemma min_ne_of_ne_of_lt
-  given: (ha : a != c) (hb : c < b)
-  statement: min a b != c
-  proof: min_ne ha hb.ne'
-
-中文:
-引理 min_ne_of_ne_of_lt
-  条件: (ha : a != c) (hb : c < b)
-  结论: 最小值 a b != c
-  证明: min_ne ha hb.ne'
-
-Depends on / 依赖: hb.ne, min_ne
+lemma min_ne (ha : a ≠ c) (hb : b ≠ c) : min a b ≠ c := by grind
+/-
+**Mathlib.Meta.Positivity.min_ne_of_ne_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Meta.Positivity`。
+形式化陈述：min_ne_of_ne_of_lt (ha : a != c) (hb : c < b) : min a b != c
+参数：ha : a != c；hb : c < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Meta.Positivity.min_ne`：min_ne (ha : a != c) (hb : b != c) : min
+ a b != c
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-lemma min_ne_of_ne_of_lt (ha : a != c) (hb : c < b) : min a b != c := min_ne ha hb.ne'
-/--
-lemma `min_ne_of_lt_of_ne` / 引理 `min_ne_of_lt_of_ne`
-
-English:
-lemma min_ne_of_lt_of_ne
-  given: (ha : c < a) (hb : b != c)
-  statement: min a b != c
-  proof: min_ne ha.ne' hb
-
-中文:
-引理 min_ne_of_lt_of_ne
-  条件: (ha : c < a) (hb : b != c)
-  结论: 最小值 a b != c
-  证明: min_ne ha.ne' hb
-
-Depends on / 依赖: ha.ne, min_ne
+lemma min_ne_of_ne_of_lt (ha : a ≠ c) (hb : c < b) : min a b ≠ c := min_ne ha hb.ne'
+/-
+**Mathlib.Meta.Positivity.min_ne_of_lt_of_ne** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.
+Meta.Positivity`。
+形式化陈述：min_ne_of_lt_of_ne (ha : c < a) (hb : b != c) : min a b != c
+参数：ha : c < a；hb : b != c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Meta.Positivity.min_ne`：min_ne (ha : a != c) (hb : b != c) : min
+ a b != c
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-lemma min_ne_of_lt_of_ne (ha : c < a) (hb : b != c) : min a b != c := min_ne ha.ne' hb
-
-/--
-lemma `max_ne` / 引理 `max_ne`
-
-English:
-lemma max_ne
-  given: (ha : a != c) (hb : b != c)
-  statement: max a b != c
-  proof: by grind
-
-中文:
-引理 max_ne
-  条件: (ha : a != c) (hb : b != c)
-  结论: 最大值 a b != c
-  证明: by grind
+lemma min_ne_of_lt_of_ne (ha : c < a) (hb : b ≠ c) : min a b ≠ c := min_ne ha.ne' hb
+/-
+**Mathlib.Meta.Positivity.max_ne** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.Positiv
+ity`。
+形式化陈述：max_ne (ha : a != c) (hb : b != c) : max a b != c
+参数：ha : a != c；hb : b != c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma max_ne (ha : a != c) (hb : b != c) : max a b != c := by grind
+lemma max_ne (ha : a ≠ c) (hb : b ≠ c) : max a b ≠ c := by grind
 
 end LinearOrder
 
-/--
-Definition of `evalMin` / `evalMin` 的定义
+/-- The `positivity` extension which identifies expressions of the form `min a b`,
+such that `positivity` successfully recognises both `a` and `b`. -/
+/-
+**Mathlib.Meta.Positivity.evalMin** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：Mathlib.Meta.Positivity.PositivityExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalMin
-  signature: : PositivityExt where eval {u α} zα pα? e
-  body: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not min"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(LinearOrder $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(min)
-  assumeInstancesCommute
-  match (dependent := true) ← core zα pα? a, ← core zα pα? b with
-  | .positive (pα := pα') pa, .positive pb =>
-    assumeInstancesCommute
-    pure (.positive q(lt_min $pa $pb))
-  | .positive (pα := pα') pa, .nonnegative pb =>
-    assumeInstancesCommute
-    pure (.nonnegative q(le_min_of_lt_of_le $pa $pb))
-  | .nonnegative (pα := pα') pa, .positive pb =>
-    assumeInstancesCommute
-    pure (.nonnegative q(le_min_of_le_of_lt $pa $pb))
-  | .nonnegative pa (pα := pα'), .nonnegative pb =>
-    assumeInstancesCommute
-    pure (.nonnegative q(le_min $pa $pb))
-  | .positive pa, .nonzero pb =>
-    assumeInstancesCommute
-    pure (.nonzero q(min_ne_of_lt_of_ne $pa $pb))
-  | .nonzero pa, .positive pb =>
-    assumeInstancesCommute
-    pure (.nonzero q(min_ne_of_ne_of_lt $pa $pb))
-  | .nonzero pa, .nonzero pb => do
-    pure (.nonzero q(min_ne $pa $pb))
-  | _, _ => pure .none
-
-中文:
-定义 evalMin
-  签名: : PositivityExt where eval {u α} zα pα? e
-  定义体: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not min"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(LinearOrder $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(min)
-  assumeInstancesCommute
-  match (dependent := true) ← core zα pα? a, ← core zα pα? b with
-  | .positive (pα := pα') pa, .positive pb =>
-    assumeInstancesCommute
-    pure (.positive q(lt_min $pa $pb))
-  | .positive (pα := pα') pa, .nonnegative pb =>
-    assumeInstancesCommute
-    pure (.nonnegative q(le_min_of_lt_of_le $pa $pb))
-  | .nonnegative (pα := pα') pa, .positive pb =>
-    assumeInstancesCommute
-    pure (.nonnegative q(le_min_of_le_of_lt $pa $pb))
-  | .nonnegative pa (pα := pα'), .nonnegative pb =>
-    assumeInstancesCommute
-    pure (.nonnegative q(le_min $pa $pb))
-  | .positive pa, .nonzero pb =>
-    assumeInstancesCommute
-    pure (.nonzero q(min_ne_of_lt_of_ne $pa $pb))
-  | .nonzero pa, .positive pb =>
-    assumeInstancesCommute
-    pure (.nonzero q(min_ne_of_ne_of_lt $pa $pb))
-  | .nonzero pa, .nonzero pb => do
-    pure (.nonzero q(min_ne $pa $pb))
-  | _, _ => pure .none
+--- 原说明 ---
+The `positivity` extension which identifies expressions of the form `min a b`,
+such that `positivity` successfully recognises both `a` and `b`.
 -/
 @[positivity min _ _] def evalMin : PositivityExt where eval {u α} zα pα? e := do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not min"
-let _e_eq : e =Q f a b := ⟨⟩
+  let .app (.app (f : Q($α → $α → $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not min"
+  let _e_eq : $e =Q $f $a $b := ⟨⟩
   let _a ← synthInstanceQ q(LinearOrder $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(min)
+  let ⟨_f_eq⟩ ← withDefault <| withNewMCtxDepth <| assertDefEqQ q($f) q(min)
   assumeInstancesCommute
   match (dependent := true) ← core zα pα? a, ← core zα pα? b with
   | .positive (pα := pα') pa, .positive pb =>
@@ -436,86 +294,25 @@ let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(min)
     pure (.nonzero q(min_ne $pa $pb))
   | _, _ => pure .none
 
-/--
-Definition of `evalMax` / `evalMax` 的定义
+/-- Extension for the `max` operator. The `max` of two numbers is nonnegative if at least one
+is nonnegative, strictly positive if at least one is positive, and nonzero if both are nonzero. -/
+/-
+**Mathlib.Meta.Positivity.evalMax** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：Mathlib.Meta.Positivity.PositivityExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalMax
-  signature: : PositivityExt where eval {u α} zα pα? e
-  body: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not max"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(LinearOrder $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(max)
-  let result : Strictness zα e pα? ← catchNone do
-    let ra ← core zα pα? a
-    match (dependent := true) ra with
-    | .positive pa =>
-      assumeInstancesCommute
-      pure (.positive q(lt_max_of_lt_left $pa))
-    | .nonnegative pa =>
-      assumeInstancesCommute
-      pure (.nonnegative q(le_max_of_le_left $pa))
-    -- If `a ≠ 0`, we might prove `max a b ≠ 0` if `b ≠ 0` but we don't want to evaluate
-    -- `b` before having ruled out `0 < a`, for performance. So we do that in the second branch
-    -- of the `orElse'`.
-    | _ => pure .none
-  orElse result do
-    let rb ← core zα pα? b
-    match (dependent := true) rb with
-    | .positive pb =>
-      assumeInstancesCommute
-      pure (.positive q(lt_max_of_lt_right $pb))
-    | .nonnegative pb =>
-      assumeInstancesCommute
-      pure (.nonnegative q(le_max_of_le_right $pb))
-    | .nonzero pb => do
-      match ← core zα pα? a with
-      | .nonzero pa => pure (.nonzero q(max_ne $pa $pb))
-      | _ => pure .none
-    | _ => pure .none
-
-中文:
-定义 evalMax
-  签名: : PositivityExt where eval {u α} zα pα? e
-  定义体: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not max"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(LinearOrder $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(max)
-  let result : Strictness zα e pα? ← catchNone do
-    let ra ← core zα pα? a
-    match (dependent := true) ra with
-    | .positive pa =>
-      assumeInstancesCommute
-      pure (.positive q(lt_max_of_lt_left $pa))
-    | .nonnegative pa =>
-      assumeInstancesCommute
-      pure (.nonnegative q(le_max_of_le_left $pa))
-    -- If `a ≠ 0`, we might prove `max a b ≠ 0` if `b ≠ 0` but we don't want to evaluate
-    -- `b` before having ruled out `0 < a`, for performance. So we do that in the second branch
-    -- of the `orElse'`.
-    | _ => pure .none
-  orElse result do
-    let rb ← core zα pα? b
-    match (dependent := true) rb with
-    | .positive pb =>
-      assumeInstancesCommute
-      pure (.positive q(lt_max_of_lt_right $pb))
-    | .nonnegative pb =>
-      assumeInstancesCommute
-      pure (.nonnegative q(le_max_of_le_right $pb))
-    | .nonzero pb => do
-      match ← core zα pα? a with
-      | .nonzero pa => pure (.nonzero q(max_ne $pa $pb))
-      | _ => pure .none
-    | _ => pure .none
+--- 原说明 ---
+Extension for the `max` operator. The `max` of two numbers is nonnegative if at 
+least one
+is nonnegative, strictly positive if at least one is positive, and nonzero if bo
+th are nonzero.
 -/
 @[positivity max _ _] def evalMax : PositivityExt where eval {u α} zα pα? e := do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not max"
-let _e_eq : e =Q f a b := ⟨⟩
+  let .app (.app (f : Q($α → $α → $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not max"
+  let _e_eq : $e =Q $f $a $b := ⟨⟩
   let _a ← synthInstanceQ q(LinearOrder $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(max)
+  let ⟨_f_eq⟩ ← withDefault <| withNewMCtxDepth <| assertDefEqQ q($f) q(max)
   let result : Strictness zα e pα? ← catchNone do
     let ra ← core zα pα? a
     match (dependent := true) ra with
@@ -544,66 +341,25 @@ let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(max)
       | _ => pure .none
     | _ => pure .none
 
-/--
-Definition of `evalAdd` / `evalAdd` 的定义
+/-- The `positivity` extension which identifies expressions of the form `a + b`,
+such that `positivity` successfully recognises both `a` and `b`. -/
+/-
+**Mathlib.Meta.Positivity.evalAdd** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：Mathlib.Meta.Positivity.PositivityExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalAdd
-  signature: : PositivityExt where eval {u α} zα pα? e
-  body: match pα? with | none => pure .none | some pα => do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not +"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(AddZeroClass $α)
-  assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HAdd.hAdd)
-  let ra ← core zα pα a; let rb ← core zα pα b
-  match ra, rb with
-  | .positive pa, .positive pb =>
-    let _a ← synthInstanceQ q(AddLeftMono $α)
-    pure (.positive q(add_pos' $pa $pb))
-  | .positive pa, .nonnegative pb =>
-    let _a ← synthInstanceQ q(AddLeftMono $α)
-    pure (.positive q(add_pos_of_pos_of_nonneg $pa $pb))
-  | .nonnegative pa, .positive pb =>
-    let _a ← synthInstanceQ q(AddRightMono $α)
-    pure (.positive q(Right.add_pos_of_nonneg_of_pos $pa $pb))
-  | .nonnegative pa, .nonnegative pb =>
-    let _a ← synthInstanceQ q(AddLeftMono $α)
-    pure (.nonnegative q(add_nonneg $pa $pb))
-  | _, _ => failure
-
-中文:
-定义 evalAdd
-  签名: : PositivityExt where eval {u α} zα pα? e
-  定义体: match pα? with | none => pure .none | some pα => do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not +"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(AddZeroClass $α)
-  assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HAdd.hAdd)
-  let ra ← core zα pα a; let rb ← core zα pα b
-  match ra, rb with
-  | .positive pa, .positive pb =>
-    let _a ← synthInstanceQ q(AddLeftMono $α)
-    pure (.positive q(add_pos' $pa $pb))
-  | .positive pa, .nonnegative pb =>
-    let _a ← synthInstanceQ q(AddLeftMono $α)
-    pure (.positive q(add_pos_of_pos_of_nonneg $pa $pb))
-  | .nonnegative pa, .positive pb =>
-    let _a ← synthInstanceQ q(AddRightMono $α)
-    pure (.positive q(Right.add_pos_of_nonneg_of_pos $pa $pb))
-  | .nonnegative pa, .nonnegative pb =>
-    let _a ← synthInstanceQ q(AddLeftMono $α)
-    pure (.nonnegative q(add_nonneg $pa $pb))
-  | _, _ => failure
+--- 原说明 ---
+The `positivity` extension which identifies expressions of the form `a + b`,
+such that `positivity` successfully recognises both `a` and `b`.
 -/
 @[positivity _ + _] def evalAdd : PositivityExt where eval {u α} zα pα? e :=
   match pα? with | none => pure .none | some pα => do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not +"
-let _e_eq : e =Q f a b := ⟨⟩
+  let .app (.app (f : Q($α → $α → $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not +"
+  let _e_eq : $e =Q $f $a $b := ⟨⟩
   let _a ← synthInstanceQ q(AddZeroClass $α)
   assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HAdd.hAdd)
+  let ⟨_f_eq⟩ ← withDefault <| withNewMCtxDepth <| assertDefEqQ q($f) q(HAdd.hAdd)
   let ra ← core zα pα a; let rb ← core zα pα b
   match ra, rb with
   | .positive pa, .positive pb =>
@@ -620,146 +376,25 @@ let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HAdd.hAdd)
     pure (.nonnegative q(add_nonneg $pa $pb))
   | _, _ => failure
 
-/--
-Definition of `evalSub` / `evalSub` 的定义
+/-- The `positivity` extension which identifies expressions of the form `a - b`,
+such that there is a local hypothesis `b < a`, `b ≤ a`, `a ≠ b` or `b ≠ a`. -/
+/-
+**Mathlib.Meta.Positivity.evalSub** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：Mathlib.Meta.Positivity.PositivityExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalSub
-  signature: : PositivityExt where eval {u α} _zα pα? e
-  body: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not -"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(AddGroup $α)
-  assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HSub.hSub)
-id
-  match pα? with
-  | some pα => do
-    let mut result := .none
-    for decl in ← getLCtx do
-      unless decl.isImplementationDetail do
-        have e' : Q(Prop) := decl.type
-        have p : Q($e') := .fvar decl.fvarId
-        result ← orElse result do
-          match e' with
-          | ~q(@LE.le.{u} $β $le $lo $hi) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            let .defEq _ ← isDefEqQ q($le) q(($pα).toLE) | return .none
-            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
-            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
-            let _ ← synthInstanceQ q(AddRightMono $α)
-            return .nonnegative q(sub_nonneg_of_le $p)
-          | ~q(@LT.lt.{u} $β $lt $lo $hi) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            let .defEq _ ← isDefEqQ q($lt) q(($pα).toLT) | return .none
-            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
-            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
-            let _i ← synthInstanceQ q(AddRightStrictMono $α)
-            assumeInstancesCommute
-            return .positive (q(sub_pos_of_lt $p):)
-          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
-              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne $p):)
-            if let .defEq _ ← isDefEqQ a rhs then
-              let .defEq _ ← isDefEqQ b lhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
-            return .none
-          | _ => return .none
-    return result
-  | none => do
-    let mut result := .none
-    for decl in ← getLCtx do
-      unless decl.isImplementationDetail do
-        have e' : Q(Prop) := decl.type
-        have p : Q($e') := .fvar decl.fvarId
-        result ← orElse result do
-          match e' with
-          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
-              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne $p):)
-            if let .defEq _ ← isDefEqQ a rhs then
-              let .defEq _ ← isDefEqQ b lhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
-            return .none
-          | _ => return .none
-    return result
-
-中文:
-定义 evalSub
-  签名: : PositivityExt where eval {u α} _zα pα? e
-  定义体: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not -"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(AddGroup $α)
-  assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HSub.hSub)
-id
-  match pα? with
-  | some pα => do
-    let mut result := .none
-    for decl in ← getLCtx do
-      unless decl.isImplementationDetail do
-        have e' : Q(Prop) := decl.type
-        have p : Q($e') := .fvar decl.fvarId
-        result ← orElse result do
-          match e' with
-          | ~q(@LE.le.{u} $β $le $lo $hi) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            let .defEq _ ← isDefEqQ q($le) q(($pα).toLE) | return .none
-            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
-            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
-            let _ ← synthInstanceQ q(AddRightMono $α)
-            return .nonnegative q(sub_nonneg_of_le $p)
-          | ~q(@LT.lt.{u} $β $lt $lo $hi) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            let .defEq _ ← isDefEqQ q($lt) q(($pα).toLT) | return .none
-            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
-            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
-            let _i ← synthInstanceQ q(AddRightStrictMono $α)
-            assumeInstancesCommute
-            return .positive (q(sub_pos_of_lt $p):)
-          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
-              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne $p):)
-            if let .defEq _ ← isDefEqQ a rhs then
-              let .defEq _ ← isDefEqQ b lhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
-            return .none
-          | _ => return .none
-    return result
-  | none => do
-    let mut result := .none
-    for decl in ← getLCtx do
-      unless decl.isImplementationDetail do
-        have e' : Q(Prop) := decl.type
-        have p : Q($e') := .fvar decl.fvarId
-        result ← orElse result do
-          match e' with
-          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
-            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
-              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne $p):)
-            if let .defEq _ ← isDefEqQ a rhs then
-              let .defEq _ ← isDefEqQ b lhs | return .none
-              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
-            return .none
-          | _ => return .none
-    return result
+--- 原说明 ---
+The `positivity` extension which identifies expressions of the form `a - b`,
+such that there is a local hypothesis `b < a`, `b ≤ a`, `a ≠ b` or `b ≠ a`.
 -/
 @[positivity _ - _] def evalSub : PositivityExt where eval {u α} _zα pα? e := do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not -"
-let _e_eq : e =Q f a b := ⟨⟩
+  let .app (.app (f : Q($α → $α → $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not -"
+  let _e_eq : $e =Q $f $a $b := ⟨⟩
   let _a ← synthInstanceQ q(AddGroup $α)
   assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HSub.hSub)
-id
+  let ⟨_f_eq⟩ ← withDefault <| withNewMCtxDepth <| assertDefEqQ q($f) q(HSub.hSub)
+  id <|
   match pα? with
   | some pα => do
     let mut result := .none
@@ -815,106 +450,31 @@ id
           | _ => return .none
     return result
 
-/--
-Definition of `evalMul` / `evalMul` 的定义
+/-- The `positivity` extension which identifies expressions of the form `a * b`,
+such that `positivity` successfully recognises both `a` and `b`. -/
+/-
+**Mathlib.Meta.Positivity.evalMul** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：Mathlib.Meta.Positivity.PositivityExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalMul
-  signature: : PositivityExt where eval {u α} zα pα? e
-  body: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not *"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(Mul $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HMul.hMul)
-  let ra ← core zα pα? a; let rb ← core zα pα? b
-  let tryProveNonzero (pα? : Option Q(PartialOrder $α))
-      (pa? : Option Q($a != 0)) (pb? : Option Q($b != 0)) : MetaM (Strictness zα e pα?) := do
-    let pa ← liftOption pa?
-    let pb ← liftOption pb?
-    let _a ← synthInstanceQ q(NoZeroDivisors $α)
-    pure (.nonzero q(mul_ne_zero $pa $pb))
-  let tryProveNonneg (pα : Q(PartialOrder $α)) (pa? : Option Q(0 <= $a)) (pb? : Option Q(0 <= $b)) :
-      MetaM (Strictness zα e pα) := do
-    let pa ← liftOption pa?
-    let pb ← liftOption pb?
-    let _a ← synthInstanceQ q(MulZeroClass $α)
-    let _a ← synthInstanceQ q(PosMulMono $α)
-    assumeInstancesCommute
-    pure (.nonnegative q(mul_nonneg $pa $pb))
-  let tryProvePositive (pα : Q(PartialOrder $α)) (pa? : Option Q(0 < $a)) (pb? : Option Q(0 < $b)) :
-      MetaM (Strictness zα e pα) := do
-    let pa ← liftOption pa?
-    let pb ← liftOption pb?
-    let _a ← synthInstanceQ q(MulZeroClass $α)
-    let _a ← synthInstanceQ q(PosMulStrictMono $α)
-    assumeInstancesCommute
-    pure (.positive q(mul_pos $pa $pb))
-id
-  match pα? with
-  | some pα => do
-    let mut result : Strictness zα e (some pα) := .none
-    result ← orElse result (tryProvePositive pα ra.toPositive rb.toPositive)
-    result ← orElse result (tryProveNonneg pα ra.toNonneg rb.toNonneg)
-    result ← orElse result (tryProveNonzero pα ra.toNonzero rb.toNonzero)
-    return result
-  | none =>
-return ← catchNone tryProveNonzero .none ra.toNonzero rb.toNonzero
-
-中文:
-定义 evalMul
-  签名: : PositivityExt where eval {u α} zα pα? e
-  定义体: do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not *"
-let _e_eq : e =Q f a b := ⟨⟩
-  let _a ← synthInstanceQ q(Mul $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HMul.hMul)
-  let ra ← core zα pα? a; let rb ← core zα pα? b
-  let tryProveNonzero (pα? : Option Q(PartialOrder $α))
-      (pa? : Option Q($a != 0)) (pb? : Option Q($b != 0)) : MetaM (Strictness zα e pα?) := do
-    let pa ← liftOption pa?
-    let pb ← liftOption pb?
-    let _a ← synthInstanceQ q(NoZeroDivisors $α)
-    pure (.nonzero q(mul_ne_zero $pa $pb))
-  let tryProveNonneg (pα : Q(PartialOrder $α)) (pa? : Option Q(0 <= $a)) (pb? : Option Q(0 <= $b)) :
-      MetaM (Strictness zα e pα) := do
-    let pa ← liftOption pa?
-    let pb ← liftOption pb?
-    let _a ← synthInstanceQ q(MulZeroClass $α)
-    let _a ← synthInstanceQ q(PosMulMono $α)
-    assumeInstancesCommute
-    pure (.nonnegative q(mul_nonneg $pa $pb))
-  let tryProvePositive (pα : Q(PartialOrder $α)) (pa? : Option Q(0 < $a)) (pb? : Option Q(0 < $b)) :
-      MetaM (Strictness zα e pα) := do
-    let pa ← liftOption pa?
-    let pb ← liftOption pb?
-    let _a ← synthInstanceQ q(MulZeroClass $α)
-    let _a ← synthInstanceQ q(PosMulStrictMono $α)
-    assumeInstancesCommute
-    pure (.positive q(mul_pos $pa $pb))
-id
-  match pα? with
-  | some pα => do
-    let mut result : Strictness zα e (some pα) := .none
-    result ← orElse result (tryProvePositive pα ra.toPositive rb.toPositive)
-    result ← orElse result (tryProveNonneg pα ra.toNonneg rb.toNonneg)
-    result ← orElse result (tryProveNonzero pα ra.toNonzero rb.toNonzero)
-    return result
-  | none =>
-return ← catchNone tryProveNonzero .none ra.toNonzero rb.toNonzero
+--- 原说明 ---
+The `positivity` extension which identifies expressions of the form `a * b`,
+such that `positivity` successfully recognises both `a` and `b`.
 -/
 @[positivity _ * _] def evalMul : PositivityExt where eval {u α} zα pα? e := do
-  let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not *"
-let _e_eq : e =Q f a b := ⟨⟩
+  let .app (.app (f : Q($α → $α → $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not *"
+  let _e_eq : $e =Q $f $a $b := ⟨⟩
   let _a ← synthInstanceQ q(Mul $α)
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HMul.hMul)
+  let ⟨_f_eq⟩ ← withDefault <| withNewMCtxDepth <| assertDefEqQ q($f) q(HMul.hMul)
   let ra ← core zα pα? a; let rb ← core zα pα? b
   let tryProveNonzero (pα? : Option Q(PartialOrder $α))
-      (pa? : Option Q($a != 0)) (pb? : Option Q($b != 0)) : MetaM (Strictness zα e pα?) := do
+      (pa? : Option Q($a ≠ 0)) (pb? : Option Q($b ≠ 0)) : MetaM (Strictness zα e pα?) := do
     let pa ← liftOption pa?
     let pb ← liftOption pb?
     let _a ← synthInstanceQ q(NoZeroDivisors $α)
     pure (.nonzero q(mul_ne_zero $pa $pb))
-  let tryProveNonneg (pα : Q(PartialOrder $α)) (pa? : Option Q(0 <= $a)) (pb? : Option Q(0 <= $b)) :
+  let tryProveNonneg (pα : Q(PartialOrder $α)) (pa? : Option Q(0 ≤ $a)) (pb? : Option Q(0 ≤ $b)) :
       MetaM (Strictness zα e pα) := do
     let pa ← liftOption pa?
     let pb ← liftOption pb?
@@ -930,7 +490,7 @@ let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HMul.hMul)
     let _a ← synthInstanceQ q(PosMulStrictMono $α)
     assumeInstancesCommute
     pure (.positive q(mul_pos $pa $pb))
-id
+  id <|
   match pα? with
   | some pα => do
     let mut result : Strictness zα e (some pα) := .none
@@ -939,147 +499,81 @@ id
     result ← orElse result (tryProveNonzero pα ra.toNonzero rb.toNonzero)
     return result
   | none =>
-return ← catchNone tryProveNonzero .none ra.toNonzero rb.toNonzero
-
-/--
-lemma `int_div_self_pos` / 引理 `int_div_self_pos`
-
-English:
-lemma int_div_self_pos
-  given: {a : Int} (ha : 0 < a)
-  statement: 0 < a / a
-  proof: by
-  rw [Int.ediv_self ha.ne']; exact zero_lt_one
-
-中文:
-引理 int_div_self_pos
-  条件: {a : 整数} (ha : 0 < a)
-  结论: 0 < a / a
-  证明: by
-  rw [Int.ediv_self ha.ne']; exact zero_lt_one
-
-Depends on / 依赖: Int.ediv_self, ediv_self, ha.ne, zero_lt_one
+    return ← catchNone <| tryProveNonzero .none ra.toNonzero rb.toNonzero
+/-
+**Mathlib.Meta.Positivity.int_div_self_pos** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Me
+ta.Positivity`。
+形式化陈述：int_div_self_pos {a : Int} (ha : 0 < a) : 0 < a / a
+参数：ha : 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.ediv_self`：∀ {a : ℤ}, a ≠ 0 → a / a = 1
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma int_div_self_pos {a : Int} (ha : 0 < a) : 0 < a / a := by
+lemma int_div_self_pos {a : ℤ} (ha : 0 < a) : 0 < a / a := by
   rw [Int.ediv_self ha.ne']; exact zero_lt_one
-
-/--
-lemma `int_div_nonneg_of_pos_of_nonneg` / 引理 `int_div_nonneg_of_pos_of_nonneg`
-
-English:
-lemma int_div_nonneg_of_pos_of_nonneg
-  given: {a b : Int} (ha : 0 < a) (hb : 0 <= b)
-  statement: 0 <= a / b
-  proof: Int.ediv_nonneg ha.le hb
-
-中文:
-引理 int_div_nonneg_of_pos_of_nonneg
-  条件: {a b : 整数} (ha : 0 < a) (hb : 0 <= b)
-  结论: 0 <= a / b
-  证明: Int.ediv_nonneg ha.le hb
-
-Depends on / 依赖: Int.ediv_nonneg, ediv_nonneg, ha.le
+/-
+**Mathlib.Meta.Positivity.int_div_nonneg_of_pos_of_nonneg** 是 Mathlib 中的一个引理，位于命
+名空间 `Mathlib.Meta.Positivity`。
+形式化陈述：int_div_nonneg_of_pos_of_nonneg {a b : Int} (ha : 0 < a) (hb : 0 <= b) : 0
+ <= a / b
+参数：ha : 0 < a；hb : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_nonneg`：∀ {a b : ℤ}, 0 ≤ a → 0 ≤ b → 0 ≤ a / b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma int_div_nonneg_of_pos_of_nonneg {a b : Int} (ha : 0 < a) (hb : 0 <= b) : 0 <= a / b :=
+lemma int_div_nonneg_of_pos_of_nonneg {a b : ℤ} (ha : 0 < a) (hb : 0 ≤ b) : 0 ≤ a / b :=
   Int.ediv_nonneg ha.le hb
-
-/--
-lemma `int_div_nonneg_of_nonneg_of_pos` / 引理 `int_div_nonneg_of_nonneg_of_pos`
-
-English:
-lemma int_div_nonneg_of_nonneg_of_pos
-  given: {a b : Int} (ha : 0 <= a) (hb : 0 < b)
-  statement: 0 <= a / b
-  proof: Int.ediv_nonneg ha hb.le
-
-中文:
-引理 int_div_nonneg_of_nonneg_of_pos
-  条件: {a b : 整数} (ha : 0 <= a) (hb : 0 < b)
-  结论: 0 <= a / b
-  证明: Int.ediv_nonneg ha hb.le
-
-Depends on / 依赖: Int.ediv_nonneg, ediv_nonneg, hb.le
+/-
+**Mathlib.Meta.Positivity.int_div_nonneg_of_nonneg_of_pos** 是 Mathlib 中的一个引理，位于命
+名空间 `Mathlib.Meta.Positivity`。
+形式化陈述：int_div_nonneg_of_nonneg_of_pos {a b : Int} (ha : 0 <= a) (hb : 0 < b) : 0
+ <= a / b
+参数：ha : 0 <= a；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_nonneg`：∀ {a b : ℤ}, 0 ≤ a → 0 ≤ b → 0 ≤ a / b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma int_div_nonneg_of_nonneg_of_pos {a b : Int} (ha : 0 <= a) (hb : 0 < b) : 0 <= a / b :=
+lemma int_div_nonneg_of_nonneg_of_pos {a b : ℤ} (ha : 0 ≤ a) (hb : 0 < b) : 0 ≤ a / b :=
   Int.ediv_nonneg ha hb.le
-
-/--
-lemma `int_div_nonneg_of_pos_of_pos` / 引理 `int_div_nonneg_of_pos_of_pos`
-
-English:
-lemma int_div_nonneg_of_pos_of_pos
-  given: {a b : Int} (ha : 0 < a) (hb : 0 < b)
-  statement: 0 <= a / b
-  proof: Int.ediv_nonneg ha.le hb.le
-
-中文:
-引理 int_div_nonneg_of_pos_of_pos
-  条件: {a b : 整数} (ha : 0 < a) (hb : 0 < b)
-  结论: 0 <= a / b
-  证明: Int.ediv_nonneg ha.le hb.le
-
-Depends on / 依赖: Int.ediv_nonneg, ediv_nonneg, ha.le, hb.le
+/-
+**Mathlib.Meta.Positivity.int_div_nonneg_of_pos_of_pos** 是 Mathlib 中的一个引理，位于命名空间
+ `Mathlib.Meta.Positivity`。
+形式化陈述：int_div_nonneg_of_pos_of_pos {a b : Int} (ha : 0 < a) (hb : 0 < b) : 0 <= 
+a / b
+参数：ha : 0 < a；hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_nonneg`：∀ {a b : ℤ}, 0 ≤ a → 0 ≤ b → 0 ≤ a / b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma int_div_nonneg_of_pos_of_pos {a b : Int} (ha : 0 < a) (hb : 0 < b) : 0 <= a / b :=
+lemma int_div_nonneg_of_pos_of_pos {a b : ℤ} (ha : 0 < a) (hb : 0 < b) : 0 ≤ a / b :=
   Int.ediv_nonneg ha.le hb.le
 
-/--
-Definition of `evalIntDiv` / `evalIntDiv` 的定义
+/-- The `positivity` extension which identifies expressions of the form `a / b`,
+where `a` and `b` are integers. -/
+/-
+**Mathlib.Meta.Positivity.evalIntDiv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Pos
+itivity`。
+形式化陈述：Mathlib.Meta.Positivity.PositivityExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalIntDiv
-  signature: : PositivityExt where eval {u α} _ pα? e
-  body: match pα? with | none => pure .none | some _ => do
-  match u, α, e with
-  | 0, ~q(Int), ~q($a / $b) =>
-    let ra ← core q(inferInstance) (some q(inferInstance)) a
-    let rb ← core q(inferInstance) (some q(inferInstance)) b
-    assertInstancesCommute
-    match ra, rb with
-    | .positive (pa : Q(0 < $a)), .positive (pb : Q(0 < $b)) =>
-      -- Only attempts to prove `0 < a / a`, otherwise falls back to `0 ≤ a / b`
-      let _ := q(int_div_self_pos $pa)
-      match ← isDefEqQ a b with
-      | .defEq _ => pure (.positive q(int_div_self_pos $pa))
-      | .notDefEq => pure (.nonnegative q(int_div_nonneg_of_pos_of_pos $pa $pb))
-    | .positive (pa : Q(0 < $a)), .nonnegative (pb : Q(0 <= $b)) =>
-      pure (.nonnegative q(int_div_nonneg_of_pos_of_nonneg $pa $pb))
-    | .nonnegative (pa : Q(0 <= $a)), .positive (pb : Q(0 < $b)) =>
-      pure (.nonnegative q(int_div_nonneg_of_nonneg_of_pos $pa $pb))
-    | .nonnegative (pa : Q(0 <= $a)), .nonnegative (pb : Q(0 <= $b)) =>
-      pure (.nonnegative q(Int.ediv_nonneg $pa $pb))
-    | _, _ => pure .none
-  | _, _, _ => throwError "not /"
-
-中文:
-定义 eval整数Div
-  签名: : PositivityExt where eval {u α} _ pα? e
-  定义体: match pα? with | none => pure .none | some _ => do
-  match u, α, e with
-  | 0, ~q(Int), ~q($a / $b) =>
-    let ra ← core q(inferInstance) (some q(inferInstance)) a
-    let rb ← core q(inferInstance) (some q(inferInstance)) b
-    assertInstancesCommute
-    match ra, rb with
-    | .positive (pa : Q(0 < $a)), .positive (pb : Q(0 < $b)) =>
-      -- Only attempts to prove `0 < a / a`, otherwise falls back to `0 ≤ a / b`
-      let _ := q(int_div_self_pos $pa)
-      match ← isDefEqQ a b with
-      | .defEq _ => pure (.positive q(int_div_self_pos $pa))
-      | .notDefEq => pure (.nonnegative q(int_div_nonneg_of_pos_of_pos $pa $pb))
-    | .positive (pa : Q(0 < $a)), .nonnegative (pb : Q(0 <= $b)) =>
-      pure (.nonnegative q(int_div_nonneg_of_pos_of_nonneg $pa $pb))
-    | .nonnegative (pa : Q(0 <= $a)), .positive (pb : Q(0 < $b)) =>
-      pure (.nonnegative q(int_div_nonneg_of_nonneg_of_pos $pa $pb))
-    | .nonnegative (pa : Q(0 <= $a)), .nonnegative (pb : Q(0 <= $b)) =>
-      pure (.nonnegative q(Int.ediv_nonneg $pa $pb))
-    | _, _ => pure .none
-  | _, _, _ => throwError "not /"
+--- 原说明 ---
+The `positivity` extension which identifies expressions of the form `a / b`,
+where `a` and `b` are integers.
 -/
-@[positivity (_ : Int) / (_ : Int)] def evalIntDiv : PositivityExt where eval {u α} _ pα? e :=
+@[positivity (_ : ℤ) / (_ : ℤ)] def evalIntDiv : PositivityExt where eval {u α} _ pα? e :=
   match pα? with | none => pure .none | some _ => do
   match u, α, e with
-  | 0, ~q(Int), ~q($a / $b) =>
+  | 0, ~q(ℤ), ~q($a / $b) =>
     let ra ← core q(inferInstance) (some q(inferInstance)) a
     let rb ← core q(inferInstance) (some q(inferInstance)) b
     assertInstancesCommute
@@ -1090,62 +584,57 @@ definition evalIntDiv
       match ← isDefEqQ a b with
       | .defEq _ => pure (.positive q(int_div_self_pos $pa))
       | .notDefEq => pure (.nonnegative q(int_div_nonneg_of_pos_of_pos $pa $pb))
-    | .positive (pa : Q(0 < $a)), .nonnegative (pb : Q(0 <= $b)) =>
+    | .positive (pa : Q(0 < $a)), .nonnegative (pb : Q(0 ≤ $b)) =>
       pure (.nonnegative q(int_div_nonneg_of_pos_of_nonneg $pa $pb))
-    | .nonnegative (pa : Q(0 <= $a)), .positive (pb : Q(0 < $b)) =>
+    | .nonnegative (pa : Q(0 ≤ $a)), .positive (pb : Q(0 < $b)) =>
       pure (.nonnegative q(int_div_nonneg_of_nonneg_of_pos $pa $pb))
-    | .nonnegative (pa : Q(0 <= $a)), .nonnegative (pb : Q(0 <= $b)) =>
+    | .nonnegative (pa : Q(0 ≤ $a)), .nonnegative (pb : Q(0 ≤ $b)) =>
       pure (.nonnegative q(Int.ediv_nonneg $pa $pb))
     | _, _ => pure .none
   | _, _, _ => throwError "not /"
-
-/--
-theorem `pow_zero_pos` / 定理 `pow_zero_pos`
-
-English:
-theorem pow_zero_pos
-  statement: [Semiring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α]
-  proof: zero_lt_one.trans_le (pow_zero a).ge
-
-中文:
-定理 pow_zero_pos
-  结论: [半环 α] [偏序 α] [是Ordered环 α] [非平凡 α]
-  证明: zero_lt_one.trans_le (pow_zero a).ge
-
-Depends on / 依赖: pow_zero, trans_le, zero_lt_one, zero_lt_one.trans_le
+/-
+**Mathlib.Meta.Positivity.pow_zero_pos** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta.P
+ositivity`。
+形式化陈述：pow_zero_pos [Semiring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α
+] (a : α) : 0 < a ^ 0
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
 -/
 theorem pow_zero_pos [Semiring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α]
     (a : α) : 0 < a ^ 0 :=
   zero_lt_one.trans_le (pow_zero a).ge
-
-/--
-theorem `pow_zero_ne_zero` / 定理 `pow_zero_ne_zero`
-
-English:
-theorem pow_zero_ne_zero
-  given: [Semiring α] [Nontrivial α] (a : α)
-  statement: a ^ 0 != 0
-  proof: pow_zero a ▸ one_ne_zero
-
-中文:
-定理 pow_zero_ne_zero
-  条件: [半环 α] [非平凡 α] (a : α)
-  结论: a ^ 0 != 0
-  证明: pow_zero a ▸ one_ne_zero
-
-Depends on / 依赖: one_ne_zero, pow_zero
+/-
+**Mathlib.Meta.Positivity.pow_zero_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Me
+ta.Positivity`。
+形式化陈述：pow_zero_ne_zero [Semiring α] [Nontrivial α] (a : α) : a ^ 0 != 0
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
 -/
-theorem pow_zero_ne_zero [Semiring α] [Nontrivial α] (a : α) : a ^ 0 != 0 :=
+theorem pow_zero_ne_zero [Semiring α] [Nontrivial α] (a : α) : a ^ 0 ≠ 0 :=
   pow_zero a ▸ one_ne_zero
 
 /-- The `positivity` extension which identifies expressions of the form `a ^ (0 : ℕ)`.
 This extension is run in addition to the general `a ^ b` extension (they are overlapping). -/
-@[positivity _ ^ (0 : Nat)]
+@[positivity _ ^ (0 : ℕ)]
 meta def evalPowZeroNat : PositivityExt where eval {u α} _zα pα? e := do
   let .app (.app _ (a : Q($α))) _ ← whnfR e | throwError "not ^"
   let _a ← synthInstanceQ q(Semiring $α)
   assumeInstancesCommute
-haveI' : e =Q a ^ 0 := ⟨⟩
+  haveI' : $e =Q $a ^ 0 := ⟨⟩
   let _a ← synthInstanceQ q(Nontrivial $α)
   match (dependent := true) pα? with
   | some _pα =>
@@ -1155,15 +644,15 @@ haveI' : e =Q a ^ 0 := ⟨⟩
 
 /-- The `positivity` extension which identifies expressions of the form `a ^ (b : ℕ)`,
 such that `positivity` successfully recognises both `a` and `b`. -/
-@[positivity _ ^ (_ : Nat)]
+@[positivity _ ^ (_ : ℕ)]
 meta def evalPow : PositivityExt where eval {u α} zα pα? e := do
-  let .app (.app _ (a : Q($α))) (b : Q(Nat)) ← whnfR e | throwError "not ^"
+  let .app (.app _ (a : Q($α))) (b : Q(ℕ)) ← whnfR e | throwError "not ^"
   match (dependent := true) pα? with
   | none =>
     let _a ← synthInstanceQ q(MonoidWithZero $α)
     let _a ← synthInstanceQ q(NoZeroDivisors $α)
     assumeInstancesCommute
-haveI' : e =Q a ^ b := ⟨⟩
+    haveI' : $e =Q $a ^ $b := ⟨⟩
     let .nonzero nza ← core zα .none a | pure .none
     pure (.nonzero q(pow_ne_zero $b $nza))
   | some pα =>
@@ -1175,20 +664,20 @@ haveI' : e =Q a ^ b := ⟨⟩
       let .true := b.isAppOfArity ``OfNat.ofNat 3 | throwError "not a ^ n where n is a literal"
       let some n := (b.getRevArg! 1).rawNatLit? | throwError "not a ^ n where n is a literal"
       guard (n % 2 = 0)
-      have m : Q(Nat) := mkRawNatLit (n / 2)
-haveI' : b =Q 2 * m := ⟨⟩
-haveI' : e =Q a ^ b := ⟨⟩
+      have m : Q(ℕ) := mkRawNatLit (n / 2)
+      haveI' : $b =Q 2 * $m := ⟨⟩
+      haveI' : $e =Q $a ^ $b := ⟨⟩
       pure (.nonnegative q((even_two_mul $m).pow_nonneg $a))
     orElse result do
       let ra ← core zα pα a
-      let ofNonneg (pa : Q(0 <= $a)) (_rα : Q(Semiring $α)) (_oα : Q(IsOrderedRing $α)) :
+      let ofNonneg (pa : Q(0 ≤ $a)) (_rα : Q(Semiring $α)) (_oα : Q(IsOrderedRing $α)) :
           MetaM (Strictness zα e (some pα)) := do
-haveI' : e =Q a ^ b := ⟨⟩
+        haveI' : $e =Q $a ^ $b := ⟨⟩
         assumeInstancesCommute
         pure (.nonnegative q(pow_nonneg $pa $b))
-      let ofNonzero (pa : Q($a != 0)) (_rα : Q(Semiring $α)) (_oα : Q(IsOrderedRing $α)) :
+      let ofNonzero (pa : Q($a ≠ 0)) (_rα : Q(Semiring $α)) (_oα : Q(IsOrderedRing $α)) :
           MetaM (Strictness zα e (some pα)) := do
-haveI' : e =Q a ^ b := ⟨⟩
+        haveI' : $e =Q $a ^ $b := ⟨⟩
         assumeInstancesCommute
         let _a ← synthInstanceQ q(NoZeroDivisors $α)
         pure (.nonzero q(pow_ne_zero $b $pa))
@@ -1198,7 +687,7 @@ haveI' : e =Q a ^ b := ⟨⟩
           let _a ← synthInstanceQ q(Semiring $α)
           let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
           assumeInstancesCommute
-haveI' : e =Q a ^ b := ⟨⟩
+          haveI' : $e =Q $a ^ $b := ⟨⟩
           pure (.positive q(pow_pos $pa $b))
         catch e : Exception =>
           trace[Tactic.positivity.failure] "{e.toMessageData}"
@@ -1215,23 +704,19 @@ haveI' : e =Q a ^ b := ⟨⟩
           ofNonzero q($pa) q($sα) q($oα)
       | .none => pure .none
 
-/--
-theorem `abs_pos_of_ne_zero` / 定理 `abs_pos_of_ne_zero`
-
-English:
-theorem abs_pos_of_ne_zero
-  statement: {α : Type*} [AddGroup α] [LinearOrder α]
-  proof: abs_pos.mpr
-
-中文:
-定理 abs_pos_of_ne_zero
-  结论: {α : 类型} [加法群 α] [线性序 α]
-  证明: abs_pos.mpr
-
-Depends on / 依赖: abs_pos, abs_pos.mpr
+/-
+**Mathlib.Meta.Positivity.abs_pos_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Meta.Positivity`。
+形式化陈述：abs_pos_of_ne_zero {α : Type*} [AddGroup α] [LinearOrder α] [AddLeftMono α
+] {a : α} : a != 0 -> 0 < |a|
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_pos`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder α] [
+AddLeftMono α] {a : α}, 0 < |a| ↔ a ≠ 0
 -/
 theorem abs_pos_of_ne_zero {α : Type*} [AddGroup α] [LinearOrder α]
-    [AddLeftMono α] {a : α} : a != 0 -> 0 < |a| := abs_pos.mpr
+    [AddLeftMono α] {a : α} : a ≠ 0 → 0 < |a| := abs_pos.mpr
 
 /-- The `positivity` extension which identifies expressions of the form `|a|`. -/
 @[positivity |_|]
@@ -1251,24 +736,18 @@ meta def evalAbs : PositivityExt where eval {_u} (α zα pα?) (e : Q($α)) :=
     let pa' ← mkAppM ``abs_nonneg #[a]
     pure (.nonnegative (pα := pα') pa')
 
-/--
-theorem `int_natAbs_pos` / 定理 `int_natAbs_pos`
-
-English:
-theorem int_natAbs_pos
-  given: {n : Int} (hn : 0 < n)
-  statement: 0 < n.natAbs
-  proof: Int.natAbs_pos.mpr hn.ne'
-
-中文:
-定理 int_natAbs_pos
-  条件: {n : 整数} (hn : 0 < n)
-  结论: 0 < n.natAbs
-  证明: Int.natAbs_pos.mpr hn.ne'
-
-Depends on / 依赖: Int.natAbs_pos.mpr, hn.ne, natAbs_pos
+/-
+**Mathlib.Meta.Positivity.int_natAbs_pos** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Meta
+.Positivity`。
+形式化陈述：int_natAbs_pos {n : Int} (hn : 0 < n) : 0 < n.natAbs
+参数：hn : 0 < n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natAbs_pos`：∀ {a : ℤ}, 0 < a.natAbs ↔ a ≠ 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-theorem int_natAbs_pos {n : Int} (hn : 0 < n) : 0 < n.natAbs :=
+theorem int_natAbs_pos {n : ℤ} (hn : 0 < n) : 0 < n.natAbs :=
   Int.natAbs_pos.mpr hn.ne'
 
 /-- Extension for the `positivity` tactic: `Int.natAbs` is positive when its input is.
@@ -1279,7 +758,7 @@ Since the output type of `Int.natAbs` is `ℕ`, the nonnegative case is handled 
 meta def evalNatAbs : PositivityExt where eval {u α} _zα pα? e :=
   match pα? with | none => pure .none | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Int.natAbs $a) =>
+  | 0, ~q(ℕ), ~q(Int.natAbs $a) =>
     let zα' : Q(Zero Int) := q(inferInstance)
     let pα' : Q(PartialOrder Int) := q(inferInstance)
     assertInstancesCommute
@@ -1299,7 +778,7 @@ meta def evalNatAbs : PositivityExt where eval {u α} _zα pα? e :=
 and positive when its input is. -/
 @[positivity Nat.cast _]
 meta def evalNatCast : PositivityExt where eval {u α} _zα pα? e := do
-  let ~q(@Nat.cast _ (_) ($a : Nat)) := e | throwError "not Nat.cast"
+  let ~q(@Nat.cast _ (_) ($a : ℕ)) := e | throwError "not Nat.cast"
   let zα' : Q(Zero Nat) := q(inferInstance)
   let (_i1 : Q(AddMonoidWithOne $α)) ← synthInstanceQ q(AddMonoidWithOne $α)
   match (dependent := true) pα? with
@@ -1328,7 +807,7 @@ meta def evalNatCast : PositivityExt where eval {u α} _zα pα? e := do
 if its input is. -/
 @[positivity Int.cast _]
 meta def evalIntCast : PositivityExt where eval {u α} _zα pα? e := do
-  let ~q(@Int.cast _ (_) ($a : Int)) := e | throwError "not Int.cast"
+  let ~q(@Int.cast _ (_) ($a : ℤ)) := e | throwError "not Int.cast"
   let zα' : Q(Zero Int) := q(inferInstance)
   let pα' : Q(PartialOrder Int) := q(inferInstance)
   let ra ← core zα' pα' a
@@ -1356,9 +835,9 @@ meta def evalIntCast : PositivityExt where eval {u α} _zα pα? e := do
 /-- Extension for `Nat.succ`. -/
 @[positivity Nat.succ _]
 meta def evalNatSucc : PositivityExt where eval {u α} _zα pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Nat.succ $a) =>
+  | 0, ~q(ℕ), ~q(Nat.succ $a) =>
     assertInstancesCommute
     pure (.positive q(Nat.succ_pos $a))
   | _, _, _ => throwError "not Nat.succ"
@@ -1366,9 +845,9 @@ meta def evalNatSucc : PositivityExt where eval {u α} _zα pα? e :=
 /-- Extension for `PNat.val`. -/
 @[positivity PNat.val _]
 meta def evalPNatVal : PositivityExt where eval {u α} _zα pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(PNat.val $a) =>
+  | 0, ~q(ℕ), ~q(PNat.val $a) =>
     assertInstancesCommute
     pure (.positive q(PNat.pos $a))
   | _, _, _ => throwError "not PNat.val"
@@ -1376,9 +855,9 @@ meta def evalPNatVal : PositivityExt where eval {u α} _zα pα? e :=
 /-- Extension for `Nat.factorial`. -/
 @[positivity Nat.factorial _]
 meta def evalFactorial : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Nat.factorial $a) =>
+  | 0, ~q(ℕ), ~q(Nat.factorial $a) =>
     assertInstancesCommute
     pure (.positive q(Nat.factorial_pos $a))
   | _, _, _ => throwError "failed to match Nat.factorial"
@@ -1386,9 +865,9 @@ meta def evalFactorial : PositivityExt where eval {u α} _ pα? e :=
 /-- Extension for `Nat.ascFactorial`. -/
 @[positivity Nat.ascFactorial _ _]
 meta def evalAscFactorial : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Nat.ascFactorial ($n + 1) $k) =>
+  | 0, ~q(ℕ), ~q(Nat.ascFactorial ($n + 1) $k) =>
     assertInstancesCommute
     pure (.positive q(Nat.ascFactorial_pos $n $k))
   | _, _, _ => throwError "failed to match Nat.ascFactorial"
@@ -1399,9 +878,9 @@ Uses positivity of the left term, if available, then tries the right term.
 The implementation relies on the fact that `Positivity.core` on `ℕ` never returns `nonzero`. -/
 @[positivity Nat.gcd _ _]
 meta def evalNatGCD : PositivityExt where eval {u α} z p e :=
-  match p with | none => throwError "not PartialOrder Nat" | some p => do
+  match p with | none => throwError "not PartialOrder ℕ" | some p => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Nat.gcd $a $b) =>
+  | 0, ~q(ℕ), ~q(Nat.gcd $a $b) =>
     assertInstancesCommute
     match ← core z p a with
     | .positive pa =>
@@ -1418,9 +897,9 @@ meta def evalNatGCD : PositivityExt where eval {u α} z p e :=
 /-- Extension for `Nat.lcm`. -/
 @[positivity Nat.lcm _ _]
 meta def evalNatLCM : PositivityExt where eval {u α} z p e :=
-  match p with | none => throwError "not PartialOrder Nat" | some p => do
+  match p with | none => throwError "not PartialOrder ℕ" | some p => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Nat.lcm $a $b) =>
+  | 0, ~q(ℕ), ~q(Nat.lcm $a $b) =>
     match ← core z p a with
     | .positive pa =>
       assertInstancesCommute
@@ -1435,9 +914,9 @@ meta def evalNatLCM : PositivityExt where eval {u α} z p e :=
 /-- Extension for `Nat.sqrt`. -/
 @[positivity Nat.sqrt _]
 meta def evalNatSqrt : PositivityExt where eval {u α} z p e :=
-  match p with | none => throwError "not PartialOrder Nat" | some p => do
+  match p with | none => throwError "not PartialOrder ℕ" | some p => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Nat.sqrt $n) =>
+  | 0, ~q(ℕ), ~q(Nat.sqrt $n) =>
     match ← core z p n with
     | .positive pa =>
       assumeInstancesCommute
@@ -1449,11 +928,11 @@ meta def evalNatSqrt : PositivityExt where eval {u α} z p e :=
 Uses positivity of the left term, if available, then tries the right term. -/
 @[positivity Int.gcd _ _]
 meta def evalIntGCD : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Int.gcd $a $b) =>
-    let z ← synthInstanceQ (q(Zero Int) : Q(Type))
-    let p ← synthInstanceQ (q(PartialOrder Int) : Q(Type))
+  | 0, ~q(ℕ), ~q(Int.gcd $a $b) =>
+    let z ← synthInstanceQ (q(Zero ℤ) : Q(Type))
+    let p ← synthInstanceQ (q(PartialOrder ℤ) : Q(Type))
     assertInstancesCommute
     match (← catchNone (core z (some p) a)).toNonzero z with
     | some na => return .positive q(Int.gcd_pos_of_ne_zero_left $b $na)
@@ -1466,11 +945,11 @@ meta def evalIntGCD : PositivityExt where eval {u α} _ pα? e :=
 /-- Extension for `Int.lcm`. -/
 @[positivity Int.lcm _ _]
 meta def evalIntLCM : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Int.lcm $a $b) =>
-    let z ← synthInstanceQ (q(Zero Int) : Q(Type))
-    let p ← synthInstanceQ (q(PartialOrder Int) : Q(Type))
+  | 0, ~q(ℕ), ~q(Int.lcm $a $b) =>
+    let z ← synthInstanceQ (q(Zero ℤ) : Q(Type))
+    let p ← synthInstanceQ (q(PartialOrder ℤ) : Q(Type))
     assertInstancesCommute
     match (← core z (some p) a).toNonzero z with
     | some na =>
@@ -1490,11 +969,11 @@ alias ⟨_, NNRat.num_ne_zero_of_ne_zero⟩ := num_ne_zero
 such that `positivity` successfully recognises `q`. -/
 @[positivity NNRat.num _]
 meta def evalNNRatNum : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(NNRat.num $a) =>
-    let zα : Q(Zero Rat>=0) := q(inferInstance)
-    let pα : Q(PartialOrder Rat>=0) := q(inferInstance)
+  | 0, ~q(ℕ), ~q(NNRat.num $a) =>
+    let zα : Q(Zero ℚ≥0) := q(inferInstance)
+    let pα : Q(PartialOrder ℚ≥0) := q(inferInstance)
     trace[Tactic.positivity] "I'm evalNNRatNum: {e}"
     assumeInstancesCommute
     match ← core zα pα a with
@@ -1507,17 +986,29 @@ meta def evalNNRatNum : PositivityExt where eval {u α} _ pα? e :=
 /-- The `positivity` extension which identifies expressions of the form `Rat.den a`. -/
 @[positivity NNRat.den _]
 meta def evalNNRatDen : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(NNRat.den $a) =>
+  | 0, ~q(ℕ), ~q(NNRat.den $a) =>
     assumeInstancesCommute
     return .positive q(den_pos $a)
   | _, _, _ => throwError "not NNRat.den"
 
-variable {q : Rat>=0}
+variable {q : ℚ≥0}
 
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (hq : 0 < q) : 0 < q.num := by positivity
-example (hq : q != 0) : q.num != 0 := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (hq : q ≠ 0) : q.num ≠ 0 := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : 0 < q.den := by positivity
 
 end NNRat
@@ -1532,29 +1023,29 @@ alias ⟨_, num_ne_zero_of_ne_zero⟩ := num_ne_zero
 such that `positivity` successfully recognises `a`. -/
 @[positivity Rat.num _]
 meta def evalRatNum : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Int" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℤ" | some _ => do
   match u, α, e with
-  | 0, ~q(Int), ~q(Rat.num $a) =>
-    let zα : Q(Zero Rat) := q(inferInstance)
-    let pα : Q(PartialOrder Rat) := q(inferInstance)
+  | 0, ~q(ℤ), ~q(Rat.num $a) =>
+    let zα : Q(Zero ℚ) := q(inferInstance)
+    let pα : Q(PartialOrder ℚ) := q(inferInstance)
     assumeInstancesCommute
     match ← core zα pα a with
     | .positive pa =>
-pure .positive q(num_pos_of_pos $pa)
+      pure <| .positive q(num_pos_of_pos $pa)
     | .nonnegative pa =>
-pure .nonnegative q(num_nonneg_of_nonneg $pa)
-| .nonzero pa => pure .nonzero q(num_ne_zero_of_ne_zero $pa)
+      pure <| .nonnegative q(num_nonneg_of_nonneg $pa)
+    | .nonzero pa => pure <| .nonzero q(num_ne_zero_of_ne_zero $pa)
     | .none => pure .none
   | _, _ => throwError "not Rat.num"
 
 /-- The `positivity` extension which identifies expressions of the form `Rat.den a`. -/
 @[positivity Rat.den _]
 meta def evalRatDen : PositivityExt where eval {u α} _ pα? e :=
-  match pα? with | none => throwError "not PartialOrder Nat" | some _ => do
+  match pα? with | none => throwError "not PartialOrder ℕ" | some _ => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(Rat.den $a) =>
+  | 0, ~q(ℕ), ~q(Rat.den $a) =>
     assumeInstancesCommute
-pure .positive q(den_pos $a)
+    pure <| .positive q(den_pos $a)
   | _, _ => throwError "not Rat.num"
 
 /-- Extension for `posPart`. `a⁺` is always nonnegative, and positive if `a` is. -/
@@ -1601,3 +1092,4 @@ end Positivity
 end Meta
 
 end Mathlib
+

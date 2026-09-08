@@ -59,30 +59,26 @@ open CategoryTheory Functor Category IsCartesian IsHomLift Fiber
 variable {𝒮 : Type u₁} {𝒳 : Type u₂} [Category.{v₁} 𝒮] [Category.{v₂} 𝒳]
 
 set_option linter.checkUnivs false in
-/--
-Definition of `HasFibers` / `HasFibers` 的定义
+/-- HasFibers is an extrinsic notion of fibers on a functor `p : 𝒳 ⥤ 𝒮`. It is given by a
+collection of categories `Fib S` for every `S : 𝒮` (the fiber categories), each equipped with a
+functors `ι : Fib S ⥤ 𝒳` which map constantly to `S` on the base such that the induced functor
+`Fib S ⥤ Fiber p S` is an equivalence. -/
+/-
+**HasFibers** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：HasFibers (p : 𝒳 ⥤ 𝒮) where /-- The type of objects of the category `Fib S
+` for each `S`. -/ Fib (S : 𝒮) : Type u₃ /-- `Fib S` is a category. -/ category 
+(S : 𝒮) : Category.{v₃} (Fib S)
+参数：p : 𝒳 ⥤ 𝒮；S : 𝒮。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasFibers
-  parameters: (p : 𝒳 ⥤ 𝒮)
-  axioms and operations (5):
-    - Fib((S : 𝒮)) : Type u₃
-    - category((S : 𝒮)) : Category.{v₃} (Fib S)  [default: by infer_instance]
-    - ι((S : 𝒮)) : Fib S ⥤ 𝒳
-    - comp_const((S : 𝒮)) : ι S ⋙ p = (const (Fib S)).obj S
-    - equiv((S : 𝒮)) : Functor.IsEquivalence (inducedFunctor (comp_const S))  [default: by infer_instance]
-
-中文:
-类 有Fibers
-  参数: (p : 𝒳 ⥤ 𝒮)
-  公理与运算 (5 个):
-    - Fib((S : 𝒮)) : 类型u₃
-    - category((S : 𝒮)) : 范畴.{v₃} (Fib S)  [默认: by infer_instance]
-    - ι((S : 𝒮)) : Fib S ⥤ 𝒳
-    - comp_const((S : 𝒮)) : ι S ⋙ p = (const (Fib S)).obj S
-    - equiv((S : 𝒮)) : 函子.是等价 (inducedFunctor (comp_const S))  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+HasFibers is an extrinsic notion of fibers on a functor `p : 𝒳 ⥤ 𝒮`. It is given
+ by a
+collection of categories `Fib S` for every `S : 𝒮` (the fiber categories), each 
+equipped with a
+functors `ι : Fib S ⥤ 𝒳` which map constantly to `S` on the base such that the i
+nduced functor
+`Fib S ⥤ Fiber p S` is an equivalence.
 -/
 class HasFibers (p : 𝒳 ⥤ 𝒮) where
   /-- The type of objects of the category `Fib S` for each `S`. -/
@@ -100,24 +96,17 @@ namespace HasFibers
 
 /-- The `HasFibers` on `p : 𝒳 ⥤ 𝒮` given by the fibers of `p` -/
 @[instance_reducible]
-/--
-Definition of `canonical` / `canonical` 的定义
+/-
+**HasFibers.canonical** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers`。
+形式化陈述：canonical (p : 𝒳 ⥤ 𝒮) : HasFibers p where Fib
+参数：p : 𝒳 ⥤ 𝒮。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.Fiber.fiberInclusion_comp_eq_const`：fiberInclusio
+n_comp_eq_const : fiberInclusion ⋙ p = (const (Fiber p S)).obj S
 
-English:
-definition canonical
-  signature: (p : 𝒳 ⥤ 𝒮)
-  body: Fiber p
-  ι S := fiberInclusion
-  comp_const S := fiberInclusion_comp_eq_const
-  equiv S := by exact isEquivalence_of_iso (F := 𝟭 (Fiber p S)) (Iso.refl _)
-
-中文:
-定义 canonical
-  签名: (p : 𝒳 ⥤ 𝒮)
-  定义体: Fiber p
-  ι S := fiberInclusion
-  comp_const S := fiberInclusion_comp_eq_const
-  equiv S := by exact isEquivalence_of_iso (F := 𝟭 (Fiber p S)) (Iso.refl _)
+--- 原说明 ---
+The `HasFibers` on `p : 𝒳 ⥤ 𝒮` given by the fibers of `p`
 -/
 def canonical (p : 𝒳 ⥤ 𝒮) : HasFibers p where
   Fib := Fiber p
@@ -133,87 +122,62 @@ attribute [instance_reducible, instance] category
 
 /-- The induced functor from `Fib p S` to the standard fiber. -/
 @[simps!]
-/--
-Definition of `inducedFunctor` / `inducedFunctor` 的定义
+/-
+**HasFibers.inducedFunctor** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers`。
+形式化陈述：inducedFunctor : Fib p S ⥤ Fiber p S
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFibers.comp_const`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} {inst : CategoryTheo
+ry.Category.{v₁, u₁} 𝒮} {inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳}   {p : Cat
+egoryTheor…
 
-English:
-definition inducedFunctor
-  signature: : Fib p S ⥤ Fiber p S
-  body: Fiber.inducedFunctor (comp_const S)
-
-中文:
-定义 inducedFunctor
-  签名: : Fib p S ⥤ Fiber p S
-  定义体: Fiber.inducedFunctor (comp_const S)
-
-Depends on / 依赖: Fiber.inducedFunctor, comp_const, inducedFunctor
+--- 原说明 ---
+The induced functor from `Fib p S` to the standard fiber.
 -/
 def inducedFunctor : Fib p S ⥤ Fiber p S :=
   Fiber.inducedFunctor (comp_const S)
 
-/--
-Definition of `inducedFunctor.natIso` / `inducedFunctor.natIso` 的定义
+/-- The natural transformation `ι S ≅ (inducedFunctor p S) ⋙ (fiberInclusion p S)` -/
+/-
+**HasFibers.inducedFunctor.natIso** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers.inducedFu
+nctor`。
+形式化陈述：{𝒮 : Type u₁} →   {𝒳 : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} 𝒮] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳] →         (p : Cat
+egoryTheory.Functor 𝒳 𝒮) →           [inst_2 : HasFibers p] →             (S : 𝒮
+) → HasFibers.ι S ≅ (HasFibers.inducedFunctor p S).comp CategoryTheory.Functor.F
+iber.fiberInclusion
+参数：p : CategoryTheory.Functor 𝒳 𝒮；S : 𝒮；HasFibers.inducedFunctor p S。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFibers.comp_const`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} {inst : CategoryTheo
+ry.Category.{v₁, u₁} 𝒮} {inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳}   {p : Cat
+egoryTheor…
 
-English:
-definition inducedFunctor.natIso
-  signature: : ι S ≅ (inducedFunctor p S) ⋙ fiberInclusion
-  body: Fiber.inducedFunctorCompIsoSelf (comp_const S)
-
-中文:
-定义 inducedFunctor.natIso
-  签名: : ι S ≅ (inducedFunctor p S) ⋙ fiberInclusion
-  定义体: Fiber.inducedFunctorCompIsoSelf (comp_const S)
-
-Depends on / 依赖: Fiber.inducedFunctorCompIsoSelf, comp_const, inducedFunctorCompIsoSelf
+--- 原说明 ---
+The natural transformation `ι S ≅ (inducedFunctor p S) ⋙ (fiberInclusion p S)`
 -/
 def inducedFunctor.natIso : ι S ≅ (inducedFunctor p S) ⋙ fiberInclusion :=
   Fiber.inducedFunctorCompIsoSelf (comp_const S)
-
-/--
-lemma `inducedFunctor_comp` / 引理 `inducedFunctor_comp`
-
-English:
-lemma inducedFunctor_comp
-  statement: ι S = (inducedFunctor p S) ⋙ fiberInclusion
-  proof: Fiber.inducedFunctor_comp (comp_const S)
-
-中文:
-引理 inducedFunctor_comp
-  结论: ι S = (inducedFunctor p S) ⋙ fiberInclusion
-  证明: Fiber.inducedFunctor_comp (comp_const S)
-
-Depends on / 依赖: Fiber.inducedFunctor_comp, comp_const, inducedFunctor_comp
+/-
+**HasFibers.inducedFunctor_comp** 是 Mathlib 中的一个引理，位于命名空间 `HasFibers`。
+形式化陈述：inducedFunctor_comp : ι S = (inducedFunctor p S) ⋙ fiberInclusion
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.Fiber.inducedFunctor_comp`：inducedFunctor_comp : 
+(inducedFunctor hF) ⋙ fiberInclusion = F
+· 使用定理 `HasFibers.comp_const`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} {inst : CategoryTheo
+ry.Category.{v₁, u₁} 𝒮} {inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳}   {p : Cat
+egoryTheor…
 -/
 lemma inducedFunctor_comp : ι S = (inducedFunctor p S) ⋙ fiberInclusion :=
   Fiber.inducedFunctor_comp (comp_const S)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Functor.IsEquivalence (inducedFunctor p S)
-  body: equiv S
-
-中文:
-实例 :
-  签名: 函子.是等价 (inducedFunctor p S)
-  定义体: equiv S
+/-
+**HasFibers.** 是 Mathlib 中的一个实例，位于命名空间 `HasFibers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Functor.IsEquivalence (inducedFunctor p S) := equiv S
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Functor.Faithful (ι (p := p) S)
-  body: Functor.Faithful.of_iso (inducedFunctor.natIso p S).symm
-
-中文:
-实例 :
-  签名: 函子.忠实 (ι (p := p) S)
-  定义体: Functor.Faithful.of_iso (inducedFunctor.natIso p S).symm
+/-
+**HasFibers.** 是 Mathlib 中的一个实例，位于命名空间 `HasFibers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Functor.Faithful (ι (p := p) S) :=
   Functor.Faithful.of_iso (inducedFunctor.natIso p S).symm
@@ -225,42 +189,41 @@ section
 variable {p : 𝒳 ⥤ 𝒮} [HasFibers p]
 
 @[simp]
-/--
-lemma `proj_eq` / 引理 `proj_eq`
-
-English:
-lemma proj_eq
-  given: {S : 𝒮} (a : Fib p S)
-  statement: p.obj ((ι S).obj a) = S
-  proof: by
-  simp only [← comp_obj, comp_const, const_obj_obj]
-
-中文:
-引理 proj_eq
-  条件: {S : 𝒮} (a : Fib p S)
-  结论: p.obj ((ι S).obj a) = S
-  证明: by
-  simp only [← comp_obj, comp_const, const_obj_obj]
-
-Depends on / 依赖: comp_const, comp_obj, const_obj_obj
+/-
+**HasFibers.proj_eq** 是 Mathlib 中的一个引理，位于命名空间 `HasFibers`。
+形式化陈述：proj_eq {S : 𝒮} (a : Fib p S) : p.obj ((ι S).obj a) = S
+参数：a : Fib p S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HasFibers.comp_const`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} {inst : CategoryTheo
+ry.Category.{v₁, u₁} 𝒮} {inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳}   {p : Cat
+egoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma proj_eq {S : 𝒮} (a : Fib p S) : p.obj ((ι S).obj a) = S := by
   simp only [← comp_obj, comp_const, const_obj_obj]
 
-/--
-Definition of `projMap` / `projMap` 的定义
+/-- The morphism `R ⟶ S` in `𝒮` obtained by projecting a morphism
+`φ : (ι R).obj a ⟶ (ι S).obj b`. -/
+/-
+**HasFibers.projMap** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers`。
+形式化陈述：projMap {R S : 𝒮} {a : Fib p R} {b : Fib p S} (φ : (ι R).obj a ⟶ (ι S).obj
+ b) : R ⟶ S
+参数：φ : (ι R).obj a ⟶ (ι S).obj b。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `HasFibers.proj_eq`：proj_eq {S : 𝒮} (a : Fib p S) : p.obj ((ι S).obj a) =
+ S
 
-English:
-definition projMap
-  signature: {R S : 𝒮} {a : Fib p R} {b : Fib p S}
-  body: eqToHom (proj_eq a).symm ≫ (p.map φ) ≫ eqToHom (proj_eq b)
-
-中文:
-定义 projMap
-  签名: {R S : 𝒮} {a : Fib p R} {b : Fib p S}
-  定义体: eqToHom (proj_eq a).symm ≫ (p.map φ) ≫ eqToHom (proj_eq b)
-
-Depends on / 依赖: eqToHom, p.map, proj_eq
+--- 原说明 ---
+The morphism `R ⟶ S` in `𝒮` obtained by projecting a morphism
+`φ : (ι R).obj a ⟶ (ι S).obj b`.
 -/
 def projMap {R S : 𝒮} {a : Fib p R} {b : Fib p S}
     (φ : (ι R).obj a ⟶ (ι S).obj b) : R ⟶ S :=
@@ -268,46 +231,73 @@ def projMap {R S : 𝒮} {a : Fib p R} {b : Fib p S}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `homLift` / 实例 `homLift`
+/-- For any homomorphism `φ` in a fiber `Fib S`, its image under `ι S` lies over `𝟙 S`. -/
+/-
+**HasFibers.homLift** 是 Mathlib 中的一个实例，位于命名空间 `HasFibers`。
+形式化陈述：homLift {S : 𝒮} {a b : Fib p S} (φ : a ⟶ b) : IsHomLift p (𝟙 S) ((ι S).map
+ φ)
+参数：φ : a ⟶ b。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsHomLift.of_fac`：of_fac {R S : 𝒮} {a b : 𝒳} (f : R ⟶ S) 
+(φ : a ⟶ b) (ha : p.obj a = R) (hb : p.obj b = S) (h : f = eqToHom ha.symm ≫ p.m
+ap φ ≫ eqToHom hb) : …
+· 使用引理 `HasFibers.proj_eq`：proj_eq {S : 𝒮} (a : Fib p S) : p.obj ((ι S).obj a) =
+ S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.comp_map`：comp_map (F : C ⥤ D) (G : D ⥤ E) {X Y :
+ C} (f : X ⟶ Y) : (F ⋙ G).map f = G.map (F.map f)
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `HasFibers.comp_const`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} {inst : CategoryTheo
+ry.Category.{v₁, u₁} 𝒮} {inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳}   {p : Cat
+egoryTheor…
+· 使用定理 `CategoryTheory.Functor.congr_hom`：congr_hom {F G : C ⥤ D} (h : F = G) {X
+ Y} (f : X ⟶ Y) : F.map f = eqToHom (congr_obj h X) ≫ G.map f ≫ eqToHom (congr_o
+bj h Y).symm
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.eqToHom_naturality`：eqToHom_naturality {f g : β -> C} (z 
+: forall b, f b ⟶ g b) {j j' : β} (w : j = j') : z j ≫ eqToHom (by simp [w]) = e
+qToHom (by simp [w]) ≫ …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
 
-English:
-instance homLift
-  signature: {S : 𝒮} {a b : Fib p S} (φ : a ⟶ b)
-  body: by
-  apply of_fac p _ _ (proj_eq a) (proj_eq b)
-  rw [← Functor.comp_map]; rw [Functor.congr_hom (comp_const S)]
-  simp
-
-中文:
-实例 homLift
-  签名: {S : 𝒮} {a b : Fib p S} (φ : a ⟶ b)
-  定义体: by
-  apply of_fac p _ _ (proj_eq a) (proj_eq b)
-  rw [← Functor.comp_map]; rw [Functor.congr_hom (comp_const S)]
-  simp
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.congr_hom, comp_const, comp_map, congr_hom, of_fac, proj_eq
+--- 原说明 ---
+For any homomorphism `φ` in a fiber `Fib S`, its image under `ι S` lies over `𝟙 
+S`.
 -/
 instance homLift {S : 𝒮} {a b : Fib p S} (φ : a ⟶ b) : IsHomLift p (𝟙 S) ((ι S).map φ) := by
   apply of_fac p _ _ (proj_eq a) (proj_eq b)
-  rw [← Functor.comp_map]; rw [Functor.congr_hom (comp_const S)]
+  rw [← Functor.comp_map, Functor.congr_hom (comp_const S)]
   simp
 
-/--
-Definition of `Fib.homMk` / `Fib.homMk` 的定义
+/-- A version of fullness of the functor `Fib S ⥤ Fiber p S` that can be used inside the category
+`𝒳`. -/
+/-
+**HasFibers.Fib.homMk** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers.Fib`。
+形式化陈述：{𝒮 : Type u₁} →   {𝒳 : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} 𝒮] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳] →         {p : Cat
+egoryTheory.Functor 𝒳 𝒮} →           [inst_2 : HasFibers p] →             {S : 𝒮
+} →               {a b : HasFibers.Fib p S} →                 (φ : (HasFibers.ι 
+S).obj a ⟶ (HasFibers.ι S).obj b) →                   [p.IsHomLift (CategoryTheo
+ry.CategoryStruct.id S) φ] → a ⟶ b
+参数：φ : (HasFibers.ι S).obj a ⟶ (HasFibers.ι S).obj b；CategoryTheory.CategoryStru
+ct.id S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fib.homMk
-  signature: {S : 𝒮} {a b : Fib p S} (φ : (ι S).obj a ⟶ (ι S).obj b)
-  body: (inducedFunctor _ S).preimage (Fiber.homMk p S φ)
-
-中文:
-定义 Fib.homMk
-  签名: {S : 𝒮} {a b : Fib p S} (φ : (ι S).obj a ⟶ (ι S).obj b)
-  定义体: (inducedFunctor _ S).preimage (Fiber.homMk p S φ)
-
-Depends on / 依赖: Fiber.homMk, inducedFunctor, preimage
+--- 原说明 ---
+A version of fullness of the functor `Fib S ⥤ Fiber p S` that can be used inside
+ the category
+`𝒳`.
 -/
 noncomputable def Fib.homMk {S : 𝒮} {a b : Fib p S} (φ : (ι S).obj a ⟶ (ι S).obj b)
     [IsHomLift p (𝟙 S) φ] : a ⟶ b :=
@@ -315,46 +305,58 @@ noncomputable def Fib.homMk {S : 𝒮} {a b : Fib p S} (φ : (ι S).obj a ⟶ (�
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `Fib.map_homMk` / 引理 `Fib.map_homMk`
-
-English:
-lemma Fib.map_homMk
-  statement: {S : 𝒮} {a b : Fib p S} (φ : (ι S).obj a ⟶ (ι S).obj b)
-  proof: by
-  simp [Fib.homMk, congr_hom (inducedFunctor_comp p S)]
-
-@[ext]
-
-中文:
-引理 Fib.map_homMk
-  结论: {S : 𝒮} {a b : Fib p S} (φ : (ι S).obj a ⟶ (ι S).obj b)
-  证明: by
-  simp [Fib.homMk, congr_hom (inducedFunctor_comp p S)]
-
-@[ext]
-
-Depends on / 依赖: Fib.homMk, congr_hom, inducedFunctor_comp
+/-
+**HasFibers.Fib.map_homMk** 是 Mathlib 中的一个定理，位于命名空间 `HasFibers.Fib`。
+形式化陈述：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳]   {p : CategoryTheory.Functor 𝒳 𝒮}
+ [inst_2 : HasFibers p] {S : 𝒮} {a b : HasFibers.Fib p S}   (φ : (HasFibers.ι S)
+.obj a ⟶ (HasFibers.ι S).obj b) [inst_3 : p.IsHomLift (CategoryTheory.CategorySt
+ruct.id S) φ],   (HasFibers.ι S).map (HasFibers.Fib.homMk φ) = φ
+参数：φ : (HasFibers.ι S).obj a ⟶ (HasFibers.ι S).obj b；CategoryTheory.CategoryStru
+ct.id S；HasFibers.ι S；HasFibers.Fib.homMk φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用引理 `HasFibers.inducedFunctor_comp`：inducedFunctor_comp : ι S = (inducedFunct
+or p S) ⋙ fiberInclusion
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.congr_hom`：congr_hom {F G : C ⥤ D} (h : F = G) {X
+ Y} (f : X ⟶ Y) : F.map f = eqToHom (congr_obj h X) ≫ G.map f ≫ eqToHom (congr_o
+bj h Y).symm
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Fib.map_homMk {S : 𝒮} {a b : Fib p S} (φ : (ι S).obj a ⟶ (ι S).obj b)
     [IsHomLift p (𝟙 S) φ] : (ι S).map (homMk φ) = φ := by
   simp [Fib.homMk, congr_hom (inducedFunctor_comp p S)]
 
 @[ext]
-/--
-lemma `Fib.hom_ext` / 引理 `Fib.hom_ext`
-
-English:
-lemma Fib.hom_ext
-  statement: {S : 𝒮} {a b : Fib p S} {f g : a ⟶ b}
-  proof: (ι S).map_injective h
-
-中文:
-引理 Fib.hom_ext
-  结论: {S : 𝒮} {a b : Fib p S} {f g : a ⟶ b}
-  证明: (ι S).map_injective h
-
-Depends on / 依赖: map_injective
+/-
+**HasFibers.Fib.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `HasFibers.Fib`。
+形式化陈述：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳]   {p : CategoryTheory.Functor 𝒳 𝒮}
+ [inst_2 : HasFibers p] {S : 𝒮} {a b : HasFibers.Fib p S} {f g : a ⟶ b},   (HasF
+ibers.ι S).map f = (HasFibers.ι S).map g → f = g
+参数：HasFibers.ι S；HasFibers.ι S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `HasFibers.instFaithfulFibι`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst : Catego
+ryTheory.Category.{v₁, u₁} 𝒮] [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳]   (p
+ : CategoryTheor…
 -/
 lemma Fib.hom_ext {S : 𝒮} {a b : Fib p S} {f g : a ⟶ b}
     (h : (ι S).map f = (ι S).map g) : f = g :=
@@ -363,79 +365,78 @@ lemma Fib.hom_ext {S : 𝒮} {a b : Fib p S} {f g : a ⟶ b}
 /-- The lift of an isomorphism `Φ : (ι S).obj a ≅ (ι S).obj b` lying over `𝟙 S` to an isomorphism
 in `Fib S`. -/
 @[simps]
-/--
-Definition of `Fib.isoMk` / `Fib.isoMk` 的定义
+/-
+**HasFibers.Fib.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers.Fib`。
+形式化陈述：{𝒮 : Type u₁} →   {𝒳 : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} 𝒮] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳] →         {p : Cat
+egoryTheory.Functor 𝒳 𝒮} →           [inst_2 : HasFibers p] →             {S : 𝒮
+} →               {a b : HasFibers.Fib p S} →                 (Φ : (HasFibers.ι 
+S).obj a ≅ (HasFibers.ι S).obj b) →                   p.IsHomLift (CategoryTheor
+y.CategoryStruct.id S) Φ.hom → (a ≅ b)
+参数：Φ : (HasFibers.ι S).obj a ≅ (HasFibers.ι S).obj b；CategoryTheory.CategoryStru
+ct.id S；a ≅ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fib.isoMk
-  signature: {S : 𝒮} {a b : Fib p S}
-  body: Fib.homMk Φ.hom
-  inv := Fib.homMk Φ.inv
-
-中文:
-定义 Fib.isoMk
-  签名: {S : 𝒮} {a b : Fib p S}
-  定义体: Fib.homMk Φ.hom
-  inv := Fib.homMk Φ.inv
-
-Depends on / 依赖: Fib.homMk
+--- 原说明 ---
+The lift of an isomorphism `Φ : (ι S).obj a ≅ (ι S).obj b` lying over `𝟙 S` to a
+n isomorphism
+in `Fib S`.
 -/
 noncomputable def Fib.isoMk {S : 𝒮} {a b : Fib p S}
     (Φ : (ι S).obj a ≅ (ι S).obj b) (hΦ : IsHomLift p (𝟙 S) Φ.hom) : a ≅ b where
   hom := Fib.homMk Φ.hom
   inv := Fib.homMk Φ.inv
 
-/--
-Definition of `Fib.mk` / `Fib.mk` 的定义
+/-- An object in `Fib p S` isomorphic in `𝒳` to a given object `a : 𝒳` such that `p(a) = S`. -/
+/-
+**HasFibers.Fib.mk** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers.Fib`。
+形式化陈述：{𝒮 : Type u₁} →   {𝒳 : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} 𝒮] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳] →         {p : Cat
+egoryTheory.Functor 𝒳 𝒮} → [inst_2 : HasFibers p] → {S : 𝒮} → {a : 𝒳} → p.obj a 
+= S → HasFibers.Fib p S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fib.mk
-  signature: {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  body: Functor.objPreimage (inducedFunctor p S) (Fiber.mk ha)
-
-中文:
-定义 Fib.mk
-  签名: {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  定义体: Functor.objPreimage (inducedFunctor p S) (Fiber.mk ha)
-
-Depends on / 依赖: Fiber.mk, Functor, Functor.objPreimage, inducedFunctor, objPreimage
+--- 原说明 ---
+An object in `Fib p S` isomorphic in `𝒳` to a given object `a : 𝒳` such that `p(
+a) = S`.
 -/
 noncomputable def Fib.mk {S : 𝒮} {a : 𝒳} (ha : p.obj a = S) : Fib p S :=
   Functor.objPreimage (inducedFunctor p S) (Fiber.mk ha)
 
-/--
-Definition of `Fib.mkIsoSelf` / `Fib.mkIsoSelf` 的定义
+/-- Applying `ι S` to the preimage of `a : 𝒳` in `Fib p S` yields an object isomorphic to `a`. -/
+/-
+**HasFibers.Fib.mkIsoSelf** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers.Fib`。
+形式化陈述：{𝒮 : Type u₁} →   {𝒳 : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} 𝒮] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳] →         {p : Cat
+egoryTheory.Functor 𝒳 𝒮} →           [inst_2 : HasFibers p] →             {S : 𝒮
+} → {a : 𝒳} → (ha : p.obj a = S) → (HasFibers.ι S).obj (HasFibers.Fib.mk ha) ≅ a
+参数：ha : p.obj a = S；HasFibers.ι S；HasFibers.Fib.mk ha。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fib.mkIsoSelf
-  signature: {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  body: fiberInclusion.mapIso (Functor.objObjPreimageIso (inducedFunctor p S) (Fiber.mk ha))
-
-中文:
-定义 Fib.mkIsoSelf
-  签名: {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  定义体: fiberInclusion.mapIso (Functor.objObjPreimageIso (inducedFunctor p S) (Fiber.mk ha))
-
-Depends on / 依赖: Fiber.mk, Functor, Functor.objObjPreimageIso, fiberInclusion, fiberInclusion.mapIso, inducedFunctor, mapIso, objObjPreimageIso
+--- 原说明 ---
+Applying `ι S` to the preimage of `a : 𝒳` in `Fib p S` yields an object isomorph
+ic to `a`.
 -/
 noncomputable def Fib.mkIsoSelf {S : 𝒮} {a : 𝒳} (ha : p.obj a = S) :
     (ι S).obj (Fib.mk ha) ≅ a :=
   fiberInclusion.mapIso (Functor.objObjPreimageIso (inducedFunctor p S) (Fiber.mk ha))
-
-/--
-Instance `Fib.mkIsoSelfIsHomLift` / 实例 `Fib.mkIsoSelfIsHomLift`
-
-English:
-instance Fib.mkIsoSelfIsHomLift
-  signature: {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  body: (Functor.objObjPreimageIso (inducedFunctor p S) (Fiber.mk ha)).hom.2
-
-中文:
-实例 Fib.mkIsoSelfIsHomLift
-  签名: {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  定义体: (Functor.objObjPreimageIso (inducedFunctor p S) (Fiber.mk ha)).hom.2
-
-Depends on / 依赖: Fiber.mk, Functor, Functor.objObjPreimageIso, inducedFunctor, objObjPreimageIso
+/-
+**HasFibers.Fib.mkIsoSelfIsHomLift** 是 Mathlib 中的一个定理，位于命名空间 `HasFibers.Fib`。
+形式化陈述：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳]   {p : CategoryTheory.Functor 𝒳 𝒮}
+ [inst_2 : HasFibers p] {S : 𝒮} {a : 𝒳} (ha : p.obj a = S),   p.IsHomLift (Categ
+oryTheory.CategoryStruct.id S) (HasFibers.Fib.mkIsoSelf ha).hom
+参数：ha : p.obj a = S；CategoryTheory.CategoryStruct.id S；HasFibers.Fib.mkIsoSelf h
+a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `HasFibers.instIsEquivalenceFibFiberInducedFunctor`：∀ {𝒮 : Type u₁} {𝒳 : 
+Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} 𝒳]   (p : CategoryTheor…
 -/
 instance Fib.mkIsoSelfIsHomLift {S : 𝒮} {a : 𝒳} (ha : p.obj a = S) :
     IsHomLift p (𝟙 S) (Fib.mkIsoSelf ha).hom :=
@@ -445,66 +446,60 @@ section
 
 variable [IsPreFibered p] {R S : 𝒮} {a : 𝒳} (f : R ⟶ S) (ha : p.obj a = S)
 
-/--
-Definition of `mkPullback` / `mkPullback` 的定义
+/-- The domain, taken in `Fib p R`, of some Cartesian morphism lifting a given
+`f : R ⟶ S` in `𝒮` -/
+/-
+**HasFibers.mkPullback** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers`。
+形式化陈述：mkPullback : Fib p R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkPullback
-  signature: : Fib p R
-  body: Fib.mk (domain_eq p f (IsPreFibered.pullbackMap ha f))
-
-中文:
-定义 mkPullback
-  签名: : Fib p R
-  定义体: Fib.mk (domain_eq p f (IsPreFibered.pullbackMap ha f))
-
-Depends on / 依赖: Fib.mk, IsPreFibered, IsPreFibered.pullbackMap, domain_eq, pullbackMap
+--- 原说明 ---
+The domain, taken in `Fib p R`, of some Cartesian morphism lifting a given
+`f : R ⟶ S` in `𝒮`
 -/
 noncomputable def mkPullback : Fib p R :=
   Fib.mk (domain_eq p f (IsPreFibered.pullbackMap ha f))
 
-/--
-Definition of `pullbackMap` / `pullbackMap` 的定义
+/-- A Cartesian morphism lifting `f : R ⟶ S` with domain in the image of `Fib p R` -/
+/-
+**HasFibers.pullbackMap** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers`。
+形式化陈述：pullbackMap : (ι R).obj (mkPullback f ha) ⟶ a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackMap
-  signature: : (ι R).obj (mkPullback f ha) ⟶ a
-  body: (Fib.mkIsoSelf (domain_eq p f (IsPreFibered.pullbackMap ha f))).hom ≫
-    (IsPreFibered.pullbackMap ha f)
-
-中文:
-定义 pullbackMap
-  签名: : (ι R).obj (mkPullback f ha) ⟶ a
-  定义体: (Fib.mkIsoSelf (domain_eq p f (IsPreFibered.pullbackMap ha f))).hom ≫
-    (IsPreFibered.pullbackMap ha f)
-
-Depends on / 依赖: Fib.mkIsoSelf, IsPreFibered, IsPreFibered.pullbackMap, domain_eq, mkIsoSelf, pullbackMap
+--- 原说明 ---
+A Cartesian morphism lifting `f : R ⟶ S` with domain in the image of `Fib p R`
 -/
 noncomputable def pullbackMap : (ι R).obj (mkPullback f ha) ⟶ a :=
   (Fib.mkIsoSelf (domain_eq p f (IsPreFibered.pullbackMap ha f))).hom ≫
     (IsPreFibered.pullbackMap ha f)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `pullbackMap.isCartesian` / 实例 `pullbackMap.isCartesian`
-
-English:
-instance pullbackMap.isCartesian
-  signature: : IsCartesian p f (pullbackMap f ha)
-  body: by
-  conv in f => rw [← id_comp f]
-  simp only [id_comp, pullbackMap]
-  infer_instance
-
-中文:
-实例 pullbackMap.isCartesian
-  签名: : 是Cartesian p f (pullbackMap f ha)
-  定义体: by
-  conv in f => rw [← id_comp f]
-  simp only [id_comp, pullbackMap]
-  infer_instance
-
-Depends on / 依赖: id_comp, infer_instance, pullbackMap
+/-
+**HasFibers.pullbackMap.isCartesian** 是 Mathlib 中的一个定理，位于命名空间 `HasFibers.pullbac
+kMap`。
+形式化陈述：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳]   {p : CategoryTheory.Functor 𝒳 𝒮}
+ [inst_2 : HasFibers p] [inst_3 : p.IsPreFibered] {R S : 𝒮} {a : 𝒳} (f : R ⟶ S) 
+  (ha : p.obj a = S), p.IsCartesian f (HasFibers.pullbackMap f ha)
+参数：f : R ⟶ S；ha : p.obj a = S；HasFibers.pullbackMap f ha。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.IsPreFibered.pullbackMap.IsCartesian`：∀ {𝒮 : Type
+ u₁} {𝒳 : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] [inst_1 : Categor
+yTheory.Category.{v₂, u₂} 𝒳]   {p : CategoryTheor…
+· 使用定理 `HasFibers.Fib.mkIsoSelfIsHomLift`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst : 
+CategoryTheory.Category.{v₁, u₁} 𝒮] [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳
+]   {p : CategoryTheor…
 -/
 instance pullbackMap.isCartesian : IsCartesian p f (pullbackMap f ha) := by
   conv in f => rw [← id_comp f]
@@ -518,45 +513,51 @@ section
 variable {R S : 𝒮} {a : 𝒳} {b b' : Fib p R} (f : R ⟶ S) (ψ : (ι R).obj b' ⟶ a)
     [IsCartesian p f ψ] (φ : (ι R).obj b ⟶ a) [IsHomLift p f φ]
 
-/--
-Definition of `inducedMap` / `inducedMap` 的定义
+/-- Given a fibered category p, b' b in Fib R, and a pullback ψ : b ⟶ a in 𝒳, i.e.
+```
+b'       b --ψ--> a
+|        |        |
+v        v        v
+R ====== R --f--> S
+```
+Then the induced map τ : b' ⟶ b can be lifted to the fiber over R -/
+/-
+**HasFibers.inducedMap** 是 Mathlib 中的一个定义，位于命名空间 `HasFibers`。
+形式化陈述：inducedMap : b ⟶ b'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inducedMap
-  signature: : b ⟶ b'
-  body: Fib.homMk (IsCartesian.map p f ψ φ)
-
-@[reassoc]
-
-中文:
-定义 inducedMap
-  签名: : b ⟶ b'
-  定义体: Fib.homMk (IsCartesian.map p f ψ φ)
-
-@[reassoc]
-
-Depends on / 依赖: Fib.homMk, IsCartesian, IsCartesian.map
+--- 原说明 ---
+Given a fibered category p, b' b in Fib R, and a pullback ψ : b ⟶ a in 𝒳, i.e.
+```
+b'       b --ψ--> a
+|        |        |
+v        v        v
+R ====== R --f--> S
+```
+Then the induced map τ : b' ⟶ b can be lifted to the fiber over R
 -/
 noncomputable def inducedMap : b ⟶ b' :=
   Fib.homMk (IsCartesian.map p f ψ φ)
 
 @[reassoc]
-/--
-lemma `inducedMap_comp` / 引理 `inducedMap_comp`
-
-English:
-lemma inducedMap_comp
-  statement: (ι R).map (inducedMap f ψ φ) ≫ ψ = φ
-  proof: by
-  simp only [inducedMap, Fib.map_homMk, IsCartesian.fac]
-
-中文:
-引理 inducedMap_comp
-  结论: (ι R).map (inducedMap f ψ φ) ≫ ψ = φ
-  证明: by
-  simp only [inducedMap, Fib.map_homMk, IsCartesian.fac]
-
-Depends on / 依赖: Fib.map_homMk, IsCartesian, IsCartesian.fac, inducedMap, map_homMk
+/-
+**HasFibers.inducedMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `HasFibers`。
+形式化陈述：inducedMap_comp : (ι R).map (inducedMap f ψ φ) ≫ ψ = φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HasFibers.Fib.map_homMk`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst : CategoryT
+heory.Category.{v₁, u₁} 𝒮] [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳]   {p : 
+CategoryTheor…
+· 使用引理 `CategoryTheory.Functor.IsCartesian.fac`：fac : IsCartesian.map p f φ φ' ≫
+ φ = φ'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inducedMap_comp : (ι R).map (inducedMap f ψ φ) ≫ ψ = φ := by
   simp only [inducedMap, Fib.map_homMk, IsCartesian.fac]
@@ -567,25 +568,61 @@ section
 
 variable [IsFibered p] {R S : 𝒮} {a : 𝒳} {b : Fib p R}
 
-/--
-lemma `fiber_factorization` / 引理 `fiber_factorization`
+/-- Given `a : 𝒳`, `b : Fib p R`, and a diagram
+```
+  b --φ--> a
+  -        -
+  |        |
+  v        v
+  R --f--> S
+```
+It can be factorized as
+```
+  b --τ--> b'--ψ--> a
+  -        -        -
+  |        |        |
+  v        v        v
+  R ====== R --f--> S
+```
+with `ψ` Cartesian over `f` and `τ` a map in `Fib p R`. -/
+/-
+**HasFibers.fiber_factorization** 是 Mathlib 中的一个引理，位于命名空间 `HasFibers`。
+形式化陈述：fiber_factorization (ha : p.obj a = S) {b : Fib p R} (f : R ⟶ S) (φ : (ι R
+).obj b ⟶ a) [IsHomLift p f φ] : exists (b' : Fib p R) (τ : b ⟶ b') (ψ : (ι R).o
+bj b' ⟶ a), IsStronglyCartesian p f ψ ∧ (((ι R).map τ) ≫ ψ = φ)
+参数：ha : p.obj a = S；f : R ⟶ S；φ : (ι R).obj b ⟶ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsFibered.toIsPreFibered`：∀ {𝒮 : Type u₁} {𝒳 : Ty
+pe u₂} {inst : CategoryTheory.Category.{v₁, u₁} 𝒮} {inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} 𝒳}   {p : CategoryTheor…
+· 使用定理 `HasFibers.pullbackMap.isCartesian`：∀ {𝒮 : Type u₁} {𝒳 : Type u₂} [inst :
+ CategoryTheory.Category.{v₁, u₁} 𝒮] [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+𝒳]   {p : CategoryTheor…
+· 使用引理 `HasFibers.inducedMap_comp`：inducedMap_comp : (ι R).map (inducedMap f ψ φ
+) ≫ ψ = φ
 
-English:
-lemma fiber_factorization
-  statement: (ha : p.obj a = S) {b : Fib p R} (f : R ⟶ S) (φ : (ι R).obj b ⟶ a)
-  proof: let ψ := pullbackMap f ha
-  ⟨mkPullback f ha, inducedMap f ψ φ, ψ, inferInstance, inducedMap_comp f ψ φ⟩
-
-中文:
-引理 fiber_factorization
-  结论: (ha : p.obj a = S) {b : Fib p R} (f : R ⟶ S) (φ : (ι R).obj b ⟶ a)
-  证明: let ψ := pullbackMap f ha
-  ⟨mkPullback f ha, inducedMap f ψ φ, ψ, inferInstance, inducedMap_comp f ψ φ⟩
-
-Depends on / 依赖: inducedMap, inducedMap_comp, mkPullback, pullbackMap
+--- 原说明 ---
+Given `a : 𝒳`, `b : Fib p R`, and a diagram
+```
+  b --φ--> a
+  -        -
+  |        |
+  v        v
+  R --f--> S
+```
+It can be factorized as
+```
+  b --τ--> b'--ψ--> a
+  -        -        -
+  |        |        |
+  v        v        v
+  R ====== R --f--> S
+```
+with `ψ` Cartesian over `f` and `τ` a map in `Fib p R`.
 -/
 lemma fiber_factorization (ha : p.obj a = S) {b : Fib p R} (f : R ⟶ S) (φ : (ι R).obj b ⟶ a)
-    [IsHomLift p f φ] : exists (b' : Fib p R) (τ : b ⟶ b') (ψ : (ι R).obj b' ⟶ a),
+    [IsHomLift p f φ] : ∃ (b' : Fib p R) (τ : b ⟶ b') (ψ : (ι R).obj b' ⟶ a),
       IsStronglyCartesian p f ψ ∧ (((ι R).map τ) ≫ ψ = φ) :=
   let ψ := pullbackMap f ha
   ⟨mkPullback f ha, inducedMap f ψ φ, ψ, inferInstance, inducedMap_comp f ψ φ⟩
@@ -595,3 +632,4 @@ end
 end
 
 end HasFibers
+

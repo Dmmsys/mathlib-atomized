@@ -37,158 +37,67 @@ namespace DirectSum
 
 open DirectSum
 
-variable (R : Type uR) (A : ι -> Type uA) {B : Type uB}
-variable [CommSemiring R] [forall i, AddCommMonoid (A i)] [forall i, Module R (A i)]
+variable (R : Type uR) (A : ι → Type uA) {B : Type uB}
+variable [CommSemiring R] [∀ i, AddCommMonoid (A i)] [∀ i, Module R (A i)]
 variable [AddMonoid ι] [GSemiring A]
 
 section
 
-/--
-Definition of `GAlgebra` / `GAlgebra` 的定义
+/-- A graded version of `Algebra`. An instance of `DirectSum.GAlgebra R A` endows `(⨁ i, A i)`
+with an `R`-algebra structure. -/
+/-
+**DirectSum.GAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 `DirectSum`。
+形式化陈述：{ι : Type uι} →   (R : Type uR) →     (A : ι → Type uA) →       [inst : Co
+mmSemiring R] →         [inst_1 : (i : ι) → AddCommMonoid (A i)] →           [(i
+ : ι) → _root_.Module R (A i)] → [inst : AddMonoid ι] → [DirectSum.GSemiring A] 
+→ Type (max uA uR)
+参数：R : Type uR；A : ι → Type uA；i : ι；A i；i : ι；A i；max uA uR。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class GAlgebra
-  parameters: where
-  axioms and operations (5):
-    - toFun : R ->+ A 0
-    - map_one : toFun 1 = GradedMonoid.GOne.one
-    - map_mul : forall r s, GradedMonoid.mk _ (toFun (r * s)) = .mk _ (GradedMonoid.GMul.mul (toFun r) (toFun s))
-    - commutes : forall (r) (x : GradedMonoid A), .mk _ (toFun r) * x = x * .mk _ (toFun r)
-    - smul_def : forall (r) (x : GradedMonoid A), r • x = .mk _ (toFun r) * x
-
-中文:
-类 G代数
-  参数: where
-  公理与运算 (5 个):
-    - toFun : R ->+ A 0
-    - map_one : toFun 1 = 分次幺半群.GOne.one
-    - map_mul : 对任意 r s, 分次幺半群.mk _ (toFun (r * s)) = .mk _ (分次幺半群.GMul.mul (toFun r) (toFun s))
-    - commutes : 对任意 (r) (x : 分次幺半群 A), .mk _ (toFun r) * x = x * .mk _ (toFun r)
-    - smul_def : 对任意 (r) (x : 分次幺半群 A), r • x = .mk _ (toFun r) * x
+--- 原说明 ---
+A graded version of `Algebra`. An instance of `DirectSum.GAlgebra R A` endows `(
+⨁ i, A i)`
+with an `R`-algebra structure.
 -/
 class GAlgebra where
-  toFun : R ->+ A 0
+  toFun : R →+ A 0
   map_one : toFun 1 = GradedMonoid.GOne.one
   map_mul :
-    forall r s, GradedMonoid.mk _ (toFun (r * s)) = .mk _ (GradedMonoid.GMul.mul (toFun r) (toFun s))
-  commutes : forall (r) (x : GradedMonoid A), .mk _ (toFun r) * x = x * .mk _ (toFun r)
-  smul_def : forall (r) (x : GradedMonoid A), r • x = .mk _ (toFun r) * x
+    ∀ r s, GradedMonoid.mk _ (toFun (r * s)) = .mk _ (GradedMonoid.GMul.mul (toFun r) (toFun s))
+  commutes : ∀ (r) (x : GradedMonoid A), .mk _ (toFun r) * x = x * .mk _ (toFun r)
+  smul_def : ∀ (r) (x : GradedMonoid A), r • x = .mk _ (toFun r) * x
 
 end
 
 variable [Semiring B] [GAlgebra R A] [Algebra R B]
 
-/--
-Instance `_root_.GradedMonoid.smulCommClass_right` / 实例 `_root_.GradedMonoid.smulCommClass_right`
-
-English:
-instance _root_.GradedMonoid.smulCommClass_right
-  signature: :
-  body: by
-    dsimp
-    rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]; rw [GAlgebra.commutes]; rw [mul_assoc]
-
-中文:
-实例 _root_.分次幺半群.smulCommClass_right
-  签名: :
-  定义体: by
-    dsimp
-    rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]; rw [GAlgebra.commutes]; rw [mul_assoc]
-
-Depends on / 依赖: GAlgebra, GAlgebra.commutes, GAlgebra.smul_def, commutes, mul_assoc, smul_def
+/-
+**DirectSum._root_.GradedMonoid.smulCommClass_right** 是 Mathlib 中的一个实例，位于命名空间 `D
+irectSum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.GradedMonoid.smulCommClass_right :
     SMulCommClass R (GradedMonoid A) (GradedMonoid A) where
   smul_comm s x y := by
     dsimp
-    rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]; rw [GAlgebra.commutes]; rw [mul_assoc]
-
-/--
-Instance `_root_.GradedMonoid.isScalarTower_right` / 实例 `_root_.GradedMonoid.isScalarTower_right`
-
-English:
-instance _root_.GradedMonoid.isScalarTower_right
-  signature: :
-  body: by
-    dsimp
-    rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]
-
-中文:
-实例 _root_.分次幺半群.isScalarTower_right
-  签名: :
-  定义体: by
-    dsimp
-    rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]
-
-Depends on / 依赖: GAlgebra, GAlgebra.smul_def, mul_assoc, smul_def
+    rw [GAlgebra.smul_def, GAlgebra.smul_def, ← mul_assoc, GAlgebra.commutes, mul_assoc]
+/-
+**DirectSum._root_.GradedMonoid.isScalarTower_right** 是 Mathlib 中的一个实例，位于命名空间 `D
+irectSum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.GradedMonoid.isScalarTower_right :
     IsScalarTower R (GradedMonoid A) (GradedMonoid A) where
   smul_assoc s x y := by
     dsimp
-    rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]
+    rw [GAlgebra.smul_def, GAlgebra.smul_def, ← mul_assoc]
 
 variable [DecidableEq ι]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra R (⨁ i, A i)
-  body: { toFun := (DirectSum.of A 0).comp GAlgebra.toFun
-    map_zero' := map_zero _
-    map_add' := map_add _
-    map_one' := DFunLike.congr_arg (DirectSum.of A 0) GAlgebra.map_one
-    map_mul' a b := by
-      simp only [AddMonoidHom.comp_apply]
-      rw [of_mul_of]
-      apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.map_mul a b) }
-  commutes' r x := by
-    change AddMonoidHom.mul (DirectSum.of _ _ _) x = AddMonoidHom.mul.flip (DirectSum.of _ _ _) x
-    apply DFunLike.congr_fun _ x
-    ext i xi : 2
-    dsimp only [AddMonoidHom.comp_apply, AddMonoidHom.mul_apply, AddMonoidHom.flip_apply]
-    rw [of_mul_of]; rw [of_mul_of]
-    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.commutes r ⟨i, xi⟩)
-  smul_def' r x := by
-    change DistribSMul.toAddMonoidHom _ r x = AddMonoidHom.mul (DirectSum.of _ _ _) x
-    apply DFunLike.congr_fun _ x
-    ext i xi : 2
-    dsimp only [AddMonoidHom.comp_apply, DistribSMul.toAddMonoidHom_apply,
-      AddMonoidHom.mul_apply]
-    rw [DirectSum.of_mul_of]; rw [← of_smul]
-    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.smul_def r ⟨i, xi⟩)
-
-中文:
-实例 :
-  签名: 代数 R (⨁ i, A i)
-  定义体: { toFun := (DirectSum.of A 0).comp GAlgebra.toFun
-    map_zero' := map_zero _
-    map_add' := map_add _
-    map_one' := DFunLike.congr_arg (DirectSum.of A 0) GAlgebra.map_one
-    map_mul' a b := by
-      simp only [AddMonoidHom.comp_apply]
-      rw [of_mul_of]
-      apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.map_mul a b) }
-  commutes' r x := by
-    change AddMonoidHom.mul (DirectSum.of _ _ _) x = AddMonoidHom.mul.flip (DirectSum.of _ _ _) x
-    apply DFunLike.congr_fun _ x
-    ext i xi : 2
-    dsimp only [AddMonoidHom.comp_apply, AddMonoidHom.mul_apply, AddMonoidHom.flip_apply]
-    rw [of_mul_of]; rw [of_mul_of]
-    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.commutes r ⟨i, xi⟩)
-  smul_def' r x := by
-    change DistribSMul.toAddMonoidHom _ r x = AddMonoidHom.mul (DirectSum.of _ _ _) x
-    apply DFunLike.congr_fun _ x
-    ext i xi : 2
-    dsimp only [AddMonoidHom.comp_apply, DistribSMul.toAddMonoidHom_apply,
-      AddMonoidHom.mul_apply]
-    rw [DirectSum.of_mul_of]; rw [← of_smul]
-    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.smul_def r ⟨i, xi⟩)
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.comp_apply, AddMonoidHom.mul, AddMonoidHom.mul.flip, DFinsupp, DFinsupp.single_eq_of_sigma_eq, DFunLike, DFunLike.congr_arg, DFunLike.congr_fun, DirectSum, DirectSum.of, GAlgebra, GAlgebra.map_mul, GAlgebra.map_one, GAlgebra.toFun, commutes, comp_apply, congr_arg, congr_fun, map_add
+/-
+**DirectSum.** 是 Mathlib 中的一个实例，位于命名空间 `DirectSum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra R (⨁ i, A i) where
   algebraMap :=
@@ -205,7 +114,7 @@ instance : Algebra R (⨁ i, A i) where
     apply DFunLike.congr_fun _ x
     ext i xi : 2
     dsimp only [AddMonoidHom.comp_apply, AddMonoidHom.mul_apply, AddMonoidHom.flip_apply]
-    rw [of_mul_of]; rw [of_mul_of]
+    rw [of_mul_of, of_mul_of]
     apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.commutes r ⟨i, xi⟩)
   smul_def' r x := by
     change DistribSMul.toAddMonoidHom _ r x = AddMonoidHom.mul (DirectSum.of _ _ _) x
@@ -213,39 +122,31 @@ instance : Algebra R (⨁ i, A i) where
     ext i xi : 2
     dsimp only [AddMonoidHom.comp_apply, DistribSMul.toAddMonoidHom_apply,
       AddMonoidHom.mul_apply]
-    rw [DirectSum.of_mul_of]; rw [← of_smul]
+    rw [DirectSum.of_mul_of, ← of_smul]
     apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.smul_def r ⟨i, xi⟩)
-
-/--
-theorem `algebraMap_apply` / 定理 `algebraMap_apply`
-
-English:
-theorem algebraMap_apply
-  given: (r : R)
-  proof: rfl
-
-中文:
-定理 algebraMap_apply
-  条件: (r : R)
-  证明: rfl
+/-
+**DirectSum.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：algebraMap_apply (r : R) : algebraMap R (⨁ i, A i) r = DirectSum.of A 0 (G
+Algebra.toFun r)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_apply (r : R) :
     algebraMap R (⨁ i, A i) r = DirectSum.of A 0 (GAlgebra.toFun r) :=
   rfl
-
-/--
-theorem `algebraMap_toAddMonoid_hom` / 定理 `algebraMap_toAddMonoid_hom`
-
-English:
-theorem algebraMap_toAddMonoid_hom
-  proof: rfl
-
-中文:
-定理 algebraMap_toAddMonoid_hom
-  证明: rfl
+/-
+**DirectSum.algebraMap_toAddMonoid_hom** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：algebraMap_toAddMonoid_hom : ↑(algebraMap R (⨁ i, A i)) = (DirectSum.of A 
+0).comp (GAlgebra.toFun : R ->+ A 0)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
 theorem algebraMap_toAddMonoid_hom :
-    ↑(algebraMap R (⨁ i, A i)) = (DirectSum.of A 0).comp (GAlgebra.toFun : R ->+ A 0) :=
+    ↑(algebraMap R (⨁ i, A i)) = (DirectSum.of A 0).comp (GAlgebra.toFun : R →+ A 0) :=
   rfl
 
 /-- A family of `LinearMap`s preserving `DirectSum.GOne.one` and `DirectSum.GMul.mul`
@@ -256,115 +157,96 @@ coercions such as `Submodule.subtype (A i)`, and the `[GMonoid A]` structure ori
 `DirectSum.GMonoid.ofAddSubmodules`, in which case the proofs about `GOne` and `GMul`
 can be discharged by `rfl`. -/
 @[simps]
-/--
-Definition of `toAlgebra` / `toAlgebra` 的定义
+/-
+**DirectSum.toAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum`。
+形式化陈述：toAlgebra (f : forall i, A i ->ₗ[R] B) (hone : f _ GradedMonoid.GOne.one =
+ 1) (hmul : forall {i j} (ai : A i) (aj : A j), f _ (GradedMonoid.GMul.mul ai aj
+) = f _ ai * f _ aj) : (⨁ i, A i) ->ₐ[R] B
+参数：f : forall i, A i ->ₗ[R] B；hone : f _ GradedMonoid.GOne.one = 1；hmul : forall
+ {i j} (ai : A i) (aj : A j), f _ (GradedMonoid.GMul.mul ai aj) = f _ ai * f _ a
+j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAlgebra
-  signature: (f : forall i, A i ->ₗ[R] B) (hone : f _ GradedMonoid.GOne.one = 1)
-  body: { toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul with
-    toFun := toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul
-    commutes' := fun r => by
-      change toModule R _ _ f (algebraMap R _ r) = _
-      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [one_def]; rw [← lof_eq_of R]; rw [toModule_lof]; rw [hone] }
+--- 原说明 ---
+A family of `LinearMap`s preserving `DirectSum.GOne.one` and `DirectSum.GMul.mul
+`
+describes an `AlgHom` on `⨁ i, A i`. This is a stronger version of `DirectSum.to
+Semiring`.
 
-中文:
-定义 toAlgebra
-  签名: (f : 对任意 i, A i ->ₗ[R] B) (hone : f _ 分次幺半群.GOne.one = 1)
-  定义体: { toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul with
-    toFun := toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul
-    commutes' := fun r => by
-      change toModule R _ _ f (algebraMap R _ r) = _
-      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [one_def]; rw [← lof_eq_of R]; rw [toModule_lof]; rw [hone] }
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, algebraMap, algebraMap_eq_smul_one, commutes, lof_eq_of, map_smul, one_def, toAddMonoidHom, toModule, toModule_lof, toSemiring
+Of particular interest is the case when `A i` are bundled subobjects, `f` is the
+ family of
+coercions such as `Submodule.subtype (A i)`, and the `[GMonoid A]` structure ori
+ginates from
+`DirectSum.GMonoid.ofAddSubmodules`, in which case the proofs about `GOne` and `
+GMul`
+can be discharged by `rfl`.
 -/
-def toAlgebra (f : forall i, A i ->ₗ[R] B) (hone : f _ GradedMonoid.GOne.one = 1)
-    (hmul : forall {i j} (ai : A i) (aj : A j), f _ (GradedMonoid.GMul.mul ai aj) = f _ ai * f _ aj) :
-    (⨁ i, A i) ->ₐ[R] B :=
+def toAlgebra (f : ∀ i, A i →ₗ[R] B) (hone : f _ GradedMonoid.GOne.one = 1)
+    (hmul : ∀ {i j} (ai : A i) (aj : A j), f _ (GradedMonoid.GMul.mul ai aj) = f _ ai * f _ aj) :
+    (⨁ i, A i) →ₐ[R] B :=
   { toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul with
     toFun := toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul
     commutes' := fun r => by
       change toModule R _ _ f (algebraMap R _ r) = _
-      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [one_def]; rw [← lof_eq_of R]; rw [toModule_lof]; rw [hone] }
+      rw [Algebra.algebraMap_eq_smul_one, Algebra.algebraMap_eq_smul_one, map_smul, one_def,
+        ← lof_eq_of R, toModule_lof, hone] }
 
 /-- Two `AlgHom`s out of a direct sum are equal if they agree on the generators.
 
 See note [partially-applied ext lemmas]. -/
 @[ext]
-/--
-theorem `algHom_ext'` / 定理 `algHom_ext'`
+/-
+**DirectSum.algHom_ext'** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：algHom_ext' ⦃f g : (⨁ i, A i) ->ₐ[R] B⦄ (h : forall i, f.toLinearMap.comp 
+(lof _ _ A i) = g.toLinearMap.comp (lof _ _ A i)) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.toLinearMap_injective`：toLinearMap_injective : Function.Injective
+ (toLinearMap : _ -> A ->ₗ[R] B)
+· 使用定理 `DirectSum.linearMap_ext`：linearMap_ext ⦃ψ ψ' : (⨁ i, M i) ->ₗ[R] N⦄ (H :
+ forall i, ψ.comp (lof R ι M i) = ψ'.comp (lof R ι M i)) : ψ = ψ'
 
-English:
-theorem algHom_ext'
-  given: ⦃f g
-  statement: (⨁ i, A i) ->ₐ[R] B⦄
-  proof: AlgHom.toLinearMap_injective DirectSum.linearMap_ext _ h
+--- 原说明 ---
+Two `AlgHom`s out of a direct sum are equal if they agree on the generators.
 
-中文:
-定理 algHom_ext'
-  条件: ⦃f g
-  结论: (⨁ i, A i) ->ₐ[R] B⦄
-  证明: AlgHom.toLinearMap_injective DirectSum.linearMap_ext _ h
-
-Depends on / 依赖: AlgHom, AlgHom.toLinearMap_injective, DirectSum, DirectSum.linearMap_ext, linearMap_ext, toLinearMap_injective
+See note [partially-applied ext lemmas].
 -/
-theorem algHom_ext' ⦃f g : (⨁ i, A i) ->ₐ[R] B⦄
-    (h : forall i, f.toLinearMap.comp (lof _ _ A i) = g.toLinearMap.comp (lof _ _ A i)) : f = g :=
-AlgHom.toLinearMap_injective DirectSum.linearMap_ext _ h
-
-/--
-theorem `algHom_ext` / 定理 `algHom_ext`
-
-English:
-theorem algHom_ext
-  given: ⦃f g
-  statement: (⨁ i, A i) ->ₐ[R] B⦄ (h : forall i x, f (of A i x) = g (of A i x)) : f = g
-  proof: algHom_ext' R A fun i => LinearMap.ext h i
-
-中文:
-定理 algHom_ext
-  条件: ⦃f g
-  结论: (⨁ i, A i) ->ₐ[R] B⦄ (h : 对任意 i x, f (of A i x) = g (of A i x)) : f = g
-  证明: algHom_ext' R A fun i => LinearMap.ext h i
-
-Depends on / 依赖: LinearMap, LinearMap.ext, algHom_ext
+theorem algHom_ext' ⦃f g : (⨁ i, A i) →ₐ[R] B⦄
+    (h : ∀ i, f.toLinearMap.comp (lof _ _ A i) = g.toLinearMap.comp (lof _ _ A i)) : f = g :=
+  AlgHom.toLinearMap_injective <| DirectSum.linearMap_ext _ h
+/-
+**DirectSum.algHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：algHom_ext ⦃f g : (⨁ i, A i) ->ₐ[R] B⦄ (h : forall i x, f (of A i x) = g (
+of A i x)) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.algHom_ext'`：algHom_ext' ⦃f g : (⨁ i, A i) ->ₐ[R] B⦄ (h : fora
+ll i, f.toLinearMap.comp (lof _ _ A i) = g.toLinearMap.comp (lof _ _ A i)) : f =
+ g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
-theorem algHom_ext ⦃f g : (⨁ i, A i) ->ₐ[R] B⦄ (h : forall i x, f (of A i x) = g (of A i x)) : f = g :=
-algHom_ext' R A fun i => LinearMap.ext h i
+theorem algHom_ext ⦃f g : (⨁ i, A i) →ₐ[R] B⦄ (h : ∀ i x, f (of A i x) = g (of A i x)) : f = g :=
+  algHom_ext' R A fun i => LinearMap.ext <| h i
 
 /-- The piecewise multiplication from the `Mul` instance, as a bundled linear map.
 
 This is the graded version of `LinearMap.mul`, and the linear version of `DirectSum.gMulHom` -/
 @[simps]
-/--
-Definition of `gMulLHom` / `gMulLHom` 的定义
+/-
+**DirectSum.gMulLHom** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum`。
+形式化陈述：gMulLHom {i j} : A i ->ₗ[R] A j ->ₗ[R] A (i + j) where toFun a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gMulLHom
-  signature: {i j}
-  body: { toFun := fun b => GradedMonoid.GMul.mul a b
-      map_smul' := fun r x => by
-        injection (smul_comm r (GradedMonoid.mk _ a) (GradedMonoid.mk _ x)).symm
-      map_add' := GNonUnitalNonAssocSemiring.mul_add _ }
-  map_smul' r x := LinearMap.ext fun y => by
-    injection smul_assoc r (GradedMonoid.mk _ x) (GradedMonoid.mk _ y)
-  map_add' _ _ := LinearMap.ext fun _ => GNonUnitalNonAssocSemiring.add_mul _ _ _
+--- 原说明 ---
+The piecewise multiplication from the `Mul` instance, as a bundled linear map.
 
-中文:
-定义 gMulLHom
-  签名: {i j}
-  定义体: { toFun := fun b => GradedMonoid.GMul.mul a b
-      map_smul' := fun r x => by
-        injection (smul_comm r (GradedMonoid.mk _ a) (GradedMonoid.mk _ x)).symm
-      map_add' := GNonUnitalNonAssocSemiring.mul_add _ }
-  map_smul' r x := LinearMap.ext fun y => by
-    injection smul_assoc r (GradedMonoid.mk _ x) (GradedMonoid.mk _ y)
-  map_add' _ _ := LinearMap.ext fun _ => GNonUnitalNonAssocSemiring.add_mul _ _ _
-
-Depends on / 依赖: GNonUnitalNonAssocSemiring, GNonUnitalNonAssocSemiring.add_mul, GNonUnitalNonAssocSemiring.mul_add, GradedMonoid, GradedMonoid.GMul.mul, GradedMonoid.mk, LinearMap, LinearMap.ext, add_mul, injection, map_add, map_smul, mul_add, smul_assoc, smul_comm
+This is the graded version of `LinearMap.mul`, and the linear version of `Direct
+Sum.gMulHom`
 -/
-def gMulLHom {i j} : A i ->ₗ[R] A j ->ₗ[R] A (i + j) where
+def gMulLHom {i j} : A i →ₗ[R] A j →ₗ[R] A (i + j) where
   toFun a :=
     { toFun := fun b => GradedMonoid.GMul.mul a b
       map_smul' := fun r x => by
@@ -381,30 +263,15 @@ end DirectSum
 
 /-- A direct sum of copies of an `Algebra` inherits the algebra structure. -/
 @[simps]
-/--
-Instance `Algebra.directSumGAlgebra` / 实例 `Algebra.directSumGAlgebra`
+/-
+**Algebra.directSumGAlgebra** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Algebra.directSumGAlgebra {R A : Type*} [AddMonoid ι] [CommSemiring R] [Se
+miring A] [Algebra R A] : DirectSum.GAlgebra R fun _ : ι => A where toFun
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Algebra.directSumGAlgebra
-  signature: {R A : Type*} [AddMonoid ι] [CommSemiring R]
-  body: (algebraMap R A).toAddMonoidHom
-  map_one := (algebraMap R A).map_one
-  map_mul a b := Sigma.ext (zero_add _).symm (heq_of_eq <| (algebraMap R A).map_mul a b)
-  commutes := fun _ ⟨_, _⟩ =>
-    Sigma.ext ((zero_add _).trans (add_zero _).symm) (heq_of_eq <| Algebra.commutes _ _)
-  smul_def := fun _ ⟨_, _⟩ => Sigma.ext (zero_add _).symm (heq_of_eq <| Algebra.smul_def _ _)
-
-中文:
-实例 代数.directSumGAlgebra
-  签名: {R A : 类型} [加法幺半群 ι] [交换半环 R]
-  定义体: (algebraMap R A).toAddMonoidHom
-  map_one := (algebraMap R A).map_one
-  map_mul a b := Sigma.ext (zero_add _).symm (heq_of_eq <| (algebraMap R A).map_mul a b)
-  commutes := fun _ ⟨_, _⟩ =>
-    Sigma.ext ((zero_add _).trans (add_zero _).symm) (heq_of_eq <| Algebra.commutes _ _)
-  smul_def := fun _ ⟨_, _⟩ => Sigma.ext (zero_add _).symm (heq_of_eq <| Algebra.smul_def _ _)
-
-Depends on / 依赖: algebraMap, toAddMonoidHom
+--- 原说明 ---
+A direct sum of copies of an `Algebra` inherits the algebra structure.
 -/
 instance Algebra.directSumGAlgebra {R A : Type*} [AddMonoid ι] [CommSemiring R]
     [Semiring A] [Algebra R A] : DirectSum.GAlgebra R fun _ : ι => A where

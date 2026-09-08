@@ -5,7 +5,7 @@ Authors: Kyle Miller
 -/
 module
 
-public import Mathlib.Data.Fintype.OfMap -- shake: keep (metaprogram output dependency)
+public import Mathlib.Data.Fintype.OfMap  -- shake: keep (metaprogram output dependency)
 public import Mathlib.Tactic.ProxyType
 public meta import Mathlib.Tactic.ToAdditive
 public meta import Mathlib.Tactic.ToDual
@@ -89,28 +89,23 @@ the namespace associated to the inductive type `α`.
 -/
 macro "derive_fintype% " t:term : term => `(term| Fintype.ofEquiv _ (proxy_equiv% $t))
 
-/--
-Definition of `mkFintype` / `mkFintype` 的定义
+/-
+Creates a `Fintype` instance by adding additional `Fintype` and `Decidable` instance arguments
+for every type and prop parameter of the type, then use the `derive_fintype%` elaborator.
+-/
+/-
+**Mathlib.Deriving.Fintype.mkFintype** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Deriving
+.Fintype`。
+形式化陈述：mkFintype (declName : Name) : CommandElabM Bool
+参数：declName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFintype
-  signature: (declName : Name)
-  body: do
-  let indVal ← getConstInfoInduct declName
-  let cmd ← liftTermElabM do
-    let header ← Deriving.mkHeader `Fintype 0 indVal
-    let binders' ← Deriving.mkInstImplicitBinders `Decidable indVal header.argNames
-    let instCmd ← `(command|
-
-中文:
-定义 mkFintype
-  签名: (declName : Name)
-  定义体: do
-  let indVal ← getConstInfoInduct declName
-  let cmd ← liftTermElabM do
-    let header ← Deriving.mkHeader `Fintype 0 indVal
-    let binders' ← Deriving.mkInstImplicitBinders `Decidable indVal header.argNames
-    let instCmd ← `(command|
+--- 原说明 ---
+Creates a `Fintype` instance by adding additional `Fintype` and `Decidable` inst
+ance arguments
+for every type and prop parameter of the type, then use the `derive_fintype%` el
+aborator.
 -/
 def mkFintype (declName : Name) : CommandElabM Bool := do
   let indVal ← getConstInfoInduct declName
@@ -118,162 +113,44 @@ def mkFintype (declName : Name) : CommandElabM Bool := do
     let header ← Deriving.mkHeader `Fintype 0 indVal
     let binders' ← Deriving.mkInstImplicitBinders `Decidable indVal header.argNames
     let instCmd ← `(command|
-/--
-Instance `header.binders` / 实例 `header.binders`
-
-English:
-instance header.binders:bracketedBinder*
-  signature: (binders'.map TSyntax.mk)
-  body: derive_fintype% _)
+      instance $header.binders:bracketedBinder* $(binders'.map TSyntax.mk):bracketedBinder* :
+          Fintype $header.targetType := derive_fintype% _)
     return instCmd
   trace[Elab.Deriving.fintype] "instance command:\n{cmd}"
   elabCommand cmd
   return true
 
-中文:
-实例 header.binders:bracketedBinder*
-  签名: (binders'.map TSyntax.mk)
-  定义体: derive_fintype% _)
-    return instCmd
-  trace[Elab.Deriving.fintype] "instance command:\n{cmd}"
-  elabCommand cmd
-  return true
+/-- Derive a `Fintype` instance for enum types. These come with a `ctorIdx` function.
 
-Depends on / 依赖: derive_fintype
--/
-instance header.binders:bracketedBinder* (binders'.map TSyntax.mk):bracketedBinder* :
-Fintype header.targetType := derive_fintype% _)
-    return instCmd
-  trace[Elab.Deriving.fintype] "instance command:\n{cmd}"
-  elabCommand cmd
-  return true
+We generate a more optimized instance than the one produced by `mkFintype`.
+The strategy is to (1) create a list `enumList` of all the constructors, (2) prove that this
+is in `ctorIdx` order, (3) show that `ctorIdx` maps `enumList` to `List.range numCtors` to show
+the list has no duplicates, and (4) give the `Fintype` instance, using 2 for completeness.
 
-/--
-Definition of `mkFintypeEnum` / `mkFintypeEnum` 的定义
+The proofs are all linear complexity, and the main computation is that
+`enumList.map ctorIdx = List.range numCtors`, which is true by `refl`. -/
+/-
+**Mathlib.Deriving.Fintype.mkFintypeEnum** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Deri
+ving.Fintype`。
+形式化陈述：mkFintypeEnum (declName : Name) : CommandElabM Unit
+参数：declName : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFintypeEnum
-  signature: (declName : Name)
-  body: do
-  let indVal ← getConstInfoInduct declName
-  let levels := indVal.levelParams.map Level.param
-  let ctorIdxName := declName.mkStr "ctorIdx"
-  let enumListName := declName.mkStr "enumList"
-  let ctorThmName := declName.mkStr "enumList_getElem?_ctorIdx_eq"
-  let enumListNodupName := declName.mkStr "enumList_nodup"
-liftTermElabM Term.withoutErrToSorry do
-    do -- Define `enumList` enumerating all constructors
-      trace[Elab.Deriving.fintype] "defining {enumListName}"
-      let type := mkConst declName levels
-      let listType ← mkAppM ``List #[type]
-      let listNil ← mkAppOptM ``List.nil #[some type]
-      let listCons name xs := mkAppM ``List.cons #[mkConst name levels, xs]
-      let enumList ← indVal.ctors.foldrM (listCons · ·) listNil
-addAndCompile Declaration.defnDecl
-        { name := enumListName
-          levelParams := indVal.levelParams
-          safety := DefinitionSafety.safe
-          hints := ReducibilityHints.abbrev
-          type := listType
-          value := enumList }
-      setProtected enumListName
-      addDocStringCore enumListName s!"A list enumerating every element of the type, \
-        which are all zero-argument constructors. (Generated by the `Fintype` deriving handler.)"
-    do -- Prove that this list is in `ctorIdx` order
-      trace[Elab.Deriving.fintype] "proving {ctorThmName}"
-      let goalStx ← `(term| forall (x : $(← Term.exprToSyntax <| mkConst declName levels)),
- (mkIdent enumListName)[$(mkIdent ctorIdxName) x]? = some x)
-      let goal ← Term.elabTerm goalStx (mkSort .zero)
-      let pf ← Term.elabTerm (← `(term| by intro x; cases x <;> rfl)) goal
-      Term.synthesizeSyntheticMVarsNoPostponing
-addAndCompile Declaration.thmDecl
-        { name := ctorThmName
-          levelParams := indVal.levelParams
-          type := ← instantiateMVars goal
-          value := ← instantiateMVars pf }
-      setProtected ctorThmName
-    do -- Use this theorem to prove `enumList` has no duplicates
-      trace[Elab.Deriving.fintype] "proving {enumListNodupName}"
-let enum ← Term.exprToSyntax mkConst enumListName levels
-      let goal ← Term.elabTerm (← `(term| List.Nodup $enum)) (mkSort .zero)
-      let n : TSyntax `term := quote indVal.numCtors
-      let pf ← Term.elabTerm (← `(term| by
-apply List.Nodup.of_map (mkIdent ctorIdxName)
-have h : List.map (mkIdent ctorIdxName) (mkIdent enumListName)
-= List.range n := rfl
-                  exact h ▸ List.nodup_range)) goal
-      Term.synthesizeSyntheticMVarsNoPostponing
-addAndCompile Declaration.thmDecl
-        { name := enumListNodupName
-          levelParams := indVal.levelParams
-          type := ← instantiateMVars goal
-          value := ← instantiateMVars pf }
-      setProtected enumListNodupName
-  -- Make the Fintype instance
-  trace[Elab.Deriving.fintype] "defining fintype instance"
-  let cmd ← `(command|
+--- 原说明 ---
+Derive a `Fintype` instance for enum types. These come with a `ctorIdx` function
+.
 
-中文:
-定义 mkFintypeEnum
-  签名: (declName : Name)
-  定义体: do
-  let indVal ← getConstInfoInduct declName
-  let levels := indVal.levelParams.map Level.param
-  let ctorIdxName := declName.mkStr "ctorIdx"
-  let enumListName := declName.mkStr "enumList"
-  let ctorThmName := declName.mkStr "enumList_getElem?_ctorIdx_eq"
-  let enumListNodupName := declName.mkStr "enumList_nodup"
-liftTermElabM Term.withoutErrToSorry do
-    do -- Define `enumList` enumerating all constructors
-      trace[Elab.Deriving.fintype] "defining {enumListName}"
-      let type := mkConst declName levels
-      let listType ← mkAppM ``List #[type]
-      let listNil ← mkAppOptM ``List.nil #[some type]
-      let listCons name xs := mkAppM ``List.cons #[mkConst name levels, xs]
-      let enumList ← indVal.ctors.foldrM (listCons · ·) listNil
-addAndCompile Declaration.defnDecl
-        { name := enumListName
-          levelParams := indVal.levelParams
-          safety := DefinitionSafety.safe
-          hints := ReducibilityHints.abbrev
-          type := listType
-          value := enumList }
-      setProtected enumListName
-      addDocStringCore enumListName s!"A list enumerating every element of the type, \
-        which are all zero-argument constructors. (Generated by the `Fintype` deriving handler.)"
-    do -- Prove that this list is in `ctorIdx` order
-      trace[Elab.Deriving.fintype] "proving {ctorThmName}"
-      let goalStx ← `(term| forall (x : $(← Term.exprToSyntax <| mkConst declName levels)),
- (mkIdent enumListName)[$(mkIdent ctorIdxName) x]? = some x)
-      let goal ← Term.elabTerm goalStx (mkSort .zero)
-      let pf ← Term.elabTerm (← `(term| by intro x; cases x <;> rfl)) goal
-      Term.synthesizeSyntheticMVarsNoPostponing
-addAndCompile Declaration.thmDecl
-        { name := ctorThmName
-          levelParams := indVal.levelParams
-          type := ← instantiateMVars goal
-          value := ← instantiateMVars pf }
-      setProtected ctorThmName
-    do -- Use this theorem to prove `enumList` has no duplicates
-      trace[Elab.Deriving.fintype] "proving {enumListNodupName}"
-let enum ← Term.exprToSyntax mkConst enumListName levels
-      let goal ← Term.elabTerm (← `(term| List.Nodup $enum)) (mkSort .zero)
-      let n : TSyntax `term := quote indVal.numCtors
-      let pf ← Term.elabTerm (← `(term| by
-apply List.Nodup.of_map (mkIdent ctorIdxName)
-have h : List.map (mkIdent ctorIdxName) (mkIdent enumListName)
-= List.range n := rfl
-                  exact h ▸ List.nodup_range)) goal
-      Term.synthesizeSyntheticMVarsNoPostponing
-addAndCompile Declaration.thmDecl
-        { name := enumListNodupName
-          levelParams := indVal.levelParams
-          type := ← instantiateMVars goal
-          value := ← instantiateMVars pf }
-      setProtected enumListNodupName
-  -- Make the Fintype instance
-  trace[Elab.Deriving.fintype] "defining fintype instance"
-  let cmd ← `(command|
+We generate a more optimized instance than the one produced by `mkFintype`.
+The strategy is to (1) create a list `enumList` of all the constructors, (2) pro
+ve that this
+is in `ctorIdx` order, (3) show that `ctorIdx` maps `enumList` to `List.range nu
+mCtors` to show
+the list has no duplicates, and (4) give the `Fintype` instance, using 2 for com
+pleteness.
+
+The proofs are all linear complexity, and the main computation is that
+`enumList.map ctorIdx = List.range numCtors`, which is true by `refl`.
 -/
 def mkFintypeEnum (declName : Name) : CommandElabM Unit := do
   let indVal ← getConstInfoInduct declName
@@ -282,7 +159,7 @@ def mkFintypeEnum (declName : Name) : CommandElabM Unit := do
   let enumListName := declName.mkStr "enumList"
   let ctorThmName := declName.mkStr "enumList_getElem?_ctorIdx_eq"
   let enumListNodupName := declName.mkStr "enumList_nodup"
-liftTermElabM Term.withoutErrToSorry do
+  liftTermElabM <| Term.withoutErrToSorry do
     do -- Define `enumList` enumerating all constructors
       trace[Elab.Deriving.fintype] "defining {enumListName}"
       let type := mkConst declName levels
@@ -290,7 +167,7 @@ liftTermElabM Term.withoutErrToSorry do
       let listNil ← mkAppOptM ``List.nil #[some type]
       let listCons name xs := mkAppM ``List.cons #[mkConst name levels, xs]
       let enumList ← indVal.ctors.foldrM (listCons · ·) listNil
-addAndCompile Declaration.defnDecl
+      addAndCompile <| Declaration.defnDecl
         { name := enumListName
           levelParams := indVal.levelParams
           safety := DefinitionSafety.safe
@@ -302,12 +179,12 @@ addAndCompile Declaration.defnDecl
         which are all zero-argument constructors. (Generated by the `Fintype` deriving handler.)"
     do -- Prove that this list is in `ctorIdx` order
       trace[Elab.Deriving.fintype] "proving {ctorThmName}"
-      let goalStx ← `(term| forall (x : $(← Term.exprToSyntax <| mkConst declName levels)),
- (mkIdent enumListName)[$(mkIdent ctorIdxName) x]? = some x)
+      let goalStx ← `(term| ∀ (x : $(← Term.exprToSyntax <| mkConst declName levels)),
+        $(mkIdent enumListName)[$(mkIdent ctorIdxName) x]? = some x)
       let goal ← Term.elabTerm goalStx (mkSort .zero)
       let pf ← Term.elabTerm (← `(term| by intro x; cases x <;> rfl)) goal
       Term.synthesizeSyntheticMVarsNoPostponing
-addAndCompile Declaration.thmDecl
+      addAndCompile <| Declaration.thmDecl
         { name := ctorThmName
           levelParams := indVal.levelParams
           type := ← instantiateMVars goal
@@ -315,16 +192,16 @@ addAndCompile Declaration.thmDecl
       setProtected ctorThmName
     do -- Use this theorem to prove `enumList` has no duplicates
       trace[Elab.Deriving.fintype] "proving {enumListNodupName}"
-let enum ← Term.exprToSyntax mkConst enumListName levels
+      let enum ← Term.exprToSyntax <| mkConst enumListName levels
       let goal ← Term.elabTerm (← `(term| List.Nodup $enum)) (mkSort .zero)
       let n : TSyntax `term := quote indVal.numCtors
       let pf ← Term.elabTerm (← `(term| by
-apply List.Nodup.of_map (mkIdent ctorIdxName)
-have h : List.map (mkIdent ctorIdxName) (mkIdent enumListName)
-= List.range n := rfl
+                  apply List.Nodup.of_map $(mkIdent ctorIdxName)
+                  have h : List.map $(mkIdent ctorIdxName) $(mkIdent enumListName)
+                            = List.range $n := rfl
                   exact h ▸ List.nodup_range)) goal
       Term.synthesizeSyntheticMVarsNoPostponing
-addAndCompile Declaration.thmDecl
+      addAndCompile <| Declaration.thmDecl
         { name := enumListNodupName
           levelParams := indVal.levelParams
           type := ← instantiateMVars goal
@@ -333,75 +210,24 @@ addAndCompile Declaration.thmDecl
   -- Make the Fintype instance
   trace[Elab.Deriving.fintype] "defining fintype instance"
   let cmd ← `(command|
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fintype (mkIdent declName)
-  body: Finset.mk (mkIdent enumListName) (mkIdent enumListNodupName)
+    instance : Fintype $(mkIdent declName) where
+      elems := Finset.mk $(mkIdent enumListName) $(mkIdent enumListNodupName)
       complete := by
         intro x
-        rw [Finset.mem_mk]; rw [Multiset.mem_coe]; rw [List.mem_iff_getElem?]
-exact ⟨ (mkIdent ctorIdxName) x, (mkIdent ctorThmName) x⟩)
+        rw [Finset.mem_mk, Multiset.mem_coe, List.mem_iff_getElem?]
+        exact ⟨$(mkIdent ctorIdxName) x, $(mkIdent ctorThmName) x⟩)
   trace[Elab.Deriving.fintype] "instance command:\n{cmd}"
   elabCommand cmd
-
-中文:
-实例 :
-  签名: 有限类型 (mkIdent declName)
-  定义体: Finset.mk (mkIdent enumListName) (mkIdent enumListNodupName)
-      complete := by
-        intro x
-        rw [Finset.mem_mk]; rw [Multiset.mem_coe]; rw [List.mem_iff_getElem?]
-exact ⟨ (mkIdent ctorIdxName) x, (mkIdent ctorThmName) x⟩)
-  trace[Elab.Deriving.fintype] "instance command:\n{cmd}"
-  elabCommand cmd
-
-Depends on / 依赖: Finset, Finset.mk, enumListName, enumListNodupName, mkIdent
--/
-instance : Fintype (mkIdent declName) where
-elems := Finset.mk (mkIdent enumListName) (mkIdent enumListNodupName)
-      complete := by
-        intro x
-        rw [Finset.mem_mk]; rw [Multiset.mem_coe]; rw [List.mem_iff_getElem?]
-exact ⟨ (mkIdent ctorIdxName) x, (mkIdent ctorThmName) x⟩)
-  trace[Elab.Deriving.fintype] "instance command:\n{cmd}"
-  elabCommand cmd
-
-/--
-Definition of `mkFintypeInstanceHandler` / `mkFintypeInstanceHandler` 的定义
-
-English:
-definition mkFintypeInstanceHandler
-  signature: (declNames : Array Name)
-  body: do
-  if h : declNames.size != 1 then
-    return false -- mutually inductive types are not supported
-  else
-    let declName := declNames[0]
-    if ← isEnumType declName then
-      mkFintypeEnum declName
-      return true
-    else
-      mkFintype declName
-
-中文:
-定义 mkFintypeInstanceHandler
-  签名: (declNames : 数组 Name)
-  定义体: do
-  if h : declNames.size != 1 then
-    return false -- mutually inductive types are not supported
-  else
-    let declName := declNames[0]
-    if ← isEnumType declName then
-      mkFintypeEnum declName
-      return true
-    else
-      mkFintype declName
+/-
+**Mathlib.Deriving.Fintype.mkFintypeInstanceHandler** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Deriving.Fintype`。
+形式化陈述：mkFintypeInstanceHandler (declNames : Array Name) : CommandElabM Bool
+参数：declNames : Array Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mkFintypeInstanceHandler (declNames : Array Name) : CommandElabM Bool := do
-  if h : declNames.size != 1 then
+  if h : declNames.size ≠ 1 then
     return false -- mutually inductive types are not supported
   else
     let declName := declNames[0]
@@ -416,3 +242,4 @@ initialize
   registerTraceClass `Elab.Deriving.fintype
 
 end Mathlib.Deriving.Fintype
+

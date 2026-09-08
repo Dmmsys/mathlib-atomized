@@ -32,64 +32,50 @@ variable {M : Type*} [AddCancelCommMonoid M] [AddMonoid.FG M] [IsAddTorsionFree 
 namespace AffineAddMonoid
 
 variable (M) in
-/--
-Definition of `dim` / `dim` 的定义
+/-- The dimension of an affine monoid `M`, namely the minimum `n` for which `M` embeds into `ℤⁿ`. -/
+/-
+**AffineAddMonoid.dim** 是 Mathlib 中的一个缩写定义，位于命名空间 `AffineAddMonoid`。
+形式化陈述：dim
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation dim
-  body: Module.finrank Int GrothendieckAddGroup M
-
-中文:
-缩写 dim
-  定义体: Module.finrank Int GrothendieckAddGroup M
-
-Depends on / 依赖: GrothendieckAddGroup, Module, Module.finrank, finrank
+--- 原说明 ---
+The dimension of an affine monoid `M`, namely the minimum `n` for which `M` embe
+ds into `ℤⁿ`.
 -/
-noncomputable abbrev dim := Module.finrank Int GrothendieckAddGroup M
+noncomputable abbrev dim := Module.finrank ℤ <| GrothendieckAddGroup M
 
 variable (M) in
-/--
-Definition of `embedding` / `embedding` 的定义
+/-- An arbitrary embedding of an affine monoid `M` into `ℤ ^ dim M`. -/
+/-
+**AffineAddMonoid.embedding** 是 Mathlib 中的一个定义，位于命名空间 `AffineAddMonoid`。
+形式化陈述：embedding : M ->+ FreeAbelianGroup (Fin (dim M))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embedding
-  signature: : M ->+ FreeAbelianGroup (Fin (dim M))
-  body: .comp (FreeAbelianGroup.equivFinsupp _).symm.toAddMonoidHom
-    .comp (Module.finBasis Int _).repr.toAddMonoidHom
-      (addMonoidOf ⊤).toAddMonoidHom
-
-中文:
-定义 embedding
-  签名: : M ->+ 自由交换群 (有限集 (dim M))
-  定义体: .comp (FreeAbelianGroup.equivFinsupp _).symm.toAddMonoidHom
-    .comp (Module.finBasis Int _).repr.toAddMonoidHom
-      (addMonoidOf ⊤).toAddMonoidHom
-
-Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.equivFinsupp, Module, Module.finBasis, addMonoidOf, equivFinsupp, finBasis, repr.toAddMonoidHom, symm.toAddMonoidHom, toAddMonoidHom
+--- 原说明 ---
+An arbitrary embedding of an affine monoid `M` into `ℤ ^ dim M`.
 -/
-noncomputable def embedding : M ->+ FreeAbelianGroup (Fin (dim M)) :=
-.comp (FreeAbelianGroup.equivFinsupp _).symm.toAddMonoidHom
-    .comp (Module.finBasis Int _).repr.toAddMonoidHom
+noncomputable def embedding : M →+ FreeAbelianGroup (Fin (dim M)) :=
+  .comp (FreeAbelianGroup.equivFinsupp _).symm.toAddMonoidHom <|
+    .comp (Module.finBasis ℤ _).repr.toAddMonoidHom
       (addMonoidOf ⊤).toAddMonoidHom
-
-/--
-lemma `embedding_injective` / 引理 `embedding_injective`
-
-English:
-lemma embedding_injective
-  statement: Injective (embedding M)
-  proof: by
-  simpa [embedding] using! mk_left_injective 0
-
-中文:
-引理 embedding_injective
-  结论: 单射 (embedding M)
-  证明: by
-  simpa [embedding] using! mk_left_injective 0
-
-Depends on / 依赖: embedding, mk_left_injective
+/-
+**AffineAddMonoid.embedding_injective** 是 Mathlib 中的一个引理，位于命名空间 `AffineAddMonoid
+`。
+形式化陈述：embedding_injective : Injective (embedding M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `AddLocalization.mk_left_injective`：∀ {α : Type u_1} [inst : AddCommMonoi
+d α] [IsCancelAdd α] {s : AddSubmonoid α} (b : ↥s),   Function.Injective fun a =
+> AddLocalization.mk a …
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
 -/
 lemma embedding_injective : Injective (embedding M) := by
   simpa [embedding] using! mk_left_injective 0
 
 end AffineAddMonoid
+

@@ -33,24 +33,9 @@ section NoZeroDivisors
 
 variable [Semiring R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NoZeroDivisors
-  signature: R] : NoZeroDivisors R⟦X⟧ where
-  body: by
-    simp_rw [← order_eq_top, order_mul] at h ⊢
-    exact WithTop.add_eq_top.mp h
-
-中文:
-实例 [无零因子
-  签名: R] : 无零因子 R⟦X⟧ where
-  定义体: by
-    simp_rw [← order_eq_top, order_mul] at h ⊢
-    exact WithTop.add_eq_top.mp h
-
-Depends on / 依赖: WithTop, WithTop.add_eq_top.mp, add_eq_top, order_eq_top, order_mul, simp_rw
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NoZeroDivisors R] : NoZeroDivisors R⟦X⟧ where
   eq_zero_or_eq_zero_of_mul_eq_zero {φ ψ} h := by
@@ -61,52 +46,39 @@ end NoZeroDivisors
 
 section IsDomain
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] [IsDomain R] : IsDomain R⟦X⟧
-  body: NoZeroDivisors.to_isDomain _
-
-中文:
-实例 [环
-  签名: R] [是整环 R] : 是整环 R⟦X⟧
-  定义体: NoZeroDivisors.to_isDomain _
-
-Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring R] [IsDomain R] : IsDomain R⟦X⟧ :=
   NoZeroDivisors.to_isDomain _
 
 variable [CommRing R] [IsDomain R]
 
-/--
-theorem `span_X_isPrime` / 定理 `span_X_isPrime`
+/-- The ideal spanned by the variable in the power series ring
+over an integral domain is a prime ideal. -/
+/-
+**PowerSeries.span_X_isPrime** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：span_X_isPrime : (Ideal.span ({X} : Set R⟦X⟧)).IsPrime
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `PowerSeries.X_dvd_iff`：X_dvd_iff {φ : R⟦X⟧} : (X : R⟦X⟧) ∣ φ ↔ constantC
+oeff φ = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `RingHom.ker_isPrime`：ker_isPrime {F : Type*} [Semiring R] [Semiring S] [
+IsDomain S] [FunLike F R S] [RingHomClass F R S] (f : F) : (ker f).IsPrime
 
-English:
-theorem span_X_isPrime
-  statement: (Ideal.span ({X} : Set R⟦X⟧)).IsPrime
-  proof: by
-  suffices Ideal.span ({X} : Set R⟦X⟧) = RingHom.ker constantCoeff by
-    rw [this]
-    exact RingHom.ker_isPrime _
-  apply Ideal.ext
-  intro φ
-  rw [RingHom.mem_ker]; rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]
-
-中文:
-定理 span_X_isPrime
-  结论: (理想.span ({X} : 集合 R⟦X⟧)).是素
-  证明: by
-  suffices Ideal.span ({X} : Set R⟦X⟧) = RingHom.ker constantCoeff by
-    rw [this]
-    exact RingHom.ker_isPrime _
-  apply Ideal.ext
-  intro φ
-  rw [RingHom.mem_ker]; rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]
-
-Depends on / 依赖: Ideal.ext, Ideal.mem_span_singleton, Ideal.span, RingHom, RingHom.ker, RingHom.ker_isPrime, RingHom.mem_ker, X_dvd_iff, constantCoeff, ker_isPrime, mem_ker, mem_span_singleton
+--- 原说明 ---
+The ideal spanned by the variable in the power series ring
+over an integral domain is a prime ideal.
 -/
 theorem span_X_isPrime : (Ideal.span ({X} : Set R⟦X⟧)).IsPrime := by
   suffices Ideal.span ({X} : Set R⟦X⟧) = RingHom.ker constantCoeff by
@@ -114,30 +86,43 @@ theorem span_X_isPrime : (Ideal.span ({X} : Set R⟦X⟧)).IsPrime := by
     exact RingHom.ker_isPrime _
   apply Ideal.ext
   intro φ
-  rw [RingHom.mem_ker]; rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]
+  rw [RingHom.mem_ker, Ideal.mem_span_singleton, X_dvd_iff]
 
-/--
-theorem `X_prime` / 定理 `X_prime`
+/-- The variable of the power series ring over an integral domain is prime. -/
+/-
+**PowerSeries.X_prime** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_prime : Prime (X : R⟦X⟧)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_singleton_prime`：span_singleton_prime {p : α} (hp : p != 0) :
+ IsPrime (span ({p} : Set α)) ↔ Prime p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.coeff_one_X`：coeff_one_X : coeff 1 (X : R⟦X⟧) = 1
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `PowerSeries.span_X_isPrime`：span_X_isPrime : (Ideal.span ({X} : Set R⟦X⟧
+)).IsPrime
 
-English:
-theorem X_prime
-  statement: Prime (X : R⟦X⟧)
-  proof: by
-  rw [← Ideal.span_singleton_prime]
-  · exact span_X_isPrime
-  · intro h
-    simpa [map_zero (coeff 1)] using congr_arg (coeff 1) h
-
-中文:
-定理 X_prime
-  结论: 素 (X : R⟦X⟧)
-  证明: by
-  rw [← Ideal.span_singleton_prime]
-  · exact span_X_isPrime
-  · intro h
-    simpa [map_zero (coeff 1)] using congr_arg (coeff 1) h
-
-Depends on / 依赖: Ideal.span_singleton_prime, congr_arg, map_zero, span_X_isPrime, span_singleton_prime
+--- 原说明 ---
+The variable of the power series ring over an integral domain is prime.
 -/
 theorem X_prime : Prime (X : R⟦X⟧) := by
   rw [← Ideal.span_singleton_prime]
@@ -145,51 +130,48 @@ theorem X_prime : Prime (X : R⟦X⟧) := by
   · intro h
     simpa [map_zero (coeff 1)] using congr_arg (coeff 1) h
 
-/--
-theorem `X_irreducible` / 定理 `X_irreducible`
+/-- The variable of the power series ring over an integral domain is irreducible. -/
+/-
+**PowerSeries.X_irreducible** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_irreducible : Irreducible (X : R⟦X⟧)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prime.irreducible`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCan
+celMulZero M] {p : M}, Prime p → Irreducible p
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `PowerSeries.instIsDomain`：∀ {R : Type u_1} [inst : Ring R] [IsDomain R],
+ IsDomain (PowerSeries R)
+· 使用定理 `PowerSeries.X_prime`：X_prime : Prime (X : R⟦X⟧)
 
-English:
-theorem X_irreducible
-  statement: Irreducible (X : R⟦X⟧)
-  proof: X_prime.irreducible
-
-中文:
-定理 X_irreducible
-  结论: 不可约 (X : R⟦X⟧)
-  证明: X_prime.irreducible
-
-Depends on / 依赖: X_prime, X_prime.irreducible, irreducible
+--- 原说明 ---
+The variable of the power series ring over an integral domain is irreducible.
 -/
 theorem X_irreducible : Irreducible (X : R⟦X⟧) := X_prime.irreducible
-
-/--
-theorem `rescale_injective` / 定理 `rescale_injective`
-
-English:
-theorem rescale_injective
-  given: {a : R} (ha : a != 0)
-  statement: Function.Injective (rescale a)
-  proof: by
-  intro p q h
-  rw [PowerSeries.ext_iff] at *
-  intro n
-  specialize h n
-  rwa [coeff_rescale, coeff_rescale, mul_right_inj' <| pow_ne_zero _ ha] at h
-
-中文:
-定理 rescale_injective
-  条件: {a : R} (ha : a != 0)
-  结论: 函数.单射 (rescale a)
-  证明: by
-  intro p q h
-  rw [PowerSeries.ext_iff] at *
-  intro n
-  specialize h n
-  rwa [coeff_rescale, coeff_rescale, mul_right_inj' <| pow_ne_zero _ ha] at h
-
-Depends on / 依赖: PowerSeries, PowerSeries.ext_iff, coeff_rescale, ext_iff, mul_right_inj, pow_ne_zero, specialize
+/-
+**PowerSeries.rescale_injective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_injective {a : R} (ha : a != 0) : Function.Injective (rescale a)
+参数：ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.ext_iff`：∀ {R : Type u_1} [inst : Semiring R] {φ ψ : PowerSe
+ries R},   φ = ψ ↔ ∀ (n : ℕ), (PowerSeries.coeff n) φ = (PowerSeries.coeff n) ψ
+· 使用引理 `mul_right_inj'`：mul_right_inj' (ha : a != 0) : a * b = a * c ↔ b = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `PowerSeries.coeff_rescale`：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : 
+coeff n (rescale a f) = a ^ n * coeff n f
 -/
-theorem rescale_injective {a : R} (ha : a != 0) : Function.Injective (rescale a) := by
+theorem rescale_injective {a : R} (ha : a ≠ 0) : Function.Injective (rescale a) := by
   intro p q h
   rw [PowerSeries.ext_iff] at *
   intro n
@@ -199,3 +181,4 @@ theorem rescale_injective {a : R} (ha : a != 0) : Function.Injective (rescale a)
 end IsDomain
 
 end PowerSeries
+

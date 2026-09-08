@@ -21,93 +21,33 @@ public meta section
 
 open Lean Meta
 
-/--
-Definition of `Lean.Meta.mkSubsingleton` / `Lean.Meta.mkSubsingleton` 的定义
+/-- Returns the expression `Subsingleton ty`. -/
+/-
+**Lean.Meta.mkSubsingleton** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.Meta.mkSubsingleton (ty : Expr) : MetaM Expr
+参数：ty : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.Meta.mkSubsingleton
-  signature: (ty : Expr)
-  body: do
-  let u ← getLevel ty
-  return Expr.app (.const ``Subsingleton [u]) ty
-
-中文:
-定义 Lean.Meta.mkSubsingleton
-  签名: (ty : Expr)
-  定义体: do
-  let u ← getLevel ty
-  return Expr.app (.const ``Subsingleton [u]) ty
-
-Depends on / 依赖: IsRightAdjoint
+--- 原说明 ---
+Returns the expression `Subsingleton ty`.
 -/
 def Lean.Meta.mkSubsingleton (ty : Expr) : MetaM Expr := do
   let u ← getLevel ty
   return Expr.app (.const ``Subsingleton [u]) ty
 
-/--
-Definition of `Lean.Meta.synthSubsingletonInst` / `Lean.Meta.synthSubsingletonInst` 的定义
+/-- Synthesizes a `Subsingleton ty` instance with the additional local instances made available. -/
+/-
+**Lean.Meta.synthSubsingletonInst** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.Meta.synthSubsingletonInst (ty : Expr) (insts : Array (Term × Abstrac
+tMVarsResult)
+参数：ty : Expr。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition Lean.Meta.synthSubsingletonInst
-  signature: (ty : Expr)
-  body: do
-  -- Synthesize a subsingleton instance. The new metacontext depth ensures that universe
-  -- level metavariables are not specialized.
-  withNewMCtxDepth do
-    -- We need to process the local instances *under* `withNewMCtxDepth` since they might
-    -- have universe parameters, which we need to let `synthInstance` assign to.
-let (insts', uss) ← Array.unzip < > insts.mapM fun inst => do
-      let us ← inst.2.paramNames.mapM fun _ => mkFreshLevelMVar
-pure (inst.2.expr.instantiateLevelParamsArray inst.2.paramNames us, us)
-    withLocalDeclsD (insts'.map fun e => (`inst, fun _ => inferType e)) fun fvars => do
-      withNewLocalInstances fvars 0 do
-let res ← instantiateMVars ← synthInstance ← mkSubsingleton ty
-        let res' := res.abstract fvars
-        for i in [0 : fvars.size] do
-          if res'.hasLooseBVar (fvars.size - i - 1) then
-            uss[i]!.forM fun u => do
-              let u ← instantiateLevelMVars u
-              if u.isMVar then
-                -- This shouldn't happen, `synthInstance` should solve for all level metavariables
-                throwErrorAt insts[i]!.1 "\
-                  Instance provided to 'subsingleton' has unassigned universe level metavariable\
-                  {indentD insts'[i]!}"
-          else
-            -- Unused local instance.
-            -- Not logging a warning since this might be `... <;> subsingleton [...]`
-            pure ()
-instantiateMVars res'.instantiateRev insts'
-
-中文:
-定义 Lean.Meta.synthSubsingletonInst
-  签名: (ty : Expr)
-  定义体: do
-  -- Synthesize a subsingleton instance. The new metacontext depth ensures that universe
-  -- level metavariables are not specialized.
-  withNewMCtxDepth do
-    -- We need to process the local instances *under* `withNewMCtxDepth` since they might
-    -- have universe parameters, which we need to let `synthInstance` assign to.
-let (insts', uss) ← Array.unzip < > insts.mapM fun inst => do
-      let us ← inst.2.paramNames.mapM fun _ => mkFreshLevelMVar
-pure (inst.2.expr.instantiateLevelParamsArray inst.2.paramNames us, us)
-    withLocalDeclsD (insts'.map fun e => (`inst, fun _ => inferType e)) fun fvars => do
-      withNewLocalInstances fvars 0 do
-let res ← instantiateMVars ← synthInstance ← mkSubsingleton ty
-        let res' := res.abstract fvars
-        for i in [0 : fvars.size] do
-          if res'.hasLooseBVar (fvars.size - i - 1) then
-            uss[i]!.forM fun u => do
-              let u ← instantiateLevelMVars u
-              if u.isMVar then
-                -- This shouldn't happen, `synthInstance` should solve for all level metavariables
-                throwErrorAt insts[i]!.1 "\
-                  Instance provided to 'subsingleton' has unassigned universe level metavariable\
-                  {indentD insts'[i]!}"
-          else
-            -- Unused local instance.
-            -- Not logging a warning since this might be `... <;> subsingleton [...]`
-            pure ()
-instantiateMVars res'.instantiateRev insts'
+--- 原说明 ---
+Synthesizes a `Subsingleton ty` instance with the additional local instances mad
+e available.
 -/
 def Lean.Meta.synthSubsingletonInst (ty : Expr)
     (insts : Array (Term × AbstractMVarsResult) := #[]) :
@@ -117,12 +57,12 @@ def Lean.Meta.synthSubsingletonInst (ty : Expr)
   withNewMCtxDepth do
     -- We need to process the local instances *under* `withNewMCtxDepth` since they might
     -- have universe parameters, which we need to let `synthInstance` assign to.
-let (insts', uss) ← Array.unzip < > insts.mapM fun inst => do
+    let (insts', uss) ← Array.unzip <$> insts.mapM fun inst => do
       let us ← inst.2.paramNames.mapM fun _ => mkFreshLevelMVar
-pure (inst.2.expr.instantiateLevelParamsArray inst.2.paramNames us, us)
+      pure <| (inst.2.expr.instantiateLevelParamsArray inst.2.paramNames us, us)
     withLocalDeclsD (insts'.map fun e => (`inst, fun _ => inferType e)) fun fvars => do
       withNewLocalInstances fvars 0 do
-let res ← instantiateMVars ← synthInstance ← mkSubsingleton ty
+        let res ← instantiateMVars <| ← synthInstance <| ← mkSubsingleton ty
         let res' := res.abstract fvars
         for i in [0 : fvars.size] do
           if res'.hasLooseBVar (fvars.size - i - 1) then
@@ -137,96 +77,30 @@ let res ← instantiateMVars ← synthInstance ← mkSubsingleton ty
             -- Unused local instance.
             -- Not logging a warning since this might be `... <;> subsingleton [...]`
             pure ()
-instantiateMVars res'.instantiateRev insts'
+        instantiateMVars <| res'.instantiateRev insts'
 
 /--
-Definition of `Lean.MVarId.subsingleton` / `Lean.MVarId.subsingleton` 的定义
+Closes the goal `g` whose target is an `Eq` or `HEq` by appealing to the fact that the types
+are subsingletons.
+Fails if it cannot find a way to do this.
 
-English:
-definition Lean.MVarId.subsingleton
-  signature: (g : MVarId) (insts : Array (Term × AbstractMVarsResult) := #[])
-  body: commitIfNoEx do
-  let g ← g.heqOfEq
-  g.withContext do
-    let tgt ← whnfR (← g.getType)
-    if let some (ty, x, y) := tgt.eq? then
-      -- Proof irrelevance. This is not necessary since `rfl` suffices,
-      -- but propositions are subsingletons so we may as well.
-      if ← Meta.isProp ty then
-g.assign mkApp3 (.const ``proof_irrel []) ty x y
-        return
-      -- Try `Subsingleton.elim`
-      let u ← getLevel ty
-      try
-        let inst ← synthSubsingletonInst ty insts
-g.assign mkApp4 (.const ``Subsingleton.elim [u]) ty inst x y
-        return
-      catch _ => pure ()
-      -- Try `lawful_beq_subsingleton`
-      let ty' ← whnfR ty
-      if ty'.isAppOfArity ``BEq 1 then
-        let α := ty'.appArg!
-        try
-          let some u' := u.dec | failure
-let xInst ← withNewMCtxDepth Meta.synthInstance mkApp2 (.const ``LawfulBEq [u']) α x
-let yInst ← withNewMCtxDepth Meta.synthInstance mkApp2 (.const ``LawfulBEq [u']) α y
-g.assign mkApp5 (.const ``lawful_beq_subsingleton [u']) α x y xInst yInst
-          return
-        catch _ => pure ()
-      throwError "\
-        tactic 'subsingleton' could not prove equality since it could not synthesize\
-          {indentD (← mkSubsingleton ty)}"
-    else if let some (xTy, x, yTy, y) := tgt.heq? then
-      -- The HEq version of proof irrelevance.
-      if ← (Meta.isProp xTy <&&> Meta.isProp yTy) then
-g.assign mkApp4 (.const ``proof_irrel_heq []) xTy yTy x y
-        return
-      throwError "tactic 'subsingleton' could not prove heterogeneous equality"
-    throwError "tactic 'subsingleton' failed, goal is neither an equality nor a \
-      heterogeneous equality"
+Has support for showing `BEq` instances are equal if they have `LawfulBEq` instances.
+-/
+/-
+**Lean.MVarId.subsingleton** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.MVarId.subsingleton (g : MVarId) (insts : Array (Term × AbstractMVars
+Result)
+参数：g : MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Lean.MVarId.subsingleton
-  签名: (g : MVarId) (insts : 数组 (项 × AbstractMVarsResult) := #[])
-  定义体: commitIfNoEx do
-  let g ← g.heqOfEq
-  g.withContext do
-    let tgt ← whnfR (← g.getType)
-    if let some (ty, x, y) := tgt.eq? then
-      -- Proof irrelevance. This is not necessary since `rfl` suffices,
-      -- but propositions are subsingletons so we may as well.
-      if ← Meta.isProp ty then
-g.assign mkApp3 (.const ``proof_irrel []) ty x y
-        return
-      -- Try `Subsingleton.elim`
-      let u ← getLevel ty
-      try
-        let inst ← synthSubsingletonInst ty insts
-g.assign mkApp4 (.const ``Subsingleton.elim [u]) ty inst x y
-        return
-      catch _ => pure ()
-      -- Try `lawful_beq_subsingleton`
-      let ty' ← whnfR ty
-      if ty'.isAppOfArity ``BEq 1 then
-        let α := ty'.appArg!
-        try
-          let some u' := u.dec | failure
-let xInst ← withNewMCtxDepth Meta.synthInstance mkApp2 (.const ``LawfulBEq [u']) α x
-let yInst ← withNewMCtxDepth Meta.synthInstance mkApp2 (.const ``LawfulBEq [u']) α y
-g.assign mkApp5 (.const ``lawful_beq_subsingleton [u']) α x y xInst yInst
-          return
-        catch _ => pure ()
-      throwError "\
-        tactic 'subsingleton' could not prove equality since it could not synthesize\
-          {indentD (← mkSubsingleton ty)}"
-    else if let some (xTy, x, yTy, y) := tgt.heq? then
-      -- The HEq version of proof irrelevance.
-      if ← (Meta.isProp xTy <&&> Meta.isProp yTy) then
-g.assign mkApp4 (.const ``proof_irrel_heq []) xTy yTy x y
-        return
-      throwError "tactic 'subsingleton' could not prove heterogeneous equality"
-    throwError "tactic 'subsingleton' failed, goal is neither an equality nor a \
-      heterogeneous equality"
+--- 原说明 ---
+Closes the goal `g` whose target is an `Eq` or `HEq` by appealing to the fact th
+at the types
+are subsingletons.
+Fails if it cannot find a way to do this.
+
+Has support for showing `BEq` instances are equal if they have `LawfulBEq` insta
+nces.
 -/
 def Lean.MVarId.subsingleton (g : MVarId) (insts : Array (Term × AbstractMVarsResult) := #[]) :
     MetaM Unit := commitIfNoEx do
@@ -237,13 +111,13 @@ def Lean.MVarId.subsingleton (g : MVarId) (insts : Array (Term × AbstractMVarsR
       -- Proof irrelevance. This is not necessary since `rfl` suffices,
       -- but propositions are subsingletons so we may as well.
       if ← Meta.isProp ty then
-g.assign mkApp3 (.const ``proof_irrel []) ty x y
+        g.assign <| mkApp3 (.const ``proof_irrel []) ty x y
         return
       -- Try `Subsingleton.elim`
       let u ← getLevel ty
       try
         let inst ← synthSubsingletonInst ty insts
-g.assign mkApp4 (.const ``Subsingleton.elim [u]) ty inst x y
+        g.assign <| mkApp4 (.const ``Subsingleton.elim [u]) ty inst x y
         return
       catch _ => pure ()
       -- Try `lawful_beq_subsingleton`
@@ -252,9 +126,9 @@ g.assign mkApp4 (.const ``Subsingleton.elim [u]) ty inst x y
         let α := ty'.appArg!
         try
           let some u' := u.dec | failure
-let xInst ← withNewMCtxDepth Meta.synthInstance mkApp2 (.const ``LawfulBEq [u']) α x
-let yInst ← withNewMCtxDepth Meta.synthInstance mkApp2 (.const ``LawfulBEq [u']) α y
-g.assign mkApp5 (.const ``lawful_beq_subsingleton [u']) α x y xInst yInst
+          let xInst ← withNewMCtxDepth <| Meta.synthInstance <| mkApp2 (.const ``LawfulBEq [u']) α x
+          let yInst ← withNewMCtxDepth <| Meta.synthInstance <| mkApp2 (.const ``LawfulBEq [u']) α y
+          g.assign <| mkApp5 (.const ``lawful_beq_subsingleton [u']) α x y xInst yInst
           return
         catch _ => pure ()
       throwError "\
@@ -263,7 +137,7 @@ g.assign mkApp5 (.const ``lawful_beq_subsingleton [u']) α x y xInst yInst
     else if let some (xTy, x, yTy, y) := tgt.heq? then
       -- The HEq version of proof irrelevance.
       if ← (Meta.isProp xTy <&&> Meta.isProp yTy) then
-g.assign mkApp4 (.const ``proof_irrel_heq []) xTy yTy x y
+        g.assign <| mkApp4 (.const ``proof_irrel_heq []) xTy yTy x y
         return
       throwError "tactic 'subsingleton' could not prove heterogeneous equality"
     throwError "tactic 'subsingleton' failed, goal is neither an equality nor a \
@@ -293,23 +167,21 @@ syntax (name := subsingletonStx) "subsingleton" (ppSpace "[" term,* "]")? : tact
 open Elab Tactic
 
 /--
-Definition of `elabSubsingletonInsts` / `elabSubsingletonInsts` 的定义
+Elaborates the terms like how `Lean.Elab.Tactic.addSimpTheorem` does,
+abstracting their metavariables.
+-/
+/-
+**Mathlib.Tactic.elabSubsingletonInsts** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+`。
+形式化陈述：elabSubsingletonInsts (instTerms? : Option (Array Term)) : TermElabM (Arra
+y (Term × AbstractMVarsResult))
+参数：instTerms? : Option (Array Term)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabSubsingletonInsts
-  body: do
-  if let some instTerms := instTerms? then
-    go instTerms.toList #[]
-  else
-    return #[]
-
-中文:
-定义 elabSubsingletonInsts
-  定义体: do
-  if let some instTerms := instTerms? then
-    go instTerms.toList #[]
-  else
-    return #[]
+--- 原说明 ---
+Elaborates the terms like how `Lean.Elab.Tactic.addSimpTheorem` does,
+abstracting their metavariables.
 -/
 def elabSubsingletonInsts
     (instTerms? : Option (Array Term)) : TermElabM (Array (Term × AbstractMVarsResult)) := do
@@ -324,8 +196,8 @@ where
     match instTerms with
     | [] => return insts
     | instTerm :: instTerms =>
-let inst ← withNewMCtxDepth Term.withoutModifyingElabMetaStateWithInfo do
-withRef instTerm Term.withoutErrToSorry do
+      let inst ← withNewMCtxDepth <| Term.withoutModifyingElabMetaStateWithInfo do
+        withRef instTerm <| Term.withoutErrToSorry do
           let e ← Term.elabTerm instTerm none
           Term.synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
           let e ← instantiateMVars e
@@ -361,7 +233,7 @@ elab_rules : tactic
         -- Try `refl` when all else fails, to give a hint to the user
         if recover then
           try
-g.refl > g.hrefl
+            g.refl <|> g.hrefl
             let tac ← if !fvars.isEmpty then `(tactic| (intros; rfl)) else `(tactic| rfl)
             Meta.Tactic.TryThis.addSuggestion (← getRef) tac (origSpan? := ← getRef)
             return none
@@ -369,3 +241,4 @@ g.refl > g.hrefl
         throw e
 
 end Mathlib.Tactic
+

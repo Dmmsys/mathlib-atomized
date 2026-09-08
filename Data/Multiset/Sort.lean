@@ -25,26 +25,19 @@ open List
 section sort
 
 
-/--
-Definition of `sort` / `sort` 的定义
+/-- `sort s` constructs a sorted list from the multiset `s`.
+  (Uses merge sort algorithm.) -/
+/-
+**Multiset.sort** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：sort (s : Multiset α) (r : α -> α -> Prop
+参数：s : Multiset α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sort
-  signature: (s : Multiset α) (r : α -> α -> Prop := by exact fun a b => a <= b)
-  body: Quot.liftOn s (mergeSort · (r · ·)) fun _ _ h =>
-    ((mergeSort_perm _ _).trans <| h.trans (mergeSort_perm _ _).symm).eq_of_pairwise' (r := r)
-      (pairwise_mergeSort' _ _) (pairwise_mergeSort' _ _)
-
-中文:
-定义 sort
-  签名: (s : Multiset α) (r : α -> α -> 命题 := by exact fun a b => a <= b)
-  定义体: Quot.liftOn s (mergeSort · (r · ·)) fun _ _ h =>
-    ((mergeSort_perm _ _).trans <| h.trans (mergeSort_perm _ _).symm).eq_of_pairwise' (r := r)
-      (pairwise_mergeSort' _ _) (pairwise_mergeSort' _ _)
-
-Depends on / 依赖: Antisymm, DecidableRel, IsTrans, Quot.liftOn, Std.Antisymm, Std.Total, eq_of_pairwise, h.trans, liftOn, mergeSort, mergeSort_perm, pairwise_mergeSort
+--- 原说明 ---
+`sort s` constructs a sorted list from the multiset `s`.
+  (Uses merge sort algorithm.)
 -/
-def sort (s : Multiset α) (r : α -> α -> Prop := by exact fun a b => a <= b)
+def sort (s : Multiset α) (r : α → α → Prop := by exact fun a b => a ≤ b)
     [DecidableRel r] [IsTrans α r] [Std.Antisymm r] [Std.Total r] : List α :=
   Quot.liftOn s (mergeSort · (r · ·)) fun _ _ h =>
     ((mergeSort_perm _ _).trans <| h.trans (mergeSort_perm _ _).symm).eq_of_pairwise' (r := r)
@@ -52,191 +45,140 @@ def sort (s : Multiset α) (r : α -> α -> Prop := by exact fun a b => a <= b)
 
 section
 
-variable (a : α) (f : α -> β) (l : List α) (s : Multiset α)
-variable (r : α -> α -> Prop) [DecidableRel r] [IsTrans α r] [Std.Antisymm r] [Std.Total r]
-variable (r' : β -> β -> Prop) [DecidableRel r'] [IsTrans β r'] [Std.Antisymm r'] [Std.Total r']
+variable (a : α) (f : α → β) (l : List α) (s : Multiset α)
+variable (r : α → α → Prop) [DecidableRel r] [IsTrans α r] [Std.Antisymm r] [Std.Total r]
+variable (r' : β → β → Prop) [DecidableRel r'] [IsTrans β r'] [Std.Antisymm r'] [Std.Total r']
 
 @[simp]
-/--
-theorem `coe_sort` / 定理 `coe_sort`
-
-English:
-theorem coe_sort
-  statement: sort l r = mergeSort l (r · ·)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sort
-  结论: sort l r = mergeSort l (r · ·)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: toList
+/-
+**Multiset.coe_sort** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_sort : sort l r = mergeSort l (r · ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sort : sort l r = mergeSort l (r · ·) :=
   rfl
 
 @[simp]
-/--
-theorem `pairwise_sort` / 定理 `pairwise_sort`
-
-English:
-theorem pairwise_sort
-  statement: (sort s r).Pairwise r
-  proof: Quot.inductionOn s (pairwise_mergeSort' _)
-
-@[simp]
-
-中文:
-定理 pairwise_sort
-  结论: (sort s r).两两 r
-  证明: Quot.inductionOn s (pairwise_mergeSort' _)
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn, pairwise_mergeSort
+/-
+**Multiset.pairwise_sort** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：pairwise_sort : (sort s r).Pairwise r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.pairwise_mergeSort'`：pairwise_mergeSort' (l : List α) : Pairwise r 
+(mergeSort l (r · ·))
 -/
 theorem pairwise_sort : (sort s r).Pairwise r :=
   Quot.inductionOn s (pairwise_mergeSort' _)
 
 @[simp]
-/--
-theorem `sort_eq` / 定理 `sort_eq`
-
-English:
-theorem sort_eq
-  statement: ↑(sort s r) = s
-  proof: Quot.inductionOn s fun _ => Quot.sound mergeSort_perm _ _
-
-@[simp]
-
-中文:
-定理 sort_eq
-  结论: ↑(sort s r) = s
-  证明: Quot.inductionOn s fun _ => Quot.sound mergeSort_perm _ _
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, Quot.sound, inductionOn, mergeSort_perm
+/-
+**Multiset.sort_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：sort_eq : ↑(sort s r) = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.mergeSort_perm`：∀ {α : Type u_1} (l : List α) (le : α → α → Bool), 
+(l.mergeSort le).Perm l
 -/
 theorem sort_eq : ↑(sort s r) = s :=
-Quot.inductionOn s fun _ => Quot.sound mergeSort_perm _ _
+  Quot.inductionOn s fun _ => Quot.sound <| mergeSort_perm _ _
 
 @[simp]
-/--
-theorem `sort_zero` / 定理 `sort_zero`
-
-English:
-theorem sort_zero
-  statement: sort 0 r = []
-  proof: List.mergeSort_nil
-
-@[simp]
-
-中文:
-定理 sort_zero
-  结论: sort 0 r = []
-  证明: List.mergeSort_nil
-
-@[simp]
-
-Depends on / 依赖: List.mergeSort_nil, mergeSort_nil
+/-
+**Multiset.sort_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：sort_zero : sort 0 r = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mergeSort_nil`：∀ {α : Type u_1} {r : α → α → Bool}, [].mergeSort r 
+= []
 -/
 theorem sort_zero : sort 0 r = [] :=
   List.mergeSort_nil
 
 @[simp]
-/--
-theorem `sort_singleton` / 定理 `sort_singleton`
-
-English:
-theorem sort_singleton
-  statement: sort {a} r = [a]
-  proof: List.mergeSort_singleton a
-
-中文:
-定理 sort_singleton
-  结论: sort {a} r = [a]
-  证明: List.mergeSort_singleton a
-
-Depends on / 依赖: List.mergeSort_singleton, mergeSort_singleton
+/-
+**Multiset.sort_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：sort_singleton : sort {a} r = [a]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mergeSort_singleton`：∀ {α : Type u_1} {r : α → α → Bool} (a : α), [
+a].mergeSort r = [a]
 -/
 theorem sort_singleton : sort {a} r = [a] :=
   List.mergeSort_singleton a
-
-/--
-theorem `map_sort` / 定理 `map_sort`
-
-English:
-theorem map_sort
-  given: (hs : forall a in s, forall b in s, r a b ↔ r' (f a) (f b))
-  proof: by
-  revert s
-  exact Quot.ind fun l h => map_mergeSort (l := l) (by simpa using h)
-
-中文:
-定理 map_sort
-  条件: (hs : 对任意 a in s, 对任意 b in s, r a b ↔ r' (f a) (f b))
-  证明: by
-  revert s
-  exact Quot.ind fun l h => map_mergeSort (l := l) (by simpa using h)
-
-Depends on / 依赖: Quot.ind, map_mergeSort, revert
+/-
+**Multiset.map_sort** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_sort (hs : forall a in s, forall b in s, r a b ↔ r' (f a) (f b)) : (s.
+sort r).map f = (s.map f).sort r'
+参数：hs : forall a in s, forall b in s, r a b ↔ r' (f a) (f b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.map_mergeSort`：∀ {α : Type u_2} {β : Type u_1} {r : α → α → Bool} {
+s : β → β → Bool} {f : α → β} {l : List α},   (∀ a ∈ l, ∀ b ∈ l, r a b = s (f a)
+ (f b)) …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem map_sort (hs : forall a in s, forall b in s, r a b ↔ r' (f a) (f b)) :
+theorem map_sort (hs : ∀ a ∈ s, ∀ b ∈ s, r a b ↔ r' (f a) (f b)) :
     (s.sort r).map f = (s.map f).sort r' := by
   revert s
   exact Quot.ind fun l h => map_mergeSort (l := l) (by simpa using h)
-
-/--
-theorem `sort_cons` / 定理 `sort_cons`
-
-English:
-theorem sort_cons
-  statement: (forall b in s, r a b) -> sort (a ::ₘ s) r = a :: sort s r
-  proof: by
-  refine Quot.inductionOn s fun l => ?_
-  simpa [mergeSort_eq_insertionSort] using insertionSort_cons_of_forall_rel r (a := a) (l := l)
-
-@[simp]
-
-中文:
-定理 sort_cons
-  结论: (对任意 b in s, r a b) -> sort (a ::ₘ s) r = a :: sort s r
-  证明: by
-  refine Quot.inductionOn s fun l => ?_
-  simpa [mergeSort_eq_insertionSort] using insertionSort_cons_of_forall_rel r (a := a) (l := l)
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn, insertionSort_cons_of_forall_rel, mergeSort_eq_insertionSort
+/-
+**Multiset.sort_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：sort_cons : (forall b in s, r a b) -> sort (a ::ₘ s) r = a :: sort s r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.mergeSort_eq_insertionSort`：mergeSort_eq_insertionSort (l : List α)
+ : mergeSort l (r · ·) = insertionSort r l
+· 使用定理 `List.insertionSort_cons`：∀ {α : Type u_1} (r : α → α → Prop) [inst : Dec
+idableRel r] (a : α) (l : List α),   List.insertionSort r (a :: l) = List.ordere
+dInsert r a (…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.insertionSort_cons_of_forall_rel`：insertionSort_cons_of_forall_rel 
+{a : α} {l : List α} (h : forall b in l, r a b) : insertionSort r (a :: l) = a :
+: insertionSort r l
 -/
-theorem sort_cons : (forall b in s, r a b) -> sort (a ::ₘ s) r = a :: sort s r := by
+theorem sort_cons : (∀ b ∈ s, r a b) → sort (a ::ₘ s) r = a :: sort s r := by
   refine Quot.inductionOn s fun l => ?_
   simpa [mergeSort_eq_insertionSort] using insertionSort_cons_of_forall_rel r (a := a) (l := l)
 
 @[simp]
-/--
-theorem `sort_range` / 定理 `sort_range`
-
-English:
-theorem sort_range
-  given: (n : Nat)
-  statement: sort (range n) = List.range n
-  proof: List.mergeSort_eq_self _ (sortedLT_range n).sortedLE.pairwise
-
-中文:
-定理 sort_range
-  条件: (n : 自然数)
-  结论: sort (range n) = 列表.range n
-  证明: List.mergeSort_eq_self _ (sortedLT_range n).sortedLE.pairwise
-
-Depends on / 依赖: List.mergeSort_eq_self, mergeSort_eq_self, pairwise, sortedLE, sortedLE.pairwise, sortedLT_range
+/-
+**Multiset.sort_range** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：sort_range (n : Nat) : sort (range n) = List.range n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mergeSort_eq_self`：mergeSort_eq_self {l : List α} : Pairwise r l ->
+ mergeSort l (r · ·) = l
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `List.SortedLE.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedLE → List.Pairwise (fun x1 x2 => x1 ≤ x2) l
+· 使用定理 `List.SortedLT.sortedLE`：∀ {α : Type u_1} [inst : Preorder α] {l : List α
+}, l.SortedLT → l.SortedLE
+· 使用定理 `List.sortedLT_range`：sortedLT_range (n : Nat) : (range n).SortedLT
 -/
-theorem sort_range (n : Nat) : sort (range n) = List.range n :=
+theorem sort_range (n : ℕ) : sort (range n) = List.range n :=
   List.mergeSort_eq_self _ (sortedLT_range n).sortedLE.pairwise
 
 end
@@ -244,47 +186,36 @@ end
 section
 
 variable {a : α} {s : Multiset α}
-variable (r : α -> α -> Prop) [DecidableRel r] [IsTrans α r] [Std.Antisymm r] [Std.Total r]
+variable (r : α → α → Prop) [DecidableRel r] [IsTrans α r] [Std.Antisymm r] [Std.Total r]
 
 @[simp]
-/--
-theorem `mem_sort` / 定理 `mem_sort`
-
-English:
-theorem mem_sort
-  statement: a in sort s r ↔ a in s
-  proof: by rw [← mem_coe, sort_eq]
-
-@[simp]
-
-中文:
-定理 mem_sort
-  结论: a in sort s r ↔ a in s
-  证明: by rw [← mem_coe, sort_eq]
-
-@[simp]
-
-Depends on / 依赖: mem_coe, sort_eq
+/-
+**Multiset.mem_sort** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_sort : a in sort s r ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.mem_coe`：mem_coe {a : α} {l : List α} : a in (l : Multiset α) ↔
+ a in l
+· 使用定理 `Multiset.sort_eq`：sort_eq : ↑(sort s r) = s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sort : a in sort s r ↔ a in s := by rw [← mem_coe, sort_eq]
+theorem mem_sort : a ∈ sort s r ↔ a ∈ s := by rw [← mem_coe, sort_eq]
 
 @[simp]
-/--
-theorem `length_sort` / 定理 `length_sort`
-
-English:
-theorem length_sort
-  statement: (sort s r).length = card s
-  proof: Quot.inductionOn s length_mergeSort
-
-中文:
-定理 length_sort
-  结论: (sort s r).length = card s
-  证明: Quot.inductionOn s length_mergeSort
-
-Depends on / 依赖: Quot.inductionOn, inductionOn, length_mergeSort
+/-
+**Multiset.length_sort** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：length_sort : (sort s r).length = card s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.length_mergeSort`：∀ {α : Type u_1} {le : α → α → Bool} (l : List α)
+, (l.mergeSort le).length = l.length
 -/
-theorem length_sort : (sort s r).length = card s := Quot.inductionOn s length_mergeSort
+theorem length_sort : (sort s r).length = card s := Quot.inductionOn s <| length_mergeSort
 
 end
 
@@ -304,6 +235,10 @@ meta unsafe instance {α : Type u} [Lean.ToLevel.{u}] [Lean.ToExpr α] :
         mkSetLiteralQ (α := q($α')) q(Multiset $α') (s.unquot.map Lean.toExpr)}
 
 -- TODO: use a sort order if available, gh-18166
+/-
+**Multiset.** 是 Mathlib 中的一个实例，位于命名空间 `Multiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 unsafe instance [Repr α] : Repr (Multiset α) where
   reprPrec s _ :=
     if Multiset.card s = 0 then
@@ -312,3 +247,4 @@ unsafe instance [Repr α] : Repr (Multiset α) where
       Std.Format.bracket "{" (Std.Format.joinSep (s.unquot.map repr) ("," ++ Std.Format.line)) "}"
 
 end Multiset
+

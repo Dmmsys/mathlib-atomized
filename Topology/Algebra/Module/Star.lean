@@ -18,7 +18,7 @@ public import Mathlib.Topology.Algebra.Star
 
 
 @[inherit_doc]
-notation:25 M " ->L⋆[" R "] " M₂ => ContinuousLinearMap (starRingEnd R) M M₂
+notation:25 M " →L⋆[" R "] " M₂ => ContinuousLinearMap (starRingEnd R) M M₂
 
 @[inherit_doc]
 notation:50 M " ≃L⋆[" R "] " M₂ => ContinuousLinearEquiv (starRingEnd R) M M₂
@@ -32,87 +32,67 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If `A` is a topological module over a commutative `R` with compatible actions,
 then `star` is a continuous semilinear equivalence. -/
 @[simps! apply]
-/--
-Definition of `starL` / `starL` 的定义
+/-
+**starL** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starL : A ≃L⋆[R] A where toLinearEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
 
-English:
-definition starL
-  signature: : A ≃L⋆[R] A where
-  body: starLinearEquiv R
-
-@[simp]
-
-中文:
-定义 starL
-  签名: : A ≃L⋆[R] A where
-  定义体: starLinearEquiv R
-
-@[simp]
-
-Depends on / 依赖: starLinearEquiv
+--- 原说明 ---
+If `A` is a topological module over a commutative `R` with compatible actions,
+then `star` is a continuous semilinear equivalence.
 -/
 def starL : A ≃L⋆[R] A where
   toLinearEquiv := starLinearEquiv R
 
 @[simp]
-/--
-theorem `toLinearEquiv_starL` / 定理 `toLinearEquiv_starL`
-
-English:
-theorem toLinearEquiv_starL
-  statement: (starL R : A ≃L⋆[R] A).toLinearEquiv = starLinearEquiv R
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearEquiv_starL
-  结论: (starL R : A ≃L⋆[R] A).toLinearEquiv = starLinearEquiv R
-  证明: rfl
-
-@[simp]
+/-
+**toLinearEquiv_starL** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toLinearEquiv_starL : (starL R : A ≃L⋆[R] A).toLinearEquiv = starLinearEqu
+iv R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
 -/
 theorem toLinearEquiv_starL : (starL R : A ≃L⋆[R] A).toLinearEquiv = starLinearEquiv R :=
   rfl
 
 @[simp]
-/--
-theorem `symm_starL` / 定理 `symm_starL`
-
-English:
-theorem symm_starL
-  statement: (starL R : A ≃L⋆[R] A).symm = starL R
-  proof: rfl
-
-@[deprecated "Use `symm_starL` and `starL_apply` instead" (since := "2026-06-03")]
-
-中文:
-定理 symm_starL
-  结论: (starL R : A ≃L⋆[R] A).symm = starL R
-  证明: rfl
-
-@[deprecated "Use `symm_starL` and `starL_apply` instead" (since := "2026-06-03")]
+/-
+**symm_starL** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：symm_starL : (starL R : A ≃L⋆[R] A).symm = starL R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
 -/
 theorem symm_starL : (starL R : A ≃L⋆[R] A).symm = starL R :=
   rfl
 
 @[deprecated "Use `symm_starL` and `starL_apply` instead" (since := "2026-06-03")]
-/--
-theorem `starL_symm_apply` / 定理 `starL_symm_apply`
-
-English:
-theorem starL_symm_apply
-  given: (x : A)
-  statement: (starL R).symm x = starAddEquiv.symm x
-  proof: by
-  simp
-
-中文:
-定理 starL_symm_apply
-  条件: (x : A)
-  结论: (starL R).symm x = starAddEquiv.symm x
-  证明: by
-  simp
+/-
+**starL_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：starL_symm_apply (x : A) : (starL R).symm x = starAddEquiv.symm x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `starL_apply`：∀ (R : Type u_1) {A : Type u_2} [inst : CommSemiring R] [in
+st_1 : StarRing R] [inst_2 : AddCommMonoid A]   [inst_3 : StarAddMonoid A] [inst
+_…
+· 使用定理 `starAddEquiv_apply`：∀ {R : Type u} [inst : AddMonoid R] [inst_1 : StarAd
+dMonoid R] (a : R), starAddEquiv a = star a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem starL_symm_apply (x : A) : (starL R).symm x = starAddEquiv.symm x := by
   simp
@@ -128,34 +108,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- If `A` is a topological module over a commutative `R` with trivial star and compatible actions,
 then `star` is a continuous linear equivalence. -/
 @[simps! apply]
-/--
-Definition of `starL'` / `starL'` 的定义
+/-
+**starL'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starL' : A ≃L[R] A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 
-English:
-definition starL'
-  signature: : A ≃L[R] A
-  body: (starL R : A ≃L⋆[R] A).trans
-    ({ AddEquiv.refl A with
-        map_smul' := fun r a => by simp
-        continuous_toFun := continuous_id
-        continuous_invFun := continuous_id } :
-      A ≃L⋆[R] A)
-
-@[simp]
-
-中文:
-定义 starL'
-  签名: : A ≃L[R] A
-  定义体: (starL R : A ≃L⋆[R] A).trans
-    ({ AddEquiv.refl A with
-        map_smul' := fun r a => by simp
-        continuous_toFun := continuous_id
-        continuous_invFun := continuous_id } :
-      A ≃L⋆[R] A)
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.refl, continuous_id, continuous_invFun, continuous_toFun, map_smul
+--- 原说明 ---
+If `A` is a topological module over a commutative `R` with trivial star and comp
+atible actions,
+then `star` is a continuous linear equivalence.
 -/
 def starL' : A ≃L[R] A :=
   (starL R : A ≃L⋆[R] A).trans
@@ -166,40 +131,38 @@ def starL' : A ≃L[R] A :=
       A ≃L⋆[R] A)
 
 @[simp]
-/--
-theorem `symm_starL'` / 定理 `symm_starL'`
-
-English:
-theorem symm_starL'
-  statement: (starL' R : A ≃L[R] A).symm = starL' R
-  proof: rfl
-
-中文:
-定理 symm_starL'
-  结论: (starL' R : A ≃L[R] A).symm = starL' R
-  证明: rfl
+/-
+**symm_starL'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：symm_starL' : (starL' R : A ≃L[R] A).symm = starL' R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_starL' : (starL' R : A ≃L[R] A).symm = starL' R :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[deprecated "Use `symm_starL'` and `starL'_apply` instead" (since := "2026-06-03")]
-/--
-theorem `starL'_symm_apply` / 定理 `starL'_symm_apply`
-
-English:
-theorem starL'_symm_apply
-  given: (x : A)
-  statement: (starL' R).symm x = starAddEquiv.symm x
-  proof: by
-  simp
-
-中文:
-定理 starL'_symm_apply
-  条件: (x : A)
-  结论: (starL' R).symm x = starAddEquiv.symm x
-  证明: by
-  simp
+/-
+**starL'_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (R : Type u_1) {A : Type u_2} [inst : CommSemiring R] [inst_1 : StarRing
+ R] [inst_2 : AddCommMonoid A]   [inst_3 : StarAddMonoid A] [inst_4 : _root_.Mod
+ule R A] [inst_5 : StarModule R A] [inst_6 : TopologicalSpace A]   [inst_7 : Con
+tinuousStar A] [inst_8 : TrivialStar R] (x : A), (starL' R).symm x = starAddEqui
+v.symm x
+参数：R : Type u_1；x : A；starL' R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `starL'_apply`：∀ (R : Type u_1) {A : Type u_2} [inst : CommSemiring R] [i
+nst_1 : StarRing R] [inst_2 : AddCommMonoid A]   [inst_3 : StarAddMonoid A] [ins
+t_…
+· 使用定理 `starAddEquiv_apply`：∀ {R : Type u} [inst : AddMonoid R] [inst_1 : StarAd
+dMonoid R] (a : R), starAddEquiv a = star a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem starL'_symm_apply (x : A) : (starL' R).symm x = starAddEquiv.symm x := by
   simp
@@ -210,88 +173,104 @@ variable (R : Type*) (A : Type*) [Semiring R] [StarMul R] [TrivialStar R] [AddCo
   [Module R A] [StarAddMonoid A] [StarModule R A] [Invertible (2 : R)] [TopologicalSpace A]
 
 @[fun_prop]
-/--
-theorem `continuous_selfAdjointPart` / 定理 `continuous_selfAdjointPart`
-
-English:
-theorem continuous_selfAdjointPart
-  given: [ContinuousAdd A] [ContinuousStar A] [ContinuousConstSMul R A]
-  proof: ((continuous_const_smul _).comp <| continuous_id.add continuous_star).subtype_mk _
-
-@[fun_prop]
-
-中文:
-定理 continuous_selfAdjointPart
-  条件: [连续加法 A] [余ntinuousStar A] [连续常数标量乘法 R A]
-  证明: ((continuous_const_smul _).comp <| continuous_id.add continuous_star).subtype_mk _
-
-@[fun_prop]
+/-
+**continuous_selfAdjointPart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_selfAdjointPart [ContinuousAdd A] [ContinuousStar A] [Continuou
+sConstSMul R A] : Continuous (selfAdjointPart R (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `ContinuousConstSMul.continuous_const_smul`：∀ {Γ : Type u_1} {T : Type u_
+2} {inst : TopologicalSpace T} {inst_1 : SMul Γ T} [self : ContinuousConstSMul Γ
+ T]   (γ : Γ), Continuous fun x…
+· 使用定理 `Continuous.add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst_1 : A
+dd M] [ContinuousAdd M] {X : Type u_2}   [inst_3 : TopologicalSpace X] {f g : X 
+→ M}…
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `ContinuousStar.continuous_star`：∀ {R : Type u_1} {inst : TopologicalSpac
+e R} {inst_1 : Star R} [self : ContinuousStar R], Continuous star
 -/
 theorem continuous_selfAdjointPart [ContinuousAdd A] [ContinuousStar A] [ContinuousConstSMul R A] :
     Continuous (selfAdjointPart R (A := A)) :=
   ((continuous_const_smul _).comp <| continuous_id.add continuous_star).subtype_mk _
 
 @[fun_prop]
-/--
-theorem `continuous_skewAdjointPart` / 定理 `continuous_skewAdjointPart`
-
-English:
-theorem continuous_skewAdjointPart
-  given: [ContinuousSub A] [ContinuousStar A] [ContinuousConstSMul R A]
-  proof: ((continuous_const_smul _).comp <| continuous_id.sub continuous_star).subtype_mk _
-
-@[fun_prop]
-
-中文:
-定理 continuous_skewAdjointPart
-  条件: [余ntinuousSub A] [余ntinuousStar A] [连续常数标量乘法 R A]
-  证明: ((continuous_const_smul _).comp <| continuous_id.sub continuous_star).subtype_mk _
-
-@[fun_prop]
+/-
+**continuous_skewAdjointPart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_skewAdjointPart [ContinuousSub A] [ContinuousStar A] [Continuou
+sConstSMul R A] : Continuous (skewAdjointPart R (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `ContinuousConstSMul.continuous_const_smul`：∀ {Γ : Type u_1} {T : Type u_
+2} {inst : TopologicalSpace T} {inst_1 : SMul Γ T} [self : ContinuousConstSMul Γ
+ T]   (γ : Γ), Continuous fun x…
+· 使用定理 `Continuous.sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalSpace
+ X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g : X 
+→ G}…
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `ContinuousStar.continuous_star`：∀ {R : Type u_1} {inst : TopologicalSpac
+e R} {inst_1 : Star R} [self : ContinuousStar R], Continuous star
 -/
 theorem continuous_skewAdjointPart [ContinuousSub A] [ContinuousStar A] [ContinuousConstSMul R A] :
     Continuous (skewAdjointPart R (A := A)) :=
   ((continuous_const_smul _).comp <| continuous_id.sub continuous_star).subtype_mk _
 
 @[fun_prop]
-/--
-theorem `continuous_decomposeProdAdjoint` / 定理 `continuous_decomposeProdAdjoint`
-
-English:
-theorem continuous_decomposeProdAdjoint
-  statement: [IsTopologicalAddGroup A] [ContinuousStar A]
-  proof: (continuous_selfAdjointPart R A).prodMk (continuous_skewAdjointPart R A)
-
-@[fun_prop]
-
-中文:
-定理 continuous_decomposeProdAdjoint
-  结论: [是拓扑加群 A] [余ntinuousStar A]
-  证明: (continuous_selfAdjointPart R A).prodMk (continuous_skewAdjointPart R A)
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_selfAdjointPart, continuous_skewAdjointPart, prodMk
+/-
+**continuous_decomposeProdAdjoint** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_decomposeProdAdjoint [IsTopologicalAddGroup A] [ContinuousStar 
+A] [ContinuousConstSMul R A] : Continuous (StarModule.decomposeProdAdjoint R A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Continuous.prodMk`：Continuous.prodMk {f : Z -> X} {g : Z -> Y} (hf : Con
+tinuous f) (hg : Continuous g) : Continuous fun x => (f x, g x)
+· 使用定理 `continuous_selfAdjointPart`：continuous_selfAdjointPart [ContinuousAdd A]
+ [ContinuousStar A] [ContinuousConstSMul R A] : Continuous (selfAdjointPart R (A
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `continuous_skewAdjointPart`：continuous_skewAdjointPart [ContinuousSub A]
+ [ContinuousStar A] [ContinuousConstSMul R A] : Continuous (skewAdjointPart R (A
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
 -/
 theorem continuous_decomposeProdAdjoint [IsTopologicalAddGroup A] [ContinuousStar A]
     [ContinuousConstSMul R A] : Continuous (StarModule.decomposeProdAdjoint R A) :=
   (continuous_selfAdjointPart R A).prodMk (continuous_skewAdjointPart R A)
 
 @[fun_prop]
-/--
-theorem `continuous_decomposeProdAdjoint_symm` / 定理 `continuous_decomposeProdAdjoint_symm`
-
-English:
-theorem continuous_decomposeProdAdjoint_symm
-  given: [ContinuousAdd A]
-  proof: (continuous_subtype_val.comp continuous_fst).add (continuous_subtype_val.comp continuous_snd)
-
-中文:
-定理 continuous_decomposeProdAdjoint_symm
-  条件: [连续加法 A]
-  证明: (continuous_subtype_val.comp continuous_fst).add (continuous_subtype_val.comp continuous_snd)
-
-Depends on / 依赖: continuous_fst, continuous_snd, continuous_subtype_val, continuous_subtype_val.comp
+/-
+**continuous_decomposeProdAdjoint_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_decomposeProdAdjoint_symm [ContinuousAdd A] : Continuous (StarM
+odule.decomposeProdAdjoint R A).symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Continuous.add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst_1 : A
+dd M] [ContinuousAdd M] {X : Type u_2}   [inst_3 : TopologicalSpace X] {f g : X 
+→ M}…
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
 -/
 theorem continuous_decomposeProdAdjoint_symm [ContinuousAdd A] :
     Continuous (StarModule.decomposeProdAdjoint R A).symm :=
@@ -299,48 +278,36 @@ theorem continuous_decomposeProdAdjoint_symm [ContinuousAdd A] :
 
 /-- The self-adjoint part of an element of a star module, as a continuous linear map. -/
 @[simps! -isSimp]
-/--
-Definition of `selfAdjointPartL` / `selfAdjointPartL` 的定义
+/-
+**selfAdjointPartL** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：selfAdjointPartL [ContinuousAdd A] [ContinuousStar A] [ContinuousConstSMul
+ R A] : A ->L[R] selfAdjoint A where toLinearMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition selfAdjointPartL
-  signature: [ContinuousAdd A] [ContinuousStar A] [ContinuousConstSMul R A]
-  body: selfAdjointPart R
-
-中文:
-定义 selfAdjointPartL
-  签名: [连续加法 A] [余ntinuousStar A] [连续常数标量乘法 R A]
-  定义体: selfAdjointPart R
-
-Depends on / 依赖: selfAdjointPart
+--- 原说明 ---
+The self-adjoint part of an element of a star module, as a continuous linear map
+.
 -/
 def selfAdjointPartL [ContinuousAdd A] [ContinuousStar A] [ContinuousConstSMul R A] :
-    A ->L[R] selfAdjoint A where
+    A →L[R] selfAdjoint A where
   toLinearMap := selfAdjointPart R
 
 /-- The skew-adjoint part of an element of a star module, as a continuous linear map. -/
 @[simps!]
-/--
-Definition of `skewAdjointPartL` / `skewAdjointPartL` 的定义
+/-
+**skewAdjointPartL** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：skewAdjointPartL [ContinuousSub A] [ContinuousStar A] [ContinuousConstSMul
+ R A] : A ->L[R] skewAdjoint A where toLinearMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition skewAdjointPartL
-  signature: [ContinuousSub A] [ContinuousStar A] [ContinuousConstSMul R A]
-  body: skewAdjointPart R
-
-#adaptation_note
-
-中文:
-定义 skewAdjointPartL
-  签名: [余ntinuousSub A] [余ntinuousStar A] [连续常数标量乘法 R A]
-  定义体: skewAdjointPart R
-
-#adaptation_note
-
-Depends on / 依赖: skewAdjointPart
+--- 原说明 ---
+The skew-adjoint part of an element of a star module, as a continuous linear map
+.
 -/
 def skewAdjointPartL [ContinuousSub A] [ContinuousStar A] [ContinuousConstSMul R A] :
-    A ->L[R] skewAdjoint A where
+    A →L[R] skewAdjoint A where
   toLinearMap := skewAdjointPart R
 
 #adaptation_note
@@ -349,20 +316,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The decomposition of elements of a star module into their self- and skew-adjoint parts,
 as a continuous linear equivalence. -/
 @[simps!]
-/--
-Definition of `StarModule.decomposeProdAdjointL` / `StarModule.decomposeProdAdjointL` 的定义
+/-
+**StarModule.decomposeProdAdjointL** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：StarModule.decomposeProdAdjointL [IsTopologicalAddGroup A] [ContinuousStar
+ A] [ContinuousConstSMul R A] : A ≃L[R] selfAdjoint A × skewAdjoint A where toLi
+nearEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StarModule.decomposeProdAdjointL
-  signature: [IsTopologicalAddGroup A] [ContinuousStar A]
-  body: StarModule.decomposeProdAdjoint R A
-
-中文:
-定义 对合模.decomposeProdAdjointL
-  签名: [是拓扑加群 A] [余ntinuousStar A]
-  定义体: StarModule.decomposeProdAdjoint R A
-
-Depends on / 依赖: StarModule, StarModule.decomposeProdAdjoint, decomposeProdAdjoint
+--- 原说明 ---
+The decomposition of elements of a star module into their self- and skew-adjoint
+ parts,
+as a continuous linear equivalence.
 -/
 def StarModule.decomposeProdAdjointL [IsTopologicalAddGroup A] [ContinuousStar A]
     [ContinuousConstSMul R A] : A ≃L[R] selfAdjoint A × skewAdjoint A where

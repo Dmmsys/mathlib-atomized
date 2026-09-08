@@ -44,30 +44,17 @@ namespace Mathlib.Tactic.DeprecateTo
 
 open Lean Elab Term Command
 
-/--
-Definition of `mkDeprecationStx` / `mkDeprecationStx` 的定义
+/-- Produce the syntax for the command `@[deprecated (since := "YYYY-MM-DD")] alias n := id`. -/
+/-
+**Mathlib.Tactic.DeprecateTo.mkDeprecationStx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.DeprecateTo`。
+形式化陈述：mkDeprecationStx (id : TSyntax `ident) (n : Name) (dat : Option String
+参数：id : TSyntax `ident；n : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkDeprecationStx
-  signature: (id : TSyntax `ident) (n : Name) (dat : Option String := none)
-  body: do
-  let dat ← match dat with
-    | none => do
-      pure s!"{← Std.Time.PlainDate.now}"
-    | some s => pure s
-  let nd := mkNode `str #[mkAtom ("\"" ++ dat.trimAsciiEnd ++ "\"")]
-  `(command| @[deprecated (since := $nd)] alias $(mkIdent n) := $id)
-
-中文:
-定义 mkDeprecationStx
-  签名: (id : TSyntax `ident) (n : Name) (dat : 选项类型 String := none)
-  定义体: do
-  let dat ← match dat with
-    | none => do
-      pure s!"{← Std.Time.PlainDate.now}"
-    | some s => pure s
-  let nd := mkNode `str #[mkAtom ("\"" ++ dat.trimAsciiEnd ++ "\"")]
-  `(command| @[deprecated (since := $nd)] alias $(mkIdent n) := $id)
+--- 原说明 ---
+Produce the syntax for the command `@[deprecated (since := "YYYY-MM-DD")] alias 
+n := id`.
 -/
 def mkDeprecationStx (id : TSyntax `ident) (n : Name) (dat : Option String := none) :
     CommandElabM (TSyntax `command) := do
@@ -78,51 +65,52 @@ def mkDeprecationStx (id : TSyntax `ident) (n : Name) (dat : Option String := no
   let nd := mkNode `str #[mkAtom ("\"" ++ dat.trimAsciiEnd ++ "\"")]
   `(command| @[deprecated (since := $nd)] alias $(mkIdent n) := $id)
 
-/--
-Definition of `newNames` / `newNames` 的定义
+/-- Returns the array of names that are in `new` but not in `old`. -/
+/-
+**Mathlib.Tactic.DeprecateTo.newNames** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+DeprecateTo`。
+形式化陈述：newNames (old new : Environment) : Array Name
+参数：old new : Environment。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition newNames
-  signature: (old new : Environment)
-  body: Id.run do
-  let mut diffs := #[]
-  for (c, _) in new.constants.map₂.toList do
-    unless old.constants.map₂.contains c do
-      diffs := diffs.push c
-pure diffs.qsort (·.toString < ·.toString)
-
-中文:
-定义 newNames
-  签名: (old new : Environment)
-  定义体: Id.run do
-  let mut diffs := #[]
-  for (c, _) in new.constants.map₂.toList do
-    unless old.constants.map₂.contains c do
-      diffs := diffs.push c
-pure diffs.qsort (·.toString < ·.toString)
-
-Depends on / 依赖: Id.run
+--- 原说明 ---
+Returns the array of names that are in `new` but not in `old`.
 -/
 def newNames (old new : Environment) : Array Name := Id.run do
   let mut diffs := #[]
   for (c, _) in new.constants.map₂.toList do
     unless old.constants.map₂.contains c do
       diffs := diffs.push c
-pure diffs.qsort (·.toString < ·.toString)
+  pure <| diffs.qsort (·.toString < ·.toString)
 
 variable (newName : TSyntax `ident) in
 /--
-Definition of `renameTheorem` / `renameTheorem` 的定义
+If the input command is a `theorem` or a `lemma`, then it replaces the name of the
+resulting declaration with `newName` and it returns the old declaration name and the
+command with the new name.
 
-English:
-definition renameTheorem
-  signature: : TSyntax `command -> TSyntax `Lean.Parser.Command.declId × TSyntax `command
-
-中文:
-定义 renameTheorem
-  签名: : TSyntax `command -> TSyntax `Lean.Parser.Command.declId × TSyntax `command
+If the input command is neither a `theorem` nor a `lemma`, then it returns
+`.missing` and the unchanged command.
 -/
-def renameTheorem : TSyntax `command -> TSyntax `Lean.Parser.Command.declId × TSyntax `command
+/-
+**Mathlib.Tactic.DeprecateTo.renameTheorem** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.DeprecateTo`。
+形式化陈述：TSyntax `ident → TSyntax `command → TSyntax `Lean.Parser.Command.declId × 
+TSyntax `command
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If the input command is a `theorem` or a `lemma`, then it replaces the name of t
+he
+resulting declaration with `newName` and it returns the old declaration name and
+ the
+command with the new name.
+
+If the input command is neither a `theorem` nor a `lemma`, then it returns
+`.missing` and the unchanged command.
+-/
+def renameTheorem : TSyntax `command → TSyntax `Lean.Parser.Command.declId × TSyntax `command
   | `(command| $dm:declModifiers theorem $id:declId $d:declSig $v:declVal) => Unhygienic.run do
     return (id, ← `($dm:declModifiers theorem $newName:declId $d:declSig $v:declVal))
   | `(command| $dm:declModifiers lemma $id:declId $d:declSig $v:declVal) => Unhygienic.run do
@@ -171,7 +159,7 @@ elab tk:"deprecate" "to" id:ident* dat:(ppSpace str ppSpace)? ppLine cmd:command
     let newEnv ← getEnv
     let allNew := newNames oldEnv newEnv
     let skip ← allNew.filterM (·.isBlackListed)
-    let mut news := allNew.filter (! · in skip)
+    let mut news := allNew.filter (! · ∈ skip)
     let mut warn := #[]
     if id.size < news.size then
       warn := warn.push s!"Un-deprecated declarations: {news.toList.drop id.size}"
@@ -204,3 +192,4 @@ elab tk:"deprecate" "to" id:ident* dat:(ppSpace str ppSpace)? ppLine cmd:command
         toMessageData
 
 end Mathlib.Tactic.DeprecateTo
+

@@ -44,24 +44,27 @@ local notation3 "F" => FractionRing T
 
 section
 
-/--
-theorem `algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul` / 定理 `algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul`
-
-English:
-theorem algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
-  statement: {A : Type*} (B : Type*)
-  proof: map_le_nonZeroDivisors_of_injective _ (FaithfulSMul.algebraMap_injective A B) hS
-
-中文:
-定理 algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
-  结论: {A : 类型} (B : 类型)
-  证明: map_le_nonZeroDivisors_of_injective _ (FaithfulSMul.algebraMap_injective A B) hS
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, map_le_nonZeroDivisors_of_injective
+/-
+**algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul {A : Type*} (B : Ty
+pe*) [CommSemiring A] [CommSemiring B] [Algebra A B] [NoZeroDivisors B] [Faithfu
+lSMul A B] {S : Submonoid A} (hS : S <= A⁰) : algebraMapSubmonoid B S <= B⁰
+参数：B : Type*；hS : S <= A⁰。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_le_nonZeroDivisors_of_injective`：map_le_nonZeroDivisors_of_injective
+ [NoZeroDivisors M₀'] [MonoidWithZeroHomClass F M₀ M₀'] (f : F) (hf : Injective 
+f) {S : Submonoid M₀} (hS…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
 -/
 theorem algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul {A : Type*} (B : Type*)
     [CommSemiring A] [CommSemiring B] [Algebra A B] [NoZeroDivisors B] [FaithfulSMul A B]
-    {S : Submonoid A} (hS : S <= A⁰) : algebraMapSubmonoid B S <= B⁰ :=
+    {S : Submonoid A} (hS : S ≤ A⁰) : algebraMapSubmonoid B S ≤ B⁰ :=
   map_le_nonZeroDivisors_of_injective _ (FaithfulSMul.algebraMap_injective A B) hS
 
 variable (Rₘ Sₘ : Type*) [CommRing Rₘ] [CommRing Sₘ] [Algebra R Rₘ] [IsTorsionFree R S]
@@ -73,68 +76,74 @@ variable (Rₘ Sₘ : Type*) [CommRing Rₘ] [CommRing Sₘ] [Algebra R Rₘ] [I
 
 set_option backward.isDefEq.respectTransparency false in
 include R S in
-/--
-theorem `FractionRing.isSeparable_of_isLocalization` / 定理 `FractionRing.isSeparable_of_isLocalization`
-
-English:
-theorem FractionRing.isSeparable_of_isLocalization
-  given: (hM : M <= R⁰)
-  proof: by
-  let M' := algebraMapSubmonoid S M
-  have hM' : algebraMapSubmonoid S M <= S⁰ := algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
-    _ hM
-  let f₁ : Rₘ ->+* K := map _ (T := R⁰) (RingHom.id R) hM
-  let f₂ : Sₘ ->+* L := map _ (T := S⁰) (RingHom.id S) hM'
-  algebraize [f₁, f₂]
-  have := localization_isScalarTower_of_submonoid_le Rₘ K _ _ hM
-  have := localization_isScalarTower_of_submonoid_le Sₘ L _ _ hM'
-  have := isFractionRing_of_isDomain_of_isLocalization M Rₘ K
-  have := isFractionRing_of_isDomain_of_isLocalization M' Sₘ L
-  have : IsDomain Rₘ := isDomain_of_le_nonZeroDivisors _ hM
-  apply Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv Rₘ K).symm.toRingEquiv
-    (FractionRing.algEquiv Sₘ L).symm.toRingEquiv
-  apply ringHom_ext R⁰
-  ext
-  simp only [RingHom.coe_comp,
-      RingHom.coe_coe, Function.comp_apply, ← algebraMap_apply]
-  rw [algebraMap_apply R Rₘ (FractionRing R)]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]; rw [algebraMap_apply R S L]; rw [algebraMap_apply S Sₘ L]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]
-  simp only [← algebraMap_apply]
-  rw [algebraMap_apply R Rₘ (FractionRing Rₘ)]; rw [← algebraMap_apply Rₘ]; rw [← algebraMap_apply]
-
-中文:
-定理 FractionRing.isSeparable_of_isLocalization
-  条件: (hM : M <= R⁰)
-  证明: by
-  let M' := algebraMapSubmonoid S M
-  have hM' : algebraMapSubmonoid S M <= S⁰ := algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
-    _ hM
-  let f₁ : Rₘ ->+* K := map _ (T := R⁰) (RingHom.id R) hM
-  let f₂ : Sₘ ->+* L := map _ (T := S⁰) (RingHom.id S) hM'
-  algebraize [f₁, f₂]
-  have := localization_isScalarTower_of_submonoid_le Rₘ K _ _ hM
-  have := localization_isScalarTower_of_submonoid_le Sₘ L _ _ hM'
-  have := isFractionRing_of_isDomain_of_isLocalization M Rₘ K
-  have := isFractionRing_of_isDomain_of_isLocalization M' Sₘ L
-  have : IsDomain Rₘ := isDomain_of_le_nonZeroDivisors _ hM
-  apply Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv Rₘ K).symm.toRingEquiv
-    (FractionRing.algEquiv Sₘ L).symm.toRingEquiv
-  apply ringHom_ext R⁰
-  ext
-  simp only [RingHom.coe_comp,
-      RingHom.coe_coe, Function.comp_apply, ← algebraMap_apply]
-  rw [algebraMap_apply R Rₘ (FractionRing R)]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]; rw [algebraMap_apply R S L]; rw [algebraMap_apply S Sₘ L]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]
-  simp only [← algebraMap_apply]
-  rw [algebraMap_apply R Rₘ (FractionRing Rₘ)]; rw [← algebraMap_apply Rₘ]; rw [← algebraMap_apply]
-
-Depends on / 依赖: RingHom, RingHom.id, algebraMapSubmonoid, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, algebraize, isFractionRing_of_isDomain_of_i, isFractionRing_of_isDomain_of_isLocalization, localization_isScalarTower_of_submonoid_le
+/-
+**FractionRing.isSeparable_of_isLocalization** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FractionRing.isSeparable_of_isLocalization (hM : M <= R⁰) : Algebra.IsSepa
+rable (FractionRing Rₘ) (FractionRing Sₘ)
+参数：hM : M <= R⁰。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (A :
+ Type u_4) [inst_1 : CommRing A] [inst_2 : Algebra R A] [FaithfulSMul R A],   Fa
+ithfulSMul R (Fract…
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul`：algebraMapSubmon
+oid_le_nonZeroDivisors_of_faithfulSMul {A : Type*} (B : Type*) [CommSemiring A] 
+[CommSemiring B] [Algebra A B] [NoZeroDiviso…
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `IsLocalization.localization_isScalarTower_of_submonoid_le`：localization_
+isScalarTower_of_submonoid_le (M N : Submonoid R) (h : M <= N) [IsLocalization M
+ S] [IsLocalization N T] : @IsScalarTower R S T…
+· 使用定理 `IsFractionRing.isFractionRing_of_isDomain_of_isLocalization`：isFractionR
+ing_of_isDomain_of_isLocalization [IsDomain R] (S T : Type*) [CommRing S] [CommR
+ing T] [Algebra R S] [Algebra R T] [Algebra S T] …
+· 使用定理 `IsLocalization.isDomain_of_le_nonZeroDivisors`：isDomain_of_le_nonZeroDiv
+isors (hM : M <= nonZeroDivisors R) : IsDomain S where __ : IsCancelMulZero S
+· 使用引理 `Algebra.IsSeparable.of_equiv_equiv`：Algebra.IsSeparable.of_equiv_equiv [
+Algebra.IsSeparable A₁ B₁] : Algebra.IsSeparable A₂ B₂
+· 使用定理 `IsLocalization.ringHom_ext`：ringHom_ext {P : Type*} [Semiring P] ⦃j k : 
+S ->+* P⦄ (h : j.comp (algebraMap R S) = k.comp (algebraMap R S)) : j = k
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FractionRing.instIsScalarTower`：∀ (R : Type u_1) [inst : CommRing R] (K 
+: Type u_5) [inst_1 : Field K] [inst_2 : Algebra R K]   [inst_3 : FaithfulSMul R
+ K] {R₀ : Type u_6} …
+· 使用定理 `OreLocalization.instIsScalarTower`：∀ {R : Type u_1} {R' : Type u_2} {M :
+ Type u_3} {X : Type u_4} [inst : Monoid M] {S : Submonoid M}   [inst_1 : OreLoc
+alization.OreSet S] [in…
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
+· 使用定理 `AlgEquiv.coe_ringEquiv`：coe_ringEquiv : ((e : A₁ ≃+* A₂) : A₁ -> A₂) = e
+· 使用定理 `AlgEquiv.commutes`：commutes : forall r : R, e (algebraMap R A₁ r) = alge
+braMap R A₂ r
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem FractionRing.isSeparable_of_isLocalization (hM : M <= R⁰) :
+theorem FractionRing.isSeparable_of_isLocalization (hM : M ≤ R⁰) :
     Algebra.IsSeparable (FractionRing Rₘ) (FractionRing Sₘ) := by
   let M' := algebraMapSubmonoid S M
-  have hM' : algebraMapSubmonoid S M <= S⁰ := algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
+  have hM' : algebraMapSubmonoid S M ≤ S⁰ := algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
     _ hM
-  let f₁ : Rₘ ->+* K := map _ (T := R⁰) (RingHom.id R) hM
-  let f₂ : Sₘ ->+* L := map _ (T := S⁰) (RingHom.id S) hM'
+  let f₁ : Rₘ →+* K := map _ (T := R⁰) (RingHom.id R) hM
+  let f₂ : Sₘ →+* L := map _ (T := S⁰) (RingHom.id S) hM'
   algebraize [f₁, f₂]
   have := localization_isScalarTower_of_submonoid_le Rₘ K _ _ hM
   have := localization_isScalarTower_of_submonoid_le Sₘ L _ _ hM'
@@ -147,9 +156,10 @@ theorem FractionRing.isSeparable_of_isLocalization (hM : M <= R⁰) :
   ext
   simp only [RingHom.coe_comp,
       RingHom.coe_coe, Function.comp_apply, ← algebraMap_apply]
-  rw [algebraMap_apply R Rₘ (FractionRing R)]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]; rw [algebraMap_apply R S L]; rw [algebraMap_apply S Sₘ L]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]
+  rw [algebraMap_apply R Rₘ (FractionRing R), AlgEquiv.coe_ringEquiv, AlgEquiv.commutes,
+    algebraMap_apply R S L, algebraMap_apply S Sₘ L, AlgEquiv.coe_ringEquiv, AlgEquiv.commutes]
   simp only [← algebraMap_apply]
-  rw [algebraMap_apply R Rₘ (FractionRing Rₘ)]; rw [← algebraMap_apply Rₘ]; rw [← algebraMap_apply]
+  rw [algebraMap_apply R Rₘ (FractionRing Rₘ), ← algebraMap_apply Rₘ, ← algebraMap_apply]
 
 end
 
@@ -161,73 +171,35 @@ local notation3 "Sₚ" => Localization P'
 
 variable [FaithfulSMul R S]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTorsionFree S Sₚ
-  body: by
-  rw [isTorsionFree_iff_algebraMap_injective]; rw [injective_iff_isRegular (algebraMapSubmonoid S P.primeCompl)]
-exact fun ⟨x, hx⟩ => isRegular_iff_ne_zero'.mpr
-ne_of_mem_of_not_mem hx by simp [Algebra.algebraMapSubmonoid]
-
-中文:
-实例 :
-  签名: 是无挠 S Sₚ
-  定义体: by
-  rw [isTorsionFree_iff_algebraMap_injective]; rw [injective_iff_isRegular (algebraMapSubmonoid S P.primeCompl)]
-exact fun ⟨x, hx⟩ => isRegular_iff_ne_zero'.mpr
-ne_of_mem_of_not_mem hx by simp [Algebra.algebraMapSubmonoid]
-
-Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, P.primeCompl, algebraMapSubmonoid, injective_iff_isRegular, isRegular_iff_ne_zero, isTorsionFree_iff_algebraMap_injective, ne_of_mem_of_not_mem, primeCompl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTorsionFree S Sₚ := by
-  rw [isTorsionFree_iff_algebraMap_injective]; rw [injective_iff_isRegular (algebraMapSubmonoid S P.primeCompl)]
-exact fun ⟨x, hx⟩ => isRegular_iff_ne_zero'.mpr
-ne_of_mem_of_not_mem hx by simp [Algebra.algebraMapSubmonoid]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTorsionFree R Sₚ
-  body: by
-  have := IsLocalization.AtPrime.faithfulSMul Rₚ R P
-  exact IsTorsionFree.trans_faithfulSMul R Rₚ _
-
-中文:
-实例 :
-  签名: 是无挠 R Sₚ
-  定义体: by
-  have := IsLocalization.AtPrime.faithfulSMul Rₚ R P
-  exact IsTorsionFree.trans_faithfulSMul R Rₚ _
-
-Depends on / 依赖: AtPrime, IsLocalization, IsLocalization.AtPrime.faithfulSMul, IsTorsionFree, IsTorsionFree.trans_faithfulSMul, faithfulSMul, trans_faithfulSMul
+  rw [isTorsionFree_iff_algebraMap_injective,
+    injective_iff_isRegular (algebraMapSubmonoid S P.primeCompl)]
+  exact fun ⟨x, hx⟩ ↦ isRegular_iff_ne_zero'.mpr <|
+    ne_of_mem_of_not_mem hx <| by simp [Algebra.algebraMapSubmonoid]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTorsionFree R Sₚ := by
   have := IsLocalization.AtPrime.faithfulSMul Rₚ R P
   exact IsTorsionFree.trans_faithfulSMul R Rₚ _
 
 /--
-Definition of `Localization.AtPrime.liftAlgebra` / `Localization.AtPrime.liftAlgebra` 的定义
+This is not an instance because it creates a diamond with `OreLocalization.instAlgebra`.
+-/
+/-
+**Localization.AtPrime.liftAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Localization.AtPrime.liftAlgebra : Algebra Sₚ L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Localization.AtPrime.liftAlgebra
-  signature: : Algebra Sₚ L
-  body: (map _ (T := S⁰) (RingHom.id S)
-    (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
-      P.primeCompl_le_nonZeroDivisors)).toAlgebra
-
-中文:
-缩写 Localization.AtPrime.liftAlgebra
-  签名: : 代数 Sₚ L
-  定义体: (map _ (T := S⁰) (RingHom.id S)
-    (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
-      P.primeCompl_le_nonZeroDivisors)).toAlgebra
-
-Depends on / 依赖: P.primeCompl_le_nonZeroDivisors, RingHom, RingHom.id, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, primeCompl_le_nonZeroDivisors, toAlgebra
+--- 原说明 ---
+This is not an instance because it creates a diamond with `OreLocalization.instA
+lgebra`.
 -/
 noncomputable abbrev Localization.AtPrime.liftAlgebra : Algebra Sₚ L :=
   (map _ (T := S⁰) (RingHom.id S)
@@ -235,222 +207,85 @@ noncomputable abbrev Localization.AtPrime.liftAlgebra : Algebra Sₚ L :=
       P.primeCompl_le_nonZeroDivisors)).toAlgebra
 
 attribute [local instance] Localization.AtPrime.liftAlgebra
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower S Sₚ L
-  body: localization_isScalarTower_of_submonoid_le _ _ _ _
-    (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
-      P.primeCompl_le_nonZeroDivisors)
-
-中文:
-实例 :
-  签名: 标量塔 S Sₚ L
-  定义体: localization_isScalarTower_of_submonoid_le _ _ _ _
-    (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
-      P.primeCompl_le_nonZeroDivisors)
-
-Depends on / 依赖: P.primeCompl_le_nonZeroDivisors, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, localization_isScalarTower_of_submonoid_le, primeCompl_le_nonZeroDivisors
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower S Sₚ L :=
   localization_isScalarTower_of_submonoid_le _ _ _ _
     (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
       P.primeCompl_le_nonZeroDivisors)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsFractionRing Rₚ K
-  body: isFractionRing_of_isDomain_of_isLocalization P.primeCompl _ _
-
-中文:
-实例 :
-  签名: IsFractionRing Rₚ K
-  定义体: isFractionRing_of_isDomain_of_isLocalization P.primeCompl _ _
-
-Depends on / 依赖: P.primeCompl, isFractionRing_of_isDomain_of_isLocalization, primeCompl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsFractionRing Rₚ K :=
   isFractionRing_of_isDomain_of_isLocalization P.primeCompl _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsFractionRing Sₚ L
-  body: isFractionRing_of_isDomain_of_isLocalization P' _ _
-
-中文:
-实例 :
-  签名: IsFractionRing Sₚ L
-  定义体: isFractionRing_of_isDomain_of_isLocalization P' _ _
-
-Depends on / 依赖: isFractionRing_of_isDomain_of_isLocalization
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsFractionRing Sₚ L :=
   isFractionRing_of_isDomain_of_isLocalization P' _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra Rₚ L
-  body: (lift (M := P.primeCompl) (g := algebraMap R L) <|
-fun ⟨x, hx⟩ => by simpa using fun h => hx by simp [h]).toAlgebra
-
-中文:
-实例 :
-  签名: 代数 Rₚ L
-  定义体: (lift (M := P.primeCompl) (g := algebraMap R L) <|
-fun ⟨x, hx⟩ => by simpa using fun h => hx by simp [h]).toAlgebra
-
-Depends on / 依赖: P.primeCompl, algebraMap, primeCompl, toAlgebra
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Algebra Rₚ L :=
   (lift (M := P.primeCompl) (g := algebraMap R L) <|
-fun ⟨x, hx⟩ => by simpa using fun h => hx by simp [h]).toAlgebra
+    fun ⟨x, hx⟩ ↦ by simpa using fun h ↦ hx <| by simp [h]).toAlgebra
 
 -- Make sure there are no diamonds in the case `R = S`.
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : instAlgebraLocalizationAtPrime P = instAlgebraAtPrimeFractionRing (S := R) := by
   with_reducible_and_instances rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower Rₚ K L
-  body: of_algebraMap_eq' (ringHom_ext P.primeCompl
-    (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra]))
-
-中文:
-实例 :
-  签名: 标量塔 Rₚ K L
-  定义体: of_algebraMap_eq' (ringHom_ext P.primeCompl
-    (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra]))
-
-Depends on / 依赖: P.primeCompl, RingHom, RingHom.algebraMap_toAlgebra, RingHom.ext, algebraMap_toAlgebra, of_algebraMap_eq, primeCompl, ringHom_ext
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower Rₚ K L :=
   of_algebraMap_eq' (ringHom_ext P.primeCompl
-    (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra]))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower R Rₚ K
-  body: of_algebraMap_eq' (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra])
-
-中文:
-实例 :
-  签名: 标量塔 R Rₚ K
-  定义体: of_algebraMap_eq' (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra])
-
-Depends on / 依赖: RingHom, RingHom.algebraMap_toAlgebra, RingHom.ext, algebraMap_toAlgebra, of_algebraMap_eq
+    (RingHom.ext fun x ↦ by simp [RingHom.algebraMap_toAlgebra]))
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower R Rₚ K :=
-  of_algebraMap_eq' (RingHom.ext fun x => by simp [RingHom.algebraMap_toAlgebra])
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower Rₚ Sₚ L
-  body: by
-refine IsScalarTower.of_algebraMap_eq' IsLocalization.ringHom_ext P.primeCompl ?_
-  rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq Rₚ K L]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
-
-中文:
-实例 :
-  签名: 标量塔 Rₚ Sₚ L
-  定义体: by
-refine IsScalarTower.of_algebraMap_eq' IsLocalization.ringHom_ext P.primeCompl ?_
-  rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq Rₚ K L]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
-
-Depends on / 依赖: IsLocalization, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, P.primeCompl, RingHom, RingHom.comp_assoc, algebraMap_eq, comp_assoc, of_algebraMap_eq, primeCompl, ringHom_ext
+  of_algebraMap_eq' (RingHom.ext fun x ↦ by simp [RingHom.algebraMap_toAlgebra])
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower Rₚ Sₚ L := by
-refine IsScalarTower.of_algebraMap_eq' IsLocalization.ringHom_ext P.primeCompl ?_
-  rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq Rₚ K L]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  refine IsScalarTower.of_algebraMap_eq' <| IsLocalization.ringHom_ext P.primeCompl ?_
+  rw [RingHom.comp_assoc, ← IsScalarTower.algebraMap_eq R Rₚ Sₚ, IsScalarTower.algebraMap_eq R S Sₚ,
+    ← RingHom.comp_assoc, ← IsScalarTower.algebraMap_eq S Sₚ L, IsScalarTower.algebraMap_eq Rₚ K L,
+    RingHom.comp_assoc, ← IsScalarTower.algebraMap_eq, ← IsScalarTower.algebraMap_eq,
+    ← IsScalarTower.algebraMap_eq]
 
 set_option linter.overlappingInstances false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsDedekindDomain
-  signature: S] : IsDedekindDomain Sₚ
-  body: isDedekindDomain S
-    (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ P.primeCompl_le_nonZeroDivisors) _
-
-中文:
-实例 [是Dedekind整环
-  签名: S] : 是Dedekind整环 Sₚ
-  定义体: isDedekindDomain S
-    (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ P.primeCompl_le_nonZeroDivisors) _
-
-Depends on / 依赖: P.primeCompl_le_nonZeroDivisors, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, isDedekindDomain, primeCompl_le_nonZeroDivisors
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsDedekindDomain S] : IsDedekindDomain Sₚ :=
   isDedekindDomain S
     (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ P.primeCompl_le_nonZeroDivisors) _
 
 set_option linter.overlappingInstances false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsDedekindDomain
-  signature: R] [IsDedekindDomain S] [Module.Finite R S] [hP
-  body: IsDedekindDomain.isPrincipalIdealRing_localization_over_prime S P (fun h => hP.1 h)
-
-中文:
-实例 [是Dedekind整环
-  签名: R] [是Dedekind整环 S] [模.有限 R S] [hP
-  定义体: IsDedekindDomain.isPrincipalIdealRing_localization_over_prime S P (fun h => hP.1 h)
-
-Depends on / 依赖: IsDedekindDomain, IsDedekindDomain.isPrincipalIdealRing_localization_over_prime, isPrincipalIdealRing_localization_over_prime
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsDedekindDomain R] [IsDedekindDomain S] [Module.Finite R S] [hP : NeZero P] :
     IsPrincipalIdealRing Sₚ :=
-  IsDedekindDomain.isPrincipalIdealRing_localization_over_prime S P (fun h => hP.1 h)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Algebra.IsSeparable
-  signature: K L] :
-  body: OreLocalization.instAlgebra
-    Algebra.IsSeparable (FractionRing Rₚ) (FractionRing Sₚ) :=
-  let _ : Algebra Rₚ (FractionRing Sₚ) := OreLocalization.instAlgebra
-  FractionRing.isSeparable_of_isLocalization S _ _ P.primeCompl_le_nonZeroDivisors
-
-local notation3 "P''" => algebraMapSubmonoid T P.primeCompl
-local notation3 "Tₚ" => Localization P''
-
-中文:
-实例 [代数.是可分
-  签名: K L] :
-  定义体: OreLocalization.instAlgebra
-    Algebra.IsSeparable (FractionRing Rₚ) (FractionRing Sₚ) :=
-  let _ : Algebra Rₚ (FractionRing Sₚ) := OreLocalization.instAlgebra
-  FractionRing.isSeparable_of_isLocalization S _ _ P.primeCompl_le_nonZeroDivisors
-
-local notation3 "P''" => algebraMapSubmonoid T P.primeCompl
-local notation3 "Tₚ" => Localization P''
-
-Depends on / 依赖: OreLocalization, OreLocalization.instAlgebra, instAlgebra
+  IsDedekindDomain.isPrincipalIdealRing_localization_over_prime S P (fun h ↦ hP.1 h)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Algebra.IsSeparable K L] :
     -- Without the following line there is a timeout
@@ -463,208 +298,92 @@ local notation3 "P''" => algebraMapSubmonoid T P.primeCompl
 local notation3 "Tₚ" => Localization P''
 
 variable [Algebra S T] [Algebra R T] [IsScalarTower R S T]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsLocalization (algebraMapSubmonoid T P') Tₚ
-  body: by
-  rw [show algebraMapSubmonoid T P' = P'' by simp]
-  exact Localization.isLocalization
-
-中文:
-实例 :
-  签名: 是Localization (algebraMapSubmonoid T P') Tₚ
-  定义体: by
-  rw [show algebraMapSubmonoid T P' = P'' by simp]
-  exact Localization.isLocalization
-
-Depends on / 依赖: Localization, Localization.isLocalization, algebraMapSubmonoid, isLocalization
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsLocalization (algebraMapSubmonoid T P') Tₚ := by
   rw [show algebraMapSubmonoid T P' = P'' by simp]
   exact Localization.isLocalization
 
 /--
-Definition of `Localization.AtPrime.algebra_localization_localization` / `Localization.AtPrime.algebra_localization_localization` 的定义
+Let `R ⊆ S ⊆ T` be a tower of rings. Let `Sₚ` and `Tₚ` denote the localizations of `S` and `T` at
+the prime ideal `P` of `R`. Then `Tₚ` is a `Sₚ`-algebra.
+This cannot be an instance since it creates a diamond when `S = T`.
+-/
+/-
+**Localization.AtPrime.algebra_localization_localization** 是 Mathlib 中的一个缩写定义，位于
+命名空间 ``。
+形式化陈述：Localization.AtPrime.algebra_localization_localization : Algebra Sₚ Tₚ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLocalizationAlgebraMapSubmonoidPrimeComplLocalization`：∀ {R : Type
+ u_1} (S : Type u_2) (T : Type u_3) [inst : CommRing R] [inst_1 : CommRing S] [i
+nst_2 : CommRing T]   [inst_3 : Algebra R S] {P :…
 
-English:
-abbreviation Localization.AtPrime.algebra_localization_localization
-  signature: :
-  body: localizationAlgebra P' T
-
-中文:
-缩写 Localization.AtPrime.algebra_localization_localization
-  签名: :
-  定义体: localizationAlgebra P' T
-
-Depends on / 依赖: localizationAlgebra
+--- 原说明 ---
+Let `R ⊆ S ⊆ T` be a tower of rings. Let `Sₚ` and `Tₚ` denote the localizations 
+of `S` and `T` at
+the prime ideal `P` of `R`. Then `Tₚ` is a `Sₚ`-algebra.
+This cannot be an instance since it creates a diamond when `S = T`.
 -/
 noncomputable abbrev Localization.AtPrime.algebra_localization_localization :
     Algebra Sₚ Tₚ := localizationAlgebra P' T
 
 attribute [local instance] Localization.AtPrime.algebra_localization_localization
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower S Sₚ Tₚ
-  body: IsScalarTower.of_algebraMap_eq'
-    by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-
-中文:
-实例 :
-  签名: 标量塔 S Sₚ Tₚ
-  定义体: IsScalarTower.of_algebraMap_eq'
-    by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-
-Depends on / 依赖: IsLocalization, IsLocalization.map_comp, IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraMap_toAlgebra, algebraMap_eq, algebraMap_toAlgebra, map_comp, of_algebraMap_eq
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower S Sₚ Tₚ :=
-IsScalarTower.of_algebraMap_eq'
+  IsScalarTower.of_algebraMap_eq' <|
     by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower R Sₚ Tₚ
-  body: IsScalarTower.of_algebraMap_eq'
-    by rw [IsScalarTower.algebraMap_eq R S Sₚ, ← RingHom.comp_assoc,
-      ← IsScalarTower.algebraMap_eq S, ← IsScalarTower.algebraMap_eq]
-
-中文:
-实例 :
-  签名: 标量塔 R Sₚ Tₚ
-  定义体: IsScalarTower.of_algebraMap_eq'
-    by rw [IsScalarTower.algebraMap_eq R S Sₚ, ← RingHom.comp_assoc,
-      ← IsScalarTower.algebraMap_eq S, ← IsScalarTower.algebraMap_eq]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.comp_assoc, algebraMap_eq, comp_assoc, of_algebraMap_eq
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower R Sₚ Tₚ :=
-IsScalarTower.of_algebraMap_eq'
+  IsScalarTower.of_algebraMap_eq' <|
     by rw [IsScalarTower.algebraMap_eq R S Sₚ, ← RingHom.comp_assoc,
       ← IsScalarTower.algebraMap_eq S, ← IsScalarTower.algebraMap_eq]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Module.Finite
-  signature: S T] : Module.Finite Sₚ Tₚ
-  body: Module.Finite.of_isLocalization S T P'
-
-中文:
-实例 [模.有限
-  签名: S T] : 模.有限 Sₚ Tₚ
-  定义体: Module.Finite.of_isLocalization S T P'
-
-Depends on / 依赖: Finite, Module, Module.Finite.of_isLocalization, of_isLocalization
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Module.Finite S T] : Module.Finite Sₚ Tₚ := Module.Finite.of_isLocalization S T P'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsTorsionFree
-  signature: S T] : IsTorsionFree Sₚ Tₚ
-  body: .of_isLocalization S T algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
-    Ideal.primeCompl_le_nonZeroDivisors P
-
-中文:
-实例 [是无挠
-  签名: S T] : 是无挠 Sₚ Tₚ
-  定义体: .of_isLocalization S T algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
-    Ideal.primeCompl_le_nonZeroDivisors P
-
-Depends on / 依赖: Ideal.primeCompl_le_nonZeroDivisors, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, of_isLocalization, primeCompl_le_nonZeroDivisors
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsTorsionFree S T] : IsTorsionFree Sₚ Tₚ :=
-.of_isLocalization S T algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
+  .of_isLocalization S T <| algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ <|
     Ideal.primeCompl_le_nonZeroDivisors P
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Algebra.IsIntegral
-  signature: R S] : Algebra.IsIntegral Rₚ Sₚ
-  body: Algebra.isIntegral_def.mpr (algebraMap_eq_map_map_submonoid P.primeCompl S Rₚ Sₚ ▸
-    isIntegral_localization : (algebraMap Rₚ Sₚ).IsIntegral)
-
-中文:
-实例 [代数.是整
-  签名: R S] : 代数.是整 Rₚ Sₚ
-  定义体: Algebra.isIntegral_def.mpr (algebraMap_eq_map_map_submonoid P.primeCompl S Rₚ Sₚ ▸
-    isIntegral_localization : (algebraMap Rₚ Sₚ).IsIntegral)
-
-Depends on / 依赖: Algebra, Algebra.isIntegral_def.mpr, IsIntegral, P.primeCompl, algebraMap, algebraMap_eq_map_map_submonoid, isIntegral_def, isIntegral_localization, primeCompl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Algebra.IsIntegral R S] : Algebra.IsIntegral Rₚ Sₚ :=
-Algebra.isIntegral_def.mpr (algebraMap_eq_map_map_submonoid P.primeCompl S Rₚ Sₚ ▸
+  Algebra.isIntegral_def.mpr <| (algebraMap_eq_map_map_submonoid P.primeCompl S Rₚ Sₚ ▸
     isIntegral_localization : (algebraMap Rₚ Sₚ).IsIntegral)
 
 variable [IsTorsionFree R T]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower Rₚ Sₚ Tₚ
-  body: by
-  refine ⟨fun a b c => a.ind fun ⟨a₁, a₂⟩ => ?_⟩
-have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivisors P a₂.prop
-  rw [← smul_right_inj this]; rw [← _root_.smul_assoc (M := R) (N := Sₚ)]; rw [← _root_.smul_assoc (M := R)
-    (α := Sₚ)]; rw [← _root_.smul_assoc (M := R) (α := Tₚ)]; rw [Localization.smul_mk]; rw [smul_eq_mul]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_mul_cancel_left]; rw [algebraMap_smul]; rw [algebraMap_smul]; rw [_root_.smul_assoc]
-
-中文:
-实例 :
-  签名: 标量塔 Rₚ Sₚ Tₚ
-  定义体: by
-  refine ⟨fun a b c => a.ind fun ⟨a₁, a₂⟩ => ?_⟩
-have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivisors P a₂.prop
-  rw [← smul_right_inj this]; rw [← _root_.smul_assoc (M := R) (N := Sₚ)]; rw [← _root_.smul_assoc (M := R)
-    (α := Sₚ)]; rw [← _root_.smul_assoc (M := R) (α := Tₚ)]; rw [Localization.smul_mk]; rw [smul_eq_mul]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_mul_cancel_left]; rw [algebraMap_smul]; rw [algebraMap_smul]; rw [_root_.smul_assoc]
-
-Depends on / 依赖: Ideal.primeCompl_le_nonZeroDivisors, IsLocalization, IsLocalization.mk, Localization, Localization.mk_eq_mk, Localization.smul_mk, _mul_cancel_left, _root_, _root_.smul_assoc, a.ind, algebraMap_smul, mk_eq_mk, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, primeCompl_le_nonZeroDivisors, smul_assoc, smul_eq_mul, smul_mk, smul_right_inj
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower Rₚ Sₚ Tₚ := by
-  refine ⟨fun a b c => a.ind fun ⟨a₁, a₂⟩ => ?_⟩
-have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivisors P a₂.prop
-  rw [← smul_right_inj this]; rw [← _root_.smul_assoc (M := R) (N := Sₚ)]; rw [← _root_.smul_assoc (M := R)
-    (α := Sₚ)]; rw [← _root_.smul_assoc (M := R) (α := Tₚ)]; rw [Localization.smul_mk]; rw [smul_eq_mul]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_mul_cancel_left]; rw [algebraMap_smul]; rw [algebraMap_smul]; rw [_root_.smul_assoc]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsTorsionFree
-  signature: S T] [Algebra.IsSeparable L F] :
-  body: by
-  refine FractionRing.isSeparable_of_isLocalization T Sₚ Tₚ (M := P') ?_
-  apply algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
-exact fun _ h => mem_nonZeroDivisors_of_ne_zero ne_of_mem_of_not_mem h by simp
-
-中文:
-实例 [是无挠
-  签名: S T] [代数.是可分 L F] :
-  定义体: by
-  refine FractionRing.isSeparable_of_isLocalization T Sₚ Tₚ (M := P') ?_
-  apply algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
-exact fun _ h => mem_nonZeroDivisors_of_ne_zero ne_of_mem_of_not_mem h by simp
-
-Depends on / 依赖: FractionRing, FractionRing.isSeparable_of_isLocalization, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, isSeparable_of_isLocalization, mem_nonZeroDivisors_of_ne_zero, ne_of_mem_of_not_mem
+  refine ⟨fun a b c ↦ a.ind fun ⟨a₁, a₂⟩ ↦ ?_⟩
+  have : a₂.val ≠ 0 := nonZeroDivisors.ne_zero <| Ideal.primeCompl_le_nonZeroDivisors P <| a₂.prop
+  rw [← smul_right_inj this, ← _root_.smul_assoc (M := R) (N := Sₚ), ← _root_.smul_assoc (M := R)
+    (α := Sₚ), ← _root_.smul_assoc (M := R) (α := Tₚ), Localization.smul_mk, smul_eq_mul,
+    Localization.mk_eq_mk', IsLocalization.mk'_mul_cancel_left, algebraMap_smul, algebraMap_smul,
+    _root_.smul_assoc]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsTorsionFree S T] [Algebra.IsSeparable L F] :
     Algebra.IsSeparable (FractionRing Sₚ) (FractionRing Tₚ) := by
   refine FractionRing.isSeparable_of_isLocalization T Sₚ Tₚ (M := P') ?_
   apply algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul
-exact fun _ h => mem_nonZeroDivisors_of_ne_zero ne_of_mem_of_not_mem h by simp
+  exact fun _ h ↦ mem_nonZeroDivisors_of_ne_zero <| ne_of_mem_of_not_mem h <| by simp

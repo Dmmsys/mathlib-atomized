@@ -40,7 +40,7 @@ open scoped TensorProduct
 
 universe u
 
-variable (R : Type u) [CommRing R] (n : Nat) {M N N' : Type*}
+variable (R : Type u) [CommRing R] (n : ℕ) {M N N' : Type*}
   [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N]
   [AddCommGroup N'] [Module R N']
 
@@ -50,167 +50,89 @@ open Function Set Set.powersetCard
 
 /-! The canonical alternating map from `Fin n → M` to `⋀[R]^n M`. -/
 
-/--
-Definition of `ιMulti` / `ιMulti` 的定义
+/-- `exteriorAlgebra.ιMulti` is the alternating map from `Fin n → M` to `⋀[r]^n M`
+induced by `exteriorAlgebra.ιMulti`, i.e. sending a family of vectors `m : Fin n → M` to the
+product of its entries. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιMulti
-  signature: : M [⋀^Fin n]->ₗ[R] (⋀[R]^n M)
-  body: (ExteriorAlgebra.ιMulti R n).codRestrict (⋀[R]^n M) fun _ =>
-ExteriorAlgebra.ιMulti_range R n Set.mem_range_self _
-
-中文:
-定义 ιMulti
-  签名: : M [⋀^有限集 n]->ₗ[R] (⋀[R]^n M)
-  定义体: (ExteriorAlgebra.ιMulti R n).codRestrict (⋀[R]^n M) fun _ =>
-ExteriorAlgebra.ιMulti_range R n Set.mem_range_self _
-
-Depends on / 依赖: ExteriorAlgebra, Set.mem_range_self, codRestrict, mem_range_self
+--- 原说明 ---
+`exteriorAlgebra.ιMulti` is the alternating map from `Fin n → M` to `⋀[r]^n M`
+induced by `exteriorAlgebra.ιMulti`, i.e. sending a family of vectors `m : Fin n
+ → M` to the
+product of its entries.
 -/
-def ιMulti : M [⋀^Fin n]->ₗ[R] (⋀[R]^n M) :=
+def ιMulti : M [⋀^Fin n]→ₗ[R] (⋀[R]^n M) :=
   (ExteriorAlgebra.ιMulti R n).codRestrict (⋀[R]^n M) fun _ =>
-ExteriorAlgebra.ιMulti_range R n Set.mem_range_self _
-
-/--
-lemma `ιMulti_apply_coe` / 引理 `ιMulti_apply_coe`
-
-English:
-lemma ιMulti_apply_coe
-  given: (a : Fin n -> M)
-  statement: ιMulti R n a = ExteriorAlgebra.ιMulti R n a
-  proof: rfl
-
-中文:
-引理 ιMulti_apply_coe
-  条件: (a : 有限集 n -> M)
-  结论: ιMulti R n a = ExteriorAlgebra.ιMulti R n a
-  证明: rfl
+    ExteriorAlgebra.ιMulti_range R n <| Set.mem_range_self _
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ιMulti_apply_coe (a : Fin n -> M) : ιMulti R n a = ExteriorAlgebra.ιMulti R n a := rfl
+@[simp] lemma ιMulti_apply_coe (a : Fin n → M) : ιMulti R n a = ExteriorAlgebra.ιMulti R n a := rfl
 
-/--
-Definition of `ιMulti_family` / `ιMulti_family` 的定义
+/-- Given a linearly ordered family `v` of vectors of `M` and a natural number `n`, produce the
+family of `n`fold exterior products of elements of `v`, seen as members of the
+`n`th exterior power. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιMulti_family
-  signature: {I : Type*} [LinearOrder I] (v : I -> M)
-  body: ιMulti R n (v ∘ (ofFinEmbEquiv.symm s))
-
-中文:
-定义 ιMulti_family
-  签名: {I : 类型} [线性序 I] (v : I -> M)
-  定义体: ιMulti R n (v ∘ (ofFinEmbEquiv.symm s))
-
-Depends on / 依赖: ofFinEmbEquiv, ofFinEmbEquiv.symm
+--- 原说明 ---
+Given a linearly ordered family `v` of vectors of `M` and a natural number `n`, 
+produce the
+family of `n`fold exterior products of elements of `v`, seen as members of the
+`n`th exterior power.
 -/
-noncomputable def ιMulti_family {I : Type*} [LinearOrder I] (v : I -> M)
+noncomputable def ιMulti_family {I : Type*} [LinearOrder I] (v : I → M)
     (s : powersetCard I n) : ⋀[R]^n M :=
   ιMulti R n (v ∘ (ofFinEmbEquiv.symm s))
-
-/--
-lemma `ιMulti_family_eq_coe_comp` / 引理 `ιMulti_family_eq_coe_comp`
-
-English:
-lemma ιMulti_family_eq_coe_comp
-  given: {I : Type*} [LinearOrder I] (v : I -> M)
-  proof: rfl
-
-中文:
-引理 ιMulti_family_eq_coe_comp
-  条件: {I : 类型} [线性序 I] (v : I -> M)
-  证明: rfl
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ιMulti_family_eq_coe_comp {I : Type*} [LinearOrder I] (v : I -> M) :
+lemma ιMulti_family_eq_coe_comp {I : Type*} [LinearOrder I] (v : I → M) :
     ExteriorAlgebra.ιMulti_family R n v = (↑) ∘ ιMulti_family R n v :=
   rfl
-
-/--
-lemma `ιMulti_family_apply_coe` / 引理 `ιMulti_family_apply_coe`
-
-English:
-lemma ιMulti_family_apply_coe
-  statement: {I : Type*} [LinearOrder I] (v : I -> M)
-  proof: rfl
-
-中文:
-引理 ιMulti_family_apply_coe
-  结论: {I : 类型} [线性序 I] (v : I -> M)
-  证明: rfl
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ιMulti_family_apply_coe {I : Type*} [LinearOrder I] (v : I -> M)
+@[simp] lemma ιMulti_family_apply_coe {I : Type*} [LinearOrder I] (v : I → M)
     (s : powersetCard I n) :
     ιMulti_family R n v s = ExteriorAlgebra.ιMulti_family R n v s := rfl
 
 variable (M)
-/--
-lemma `ιMulti_span_fixedDegree` / 引理 `ιMulti_span_fixedDegree`
+/-- The image of `ExteriorAlgebra.ιMulti R n` spans the `n`th exterior power. Variant of
+`ExteriorAlgebra.ιMulti_span_fixedDegree`, useful in rewrites. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_span_fixedDegree
-  proof: ExteriorAlgebra.ιMulti_span_fixedDegree R n
-
-中文:
-引理 ιMulti_span_fixedDegree
-  证明: ExteriorAlgebra.ιMulti_span_fixedDegree R n
-
-Depends on / 依赖: ExteriorAlgebra
+--- 原说明 ---
+The image of `ExteriorAlgebra.ιMulti R n` spans the `n`th exterior power. Varian
+t of
+`ExteriorAlgebra.ιMulti_span_fixedDegree`, useful in rewrites.
 -/
 lemma ιMulti_span_fixedDegree :
     Submodule.span R (Set.range (ExteriorAlgebra.ιMulti R n)) = ⋀[R]^n M :=
   ExteriorAlgebra.ιMulti_span_fixedDegree R n
 
 open Set Submodule in
-/--
-lemma `ιMulti_span_fixedDegree_of_span_eq_top` / 引理 `ιMulti_span_fixedDegree_of_span_eq_top`
+/-- If a set `s` spans the module `M`, then the set of all elements of the form `x₁ ∧ ⋯ ∧ xₙ`
+where `xᵢ ∈ s` spans `⋀ⁿ M`. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_span_fixedDegree_of_span_eq_top
-  given: {s : Set M} (hs : span R s = ⊤)
-  proof: by
-  apply le_antisymm
-  · rw [span_le]
-    rintro - ⟨y, ⟨y_mem, rfl⟩⟩
-    apply ExteriorAlgebra.ιMulti_range R n
-    simp
-  · rw [ExteriorAlgebra.exteriorPower, LinearMap.range_eq_map, ← hs, map_span, span_pow, span_le]
-    rintro x hx
-    obtain ⟨f, rfl⟩ := Set.mem_pow.mp hx
-    refine mem_span_of_mem ⟨ExteriorAlgebra.ιInv ∘ Subtype.val ∘ f, ?_, ?_⟩
-    · rw [Set.mem_ofPred_eq, Set.range_comp, Set.image_subset_iff]
-      apply Subset.trans ?_ (s.image_subset_preimage_of_inverse ExteriorAlgebra.ι_leftInverse)
-      grind
-    · rw [ExteriorAlgebra.ιMulti_apply]
-      apply congrArg (List.prod ∘ List.ofFn)
-      ext i
-      obtain ⟨m, -, hm⟩ := (Set.mem_image _ _ _).mp (f i).2
-      rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← hm]; rw [ExteriorAlgebra.ι_leftInverse]
-
-中文:
-引理 ιMulti_span_fixedDegree_of_span_eq_top
-  条件: {s : 集合 M} (hs : span R s = ⊤)
-  证明: by
-  apply le_antisymm
-  · rw [span_le]
-    rintro - ⟨y, ⟨y_mem, rfl⟩⟩
-    apply ExteriorAlgebra.ιMulti_range R n
-    simp
-  · rw [ExteriorAlgebra.exteriorPower, LinearMap.range_eq_map, ← hs, map_span, span_pow, span_le]
-    rintro x hx
-    obtain ⟨f, rfl⟩ := Set.mem_pow.mp hx
-    refine mem_span_of_mem ⟨ExteriorAlgebra.ιInv ∘ Subtype.val ∘ f, ?_, ?_⟩
-    · rw [Set.mem_ofPred_eq, Set.range_comp, Set.image_subset_iff]
-      apply Subset.trans ?_ (s.image_subset_preimage_of_inverse ExteriorAlgebra.ι_leftInverse)
-      grind
-    · rw [ExteriorAlgebra.ιMulti_apply]
-      apply congrArg (List.prod ∘ List.ofFn)
-      ext i
-      obtain ⟨m, -, hm⟩ := (Set.mem_image _ _ _).mp (f i).2
-      rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← hm]; rw [ExteriorAlgebra.ι_leftInverse]
-
-Depends on / 依赖: ExteriorAlge, ExteriorAlgebra, ExteriorAlgebra.exteriorPower, LinearMap, LinearMap.range_eq_map, Set.image_subset_iff, Set.mem_ofPred_eq, Set.mem_pow.mp, Set.range_comp, Subset, Subset.trans, Subtype, Subtype.val, exteriorPower, image_subset_iff, image_subset_preimage_of_inverse, le_antisymm, map_span, mem_ofPred_eq, mem_pow
+--- 原说明 ---
+If a set `s` spans the module `M`, then the set of all elements of the form `x₁ 
+∧ ⋯ ∧ xₙ`
+where `xᵢ ∈ s` spans `⋀ⁿ M`.
 -/
 lemma ιMulti_span_fixedDegree_of_span_eq_top {s : Set M} (hs : span R s = ⊤) :
-    span R (ExteriorAlgebra.ιMulti R n '' {a | range a subseteq s}) = ⋀[R]^n M := by
+    span R (ExteriorAlgebra.ιMulti R n '' {a | range a ⊆ s}) = ⋀[R]^n M := by
   apply le_antisymm
   · rw [span_le]
     rintro - ⟨y, ⟨y_mem, rfl⟩⟩
@@ -227,125 +149,78 @@ lemma ιMulti_span_fixedDegree_of_span_eq_top {s : Set M} (hs : span R s = ⊤) 
       apply congrArg (List.prod ∘ List.ofFn)
       ext i
       obtain ⟨m, -, hm⟩ := (Set.mem_image _ _ _).mp (f i).2
-      rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← hm]; rw [ExteriorAlgebra.ι_leftInverse]
+      rw [Function.comp_apply, Function.comp_apply, ← hm, ExteriorAlgebra.ι_leftInverse]
 
-/--
-lemma `ιMulti_span` / 引理 `ιMulti_span`
+/-- The image of `exteriorPower.ιMulti` spans `⋀[R]^n M`. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_span
-  proof: by
-  apply LinearMap.map_injective (Submodule.ker_subtype (⋀[R]^n M))
-  rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
-  simp only [Submodule.coe_subtype, ιMulti_apply_coe, Set.image_univ, Submodule.map_top,
-    Submodule.range_subtype]
-  exact ExteriorAlgebra.ιMulti_span_fixedDegree R n
-
-中文:
-引理 ιMulti_span
-  证明: by
-  apply LinearMap.map_injective (Submodule.ker_subtype (⋀[R]^n M))
-  rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
-  simp only [Submodule.coe_subtype, ιMulti_apply_coe, Set.image_univ, Submodule.map_top,
-    Submodule.range_subtype]
-  exact ExteriorAlgebra.ιMulti_span_fixedDegree R n
-
-Depends on / 依赖: ExteriorAlgebra, LinearMap, LinearMap.map_injective, LinearMap.map_span, Set.image_image, Set.image_univ, Submodule, Submodule.coe_subtype, Submodule.ker_subtype, Submodule.map_top, Submodule.range_subtype, coe_subtype, image_image, image_univ, ker_subtype, map_injective, map_span, map_top, range_subtype
+--- 原说明 ---
+The image of `exteriorPower.ιMulti` spans `⋀[R]^n M`.
 -/
 lemma ιMulti_span :
     Submodule.span R (Set.range (ιMulti R n)) = (⊤ : Submodule R (⋀[R]^n M)) := by
   apply LinearMap.map_injective (Submodule.ker_subtype (⋀[R]^n M))
-  rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
+  rw [LinearMap.map_span, ← Set.image_univ, Set.image_image]
   simp only [Submodule.coe_subtype, ιMulti_apply_coe, Set.image_univ, Submodule.map_top,
     Submodule.range_subtype]
   exact ExteriorAlgebra.ιMulti_span_fixedDegree R n
 
 open Set Submodule in
-/--
-lemma `ιMulti_span_of_span` / 引理 `ιMulti_span_of_span`
+/-- A version of `ιMulti_span_fixedDegree_of_span_eq_top` that works in the exterior power. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_span_of_span
-  given: {s : Set M} (hs : span R s = ⊤)
-  proof: by
-  apply LinearMap.map_injective (ker_subtype (⋀[R]^n M))
-  simpa [LinearMap.map_span, Set.image_image] using ιMulti_span_fixedDegree_of_span_eq_top R n M hs
-
-中文:
-引理 ιMulti_span_of_span
-  条件: {s : 集合 M} (hs : span R s = ⊤)
-  证明: by
-  apply LinearMap.map_injective (ker_subtype (⋀[R]^n M))
-  simpa [LinearMap.map_span, Set.image_image] using ιMulti_span_fixedDegree_of_span_eq_top R n M hs
-
-Depends on / 依赖: LinearMap, LinearMap.map_injective, LinearMap.map_span, Set.image_image, image_image, ker_subtype, map_injective, map_span
+--- 原说明 ---
+A version of `ιMulti_span_fixedDegree_of_span_eq_top` that works in the exterior
+ power.
 -/
 lemma ιMulti_span_of_span {s : Set M} (hs : span R s = ⊤) :
-    span R (ιMulti R n '' {a | range a subseteq s}) = ⊤ := by
+    span R (ιMulti R n '' {a | range a ⊆ s}) = ⊤ := by
   apply LinearMap.map_injective (ker_subtype (⋀[R]^n M))
   simpa [LinearMap.map_span, Set.image_image] using ιMulti_span_fixedDegree_of_span_eq_top R n M hs
 
 namespace presentation
 
-/--
-Inductive type `Rels` / 归纳类型 `Rels`
+/-- The index type for the relations in the standard presentation of `⋀[R]^n M`,
+in the particular case `ι` is `Fin n`. -/
+/-
+**exteriorPower.presentation.Rels** 是 Mathlib 中的一个归纳类型，位于命名空间 `exteriorPower.pre
+sentation`。
+形式化陈述：Type u → Type u_4 → Type u_5 → Type (max (max u u_4) u_5)
+参数：max (max u u_4) u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Rels
-  parameters: (ι : Type*) (M : Type*)
-  constructors (3):
-    - add: (m : ι -> M) (i : ι) (x y : M)
-    - smul: (m : ι -> M) (i : ι) (r : R) (x : M)
-    - alt: (m : ι -> M) (i j : ι) (hm : m i = m j) (hij : i != j)
-
-中文:
-归纳类型 Rels
-  参数: (ι : 类型) (M : 类型)
-  构造子 (3 个):
-    - add: (m : ι -> M) (i : ι) (x y : M)
-    - smul: (m : ι -> M) (i : ι) (r : R) (x : M)
-    - alt: (m : ι -> M) (i j : ι) (hm : m i = m j) (hij : i != j)
+--- 原说明 ---
+The index type for the relations in the standard presentation of `⋀[R]^n M`,
+in the particular case `ι` is `Fin n`.
 -/
 inductive Rels (ι : Type*) (M : Type*)
-  | add (m : ι -> M) (i : ι) (x y : M)
-  | smul (m : ι -> M) (i : ι) (r : R) (x : M)
-  | alt (m : ι -> M) (i j : ι) (hm : m i = m j) (hij : i != j)
+  | add (m : ι → M) (i : ι) (x y : M)
+  | smul (m : ι → M) (i : ι) (r : R) (x : M)
+  | alt (m : ι → M) (i j : ι) (hm : m i = m j) (hij : i ≠ j)
 
 /-- The relations in the standard presentation of `⋀[R]^n M` with generators and relations. -/
 @[simps]
-/--
-Definition of `relations` / `relations` 的定义
+/-
+**exteriorPower.presentation.relations** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower.
+presentation`。
+形式化陈述：relations (ι : Type*) [DecidableEq ι] (M : Type*) [AddCommGroup M] [Module
+ R M] : Module.Relations R where G
+参数：ι : Type*；M : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relations
-  signature: (ι : Type*) [DecidableEq ι] (M : Type*)
-  body: ι -> M
-  R := Rels R ι M
-  relation
-    | .add m i x y => Finsupp.single (update m i x) 1 +
-        Finsupp.single (update m i y) 1 -
-        Finsupp.single (update m i (x + y)) 1
-    | .smul m i r x => Finsupp.single (update m i (r • x)) 1 -
-        r • Finsupp.single (update m i x) 1
-    | .alt m _ _ _ _ => Finsupp.single m 1
-
-中文:
-定义 relations
-  签名: (ι : 类型) [DecidableEq ι] (M : 类型)
-  定义体: ι -> M
-  R := Rels R ι M
-  relation
-    | .add m i x y => Finsupp.single (update m i x) 1 +
-        Finsupp.single (update m i y) 1 -
-        Finsupp.single (update m i (x + y)) 1
-    | .smul m i r x => Finsupp.single (update m i (r • x)) 1 -
-        r • Finsupp.single (update m i x) 1
-    | .alt m _ _ _ _ => Finsupp.single m 1
+--- 原说明 ---
+The relations in the standard presentation of `⋀[R]^n M` with generators and rel
+ations.
 -/
 noncomputable def relations (ι : Type*) [DecidableEq ι] (M : Type*)
     [AddCommGroup M] [Module R M] :
     Module.Relations R where
-  G := ι -> M
+  G := ι → M
   R := Rels R ι M
   relation
     | .add m i x y => Finsupp.single (update m i x) 1 +
@@ -361,78 +236,42 @@ variable {R} in
 /-- The solutions in a module `N` to the linear equations
 given by `exteriorPower.relations R ι M` identify to alternating maps to `N`. -/
 @[simps!]
-/--
-Definition of `relationsSolutionEquiv` / `relationsSolutionEquiv` 的定义
+/-
+**exteriorPower.presentation.relationsSolutionEquiv** 是 Mathlib 中的一个定义，位于命名空间 `e
+xteriorPower.presentation`。
+形式化陈述：relationsSolutionEquiv {ι : Type*} [DecidableEq ι] {M : Type*} [AddCommGro
+up M] [Module R M] : (relations R ι M).Solution N ≃ AlternatingMap R M N ι where
+ toFun s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition relationsSolutionEquiv
-  signature: {ι : Type*} [DecidableEq ι] {M : Type*}
-  body: { toFun := fun m => s.var m
-      map_update_add' := fun m i x y => by
-        have := s.linearCombination_var_relation (.add m i x y)
-        dsimp at this ⊢
-        rw [map_sub]; rw [map_add]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [sub_eq_zero] at this
-        convert! this.symm -- `convert` is necessary due to the implementation of `MultilinearMap`
-      map_update_smul' := fun m i r x => by
-        have := s.linearCombination_var_relation (.smul m i r x)
-        dsimp at this ⊢
-        rw [Finsupp.smul_single]; rw [smul_eq_mul]; rw [mul_one]; rw [map_sub]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [sub_eq_zero] at this
-        convert! this
-      map_eq_zero_of_eq' := fun v i j hm hij =>
-        by simpa using s.linearCombination_var_relation (.alt v i j hm hij) }
-  invFun f :=
-    { var := fun m => f m
-      linearCombination_var_relation := by
-        rintro (⟨m, i, x, y⟩ | ⟨m, i, r, x⟩ | ⟨v, i, j, hm, hij⟩)
-        · simp
-        · simp
-        · simpa using f.map_eq_zero_of_eq v hm hij }
-
-中文:
-定义 relationsSolutionEquiv
-  签名: {ι : 类型} [DecidableEq ι] {M : 类型}
-  定义体: { toFun := fun m => s.var m
-      map_update_add' := fun m i x y => by
-        have := s.linearCombination_var_relation (.add m i x y)
-        dsimp at this ⊢
-        rw [map_sub]; rw [map_add]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [sub_eq_zero] at this
-        convert! this.symm -- `convert` is necessary due to the implementation of `MultilinearMap`
-      map_update_smul' := fun m i r x => by
-        have := s.linearCombination_var_relation (.smul m i r x)
-        dsimp at this ⊢
-        rw [Finsupp.smul_single]; rw [smul_eq_mul]; rw [mul_one]; rw [map_sub]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [sub_eq_zero] at this
-        convert! this
-      map_eq_zero_of_eq' := fun v i j hm hij =>
-        by simpa using s.linearCombination_var_relation (.alt v i j hm hij) }
-  invFun f :=
-    { var := fun m => f m
-      linearCombination_var_relation := by
-        rintro (⟨m, i, x, y⟩ | ⟨m, i, r, x⟩ | ⟨v, i, j, hm, hij⟩)
-        · simp
-        · simp
-        · simpa using f.map_eq_zero_of_eq v hm hij }
-
-Depends on / 依赖: Finsupp, Finsupp.linearCombination_single, MultilinearMap, convert, implementation, linearCom, linearCombination_single, linearCombination_var_relation, map_add, map_sub, map_update_add, map_update_smul, necessary, one_smul, s.linearCom, s.linearCombination_var_relation, s.var, sub_eq_zero, this.symm
+--- 原说明 ---
+The solutions in a module `N` to the linear equations
+given by `exteriorPower.relations R ι M` identify to alternating maps to `N`.
 -/
 noncomputable def relationsSolutionEquiv {ι : Type*} [DecidableEq ι] {M : Type*}
     [AddCommGroup M] [Module R M] :
     (relations R ι M).Solution N ≃ AlternatingMap R M N ι where
   toFun s :=
-    { toFun := fun m => s.var m
-      map_update_add' := fun m i x y => by
+    { toFun := fun m ↦ s.var m
+      map_update_add' := fun m i x y ↦ by
         have := s.linearCombination_var_relation (.add m i x y)
         dsimp at this ⊢
-        rw [map_sub]; rw [map_add]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [sub_eq_zero] at this
+        rw [map_sub, map_add, Finsupp.linearCombination_single, one_smul,
+          Finsupp.linearCombination_single, one_smul,
+          Finsupp.linearCombination_single, one_smul, sub_eq_zero] at this
         convert! this.symm -- `convert` is necessary due to the implementation of `MultilinearMap`
-      map_update_smul' := fun m i r x => by
+      map_update_smul' := fun m i r x ↦ by
         have := s.linearCombination_var_relation (.smul m i r x)
         dsimp at this ⊢
-        rw [Finsupp.smul_single]; rw [smul_eq_mul]; rw [mul_one]; rw [map_sub]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [sub_eq_zero] at this
+        rw [Finsupp.smul_single, smul_eq_mul, mul_one, map_sub,
+          Finsupp.linearCombination_single, one_smul,
+          Finsupp.linearCombination_single, sub_eq_zero] at this
         convert! this
-      map_eq_zero_of_eq' := fun v i j hm hij =>
+      map_eq_zero_of_eq' := fun v i j hm hij ↦
         by simpa using s.linearCombination_var_relation (.alt v i j hm hij) }
   invFun f :=
-    { var := fun m => f m
+    { var := fun m ↦ f m
       linearCombination_var_relation := by
         rintro (⟨m, i, x, y⟩ | ⟨m, i, r, x⟩ | ⟨v, i, j, hm, hij⟩)
         · simp
@@ -440,32 +279,17 @@ noncomputable def relationsSolutionEquiv {ι : Type*} [DecidableEq ι] {M : Type
         · simpa using f.map_eq_zero_of_eq v hm hij }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `isPresentationCore` / `isPresentationCore` 的定义
+/-- The universal property of the exterior power. -/
+/-
+**exteriorPower.presentation.isPresentationCore** 是 Mathlib 中的一个定义，位于命名空间 `exter
+iorPower.presentation`。
+形式化陈述：isPresentationCore : (relationsSolutionEquiv.symm (ιMulti R n (M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isPresentationCore
-  signature: :
-  body: LinearMap.comp (ExteriorAlgebra.liftAlternating
-      (Function.update 0 n (relationsSolutionEquiv s))) (Submodule.subtype _)
-  postcomp_desc s := by aesop
-  postcomp_injective {N _ _ f f' h} := by
-    rw [Submodule.linearMap_eq_iff_of_span_eq_top _ _ (ιMulti_span R n M)]
-    rintro ⟨_, ⟨f, rfl⟩⟩
-    exact Module.Relations.Solution.congr_var h f
-
-中文:
-定义 isPresentationCore
-  签名: :
-  定义体: LinearMap.comp (ExteriorAlgebra.liftAlternating
-      (Function.update 0 n (relationsSolutionEquiv s))) (Submodule.subtype _)
-  postcomp_desc s := by aesop
-  postcomp_injective {N _ _ f f' h} := by
-    rw [Submodule.linearMap_eq_iff_of_span_eq_top _ _ (ιMulti_span R n M)]
-    rintro ⟨_, ⟨f, rfl⟩⟩
-    exact Module.Relations.Solution.congr_var h f
-
-Depends on / 依赖: IsPresentationCore
+--- 原说明 ---
+The universal property of the exterior power.
 -/
 noncomputable def isPresentationCore :
     (relationsSolutionEquiv.symm (ιMulti R n (M := M))).IsPresentationCore where
@@ -481,20 +305,15 @@ end presentation
 
 /-- The standard presentation of the `R`-module `⋀[R]^n M`. -/
 @[simps! G R relation var]
-/--
-Definition of `presentation` / `presentation` 的定义
+/-
+**exteriorPower.presentation** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower`。
+形式化陈述：presentation : Module.Presentation R (⋀[R]^n M)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition presentation
-  signature: : Module.Presentation R (⋀[R]^n M)
-  body: .ofIsPresentation (presentation.isPresentationCore R n M).isPresentation
-
-中文:
-定义 presentation
-  签名: : 模.呈现 R (⋀[R]^n M)
-  定义体: .ofIsPresentation (presentation.isPresentationCore R n M).isPresentation
-
-Depends on / 依赖: isPresentation, isPresentationCore, ofIsPresentation, presentation, presentation.isPresentationCore
+--- 原说明 ---
+The standard presentation of the `R`-module `⋀[R]^n M`.
 -/
 noncomputable def presentation : Module.Presentation R (⋀[R]^n M) :=
   .ofIsPresentation (presentation.isPresentationCore R n M).isPresentation
@@ -504,53 +323,53 @@ variable {R M n}
 /-- Two linear maps on `⋀[R]^n M` that agree on the image of `exteriorPower.ιMulti`
 are equal. -/
 @[ext]
-/--
-lemma `linearMap_ext` / 引理 `linearMap_ext`
+/-
+**exteriorPower.linearMap_ext** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+形式化陈述：linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : ⋀[R]^n M ->ₗ[R] N} (heq : f.com
+pAlternatingMap (ιMulti R n) = g.compAlternatingMap (ιMulti R n)) : f = g
+参数：heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingMap (ιMulti R n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Relations.Solution.IsPresentation.postcomp_injective`：postcomp_in
+jective {f f' : M ->ₗ[A] N} (h' : solution.postcomp f = solution.postcomp f') : 
+f = f'
+· 使用定理 `Module.Presentation.toIsPresentation`：∀ {A : Type u} [inst : Ring A] {M 
+: Type v} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module A M]   (self : Modul
+e.Presentation A M), self.…
+· 使用定理 `Module.Relations.Solution.ext`：∀ {A : Type u} {inst : Ring A} {relations
+ : Module.Relations A} {M : Type v} {inst_1 : AddCommGroup M}   {inst_2 : _root_
+.Module A M} {x y :…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-English:
-lemma linearMap_ext
-  statement: {f : ⋀[R]^n M ->ₗ[R] N} {g : ⋀[R]^n M ->ₗ[R] N}
-  proof: (presentation R n M).postcomp_injective (by ext f; apply DFunLike.congr_fun heq)
-
-中文:
-引理 linearMap_ext
-  结论: {f : ⋀[R]^n M ->ₗ[R] N} {g : ⋀[R]^n M ->ₗ[R] N}
-  证明: (presentation R n M).postcomp_injective (by ext f; apply DFunLike.congr_fun heq)
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, postcomp_injective, presentation
+--- 原说明 ---
+Two linear maps on `⋀[R]^n M` that agree on the image of `exteriorPower.ιMulti`
+are equal.
 -/
-lemma linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : ⋀[R]^n M ->ₗ[R] N}
+lemma linearMap_ext {f : ⋀[R]^n M →ₗ[R] N} {g : ⋀[R]^n M →ₗ[R] N}
     (heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingMap (ιMulti R n)) : f = g :=
   (presentation R n M).postcomp_injective (by ext f; apply DFunLike.congr_fun heq)
 
-/--
-Definition of `alternatingMapLinearEquiv` / `alternatingMapLinearEquiv` 的定义
+/-- The linear equivalence between `n`-fold alternating maps from `M` to `N` and linear maps from
+`⋀[R]^n M` to `N`: this is the universal property of the `n`th exterior power of `M`. -/
+/-
+**exteriorPower.alternatingMapLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPow
+er`。
+形式化陈述：alternatingMapLinearEquiv : (M [⋀^Fin n]->ₗ[R] N) ≃ₗ[R] ⋀[R]^n M ->ₗ[R] N
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition alternatingMapLinearEquiv
-  signature: : (M [⋀^Fin n]->ₗ[R] N) ≃ₗ[R] ⋀[R]^n M ->ₗ[R] N
-  body: LinearEquiv.symm
-    (Equiv.toLinearEquiv
-      ((presentation R n M).linearMapEquiv.trans presentation.relationsSolutionEquiv)
-      { map_add := fun _ _ => rfl
-        map_smul := fun _ _ => rfl })
-
-@[simp]
-
-中文:
-定义 alternatingMapLinearEquiv
-  签名: : (M [⋀^有限集 n]->ₗ[R] N) ≃ₗ[R] ⋀[R]^n M ->ₗ[R] N
-  定义体: LinearEquiv.symm
-    (Equiv.toLinearEquiv
-      ((presentation R n M).linearMapEquiv.trans presentation.relationsSolutionEquiv)
-      { map_add := fun _ _ => rfl
-        map_smul := fun _ _ => rfl })
-
-@[simp]
-
-Depends on / 依赖: Equiv.toLinearEquiv, LinearEquiv, LinearEquiv.symm, linearMapEquiv, linearMapEquiv.trans, map_add, map_smul, presentation, presentation.relationsSolutionEquiv, relationsSolutionEquiv, toLinearEquiv
+--- 原说明 ---
+The linear equivalence between `n`-fold alternating maps from `M` to `N` and lin
+ear maps from
+`⋀[R]^n M` to `N`: this is the universal property of the `n`th exterior power of
+ `M`.
 -/
-noncomputable def alternatingMapLinearEquiv : (M [⋀^Fin n]->ₗ[R] N) ≃ₗ[R] ⋀[R]^n M ->ₗ[R] N :=
+noncomputable def alternatingMapLinearEquiv : (M [⋀^Fin n]→ₗ[R] N) ≃ₗ[R] ⋀[R]^n M →ₗ[R] N :=
   LinearEquiv.symm
     (Equiv.toLinearEquiv
       ((presentation R n M).linearMapEquiv.trans presentation.relationsSolutionEquiv)
@@ -558,34 +377,12 @@ noncomputable def alternatingMapLinearEquiv : (M [⋀^Fin n]->ₗ[R] N) ≃ₗ[R
         map_smul := fun _ _ => rfl })
 
 @[simp]
-/--
-lemma `alternatingMapLinearEquiv_comp_ιMulti` / 引理 `alternatingMapLinearEquiv_comp_ιMulti`
-
-English:
-lemma alternatingMapLinearEquiv_comp_ιMulti
-  given: (f : M [⋀^Fin n]->ₗ[R] N)
-  proof: by
-  obtain ⟨φ, rfl⟩ := alternatingMapLinearEquiv.symm.surjective f
-  dsimp [alternatingMapLinearEquiv]
-  simp only [LinearEquiv.symm_apply_apply]
-  rfl
-
-@[simp]
-
-中文:
-引理 alternatingMapLinearEquiv_comp_ιMulti
-  条件: (f : M [⋀^有限集 n]->ₗ[R] N)
-  证明: by
-  obtain ⟨φ, rfl⟩ := alternatingMapLinearEquiv.symm.surjective f
-  dsimp [alternatingMapLinearEquiv]
-  simp only [LinearEquiv.symm_apply_apply]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_apply, alternatingMapLinearEquiv, alternatingMapLinearEquiv.symm.surjective, surjective, symm_apply_apply
+/-
+**exteriorPower.alternatingMapLinearEquiv_comp_** 是 Mathlib 中的一个引理，位于命名空间 `exter
+iorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma alternatingMapLinearEquiv_comp_ιMulti (f : M [⋀^Fin n]->ₗ[R] N) :
+lemma alternatingMapLinearEquiv_comp_ιMulti (f : M [⋀^Fin n]→ₗ[R] N) :
     (alternatingMapLinearEquiv f).compAlternatingMap (ιMulti R n) = f := by
   obtain ⟨φ, rfl⟩ := alternatingMapLinearEquiv.symm.surjective f
   dsimp [alternatingMapLinearEquiv]
@@ -593,77 +390,52 @@ lemma alternatingMapLinearEquiv_comp_ιMulti (f : M [⋀^Fin n]->ₗ[R] N) :
   rfl
 
 @[simp]
-/--
-lemma `alternatingMapLinearEquiv_apply_ιMulti` / 引理 `alternatingMapLinearEquiv_apply_ιMulti`
-
-English:
-lemma alternatingMapLinearEquiv_apply_ιMulti
-  given: (f : M [⋀^Fin n]->ₗ[R] N) (a : Fin n -> M)
-  proof: DFunLike.congr_fun (alternatingMapLinearEquiv_comp_ιMulti f) a
-
-@[simp]
-
-中文:
-引理 alternatingMapLinearEquiv_apply_ιMulti
-  条件: (f : M [⋀^有限集 n]->ₗ[R] N) (a : 有限集 n -> M)
-  证明: DFunLike.congr_fun (alternatingMapLinearEquiv_comp_ιMulti f) a
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
+/-
+**exteriorPower.alternatingMapLinearEquiv_apply_** 是 Mathlib 中的一个引理，位于命名空间 `exte
+riorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma alternatingMapLinearEquiv_apply_ιMulti (f : M [⋀^Fin n]->ₗ[R] N) (a : Fin n -> M) :
+lemma alternatingMapLinearEquiv_apply_ιMulti (f : M [⋀^Fin n]→ₗ[R] N) (a : Fin n → M) :
     alternatingMapLinearEquiv f (ιMulti R n a) = f a :=
   DFunLike.congr_fun (alternatingMapLinearEquiv_comp_ιMulti f) a
 
 @[simp]
-/--
-lemma `alternatingMapLinearEquiv_symm_apply` / 引理 `alternatingMapLinearEquiv_symm_apply`
-
-English:
-lemma alternatingMapLinearEquiv_symm_apply
-  given: (F : ⋀[R]^n M ->ₗ[R] N) (m : Fin n -> M)
-  proof: by
-  obtain ⟨f, rfl⟩ := alternatingMapLinearEquiv.surjective F
-  simp only [LinearEquiv.symm_apply_apply, alternatingMapLinearEquiv_comp_ιMulti]
-
-@[simp]
-
-中文:
-引理 alternatingMapLinearEquiv_symm_apply
-  条件: (F : ⋀[R]^n M ->ₗ[R] N) (m : 有限集 n -> M)
-  证明: by
-  obtain ⟨f, rfl⟩ := alternatingMapLinearEquiv.surjective F
-  simp only [LinearEquiv.symm_apply_apply, alternatingMapLinearEquiv_comp_ιMulti]
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_apply, alternatingMapLinearEquiv, alternatingMapLinearEquiv.surjective, surjective, symm_apply_apply
+/-
+**exteriorPower.alternatingMapLinearEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `
+exteriorPower`。
+形式化陈述：alternatingMapLinearEquiv_symm_apply (F : ⋀[R]^n M ->ₗ[R] N) (m : Fin n ->
+ M) : alternatingMapLinearEquiv.symm F m = F.compAlternatingMap (ιMulti R n) m
+参数：F : ⋀[R]^n M ->ₗ[R] N；m : Fin n -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用引理 `exteriorPower.alternatingMapLinearEquiv_comp_ιMulti`：alternatingMapLinea
+rEquiv_comp_ιMulti (f : M [⋀^Fin n]->ₗ[R] N) : (alternatingMapLinearEquiv f).com
+pAlternatingMap (ιMulti R n) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma alternatingMapLinearEquiv_symm_apply (F : ⋀[R]^n M ->ₗ[R] N) (m : Fin n -> M) :
+lemma alternatingMapLinearEquiv_symm_apply (F : ⋀[R]^n M →ₗ[R] N) (m : Fin n → M) :
     alternatingMapLinearEquiv.symm F m = F.compAlternatingMap (ιMulti R n) m := by
   obtain ⟨f, rfl⟩ := alternatingMapLinearEquiv.surjective F
   simp only [LinearEquiv.symm_apply_apply, alternatingMapLinearEquiv_comp_ιMulti]
 
 @[simp]
-/--
-lemma `alternatingMapLinearEquiv_ιMulti` / 引理 `alternatingMapLinearEquiv_ιMulti`
-
-English:
-lemma alternatingMapLinearEquiv_ιMulti
-  proof: by
-  ext
-  simp only [alternatingMapLinearEquiv_comp_ιMulti, ιMulti_apply_coe,
-    LinearMap.compAlternatingMap_apply, LinearMap.id_coe, id_eq]
-
-中文:
-引理 alternatingMapLinearEquiv_ιMulti
-  证明: by
-  ext
-  simp only [alternatingMapLinearEquiv_comp_ιMulti, ιMulti_apply_coe,
-    LinearMap.compAlternatingMap_apply, LinearMap.id_coe, id_eq]
-
-Depends on / 依赖: LinearMap, LinearMap.compAlternatingMap_apply, LinearMap.id, LinearMap.id_coe, compAlternatingMap_apply, id_coe, id_eq
+/-
+**exteriorPower.alternatingMapLinearEquiv_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPo
+wer`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma alternatingMapLinearEquiv_ιMulti :
     alternatingMapLinearEquiv (ιMulti R n (M := M)) = LinearMap.id := by
@@ -671,28 +443,51 @@ lemma alternatingMapLinearEquiv_ιMulti :
   simp only [alternatingMapLinearEquiv_comp_ιMulti, ιMulti_apply_coe,
     LinearMap.compAlternatingMap_apply, LinearMap.id_coe, id_eq]
 
-/--
-lemma `alternatingMapLinearEquiv_comp` / 引理 `alternatingMapLinearEquiv_comp`
+/-- If `f` is an alternating map from `M` to `N`,
+`alternatingMapLinearEquiv f` is the corresponding linear map from `⋀[R]^n M` to `N`,
+and if `g` is a linear map from `N` to `N'`, then
+the alternating map `g.compAlternatingMap f` from `M` to `N'` corresponds to the linear
+map `g.comp (alternatingMapLinearEquiv f)` on `⋀[R]^n M`. -/
+/-
+**exteriorPower.alternatingMapLinearEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `exteri
+orPower`。
+形式化陈述：alternatingMapLinearEquiv_comp (g : N ->ₗ[R] N') (f : M [⋀^Fin n]->ₗ[R] N)
+ : alternatingMapLinearEquiv (g.compAlternatingMap f) = g.comp (alternatingMapLi
+nearEquiv f)
+参数：g : N ->ₗ[R] N'；f : M [⋀^Fin n]->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exteriorPower.linearMap_ext`：linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : 
+⋀[R]^n M ->ₗ[R] N} (heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingM
+ap (ιMulti R n)) …
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `exteriorPower.alternatingMapLinearEquiv_comp_ιMulti`：alternatingMapLinea
+rEquiv_comp_ιMulti (f : M [⋀^Fin n]->ₗ[R] N) : (alternatingMapLinearEquiv f).com
+pAlternatingMap (ιMulti R n) = f
+· 使用引理 `exteriorPower.alternatingMapLinearEquiv_apply_ιMulti`：alternatingMapLine
+arEquiv_apply_ιMulti (f : M [⋀^Fin n]->ₗ[R] N) (a : Fin n -> M) : alternatingMap
+LinearEquiv f (ιMulti R n a) = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma alternatingMapLinearEquiv_comp
-  given: (g : N ->ₗ[R] N') (f : M [⋀^Fin n]->ₗ[R] N)
-  proof: by
-  ext
-  simp only [alternatingMapLinearEquiv_comp_ιMulti, LinearMap.compAlternatingMap_apply,
-    LinearMap.coe_comp, comp_apply, alternatingMapLinearEquiv_apply_ιMulti]
-
-中文:
-引理 alternatingMapLinearEquiv_comp
-  条件: (g : N ->ₗ[R] N') (f : M [⋀^有限集 n]->ₗ[R] N)
-  证明: by
-  ext
-  simp only [alternatingMapLinearEquiv_comp_ιMulti, LinearMap.compAlternatingMap_apply,
-    LinearMap.coe_comp, comp_apply, alternatingMapLinearEquiv_apply_ιMulti]
-
-Depends on / 依赖: LinearMap, LinearMap.coe_comp, LinearMap.compAlternatingMap_apply, coe_comp, compAlternatingMap_apply, comp_apply
+--- 原说明 ---
+If `f` is an alternating map from `M` to `N`,
+`alternatingMapLinearEquiv f` is the corresponding linear map from `⋀[R]^n M` to
+ `N`,
+and if `g` is a linear map from `N` to `N'`, then
+the alternating map `g.compAlternatingMap f` from `M` to `N'` corresponds to the
+ linear
+map `g.comp (alternatingMapLinearEquiv f)` on `⋀[R]^n M`.
 -/
-lemma alternatingMapLinearEquiv_comp (g : N ->ₗ[R] N') (f : M [⋀^Fin n]->ₗ[R] N) :
+lemma alternatingMapLinearEquiv_comp (g : N →ₗ[R] N') (f : M [⋀^Fin n]→ₗ[R] N) :
     alternatingMapLinearEquiv (g.compAlternatingMap f) = g.comp (alternatingMapLinearEquiv f) := by
   ext
   simp only [alternatingMapLinearEquiv_comp_ιMulti, LinearMap.compAlternatingMap_apply,
@@ -701,276 +496,248 @@ lemma alternatingMapLinearEquiv_comp (g : N ->ₗ[R] N') (f : M [⋀^Fin n]->ₗ
 /-! Functoriality of the exterior powers. -/
 
 variable (n) in
-/--
-Definition of `map` / `map` 的定义
+/-- The linear map between `n`th exterior powers induced by a linear map between the modules. -/
+/-
+**exteriorPower.map** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower`。
+形式化陈述：map (f : M ->ₗ[R] N) : ⋀[R]^n M ->ₗ[R] ⋀[R]^n N
+参数：f : M ->ₗ[R] N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : M ->ₗ[R] N)
-  body: alternatingMapLinearEquiv ((ιMulti R n).compLinearMap f)
-
-中文:
-定义 map
-  签名: (f : M ->ₗ[R] N)
-  定义体: alternatingMapLinearEquiv ((ιMulti R n).compLinearMap f)
-
-Depends on / 依赖: alternatingMapLinearEquiv, compLinearMap
+--- 原说明 ---
+The linear map between `n`th exterior powers induced by a linear map between the
+ modules.
 -/
-noncomputable def map (f : M ->ₗ[R] N) : ⋀[R]^n M ->ₗ[R] ⋀[R]^n N :=
+noncomputable def map (f : M →ₗ[R] N) : ⋀[R]^n M →ₗ[R] ⋀[R]^n N :=
   alternatingMapLinearEquiv ((ιMulti R n).compLinearMap f)
-
-/--
-lemma `alternatingMapLinearEquiv_symm_map` / 引理 `alternatingMapLinearEquiv_symm_map`
-
-English:
-lemma alternatingMapLinearEquiv_symm_map
-  given: (f : M ->ₗ[R] N)
-  proof: by
-  simp only [map, LinearEquiv.symm_apply_apply]
-
-@[simp]
-
-中文:
-引理 alternatingMapLinearEquiv_symm_map
-  条件: (f : M ->ₗ[R] N)
-  证明: by
-  simp only [map, LinearEquiv.symm_apply_apply]
-
-@[simp]
+/-
+**exteriorPower.alternatingMapLinearEquiv_symm_map** 是 Mathlib 中的一个定理，位于命名空间 `ex
+teriorPower`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {n : ℕ} {M : Type u_1} {N : Type u_2} [
+inst_1 : AddCommGroup M]   [inst_2 : _root_.Module R M] [inst_3 : AddCommGroup N
+] [inst_4 : _root_.Module R N] (f : M →ₗ[R] N),   exteriorPower.alternatingMapLi
+nearEquiv.symm (exteriorPower.map n f) = (exteriorPower.ιMulti R n).compLinearMa
+p f
+参数：f : M →ₗ[R] N；exteriorPower.map n f；exteriorPower.ιMulti R n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma alternatingMapLinearEquiv_symm_map (f : M ->ₗ[R] N) :
+@[simp] lemma alternatingMapLinearEquiv_symm_map (f : M →ₗ[R] N) :
     alternatingMapLinearEquiv.symm (map n f) = (ιMulti R n).compLinearMap f := by
   simp only [map, LinearEquiv.symm_apply_apply]
 
 @[simp]
-/--
-theorem `map_comp_ιMulti` / 定理 `map_comp_ιMulti`
-
-English:
-theorem map_comp_ιMulti
-  given: (f : M ->ₗ[R] N)
-  proof: by
-  simp only [map, alternatingMapLinearEquiv_comp_ιMulti]
-
-@[simp]
-
-中文:
-定理 map_comp_ιMulti
-  条件: (f : M ->ₗ[R] N)
-  证明: by
-  simp only [map, alternatingMapLinearEquiv_comp_ιMulti]
-
-@[simp]
+/-
+**exteriorPower.map_comp_** 是 Mathlib 中的一个定理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_comp_ιMulti (f : M ->ₗ[R] N) :
+theorem map_comp_ιMulti (f : M →ₗ[R] N) :
     (map n f).compAlternatingMap (ιMulti R n) = (ιMulti R n).compLinearMap f := by
   simp only [map, alternatingMapLinearEquiv_comp_ιMulti]
 
 @[simp]
-/--
-theorem `map_apply_ιMulti` / 定理 `map_apply_ιMulti`
-
-English:
-theorem map_apply_ιMulti
-  given: (f : M ->ₗ[R] N) (m : Fin n -> M)
-  proof: by
-  simp only [map, alternatingMapLinearEquiv_apply_ιMulti, AlternatingMap.compLinearMap_apply,
-    Function.comp_def]
-
-@[simp]
-
-中文:
-定理 map_apply_ιMulti
-  条件: (f : M ->ₗ[R] N) (m : 有限集 n -> M)
-  证明: by
-  simp only [map, alternatingMapLinearEquiv_apply_ιMulti, AlternatingMap.compLinearMap_apply,
-    Function.comp_def]
-
-@[simp]
-
-Depends on / 依赖: AlternatingMap, AlternatingMap.compLinearMap_apply, Function, Function.comp_def, compLinearMap_apply, comp_def
+/-
+**exteriorPower.map_apply_** 是 Mathlib 中的一个定理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply_ιMulti (f : M ->ₗ[R] N) (m : Fin n -> M) :
+theorem map_apply_ιMulti (f : M →ₗ[R] N) (m : Fin n → M) :
     map n f (ιMulti R n m) = ιMulti R n (f ∘ m) := by
   simp only [map, alternatingMapLinearEquiv_apply_ιMulti, AlternatingMap.compLinearMap_apply,
     Function.comp_def]
 
 @[simp]
-/--
-lemma `map_comp_ιMulti_family` / 引理 `map_comp_ιMulti_family`
-
-English:
-lemma map_comp_ιMulti_family
-  given: {I : Type*} [LinearOrder I] (v : I -> M) (f : M ->ₗ[R] N)
-  proof: by
-  ext ⟨s, hs⟩
-  simp only [ιMulti_family, Function.comp_apply, map_apply_ιMulti]
-  rfl
-
-@[simp]
-
-中文:
-引理 map_comp_ιMulti_family
-  条件: {I : 类型} [线性序 I] (v : I -> M) (f : M ->ₗ[R] N)
-  证明: by
-  ext ⟨s, hs⟩
-  simp only [ιMulti_family, Function.comp_apply, map_apply_ιMulti]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply
+/-
+**exteriorPower.map_comp_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_comp_ιMulti_family {I : Type*} [LinearOrder I] (v : I -> M) (f : M ->ₗ[R] N) :
+lemma map_comp_ιMulti_family {I : Type*} [LinearOrder I] (v : I → M) (f : M →ₗ[R] N) :
     (map n f) ∘ (ιMulti_family R n v) = ιMulti_family R n (f ∘ v) := by
   ext ⟨s, hs⟩
   simp only [ιMulti_family, Function.comp_apply, map_apply_ιMulti]
   rfl
 
 @[simp]
-/--
-lemma `map_apply_ιMulti_family` / 引理 `map_apply_ιMulti_family`
-
-English:
-lemma map_apply_ιMulti_family
-  statement: {I : Type*} [LinearOrder I] (v : I -> M) (f : M ->ₗ[R] N)
-  proof: by
-  simp only [ιMulti_family, map, alternatingMapLinearEquiv_apply_ιMulti]
-  rfl
-
-@[simp]
-
-中文:
-引理 map_apply_ιMulti_family
-  结论: {I : 类型} [线性序 I] (v : I -> M) (f : M ->ₗ[R] N)
-  证明: by
-  simp only [ιMulti_family, map, alternatingMapLinearEquiv_apply_ιMulti]
-  rfl
-
-@[simp]
+/-
+**exteriorPower.map_apply_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_apply_ιMulti_family {I : Type*} [LinearOrder I] (v : I -> M) (f : M ->ₗ[R] N)
+lemma map_apply_ιMulti_family {I : Type*} [LinearOrder I] (v : I → M) (f : M →ₗ[R] N)
     (s : powersetCard I n) :
     (map n f) (ιMulti_family R n v s) = ιMulti_family R n (f ∘ v) s := by
   simp only [ιMulti_family, map, alternatingMapLinearEquiv_apply_ιMulti]
   rfl
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  proof: by
-  aesop
-
-@[simp]
-
-中文:
-定理 map_id
-  证明: by
-  aesop
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+/-
+**exteriorPower.map_id** 是 Mathlib 中的一个定理，位于命名空间 `exteriorPower`。
+形式化陈述：map_id : map n (LinearMap.id (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exteriorPower.linearMap_ext`：linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : 
+⋀[R]^n M ->ₗ[R] N} (heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingM
+ap (ιMulti R n)) …
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `exteriorPower.map_comp_ιMulti`：map_comp_ιMulti (f : M ->ₗ[R] N) : (map n
+ f).compAlternatingMap (ιMulti R n) = (ιMulti R n).compLinearMap f
+· 使用定理 `AlternatingMap.compLinearMap_id`：compLinearMap_id (f : M [⋀^ι]->ₗ[R] N) 
+: f.compLinearMap LinearMap.id = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_id :
     map n (LinearMap.id (R := R) (M := M)) = LinearMap.id := by
   aesop
 
 @[simp]
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (f : M ->ₗ[R] N) (g : N ->ₗ[R] N')
-  proof: by
-  aesop
-
-中文:
-定理 map_comp
-  条件: (f : M ->ₗ[R] N) (g : N ->ₗ[R] N')
-  证明: by
-  aesop
+/-
+**exteriorPower.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `exteriorPower`。
+形式化陈述：map_comp (f : M ->ₗ[R] N) (g : N ->ₗ[R] N') : map n (g ∘ₗ f) = map n g ∘ₗ 
+map n f
+参数：f : M ->ₗ[R] N；g : N ->ₗ[R] N'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exteriorPower.linearMap_ext`：linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : 
+⋀[R]^n M ->ₗ[R] N} (heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingM
+ap (ιMulti R n)) …
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `exteriorPower.map_comp_ιMulti`：map_comp_ιMulti (f : M ->ₗ[R] N) : (map n
+ f).compAlternatingMap (ιMulti R n) = (ιMulti R n).compLinearMap f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exteriorPower.map_apply_ιMulti`：map_apply_ιMulti (f : M ->ₗ[R] N) (m : F
+in n -> M) : map n f (ιMulti R n m) = ιMulti R n (f ∘ m)
 -/
-theorem map_comp (f : M ->ₗ[R] N) (g : N ->ₗ[R] N') :
+theorem map_comp (f : M →ₗ[R] N) (g : N →ₗ[R] N') :
     map n (g ∘ₗ f) = map n g ∘ₗ map n f := by
   aesop
 
 /-! Exactness properties of the exterior power functor. -/
 
-/--
-lemma `map_injective` / 引理 `map_injective`
+/-- If a linear map has a retraction, then the map it induces on exterior powers is injective. -/
+/-
+**exteriorPower.map_injective** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+形式化陈述：map_injective {f : M ->ₗ[R] N} (g : N ->ₗ[R] M) (hg : g ∘ₗ f = .id) : Inje
+ctive (map n f)
+参数：g : N ->ₗ[R] M；hg : g ∘ₗ f = .id。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.RightInverse f g → Function.Injective f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `exteriorPower.map_comp`：map_comp (f : M ->ₗ[R] N) (g : N ->ₗ[R] N') : ma
+p n (g ∘ₗ f) = map n g ∘ₗ map n f
+· 使用定理 `exteriorPower.map_id`：map_id : map n (LinearMap.id (R
+· 使用定理 `LinearMap.id_coe`：id_coe : ((LinearMap.id : M ->ₗ[R] M) : M -> M) = _roo
+t_.id
+· 使用定理 `id_eq`：∀ {α : Sort u_1} (a : α), id a = a
 
-English:
-lemma map_injective
-  given: {f : M ->ₗ[R] N} (g : N ->ₗ[R] M) (hg : g ∘ₗ f = .id)
-  proof: RightInverse.injective (g := map n g)
-    (fun _ => by rw [← LinearMap.comp_apply, ← map_comp, hg, map_id, LinearMap.id_coe, id_eq])
-
-中文:
-引理 map_injective
-  条件: {f : M ->ₗ[R] N} (g : N ->ₗ[R] M) (hg : g ∘ₗ f = .id)
-  证明: RightInverse.injective (g := map n g)
-    (fun _ => by rw [← LinearMap.comp_apply, ← map_comp, hg, map_id, LinearMap.id_coe, id_eq])
-
-Depends on / 依赖: LinearMap, LinearMap.comp_apply, LinearMap.id_coe, RightInverse, RightInverse.injective, comp_apply, id_coe, id_eq, injective, map_comp, map_id
+--- 原说明 ---
+If a linear map has a retraction, then the map it induces on exterior powers is 
+injective.
 -/
-lemma map_injective {f : M ->ₗ[R] N} (g : N ->ₗ[R] M) (hg : g ∘ₗ f = .id) :
+lemma map_injective {f : M →ₗ[R] N} (g : N →ₗ[R] M) (hg : g ∘ₗ f = .id) :
     Injective (map n f) :=
   RightInverse.injective (g := map n g)
-    (fun _ => by rw [← LinearMap.comp_apply, ← map_comp, hg, map_id, LinearMap.id_coe, id_eq])
+    (fun _ ↦ by rw [← LinearMap.comp_apply, ← map_comp, hg, map_id, LinearMap.id_coe, id_eq])
 
-/--
-lemma `map_injective_field` / 引理 `map_injective_field`
+/-- If the base ring is a field, then any injective linear map induces an injective map on
+exterior powers. -/
+/-
+**exteriorPower.map_injective_field** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+形式化陈述：map_injective_field {K : Type*} [Field K] [Module K M] [Module K N] {f : M
+ ->ₗ[K] N} (hf : Injective f) : Injective (map n f)
+参数：hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exteriorPower.map_injective`：map_injective {f : M ->ₗ[R] N} (g : N ->ₗ[R
+] M) (hg : g ∘ₗ f = .id) : Injective (map n f)
+· 使用定理 `LinearMap.exists_leftInverse_of_injective`：LinearMap.exists_leftInverse_
+of_injective (f : V ->ₗ[K] V') (hf_inj : LinearMap.ker f = ⊥) : exists g : V' ->
+ₗ[K] V, g.comp f = LinearMap.id
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 
-English:
-lemma map_injective_field
-  statement: {K : Type*} [Field K] [Module K M] [Module K N]
-  proof: map_injective _ (f.exists_leftInverse_of_injective (LinearMap.ker_eq_bot.mpr hf)).choose_spec
-
-中文:
-引理 map_injective_field
-  结论: {K : 类型} [域 K] [模 K M] [模 K N]
-  证明: map_injective _ (f.exists_leftInverse_of_injective (LinearMap.ker_eq_bot.mpr hf)).choose_spec
-
-Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mpr, choose_spec, exists_leftInverse_of_injective, f.exists_leftInverse_of_injective, ker_eq_bot, map_injective
+--- 原说明 ---
+If the base ring is a field, then any injective linear map induces an injective 
+map on
+exterior powers.
 -/
 lemma map_injective_field {K : Type*} [Field K] [Module K M] [Module K N]
-    {f : M ->ₗ[K] N} (hf : Injective f) :
+    {f : M →ₗ[K] N} (hf : Injective f) :
     Injective (map n f) :=
   map_injective _ (f.exists_leftInverse_of_injective (LinearMap.ker_eq_bot.mpr hf)).choose_spec
 
-/--
-lemma `map_surjective` / 引理 `map_surjective`
+/-- If a linear map is surjective, then the map it induces on exterior powers is surjective. -/
+/-
+**exteriorPower.map_surjective** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+形式化陈述：map_surjective {f : M ->ₗ[R] N} (hf : Surjective f) : Surjective (map n f)
+参数：hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.range_eq_map`：range_eq_map [RingHomSurjective τ₁₂] (f : M ->ₛₗ
+[τ₁₂] M₂) : range f = map f ⊤
+· 使用引理 `exteriorPower.ιMulti_span`：ιMulti_span : Submodule.span R (Set.range (ιM
+ulti R n)) = (⊤ : Submodule R (⋀[R]^n M))
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `LinearMap.coe_compAlternatingMap`：coe_compAlternatingMap (g : N ->ₗ[R] N
+₂) (f : M [⋀^ι]->ₗ[R] N) : ⇑(g.compAlternatingMap f) = g ∘ f
+· 使用定理 `exteriorPower.map_comp_ιMulti`：map_comp_ιMulti (f : M ->ₗ[R] N) : (map n
+ f).compAlternatingMap (ιMulti R n) = (ιMulti R n).compLinearMap f
+· 使用定理 `AlternatingMap.coe_compLinearMap`：coe_compLinearMap (f : M [⋀^ι]->ₗ[R] N
+) (g : M₂ ->ₗ[R] M) : ⇑(f.compLinearMap g) = f ∘ (g ∘ ·)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Set.range_eq_univ`：range_eq_univ : range f = univ ↔ Surjective f
+· 使用定理 `Function.Surjective.comp_left`：∀ {α : Sort u} {β : Sort v} {γ : Sort w} 
+{g : β → γ}, Function.Surjective g → Function.Surjective fun x => g ∘ x
 
-English:
-lemma map_surjective
-  given: {f : M ->ₗ[R] N} (hf : Surjective f)
-  proof: by
-  rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [← ιMulti_span]; rw [← ιMulti_span]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← LinearMap.coe_compAlternatingMap]; rw [map_comp_ιMulti]; rw [AlternatingMap.coe_compLinearMap]; rw [Set.range_comp]
-  conv_rhs => rw [← Set.image_univ]
-  congr
-  rw [Set.range_eq_univ]
-  exact Surjective.comp_left hf
-
-中文:
-引理 map_surjective
-  条件: {f : M ->ₗ[R] N} (hf : 满射 f)
-  证明: by
-  rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [← ιMulti_span]; rw [← ιMulti_span]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← LinearMap.coe_compAlternatingMap]; rw [map_comp_ιMulti]; rw [AlternatingMap.coe_compLinearMap]; rw [Set.range_comp]
-  conv_rhs => rw [← Set.image_univ]
-  congr
-  rw [Set.range_eq_univ]
-  exact Surjective.comp_left hf
-
-Depends on / 依赖: AlternatingMap, AlternatingMap.coe_compLinearMap, LinearMap, LinearMap.coe_compAlternatingMap, LinearMap.range_eq_map, LinearMap.range_eq_top, Set.image_univ, Set.range_comp, Set.range_eq_univ, Submodule, Submodule.map_span, Surjective, Surjective.comp_left, coe_compAlternatingMap, coe_compLinearMap, comp_left, conv_rhs, image_univ, map_span, range_comp
+--- 原说明 ---
+If a linear map is surjective, then the map it induces on exterior powers is sur
+jective.
 -/
-lemma map_surjective {f : M ->ₗ[R] N} (hf : Surjective f) :
+lemma map_surjective {f : M →ₗ[R] N} (hf : Surjective f) :
     Surjective (map n f) := by
-  rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [← ιMulti_span]; rw [← ιMulti_span]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← LinearMap.coe_compAlternatingMap]; rw [map_comp_ιMulti]; rw [AlternatingMap.coe_compLinearMap]; rw [Set.range_comp]
+  rw [← LinearMap.range_eq_top, LinearMap.range_eq_map, ← ιMulti_span, ← ιMulti_span,
+    Submodule.map_span, ← Set.range_comp, ← LinearMap.coe_compAlternatingMap, map_comp_ιMulti,
+    AlternatingMap.coe_compLinearMap, Set.range_comp]
   conv_rhs => rw [← Set.image_univ]
   congr
   rw [Set.range_eq_univ]
@@ -981,70 +748,26 @@ section ιMulti_family
 variable (R)
 
 open Submodule Set in
-/--
-lemma `ιMulti_family_span_fixedDegree_aux` / 引理 `ιMulti_family_span_fixedDegree_aux`
+/-- Given an ordered family of vectors `i ↦ v i` ranging over `i ∈ I`, and indexes
+`α₁, α₂, …, αₙ ∈ I` (not necessarily in order) the wedge product `v (α 1) ∧ ⋯ ∧ v (α n)` belongs to
+the span of `n`-fold _ordered_ wedge products of elements of the `v i`. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_family_span_fixedDegree_aux
-  proof: by
-  by_cases α_inj : Injective α; swap
-  · suffices ExteriorAlgebra.ιMulti R n (v ∘ α) = 0 by simp [this]
-exact AlternatingMap.map_eq_zero_of_not_injective _ _ fun h => α_inj (Injective.of_comp h)
-  suffices exists σ : Equiv.Perm (Fin n), (ExteriorAlgebra.ιMulti R n ((v ∘ α) ∘ σ)) in
-      Submodule.span R (Set.range (ExteriorAlgebra.ιMulti_family R n v)) by
-    obtain ⟨σ, hσ⟩ := this
-    rw [AlternatingMap.map_perm] at hσ
-    refine (Submodule.smul_mem_iff_of_isUnit _ (r := (σ.sign : R)) ?_).mp hσ
-    rw [isUnit_iff_exists_inv]
-    use (σ.sign : R)
-    norm_cast
-    simp only [Int.units_mul_self, Units.val_one, Int.cast_one]
-  have α_card : (Finset.image α Finset.univ).card = n :=
-    (Finset.card_image_of_injective Finset.univ α_inj).trans (Finset.card_fin n)
-  use (Finset.orderIsoOfFin (Finset.image α Finset.univ) α_card).toEquiv.trans
-    ((Equiv.setCongr Fintype.coe_image_univ).trans (Equiv.ofInjective α α_inj).symm)
-  apply Submodule.mem_span_of_mem
-  use ⟨(Finset.image α Finset.univ), α_card⟩
-  rw [ExteriorAlgebra.ιMulti_family]; rw [Function.comp_assoc]
-  congr
-  ext i
-  simp [Equiv.apply_ofInjective_symm]
-  rfl
-
-中文:
-引理 ιMulti_family_span_fixedDegree_aux
-  证明: by
-  by_cases α_inj : Injective α; swap
-  · suffices ExteriorAlgebra.ιMulti R n (v ∘ α) = 0 by simp [this]
-exact AlternatingMap.map_eq_zero_of_not_injective _ _ fun h => α_inj (Injective.of_comp h)
-  suffices exists σ : Equiv.Perm (Fin n), (ExteriorAlgebra.ιMulti R n ((v ∘ α) ∘ σ)) in
-      Submodule.span R (Set.range (ExteriorAlgebra.ιMulti_family R n v)) by
-    obtain ⟨σ, hσ⟩ := this
-    rw [AlternatingMap.map_perm] at hσ
-    refine (Submodule.smul_mem_iff_of_isUnit _ (r := (σ.sign : R)) ?_).mp hσ
-    rw [isUnit_iff_exists_inv]
-    use (σ.sign : R)
-    norm_cast
-    simp only [Int.units_mul_self, Units.val_one, Int.cast_one]
-  have α_card : (Finset.image α Finset.univ).card = n :=
-    (Finset.card_image_of_injective Finset.univ α_inj).trans (Finset.card_fin n)
-  use (Finset.orderIsoOfFin (Finset.image α Finset.univ) α_card).toEquiv.trans
-    ((Equiv.setCongr Fintype.coe_image_univ).trans (Equiv.ofInjective α α_inj).symm)
-  apply Submodule.mem_span_of_mem
-  use ⟨(Finset.image α Finset.univ), α_card⟩
-  rw [ExteriorAlgebra.ιMulti_family]; rw [Function.comp_assoc]
-  congr
-  ext i
-  simp [Equiv.apply_ofInjective_symm]
-  rfl
+--- 原说明 ---
+Given an ordered family of vectors `i ↦ v i` ranging over `i ∈ I`, and indexes
+`α₁, α₂, …, αₙ ∈ I` (not necessarily in order) the wedge product `v (α 1) ∧ ⋯ ∧ 
+v (α n)` belongs to
+the span of `n`-fold _ordered_ wedge products of elements of the `v i`.
 -/
 private lemma ιMulti_family_span_fixedDegree_aux
-    {I : Type*} [LinearOrder I] (v : I -> M) (α : Fin n -> I) :
-    ExteriorAlgebra.ιMulti R n (v ∘ α) in span R (range (ExteriorAlgebra.ιMulti_family R n v)) := by
+    {I : Type*} [LinearOrder I] (v : I → M) (α : Fin n → I) :
+    ExteriorAlgebra.ιMulti R n (v ∘ α) ∈ span R (range (ExteriorAlgebra.ιMulti_family R n v)) := by
   by_cases α_inj : Injective α; swap
   · suffices ExteriorAlgebra.ιMulti R n (v ∘ α) = 0 by simp [this]
-exact AlternatingMap.map_eq_zero_of_not_injective _ _ fun h => α_inj (Injective.of_comp h)
-  suffices exists σ : Equiv.Perm (Fin n), (ExteriorAlgebra.ιMulti R n ((v ∘ α) ∘ σ)) in
+    exact AlternatingMap.map_eq_zero_of_not_injective _ _ <| fun h ↦ α_inj (Injective.of_comp h)
+  suffices ∃ σ : Equiv.Perm (Fin n), (ExteriorAlgebra.ιMulti R n ((v ∘ α) ∘ σ)) ∈
       Submodule.span R (Set.range (ExteriorAlgebra.ιMulti_family R n v)) by
     obtain ⟨σ, hσ⟩ := this
     rw [AlternatingMap.map_perm] at hσ
@@ -1059,55 +782,31 @@ exact AlternatingMap.map_eq_zero_of_not_injective _ _ fun h => α_inj (Injective
     ((Equiv.setCongr Fintype.coe_image_univ).trans (Equiv.ofInjective α α_inj).symm)
   apply Submodule.mem_span_of_mem
   use ⟨(Finset.image α Finset.univ), α_card⟩
-  rw [ExteriorAlgebra.ιMulti_family]; rw [Function.comp_assoc]
+  rw [ExteriorAlgebra.ιMulti_family, Function.comp_assoc]
   congr
   ext i
   simp [Equiv.apply_ofInjective_symm]
   rfl
 
 open Finset in
-/--
-lemma `ιMulti_family_span_fixedDegree_of_span` / 引理 `ιMulti_family_span_fixedDegree_of_span`
+/-- If a family of vectors spans `M`, then the family of its `n`-fold exterior products spans
+`⋀[R]^n M`. Here we work in the exterior algebra. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_family_span_fixedDegree_of_span
-  statement: {I : Type*} [LinearOrder I] {v : I -> M}
-  proof: by
-  apply le_antisymm
-  · rw [Submodule.span_le, Set.range_subset_iff]
-    intro
-    rw [SetLike.mem_coe]; rw [ιMulti_family_eq_coe_comp]; rw [comp_apply]
-    exact Submodule.coe_mem _
-  · rw [← ιMulti_span_fixedDegree_of_span_eq_top R n M hv, Submodule.span_le]
-    rintro - ⟨f, ⟨f_range, rfl⟩⟩
-    rw [Set.mem_ofPred] at f_range
-    obtain ⟨α, rfl⟩ := Set.range_subset_range_iff_exists_comp.mp f_range
-    exact ιMulti_family_span_fixedDegree_aux R v α
-
-中文:
-引理 ιMulti_family_span_fixedDegree_of_span
-  结论: {I : 类型} [线性序 I] {v : I -> M}
-  证明: by
-  apply le_antisymm
-  · rw [Submodule.span_le, Set.range_subset_iff]
-    intro
-    rw [SetLike.mem_coe]; rw [ιMulti_family_eq_coe_comp]; rw [comp_apply]
-    exact Submodule.coe_mem _
-  · rw [← ιMulti_span_fixedDegree_of_span_eq_top R n M hv, Submodule.span_le]
-    rintro - ⟨f, ⟨f_range, rfl⟩⟩
-    rw [Set.mem_ofPred] at f_range
-    obtain ⟨α, rfl⟩ := Set.range_subset_range_iff_exists_comp.mp f_range
-    exact ιMulti_family_span_fixedDegree_aux R v α
-
-Depends on / 依赖: Set.mem_ofPred, Set.range_subset_iff, Set.range_subset_range_iff_exists_comp.mp, SetLike, SetLike.mem_coe, Submodule, Submodule.coe_mem, Submodule.span_le, coe_mem, comp_apply, f_range, le_antisymm, mem_coe, mem_ofPred, range_subset_iff, range_subset_range_iff_exists_comp, span_le
+--- 原说明 ---
+If a family of vectors spans `M`, then the family of its `n`-fold exterior produ
+cts spans
+`⋀[R]^n M`. Here we work in the exterior algebra.
 -/
-lemma ιMulti_family_span_fixedDegree_of_span {I : Type*} [LinearOrder I] {v : I -> M}
+lemma ιMulti_family_span_fixedDegree_of_span {I : Type*} [LinearOrder I] {v : I → M}
     (hv : Submodule.span R (Set.range v) = ⊤) :
     Submodule.span R (Set.range (ExteriorAlgebra.ιMulti_family R n v)) = ⋀[R]^n M := by
   apply le_antisymm
   · rw [Submodule.span_le, Set.range_subset_iff]
     intro
-    rw [SetLike.mem_coe]; rw [ιMulti_family_eq_coe_comp]; rw [comp_apply]
+    rw [SetLike.mem_coe, ιMulti_family_eq_coe_comp, comp_apply]
     exact Submodule.coe_mem _
   · rw [← ιMulti_span_fixedDegree_of_span_eq_top R n M hv, Submodule.span_le]
     rintro - ⟨f, ⟨f_range, rfl⟩⟩
@@ -1115,74 +814,54 @@ lemma ιMulti_family_span_fixedDegree_of_span {I : Type*} [LinearOrder I] {v : I
     obtain ⟨α, rfl⟩ := Set.range_subset_range_iff_exists_comp.mp f_range
     exact ιMulti_family_span_fixedDegree_aux R v α
 
-/--
-lemma `ιMulti_family_span_of_span` / 引理 `ιMulti_family_span_of_span`
+/-- If a family of vectors spans `M`, then the family of its `n`-fold exterior products spans
+`⋀[R]^n M`. This is a variant of `ιMulti_family_span_fixedDegree_of_span` where we
+work in the exterior power and not the exterior algebra. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_family_span_of_span
-  statement: {I : Type*} [LinearOrder I]
-  proof: by
-  apply LinearMap.map_injective (Submodule.ker_subtype (⋀[R]^n M))
-  rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
-  simpa using ιMulti_family_span_fixedDegree_of_span R hv
-
-中文:
-引理 ιMulti_family_span_of_span
-  结论: {I : 类型} [线性序 I]
-  证明: by
-  apply LinearMap.map_injective (Submodule.ker_subtype (⋀[R]^n M))
-  rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
-  simpa using ιMulti_family_span_fixedDegree_of_span R hv
-
-Depends on / 依赖: LinearMap, LinearMap.map_injective, LinearMap.map_span, Set.image_image, Set.image_univ, Submodule, Submodule.ker_subtype, image_image, image_univ, ker_subtype, map_injective, map_span
+--- 原说明 ---
+If a family of vectors spans `M`, then the family of its `n`-fold exterior produ
+cts spans
+`⋀[R]^n M`. This is a variant of `ιMulti_family_span_fixedDegree_of_span` where 
+we
+work in the exterior power and not the exterior algebra.
 -/
 lemma ιMulti_family_span_of_span {I : Type*} [LinearOrder I]
-    {v : I -> M} (hv : Submodule.span R (Set.range v) = ⊤) :
+    {v : I → M} (hv : Submodule.span R (Set.range v) = ⊤) :
     Submodule.span R (Set.range (ιMulti_family R n v)) = ⊤ := by
   apply LinearMap.map_injective (Submodule.ker_subtype (⋀[R]^n M))
-  rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
+  rw [LinearMap.map_span, ← Set.image_univ, Set.image_image]
   simpa using ιMulti_family_span_fixedDegree_of_span R hv
 
 open Set Submodule in
-/--
-lemma `ιMulti_family_span` / 引理 `ιMulti_family_span`
+/-- If `v` is a family of vectors of `M` indexed by a linearly ordered type, then the span of the
+range of `exteriorPower.ιMulti_family R n v`, i.e., of the family of `n`-fold exterior products
+of elements of `v`, is the image of the map of exterior powers induced by the inclusion of
+the span of `v` into `M`. -/
+/-
+**exteriorPower.** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιMulti_family_span
-  given: {I : Type*} [LinearOrder I] (v : I -> M)
-  proof: by
-  have ⟨f, hf⟩ : exists f : I -> Submodule.span R (Set.range v), Submodule.subtype _ ∘ f = v :=
-    ⟨fun i => ⟨v i, Submodule.subset_span (Set.mem_range_self i)⟩, rfl⟩
-  have htop : Submodule.span R (Set.range f) = ⊤ := by
-    apply SetLike.coe_injective
-    apply Set.image_injective.mpr (Submodule.span R (Set.range v)).injective_subtype
-    rw [← Submodule.map_coe]; rw [← Submodule.span_image]; rw [← Set.range_comp]; rw [hf]; rw [← Submodule.map_coe]; rw [← LinearMap.range_eq_map]; rw [Submodule.range_subtype]
-  rw [LinearMap.range_eq_map (M := ⋀[R]^n _), ← ιMulti_family_span_of_span _ htop,
-    Submodule.map_span, ← Set.range_comp, map_comp_ιMulti_family, hf]
-
-中文:
-引理 ιMulti_family_span
-  条件: {I : 类型} [线性序 I] (v : I -> M)
-  证明: by
-  have ⟨f, hf⟩ : exists f : I -> Submodule.span R (Set.range v), Submodule.subtype _ ∘ f = v :=
-    ⟨fun i => ⟨v i, Submodule.subset_span (Set.mem_range_self i)⟩, rfl⟩
-  have htop : Submodule.span R (Set.range f) = ⊤ := by
-    apply SetLike.coe_injective
-    apply Set.image_injective.mpr (Submodule.span R (Set.range v)).injective_subtype
-    rw [← Submodule.map_coe]; rw [← Submodule.span_image]; rw [← Set.range_comp]; rw [hf]; rw [← Submodule.map_coe]; rw [← LinearMap.range_eq_map]; rw [Submodule.range_subtype]
-  rw [LinearMap.range_eq_map (M := ⋀[R]^n _), ← ιMulti_family_span_of_span _ htop,
-    Submodule.map_span, ← Set.range_comp, map_comp_ιMulti_family, hf]
-
-Depends on / 依赖: LinearMap, LinearMap.range_eq_map, Set.image_injective.mpr, Set.mem_range_self, Set.range, Set.range_comp, SetLike, SetLike.coe_injective, Submodule, Submodule.map_coe, Submodule.range_subtype, Submodule.span, Submodule.span_image, Submodule.subset_span, Submodule.subtype, coe_injective, image_injective, injective_subtype, map_coe, mem_range_self
+--- 原说明 ---
+If `v` is a family of vectors of `M` indexed by a linearly ordered type, then th
+e span of the
+range of `exteriorPower.ιMulti_family R n v`, i.e., of the family of `n`-fold ex
+terior products
+of elements of `v`, is the image of the map of exterior powers induced by the in
+clusion of
+the span of `v` into `M`.
 -/
-lemma ιMulti_family_span {I : Type*} [LinearOrder I] (v : I -> M) :
+lemma ιMulti_family_span {I : Type*} [LinearOrder I] (v : I → M) :
     (map n (span R (range v)).subtype).range = span R (range (ιMulti_family R n v)) := by
-  have ⟨f, hf⟩ : exists f : I -> Submodule.span R (Set.range v), Submodule.subtype _ ∘ f = v :=
-    ⟨fun i => ⟨v i, Submodule.subset_span (Set.mem_range_self i)⟩, rfl⟩
+  have ⟨f, hf⟩ : ∃ f : I → Submodule.span R (Set.range v), Submodule.subtype _ ∘ f = v :=
+    ⟨fun i ↦ ⟨v i, Submodule.subset_span (Set.mem_range_self i)⟩, rfl⟩
   have htop : Submodule.span R (Set.range f) = ⊤ := by
     apply SetLike.coe_injective
     apply Set.image_injective.mpr (Submodule.span R (Set.range v)).injective_subtype
-    rw [← Submodule.map_coe]; rw [← Submodule.span_image]; rw [← Set.range_comp]; rw [hf]; rw [← Submodule.map_coe]; rw [← LinearMap.range_eq_map]; rw [Submodule.range_subtype]
+    rw [← Submodule.map_coe, ← Submodule.span_image, ← Set.range_comp, hf,
+      ← Submodule.map_coe, ← LinearMap.range_eq_map, Submodule.range_subtype]
   rw [LinearMap.range_eq_map (M := ⋀[R]^n _), ← ιMulti_family_span_of_span _ htop,
     Submodule.map_span, ← Set.range_comp, map_comp_ιMulti_family, hf]
 
@@ -1193,181 +872,122 @@ end ιMulti_family
 variable (R M) in
 /-- The linear equivalence ` ⋀[R]^0 M ≃ₗ[R] R`. -/
 @[simps! -isSimp symm_apply]
-/--
-Definition of `zeroEquiv` / `zeroEquiv` 的定义
+/-
+**exteriorPower.zeroEquiv** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower`。
+形式化陈述：zeroEquiv : ⋀[R]^0 M ≃ₗ[R] R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroEquiv
-  signature: : ⋀[R]^0 M ≃ₗ[R] R
-  body: .ofLinearMap (alternatingMapLinearEquiv (AlternatingMap.constOfIsEmpty R _ _ 1))
-    { toFun := fun r => r • (ιMulti _ _ (by rintro ⟨i, hi⟩; simp at hi))
-      map_add' := by intros; simp only [add_smul]
-      map_smul' := by intros; simp only [smul_eq_mul, mul_smul, RingHom.id_apply] }
-    (by aesop) (by aesop)
-
-@[simp]
-
-中文:
-定义 zeroEquiv
-  签名: : ⋀[R]^0 M ≃ₗ[R] R
-  定义体: .ofLinearMap (alternatingMapLinearEquiv (AlternatingMap.constOfIsEmpty R _ _ 1))
-    { toFun := fun r => r • (ιMulti _ _ (by rintro ⟨i, hi⟩; simp at hi))
-      map_add' := by intros; simp only [add_smul]
-      map_smul' := by intros; simp only [smul_eq_mul, mul_smul, RingHom.id_apply] }
-    (by aesop) (by aesop)
-
-@[simp]
-
-Depends on / 依赖: AlternatingMap, AlternatingMap.constOfIsEmpty, RingHom, RingHom.id_apply, add_smul, alternatingMapLinearEquiv, constOfIsEmpty, id_apply, intros, map_add, map_smul, mul_smul, ofLinearMap, smul_eq_mul
+--- 原说明 ---
+The linear equivalence ` ⋀[R]^0 M ≃ₗ[R] R`.
 -/
 noncomputable def zeroEquiv : ⋀[R]^0 M ≃ₗ[R] R :=
   .ofLinearMap (alternatingMapLinearEquiv (AlternatingMap.constOfIsEmpty R _ _ 1))
-    { toFun := fun r => r • (ιMulti _ _ (by rintro ⟨i, hi⟩; simp at hi))
+    { toFun := fun r ↦ r • (ιMulti _ _ (by rintro ⟨i, hi⟩; simp at hi))
       map_add' := by intros; simp only [add_smul]
       map_smul' := by intros; simp only [smul_eq_mul, mul_smul, RingHom.id_apply] }
     (by aesop) (by aesop)
 
 @[simp]
-/--
-lemma `zeroEquiv_ιMulti` / 引理 `zeroEquiv_ιMulti`
-
-English:
-lemma zeroEquiv_ιMulti
-  given: (f : Fin 0 -> M)
-  proof: by
-  simp [zeroEquiv]
-
-中文:
-引理 zeroEquiv_ιMulti
-  条件: (f : 有限集 0 -> M)
-  证明: by
-  simp [zeroEquiv]
-
-Depends on / 依赖: zeroEquiv
+/-
+**exteriorPower.zeroEquiv_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma zeroEquiv_ιMulti (f : Fin 0 -> M) :
+lemma zeroEquiv_ιMulti (f : Fin 0 → M) :
     zeroEquiv R M (ιMulti _ _ f) = 1 := by
   simp [zeroEquiv]
-
-/--
-lemma `zeroEquiv_naturality` / 引理 `zeroEquiv_naturality`
-
-English:
-lemma zeroEquiv_naturality
-  given: (f : M ->ₗ[R] N)
-  proof: by aesop
-
-中文:
-引理 zeroEquiv_naturality
-  条件: (f : M ->ₗ[R] N)
-  证明: by aesop
+/-
+**exteriorPower.zeroEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+形式化陈述：zeroEquiv_naturality (f : M ->ₗ[R] N) : (zeroEquiv R N).comp (map 0 f) = z
+eroEquiv R M
+参数：f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exteriorPower.linearMap_ext`：linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : 
+⋀[R]^n M ->ₗ[R] N} (heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingM
+ap (ιMulti R n)) …
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `exteriorPower.map_apply_ιMulti`：map_apply_ιMulti (f : M ->ₗ[R] N) (m : F
+in n -> M) : map n f (ιMulti R n m) = ιMulti R n (f ∘ m)
+· 使用引理 `exteriorPower.zeroEquiv_ιMulti`：zeroEquiv_ιMulti (f : Fin 0 -> M) : zero
+Equiv R M (ιMulti _ _ f) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma zeroEquiv_naturality (f : M ->ₗ[R] N) :
+lemma zeroEquiv_naturality (f : M →ₗ[R] N) :
     (zeroEquiv R N).comp (map 0 f) = zeroEquiv R M := by aesop
 
 variable (R M) in
 /-- The linear equivalence `M ≃ₗ[R] ⋀[R]^1 M`. -/
 @[simps! -isSimp symm_apply]
-/--
-Definition of `oneEquiv` / `oneEquiv` 的定义
+/-
+**exteriorPower.oneEquiv** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower`。
+形式化陈述：oneEquiv : ⋀[R]^1 M ≃ₗ[R] M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
 
-English:
-definition oneEquiv
-  signature: : ⋀[R]^1 M ≃ₗ[R] M
-  body: .ofLinearMap (alternatingMapLinearEquiv (AlternatingMap.ofSubsingleton R M M (0 : Fin 1) .id)) (by
-    have h (m : M) : (fun (_ : Fin 1) => m) = update (fun _ => 0) 0 m := by
-      ext i
-      fin_cases i
-      rfl
-    exact
-      { toFun := fun m => ιMulti _ _ (fun _ => m)
-        map_add' := fun m₁ m₂ => by
-          rw [h]; nth_rw 2 [h]; nth_rw 3 [h]
-          simp only [Fin.isValue, AlternatingMap.map_update_add]
-        map_smul' := fun r m => by
-          dsimp
-          rw [h]; nth_rw 2 [h]
-          simp only [Fin.isValue, AlternatingMap.map_update_smul] })
-  (by aesop) (by aesop)
-
-@[simp]
-
-中文:
-定义 oneEquiv
-  签名: : ⋀[R]^1 M ≃ₗ[R] M
-  定义体: .ofLinearMap (alternatingMapLinearEquiv (AlternatingMap.ofSubsingleton R M M (0 : Fin 1) .id)) (by
-    have h (m : M) : (fun (_ : Fin 1) => m) = update (fun _ => 0) 0 m := by
-      ext i
-      fin_cases i
-      rfl
-    exact
-      { toFun := fun m => ιMulti _ _ (fun _ => m)
-        map_add' := fun m₁ m₂ => by
-          rw [h]; nth_rw 2 [h]; nth_rw 3 [h]
-          simp only [Fin.isValue, AlternatingMap.map_update_add]
-        map_smul' := fun r m => by
-          dsimp
-          rw [h]; nth_rw 2 [h]
-          simp only [Fin.isValue, AlternatingMap.map_update_smul] })
-  (by aesop) (by aesop)
-
-@[simp]
-
-Depends on / 依赖: AlternatingMap, AlternatingMap.map_update_add, AlternatingMap.map_update_smul, AlternatingMap.ofSubsingleton, Fin.isValue, alternatingMapLinearEquiv, fin_cases, isValue, map_add, map_smul, map_update_add, map_update_smul, nth_rw, ofLinearMap, ofSubsingleton, update
+--- 原说明 ---
+The linear equivalence `M ≃ₗ[R] ⋀[R]^1 M`.
 -/
 noncomputable def oneEquiv : ⋀[R]^1 M ≃ₗ[R] M :=
   .ofLinearMap (alternatingMapLinearEquiv (AlternatingMap.ofSubsingleton R M M (0 : Fin 1) .id)) (by
-    have h (m : M) : (fun (_ : Fin 1) => m) = update (fun _ => 0) 0 m := by
+    have h (m : M) : (fun (_ : Fin 1) ↦ m) = update (fun _ ↦ 0) 0 m := by
       ext i
       fin_cases i
       rfl
     exact
-      { toFun := fun m => ιMulti _ _ (fun _ => m)
-        map_add' := fun m₁ m₂ => by
+      { toFun := fun m ↦ ιMulti _ _ (fun _ ↦ m)
+        map_add' := fun m₁ m₂ ↦ by
           rw [h]; nth_rw 2 [h]; nth_rw 3 [h]
           simp only [Fin.isValue, AlternatingMap.map_update_add]
-        map_smul' := fun r m => by
+        map_smul' := fun r m ↦ by
           dsimp
           rw [h]; nth_rw 2 [h]
           simp only [Fin.isValue, AlternatingMap.map_update_smul] })
   (by aesop) (by aesop)
 
 @[simp]
-/--
-lemma `oneEquiv_ιMulti` / 引理 `oneEquiv_ιMulti`
-
-English:
-lemma oneEquiv_ιMulti
-  given: (f : Fin 1 -> M)
-  proof: by
-  simp [oneEquiv]
-
-中文:
-引理 oneEquiv_ιMulti
-  条件: (f : 有限集 1 -> M)
-  证明: by
-  simp [oneEquiv]
-
-Depends on / 依赖: oneEquiv
+/-
+**exteriorPower.oneEquiv_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma oneEquiv_ιMulti (f : Fin 1 -> M) :
+lemma oneEquiv_ιMulti (f : Fin 1 → M) :
     oneEquiv R M (ιMulti _ _ f) = f 0 := by
   simp [oneEquiv]
-
-/--
-lemma `oneEquiv_naturality` / 引理 `oneEquiv_naturality`
-
-English:
-lemma oneEquiv_naturality
-  given: (f : M ->ₗ[R] N)
-  proof: by aesop
-
-中文:
-引理 oneEquiv_naturality
-  条件: (f : M ->ₗ[R] N)
-  证明: by aesop
+/-
+**exteriorPower.oneEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+形式化陈述：oneEquiv_naturality (f : M ->ₗ[R] N) : (oneEquiv R N).comp (map 1 f) = f.c
+omp (oneEquiv R M).toLinearMap
+参数：f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exteriorPower.linearMap_ext`：linearMap_ext {f : ⋀[R]^n M ->ₗ[R] N} {g : 
+⋀[R]^n M ->ₗ[R] N} (heq : f.compAlternatingMap (ιMulti R n) = g.compAlternatingM
+ap (ιMulti R n)) …
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `exteriorPower.map_apply_ιMulti`：map_apply_ιMulti (f : M ->ₗ[R] N) (m : F
+in n -> M) : map n f (ιMulti R n m) = ιMulti R n (f ∘ m)
+· 使用引理 `exteriorPower.oneEquiv_ιMulti`：oneEquiv_ιMulti (f : Fin 1 -> M) : oneEqu
+iv R M (ιMulti _ _ f) = f 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma oneEquiv_naturality (f : M ->ₗ[R] N) :
+lemma oneEquiv_naturality (f : M →ₗ[R] N) :
     (oneEquiv R N).comp (map 1 f) = f.comp (oneEquiv R M).toLinearMap := by aesop
 
 end exteriorPower
+

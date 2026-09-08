@@ -23,36 +23,18 @@ namespace CategoryTheory.Limits
 
 variable {C : Type u₁} [Category.{v₁} C] {K : Type u₂} [Category.{v₂} K]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFilteredColimitsOfSize.{w',
-  signature: w} C] : HasFilteredColimitsOfSize.{w', w} (K ⥤ C)
-  body: ⟨fun _ => inferInstance⟩
-
-中文:
-实例 [有FilteredColimitsOfSize.{w',
-  签名: w} C] : 有FilteredColimitsOfSize.{w', w} (K ⥤ C)
-  定义体: ⟨fun _ => inferInstance⟩
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFilteredColimitsOfSize.{w', w} C] : HasFilteredColimitsOfSize.{w', w} (K ⥤ C) :=
   ⟨fun _ => inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasCofilteredLimitsOfSize.{w',
-  signature: w} C] : HasCofilteredLimitsOfSize.{w', w} (K ⥤ C)
-  body: ⟨fun _ => inferInstance⟩
-
-中文:
-实例 [有余filteredLimitsOfSize.{w',
-  签名: w} C] : 有余filteredLimitsOfSize.{w', w} (K ⥤ C)
-  定义体: ⟨fun _ => inferInstance⟩
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasCofilteredLimitsOfSize.{w', w} C] : HasCofilteredLimitsOfSize.{w', w} (K ⥤ C) :=
   ⟨fun _ => inferInstance⟩
 
 end CategoryTheory.Limits
+

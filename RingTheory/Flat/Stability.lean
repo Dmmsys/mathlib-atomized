@@ -58,87 +58,81 @@ variable (R : Type u) (S : Type v) (M : Type w)
   [AddCommMonoid M] [Module R M] [Module S M] [IsScalarTower R S M]
 
 open AlgebraTensorModule in
-/--
-theorem `trans` / 定理 `trans`
+/-- If `S` is a flat `R`-algebra, then any flat `S`-Module is also `R`-flat. -/
+/-
+**Module.Flat.trans** 是 Mathlib 中的一个定理，位于命名空间 `Module.Flat`。
+形式化陈述：trans [Flat R S] [Flat S M] : Flat R M
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.Flat.iff_lTensor_injectiveₛ`：iff_lTensor_injectiveₛ : Flat R M ↔ 
+forall ⦃P : Type u⦄ [AddCommMonoid P] [Module R P] (N : Submodule R P), Function
+.Injective (N.subtype.lT…
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `TensorProduct.AlgebraTensorModule.coe_lTensor`：coe_lTensor (f : N ->ₗ[R]
+ Q) : (lTensor A M f : M otimes[R] N -> M otimes[R] Q) = f.lTensor M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `EquivLike.injective_comp`：injective_comp (e : E) (f : β -> γ) : Function
+.Injective (f ∘ e) ↔ Function.Injective f
+· 使用定理 `LinearEquiv.coe_coe`：coe_coe : ⇑(e : M ->ₛₗ[σ] M₂) = e
+· 使用定理 `LinearMap.coe_comp`：coe_comp : (f.comp g : M₁ -> M₃) = f ∘ g
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `TensorProduct.AlgebraTensorModule.lTensor_comp_cancelBaseChange`：lTensor
+_comp_cancelBaseChange (f : N ->ₗ[R] Q) : lTensor _ _ f ∘ₗ cancelBaseChange R A 
+B M N = (cancelBaseChange R A B M Q).toLinearMap ∘ₗ l…
+· 使用定理 `EquivLike.comp_injective`：comp_injective (f : α -> β) (e : F) : Function
+.Injective (e ∘ f) ↔ Function.Injective f
+· 使用定理 `Module.Flat.lTensor_preserves_injective_linearMap`：lTensor_preserves_inj
+ective_linearMap [Flat R M] (f : N ->ₗ[R] P) (hf : Function.Injective f) : Funct
+ion.Injective (f.lTensor M)
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
 
-English:
-theorem trans
-  given: [Flat R S] [Flat S M]
-  statement: Flat R M
-  proof: by
-  rw [Flat.iff_lTensor_injectiveₛ]
-  introv
-  rw [← coe_lTensor (A := S)]; rw [← EquivLike.injective_comp (cancelBaseChange R S S _ _)]; rw [← LinearEquiv.coe_coe]; rw [← LinearMap.coe_comp]; rw [lTensor_comp_cancelBaseChange]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_injective]
-  iterate 2 apply Flat.lTensor_preserves_injective_linearMap
-  exact Subtype.val_injective
-
-中文:
-定理 trans
-  条件: [平坦 R S] [平坦 S M]
-  结论: 平坦 R M
-  证明: by
-  rw [Flat.iff_lTensor_injectiveₛ]
-  introv
-  rw [← coe_lTensor (A := S)]; rw [← EquivLike.injective_comp (cancelBaseChange R S S _ _)]; rw [← LinearEquiv.coe_coe]; rw [← LinearMap.coe_comp]; rw [lTensor_comp_cancelBaseChange]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_injective]
-  iterate 2 apply Flat.lTensor_preserves_injective_linearMap
-  exact Subtype.val_injective
-
-Depends on / 依赖: EquivLike, EquivLike.comp_injective, EquivLike.injective_comp, Flat.iff_lTensor_injective, Flat.lTensor_preserves_injective_linearMap, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, Subtype, Subtype.val_injective, _of_ne_zero_right, cancelBaseChange, coe_coe, coe_comp, coe_lTensor, comp_injective, injective_comp, introv, iterate
+--- 原说明 ---
+If `S` is a flat `R`-algebra, then any flat `S`-Module is also `R`-flat.
 -/
 theorem trans [Flat R S] [Flat S M] : Flat R M := by
   rw [Flat.iff_lTensor_injectiveₛ]
   introv
-  rw [← coe_lTensor (A := S)]; rw [← EquivLike.injective_comp (cancelBaseChange R S S _ _)]; rw [← LinearEquiv.coe_coe]; rw [← LinearMap.coe_comp]; rw [lTensor_comp_cancelBaseChange]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_injective]
+  rw [← coe_lTensor (A := S), ← EquivLike.injective_comp (cancelBaseChange R S S _ _),
+    ← LinearEquiv.coe_coe, ← LinearMap.coe_comp, lTensor_comp_cancelBaseChange,
+    LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.comp_injective]
   iterate 2 apply Flat.lTensor_preserves_injective_linearMap
   exact Subtype.val_injective
 
 variable {R M} in
 @[simp]
-/--
-lemma `ulift_left_iff` / 引理 `ulift_left_iff`
-
-English:
-lemma ulift_left_iff
-  statement: Flat (ULift.{t} R) M ↔ Flat R M
-  proof: by
-  refine ⟨fun h => .trans _ (ULift R) _, fun h => ?_⟩
-  have : Module.Flat (ULift.{t} R) R := .of_ulift
-  let _ := ULift.algebra'
-  exact .trans _ R _
-
-中文:
-引理 ulift_left_iff
-  结论: 平坦 (类型层提升.{t} R) M ↔ 平坦 R M
-  证明: by
-  refine ⟨fun h => .trans _ (ULift R) _, fun h => ?_⟩
-  have : Module.Flat (ULift.{t} R) R := .of_ulift
-  let _ := ULift.algebra'
-  exact .trans _ R _
-
-Depends on / 依赖: Module, Module.Flat, ULift.algebra, algebra, of_ulift
+/-
+**Module.Flat.ulift_left_iff** 是 Mathlib 中的一个引理，位于命名空间 `Module.Flat`。
+形式化陈述：ulift_left_iff : Flat (ULift.{t} R) M ↔ Flat R M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Flat.trans`：trans [Flat R S] [Flat S M] : Flat R M
+· 使用引理 `Module.Flat.of_ulift`：of_ulift [Flat R (ULift.{v'} M)] : Flat R M
 -/
 lemma ulift_left_iff : Flat (ULift.{t} R) M ↔ Flat R M := by
-  refine ⟨fun h => .trans _ (ULift R) _, fun h => ?_⟩
+  refine ⟨fun h ↦ .trans _ (ULift R) _, fun h ↦ ?_⟩
   have : Module.Flat (ULift.{t} R) R := .of_ulift
   let _ := ULift.algebra'
   exact .trans _ R _
 
 variable {R M} in
 @[simp]
-/--
-lemma `ulift_right_iff` / 引理 `ulift_right_iff`
-
-English:
-lemma ulift_right_iff
-  statement: Flat R (ULift.{t} M) ↔ Flat R M
-  proof: Flat.equiv_iff ULift.moduleEquiv
-
-中文:
-引理 ulift_right_iff
-  结论: 平坦 R (类型层提升.{t} M) ↔ 平坦 R M
-  证明: Flat.equiv_iff ULift.moduleEquiv
-
-Depends on / 依赖: Flat.equiv_iff, ULift.moduleEquiv, equiv_iff, moduleEquiv
+/-
+**Module.Flat.ulift_right_iff** 是 Mathlib 中的一个引理，位于命名空间 `Module.Flat`。
+形式化陈述：ulift_right_iff : Flat R (ULift.{t} M) ↔ Flat R M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Flat.equiv_iff`：equiv_iff (e : M ≃ₗ[R] N) : Flat R M ↔ Flat R N
 -/
 lemma ulift_right_iff : Flat R (ULift.{t} M) ↔ Flat R M :=
   Flat.equiv_iff ULift.moduleEquiv
@@ -158,38 +152,43 @@ variable (R : Type u) (S : Type v) (M : Type w)
   [CommSemiring R] [CommSemiring S] [Algebra R S]
   [AddCommMonoid M] [Module R M]
 
-/--
-Instance `baseChange` / 实例 `baseChange`
+/-- If `M` is a flat `R`-module and `S` is any `R`-algebra, `S ⊗[R] M` is `S`-flat. -/
+/-
+**Module.Flat.baseChange** 是 Mathlib 中的一个实例，位于命名空间 `Module.Flat`。
+形式化陈述：baseChange [Flat R M] : Flat S (S otimes[R] M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Module.Flat.instTensorProduct`：∀ {R : Type u} {M : Type v} {N : Type u_1
+} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R
+ M] [inst_3 : AddCo…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-instance baseChange
-  signature: [Flat R M]
-  body: inferInstance
-
-中文:
-实例 baseChange
-  签名: [平坦 R M]
-  定义体: inferInstance
+--- 原说明 ---
+If `M` is a flat `R`-module and `S` is any `R`-algebra, `S ⊗[R] M` is `S`-flat.
 -/
-instance baseChange [Flat R M] : Flat S (S otimes[R] M) := inferInstance
+instance baseChange [Flat R M] : Flat S (S ⊗[R] M) := inferInstance
 
-/--
-theorem `isBaseChange` / 定理 `isBaseChange`
+/-- A base change of a flat module is flat. -/
+/-
+**Module.Flat.isBaseChange** 是 Mathlib 中的一个定理，位于命名空间 `Module.Flat`。
+形式化陈述：isBaseChange [Flat R M] (N : Type t) [AddCommMonoid N] [Module R N] [Modul
+e S N] [IsScalarTower R S N] {f : M ->ₗ[R] N} (h : IsBaseChange S f) : Flat S N
+参数：N : Type t；h : IsBaseChange S f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Flat.of_linearEquiv`：of_linearEquiv [Flat R M] (e : N ≃ₗ[R] M) : 
+Flat R N
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 
-English:
-theorem isBaseChange
-  statement: [Flat R M] (N : Type t) [AddCommMonoid N] [Module R N] [Module S N]
-  proof: of_linearEquiv (IsBaseChange.equiv h).symm
-
-中文:
-定理 isBaseChange
-  结论: [平坦 R M] (N : 类型 t) [加法交换幺半群 N] [模 R N] [模 S N]
-  证明: of_linearEquiv (IsBaseChange.equiv h).symm
-
-Depends on / 依赖: IsBaseChange, IsBaseChange.equiv, of_linearEquiv
+--- 原说明 ---
+A base change of a flat module is flat.
 -/
 theorem isBaseChange [Flat R M] (N : Type t) [AddCommMonoid N] [Module R N] [Module S N]
-    [IsScalarTower R S N] {f : M ->ₗ[R] N} (h : IsBaseChange S f) :
+    [IsScalarTower R S N] {f : M →ₗ[R] N} (h : IsBaseChange S f) :
     Flat S N :=
   of_linearEquiv (IsBaseChange.equiv h).symm
 
@@ -201,28 +200,26 @@ variable {R : Type u} {M Mp : Type*} (Rp : Type v)
   [CommSemiring R] [AddCommMonoid M] [Module R M] [CommSemiring Rp] [Algebra R Rp]
   [AddCommMonoid Mp] [Module R Mp] [Module Rp Mp] [IsScalarTower R Rp Mp]
 
-/--
-Instance `localizedModule` / 实例 `localizedModule`
-
-English:
-instance localizedModule
-  signature: [Flat R M] (S : Submonoid R)
-  body: by
-  apply Flat.isBaseChange (R := R) (S := Localization S)
-    (f := LocalizedModule.mkLinearMap S M)
-  rw [← isLocalizedModule_iff_isBaseChange S]
-  exact localizedModuleIsLocalizedModule S
-
-中文:
-实例 localizedModule
-  签名: [平坦 R M] (S : 子幺半群 R)
-  定义体: by
-  apply Flat.isBaseChange (R := R) (S := Localization S)
-    (f := LocalizedModule.mkLinearMap S M)
-  rw [← isLocalizedModule_iff_isBaseChange S]
-  exact localizedModuleIsLocalizedModule S
-
-Depends on / 依赖: Flat.isBaseChange, Localization, LocalizedModule, LocalizedModule.mkLinearMap, isBaseChange, isLocalizedModule_iff_isBaseChange, localizedModuleIsLocalizedModule, mkLinearMap
+/-
+**Module.Flat.localizedModule** 是 Mathlib 中的一个实例，位于命名空间 `Module.Flat`。
+形式化陈述：localizedModule [Flat R M] (S : Submonoid R) : Flat (Localization S) (Loca
+lizedModule S M)
+参数：S : Submonoid R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Flat.isBaseChange`：isBaseChange [Flat R M] (N : Type t) [AddCommM
+onoid N] [Module R N] [Module S N] [IsScalarTower R S N] {f : M ->ₗ[R] N} (h : I
+sBaseChange S …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `OreLocalization.instIsScalarTower_1`：∀ {R : Type u_1} {M : Type u_3} {X 
+: Type u_4} [inst : Monoid M] {S : Submonoid M} [inst_1 : OreLocalization.OreSet
+ S]   [inst_2 : MulAction…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isLocalizedModule_iff_isBaseChange`：isLocalizedModule_iff_isBaseChange :
+ IsLocalizedModule S f ↔ IsBaseChange A f
 -/
 instance localizedModule [Flat R M] (S : Submonoid R) :
     Flat (Localization S) (LocalizedModule S M) := by
@@ -230,31 +227,28 @@ instance localizedModule [Flat R M] (S : Submonoid R) :
     (f := LocalizedModule.mkLinearMap S M)
   rw [← isLocalizedModule_iff_isBaseChange S]
   exact localizedModuleIsLocalizedModule S
-
-/--
-theorem `of_isLocalizedModule` / 定理 `of_isLocalizedModule`
-
-English:
-theorem of_isLocalizedModule
-  statement: [Flat R M] (S : Submonoid R) [IsLocalization S Rp]
-  proof: by
-  fapply Flat.isBaseChange (R := R) (M := M) (S := Rp) (N := Mp)
-  exact (isLocalizedModule_iff_isBaseChange S Rp f).mp h
-
-中文:
-定理 of_isLocalizedModule
-  结论: [平坦 R M] (S : 子幺半群 R) [是Localization S Rp]
-  证明: by
-  fapply Flat.isBaseChange (R := R) (M := M) (S := Rp) (N := Mp)
-  exact (isLocalizedModule_iff_isBaseChange S Rp f).mp h
-
-Depends on / 依赖: Flat.isBaseChange, fapply, isBaseChange, isLocalizedModule_iff_isBaseChange
+/-
+**Module.Flat.of_isLocalizedModule** 是 Mathlib 中的一个定理，位于命名空间 `Module.Flat`。
+形式化陈述：of_isLocalizedModule [Flat R M] (S : Submonoid R) [IsLocalization S Rp] (f
+ : M ->ₗ[R] Mp) [h : IsLocalizedModule S f] : Flat Rp Mp
+参数：S : Submonoid R；f : M ->ₗ[R] Mp。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Flat.isBaseChange`：isBaseChange [Flat R M] (N : Type t) [AddCommM
+onoid N] [Module R N] [Module S N] [IsScalarTower R S N] {f : M ->ₗ[R] N} (h : I
+sBaseChange S …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isLocalizedModule_iff_isBaseChange`：isLocalizedModule_iff_isBaseChange :
+ IsLocalizedModule S f ↔ IsBaseChange A f
 -/
 theorem of_isLocalizedModule [Flat R M] (S : Submonoid R) [IsLocalization S Rp]
-    (f : M ->ₗ[R] Mp) [h : IsLocalizedModule S f] : Flat Rp Mp := by
+    (f : M →ₗ[R] Mp) [h : IsLocalizedModule S f] : Flat Rp Mp := by
   fapply Flat.isBaseChange (R := R) (M := M) (S := Rp) (N := Mp)
   exact (isLocalizedModule_iff_isBaseChange S Rp f).mp h
-
+/-
+**Module.Flat.** 是 Mathlib 中的一个实例，位于命名空间 `Module.Flat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A : Type*} [CommSemiring A] [Algebra R A] [Flat R A] (S : Submonoid R) :
     Flat (Localization S) (Localization (Algebra.algebraMapSubmonoid A S)) :=
   of_isLocalizedModule _ S (IsScalarTower.toAlgHom R A _).toLinearMap
@@ -262,3 +256,4 @@ instance {A : Type*} [CommSemiring A] [Algebra R A] [Flat R A] (S : Submonoid R)
 end Localization
 
 end Module.Flat
+

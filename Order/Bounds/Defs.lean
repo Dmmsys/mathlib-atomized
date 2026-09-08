@@ -31,38 +31,29 @@ variable {α : Type*} [LE α]
 
 /-- The set of upper bounds of a set. -/
 @[to_dual /-- The set of lower bounds of a set. -/]
-/--
-Definition of `upperBounds` / `upperBounds` 的定义
+/-
+**upperBounds** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：upperBounds (s : Set α) : Set α
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition upperBounds
-  signature: (s : Set α)
-  body: { x | forall ⦃a⦄, a in s -> a <= x }
-
-中文:
-定义 upperBounds
-  签名: (s : 集合 α)
-  定义体: { x | forall ⦃a⦄, a in s -> a <= x }
+--- 原说明 ---
+The set of upper bounds of a set.
 -/
 def upperBounds (s : Set α) : Set α :=
-  { x | forall ⦃a⦄, a in s -> a <= x }
+  { x | ∀ ⦃a⦄, a ∈ s → a ≤ x }
 
 /-- A set is bounded above if there exists an upper bound. -/
 @[to_dual /-- A set is bounded below if there exists a lower bound. -/]
-/--
-Definition of `BddAbove` / `BddAbove` 的定义
+/-
+**BddAbove** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：BddAbove (s : Set α)
+参数：s : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BddAbove
-  signature: (s : Set α)
-  body: (upperBounds s).Nonempty
-
-中文:
-定义 BddAbove
-  签名: (s : 集合 α)
-  定义体: (upperBounds s).Nonempty
-
-Depends on / 依赖: Nonempty, upperBounds
+--- 原说明 ---
+A set is bounded above if there exists an upper bound.
 -/
 def BddAbove (s : Set α) :=
   (upperBounds s).Nonempty
@@ -70,78 +61,52 @@ def BddAbove (s : Set α) :=
 /-- `a` is a least element of a set `s`; for a partial order, it is unique if exists. -/
 @[to_dual
 /-- `a` is a greatest element of a set `s`; for a partial order, it is unique if exists. -/]
-/--
-Definition of `IsLeast` / `IsLeast` 的定义
-
-English:
-definition IsLeast
-  signature: (s : Set α) (a : α)
-  body: a in s ∧ a in lowerBounds s
-
-中文:
-定义 IsLeast
-  签名: (s : 集合 α) (a : α)
-  定义体: a in s ∧ a in lowerBounds s
-
-Depends on / 依赖: lowerBounds
+/-
+**IsLeast** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLeast (s : Set α) (a : α) : Prop
+参数：s : Set α；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def IsLeast (s : Set α) (a : α) : Prop :=
-  a in s ∧ a in lowerBounds s
+  a ∈ s ∧ a ∈ lowerBounds s
 
 /-- `a` is a least upper bound of a set `s`; for a partial order, it is unique if exists. -/
 @[to_dual
 /-- `a` is a greatest lower bound of a set `s`; for a partial order, it is unique if exists. -/]
-/--
-Definition of `IsLUB` / `IsLUB` 的定义
-
-English:
-definition IsLUB
-  signature: (s : Set α)
-  body: IsLeast (upperBounds s)
-
-中文:
-定义 IsLUB
-  签名: (s : 集合 α)
-  定义体: IsLeast (upperBounds s)
-
-Depends on / 依赖: IsLeast, upperBounds
+/-
+**IsLUB** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLUB (s : Set α) : α -> Prop
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def IsLUB (s : Set α) : α -> Prop :=
+def IsLUB (s : Set α) : α → Prop :=
   IsLeast (upperBounds s)
 
 /-- A set `s` is said to be cofinal for a set `t` if, for all `a ∈ s` there exists `b ∈ t`
 such that `a ≤ b`. -/
 @[to_dual /-- A set `s` is said to be coinitial for a set `t` if, for all `a ∈ s` there exists
 `b ∈ t` such that `b ≤ a`. -/]
-/--
-Definition of `IsCofinalFor` / `IsCofinalFor` 的定义
-
-English:
-definition IsCofinalFor
-  signature: (s t : Set α)
-  body: forall ⦃a⦄, a in s -> exists b in t, a <= b
-
-中文:
-定义 IsCofinalFor
-  签名: (s t : 集合 α)
-  定义体: forall ⦃a⦄, a in s -> exists b in t, a <= b
+/-
+**IsCofinalFor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsCofinalFor (s t : Set α)
+参数：s t : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def IsCofinalFor (s t : Set α) := forall ⦃a⦄, a in s -> exists b in t, a <= b
+def IsCofinalFor (s t : Set α) := ∀ ⦃a⦄, a ∈ s → ∃ b ∈ t, a ≤ b
 
 /-- A set is cofinal when for every `x : α` there exists `y ∈ s` with `x ≤ y`. -/
 @[to_dual /-- A set is coinitial when for every `x : α` there exists `y ∈ s` with `y ≤ x`. -/]
-/--
-Definition of `IsCofinal` / `IsCofinal` 的定义
+/-
+**IsCofinal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsCofinal (s : Set α) : Prop
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsCofinal
-  signature: (s : Set α)
-  body: forall x, exists y in s, x <= y
-
-中文:
-定义 IsCofinal
-  签名: (s : 集合 α)
-  定义体: forall x, exists y in s, x <= y
+--- 原说明 ---
+A set is cofinal when for every `x : α` there exists `y ∈ s` with `x ≤ y`.
 -/
 def IsCofinal (s : Set α) : Prop :=
-  forall x, exists y in s, x <= y
+  ∀ x, ∃ y ∈ s, x ≤ y

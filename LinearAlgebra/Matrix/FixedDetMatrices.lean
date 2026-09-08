@@ -24,20 +24,15 @@ kbb (https://github.com/kim-em/kbb/tree/master) repository, so credit to those a
 
 variable (n : Type*) [DecidableEq n] [Fintype n] (R : Type*) [CommRing R]
 
-/--
-Definition of `FixedDetMatrix` / `FixedDetMatrix` 的定义
+/-- The subtype of matrices with fixed determinant `m` -/
+/-
+**FixedDetMatrix** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FixedDetMatrix (m : R)
+参数：m : R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FixedDetMatrix
-  signature: (m : R)
-  body: { A : Matrix n n R // A.det = m }
-
-中文:
-定义 FixedDetMatrix
-  签名: (m : R)
-  定义体: { A : Matrix n n R // A.det = m }
-
-Depends on / 依赖: A.det, Matrix
+--- 原说明 ---
+The subtype of matrices with fixed determinant `m`
 -/
 def FixedDetMatrix (m : R) := { A : Matrix n n R // A.det = m }
 
@@ -46,101 +41,80 @@ namespace FixedDetMatrices
 open Matrix hiding mul_smul
 open ModularGroup SpecialLinearGroup MatrixGroups
 
-/--
-lemma `ext'` / 引理 `ext'`
+/-- Extensionality theorem for `FixedDetMatrix` with respect to the underlying matrix, not
+entrywise. -/
+/-
+**FixedDetMatrices.ext'** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：ext' {m : R} {A B : FixedDetMatrix n R m} (h : A.1 = B.1) : A = B
+参数：h : A.1 = B.1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma ext'
-  given: {m : R} {A B : FixedDetMatrix n R m} (h : A.1 = B.1)
-  statement: A = B
-  proof: by
-  cases A; cases B
-  congr
-
-@[ext]
-
-中文:
-引理 ext'
-  条件: {m : R} {A B : FixedDetMatrix n R m} (h : A.1 = B.1)
-  结论: A = B
-  证明: by
-  cases A; cases B
-  congr
-
-@[ext]
+--- 原说明 ---
+Extensionality theorem for `FixedDetMatrix` with respect to the underlying matri
+x, not
+entrywise.
 -/
 lemma ext' {m : R} {A B : FixedDetMatrix n R m} (h : A.1 = B.1) : A = B := by
   cases A; cases B
   congr
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {m : R} {A B : FixedDetMatrix n R m} (h : forall i j, A.1 i j = B.1 i j)
-  statement: A = B
-  proof: by
-  apply ext'
-  ext i j
-  apply h
-
-中文:
-引理 ext
-  条件: {m : R} {A B : FixedDetMatrix n R m} (h : 对任意 i j, A.1 i j = B.1 i j)
-  结论: A = B
-  证明: by
-  apply ext'
-  ext i j
-  apply h
+/-
+**FixedDetMatrices.ext** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：ext {m : R} {A B : FixedDetMatrix n R m} (h : forall i j, A.1 i j = B.1 i 
+j) : A = B
+参数：h : forall i j, A.1 i j = B.1 i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `FixedDetMatrices.ext'`：ext' {m : R} {A B : FixedDetMatrix n R m} (h : A.
+1 = B.1) : A = B
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-lemma ext {m : R} {A B : FixedDetMatrix n R m} (h : forall i j, A.1 i j = B.1 i j) : A = B := by
+lemma ext {m : R} {A B : FixedDetMatrix n R m} (h : ∀ i j, A.1 i j = B.1 i j) : A = B := by
   apply ext'
   ext i j
   apply h
-
+/-
+**FixedDetMatrices.** 是 Mathlib 中的一个实例，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (m : R) : SMul (SpecialLinearGroup n R) (FixedDetMatrix n R m) where
   smul g A := ⟨g * A.1, by simp only [det_mul, SpecialLinearGroup.det_coe, A.2, one_mul]⟩
-
-/--
-lemma `smul_def` / 引理 `smul_def`
-
-English:
-lemma smul_def
-  given: (m : R) (g : SpecialLinearGroup n R) (A : (FixedDetMatrix n R m))
-  proof: rfl
-
-中文:
-引理 smul_def
-  条件: (m : R) (g : SpecialLinearGroup n R) (A : (FixedDetMatrix n R m))
-  证明: rfl
+/-
+**FixedDetMatrices.smul_def** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：smul_def (m : R) (g : SpecialLinearGroup n R) (A : (FixedDetMatrix n R m))
+ : g • A = ⟨g * A.1, by simp only [det_mul, SpecialLinearGroup.det_coe, A.2, one
+_mul]⟩
+参数：m : R；g : SpecialLinearGroup n R；A : (FixedDetMatrix n R m)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_def (m : R) (g : SpecialLinearGroup n R) (A : (FixedDetMatrix n R m)) :
     g • A = ⟨g * A.1, by simp only [det_mul, SpecialLinearGroup.det_coe, A.2, one_mul]⟩ :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**FixedDetMatrices.** 是 Mathlib 中的一个实例，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (m : R) : MulAction (SpecialLinearGroup n R) (FixedDetMatrix n R m) where
   one_smul b := by rw [smul_def]; simp only [coe_one, one_mul, Subtype.coe_eta]
   mul_smul x y b := by simp_rw [smul_def, ← mul_assoc, coe_mul]
-
-/--
-lemma `smul_coe` / 引理 `smul_coe`
-
-English:
-lemma smul_coe
-  given: (m : R) (g : SpecialLinearGroup n R) (A : FixedDetMatrix n R m)
-  proof: by
-  rw [smul_def]
-
-中文:
-引理 smul_coe
-  条件: (m : R) (g : SpecialLinearGroup n R) (A : FixedDetMatrix n R m)
-  证明: by
-  rw [smul_def]
-
-Depends on / 依赖: smul_def
+/-
+**FixedDetMatrices.smul_coe** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：smul_coe (m : R) (g : SpecialLinearGroup n R) (A : FixedDetMatrix n R m) :
+ (g • A).1 = g * A.1
+参数：m : R；g : SpecialLinearGroup n R；A : FixedDetMatrix n R m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `FixedDetMatrices.smul_def`：smul_def (m : R) (g : SpecialLinearGroup n R)
+ (A : (FixedDetMatrix n R m)) : g • A = ⟨g * A.1, by simp only [det_mul, Special
+LinearGroup.det…
 -/
 lemma smul_coe (m : R) (g : SpecialLinearGroup n R) (A : FixedDetMatrix n R m) :
     (g • A).1 = g * A.1 := by
@@ -148,107 +122,67 @@ lemma smul_coe (m : R) (g : SpecialLinearGroup n R) (A : FixedDetMatrix n R m) :
 
 section IntegralFixedDetMatrices
 
-local notation:1024 "Δ" m:1024 => (FixedDetMatrix (Fin 2) Int m)
+local notation:1024 "Δ" m:1024 => (FixedDetMatrix (Fin 2) ℤ m)
 
-variable {m : Int}
+variable {m : ℤ}
 
-/--
-Definition of `reps` / `reps` 的定义
+/-- Set of representatives for the orbits under `S` and `T` -/
+/-
+**FixedDetMatrices.reps** 是 Mathlib 中的一个定义，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reps (m : Int) : Set (Δ m)
+参数：m : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reps
-  signature: (m : Int)
-  body: {A : Δ m | (A.1 1 0) = 0 ∧ 0 < A.1 0 0 ∧ 0 <= A.1 0 1 ∧ |(A.1 0 1)| < |(A.1 1 1)|}
-
-中文:
-定义 reps
-  签名: (m : 整数)
-  定义体: {A : Δ m | (A.1 1 0) = 0 ∧ 0 < A.1 0 0 ∧ 0 <= A.1 0 1 ∧ |(A.1 0 1)| < |(A.1 1 1)|}
+--- 原说明 ---
+Set of representatives for the orbits under `S` and `T`
 -/
-def reps (m : Int) : Set (Δ m) :=
-  {A : Δ m | (A.1 1 0) = 0 ∧ 0 < A.1 0 0 ∧ 0 <= A.1 0 1 ∧ |(A.1 0 1)| < |(A.1 1 1)|}
+def reps (m : ℤ) : Set (Δ m) :=
+  {A : Δ m | (A.1 1 0) = 0 ∧ 0 < A.1 0 0 ∧ 0 ≤ A.1 0 1 ∧ |(A.1 0 1)| < |(A.1 1 1)|}
 
-/--
-Definition of `reduceStep` / `reduceStep` 的定义
+/-- Reduction step for matrices in `Δ m` which moves the matrices towards `reps` -/
+/-
+**FixedDetMatrices.reduceStep** 是 Mathlib 中的一个定义，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reduceStep (A : Δ m) : Δ m
+参数：A : Δ m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reduceStep
-  signature: (A : Δ m)
-  body: S • (T ^ (-(A.1 0 0 / A.1 1 0))) • A
-
-中文:
-定义 reduceStep
-  签名: (A : Δ m)
-  定义体: S • (T ^ (-(A.1 0 0 / A.1 1 0))) • A
+--- 原说明 ---
+Reduction step for matrices in `Δ m` which moves the matrices towards `reps`
 -/
 def reduceStep (A : Δ m) : Δ m := S • (T ^ (-(A.1 0 0 / A.1 1 0))) • A
-
-/--
-lemma `reduce_aux` / 引理 `reduce_aux`
-
-English:
-lemma reduce_aux
-  given: {A : Δ m} (h : (A.1 1 0) != 0)
-  proof: by
-  suffices ((reduceStep A).1 1 0) = A.1 0 0 % A.1 1 0 by
-    rw [this]; rw [abs_eq_self.mpr (Int.emod_nonneg (A.1 0 0) h)]
-    exact Int.emod_lt_abs (A.1 0 0) h
-  simp_rw [Int.emod_def, sub_eq_add_neg, reduceStep, smul_coe, coe_T_zpow, S]
-  norm_num [vecMul, vecHead, vecTail, mul_comm]
-
-中文:
-引理 reduce_aux
-  条件: {A : Δ m} (h : (A.1 1 0) != 0)
-  证明: by
-  suffices ((reduceStep A).1 1 0) = A.1 0 0 % A.1 1 0 by
-    rw [this]; rw [abs_eq_self.mpr (Int.emod_nonneg (A.1 0 0) h)]
-    exact Int.emod_lt_abs (A.1 0 0) h
-  simp_rw [Int.emod_def, sub_eq_add_neg, reduceStep, smul_coe, coe_T_zpow, S]
-  norm_num [vecMul, vecHead, vecTail, mul_comm]
+/-
+**FixedDetMatrices.reduce_aux** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma reduce_aux {A : Δ m} (h : (A.1 1 0) != 0) :
+private lemma reduce_aux {A : Δ m} (h : (A.1 1 0) ≠ 0) :
     |((reduceStep A).1 1 0)| < |(A.1 1 0)| := by
   suffices ((reduceStep A).1 1 0) = A.1 0 0 % A.1 1 0 by
-    rw [this]; rw [abs_eq_self.mpr (Int.emod_nonneg (A.1 0 0) h)]
+    rw [this, abs_eq_self.mpr (Int.emod_nonneg (A.1 0 0) h)]
     exact Int.emod_lt_abs (A.1 0 0) h
   simp_rw [Int.emod_def, sub_eq_add_neg, reduceStep, smul_coe, coe_T_zpow, S]
   norm_num [vecMul, vecHead, vecTail, mul_comm]
 
 /-- Reduction lemma for integral FixedDetMatrices. -/
 @[elab_as_elim]
-/--
-Definition of `reduce_rec` / `reduce_rec` 的定义
+/-
+**FixedDetMatrices.reduce_rec** 是 Mathlib 中的一个定义，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reduce_rec {C : Δ m -> Sort*} (base : forall A : Δ m, (A.1 1 0) = 0 -> C A
+) (step : forall A : Δ m, (A.1 1 0) != 0 -> C (reduceStep A) -> C A) : forall A,
+ C A
+参数：base : forall A : Δ m, (A.1 1 0) = 0 -> C A；step : forall A : Δ m, (A.1 1 0) 
+!= 0 -> C (reduceStep A) -> C A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reduce_rec
-  signature: {C : Δ m -> Sort*}
-  body: fun A => by
-  by_cases h : (A.1 1 0) = 0
-  · exact base _ h
-  · exact step A h (reduce_rec base step (reduceStep A))
-  termination_by A => Int.natAbs (A.1 1 0)
-  decreasing_by
-    zify
-    exact reduce_aux h
-
-中文:
-定义 reduce_rec
-  签名: {C : Δ m -> 类型层*}
-  定义体: fun A => by
-  by_cases h : (A.1 1 0) = 0
-  · exact base _ h
-  · exact step A h (reduce_rec base step (reduceStep A))
-  termination_by A => Int.natAbs (A.1 1 0)
-  decreasing_by
-    zify
-    exact reduce_aux h
-
-Depends on / 依赖: Int.natAbs, decreasing_by, natAbs, reduceStep, reduce_aux, reduce_rec, termination_by
+--- 原说明 ---
+Reduction lemma for integral FixedDetMatrices.
 -/
-def reduce_rec {C : Δ m -> Sort*}
-    (base : forall A : Δ m, (A.1 1 0) = 0 -> C A)
-    (step : forall A : Δ m, (A.1 1 0) != 0 -> C (reduceStep A) -> C A) :
-    forall A, C A := fun A => by
+def reduce_rec {C : Δ m → Sort*}
+    (base : ∀ A : Δ m, (A.1 1 0) = 0 → C A)
+    (step : ∀ A : Δ m, (A.1 1 0) ≠ 0 → C (reduceStep A) → C A) :
+    ∀ A, C A := fun A => by
   by_cases h : (A.1 1 0) = 0
   · exact base _ h
   · exact step A h (reduce_rec base step (reduceStep A))
@@ -257,40 +191,20 @@ def reduce_rec {C : Δ m -> Sort*}
     zify
     exact reduce_aux h
 
-/--
-Definition of `reduce` / `reduce` 的定义
+/-- Map from `Δ m → Δ m` which reduces a `FixedDetMatrix` towards a representative element
+in reps -/
+/-
+**FixedDetMatrices.reduce** 是 Mathlib 中的一个定义，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reduce : Δ m -> Δ m
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reduce
-  signature: : Δ m -> Δ m
-  body: fun A =>
-  if (A.1 1 0) = 0 then
-    if 0 < A.1 0 0 then (T ^ (-(A.1 0 1 / A.1 1 1))) • A else
-      (T ^ (-(-A.1 0 1 / -A.1 1 1))) • (S • (S • A)) --the -/- don't cancel with ℤ divs.
-  else
-    reduce (reduceStep A)
-  termination_by b => Int.natAbs (b.1 1 0)
-  decreasing_by
-    next a h =>
-    zify
-    exact reduce_aux h
-
-中文:
-定义 reduce
-  签名: : Δ m -> Δ m
-  定义体: fun A =>
-  if (A.1 1 0) = 0 then
-    if 0 < A.1 0 0 then (T ^ (-(A.1 0 1 / A.1 1 1))) • A else
-      (T ^ (-(-A.1 0 1 / -A.1 1 1))) • (S • (S • A)) --the -/- don't cancel with ℤ divs.
-  else
-    reduce (reduceStep A)
-  termination_by b => Int.natAbs (b.1 1 0)
-  decreasing_by
-    next a h =>
-    zify
-    exact reduce_aux h
+--- 原说明 ---
+Map from `Δ m → Δ m` which reduces a `FixedDetMatrix` towards a representative e
+lement
+in reps
 -/
-def reduce : Δ m -> Δ m := fun A =>
+def reduce : Δ m → Δ m := fun A ↦
   if (A.1 1 0) = 0 then
     if 0 < A.1 0 0 then (T ^ (-(A.1 0 1 / A.1 1 1))) • A else
       (T ^ (-(-A.1 0 1 / -A.1 1 1))) • (S • (S • A)) --the -/- don't cancel with ℤ divs.
@@ -301,58 +215,71 @@ def reduce : Δ m -> Δ m := fun A =>
     next a h =>
     zify
     exact reduce_aux h
-
-/--
-lemma `reduce_of_pos` / 引理 `reduce_of_pos`
-
-English:
-lemma reduce_of_pos
-  given: {A : Δ m} (hc : (A.1 1 0) = 0) (ha : 0 < A.1 0 0)
-  proof: by
-  rw [reduce]
-  simp only [zpow_neg, Int.ediv_neg, neg_neg] at *
-  simp_rw [if_pos hc, if_pos ha]
-
-中文:
-引理 reduce_of_pos
-  条件: {A : Δ m} (hc : (A.1 1 0) = 0) (ha : 0 < A.1 0 0)
-  证明: by
-  rw [reduce]
-  simp only [zpow_neg, Int.ediv_neg, neg_neg] at *
-  simp_rw [if_pos hc, if_pos ha]
-
-Depends on / 依赖: Int.ediv_neg, ediv_neg, if_pos, neg_neg, simp_rw, zpow_neg
+/-
+**FixedDetMatrices.reduce_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reduce_of_pos {A : Δ m} (hc : (A.1 1 0) = 0) (ha : 0 < A.1 0 0) : reduce A
+ = (T ^ (-(A.1 0 1 / A.1 1 1))) • A
+参数：hc : (A.1 1 0) = 0；ha : 0 < A.1 0 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FixedDetMatrices.reduce.eq_1`：∀ {m : ℤ} (A : FixedDetMatrix (Fin 2) ℤ m)
+,   FixedDetMatrices.reduce A =     if ↑A 1 0 = 0 then       if 0 < ↑A 0 0 then 
+ModularGroup.T ^ (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.ediv_neg`：∀ (a b : ℤ), a / -b = -(a / b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma reduce_of_pos {A : Δ m} (hc : (A.1 1 0) = 0) (ha : 0 < A.1 0 0) :
     reduce A = (T ^ (-(A.1 0 1 / A.1 1 1))) • A := by
   rw [reduce]
   simp only [zpow_neg, Int.ediv_neg, neg_neg] at *
   simp_rw [if_pos hc, if_pos ha]
-
-/--
-lemma `reduce_of_not_pos` / 引理 `reduce_of_not_pos`
-
-English:
-lemma reduce_of_not_pos
-  given: {A : Δ m} (hc : (A.1 1 0) = 0) (ha : ¬ 0 < A.1 0 0)
-  proof: by
-  rw [reduce]
-  simp only [zpow_neg, Int.ediv_neg, neg_neg] at *
-  simp_rw [if_pos hc, if_neg ha]
-
-@[simp]
-
-中文:
-引理 reduce_of_not_pos
-  条件: {A : Δ m} (hc : (A.1 1 0) = 0) (ha : ¬ 0 < A.1 0 0)
-  证明: by
-  rw [reduce]
-  simp only [zpow_neg, Int.ediv_neg, neg_neg] at *
-  simp_rw [if_pos hc, if_neg ha]
-
-@[simp]
-
-Depends on / 依赖: Int.ediv_neg, ediv_neg, if_neg, if_pos, neg_neg, simp_rw, zpow_neg
+/-
+**FixedDetMatrices.reduce_of_not_pos** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices
+`。
+形式化陈述：reduce_of_not_pos {A : Δ m} (hc : (A.1 1 0) = 0) (ha : ¬ 0 < A.1 0 0) : re
+duce A = (T ^ (-(-A.1 0 1 / -A.1 1 1))) • (S • (S • A))
+参数：hc : (A.1 1 0) = 0；ha : ¬ 0 < A.1 0 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FixedDetMatrices.reduce.eq_1`：∀ {m : ℤ} (A : FixedDetMatrix (Fin 2) ℤ m)
+,   FixedDetMatrices.reduce A =     if ↑A 1 0 = 0 then       if 0 < ↑A 0 0 then 
+ModularGroup.T ^ (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.ediv_neg`：∀ (a b : ℤ), a / -b = -(a / b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma reduce_of_not_pos {A : Δ m} (hc : (A.1 1 0) = 0) (ha : ¬ 0 < A.1 0 0) :
     reduce A = (T ^ (-(-A.1 0 1 / -A.1 1 1))) • (S • (S • A)) := by
@@ -361,126 +288,120 @@ lemma reduce_of_not_pos {A : Δ m} (hc : (A.1 1 0) = 0) (ha : ¬ 0 < A.1 0 0) :
   simp_rw [if_pos hc, if_neg ha]
 
 @[simp]
-/--
-lemma `reduce_reduceStep` / 引理 `reduce_reduceStep`
-
-English:
-lemma reduce_reduceStep
-  given: {A : Δ m} (hc : (A.1 1 0) ≠ 0)
-  proof: by
-  symm
-  rw [reduce]; rw [if_neg hc]
-
-中文:
-引理 reduce_reduceStep
-  条件: {A : Δ m} (hc : (A.1 1 0) ≠ 0)
-  证明: by
-  symm
-  rw [reduce]; rw [if_neg hc]
-
-Depends on / 依赖: if_neg
+/-
+**FixedDetMatrices.reduce_reduceStep** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices
+`。
+形式化陈述：reduce_reduceStep {A : Δ m} (hc : (A.1 1 0) ≠ 0) : reduce (reduceStep A) =
+ reduce A
+参数：hc : (A.1 1 0) ≠ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FixedDetMatrices.reduce.eq_1`：∀ {m : ℤ} (A : FixedDetMatrix (Fin 2) ℤ m)
+,   FixedDetMatrices.reduce A =     if ↑A 1 0 = 0 then       if 0 < ↑A 0 0 then 
+ModularGroup.T ^ (…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
 lemma reduce_reduceStep {A : Δ m} (hc : (A.1 1 0) ≠ 0) :
     reduce (reduceStep A) = reduce A := by
   symm
-  rw [reduce]; rw [if_neg hc]
-
-/--
-lemma `A_c_eq_zero` / 引理 `A_c_eq_zero`
-
-English:
-lemma A_c_eq_zero
-  given: {A : Δ m} (ha : A.1 1 0 = 0)
-  statement: A.1 0 0 * A.1 1 1 = m
-  proof: by
-  simpa only [det_fin_two, ha, mul_zero, sub_zero] using A.2
-
-中文:
-引理 A_c_eq_zero
-  条件: {A : Δ m} (ha : A.1 1 0 = 0)
-  结论: A.1 0 0 * A.1 1 1 = m
-  证明: by
-  simpa only [det_fin_two, ha, mul_zero, sub_zero] using A.2
+  rw [reduce, if_neg hc]
+/-
+**FixedDetMatrices.A_c_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma A_c_eq_zero {A : Δ m} (ha : A.1 1 0 = 0) : A.1 0 0 * A.1 1 1 = m := by
   simpa only [det_fin_two, ha, mul_zero, sub_zero] using A.2
-
-/--
-lemma `A_d_ne_zero` / 引理 `A_d_ne_zero`
-
-English:
-lemma A_d_ne_zero
-  given: {A : Δ m} (ha : A.1 1 0 = 0) (hm : m ≠ 0)
-  statement: A.1 1 1 ≠ 0
-  proof: right_ne_zero_of_mul (A_c_eq_zero (ha) ▸ hm)
-
-中文:
-引理 A_d_ne_zero
-  条件: {A : Δ m} (ha : A.1 1 0 = 0) (hm : m ≠ 0)
-  结论: A.1 1 1 ≠ 0
-  证明: right_ne_zero_of_mul (A_c_eq_zero (ha) ▸ hm)
+/-
+**FixedDetMatrices.A_d_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma A_d_ne_zero {A : Δ m} (ha : A.1 1 0 = 0) (hm : m ≠ 0) : A.1 1 1 ≠ 0 :=
   right_ne_zero_of_mul (A_c_eq_zero (ha) ▸ hm)
-
-/--
-lemma `A_a_ne_zero` / 引理 `A_a_ne_zero`
-
-English:
-lemma A_a_ne_zero
-  given: {A : Δ m} (ha : A.1 1 0 = 0) (hm : m ≠ 0)
-  statement: A.1 0 0 ≠ 0
-  proof: left_ne_zero_of_mul (A_c_eq_zero ha ▸ hm)
-
-中文:
-引理 A_a_ne_zero
-  条件: {A : Δ m} (ha : A.1 1 0 = 0) (hm : m ≠ 0)
-  结论: A.1 0 0 ≠ 0
-  证明: left_ne_zero_of_mul (A_c_eq_zero ha ▸ hm)
+/-
+**FixedDetMatrices.A_a_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma A_a_ne_zero {A : Δ m} (ha : A.1 1 0 = 0) (hm : m ≠ 0) : A.1 0 0 ≠ 0 :=
   left_ne_zero_of_mul (A_c_eq_zero ha ▸ hm)
 
-/--
-lemma `reps_entries_le_m'` / 引理 `reps_entries_le_m'`
+/-- An auxiliary result bounding the size of the entries of the representatives in `reps` -/
+/-
+**FixedDetMatrices.reps_entries_le_m'** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrice
+s`。
+形式化陈述：reps_entries_le_m' {A : Δ m} (h : A in reps m) (i j : Fin 2) : A.1 i j in 
+Finset.Icc (-|m|) |m|
+参数：h : A in reps m；i j : Fin 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_pos`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder α] [
+AddLeftMono α] {a : α}, 0 < |a| ↔ a ≠ 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.FixedDetMatrices.0.FixedDetMatrice
+s.A_c_eq_zero`：∀ {m : ℤ} {A : FixedDetMatrix (Fin 2) ℤ m}, ↑A 1 0 = 0 → ↑A 0 0 *
+ ↑A 1 1 = m
+· 使用引理 `le_mul_iff_one_le_right`：le_mul_iff_one_le_right [PosMulMono α] [PosMulR
+eflectLE α] (a0 : 0 < a) : a <= a * b ↔ 1 <= b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `le_mul_of_one_le_left`：le_mul_of_one_le_left [MulPosMono α] (hb : 0 <= b
+) (h : 1 <= a) : b <= a * b
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `abs_zero`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [Add
+LeftMono α], |0| = 0
+· 使用引理 `le_mul_iff_one_le_left`：le_mul_iff_one_le_left [MulPosMono α] [MulPosRef
+lectLE α] (a0 : 0 < a) : a <= b * a ↔ 1 <= b
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+（共 33 条，此处仅展示前 30 条）
 
-English:
-lemma reps_entries_le_m'
-  given: {A : Δ m} (h : A in reps m) (i j : Fin 2)
-  proof: by
-suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
-  obtain ⟨h10, h00, h01, h11⟩ := h
-  have h1 : 0 < |A.1 1 1| := (abs_nonneg _).trans_lt h11
-  have h2 : 0 < |A.1 0 0| := abs_pos.mpr h00.ne'
-  fin_cases i <;> fin_cases j
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_right h2).mpr h1
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! h11.le.trans (le_mul_of_one_le_left h1.le h2)
-  · simp_all
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_left h1).mpr h2
-
-@[simp]
-
-中文:
-引理 reps_entries_le_m'
-  条件: {A : Δ m} (h : A in reps m) (i j : 有限集 2)
-  证明: by
-suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
-  obtain ⟨h10, h00, h01, h11⟩ := h
-  have h1 : 0 < |A.1 1 1| := (abs_nonneg _).trans_lt h11
-  have h2 : 0 < |A.1 0 0| := abs_pos.mpr h00.ne'
-  fin_cases i <;> fin_cases j
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_right h2).mpr h1
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! h11.le.trans (le_mul_of_one_le_left h1.le h2)
-  · simp_all
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_left h1).mpr h2
-
-@[simp]
-
-Depends on / 依赖: A_c_eq_zero, Finset, Finset.mem_Icc.mpr, abs_le, abs_le.mp, abs_mul, abs_nonneg, abs_pos, abs_pos.mpr, fin_cases, h00.ne, h1.le, h11.le.trans, le_mul_iff_one_le_left, le_mul_iff_one_le_right, le_mul_of_one_le_left, mem_Icc, trans_lt
+--- 原说明 ---
+An auxiliary result bounding the size of the entries of the representatives in `
+reps`
 -/
-lemma reps_entries_le_m' {A : Δ m} (h : A in reps m) (i j : Fin 2) :
-    A.1 i j in Finset.Icc (-|m|) |m| := by
-suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
+lemma reps_entries_le_m' {A : Δ m} (h : A ∈ reps m) (i j : Fin 2) :
+    A.1 i j ∈ Finset.Icc (-|m|) |m| := by
+  suffices |A.1 i j| ≤ |m| from Finset.mem_Icc.mpr <| abs_le.mp this
   obtain ⟨h10, h00, h01, h11⟩ := h
   have h1 : 0 < |A.1 1 1| := (abs_nonneg _).trans_lt h11
   have h2 : 0 < |A.1 0 0| := abs_pos.mpr h00.ne'
@@ -491,133 +412,198 @@ suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
   · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_left h1).mpr h2
 
 @[simp]
-/--
-lemma `reps_zero_empty` / 引理 `reps_zero_empty`
-
-English:
-lemma reps_zero_empty
-  statement: reps 0 = ∅
-  proof: by
-  rw [reps]; rw [Set.eq_empty_iff_forall_notMem]
-  rintro A ⟨h₁, h₂, -, h₄⟩
-  suffices |A.1 0 1| < 0 by linarith [abs_nonneg (A.1 0 1)]
-  have := A_c_eq_zero h₁
-  simp_all [h₂.ne']
-
-中文:
-引理 reps_zero_empty
-  结论: reps 0 = ∅
-  证明: by
-  rw [reps]; rw [Set.eq_empty_iff_forall_notMem]
-  rintro A ⟨h₁, h₂, -, h₄⟩
-  suffices |A.1 0 1| < 0 by linarith [abs_nonneg (A.1 0 1)]
-  have := A_c_eq_zero h₁
-  simp_all [h₂.ne']
-
-Depends on / 依赖: A_c_eq_zero, Set.eq_empty_iff_forall_notMem, abs_nonneg, eq_empty_iff_forall_notMem
+/-
+**FixedDetMatrices.reps_zero_empty** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reps_zero_empty : reps 0 = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FixedDetMatrices.reps.eq_1`：∀ (m : ℤ), FixedDetMatrices.reps m = {A | ↑A
+ 1 0 = 0 ∧ 0 < ↑A 0 0 ∧ 0 ≤ ↑A 0 1 ∧ |↑A 0 1| < |↑A 1 1|}
+· 使用定理 `Set.eq_empty_iff_forall_notMem`：eq_empty_iff_forall_notMem {s : Set α} :
+ s = ∅ ↔ forall x, x ∉ s
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.FixedDetMatrices.0.FixedDetMatrice
+s.A_c_eq_zero`：∀ {m : ℤ} {A : FixedDetMatrix (Fin 2) ℤ m}, ↑A 1 0 = 0 → ↑A 0 0 *
+ ↑A 1 1 = m
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `abs_zero`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [Add
+LeftMono α], |0| = 0
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 48 条，此处仅展示前 30 条）
 -/
 lemma reps_zero_empty : reps 0 = ∅ := by
-  rw [reps]; rw [Set.eq_empty_iff_forall_notMem]
+  rw [reps, Set.eq_empty_iff_forall_notMem]
   rintro A ⟨h₁, h₂, -, h₄⟩
   suffices |A.1 0 1| < 0 by linarith [abs_nonneg (A.1 0 1)]
   have := A_c_eq_zero h₁
   simp_all [h₂.ne']
-
-/--
-Instance `repsFintype` / 实例 `repsFintype`
-
-English:
-instance repsFintype
-  signature: (k : Int)
-  body: by
-  let H := Finset.Icc (-|k|) |k|
-  let H4 := Fin 2 -> Fin 2 -> H
-  apply Fintype.ofInjective (β := H4) (f := fun M i j => ⟨M.1.1 i j, reps_entries_le_m' M.2 i j⟩)
-  intro M N h
-  ext i j
-  simpa only [Subtype.mk.injEq] using congrFun₂ h i j
-
-中文:
-实例 repsFintype
-  签名: (k : 整数)
-  定义体: by
-  let H := Finset.Icc (-|k|) |k|
-  let H4 := Fin 2 -> Fin 2 -> H
-  apply Fintype.ofInjective (β := H4) (f := fun M i j => ⟨M.1.1 i j, reps_entries_le_m' M.2 i j⟩)
-  intro M N h
-  ext i j
-  simpa only [Subtype.mk.injEq] using congrFun₂ h i j
-
-Depends on / 依赖: Finset, Finset.Icc, Fintype, Fintype.ofInjective, Subtype, Subtype.mk.injEq, ofInjective, reps_entries_le_m
+/-
+**FixedDetMatrices.repsFintype** 是 Mathlib 中的一个实例，位于命名空间 `FixedDetMatrices`。
+形式化陈述：repsFintype (k : Int) : Fintype (reps k)
+参数：k : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance repsFintype (k : Int) : Fintype (reps k) := by
+noncomputable instance repsFintype (k : ℤ) : Fintype (reps k) := by
   let H := Finset.Icc (-|k|) |k|
-  let H4 := Fin 2 -> Fin 2 -> H
-  apply Fintype.ofInjective (β := H4) (f := fun M i j => ⟨M.1.1 i j, reps_entries_le_m' M.2 i j⟩)
+  let H4 := Fin 2 → Fin 2 → H
+  apply Fintype.ofInjective (β := H4) (f := fun M i j ↦ ⟨M.1.1 i j, reps_entries_le_m' M.2 i j⟩)
   intro M N h
   ext i j
   simpa only [Subtype.mk.injEq] using congrFun₂ h i j
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `S_smul_four` / 引理 `S_smul_four`
-
-English:
-lemma S_smul_four
-  given: (A : Δ m)
-  statement: S • S • S • S • A = A
-  proof: by
-  simp only [smul_def, ← mul_assoc, S_mul_S_eq, neg_mul, one_mul, mul_neg, neg_neg, Subtype.coe_eta]
-
-@[simp]
-
-中文:
-引理 S_smul_four
-  条件: (A : Δ m)
-  结论: S • S • S • S • A = A
-  证明: by
-  simp only [smul_def, ← mul_assoc, S_mul_S_eq, neg_mul, one_mul, mul_neg, neg_neg, Subtype.coe_eta]
-
-@[simp]
-
-Depends on / 依赖: S_mul_S_eq, Subtype, Subtype.coe_eta, coe_eta, mul_assoc, mul_neg, neg_mul, neg_neg, one_mul, smul_def
+/-
+**FixedDetMatrices.S_smul_four** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：S_smul_four (A : Δ m) : S • S • S • S • A = A
+参数：A : Δ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ModularGroup.S_mul_S_eq`：S_mul_S_eq : (S : Matrix (Fin 2) (Fin 2) Int) *
+ S = -1
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma S_smul_four (A : Δ m) : S • S • S • S • A = A := by
   simp only [smul_def, ← mul_assoc, S_mul_S_eq, neg_mul, one_mul, mul_neg, neg_neg, Subtype.coe_eta]
 
 @[simp]
-/--
-lemma `T_S_rel_smul` / 引理 `T_S_rel_smul`
-
-English:
-lemma T_S_rel_smul
-  given: (A : Δ m)
-  statement: S • S • S • T • S • T • S • A = T⁻¹ • A
-  proof: by
-  simp_rw [← T_S_rel, ← smul_assoc]
-
-中文:
-引理 T_S_rel_smul
-  条件: (A : Δ m)
-  结论: S • S • S • T • S • T • S • A = T⁻¹ • A
-  证明: by
-  simp_rw [← T_S_rel, ← smul_assoc]
-
-Depends on / 依赖: T_S_rel, simp_rw, smul_assoc
+/-
+**FixedDetMatrices.T_S_rel_smul** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：T_S_rel_smul (A : Δ m) : S • S • S • T • S • T • S • A = T⁻¹ • A
+参数：A : Δ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma T_S_rel_smul (A : Δ m) : S • S • S • T • S • T • S • A = T⁻¹ • A := by
   simp_rw [← T_S_rel, ← smul_assoc]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `reduce_mem_reps` / 引理 `reduce_mem_reps`
-
-English:
-lemma reduce_mem_reps
-  given: {m : Int} (hm : m != 0) (A : Δ m)
-  statement: reduce A in reps m
-  proof: by
+/-
+**FixedDetMatrices.reduce_mem_reps** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reduce_mem_reps {m : Int} (hm : m != 0) (A : Δ m) : reduce A in reps m
+参数：hm : m != 0；A : Δ m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.FixedDetMatrices.0.FixedDetMatrice
+s.A_d_ne_zero`：∀ {m : ℤ} {A : FixedDetMatrix (Fin 2) ℤ m}, ↑A 1 0 = 0 → m ≠ 0 → 
+↑A 1 1 ≠ 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `FixedDetMatrices.reduce_of_pos`：reduce_of_pos {A : Δ m} (hc : (A.1 1 0) 
+= 0) (ha : 0 < A.1 0 0) : reduce A = (T ^ (-(A.1 0 1 / A.1 1 1))) • A
+· 使用定理 `Int.emod_def`：∀ (a b : ℤ), a % b = a - b * (a / b)
+· 使用定理 `Int.ediv_mul_le`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → a / b * b ≤ a
+· 使用定理 `Int.emod_lt_abs`：emod_lt_abs (a : Int) {b : Int} (H : b != 0) : a % b < 
+|b|
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ModularGroup.coe_T_zpow`：coe_T_zpow (n : Int) : (T ^ n).1 = !![1, n; 0, 
+1]
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_eq_self`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOr
+der G] [IsOrderedAddMonoid G] {a : G}, |a| = a ↔ 0 ≤ a
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Matrix.cons_mul`：cons_mul [Fintype n'] (v : n' -> α) (A : Fin m -> n' ->
+ α) (B : Matrix n' o' α) : of (vecCons v A) * B = of (vecCons (v ᵥ* B) (of.symm 
+(of A…
+· 使用定理 `Matrix.empty_mul`：empty_mul [Fintype n'] (A : Matrix (Fin 0) n' α) (B : 
+Matrix n' o' α) : A * B = of ![]
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `Matrix.cons_dotProduct`：cons_dotProduct (x : α) (v : Fin n -> α) (w : Fi
+n n.succ -> α) : vecCons x v ⬝ᵥ w = x * vecHead w + v ⬝ᵥ vecTail w
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+（共 64 条，此处仅展示前 30 条）
+-/
+lemma reduce_mem_reps {m : ℤ} (hm : m ≠ 0) (A : Δ m) : reduce A ∈ reps m := by
   induction A using reduce_rec with
   | step A h1 h2 => simpa only [reduce_reduceStep h1] using h2
   | base A h =>
@@ -626,12 +612,12 @@ lemma reduce_mem_reps
     · simp only [reduce_of_pos h h1]
       have h2 := Int.emod_def (A.1 0 1) (A.1 1 1)
       have h4 := Int.ediv_mul_le (A.1 0 1) hd
-      set n : Int := A.1 0 1 / A.1 1 1
+      set n : ℤ := A.1 0 1 / A.1 1 1
       have h3 := Int.emod_lt_abs (A.1 0 1) hd
       rw [← abs_eq_self.mpr <| Int.emod_nonneg _ hd] at h3
       simp only [smul_def, coe_T_zpow]
       suffices A.1 1 0 = 0 ∧ n * A.1 1 0 < A.1 0 0 ∧
-          n * A.1 1 1 <= A.1 0 1 ∧ |A.1 0 1 + -(n * A.1 1 1)| < |A.1 1 1| by
+          n * A.1 1 1 ≤ A.1 0 1 ∧ |A.1 0 1 + -(n * A.1 1 1)| < |A.1 1 1| by
         simpa only [reps, Fin.isValue, cons_mul, Nat.succ_eq_add_one, Nat.reduceAdd, empty_mul,
           Equiv.symm_apply_apply, Set.mem_ofPred_eq, of_apply, cons_val', vecMul, cons_dotProduct,
           vecHead, one_mul, vecTail, Function.comp_apply, Fin.succ_zero_eq_one, neg_mul,
@@ -650,202 +636,86 @@ lemma reduce_mem_reps
       · simp only [Int.lt_iff_le_and_ne]
         exact ⟨not_lt.mp h1, A_a_ne_zero h hm⟩
       · rw [mul_comm, add_comm, ← Int.sub_eq_add_neg, ← Int.emod_def,
-abs_eq_self.mpr Int.emod_nonneg _ hd]
+         abs_eq_self.mpr <| Int.emod_nonneg _ hd]
         exact Int.emod_lt_abs _ hd
 
-中文:
-引理 reduce_mem_reps
-  条件: {m : 整数} (hm : m != 0) (A : Δ m)
-  结论: reduce A in reps m
-  证明: by
-  induction A using reduce_rec with
-  | step A h1 h2 => simpa only [reduce_reduceStep h1] using h2
-  | base A h =>
-    have hd := A_d_ne_zero h hm
-    by_cases h1 : 0 < A.1 0 0
-    · simp only [reduce_of_pos h h1]
-      have h2 := Int.emod_def (A.1 0 1) (A.1 1 1)
-      have h4 := Int.ediv_mul_le (A.1 0 1) hd
-      set n : Int := A.1 0 1 / A.1 1 1
-      have h3 := Int.emod_lt_abs (A.1 0 1) hd
-      rw [← abs_eq_self.mpr <| Int.emod_nonneg _ hd] at h3
-      simp only [smul_def, coe_T_zpow]
-      suffices A.1 1 0 = 0 ∧ n * A.1 1 0 < A.1 0 0 ∧
-          n * A.1 1 1 <= A.1 0 1 ∧ |A.1 0 1 + -(n * A.1 1 1)| < |A.1 1 1| by
-        simpa only [reps, Fin.isValue, cons_mul, Nat.succ_eq_add_one, Nat.reduceAdd, empty_mul,
-          Equiv.symm_apply_apply, Set.mem_ofPred_eq, of_apply, cons_val', vecMul, cons_dotProduct,
-          vecHead, one_mul, vecTail, Function.comp_apply, Fin.succ_zero_eq_one, neg_mul,
-          dotProduct_of_isEmpty, add_zero, zero_mul, zero_add, empty_val', cons_val_fin_one,
-          cons_val_one, cons_val_zero, lt_add_neg_iff_add_lt, le_add_neg_iff_add_le]
-      simp_all only [mul_comm n, zero_mul, ← sub_eq_add_neg, ← h2,
-        Fin.isValue, and_true]
-    · simp only [reps, Fin.isValue, reduce_of_not_pos h h1, Int.ediv_neg, neg_neg, smul_def, ←
-        mul_assoc, S_mul_S_eq, neg_mul, one_mul, coe_T_zpow, mul_neg, cons_mul, Nat.succ_eq_add_one,
-        Nat.reduceAdd, empty_mul, Equiv.symm_apply_apply, neg_of, neg_cons, neg_empty,
-        Set.mem_ofPred_eq, of_apply, cons_val', Pi.neg_apply, vecMul, cons_dotProduct, vecHead,
-        vecTail, Function.comp_apply, Fin.succ_zero_eq_one, h, mul_zero, dotProduct_of_isEmpty,
-        add_zero, zero_mul, neg_zero, empty_val', cons_val_fin_one, cons_val_one, cons_val_zero,
-        lt_neg, neg_add_rev, zero_add, le_add_neg_iff_add_le, ← le_neg, abs_neg, true_and]
-      refine ⟨?_, Int.ediv_mul_le _ hd, ?_⟩
-      · simp only [Int.lt_iff_le_and_ne]
-        exact ⟨not_lt.mp h1, A_a_ne_zero h hm⟩
-      · rw [mul_comm, add_comm, ← Int.sub_eq_add_neg, ← Int.emod_def,
-abs_eq_self.mpr Int.emod_nonneg _ hd]
-        exact Int.emod_lt_abs _ hd
-
-Depends on / 依赖: A_d_ne_zero, Int.ediv_mul_le, Int.emod_def, Int.emod_lt_abs, Int.emod_nonneg, abs_eq_self, abs_eq_self.mpr, coe_T_zpow, ediv_mul_le, emod_def, emod_lt_abs, emod_nonneg, reduce_of_pos, reduce_rec, reduce_reduceStep, smul_def
+variable {C : Δ m → Prop}
+/-
+**FixedDetMatrices.prop_red_S** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma reduce_mem_reps {m : Int} (hm : m != 0) (A : Δ m) : reduce A in reps m := by
-  induction A using reduce_rec with
-  | step A h1 h2 => simpa only [reduce_reduceStep h1] using h2
-  | base A h =>
-    have hd := A_d_ne_zero h hm
-    by_cases h1 : 0 < A.1 0 0
-    · simp only [reduce_of_pos h h1]
-      have h2 := Int.emod_def (A.1 0 1) (A.1 1 1)
-      have h4 := Int.ediv_mul_le (A.1 0 1) hd
-      set n : Int := A.1 0 1 / A.1 1 1
-      have h3 := Int.emod_lt_abs (A.1 0 1) hd
-      rw [← abs_eq_self.mpr <| Int.emod_nonneg _ hd] at h3
-      simp only [smul_def, coe_T_zpow]
-      suffices A.1 1 0 = 0 ∧ n * A.1 1 0 < A.1 0 0 ∧
-          n * A.1 1 1 <= A.1 0 1 ∧ |A.1 0 1 + -(n * A.1 1 1)| < |A.1 1 1| by
-        simpa only [reps, Fin.isValue, cons_mul, Nat.succ_eq_add_one, Nat.reduceAdd, empty_mul,
-          Equiv.symm_apply_apply, Set.mem_ofPred_eq, of_apply, cons_val', vecMul, cons_dotProduct,
-          vecHead, one_mul, vecTail, Function.comp_apply, Fin.succ_zero_eq_one, neg_mul,
-          dotProduct_of_isEmpty, add_zero, zero_mul, zero_add, empty_val', cons_val_fin_one,
-          cons_val_one, cons_val_zero, lt_add_neg_iff_add_lt, le_add_neg_iff_add_le]
-      simp_all only [mul_comm n, zero_mul, ← sub_eq_add_neg, ← h2,
-        Fin.isValue, and_true]
-    · simp only [reps, Fin.isValue, reduce_of_not_pos h h1, Int.ediv_neg, neg_neg, smul_def, ←
-        mul_assoc, S_mul_S_eq, neg_mul, one_mul, coe_T_zpow, mul_neg, cons_mul, Nat.succ_eq_add_one,
-        Nat.reduceAdd, empty_mul, Equiv.symm_apply_apply, neg_of, neg_cons, neg_empty,
-        Set.mem_ofPred_eq, of_apply, cons_val', Pi.neg_apply, vecMul, cons_dotProduct, vecHead,
-        vecTail, Function.comp_apply, Fin.succ_zero_eq_one, h, mul_zero, dotProduct_of_isEmpty,
-        add_zero, zero_mul, neg_zero, empty_val', cons_val_fin_one, cons_val_one, cons_val_zero,
-        lt_neg, neg_add_rev, zero_add, le_add_neg_iff_add_le, ← le_neg, abs_neg, true_and]
-      refine ⟨?_, Int.ediv_mul_le _ hd, ?_⟩
-      · simp only [Int.lt_iff_le_and_ne]
-        exact ⟨not_lt.mp h1, A_a_ne_zero h hm⟩
-      · rw [mul_comm, add_comm, ← Int.sub_eq_add_neg, ← Int.emod_def,
-abs_eq_self.mpr Int.emod_nonneg _ hd]
-        exact Int.emod_lt_abs _ hd
-
-variable {C : Δ m -> Prop}
-
-/--
-lemma `prop_red_S` / 引理 `prop_red_S`
-
-English:
-lemma prop_red_S
-  given: (hS : forall B, C B -> C (S • B)) (B)
-  statement: C (S • B) ↔ C B
-  proof: by
+private lemma prop_red_S (hS : ∀ B, C B → C (S • B)) (B) : C (S • B) ↔ C B := by
   refine ⟨?_, hS _⟩
   intro ih
   rw [← (S_smul_four B)]
   solve_by_elim
-
-中文:
-引理 prop_red_S
-  条件: (hS : 对任意 B, C B -> C (S • B)) (B)
-  结论: C (S • B) ↔ C B
-  证明: by
-  refine ⟨?_, hS _⟩
-  intro ih
-  rw [← (S_smul_four B)]
-  solve_by_elim
+/-
+**FixedDetMatrices.prop_red_T** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma prop_red_S (hS : forall B, C B -> C (S • B)) (B) : C (S • B) ↔ C B := by
-  refine ⟨?_, hS _⟩
-  intro ih
-  rw [← (S_smul_four B)]
-  solve_by_elim
-
-/--
-lemma `prop_red_T` / 引理 `prop_red_T`
-
-English:
-lemma prop_red_T
-  given: (hS : forall B, C B -> C (S • B)) (hT : forall B, C B -> C (T • B)) (B)
-  proof: by
-  refine ⟨?_, hT _⟩
-  intro ih
-  rw [show B = T⁻¹ • T • B by simp]; rw [← T_S_rel_smul]
-  solve_by_elim (maxDepth := 10)
-
-中文:
-引理 prop_red_T
-  条件: (hS : 对任意 B, C B -> C (S • B)) (hT : 对任意 B, C B -> C (T • B)) (B)
-  证明: by
-  refine ⟨?_, hT _⟩
-  intro ih
-  rw [show B = T⁻¹ • T • B by simp]; rw [← T_S_rel_smul]
-  solve_by_elim (maxDepth := 10)
--/
-private lemma prop_red_T (hS : forall B, C B -> C (S • B)) (hT : forall B, C B -> C (T • B)) (B) :
+private lemma prop_red_T (hS : ∀ B, C B → C (S • B)) (hT : ∀ B, C B → C (T • B)) (B) :
     C (T • B) ↔ C B := by
   refine ⟨?_, hT _⟩
   intro ih
-  rw [show B = T⁻¹ • T • B by simp]; rw [← T_S_rel_smul]
+  rw [show B = T⁻¹ • T • B by simp, ← T_S_rel_smul]
   solve_by_elim (maxDepth := 10)
-
-/--
-lemma `prop_red_T_pow` / 引理 `prop_red_T_pow`
-
-English:
-lemma prop_red_T_pow
-  given: (hS : forall B, C B -> C (S • B)) (hT : forall B, C B -> C (T • B))
-  proof: by
-  intro B n
-  induction n with
-  | zero => simp only [zpow_zero, one_smul]
-  | succ n hn =>
-    simpa only [add_comm (n : Int), zpow_add _ 1, ← smul_eq_mul, zpow_one, smul_assoc,
-      prop_red_T hS hT]
-  | pred m hm =>
-    rwa [sub_eq_neg_add, zpow_add, zpow_neg_one, ← prop_red_T hS hT, mul_smul, smul_inv_smul]
-
-@[elab_as_elim]
-
-中文:
-引理 prop_red_T_pow
-  条件: (hS : 对任意 B, C B -> C (S • B)) (hT : 对任意 B, C B -> C (T • B))
-  证明: by
-  intro B n
-  induction n with
-  | zero => simp only [zpow_zero, one_smul]
-  | succ n hn =>
-    simpa only [add_comm (n : Int), zpow_add _ 1, ← smul_eq_mul, zpow_one, smul_assoc,
-      prop_red_T hS hT]
-  | pred m hm =>
-    rwa [sub_eq_neg_add, zpow_add, zpow_neg_one, ← prop_red_T hS hT, mul_smul, smul_inv_smul]
-
-@[elab_as_elim]
+/-
+**FixedDetMatrices.prop_red_T_pow** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma prop_red_T_pow (hS : forall B, C B -> C (S • B)) (hT : forall B, C B -> C (T • B)) :
-     forall B (n : Int), C (T ^ n • B) ↔ C B := by
+private lemma prop_red_T_pow (hS : ∀ B, C B → C (S • B)) (hT : ∀ B, C B → C (T • B)) :
+     ∀ B (n : ℤ), C (T ^ n • B) ↔ C B := by
   intro B n
   induction n with
   | zero => simp only [zpow_zero, one_smul]
   | succ n hn =>
-    simpa only [add_comm (n : Int), zpow_add _ 1, ← smul_eq_mul, zpow_one, smul_assoc,
+    simpa only [add_comm (n : ℤ), zpow_add _ 1, ← smul_eq_mul, zpow_one, smul_assoc,
       prop_red_T hS hT]
   | pred m hm =>
     rwa [sub_eq_neg_add, zpow_add, zpow_neg_one, ← prop_red_T hS hT, mul_smul, smul_inv_smul]
 
 @[elab_as_elim]
-/--
-theorem `induction_on` / 定理 `induction_on`
-
-English:
-theorem induction_on
-  statement: {C : Δ m -> Prop} {A : Δ m} (hm : m != 0)
-  proof: by
+/-
+**FixedDetMatrices.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：induction_on {C : Δ m -> Prop} {A : Δ m} (hm : m != 0) (h0 : forall A : Δ 
+m, A.1 1 0 = 0 -> 0 < A.1 0 0 -> 0 <= A.1 0 1 -> |(A.1 0 1)| < |(A.1 1 1)| -> C 
+A) (hS : forall B, C B -> C (S • B)) (hT : forall B, C B -> C (T • B)) : C A
+参数：hm : m != 0；h0 : forall A : Δ m, A.1 1 0 = 0 -> 0 < A.1 0 0 -> 0 <= A.1 0 1 -
+> |(A.1 0 1)| < |(A.1 1 1)| -> C A；hS : forall B, C B -> C (S • B)；hT : forall B
+, C B -> C (T • B)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `FixedDetMatrices.reduce_mem_reps`：reduce_mem_reps {m : Int} (hm : m != 0
+) (A : Δ m) : reduce A in reps m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `FixedDetMatrices.reduce_of_pos`：reduce_of_pos {A : Δ m} (hc : (A.1 1 0) 
+= 0) (ha : 0 < A.1 0 0) : reduce A = (T ^ (-(A.1 0 1 / A.1 1 1))) • A
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.FixedDetMatrices.0.FixedDetMatrice
+s.prop_red_T_pow`：∀ {m : ℤ} {C : FixedDetMatrix (Fin 2) ℤ m → Prop},   (∀ (B : F
+ixedDetMatrix (Fin 2) ℤ m), C B → C (ModularGroup.S • B)) →     (∀ (B : FixedD…
+· 使用引理 `FixedDetMatrices.reduce_of_not_pos`：reduce_of_not_pos {A : Δ m} (hc : (A
+.1 1 0) = 0) (ha : ¬ 0 < A.1 0 0) : reduce A = (T ^ (-(-A.1 0 1 / -A.1 1 1))) • 
+(S • (S • A))
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.FixedDetMatrices.0.FixedDetMatrice
+s.prop_red_S`：∀ {m : ℤ} {C : FixedDetMatrix (Fin 2) ℤ m → Prop},   (∀ (B : Fixed
+DetMatrix (Fin 2) ℤ m), C B → C (ModularGroup.S • B)) →     ∀ (B : FixedDe…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `FixedDetMatrices.reduce_reduceStep`：reduce_reduceStep {A : Δ m} (hc : (A
+.1 1 0) ≠ 0) : reduce (reduceStep A) = reduce A
+-/
+theorem induction_on {C : Δ m → Prop} {A : Δ m} (hm : m ≠ 0)
+    (h0 : ∀ A : Δ m, A.1 1 0 = 0 → 0 < A.1 0 0 → 0 ≤ A.1 0 1 → |(A.1 0 1)| < |(A.1 1 1)| → C A)
+    (hS : ∀ B, C B → C (S • B)) (hT : ∀ B, C B → C (T • B)) : C A := by
   have h_reduce : C (reduce A) := by
     rcases reduce_mem_reps hm A with ⟨H1, H2, H3, H4⟩
     exact h0 _ H1 H2 H3 H4
-  suffices forall A : Δ m, C (reduce A) -> C A from this _ h_reduce
+  suffices ∀ A : Δ m, C (reduce A) → C A from this _ h_reduce
   apply reduce_rec
   · intro A h
     by_cases h1 : 0 < A.1 0 0
@@ -854,65 +724,54 @@ theorem induction_on
   intro A hc ih hA
   rw [← reduce_reduceStep hc] at hA
   simpa only [reduceStep, prop_red_S hS, prop_red_T_pow hS hT] using ih hA
-
-中文:
-定理 induction_on
-  结论: {C : Δ m -> 命题} {A : Δ m} (hm : m != 0)
-  证明: by
-  have h_reduce : C (reduce A) := by
-    rcases reduce_mem_reps hm A with ⟨H1, H2, H3, H4⟩
-    exact h0 _ H1 H2 H3 H4
-  suffices forall A : Δ m, C (reduce A) -> C A from this _ h_reduce
-  apply reduce_rec
-  · intro A h
-    by_cases h1 : 0 < A.1 0 0
-    · simp only [reduce_of_pos h h1, prop_red_T_pow hS hT, imp_self]
-    · simp only [reduce_of_not_pos h h1, prop_red_T_pow hS hT, prop_red_S hS, imp_self]
-  intro A hc ih hA
-  rw [← reduce_reduceStep hc] at hA
-  simpa only [reduceStep, prop_red_S hS, prop_red_T_pow hS hT] using ih hA
-
-Depends on / 依赖: h_reduce, imp_self, prop_red_S, prop_red_T_pow, reduceStep, reduce_mem_reps, reduce_of_not_pos, reduce_of_pos, reduce_rec, reduce_reduceStep
+/-
+**FixedDetMatrices.reps_one_id** 是 Mathlib 中的一个引理，位于命名空间 `FixedDetMatrices`。
+形式化陈述：reps_one_id (A : FixedDetMatrix (Fin 2) Int 1) (a1 : A.1 1 0 = 0) (a4 : 0 
+< A.1 0 0) (a6 : |A.1 0 1| < |(A.1 1 1)|) : A = (1 : SL(2, Int))
+参数：A : FixedDetMatrix (Fin 2) Int 1；a1 : A.1 1 0 = 0；a4 : 0 < A.1 0 0；a6 : |A.1 
+0 1| < |(A.1 1 1)|。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Int.mul_eq_one_iff_eq_one_or_neg_one`：mul_eq_one_iff_eq_one_or_neg_one :
+ u * v = 1 ↔ u = 1 ∧ v = 1 ∨ u = -1 ∧ v = -1
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.FixedDetMatrices.0.FixedDetMatrice
+s.A_c_eq_zero`：∀ {m : ℤ} {A : FixedDetMatrix (Fin 2) ℤ m}, ↑A 1 0 = 0 → ↑A 0 0 *
+ ↑A 1 1 = m
+· 使用引理 `FixedDetMatrices.ext`：ext {m : R} {A B : FixedDetMatrix n R m} (h : fora
+ll i j, A.1 i j = B.1 i j) : A = B
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.one_apply_eq`：one_apply_eq (i) : (1 : Matrix n n α) i i = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false_of_decide`：∀ {p : Prop} {x : Decidable p}, decide p = false → p
+ = False
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Matrix.one_apply_ne`：one_apply_ne {i j} : i != j -> (1 : Matrix n n α) i
+ j = 0
+· 使用定理 `Fin.instNeZeroHAddNatOfNat_mathlib_1`：∀ (n : ℕ) [NeZero n], NeZero 1
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `abs_one`：∀ {α : Type u_1} [inst : Ring α] [inst_1 : LinearOrder α] [IsOr
+deredRing α], |1| = 1
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-theorem induction_on {C : Δ m -> Prop} {A : Δ m} (hm : m != 0)
-    (h0 : forall A : Δ m, A.1 1 0 = 0 -> 0 < A.1 0 0 -> 0 <= A.1 0 1 -> |(A.1 0 1)| < |(A.1 1 1)| -> C A)
-    (hS : forall B, C B -> C (S • B)) (hT : forall B, C B -> C (T • B)) : C A := by
-  have h_reduce : C (reduce A) := by
-    rcases reduce_mem_reps hm A with ⟨H1, H2, H3, H4⟩
-    exact h0 _ H1 H2 H3 H4
-  suffices forall A : Δ m, C (reduce A) -> C A from this _ h_reduce
-  apply reduce_rec
-  · intro A h
-    by_cases h1 : 0 < A.1 0 0
-    · simp only [reduce_of_pos h h1, prop_red_T_pow hS hT, imp_self]
-    · simp only [reduce_of_not_pos h h1, prop_red_T_pow hS hT, prop_red_S hS, imp_self]
-  intro A hc ih hA
-  rw [← reduce_reduceStep hc] at hA
-  simpa only [reduceStep, prop_red_S hS, prop_red_T_pow hS hT] using ih hA
-
-/--
-lemma `reps_one_id` / 引理 `reps_one_id`
-
-English:
-lemma reps_one_id
-  statement: (A : FixedDetMatrix (Fin 2) Int 1) (a1 : A.1 1 0 = 0) (a4 : 0 < A.1 0 0)
-  proof: by
-  have := Int.mul_eq_one_iff_eq_one_or_neg_one.mp (A_c_eq_zero a1)
-  ext i j
-  fin_cases i <;> fin_cases j <;> aesop
-
-中文:
-引理 reps_one_id
-  结论: (A : FixedDetMatrix (有限集 2) 整数 1) (a1 : A.1 1 0 = 0) (a4 : 0 < A.1 0 0)
-  证明: by
-  have := Int.mul_eq_one_iff_eq_one_or_neg_one.mp (A_c_eq_zero a1)
-  ext i j
-  fin_cases i <;> fin_cases j <;> aesop
-
-Depends on / 依赖: A_c_eq_zero, Int.mul_eq_one_iff_eq_one_or_neg_one.mp, fin_cases, mul_eq_one_iff_eq_one_or_neg_one
--/
-lemma reps_one_id (A : FixedDetMatrix (Fin 2) Int 1) (a1 : A.1 1 0 = 0) (a4 : 0 < A.1 0 0)
-    (a6 : |A.1 0 1| < |(A.1 1 1)|) : A = (1 : SL(2, Int)) := by
+lemma reps_one_id (A : FixedDetMatrix (Fin 2) ℤ 1) (a1 : A.1 1 0 = 0) (a4 : 0 < A.1 0 0)
+    (a6 : |A.1 0 1| < |(A.1 1 1)|) : A = (1 : SL(2, ℤ)) := by
   have := Int.mul_eq_one_iff_eq_one_or_neg_one.mp (A_c_eq_zero a1)
   ext i j
   fin_cases i <;> fin_cases j <;> aesop
@@ -927,40 +786,48 @@ section SL2Z_generators
 
 open ModularGroup Subgroup
 
-/--
-lemma `SpecialLinearGroup.SL2Z_generators` / 引理 `SpecialLinearGroup.SL2Z_generators`
+/-- `SL(2, ℤ)` is generated by `S` and `T`. -/
+/-
+**SpecialLinearGroup.SL2Z_generators** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SpecialLinearGroup.SL2Z_generators : closure {S, T} = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.eq_top_iff'`：eq_top_iff' : H = ⊤ ↔ forall x : G, x in H
+· 使用定理 `FixedDetMatrices.induction_on`：induction_on {C : Δ m -> Prop} {A : Δ m} 
+(hm : m != 0) (h0 : forall A : Δ m, A.1 1 0 = 0 -> 0 < A.1 0 0 -> 0 <= A.1 0 1 -
+> |(A.1 0 1)| < |(A…
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `FixedDetMatrices.reps_one_id`：reps_one_id (A : FixedDetMatrix (Fin 2) In
+t 1) (a1 : A.1 1 0 = 0) (a4 : 0 < A.1 0 0) (a6 : |A.1 0 1| < |(A.1 1 1)|) : A = 
+(1 : SL(2, Int))
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `Set.mem_insert_of_mem`：mem_insert_of_mem {x : α} {s : Set α} (y : α) : x
+ in s -> x in insert y s
 
-English:
-lemma SpecialLinearGroup.SL2Z_generators
-  statement: closure {S, T} = ⊤
-  proof: by
-  rw [eq_top_iff']
-  intro A
-  induction A using (induction_on one_ne_zero) with
-  | h0 A a1 a4 _ a6 =>
-    rw [reps_one_id A a1 a4 a6]
-    exact one_mem _
-  | hS B hb =>
-    exact mul_mem (subset_closure (Set.mem_insert S {T})) hb
-  | hT B hb =>
-    exact mul_mem (subset_closure (Set.mem_insert_of_mem S rfl)) hb
-
-中文:
-引理 SpecialLinearGroup.SL2Z_generators
-  结论: closure {S, T} = ⊤
-  证明: by
-  rw [eq_top_iff']
-  intro A
-  induction A using (induction_on one_ne_zero) with
-  | h0 A a1 a4 _ a6 =>
-    rw [reps_one_id A a1 a4 a6]
-    exact one_mem _
-  | hS B hb =>
-    exact mul_mem (subset_closure (Set.mem_insert S {T})) hb
-  | hT B hb =>
-    exact mul_mem (subset_closure (Set.mem_insert_of_mem S rfl)) hb
-
-Depends on / 依赖: Set.mem_insert, Set.mem_insert_of_mem, eq_top_iff, induction_on, mem_insert, mem_insert_of_mem, mul_mem, one_mem, one_ne_zero, reps_one_id, subset_closure
+--- 原说明 ---
+`SL(2, ℤ)` is generated by `S` and `T`.
 -/
 lemma SpecialLinearGroup.SL2Z_generators : closure {S, T} = ⊤ := by
   rw [eq_top_iff']
@@ -975,3 +842,4 @@ lemma SpecialLinearGroup.SL2Z_generators : closure {S, T} = ⊤ := by
     exact mul_mem (subset_closure (Set.mem_insert_of_mem S rfl)) hb
 
 end SL2Z_generators
+

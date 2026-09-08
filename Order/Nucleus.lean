@@ -28,376 +28,218 @@ open Order InfHom Set
 
 variable {X : Type*}
 
-/--
-Definition of `Nucleus` / `Nucleus` 的定义
+/-- A nucleus is an inflationary idempotent `inf`-preserving endomorphism of a semilattice.
 
-English:
-structure Nucleus
-  parameters: (X : Type*) [SemilatticeInf X]
-  extends: InfHom X X
-  axioms and operations (2):
-    - idempotent'((x : X)) : toFun (toFun x) <= toFun x
-    - le_apply'((x : X)) : x <= toFun x
+In a frame, nuclei correspond to sublocales. See `nucleusIsoSublocale`. -/
+/-
+**Nucleus** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_2) → [SemilatticeInf X] → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 核
-  参数: (X : 类型) [SemilatticeInf X]
-  继承: 交态射 X X
-  公理与运算 (2 个):
-    - idempotent'((x : X)) : toFun (toFun x) <= toFun x
-    - le_apply'((x : X)) : x <= toFun x
+--- 原说明 ---
+A nucleus is an inflationary idempotent `inf`-preserving endomorphism of a semil
+attice.
+
+In a frame, nuclei correspond to sublocales. See `nucleusIsoSublocale`.
 -/
 structure Nucleus (X : Type*) [SemilatticeInf X] extends InfHom X X where
   /-- A nucleus is idempotent.
 
   Do not use this directly. Instead use `NucleusClass.idempotent`. -/
-  idempotent' (x : X) : toFun (toFun x) <= toFun x
+  idempotent' (x : X) : toFun (toFun x) ≤ toFun x
   /-- A nucleus is increasing.
 
   Do not use this directly. Instead use `NucleusClass.le_apply`. -/
-  le_apply' (x : X) : x <= toFun x
+  le_apply' (x : X) : x ≤ toFun x
 
-/--
-Definition of `NucleusClass` / `NucleusClass` 的定义
+/-- `NucleusClass F X` states that F is a type of nuclei. -/
+/-
+**NucleusClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_2) → (X : Type u_3) → [SemilatticeInf X] → [FunLike F X X] → P
+rop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NucleusClass
-  parameters: (F X : Type*) [SemilatticeInf X] [FunLike F X X]
-  extends: InfHomClass F X X
-  axioms and operations (2):
-    - idempotent((x : X) (f : F)) : f (f x) <= f x
-    - le_apply((x : X) (f : F)) : x <= f x
-
-中文:
-类 核类
-  参数: (F X : 类型) [SemilatticeInf X] [函数状 F X X]
-  继承: 交态射类 F X X
-  公理与运算 (2 个):
-    - idempotent((x : X) (f : F)) : f (f x) <= f x
-    - le_apply((x : X) (f : F)) : x <= f x
+--- 原说明 ---
+`NucleusClass F X` states that F is a type of nuclei.
 -/
 class NucleusClass (F X : Type*) [SemilatticeInf X] [FunLike F X X] : Prop
     extends InfHomClass F X X where
   /-- A nucleus is idempotent. -/
-  idempotent (x : X) (f : F) : f (f x) <= f x
+  idempotent (x : X) (f : F) : f (f x) ≤ f x
   /-- A nucleus is inflationary. -/
-  le_apply (x : X) (f : F) : x <= f x
+  le_apply (x : X) (f : F) : x ≤ f x
 
 namespace Nucleus
 section SemilatticeInf
 variable [SemilatticeInf X] {n m : Nucleus X} {x y : X}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (Nucleus X) X X
-  body: x.toFun
-  coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
-
-中文:
-实例 :
-  签名: 函数状 (核 X) X X
-  定义体: x.toFun
-  coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
-
-Depends on / 依赖: x.toFun
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (Nucleus X) X X where
   coe x := x.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**Nucleus.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `Nucleus.Simps`。
+形式化陈述：{X : Type u_1} → [inst : SemilatticeInf X] → Nucleus X → X → X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (n : Nucleus X)
-  body: n
-
-中文:
-定义 Simps.apply
-  签名: (n : 核 X)
-  定义体: n
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.apply (n : Nucleus X) : X -> X := n
-
-/--
-lemma `toFun_eq_coe` / 引理 `toFun_eq_coe`
-
-English:
-lemma toFun_eq_coe
-  given: (n : Nucleus X)
-  statement: n.toFun = n
-  proof: rfl
-
-中文:
-引理 toFun_eq_coe
-  条件: (n : 核 X)
-  结论: n.toFun = n
-  证明: rfl
+def Simps.apply (n : Nucleus X) : X → X := n
+/-
+**Nucleus.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] (n : Nucleus X), n.toFun = ⇑n
+参数：n : Nucleus X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toFun_eq_coe (n : Nucleus X) : n.toFun = n := rfl
-/--
-lemma `coe_toInfHom` / 引理 `coe_toInfHom`
-
-English:
-lemma coe_toInfHom
-  given: (n : Nucleus X)
-  statement: ⇑n.toInfHom = n
-  proof: rfl
-
-中文:
-引理 coe_toInfHom
-  条件: (n : 核 X)
-  结论: ⇑n.toInfHom = n
-  证明: rfl
+/-
+**Nucleus.coe_toInfHom** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] (n : Nucleus X), ⇑n.toInfHom = 
+⇑n
+参数：n : Nucleus X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toInfHom (n : Nucleus X) : ⇑n.toInfHom = n := rfl
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (f : InfHom X X) (h1 h2)
-  statement: ⇑(mk f h1 h2) = f
-  proof: rfl
-
-initialize_simps_projections Nucleus (toFun -> apply)
-
-中文:
-引理 coe_mk
-  条件: (f : 交态射 X X) (h1 h2)
-  结论: ⇑(mk f h1 h2) = f
-  证明: rfl
-
-initialize_simps_projections Nucleus (toFun -> apply)
+/-
+**Nucleus.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] (f : InfHom X X) (h1 : ∀ (x : X
+), f.toFun (f.toFun x) ≤ f.toFun x)   (h2 : ∀ (x : X), x ≤ f.toFun x), ⇑{ toInfH
+om := f, idempotent' := h1, le_apply' := h2 } = ⇑f
+参数：f : InfHom X X；h1 : ∀ (x : X), f.toFun (f.toFun x) ≤ f.toFun x；h2 : ∀ (x : X)
+, x ≤ f.toFun x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_mk (f : InfHom X X) (h1 h2) : ⇑(mk f h1 h2) = f := rfl
 
-initialize_simps_projections Nucleus (toFun -> apply)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NucleusClass (Nucleus X) X
-  body: idempotent' ..
-  le_apply _ _ := le_apply' ..
-  map_inf _ _ _ := map_inf' ..
-
-中文:
-实例 :
-  签名: 核类 (核 X) X
-  定义体: idempotent' ..
-  le_apply _ _ := le_apply' ..
-  map_inf _ _ _ := map_inf' ..
-
-Depends on / 依赖: idempotent
+initialize_simps_projections Nucleus (toFun → apply)
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NucleusClass (Nucleus X) X where
   idempotent _ _ := idempotent' ..
   le_apply _ _ := le_apply' ..
   map_inf _ _ _ := map_inf' ..
 
-/--
-Definition of `toClosureOperator` / `toClosureOperator` 的定义
+/-- Every nucleus is a `ClosureOperator`. -/
+/-
+**Nucleus.toClosureOperator** 是 Mathlib 中的一个定义，位于命名空间 `Nucleus`。
+形式化陈述：toClosureOperator (n : Nucleus X) : ClosureOperator X
+参数：n : Nucleus X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nucleus.le_apply'`：∀ {X : Type u_2} [inst : SemilatticeInf X] (self : Nu
+cleus X) (x : X), x ≤ self.toFun x
+· 使用定理 `Nucleus.idempotent'`：∀ {X : Type u_2} [inst : SemilatticeInf X] (self : 
+Nucleus X) (x : X), self.toFun (self.toFun x) ≤ self.toFun x
 
-English:
-definition toClosureOperator
-  signature: (n : Nucleus X)
-  body: ClosureOperator.mk' n (OrderHomClass.mono n) n.le_apply' n.idempotent'
-
-中文:
-定义 toClosureOperator
-  签名: (n : 核 X)
-  定义体: ClosureOperator.mk' n (OrderHomClass.mono n) n.le_apply' n.idempotent'
-
-Depends on / 依赖: ClosureOperator, ClosureOperator.mk, OrderHomClass, OrderHomClass.mono, idempotent, le_apply, n.idempotent, n.le_apply
+--- 原说明 ---
+Every nucleus is a `ClosureOperator`.
 -/
 def toClosureOperator (n : Nucleus X) : ClosureOperator X :=
   ClosureOperator.mk' n (OrderHomClass.mono n) n.le_apply' n.idempotent'
-
-/--
-lemma `idempotent` / 引理 `idempotent`
-
-English:
-lemma idempotent
-  given: (x : X)
-  statement: n (n x) = n x
-  proof: n.toClosureOperator.idempotent x
-
-中文:
-引理 idempotent
-  条件: (x : X)
-  结论: n (n x) = n x
-  证明: n.toClosureOperator.idempotent x
+/-
+**Nucleus.idempotent** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] {n : Nucleus X} (x : X), n (n x
+) = n x
+参数：x : X；n x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosureOperator.idempotent`：idempotent (x : α) : c (c x) = c x
 -/
 @[simp] lemma idempotent (x : X) : n (n x) = n x := n.toClosureOperator.idempotent x
-
-/--
-lemma `le_apply` / 引理 `le_apply`
-
-English:
-lemma le_apply
-  statement: x <= n x
-  proof: n.toClosureOperator.le_closure x
-
-中文:
-引理 le_apply
-  结论: x <= n x
-  证明: n.toClosureOperator.le_closure x
-
-Depends on / 依赖: le_closure, n.toClosureOperator.le_closure, toClosureOperator
+/-
+**Nucleus.le_apply** 是 Mathlib 中的一个引理，位于命名空间 `Nucleus`。
+形式化陈述：le_apply : x <= n x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosureOperator.le_closure`：le_closure (x : α) : x <= c x
 -/
-lemma le_apply : x <= n x :=
+lemma le_apply : x ≤ n x :=
   n.toClosureOperator.le_closure x
-
-/--
-lemma `monotone` / 引理 `monotone`
-
-English:
-lemma monotone
-  statement: Monotone n
-  proof: n.toClosureOperator.monotone
-
-中文:
-引理 monotone
-  结论: 递增 n
-  证明: n.toClosureOperator.monotone
-
-Depends on / 依赖: monotone, n.toClosureOperator.monotone, toClosureOperator
+/-
+**Nucleus.monotone** 是 Mathlib 中的一个引理，位于命名空间 `Nucleus`。
+形式化陈述：monotone : Monotone n
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosureOperator.monotone`：monotone : Monotone c
 -/
 lemma monotone : Monotone n := n.toClosureOperator.monotone
-
-/--
-lemma `map_inf` / 引理 `map_inf`
-
-English:
-lemma map_inf
-  statement: n (x ⊓ y) = n x ⊓ n y
-  proof: InfHomClass.map_inf n x y
-
-中文:
-引理 map_inf
-  结论: n (x ⊓ y) = n x ⊓ n y
-  证明: InfHomClass.map_inf n x y
-
-Depends on / 依赖: InfHomClass, InfHomClass.map_inf, map_inf
+/-
+**Nucleus.map_inf** 是 Mathlib 中的一个引理，位于命名空间 `Nucleus`。
+形式化陈述：map_inf : n (x ⊓ y) = n x ⊓ n y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfHomClass.map_inf`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Min α} {inst_1 : Min β} {inst_2 : FunLike F α β}   [self : InfHomClass F α β
+] (f : F)…
+· 使用定理 `NucleusClass.toInfHomClass`：∀ {F : Type u_2} {X : Type u_3} {inst : Semi
+latticeInf X} {inst_1 : FunLike F X X} [self : NucleusClass F X],   InfHomClass 
+F X X
+· 使用定理 `Nucleus.instNucleusClass`：∀ {X : Type u_1} [inst : SemilatticeInf X], Nu
+cleusClass (Nucleus X) X
 -/
 lemma map_inf : n (x ⊓ y) = n x ⊓ n y :=
   InfHomClass.map_inf n x y
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {m n : Nucleus X} (h : forall a, m a = n a)
-  statement: m = n
-  proof: DFunLike.ext m n h
-
-中文:
-引理 ext
-  条件: {m n : 核 X} (h : 对任意 a, m a = n a)
-  结论: m = n
-  证明: DFunLike.ext m n h
+/-
+**Nucleus.ext** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] {m n : Nucleus X}, (∀ (a : X), 
+m a = n a) → m = n
+参数：∀ (a : X), m a = n a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-@[ext] lemma ext {m n : Nucleus X} (h : forall a, m a = n a) : m = n :=
+@[ext] lemma ext {m n : Nucleus X} (h : ∀ a, m a = n a) : m = n :=
   DFunLike.ext m n h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Nucleus X)
-  body: .lift (⇑) DFunLike.coe_injective
-
-中文:
-实例 :
-  签名: 偏序 (核 X)
-  定义体: .lift (⇑) DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Nucleus X) := .lift (⇑) DFunLike.coe_injective
-
-/--
-lemma `coe_le_coe` / 引理 `coe_le_coe`
-
-English:
-lemma coe_le_coe
-  statement: ⇑m <= n ↔ m <= n
-  proof: .rfl
-
-中文:
-引理 coe_le_coe
-  结论: ⇑m <= n ↔ m <= n
-  证明: .rfl
+/-
+**Nucleus.coe_le_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] {n m : Nucleus X}, ⇑m ≤ ⇑n ↔ m 
+≤ n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, norm_cast] lemma coe_le_coe : ⇑m <= n ↔ m <= n := .rfl
-/--
-lemma `coe_lt_coe` / 引理 `coe_lt_coe`
-
-English:
-lemma coe_lt_coe
-  statement: ⇑m < n ↔ m < n
-  proof: .rfl
-
-中文:
-引理 coe_lt_coe
-  结论: ⇑m < n ↔ m < n
-  证明: .rfl
+@[simp, norm_cast] lemma coe_le_coe : ⇑m ≤ n ↔ m ≤ n := .rfl
+/-
+**Nucleus.coe_lt_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] {n m : Nucleus X}, ⇑m < ⇑n ↔ m 
+< n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp, norm_cast] lemma coe_lt_coe : ⇑m < n ↔ m < n := .rfl
-
-/--
-lemma `mk_le_mk` / 引理 `mk_le_mk`
-
-English:
-lemma mk_le_mk
-  statement: (toInfHom₁ toInfHom₂ : InfHom X X)
-  proof: .rfl
-
-中文:
-引理 mk_le_mk
-  结论: (toInfHom₁ toInfHom₂ : 交态射 X X)
-  证明: .rfl
+/-
+**Nucleus.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] (toInfHom₁ toInfHom₂ : InfHom X
+ X)   (le_apply₁ : ∀ (x : X), toInfHom₁.toFun (toInfHom₁.toFun x) ≤ toInfHom₁.to
+Fun x)   (le_apply₂ : ∀ (x : X), toInfHom₂.toFun (toInfHom₂.toFun x) ≤ toInfHom₂
+.toFun x)   (idempotent₁ : ∀ (x : X), x ≤ toInfHom₁.toFun x) (idempotent₂ : ∀ (x
+ : X), x ≤ toInfHom₂.toFun x),   { toInfHom := toInfHom₁, idempotent' := le_appl
+y₁, le_apply' := idempotent₁ } ≤       { toInfHom := toInfHom₂, idempotent' := l
+e_apply₂, le_apply' := idempotent₂ } ↔     toInfHom₁ ≤ toInfHom₂
+参数：toInfHom₁ toInfHom₂ : InfHom X X；le_apply₁ : ∀ (x : X), toInfHom₁.toFun (toIn
+fHom₁.toFun x) ≤ toInfHom₁.toFun x；le_apply₂ : ∀ (x : X), toInfHom₂.toFun (toInf
+Hom₂.toFun x) ≤ toInfHom₂.toFun x；idempotent₁ : ∀ (x : X), x ≤ toInfHom₁.toFun x
+；idempotent₂ : ∀ (x : X), x ≤ toInfHom₂.toFun x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp, gcongr] lemma mk_le_mk (toInfHom₁ toInfHom₂ : InfHom X X)
     (le_apply₁ le_apply₂ idempotent₁ idempotent₂) :
-    mk toInfHom₁ le_apply₁ idempotent₁ <= mk toInfHom₂ le_apply₂ idempotent₂ ↔
-      toInfHom₁ <= toInfHom₂ := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (Nucleus X)
-  body: {
-    toFun := m ⊓ n
-    map_inf' x y := by simp [inf_inf_inf_comm]
-    idempotent' x := by
-      simp only [Pi.inf_apply, map_inf, idempotent]
-      exact inf_le_inf inf_le_left inf_le_right
-    le_apply' x := le_inf m.le_apply n.le_apply
-  }
-
-中文:
-实例 :
-  签名: 最小值 (核 X)
-  定义体: {
-    toFun := m ⊓ n
-    map_inf' x y := by simp [inf_inf_inf_comm]
-    idempotent' x := by
-      simp only [Pi.inf_apply, map_inf, idempotent]
-      exact inf_le_inf inf_le_left inf_le_right
-    le_apply' x := le_inf m.le_apply n.le_apply
-  }
+    mk toInfHom₁ le_apply₁ idempotent₁ ≤ mk toInfHom₂ le_apply₂ idempotent₂ ↔
+      toInfHom₁ ≤ toInfHom₂ := .rfl
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (Nucleus X) where
   min m n := {
@@ -408,78 +250,38 @@ instance : Min (Nucleus X) where
       exact inf_le_inf inf_le_left inf_le_right
     le_apply' x := le_inf m.le_apply n.le_apply
   }
-
-/--
-lemma `coe_inf` / 引理 `coe_inf`
-
-English:
-lemma coe_inf
-  given: (m n : Nucleus X)
-  statement: ⇑(m ⊓ n) = ⇑m ⊓ ⇑n
-  proof: rfl
-
-中文:
-引理 coe_inf
-  条件: (m n : 核 X)
-  结论: ⇑(m ⊓ n) = ⇑m ⊓ ⇑n
-  证明: rfl
+/-
+**Nucleus.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] (m n : Nucleus X), ⇑(m ⊓ n) = ⇑
+m ⊓ ⇑n
+参数：m n : Nucleus X；m ⊓ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_inf (m n : Nucleus X) : ⇑(m ⊓ n) = ⇑m ⊓ ⇑n := rfl
-/--
-lemma `inf_apply` / 引理 `inf_apply`
-
-English:
-lemma inf_apply
-  given: (m n : Nucleus X) (x : X)
-  statement: (m ⊓ n) x = m x ⊓ n x
-  proof: rfl
-
-中文:
-引理 inf_apply
-  条件: (m n : 核 X) (x : X)
-  结论: (m ⊓ n) x = m x ⊓ n x
-  证明: rfl
+/-
+**Nucleus.inf_apply** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] (m n : Nucleus X) (x : X), (m ⊓
+ n) x = m x ⊓ n x
+参数：m n : Nucleus X；x : X；m ⊓ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma inf_apply (m n : Nucleus X) (x : X) : (m ⊓ n) x = m x ⊓ n x := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeInf (Nucleus X)
-  body: DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-中文:
-实例 :
-  签名: SemilatticeInf (核 X)
-  定义体: DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeInf, coe_inf, coe_injective, semilatticeInf
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeInf (Nucleus X) :=
   DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
 
-/--
-Instance `instBot` / 实例 `instBot`
+/-- The smallest nucleus is the identity. -/
+/-
+**Nucleus.instBot** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+形式化陈述：instBot : OrderBot (Nucleus X) where bot.toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instBot
-  signature: : OrderBot (Nucleus X) where
-  body: x
-  bot.idempotent' := by simp
-  bot.le_apply' := by simp
-  bot.map_inf' := by simp
-  bot_le n _ := n.le_apply
-
-中文:
-实例 instBot
-  签名: : 有底序 (核 X) where
-  定义体: x
-  bot.idempotent' := by simp
-  bot.le_apply' := by simp
-  bot.map_inf' := by simp
-  bot_le n _ := n.le_apply
+--- 原说明 ---
+The smallest nucleus is the identity.
 -/
 instance instBot : OrderBot (Nucleus X) where
   bot.toFun x := x
@@ -487,130 +289,65 @@ instance instBot : OrderBot (Nucleus X) where
   bot.le_apply' := by simp
   bot.map_inf' := by simp
   bot_le n _ := n.le_apply
-
-/--
-lemma `coe_bot` / 引理 `coe_bot`
-
-English:
-lemma coe_bot
-  statement: ⇑(⊥ : Nucleus X) = id
-  proof: rfl
-
-中文:
-引理 coe_bot
-  结论: ⇑(⊥ : 核 X) = id
-  证明: rfl
+/-
+**Nucleus.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X], ⇑⊥ = id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_bot : ⇑(⊥ : Nucleus X) = id := rfl
-/--
-lemma `bot_apply` / 引理 `bot_apply`
-
-English:
-lemma bot_apply
-  given: (x : X)
-  statement: (⊥ : Nucleus X) x = x
-  proof: rfl
-
-中文:
-引理 bot_apply
-  条件: (x : X)
-  结论: (⊥ : 核 X) x = x
-  证明: rfl
+/-
+**Nucleus.bot_apply** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] (x : X), ⊥ x = x
+参数：x : X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma bot_apply (x : X) : (⊥ : Nucleus X) x = x := rfl
 
 variable [OrderTop X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A nucleus preserves `⊤`. -/
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: TopHomClass (Nucleus X) X X
-  body: eq_top_iff.mpr le_apply
-
-中文:
-实例 :
-  签名: 顶元素态射类 (核 X) X X
-  定义体: eq_top_iff.mpr le_apply
-
-Depends on / 依赖: eq_top_iff, eq_top_iff.mpr, le_apply
+--- 原说明 ---
+A nucleus preserves `⊤`.
 -/
 instance : TopHomClass (Nucleus X) X X where
   map_top _ := eq_top_iff.mpr le_apply
 
-/--
-Instance `instTop` / 实例 `instTop`
+/-- The largest nucleus sends everything to `⊤`. -/
+/-
+**Nucleus.instTop** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+形式化陈述：instTop : Top (Nucleus X) where top.toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instTop
-  signature: : Top (Nucleus X) where
-  body: ⊤
-  top.idempotent' := by simp
-  top.le_apply' := by simp
-  top.map_inf' := by simp
-
-中文:
-实例 instTop
-  签名: : 顶元素 (核 X) where
-  定义体: ⊤
-  top.idempotent' := by simp
-  top.le_apply' := by simp
-  top.map_inf' := by simp
+--- 原说明 ---
+The largest nucleus sends everything to `⊤`.
 -/
 instance instTop : Top (Nucleus X) where
   top.toFun := ⊤
   top.idempotent' := by simp
   top.le_apply' := by simp
   top.map_inf' := by simp
-
-/--
-lemma `coe_top` / 引理 `coe_top`
-
-English:
-lemma coe_top
-  statement: ⇑(⊤ : Nucleus X) = ⊤
-  proof: rfl
-
-中文:
-引理 coe_top
-  结论: ⇑(⊤ : 核 X) = ⊤
-  证明: rfl
+/-
+**Nucleus.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] [inst_1 : OrderTop X], ⇑⊤ = ⊤
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_top : ⇑(⊤ : Nucleus X) = ⊤ := rfl
-/--
-lemma `top_apply` / 引理 `top_apply`
-
-English:
-lemma top_apply
-  given: (x : X)
-  statement: (⊤ : Nucleus X) x = ⊤
-  proof: rfl
-
-中文:
-引理 top_apply
-  条件: (x : X)
-  结论: (⊤ : 核 X) x = ⊤
-  证明: rfl
+/-
+**Nucleus.top_apply** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : SemilatticeInf X] [inst_1 : OrderTop X] (x : X), 
+⊤ x = ⊤
+参数：x : X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma top_apply (x : X) : (⊤ : Nucleus X) x = ⊤ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BoundedOrder (Nucleus X)
-  body: le_apply
-  le_top _ _ := by simp
-
-中文:
-实例 :
-  签名: 有界序 (核 X)
-  定义体: le_apply
-  le_top _ _ := by simp
-
-Depends on / 依赖: le_apply
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BoundedOrder (Nucleus X) where
   bot_le _ _ := le_apply
@@ -621,126 +358,57 @@ end SemilatticeInf
 section CompleteLattice
 variable [CompleteLattice X]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Nucleus X)
-  body: { toFun x := ⨅ f in s, f x,
-    map_inf' x y := by
-      simp only [InfHomClass.map_inf, le_antisymm_iff, le_inf_iff, le_iInf_iff]
-      refine ⟨⟨?_, ?_⟩, ?_⟩ <;> rintro f hf
-      · exact iInf₂_le_of_le f hf inf_le_left
-      · exact iInf₂_le_of_le f hf inf_le_right
-· exact ⟨inf_le_of_left_le iInf₂_le f hf, inf_le_of_right_le iInf₂_le f hf⟩
-    idempotent' x := iInf₂_mono fun f hf => (f.monotone <| iInf₂_le f hf).trans_eq (f.idempotent _)
-    le_apply' x := by simp [le_apply] }
-
-中文:
-实例 :
-  签名: 下确界集 (核 X)
-  定义体: { toFun x := ⨅ f in s, f x,
-    map_inf' x y := by
-      simp only [InfHomClass.map_inf, le_antisymm_iff, le_inf_iff, le_iInf_iff]
-      refine ⟨⟨?_, ?_⟩, ?_⟩ <;> rintro f hf
-      · exact iInf₂_le_of_le f hf inf_le_left
-      · exact iInf₂_le_of_le f hf inf_le_right
-· exact ⟨inf_le_of_left_le iInf₂_le f hf, inf_le_of_right_le iInf₂_le f hf⟩
-    idempotent' x := iInf₂_mono fun f hf => (f.monotone <| iInf₂_le f hf).trans_eq (f.idempotent _)
-    le_apply' x := by simp [le_apply] }
-
-Depends on / 依赖: InfHomClass, InfHomClass.map_inf, f.idempotent, f.monotone, idempotent, inf_le_left, inf_le_of_left_le, inf_le_of_right_le, inf_le_right, le_antisymm_iff, le_apply, le_iInf_iff, le_inf_iff, map_inf, monotone, trans_eq
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (Nucleus X) where
   sInf s :=
-  { toFun x := ⨅ f in s, f x,
+  { toFun x := ⨅ f ∈ s, f x,
     map_inf' x y := by
       simp only [InfHomClass.map_inf, le_antisymm_iff, le_inf_iff, le_iInf_iff]
       refine ⟨⟨?_, ?_⟩, ?_⟩ <;> rintro f hf
       · exact iInf₂_le_of_le f hf inf_le_left
       · exact iInf₂_le_of_le f hf inf_le_right
-· exact ⟨inf_le_of_left_le iInf₂_le f hf, inf_le_of_right_le iInf₂_le f hf⟩
-    idempotent' x := iInf₂_mono fun f hf => (f.monotone <| iInf₂_le f hf).trans_eq (f.idempotent _)
+      · exact ⟨inf_le_of_left_le <| iInf₂_le f hf, inf_le_of_right_le <| iInf₂_le f hf⟩
+    idempotent' x := iInf₂_mono fun f hf ↦ (f.monotone <| iInf₂_le f hf).trans_eq (f.idempotent _)
     le_apply' x := by simp [le_apply] }
-
-/--
-lemma `sInf_apply` / 引理 `sInf_apply`
-
-English:
-lemma sInf_apply
-  given: (s : Set (Nucleus X)) (x : X)
-  statement: sInf s x = ⨅ j in s, j x
-  proof: rfl
-
-中文:
-引理 sInf_apply
-  条件: (s : 集合 (核 X)) (x : X)
-  结论: sInf s x = ⨅ j in s, j x
-  证明: rfl
+/-
+**Nucleus.sInf_apply** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : CompleteLattice X] (s : Set (Nucleus X)) (x : X),
+ (sInf s) x = ⨅ j ∈ s, j x
+参数：s : Set (Nucleus X)；x : X；sInf s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma sInf_apply (s : Set (Nucleus X)) (x : X) : sInf s x = ⨅ j in s, j x := rfl
-
-/--
-lemma `iInf_apply` / 引理 `iInf_apply`
-
-English:
-lemma iInf_apply
-  given: {ι : Type*} (f : ι -> (Nucleus X)) (x : X)
-  statement: iInf f x = ⨅ j, f j x
-  proof: by
-  rw [iInf]; rw [sInf_apply]; rw [iInf_range]
-
-中文:
-引理 iInf_apply
-  条件: {ι : 类型} (f : ι -> (核 X)) (x : X)
-  结论: iInf f x = ⨅ j, f j x
-  证明: by
-  rw [iInf]; rw [sInf_apply]; rw [iInf_range]
+@[simp] lemma sInf_apply (s : Set (Nucleus X)) (x : X) : sInf s x = ⨅ j ∈ s, j x := rfl
+/-
+**Nucleus.iInf_apply** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : CompleteLattice X] {ι : Type u_2} (f : ι → Nucleu
+s X) (x : X), (iInf f) x = ⨅ j, (f j) x
+参数：f : ι → Nucleus X；x : X；iInf f；f j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `Nucleus.sInf_apply`：∀ {X : Type u_1} [inst : CompleteLattice X] (s : Set
+ (Nucleus X)) (x : X), (sInf s) x = ⨅ j ∈ s, j x
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
 -/
-@[simp] lemma iInf_apply {ι : Type*} (f : ι -> (Nucleus X)) (x : X) : iInf f x = ⨅ j, f j x := by
-  rw [iInf]; rw [sInf_apply]; rw [iInf_range]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteSemilatticeInf (Nucleus X)
-  body: ⟨by simp +contextual [mem_lowerBounds, ← coe_le_coe, Pi.le_def, iInf_le_iff],
-      by simp +contextual [mem_lowerBounds, mem_upperBounds, ← coe_le_coe, Pi.le_def]⟩
-
-中文:
-实例 :
-  签名: 余mpleteSemilatticeInf (核 X)
-  定义体: ⟨by simp +contextual [mem_lowerBounds, ← coe_le_coe, Pi.le_def, iInf_le_iff],
-      by simp +contextual [mem_lowerBounds, mem_upperBounds, ← coe_le_coe, Pi.le_def]⟩
-
-Depends on / 依赖: Pi.le_def, coe_le_coe, contextual, iInf_le_iff, le_def, mem_lowerBounds, mem_upperBounds
+@[simp] lemma iInf_apply {ι : Type*} (f : ι → (Nucleus X)) (x : X) : iInf f x = ⨅ j, f j x := by
+  rw [iInf, sInf_apply, iInf_range]
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteSemilatticeInf (Nucleus X) where
   isGLB_sInf _ :=
     ⟨by simp +contextual [mem_lowerBounds, ← coe_le_coe, Pi.le_def, iInf_le_iff],
       by simp +contextual [mem_lowerBounds, mem_upperBounds, ← coe_le_coe, Pi.le_def]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (Nucleus X)
-  body: inferInstance
-  __ : OrderBot (Nucleus X) := inferInstance
-  __ : OrderTop (Nucleus X) := inferInstance
-  __ := completeLatticeOfCompleteSemilatticeInf (Nucleus X)
-
-中文:
-实例 :
-  签名: 完备格 (核 X)
-  定义体: inferInstance
-  __ : OrderBot (Nucleus X) := inferInstance
-  __ : OrderTop (Nucleus X) := inferInstance
-  __ := completeLatticeOfCompleteSemilatticeInf (Nucleus X)
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (Nucleus X) where
   __ : SemilatticeInf (Nucleus X) := inferInstance
@@ -753,331 +421,171 @@ end CompleteLattice
 section Frame
 variable [Order.Frame X] {n m : Nucleus X} {x y : X}
 
-/--
-lemma `map_himp_le` / 引理 `map_himp_le`
-
-English:
-lemma map_himp_le
-  statement: n (x ⇨ y) <= x ⇨ n y
-  proof: by
-  rw [le_himp_iff]
-  calc
-    n (x ⇨ y) ⊓ x
-    _ <= n (x ⇨ y) ⊓ n x := by gcongr; exact n.le_apply
-    _ = n (y ⊓ x) := by rw [← map_inf, himp_inf_self]
-    _ <= n y := by gcongr; exact inf_le_left
-
-中文:
-引理 map_himp_le
-  结论: n (x ⇨ y) <= x ⇨ n y
-  证明: by
-  rw [le_himp_iff]
-  calc
-    n (x ⇨ y) ⊓ x
-    _ <= n (x ⇨ y) ⊓ n x := by gcongr; exact n.le_apply
-    _ = n (y ⊓ x) := by rw [← map_inf, himp_inf_self]
-    _ <= n y := by gcongr; exact inf_le_left
-
-Depends on / 依赖: himp_inf_self, inf_le_left, le_apply, le_himp_iff, map_inf, n.le_apply
+/-
+**Nucleus.map_himp_le** 是 Mathlib 中的一个引理，位于命名空间 `Nucleus`。
+形式化陈述：map_himp_le : n (x ⇨ y) <= x ⇨ n y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `le_himp_iff`：le_himp_iff : a <= b ⇨ c ↔ a ⊓ b <= c
+· 使用定理 `inf_le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c d : α}, b ≤ 
+a → d ≤ c → b ⊓ d ≤ a ⊓ c
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `Nucleus.le_apply`：le_apply : x <= n x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Nucleus.map_inf`：map_inf : n (x ⊓ y) = n x ⊓ n y
+· 使用定理 `himp_inf_self`：himp_inf_self (a b : α) : (a ⇨ b) ⊓ a = b ⊓ a
+· 使用定理 `OrderHomClass.mono`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst
+ : Preorder α] [inst_1 : Preorder β] [inst_2 : FunLike F α β]   [OrderHomClass F
+ α β] (f…
+· 使用定理 `InfHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : SemilatticeIn
+f β] [InfHomClass…
+· 使用定理 `NucleusClass.toInfHomClass`：∀ {F : Type u_2} {X : Type u_3} {inst : Semi
+latticeInf X} {inst_1 : FunLike F X X} [self : NucleusClass F X],   InfHomClass 
+F X X
+· 使用定理 `Nucleus.instNucleusClass`：∀ {X : Type u_1} [inst : SemilatticeInf X], Nu
+cleusClass (Nucleus X) X
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
 -/
-lemma map_himp_le : n (x ⇨ y) <= x ⇨ n y := by
+lemma map_himp_le : n (x ⇨ y) ≤ x ⇨ n y := by
   rw [le_himp_iff]
   calc
     n (x ⇨ y) ⊓ x
-    _ <= n (x ⇨ y) ⊓ n x := by gcongr; exact n.le_apply
+    _ ≤ n (x ⇨ y) ⊓ n x := by gcongr; exact n.le_apply
     _ = n (y ⊓ x) := by rw [← map_inf, himp_inf_self]
-    _ <= n y := by gcongr; exact inf_le_left
-
-/--
-lemma `map_himp_apply` / 引理 `map_himp_apply`
-
-English:
-lemma map_himp_apply
-  given: (n : Nucleus X) (x y : X)
-  statement: n (x ⇨ n y) = x ⇨ n y
-  proof: le_antisymm (map_himp_le.trans_eq <| by rw [n.idempotent]) n.le_apply
-
-中文:
-引理 map_himp_apply
-  条件: (n : 核 X) (x y : X)
-  结论: n (x ⇨ n y) = x ⇨ n y
-  证明: le_antisymm (map_himp_le.trans_eq <| by rw [n.idempotent]) n.le_apply
-
-Depends on / 依赖: idempotent, le_antisymm, le_apply, map_himp_le, map_himp_le.trans_eq, n.idempotent, n.le_apply, trans_eq
+    _ ≤ n y := by gcongr; exact inf_le_left
+/-
+**Nucleus.map_himp_apply** 是 Mathlib 中的一个引理，位于命名空间 `Nucleus`。
+形式化陈述：map_himp_apply (n : Nucleus X) (x y : X) : n (x ⇨ n y) = x ⇨ n y
+参数：n : Nucleus X；x y : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `Nucleus.map_himp_le`：map_himp_le : n (x ⇨ y) <= x ⇨ n y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nucleus.idempotent`：∀ {X : Type u_1} [inst : SemilatticeInf X] {n : Nucl
+eus X} (x : X), n (n x) = n x
+· 使用引理 `Nucleus.le_apply`：le_apply : x <= n x
 -/
 lemma map_himp_apply (n : Nucleus X) (x y : X) : n (x ⇨ n y) = x ⇨ n y :=
   le_antisymm (map_himp_le.trans_eq <| by rw [n.idempotent]) n.le_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HImp (Nucleus X)
-  body: { toFun x := ⨅ y >= x, m y ⇨ n y
-    idempotent' x := le_iInf₂ fun y hy =>
-      calc
-        ⨅ z >= ⨅ w >= x, m w ⇨ n w, m z ⇨ n z
-_ <= m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) iInf₂_le y hy
-        _ = m y ⇨ n y := by
-          rw [map_himp_apply]; rw [himp_himp]; rw [← map_inf]; rw [inf_of_le_right (le_trans n.le_apply le_himp)]
-    map_inf' x y := by
-      simp only [and_assoc, le_antisymm_iff, le_inf_iff, le_iInf_iff]
-refine ⟨fun z hxz => iInf₂_le _ inf_le_of_left_le hxz,
-fun z hyz => iInf₂_le _ inf_le_of_right_le hyz, ?_⟩
-      have : Nonempty X := ⟨x⟩
-      simp only [iInf_inf, le_iInf_iff, le_himp_iff, iInf_le_iff, le_inf_iff, forall_and,
-        forall_const, and_imp]
-      intro k hxyk l hlx hly hlk
-      calc
-        l = (l ⊓ m (x ⊔ k)) ⊓ (l ⊓ m (y ⊔ k)) := by
-          rw [← inf_inf_distrib_left]; rw [← map_inf]; rw [← sup_inf_right]; rw [sup_eq_right.2 hxyk]; rw [inf_eq_left.2 hlk]
-        _ <= n (x ⊔ k) ⊓ n (y ⊔ k) := by
-          gcongr; exacts [hlx (x ⊔ k) le_sup_left, hly (y ⊔ k) le_sup_left]
-        _ = n k := by rw [← map_inf, ← sup_inf_right, sup_eq_right.2 hxyk]
-    le_apply' := by
-simpa using fun _ _ h => inf_le_of_left_le h.trans n.le_apply }
-
-中文:
-实例 :
-  签名: HImp (核 X)
-  定义体: { toFun x := ⨅ y >= x, m y ⇨ n y
-    idempotent' x := le_iInf₂ fun y hy =>
-      calc
-        ⨅ z >= ⨅ w >= x, m w ⇨ n w, m z ⇨ n z
-_ <= m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) iInf₂_le y hy
-        _ = m y ⇨ n y := by
-          rw [map_himp_apply]; rw [himp_himp]; rw [← map_inf]; rw [inf_of_le_right (le_trans n.le_apply le_himp)]
-    map_inf' x y := by
-      simp only [and_assoc, le_antisymm_iff, le_inf_iff, le_iInf_iff]
-refine ⟨fun z hxz => iInf₂_le _ inf_le_of_left_le hxz,
-fun z hyz => iInf₂_le _ inf_le_of_right_le hyz, ?_⟩
-      have : Nonempty X := ⟨x⟩
-      simp only [iInf_inf, le_iInf_iff, le_himp_iff, iInf_le_iff, le_inf_iff, forall_and,
-        forall_const, and_imp]
-      intro k hxyk l hlx hly hlk
-      calc
-        l = (l ⊓ m (x ⊔ k)) ⊓ (l ⊓ m (y ⊔ k)) := by
-          rw [← inf_inf_distrib_left]; rw [← map_inf]; rw [← sup_inf_right]; rw [sup_eq_right.2 hxyk]; rw [inf_eq_left.2 hlk]
-        _ <= n (x ⊔ k) ⊓ n (y ⊔ k) := by
-          gcongr; exacts [hlx (x ⊔ k) le_sup_left, hly (y ⊔ k) le_sup_left]
-        _ = n k := by rw [← map_inf, ← sup_inf_right, sup_eq_right.2 hxyk]
-    le_apply' := by
-simpa using fun _ _ h => inf_le_of_left_le h.trans n.le_apply }
-
-Depends on / 依赖: and_assoc, himp_himp, idempotent, inf_le_of_left_le, inf_le_of_right_le, inf_of_le_right, le_antisymm_iff, le_apply, le_himp, le_iInf_iff, le_inf_iff, le_trans, map_himp_apply, map_inf, n.le_apply
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HImp (Nucleus X) where
   himp m n :=
-  { toFun x := ⨅ y >= x, m y ⇨ n y
-    idempotent' x := le_iInf₂ fun y hy =>
+  { toFun x := ⨅ y ≥ x, m y ⇨ n y
+    idempotent' x := le_iInf₂ fun y hy ↦
       calc
-        ⨅ z >= ⨅ w >= x, m w ⇨ n w, m z ⇨ n z
-_ <= m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) iInf₂_le y hy
+        ⨅ z ≥ ⨅ w ≥ x, m w ⇨ n w, m z ⇨ n z
+        _ ≤ m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) <| iInf₂_le y hy
         _ = m y ⇨ n y := by
-          rw [map_himp_apply]; rw [himp_himp]; rw [← map_inf]; rw [inf_of_le_right (le_trans n.le_apply le_himp)]
+          rw [map_himp_apply, himp_himp, ← map_inf, inf_of_le_right (le_trans n.le_apply le_himp)]
     map_inf' x y := by
       simp only [and_assoc, le_antisymm_iff, le_inf_iff, le_iInf_iff]
-refine ⟨fun z hxz => iInf₂_le _ inf_le_of_left_le hxz,
-fun z hyz => iInf₂_le _ inf_le_of_right_le hyz, ?_⟩
+      refine ⟨fun z hxz ↦ iInf₂_le _ <| inf_le_of_left_le hxz,
+        fun z hyz ↦ iInf₂_le _ <| inf_le_of_right_le hyz, ?_⟩
       have : Nonempty X := ⟨x⟩
       simp only [iInf_inf, le_iInf_iff, le_himp_iff, iInf_le_iff, le_inf_iff, forall_and,
         forall_const, and_imp]
       intro k hxyk l hlx hly hlk
       calc
         l = (l ⊓ m (x ⊔ k)) ⊓ (l ⊓ m (y ⊔ k)) := by
-          rw [← inf_inf_distrib_left]; rw [← map_inf]; rw [← sup_inf_right]; rw [sup_eq_right.2 hxyk]; rw [inf_eq_left.2 hlk]
-        _ <= n (x ⊔ k) ⊓ n (y ⊔ k) := by
+          rw [← inf_inf_distrib_left, ← map_inf, ← sup_inf_right, sup_eq_right.2 hxyk,
+            inf_eq_left.2 hlk]
+        _ ≤ n (x ⊔ k) ⊓ n (y ⊔ k) := by
           gcongr; exacts [hlx (x ⊔ k) le_sup_left, hly (y ⊔ k) le_sup_left]
         _ = n k := by rw [← map_inf, ← sup_inf_right, sup_eq_right.2 hxyk]
     le_apply' := by
-simpa using fun _ _ h => inf_le_of_left_le h.trans n.le_apply }
-
-/--
-lemma `himp_apply` / 引理 `himp_apply`
-
-English:
-lemma himp_apply
-  given: (m n : Nucleus X) (x : X)
-  statement: (m ⇨ n) x = ⨅ y >= x, m y ⇨ n y
-  proof: rfl
-
-中文:
-引理 himp_apply
-  条件: (m n : 核 X) (x : X)
-  结论: (m ⇨ n) x = ⨅ y >= x, m y ⇨ n y
-  证明: rfl
+      simpa using fun _ _ h ↦ inf_le_of_left_le <| h.trans n.le_apply }
+/-
+**Nucleus.himp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : Order.Frame X] (m n : Nucleus X) (x : X), (m ⇨ n)
+ x = ⨅ y, ⨅ (_ : y ≥ x), m y ⇨ n y
+参数：m n : Nucleus X；x : X；m ⇨ n；_ : y ≥ x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma himp_apply (m n : Nucleus X) (x : X) : (m ⇨ n) x = ⨅ y >= x, m y ⇨ n y := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HeytingAlgebra (Nucleus X)
-  body: m ⇨ ⊥
-  le_himp_iff _ n _ := by
-    simpa [← coe_le_coe, Pi.le_def]
-using ⟨fun h i => h i i le_rfl, fun h i j _ => (h j).trans' by gcongr⟩
-  himp_bot m := rfl
-
-中文:
-实例 :
-  签名: Heyting代数 (核 X)
-  定义体: m ⇨ ⊥
-  le_himp_iff _ n _ := by
-    simpa [← coe_le_coe, Pi.le_def]
-using ⟨fun h i => h i i le_rfl, fun h i j _ => (h j).trans' by gcongr⟩
-  himp_bot m := rfl
+@[simp] lemma himp_apply (m n : Nucleus X) (x : X) : (m ⇨ n) x = ⨅ y ≥ x, m y ⇨ n y := rfl
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HeytingAlgebra (Nucleus X) where
   compl m := m ⇨ ⊥
   le_himp_iff _ n _ := by
     simpa [← coe_le_coe, Pi.le_def]
-using ⟨fun h i => h i i le_rfl, fun h i j _ => (h j).trans' by gcongr⟩
+      using ⟨fun h i ↦ h i i le_rfl, fun h i j _ ↦ (h j).trans' <| by gcongr⟩
   himp_bot m := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Order.Frame (Nucleus X)
-  body: Nucleus.instHeytingAlgebra
-  __ := Nucleus.instCompleteLattice
-
-中文:
-实例 :
-  签名: Order.框架 (核 X)
-  定义体: Nucleus.instHeytingAlgebra
-  __ := Nucleus.instCompleteLattice
-
-Depends on / 依赖: Nucleus, Nucleus.instHeytingAlgebra, instHeytingAlgebra
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Order.Frame (Nucleus X) where
   __ := Nucleus.instHeytingAlgebra
   __ := Nucleus.instCompleteLattice
-
-/--
-lemma `mem_range` / 引理 `mem_range`
-
-English:
-lemma mem_range
-  statement: x in range n ↔ n x = x where
-  proof: by rintro ⟨x, rfl⟩; exact idempotent _
-  mpr h := ⟨x, h⟩
-
-中文:
-引理 mem_range
-  结论: x in range n ↔ n x = x where
-  证明: by rintro ⟨x, rfl⟩; exact idempotent _
-  mpr h := ⟨x, h⟩
-
-Depends on / 依赖: Algebra, Algebra.IsPushout.isIntegral, IsPushout, idempotent, isIntegral
+/-
+**Nucleus.mem_range** 是 Mathlib 中的一个引理，位于命名空间 `Nucleus`。
+形式化陈述：mem_range : x in range n ↔ n x = x where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nucleus.idempotent`：∀ {X : Type u_1} [inst : SemilatticeInf X] {n : Nucl
+eus X} (x : X), n (n x) = n x
 -/
-lemma mem_range : x in range n ↔ n x = x where
+lemma mem_range : x ∈ range n ↔ n x = x where
   mp := by rintro ⟨x, rfl⟩; exact idempotent _
   mpr h := ⟨x, h⟩
 
 set_option backward.privateInPublic true in
-/--
-Definition of `giAux` / `giAux` 的定义
+/-- See `Nucleus.giRestrict` for the public-facing version. -/
+/-
+**Nucleus.giAux** 是 Mathlib 中的一个定义，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition giAux
-  signature: (n : Nucleus X)
-  body: ⟨x, mem_range.2 hx.antisymm n.le_apply⟩
-gc x y := ClosureOperator.IsClosed.closure_le_iff (c := n.toClosureOperator) mem_range.1 y.2
-  le_l_u x := le_apply
-  choice_eq x hx := by ext; exact le_apply.antisymm hx
-
-中文:
-定义 giAux
-  签名: (n : 核 X)
-  定义体: ⟨x, mem_range.2 hx.antisymm n.le_apply⟩
-gc x y := ClosureOperator.IsClosed.closure_le_iff (c := n.toClosureOperator) mem_range.1 y.2
-  le_l_u x := le_apply
-  choice_eq x hx := by ext; exact le_apply.antisymm hx
+--- 原说明 ---
+See `Nucleus.giRestrict` for the public-facing version.
 -/
 private def giAux (n : Nucleus X) : GaloisInsertion (rangeFactorization n) Subtype.val where
-choice x hx := ⟨x, mem_range.2 hx.antisymm n.le_apply⟩
-gc x y := ClosureOperator.IsClosed.closure_le_iff (c := n.toClosureOperator) mem_range.1 y.2
+  choice x hx := ⟨x, mem_range.2 <| hx.antisymm n.le_apply⟩
+  gc x y := ClosureOperator.IsClosed.closure_le_iff (c := n.toClosureOperator) <| mem_range.1 y.2
   le_l_u x := le_apply
   choice_eq x hx := by ext; exact le_apply.antisymm hx
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (range n)
-  body: n.giAux.liftCompleteLattice
-
-中文:
-实例 :
-  签名: 完备格 (range n)
-  定义体: n.giAux.liftCompleteLattice
-
-Depends on / 依赖: liftCompleteLattice, n.giAux.liftCompleteLattice
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (range n) := n.giAux.liftCompleteLattice
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Frame (range n)
-  body: .ofMinimalAxioms {
-  inf_sSup_le_iSup_inf a s := by
-    simp_rw [← Subtype.coe_le_coe, iSup_subtype', iSup, sSup, n.giAux.gc.u_inf]
-    rw [rangeFactorization_coe]; rw [← mem_range.1 a.prop]; rw [← map_inf]
-    apply n.monotone
-    simp_rw [inf_sSup_eq, sSup_image, iSup_range, iSup_image, iSup_subtype', n.giAux.gc.u_inf,
-      le_rfl] }
-
-中文:
-实例 :
-  签名: 框架 (range n)
-  定义体: .ofMinimalAxioms {
-  inf_sSup_le_iSup_inf a s := by
-    simp_rw [← Subtype.coe_le_coe, iSup_subtype', iSup, sSup, n.giAux.gc.u_inf]
-    rw [rangeFactorization_coe]; rw [← mem_range.1 a.prop]; rw [← map_inf]
-    apply n.monotone
-    simp_rw [inf_sSup_eq, sSup_image, iSup_range, iSup_image, iSup_subtype', n.giAux.gc.u_inf,
-      le_rfl] }
-
-Depends on / 依赖: ofMinimalAxioms
+/-
+**Nucleus.** 是 Mathlib 中的一个实例，位于命名空间 `Nucleus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Frame (range n) := .ofMinimalAxioms {
   inf_sSup_le_iSup_inf a s := by
     simp_rw [← Subtype.coe_le_coe, iSup_subtype', iSup, sSup, n.giAux.gc.u_inf]
-    rw [rangeFactorization_coe]; rw [← mem_range.1 a.prop]; rw [← map_inf]
+    rw [rangeFactorization_coe, ← mem_range.1 a.prop, ← map_inf]
     apply n.monotone
     simp_rw [inf_sSup_eq, sSup_image, iSup_range, iSup_image, iSup_subtype', n.giAux.gc.u_inf,
       le_rfl] }
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- Restrict a nucleus to its range. -/
+/-
+**Nucleus.restrict** 是 Mathlib 中的一个定义，位于命名空间 `Nucleus`。
+形式化陈述：{X : Type u_1} → [inst : Order.Frame X] → (n : Nucleus X) → FrameHom X ↑(S
+et.range ⇑n)
+参数：n : Nucleus X；Set.range ⇑n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (n : Nucleus X)
-  body: rangeFactorization n
-  map_inf' a b := by ext; exact map_inf
-  map_top' := by ext; exact map_top n
-  map_sSup' s := by rw [n.giAux.gc.l_sSup, sSup_image]
-
-中文:
-定义 restrict
-  签名: (n : 核 X)
-  定义体: rangeFactorization n
-  map_inf' a b := by ext; exact map_inf
-  map_top' := by ext; exact map_top n
-  map_sSup' s := by rw [n.giAux.gc.l_sSup, sSup_image]
+--- 原说明 ---
+Restrict a nucleus to its range.
 -/
 @[simps] def restrict (n : Nucleus X) : FrameHom X (range n) where
   toFun := rangeFactorization n
@@ -1087,72 +595,68 @@ definition restrict
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `giRestrict` / `giRestrict` 的定义
+/-- The restriction of a nucleus to its range forms a Galois insertion with the forgetful map from
+the range to the original frame. -/
+/-
+**Nucleus.giRestrict** 是 Mathlib 中的一个定义，位于命名空间 `Nucleus`。
+形式化陈述：giRestrict (n : Nucleus X) : GaloisInsertion n.restrict Subtype.val
+参数：n : Nucleus X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition giRestrict
-  signature: (n : Nucleus X)
-  body: n.giAux
-
-中文:
-定义 giRestrict
-  签名: (n : 核 X)
-  定义体: n.giAux
-
-Depends on / 依赖: n.giAux
+--- 原说明 ---
+The restriction of a nucleus to its range forms a Galois insertion with the forg
+etful map from
+the range to the original frame.
 -/
 def giRestrict (n : Nucleus X) : GaloisInsertion n.restrict Subtype.val := n.giAux
-
-/--
-lemma `comp_eq_right_iff_le` / 引理 `comp_eq_right_iff_le`
-
-English:
-lemma comp_eq_right_iff_le
-  statement: n ∘ m = m ↔ n <= m where
-  proof: funext_iff.mpr fun _ => le_antisymm (le_trans (h (m _)) (m.idempotent' _)) le_apply
-  mp h := by
-    rw [← coe_le_coe]; rw [← h]
-    exact fun _ => monotone le_apply
-
-中文:
-引理 comp_eq_right_iff_le
-  结论: n ∘ m = m ↔ n <= m where
-  证明: funext_iff.mpr fun _ => le_antisymm (le_trans (h (m _)) (m.idempotent' _)) le_apply
-  mp h := by
-    rw [← coe_le_coe]; rw [← h]
-    exact fun _ => monotone le_apply
-
-Depends on / 依赖: funext_iff, funext_iff.mpr, idempotent, le_antisymm, le_apply, le_trans, m.idempotent
+/-
+**Nucleus.comp_eq_right_iff_le** 是 Mathlib 中的一个引理，位于命名空间 `Nucleus`。
+形式化陈述：comp_eq_right_iff_le : n ∘ m = m ↔ n <= m where mpr h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nucleus.coe_le_coe`：∀ {X : Type u_1} [inst : SemilatticeInf X] {n m : Nu
+cleus X}, ⇑m ≤ ⇑n ↔ m ≤ n
+· 使用引理 `Nucleus.monotone`：monotone : Monotone n
+· 使用引理 `Nucleus.le_apply`：le_apply : x <= n x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Nucleus.idempotent'`：∀ {X : Type u_2} [inst : SemilatticeInf X] (self : 
+Nucleus X) (x : X), self.toFun (self.toFun x) ≤ self.toFun x
 -/
-lemma comp_eq_right_iff_le : n ∘ m = m ↔ n <= m where
-mpr h := funext_iff.mpr fun _ => le_antisymm (le_trans (h (m _)) (m.idempotent' _)) le_apply
+lemma comp_eq_right_iff_le : n ∘ m = m ↔ n ≤ m where
+  mpr h := funext_iff.mpr <| fun _ ↦ le_antisymm (le_trans (h (m _)) (m.idempotent' _)) le_apply
   mp h := by
-    rw [← coe_le_coe]; rw [← h]
-    exact fun _ => monotone le_apply
-
-/--
-lemma `range_subset_range` / 引理 `range_subset_range`
-
-English:
-lemma range_subset_range
-  statement: range m subseteq range n ↔ n <= m where
-  proof: by
-    rw [← mem_range.mp (Set.range_subset_iff.mp h x)]
-    exact n.monotone m.le_apply
-  mpr h :=
-    range_subset_range_iff_exists_comp.mpr ⟨m, (comp_eq_right_iff_le.mpr h).symm⟩
-
-中文:
-引理 range_subset_range
-  结论: range m subseteq range n ↔ n <= m where
-  证明: by
-    rw [← mem_range.mp (Set.range_subset_iff.mp h x)]
-    exact n.monotone m.le_apply
-  mpr h :=
-    range_subset_range_iff_exists_comp.mpr ⟨m, (comp_eq_right_iff_le.mpr h).symm⟩
+    rw [← coe_le_coe, ← h]
+    exact fun _ ↦ monotone le_apply
+/-
+**Nucleus.range_subset_range** 是 Mathlib 中的一个定理，位于命名空间 `Nucleus`。
+形式化陈述：∀ {X : Type u_1} [inst : Order.Frame X] {n m : Nucleus X}, Set.range ⇑m ⊆ 
+Set.range ⇑n ↔ n ≤ m
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Nucleus.mem_range`：mem_range : x in range n ↔ n x = x where mp
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用引理 `Nucleus.monotone`：monotone : Monotone n
+· 使用引理 `Nucleus.le_apply`：le_apply : x <= n x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_range_iff_exists_comp`：range_subset_range_iff_exists_co
+mp {f : α -> γ} {g : β -> γ} : range f subseteq range g ↔ exists h : α -> β, f =
+ g ∘ h
+· 使用引理 `Nucleus.comp_eq_right_iff_le`：comp_eq_right_iff_le : n ∘ m = m ↔ n <= m 
+where mpr h
 -/
-@[simp] lemma range_subset_range : range m subseteq range n ↔ n <= m where
+@[simp] lemma range_subset_range : range m ⊆ range n ↔ n ≤ m where
   mp h x := by
     rw [← mem_range.mp (Set.range_subset_iff.mp h x)]
     exact n.monotone m.le_apply
@@ -1161,3 +665,4 @@ lemma range_subset_range
 
 end Frame
 end Nucleus
+

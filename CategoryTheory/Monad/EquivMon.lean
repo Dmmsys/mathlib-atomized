@@ -40,6 +40,10 @@ namespace Monad
 attribute [local instance] endofunctorMonoidalCategory
 
 @[simps]
+/-
+**CategoryTheory.Monad.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Monad`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Monad C) : MonObj (M : C ⥤ C) where
   one := M.η
   mul := M.μ
@@ -47,18 +51,15 @@ instance (M : Monad C) : MonObj (M : C ⥤ C) where
 
 /-- To every `Monad C` we associated a monoid object in `C ⥤ C`. -/
 @[simps]
-/--
-Definition of `toMon` / `toMon` 的定义
+/-
+**CategoryTheory.Monad.toMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Monad`。
+形式化陈述：toMon (M : Monad C) : Mon (C ⥤ C) where X
+参数：M : Monad C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMon
-  signature: (M : Monad C)
-  body: (M : C ⥤ C)
-
-中文:
-定义 toMon
-  签名: (M : 单子 C)
-  定义体: (M : C ⥤ C)
+--- 原说明 ---
+To every `Monad C` we associated a monoid object in `C ⥤ C`.
 -/
 def toMon (M : Monad C) : Mon (C ⥤ C) where
   X := (M : C ⥤ C)
@@ -67,20 +68,15 @@ set_option backward.isDefEq.respectTransparency false in
 variable (C) in
 /-- Passing from `Monad C` to `Mon (C ⥤ C)` is functorial. -/
 @[simps]
-/--
-Definition of `monadToMon` / `monadToMon` 的定义
+/-
+**CategoryTheory.Monad.monadToMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mona
+d`。
+形式化陈述：monadToMon : Monad C ⥤ Mon (C ⥤ C) where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monadToMon
-  signature: : Monad C ⥤ Mon (C ⥤ C) where
-  body: toMon
-  map f := .mk' f.toNatTrans
-
-中文:
-定义 monadToMon
-  签名: : 单子 C ⥤ 幺半群 (C ⥤ C) where
-  定义体: toMon
-  map f := .mk' f.toNatTrans
+--- 原说明 ---
+Passing from `Monad C` to `Mon (C ⥤ C)` is functorial.
 -/
 def monadToMon : Monad C ⥤ Mon (C ⥤ C) where
   obj := toMon
@@ -88,61 +84,37 @@ def monadToMon : Monad C ⥤ Mon (C ⥤ C) where
 
 /-- To every monoid object in `C ⥤ C` we associate a `Monad C`. -/
 @[simps «η» «μ»]
-/--
-Definition of `ofMon` / `ofMon` 的定义
+/-
+**CategoryTheory.Monad.ofMon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Monad`。
+形式化陈述：ofMon (M : Mon (C ⥤ C)) : Monad C where toFunctor
+参数：M : Mon (C ⥤ C)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMon
-  signature: (M : Mon (C ⥤ C))
-  body: M.X
-  «η» := η[M.X]
-  «μ» := μ[M.X]
-  left_unit := fun X => by
-    simpa [-MonObj.mul_one] using! congrArg (fun t => t.app X) (mul_one M.X)
-  right_unit := fun X => by
-    simpa [-MonObj.one_mul] using! congrArg (fun t => t.app X) (one_mul M.X)
-  assoc := fun X => by
-    simpa [-MonObj.mul_assoc] using! congrArg (fun t => t.app X) (mul_assoc M.X)
-
-中文:
-定义 ofMon
-  签名: (M : 幺半群 (C ⥤ C))
-  定义体: M.X
-  «η» := η[M.X]
-  «μ» := μ[M.X]
-  left_unit := fun X => by
-    simpa [-MonObj.mul_one] using! congrArg (fun t => t.app X) (mul_one M.X)
-  right_unit := fun X => by
-    simpa [-MonObj.one_mul] using! congrArg (fun t => t.app X) (one_mul M.X)
-  assoc := fun X => by
-    simpa [-MonObj.mul_assoc] using! congrArg (fun t => t.app X) (mul_assoc M.X)
+--- 原说明 ---
+To every monoid object in `C ⥤ C` we associate a `Monad C`.
 -/
 def ofMon (M : Mon (C ⥤ C)) : Monad C where
   toFunctor := M.X
   «η» := η[M.X]
   «μ» := μ[M.X]
   left_unit := fun X => by
-    simpa [-MonObj.mul_one] using! congrArg (fun t => t.app X) (mul_one M.X)
+    simpa [-MonObj.mul_one] using! congrArg (fun t ↦ t.app X) (mul_one M.X)
   right_unit := fun X => by
-    simpa [-MonObj.one_mul] using! congrArg (fun t => t.app X) (one_mul M.X)
+    simpa [-MonObj.one_mul] using! congrArg (fun t ↦ t.app X) (one_mul M.X)
   assoc := fun X => by
-    simpa [-MonObj.mul_assoc] using! congrArg (fun t => t.app X) (mul_assoc M.X)
+    simpa [-MonObj.mul_assoc] using! congrArg (fun t ↦ t.app X) (mul_assoc M.X)
 
 -- Porting note: `@[simps]` fails to generate `ofMon_obj`:
-/--
-lemma `ofMon_obj` / 引理 `ofMon_obj`
-
-English:
-lemma ofMon_obj
-  given: (M : Mon (C ⥤ C)) (X : C)
-  statement: (ofMon M).obj X = M.X.obj X
-  proof: rfl
-
-中文:
-引理 ofMon_obj
-  条件: (M : 幺半群 (C ⥤ C)) (X : C)
-  结论: (ofMon M).obj X = M.X.obj X
-  证明: rfl
+/-
+**CategoryTheory.Monad.ofMon_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Monad
+`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (M : CategoryTheo
+ry.Mon (CategoryTheory.Functor C C)) (X : C),   (CategoryTheory.Monad.ofMon M).o
+bj X = M.X.obj X
+参数：M : CategoryTheory.Mon (CategoryTheory.Functor C C)；X : C；CategoryTheory.Mona
+d.ofMon M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofMon_obj (M : Mon (C ⥤ C)) (X : C) : (ofMon M).obj X = M.X.obj X := rfl
 
@@ -151,72 +123,39 @@ variable (C)
 set_option backward.isDefEq.respectTransparency false in
 /-- Passing from `Mon (C ⥤ C)` to `Monad C` is functorial. -/
 @[simps]
-/--
-Definition of `monToMonad` / `monToMonad` 的定义
+/-
+**CategoryTheory.Monad.monToMonad** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mona
+d`。
+形式化陈述：monToMonad : Mon (C ⥤ C) ⥤ Monad C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monToMonad
-  signature: : Mon (C ⥤ C) ⥤ Monad C where
-  body: ofMon
-  map {X Y} f :=
-    { f.hom with
-      app_η X := by
-        simpa [-IsMonHom.one_hom] using congrArg (fun t => t.app X) (IsMonHom.one_hom f.hom)
-      app_μ Z := by
-        simpa [-IsMonHom.mul_hom] using congrArg (fun t => t.app Z) (IsMonHom.mul_hom f.hom) }
-
-中文:
-定义 monToMonad
-  签名: : 幺半群 (C ⥤ C) ⥤ 单子 C where
-  定义体: ofMon
-  map {X Y} f :=
-    { f.hom with
-      app_η X := by
-        simpa [-IsMonHom.one_hom] using congrArg (fun t => t.app X) (IsMonHom.one_hom f.hom)
-      app_μ Z := by
-        simpa [-IsMonHom.mul_hom] using congrArg (fun t => t.app Z) (IsMonHom.mul_hom f.hom) }
+--- 原说明 ---
+Passing from `Mon (C ⥤ C)` to `Monad C` is functorial.
 -/
 def monToMonad : Mon (C ⥤ C) ⥤ Monad C where
   obj := ofMon
   map {X Y} f :=
     { f.hom with
       app_η X := by
-        simpa [-IsMonHom.one_hom] using congrArg (fun t => t.app X) (IsMonHom.one_hom f.hom)
+        simpa [-IsMonHom.one_hom] using congrArg (fun t ↦ t.app X) (IsMonHom.one_hom f.hom)
       app_μ Z := by
-        simpa [-IsMonHom.mul_hom] using congrArg (fun t => t.app Z) (IsMonHom.mul_hom f.hom) }
+        simpa [-IsMonHom.mul_hom] using congrArg (fun t ↦ t.app Z) (IsMonHom.mul_hom f.hom) }
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Oh, monads are just monoids in the category of endofunctors (equivalence of categories). -/
 @[simps]
-/--
-Definition of `monadMonEquiv` / `monadMonEquiv` 的定义
+/-
+**CategoryTheory.Monad.monadMonEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.M
+onad`。
+形式化陈述：monadMonEquiv : Monad C ≌ Mon (C ⥤ C) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monadMonEquiv
-  signature: : Monad C ≌ Mon (C ⥤ C) where
-  body: monadToMon _
-  inverse := monToMonad _
-  unitIso :=
-  { hom := { app := fun _ => { app := fun _ => 𝟙 _ } }
-    inv := { app := fun _ => { app := fun _ => 𝟙 _ } } }
-  counitIso :=
-  { hom := { app := fun _ => { hom := 𝟙 _ } }
-    inv := { app := fun _ => { hom := 𝟙 _ } } }
-
-中文:
-定义 monadMonEquiv
-  签名: : 单子 C ≌ 幺半群 (C ⥤ C) where
-  定义体: monadToMon _
-  inverse := monToMonad _
-  unitIso :=
-  { hom := { app := fun _ => { app := fun _ => 𝟙 _ } }
-    inv := { app := fun _ => { app := fun _ => 𝟙 _ } } }
-  counitIso :=
-  { hom := { app := fun _ => { hom := 𝟙 _ } }
-    inv := { app := fun _ => { hom := 𝟙 _ } } }
-
-Depends on / 依赖: monadToMon
+--- 原说明 ---
+Oh, monads are just monoids in the category of endofunctors (equivalence of cate
+gories).
 -/
 def monadMonEquiv : Monad C ≌ Mon (C ⥤ C) where
   functor := monadToMon _
@@ -229,9 +168,14 @@ def monadMonEquiv : Monad C ≌ Mon (C ⥤ C) where
     inv := { app := fun _ => { hom := 𝟙 _ } } }
 
 -- Sanity check
+/-
+**CategoryTheory.Monad.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Monad`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (A : Monad C) {X : C} : ((monadMonEquiv C).unitIso.app A).hom.app X = 𝟙 _ :=
   rfl
 
 end Monad
 
 end CategoryTheory
+

@@ -20,30 +20,10 @@ namespace CategoryTheory.IsGrothendieckAbelian
 
 variable {C : Type u} [Category.{v} C] [Abelian C] [IsGrothendieckAbelian.{w} C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasCoseparator C
-  body: by
-  suffices HasCoseparator (ShrinkHoms C) from
-    HasCoseparator.of_equivalence (ShrinkHoms.equivalence.{w} C).symm
-  obtain ⟨G, -, hG⟩ := Abelian.has_injective_coseparator (separator (ShrinkHoms C))
-    (isSeparator_separator _)
-  exact ⟨G, hG⟩
-
-中文:
-实例 :
-  签名: 有余separator C
-  定义体: by
-  suffices HasCoseparator (ShrinkHoms C) from
-    HasCoseparator.of_equivalence (ShrinkHoms.equivalence.{w} C).symm
-  obtain ⟨G, -, hG⟩ := Abelian.has_injective_coseparator (separator (ShrinkHoms C))
-    (isSeparator_separator _)
-  exact ⟨G, hG⟩
-
-Depends on / 依赖: Abelian, Abelian.has_injective_coseparator, HasCoseparator, HasCoseparator.of_equivalence, ShrinkHoms, ShrinkHoms.equivalence, equivalence, has_injective_coseparator, isSeparator_separator, of_equivalence, separator
+/-
+**CategoryTheory.IsGrothendieckAbelian.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.IsGrothendieckAbelian`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasCoseparator C := by
   suffices HasCoseparator (ShrinkHoms C) from
@@ -53,3 +33,4 @@ instance : HasCoseparator C := by
   exact ⟨G, hG⟩
 
 end CategoryTheory.IsGrothendieckAbelian
+

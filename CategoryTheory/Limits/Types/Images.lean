@@ -27,227 +27,146 @@ variable {α β : Type u} (f : α ⟶ β)
 section
 
 -- implementation of `HasImage`
-/--
-Definition of `Image` / `Image` 的定义
+/-- the image of a morphism in Type is just `Set.range f` -/
+/-
+**CategoryTheory.Limits.Types.Image** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits.Types`。
+形式化陈述：Image : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Image
-  signature: : Type u
-  body: Set.range f
-
-中文:
-定义 像
-  签名: : 类型u
-  定义体: Set.range f
-
-Depends on / 依赖: Set.range
+--- 原说明 ---
+the image of a morphism in Type is just `Set.range f`
 -/
 def Image : Type u :=
   Set.range f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (Image f) where default
-  body: ⟨f default, ⟨_, rfl⟩⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 (像 f) where default
-  定义体: ⟨f default, ⟨_, rfl⟩⟩
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (Image f) where default := ⟨f default, ⟨_, rfl⟩⟩
 
-/--
-Definition of `Image.ι` / `Image.ι` 的定义
+/-- the inclusion of `Image f` into the target -/
+/-
+**CategoryTheory.Limits.Types.Image.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Image.ι
-  signature: : Image f ⟶ β
-  body: ↾(Subtype.val)
-
-中文:
-定义 像.ι
-  签名: : 像 f ⟶ β
-  定义体: ↾(Subtype.val)
-
-Depends on / 依赖: Subtype, Subtype.val
+--- 原说明 ---
+the inclusion of `Image f` into the target
 -/
 def Image.ι : Image f ⟶ β :=
   ↾(Subtype.val)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono (Image.ι f)
-  body: (mono_iff_injective _).2 Subtype.val_injective
-
-中文:
-实例 :
-  签名: 单态射 (像.ι f)
-  定义体: (mono_iff_injective _).2 Subtype.val_injective
-
-Depends on / 依赖: Subtype, Subtype.val_injective, mono_iff_injective, val_injective
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono (Image.ι f) :=
   (mono_iff_injective _).2 Subtype.val_injective
 
 variable {f}
 
-/--
-Definition of `Image.lift` / `Image.lift` 的定义
+/-- the universal property for the image factorisation -/
+/-
+**CategoryTheory.Limits.Types.Image.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.Types.Image`。
+形式化陈述：{α β : Type u} →   {f : α ⟶ β} → (F' : CategoryTheory.Limits.MonoFactorisa
+tion f) → CategoryTheory.Limits.Types.Image f ⟶ F'.I
+参数：F' : CategoryTheory.Limits.MonoFactorisation f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Image.lift
-  signature: (F' : MonoFactorisation f)
-  body: ↾fun x => F'.e (Classical.indefiniteDescription _ x.2).1
-
-中文:
-定义 像.lift
-  签名: (F' : 单态射分解 f)
-  定义体: ↾fun x => F'.e (Classical.indefiniteDescription _ x.2).1
-
-Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription
+--- 原说明 ---
+the universal property for the image factorisation
 -/
 noncomputable def Image.lift (F' : MonoFactorisation f) : Image f ⟶ F'.I :=
   ↾fun x => F'.e (Classical.indefiniteDescription _ x.2).1
-
-/--
-theorem `Image.lift_fac` / 定理 `Image.lift_fac`
-
-English:
-theorem Image.lift_fac
-  given: (F' : MonoFactorisation f)
-  statement: Image.lift F' ≫ F'.m = Image.ι f
-  proof: by
-  ext x
-  change (F'.e ≫ F'.m) _ = _
-  rw [F'.fac]; rw [(Classical.indefiniteDescription _ x.2).2]
-  rfl
-
-中文:
-定理 像.lift_fac
-  条件: (F' : 单态射分解 f)
-  结论: 像.lift F' ≫ F'.m = 像.ι f
-  证明: by
-  ext x
-  change (F'.e ≫ F'.m) _ = _
-  rw [F'.fac]; rw [(Classical.indefiniteDescription _ x.2).2]
-  rfl
-
-Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription
+/-
+**CategoryTheory.Limits.Types.Image.lift_fac** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.Types.Image`。
+形式化陈述：∀ {α β : Type u} {f : α ⟶ β} (F' : CategoryTheory.Limits.MonoFactorisation
+ f),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.Types.Image.lif
+t F') F'.m =     CategoryTheory.Limits.Types.Image.ι f
+参数：F' : CategoryTheory.Limits.MonoFactorisation f；CategoryTheory.Limits.Types.Im
+age.lift F'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.MonoFactorisation.fac`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y}   (self : CategoryTheory.Lim
+its.MonoFactorisation f), Categor…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem Image.lift_fac (F' : MonoFactorisation f) : Image.lift F' ≫ F'.m = Image.ι f := by
   ext x
   change (F'.e ≫ F'.m) _ = _
-  rw [F'.fac]; rw [(Classical.indefiniteDescription _ x.2).2]
+  rw [F'.fac, (Classical.indefiniteDescription _ x.2).2]
   rfl
 
 end
 
-/--
-Definition of `monoFactorisation` / `monoFactorisation` 的定义
+/-- the factorisation of any morphism in Type through a mono. -/
+/-
+**CategoryTheory.Limits.Types.monoFactorisation** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.Types`。
+形式化陈述：monoFactorisation : MonoFactorisation f where I
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Types.instMonoImageι`：∀ {α β : Type u} (f : α ⟶ β)
+, CategoryTheory.Mono (CategoryTheory.Limits.Types.Image.ι f)
 
-English:
-definition monoFactorisation
-  signature: : MonoFactorisation f where
-  body: Image f
-  m := Image.ι f
-  e := ↾(Set.rangeFactorization f)
-
-中文:
-定义 monoFactorisation
-  签名: : 单态射分解 f where
-  定义体: Image f
-  m := Image.ι f
-  e := ↾(Set.rangeFactorization f)
+--- 原说明 ---
+the factorisation of any morphism in Type through a mono.
 -/
 def monoFactorisation : MonoFactorisation f where
   I := Image f
   m := Image.ι f
   e := ↾(Set.rangeFactorization f)
 
-/--
-Definition of `isImage` / `isImage` 的定义
+/-- the factorisation through a mono has the universal property of the image. -/
+/-
+**CategoryTheory.Limits.Types.isImage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Types`。
+形式化陈述：isImage : IsImage (monoFactorisation f) where lift
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Types.Image.lift_fac`：∀ {α β : Type u} {f : α ⟶ β}
+ (F' : CategoryTheory.Limits.MonoFactorisation f),   CategoryTheory.CategoryStru
+ct.comp (CategoryTheory.Limits.T…
 
-English:
-definition isImage
-  signature: : IsImage (monoFactorisation f) where
-  body: Image.lift
-  lift_fac := Image.lift_fac
-
-中文:
-定义 isImage
-  签名: : 是像 (monoFactorisation f) where
-  定义体: Image.lift
-  lift_fac := Image.lift_fac
-
-Depends on / 依赖: Image.lift
+--- 原说明 ---
+the factorisation through a mono has the universal property of the image.
 -/
 noncomputable def isImage : IsImage (monoFactorisation f) where
   lift := Image.lift
   lift_fac := Image.lift_fac
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasImage f
-  body: HasImage.mk ⟨_, isImage f⟩
-
-中文:
-实例 :
-  签名: 有像 f
-  定义体: HasImage.mk ⟨_, isImage f⟩
-
-Depends on / 依赖: HasImage, HasImage.mk, isImage
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasImage f :=
   HasImage.mk ⟨_, isImage f⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasImages (Type u)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 有Images (类型u)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasImages (Type u) where
   has_image := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasImageMaps (Type u)
-  body: HasImageMap.transport st (monoFactorisation f.hom) (isImage g.hom)
-      (↾fun x => ⟨st.right x.val, ⟨st.left (Classical.choose x.2), by
-        rw [elementwise_of% st.w]
-        rw [Classical.choose_spec x.property]⟩⟩) rfl
-
-中文:
-实例 :
-  签名: 有ImageMaps (类型u)
-  定义体: HasImageMap.transport st (monoFactorisation f.hom) (isImage g.hom)
-      (↾fun x => ⟨st.right x.val, ⟨st.left (Classical.choose x.2), by
-        rw [elementwise_of% st.w]
-        rw [Classical.choose_spec x.property]⟩⟩) rfl
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, HasImageMap, HasImageMap.transport, choose_spec, elementwise_of, f.hom, g.hom, isImage, monoFactorisation, property, st.left, st.right, st.w, transport, x.property, x.val
+/-
+**CategoryTheory.Limits.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.
+Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasImageMaps (Type u) where
   has_image_map {f g} st :=
@@ -256,119 +175,68 @@ instance : HasImageMaps (Type u) where
         rw [elementwise_of% st.w]
         rw [Classical.choose_spec x.property]⟩⟩) rfl
 
-variable {F : Natᵒᵖ ⥤ Type u} {c : Cone F}
-  (hF : forall n, Function.Surjective (F.map (homOfLE (Nat.le_succ n)).op))
-
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def limitOfSurjectionsSurjective.preimage
-
-中文:
-定义 noncomputable
-  签名: def limitOfSurjectionsSurjective.原像
-
-Depends on / 依赖: Equiv.addCommGroup, addCommGroup, fast_instance, opEquiv
+variable {F : ℕᵒᵖ ⥤ Type u} {c : Cone F}
+  (hF : ∀ n, Function.Surjective (F.map (homOfLE (Nat.le_succ n)).op))
+/-
+**CategoryTheory.Limits.Types.limitOfSurjectionsSurjective.preimage** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.Limits.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private noncomputable def limitOfSurjectionsSurjective.preimage
-    (a : F.obj ⟨0⟩) : (n : Nat) -> F.obj ⟨n⟩
+    (a : F.obj ⟨0⟩) : (n : ℕ) → F.obj ⟨n⟩
     | 0 => a
     | n + 1 => (hF n (preimage a n)).choose
 
 include hF in
 open limitOfSurjectionsSurjective in
-/--
-lemma `surjective_π_app_zero_of_surjective_map_aux` / 引理 `surjective_π_app_zero_of_surjective_map_aux`
+/-- Auxiliary lemma. Use `limit_of_surjections_surjective` instead. -/
+/-
+**CategoryTheory.Limits.Types.surjective_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Limits.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma surjective_π_app_zero_of_surjective_map_aux
-  proof: by
-  intro a
-  refine ⟨⟨fun ⟨n⟩ => preimage hF a n, ?_⟩, rfl⟩
-  intro ⟨n⟩ ⟨m⟩ ⟨⟨⟨(h : m <= n)⟩⟩⟩
-  induction h with
-  | refl =>
-    erw [CategoryTheory.Functor.map_id, id_apply]
-  | @step p h ih =>
-    rw [← ih]
-    have h' : m <= p := h
-    erw [CategoryTheory.Functor.map_comp (f := (homOfLE (Nat.le_succ p)).op) (g := (homOfLE h').op),
-      comp_apply, (hF p _).choose_spec]
-    rfl
-
-中文:
-引理 surjective_π_app_zero_of_surjective_map_aux
-  证明: by
-  intro a
-  refine ⟨⟨fun ⟨n⟩ => preimage hF a n, ?_⟩, rfl⟩
-  intro ⟨n⟩ ⟨m⟩ ⟨⟨⟨(h : m <= n)⟩⟩⟩
-  induction h with
-  | refl =>
-    erw [CategoryTheory.Functor.map_id, id_apply]
-  | @step p h ih =>
-    rw [← ih]
-    have h' : m <= p := h
-    erw [CategoryTheory.Functor.map_comp (f := (homOfLE (Nat.le_succ p)).op) (g := (homOfLE h').op),
-      comp_apply, (hF p _).choose_spec]
-    rfl
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_comp, CategoryTheory.Functor.map_id, Functor, Nat.le_succ, choose_spec, comp_apply, homOfLE, id_apply, le_succ, map_comp, map_id, preimage
+--- 原说明 ---
+Auxiliary lemma. Use `limit_of_surjections_surjective` instead.
 -/
 lemma surjective_π_app_zero_of_surjective_map_aux :
     Function.Surjective ((limitCone F).π.app ⟨0⟩) := by
   intro a
-  refine ⟨⟨fun ⟨n⟩ => preimage hF a n, ?_⟩, rfl⟩
-  intro ⟨n⟩ ⟨m⟩ ⟨⟨⟨(h : m <= n)⟩⟩⟩
+  refine ⟨⟨fun ⟨n⟩ ↦ preimage hF a n, ?_⟩, rfl⟩
+  intro ⟨n⟩ ⟨m⟩ ⟨⟨⟨(h : m ≤ n)⟩⟩⟩
   induction h with
   | refl =>
     erw [CategoryTheory.Functor.map_id, id_apply]
   | @step p h ih =>
     rw [← ih]
-    have h' : m <= p := h
+    have h' : m ≤ p := h
     erw [CategoryTheory.Functor.map_comp (f := (homOfLE (Nat.le_succ p)).op) (g := (homOfLE h').op),
       comp_apply, (hF p _).choose_spec]
     rfl
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-lemma `surjective_π_app_zero_of_surjective_map` / 引理 `surjective_π_app_zero_of_surjective_map`
+Given surjections `⋯ ⟶ Xₙ₊₁ ⟶ Xₙ ⟶ ⋯ ⟶ X₀`, the projection map `lim Xₙ ⟶ X₀` is surjective.
+-/
+/-
+**CategoryTheory.Limits.Types.surjective_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Limits.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma surjective_π_app_zero_of_surjective_map
-  proof: by
-  let i := hc.conePointUniqueUpToIso (limitConeIsLimit F)
-  have : c.π.app ⟨0⟩ = i.hom ≫ (limitCone F).π.app ⟨0⟩ := by simp [i]; rfl
-  rw [this]; rw [types_comp]
-  apply Function.Surjective.comp
-  · exact surjective_π_app_zero_of_surjective_map_aux hF
-  · rw [← epi_iff_surjective]
-    infer_instance
-
-中文:
-引理 surjective_π_app_zero_of_surjective_map
-  证明: by
-  let i := hc.conePointUniqueUpToIso (limitConeIsLimit F)
-  have : c.π.app ⟨0⟩ = i.hom ≫ (limitCone F).π.app ⟨0⟩ := by simp [i]; rfl
-  rw [this]; rw [types_comp]
-  apply Function.Surjective.comp
-  · exact surjective_π_app_zero_of_surjective_map_aux hF
-  · rw [← epi_iff_surjective]
-    infer_instance
-
-Depends on / 依赖: Function, Function.Surjective.comp, Surjective, conePointUniqueUpToIso, epi_iff_surjective, hc.conePointUniqueUpToIso, i.hom, infer_instance, limitCone, limitConeIsLimit, types_comp
+--- 原说明 ---
+Given surjections `⋯ ⟶ Xₙ₊₁ ⟶ Xₙ ⟶ ⋯ ⟶ X₀`, the projection map `lim Xₙ ⟶ X₀` is 
+surjective.
 -/
 lemma surjective_π_app_zero_of_surjective_map
     (hc : IsLimit c)
-    (hF : forall n, Function.Surjective (F.map (homOfLE (Nat.le_succ n)).op)) :
+    (hF : ∀ n, Function.Surjective (F.map (homOfLE (Nat.le_succ n)).op)) :
     Function.Surjective (c.π.app ⟨0⟩) := by
   let i := hc.conePointUniqueUpToIso (limitConeIsLimit F)
   have : c.π.app ⟨0⟩ = i.hom ≫ (limitCone F).π.app ⟨0⟩ := by simp [i]; rfl
-  rw [this]; rw [types_comp]
+  rw [this, types_comp]
   apply Function.Surjective.comp
   · exact surjective_π_app_zero_of_surjective_map_aux hF
   · rw [← epi_iff_surjective]
     infer_instance
 
 end CategoryTheory.Limits.Types
+

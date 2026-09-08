@@ -47,26 +47,27 @@ universe v u
 
 variable (R : Type u) [Ring R]
 
-/--
-Definition of `ModuleCat` / `ModuleCat` 的定义
+/-- The category of R-modules and their morphisms.
 
-English:
-structure ModuleCat
-  parameters: where
-  axioms and operations (4):
-    - private(mk) : :
-    - carrier : Type v
-    - [isAddCommGroup : AddCommGroup carrier]
-    - [isModule : Module R carrier]
+Note that in the case of `R = ℤ`, we cannot
+impose here that the `ℤ`-multiplication field from the module structure is defeq to the one coming
+from the `isAddCommGroup` structure (contrary to what we do for all module structures in
+mathlib), which creates some difficulties down the road. -/
+/-
+**ModuleCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [Ring R] → Type (max u (v + 1))
+参数：v + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 模范畴
-  参数: where
-  公理与运算 (4 个):
-    - private(mk) : :
-    - carrier : 类型v
-    - [isAddCommGroup : 加法交换群 carrier]
-    - [isModule : 模 R carrier]
+--- 原说明 ---
+The category of R-modules and their morphisms.
+
+Note that in the case of `R = ℤ`, we cannot
+impose here that the `ℤ`-multiplication field from the module structure is defeq
+ to the one coming
+from the `isAddCommGroup` structure (contrary to what we do for all module struc
+tures in
+mathlib), which creates some difficulties down the road.
 -/
 structure ModuleCat where
   private mk ::
@@ -81,20 +82,9 @@ attribute [instance 1100] ModuleCat.isModule
 
 namespace ModuleCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (ModuleCat.{v} R) (Type v)
-  body: ⟨ModuleCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort (模范畴.{v} R) (类型v)
-  定义体: ⟨ModuleCat.carrier⟩
-
-Depends on / 依赖: ModuleCat, ModuleCat.carrier, carrier
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (ModuleCat.{v} R) (Type v) :=
   ⟨ModuleCat.carrier⟩
@@ -103,90 +93,69 @@ attribute [coe] ModuleCat.carrier
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `of` / `of` 的定义
+/-- The object in the category of R-algebras associated to a type equipped with the appropriate
+typeclasses. This is the preferred way to construct a term of `ModuleCat R`. -/
+/-
+**ModuleCat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `ModuleCat`。
+形式化陈述：of (X : Type v) [AddCommGroup X] [Module R X] : ModuleCat.{v} R
+参数：X : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (X : Type v) [AddCommGroup X] [Module R X]
-  body: ⟨X⟩
-
-中文:
-缩写 of
-  签名: (X : 类型v) [加法交换群 X] [模 R X]
-  定义体: ⟨X⟩
+--- 原说明 ---
+The object in the category of R-algebras associated to a type equipped with the 
+appropriate
+typeclasses. This is the preferred way to construct a term of `ModuleCat R`.
 -/
 abbrev of (X : Type v) [AddCommGroup X] [Module R X] : ModuleCat.{v} R :=
   ⟨X⟩
-
-/--
-lemma `coe_of` / 引理 `coe_of`
-
-English:
-lemma coe_of
-  given: (X : Type v) [Ring X] [Module R X]
-  statement: (of R X : Type v) = X
-  proof: rfl
-
-中文:
-引理 coe_of
-  条件: (X : 类型v) [环 X] [模 R X]
-  结论: (of R X : 类型v) = X
-  证明: rfl
+/-
+**ModuleCat.coe_of** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：coe_of (X : Type v) [Ring X] [Module R X] : (of R X : Type v) = X
+参数：X : Type v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_of (X : Type v) [Ring X] [Module R X] : (of R X : Type v) = X :=
   rfl
 
 -- Ensure the roundtrips are reducibly defeq (so tactics like `rw` can see through them).
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (X : Type v) [Ring X] [Module R X] : (of R X : Type v) = X := by with_reducible rfl
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (M : ModuleCat.{v} R) : of R M = M := by with_reducible rfl
 
 set_option backward.privateInPublic true in
 variable {R} in
 /-- The type of morphisms in `ModuleCat R`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**ModuleCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `ModuleCat`。
+形式化陈述：{R : Type u} → [inst : Ring R] → ModuleCat R → ModuleCat R → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (M N : ModuleCat.{v} R)
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : M ->ₗ[R] N
-
-中文:
-结构 态射
-  参数: (M N : 模范畴.{v} R)
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : M ->ₗ[R] N
-
-Depends on / 依赖: Coalgebra, Coalgebra.counit, ModuleCat, ModuleCat.ofHom, counit
+--- 原说明 ---
+The type of morphisms in `ModuleCat R`.
 -/
 structure Hom (M N : ModuleCat.{v} R) where
   private mk ::
   /-- The underlying linear map. -/
-  hom' : M ->ₗ[R] N
+  hom' : M →ₗ[R] N
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `moduleCategory` / 实例 `moduleCategory`
-
-English:
-instance moduleCategory
-  signature: : Category.{v, max (v + 1) u} (ModuleCat.{v} R) where
-  body: Hom M N
-  id _ := ⟨LinearMap.id⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 moduleCategory
-  签名: : 范畴.{v, 最大值 (v + 1) u} (模范畴.{v} R) where
-  定义体: Hom M N
-  id _ := ⟨LinearMap.id⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**ModuleCat.moduleCategory** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+形式化陈述：moduleCategory : Category.{v, max (v + 1) u} (ModuleCat.{v} R) where Hom M
+ N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance moduleCategory : Category.{v, max (v + 1) u} (ModuleCat.{v} R) where
   Hom M N := Hom M N
@@ -195,24 +164,11 @@ instance moduleCategory : Category.{v, max (v + 1) u} (ModuleCat.{v} R) where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory (ModuleCat.{v} R) (· ->ₗ[R] ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 (模范畴.{v} R) (· ->ₗ[R] ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory (ModuleCat.{v} R) (· ->ₗ[R] ·) where
+instance : ConcreteCategory (ModuleCat.{v} R) (· →ₗ[R] ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
@@ -220,415 +176,316 @@ section
 
 variable {R}
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `ModuleCat` back into a `LinearMap`. -/
+/-
+**ModuleCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.Hom`。
+形式化陈述：{R : Type u} → [inst : Ring R] → {A B : ModuleCat R} → A.Hom B → ↑A →ₗ[R] 
+↑B
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {A B : ModuleCat.{v} R} (f : Hom A B)
-  body: ConcreteCategory.hom (C := ModuleCat R) f
-
-中文:
-缩写 态射.hom
-  签名: {A B : 模范畴.{v} R} (f : 态射 A B)
-  定义体: ConcreteCategory.hom (C := ModuleCat R) f
+--- 原说明 ---
+Turn a morphism in `ModuleCat` back into a `LinearMap`.
 -/
 abbrev Hom.hom {A B : ModuleCat.{v} R} (f : Hom A B) :=
   ConcreteCategory.hom (C := ModuleCat R) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `LinearMap` as a morphism in `ModuleCat`. -/
+/-
+**ModuleCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Modul
+e R Y] (f : X ->ₗ[R] Y) : of R X ⟶ of R Y
+参数：f : X ->ₗ[R] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Module R Y]
-  body: ConcreteCategory.ofHom (C := ModuleCat R) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型v} [加法交换群 X] [模 R X] [加法交换群 Y] [模 R Y]
-  定义体: ConcreteCategory.ofHom (C := ModuleCat R) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, ModuleCat
+--- 原说明 ---
+Typecheck a `LinearMap` as a morphism in `ModuleCat`.
 -/
 abbrev ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Module R Y]
-    (f : X ->ₗ[R] Y) : of R X ⟶ of R Y :=
+    (f : X →ₗ[R] Y) : of R X ⟶ of R Y :=
   ConcreteCategory.ofHom (C := ModuleCat R) f
 
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**ModuleCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.Hom.Simps`。
+形式化陈述：{R : Type u} → [inst : Ring R] → (A B : ModuleCat R) → A.Hom B → ↑A →ₗ[R] 
+↑B
+参数：A B : ModuleCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (A B : ModuleCat.{v} R) (f : Hom A B)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (A B : 模范畴.{v} R) (f : 态射 A B)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (A B : ModuleCat.{v} R) (f : Hom A B) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
+/-
+**ModuleCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_id {M : ModuleCat.{v} R} : (𝟙 M : M ⟶ M).hom = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma hom_id
-  given: {M : ModuleCat.{v} R}
-  statement: (𝟙 M : M ⟶ M).hom = LinearMap.id
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {M : 模范畴.{v} R}
-  结论: (𝟙 M : M ⟶ M).hom = 线性映射.id
-  证明: rfl
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
 lemma hom_id {M : ModuleCat.{v} R} : (𝟙 M : M ⟶ M).hom = LinearMap.id := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**ModuleCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：id_apply (M : ModuleCat.{v} R) (x : M) : (𝟙 M : M ⟶ M) x = x
+参数：M : ModuleCat.{v} R；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (M : ModuleCat.{v} R) (x : M)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (M : 模范畴.{v} R) (x : M)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (M : ModuleCat.{v} R) (x : M) :
     (𝟙 M : M ⟶ M) x = x := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {M N O : 模范畴.{v} R} (f : M ⟶ N) (g : N ⟶ O)
-  证明: rfl
+/-
+**ModuleCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_comp {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) : (f ≫ g).hom =
+ g.hom.comp f.hom
+参数：f : M ⟶ N；g : N ⟶ O。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**ModuleCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：comp_apply {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M) : (f 
+≫ g) x = g (f x)
+参数：f : M ⟶ N；g : N ⟶ O；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {M N O : 模范畴.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M) :
     (f ≫ g) x = g (f x) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-中文:
-引理 hom_ext
-  条件: {M N : 模范畴.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-Depends on / 依赖: Hom.ext
+/-
+**ModuleCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.Hom.ext`：∀ {R : Type u} {inst : Ring R} {M N : ModuleCat R} {x
+ y : M.Hom N}, x.hom' = y.hom' → x = y
 -/
 lemma hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
-
-/--
-lemma `hom_bijective` / 引理 `hom_bijective`
-
-English:
-lemma hom_bijective
-  given: {M N : ModuleCat.{v} R}
-  proof: by cases f; cases g; simpa using! h
-  right f := ⟨⟨f⟩, rfl⟩
-
-中文:
-引理 hom_bijective
-  条件: {M N : 模范畴.{v} R}
-  证明: by cases f; cases g; simpa using! h
-  right f := ⟨⟨f⟩, rfl⟩
+/-
+**ModuleCat.hom_bijective** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_bijective {M N : ModuleCat.{v} R} : Function.Bijective (Hom.hom : (M ⟶
+ N) -> (M ->ₗ[R] N)) where left f g h
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Algebra.Category.ModuleCat.Basic.0.ModuleCat.Hom.mk.inj
+Eq`：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (hom' hom'_1 : ↑M →ₗ[R] ↑
+N),   ({ hom' := hom' } = { hom' := hom'_1 }) = (hom' = hom'_1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma hom_bijective {M N : ModuleCat.{v} R} :
-    Function.Bijective (Hom.hom : (M ⟶ N) -> (M ->ₗ[R] N)) where
+    Function.Bijective (Hom.hom : (M ⟶ N) → (M →ₗ[R] N)) where
   left f g h := by cases f; cases g; simpa using! h
   right f := ⟨⟨f⟩, rfl⟩
 
-/--
-lemma `hom_injective` / 引理 `hom_injective`
+/-- Convenience shortcut for `ModuleCat.hom_bijective.injective`. -/
+/-
+**ModuleCat.hom_injective** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_injective {M N : ModuleCat.{v} R} : Function.Injective (Hom.hom : (M ⟶
+ N) -> (M ->ₗ[R] N))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用引理 `ModuleCat.hom_bijective`：hom_bijective {M N : ModuleCat.{v} R} : Functio
+n.Bijective (Hom.hom : (M ⟶ N) -> (M ->ₗ[R] N)) where left f g h
 
-English:
-lemma hom_injective
-  given: {M N : ModuleCat.{v} R}
-  proof: hom_bijective.injective
-
-中文:
-引理 hom_injective
-  条件: {M N : 模范畴.{v} R}
-  证明: hom_bijective.injective
-
-Depends on / 依赖: hom_bijective, hom_bijective.injective, injective
+--- 原说明 ---
+Convenience shortcut for `ModuleCat.hom_bijective.injective`.
 -/
 lemma hom_injective {M N : ModuleCat.{v} R} :
-    Function.Injective (Hom.hom : (M ⟶ N) -> (M ->ₗ[R] N)) :=
+    Function.Injective (Hom.hom : (M ⟶ N) → (M →ₗ[R] N)) :=
   hom_bijective.injective
 
-/--
-lemma `hom_surjective` / 引理 `hom_surjective`
+/-- Convenience shortcut for `ModuleCat.hom_bijective.surjective`. -/
+/-
+**ModuleCat.hom_surjective** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_surjective {M N : ModuleCat.{v} R} : Function.Surjective (Hom.hom : (M
+ ⟶ N) -> (M ->ₗ[R] N))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用引理 `ModuleCat.hom_bijective`：hom_bijective {M N : ModuleCat.{v} R} : Functio
+n.Bijective (Hom.hom : (M ⟶ N) -> (M ->ₗ[R] N)) where left f g h
 
-English:
-lemma hom_surjective
-  given: {M N : ModuleCat.{v} R}
-  proof: hom_bijective.surjective
-
-@[simp]
-
-中文:
-引理 hom_surjective
-  条件: {M N : 模范畴.{v} R}
-  证明: hom_bijective.surjective
-
-@[simp]
-
-Depends on / 依赖: hom_bijective, hom_bijective.surjective, surjective
+--- 原说明 ---
+Convenience shortcut for `ModuleCat.hom_bijective.surjective`.
 -/
 lemma hom_surjective {M N : ModuleCat.{v} R} :
-    Function.Surjective (Hom.hom : (M ⟶ N) -> (M ->ₗ[R] N)) :=
+    Function.Surjective (Hom.hom : (M ⟶ N) → (M →ₗ[R] N)) :=
   hom_bijective.surjective
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  statement: {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  结论: {X Y : 类型v} [加法交换群 X] [模 R X] [加法交换群 Y]
-  证明: rfl
-
-@[simp]
+/-
+**ModuleCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [M
+odule R Y] (f : X ->ₗ[R] Y) : (ofHom f).hom = f
+参数：f : X ->ₗ[R] Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y]
-    [Module R Y] (f : X ->ₗ[R] Y) : (ofHom f).hom = f := rfl
+    [Module R Y] (f : X →ₗ[R] Y) : (ofHom f).hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {M N : ModuleCat.{v} R} (f : M ⟶ N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {M N : 模范畴.{v} R} (f : M ⟶ N)
-  证明: rfl
-
-@[simp]
+/-
+**ModuleCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom_hom {M N : ModuleCat.{v} R} (f : M ⟶ N) : ofHom (Hom.hom f) = f
+参数：f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {M N : ModuleCat.{v} R} (f : M ⟶ N) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {M : Type v} [AddCommGroup M] [Module R M]
-  statement: ofHom LinearMap.id = 𝟙 (of R M)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {M : 类型v} [加法交换群 M] [模 R M]
-  结论: ofHom 线性映射.id = 𝟙 (of R M)
-  证明: rfl
-
-@[simp]
+/-
+**ModuleCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom_id {M : Type v} [AddCommGroup M] [Module R M] : ofHom LinearMap.id =
+ 𝟙 (of R M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {M : Type v} [AddCommGroup M] [Module R M] : ofHom LinearMap.id = 𝟙 (of R M) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {M N O : Type v} [AddCommGroup M] [AddCommGroup N] [AddCommGroup O] [Module R M]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {M N O : 类型v} [加法交换群 M] [加法交换群 N] [加法交换群 O] [模 R M]
-  证明: rfl
+/-
+**ModuleCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom_comp {M N O : Type v} [AddCommGroup M] [AddCommGroup N] [AddCommGrou
+p O] [Module R M] [Module R N] [Module R O] (f : M ->ₗ[R] N) (g : N ->ₗ[R] O) : 
+ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : M ->ₗ[R] N；g : N ->ₗ[R] O。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {M N O : Type v} [AddCommGroup M] [AddCommGroup N] [AddCommGroup O] [Module R M]
-    [Module R N] [Module R O] (f : M ->ₗ[R] N) (g : N ->ₗ[R] O) :
+    [Module R N] [Module R O] (f : M →ₗ[R] N) (g : N →ₗ[R] O) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
 
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
+/- Doesn't need to be `@[simp]` since `simp only` can solve this. -/
+/-
+**ModuleCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom_apply {M N : Type v} [AddCommGroup M] [AddCommGroup N] [Module R M] 
+[Module R N] (f : M ->ₗ[R] N) (x : M) : ofHom f x = f x
+参数：f : M ->ₗ[R] N；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ofHom_apply
-  statement: {M N : Type v} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {M N : 类型v} [加法交换群 M] [加法交换群 N] [模 R M] [模 R N]
-  证明: rfl
+--- 原说明 ---
+Doesn't need to be `@[simp]` since `simp only` can solve this.
 -/
 lemma ofHom_apply {M N : Type v} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
-    (f : M ->ₗ[R] N) (x : M) : ofHom f x = f x := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {M N : ModuleCat.{v} R} (e : M ≅ N) (x : M)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {M N : 模范畴.{v} R} (e : M ≅ N) (x : M)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
+    (f : M →ₗ[R] N) (x : M) : ofHom f x = f x := rfl
+/-
+**ModuleCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：inv_hom_apply {M N : ModuleCat.{v} R} (e : M ≅ N) (x : M) : e.inv (e.hom x
+) = x
+参数：e : M ≅ N；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {M N : ModuleCat.{v} R} (e : M ≅ N) (x : M) : e.inv (e.hom x) = x := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {M N : ModuleCat.{v} R} (e : M ≅ N) (x : N)
-  statement: e.hom (e.inv x) = x
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {M N : 模范畴.{v} R} (e : M ≅ N) (x : N)
-  结论: e.hom (e.inv x) = x
-  证明: by
-  simp
-
-Depends on / 依赖: Iso.refl
+/-
+**ModuleCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：hom_inv_apply {M N : ModuleCat.{v} R} (e : M ≅ N) (x : N) : e.hom (e.inv x
+) = x
+参数：e : M ≅ N；x : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {M N : ModuleCat.{v} R} (e : M ≅ N) (x : N) : e.hom (e.inv x) = x := by
   simp
 
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
+/-- `ModuleCat.Hom.hom` bundled as an `Equiv`. -/
+/-
+**ModuleCat.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：homEquiv {M N : ModuleCat.{v} R} : (M ⟶ N) ≃ (M ->ₗ[R] N) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homEquiv
-  signature: {M N : ModuleCat.{v} R}
-  body: Hom.hom
-  invFun := ofHom
-
-中文:
-定义 homEquiv
-  签名: {M N : 模范畴.{v} R}
-  定义体: Hom.hom
-  invFun := ofHom
-
-Depends on / 依赖: Hom.hom
+--- 原说明 ---
+`ModuleCat.Hom.hom` bundled as an `Equiv`.
 -/
-def homEquiv {M N : ModuleCat.{v} R} : (M ⟶ N) ≃ (M ->ₗ[R] N) where
+def homEquiv {M N : ModuleCat.{v} R} : (M ⟶ N) ≃ (M →ₗ[R] N) where
   toFun := Hom.hom
   invFun := ofHom
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `equivalenceSemimoduleCat` / `equivalenceSemimoduleCat` 的定义
+/-- The categorical equivalence between `ModuleCat` and `SemimoduleCat`.
 
-English:
-definition equivalenceSemimoduleCat
-  signature: : ModuleCat.{v} R ≌ SemimoduleCat.{v} R where
-  body: { obj M := .of R M
-    map f := SemimoduleCat.ofHom f.hom' }
-  inverse := letI := Module.addCommMonoidToAddCommGroup
-  { obj M := of R M
-    map {M N} f := ofHom f.hom }
-  unitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
-  counitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
+In the inverse direction, data (such as the negation operation) is created which may lead to
+diamonds when applied to semi-modules that already have an existing additive group structure. -/
+/-
+**ModuleCat.equivalenceSemimoduleCat** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：equivalenceSemimoduleCat : ModuleCat.{v} R ≌ SemimoduleCat.{v} R where fun
+ctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 equivalenceSemimoduleCat
-  签名: : 模范畴.{v} R ≌ Semimodule范畴.{v} R where
-  定义体: { obj M := .of R M
-    map f := SemimoduleCat.ofHom f.hom' }
-  inverse := letI := Module.addCommMonoidToAddCommGroup
-  { obj M := of R M
-    map {M N} f := ofHom f.hom }
-  unitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
-  counitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
+--- 原说明 ---
+The categorical equivalence between `ModuleCat` and `SemimoduleCat`.
 
-Depends on / 依赖: Module, Module.addCommMonoidToAddCommGroup, NatIso, NatIso.ofComponents, SemimoduleCat, SemimoduleCat.ofHom, addCommMonoidToAddCommGroup, counitIso, f.hom, inverse, ofComponents, unitIso
+In the inverse direction, data (such as the negation operation) is created which
+ may lead to
+diamonds when applied to semi-modules that already have an existing additive gro
+up structure.
 -/
 def equivalenceSemimoduleCat : ModuleCat.{v} R ≌ SemimoduleCat.{v} R where
   functor :=
@@ -637,70 +494,43 @@ def equivalenceSemimoduleCat : ModuleCat.{v} R ≌ SemimoduleCat.{v} R where
   inverse := letI := Module.addCommMonoidToAddCommGroup
   { obj M := of R M
     map {M N} f := ofHom f.hom }
-  unitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
-  counitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
+  unitIso := NatIso.ofComponents fun _ ↦ { hom := ⟨.id⟩, inv := ⟨.id⟩ }
+  counitIso := NatIso.ofComponents fun _ ↦ { hom := ⟨.id⟩, inv := ⟨.id⟩ }
 
 end
 
-/--
-lemma `forget_obj` / 引理 `forget_obj`
+/- Not a `@[simp]` lemma since it will rewrite the (co)domain of maps and cause
+definitional equality issues. -/
+/-
+**ModuleCat.forget_obj** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：forget_obj {M : ModuleCat.{v} R} : (forget (ModuleCat.{v} R)).obj M = M
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma forget_obj
-  given: {M : ModuleCat.{v} R}
-  statement: (forget (ModuleCat.{v} R)).obj M = M
-  proof: rfl
-
-@[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-03-02")]
-
-中文:
-引理 forget_obj
-  条件: {M : 模范畴.{v} R}
-  结论: (forget (模范畴.{v} R)).obj M = M
-  证明: rfl
-
-@[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-03-02")]
+--- 原说明 ---
+Not a `@[simp]` lemma since it will rewrite the (co)domain of maps and cause
+definitional equality issues.
 -/
 lemma forget_obj {M : ModuleCat.{v} R} : (forget (ModuleCat.{v} R)).obj M = M := rfl
 
 @[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-03-02")]
-/--
-lemma `forget_map` / 引理 `forget_map`
-
-English:
-lemma forget_map
-  given: {M N : ModuleCat.{v} R} (f : M ⟶ N)
-  proof: rfl
-
-中文:
-引理 forget_map
-  条件: {M N : 模范畴.{v} R} (f : M ⟶ N)
-  证明: rfl
+/-
+**ModuleCat.forget_map** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：forget_map {M N : ModuleCat.{v} R} (f : M ⟶ N) : (forget (ModuleCat.{v} R)
+).map f = (f : _ -> _)
+参数：f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forget_map {M N : ModuleCat.{v} R} (f : M ⟶ N) :
-    (forget (ModuleCat.{v} R)).map f = (f : _ -> _) :=
+    (forget (ModuleCat.{v} R)).map f = (f : _ → _) :=
   rfl
-
-/--
-Instance `hasForgetToAddCommGroup` / 实例 `hasForgetToAddCommGroup`
-
-English:
-instance hasForgetToAddCommGroup
-  signature: : HasForget₂ (ModuleCat R) AddCommGrpCat where
-  body: { obj := fun M => AddCommGrpCat.of M
-      map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
-
-@[simp]
-
-中文:
-实例 hasForgetToAddCommGroup
-  签名: : 有Forget₂ (模范畴 R) 加法交换群范畴 where
-  定义体: { obj := fun M => AddCommGrpCat.of M
-      map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
-
-@[simp]
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.of, AddCommGrpCat.ofHom, f.hom.toAddMonoidHom, toAddMonoidHom
+/-
+**ModuleCat.hasForgetToAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+形式化陈述：hasForgetToAddCommGroup : HasForget₂ (ModuleCat R) AddCommGrpCat where for
+get₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToAddCommGroup : HasForget₂ (ModuleCat R) AddCommGrpCat where
   forget₂ :=
@@ -708,153 +538,91 @@ instance hasForgetToAddCommGroup : HasForget₂ (ModuleCat R) AddCommGrpCat wher
       map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
 
 @[simp]
-/--
-theorem `forget₂_obj` / 定理 `forget₂_obj`
-
-English:
-theorem forget₂_obj
-  given: (X : ModuleCat R)
-  proof: rfl
-
-中文:
-定理 forget₂_obj
-  条件: (X : 模范畴 R)
-  证明: rfl
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂_obj (X : ModuleCat R) :
     (forget₂ (ModuleCat R) AddCommGrpCat).obj X = AddCommGrpCat.of X :=
   rfl
-
-/--
-theorem `forget₂_obj_moduleCat_of` / 定理 `forget₂_obj_moduleCat_of`
-
-English:
-theorem forget₂_obj_moduleCat_of
-  given: (X : Type v) [AddCommGroup X] [Module R X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂_obj_moduleCat_of
-  条件: (X : 类型v) [加法交换群 X] [模 R X]
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: CommAlgCat, ConcreteCategory, ConcreteCategory.hom
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂_obj_moduleCat_of (X : Type v) [AddCommGroup X] [Module R X] :
     (forget₂ (ModuleCat R) AddCommGrpCat).obj (of R X) = AddCommGrpCat.of X :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂_map` / 定理 `forget₂_map`
-
-English:
-theorem forget₂_map
-  given: (X Y : ModuleCat R) (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-定理 forget₂_map
-  条件: (X Y : 模范畴 R) (f : X ⟶ Y)
-  证明: rfl
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂_map (X Y : ModuleCat R) (f : X ⟶ Y) :
     (forget₂ (ModuleCat R) AddCommGrpCat).map f = AddCommGrpCat.ofHom f.hom :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (ModuleCat R)
-  body: ⟨of R PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 (模范畴 R)
-  定义体: ⟨of R PUnit⟩
-
-Depends on / 依赖: f.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (ModuleCat R) :=
   ⟨of R PUnit⟩
-
-/--
-theorem `of_coe` / 定理 `of_coe`
-
-English:
-theorem of_coe
-  given: (X : ModuleCat R)
-  statement: of R X = X
-  proof: rfl
-
-中文:
-定理 of_coe
-  条件: (X : 模范畴 R)
-  结论: of R X = X
-  证明: rfl
+/-
+**ModuleCat.of_coe** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ (R : Type u) [inst : Ring R] (X : ModuleCat R), ModuleCat.of R ↑X = X
+参数：R : Type u；X : ModuleCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem of_coe (X : ModuleCat R) : of R X = X := rfl
 
 variable {R}
-
-/--
-theorem `isZero_of_subsingleton` / 定理 `isZero_of_subsingleton`
-
-English:
-theorem isZero_of_subsingleton
-  given: (M : ModuleCat R) [Subsingleton M]
-  statement: IsZero M where
-  proof: ⟨⟨⟨ofHom (0 : M ->ₗ[R] X)⟩, fun f => by
-    ext x
-    rw [Subsingleton.elim x (0 : M)]
-    simp⟩⟩
-  unique_from X := ⟨⟨⟨ofHom (0 : X ->ₗ[R] M)⟩, fun f => by
-    ext x
-    subsingleton⟩⟩
-
-中文:
-定理 isZero_of_subsingleton
-  条件: (M : 模范畴 R) [子单例 M]
-  结论: 是零 M where
-  证明: ⟨⟨⟨ofHom (0 : M ->ₗ[R] X)⟩, fun f => by
-    ext x
-    rw [Subsingleton.elim x (0 : M)]
-    simp⟩⟩
-  unique_from X := ⟨⟨⟨ofHom (0 : X ->ₗ[R] M)⟩, fun f => by
-    ext x
-    subsingleton⟩⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, subsingleton, unique_from
+/-
+**ModuleCat.isZero_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：isZero_of_subsingleton (M : ModuleCat R) [Subsingleton M] : IsZero M where
+ unique_to X
+参数：M : ModuleCat R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isZero_of_subsingleton (M : ModuleCat R) [Subsingleton M] : IsZero M where
-  unique_to X := ⟨⟨⟨ofHom (0 : M ->ₗ[R] X)⟩, fun f => by
+  unique_to X := ⟨⟨⟨ofHom (0 : M →ₗ[R] X)⟩, fun f => by
     ext x
     rw [Subsingleton.elim x (0 : M)]
     simp⟩⟩
-  unique_from X := ⟨⟨⟨ofHom (0 : X ->ₗ[R] M)⟩, fun f => by
+  unique_from X := ⟨⟨⟨ofHom (0 : X →ₗ[R] M)⟩, fun f => by
     ext x
     subsingleton⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasZeroObject (ModuleCat.{v} R)
-  body: ⟨⟨of R PUnit, isZero_of_subsingleton _⟩⟩
-
-中文:
-实例 :
-  签名: 有ZeroObject (模范畴.{v} R)
-  定义体: ⟨⟨of R PUnit, isZero_of_subsingleton _⟩⟩
-
-Depends on / 依赖: isZero_of_subsingleton
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasZeroObject (ModuleCat.{v} R) :=
   ⟨⟨of R PUnit, isZero_of_subsingleton _⟩⟩
@@ -873,99 +641,68 @@ section
 
 /-- Build an isomorphism in the category `Module R` from a `LinearEquiv` between `Module`s. -/
 @[simps]
-/--
-Definition of `LinearEquiv.toModuleIso` / `LinearEquiv.toModuleIso` 的定义
+/-
+**LinearEquiv.toModuleIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LinearEquiv.toModuleIso {g₁ : AddCommGroup X₁} {g₂ : AddCommGroup X₂} {m₁ 
+: Module R X₁} {m₂ : Module R X₂} (e : X₁ ≃ₗ[R] X₂) : ModuleCat.of R X₁ ≅ Module
+Cat.of R X₂ where hom
+参数：e : X₁ ≃ₗ[R] X₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LinearEquiv.toModuleIso
-  signature: {g₁ : AddCommGroup X₁} {g₂ : AddCommGroup X₂} {m₁ : Module R X₁}
-  body: ofHom (e : X₁ ->ₗ[R] X₂)
-  inv := ofHom (e.symm : X₂ ->ₗ[R] X₁)
-  hom_inv_id := by ext; apply e.left_inv
-  inv_hom_id := by ext; apply e.right_inv
-
-中文:
-定义 线性等价.toModuleIso
-  签名: {g₁ : 加法交换群 X₁} {g₂ : 加法交换群 X₂} {m₁ : 模 R X₁}
-  定义体: ofHom (e : X₁ ->ₗ[R] X₂)
-  inv := ofHom (e.symm : X₂ ->ₗ[R] X₁)
-  hom_inv_id := by ext; apply e.left_inv
-  inv_hom_id := by ext; apply e.right_inv
+--- 原说明 ---
+Build an isomorphism in the category `Module R` from a `LinearEquiv` between `Mo
+dule`s.
 -/
 def LinearEquiv.toModuleIso {g₁ : AddCommGroup X₁} {g₂ : AddCommGroup X₂} {m₁ : Module R X₁}
     {m₂ : Module R X₂} (e : X₁ ≃ₗ[R] X₂) : ModuleCat.of R X₁ ≅ ModuleCat.of R X₂ where
-  hom := ofHom (e : X₁ ->ₗ[R] X₂)
-  inv := ofHom (e.symm : X₂ ->ₗ[R] X₁)
+  hom := ofHom (e : X₁ →ₗ[R] X₂)
+  inv := ofHom (e.symm : X₂ →ₗ[R] X₁)
   hom_inv_id := by ext; apply e.left_inv
   inv_hom_id := by ext; apply e.right_inv
 
 namespace CategoryTheory.Iso
 variable {X Y : ModuleCat R}
 
-/--
-Definition of `toLinearEquiv` / `toLinearEquiv` 的定义
+/-- Build a `LinearEquiv` from an isomorphism in the category `ModuleCat R`. -/
+/-
+**CategoryTheory.Iso.toLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Iso
+`。
+形式化陈述：toLinearEquiv (i : X ≅ Y) : X ≃ₗ[R] Y
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearEquiv
-  signature: (i : X ≅ Y)
-  body: .ofLinearMap i.hom.hom i.inv.hom (by aesop) (by aesop)
-
-中文:
-定义 toLinearEquiv
-  签名: (i : X ≅ Y)
-  定义体: .ofLinearMap i.hom.hom i.inv.hom (by aesop) (by aesop)
-
-Depends on / 依赖: i.hom.hom, i.inv.hom, ofLinearMap
+--- 原说明 ---
+Build a `LinearEquiv` from an isomorphism in the category `ModuleCat R`.
 -/
 def toLinearEquiv (i : X ≅ Y) : X ≃ₗ[R] Y :=
   .ofLinearMap i.hom.hom i.inv.hom (by aesop) (by aesop)
-
-/--
-lemma `toLinearEquiv_apply` / 引理 `toLinearEquiv_apply`
-
-English:
-lemma toLinearEquiv_apply
-  given: (i : X ≅ Y) (x : X)
-  statement: i.toLinearEquiv x = i.hom x
-  proof: rfl
-
-中文:
-引理 toLinearEquiv_apply
-  条件: (i : X ≅ Y) (x : X)
-  结论: i.toLinearEquiv x = i.hom x
-  证明: rfl
+/-
+**CategoryTheory.Iso.toLinearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Iso`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {X Y : ModuleCat R} (i : X ≅ Y) (x : ↑X),  
+ i.toLinearEquiv x = (CategoryTheory.ConcreteCategory.hom i.hom) x
+参数：i : X ≅ Y；x : ↑X；CategoryTheory.ConcreteCategory.hom i.hom。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLinearEquiv_apply (i : X ≅ Y) (x : X) : i.toLinearEquiv x = i.hom x := rfl
-/--
-lemma `toLinearEquiv_symm` / 引理 `toLinearEquiv_symm`
-
-English:
-lemma toLinearEquiv_symm
-  given: (i : X ≅ Y)
-  statement: i.toLinearEquiv.symm = i.symm.toLinearEquiv
-  proof: rfl
-
-中文:
-引理 toLinearEquiv_symm
-  条件: (i : X ≅ Y)
-  结论: i.toLinearEquiv.symm = i.symm.toLinearEquiv
-  证明: rfl
+/-
+**CategoryTheory.Iso.toLinearEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Iso`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {X Y : ModuleCat R} (i : X ≅ Y), i.toLinear
+Equiv.symm = i.symm.toLinearEquiv
+参数：i : X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLinearEquiv_symm (i : X ≅ Y) : i.toLinearEquiv.symm = i.symm.toLinearEquiv := rfl
-/--
-lemma `toLinearMap_toLinearEquiv` / 引理 `toLinearMap_toLinearEquiv`
-
-English:
-lemma toLinearMap_toLinearEquiv
-  given: (i : X ≅ Y)
-  statement: i.toLinearEquiv = i.hom.hom
-  proof: rfl
-
-中文:
-引理 toLinearMap_toLinearEquiv
-  条件: (i : X ≅ Y)
-  结论: i.toLinearEquiv = i.hom.hom
-  证明: rfl
+/-
+**CategoryTheory.Iso.toLinearMap_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Iso`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {X Y : ModuleCat R} (i : X ≅ Y), ↑i.toLinea
+rEquiv = ModuleCat.Hom.hom i.hom
+参数：i : X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLinearMap_toLinearEquiv (i : X ≅ Y) : i.toLinearEquiv = i.hom.hom := rfl
 
@@ -974,27 +711,23 @@ end CategoryTheory.Iso
 /-- linear equivalences between `Module`s are the same as (isomorphic to) isomorphisms
 in `ModuleCat` -/
 @[simps]
-/--
-Definition of `linearEquivIsoModuleIso` / `linearEquivIsoModuleIso` 的定义
+/-
+**linearEquivIsoModuleIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：linearEquivIsoModuleIso {X Y : Type u} [AddCommGroup X] [AddCommGroup Y] [
+Module R X] [Module R Y] : (X ≃ₗ[R] Y) ≅ (ModuleCat.of R X ≅ ModuleCat.of R Y) w
+here hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearEquivIsoModuleIso
-  signature: {X Y : Type u} [AddCommGroup X] [AddCommGroup Y] [Module R X]
-  body: ↾fun e => e.toModuleIso
-  inv := ↾fun i => i.toLinearEquiv
-
-中文:
-定义 linearEquivIsoModuleIso
-  签名: {X Y : 类型u} [加法交换群 X] [加法交换群 Y] [模 R X]
-  定义体: ↾fun e => e.toModuleIso
-  inv := ↾fun i => i.toLinearEquiv
-
-Depends on / 依赖: e.toModuleIso, toModuleIso
+--- 原说明 ---
+linear equivalences between `Module`s are the same as (isomorphic to) isomorphis
+ms
+in `ModuleCat`
 -/
 def linearEquivIsoModuleIso {X Y : Type u} [AddCommGroup X] [AddCommGroup Y] [Module R X]
     [Module R Y] : (X ≃ₗ[R] Y) ≅ (ModuleCat.of R X ≅ ModuleCat.of R Y) where
-  hom := ↾fun e => e.toModuleIso
-  inv := ↾fun i => i.toLinearEquiv
+  hom := ↾fun e ↦ e.toModuleIso
+  inv := ↾fun i ↦ i.toLinearEquiv
 
 end
 
@@ -1006,426 +739,235 @@ variable {M N : ModuleCat.{v} R}
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (M ⟶ N)
-  body: ⟨f.hom + g.hom⟩
-
-中文:
-实例 :
-  签名: 加法 (M ⟶ N)
-  定义体: ⟨f.hom + g.hom⟩
-
-Depends on / 依赖: f.hom, g.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (M ⟶ N) where
   add f g := ⟨f.hom + g.hom⟩
-
-/--
-lemma `hom_add` / 引理 `hom_add`
-
-English:
-lemma hom_add
-  given: (f g : M ⟶ N)
-  statement: (f + g).hom = f.hom + g.hom
-  proof: rfl
-
-中文:
-引理 hom_add
-  条件: (f g : M ⟶ N)
-  结论: (f + g).hom = f.hom + g.hom
-  证明: rfl
+/-
+**ModuleCat.hom_add** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (f g : M ⟶ N),   Module
+Cat.Hom.hom (f + g) = ModuleCat.Hom.hom f + ModuleCat.Hom.hom g
+参数：f g : M ⟶ N；f + g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_add (f g : M ⟶ N) : (f + g).hom = f.hom + g.hom := rfl
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (M ⟶ N)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 零 (M ⟶ N)
-  定义体: ⟨0⟩
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (M ⟶ N) where
   zero := ⟨0⟩
-
-/--
-lemma `hom_zero` / 引理 `hom_zero`
-
-English:
-lemma hom_zero
-  statement: (0 : M ⟶ N).hom = 0
-  proof: rfl
-
-中文:
-引理 hom_zero
-  结论: (0 : M ⟶ N).hom = 0
-  证明: rfl
+/-
+**ModuleCat.hom_zero** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R}, ModuleCat.Hom.hom 0 = 
+0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_zero : (0 : M ⟶ N).hom = 0 := rfl
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Nat (M ⟶ N)
-  body: ⟨n • f.hom⟩
-
-中文:
-实例 :
-  签名: 标量乘法 自然数 (M ⟶ N)
-  定义体: ⟨n • f.hom⟩
-
-Depends on / 依赖: f.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Nat (M ⟶ N) where
+instance : SMul ℕ (M ⟶ N) where
   smul n f := ⟨n • f.hom⟩
-
-/--
-lemma `hom_nsmul` / 引理 `hom_nsmul`
-
-English:
-lemma hom_nsmul
-  given: (n : Nat) (f : M ⟶ N)
-  statement: (n • f).hom = n • f.hom
-  proof: rfl
-
-中文:
-引理 hom_nsmul
-  条件: (n : 自然数) (f : M ⟶ N)
-  结论: (n • f).hom = n • f.hom
-  证明: rfl
+/-
+**ModuleCat.hom_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (n : ℕ) (f : M ⟶ N),   
+ModuleCat.Hom.hom (n • f) = n • ModuleCat.Hom.hom f
+参数：n : ℕ；f : M ⟶ N；n • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma hom_nsmul (n : Nat) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
+@[simp] lemma hom_nsmul (n : ℕ) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (M ⟶ N)
-  body: ⟨-f.hom⟩
-
-中文:
-实例 :
-  签名: 取负 (M ⟶ N)
-  定义体: ⟨-f.hom⟩
-
-Depends on / 依赖: f.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (M ⟶ N) where
   neg f := ⟨-f.hom⟩
-
-/--
-lemma `hom_neg` / 引理 `hom_neg`
-
-English:
-lemma hom_neg
-  given: (f : M ⟶ N)
-  statement: (-f).hom = -f.hom
-  proof: rfl
-
-中文:
-引理 hom_neg
-  条件: (f : M ⟶ N)
-  结论: (-f).hom = -f.hom
-  证明: rfl
+/-
+**ModuleCat.hom_neg** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (f : M ⟶ N), ModuleCat.
+Hom.hom (-f) = -ModuleCat.Hom.hom f
+参数：f : M ⟶ N；-f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_neg (f : M ⟶ N) : (-f).hom = -f.hom := rfl
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (M ⟶ N)
-  body: ⟨f.hom - g.hom⟩
-
-中文:
-实例 :
-  签名: 减法 (M ⟶ N)
-  定义体: ⟨f.hom - g.hom⟩
-
-Depends on / 依赖: f.hom, g.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (M ⟶ N) where
   sub f g := ⟨f.hom - g.hom⟩
-
-/--
-lemma `hom_sub` / 引理 `hom_sub`
-
-English:
-lemma hom_sub
-  given: (f g : M ⟶ N)
-  statement: (f - g).hom = f.hom - g.hom
-  proof: rfl
-
-中文:
-引理 hom_sub
-  条件: (f g : M ⟶ N)
-  结论: (f - g).hom = f.hom - g.hom
-  证明: rfl
+/-
+**ModuleCat.hom_sub** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (f g : M ⟶ N),   Module
+Cat.Hom.hom (f - g) = ModuleCat.Hom.hom f - ModuleCat.Hom.hom g
+参数：f g : M ⟶ N；f - g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_sub (f g : M ⟶ N) : (f - g).hom = f.hom - g.hom := rfl
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Int (M ⟶ N)
-  body: ⟨n • f.hom⟩
-
-中文:
-实例 :
-  签名: 标量乘法 整数 (M ⟶ N)
-  定义体: ⟨n • f.hom⟩
-
-Depends on / 依赖: f.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Int (M ⟶ N) where
+instance : SMul ℤ (M ⟶ N) where
   smul n f := ⟨n • f.hom⟩
-
-/--
-lemma `hom_zsmul` / 引理 `hom_zsmul`
-
-English:
-lemma hom_zsmul
-  given: (n : Int) (f : M ⟶ N)
-  statement: (n • f).hom = n • f.hom
-  proof: rfl
-
-中文:
-引理 hom_zsmul
-  条件: (n : 整数) (f : M ⟶ N)
-  结论: (n • f).hom = n • f.hom
-  证明: rfl
+/-
+**ModuleCat.hom_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (n : ℤ) (f : M ⟶ N),   
+ModuleCat.Hom.hom (n • f) = n • ModuleCat.Hom.hom f
+参数：n : ℤ；f : M ⟶ N；n • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma hom_zsmul (n : Int) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (M ⟶ N)
-  body: Function.Injective.addCommGroup (Hom.hom) hom_injective
-    rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 :
-  签名: 加法交换群 (M ⟶ N)
-  定义体: Function.Injective.addCommGroup (Hom.hom) hom_injective
-    rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: Function, Function.Injective.addCommGroup, Hom.hom, Injective, addCommGroup, hom_injective
+@[simp] lemma hom_zsmul (n : ℤ) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (M ⟶ N) :=
   Function.Injective.addCommGroup (Hom.hom) hom_injective
     rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-lemma `hom_sum` / 引理 `hom_sum`
-
-English:
-lemma hom_sum
-  given: {ι : Type*} (f : ι -> (M ⟶ N)) (s : Finset ι)
-  proof: map_sum ({ toFun := ModuleCat.Hom.hom, map_zero' := ModuleCat.hom_zero, map_add' := hom_add } :
-    (M ⟶ N) ->+ (M ->ₗ[R] N)) _ _
-
-中文:
-引理 hom_sum
-  条件: {ι : 类型} (f : ι -> (M ⟶ N)) (s : 有限集 ι)
-  证明: map_sum ({ toFun := ModuleCat.Hom.hom, map_zero' := ModuleCat.hom_zero, map_add' := hom_add } :
-    (M ⟶ N) ->+ (M ->ₗ[R] N)) _ _
+/-
+**ModuleCat.hom_sum** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} {ι : Type u_1} (f : ι →
+ (M ⟶ N)) (s : Finset ι),   ModuleCat.Hom.hom (∑ i ∈ s, f i) = ∑ i ∈ s, ModuleCa
+t.Hom.hom (f i)
+参数：f : ι → (M ⟶ N)；s : Finset ι；∑ i ∈ s, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `ModuleCat.hom_zero`：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R}, 
+ModuleCat.Hom.hom 0 = 0
+· 使用定理 `ModuleCat.hom_add`：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (f
+ g : M ⟶ N),   ModuleCat.Hom.hom (f + g) = ModuleCat.Hom.hom f + ModuleCat.Hom.h
+om g
 -/
-@[simp] lemma hom_sum {ι : Type*} (f : ι -> (M ⟶ N)) (s : Finset ι) :
-    (∑ i in s, f i).hom = ∑ i in s, (f i).hom :=
+@[simp] lemma hom_sum {ι : Type*} (f : ι → (M ⟶ N)) (s : Finset ι) :
+    (∑ i ∈ s, f i).hom = ∑ i ∈ s, (f i).hom :=
   map_sum ({ toFun := ModuleCat.Hom.hom, map_zero' := ModuleCat.hom_zero, map_add' := hom_add } :
-    (M ⟶ N) ->+ (M ->ₗ[R] N)) _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive (ModuleCat.{v} R)
-
-中文:
-实例 :
-  签名: 预加性 (模范畴.{v} R)
+    (M ⟶ N) →+ (M →ₗ[R] N)) _ _
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive (ModuleCat.{v} R) where
-
-/--
-Instance `forget₂_addCommGrp_additive` / 实例 `forget₂_addCommGrp_additive`
-
-English:
-instance forget₂_addCommGrp_additive
-  signature: :
-
-中文:
-实例 forget₂_addCommGrp_additive
-  签名: :
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forget₂_addCommGrp_additive :
     (forget₂ (ModuleCat.{v} R) AddCommGrpCat).Additive where
 
 /-- `ModuleCat.Hom.hom` bundled as an additive equivalence. -/
 @[simps!]
-/--
-Definition of `homAddEquiv` / `homAddEquiv` 的定义
+/-
+**ModuleCat.homAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：homAddEquiv : (M ⟶ N) ≃+ (M ->ₗ[R] N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homAddEquiv
-  signature: : (M ⟶ N) ≃+ (M ->ₗ[R] N)
-  body: { homEquiv with
-    map_add' := fun _ _ => rfl }
-
-中文:
-定义 homAddEquiv
-  签名: : (M ⟶ N) ≃+ (M ->ₗ[R] N)
-  定义体: { homEquiv with
-    map_add' := fun _ _ => rfl }
-
-Depends on / 依赖: homEquiv, map_add
+--- 原说明 ---
+`ModuleCat.Hom.hom` bundled as an additive equivalence.
 -/
-def homAddEquiv : (M ⟶ N) ≃+ (M ->ₗ[R] N) :=
+def homAddEquiv : (M ⟶ N) ≃+ (M →ₗ[R] N) :=
   { homEquiv with
     map_add' := fun _ _ => rfl }
-
-/--
-theorem `subsingleton_of_isZero` / 定理 `subsingleton_of_isZero`
-
-English:
-theorem subsingleton_of_isZero
-  given: (h : IsZero M)
-  statement: Subsingleton M
-  proof: by
-  refine subsingleton_of_forall_eq 0 (fun x => ?_)
-  rw [← LinearMap.id_apply (R := R) x]; rw [← ModuleCat.hom_id]
-  simp only [(CategoryTheory.Limits.IsZero.iff_id_eq_zero M).mp h, hom_zero, LinearMap.zero_apply]
-
-中文:
-定理 subsingleton_of_isZero
-  条件: (h : 是零 M)
-  结论: 子单例 M
-  证明: by
-  refine subsingleton_of_forall_eq 0 (fun x => ?_)
-  rw [← LinearMap.id_apply (R := R) x]; rw [← ModuleCat.hom_id]
-  simp only [(CategoryTheory.Limits.IsZero.iff_id_eq_zero M).mp h, hom_zero, LinearMap.zero_apply]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Limits.IsZero.iff_id_eq_zero, IsZero, Limits, LinearMap, LinearMap.id_apply, LinearMap.zero_apply, ModuleCat, ModuleCat.hom_id, hom_id, hom_zero, id_apply, iff_id_eq_zero, subsingleton_of_forall_eq, zero_apply
+/-
+**ModuleCat.subsingleton_of_isZero** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：subsingleton_of_isZero (h : IsZero M) : Subsingleton M
+参数：h : IsZero M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_of_forall_eq`：∀ {α : Sort u_1} (x : α), (∀ (y : α), y = x) 
+→ Subsingleton α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.id_apply`：id_apply (x : M) : @id R M _ _ _ x = x
+· 使用引理 `ModuleCat.hom_id`：hom_id {M : ModuleCat.{v} R} : (𝟙 M : M ⟶ M).hom = Lin
+earMap.id
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.Limits.IsZero.iff_id_eq_zero`：iff_id_eq_zero (X : C) : Is
+Zero X ↔ 𝟙 X = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem subsingleton_of_isZero (h : IsZero M) : Subsingleton M := by
-  refine subsingleton_of_forall_eq 0 (fun x => ?_)
-  rw [← LinearMap.id_apply (R := R) x]; rw [← ModuleCat.hom_id]
+  refine subsingleton_of_forall_eq 0 (fun x ↦ ?_)
+  rw [← LinearMap.id_apply (R := R) x, ← ModuleCat.hom_id]
   simp only [(CategoryTheory.Limits.IsZero.iff_id_eq_zero M).mp h, hom_zero, LinearMap.zero_apply]
-
-/--
-lemma `isZero_iff_subsingleton` / 引理 `isZero_iff_subsingleton`
-
-English:
-lemma isZero_iff_subsingleton
-  statement: IsZero M ↔ Subsingleton M where
-  proof: subsingleton_of_isZero
-  mpr _ := isZero_of_subsingleton M
-
-@[simp]
-
-中文:
-引理 isZero_iff_subsingleton
-  结论: 是零 M ↔ 子单例 M where
-  证明: subsingleton_of_isZero
-  mpr _ := isZero_of_subsingleton M
-
-@[simp]
-
-Depends on / 依赖: subsingleton_of_isZero
+/-
+**ModuleCat.isZero_iff_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：isZero_iff_subsingleton : IsZero M ↔ Subsingleton M where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.subsingleton_of_isZero`：subsingleton_of_isZero (h : IsZero M) 
+: Subsingleton M
+· 使用定理 `ModuleCat.isZero_of_subsingleton`：isZero_of_subsingleton (M : ModuleCat 
+R) [Subsingleton M] : IsZero M where unique_to X
 -/
 lemma isZero_iff_subsingleton : IsZero M ↔ Subsingleton M where
   mp := subsingleton_of_isZero
   mpr _ := isZero_of_subsingleton M
 
 @[simp]
-/--
-lemma `isZero_of_iff_subsingleton` / 引理 `isZero_of_iff_subsingleton`
-
-English:
-lemma isZero_of_iff_subsingleton
-  given: {M : Type*} [AddCommGroup M] [Module R M]
-  proof: isZero_iff_subsingleton
-
-@[simp]
-
-中文:
-引理 isZero_of_iff_subsingleton
-  条件: {M : 类型} [加法交换群 M] [模 R M]
-  证明: isZero_iff_subsingleton
-
-@[simp]
-
-Depends on / 依赖: isZero_iff_subsingleton
+/-
+**ModuleCat.isZero_of_iff_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：isZero_of_iff_subsingleton {M : Type*} [AddCommGroup M] [Module R M] : IsZ
+ero (of R M) ↔ Subsingleton M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModuleCat.isZero_iff_subsingleton`：isZero_iff_subsingleton : IsZero M ↔ 
+Subsingleton M where mp
 -/
 lemma isZero_of_iff_subsingleton {M : Type*} [AddCommGroup M] [Module R M] :
     IsZero (of R M) ↔ Subsingleton M := isZero_iff_subsingleton
 
 @[simp]
-/--
-lemma `ofHom_zero` / 引理 `ofHom_zero`
-
-English:
-lemma ofHom_zero
-  statement: {M N : Type v} [AddCommGroup M] [Module R M]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_zero
-  结论: {M N : 类型v} [加法交换群 M] [模 R M]
-  证明: rfl
-
-@[simp]
+/-
+**ModuleCat.ofHom_zero** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom_zero {M N : Type v} [AddCommGroup M] [Module R M] [AddCommGroup N] [
+Module R N] : ModuleCat.ofHom (0 : M ->ₗ[R] N) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_zero {M N : Type v} [AddCommGroup M] [Module R M]
-    [AddCommGroup N] [Module R N] : ModuleCat.ofHom (0 : M ->ₗ[R] N) = 0 := rfl
+    [AddCommGroup N] [Module R N] : ModuleCat.ofHom (0 : M →ₗ[R] N) = 0 := rfl
 
 @[simp]
-/--
-lemma `ofHom_add` / 引理 `ofHom_add`
-
-English:
-lemma ofHom_add
-  statement: {M N : Type v} [AddCommGroup M] [Module R M]
-  proof: rfl
-
-中文:
-引理 ofHom_add
-  结论: {M N : 类型v} [加法交换群 M] [模 R M]
-  证明: rfl
+/-
+**ModuleCat.ofHom_add** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom_add {M N : Type v} [AddCommGroup M] [Module R M] [AddCommGroup N] [M
+odule R N] (f g : M ->ₗ[R] N) : ModuleCat.ofHom (f + g) = ModuleCat.ofHom f + Mo
+duleCat.ofHom g
+参数：f g : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_add {M N : Type v} [AddCommGroup M] [Module R M]
-    [AddCommGroup N] [Module R N] (f g : M ->ₗ[R] N) :
+    [AddCommGroup N] [Module R N] (f g : M →ₗ[R] N) :
     ModuleCat.ofHom (f + g) = ModuleCat.ofHom f + ModuleCat.ofHom g := rfl
 
 end AddCommGroup
@@ -1436,38 +978,19 @@ variable {M N : ModuleCat.{v} R} {S : Type*} [Monoid S] [DistribMulAction S N] [
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul S (M ⟶ N)
-  body: ⟨c • f.hom⟩
-
-中文:
-实例 :
-  签名: 标量乘法 S (M ⟶ N)
-  定义体: ⟨c • f.hom⟩
-
-Depends on / 依赖: f.hom
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul S (M ⟶ N) where
   smul c f := ⟨c • f.hom⟩
-
-/--
-lemma `hom_smul` / 引理 `hom_smul`
-
-English:
-lemma hom_smul
-  given: (s : S) (f : M ⟶ N)
-  statement: (s • f).hom = s • f.hom
-  proof: rfl
-
-中文:
-引理 hom_smul
-  条件: (s : S) (f : M ⟶ N)
-  结论: (s • f).hom = s • f.hom
-  证明: rfl
+/-
+**ModuleCat.hom_smul** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} {S : Type u_1} [inst_1 
+: Monoid S] [inst_2 : DistribMulAction S ↑N]   [inst_3 : SMulCommClass R S ↑N] (
+s : S) (f : M ⟶ N), ModuleCat.Hom.hom (s • f) = s • ModuleCat.Hom.hom f
+参数：s : S；f : M ⟶ N；s • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_smul (s : S) (f : M ⟶ N) : (s • f).hom = s • f.hom := rfl
 
@@ -1477,26 +1000,20 @@ section Module
 
 variable {M N : ModuleCat.{v} R} {S : Type*} [Semiring S] [Module S N] [SMulCommClass R S N]
 
-/--
-Instance `Hom.instModule` / 实例 `Hom.instModule`
-
-English:
-instance Hom.instModule
-  signature: : Module S (M ⟶ N)
-  body: Function.Injective.module S
-    { toFun := Hom.hom, map_zero' := hom_zero, map_add' := hom_add }
-    hom_injective
-    (fun _ _ => rfl)
-
-中文:
-实例 态射.instModule
-  签名: : 模 S (M ⟶ N)
-  定义体: Function.Injective.module S
-    { toFun := Hom.hom, map_zero' := hom_zero, map_add' := hom_add }
-    hom_injective
-    (fun _ _ => rfl)
-
-Depends on / 依赖: Function, Function.Injective.module, Hom.hom, Injective, hom_add, hom_injective, hom_zero, map_add, map_zero, module
+/-
+**ModuleCat.Hom.instModule** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.Hom`。
+形式化陈述：{R : Type u} →   [inst : Ring R] →     {M N : ModuleCat R} →       {S : Ty
+pe u_1} →         [inst_1 : Semiring S] → [inst_2 : _root_.Module S ↑N] → [SMulC
+ommClass R S ↑N] → _root_.Module S (M ⟶ N)
+参数：M ⟶ N。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.hom_zero`：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R}, 
+ModuleCat.Hom.hom 0 = 0
+· 使用定理 `ModuleCat.hom_add`：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R} (f
+ g : M ⟶ N),   ModuleCat.Hom.hom (f + g) = ModuleCat.Hom.hom f + ModuleCat.Hom.h
+om g
+· 使用引理 `ModuleCat.hom_injective`：hom_injective {M N : ModuleCat.{v} R} : Functio
+n.Injective (Hom.hom : (M ⟶ N) -> (M ->ₗ[R] N))
 -/
 instance Hom.instModule : Module S (M ⟶ N) :=
   Function.Injective.module S
@@ -1506,24 +1023,16 @@ instance Hom.instModule : Module S (M ⟶ N) :=
 
 /-- `ModuleCat.Hom.hom` bundled as a linear equivalence. -/
 @[simps]
-/--
-Definition of `homLinearEquiv` / `homLinearEquiv` 的定义
+/-
+**ModuleCat.homLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：homLinearEquiv : (M ⟶ N) ≃ₗ[S] (M ->ₗ[R] N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homLinearEquiv
-  signature: : (M ⟶ N) ≃ₗ[S] (M ->ₗ[R] N)
-  body: { homAddEquiv with
-    map_smul' := fun _ _ => rfl }
-
-中文:
-定义 homLinearEquiv
-  签名: : (M ⟶ N) ≃ₗ[S] (M ->ₗ[R] N)
-  定义体: { homAddEquiv with
-    map_smul' := fun _ _ => rfl }
-
-Depends on / 依赖: homAddEquiv, map_smul
+--- 原说明 ---
+`ModuleCat.Hom.hom` bundled as a linear equivalence.
 -/
-def homLinearEquiv : (M ⟶ N) ≃ₗ[S] (M ->ₗ[R] N) :=
+def homLinearEquiv : (M ⟶ N) ≃ₗ[S] (M →ₗ[R] N) :=
   { homAddEquiv with
     map_smul' := fun _ _ => rfl }
 
@@ -1542,17 +1051,43 @@ variable {M N : ModuleCat.{v} S}
 /--
 Let `S` be an `S₀`-algebra. Then `S`-modules are modules over `S₀`.
 -/
-scoped instance : Module S₀ M := Module.compHom _ (algebraMap S₀ S)
+/-
+**ModuleCat.Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat.Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
+--- 原说明 ---
+Let `S` be an `S₀`-algebra. Then `S`-modules are modules over `S₀`.
+-/
+scoped instance : Module S₀ M := Module.compHom _ (algebraMap S₀ S)
+/-
+**ModuleCat.Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat.Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 scoped instance : IsScalarTower S₀ S M where
   smul_assoc _ _ _ := by rw [Algebra.smul_def, mul_smul]; rfl
-
+/-
+**ModuleCat.Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat.Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 scoped instance : SMulCommClass S S₀ M where
   smul_comm s s₀ n :=
     show s • algebraMap S₀ S s₀ • n = algebraMap S₀ S s₀ • s • n by
-    rw [← smul_assoc]; rw [smul_eq_mul]; rw [← Algebra.commutes]; rw [mul_smul]
+    rw [← smul_assoc, smul_eq_mul, ← Algebra.commutes, mul_smul]
 
 /--
+Let `S` be an `S₀`-algebra. Then the category of `S`-modules is `S₀`-linear.
+-/
+/-
+**ModuleCat.Algebra.instLinear** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.Algebra`。
+形式化陈述：{S₀ : Type u₀} →   [inst : CommSemiring S₀] → {S : Type u} → [inst_1 : Rin
+g S] → [Algebra S₀ S] → CategoryTheory.Linear S₀ (ModuleCat S)
+参数：ModuleCat S。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.Algebra.instSMulCommClassCarrier`：∀ {S₀ : Type u₀} [inst : Com
+mSemiring S₀] {S : Type u} [inst_1 : Ring S] [inst_2 : Algebra S₀ S] {M : Module
+Cat S},   SMulCommClass S S₀ ↑M
+
+--- 原说明 ---
 Let `S` be an `S₀`-algebra. Then the category of `S`-modules is `S₀`-linear.
 -/
 scoped instance instLinear : Linear S₀ (ModuleCat.{v} S) where
@@ -1564,35 +1099,18 @@ section
 
 variable {S : Type u} [CommRing S]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Linear S (ModuleCat.{v} S)
-  body: ModuleCat.Algebra.instLinear
-
-中文:
-实例 :
-  签名: 线性 S (模范畴.{v} S)
-  定义体: ModuleCat.Algebra.instLinear
-
-Depends on / 依赖: Algebra, ModuleCat, ModuleCat.Algebra.instLinear, instLinear
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Linear S (ModuleCat.{v} S) := ModuleCat.Algebra.instLinear
-
-/--
-lemma `lsmul_eq_smul_id` / 引理 `lsmul_eq_smul_id`
-
-English:
-lemma lsmul_eq_smul_id
-  given: (M : ModuleCat.{v} S) (s : S)
-  proof: rfl
-
-中文:
-引理 lsmul_eq_smul_id
-  条件: (M : 模范畴.{v} S) (s : S)
-  证明: rfl
+/-
+**ModuleCat.lsmul_eq_smul_id** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：lsmul_eq_smul_id (M : ModuleCat.{v} S) (s : S) : ModuleCat.ofHom (LinearMa
+p.lsmul S M s) = s • 𝟙 M
+参数：M : ModuleCat.{v} S；s : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lsmul_eq_smul_id (M : ModuleCat.{v} S) (s : S) :
     ModuleCat.ofHom (LinearMap.lsmul S M s) = s • 𝟙 M := rfl
@@ -1601,18 +1119,15 @@ variable {X Y X' Y' : ModuleCat.{v} S}
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `Iso.homCongr_eq_arrowCongr` / 定理 `Iso.homCongr_eq_arrowCongr`
-
-English:
-theorem Iso.homCongr_eq_arrowCongr
-  given: (i : X ≅ X') (j : Y ≅ Y') (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-定理 同构.homCongr_eq_arrowCongr
-  条件: (i : X ≅ X') (j : Y ≅ Y') (f : X ⟶ Y)
-  证明: rfl
+/-
+**ModuleCat.Iso.homCongr_eq_arrowCongr** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat.Iso`
+。
+形式化陈述：∀ {S : Type u} [inst : CommRing S] {X Y X' Y' : ModuleCat S} (i : X ≅ X') 
+(j : Y ≅ Y') (f : X ⟶ Y),   (i.homCongr j) f = { hom' := (i.toLinearEquiv.arrowC
+ongr j.toLinearEquiv) (ModuleCat.Hom.hom f) }
+参数：i : X ≅ X'；j : Y ≅ Y'；f : X ⟶ Y；i.homCongr j；i.toLinearEquiv.arrowCongr j.toL
+inearEquiv；ModuleCat.Hom.hom f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Iso.homCongr_eq_arrowCongr (i : X ≅ X') (j : Y ≅ Y') (f : X ⟶ Y) :
     Iso.homCongr i j f = ⟨LinearEquiv.arrowCongr i.toLinearEquiv j.toLinearEquiv f.hom⟩ :=
@@ -1620,18 +1135,13 @@ theorem Iso.homCongr_eq_arrowCongr (i : X ≅ X') (j : Y ≅ Y') (f : X ⟶ Y) :
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `Iso.conj_eq_conj` / 定理 `Iso.conj_eq_conj`
-
-English:
-theorem Iso.conj_eq_conj
-  given: (i : X ≅ X') (f : End X)
-  proof: rfl
-
-中文:
-定理 同构.conj_eq_conj
-  条件: (i : X ≅ X') (f : End X)
-  证明: rfl
+/-
+**ModuleCat.Iso.conj_eq_conj** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat.Iso`。
+形式化陈述：∀ {S : Type u} [inst : CommRing S] {X X' : ModuleCat S} (i : X ≅ X') (f : 
+CategoryTheory.End X),   i.conj f = { hom' := i.toLinearEquiv.conj (ModuleCat.Ho
+m.hom f) }
+参数：i : X ≅ X'；f : CategoryTheory.End X；ModuleCat.Hom.hom f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Iso.conj_eq_conj (i : X ≅ X') (f : End X) :
     Iso.conj i f = ⟨LinearEquiv.conj i.toLinearEquiv f.hom⟩ :=
@@ -1643,62 +1153,39 @@ end
 
 variable (M N : ModuleCat.{v} R)
 
-/--
-Definition of `endRingEquiv` / `endRingEquiv` 的定义
+/-- `ModuleCat.Hom.hom` as an isomorphism of rings. -/
+/-
+**ModuleCat.endRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：{R : Type u} → [inst : Ring R] → (M : ModuleCat R) → CategoryTheory.End M 
+≃+* (↑M →ₗ[R] ↑M)
+参数：M : ModuleCat R；↑M →ₗ[R] ↑M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition endRingEquiv
-  signature: : End M ≃+* (M ->ₗ[R] M) where
-  body: ModuleCat.Hom.hom
-  invFun := ModuleCat.ofHom
-  map_mul' _ _ := rfl
-  map_add' _ _ := rfl
-
-中文:
-定义 endRingEquiv
-  签名: : End M ≃+* (M ->ₗ[R] M) where
-  定义体: ModuleCat.Hom.hom
-  invFun := ModuleCat.ofHom
-  map_mul' _ _ := rfl
-  map_add' _ _ := rfl
+--- 原说明 ---
+`ModuleCat.Hom.hom` as an isomorphism of rings.
 -/
-@[simps!] def endRingEquiv : End M ≃+* (M ->ₗ[R] M) where
+@[simps!] def endRingEquiv : End M ≃+* (M →ₗ[R] M) where
   toFun := ModuleCat.Hom.hom
   invFun := ModuleCat.ofHom
   map_mul' _ _ := rfl
   map_add' _ _ := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `smul` / `smul` 的定义
+/-- The scalar multiplication on an object of `ModuleCat R` considered as
+a morphism of rings from `R` to the endomorphisms of the underlying abelian group. -/
+/-
+**ModuleCat.smul** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：smul : R ->+* End ((forget₂ (ModuleCat R) AddCommGrpCat).obj M) where toFu
+n r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smul
-  signature: : R ->+* End ((forget₂ (ModuleCat R) AddCommGrpCat).obj M) where
-  body: AddCommGrpCat.ofHom
-    { toFun := fun (m : M) => r • m
-      map_zero' := by rw [smul_zero]
-      map_add' := fun x y => by rw [smul_add] }
-  map_one' := AddCommGrpCat.ext (fun x => by simp)
-  map_zero' := AddCommGrpCat.ext (fun x => by simp)
-  map_mul' r s := AddCommGrpCat.ext (fun (x : M) => (smul_smul r s x).symm)
-  map_add' r s := AddCommGrpCat.ext (fun (x : M) => add_smul r s x)
-
-中文:
-定义 smul
-  签名: : R ->+* End ((forget₂ (模范畴 R) 加法交换群范畴).obj M) where
-  定义体: AddCommGrpCat.ofHom
-    { toFun := fun (m : M) => r • m
-      map_zero' := by rw [smul_zero]
-      map_add' := fun x y => by rw [smul_add] }
-  map_one' := AddCommGrpCat.ext (fun x => by simp)
-  map_zero' := AddCommGrpCat.ext (fun x => by simp)
-  map_mul' r s := AddCommGrpCat.ext (fun (x : M) => (smul_smul r s x).symm)
-  map_add' r s := AddCommGrpCat.ext (fun (x : M) => add_smul r s x)
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom
+--- 原说明 ---
+The scalar multiplication on an object of `ModuleCat R` considered as
+a morphism of rings from `R` to the endomorphisms of the underlying abelian grou
+p.
 -/
-def smul : R ->+* End ((forget₂ (ModuleCat R) AddCommGrpCat).obj M) where
+def smul : R →+* End ((forget₂ (ModuleCat R) AddCommGrpCat).obj M) where
   toFun r := AddCommGrpCat.ofHom
     { toFun := fun (m : M) => r • m
       map_zero' := by rw [smul_zero]
@@ -1707,25 +1194,22 @@ def smul : R ->+* End ((forget₂ (ModuleCat R) AddCommGrpCat).obj M) where
   map_zero' := AddCommGrpCat.ext (fun x => by simp)
   map_mul' r s := AddCommGrpCat.ext (fun (x : M) => (smul_smul r s x).symm)
   map_add' r s := AddCommGrpCat.ext (fun (x : M) => add_smul r s x)
-
-/--
-lemma `smul_naturality` / 引理 `smul_naturality`
-
-English:
-lemma smul_naturality
-  given: {M N : ModuleCat.{v} R} (f : M ⟶ N) (r : R)
-  proof: by
-  ext x
-  exact (f.hom.map_smul r x).symm
-
-中文:
-引理 smul_naturality
-  条件: {M N : 模范畴.{v} R} (f : M ⟶ N) (r : R)
-  证明: by
-  ext x
-  exact (f.hom.map_smul r x).symm
-
-Depends on / 依赖: f.hom.map_smul, map_smul
+/-
+**ModuleCat.smul_naturality** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：smul_naturality {M N : ModuleCat.{v} R} (f : M ⟶ N) (r : R) : (forget₂ (Mo
+duleCat R) AddCommGrpCat).map f ≫ N.smul r = M.smul r ≫ (forget₂ (ModuleCat R) A
+ddCommGrpCat).map f
+参数：f : M ⟶ N；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGrpCat.hom_ext`：∀ {X Y : AddCommGrpCat} {f g : X ⟶ Y}, AddCommGrp
+Cat.Hom.hom f = AddCommGrpCat.Hom.hom g → f = g
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
 -/
 lemma smul_naturality {M N : ModuleCat.{v} R} (f : M ⟶ N) (r : R) :
     (forget₂ (ModuleCat R) AddCommGrpCat).map f ≫ N.smul r =
@@ -1737,32 +1221,21 @@ variable (R) in
 /-- The scalar multiplication on `ModuleCat R` considered as a morphism of rings
 to the endomorphisms of the forgetful functor to `AddCommGrpCat)`. -/
 @[simps]
-/--
-Definition of `smulNatTrans` / `smulNatTrans` 的定义
+/-
+**ModuleCat.smulNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：smulNatTrans : R ->+* End (forget₂ (ModuleCat R) AddCommGrpCat) where toFu
+n r
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ModuleCat.smul_naturality`：smul_naturality {M N : ModuleCat.{v} R} (f : 
+M ⟶ N) (r : R) : (forget₂ (ModuleCat R) AddCommGrpCat).map f ≫ N.smul r = M.smul
+ r ≫ (forget₂ (…
 
-English:
-definition smulNatTrans
-  signature: : R ->+* End (forget₂ (ModuleCat R) AddCommGrpCat) where
-  body: { app := fun M => M.smul r
-      naturality := fun _ _ _ => smul_naturality _ r }
-  map_one' := by cat_disch
-  map_zero' := by cat_disch
-  map_mul' _ _ := by cat_disch
-  map_add' _ _ := by cat_disch
-
-中文:
-定义 smul自然数Trans
-  签名: : R ->+* End (forget₂ (模范畴 R) 加法交换群范畴) where
-  定义体: { app := fun M => M.smul r
-      naturality := fun _ _ _ => smul_naturality _ r }
-  map_one' := by cat_disch
-  map_zero' := by cat_disch
-  map_mul' _ _ := by cat_disch
-  map_add' _ _ := by cat_disch
-
-Depends on / 依赖: Abelian, Abelian.PreservesCoimage.hom_coimageImageComparison, FGModuleCat, FullyFaithful, Functor, Functor.FullyFaithful.isIso_of_isIso_map, IsIso.of_isIso_fac_right, M.smul, ModuleCat, ModuleCat.isFG, PreservesCoimage, cat_disch, hom_coimageImageComparison, isIso_of_isIso_map, map_add, map_mul, map_one, map_zero, naturality, of_isIso_fac_right
+--- 原说明 ---
+The scalar multiplication on `ModuleCat R` considered as a morphism of rings
+to the endomorphisms of the forgetful functor to `AddCommGrpCat)`.
 -/
-def smulNatTrans : R ->+* End (forget₂ (ModuleCat R) AddCommGrpCat) where
+def smulNatTrans : R →+* End (forget₂ (ModuleCat R) AddCommGrpCat) where
   toFun r :=
     { app := fun M => M.smul r
       naturality := fun _ _ _ => smul_naturality _ r }
@@ -1774,104 +1247,52 @@ def smulNatTrans : R ->+* End (forget₂ (ModuleCat R) AddCommGrpCat) where
 /-- Given `A : AddCommGrpCat` and a ring morphism `R →+* End A`, this is a type synonym
 for `A`, on which we shall define a structure of `R`-module. -/
 @[nolint unusedArguments]
-/--
-Definition of `mkOfSMul'` / `mkOfSMul'` 的定义
+/-
+**ModuleCat.mkOfSMul'** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：mkOfSMul' {A : AddCommGrpCat} (_ : R ->+* End A)
+参数：_ : R ->+* End A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfSMul'
-  signature: {A : AddCommGrpCat} (_ : R ->+* End A)
-  body: A
-
-中文:
-定义 mkOfSMul'
-  签名: {A : 加法交换群范畴} (_ : R ->+* End A)
-  定义体: A
+--- 原说明 ---
+Given `A : AddCommGrpCat` and a ring morphism `R →+* End A`, this is a type syno
+nym
+for `A`, on which we shall define a structure of `R`-module.
 -/
-def mkOfSMul' {A : AddCommGrpCat} (_ : R ->+* End A) := A
+def mkOfSMul' {A : AddCommGrpCat} (_ : R →+* End A) := A
 
 section
 
-variable {A : AddCommGrpCat} (φ : R ->+* End A)
+variable {A : AddCommGrpCat} (φ : R →+* End A)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (mkOfSMul' φ)
-  body: inferInstanceAs AddCommGroup A
-
-中文:
-实例 :
-  签名: 加法交换群 (mkOfSMul' φ)
-  定义体: inferInstanceAs AddCommGroup A
-
-Depends on / 依赖: AddCommGroup
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (mkOfSMul' φ) :=
-inferInstanceAs AddCommGroup A
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul R (mkOfSMul' φ)
-  body: ⟨fun r (x : A) => (show A ⟶ A from φ r) x⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 标量乘法 R (mkOfSMul' φ)
-  定义体: ⟨fun r (x : A) => (show A ⟶ A from φ r) x⟩
-
-@[simp]
+  inferInstanceAs <| AddCommGroup A
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul R (mkOfSMul' φ) := ⟨fun r (x : A) => (show A ⟶ A from φ r) x⟩
 
 @[simp]
-/--
-lemma `mkOfSMul'_smul` / 引理 `mkOfSMul'_smul`
-
-English:
-lemma mkOfSMul'_smul
-  given: (r : R) (x : mkOfSMul' φ)
-  proof: rfl
-
-中文:
-引理 mkOfSMul'_smul
-  条件: (r : R) (x : mkOfSMul' φ)
-  证明: rfl
+/-
+**ModuleCat.mkOfSMul'_smul** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {A : AddCommGrpCat} (φ : R →+* CategoryTheo
+ry.End A) (r : R)   (x : ↑(ModuleCat.mkOfSMul' φ)),   r • x =     (CategoryTheor
+y.ConcreteCategory.hom         (have this := φ r;         this))       x
+参数：φ : R →+* CategoryTheory.End A；r : R；x : ↑(ModuleCat.mkOfSMul' φ)；CategoryThe
+ory.ConcreteCategory.hom         (have this := φ r;         this)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkOfSMul'_smul (r : R) (x : mkOfSMul' φ) :
     r • x = (show A ⟶ A from φ r) x := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module R (mkOfSMul' φ)
-  body: map_zero (N := A) _
-  smul_add _ _ _ := map_add (N := A) _ _ _
-  one_smul := by simp
-  mul_smul := by simp
-  add_smul _ _ _ := by simp; rfl
-  zero_smul := by simp
-
-中文:
-实例 :
-  签名: 模 R (mkOfSMul' φ)
-  定义体: map_zero (N := A) _
-  smul_add _ _ _ := map_add (N := A) _ _ _
-  one_smul := by simp
-  mul_smul := by simp
-  add_smul _ _ _ := by simp; rfl
-  zero_smul := by simp
-
-Depends on / 依赖: map_zero
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module R (mkOfSMul' φ) where
   smul_zero _ := map_zero (N := A) _
@@ -1881,37 +1302,28 @@ instance : Module R (mkOfSMul' φ) where
   add_smul _ _ _ := by simp; rfl
   zero_smul := by simp
 
-/--
-Definition of `mkOfSMul` / `mkOfSMul` 的定义
+/-- Given `A : AddCommGrpCat` and a ring morphism `R →+* End A`, this is an object in
+`ModuleCat R`, whose underlying abelian group is `A` and whose scalar multiplication is
+given by `R`. -/
+/-
+**ModuleCat.mkOfSMul** 是 Mathlib 中的一个缩写定义，位于命名空间 `ModuleCat`。
+形式化陈述：mkOfSMul
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mkOfSMul
-  body: ModuleCat.of R (mkOfSMul' φ)
-
-中文:
-缩写 mkOfSMul
-  定义体: ModuleCat.of R (mkOfSMul' φ)
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, mkOfSMul
+--- 原说明 ---
+Given `A : AddCommGrpCat` and a ring morphism `R →+* End A`, this is an object i
+n
+`ModuleCat R`, whose underlying abelian group is `A` and whose scalar multiplica
+tion is
+given by `R`.
 -/
 abbrev mkOfSMul := ModuleCat.of R (mkOfSMul' φ)
-
-/--
-lemma `mkOfSMul_smul` / 引理 `mkOfSMul_smul`
-
-English:
-lemma mkOfSMul_smul
-  given: (r : R)
-  statement: (mkOfSMul φ).smul r = φ r
-  proof: rfl
-
-中文:
-引理 mkOfSMul_smul
-  条件: (r : R)
-  结论: (mkOfSMul φ).smul r = φ r
-  证明: rfl
-
-Depends on / 依赖: M.property, property
+/-
+**ModuleCat.mkOfSMul_smul** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：mkOfSMul_smul (r : R) : (mkOfSMul φ).smul r = φ r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkOfSMul_smul (r : R) : (mkOfSMul φ).smul r = φ r := rfl
 
@@ -1922,7 +1334,7 @@ section
 variable {M N}
   (φ : (forget₂ (ModuleCat R) AddCommGrpCat).obj M ⟶
       (forget₂ (ModuleCat R) AddCommGrpCat).obj N)
-  (hφ : forall (r : R), φ ≫ N.smul r = M.smul r ≫ φ)
+  (hφ : ∀ (r : R), φ ≫ N.smul r = M.smul r ≫ φ)
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
@@ -1930,188 +1342,114 @@ set_option backward.privateInPublic.warn false in
 a morphism between the underlying objects in `AddCommGrpCat` and the compatibility
 with the scalar multiplication. -/
 @[simps]
-/--
-Definition of `homMk` / `homMk` 的定义
+/-
+**ModuleCat.homMk** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：homMk : M ⟶ N where hom'.toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: : M ⟶ N where
-  body: φ
-  hom'.map_add' _ _ := φ.hom.map_add _ _
-  hom'.map_smul' r x := (ConcreteCategory.congr_hom (hφ r) x).symm
-
-中文:
-定义 homMk
-  签名: : M ⟶ N where
-  定义体: φ
-  hom'.map_add' _ _ := φ.hom.map_add _ _
-  hom'.map_smul' r x := (ConcreteCategory.congr_hom (hφ r) x).symm
+--- 原说明 ---
+Constructor for morphisms in `ModuleCat R` which takes as inputs
+a morphism between the underlying objects in `AddCommGrpCat` and the compatibili
+ty
+with the scalar multiplication.
 -/
 def homMk : M ⟶ N where
   hom'.toFun := φ
   hom'.map_add' _ _ := φ.hom.map_add _ _
   hom'.map_smul' r x := (ConcreteCategory.congr_hom (hφ r) x).symm
-
-/--
-lemma `forget₂_map_homMk` / 引理 `forget₂_map_homMk`
-
-English:
-lemma forget₂_map_homMk
-  proof: rfl
-
-中文:
-引理 forget₂_map_homMk
-  证明: rfl
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forget₂_map_homMk :
     (forget₂ (ModuleCat R) AddCommGrpCat).map (homMk φ hφ) = φ := rfl
 
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-- Constructor for isomorphisms in `ModuleCat R` taking an isomorphism in `AddCommGrpCat`
+and a compatibility condition. -/
+/-
+**ModuleCat.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：isoMk (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N) (hφ : f
+orall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) : M ≅ N
+参数：φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N；hφ : forall r, φ.h
+om ≫ N.smul r = M.smul r ≫ φ.hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  body: LinearEquiv.toModuleIso
-    { __ := φ.addCommGroupIsoToAddEquiv
-      map_smul' r x := congr($(hφ r) x).symm }
-
-@[simp]
-
-中文:
-定义 isoMk
-  签名: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  定义体: LinearEquiv.toModuleIso
-    { __ := φ.addCommGroupIsoToAddEquiv
-      map_smul' r x := congr($(hφ r) x).symm }
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toModuleIso, addCommGroupIsoToAddEquiv, map_smul, toModuleIso
+--- 原说明 ---
+Constructor for isomorphisms in `ModuleCat R` taking an isomorphism in `AddCommG
+rpCat`
+and a compatibility condition.
 -/
 def isoMk (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-    (hφ : forall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
+    (hφ : ∀ r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
     M ≅ N :=
   LinearEquiv.toModuleIso
     { __ := φ.addCommGroupIsoToAddEquiv
       map_smul' r x := congr($(hφ r) x).symm }
 
 @[simp]
-/--
-lemma `isoMk_hom` / 引理 `isoMk_hom`
-
-English:
-lemma isoMk_hom
-  statement: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 isoMk_hom
-  结论: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  证明: rfl
-
-@[simp]
+/-
+**ModuleCat.isoMk_hom** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：isoMk_hom (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N) (hφ
+ : forall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) : (isoMk φ hφ).hom = homMk φ.h
+om hφ
+参数：φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N；hφ : forall r, φ.h
+om ≫ N.smul r = M.smul r ≫ φ.hom。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isoMk_hom (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-    (hφ : forall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
+    (hφ : ∀ r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
     (isoMk φ hφ).hom = homMk φ.hom hφ :=
   rfl
 
 @[simp]
-/--
-lemma `isoMk_inv` / 引理 `isoMk_inv`
-
-English:
-lemma isoMk_inv
-  statement: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 isoMk_inv
-  结论: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: V.property, property
+/-
+**ModuleCat.isoMk_inv** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：isoMk_inv (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N) (hφ
+ : forall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) : (isoMk φ hφ).inv = homMk φ.i
+nv (ModuleCat.smul_naturality (isoMk φ hφ).inv)
+参数：φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N；hφ : forall r, φ.h
+om ≫ N.smul r = M.smul r ≫ φ.hom。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isoMk_inv (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-    (hφ : forall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
+    (hφ : ∀ r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
     (isoMk φ hφ).inv = homMk φ.inv (ModuleCat.smul_naturality (isoMk φ hφ).inv) :=
   rfl
 
 @[simp]
-/--
-lemma `isoMk_symm` / 引理 `isoMk_symm`
-
-English:
-lemma isoMk_symm
-  statement: (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  proof: rfl
-
-中文:
-引理 isoMk_symm
-  结论: (φ : (forget₂ (模范畴 R) Ab).obj M ≅ (forget₂ _ _).obj N)
-  证明: rfl
+/-
+**ModuleCat.isoMk_symm** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：isoMk_symm (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N) (h
+φ : forall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) : (isoMk φ hφ).symm = isoMk φ
+.symm (ModuleCat.smul_naturality (isoMk φ hφ).inv)
+参数：φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N；hφ : forall r, φ.h
+om ≫ N.smul r = M.smul r ≫ φ.hom。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isoMk_symm (φ : (forget₂ (ModuleCat R) Ab).obj M ≅ (forget₂ _ _).obj N)
-    (hφ : forall r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
+    (hφ : ∀ r, φ.hom ≫ N.smul r = M.smul r ≫ φ.hom) :
     (isoMk φ hφ).symm = isoMk φ.symm (ModuleCat.smul_naturality (isoMk φ hφ).inv) :=
   rfl
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget (ModuleCat.{v} R)).ReflectsIsomorphisms
-  body: (inferInstance : IsIso ((LinearEquiv.mk f.hom
-      (asIso ((forget (ModuleCat R)).map f)).toEquiv.invFun
-      (Equiv.left_inv _) (Equiv.right_inv _)).toModuleIso).hom)
-
-中文:
-实例 :
-  签名: (forget (模范畴.{v} R)).反映同构
-  定义体: (inferInstance : IsIso ((LinearEquiv.mk f.hom
-      (asIso ((forget (ModuleCat R)).map f)).toEquiv.invFun
-      (Equiv.left_inv _) (Equiv.right_inv _)).toModuleIso).hom)
-
-Depends on / 依赖: Equiv.left_inv, Equiv.right_inv, LinearEquiv, LinearEquiv.mk, ModuleCat, f.hom, forget, invFun, left_inv, right_inv, toEquiv, toEquiv.invFun, toModuleIso
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget (ModuleCat.{v} R)).ReflectsIsomorphisms where
   reflects f _ :=
     (inferInstance : IsIso ((LinearEquiv.mk f.hom
       (asIso ((forget (ModuleCat R)).map f)).toEquiv.invFun
       (Equiv.left_inv _) (Equiv.right_inv _)).toModuleIso).hom)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v}).ReflectsIsomorphisms
-  body: by
-    have : IsIso ((forget _).map f) := by
-      change IsIso ((forget _).map ((forget₂ _ AddCommGrpCat).map f))
-      infer_instance
-    apply isIso_of_reflects_iso _ (forget _)
-
-中文:
-实例 :
-  签名: (forget₂ (模范畴.{v} R) 加法交换群范畴.{v}).反映同构
-  定义体: by
-    have : IsIso ((forget _).map f) := by
-      change IsIso ((forget _).map ((forget₂ _ AddCommGrpCat).map f))
-      infer_instance
-    apply isIso_of_reflects_iso _ (forget _)
-
-Depends on / 依赖: AddCommGrpCat, forget, infer_instance, isIso_of_reflects_iso
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂ (ModuleCat.{v} R) AddCommGrpCat.{v}).ReflectsIsomorphisms where
   reflects f _ := by
@@ -2130,73 +1468,49 @@ namespace ModuleCat
 
 /-- Turn a bilinear map into a homomorphism. -/
 @[simps!]
-/--
-Definition of `ofHom₂` / `ofHom₂` 的定义
+/-
+**ModuleCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Modul
+e R Y] (f : X ->ₗ[R] Y) : of R X ⟶ of R Y
+参数：f : X ->ₗ[R] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofHom₂
-  signature: {M N P : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
-  body: ofHom homLinearEquiv.symm.toLinearMap ∘ₗ f
-
-中文:
-定义 ofHom₂
-  签名: {M N P : 模范畴.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
-  定义体: ofHom homLinearEquiv.symm.toLinearMap ∘ₗ f
-
-Depends on / 依赖: homLinearEquiv, homLinearEquiv.symm.toLinearMap, toLinearMap
+--- 原说明 ---
+Turn a bilinear map into a homomorphism.
 -/
-def ofHom₂ {M N P : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P) :
+def ofHom₂ {M N P : ModuleCat.{u} R} (f : M →ₗ[R] N →ₗ[R] P) :
     M ⟶ of R (N ⟶ P) :=
-ofHom homLinearEquiv.symm.toLinearMap ∘ₗ f
+  ofHom <| homLinearEquiv.symm.toLinearMap ∘ₗ f
 
 /-- Turn a homomorphism into a bilinear map. -/
 @[simps!]
-/--
-Definition of `Hom.hom₂` / `Hom.hom₂` 的定义
+/-
+**ModuleCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.Hom`。
+形式化陈述：{R : Type u} → [inst : Ring R] → {A B : ModuleCat R} → A.Hom B → ↑A →ₗ[R] 
+↑B
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.hom₂
-  signature: {M N P : ModuleCat.{u} R} (f : M ⟶ (of R (N ⟶ P)))
-  body: (f ≫ ofHom homLinearEquiv.toLinearMap).hom
-
-中文:
-定义 态射.hom₂
-  签名: {M N P : 模范畴.{u} R} (f : M ⟶ (of R (N ⟶ P)))
-  定义体: (f ≫ ofHom homLinearEquiv.toLinearMap).hom
-
-Depends on / 依赖: homLinearEquiv, homLinearEquiv.toLinearMap, toLinearMap
+--- 原说明 ---
+Turn a homomorphism into a bilinear map.
 -/
-def Hom.hom₂ {M N P : ModuleCat.{u} R} (f : M ⟶ (of R (N ⟶ P))) : M ->ₗ[R] N ->ₗ[R] P :=
+def Hom.hom₂ {M N P : ModuleCat.{u} R} (f : M ⟶ (of R (N ⟶ P))) : M →ₗ[R] N →ₗ[R] P :=
   (f ≫ ofHom homLinearEquiv.toLinearMap).hom
-
-/--
-lemma `Hom.hom₂_ofHom₂` / 引理 `Hom.hom₂_ofHom₂`
-
-English:
-lemma Hom.hom₂_ofHom₂
-  given: {M N P : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
-  proof: rfl
-
-中文:
-引理 态射.hom₂_ofHom₂
-  条件: {M N P : 模范畴.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
-  证明: rfl
+/-
+**ModuleCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.Hom`。
+形式化陈述：{R : Type u} → [inst : Ring R] → {A B : ModuleCat R} → A.Hom B → ↑A →ₗ[R] 
+↑B
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma Hom.hom₂_ofHom₂ {M N P : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P) :
+@[simp] lemma Hom.hom₂_ofHom₂ {M N P : ModuleCat.{u} R} (f : M →ₗ[R] N →ₗ[R] P) :
     (ofHom₂ f).hom₂ = f := rfl
-
-/--
-lemma `ofHom₂_hom₂` / 引理 `ofHom₂_hom₂`
-
-English:
-lemma ofHom₂_hom₂
-  given: {M N P : ModuleCat.{u} R} (f : M ⟶ of R (N ⟶ P))
-  proof: rfl
-
-中文:
-引理 ofHom₂_hom₂
-  条件: {M N P : 模范畴.{u} R} (f : M ⟶ of R (N ⟶ P))
-  证明: rfl
+/-
+**ModuleCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `ModuleCat`。
+形式化陈述：ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Modul
+e R Y] (f : X ->ₗ[R] Y) : of R X ⟶ of R Y
+参数：f : X ->ₗ[R] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofHom₂_hom₂ {M N P : ModuleCat.{u} R} (f : M ⟶ of R (N ⟶ P)) :
     ofHom₂ f.hom₂ = f := rfl
@@ -2205,40 +1519,46 @@ end ModuleCat
 
 end Bilinear
 
+/-!
+`@[simp]` lemmas for `LinearMap.comp` and categorical identities.
+-/
 
-/--
-theorem `LinearMap.comp_id_moduleCat` / 定理 `LinearMap.comp_id_moduleCat`
+/-
+**LinearMap.comp_id_moduleCat** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {G : ModuleCat R} {H : Type u} [inst_1 : 
+AddCommGroup H] [inst_2 : _root_.Module R H]   (f : ↑G →ₗ[R] H), f ∘ₗ ModuleCat.
+Hom.hom (CategoryTheory.CategoryStruct.id G) = f
+参数：f : ↑G →ₗ[R] H；CategoryTheory.CategoryStruct.id G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem LinearMap.comp_id_moduleCat
-  proof: by simp
-
-中文:
-定理 线性映射.comp_id_moduleCat
-  证明: by simp
+--- 原说明 ---
+`@[simp]` lemmas for `LinearMap.comp` and categorical identities.
 -/
 @[simp] theorem LinearMap.comp_id_moduleCat
-    {R} [Ring R] {G : ModuleCat.{u} R} {H : Type u} [AddCommGroup H] [Module R H] (f : G ->ₗ[R] H) :
+    {R} [Ring R] {G : ModuleCat.{u} R} {H : Type u} [AddCommGroup H] [Module R H] (f : G →ₗ[R] H) :
     f.comp (𝟙 G : G ⟶ G).hom = f := by simp
-
-/--
-theorem `LinearMap.id_moduleCat_comp` / 定理 `LinearMap.id_moduleCat_comp`
-
-English:
-theorem LinearMap.id_moduleCat_comp
-  proof: by simp
-
-中文:
-定理 线性映射.id_moduleCat_comp
-  证明: by simp
+/-
+**LinearMap.id_moduleCat_comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {G : Type u} [inst_1 : AddCommGroup G] [i
+nst_2 : _root_.Module R G] {H : ModuleCat R}   (f : G →ₗ[R] ↑H), ModuleCat.Hom.h
+om (CategoryTheory.CategoryStruct.id H) ∘ₗ f = f
+参数：f : G →ₗ[R] ↑H；CategoryTheory.CategoryStruct.id H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem LinearMap.id_moduleCat_comp
-    {R} [Ring R] {G : Type u} [AddCommGroup G] [Module R G] {H : ModuleCat.{u} R} (f : G ->ₗ[R] H) :
+    {R} [Ring R] {G : Type u} [AddCommGroup G] [Module R G] {H : ModuleCat.{u} R} (f : G →ₗ[R] H) :
     LinearMap.comp (𝟙 H : H ⟶ H).hom f = f := by simp
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R S : Type*} [Ring R] [Ring S] (F : ModuleCat R ⥤ ModuleCat S) [F.Full] [F.Faithful]
     (M : ModuleCat R) [h : Nontrivial M] : Nontrivial (F.obj M) := by
   by_contra!
   exact ((not_iff_not.2 ModuleCat.isZero_iff_subsingleton).2 <|
     not_subsingleton_iff_nontrivial.2 h) <| IsZero.of_full_of_faithful_of_isZero F _ <|
-ModuleCat.isZero_of_subsingleton F.obj M
+    ModuleCat.isZero_of_subsingleton <| F.obj M

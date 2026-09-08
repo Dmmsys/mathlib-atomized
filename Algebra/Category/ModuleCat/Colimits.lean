@@ -45,41 +45,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The induced scalar multiplication on
 `colimit (F ⋙ forget₂ _ AddCommGrpCat)`. -/
 @[simps]
-/--
-Definition of `coconePointSMul` / `coconePointSMul` 的定义
+/-
+**ModuleCat.HasColimit.coconePointSMul** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.HasC
+olimit`。
+形式化陈述：coconePointSMul : R ->+* End (colimit (F ⋙ forget₂ _ AddCommGrpCat)) where
+ toFun r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconePointSMul
-  signature: :
-  body: colimMap
-    { app := fun j => (F.obj j).smul r
-      naturality := fun _ _ _ => smul_naturality _ _ }
-  map_zero' := colimit.hom_ext (by simp +instances)
-  map_one' := colimit.hom_ext (by simp +instances)
-  map_add' r s := colimit.hom_ext (fun j => by
-    simp +instances only [Functor.comp_obj, forget₂_obj, map_add, ι_colimMap]
-    rw [Preadditive.add_comp]; rw [Preadditive.comp_add]
-    simp only [ι_colimMap, Functor.comp_obj, forget₂_obj])
-  map_mul' r s := colimit.hom_ext (fun j => by simp +instances)
-
-中文:
-定义 coconePointSMul
-  签名: :
-  定义体: colimMap
-    { app := fun j => (F.obj j).smul r
-      naturality := fun _ _ _ => smul_naturality _ _ }
-  map_zero' := colimit.hom_ext (by simp +instances)
-  map_one' := colimit.hom_ext (by simp +instances)
-  map_add' r s := colimit.hom_ext (fun j => by
-    simp +instances only [Functor.comp_obj, forget₂_obj, map_add, ι_colimMap]
-    rw [Preadditive.add_comp]; rw [Preadditive.comp_add]
-    simp only [ι_colimMap, Functor.comp_obj, forget₂_obj])
-  map_mul' r s := colimit.hom_ext (fun j => by simp +instances)
-
-Depends on / 依赖: colimMap
+--- 原说明 ---
+The induced scalar multiplication on
+`colimit (F ⋙ forget₂ _ AddCommGrpCat)`.
 -/
 noncomputable def coconePointSMul :
-    R ->+* End (colimit (F ⋙ forget₂ _ AddCommGrpCat)) where
+    R →+* End (colimit (F ⋙ forget₂ _ AddCommGrpCat)) where
   toFun r := colimMap
     { app := fun j => (F.obj j).smul r
       naturality := fun _ _ _ => smul_naturality _ _ }
@@ -87,7 +66,7 @@ noncomputable def coconePointSMul :
   map_one' := colimit.hom_ext (by simp +instances)
   map_add' r s := colimit.hom_ext (fun j => by
     simp +instances only [Functor.comp_obj, forget₂_obj, map_add, ι_colimMap]
-    rw [Preadditive.add_comp]; rw [Preadditive.comp_add]
+    rw [Preadditive.add_comp, Preadditive.comp_add]
     simp only [ι_colimMap, Functor.comp_obj, forget₂_obj])
   map_mul' r s := colimit.hom_ext (fun j => by simp +instances)
 
@@ -95,42 +74,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The cocone for `F` constructed from the colimit of
 `(F ⋙ forget₂ (ModuleCat R) AddCommGrpCat)`. -/
 @[simps]
-/--
-Definition of `colimitCocone` / `colimitCocone` 的定义
+/-
+**ModuleCat.HasColimit.colimitCocone** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat.HasCol
+imit`。
+形式化陈述：colimitCocone : Cocone F where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitCocone
-  signature: : Cocone F where
-  body: mkOfSMul (coconePointSMul F)
-  ι :=
-    { app := fun j => homMk (colimit.ι (F ⋙ forget₂ _ AddCommGrpCat) j) (fun r => by
-        dsimp
-        -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-        erw [mkOfSMul_smul]
-        simp)
-      naturality := fun i j f => by
-        apply (forget₂ _ AddCommGrpCat).map_injective
-        simp only [Functor.map_comp, forget₂_map_homMk]
-        dsimp
-        erw [colimit.w (F ⋙ forget₂ _ AddCommGrpCat), comp_id] }
-
-中文:
-定义 colimitCocone
-  签名: : 余锥 F where
-  定义体: mkOfSMul (coconePointSMul F)
-  ι :=
-    { app := fun j => homMk (colimit.ι (F ⋙ forget₂ _ AddCommGrpCat) j) (fun r => by
-        dsimp
-        -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-        erw [mkOfSMul_smul]
-        simp)
-      naturality := fun i j f => by
-        apply (forget₂ _ AddCommGrpCat).map_injective
-        simp only [Functor.map_comp, forget₂_map_homMk]
-        dsimp
-        erw [colimit.w (F ⋙ forget₂ _ AddCommGrpCat), comp_id] }
-
-Depends on / 依赖: coconePointSMul, f.hom, mkOfSMul
+--- 原说明 ---
+The cocone for `F` constructed from the colimit of
+`(F ⋙ forget₂ (ModuleCat R) AddCommGrpCat)`.
 -/
 noncomputable def colimitCocone : Cocone F where
   pt := mkOfSMul (coconePointSMul F)
@@ -148,62 +101,18 @@ noncomputable def colimitCocone : Cocone F where
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isColimitColimitCocone` / `isColimitColimitCocone` 的定义
+/-- The cocone for `F` constructed from the colimit of
+`(F ⋙ forget₂ (ModuleCat R) AddCommGrpCat)` is a colimit cocone. -/
+/-
+**ModuleCat.HasColimit.isColimitColimitCocone** 是 Mathlib 中的一个定义，位于命名空间 `ModuleC
+at.HasColimit`。
+形式化陈述：isColimitColimitCocone : IsColimit (colimitCocone F) where desc s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitColimitCocone
-  signature: : IsColimit (colimitCocone F) where
-  body: homMk (colimit.desc _ ((forget₂ _ AddCommGrpCat).mapCocone s)) (fun r => by
-    apply colimit.hom_ext
-    intro j
-    dsimp
-    rw [colimit.ι_desc_assoc]
-    -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-    erw [mkOfSMul_smul]
-    dsimp
-    simp only [ι_colimMap_assoc, Functor.comp_obj, forget₂_obj, colimit.ι_desc,
-      Functor.mapCocone_pt, Functor.mapCocone_ι_app, forget₂_map]
-    exact smul_naturality (s.ι.app j) r)
-  fac s j := by
-    apply (forget₂ _ AddCommGrpCat).map_injective
-    exact colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j
-  uniq s m hm := by
-    apply (forget₂ _ AddCommGrpCat).map_injective
-    apply colimit.hom_ext
-    intro j
-    erw [colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j]
-    dsimp
-    rw [← hm]
-    rfl
-
-中文:
-定义 isColimitColimitCocone
-  签名: : 是余极限 (colimitCocone F) where
-  定义体: homMk (colimit.desc _ ((forget₂ _ AddCommGrpCat).mapCocone s)) (fun r => by
-    apply colimit.hom_ext
-    intro j
-    dsimp
-    rw [colimit.ι_desc_assoc]
-    -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-    erw [mkOfSMul_smul]
-    dsimp
-    simp only [ι_colimMap_assoc, Functor.comp_obj, forget₂_obj, colimit.ι_desc,
-      Functor.mapCocone_pt, Functor.mapCocone_ι_app, forget₂_map]
-    exact smul_naturality (s.ι.app j) r)
-  fac s j := by
-    apply (forget₂ _ AddCommGrpCat).map_injective
-    exact colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j
-  uniq s m hm := by
-    apply (forget₂ _ AddCommGrpCat).map_injective
-    apply colimit.hom_ext
-    intro j
-    erw [colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j]
-    dsimp
-    rw [← hm]
-    rfl
-
-Depends on / 依赖: AddCommGrpCat, colimit, colimit.desc, colimit.hom_ext, hom_ext, mapCocone
+--- 原说明 ---
+The cocone for `F` constructed from the colimit of
+`(F ⋙ forget₂ (ModuleCat R) AddCommGrpCat)` is a colimit cocone.
 -/
 noncomputable def isColimitColimitCocone : IsColimit (colimitCocone F) where
   desc s := homMk (colimit.desc _ ((forget₂ _ AddCommGrpCat).mapCocone s)) (fun r => by
@@ -228,56 +137,37 @@ noncomputable def isColimitColimitCocone : IsColimit (colimitCocone F) where
     dsimp
     rw [← hm]
     rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimit F
-  body: ⟨_, isColimitColimitCocone F⟩
-
-中文:
-实例 :
-  签名: 有余极限 F
-  定义体: ⟨_, isColimitColimitCocone F⟩
-
-Depends on / 依赖: isColimitColimitCocone
+/-
+**ModuleCat.HasColimit.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat.HasColimit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimit F := ⟨_, isColimitColimitCocone F⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimit F (forget₂ _ AddCommGrpCat)
-  body: preservesColimit_of_preserves_colimit_cocone (isColimitColimitCocone F) (colimit.isColimit _)
-
-中文:
-实例 :
-  签名: 保持余极限 F (forget₂ _ 加法交换群范畴)
-  定义体: preservesColimit_of_preserves_colimit_cocone (isColimitColimitCocone F) (colimit.isColimit _)
-
-Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimitColimitCocone, preservesColimit_of_preserves_colimit_cocone
+/-
+**ModuleCat.HasColimit.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat.HasColimit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PreservesColimit F (forget₂ _ AddCommGrpCat) :=
   preservesColimit_of_preserves_colimit_cocone (isColimitColimitCocone F) (colimit.isColimit _)
-
-/--
-Instance `reflectsColimit` / 实例 `reflectsColimit`
-
-English:
-instance reflectsColimit
-  signature: :
-  body: reflectsColimit_of_reflectsIsomorphisms _ _
-
-中文:
-实例 reflectsColimit
-  签名: :
-  定义体: reflectsColimit_of_reflectsIsomorphisms _ _
-
-Depends on / 依赖: reflectsColimit_of_reflectsIsomorphisms
+/-
+**ModuleCat.HasColimit.reflectsColimit** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat.HasC
+olimit`。
+形式化陈述：reflectsColimit : ReflectsColimit F (forget₂ (ModuleCat.{w'} R) AddCommGrp
+Cat)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.reflectsColimit_of_reflectsIsomorphisms`：reflectsC
+olimit_of_reflectsIsomorphisms (F : J ⥤ C) (G : C ⥤ D) [G.ReflectsIsomorphisms] 
+[HasColimit F] [PreservesColimit F G] : ReflectsCol…
+· 使用定理 `ModuleCat.instReflectsIsomorphismsAddCommGrpCatForget₂LinearMapIdCarrier
+AddMonoidHomCarrier`：∀ {R : Type u} [inst : Ring R], (CategoryTheory.forget₂ (Mo
+duleCat R) AddCommGrpCat).ReflectsIsomorphisms
+· 使用定理 `ModuleCat.HasColimit.instHasColimit`：∀ {R : Type w} [inst : Ring R] {J :
+ Type u} [inst_1 : CategoryTheory.Category.{v, u} J]   (F : CategoryTheory.Funct
+or J (ModuleCat R))   [Ca…
+· 使用定理 `ModuleCat.HasColimit.instPreservesColimitAddCommGrpCatForget₂LinearMapId
+CarrierAddMonoidHomCarrier`：∀ {R : Type w} [inst : Ring R] {J : Type u} [inst_1 
+: CategoryTheory.Category.{v, u} J]   (F : CategoryTheory.Functor J (ModuleCat R
+))   [Ca…
 -/
 noncomputable instance reflectsColimit :
     ReflectsColimit F (forget₂ (ModuleCat.{w'} R) AddCommGrpCat) :=
@@ -287,122 +177,115 @@ end HasColimit
 
 variable (J R)
 
-/--
-Instance `hasColimitsOfShape` / 实例 `hasColimitsOfShape`
-
-English:
-instance hasColimitsOfShape
-  signature: [HasColimitsOfShape J AddCommGrpCat.{w'}]
-
-中文:
-实例 hasColimitsOfShape
-  签名: [有形状余极限 J 加法交换群范畴.{w'}]
+/-
+**ModuleCat.hasColimitsOfShape** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ (R : Type w) [inst : Ring R] (J : Type u) [inst_1 : CategoryTheory.Categ
+ory.{v, u} J]   [CategoryTheory.Limits.HasColimitsOfShape J AddCommGrpCat], Cate
+goryTheory.Limits.HasColimitsOfShape J (ModuleCat R)
+参数：R : Type w；J : Type u；ModuleCat R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.HasColimit.instHasColimit`：∀ {R : Type w} [inst : Ring R] {J :
+ Type u} [inst_1 : CategoryTheory.Category.{v, u} J]   (F : CategoryTheory.Funct
+or J (ModuleCat R))   [Ca…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance hasColimitsOfShape [HasColimitsOfShape J AddCommGrpCat.{w'}] :
     HasColimitsOfShape J (ModuleCat.{w'} R) where
-
-/--
-Instance `reflectsColimitsOfShape` / 实例 `reflectsColimitsOfShape`
-
-English:
-instance reflectsColimitsOfShape
-  signature: [HasColimitsOfShape J AddCommGrpCat.{w'}]
-
-中文:
-实例 reflectsColimitsOfShape
-  签名: [有形状余极限 J 加法交换群范畴.{w'}]
+/-
+**ModuleCat.reflectsColimitsOfShape** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ (R : Type w) [inst : Ring R] (J : Type u) [inst_1 : CategoryTheory.Categ
+ory.{v, u} J]   [CategoryTheory.Limits.HasColimitsOfShape J AddCommGrpCat],   Ca
+tegoryTheory.Limits.ReflectsColimitsOfShape J (CategoryTheory.forget₂ (ModuleCat
+ R) AddCommGrpCat)
+参数：R : Type w；J : Type u；CategoryTheory.forget₂ (ModuleCat R) AddCommGrpCat。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 noncomputable instance reflectsColimitsOfShape [HasColimitsOfShape J AddCommGrpCat.{w'}] :
     ReflectsColimitsOfShape J (forget₂ (ModuleCat.{w'} R) AddCommGrpCat) where
-
-/--
-Instance `hasColimitsOfSize` / 实例 `hasColimitsOfSize`
-
-English:
-instance hasColimitsOfSize
-  signature: [HasColimitsOfSize.{v, u} AddCommGrpCat.{w'}]
-
-中文:
-实例 hasColimitsOfSize
-  签名: [有余limitsOfSize.{v, u} 加法交换群范畴.{w'}]
+/-
+**ModuleCat.hasColimitsOfSize** 是 Mathlib 中的一个定理，位于命名空间 `ModuleCat`。
+形式化陈述：∀ (R : Type w) [inst : Ring R] [CategoryTheory.Limits.HasColimitsOfSize.{v
+, u, w', w' + 1} AddCommGrpCat],   CategoryTheory.Limits.HasColimitsOfSize.{v, u
+, w', max (w' + 1) w} (ModuleCat R)
+参数：R : Type w；w' + 1；ModuleCat R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.hasColimitsOfShape`：∀ (R : Type w) [inst : Ring R] (J : Type u
+) [inst_1 : CategoryTheory.Category.{v, u} J]   [CategoryTheory.Limits.HasColimi
+tsOfShape J AddCom…
+· 使用定理 `CategoryTheory.Limits.instHasColimitsOfShapeOfHasColimitsOfSize`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : Catego
+ryTheory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance hasColimitsOfSize [HasColimitsOfSize.{v, u} AddCommGrpCat.{w'}] :
     HasColimitsOfSize.{v, u} (ModuleCat.{w'} R) where
-
-/--
-Instance `forget₂PreservesColimitsOfShape` / 实例 `forget₂PreservesColimitsOfShape`
-
-English:
-instance forget₂PreservesColimitsOfShape
-
-中文:
-实例 forget₂PreservesColimitsOfShape
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance forget₂PreservesColimitsOfShape
     [HasColimitsOfShape J AddCommGrpCat.{w'}] :
     PreservesColimitsOfShape J (forget₂ (ModuleCat.{w'} R) AddCommGrpCat) where
-
-/--
-Instance `forget₂PreservesColimitsOfSize` / 实例 `forget₂PreservesColimitsOfSize`
-
-English:
-instance forget₂PreservesColimitsOfSize
-
-中文:
-实例 forget₂PreservesColimitsOfSize
+/-
+**ModuleCat.forget** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance forget₂PreservesColimitsOfSize
     [HasColimitsOfSize.{u, v} AddCommGrpCat.{w'}] :
     PreservesColimitsOfSize.{u, v} (forget₂ (ModuleCat.{w'} R) AddCommGrpCat) where
-
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance
     [HasColimitsOfSize.{u, v} AddCommGrpMax.{w, w'}] :
     PreservesColimitsOfSize.{u, v} (forget₂ (ModuleCat.{max w w'} R) AddCommGrpCat) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteColimits (ModuleCat.{w'} R)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 有有限余极限 (模范畴.{w'} R)
-  定义体: inferInstance
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteColimits (ModuleCat.{w'} R) := inferInstance
 
 -- Sanity checks, just to make sure typeclass search can find the instances we want.
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (R : Type u) [Ring R] : HasColimits (ModuleCat.{max v u} R) :=
   inferInstance
-
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (R : Type u) [Ring R] : HasColimits (ModuleCat.{max u v} R) :=
   inferInstance
-
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (R : Type u) [Ring R] : HasColimits (ModuleCat.{u} R) :=
   inferInstance
-
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (R : Type u) [Ring R] : HasCoequalizers (ModuleCat.{u} R) := by
   infer_instance
 
 -- for some reason, this instance is not found automatically later on
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasCoequalizers (ModuleCat.{v} R)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: HasCoequalizers (模范畴.{v} R)
-  定义体: inferInstance
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasCoequalizers (ModuleCat.{v} R) where
-
+/-
+**ModuleCat.** 是 Mathlib 中的一个示例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example (R : Type u) [Ring R] :
     PreservesColimits (forget₂ (ModuleCat.{u} R) AddCommGrpCat) := inferInstance
 
@@ -412,61 +295,34 @@ variable (R : Type w) [CommRing R] (M ι : Type u) [AddCommGroup M] [Module R M]
 
 /-- The coproduct cone induced by the concrete coproduct. -/
 noncomputable
-/--
-Definition of `finsuppCocone` / `finsuppCocone` 的定义
-
-English:
-definition finsuppCocone
-  signature: : Cofan fun _ : ι => ModuleCat.of R M
-  body: Cofan.mk (ModuleCat.of R (ι ->₀ M)) fun i =>
-    ModuleCat.ofHom (Finsupp.lsingle i (R := R) (M := ModuleCat.of R M))
-
-中文:
-定义 finsuppCocone
-  签名: : Cofan fun _ : ι => 模范畴.of R M
-  定义体: Cofan.mk (ModuleCat.of R (ι ->₀ M)) fun i =>
-    ModuleCat.ofHom (Finsupp.lsingle i (R := R) (M := ModuleCat.of R M))
-
-Depends on / 依赖: Cofan.mk, Finsupp, Finsupp.lsingle, ModuleCat, ModuleCat.of, ModuleCat.ofHom, lsingle
+/-
+**ModuleCat.finsuppCocone** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：finsuppCocone : Cofan fun _ : ι => ModuleCat.of R M
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def finsuppCocone : Cofan fun _ : ι => ModuleCat.of R M :=
-  Cofan.mk (ModuleCat.of R (ι ->₀ M)) fun i =>
+def finsuppCocone : Cofan fun _ : ι ↦ ModuleCat.of R M :=
+  Cofan.mk (ModuleCat.of R (ι →₀ M)) fun i ↦
     ModuleCat.ofHom (Finsupp.lsingle i (R := R) (M := ModuleCat.of R M))
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The concrete coproduct cone is colimiting. -/
 noncomputable
-/--
-Definition of `finsuppCoconeIsColimit` / `finsuppCoconeIsColimit` 的定义
-
-English:
-definition finsuppCoconeIsColimit
-  signature: : IsColimit (finsuppCocone R M ι) where
-  body: ModuleCat.ofHom Finsupp.lsum R (N := s.pt) (fun i => (s.ι.app ⟨i⟩).hom)
-  fac := by aesop (add simp finsuppCocone)
-  uniq s f h := by
-    ext : 1
-    exact Finsupp.lhom_ext' fun i => LinearMap.ext fun x => by simpa using! congr($(h ⟨i⟩) (x : M))
-
-中文:
-定义 finsuppCoconeIsColimit
-  签名: : 是余极限 (finsuppCocone R M ι) where
-  定义体: ModuleCat.ofHom Finsupp.lsum R (N := s.pt) (fun i => (s.ι.app ⟨i⟩).hom)
-  fac := by aesop (add simp finsuppCocone)
-  uniq s f h := by
-    ext : 1
-    exact Finsupp.lhom_ext' fun i => LinearMap.ext fun x => by simpa using! congr($(h ⟨i⟩) (x : M))
-
-Depends on / 依赖: Finsupp, Finsupp.lsum, ModuleCat, ModuleCat.ofHom, s.pt
+/-
+**ModuleCat.finsuppCoconeIsColimit** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：finsuppCoconeIsColimit : IsColimit (finsuppCocone R M ι) where desc s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def finsuppCoconeIsColimit : IsColimit (finsuppCocone R M ι) where
-desc s := ModuleCat.ofHom Finsupp.lsum R (N := s.pt) (fun i => (s.ι.app ⟨i⟩).hom)
+  desc s := ModuleCat.ofHom <| Finsupp.lsum R (N := s.pt) (fun i ↦ (s.ι.app ⟨i⟩).hom)
   fac := by aesop (add simp finsuppCocone)
   uniq s f h := by
     ext : 1
-    exact Finsupp.lhom_ext' fun i => LinearMap.ext fun x => by simpa using! congr($(h ⟨i⟩) (x : M))
+    exact Finsupp.lhom_ext' fun i ↦ LinearMap.ext fun x ↦ by simpa using! congr($(h ⟨i⟩) (x : M))
 
 end
 
 end ModuleCat
+

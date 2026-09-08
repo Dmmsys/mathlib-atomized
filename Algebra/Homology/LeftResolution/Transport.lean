@@ -31,40 +31,19 @@ namespace LeftResolution
 open CategoryTheory.Functor
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `transport` / `transport` 的定义
+/-- Transport `LeftResolution` via equivalences of categories. -/
+/-
+**CategoryTheory.Abelian.LeftResolution.transport** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Abelian.LeftResolution`。
+形式化陈述：transport {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A'} (eA : A' ≌ A) 
+(eC : C' ≌ C) (e : ι' ⋙ eA.functor ≅ eC.functor ⋙ ι) : LeftResolution ι' where F
+参数：Λ : LeftResolution ι；eA : A' ≌ A；eC : C' ≌ C；e : ι' ⋙ eA.functor ≅ eC.functor
+ ⋙ ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transport
-  signature: {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A'}
-  body: eA.functor ⋙ Λ.F ⋙ eC.inverse
-  π := (rightUnitor _).inv ≫ whiskerLeft _ eA.unitIso.hom ≫
-      (associator _ _ _).hom ≫ whiskerLeft _ (associator _ _ _).inv ≫
-      whiskerLeft _ (whiskerRight e.hom _) ≫ (associator _ _ _).inv ≫
-      whiskerRight (associator _ _ _).inv _ ≫
-      whiskerRight (whiskerRight (associator _ _ _).hom _) _ ≫
-      whiskerRight (whiskerRight (whiskerLeft _ ((associator _ _ _).hom ≫
-      whiskerLeft Λ.F eC.counitIso.hom ≫ Λ.F.rightUnitor.hom)) _) _ ≫
-        (whiskerRight ((associator _ _ _).hom ≫ whiskerLeft _ Λ.π ≫
-          (rightUnitor _).hom) _) ≫ eA.unitIso.inv
-  epi_π_app _ := by dsimp; infer_instance
-
-中文:
-定义 transport
-  签名: {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A'}
-  定义体: eA.functor ⋙ Λ.F ⋙ eC.inverse
-  π := (rightUnitor _).inv ≫ whiskerLeft _ eA.unitIso.hom ≫
-      (associator _ _ _).hom ≫ whiskerLeft _ (associator _ _ _).inv ≫
-      whiskerLeft _ (whiskerRight e.hom _) ≫ (associator _ _ _).inv ≫
-      whiskerRight (associator _ _ _).inv _ ≫
-      whiskerRight (whiskerRight (associator _ _ _).hom _) _ ≫
-      whiskerRight (whiskerRight (whiskerLeft _ ((associator _ _ _).hom ≫
-      whiskerLeft Λ.F eC.counitIso.hom ≫ Λ.F.rightUnitor.hom)) _) _ ≫
-        (whiskerRight ((associator _ _ _).hom ≫ whiskerLeft _ Λ.π ≫
-          (rightUnitor _).hom) _) ≫ eA.unitIso.inv
-  epi_π_app _ := by dsimp; infer_instance
-
-Depends on / 依赖: eA.functor, eC.inverse, functor, inverse
+--- 原说明 ---
+Transport `LeftResolution` via equivalences of categories.
 -/
 def transport {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A'}
     (eA : A' ≌ A) (eC : C' ≌ C) (e : ι' ⋙ eA.functor ≅ eC.functor ⋙ ι) :
@@ -81,22 +60,20 @@ def transport {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A'}
           (rightUnitor _).hom) _) ≫ eA.unitIso.inv
   epi_π_app _ := by dsimp; infer_instance
 
-/--
-Definition of `ofCompIso` / `ofCompIso` 的定义
+/-- If we have an isomorphism `e : G ⋙ ι' ≅ ι`, then any `Λ : LeftResolution ι`
+induces `Λ.ofCompIso e : LeftResolution ι'`. -/
+/-
+**CategoryTheory.Abelian.LeftResolution.ofCompIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Abelian.LeftResolution`。
+形式化陈述：ofCompIso {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A} {G : C ⥤ C'} (e
+ : G ⋙ ι' ≅ ι) : LeftResolution ι' where F
+参数：Λ : LeftResolution ι；e : G ⋙ ι' ≅ ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCompIso
-  signature: {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A} {G : C ⥤ C'}
-  body: Λ.F ⋙ G
-  π := (associator _ _ _).hom ≫ whiskerLeft _ e.hom ≫ Λ.π
-  epi_π_app _ := by dsimp; infer_instance
-
-中文:
-定义 ofCompIso
-  签名: {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A} {G : C ⥤ C'}
-  定义体: Λ.F ⋙ G
-  π := (associator _ _ _).hom ≫ whiskerLeft _ e.hom ≫ Λ.π
-  epi_π_app _ := by dsimp; infer_instance
+--- 原说明 ---
+If we have an isomorphism `e : G ⋙ ι' ≅ ι`, then any `Λ : LeftResolution ι`
+induces `Λ.ofCompIso e : LeftResolution ι'`.
 -/
 def ofCompIso {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A} {G : C ⥤ C'}
     (e : G ⋙ ι' ≅ ι) :
@@ -108,3 +85,4 @@ def ofCompIso {ι : C ⥤ A} (Λ : LeftResolution ι) {ι' : C' ⥤ A} {G : C �
 end LeftResolution
 
 end CategoryTheory.Abelian
+

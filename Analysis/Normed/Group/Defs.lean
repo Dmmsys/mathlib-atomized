@@ -57,66 +57,50 @@ open ENNReal Filter NNReal Uniformity Pointwise Topology
 class is designed to be extended in more interesting classes specifying the properties of the norm.
 -/
 @[notation_class]
-/--
-Definition of `Norm` / `Norm` 的定义
+/-
+**Norm** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_8 → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Norm
-  parameters: (E : Type*)
-  axioms and operations (1):
-    - norm : E -> Real
-
-中文:
-类 范数
-  参数: (E : 类型)
-  公理与运算 (1 个):
-    - norm : E -> 实数
+--- 原说明 ---
+Auxiliary class, endowing a type `E` with a function `norm : E → ℝ` with notatio
+n `‖x‖`. This
+class is designed to be extended in more interesting classes specifying the prop
+erties of the norm.
 -/
 class Norm (E : Type*) where
   /-- the `ℝ`-valued norm function. -/
-  norm : E -> Real
+  norm : E → ℝ
 
 /-- Auxiliary class, endowing a type `α` with a function `nnnorm : α → ℝ≥0` with notation `‖x‖₊`. -/
 @[notation_class]
-/--
-Definition of `NNNorm` / `NNNorm` 的定义
+/-
+**NNNorm** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_8 → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NNNorm
-  parameters: (E : Type*)
-  axioms and operations (1):
-    - nnnorm : E -> Real>=0
-
-中文:
-类 NN范数
-  参数: (E : 类型)
-  公理与运算 (1 个):
-    - nnnorm : E -> 实数>=0
+--- 原说明 ---
+Auxiliary class, endowing a type `α` with a function `nnnorm : α → ℝ≥0` with not
+ation `‖x‖₊`.
 -/
 class NNNorm (E : Type*) where
   /-- the `ℝ≥0`-valued norm function. -/
-  nnnorm : E -> Real>=0
+  nnnorm : E → ℝ≥0
 
 /-- Auxiliary class, endowing a type `α` with a function `enorm : α → ℝ≥0∞` with notation `‖x‖ₑ`. -/
 @[notation_class]
-/--
-Definition of `ENorm` / `ENorm` 的定义
+/-
+**ENorm** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_8 → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ENorm
-  parameters: (E : Type*)
-  axioms and operations (1):
-    - enorm : E -> Real>=0∞
-
-中文:
-类 E范数
-  参数: (E : 类型)
-  公理与运算 (1 个):
-    - enorm : E -> 实数>=0∞
+--- 原说明 ---
+Auxiliary class, endowing a type `α` with a function `enorm : α → ℝ≥0∞` with not
+ation `‖x‖ₑ`.
 -/
 class ENorm (E : Type*) where
   /-- the `ℝ≥0∞`-valued norm function. -/
-  enorm : E -> Real>=0∞
+  enorm : E → ℝ≥0∞
 
 export Norm (norm)
 export NNNorm (nnnorm)
@@ -127,245 +111,183 @@ export ENorm (enorm)
 @[inherit_doc] notation "‖" e "‖ₑ" => enorm e
 
 section ENorm
-variable {E : Type*} [NNNorm E] {x : E} {r : Real>=0}
+variable {E : Type*} [NNNorm E] {x : E} {r : ℝ≥0}
 
-/--
-Instance `NNNorm.toENorm` / 实例 `NNNorm.toENorm`
-
-English:
-instance NNNorm.toENorm
-  signature: : ENorm E where enorm
-  body: (‖·‖₊ : E -> Real>=0∞)
-
-中文:
-实例 NN范数.toENorm
-  签名: : E范数 E where enorm
-  定义体: (‖·‖₊ : E -> Real>=0∞)
+/-
+**NNNorm.toENorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNNorm.toENorm : ENorm E where enorm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance NNNorm.toENorm : ENorm E where enorm := (‖·‖₊ : E -> Real>=0∞)
-
-/--
-lemma `enorm_eq_nnnorm` / 引理 `enorm_eq_nnnorm`
-
-English:
-lemma enorm_eq_nnnorm
-  given: (x : E)
-  statement: ‖x‖ₑ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 enorm_eq_nnnorm
-  条件: (x : E)
-  结论: ‖x‖ₑ = ‖x‖₊
-  证明: rfl
+instance NNNorm.toENorm : ENorm E where enorm := (‖·‖₊ : E → ℝ≥0∞)
+/-
+**enorm_eq_nnnorm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_eq_nnnorm (x : E) : ‖x‖ₑ = ‖x‖₊
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma enorm_eq_nnnorm (x : E) : ‖x‖ₑ = ‖x‖₊ := rfl
-
-/--
-lemma `toNNReal_enorm` / 引理 `toNNReal_enorm`
-
-English:
-lemma toNNReal_enorm
-  given: (x : E)
-  statement: ‖x‖ₑ.toNNReal = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 toNN实数_enorm
-  条件: (x : E)
-  结论: ‖x‖ₑ.toNN实数 = ‖x‖₊
-  证明: rfl
+/-
+**toNNReal_enorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_8} [inst : NNNorm E] (x : E), ‖x‖ₑ.toNNReal = ‖x‖₊
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toNNReal_enorm (x : E) : ‖x‖ₑ.toNNReal = ‖x‖₊ := rfl
-
-/--
-lemma `coe_le_enorm` / 引理 `coe_le_enorm`
-
-English:
-lemma coe_le_enorm
-  statement: r <= ‖x‖ₑ ↔ r <= ‖x‖₊
-  proof: by simp [enorm]
-
-中文:
-引理 coe_le_enorm
-  结论: r <= ‖x‖ₑ ↔ r <= ‖x‖₊
-  证明: by simp [enorm]
+/-
+**coe_le_enorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_8} [inst : NNNorm E] {x : E} {r : NNReal}, ↑r ≤ ‖x‖ₑ ↔ r ≤ ‖
+x‖₊
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp, norm_cast] lemma coe_le_enorm : r <= ‖x‖ₑ ↔ r <= ‖x‖₊ := by simp [enorm]
-/--
-lemma `enorm_le_coe` / 引理 `enorm_le_coe`
-
-English:
-lemma enorm_le_coe
-  statement: ‖x‖ₑ <= r ↔ ‖x‖₊ <= r
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_le_coe
-  结论: ‖x‖ₑ <= r ↔ ‖x‖₊ <= r
-  证明: by simp [enorm]
+@[simp, norm_cast] lemma coe_le_enorm : r ≤ ‖x‖ₑ ↔ r ≤ ‖x‖₊ := by simp [enorm]
+/-
+**enorm_le_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_8} [inst : NNNorm E] {x : E} {r : NNReal}, ‖x‖ₑ ≤ ↑r ↔ ‖x‖₊ 
+≤ r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp, norm_cast] lemma enorm_le_coe : ‖x‖ₑ <= r ↔ ‖x‖₊ <= r := by simp [enorm]
-/--
-lemma `coe_lt_enorm` / 引理 `coe_lt_enorm`
-
-English:
-lemma coe_lt_enorm
-  statement: r < ‖x‖ₑ ↔ r < ‖x‖₊
-  proof: by simp [enorm]
-
-中文:
-引理 coe_lt_enorm
-  结论: r < ‖x‖ₑ ↔ r < ‖x‖₊
-  证明: by simp [enorm]
+@[simp, norm_cast] lemma enorm_le_coe : ‖x‖ₑ ≤ r ↔ ‖x‖₊ ≤ r := by simp [enorm]
+/-
+**coe_lt_enorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_8} [inst : NNNorm E] {x : E} {r : NNReal}, ↑r < ‖x‖ₑ ↔ r < ‖
+x‖₊
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp, norm_cast] lemma coe_lt_enorm : r < ‖x‖ₑ ↔ r < ‖x‖₊ := by simp [enorm]
-/--
-lemma `enorm_lt_coe` / 引理 `enorm_lt_coe`
-
-English:
-lemma enorm_lt_coe
-  statement: ‖x‖ₑ < r ↔ ‖x‖₊ < r
-  proof: by simp [enorm]
-
-@[aesop (rule_sets := [finiteness]) safe apply, simp]
-
-中文:
-引理 enorm_lt_coe
-  结论: ‖x‖ₑ < r ↔ ‖x‖₊ < r
-  证明: by simp [enorm]
-
-@[aesop (rule_sets := [finiteness]) safe apply, simp]
+/-
+**enorm_lt_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_8} [inst : NNNorm E] {x : E} {r : NNReal}, ‖x‖ₑ < ↑r ↔ ‖x‖₊ 
+< r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp, norm_cast] lemma enorm_lt_coe : ‖x‖ₑ < r ↔ ‖x‖₊ < r := by simp [enorm]
 
 @[aesop (rule_sets := [finiteness]) safe apply, simp]
-/--
-lemma `enorm_ne_top` / 引理 `enorm_ne_top`
-
-English:
-lemma enorm_ne_top
-  statement: ‖x‖ₑ != ∞
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_ne_top
-  结论: ‖x‖ₑ != ∞
-  证明: by simp [enorm]
-
-Depends on / 依赖: enorm_lt_top
+/-
+**enorm_ne_top** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：enorm_ne_top : ‖x‖ₑ != ∞
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma enorm_ne_top : ‖x‖ₑ != ∞ := by simp [enorm]
-/--
-lemma `enorm_lt_top` / 引理 `enorm_lt_top`
-
-English:
-lemma enorm_lt_top
-  statement: ‖x‖ₑ < ∞
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_lt_top
-  结论: ‖x‖ₑ < ∞
-  证明: by simp [enorm]
+lemma enorm_ne_top : ‖x‖ₑ ≠ ∞ := by simp [enorm]
+/-
+**enorm_lt_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_8} [inst : NNNorm E] {x : E}, ‖x‖ₑ < ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 @[simp] lemma enorm_lt_top : ‖x‖ₑ < ∞ := by simp [enorm]
 
 end ENorm
 
-/--
-Definition of `ContinuousENorm` / `ContinuousENorm` 的定义
+/-- A type `E` equipped with a continuous map `‖·‖ₑ : E → ℝ≥0∞`
 
-English:
-class ContinuousENorm
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ENorm E
-  axioms and operations (1):
-    - continuous_enorm : Continuous enorm
+NB. We do not demand that the topology is somehow defined by the enorm:
+for `ℝ≥0∞` (the motivating example behind this definition), this is not true. -/
+/-
+**ContinuousENorm** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 余ntinuousE范数
-  参数: (E : 类型) [拓扑空间 E]
-  继承: E范数 E
-  公理与运算 (1 个):
-    - continuous_enorm : 连续 enorm
+--- 原说明 ---
+A type `E` equipped with a continuous map `‖·‖ₑ : E → ℝ≥0∞`
+
+NB. We do not demand that the topology is somehow defined by the enorm:
+for `ℝ≥0∞` (the motivating example behind this definition), this is not true.
 -/
 class ContinuousENorm (E : Type*) [TopologicalSpace E] extends ENorm E where
   continuous_enorm : Continuous enorm
 
-/--
-Definition of `ESeminormedAddMonoid` / `ESeminormedAddMonoid` 的定义
+/-- An e-seminormed monoid is an additive monoid endowed with a continuous enorm.
+Note that we do not ask for the enorm to be positive definite:
+non-trivial elements may have enorm zero. -/
+/-
+**ESeminormedAddMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ESeminormedAddMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ContinuousENorm E, AddMonoid E
-  axioms and operations (2):
-    - enorm_zero : ‖(0 : E)‖ₑ = 0
-    - enorm_add_le : forall x y : E, ‖x + y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
-
-中文:
-类 ESeminormedAdd幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: 余ntinuousE范数 E, 加法幺半群 E
-  公理与运算 (2 个):
-    - enorm_zero : ‖(0 : E)‖ₑ = 0
-    - enorm_add_le : 对任意 x y : E, ‖x + y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
+--- 原说明 ---
+An e-seminormed monoid is an additive monoid endowed with a continuous enorm.
+Note that we do not ask for the enorm to be positive definite:
+non-trivial elements may have enorm zero.
 -/
 class ESeminormedAddMonoid (E : Type*) [TopologicalSpace E]
     extends ContinuousENorm E, AddMonoid E where
   enorm_zero : ‖(0 : E)‖ₑ = 0
-  protected enorm_add_le : forall x y : E, ‖x + y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
+  protected enorm_add_le : ∀ x y : E, ‖x + y‖ₑ ≤ ‖x‖ₑ + ‖y‖ₑ
 
 -- see Note [lower instance priority]
 attribute [instance 10] ESeminormedAddMonoid.toAddMonoid
 
-/--
-Definition of `ENormedAddMonoid` / `ENormedAddMonoid` 的定义
+/-- An enormed monoid is an additive monoid endowed with a continuous enorm,
+which is positive definite: in other words, this is an `ESeminormedAddMonoid` with a positive
+definiteness condition added. -/
+/-
+**ENormedAddMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ENormedAddMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ESeminormedAddMonoid E
-  axioms and operations (1):
-    - enorm_eq_zero : forall x : E, ‖x‖ₑ = 0 ↔ x = 0
-
-中文:
-类 ENormedAdd幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: ESeminormedAdd幺半群 E
-  公理与运算 (1 个):
-    - enorm_eq_zero : 对任意 x : E, ‖x‖ₑ = 0 ↔ x = 0
+--- 原说明 ---
+An enormed monoid is an additive monoid endowed with a continuous enorm,
+which is positive definite: in other words, this is an `ESeminormedAddMonoid` wi
+th a positive
+definiteness condition added.
 -/
 class ENormedAddMonoid (E : Type*) [TopologicalSpace E]
     extends ESeminormedAddMonoid E where
-  enorm_eq_zero : forall x : E, ‖x‖ₑ = 0 ↔ x = 0
+  enorm_eq_zero : ∀ x : E, ‖x‖ₑ = 0 ↔ x = 0
 
 /-- An e-seminormed monoid is a monoid endowed with a continuous enorm.
 Note that we only ask for the enorm to be a semi-norm: non-trivial elements may have enorm zero. -/
 @[to_additive]
-/--
-Definition of `ESeminormedMonoid` / `ESeminormedMonoid` 的定义
+/-
+**ESeminormedMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ESeminormedMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ContinuousENorm E, Monoid E
-  axioms and operations (2):
-    - enorm_zero : ‖(1 : E)‖ₑ = 0
-    - enorm_mul_le : forall x y : E, ‖x * y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
-
-中文:
-类 ESeminormed幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: 余ntinuousE范数 E, 幺半群 E
-  公理与运算 (2 个):
-    - enorm_zero : ‖(1 : E)‖ₑ = 0
-    - enorm_mul_le : 对任意 x y : E, ‖x * y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
+--- 原说明 ---
+An e-seminormed monoid is a monoid endowed with a continuous enorm.
+Note that we only ask for the enorm to be a semi-norm: non-trivial elements may 
+have enorm zero.
 -/
 class ESeminormedMonoid (E : Type*) [TopologicalSpace E] extends ContinuousENorm E, Monoid E where
   enorm_zero : ‖(1 : E)‖ₑ = 0
-  enorm_mul_le : forall x y : E, ‖x * y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
+  enorm_mul_le : ∀ x y : E, ‖x * y‖ₑ ≤ ‖x‖ₑ + ‖y‖ₑ
 
 -- see Note [lower instance priority]
 attribute [instance 10] ESeminormedMonoid.toMonoid
@@ -374,40 +296,41 @@ attribute [instance 10] ESeminormedMonoid.toMonoid
 which is positive definite: in other words, this is an `ESeminormedMonoid` with a positive
 definiteness condition added. -/
 @[to_additive]
-/--
-Definition of `ENormedMonoid` / `ENormedMonoid` 的定义
+/-
+**ENormedMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ENormedMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ESeminormedMonoid E
-  axioms and operations (1):
-    - enorm_eq_zero : forall x : E, ‖x‖ₑ = 0 ↔ x = 1
-
-中文:
-类 ENormed幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: ESeminormed幺半群 E
-  公理与运算 (1 个):
-    - enorm_eq_zero : 对任意 x : E, ‖x‖ₑ = 0 ↔ x = 1
+--- 原说明 ---
+An enormed monoid is a monoid endowed with a continuous enorm,
+which is positive definite: in other words, this is an `ESeminormedMonoid` with 
+a positive
+definiteness condition added.
 -/
 class ENormedMonoid (E : Type*) [TopologicalSpace E] extends ESeminormedMonoid E where
-  enorm_eq_zero : forall x : E, ‖x‖ₑ = 0 ↔ x = 1
+  enorm_eq_zero : ∀ x : E, ‖x‖ₑ = 0 ↔ x = 1
 
-/--
-Definition of `ESeminormedAddCommMonoid` / `ESeminormedAddCommMonoid` 的定义
+/-- An e-seminormed commutative monoid is an additive commutative monoid endowed with a continuous
+enorm.
 
-English:
-class ESeminormedAddCommMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ESeminormedAddMonoid E, AddCommMonoid E
-  (no additional axioms)
+We don't have `ESeminormedAddCommMonoid` extend `EMetricSpace`, since the canonical instance `ℝ≥0∞`
+is not an `EMetricSpace`. This is because `ℝ≥0∞` carries the order topology, which is distinct from
+the topology coming from `edist`. -/
+/-
+**ESeminormedAddCommMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 ESeminormedAddComm幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: ESeminormedAdd幺半群 E, 加法交换幺半群 E
-  (无附加公理)
+--- 原说明 ---
+An e-seminormed commutative monoid is an additive commutative monoid endowed wit
+h a continuous
+enorm.
+
+We don't have `ESeminormedAddCommMonoid` extend `EMetricSpace`, since the canoni
+cal instance `ℝ≥0∞`
+is not an `EMetricSpace`. This is because `ℝ≥0∞` carries the order topology, whi
+ch is distinct from
+the topology coming from `edist`.
 -/
 class ESeminormedAddCommMonoid (E : Type*) [TopologicalSpace E]
   extends ESeminormedAddMonoid E, AddCommMonoid E where
@@ -415,40 +338,40 @@ class ESeminormedAddCommMonoid (E : Type*) [TopologicalSpace E]
 -- see Note [lower instance priority]
 attribute [instance 10] ESeminormedAddCommMonoid.toAddCommMonoid
 
-/--
-Definition of `ENormedAddCommMonoid` / `ENormedAddCommMonoid` 的定义
+/-- An enormed commutative monoid is an additive commutative monoid
+endowed with a continuous enorm which is positive definite.
 
-English:
-class ENormedAddCommMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ESeminormedAddCommMonoid E, ENormedAddMonoid E
-  (no additional axioms)
+We don't have `ENormedAddCommMonoid` extend `EMetricSpace`, since the canonical instance `ℝ≥0∞`
+is not an `EMetricSpace`. This is because `ℝ≥0∞` carries the order topology, which is distinct from
+the topology coming from `edist`. -/
+/-
+**ENormedAddCommMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 ENormedAddComm幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: ESeminormedAddComm幺半群 E, ENormedAdd幺半群 E
-  (无附加公理)
+--- 原说明 ---
+An enormed commutative monoid is an additive commutative monoid
+endowed with a continuous enorm which is positive definite.
+
+We don't have `ENormedAddCommMonoid` extend `EMetricSpace`, since the canonical 
+instance `ℝ≥0∞`
+is not an `EMetricSpace`. This is because `ℝ≥0∞` carries the order topology, whi
+ch is distinct from
+the topology coming from `edist`.
 -/
 class ENormedAddCommMonoid (E : Type*) [TopologicalSpace E]
   extends ESeminormedAddCommMonoid E, ENormedAddMonoid E where
 
 /-- An e-seminormed commutative monoid is a commutative monoid endowed with a continuous enorm. -/
 @[to_additive]
-/--
-Definition of `ESeminormedCommMonoid` / `ESeminormedCommMonoid` 的定义
+/-
+**ESeminormedCommMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ESeminormedCommMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ESeminormedMonoid E, CommMonoid E
-  (no additional axioms)
-
-中文:
-类 ESeminormedComm幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: ESeminormed幺半群 E, 交换幺半群 E
-  (无附加公理)
+--- 原说明 ---
+An e-seminormed commutative monoid is a commutative monoid endowed with a contin
+uous enorm.
 -/
 class ESeminormedCommMonoid (E : Type*) [TopologicalSpace E]
   extends ESeminormedMonoid E, CommMonoid E where
@@ -459,47 +382,38 @@ attribute [instance 10] ESeminormedCommMonoid.toCommMonoid
 /-- An enormed commutative monoid is a commutative monoid endowed with a continuous enorm
 which is positive definite. -/
 @[to_additive]
-/--
-Definition of `ENormedCommMonoid` / `ENormedCommMonoid` 的定义
+/-
+**ENormedCommMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_8) → [TopologicalSpace E] → Type u_8
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ENormedCommMonoid
-  parameters: (E : Type*) [TopologicalSpace E]
-  extends: ESeminormedCommMonoid E, ENormedMonoid E
-  (no additional axioms)
-
-中文:
-类 ENormedComm幺半群
-  参数: (E : 类型) [拓扑空间 E]
-  继承: ESeminormedComm幺半群 E, ENormed幺半群 E
-  (无附加公理)
+--- 原说明 ---
+An enormed commutative monoid is a commutative monoid endowed with a continuous 
+enorm
+which is positive definite.
 -/
 class ENormedCommMonoid (E : Type*) [TopologicalSpace E]
   extends ESeminormedCommMonoid E, ENormedMonoid E where
 
-/--
-Definition of `SeminormedAddGroup` / `SeminormedAddGroup` 的定义
+/-- A seminormed group is an additive group endowed with a norm for which `dist x y = ‖-x + y‖`
+defines a pseudometric space structure. -/
+/-
+**SeminormedAddGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：SeminormedAddGroup (E : Type*) extends Norm E, AddGroup E, PseudoMetricSpa
+ce E where dist
+参数：E : Type*。
+继承自：Norm E, AddGroup E, PseudoMetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SeminormedAddGroup
-  parameters: (E : Type*)
-  extends: Norm E, AddGroup E, PseudoMetricSpace E
-  axioms and operations (2):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
-
-中文:
-类 半赋范加群
-  参数: (E : 类型)
-  继承: 范数 E, 加法群 E, 伪度量空间 E
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
+--- 原说明 ---
+A seminormed group is an additive group endowed with a norm for which `dist x y 
+= ‖-x + y‖`
+defines a pseudometric space structure.
 -/
 class SeminormedAddGroup (E : Type*) extends Norm E, AddGroup E, PseudoMetricSpace E where
   dist := fun x y => ‖-x + y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖-x + y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖-x + y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] SeminormedAddGroup.toAddGroup
@@ -507,56 +421,46 @@ attribute [instance 10] SeminormedAddGroup.toAddGroup
 /-- A seminormed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y‖` defines a
 pseudometric space structure. -/
 @[to_additive]
-/--
-Definition of `SeminormedGroup` / `SeminormedGroup` 的定义
+/-
+**SeminormedGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：SeminormedGroup (E : Type*) extends Norm E, Group E, PseudoMetricSpace E w
+here dist
+参数：E : Type*。
+继承自：Norm E, Group E, PseudoMetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SeminormedGroup
-  parameters: (E : Type*)
-  extends: Norm E, Group E, PseudoMetricSpace E
-  axioms and operations (2):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
-
-中文:
-类 半赋范群
-  参数: (E : 类型)
-  继承: 范数 E, 群 E, 伪度量空间 E
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
+--- 原说明 ---
+A seminormed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y
+‖` defines a
+pseudometric space structure.
 -/
 class SeminormedGroup (E : Type*) extends Norm E, Group E, PseudoMetricSpace E where
   dist := fun x y => ‖x⁻¹ * y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖x⁻¹ * y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] SeminormedGroup.toGroup
 
-/--
-Definition of `NormedAddGroup` / `NormedAddGroup` 的定义
+/-- A normed group is an additive group endowed with a norm for which `dist x y = ‖-x + y‖` defines
+a metric space structure. -/
+/-
+**NormedAddGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：NormedAddGroup (E : Type*) extends Norm E, AddGroup E, MetricSpace E where
+ dist
+参数：E : Type*。
+继承自：Norm E, AddGroup E, MetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NormedAddGroup
-  parameters: (E : Type*)
-  extends: Norm E, AddGroup E, MetricSpace E
-  axioms and operations (2):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
-
-中文:
-类 赋范加群
-  参数: (E : 类型)
-  继承: 范数 E, 加法群 E, 度量空间 E
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
+--- 原说明 ---
+A normed group is an additive group endowed with a norm for which `dist x y = ‖-
+x + y‖` defines
+a metric space structure.
 -/
 class NormedAddGroup (E : Type*) extends Norm E, AddGroup E, MetricSpace E where
   dist := fun x y => ‖-x + y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖-x + y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖-x + y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] NormedAddGroup.toAddGroup
@@ -564,57 +468,46 @@ attribute [instance 10] NormedAddGroup.toAddGroup
 /-- A normed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y‖` defines a metric
 space structure. -/
 @[to_additive]
-/--
-Definition of `NormedGroup` / `NormedGroup` 的定义
+/-
+**NormedGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：NormedGroup (E : Type*) extends Norm E, Group E, MetricSpace E where dist
+参数：E : Type*。
+继承自：Norm E, Group E, MetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NormedGroup
-  parameters: (E : Type*)
-  extends: Norm E, Group E, MetricSpace E
-  axioms and operations (2):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
-
-中文:
-类 赋范群
-  参数: (E : 类型)
-  继承: 范数 E, 群 E, 度量空间 E
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
+--- 原说明 ---
+A normed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y‖` d
+efines a metric
+space structure.
 -/
 class NormedGroup (E : Type*) extends Norm E, Group E, MetricSpace E where
   dist := fun x y => ‖x⁻¹ * y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖x⁻¹ * y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] NormedGroup.toGroup
 
-/--
-Definition of `SeminormedAddCommGroup` / `SeminormedAddCommGroup` 的定义
+/-- A seminormed group is an additive group endowed with a norm for which `dist x y = ‖-x + y‖`
+defines a pseudometric space structure. -/
+/-
+**SeminormedAddCommGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：SeminormedAddCommGroup (E : Type*) extends Norm E, AddCommGroup E, PseudoM
+etricSpace E where dist
+参数：E : Type*。
+继承自：Norm E, AddCommGroup E, PseudoMetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SeminormedAddCommGroup
-  parameters: (E : Type*)
-  extends: Norm E, AddCommGroup E, 
-  axioms and operations (2):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
-
-中文:
-类 SeminormedAddComm群
-  参数: (E : 类型)
-  继承: 范数 E, 加法交换群 E, 
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
+--- 原说明 ---
+A seminormed group is an additive group endowed with a norm for which `dist x y 
+= ‖-x + y‖`
+defines a pseudometric space structure.
 -/
 class SeminormedAddCommGroup (E : Type*) extends Norm E, AddCommGroup E,
   PseudoMetricSpace E where
   dist := fun x y => ‖-x + y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖-x + y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖-x + y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] SeminormedAddCommGroup.toAddCommGroup
@@ -622,56 +515,46 @@ attribute [instance 10] SeminormedAddCommGroup.toAddCommGroup
 /-- A seminormed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y‖`
 defines a pseudometric space structure. -/
 @[to_additive]
-/--
-Definition of `SeminormedCommGroup` / `SeminormedCommGroup` 的定义
+/-
+**SeminormedCommGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：SeminormedCommGroup (E : Type*) extends Norm E, CommGroup E, PseudoMetricS
+pace E where dist
+参数：E : Type*。
+继承自：Norm E, CommGroup E, PseudoMetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SeminormedCommGroup
-  parameters: (E : Type*)
-  extends: Norm E, CommGroup E, PseudoMetricSpace E
-  axioms and operations (2):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
-
-中文:
-类 SeminormedComm群
-  参数: (E : 类型)
-  继承: 范数 E, 交换群 E, 伪度量空间 E
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
+--- 原说明 ---
+A seminormed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y
+‖`
+defines a pseudometric space structure.
 -/
 class SeminormedCommGroup (E : Type*) extends Norm E, CommGroup E, PseudoMetricSpace E where
   dist := fun x y => ‖x⁻¹ * y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖x⁻¹ * y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] SeminormedCommGroup.toCommGroup
 
-/--
-Definition of `NormedAddCommGroup` / `NormedAddCommGroup` 的定义
+/-- A normed group is an additive group endowed with a norm for which `dist x y = ‖-x + y‖` defines
+a metric space structure. -/
+/-
+**NormedAddCommGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：NormedAddCommGroup (E : Type*) extends Norm E, AddCommGroup E, MetricSpace
+ E where dist
+参数：E : Type*。
+继承自：Norm E, AddCommGroup E, MetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NormedAddCommGroup
-  parameters: (E : Type*)
-  extends: Norm E, AddCommGroup E, MetricSpace E
-  axioms and operations (2):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
-
-中文:
-类 赋范交换加群
-  参数: (E : 类型)
-  继承: 范数 E, 加法交换群 E, 度量空间 E
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖-x + y‖
-    - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
+--- 原说明 ---
+A normed group is an additive group endowed with a norm for which `dist x y = ‖-
+x + y‖` defines
+a metric space structure.
 -/
 class NormedAddCommGroup (E : Type*) extends Norm E, AddCommGroup E, MetricSpace E where
   dist := fun x y => ‖-x + y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖-x + y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖-x + y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] NormedAddCommGroup.toAddCommGroup
@@ -679,90 +562,93 @@ attribute [instance 10] NormedAddCommGroup.toAddCommGroup
 /-- A normed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y‖` defines a metric
 space structure. -/
 @[to_additive]
-/--
-Definition of `NormedCommGroup` / `NormedCommGroup` 的定义
+/-
+**NormedCommGroup** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：NormedCommGroup (E : Type*) extends Norm E, CommGroup E, MetricSpace E whe
+re dist
+参数：E : Type*。
+继承自：Norm E, CommGroup E, MetricSpace E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NormedCommGroup
-  parameters: (E : Type*)
-  extends: Norm E, CommGroup E, MetricSpace E
-  axioms and operations (2):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
-
-中文:
-类 NormedComm群
-  参数: (E : 类型)
-  继承: 范数 E, 交换群 E, 度量空间 E
-  公理与运算 (2 个):
-    - dist : = fun x y => ‖x⁻¹ * y‖
-    - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
+--- 原说明 ---
+A normed group is a group endowed with a norm for which `dist x y = ‖x⁻¹ * y‖` d
+efines a metric
+space structure.
 -/
 class NormedCommGroup (E : Type*) extends Norm E, CommGroup E, MetricSpace E where
   dist := fun x y => ‖x⁻¹ * y‖
   /-- The distance function is induced by the norm. -/
-  dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖ := by aesop
+  dist_eq : ∀ x y, dist x y = ‖x⁻¹ * y‖ := by aesop
 
 -- see Note [lower instance priority]
 attribute [instance 10] NormedCommGroup.toCommGroup
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) NormedGroup.toSeminormedGroup [NormedGroup E] : SeminormedGroup E :=
   { ‹NormedGroup E› with }
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) NormedCommGroup.toSeminormedCommGroup [NormedCommGroup E] :
     SeminormedCommGroup E :=
   { ‹NormedCommGroup E› with }
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) SeminormedCommGroup.toSeminormedGroup [SeminormedCommGroup E] :
     SeminormedGroup E :=
   { ‹SeminormedCommGroup E› with }
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) NormedCommGroup.toNormedGroup [NormedCommGroup E] : NormedGroup E :=
   { ‹NormedCommGroup E› with }
 
 -- See note [reducible non-instances]
 /-- Construct a `NormedGroup` from a `SeminormedGroup` satisfying `∀ x, ‖x‖ = 0 → x = 1`. This
 avoids having to go back to the `(Pseudo)MetricSpace` level when declaring a `NormedGroup`
+/-
+**as** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance as a special case of a more general `SeminormedGroup` instance. -/
 @[to_additive /-- Construct a `NormedAddGroup` from a `SeminormedAddGroup`
 satisfying `∀ x, ‖x‖ = 0 → x = 0`. This avoids having to go back to the `(Pseudo)MetricSpace`
 level when declaring a `NormedAddGroup` instance as a special case of a more general
 `SeminormedAddGroup` instance. -/]
-/--
-Definition of `NormedGroup.ofSeparation` / `NormedGroup.ofSeparation` 的定义
-
-English:
-abbreviation NormedGroup.ofSeparation
-  signature: [SeminormedGroup E] (h : forall x : E, ‖x‖ = 0 -> x = 1)
-  body: ‹SeminormedGroup E›.dist_eq
-  toMetricSpace :=
-    { eq_of_dist_eq_zero := fun hxy =>
-inv_mul_eq_one.1 h _ (‹SeminormedGroup E›.dist_eq _ _).symm.trans hxy }
-
-中文:
-缩写 赋范群.ofSeparation
-  签名: [半赋范群 E] (h : 对任意 x : E, ‖x‖ = 0 -> x = 1)
-  定义体: ‹SeminormedGroup E›.dist_eq
-  toMetricSpace :=
-    { eq_of_dist_eq_zero := fun hxy =>
-inv_mul_eq_one.1 h _ (‹SeminormedGroup E›.dist_eq _ _).symm.trans hxy }
-
-Depends on / 依赖: SeminormedGroup, dist_eq
+/-
+**NormedGroup.ofSeparation** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedGroup.ofSeparation [SeminormedGroup E] (h : forall x : E, ‖x‖ = 0 ->
+ x = 1) : NormedGroup E where dist_eq
+参数：h : forall x : E, ‖x‖ = 0 -> x = 1。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
-abbrev NormedGroup.ofSeparation [SeminormedGroup E] (h : forall x : E, ‖x‖ = 0 -> x = 1) :
+abbrev NormedGroup.ofSeparation [SeminormedGroup E] (h : ∀ x : E, ‖x‖ = 0 → x = 1) :
     NormedGroup E where
   dist_eq := ‹SeminormedGroup E›.dist_eq
   toMetricSpace :=
     { eq_of_dist_eq_zero := fun hxy =>
-inv_mul_eq_one.1 h _ (‹SeminormedGroup E›.dist_eq _ _).symm.trans hxy }
+        inv_mul_eq_one.1 <| h _ <| (‹SeminormedGroup E›.dist_eq _ _).symm.trans hxy }
 
 -- See note [reducible non-instances]
 /-- Construct a `NormedCommGroup` from a `SeminormedCommGroup` satisfying
@@ -773,22 +659,17 @@ instance. -/
 `SeminormedAddCommGroup` satisfying `∀ x, ‖x‖ = 0 → x = 0`. This avoids having to go back to the
 `(Pseudo)MetricSpace` level when declaring a `NormedAddCommGroup` instance as a special case
 of a more general `SeminormedAddCommGroup` instance. -/]
-/--
-Definition of `NormedCommGroup.ofSeparation` / `NormedCommGroup.ofSeparation` 的定义
-
-English:
-abbreviation NormedCommGroup.ofSeparation
-  signature: [SeminormedCommGroup E] (h : forall x : E, ‖x‖ = 0 -> x = 1)
-  body: { ‹SeminormedCommGroup E›, NormedGroup.ofSeparation h with }
-
-中文:
-缩写 NormedComm群.ofSeparation
-  签名: [SeminormedComm群 E] (h : 对任意 x : E, ‖x‖ = 0 -> x = 1)
-  定义体: { ‹SeminormedCommGroup E›, NormedGroup.ofSeparation h with }
-
-Depends on / 依赖: NormedGroup, NormedGroup.ofSeparation, SeminormedCommGroup, ofSeparation
+/-
+**NormedCommGroup.ofSeparation** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedCommGroup.ofSeparation [SeminormedCommGroup E] (h : forall x : E, ‖x
+‖ = 0 -> x = 1) : NormedCommGroup E
+参数：h : forall x : E, ‖x‖ = 0 -> x = 1。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedCommGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedCommGrou
+p E] (x y : E), dist x y = ‖x⁻¹ * y‖
 -/
-abbrev NormedCommGroup.ofSeparation [SeminormedCommGroup E] (h : forall x : E, ‖x‖ = 0 -> x = 1) :
+abbrev NormedCommGroup.ofSeparation [SeminormedCommGroup E] (h : ∀ x : E, ‖x‖ = 0 → x = 1) :
     NormedCommGroup E :=
   { ‹SeminormedCommGroup E›, NormedGroup.ofSeparation h with }
 
@@ -796,29 +677,18 @@ abbrev NormedCommGroup.ofSeparation [SeminormedCommGroup E] (h : forall x : E, �
 /-- Construct a seminormed group from a multiplication-invariant distance. -/
 @[to_additive
   /-- Construct a seminormed group from a translation-invariant distance. -/]
-/--
-Definition of `SeminormedGroup.ofMulDist` / `SeminormedGroup.ofMulDist` 的定义
-
-English:
-abbreviation SeminormedGroup.ofMulDist
-  signature: [Norm E] [Group E] [PseudoMetricSpace E]
-  body: by
-    rw [h₁]; apply le_antisymm
-    · simpa only [div_eq_mul_inv, ← inv_mul_cancel x] using h₂ x y x⁻¹
-    · simpa only [mul_inv_cancel, mul_one, ← mul_assoc, one_mul] using h₂ 1 (x⁻¹ * y) x
-
-中文:
-缩写 半赋范群.ofMulDist
-  签名: [范数 E] [群 E] [伪度量空间 E]
-  定义体: by
-    rw [h₁]; apply le_antisymm
-    · simpa only [div_eq_mul_inv, ← inv_mul_cancel x] using h₂ x y x⁻¹
-    · simpa only [mul_inv_cancel, mul_one, ← mul_assoc, one_mul] using h₂ 1 (x⁻¹ * y) x
-
-Depends on / 依赖: div_eq_mul_inv, inv_mul_cancel, le_antisymm, mul_assoc, mul_inv_cancel, mul_one, one_mul
+/-
+**SeminormedGroup.ofMulDist** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：SeminormedGroup.ofMulDist [Norm E] [Group E] [PseudoMetricSpace E] (h₁ : f
+orall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist x y <= dist (z * x) (z
+ * y)) : SeminormedGroup E where dist_eq x y
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist x y <= dist (z 
+* x) (z * y)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev SeminormedGroup.ofMulDist [Norm E] [Group E] [PseudoMetricSpace E]
-    (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist x y <= dist (z * x) (z * y)) :
+    (h₁ : ∀ x : E, ‖x‖ = dist 1 x) (h₂ : ∀ x y z : E, dist x y ≤ dist (z * x) (z * y)) :
     SeminormedGroup E where
   dist_eq x y := by
     rw [h₁]; apply le_antisymm
@@ -829,29 +699,18 @@ abbrev SeminormedGroup.ofMulDist [Norm E] [Group E] [PseudoMetricSpace E]
 /-- Construct a seminormed group from a multiplication-invariant pseudodistance. -/
 @[to_additive
   /-- Construct a seminormed group from a translation-invariant pseudodistance. -/]
-/--
-Definition of `SeminormedGroup.ofMulDist'` / `SeminormedGroup.ofMulDist'` 的定义
-
-English:
-abbreviation SeminormedGroup.ofMulDist'
-  signature: [Norm E] [Group E] [PseudoMetricSpace E]
-  body: by
-    rw [h₁]; apply le_antisymm
-    · simpa only [mul_inv_cancel, mul_one, ← mul_assoc, one_mul] using h₂ 1 (x⁻¹ * y) x
-    · simpa only [div_eq_mul_inv, ← inv_mul_cancel x] using h₂ x y x⁻¹
-
-中文:
-缩写 半赋范群.ofMulDist'
-  签名: [范数 E] [群 E] [伪度量空间 E]
-  定义体: by
-    rw [h₁]; apply le_antisymm
-    · simpa only [mul_inv_cancel, mul_one, ← mul_assoc, one_mul] using h₂ 1 (x⁻¹ * y) x
-    · simpa only [div_eq_mul_inv, ← inv_mul_cancel x] using h₂ x y x⁻¹
-
-Depends on / 依赖: div_eq_mul_inv, inv_mul_cancel, le_antisymm, mul_assoc, mul_inv_cancel, mul_one, one_mul
+/-
+**SeminormedGroup.ofMulDist'** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：SeminormedGroup.ofMulDist' [Norm E] [Group E] [PseudoMetricSpace E] (h₁ : 
+forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist (z * x) (z * y) <= di
+st x y) : SeminormedGroup E where dist_eq x y
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist (z * x) (z * y)
+ <= dist x y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev SeminormedGroup.ofMulDist' [Norm E] [Group E] [PseudoMetricSpace E]
-    (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist (z * x) (z * y) <= dist x y) :
+    (h₁ : ∀ x : E, ‖x‖ = dist 1 x) (h₂ : ∀ x y z : E, dist (z * x) (z * y) ≤ dist x y) :
     SeminormedGroup E where
   dist_eq x y := by
     rw [h₁]; apply le_antisymm
@@ -862,25 +721,20 @@ abbrev SeminormedGroup.ofMulDist' [Norm E] [Group E] [PseudoMetricSpace E]
 /-- Construct a seminormed group from a multiplication-invariant pseudodistance. -/
 @[to_additive
   /-- Construct a seminormed group from a translation-invariant pseudodistance. -/]
-/--
-Definition of `SeminormedCommGroup.ofMulDist` / `SeminormedCommGroup.ofMulDist` 的定义
-
-English:
-abbreviation SeminormedCommGroup.ofMulDist
-  signature: [Norm E] [CommGroup E] [PseudoMetricSpace E]
-  body: { SeminormedGroup.ofMulDist h₁ h₂ with
-    mul_comm := mul_comm }
-
-中文:
-缩写 SeminormedComm群.ofMulDist
-  签名: [范数 E] [交换群 E] [伪度量空间 E]
-  定义体: { SeminormedGroup.ofMulDist h₁ h₂ with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.ofMulDist, mul_comm, ofMulDist
+/-
+**SeminormedCommGroup.ofMulDist** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：SeminormedCommGroup.ofMulDist [Norm E] [CommGroup E] [PseudoMetricSpace E]
+ (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist x y <= dist (z
+ * x) (z * y)) : SeminormedCommGroup E
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist x y <= dist (z 
+* x) (z * y)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
 abbrev SeminormedCommGroup.ofMulDist [Norm E] [CommGroup E] [PseudoMetricSpace E]
-    (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist x y <= dist (z * x) (z * y)) :
+    (h₁ : ∀ x : E, ‖x‖ = dist 1 x) (h₂ : ∀ x y z : E, dist x y ≤ dist (z * x) (z * y)) :
     SeminormedCommGroup E :=
   { SeminormedGroup.ofMulDist h₁ h₂ with
     mul_comm := mul_comm }
@@ -889,25 +743,20 @@ abbrev SeminormedCommGroup.ofMulDist [Norm E] [CommGroup E] [PseudoMetricSpace E
 /-- Construct a seminormed group from a multiplication-invariant pseudodistance. -/
 @[to_additive
   /-- Construct a seminormed group from a translation-invariant pseudodistance. -/]
-/--
-Definition of `SeminormedCommGroup.ofMulDist'` / `SeminormedCommGroup.ofMulDist'` 的定义
-
-English:
-abbreviation SeminormedCommGroup.ofMulDist'
-  signature: [Norm E] [CommGroup E] [PseudoMetricSpace E]
-  body: { SeminormedGroup.ofMulDist' h₁ h₂ with
-    mul_comm := mul_comm }
-
-中文:
-缩写 SeminormedComm群.ofMulDist'
-  签名: [范数 E] [交换群 E] [伪度量空间 E]
-  定义体: { SeminormedGroup.ofMulDist' h₁ h₂ with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.ofMulDist, mul_comm, ofMulDist
+/-
+**SeminormedCommGroup.ofMulDist'** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：SeminormedCommGroup.ofMulDist' [Norm E] [CommGroup E] [PseudoMetricSpace E
+] (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist (z * x) (z * 
+y) <= dist x y) : SeminormedCommGroup E
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist (z * x) (z * y)
+ <= dist x y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
 abbrev SeminormedCommGroup.ofMulDist' [Norm E] [CommGroup E] [PseudoMetricSpace E]
-    (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist (z * x) (z * y) <= dist x y) :
+    (h₁ : ∀ x : E, ‖x‖ = dist 1 x) (h₂ : ∀ x y z : E, dist (z * x) (z * y) ≤ dist x y) :
     SeminormedCommGroup E :=
   { SeminormedGroup.ofMulDist' h₁ h₂ with
     mul_comm := mul_comm }
@@ -916,25 +765,21 @@ abbrev SeminormedCommGroup.ofMulDist' [Norm E] [CommGroup E] [PseudoMetricSpace 
 /-- Construct a normed group from a multiplication-invariant distance. -/
 @[to_additive
   /-- Construct a normed group from a translation-invariant distance. -/]
-/--
-Definition of `NormedGroup.ofMulDist` / `NormedGroup.ofMulDist` 的定义
-
-English:
-abbreviation NormedGroup.ofMulDist
-  signature: [Norm E] [Group E] [MetricSpace E] (h₁ : forall x : E, ‖x‖ = dist 1 x)
-  body: { SeminormedGroup.ofMulDist h₁ h₂ with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-缩写 赋范群.ofMulDist
-  签名: [范数 E] [群 E] [度量空间 E] (h₁ : 对任意 x : E, ‖x‖ = dist 1 x)
-  定义体: { SeminormedGroup.ofMulDist h₁ h₂ with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.ofMulDist, eq_of_dist_eq_zero, ofMulDist
+/-
+**NormedGroup.ofMulDist** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedGroup.ofMulDist [Norm E] [Group E] [MetricSpace E] (h₁ : forall x : 
+E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist x y <= dist (z * x) (z * y)) : N
+ormedGroup E
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist x y <= dist (z 
+* x) (z * y)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_dist_eq_zero`：eq_of_dist_eq_zero {x y : γ} : dist x y = 0 -> x = y
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
-abbrev NormedGroup.ofMulDist [Norm E] [Group E] [MetricSpace E] (h₁ : forall x : E, ‖x‖ = dist 1 x)
-    (h₂ : forall x y z : E, dist x y <= dist (z * x) (z * y)) : NormedGroup E :=
+abbrev NormedGroup.ofMulDist [Norm E] [Group E] [MetricSpace E] (h₁ : ∀ x : E, ‖x‖ = dist 1 x)
+    (h₂ : ∀ x y z : E, dist x y ≤ dist (z * x) (z * y)) : NormedGroup E :=
   { SeminormedGroup.ofMulDist h₁ h₂ with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -942,25 +787,21 @@ abbrev NormedGroup.ofMulDist [Norm E] [Group E] [MetricSpace E] (h₁ : forall x
 /-- Construct a normed group from a multiplication-invariant pseudodistance. -/
 @[to_additive
   /-- Construct a normed group from a translation-invariant pseudodistance. -/]
-/--
-Definition of `NormedGroup.ofMulDist'` / `NormedGroup.ofMulDist'` 的定义
-
-English:
-abbreviation NormedGroup.ofMulDist'
-  signature: [Norm E] [Group E] [MetricSpace E] (h₁ : forall x : E, ‖x‖ = dist 1 x)
-  body: { SeminormedGroup.ofMulDist' h₁ h₂ with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-缩写 赋范群.ofMulDist'
-  签名: [范数 E] [群 E] [度量空间 E] (h₁ : 对任意 x : E, ‖x‖ = dist 1 x)
-  定义体: { SeminormedGroup.ofMulDist' h₁ h₂ with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.ofMulDist, eq_of_dist_eq_zero, ofMulDist
+/-
+**NormedGroup.ofMulDist'** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedGroup.ofMulDist' [Norm E] [Group E] [MetricSpace E] (h₁ : forall x :
+ E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist (z * x) (z * y) <= dist x y) : 
+NormedGroup E
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist (z * x) (z * y)
+ <= dist x y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_dist_eq_zero`：eq_of_dist_eq_zero {x y : γ} : dist x y = 0 -> x = y
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
-abbrev NormedGroup.ofMulDist' [Norm E] [Group E] [MetricSpace E] (h₁ : forall x : E, ‖x‖ = dist 1 x)
-    (h₂ : forall x y z : E, dist (z * x) (z * y) <= dist x y) : NormedGroup E :=
+abbrev NormedGroup.ofMulDist' [Norm E] [Group E] [MetricSpace E] (h₁ : ∀ x : E, ‖x‖ = dist 1 x)
+    (h₂ : ∀ x y z : E, dist (z * x) (z * y) ≤ dist x y) : NormedGroup E :=
   { SeminormedGroup.ofMulDist' h₁ h₂ with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -968,25 +809,20 @@ abbrev NormedGroup.ofMulDist' [Norm E] [Group E] [MetricSpace E] (h₁ : forall 
 /-- Construct a normed group from a multiplication-invariant pseudodistance. -/
 @[to_additive
 /-- Construct a normed group from a translation-invariant pseudodistance. -/]
-/--
-Definition of `NormedCommGroup.ofMulDist` / `NormedCommGroup.ofMulDist` 的定义
-
-English:
-abbreviation NormedCommGroup.ofMulDist
-  signature: [Norm E] [CommGroup E] [MetricSpace E]
-  body: { NormedGroup.ofMulDist h₁ h₂ with
-    mul_comm := mul_comm }
-
-中文:
-缩写 NormedComm群.ofMulDist
-  签名: [范数 E] [交换群 E] [度量空间 E]
-  定义体: { NormedGroup.ofMulDist h₁ h₂ with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: NormedGroup, NormedGroup.ofMulDist, mul_comm, ofMulDist
+/-
+**NormedCommGroup.ofMulDist** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedCommGroup.ofMulDist [Norm E] [CommGroup E] [MetricSpace E] (h₁ : for
+all x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist x y <= dist (z * x) (z *
+ y)) : NormedCommGroup E
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist x y <= dist (z 
+* x) (z * y)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedGroup.dist_eq`：∀ {E : Type u_8} [self : NormedGroup E] (x y : E), 
+dist x y = ‖x⁻¹ * y‖
 -/
 abbrev NormedCommGroup.ofMulDist [Norm E] [CommGroup E] [MetricSpace E]
-    (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist x y <= dist (z * x) (z * y)) :
+    (h₁ : ∀ x : E, ‖x‖ = dist 1 x) (h₂ : ∀ x y z : E, dist x y ≤ dist (z * x) (z * y)) :
     NormedCommGroup E :=
   { NormedGroup.ofMulDist h₁ h₂ with
     mul_comm := mul_comm }
@@ -995,25 +831,20 @@ abbrev NormedCommGroup.ofMulDist [Norm E] [CommGroup E] [MetricSpace E]
 /-- Construct a normed group from a multiplication-invariant pseudodistance. -/
 @[to_additive
   /-- Construct a normed group from a translation-invariant pseudodistance. -/]
-/--
-Definition of `NormedCommGroup.ofMulDist'` / `NormedCommGroup.ofMulDist'` 的定义
-
-English:
-abbreviation NormedCommGroup.ofMulDist'
-  signature: [Norm E] [CommGroup E] [MetricSpace E]
-  body: { NormedGroup.ofMulDist' h₁ h₂ with
-    mul_comm := mul_comm }
-
-中文:
-缩写 NormedComm群.ofMulDist'
-  签名: [范数 E] [交换群 E] [度量空间 E]
-  定义体: { NormedGroup.ofMulDist' h₁ h₂ with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: NormedGroup, NormedGroup.ofMulDist, mul_comm, ofMulDist
+/-
+**NormedCommGroup.ofMulDist'** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：NormedCommGroup.ofMulDist' [Norm E] [CommGroup E] [MetricSpace E] (h₁ : fo
+rall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist (z * x) (z * y) <= dist
+ x y) : NormedCommGroup E
+参数：h₁ : forall x : E, ‖x‖ = dist 1 x；h₂ : forall x y z : E, dist (z * x) (z * y)
+ <= dist x y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedGroup.dist_eq`：∀ {E : Type u_8} [self : NormedGroup E] (x y : E), 
+dist x y = ‖x⁻¹ * y‖
 -/
 abbrev NormedCommGroup.ofMulDist' [Norm E] [CommGroup E] [MetricSpace E]
-    (h₁ : forall x : E, ‖x‖ = dist 1 x) (h₂ : forall x y z : E, dist (z * x) (z * y) <= dist x y) :
+    (h₁ : ∀ x : E, ‖x‖ = dist 1 x) (h₂ : ∀ x y z : E, dist (z * x) (z * y) ≤ dist x y) :
     NormedCommGroup E :=
   { NormedGroup.ofMulDist' h₁ h₂ with
     mul_comm := mul_comm }
@@ -1028,28 +859,13 @@ creates bad definitional equalities (e.g., it does not take into account a possi
 and the pseudometric space structure from the seminorm properties. Note that in most cases this
 instance creates bad definitional equalities (e.g., it does not take into account a possibly
 existing `UniformSpace` instance on `E`). -/]
-/--
-Definition of `GroupSeminorm.toSeminormedGroup` / `GroupSeminorm.toSeminormedGroup` 的定义
-
-English:
-abbreviation GroupSeminorm.toSeminormedGroup
-  signature: [Group E] (f : GroupSeminorm E)
-  body: f (x⁻¹ * y)
-  norm := f
-  dist_eq _ _ := rfl
-  dist_self x := by simp only [inv_mul_cancel, map_one_eq_zero]
-  dist_triangle x y z := by convert! map_mul_le_add f (x⁻¹ * y) (y⁻¹ * z) using 2; group
-  dist_comm x y := by convert! map_inv_eq_map f (y⁻¹ * x) using 2; group
-
-中文:
-缩写 群半范数.toSeminormedGroup
-  签名: [群 E] (f : 群半范数 E)
-  定义体: f (x⁻¹ * y)
-  norm := f
-  dist_eq _ _ := rfl
-  dist_self x := by simp only [inv_mul_cancel, map_one_eq_zero]
-  dist_triangle x y z := by convert! map_mul_le_add f (x⁻¹ * y) (y⁻¹ * z) using 2; group
-  dist_comm x y := by convert! map_inv_eq_map f (y⁻¹ * x) using 2; group
+/-
+**GroupSeminorm.toSeminormedGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：GroupSeminorm.toSeminormedGroup [Group E] (f : GroupSeminorm E) : Seminorm
+edGroup E where dist x y
+参数：f : GroupSeminorm E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev GroupSeminorm.toSeminormedGroup [Group E] (f : GroupSeminorm E) : SeminormedGroup E where
   dist x y := f (x⁻¹ * y)
@@ -1069,22 +885,15 @@ creates bad definitional equalities (e.g., it does not take into account a possi
 and the pseudometric space structure from the seminorm properties. Note that in most cases this
 instance creates bad definitional equalities (e.g., it does not take into account a possibly
 existing `UniformSpace` instance on `E`). -/]
-/--
-Definition of `GroupSeminorm.toSeminormedCommGroup` / `GroupSeminorm.toSeminormedCommGroup` 的定义
-
-English:
-abbreviation GroupSeminorm.toSeminormedCommGroup
-  signature: [CommGroup E] (f : GroupSeminorm E)
-  body: { f.toSeminormedGroup with
-    mul_comm := mul_comm }
-
-中文:
-缩写 群半范数.toSeminormedCommGroup
-  签名: [交换群 E] (f : 群半范数 E)
-  定义体: { f.toSeminormedGroup with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: f.toSeminormedGroup, mul_comm, toSeminormedGroup
+/-
+**GroupSeminorm.toSeminormedCommGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：GroupSeminorm.toSeminormedCommGroup [CommGroup E] (f : GroupSeminorm E) : 
+SeminormedCommGroup E
+参数：f : GroupSeminorm E。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
 abbrev GroupSeminorm.toSeminormedCommGroup [CommGroup E] (f : GroupSeminorm E) :
     SeminormedCommGroup E :=
@@ -1100,27 +909,23 @@ equalities (e.g., it does not take into account a possibly existing `UniformSpac
   /-- Construct a normed group from a norm, i.e., registering the distance and the metric
 space structure from the norm properties. Note that in most cases this instance creates bad
 definitional equalities (e.g., it does not take into account a possibly existing `UniformSpace`
+/-
+**on** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance on `E`). -/]
-/--
-Definition of `GroupNorm.toNormedGroup` / `GroupNorm.toNormedGroup` 的定义
-
-English:
-abbreviation GroupNorm.toNormedGroup
-  signature: [Group E] (f : GroupNorm E)
-  body: { f.toGroupSeminorm.toSeminormedGroup with
-eq_of_dist_eq_zero := fun h => inv_mul_eq_one.1 eq_one_of_map_eq_zero f h }
-
-中文:
-缩写 群范数.toNormedGroup
-  签名: [群 E] (f : 群范数 E)
-  定义体: { f.toGroupSeminorm.toSeminormedGroup with
-eq_of_dist_eq_zero := fun h => inv_mul_eq_one.1 eq_one_of_map_eq_zero f h }
-
-Depends on / 依赖: eq_of_dist_eq_zero, eq_one_of_map_eq_zero, f.toGroupSeminorm.toSeminormedGroup, inv_mul_eq_one, toGroupSeminorm, toSeminormedGroup
+/-
+**GroupNorm.toNormedGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：GroupNorm.toNormedGroup [Group E] (f : GroupNorm E) : NormedGroup E
+参数：f : GroupNorm E。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedGroup.dist_eq`：∀ {E : Type u_8} [self : SeminormedGroup E] (x 
+y : E), dist x y = ‖x⁻¹ * y‖
 -/
 abbrev GroupNorm.toNormedGroup [Group E] (f : GroupNorm E) : NormedGroup E :=
   { f.toGroupSeminorm.toSeminormedGroup with
-eq_of_dist_eq_zero := fun h => inv_mul_eq_one.1 eq_one_of_map_eq_zero f h }
+    eq_of_dist_eq_zero := fun h => inv_mul_eq_one.1 <| eq_one_of_map_eq_zero f h }
 
 -- See note [reducible non-instances]
 /-- Construct a normed group from a norm, i.e., registering the distance and the metric space
@@ -1131,23 +936,20 @@ equalities (e.g., it does not take into account a possibly existing `UniformSpac
   /-- Construct a normed group from a norm, i.e., registering the distance and the metric
 space structure from the norm properties. Note that in most cases this instance creates bad
 definitional equalities (e.g., it does not take into account a possibly existing `UniformSpace`
+/-
+**on** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance on `E`). -/]
-/--
-Definition of `GroupNorm.toNormedCommGroup` / `GroupNorm.toNormedCommGroup` 的定义
-
-English:
-abbreviation GroupNorm.toNormedCommGroup
-  signature: [CommGroup E] (f : GroupNorm E)
-  body: { f.toNormedGroup with
-    mul_comm := mul_comm }
-
-中文:
-缩写 群范数.toNormedCommGroup
-  签名: [交换群 E] (f : 群范数 E)
-  定义体: { f.toNormedGroup with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: f.toNormedGroup, mul_comm, toNormedGroup
+/-
+**GroupNorm.toNormedCommGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：GroupNorm.toNormedCommGroup [CommGroup E] (f : GroupNorm E) : NormedCommGr
+oup E
+参数：f : GroupNorm E。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedGroup.dist_eq`：∀ {E : Type u_8} [self : NormedGroup E] (x y : E), 
+dist x y = ‖x⁻¹ * y‖
 -/
 abbrev GroupNorm.toNormedCommGroup [CommGroup E] (f : GroupNorm E) : NormedCommGroup E :=
   { f.toNormedGroup with

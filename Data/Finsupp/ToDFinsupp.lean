@@ -69,52 +69,32 @@ variable {ι : Type*} {R : Type*} {M : Type*}
 
 section Defs
 
-/--
-Definition of `Finsupp.toDFinsupp` / `Finsupp.toDFinsupp` 的定义
+/-- Interpret a `Finsupp` as a homogeneous `DFinsupp`. -/
+/-
+**Finsupp.toDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Finsupp.toDFinsupp [Zero M] (f : ι ->₀ M) : Π₀ _ : ι, M where toFun
+参数：f : ι ->₀ M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Finsupp.toDFinsupp
-  signature: [Zero M] (f : ι ->₀ M)
-  body: f
-  support' :=
-    Trunc.mk
-      ⟨f.support.1, fun i => (Classical.em (f i = 0)).symm.imp_left Finsupp.mem_support_iff.mpr⟩
-
-@[simp]
-
-中文:
-定义 有限支撑.toDFinsupp
-  签名: [零 M] (f : ι ->₀ M)
-  定义体: f
-  support' :=
-    Trunc.mk
-      ⟨f.support.1, fun i => (Classical.em (f i = 0)).symm.imp_left Finsupp.mem_support_iff.mpr⟩
-
-@[simp]
+--- 原说明 ---
+Interpret a `Finsupp` as a homogeneous `DFinsupp`.
 -/
-def Finsupp.toDFinsupp [Zero M] (f : ι ->₀ M) : Π₀ _ : ι, M where
+def Finsupp.toDFinsupp [Zero M] (f : ι →₀ M) : Π₀ _ : ι, M where
   toFun := f
   support' :=
     Trunc.mk
       ⟨f.support.1, fun i => (Classical.em (f i = 0)).symm.imp_left Finsupp.mem_support_iff.mpr⟩
 
 @[simp]
-/--
-theorem `Finsupp.toDFinsupp_coe` / 定理 `Finsupp.toDFinsupp_coe`
-
-English:
-theorem Finsupp.toDFinsupp_coe
-  given: [Zero M] (f : ι ->₀ M)
-  statement: ⇑f.toDFinsupp = f
-  proof: rfl
-
-中文:
-定理 有限支撑.toDFinsupp_coe
-  条件: [零 M] (f : ι ->₀ M)
-  结论: ⇑f.toDFinsupp = f
-  证明: rfl
+/-
+**Finsupp.toDFinsupp_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toDFinsupp_coe [Zero M] (f : ι ->₀ M) : ⇑f.toDFinsupp = f
+参数：f : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Finsupp.toDFinsupp_coe [Zero M] (f : ι ->₀ M) : ⇑f.toDFinsupp = f :=
+theorem Finsupp.toDFinsupp_coe [Zero M] (f : ι →₀ M) : ⇑f.toDFinsupp = f :=
   rfl
 
 section
@@ -122,152 +102,144 @@ section
 variable [DecidableEq ι] [Zero M]
 
 @[simp]
-/--
-theorem `Finsupp.toDFinsupp_single` / 定理 `Finsupp.toDFinsupp_single`
-
-English:
-theorem Finsupp.toDFinsupp_single
-  given: (i : ι) (m : M)
-  proof: by
-  ext
-  simp [Finsupp.single_apply, DFinsupp.single_apply]
-
-中文:
-定理 有限支撑.toDFinsupp_single
-  条件: (i : ι) (m : M)
-  证明: by
-  ext
-  simp [Finsupp.single_apply, DFinsupp.single_apply]
-
-Depends on / 依赖: DFinsupp, DFinsupp.single_apply, Finsupp, Finsupp.single_apply, single_apply
+/-
+**Finsupp.toDFinsupp_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toDFinsupp_single (i : ι) (m : M) : (Finsupp.single i m).toDFinsup
+p = DFinsupp.single i m
+参数：i : ι；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `DFinsupp.single_apply`：single_apply {i i' b} : (single i b : Π₀ i, β i) 
+i' = if h : i = i' then Eq.recOn h b else 0
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `eq_rec_constant`：∀ {α : Sort u_1} {a a' : α} {β : Sort u_2} (y : β) (h :
+ a = a'), h ▸ y = y
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Finsupp.toDFinsupp_single (i : ι) (m : M) :
     (Finsupp.single i m).toDFinsupp = DFinsupp.single i m := by
   ext
   simp [Finsupp.single_apply, DFinsupp.single_apply]
 
-variable [forall m : M, Decidable (m != 0)]
+variable [∀ m : M, Decidable (m ≠ 0)]
 
 @[simp]
-/--
-theorem `toDFinsupp_support` / 定理 `toDFinsupp_support`
-
-English:
-theorem toDFinsupp_support
-  given: (f : ι ->₀ M)
-  statement: f.toDFinsupp.support = f.support
-  proof: by
-  ext
-  simp
-
-中文:
-定理 toDFinsupp_support
-  条件: (f : ι ->₀ M)
-  结论: f.toDFinsupp.support = f.support
-  证明: by
-  ext
-  simp
+/-
+**toDFinsupp_support** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toDFinsupp_support (f : ι ->₀ M) : f.toDFinsupp.support = f.support
+参数：f : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toDFinsupp_support (f : ι ->₀ M) : f.toDFinsupp.support = f.support := by
+theorem toDFinsupp_support (f : ι →₀ M) : f.toDFinsupp.support = f.support := by
   ext
   simp
 
-/--
-Definition of `DFinsupp.toFinsupp` / `DFinsupp.toFinsupp` 的定义
+/-- Interpret a homogeneous `DFinsupp` as a `Finsupp`.
 
-English:
-definition DFinsupp.toFinsupp
-  signature: (f : Π₀ _ : ι, M)
-  body: ⟨f.support, f, fun i => by simp only [DFinsupp.mem_support_iff]⟩
+Note that the elaborator has a lot of trouble with this definition - it is often necessary to
+write `(DFinsupp.toFinsupp f : ι →₀ M)` instead of `f.toFinsupp`, as for some unknown reason
+using dot notation or omitting the type ascription prevents the type being resolved correctly. -/
+/-
+**DFinsupp.toFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DFinsupp.toFinsupp (f : Π₀ _ : ι, M) : ι ->₀ M
+参数：f : Π₀ _ : ι, M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Interpret a homogeneous `DFinsupp` as a `Finsupp`.
 
-中文:
-定义 直和有限支撑.toFinsupp
-  签名: (f : Π₀ _ : ι, M)
-  定义体: ⟨f.support, f, fun i => by simp only [DFinsupp.mem_support_iff]⟩
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.mem_support_iff, f.support, mem_support_iff, support
+Note that the elaborator has a lot of trouble with this definition - it is often
+ necessary to
+write `(DFinsupp.toFinsupp f : ι →₀ M)` instead of `f.toFinsupp`, as for some un
+known reason
+using dot notation or omitting the type ascription prevents the type being resol
+ved correctly.
 -/
-def DFinsupp.toFinsupp (f : Π₀ _ : ι, M) : ι ->₀ M :=
+def DFinsupp.toFinsupp (f : Π₀ _ : ι, M) : ι →₀ M :=
   ⟨f.support, f, fun i => by simp only [DFinsupp.mem_support_iff]⟩
 
 @[simp]
-/--
-theorem `DFinsupp.toFinsupp_coe` / 定理 `DFinsupp.toFinsupp_coe`
-
-English:
-theorem DFinsupp.toFinsupp_coe
-  given: (f : Π₀ _ : ι, M)
-  statement: ⇑f.toFinsupp = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 直和有限支撑.toFinsupp_coe
-  条件: (f : Π₀ _ : ι, M)
-  结论: ⇑f.toFinsupp = f
-  证明: rfl
-
-@[simp]
+/-
+**DFinsupp.toFinsupp_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DFinsupp.toFinsupp_coe (f : Π₀ _ : ι, M) : ⇑f.toFinsupp = f
+参数：f : Π₀ _ : ι, M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem DFinsupp.toFinsupp_coe (f : Π₀ _ : ι, M) : ⇑f.toFinsupp = f :=
   rfl
 
 @[simp]
-/--
-theorem `DFinsupp.toFinsupp_support` / 定理 `DFinsupp.toFinsupp_support`
-
-English:
-theorem DFinsupp.toFinsupp_support
-  given: (f : Π₀ _ : ι, M)
-  statement: f.toFinsupp.support = f.support
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 直和有限支撑.toFinsupp_support
-  条件: (f : Π₀ _ : ι, M)
-  结论: f.toFinsupp.support = f.support
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**DFinsupp.toFinsupp_support** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DFinsupp.toFinsupp_support (f : Π₀ _ : ι, M) : f.toFinsupp.support = f.sup
+port
+参数：f : Π₀ _ : ι, M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem DFinsupp.toFinsupp_support (f : Π₀ _ : ι, M) : f.toFinsupp.support = f.support := by
   ext
   simp
 
 @[simp]
-/--
-theorem `DFinsupp.toFinsupp_single` / 定理 `DFinsupp.toFinsupp_single`
-
-English:
-theorem DFinsupp.toFinsupp_single
-  given: (i : ι) (m : M)
-  proof: by
-  ext
-  simp [Finsupp.single_apply, DFinsupp.single_apply]
-
-@[simp]
-
-中文:
-定理 直和有限支撑.toFinsupp_single
-  条件: (i : ι) (m : M)
-  证明: by
-  ext
-  simp [Finsupp.single_apply, DFinsupp.single_apply]
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.single_apply, Finsupp, Finsupp.single_apply, single_apply
+/-
+**DFinsupp.toFinsupp_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DFinsupp.toFinsupp_single (i : ι) (m : M) : (DFinsupp.single i m : Π₀ _ : 
+ι, M).toFinsupp = Finsupp.single i m
+参数：i : ι；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFinsupp.single_apply`：single_apply {i i' b} : (single i b : Π₀ i, β i) 
+i' = if h : i = i' then Eq.recOn h b else 0
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `eq_rec_constant`：∀ {α : Sort u_1} {a a' : α} {β : Sort u_2} (y : β) (h :
+ a = a'), h ▸ y = y
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem DFinsupp.toFinsupp_single (i : ι) (m : M) :
     (DFinsupp.single i m : Π₀ _ : ι, M).toFinsupp = Finsupp.single i m := by
@@ -275,47 +247,30 @@ theorem DFinsupp.toFinsupp_single (i : ι) (m : M) :
   simp [Finsupp.single_apply, DFinsupp.single_apply]
 
 @[simp]
-/--
-theorem `Finsupp.toDFinsupp_toFinsupp` / 定理 `Finsupp.toDFinsupp_toFinsupp`
-
-English:
-theorem Finsupp.toDFinsupp_toFinsupp
-  given: (f : ι ->₀ M)
-  statement: f.toDFinsupp.toFinsupp = f
-  proof: DFunLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 有限支撑.toDFinsupp_toFinsupp
-  条件: (f : ι ->₀ M)
-  结论: f.toDFinsupp.toFinsupp = f
-  证明: DFunLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Finsupp.toDFinsupp_toFinsupp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toDFinsupp_toFinsupp (f : ι ->₀ M) : f.toDFinsupp.toFinsupp = f
+参数：f : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem Finsupp.toDFinsupp_toFinsupp (f : ι ->₀ M) : f.toDFinsupp.toFinsupp = f :=
+theorem Finsupp.toDFinsupp_toFinsupp (f : ι →₀ M) : f.toDFinsupp.toFinsupp = f :=
   DFunLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `DFinsupp.toFinsupp_toDFinsupp` / 定理 `DFinsupp.toFinsupp_toDFinsupp`
-
-English:
-theorem DFinsupp.toFinsupp_toDFinsupp
-  given: (f : Π₀ _ : ι, M)
-  statement: f.toFinsupp.toDFinsupp = f
-  proof: DFunLike.coe_injective rfl
-
-中文:
-定理 直和有限支撑.toFinsupp_toDFinsupp
-  条件: (f : Π₀ _ : ι, M)
-  结论: f.toFinsupp.toDFinsupp = f
-  证明: DFunLike.coe_injective rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**DFinsupp.toFinsupp_toDFinsupp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DFinsupp.toFinsupp_toDFinsupp (f : Π₀ _ : ι, M) : f.toFinsupp.toDFinsupp =
+ f
+参数：f : Π₀ _ : ι, M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
 theorem DFinsupp.toFinsupp_toDFinsupp (f : Π₀ _ : ι, M) : f.toFinsupp.toDFinsupp = f :=
   DFunLike.coe_injective rfl
@@ -332,120 +287,78 @@ section Lemmas
 namespace Finsupp
 
 @[simp]
-/--
-theorem `toDFinsupp_zero` / 定理 `toDFinsupp_zero`
-
-English:
-theorem toDFinsupp_zero
-  given: [Zero M]
-  statement: (0 : ι ->₀ M).toDFinsupp = 0
-  proof: DFunLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 toDFinsupp_zero
-  条件: [零 M]
-  结论: (0 : ι ->₀ M).toDFinsupp = 0
-  证明: DFunLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Finsupp.toDFinsupp_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toDFinsupp_zero [Zero M] : (0 : ι ->₀ M).toDFinsupp = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem toDFinsupp_zero [Zero M] : (0 : ι ->₀ M).toDFinsupp = 0 :=
+theorem toDFinsupp_zero [Zero M] : (0 : ι →₀ M).toDFinsupp = 0 :=
   DFunLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `toDFinsupp_add` / 定理 `toDFinsupp_add`
-
-English:
-theorem toDFinsupp_add
-  given: [AddZeroClass M] (f g : ι ->₀ M)
-  proof: DFunLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 toDFinsupp_add
-  条件: [加法零类 M] (f g : ι ->₀ M)
-  证明: DFunLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Finsupp.toDFinsupp_add** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toDFinsupp_add [AddZeroClass M] (f g : ι ->₀ M) : (f + g).toDFinsupp = f.t
+oDFinsupp + g.toDFinsupp
+参数：f g : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem toDFinsupp_add [AddZeroClass M] (f g : ι ->₀ M) :
+theorem toDFinsupp_add [AddZeroClass M] (f g : ι →₀ M) :
     (f + g).toDFinsupp = f.toDFinsupp + g.toDFinsupp :=
   DFunLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `toDFinsupp_neg` / 定理 `toDFinsupp_neg`
-
-English:
-theorem toDFinsupp_neg
-  given: [AddGroup M] (f : ι ->₀ M)
-  statement: (-f).toDFinsupp = -f.toDFinsupp
-  proof: DFunLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 toDFinsupp_neg
-  条件: [加法群 M] (f : ι ->₀ M)
-  结论: (-f).toDFinsupp = -f.toDFinsupp
-  证明: DFunLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Finsupp.toDFinsupp_neg** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toDFinsupp_neg [AddGroup M] (f : ι ->₀ M) : (-f).toDFinsupp = -f.toDFinsup
+p
+参数：f : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem toDFinsupp_neg [AddGroup M] (f : ι ->₀ M) : (-f).toDFinsupp = -f.toDFinsupp :=
+theorem toDFinsupp_neg [AddGroup M] (f : ι →₀ M) : (-f).toDFinsupp = -f.toDFinsupp :=
   DFunLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `toDFinsupp_sub` / 定理 `toDFinsupp_sub`
-
-English:
-theorem toDFinsupp_sub
-  given: [AddGroup M] (f g : ι ->₀ M)
-  proof: DFunLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 toDFinsupp_sub
-  条件: [加法群 M] (f g : ι ->₀ M)
-  证明: DFunLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Finsupp.toDFinsupp_sub** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toDFinsupp_sub [AddGroup M] (f g : ι ->₀ M) : (f - g).toDFinsupp = f.toDFi
+nsupp - g.toDFinsupp
+参数：f g : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem toDFinsupp_sub [AddGroup M] (f g : ι ->₀ M) :
+theorem toDFinsupp_sub [AddGroup M] (f g : ι →₀ M) :
     (f - g).toDFinsupp = f.toDFinsupp - g.toDFinsupp :=
   DFunLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `toDFinsupp_smul` / 定理 `toDFinsupp_smul`
-
-English:
-theorem toDFinsupp_smul
-  given: [Monoid R] [AddMonoid M] [DistribMulAction R M] (r : R) (f : ι ->₀ M)
-  proof: DFunLike.coe_injective rfl
-
-中文:
-定理 toDFinsupp_smul
-  条件: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] (r : R) (f : ι ->₀ M)
-  证明: DFunLike.coe_injective rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Finsupp.toDFinsupp_smul** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toDFinsupp_smul [Monoid R] [AddMonoid M] [DistribMulAction R M] (r : R) (f
+ : ι ->₀ M) : (r • f).toDFinsupp = r • f.toDFinsupp
+参数：r : R；f : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem toDFinsupp_smul [Monoid R] [AddMonoid M] [DistribMulAction R M] (r : R) (f : ι ->₀ M) :
+theorem toDFinsupp_smul [Monoid R] [AddMonoid M] [DistribMulAction R M] (r : R) (f : ι →₀ M) :
     (r • f).toDFinsupp = r • f.toDFinsupp :=
   DFunLike.coe_injective rfl
 
@@ -456,121 +369,92 @@ namespace DFinsupp
 variable [DecidableEq ι]
 
 @[simp]
-/--
-theorem `toFinsupp_zero` / 定理 `toFinsupp_zero`
-
-English:
-theorem toFinsupp_zero
-  given: [Zero M] [forall m : M, Decidable (m != 0)]
-  statement: toFinsupp 0 = (0 : ι ->₀ M)
-  proof: DFunLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 toFinsupp_zero
-  条件: [零 M] [对任意 m : M, 可判定 (m != 0)]
-  结论: toFinsupp 0 = (0 : ι ->₀ M)
-  证明: DFunLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**DFinsupp.toFinsupp_zero** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toFinsupp_zero [Zero M] [forall m : M, Decidable (m != 0)] : toFinsupp 0 =
+ (0 : ι ->₀ M)
+参数：m != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem toFinsupp_zero [Zero M] [forall m : M, Decidable (m != 0)] : toFinsupp 0 = (0 : ι ->₀ M) :=
+theorem toFinsupp_zero [Zero M] [∀ m : M, Decidable (m ≠ 0)] : toFinsupp 0 = (0 : ι →₀ M) :=
   DFunLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `toFinsupp_add` / 定理 `toFinsupp_add`
-
-English:
-theorem toFinsupp_add
-  given: [AddZeroClass M] [forall m : M, Decidable (m != 0)] (f g : Π₀ _ : ι, M)
-  proof: DFunLike.coe_injective DFinsupp.coe_add _ _
-
-@[simp]
-
-中文:
-定理 toFinsupp_add
-  条件: [加法零类 M] [对任意 m : M, 可判定 (m != 0)] (f g : Π₀ _ : ι, M)
-  证明: DFunLike.coe_injective DFinsupp.coe_add _ _
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.coe_add, DFunLike, DFunLike.coe_injective, coe_add, coe_injective
+/-
+**DFinsupp.toFinsupp_add** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toFinsupp_add [AddZeroClass M] [forall m : M, Decidable (m != 0)] (f g : Π
+₀ _ : ι, M) : (toFinsupp (f + g) : ι ->₀ M) = toFinsupp f + toFinsupp g
+参数：m != 0；f g : Π₀ _ : ι, M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `DFinsupp.coe_add`：coe_add [forall i, AddZeroClass (β i)] (g₁ g₂ : Π₀ i, 
+β i) : ⇑(g₁ + g₂) = g₁ + g₂
 -/
-theorem toFinsupp_add [AddZeroClass M] [forall m : M, Decidable (m != 0)] (f g : Π₀ _ : ι, M) :
-    (toFinsupp (f + g) : ι ->₀ M) = toFinsupp f + toFinsupp g :=
-DFunLike.coe_injective DFinsupp.coe_add _ _
+theorem toFinsupp_add [AddZeroClass M] [∀ m : M, Decidable (m ≠ 0)] (f g : Π₀ _ : ι, M) :
+    (toFinsupp (f + g) : ι →₀ M) = toFinsupp f + toFinsupp g :=
+  DFunLike.coe_injective <| DFinsupp.coe_add _ _
 
 @[simp]
-/--
-theorem `toFinsupp_neg` / 定理 `toFinsupp_neg`
-
-English:
-theorem toFinsupp_neg
-  given: [AddGroup M] [forall m : M, Decidable (m != 0)] (f : Π₀ _ : ι, M)
-  proof: DFunLike.coe_injective DFinsupp.coe_neg _
-
-@[simp]
-
-中文:
-定理 toFinsupp_neg
-  条件: [加法群 M] [对任意 m : M, 可判定 (m != 0)] (f : Π₀ _ : ι, M)
-  证明: DFunLike.coe_injective DFinsupp.coe_neg _
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.coe_neg, DFunLike, DFunLike.coe_injective, coe_injective, coe_neg
+/-
+**DFinsupp.toFinsupp_neg** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toFinsupp_neg [AddGroup M] [forall m : M, Decidable (m != 0)] (f : Π₀ _ : 
+ι, M) : (toFinsupp (-f) : ι ->₀ M) = -toFinsupp f
+参数：m != 0；f : Π₀ _ : ι, M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `DFinsupp.coe_neg`：∀ {ι : Type u} {β : ι → Type v} [inst : (i : ι) → AddG
+roup (β i)] (g : Π₀ (i : ι), β i), ⇑(-g) = -⇑g
 -/
-theorem toFinsupp_neg [AddGroup M] [forall m : M, Decidable (m != 0)] (f : Π₀ _ : ι, M) :
-    (toFinsupp (-f) : ι ->₀ M) = -toFinsupp f :=
-DFunLike.coe_injective DFinsupp.coe_neg _
+theorem toFinsupp_neg [AddGroup M] [∀ m : M, Decidable (m ≠ 0)] (f : Π₀ _ : ι, M) :
+    (toFinsupp (-f) : ι →₀ M) = -toFinsupp f :=
+  DFunLike.coe_injective <| DFinsupp.coe_neg _
 
 @[simp]
-/--
-theorem `toFinsupp_sub` / 定理 `toFinsupp_sub`
-
-English:
-theorem toFinsupp_sub
-  given: [AddGroup M] [forall m : M, Decidable (m != 0)] (f g : Π₀ _ : ι, M)
-  proof: DFunLike.coe_injective DFinsupp.coe_sub _ _
-
-@[simp]
-
-中文:
-定理 toFinsupp_sub
-  条件: [加法群 M] [对任意 m : M, 可判定 (m != 0)] (f g : Π₀ _ : ι, M)
-  证明: DFunLike.coe_injective DFinsupp.coe_sub _ _
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.coe_sub, DFunLike, DFunLike.coe_injective, coe_injective, coe_sub
+/-
+**DFinsupp.toFinsupp_sub** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toFinsupp_sub [AddGroup M] [forall m : M, Decidable (m != 0)] (f g : Π₀ _ 
+: ι, M) : (toFinsupp (f - g) : ι ->₀ M) = toFinsupp f - toFinsupp g
+参数：m != 0；f g : Π₀ _ : ι, M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `DFinsupp.coe_sub`：coe_sub [forall i, AddGroup (β i)] (g₁ g₂ : Π₀ i, β i)
+ : ⇑(g₁ - g₂) = g₁ - g₂
 -/
-theorem toFinsupp_sub [AddGroup M] [forall m : M, Decidable (m != 0)] (f g : Π₀ _ : ι, M) :
-    (toFinsupp (f - g) : ι ->₀ M) = toFinsupp f - toFinsupp g :=
-DFunLike.coe_injective DFinsupp.coe_sub _ _
+theorem toFinsupp_sub [AddGroup M] [∀ m : M, Decidable (m ≠ 0)] (f g : Π₀ _ : ι, M) :
+    (toFinsupp (f - g) : ι →₀ M) = toFinsupp f - toFinsupp g :=
+  DFunLike.coe_injective <| DFinsupp.coe_sub _ _
 
 @[simp]
-/--
-theorem `toFinsupp_smul` / 定理 `toFinsupp_smul`
-
-English:
-theorem toFinsupp_smul
-  statement: [Monoid R] [AddMonoid M] [DistribMulAction R M] [forall m : M, Decidable (m != 0)]
-  proof: DFunLike.coe_injective DFinsupp.coe_smul _ _
-
-中文:
-定理 toFinsupp_smul
-  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [对任意 m : M, 可判定 (m != 0)]
-  证明: DFunLike.coe_injective DFinsupp.coe_smul _ _
-
-Depends on / 依赖: DFinsupp, DFinsupp.coe_smul, DFunLike, DFunLike.coe_injective, coe_injective, coe_smul
+/-
+**DFinsupp.toFinsupp_smul** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toFinsupp_smul [Monoid R] [AddMonoid M] [DistribMulAction R M] [forall m :
+ M, Decidable (m != 0)] (r : R) (f : Π₀ _ : ι, M) : (toFinsupp (r • f) : ι ->₀ M
+) = r • toFinsupp f
+参数：m != 0；r : R；f : Π₀ _ : ι, M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+· 使用定理 `DFinsupp.coe_smul`：coe_smul [forall i, Zero (β i)] [forall i, SMulZeroCl
+ass γ (β i)] (b : γ) (v : Π₀ i, β i) : ⇑(b • v) = b • ⇑v
 -/
-theorem toFinsupp_smul [Monoid R] [AddMonoid M] [DistribMulAction R M] [forall m : M, Decidable (m != 0)]
-    (r : R) (f : Π₀ _ : ι, M) : (toFinsupp (r • f) : ι ->₀ M) = r • toFinsupp f :=
-DFunLike.coe_injective DFinsupp.coe_smul _ _
+theorem toFinsupp_smul [Monoid R] [AddMonoid M] [DistribMulAction R M] [∀ m : M, Decidable (m ≠ 0)]
+    (r : R) (f : Π₀ _ : ι, M) : (toFinsupp (r • f) : ι →₀ M) = r • toFinsupp f :=
+  DFunLike.coe_injective <| DFinsupp.coe_smul _ _
 
 end DFinsupp
 
@@ -583,29 +467,23 @@ section Equivs
 
 /-- `Finsupp.toDFinsupp` and `DFinsupp.toFinsupp` together form an equiv. -/
 @[simps -fullyApplied]
-/--
-Definition of `finsuppEquivDFinsupp` / `finsuppEquivDFinsupp` 的定义
+/-
+**finsuppEquivDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finsuppEquivDFinsupp [DecidableEq ι] [Zero M] [forall m : M, Decidable (m 
+!= 0)] : (ι ->₀ M) ≃ Π₀ _ : ι, M where toFun
+参数：m != 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.toDFinsupp_toFinsupp`：Finsupp.toDFinsupp_toFinsupp (f : ι ->₀ M)
+ : f.toDFinsupp.toFinsupp = f
+· 使用定理 `DFinsupp.toFinsupp_toDFinsupp`：DFinsupp.toFinsupp_toDFinsupp (f : Π₀ _ :
+ ι, M) : f.toFinsupp.toDFinsupp = f
 
-English:
-definition finsuppEquivDFinsupp
-  signature: [DecidableEq ι] [Zero M] [forall m : M, Decidable (m != 0)]
-  body: Finsupp.toDFinsupp
-  invFun := DFinsupp.toFinsupp
-  left_inv := Finsupp.toDFinsupp_toFinsupp
-  right_inv := DFinsupp.toFinsupp_toDFinsupp
-
-中文:
-定义 finsuppEquivDFinsupp
-  签名: [DecidableEq ι] [零 M] [对任意 m : M, 可判定 (m != 0)]
-  定义体: Finsupp.toDFinsupp
-  invFun := DFinsupp.toFinsupp
-  left_inv := Finsupp.toDFinsupp_toFinsupp
-  right_inv := DFinsupp.toFinsupp_toDFinsupp
-
-Depends on / 依赖: Finsupp, Finsupp.toDFinsupp, toDFinsupp
+--- 原说明 ---
+`Finsupp.toDFinsupp` and `DFinsupp.toFinsupp` together form an equiv.
 -/
-def finsuppEquivDFinsupp [DecidableEq ι] [Zero M] [forall m : M, Decidable (m != 0)] :
-    (ι ->₀ M) ≃ Π₀ _ : ι, M where
+def finsuppEquivDFinsupp [DecidableEq ι] [Zero M] [∀ m : M, Decidable (m ≠ 0)] :
+    (ι →₀ M) ≃ Π₀ _ : ι, M where
   toFun := Finsupp.toDFinsupp
   invFun := DFinsupp.toFinsupp
   left_inv := Finsupp.toDFinsupp_toFinsupp
@@ -614,29 +492,23 @@ def finsuppEquivDFinsupp [DecidableEq ι] [Zero M] [forall m : M, Decidable (m !
 /-- The additive version of `finsupp.toFinsupp`. Note that this is `noncomputable` because
 `Finsupp.add` is noncomputable. -/
 @[simps -fullyApplied]
-/--
-Definition of `finsuppAddEquivDFinsupp` / `finsuppAddEquivDFinsupp` 的定义
+/-
+**finsuppAddEquivDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finsuppAddEquivDFinsupp [DecidableEq ι] [AddZeroClass M] [forall m : M, De
+cidable (m != 0)] : (ι ->₀ M) ≃+ Π₀ _ : ι, M
+参数：m != 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.toDFinsupp_add`：toDFinsupp_add [AddZeroClass M] (f g : ι ->₀ M) 
+: (f + g).toDFinsupp = f.toDFinsupp + g.toDFinsupp
 
-English:
-definition finsuppAddEquivDFinsupp
-  signature: [DecidableEq ι] [AddZeroClass M] [forall m : M, Decidable (m != 0)]
-  body: { finsuppEquivDFinsupp with
-    toFun := Finsupp.toDFinsupp
-    invFun := DFinsupp.toFinsupp
-    map_add' := Finsupp.toDFinsupp_add }
-
-中文:
-定义 finsuppAddEquivDFinsupp
-  签名: [DecidableEq ι] [加法零类 M] [对任意 m : M, 可判定 (m != 0)]
-  定义体: { finsuppEquivDFinsupp with
-    toFun := Finsupp.toDFinsupp
-    invFun := DFinsupp.toFinsupp
-    map_add' := Finsupp.toDFinsupp_add }
-
-Depends on / 依赖: DFinsupp, DFinsupp.toFinsupp, Finsupp, Finsupp.toDFinsupp, Finsupp.toDFinsupp_add, finsuppEquivDFinsupp, invFun, map_add, toDFinsupp, toDFinsupp_add, toFinsupp
+--- 原说明 ---
+The additive version of `finsupp.toFinsupp`. Note that this is `noncomputable` b
+ecause
+`Finsupp.add` is noncomputable.
 -/
-def finsuppAddEquivDFinsupp [DecidableEq ι] [AddZeroClass M] [forall m : M, Decidable (m != 0)] :
-    (ι ->₀ M) ≃+ Π₀ _ : ι, M :=
+def finsuppAddEquivDFinsupp [DecidableEq ι] [AddZeroClass M] [∀ m : M, Decidable (m ≠ 0)] :
+    (ι →₀ M) ≃+ Π₀ _ : ι, M :=
   { finsuppEquivDFinsupp with
     toFun := Finsupp.toDFinsupp
     invFun := DFinsupp.toFinsupp
@@ -644,35 +516,23 @@ def finsuppAddEquivDFinsupp [DecidableEq ι] [AddZeroClass M] [forall m : M, Dec
 
 variable (R)
 
-/--
-Definition of `finsuppLequivDFinsupp` / `finsuppLequivDFinsupp` 的定义
+/-- The additive version of `Finsupp.toFinsupp`. Note that this is `noncomputable` because
+`Finsupp.add` is noncomputable. -/
+/-
+**finsuppLequivDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finsuppLequivDFinsupp [DecidableEq ι] [Semiring R] [AddCommMonoid M] [fora
+ll m : M, Decidable (m != 0)] [Module R M] : (ι ->₀ M) ≃ₗ[R] Π₀ _ : ι, M
+参数：m != 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finsuppLequivDFinsupp
-  signature: [DecidableEq ι] [Semiring R] [AddCommMonoid M]
-  body: { finsuppEquivDFinsupp with
-    toFun := Finsupp.toDFinsupp
-    invFun := DFinsupp.toFinsupp
-    map_smul' := Finsupp.toDFinsupp_smul
-    map_add' := Finsupp.toDFinsupp_add }
-
-@[simp]
-
-中文:
-定义 finsuppLequivDFinsupp
-  签名: [DecidableEq ι] [半环 R] [加法交换幺半群 M]
-  定义体: { finsuppEquivDFinsupp with
-    toFun := Finsupp.toDFinsupp
-    invFun := DFinsupp.toFinsupp
-    map_smul' := Finsupp.toDFinsupp_smul
-    map_add' := Finsupp.toDFinsupp_add }
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.toFinsupp, Finsupp, Finsupp.toDFinsupp, Finsupp.toDFinsupp_add, Finsupp.toDFinsupp_smul, finsuppEquivDFinsupp, invFun, map_add, map_smul, toDFinsupp, toDFinsupp_add, toDFinsupp_smul, toFinsupp
+--- 原说明 ---
+The additive version of `Finsupp.toFinsupp`. Note that this is `noncomputable` b
+ecause
+`Finsupp.add` is noncomputable.
 -/
 def finsuppLequivDFinsupp [DecidableEq ι] [Semiring R] [AddCommMonoid M]
-    [forall m : M, Decidable (m != 0)] [Module R M] : (ι ->₀ M) ≃ₗ[R] Π₀ _ : ι, M :=
+    [∀ m : M, Decidable (m ≠ 0)] [Module R M] : (ι →₀ M) ≃ₗ[R] Π₀ _ : ι, M :=
   { finsuppEquivDFinsupp with
     toFun := Finsupp.toDFinsupp
     invFun := DFinsupp.toFinsupp
@@ -680,51 +540,31 @@ def finsuppLequivDFinsupp [DecidableEq ι] [Semiring R] [AddCommMonoid M]
     map_add' := Finsupp.toDFinsupp_add }
 
 @[simp]
-/--
-theorem `finsuppLequivDFinsupp_apply_apply` / 定理 `finsuppLequivDFinsupp_apply_apply`
-
-English:
-theorem finsuppLequivDFinsupp_apply_apply
-  statement: [DecidableEq ι] [Semiring R] [AddCommMonoid M]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finsuppLequivDFinsupp_apply_apply
-  结论: [DecidableEq ι] [半环 R] [加法交换幺半群 M]
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.toDFinsupp, toDFinsupp
+/-
+**finsuppLequivDFinsupp_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finsuppLequivDFinsupp_apply_apply [DecidableEq ι] [Semiring R] [AddCommMon
+oid M] [forall m : M, Decidable (m != 0)] [Module R M] : (↑(finsuppLequivDFinsup
+p (M
+参数：m != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finsuppLequivDFinsupp_apply_apply [DecidableEq ι] [Semiring R] [AddCommMonoid M]
-    [forall m : M, Decidable (m != 0)] [Module R M] :
-    (↑(finsuppLequivDFinsupp (M := M) R) : (ι ->₀ M) -> _) = Finsupp.toDFinsupp := rfl
+    [∀ m : M, Decidable (m ≠ 0)] [Module R M] :
+    (↑(finsuppLequivDFinsupp (M := M) R) : (ι →₀ M) → _) = Finsupp.toDFinsupp := rfl
 
 @[simp]
-/--
-theorem `finsuppLequivDFinsupp_symm_apply` / 定理 `finsuppLequivDFinsupp_symm_apply`
-
-English:
-theorem finsuppLequivDFinsupp_symm_apply
-  statement: [DecidableEq ι] [Semiring R] [AddCommMonoid M]
-  proof: rfl
-
-noncomputable section Sigma
-
-中文:
-定理 finsuppLequivDFinsupp_symm_apply
-  结论: [DecidableEq ι] [半环 R] [加法交换幺半群 M]
-  证明: rfl
-
-noncomputable section Sigma
-
-Depends on / 依赖: DFinsupp, DFinsupp.toFinsupp, toFinsupp
+/-
+**finsuppLequivDFinsupp_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finsuppLequivDFinsupp_symm_apply [DecidableEq ι] [Semiring R] [AddCommMono
+id M] [forall m : M, Decidable (m != 0)] [Module R M] : ↑(LinearEquiv.symm (fins
+uppLequivDFinsupp (ι
+参数：m != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finsuppLequivDFinsupp_symm_apply [DecidableEq ι] [Semiring R] [AddCommMonoid M]
-    [forall m : M, Decidable (m != 0)] [Module R M] :
+    [∀ m : M, Decidable (m ≠ 0)] [Module R M] :
     ↑(LinearEquiv.symm (finsuppLequivDFinsupp (ι := ι) (M := M) R)) = DFinsupp.toFinsupp :=
   rfl
 
@@ -732,67 +572,30 @@ noncomputable section Sigma
 
 /-! ### Stronger versions of `Finsupp.split` -/
 
-variable {η : ι -> Type*} {N : Type*} [Semiring R]
+variable {η : ι → Type*} {N : Type*} [Semiring R]
 
 open Finsupp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `sigmaFinsuppEquivDFinsupp` / `sigmaFinsuppEquivDFinsupp` 的定义
+/-- `Finsupp.split` is an equivalence between `(Σ i, η i) →₀ N` and `Π₀ i, (η i →₀ N)`. -/
+/-
+**sigmaFinsuppEquivDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：sigmaFinsuppEquivDFinsupp [Zero N] : ((Σ i, η i) ->₀ N) ≃ Π₀ i, η i ->₀ N 
+where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaFinsuppEquivDFinsupp
-  signature: [Zero N]
-  body: ⟨split f, Trunc.mk ⟨(splitSupport f : Finset ι).val, fun i => by
-          rw [← Finset.mem_def]; rw [mem_splitSupport_iff_nonzero]
-          exact (em _).symm⟩⟩
-  invFun f := by
-    haveI := Classical.decEq ι
-    haveI := fun i => Classical.decEq (η i ->₀ N)
-    refine
-      onFinset (Finset.sigma f.support fun j => (f j).support) (fun ji => f ji.1 ji.2) fun g hg =>
-        Finset.mem_sigma.mpr ⟨?_, mem_support_iff.mpr hg⟩
-    simp only [Ne, DFinsupp.mem_support_toFun]
-    intro h
-    dsimp at hg
-    rw [h] at hg
-    simp only [coe_zero, Pi.zero_apply, not_true] at hg
-  left_inv f := by ext; simp [split]
-  right_inv f := by ext; simp [split]
-
-@[simp]
-
-中文:
-定义 sigmaFinsuppEquivDFinsupp
-  签名: [零 N]
-  定义体: ⟨split f, Trunc.mk ⟨(splitSupport f : Finset ι).val, fun i => by
-          rw [← Finset.mem_def]; rw [mem_splitSupport_iff_nonzero]
-          exact (em _).symm⟩⟩
-  invFun f := by
-    haveI := Classical.decEq ι
-    haveI := fun i => Classical.decEq (η i ->₀ N)
-    refine
-      onFinset (Finset.sigma f.support fun j => (f j).support) (fun ji => f ji.1 ji.2) fun g hg =>
-        Finset.mem_sigma.mpr ⟨?_, mem_support_iff.mpr hg⟩
-    simp only [Ne, DFinsupp.mem_support_toFun]
-    intro h
-    dsimp at hg
-    rw [h] at hg
-    simp only [coe_zero, Pi.zero_apply, not_true] at hg
-  left_inv f := by ext; simp [split]
-  right_inv f := by ext; simp [split]
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.decEq, DFinsupp, DFinsupp.mem_support_toFun, Finset, Finset.mem_def, Finset.mem_sigma.mpr, Finset.sigma, Pi.zero_apply, Trunc.mk, coe_zero, f.support, invFun, mem_def, mem_sigma, mem_splitSupport_iff_nonzero, mem_support_iff, mem_support_iff.mpr, mem_support_toFun, not_true
+--- 原说明 ---
+`Finsupp.split` is an equivalence between `(Σ i, η i) →₀ N` and `Π₀ i, (η i →₀ N
+)`.
 -/
-def sigmaFinsuppEquivDFinsupp [Zero N] : ((Σ i, η i) ->₀ N) ≃ Π₀ i, η i ->₀ N where
+def sigmaFinsuppEquivDFinsupp [Zero N] : ((Σ i, η i) →₀ N) ≃ Π₀ i, η i →₀ N where
   toFun f := ⟨split f, Trunc.mk ⟨(splitSupport f : Finset ι).val, fun i => by
-          rw [← Finset.mem_def]; rw [mem_splitSupport_iff_nonzero]
+          rw [← Finset.mem_def, mem_splitSupport_iff_nonzero]
           exact (em _).symm⟩⟩
   invFun f := by
     haveI := Classical.decEq ι
-    haveI := fun i => Classical.decEq (η i ->₀ N)
+    haveI := fun i => Classical.decEq (η i →₀ N)
     refine
       onFinset (Finset.sigma f.support fun j => (f j).support) (fun ji => f ji.1 ji.2) fun g hg =>
         Finset.mem_sigma.mpr ⟨?_, mem_support_iff.mpr hg⟩
@@ -805,177 +608,156 @@ def sigmaFinsuppEquivDFinsupp [Zero N] : ((Σ i, η i) ->₀ N) ≃ Π₀ i, η 
   right_inv f := by ext; simp [split]
 
 @[simp]
-/--
-theorem `sigmaFinsuppEquivDFinsupp_apply` / 定理 `sigmaFinsuppEquivDFinsupp_apply`
-
-English:
-theorem sigmaFinsuppEquivDFinsupp_apply
-  given: [Zero N] (f : (Σ i, η i) ->₀ N)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sigmaFinsuppEquivDFinsupp_apply
-  条件: [零 N] (f : (Σ i, η i) ->₀ N)
-  证明: rfl
-
-@[simp]
+/-
+**sigmaFinsuppEquivDFinsupp_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sigmaFinsuppEquivDFinsupp_apply [Zero N] (f : (Σ i, η i) ->₀ N) : (sigmaFi
+nsuppEquivDFinsupp f : forall i, η i ->₀ N) = Finsupp.split f
+参数：f : (Σ i, η i) ->₀ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sigmaFinsuppEquivDFinsupp_apply [Zero N] (f : (Σ i, η i) ->₀ N) :
-    (sigmaFinsuppEquivDFinsupp f : forall i, η i ->₀ N) = Finsupp.split f :=
+theorem sigmaFinsuppEquivDFinsupp_apply [Zero N] (f : (Σ i, η i) →₀ N) :
+    (sigmaFinsuppEquivDFinsupp f : ∀ i, η i →₀ N) = Finsupp.split f :=
   rfl
 
 @[simp]
-/--
-theorem `sigmaFinsuppEquivDFinsupp_symm_apply` / 定理 `sigmaFinsuppEquivDFinsupp_symm_apply`
-
-English:
-theorem sigmaFinsuppEquivDFinsupp_symm_apply
-  given: [Zero N] (f : Π₀ i, η i ->₀ N) (s : Σ i, η i)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sigmaFinsuppEquivDFinsupp_symm_apply
-  条件: [零 N] (f : Π₀ i, η i ->₀ N) (s : Σ i, η i)
-  证明: rfl
-
-@[simp]
+/-
+**sigmaFinsuppEquivDFinsupp_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sigmaFinsuppEquivDFinsupp_symm_apply [Zero N] (f : Π₀ i, η i ->₀ N) (s : Σ
+ i, η i) : (sigmaFinsuppEquivDFinsupp.symm f : (Σ i, η i) ->₀ N) s = f s.1 s.2
+参数：f : Π₀ i, η i ->₀ N；s : Σ i, η i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem sigmaFinsuppEquivDFinsupp_symm_apply [Zero N] (f : Π₀ i, η i ->₀ N) (s : Σ i, η i) :
-    (sigmaFinsuppEquivDFinsupp.symm f : (Σ i, η i) ->₀ N) s = f s.1 s.2 :=
+theorem sigmaFinsuppEquivDFinsupp_symm_apply [Zero N] (f : Π₀ i, η i →₀ N) (s : Σ i, η i) :
+    (sigmaFinsuppEquivDFinsupp.symm f : (Σ i, η i) →₀ N) s = f s.1 s.2 :=
   rfl
 
 @[simp]
-/--
-theorem `sigmaFinsuppEquivDFinsupp_support` / 定理 `sigmaFinsuppEquivDFinsupp_support`
-
-English:
-theorem sigmaFinsuppEquivDFinsupp_support
-  statement: [DecidableEq ι] [Zero N]
-  proof: by
-  ext
-  rw [DFinsupp.mem_support_toFun]
-  exact (Finsupp.mem_splitSupport_iff_nonzero _ _).symm
-
-@[simp]
-
-中文:
-定理 sigmaFinsuppEquivDFinsupp_support
-  结论: [DecidableEq ι] [零 N]
-  证明: by
-  ext
-  rw [DFinsupp.mem_support_toFun]
-  exact (Finsupp.mem_splitSupport_iff_nonzero _ _).symm
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.mem_support_toFun, Finsupp, Finsupp.mem_splitSupport_iff_nonzero, mem_splitSupport_iff_nonzero, mem_support_toFun
+/-
+**sigmaFinsuppEquivDFinsupp_support** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sigmaFinsuppEquivDFinsupp_support [DecidableEq ι] [Zero N] [forall (i : ι)
+ (x : η i ->₀ N), Decidable (x != 0)] (f : (Σ i, η i) ->₀ N) : (sigmaFinsuppEqui
+vDFinsupp f).support = Finsupp.splitSupport f
+参数：i : ι；x : η i ->₀ N；x != 0；f : (Σ i, η i) ->₀ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFinsupp.mem_support_toFun`：mem_support_toFun (f : Π₀ i, β i) (i) : i in
+ f.support ↔ f i != 0
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Finsupp.mem_splitSupport_iff_nonzero`：mem_splitSupport_iff_nonzero (i : 
+ι) : i in splitSupport l ↔ split l i != 0
 -/
 theorem sigmaFinsuppEquivDFinsupp_support [DecidableEq ι] [Zero N]
-    [forall (i : ι) (x : η i ->₀ N), Decidable (x != 0)] (f : (Σ i, η i) ->₀ N) :
+    [∀ (i : ι) (x : η i →₀ N), Decidable (x ≠ 0)] (f : (Σ i, η i) →₀ N) :
     (sigmaFinsuppEquivDFinsupp f).support = Finsupp.splitSupport f := by
   ext
   rw [DFinsupp.mem_support_toFun]
   exact (Finsupp.mem_splitSupport_iff_nonzero _ _).symm
 
 @[simp]
-/--
-theorem `sigmaFinsuppEquivDFinsupp_single` / 定理 `sigmaFinsuppEquivDFinsupp_single`
-
-English:
-theorem sigmaFinsuppEquivDFinsupp_single
-  given: [DecidableEq ι] [Zero N] (a : Σ i, η i) (n : N)
-  proof: by
-  obtain ⟨i, a⟩ := a
-  ext j b
-  by_cases h : i = j
-  · subst h
-    classical simp [split_apply, Finsupp.single_apply]
-  suffices Finsupp.single (⟨i, a⟩ : Σ i, η i) n ⟨j, b⟩ = 0 by simp [split_apply, dif_neg h, this]
-  have H : (⟨i, a⟩ : Σ i, η i) != ⟨j, b⟩ := by simp [h]
-  classical rw [Finsupp.single_apply, if_neg H]
-
-中文:
-定理 sigmaFinsuppEquivDFinsupp_single
-  条件: [DecidableEq ι] [零 N] (a : Σ i, η i) (n : N)
-  证明: by
-  obtain ⟨i, a⟩ := a
-  ext j b
-  by_cases h : i = j
-  · subst h
-    classical simp [split_apply, Finsupp.single_apply]
-  suffices Finsupp.single (⟨i, a⟩ : Σ i, η i) n ⟨j, b⟩ = 0 by simp [split_apply, dif_neg h, this]
-  have H : (⟨i, a⟩ : Σ i, η i) != ⟨j, b⟩ := by simp [h]
-  classical rw [Finsupp.single_apply, if_neg H]
-
-Depends on / 依赖: Finsupp, Finsupp.single, Finsupp.single_apply, classical, dif_neg, if_neg, single, single_apply, split_apply
+/-
+**sigmaFinsuppEquivDFinsupp_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sigmaFinsuppEquivDFinsupp_single [DecidableEq ι] [Zero N] (a : Σ i, η i) (
+n : N) : sigmaFinsuppEquivDFinsupp (Finsupp.single a n) = @DFinsupp.single _ (fu
+n i => η i ->₀ N) _ _ a.1 (Finsupp.single a.2 n)
+参数：a : Σ i, η i；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.split_apply`：split_apply (i : ι) (x : αs i) : split l i x = l ⟨i
+, x⟩
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Sigma.mk.injEq`：∀ {α : Type u} {β : α → Type v} (fst : α) (snd : β fst) 
+(fst_1 : α) (snd_1 : β fst_1),   (⟨fst, snd⟩ = ⟨fst_1, snd_1⟩) = (fst = fst_1 ∧ 
+snd …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DFinsupp.single_apply`：single_apply {i i' b} : (single i b : Π₀ i, β i) 
+i' = if h : i = i' then Eq.recOn h b else 0
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem sigmaFinsuppEquivDFinsupp_single [DecidableEq ι] [Zero N] (a : Σ i, η i) (n : N) :
     sigmaFinsuppEquivDFinsupp (Finsupp.single a n) =
-      @DFinsupp.single _ (fun i => η i ->₀ N) _ _ a.1 (Finsupp.single a.2 n) := by
+      @DFinsupp.single _ (fun i => η i →₀ N) _ _ a.1 (Finsupp.single a.2 n) := by
   obtain ⟨i, a⟩ := a
   ext j b
   by_cases h : i = j
   · subst h
     classical simp [split_apply, Finsupp.single_apply]
   suffices Finsupp.single (⟨i, a⟩ : Σ i, η i) n ⟨j, b⟩ = 0 by simp [split_apply, dif_neg h, this]
-  have H : (⟨i, a⟩ : Σ i, η i) != ⟨j, b⟩ := by simp [h]
+  have H : (⟨i, a⟩ : Σ i, η i) ≠ ⟨j, b⟩ := by simp [h]
   classical rw [Finsupp.single_apply, if_neg H]
 
 -- Without this Lean fails to find the `AddZeroClass` instance on `Π₀ i, (η i →₀ N)`.
 attribute [-instance] Finsupp.instZero
 
 @[simp]
-/--
-theorem `sigmaFinsuppEquivDFinsupp_add` / 定理 `sigmaFinsuppEquivDFinsupp_add`
-
-English:
-theorem sigmaFinsuppEquivDFinsupp_add
-  given: [AddZeroClass N] (f g : (Σ i, η i) ->₀ N)
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 sigmaFinsuppEquivDFinsupp_add
-  条件: [加法零类 N] (f g : (Σ i, η i) ->₀ N)
-  证明: by
-  ext
-  rfl
+/-
+**sigmaFinsuppEquivDFinsupp_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sigmaFinsuppEquivDFinsupp_add [AddZeroClass N] (f g : (Σ i, η i) ->₀ N) : 
+sigmaFinsuppEquivDFinsupp (f + g) = (sigmaFinsuppEquivDFinsupp f + sigmaFinsuppE
+quivDFinsupp g : Π₀ i : ι, η i ->₀ N)
+参数：f g : (Σ i, η i) ->₀ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 -/
-theorem sigmaFinsuppEquivDFinsupp_add [AddZeroClass N] (f g : (Σ i, η i) ->₀ N) :
+theorem sigmaFinsuppEquivDFinsupp_add [AddZeroClass N] (f g : (Σ i, η i) →₀ N) :
     sigmaFinsuppEquivDFinsupp (f + g) =
-      (sigmaFinsuppEquivDFinsupp f + sigmaFinsuppEquivDFinsupp g : Π₀ i : ι, η i ->₀ N) := by
+      (sigmaFinsuppEquivDFinsupp f + sigmaFinsuppEquivDFinsupp g : Π₀ i : ι, η i →₀ N) := by
   ext
   rfl
 
 /-- `Finsupp.split` is an additive equivalence between `(Σ i, η i) →₀ N` and `Π₀ i, (η i →₀ N)`. -/
 @[simps]
-/--
-Definition of `sigmaFinsuppAddEquivDFinsupp` / `sigmaFinsuppAddEquivDFinsupp` 的定义
+/-
+**sigmaFinsuppAddEquivDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：sigmaFinsuppAddEquivDFinsupp [AddZeroClass N] : ((Σ i, η i) ->₀ N) ≃+ Π₀ i
+, η i ->₀ N
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `sigmaFinsuppEquivDFinsupp_add`：sigmaFinsuppEquivDFinsupp_add [AddZeroCla
+ss N] (f g : (Σ i, η i) ->₀ N) : sigmaFinsuppEquivDFinsupp (f + g) = (sigmaFinsu
+ppEquivDFinsupp f +…
 
-English:
-definition sigmaFinsuppAddEquivDFinsupp
-  signature: [AddZeroClass N]
-  body: { sigmaFinsuppEquivDFinsupp with
-    toFun := sigmaFinsuppEquivDFinsupp
-    invFun := sigmaFinsuppEquivDFinsupp.symm
-    map_add' := sigmaFinsuppEquivDFinsupp_add }
-
-中文:
-定义 sigmaFinsuppAddEquivDFinsupp
-  签名: [加法零类 N]
-  定义体: { sigmaFinsuppEquivDFinsupp with
-    toFun := sigmaFinsuppEquivDFinsupp
-    invFun := sigmaFinsuppEquivDFinsupp.symm
-    map_add' := sigmaFinsuppEquivDFinsupp_add }
-
-Depends on / 依赖: invFun, map_add, sigmaFinsuppEquivDFinsupp, sigmaFinsuppEquivDFinsupp.symm, sigmaFinsuppEquivDFinsupp_add
+--- 原说明 ---
+`Finsupp.split` is an additive equivalence between `(Σ i, η i) →₀ N` and `Π₀ i, 
+(η i →₀ N)`.
 -/
-def sigmaFinsuppAddEquivDFinsupp [AddZeroClass N] : ((Σ i, η i) ->₀ N) ≃+ Π₀ i, η i ->₀ N :=
+def sigmaFinsuppAddEquivDFinsupp [AddZeroClass N] : ((Σ i, η i) →₀ N) ≃+ Π₀ i, η i →₀ N :=
   { sigmaFinsuppEquivDFinsupp with
     toFun := sigmaFinsuppEquivDFinsupp
     invFun := sigmaFinsuppEquivDFinsupp.symm
@@ -984,25 +766,19 @@ def sigmaFinsuppAddEquivDFinsupp [AddZeroClass N] : ((Σ i, η i) ->₀ N) ≃+ 
 attribute [-instance] Finsupp.instAddZeroClass
 
 @[simp]
-/--
-theorem `sigmaFinsuppEquivDFinsupp_smul` / 定理 `sigmaFinsuppEquivDFinsupp_smul`
-
-English:
-theorem sigmaFinsuppEquivDFinsupp_smul
-  statement: {R} [Monoid R] [AddMonoid N] [DistribMulAction R N] (r : R)
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 sigmaFinsuppEquivDFinsupp_smul
-  结论: {R} [幺半群 R] [加法幺半群 N] [分配乘法作用 R N] (r : R)
-  证明: by
-  ext
-  rfl
+/-
+**sigmaFinsuppEquivDFinsupp_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sigmaFinsuppEquivDFinsupp_smul {R} [Monoid R] [AddMonoid N] [DistribMulAct
+ion R N] (r : R) (f : (Σ i, η i) ->₀ N) : sigmaFinsuppEquivDFinsupp (r • f) = r 
+• sigmaFinsuppEquivDFinsupp f
+参数：r : R；f : (Σ i, η i) ->₀ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 -/
 theorem sigmaFinsuppEquivDFinsupp_smul {R} [Monoid R] [AddMonoid N] [DistribMulAction R N] (r : R)
-    (f : (Σ i, η i) ->₀ N) :
+    (f : (Σ i, η i) →₀ N) :
     sigmaFinsuppEquivDFinsupp (r • f) = r • sigmaFinsuppEquivDFinsupp f := by
   ext
   rfl
@@ -1011,28 +787,23 @@ attribute [-instance] Finsupp.instAddMonoid
 
 /-- `Finsupp.split` is a linear equivalence between `(Σ i, η i) →₀ N` and `Π₀ i, (η i →₀ N)`. -/
 @[simps]
-/--
-Definition of `sigmaFinsuppLequivDFinsupp` / `sigmaFinsuppLequivDFinsupp` 的定义
+/-
+**sigmaFinsuppLequivDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：sigmaFinsuppLequivDFinsupp [AddCommMonoid N] [Module R N] : ((Σ i, η i) ->
+₀ N) ≃ₗ[R] Π₀ i, η i ->₀ N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaFinsuppLequivDFinsupp
-  signature: [AddCommMonoid N] [Module R N]
-  body: { sigmaFinsuppAddEquivDFinsupp with
-    map_smul' := sigmaFinsuppEquivDFinsupp_smul }
-
-中文:
-定义 sigmaFinsuppLequivDFinsupp
-  签名: [加法交换幺半群 N] [模 R N]
-  定义体: { sigmaFinsuppAddEquivDFinsupp with
-    map_smul' := sigmaFinsuppEquivDFinsupp_smul }
-
-Depends on / 依赖: map_smul, sigmaFinsuppAddEquivDFinsupp, sigmaFinsuppEquivDFinsupp_smul
+--- 原说明 ---
+`Finsupp.split` is a linear equivalence between `(Σ i, η i) →₀ N` and `Π₀ i, (η 
+i →₀ N)`.
 -/
 def sigmaFinsuppLequivDFinsupp [AddCommMonoid N] [Module R N] :
-    ((Σ i, η i) ->₀ N) ≃ₗ[R] Π₀ i, η i ->₀ N :=
+    ((Σ i, η i) →₀ N) ≃ₗ[R] Π₀ i, η i →₀ N :=
   { sigmaFinsuppAddEquivDFinsupp with
     map_smul' := sigmaFinsuppEquivDFinsupp_smul }
 
 end Sigma
 
 end Equivs
+

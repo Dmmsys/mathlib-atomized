@@ -57,112 +57,157 @@ namespace MeasureTheory
 
 section Preliminaries
 
-variable {ι : Type*} {X : ι -> Type*} {mX : forall i, MeasurableSpace (X i)}
-variable (μ : (i : ι) -> Measure (X i)) [hμ : forall i, IsProbabilityMeasure (μ i)]
+variable {ι : Type*} {X : ι → Type*} {mX : ∀ i, MeasurableSpace (X i)}
+variable (μ : (i : ι) → Measure (X i)) [hμ : ∀ i, IsProbabilityMeasure (μ i)]
 
-/--
-lemma `isProjectiveMeasureFamily_pi` / 引理 `isProjectiveMeasureFamily_pi`
+/-- Consider a family of probability measures. You can take their products for any finite
+subfamily. This gives a projective family of measures. -/
+/-
+**MeasureTheory.isProjectiveMeasureFamily_pi** 是 Mathlib 中的一个引理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：isProjectiveMeasureFamily_pi : IsProjectiveMeasureFamily (fun I : Finset ι
+ => (Measure.pi (fun i : I => μ i)))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.pi_eq`：pi_eq [forall i, SigmaFinite (μ i)] {μ' : M
+easure (forall i, α i)} (h : forall s : forall i, Set (α i), (forall i, Measurab
+leSet (s i)) -> μ…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Finset.measurable_restrict₂`：Finset.measurable_restrict₂ {s t : Finset δ
+} (hst : s subseteq t) : Measurable (Finset.restrict₂ (π
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `Finset.restrict₂_preimage`：restrict₂_preimage [DecidablePred (· in s)] (
+hst : s subseteq t) (u : (i : s) -> Set (π i)) : (restrict₂ hst) ⁻¹' (Set.univ.p
+i u) = (@Set.un…
+· 使用定理 `MeasureTheory.Measure.pi_pi`：pi_pi [forall i, SigmaFinite (μ i)] (s : (i
+ : ι) -> Set (α i)) : Measure.pi μ (pi univ s) = ∏ i, μ i (s i)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.prod_eq_prod_extend`：prod_eq_prod_extend (f : s -> M) : ∏ x, f x 
+= ∏ x in s, Subtype.val.extend f 1 x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_subset_one_on_sdiff`：prod_subset_one_on_sdiff [DecidableEq ι
+] (h : s₁ subseteq s₂) (hg : forall x in s₂ \ s₁, g x = 1) (hfg : forall x in s₁
+, f x = g x) : ∏ i in…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_sdiff`：mem_sdiff : a in s \ t ↔ a in s ∧ a ∉ t
+· 使用定理 `Function.extend_val_apply`：∀ {β : Sort u_2} {γ : Sort u_3} {p : β → Prop
+} {g : { x // p x } → γ} {j : β → γ} {b : β} (hb : p b),   Function.extend Subty
+pe.val g j b = …
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 
-English:
-lemma isProjectiveMeasureFamily_pi
-  proof: by
-  refine fun I J hJI => Measure.pi_eq (fun s ms => ?_)
-  classical
-  simp_rw [Measure.map_apply (measurable_restrict₂ hJI) (.univ_pi ms), restrict₂_preimage hJI,
-    Measure.pi_pi, prod_eq_prod_extend]
-  refine (prod_subset_one_on_sdiff hJI (fun x hx => ?_) (fun x hx => ?_)).symm
-  · rw [Function.extend_val_apply (mem_sdiff.1 hx).1, dif_neg (mem_sdiff.1 hx).2, measure_univ]
-  · rw [Function.extend_val_apply hx, Function.extend_val_apply (hJI hx), dif_pos hx]
-
-中文:
-引理 isProjectiveMeasureFamily_pi
-  证明: by
-  refine fun I J hJI => Measure.pi_eq (fun s ms => ?_)
-  classical
-  simp_rw [Measure.map_apply (measurable_restrict₂ hJI) (.univ_pi ms), restrict₂_preimage hJI,
-    Measure.pi_pi, prod_eq_prod_extend]
-  refine (prod_subset_one_on_sdiff hJI (fun x hx => ?_) (fun x hx => ?_)).symm
-  · rw [Function.extend_val_apply (mem_sdiff.1 hx).1, dif_neg (mem_sdiff.1 hx).2, measure_univ]
-  · rw [Function.extend_val_apply hx, Function.extend_val_apply (hJI hx), dif_pos hx]
-
-Depends on / 依赖: Function, Function.extend_val_apply, Measure, Measure.map_apply, Measure.pi_eq, Measure.pi_pi, classical, dif_neg, dif_pos, extend_val_apply, map_apply, measure_univ, mem_sdiff, pi_eq, pi_pi, prod_eq_prod_extend, prod_subset_one_on_sdiff, simp_rw, univ_pi
+--- 原说明 ---
+Consider a family of probability measures. You can take their products for any f
+inite
+subfamily. This gives a projective family of measures.
 -/
 lemma isProjectiveMeasureFamily_pi :
-    IsProjectiveMeasureFamily (fun I : Finset ι => (Measure.pi (fun i : I => μ i))) := by
-  refine fun I J hJI => Measure.pi_eq (fun s ms => ?_)
+    IsProjectiveMeasureFamily (fun I : Finset ι ↦ (Measure.pi (fun i : I ↦ μ i))) := by
+  refine fun I J hJI ↦ Measure.pi_eq (fun s ms ↦ ?_)
   classical
   simp_rw [Measure.map_apply (measurable_restrict₂ hJI) (.univ_pi ms), restrict₂_preimage hJI,
     Measure.pi_pi, prod_eq_prod_extend]
-  refine (prod_subset_one_on_sdiff hJI (fun x hx => ?_) (fun x hx => ?_)).symm
+  refine (prod_subset_one_on_sdiff hJI (fun x hx ↦ ?_) (fun x hx ↦ ?_)).symm
   · rw [Function.extend_val_apply (mem_sdiff.1 hx).1, dif_neg (mem_sdiff.1 hx).2, measure_univ]
   · rw [Function.extend_val_apply hx, Function.extend_val_apply (hJI hx), dif_pos hx]
 
-/--
-Definition of `piContent` / `piContent` 的定义
+/-- Consider a family of probability measures. You can take their products for any finite
+subfamily. This gives an additive content on the measurable cylinders. -/
+/-
+**MeasureTheory.piContent** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：piContent : AddContent Real>=0∞ (measurableCylinders X)
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.isProjectiveMeasureFamily_pi`：isProjectiveMeasureFamily_pi
+ : IsProjectiveMeasureFamily (fun I : Finset ι => (Measure.pi (fun i : I => μ i)
+))
 
-English:
-definition piContent
-  signature: : AddContent Real>=0∞ (measurableCylinders X)
-  body: projectiveFamilyContent (isProjectiveMeasureFamily_pi μ)
-
-中文:
-定义 piContent
-  签名: : 加法内容 实数>=0∞ (measurableCylinders X)
-  定义体: projectiveFamilyContent (isProjectiveMeasureFamily_pi μ)
-
-Depends on / 依赖: isProjectiveMeasureFamily_pi, projectiveFamilyContent
+--- 原说明 ---
+Consider a family of probability measures. You can take their products for any f
+inite
+subfamily. This gives an additive content on the measurable cylinders.
 -/
-noncomputable def piContent : AddContent Real>=0∞ (measurableCylinders X) :=
+noncomputable def piContent : AddContent ℝ≥0∞ (measurableCylinders X) :=
   projectiveFamilyContent (isProjectiveMeasureFamily_pi μ)
-
-/--
-lemma `piContent_cylinder` / 引理 `piContent_cylinder`
-
-English:
-lemma piContent_cylinder
-  given: {I : Finset ι} {S : Set (Π i : I, X i)} (hS : MeasurableSet S)
-  proof: projectiveFamilyContent_cylinder _ hS
-
-中文:
-引理 piContent_cylinder
-  条件: {I : 有限集 ι} {S : 集合 (Π i : I, X i)} (hS : 可测集 S)
-  证明: projectiveFamilyContent_cylinder _ hS
-
-Depends on / 依赖: projectiveFamilyContent_cylinder
+/-
+**MeasureTheory.piContent_cylinder** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：piContent_cylinder {I : Finset ι} {S : Set (Π i : I, X i)} (hS : Measurabl
+eSet S) : piContent μ (cylinder I S) = Measure.pi (fun i : I => μ i) S
+参数：Π i : I, X i；hS : MeasurableSet S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.projectiveFamilyContent_cylinder`：projectiveFamilyContent_
+cylinder (hP : IsProjectiveMeasureFamily P) (hS : MeasurableSet S) : projectiveF
+amilyContent hP (cylinder I S) = P I…
+· 使用引理 `MeasureTheory.isProjectiveMeasureFamily_pi`：isProjectiveMeasureFamily_pi
+ : IsProjectiveMeasureFamily (fun I : Finset ι => (Measure.pi (fun i : I => μ i)
+))
 -/
 lemma piContent_cylinder {I : Finset ι} {S : Set (Π i : I, X i)} (hS : MeasurableSet S) :
-    piContent μ (cylinder I S) = Measure.pi (fun i : I => μ i) S :=
+    piContent μ (cylinder I S) = Measure.pi (fun i : I ↦ μ i) S :=
   projectiveFamilyContent_cylinder _ hS
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `piContent_eq_measure_pi` / 定理 `piContent_eq_measure_pi`
-
-English:
-theorem piContent_eq_measure_pi
-  given: [Fintype ι] {s : Set (Π i, X i)} (hs : MeasurableSet s)
-  proof: by
-  let e : @Finset.univ ι _ ≃ ι :=
-    { toFun i := i
-      invFun i := ⟨i, mem_univ i⟩ }
-  have : s = cylinder univ (MeasurableEquiv.piCongrLeft X e ⁻¹' s) := rfl
-  nth_rw 1 [this]
-  dsimp [e]
-  rw [piContent_cylinder _ (hs.preimage (by fun_prop))]; rw [← Measure.pi_map_piCongrLeft e]; rw [← Measure.map_apply (by fun_prop) hs]; rfl
-
-中文:
-定理 piContent_eq_measure_pi
-  条件: [有限类型 ι] {s : 集合 (Π i, X i)} (hs : 可测集 s)
-  证明: by
-  let e : @Finset.univ ι _ ≃ ι :=
-    { toFun i := i
-      invFun i := ⟨i, mem_univ i⟩ }
-  have : s = cylinder univ (MeasurableEquiv.piCongrLeft X e ⁻¹' s) := rfl
-  nth_rw 1 [this]
-  dsimp [e]
-  rw [piContent_cylinder _ (hs.preimage (by fun_prop))]; rw [← Measure.pi_map_piCongrLeft e]; rw [← Measure.map_apply (by fun_prop) hs]; rfl
-
-Depends on / 依赖: Finset, Finset.univ, MeasurableEquiv, MeasurableEquiv.piCongrLeft, Measure, Measure.map_apply, Measure.pi_map_piCongrLeft, cylinder, fun_prop, hs.preimage, invFun, map_apply, mem_univ, nth_rw, piCongrLeft, piContent_cylinder, pi_map_piCongrLeft, preimage
+/-
+**MeasureTheory.piContent_eq_measure_pi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+`。
+形式化陈述：piContent_eq_measure_pi [Fintype ι] {s : Set (Π i, X i)} (hs : MeasurableS
+et s) : piContent μ s = Measure.pi μ s
+参数：Π i, X i；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.piContent_cylinder`：piContent_cylinder {I : Finset ι} {S :
+ Set (Π i : I, X i)} (hS : MeasurableSet S) : piContent μ (cylinder I S) = Measu
+re.pi (fun i : I => μ …
+· 使用定理 `MeasurableSet.preimage`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {m :
+ MeasurableSpace α} {mβ : MeasurableSpace β} {t : Set β},   MeasurableSet t → Me
+asurable f →…
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.pi_map_piCongrLeft`：∀ {ι : Type u_1} {ι' : Type u_
+2} [inst : Fintype ι] [inst_1 : Fintype ι'] (e : ι ≃ ι') {β : ι' → Type u_4}   [
+inst_2 : (i : ι') → Measurable…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
 -/
 theorem piContent_eq_measure_pi [Fintype ι] {s : Set (Π i, X i)} (hs : MeasurableSet s) :
     piContent μ s = Measure.pi μ s := by
@@ -172,7 +217,8 @@ theorem piContent_eq_measure_pi [Fintype ι] {s : Set (Π i, X i)} (hs : Measura
   have : s = cylinder univ (MeasurableEquiv.piCongrLeft X e ⁻¹' s) := rfl
   nth_rw 1 [this]
   dsimp [e]
-  rw [piContent_cylinder _ (hs.preimage (by fun_prop))]; rw [← Measure.pi_map_piCongrLeft e]; rw [← Measure.map_apply (by fun_prop) hs]; rfl
+  rw [piContent_cylinder _ (hs.preimage (by fun_prop)), ← Measure.pi_map_piCongrLeft e,
+    ← Measure.map_apply (by fun_prop) hs]; rfl
 
 end Preliminaries
 
@@ -182,363 +228,516 @@ open Kernel
 
 /-! ### Product of measures indexed by `ℕ` -/
 
-variable {X : Nat -> Type*}
+variable {X : ℕ → Type*}
 
-variable {mX : forall n, MeasurableSpace (X n)}
-  (μ : (n : Nat) -> Measure (X n)) [hμ : forall n, IsProbabilityMeasure (μ n)]
+variable {mX : ∀ n, MeasurableSpace (X n)}
+  (μ : (n : ℕ) → Measure (X n)) [hμ : ∀ n, IsProbabilityMeasure (μ n)]
 
 namespace Measure
 
-/--
-Definition of `infinitePiNat` / `infinitePiNat` 的定义
+/-- Infinite product measure indexed by `ℕ`. This is an auxiliary construction, you should use
+the generic product measure `Measure.infinitePi`. -/
+/-
+**MeasureTheory.Measure.infinitePiNat** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：infinitePiNat : Measure (Π n, X n)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition infinitePiNat
-  signature: : Measure (Π n, X n)
-  body: (traj (fun n => const _ (μ (n + 1))) 0) ∘ₘ (Measure.pi (fun i : Iic 0 => μ i))
-
-中文:
-定义 infinitePi自然数
-  签名: : 测度 (Π n, X n)
-  定义体: (traj (fun n => const _ (μ (n + 1))) 0) ∘ₘ (Measure.pi (fun i : Iic 0 => μ i))
-
-Depends on / 依赖: Measure, Measure.pi
+--- 原说明 ---
+Infinite product measure indexed by `ℕ`. This is an auxiliary construction, you 
+should use
+the generic product measure `Measure.infinitePi`.
 -/
 noncomputable def infinitePiNat : Measure (Π n, X n) :=
-  (traj (fun n => const _ (μ (n + 1))) 0) ∘ₘ (Measure.pi (fun i : Iic 0 => μ i))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsProbabilityMeasure (Measure.infinitePiNat μ)
-  body: by
-  rw [Measure.infinitePiNat]; infer_instance
-
-中文:
-实例 :
-  签名: 是概率测度 (测度.infinitePi自然数 μ)
-  定义体: by
-  rw [Measure.infinitePiNat]; infer_instance
-
-Depends on / 依赖: Measure, Measure.infinitePiNat, infer_instance, infinitePiNat
+  (traj (fun n ↦ const _ (μ (n + 1))) 0) ∘ₘ (Measure.pi (fun i : Iic 0 ↦ μ i))
+/-
+**MeasureTheory.Measure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsProbabilityMeasure (Measure.infinitePiNat μ) := by
   rw [Measure.infinitePiNat]; infer_instance
 
-/--
-lemma `pi_prod_map_IocProdIoc` / 引理 `pi_prod_map_IocProdIoc`
+/-- Let `μ : (i : Ioc a c) → Measure (X i)` be a family of measures. Up to an equivalence,
+`(⨂ i : Ioc a b, μ i) ⊗ (⨂ i : Ioc b c, μ i) = ⨂ i : Ioc a c, μ i`, where `⊗` denotes the
+product of measures. -/
+/-
+**MeasureTheory.Measure.pi_prod_map_IocProdIoc** 是 Mathlib 中的一个引理，位于命名空间 `Measur
+eTheory.Measure`。
+形式化陈述：pi_prod_map_IocProdIoc {a b c : Nat} (hab : a <= b) (hbc : b <= c) : ((Mea
+sure.pi (fun i : Ioc a b => μ i)).prod (Measure.pi (fun i : Ioc b c => μ i))).ma
+p (IocProdIoc a b c) = Measure.pi (fun i : Ioc a c => μ i)
+参数：hab : a <= b；hbc : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.pi_eq`：pi_eq [forall i, SigmaFinite (μ i)] {μ' : M
+easure (forall i, α i)} (h : forall s : forall i, Set (α i), (forall i, Measurab
+leSet (s i)) -> μ…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用引理 `measurable_IocProdIoc`：measurable_IocProdIoc [forall i, MeasurableSpace 
+(X i)] {a b c : ι} : Measurable (IocProdIoc (X
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `Subtype.countable`：∀ {α : Sort u} [Countable α] {p : α → Prop}, Countabl
+e { x // p x }
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Finset.Ioc_subset_Ioc_right`：Ioc_subset_Ioc_right (h : b₁ <= b₂) : Ioc a
+ b₁ subseteq Ioc a b₂
+· 使用定理 `Finset.Ioc_subset_Ioc_left`：Ioc_subset_Ioc_left (h : a₁ <= a₂) : Ioc a₂ 
+b subseteq Ioc a₁ b
+· 使用定理 `IocProdIoc_preimage`：∀ {ι : Type u_1} [inst : LinearOrder ι] [inst_1 : L
+ocallyFiniteOrder ι] [inst_2 : DecidableLE ι] {X : ι → Type u_2}   {a b c : ι} (
+hab : a ≤…
+· 使用定理 `MeasureTheory.Measure.prod_prod`：prod_prod (s : Set α) (t : Set β) : μ.p
+rod ν (s ×ˢ t) = μ s * ν t
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.Measure.pi.sigmaFinite`：∀ {ι : Type u_1} {α : ι → Type u_3
+} [inst : Fintype ι] [inst_1 : (i : ι) → MeasurableSpace (α i)]   (μ : (i : ι) →
+ MeasureTheory.Measure (α …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.Measure.pi_pi`：pi_pi [forall i, SigmaFinite (μ i)] (s : (i
+ : ι) -> Set (α i)) : Measure.pi μ (pi univ s) = ∏ i, μ i (s i)
+· 使用定理 `Finset.prod_eq_prod_extend`：prod_eq_prod_extend (f : s -> M) : ∏ x, f x 
+= ∏ x in s, Subtype.val.extend f 1 x
+· 使用定理 `Eq.comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Finset.Ioc_union_Ioc_eq_Ioc`：Ioc_union_Ioc_eq_Ioc {a b c : α} (h₁ : a <=
+ b) (h₂ : b <= c) : Ioc a b union Ioc b c = Ioc a c
+· 使用定理 `Finset.prod_union`：prod_union [DecidableEq ι] (h : Disjoint s₁ s₂) : ∏ x
+ in s₁ union s₂, f x = (∏ x in s₁, f x) * ∏ x in s₂, f x
+· 使用定理 `Finset.Ioc_disjoint_Ioc_of_le`：Ioc_disjoint_Ioc_of_le {d : α} (hbc : b <
+= c) : Disjoint (Ioc a b) (Ioc c d)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Function.extend_val_apply`：∀ {β : Sort u_2} {γ : Sort u_3} {p : β → Prop
+} {g : { x // p x } → γ} {j : β → γ} {b : β} (hb : p b),   Function.extend Subty
+pe.val g j b = …
+· 使用定理 `Finset.restrict₂.eq_1`：∀ {ι : Type u_2} {π : ι → Type u_3} {s t : Finset
+ ι} (hst : s ⊆ t) (f : (i : ↥t) → π ↑i) (i : ↥s),   Finset.restrict₂ hst f i = f
+ ⟨↑i, ⋯⟩
 
-English:
-lemma pi_prod_map_IocProdIoc
-  given: {a b c : Nat} (hab : a <= b) (hbc : b <= c)
-  proof: by
-  refine (Measure.pi_eq fun s ms => ?_).symm
+--- 原说明 ---
+Let `μ : (i : Ioc a c) → Measure (X i)` be a family of measures. Up to an equiva
+lence,
+`(⨂ i : Ioc a b, μ i) ⊗ (⨂ i : Ioc b c, μ i) = ⨂ i : Ioc a c, μ i`, where `⊗` de
+notes the
+product of measures.
+-/
+lemma pi_prod_map_IocProdIoc {a b c : ℕ} (hab : a ≤ b) (hbc : b ≤ c) :
+    ((Measure.pi (fun i : Ioc a b ↦ μ i)).prod (Measure.pi (fun i : Ioc b c ↦ μ i))).map
+      (IocProdIoc a b c) = Measure.pi (fun i : Ioc a c ↦ μ i) := by
+  refine (Measure.pi_eq fun s ms ↦ ?_).symm
   simp_rw [Measure.map_apply measurable_IocProdIoc (.univ_pi ms), IocProdIoc_preimage hab hbc,
     Measure.prod_prod, Measure.pi_pi, prod_eq_prod_extend]
   nth_rw 1 [Eq.comm, ← Ioc_union_Ioc_eq_Ioc hab hbc, prod_union (Ioc_disjoint_Ioc_of_le le_rfl)]
-  congr 1 <;> refine prod_congr rfl fun x hx => ?_
+  congr 1 <;> refine prod_congr rfl fun x hx ↦ ?_
   · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Ioc_right hbc hx),
       restrict₂]
   · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Ioc_left hab hx),
       restrict₂]
 
-中文:
-引理 pi_prod_map_IocProdIoc
-  条件: {a b c : 自然数} (hab : a <= b) (hbc : b <= c)
-  证明: by
-  refine (Measure.pi_eq fun s ms => ?_).symm
-  simp_rw [Measure.map_apply measurable_IocProdIoc (.univ_pi ms), IocProdIoc_preimage hab hbc,
-    Measure.prod_prod, Measure.pi_pi, prod_eq_prod_extend]
-  nth_rw 1 [Eq.comm, ← Ioc_union_Ioc_eq_Ioc hab hbc, prod_union (Ioc_disjoint_Ioc_of_le le_rfl)]
-  congr 1 <;> refine prod_congr rfl fun x hx => ?_
-  · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Ioc_right hbc hx),
-      restrict₂]
-  · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Ioc_left hab hx),
-      restrict₂]
+/-- Let `μ : (i : Iic b) → Measure (X i)` be a family of measures. Up to an equivalence,
+`(⨂ i : Iic a, μ i) ⊗ (⨂ i : Ioc a b, μ i) = ⨂ i : Iic b, μ i`, where `⊗` denotes the
+product of measures. -/
+/-
+**MeasureTheory.Measure.pi_prod_map_IicProdIoc** 是 Mathlib 中的一个引理，位于命名空间 `Measur
+eTheory.Measure`。
+形式化陈述：pi_prod_map_IicProdIoc {a b : Nat} : ((Measure.pi (fun i : Iic a => μ i)).
+prod (Measure.pi (fun i : Ioc a b => μ i))).map (IicProdIoc a b) = Measure.pi (f
+un i : Iic b => μ i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.pi_eq`：pi_eq [forall i, SigmaFinite (μ i)] {μ' : M
+easure (forall i, α i)} (h : forall s : forall i, Set (α i), (forall i, Measurab
+leSet (s i)) -> μ…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用引理 `measurable_IicProdIoc`：measurable_IicProdIoc {m n : ι} : Measurable (Iic
+ProdIoc (X
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `Subtype.countable`：∀ {α : Sort u} [Countable α] {p : α → Prop}, Countabl
+e { x // p x }
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Finset.Ioc_subset_Iic_self`：Ioc_subset_Iic_self : Ioc a b subseteq Iic b
+· 使用定理 `IicProdIoc_preimage`：∀ {ι : Type u_1} [inst : LinearOrder ι] [inst_1 : L
+ocallyFiniteOrder ι] [inst_2 : DecidableLE ι] {X : ι → Type u_2}   [inst_3 : Loc
+allyFinit…
+· 使用定理 `MeasureTheory.Measure.prod_prod`：prod_prod (s : Set α) (t : Set β) : μ.p
+rod ν (s ×ˢ t) = μ s * ν t
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.Measure.pi.sigmaFinite`：∀ {ι : Type u_1} {α : ι → Type u_3
+} [inst : Fintype ι] [inst_1 : (i : ι) → MeasurableSpace (α i)]   (μ : (i : ι) →
+ MeasureTheory.Measure (α …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.Measure.pi_pi`：pi_pi [forall i, SigmaFinite (μ i)] (s : (i
+ : ι) -> Set (α i)) : Measure.pi μ (pi univ s) = ∏ i, μ i (s i)
+· 使用定理 `Finset.prod_eq_prod_extend`：prod_eq_prod_extend (f : s -> M) : ∏ x, f x 
+= ∏ x in s, Subtype.val.extend f 1 x
+· 使用定理 `Eq.comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Finset.Iic_union_Ioc_eq_Iic`：Iic_union_Ioc_eq_Iic (h : a <= b) : Iic a u
+nion Ioc a b = Iic b
+· 使用定理 `Finset.prod_union`：prod_union [DecidableEq ι] (h : Disjoint s₁ s₂) : ∏ x
+ in s₁ union s₂, f x = (∏ x in s₁, f x) * ∏ x in s₂, f x
+· 使用定理 `Finset.Iic_disjoint_Ioc`：Iic_disjoint_Ioc (h : a <= b) : Disjoint (Iic a
+) (Ioc b c)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Function.extend_val_apply`：∀ {β : Sort u_2} {γ : Sort u_3} {p : β → Prop
+} {g : { x // p x } → γ} {j : β → γ} {b : β} (hb : p b),   Function.extend Subty
+pe.val g j b = …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.Iic_subset_Iic`：Iic_subset_Iic : Iic a subseteq Iic b ↔ a <= b
+（共 41 条，此处仅展示前 30 条）
 
-Depends on / 依赖: Eq.comm, Function, Function.extend_val_ap, Function.extend_val_apply, IocProdIoc_preimage, Ioc_disjoint_Ioc_of_le, Ioc_subset_Ioc_right, Ioc_union_Ioc_eq_Ioc, Measure, Measure.map_apply, Measure.pi_eq, Measure.pi_pi, Measure.prod_prod, extend_val_ap, extend_val_apply, le_rfl, map_apply, measurable_IocProdIoc, nth_rw, pi_eq
+--- 原说明 ---
+Let `μ : (i : Iic b) → Measure (X i)` be a family of measures. Up to an equivale
+nce,
+`(⨂ i : Iic a, μ i) ⊗ (⨂ i : Ioc a b, μ i) = ⨂ i : Iic b, μ i`, where `⊗` denote
+s the
+product of measures.
 -/
-lemma pi_prod_map_IocProdIoc {a b c : Nat} (hab : a <= b) (hbc : b <= c) :
-    ((Measure.pi (fun i : Ioc a b => μ i)).prod (Measure.pi (fun i : Ioc b c => μ i))).map
-      (IocProdIoc a b c) = Measure.pi (fun i : Ioc a c => μ i) := by
-  refine (Measure.pi_eq fun s ms => ?_).symm
-  simp_rw [Measure.map_apply measurable_IocProdIoc (.univ_pi ms), IocProdIoc_preimage hab hbc,
-    Measure.prod_prod, Measure.pi_pi, prod_eq_prod_extend]
-  nth_rw 1 [Eq.comm, ← Ioc_union_Ioc_eq_Ioc hab hbc, prod_union (Ioc_disjoint_Ioc_of_le le_rfl)]
-  congr 1 <;> refine prod_congr rfl fun x hx => ?_
-  · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Ioc_right hbc hx),
-      restrict₂]
-  · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Ioc_left hab hx),
-      restrict₂]
-
-/--
-lemma `pi_prod_map_IicProdIoc` / 引理 `pi_prod_map_IicProdIoc`
-
-English:
-lemma pi_prod_map_IicProdIoc
-  given: {a b : Nat}
-  proof: by
+lemma pi_prod_map_IicProdIoc {a b : ℕ} :
+    ((Measure.pi (fun i : Iic a ↦ μ i)).prod (Measure.pi (fun i : Ioc a b ↦ μ i))).map
+      (IicProdIoc a b) = Measure.pi (fun i : Iic b ↦ μ i) := by
   obtain hab | hba := le_total a b
-  · refine (Measure.pi_eq fun s ms => ?_).symm
+  · refine (Measure.pi_eq fun s ms ↦ ?_).symm
     simp_rw [Measure.map_apply measurable_IicProdIoc (.univ_pi ms), IicProdIoc_preimage hab,
       Measure.prod_prod, Measure.pi_pi, prod_eq_prod_extend]
     nth_rw 1 [Eq.comm, ← Iic_union_Ioc_eq_Iic hab, prod_union (Iic_disjoint_Ioc le_rfl)]
-    congr 1 <;> refine prod_congr rfl fun x hx => ?_
+    congr 1 <;> refine prod_congr rfl fun x hx ↦ ?_
     · rw [Function.extend_val_apply hx, Function.extend_val_apply (Iic_subset_Iic.2 hab hx),
         frestrictLe₂, restrict₂]
     · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Iic_self hx),
         restrict₂]
   · rw [IicProdIoc_le hba, ← Measure.map_map, ← Measure.fst, Measure.fst_prod]
-.symm · exact isProjectiveMeasureFamily_pi μ (Iic a) (Iic b) (Iic_subset_Iic.2 hba)
+    · exact isProjectiveMeasureFamily_pi μ (Iic a) (Iic b) (Iic_subset_Iic.2 hba) |>.symm
     all_goals fun_prop
 
-中文:
-引理 pi_prod_map_IicProdIoc
-  条件: {a b : 自然数}
-  证明: by
-  obtain hab | hba := le_total a b
-  · refine (Measure.pi_eq fun s ms => ?_).symm
-    simp_rw [Measure.map_apply measurable_IicProdIoc (.univ_pi ms), IicProdIoc_preimage hab,
-      Measure.prod_prod, Measure.pi_pi, prod_eq_prod_extend]
-    nth_rw 1 [Eq.comm, ← Iic_union_Ioc_eq_Iic hab, prod_union (Iic_disjoint_Ioc le_rfl)]
-    congr 1 <;> refine prod_congr rfl fun x hx => ?_
-    · rw [Function.extend_val_apply hx, Function.extend_val_apply (Iic_subset_Iic.2 hab hx),
-        frestrictLe₂, restrict₂]
-    · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Iic_self hx),
-        restrict₂]
-  · rw [IicProdIoc_le hba, ← Measure.map_map, ← Measure.fst, Measure.fst_prod]
-.symm · exact isProjectiveMeasureFamily_pi μ (Iic a) (Iic b) (Iic_subset_Iic.2 hba)
-    all_goals fun_prop
+/-- Let `μ (i + 1) : Measure (X (i + 1))` be a measure. Up to an equivalence,
+`μ i = ⨂ j : Ioc i (i + 1), μ i`, where `⊗` denotes the product of measures. -/
+/-
+**MeasureTheory.Measure.map_piSingleton** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory
+.Measure`。
+形式化陈述：map_piSingleton (μ : (n : Nat) -> Measure (X n)) [forall n, SigmaFinite (μ
+ n)] (n : Nat) : (μ (n + 1)).map (piSingleton n) = Measure.pi (fun i : Ioc n (n 
++ 1) => μ i)
+参数：μ : (n : Nat) -> Measure (X n)；μ n；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.pi_eq`：pi_eq [forall i, SigmaFinite (μ i)] {μ' : M
+easure (forall i, α i)} (h : forall s : forall i, Set (α i), (forall i, Measurab
+leSet (s i)) -> μ…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.Ioc_succ_singleton`：Ioc_succ_singleton : Ioc b (b + 1) = {b + 1}
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_Ioc`：mem_Ioc : x in Ioc a b ↔ a < x ∧ x <= b
+· 使用定理 `Fintype.prod_subsingleton`：prod_subsingleton [Subsingleton ι] (f : ι -> 
+M) (a : ι) : ∏ x : ι, f x = f a
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `Subtype.countable`：∀ {α : Sort u} [Countable α] {p : α → Prop}, Countabl
+e { x // p x }
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
 
-Depends on / 依赖: Eq.comm, Function, Function.extend_val_a, Function.extend_val_apply, IicProdIoc_preimage, Iic_disjoint_Ioc, Iic_subset_Iic, Iic_union_Ioc_eq_Iic, Measure, Measure.map_apply, Measure.pi_eq, Measure.pi_pi, Measure.prod_prod, extend_val_a, extend_val_apply, le_rfl, le_total, map_apply, measurable_IicProdIoc, nth_rw
+--- 原说明 ---
+Let `μ (i + 1) : Measure (X (i + 1))` be a measure. Up to an equivalence,
+`μ i = ⨂ j : Ioc i (i + 1), μ i`, where `⊗` denotes the product of measures.
 -/
-lemma pi_prod_map_IicProdIoc {a b : Nat} :
-    ((Measure.pi (fun i : Iic a => μ i)).prod (Measure.pi (fun i : Ioc a b => μ i))).map
-      (IicProdIoc a b) = Measure.pi (fun i : Iic b => μ i) := by
-  obtain hab | hba := le_total a b
-  · refine (Measure.pi_eq fun s ms => ?_).symm
-    simp_rw [Measure.map_apply measurable_IicProdIoc (.univ_pi ms), IicProdIoc_preimage hab,
-      Measure.prod_prod, Measure.pi_pi, prod_eq_prod_extend]
-    nth_rw 1 [Eq.comm, ← Iic_union_Ioc_eq_Iic hab, prod_union (Iic_disjoint_Ioc le_rfl)]
-    congr 1 <;> refine prod_congr rfl fun x hx => ?_
-    · rw [Function.extend_val_apply hx, Function.extend_val_apply (Iic_subset_Iic.2 hab hx),
-        frestrictLe₂, restrict₂]
-    · rw [Function.extend_val_apply hx, Function.extend_val_apply (Ioc_subset_Iic_self hx),
-        restrict₂]
-  · rw [IicProdIoc_le hba, ← Measure.map_map, ← Measure.fst, Measure.fst_prod]
-.symm · exact isProjectiveMeasureFamily_pi μ (Iic a) (Iic b) (Iic_subset_Iic.2 hba)
-    all_goals fun_prop
-
-/--
-lemma `map_piSingleton` / 引理 `map_piSingleton`
-
-English:
-lemma map_piSingleton
-  given: (μ : (n : Nat) -> Measure (X n)) [forall n, SigmaFinite (μ n)] (n : Nat)
-  proof: by
-  refine (Measure.pi_eq fun s hs => ?_).symm
+lemma map_piSingleton (μ : (n : ℕ) → Measure (X n)) [∀ n, SigmaFinite (μ n)] (n : ℕ) :
+    (μ (n + 1)).map (piSingleton n) = Measure.pi (fun i : Ioc n (n + 1) ↦ μ i) := by
+  refine (Measure.pi_eq fun s hs ↦ ?_).symm
   have : Subsingleton (Ioc n (n + 1)) := by rw [Nat.Ioc_succ_singleton]; infer_instance
-  rw [Fintype.prod_subsingleton _ ⟨n + 1]; rw [mem_Ioc.2 (by lia)⟩]; rw [Measure.map_apply (by fun_prop) (.univ_pi hs)]
+  rw [Fintype.prod_subsingleton _ ⟨n + 1, mem_Ioc.2 (by lia)⟩,
+    Measure.map_apply (by fun_prop) (.univ_pi hs)]
   congr 1 with x
   simp only [Set.mem_preimage, Set.mem_pi, Set.mem_univ, forall_const, Subtype.forall,
     Nat.Ioc_succ_singleton, mem_singleton]
-  exact ⟨fun h => h (n + 1) rfl, fun h a b => b.symm ▸ h⟩
-
-中文:
-引理 map_piSingleton
-  条件: (μ : (n : 自然数) -> 测度 (X n)) [对任意 n, σ有限 (μ n)] (n : 自然数)
-  证明: by
-  refine (Measure.pi_eq fun s hs => ?_).symm
-  have : Subsingleton (Ioc n (n + 1)) := by rw [Nat.Ioc_succ_singleton]; infer_instance
-  rw [Fintype.prod_subsingleton _ ⟨n + 1]; rw [mem_Ioc.2 (by lia)⟩]; rw [Measure.map_apply (by fun_prop) (.univ_pi hs)]
-  congr 1 with x
-  simp only [Set.mem_preimage, Set.mem_pi, Set.mem_univ, forall_const, Subtype.forall,
-    Nat.Ioc_succ_singleton, mem_singleton]
-  exact ⟨fun h => h (n + 1) rfl, fun h a b => b.symm ▸ h⟩
-
-Depends on / 依赖: Fintype, Fintype.prod_subsingleton, Ioc_succ_singleton, Measure, Measure.map_apply, Measure.pi_eq, Nat.Ioc_succ_singleton, Set.mem_pi, Set.mem_preimage, Set.mem_univ, Subsingleton, Subtype, Subtype.forall, b.symm, forall_const, fun_prop, infer_instance, map_apply, mem_Ioc, mem_pi
--/
-lemma map_piSingleton (μ : (n : Nat) -> Measure (X n)) [forall n, SigmaFinite (μ n)] (n : Nat) :
-    (μ (n + 1)).map (piSingleton n) = Measure.pi (fun i : Ioc n (n + 1) => μ i) := by
-  refine (Measure.pi_eq fun s hs => ?_).symm
-  have : Subsingleton (Ioc n (n + 1)) := by rw [Nat.Ioc_succ_singleton]; infer_instance
-  rw [Fintype.prod_subsingleton _ ⟨n + 1]; rw [mem_Ioc.2 (by lia)⟩]; rw [Measure.map_apply (by fun_prop) (.univ_pi hs)]
-  congr 1 with x
-  simp only [Set.mem_preimage, Set.mem_pi, Set.mem_univ, forall_const, Subtype.forall,
-    Nat.Ioc_succ_singleton, mem_singleton]
-  exact ⟨fun h => h (n + 1) rfl, fun h a b => b.symm ▸ h⟩
+  exact ⟨fun h ↦ h (n + 1) rfl, fun h a b ↦ b.symm ▸ h⟩
 
 end Measure
 
-/--
-theorem `partialTraj_const_restrict₂` / 定理 `partialTraj_const_restrict₂`
+/-- `partialTraj κ a b` is a kernel which up to an equivalence is equal to
+`Kernel.id ×ₖ (κ a ⊗ₖ ... ⊗ₖ κ (b - 1))`. This lemma therefore states that if the kernels `κ`
+are constant then their composition-product is the product measure. -/
+/-
+**MeasureTheory.partialTraj_const_restrict** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem partialTraj_const_restrict₂
-  given: {a b : Nat}
-  proof: by
-  obtain hab | hba := lt_or_ge a b
-  · refine Nat.le_induction ?_ (fun n hn hind => ?_) b (Nat.succ_le_of_lt hab) <;> ext1 x₀
-    · rw [partialTraj_succ_self, ← map_comp_right, map_apply, prod_apply, map_apply, const_apply,
-        const_apply, Measure.map_piSingleton, restrict₂_comp_IicProdIoc, Measure.map_snd_prod,
-        measure_univ, one_smul]
-      all_goals fun_prop
-    · have : (restrict₂ (Ioc_subset_Iic_self (a := a))) ∘ (IicProdIoc (X := X) n (n + 1)) =
-          (IocProdIoc a n (n + 1)) ∘ (Prod.map (restrict₂ Ioc_subset_Iic_self) id) := rfl
-      rw [const_apply]; rw [partialTraj_succ_of_le (by lia)]; rw [map_const]; rw [prod_const_comp]; rw [id_comp]; rw [← map_comp_right]; rw [this]; rw [map_comp_right]; rw [← map_prod_map]; rw [hind]; rw [Kernel.map_id]; rw [map_apply]; rw [prod_apply]; rw [const_apply]; rw [const_apply]; rw [Measure.map_piSingleton]; rw [Measure.pi_prod_map_IocProdIoc]
-      any_goals fun_prop
-      all_goals lia
-  · have : IsEmpty (Ioc a b) := by simpa [hba] using Subtype.isEmpty_false
-    ext x s ms
-    by_cases hs : s.Nonempty
-    · rw [Subsingleton.eq_univ_of_nonempty hs, @measure_univ .., measure_univ]
-.isProbabilityMeasure x exact (IsMarkovKernel.map _ (measurable_restrict₂ _))
-    · rw [Set.not_nonempty_iff_eq_empty.1 hs]
-      simp
-
-中文:
-定理 partialTraj_const_restrict₂
-  条件: {a b : 自然数}
-  证明: by
-  obtain hab | hba := lt_or_ge a b
-  · refine Nat.le_induction ?_ (fun n hn hind => ?_) b (Nat.succ_le_of_lt hab) <;> ext1 x₀
-    · rw [partialTraj_succ_self, ← map_comp_right, map_apply, prod_apply, map_apply, const_apply,
-        const_apply, Measure.map_piSingleton, restrict₂_comp_IicProdIoc, Measure.map_snd_prod,
-        measure_univ, one_smul]
-      all_goals fun_prop
-    · have : (restrict₂ (Ioc_subset_Iic_self (a := a))) ∘ (IicProdIoc (X := X) n (n + 1)) =
-          (IocProdIoc a n (n + 1)) ∘ (Prod.map (restrict₂ Ioc_subset_Iic_self) id) := rfl
-      rw [const_apply]; rw [partialTraj_succ_of_le (by lia)]; rw [map_const]; rw [prod_const_comp]; rw [id_comp]; rw [← map_comp_right]; rw [this]; rw [map_comp_right]; rw [← map_prod_map]; rw [hind]; rw [Kernel.map_id]; rw [map_apply]; rw [prod_apply]; rw [const_apply]; rw [const_apply]; rw [Measure.map_piSingleton]; rw [Measure.pi_prod_map_IocProdIoc]
-      any_goals fun_prop
-      all_goals lia
-  · have : IsEmpty (Ioc a b) := by simpa [hba] using Subtype.isEmpty_false
-    ext x s ms
-    by_cases hs : s.Nonempty
-    · rw [Subsingleton.eq_univ_of_nonempty hs, @measure_univ .., measure_univ]
-.isProbabilityMeasure x exact (IsMarkovKernel.map _ (measurable_restrict₂ _))
-    · rw [Set.not_nonempty_iff_eq_empty.1 hs]
-      simp
-
-Depends on / 依赖: IicProdIoc, IocProdIoc, Ioc_subset_Iic_, Ioc_subset_Iic_self, Measure, Measure.map_piSingleton, Measure.map_snd_prod, Nat.le_induction, Nat.succ_le_of_lt, Prod.map, all_goals, const_apply, fun_prop, le_induction, lt_or_ge, map_apply, map_comp_right, map_piSingleton, map_snd_prod, measure_univ
+--- 原说明 ---
+`partialTraj κ a b` is a kernel which up to an equivalence is equal to
+`Kernel.id ×ₖ (κ a ⊗ₖ ... ⊗ₖ κ (b - 1))`. This lemma therefore states that if th
+e kernels `κ`
+are constant then their composition-product is the product measure.
 -/
-theorem partialTraj_const_restrict₂ {a b : Nat} :
-    (partialTraj (fun n => const _ (μ (n + 1))) a b).map (restrict₂ Ioc_subset_Iic_self) =
-    const _ (Measure.pi (fun i : Ioc a b => μ i)) := by
+theorem partialTraj_const_restrict₂ {a b : ℕ} :
+    (partialTraj (fun n ↦ const _ (μ (n + 1))) a b).map (restrict₂ Ioc_subset_Iic_self) =
+    const _ (Measure.pi (fun i : Ioc a b ↦ μ i)) := by
   obtain hab | hba := lt_or_ge a b
-  · refine Nat.le_induction ?_ (fun n hn hind => ?_) b (Nat.succ_le_of_lt hab) <;> ext1 x₀
+  · refine Nat.le_induction ?_ (fun n hn hind ↦ ?_) b (Nat.succ_le_of_lt hab) <;> ext1 x₀
     · rw [partialTraj_succ_self, ← map_comp_right, map_apply, prod_apply, map_apply, const_apply,
         const_apply, Measure.map_piSingleton, restrict₂_comp_IicProdIoc, Measure.map_snd_prod,
         measure_univ, one_smul]
       all_goals fun_prop
     · have : (restrict₂ (Ioc_subset_Iic_self (a := a))) ∘ (IicProdIoc (X := X) n (n + 1)) =
           (IocProdIoc a n (n + 1)) ∘ (Prod.map (restrict₂ Ioc_subset_Iic_self) id) := rfl
-      rw [const_apply]; rw [partialTraj_succ_of_le (by lia)]; rw [map_const]; rw [prod_const_comp]; rw [id_comp]; rw [← map_comp_right]; rw [this]; rw [map_comp_right]; rw [← map_prod_map]; rw [hind]; rw [Kernel.map_id]; rw [map_apply]; rw [prod_apply]; rw [const_apply]; rw [const_apply]; rw [Measure.map_piSingleton]; rw [Measure.pi_prod_map_IocProdIoc]
+      rw [const_apply, partialTraj_succ_of_le (by lia), map_const, prod_const_comp, id_comp,
+        ← map_comp_right, this, map_comp_right, ← map_prod_map, hind, Kernel.map_id, map_apply,
+        prod_apply, const_apply, const_apply, Measure.map_piSingleton,
+        Measure.pi_prod_map_IocProdIoc]
       any_goals fun_prop
       all_goals lia
   · have : IsEmpty (Ioc a b) := by simpa [hba] using Subtype.isEmpty_false
     ext x s ms
     by_cases hs : s.Nonempty
     · rw [Subsingleton.eq_univ_of_nonempty hs, @measure_univ .., measure_univ]
-.isProbabilityMeasure x exact (IsMarkovKernel.map _ (measurable_restrict₂ _))
+      exact (IsMarkovKernel.map _ (measurable_restrict₂ _)) |>.isProbabilityMeasure x
     · rw [Set.not_nonempty_iff_eq_empty.1 hs]
       simp
 
-/--
-theorem `partialTraj_const` / 定理 `partialTraj_const`
+/-- `partialTraj κ a b` is a kernel which up to an equivalence is equal to
+`Kernel.id ×ₖ (κ a ⊗ₖ ... ⊗ₖ κ (b - 1))`. This lemma therefore states that if the kernel `κ i`
+is constant equal to `μ i` for all `i`, then up to an equivalence
+`partialTraj κ a b = Kernel.id ×ₖ Kernel.const (⨂ μ i)`. -/
+/-
+**MeasureTheory.partialTraj_const** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：partialTraj_const {a b : Nat} : partialTraj (fun n => const _ (μ (n + 1)))
+ a b = (Kernel.id ×ₖ (const _ (Measure.pi (fun i : Ioc a b => μ i)))).map (IicPr
+odIoc a b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Ioc_subset_Iic_self`：Ioc_subset_Iic_self : Ioc a b subseteq Iic b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.partialTraj_eq_prod`：partialTraj_eq_prod [foral
+l n, IsSFiniteKernel (κ n)] (a b : Nat) : partialTraj κ a b = (Kernel.id ×ₖ (par
+tialTraj κ a b).map (restrict₂ Ioc…
+· 使用定理 `ProbabilityTheory.Kernel.const.instIsSFiniteKernel`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {μβ : MeasureTheor
+y.Measure β}   [MeasureTheory.SFinite μβ…
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `MeasureTheory.partialTraj_const_restrict₂`：partialTraj_const_restrict₂ {
+a b : Nat} : (partialTraj (fun n => const _ (μ (n + 1))) a b).map (restrict₂ Ioc
+_subset_Iic_self) = const _ (Me…
 
-English:
-theorem partialTraj_const
-  given: {a b : Nat}
-  proof: by
-  rw [partialTraj_eq_prod]; rw [partialTraj_const_restrict₂]
-
-中文:
-定理 partialTraj_const
-  条件: {a b : 自然数}
-  证明: by
-  rw [partialTraj_eq_prod]; rw [partialTraj_const_restrict₂]
-
-Depends on / 依赖: partialTraj_eq_prod
+--- 原说明 ---
+`partialTraj κ a b` is a kernel which up to an equivalence is equal to
+`Kernel.id ×ₖ (κ a ⊗ₖ ... ⊗ₖ κ (b - 1))`. This lemma therefore states that if th
+e kernel `κ i`
+is constant equal to `μ i` for all `i`, then up to an equivalence
+`partialTraj κ a b = Kernel.id ×ₖ Kernel.const (⨂ μ i)`.
 -/
-theorem partialTraj_const {a b : Nat} :
-    partialTraj (fun n => const _ (μ (n + 1))) a b =
-      (Kernel.id ×ₖ (const _ (Measure.pi (fun i : Ioc a b => μ i)))).map (IicProdIoc a b) := by
-  rw [partialTraj_eq_prod]; rw [partialTraj_const_restrict₂]
+theorem partialTraj_const {a b : ℕ} :
+    partialTraj (fun n ↦ const _ (μ (n + 1))) a b =
+      (Kernel.id ×ₖ (const _ (Measure.pi (fun i : Ioc a b ↦ μ i)))).map (IicProdIoc a b) := by
+  rw [partialTraj_eq_prod, partialTraj_const_restrict₂]
 
 namespace Measure
 
-/--
-theorem `isProjectiveLimit_infinitePiNat` / 定理 `isProjectiveLimit_infinitePiNat`
-
-English:
-theorem isProjectiveLimit_infinitePiNat
-  proof: by
-  intro I
-  rw [isProjectiveMeasureFamily_pi μ _ _ I.subset_Iic_sup_id]; rw [← restrict₂_comp_restrict I.subset_Iic_sup_id]; rw [← map_map]; rw [← frestrictLe]; rw [infinitePiNat]; rw [map_comp]; rw [traj_map_frestrictLe]; rw [partialTraj_const]; rw [← map_comp]; rw [← compProd_eq_comp_prod]; rw [compProd_const]; rw [pi_prod_map_IicProdIoc]
-  all_goals fun_prop
-
-中文:
-定理 isProjectiveLimit_infinitePi自然数
-  证明: by
-  intro I
-  rw [isProjectiveMeasureFamily_pi μ _ _ I.subset_Iic_sup_id]; rw [← restrict₂_comp_restrict I.subset_Iic_sup_id]; rw [← map_map]; rw [← frestrictLe]; rw [infinitePiNat]; rw [map_comp]; rw [traj_map_frestrictLe]; rw [partialTraj_const]; rw [← map_comp]; rw [← compProd_eq_comp_prod]; rw [compProd_const]; rw [pi_prod_map_IicProdIoc]
-  all_goals fun_prop
-
-Depends on / 依赖: I.subset_Iic_sup_id, all_goals, compProd_const, compProd_eq_comp_prod, frestrictLe, fun_prop, infinitePiNat, isProjectiveMeasureFamily_pi, map_comp, map_map, partialTraj_const, pi_prod_map_IicProdIoc, subset_Iic_sup_id, traj_map_frestrictLe
+/-
+**MeasureTheory.Measure.isProjectiveLimit_infinitePiNat** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.Measure`。
+形式化陈述：isProjectiveLimit_infinitePiNat : IsProjectiveLimit (infinitePiNat μ) (fun
+ I : Finset Nat => (Measure.pi (fun i : I => μ i)))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.subset_Iic_sup_id`：subset_Iic_sup_id [OrderBot α] (s : Finset α) 
+: s subseteq Iic (s.sup id)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.isProjectiveMeasureFamily_pi`：isProjectiveMeasureFamily_pi
+ : IsProjectiveMeasureFamily (fun I : Finset ι => (Measure.pi (fun i : I => μ i)
+))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.restrict₂_comp_restrict`：restrict₂_comp_restrict (hst : s subsete
+q t) : (restrict₂ (π
+· 使用定理 `MeasureTheory.Measure.map_map`：map_map {g : β -> γ} {f : α -> β} (hg : M
+easurable g) (hf : Measurable f) : (μ.map f).map g = μ.map (g ∘ f)
+· 使用定理 `Finset.measurable_restrict₂`：Finset.measurable_restrict₂ {s t : Finset δ
+} (hst : s subseteq t) : Measurable (Finset.restrict₂ (π
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `Preorder.frestrictLe.eq_1`：∀ {α : Type u_1} [inst : Preorder α] {π : α →
+ Type u_2} [inst_1 : LocallyFiniteOrderBot α] (a : α),   Preorder.frestrictLe a 
+= (Finset.Iic a…
+· 使用定理 `MeasureTheory.Measure.infinitePiNat.eq_1`：∀ {X : ℕ → Type u_1} {mX : (n 
+: ℕ) → MeasurableSpace (X n)} (μ : (n : ℕ) → MeasureTheory.Measure (X n))   [hμ 
+: ∀ (n : ℕ), MeasureTheory.IsP…
+· 使用引理 `MeasureTheory.Measure.map_comp`：map_comp (μ : Measure α) (κ : Kernel α β
+) {f : β -> γ} (hf : Measurable f) : (κ ∘ₘ μ).map f = (κ.map f) ∘ₘ μ
+· 使用定理 `Preorder.measurable_frestrictLe`：measurable_frestrictLe (a : α) : Measur
+able (frestrictLe (π
+· 使用引理 `ProbabilityTheory.Kernel.traj_map_frestrictLe`：traj_map_frestrictLe (a b
+ : Nat) : (traj κ a).map (frestrictLe b) = partialTraj κ a b
+· 使用定理 `MeasureTheory.partialTraj_const`：partialTraj_const {a b : Nat} : partial
+Traj (fun n => const _ (μ (n + 1))) a b = (Kernel.id ×ₖ (const _ (Measure.pi (fu
+n i : Ioc a b => μ i)…
+· 使用引理 `measurable_IicProdIoc`：measurable_IicProdIoc {m n : ι} : Measurable (Iic
+ProdIoc (X
+· 使用引理 `MeasureTheory.Measure.compProd_eq_comp_prod`：compProd_eq_comp_prod (μ : 
+Measure α) [SFinite μ] (κ : Kernel α β) [IsSFiniteKernel κ] : μ otimesₘ κ = (Ker
+nel.id ×ₖ κ) ∘ₘ μ
+· 使用定理 `MeasureTheory.instSFiniteOfSigmaFinite`：∀ {α : Type u_1} {m0 : Measurabl
+eSpace α} {μ : MeasureTheory.Measure α} [MeasureTheory.SigmaFinite μ],   Measure
+Theory.SFinite μ
+· 使用定理 `MeasureTheory.Measure.pi.sigmaFinite`：∀ {ι : Type u_1} {α : ι → Type u_3
+} [inst : Fintype ι] [inst_1 : (i : ι) → MeasurableSpace (α i)]   (μ : (i : ι) →
+ MeasureTheory.Measure (α …
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `ProbabilityTheory.Kernel.const.instIsSFiniteKernel`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {μβ : MeasureTheor
+y.Measure β}   [MeasureTheory.SFinite μβ…
+· 使用引理 `MeasureTheory.Measure.compProd_const`：compProd_const {ν : Measure β} [SF
+inite μ] [SFinite ν] : μ otimesₘ (Kernel.const α ν) = μ.prod ν
+· 使用引理 `MeasureTheory.Measure.pi_prod_map_IicProdIoc`：pi_prod_map_IicProdIoc {a 
+b : Nat} : ((Measure.pi (fun i : Iic a => μ i)).prod (Measure.pi (fun i : Ioc a 
+b => μ i))).map (IicProdIoc a b) =…
 -/
 theorem isProjectiveLimit_infinitePiNat :
-    IsProjectiveLimit (infinitePiNat μ) (fun I : Finset Nat => (Measure.pi (fun i : I => μ i))) := by
+    IsProjectiveLimit (infinitePiNat μ) (fun I : Finset ℕ ↦ (Measure.pi (fun i : I ↦ μ i))) := by
   intro I
-  rw [isProjectiveMeasureFamily_pi μ _ _ I.subset_Iic_sup_id]; rw [← restrict₂_comp_restrict I.subset_Iic_sup_id]; rw [← map_map]; rw [← frestrictLe]; rw [infinitePiNat]; rw [map_comp]; rw [traj_map_frestrictLe]; rw [partialTraj_const]; rw [← map_comp]; rw [← compProd_eq_comp_prod]; rw [compProd_const]; rw [pi_prod_map_IicProdIoc]
+  rw [isProjectiveMeasureFamily_pi μ _ _ I.subset_Iic_sup_id,
+    ← restrict₂_comp_restrict I.subset_Iic_sup_id, ← map_map, ← frestrictLe, infinitePiNat,
+    map_comp, traj_map_frestrictLe, partialTraj_const, ← map_comp, ← compProd_eq_comp_prod,
+    compProd_const, pi_prod_map_IicProdIoc]
   all_goals fun_prop
 
-/--
-lemma `infinitePiNat_map_restrict` / 引理 `infinitePiNat_map_restrict`
+/-- Restricting the product measure to a product indexed by a finset yields the usual
+product measure. -/
+/-
+**MeasureTheory.Measure.infinitePiNat_map_restrict** 是 Mathlib 中的一个引理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：infinitePiNat_map_restrict (I : Finset Nat) : (infinitePiNat μ).map I.rest
+rict = Measure.pi fun i : I => μ i
+参数：I : Finset Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.isProjectiveLimit_infinitePiNat`：isProjectiveLimit
+_infinitePiNat : IsProjectiveLimit (infinitePiNat μ) (fun I : Finset Nat => (Mea
+sure.pi (fun i : I => μ i)))
 
-English:
-lemma infinitePiNat_map_restrict
-  given: (I : Finset Nat)
-  proof: isProjectiveLimit_infinitePiNat μ I
-
-中文:
-引理 infinitePi自然数_map_restrict
-  条件: (I : 有限集 自然数)
-  证明: isProjectiveLimit_infinitePiNat μ I
-
-Depends on / 依赖: isProjectiveLimit_infinitePiNat
+--- 原说明 ---
+Restricting the product measure to a product indexed by a finset yields the usua
+l
+product measure.
 -/
-lemma infinitePiNat_map_restrict (I : Finset Nat) :
-    (infinitePiNat μ).map I.restrict = Measure.pi fun i : I => μ i :=
+lemma infinitePiNat_map_restrict (I : Finset ℕ) :
+    (infinitePiNat μ).map I.restrict = Measure.pi fun i : I ↦ μ i :=
   isProjectiveLimit_infinitePiNat μ I
-
-/--
-theorem `piContent_eq_infinitePiNat` / 定理 `piContent_eq_infinitePiNat`
-
-English:
-theorem piContent_eq_infinitePiNat
-  given: {A : Set (Π n, X n)} (hA : A in measurableCylinders X)
-  proof: by
-  obtain ⟨s, S, mS, rfl⟩ : exists s S, MeasurableSet S ∧ A = cylinder s S := by
-    simpa [mem_measurableCylinders] using hA
-  rw [piContent_cylinder _ mS]; rw [cylinder]; rw [← map_apply (measurable_restrict _) mS]; rw [infinitePiNat_map_restrict]
-
-中文:
-定理 piContent_eq_infinitePi自然数
-  条件: {A : 集合 (Π n, X n)} (hA : A in measurableCylinders X)
-  证明: by
-  obtain ⟨s, S, mS, rfl⟩ : exists s S, MeasurableSet S ∧ A = cylinder s S := by
-    simpa [mem_measurableCylinders] using hA
-  rw [piContent_cylinder _ mS]; rw [cylinder]; rw [← map_apply (measurable_restrict _) mS]; rw [infinitePiNat_map_restrict]
-
-Depends on / 依赖: MeasurableSet, cylinder, infinitePiNat_map_restrict, map_apply, measurable_restrict, mem_measurableCylinders, piContent_cylinder
+/-
+**MeasureTheory.Measure.piContent_eq_infinitePiNat** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：piContent_eq_infinitePiNat {A : Set (Π n, X n)} (hA : A in measurableCylin
+ders X) : piContent μ A = infinitePiNat μ A
+参数：Π n, X n；hA : A in measurableCylinders X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.piContent_cylinder`：piContent_cylinder {I : Finset ι} {S :
+ Set (Π i : I, X i)} (hS : MeasurableSet S) : piContent μ (cylinder I S) = Measu
+re.pi (fun i : I => μ …
+· 使用定理 `MeasureTheory.cylinder.eq_1`：∀ {ι : Type u_1} {α : ι → Type u_2} (s : Fi
+nset ι) (S : Set ((i : ↥s) → α ↑i)),   MeasureTheory.cylinder s S = s.restrict ⁻
+¹' S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用引理 `MeasureTheory.Measure.infinitePiNat_map_restrict`：infinitePiNat_map_rest
+rict (I : Finset Nat) : (infinitePiNat μ).map I.restrict = Measure.pi fun i : I 
+=> μ i
 -/
-theorem piContent_eq_infinitePiNat {A : Set (Π n, X n)} (hA : A in measurableCylinders X) :
+theorem piContent_eq_infinitePiNat {A : Set (Π n, X n)} (hA : A ∈ measurableCylinders X) :
     piContent μ A = infinitePiNat μ A := by
-  obtain ⟨s, S, mS, rfl⟩ : exists s S, MeasurableSet S ∧ A = cylinder s S := by
+  obtain ⟨s, S, mS, rfl⟩ : ∃ s S, MeasurableSet S ∧ A = cylinder s S := by
     simpa [mem_measurableCylinders] using hA
-  rw [piContent_cylinder _ mS]; rw [cylinder]; rw [← map_apply (measurable_restrict _) mS]; rw [infinitePiNat_map_restrict]
+  rw [piContent_cylinder _ mS, cylinder, ← map_apply (measurable_restrict _) mS,
+    infinitePiNat_map_restrict]
 
 end Measure
 
@@ -550,202 +749,194 @@ open Measure
 
 /-! ### Product of infinitely many probability measures -/
 
-variable {ι : Type*} {X : ι -> Type*} {mX : forall i, MeasurableSpace (X i)}
-  (μ : (i : ι) -> Measure (X i)) [hμ : forall i, IsProbabilityMeasure (μ i)]
+variable {ι : Type*} {X : ι → Type*} {mX : ∀ i, MeasurableSpace (X i)}
+  (μ : (i : ι) → Measure (X i)) [hμ : ∀ i, IsProbabilityMeasure (μ i)]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Measure.infinitePiNat_map_piCongrLeft` / 引理 `Measure.infinitePiNat_map_piCongrLeft`
+/-- If we push the product measure forward by a reindexing equivalence, we get a product measure
+on the reindexed product in the sense that it coincides with `piContent μ` over
+measurable cylinders. See `infinitePi_map_piCongrLeft` for a general version. -/
+/-
+**MeasureTheory.Measure.infinitePiNat_map_piCongrLeft** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.Measure`。
+形式化陈述：∀ {ι : Type u_1} {X : ι → Type u_2} {mX : (i : ι) → MeasurableSpace (X i)}
+ (μ : (i : ι) → MeasureTheory.Measure (X i))   [hμ : ∀ (i : ι), MeasureTheory.Is
+ProbabilityMeasure (μ i)] (e : ℕ ≃ ι) {s : Set ((i : ι) → X i)},   s ∈ MeasureTh
+eory.measurableCylinders X →     (MeasureTheory.Measure.map (⇑(MeasurableEquiv.p
+iCongrLeft X e))           (MeasureTheory.Measure.infinitePiNat fun n => μ (e n)
+))         s =       (MeasureTheory.piContent μ) s
+参数：i : ι；X i；μ : (i : ι) → MeasureTheory.Measure (X i)；i : ι；μ i；e : ℕ ≃ ι；(i : 
+ι) → X i；MeasureTheory.Measure.map (⇑(MeasurableEquiv.piCongrLeft X e))         
+  (MeasureTheory.Measure.infinitePiNat fun n => μ (e n))；MeasureTheory.piContent
+ μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `MeasurableSet.cylinder`：∀ {ι : Type u_2} {α : ι → Type u_1} [inst : (i :
+ ι) → MeasurableSpace (α i)] (s : Finset ι) {S : Set ((i : ↥s) → α ↑i)},   Measu
+rableSet S →…
+· 使用定理 `MeasureTheory.cylinder.eq_1`：∀ {ι : Type u_1} {α : ι → Type u_2} (s : Fi
+nset ι) (S : Set ((i : ↥s) → α ↑i)),   MeasureTheory.cylinder s S = s.restrict ⁻
+¹' S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `MeasurableEquiv.coe_piCongrLeft`：coe_piCongrLeft (f : δ ≃ δ') : ⇑(Measur
+ableEquiv.piCongrLeft π f) = f.piCongrLeft π
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用引理 `Finset.restrict_comp_piCongrLeft`：Finset.restrict_comp_piCongrLeft {π : 
+β -> Type*} (s : Finset β) (e : α ≃ β) : s.restrict ∘ ⇑(e.piCongrLeft π) = ⇑((e.
+restrictPreimageFinset…
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `MeasurableSet.preimage`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {m :
+ MeasurableSpace α} {mβ : MeasurableSpace β} {t : Set β},   MeasurableSet t → Me
+asurable f →…
+· 使用定理 `measurable_piCongrLeft`：measurable_piCongrLeft (f : δ' ≃ δ) : Measurable
+ (Equiv.piCongrLeft X f)
+· 使用引理 `MeasureTheory.Measure.infinitePiNat_map_restrict`：infinitePiNat_map_rest
+rict (I : Finset Nat) : (infinitePiNat μ).map I.restrict = Measure.pi fun i : I 
+=> μ i
+· 使用引理 `MeasureTheory.piContent_cylinder`：piContent_cylinder {I : Finset ι} {S :
+ Set (Π i : I, X i)} (hS : MeasurableSet S) : piContent μ (cylinder I S) = Measu
+re.pi (fun i : I => μ …
+· 使用定理 `MeasureTheory.Measure.pi_map_piCongrLeft`：∀ {ι : Type u_1} {ι' : Type u_
+2} [inst : Fintype ι] [inst_1 : Fintype ι'] (e : ι ≃ ι') {β : ι' → Type u_4}   [
+inst_2 : (i : ι') → Measurable…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Measure.infinitePiNat_map_piCongrLeft
-  statement: (e : Nat ≃ ι) {s : Set (Π i, X i)}
-  proof: by
-  obtain ⟨I, S, hS, rfl⟩ := (mem_measurableCylinders s).1 hs
-  rw [map_apply _ hS.cylinder]; rw [cylinder]; rw [← Set.preimage_comp]; rw [coe_piCongrLeft]; rw [restrict_comp_piCongrLeft]; rw [Set.preimage_comp]; rw [← map_apply]; rw [infinitePiNat_map_restrict (fun n => μ (e n))]; rw [← cylinder]; rw [piContent_cylinder μ hS]; rw [← pi_map_piCongrLeft (e.restrictPreimageFinset I)]; rw [map_apply _ hS]; rw [coe_piCongrLeft]
-  · simp
-  any_goals fun_prop
-  exact hS.preimage (by fun_prop)
-
-中文:
-引理 测度.infinitePi自然数_map_piCongrLeft
-  结论: (e : 自然数 ≃ ι) {s : 集合 (Π i, X i)}
-  证明: by
-  obtain ⟨I, S, hS, rfl⟩ := (mem_measurableCylinders s).1 hs
-  rw [map_apply _ hS.cylinder]; rw [cylinder]; rw [← Set.preimage_comp]; rw [coe_piCongrLeft]; rw [restrict_comp_piCongrLeft]; rw [Set.preimage_comp]; rw [← map_apply]; rw [infinitePiNat_map_restrict (fun n => μ (e n))]; rw [← cylinder]; rw [piContent_cylinder μ hS]; rw [← pi_map_piCongrLeft (e.restrictPreimageFinset I)]; rw [map_apply _ hS]; rw [coe_piCongrLeft]
-  · simp
-  any_goals fun_prop
-  exact hS.preimage (by fun_prop)
-
-Depends on / 依赖: Set.preimage_comp, any_goals, coe_piCongrLeft, cylinder, e.restrictPreimageFinset, fun_prop, hS.cylinder, hS.preimage, infinitePiNat_map_restrict, map_apply, mem_measurableCylinders, piContent_cylinder, pi_map_piCongrLeft, preimage, preimage_comp, restrictPreimageFinset, restrict_comp_piCongrLeft
+--- 原说明 ---
+If we push the product measure forward by a reindexing equivalence, we get a pro
+duct measure
+on the reindexed product in the sense that it coincides with `piContent μ` over
+measurable cylinders. See `infinitePi_map_piCongrLeft` for a general version.
 -/
-lemma Measure.infinitePiNat_map_piCongrLeft (e : Nat ≃ ι) {s : Set (Π i, X i)}
-    (hs : s in measurableCylinders X) :
-    (infinitePiNat (fun n => μ (e n))).map (piCongrLeft X e) s = piContent μ s := by
+lemma Measure.infinitePiNat_map_piCongrLeft (e : ℕ ≃ ι) {s : Set (Π i, X i)}
+    (hs : s ∈ measurableCylinders X) :
+    (infinitePiNat (fun n ↦ μ (e n))).map (piCongrLeft X e) s = piContent μ s := by
   obtain ⟨I, S, hS, rfl⟩ := (mem_measurableCylinders s).1 hs
-  rw [map_apply _ hS.cylinder]; rw [cylinder]; rw [← Set.preimage_comp]; rw [coe_piCongrLeft]; rw [restrict_comp_piCongrLeft]; rw [Set.preimage_comp]; rw [← map_apply]; rw [infinitePiNat_map_restrict (fun n => μ (e n))]; rw [← cylinder]; rw [piContent_cylinder μ hS]; rw [← pi_map_piCongrLeft (e.restrictPreimageFinset I)]; rw [map_apply _ hS]; rw [coe_piCongrLeft]
+  rw [map_apply _ hS.cylinder, cylinder, ← Set.preimage_comp, coe_piCongrLeft,
+    restrict_comp_piCongrLeft, Set.preimage_comp, ← map_apply,
+    infinitePiNat_map_restrict (fun n ↦ μ (e n)), ← cylinder, piContent_cylinder μ hS,
+    ← pi_map_piCongrLeft (e.restrictPreimageFinset I), map_apply _ hS, coe_piCongrLeft]
   · simp
   any_goals fun_prop
   exact hS.preimage (by fun_prop)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `piContent_tendsto_zero` / 定理 `piContent_tendsto_zero`
+/-- This is the key theorem to build the product of an arbitrary family of probability measures:
+the `piContent` of a decreasing sequence of cylinders with empty intersection converges to `0`.
 
-English:
-theorem piContent_tendsto_zero
-  statement: {A : Nat -> Set (Π i, X i)} (A_mem : forall n, A n in measurableCylinders X)
-  proof: by
-  have : forall i, Nonempty (X i) := fun i => nonempty_of_isProbabilityMeasure (μ i)
-  have A_cyl n : exists s S, MeasurableSet S ∧ A n = cylinder s S :=
-    (mem_measurableCylinders _).1 (A_mem n)
-  choose s S mS A_eq using A_cyl
-  -- The family `(Aₙ)` only depends on a countable set of coordinates, called `u`. Therefore our
-  -- goal is to see it as a family indexed by this countable set, because on the product indexed
-  -- by this countable set we can build a measure. To do so we have to pull back our cylinders
-  -- along the injection from `Π i : u, X i` to `Π i, X i`.
-  let u := ⋃ n, (s n : Set ι)
-  -- `tₙ` will be `sₙ` seen as a subset of `u`.
-  let t n : Finset u := (s n).preimage Subtype.val Subtype.val_injective.injOn
-  classical
-  -- The map `f` allows to pull back `Aₙ`
-  let f : (Π i : u, X i) -> Π i, X i :=
-    fun x i => if hi : i in u then x ⟨i, hi⟩ else Classical.ofNonempty
-  -- `aux` is the obvious equivalence between `sₙ` and `tₙ`
-  let aux n : t n ≃ s n :=
-    { toFun := fun i => ⟨i.1.1, mem_preimage.1 i.2⟩
-      invFun := fun i => ⟨⟨i.1, Set.mem_iUnion.2 ⟨n, i.2⟩⟩, mem_preimage.2 i.2⟩
-      left_inv := fun i => by simp
-      right_inv := fun i => by simp }
-  -- Finally `gₙ` is the equivalence between the product indexed by `tₙ` and the one indexed by `sₙ`
-  let g n := (aux n).piCongrLeft (fun i : s n => X i)
-  -- Mapping from the product indexed by `u` by `f` and then restricting to `sₙ` is the same as
-  -- first restricting to `tₙ` and then mapping by `gₙ`
-  have r_comp_f n : (s n).restrict ∘ f = (g n) ∘ (fun (x : Π i : u, X i) i => x i) := by
-    ext x i
-    simp only [Function.comp_apply, Finset.restrict,
-      Equiv.piCongrLeft_apply, Equiv.coe_fn_symm_mk, f, aux, g, t]
-    rw [dif_pos (Set.mem_iUnion.2 ⟨n]; rw [i.2⟩)]
-  -- `Bₙ` is the same as `Aₙ` but in the product indexed by `u`
-  let B n := f ⁻¹' (A n)
-  -- `Tₙ` is the same as `Sₙ` but in the product indexed by `u`
-  let T n := (g n) ⁻¹' (S n)
-  -- We now transfer the properties of `Aₙ` and `Sₙ` to `Bₙ` and `Tₙ`
-  have B_eq n : B n = cylinder (t n) (T n) := by
-    simp_rw [B, A_eq, cylinder, ← Set.preimage_comp, r_comp_f]; rfl
-  have mT n : MeasurableSet (T n) := (mS n).preimage (by fun_prop)
-  have B_mem n : B n in measurableCylinders (fun i : u => X i) :=
-    (mem_measurableCylinders (B n)).2 ⟨t n, T n, mT n, B_eq n⟩
-  have mB n : MeasurableSet (B n) := .of_mem_measurableCylinders (B_mem n)
-have B_anti : Antitone B := fun m n hmn => Set.preimage_mono A_anti hmn
-  have B_inter : ⋂ n, B n = ∅ := by
-    simp_rw [B, ← Set.preimage_iInter, A_inter, Set.preimage_empty]
-  -- We now rewrite `piContent μ (A n)` as `piContent (fun i : u ↦ μ i) (B n)`. Then there are two
-  -- cases: either `u` is finite and we rewrite it to the finite product measure, either
-  -- it is countable and we rewrite it to the pushforward measure of `infinitePiNat`. In both cases
-  -- we have an actual measure and we can conclude with `tendsto_measure_iInter_atTop`.
-  conv =>
-    enter [1]; ext n
-    rw [A_eq]; rw [piContent_cylinder μ (mS n)]; rw [← pi_map_piCongrLeft (aux n)]; rw [map_apply (by fun_prop) (mS n)]
-    change (Measure.pi (fun i : t n => μ i)) (T n)
-    rw [← piContent_cylinder (fun i : u => μ i) (mT n)]; rw [← B_eq n]
-  obtain u_fin | u_inf := finite_or_infinite u
-  · let _ := Fintype.ofFinite u
-    simp_rw [fun n => piContent_eq_measure_pi (fun i : u => μ i) (mB n)]
-    convert!
-      tendsto_measure_iInter_atTop (fun n => (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
-    · rw [B_inter, measure_empty]
-    · infer_instance
-  · -- If `u` is infinite, then we have an equivalence with `ℕ` so we can apply `secondLemma`.
-    have count_u : Countable u := Set.countable_iUnion (fun n => (s n).countable_toSet)
-    obtain ⟨φ, -⟩ := Classical.exists_true_of_nonempty (α := Nat ≃ u) nonempty_equiv_of_countable
-    conv => enter [1]; ext n; rw [← infinitePiNat_map_piCongrLeft _ φ (B_mem n)]
-    convert!
-      tendsto_measure_iInter_atTop (fun n => (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
-    · rw [B_inter, measure_empty]
-    · infer_instance
+This implies the `σ`-additivity of `piContent` (see `addContent_iUnion_eq_sum_of_tendsto_zero`),
+which allows to extend it to the `σ`-algebra by Carathéodory's theorem. -/
+/-
+**MeasureTheory.piContent_tendsto_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：piContent_tendsto_zero {A : Nat -> Set (Π i, X i)} (A_mem : forall n, A n 
+in measurableCylinders X) (A_anti : Antitone A) (A_inter : ⋂ n, A n = ∅) : Tends
+to (fun n => piContent μ (A n)) atTop (𝓝 0)
+参数：Π i, X i；A_mem : forall n, A n in measurableCylinders X；A_anti : Antitone A；A
+_inter : ⋂ n, A n = ∅。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.nonempty_of_isProbabilityMeasure`：nonempty_of_isProbabilit
+yMeasure (μ : Measure α) [IsProbabilityMeasure μ] : Nonempty α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Finset.mem_preimage`：mem_preimage {f : α -> β} {s : Finset β} {hf : Set.
+InjOn f (f ⁻¹' ↑s)} {x : α} : x in preimage s f hf ↔ f x in s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasurableSet.preimage`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {m :
+ MeasurableSpace α} {mβ : MeasurableSpace β} {t : Set β},   MeasurableSet t → Me
+asurable f →…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `measurable_piCongrLeft`：measurable_piCongrLeft (f : δ' ≃ δ) : Measurable
+ (Equiv.piCongrLeft X f)
+· 使用定理 `MeasurableSet.of_mem_measurableCylinders`：∀ {ι : Type u_1} {α : ι → Type
+ u_2} [inst : (i : ι) → MeasurableSpace (α i)] {s : Set ((i : ι) → α i)},   s ∈ 
+MeasureTheory.measurableCylind…
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用引理 `MeasureTheory.piContent_cylinder`：piContent_cylinder {I : Finset ι} {S :
+ Set (Π i : I, X i)} (hS : MeasurableSet S) : piContent μ (cylinder I S) = Measu
+re.pi (fun i : I => μ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.pi_map_piCongrLeft`：∀ {ι : Type u_1} {ι' : Type u_
+2} [inst : Fintype ι] [inst_1 : Fintype ι'] (e : ι ≃ ι') {β : ι' → Type u_4}   [
+inst_2 : (i : ι') → Measurable…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+（共 55 条，此处仅展示前 30 条）
 
-中文:
-定理 piContent_tendsto_zero
-  结论: {A : 自然数 -> 集合 (Π i, X i)} (A_mem : 对任意 n, A n in measurableCylinders X)
-  证明: by
-  have : forall i, Nonempty (X i) := fun i => nonempty_of_isProbabilityMeasure (μ i)
-  have A_cyl n : exists s S, MeasurableSet S ∧ A n = cylinder s S :=
-    (mem_measurableCylinders _).1 (A_mem n)
-  choose s S mS A_eq using A_cyl
-  -- The family `(Aₙ)` only depends on a countable set of coordinates, called `u`. Therefore our
-  -- goal is to see it as a family indexed by this countable set, because on the product indexed
-  -- by this countable set we can build a measure. To do so we have to pull back our cylinders
-  -- along the injection from `Π i : u, X i` to `Π i, X i`.
-  let u := ⋃ n, (s n : Set ι)
-  -- `tₙ` will be `sₙ` seen as a subset of `u`.
-  let t n : Finset u := (s n).preimage Subtype.val Subtype.val_injective.injOn
-  classical
-  -- The map `f` allows to pull back `Aₙ`
-  let f : (Π i : u, X i) -> Π i, X i :=
-    fun x i => if hi : i in u then x ⟨i, hi⟩ else Classical.ofNonempty
-  -- `aux` is the obvious equivalence between `sₙ` and `tₙ`
-  let aux n : t n ≃ s n :=
-    { toFun := fun i => ⟨i.1.1, mem_preimage.1 i.2⟩
-      invFun := fun i => ⟨⟨i.1, Set.mem_iUnion.2 ⟨n, i.2⟩⟩, mem_preimage.2 i.2⟩
-      left_inv := fun i => by simp
-      right_inv := fun i => by simp }
-  -- Finally `gₙ` is the equivalence between the product indexed by `tₙ` and the one indexed by `sₙ`
-  let g n := (aux n).piCongrLeft (fun i : s n => X i)
-  -- Mapping from the product indexed by `u` by `f` and then restricting to `sₙ` is the same as
-  -- first restricting to `tₙ` and then mapping by `gₙ`
-  have r_comp_f n : (s n).restrict ∘ f = (g n) ∘ (fun (x : Π i : u, X i) i => x i) := by
-    ext x i
-    simp only [Function.comp_apply, Finset.restrict,
-      Equiv.piCongrLeft_apply, Equiv.coe_fn_symm_mk, f, aux, g, t]
-    rw [dif_pos (Set.mem_iUnion.2 ⟨n]; rw [i.2⟩)]
-  -- `Bₙ` is the same as `Aₙ` but in the product indexed by `u`
-  let B n := f ⁻¹' (A n)
-  -- `Tₙ` is the same as `Sₙ` but in the product indexed by `u`
-  let T n := (g n) ⁻¹' (S n)
-  -- We now transfer the properties of `Aₙ` and `Sₙ` to `Bₙ` and `Tₙ`
-  have B_eq n : B n = cylinder (t n) (T n) := by
-    simp_rw [B, A_eq, cylinder, ← Set.preimage_comp, r_comp_f]; rfl
-  have mT n : MeasurableSet (T n) := (mS n).preimage (by fun_prop)
-  have B_mem n : B n in measurableCylinders (fun i : u => X i) :=
-    (mem_measurableCylinders (B n)).2 ⟨t n, T n, mT n, B_eq n⟩
-  have mB n : MeasurableSet (B n) := .of_mem_measurableCylinders (B_mem n)
-have B_anti : Antitone B := fun m n hmn => Set.preimage_mono A_anti hmn
-  have B_inter : ⋂ n, B n = ∅ := by
-    simp_rw [B, ← Set.preimage_iInter, A_inter, Set.preimage_empty]
-  -- We now rewrite `piContent μ (A n)` as `piContent (fun i : u ↦ μ i) (B n)`. Then there are two
-  -- cases: either `u` is finite and we rewrite it to the finite product measure, either
-  -- it is countable and we rewrite it to the pushforward measure of `infinitePiNat`. In both cases
-  -- we have an actual measure and we can conclude with `tendsto_measure_iInter_atTop`.
-  conv =>
-    enter [1]; ext n
-    rw [A_eq]; rw [piContent_cylinder μ (mS n)]; rw [← pi_map_piCongrLeft (aux n)]; rw [map_apply (by fun_prop) (mS n)]
-    change (Measure.pi (fun i : t n => μ i)) (T n)
-    rw [← piContent_cylinder (fun i : u => μ i) (mT n)]; rw [← B_eq n]
-  obtain u_fin | u_inf := finite_or_infinite u
-  · let _ := Fintype.ofFinite u
-    simp_rw [fun n => piContent_eq_measure_pi (fun i : u => μ i) (mB n)]
-    convert!
-      tendsto_measure_iInter_atTop (fun n => (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
-    · rw [B_inter, measure_empty]
-    · infer_instance
-  · -- If `u` is infinite, then we have an equivalence with `ℕ` so we can apply `secondLemma`.
-    have count_u : Countable u := Set.countable_iUnion (fun n => (s n).countable_toSet)
-    obtain ⟨φ, -⟩ := Classical.exists_true_of_nonempty (α := Nat ≃ u) nonempty_equiv_of_countable
-    conv => enter [1]; ext n; rw [← infinitePiNat_map_piCongrLeft _ φ (B_mem n)]
-    convert!
-      tendsto_measure_iInter_atTop (fun n => (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
-    · rw [B_inter, measure_empty]
-    · infer_instance
+--- 原说明 ---
+This is the key theorem to build the product of an arbitrary family of probabili
+ty measures:
+the `piContent` of a decreasing sequence of cylinders with empty intersection co
+nverges to `0`.
 
-Depends on / 依赖: A_cyl, A_eq, A_mem, MeasurableSet, Nonempty, cylinder, mem_measurableCylinders, nonempty_of_isProbabilityMeasure
+This implies the `σ`-additivity of `piContent` (see `addContent_iUnion_eq_sum_of
+_tendsto_zero`),
+which allows to extend it to the `σ`-algebra by Carathéodory's theorem.
 -/
-theorem piContent_tendsto_zero {A : Nat -> Set (Π i, X i)} (A_mem : forall n, A n in measurableCylinders X)
+theorem piContent_tendsto_zero {A : ℕ → Set (Π i, X i)} (A_mem : ∀ n, A n ∈ measurableCylinders X)
     (A_anti : Antitone A) (A_inter : ⋂ n, A n = ∅) :
-    Tendsto (fun n => piContent μ (A n)) atTop (𝓝 0) := by
-  have : forall i, Nonempty (X i) := fun i => nonempty_of_isProbabilityMeasure (μ i)
-  have A_cyl n : exists s S, MeasurableSet S ∧ A n = cylinder s S :=
+    Tendsto (fun n ↦ piContent μ (A n)) atTop (𝓝 0) := by
+  have : ∀ i, Nonempty (X i) := fun i ↦ nonempty_of_isProbabilityMeasure (μ i)
+  have A_cyl n : ∃ s S, MeasurableSet S ∧ A n = cylinder s S :=
     (mem_measurableCylinders _).1 (A_mem n)
   choose s S mS A_eq using A_cyl
   -- The family `(Aₙ)` only depends on a countable set of coordinates, called `u`. Therefore our
@@ -757,23 +948,23 @@ theorem piContent_tendsto_zero {A : Nat -> Set (Π i, X i)} (A_mem : forall n, A
   let t n : Finset u := (s n).preimage Subtype.val Subtype.val_injective.injOn
   classical
   -- The map `f` allows to pull back `Aₙ`
-  let f : (Π i : u, X i) -> Π i, X i :=
-    fun x i => if hi : i in u then x ⟨i, hi⟩ else Classical.ofNonempty
+  let f : (Π i : u, X i) → Π i, X i :=
+    fun x i ↦ if hi : i ∈ u then x ⟨i, hi⟩ else Classical.ofNonempty
   -- `aux` is the obvious equivalence between `sₙ` and `tₙ`
   let aux n : t n ≃ s n :=
-    { toFun := fun i => ⟨i.1.1, mem_preimage.1 i.2⟩
-      invFun := fun i => ⟨⟨i.1, Set.mem_iUnion.2 ⟨n, i.2⟩⟩, mem_preimage.2 i.2⟩
-      left_inv := fun i => by simp
-      right_inv := fun i => by simp }
+    { toFun := fun i ↦ ⟨i.1.1, mem_preimage.1 i.2⟩
+      invFun := fun i ↦ ⟨⟨i.1, Set.mem_iUnion.2 ⟨n, i.2⟩⟩, mem_preimage.2 i.2⟩
+      left_inv := fun i ↦ by simp
+      right_inv := fun i ↦ by simp }
   -- Finally `gₙ` is the equivalence between the product indexed by `tₙ` and the one indexed by `sₙ`
-  let g n := (aux n).piCongrLeft (fun i : s n => X i)
+  let g n := (aux n).piCongrLeft (fun i : s n ↦ X i)
   -- Mapping from the product indexed by `u` by `f` and then restricting to `sₙ` is the same as
   -- first restricting to `tₙ` and then mapping by `gₙ`
-  have r_comp_f n : (s n).restrict ∘ f = (g n) ∘ (fun (x : Π i : u, X i) i => x i) := by
+  have r_comp_f n : (s n).restrict ∘ f = (g n) ∘ (fun (x : Π i : u, X i) i ↦ x i) := by
     ext x i
     simp only [Function.comp_apply, Finset.restrict,
       Equiv.piCongrLeft_apply, Equiv.coe_fn_symm_mk, f, aux, g, t]
-    rw [dif_pos (Set.mem_iUnion.2 ⟨n]; rw [i.2⟩)]
+    rw [dif_pos (Set.mem_iUnion.2 ⟨n, i.2⟩)]
   -- `Bₙ` is the same as `Aₙ` but in the product indexed by `u`
   let B n := f ⁻¹' (A n)
   -- `Tₙ` is the same as `Sₙ` but in the product indexed by `u`
@@ -782,10 +973,10 @@ theorem piContent_tendsto_zero {A : Nat -> Set (Π i, X i)} (A_mem : forall n, A
   have B_eq n : B n = cylinder (t n) (T n) := by
     simp_rw [B, A_eq, cylinder, ← Set.preimage_comp, r_comp_f]; rfl
   have mT n : MeasurableSet (T n) := (mS n).preimage (by fun_prop)
-  have B_mem n : B n in measurableCylinders (fun i : u => X i) :=
+  have B_mem n : B n ∈ measurableCylinders (fun i : u ↦ X i) :=
     (mem_measurableCylinders (B n)).2 ⟨t n, T n, mT n, B_eq n⟩
   have mB n : MeasurableSet (B n) := .of_mem_measurableCylinders (B_mem n)
-have B_anti : Antitone B := fun m n hmn => Set.preimage_mono A_anti hmn
+  have B_anti : Antitone B := fun m n hmn ↦ Set.preimage_mono <| A_anti hmn
   have B_inter : ⋂ n, B n = ∅ := by
     simp_rw [B, ← Set.preimage_iInter, A_inter, Set.preimage_empty]
   -- We now rewrite `piContent μ (A n)` as `piContent (fun i : u ↦ μ i) (B n)`. Then there are two
@@ -794,207 +985,272 @@ have B_anti : Antitone B := fun m n hmn => Set.preimage_mono A_anti hmn
   -- we have an actual measure and we can conclude with `tendsto_measure_iInter_atTop`.
   conv =>
     enter [1]; ext n
-    rw [A_eq]; rw [piContent_cylinder μ (mS n)]; rw [← pi_map_piCongrLeft (aux n)]; rw [map_apply (by fun_prop) (mS n)]
-    change (Measure.pi (fun i : t n => μ i)) (T n)
-    rw [← piContent_cylinder (fun i : u => μ i) (mT n)]; rw [← B_eq n]
+    rw [A_eq, piContent_cylinder μ (mS n), ← pi_map_piCongrLeft (aux n),
+      map_apply (by fun_prop) (mS n)]
+    change (Measure.pi (fun i : t n ↦ μ i)) (T n)
+    rw [← piContent_cylinder (fun i : u ↦ μ i) (mT n), ← B_eq n]
   obtain u_fin | u_inf := finite_or_infinite u
   · let _ := Fintype.ofFinite u
-    simp_rw [fun n => piContent_eq_measure_pi (fun i : u => μ i) (mB n)]
+    simp_rw [fun n ↦ piContent_eq_measure_pi (fun i : u ↦ μ i) (mB n)]
     convert!
-      tendsto_measure_iInter_atTop (fun n => (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
+      tendsto_measure_iInter_atTop (fun n ↦ (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
     · rw [B_inter, measure_empty]
     · infer_instance
   · -- If `u` is infinite, then we have an equivalence with `ℕ` so we can apply `secondLemma`.
-    have count_u : Countable u := Set.countable_iUnion (fun n => (s n).countable_toSet)
-    obtain ⟨φ, -⟩ := Classical.exists_true_of_nonempty (α := Nat ≃ u) nonempty_equiv_of_countable
+    have count_u : Countable u := Set.countable_iUnion (fun n ↦ (s n).countable_toSet)
+    obtain ⟨φ, -⟩ := Classical.exists_true_of_nonempty (α := ℕ ≃ u) nonempty_equiv_of_countable
     conv => enter [1]; ext n; rw [← infinitePiNat_map_piCongrLeft _ φ (B_mem n)]
     convert!
-      tendsto_measure_iInter_atTop (fun n => (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
+      tendsto_measure_iInter_atTop (fun n ↦ (mB n).nullMeasurableSet) B_anti ⟨0, measure_ne_top _ _⟩
     · rw [B_inter, measure_empty]
     · infer_instance
 
-/--
-theorem `isSigmaSubadditive_piContent` / 定理 `isSigmaSubadditive_piContent`
+/-- The `projectiveFamilyContent` associated to a family of probability measures is
+σ-subadditive. -/
+/-
+**MeasureTheory.isSigmaSubadditive_piContent** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：isSigmaSubadditive_piContent : (piContent μ).IsSigmaSubadditive
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.isSigmaSubadditive_of_addContent_iUnion_eq_tsum`：isSigmaSu
+badditive_of_addContent_iUnion_eq_tsum {m : AddContent Real>=0∞ C} (hC : IsSetRi
+ng C) (m_iUnion : forall (f : Nat -> Set α) (_ : fo…
+· 使用引理 `MeasureTheory.isSetRing_measurableCylinders`：isSetRing_measurableCylinde
+rs : IsSetRing (measurableCylinders α)
+· 使用定理 `MeasureTheory.addContent_iUnion_eq_sum_of_tendsto_zero`：addContent_iUnio
+n_eq_sum_of_tendsto_zero (hC : IsSetRing C) (m : AddContent Real>=0∞ C) (hm_ne_t
+op : forall s in C, m s != ∞) (hm_tendsto : …
+· 使用引理 `MeasureTheory.projectiveFamilyContent_ne_top`：projectiveFamilyContent_ne
+_top [forall J, IsFiniteMeasure (P J)] (hP : IsProjectiveMeasureFamily P) : proj
+ectiveFamilyContent hP s != ∞
+· 使用定理 `MeasureTheory.Measure.pi.instIsFiniteMeasure`：∀ {ι : Type u_1} {α : ι → 
+Type u_3} [inst : Fintype ι] [inst_1 : (i : ι) → MeasurableSpace (α i)]   (μ : (
+i : ι) → MeasureTheory.Measure (α …
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用引理 `MeasureTheory.isProjectiveMeasureFamily_pi`：isProjectiveMeasureFamily_pi
+ : IsProjectiveMeasureFamily (fun I : Finset ι => (Measure.pi (fun i : I => μ i)
+))
+· 使用定理 `MeasureTheory.piContent_tendsto_zero`：piContent_tendsto_zero {A : Nat ->
+ Set (Π i, X i)} (A_mem : forall n, A n in measurableCylinders X) (A_anti : Anti
+tone A) (A_inter : ⋂ n, A …
 
-English:
-theorem isSigmaSubadditive_piContent
-  statement: (piContent μ).IsSigmaSubadditive
-  proof: by
-  refine isSigmaSubadditive_of_addContent_iUnion_eq_tsum
-    isSetRing_measurableCylinders (fun f hf hf_Union hf' => ?_)
-  exact addContent_iUnion_eq_sum_of_tendsto_zero isSetRing_measurableCylinders
-    (piContent μ) (fun s hs => projectiveFamilyContent_ne_top _)
-    (fun _ => piContent_tendsto_zero μ) hf hf_Union hf'
-
-中文:
-定理 isSigmaSubadditive_piContent
-  结论: (piContent μ).IsSigmaSubadditive
-  证明: by
-  refine isSigmaSubadditive_of_addContent_iUnion_eq_tsum
-    isSetRing_measurableCylinders (fun f hf hf_Union hf' => ?_)
-  exact addContent_iUnion_eq_sum_of_tendsto_zero isSetRing_measurableCylinders
-    (piContent μ) (fun s hs => projectiveFamilyContent_ne_top _)
-    (fun _ => piContent_tendsto_zero μ) hf hf_Union hf'
-
-Depends on / 依赖: addContent_iUnion_eq_sum_of_tendsto_zero, hf_Union, isSetRing_measurableCylinders, isSigmaSubadditive_of_addContent_iUnion_eq_tsum, piContent, piContent_tendsto_zero, projectiveFamilyContent_ne_top
+--- 原说明 ---
+The `projectiveFamilyContent` associated to a family of probability measures is
+σ-subadditive.
 -/
 theorem isSigmaSubadditive_piContent : (piContent μ).IsSigmaSubadditive := by
   refine isSigmaSubadditive_of_addContent_iUnion_eq_tsum
-    isSetRing_measurableCylinders (fun f hf hf_Union hf' => ?_)
+    isSetRing_measurableCylinders (fun f hf hf_Union hf' ↦ ?_)
   exact addContent_iUnion_eq_sum_of_tendsto_zero isSetRing_measurableCylinders
-    (piContent μ) (fun s hs => projectiveFamilyContent_ne_top _)
-    (fun _ => piContent_tendsto_zero μ) hf hf_Union hf'
+    (piContent μ) (fun s hs ↦ projectiveFamilyContent_ne_top _)
+    (fun _ ↦ piContent_tendsto_zero μ) hf hf_Union hf'
 
 namespace Measure
 
 open scoped Classical in
-/--
-Definition of `infinitePi` / `infinitePi` 的定义
+/-- The product measure of an arbitrary family of probability measures. It is defined as the unique
+extension of the function which gives to cylinders the measure given by the associated product
+measure.
 
-English:
-definition infinitePi
-  signature: : Measure (Π i, X i)
-  body: if h : forall i, IsProbabilityMeasure (μ i) then
-    (piContent μ).measure isSetSemiring_measurableCylinders
-      generateFrom_measurableCylinders.ge (isSigmaSubadditive_piContent (hμ := h) μ)
-    else 0
+It is defined via an `if ... then ... else` so that it can be manipulated without carrying
+a proof that the measures are probability measures. -/
+/-
+**MeasureTheory.Measure.infinitePi** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Meas
+ure`。
+形式化陈述：infinitePi : Measure (Π i, X i)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.isSetSemiring_measurableCylinders`：isSetSemiring_measurabl
+eCylinders : MeasureTheory.IsSetSemiring (measurableCylinders α)
+· 使用定理 `MeasureTheory.isSigmaSubadditive_piContent`：isSigmaSubadditive_piContent
+ : (piContent μ).IsSigmaSubadditive
 
-中文:
-定义 infinitePi
-  签名: : 测度 (Π i, X i)
-  定义体: if h : forall i, IsProbabilityMeasure (μ i) then
-    (piContent μ).measure isSetSemiring_measurableCylinders
-      generateFrom_measurableCylinders.ge (isSigmaSubadditive_piContent (hμ := h) μ)
-    else 0
+--- 原说明 ---
+The product measure of an arbitrary family of probability measures. It is define
+d as the unique
+extension of the function which gives to cylinders the measure given by the asso
+ciated product
+measure.
 
-Depends on / 依赖: IsProbabilityMeasure, generateFrom_measurableCylinders, generateFrom_measurableCylinders.ge, isSetSemiring_measurableCylinders, isSigmaSubadditive_piContent, measure, piContent
+It is defined via an `if ... then ... else` so that it can be manipulated withou
+t carrying
+a proof that the measures are probability measures.
 -/
 noncomputable def infinitePi : Measure (Π i, X i) :=
-  if h : forall i, IsProbabilityMeasure (μ i) then
+  if h : ∀ i, IsProbabilityMeasure (μ i) then
     (piContent μ).measure isSetSemiring_measurableCylinders
       generateFrom_measurableCylinders.ge (isSigmaSubadditive_piContent (hμ := h) μ)
     else 0
 
-/--
-theorem `isProjectiveLimit_infinitePi` / 定理 `isProjectiveLimit_infinitePi`
+/-- The product measure is the projective limit of the partial product measures. This ensures
+uniqueness and expresses the value of the product measure applied to cylinders. -/
+/-
+**MeasureTheory.Measure.isProjectiveLimit_infinitePi** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.Measure`。
+形式化陈述：isProjectiveLimit_infinitePi : IsProjectiveLimit (infinitePi μ) (fun I : F
+inset ι => (Measure.pi (fun i : I => μ i)))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用引理 `MeasureTheory.isSetSemiring_measurableCylinders`：isSetSemiring_measurabl
+eCylinders : MeasureTheory.IsSetSemiring (measurableCylinders α)
+· 使用定理 `MeasureTheory.isSigmaSubadditive_piContent`：isSigmaSubadditive_piContent
+ : (piContent μ).IsSigmaSubadditive
+· 使用定理 `MeasureTheory.Measure.infinitePi.eq_1`：∀ {ι : Type u_1} {X : ι → Type u_
+2} {mX : (i : ι) → MeasurableSpace (X i)} (μ : (i : ι) → MeasureTheory.Measure (
+X i)),   MeasureTheory.Meas…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.generateFrom_measurableCylinders`：generateFrom_measurableC
+ylinders : MeasurableSpace.generateFrom (measurableCylinders α) = MeasurableSpac
+e.pi
+· 使用定理 `MeasureTheory.AddContent.measure_eq`：measure_eq [mα : MeasurableSpace α]
+ (m : AddContent Real>=0∞ C) (hC : IsSetSemiring C) (hC_gen : mα = MeasurableSpa
+ce.generateFrom C) (m_sig…
+· 使用定理 `MeasureTheory.cylinder_mem_measurableCylinders`：cylinder_mem_measurableC
+ylinders (s : Finset ι) (S : Set (forall i : s, α i)) (hS : MeasurableSet S) : c
+ylinder s S in measurableCylinders α
+· 使用定理 `MeasureTheory.cylinder.eq_1`：∀ {ι : Type u_1} {α : ι → Type u_2} (s : Fi
+nset ι) (S : Set ((i : ↥s) → α ↑i)),   MeasureTheory.cylinder s S = s.restrict ⁻
+¹' S
+· 使用引理 `MeasureTheory.piContent_cylinder`：piContent_cylinder {I : Finset ι} {S :
+ Set (Π i : I, X i)} (hS : MeasurableSet S) : piContent μ (cylinder I S) = Measu
+re.pi (fun i : I => μ …
 
-English:
-theorem isProjectiveLimit_infinitePi
-  proof: by
-  intro I
-  ext s hs
-  rw [map_apply (measurable_restrict I) hs]; rw [infinitePi]; rw [dif_pos hμ]; rw [AddContent.measure_eq]; rw [← cylinder]; rw [piContent_cylinder μ hs]
-  · exact generateFrom_measurableCylinders.symm
-  · exact cylinder_mem_measurableCylinders _ _ hs
-
-中文:
-定理 isProjectiveLimit_infinitePi
-  证明: by
-  intro I
-  ext s hs
-  rw [map_apply (measurable_restrict I) hs]; rw [infinitePi]; rw [dif_pos hμ]; rw [AddContent.measure_eq]; rw [← cylinder]; rw [piContent_cylinder μ hs]
-  · exact generateFrom_measurableCylinders.symm
-  · exact cylinder_mem_measurableCylinders _ _ hs
-
-Depends on / 依赖: AddContent, AddContent.measure_eq, cylinder, cylinder_mem_measurableCylinders, dif_pos, generateFrom_measurableCylinders, generateFrom_measurableCylinders.symm, infinitePi, map_apply, measurable_restrict, measure_eq, piContent_cylinder
+--- 原说明 ---
+The product measure is the projective limit of the partial product measures. Thi
+s ensures
+uniqueness and expresses the value of the product measure applied to cylinders.
 -/
 theorem isProjectiveLimit_infinitePi :
-    IsProjectiveLimit (infinitePi μ) (fun I : Finset ι => (Measure.pi (fun i : I => μ i))) := by
+    IsProjectiveLimit (infinitePi μ) (fun I : Finset ι ↦ (Measure.pi (fun i : I ↦ μ i))) := by
   intro I
   ext s hs
-  rw [map_apply (measurable_restrict I) hs]; rw [infinitePi]; rw [dif_pos hμ]; rw [AddContent.measure_eq]; rw [← cylinder]; rw [piContent_cylinder μ hs]
+  rw [map_apply (measurable_restrict I) hs, infinitePi, dif_pos hμ, AddContent.measure_eq,
+    ← cylinder, piContent_cylinder μ hs]
   · exact generateFrom_measurableCylinders.symm
   · exact cylinder_mem_measurableCylinders _ _ hs
 
-/--
-theorem `infinitePi_map_restrict` / 定理 `infinitePi_map_restrict`
+/-- Restricting the product measure to a product indexed by a finset yields the usual
+product measure. -/
+/-
+**MeasureTheory.Measure.infinitePi_map_restrict** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.Measure`。
+形式化陈述：infinitePi_map_restrict {I : Finset ι} : (Measure.infinitePi μ).map I.rest
+rict = Measure.pi fun i : I => μ i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.isProjectiveLimit_infinitePi`：isProjectiveLimit_in
+finitePi : IsProjectiveLimit (infinitePi μ) (fun I : Finset ι => (Measure.pi (fu
+n i : I => μ i)))
 
-English:
-theorem infinitePi_map_restrict
-  given: {I : Finset ι}
-  proof: isProjectiveLimit_infinitePi μ I
-
-中文:
-定理 infinitePi_map_restrict
-  条件: {I : 有限集 ι}
-  证明: isProjectiveLimit_infinitePi μ I
-
-Depends on / 依赖: isProjectiveLimit_infinitePi
+--- 原说明 ---
+Restricting the product measure to a product indexed by a finset yields the usua
+l
+product measure.
 -/
 theorem infinitePi_map_restrict {I : Finset ι} :
-    (Measure.infinitePi μ).map I.restrict = Measure.pi fun i : I => μ i :=
+    (Measure.infinitePi μ).map I.restrict = Measure.pi fun i : I ↦ μ i :=
   isProjectiveLimit_infinitePi μ I
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsProbabilityMeasure (infinitePi μ)
-  body: by
-  constructor
-  rw [← cylinder_univ ∅]; rw [cylinder]; rw [← map_apply (measurable_restrict _) .univ]; rw [infinitePi_map_restrict]; rw [measure_univ]
-
-中文:
-实例 :
-  签名: 是概率测度 (infinitePi μ)
-  定义体: by
-  constructor
-  rw [← cylinder_univ ∅]; rw [cylinder]; rw [← map_apply (measurable_restrict _) .univ]; rw [infinitePi_map_restrict]; rw [measure_univ]
-
-Depends on / 依赖: cylinder, cylinder_univ, infinitePi_map_restrict, map_apply, measurable_restrict, measure_univ
+/-
+**MeasureTheory.Measure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsProbabilityMeasure (infinitePi μ) := by
   constructor
-  rw [← cylinder_univ ∅]; rw [cylinder]; rw [← map_apply (measurable_restrict _) .univ]; rw [infinitePi_map_restrict]; rw [measure_univ]
+  rw [← cylinder_univ ∅, cylinder, ← map_apply (measurable_restrict _) .univ,
+    infinitePi_map_restrict, measure_univ]
 
-/--
-theorem `eq_infinitePi` / 定理 `eq_infinitePi`
+/-- To prove that a measure is equal to the product measure it is enough to check that it
+it gives the same measure to measurable boxes. -/
+/-
+**MeasureTheory.Measure.eq_infinitePi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：eq_infinitePi {ν : Measure (Π i, X i)} (hν : forall s : Finset ι, forall t
+ : (i : ι) -> Set (X i), (forall i, MeasurableSet (t i)) -> ν (Set.pi s t) = ∏ i
+ in s, μ i (t i)) : ν = infinitePi μ
+参数：Π i, X i；hν : forall s : Finset ι, forall t : (i : ι) -> Set (X i), (forall i
+, MeasurableSet (t i)) -> ν (Set.pi s t) = ∏ i in s, μ i (t i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.IsProjectiveLimit.unique`：unique [forall i, IsFiniteMeasur
+e (P i)] (hμ : IsProjectiveLimit μ P) (hν : IsProjectiveLimit ν P) : μ = ν
+· 使用定理 `MeasureTheory.Measure.pi.instIsFiniteMeasure`：∀ {ι : Type u_1} {α : ι → 
+Type u_3} [inst : Fintype ι] [inst_1 : (i : ι) → MeasurableSpace (α i)]   (μ : (
+i : ι) → MeasureTheory.Measure (α …
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `MeasureTheory.Measure.isProjectiveLimit_infinitePi`：isProjectiveLimit_in
+finitePi : IsProjectiveLimit (infinitePi μ) (fun I : Finset ι => (Measure.pi (fu
+n i : I => μ i)))
+· 使用定理 `MeasureTheory.Measure.pi_eq`：pi_eq [forall i, SigmaFinite (μ i)] {μ' : M
+easure (forall i, α i)} (h : forall s : forall i, Set (α i), (forall i, Measurab
+leSet (s i)) -> μ…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `Finset.restrict_preimage_univ`：restrict_preimage_univ [DecidablePred (· 
+in s)] (t : (i : s) -> Set (π i)) : s.restrict ⁻¹' (Set.univ.pi t) = Set.pi s (f
+un i => if h : i in…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用引理 `Finset.prod_attach`：prod_attach (s : Finset ι) (f : ι -> M) : ∏ x in s.a
+ttach, f x = ∏ x in s, f x
+· 使用定理 `Finset.univ_eq_attach`：Finset.univ_eq_attach {α : Type u} (s : Finset α)
+ : (univ : Finset s) = s.attach
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem eq_infinitePi
-  statement: {ν : Measure (Π i, X i)}
-  proof: by
-.symm refine (isProjectiveLimit_infinitePi μ).unique ?_
-  refine fun s => (pi_eq fun t ht => ?_).symm
-  classical
-  rw [Measure.map_apply]; rw [restrict_preimage_univ]; rw [hν]; rw [← prod_attach]; rw [univ_eq_attach]
-  · congr with i
-    rw [dif_pos i.2]
-  any_goals fun_prop
-  · rintro i
-    split_ifs with hi
-    · exact ht ⟨i, hi⟩
-    · exact .univ
-  · exact .univ_pi ht
-
-中文:
-定理 eq_infinitePi
-  结论: {ν : 测度 (Π i, X i)}
-  证明: by
-.symm refine (isProjectiveLimit_infinitePi μ).unique ?_
-  refine fun s => (pi_eq fun t ht => ?_).symm
-  classical
-  rw [Measure.map_apply]; rw [restrict_preimage_univ]; rw [hν]; rw [← prod_attach]; rw [univ_eq_attach]
-  · congr with i
-    rw [dif_pos i.2]
-  any_goals fun_prop
-  · rintro i
-    split_ifs with hi
-    · exact ht ⟨i, hi⟩
-    · exact .univ
-  · exact .univ_pi ht
-
-Depends on / 依赖: Measure, Measure.map_apply, any_goals, classical, dif_pos, fun_prop, isProjectiveLimit_infinitePi, map_apply, pi_eq, prod_attach, restrict_preimage_univ, split_ifs, unique, univ_eq_attach, univ_pi
+--- 原说明 ---
+To prove that a measure is equal to the product measure it is enough to check th
+at it
+it gives the same measure to measurable boxes.
 -/
 theorem eq_infinitePi {ν : Measure (Π i, X i)}
-    (hν : forall s : Finset ι, forall t : (i : ι) -> Set (X i),
-      (forall i, MeasurableSet (t i)) -> ν (Set.pi s t) = ∏ i in s, μ i (t i)) :
+    (hν : ∀ s : Finset ι, ∀ t : (i : ι) → Set (X i),
+      (∀ i, MeasurableSet (t i)) → ν (Set.pi s t) = ∏ i ∈ s, μ i (t i)) :
     ν = infinitePi μ := by
-.symm refine (isProjectiveLimit_infinitePi μ).unique ?_
-  refine fun s => (pi_eq fun t ht => ?_).symm
+  refine (isProjectiveLimit_infinitePi μ).unique ?_ |>.symm
+  refine fun s ↦ (pi_eq fun t ht ↦ ?_).symm
   classical
-  rw [Measure.map_apply]; rw [restrict_preimage_univ]; rw [hν]; rw [← prod_attach]; rw [univ_eq_attach]
+  rw [Measure.map_apply, restrict_preimage_univ, hν, ← prod_attach, univ_eq_attach]
   · congr with i
     rw [dif_pos i.2]
   any_goals fun_prop
@@ -1003,284 +1259,345 @@ theorem eq_infinitePi {ν : Measure (Π i, X i)}
     · exact ht ⟨i, hi⟩
     · exact .univ
   · exact .univ_pi ht
-
-/--
-lemma `infinitePi_pi` / 引理 `infinitePi_pi`
-
-English:
-lemma infinitePi_pi
-  statement: {s : Finset ι} {t : (i : ι) -> Set (X i)}
-  proof: by
-  have : Set.pi s t = cylinder s ((@Set.univ s).pi (fun i : s => t i)) := by
-    ext x
-    simp
-  rw [this]; rw [cylinder]; rw [← map_apply]; rw [infinitePi_map_restrict]; rw [pi_pi]
-  · rw [univ_eq_attach, prod_attach _ (fun i => (μ i) (t i))]
-  · exact measurable_restrict _
-  · exact .univ_pi fun i => mt i.1 i.2
-
-中文:
-引理 infinitePi_pi
-  结论: {s : 有限集 ι} {t : (i : ι) -> 集合 (X i)}
-  证明: by
-  have : Set.pi s t = cylinder s ((@Set.univ s).pi (fun i : s => t i)) := by
-    ext x
-    simp
-  rw [this]; rw [cylinder]; rw [← map_apply]; rw [infinitePi_map_restrict]; rw [pi_pi]
-  · rw [univ_eq_attach, prod_attach _ (fun i => (μ i) (t i))]
-  · exact measurable_restrict _
-  · exact .univ_pi fun i => mt i.1 i.2
-
-Depends on / 依赖: Set.pi, Set.univ, cylinder, infinitePi_map_restrict, map_apply, measurable_restrict, pi_pi, prod_attach, univ_eq_attach, univ_pi
+/-
+**MeasureTheory.Measure.infinitePi_pi** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：infinitePi_pi {s : Finset ι} {t : (i : ι) -> Set (X i)} (mt : forall i in 
+s, MeasurableSet (t i)) : infinitePi μ (Set.pi s t) = ∏ i in s, μ i (t i)
+参数：i : ι；X i；mt : forall i in s, MeasurableSet (t i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `MeasureTheory.cylinder.eq_1`：∀ {ι : Type u_1} {α : ι → Type u_2} (s : Fi
+nset ι) (S : Set ((i : ↥s) → α ↑i)),   MeasureTheory.cylinder s S = s.restrict ⁻
+¹' S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `MeasureTheory.Measure.infinitePi_map_restrict`：infinitePi_map_restrict {
+I : Finset ι} : (Measure.infinitePi μ).map I.restrict = Measure.pi fun i : I => 
+μ i
+· 使用定理 `MeasureTheory.Measure.pi_pi`：pi_pi [forall i, SigmaFinite (μ i)] (s : (i
+ : ι) -> Set (α i)) : Measure.pi μ (pi univ s) = ∏ i, μ i (s i)
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `Finset.univ_eq_attach`：Finset.univ_eq_attach {α : Type u} (s : Finset α)
+ : (univ : Finset s) = s.attach
+· 使用引理 `Finset.prod_attach`：prod_attach (s : Finset ι) (f : ι -> M) : ∏ x in s.a
+ttach, f x = ∏ x in s, f x
 -/
-lemma infinitePi_pi {s : Finset ι} {t : (i : ι) -> Set (X i)}
-    (mt : forall i in s, MeasurableSet (t i)) :
-    infinitePi μ (Set.pi s t) = ∏ i in s, μ i (t i) := by
-  have : Set.pi s t = cylinder s ((@Set.univ s).pi (fun i : s => t i)) := by
+lemma infinitePi_pi {s : Finset ι} {t : (i : ι) → Set (X i)}
+    (mt : ∀ i ∈ s, MeasurableSet (t i)) :
+    infinitePi μ (Set.pi s t) = ∏ i ∈ s, μ i (t i) := by
+  have : Set.pi s t = cylinder s ((@Set.univ s).pi (fun i : s ↦ t i)) := by
     ext x
     simp
-  rw [this]; rw [cylinder]; rw [← map_apply]; rw [infinitePi_map_restrict]; rw [pi_pi]
-  · rw [univ_eq_attach, prod_attach _ (fun i => (μ i) (t i))]
+  rw [this, cylinder, ← map_apply, infinitePi_map_restrict, pi_pi]
+  · rw [univ_eq_attach, prod_attach _ (fun i ↦ (μ i) (t i))]
   · exact measurable_restrict _
-  · exact .univ_pi fun i => mt i.1 i.2
-
-/--
-theorem `infinitePi_map_restrict'` / 定理 `infinitePi_map_restrict'`
-
-English:
-theorem infinitePi_map_restrict'
-  given: {I : Set ι}
-  proof: by
-  apply eq_infinitePi
-  intro s t ht
-  classical
-  rw [map_apply (by fun_prop)]; rw [domRestrict_preimage]; rw [infinitePi_pi _ (by measurability)]
-  · simp
-  · exact .pi s.countable_toSet (by measurability)
-
-中文:
-定理 infinitePi_map_restrict'
-  条件: {I : 集合 ι}
-  证明: by
-  apply eq_infinitePi
-  intro s t ht
-  classical
-  rw [map_apply (by fun_prop)]; rw [domRestrict_preimage]; rw [infinitePi_pi _ (by measurability)]
-  · simp
-  · exact .pi s.countable_toSet (by measurability)
-
-Depends on / 依赖: classical, countable_toSet, domRestrict_preimage, eq_infinitePi, fun_prop, infinitePi_pi, map_apply, measurability, s.countable_toSet
+  · exact .univ_pi fun i ↦ mt i.1 i.2
+/-
+**MeasureTheory.Measure.infinitePi_map_restrict'** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.Measure`。
+形式化陈述：infinitePi_map_restrict' {I : Set ι} : (infinitePi μ).map I.domRestrict = 
+infinitePi fun i : I => μ i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.eq_infinitePi`：eq_infinitePi {ν : Measure (Π i, X 
+i)} (hν : forall s : Finset ι, forall t : (i : ι) -> Set (X i), (forall i, Measu
+rableSet (t i)) -> ν (Set…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Set.measurable_restrict`：Set.measurable_restrict (s : Set δ) : Measurabl
+e (s.domRestrict (π
+· 使用定理 `MeasurableSet.pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : δ) → 
+MeasurableSpace (X a)] {s : Set δ} {t : (i : δ) → Set (X i)},   s.Countable → (∀
+ i ∈ s…
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `Finset.domRestrict_preimage`：domRestrict_preimage [DecidableEq ι] {I : S
+et ι} [DecidablePred (· in I)] (s : Finset I) (u : (i : I) -> Set (π i)) : I.dom
+Restrict ⁻¹' Set.…
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi`：infinitePi_pi {s : Finset ι} {t : (
+i : ι) -> Set (X i)} (mt : forall i in s, MeasurableSet (t i)) : infinitePi μ (S
+et.pi s t) = ∏ i in s, μ …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.prod_image`：prod_image [DecidableEq ι] {s : Finset κ} {g : κ -> ι
+} : Set.InjOn g s -> ∏ x in s.image g, f x = ∏ x in s, f (g x)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem infinitePi_map_restrict' {I : Set ι} :
-    (infinitePi μ).map I.domRestrict = infinitePi fun i : I => μ i := by
+    (infinitePi μ).map I.domRestrict = infinitePi fun i : I ↦ μ i := by
   apply eq_infinitePi
   intro s t ht
   classical
-  rw [map_apply (by fun_prop)]; rw [domRestrict_preimage]; rw [infinitePi_pi _ (by measurability)]
+  rw [map_apply (by fun_prop), domRestrict_preimage, infinitePi_pi _ (by measurability)]
   · simp
   · exact .pi s.countable_toSet (by measurability)
-
-/--
-lemma `infinitePi_pi_of_countable` / 引理 `infinitePi_pi_of_countable`
-
-English:
-lemma infinitePi_pi_of_countable
-  statement: {s : Set ι} (hs : Countable s) {t : (i : ι) -> Set (X i)}
-  proof: by
-  wlog s_ne : Nonempty s
-  · simp [Set.not_nonempty_iff_eq_empty'.mp s_ne]
-  apply tendsto_nhds_unique (f := fun s' : Finset s => ∏ i in s', μ i (t i)) (l := atTop)
-  classical
-  · conv in ∏ _ in _, _ =>
-      rw [← infinitePi_pi _ (by measurability)]; rw [← infinitePi_map_restrict']; rw [map_apply
-        (by fun_prop) (by apply MeasurableSet.pi (countable_toSet _) (by measurability))]; rw [domRestrict_preimage]
-      simp only [coe_image, dite_eq_ite]
-    have : s.pi t
-      = ⋂ s' : Finset s,
-        (Subtype.val '' (s' : Set s)).pi (fun i => if i in s then t i else Set.univ) := by
-      rw [← Set.pi_iUnion_eq_iInter_pi]; rw [Set.iUnion_finset_eq_set]
-      grind
-    rw [this]
-    apply tendsto_measure_iInter_atTop
-    · refine fun s' => MeasurableSet.nullMeasurableSet (MeasurableSet.pi ?_ (by measurability))
-      exact (Finset.countable_toSet _).image _
-    · intro _ _ h
-      simpa using Set.pi_mono' (by simp) (Set.image_mono h)
-    · exact ⟨{Nonempty.some s_ne}, by simp⟩
-  · rw [ENNReal.tprod_eq_iInf_prod (by simp [prob_le_one])]
-    exact tendsto_atTop_iInf (prod_anti_set_of_le_one' (by simp [prob_le_one]))
-
-中文:
-引理 infinitePi_pi_of_countable
-  结论: {s : 集合 ι} (hs : 可数 s) {t : (i : ι) -> 集合 (X i)}
-  证明: by
-  wlog s_ne : Nonempty s
-  · simp [Set.not_nonempty_iff_eq_empty'.mp s_ne]
-  apply tendsto_nhds_unique (f := fun s' : Finset s => ∏ i in s', μ i (t i)) (l := atTop)
-  classical
-  · conv in ∏ _ in _, _ =>
-      rw [← infinitePi_pi _ (by measurability)]; rw [← infinitePi_map_restrict']; rw [map_apply
-        (by fun_prop) (by apply MeasurableSet.pi (countable_toSet _) (by measurability))]; rw [domRestrict_preimage]
-      simp only [coe_image, dite_eq_ite]
-    have : s.pi t
-      = ⋂ s' : Finset s,
-        (Subtype.val '' (s' : Set s)).pi (fun i => if i in s then t i else Set.univ) := by
-      rw [← Set.pi_iUnion_eq_iInter_pi]; rw [Set.iUnion_finset_eq_set]
-      grind
-    rw [this]
-    apply tendsto_measure_iInter_atTop
-    · refine fun s' => MeasurableSet.nullMeasurableSet (MeasurableSet.pi ?_ (by measurability))
-      exact (Finset.countable_toSet _).image _
-    · intro _ _ h
-      simpa using Set.pi_mono' (by simp) (Set.image_mono h)
-    · exact ⟨{Nonempty.some s_ne}, by simp⟩
-  · rw [ENNReal.tprod_eq_iInf_prod (by simp [prob_le_one])]
-    exact tendsto_atTop_iInf (prod_anti_set_of_le_one' (by simp [prob_le_one]))
-
-Depends on / 依赖: Finset, MeasurableSet, MeasurableSet.pi, Nonempty, Set.not_nonempty_iff_eq_empty, Subtype, Subtype.val, classical, coe_image, countable_toSet, dite_eq_ite, domRestrict_preimage, fun_prop, infinitePi_map_restrict, infinitePi_pi, map_apply, measurability, not_nonempty_iff_eq_empty, s.pi, s_ne
+/-
+**MeasureTheory.Measure.infinitePi_pi_of_countable** 是 Mathlib 中的一个引理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：infinitePi_pi_of_countable {s : Set ι} (hs : Countable s) {t : (i : ι) -> 
+Set (X i)} (mt : forall i in s, MeasurableSet (t i)) : infinitePi μ (Set.pi s t)
+ = ∏' i : s, μ i (t i)
+参数：hs : Countable s；i : ι；X i；mt : forall i in s, MeasurableSet (t i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `tendsto_nhds_unique`：tendsto_nhds_unique [T2Space X] {f : Y -> X} {l : F
+ilter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝 b)) :
+ a = b
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi`：infinitePi_pi {s : Finset ι} {t : (
+i : ι) -> Set (X i)} (mt : forall i in s, MeasurableSet (t i)) : infinitePi μ (S
+et.pi s t) = ∏ i in s, μ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MeasureTheory.Measure.infinitePi_map_restrict'`：infinitePi_map_restrict'
+ {I : Set ι} : (infinitePi μ).map I.domRestrict = infinitePi fun i : I => μ i
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Set.measurable_restrict`：Set.measurable_restrict (s : Set δ) : Measurabl
+e (s.domRestrict (π
+· 使用定理 `MeasurableSet.pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : δ) → 
+MeasurableSpace (X a)] {s : Set δ} {t : (i : δ) → Set (X i)},   s.Countable → (∀
+ i ∈ s…
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
+· 使用引理 `Finset.domRestrict_preimage`：domRestrict_preimage [DecidableEq ι] {I : S
+et ι} [DecidablePred (· in I)] (s : Finset I) (u : (i : I) -> Set (π i)) : I.dom
+Restrict ⁻¹' Set.…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Set.pi_iUnion_eq_iInter_pi`：pi_iUnion_eq_iInter_pi {α' : Type*} (s : α' 
+-> Set α) (t : (a : α) -> Set (π a)) : (⋃ i, s i).pi t = ⋂ i, (s i).pi t
+· 使用定理 `Set.iUnion_finset_eq_set`：iUnion_finset_eq_set (s : Set ι) : ⋃ s' : Fins
+et s, Subtype.val '' (s' : Set s) = s
+· 使用定理 `MeasureTheory.tendsto_measure_iInter_atTop`：tendsto_measure_iInter_atTop
+ [Preorder ι] [IsCountablyGenerated (atTop : Filter ι)] {s : ι -> Set α} (hs : f
+orall i, NullMeasurableSet (s i)…
+· 使用定理 `Filter.atTop.isCountablyGenerated`：∀ {α : Type u_1} [inst : Preorder α] 
+[Countable α], Filter.atTop.IsCountablyGenerated
+· 使用定理 `Finset.countable`：∀ {α : Type u_1} [Countable α], Countable (Finset α)
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+（共 57 条，此处仅展示前 30 条）
 -/
-lemma infinitePi_pi_of_countable {s : Set ι} (hs : Countable s) {t : (i : ι) -> Set (X i)}
-    (mt : forall i in s, MeasurableSet (t i)) :
+lemma infinitePi_pi_of_countable {s : Set ι} (hs : Countable s) {t : (i : ι) → Set (X i)}
+    (mt : ∀ i ∈ s, MeasurableSet (t i)) :
     infinitePi μ (Set.pi s t) = ∏' i : s, μ i (t i) := by
   wlog s_ne : Nonempty s
   · simp [Set.not_nonempty_iff_eq_empty'.mp s_ne]
-  apply tendsto_nhds_unique (f := fun s' : Finset s => ∏ i in s', μ i (t i)) (l := atTop)
+  apply tendsto_nhds_unique (f := fun s' : Finset s ↦ ∏ i ∈ s', μ i (t i)) (l := atTop)
   classical
-  · conv in ∏ _ in _, _ =>
-      rw [← infinitePi_pi _ (by measurability)]; rw [← infinitePi_map_restrict']; rw [map_apply
-        (by fun_prop) (by apply MeasurableSet.pi (countable_toSet _) (by measurability))]; rw [domRestrict_preimage]
+  · conv in ∏ _ ∈ _, _ =>
+      rw [← infinitePi_pi _ (by measurability), ← infinitePi_map_restrict', map_apply
+        (by fun_prop) (by apply MeasurableSet.pi (countable_toSet _) (by measurability)),
+        domRestrict_preimage]
       simp only [coe_image, dite_eq_ite]
     have : s.pi t
       = ⋂ s' : Finset s,
-        (Subtype.val '' (s' : Set s)).pi (fun i => if i in s then t i else Set.univ) := by
-      rw [← Set.pi_iUnion_eq_iInter_pi]; rw [Set.iUnion_finset_eq_set]
+        (Subtype.val '' (s' : Set s)).pi (fun i ↦ if i ∈ s then t i else Set.univ) := by
+      rw [← Set.pi_iUnion_eq_iInter_pi, Set.iUnion_finset_eq_set]
       grind
     rw [this]
     apply tendsto_measure_iInter_atTop
-    · refine fun s' => MeasurableSet.nullMeasurableSet (MeasurableSet.pi ?_ (by measurability))
+    · refine fun s' ↦ MeasurableSet.nullMeasurableSet (MeasurableSet.pi ?_ (by measurability))
       exact (Finset.countable_toSet _).image _
     · intro _ _ h
       simpa using Set.pi_mono' (by simp) (Set.image_mono h)
     · exact ⟨{Nonempty.some s_ne}, by simp⟩
   · rw [ENNReal.tprod_eq_iInf_prod (by simp [prob_le_one])]
     exact tendsto_atTop_iInf (prod_anti_set_of_le_one' (by simp [prob_le_one]))
-
-/--
-lemma `infinitePi_pi_univ` / 引理 `infinitePi_pi_univ`
-
-English:
-lemma infinitePi_pi_univ
-  statement: [Countable ι] {t : (i : ι) -> Set (X i)}
-  proof: by
-  rw [infinitePi_pi_of_countable]; rw [tprod_univ (f := fun i => μ i (t i))]
-  · simpa [Set.countable_univ_iff]
-  · measurability
-
-@[simp]
-
-中文:
-引理 infinitePi_pi_univ
-  结论: [可数 ι] {t : (i : ι) -> 集合 (X i)}
-  证明: by
-  rw [infinitePi_pi_of_countable]; rw [tprod_univ (f := fun i => μ i (t i))]
-  · simpa [Set.countable_univ_iff]
-  · measurability
-
-@[simp]
-
-Depends on / 依赖: Set.countable_univ_iff, countable_univ_iff, infinitePi_pi_of_countable, measurability, tprod_univ
+/-
+**MeasureTheory.Measure.infinitePi_pi_univ** 是 Mathlib 中的一个引理，位于命名空间 `MeasureThe
+ory.Measure`。
+形式化陈述：infinitePi_pi_univ [Countable ι] {t : (i : ι) -> Set (X i)} (mt : forall i
+ : ι, MeasurableSet (t i)) : infinitePi μ (Set.univ.pi t) = ∏' i, μ i (t i)
+参数：i : ι；X i；mt : forall i : ι, MeasurableSet (t i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi_of_countable`：infinitePi_pi_of_count
+able {s : Set ι} (hs : Countable s) {t : (i : ι) -> Set (X i)} (mt : forall i in
+ s, MeasurableSet (t i)) : infinitePi …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `tprod_univ`：tprod_univ (f : β -> α) : ∏' x : (Set.univ : Set β), f x = ∏
+' x, f x
 -/
-lemma infinitePi_pi_univ [Countable ι] {t : (i : ι) -> Set (X i)}
-    (mt : forall i : ι, MeasurableSet (t i)) :
+lemma infinitePi_pi_univ [Countable ι] {t : (i : ι) → Set (X i)}
+    (mt : ∀ i : ι, MeasurableSet (t i)) :
     infinitePi μ (Set.univ.pi t) = ∏' i, μ i (t i) := by
-  rw [infinitePi_pi_of_countable]; rw [tprod_univ (f := fun i => μ i (t i))]
+  rw [infinitePi_pi_of_countable, tprod_univ (f := fun i ↦ μ i (t i))]
   · simpa [Set.countable_univ_iff]
   · measurability
 
 @[simp]
-/--
-lemma `infinitePi_singleton` / 引理 `infinitePi_singleton`
-
-English:
-lemma infinitePi_singleton
-  statement: [Countable ι] [forall i, MeasurableSingletonClass (X i)]
-  proof: by
-  rw [← Set.univ_pi_singleton]; rw [infinitePi_pi_univ _ (by measurability)]
-
-中文:
-引理 infinitePi_singleton
-  结论: [可数 ι] [对任意 i, MeasurableSingleton类 (X i)]
-  证明: by
-  rw [← Set.univ_pi_singleton]; rw [infinitePi_pi_univ _ (by measurability)]
-
-Depends on / 依赖: Set.univ_pi_singleton, infinitePi_pi_univ, measurability, univ_pi_singleton
+/-
+**MeasureTheory.Measure.infinitePi_singleton** 是 Mathlib 中的一个引理，位于命名空间 `MeasureT
+heory.Measure`。
+形式化陈述：infinitePi_singleton [Countable ι] [forall i, MeasurableSingletonClass (X 
+i)] (f : forall i, X i) : infinitePi μ {f} = ∏' i, μ i {f i}
+参数：X i；f : forall i, X i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.univ_pi_singleton`：univ_pi_singleton (f : forall i, α i) : (pi univ 
+fun i => {f i}) = ({f} : Set (forall i, α i))
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi_univ`：infinitePi_pi_univ [Countable 
+ι] {t : (i : ι) -> Set (X i)} (mt : forall i : ι, MeasurableSet (t i)) : infinit
+ePi μ (Set.univ.pi t) = ∏' i, …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-lemma infinitePi_singleton [Countable ι] [forall i, MeasurableSingletonClass (X i)]
-    (f : forall i, X i) : infinitePi μ {f} = ∏' i, μ i {f i} := by
-  rw [← Set.univ_pi_singleton]; rw [infinitePi_pi_univ _ (by measurability)]
-
-/--
-lemma `infinitePi_singleton_of_fintype` / 引理 `infinitePi_singleton_of_fintype`
-
-English:
-lemma infinitePi_singleton_of_fintype
-  statement: [Fintype ι] [forall i, MeasurableSingletonClass (X i)]
-  proof: by simp
-
-中文:
-引理 infinitePi_singleton_of_fintype
-  结论: [有限类型 ι] [对任意 i, MeasurableSingleton类 (X i)]
-  证明: by simp
+lemma infinitePi_singleton [Countable ι] [∀ i, MeasurableSingletonClass (X i)]
+    (f : ∀ i, X i) : infinitePi μ {f} = ∏' i, μ i {f i} := by
+  rw [← Set.univ_pi_singleton, infinitePi_pi_univ _ (by measurability)]
+/-
+**MeasureTheory.Measure.infinitePi_singleton_of_fintype** 是 Mathlib 中的一个引理，位于命名空
+间 `MeasureTheory.Measure`。
+形式化陈述：infinitePi_singleton_of_fintype [Fintype ι] [forall i, MeasurableSingleton
+Class (X i)] (f : forall i, X i) : infinitePi μ {f} = ∏ i, μ i {f i}
+参数：X i；f : forall i, X i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Measure.infinitePi_singleton`：infinitePi_singleton [Counta
+ble ι] [forall i, MeasurableSingletonClass (X i)] (f : forall i, X i) : infinite
+Pi μ {f} = ∏' i, μ i {f i}
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `tprod_fintype`：tprod_fintype [L.LeAtTop] [Fintype β] (f : β -> α) : ∏'[L
+] b, f b = ∏ b, f b
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma infinitePi_singleton_of_fintype [Fintype ι] [forall i, MeasurableSingletonClass (X i)]
-    (f : forall i, X i) : infinitePi μ {f} = ∏ i, μ i {f i} := by simp
-
-/--
-lemma `infinitePi_dirac` / 引理 `infinitePi_dirac`
-
-English:
-lemma infinitePi_dirac
-  given: (f : forall i, X i)
-  statement: infinitePi (fun i => dirac (f i)) = dirac f
-  proof: .symm eq_infinitePi _ by simp +contextual [MeasurableSet.pi, Finset.countable_toSet]
-
-中文:
-引理 infinitePi_dirac
-  条件: (f : 对任意 i, X i)
-  结论: infinitePi (fun i => dirac (f i)) = dirac f
-  证明: .symm eq_infinitePi _ by simp +contextual [MeasurableSet.pi, Finset.countable_toSet]
+lemma infinitePi_singleton_of_fintype [Fintype ι] [∀ i, MeasurableSingletonClass (X i)]
+    (f : ∀ i, X i) : infinitePi μ {f} = ∏ i, μ i {f i} := by simp
+/-
+**MeasureTheory.Measure.infinitePi_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：∀ {ι : Type u_1} {X : ι → Type u_2} {mX : (i : ι) → MeasurableSpace (X i)}
+ (f : (i : ι) → X i),   (MeasureTheory.Measure.infinitePi fun i => MeasureTheory
+.Measure.dirac (f i)) = MeasureTheory.Measure.dirac f
+参数：i : ι；X i；f : (i : ι) → X i；MeasureTheory.Measure.infinitePi fun i => Measure
+Theory.Measure.dirac (f i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.eq_infinitePi`：eq_infinitePi {ν : Measure (Π i, X 
+i)} (hν : forall s : Finset ι, forall t : (i : ι) -> Set (X i), (forall i, Measu
+rableSet (t i)) -> ν (Set…
+· 使用定理 `MeasureTheory.Measure.dirac.isProbabilityMeasure`：∀ {α : Type u_1} [inst
+ : MeasurableSpace α] {x : α}, MeasureTheory.IsProbabilityMeasure (MeasureTheory
+.Measure.dirac x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.dirac_apply'`：dirac_apply' (a : α) (hs : Measurabl
+eSet s) : dirac a s = s.indicator 1 a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Set.indicator_pi_one_apply`：∀ {ι : Type u_1} {M₀ : Type u_4} {α : ι → Ty
+pe u_5} [inst : CommMonoidWithZero M₀] (s : Finset ι)   (t : (i : ι) → Set (α i)
+) (f : (i : ι) →…
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma infinitePi_dirac (f : forall i, X i) : infinitePi (fun i => dirac (f i)) = dirac f :=
-.symm eq_infinitePi _ by simp +contextual [MeasurableSet.pi, Finset.countable_toSet]
-
-/--
-lemma `_root_.measurePreserving_eval_infinitePi` / 引理 `_root_.measurePreserving_eval_infinitePi`
-
-English:
-lemma _root_.measurePreserving_eval_infinitePi
-  given: (i : ι)
-  proof: by fun_prop
-  map_eq := by
-    ext s hs
-    have : @Function.eval ι X i =
-        (@Function.eval ({i} : Finset ι) (fun j => X j) ⟨i, by simp⟩) ∘
-        (Finset.restrict {i}) := by ext; simp
-    rw [this]; rw [← map_map]; rw [infinitePi_map_restrict]; rw [(measurePreserving_eval _ _).map_eq]
-    all_goals fun_prop
-
-中文:
-引理 _root_.measurePreserving_eval_infinitePi
-  条件: (i : ι)
-  证明: by fun_prop
-  map_eq := by
-    ext s hs
-    have : @Function.eval ι X i =
-        (@Function.eval ({i} : Finset ι) (fun j => X j) ⟨i, by simp⟩) ∘
-        (Finset.restrict {i}) := by ext; simp
-    rw [this]; rw [← map_map]; rw [infinitePi_map_restrict]; rw [(measurePreserving_eval _ _).map_eq]
-    all_goals fun_prop
-
-Depends on / 依赖: Finset, Finset.restrict, Function, Function.eval, all_goals, fun_prop, infinitePi_map_restrict, map_eq, map_map, measurePreserving_eval, restrict
+@[simp] lemma infinitePi_dirac (f : ∀ i, X i) : infinitePi (fun i ↦ dirac (f i)) = dirac f :=
+  .symm <| eq_infinitePi _ <| by simp +contextual [MeasurableSet.pi, Finset.countable_toSet]
+/-
+**MeasureTheory.Measure._root_.measurePreserving_eval_infinitePi** 是 Mathlib 中的一
+个引理，位于命名空间 `MeasureTheory.Measure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.measurePreserving_eval_infinitePi (i : ι) :
     MeasurePreserving (Function.eval i) (infinitePi μ) (μ i) where
@@ -1288,294 +1605,409 @@ lemma _root_.measurePreserving_eval_infinitePi (i : ι) :
   map_eq := by
     ext s hs
     have : @Function.eval ι X i =
-        (@Function.eval ({i} : Finset ι) (fun j => X j) ⟨i, by simp⟩) ∘
+        (@Function.eval ({i} : Finset ι) (fun j ↦ X j) ⟨i, by simp⟩) ∘
         (Finset.restrict {i}) := by ext; simp
-    rw [this]; rw [← map_map]; rw [infinitePi_map_restrict]; rw [(measurePreserving_eval _ _).map_eq]
+    rw [this, ← map_map, infinitePi_map_restrict, (measurePreserving_eval _ _).map_eq]
     all_goals fun_prop
-
-/--
-lemma `infinitePi_map_eval` / 引理 `infinitePi_map_eval`
-
-English:
-lemma infinitePi_map_eval
-  given: (i : ι)
-  proof: (measurePreserving_eval_infinitePi μ i).map_eq
-
-中文:
-引理 infinitePi_map_eval
-  条件: (i : ι)
-  证明: (measurePreserving_eval_infinitePi μ i).map_eq
-
-Depends on / 依赖: map_eq, measurePreserving_eval_infinitePi
+/-
+**MeasureTheory.Measure.infinitePi_map_eval** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTh
+eory.Measure`。
+形式化陈述：infinitePi_map_eval (i : ι) : (infinitePi μ).map (fun x => x i) = μ i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.MeasurePreserving.map_eq`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : MeasurableSpace α] [inst_1 : MeasurableSpace β] {f : α → β}   {μa : auto
+Param (MeasureTheory.Measure…
+· 使用定理 `measurePreserving_eval_infinitePi`：∀ {ι : Type u_1} {X : ι → Type u_2} {
+mX : (i : ι) → MeasurableSpace (X i)} (μ : (i : ι) → MeasureTheory.Measure (X i)
+)   [hμ : ∀ (i : ι), Me…
 -/
 lemma infinitePi_map_eval (i : ι) :
-    (infinitePi μ).map (fun x => x i) = μ i :=
+    (infinitePi μ).map (fun x ↦ x i) = μ i :=
   (measurePreserving_eval_infinitePi μ i).map_eq
-
-/--
-lemma `infinitePi_map_pi` / 引理 `infinitePi_map_pi`
-
-English:
-lemma infinitePi_map_pi
-  statement: {Y : ι -> Type*} [forall i, MeasurableSpace (Y i)] {f : (i : ι) -> X i -> Y i}
-  proof: by
-  have (i : ι) : IsProbabilityMeasure ((μ i).map (f i)) :=
-    isProbabilityMeasure_map (hf i).aemeasurable
-  refine eq_infinitePi _ fun s t ht => ?_
-  rw [map_apply (by fun_prop) (.pi s.countable_toSet fun _ _ => ht _)]
-  have : (fun (x : Π i, X i) i => f i (x i)) ⁻¹' ((s : Set ι).pi t) =
-      (s : Set ι).pi (fun i => (f i) ⁻¹' (t i)) := by ext x; simp
-  rw [this]; rw [infinitePi_pi _ (fun i _ => hf i (ht i))]
-  congr! with i hi
-  rw [map_apply (by fun_prop) (ht i)]
-
-中文:
-引理 infinitePi_map_pi
-  结论: {Y : ι -> 类型} [对任意 i, 可测空间 (Y i)] {f : (i : ι) -> X i -> Y i}
-  证明: by
-  have (i : ι) : IsProbabilityMeasure ((μ i).map (f i)) :=
-    isProbabilityMeasure_map (hf i).aemeasurable
-  refine eq_infinitePi _ fun s t ht => ?_
-  rw [map_apply (by fun_prop) (.pi s.countable_toSet fun _ _ => ht _)]
-  have : (fun (x : Π i, X i) i => f i (x i)) ⁻¹' ((s : Set ι).pi t) =
-      (s : Set ι).pi (fun i => (f i) ⁻¹' (t i)) := by ext x; simp
-  rw [this]; rw [infinitePi_pi _ (fun i _ => hf i (ht i))]
-  congr! with i hi
-  rw [map_apply (by fun_prop) (ht i)]
-
-Depends on / 依赖: IsProbabilityMeasure, aemeasurable, countable_toSet, eq_infinitePi, fun_prop, infinitePi_pi, isProbabilityMeasure_map, map_apply, s.countable_toSet
+/-
+**MeasureTheory.Measure.infinitePi_map_pi** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheo
+ry.Measure`。
+形式化陈述：infinitePi_map_pi {Y : ι -> Type*} [forall i, MeasurableSpace (Y i)] {f : 
+(i : ι) -> X i -> Y i} (hf : forall i, Measurable (f i)) : (infinitePi μ).map (f
+un x i => f i (x i)) = infinitePi (fun i => (μ i).map (f i))
+参数：Y i；i : ι；hf : forall i, Measurable (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.isProbabilityMeasure_map`：∀ {α : Type u_1} {β : Ty
+pe u_2} {m0 : MeasurableSpace α} [inst : MeasurableSpace β] {μ : MeasureTheory.M
+easure α}   [MeasureTheory.IsProbabi…
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `MeasureTheory.Measure.eq_infinitePi`：eq_infinitePi {ν : Measure (Π i, X 
+i)} (hν : forall s : Finset ι, forall t : (i : ι) -> Set (X i), (forall i, Measu
+rableSet (t i)) -> ν (Set…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `measurable_pi_lambda`：measurable_pi_lambda (f : α -> forall a, X a) (hf 
+: forall a, Measurable fun c => f c a) : Measurable f
+· 使用定理 `Measurable.fun_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x :
+ MeasurableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β
+ → γ} {f …
+· 使用定理 `measurable_pi_apply`：measurable_pi_apply (a : δ) : Measurable fun f : fo
+rall a, X a => f a
+· 使用定理 `MeasurableSet.pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : δ) → 
+MeasurableSpace (X a)] {s : Set δ} {t : (i : δ) → Set (X i)},   s.Countable → (∀
+ i ∈ s…
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi`：infinitePi_pi {s : Finset ι} {t : (
+i : ι) -> Set (X i)} (mt : forall i in s, MeasurableSet (t i)) : infinitePi μ (S
+et.pi s t) = ∏ i in s, μ …
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
 -/
-lemma infinitePi_map_pi {Y : ι -> Type*} [forall i, MeasurableSpace (Y i)] {f : (i : ι) -> X i -> Y i}
-    (hf : forall i, Measurable (f i)) :
-    (infinitePi μ).map (fun x i => f i (x i)) = infinitePi (fun i => (μ i).map (f i)) := by
+lemma infinitePi_map_pi {Y : ι → Type*} [∀ i, MeasurableSpace (Y i)] {f : (i : ι) → X i → Y i}
+    (hf : ∀ i, Measurable (f i)) :
+    (infinitePi μ).map (fun x i ↦ f i (x i)) = infinitePi (fun i ↦ (μ i).map (f i)) := by
   have (i : ι) : IsProbabilityMeasure ((μ i).map (f i)) :=
     isProbabilityMeasure_map (hf i).aemeasurable
-  refine eq_infinitePi _ fun s t ht => ?_
-  rw [map_apply (by fun_prop) (.pi s.countable_toSet fun _ _ => ht _)]
-  have : (fun (x : Π i, X i) i => f i (x i)) ⁻¹' ((s : Set ι).pi t) =
-      (s : Set ι).pi (fun i => (f i) ⁻¹' (t i)) := by ext x; simp
-  rw [this]; rw [infinitePi_pi _ (fun i _ => hf i (ht i))]
+  refine eq_infinitePi _ fun s t ht ↦ ?_
+  rw [map_apply (by fun_prop) (.pi s.countable_toSet fun _ _ ↦ ht _)]
+  have : (fun (x : Π i, X i) i ↦ f i (x i)) ⁻¹' ((s : Set ι).pi t) =
+      (s : Set ι).pi (fun i ↦ (f i) ⁻¹' (t i)) := by ext x; simp
+  rw [this, infinitePi_pi _ (fun i _ ↦ hf i (ht i))]
   congr! with i hi
   rw [map_apply (by fun_prop) (ht i)]
 
-/--
-theorem `infinitePi_map_piCongrLeft` / 定理 `infinitePi_map_piCongrLeft`
+/-- If we push the product measure forward by a reindexing equivalence, we get a product measure
+on the reindexed product. -/
+/-
+**MeasureTheory.Measure.infinitePi_map_piCongrLeft** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：infinitePi_map_piCongrLeft {α : Type*} (e : α ≃ ι) : (infinitePi (fun i =>
+ μ (e i))).map (piCongrLeft X e) = infinitePi μ
+参数：e : α ≃ ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.eq_infinitePi`：eq_infinitePi {ν : Measure (Π i, X 
+i)} (hν : forall s : Finset ι, forall t : (i : ι) -> Set (X i), (forall i, Measu
+rableSet (t i)) -> ν (Set…
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.image_preimage`：image_preimage {α β} (e : α ≃ β) (s : Set β) : e '
+' e ⁻¹' s = s
+· 使用定理 `Finset.coe_preimage`：coe_preimage {f : α -> β} (s : Finset β) (hf : Set.
+InjOn f (f ⁻¹' ↑s)) : (↑(preimage s f hf) : Set α) = f ⁻¹' ↑s
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `MeasurableSet.pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : δ) → 
+MeasurableSpace (X a)] {s : Set δ} {t : (i : δ) → Set (X i)},   s.Countable → (∀
+ i ∈ s…
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `MeasurableEquiv.coe_piCongrLeft`：coe_piCongrLeft (f : δ ≃ δ') : ⇑(Measur
+ableEquiv.piCongrLeft π f) = f.piCongrLeft π
+· 使用定理 `Equiv.piCongrLeft_preimage_pi`：piCongrLeft_preimage_pi (f : ι' ≃ ι) (s :
+ Set ι') (t : forall i, Set (α i)) : f.piCongrLeft α ⁻¹' (f '' s).pi t = s.pi fu
+n i => t (f i)
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi`：infinitePi_pi {s : Finset ι} {t : (
+i : ι) -> Set (X i)} (mt : forall i in s, MeasurableSet (t i)) : infinitePi μ (S
+et.pi s t) = ∏ i in s, μ …
+· 使用引理 `Finset.prod_equiv`：prod_equiv (e : ι ≃ κ) (hst : forall i, i in s ↔ e i 
+in t) (hfg : forall i in s, f i = g (e i)) : ∏ i in s, f i = ∏ i in t, g i
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem infinitePi_map_piCongrLeft
-  given: {α : Type*} (e : α ≃ ι)
-  proof: by
-  refine eq_infinitePi μ fun s t ht => ?_
-  conv_lhs => enter [2, 1]; rw [← e.image_preimage s, ← coe_preimage _ e.injective.injOn]
-  rw [map_apply]; rw [coe_piCongrLeft]; rw [Equiv.piCongrLeft_preimage_pi]; rw [infinitePi_pi]; rw [prod_equiv e]
-  · simp
-  · simp
-  · simp_all
-  · fun_prop
-  · exact .pi ((countable_toSet _).image e) (by simp_all)
-
-中文:
-定理 infinitePi_map_piCongrLeft
-  条件: {α : 类型} (e : α ≃ ι)
-  证明: by
-  refine eq_infinitePi μ fun s t ht => ?_
-  conv_lhs => enter [2, 1]; rw [← e.image_preimage s, ← coe_preimage _ e.injective.injOn]
-  rw [map_apply]; rw [coe_piCongrLeft]; rw [Equiv.piCongrLeft_preimage_pi]; rw [infinitePi_pi]; rw [prod_equiv e]
-  · simp
-  · simp
-  · simp_all
-  · fun_prop
-  · exact .pi ((countable_toSet _).image e) (by simp_all)
-
-Depends on / 依赖: Equiv.piCongrLeft_preimage_pi, coe_piCongrLeft, coe_preimage, conv_lhs, countable_toSet, e.image_preimage, e.injective.injOn, eq_infinitePi, fun_prop, image_preimage, infinitePi_pi, injective, map_apply, piCongrLeft_preimage_pi, prod_equiv
+--- 原说明 ---
+If we push the product measure forward by a reindexing equivalence, we get a pro
+duct measure
+on the reindexed product.
 -/
 theorem infinitePi_map_piCongrLeft {α : Type*} (e : α ≃ ι) :
-    (infinitePi (fun i => μ (e i))).map (piCongrLeft X e) = infinitePi μ := by
-  refine eq_infinitePi μ fun s t ht => ?_
+    (infinitePi (fun i ↦ μ (e i))).map (piCongrLeft X e) = infinitePi μ := by
+  refine eq_infinitePi μ fun s t ht ↦ ?_
   conv_lhs => enter [2, 1]; rw [← e.image_preimage s, ← coe_preimage _ e.injective.injOn]
-  rw [map_apply]; rw [coe_piCongrLeft]; rw [Equiv.piCongrLeft_preimage_pi]; rw [infinitePi_pi]; rw [prod_equiv e]
+  rw [map_apply, coe_piCongrLeft, Equiv.piCongrLeft_preimage_pi, infinitePi_pi,
+    prod_equiv e]
   · simp
   · simp
   · simp_all
   · fun_prop
   · exact .pi ((countable_toSet _).image e) (by simp_all)
-
-/--
-theorem `infinitePi_eq_pi` / 定理 `infinitePi_eq_pi`
-
-English:
-theorem infinitePi_eq_pi
-  given: [Fintype ι]
-  statement: infinitePi μ = Measure.pi μ
-  proof: by
-  refine (pi_eq fun s hs => ?_).symm
-  rw [← coe_univ]; rw [infinitePi_pi]
-  simpa
-
-中文:
-定理 infinitePi_eq_pi
-  条件: [有限类型 ι]
-  结论: infinitePi μ = 测度.pi μ
-  证明: by
-  refine (pi_eq fun s hs => ?_).symm
-  rw [← coe_univ]; rw [infinitePi_pi]
-  simpa
-
-Depends on / 依赖: coe_univ, infinitePi_pi, pi_eq
+/-
+**MeasureTheory.Measure.infinitePi_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.Measure`。
+形式化陈述：infinitePi_eq_pi [Fintype ι] : infinitePi μ = Measure.pi μ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.pi_eq`：pi_eq [forall i, SigmaFinite (μ i)] {μ' : M
+easure (forall i, α i)} (h : forall s : forall i, Set (α i), (forall i, Measurab
+leSet (s i)) -> μ…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi`：infinitePi_pi {s : Finset ι} {t : (
+i : ι) -> Set (X i)} (mt : forall i in s, MeasurableSet (t i)) : infinitePi μ (S
+et.pi s t) = ∏ i in s, μ …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 theorem infinitePi_eq_pi [Fintype ι] : infinitePi μ = Measure.pi μ := by
-  refine (pi_eq fun s hs => ?_).symm
-  rw [← coe_univ]; rw [infinitePi_pi]
+  refine (pi_eq fun s hs ↦ ?_).symm
+  rw [← coe_univ, infinitePi_pi]
   simpa
-
-/--
-lemma `infinitePi_cylinder` / 引理 `infinitePi_cylinder`
-
-English:
-lemma infinitePi_cylinder
-  given: {s : Finset ι} {S : Set (Π i : s, X i)} (mS : MeasurableSet S)
-  proof: by
-  rw [cylinder]; rw [← Measure.map_apply (measurable_restrict _) mS]; rw [infinitePi_map_restrict]
-
-中文:
-引理 infinitePi_cylinder
-  条件: {s : 有限集 ι} {S : 集合 (Π i : s, X i)} (mS : 可测集 S)
-  证明: by
-  rw [cylinder]; rw [← Measure.map_apply (measurable_restrict _) mS]; rw [infinitePi_map_restrict]
-
-Depends on / 依赖: Measure, Measure.map_apply, cylinder, infinitePi_map_restrict, map_apply, measurable_restrict
+/-
+**MeasureTheory.Measure.infinitePi_cylinder** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTh
+eory.Measure`。
+形式化陈述：infinitePi_cylinder {s : Finset ι} {S : Set (Π i : s, X i)} (mS : Measurab
+leSet S) : infinitePi μ (cylinder s S) = Measure.pi (fun i : s => μ i) S
+参数：Π i : s, X i；mS : MeasurableSet S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.cylinder.eq_1`：∀ {ι : Type u_1} {α : ι → Type u_2} (s : Fi
+nset ι) (S : Set ((i : ↥s) → α ↑i)),   MeasureTheory.cylinder s S = s.restrict ⁻
+¹' S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `MeasureTheory.Measure.infinitePi_map_restrict`：infinitePi_map_restrict {
+I : Finset ι} : (Measure.infinitePi μ).map I.restrict = Measure.pi fun i : I => 
+μ i
 -/
 lemma infinitePi_cylinder {s : Finset ι} {S : Set (Π i : s, X i)} (mS : MeasurableSet S) :
-    infinitePi μ (cylinder s S) = Measure.pi (fun i : s => μ i) S := by
-  rw [cylinder]; rw [← Measure.map_apply (measurable_restrict _) mS]; rw [infinitePi_map_restrict]
+    infinitePi μ (cylinder s S) = Measure.pi (fun i : s ↦ μ i) S := by
+  rw [cylinder, ← Measure.map_apply (measurable_restrict _) mS, infinitePi_map_restrict]
 
 section curry
 
-variable {ι : Type*} {κ : ι -> Type*} {X : (i : ι) -> κ i -> Type*}
-  {mX : forall i, forall j, MeasurableSpace (X i j)} (μ : (i : ι) -> (j : κ i) -> Measure (X i j))
-  [hμ : forall i j, IsProbabilityMeasure (μ i j)]
+variable {ι : Type*} {κ : ι → Type*} {X : (i : ι) → κ i → Type*}
+  {mX : ∀ i, ∀ j, MeasurableSpace (X i j)} (μ : (i : ι) → (j : κ i) → Measure (X i j))
+  [hμ : ∀ i j, IsProbabilityMeasure (μ i j)]
 
-/--
-lemma `infinitePi_map_piCurry_symm` / 引理 `infinitePi_map_piCurry_symm`
-
-English:
-lemma infinitePi_map_piCurry_symm
-  proof: by
-  apply eq_infinitePi
-  intro s t ht
-  classical
-  rw [map_apply (by fun_prop) (.pi (countable_toSet _) fun _ _ => ht _)]; rw [← Finset.sigma_image_fst_preimage_mk s]; rw [coe_piCurry_symm]; rw [Finset.coe_sigma]; rw [Set.uncurry_preimage_sigma_pi]; rw [infinitePi_pi]; rw [Finset.prod_sigma]
-  · exact Finset.prod_congr rfl (fun _ _ => infinitePi_pi _ fun _ _ => ht _)
-  · simp only [mem_image, Sigma.exists, exists_and_right, exists_eq_right, forall_exists_index]
-    exact fun i j hij => MeasurableSet.pi (countable_toSet _) fun k hk => by simp_all
-
-中文:
-引理 infinitePi_map_piCurry_symm
-  证明: by
-  apply eq_infinitePi
-  intro s t ht
-  classical
-  rw [map_apply (by fun_prop) (.pi (countable_toSet _) fun _ _ => ht _)]; rw [← Finset.sigma_image_fst_preimage_mk s]; rw [coe_piCurry_symm]; rw [Finset.coe_sigma]; rw [Set.uncurry_preimage_sigma_pi]; rw [infinitePi_pi]; rw [Finset.prod_sigma]
-  · exact Finset.prod_congr rfl (fun _ _ => infinitePi_pi _ fun _ _ => ht _)
-  · simp only [mem_image, Sigma.exists, exists_and_right, exists_eq_right, forall_exists_index]
-    exact fun i j hij => MeasurableSet.pi (countable_toSet _) fun k hk => by simp_all
-
-Depends on / 依赖: Finset, Finset.coe_sigma, Finset.prod_congr, Finset.prod_sigma, Finset.sigma_image_fst_preimage_mk, MeasurableSet, MeasurableSet.pi, Set.uncurry_preimage_sigma_pi, Sigma.exists, classical, coe_piCurry_symm, coe_sigma, countable_toSet, eq_infinitePi, exists_and_right, exists_eq_right, forall_exists_index, fun_prop, infinitePi_pi, map_apply
+/-
+**MeasureTheory.Measure.infinitePi_map_piCurry_symm** 是 Mathlib 中的一个引理，位于命名空间 `M
+easureTheory.Measure`。
+形式化陈述：infinitePi_map_piCurry_symm : (infinitePi fun i : ι => infinitePi fun j : 
+κ i => μ i j).map (piCurry X).symm = infinitePi fun p : (i : ι) × κ i => μ p.1 p
+.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.eq_infinitePi`：eq_infinitePi {ν : Measure (Π i, X 
+i)} (hν : forall s : Finset ι, forall t : (i : ι) -> Set (X i), (forall i, Measu
+rableSet (t i)) -> ν (Set…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply`：map_apply (hf : Measurable f) {s : Set 
+β} (hs : MeasurableSet s) : μ.map f s = μ (f ⁻¹' s)
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `MeasurableSet.pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : δ) → 
+MeasurableSpace (X a)] {s : Set δ} {t : (i : δ) → Set (X i)},   s.Countable → (∀
+ i ∈ s…
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `sigma_mk_injective`：∀ {α : Type u_1} {β : α → Type u_4} {i : α}, Functio
+n.Injective (Sigma.mk i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sigma_image_fst_preimage_mk`：sigma_image_fst_preimage_mk {β : α -
+> Type*} [DecidableEq α] (s : Finset (Σ a, β a)) : ((s.image Sigma.fst).sigma fu
+n a => s.preimage (Sigma…
+· 使用引理 `MeasurableEquiv.coe_piCurry_symm`：coe_piCurry_symm {ι : Type*} {κ : ι ->
+ Type*} (X : (i : ι) -> κ i -> Type*) [forall i j, MeasurableSpace (X i j)] : ⇑(
+piCurry X).symm = Sigm…
+· 使用定理 `Finset.coe_sigma`：coe_sigma (s : Finset ι) (t : forall i, Finset (α i)) 
+: (s.sigma t : Set (Σ i, α i)) = (s : Set ι).sigma fun i => (t i : Set (α i))
+· 使用引理 `Set.uncurry_preimage_sigma_pi`：uncurry_preimage_sigma_pi {β : (i : ι) ->
+ α i -> Type*} (s : Set ι) (t : (i : ι) -> Set (α i)) (u : (p : (i : ι) × α i) -
+> Set (β p.1 p.2)) …
+· 使用引理 `MeasureTheory.Measure.infinitePi_pi`：infinitePi_pi {s : Finset ι} {t : (
+i : ι) -> Set (X i)} (mt : forall i in s, MeasurableSet (t i)) : infinitePi μ (S
+et.pi s t) = ∏ i in s, μ …
+· 使用定理 `MeasureTheory.Measure.instIsProbabilityMeasureForallInfinitePi`：∀ {ι : T
+ype u_1} {X : ι → Type u_2} {mX : (i : ι) → MeasurableSpace (X i)} (μ : (i : ι) 
+→ MeasureTheory.Measure (X i))   [hμ : ∀ (i : ι), Me…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.prod_sigma`：prod_sigma {σ : α -> Type*} (s : Finset α) (t : foral
+l a, Finset (σ a)) (f : Sigma σ -> β) : ∏ x in s.sigma t, f x = ∏ a in s, ∏ s in
+ t a, f…
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
 -/
 lemma infinitePi_map_piCurry_symm :
-    (infinitePi fun i : ι => infinitePi fun j : κ i => μ i j).map (piCurry X).symm =
-      infinitePi fun p : (i : ι) × κ i => μ p.1 p.2 := by
+    (infinitePi fun i : ι ↦ infinitePi fun j : κ i ↦ μ i j).map (piCurry X).symm =
+      infinitePi fun p : (i : ι) × κ i ↦ μ p.1 p.2 := by
   apply eq_infinitePi
   intro s t ht
   classical
-  rw [map_apply (by fun_prop) (.pi (countable_toSet _) fun _ _ => ht _)]; rw [← Finset.sigma_image_fst_preimage_mk s]; rw [coe_piCurry_symm]; rw [Finset.coe_sigma]; rw [Set.uncurry_preimage_sigma_pi]; rw [infinitePi_pi]; rw [Finset.prod_sigma]
-  · exact Finset.prod_congr rfl (fun _ _ => infinitePi_pi _ fun _ _ => ht _)
+  rw [map_apply (by fun_prop) (.pi (countable_toSet _) fun _ _ ↦ ht _),
+    ← Finset.sigma_image_fst_preimage_mk s, coe_piCurry_symm, Finset.coe_sigma,
+    Set.uncurry_preimage_sigma_pi, infinitePi_pi, Finset.prod_sigma]
+  · exact Finset.prod_congr rfl (fun _ _ ↦ infinitePi_pi _ fun _ _ ↦ ht _)
   · simp only [mem_image, Sigma.exists, exists_and_right, exists_eq_right, forall_exists_index]
-    exact fun i j hij => MeasurableSet.pi (countable_toSet _) fun k hk => by simp_all
-
-/--
-lemma `infinitePi_map_piCurry` / 引理 `infinitePi_map_piCurry`
-
-English:
-lemma infinitePi_map_piCurry
-  proof: by
-  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq]; rw [infinitePi_map_piCurry_symm]
-
-中文:
-引理 infinitePi_map_piCurry
-  证明: by
-  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq]; rw [infinitePi_map_piCurry_symm]
-
-Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq, infinitePi_map_piCurry_symm, map_apply_eq_iff_map_symm_apply_eq
+    exact fun i j hij ↦ MeasurableSet.pi (countable_toSet _) fun k hk ↦ by simp_all
+/-
+**MeasureTheory.Measure.infinitePi_map_piCurry** 是 Mathlib 中的一个引理，位于命名空间 `Measur
+eTheory.Measure`。
+形式化陈述：infinitePi_map_piCurry : (infinitePi fun p : (i : ι) × κ i => μ p.1 p.2).m
+ap (piCurry X) = infinitePi fun i : ι => infinitePi fun j : κ i => μ i j
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq`：map_apply_eq_iff_map
+_symm_apply_eq (e : α ≃ᵐ β) : μ.map e = ν ↔ μ = ν.map e.symm
+· 使用引理 `MeasureTheory.Measure.infinitePi_map_piCurry_symm`：infinitePi_map_piCurr
+y_symm : (infinitePi fun i : ι => infinitePi fun j : κ i => μ i j).map (piCurry 
+X).symm = infinitePi fun p : (i : ι) × …
 -/
 lemma infinitePi_map_piCurry :
-    (infinitePi fun p : (i : ι) × κ i => μ p.1 p.2).map (piCurry X) =
-      infinitePi fun i : ι => infinitePi fun j : κ i => μ i j := by
-  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq]; rw [infinitePi_map_piCurry_symm]
+    (infinitePi fun p : (i : ι) × κ i ↦ μ p.1 p.2).map (piCurry X) =
+      infinitePi fun i : ι ↦ infinitePi fun j : κ i ↦ μ i j := by
+  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq, infinitePi_map_piCurry_symm]
 
-variable {ι κ X : Type*} {mX : MeasurableSpace X} (μ : ι -> κ -> Measure X)
-  [hμ : forall i j, IsProbabilityMeasure (μ i j)]
-
-/--
-lemma `infinitePi_map_curry_symm` / 引理 `infinitePi_map_curry_symm`
-
-English:
-lemma infinitePi_map_curry_symm
-  proof: by
-  rw [← (MeasurableEquiv.piCongrLeft (fun _ => X)
-    (Equiv.sigmaEquivProd ι κ).symm).map_measurableEquiv_injective.eq_iff]; rw [map_map]
-  · have : (MeasurableEquiv.piCongrLeft (fun _ => X) (Equiv.sigmaEquivProd ι κ).symm) ∘
-        (MeasurableEquiv.curry ι κ X).symm = ⇑(MeasurableEquiv.piCurry (fun _ _ => X)).symm := by
-      ext; simp [piCongrLeft, Equiv.piCongrLeft, Sigma.uncurry]
-    rw [this]; rw [infinitePi_map_piCurry_symm]
-.symm convert! infinitePi_map_piCongrLeft (fun p => μ p.1 p.2) (Equiv.sigmaEquivProd ι κ).symm
-  all_goals fun_prop
-
-中文:
-引理 infinitePi_map_curry_symm
-  证明: by
-  rw [← (MeasurableEquiv.piCongrLeft (fun _ => X)
-    (Equiv.sigmaEquivProd ι κ).symm).map_measurableEquiv_injective.eq_iff]; rw [map_map]
-  · have : (MeasurableEquiv.piCongrLeft (fun _ => X) (Equiv.sigmaEquivProd ι κ).symm) ∘
-        (MeasurableEquiv.curry ι κ X).symm = ⇑(MeasurableEquiv.piCurry (fun _ _ => X)).symm := by
-      ext; simp [piCongrLeft, Equiv.piCongrLeft, Sigma.uncurry]
-    rw [this]; rw [infinitePi_map_piCurry_symm]
-.symm convert! infinitePi_map_piCongrLeft (fun p => μ p.1 p.2) (Equiv.sigmaEquivProd ι κ).symm
-  all_goals fun_prop
-
-Depends on / 依赖: Equiv.piCongrLeft, Equiv.sigmaEquivProd, MeasurableEquiv, MeasurableEquiv.curry, MeasurableEquiv.piCongrLeft, MeasurableEquiv.piCurry, Sigma.uncurry, convert, eq_iff, infinitePi_map_piCongrLeft, infinitePi_map_piCurry_symm, map_map, map_measurableEquiv_injective, map_measurableEquiv_injective.eq_iff, piCongrLeft, piCurry, sigmaEquivProd, uncurry
+variable {ι κ X : Type*} {mX : MeasurableSpace X} (μ : ι → κ → Measure X)
+  [hμ : ∀ i j, IsProbabilityMeasure (μ i j)]
+/-
+**MeasureTheory.Measure.infinitePi_map_curry_symm** 是 Mathlib 中的一个引理，位于命名空间 `Mea
+sureTheory.Measure`。
+形式化陈述：infinitePi_map_curry_symm : (infinitePi fun i : ι => infinitePi fun j : κ 
+=> μ i j).map (curry ι κ X).symm = infinitePi fun p : ι × κ => μ p.1 p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `MeasurableEquiv.map_measurableEquiv_injective`：map_measurableEquiv_injec
+tive (e : α ≃ᵐ β) : Injective (Measure.map e)
+· 使用定理 `MeasureTheory.Measure.map_map`：map_map {g : β -> γ} {f : α -> β} (hg : M
+easurable g) (hf : Measurable f) : (μ.map f).map g = μ.map (g ∘ f)
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.piCongrLeft'_symm`：∀ {α : Sort u_1} {β : Sort u_4} (P : Sort u_9) 
+(e : α ≃ β),   (Equiv.piCongrLeft' (fun x => P) e).symm = Equiv.piCongrLeft' (fu
+n a => P) e.s…
+· 使用定理 `MeasurableEquiv.mk.congr_simp`：∀ {α : Type u_6} {β : Type u_7} [inst : M
+easurableSpace α] [inst_1 : MeasurableSpace β] (toEquiv toEquiv_1 : α ≃ β)   (e_
+toEquiv : toEquiv =…
+· 使用定理 `Equiv.piCongrLeft'_apply`：∀ {α : Sort u_1} {β : Sort u_4} (P : α → Sort 
+u_9) (e : α ≃ β) (f : (a : α) → P a) (x : β),   (Equiv.piCongrLeft' P e) f x = f
+ (e.symm x)
+· 使用定理 `Equiv.sigmaEquivProd_apply`：∀ (α : Type u_1) (β : Type u_2) (a : (_ : α)
+ × β), (Equiv.sigmaEquivProd α β) a = (a.fst, a.snd)
+· 使用定理 `MeasurableEquiv.curry_symm_apply`：∀ (ι : Type u_6) (κ : Type u_7) (X : T
+ype u_8) [inst : MeasurableSpace X] (a : ι → κ → X) (a_1 : ι × κ),   (Measurable
+Equiv.curry ι κ X).sym…
+· 使用定理 `MeasurableEquiv.piCurry_symm_apply`：∀ {ι : Type u_6} {κ : ι → Type u_7} 
+(X : (i : ι) → κ i → Type u_8)   [inst : (i : ι) → (j : κ i) → MeasurableSpace (
+X i j)] (f : (x : ι) → (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `MeasureTheory.Measure.infinitePi_map_piCurry_symm`：infinitePi_map_piCurr
+y_symm : (infinitePi fun i : ι => infinitePi fun j : κ i => μ i j).map (piCurry 
+X).symm = infinitePi fun p : (i : ι) × …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `MeasureTheory.Measure.infinitePi_map_piCongrLeft`：infinitePi_map_piCongr
+Left {α : Type*} (e : α ≃ ι) : (infinitePi (fun i => μ (e i))).map (piCongrLeft 
+X e) = infinitePi μ
 -/
 lemma infinitePi_map_curry_symm :
-    (infinitePi fun i : ι => infinitePi fun j : κ => μ i j).map (curry ι κ X).symm =
-      infinitePi fun p : ι × κ => μ p.1 p.2 := by
-  rw [← (MeasurableEquiv.piCongrLeft (fun _ => X)
-    (Equiv.sigmaEquivProd ι κ).symm).map_measurableEquiv_injective.eq_iff]; rw [map_map]
-  · have : (MeasurableEquiv.piCongrLeft (fun _ => X) (Equiv.sigmaEquivProd ι κ).symm) ∘
-        (MeasurableEquiv.curry ι κ X).symm = ⇑(MeasurableEquiv.piCurry (fun _ _ => X)).symm := by
+    (infinitePi fun i : ι ↦ infinitePi fun j : κ ↦ μ i j).map (curry ι κ X).symm =
+      infinitePi fun p : ι × κ ↦ μ p.1 p.2 := by
+  rw [← (MeasurableEquiv.piCongrLeft (fun _ ↦ X)
+    (Equiv.sigmaEquivProd ι κ).symm).map_measurableEquiv_injective.eq_iff, map_map]
+  · have : (MeasurableEquiv.piCongrLeft (fun _ ↦ X) (Equiv.sigmaEquivProd ι κ).symm) ∘
+        (MeasurableEquiv.curry ι κ X).symm = ⇑(MeasurableEquiv.piCurry (fun _ _ ↦ X)).symm := by
       ext; simp [piCongrLeft, Equiv.piCongrLeft, Sigma.uncurry]
-    rw [this]; rw [infinitePi_map_piCurry_symm]
-.symm convert! infinitePi_map_piCongrLeft (fun p => μ p.1 p.2) (Equiv.sigmaEquivProd ι κ).symm
+    rw [this, infinitePi_map_piCurry_symm]
+    convert! infinitePi_map_piCongrLeft (fun p ↦ μ p.1 p.2) (Equiv.sigmaEquivProd ι κ).symm |>.symm
   all_goals fun_prop
-
-/--
-lemma `infinitePi_map_curry` / 引理 `infinitePi_map_curry`
-
-English:
-lemma infinitePi_map_curry
-  proof: by
-  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq]; rw [infinitePi_map_curry_symm]
-
-中文:
-引理 infinitePi_map_curry
-  证明: by
-  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq]; rw [infinitePi_map_curry_symm]
-
-Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq, infinitePi_map_curry_symm, map_apply_eq_iff_map_symm_apply_eq
+/-
+**MeasureTheory.Measure.infinitePi_map_curry** 是 Mathlib 中的一个引理，位于命名空间 `MeasureT
+heory.Measure`。
+形式化陈述：infinitePi_map_curry : (infinitePi fun p : ι × κ => μ p.1 p.2).map (curry 
+ι κ X) = infinitePi fun i : ι => infinitePi fun j : κ => μ i j
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq`：map_apply_eq_iff_map
+_symm_apply_eq (e : α ≃ᵐ β) : μ.map e = ν ↔ μ = ν.map e.symm
+· 使用引理 `MeasureTheory.Measure.infinitePi_map_curry_symm`：infinitePi_map_curry_sy
+mm : (infinitePi fun i : ι => infinitePi fun j : κ => μ i j).map (curry ι κ X).s
+ymm = infinitePi fun p : ι × κ => μ p…
 -/
 lemma infinitePi_map_curry :
-    (infinitePi fun p : ι × κ => μ p.1 p.2).map (curry ι κ X) =
-      infinitePi fun i : ι => infinitePi fun j : κ => μ i j := by
-  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq]; rw [infinitePi_map_curry_symm]
+    (infinitePi fun p : ι × κ ↦ μ p.1 p.2).map (curry ι κ X) =
+      infinitePi fun i : ι ↦ infinitePi fun j : κ ↦ μ i j := by
+  rw [MeasurableEquiv.map_apply_eq_iff_map_symm_apply_eq, infinitePi_map_curry_symm]
 
 end curry
 
@@ -1583,132 +2015,193 @@ end Measure
 
 section Integral
 
-/--
-theorem `integral_restrict_infinitePi` / 定理 `integral_restrict_infinitePi`
-
-English:
-theorem integral_restrict_infinitePi
-  statement: {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
-  proof: by
-  rw [← integral_map]; rw [infinitePi_map_restrict]
-  · fun_prop
-  · rwa [infinitePi_map_restrict]
-
-中文:
-定理 integral_restrict_infinitePi
-  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
-  证明: by
-  rw [← integral_map]; rw [infinitePi_map_restrict]
-  · fun_prop
-  · rwa [infinitePi_map_restrict]
-
-Depends on / 依赖: fun_prop, infinitePi_map_restrict, integral_map
+/-
+**MeasureTheory.integral_restrict_infinitePi** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：integral_restrict_infinitePi {E : Type*} [NormedAddCommGroup E] [NormedSpa
+ce Real E] {s : Finset ι} {f : (Π i : s, X i) -> E} (hf : AEStronglyMeasurable f
+ (Measure.pi (fun i : s => μ i))) : ∫ y, f (s.restrict y) ∂infinitePi μ = ∫ y, f
+ y ∂Measure.pi (fun i : s => μ i)
+参数：Π i : s, X i；hf : AEStronglyMeasurable f (Measure.pi (fun i : s => μ i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_map`：integral_map {β} [MeasurableSpace β] {φ : α 
+-> β} (hφ : AEMeasurable φ μ) {f : β -> G} (hfm : AEStronglyMeasurable f (Measur
+e.map φ μ)) : ∫ …
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `MeasureTheory.Measure.infinitePi_map_restrict`：infinitePi_map_restrict {
+I : Finset ι} : (Measure.infinitePi μ).map I.restrict = Measure.pi fun i : I => 
+μ i
 -/
-theorem integral_restrict_infinitePi {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
-    {s : Finset ι} {f : (Π i : s, X i) -> E}
-    (hf : AEStronglyMeasurable f (Measure.pi (fun i : s => μ i))) :
-    ∫ y, f (s.restrict y) ∂infinitePi μ = ∫ y, f y ∂Measure.pi (fun i : s => μ i) := by
-  rw [← integral_map]; rw [infinitePi_map_restrict]
+theorem integral_restrict_infinitePi {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    {s : Finset ι} {f : (Π i : s, X i) → E}
+    (hf : AEStronglyMeasurable f (Measure.pi (fun i : s ↦ μ i))) :
+    ∫ y, f (s.restrict y) ∂infinitePi μ = ∫ y, f y ∂Measure.pi (fun i : s ↦ μ i) := by
+  rw [← integral_map, infinitePi_map_restrict]
   · fun_prop
   · rwa [infinitePi_map_restrict]
-
-/--
-theorem `lintegral_restrict_infinitePi` / 定理 `lintegral_restrict_infinitePi`
-
-English:
-theorem lintegral_restrict_infinitePi
-  statement: {s : Finset ι}
-  proof: by
-  rw [← lintegral_map hf (measurable_restrict _)]; rw [isProjectiveLimit_infinitePi μ]
-
-中文:
-定理 lintegral_restrict_infinitePi
-  结论: {s : 有限集 ι}
-  证明: by
-  rw [← lintegral_map hf (measurable_restrict _)]; rw [isProjectiveLimit_infinitePi μ]
-
-Depends on / 依赖: isProjectiveLimit_infinitePi, lintegral_map, measurable_restrict
+/-
+**MeasureTheory.lintegral_restrict_infinitePi** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：lintegral_restrict_infinitePi {s : Finset ι} {f : (Π i : s, X i) -> Real>=
+0∞} (hf : Measurable f) : ∫⁻ y, f (s.restrict y) ∂infinitePi μ = ∫⁻ y, f y ∂Meas
+ure.pi (fun i : s => μ i)
+参数：Π i : s, X i；hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.lintegral_map`：lintegral_map {f : β -> Real>=0∞} {g : α ->
+ β} (hf : Measurable f) (hg : Measurable g) : ∫⁻ a, f a ∂map g μ = ∫⁻ a, f (g a)
+ ∂μ
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `MeasureTheory.Measure.isProjectiveLimit_infinitePi`：isProjectiveLimit_in
+finitePi : IsProjectiveLimit (infinitePi μ) (fun I : Finset ι => (Measure.pi (fu
+n i : I => μ i)))
 -/
 theorem lintegral_restrict_infinitePi {s : Finset ι}
-    {f : (Π i : s, X i) -> Real>=0∞} (hf : Measurable f) :
-    ∫⁻ y, f (s.restrict y) ∂infinitePi μ = ∫⁻ y, f y ∂Measure.pi (fun i : s => μ i) := by
-  rw [← lintegral_map hf (measurable_restrict _)]; rw [isProjectiveLimit_infinitePi μ]
+    {f : (Π i : s, X i) → ℝ≥0∞} (hf : Measurable f) :
+    ∫⁻ y, f (s.restrict y) ∂infinitePi μ = ∫⁻ y, f y ∂Measure.pi (fun i : s ↦ μ i) := by
+  rw [← lintegral_map hf (measurable_restrict _), isProjectiveLimit_infinitePi μ]
 
 open Filtration
-
-/--
-theorem `integral_infinitePi_of_piFinset` / 定理 `integral_infinitePi_of_piFinset`
-
-English:
-theorem integral_infinitePi_of_piFinset
-  statement: [DecidableEq ι] {E : Type*} [NormedAddCommGroup E]
-  proof: by
-  let g : (Π i : s, X i) -> E := fun y => f (Function.updateFinset x _ y)
-  have this y : g (s.restrict y) = f y :=
-    mf.dependsOn_of_piFinset fun i hi => by simp_all [Function.updateFinset]
-  rw [← integral_congr_ae <| ae_of_all _ this]; rw [integral_restrict_infinitePi]
-  exact mf.comp_measurable (measurable_updateFinset.mono le_rfl (piFinset.le s))
-.aestronglyMeasurable
-
-中文:
-定理 integral_infinitePi_of_piFinset
-  结论: [DecidableEq ι] {E : 类型} [赋范交换加群 E]
-  证明: by
-  let g : (Π i : s, X i) -> E := fun y => f (Function.updateFinset x _ y)
-  have this y : g (s.restrict y) = f y :=
-    mf.dependsOn_of_piFinset fun i hi => by simp_all [Function.updateFinset]
-  rw [← integral_congr_ae <| ae_of_all _ this]; rw [integral_restrict_infinitePi]
-  exact mf.comp_measurable (measurable_updateFinset.mono le_rfl (piFinset.le s))
-.aestronglyMeasurable
-
-Depends on / 依赖: Function, Function.updateFinset, ae_of_all, aestronglyMeasurable, comp_measurable, dependsOn_of_piFinset, integral_congr_ae, integral_restrict_infinitePi, le_rfl, measurable_updateFinset, measurable_updateFinset.mono, mf.comp_measurable, mf.dependsOn_of_piFinset, piFinset, piFinset.le, restrict, s.restrict, updateFinset
+/-
+**MeasureTheory.integral_infinitePi_of_piFinset** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory`。
+形式化陈述：integral_infinitePi_of_piFinset [DecidableEq ι] {E : Type*} [NormedAddComm
+Group E] [NormedSpace Real E] {s : Finset ι} {f : (Π i, X i) -> E} (mf : Strongl
+yMeasurable[piFinset s] f) (x : Π i, X i) : ∫ y, f y ∂infinitePi μ = ∫ y, f (Fun
+ction.updateFinset x s y) ∂Measure.pi (fun i : s => μ i)
+参数：Π i, X i；mf : StronglyMeasurable[piFinset s] f；x : Π i, X i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.StronglyMeasurable.dependsOn_of_piFinset`：∀ {Z : Type u_3}
+ {ι : Type u_4} {X : ι → Type u_5} [inst : (i : ι) → MeasurableSpace (X i)] {f :
+ ((i : ι) → X i) → Z}   {s : Finset ι} [inst…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `T5Space.toT1Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T5
+Space X], T1Space X
+· 使用定理 `T6Space.toT5Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T6Space
+ X], T5Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.integral_congr_ae`：integral_congr_ae {f g : α -> G} (h : f
+ =ᵐ[μ] g) : ∫ a, f a ∂μ = ∫ a, g a ∂μ
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.integral_restrict_infinitePi`：integral_restrict_infinitePi
+ {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] {s : Finset ι} {f : (Π 
+i : s, X i) -> E} (hf : AEStrong…
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.StronglyMeasurable.comp_measurable`：comp_measurable [Topol
+ogicalSpace β] {_ : MeasurableSpace α} {_ : MeasurableSpace γ} {f : α -> β} {g :
+ γ -> α} (hf : StronglyMeasurable f) (…
+· 使用定理 `Measurable.mono`：Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : 
+MeasurableSpace β} {f : α -> β} (hf : @Measurable α β ma mb f) (ha : ma <= ma') 
+(hb :…
+· 使用定理 `measurable_updateFinset`：measurable_updateFinset [DecidableEq δ] {s : Fi
+nset δ} {x : Π i, X i} : Measurable (updateFinset x s)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
 -/
 theorem integral_infinitePi_of_piFinset [DecidableEq ι] {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace Real E] {s : Finset ι} {f : (Π i, X i) -> E}
+    [NormedSpace ℝ E] {s : Finset ι} {f : (Π i, X i) → E}
     (mf : StronglyMeasurable[piFinset s] f) (x : Π i, X i) :
     ∫ y, f y ∂infinitePi μ =
-    ∫ y, f (Function.updateFinset x s y) ∂Measure.pi (fun i : s => μ i) := by
-  let g : (Π i : s, X i) -> E := fun y => f (Function.updateFinset x _ y)
+    ∫ y, f (Function.updateFinset x s y) ∂Measure.pi (fun i : s ↦ μ i) := by
+  let g : (Π i : s, X i) → E := fun y ↦ f (Function.updateFinset x _ y)
   have this y : g (s.restrict y) = f y :=
-    mf.dependsOn_of_piFinset fun i hi => by simp_all [Function.updateFinset]
-  rw [← integral_congr_ae <| ae_of_all _ this]; rw [integral_restrict_infinitePi]
+    mf.dependsOn_of_piFinset fun i hi ↦ by simp_all [Function.updateFinset]
+  rw [← integral_congr_ae <| ae_of_all _ this, integral_restrict_infinitePi]
   exact mf.comp_measurable (measurable_updateFinset.mono le_rfl (piFinset.le s))
-.aestronglyMeasurable
-
-/--
-theorem `lintegral_infinitePi_of_piFinset` / 定理 `lintegral_infinitePi_of_piFinset`
-
-English:
-theorem lintegral_infinitePi_of_piFinset
-  statement: [DecidableEq ι] {s : Finset ι}
-  proof: by
-  let g : (Π i : s, X i) -> Real>=0∞ := fun y => f (Function.updateFinset x _ y)
-  have this y : g (s.restrict y) = f y :=
-    mf.dependsOn_of_piFinset fun i hi => by simp_all [Function.updateFinset]
-  rw [← lintegral_congr_ae <| ae_of_all _ this]; rw [lintegral_restrict_infinitePi]
-  · rfl
-  · exact mf.comp (measurable_updateFinset.mono le_rfl (piFinset.le s))
-
-中文:
-定理 lintegral_infinitePi_of_piFinset
-  结论: [DecidableEq ι] {s : 有限集 ι}
-  证明: by
-  let g : (Π i : s, X i) -> Real>=0∞ := fun y => f (Function.updateFinset x _ y)
-  have this y : g (s.restrict y) = f y :=
-    mf.dependsOn_of_piFinset fun i hi => by simp_all [Function.updateFinset]
-  rw [← lintegral_congr_ae <| ae_of_all _ this]; rw [lintegral_restrict_infinitePi]
-  · rfl
-  · exact mf.comp (measurable_updateFinset.mono le_rfl (piFinset.le s))
-
-Depends on / 依赖: Function, Function.updateFinset, ae_of_all, dependsOn_of_piFinset, le_rfl, lintegral_congr_ae, lintegral_restrict_infinitePi, measurable_updateFinset, measurable_updateFinset.mono, mf.comp, mf.dependsOn_of_piFinset, piFinset, piFinset.le, restrict, s.restrict, updateFinset
+    |>.aestronglyMeasurable
+/-
+**MeasureTheory.lintegral_infinitePi_of_piFinset** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：lintegral_infinitePi_of_piFinset [DecidableEq ι] {s : Finset ι} {f : (Π i,
+ X i) -> Real>=0∞} (mf : Measurable[piFinset s] f) (x : Π i, X i) : ∫⁻ y, f y ∂i
+nfinitePi μ = (∫⋯∫⁻_s, f ∂μ) x
+参数：Π i, X i；mf : Measurable[piFinset s] f；x : Π i, X i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.dependsOn_of_piFinset`：∀ {Z : Type u_3} {ι : Type u_4} {X : ι
+ → Type u_5} [inst : (i : ι) → MeasurableSpace (X i)] {f : ((i : ι) → X i) → Z} 
+  {s : Finset ι} [inst…
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `StandardBorelSpace.instMeasurableEq`：∀ {α : Type u_1} [inst : Measurable
+Space α] [StandardBorelSpace α], MeasurableEq α
+· 使用定理 `standardBorel_of_polish`：∀ {α : Type u_1} [inst : MeasurableSpace α] [τ 
+: TopologicalSpace α] [BorelSpace α] [PolishSpace α],   StandardBorelSpace α
+· 使用定理 `PolishSpace.instENNReal`：PolishSpace ENNReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.lintegral_congr_ae`：lintegral_congr_ae {f g : α -> Real>=0
+∞} (h : f =ᵐ[μ] g) : ∫⁻ a, f a ∂μ = ∫⁻ a, g a ∂μ
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.lintegral_restrict_infinitePi`：lintegral_restrict_infinite
+Pi {s : Finset ι} {f : (Π i : s, X i) -> Real>=0∞} (hf : Measurable f) : ∫⁻ y, f
+ (s.restrict y) ∂infinitePi μ = ∫…
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `Measurable.mono`：Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : 
+MeasurableSpace β} {f : α -> β} (hf : @Measurable α β ma mb f) (ha : ma <= ma') 
+(hb :…
+· 使用定理 `measurable_updateFinset`：measurable_updateFinset [DecidableEq δ] {s : Fi
+nset δ} {x : Π i, X i} : Measurable (updateFinset x s)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
 -/
 theorem lintegral_infinitePi_of_piFinset [DecidableEq ι] {s : Finset ι}
-    {f : (Π i, X i) -> Real>=0∞} (mf : Measurable[piFinset s] f)
+    {f : (Π i, X i) → ℝ≥0∞} (mf : Measurable[piFinset s] f)
     (x : Π i, X i) : ∫⁻ y, f y ∂infinitePi μ = (∫⋯∫⁻_s, f ∂μ) x := by
-  let g : (Π i : s, X i) -> Real>=0∞ := fun y => f (Function.updateFinset x _ y)
+  let g : (Π i : s, X i) → ℝ≥0∞ := fun y ↦ f (Function.updateFinset x _ y)
   have this y : g (s.restrict y) = f y :=
-    mf.dependsOn_of_piFinset fun i hi => by simp_all [Function.updateFinset]
-  rw [← lintegral_congr_ae <| ae_of_all _ this]; rw [lintegral_restrict_infinitePi]
+    mf.dependsOn_of_piFinset fun i hi ↦ by simp_all [Function.updateFinset]
+  rw [← lintegral_congr_ae <| ae_of_all _ this, lintegral_restrict_infinitePi]
   · rfl
   · exact mf.comp (measurable_updateFinset.mono le_rfl (piFinset.le s))
 
@@ -1717,3 +2210,4 @@ end Integral
 end InfinitePi
 
 end MeasureTheory
+

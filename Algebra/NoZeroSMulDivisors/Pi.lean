@@ -22,49 +22,55 @@ universe u v
 variable {I : Type u}
 
 -- The indexing type
-variable {f : I -> Type v}
+variable {f : I → Type v}
 
-/--
-Instance `Pi.noZeroSMulDivisors` / 实例 `Pi.noZeroSMulDivisors`
-
-English:
-instance Pi.noZeroSMulDivisors
-  signature: (α) [Semiring α] [IsDomain α] [forall i, AddCommGroup <| f i]
-  body: ⟨fun {_ _} h =>
-    or_iff_not_imp_left.mpr fun hc =>
-      funext fun i => (smul_eq_zero.mp (congr_fun h i)).resolve_left hc⟩
-
-中文:
-实例 依赖函数类型.noZeroSMulDivisors
-  签名: (α) [半环 α] [是整环 α] [对任意 i, 加法交换群 <| f i]
-  定义体: ⟨fun {_ _} h =>
-    or_iff_not_imp_left.mpr fun hc =>
-      funext fun i => (smul_eq_zero.mp (congr_fun h i)).resolve_left hc⟩
-
-Depends on / 依赖: congr_fun, or_iff_not_imp_left, or_iff_not_imp_left.mpr, resolve_left, smul_eq_zero, smul_eq_zero.mp
+/-
+**Pi.noZeroSMulDivisors** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.noZeroSMulDivisors (α) [Semiring α] [IsDomain α] [forall i, AddCommGrou
+p <| f i] [forall i, Module α <| f i] [forall i, NoZeroSMulDivisors α <| f i] : 
+NoZeroSMulDivisors α (forall i : I, f i)
+参数：α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `smul_eq_zero`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [inst_
+1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {r : R}   {m : M} [Module.IsTo
+rs…
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
 -/
-instance Pi.noZeroSMulDivisors (α) [Semiring α] [IsDomain α] [forall i, AddCommGroup <| f i]
-    [forall i, Module α <| f i] [forall i, NoZeroSMulDivisors α <| f i] :
-    NoZeroSMulDivisors α (forall i : I, f i) :=
+instance Pi.noZeroSMulDivisors (α) [Semiring α] [IsDomain α] [∀ i, AddCommGroup <| f i]
+    [∀ i, Module α <| f i] [∀ i, NoZeroSMulDivisors α <| f i] :
+    NoZeroSMulDivisors α (∀ i : I, f i) :=
   ⟨fun {_ _} h =>
     or_iff_not_imp_left.mpr fun hc =>
       funext fun i => (smul_eq_zero.mp (congr_fun h i)).resolve_left hc⟩
 
-/--
-Instance `_root_.Function.noZeroSMulDivisors` / 实例 `_root_.Function.noZeroSMulDivisors`
+/-- A special case of `Pi.noZeroSMulDivisors` for non-dependent types. Lean struggles to
+synthesize this instance by itself elsewhere in the library. -/
+/-
+**_root_.Function.noZeroSMulDivisors** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：_root_.Function.noZeroSMulDivisors {ι α β : Type*} [Semiring α] [IsDomain 
+α] [AddCommGroup β] [Module α β] [NoZeroSMulDivisors α β] : NoZeroSMulDivisors α
+ (ι -> β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance _root_.Function.noZeroSMulDivisors
-  signature: {ι α β : Type*} [Semiring α] [IsDomain α]
-  body: Pi.noZeroSMulDivisors _
-
-中文:
-实例 _root_.函数.noZeroSMulDivisors
-  签名: {ι α β : 类型} [半环 α] [是整环 α]
-  定义体: Pi.noZeroSMulDivisors _
-
-Depends on / 依赖: Pi.noZeroSMulDivisors, noZeroSMulDivisors
+--- 原说明 ---
+A special case of `Pi.noZeroSMulDivisors` for non-dependent types. Lean struggle
+s to
+synthesize this instance by itself elsewhere in the library.
 -/
 instance _root_.Function.noZeroSMulDivisors {ι α β : Type*} [Semiring α] [IsDomain α]
-    [AddCommGroup β] [Module α β] [NoZeroSMulDivisors α β] : NoZeroSMulDivisors α (ι -> β) :=
+    [AddCommGroup β] [Module α β] [NoZeroSMulDivisors α β] : NoZeroSMulDivisors α (ι → β) :=
   Pi.noZeroSMulDivisors _

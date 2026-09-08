@@ -33,22 +33,16 @@ variable {C : Type*} [Category* C] (P : MorphismProperty C) [MonoidalCategory C]
 
 namespace MorphismProperty
 
-/--
-Definition of `IsStableUnderAssociator` / `IsStableUnderAssociator` 的定义
+/-- A morphism property stable under associator isomorphisms of a monoidal category. -/
+/-
+**CategoryTheory.MorphismProperty.IsStableUnderAssociator** 是 Mathlib 中的一个归纳类型，位
+于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [Ca
+tegoryTheory.MonoidalCategory C] → CategoryTheory.MorphismProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStableUnderAssociator
-  parameters: (P : MorphismProperty C)
-  axioms and operations (2):
-    - associator_hom_mem((P) (c c' c'' : C)) : P (α_ c c' c'').hom
-    - associator_inv_mem((P) (c c' c'' : C)) : P (α_ c c' c'').inv
-
-中文:
-类 是StableUnderAssociator
-  参数: (P : MorphismProperty C)
-  公理与运算 (2 个):
-    - associator_hom_mem((P) (c c' c'' : C)) : P (α_ c c' c'').hom
-    - associator_inv_mem((P) (c c' c'' : C)) : P (α_ c c' c'').inv
+--- 原说明 ---
+A morphism property stable under associator isomorphisms of a monoidal category.
 -/
 class IsStableUnderAssociator (P : MorphismProperty C) : Prop where
   associator_hom_mem (P) (c c' c'' : C) : P (α_ c c' c'').hom
@@ -56,72 +50,51 @@ class IsStableUnderAssociator (P : MorphismProperty C) : Prop where
 
 export IsStableUnderAssociator (associator_hom_mem associator_inv_mem)
 
-/--
-Definition of `IsStableUnderUnitor` / `IsStableUnderUnitor` 的定义
+/-- A morphism property stable under left and right unitor isomorphisms. -/
+/-
+**CategoryTheory.MorphismProperty.IsStableUnderUnitor** 是 Mathlib 中的一个归纳类型，位于命名空
+间 `CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [Ca
+tegoryTheory.MonoidalCategory C] → CategoryTheory.MorphismProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStableUnderUnitor
-  parameters: (P : MorphismProperty C)
-  axioms and operations (4):
-    - leftUnitor_hom_mem((P) (c : C)) : P ((fun_ c).hom)
-    - leftUnitor_inv_mem((P) (c : C)) : P ((fun_ c).inv)
-    - rightUnitor_hom_mem((P) (c : C)) : P ((ρ_ c).hom)
-    - rightUnitor_inv_mem((P) (c : C)) : P ((ρ_ c).inv)
-
-中文:
-类 是StableUnderUnitor
-  参数: (P : MorphismProperty C)
-  公理与运算 (4 个):
-    - leftUnitor_hom_mem((P) (c : C)) : P ((fun_ c).hom)
-    - leftUnitor_inv_mem((P) (c : C)) : P ((fun_ c).inv)
-    - rightUnitor_hom_mem((P) (c : C)) : P ((ρ_ c).hom)
-    - rightUnitor_inv_mem((P) (c : C)) : P ((ρ_ c).inv)
+--- 原说明 ---
+A morphism property stable under left and right unitor isomorphisms.
 -/
 class IsStableUnderUnitor (P : MorphismProperty C) : Prop where
-  leftUnitor_hom_mem (P) (c : C) : P ((fun_ c).hom)
-  leftUnitor_inv_mem (P) (c : C) : P ((fun_ c).inv)
+  leftUnitor_hom_mem (P) (c : C) : P ((λ_ c).hom)
+  leftUnitor_inv_mem (P) (c : C) : P ((λ_ c).inv)
   rightUnitor_hom_mem (P) (c : C) : P ((ρ_ c).hom)
   rightUnitor_inv_mem (P) (c : C) : P ((ρ_ c).inv)
 
 export IsStableUnderUnitor (leftUnitor_hom_mem leftUnitor_inv_mem rightUnitor_hom_mem
   rightUnitor_inv_mem)
 
-/--
-Definition of `IsMonoidalStable` / `IsMonoidalStable` 的定义
+/-- A morphism property stable under tensoring, associators, and unitors. -/
+/-
+**CategoryTheory.MorphismProperty.IsMonoidalStable** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.MorphismProperty C → [CategoryTheory.MonoidalCategory C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsMonoidalStable
-  parameters: : Prop extends IsMonoidal P, IsStableUnderAssociator P,
-  extends: IsMonoidal P, IsStableUnderAssociator P, 
-  (no additional axioms)
-
-中文:
-类 是MonoidalStable
-  参数: : 命题 extends 是幺半群 P, 是StableUnderAssociator P,
-  继承: 是幺半群 P, 是StableUnderAssociator P, 
-  (无附加公理)
+--- 原说明 ---
+A morphism property stable under tensoring, associators, and unitors.
 -/
 class IsMonoidalStable : Prop extends IsMonoidal P, IsStableUnderAssociator P,
     IsStableUnderUnitor P
 
-/--
-Definition of `IsStableUnderBraiding` / `IsStableUnderBraiding` 的定义
+/-- A monoidal-stable morphism property also stable under braiding isomorphisms. -/
+/-
+**CategoryTheory.MorphismProperty.IsStableUnderBraiding** 是 Mathlib 中的一个归纳类型，位于命
+名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       [CategoryTheory.BraidedCategor
+y C] → CategoryTheory.MorphismProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStableUnderBraiding
-  parameters: [BraidedCategory C] (P : MorphismProperty C)
-  extends: IsMonoidalStable P
-  axioms and operations (2):
-    - braiding_hom_mem((P) (c c' : C)) : P (β_ c c').hom
-    - braiding_inv_mem((P) (c c' : C)) : P (β_ c c').inv
-
-中文:
-类 是StableUnderBraiding
-  参数: [辫范畴 C] (P : MorphismProperty C)
-  继承: 是MonoidalStable P
-  公理与运算 (2 个):
-    - braiding_hom_mem((P) (c c' : C)) : P (β_ c c').hom
-    - braiding_inv_mem((P) (c c' : C)) : P (β_ c c').inv
+--- 原说明 ---
+A monoidal-stable morphism property also stable under braiding isomorphisms.
 -/
 class IsStableUnderBraiding [BraidedCategory C] (P : MorphismProperty C) : Prop
     extends IsMonoidalStable P where
@@ -135,92 +108,36 @@ end MorphismProperty
 namespace WideSubcategory
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsMonoidalStable]
-  signature: : MonoidalCategoryStruct (WideSubcategory P) where
-  body: ⟨c.obj otimes c'.obj⟩
-  whiskerLeft c _ _ f := ⟨c.obj ◁ f.1, P.whiskerLeft_mem _ _ f.2⟩
-  whiskerRight f c' := ⟨f.1 ▷ c'.obj, P.whiskerRight_mem _ f.2 _⟩
-  tensorUnit := ⟨𝟙_ C⟩
-  associator _ _ _ :=
-    isoMk (α_ _ _ _) (P.associator_hom_mem _ _ _) (P.associator_inv_mem _ _ _)
-  leftUnitor _ :=
-    isoMk (fun_ _) (P.leftUnitor_hom_mem _) (P.leftUnitor_inv_mem _)
-  rightUnitor _ :=
-    isoMk (ρ_ _) (P.rightUnitor_hom_mem _) (P.rightUnitor_inv_mem _)
-  tensorHom f g := ⟨f.1 otimesₘ g.1, P.tensorHom_mem _ _ f.2 g.2⟩
-
-中文:
-实例 [P.是MonoidalStable]
-  签名: : 幺半群范畴结构 (宽子范畴 P) where
-  定义体: ⟨c.obj otimes c'.obj⟩
-  whiskerLeft c _ _ f := ⟨c.obj ◁ f.1, P.whiskerLeft_mem _ _ f.2⟩
-  whiskerRight f c' := ⟨f.1 ▷ c'.obj, P.whiskerRight_mem _ f.2 _⟩
-  tensorUnit := ⟨𝟙_ C⟩
-  associator _ _ _ :=
-    isoMk (α_ _ _ _) (P.associator_hom_mem _ _ _) (P.associator_inv_mem _ _ _)
-  leftUnitor _ :=
-    isoMk (fun_ _) (P.leftUnitor_hom_mem _) (P.leftUnitor_inv_mem _)
-  rightUnitor _ :=
-    isoMk (ρ_ _) (P.rightUnitor_hom_mem _) (P.rightUnitor_inv_mem _)
-  tensorHom f g := ⟨f.1 otimesₘ g.1, P.tensorHom_mem _ _ f.2 g.2⟩
-
-Depends on / 依赖: c.obj, otimes
+/-
+**CategoryTheory.WideSubcategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Wide
+Subcategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsMonoidalStable] : MonoidalCategoryStruct (WideSubcategory P) where
-  tensorObj c c' := ⟨c.obj otimes c'.obj⟩
+  tensorObj c c' := ⟨c.obj ⊗ c'.obj⟩
   whiskerLeft c _ _ f := ⟨c.obj ◁ f.1, P.whiskerLeft_mem _ _ f.2⟩
   whiskerRight f c' := ⟨f.1 ▷ c'.obj, P.whiskerRight_mem _ f.2 _⟩
   tensorUnit := ⟨𝟙_ C⟩
   associator _ _ _ :=
     isoMk (α_ _ _ _) (P.associator_hom_mem _ _ _) (P.associator_inv_mem _ _ _)
   leftUnitor _ :=
-    isoMk (fun_ _) (P.leftUnitor_hom_mem _) (P.leftUnitor_inv_mem _)
+    isoMk (λ_ _) (P.leftUnitor_hom_mem _) (P.leftUnitor_inv_mem _)
   rightUnitor _ :=
     isoMk (ρ_ _) (P.rightUnitor_hom_mem _) (P.rightUnitor_inv_mem _)
-  tensorHom f g := ⟨f.1 otimesₘ g.1, P.tensorHom_mem _ _ f.2 g.2⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsMonoidalStable]
-  signature: : MonoidalCategory (WideSubcategory P)
-  body: Monoidal.induced (wideSubcategoryInclusion P)
-    { εIso := Iso.refl _
-      μIso _ _ := Iso.refl _ }
-
-中文:
-实例 [P.是MonoidalStable]
-  签名: : 幺半群范畴 (宽子范畴 P)
-  定义体: Monoidal.induced (wideSubcategoryInclusion P)
-    { εIso := Iso.refl _
-      μIso _ _ := Iso.refl _ }
-
-Depends on / 依赖: Iso.refl, Monoidal, Monoidal.induced, induced, wideSubcategoryInclusion
+  tensorHom f g := ⟨f.1 ⊗ₘ g.1, P.tensorHom_mem _ _ f.2 g.2⟩
+/-
+**CategoryTheory.WideSubcategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Wide
+Subcategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsMonoidalStable] : MonoidalCategory (WideSubcategory P) :=
   Monoidal.induced (wideSubcategoryInclusion P)
     { εIso := Iso.refl _
       μIso _ _ := Iso.refl _ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [BraidedCategory
-  signature: C] [P.IsStableUnderBraiding] :
-  body: isoMk (β_ _ _) (P.braiding_hom_mem _ _) (P.braiding_inv_mem _ _)
-
-中文:
-实例 [辫范畴
-  签名: C] [P.是StableUnderBraiding] :
-  定义体: isoMk (β_ _ _) (P.braiding_hom_mem _ _) (P.braiding_inv_mem _ _)
-
-Depends on / 依赖: P.braiding_hom_mem, P.braiding_inv_mem, braiding_hom_mem, braiding_inv_mem
+/-
+**CategoryTheory.WideSubcategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Wide
+Subcategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [BraidedCategory C] [P.IsStableUnderBraiding] :
     BraidedCategory (WideSubcategory P) where
@@ -230,40 +147,17 @@ instance [BraidedCategory C] [P.IsStableUnderBraiding] :
 variable {P} in
 open MonoidalCategory in
 @[simp]
-/--
-lemma `tensorμ_hom` / 引理 `tensorμ_hom`
-
-English:
-lemma tensorμ_hom
-  given: [BraidedCategory C] [P.IsStableUnderBraiding] (X Y Z T : WideSubcategory P)
-  proof: rfl
-
-中文:
-引理 tensorμ_hom
-  条件: [辫范畴 C] [P.是StableUnderBraiding] (X Y Z T : 宽子范畴 P)
-  证明: rfl
+/-
+**CategoryTheory.WideSubcategory.tensor** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.WideSubcategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorμ_hom [BraidedCategory C] [P.IsStableUnderBraiding] (X Y Z T : WideSubcategory P) :
     (tensorμ X Y Z T).hom = tensorμ _ _ _ _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SymmetricCategory
-  signature: C] [P.IsStableUnderBraiding] :
-  body: by
-    ext
-    exact SymmetricCategory.symmetry _ _
-
-中文:
-实例 [对称范畴
-  签名: C] [P.是StableUnderBraiding] :
-  定义体: by
-    ext
-    exact SymmetricCategory.symmetry _ _
-
-Depends on / 依赖: SymmetricCategory, SymmetricCategory.symmetry, symmetry
+/-
+**CategoryTheory.WideSubcategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Wide
+Subcategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SymmetricCategory C] [P.IsStableUnderBraiding] :
     SymmetricCategory (WideSubcategory P) where
@@ -274,3 +168,4 @@ instance [SymmetricCategory C] [P.IsStableUnderBraiding] :
 end WideSubcategory
 
 end CategoryTheory
+

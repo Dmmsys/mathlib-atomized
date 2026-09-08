@@ -99,38 +99,34 @@ open Module Set
 
 suppress_compilation
 
-/--
-Definition of `SingularManifold.` / `SingularManifold.` 的定义
+/-- A **singular manifold** on a topological space `X` is a pair `(M, f)` of a closed
+`C^k`-manifold `M` modelled on `I` together with a continuous map `M → X`.
+If we wish to emphasize the model, we will speak of a singular `I`-manifold.
 
-English:
-structure SingularManifold.{u}
-  parameters: (X : Type*) [TopologicalSpace X] (k : WithTop Nat∞)
-  axioms and operations (8):
-    - M : Type u
-    - [topSpaceM : TopologicalSpace M]
-    - [chartedSpace : ChartedSpace H M]
-    - [isManifold : IsManifold I k M]
-    - [compactSpace : CompactSpace M]
-    - [boundaryless : BoundarylessManifold I M]
-    - f : M -> X
-    - hf : Continuous f
+In practice, one commonly wants to take `k=∞` (as then e.g. the intersection form is a powerful tool
+to compute bordism groups; for the definition, this makes no difference.)
 
-中文:
-结构 SingularManifold.{u}
-  参数: (X : 类型) [拓扑空间 X] (k : WithTop 自然数∞)
-  公理与运算 (8 个):
-    - M : 类型u
-    - [topSpaceM : 拓扑空间 M]
-    - [chartedSpace : Charted空间 H M]
-    - [isManifold : 是流形 I k M]
-    - [compactSpace : 紧空间 M]
-    - [boundaryless : 无边界流形 I M]
-    - f : M -> X
-    - hf : 连续 f
+This is parametrised on the universe `M` lives in; ensure `u` is the first universe argument. -/
+/-
+**SingularManifold.** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A **singular manifold** on a topological space `X` is a pair `(M, f)` of a close
+d
+`C^k`-manifold `M` modelled on `I` together with a continuous map `M → X`.
+If we wish to emphasize the model, we will speak of a singular `I`-manifold.
+
+In practice, one commonly wants to take `k=∞` (as then e.g. the intersection for
+m is a powerful tool
+to compute bordism groups; for the definition, this makes no difference.)
+
+This is parametrised on the universe `M` lives in; ensure `u` is the first unive
+rse argument.
 -/
-structure SingularManifold.{u} (X : Type*) [TopologicalSpace X] (k : WithTop Nat∞)
-    {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [FiniteDimensional Real E]
-    [TopologicalSpace H] (I : ModelWithCorners Real E H) where
+structure SingularManifold.{u} (X : Type*) [TopologicalSpace X] (k : WithTop ℕ∞)
+    {E H : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+    [TopologicalSpace H] (I : ModelWithCorners ℝ E H) where
   /-- The manifold `M` of a singular `n`-manifold `(M, f)` -/
   M : Type u
   /-- The manifold `M` is a topological space. -/
@@ -142,398 +138,331 @@ structure SingularManifold.{u} (X : Type*) [TopologicalSpace X] (k : WithTop Nat
   [compactSpace : CompactSpace M]
   [boundaryless : BoundarylessManifold I M]
   /-- The underlying map `M → X` of a singular `n`-manifold `(M, f)` on `X` -/
-  f : M -> X
+  f : M → X
   hf : Continuous f
 
 namespace SingularManifold
 
 variable {X Y Z : Type*} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
-  {k : WithTop Nat∞}
-  {E H M : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [FiniteDimensional Real E]
-  [TopologicalSpace H] {I : ModelWithCorners Real E H} [TopologicalSpace M] [ChartedSpace H M]
+  {k : WithTop ℕ∞}
+  {E H M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+  [TopologicalSpace H] {I : ModelWithCorners ℝ E H} [TopologicalSpace M] [ChartedSpace H M]
   [IsManifold I k M] [CompactSpace M] [BoundarylessManifold I M]
 
+/-
+**SingularManifold.** 是 Mathlib 中的一个实例，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : SingularManifold X k I} : TopologicalSpace s.M := s.topSpaceM
-
+/-
+**SingularManifold.** 是 Mathlib 中的一个实例，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : SingularManifold X k I} : ChartedSpace H s.M := s.chartedSpace
-
+/-
+**SingularManifold.** 是 Mathlib 中的一个实例，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : SingularManifold X k I} : IsManifold I k s.M := s.isManifold
-
+/-
+**SingularManifold.** 是 Mathlib 中的一个实例，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : SingularManifold X k I} : CompactSpace s.M := s.compactSpace
-
+/-
+**SingularManifold.** 是 Mathlib 中的一个实例，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s : SingularManifold X k I} : BoundarylessManifold I s.M := s.boundaryless
 
+/-- A map of topological spaces induces a corresponding map of singular manifolds. -/
 -- This is part of proving functoriality of the bordism groups.
-/--
-Definition of `map.` / `map.` 的定义
-
-English:
-definition map.{u}
-  signature: {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {k : WithTop Nat∞}
-  body: s.M
-  f := φ ∘ s.f
-  hf := hφ.comp s.hf
-
-@[simp, mfld_simps]
-
-中文:
-定义 map.{u}
-  签名: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y] {k : WithTop 自然数∞}
-  定义体: s.M
-  f := φ ∘ s.f
-  hf := hφ.comp s.hf
-
-@[simp, mfld_simps]
+/-
+**SingularManifold.map.** 是 Mathlib 中的一个定义，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[expose] def map.{u} {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {k : WithTop Nat∞}
-    {E H : Type*} [NormedAddCommGroup E] [NormedSpace Real E] [FiniteDimensional Real E]
-    [TopologicalSpace H] {I : ModelWithCorners Real E H} (s : SingularManifold.{u} X k I)
-    {φ : X -> Y} (hφ : Continuous φ) : SingularManifold.{u} Y k I where
+@[expose] def map.{u} {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {k : WithTop ℕ∞}
+    {E H : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+    [TopologicalSpace H] {I : ModelWithCorners ℝ E H} (s : SingularManifold.{u} X k I)
+    {φ : X → Y} (hφ : Continuous φ) : SingularManifold.{u} Y k I where
   M := s.M
   f := φ ∘ s.f
   hf := hφ.comp s.hf
 
 @[simp, mfld_simps]
-/--
-lemma `map_f` / 引理 `map_f`
-
-English:
-lemma map_f
-  given: (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ)
-  proof: rfl
-
-@[simp, mfld_simps]
-
-中文:
-引理 map_f
-  条件: (s : SingularManifold X k I) {φ : X -> Y} (hφ : 连续 φ)
-  证明: rfl
-
-@[simp, mfld_simps]
+/-
+**SingularManifold.map_f** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：map_f (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ) : (s.m
+ap hφ).f = φ ∘ s.f
+参数：s : SingularManifold X k I；hφ : Continuous φ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_f (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ) :
+lemma map_f (s : SingularManifold X k I) {φ : X → Y} (hφ : Continuous φ) :
     (s.map hφ).f = φ ∘ s.f :=
   rfl
 
 @[simp, mfld_simps]
-/--
-lemma `map_M` / 引理 `map_M`
-
-English:
-lemma map_M
-  given: (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ)
-  proof: rfl
-
-中文:
-引理 map_M
-  条件: (s : SingularManifold X k I) {φ : X -> Y} (hφ : 连续 φ)
-  证明: rfl
+/-
+**SingularManifold.map_M** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：map_M (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ) : (s.m
+ap hφ).M = s.M
+参数：s : SingularManifold X k I；hφ : Continuous φ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_M (s : SingularManifold X k I) {φ : X -> Y} (hφ : Continuous φ) :
+lemma map_M (s : SingularManifold X k I) {φ : X → Y} (hφ : Continuous φ) :
     (s.map hφ).M = s.M :=
   rfl
-
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  statement: (s : SingularManifold X k I)
-  proof: by
-  simp [Function.comp_def]
-
-中文:
-引理 map_comp
-  结论: (s : SingularManifold X k I)
-  证明: by
-  simp [Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def
+/-
+**SingularManifold.map_comp** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：map_comp (s : SingularManifold X k I) {φ : X -> Y} {ψ : Y -> Z} (hφ : Cont
+inuous φ) (hψ : Continuous ψ) : ((s.map hφ).map hψ).f = (ψ ∘ φ) ∘ s.f
+参数：s : SingularManifold X k I；hφ : Continuous φ；hψ : Continuous ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_comp (s : SingularManifold X k I)
-    {φ : X -> Y} {ψ : Y -> Z} (hφ : Continuous φ) (hψ : Continuous ψ) :
+    {φ : X → Y} {ψ : Y → Z} (hφ : Continuous φ) (hψ : Continuous ψ) :
     ((s.map hφ).map hψ).f = (ψ ∘ φ) ∘ s.f := by
   simp [Function.comp_def]
 
-variable {E' H' : Type*} [NormedAddCommGroup E'] [NormedSpace Real E'] [TopologicalSpace H']
+variable {E' H' : Type*} [NormedAddCommGroup E'] [NormedSpace ℝ E'] [TopologicalSpace H']
 
 variable (M I) in
-/--
-Definition of `refl` / `refl` 的定义
+/-- If `M` is a closed `C^k` manifold, it is a singular manifold over itself. -/
+/-
+**SingularManifold.refl** 是 Mathlib 中的一个定义，位于命名空间 `SingularManifold`。
+形式化陈述：refl : SingularManifold M k I where M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 
-English:
-definition refl
-  signature: : SingularManifold M k I where
-  body: M
-  f := id
-  hf := continuous_id
-
-中文:
-定义 refl
-  签名: : SingularManifold M k I where
-  定义体: M
-  f := id
-  hf := continuous_id
+--- 原说明 ---
+If `M` is a closed `C^k` manifold, it is a singular manifold over itself.
 -/
 noncomputable def refl : SingularManifold M k I where
   M := M
   f := id
   hf := continuous_id
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- If `(N, f)` is a singular manifold on `X` and `M` another `C^k` manifold,
+a continuous map `φ : M → N` induces a singular manifold structure `(M, f ∘ φ)` on `X`. -/
+/-
+**SingularManifold.comap** 是 Mathlib 中的一个定义，位于命名空间 `SingularManifold`。
+形式化陈述：{X : Type u_1} →   [inst : TopologicalSpace X] →     {k : WithTop ℕ∞} →   
+    {E : Type u_4} →         {H : Type u_5} →           {M : Type u_6} →        
+     [inst_1 : NormedAddCommGroup E] →               [inst_2 : NormedSpace ℝ E] 
+→                 [inst_3 : FiniteDimensional ℝ E] →                   [inst_4 :
+ TopologicalSpace H] →                     {I : ModelWithCorners ℝ E H} →       
+                [inst_5 : TopologicalSpace M] →                         [inst_6 
+: ChartedSpace H M] →                           [IsManifold I k M] →            
+                 [CompactSpace M] →                               [BoundarylessM
+anifold I M] →                                 (s : SingularManifold X k I) → {φ
+ : M → s.M} → Continuous φ → SingularManifold X k I
+参数：s : SingularManifold X k I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (s : SingularManifold X k I)
-  body: M
-  f := s.f ∘ φ
-  hf := s.hf.comp hφ
-
-@[simp, mfld_simps]
-
-中文:
-定义 comap
-  签名: (s : SingularManifold X k I)
-  定义体: M
-  f := s.f ∘ φ
-  hf := s.hf.comp hφ
-
-@[simp, mfld_simps]
+--- 原说明 ---
+If `(N, f)` is a singular manifold on `X` and `M` another `C^k` manifold,
+a continuous map `φ : M → N` induces a singular manifold structure `(M, f ∘ φ)` 
+on `X`.
 -/
 @[expose] noncomputable def comap (s : SingularManifold X k I)
-    {φ : M -> s.M} (hφ : Continuous φ) : SingularManifold X k I where
+    {φ : M → s.M} (hφ : Continuous φ) : SingularManifold X k I where
   M := M
   f := s.f ∘ φ
   hf := s.hf.comp hφ
 
 @[simp, mfld_simps]
-/--
-lemma `comap_M` / 引理 `comap_M`
-
-English:
-lemma comap_M
-  given: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ)
-  proof: by
-  rfl
-
-@[simp, mfld_simps]
-
-中文:
-引理 comap_M
-  条件: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : 连续 φ)
-  证明: by
-  rfl
-
-@[simp, mfld_simps]
+/-
+**SingularManifold.comap_M** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：comap_M (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ) : 
+(s.comap hφ).M = M
+参数：s : SingularManifold X k I；hφ : Continuous φ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comap_M (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ) :
+lemma comap_M (s : SingularManifold X k I) {φ : M → s.M} (hφ : Continuous φ) :
     (s.comap hφ).M = M := by
   rfl
 
 @[simp, mfld_simps]
-/--
-lemma `comap_f` / 引理 `comap_f`
-
-English:
-lemma comap_f
-  given: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ)
-  proof: rfl
-
-中文:
-引理 comap_f
-  条件: (s : SingularManifold X k I) {φ : M -> s.M} (hφ : 连续 φ)
-  证明: rfl
+/-
+**SingularManifold.comap_f** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：comap_f (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ) : 
+(s.comap hφ).f = s.f ∘ φ
+参数：s : SingularManifold X k I；hφ : Continuous φ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comap_f (s : SingularManifold X k I) {φ : M -> s.M} (hφ : Continuous φ) :
+lemma comap_f (s : SingularManifold X k I) {φ : M → s.M} (hφ : Continuous φ) :
     (s.comap hφ).f = s.f ∘ φ :=
   rfl
 
 variable (X) in
-/--
-Definition of `empty.` / `empty.` 的定义
+/-- The canonical singular manifold associated to the empty set (seen as a smooth manifold) -/
+/-
+**SingularManifold.empty.** 是 Mathlib 中的一个定义，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition empty.{u}
-  signature: (M : Type u) [TopologicalSpace M] [ChartedSpace H M]
-  body: M
-  f x := (IsEmpty.false x).elim
-  hf := by
-    rw [continuous_iff_continuousAt]
-    exact fun x => (IsEmpty.false x).elim
-
-omit [CompactSpace M] [BoundarylessManifold I M] in
-@[simp, mfld_simps]
-
-中文:
-定义 empty.{u}
-  签名: (M : 类型u) [拓扑空间 M] [Charted空间 H M]
-  定义体: M
-  f x := (IsEmpty.false x).elim
-  hf := by
-    rw [continuous_iff_continuousAt]
-    exact fun x => (IsEmpty.false x).elim
-
-omit [CompactSpace M] [BoundarylessManifold I M] in
-@[simp, mfld_simps]
+--- 原说明 ---
+The canonical singular manifold associated to the empty set (seen as a smooth ma
+nifold)
 -/
 @[expose] def empty.{u} (M : Type u) [TopologicalSpace M] [ChartedSpace H M]
-    (I : ModelWithCorners Real E H) [IsManifold I k M] [IsEmpty M] : SingularManifold X k I where
+    (I : ModelWithCorners ℝ E H) [IsManifold I k M] [IsEmpty M] : SingularManifold X k I where
   M := M
   f x := (IsEmpty.false x).elim
   hf := by
     rw [continuous_iff_continuousAt]
-    exact fun x => (IsEmpty.false x).elim
+    exact fun x ↦ (IsEmpty.false x).elim
 
 omit [CompactSpace M] [BoundarylessManifold I M] in
 @[simp, mfld_simps]
-/--
-lemma `empty_M` / 引理 `empty_M`
-
-English:
-lemma empty_M
-  given: [IsEmpty M]
-  statement: (empty X M I (k := k)).M = M
-  proof: (rfl)
-
-中文:
-引理 empty_M
-  条件: [是空 M]
-  结论: (empty X M I (k := k)).M = M
-  证明: (rfl)
+/-
+**SingularManifold.empty_M** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：empty_M [IsEmpty M] : (empty X M I (k
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma empty_M [IsEmpty M] : (empty X M I (k := k)).M = M := (rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: M] : IsEmpty (SingularManifold.empty X M I (k := k)).M
-  body: inferInstanceAs IsEmpty M
-
-中文:
-实例 [是空
-  签名: M] : 是空 (SingularManifold.empty X M I (k := k)).M
-  定义体: inferInstanceAs IsEmpty M
+/-
+**SingularManifold.** 是 Mathlib 中的一个实例，位于命名空间 `SingularManifold`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty M] : IsEmpty (SingularManifold.empty X M I (k := k)).M :=
-inferInstanceAs IsEmpty M
+  inferInstanceAs <| IsEmpty M
 
 variable (M I) in
-/--
-Definition of `toPUnit` / `toPUnit` 的定义
+/-- A smooth manifold induces a singular manifold on the one-point space. -/
+/-
+**SingularManifold.toPUnit** 是 Mathlib 中的一个定义，位于命名空间 `SingularManifold`。
+形式化陈述：{k : WithTop ℕ∞} →   {E : Type u_4} →     {H : Type u_5} →       (M : Type
+ u_6) →         [inst : NormedAddCommGroup E] →           [inst_1 : NormedSpace 
+ℝ E] →             [inst_2 : FiniteDimensional ℝ E] →               [inst_3 : To
+pologicalSpace H] →                 (I : ModelWithCorners ℝ E H) →              
+     [inst_4 : TopologicalSpace M] →                     [inst_5 : ChartedSpace 
+H M] →                       [IsManifold I k M] →                         [Compa
+ctSpace M] → [BoundarylessManifold I M] → SingularManifold PUnit.{u_9 + 1} k I
+参数：M : Type u_6；I : ModelWithCorners ℝ E H。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 
-English:
-definition toPUnit
-  signature: : SingularManifold PUnit k I where
-  body: M
-  f := fun _ => PUnit.unit
-  hf := continuous_const
-
-中文:
-定义 toPUnit
-  签名: : SingularManifold 命题单元 k I where
-  定义体: M
-  f := fun _ => PUnit.unit
-  hf := continuous_const
+--- 原说明 ---
+A smooth manifold induces a singular manifold on the one-point space.
 -/
 @[expose] def toPUnit : SingularManifold PUnit k I where
   M := M
-  f := fun _ => PUnit.unit
+  f := fun _ ↦ PUnit.unit
   hf := continuous_const
 
-variable {I' : ModelWithCorners Real E' H'} [FiniteDimensional Real E']
+variable {I' : ModelWithCorners ℝ E' H'} [FiniteDimensional ℝ E']
 
 /--
-Definition of `prod` / `prod` 的定义
+The product of a singular `I`- and a singular `J`-manifold into a one-point space
+is a singular `I.prod J`-manifold.
+This construction is used to prove that the bordism group of `PUnit` is a graded commutative ring.
 
-English:
-definition prod
-  signature: (s : SingularManifold PUnit k I) (t : SingularManifold PUnit k I')
-  body: s.M × t.M
-  f := fun _ => PUnit.unit
-  hf := continuous_const
+NB. This definition as written makes sense more generally, for `SingularManifold X k I` whenever `X`
+is a topological (additive) group. However, this would not be the correct definition if `X` is not
+`(P)Unit`: the bordism ring can be defined for every `C^k` manifold `X`, but the product of two
+singular manifolds `(M, f)` and `(N, g)` is the fibre product of `M` and `N` w.r.t. `f` and `g`,
+with its induced map into `X`.
+(If `f` and `g` intersect transversely, this fibre product is a smooth manifold, of dimension
+`dim M + dim N - dim X`. Otherwise, the transversality theorem proves that `f` (or `g`) admits an
+arbitrarily small perturbation `f'` so `f'` and `g` are transverse. One can prove that different
+perturbations yield bordant manifolds.)
+-/
+/-
+**SingularManifold.prod** 是 Mathlib 中的一个定义，位于命名空间 `SingularManifold`。
+形式化陈述：{k : WithTop ℕ∞} →   {E : Type u_4} →     {H : Type u_5} →       [inst : N
+ormedAddCommGroup E] →         [inst_1 : NormedSpace ℝ E] →           [inst_2 : 
+FiniteDimensional ℝ E] →             [inst_3 : TopologicalSpace H] →            
+   {I : ModelWithCorners ℝ E H} →                 {E' : Type u_7} →             
+      {H' : Type u_8} →                     [inst_4 : NormedAddCommGroup E'] →  
+                     [inst_5 : NormedSpace ℝ E'] →                         [inst
+_6 : TopologicalSpace H'] →                           {I' : ModelWithCorners ℝ E
+' H'} →                             [inst_7 : FiniteDimensional ℝ E'] →         
+                      SingularManifold PUnit.{u_10 + 1} k I →                   
+              SingularManifold PUnit.{u_12 + 1} k I' → SingularManifold PUnit.{u
+_13 + 1} k (I.prod I')
+参数：I.prod I'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 乘积
-  签名: (s : SingularManifold 命题单元 k I) (t : SingularManifold 命题单元 k I')
-  定义体: s.M × t.M
-  f := fun _ => PUnit.unit
-  hf := continuous_const
+--- 原说明 ---
+The product of a singular `I`- and a singular `J`-manifold into a one-point spac
+e
+is a singular `I.prod J`-manifold.
+This construction is used to prove that the bordism group of `PUnit` is a graded
+ commutative ring.
+
+NB. This definition as written makes sense more generally, for `SingularManifold
+ X k I` whenever `X`
+is a topological (additive) group. However, this would not be the correct defini
+tion if `X` is not
+`(P)Unit`: the bordism ring can be defined for every `C^k` manifold `X`, but the
+ product of two
+singular manifolds `(M, f)` and `(N, g)` is the fibre product of `M` and `N` w.r
+.t. `f` and `g`,
+with its induced map into `X`.
+(If `f` and `g` intersect transversely, this fibre product is a smooth manifold,
+ of dimension
+`dim M + dim N - dim X`. Otherwise, the transversality theorem proves that `f` (
+or `g`) admits an
+arbitrarily small perturbation `f'` so `f'` and `g` are transverse. One can prov
+e that different
+perturbations yield bordant manifolds.)
 -/
 @[expose] def prod (s : SingularManifold PUnit k I) (t : SingularManifold PUnit k I') :
     SingularManifold PUnit k (I.prod I') where
   M := s.M × t.M
-  f := fun _ => PUnit.unit
+  f := fun _ ↦ PUnit.unit
   hf := continuous_const
 
 variable (s t : SingularManifold X k I)
 
-/--
-Definition of `sum` / `sum` 的定义
+/-- The disjoint union of two singular `I`-manifolds on `X` is a singular `I`-manifold on `X`. -/
+/-
+**SingularManifold.sum** 是 Mathlib 中的一个定义，位于命名空间 `SingularManifold`。
+形式化陈述：{X : Type u_1} →   [inst : TopologicalSpace X] →     {k : WithTop ℕ∞} →   
+    {E : Type u_4} →         {H : Type u_5} →           [inst_1 : NormedAddCommG
+roup E] →             [inst_2 : NormedSpace ℝ E] →               [inst_3 : Finit
+eDimensional ℝ E] →                 [inst_4 : TopologicalSpace H] →             
+      {I : ModelWithCorners ℝ E H} →                     SingularManifold X k I 
+→ SingularManifold X k I → SingularManifold X k I
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sum
-  signature: (s t : SingularManifold X k I)
-  body: s.M oplus t.M
-  f := Sum.elim s.f t.f
-  hf := s.hf.sumElim t.hf
-
-@[simp, mfld_simps]
-
-中文:
-定义 求和
-  签名: (s t : SingularManifold X k I)
-  定义体: s.M oplus t.M
-  f := Sum.elim s.f t.f
-  hf := s.hf.sumElim t.hf
-
-@[simp, mfld_simps]
+--- 原说明 ---
+The disjoint union of two singular `I`-manifolds on `X` is a singular `I`-manifo
+ld on `X`.
 -/
 @[expose] def sum (s t : SingularManifold X k I) : SingularManifold X k I where
-  M := s.M oplus t.M
+  M := s.M ⊕ t.M
   f := Sum.elim s.f t.f
   hf := s.hf.sumElim t.hf
 
 @[simp, mfld_simps]
-/--
-lemma `sum_M` / 引理 `sum_M`
-
-English:
-lemma sum_M
-  given: (s t : SingularManifold X k I)
-  statement: (s.sum t).M = (s.M oplus t.M)
-  proof: (rfl)
-
-@[simp, mfld_simps]
-
-中文:
-引理 sum_M
-  条件: (s t : SingularManifold X k I)
-  结论: (s.求和 t).M = (s.M oplus t.M)
-  证明: (rfl)
-
-@[simp, mfld_simps]
+/-
+**SingularManifold.sum_M** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：sum_M (s t : SingularManifold X k I) : (s.sum t).M = (s.M oplus t.M)
+参数：s t : SingularManifold X k I。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma sum_M (s t : SingularManifold X k I) : (s.sum t).M = (s.M oplus t.M) := (rfl)
+lemma sum_M (s t : SingularManifold X k I) : (s.sum t).M = (s.M ⊕ t.M) := (rfl)
 
 @[simp, mfld_simps]
-/--
-lemma `sum_f` / 引理 `sum_f`
-
-English:
-lemma sum_f
-  given: (s t : SingularManifold X k I)
-  statement: (s.sum t).f = Sum.elim s.f t.f
-  proof: (rfl)
-
-中文:
-引理 sum_f
-  条件: (s t : SingularManifold X k I)
-  结论: (s.求和 t).f = 和.elim s.f t.f
-  证明: (rfl)
+/-
+**SingularManifold.sum_f** 是 Mathlib 中的一个引理，位于命名空间 `SingularManifold`。
+形式化陈述：sum_f (s t : SingularManifold X k I) : (s.sum t).f = Sum.elim s.f t.f
+参数：s t : SingularManifold X k I。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sum_f (s t : SingularManifold X k I) : (s.sum t).f = Sum.elim s.f t.f := (rfl)
 
 end SingularManifold
+

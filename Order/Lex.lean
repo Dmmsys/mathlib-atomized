@@ -44,490 +44,390 @@ variable {α : Type*}
 /-! ### Lexicographic order -/
 
 
-/--
-Definition of `Lex` / `Lex` 的定义
+/-- A type synonym to equip a type with its lexicographic order. -/
+/-
+**Lex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lex (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lex
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 Lex
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+A type synonym to equip a type with its lexicographic order.
 -/
 def Lex (α : Type*) :=
   α
 
 /-- `toLex` is the identity function to the `Lex` of a type. -/
 @[match_pattern]
-/--
-Definition of `toLex` / `toLex` 的定义
+/-
+**toLex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toLex : α ≃ Lex α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toLex
-  signature: : α ≃ Lex α
-  body: Equiv.refl _
-
-中文:
-定义 toLex
-  签名: : α ≃ Lex α
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`toLex` is the identity function to the `Lex` of a type.
 -/
 def toLex : α ≃ Lex α :=
   Equiv.refl _
 
 /-- `ofLex` is the identity function from the `Lex` of a type. -/
 @[match_pattern]
-/--
-Definition of `ofLex` / `ofLex` 的定义
+/-
+**ofLex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ofLex : Lex α ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofLex
-  signature: : Lex α ≃ α
-  body: Equiv.refl _
-
-@[simp]
-
-中文:
-定义 ofLex
-  签名: : Lex α ≃ α
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`ofLex` is the identity function from the `Lex` of a type.
 -/
 def ofLex : Lex α ≃ α :=
   Equiv.refl _
 
 @[simp]
-/--
-theorem `toLex_symm_eq` / 定理 `toLex_symm_eq`
-
-English:
-theorem toLex_symm_eq
-  statement: (@toLex α).symm = ofLex
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLex_symm_eq
-  结论: (@toLex α).symm = ofLex
-  证明: rfl
-
-@[simp]
+/-
+**toLex_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toLex_symm_eq : (@toLex α).symm = ofLex
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toLex_symm_eq : (@toLex α).symm = ofLex :=
   rfl
 
 @[simp]
-/--
-theorem `ofLex_symm_eq` / 定理 `ofLex_symm_eq`
-
-English:
-theorem ofLex_symm_eq
-  statement: (@ofLex α).symm = toLex
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofLex_symm_eq
-  结论: (@ofLex α).symm = toLex
-  证明: rfl
-
-@[simp]
+/-
+**ofLex_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofLex_symm_eq : (@ofLex α).symm = toLex
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofLex_symm_eq : (@ofLex α).symm = toLex :=
   rfl
 
 @[simp]
-/--
-theorem `toLex_ofLex` / 定理 `toLex_ofLex`
-
-English:
-theorem toLex_ofLex
-  given: (a : Lex α)
-  statement: toLex (ofLex a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLex_ofLex
-  条件: (a : Lex α)
-  结论: toLex (ofLex a) = a
-  证明: rfl
-
-@[simp]
+/-
+**toLex_ofLex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toLex_ofLex (a : Lex α) : toLex (ofLex a) = a
+参数：a : Lex α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLex_ofLex (a : Lex α) : toLex (ofLex a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `ofLex_toLex` / 定理 `ofLex_toLex`
-
-English:
-theorem ofLex_toLex
-  given: (a : α)
-  statement: ofLex (toLex a) = a
-  proof: rfl
-
-中文:
-定理 ofLex_toLex
-  条件: (a : α)
-  结论: ofLex (toLex a) = a
-  证明: rfl
+/-
+**ofLex_toLex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofLex_toLex (a : α) : ofLex (toLex a) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofLex_toLex (a : α) : ofLex (toLex a) = a :=
   rfl
-
-/--
-theorem `toLex_inj` / 定理 `toLex_inj`
-
-English:
-theorem toLex_inj
-  given: {a b : α}
-  statement: toLex a = toLex b ↔ a = b
-  proof: by simp
-
-中文:
-定理 toLex_inj
-  条件: {a b : α}
-  结论: toLex a = toLex b ↔ a = b
-  证明: by simp
+/-
+**toLex_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toLex_inj {a b : α} : toLex a = toLex b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toLex_inj {a b : α} : toLex a = toLex b ↔ a = b := by simp
-
-/--
-theorem `ofLex_inj` / 定理 `ofLex_inj`
-
-English:
-theorem ofLex_inj
-  given: {a b : Lex α}
-  statement: ofLex a = ofLex b ↔ a = b
-  proof: by simp
-
-中文:
-定理 ofLex_inj
-  条件: {a b : Lex α}
-  结论: ofLex a = ofLex b ↔ a = b
-  证明: by simp
+/-
+**ofLex_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofLex_inj {a b : Lex α} : ofLex a = ofLex b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem ofLex_inj {a b : Lex α} : ofLex a = ofLex b ↔ a = b := by simp
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [BEq α] : BEq (Lex α) where
   beq a b := ofLex a == ofLex b
-
-instance (α : Type*) [BEq α] [LawfulBEq α] : LawfulBEq (Lex α) := inferInstanceAs LawfulBEq α
-instance (α : Type*) [DecidableEq α] : DecidableEq (Lex α) := inferInstanceAs DecidableEq α
-
-instance (α : Type*) [Inhabited α] : Inhabited (Lex α) := inferInstanceAs Inhabited α
-instance (α : Type*) [Nonempty α] : Nonempty (Lex α) := inferInstanceAs Nonempty α
-instance (α : Type*) [Nontrivial α] : Nontrivial (Lex α) := inferInstanceAs Nontrivial α
-instance (α : Type*) [Unique α] : Unique (Lex α) := inferInstanceAs Unique α
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [BEq α] [LawfulBEq α] : LawfulBEq (Lex α) := inferInstanceAs <| LawfulBEq α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [DecidableEq α] : DecidableEq (Lex α) := inferInstanceAs <| DecidableEq α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Inhabited α] : Inhabited (Lex α) := inferInstanceAs <| Inhabited α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Nonempty α] : Nonempty (Lex α) := inferInstanceAs <| Nonempty α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Nontrivial α] : Nontrivial (Lex α) := inferInstanceAs <| Nontrivial α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Unique α] : Unique (Lex α) := inferInstanceAs <| Unique α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α γ} [H : CoeFun α γ] : CoeFun (Lex α) γ where
   coe f := H.coe (ofLex f)
 
 /-- A recursor for `Lex`. Use as `induction x`. -/
 @[elab_as_elim, induction_eliminator, cases_eliminator]
-/--
-Definition of `Lex.rec` / `Lex.rec` 的定义
+/-
+**Lex.rec** 是 Mathlib 中的一个定义，位于命名空间 `Lex`。
+形式化陈述：{α : Type u_1} → {β : Lex α → Sort u_2} → ((a : α) → β (toLex a)) → (a : L
+ex α) → β a
+参数：(a : α) → β (toLex a)；a : Lex α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lex.rec
-  signature: {β : Lex α -> Sort*} (h : forall a, β (toLex a))
-  body: fun a => h (ofLex a)
-
-中文:
-定义 Lex.rec
-  签名: {β : Lex α -> 类型层*} (h : 对任意 a, β (toLex a))
-  定义体: fun a => h (ofLex a)
+--- 原说明 ---
+A recursor for `Lex`. Use as `induction x`.
 -/
-protected def Lex.rec {β : Lex α -> Sort*} (h : forall a, β (toLex a)) : forall a, β a := fun a => h (ofLex a)
-
-/--
-lemma `Lex.forall` / 引理 `Lex.forall`
-
-English:
-lemma Lex.forall
-  given: {p : Lex α -> Prop}
-  statement: (forall a, p a) ↔ forall a, p (toLex a)
-  proof: Iff.rfl
-
-中文:
-引理 Lex.对任意
-  条件: {p : Lex α -> 命题}
-  结论: (对任意 a, p a) ↔ 对任意 a, p (toLex a)
-  证明: Iff.rfl
+protected def Lex.rec {β : Lex α → Sort*} (h : ∀ a, β (toLex a)) : ∀ a, β a := fun a => h (ofLex a)
+/-
+**Lex.forall** 是 Mathlib 中的一个定理，位于命名空间 `Lex`。
+形式化陈述：∀ {α : Type u_1} {p : Lex α → Prop}, (∀ (a : Lex α), p a) ↔ ∀ (a : α), p (
+toLex a)
+参数：∀ (a : Lex α), p a；a : α；toLex a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma Lex.forall {p : Lex α -> Prop} : (forall a, p a) ↔ forall a, p (toLex a) := Iff.rfl
-/--
-lemma `Lex.exists` / 引理 `Lex.exists`
-
-English:
-lemma Lex.exists
-  given: {p : Lex α -> Prop}
-  statement: (exists a, p a) ↔ exists a, p (toLex a)
-  proof: Iff.rfl
-
-中文:
-引理 Lex.存在
-  条件: {p : Lex α -> 命题}
-  结论: (存在 a, p a) ↔ 存在 a, p (toLex a)
-  证明: Iff.rfl
+@[simp] lemma Lex.forall {p : Lex α → Prop} : (∀ a, p a) ↔ ∀ a, p (toLex a) := Iff.rfl
+/-
+**Lex.exists** 是 Mathlib 中的一个定理，位于命名空间 `Lex`。
+形式化陈述：∀ {α : Type u_1} {p : Lex α → Prop}, (∃ a, p a) ↔ ∃ a, p (toLex a)
+参数：∃ a, p a；toLex a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma Lex.exists {p : Lex α -> Prop} : (exists a, p a) ↔ exists a, p (toLex a) := Iff.rfl
+@[simp] lemma Lex.exists {p : Lex α → Prop} : (∃ a, p a) ↔ ∃ a, p (toLex a) := Iff.rfl
 
 /-! ### Colexicographic order -/
 
 
-/--
-Definition of `Colex` / `Colex` 的定义
+/-- A type synonym to equip a type with its lexicographic order. -/
+/-
+**Colex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Colex (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Colex
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 Colex
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+A type synonym to equip a type with its lexicographic order.
 -/
 def Colex (α : Type*) :=
   α
 
 /-- `toColex` is the identity function to the `Colex` of a type. -/
 @[match_pattern]
-/--
-Definition of `toColex` / `toColex` 的定义
+/-
+**toColex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toColex : α ≃ Colex α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toColex
-  signature: : α ≃ Colex α
-  body: Equiv.refl _
-
-中文:
-定义 toColex
-  签名: : α ≃ Colex α
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`toColex` is the identity function to the `Colex` of a type.
 -/
 def toColex : α ≃ Colex α :=
   Equiv.refl _
 
 /-- `ofColex` is the identity function from the `Colex` of a type. -/
 @[match_pattern]
-/--
-Definition of `ofColex` / `ofColex` 的定义
+/-
+**ofColex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ofColex : Colex α ≃ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofColex
-  signature: : Colex α ≃ α
-  body: Equiv.refl _
-
-@[simp]
-
-中文:
-定义 ofColex
-  签名: : Colex α ≃ α
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`ofColex` is the identity function from the `Colex` of a type.
 -/
 def ofColex : Colex α ≃ α :=
   Equiv.refl _
 
 @[simp]
-/--
-theorem `toColex_symm_eq` / 定理 `toColex_symm_eq`
-
-English:
-theorem toColex_symm_eq
-  statement: (@toColex α).symm = ofColex
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toColex_symm_eq
-  结论: (@toColex α).symm = ofColex
-  证明: rfl
-
-@[simp]
+/-
+**toColex_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toColex_symm_eq : (@toColex α).symm = ofColex
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toColex_symm_eq : (@toColex α).symm = ofColex :=
   rfl
 
 @[simp]
-/--
-theorem `ofColex_symm_eq` / 定理 `ofColex_symm_eq`
-
-English:
-theorem ofColex_symm_eq
-  statement: (@ofColex α).symm = toColex
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofColex_symm_eq
-  结论: (@ofColex α).symm = toColex
-  证明: rfl
-
-@[simp]
+/-
+**ofColex_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofColex_symm_eq : (@ofColex α).symm = toColex
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofColex_symm_eq : (@ofColex α).symm = toColex :=
   rfl
 
 @[simp]
-/--
-theorem `toColex_ofColex` / 定理 `toColex_ofColex`
-
-English:
-theorem toColex_ofColex
-  given: (a : Colex α)
-  statement: toColex (ofColex a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toColex_ofColex
-  条件: (a : Colex α)
-  结论: toColex (ofColex a) = a
-  证明: rfl
-
-@[simp]
+/-
+**toColex_ofColex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toColex_ofColex (a : Colex α) : toColex (ofColex a) = a
+参数：a : Colex α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toColex_ofColex (a : Colex α) : toColex (ofColex a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `ofColex_toColex` / 定理 `ofColex_toColex`
-
-English:
-theorem ofColex_toColex
-  given: (a : α)
-  statement: ofColex (toColex a) = a
-  proof: rfl
-
-中文:
-定理 ofColex_toColex
-  条件: (a : α)
-  结论: ofColex (toColex a) = a
-  证明: rfl
+/-
+**ofColex_toColex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofColex_toColex (a : α) : ofColex (toColex a) = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofColex_toColex (a : α) : ofColex (toColex a) = a :=
   rfl
-
-/--
-theorem `toColex_inj` / 定理 `toColex_inj`
-
-English:
-theorem toColex_inj
-  given: {a b : α}
-  statement: toColex a = toColex b ↔ a = b
-  proof: by simp
-
-中文:
-定理 toColex_inj
-  条件: {a b : α}
-  结论: toColex a = toColex b ↔ a = b
-  证明: by simp
+/-
+**toColex_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toColex_inj {a b : α} : toColex a = toColex b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toColex_inj {a b : α} : toColex a = toColex b ↔ a = b := by simp
-
-/--
-theorem `ofColex_inj` / 定理 `ofColex_inj`
-
-English:
-theorem ofColex_inj
-  given: {a b : Colex α}
-  statement: ofColex a = ofColex b ↔ a = b
-  proof: by simp
-
-中文:
-定理 ofColex_inj
-  条件: {a b : Colex α}
-  结论: ofColex a = ofColex b ↔ a = b
-  证明: by simp
+/-
+**ofColex_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofColex_inj {a b : Colex α} : ofColex a = ofColex b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem ofColex_inj {a b : Colex α} : ofColex a = ofColex b ↔ a = b := by simp
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [BEq α] : BEq (Colex α) where
   beq a b := ofColex a == ofColex b
-
-instance (α : Type*) [BEq α] [LawfulBEq α] : LawfulBEq (Colex α) := inferInstanceAs LawfulBEq α
-instance (α : Type*) [DecidableEq α] : DecidableEq (Colex α) := inferInstanceAs DecidableEq α
-
-instance (α : Type*) [Inhabited α] : Inhabited (Colex α) := inferInstanceAs Inhabited α
-instance (α : Type*) [Nonempty α] : Nonempty (Colex α) := inferInstanceAs Nonempty α
-instance (α : Type*) [Nontrivial α] : Nontrivial (Colex α) := inferInstanceAs Nontrivial α
-instance (α : Type*) [Unique α] : Unique (Colex α) := inferInstanceAs Unique α
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [BEq α] [LawfulBEq α] : LawfulBEq (Colex α) := inferInstanceAs <| LawfulBEq α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [DecidableEq α] : DecidableEq (Colex α) := inferInstanceAs <| DecidableEq α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Inhabited α] : Inhabited (Colex α) := inferInstanceAs <| Inhabited α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Nonempty α] : Nonempty (Colex α) := inferInstanceAs <| Nonempty α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Nontrivial α] : Nontrivial (Colex α) := inferInstanceAs <| Nontrivial α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α : Type*) [Unique α] : Unique (Colex α) := inferInstanceAs <| Unique α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α γ} [H : CoeFun α γ] : CoeFun (Colex α) γ where
   coe f := H.coe (ofColex f)
 
 /-- A recursor for `Colex`. Use as `induction x`. -/
 @[elab_as_elim, induction_eliminator, cases_eliminator]
-/--
-Definition of `Colex.rec` / `Colex.rec` 的定义
+/-
+**Colex.rec** 是 Mathlib 中的一个定义，位于命名空间 `Colex`。
+形式化陈述：{α : Type u_1} → {β : Colex α → Sort u_2} → ((a : α) → β (toColex a)) → (a
+ : Colex α) → β a
+参数：(a : α) → β (toColex a)；a : Colex α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Colex.rec
-  signature: {β : Colex α -> Sort*} (h : forall a, β (toColex a))
-  body: fun a => h (ofColex a)
-
-中文:
-定义 Colex.rec
-  签名: {β : Colex α -> 类型层*} (h : 对任意 a, β (toColex a))
-  定义体: fun a => h (ofColex a)
+--- 原说明 ---
+A recursor for `Colex`. Use as `induction x`.
 -/
-protected def Colex.rec {β : Colex α -> Sort*} (h : forall a, β (toColex a)) : forall a, β a :=
+protected def Colex.rec {β : Colex α → Sort*} (h : ∀ a, β (toColex a)) : ∀ a, β a :=
   fun a => h (ofColex a)
-
-/--
-lemma `Colex.forall` / 引理 `Colex.forall`
-
-English:
-lemma Colex.forall
-  given: {p : Colex α -> Prop}
-  statement: (forall a, p a) ↔ forall a, p (toColex a)
-  proof: Iff.rfl
-
-中文:
-引理 Colex.对任意
-  条件: {p : Colex α -> 命题}
-  结论: (对任意 a, p a) ↔ 对任意 a, p (toColex a)
-  证明: Iff.rfl
+/-
+**Colex.forall** 是 Mathlib 中的一个定理，位于命名空间 `Colex`。
+形式化陈述：∀ {α : Type u_1} {p : Colex α → Prop}, (∀ (a : Colex α), p a) ↔ ∀ (a : α),
+ p (toColex a)
+参数：∀ (a : Colex α), p a；a : α；toColex a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma Colex.forall {p : Colex α -> Prop} : (forall a, p a) ↔ forall a, p (toColex a) := Iff.rfl
-/--
-lemma `Colex.exists` / 引理 `Colex.exists`
-
-English:
-lemma Colex.exists
-  given: {p : Colex α -> Prop}
-  statement: (exists a, p a) ↔ exists a, p (toColex a)
-  proof: Iff.rfl
-
-中文:
-引理 Colex.存在
-  条件: {p : Colex α -> 命题}
-  结论: (存在 a, p a) ↔ 存在 a, p (toColex a)
-  证明: Iff.rfl
+@[simp] lemma Colex.forall {p : Colex α → Prop} : (∀ a, p a) ↔ ∀ a, p (toColex a) := Iff.rfl
+/-
+**Colex.exists** 是 Mathlib 中的一个定理，位于命名空间 `Colex`。
+形式化陈述：∀ {α : Type u_1} {p : Colex α → Prop}, (∃ a, p a) ↔ ∃ a, p (toColex a)
+参数：∃ a, p a；toColex a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma Colex.exists {p : Colex α -> Prop} : (exists a, p a) ↔ exists a, p (toColex a) := Iff.rfl
+@[simp] lemma Colex.exists {p : Colex α → Prop} : (∃ a, p a) ↔ ∃ a, p (toColex a) := Iff.rfl

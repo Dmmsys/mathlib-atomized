@@ -34,28 +34,19 @@ namespace Limits
 /-- If `F : C ⥤ D` creates colimits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates
 limits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitOp` / `createsLimitOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：createsLimitOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesColimit K.leftOp F] : Cre
+atesLimit K F.op where __
+参数：K : J ⥤ Cᵒᵖ；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitOp
-  signature: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesColimit K.leftOp F]
-  body: reflectsLimit_op _ _
-  lifts _ hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F) _ (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [创造余极限 K.leftOp F]
-  定义体: reflectsLimit_op _ _
-  lifts _ hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F) _ (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: reflectsLimit_op
+--- 原说明 ---
+If `F : C ⥤ D` creates colimits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ`
+ creates
+limits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsLimitOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesColimit K.leftOp F] :
     CreatesLimit K F.op where
@@ -68,28 +59,19 @@ def createsLimitOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesColimit K.leftOp F]
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ D` creates
 limits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitOfOp` / `createsLimitOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitOfOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：createsLimitOfOp (K : J ⥤ C) (F : C ⥤ D) [CreatesColimit K.op F.op] : Crea
+tesLimit K F where __
+参数：K : J ⥤ C；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitOfOp
-  signature: (K : J ⥤ C) (F : C ⥤ D) [CreatesColimit K.op F.op]
-  body: reflectsLimit_of_op _ _
-  lifts _ hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F.op) _ hc.op
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitOfOp
-  签名: (K : J ⥤ C) (F : C ⥤ D) [创造余极限 K.op F.op]
-  定义体: reflectsLimit_of_op _ _
-  lifts _ hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F.op) _ hc.op
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: reflectsLimit_of_op
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ D` c
+reates
+limits of `K : J ⥤ C`.
 -/
 def createsLimitOfOp (K : J ⥤ C) (F : C ⥤ D) [CreatesColimit K.op F.op] :
     CreatesLimit K F where
@@ -102,28 +84,19 @@ def createsLimitOfOp (K : J ⥤ C) (F : C ⥤ D) [CreatesColimit K.op F.op] :
 /-- If `F : C ⥤ Dᵒᵖ` creates colimits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.leftOp : Cᵒᵖ ⥤ D`
 creates limits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitLeftOp` / `createsLimitLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：createsLimitLeftOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.leftOp F]
+ : CreatesLimit K F.leftOp where __
+参数：K : J ⥤ Cᵒᵖ；F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitLeftOp
-  signature: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.leftOp F]
-  body: reflectsLimit_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F) c.op hc.op
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitLeftOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [创造余极限 K.leftOp F]
-  定义体: reflectsLimit_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F) c.op hc.op
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: PreservesLimitOfIsCosplitPair, PreservesLimitOfIsCosplitPair.out, reflectsLimit_leftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates colimits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.leftOp : Cᵒᵖ 
+⥤ D`
+creates limits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsLimitLeftOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.leftOp F] :
     CreatesLimit K F.leftOp where
@@ -136,30 +109,19 @@ def createsLimitLeftOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesColimit K
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ Dᵒᵖ` creates
 limits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitOfLeftOp` / `createsLimitOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：createsLimitOfLeftOp (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.op F.left
+Op] : CreatesLimit K F where __
+参数：K : J ⥤ C；F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitOfLeftOp
-  signature: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.op F.leftOp]
-  body: reflectsLimit_of_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F.leftOp)
-      (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitOfLeftOp
-  签名: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [创造余极限 K.op F.leftOp]
-  定义体: reflectsLimit_of_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F.leftOp)
-      (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: reflectsLimit_of_leftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ Dᵒ
+ᵖ` creates
+limits of `K : J ⥤ C`.
 -/
 def createsLimitOfLeftOp (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.op F.leftOp] :
     CreatesLimit K F where
@@ -173,30 +135,19 @@ def createsLimitOfLeftOp (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesColimit K.op 
 /-- If `F : Cᵒᵖ ⥤ D` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.rightOp : C ⥤ Dᵒᵖ` creates
 limits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitRightOp` / `createsLimitRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitRightOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：createsLimitRightOp (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.op F] : Cr
+eatesLimit K F.rightOp where __
+参数：K : J ⥤ C；F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitRightOp
-  signature: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.op F]
-  body: reflectsLimit_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F)
-      (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitRightOp
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [创造余极限 K.op F]
-  定义体: reflectsLimit_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F)
-      (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: ReflectsLimitOfIsCosplitPair, ReflectsLimitOfIsCosplitPair.out, reflectsLimit_rightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.rightOp : C ⥤ D
+ᵒᵖ` creates
+limits of `K : J ⥤ C`.
 -/
 def createsLimitRightOp (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.op F] :
     CreatesLimit K F.rightOp where
@@ -210,28 +161,19 @@ def createsLimitRightOp (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.op F
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits of `K.leftOp : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : Cᵒᵖ ⥤ D`
 creates limits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitOfRightOp` / `createsLimitOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitOfRightOp** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsLimitOfRightOp (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.leftOp
+ F.rightOp] : CreatesLimit K F where __
+参数：K : J ⥤ Cᵒᵖ；F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitOfRightOp
-  signature: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.leftOp F.rightOp]
-  body: reflectsLimit_of_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.rightOp) c.op hc.op
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitOfRightOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [创造余极限 K.leftOp F.rightOp]
-  定义体: reflectsLimit_of_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.rightOp) c.op hc.op
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: reflectsLimit_of_rightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits of `K.leftOp : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C
+ᵒᵖ ⥤ D`
+creates limits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsLimitOfRightOp (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesColimit K.leftOp F.rightOp] :
     CreatesLimit K F where
@@ -244,28 +186,19 @@ def createsLimitOfRightOp (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesColimi
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.unop : C ⥤ D` creates
 limits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitUnop` / `createsLimitUnop` 的定义
+/-
+**CategoryTheory.Limits.createsLimitUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：createsLimitUnop (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.op F] : Cre
+atesLimit K F.unop where __
+参数：K : J ⥤ C；F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitUnop
-  signature: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.op F]
-  body: reflectsLimit_unop _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F) c.op hc.op
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitUnop
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造余极限 K.op F]
-  定义体: reflectsLimit_unop _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.op) (F := F) c.op hc.op
-    { liftedCone := lc.liftedCocone.unop
-      validLift := (coneOpEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: reflectsLimit_unop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.unop : C ⥤ D`
+ creates
+limits of `K : J ⥤ C`.
 -/
 def createsLimitUnop (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.op F] :
     CreatesLimit K F.unop where
@@ -278,30 +211,19 @@ def createsLimitUnop (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.o
 /-- If `F.unop : C ⥤ D` creates colimits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates
 limits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitOfUnop` / `createsLimitOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsLimitOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：createsLimitOfUnop (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.leftOp 
+F.unop] : CreatesLimit K F where __
+参数：K : J ⥤ Cᵒᵖ；F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitOfUnop
-  signature: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.leftOp F.unop]
-  body: reflectsLimit_of_unop _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.unop)
-      (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-中文:
-定义 createsLimitOfUnop
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造余极限 K.leftOp F.unop]
-  定义体: reflectsLimit_of_unop _ _
-  lifts c hc :=
-    letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.unop)
-      (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
-    { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
-
-Depends on / 依赖: CreatesLimitOfIsCosplitPair, CreatesLimitOfIsCosplitPair.out, reflectsLimit_of_unop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates colimits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F : Cᵒᵖ ⥤ Dᵒ
+ᵖ` creates
+limits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsLimitOfUnop (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimit K.leftOp F.unop] :
     CreatesLimit K F where
@@ -315,30 +237,19 @@ def createsLimitOfUnop (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesCol
 /-- If `F : C ⥤ D` creates limits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates
 colimits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitOp` / `createsColimitOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：createsColimitOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesLimit K.leftOp F] : Cre
+atesColimit K F.op where __
+参数：K : J ⥤ Cᵒᵖ；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitOp
-  signature: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesLimit K.leftOp F]
-  body: reflectsColimit_op _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [创造极限 K.leftOp F]
-  定义体: reflectsColimit_op _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: reflectsColimit_op
+--- 原说明 ---
+If `F : C ⥤ D` creates limits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` c
+reates
+colimits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsColimitOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesLimit K.leftOp F] :
     CreatesColimit K F.op where
@@ -352,28 +263,19 @@ def createsColimitOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ D) [CreatesLimit K.leftOp F]
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ D` creates
 colimits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitOfOp` / `createsColimitOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitOfOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：createsColimitOfOp (K : J ⥤ C) (F : C ⥤ D) [CreatesLimit K.op F.op] : Crea
+tesColimit K F where __
+参数：K : J ⥤ C；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitOfOp
-  signature: (K : J ⥤ C) (F : C ⥤ D) [CreatesLimit K.op F.op]
-  body: reflectsColimit_of_op _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F.op) c.op hc.op
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitOfOp
-  签名: (K : J ⥤ C) (F : C ⥤ D) [创造极限 K.op F.op]
-  定义体: reflectsColimit_of_op _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F.op) c.op hc.op
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: reflectsColimit_of_op
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ D` cre
+ates
+colimits of `K : J ⥤ C`.
 -/
 def createsColimitOfOp (K : J ⥤ C) (F : C ⥤ D) [CreatesLimit K.op F.op] :
     CreatesColimit K F where
@@ -386,28 +288,19 @@ def createsColimitOfOp (K : J ⥤ C) (F : C ⥤ D) [CreatesLimit K.op F.op] :
 /-- If `F : C ⥤ Dᵒᵖ` creates limits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.leftOp : Cᵒᵖ ⥤ D` creates
 colimits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitLeftOp` / `createsColimitLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：createsColimitLeftOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.leftOp F]
+ : CreatesColimit K F.leftOp where __
+参数：K : J ⥤ Cᵒᵖ；F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitLeftOp
-  signature: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.leftOp F]
-  body: reflectsColimit_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F) c.op hc.op
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitLeftOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [创造极限 K.leftOp F]
-  定义体: reflectsColimit_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F) c.op hc.op
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: reflectsColimit_leftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates limits of `K.leftOp : Jᵒᵖ ⥤ C`, then `F.leftOp : Cᵒᵖ ⥤ 
+D` creates
+colimits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsColimitLeftOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.leftOp F] :
     CreatesColimit K F.leftOp where
@@ -420,30 +313,19 @@ def createsColimitLeftOp (K : J ⥤ Cᵒᵖ) (F : C ⥤ Dᵒᵖ) [CreatesLimit K
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ Dᵒᵖ` creates
 colimits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitOfLeftOp` / `createsColimitOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：createsColimitOfLeftOp (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.op F.left
+Op] : CreatesColimit K F where __
+参数：K : J ⥤ C；F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitOfLeftOp
-  signature: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.op F.leftOp]
-  body: reflectsColimit_of_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F.leftOp)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitOfLeftOp
-  签名: (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [创造极限 K.op F.leftOp]
-  定义体: reflectsColimit_of_leftOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F.leftOp)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: PreservesLimitOfIsCoreflexivePair, PreservesLimitOfIsCoreflexivePair.out, reflectsColimit_of_leftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : C ⥤ Dᵒᵖ`
+ creates
+colimits of `K : J ⥤ C`.
 -/
 def createsColimitOfLeftOp (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.op F.leftOp] :
     CreatesColimit K F where
@@ -457,30 +339,19 @@ def createsColimitOfLeftOp (K : J ⥤ C) (F : C ⥤ Dᵒᵖ) [CreatesLimit K.op 
 /-- If `F : Cᵒᵖ ⥤ D` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.rightOp : C ⥤ Dᵒᵖ` creates
 colimits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitRightOp` / `createsColimitRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitRightOp** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsColimitRightOp (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.op F] : Cr
+eatesColimit K F.rightOp where __
+参数：K : J ⥤ C；F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitRightOp
-  signature: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.op F]
-  body: reflectsColimit_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitRightOp
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [创造极限 K.op F]
-  定义体: reflectsColimit_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: reflectsColimit_rightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.rightOp : C ⥤ Dᵒᵖ
+` creates
+colimits of `K : J ⥤ C`.
 -/
 def createsColimitRightOp (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.op F] :
     CreatesColimit K F.rightOp where
@@ -494,28 +365,19 @@ def createsColimitRightOp (K : J ⥤ C) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.op F
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates limits of `K.leftOp : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : Cᵒᵖ ⥤ D`
 creates colimits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitOfRightOp` / `createsColimitOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitOfRightOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsColimitOfRightOp (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.leftOp
+ F.rightOp] : CreatesColimit K F where __
+参数：K : J ⥤ Cᵒᵖ；F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitOfRightOp
-  signature: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.leftOp F.rightOp]
-  body: reflectsColimit_of_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.rightOp) c.op hc.op
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitOfRightOp
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [创造极限 K.leftOp F.rightOp]
-  定义体: reflectsColimit_of_rightOp _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.rightOp) c.op hc.op
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: reflectsColimit_of_rightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates limits of `K.leftOp : Jᵒᵖ ⥤ Cᵒᵖ`, then `F : Cᵒᵖ
+ ⥤ D`
+creates colimits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsColimitOfRightOp (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesLimit K.leftOp F.rightOp] :
     CreatesColimit K F where
@@ -528,28 +390,19 @@ def createsColimitOfRightOp (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ D) [CreatesLimi
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.unop : C ⥤ D` creates
 colimits of `K : J ⥤ C`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitUnop` / `createsColimitUnop` 的定义
+/-
+**CategoryTheory.Limits.createsColimitUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：createsColimitUnop (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.op F] : Cre
+atesColimit K F.unop where __
+参数：K : J ⥤ C；F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitUnop
-  signature: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.op F]
-  body: reflectsColimit_unop _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F) c.op hc.op
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitUnop
-  签名: (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造极限 K.op F]
-  定义体: reflectsColimit_unop _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.op) (F := F) c.op hc.op
-    { liftedCocone := lc.liftedCone.unop
-      validLift := (coconeUnopOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: reflectsColimit_unop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of `K.op : Jᵒᵖ ⥤ Cᵒᵖ`, then `F.unop : C ⥤ D` c
+reates
+colimits of `K : J ⥤ C`.
 -/
 def createsColimitUnop (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.op F] :
     CreatesColimit K F.unop where
@@ -562,30 +415,19 @@ def createsColimitUnop (K : J ⥤ C) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.o
 /-- If `F.unop : C ⥤ D` creates limits of `K.op : Jᵒᵖ ⥤ C`, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates
 colimits of `K : J ⥤ Cᵒᵖ`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitOfUnop` / `createsColimitOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsColimitOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：createsColimitOfUnop (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.leftOp 
+F.unop] : CreatesColimit K F where __
+参数：K : J ⥤ Cᵒᵖ；F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitOfUnop
-  signature: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.leftOp F.unop]
-  body: reflectsColimit_of_unop _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.unop)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-中文:
-定义 createsColimitOfUnop
-  签名: (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造极限 K.leftOp F.unop]
-  定义体: reflectsColimit_of_unop _ _
-  lifts c hc :=
-    letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.unop)
-      (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
-    { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
-
-Depends on / 依赖: reflectsColimit_of_unop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates limits of `K.op : Jᵒᵖ ⥤ C`, then `F : Cᵒᵖ ⥤ Dᵒᵖ` cre
+ates
+colimits of `K : J ⥤ Cᵒᵖ`.
 -/
 def createsColimitOfUnop (K : J ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimit K.leftOp F.unop] :
     CreatesColimit K F where
@@ -603,20 +445,19 @@ variable (J)
 /-- If `F : C ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of
 shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeOp` / `createsLimitsOfShapeOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeOp** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeOp (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F] : Create
+sLimitsOfShape J F.op where CreatesLimit {K}
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeOp
-  signature: (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F]
-  body: createsLimitOp K F
-
-中文:
-定义 createsLimitsOfShapeOp
-  签名: (F : C ⥤ D) [创造形状余极限 Jᵒᵖ F]
-  定义体: createsLimitOp K F
-
-Depends on / 依赖: createsLimitOp
+--- 原说明 ---
+If `F : C ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates 
+limits of
+shape `J`.
 -/
 def createsLimitsOfShapeOp (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F] :
     CreatesLimitsOfShape J F.op where CreatesLimit {K} := createsLimitOp K F
@@ -624,20 +465,19 @@ def createsLimitsOfShapeOp (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F] :
 /-- If `F : C ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F.leftOp : Cᵒᵖ ⥤ D` creates limits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeLeftOp` / `createsLimitsOfShapeLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F] : 
+CreatesLimitsOfShape J F.leftOp where CreatesLimit {K}
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F]
-  body: createsLimitLeftOp K F
-
-中文:
-定义 createsLimitsOfShapeLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F]
-  定义体: createsLimitLeftOp K F
-
-Depends on / 依赖: createsLimitLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F.leftOp : Cᵒᵖ ⥤ D` crea
+tes limits
+of shape `J`.
 -/
 def createsLimitsOfShapeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F] :
     CreatesLimitsOfShape J F.leftOp where CreatesLimit {K} := createsLimitLeftOp K F
@@ -645,20 +485,19 @@ def createsLimitsOfShapeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒ�
 /-- If `F : Cᵒᵖ ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F.rightOp : C ⥤ Dᵒᵖ` creates limits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeRightOp` / `createsLimitsOfShapeRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeRightOp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F] :
+ CreatesLimitsOfShape J F.rightOp where CreatesLimit {K}
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F]
-  body: createsLimitRightOp K F
-
-中文:
-定义 createsLimitsOfShapeRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造形状余极限 Jᵒᵖ F]
-  定义体: createsLimitRightOp K F
-
-Depends on / 依赖: createsLimitRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F.rightOp : C ⥤ Dᵒᵖ` cre
+ates limits
+of shape `J`.
 -/
 def createsLimitsOfShapeRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F] :
     CreatesLimitsOfShape J F.rightOp where CreatesLimit {K} := createsLimitRightOp K F
@@ -666,20 +505,19 @@ def createsLimitsOfShapeRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒ
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F.unop : C ⥤ D` creates limits of
 shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeUnop` / `createsLimitsOfShapeUnop` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeUnop** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F] : 
+CreatesLimitsOfShape J F.unop where CreatesLimit {K}
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F]
-  body: createsLimitUnop K F
-
-中文:
-定义 createsLimitsOfShapeUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F]
-  定义体: createsLimitUnop K F
-
-Depends on / 依赖: createsLimitUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F.unop : C ⥤ D` create
+s limits of
+shape `J`.
 -/
 def createsLimitsOfShapeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F] :
     CreatesLimitsOfShape J F.unop where CreatesLimit {K} := createsLimitUnop K F
@@ -687,20 +525,19 @@ def createsLimitsOfShapeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape J
 /-- If `F : C ⥤ D` creates limits of shape `Jᵒᵖ`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of
 shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeOp` / `createsColimitsOfShapeOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeOp** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeOp (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F] : Create
+sColimitsOfShape J F.op where CreatesColimit {K}
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeOp
-  signature: (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F]
-  body: createsColimitOp K F
-
-中文:
-定义 createsColimitsOfShapeOp
-  签名: (F : C ⥤ D) [创造形状极限 Jᵒᵖ F]
-  定义体: createsColimitOp K F
-
-Depends on / 依赖: createsColimitOp
+--- 原说明 ---
+If `F : C ⥤ D` creates limits of shape `Jᵒᵖ`, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates co
+limits of
+shape `J`.
 -/
 def createsColimitsOfShapeOp (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F] :
     CreatesColimitsOfShape J F.op where CreatesColimit {K} := createsColimitOp K F
@@ -708,20 +545,19 @@ def createsColimitsOfShapeOp (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F] :
 /-- If `F : C ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F.leftOp : Cᵒᵖ ⥤ D` creates colimits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeLeftOp` / `createsColimitsOfShapeLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F] : 
+CreatesColimitsOfShape J F.leftOp where CreatesColimit {K}
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F]
-  body: createsColimitLeftOp K F
-
-中文:
-定义 createsColimitsOfShapeLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F]
-  定义体: createsColimitLeftOp K F
-
-Depends on / 依赖: createsColimitLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F.leftOp : Cᵒᵖ ⥤ D` create
+s colimits
+of shape `J`.
 -/
 def createsColimitsOfShapeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F] :
     CreatesColimitsOfShape J F.leftOp where CreatesColimit {K} := createsColimitLeftOp K F
@@ -729,20 +565,19 @@ def createsColimitsOfShapeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒ�
 /-- If `F : Cᵒᵖ ⥤ D` creates limits of shape `Jᵒᵖ`, then `F.rightOp : C ⥤ Dᵒᵖ` creates colimits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeRightOp` / `createsColimitsOfShapeRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeRightOp** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F] :
+ CreatesColimitsOfShape J F.rightOp where CreatesColimit {K}
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F]
-  body: createsColimitRightOp K F
-
-中文:
-定义 createsColimitsOfShapeRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造形状极限 Jᵒᵖ F]
-  定义体: createsColimitRightOp K F
-
-Depends on / 依赖: createsColimitRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates limits of shape `Jᵒᵖ`, then `F.rightOp : C ⥤ Dᵒᵖ` creat
+es colimits
+of shape `J`.
 -/
 def createsColimitsOfShapeRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F] :
     CreatesColimitsOfShape J F.rightOp where CreatesColimit {K} := createsColimitRightOp K F
@@ -750,20 +585,19 @@ def createsColimitsOfShapeRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒ
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F.unop : C ⥤ D` creates colimits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeUnop` / `createsColimitsOfShapeUnop` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeUnop** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F] : 
+CreatesColimitsOfShape J F.unop where CreatesColimit {K}
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F]
-  body: createsColimitUnop K F
-
-中文:
-定义 createsColimitsOfShapeUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F]
-  定义体: createsColimitUnop K F
-
-Depends on / 依赖: createsColimitUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F.unop : C ⥤ D` creates 
+colimits
+of shape `J`.
 -/
 def createsColimitsOfShapeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F] :
     CreatesColimitsOfShape J F.unop where CreatesColimit {K} := createsColimitUnop K F
@@ -771,20 +605,19 @@ def createsColimitsOfShapeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape J
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F : C ⥤ D` creates limits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeOfOp` / `createsLimitsOfShapeOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeOfOp** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeOfOp (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.op] : C
+reatesLimitsOfShape J F where CreatesLimit {K}
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeOfOp
-  signature: (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.op]
-  body: createsLimitOfOp K F
-
-中文:
-定义 createsLimitsOfShapeOfOp
-  签名: (F : C ⥤ D) [创造形状余极限 Jᵒᵖ F.op]
-  定义体: createsLimitOfOp K F
-
-Depends on / 依赖: createsLimitOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F : C ⥤ D` creates 
+limits
+of shape `J`.
 -/
 def createsLimitsOfShapeOfOp (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.op] :
     CreatesLimitsOfShape J F where CreatesLimit {K} := createsLimitOfOp K F
@@ -792,20 +625,19 @@ def createsLimitsOfShapeOfOp (F : C ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.op]
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F : C ⥤ Dᵒᵖ` creates limits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeOfLeftOp` / `createsLimitsOfShapeOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.l
+eftOp] : CreatesLimitsOfShape J F where CreatesLimit {K}
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.leftOp]
-  body: createsLimitOfLeftOp K F
-
-中文:
-定义 createsLimitsOfShapeOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F.leftOp]
-  定义体: createsLimitOfLeftOp K F
-
-Depends on / 依赖: createsLimitOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F : C ⥤ Dᵒᵖ` crea
+tes limits
+of shape `J`.
 -/
 def createsLimitsOfShapeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.leftOp] :
     CreatesLimitsOfShape J F where CreatesLimit {K} := createsLimitOfLeftOp K F
@@ -813,20 +645,19 @@ def createsLimitsOfShapeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfShape J�
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ D` creates limits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeOfRightOp` / `createsLimitsOfShapeOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeOfRightOp** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.
+rightOp] : CreatesLimitsOfShape J F where CreatesLimit {K}
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.rightOp]
-  body: createsLimitOfRightOp K F
-
-中文:
-定义 createsLimitsOfShapeOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造形状余极限 Jᵒᵖ F.rightOp]
-  定义体: createsLimitOfRightOp K F
-
-Depends on / 依赖: createsLimitOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ D` cre
+ates limits
+of shape `J`.
 -/
 def createsLimitsOfShapeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape Jᵒᵖ F.rightOp] :
     CreatesLimitsOfShape J F where CreatesLimit {K} := createsLimitOfRightOp K F
@@ -834,20 +665,19 @@ def createsLimitsOfShapeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfShape J�
 /-- If `F.unop : C ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeOfUnop` / `createsLimitsOfShapeOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.u
+nop] : CreatesLimitsOfShape J F where CreatesLimit {K}
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.unop]
-  body: createsLimitOfUnop K F
-
-中文:
-定义 createsLimitsOfShapeOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状余极限 Jᵒᵖ F.unop]
-  定义体: createsLimitOfUnop K F
-
-Depends on / 依赖: createsLimitOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates colimits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ Dᵒᵖ` create
+s limits
+of shape `J`.
 -/
 def createsLimitsOfShapeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape Jᵒᵖ F.unop] :
     CreatesLimitsOfShape J F where CreatesLimit {K} := createsLimitOfUnop K F
@@ -855,20 +685,19 @@ def createsLimitsOfShapeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfShape
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F : C ⥤ D` creates colimits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeOfOp` / `createsColimitsOfShapeOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeOfOp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeOfOp (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.op] : C
+reatesColimitsOfShape J F where CreatesColimit {K}
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeOfOp
-  signature: (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.op]
-  body: createsColimitOfOp K F
-
-中文:
-定义 createsColimitsOfShapeOfOp
-  签名: (F : C ⥤ D) [创造形状极限 Jᵒᵖ F.op]
-  定义体: createsColimitOfOp K F
-
-Depends on / 依赖: createsColimitOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F : C ⥤ D` creates co
+limits
+of shape `J`.
 -/
 def createsColimitsOfShapeOfOp (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.op] :
     CreatesColimitsOfShape J F where CreatesColimit {K} := createsColimitOfOp K F
@@ -876,20 +705,19 @@ def createsColimitsOfShapeOfOp (F : C ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.op]
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates limits of shape `Jᵒᵖ`, then `F : C ⥤ Dᵒᵖ` creates colimits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeOfLeftOp` / `createsColimitsOfShapeOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.l
+eftOp] : CreatesColimitsOfShape J F where CreatesColimit {K}
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.leftOp]
-  body: createsColimitOfLeftOp K F
-
-中文:
-定义 createsColimitsOfShapeOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F.leftOp]
-  定义体: createsColimitOfLeftOp K F
-
-Depends on / 依赖: createsColimitOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates limits of shape `Jᵒᵖ`, then `F : C ⥤ Dᵒᵖ` create
+s colimits
+of shape `J`.
 -/
 def createsColimitsOfShapeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.leftOp] :
     CreatesColimitsOfShape J F where CreatesColimit {K} := createsColimitOfLeftOp K F
@@ -897,20 +725,19 @@ def createsColimitsOfShapeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfShape J�
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ D` creates colimits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeOfRightOp` / `createsColimitsOfShapeOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeOfRightOp** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.
+rightOp] : CreatesColimitsOfShape J F where CreatesColimit {K}
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.rightOp]
-  body: createsColimitOfRightOp K F
-
-中文:
-定义 createsColimitsOfShapeOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造形状极限 Jᵒᵖ F.rightOp]
-  定义体: createsColimitOfRightOp K F
-
-Depends on / 依赖: createsColimitOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates limits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ D` creat
+es colimits
+of shape `J`.
 -/
 def createsColimitsOfShapeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape Jᵒᵖ F.rightOp] :
     CreatesColimitsOfShape J F where CreatesColimit {K} := createsColimitOfRightOp K F
@@ -918,20 +745,19 @@ def createsColimitsOfShapeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfShape J�
 /-- If `F.unop : C ⥤ D` creates limits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits
 of shape `J`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeOfUnop` / `createsColimitsOfShapeOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.u
+nop] : CreatesColimitsOfShape J F where CreatesColimit {K}
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.unop]
-  body: createsColimitOfUnop K F
-
-中文:
-定义 createsColimitsOfShapeOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造形状极限 Jᵒᵖ F.unop]
-  定义体: createsColimitOfUnop K F
-
-Depends on / 依赖: createsColimitOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates limits of shape `Jᵒᵖ`, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates 
+colimits
+of shape `J`.
 -/
 def createsColimitsOfShapeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfShape Jᵒᵖ F.unop] :
     CreatesColimitsOfShape J F where CreatesColimit {K} := createsColimitOfUnop K F
@@ -940,20 +766,17 @@ end
 
 /-- If `F : C ⥤ D` creates colimits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeOp` / `createsLimitsOfSizeOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeOp** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsLimitsOfSizeOp (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F] : Crea
+tesLimitsOfSize.{w, w'} F.op where CreatesLimitsOfShape {_} _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeOp
-  signature: (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F]
-  body: createsLimitsOfShapeOp _ _
-
-中文:
-定义 createsLimitsOfSizeOp
-  签名: (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F]
-  定义体: createsLimitsOfShapeOp _ _
-
-Depends on / 依赖: createsLimitsOfShapeOp
+--- 原说明 ---
+If `F : C ⥤ D` creates colimits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits.
 -/
 def createsLimitsOfSizeOp (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F] :
     CreatesLimitsOfSize.{w, w'} F.op where
@@ -961,20 +784,17 @@ def createsLimitsOfSizeOp (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F] :
 
 /-- If `F : C ⥤ Dᵒᵖ` creates colimits, then `F.leftOp : Cᵒᵖ ⥤ D` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeLeftOp` / `createsLimitsOfSizeLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsLimitsOfSizeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F] 
+: CreatesLimitsOfSize.{w, w'} F.leftOp where CreatesLimitsOfShape {_} _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F]
-  body: createsLimitsOfShapeLeftOp _ _
-
-中文:
-定义 createsLimitsOfSizeLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F]
-  定义体: createsLimitsOfShapeLeftOp _ _
-
-Depends on / 依赖: createsLimitsOfShapeLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates colimits, then `F.leftOp : Cᵒᵖ ⥤ D` creates limits.
 -/
 def createsLimitsOfSizeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F] :
     CreatesLimitsOfSize.{w, w'} F.leftOp where
@@ -982,20 +802,17 @@ def createsLimitsOfSizeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'}
 
 /-- If `F : Cᵒᵖ ⥤ D` creates colimits, then `F.rightOp : C ⥤ Dᵒᵖ` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeRightOp` / `createsLimitsOfSizeRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeRightOp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：createsLimitsOfSizeRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} F]
+ : CreatesLimitsOfSize.{w, w'} F.rightOp where CreatesLimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} F]
-  body: createsLimitsOfShapeRightOp _ _
-
-中文:
-定义 createsLimitsOfSizeRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} F]
-  定义体: createsLimitsOfShapeRightOp _ _
-
-Depends on / 依赖: createsLimitsOfShapeRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates colimits, then `F.rightOp : C ⥤ Dᵒᵖ` creates limits.
 -/
 def createsLimitsOfSizeRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} F] :
     CreatesLimitsOfSize.{w, w'} F.rightOp where
@@ -1003,20 +820,17 @@ def createsLimitsOfSizeRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'
 
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F.unop : C ⥤ D` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeUnop` / `createsLimitsOfSizeUnop` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeUnop** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsLimitsOfSizeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F] 
+: CreatesLimitsOfSize.{w, w'} F.unop where CreatesLimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F]
-  body: createsLimitsOfShapeUnop _ _
-
-中文:
-定义 createsLimitsOfSizeUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F]
-  定义体: createsLimitsOfShapeUnop _ _
-
-Depends on / 依赖: createsLimitsOfShapeUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F.unop : C ⥤ D` creates limits.
 -/
 def createsLimitsOfSizeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F] :
     CreatesLimitsOfSize.{w, w'} F.unop where
@@ -1024,20 +838,17 @@ def createsLimitsOfSizeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w,
 
 /-- If `F : C ⥤ D` creates limits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeOp` / `createsColimitsOfSizeOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeOp (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F] : Crea
+tesColimitsOfSize.{w, w'} F.op where CreatesColimitsOfShape {_} _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeOp
-  signature: (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F]
-  body: createsColimitsOfShapeOp _ _
-
-中文:
-定义 createsColimitsOfSizeOp
-  签名: (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F]
-  定义体: createsColimitsOfShapeOp _ _
-
-Depends on / 依赖: createsColimitsOfShapeOp
+--- 原说明 ---
+If `F : C ⥤ D` creates limits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits.
 -/
 def createsColimitsOfSizeOp (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F] :
     CreatesColimitsOfSize.{w, w'} F.op where
@@ -1045,20 +856,17 @@ def createsColimitsOfSizeOp (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F] :
 
 /-- If `F : C ⥤ Dᵒᵖ` creates limits, then `F.leftOp : Cᵒᵖ ⥤ D` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeLeftOp` / `createsColimitsOfSizeLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F] 
+: CreatesColimitsOfSize.{w, w'} F.leftOp where CreatesColimitsOfShape {_} _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F]
-  body: createsColimitsOfShapeLeftOp _ _
-
-中文:
-定义 createsColimitsOfSizeLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F]
-  定义体: createsColimitsOfShapeLeftOp _ _
-
-Depends on / 依赖: createsColimitsOfShapeLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates limits, then `F.leftOp : Cᵒᵖ ⥤ D` creates colimits.
 -/
 def createsColimitsOfSizeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F] :
     CreatesColimitsOfSize.{w, w'} F.leftOp where
@@ -1066,20 +874,17 @@ def createsColimitsOfSizeLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'}
 
 /-- If `F : Cᵒᵖ ⥤ D` creates limits, then `F.rightOp : C ⥤ Dᵒᵖ` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeRightOp` / `createsColimitsOfSizeRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeRightOp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} F]
+ : CreatesColimitsOfSize.{w, w'} F.rightOp where CreatesColimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} F]
-  body: createsColimitsOfShapeRightOp _ _
-
-中文:
-定义 createsColimitsOfSizeRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} F]
-  定义体: createsColimitsOfShapeRightOp _ _
-
-Depends on / 依赖: createsColimitsOfShapeRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates limits, then `F.rightOp : C ⥤ Dᵒᵖ` creates colimits.
 -/
 def createsColimitsOfSizeRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} F] :
     CreatesColimitsOfSize.{w, w'} F.rightOp where
@@ -1087,20 +892,17 @@ def createsColimitsOfSizeRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'
 
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F.unop : C ⥤ D` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeUnop` / `createsColimitsOfSizeUnop` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeUnop** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F] 
+: CreatesColimitsOfSize.{w, w'} F.unop where CreatesColimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F]
-  body: createsColimitsOfShapeUnop _ _
-
-中文:
-定义 createsColimitsOfSizeUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F]
-  定义体: createsColimitsOfShapeUnop _ _
-
-Depends on / 依赖: createsColimitsOfShapeUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F.unop : C ⥤ D` creates colimits.
 -/
 def createsColimitsOfSizeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F] :
     CreatesColimitsOfSize.{w, w'} F.unop where
@@ -1108,20 +910,17 @@ def createsColimitsOfSizeUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w,
 
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F : C ⥤ D` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeOfOp` / `createsLimitsOfSizeOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeOfOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsLimitsOfSizeOfOp (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F.op] :
+ CreatesLimitsOfSize.{w, w'} F where CreatesLimitsOfShape {_} _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeOfOp
-  signature: (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F.op]
-  body: createsLimitsOfShapeOfOp _ _
-
-中文:
-定义 createsLimitsOfSizeOfOp
-  签名: (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F.op]
-  定义体: createsLimitsOfShapeOfOp _ _
-
-Depends on / 依赖: createsLimitsOfShapeOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F : C ⥤ D` creates limits.
 -/
 def createsLimitsOfSizeOfOp (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F.op] :
     CreatesLimitsOfSize.{w, w'} F where
@@ -1129,20 +928,17 @@ def createsLimitsOfSizeOfOp (F : C ⥤ D) [CreatesColimitsOfSize.{w, w'} F.op] :
 
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits, then `F : C ⥤ Dᵒᵖ` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeOfLeftOp` / `createsLimitsOfSizeOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsLimitsOfSizeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F
+.leftOp] : CreatesLimitsOfSize.{w, w'} F where CreatesLimitsOfShape {_} _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F.leftOp]
-  body: createsLimitsOfShapeOfLeftOp _ _
-
-中文:
-定义 createsLimitsOfSizeOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F.leftOp]
-  定义体: createsLimitsOfShapeOfLeftOp _ _
-
-Depends on / 依赖: createsLimitsOfShapeOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits, then `F : C ⥤ Dᵒᵖ` creates limits.
 -/
 def createsLimitsOfSizeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F.leftOp] :
     CreatesLimitsOfSize.{w, w'} F where
@@ -1150,20 +946,17 @@ def createsLimitsOfSizeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w
 
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits, then `F : Cᵒᵖ ⥤ D` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeOfRightOp` / `createsLimitsOfSizeOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeOfRightOp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsLimitsOfSizeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} 
+F.rightOp] : CreatesLimitsOfSize.{w, w'} F where CreatesLimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} F.rightOp]
-  body: createsLimitsOfShapeOfRightOp _ _
-
-中文:
-定义 createsLimitsOfSizeOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} F.rightOp]
-  定义体: createsLimitsOfShapeOfRightOp _ _
-
-Depends on / 依赖: createsLimitsOfShapeOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits, then `F : Cᵒᵖ ⥤ D` creates limits.
 -/
 def createsLimitsOfSizeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, w'} F.rightOp] :
     CreatesLimitsOfSize.{w, w'} F where
@@ -1171,20 +964,17 @@ def createsLimitsOfSizeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimitsOfSize.{w, 
 
 /-- If `F.unop : C ⥤ D` creates colimits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfSizeOfUnop` / `createsLimitsOfSizeOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsLimitsOfSizeOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsLimitsOfSizeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F
+.unop] : CreatesLimitsOfSize.{w, w'} F where CreatesLimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfSizeOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F.unop]
-  body: createsLimitsOfShapeOfUnop _ _
-
-中文:
-定义 createsLimitsOfSizeOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F.unop]
-  定义体: createsLimitsOfShapeOfUnop _ _
-
-Depends on / 依赖: createsLimitsOfShapeOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates colimits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits.
 -/
 def createsLimitsOfSizeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{w, w'} F.unop] :
     CreatesLimitsOfSize.{w, w'} F where
@@ -1192,20 +982,17 @@ def createsLimitsOfSizeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimitsOfSize.{
 
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F : C ⥤ D` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeOfOp` / `createsColimitsOfSizeOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeOfOp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeOfOp (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F.op] :
+ CreatesColimitsOfSize.{w, w'} F where CreatesColimitsOfShape {_} _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeOfOp
-  signature: (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F.op]
-  body: createsColimitsOfShapeOfOp _ _
-
-中文:
-定义 createsColimitsOfSizeOfOp
-  签名: (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F.op]
-  定义体: createsColimitsOfShapeOfOp _ _
-
-Depends on / 依赖: createsColimitsOfShapeOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F : C ⥤ D` creates colimits.
 -/
 def createsColimitsOfSizeOfOp (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F.op] :
     CreatesColimitsOfSize.{w, w'} F where
@@ -1213,20 +1000,17 @@ def createsColimitsOfSizeOfOp (F : C ⥤ D) [CreatesLimitsOfSize.{w, w'} F.op] :
 
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates limits, then `F : C ⥤ Dᵒᵖ` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeOfLeftOp` / `createsColimitsOfSizeOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F
+.leftOp] : CreatesColimitsOfSize.{w, w'} F where CreatesColimitsOfShape {_} _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F.leftOp]
-  body: createsColimitsOfShapeOfLeftOp _ _
-
-中文:
-定义 createsColimitsOfSizeOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F.leftOp]
-  定义体: createsColimitsOfShapeOfLeftOp _ _
-
-Depends on / 依赖: createsColimitsOfShapeOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates limits, then `F : C ⥤ Dᵒᵖ` creates colimits.
 -/
 def createsColimitsOfSizeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F.leftOp] :
     CreatesColimitsOfSize.{w, w'} F where
@@ -1234,20 +1018,17 @@ def createsColimitsOfSizeOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w
 
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates limits, then `F : Cᵒᵖ ⥤ D` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeOfRightOp` / `createsColimitsOfSizeOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeOfRightOp** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} 
+F.rightOp] : CreatesColimitsOfSize.{w, w'} F where CreatesColimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} F.rightOp]
-  body: createsColimitsOfShapeOfRightOp _ _
-
-中文:
-定义 createsColimitsOfSizeOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} F.rightOp]
-  定义体: createsColimitsOfShapeOfRightOp _ _
-
-Depends on / 依赖: createsColimitsOfShapeOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates limits, then `F : Cᵒᵖ ⥤ D` creates colimits.
 -/
 def createsColimitsOfSizeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, w'} F.rightOp] :
     CreatesColimitsOfSize.{w, w'} F where
@@ -1255,309 +1036,270 @@ def createsColimitsOfSizeOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimitsOfSize.{w, 
 
 /-- If `F.unop : C ⥤ D` creates limits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfSizeOfUnop` / `createsColimitsOfSizeOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsColimitsOfSizeOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsColimitsOfSizeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F
+.unop] : CreatesColimitsOfSize.{w, w'} F where CreatesColimitsOfShape {_} _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfSizeOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F.unop]
-  body: createsColimitsOfShapeOfUnop _ _
-
-中文:
-定义 createsColimitsOfSizeOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F.unop]
-  定义体: createsColimitsOfShapeOfUnop _ _
-
-Depends on / 依赖: createsColimitsOfShapeOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates limits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits.
 -/
 def createsColimitsOfSizeOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimitsOfSize.{w, w'} F.unop] :
     CreatesColimitsOfSize.{w, w'} F where
   CreatesColimitsOfShape {_} _ := createsColimitsOfShapeOfUnop _ _
 
-/--
-Definition of `createsLimitsOp` / `createsLimitsOp` 的定义
+/-- If `F : C ⥤ D` creates colimits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：createsLimitsOp (F : C ⥤ D) [CreatesColimits F] : CreatesLimits F.op
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsOp
-  signature: (F : C ⥤ D) [CreatesColimits F]
-  body: createsLimitsOfSizeOp F
-
-中文:
-缩写 createsLimitsOp
-  签名: (F : C ⥤ D) [CreatesColimits F]
-  定义体: createsLimitsOfSizeOp F
-
-Depends on / 依赖: createsLimitsOfSizeOp
+--- 原说明 ---
+If `F : C ⥤ D` creates colimits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits.
 -/
 abbrev createsLimitsOp (F : C ⥤ D) [CreatesColimits F] : CreatesLimits F.op :=
   createsLimitsOfSizeOp F
 
-/--
-Definition of `createsLimitsLeftOp` / `createsLimitsLeftOp` 的定义
+/-- If `F : C ⥤ Dᵒᵖ` creates colimits, then `F.leftOp : Cᵒᵖ ⥤ D` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsLeftOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsLimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimits F] : CreatesLimits F.le
+ftOp
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesColimits F]
-  body: createsLimitsOfSizeLeftOp F
-
-中文:
-缩写 createsLimitsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesColimits F]
-  定义体: createsLimitsOfSizeLeftOp F
-
-Depends on / 依赖: createsLimitsOfSizeLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates colimits, then `F.leftOp : Cᵒᵖ ⥤ D` creates limits.
 -/
 abbrev createsLimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimits F] : CreatesLimits F.leftOp :=
   createsLimitsOfSizeLeftOp F
 
-/--
-Definition of `createsLimitsRightOp` / `createsLimitsRightOp` 的定义
+/-- If `F : Cᵒᵖ ⥤ D` creates colimits, then `F.rightOp : C ⥤ Dᵒᵖ` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsRightOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：createsLimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimits F] : CreatesLimits F.r
+ightOp
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesColimits F]
-  body: createsLimitsOfSizeRightOp F
-
-中文:
-缩写 createsLimitsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesColimits F]
-  定义体: createsLimitsOfSizeRightOp F
-
-Depends on / 依赖: createsLimitsOfSizeRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates colimits, then `F.rightOp : C ⥤ Dᵒᵖ` creates limits.
 -/
 abbrev createsLimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimits F] : CreatesLimits F.rightOp :=
   createsLimitsOfSizeRightOp F
 
-/--
-Definition of `createsLimitsUnop` / `createsLimitsUnop` 的定义
+/-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F.unop : C ⥤ D` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsUnop** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：createsLimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F] : CreatesLimits F.un
+op
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F]
-  body: createsLimitsOfSizeUnop F
-
-中文:
-缩写 createsLimitsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F]
-  定义体: createsLimitsOfSizeUnop F
-
-Depends on / 依赖: createsLimitsOfSizeUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F.unop : C ⥤ D` creates limits.
 -/
 abbrev createsLimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F] : CreatesLimits F.unop :=
   createsLimitsOfSizeUnop F
 
-/--
-Definition of `createsColimitsOp` / `createsColimitsOp` 的定义
+/-- If `F : C ⥤ D` creates limits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：createsColimitsOp (F : C ⥤ D) [CreatesLimits F] : CreatesColimits F.op
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsOp
-  signature: (F : C ⥤ D) [CreatesLimits F]
-  body: createsColimitsOfSizeOp F
-
-中文:
-缩写 createsColimitsOp
-  签名: (F : C ⥤ D) [CreatesLimits F]
-  定义体: createsColimitsOfSizeOp F
-
-Depends on / 依赖: createsColimitsOfSizeOp
+--- 原说明 ---
+If `F : C ⥤ D` creates limits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits.
 -/
 abbrev createsColimitsOp (F : C ⥤ D) [CreatesLimits F] : CreatesColimits F.op :=
   createsColimitsOfSizeOp F
 
-/--
-Definition of `createsColimitsLeftOp` / `createsColimitsLeftOp` 的定义
+/-- If `F : C ⥤ Dᵒᵖ` creates limits, then `F.leftOp : Cᵒᵖ ⥤ D` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsLeftOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsColimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimits F] : CreatesColimits F.
+leftOp
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesLimits F]
-  body: createsColimitsOfSizeLeftOp F
-
-中文:
-缩写 createsColimitsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesLimits F]
-  定义体: createsColimitsOfSizeLeftOp F
-
-Depends on / 依赖: createsColimitsOfSizeLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates limits, then `F.leftOp : Cᵒᵖ ⥤ D` creates colimits.
 -/
 abbrev createsColimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimits F] : CreatesColimits F.leftOp :=
   createsColimitsOfSizeLeftOp F
 
-/--
-Definition of `createsColimitsRightOp` / `createsColimitsRightOp` 的定义
+/-- If `F : Cᵒᵖ ⥤ D` creates limits, then `F.rightOp : C ⥤ Dᵒᵖ` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsRightOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：createsColimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimits F] : CreatesColimits F
+.rightOp
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesLimits F]
-  body: createsColimitsOfSizeRightOp F
-
-中文:
-缩写 createsColimitsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesLimits F]
-  定义体: createsColimitsOfSizeRightOp F
-
-Depends on / 依赖: createsColimitsOfSizeRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates limits, then `F.rightOp : C ⥤ Dᵒᵖ` creates colimits.
 -/
 abbrev createsColimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimits F] : CreatesColimits F.rightOp :=
   createsColimitsOfSizeRightOp F
 
-/--
-Definition of `createsColimitsUnop` / `createsColimitsUnop` 的定义
+/-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F.unop : C ⥤ D` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsUnop** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsColimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F] : CreatesColimits F.
+unop
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F]
-  body: createsColimitsOfSizeUnop F
-
-中文:
-缩写 createsColimitsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F]
-  定义体: createsColimitsOfSizeUnop F
-
-Depends on / 依赖: createsColimitsOfSizeUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F.unop : C ⥤ D` creates colimits.
 -/
 abbrev createsColimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F] : CreatesColimits F.unop :=
   createsColimitsOfSizeUnop F
 
-/--
-Definition of `createsLimitsOfOp` / `createsLimitsOfOp` 的定义
+/-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F : C ⥤ D` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsOfOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：createsLimitsOfOp (F : C ⥤ D) [CreatesColimits F.op] : CreatesLimits F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsOfOp
-  signature: (F : C ⥤ D) [CreatesColimits F.op]
-  body: createsLimitsOfSizeOfOp F
-
-中文:
-缩写 createsLimitsOfOp
-  签名: (F : C ⥤ D) [CreatesColimits F.op]
-  定义体: createsLimitsOfSizeOfOp F
-
-Depends on / 依赖: createsLimitsOfSizeOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits, then `F : C ⥤ D` creates limits.
 -/
 abbrev createsLimitsOfOp (F : C ⥤ D) [CreatesColimits F.op] : CreatesLimits F :=
   createsLimitsOfSizeOfOp F
 
-/--
-Definition of `createsLimitsOfLeftOp` / `createsLimitsOfLeftOp` 的定义
+/-- If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits, then `F : C ⥤ Dᵒᵖ` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsOfLeftOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsLimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimits F.leftOp] : CreatesLi
+mits F
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesColimits F.leftOp]
-  body: createsLimitsOfSizeOfLeftOp F
-
-中文:
-缩写 createsLimitsOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesColimits F.leftOp]
-  定义体: createsLimitsOfSizeOfLeftOp F
-
-Depends on / 依赖: createsLimitsOfSizeOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates colimits, then `F : C ⥤ Dᵒᵖ` creates limits.
 -/
 abbrev createsLimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesColimits F.leftOp] : CreatesLimits F :=
   createsLimitsOfSizeOfLeftOp F
 
-/--
-Definition of `createsLimitsOfRightOp` / `createsLimitsOfRightOp` 的定义
+/-- If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits, then `F : Cᵒᵖ ⥤ D` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsOfRightOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：createsLimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimits F.rightOp] : Creates
+Limits F
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesColimits F.rightOp]
-  body: createsLimitsOfSizeOfRightOp F
-
-中文:
-缩写 createsLimitsOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesColimits F.rightOp]
-  定义体: createsLimitsOfSizeOfRightOp F
-
-Depends on / 依赖: createsLimitsOfSizeOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates colimits, then `F : Cᵒᵖ ⥤ D` creates limits.
 -/
 abbrev createsLimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesColimits F.rightOp] : CreatesLimits F :=
   createsLimitsOfSizeOfRightOp F
 
-/--
-Definition of `createsLimitsOfUnop` / `createsLimitsOfUnop` 的定义
+/-- If `F.unop : C ⥤ D` creates colimits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsOfUnop** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsLimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F.unop] : CreatesLimi
+ts F
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsLimitsOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F.unop]
-  body: createsLimitsOfSizeOfUnop F
-
-中文:
-缩写 createsLimitsOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F.unop]
-  定义体: createsLimitsOfSizeOfUnop F
-
-Depends on / 依赖: createsLimitsOfSizeOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates colimits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates limits.
 -/
 abbrev createsLimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesColimits F.unop] : CreatesLimits F :=
   createsLimitsOfSizeOfUnop F
 
-/--
-Definition of `createsColimitsOfOp` / `createsColimitsOfOp` 的定义
+/-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F : C ⥤ D` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsOfOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsColimitsOfOp (F : C ⥤ D) [CreatesLimits F.op] : CreatesColimits F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsOfOp
-  signature: (F : C ⥤ D) [CreatesLimits F.op]
-  body: createsColimitsOfSizeOfOp F
-
-中文:
-缩写 createsColimitsOfOp
-  签名: (F : C ⥤ D) [CreatesLimits F.op]
-  定义体: createsColimitsOfSizeOfOp F
-
-Depends on / 依赖: createsColimitsOfSizeOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates limits, then `F : C ⥤ D` creates colimits.
 -/
 abbrev createsColimitsOfOp (F : C ⥤ D) [CreatesLimits F.op] : CreatesColimits F :=
   createsColimitsOfSizeOfOp F
 
-/--
-Definition of `createsColimitsOfLeftOp` / `createsColimitsOfLeftOp` 的定义
+/-- If `F.leftOp : Cᵒᵖ ⥤ D` creates limits, then `F : C ⥤ Dᵒᵖ` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsOfLeftOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsColimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimits F.leftOp] : CreatesCo
+limits F
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesLimits F.leftOp]
-  body: createsColimitsOfSizeOfLeftOp F
-
-中文:
-缩写 createsColimitsOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesLimits F.leftOp]
-  定义体: createsColimitsOfSizeOfLeftOp F
-
-Depends on / 依赖: createsColimitsOfSizeOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates limits, then `F : C ⥤ Dᵒᵖ` creates colimits.
 -/
 abbrev createsColimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesLimits F.leftOp] : CreatesColimits F :=
   createsColimitsOfSizeOfLeftOp F
 
-/--
-Definition of `createsColimitsOfRightOp` / `createsColimitsOfRightOp` 的定义
+/-- If `F.rightOp : C ⥤ Dᵒᵖ` creates limits, then `F : Cᵒᵖ ⥤ D` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsOfRightOp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：createsColimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimits F.rightOp] : Creates
+Colimits F
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesLimits F.rightOp]
-  body: createsColimitsOfSizeOfRightOp F
-
-中文:
-缩写 createsColimitsOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesLimits F.rightOp]
-  定义体: createsColimitsOfSizeOfRightOp F
-
-Depends on / 依赖: createsColimitsOfSizeOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates limits, then `F : Cᵒᵖ ⥤ D` creates colimits.
 -/
 abbrev createsColimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesLimits F.rightOp] : CreatesColimits F :=
   createsColimitsOfSizeOfRightOp F
 
-/--
-Definition of `createsColimitsOfUnop` / `createsColimitsOfUnop` 的定义
+/-- If `F.unop : C ⥤ D` creates limits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsOfUnop** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsColimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F.unop] : CreatesColi
+mits F
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation createsColimitsOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F.unop]
-  body: createsColimitsOfSizeOfUnop F
-
-中文:
-缩写 createsColimitsOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F.unop]
-  定义体: createsColimitsOfSizeOfUnop F
-
-Depends on / 依赖: createsColimitsOfSizeOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates limits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates colimits.
 -/
 abbrev createsColimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F.unop] : CreatesColimits F :=
   createsColimitsOfSizeOfUnop F
@@ -1565,20 +1307,18 @@ abbrev createsColimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesLimits F.unop] : 
 /-- If `F : C ⥤ D` creates finite colimits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
 limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsOp` / `createsFiniteLimitsOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsOp** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：createsFiniteLimitsOp (F : C ⥤ D) [CreatesFiniteColimits F] : CreatesFinit
+eLimits F.op where createsFiniteLimits J _ _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsOp
-  signature: (F : C ⥤ D) [CreatesFiniteColimits F]
-  body: createsLimitsOfShapeOp J F
-
-中文:
-定义 createsFiniteLimitsOp
-  签名: (F : C ⥤ D) [创造有限余极限 F]
-  定义体: createsLimitsOfShapeOp J F
-
-Depends on / 依赖: createsLimitsOfShapeOp
+--- 原说明 ---
+If `F : C ⥤ D` creates finite colimits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
+limits.
 -/
 def createsFiniteLimitsOp (F : C ⥤ D) [CreatesFiniteColimits F] :
     CreatesFiniteLimits F.op where
@@ -1587,20 +1327,19 @@ def createsFiniteLimitsOp (F : C ⥤ D) [CreatesFiniteColimits F] :
 /-- If `F : C ⥤ Dᵒᵖ` creates finite colimits, then `F.leftOp : Cᵒᵖ ⥤ D` creates finite
 limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsLeftOp` / `createsFiniteLimitsLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsFiniteLimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F] : Create
+sFiniteLimits F.leftOp where createsFiniteLimits J _ _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F]
-  body: createsLimitsOfShapeLeftOp J F
-
-中文:
-定义 createsFiniteLimitsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造有限余极限 F]
-  定义体: createsLimitsOfShapeLeftOp J F
-
-Depends on / 依赖: createsLimitsOfShapeLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates finite colimits, then `F.leftOp : Cᵒᵖ ⥤ D` creates fini
+te
+limits.
 -/
 def createsFiniteLimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F] :
     CreatesFiniteLimits F.leftOp where
@@ -1609,20 +1348,19 @@ def createsFiniteLimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F] :
 /-- If `F : Cᵒᵖ ⥤ D` creates finite colimits, then `F.rightOp : C ⥤ Dᵒᵖ` creates finite
 limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsRightOp` / `createsFiniteLimitsRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsRightOp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：createsFiniteLimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F] : Creat
+esFiniteLimits F.rightOp where createsFiniteLimits J _ _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F]
-  body: createsLimitsOfShapeRightOp J F
-
-中文:
-定义 createsFiniteLimitsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造有限余极限 F]
-  定义体: createsLimitsOfShapeRightOp J F
-
-Depends on / 依赖: createsLimitsOfShapeRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates finite colimits, then `F.rightOp : C ⥤ Dᵒᵖ` creates fin
+ite
+limits.
 -/
 def createsFiniteLimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F] :
     CreatesFiniteLimits F.rightOp where
@@ -1631,20 +1369,18 @@ def createsFiniteLimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F] :
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite colimits, then `F.unop : C ⥤ D` creates finite
 limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsUnop` / `createsFiniteLimitsUnop` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsUnop** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsFiniteLimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F] : Create
+sFiniteLimits F.unop where createsFiniteLimits J _ _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F]
-  body: createsLimitsOfShapeUnop J F
-
-中文:
-定义 createsFiniteLimitsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限余极限 F]
-  定义体: createsLimitsOfShapeUnop J F
-
-Depends on / 依赖: createsLimitsOfShapeUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite colimits, then `F.unop : C ⥤ D` creates finite
+limits.
 -/
 def createsFiniteLimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F] :
     CreatesFiniteLimits F.unop where
@@ -1653,20 +1389,18 @@ def createsFiniteLimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F] 
 /-- If `F : C ⥤ D` creates finite limits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
 colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsOp` / `createsFiniteColimitsOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsFiniteColimitsOp (F : C ⥤ D) [CreatesFiniteLimits F] : CreatesFinit
+eColimits F.op where createsFiniteColimits J _ _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsOp
-  signature: (F : C ⥤ D) [CreatesFiniteLimits F]
-  body: createsColimitsOfShapeOp J F
-
-中文:
-定义 createsFiniteColimitsOp
-  签名: (F : C ⥤ D) [创造有限极限 F]
-  定义体: createsColimitsOfShapeOp J F
-
-Depends on / 依赖: createsColimitsOfShapeOp
+--- 原说明 ---
+If `F : C ⥤ D` creates finite limits, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
+colimits.
 -/
 def createsFiniteColimitsOp (F : C ⥤ D) [CreatesFiniteLimits F] :
     CreatesFiniteColimits F.op where
@@ -1675,20 +1409,18 @@ def createsFiniteColimitsOp (F : C ⥤ D) [CreatesFiniteLimits F] :
 /-- If `F : C ⥤ Dᵒᵖ` creates finite limits, then `F.leftOp : Cᵒᵖ ⥤ D` creates finite
 colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsLeftOp` / `createsFiniteColimitsLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsFiniteColimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F] : Create
+sFiniteColimits F.leftOp where createsFiniteColimits J _ _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F]
-  body: createsColimitsOfShapeLeftOp J F
-
-中文:
-定义 createsFiniteColimitsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造有限极限 F]
-  定义体: createsColimitsOfShapeLeftOp J F
-
-Depends on / 依赖: createsColimitsOfShapeLeftOp
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates finite limits, then `F.leftOp : Cᵒᵖ ⥤ D` creates finite
+colimits.
 -/
 def createsFiniteColimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F] :
     CreatesFiniteColimits F.leftOp where
@@ -1697,20 +1429,19 @@ def createsFiniteColimitsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F] :
 /-- If `F : Cᵒᵖ ⥤ D` creates finite limits, then `F.rightOp : C ⥤ Dᵒᵖ` creates finite
 colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsRightOp` / `createsFiniteColimitsRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsRightOp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsFiniteColimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F] : Creat
+esFiniteColimits F.rightOp where createsFiniteColimits J _ _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F]
-  body: createsColimitsOfShapeRightOp J F
-
-中文:
-定义 createsFiniteColimitsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造有限极限 F]
-  定义体: createsColimitsOfShapeRightOp J F
-
-Depends on / 依赖: createsColimitsOfShapeRightOp
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates finite limits, then `F.rightOp : C ⥤ Dᵒᵖ` creates finit
+e
+colimits.
 -/
 def createsFiniteColimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F] :
     CreatesFiniteColimits F.rightOp where
@@ -1719,20 +1450,18 @@ def createsFiniteColimitsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F] :
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite limits, then `F.unop : C ⥤ D` creates finite
 colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsUnop` / `createsFiniteColimitsUnop` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsUnop** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsFiniteColimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F] : Create
+sFiniteColimits F.unop where createsFiniteColimits J _ _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F]
-  body: createsColimitsOfShapeUnop J F
-
-中文:
-定义 createsFiniteColimitsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限极限 F]
-  定义体: createsColimitsOfShapeUnop J F
-
-Depends on / 依赖: createsColimitsOfShapeUnop
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite limits, then `F.unop : C ⥤ D` creates finite
+colimits.
 -/
 def createsFiniteColimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F] :
     CreatesFiniteColimits F.unop where
@@ -1740,20 +1469,18 @@ def createsFiniteColimitsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F] 
 
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite colimits, then `F : C ⥤ D` creates finite limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsOfOp` / `createsFiniteLimitsOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsOfOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsFiniteLimitsOfOp (F : C ⥤ D) [CreatesFiniteColimits F.op] : Creates
+FiniteLimits F where createsFiniteLimits J _ _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsOfOp
-  signature: (F : C ⥤ D) [CreatesFiniteColimits F.op]
-  body: createsLimitsOfShapeOfOp J F
-
-中文:
-定义 createsFiniteLimitsOfOp
-  签名: (F : C ⥤ D) [创造有限余极限 F.op]
-  定义体: createsLimitsOfShapeOfOp J F
-
-Depends on / 依赖: createsLimitsOfShapeOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite colimits, then `F : C ⥤ D` creates finite l
+imits.
 -/
 def createsFiniteLimitsOfOp (F : C ⥤ D) [CreatesFiniteColimits F.op] :
     CreatesFiniteLimits F where
@@ -1762,20 +1489,19 @@ def createsFiniteLimitsOfOp (F : C ⥤ D) [CreatesFiniteColimits F.op] :
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates finite colimits, then `F : C ⥤ Dᵒᵖ` creates finite
 limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsOfLeftOp` / `createsFiniteLimitsOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsFiniteLimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F.leftOp]
+ : CreatesFiniteLimits F where createsFiniteLimits J _ _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F.leftOp]
-  body: createsLimitsOfShapeOfLeftOp J F
-
-中文:
-定义 createsFiniteLimitsOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造有限余极限 F.leftOp]
-  定义体: createsLimitsOfShapeOfLeftOp J F
-
-Depends on / 依赖: createsLimitsOfShapeOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates finite colimits, then `F : C ⥤ Dᵒᵖ` creates fini
+te
+limits.
 -/
 def createsFiniteLimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F.leftOp] :
     CreatesFiniteLimits F where
@@ -1784,20 +1510,19 @@ def createsFiniteLimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteColimits F.lef
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates finite colimits, then `F : Cᵒᵖ ⥤ D` creates finite
 limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsOfRightOp` / `createsFiniteLimitsOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsOfRightOp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsFiniteLimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F.rightO
+p] : CreatesFiniteLimits F where createsFiniteLimits J _ _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F.rightOp]
-  body: createsLimitsOfShapeOfRightOp J F
-
-中文:
-定义 createsFiniteLimitsOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造有限余极限 F.rightOp]
-  定义体: createsLimitsOfShapeOfRightOp J F
-
-Depends on / 依赖: createsLimitsOfShapeOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates finite colimits, then `F : Cᵒᵖ ⥤ D` creates fin
+ite
+limits.
 -/
 def createsFiniteLimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F.rightOp] :
     CreatesFiniteLimits F where
@@ -1805,20 +1530,18 @@ def createsFiniteLimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteColimits F.ri
 
 /-- If `F.unop : C ⥤ D` creates finite colimits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite limits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteLimitsOfUnop` / `createsFiniteLimitsOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteLimitsOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsFiniteLimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F.unop] :
+ CreatesFiniteLimits F where createsFiniteLimits J _ _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteLimitsOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F.unop]
-  body: createsLimitsOfShapeOfUnop J F
-
-中文:
-定义 createsFiniteLimitsOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限余极限 F.unop]
-  定义体: createsLimitsOfShapeOfUnop J F
-
-Depends on / 依赖: createsLimitsOfShapeOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates finite colimits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
+ limits.
 -/
 def createsFiniteLimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F.unop] :
     CreatesFiniteLimits F where
@@ -1826,20 +1549,18 @@ def createsFiniteLimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteColimits F
 
 /-- If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite limits, then `F : C ⥤ D` creates finite colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsOfOp` / `createsFiniteColimitsOfOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsOfOp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsFiniteColimitsOfOp (F : C ⥤ D) [CreatesFiniteLimits F.op] : Creates
+FiniteColimits F where createsFiniteColimits J _ _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsOfOp
-  signature: (F : C ⥤ D) [CreatesFiniteLimits F.op]
-  body: createsColimitsOfShapeOfOp J F
-
-中文:
-定义 createsFiniteColimitsOfOp
-  签名: (F : C ⥤ D) [创造有限极限 F.op]
-  定义体: createsColimitsOfShapeOfOp J F
-
-Depends on / 依赖: createsColimitsOfShapeOfOp
+--- 原说明 ---
+If `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite limits, then `F : C ⥤ D` creates finite col
+imits.
 -/
 def createsFiniteColimitsOfOp (F : C ⥤ D) [CreatesFiniteLimits F.op] :
     CreatesFiniteColimits F where
@@ -1848,20 +1569,18 @@ def createsFiniteColimitsOfOp (F : C ⥤ D) [CreatesFiniteLimits F.op] :
 /-- If `F.leftOp : Cᵒᵖ ⥤ D` creates finite limits, then `F : C ⥤ Dᵒᵖ` creates finite
 colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsOfLeftOp` / `createsFiniteColimitsOfLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsOfLeftOp** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：createsFiniteColimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F.leftOp]
+ : CreatesFiniteColimits F where createsFiniteColimits J _ _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsOfLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F.leftOp]
-  body: createsColimitsOfShapeOfLeftOp J F
-
-中文:
-定义 createsFiniteColimitsOfLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [创造有限极限 F.leftOp]
-  定义体: createsColimitsOfShapeOfLeftOp J F
-
-Depends on / 依赖: createsColimitsOfShapeOfLeftOp
+--- 原说明 ---
+If `F.leftOp : Cᵒᵖ ⥤ D` creates finite limits, then `F : C ⥤ Dᵒᵖ` creates finite
+colimits.
 -/
 def createsFiniteColimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F.leftOp] :
     CreatesFiniteColimits F where
@@ -1870,20 +1589,19 @@ def createsFiniteColimitsOfLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteLimits F.lef
 /-- If `F.rightOp : C ⥤ Dᵒᵖ` creates finite limits, then `F : Cᵒᵖ ⥤ D` creates finite
 colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsOfRightOp` / `createsFiniteColimitsOfRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsOfRightOp** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：createsFiniteColimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F.rightO
+p] : CreatesFiniteColimits F where createsFiniteColimits J _ _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsOfRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F.rightOp]
-  body: createsColimitsOfShapeOfRightOp J F
-
-中文:
-定义 createsFiniteColimitsOfRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [创造有限极限 F.rightOp]
-  定义体: createsColimitsOfShapeOfRightOp J F
-
-Depends on / 依赖: createsColimitsOfShapeOfRightOp
+--- 原说明 ---
+If `F.rightOp : C ⥤ Dᵒᵖ` creates finite limits, then `F : Cᵒᵖ ⥤ D` creates finit
+e
+colimits.
 -/
 def createsFiniteColimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F.rightOp] :
     CreatesFiniteColimits F where
@@ -1891,20 +1609,18 @@ def createsFiniteColimitsOfRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteLimits F.ri
 
 /-- If `F.unop : C ⥤ D` creates finite limits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteColimitsOfUnop` / `createsFiniteColimitsOfUnop` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteColimitsOfUnop** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsFiniteColimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F.unop] :
+ CreatesFiniteColimits F where createsFiniteColimits J _ _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteColimitsOfUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F.unop]
-  body: createsColimitsOfShapeOfUnop J F
-
-中文:
-定义 createsFiniteColimitsOfUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [创造有限极限 F.unop]
-  定义体: createsColimitsOfShapeOfUnop J F
-
-Depends on / 依赖: createsColimitsOfShapeOfUnop
+--- 原说明 ---
+If `F.unop : C ⥤ D` creates finite limits, then `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite c
+olimits.
 -/
 def createsFiniteColimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F.unop] :
     CreatesFiniteColimits F where
@@ -1913,24 +1629,18 @@ def createsFiniteColimitsOfUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteLimits F
 /-- If `F : C ⥤ D` creates finite coproducts, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
 products. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteProductsOp` / `createsFiniteProductsOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteProductsOp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：createsFiniteProductsOp (F : C ⥤ D) [CreatesFiniteCoproducts F] : CreatesF
+initeProducts F.op where creates _ _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteProductsOp
-  signature: (F : C ⥤ D) [CreatesFiniteCoproducts F]
-  body: by
-    apply +allowSynthFailures createsLimitsOfShapeOp
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteProductsOp
-  签名: (F : C ⥤ D) [CreatesFiniteCoproducts F]
-  定义体: by
-    apply +allowSynthFailures createsLimitsOfShapeOp
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeOfEquiv, createsLimitsOfShapeOp, opposite
+--- 原说明 ---
+If `F : C ⥤ D` creates finite coproducts, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
+products.
 -/
 def createsFiniteProductsOp (F : C ⥤ D) [CreatesFiniteCoproducts F] :
     CreatesFiniteProducts F.op where
@@ -1941,24 +1651,19 @@ def createsFiniteProductsOp (F : C ⥤ D) [CreatesFiniteCoproducts F] :
 /-- If `F : C ⥤ Dᵒᵖ` creates finite coproducts, then `F.leftOp : Cᵒᵖ ⥤ D` creates finite
 products. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteProductsLeftOp` / `createsFiniteProductsLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteProductsLeftOp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsFiniteProductsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F] : Cr
+eatesFiniteProducts F.leftOp where creates _ _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteProductsLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F]
-  body: by
-    apply +allowSynthFailures createsLimitsOfShapeLeftOp
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteProductsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F]
-  定义体: by
-    apply +allowSynthFailures createsLimitsOfShapeLeftOp
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeOfEquiv, createsLimitsOfShapeLeftOp, opposite
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates finite coproducts, then `F.leftOp : Cᵒᵖ ⥤ D` creates fi
+nite
+products.
 -/
 def createsFiniteProductsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F] :
     CreatesFiniteProducts F.leftOp where
@@ -1969,24 +1674,19 @@ def createsFiniteProductsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F] 
 /-- If `F : Cᵒᵖ ⥤ D` creates finite coproducts, then `F.rightOp : C ⥤ Dᵒᵖ` creates finite
 products. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteProductsRightOp` / `createsFiniteProductsRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteProductsRightOp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：createsFiniteProductsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteCoproducts F] : C
+reatesFiniteProducts F.rightOp where creates _ _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteProductsRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesFiniteCoproducts F]
-  body: by
-    apply +allowSynthFailures createsLimitsOfShapeRightOp
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteProductsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesFiniteCoproducts F]
-  定义体: by
-    apply +allowSynthFailures createsLimitsOfShapeRightOp
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeOfEquiv, createsLimitsOfShapeRightOp, opposite
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates finite coproducts, then `F.rightOp : C ⥤ Dᵒᵖ` creates f
+inite
+products.
 -/
 def createsFiniteProductsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteCoproducts F] :
     CreatesFiniteProducts F.rightOp where
@@ -1997,24 +1697,19 @@ def createsFiniteProductsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteCoproducts F]
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite coproducts, then `F.unop : C ⥤ D` creates finite
 products. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteProductsUnop` / `createsFiniteProductsUnop` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteProductsUnop** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsFiniteProductsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F] : Cr
+eatesFiniteProducts F.unop where creates _ _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteProductsUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F]
-  body: by
-    apply +allowSynthFailures createsLimitsOfShapeUnop
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteProductsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F]
-  定义体: by
-    apply +allowSynthFailures createsLimitsOfShapeUnop
-    exact createsColimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeOfEquiv, createsLimitsOfShapeUnop, opposite
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite coproducts, then `F.unop : C ⥤ D` creates fini
+te
+products.
 -/
 def createsFiniteProductsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteCoproducts F] :
     CreatesFiniteProducts F.unop where
@@ -2025,24 +1720,18 @@ def createsFiniteProductsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteCoproducts
 /-- If `F : C ⥤ D` creates finite products, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
 coproducts. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteCoproductsOp` / `createsFiniteCoproductsOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteCoproductsOp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：createsFiniteCoproductsOp (F : C ⥤ D) [CreatesFiniteProducts F] : CreatesF
+initeCoproducts F.op where creates _ _
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteCoproductsOp
-  signature: (F : C ⥤ D) [CreatesFiniteProducts F]
-  body: by
-    apply +allowSynthFailures createsColimitsOfShapeOp
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteCoproductsOp
-  签名: (F : C ⥤ D) [CreatesFiniteProducts F]
-  定义体: by
-    apply +allowSynthFailures createsColimitsOfShapeOp
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeOp, createsLimitsOfShapeOfEquiv, opposite
+--- 原说明 ---
+If `F : C ⥤ D` creates finite products, then `F.op : Cᵒᵖ ⥤ Dᵒᵖ` creates finite
+coproducts.
 -/
 def createsFiniteCoproductsOp (F : C ⥤ D) [CreatesFiniteProducts F] :
     CreatesFiniteCoproducts F.op where
@@ -2053,24 +1742,19 @@ def createsFiniteCoproductsOp (F : C ⥤ D) [CreatesFiniteProducts F] :
 /-- If `F : C ⥤ Dᵒᵖ` creates finite products, then `F.leftOp : Cᵒᵖ ⥤ D` creates finite
 coproducts. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteCoproductsLeftOp` / `createsFiniteCoproductsLeftOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteCoproductsLeftOp** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：createsFiniteCoproductsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteProducts F] : Cr
+eatesFiniteCoproducts F.leftOp where creates _ _
+参数：F : C ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteCoproductsLeftOp
-  signature: (F : C ⥤ Dᵒᵖ) [CreatesFiniteProducts F]
-  body: by
-    apply +allowSynthFailures createsColimitsOfShapeLeftOp
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteCoproductsLeftOp
-  签名: (F : C ⥤ Dᵒᵖ) [CreatesFiniteProducts F]
-  定义体: by
-    apply +allowSynthFailures createsColimitsOfShapeLeftOp
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeLeftOp, createsLimitsOfShapeOfEquiv, opposite
+--- 原说明 ---
+If `F : C ⥤ Dᵒᵖ` creates finite products, then `F.leftOp : Cᵒᵖ ⥤ D` creates fini
+te
+coproducts.
 -/
 def createsFiniteCoproductsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteProducts F] :
     CreatesFiniteCoproducts F.leftOp where
@@ -2081,24 +1765,19 @@ def createsFiniteCoproductsLeftOp (F : C ⥤ Dᵒᵖ) [CreatesFiniteProducts F] 
 /-- If `F : Cᵒᵖ ⥤ D` creates finite products, then `F.rightOp : C ⥤ Dᵒᵖ` creates finite
 coproducts. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteCoproductsRightOp` / `createsFiniteCoproductsRightOp` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteCoproductsRightOp** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：createsFiniteCoproductsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteProducts F] : C
+reatesFiniteCoproducts F.rightOp where creates _ _
+参数：F : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteCoproductsRightOp
-  signature: (F : Cᵒᵖ ⥤ D) [CreatesFiniteProducts F]
-  body: by
-    apply +allowSynthFailures createsColimitsOfShapeRightOp
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteCoproductsRightOp
-  签名: (F : Cᵒᵖ ⥤ D) [CreatesFiniteProducts F]
-  定义体: by
-    apply +allowSynthFailures createsColimitsOfShapeRightOp
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeRightOp, createsLimitsOfShapeOfEquiv, opposite
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ D` creates finite products, then `F.rightOp : C ⥤ Dᵒᵖ` creates fin
+ite
+coproducts.
 -/
 def createsFiniteCoproductsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteProducts F] :
     CreatesFiniteCoproducts F.rightOp where
@@ -2109,24 +1788,18 @@ def createsFiniteCoproductsRightOp (F : Cᵒᵖ ⥤ D) [CreatesFiniteProducts F]
 /-- If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite products, then `F.unop : C ⥤ D` creates finite
 coproducts. -/
 @[instance_reducible]
-/--
-Definition of `createsFiniteCoproductsUnop` / `createsFiniteCoproductsUnop` 的定义
+/-
+**CategoryTheory.Limits.createsFiniteCoproductsUnop** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：createsFiniteCoproductsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteProducts F] : Cr
+eatesFiniteCoproducts F.unop where creates _ _
+参数：F : Cᵒᵖ ⥤ Dᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsFiniteCoproductsUnop
-  signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteProducts F]
-  body: by
-    apply +allowSynthFailures createsColimitsOfShapeUnop
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-中文:
-定义 createsFiniteCoproductsUnop
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteProducts F]
-  定义体: by
-    apply +allowSynthFailures createsColimitsOfShapeUnop
-    exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
-
-Depends on / 依赖: Discrete, Discrete.opposite, allowSynthFailures, createsColimitsOfShapeUnop, createsLimitsOfShapeOfEquiv, opposite
+--- 原说明 ---
+If `F : Cᵒᵖ ⥤ Dᵒᵖ` creates finite products, then `F.unop : C ⥤ D` creates finite
+coproducts.
 -/
 def createsFiniteCoproductsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteProducts F] :
     CreatesFiniteCoproducts F.unop where
@@ -2135,3 +1808,4 @@ def createsFiniteCoproductsUnop (F : Cᵒᵖ ⥤ Dᵒᵖ) [CreatesFiniteProducts
     exact createsLimitsOfShapeOfEquiv (Discrete.opposite _).symm _
 
 end CategoryTheory.Limits
+

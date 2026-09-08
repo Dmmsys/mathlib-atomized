@@ -8,7 +8,7 @@ module
 public meta import Lean.Elab.Command
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Lean.Message
 
 /-!
@@ -58,18 +58,23 @@ open Lean Elab Linter
 
 namespace Mathlib.Linter.Style
 
-/--
-Definition of `isObtainWithoutProof` / `isObtainWithoutProof` 的定义
+/-- Whether a syntax element is an `obtain` tactic call without a provided proof. -/
+/-
+**Mathlib.Linter.Style.isObtainWithoutProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.L
+inter.Style`。
+形式化陈述：isObtainWithoutProof : Syntax -> Bool -- Using the `obtain` tactic without
+ a proof requires proving a type; -- a pattern is optional. | `(tactic|obtain : 
+$_type) | `(tactic|obtain $_pat : $_type) => true | _ => false  /-- The `oldObta
+in` linter emits a warning upon uses of the "stream-of-consciousness" variants o
+f the `obtain` tactic, i.e. with the proof postponed. -/ public register_option 
+linter.oldObtain : Bool
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isObtainWithoutProof
-  signature: : Syntax -> Bool
-
-中文:
-定义 isObtainWithoutProof
-  签名: : Syntax -> 布尔值
+--- 原说明 ---
+Whether a syntax element is an `obtain` tactic call without a provided proof.
 -/
-def isObtainWithoutProof : Syntax -> Bool
+def isObtainWithoutProof : Syntax → Bool
   -- Using the `obtain` tactic without a proof requires proving a type;
   -- a pattern is optional.
   | `(tactic|obtain : $_type) | `(tactic|obtain $_pat : $_type) => true
@@ -82,32 +87,16 @@ public register_option linter.oldObtain : Bool := {
   descr := "enable the `oldObtain` linter"
 }
 
-/--
-Definition of `oldObtainLinter` / `oldObtainLinter` 的定义
+/-- The `oldObtain` linter: see docstring above -/
+/-
+**Mathlib.Linter.Style.oldObtainLinter** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter
+.Style`。
+形式化陈述：oldObtainLinter : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition oldObtainLinter
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-    unless getLinterValue linter.oldObtain (← getLinterOptions) do
-      return
-    if (← MonadState.get).messages.hasErrors then
-      return
-    if let some head := stx.find? isObtainWithoutProof then
-      Linter.logLint linter.oldObtain head m!"Please remove stream-of-consciousness `obtain` syntax"
-
-中文:
-定义 oldObtainLinter
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-    unless getLinterValue linter.oldObtain (← getLinterOptions) do
-      return
-    if (← MonadState.get).messages.hasErrors then
-      return
-    if let some head := stx.find? isObtainWithoutProof then
-      Linter.logLint linter.oldObtain head m!"Please remove stream-of-consciousness `obtain` syntax"
-
-Depends on / 依赖: withSetOptionIn
+--- 原说明 ---
+The `oldObtain` linter: see docstring above
 -/
 def oldObtainLinter : Linter where run := withSetOptionIn fun stx => do
     unless getLinterValue linter.oldObtain (← getLinterOptions) do
@@ -120,3 +109,4 @@ def oldObtainLinter : Linter where run := withSetOptionIn fun stx => do
 initialize addLinter oldObtainLinter
 
 end Mathlib.Linter.Style
+

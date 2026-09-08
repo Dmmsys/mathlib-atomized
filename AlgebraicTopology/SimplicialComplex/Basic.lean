@@ -44,22 +44,15 @@ variable (ι : Type*)
 which is downwards closed, i.e., any nonempty subset of a face is also a face.
 -/
 @[ext]
-/--
-Definition of `PreAbstractSimplicialComplex` / `PreAbstractSimplicialComplex` 的定义
+/-
+**PreAbstractSimplicialComplex** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PreAbstractSimplicialComplex
-  parameters: where
-  axioms and operations (2):
-    - faces : Set (Finset ι)
-    - isRelLowerSet_faces : IsRelLowerSet faces Finset.Nonempty
-
-中文:
-结构 预抽象单纯复形
-  参数: where
-  公理与运算 (2 个):
-    - faces : 集合 (有限集 ι)
-    - isRelLowerSet_faces : IsRelLowerSet faces 有限集.非空
+--- 原说明 ---
+An abstract simplicial complex is a collection of nonempty finite sets of points
+ ("faces")
+which is downwards closed, i.e., any nonempty subset of a face is also a face.
 -/
 structure PreAbstractSimplicialComplex where
   /-- the faces of this simplicial complex: currently, given by their spanning vertices -/
@@ -70,26 +63,10 @@ structure PreAbstractSimplicialComplex where
 
 namespace PreAbstractSimplicialComplex
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (PreAbstractSimplicialComplex ι) (Finset ι)
-  body: K.faces
-  coe_injective K _ _ := by
-    cases K
-    congr
-
-中文:
-实例 :
-  签名: 集合状 (预抽象单纯复形 ι) (有限集 ι)
-  定义体: K.faces
-  coe_injective K _ _ := by
-    cases K
-    congr
-
-Depends on / 依赖: K.faces
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (PreAbstractSimplicialComplex ι) (Finset ι) where
   coe K := K.faces
@@ -97,281 +74,118 @@ instance : SetLike (PreAbstractSimplicialComplex ι) (Finset ι) where
     cases K
     congr
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The complex consisting of only the faces present in both of its arguments. -/
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min (PreAbstractSimplicialComplex ι)
-  body: { faces := K.faces inter L.faces
-      isRelLowerSet_faces := IsRelLowerSet.inter K.isRelLowerSet_faces L.isRelLowerSet_faces }
-
-中文:
-实例 :
-  签名: 最小值 (预抽象单纯复形 ι)
-  定义体: { faces := K.faces inter L.faces
-      isRelLowerSet_faces := IsRelLowerSet.inter K.isRelLowerSet_faces L.isRelLowerSet_faces }
-
-Depends on / 依赖: IsRelLowerSet, IsRelLowerSet.inter, K.faces, K.isRelLowerSet_faces, L.faces, L.isRelLowerSet_faces, isRelLowerSet_faces
+--- 原说明 ---
+The complex consisting of only the faces present in both of its arguments.
 -/
 instance : Min (PreAbstractSimplicialComplex ι) where
   min K L :=
-    { faces := K.faces inter L.faces
+    { faces := K.faces ∩ L.faces
       isRelLowerSet_faces := IsRelLowerSet.inter K.isRelLowerSet_faces L.isRelLowerSet_faces }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The complex consisting of all faces present in either of its arguments. -/
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Max (PreAbstractSimplicialComplex ι)
-  body: { faces := K.faces union L.faces
-      isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces L.isRelLowerSet_faces }
-
-中文:
-实例 :
-  签名: 最大值 (预抽象单纯复形 ι)
-  定义体: { faces := K.faces union L.faces
-      isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces L.isRelLowerSet_faces }
-
-Depends on / 依赖: IsRelLowerSet, IsRelLowerSet.union, K.faces, K.isRelLowerSet_faces, L.faces, L.isRelLowerSet_faces, isRelLowerSet_faces
+--- 原说明 ---
+The complex consisting of all faces present in either of its arguments.
 -/
 instance : Max (PreAbstractSimplicialComplex ι) where
   max K L :=
-    { faces := K.faces union L.faces
+    { faces := K.faces ∪ L.faces
       isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces L.isRelLowerSet_faces }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (PreAbstractSimplicialComplex ι)
-  body: K.faces subseteq L.faces
-
-中文:
-实例 :
-  签名: LE (预抽象单纯复形 ι)
-  定义体: K.faces subseteq L.faces
-
-Depends on / 依赖: K.faces, L.faces, subseteq
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE (PreAbstractSimplicialComplex ι) where
-  le K L := K.faces subseteq L.faces
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT (PreAbstractSimplicialComplex ι)
-  body: K.faces ⊂ L.faces
-
-中文:
-实例 :
-  签名: LT (预抽象单纯复形 ι)
-  定义体: K.faces ⊂ L.faces
-
-Depends on / 依赖: K.faces, L.faces
+  le K L := K.faces ⊆ L.faces
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LT (PreAbstractSimplicialComplex ι) where
   lt K L := K.faces ⊂ L.faces
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsConcreteLE (PreAbstractSimplicialComplex ι) (Finset ι)
-  body: .rfl
-
-中文:
-实例 :
-  签名: 是余ncreteLE (预抽象单纯复形 ι) (有限集 ι)
-  定义体: .rfl
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsConcreteLE (PreAbstractSimplicialComplex ι) (Finset ι) where
   coe_subset_coe' := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (PreAbstractSimplicialComplex ι)
-  body: PartialOrder.lift (fun K => K.faces) (fun _ _ => PreAbstractSimplicialComplex.ext)
-
-中文:
-实例 :
-  签名: 偏序 (预抽象单纯复形 ι)
-  定义体: PartialOrder.lift (fun K => K.faces) (fun _ _ => PreAbstractSimplicialComplex.ext)
-
-Depends on / 依赖: K.faces, PartialOrder, PartialOrder.lift, PreAbstractSimplicialComplex, PreAbstractSimplicialComplex.ext
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (PreAbstractSimplicialComplex ι) :=
   PartialOrder.lift (fun K => K.faces) (fun _ _ => PreAbstractSimplicialComplex.ext)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (PreAbstractSimplicialComplex ι)
-  body: { faces := ⋃ K in s, K.faces
-      isRelLowerSet_faces := IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces }
-
-中文:
-实例 :
-  签名: 上确界集 (预抽象单纯复形 ι)
-  定义体: { faces := ⋃ K in s, K.faces
-      isRelLowerSet_faces := IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces }
-
-Depends on / 依赖: IsRelLowerSet, IsRelLowerSet.iUnion, K.faces, K.isRelLowerSet_faces, isRelLowerSet_faces
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (PreAbstractSimplicialComplex ι) where
   sSup s :=
-    { faces := ⋃ K in s, K.faces
+    { faces := ⋃ K ∈ s, K.faces
       isRelLowerSet_faces := IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (PreAbstractSimplicialComplex ι)
-  body: { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
-      isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
-        grind [IsRelLowerSet.mem_of_le, isRelLowerSet_faces, mem_iInter] }
-
-中文:
-实例 :
-  签名: 下确界集 (预抽象单纯复形 ι)
-  定义体: { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
-      isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
-        grind [IsRelLowerSet.mem_of_le, isRelLowerSet_faces, mem_iInter] }
-
-Depends on / 依赖: IsRelLowerSet, IsRelLowerSet.mem_of_le, K.faces, Nonempty, isRelLowerSet_faces, mem_iInter, mem_of_le, t.Nonempty
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (PreAbstractSimplicialComplex ι) where
   sInf s :=
-    { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
+    { faces := (⋂ K ∈ s, K.faces) ∩ { t | t.Nonempty }
       isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
         grind [IsRelLowerSet.mem_of_le, isRelLowerSet_faces, mem_iInter] }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (PreAbstractSimplicialComplex ι)
-  body: { faces := { s | s.Nonempty }
-      isRelLowerSet_faces := fun {_} hs => ⟨hs, fun _ _ ht => ht⟩ }
-
-中文:
-实例 :
-  签名: 顶元素 (预抽象单纯复形 ι)
-  定义体: { faces := { s | s.Nonempty }
-      isRelLowerSet_faces := fun {_} hs => ⟨hs, fun _ _ ht => ht⟩ }
-
-Depends on / 依赖: Nonempty, isRelLowerSet_faces, s.Nonempty
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (PreAbstractSimplicialComplex ι) where
   top :=
     { faces := { s | s.Nonempty }
       isRelLowerSet_faces := fun {_} hs => ⟨hs, fun _ _ ht => ht⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (PreAbstractSimplicialComplex ι)
-  body: { faces := { _s | False }
-      isRelLowerSet_faces := isRelLowerSet_empty }
-
-中文:
-实例 :
-  签名: 底元素 (预抽象单纯复形 ι)
-  定义体: { faces := { _s | False }
-      isRelLowerSet_faces := isRelLowerSet_empty }
-
-Depends on / 依赖: isRelLowerSet_empty, isRelLowerSet_faces
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (PreAbstractSimplicialComplex ι) where
   bot :=
     { faces := { _s | False }
       isRelLowerSet_faces := isRelLowerSet_empty }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteSemilatticeSup (PreAbstractSimplicialComplex ι)
-  body: .of_image SetLike.coe_subset_coe isLUB_biSup
-
-中文:
-实例 :
-  签名: 余mpleteSemilatticeSup (预抽象单纯复形 ι)
-  定义体: .of_image SetLike.coe_subset_coe isLUB_biSup
-
-Depends on / 依赖: SetLike, SetLike.coe_subset_coe, coe_subset_coe, isLUB_biSup, of_image
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteSemilatticeSup (PreAbstractSimplicialComplex ι) where
   isLUB_sSup _ := .of_image SetLike.coe_subset_coe isLUB_biSup
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteSemilatticeInf (PreAbstractSimplicialComplex ι)
-  body: ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
-      fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
-
-中文:
-实例 :
-  签名: 余mpleteSemilatticeInf (预抽象单纯复形 ι)
-  定义体: ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
-      fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
-
-Depends on / 依赖: K.isRelLowerSet_faces, Set.biInter_subset_of_mem, Set.inter_subset_left.trans, Set.mem_iInter, biInter_subset_of_mem, inter_subset_left, isRelLowerSet_faces
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteSemilatticeInf (PreAbstractSimplicialComplex ι) where
   isGLB_sInf _ :=
-    ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
-      fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (PreAbstractSimplicialComplex ι)
-  body: min
-  inf_le_left _ _ := Set.inter_subset_left
-  inf_le_right _ _ := Set.inter_subset_right
-  le_inf _ _ _ := Set.subset_inter
-  sup := max
-  le_sup_left _ _ := Set.subset_union_left
-  le_sup_right _ _ := Set.subset_union_right
-  sup_le _ _ _ hK hL := Set.union_subset hK hL
-  le_top K _ ht := (K.isRelLowerSet_faces ht).1
-  bot_le _ _ ht := ht.elim
-
-中文:
-实例 :
-  签名: 完备格 (预抽象单纯复形 ι)
-  定义体: min
-  inf_le_left _ _ := Set.inter_subset_left
-  inf_le_right _ _ := Set.inter_subset_right
-  le_inf _ _ _ := Set.subset_inter
-  sup := max
-  le_sup_left _ _ := Set.subset_union_left
-  le_sup_right _ _ := Set.subset_union_right
-  sup_le _ _ _ hK hL := Set.union_subset hK hL
-  le_top K _ ht := (K.isRelLowerSet_faces ht).1
-  bot_le _ _ ht := ht.elim
+    ⟨fun _ hK ↦ Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
+      fun K hK _ ht ↦ ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
+/-
+**PreAbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `PreAbstractSimplicial
+Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (PreAbstractSimplicialComplex ι) where
   inf := min
@@ -386,37 +200,24 @@ instance : CompleteLattice (PreAbstractSimplicialComplex ι) where
   bot_le _ _ ht := ht.elim
 
 /--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: {α β : Type*} [DecidableEq β] (K : PreAbstractSimplicialComplex α) (f : α -> β)
-  body: K.faces.image (fun s => s.image f)
-  isRelLowerSet_faces := fun {x} h => by
-    simp only [Set.mem_image] at h ⊢
-    obtain ⟨s', hs', rfl⟩ := h
-    constructor
-    · exact Finset.image_nonempty.mpr (K.isRelLowerSet_faces hs').1
-    · intro t hts ht
-      obtain ⟨t', ht', rfl⟩ := Finset.subset_image_iff.mp hts
-      exact ⟨t', (K.isRelLowerSet_faces hs').2 ht' (Finset.image_nonempty.mp ht), rfl⟩
-
-中文:
-定义 map
-  签名: {α β : 类型} [DecidableEq β] (K : 预抽象单纯复形 α) (f : α -> β)
-  定义体: K.faces.image (fun s => s.image f)
-  isRelLowerSet_faces := fun {x} h => by
-    simp only [Set.mem_image] at h ⊢
-    obtain ⟨s', hs', rfl⟩ := h
-    constructor
-    · exact Finset.image_nonempty.mpr (K.isRelLowerSet_faces hs').1
-    · intro t hts ht
-      obtain ⟨t', ht', rfl⟩ := Finset.subset_image_iff.mp hts
-      exact ⟨t', (K.isRelLowerSet_faces hs').2 ht' (Finset.image_nonempty.mp ht), rfl⟩
-
-Depends on / 依赖: K.faces.image, s.image
+Map each vertex in each face of a PreAbstractSimplicialComplex through a function,
+producing a new PreAbstractSimplicialComplex.
 -/
-def map {α β : Type*} [DecidableEq β] (K : PreAbstractSimplicialComplex α) (f : α -> β) :
+/-
+**PreAbstractSimplicialComplex.map** 是 Mathlib 中的一个定义，位于命名空间 `PreAbstractSimplic
+ialComplex`。
+形式化陈述：map {α β : Type*} [DecidableEq β] (K : PreAbstractSimplicialComplex α) (f 
+: α -> β) : PreAbstractSimplicialComplex β where faces
+参数：K : PreAbstractSimplicialComplex α；f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Map each vertex in each face of a PreAbstractSimplicialComplex through a functio
+n,
+producing a new PreAbstractSimplicialComplex.
+-/
+def map {α β : Type*} [DecidableEq β] (K : PreAbstractSimplicialComplex α) (f : α → β) :
     PreAbstractSimplicialComplex β where
   faces := K.faces.image (fun s => s.image f)
   isRelLowerSet_faces := fun {x} h => by
@@ -435,78 +236,59 @@ end PreAbstractSimplicialComplex
 An `AbstractSimplicialComplex` is a `PreAbstractSimplicialComplex` which contains all singletons.
 -/
 @[ext]
-/--
-Definition of `AbstractSimplicialComplex` / `AbstractSimplicialComplex` 的定义
+/-
+**AbstractSimplicialComplex** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AbstractSimplicialComplex
-  parameters: extends PreAbstractSimplicialComplex ι
-  extends: PreAbstractSimplicialComplex ι
-  axioms and operations (1):
-    - singleton_mem : forall v : ι, {v} in faces
-
-中文:
-结构 抽象单纯复形
-  参数: extends 预抽象单纯复形 ι
-  继承: 预抽象单纯复形 ι
-  公理与运算 (1 个):
-    - singleton_mem : 对任意 v : ι, {v} in faces
+--- 原说明 ---
+An `AbstractSimplicialComplex` is a `PreAbstractSimplicialComplex` which contain
+s all singletons.
 -/
 structure AbstractSimplicialComplex extends PreAbstractSimplicialComplex ι where
   /-- every singleton is a face -/
-  singleton_mem : forall v : ι, {v} in faces
+  singleton_mem : ∀ v : ι, {v} ∈ faces
 
-/--
-Definition of `PreAbstractSimplicialComplex.toAbstractSimplicialComplex` / `PreAbstractSimplicialComplex.toAbstractSimplicialComplex` 的定义
+/-- Convert a `PreAbstractSimplicialComplex` satisfying `IsAbstract` to an
+`AbstractSimplicialComplex`. -/
+/-
+**PreAbstractSimplicialComplex.toAbstractSimplicialComplex** 是 Mathlib 中的一个定义，位于
+命名空间 ``。
+形式化陈述：PreAbstractSimplicialComplex.toAbstractSimplicialComplex (K : PreAbstractS
+implicialComplex ι) (h : forall v : ι, {v} in K.faces) : AbstractSimplicialCompl
+ex ι
+参数：K : PreAbstractSimplicialComplex ι；h : forall v : ι, {v} in K.faces。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PreAbstractSimplicialComplex.toAbstractSimplicialComplex
-  body: { K with singleton_mem := h }
-
-中文:
-定义 预抽象单纯复形.toAbstractSimplicialComplex
-  定义体: { K with singleton_mem := h }
-
-Depends on / 依赖: singleton_mem
+--- 原说明 ---
+Convert a `PreAbstractSimplicialComplex` satisfying `IsAbstract` to an
+`AbstractSimplicialComplex`.
 -/
 def PreAbstractSimplicialComplex.toAbstractSimplicialComplex
-    (K : PreAbstractSimplicialComplex ι) (h : forall v : ι, {v} in K.faces) :
+    (K : PreAbstractSimplicialComplex ι) (h : ∀ v : ι, {v} ∈ K.faces) :
     AbstractSimplicialComplex ι :=
   { K with singleton_mem := h }
 
-/--
-Definition of `PreAbstractSimplicialComplex.addSingletons` / `PreAbstractSimplicialComplex.addSingletons` 的定义
+/-- The closure of a `PreAbstractSimplicialComplex` to an `AbstractSimplicialComplex` by adding
+all singletons. -/
+/-
+**PreAbstractSimplicialComplex.addSingletons** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PreAbstractSimplicialComplex.addSingletons (K : PreAbstractSimplicialCompl
+ex ι) : AbstractSimplicialComplex ι
+参数：K : PreAbstractSimplicialComplex ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PreAbstractSimplicialComplex.addSingletons
-  body: { faces := K.faces union { s | exists v, s = {v} }
-    isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces (fun {x} ⟨v, hv⟩ => by
-      constructor
-      · rw [hv]; exact Finset.singleton_nonempty _
-      · intro t hts ht
-        cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-        | inl h => exact (ht.ne_empty h).elim
-        | inr h => exact ⟨v, h⟩)
-    singleton_mem v := Or.inr ⟨v, rfl⟩ }
-
-中文:
-定义 预抽象单纯复形.addSingletons
-  定义体: { faces := K.faces union { s | exists v, s = {v} }
-    isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces (fun {x} ⟨v, hv⟩ => by
-      constructor
-      · rw [hv]; exact Finset.singleton_nonempty _
-      · intro t hts ht
-        cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-        | inl h => exact (ht.ne_empty h).elim
-        | inr h => exact ⟨v, h⟩)
-    singleton_mem v := Or.inr ⟨v, rfl⟩ }
-
-Depends on / 依赖: Finset, Finset.singleton_nonempty, Finset.subset_singleton_iff.mp, IsRelLowerSet, IsRelLowerSet.union, K.faces, K.isRelLowerSet_faces, Or.inr, ht.ne_empty, isRelLowerSet_faces, ne_empty, singleton_mem, singleton_nonempty, subset_singleton_iff
+--- 原说明 ---
+The closure of a `PreAbstractSimplicialComplex` to an `AbstractSimplicialComplex
+` by adding
+all singletons.
 -/
 def PreAbstractSimplicialComplex.addSingletons
     (K : PreAbstractSimplicialComplex ι) :
     AbstractSimplicialComplex ι :=
-  { faces := K.faces union { s | exists v, s = {v} }
+  { faces := K.faces ∪ { s | ∃ v, s = {v} }
     isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces (fun {x} ⟨v, hv⟩ => by
       constructor
       · rw [hv]; exact Finset.singleton_nonempty _
@@ -520,26 +302,10 @@ namespace AbstractSimplicialComplex
 
 variable {ι}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (AbstractSimplicialComplex ι) (Finset ι)
-  body: K.faces
-  coe_injective _ _ _ := by
-    ext
-    grind
-
-中文:
-实例 :
-  签名: 集合状 (抽象单纯复形 ι) (有限集 ι)
-  定义体: K.faces
-  coe_injective _ _ _ := by
-    ext
-    grind
-
-Depends on / 依赖: K.faces
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (AbstractSimplicialComplex ι) (Finset ι) where
   coe K := K.faces
@@ -547,221 +313,112 @@ instance : SetLike (AbstractSimplicialComplex ι) (Finset ι) where
     ext
     grind
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The complex consisting of only the faces present in both of its arguments. -/
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min (AbstractSimplicialComplex ι)
-  body: { K.toPreAbstractSimplicialComplex ⊓ L.toPreAbstractSimplicialComplex with
-      singleton_mem v := ⟨K.singleton_mem v, L.singleton_mem v⟩ }
-
-中文:
-实例 :
-  签名: 最小值 (抽象单纯复形 ι)
-  定义体: { K.toPreAbstractSimplicialComplex ⊓ L.toPreAbstractSimplicialComplex with
-      singleton_mem v := ⟨K.singleton_mem v, L.singleton_mem v⟩ }
-
-Depends on / 依赖: K.singleton_mem, K.toPreAbstractSimplicialComplex, L.singleton_mem, L.toPreAbstractSimplicialComplex, singleton_mem, toPreAbstractSimplicialComplex
+--- 原说明 ---
+The complex consisting of only the faces present in both of its arguments.
 -/
 instance : Min (AbstractSimplicialComplex ι) where
   min K L :=
     { K.toPreAbstractSimplicialComplex ⊓ L.toPreAbstractSimplicialComplex with
       singleton_mem v := ⟨K.singleton_mem v, L.singleton_mem v⟩ }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The complex consisting of all faces present in either of its arguments. -/
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Max (AbstractSimplicialComplex ι)
-  body: { K.toPreAbstractSimplicialComplex ⊔ L.toPreAbstractSimplicialComplex with
-      singleton_mem v := Or.inl (K.singleton_mem v) }
-
-中文:
-实例 :
-  签名: 最大值 (抽象单纯复形 ι)
-  定义体: { K.toPreAbstractSimplicialComplex ⊔ L.toPreAbstractSimplicialComplex with
-      singleton_mem v := Or.inl (K.singleton_mem v) }
-
-Depends on / 依赖: K.singleton_mem, K.toPreAbstractSimplicialComplex, L.toPreAbstractSimplicialComplex, Or.inl, singleton_mem, toPreAbstractSimplicialComplex
+--- 原说明 ---
+The complex consisting of all faces present in either of its arguments.
 -/
 instance : Max (AbstractSimplicialComplex ι) where
   max K L :=
     { K.toPreAbstractSimplicialComplex ⊔ L.toPreAbstractSimplicialComplex with
       singleton_mem v := Or.inl (K.singleton_mem v) }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (AbstractSimplicialComplex ι)
-  body: K.faces subseteq L.faces
-
-中文:
-实例 :
-  签名: LE (抽象单纯复形 ι)
-  定义体: K.faces subseteq L.faces
-
-Depends on / 依赖: K.faces, L.faces, subseteq
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE (AbstractSimplicialComplex ι) where
-  le K L := K.faces subseteq L.faces
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT (AbstractSimplicialComplex ι)
-  body: K.faces ⊂ L.faces
-
-中文:
-实例 :
-  签名: LT (抽象单纯复形 ι)
-  定义体: K.faces ⊂ L.faces
-
-Depends on / 依赖: K.faces, L.faces
+  le K L := K.faces ⊆ L.faces
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LT (AbstractSimplicialComplex ι) where
   lt K L := K.faces ⊂ L.faces
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsConcreteLE (AbstractSimplicialComplex ι) (Finset ι)
-  body: .rfl
-
-中文:
-实例 :
-  签名: 是余ncreteLE (抽象单纯复形 ι) (有限集 ι)
-  定义体: .rfl
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsConcreteLE (AbstractSimplicialComplex ι) (Finset ι) where
   coe_subset_coe' := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (AbstractSimplicialComplex ι)
-  body: PartialOrder.lift (fun K => K.faces) (fun _ _ => AbstractSimplicialComplex.ext)
-
-中文:
-实例 :
-  签名: 偏序 (抽象单纯复形 ι)
-  定义体: PartialOrder.lift (fun K => K.faces) (fun _ _ => AbstractSimplicialComplex.ext)
-
-Depends on / 依赖: AbstractSimplicialComplex, AbstractSimplicialComplex.ext, K.faces, PartialOrder, PartialOrder.lift
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (AbstractSimplicialComplex ι) :=
   PartialOrder.lift (fun K => K.faces) (fun _ _ => AbstractSimplicialComplex.ext)
-
-/--
-theorem `toPreAbstractSimplicialComplex_injective` / 定理 `toPreAbstractSimplicialComplex_injective`
-
-English:
-theorem toPreAbstractSimplicialComplex_injective
-  proof: fun _ _ h => AbstractSimplicialComplex.ext (congrArg PreAbstractSimplicialComplex.faces h)
-
-@[simp]
-
-中文:
-定理 toPreAbstractSimplicialComplex_injective
-  证明: fun _ _ h => AbstractSimplicialComplex.ext (congrArg PreAbstractSimplicialComplex.faces h)
-
-@[simp]
+/-
+**AbstractSimplicialComplex.toPreAbstractSimplicialComplex_injective** 是 Mathlib
+ 中的一个定理，位于命名空间 `AbstractSimplicialComplex`。
+形式化陈述：toPreAbstractSimplicialComplex_injective : Function.Injective (toPreAbstra
+ctSimplicialComplex (ι
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractSimplicialComplex.ext`：∀ {ι : Type u_1} {x y : AbstractSimplicia
+lComplex ι}, x.faces = y.faces → x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem toPreAbstractSimplicialComplex_injective :
     Function.Injective (toPreAbstractSimplicialComplex (ι := ι)) :=
   fun _ _ h => AbstractSimplicialComplex.ext (congrArg PreAbstractSimplicialComplex.faces h)
 
 @[simp]
-/--
-theorem `toPreAbstractSimplicialComplex_le_iff` / 定理 `toPreAbstractSimplicialComplex_le_iff`
-
-English:
-theorem toPreAbstractSimplicialComplex_le_iff
-  given: {K L : AbstractSimplicialComplex ι}
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 toPreAbstractSimplicialComplex_le_iff
-  条件: {K L : 抽象单纯复形 ι}
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**AbstractSimplicialComplex.toPreAbstractSimplicialComplex_le_iff** 是 Mathlib 中的
+一个定理，位于命名空间 `AbstractSimplicialComplex`。
+形式化陈述：toPreAbstractSimplicialComplex_le_iff {K L : AbstractSimplicialComplex ι} 
+: K.toPreAbstractSimplicialComplex <= L.toPreAbstractSimplicialComplex ↔ K <= L
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toPreAbstractSimplicialComplex_le_iff {K L : AbstractSimplicialComplex ι} :
-    K.toPreAbstractSimplicialComplex <= L.toPreAbstractSimplicialComplex ↔ K <= L :=
+    K.toPreAbstractSimplicialComplex ≤ L.toPreAbstractSimplicialComplex ↔ K ≤ L :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `toPreAbstractSimplicialComplex_lt_iff` / 定理 `toPreAbstractSimplicialComplex_lt_iff`
-
-English:
-theorem toPreAbstractSimplicialComplex_lt_iff
-  given: {K L : AbstractSimplicialComplex ι}
-  proof: Iff.rfl
-
-中文:
-定理 toPreAbstractSimplicialComplex_lt_iff
-  条件: {K L : 抽象单纯复形 ι}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**AbstractSimplicialComplex.toPreAbstractSimplicialComplex_lt_iff** 是 Mathlib 中的
+一个定理，位于命名空间 `AbstractSimplicialComplex`。
+形式化陈述：toPreAbstractSimplicialComplex_lt_iff {K L : AbstractSimplicialComplex ι} 
+: K.toPreAbstractSimplicialComplex < L.toPreAbstractSimplicialComplex ↔ K < L
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toPreAbstractSimplicialComplex_lt_iff {K L : AbstractSimplicialComplex ι} :
     K.toPreAbstractSimplicialComplex < L.toPreAbstractSimplicialComplex ↔ K < L :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (AbstractSimplicialComplex ι)
-  body: { faces := (⋃ K in s, K.faces) union { t | exists v, t = {v} }
-      isRelLowerSet_faces := IsRelLowerSet.union
-        (IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces)
-        (fun {x} ⟨v, hv⟩ => by
-          constructor
-          · rw [hv]; exact Finset.singleton_nonempty _
-          · intro t hts ht
-            cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-            | inl h => exact (ht.ne_empty h).elim
-            | inr h => exact ⟨v, h⟩)
-      singleton_mem v := Or.inr ⟨v, rfl⟩ }
-
-中文:
-实例 :
-  签名: 上确界集 (抽象单纯复形 ι)
-  定义体: { faces := (⋃ K in s, K.faces) union { t | exists v, t = {v} }
-      isRelLowerSet_faces := IsRelLowerSet.union
-        (IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces)
-        (fun {x} ⟨v, hv⟩ => by
-          constructor
-          · rw [hv]; exact Finset.singleton_nonempty _
-          · intro t hts ht
-            cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-            | inl h => exact (ht.ne_empty h).elim
-            | inr h => exact ⟨v, h⟩)
-      singleton_mem v := Or.inr ⟨v, rfl⟩ }
-
-Depends on / 依赖: Finset, Finset.singleton_nonempty, Finset.subset_singleton_iff.mp, IsRelLowerSet, IsRelLowerSet.iUnion, IsRelLowerSet.union, K.faces, K.isRelLowerSet_faces, Or.inr, ht.ne_empty, isRelLowerSet_faces, ne_empty, singleton_mem, singleton_nonempty, subset_singleton_iff
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (AbstractSimplicialComplex ι) where
   sSup s :=
-    { faces := (⋃ K in s, K.faces) union { t | exists v, t = {v} }
+    { faces := (⋃ K ∈ s, K.faces) ∪ { t | ∃ v, t = {v} }
       isRelLowerSet_faces := IsRelLowerSet.union
         (IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces)
         (fun {x} ⟨v, hv⟩ => by
@@ -772,112 +429,47 @@ instance : SupSet (AbstractSimplicialComplex ι) where
             | inl h => exact (ht.ne_empty h).elim
             | inr h => exact ⟨v, h⟩)
       singleton_mem v := Or.inr ⟨v, rfl⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (AbstractSimplicialComplex ι)
-  body: { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
-      isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
-        grind [IsRelLowerSet.mem_of_le, PreAbstractSimplicialComplex.isRelLowerSet_faces,
-          mem_iInter]
-      singleton_mem v := by
-        grind [Set.mem_iInter, Finset.singleton_nonempty, singleton_mem] }
-
-中文:
-实例 :
-  签名: 下确界集 (抽象单纯复形 ι)
-  定义体: { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
-      isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
-        grind [IsRelLowerSet.mem_of_le, PreAbstractSimplicialComplex.isRelLowerSet_faces,
-          mem_iInter]
-      singleton_mem v := by
-        grind [Set.mem_iInter, Finset.singleton_nonempty, singleton_mem] }
-
-Depends on / 依赖: Finset, Finset.singleton_nonempty, IsRelLowerSet, IsRelLowerSet.mem_of_le, K.faces, Nonempty, PreAbstractSimplicialComplex, PreAbstractSimplicialComplex.isRelLowerSet_faces, Set.mem_iInter, isRelLowerSet_faces, mem_iInter, mem_of_le, singleton_mem, singleton_nonempty, t.Nonempty
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (AbstractSimplicialComplex ι) where
   sInf s :=
-    { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
+    { faces := (⋂ K ∈ s, K.faces) ∩ { t | t.Nonempty }
       isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
         grind [IsRelLowerSet.mem_of_le, PreAbstractSimplicialComplex.isRelLowerSet_faces,
           mem_iInter]
       singleton_mem v := by
         grind [Set.mem_iInter, Finset.singleton_nonempty, singleton_mem] }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (AbstractSimplicialComplex ι)
-  body: { (⊤ : PreAbstractSimplicialComplex ι) with
-      singleton_mem _ := Finset.singleton_nonempty _ }
-
-中文:
-实例 :
-  签名: 顶元素 (抽象单纯复形 ι)
-  定义体: { (⊤ : PreAbstractSimplicialComplex ι) with
-      singleton_mem _ := Finset.singleton_nonempty _ }
-
-Depends on / 依赖: Finset, Finset.singleton_nonempty, PreAbstractSimplicialComplex, singleton_mem, singleton_nonempty
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (AbstractSimplicialComplex ι) where
   top :=
     { (⊤ : PreAbstractSimplicialComplex ι) with
       singleton_mem _ := Finset.singleton_nonempty _ }
-
-/--
-lemma `top_toPreAbstractSimplicialComplex` / 引理 `top_toPreAbstractSimplicialComplex`
-
-English:
-lemma top_toPreAbstractSimplicialComplex
-  proof: rfl
-
-中文:
-引理 top_toPreAbstractSimplicialComplex
-  证明: rfl
+/-
+**AbstractSimplicialComplex.top_toPreAbstractSimplicialComplex** 是 Mathlib 中的一个引
+理，位于命名空间 `AbstractSimplicialComplex`。
+形式化陈述：top_toPreAbstractSimplicialComplex : (⊤ : AbstractSimplicialComplex ι).toP
+reAbstractSimplicialComplex = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma top_toPreAbstractSimplicialComplex :
     (⊤ : AbstractSimplicialComplex ι).toPreAbstractSimplicialComplex = ⊤ :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (AbstractSimplicialComplex ι)
-  body: { faces := { s | exists v, s = {v} }
-      isRelLowerSet_faces := fun {x} ⟨v, hv⟩ => by
-        constructor
-        · rw [hv]; exact Finset.singleton_nonempty _
-        · intro t hts ht
-          cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-          | inl h => exact (ht.ne_empty h).elim
-          | inr h => exact ⟨v, h⟩
-      singleton_mem v := ⟨v, rfl⟩ }
-
-中文:
-实例 :
-  签名: 底元素 (抽象单纯复形 ι)
-  定义体: { faces := { s | exists v, s = {v} }
-      isRelLowerSet_faces := fun {x} ⟨v, hv⟩ => by
-        constructor
-        · rw [hv]; exact Finset.singleton_nonempty _
-        · intro t hts ht
-          cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-          | inl h => exact (ht.ne_empty h).elim
-          | inr h => exact ⟨v, h⟩
-      singleton_mem v := ⟨v, rfl⟩ }
-
-Depends on / 依赖: Finset, Finset.singleton_nonempty, Finset.subset_singleton_iff.mp, ht.ne_empty, isRelLowerSet_faces, ne_empty, singleton_mem, singleton_nonempty, subset_singleton_iff
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (AbstractSimplicialComplex ι) where
   bot :=
-    { faces := { s | exists v, s = {v} }
+    { faces := { s | ∃ v, s = {v} }
       isRelLowerSet_faces := fun {x} ⟨v, hv⟩ => by
         constructor
         · rw [hv]; exact Finset.singleton_nonempty _
@@ -886,45 +478,10 @@ instance : Bot (AbstractSimplicialComplex ι) where
           | inl h => exact (ht.ne_empty h).elim
           | inr h => exact ⟨v, h⟩
       singleton_mem v := ⟨v, rfl⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteSemilatticeSup (AbstractSimplicialComplex ι)
-  body: by
-    constructor
-    · intro K hK _ ht
-      exact Or.inl (Set.mem_biUnion hK ht)
-    · intro L hL _ ht
-      cases ht with
-      | inl ht =>
-        simp only [Set.mem_iUnion] at ht
-        obtain ⟨K, hK, htK⟩ := ht
-        exact hL hK htK
-      | inr ht =>
-        obtain ⟨v, hv⟩ := ht
-        exact hv ▸ L.singleton_mem v
-
-中文:
-实例 :
-  签名: 余mpleteSemilatticeSup (抽象单纯复形 ι)
-  定义体: by
-    constructor
-    · intro K hK _ ht
-      exact Or.inl (Set.mem_biUnion hK ht)
-    · intro L hL _ ht
-      cases ht with
-      | inl ht =>
-        simp only [Set.mem_iUnion] at ht
-        obtain ⟨K, hK, htK⟩ := ht
-        exact hL hK htK
-      | inr ht =>
-        obtain ⟨v, hv⟩ := ht
-        exact hv ▸ L.singleton_mem v
-
-Depends on / 依赖: L.singleton_mem, Or.inl, Set.mem_biUnion, Set.mem_iUnion, mem_biUnion, mem_iUnion, singleton_mem
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteSemilatticeSup (AbstractSimplicialComplex ι) where
   isLUB_sSup _ := by
@@ -940,63 +497,19 @@ instance : CompleteSemilatticeSup (AbstractSimplicialComplex ι) where
       | inr ht =>
         obtain ⟨v, hv⟩ := ht
         exact hv ▸ L.singleton_mem v
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteSemilatticeInf (AbstractSimplicialComplex ι)
-  body: ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
-      fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
-
-中文:
-实例 :
-  签名: 余mpleteSemilatticeInf (抽象单纯复形 ι)
-  定义体: ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
-      fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
-
-Depends on / 依赖: K.isRelLowerSet_faces, Set.biInter_subset_of_mem, Set.inter_subset_left.trans, Set.mem_iInter, biInter_subset_of_mem, inter_subset_left, isRelLowerSet_faces
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteSemilatticeInf (AbstractSimplicialComplex ι) where
   isGLB_sInf _ :=
-    ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
-      fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (AbstractSimplicialComplex ι)
-  body: min
-  inf_le_left _ _ := Set.inter_subset_left
-  inf_le_right _ _ := Set.inter_subset_right
-  le_inf _ _ _ := Set.subset_inter
-  sup := max
-  le_sup_left _ _ := Set.subset_union_left
-  le_sup_right _ _ := Set.subset_union_right
-  sup_le _ _ _ := Set.union_subset
-  le_top K _ ht := (K.isRelLowerSet_faces ht).1
-  bot_le K _ ht := by
-    obtain ⟨v, hv⟩ := ht
-    exact hv ▸ K.singleton_mem v
-
-中文:
-实例 :
-  签名: 完备格 (抽象单纯复形 ι)
-  定义体: min
-  inf_le_left _ _ := Set.inter_subset_left
-  inf_le_right _ _ := Set.inter_subset_right
-  le_inf _ _ _ := Set.subset_inter
-  sup := max
-  le_sup_left _ _ := Set.subset_union_left
-  le_sup_right _ _ := Set.subset_union_right
-  sup_le _ _ _ := Set.union_subset
-  le_top K _ ht := (K.isRelLowerSet_faces ht).1
-  bot_le K _ ht := by
-    obtain ⟨v, hv⟩ := ht
-    exact hv ▸ K.singleton_mem v
+    ⟨fun _ hK ↦ Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
+      fun K hK _ ht ↦ ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
+/-
+**AbstractSimplicialComplex.** 是 Mathlib 中的一个实例，位于命名空间 `AbstractSimplicialComple
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (AbstractSimplicialComplex ι) where
   inf := min
@@ -1015,3 +528,4 @@ instance : CompleteLattice (AbstractSimplicialComplex ι) where
 end AbstractSimplicialComplex
 
 end
+

@@ -30,42 +30,28 @@ namespace Fin
 
 variable {α : Type*} [Preorder α]
 
-/--
-Definition of `orderIsoSingleton` / `orderIsoSingleton` 的定义
+/-- This is the order isomorphism from `Fin 1` to a finset `{a}`. -/
+/-
+**Fin.orderIsoSingleton** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：orderIsoSingleton (a : α) : Fin 1 ≃o ({a} : Finset α)
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoSingleton
-  signature: (a : α)
-  body: OrderIso.ofUnique _ _
-
-@[simp]
-
-中文:
-定义 orderIsoSingleton
-  签名: (a : α)
-  定义体: OrderIso.ofUnique _ _
-
-@[simp]
-
-Depends on / 依赖: OrderIso, OrderIso.ofUnique, ofUnique
+--- 原说明 ---
+This is the order isomorphism from `Fin 1` to a finset `{a}`.
 -/
 noncomputable def orderIsoSingleton (a : α) :
     Fin 1 ≃o ({a} : Finset α) :=
   OrderIso.ofUnique _ _
 
 @[simp]
-/--
-lemma `orderIsoSingleton_apply` / 引理 `orderIsoSingleton_apply`
-
-English:
-lemma orderIsoSingleton_apply
-  given: (a : α) (i : Fin 1)
-  proof: rfl
-
-中文:
-引理 orderIsoSingleton_apply
-  条件: (a : α) (i : 有限集 1)
-  证明: rfl
+/-
+**Fin.orderIsoSingleton_apply** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：orderIsoSingleton_apply (a : α) (i : Fin 1) : orderIsoSingleton a i = a
+参数：a : α；i : Fin 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma orderIsoSingleton_apply (a : α) (i : Fin 1) :
     orderIsoSingleton a i = a := rfl
@@ -76,66 +62,40 @@ section
 
 variable (a b : α) (hab : a < b)
 
-/--
-Definition of `orderIsoPair` / `orderIsoPair` 的定义
+/-- This is the order isomorphism from `Fin 2` to a finset `{a, b}` when `a < b`. -/
+/-
+**Fin.orderIsoPair** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：orderIsoPair : Fin 2 ≃o ({a, b} : Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoPair
-  signature: :
-  body: StrictMono.orderIsoOfSurjective ![⟨a, by simp⟩, ⟨b, by simp⟩]
-    (strictMono_vecEmpty.vecCons hab) (fun ⟨x, hx⟩ => by
-      simp only [Finset.mem_insert, Finset.mem_singleton] at hx
-      obtain rfl | rfl := hx
-      · exact ⟨0, rfl⟩
-      · exact ⟨1, rfl⟩)
-
-中文:
-定义 orderIsoPair
-  签名: :
-  定义体: StrictMono.orderIsoOfSurjective ![⟨a, by simp⟩, ⟨b, by simp⟩]
-    (strictMono_vecEmpty.vecCons hab) (fun ⟨x, hx⟩ => by
-      simp only [Finset.mem_insert, Finset.mem_singleton] at hx
-      obtain rfl | rfl := hx
-      · exact ⟨0, rfl⟩
-      · exact ⟨1, rfl⟩)
-
-Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, StrictMono, StrictMono.orderIsoOfSurjective, mem_insert, mem_singleton, orderIsoOfSurjective, strictMono_vecEmpty, strictMono_vecEmpty.vecCons, vecCons
+--- 原说明 ---
+This is the order isomorphism from `Fin 2` to a finset `{a, b}` when `a < b`.
 -/
 noncomputable def orderIsoPair :
     Fin 2 ≃o ({a, b} : Finset α) :=
   StrictMono.orderIsoOfSurjective ![⟨a, by simp⟩, ⟨b, by simp⟩]
-    (strictMono_vecEmpty.vecCons hab) (fun ⟨x, hx⟩ => by
+    (strictMono_vecEmpty.vecCons hab) (fun ⟨x, hx⟩ ↦ by
       simp only [Finset.mem_insert, Finset.mem_singleton] at hx
       obtain rfl | rfl := hx
       · exact ⟨0, rfl⟩
       · exact ⟨1, rfl⟩)
-
-/--
-lemma `orderIsoPair_zero` / 引理 `orderIsoPair_zero`
-
-English:
-lemma orderIsoPair_zero
-  statement: orderIsoPair a b hab 0 = a
-  proof: rfl
-
-中文:
-引理 orderIsoPair_zero
-  结论: orderIsoPair a b hab 0 = a
-  证明: rfl
+/-
+**Fin.orderIsoPair_zero** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : DecidableEq α] (a b : α) (h
+ab : a < b),   ↑((Fin.orderIsoPair a b hab) 0) = a
+参数：a b : α；hab : a < b；(Fin.orderIsoPair a b hab) 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 @[simp] lemma orderIsoPair_zero : orderIsoPair a b hab 0 = a := rfl
-/--
-lemma `orderIsoPair_one` / 引理 `orderIsoPair_one`
-
-English:
-lemma orderIsoPair_one
-  statement: orderIsoPair a b hab 1 = b
-  proof: rfl
-
-中文:
-引理 orderIsoPair_one
-  结论: orderIsoPair a b hab 1 = b
-  证明: rfl
+/-
+**Fin.orderIsoPair_one** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : DecidableEq α] (a b : α) (h
+ab : a < b),   ↑((Fin.orderIsoPair a b hab) 1) = b
+参数：a b : α；hab : a < b；(Fin.orderIsoPair a b hab) 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 @[simp] lemma orderIsoPair_one : orderIsoPair a b hab 1 = b := rfl
 
@@ -145,86 +105,56 @@ section
 
 variable (a b c : α) (hab : a < b) (hbc : b < c)
 
-/--
-Definition of `orderIsoTriple` / `orderIsoTriple` 的定义
+/-- This is the order isomorphism from `Fin 3`
+to a finset `{a, b, c}` when `a < b` and `b < c`. -/
+/-
+**Fin.orderIsoTriple** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：orderIsoTriple : Fin 3 ≃o ({a, b, c} : Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoTriple
-  signature: :
-  body: StrictMono.orderIsoOfSurjective ![⟨a, by simp⟩, ⟨b, by simp⟩, ⟨c, by simp⟩]
-    (StrictMono.vecCons (strictMono_vecEmpty.vecCons hbc) hab) (fun ⟨x, hx⟩ => by
-      simp only [Finset.mem_insert, Finset.mem_singleton] at hx
-      obtain rfl | rfl | rfl := hx
-      · exact ⟨0, rfl⟩
-      · exact ⟨1, rfl⟩
-      · exact ⟨2, rfl⟩)
-
-中文:
-定义 orderIsoTriple
-  签名: :
-  定义体: StrictMono.orderIsoOfSurjective ![⟨a, by simp⟩, ⟨b, by simp⟩, ⟨c, by simp⟩]
-    (StrictMono.vecCons (strictMono_vecEmpty.vecCons hbc) hab) (fun ⟨x, hx⟩ => by
-      simp only [Finset.mem_insert, Finset.mem_singleton] at hx
-      obtain rfl | rfl | rfl := hx
-      · exact ⟨0, rfl⟩
-      · exact ⟨1, rfl⟩
-      · exact ⟨2, rfl⟩)
-
-Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, StrictMono, StrictMono.orderIsoOfSurjective, StrictMono.vecCons, mem_insert, mem_singleton, orderIsoOfSurjective, strictMono_vecEmpty, strictMono_vecEmpty.vecCons, vecCons
+--- 原说明 ---
+This is the order isomorphism from `Fin 3`
+to a finset `{a, b, c}` when `a < b` and `b < c`.
 -/
 noncomputable def orderIsoTriple :
     Fin 3 ≃o ({a, b, c} : Finset α) :=
   StrictMono.orderIsoOfSurjective ![⟨a, by simp⟩, ⟨b, by simp⟩, ⟨c, by simp⟩]
-    (StrictMono.vecCons (strictMono_vecEmpty.vecCons hbc) hab) (fun ⟨x, hx⟩ => by
+    (StrictMono.vecCons (strictMono_vecEmpty.vecCons hbc) hab) (fun ⟨x, hx⟩ ↦ by
       simp only [Finset.mem_insert, Finset.mem_singleton] at hx
       obtain rfl | rfl | rfl := hx
       · exact ⟨0, rfl⟩
       · exact ⟨1, rfl⟩
       · exact ⟨2, rfl⟩)
-
-/--
-lemma `orderIsoTriple_zero` / 引理 `orderIsoTriple_zero`
-
-English:
-lemma orderIsoTriple_zero
-  statement: orderIsoTriple a b c hab hbc 0 = a
-  proof: rfl
-
-中文:
-引理 orderIsoTriple_zero
-  结论: orderIsoTriple a b c hab hbc 0 = a
-  证明: rfl
+/-
+**Fin.orderIsoTriple_zero** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : DecidableEq α] (a b c : α) 
+(hab : a < b) (hbc : b < c),   ↑((Fin.orderIsoTriple a b c hab hbc) 0) = a
+参数：a b c : α；hab : a < b；hbc : b < c；(Fin.orderIsoTriple a b c hab hbc) 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 @[simp] lemma orderIsoTriple_zero : orderIsoTriple a b c hab hbc 0 = a := rfl
-/--
-lemma `orderIsoTriple_one` / 引理 `orderIsoTriple_one`
-
-English:
-lemma orderIsoTriple_one
-  statement: orderIsoTriple a b c hab hbc 1 = b
-  proof: rfl
-
-中文:
-引理 orderIsoTriple_one
-  结论: orderIsoTriple a b c hab hbc 1 = b
-  证明: rfl
+/-
+**Fin.orderIsoTriple_one** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : DecidableEq α] (a b c : α) 
+(hab : a < b) (hbc : b < c),   ↑((Fin.orderIsoTriple a b c hab hbc) 1) = b
+参数：a b c : α；hab : a < b；hbc : b < c；(Fin.orderIsoTriple a b c hab hbc) 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 @[simp] lemma orderIsoTriple_one : orderIsoTriple a b c hab hbc 1 = b := rfl
-/--
-lemma `orderIsoTriple_two` / 引理 `orderIsoTriple_two`
-
-English:
-lemma orderIsoTriple_two
-  statement: orderIsoTriple a b c hab hbc 2 = c
-  proof: rfl
-
-中文:
-引理 orderIsoTriple_two
-  结论: orderIsoTriple a b c hab hbc 2 = c
-  证明: rfl
+/-
+**Fin.orderIsoTriple_two** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : DecidableEq α] (a b c : α) 
+(hab : a < b) (hbc : b < c),   ↑((Fin.orderIsoTriple a b c hab hbc) 2) = c
+参数：a b c : α；hab : a < b；hbc : b < c；(Fin.orderIsoTriple a b c hab hbc) 2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 @[simp] lemma orderIsoTriple_two : orderIsoTriple a b c hab hbc 2 = c := rfl
 
 end
 
 end Fin
+

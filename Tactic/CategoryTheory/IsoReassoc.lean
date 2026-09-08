@@ -29,45 +29,31 @@ open CategoryTheory
 
 namespace Mathlib.Tactic.Reassoc
 
-/--
-theorem `Iso.eq_whisker` / 定理 `Iso.eq_whisker`
-
-English:
-theorem Iso.eq_whisker
-  statement: {C : Type*} [Category* C]
-  proof: by rw [w]
-
-中文:
-定理 同构.eq_whisker
-  结论: {C : 类型} [范畴* C]
-  证明: by rw [w]
-
-Depends on / 依赖: Icc_prod_eq, isCompact_Icc, isCompact_Icc.prod
+/-
+**Mathlib.Tactic.Reassoc.Iso.eq_whisker** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tacti
+c.Reassoc.Iso`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {X Y : C} {
+f g : X ≅ Y},   f = g → ∀ {Z : C} (h : Y ≅ Z), f ≪≫ h = g ≪≫ h
+参数：h : Y ≅ Z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem Iso.eq_whisker {C : Type*} [Category* C]
     {X Y : C} {f g : X ≅ Y} (w : f = g) {Z : C} (h : Y ≅ Z) :
     f ≪≫ h = g ≪≫ h := by rw [w]
 
-/--
-Definition of `categoryIsoSimp` / `categoryIsoSimp` 的定义
+/-- Simplify an expression using only the axioms of a groupoid. -/
+/-
+**Mathlib.Tactic.Reassoc.categoryIsoSimp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Reassoc`。
+形式化陈述：categoryIsoSimp (e : Expr) : MetaM Simp.Result
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition categoryIsoSimp
-  signature: (e : Expr)
-  body: simpOnlyNames [``Iso.trans_symm, ``Iso.trans_refl, ``Iso.refl_trans, ``Iso.trans_assoc,
-    ``Iso.symm_self_id, ``Iso.self_symm_id, ``Iso.symm_self_id_assoc, ``Iso.self_symm_id_assoc,
-    ``Functor.mapIso_trans, ``Functor.mapIso_symm, ``Functor.mapIso_refl, ``Functor.id_obj] e
-    (config := { decide := false })
-
-中文:
-定义 categoryIsoSimp
-  签名: (e : Expr)
-  定义体: simpOnlyNames [``Iso.trans_symm, ``Iso.trans_refl, ``Iso.refl_trans, ``Iso.trans_assoc,
-    ``Iso.symm_self_id, ``Iso.self_symm_id, ``Iso.symm_self_id_assoc, ``Iso.self_symm_id_assoc,
-    ``Functor.mapIso_trans, ``Functor.mapIso_symm, ``Functor.mapIso_refl, ``Functor.id_obj] e
-    (config := { decide := false })
-
-Depends on / 依赖: Functor, Functor.id_obj, Functor.mapIso_refl, Functor.mapIso_symm, Functor.mapIso_trans, Iso.refl_trans, Iso.self_symm_id, Iso.self_symm_id_assoc, Iso.symm_self_id, Iso.symm_self_id_assoc, Iso.trans_assoc, Iso.trans_refl, Iso.trans_symm, config, id_obj, mapIso_refl, mapIso_symm, mapIso_trans, refl_trans, self_symm_id
+--- 原说明 ---
+Simplify an expression using only the axioms of a groupoid.
 -/
 def categoryIsoSimp (e : Expr) : MetaM Simp.Result :=
   simpOnlyNames [``Iso.trans_symm, ``Iso.trans_refl, ``Iso.refl_trans, ``Iso.trans_assoc,
@@ -76,35 +62,23 @@ def categoryIsoSimp (e : Expr) : MetaM Simp.Result :=
     (config := { decide := false })
 
 /--
-Definition of `reassocExprIso` / `reassocExprIso` 的定义
+Given an equation `f = g` between isomorphisms `X ≅ Y` in a category,
+produce the equation `∀ {Z} (h : Y ≅ Z), f ≪≫ h = g ≪≫ h`,
+but with compositions fully right associated, identities removed, and functors applied.
+-/
+/-
+**Mathlib.Tactic.Reassoc.reassocExprIso** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Reassoc`。
+形式化陈述：reassocExprIso (e : Expr) : MetaM (Expr × Array MVarId)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reassocExprIso
-  signature: (e : Expr)
-  body: do
-  let lem₀ ← mkConstWithFreshMVarLevels ``Iso.eq_whisker
-  let (args, _, _) ← forallMetaBoundedTelescope (← inferType lem₀) 7
-  let inst := args[1]!
-  inst.mvarId!.setKind .synthetic
-  let w := args[6]!
-  w.mvarId!.assignIfDefEq e
-  withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType categoryIsoSimp (mkAppN lem₀ args), #[inst.mvarId!])
-
-中文:
-定义 reassocExprIso
-  签名: (e : Expr)
-  定义体: do
-  let lem₀ ← mkConstWithFreshMVarLevels ``Iso.eq_whisker
-  let (args, _, _) ← forallMetaBoundedTelescope (← inferType lem₀) 7
-  let inst := args[1]!
-  inst.mvarId!.setKind .synthetic
-  let w := args[6]!
-  w.mvarId!.assignIfDefEq e
-  withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType categoryIsoSimp (mkAppN lem₀ args), #[inst.mvarId!])
-
-Depends on / 依赖: CompleteLinearOrder, compactSpace_of_completeLinearOrder
+--- 原说明 ---
+Given an equation `f = g` between isomorphisms `X ≅ Y` in a category,
+produce the equation `∀ {Z} (h : Y ≅ Z), f ≪≫ h = g ≪≫ h`,
+but with compositions fully right associated, identities removed, and functors a
+pplied.
 -/
 def reassocExprIso (e : Expr) : MetaM (Expr × Array MVarId) := do
   let lem₀ ← mkConstWithFreshMVarLevels ``Iso.eq_whisker
@@ -119,3 +93,4 @@ def reassocExprIso (e : Expr) : MetaM (Expr × Array MVarId) := do
 initialize registerReassocExpr reassocExprIso
 
 end Mathlib.Tactic.Reassoc
+

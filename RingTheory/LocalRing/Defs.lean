@@ -27,24 +27,15 @@ public section
 /-- A semiring is local if it is nontrivial and `a` or `b` is a unit whenever `a + b = 1`.
 Note that `IsLocalRing` is a predicate. -/
 @[wikidata Q1142704]
-/--
-Definition of `IsLocalRing` / `IsLocalRing` 的定义
+/-
+**IsLocalRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [Semiring R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLocalRing
-  parameters: (R : Type*) [Semiring R]
-  extends: Nontrivial R
-  axioms and operations (2):
-    - of_is_unit_or_is_unit_of_add_one : :
-    - isUnit_or_isUnit_of_add_one({a b : R} (h : a + b = 1)) : IsUnit a ∨ IsUnit b
-
-中文:
-类 是局部环
-  参数: (R : 类型) [半环 R]
-  继承: 非平凡 R
-  公理与运算 (2 个):
-    - of_is_unit_or_is_unit_of_add_one : :
-    - isUnit_or_isUnit_of_add_one({a b : R} (h : a + b = 1)) : 是单位 a ∨ 是单位 b
+--- 原说明 ---
+A semiring is local if it is nontrivial and `a` or `b` is a unit whenever `a + b
+ = 1`.
+Note that `IsLocalRing` is a predicate.
 -/
 class IsLocalRing (R : Type*) [Semiring R] : Prop extends Nontrivial R where
   of_is_unit_or_is_unit_of_add_one ::

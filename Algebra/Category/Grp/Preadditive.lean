@@ -24,269 +24,124 @@ namespace AddCommGrpCat
 
 variable {M N : AddCommGrpCat.{u}}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (M ⟶ N)
-  body: ofHom (f.hom + g.hom)
-
-中文:
-实例 :
-  签名: 加法 (M ⟶ N)
-  定义体: ofHom (f.hom + g.hom)
-
-Depends on / 依赖: f.hom, g.hom
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (M ⟶ N) where
   add f g := ofHom (f.hom + g.hom)
-
-/--
-lemma `hom_add` / 引理 `hom_add`
-
-English:
-lemma hom_add
-  given: (f g : M ⟶ N)
-  statement: (f + g).hom = f.hom + g.hom
-  proof: rfl
-
-中文:
-引理 hom_add
-  条件: (f g : M ⟶ N)
-  结论: (f + g).hom = f.hom + g.hom
-  证明: rfl
+/-
+**AddCommGrpCat.hom_add** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：∀ {M N : AddCommGrpCat} (f g : M ⟶ N), AddCommGrpCat.Hom.hom (f + g) = Add
+CommGrpCat.Hom.hom f + AddCommGrpCat.Hom.hom g
+参数：f g : M ⟶ N；f + g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_add (f g : M ⟶ N) : (f + g).hom = f.hom + g.hom := rfl
-
-/--
-lemma `hom_add_apply` / 引理 `hom_add_apply`
-
-English:
-lemma hom_add_apply
-  given: {P Q : AddCommGrpCat} (f g : P ⟶ Q) (x : P)
-  statement: (f + g) x = f x + g x
-  proof: rfl
-
-中文:
-引理 hom_add_apply
-  条件: {P Q : 加法交换群范畴} (f g : P ⟶ Q) (x : P)
-  结论: (f + g) x = f x + g x
-  证明: rfl
+/-
+**AddCommGrpCat.hom_add_apply** 是 Mathlib 中的一个引理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：hom_add_apply {P Q : AddCommGrpCat} (f g : P ⟶ Q) (x : P) : (f + g) x = f 
+x + g x
+参数：f g : P ⟶ Q；x : P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_add_apply {P Q : AddCommGrpCat} (f g : P ⟶ Q) (x : P) : (f + g) x = f x + g x := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (M ⟶ N)
-  body: ofHom 0
-
-中文:
-实例 :
-  签名: 零 (M ⟶ N)
-  定义体: ofHom 0
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (M ⟶ N) where
   zero := ofHom 0
-
-/--
-lemma `hom_zero` / 引理 `hom_zero`
-
-English:
-lemma hom_zero
-  statement: (0 : M ⟶ N).hom = 0
-  proof: rfl
-
-中文:
-引理 hom_zero
-  结论: (0 : M ⟶ N).hom = 0
-  证明: rfl
+/-
+**AddCommGrpCat.hom_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：∀ {M N : AddCommGrpCat}, AddCommGrpCat.Hom.hom 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_zero : (0 : M ⟶ N).hom = 0 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Nat (M ⟶ N)
-  body: ofHom (n • f.hom)
-
-中文:
-实例 :
-  签名: 标量乘法 自然数 (M ⟶ N)
-  定义体: ofHom (n • f.hom)
-
-Depends on / 依赖: f.hom
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Nat (M ⟶ N) where
+instance : SMul ℕ (M ⟶ N) where
   smul n f := ofHom (n • f.hom)
-
-/--
-lemma `hom_nsmul` / 引理 `hom_nsmul`
-
-English:
-lemma hom_nsmul
-  given: (n : Nat) (f : M ⟶ N)
-  statement: (n • f).hom = n • f.hom
-  proof: rfl
-
-中文:
-引理 hom_nsmul
-  条件: (n : 自然数) (f : M ⟶ N)
-  结论: (n • f).hom = n • f.hom
-  证明: rfl
+/-
+**AddCommGrpCat.hom_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：∀ {M N : AddCommGrpCat} (n : ℕ) (f : M ⟶ N), AddCommGrpCat.Hom.hom (n • f)
+ = n • AddCommGrpCat.Hom.hom f
+参数：n : ℕ；f : M ⟶ N；n • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma hom_nsmul (n : Nat) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (M ⟶ N)
-  body: ofHom (-f.hom)
-
-中文:
-实例 :
-  签名: 取负 (M ⟶ N)
-  定义体: ofHom (-f.hom)
-
-Depends on / 依赖: f.hom
+@[simp] lemma hom_nsmul (n : ℕ) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (M ⟶ N) where
   neg f := ofHom (-f.hom)
-
-/--
-lemma `hom_neg` / 引理 `hom_neg`
-
-English:
-lemma hom_neg
-  given: (f : M ⟶ N)
-  statement: (-f).hom = -f.hom
-  proof: rfl
-
-中文:
-引理 hom_neg
-  条件: (f : M ⟶ N)
-  结论: (-f).hom = -f.hom
-  证明: rfl
+/-
+**AddCommGrpCat.hom_neg** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：∀ {M N : AddCommGrpCat} (f : M ⟶ N), AddCommGrpCat.Hom.hom (-f) = -AddComm
+GrpCat.Hom.hom f
+参数：f : M ⟶ N；-f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_neg (f : M ⟶ N) : (-f).hom = -f.hom := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (M ⟶ N)
-  body: ofHom (f.hom - g.hom)
-
-中文:
-实例 :
-  签名: 减法 (M ⟶ N)
-  定义体: ofHom (f.hom - g.hom)
-
-Depends on / 依赖: f.hom, g.hom
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (M ⟶ N) where
   sub f g := ofHom (f.hom - g.hom)
-
-/--
-lemma `hom_sub` / 引理 `hom_sub`
-
-English:
-lemma hom_sub
-  given: (f g : M ⟶ N)
-  statement: (f - g).hom = f.hom - g.hom
-  proof: rfl
-
-中文:
-引理 hom_sub
-  条件: (f g : M ⟶ N)
-  结论: (f - g).hom = f.hom - g.hom
-  证明: rfl
+/-
+**AddCommGrpCat.hom_sub** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：∀ {M N : AddCommGrpCat} (f g : M ⟶ N), AddCommGrpCat.Hom.hom (f - g) = Add
+CommGrpCat.Hom.hom f - AddCommGrpCat.Hom.hom g
+参数：f g : M ⟶ N；f - g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_sub (f g : M ⟶ N) : (f - g).hom = f.hom - g.hom := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Int (M ⟶ N)
-  body: ofHom (n • f.hom)
-
-中文:
-实例 :
-  签名: 标量乘法 整数 (M ⟶ N)
-  定义体: ofHom (n • f.hom)
-
-Depends on / 依赖: GrpObj, GrpObj.left_inv, GrpObj.right_inv, f.hom, left_inv, ofAlgHom, right_inv, unop.hom
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Int (M ⟶ N) where
+instance : SMul ℤ (M ⟶ N) where
   smul n f := ofHom (n • f.hom)
-
-/--
-lemma `hom_zsmul` / 引理 `hom_zsmul`
-
-English:
-lemma hom_zsmul
-  given: (n : Int) (f : M ⟶ N)
-  statement: (n • f).hom = n • f.hom
-  proof: rfl
-
-中文:
-引理 hom_zsmul
-  条件: (n : 整数) (f : M ⟶ N)
-  结论: (n • f).hom = n • f.hom
-  证明: rfl
+/-
+**AddCommGrpCat.hom_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：∀ {M N : AddCommGrpCat} (n : ℤ) (f : M ⟶ N), AddCommGrpCat.Hom.hom (n • f)
+ = n • AddCommGrpCat.Hom.hom f
+参数：n : ℤ；f : M ⟶ N；n • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma hom_zsmul (n : Int) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
-
+@[simp] lemma hom_zsmul (n : ℤ) (f : M ⟶ N) : (n • f).hom = n • f.hom := rfl
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (P Q : AddCommGrpCat) : AddCommGroup (P ⟶ Q) :=
   Function.Injective.addCommGroup (Hom.hom) ConcreteCategory.hom_injective
     rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive AddCommGrpCat
-
-中文:
-实例 :
-  签名: 预加性 加法交换群范畴
-
-Depends on / 依赖: CommAlgCat, CommAlgCat.of, IsCommMonObj
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive AddCommGrpCat where
 
 /-- `AddCommGrpCat.Hom.hom` bundled as an additive equivalence. -/
 @[simps!]
-/--
-Definition of `homAddEquiv` / `homAddEquiv` 的定义
+/-
+**AddCommGrpCat.homAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：homAddEquiv : (M ⟶ N) ≃+ (M ->+ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homAddEquiv
-  signature: : (M ⟶ N) ≃+ (M ->+ N)
-  body: { ConcreteCategory.homEquiv (C := AddCommGrpCat) with
-    map_add' _ _ := rfl }
-
-中文:
-定义 homAddEquiv
-  签名: : (M ⟶ N) ≃+ (M ->+ N)
-  定义体: { ConcreteCategory.homEquiv (C := AddCommGrpCat) with
-    map_add' _ _ := rfl }
-
-Depends on / 依赖: AddCommGrpCat, ConcreteCategory, ConcreteCategory.homEquiv, homEquiv, map_add
+--- 原说明 ---
+`AddCommGrpCat.Hom.hom` bundled as an additive equivalence.
 -/
-def homAddEquiv : (M ⟶ N) ≃+ (M ->+ N) :=
+def homAddEquiv : (M ⟶ N) ≃+ (M →+ N) :=
   { ConcreteCategory.homEquiv (C := AddCommGrpCat) with
     map_add' _ _ := rfl }
 
 end AddCommGrpCat
+

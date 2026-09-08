@@ -70,38 +70,25 @@ open Set
 
 /-- A topology on `X`. -/
 @[to_dual_dont_translate]
-/--
-Definition of `TopologicalSpace` / `TopologicalSpace` 的定义
+/-
+**TopologicalSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class TopologicalSpace
-  parameters: (X : Type u)
-  axioms and operations (4):
-    - IsOpen : Set X -> Prop
-    - isOpen_univ : IsOpen univ
-    - isOpen_inter : forall s t, IsOpen s -> IsOpen t -> IsOpen (s inter t)
-    - isOpen_sUnion : forall s, (forall t in s, IsOpen t) -> IsOpen (⋃₀ s)
-
-中文:
-类 拓扑空间
-  参数: (X : 类型u)
-  公理与运算 (4 个):
-    - IsOpen : 集合 X -> 命题
-    - isOpen_univ : 是开集 univ
-    - isOpen_inter : 对任意 s t, 是开集 s -> 是开集 t -> 是开集 (s inter t)
-    - isOpen_sUnion : 对任意 s, (对任意 t in s, 是开集 t) -> 是开集 (⋃₀ s)
+--- 原说明 ---
+A topology on `X`.
 -/
 class TopologicalSpace (X : Type u) where
   /-- A predicate saying that a set is an open set. Use `IsOpen` in the root namespace instead. -/
-  protected IsOpen : Set X -> Prop
+  protected IsOpen : Set X → Prop
   /-- The set representing the whole space is an open set.
   Use `isOpen_univ` in the root namespace instead. -/
   protected isOpen_univ : IsOpen univ
   /-- The intersection of two open sets is an open set. Use `IsOpen.inter` instead. -/
-  protected isOpen_inter : forall s t, IsOpen s -> IsOpen t -> IsOpen (s inter t)
+  protected isOpen_inter : ∀ s t, IsOpen s → IsOpen t → IsOpen (s ∩ t)
   /-- The union of a family of open sets is an open set.
   Use `isOpen_sUnion` in the root namespace instead. -/
-  protected isOpen_sUnion : forall s, (forall t in s, IsOpen t) -> IsOpen (⋃₀ s)
+  protected isOpen_sUnion : ∀ s, (∀ t ∈ s, IsOpen t) → IsOpen (⋃₀ s)
 
 variable {X : Type u} {Y : Type v}
 
@@ -113,293 +100,244 @@ variable [TopologicalSpace X] [TopologicalSpace Y] {s t : Set X}
 
 /-- `IsOpen s` means that `s` is open in the ambient topological space on `X` -/
 @[wikidata Q213363]
-/--
-Definition of `IsOpen` / `IsOpen` 的定义
+/-
+**IsOpen** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsOpen : Set X -> Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsOpen
-  signature: : Set X -> Prop
-  body: TopologicalSpace.IsOpen
-
-中文:
-定义 是开集
-  签名: : 集合 X -> 命题
-  定义体: TopologicalSpace.IsOpen
-
-Depends on / 依赖: IsOpen, TopologicalSpace, TopologicalSpace.IsOpen
+--- 原说明 ---
+`IsOpen s` means that `s` is open in the ambient topological space on `X`
 -/
-def IsOpen : Set X -> Prop := TopologicalSpace.IsOpen
-
-/--
-theorem `isOpen_univ` / 定理 `isOpen_univ`
-
-English:
-theorem isOpen_univ
-  statement: IsOpen (univ : Set X)
-  proof: TopologicalSpace.isOpen_univ
-
-中文:
-定理 isOpen_univ
-  结论: 是开集 (univ : 集合 X)
-  证明: TopologicalSpace.isOpen_univ
+def IsOpen : Set X → Prop := TopologicalSpace.IsOpen
+/-
+**isOpen_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.isOpen_univ`：∀ {X : Type u} [self : TopologicalSpace X]
+, TopologicalSpace.IsOpen Set.univ
 -/
 @[simp] theorem isOpen_univ : IsOpen (univ : Set X) := TopologicalSpace.isOpen_univ
-
-/--
-theorem `IsOpen.inter` / 定理 `IsOpen.inter`
-
-English:
-theorem IsOpen.inter
-  given: (hs : IsOpen s) (ht : IsOpen t)
-  statement: IsOpen (s inter t)
-  proof: TopologicalSpace.isOpen_inter s t hs ht
-
-中文:
-定理 是开集.inter
-  条件: (hs : 是开集 s) (ht : 是开集 t)
-  结论: 是开集 (s inter t)
-  证明: TopologicalSpace.isOpen_inter s t hs ht
+/-
+**IsOpen.inter** 是 Mathlib 中的一个定理，位于命名空间 `Scott`。
+形式化陈述：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> IsOpen α (s inter
+ t)
+参数：s t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.isOpen_inter`：∀ {X : Type u} [self : TopologicalSpace X
+] (s t : Set X),   TopologicalSpace.IsOpen s → TopologicalSpace.IsOpen t → Topol
+ogicalSpace.IsOpen …
 -/
-theorem IsOpen.inter (hs : IsOpen s) (ht : IsOpen t) : IsOpen (s inter t) :=
+theorem IsOpen.inter (hs : IsOpen s) (ht : IsOpen t) : IsOpen (s ∩ t) :=
   TopologicalSpace.isOpen_inter s t hs ht
-
-/--
-theorem `isOpen_sUnion` / 定理 `isOpen_sUnion`
-
-English:
-theorem isOpen_sUnion
-  given: {s : Set (Set X)} (h : forall t in s, IsOpen t)
-  statement: IsOpen (⋃₀ s)
-  proof: TopologicalSpace.isOpen_sUnion s h
-
-中文:
-定理 isOpen_sUnion
-  条件: {s : 集合 (集合 X)} (h : 对任意 t in s, 是开集 t)
-  结论: 是开集 (⋃₀ s)
-  证明: TopologicalSpace.isOpen_sUnion s h
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.isOpen_sUnion, isOpen_sUnion
+/-
+**isOpen_sUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpen_sUnion {s : Set (Set X)} (h : forall t in s, IsOpen t) : IsOpen (⋃₀
+ s)
+参数：Set X；h : forall t in s, IsOpen t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.isOpen_sUnion`：∀ {X : Type u} [self : TopologicalSpace 
+X] (s : Set (Set X)),   (∀ t ∈ s, TopologicalSpace.IsOpen t) → TopologicalSpace.
+IsOpen (⋃₀ s)
 -/
-theorem isOpen_sUnion {s : Set (Set X)} (h : forall t in s, IsOpen t) : IsOpen (⋃₀ s) :=
+theorem isOpen_sUnion {s : Set (Set X)} (h : ∀ t ∈ s, IsOpen t) : IsOpen (⋃₀ s) :=
   TopologicalSpace.isOpen_sUnion s h
 
 /-- A set is closed if its complement is open -/
 @[wikidata Q320357]
-/--
-Definition of `IsClosed` / `IsClosed` 的定义
+/-
+**IsClosed** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{X : Type u} → [TopologicalSpace X] → Set X → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosed
-  parameters: (s : Set X)
-  axioms and operations (1):
-    - isOpen_compl : IsOpen sᶜ
-
-中文:
-类 是闭集
-  参数: (s : 集合 X)
-  公理与运算 (1 个):
-    - isOpen_compl : 是开集 sᶜ
+--- 原说明 ---
+A set is closed if its complement is open
 -/
 class IsClosed (s : Set X) : Prop where
   /-- The complement of a closed set is an open set. -/
   isOpen_compl : IsOpen sᶜ
 
-/--
-Definition of `IsClopen` / `IsClopen` 的定义
+/-- A set is clopen if it is both closed and open. -/
+/-
+**IsClopen** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsClopen (s : Set X) : Prop
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsClopen
-  signature: (s : Set X)
-  body: IsClosed s ∧ IsOpen s
-
-中文:
-定义 IsClopen
-  签名: (s : 集合 X)
-  定义体: IsClosed s ∧ IsOpen s
-
-Depends on / 依赖: IsClosed, IsOpen
+--- 原说明 ---
+A set is clopen if it is both closed and open.
 -/
 def IsClopen (s : Set X) : Prop :=
   IsClosed s ∧ IsOpen s
 
 /--
-Definition of `IsLocallyClosed` / `IsLocallyClosed` 的定义
-
-English:
-definition IsLocallyClosed
-  signature: (s : Set X)
-  body: exists (U Z : Set X), IsOpen U ∧ IsClosed Z ∧ s = U inter Z
-
-中文:
-定义 IsLocallyClosed
-  签名: (s : 集合 X)
-  定义体: exists (U Z : Set X), IsOpen U ∧ IsClosed Z ∧ s = U inter Z
-
-Depends on / 依赖: IsClosed, IsOpen
+A set is locally closed if it is the intersection of some open set and some closed set.
+Also see `isLocallyClosed_tfae` and other lemmas in `Mathlib/Topology/LocallyClosed.lean`.
 -/
-def IsLocallyClosed (s : Set X) : Prop := exists (U Z : Set X), IsOpen U ∧ IsClosed Z ∧ s = U inter Z
+/-
+**IsLocallyClosed** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocallyClosed (s : Set X) : Prop
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `interior` / `interior` 的定义
+--- 原说明 ---
+A set is locally closed if it is the intersection of some open set and some clos
+ed set.
+Also see `isLocallyClosed_tfae` and other lemmas in `Mathlib/Topology/LocallyClo
+sed.lean`.
+-/
+def IsLocallyClosed (s : Set X) : Prop := ∃ (U Z : Set X), IsOpen U ∧ IsClosed Z ∧ s = U ∩ Z
 
-English:
-definition interior
-  signature: (s : Set X)
-  body: ⋃₀ { t | IsOpen t ∧ t subseteq s }
+/-- The interior of a set `s` is the largest open subset of `s`. -/
+/-
+**interior** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：interior (s : Set X) : Set X
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 interior
-  签名: (s : 集合 X)
-  定义体: ⋃₀ { t | IsOpen t ∧ t subseteq s }
-
-Depends on / 依赖: IsOpen, subseteq
+--- 原说明 ---
+The interior of a set `s` is the largest open subset of `s`.
 -/
 def interior (s : Set X) : Set X :=
-  ⋃₀ { t | IsOpen t ∧ t subseteq s }
+  ⋃₀ { t | IsOpen t ∧ t ⊆ s }
 
-/--
-Definition of `closure` / `closure` 的定义
+/-- The closure of `s` is the smallest closed set containing `s`. -/
+/-
+**closure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：closure (s : Set X) : Set X
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition closure
-  signature: (s : Set X)
-  body: ⋂₀ { t | IsClosed t ∧ s subseteq t }
-
-中文:
-定义 closure
-  签名: (s : 集合 X)
-  定义体: ⋂₀ { t | IsClosed t ∧ s subseteq t }
-
-Depends on / 依赖: IsClosed, subseteq
+--- 原说明 ---
+The closure of `s` is the smallest closed set containing `s`.
 -/
 def closure (s : Set X) : Set X :=
-  ⋂₀ { t | IsClosed t ∧ s subseteq t }
+  ⋂₀ { t | IsClosed t ∧ s ⊆ t }
 
-/--
-Definition of `frontier` / `frontier` 的定义
+/-- The frontier of a set is the set of points between the closure and interior. -/
+/-
+**frontier** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：frontier (s : Set X) : Set X
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition frontier
-  signature: (s : Set X)
-  body: closure s \ interior s
-
-中文:
-定义 frontier
-  签名: (s : 集合 X)
-  定义体: closure s \ interior s
-
-Depends on / 依赖: closure, interior
+--- 原说明 ---
+The frontier of a set is the set of points between the closure and interior.
 -/
 def frontier (s : Set X) : Set X :=
   closure s \ interior s
 
 /--
-Definition of `coborder` / `coborder` 的定义
+The coborder is defined as the complement of `closure s \ s`,
+or the union of `s` and the complement of `∂(s)`.
+This is the largest set in which `s` is closed, and `s` is locally closed if and only if
+`coborder s` is open.
 
-English:
-definition coborder
-  signature: (s : Set X)
-  body: (closure s \ s)ᶜ
+This is unnamed in the literature, and this name is due to the fact that `coborder s = (border sᶜ)ᶜ`
+where `border s = s \ interior s` is the border in the sense of Hausdorff.
+-/
+/-
+**coborder** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：coborder (s : Set X) : Set X
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 coborder
-  签名: (s : 集合 X)
-  定义体: (closure s \ s)ᶜ
+--- 原说明 ---
+The coborder is defined as the complement of `closure s \ s`,
+or the union of `s` and the complement of `∂(s)`.
+This is the largest set in which `s` is closed, and `s` is locally closed if and
+ only if
+`coborder s` is open.
 
-Depends on / 依赖: closure
+This is unnamed in the literature, and this name is due to the fact that `cobord
+er s = (border sᶜ)ᶜ`
+where `border s = s \ interior s` is the border in the sense of Hausdorff.
 -/
 def coborder (s : Set X) : Set X :=
   (closure s \ s)ᶜ
 
-/--
-Definition of `Dense` / `Dense` 的定义
+/-- A set is dense in a topological space if every point belongs to its closure. -/
+/-
+**Dense** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Dense (s : Set X) : Prop
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Dense
-  signature: (s : Set X)
-  body: forall x, x in closure s
-
-中文:
-定义 稠密
-  签名: (s : 集合 X)
-  定义体: forall x, x in closure s
-
-Depends on / 依赖: closure
+--- 原说明 ---
+A set is dense in a topological space if every point belongs to its closure.
 -/
 def Dense (s : Set X) : Prop :=
-  forall x, x in closure s
+  ∀ x, x ∈ closure s
 
-/--
-Definition of `DenseRange` / `DenseRange` 的定义
+/-- `f : α → X` has dense range if its range (image) is a dense subset of `X`. -/
+/-
+**DenseRange** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DenseRange {α : Type*} (f : α -> X)
+参数：f : α -> X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DenseRange
-  signature: {α : Type*} (f : α -> X)
-  body: Dense (range f)
-
-中文:
-定义 DenseRange
-  签名: {α : 类型} (f : α -> X)
-  定义体: Dense (range f)
+--- 原说明 ---
+`f : α → X` has dense range if its range (image) is a dense subset of `X`.
 -/
-def DenseRange {α : Type*} (f : α -> X) := Dense (range f)
+def DenseRange {α : Type*} (f : α → X) := Dense (range f)
 
 /-- A function between topological spaces is continuous if the preimage
   of every open set is open. Registered as a structure to make sure it is not unfolded by Lean. -/
 @[fun_prop, wikidata Q170058]
-/--
-Definition of `Continuous` / `Continuous` 的定义
+/-
+**Continuous** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Continuous (f : X → Y)
+参数：f : X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Continuous
-  parameters: (f : X -> Y)
-  axioms and operations (1):
-    - isOpen_preimage : forall s, IsOpen s -> IsOpen (f ⁻¹' s)
-
-中文:
-结构 连续
-  参数: (f : X -> Y)
-  公理与运算 (1 个):
-    - isOpen_preimage : 对任意 s, 是开集 s -> 是开集 (f ⁻¹' s)
+--- 原说明 ---
+A function between topological spaces is continuous if the preimage
+  of every open set is open. Registered as a structure to make sure it is not un
+folded by Lean.
 -/
-structure Continuous (f : X -> Y) : Prop where
+structure Continuous (f : X → Y) : Prop where
   /-- The preimage of an open set under a continuous function is an open set. Use `IsOpen.preimage`
   instead. -/
-  isOpen_preimage : forall s, IsOpen s -> IsOpen (f ⁻¹' s)
+  isOpen_preimage : ∀ s, IsOpen s → IsOpen (f ⁻¹' s)
 
-/--
-Definition of `IsOpenMap` / `IsOpenMap` 的定义
+/-- A map `f : X → Y` is said to be an *open map*,
+if the image of any open `U : Set X` is open in `Y`. -/
+/-
+**IsOpenMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsOpenMap (f : X -> Y) : Prop
+参数：f : X -> Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsOpenMap
-  signature: (f : X -> Y)
-  body: forall U : Set X, IsOpen U -> IsOpen (f '' U)
-
-中文:
-定义 是开映射
-  签名: (f : X -> Y)
-  定义体: forall U : Set X, IsOpen U -> IsOpen (f '' U)
-
-Depends on / 依赖: IsOpen
+--- 原说明 ---
+A map `f : X → Y` is said to be an *open map*,
+if the image of any open `U : Set X` is open in `Y`.
 -/
-def IsOpenMap (f : X -> Y) : Prop := forall U : Set X, IsOpen U -> IsOpen (f '' U)
+def IsOpenMap (f : X → Y) : Prop := ∀ U : Set X, IsOpen U → IsOpen (f '' U)
 
-/--
-Definition of `IsClosedMap` / `IsClosedMap` 的定义
+/-- A map `f : X → Y` is said to be a *closed map*,
+if the image of any closed `U : Set X` is closed in `Y`. -/
+/-
+**IsClosedMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsClosedMap (f : X -> Y) : Prop
+参数：f : X -> Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsClosedMap
-  signature: (f : X -> Y)
-  body: forall U : Set X, IsClosed U -> IsClosed (f '' U)
-
-中文:
-定义 是闭映射
-  签名: (f : X -> Y)
-  定义体: forall U : Set X, IsClosed U -> IsClosed (f '' U)
-
-Depends on / 依赖: IsClosed
+--- 原说明 ---
+A map `f : X → Y` is said to be a *closed map*,
+if the image of any closed `U : Set X` is closed in `Y`.
 -/
-def IsClosedMap (f : X -> Y) : Prop := forall U : Set X, IsClosed U -> IsClosed (f '' U)
+def IsClosedMap (f : X → Y) : Prop := ∀ U : Set X, IsClosed U → IsClosed (f '' U)
 
 /-- An open quotient map is an open map `f : X → Y` which is both an open map and a quotient map.
 Equivalently, it is a surjective continuous open map.
@@ -415,26 +353,31 @@ Contrary to general quotient maps,
 the category of open quotient maps is closed under `Prod.map`.
 -/
 @[mk_iff]
-/--
-Definition of `IsOpenQuotientMap` / `IsOpenQuotientMap` 的定义
+/-
+**IsOpenQuotientMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{X : Type u} → {Y : Type v} → [TopologicalSpace X] → [TopologicalSpace Y] 
+→ (X → Y) → Prop
+参数：X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsOpenQuotientMap
-  parameters: (f : X -> Y)
-  axioms and operations (3):
-    - surjective : Function.Surjective f
-    - continuous : Continuous f
-    - isOpenMap : IsOpenMap f
+--- 原说明 ---
+An open quotient map is an open map `f : X → Y` which is both an open map and a 
+quotient map.
+Equivalently, it is a surjective continuous open map.
+We use the latter characterization as a definition.
 
-中文:
-结构 是OpenQuotient映射
-  参数: (f : X -> Y)
-  公理与运算 (3 个):
-    - surjective : 函数.满射 f
-    - continuous : 连续 f
-    - isOpenMap : 是开映射 f
+Many important quotient maps are open quotient maps, including
+
+- the quotient map from a topological space to its quotient by the action of a g
+roup;
+- the quotient map from a topological group to its quotient by a normal subgroup
+;
+- the quotient map from a topological space to its separation quotient.
+
+Contrary to general quotient maps,
+the category of open quotient maps is closed under `Prod.map`.
 -/
-structure IsOpenQuotientMap (f : X -> Y) : Prop where
+structure IsOpenQuotientMap (f : X → Y) : Prop where
   /-- An open quotient map is surjective. -/
   surjective : Function.Surjective f
   /-- An open quotient map is continuous. -/
@@ -464,58 +407,50 @@ scoped notation (name := Continuous_of) "Continuous[" t₁ ", " t₂ "]" =>
 open Topology Lean.PrettyPrinter.Delaborator Delab.Noncanonical
 
 /-- Delaborator for `IsOpen[_]`. -/
-@[scoped app_delab IsOpen] meta def delabIsOpen : Delab := delabUnary 2 1 fun x => `(IsOpen[$x])
+@[scoped app_delab IsOpen] meta def delabIsOpen : Delab := delabUnary 2 1 fun x ↦ `(IsOpen[$x])
 
 /-- Delaborator for `IsClosed[_]`. -/
 @[scoped app_delab IsClosed]
-meta def delabIsClosed : Delab := delabUnary 2 1 fun x => `(IsClosed[$x])
+meta def delabIsClosed : Delab := delabUnary 2 1 fun x ↦ `(IsClosed[$x])
 
 /-- Delaborator for `closure[_]`. -/
-@[scoped app_delab closure] meta def delabClosure : Delab := delabUnary 2 1 fun x => `(closure[$x])
+@[scoped app_delab closure] meta def delabClosure : Delab := delabUnary 2 1 fun x ↦ `(closure[$x])
 
 /-- Delaborator for `Continuous[_, _]`. -/
 @[scoped app_delab Continuous]
 meta def delabContinuous : Delab :=
-  delabBinary 4 2 3 (fun x y => `(Continuous[$x, $y]))
+  delabBinary 4 2 3 (fun x y ↦ `(Continuous[$x, $y]))
 
 end Topology
 
-/--
-Definition of `BaireSpace` / `BaireSpace` 的定义
+/-- The property `BaireSpace α` means that the topological space `α` has the Baire property:
+any countable intersection of open dense subsets is dense.
+Formulated here when the source space is ℕ.
+Use `dense_iInter_of_isOpen` which works for any countable index type instead. -/
+/-
+**BaireSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class BaireSpace
-  parameters: (X : Type*) [TopologicalSpace X]
-  axioms and operations (1):
-    - baire_property : forall f : Nat -> Set X, (forall n, IsOpen (f n)) -> (forall n, Dense (f n)) -> Dense (⋂ n, f n)
-
-中文:
-类 Baire空间
-  参数: (X : 类型) [拓扑空间 X]
-  公理与运算 (1 个):
-    - baire_property : 对任意 f : 自然数 -> 集合 X, (对任意 n, 是开集 (f n)) -> (对任意 n, 稠密 (f n)) -> 稠密 (⋂ n, f n)
+--- 原说明 ---
+The property `BaireSpace α` means that the topological space `α` has the Baire p
+roperty:
+any countable intersection of open dense subsets is dense.
+Formulated here when the source space is ℕ.
+Use `dense_iInter_of_isOpen` which works for any countable index type instead.
 -/
 class BaireSpace (X : Type*) [TopologicalSpace X] : Prop where
-  baire_property : forall f : Nat -> Set X, (forall n, IsOpen (f n)) -> (forall n, Dense (f n)) -> Dense (⋂ n, f n)
+  baire_property : ∀ f : ℕ → Set X, (∀ n, IsOpen (f n)) → (∀ n, Dense (f n)) → Dense (⋂ n, f n)
 
 /-- A one-field structure wrapper for `X` with the topology coinduced from `t`. -/
 @[ext]
-/--
-Definition of `WithTopology` / `WithTopology` 的定义
+/-
+**WithTopology** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → TopologicalSpace X → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure WithTopology
-  parameters: (X : Type*) (t : TopologicalSpace X)
-  axioms and operations (2):
-    - toTopology((t)) : :
-    - ofTopology : X
-
-中文:
-结构 With拓扑
-  参数: (X : 类型) (t : 拓扑空间 X)
-  公理与运算 (2 个):
-    - toTopology((t)) : :
-    - ofTopology : X
+--- 原说明 ---
+A one-field structure wrapper for `X` with the topology coinduced from `t`.
 -/
 structure WithTopology (X : Type*) (t : TopologicalSpace X) where
   /-- Converts an element of `X` to an element of `WithTopology X t`. -/
@@ -533,3 +468,4 @@ by `delabStructureInstance`. -/
 meta def WithTopology.delabToTopology : Delab := delabApp
 
 end Notation
+

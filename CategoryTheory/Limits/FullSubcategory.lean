@@ -35,20 +35,19 @@ variable {J : Type w} [Category.{w'} J] {C : Type u} [Category.{v} C] {P : Objec
 /-- If a `J`-shaped diagram in `FullSubcategory P` has a limit cone in `C` whose cone point lives
     in the full subcategory, then this defines a limit in the full subcategory. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitFullSubcategoryInclusion'` / `createsLimitFullSubcategoryInclusion'` 的定义
+/-
+**CategoryTheory.Limits.createsLimitFullSubcategoryInclusion'** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsLimitFullSubcategoryInclusion' (F : J ⥤ P.FullSubcategory) {c : Con
+e (F ⋙ P.ι)} (hc : IsLimit c) (h : P c.pt) : CreatesLimit F P.ι
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι；hc : IsLimit c；h : P c.pt。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitFullSubcategoryInclusion'
-  signature: (F : J ⥤ P.FullSubcategory)
-  body: createsLimitOfFullyFaithfulOfIso' hc ⟨_, h⟩ (Iso.refl _)
-
-中文:
-定义 createsLimitFullSubcategoryInclusion'
-  签名: (F : J ⥤ P.满子范畴)
-  定义体: createsLimitOfFullyFaithfulOfIso' hc ⟨_, h⟩ (Iso.refl _)
-
-Depends on / 依赖: Iso.refl, createsLimitOfFullyFaithfulOfIso
+--- 原说明 ---
+If a `J`-shaped diagram in `FullSubcategory P` has a limit cone in `C` whose con
+e point lives
+    in the full subcategory, then this defines a limit in the full subcategory.
 -/
 def createsLimitFullSubcategoryInclusion' (F : J ⥤ P.FullSubcategory)
     {c : Cone (F ⋙ P.ι)} (hc : IsLimit c) (h : P c.pt) :
@@ -58,20 +57,19 @@ def createsLimitFullSubcategoryInclusion' (F : J ⥤ P.FullSubcategory)
 /-- If a `J`-shaped diagram in `FullSubcategory P` has a limit in `C` whose cone point lives in the
     full subcategory, then this defines a limit in the full subcategory. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitFullSubcategoryInclusion` / `createsLimitFullSubcategoryInclusion` 的定义
+/-
+**CategoryTheory.Limits.createsLimitFullSubcategoryInclusion** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsLimitFullSubcategoryInclusion (F : J ⥤ P.FullSubcategory) [HasLimit
+ (F ⋙ P.ι)] (h : P (limit (F ⋙ P.ι))) : CreatesLimit F P.ι
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι；h : P (limit (F ⋙ P.ι))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitFullSubcategoryInclusion
-  signature: (F : J ⥤ P.FullSubcategory)
-  body: createsLimitFullSubcategoryInclusion' F (limit.isLimit _) h
-
-中文:
-定义 createsLimitFullSubcategoryInclusion
-  签名: (F : J ⥤ P.满子范畴)
-  定义体: createsLimitFullSubcategoryInclusion' F (limit.isLimit _) h
-
-Depends on / 依赖: createsLimitFullSubcategoryInclusion, isLimit, limit.isLimit
+--- 原说明 ---
+If a `J`-shaped diagram in `FullSubcategory P` has a limit in `C` whose cone poi
+nt lives in the
+    full subcategory, then this defines a limit in the full subcategory.
 -/
 def createsLimitFullSubcategoryInclusion (F : J ⥤ P.FullSubcategory)
     [HasLimit (F ⋙ P.ι)] (h : P (limit (F ⋙ P.ι))) :
@@ -81,20 +79,20 @@ def createsLimitFullSubcategoryInclusion (F : J ⥤ P.FullSubcategory)
 /-- If a `J`-shaped diagram in `FullSubcategory P` has a colimit cocone in `C` whose cocone point
     lives in the full subcategory, then this defines a colimit in the full subcategory. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitFullSubcategoryInclusion'` / `createsColimitFullSubcategoryInclusion'` 的定义
+/-
+**CategoryTheory.Limits.createsColimitFullSubcategoryInclusion'** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsColimitFullSubcategoryInclusion' (F : J ⥤ P.FullSubcategory) {c : C
+ocone (F ⋙ P.ι)} (hc : IsColimit c) (h : P c.pt) : CreatesColimit F P.ι
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι；hc : IsColimit c；h : P c.pt。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitFullSubcategoryInclusion'
-  signature: (F : J ⥤ P.FullSubcategory)
-  body: createsColimitOfFullyFaithfulOfIso' hc ⟨_, h⟩ (Iso.refl _)
-
-中文:
-定义 createsColimitFullSubcategoryInclusion'
-  签名: (F : J ⥤ P.满子范畴)
-  定义体: createsColimitOfFullyFaithfulOfIso' hc ⟨_, h⟩ (Iso.refl _)
-
-Depends on / 依赖: Iso.refl, createsColimitOfFullyFaithfulOfIso
+--- 原说明 ---
+If a `J`-shaped diagram in `FullSubcategory P` has a colimit cocone in `C` whose
+ cocone point
+    lives in the full subcategory, then this defines a colimit in the full subca
+tegory.
 -/
 def createsColimitFullSubcategoryInclusion' (F : J ⥤ P.FullSubcategory)
     {c : Cocone (F ⋙ P.ι)} (hc : IsColimit c) (h : P c.pt) :
@@ -104,20 +102,19 @@ def createsColimitFullSubcategoryInclusion' (F : J ⥤ P.FullSubcategory)
 /-- If a `J`-shaped diagram in `FullSubcategory P` has a colimit in `C` whose cocone point lives in
     the full subcategory, then this defines a colimit in the full subcategory. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitFullSubcategoryInclusion` / `createsColimitFullSubcategoryInclusion` 的定义
+/-
+**CategoryTheory.Limits.createsColimitFullSubcategoryInclusion** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsColimitFullSubcategoryInclusion (F : J ⥤ P.FullSubcategory) [HasCol
+imit (F ⋙ P.ι)] (h : P (colimit (F ⋙ P.ι))) : CreatesColimit F P.ι
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι；h : P (colimit (F ⋙ P.ι))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitFullSubcategoryInclusion
-  signature: (F : J ⥤ P.FullSubcategory)
-  body: createsColimitFullSubcategoryInclusion' F (colimit.isColimit _) h
-
-中文:
-定义 createsColimitFullSubcategoryInclusion
-  签名: (F : J ⥤ P.满子范畴)
-  定义体: createsColimitFullSubcategoryInclusion' F (colimit.isColimit _) h
-
-Depends on / 依赖: colimit, colimit.isColimit, createsColimitFullSubcategoryInclusion, isColimit
+--- 原说明 ---
+If a `J`-shaped diagram in `FullSubcategory P` has a colimit in `C` whose cocone
+ point lives in
+    the full subcategory, then this defines a colimit in the full subcategory.
 -/
 def createsColimitFullSubcategoryInclusion (F : J ⥤ P.FullSubcategory)
     [HasColimit (F ⋙ P.ι)]
@@ -129,84 +126,69 @@ variable (P J)
 
 /-- If `P` is closed under limits of shape `J`, then the inclusion creates such limits. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitFullSubcategoryInclusionOfClosed` / `createsLimitFullSubcategoryInclusionOfClosed` 的定义
+/-
+**CategoryTheory.Limits.createsLimitFullSubcategoryInclusionOfClosed** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsLimitFullSubcategoryInclusionOfClosed [P.IsClosedUnderLimitsOfShape
+ J] (F : J ⥤ P.FullSubcategory) [HasLimit (F ⋙ P.ι)] : CreatesLimit F P.ι
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitFullSubcategoryInclusionOfClosed
-  signature: [P.IsClosedUnderLimitsOfShape J]
-  body: createsLimitFullSubcategoryInclusion F (P.prop_limit _ fun j => (F.obj j).property)
-
-中文:
-定义 createsLimitFullSubcategoryInclusionOfClosed
-  签名: [P.是ClosedUnderLimitsOfShape J]
-  定义体: createsLimitFullSubcategoryInclusion F (P.prop_limit _ fun j => (F.obj j).property)
-
-Depends on / 依赖: F.obj, P.prop_limit, createsLimitFullSubcategoryInclusion, prop_limit, property
+--- 原说明 ---
+If `P` is closed under limits of shape `J`, then the inclusion creates such limi
+ts.
 -/
 def createsLimitFullSubcategoryInclusionOfClosed [P.IsClosedUnderLimitsOfShape J]
     (F : J ⥤ P.FullSubcategory) [HasLimit (F ⋙ P.ι)] :
     CreatesLimit F P.ι :=
   createsLimitFullSubcategoryInclusion F (P.prop_limit _ fun j => (F.obj j).property)
 
-/--
-Instance `createsLimitsOfShapeFullSubcategoryInclusion` / 实例 `createsLimitsOfShapeFullSubcategoryInclusion`
+/-- If `P` is closed under limits of shape `J`, then the inclusion creates such limits. -/
+/-
+**CategoryTheory.Limits.createsLimitsOfShapeFullSubcategoryInclusion** 是 Mathlib
+ 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsLimitsOfShapeFullSubcategoryInclusion [P.IsClosedUnderLimitsOfShape
+ J] [HasLimitsOfShape J C] : CreatesLimitsOfShape J P.ι where CreatesLimit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance createsLimitsOfShapeFullSubcategoryInclusion
-  signature: [P.IsClosedUnderLimitsOfShape J]
-  body: @fun F => createsLimitFullSubcategoryInclusionOfClosed J P F
-
-中文:
-实例 createsLimitsOfShapeFullSubcategoryInclusion
-  签名: [P.是ClosedUnderLimitsOfShape J]
-  定义体: @fun F => createsLimitFullSubcategoryInclusionOfClosed J P F
-
-Depends on / 依赖: createsLimitFullSubcategoryInclusionOfClosed
+--- 原说明 ---
+If `P` is closed under limits of shape `J`, then the inclusion creates such limi
+ts.
 -/
 instance createsLimitsOfShapeFullSubcategoryInclusion [P.IsClosedUnderLimitsOfShape J]
     [HasLimitsOfShape J C] : CreatesLimitsOfShape J P.ι where
   CreatesLimit := @fun F => createsLimitFullSubcategoryInclusionOfClosed J P F
-
-/--
-theorem `hasLimit_of_closedUnderLimits` / 定理 `hasLimit_of_closedUnderLimits`
-
-English:
-theorem hasLimit_of_closedUnderLimits
-  statement: [P.IsClosedUnderLimitsOfShape J]
-  proof: have : CreatesLimit F P.ι :=
-    createsLimitFullSubcategoryInclusionOfClosed J P F
-  hasLimit_of_created F P.ι
-
-中文:
-定理 hasLimit_of_closedUnderLimits
-  结论: [P.是ClosedUnderLimitsOfShape J]
-  证明: have : CreatesLimit F P.ι :=
-    createsLimitFullSubcategoryInclusionOfClosed J P F
-  hasLimit_of_created F P.ι
-
-Depends on / 依赖: CreatesLimit, createsLimitFullSubcategoryInclusionOfClosed, hasLimit_of_created
+/-
+**CategoryTheory.Limits.hasLimit_of_closedUnderLimits** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：hasLimit_of_closedUnderLimits [P.IsClosedUnderLimitsOfShape J] (F : J ⥤ P.
+FullSubcategory) [HasLimit (F ⋙ P.ι)] : HasLimit F
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasLimit_of_created`：hasLimit_of_created (K : J ⥤ C) (F :
+ C ⥤ D) [HasLimit (K ⋙ F)] [CreatesLimit K F] : HasLimit K
 -/
 theorem hasLimit_of_closedUnderLimits [P.IsClosedUnderLimitsOfShape J]
     (F : J ⥤ P.FullSubcategory) [HasLimit (F ⋙ P.ι)] : HasLimit F :=
   have : CreatesLimit F P.ι :=
     createsLimitFullSubcategoryInclusionOfClosed J P F
   hasLimit_of_created F P.ι
-
-/--
-Instance `hasLimitsOfShape_of_closedUnderLimits` / 实例 `hasLimitsOfShape_of_closedUnderLimits`
-
-English:
-instance hasLimitsOfShape_of_closedUnderLimits
-  signature: [P.IsClosedUnderLimitsOfShape J]
-  body: { has_limit := fun F => hasLimit_of_closedUnderLimits J P F }
-
-中文:
-实例 hasLimitsOfShape_of_closedUnderLimits
-  签名: [P.是ClosedUnderLimitsOfShape J]
-  定义体: { has_limit := fun F => hasLimit_of_closedUnderLimits J P F }
-
-Depends on / 依赖: hasLimit_of_closedUnderLimits, has_limit
+/-
+**CategoryTheory.Limits.hasLimitsOfShape_of_closedUnderLimits** 是 Mathlib 中的一个实例
+，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasLimitsOfShape_of_closedUnderLimits [P.IsClosedUnderLimitsOfShape J] [Ha
+sLimitsOfShape J C] : HasLimitsOfShape J P.FullSubcategory
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_closedUnderLimits`：hasLimit_of_closedU
+nderLimits [P.IsClosedUnderLimitsOfShape J] (F : J ⥤ P.FullSubcategory) [HasLimi
+t (F ⋙ P.ι)] : HasLimit F
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance hasLimitsOfShape_of_closedUnderLimits [P.IsClosedUnderLimitsOfShape J]
     [HasLimitsOfShape J C] : HasLimitsOfShape J P.FullSubcategory :=
@@ -214,84 +196,71 @@ instance hasLimitsOfShape_of_closedUnderLimits [P.IsClosedUnderLimitsOfShape J]
 
 /-- If `P` is closed under colimits of shape `J`, then the inclusion creates such colimits. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitFullSubcategoryInclusionOfClosed` / `createsColimitFullSubcategoryInclusionOfClosed` 的定义
+/-
+**CategoryTheory.Limits.createsColimitFullSubcategoryInclusionOfClosed** 是 Mathl
+ib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsColimitFullSubcategoryInclusionOfClosed [P.IsClosedUnderColimitsOfS
+hape J] (F : J ⥤ P.FullSubcategory) [HasColimit (F ⋙ P.ι)] : CreatesColimit F P.
+ι
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitFullSubcategoryInclusionOfClosed
-  signature: [P.IsClosedUnderColimitsOfShape J]
-  body: createsColimitFullSubcategoryInclusion F (P.prop_colimit _ fun j => (F.obj j).property)
-
-中文:
-定义 createsColimitFullSubcategoryInclusionOfClosed
-  签名: [P.是ClosedUnderColimitsOfShape J]
-  定义体: createsColimitFullSubcategoryInclusion F (P.prop_colimit _ fun j => (F.obj j).property)
-
-Depends on / 依赖: F.obj, P.prop_colimit, createsColimitFullSubcategoryInclusion, prop_colimit, property
+--- 原说明 ---
+If `P` is closed under colimits of shape `J`, then the inclusion creates such co
+limits.
 -/
 def createsColimitFullSubcategoryInclusionOfClosed [P.IsClosedUnderColimitsOfShape J]
     (F : J ⥤ P.FullSubcategory) [HasColimit (F ⋙ P.ι)] :
     CreatesColimit F P.ι :=
   createsColimitFullSubcategoryInclusion F (P.prop_colimit _ fun j => (F.obj j).property)
 
-/--
-Instance `createsColimitsOfShapeFullSubcategoryInclusion` / 实例 `createsColimitsOfShapeFullSubcategoryInclusion`
+/-- If `P` is closed under colimits of shape `J`, then the inclusion creates such colimits. -/
+/-
+**CategoryTheory.Limits.createsColimitsOfShapeFullSubcategoryInclusion** 是 Mathl
+ib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：createsColimitsOfShapeFullSubcategoryInclusion [P.IsClosedUnderColimitsOfS
+hape J] [HasColimitsOfShape J C] : CreatesColimitsOfShape J P.ι where CreatesCol
+imit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance createsColimitsOfShapeFullSubcategoryInclusion
-  signature: [P.IsClosedUnderColimitsOfShape J]
-  body: @fun F => createsColimitFullSubcategoryInclusionOfClosed J P F
-
-中文:
-实例 createsColimitsOfShapeFullSubcategoryInclusion
-  签名: [P.是ClosedUnderColimitsOfShape J]
-  定义体: @fun F => createsColimitFullSubcategoryInclusionOfClosed J P F
-
-Depends on / 依赖: createsColimitFullSubcategoryInclusionOfClosed
+--- 原说明 ---
+If `P` is closed under colimits of shape `J`, then the inclusion creates such co
+limits.
 -/
 instance createsColimitsOfShapeFullSubcategoryInclusion [P.IsClosedUnderColimitsOfShape J]
     [HasColimitsOfShape J C] : CreatesColimitsOfShape J P.ι where
   CreatesColimit := @fun F => createsColimitFullSubcategoryInclusionOfClosed J P F
-
-/--
-theorem `hasColimit_of_closedUnderColimits` / 定理 `hasColimit_of_closedUnderColimits`
-
-English:
-theorem hasColimit_of_closedUnderColimits
-  statement: [P.IsClosedUnderColimitsOfShape J]
-  proof: have : CreatesColimit F P.ι :=
-    createsColimitFullSubcategoryInclusionOfClosed J P F
-  hasColimit_of_created F P.ι
-
-中文:
-定理 hasColimit_of_closedUnderColimits
-  结论: [P.是ClosedUnderColimitsOfShape J]
-  证明: have : CreatesColimit F P.ι :=
-    createsColimitFullSubcategoryInclusionOfClosed J P F
-  hasColimit_of_created F P.ι
-
-Depends on / 依赖: CreatesColimit, createsColimitFullSubcategoryInclusionOfClosed, hasColimit_of_created
+/-
+**CategoryTheory.Limits.hasColimit_of_closedUnderColimits** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Limits`。
+形式化陈述：hasColimit_of_closedUnderColimits [P.IsClosedUnderColimitsOfShape J] (F : 
+J ⥤ P.FullSubcategory) [HasColimit (F ⋙ P.ι)] : HasColimit F
+参数：F : J ⥤ P.FullSubcategory；F ⋙ P.ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasColimit_of_created`：hasColimit_of_created (K : J ⥤ C) 
+(F : C ⥤ D) [HasColimit (K ⋙ F)] [CreatesColimit K F] : HasColimit K
 -/
 theorem hasColimit_of_closedUnderColimits [P.IsClosedUnderColimitsOfShape J]
     (F : J ⥤ P.FullSubcategory) [HasColimit (F ⋙ P.ι)] : HasColimit F :=
   have : CreatesColimit F P.ι :=
     createsColimitFullSubcategoryInclusionOfClosed J P F
   hasColimit_of_created F P.ι
-
-/--
-Instance `hasColimitsOfShape_of_closedUnderColimits` / 实例 `hasColimitsOfShape_of_closedUnderColimits`
-
-English:
-instance hasColimitsOfShape_of_closedUnderColimits
-  signature: [P.IsClosedUnderColimitsOfShape J]
-  body: { has_colimit := fun F => hasColimit_of_closedUnderColimits J P F }
-
-中文:
-实例 hasColimitsOfShape_of_closedUnderColimits
-  签名: [P.是ClosedUnderColimitsOfShape J]
-  定义体: { has_colimit := fun F => hasColimit_of_closedUnderColimits J P F }
-
-Depends on / 依赖: hasColimit_of_closedUnderColimits, has_colimit
+/-
+**CategoryTheory.Limits.hasColimitsOfShape_of_closedUnderColimits** 是 Mathlib 中的
+一个实例，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasColimitsOfShape_of_closedUnderColimits [P.IsClosedUnderColimitsOfShape 
+J] [HasColimitsOfShape J C] : HasColimitsOfShape J P.FullSubcategory
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimit_of_closedUnderColimits`：hasColimit_of_c
+losedUnderColimits [P.IsClosedUnderColimitsOfShape J] (F : J ⥤ P.FullSubcategory
+) [HasColimit (F ⋙ P.ι)] : HasColimit F
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance hasColimitsOfShape_of_closedUnderColimits [P.IsClosedUnderColimitsOfShape J]
     [HasColimitsOfShape J C] : HasColimitsOfShape J P.FullSubcategory :=
@@ -305,26 +274,10 @@ open Limits
 
 variable {C : Type u} [Category.{v} C] (P : ObjectProperty C) (J : Type w) [Category.{w'} J]
 
-/--
-lemma `isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι` / 引理 `isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι`
-
-English:
-lemma isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι
-  proof: by
-    rintro X ⟨p⟩
-    exact P.prop_of_iso (IsColimit.coconePointUniqueUpToIso
-      (isColimitOfPreserves P.ι (colimit.isColimit (P.lift p.diag p.prop_diag_obj)))
-        p.isColimit) (colimit (P.lift p.diag p.prop_diag_obj)).property
-
-中文:
-引理 isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι
-  证明: by
-    rintro X ⟨p⟩
-    exact P.prop_of_iso (IsColimit.coconePointUniqueUpToIso
-      (isColimitOfPreserves P.ι (colimit.isColimit (P.lift p.diag p.prop_diag_obj)))
-        p.isColimit) (colimit (P.lift p.diag p.prop_diag_obj)).property
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, P.lift, P.prop_of_iso, coconePointUniqueUpToIso, colimit, colimit.isColimit, isColimit, isColimitOfPreserves, p.diag, p.isColimit, p.prop_diag_obj, prop_diag_obj, prop_of_iso, property
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_of_preservesColimit
+sOfShape_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι
     [HasColimitsOfShape J P.FullSubcategory] [P.IsClosedUnderIsomorphisms]
@@ -335,27 +288,10 @@ lemma isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι
     exact P.prop_of_iso (IsColimit.coconePointUniqueUpToIso
       (isColimitOfPreserves P.ι (colimit.isColimit (P.lift p.diag p.prop_diag_obj)))
         p.isColimit) (colimit (P.lift p.diag p.prop_diag_obj)).property
-
-/--
-lemma `isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι` / 引理 `isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι`
-
-English:
-lemma isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι
-  proof: by
-    rintro X ⟨p⟩
-    exact P.prop_of_iso (IsLimit.conePointUniqueUpToIso
-      (isLimitOfPreserves P.ι (limit.isLimit (P.lift p.diag p.prop_diag_obj)))
-        p.isLimit) (limit (P.lift p.diag p.prop_diag_obj)).property
-
-中文:
-引理 isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι
-  证明: by
-    rintro X ⟨p⟩
-    exact P.prop_of_iso (IsLimit.conePointUniqueUpToIso
-      (isLimitOfPreserves P.ι (limit.isLimit (P.lift p.diag p.prop_diag_obj)))
-        p.isLimit) (limit (P.lift p.diag p.prop_diag_obj)).property
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, P.lift, P.prop_of_iso, conePointUniqueUpToIso, isLimit, isLimitOfPreserves, limit.isLimit, p.diag, p.isLimit, p.prop_diag_obj, prop_diag_obj, prop_of_iso, property
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_of_preservesLimitsOfS
+hape_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι
     [HasLimitsOfShape J P.FullSubcategory] [P.IsClosedUnderIsomorphisms]
@@ -376,30 +312,13 @@ variable (F : C ⥤ D)
 
 namespace Limits
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The essential image of a functor is closed under the limits it preserves. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [HasLimitsOfShape
-  signature: J C] [PreservesLimitsOfShape J F] [F.Full] [F.Faithful] :
-  body: .mk' (by
-    rintro _ ⟨G, hG⟩
-    exact ⟨limit (Functor.essImage.liftFunctor G F hG),
-      ⟨IsLimit.conePointsIsoOfNatIso
-        (isLimitOfPreserves F (limit.isLimit _)) (limit.isLimit _)
-        (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
-
-中文:
-实例 [有形状极限
-  签名: J C] [保持形状极限 J F] [F.满] [F.忠实] :
-  定义体: .mk' (by
-    rintro _ ⟨G, hG⟩
-    exact ⟨limit (Functor.essImage.liftFunctor G F hG),
-      ⟨IsLimit.conePointsIsoOfNatIso
-        (isLimitOfPreserves F (limit.isLimit _)) (limit.isLimit _)
-        (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
-
-Depends on / 依赖: Functor, Functor.essImage.liftFunctor, Functor.essImage.liftFunctorCompIso, IsLimit, IsLimit.conePointsIsoOfNatIso, conePointsIsoOfNatIso, essImage, isLimit, isLimitOfPreserves, liftFunctor, liftFunctorCompIso, limit.isLimit
+--- 原说明 ---
+The essential image of a functor is closed under the limits it preserves.
 -/
 instance [HasLimitsOfShape J C] [PreservesLimitsOfShape J F] [F.Full] [F.Faithful] :
     F.essImage.IsClosedUnderLimitsOfShape J :=
@@ -410,30 +329,13 @@ instance [HasLimitsOfShape J C] [PreservesLimitsOfShape J F] [F.Full] [F.Faithfu
         (isLimitOfPreserves F (limit.isLimit _)) (limit.isLimit _)
         (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The essential image of a functor is closed under the colimits it preserves. -/
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [HasColimitsOfShape
-  signature: J C] [PreservesColimitsOfShape J F] [F.Full] [F.Faithful] :
-  body: .mk' (by
-    rintro _ ⟨G, hG⟩
-    exact ⟨colimit (Functor.essImage.liftFunctor G F hG),
-      ⟨IsColimit.coconePointsIsoOfNatIso
-        (isColimitOfPreserves F (colimit.isColimit _)) (colimit.isColimit _)
-        (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
-
-中文:
-实例 [有形状余极限
-  签名: J C] [保持形状余极限 J F] [F.满] [F.忠实] :
-  定义体: .mk' (by
-    rintro _ ⟨G, hG⟩
-    exact ⟨colimit (Functor.essImage.liftFunctor G F hG),
-      ⟨IsColimit.coconePointsIsoOfNatIso
-        (isColimitOfPreserves F (colimit.isColimit _)) (colimit.isColimit _)
-        (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
-
-Depends on / 依赖: Functor, Functor.essImage.liftFunctor, Functor.essImage.liftFunctorCompIso, IsColimit, IsColimit.coconePointsIsoOfNatIso, coconePointsIsoOfNatIso, colimit, colimit.isColimit, essImage, isColimit, isColimitOfPreserves, liftFunctor, liftFunctorCompIso
+--- 原说明 ---
+The essential image of a functor is closed under the colimits it preserves.
 -/
 instance [HasColimitsOfShape J C] [PreservesColimitsOfShape J F] [F.Full] [F.Faithful] :
     F.essImage.IsClosedUnderColimitsOfShape J :=
@@ -445,3 +347,4 @@ instance [HasColimitsOfShape J C] [PreservesColimitsOfShape J F] [F.Full] [F.Fai
         (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
 
 end CategoryTheory.Limits
+

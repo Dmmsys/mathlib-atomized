@@ -24,28 +24,23 @@ public section
 /-- The maximal spectrum of a commutative (semi)ring `R` is the type of all
 maximal ideals of `R`. -/
 @[ext]
-/--
-Definition of `MaximalSpectrum` / `MaximalSpectrum` 的定义
+/-
+**MaximalSpectrum** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [CommSemiring R] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MaximalSpectrum
-  parameters: (R : Type*) [CommSemiring R]
-  axioms and operations (2):
-    - asIdeal : Ideal R
-    - isMaximal : asIdeal.IsMaximal
-
-中文:
-结构 极大谱
-  参数: (R : 类型) [交换半环 R]
-  公理与运算 (2 个):
-    - asIdeal : 理想 R
-    - isMaximal : asIdeal.是极大
+--- 原说明 ---
+The maximal spectrum of a commutative (semi)ring `R` is the type of all
+maximal ideals of `R`.
 -/
 structure MaximalSpectrum (R : Type*) [CommSemiring R] where
   asIdeal : Ideal R
   isMaximal : asIdeal.IsMaximal
 
 attribute [instance] MaximalSpectrum.isMaximal
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R : Type*) [CommSemiring R] : Coe (MaximalSpectrum R) (Ideal R) where
   coe P := P.asIdeal

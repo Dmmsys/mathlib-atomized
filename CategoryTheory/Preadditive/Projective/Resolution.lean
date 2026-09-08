@@ -35,37 +35,31 @@ open Projective
 variable [HasZeroObject C] [HasZeroMorphisms C]
 
 /--
-Definition of `ProjectiveResolution` / `ProjectiveResolution` 的定义
+A `ProjectiveResolution Z` consists of a bundled `ℕ`-indexed chain complex of projective objects,
+along with a quasi-isomorphism to the complex consisting of just `Z` supported in degree `0`.
+-/
+/-
+**CategoryTheory.ProjectiveResolution** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`
+。
+形式化陈述：ProjectiveResolution (Z : C) where /-- the chain complex involved in the r
+esolution -/ complex : ChainComplex C Nat /-- the chain complex must be degreewi
+se projective -/ projective : forall n, Projective (complex.X n)
+参数：Z : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ProjectiveResolution
-  parameters: (Z : C)
-  axioms and operations (5):
-    - complex : ChainComplex C Nat
-    - projective : forall n, Projective (complex.X n)  [default: by infer_instance]
-    - [hasHomology : forall i, complex.HasHomology i]
-    - π : complex ⟶ (ChainComplex.single₀ C).obj Z
-    - quasiIso : QuasiIso π  [default: by infer_instance]
-
-中文:
-结构 投射消解
-  参数: (Z : C)
-  公理与运算 (5 个):
-    - complex : 链复形 C 自然数
-    - projective : 对任意 n, 投射 (complex.X n)  [默认: by infer_instance]
-    - [hasHomology : 对任意 i, complex.有同调 i]
-    - π : complex ⟶ (链复形.single₀ C).obj Z
-    - quasiIso : 拟同构 π  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A `ProjectiveResolution Z` consists of a bundled `ℕ`-indexed chain complex of pr
+ojective objects,
+along with a quasi-isomorphism to the complex consisting of just `Z` supported i
+n degree `0`.
 -/
 structure ProjectiveResolution (Z : C) where
   /-- the chain complex involved in the resolution -/
-  complex : ChainComplex C Nat
+  complex : ChainComplex C ℕ
   /-- the chain complex must be degreewise projective -/
-  projective : forall n, Projective (complex.X n) := by infer_instance
+  projective : ∀ n, Projective (complex.X n) := by infer_instance
   /-- the chain complex must have homology -/
-  [hasHomology : forall i, complex.HasHomology i]
+  [hasHomology : ∀ i, complex.HasHomology i]
   /-- the morphism to the single chain complex with `Z` in degree `0` -/
   π : complex ⟶ (ChainComplex.single₀ C).obj Z
   /-- the morphism to the single chain complex with `Z` in degree `0` is a quasi-isomorphism -/
@@ -74,45 +68,43 @@ structure ProjectiveResolution (Z : C) where
 open ProjectiveResolution in
 attribute [instance] projective hasHomology ProjectiveResolution.quasiIso
 
-/--
-Definition of `HasProjectiveResolution` / `HasProjectiveResolution` 的定义
+/-- An object admits a projective resolution.
+-/
+/-
+**CategoryTheory.HasProjectiveResolution** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Limits.HasZeroObject C] → [CategoryTheory.Limits.HasZeroMorphisms C] → C 
+→ Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasProjectiveResolution
-  parameters: (Z : C)
-  axioms and operations (1):
-    - out : Nonempty (ProjectiveResolution Z)
-
-中文:
-类 有投射消解
-  参数: (Z : C)
-  公理与运算 (1 个):
-    - out : 非空 (投射消解 Z)
+--- 原说明 ---
+An object admits a projective resolution.
 -/
 class HasProjectiveResolution (Z : C) : Prop where
   out : Nonempty (ProjectiveResolution Z)
 
 variable (C)
 
-/--
-Definition of `HasProjectiveResolutions` / `HasProjectiveResolutions` 的定义
+/-- You will rarely use this typeclass directly: it is implied by the combination
+`[EnoughProjectives C]` and `[Abelian C]`.
+By itself it's enough to set up the basic theory of derived functors.
+-/
+/-
+**CategoryTheory.HasProjectiveResolutions** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryT
+heory`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Limits.HasZeroObject C] → [CategoryTheory.Limits.HasZeroMorphisms C] → Pr
+op
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasProjectiveResolutions
-  parameters: : Prop where
-  axioms and operations (1):
-    - out : forall Z : C, HasProjectiveResolution Z
-
-中文:
-类 有ProjectiveResolutions
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out : 对任意 Z : C, 有投射消解 Z
-
-Depends on / 依赖: Fintype, Fintype.ofSurjective, ofComposition, ofComposition_surj, ofSurjective
+--- 原说明 ---
+You will rarely use this typeclass directly: it is implied by the combination
+`[EnoughProjectives C]` and `[Abelian C]`.
+By itself it's enough to set up the basic theory of derived functors.
 -/
 class HasProjectiveResolutions : Prop where
-  out : forall Z : C, HasProjectiveResolution Z
+  out : ∀ Z : C, HasProjectiveResolution Z
 
 attribute [instance 100] HasProjectiveResolutions.out
 
@@ -121,186 +113,174 @@ namespace ProjectiveResolution
 variable {C}
 variable {Z : C} (P : ProjectiveResolution Z)
 
-/--
-lemma `complex_exactAt_succ` / 引理 `complex_exactAt_succ`
-
-English:
-lemma complex_exactAt_succ
-  given: (n : Nat)
-  proof: by
-  rw [← quasiIsoAt_iff_exactAt' P.π (n + 1) (exactAt_succ_single_obj _ _)]
-  infer_instance
-
-中文:
-引理 complex_exactAt_succ
-  条件: (n : 自然数)
-  证明: by
-  rw [← quasiIsoAt_iff_exactAt' P.π (n + 1) (exactAt_succ_single_obj _ _)]
-  infer_instance
-
-Depends on / 依赖: exactAt_succ_single_obj, infer_instance, quasiIsoAt_iff_exactAt
+/-
+**CategoryTheory.ProjectiveResolution.complex_exactAt_succ** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.ProjectiveResolution`。
+形式化陈述：complex_exactAt_succ (n : Nat) : P.complex.ExactAt (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.ProjectiveResolution.hasHomology`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroObject 
+C]   [inst_2 : CategoryTheory.Limits.…
+· 使用定理 `HomologicalComplex.instHasHomologyObjSingle`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C
+]   [inst_2 : CategoryTheory.Limi…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `quasiIsoAt_iff_exactAt'`：quasiIsoAt_iff_exactAt' (f : K ⟶ L) (i : ι) [K.
+HasHomology i] [L.HasHomology i] (hL : L.ExactAt i) : QuasiIsoAt f i ↔ K.ExactAt
+ i
+· 使用引理 `ChainComplex.exactAt_succ_single_obj`：ChainComplex.exactAt_succ_single_o
+bj (A : C) (n : Nat) : ExactAt ((single₀ C).obj A) (n + 1)
+· 使用定理 `QuasiIso.quasiIsoAt`：∀ {ι : Type u_1} {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C} {c : 
+ComplexSh…
+· 使用定理 `CategoryTheory.ProjectiveResolution.quasiIso`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroObject C] 
+  [inst_2 : CategoryTheory.Limits.…
 -/
-lemma complex_exactAt_succ (n : Nat) :
+lemma complex_exactAt_succ (n : ℕ) :
     P.complex.ExactAt (n + 1) := by
   rw [← quasiIsoAt_iff_exactAt' P.π (n + 1) (exactAt_succ_single_obj _ _)]
   infer_instance
-
-/--
-lemma `exact_succ` / 引理 `exact_succ`
-
-English:
-lemma exact_succ
-  given: (n : Nat)
-  proof: ((HomologicalComplex.exactAt_iff' _ (n + 2) (n + 1) n) (by simp only [prev]; rfl)
-    (by simp)).1 (P.complex_exactAt_succ n)
-
-@[simp]
-
-中文:
-引理 exact_succ
-  条件: (n : 自然数)
-  证明: ((HomologicalComplex.exactAt_iff' _ (n + 2) (n + 1) n) (by simp only [prev]; rfl)
-    (by simp)).1 (P.complex_exactAt_succ n)
-
-@[simp]
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.exactAt_iff, P.complex_exactAt_succ, complex_exactAt_succ, exactAt_iff
+/-
+**CategoryTheory.ProjectiveResolution.exact_succ** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.ProjectiveResolution`。
+形式化陈述：exact_succ (n : Nat) : (ShortComplex.mk _ _ (P.complex.d_comp_d (n + 2) (n
+ + 1) n)).Exact
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `HomologicalComplex.exactAt_iff'`：exactAt_iff' (hi : c.prev j = i) (hk : 
+c.next j = k) : K.ExactAt j ↔ (K.sc' i j k).Exact
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ChainComplex.prev`：prev (α : Type*) [AddRightCancelSemigroup α] [One α] 
+(i : α) : (ComplexShape.down α).prev i = i + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ChainComplex.next_nat_succ`：next_nat_succ (i : Nat) : (ComplexShape.down
+ Nat).next (i + 1) = i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.ProjectiveResolution.complex_exactAt_succ`：complex_exactA
+t_succ (n : Nat) : P.complex.ExactAt (n + 1)
 -/
-lemma exact_succ (n : Nat) :
+lemma exact_succ (n : ℕ) :
     (ShortComplex.mk _ _ (P.complex.d_comp_d (n + 2) (n + 1) n)).Exact :=
   ((HomologicalComplex.exactAt_iff' _ (n + 2) (n + 1) n) (by simp only [prev]; rfl)
     (by simp)).1 (P.complex_exactAt_succ n)
 
 @[simp]
-/--
-theorem `π_f_succ` / 定理 `π_f_succ`
-
-English:
-theorem π_f_succ
-  given: (n : Nat)
-  statement: P.π.f (n + 1) = 0
-  proof: (isZero_single_obj_X _ _ _ _ (by simp)).eq_of_tgt _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 π_f_succ
-  条件: (n : 自然数)
-  结论: P.π.f (n + 1) = 0
-  证明: (isZero_single_obj_X _ _ _ _ (by simp)).eq_of_tgt _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: eq_of_tgt, isZero_single_obj_X
+/-
+**CategoryTheory.ProjectiveResolution.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.ProjectiveResolution`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem π_f_succ (n : Nat) : P.π.f (n + 1) = 0 :=
+theorem π_f_succ (n : ℕ) : P.π.f (n + 1) = 0 :=
   (isZero_single_obj_X _ _ _ _ (by simp)).eq_of_tgt _ _
 
 @[reassoc (attr := simp)]
-/--
-theorem `complex_d_comp_π_f_zero` / 定理 `complex_d_comp_π_f_zero`
-
-English:
-theorem complex_d_comp_π_f_zero
-  proof: by
-  rw [← P.π.comm 1 0]; rw [single_obj_d]; rw [comp_zero]
-
-中文:
-定理 complex_d_comp_π_f_zero
-  证明: by
-  rw [← P.π.comm 1 0]; rw [single_obj_d]; rw [comp_zero]
-
-Depends on / 依赖: comp_zero, single_obj_d
+/-
+**CategoryTheory.ProjectiveResolution.complex_d_comp_** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.ProjectiveResolution`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem complex_d_comp_π_f_zero :
     P.complex.d 1 0 ≫ P.π.f 0 = 0 := by
-  rw [← P.π.comm 1 0]; rw [single_obj_d]; rw [comp_zero]
-
-/--
-theorem `complex_d_succ_comp` / 定理 `complex_d_succ_comp`
-
-English:
-theorem complex_d_succ_comp
-  given: (n : Nat)
-  proof: by
-  simp
-
-中文:
-定理 complex_d_succ_comp
-  条件: (n : 自然数)
-  证明: by
-  simp
+  rw [← P.π.comm 1 0, single_obj_d, comp_zero]
+/-
+**CategoryTheory.ProjectiveResolution.complex_d_succ_comp** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.ProjectiveResolution`。
+形式化陈述：complex_d_succ_comp (n : Nat) : P.complex.d n (n + 1) ≫ P.complex.d (n + 1
+) (n + 2) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `ComplexShape.down_Rel`：∀ (α : Type u_2) [inst : Add α] [inst_1 : IsRight
+CancelAdd α] [inst_2 : One α] (i j : α),   (ComplexShape.down α).Rel i j = (j + 
+1 = i)
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem complex_d_succ_comp (n : Nat) :
+theorem complex_d_succ_comp (n : ℕ) :
     P.complex.d n (n + 1) ≫ P.complex.d (n + 1) (n + 2) = 0 := by
   simp
 
 /-- The (limit) cokernel cofork given by the composition
 `P.complex.X 1 ⟶ P.complex.X 0 ⟶ Z` when `P : ProjectiveResolution Z`. -/
 @[simp]
-/--
-Definition of `cokernelCofork` / `cokernelCofork` 的定义
+/-
+**CategoryTheory.ProjectiveResolution.cokernelCofork** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.ProjectiveResolution`。
+形式化陈述：cokernelCofork : CokernelCofork (P.complex.d 1 0)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ProjectiveResolution.complex_d_comp_π_f_zero`：complex_d_c
+omp_π_f_zero : P.complex.d 1 0 ≫ P.π.f 0 = 0
 
-English:
-definition cokernelCofork
-  signature: : CokernelCofork (P.complex.d 1 0)
-  body: CokernelCofork.ofπ _ P.complex_d_comp_π_f_zero
-
-中文:
-定义 cokernelCofork
-  签名: : 余核余叉 (P.complex.d 1 0)
-  定义体: CokernelCofork.ofπ _ P.complex_d_comp_π_f_zero
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.of, P.complex_d_comp_
+--- 原说明 ---
+The (limit) cokernel cofork given by the composition
+`P.complex.X 1 ⟶ P.complex.X 0 ⟶ Z` when `P : ProjectiveResolution Z`.
 -/
 noncomputable def cokernelCofork : CokernelCofork (P.complex.d 1 0) :=
   CokernelCofork.ofπ _ P.complex_d_comp_π_f_zero
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `isColimitCokernelCofork` / `isColimitCokernelCofork` 的定义
+/-- `Z` is the cokernel of `P.complex.X 1 ⟶ P.complex.X 0` when `P : ProjectiveResolution Z`. -/
+/-
+**CategoryTheory.ProjectiveResolution.isColimitCokernelCofork** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.ProjectiveResolution`。
+形式化陈述：isColimitCokernelCofork : IsColimit (P.cokernelCofork)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCokernelCofork
-  signature: : IsColimit (P.cokernelCofork)
-  body: by
-  refine IsColimit.ofIsoColimit (P.complex.opcyclesIsCokernel 1 0 (by simp)) ?_
-  refine Cofork.ext (P.complex.isoHomologyι₀.symm ≪≫ isoOfQuasiIsoAt P.π 0 ≪≫
-    singleObjHomologySelfIso _ _ _) ?_
-  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down Nat) 0 _).inv]; rw [← cancel_mono (isoHomologyι₀ _).hom]
-  dsimp
-  simp only [isoHomologyι₀_inv_naturality_assoc, p_opcyclesMap_assoc, single₀_obj_zero, assoc,
-    Iso.hom_inv_id, comp_id, isoHomologyι_inv_hom_id, singleObjHomologySelfIso_inv_homologyι,
-    singleObjOpcyclesSelfIso_hom, single₀ObjXSelf, Iso.refl_inv, id_comp]
-
-中文:
-定义 isColimitCokernelCofork
-  签名: : 是余极限 (P.cokernelCofork)
-  定义体: by
-  refine IsColimit.ofIsoColimit (P.complex.opcyclesIsCokernel 1 0 (by simp)) ?_
-  refine Cofork.ext (P.complex.isoHomologyι₀.symm ≪≫ isoOfQuasiIsoAt P.π 0 ≪≫
-    singleObjHomologySelfIso _ _ _) ?_
-  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down Nat) 0 _).inv]; rw [← cancel_mono (isoHomologyι₀ _).hom]
-  dsimp
-  simp only [isoHomologyι₀_inv_naturality_assoc, p_opcyclesMap_assoc, single₀_obj_zero, assoc,
-    Iso.hom_inv_id, comp_id, isoHomologyι_inv_hom_id, singleObjHomologySelfIso_inv_homologyι,
-    singleObjOpcyclesSelfIso_hom, single₀ObjXSelf, Iso.refl_inv, id_comp]
-
-Depends on / 依赖: Cofork, Cofork.ext, ComplexShape, ComplexShape.down, IsColimit, IsColimit.ofIsoColimit, Iso.hom_inv_id, P.complex.isoHomology, P.complex.opcyclesIsCokernel, cancel_mono, comp_id, complex, hom_inv_id, isoOfQuasiIsoAt, ofIsoColimit, opcyclesIsCokernel, p_opcyclesMap_assoc, singleObjHomologySelfIso
+--- 原说明 ---
+`Z` is the cokernel of `P.complex.X 1 ⟶ P.complex.X 0` when `P : ProjectiveResol
+ution Z`.
 -/
 noncomputable def isColimitCokernelCofork : IsColimit (P.cokernelCofork) := by
   refine IsColimit.ofIsoColimit (P.complex.opcyclesIsCokernel 1 0 (by simp)) ?_
   refine Cofork.ext (P.complex.isoHomologyι₀.symm ≪≫ isoOfQuasiIsoAt P.π 0 ≪≫
     singleObjHomologySelfIso _ _ _) ?_
-  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down Nat) 0 _).inv]; rw [← cancel_mono (isoHomologyι₀ _).hom]
+  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down ℕ) 0 _).inv,
+    ← cancel_mono (isoHomologyι₀ _).hom]
   dsimp
   simp only [isoHomologyι₀_inv_naturality_assoc, p_opcyclesMap_assoc, single₀_obj_zero, assoc,
     Iso.hom_inv_id, comp_id, isoHomologyι_inv_hom_id, singleObjHomologySelfIso_inv_homologyι,
     singleObjOpcyclesSelfIso_hom, single₀ObjXSelf, Iso.refl_inv, id_comp]
 
 set_option backward.isDefEq.respectTransparency false in
-instance (n : Nat) : Epi (P.π.f n) := by
+/-
+**CategoryTheory.ProjectiveResolution.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.ProjectiveResolution`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℕ) : Epi (P.π.f n) := by
   cases n
   · exact epi_of_isColimit_cofork P.isColimitCokernelCofork
   · rw [π_f_succ]; infer_instance
@@ -309,34 +289,15 @@ variable (Z)
 
 /-- A projective object admits a trivial projective resolution: itself in degree 0. -/
 @[simps]
-/--
-Definition of `self` / `self` 的定义
+/-
+**CategoryTheory.ProjectiveResolution.self** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ProjectiveResolution`。
+形式化陈述：self [Projective Z] : ProjectiveResolution Z where complex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition self
-  signature: [Projective Z]
-  body: (ChainComplex.single₀ C).obj Z
-  π := 𝟙 ((ChainComplex.single₀ C).obj Z)
-  projective n := by
-    cases n
-    · simpa
-    · apply IsZero.projective
-      apply HomologicalComplex.isZero_single_obj_X
-      simp
-
-中文:
-定义 self
-  签名: [投射 Z]
-  定义体: (ChainComplex.single₀ C).obj Z
-  π := 𝟙 ((ChainComplex.single₀ C).obj Z)
-  projective n := by
-    cases n
-    · simpa
-    · apply IsZero.projective
-      apply HomologicalComplex.isZero_single_obj_X
-      simp
-
-Depends on / 依赖: ChainComplex, ChainComplex.single
+--- 原说明 ---
+A projective object admits a trivial projective resolution: itself in degree 0.
 -/
 noncomputable def self [Projective Z] : ProjectiveResolution Z where
   complex := (ChainComplex.single₀ C).obj Z
@@ -350,22 +311,23 @@ noncomputable def self [Projective Z] : ProjectiveResolution Z where
 
 variable {Z} {Z' : C} (P' : ProjectiveResolution Z')
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- Given projective resolutions `P` and `P'` of two objects `Z` and `Z'`,
+and a morphism `f : Z ⟶ Z'`, this structure contains the data of a morphism
+`P.complex ⟶ P'.complex` which is compatible with `f` -/
+/-
+**CategoryTheory.ProjectiveResolution.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryT
+heory.ProjectiveResolution`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroObject C] →       [inst_2 : CategoryTheory.Limits.
+HasZeroMorphisms C] →         {Z : C} →           CategoryTheory.ProjectiveResol
+ution Z → {Z' : C} → CategoryTheory.ProjectiveResolution Z' → (Z ⟶ Z') → Type v
+参数：Z ⟶ Z'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (f : Z ⟶ Z')
-  axioms and operations (2):
-    - hom : P.complex ⟶ P'.complex
-    - hom_f_zero_comp_π_f_zero : hom.f 0 ≫ P'.π.f 0 = P.π.f 0 ≫ ((single₀ C).map f).f 0
-
-中文:
-结构 态射
-  参数: (f : Z ⟶ Z')
-  公理与运算 (2 个):
-    - hom : P.complex ⟶ P'.complex
-    - hom_f_zero_comp_π_f_zero : hom.f 0 ≫ P'.π.f 0 = P.π.f 0 ≫ ((single₀ C).map f).f 0
+--- 原说明 ---
+Given projective resolutions `P` and `P'` of two objects `Z` and `Z'`,
+and a morphism `f : Z ⟶ Z'`, this structure contains the data of a morphism
+`P.complex ⟶ P'.complex` which is compatible with `f`
 -/
 structure Hom (f : Z ⟶ Z') where
   /-- A morphism between the cocomplexes -/
@@ -379,20 +341,10 @@ attribute [reassoc (attr := simp)] hom_f_zero_comp_π_f_zero
 set_option backward.isDefEq.respectTransparency false in
 variable {I I'} in
 @[reassoc (attr := simp)]
-/--
-lemma `hom_comp_π` / 引理 `hom_comp_π`
-
-English:
-lemma hom_comp_π
-  given: {f : Z ⟶ Z'} (φ : Hom P P' f)
-  proof: by cat_disch
-
-中文:
-引理 hom_comp_π
-  条件: {f : Z ⟶ Z'} (φ : 态射 P P' f)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.ProjectiveResolution.Hom.hom_comp_** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ProjectiveResolution.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp_π {f : Z ⟶ Z'} (φ : Hom P P' f) :
     φ.hom ≫ P'.π = P.π ≫ (single₀ C).map f := by cat_disch
@@ -411,28 +363,24 @@ variable {C : Type u} [Category* C] [HasZeroObject C] [Preadditive C]
 /-- An additive functor `F` which preserves homology and sends projective objects to projective
 objects sends a projective resolution of `Z` to a projective resolution of `F.obj Z`. -/
 @[simps complex π]
-/--
-Definition of `mapProjectiveResolution` / `mapProjectiveResolution` 的定义
+/-
+**CategoryTheory.Functor.mapProjectiveResolution** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：mapProjectiveResolution (F : C ⥤ D) [F.Additive] [F.PreservesProjectiveObj
+ects] [F.PreservesHomology] {Z : C} (P : ProjectiveResolution Z) : ProjectiveRes
+olution (F.obj Z) where complex
+参数：F : C ⥤ D；P : ProjectiveResolution Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
 
-English:
-definition mapProjectiveResolution
-  signature: (F : C ⥤ D) [F.Additive]
-  body: (F.mapHomologicalComplex _).obj P.complex
-  projective n := PreservesProjectiveObjects.projective_obj (P.projective n)
-  π := (F.mapHomologicalComplex _).map P.π ≫
-    (HomologicalComplex.singleMapHomologicalComplex _ _ _).hom.app _
-  quasiIso := inferInstance
-
-中文:
-定义 mapProjectiveResolution
-  签名: (F : C ⥤ D) [F.加性]
-  定义体: (F.mapHomologicalComplex _).obj P.complex
-  projective n := PreservesProjectiveObjects.projective_obj (P.projective n)
-  π := (F.mapHomologicalComplex _).map P.π ≫
-    (HomologicalComplex.singleMapHomologicalComplex _ _ _).hom.app _
-  quasiIso := inferInstance
-
-Depends on / 依赖: F.mapHomologicalComplex, P.complex, complex, mapHomologicalComplex
+--- 原说明 ---
+An additive functor `F` which preserves homology and sends projective objects to
+ projective
+objects sends a projective resolution of `Z` to a projective resolution of `F.ob
+j Z`.
 -/
 noncomputable def mapProjectiveResolution (F : C ⥤ D) [F.Additive]
     [F.PreservesProjectiveObjects] [F.PreservesHomology] {Z : C} (P : ProjectiveResolution Z) :
@@ -444,3 +392,4 @@ noncomputable def mapProjectiveResolution (F : C ⥤ D) [F.Additive]
   quasiIso := inferInstance
 
 end CategoryTheory.Functor
+

@@ -24,22 +24,15 @@ universe u
 
 open CategoryTheory
 
-/--
-Definition of `DistLat` / `DistLat` 的定义
+/-- The category of distributive lattices. -/
+/-
+**DistLat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u_1 + 1)
+参数：u_1 + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure DistLat
-  parameters: where
-  axioms and operations (2):
-    - carrier : Type*
-    - [str : DistribLattice carrier]
-
-中文:
-结构 分配格
-  参数: where
-  公理与运算 (2 个):
-    - carrier : 类型
-    - [str : Distrib格 carrier]
+--- 原说明 ---
+The category of distributive lattices.
 -/
 structure DistLat where
   /-- The underlying distributive lattice. -/
@@ -48,63 +41,41 @@ structure DistLat where
 
 attribute [instance] DistLat.str
 
-initialize_simps_projections DistLat (carrier -> coe, -str)
+initialize_simps_projections DistLat (carrier → coe, -str)
 
 namespace DistLat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort DistLat.{u} (Type u)
-  body: ⟨DistLat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 分配格.{u} (类型u)
-  定义体: ⟨DistLat.carrier⟩
-
-Depends on / 依赖: DistLat, DistLat.carrier, carrier
+/-
+**DistLat.** 是 Mathlib 中的一个实例，位于命名空间 `DistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort DistLat.{u} (Type u) :=
   ⟨DistLat.carrier⟩
 
 attribute [coe] DistLat.carrier
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a bundled `DistLat` from the underlying type and typeclass. -/
+/-
+**DistLat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `DistLat`。
+形式化陈述：of (X : Type*) [DistribLattice X] : DistLat
+参数：X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (X : Type*) [DistribLattice X]
-  body: ⟨X⟩
-
-中文:
-缩写 of
-  签名: (X : 类型) [Distrib格 X]
-  定义体: ⟨X⟩
+--- 原说明 ---
+Construct a bundled `DistLat` from the underlying type and typeclass.
 -/
 abbrev of (X : Type*) [DistribLattice X] : DistLat := ⟨X⟩
 
 /-- The type of morphisms in `DistLat R`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**DistLat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `DistLat`。
+形式化陈述：DistLat → DistLat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : DistLat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : LatticeHom X Y
-
-中文:
-结构 态射
-  参数: (X Y : 分配格.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : 格态射 X Y
+--- 原说明 ---
+The type of morphisms in `DistLat R`.
 -/
 structure Hom (X Y : DistLat.{u}) where
   private mk ::
@@ -113,22 +84,9 @@ structure Hom (X Y : DistLat.{u}) where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category DistLat.{u}
-  body: Hom X Y
-  id X := ⟨LatticeHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 分配格.{u}
-  定义体: Hom X Y
-  id X := ⟨LatticeHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**DistLat.** 是 Mathlib 中的一个实例，位于命名空间 `DistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category DistLat.{u} where
   Hom X Y := Hom X Y
@@ -137,452 +95,288 @@ instance : Category DistLat.{u} where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory DistLat (LatticeHom · ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 分配格 (格态射 · ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**DistLat.** 是 Mathlib 中的一个实例，位于命名空间 `DistLat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConcreteCategory DistLat (LatticeHom · ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `DistLat` back into a `LatticeHom`. -/
+/-
+**DistLat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `DistLat.Hom`。
+形式化陈述：{X Y : DistLat} → X.Hom Y → LatticeHom ↑X ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : DistLat.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := DistLat) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 分配格.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := DistLat) f
+--- 原说明 ---
+Turn a morphism in `DistLat` back into a `LatticeHom`.
 -/
 abbrev Hom.hom {X Y : DistLat.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := DistLat) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `LatticeHom` as a morphism in `DistLat`. -/
+/-
+**DistLat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `DistLat`。
+形式化陈述：ofHom {X Y : Type u} [DistribLattice X] [DistribLattice Y] (f : LatticeHom
+ X Y) : of X ⟶ of Y
+参数：f : LatticeHom X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [DistribLattice X] [DistribLattice Y] (f : LatticeHom X Y)
-  body: ConcreteCategory.ofHom (C := DistLat) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [Distrib格 X] [Distrib格 Y] (f : 格态射 X Y)
-  定义体: ConcreteCategory.ofHom (C := DistLat) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, DistLat
+--- 原说明 ---
+Typecheck a `LatticeHom` as a morphism in `DistLat`.
 -/
 abbrev ofHom {X Y : Type u} [DistribLattice X] [DistribLattice Y] (f : LatticeHom X Y) :
     of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := DistLat) f
 
 variable {R} in
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**DistLat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `DistLat.Hom.Simps`。
+形式化陈述：(X Y : DistLat) → X.Hom Y → LatticeHom ↑X ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : DistLat.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 分配格.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : DistLat.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `coe_id` / 引理 `coe_id`
+/-
+**DistLat.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：coe_id {X : DistLat} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_id
-  given: {X : DistLat}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_id
-  条件: {X : 分配格}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_id {X : DistLat} : (𝟙 X : X -> X) = id := rfl
+lemma coe_id {X : DistLat} : (𝟙 X : X → X) = id := rfl
 
 @[simp]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: {X Y Z : DistLat} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 分配格} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[simp]
+/-
+**DistLat.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：coe_comp {X Y Z : DistLat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g 
+∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_comp {X Y Z : DistLat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
+lemma coe_comp {X Y Z : DistLat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[simp]
-/--
-lemma `forget_map` / 引理 `forget_map`
-
-English:
-lemma forget_map
-  given: {X Y : DistLat} (f : X ⟶ Y)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 forget_map
-  条件: {X Y : 分配格} (f : X ⟶ Y)
-  证明: rfl
-
-@[ext]
+/-
+**DistLat.forget_map** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：forget_map {X Y : DistLat} (f : X ⟶ Y) : (forget DistLat).map f = (f : _ -
+> _)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forget_map {X Y : DistLat} (f : X ⟶ Y) :
-    (forget DistLat).map f = (f : _ -> _) := rfl
+    (forget DistLat).map f = (f : _ → _) := rfl
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : DistLat} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-中文:
-引理 ext
-  条件: {X Y : 分配格} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
+/-
+**DistLat.ext** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：ext {X Y : DistLat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma ext {X Y : DistLat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : DistLat} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 -- This is not `simp` to avoid rewriting in types of terms.
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [DistribLattice X]
-  statement: (DistLat.of X : Type u) = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [Distrib格 X]
-  结论: (分配格.of X : 类型u) = X
-  证明: rfl
-
-@[simp]
+/-
+**DistLat.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `DistLat`。
+形式化陈述：coe_of (X : Type u) [DistribLattice X] : (DistLat.of X : Type u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [DistribLattice X] : (DistLat.of X : Type u) = X := rfl
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {X : DistLat}
-  statement: (𝟙 X : X ⟶ X).hom = LatticeHom.id _
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {X : 分配格}
-  结论: (𝟙 X : X ⟶ X).hom = 格态射.id _
-  证明: rfl
+/-
+**DistLat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：hom_id {X : DistLat} : (𝟙 X : X ⟶ X).hom = LatticeHom.id _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {X : DistLat} : (𝟙 X : X ⟶ X).hom = LatticeHom.id _ := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**DistLat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：id_apply (X : DistLat) (x : X) : (𝟙 X : X ⟶ X) x = x
+参数：X : DistLat；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (X : DistLat) (x : X)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (X : 分配格) (x : X)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (X : DistLat) (x : X) :
     (𝟙 X : X ⟶ X) x = x := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {X Y Z : DistLat} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {X Y Z : 分配格} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**DistLat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：hom_comp {X Y Z : DistLat} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom = g.hom.c
+omp f.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {X Y Z : DistLat} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**DistLat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：comp_apply {X Y Z : DistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x =
+ g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {X Y Z : DistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {X Y Z : 分配格} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {X Y Z : DistLat} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) :
     (f ≫ g) x = g (f x) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : DistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {X Y : 分配格} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**DistLat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：hom_ext {X Y : DistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistLat.Hom.ext`：∀ {X Y : DistLat} {x y : X.Hom Y}, x.hom' = y.hom' → x 
+= y
 -/
 lemma hom_ext {X Y : DistLat} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {X Y : Type u} [DistribLattice X] [DistribLattice Y] (f : LatticeHom X Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {X Y : 类型u} [Distrib格 X] [Distrib格 Y] (f : 格态射 X Y)
-  证明: rfl
-
-@[simp]
+/-
+**DistLat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：hom_ofHom {X Y : Type u} [DistribLattice X] [DistribLattice Y] (f : Lattic
+eHom X Y) : (ofHom f).hom = f
+参数：f : LatticeHom X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ofHom {X Y : Type u} [DistribLattice X] [DistribLattice Y] (f : LatticeHom X Y) :
     (ofHom f).hom = f :=
   rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {X Y : DistLat} (f : X ⟶ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {X Y : 分配格} (f : X ⟶ Y)
-  证明: rfl
-
-@[simp]
+/-
+**DistLat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：ofHom_hom {X Y : DistLat} (f : X ⟶ Y) : ofHom (Hom.hom f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {X Y : DistLat} (f : X ⟶ Y) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {X : Type u} [DistribLattice X]
-  statement: ofHom (LatticeHom.id _) = 𝟙 (of X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {X : 类型u} [Distrib格 X]
-  结论: ofHom (格态射.id _) = 𝟙 (of X)
-  证明: rfl
-
-@[simp]
+/-
+**DistLat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：ofHom_id {X : Type u} [DistribLattice X] : ofHom (LatticeHom.id _) = 𝟙 (of
+ X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {X : Type u} [DistribLattice X] : ofHom (LatticeHom.id _) = 𝟙 (of X) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {X Y Z : Type u} [DistribLattice X] [DistribLattice Y] [DistribLattice Z]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {X Y Z : 类型u} [Distrib格 X] [Distrib格 Y] [Distrib格 Z]
-  证明: rfl
+/-
+**DistLat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：ofHom_comp {X Y Z : Type u} [DistribLattice X] [DistribLattice Y] [Distrib
+Lattice Z] (f : LatticeHom X Y) (g : LatticeHom Y Z) : ofHom (g.comp f) = ofHom 
+f ≫ ofHom g
+参数：f : LatticeHom X Y；g : LatticeHom Y Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {X Y Z : Type u} [DistribLattice X] [DistribLattice Y] [DistribLattice Z]
     (f : LatticeHom X Y) (g : LatticeHom Y Z) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  statement: {X Y : Type u} [DistribLattice X] [DistribLattice Y]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {X Y : 类型u} [Distrib格 X] [Distrib格 Y]
-  证明: rfl
+/-
+**DistLat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：ofHom_apply {X Y : Type u} [DistribLattice X] [DistribLattice Y] (f : Latt
+iceHom X Y) (x : X) : (ofHom f) x = f x
+参数：f : LatticeHom X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_apply {X Y : Type u} [DistribLattice X] [DistribLattice Y]
     (f : LatticeHom X Y) (x : X) :
     (ofHom f) x = f x := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {X Y : DistLat} (e : X ≅ Y) (x : X)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {X Y : 分配格} (e : X ≅ Y) (x : X)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
+/-
+**DistLat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：inv_hom_apply {X Y : DistLat} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x
+参数：e : X ≅ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {X Y : DistLat} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {X Y : DistLat} (e : X ≅ Y) (s : Y)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {X Y : 分配格} (e : X ≅ Y) (s : Y)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**DistLat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `DistLat`。
+形式化陈述：hom_inv_apply {X Y : DistLat} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s
+参数：e : X ≅ Y；s : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {X Y : DistLat} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `hasForgetToLat` / 实例 `hasForgetToLat`
-
-English:
-instance hasForgetToLat
-  signature: : HasForget₂ DistLat Lat where
-  body: .of X
-  forget₂.map f := Lat.ofHom f.hom
-
-中文:
-实例 hasForgetToLat
-  签名: : 有Forget₂ 分配格 格 where
-  定义体: .of X
-  forget₂.map f := Lat.ofHom f.hom
+/-
+**DistLat.hasForgetToLat** 是 Mathlib 中的一个实例，位于命名空间 `DistLat`。
+形式化陈述：hasForgetToLat : HasForget₂ DistLat Lat where forget₂.obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToLat : HasForget₂ DistLat Lat where
   forget₂.obj X := .of X
@@ -591,20 +385,15 @@ instance hasForgetToLat : HasForget₂ DistLat Lat where
 /-- Constructs an equivalence between distributive lattices from an order isomorphism between them.
 -/
 @[simps]
-/--
-Definition of `Iso.mk` / `Iso.mk` 的定义
+/-
+**DistLat.Iso.mk** 是 Mathlib 中的一个定义，位于命名空间 `DistLat.Iso`。
+形式化陈述：{α β : DistLat} → ↑α ≃o ↑β → (α ≅ β)
+参数：α ≅ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iso.mk
-  signature: {α β : DistLat.{u}} (e : α ≃o β)
-  body: ofHom e
-  inv := ofHom e.symm
-
-中文:
-定义 同构.mk
-  签名: {α β : 分配格.{u}} (e : α ≃o β)
-  定义体: ofHom e
-  inv := ofHom e.symm
+--- 原说明 ---
+Constructs an equivalence between distributive lattices from an order isomorphis
+m between them.
 -/
 def Iso.mk {α β : DistLat.{u}} (e : α ≃o β) : α ≅ β where
   hom := ofHom e
@@ -612,20 +401,14 @@ def Iso.mk {α β : DistLat.{u}} (e : α ≃o β) : α ≅ β where
 
 /-- `OrderDual` as a functor. -/
 @[simps map]
-/--
-Definition of `dual` / `dual` 的定义
+/-
+**DistLat.dual** 是 Mathlib 中的一个定义，位于命名空间 `DistLat`。
+形式化陈述：dual : DistLat ⥤ DistLat where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dual
-  signature: : DistLat ⥤ DistLat where
-  body: of Xᵒᵈ
-  map f := ofHom f.hom.dual
-
-中文:
-定义 dual
-  签名: : 分配格 ⥤ 分配格 where
-  定义体: of Xᵒᵈ
-  map f := ofHom f.hom.dual
+--- 原说明 ---
+`OrderDual` as a functor.
 -/
 def dual : DistLat ⥤ DistLat where
   obj X := of Xᵒᵈ
@@ -633,24 +416,14 @@ def dual : DistLat ⥤ DistLat where
 
 /-- The equivalence between `DistLat` and itself induced by `OrderDual` both ways. -/
 @[simps functor inverse]
-/--
-Definition of `dualEquiv` / `dualEquiv` 的定义
+/-
+**DistLat.dualEquiv** 是 Mathlib 中的一个定义，位于命名空间 `DistLat`。
+形式化陈述：dualEquiv : DistLat ≌ DistLat where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualEquiv
-  signature: : DistLat ≌ DistLat where
-  body: dual
-  inverse := dual
-  unitIso := NatIso.ofComponents (fun X => Iso.mk <| OrderIso.dualDual X) fun _ => rfl
-  counitIso := NatIso.ofComponents (fun X => Iso.mk <| OrderIso.dualDual X) fun _ => rfl
-
-中文:
-定义 dualEquiv
-  签名: : 分配格 ≌ 分配格 where
-  定义体: dual
-  inverse := dual
-  unitIso := NatIso.ofComponents (fun X => Iso.mk <| OrderIso.dualDual X) fun _ => rfl
-  counitIso := NatIso.ofComponents (fun X => Iso.mk <| OrderIso.dualDual X) fun _ => rfl
+--- 原说明 ---
+The equivalence between `DistLat` and itself induced by `OrderDual` both ways.
 -/
 def dualEquiv : DistLat ≌ DistLat where
   functor := dual
@@ -660,16 +433,12 @@ def dualEquiv : DistLat ≌ DistLat where
 
 end DistLat
 
-/--
-theorem `distLat_dual_comp_forget_to_Lat` / 定理 `distLat_dual_comp_forget_to_Lat`
-
-English:
-theorem distLat_dual_comp_forget_to_Lat
-  proof: rfl
-
-中文:
-定理 distLat_dual_comp_forget_to_Lat
-  证明: rfl
+/-
+**distLat_dual_comp_forget_to_Lat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：distLat_dual_comp_forget_to_Lat : DistLat.dual ⋙ forget₂ DistLat Lat = for
+get₂ DistLat Lat ⋙ Lat.dual
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem distLat_dual_comp_forget_to_Lat :
     DistLat.dual ⋙ forget₂ DistLat Lat = forget₂ DistLat Lat ⋙ Lat.dual :=

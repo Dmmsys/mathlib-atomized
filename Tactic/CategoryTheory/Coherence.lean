@@ -41,20 +41,18 @@ noncomputable section lifting
 
 variable [MonoidalCategory C]
 
-/--
-Definition of `LiftObj` / `LiftObj` 的定义
+/-- A typeclass carrying a choice of lift of an object from `C` to `FreeMonoidalCategory C`.
+It must be the case that `projectObj id (LiftObj.lift x) = x` by defeq. -/
+/-
+**Mathlib.Tactic.Coherence.LiftObj** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.C
+oherence`。
+形式化陈述：{C : Type u} → C → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LiftObj
-  parameters: (X : C)
-  axioms and operations (1):
-    - lift : FreeMonoidalCategory C
-
-中文:
-类 LiftObj
-  参数: (X : C)
-  公理与运算 (1 个):
-    - lift : FreeMonoidal范畴 C
+--- 原说明 ---
+A typeclass carrying a choice of lift of an object from `C` to `FreeMonoidalCate
+gory C`.
+It must be the case that `projectObj id (LiftObj.lift x) = x` by defeq.
 -/
 class LiftObj (X : C) where
   protected lift : FreeMonoidalCategory C
@@ -63,252 +61,163 @@ namespace LiftObj
 
 nonrec instance unit : LiftObj (𝟙_ C) := ⟨unit⟩
 
-/--
-Instance `tensor` / 实例 `tensor`
-
-English:
-instance tensor
-  signature: (X Y : C) [LiftObj X] [LiftObj Y]
-  body: LiftObj.lift X otimes LiftObj.lift Y
-
-nonrec instance (priority := 100) of (X : C) : LiftObj X := ⟨of X⟩
-
-中文:
-实例 tensor
-  签名: (X Y : C) [LiftObj X] [LiftObj Y]
-  定义体: LiftObj.lift X otimes LiftObj.lift Y
-
-nonrec instance (priority := 100) of (X : C) : LiftObj X := ⟨of X⟩
-
-Depends on / 依赖: LiftObj, LiftObj.lift, otimes
+/-
+**Mathlib.Tactic.Coherence.LiftObj.tensor** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tac
+tic.Coherence.LiftObj`。
+形式化陈述：tensor (X Y : C) [LiftObj X] [LiftObj Y] : LiftObj (X otimes Y) where lift
+参数：X Y : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance tensor (X Y : C) [LiftObj X] [LiftObj Y] : LiftObj (X otimes Y) where
-  lift := LiftObj.lift X otimes LiftObj.lift Y
+instance tensor (X Y : C) [LiftObj X] [LiftObj Y] : LiftObj (X ⊗ Y) where
+  lift := LiftObj.lift X ⊗ LiftObj.lift Y
 
 nonrec instance (priority := 100) of (X : C) : LiftObj X := ⟨of X⟩
 
 end LiftObj
 
-/--
-Definition of `LiftHom` / `LiftHom` 的定义
+/-- A typeclass carrying a choice of lift of a morphism from `C` to `FreeMonoidalCategory C`.
+It must be the case that `projectMap id _ _ (LiftHom.lift f) = f` by defeq. -/
+/-
+**Mathlib.Tactic.Coherence.LiftHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.C
+oherence`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → [Mathlib.Tactic.Coherence.LiftObj X] → [Mathlib.Tactic.Coherence.LiftObj Y] →
+ (X ⟶ Y) → Type u
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LiftHom
-  parameters: {X Y : C} [LiftObj X] [LiftObj Y] (f : X ⟶ Y)
-  axioms and operations (1):
-    - lift : LiftObj.lift X ⟶ LiftObj.lift Y
-
-中文:
-类 Lift态射
-  参数: {X Y : C} [LiftObj X] [LiftObj Y] (f : X ⟶ Y)
-  公理与运算 (1 个):
-    - lift : LiftObj.lift X ⟶ LiftObj.lift Y
+--- 原说明 ---
+A typeclass carrying a choice of lift of a morphism from `C` to `FreeMonoidalCat
+egory C`.
+It must be the case that `projectMap id _ _ (LiftHom.lift f) = f` by defeq.
 -/
 class LiftHom {X Y : C} [LiftObj X] [LiftObj Y] (f : X ⟶ Y) where
   protected lift : LiftObj.lift X ⟶ LiftObj.lift Y
 
 namespace LiftHom
 
-/--
-Instance `id` / 实例 `id`
-
-English:
-instance id
-  signature: (X : C) [LiftObj X]
-  body: ⟨𝟙 _⟩
-
-中文:
-实例 id
-  签名: (X : C) [LiftObj X]
-  定义体: ⟨𝟙 _⟩
+/-
+**Mathlib.Tactic.Coherence.LiftHom.id** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.
+Coherence.LiftHom`。
+形式化陈述：id (X : C) [LiftObj X] : LiftHom (𝟙 X)
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance id (X : C) [LiftObj X] : LiftHom (𝟙 X) := ⟨𝟙 _⟩
-
-/--
-Instance `leftUnitorHom` / 实例 `leftUnitorHom`
-
-English:
-instance leftUnitorHom
-  signature: (X : C) [LiftObj X]
-  body: (fun_ (LiftObj.lift X)).hom
-
-中文:
-实例 leftUnitorHom
-  签名: (X : C) [LiftObj X]
-  定义体: (fun_ (LiftObj.lift X)).hom
-
-Depends on / 依赖: LiftObj, LiftObj.lift, fun_
+/-
+**Mathlib.Tactic.Coherence.LiftHom.leftUnitorHom** 是 Mathlib 中的一个实例，位于命名空间 `Math
+lib.Tactic.Coherence.LiftHom`。
+形式化陈述：leftUnitorHom (X : C) [LiftObj X] : LiftHom (fun_ X).hom where lift
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance leftUnitorHom (X : C) [LiftObj X] : LiftHom (fun_ X).hom where
-  lift := (fun_ (LiftObj.lift X)).hom
-
-/--
-Instance `leftUnitorInv` / 实例 `leftUnitorInv`
-
-English:
-instance leftUnitorInv
-  signature: (X : C) [LiftObj X]
-  body: (fun_ (LiftObj.lift X)).inv
-
-中文:
-实例 leftUnitorInv
-  签名: (X : C) [LiftObj X]
-  定义体: (fun_ (LiftObj.lift X)).inv
-
-Depends on / 依赖: LiftObj, LiftObj.lift, fun_
+instance leftUnitorHom (X : C) [LiftObj X] : LiftHom (λ_ X).hom where
+  lift := (λ_ (LiftObj.lift X)).hom
+/-
+**Mathlib.Tactic.Coherence.LiftHom.leftUnitorInv** 是 Mathlib 中的一个实例，位于命名空间 `Math
+lib.Tactic.Coherence.LiftHom`。
+形式化陈述：leftUnitorInv (X : C) [LiftObj X] : LiftHom (fun_ X).inv where lift
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance leftUnitorInv (X : C) [LiftObj X] : LiftHom (fun_ X).inv where
-  lift := (fun_ (LiftObj.lift X)).inv
-
-/--
-Instance `rightUnitorHom` / 实例 `rightUnitorHom`
-
-English:
-instance rightUnitorHom
-  signature: (X : C) [LiftObj X]
-  body: (ρ_ (LiftObj.lift X)).hom
-
-中文:
-实例 rightUnitorHom
-  签名: (X : C) [LiftObj X]
-  定义体: (ρ_ (LiftObj.lift X)).hom
-
-Depends on / 依赖: LiftObj, LiftObj.lift
+instance leftUnitorInv (X : C) [LiftObj X] : LiftHom (λ_ X).inv where
+  lift := (λ_ (LiftObj.lift X)).inv
+/-
+**Mathlib.Tactic.Coherence.LiftHom.rightUnitorHom** 是 Mathlib 中的一个实例，位于命名空间 `Mat
+hlib.Tactic.Coherence.LiftHom`。
+形式化陈述：rightUnitorHom (X : C) [LiftObj X] : LiftHom (ρ_ X).hom where lift
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance rightUnitorHom (X : C) [LiftObj X] : LiftHom (ρ_ X).hom where
   lift := (ρ_ (LiftObj.lift X)).hom
-
-/--
-Instance `rightUnitorInv` / 实例 `rightUnitorInv`
-
-English:
-instance rightUnitorInv
-  signature: (X : C) [LiftObj X]
-  body: (ρ_ (LiftObj.lift X)).inv
-
-中文:
-实例 rightUnitorInv
-  签名: (X : C) [LiftObj X]
-  定义体: (ρ_ (LiftObj.lift X)).inv
-
-Depends on / 依赖: LiftObj, LiftObj.lift
+/-
+**Mathlib.Tactic.Coherence.LiftHom.rightUnitorInv** 是 Mathlib 中的一个实例，位于命名空间 `Mat
+hlib.Tactic.Coherence.LiftHom`。
+形式化陈述：rightUnitorInv (X : C) [LiftObj X] : LiftHom (ρ_ X).inv where lift
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance rightUnitorInv (X : C) [LiftObj X] : LiftHom (ρ_ X).inv where
   lift := (ρ_ (LiftObj.lift X)).inv
-
-/--
-Instance `associatorHom` / 实例 `associatorHom`
-
-English:
-instance associatorHom
-  signature: (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z]
-  body: (α_ (LiftObj.lift X) (LiftObj.lift Y) (LiftObj.lift Z)).hom
-
-中文:
-实例 associatorHom
-  签名: (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z]
-  定义体: (α_ (LiftObj.lift X) (LiftObj.lift Y) (LiftObj.lift Z)).hom
-
-Depends on / 依赖: LiftObj, LiftObj.lift
+/-
+**Mathlib.Tactic.Coherence.LiftHom.associatorHom** 是 Mathlib 中的一个实例，位于命名空间 `Math
+lib.Tactic.Coherence.LiftHom`。
+形式化陈述：associatorHom (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z] : LiftHom (α
+_ X Y Z).hom where lift
+参数：X Y Z : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance associatorHom (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z] :
     LiftHom (α_ X Y Z).hom where
   lift := (α_ (LiftObj.lift X) (LiftObj.lift Y) (LiftObj.lift Z)).hom
-
-/--
-Instance `associatorInv` / 实例 `associatorInv`
-
-English:
-instance associatorInv
-  signature: (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z]
-  body: (α_ (LiftObj.lift X) (LiftObj.lift Y) (LiftObj.lift Z)).inv
-
-中文:
-实例 associatorInv
-  签名: (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z]
-  定义体: (α_ (LiftObj.lift X) (LiftObj.lift Y) (LiftObj.lift Z)).inv
-
-Depends on / 依赖: LiftObj, LiftObj.lift
+/-
+**Mathlib.Tactic.Coherence.LiftHom.associatorInv** 是 Mathlib 中的一个实例，位于命名空间 `Math
+lib.Tactic.Coherence.LiftHom`。
+形式化陈述：associatorInv (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z] : LiftHom (α
+_ X Y Z).inv where lift
+参数：X Y Z : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance associatorInv (X Y Z : C) [LiftObj X] [LiftObj Y] [LiftObj Z] :
     LiftHom (α_ X Y Z).inv where
   lift := (α_ (LiftObj.lift X) (LiftObj.lift Y) (LiftObj.lift Z)).inv
-
-/--
-Instance `comp` / 实例 `comp`
-
-English:
-instance comp
-  signature: {X Y Z : C} [LiftObj X] [LiftObj Y] [LiftObj Z] (f : X ⟶ Y) (g : Y ⟶ Z)
-  body: LiftHom.lift f ≫ LiftHom.lift g
-
-中文:
-实例 comp
-  签名: {X Y Z : C} [LiftObj X] [LiftObj Y] [LiftObj Z] (f : X ⟶ Y) (g : Y ⟶ Z)
-  定义体: LiftHom.lift f ≫ LiftHom.lift g
-
-Depends on / 依赖: LiftHom, LiftHom.lift
+/-
+**Mathlib.Tactic.Coherence.LiftHom.comp** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tacti
+c.Coherence.LiftHom`。
+形式化陈述：comp {X Y Z : C} [LiftObj X] [LiftObj Y] [LiftObj Z] (f : X ⟶ Y) (g : Y ⟶ 
+Z) [LiftHom f] [LiftHom g] : LiftHom (f ≫ g) where lift
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance comp {X Y Z : C} [LiftObj X] [LiftObj Y] [LiftObj Z] (f : X ⟶ Y) (g : Y ⟶ Z)
     [LiftHom f] [LiftHom g] : LiftHom (f ≫ g) where
   lift := LiftHom.lift f ≫ LiftHom.lift g
-
-/--
-Instance `whiskerLeft` / 实例 `whiskerLeft`
-
-English:
-instance whiskerLeft
-  signature: (X : C) [LiftObj X] {Y Z : C} [LiftObj Y] [LiftObj Z]
-  body: LiftObj.lift X ◁ LiftHom.lift f
-
-中文:
-实例 whiskerLeft
-  签名: (X : C) [LiftObj X] {Y Z : C} [LiftObj Y] [LiftObj Z]
-  定义体: LiftObj.lift X ◁ LiftHom.lift f
-
-Depends on / 依赖: LiftHom, LiftHom.lift, LiftObj, LiftObj.lift
+/-
+**Mathlib.Tactic.Coherence.LiftHom.whiskerLeft** 是 Mathlib 中的一个实例，位于命名空间 `Mathli
+b.Tactic.Coherence.LiftHom`。
+形式化陈述：whiskerLeft (X : C) [LiftObj X] {Y Z : C} [LiftObj Y] [LiftObj Z] (f : Y ⟶
+ Z) [LiftHom f] : LiftHom (X ◁ f) where lift
+参数：X : C；f : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance whiskerLeft (X : C) [LiftObj X] {Y Z : C} [LiftObj Y] [LiftObj Z]
     (f : Y ⟶ Z) [LiftHom f] : LiftHom (X ◁ f) where
   lift := LiftObj.lift X ◁ LiftHom.lift f
-
-/--
-Instance `whiskerRight` / 实例 `whiskerRight`
-
-English:
-instance whiskerRight
-  signature: {X Y : C} (f : X ⟶ Y) [LiftObj X] [LiftObj Y] [LiftHom f]
-  body: LiftHom.lift f ▷ LiftObj.lift Z
-
-中文:
-实例 whiskerRight
-  签名: {X Y : C} (f : X ⟶ Y) [LiftObj X] [LiftObj Y] [Lift态射 f]
-  定义体: LiftHom.lift f ▷ LiftObj.lift Z
-
-Depends on / 依赖: LiftHom, LiftHom.lift, LiftObj, LiftObj.lift
+/-
+**Mathlib.Tactic.Coherence.LiftHom.whiskerRight** 是 Mathlib 中的一个实例，位于命名空间 `Mathl
+ib.Tactic.Coherence.LiftHom`。
+形式化陈述：whiskerRight {X Y : C} (f : X ⟶ Y) [LiftObj X] [LiftObj Y] [LiftHom f] {Z 
+: C} [LiftObj Z] : LiftHom (f ▷ Z) where lift
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance whiskerRight {X Y : C} (f : X ⟶ Y) [LiftObj X] [LiftObj Y] [LiftHom f]
     {Z : C} [LiftObj Z] : LiftHom (f ▷ Z) where
   lift := LiftHom.lift f ▷ LiftObj.lift Z
-
-/--
-Instance `tensor` / 实例 `tensor`
-
-English:
-instance tensor
-  signature: {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y] [LiftObj Z]
-  body: LiftHom.lift f otimesₘ LiftHom.lift g
-
-中文:
-实例 tensor
-  签名: {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y] [LiftObj Z]
-  定义体: LiftHom.lift f otimesₘ LiftHom.lift g
-
-Depends on / 依赖: LiftHom, LiftHom.lift
+/-
+**Mathlib.Tactic.Coherence.LiftHom.tensor** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tac
+tic.Coherence.LiftHom`。
+形式化陈述：tensor {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y] [LiftObj Z] (f : 
+W ⟶ X) (g : Y ⟶ Z) [LiftHom f] [LiftHom g] : LiftHom (f otimesₘ g) where lift
+参数：f : W ⟶ X；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance tensor {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y] [LiftObj Z]
-    (f : W ⟶ X) (g : Y ⟶ Z) [LiftHom f] [LiftHom g] : LiftHom (f otimesₘ g) where
-  lift := LiftHom.lift f otimesₘ LiftHom.lift g
+    (f : W ⟶ X) (g : Y ⟶ Z) [LiftHom f] [LiftHom g] : LiftHom (f ⊗ₘ g) where
+  lift := LiftHom.lift f ⊗ₘ LiftHom.lift g
 
 end LiftHom
 
@@ -388,12 +297,12 @@ elab (name := pure_coherence) "pure_coherence" : tactic => do
     They are given in `Mathlib.Tactic.CategoryTheory.Monoidal.Basic` and \
     `Mathlib.Tactic.CategoryTheory.Bicategory.Basic.lean` respectively."
   let g ← getMainGoal
-monoidalCoherence g > bicategoryCoherence g
+  monoidalCoherence g <|> bicategoryCoherence g
 
 /-- The same as `pure_coherence`, but used internally in `coherence` without the warning. -/
 elab (name := pure_coherence_internal) "pure_coherence_internal" : tactic => do
   let g ← getMainGoal
-monoidalCoherence g > bicategoryCoherence g
+  monoidalCoherence g <|> bicategoryCoherence g
 
 /--
 Auxiliary simp lemma for the `coherence` tactic:
@@ -404,20 +313,18 @@ built out of unitors and associators.
 -- They are intentional, to ensure that `simp only [assoc_LiftHom]` only left associates
 -- monoidal structural morphisms.
 @[nolint unusedArguments]
-/--
-lemma `assoc_liftHom` / 引理 `assoc_liftHom`
-
-English:
-lemma assoc_liftHom
-  statement: {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y]
-  proof: (Category.assoc _ _ _).symm
-
-中文:
-引理 assoc_liftHom
-  结论: {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y]
-  证明: (Category.assoc _ _ _).symm
-
-Depends on / 依赖: Category, Category.assoc
+/-
+**Mathlib.Tactic.Coherence.assoc_liftHom** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tact
+ic.Coherence`。
+形式化陈述：assoc_liftHom {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y] (f : W ⟶ X
+) (g : X ⟶ Y) (h : Y ⟶ Z) [LiftHom f] [LiftHom g] : f ≫ (g ≫ h) = (f ≫ g) ≫ h
+参数：f : W ⟶ X；g : X ⟶ Y；h : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 -/
 lemma assoc_liftHom {W X Y Z : C} [LiftObj W] [LiftObj X] [LiftObj Y]
     (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z) [LiftHom f] [LiftHom g] :
@@ -444,39 +351,38 @@ elab (name := liftable_prefixes) "liftable_prefixes" : tactic => do
     (simp -failIfUnchanged only
       [assoc_liftHom, Mathlib.Tactic.BicategoryCoherence.assoc_liftHom₂])))
 
-/--
-lemma `insert_id_lhs` / 引理 `insert_id_lhs`
-
-English:
-lemma insert_id_lhs
-  given: {C : Type*} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f ≫ 𝟙 _ = g)
-  proof: by
-  simpa using w
-
-中文:
-引理 insert_id_lhs
-  条件: {C : 类型} [范畴* C] {X Y : C} (f g : X ⟶ Y) (w : f ≫ 𝟙 _ = g)
-  证明: by
-  simpa using w
+/-
+**Mathlib.Tactic.Coherence.insert_id_lhs** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tact
+ic.Coherence`。
+形式化陈述：insert_id_lhs {C : Type*} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f ≫ 𝟙
+ _ = g) : f = g
+参数：f g : X ⟶ Y；w : f ≫ 𝟙 _ = g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma insert_id_lhs {C : Type*} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f ≫ 𝟙 _ = g) :
     f = g := by
   simpa using w
-
-/--
-lemma `insert_id_rhs` / 引理 `insert_id_rhs`
-
-English:
-lemma insert_id_rhs
-  given: {C : Type*} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f = g ≫ 𝟙 _)
-  proof: by
-  simpa using w
-
-中文:
-引理 insert_id_rhs
-  条件: {C : 类型} [范畴* C] {X Y : C} (f g : X ⟶ Y) (w : f = g ≫ 𝟙 _)
-  证明: by
-  simpa using w
+/-
+**Mathlib.Tactic.Coherence.insert_id_rhs** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Tact
+ic.Coherence`。
+形式化陈述：insert_id_rhs {C : Type*} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f = g
+ ≫ 𝟙 _) : f = g
+参数：f g : X ⟶ Y；w : f = g ≫ 𝟙 _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma insert_id_rhs {C : Type*} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f = g ≫ 𝟙 _) :
     f = g := by
@@ -504,25 +410,25 @@ meta def coherenceLoop (maxSteps := 37) : TacticM Unit :=
   | maxSteps' + 1 => do
     -- To prove an equality `f = g` in a monoidal category,
     -- first try the `pure_coherence` tactic on the entire equation:
-evalTactic (← `(tactic| pure_coherence_internal)) > do
+    evalTactic (← `(tactic| pure_coherence_internal)) <|> do
     -- Otherwise, rearrange so we have a maximal prefix of each side
     -- that is built out of unitors and associators:
-evalTactic (← `(tactic| liftable_prefixes)) >
+    evalTactic (← `(tactic| liftable_prefixes)) <|>
       exception' "Something went wrong in the `coherence` tactic: \
         is the target an equation in a monoidal category?"
     -- The goal should now look like `f₀ ≫ f₁ = g₀ ≫ g₁`,
     liftMetaTactic MVarId.congrCore
     -- and now we have two goals `f₀ = g₀` and `f₁ = g₁`.
     -- Discharge the first using `coherence`,
-evalTactic (← `(tactic| { pure_coherence_internal })) >
+    evalTactic (← `(tactic| { pure_coherence_internal })) <|>
       exception' "`coherence` tactic failed, subgoal not true in the free monoidal category"
     -- Then check that either `g₀` is identically `g₁`,
-evalTactic (← `(tactic| rfl)) > do
+    evalTactic (← `(tactic| rfl)) <|> do
       -- or that both are compositions,
       liftMetaTactic' insertTrailingIds
       liftMetaTactic MVarId.congrCore
       -- with identical first terms,
-evalTactic (← `(tactic| rfl)) >
+      evalTactic (← `(tactic| rfl)) <|>
         exception' "`coherence` tactic failed, non-structural morphisms don't match"
       -- and whose second terms can be identified by recursively called `coherence`.
       coherenceLoop maxSteps'
@@ -540,7 +446,7 @@ syntax (name := monoidal_simps) "monoidal_simps" optConfig : tactic
 elab_rules : tactic
 | `(tactic| monoidal_simps $cfg:optConfig) => do
   evalTactic (← `(tactic|
-simp cfg only [
+    simp $cfg only [
       Category.assoc, MonoidalCategory.tensor_whiskerLeft, MonoidalCategory.id_whiskerLeft,
       MonoidalCategory.whiskerRight_tensor, MonoidalCategory.whiskerRight_id,
       MonoidalCategory.whiskerLeft_comp, MonoidalCategory.whiskerLeft_id,
@@ -584,3 +490,4 @@ elab_rules : tactic
 end Coherence
 
 end Mathlib.Tactic
+

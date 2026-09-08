@@ -24,8 +24,8 @@ pointwise multiplication and pointwise inversion.
 
 ## Implementation notes
 
-Implicit `{}` brackets are often used instead of type class `[]` brackets. This is done when the
-instances can be inferred because they are implicit arguments to the type `MonoidHom`. When they
+Implicit `{}` brackets are often used instead of type class `[]` brackets.  This is done when the
+instances can be inferred because they are implicit arguments to the type `MonoidHom`.  When they
 can be inferred from the type it is faster to use this method than to use type class inference.
 
 ## Tags
@@ -42,42 +42,38 @@ open Function
 namespace NeZero
 variable {F α β : Type*} [Zero α] [Zero β] [FunLike F α β] [ZeroHomClass F α β] {a : α}
 
-/--
-lemma `of_map` / 引理 `of_map`
-
-English:
-lemma of_map
-  given: (f : F) [neZero : NeZero (f a)]
-  statement: NeZero a
-  proof: ⟨fun h => ne (f a) by rw [h]; exact ZeroHomClass.map_zero f⟩
-
-中文:
-引理 of_map
-  条件: (f : F) [neZero : NeZero (f a)]
-  结论: NeZero a
-  证明: ⟨fun h => ne (f a) by rw [h]; exact ZeroHomClass.map_zero f⟩
-
-Depends on / 依赖: ZeroHomClass, ZeroHomClass.map_zero, map_zero
+/-
+**NeZero.of_map** 是 Mathlib 中的一个引理，位于命名空间 `NeZero`。
+形式化陈述：of_map (f : F) [neZero : NeZero (f a)] : NeZero a
+参数：f : F；f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ZeroHomClass.map_zero`：∀ {F : Type u_10} {M : outParam (Type u_11)} {N :
+ outParam (Type u_12)} {inst : Zero M} {inst_1 : Zero N}   {inst_2 : FunLike F M
+ N} [self :…
 -/
 lemma of_map (f : F) [neZero : NeZero (f a)] : NeZero a :=
-⟨fun h => ne (f a) by rw [h]; exact ZeroHomClass.map_zero f⟩
-
-/--
-lemma `of_injective` / 引理 `of_injective`
-
-English:
-lemma of_injective
-  given: {f : F} (hf : Injective f) [NeZero a]
-  statement: NeZero (f a)
-  proof: ⟨by rw [← ZeroHomClass.map_zero f]; exact hf.ne NeZero.out⟩
-
-中文:
-引理 of_injective
-  条件: {f : F} (hf : 单射 f) [NeZero a]
-  结论: NeZero (f a)
-  证明: ⟨by rw [← ZeroHomClass.map_zero f]; exact hf.ne NeZero.out⟩
-
-Depends on / 依赖: NeZero, NeZero.out, ZeroHomClass, ZeroHomClass.map_zero, hf.ne, map_zero
+  ⟨fun h ↦ ne (f a) <| by rw [h]; exact ZeroHomClass.map_zero f⟩
+/-
+**NeZero.of_injective** 是 Mathlib 中的一个引理，位于命名空间 `NeZero`。
+形式化陈述：of_injective {f : F} (hf : Injective f) [NeZero a] : NeZero (f a)
+参数：hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZeroHomClass.map_zero`：∀ {F : Type u_10} {M : outParam (Type u_11)} {N :
+ outParam (Type u_12)} {inst : Zero M} {inst_1 : Zero N}   {inst_2 : FunLike F M
+ N} [self :…
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
 -/
 lemma of_injective {f : F} (hf : Injective f) [NeZero a] : NeZero (f a) :=
   ⟨by rw [← ZeroHomClass.map_zero f]; exact hf.ne NeZero.out⟩
@@ -87,148 +83,135 @@ end NeZero
 variable {F α β γ δ M₀ : Type*} [MulZeroOneClass α] [MulZeroOneClass β] [MulZeroOneClass γ]
   [MulZeroOneClass δ]
 
-/--
-Definition of `MonoidWithZeroHomClass` / `MonoidWithZeroHomClass` 的定义
+/-- `MonoidWithZeroHomClass F α β` states that `F` is a type of
+`MonoidWithZero`-preserving homomorphisms.
 
-English:
-class MonoidWithZeroHomClass
-  parameters: (F : Type*) (α β : outParam Type*) [MulZeroOneClass α]
-  extends: MonoidHomClass F α β, ZeroHomClass F α β
-  (no additional axioms)
+You should also extend this typeclass when you extend `MonoidWithZeroHom`. -/
+/-
+**MonoidWithZeroHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_7) →   (α : outParam (Type u_8)) →     (β : outParam (Type u_9
+)) → [MulZeroOneClass α] → [MulZeroOneClass β] → [FunLike F α β] → Prop
+参数：Type u_8；Type u_9。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 带零幺半群态射类
-  参数: (F : 类型) (α β : outParam 类型) [乘零幺类 α]
-  继承: 幺半群态射类 F α β, 保零态射类 F α β
-  (无附加公理)
+--- 原说明 ---
+`MonoidWithZeroHomClass F α β` states that `F` is a type of
+`MonoidWithZero`-preserving homomorphisms.
+
+You should also extend this typeclass when you extend `MonoidWithZeroHom`.
 -/
 class MonoidWithZeroHomClass (F : Type*) (α β : outParam Type*) [MulZeroOneClass α]
     [MulZeroOneClass β] [FunLike F α β] : Prop
   extends MonoidHomClass F α β, ZeroHomClass F α β
 
-/--
-Definition of `MonoidWithZeroHom` / `MonoidWithZeroHom` 的定义
+/-- `α →*₀ β` is the type of functions `α → β` that preserve
+the `MonoidWithZero` structure.
 
-English:
-structure MonoidWithZeroHom
-  parameters: (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β]
-  extends: ZeroHom α β, MonoidHom α β
-  (no additional axioms)
+`MonoidWithZeroHom` is also used for group homomorphisms.
 
-中文:
-结构 带零幺半群态射
-  参数: (α β : 类型) [乘零幺类 α] [乘零幺类 β]
-  继承: 保零态射 α β, 幺半群态射 α β
-  (无附加公理)
+When possible, instead of parametrizing results over `(f : α →*₀ β)`,
+you should parametrize over `(F : Type*) [MonoidWithZeroHomClass F α β] (f : F)`.
+
+When you extend this structure, make sure to extend `MonoidWithZeroHomClass`. -/
+/-
+**MonoidWithZeroHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_7) → (β : Type u_8) → [MulZeroOneClass α] → [MulZeroOneClass β
+] → Type (max u_7 u_8)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`α →*₀ β` is the type of functions `α → β` that preserve
+the `MonoidWithZero` structure.
+
+`MonoidWithZeroHom` is also used for group homomorphisms.
+
+When possible, instead of parametrizing results over `(f : α →*₀ β)`,
+you should parametrize over `(F : Type*) [MonoidWithZeroHomClass F α β] (f : F)`
+.
+
+When you extend this structure, make sure to extend `MonoidWithZeroHomClass`.
 -/
 structure MonoidWithZeroHom (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β]
   extends ZeroHom α β, MonoidHom α β
 
 /-- `α →*₀ β` denotes the type of zero-preserving monoid homomorphisms from `α` to `β`. -/
-infixr:25 " ->*₀ " => MonoidWithZeroHom
+infixr:25 " →*₀ " => MonoidWithZeroHom
 
-/--
-Definition of `MonoidWithZeroHom.ofClass` / `MonoidWithZeroHom.ofClass` 的定义
+/-- Turn an element of a type `F` satisfying `MonoidWithZeroHomClass F α β` into an actual
+`MonoidWithZeroHom`. -/
+/-
+**MonoidWithZeroHom.ofClass** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonoidWithZeroHom.ofClass [FunLike F α β] [MonoidWithZeroHomClass F α β] (
+f : F) : α ->*₀ β
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
 
-English:
-definition MonoidWithZeroHom.ofClass
-  signature: [FunLike F α β] [MonoidWithZeroHomClass F α β]
-  body: { (f : α ->* β), (f : ZeroHom α β) with }
-
-中文:
-定义 带零幺半群态射.ofClass
-  签名: [函数状 F α β] [带零幺半群态射类 F α β]
-  定义体: { (f : α ->* β), (f : ZeroHom α β) with }
-
-Depends on / 依赖: ZeroHom
+--- 原说明 ---
+Turn an element of a type `F` satisfying `MonoidWithZeroHomClass F α β` into an 
+actual
+`MonoidWithZeroHom`.
 -/
 def MonoidWithZeroHom.ofClass [FunLike F α β] [MonoidWithZeroHomClass F α β]
-    (f : F) : α ->*₀ β := { (f : α ->* β), (f : ZeroHom α β) with }
+    (f : F) : α →*₀ β := { (f : α →* β), (f : ZeroHom α β) with }
 
 namespace MonoidWithZeroHom
 
 attribute [nolint docBlame] toMonoidHom
 attribute [nolint docBlame] toZeroHom
 
-/--
-Instance `funLike` / 实例 `funLike`
-
-English:
-instance funLike
-  signature: : FunLike (α ->*₀ β) α β where
-  body: f.toFun
-  coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; obtain ⟨⟨_, _⟩, _⟩ := g; congr
-
-中文:
-实例 funLike
-  签名: : 函数状 (α ->*₀ β) α β where
-  定义体: f.toFun
-  coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; obtain ⟨⟨_, _⟩, _⟩ := g; congr
-
-Depends on / 依赖: f.toFun
+/-
+**MonoidWithZeroHom.funLike** 是 Mathlib 中的一个实例，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：funLike : FunLike (α ->*₀ β) α β where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance funLike : FunLike (α ->*₀ β) α β where
+instance funLike : FunLike (α →*₀ β) α β where
   coe f := f.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; obtain ⟨⟨_, _⟩, _⟩ := g; congr
-
-/--
-Instance `monoidWithZeroHomClass` / 实例 `monoidWithZeroHomClass`
-
-English:
-instance monoidWithZeroHomClass
-  signature: : MonoidWithZeroHomClass (α ->*₀ β) α β where
-  body: MonoidWithZeroHom.map_mul'
-  map_one := MonoidWithZeroHom.map_one'
-  map_zero f := f.map_zero'
-
-中文:
-实例 monoidWithZeroHomClass
-  签名: : 带零幺半群态射类 (α ->*₀ β) α β where
-  定义体: MonoidWithZeroHom.map_mul'
-  map_one := MonoidWithZeroHom.map_one'
-  map_zero f := f.map_zero'
-
-Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.map_mul, map_mul
+/-
+**MonoidWithZeroHom.monoidWithZeroHomClass** 是 Mathlib 中的一个实例，位于命名空间 `MonoidWith
+ZeroHom`。
+形式化陈述：monoidWithZeroHomClass : MonoidWithZeroHomClass (α ->*₀ β) α β where map_m
+ul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.map_mul'`：∀ {α : Type u_7} {β : Type u_8} [inst : MulZ
+eroOneClass α] [inst_1 : MulZeroOneClass β] (self : α →*₀ β) (x y : α),   (↑self
+).toFun (x * y) …
+· 使用定理 `MonoidWithZeroHom.map_one'`：∀ {α : Type u_7} {β : Type u_8} [inst : MulZ
+eroOneClass α] [inst_1 : MulZeroOneClass β] (self : α →*₀ β),   (↑self).toFun 1 
+= 1
+· 使用定理 `ZeroHom.map_zero'`：∀ {M : Type u_10} {N : Type u_11} [inst : Zero M] [in
+st_1 : Zero N] (self : ZeroHom M N), self.toFun 0 = 0
 -/
-instance monoidWithZeroHomClass : MonoidWithZeroHomClass (α ->*₀ β) α β where
+instance monoidWithZeroHomClass : MonoidWithZeroHomClass (α →*₀ β) α β where
   map_mul := MonoidWithZeroHom.map_mul'
   map_one := MonoidWithZeroHom.map_one'
   map_zero f := f.map_zero'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: α] : Subsingleton (α ->*₀ β)
-  body: .of_oneHomClass
-
-中文:
-实例 [子单例
-  签名: α] : 子单例 (α ->*₀ β)
-  定义体: .of_oneHomClass
-
-Depends on / 依赖: of_oneHomClass
+/-
+**MonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Subsingleton α] : Subsingleton (α ->*₀ β) := .of_oneHomClass
+instance [Subsingleton α] : Subsingleton (α →*₀ β) := .of_oneHomClass
 
 variable [FunLike F α β]
-
-/--
-lemma `coe_ofClass` / 引理 `coe_ofClass`
-
-English:
-lemma coe_ofClass
-  given: [MonoidWithZeroHomClass F α β] (f : F)
-  proof: rfl
-
-中文:
-引理 coe_ofClass
-  条件: [带零幺半群态射类 F α β] (f : F)
-  证明: rfl
+/-
+**MonoidWithZeroHom.coe_ofClass** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] 
+[inst_1 : MulZeroOneClass β]   [inst_2 : FunLike F α β] [inst_3 : MonoidWithZero
+HomClass F α β] (f : F), ⇑(MonoidWithZeroHom.ofClass f) = ⇑f
+参数：f : F；MonoidWithZeroHom.ofClass f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_ofClass [MonoidWithZeroHomClass F α β] (f : F) :
-    (MonoidWithZeroHom.ofClass f : α -> β) = f := rfl
+    (MonoidWithZeroHom.ofClass f : α → β) = f := rfl
 
 -- Completely uninteresting lemmas about coercion to function, that all homs need
 section Coes
@@ -237,270 +220,199 @@ section Coes
 
 attribute [coe] toMonoidHom
 
-/--
-Instance `coeToMonoidHom` / 实例 `coeToMonoidHom`
+/-- `MonoidWithZeroHom` down-cast to a `MonoidHom`, forgetting the 0-preserving property. -/
+/-
+**MonoidWithZeroHom.coeToMonoidHom** 是 Mathlib 中的一个实例，位于命名空间 `MonoidWithZeroHom`
+。
+形式化陈述：coeToMonoidHom : Coe (α ->*₀ β) (α ->* β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance coeToMonoidHom
-  signature: : Coe (α ->*₀ β) (α ->* β)
-  body: ⟨toMonoidHom⟩
-
-中文:
-实例 coeToMonoidHom
-  签名: : Coe (α ->*₀ β) (α ->* β)
-  定义体: ⟨toMonoidHom⟩
-
-Depends on / 依赖: toMonoidHom
+--- 原说明 ---
+`MonoidWithZeroHom` down-cast to a `MonoidHom`, forgetting the 0-preserving prop
+erty.
 -/
-instance coeToMonoidHom : Coe (α ->*₀ β) (α ->* β) :=
+instance coeToMonoidHom : Coe (α →*₀ β) (α →* β) :=
   ⟨toMonoidHom⟩
 
 attribute [coe] toZeroHom
 
-/--
-Instance `coeToZeroHom` / 实例 `coeToZeroHom`
+/-- `MonoidWithZeroHom` down-cast to a `ZeroHom`, forgetting the monoidal property. -/
+/-
+**MonoidWithZeroHom.coeToZeroHom** 是 Mathlib 中的一个实例，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：coeToZeroHom : Coe (α ->*₀ β) (ZeroHom α β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance coeToZeroHom
-  signature: : Coe (α ->*₀ β) (ZeroHom α β)
-  body: ⟨toZeroHom⟩
-
-中文:
-实例 coeToZeroHom
-  签名: : Coe (α ->*₀ β) (保零态射 α β)
-  定义体: ⟨toZeroHom⟩
-
-Depends on / 依赖: toZeroHom
+--- 原说明 ---
+`MonoidWithZeroHom` down-cast to a `ZeroHom`, forgetting the monoidal property.
 -/
-instance coeToZeroHom : Coe (α ->*₀ β) (ZeroHom α β) := ⟨toZeroHom⟩
+instance coeToZeroHom : Coe (α →*₀ β) (ZeroHom α β) := ⟨toZeroHom⟩
 
 -- This must come after the coe_toFun definitions
-initialize_simps_projections MonoidWithZeroHom (toFun -> apply)
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (f h1 hmul)
-  statement: (mk f h1 hmul : α -> β) = (f : α -> β)
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (f h1 hmul)
-  结论: (mk f h1 hmul : α -> β) = (f : α -> β)
-  证明: rfl
-
-Depends on / 依赖: IsSplitEpi
+initialize_simps_projections MonoidWithZeroHom (toFun → apply)
+/-
+**MonoidWithZeroHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : ZeroHom α β)   (h1 : f.toFun 1 = 1) (hmul : ∀ (x y : α), f.to
+Fun (x * y) = f.toFun x * f.toFun y),   ⇑{ toZeroHom := f, map_one' := h1, map_m
+ul' := hmul } = ⇑f
+参数：f : ZeroHom α β；h1 : f.toFun 1 = 1；hmul : ∀ (x y : α), f.toFun (x * y) = f.to
+Fun x * f.toFun y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_mk (f h1 hmul) : (mk f h1 hmul : α -> β) = (f : α -> β) := rfl
-
-/--
-lemma `toZeroHom_coe` / 引理 `toZeroHom_coe`
-
-English:
-lemma toZeroHom_coe
-  given: (f : α ->*₀ β)
-  statement: (f.toZeroHom : α -> β) = f
-  proof: rfl
-
-中文:
-引理 toZeroHom_coe
-  条件: (f : α ->*₀ β)
-  结论: (f.toZeroHom : α -> β) = f
-  证明: rfl
-
-Depends on / 依赖: IsSplitMono
+@[simp] lemma coe_mk (f h1 hmul) : (mk f h1 hmul : α → β) = (f : α → β) := rfl
+/-
+**MonoidWithZeroHom.toZeroHom_coe** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : α →*₀ β), ⇑↑f = ⇑f
+参数：f : α →*₀ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toZeroHom_coe (f : α ->*₀ β) : (f.toZeroHom : α -> β) = f := rfl
-
-/--
-lemma `toMonoidHom_coe` / 引理 `toMonoidHom_coe`
-
-English:
-lemma toMonoidHom_coe
-  given: (f : α ->*₀ β)
-  statement: f.toMonoidHom.toFun = f
-  proof: rfl
-
-中文:
-引理 toMonoidHom_coe
-  条件: (f : α ->*₀ β)
-  结论: f.toMonoidHom.toFun = f
-  证明: rfl
+@[simp] lemma toZeroHom_coe (f : α →*₀ β) : (f.toZeroHom : α → β) = f := rfl
+/-
+**MonoidWithZeroHom.toMonoidHom_coe** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom
+`。
+形式化陈述：toMonoidHom_coe (f : α ->*₀ β) : f.toMonoidHom.toFun = f
+参数：f : α ->*₀ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toMonoidHom_coe (f : α ->*₀ β) : f.toMonoidHom.toFun = f := rfl
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: ⦃f g
-  statement: α ->*₀ β⦄ (h : forall x, f x = g x) : f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-引理 ext
-  条件: ⦃f g
-  结论: α ->*₀ β⦄ (h : 对任意 x, f x = g x) : f = g
-  证明: DFunLike.ext _ _ h
+lemma toMonoidHom_coe (f : α →*₀ β) : f.toMonoidHom.toFun = f := rfl
+/-
+**MonoidWithZeroHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] ⦃f g : α →*₀ β⦄,   (∀ (x : α), f x = g x) → f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-@[ext] lemma ext ⦃f g : α ->*₀ β⦄ (h : forall x, f x = g x) : f = g := DFunLike.ext _ _ h
-
-/--
-lemma `mk_coe` / 引理 `mk_coe`
-
-English:
-lemma mk_coe
-  given: (f : α ->*₀ β) (h1 hmul)
-  statement: mk f h1 hmul = f
-  proof: ext fun _ => rfl
-
-中文:
-引理 mk_coe
-  条件: (f : α ->*₀ β) (h1 hmul)
-  结论: mk f h1 hmul = f
-  证明: ext fun _ => rfl
+@[ext] lemma ext ⦃f g : α →*₀ β⦄ (h : ∀ x, f x = g x) : f = g := DFunLike.ext _ _ h
+/-
+**MonoidWithZeroHom.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : α →*₀ β)   (h1 : (↑f).toFun 1 = 1) (hmul : ∀ (x y : α), (↑f).
+toFun (x * y) = (↑f).toFun x * (↑f).toFun y),   { toZeroHom := ↑f, map_one' := h
+1, map_mul' := hmul } = f
+参数：f : α →*₀ β；h1 : (↑f).toFun 1 = 1；hmul : ∀ (x y : α), (↑f).toFun (x * y) = (↑
+f).toFun x * (↑f).toFun y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `MonoidWithZeroHom.ext`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOn
+eClass α] [inst_1 : MulZeroOneClass β] ⦃f g : α →*₀ β⦄,   (∀ (x : α), f x = g x)
+ → f = g
 -/
-@[simp] lemma mk_coe (f : α ->*₀ β) (h1 hmul) : mk f h1 hmul = f := ext fun _ => rfl
+@[simp] lemma mk_coe (f : α →*₀ β) (h1 hmul) : mk f h1 hmul = f := ext fun _ ↦ rfl
 
 end Coes
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `MonoidHom` with a new `toFun` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**MonoidWithZeroHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : MulZeroOneClass α] → [inst
+_1 : MulZeroOneClass β] → (f : α →*₀ β) → (f' : α → β) → f' = ⇑f → α →* β
+参数：f : α →*₀ β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : α ->*₀ β) (f' : α -> β) (h : f' = f)
-  body: { f.toZeroHom.copy f' h, f.toMonoidHom.copy f' h with }
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : α ->*₀ β) (f' : α -> β) (h : f' = f)
-  定义体: { f.toZeroHom.copy f' h, f.toMonoidHom.copy f' h with }
-
-@[simp]
+--- 原说明 ---
+Copy of a `MonoidHom` with a new `toFun` equal to the old one. Useful to fix
+definitional equalities.
 -/
-protected def copy (f : α ->*₀ β) (f' : α -> β) (h : f' = f) : α ->* β :=
+protected def copy (f : α →*₀ β) (f' : α → β) (h : f' = f) : α →* β :=
   { f.toZeroHom.copy f' h, f.toMonoidHom.copy f' h with }
 
 @[simp]
-/--
-lemma `coe_copy` / 引理 `coe_copy`
-
-English:
-lemma coe_copy
-  given: (f : α ->*₀ β) (f' : α -> β) (h)
-  statement: (f.copy f' h) = f'
-  proof: rfl
-
-中文:
-引理 coe_copy
-  条件: (f : α ->*₀ β) (f' : α -> β) (h)
-  结论: (f.copy f' h) = f'
-  证明: rfl
+/-
+**MonoidWithZeroHom.coe_copy** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：coe_copy (f : α ->*₀ β) (f' : α -> β) (h) : (f.copy f' h) = f'
+参数：f : α ->*₀ β；f' : α -> β；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_copy (f : α ->*₀ β) (f' : α -> β) (h) : (f.copy f' h) = f' := rfl
-
-/--
-lemma `copy_eq` / 引理 `copy_eq`
-
-English:
-lemma copy_eq
-  given: (f : α ->*₀ β) (f' : α -> β) (h)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-引理 copy_eq
-  条件: (f : α ->*₀ β) (f' : α -> β) (h)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+lemma coe_copy (f : α →*₀ β) (f' : α → β) (h) : (f.copy f' h) = f' := rfl
+/-
+**MonoidWithZeroHom.copy_eq** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：copy_eq (f : α ->*₀ β) (f' : α -> β) (h) : f.copy f' h = f
+参数：f : α ->*₀ β；f' : α -> β；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
 -/
-lemma copy_eq (f : α ->*₀ β) (f' : α -> β) (h) : f.copy f' h = f := DFunLike.ext' h
-
-/--
-lemma `map_one` / 引理 `map_one`
-
-English:
-lemma map_one
-  given: (f : α ->*₀ β)
-  statement: f 1 = 1
-  proof: f.map_one'
-
-中文:
-引理 map_one
-  条件: (f : α ->*₀ β)
-  结论: f 1 = 1
-  证明: f.map_one'
+lemma copy_eq (f : α →*₀ β) (f' : α → β) (h) : f.copy f' h = f := DFunLike.ext' h
+/-
+**MonoidWithZeroHom.map_one** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : α →*₀ β), f 1 = 1
+参数：f : α →*₀ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.map_one'`：∀ {α : Type u_7} {β : Type u_8} [inst : MulZ
+eroOneClass α] [inst_1 : MulZeroOneClass β] (self : α →*₀ β),   (↑self).toFun 1 
+= 1
 -/
-protected lemma map_one (f : α ->*₀ β) : f 1 = 1 := f.map_one'
-
-/--
-lemma `map_zero` / 引理 `map_zero`
-
-English:
-lemma map_zero
-  given: (f : α ->*₀ β)
-  statement: f 0 = 0
-  proof: f.map_zero'
-
-中文:
-引理 map_zero
-  条件: (f : α ->*₀ β)
-  结论: f 0 = 0
-  证明: f.map_zero'
+protected lemma map_one (f : α →*₀ β) : f 1 = 1 := f.map_one'
+/-
+**MonoidWithZeroHom.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : α →*₀ β), f 0 = 0
+参数：f : α →*₀ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroHom.map_zero'`：∀ {M : Type u_10} {N : Type u_11} [inst : Zero M] [in
+st_1 : Zero N] (self : ZeroHom M N), self.toFun 0 = 0
 -/
-protected lemma map_zero (f : α ->*₀ β) : f 0 = 0 := f.map_zero'
-
-/--
-lemma `map_mul` / 引理 `map_mul`
-
-English:
-lemma map_mul
-  given: (f : α ->*₀ β) (a b : α)
-  statement: f (a * b) = f a * f b
-  proof: f.map_mul' a b
+protected lemma map_zero (f : α →*₀ β) : f 0 = 0 := f.map_zero'
+/-
+**MonoidWithZeroHom.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : α →*₀ β) (a b : α),   f (a * b) = f a * f b
+参数：f : α →*₀ β；a b : α；a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.map_mul'`：∀ {α : Type u_7} {β : Type u_8} [inst : MulZ
+eroOneClass α] [inst_1 : MulZeroOneClass β] (self : α →*₀ β) (x y : α),   (↑self
+).toFun (x * y) …
+-/
+protected lemma map_mul (f : α →*₀ β) (a b : α) : f (a * b) = f a * f b := f.map_mul' a b
 
 @[simp]
-
-中文:
-引理 map_mul
-  条件: (f : α ->*₀ β) (a b : α)
-  结论: f (a * b) = f a * f b
-  证明: f.map_mul' a b
-
-@[simp]
--/
-protected lemma map_mul (f : α ->*₀ β) (a b : α) : f (a * b) = f a * f b := f.map_mul' a b
-
-@[simp]
-/--
-theorem `map_ite_zero_one` / 定理 `map_ite_zero_one`
-
-English:
-theorem map_ite_zero_one
-  statement: {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F α β] (f : F)
-  proof: by
-  split_ifs with h <;> simp
-
-@[simp]
-
-中文:
-定理 map_ite_zero_one
-  结论: {F : 类型} [函数状 F α β] [带零幺半群态射类 F α β] (f : F)
-  证明: by
-  split_ifs with h <;> simp
-
-@[simp]
-
-Depends on / 依赖: split_ifs
+/-
+**MonoidWithZeroHom.map_ite_zero_one** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHo
+m`。
+形式化陈述：map_ite_zero_one {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F α β
+] (f : F) (p : Prop) [Decidable p] : f (ite p 0 1) = ite p 0 1
+参数：f : F；p : Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
 -/
 theorem map_ite_zero_one {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F α β] (f : F)
     (p : Prop) [Decidable p] :
@@ -508,22 +420,39 @@ theorem map_ite_zero_one {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F
   split_ifs with h <;> simp
 
 @[simp]
-/--
-theorem `map_ite_one_zero` / 定理 `map_ite_one_zero`
-
-English:
-theorem map_ite_one_zero
-  statement: {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F α β] (f : F)
-  proof: by
-  split_ifs with h <;> simp
-
-中文:
-定理 map_ite_one_zero
-  结论: {F : 类型} [函数状 F α β] [带零幺半群态射类 F α β] (f : F)
-  证明: by
-  split_ifs with h <;> simp
-
-Depends on / 依赖: split_ifs
+/-
+**MonoidWithZeroHom.map_ite_one_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHo
+m`。
+形式化陈述：map_ite_one_zero {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F α β
+] (f : F) (p : Prop) [Decidable p] : f (ite p 1 0) = ite p 1 0
+参数：f : F；p : Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
 -/
 theorem map_ite_one_zero {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F α β] (f : F)
     (p : Prop) [Decidable p] :
@@ -532,445 +461,352 @@ theorem map_ite_one_zero {F : Type*} [FunLike F α β] [MonoidWithZeroHomClass F
 
 /-- The identity map from a `MonoidWithZero` to itself. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**MonoidWithZeroHom.id** 是 Mathlib 中的一个定义，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：id (α : Type*) [MulZeroOneClass α] : α ->*₀ α where toFun x
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (α : Type*) [MulZeroOneClass α]
-  body: x
-  map_zero' := rfl
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 id
-  签名: (α : 类型) [乘零幺类 α]
-  定义体: x
-  map_zero' := rfl
-  map_one' := rfl
-  map_mul' _ _ := rfl
+--- 原说明 ---
+The identity map from a `MonoidWithZero` to itself.
 -/
-def id (α : Type*) [MulZeroOneClass α] : α ->*₀ α where
+def id (α : Type*) [MulZeroOneClass α] : α →*₀ α where
   toFun x := x
   map_zero' := rfl
   map_one' := rfl
   map_mul' _ _ := rfl
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of `MonoidWithZeroHom`s as a `MonoidWithZeroHom`. -/
+/-
+**MonoidWithZeroHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：comp (hnp : β ->*₀ γ) (hmn : α ->*₀ β) : α ->*₀ γ where toFun
+参数：hnp : β ->*₀ γ；hmn : α ->*₀ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (hnp : β ->*₀ γ) (hmn : α ->*₀ β)
-  body: hnp ∘ hmn
-  map_zero' := by rw [comp_apply, map_zero, map_zero]
-  map_one' := by simp
-  map_mul' := by simp
-
-中文:
-定义 comp
-  签名: (hnp : β ->*₀ γ) (hmn : α ->*₀ β)
-  定义体: hnp ∘ hmn
-  map_zero' := by rw [comp_apply, map_zero, map_zero]
-  map_one' := by simp
-  map_mul' := by simp
+--- 原说明 ---
+Composition of `MonoidWithZeroHom`s as a `MonoidWithZeroHom`.
 -/
-def comp (hnp : β ->*₀ γ) (hmn : α ->*₀ β) : α ->*₀ γ where
+def comp (hnp : β →*₀ γ) (hmn : α →*₀ β) : α →*₀ γ where
   toFun := hnp ∘ hmn
   map_zero' := by rw [comp_apply, map_zero, map_zero]
   map_one' := by simp
   map_mul' := by simp
-
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: (g : β ->*₀ γ) (f : α ->*₀ β)
-  statement: ↑(g.comp f) = g ∘ f
-  proof: rfl
-
-中文:
-引理 coe_comp
-  条件: (g : β ->*₀ γ) (f : α ->*₀ β)
-  结论: ↑(g.comp f) = g ∘ f
-  证明: rfl
+/-
+**MonoidWithZeroHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : MulZeroOneClass α] 
+[inst_1 : MulZeroOneClass β]   [inst_2 : MulZeroOneClass γ] (g : β →*₀ γ) (f : α
+ →*₀ β), ⇑(g.comp f) = ⇑g ∘ ⇑f
+参数：g : β →*₀ γ；f : α →*₀ β；g.comp f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_comp (g : β ->*₀ γ) (f : α ->*₀ β) : ↑(g.comp f) = g ∘ f := rfl
-
-/--
-lemma `comp_apply` / 引理 `comp_apply`
-
-English:
-lemma comp_apply
-  given: (g : β ->*₀ γ) (f : α ->*₀ β) (x : α)
-  statement: g.comp f x = g (f x)
-  proof: rfl
-
-中文:
-引理 comp_apply
-  条件: (g : β ->*₀ γ) (f : α ->*₀ β) (x : α)
-  结论: g.comp f x = g (f x)
-  证明: rfl
+@[simp] lemma coe_comp (g : β →*₀ γ) (f : α →*₀ β) : ↑(g.comp f) = g ∘ f := rfl
+/-
+**MonoidWithZeroHom.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：comp_apply (g : β ->*₀ γ) (f : α ->*₀ β) (x : α) : g.comp f x = g (f x)
+参数：g : β ->*₀ γ；f : α ->*₀ β；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comp_apply (g : β ->*₀ γ) (f : α ->*₀ β) (x : α) : g.comp f x = g (f x) := rfl
-
-/--
-lemma `comp_assoc` / 引理 `comp_assoc`
-
-English:
-lemma comp_assoc
-  given: (f : α ->*₀ β) (g : β ->*₀ γ) (h : γ ->*₀ δ)
-  proof: rfl
-
-中文:
-引理 comp_assoc
-  条件: (f : α ->*₀ β) (g : β ->*₀ γ) (h : γ ->*₀ δ)
-  证明: rfl
+lemma comp_apply (g : β →*₀ γ) (f : α →*₀ β) (x : α) : g.comp f x = g (f x) := rfl
+/-
+**MonoidWithZeroHom.comp_assoc** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：comp_assoc (f : α ->*₀ β) (g : β ->*₀ γ) (h : γ ->*₀ δ) : (h.comp g).comp 
+f = h.comp (g.comp f)
+参数：f : α ->*₀ β；g : β ->*₀ γ；h : γ ->*₀ δ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comp_assoc (f : α ->*₀ β) (g : β ->*₀ γ) (h : γ ->*₀ δ) :
+lemma comp_assoc (f : α →*₀ β) (g : β →*₀ γ) (h : γ →*₀ δ) :
     (h.comp g).comp f = h.comp (g.comp f) := rfl
-
-/--
-lemma `cancel_right` / 引理 `cancel_right`
-
-English:
-lemma cancel_right
-  given: {g₁ g₂ : β ->*₀ γ} {f : α ->*₀ β} (hf : Surjective f)
-  proof: ⟨fun h => ext hf.forall.2 (DFunLike.ext_iff.1 h), fun h => h ▸ rfl⟩
-
-中文:
-引理 cancel_right
-  条件: {g₁ g₂ : β ->*₀ γ} {f : α ->*₀ β} (hf : 满射 f)
-  证明: ⟨fun h => ext hf.forall.2 (DFunLike.ext_iff.1 h), fun h => h ▸ rfl⟩
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, hf.forall
+/-
+**MonoidWithZeroHom.cancel_right** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：cancel_right {g₁ g₂ : β ->*₀ γ} {f : α ->*₀ β} (hf : Surjective f) : g₁.co
+mp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.ext`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOn
+eClass α] [inst_1 : MulZeroOneClass β] ⦃f g : α →*₀ β⦄,   (∀ (x : α), f x = g x)
+ → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-lemma cancel_right {g₁ g₂ : β ->*₀ γ} {f : α ->*₀ β} (hf : Surjective f) :
+lemma cancel_right {g₁ g₂ : β →*₀ γ} {f : α →*₀ β} (hf : Surjective f) :
     g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 (DFunLike.ext_iff.1 h), fun h => h ▸ rfl⟩
-
-/--
-lemma `cancel_left` / 引理 `cancel_left`
-
-English:
-lemma cancel_left
-  given: {g : β ->*₀ γ} {f₁ f₂ : α ->*₀ β} (hg : Injective g)
-  proof: ⟨fun h => ext fun x => hg by rw [← comp_apply, h,
-    comp_apply], fun h => h ▸ rfl⟩
-
-中文:
-引理 cancel_left
-  条件: {g : β ->*₀ γ} {f₁ f₂ : α ->*₀ β} (hg : 单射 g)
-  证明: ⟨fun h => ext fun x => hg by rw [← comp_apply, h,
-    comp_apply], fun h => h ▸ rfl⟩
-
-Depends on / 依赖: comp_apply
+  ⟨fun h ↦ ext <| hf.forall.2 (DFunLike.ext_iff.1 h), fun h ↦ h ▸ rfl⟩
+/-
+**MonoidWithZeroHom.cancel_left** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：cancel_left {g : β ->*₀ γ} {f₁ f₂ : α ->*₀ β} (hg : Injective g) : g.comp 
+f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.ext`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOn
+eClass α] [inst_1 : MulZeroOneClass β] ⦃f g : α →*₀ β⦄,   (∀ (x : α), f x = g x)
+ → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MonoidWithZeroHom.comp_apply`：comp_apply (g : β ->*₀ γ) (f : α ->*₀ β) (
+x : α) : g.comp f x = g (f x)
 -/
-lemma cancel_left {g : β ->*₀ γ} {f₁ f₂ : α ->*₀ β} (hg : Injective g) :
+lemma cancel_left {g : β →*₀ γ} {f₁ f₂ : α →*₀ β} (hg : Injective g) :
     g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => ext fun x => hg by rw [← comp_apply, h,
-    comp_apply], fun h => h ▸ rfl⟩
-
-/--
-lemma `toMonoidHom_injective` / 引理 `toMonoidHom_injective`
-
-English:
-lemma toMonoidHom_injective
-  statement: Injective (toMonoidHom : (α ->*₀ β) -> α ->* β)
-  proof: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
-
-中文:
-引理 toMonoidHom_injective
-  结论: 单射 (toMonoidHom : (α ->*₀ β) -> α ->* β)
-  证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
+  ⟨fun h ↦ ext fun x ↦ hg <| by rw [← comp_apply, h,
+    comp_apply], fun h ↦ h ▸ rfl⟩
+/-
+**MonoidWithZeroHom.toMonoidHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZ
+eroHom`。
+形式化陈述：toMonoidHom_injective : Injective (toMonoidHom : (α ->*₀ β) -> α ->* β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-lemma toMonoidHom_injective : Injective (toMonoidHom : (α ->*₀ β) -> α ->* β) :=
+lemma toMonoidHom_injective : Injective (toMonoidHom : (α →*₀ β) → α →* β) :=
   Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
-
-/--
-lemma `toZeroHom_injective` / 引理 `toZeroHom_injective`
-
-English:
-lemma toZeroHom_injective
-  statement: Injective (toZeroHom : (α ->*₀ β) -> ZeroHom α β)
-  proof: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
-
-中文:
-引理 toZeroHom_injective
-  结论: 单射 (toZeroHom : (α ->*₀ β) -> 保零态射 α β)
-  证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
+/-
+**MonoidWithZeroHom.toZeroHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZer
+oHom`。
+形式化陈述：toZeroHom_injective : Injective (toZeroHom : (α ->*₀ β) -> ZeroHom α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-lemma toZeroHom_injective : Injective (toZeroHom : (α ->*₀ β) -> ZeroHom α β) :=
+lemma toZeroHom_injective : Injective (toZeroHom : (α →*₀ β) → ZeroHom α β) :=
   Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
-
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  given: (f : α ->*₀ β)
-  statement: f.comp (id α) = f
-  proof: ext fun _ => rfl
-
-中文:
-引理 comp_id
-  条件: (f : α ->*₀ β)
-  结论: f.comp (id α) = f
-  证明: ext fun _ => rfl
+/-
+**MonoidWithZeroHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : α →*₀ β),   f.comp (MonoidWithZeroHom.id α) = f
+参数：f : α →*₀ β；MonoidWithZeroHom.id α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.ext`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOn
+eClass α] [inst_1 : MulZeroOneClass β] ⦃f g : α →*₀ β⦄,   (∀ (x : α), f x = g x)
+ → f = g
 -/
-@[simp] lemma comp_id (f : α ->*₀ β) : f.comp (id α) = f := ext fun _ => rfl
-
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  given: (f : α ->*₀ β)
-  statement: (id β).comp f = f
-  proof: ext fun _ => rfl
-
-中文:
-引理 id_comp
-  条件: (f : α ->*₀ β)
-  结论: (id β).comp f = f
-  证明: ext fun _ => rfl
-
-Depends on / 依赖: Category, Category.id_comp, id_comp, if_pos
+@[simp] lemma comp_id (f : α →*₀ β) : f.comp (id α) = f := ext fun _ ↦ rfl
+/-
+**MonoidWithZeroHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZe
+roOneClass β] (f : α →*₀ β),   (MonoidWithZeroHom.id β).comp f = f
+参数：f : α →*₀ β；MonoidWithZeroHom.id β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.ext`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZeroOn
+eClass α] [inst_1 : MulZeroOneClass β] ⦃f g : α →*₀ β⦄,   (∀ (x : α), f x = g x)
+ → f = g
 -/
-@[simp] lemma id_comp (f : α ->*₀ β) : (id β).comp f = f := ext fun _ => rfl
+@[simp] lemma id_comp (f : α →*₀ β) : (id β).comp f = f := ext fun _ ↦ rfl
 
 -- Unlike the other homs, `MonoidWithZeroHom` does not have a `1` or `0`
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (α ->*₀ α)
-  body: ⟨id α⟩
-
-中文:
-实例 :
-  签名: 可居 (α ->*₀ α)
-  定义体: ⟨id α⟩
-
-Depends on / 依赖: eqToIso, id_comp, mkXIso, of.d
+/-
+**MonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited (α ->*₀ α) := ⟨id α⟩
+instance : Inhabited (α →*₀ α) := ⟨id α⟩
 
 /-- Given two monoid with zero morphisms `f`, `g` to a commutative monoid with zero, `f * g` is the
 monoid with zero morphism sending `x` to `f x * g x`. -/
-instance {β} [CommMonoidWithZero β] : Mul (α ->*₀ β) where
+/-
+**MonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given two monoid with zero morphisms `f`, `g` to a commutative monoid with zero,
+ `f * g` is the
+monoid with zero morphism sending `x` to `f x * g x`.
+-/
+instance {β} [CommMonoidWithZero β] : Mul (α →*₀ β) where
   mul f g :=
-    { (f * g : α ->* β) with
+    { (f * g : α →* β) with
       map_zero' := by dsimp; rw [map_zero, zero_mul] }
 
-/--
-Instance `one` / 实例 `one`
+/-- The trivial homomorphism between monoids with zero, sending 0 to 0 and all other elements to 1.
+-/
+/-
+**MonoidWithZeroHom.one** 是 Mathlib 中的一个定义，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：(M₀ : Type u_7) →   (N₀ : Type u_8) →     [inst : MulZeroOneClass M₀] →   
+    [inst_1 : MulZeroOneClass N₀] →         [DecidablePred fun x => x = 0] → [No
+ntrivial M₀] → [NoZeroDivisors M₀] → One (M₀ →*₀ N₀)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance one
-  signature: (M₀ N₀ : Type*) [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-  body: if x = 0 then 0 else 1
-  one.map_zero' := by simp
-  one.map_one' := by simp
-  one.map_mul' x y := by split_ifs <;> simp_all
-
-中文:
-实例 one
-  签名: (M₀ N₀ : 类型) [乘零幺类 M₀] [乘零幺类 N₀]
-  定义体: if x = 0 then 0 else 1
-  one.map_zero' := by simp
-  one.map_one' := by simp
-  one.map_mul' x y := by split_ifs <;> simp_all
+--- 原说明 ---
+The trivial homomorphism between monoids with zero, sending 0 to 0 and all other
+ elements to 1.
 -/
 protected instance one (M₀ N₀ : Type*) [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-    [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] :
-    One (M₀ ->*₀ N₀) where
+    [DecidablePred fun x : M₀ ↦ x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] :
+    One (M₀ →*₀ N₀) where
   one.toFun x := if x = 0 then 0 else 1
   one.map_zero' := by simp
   one.map_one' := by simp
   one.map_mul' x y := by split_ifs <;> simp_all
-
-/--
-lemma `one_apply_def` / 引理 `one_apply_def`
-
-English:
-lemma one_apply_def
-  statement: {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 one_apply_def
-  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: _congr_succ, mk_d, mk_d_1_0, mk_d_2_1
+/-
+**MonoidWithZeroHom.one_apply_def** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`。
+形式化陈述：one_apply_def {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀] [D
+ecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] (x : M₀) :
+ (1 : M₀ ->*₀ N₀) x = if x = 0 then 0 else 1
+参数：x : M₀。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_apply_def {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-    [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] (x : M₀) :
-    (1 : M₀ ->*₀ N₀) x = if x = 0 then 0 else 1 :=
+    [DecidablePred fun x : M₀ ↦ x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] (x : M₀) :
+    (1 : M₀ →*₀ N₀) x = if x = 0 then 0 else 1 :=
   rfl
 
 @[simp]
-/--
-lemma `one_apply_zero` / 引理 `one_apply_zero`
-
-English:
-lemma one_apply_zero
-  statement: {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-  proof: if_pos rfl
-
-中文:
-引理 one_apply_zero
-  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
-  证明: if_pos rfl
-
-Depends on / 依赖: if_pos
+/-
+**MonoidWithZeroHom.one_apply_zero** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom`
+。
+形式化陈述：one_apply_zero {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀] [
+DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] : (1 : M₀
+ ->*₀ N₀) 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 lemma one_apply_zero {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-    [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] :
-    (1 : M₀ ->*₀ N₀) 0 = 0 :=
+    [DecidablePred fun x : M₀ ↦ x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] :
+    (1 : M₀ →*₀ N₀) 0 = 0 :=
   if_pos rfl
-
-/--
-lemma `one_apply_of_ne_zero` / 引理 `one_apply_of_ne_zero`
-
-English:
-lemma one_apply_of_ne_zero
-  statement: {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-  proof: if_neg hx
-
-@[simp]
-
-中文:
-引理 one_apply_of_ne_zero
-  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
-  证明: if_neg hx
-
-@[simp]
-
-Depends on / 依赖: if_neg
+/-
+**MonoidWithZeroHom.one_apply_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZe
+roHom`。
+形式化陈述：one_apply_of_ne_zero {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass
+ N₀] [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] {x 
+: M₀} (hx : x != 0) : (1 : M₀ ->*₀ N₀) x = 1
+参数：hx : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
 lemma one_apply_of_ne_zero {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-    [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] {x : M₀} (hx : x != 0) :
-    (1 : M₀ ->*₀ N₀) x = 1 :=
+    [DecidablePred fun x : M₀ ↦ x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] {x : M₀} (hx : x ≠ 0) :
+    (1 : M₀ →*₀ N₀) x = 1 :=
   if_neg hx
 
 @[simp]
-/--
-lemma `one_apply_eq_zero_iff` / 引理 `one_apply_eq_zero_iff`
-
-English:
-lemma one_apply_eq_zero_iff
-  statement: {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-  proof: by
-  rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
-
-@[simp]
-
-中文:
-引理 one_apply_eq_zero_iff
-  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
-  证明: by
-  rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
-
-@[simp]
-
-Depends on / 依赖: eq_or_ne, one_apply_of_ne_zero
+/-
+**MonoidWithZeroHom.one_apply_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZ
+eroHom`。
+形式化陈述：one_apply_eq_zero_iff {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClas
+s N₀] [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] [N
+ontrivial N₀] {x : M₀} : (1 : M₀ ->*₀ N₀) x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `MonoidWithZeroHom.one_apply_zero`：one_apply_zero {M₀ N₀ : Type*} [MulZer
+oOneClass M₀] [MulZeroOneClass N₀] [DecidablePred fun x : M₀ => x = 0] [Nontrivi
+al M₀] [NoZeroDivisors…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MonoidWithZeroHom.one_apply_of_ne_zero`：one_apply_of_ne_zero {M₀ N₀ : Ty
+pe*} [MulZeroOneClass M₀] [MulZeroOneClass N₀] [DecidablePred fun x : M₀ => x = 
+0] [Nontrivial M₀] [NoZeroDi…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma one_apply_eq_zero_iff {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-    [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] [Nontrivial N₀]
+    [DecidablePred fun x : M₀ ↦ x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] [Nontrivial N₀]
     {x : M₀} :
-    (1 : M₀ ->*₀ N₀) x = 0 ↔ x = 0 := by
+    (1 : M₀ →*₀ N₀) x = 0 ↔ x = 0 := by
   rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
 
 @[simp]
-/--
-lemma `one_apply_eq_one_iff` / 引理 `one_apply_eq_one_iff`
-
-English:
-lemma one_apply_eq_one_iff
-  statement: {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-  proof: by
-  rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
-
-中文:
-引理 one_apply_eq_one_iff
-  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
-  证明: by
-  rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
-
-Depends on / 依赖: eq_or_ne, one_apply_of_ne_zero
+/-
+**MonoidWithZeroHom.one_apply_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZe
+roHom`。
+形式化陈述：one_apply_eq_one_iff {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass
+ N₀] [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] [No
+ntrivial N₀] {x : M₀} : (1 : M₀ ->*₀ N₀) x = 1 ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `MonoidWithZeroHom.one_apply_zero`：one_apply_zero {M₀ N₀ : Type*} [MulZer
+oOneClass M₀] [MulZeroOneClass N₀] [DecidablePred fun x : M₀ => x = 0] [Nontrivi
+al M₀] [NoZeroDivisors…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MonoidWithZeroHom.one_apply_of_ne_zero`：one_apply_of_ne_zero {M₀ N₀ : Ty
+pe*} [MulZeroOneClass M₀] [MulZeroOneClass N₀] [DecidablePred fun x : M₀ => x = 
+0] [Nontrivial M₀] [NoZeroDi…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma one_apply_eq_one_iff {M₀ N₀ : Type*} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-    [DecidablePred fun x : M₀ => x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] [Nontrivial N₀]
+    [DecidablePred fun x : M₀ ↦ x = 0] [Nontrivial M₀] [NoZeroDivisors M₀] [Nontrivial N₀]
     {x : M₀} :
-    (1 : M₀ ->*₀ N₀) x = 1 ↔ x != 0 := by
+    (1 : M₀ →*₀ N₀) x = 1 ↔ x ≠ 0 := by
   rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
 
 end MonoidWithZeroHom
 
 section CommMonoidWithZero
-variable [CommMonoidWithZero M₀] {n : Nat} (hn : n != 0)
+variable [CommMonoidWithZero M₀] {n : ℕ} (hn : n ≠ 0)
 
-/--
-Definition of `powMonoidWithZeroHom` / `powMonoidWithZeroHom` 的定义
+/-- We define `x ↦ x^n` (for positive `n : ℕ`) as a `MonoidWithZeroHom` -/
+/-
+**powMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：powMonoidWithZeroHom : M₀ ->*₀ M₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powMonoidWithZeroHom
-  signature: : M₀ ->*₀ M₀
-  body: { powMonoidHom n with map_zero' := zero_pow hn }
-
-中文:
-定义 powMonoidWithZeroHom
-  签名: : M₀ ->*₀ M₀
-  定义体: { powMonoidHom n with map_zero' := zero_pow hn }
-
-Depends on / 依赖: eqToHom, map_zero, powMonoidHom, zero_pow
+--- 原说明 ---
+We define `x ↦ x^n` (for positive `n : ℕ`) as a `MonoidWithZeroHom`
 -/
-def powMonoidWithZeroHom : M₀ ->*₀ M₀ :=
+def powMonoidWithZeroHom : M₀ →*₀ M₀ :=
   { powMonoidHom n with map_zero' := zero_pow hn }
-
-/--
-lemma `coe_powMonoidWithZeroHom` / 引理 `coe_powMonoidWithZeroHom`
-
-English:
-lemma coe_powMonoidWithZeroHom
-  statement: (powMonoidWithZeroHom hn : M₀ -> M₀) = fun x => x ^ n
-  proof: rfl
-
-中文:
-引理 coe_powMonoidWithZeroHom
-  结论: (powMonoidWithZeroHom hn : M₀ -> M₀) = fun x => x ^ n
-  证明: rfl
+/-
+**coe_powMonoidWithZeroHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M₀ : Type u_6} [inst : CommMonoidWithZero M₀] {n : ℕ} (hn : n ≠ 0), ⇑(p
+owMonoidWithZeroHom hn) = fun x => x ^ n
+参数：hn : n ≠ 0；powMonoidWithZeroHom hn。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_powMonoidWithZeroHom : (powMonoidWithZeroHom hn : M₀ -> M₀) = fun x => x ^ n := rfl
-
-/--
-lemma `powMonoidWithZeroHom_apply` / 引理 `powMonoidWithZeroHom_apply`
-
-English:
-lemma powMonoidWithZeroHom_apply
-  given: (a : M₀)
-  statement: powMonoidWithZeroHom hn a = a ^ n
-  proof: rfl
-
-中文:
-引理 powMonoidWithZeroHom_apply
-  条件: (a : M₀)
-  结论: powMonoidWithZeroHom hn a = a ^ n
-  证明: rfl
+@[simp] lemma coe_powMonoidWithZeroHom : (powMonoidWithZeroHom hn : M₀ → M₀) = fun x ↦ x ^ n := rfl
+/-
+**powMonoidWithZeroHom_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M₀ : Type u_6} [inst : CommMonoidWithZero M₀] {n : ℕ} (hn : n ≠ 0) (a :
+ M₀), (powMonoidWithZeroHom hn) a = a ^ n
+参数：hn : n ≠ 0；a : M₀；powMonoidWithZeroHom hn。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma powMonoidWithZeroHom_apply (a : M₀) : powMonoidWithZeroHom hn a = a ^ n := rfl
 
 end CommMonoidWithZero
+

@@ -42,20 +42,13 @@ variable [CommRing R] [LieRing L] [AddCommGroup M] [Module R M]
 variable [LieRingModule L M]
 variable (N N' : LieSubmodule R L M)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The quotient of a Lie module by a Lie submodule. It is a Lie module. -/
+/-
+**LieSubmodule.** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: HasQuotient M (LieSubmodule R L M)
-  body: ⟨fun N => M ⧸ N.toSubmodule⟩
-
-中文:
-实例 :
-  签名: 有商 M (Lie子模 R L M)
-  定义体: ⟨fun N => M ⧸ N.toSubmodule⟩
-
-Depends on / 依赖: N.toSubmodule, toSubmodule
+--- 原说明 ---
+The quotient of a Lie module by a Lie submodule. It is a Lie module.
 -/
 instance : HasQuotient M (LieSubmodule R L M) :=
   ⟨fun N => M ⧸ N.toSubmodule⟩
@@ -64,152 +57,94 @@ namespace Quotient
 
 variable {N}
 
-/--
-Instance `addCommGroup` / 实例 `addCommGroup`
-
-English:
-instance addCommGroup
-  signature: : AddCommGroup (M ⧸ N)
-  body: Submodule.Quotient.addCommGroup _
-
-中文:
-实例 addCommGroup
-  签名: : 加法交换群 (M ⧸ N)
-  定义体: Submodule.Quotient.addCommGroup _
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.addCommGroup, addCommGroup
+/-
+**LieSubmodule.Quotient.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodule.Quo
+tient`。
+形式化陈述：addCommGroup : AddCommGroup (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommGroup : AddCommGroup (M ⧸ N) :=
   Submodule.Quotient.addCommGroup _
-
-/--
-Instance `module'` / 实例 `module'`
-
-English:
-instance module'
-  signature: {S : Type*} [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M]
-  body: Submodule.Quotient.module' _
-
-中文:
-实例 module'
-  签名: {S : 类型} [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
-  定义体: Submodule.Quotient.module' _
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.module, module
+/-
+**LieSubmodule.Quotient.module'** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodule.Quotient
+`。
+形式化陈述：module' {S : Type*} [Semiring S] [SMul S R] [Module S M] [IsScalarTower S 
+R M] : Module S (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module' {S : Type*} [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M] :
     Module S (M ⧸ N) :=
   Submodule.Quotient.module' _
-
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: : Module R (M ⧸ N)
-  body: Submodule.Quotient.module _
-
-中文:
-实例 module
-  签名: : 模 R (M ⧸ N)
-  定义体: Submodule.Quotient.module _
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.module, module
+/-
+**LieSubmodule.Quotient.module** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodule.Quotient`
+。
+形式化陈述：module : Module R (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module : Module R (M ⧸ N) :=
   Submodule.Quotient.module _
-
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: {S : Type*} [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M]
-  body: Submodule.Quotient.isCentralScalar _
-
-中文:
-实例 isCentralScalar
-  签名: {S : 类型} [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
-  定义体: Submodule.Quotient.isCentralScalar _
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.isCentralScalar, isCentralScalar
+/-
+**LieSubmodule.Quotient.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodule.
+Quotient`。
+形式化陈述：isCentralScalar {S : Type*} [Semiring S] [SMul S R] [Module S M] [IsScalar
+Tower S R M] [SMul Sᵐᵒᵖ R] [Module Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M] [IsCentralSc
+alar S M] : IsCentralScalar S (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isCentralScalar {S : Type*} [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M]
     [SMul Sᵐᵒᵖ R] [Module Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M] [IsCentralScalar S M] :
     IsCentralScalar S (M ⧸ N) :=
   Submodule.Quotient.isCentralScalar _
-
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: : Inhabited (M ⧸ N)
-  body: ⟨0⟩
-
-中文:
-实例 inhabited
-  签名: : 可居 (M ⧸ N)
-  定义体: ⟨0⟩
+/-
+**LieSubmodule.Quotient.inhabited** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodule.Quotie
+nt`。
+形式化陈述：inhabited : Inhabited (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabited : Inhabited (M ⧸ N) :=
   ⟨0⟩
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Map sending an element of `M` to the corresponding element of `M ⧸ N`, when `N` is a
+Lie submodule of the Lie module `M`. -/
+/-
+**LieSubmodule.Quotient.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieSubmodule.Quotient`。
+形式化陈述：mk : M -> M ⧸ N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: : M -> M ⧸ N
-  body: Submodule.Quotient.mk
-
-@[simp]
-
-中文:
-缩写 mk
-  签名: : M -> M ⧸ N
-  定义体: Submodule.Quotient.mk
-
-@[simp]
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk
+--- 原说明 ---
+Map sending an element of `M` to the corresponding element of `M ⧸ N`, when `N` 
+is a
+Lie submodule of the Lie module `M`.
 -/
-abbrev mk : M -> M ⧸ N :=
+abbrev mk : M → M ⧸ N :=
   Submodule.Quotient.mk
 
 @[simp]
-/--
-theorem `mk_eq_zero'` / 定理 `mk_eq_zero'`
-
-English:
-theorem mk_eq_zero'
-  given: {m : M}
-  statement: mk (N := N) m = 0 ↔ m in N
-  proof: Submodule.Quotient.mk_eq_zero N.toSubmodule
-
-中文:
-定理 mk_eq_zero'
-  条件: {m : M}
-  结论: mk (N := N) m = 0 ↔ m in N
-  证明: Submodule.Quotient.mk_eq_zero N.toSubmodule
+/-
+**LieSubmodule.Quotient.mk_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule.Quot
+ient`。
+形式化陈述：mk_eq_zero' {m : M} : mk (N
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
 -/
-theorem mk_eq_zero' {m : M} : mk (N := N) m = 0 ↔ m in N :=
+theorem mk_eq_zero' {m : M} : mk (N := N) m = 0 ↔ m ∈ N :=
   Submodule.Quotient.mk_eq_zero N.toSubmodule
-
-/--
-theorem `is_quotient_mk` / 定理 `is_quotient_mk`
-
-English:
-theorem is_quotient_mk
-  given: (m : M)
-  statement: Quotient.mk'' m = (mk m : M ⧸ N)
-  proof: rfl
-
-中文:
-定理 is_quotient_mk
-  条件: (m : M)
-  结论: 商.mk'' m = (mk m : M ⧸ N)
-  证明: rfl
+/-
+**LieSubmodule.Quotient.is_quotient_mk** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule.Q
+uotient`。
+形式化陈述：is_quotient_mk (m : M) : Quotient.mk'' m = (mk m : M ⧸ N)
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 -/
 theorem is_quotient_mk (m : M) : Quotient.mk'' m = (mk m : M ⧸ N) :=
   rfl
@@ -217,149 +152,100 @@ theorem is_quotient_mk (m : M) : Quotient.mk'' m = (mk m : M ⧸ N) :=
 variable [LieAlgebra R L] [LieModule R L M] (I J : LieIdeal R L)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `lieSubmoduleInvariant` / `lieSubmoduleInvariant` 的定义
+/-- Given a Lie module `M` over a Lie algebra `L`, together with a Lie submodule `N ⊆ M`, there
+is a natural linear map from `L` to the endomorphisms of `M` leaving `N` invariant. -/
+/-
+**LieSubmodule.Quotient.lieSubmoduleInvariant** 是 Mathlib 中的一个定义，位于命名空间 `LieSubm
+odule.Quotient`。
+形式化陈述：lieSubmoduleInvariant : L ->ₗ[R] Submodule.compatibleMaps N.toSubmodule N.
+toSubmodule
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.lie_mem`：∀ {R : Type u} {L : Type v} {M : Type w} [inst : C
+ommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3 : _root_.Mod
+ule R M] […
 
-English:
-definition lieSubmoduleInvariant
-  signature: : L ->ₗ[R] Submodule.compatibleMaps N.toSubmodule N.toSubmodule
-  body: LinearMap.codRestrict _ (LieModule.toEnd R L M) fun _ _ => N.lie_mem
-
-中文:
-定义 lieSubmoduleInvariant
-  签名: : L ->ₗ[R] 子模.compatibleMaps N.toSubmodule N.toSubmodule
-  定义体: LinearMap.codRestrict _ (LieModule.toEnd R L M) fun _ _ => N.lie_mem
-
-Depends on / 依赖: LieModule, LieModule.toEnd, LinearMap, LinearMap.codRestrict, N.lie_mem, codRestrict, lie_mem
+--- 原说明 ---
+Given a Lie module `M` over a Lie algebra `L`, together with a Lie submodule `N 
+⊆ M`, there
+is a natural linear map from `L` to the endomorphisms of `M` leaving `N` invaria
+nt.
 -/
-def lieSubmoduleInvariant : L ->ₗ[R] Submodule.compatibleMaps N.toSubmodule N.toSubmodule :=
+def lieSubmoduleInvariant : L →ₗ[R] Submodule.compatibleMaps N.toSubmodule N.toSubmodule :=
   LinearMap.codRestrict _ (LieModule.toEnd R L M) fun _ _ => N.lie_mem
 
 variable (N)
 
 attribute [local instance 100] LieRing.ofAssociativeRing
 
-/--
-Definition of `actionAsEndoMap` / `actionAsEndoMap` 的定义
+/-- Given a Lie module `M` over a Lie algebra `L`, together with a Lie submodule `N ⊆ M`, there
+is a natural Lie algebra morphism from `L` to the linear endomorphism of the quotient `M/N`. -/
+/-
+**LieSubmodule.Quotient.actionAsEndoMap** 是 Mathlib 中的一个定义，位于命名空间 `LieSubmodule.
+Quotient`。
+形式化陈述：actionAsEndoMap : L ->ₗ⁅R⁆ Module.End R (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition actionAsEndoMap
-  signature: : L ->ₗ⁅R⁆ Module.End R (M ⧸ N)
-  body: { LinearMap.comp (Submodule.mapQLinear (N : Submodule R M) (N : Submodule R M))
-      lieSubmoduleInvariant with
-    map_lie' := fun {_ _} =>
-Submodule.linearMap_qext _ LinearMap.ext fun _ => congr_arg mk lie_lie _ _ _ }
-
-中文:
-定义 actionAsEndoMap
-  签名: : L ->ₗ⁅R⁆ 模.End R (M ⧸ N)
-  定义体: { LinearMap.comp (Submodule.mapQLinear (N : Submodule R M) (N : Submodule R M))
-      lieSubmoduleInvariant with
-    map_lie' := fun {_ _} =>
-Submodule.linearMap_qext _ LinearMap.ext fun _ => congr_arg mk lie_lie _ _ _ }
-
-Depends on / 依赖: LinearMap, LinearMap.comp, LinearMap.ext, Submodule, Submodule.linearMap_qext, Submodule.mapQLinear, congr_arg, lieSubmoduleInvariant, lie_lie, linearMap_qext, mapQLinear, map_lie
+--- 原说明 ---
+Given a Lie module `M` over a Lie algebra `L`, together with a Lie submodule `N 
+⊆ M`, there
+is a natural Lie algebra morphism from `L` to the linear endomorphism of the quo
+tient `M/N`.
 -/
-def actionAsEndoMap : L ->ₗ⁅R⁆ Module.End R (M ⧸ N) :=
+def actionAsEndoMap : L →ₗ⁅R⁆ Module.End R (M ⧸ N) :=
   { LinearMap.comp (Submodule.mapQLinear (N : Submodule R M) (N : Submodule R M))
       lieSubmoduleInvariant with
     map_lie' := fun {_ _} =>
-Submodule.linearMap_qext _ LinearMap.ext fun _ => congr_arg mk lie_lie _ _ _ }
+      Submodule.linearMap_qext _ <| LinearMap.ext fun _ => congr_arg mk <| lie_lie _ _ _ }
 
-/--
-Instance `actionAsEndoMapBracket` / 实例 `actionAsEndoMapBracket`
+/-- Given a Lie module `M` over a Lie algebra `L`, together with a Lie submodule `N ⊆ M`, there is
+a natural bracket action of `L` on the quotient `M/N`. -/
+/-
+**LieSubmodule.Quotient.actionAsEndoMapBracket** 是 Mathlib 中的一个实例，位于命名空间 `LieSub
+module.Quotient`。
+形式化陈述：actionAsEndoMapBracket : Bracket L (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance actionAsEndoMapBracket
-  signature: : Bracket L (M ⧸ N)
-  body: ⟨fun x n => actionAsEndoMap N x n⟩
-
-中文:
-实例 actionAsEndoMapBracket
-  签名: : Bracket L (M ⧸ N)
-  定义体: ⟨fun x n => actionAsEndoMap N x n⟩
-
-Depends on / 依赖: actionAsEndoMap
+--- 原说明 ---
+Given a Lie module `M` over a Lie algebra `L`, together with a Lie submodule `N 
+⊆ M`, there is
+a natural bracket action of `L` on the quotient `M/N`.
 -/
 instance actionAsEndoMapBracket : Bracket L (M ⧸ N) :=
   ⟨fun x n => actionAsEndoMap N x n⟩
-
-/--
-Instance `lieQuotientLieRingModule` / 实例 `lieQuotientLieRingModule`
-
-English:
-instance lieQuotientLieRingModule
-  signature: : LieRingModule L (M ⧸ N)
-  body: { LieRingModule.compLieHom _ (actionAsEndoMap N) with bracket := Bracket.bracket }
-
-中文:
-实例 lieQuotientLieRingModule
-  签名: : Lie环模 L (M ⧸ N)
-  定义体: { LieRingModule.compLieHom _ (actionAsEndoMap N) with bracket := Bracket.bracket }
-
-Depends on / 依赖: Bracket, Bracket.bracket, LieRingModule, LieRingModule.compLieHom, actionAsEndoMap, bracket, compLieHom
+/-
+**LieSubmodule.Quotient.lieQuotientLieRingModule** 是 Mathlib 中的一个实例，位于命名空间 `LieS
+ubmodule.Quotient`。
+形式化陈述：lieQuotientLieRingModule : LieRingModule L (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance lieQuotientLieRingModule : LieRingModule L (M ⧸ N) :=
   { LieRingModule.compLieHom _ (actionAsEndoMap N) with bracket := Bracket.bracket }
 
-/--
-Instance `lieQuotientLieModule` / 实例 `lieQuotientLieModule`
+/-- The quotient of a Lie module by a Lie submodule, is a Lie module. -/
+/-
+**LieSubmodule.Quotient.lieQuotientLieModule** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmo
+dule.Quotient`。
+形式化陈述：lieQuotientLieModule : LieModule R L (M ⧸ N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieModule.compLieHom`：LieModule.compLieHom [Module R M] [LieModule R L₂ 
+M] : @LieModule R L₁ M _ _ _ _ _ (LieRingModule.compLieHom M f)
 
-English:
-instance lieQuotientLieModule
-  signature: : LieModule R L (M ⧸ N)
-  body: LieModule.compLieHom _ (actionAsEndoMap N)
-
-中文:
-实例 lieQuotientLieModule
-  签名: : Lie模 R L (M ⧸ N)
-  定义体: LieModule.compLieHom _ (actionAsEndoMap N)
-
-Depends on / 依赖: LieModule, LieModule.compLieHom, actionAsEndoMap, compLieHom
+--- 原说明 ---
+The quotient of a Lie module by a Lie submodule, is a Lie module.
 -/
 instance lieQuotientLieModule : LieModule R L (M ⧸ N) :=
   LieModule.compLieHom _ (actionAsEndoMap N)
-
-/--
-Instance `lieQuotientHasBracket` / 实例 `lieQuotientHasBracket`
-
-English:
-instance lieQuotientHasBracket
-  signature: : Bracket (L ⧸ I) (L ⧸ I)
-  body: ⟨by
-    intro x y
-    apply Quotient.liftOn₂' x y fun x' y' => mk ⁅x', y'⁆
-    intro x₁ x₂ y₁ y₂ h₁ h₂
-    apply (Submodule.Quotient.eq I.toSubmodule).2
-    rw [Submodule.quotientRel_def] at h₁ h₂
-    have h : ⁅x₁, x₂⁆ - ⁅y₁, y₂⁆ = ⁅x₁, x₂ - y₂⁆ + ⁅x₁ - y₁, y₂⁆ := by
-      simp [-lie_skew, sub_eq_add_neg, add_assoc]
-    rw [h]
-    apply Submodule.add_mem
-    · apply lie_mem_right R L I x₁ (x₂ - y₂) h₂
-    · apply lie_mem_left R L I (x₁ - y₁) y₂ h₁⟩
-
-@[simp]
-
-中文:
-实例 lieQuotientHasBracket
-  签名: : Bracket (L ⧸ I) (L ⧸ I)
-  定义体: ⟨by
-    intro x y
-    apply Quotient.liftOn₂' x y fun x' y' => mk ⁅x', y'⁆
-    intro x₁ x₂ y₁ y₂ h₁ h₂
-    apply (Submodule.Quotient.eq I.toSubmodule).2
-    rw [Submodule.quotientRel_def] at h₁ h₂
-    have h : ⁅x₁, x₂⁆ - ⁅y₁, y₂⁆ = ⁅x₁, x₂ - y₂⁆ + ⁅x₁ - y₁, y₂⁆ := by
-      simp [-lie_skew, sub_eq_add_neg, add_assoc]
-    rw [h]
-    apply Submodule.add_mem
-    · apply lie_mem_right R L I x₁ (x₂ - y₂) h₂
-    · apply lie_mem_left R L I (x₁ - y₁) y₂ h₁⟩
-
-@[simp]
-
-Depends on / 依赖: I.toSubmodule, Quotient, Quotient.liftOn, RingHomInvPair, Submodule, Submodule.Quotient.eq, Submodule.add_mem, Submodule.quotientRel_def, add_assoc, add_mem, lie_mem_left, lie_mem_right, lie_skew, quotientRel_def, sub_eq_add_neg, toSubmodule
+/-
+**LieSubmodule.Quotient.lieQuotientHasBracket** 是 Mathlib 中的一个实例，位于命名空间 `LieSubm
+odule.Quotient`。
+形式化陈述：lieQuotientHasBracket : Bracket (L ⧸ I) (L ⧸ I)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance lieQuotientHasBracket : Bracket (L ⧸ I) (L ⧸ I) :=
   ⟨by
@@ -376,92 +262,22 @@ instance lieQuotientHasBracket : Bracket (L ⧸ I) (L ⧸ I) :=
     · apply lie_mem_left R L I (x₁ - y₁) y₂ h₁⟩
 
 @[simp]
-/--
-theorem `mk_bracket` / 定理 `mk_bracket`
-
-English:
-theorem mk_bracket
-  given: (x y : L)
-  statement: mk ⁅x, y⁆ = ⁅(mk x : L ⧸ I), (mk y : L ⧸ I)⁆
-  proof: rfl
-
-中文:
-定理 mk_bracket
-  条件: (x y : L)
-  结论: mk ⁅x, y⁆ = ⁅(mk x : L ⧸ I), (mk y : L ⧸ I)⁆
-  证明: rfl
+/-
+**LieSubmodule.Quotient.mk_bracket** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule.Quoti
+ent`。
+形式化陈述：mk_bracket (x y : L) : mk ⁅x, y⁆ = ⁅(mk x : L ⧸ I), (mk y : L ⧸ I)⁆
+参数：x y : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_bracket (x y : L) : mk ⁅x, y⁆ = ⁅(mk x : L ⧸ I), (mk y : L ⧸ I)⁆ :=
   rfl
-
-/--
-Instance `lieQuotientLieRing` / 实例 `lieQuotientLieRing`
-
-English:
-instance lieQuotientLieRing
-  signature: : LieRing (L ⧸ I) where
-  body: by
-    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
-    apply congr_arg; apply add_lie
-  lie_add x' y' z' := by
-    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
-    apply congr_arg; apply lie_add
-  lie_self x' := by
-    induction x' using Quotient.inductionOn' with | _ x
-    rw [is_quotient_mk]; rw [← mk_bracket]
-    apply congr_arg; apply lie_self
-  leibniz_lie x' y' z' := by
-    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
-    apply congr_arg; apply leibniz_lie
-
-中文:
-实例 lieQuotientLieRing
-  签名: : Lie环 (L ⧸ I) where
-  定义体: by
-    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
-    apply congr_arg; apply add_lie
-  lie_add x' y' z' := by
-    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
-    apply congr_arg; apply lie_add
-  lie_self x' := by
-    induction x' using Quotient.inductionOn' with | _ x
-    rw [is_quotient_mk]; rw [← mk_bracket]
-    apply congr_arg; apply lie_self
-  leibniz_lie x' y' z' := by
-    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
-    apply congr_arg; apply leibniz_lie
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Submodule, Submodule.Quotient.mk_add, add_lie, congr_arg, inductionOn, is_quotient_mk, lie_add, lie_self, mk_add, mk_bracket, repeat
+/-
+**LieSubmodule.Quotient.lieQuotientLieRing** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodu
+le.Quotient`。
+形式化陈述：lieQuotientLieRing : LieRing (L ⧸ I) where add_lie x' y' z'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance lieQuotientLieRing : LieRing (L ⧸ I) where
   add_lie x' y' z' := by
@@ -482,7 +298,7 @@ instance lieQuotientLieRing : LieRing (L ⧸ I) where
     apply congr_arg; apply lie_add
   lie_self x' := by
     induction x' using Quotient.inductionOn' with | _ x
-    rw [is_quotient_mk]; rw [← mk_bracket]
+    rw [is_quotient_mk, ← mk_bracket]
     apply congr_arg; apply lie_self
   leibniz_lie x' y' z' := by
     induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
@@ -492,35 +308,12 @@ instance lieQuotientLieRing : LieRing (L ⧸ I) where
       | rw [← mk_bracket]
       | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
     apply congr_arg; apply leibniz_lie
-
-/--
-Instance `lieQuotientLieAlgebra` / 实例 `lieQuotientLieAlgebra`
-
-English:
-instance lieQuotientLieAlgebra
-  signature: : LieAlgebra R (L ⧸ I) where
-  body: by
-    induction x', y' using Quotient.inductionOn₂' with | _ x y
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_smul (R := R) (M := L)]
-    apply congr_arg; apply lie_smul
-
-中文:
-实例 lieQuotientLieAlgebra
-  签名: : Lie代数 R (L ⧸ I) where
-  定义体: by
-    induction x', y' using Quotient.inductionOn₂' with | _ x y
-    repeat'
-      first
-      | rw [is_quotient_mk]
-      | rw [← mk_bracket]
-      | rw [← Submodule.Quotient.mk_smul (R := R) (M := L)]
-    apply congr_arg; apply lie_smul
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Submodule, Submodule.Quotient.mk_smul, congr_arg, is_quotient_mk, lie_smul, mk_bracket, mk_smul, repeat
+/-
+**LieSubmodule.Quotient.lieQuotientLieAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `LieSubm
+odule.Quotient`。
+形式化陈述：lieQuotientLieAlgebra : LieAlgebra R (L ⧸ I) where lie_smul t x' y'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance lieQuotientLieAlgebra : LieAlgebra R (L ⧸ I) where
   lie_smul t x' y' := by
@@ -534,197 +327,147 @@ instance lieQuotientLieAlgebra : LieAlgebra R (L ⧸ I) where
 
 /-- `LieSubmodule.Quotient.mk` as a `LieModuleHom`. -/
 @[simps]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**LieSubmodule.Quotient.mk'** 是 Mathlib 中的一个定义，位于命名空间 `LieSubmodule.Quotient`。
+形式化陈述：mk' : M ->ₗ⁅R,L⁆ M ⧸ N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: : M ->ₗ⁅R,L⁆ M ⧸ N
-  body: { N.toSubmodule.mkQ with
-    toFun := mk
-    map_lie' := fun {_ _} => rfl }
-
-@[simp]
-
-中文:
-定义 mk'
-  签名: : M ->ₗ⁅R,L⁆ M ⧸ N
-  定义体: { N.toSubmodule.mkQ with
-    toFun := mk
-    map_lie' := fun {_ _} => rfl }
-
-@[simp]
-
-Depends on / 依赖: N.toSubmodule.mkQ, map_lie, toSubmodule
+--- 原说明 ---
+`LieSubmodule.Quotient.mk` as a `LieModuleHom`.
 -/
-def mk' : M ->ₗ⁅R,L⁆ M ⧸ N :=
+def mk' : M →ₗ⁅R,L⁆ M ⧸ N :=
   { N.toSubmodule.mkQ with
     toFun := mk
     map_lie' := fun {_ _} => rfl }
 
 @[simp]
-/--
-theorem `surjective_mk'` / 定理 `surjective_mk'`
-
-English:
-theorem surjective_mk'
-  statement: Function.Surjective (mk' N)
-  proof: Quot.mk_surjective
-
-@[simp]
-
-中文:
-定理 surjective_mk'
-  结论: 函数.满射 (mk' N)
-  证明: Quot.mk_surjective
-
-@[simp]
-
-Depends on / 依赖: Quot.mk_surjective, mk_surjective
+/-
+**LieSubmodule.Quotient.surjective_mk'** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule.Q
+uotient`。
+形式化陈述：surjective_mk' : Function.Surjective (mk' N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.mk_surjective`：Quot.mk_surjective {r : α -> α -> Prop} : Function.S
+urjective (Quot.mk r)
 -/
 theorem surjective_mk' : Function.Surjective (mk' N) := Quot.mk_surjective
 
 @[simp]
-/--
-theorem `range_mk'` / 定理 `range_mk'`
-
-English:
-theorem range_mk'
-  statement: LieModuleHom.range (mk' N) = ⊤
-  proof: by
-  simp [LieModuleHom.range_eq_top]
-
-中文:
-定理 range_mk'
-  结论: Lie模态射.range (mk' N) = ⊤
-  证明: by
-  simp [LieModuleHom.range_eq_top]
-
-Depends on / 依赖: LieModuleHom, LieModuleHom.range_eq_top, range_eq_top
+/-
+**LieSubmodule.Quotient.range_mk'** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule.Quotie
+nt`。
+形式化陈述：range_mk' : LieModuleHom.range (mk' N) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem range_mk' : LieModuleHom.range (mk' N) = ⊤ := by
   simp [LieModuleHom.range_eq_top]
-
-/--
-Instance `isNoetherian` / 实例 `isNoetherian`
-
-English:
-instance isNoetherian
-  signature: [IsNoetherian R M]
-  body: inferInstanceAs (IsNoetherian R (M ⧸ (N : Submodule R M)))
-
-中文:
-实例 isNoetherian
-  签名: [是Noether R M]
-  定义体: inferInstanceAs (IsNoetherian R (M ⧸ (N : Submodule R M)))
-
-Depends on / 依赖: IsNoetherian, Submodule
+/-
+**LieSubmodule.Quotient.isNoetherian** 是 Mathlib 中的一个实例，位于命名空间 `LieSubmodule.Quo
+tient`。
+形式化陈述：isNoetherian [IsNoetherian R M] : IsNoetherian R (M ⧸ N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isNoetherian [IsNoetherian R M] : IsNoetherian R (M ⧸ N) :=
   inferInstanceAs (IsNoetherian R (M ⧸ (N : Submodule R M)))
-
-/--
-theorem `mk_eq_zero` / 定理 `mk_eq_zero`
-
-English:
-theorem mk_eq_zero
-  given: {m : M}
-  statement: mk' N m = 0 ↔ m in N
-  proof: Submodule.Quotient.mk_eq_zero N.toSubmodule
-
-@[simp]
-
-中文:
-定理 mk_eq_zero
-  条件: {m : M}
-  结论: mk' N m = 0 ↔ m in N
-  证明: Submodule.Quotient.mk_eq_zero N.toSubmodule
-
-@[simp]
-
-Depends on / 依赖: N.toSubmodule, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, mk_eq_zero, toSubmodule
+/-
+**LieSubmodule.Quotient.mk_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule.Quoti
+ent`。
+形式化陈述：mk_eq_zero {m : M} : mk' N m = 0 ↔ m in N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
 -/
-theorem mk_eq_zero {m : M} : mk' N m = 0 ↔ m in N :=
+theorem mk_eq_zero {m : M} : mk' N m = 0 ↔ m ∈ N :=
   Submodule.Quotient.mk_eq_zero N.toSubmodule
 
 @[simp]
-/--
-theorem `mk'_ker` / 定理 `mk'_ker`
-
-English:
-theorem mk'_ker
-  statement: (mk' N).ker = N
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-定理 mk'_ker
-  结论: (mk' N).ker = N
-  证明: by ext; simp
-
-@[simp]
+/-
+**LieSubmodule.Quotient.mk'_ker** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule.Quotient
+`。
+形式化陈述：∀ {R : Type u} {L : Type v} {M : Type w} [inst : CommRing R] [inst_1 : Lie
+Ring L] [inst_2 : AddCommGroup M]   [inst_3 : _root_.Module R M] [inst_4 : LieRi
+ngModule L M] (N : LieSubmodule R L M) [inst_5 : LieAlgebra R L]   [inst_6 : Lie
+Module R L M], (LieSubmodule.Quotient.mk' N).ker = N
+参数：N : LieSubmodule R L M；LieSubmodule.Quotient.mk' N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.ext`：ext (h : forall m, m in N ↔ m in N') : N = N'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubmodule.Quotient.mk'_apply`：∀ {R : Type u} {L : Type v} {M : Type w
+} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3 :
+ _root_.Module R M] […
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mk'_ker : (mk' N).ker = N := by ext; simp
 
 @[simp]
-/--
-theorem `map_mk'_eq_bot_le` / 定理 `map_mk'_eq_bot_le`
-
-English:
-theorem map_mk'_eq_bot_le
-  statement: map (mk' N) N' = ⊥ ↔ N' <= N
-  proof: by
-  rw [← LieModuleHom.le_ker_iff_map]; rw [mk'_ker]
-
-中文:
-定理 map_mk'_eq_bot_le
-  结论: map (mk' N) N' = ⊥ ↔ N' <= N
-  证明: by
-  rw [← LieModuleHom.le_ker_iff_map]; rw [mk'_ker]
-
-Depends on / 依赖: LieModuleHom, LieModuleHom.le_ker_iff_map, _ker, le_ker_iff_map
+/-
+**LieSubmodule.Quotient.map_mk'_eq_bot_le** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodul
+e.Quotient`。
+形式化陈述：∀ {R : Type u} {L : Type v} {M : Type w} [inst : CommRing R] [inst_1 : Lie
+Ring L] [inst_2 : AddCommGroup M]   [inst_3 : _root_.Module R M] [inst_4 : LieRi
+ngModule L M] (N N' : LieSubmodule R L M) [inst_5 : LieAlgebra R L]   [inst_6 : 
+LieModule R L M], LieSubmodule.map (LieSubmodule.Quotient.mk' N) N' = ⊥ ↔ N' ≤ N
+参数：N N' : LieSubmodule R L M；LieSubmodule.Quotient.mk' N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieModuleHom.le_ker_iff_map`：le_ker_iff_map (M' : LieSubmodule R L M) : 
+M' <= f.ker ↔ LieSubmodule.map f M' = ⊥
+· 使用定理 `LieSubmodule.Quotient.mk'_ker`：∀ {R : Type u} {L : Type v} {M : Type w} 
+[inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3 : _
+root_.Module R M] […
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem map_mk'_eq_bot_le : map (mk' N) N' = ⊥ ↔ N' <= N := by
-  rw [← LieModuleHom.le_ker_iff_map]; rw [mk'_ker]
+theorem map_mk'_eq_bot_le : map (mk' N) N' = ⊥ ↔ N' ≤ N := by
+  rw [← LieModuleHom.le_ker_iff_map, mk'_ker]
 
 /-- Two `LieModuleHom`s from a quotient lie module are equal if their compositions with
 `LieSubmodule.Quotient.mk'` are equal.
 
 See note [partially-applied ext lemmas]. -/
 @[ext]
-/--
-theorem `lieModuleHom_ext` / 定理 `lieModuleHom_ext`
+/-
+**LieSubmodule.Quotient.lieModuleHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `LieSubmodule
+.Quotient`。
+形式化陈述：lieModuleHom_ext ⦃f g : M ⧸ N ->ₗ⁅R,L⁆ M⦄ (h : f.comp (mk' N) = g.comp (mk
+' N)) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieModuleHom.ext`：ext {f g : M ->ₗ⁅R,L⁆ N} (h : forall m, f m = g m) : f
+ = g
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `LieModuleHom.congr_fun`：congr_fun {f g : M ->ₗ⁅R,L⁆ N} (h : f = g) (x : 
+M) : f x = g x
 
-English:
-theorem lieModuleHom_ext
-  given: ⦃f g
-  statement: M ⧸ N ->ₗ⁅R,L⁆ M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g
-  proof: LieModuleHom.ext fun x => Quotient.inductionOn' x LieModuleHom.congr_fun h
+--- 原说明 ---
+Two `LieModuleHom`s from a quotient lie module are equal if their compositions w
+ith
+`LieSubmodule.Quotient.mk'` are equal.
 
-中文:
-定理 lieModuleHom_ext
-  条件: ⦃f g
-  结论: M ⧸ N ->ₗ⁅R,L⁆ M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g
-  证明: LieModuleHom.ext fun x => Quotient.inductionOn' x LieModuleHom.congr_fun h
-
-Depends on / 依赖: LieModuleHom, LieModuleHom.congr_fun, LieModuleHom.ext, Quotient, Quotient.inductionOn, congr_fun, inductionOn
+See note [partially-applied ext lemmas].
 -/
-theorem lieModuleHom_ext ⦃f g : M ⧸ N ->ₗ⁅R,L⁆ M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g :=
-LieModuleHom.ext fun x => Quotient.inductionOn' x LieModuleHom.congr_fun h
-
-/--
-lemma `toEnd_comp_mk'` / 引理 `toEnd_comp_mk'`
-
-English:
-lemma toEnd_comp_mk'
-  given: (x : L)
-  proof: rfl
-
-中文:
-引理 toEnd_comp_mk'
-  条件: (x : L)
-  证明: rfl
+theorem lieModuleHom_ext ⦃f g : M ⧸ N →ₗ⁅R,L⁆ M⦄ (h : f.comp (mk' N) = g.comp (mk' N)) : f = g :=
+  LieModuleHom.ext fun x => Quotient.inductionOn' x <| LieModuleHom.congr_fun h
+/-
+**LieSubmodule.Quotient.toEnd_comp_mk'** 是 Mathlib 中的一个引理，位于命名空间 `LieSubmodule.Q
+uotient`。
+形式化陈述：toEnd_comp_mk' (x : L) : LieModule.toEnd R L (M ⧸ N) x ∘ₗ mk' N = mk' N ∘ₗ
+ LieModule.toEnd R L M x
+参数：x : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toEnd_comp_mk' (x : L) :
     LieModule.toEnd R L (M ⧸ N) x ∘ₗ mk' N = mk' N ∘ₗ LieModule.toEnd R L M x :=
@@ -738,51 +481,30 @@ namespace LieHom
 
 variable {R L L' : Type*}
 variable [CommRing R] [LieRing L] [LieAlgebra R L] [LieRing L'] [LieAlgebra R L']
-variable (f : L ->ₗ⁅R⁆ L')
+variable (f : L →ₗ⁅R⁆ L')
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The first isomorphism theorem for morphisms of Lie algebras. -/
 @[simps]
-/--
-Definition of `quotKerEquivRange` / `quotKerEquivRange` 的定义
+/-
+**LieHom.quotKerEquivRange** 是 Mathlib 中的一个定义，位于命名空间 `LieHom`。
+形式化陈述：quotKerEquivRange : (L ⧸ f.ker) ≃ₗ⁅R⁆ f.range
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotKerEquivRange
-  signature: : (L ⧸ f.ker) ≃ₗ⁅R⁆ f.range
-  body: { (f : L ->ₗ[R] L').quotKerEquivRange with
-    toFun := (f : L ->ₗ[R] L').quotKerEquivRange
-    map_lie' := by
-      intro x y
-      induction x using Submodule.Quotient.induction_on
-      induction y using Submodule.Quotient.induction_on
-      rw [← SetLike.coe_eq_coe]; rw [LieSubalgebra.coe_bracket f.range]
-      simp only [← LieSubmodule.Quotient.mk_bracket, LinearMap.quotKerEquivRange_apply_mk,
-        coe_toLinearMap, map_lie] }
-
-中文:
-定义 quotKerEquivRange
-  签名: : (L ⧸ f.ker) ≃ₗ⁅R⁆ f.range
-  定义体: { (f : L ->ₗ[R] L').quotKerEquivRange with
-    toFun := (f : L ->ₗ[R] L').quotKerEquivRange
-    map_lie' := by
-      intro x y
-      induction x using Submodule.Quotient.induction_on
-      induction y using Submodule.Quotient.induction_on
-      rw [← SetLike.coe_eq_coe]; rw [LieSubalgebra.coe_bracket f.range]
-      simp only [← LieSubmodule.Quotient.mk_bracket, LinearMap.quotKerEquivRange_apply_mk,
-        coe_toLinearMap, map_lie] }
-
-Depends on / 依赖: LieSubalgebra, LieSubalgebra.coe_bracket, LieSubmodule, LieSubmodule.Quotient.mk_bracket, LinearMap, LinearMap.quotKerEquivRange_apply_mk, Quotient, SetLike, SetLike.coe_eq_coe, Submodule, Submodule.Quotient.induction_on, coe_bracket, coe_eq_coe, coe_toLinearMap, f.range, induction_on, map_lie, mk_bracket, quotKerEquivRange, quotKerEquivRange_apply_mk
+--- 原说明 ---
+The first isomorphism theorem for morphisms of Lie algebras.
 -/
 noncomputable def quotKerEquivRange : (L ⧸ f.ker) ≃ₗ⁅R⁆ f.range :=
-  { (f : L ->ₗ[R] L').quotKerEquivRange with
-    toFun := (f : L ->ₗ[R] L').quotKerEquivRange
+  { (f : L →ₗ[R] L').quotKerEquivRange with
+    toFun := (f : L →ₗ[R] L').quotKerEquivRange
     map_lie' := by
       intro x y
       induction x using Submodule.Quotient.induction_on
       induction y using Submodule.Quotient.induction_on
-      rw [← SetLike.coe_eq_coe]; rw [LieSubalgebra.coe_bracket f.range]
+      rw [← SetLike.coe_eq_coe, LieSubalgebra.coe_bracket f.range]
       simp only [← LieSubmodule.Quotient.mk_bracket, LinearMap.quotKerEquivRange_apply_mk,
         coe_toLinearMap, map_lie] }
 
 end LieHom
+

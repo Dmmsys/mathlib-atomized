@@ -39,28 +39,28 @@ variable {C₁ : Type u₁} {C₂ : Type u₂} {C₃ : Type u₃} {D₁ : Type u
   [Category.{v₁} C₁] [Category.{v₂} C₂] [Category.{v₃} C₃] [Category.{v₄} D₁] [Category.{v₅} D₂]
   (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂) (W₃ : MorphismProperty C₃)
 
-/--
-Definition of `LocalizerMorphism` / `LocalizerMorphism` 的定义
+/-- If `W₁ : MorphismProperty C₁` and `W₂ : MorphismProperty C₂`, a `LocalizerMorphism W₁ W₂`
+is the datum of a functor `C₁ ⥤ C₂` which sends morphisms in `W₁` to morphisms in `W₂` -/
+/-
+**CategoryTheory.LocalizerMorphism** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C₁ : Type u₁} →   {C₂ : Type u₂} →     [inst : CategoryTheory.Category.{v
+₁, u₁} C₁] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] →         Cate
+goryTheory.MorphismProperty C₁ → CategoryTheory.MorphismProperty C₂ → Type (max 
+(max (max u₁ u₂) v₁) v₂)
+参数：max (max (max u₁ u₂) v₁) v₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LocalizerMorphism
-  parameters: where
-  axioms and operations (2):
-    - functor : C₁ ⥤ C₂
-    - map : W₁ <= W₂.inverseImage functor
-
-中文:
-结构 Localizer态射
-  参数: where
-  公理与运算 (2 个):
-    - functor : C₁ ⥤ C₂
-    - map : W₁ <= W₂.inverseImage functor
+--- 原说明 ---
+If `W₁ : MorphismProperty C₁` and `W₂ : MorphismProperty C₂`, a `LocalizerMorphi
+sm W₁ W₂`
+is the datum of a functor `C₁ ⥤ C₂` which sends morphisms in `W₁` to morphisms i
+n `W₂`
 -/
 structure LocalizerMorphism where
   /-- a functor between the two categories -/
   functor : C₁ ⥤ C₂
   /-- the functor is compatible with the `MorphismProperty` -/
-  map : W₁ <= W₂.inverseImage functor
+  map : W₁ ≤ W₂.inverseImage functor
 
 namespace LocalizerMorphism
 
@@ -69,20 +69,19 @@ variable {W₁ W₂} in
 under the stronger assumption that the classes of morphisms `W₁` and `W₂`
 satisfy `W₁ = W₂.inverseImage F`. -/
 @[simps]
-/--
-Definition of `ofEq` / `ofEq` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.ofEq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.LocalizerMorphism`。
+形式化陈述：ofEq {F : C₁ ⥤ C₂} (hW : W₁ = W₂.inverseImage F) : LocalizerMorphism W₁ W₂
+ where functor
+参数：hW : W₁ = W₂.inverseImage F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEq
-  signature: {F : C₁ ⥤ C₂} (hW : W₁ = W₂.inverseImage F)
-  body: F
-  map := by rw [hW]
-
-中文:
-定义 ofEq
-  签名: {F : C₁ ⥤ C₂} (hW : W₁ = W₂.inverseImage F)
-  定义体: F
-  map := by rw [hW]
+--- 原说明 ---
+Constructor for localizer morphisms given by a functor `F : C₁ ⥤ C₂`
+under the stronger assumption that the classes of morphisms `W₁` and `W₂`
+satisfy `W₁ = W₂.inverseImage F`.
 -/
 def ofEq {F : C₁ ⥤ C₂} (hW : W₁ = W₂.inverseImage F) : LocalizerMorphism W₁ W₂ where
   functor := F
@@ -90,39 +89,23 @@ def ofEq {F : C₁ ⥤ C₂} (hW : W₁ = W₂.inverseImage F) : LocalizerMorphi
 
 /-- The identity functor as a morphism of localizers. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+LocalizerMorphism`。
+形式化陈述：id : LocalizerMorphism W₁ W₁ where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : LocalizerMorphism W₁ W₁ where
-  body: 𝟭 C₁
-  map _ _ _ hf := hf
-
-中文:
-定义 id
-  签名: : Localizer态射 W₁ W₁ where
-  定义体: 𝟭 C₁
-  map _ _ _ hf := hf
+--- 原说明 ---
+The identity functor as a morphism of localizers.
 -/
 def id : LocalizerMorphism W₁ W₁ where
   functor := 𝟭 C₁
   map _ _ _ hf := hf
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (id W₁).functor.IsEquivalence
-  body: inferInstanceAs (𝟭 C₁).IsEquivalence
-
-中文:
-实例 :
-  签名: (id W₁).functor.是等价
-  定义体: inferInstanceAs (𝟭 C₁).IsEquivalence
-
-Depends on / 依赖: IsEquivalence
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (id W₁).functor.IsEquivalence :=
   inferInstanceAs (𝟭 C₁).IsEquivalence
@@ -131,22 +114,17 @@ variable {W₁ W₂ W₃}
 
 /-- The composition of two localizers morphisms. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.LocalizerMorphism`。
+形式化陈述：comp (Φ : LocalizerMorphism W₁ W₂) (Ψ : LocalizerMorphism W₂ W₃) : Localiz
+erMorphism W₁ W₃ where functor
+参数：Φ : LocalizerMorphism W₁ W₂；Ψ : LocalizerMorphism W₂ W₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (Φ : LocalizerMorphism W₁ W₂) (Ψ : LocalizerMorphism W₂ W₃)
-  body: Φ.functor ⋙ Ψ.functor
-  map _ _ _ hf := Ψ.map _ (Φ.map _ hf)
-
-中文:
-定义 comp
-  签名: (Φ : Localizer态射 W₁ W₂) (Ψ : Localizer态射 W₂ W₃)
-  定义体: Φ.functor ⋙ Ψ.functor
-  map _ _ _ hf := Ψ.map _ (Φ.map _ hf)
-
-Depends on / 依赖: functor
+--- 原说明 ---
+The composition of two localizers morphisms.
 -/
 def comp (Φ : LocalizerMorphism W₁ W₂) (Ψ : LocalizerMorphism W₂ W₃) :
     LocalizerMorphism W₁ W₃ where
@@ -155,98 +133,82 @@ def comp (Φ : LocalizerMorphism W₁ W₂) (Ψ : LocalizerMorphism W₂ W₃) :
 
 variable (Φ : LocalizerMorphism W₁ W₂)
 
-/--
-Definition of `op` / `op` 的定义
+/-- The opposite localizer morphism `LocalizerMorphism W₁.op W₂.op` deduced
+from `Φ : LocalizerMorphism W₁ W₂`. -/
+/-
+**CategoryTheory.LocalizerMorphism.op** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.LocalizerMorphism`。
+形式化陈述：op : LocalizerMorphism W₁.op W₂.op where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation op
-  signature: : LocalizerMorphism W₁.op W₂.op where
-  body: Φ.functor.op
-  map _ _ _ hf := Φ.map _ hf
-
-中文:
-缩写 op
-  签名: : Localizer态射 W₁.op W₂.op where
-  定义体: Φ.functor.op
-  map _ _ _ hf := Φ.map _ hf
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, Functor, Functor.map_comp, Functor.map_comp_assoc, Functor.map_id, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, _inv_app, cancel_mono, functor, functor.op, hom_inv_id_app, hom_inv_id_app_assoc, id_comp, inv.app, map_comp, map_comp_assoc, map_id
+--- 原说明 ---
+The opposite localizer morphism `LocalizerMorphism W₁.op W₂.op` deduced
+from `Φ : LocalizerMorphism W₁ W₂`.
 -/
 abbrev op : LocalizerMorphism W₁.op W₂.op where
   functor := Φ.functor.op
   map _ _ _ hf := Φ.map _ hf
 
 variable (L₁ : C₁ ⥤ D₁) [L₁.IsLocalization W₁] (L₂ : C₂ ⥤ D₂) [L₂.IsLocalization W₂]
-
-/--
-lemma `inverts` / 引理 `inverts`
-
-English:
-lemma inverts
-  statement: W₁.IsInvertedBy (Φ.functor ⋙ L₂)
-  proof: fun _ _ _ hf => Localization.inverts L₂ W₂ _ (Φ.map _ hf)
-
-中文:
-引理 inverts
-  结论: W₁.IsInvertedBy (Φ.functor ⋙ L₂)
-  证明: fun _ _ _ hf => Localization.inverts L₂ W₂ _ (Φ.map _ hf)
-
-Depends on / 依赖: Localization, Localization.inverts, inverts
+/-
+**CategoryTheory.LocalizerMorphism.inverts** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.LocalizerMorphism`。
+形式化陈述：inverts : W₁.IsInvertedBy (Φ.functor ⋙ L₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `CategoryTheory.LocalizerMorphism.map`：∀ {C₁ : Type u₁} {C₂ : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{
+v₂, u₂} C₂] {W₁ : Category…
 -/
 lemma inverts : W₁.IsInvertedBy (Φ.functor ⋙ L₂) :=
   fun _ _ _ hf => Localization.inverts L₂ W₂ _ (Φ.map _ hf)
 
-/--
-Definition of `localizedFunctor` / `localizedFunctor` 的定义
+/-- When `Φ : LocalizerMorphism W₁ W₂` and that `L₁` and `L₂` are localization functors
+for `W₁` and `W₂`, then `Φ.localizedFunctor L₁ L₂` is the induced functor on the
+localized categories. -/
+/-
+**CategoryTheory.LocalizerMorphism.localizedFunctor** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.LocalizerMorphism`。
+形式化陈述：localizedFunctor : D₁ ⥤ D₂
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.inverts`：inverts : W₁.IsInvertedBy (Φ.f
+unctor ⋙ L₂)
 
-English:
-definition localizedFunctor
-  signature: : D₁ ⥤ D₂
-  body: lift (Φ.functor ⋙ L₂) (Φ.inverts _) L₁
-
-中文:
-定义 localizedFunctor
-  签名: : D₁ ⥤ D₂
-  定义体: lift (Φ.functor ⋙ L₂) (Φ.inverts _) L₁
-
-Depends on / 依赖: functor, inverts
+--- 原说明 ---
+When `Φ : LocalizerMorphism W₁ W₂` and that `L₁` and `L₂` are localization funct
+ors
+for `W₁` and `W₂`, then `Φ.localizedFunctor L₁ L₂` is the induced functor on the
+localized categories.
 -/
 noncomputable def localizedFunctor : D₁ ⥤ D₂ :=
   lift (Φ.functor ⋙ L₂) (Φ.inverts _) L₁
-
-/--
-Instance `liftingLocalizedFunctor` / 实例 `liftingLocalizedFunctor`
-
-English:
-instance liftingLocalizedFunctor
-  signature: :
-  body: inferInstanceAs Lifting L₁ W₁ _ (lift _ _ L₁)
-
-中文:
-实例 liftingLocalizedFunctor
-  签名: :
-  定义体: inferInstanceAs Lifting L₁ W₁ _ (lift _ _ L₁)
-
-Depends on / 依赖: Lifting
+/-
+**CategoryTheory.LocalizerMorphism.liftingLocalizedFunctor** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：liftingLocalizedFunctor : Lifting L₁ W₁ (Φ.functor ⋙ L₂) (Φ.localizedFunct
+or L₁ L₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance liftingLocalizedFunctor :
     Lifting L₁ W₁ (Φ.functor ⋙ L₂) (Φ.localizedFunctor L₁ L₂) :=
-inferInstanceAs Lifting L₁ W₁ _ (lift _ _ L₁)
+  inferInstanceAs <| Lifting L₁ W₁ _ (lift _ _ L₁)
 
-/--
-Instance `catCommSq` / 实例 `catCommSq`
+/-- The 2-commutative square expressing that `Φ.localizedFunctor L₁ L₂` lifts the
+functor `Φ.functor` -/
+/-
+**CategoryTheory.LocalizerMorphism.catCommSq** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.LocalizerMorphism`。
+形式化陈述：catCommSq : CatCommSq Φ.functor L₁ L₂ (Φ.localizedFunctor L₁ L₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance catCommSq
-  signature: : CatCommSq Φ.functor L₁ L₂ (Φ.localizedFunctor L₁ L₂)
-  body: CatCommSq.mk (Lifting.iso _ W₁ _ _).symm
-
-中文:
-实例 catCommSq
-  签名: : CatCommSq Φ.functor L₁ L₂ (Φ.localizedFunctor L₁ L₂)
-  定义体: CatCommSq.mk (Lifting.iso _ W₁ _ _).symm
-
-Depends on / 依赖: CatCommSq, CatCommSq.mk, Lifting, Lifting.iso
+--- 原说明 ---
+The 2-commutative square expressing that `Φ.localizedFunctor L₁ L₂` lifts the
+functor `Φ.functor`
 -/
 noncomputable instance catCommSq : CatCommSq Φ.functor L₁ L₂ (Φ.localizedFunctor L₁ L₂) :=
   CatCommSq.mk (Lifting.iso _ W₁ _ _).symm
@@ -262,50 +224,30 @@ variable [CatCommSq Φ.functor L₁ L₂ G]
   (G' : D₁' ⥤ D₂') [CatCommSq Φ.functor L₁' L₂' G']
 include W₁ W₂ Φ L₁ L₂ L₁' L₂'
 
-/--
-lemma `isEquivalence_imp` / 引理 `isEquivalence_imp`
+/-- If a localizer morphism induces an equivalence on some choice of localized categories,
+it will be so for any choice of localized categories. -/
+/-
+**CategoryTheory.LocalizerMorphism.isEquivalence_imp** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.LocalizerMorphism`。
+形式化陈述：isEquivalence_imp [G.IsEquivalence] : G'.IsEquivalence
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.isEquivalence_of_iso`：isEquivalence_of_iso {F G :
+ C ⥤ D} (e : F ≅ G) [F.IsEquivalence] : G.IsEquivalence
+· 使用定理 `CategoryTheory.Functor.isEquivalence_trans`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
+· 使用引理 `CategoryTheory.Functor.isEquivalence_of_comp_left`：isEquivalence_of_comp
+_left {E : Type*} [Category* E] (F : C ⥤ D) (G : D ⥤ E) [IsEquivalence F] [IsEqu
+ivalence (F ⋙ G)] : IsEquivalence G
 
-English:
-lemma isEquivalence_imp
-  given: [G.IsEquivalence]
-  statement: G'.IsEquivalence
-  proof: let E₁ := Localization.uniq L₁ L₁' W₁
-  let E₂ := Localization.uniq L₂ L₂' W₂
-  let e : L₁ ⋙ G ⋙ E₂.functor ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-    calc
-      L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
-          (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
-            associator _ _ _
-      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
-      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
-      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
-  have := Functor.isEquivalence_of_iso
-    (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e)
-  Functor.isEquivalence_of_comp_left E₁.functor G'
-
-中文:
-引理 isEquivalence_imp
-  条件: [G.是等价]
-  结论: G'.是等价
-  证明: let E₁ := Localization.uniq L₁ L₁' W₁
-  let E₂ := Localization.uniq L₂ L₂' W₂
-  let e : L₁ ⋙ G ⋙ E₂.functor ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-    calc
-      L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
-          (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
-            associator _ _ _
-      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
-      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
-      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
-  have := Functor.isEquivalence_of_iso
-    (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e)
-  Functor.isEquivalence_of_comp_left E₁.functor G'
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, Localization, Localization.uniq, associator, compUniqFunctor, functor, isoWhiskerLeft, isoWhiskerRight
+--- 原说明 ---
+If a localizer morphism induces an equivalence on some choice of localized categ
+ories,
+it will be so for any choice of localized categories.
 -/
 lemma isEquivalence_imp [G.IsEquivalence] : G'.IsEquivalence :=
   let E₁ := Localization.uniq L₁ L₁' W₁
@@ -323,68 +265,29 @@ lemma isEquivalence_imp [G.IsEquivalence] : G'.IsEquivalence :=
   have := Functor.isEquivalence_of_iso
     (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e)
   Functor.isEquivalence_of_comp_left E₁.functor G'
-
-/--
-lemma `isEquivalence_iff` / 引理 `isEquivalence_iff`
-
-English:
-lemma isEquivalence_iff
-  statement: G.IsEquivalence ↔ G'.IsEquivalence
-  proof: ⟨fun _ => Φ.isEquivalence_imp L₁ L₂ G L₁' L₂' G',
-    fun _ => Φ.isEquivalence_imp L₁' L₂' G' L₁ L₂ G⟩
-
-中文:
-引理 isEquivalence_iff
-  结论: G.是等价 ↔ G'.是等价
-  证明: ⟨fun _ => Φ.isEquivalence_imp L₁ L₂ G L₁' L₂' G',
-    fun _ => Φ.isEquivalence_imp L₁' L₂' G' L₁ L₂ G⟩
-
-Depends on / 依赖: isEquivalence_imp
+/-
+**CategoryTheory.LocalizerMorphism.isEquivalence_iff** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.LocalizerMorphism`。
+形式化陈述：isEquivalence_iff : G.IsEquivalence ↔ G'.IsEquivalence
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.isEquivalence_imp`：isEquivalence_imp [G
+.IsEquivalence] : G'.IsEquivalence
 -/
 lemma isEquivalence_iff : G.IsEquivalence ↔ G'.IsEquivalence :=
   ⟨fun _ => Φ.isEquivalence_imp L₁ L₂ G L₁' L₂' G',
     fun _ => Φ.isEquivalence_imp L₁' L₂' G' L₁ L₂ G⟩
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- If a localizer morphism induces a fully faithful functor on some choice of
+localized categories, it will be so for any choice of localized categories. -/
+/-
+**CategoryTheory.LocalizerMorphism.fullyFaithfulImp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.LocalizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def fullyFaithfulImp (hG : G.FullyFaithful)
-  body: let E₁ := Localization.uniq L₁ L₁' W₁
-  let E₂ := Localization.uniq L₂ L₂' W₂
-  let e : L₁ ⋙ G ⋙ E₂.functor ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-    calc
-      L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
-          (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
-            associator _ _ _
-      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
-      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
-      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
-  (E₁.fullyFaithfulInverse.comp (hG.comp E₂.fullyFaithfulFunctor)).ofIso
-    ((isoWhiskerLeft (E₁.inverse) (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e) ≪≫
-    (associator _ _ _).symm ≪≫ isoWhiskerRight E₁.counitIso G' ≪≫ G'.leftUnitor))
-
-中文:
-定义 noncomputable
-  签名: def fullyFaithfulImp (hG : G.满忠实)
-  定义体: let E₁ := Localization.uniq L₁ L₁' W₁
-  let E₂ := Localization.uniq L₂ L₂' W₂
-  let e : L₁ ⋙ G ⋙ E₂.functor ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-    calc
-      L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
-          (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
-            associator _ _ _
-      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
-      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
-      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
-            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
-  (E₁.fullyFaithfulInverse.comp (hG.comp E₂.fullyFaithfulFunctor)).ofIso
-    ((isoWhiskerLeft (E₁.inverse) (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e) ≪≫
-    (associator _ _ _).symm ≪≫ isoWhiskerRight E₁.counitIso G' ≪≫ G'.leftUnitor))
+--- 原说明 ---
+If a localizer morphism induces a fully faithful functor on some choice of
+localized categories, it will be so for any choice of localized categories.
 -/
 private noncomputable def fullyFaithfulImp (hG : G.FullyFaithful) : G'.FullyFaithful :=
   let E₁ := Localization.uniq L₁ L₁' W₁
@@ -402,23 +305,13 @@ private noncomputable def fullyFaithfulImp (hG : G.FullyFaithful) : G'.FullyFait
   (E₁.fullyFaithfulInverse.comp (hG.comp E₂.fullyFaithfulFunctor)).ofIso
     ((isoWhiskerLeft (E₁.inverse) (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e) ≪≫
     (associator _ _ _).symm ≪≫ isoWhiskerRight E₁.counitIso G' ≪≫ G'.leftUnitor))
-
-/--
-lemma `nonempty_fullyFaithful_iff` / 引理 `nonempty_fullyFaithful_iff`
-
-English:
-lemma nonempty_fullyFaithful_iff
-  statement: Nonempty G.FullyFaithful ↔ Nonempty G'.FullyFaithful
-  proof: ⟨fun ⟨h⟩ => ⟨Φ.fullyFaithfulImp L₁ L₂ G L₁' L₂' G' h⟩,
-    fun ⟨h⟩ => ⟨Φ.fullyFaithfulImp L₁' L₂' G' L₁ L₂ G h⟩⟩
-
-中文:
-引理 nonempty_fullyFaithful_iff
-  结论: 非空 G.满忠实 ↔ 非空 G'.满忠实
-  证明: ⟨fun ⟨h⟩ => ⟨Φ.fullyFaithfulImp L₁ L₂ G L₁' L₂' G' h⟩,
-    fun ⟨h⟩ => ⟨Φ.fullyFaithfulImp L₁' L₂' G' L₁ L₂ G h⟩⟩
-
-Depends on / 依赖: fullyFaithfulImp
+/-
+**CategoryTheory.LocalizerMorphism.nonempty_fullyFaithful_iff** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：nonempty_fullyFaithful_iff : Nonempty G.FullyFaithful ↔ Nonempty G'.FullyF
+aithful
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma nonempty_fullyFaithful_iff : Nonempty G.FullyFaithful ↔ Nonempty G'.FullyFaithful :=
   ⟨fun ⟨h⟩ => ⟨Φ.fullyFaithfulImp L₁ L₂ G L₁' L₂' G' h⟩,
@@ -426,43 +319,41 @@ lemma nonempty_fullyFaithful_iff : Nonempty G.FullyFaithful ↔ Nonempty G'.Full
 
 end
 
-/--
-Definition of `IsLocalizedEquivalence` / `IsLocalizedEquivalence` 的定义
+/-- Condition that a `LocalizerMorphism` induces an equivalence on the localized categories -/
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence** 是 Mathlib 中的一个归纳类型，位
+于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：{C₁ : Type u₁} →   {C₂ : Type u₂} →     [inst : CategoryTheory.Category.{v
+₁, u₁} C₁] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] →         {W₁ 
+: CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.MorphismP
+roperty C₂} → CategoryTheory.LocalizerMorphism W₁ W₂ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLocalizedEquivalence
-  parameters: : Prop where
-  axioms and operations (1):
-    - isEquivalence : (Φ.localizedFunctor W₁.Q W₂.Q).IsEquivalence
-
-中文:
-类 是LocalizedEquivalence
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isEquivalence : (Φ.localizedFunctor W₁.Q W₂.Q).是等价
+--- 原说明 ---
+Condition that a `LocalizerMorphism` induces an equivalence on the localized cat
+egories
 -/
 class IsLocalizedEquivalence : Prop where
   /-- the induced functor on the constructed localized categories is an equivalence -/
   isEquivalence : (Φ.localizedFunctor W₁.Q W₂.Q).IsEquivalence
-
-/--
-lemma `IsLocalizedEquivalence.mk'` / 引理 `IsLocalizedEquivalence.mk'`
-
-English:
-lemma IsLocalizedEquivalence.mk'
-  given: [CatCommSq Φ.functor L₁ L₂ G] [G.IsEquivalence]
-  proof: by
-    rw [Φ.isEquivalence_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
-    exact inferInstance
-
-中文:
-引理 是LocalizedEquivalence.mk'
-  条件: [CatCommSq Φ.functor L₁ L₂ G] [G.是等价]
-  证明: by
-    rw [Φ.isEquivalence_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
-    exact inferInstance
-
-Depends on / 依赖: isEquivalence_iff, localizedFunctor
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.mk'** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence`。
+形式化陈述：∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₁ : Type u₄} {D₂ : Type u₅} [inst : Cate
+goryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂
+] [inst_2 : CategoryTheory.Category.{v₄, u₄} D₁]   [inst_3 : CategoryTheory.Cate
+gory.{v₅, u₅} D₂] {W₁ : CategoryTheory.MorphismProperty C₁}   {W₂ : CategoryTheo
+ry.MorphismProperty C₂} (Φ : CategoryTheory.LocalizerMorphism W₁ W₂)   (L₁ : Cat
+egoryTheory.Functor C₁ D₁) [L₁.IsLocalization W₁] (L₂ : CategoryTheory.Functor C
+₂ D₂) [L₂.IsLocalization W₂]   (G : CategoryTheory.Functor D₁ D₂) [CategoryTheor
+y.CatCommSq Φ.functor L₁ L₂ G] [G.IsEquivalence],   Φ.IsLocalizedEquivalence
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；L₁ : CategoryTheory.Functor C₁ D₁；
+L₂ : CategoryTheory.Functor C₂ D₂；G : CategoryTheory.Functor D₁ D₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.LocalizerMorphism.isEquivalence_iff`：isEquivalence_iff : 
+G.IsEquivalence ↔ G'.IsEquivalence
 -/
 lemma IsLocalizedEquivalence.mk' [CatCommSq Φ.functor L₁ L₂ G] [G.IsEquivalence] :
     Φ.IsLocalizedEquivalence where
@@ -470,54 +361,35 @@ lemma IsLocalizedEquivalence.mk' [CatCommSq Φ.functor L₁ L₂ G] [G.IsEquival
     rw [Φ.isEquivalence_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
     exact inferInstance
 
-/--
-lemma `isEquivalence` / 引理 `isEquivalence`
+/-- If a `LocalizerMorphism` is a localized equivalence, then any compatible functor
+between the localized categories is an equivalence. -/
+/-
+**CategoryTheory.LocalizerMorphism.isEquivalence** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.LocalizerMorphism`。
+形式化陈述：isEquivalence [h : Φ.IsLocalizedEquivalence] [CatCommSq Φ.functor L₁ L₂ G]
+ : G.IsEquivalence
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.LocalizerMorphism.isEquivalence_iff`：isEquivalence_iff : 
+G.IsEquivalence ↔ G'.IsEquivalence
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.isEquivalence`：∀
+ {C₁ : Type u₁} {C₂ : Type u₂} {inst : CategoryTheory.Category.{v₁, u₁} C₁}   {i
+nst_1 : CategoryTheory.Category.{v₂, u₂} C₂} {W₁ : Category…
 
-English:
-lemma isEquivalence
-  given: [h : Φ.IsLocalizedEquivalence] [CatCommSq Φ.functor L₁ L₂ G]
-  proof: (by
-  rw [Φ.isEquivalence_iff L₁ L₂ G W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)]
-  exact h.isEquivalence)
-
-中文:
-引理 isEquivalence
-  条件: [h : Φ.是LocalizedEquivalence] [CatCommSq Φ.functor L₁ L₂ G]
-  证明: (by
-  rw [Φ.isEquivalence_iff L₁ L₂ G W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)]
-  exact h.isEquivalence)
-
-Depends on / 依赖: h.isEquivalence, isEquivalence, isEquivalence_iff, localizedFunctor
+--- 原说明 ---
+If a `LocalizerMorphism` is a localized equivalence, then any compatible functor
+between the localized categories is an equivalence.
 -/
 lemma isEquivalence [h : Φ.IsLocalizedEquivalence] [CatCommSq Φ.functor L₁ L₂ G] :
     G.IsEquivalence := (by
   rw [Φ.isEquivalence_iff L₁ L₂ G W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)]
   exact h.isEquivalence)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsLocalizedEquivalence]
-  signature: : Φ.op.IsLocalizedEquivalence
-  body: by
-  let G := Φ.localizedFunctor W₁.Q W₂.Q
-  let : CatCommSq Φ.op.functor W₁.Q.op W₂.Q.op G.op :=
-    ⟨NatIso.op (CatCommSq.iso Φ.functor W₁.Q W₂.Q G).symm⟩
-  have := Φ.isEquivalence W₁.Q W₂.Q G
-  exact IsLocalizedEquivalence.mk' Φ.op W₁.Q.op W₂.Q.op G.op
-
-中文:
-实例 [Φ.是LocalizedEquivalence]
-  签名: : Φ.op.是LocalizedEquivalence
-  定义体: by
-  let G := Φ.localizedFunctor W₁.Q W₂.Q
-  let : CatCommSq Φ.op.functor W₁.Q.op W₂.Q.op G.op :=
-    ⟨NatIso.op (CatCommSq.iso Φ.functor W₁.Q W₂.Q G).symm⟩
-  have := Φ.isEquivalence W₁.Q W₂.Q G
-  exact IsLocalizedEquivalence.mk' Φ.op W₁.Q.op W₂.Q.op G.op
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, G.op, IsLocalizedEquivalence, IsLocalizedEquivalence.mk, NatIso, NatIso.op, Q.op, functor, isEquivalence, localizedFunctor, op.functor
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsLocalizedEquivalence] : Φ.op.IsLocalizedEquivalence := by
   let G := Φ.localizedFunctor W₁.Q W₂.Q
@@ -526,43 +398,48 @@ instance [Φ.IsLocalizedEquivalence] : Φ.op.IsLocalizedEquivalence := by
   have := Φ.isEquivalence W₁.Q W₂.Q G
   exact IsLocalizedEquivalence.mk' Φ.op W₁.Q.op W₂.Q.op G.op
 
-/--
-Instance `localizedFunctor_isEquivalence` / 实例 `localizedFunctor_isEquivalence`
+/-- If a `LocalizerMorphism` is a localized equivalence, then the induced functor on
+the localized categories is an equivalence -/
+/-
+**CategoryTheory.LocalizerMorphism.localizedFunctor_isEquivalence** 是 Mathlib 中的
+一个实例，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：localizedFunctor_isEquivalence [Φ.IsLocalizedEquivalence] : (Φ.localizedFu
+nctor L₁ L₂).IsEquivalence
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.isEquivalence`：isEquivalence [h : Φ.IsL
+ocalizedEquivalence] [CatCommSq Φ.functor L₁ L₂ G] : G.IsEquivalence
 
-English:
-instance localizedFunctor_isEquivalence
-  signature: [Φ.IsLocalizedEquivalence]
-  body: Φ.isEquivalence L₁ L₂ _
-
-中文:
-实例 localizedFunctor_isEquivalence
-  签名: [Φ.是LocalizedEquivalence]
-  定义体: Φ.isEquivalence L₁ L₂ _
-
-Depends on / 依赖: isEquivalence
+--- 原说明 ---
+If a `LocalizerMorphism` is a localized equivalence, then the induced functor on
+the localized categories is an equivalence
 -/
 instance localizedFunctor_isEquivalence [Φ.IsLocalizedEquivalence] :
     (Φ.localizedFunctor L₁ L₂).IsEquivalence :=
   Φ.isEquivalence L₁ L₂ _
 
-/--
-lemma `IsLocalizedEquivalence.of_isLocalization_of_isLocalization` / 引理 `IsLocalizedEquivalence.of_isLocalization_of_isLocalization`
+/-- When `Φ : LocalizerMorphism W₁ W₂`, if the composition `Φ.functor ⋙ L₂` is a
+localization functor for `W₁`, then `Φ` is a localized equivalence. -/
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_of_i
+sLocalization** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.LocalizerMorphism.IsLoca
+lizedEquivalence`。
+形式化陈述：∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₂ : Type u₅} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] [inst_2 : Cat
+egoryTheory.Category.{v₅, u₅} D₂]   {W₁ : CategoryTheory.MorphismProperty C₁} {W
+₂ : CategoryTheory.MorphismProperty C₂}   (Φ : CategoryTheory.LocalizerMorphism 
+W₁ W₂) (L₂ : CategoryTheory.Functor C₂ D₂) [L₂.IsLocalization W₂]   [(Φ.functor.
+comp L₂).IsLocalization W₁], Φ.IsLocalizedEquivalence
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；L₂ : CategoryTheory.Functor C₂ D₂；
+Φ.functor.comp L₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.mk'`：∀ {C₁ : Typ
+e u₁} {C₂ : Type u₂} {D₁ : Type u₄} {D₂ : Type u₅} [inst : CategoryTheory.Catego
+ry.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Catego…
 
-English:
-lemma IsLocalizedEquivalence.of_isLocalization_of_isLocalization
-  proof: by
-  have : CatCommSq Φ.functor (Φ.functor ⋙ L₂) L₂ (𝟭 D₂) :=
-    CatCommSq.mk (rightUnitor _).symm
-  exact IsLocalizedEquivalence.mk' Φ (Φ.functor ⋙ L₂) L₂ (𝟭 D₂)
-
-中文:
-引理 是LocalizedEquivalence.of_isLocalization_of_isLocalization
-  证明: by
-  have : CatCommSq Φ.functor (Φ.functor ⋙ L₂) L₂ (𝟭 D₂) :=
-    CatCommSq.mk (rightUnitor _).symm
-  exact IsLocalizedEquivalence.mk' Φ (Φ.functor ⋙ L₂) L₂ (𝟭 D₂)
-
-Depends on / 依赖: CatCommSq, CatCommSq.mk, IsLocalizedEquivalence, IsLocalizedEquivalence.mk, functor, rightUnitor
+--- 原说明 ---
+When `Φ : LocalizerMorphism W₁ W₂`, if the composition `Φ.functor ⋙ L₂` is a
+localization functor for `W₁`, then `Φ` is a localized equivalence.
 -/
 lemma IsLocalizedEquivalence.of_isLocalization_of_isLocalization
     [(Φ.functor ⋙ L₂).IsLocalization W₁] :
@@ -571,41 +448,44 @@ lemma IsLocalizedEquivalence.of_isLocalization_of_isLocalization
     CatCommSq.mk (rightUnitor _).symm
   exact IsLocalizedEquivalence.mk' Φ (Φ.functor ⋙ L₂) L₂ (𝟭 D₂)
 
-/--
-lemma `IsLocalizedEquivalence.of_equivalence` / 引理 `IsLocalizedEquivalence.of_equivalence`
+/-- When the underlying functor `Φ.functor` of `Φ : LocalizerMorphism W₁ W₂` is
+an equivalence of categories and that `W₁` and `W₂` essentially correspond to each
+other via this equivalence, then `Φ` is a localized equivalence. -/
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.of_equivalence** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence`。
+形式化陈述：∀ {C₁ : Type u₁} {C₂ : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C
+₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] {W₁ : CategoryTheory.Morphis
+mProperty C₁}   {W₂ : CategoryTheory.MorphismProperty C₂} (Φ : CategoryTheory.Lo
+calizerMorphism W₁ W₂) [Φ.functor.IsEquivalence],   W₂ ≤ W₁.map Φ.functor → Φ.Is
+LocalizedEquivalence
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.IsLocalization.of_equivalence_source`：of_equivale
+nce_source (L₁ : C₁ ⥤ D) (W₁ : MorphismProperty C₁) (L₂ : C₂ ⥤ D) (W₂ : Morphism
+Property C₂) (E : C₁ ≌ C₂) (hW₁ : W₁ <= W₂.isoClo…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.inverseImage_equivalence_functor_eq_map_
+inverse`：inverseImage_equivalence_functor_eq_map_inverse (Q : MorphismProperty C
+) [RespectsIso Q] (E : C ≌ D) : Q.inverseImage E.inverse = Q.map E.fu…
+· 使用引理 `CategoryTheory.MorphismProperty.map_isoClosure`：map_isoClosure (P : Morp
+hismProperty C) (F : C ⥤ D) : P.isoClosure.map F = P.map F
+· 使用引理 `CategoryTheory.LocalizerMorphism.inverts`：inverts : W₁.IsInvertedBy (Φ.f
+unctor ⋙ L₂)
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.of_isLocalizatio
+n_of_isLocalization`：∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₂ : Type u₅} [inst : Cate
+goryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂
+]…
 
-English:
-lemma IsLocalizedEquivalence.of_equivalence
-  statement: [Φ.functor.IsEquivalence]
-  proof: by
-  have : Functor.IsLocalization (Φ.functor ⋙ MorphismProperty.Q W₂) W₁ := by
-    refine Functor.IsLocalization.of_equivalence_source W₂.Q W₂ (Φ.functor ⋙ W₂.Q) W₁
-      (asEquivalence Φ.functor).symm ?_ (Φ.inverts W₂.Q)
-      ((associator _ _ _).symm ≪≫ isoWhiskerRight ((Equivalence.unitIso _).symm) _ ≪≫
-        leftUnitor _)
-    erw [W₁.isoClosure.inverseImage_equivalence_functor_eq_map_inverse]
-    rw [MorphismProperty.map_isoClosure]
-    exact h
-  exact IsLocalizedEquivalence.of_isLocalization_of_isLocalization Φ W₂.Q
-
-中文:
-引理 是LocalizedEquivalence.of_equivalence
-  结论: [Φ.functor.是等价]
-  证明: by
-  have : Functor.IsLocalization (Φ.functor ⋙ MorphismProperty.Q W₂) W₁ := by
-    refine Functor.IsLocalization.of_equivalence_source W₂.Q W₂ (Φ.functor ⋙ W₂.Q) W₁
-      (asEquivalence Φ.functor).symm ?_ (Φ.inverts W₂.Q)
-      ((associator _ _ _).symm ≪≫ isoWhiskerRight ((Equivalence.unitIso _).symm) _ ≪≫
-        leftUnitor _)
-    erw [W₁.isoClosure.inverseImage_equivalence_functor_eq_map_inverse]
-    rw [MorphismProperty.map_isoClosure]
-    exact h
-  exact IsLocalizedEquivalence.of_isLocalization_of_isLocalization Φ W₂.Q
-
-Depends on / 依赖: Equivalence, Equivalence.unitIso, Functor, Functor.IsLocalization, Functor.IsLocalization.of_equivalence_source, IsLocalization, IsLocalizedEquivalence, IsLocalizedEquivalence.of_isLocalization_of_isLocalization, MorphismProperty, MorphismProperty.Q, MorphismProperty.map_isoClosure, asEquivalence, associator, functor, inverseImage_equivalence_functor_eq_map_inverse, inverts, isoClosure, isoClosure.inverseImage_equivalence_functor_eq_map_inverse, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+When the underlying functor `Φ.functor` of `Φ : LocalizerMorphism W₁ W₂` is
+an equivalence of categories and that `W₁` and `W₂` essentially correspond to ea
+ch
+other via this equivalence, then `Φ` is a localized equivalence.
 -/
 lemma IsLocalizedEquivalence.of_equivalence [Φ.functor.IsEquivalence]
-    (h : W₂ <= W₁.map Φ.functor) : IsLocalizedEquivalence Φ := by
+    (h : W₂ ≤ W₁.map Φ.functor) : IsLocalizedEquivalence Φ := by
   have : Functor.IsLocalization (Φ.functor ⋙ MorphismProperty.Q W₂) W₁ := by
     refine Functor.IsLocalization.of_equivalence_source W₂.Q W₂ (Φ.functor ⋙ W₂.Q) W₁
       (asEquivalence Φ.functor).symm ?_ (Φ.inverts W₂.Q)
@@ -615,86 +495,60 @@ lemma IsLocalizedEquivalence.of_equivalence [Φ.functor.IsEquivalence]
     rw [MorphismProperty.map_isoClosure]
     exact h
   exact IsLocalizedEquivalence.of_isLocalization_of_isLocalization Φ W₂.Q
-
-/--
-Instance `IsLocalizedEquivalence.isLocalization` / 实例 `IsLocalizedEquivalence.isLocalization`
-
-English:
-instance IsLocalizedEquivalence.isLocalization
-  signature: [Φ.IsLocalizedEquivalence]
-  body: Functor.IsLocalization.of_iso _ ((Φ.catCommSq W₁.Q L₂).iso).symm
-
-中文:
-实例 是LocalizedEquivalence.isLocalization
-  签名: [Φ.是LocalizedEquivalence]
-  定义体: Functor.IsLocalization.of_iso _ ((Φ.catCommSq W₁.Q L₂).iso).symm
-
-Depends on / 依赖: Functor, Functor.IsLocalization.of_iso, IsLocalization, catCommSq, of_iso
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.isLocalization** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence`。
+形式化陈述：∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₂ : Type u₅} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] [inst_2 : Cat
+egoryTheory.Category.{v₅, u₅} D₂]   {W₁ : CategoryTheory.MorphismProperty C₁} {W
+₂ : CategoryTheory.MorphismProperty C₂}   (Φ : CategoryTheory.LocalizerMorphism 
+W₁ W₂) (L₂ : CategoryTheory.Functor C₂ D₂) [L₂.IsLocalization W₂]   [Φ.IsLocaliz
+edEquivalence], (Φ.functor.comp L₂).IsLocalization W₁
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；L₂ : CategoryTheory.Functor C₂ D₂；
+Φ.functor.comp L₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsLocalization.of_iso`：of_iso {L₁ L₂ : C ⥤ D} (e 
+: L₁ ≅ L₂) [L₁.IsLocalization W] : L₂.IsLocalization W
+· 使用定理 `CategoryTheory.Functor.IsLocalization.instCompOfIsEquivalence`：∀ {C : Ty
+pe u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} D] (L : Categor…
 -/
 instance IsLocalizedEquivalence.isLocalization [Φ.IsLocalizedEquivalence] :
     (Φ.functor ⋙ L₂).IsLocalization W₁ :=
   Functor.IsLocalization.of_iso _ ((Φ.catCommSq W₁.Q L₂).iso).symm
-
-/--
-lemma `isLocalizedEquivalence_of_unit_of_unit` / 引理 `isLocalizedEquivalence_of_unit_of_unit`
-
-English:
-lemma isLocalizedEquivalence_of_unit_of_unit
-  statement: (Ψ : LocalizerMorphism W₂ W₁)
-  proof: by
-    have : IsIso (whiskerRight ε₁ W₁.Q) := by
-      rw [NatTrans.isIso_iff_isIso_app]
-      exact fun _ => Localization.inverts W₁.Q W₁ _ (hε₁ _)
-    have : IsIso (whiskerRight ε₂ W₂.Q) := by
-      rw [NatTrans.isIso_iff_isIso_app]
-      exact fun _ => Localization.inverts W₂.Q W₂ _ (hε₂ _)
-    refine (Localization.equivalence W₁.Q W₁ W₂.Q W₂ (Φ.functor ⋙ W₂.Q)
-      (Φ.localizedFunctor W₁.Q W₂.Q)
-      (Ψ.functor ⋙ W₁.Q) (Ψ.localizedFunctor W₂.Q W₁.Q) ?_ ?_).isEquivalence_functor
-    · exact Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft _ (CatCommSq.iso Ψ.functor W₂.Q W₁.Q _).symm ≪≫
-        (Functor.associator _ _ _).symm ≪≫
-        (asIso (whiskerRight ε₁ W₁.Q)).symm ≪≫ Functor.leftUnitor _
-    · exact Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft _ (CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm ≪≫
-        (Functor.associator _ _ _).symm ≪≫
-        (asIso (whiskerRight ε₂ W₂.Q)).symm ≪≫ Functor.leftUnitor _
-
-中文:
-引理 isLocalizedEquivalence_of_unit_of_unit
-  结论: (Ψ : Localizer态射 W₂ W₁)
-  证明: by
-    have : IsIso (whiskerRight ε₁ W₁.Q) := by
-      rw [NatTrans.isIso_iff_isIso_app]
-      exact fun _ => Localization.inverts W₁.Q W₁ _ (hε₁ _)
-    have : IsIso (whiskerRight ε₂ W₂.Q) := by
-      rw [NatTrans.isIso_iff_isIso_app]
-      exact fun _ => Localization.inverts W₂.Q W₂ _ (hε₂ _)
-    refine (Localization.equivalence W₁.Q W₁ W₂.Q W₂ (Φ.functor ⋙ W₂.Q)
-      (Φ.localizedFunctor W₁.Q W₂.Q)
-      (Ψ.functor ⋙ W₁.Q) (Ψ.localizedFunctor W₂.Q W₁.Q) ?_ ?_).isEquivalence_functor
-    · exact Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft _ (CatCommSq.iso Ψ.functor W₂.Q W₁.Q _).symm ≪≫
-        (Functor.associator _ _ _).symm ≪≫
-        (asIso (whiskerRight ε₁ W₁.Q)).symm ≪≫ Functor.leftUnitor _
-    · exact Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft _ (CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm ≪≫
-        (Functor.associator _ _ _).symm ≪≫
-        (asIso (whiskerRight ε₂ W₂.Q)).symm ≪≫ Functor.leftUnitor _
-
-Depends on / 依赖: Functor, Functor.associator, Localization, Localization.equivalence, Localization.inverts, NatTrans, NatTrans.isIso_iff_isIso_app, associator, equivalence, functor, inverts, isEquivalence_functor, isIso_iff_isIso_app, isoWhiskerLeft, localizedFunctor, whiskerRight
+/-
+**CategoryTheory.LocalizerMorphism.isLocalizedEquivalence_of_unit_of_unit** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：isLocalizedEquivalence_of_unit_of_unit (Ψ : LocalizerMorphism W₂ W₁) (ε₁ :
+ 𝟭 C₁ ⟶ Φ.functor ⋙ Ψ.functor) (ε₂ : 𝟭 C₂ ⟶ Ψ.functor ⋙ Φ.functor) (hε₁ : forall
+ X₁, W₁ (ε₁.app X₁)) (hε₂ : forall X₂, W₂ (ε₂.app X₂)) : Φ.IsLocalizedEquivalenc
+e where isEquivalence
+参数：Ψ : LocalizerMorphism W₂ W₁；ε₁ : 𝟭 C₁ ⟶ Φ.functor ⋙ Ψ.functor；ε₂ : 𝟭 C₂ ⟶ Ψ.f
+unctor ⋙ Φ.functor；hε₁ : forall X₁, W₁ (ε₁.app X₁)；hε₂ : forall X₂, W₂ (ε₂.app X
+₂)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.isIso_iff_isIso_app`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 lemma isLocalizedEquivalence_of_unit_of_unit (Ψ : LocalizerMorphism W₂ W₁)
     (ε₁ : 𝟭 C₁ ⟶ Φ.functor ⋙ Ψ.functor) (ε₂ : 𝟭 C₂ ⟶ Ψ.functor ⋙ Φ.functor)
-    (hε₁ : forall X₁, W₁ (ε₁.app X₁)) (hε₂ : forall X₂, W₂ (ε₂.app X₂)) :
+    (hε₁ : ∀ X₁, W₁ (ε₁.app X₁)) (hε₂ : ∀ X₂, W₂ (ε₂.app X₂)) :
     Φ.IsLocalizedEquivalence where
   isEquivalence := by
     have : IsIso (whiskerRight ε₁ W₁.Q) := by
       rw [NatTrans.isIso_iff_isIso_app]
-      exact fun _ => Localization.inverts W₁.Q W₁ _ (hε₁ _)
+      exact fun _ ↦ Localization.inverts W₁.Q W₁ _ (hε₁ _)
     have : IsIso (whiskerRight ε₂ W₂.Q) := by
       rw [NatTrans.isIso_iff_isIso_app]
-      exact fun _ => Localization.inverts W₂.Q W₂ _ (hε₂ _)
+      exact fun _ ↦ Localization.inverts W₂.Q W₂ _ (hε₂ _)
     refine (Localization.equivalence W₁.Q W₁ W₂.Q W₂ (Φ.functor ⋙ W₂.Q)
       (Φ.localizedFunctor W₁.Q W₂.Q)
       (Ψ.functor ⋙ W₁.Q) (Ψ.localizedFunctor W₂.Q W₁.Q) ?_ ?_).isEquivalence_functor
@@ -706,50 +560,48 @@ lemma isLocalizedEquivalence_of_unit_of_unit (Ψ : LocalizerMorphism W₂ W₁)
         isoWhiskerLeft _ (CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm ≪≫
         (Functor.associator _ _ _).symm ≪≫
         (asIso (whiskerRight ε₂ W₂.Q)).symm ≪≫ Functor.leftUnitor _
-
-/--
-Instance `IsLocalizedEquivalence.id` / 实例 `IsLocalizedEquivalence.id`
-
-English:
-instance IsLocalizedEquivalence.id
-  signature: :
-  body: have : ((LocalizerMorphism.id W₁).functor ⋙ W₁.Q).IsLocalization W₁ :=
-    Functor.IsLocalization.of_iso _ (Functor.leftUnitor _).symm
-  of_isLocalization_of_isLocalization _ W₁.Q
-
-中文:
-实例 是LocalizedEquivalence.id
-  签名: :
-  定义体: have : ((LocalizerMorphism.id W₁).functor ⋙ W₁.Q).IsLocalization W₁ :=
-    Functor.IsLocalization.of_iso _ (Functor.leftUnitor _).symm
-  of_isLocalization_of_isLocalization _ W₁.Q
-
-Depends on / 依赖: Functor, Functor.IsLocalization.of_iso, Functor.leftUnitor, IsLocalization, LocalizerMorphism, LocalizerMorphism.id, functor, leftUnitor, of_isLocalization_of_isLocalization, of_iso
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.id** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence`。
+形式化陈述：∀ {C₁ : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C₁] {W₁ : Catego
+ryTheory.MorphismProperty C₁},   (CategoryTheory.LocalizerMorphism.id W₁).IsLoca
+lizedEquivalence
+参数：CategoryTheory.LocalizerMorphism.id W₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsLocalization.of_iso`：of_iso {L₁ L₂ : C ⥤ D} (e 
+: L₁ ≅ L₂) [L₁.IsLocalization W] : L₂.IsLocalization W
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.of_isLocalizatio
+n_of_isLocalization`：∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₂ : Type u₅} [inst : Cate
+goryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂
+]…
 -/
 instance IsLocalizedEquivalence.id :
     (id W₁).IsLocalizedEquivalence :=
   have : ((LocalizerMorphism.id W₁).functor ⋙ W₁.Q).IsLocalization W₁ :=
     Functor.IsLocalization.of_iso _ (Functor.leftUnitor _).symm
   of_isLocalization_of_isLocalization _ W₁.Q
-
-/--
-Instance `IsLocalizedEquivalence.comp` / 实例 `IsLocalizedEquivalence.comp`
-
-English:
-instance IsLocalizedEquivalence.comp
-  signature: [Φ.IsLocalizedEquivalence]
-  body: have : ((Φ.comp Ψ).functor ⋙ W₃.Q).IsLocalization W₁ :=
-    Functor.IsLocalization.of_iso _ (Functor.associator _ _ _).symm
-  of_isLocalization_of_isLocalization _ W₃.Q
-
-中文:
-实例 是LocalizedEquivalence.comp
-  签名: [Φ.是LocalizedEquivalence]
-  定义体: have : ((Φ.comp Ψ).functor ⋙ W₃.Q).IsLocalization W₁ :=
-    Functor.IsLocalization.of_iso _ (Functor.associator _ _ _).symm
-  of_isLocalization_of_isLocalization _ W₃.Q
-
-Depends on / 依赖: Functor, Functor.IsLocalization.of_iso, Functor.associator, IsLocalization, associator, functor, of_isLocalization_of_isLocalization, of_iso
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.comp** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence`。
+形式化陈述：∀ {C₁ : Type u₁} {C₂ : Type u₂} {C₃ : Type u₃} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] [inst_2 : Cat
+egoryTheory.Category.{v₃, u₃} C₃]   {W₁ : CategoryTheory.MorphismProperty C₁} {W
+₂ : CategoryTheory.MorphismProperty C₂}   {W₃ : CategoryTheory.MorphismProperty 
+C₃} (Φ : CategoryTheory.LocalizerMorphism W₁ W₂) [Φ.IsLocalizedEquivalence]   (Ψ
+ : CategoryTheory.LocalizerMorphism W₂ W₃) [Ψ.IsLocalizedEquivalence], (Φ.comp Ψ
+).IsLocalizedEquivalence
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；Ψ : CategoryTheory.LocalizerMorphi
+sm W₂ W₃；Φ.comp Ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsLocalization.of_iso`：of_iso {L₁ L₂ : C ⥤ D} (e 
+: L₁ ≅ L₂) [L₁.IsLocalization W] : L₂.IsLocalization W
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.isLocalization`：
+∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₂ : Type u₅} [inst : CategoryTheory.Category.{
+v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂]…
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.of_isLocalizatio
+n_of_isLocalization`：∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₂ : Type u₅} [inst : Cate
+goryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂
+]…
 -/
 instance IsLocalizedEquivalence.comp [Φ.IsLocalizedEquivalence]
     (Ψ : LocalizerMorphism W₂ W₃)
@@ -759,82 +611,84 @@ instance IsLocalizedEquivalence.comp [Φ.IsLocalizedEquivalence]
     Functor.IsLocalization.of_iso _ (Functor.associator _ _ _).symm
   of_isLocalization_of_isLocalization _ W₃.Q
 
-/--
-Definition of `IsLocalizedFullyFaithful` / `IsLocalizedFullyFaithful` 的定义
+/-- Condition that a `LocalizerMorphism` induces a fully faithful functor
+on the localized categories. -/
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedFullyFaithful** 是 Mathlib 中的一个归纳类型
+，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：{C₁ : Type u₁} →   {C₂ : Type u₂} →     [inst : CategoryTheory.Category.{v
+₁, u₁} C₁] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] →         {W₁ 
+: CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.MorphismP
+roperty C₂} → CategoryTheory.LocalizerMorphism W₁ W₂ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLocalizedFullyFaithful
-  parameters: : Prop where
-  axioms and operations (1):
-    - nonempty_fullyFaithful : Nonempty (Φ.localizedFunctor W₁.Q W₂.Q).FullyFaithful
-
-中文:
-类 是LocalizedFullyFaithful
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - nonempty_fullyFaithful : 非空 (Φ.localizedFunctor W₁.Q W₂.Q).满忠实
+--- 原说明 ---
+Condition that a `LocalizerMorphism` induces a fully faithful functor
+on the localized categories.
 -/
 class IsLocalizedFullyFaithful : Prop where
   /-- the induced functor on the constructed localized categories is fully faithful -/
   nonempty_fullyFaithful : Nonempty (Φ.localizedFunctor W₁.Q W₂.Q).FullyFaithful
-
-/--
-lemma `IsLocalizedFullyFaithful.mk'` / 引理 `IsLocalizedFullyFaithful.mk'`
-
-English:
-lemma IsLocalizedFullyFaithful.mk'
-  given: [CatCommSq Φ.functor L₁ L₂ G] (hG : G.FullyFaithful)
-  proof: by
-    rw [Φ.nonempty_fullyFaithful_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
-    exact ⟨hG⟩
-
-中文:
-引理 是LocalizedFullyFaithful.mk'
-  条件: [CatCommSq Φ.functor L₁ L₂ G] (hG : G.满忠实)
-  证明: by
-    rw [Φ.nonempty_fullyFaithful_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
-    exact ⟨hG⟩
-
-Depends on / 依赖: localizedFunctor, nonempty_fullyFaithful_iff
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedFullyFaithful.mk'** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.LocalizerMorphism.IsLocalizedFullyFaithful`。
+形式化陈述：∀ {C₁ : Type u₁} {C₂ : Type u₂} {D₁ : Type u₄} {D₂ : Type u₅} [inst : Cate
+goryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂
+] [inst_2 : CategoryTheory.Category.{v₄, u₄} D₁]   [inst_3 : CategoryTheory.Cate
+gory.{v₅, u₅} D₂] {W₁ : CategoryTheory.MorphismProperty C₁}   {W₂ : CategoryTheo
+ry.MorphismProperty C₂} (Φ : CategoryTheory.LocalizerMorphism W₁ W₂)   (L₁ : Cat
+egoryTheory.Functor C₁ D₁) [L₁.IsLocalization W₁] (L₂ : CategoryTheory.Functor C
+₂ D₂) [L₂.IsLocalization W₂]   (G : CategoryTheory.Functor D₁ D₂) [CategoryTheor
+y.CatCommSq Φ.functor L₁ L₂ G] (hG : G.FullyFaithful),   Φ.IsLocalizedFullyFaith
+ful
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；L₁ : CategoryTheory.Functor C₁ D₁；
+L₂ : CategoryTheory.Functor C₂ D₂；G : CategoryTheory.Functor D₁ D₂；hG : G.FullyF
+aithful。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.LocalizerMorphism.nonempty_fullyFaithful_iff`：nonempty_fu
+llyFaithful_iff : Nonempty G.FullyFaithful ↔ Nonempty G'.FullyFaithful
 -/
 lemma IsLocalizedFullyFaithful.mk' [CatCommSq Φ.functor L₁ L₂ G] (hG : G.FullyFaithful) :
     Φ.IsLocalizedFullyFaithful where
   nonempty_fullyFaithful := by
     rw [Φ.nonempty_fullyFaithful_iff W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) L₁ L₂ G]
     exact ⟨hG⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsLocalizedEquivalence]
-  signature: : Φ.IsLocalizedFullyFaithful where
-  body: ⟨Functor.FullyFaithful.ofFullyFaithful _⟩
-
-中文:
-实例 [Φ.是LocalizedEquivalence]
-  签名: : Φ.是LocalizedFullyFaithful where
-  定义体: ⟨Functor.FullyFaithful.ofFullyFaithful _⟩
-
-Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, ofFullyFaithful
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsLocalizedEquivalence] : Φ.IsLocalizedFullyFaithful where
   nonempty_fullyFaithful := ⟨Functor.FullyFaithful.ofFullyFaithful _⟩
 
-/--
-Definition of `fullyFaithful` / `fullyFaithful` 的定义
+/-- If a `LocalizerMorphism` becomes a fully faithful after localization, then any compatible
+functor between the localized categories is fully faithful. -/
+/-
+**CategoryTheory.LocalizerMorphism.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.LocalizerMorphism`。
+形式化陈述：{C₁ : Type u₁} →   {C₂ : Type u₂} →     {D₁ : Type u₄} →       {D₂ : Type 
+u₅} →         [inst : CategoryTheory.Category.{v₁, u₁} C₁] →           [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} C₂] →             [inst_2 : CategoryTheory.Cat
+egory.{v₄, u₄} D₁] →               [inst_3 : CategoryTheory.Category.{v₅, u₅} D₂
+] →                 {W₁ : CategoryTheory.MorphismProperty C₁} →                 
+  {W₂ : CategoryTheory.MorphismProperty C₂} →                     (Φ : CategoryT
+heory.LocalizerMorphism W₁ W₂) →                       (L₁ : CategoryTheory.Func
+tor C₁ D₁) →                         [L₁.IsLocalization W₁] →                   
+        (L₂ : CategoryTheory.Functor C₂ D₂) →                             [L₂.Is
+Localization W₂] →                               (G : CategoryTheory.Functor D₁ 
+D₂) →                                 [h : Φ.IsLocalizedFullyFaithful] →        
+                           [CategoryTheory.CatCommSq Φ.functor L₁ L₂ G] → G.Full
+yFaithful
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；L₁ : CategoryTheory.Functor C₁ D₁；
+L₂ : CategoryTheory.Functor C₂ D₂；G : CategoryTheory.Functor D₁ D₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithful
-  body: Nonempty.some (by
-    rw [Φ.nonempty_fullyFaithful_iff L₁ L₂ G W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)]
-    exact h.nonempty_fullyFaithful)
-
-中文:
-定义 fullyFaithful
-  定义体: Nonempty.some (by
-    rw [Φ.nonempty_fullyFaithful_iff L₁ L₂ G W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)]
-    exact h.nonempty_fullyFaithful)
+--- 原说明 ---
+If a `LocalizerMorphism` becomes a fully faithful after localization, then any c
+ompatible
+functor between the localized categories is fully faithful.
 -/
 @[no_expose] noncomputable def fullyFaithful
     [h : Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G] :
@@ -842,120 +696,77 @@ definition fullyFaithful
   Nonempty.some (by
     rw [Φ.nonempty_fullyFaithful_iff L₁ L₂ G W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)]
     exact h.nonempty_fullyFaithful)
-
-/--
-lemma `faithful` / 引理 `faithful`
-
-English:
-lemma faithful
-  given: [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
-  proof: (Φ.fullyFaithful L₁ L₂ G).faithful
-
-中文:
-引理 faithful
-  条件: [Φ.是LocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
-  证明: (Φ.fullyFaithful L₁ L₂ G).faithful
-
-Depends on / 依赖: faithful, fullyFaithful
+/-
+**CategoryTheory.LocalizerMorphism.faithful** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.LocalizerMorphism`。
+形式化陈述：faithful [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G] : G.Fa
+ithful
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 -/
 lemma faithful [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G] :
     G.Faithful :=
   (Φ.fullyFaithful L₁ L₂ G).faithful
-
-/--
-lemma `full` / 引理 `full`
-
-English:
-lemma full
-  given: [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
-  proof: (Φ.fullyFaithful L₁ L₂ G).full
-
-中文:
-引理 full
-  条件: [Φ.是LocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G]
-  证明: (Φ.fullyFaithful L₁ L₂ G).full
-
-Depends on / 依赖: fullyFaithful, isoZero, shiftFunctorZero
+/-
+**CategoryTheory.LocalizerMorphism.full** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.LocalizerMorphism`。
+形式化陈述：full [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G] : G.Full
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 lemma full [Φ.IsLocalizedFullyFaithful] [CatCommSq Φ.functor L₁ L₂ G] :
     G.Full :=
   (Φ.fullyFaithful L₁ L₂ G).full
 
-/--
-Definition of `fullyFaithfulLocalizedFunctor` / `fullyFaithfulLocalizedFunctor` 的定义
+/-- If a `LocalizerMorphism` becomes fully faithful after localization,
+then the induced functor on the localized categories is fully faithful. -/
+/-
+**CategoryTheory.LocalizerMorphism.fullyFaithfulLocalizedFunctor** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：{C₁ : Type u₁} →   {C₂ : Type u₂} →     {D₁ : Type u₄} →       {D₂ : Type 
+u₅} →         [inst : CategoryTheory.Category.{v₁, u₁} C₁] →           [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} C₂] →             [inst_2 : CategoryTheory.Cat
+egory.{v₄, u₄} D₁] →               [inst_3 : CategoryTheory.Category.{v₅, u₅} D₂
+] →                 {W₁ : CategoryTheory.MorphismProperty C₁} →                 
+  {W₂ : CategoryTheory.MorphismProperty C₂} →                     (Φ : CategoryT
+heory.LocalizerMorphism W₁ W₂) →                       (L₁ : CategoryTheory.Func
+tor C₁ D₁) →                         [inst_4 : L₁.IsLocalization W₁] →          
+                 (L₂ : CategoryTheory.Functor C₂ D₂) →                          
+   [inst_5 : L₂.IsLocalization W₂] →                               [Φ.IsLocalize
+dFullyFaithful] → (Φ.localizedFunctor L₁ L₂).FullyFaithful
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；L₁ : CategoryTheory.Functor C₁ D₁；
+L₂ : CategoryTheory.Functor C₂ D₂；Φ.localizedFunctor L₁ L₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulLocalizedFunctor
-  signature: [Φ.IsLocalizedFullyFaithful]
-  body: Φ.fullyFaithful L₁ L₂ _
-
-中文:
-定义 fullyFaithfulLocalizedFunctor
-  签名: [Φ.是LocalizedFullyFaithful]
-  定义体: Φ.fullyFaithful L₁ L₂ _
+--- 原说明 ---
+If a `LocalizerMorphism` becomes fully faithful after localization,
+then the induced functor on the localized categories is fully faithful.
 -/
 @[no_expose] noncomputable def fullyFaithfulLocalizedFunctor [Φ.IsLocalizedFullyFaithful] :
     (Φ.localizedFunctor L₁ L₂).FullyFaithful :=
   Φ.fullyFaithful L₁ L₂ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsLocalizedFullyFaithful]
-  signature: : (Φ.localizedFunctor L₁ L₂).Full
-  body: Φ.full L₁ L₂ _
-
-中文:
-实例 [Φ.是LocalizedFullyFaithful]
-  签名: : (Φ.localizedFunctor L₁ L₂).满
-  定义体: Φ.full L₁ L₂ _
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsLocalizedFullyFaithful] : (Φ.localizedFunctor L₁ L₂).Full :=
   Φ.full L₁ L₂ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsLocalizedFullyFaithful]
-  signature: : (Φ.localizedFunctor L₁ L₂).Faithful
-  body: Φ.faithful L₁ L₂ _
-
-中文:
-实例 [Φ.是LocalizedFullyFaithful]
-  签名: : (Φ.localizedFunctor L₁ L₂).忠实
-  定义体: Φ.faithful L₁ L₂ _
-
-Depends on / 依赖: faithful
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsLocalizedFullyFaithful] : (Φ.localizedFunctor L₁ L₂).Faithful :=
   Φ.faithful L₁ L₂ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsLocalizedFullyFaithful]
-  signature: : Φ.op.IsLocalizedFullyFaithful
-  body: by
-  let G := Φ.localizedFunctor W₁.Q W₂.Q
-  let : CatCommSq Φ.op.functor W₁.Q.op W₂.Q.op G.op :=
-    ⟨NatIso.op (CatCommSq.iso Φ.functor W₁.Q W₂.Q G).symm⟩
-  exact IsLocalizedFullyFaithful.mk' Φ.op W₁.Q.op W₂.Q.op G.op
-    (Φ.fullyFaithful W₁.Q W₂.Q G).op
-
-中文:
-实例 [Φ.是LocalizedFullyFaithful]
-  签名: : Φ.op.是LocalizedFullyFaithful
-  定义体: by
-  let G := Φ.localizedFunctor W₁.Q W₂.Q
-  let : CatCommSq Φ.op.functor W₁.Q.op W₂.Q.op G.op :=
-    ⟨NatIso.op (CatCommSq.iso Φ.functor W₁.Q W₂.Q G).symm⟩
-  exact IsLocalizedFullyFaithful.mk' Φ.op W₁.Q.op W₂.Q.op G.op
-    (Φ.fullyFaithful W₁.Q W₂.Q G).op
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, G.op, IsLocalizedFullyFaithful, IsLocalizedFullyFaithful.mk, NatIso, NatIso.op, Q.op, fullyFaithful, functor, localizedFunctor, op.functor
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsLocalizedFullyFaithful] : Φ.op.IsLocalizedFullyFaithful := by
   let G := Φ.localizedFunctor W₁.Q W₂.Q
@@ -964,50 +775,56 @@ instance [Φ.IsLocalizedFullyFaithful] : Φ.op.IsLocalizedFullyFaithful := by
   exact IsLocalizedFullyFaithful.mk' Φ.op W₁.Q.op W₂.Q.op G.op
     (Φ.fullyFaithful W₁.Q W₂.Q G).op
 
-/--
-lemma `isLocalization_of_isLocalizedFullyFaithful` / 引理 `isLocalization_of_isLocalizedFullyFaithful`
+/-- Assume that a localizer morphism `Φ : LocalizerMorphism W₁ W₂` induces
+a fully faithful functor on the localized categories.
+If `L₂ : C₂ ⥤ D₂` is a localization functor for `W₂` and we have a
+factorization `iso : Φ.functor ⋙ L₂ ≅ L₁ ⋙ F` as an essentially surjective
+functor `L₁ : C₁ ⥤ D₁` followed by a fully faithful functor `F : D₁ ⥤ D₂`,
+then `L₁` is a localization functor for `W₁`. -/
+/-
+**CategoryTheory.LocalizerMorphism.isLocalization_of_isLocalizedFullyFaithful** 
+是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：isLocalization_of_isLocalizedFullyFaithful [Φ.IsLocalizedFullyFaithful] {L
+₂ : C₂ ⥤ D₂} [L₂.IsLocalization W₂] {L₁ : C₁ ⥤ D₁} {F : D₁ ⥤ D₂} (iso : Φ.functo
+r ⋙ L₂ ≅ L₁ ⋙ F) [F.Full] [F.Faithful] [L₁.EssSurj] : L₁.IsLocalization W₁
+参数：iso : Φ.functor ⋙ L₂ ≅ L₁ ⋙ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
+· 使用定理 `CategoryTheory.reflectsIsomorphisms_of_full_and_faithful`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.isomorphisms`：∀ (C : Type u)
+ [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.MorphismProperty.iso
+morphisms C).RespectsIso
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `CategoryTheory.LocalizerMorphism.map`：∀ {C₁ : Type u₁} {C₂ : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{
+v₂, u₂} C₂] {W₁ : Category…
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
+· 使用定理 `CategoryTheory.Functor.IsLocalization.of_equivalence_target`：of_equivale
+nce_target {E : Type*} [Category* E] (L' : C ⥤ E) (eq : D ≌ E) [L.IsLocalization
+ W] (e : L ⋙ eq.functor ≅ L') : L'.IsLocalization…
 
-English:
-lemma isLocalization_of_isLocalizedFullyFaithful
-  proof: by
-  have h : W₁.IsInvertedBy L₁ := fun _ _ f hf => by
-    rw [← isIso_iff_of_reflects_iso _ F]
-    exact ((MorphismProperty.isomorphisms _).arrow_mk_iso_iff
-      (Arrow.isoOfNatIso iso f)).1 (Localization.inverts L₂ W₂ _ (Φ.map _ hf))
-  let G := Localization.lift L₁ h W₁.Q
-  let e : W₁.Q ⋙ G ≅ L₁ := Localization.fac L₁ h W₁.Q
-  let : CatCommSq Φ.functor W₁.Q L₂ (G ⋙ F) :=
-    ⟨iso ≪≫ isoWhiskerRight e.symm _ ≪≫ associator _ _ _⟩
-  have hG : G.FullyFaithful := Functor.FullyFaithful.ofCompFaithful
-    (Φ.fullyFaithful W₁.Q L₂ (G ⋙ F))
-  have := hG.full
-  have := hG.faithful
-  have : G.EssSurj :=
-    ⟨fun X => ⟨W₁.Q.obj (L₁.objPreimage X), ⟨e.app _ ≪≫ L₁.objObjPreimageIso X⟩⟩⟩
-  have : G.IsEquivalence := { }
-  exact IsLocalization.of_equivalence_target W₁.Q W₁ L₁ G.asEquivalence e
-
-中文:
-引理 isLocalization_of_isLocalizedFullyFaithful
-  证明: by
-  have h : W₁.IsInvertedBy L₁ := fun _ _ f hf => by
-    rw [← isIso_iff_of_reflects_iso _ F]
-    exact ((MorphismProperty.isomorphisms _).arrow_mk_iso_iff
-      (Arrow.isoOfNatIso iso f)).1 (Localization.inverts L₂ W₂ _ (Φ.map _ hf))
-  let G := Localization.lift L₁ h W₁.Q
-  let e : W₁.Q ⋙ G ≅ L₁ := Localization.fac L₁ h W₁.Q
-  let : CatCommSq Φ.functor W₁.Q L₂ (G ⋙ F) :=
-    ⟨iso ≪≫ isoWhiskerRight e.symm _ ≪≫ associator _ _ _⟩
-  have hG : G.FullyFaithful := Functor.FullyFaithful.ofCompFaithful
-    (Φ.fullyFaithful W₁.Q L₂ (G ⋙ F))
-  have := hG.full
-  have := hG.faithful
-  have : G.EssSurj :=
-    ⟨fun X => ⟨W₁.Q.obj (L₁.objPreimage X), ⟨e.app _ ≪≫ L₁.objObjPreimageIso X⟩⟩⟩
-  have : G.IsEquivalence := { }
-  exact IsLocalization.of_equivalence_target W₁.Q W₁ L₁ G.asEquivalence e
-
-Depends on / 依赖: Arrow.isoOfNatIso, CatCommSq, FullyFaithful, Functor, Functor.FullyFaithful.ofCompFaithful, Functor.map_comp_assoc, G.FullyFaithful, IsInvertedBy, Localization, Localization.fac, Localization.inverts, Localization.lift, MorphismProperty, MorphismProperty.isomorphisms, _add_zero_hom_app, _add_zero_inv_app, arrow_mk_iso_iff, associator, e.symm, fullyFaithful
+--- 原说明 ---
+Assume that a localizer morphism `Φ : LocalizerMorphism W₁ W₂` induces
+a fully faithful functor on the localized categories.
+If `L₂ : C₂ ⥤ D₂` is a localization functor for `W₂` and we have a
+factorization `iso : Φ.functor ⋙ L₂ ≅ L₁ ⋙ F` as an essentially surjective
+functor `L₁ : C₁ ⥤ D₁` followed by a fully faithful functor `F : D₁ ⥤ D₂`,
+then `L₁` is a localization functor for `W₁`.
 -/
 lemma isLocalization_of_isLocalizedFullyFaithful
     [Φ.IsLocalizedFullyFaithful] {L₂ : C₂ ⥤ D₂} [L₂.IsLocalization W₂]
@@ -1015,8 +832,8 @@ lemma isLocalization_of_isLocalizedFullyFaithful
     (iso : Φ.functor ⋙ L₂ ≅ L₁ ⋙ F)
     [F.Full] [F.Faithful] [L₁.EssSurj] :
     L₁.IsLocalization W₁ := by
-  have h : W₁.IsInvertedBy L₁ := fun _ _ f hf => by
-    rw [← isIso_iff_of_reflects_iso _ F]
+  have h : W₁.IsInvertedBy L₁ := fun _ _ f hf ↦ by
+    rw [← isIso_iff_of_reflects_iso  _ F]
     exact ((MorphismProperty.isomorphisms _).arrow_mk_iso_iff
       (Arrow.isoOfNatIso iso f)).1 (Localization.inverts L₂ W₂ _ (Φ.map _ hf))
   let G := Localization.lift L₁ h W₁.Q
@@ -1028,32 +845,25 @@ lemma isLocalization_of_isLocalizedFullyFaithful
   have := hG.full
   have := hG.faithful
   have : G.EssSurj :=
-    ⟨fun X => ⟨W₁.Q.obj (L₁.objPreimage X), ⟨e.app _ ≪≫ L₁.objObjPreimageIso X⟩⟩⟩
+    ⟨fun X ↦ ⟨W₁.Q.obj (L₁.objPreimage X), ⟨e.app _ ≪≫ L₁.objObjPreimageIso X⟩⟩⟩
   have : G.IsEquivalence := { }
   exact IsLocalization.of_equivalence_target W₁.Q W₁ L₁ G.asEquivalence e
-
-/--
-Instance `IsLocalizedFullyFaithful.comp` / 实例 `IsLocalizedFullyFaithful.comp`
-
-English:
-instance IsLocalizedFullyFaithful.comp
-  body: letI : CatCommSq (Φ.comp Ψ).functor W₁.Q W₃.Q
-      (Φ.localizedFunctor W₁.Q W₂.Q ⋙ Ψ.localizedFunctor W₂.Q W₃.Q) :=
-    CatCommSq.hComp _ _ _ W₂.Q _ _ _
-  IsLocalizedFullyFaithful.mk' _ W₁.Q W₃.Q _
-    ((Φ.fullyFaithfulLocalizedFunctor W₁.Q W₂.Q).comp
-      (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.Q))
-
-中文:
-实例 是LocalizedFullyFaithful.comp
-  定义体: letI : CatCommSq (Φ.comp Ψ).functor W₁.Q W₃.Q
-      (Φ.localizedFunctor W₁.Q W₂.Q ⋙ Ψ.localizedFunctor W₂.Q W₃.Q) :=
-    CatCommSq.hComp _ _ _ W₂.Q _ _ _
-  IsLocalizedFullyFaithful.mk' _ W₁.Q W₃.Q _
-    ((Φ.fullyFaithfulLocalizedFunctor W₁.Q W₂.Q).comp
-      (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.Q))
-
-Depends on / 依赖: CatCommSq, CatCommSq.hComp, IsLocalizedFullyFaithful, IsLocalizedFullyFaithful.mk, fullyFaithfulLocalizedFunctor, functor, localizedFunctor
+/-
+**CategoryTheory.LocalizerMorphism.IsLocalizedFullyFaithful.comp** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.LocalizerMorphism.IsLocalizedFullyFaithful`。
+形式化陈述：∀ {C₁ : Type u₁} {C₂ : Type u₂} {C₃ : Type u₃} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] [inst_2 : Cat
+egoryTheory.Category.{v₃, u₃} C₃]   {W₁ : CategoryTheory.MorphismProperty C₁} {W
+₂ : CategoryTheory.MorphismProperty C₂}   {W₃ : CategoryTheory.MorphismProperty 
+C₃} (Φ : CategoryTheory.LocalizerMorphism W₁ W₂)   (Ψ : CategoryTheory.Localizer
+Morphism W₂ W₃) [Φ.IsLocalizedFullyFaithful] [Ψ.IsLocalizedFullyFaithful],   (Φ.
+comp Ψ).IsLocalizedFullyFaithful
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；Ψ : CategoryTheory.LocalizerMorphi
+sm W₂ W₃；Φ.comp Ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedFullyFaithful.mk'`：∀ {C₁ : T
+ype u₁} {C₂ : Type u₂} {D₁ : Type u₄} {D₂ : Type u₅} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C₁]   [inst_1 : CategoryTheory.Catego…
 -/
 instance IsLocalizedFullyFaithful.comp
     (Ψ : LocalizerMorphism W₂ W₃)
@@ -1066,107 +876,70 @@ instance IsLocalizedFullyFaithful.comp
     ((Φ.fullyFaithfulLocalizedFunctor W₁.Q W₂.Q).comp
       (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.Q))
 
-/--
-Definition of `arrow` / `arrow` 的定义
+/-- The localizer morphism from `W₁.arrow` to `W₂.arrow` that is induced by
+`Φ : LocalizerMorphism W₁ W₂`. -/
+/-
+**CategoryTheory.LocalizerMorphism.arrow** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory.LocalizerMorphism`。
+形式化陈述：arrow : LocalizerMorphism W₁.arrow W₂.arrow where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation arrow
-  signature: : LocalizerMorphism W₁.arrow W₂.arrow where
-  body: Φ.functor.mapArrow
-  map _ _ _ hf := ⟨Φ.map _ hf.1, Φ.map _ hf.2⟩
-
-中文:
-缩写 arrow
-  签名: : Localizer态射 W₁.arrow W₂.arrow where
-  定义体: Φ.functor.mapArrow
-  map _ _ _ hf := ⟨Φ.map _ hf.1, Φ.map _ hf.2⟩
-
-Depends on / 依赖: Category, Category.assoc, F.map_comp_assoc, Functor, Functor.map_comp_assoc, NatTrans, NatTrans.naturality_2, NatTrans.naturality_assoc, _assoc_hom_app, _assoc_inv_app, _hom_app, ec.hom, functor, functor.mapArrow, isoAdd, mapArrow, map_comp_assoc, naturality_2, naturality_assoc, shiftFunctorAdd
+--- 原说明 ---
+The localizer morphism from `W₁.arrow` to `W₂.arrow` that is induced by
+`Φ : LocalizerMorphism W₁ W₂`.
 -/
 abbrev arrow : LocalizerMorphism W₁.arrow W₂.arrow where
   functor := Φ.functor.mapArrow
   map _ _ _ hf := ⟨Φ.map _ hf.1, Φ.map _ hf.2⟩
 
-/--
-Definition of `IsInduced` / `IsInduced` 的定义
+/-- If `Φ : LocalizerMorphism W₁ W₂`, the typeclass `Φ.IsInduced`
+says that `W₂.inverseImage Φ.functor = W₁`. -/
+/-
+**CategoryTheory.LocalizerMorphism.IsInduced** 是 Mathlib 中的一个归纳类型，位于命名空间 `Catego
+ryTheory.LocalizerMorphism`。
+形式化陈述：{C₁ : Type u₁} →   {C₂ : Type u₂} →     [inst : CategoryTheory.Category.{v
+₁, u₁} C₁] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] →         {W₁ 
+: CategoryTheory.MorphismProperty C₁} →           {W₂ : CategoryTheory.MorphismP
+roperty C₂} → CategoryTheory.LocalizerMorphism W₁ W₂ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsInduced
-  parameters: (Φ : LocalizerMorphism W₁ W₂)
-  axioms and operations (1):
-    - inverseImage_eq((Φ)) : W₂.inverseImage Φ.functor = W₁
-
-中文:
-类 是Induced
-  参数: (Φ : Localizer态射 W₁ W₂)
-  公理与运算 (1 个):
-    - inverseImage_eq((Φ)) : W₂.inverseImage Φ.functor = W₁
+--- 原说明 ---
+If `Φ : LocalizerMorphism W₁ W₂`, the typeclass `Φ.IsInduced`
+says that `W₂.inverseImage Φ.functor = W₁`.
 -/
 class IsInduced (Φ : LocalizerMorphism W₁ W₂) : Prop where
   inverseImage_eq (Φ) : W₂.inverseImage Φ.functor = W₁
 
 export IsInduced (inverseImage_eq)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsInduced]
-  signature: : Φ.op.IsInduced where
-  body: by
-    simp [← Φ.inverseImage_eq]
-
-中文:
-实例 [Φ.是Induced]
-  签名: : Φ.op.是Induced where
-  定义体: by
-    simp [← Φ.inverseImage_eq]
-
-Depends on / 依赖: inverseImage_eq
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsInduced] : Φ.op.IsInduced where
   inverseImage_eq := by
     simp [← Φ.inverseImage_eq]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (id W₁).IsInduced
-  body: rfl
-
-中文:
-实例 :
-  签名: (id W₁).是Induced
-  定义体: rfl
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (id W₁).IsInduced where
   inverseImage_eq := rfl
-
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (Ψ : LocalizerMorphism W₂ W₃) [Φ.IsInduced] [Ψ.IsInduced] :
     (Φ.comp Ψ).IsInduced where
   inverseImage_eq := by
     simp [← Φ.inverseImage_eq, ← Ψ.inverseImage_eq]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Φ.IsInduced]
-  signature: : Φ.arrow.IsInduced where
-  body: by
-    simp only [← Φ.inverseImage_eq]
-    rfl
-
-中文:
-实例 [Φ.是Induced]
-  签名: : Φ.arrow.是Induced where
-  定义体: by
-    simp only [← Φ.inverseImage_eq]
-    rfl
-
-Depends on / 依赖: inverseImage_eq
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Φ.IsInduced] : Φ.arrow.IsInduced where
   inverseImage_eq := by
@@ -1185,32 +958,17 @@ attribute [local simp] Functor.asEquivalence_counitIso_hom_app
 when `Φ.functor` is an equivalence, `W₁` is induced by `W₂`
 and `W₂` respects isomorphisms. -/
 @[simps]
-/--
-Definition of `inv` / `inv` 的定义
+/-
+**CategoryTheory.LocalizerMorphism.inv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.LocalizerMorphism`。
+形式化陈述：inv : LocalizerMorphism W₂ W₁ where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv
-  signature: : LocalizerMorphism W₂ W₁ where
-  body: Φ.functor.inv
-  map := by
-    simp only [← Φ.inverseImage_eq]
-    intro X Y f hf
-    exact (W₂.arrow_mk_iso_iff
-      (Arrow.isoMk (Φ.functor.asEquivalence.counitIso.app _)
-        (Φ.functor.asEquivalence.counitIso.app _))).2 hf
-
-中文:
-定义 inv
-  签名: : Localizer态射 W₂ W₁ where
-  定义体: Φ.functor.inv
-  map := by
-    simp only [← Φ.inverseImage_eq]
-    intro X Y f hf
-    exact (W₂.arrow_mk_iso_iff
-      (Arrow.isoMk (Φ.functor.asEquivalence.counitIso.app _)
-        (Φ.functor.asEquivalence.counitIso.app _))).2 hf
-
-Depends on / 依赖: functor, functor.inv
+--- 原说明 ---
+The inverse of a localizer morphism `Φ : LocalizerMorphism W₁ W₂`,
+when `Φ.functor` is an equivalence, `W₁` is induced by `W₂`
+and `W₂` respects isomorphisms.
 -/
 noncomputable def inv : LocalizerMorphism W₂ W₁ where
   functor := Φ.functor.inv
@@ -1222,24 +980,10 @@ noncomputable def inv : LocalizerMorphism W₂ W₁ where
         (Φ.functor.asEquivalence.counitIso.app _))).2 hf
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Φ.inv.functor.IsEquivalence
-  body: by
-  dsimp
-  infer_instance
-
-中文:
-实例 :
-  签名: Φ.inv.functor.是等价
-  定义体: by
-  dsimp
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Φ.inv.functor.IsEquivalence := by
   dsimp
@@ -1249,30 +993,10 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 attribute [local simp] Functor.asEquivalence_inverse
   Functor.asEquivalence_counitIso_hom_app Functor.asEquivalence_counitIso_inv_app in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Φ.inv.IsInduced
-  body: by
-    ext X Y f
-    simp only [← Φ.inverseImage_eq]
-    exact W₂.arrow_mk_iso_iff
-      (Arrow.isoMk (Φ.functor.asEquivalence.counitIso.app _)
-        (Φ.functor.asEquivalence.counitIso.app _))
-
-中文:
-实例 :
-  签名: Φ.inv.是Induced
-  定义体: by
-    ext X Y f
-    simp only [← Φ.inverseImage_eq]
-    exact W₂.arrow_mk_iso_iff
-      (Arrow.isoMk (Φ.functor.asEquivalence.counitIso.app _)
-        (Φ.functor.asEquivalence.counitIso.app _))
-
-Depends on / 依赖: Arrow.isoMk, arrow_mk_iso_iff, asEquivalence, counitIso, functor, functor.asEquivalence.counitIso.app, inverseImage_eq
+/-
+**CategoryTheory.LocalizerMorphism.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lo
+calizerMorphism`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Φ.inv.IsInduced where
   inverseImage_eq := by
@@ -1283,38 +1007,53 @@ instance : Φ.inv.IsInduced where
         (Φ.functor.asEquivalence.counitIso.app _))
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isLocalizedEquivalence_of_isInduced` / 引理 `isLocalizedEquivalence_of_isInduced`
-
-English:
-lemma isLocalizedEquivalence_of_isInduced
-  proof: by
-  refine IsLocalizedEquivalence.of_equivalence _ (fun X Y f hf => ?_)
-  let e :
-      Arrow.mk (Φ.functor.map (Φ.functor.preimage
-        ((Φ.functor.objObjPreimageIso X).hom ≫ f ≫ (Φ.functor.objObjPreimageIso Y).inv))) ≅
-      Arrow.mk f :=
-    Arrow.isoMk (Φ.functor.objObjPreimageIso X) (Φ.functor.objObjPreimageIso Y)
-  simp only [← Φ.inverseImage_eq]
-  exact ⟨_, _, _, (W₂.arrow_mk_iso_iff e).2 hf, ⟨e⟩⟩
-
-中文:
-引理 isLocalizedEquivalence_of_isInduced
-  证明: by
-  refine IsLocalizedEquivalence.of_equivalence _ (fun X Y f hf => ?_)
-  let e :
-      Arrow.mk (Φ.functor.map (Φ.functor.preimage
-        ((Φ.functor.objObjPreimageIso X).hom ≫ f ≫ (Φ.functor.objObjPreimageIso Y).inv))) ≅
-      Arrow.mk f :=
-    Arrow.isoMk (Φ.functor.objObjPreimageIso X) (Φ.functor.objObjPreimageIso Y)
-  simp only [← Φ.inverseImage_eq]
-  exact ⟨_, _, _, (W₂.arrow_mk_iso_iff e).2 hf, ⟨e⟩⟩
-
-Depends on / 依赖: Arrow.isoMk, Arrow.mk, IsLocalizedEquivalence, IsLocalizedEquivalence.of_equivalence, arrow_mk_iso_iff, functor, functor.map, functor.objObjPreimageIso, functor.preimage, inverseImage_eq, objObjPreimageIso, of_equivalence, preimage
+/-
+**CategoryTheory.LocalizerMorphism.isLocalizedEquivalence_of_isInduced** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：isLocalizedEquivalence_of_isInduced : Φ.IsLocalizedEquivalence
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsLocalizedEquivalence.of_equivalence`：
+∀ {C₁ : Type u₁} {C₂ : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [
+inst_1 : CategoryTheory.Category.{v₂, u₂} C₂] {W₁ : Category…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.LocalizerMorphism.IsInduced.inverseImage_eq`：∀ {C₁ : Type
+ u₁} {C₂ : Type u₂} {inst : CategoryTheory.Category.{v₁, u₁} C₁}   {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} C₂} {W₁ : Category…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
 -/
 lemma isLocalizedEquivalence_of_isInduced :
     Φ.IsLocalizedEquivalence := by
-  refine IsLocalizedEquivalence.of_equivalence _ (fun X Y f hf => ?_)
+  refine IsLocalizedEquivalence.of_equivalence _ (fun X Y f hf ↦ ?_)
   let e :
       Arrow.mk (Φ.functor.map (Φ.functor.preimage
         ((Φ.functor.objObjPreimageIso X).hom ≫ f ≫ (Φ.functor.objObjPreimageIso Y).inv))) ≅
@@ -1328,3 +1067,4 @@ end
 end LocalizerMorphism
 
 end CategoryTheory
+

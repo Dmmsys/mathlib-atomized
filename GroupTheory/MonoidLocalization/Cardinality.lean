@@ -27,22 +27,16 @@ namespace Localization
 variable {M : Type u} [CommMonoid M] (S : Submonoid M)
 
 @[to_additive]
-/--
-theorem `cardinalMk_le` / 定理 `cardinalMk_le`
-
-English:
-theorem cardinalMk_le
-  statement: #(Localization S) <= #M
-  proof: OreLocalization.cardinalMk_le S
-
-中文:
-定理 cardinalMk_le
-  结论: #(Localization S) <= #M
-  证明: OreLocalization.cardinalMk_le S
-
-Depends on / 依赖: OreLocalization, OreLocalization.cardinalMk_le, cardinalMk_le
+/-
+**Localization.cardinalMk_le** 是 Mathlib 中的一个定理，位于命名空间 `Localization`。
+形式化陈述：cardinalMk_le : #(Localization S) <= #M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OreLocalization.cardinalMk_le`：cardinalMk_le : #(OreLocalization S R) <=
+ #R
 -/
-theorem cardinalMk_le : #(Localization S) <= #M :=
+theorem cardinalMk_le : #(Localization S) ≤ #M :=
   OreLocalization.cardinalMk_le S
 
 end Localization
+

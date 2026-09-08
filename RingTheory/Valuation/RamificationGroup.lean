@@ -25,93 +25,80 @@ open scoped Pointwise
 
 variable (K : Type*) {L : Type*} [Field K] [Field L] [Algebra K L]
 
-/--
-Definition of `decompositionSubgroup` / `decompositionSubgroup` 的定义
+/-- The decomposition subgroup defined as the stabilizer of the action
+on the type of all valuation subrings of the field. -/
+/-
+**ValuationSubring.decompositionSubgroup** 是 Mathlib 中的一个缩写定义，位于命名空间 `ValuationS
+ubring`。
+形式化陈述：decompositionSubgroup (A : ValuationSubring L) : Subgroup (L ≃ₐ[K] L)
+参数：A : ValuationSubring L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation decompositionSubgroup
-  signature: (A : ValuationSubring L)
-  body: MulAction.stabilizer (L ≃ₐ[K] L) A
-
-中文:
-缩写 decompositionSubgroup
-  签名: (A : 赋值子环 L)
-  定义体: MulAction.stabilizer (L ≃ₐ[K] L) A
-
-Depends on / 依赖: MulAction, MulAction.stabilizer, stabilizer
+--- 原说明 ---
+The decomposition subgroup defined as the stabilizer of the action
+on the type of all valuation subrings of the field.
 -/
 abbrev decompositionSubgroup (A : ValuationSubring L) : Subgroup (L ≃ₐ[K] L) :=
   MulAction.stabilizer (L ≃ₐ[K] L) A
 
-/--
-Definition of `subMulAction` / `subMulAction` 的定义
+/-- The valuation subring `A` (considered as a subset of `L`)
+is stable under the action of the decomposition group. -/
+/-
+**ValuationSubring.subMulAction** 是 Mathlib 中的一个定义，位于命名空间 `ValuationSubring`。
+形式化陈述：subMulAction (A : ValuationSubring L) : SubMulAction (A.decompositionSubgr
+oup K) L where carrier
+参数：A : ValuationSubring L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subMulAction
-  signature: (A : ValuationSubring L)
-  body: A
-  smul_mem' g _ h := Set.mem_of_mem_of_subset (Set.smul_mem_smul_set h) g.prop.le
-
-中文:
-定义 subMulAction
-  签名: (A : 赋值子环 L)
-  定义体: A
-  smul_mem' g _ h := Set.mem_of_mem_of_subset (Set.smul_mem_smul_set h) g.prop.le
+--- 原说明 ---
+The valuation subring `A` (considered as a subset of `L`)
+is stable under the action of the decomposition group.
 -/
 def subMulAction (A : ValuationSubring L) : SubMulAction (A.decompositionSubgroup K) L where
   carrier := A
   smul_mem' g _ h := Set.mem_of_mem_of_subset (Set.smul_mem_smul_set h) g.prop.le
 
-/--
-Instance `decompositionSubgroupMulSemiringAction` / 实例 `decompositionSubgroupMulSemiringAction`
+/-- The multiplicative action of the decomposition subgroup on `A`. -/
+/-
+**ValuationSubring.decompositionSubgroupMulSemiringAction** 是 Mathlib 中的一个实例，位于命
+名空间 `ValuationSubring`。
+形式化陈述：decompositionSubgroupMulSemiringAction (A : ValuationSubring L) : MulSemir
+ingAction (A.decompositionSubgroup K) A
+参数：A : ValuationSubring L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance decompositionSubgroupMulSemiringAction
-  signature: (A : ValuationSubring L)
-  body: { SubMulAction.mulAction (A.subMulAction K) with
-smul_add := fun g k l => Subtype.ext smul_add (A := L) g k l
-smul_zero := fun g => Subtype.ext smul_zero g
-smul_one := fun g => Subtype.ext smul_one g
-smul_mul := fun g k l => Subtype.ext smul_mul' (N := L) g k l }
-
-中文:
-实例 decompositionSubgroupMulSemiringAction
-  签名: (A : 赋值子环 L)
-  定义体: { SubMulAction.mulAction (A.subMulAction K) with
-smul_add := fun g k l => Subtype.ext smul_add (A := L) g k l
-smul_zero := fun g => Subtype.ext smul_zero g
-smul_one := fun g => Subtype.ext smul_one g
-smul_mul := fun g k l => Subtype.ext smul_mul' (N := L) g k l }
-
-Depends on / 依赖: A.subMulAction, SubMulAction, SubMulAction.mulAction, Subtype, Subtype.ext, mulAction, smul_add, smul_mul, smul_one, smul_zero, subMulAction
+--- 原说明 ---
+The multiplicative action of the decomposition subgroup on `A`.
 -/
 instance decompositionSubgroupMulSemiringAction (A : ValuationSubring L) :
     MulSemiringAction (A.decompositionSubgroup K) A :=
   { SubMulAction.mulAction (A.subMulAction K) with
-smul_add := fun g k l => Subtype.ext smul_add (A := L) g k l
-smul_zero := fun g => Subtype.ext smul_zero g
-smul_one := fun g => Subtype.ext smul_one g
-smul_mul := fun g k l => Subtype.ext smul_mul' (N := L) g k l }
+    smul_add := fun g k l => Subtype.ext <| smul_add (A := L) g k l
+    smul_zero := fun g => Subtype.ext <| smul_zero g
+    smul_one := fun g => Subtype.ext <| smul_one g
+    smul_mul := fun g k l => Subtype.ext <| smul_mul' (N := L) g k l }
 
-/--
-Definition of `inertiaSubgroup` / `inertiaSubgroup` 的定义
+/-- The inertia subgroup defined as the kernel of the group homomorphism from
+the decomposition subgroup to the group of automorphisms of the residue field of `A`. -/
+/-
+**ValuationSubring.inertiaSubgroup** 是 Mathlib 中的一个定义，位于命名空间 `ValuationSubring`。
+形式化陈述：inertiaSubgroup (A : ValuationSubring L) : Subgroup (A.decompositionSubgro
+up K)
+参数：A : ValuationSubring L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inertiaSubgroup
-  signature: (A : ValuationSubring L)
-  body: MonoidHom.ker
-    MulSemiringAction.toRingAut (A.decompositionSubgroup K) (IsLocalRing.ResidueField A)
-
-中文:
-定义 inertiaSubgroup
-  签名: (A : 赋值子环 L)
-  定义体: MonoidHom.ker
-    MulSemiringAction.toRingAut (A.decompositionSubgroup K) (IsLocalRing.ResidueField A)
-
-Depends on / 依赖: A.decompositionSubgroup, EMetricSpace, IsLocalRing, IsLocalRing.ResidueField, MonoidHom, MonoidHom.ker, MulSemiringAction, MulSemiringAction.toRingAut, Nontrivial, NontrivialTopology, ResidueField, decompositionSubgroup, toRingAut
+--- 原说明 ---
+The inertia subgroup defined as the kernel of the group homomorphism from
+the decomposition subgroup to the group of automorphisms of the residue field of
+ `A`.
 -/
 noncomputable def inertiaSubgroup (A : ValuationSubring L) : Subgroup (A.decompositionSubgroup K) :=
-MonoidHom.ker
+  MonoidHom.ker <|
     MulSemiringAction.toRingAut (A.decompositionSubgroup K) (IsLocalRing.ResidueField A)
 
 end ValuationSubring
+

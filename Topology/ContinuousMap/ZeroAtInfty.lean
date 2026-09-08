@@ -34,22 +34,30 @@ open BoundedContinuousFunction Topology Bornology
 
 open Filter Metric
 
-/--
-Definition of `ZeroAtInftyContinuousMap` / `ZeroAtInftyContinuousMap` 的定义
+/-- `C₀(α, β)` is the type of continuous functions `α → β` which vanish at infinity from a
+topological space to a metric space with a zero element.
 
-English:
-structure ZeroAtInftyContinuousMap
-  parameters: (α : Type u) (β : Type v) [TopologicalSpace α] [Zero β]
-  extends: ContinuousMap α β
-  axioms and operations (1):
-    - zero_at_infty' : Tendsto toFun (cocompact α) (𝓝 0)
+When possible, instead of parametrizing results over `(f : C₀(α, β))`,
+you should parametrize over `(F : Type*) [ZeroAtInftyContinuousMapClass F α β] (f : F)`.
 
-中文:
-结构 ZeroAtInftyContinuous映射
-  参数: (α : 类型u) (β : 类型v) [拓扑空间 α] [零 β]
-  继承: 连续映射 α β
-  公理与运算 (1 个):
-    - zero_at_infty' : 收敛 toFun (cocompact α) (𝓝 0)
+When you extend this structure, make sure to extend `ZeroAtInftyContinuousMapClass`. -/
+/-
+**ZeroAtInftyContinuousMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u) → (β : Type v) → [TopologicalSpace α] → [Zero β] → [Topologic
+alSpace β] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`C₀(α, β)` is the type of continuous functions `α → β` which vanish at infinity 
+from a
+topological space to a metric space with a zero element.
+
+When possible, instead of parametrizing results over `(f : C₀(α, β))`,
+you should parametrize over `(F : Type*) [ZeroAtInftyContinuousMapClass F α β] (
+f : F)`.
+
+When you extend this structure, make sure to extend `ZeroAtInftyContinuousMapCla
+ss`.
 -/
 structure ZeroAtInftyContinuousMap (α : Type u) (β : Type v) [TopologicalSpace α] [Zero β]
     [TopologicalSpace β] : Type max u v extends ContinuousMap α β where
@@ -60,28 +68,31 @@ structure ZeroAtInftyContinuousMap (α : Type u) (β : Type v) [TopologicalSpace
 scoped[ZeroAtInfty] notation (priority := 2000) "C₀(" α ", " β ")" => ZeroAtInftyContinuousMap α β
 
 @[inherit_doc]
-scoped[ZeroAtInfty] notation α " ->C₀ " β => ZeroAtInftyContinuousMap α β
+scoped[ZeroAtInfty] notation α " →C₀ " β => ZeroAtInftyContinuousMap α β
 
 open ZeroAtInfty
 
 section
 
-/--
-Definition of `ZeroAtInftyContinuousMapClass` / `ZeroAtInftyContinuousMapClass` 的定义
+/-- `ZeroAtInftyContinuousMapClass F α β` states that `F` is a type of continuous maps which
+vanish at infinity.
 
-English:
-class ZeroAtInftyContinuousMapClass
-  parameters: (F : Type*) (α β : outParam Type*) [TopologicalSpace α]
-  extends: ContinuousMapClass F α β
-  axioms and operations (1):
-    - zero_at_infty((f : F)) : Tendsto f (cocompact α) (𝓝 0)
+You should also extend this typeclass when you extend `ZeroAtInftyContinuousMap`. -/
+/-
+**ZeroAtInftyContinuousMapClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_2) →   (α : outParam (Type u_3)) →     (β : outParam (Type u_4
+)) → [TopologicalSpace α] → [Zero β] → [TopologicalSpace β] → [FunLike F α β] → 
+Prop
+参数：Type u_3；Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 ZeroAtInftyContinuous映射类
-  参数: (F : 类型) (α β : outParam 类型) [拓扑空间 α]
-  继承: 连续映射类 F α β
-  公理与运算 (1 个):
-    - zero_at_infty((f : F)) : 收敛 f (cocompact α) (𝓝 0)
+--- 原说明 ---
+`ZeroAtInftyContinuousMapClass F α β` states that `F` is a type of continuous ma
+ps which
+vanish at infinity.
+
+You should also extend this typeclass when you extend `ZeroAtInftyContinuousMap`
+.
 -/
 class ZeroAtInftyContinuousMapClass (F : Type*) (α β : outParam Type*) [TopologicalSpace α]
     [Zero β] [TopologicalSpace β] [FunLike F α β] : Prop extends ContinuousMapClass F α β where
@@ -98,28 +109,12 @@ section Basics
 
 variable [TopologicalSpace β] [Zero β] [FunLike F α β] [ZeroAtInftyContinuousMapClass F α β]
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike C₀(α, β) α β where
-  body: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-中文:
-实例 instFunLike
-  签名: : 函数状 C₀(α, β) α β where
-  定义体: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-Depends on / 依赖: f.toFun
+/-
+**ZeroAtInftyContinuousMap.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyCon
+tinuousMap`。
+形式化陈述：instFunLike : FunLike C₀(α, β) α β where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike C₀(α, β) α β where
   coe f := f.toFun
@@ -127,52 +122,32 @@ instance instFunLike : FunLike C₀(α, β) α β where
     obtain ⟨⟨_, _⟩, _⟩ := f
     obtain ⟨⟨_, _⟩, _⟩ := g
     congr
-
-/--
-Instance `instZeroAtInftyContinuousMapClass` / 实例 `instZeroAtInftyContinuousMapClass`
-
-English:
-instance instZeroAtInftyContinuousMapClass
-  signature: : ZeroAtInftyContinuousMapClass C₀(α, β) α β where
-  body: f.continuous_toFun
-  zero_at_infty f := f.zero_at_infty'
-
-中文:
-实例 instZeroAtInftyContinuousMapClass
-  签名: : ZeroAtInftyContinuous映射类 C₀(α, β) α β where
-  定义体: f.continuous_toFun
-  zero_at_infty f := f.zero_at_infty'
-
-Depends on / 依赖: continuous_toFun, f.continuous_toFun
+/-
+**ZeroAtInftyContinuousMap.instZeroAtInftyContinuousMapClass** 是 Mathlib 中的一个实例，
+位于命名空间 `ZeroAtInftyContinuousMap`。
+形式化陈述：instZeroAtInftyContinuousMapClass : ZeroAtInftyContinuousMapClass C₀(α, β)
+ α β where map_continuous f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous_toFun`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+TopologicalSpace X] [inst_1 : TopologicalSpace Y] (self : C(X, Y)),   Continuous
+ self.toFun
+· 使用定理 `ZeroAtInftyContinuousMap.zero_at_infty'`：∀ {α : Type u} {β : Type v} [in
+st : TopologicalSpace α] [inst_1 : Zero β] [inst_2 : TopologicalSpace β]   (self
+ : ZeroAtInftyContinuousMap α…
 -/
 instance instZeroAtInftyContinuousMapClass : ZeroAtInftyContinuousMapClass C₀(α, β) α β where
   map_continuous f := f.continuous_toFun
   zero_at_infty f := f.zero_at_infty'
-
-/--
-Instance `instCoeTC` / 实例 `instCoeTC`
-
-English:
-instance instCoeTC
-  signature: : CoeTC F C₀(α, β)
-  body: ⟨fun f =>
-    { toFun := f
-      continuous_toFun := map_continuous f
-      zero_at_infty' := zero_at_infty f }⟩
-
-@[simp]
-
-中文:
-实例 instCoeTC
-  签名: : CoeTC F C₀(α, β)
-  定义体: ⟨fun f =>
-    { toFun := f
-      continuous_toFun := map_continuous f
-      zero_at_infty' := zero_at_infty f }⟩
-
-@[simp]
-
-Depends on / 依赖: continuous_toFun, map_continuous, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.instCoeTC** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyConti
+nuousMap`。
+形式化陈述：instCoeTC : CoeTC F C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroAtInftyContinuousMapClass.zero_at_infty`：∀ {F : Type u_2} {α : outPa
+ram (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α} {inst_1 : 
+Zero β}   {inst_2 : TopologicalSp…
 -/
 instance instCoeTC : CoeTC F C₀(α, β) :=
   ⟨fun f =>
@@ -181,103 +156,63 @@ instance instCoeTC : CoeTC F C₀(α, β) :=
       zero_at_infty' := zero_at_infty f }⟩
 
 @[simp]
-/--
-theorem `coe_toContinuousMap` / 定理 `coe_toContinuousMap`
-
-English:
-theorem coe_toContinuousMap
-  given: (f : C₀(α, β))
-  statement: (f.toContinuousMap : α -> β) = f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_toContinuousMap
-  条件: (f : C₀(α, β))
-  结论: (f.toContinuousMap : α -> β) = f
-  证明: rfl
-
-@[ext]
+/-
+**ZeroAtInftyContinuousMap.coe_toContinuousMap** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAt
+InftyContinuousMap`。
+形式化陈述：coe_toContinuousMap (f : C₀(α, β)) : (f.toContinuousMap : α -> β) = f
+参数：f : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toContinuousMap (f : C₀(α, β)) : (f.toContinuousMap : α -> β) = f :=
+theorem coe_toContinuousMap (f : C₀(α, β)) : (f.toContinuousMap : α → β) = f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : C₀(α, β)} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext _ _ h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {f g : C₀(α, β)} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext _ _ h
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ZeroAtInftyContinuousMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinuousM
+ap`。
+形式化陈述：ext {f g : C₀(α, β)} (h : forall x, f x = g x) : f = g
+参数：α, β；h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : C₀(α, β)} (h : forall x, f x = g x) : f = g :=
+theorem ext {f g : C₀(α, β)} (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext _ _ h
 
 @[simp]
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: {f : α -> β} (hf : Continuous f) (hf' : Tendsto f (cocompact α) (𝓝 0))
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: {f : α -> β} (hf : 连续 f) (hf' : 收敛 f (cocompact α) (𝓝 0))
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_mk** 是 Mathlib 中的一个引理，位于命名空间 `ZeroAtInftyContinuo
+usMap`。
+形式化陈述：coe_mk {f : α -> β} (hf : Continuous f) (hf' : Tendsto f (cocompact α) (𝓝 
+0)) : { toFun
+参数：hf : Continuous f；hf' : Tendsto f (cocompact α) (𝓝 0)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_mk {f : α -> β} (hf : Continuous f) (hf' : Tendsto f (cocompact α) (𝓝 0)) :
+lemma coe_mk {f : α → β} (hf : Continuous f) (hf' : Tendsto f (cocompact α) (𝓝 0)) :
     { toFun := f,
       continuous_toFun := hf,
       zero_at_infty' := hf' : ZeroAtInftyContinuousMap α β } = f :=
   rfl
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `ZeroAtInftyContinuousMap` with a new `toFun` equal to the old one. Useful
+to fix definitional equalities. -/
+/-
+**ZeroAtInftyContinuousMap.copy** 是 Mathlib 中的一个定义，位于命名空间 `ZeroAtInftyContinuous
+Map`。
+形式化陈述：{α : Type u} →   {β : Type v} →     [inst : TopologicalSpace α] →       [i
+nst_1 : TopologicalSpace β] →         [inst_2 : Zero β] → (f : ZeroAtInftyContin
+uousMap α β) → (f' : α → β) → f' = ⇑f → ZeroAtInftyContinuousMap α β
+参数：f : ZeroAtInftyContinuousMap α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : C₀(α, β)) (f' : α -> β) (h : f' = f)
-  body: f'
-  continuous_toFun := by
-    rw [h]
-    exact f.continuous_toFun
-  zero_at_infty' := by
-    simp_rw [h]
-    exact f.zero_at_infty'
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : C₀(α, β)) (f' : α -> β) (h : f' = f)
-  定义体: f'
-  continuous_toFun := by
-    rw [h]
-    exact f.continuous_toFun
-  zero_at_infty' := by
-    simp_rw [h]
-    exact f.zero_at_infty'
-
-@[simp]
+--- 原说明 ---
+Copy of a `ZeroAtInftyContinuousMap` with a new `toFun` equal to the old one. Us
+eful
+to fix definitional equalities.
 -/
-protected def copy (f : C₀(α, β)) (f' : α -> β) (h : f' = f) : C₀(α, β) where
+protected def copy (f : C₀(α, β)) (f' : α → β) (h : f' = f) : C₀(α, β) where
   toFun := f'
   continuous_toFun := by
     rw [h]
@@ -287,85 +222,57 @@ protected def copy (f : C₀(α, β)) (f' : α -> β) (h : f' = f) : C₀(α, β
     exact f.zero_at_infty'
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : C₀(α, β)) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : C₀(α, β)) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContin
+uousMap`。
+形式化陈述：coe_copy (f : C₀(α, β)) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f'
+参数：f : C₀(α, β)；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : C₀(α, β)) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : C₀(α, β)) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : C₀(α, β)) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : C₀(α, β)) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ZeroAtInftyContinuousMap.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：copy_eq (f : C₀(α, β)) (f' : α -> β) (h : f' = f) : f.copy f' h = f
+参数：f : C₀(α, β)；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : C₀(α, β)) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : C₀(α, β)) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
-
-/--
-theorem `eq_of_empty` / 定理 `eq_of_empty`
-
-English:
-theorem eq_of_empty
-  given: [IsEmpty α] (f g : C₀(α, β))
-  statement: f = g
-  proof: ext IsEmpty.elim ‹_›
-
-中文:
-定理 eq_of_empty
-  条件: [是空 α] (f g : C₀(α, β))
-  结论: f = g
-  证明: ext IsEmpty.elim ‹_›
-
-Depends on / 依赖: IsEmpty, IsEmpty.elim
+/-
+**ZeroAtInftyContinuousMap.eq_of_empty** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyCon
+tinuousMap`。
+形式化陈述：eq_of_empty [IsEmpty α] (f g : C₀(α, β)) : f = g
+参数：f g : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroAtInftyContinuousMap.ext`：ext {f g : C₀(α, β)} (h : forall x, f x = 
+g x) : f = g
 -/
 theorem eq_of_empty [IsEmpty α] (f g : C₀(α, β)) : f = g :=
-ext IsEmpty.elim ‹_›
+  ext <| IsEmpty.elim ‹_›
 
 /-- A continuous function on a compact space is automatically a continuous function vanishing at
 infinity. -/
 @[simps]
-/--
-Definition of `ContinuousMap.liftZeroAtInfty` / `ContinuousMap.liftZeroAtInfty` 的定义
+/-
+**ZeroAtInftyContinuousMap.ContinuousMap.liftZeroAtInfty** 是 Mathlib 中的一个定义，位于命名
+空间 `ZeroAtInftyContinuousMap.ContinuousMap`。
+形式化陈述：{α : Type u} →   {β : Type v} →     [inst : TopologicalSpace α] →       [i
+nst_1 : TopologicalSpace β] → [inst_2 : Zero β] → [CompactSpace α] → C(α, β) ≃ Z
+eroAtInftyContinuousMap α β
+参数：α, β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContinuousMap.liftZeroAtInfty
-  signature: [CompactSpace α]
-  body: { toFun := f
-      zero_at_infty' := by simp }
-  invFun f := f
-
-中文:
-定义 连续映射.liftZeroAtInfty
-  签名: [紧空间 α]
-  定义体: { toFun := f
-      zero_at_infty' := by simp }
-  invFun f := f
-
-Depends on / 依赖: invFun, zero_at_infty
+--- 原说明 ---
+A continuous function on a compact space is automatically a continuous function 
+vanishing at
+infinity.
 -/
 def ContinuousMap.liftZeroAtInfty [CompactSpace α] : C(α, β) ≃ C₀(α, β) where
   toFun f :=
@@ -373,22 +280,31 @@ def ContinuousMap.liftZeroAtInfty [CompactSpace α] : C(α, β) ≃ C₀(α, β)
       zero_at_infty' := by simp }
   invFun f := f
 
-/--
-lemma `zeroAtInftyContinuousMapClass.ofCompact` / 引理 `zeroAtInftyContinuousMapClass.ofCompact`
+/-- A continuous function on a compact space is automatically a continuous function vanishing at
+infinity. This is not an instance to avoid type class loops. -/
+/-
+**ZeroAtInftyContinuousMap.zeroAtInftyContinuousMapClass.ofCompact** 是 Mathlib 中
+的一个定理，位于命名空间 `ZeroAtInftyContinuousMap.zeroAtInftyContinuousMapClass`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] [inst_1 : Topologi
+calSpace β] [inst_2 : Zero β] {G : Type u_2}   [inst_3 : FunLike G α β] [Continu
+ousMapClass G α β] [CompactSpace α], ZeroAtInftyContinuousMapClass G α β
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.cocompact_eq_bot`：Filter.cocompact_eq_bot [CompactSpace X] : Filt
+er.cocompact X = ⊥
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-lemma zeroAtInftyContinuousMapClass.ofCompact
-  statement: {G : Type*} [FunLike G α β]
-  proof: map_continuous
-  zero_at_infty := by simp
-
-中文:
-引理 zeroAtInftyContinuousMapClass.ofCompact
-  结论: {G : 类型} [函数状 G α β]
-  证明: map_continuous
-  zero_at_infty := by simp
-
-Depends on / 依赖: map_continuous
+--- 原说明 ---
+A continuous function on a compact space is automatically a continuous function 
+vanishing at
+infinity. This is not an instance to avoid type class loops.
 -/
 lemma zeroAtInftyContinuousMapClass.ofCompact {G : Type*} [FunLike G α β]
     [ContinuousMapClass G α β] [CompactSpace α] : ZeroAtInftyContinuousMapClass G α β where
@@ -409,312 +325,175 @@ section AlgebraicStructure
 
 variable [TopologicalSpace β] (x : α)
 
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: [Zero β]
-  body: ⟨⟨0, tendsto_const_nhds⟩⟩
-
-中文:
-实例 instZero
-  签名: [零 β]
-  定义体: ⟨⟨0, tendsto_const_nhds⟩⟩
-
-Depends on / 依赖: tendsto_const_nhds
+/-
+**ZeroAtInftyContinuousMap.instZero** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContin
+uousMap`。
+形式化陈述：instZero [Zero β] : Zero C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero [Zero β] : Zero C₀(α, β) :=
   ⟨⟨0, tendsto_const_nhds⟩⟩
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: [Zero β]
-  body: ⟨0⟩
-
-@[simp]
-
-中文:
-实例 instInhabited
-  签名: [零 β]
-  定义体: ⟨0⟩
-
-@[simp]
+/-
+**ZeroAtInftyContinuousMap.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyC
+ontinuousMap`。
+形式化陈述：instInhabited [Zero β] : Inhabited C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited [Zero β] : Inhabited C₀(α, β) :=
   ⟨0⟩
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  given: [Zero β]
-  statement: ⇑(0 : C₀(α, β)) = 0
-  proof: rfl
-
-中文:
-定理 coe_zero
-  条件: [零 β]
-  结论: ⇑(0 : C₀(α, β)) = 0
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContin
+uousMap`。
+形式化陈述：coe_zero [Zero β] : ⇑(0 : C₀(α, β)) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero [Zero β] : ⇑(0 : C₀(α, β)) = 0 :=
   rfl
-
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: [Zero β]
-  statement: (0 : C₀(α, β)) x = 0
-  proof: rfl
-
-中文:
-定理 zero_apply
-  条件: [零 β]
-  结论: (0 : C₀(α, β)) x = 0
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyCont
+inuousMap`。
+形式化陈述：zero_apply [Zero β] : (0 : C₀(α, β)) x = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply [Zero β] : (0 : C₀(α, β)) x = 0 :=
   rfl
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: [MulZeroClass β] [ContinuousMul β]
-  body: ⟨fun f g =>
-    ⟨f * g, by simpa only [mul_zero] using! (zero_at_infty f).mul (zero_at_infty g)⟩⟩
-
-@[simp]
-
-中文:
-实例 instMul
-  签名: [乘零类 β] [连续乘法 β]
-  定义体: ⟨fun f g =>
-    ⟨f * g, by simpa only [mul_zero] using! (zero_at_infty f).mul (zero_at_infty g)⟩⟩
-
-@[simp]
-
-Depends on / 依赖: mul_zero, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.instMul** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：instMul [MulZeroClass β] [ContinuousMul β] : Mul C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMul [MulZeroClass β] [ContinuousMul β] : Mul C₀(α, β) :=
   ⟨fun f g =>
     ⟨f * g, by simpa only [mul_zero] using! (zero_at_infty f).mul (zero_at_infty g)⟩⟩
 
 @[simp]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β))
-  statement: ⇑(f * g) = f * g
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: [乘零类 β] [连续乘法 β] (f g : C₀(α, β))
-  结论: ⇑(f * g) = f * g
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：coe_mul [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β)) : ⇑(f * g) = f
+ * g
+参数：f g : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β)) : ⇑(f * g) = f * g :=
   rfl
-
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β))
-  statement: (f * g) x = f x * g x
-  proof: rfl
-
-中文:
-定理 mul_apply
-  条件: [乘零类 β] [连续乘法 β] (f g : C₀(α, β))
-  结论: (f * g) x = f x * g x
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyConti
+nuousMap`。
+形式化陈述：mul_apply [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β)) : (f * g) x 
+= f x * g x
+参数：f g : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_apply [MulZeroClass β] [ContinuousMul β] (f g : C₀(α, β)) : (f * g) x = f x * g x :=
   rfl
-
-/--
-Instance `instMulZeroClass` / 实例 `instMulZeroClass`
-
-English:
-instance instMulZeroClass
-  signature: [MulZeroClass β] [ContinuousMul β]
-  body: fast_instance% DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
-
-中文:
-实例 instMulZeroClass
-  签名: [乘零类 β] [连续乘法 β]
-  定义体: fast_instance% DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulZeroClass, coe_injective, coe_mul, coe_zero, fast_instance, mulZeroClass
+/-
+**ZeroAtInftyContinuousMap.instMulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInf
+tyContinuousMap`。
+形式化陈述：instMulZeroClass [MulZeroClass β] [ContinuousMul β] : MulZeroClass C₀(α, β
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulZeroClass [MulZeroClass β] [ContinuousMul β] : MulZeroClass C₀(α, β) :=
   fast_instance% DFunLike.coe_injective.mulZeroClass _ coe_zero coe_mul
-
-/--
-Instance `instSemigroupWithZero` / 实例 `instSemigroupWithZero`
-
-English:
-instance instSemigroupWithZero
-  signature: [SemigroupWithZero β] [ContinuousMul β]
-  body: fast_instance%
-  DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
-
-中文:
-实例 instSemigroupWithZero
-  签名: [带零半群 β] [连续乘法 β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instSemigroupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Zero
+AtInftyContinuousMap`。
+形式化陈述：instSemigroupWithZero [SemigroupWithZero β] [ContinuousMul β] : SemigroupW
+ithZero C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroupWithZero [SemigroupWithZero β] [ContinuousMul β] :
     SemigroupWithZero C₀(α, β) := fast_instance%
   DFunLike.coe_injective.semigroupWithZero _ coe_zero coe_mul
-
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: [AddZeroClass β] [ContinuousAdd β]
-  body: ⟨fun f g => ⟨f + g, by simpa only [add_zero] using! (zero_at_infty f).add (zero_at_infty g)⟩⟩
-
-@[simp]
-
-中文:
-实例 instAdd
-  签名: [加法零类 β] [连续加法 β]
-  定义体: ⟨fun f g => ⟨f + g, by simpa only [add_zero] using! (zero_at_infty f).add (zero_at_infty g)⟩⟩
-
-@[simp]
-
-Depends on / 依赖: add_zero, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：instAdd [AddZeroClass β] [ContinuousAdd β] : Add C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAdd [AddZeroClass β] [ContinuousAdd β] : Add C₀(α, β) :=
   ⟨fun f g => ⟨f + g, by simpa only [add_zero] using! (zero_at_infty f).add (zero_at_infty g)⟩⟩
 
 @[simp]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β))
-  statement: ⇑(f + g) = f + g
-  proof: rfl
-
-中文:
-定理 coe_add
-  条件: [加法零类 β] [连续加法 β] (f g : C₀(α, β))
-  结论: ⇑(f + g) = f + g
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：coe_add [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β)) : ⇑(f + g) = f
+ + g
+参数：f g : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_add [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β)) : ⇑(f + g) = f + g :=
   rfl
-
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  given: [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β))
-  statement: (f + g) x = f x + g x
-  proof: rfl
-
-中文:
-定理 add_apply
-  条件: [加法零类 β] [连续加法 β] (f g : C₀(α, β))
-  结论: (f + g) x = f x + g x
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyConti
+nuousMap`。
+形式化陈述：add_apply [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β)) : (f + g) x 
+= f x + g x
+参数：f g : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply [AddZeroClass β] [ContinuousAdd β] (f g : C₀(α, β)) : (f + g) x = f x + g x :=
   rfl
-
-/--
-Instance `instAddZeroClass` / 实例 `instAddZeroClass`
-
-English:
-instance instAddZeroClass
-  signature: [AddZeroClass β] [ContinuousAdd β]
-  body: fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-中文:
-实例 instAddZeroClass
-  签名: [加法零类 β] [连续加法 β]
-  定义体: fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addZeroClass, addZeroClass, coe_add, coe_injective, coe_zero, fast_instance
+/-
+**ZeroAtInftyContinuousMap.instAddZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInf
+tyContinuousMap`。
+形式化陈述：instAddZeroClass [AddZeroClass β] [ContinuousAdd β] : AddZeroClass C₀(α, β
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddZeroClass [AddZeroClass β] [ContinuousAdd β] : AddZeroClass C₀(α, β) :=
   fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
-
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β]
-  body: ⟨fun r f => ⟨r • f, by simpa [smul_zero] using! (zero_at_infty f).const_smul r⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instSMul
-  签名: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [连续常数标量乘法 R β]
-  定义体: ⟨fun r f => ⟨r • f, by simpa [smul_zero] using! (zero_at_infty f).const_smul r⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: const_smul, smul_zero, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContin
+uousMap`。
+形式化陈述：instSMul [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConst
+SMul R β] : SMul R C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β] :
     SMul R C₀(α, β) :=
   ⟨fun r f => ⟨r • f, by simpa [smul_zero] using! (zero_at_infty f).const_smul r⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  statement: [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β] (r : R)
-  proof: rfl
-
-中文:
-定理 coe_smul
-  结论: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [连续常数标量乘法 R β] (r : R)
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContin
+uousMap`。
+形式化陈述：coe_smul [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConst
+SMul R β] (r : R) (f : C₀(α, β)) : ⇑(r • f) = r • ⇑f
+参数：r : R；f : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smul [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β] (r : R)
     (f : C₀(α, β)) : ⇑(r • f) = r • ⇑f :=
   rfl
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  statement: [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β]
-  proof: rfl
-
-中文:
-定理 smul_apply
-  结论: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [连续常数标量乘法 R β]
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyCont
+inuousMap`。
+形式化陈述：smul_apply [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousCon
+stSMul R β] (r : R) (f : C₀(α, β)) (x : α) : (r • f) x = r • f x
+参数：r : R；f : C₀(α, β)；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [ContinuousConstSMul R β]
     (r : R) (f : C₀(α, β)) (x : α) : (r • f) x = r • f x :=
@@ -724,42 +503,25 @@ section AddMonoid
 
 variable [AddMonoid β] [ContinuousAdd β] (f g : C₀(α, β))
 
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: : AddMonoid C₀(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-中文:
-实例 instAddMonoid
-  签名: : 加法幺半群 C₀(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyC
+ontinuousMap`。
+形式化陈述：instAddMonoid : AddMonoid C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddMonoid : AddMonoid C₀(α, β) := fast_instance%
   DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
 
 end AddMonoid
 
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: [AddCommMonoid β] [ContinuousAdd β]
-  body: fast_instance% DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-中文:
-实例 instAddCommMonoid
-  签名: [加法交换幺半群 β] [连续加法 β]
-  定义体: fast_instance% DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommMonoid, addCommMonoid, coe_add, coe_injective, coe_zero, fast_instance
+/-
+**ZeroAtInftyContinuousMap.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtIn
+ftyContinuousMap`。
+形式化陈述：instAddCommMonoid [AddCommMonoid β] [ContinuousAdd β] : AddCommMonoid C₀(α
+, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommMonoid [AddCommMonoid β] [ContinuousAdd β] : AddCommMonoid C₀(α, β) :=
   fast_instance% DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
@@ -768,399 +530,237 @@ section AddGroup
 
 variable [AddGroup β] [IsTopologicalAddGroup β] (f g : C₀(α, β))
 
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: : Neg C₀(α, β)
-  body: ⟨fun f => ⟨-f, by simpa only [neg_zero] using! (zero_at_infty f).neg⟩⟩
-
-@[simp]
-
-中文:
-实例 instNeg
-  签名: : 取负 C₀(α, β)
-  定义体: ⟨fun f => ⟨-f, by simpa only [neg_zero] using! (zero_at_infty f).neg⟩⟩
-
-@[simp]
-
-Depends on / 依赖: neg_zero, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：instNeg : Neg C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousNeg`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousNeg 
+G
 -/
 instance instNeg : Neg C₀(α, β) :=
   ⟨fun f => ⟨-f, by simpa only [neg_zero] using! (zero_at_infty f).neg⟩⟩
 
 @[simp]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  statement: ⇑(-f) = -f
-  proof: rfl
-
-中文:
-定理 coe_neg
-  结论: ⇑(-f) = -f
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：coe_neg : ⇑(-f) = -f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg : ⇑(-f) = -f :=
   rfl
-
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  statement: (-f) x = -f x
-  proof: rfl
-
-中文:
-定理 neg_apply
-  结论: (-f) x = -f x
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyConti
+nuousMap`。
+形式化陈述：neg_apply : (-f) x = -f x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply : (-f) x = -f x :=
   rfl
-
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: : Sub C₀(α, β)
-  body: ⟨fun f g => ⟨f - g, by simpa only [sub_zero] using! (zero_at_infty f).sub (zero_at_infty g)⟩⟩
-
-@[simp]
-
-中文:
-实例 instSub
-  签名: : 减法 C₀(α, β)
-  定义体: ⟨fun f g => ⟨f - g, by simpa only [sub_zero] using! (zero_at_infty f).sub (zero_at_infty g)⟩⟩
-
-@[simp]
-
-Depends on / 依赖: sub_zero, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.instSub** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：instSub : Sub C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
 -/
 instance instSub : Sub C₀(α, β) :=
   ⟨fun f g => ⟨f - g, by simpa only [sub_zero] using! (zero_at_infty f).sub (zero_at_infty g)⟩⟩
 
 @[simp]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  statement: ⇑(f - g) = f - g
-  proof: rfl
-
-中文:
-定理 coe_sub
-  结论: ⇑(f - g) = f - g
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：coe_sub : ⇑(f - g) = f - g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sub : ⇑(f - g) = f - g :=
   rfl
-
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  statement: (f - g) x = f x - g x
-  proof: rfl
-
-中文:
-定理 sub_apply
-  结论: (f - g) x = f x - g x
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyConti
+nuousMap`。
+形式化陈述：sub_apply : (f - g) x = f x - g x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_apply : (f - g) x = f x - g x :=
   rfl
-
-/--
-Instance `instAddGroup` / 实例 `instAddGroup`
-
-English:
-instance instAddGroup
-  signature: : AddGroup C₀(α, β)
-  body: fast_instance%
-  DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddGroup
-  签名: : 加法群 C₀(α, β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyCo
+ntinuousMap`。
+形式化陈述：instAddGroup : AddGroup C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 instance instAddGroup : AddGroup C₀(α, β) := fast_instance%
   DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
 end AddGroup
 
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup β] [IsTopologicalAddGroup β]
-  body: fast_instance%
-  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
-    rfl
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 β] [是拓扑加群 β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
-    rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommGroup, addCommGroup, coe_add, coe_injective, coe_neg, coe_sub, coe_zero, fast_instance
+/-
+**ZeroAtInftyContinuousMap.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInf
+tyContinuousMap`。
+形式化陈述：instAddCommGroup [AddCommGroup β] [IsTopologicalAddGroup β] : AddCommGroup
+ C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup [AddCommGroup β] [IsTopologicalAddGroup β] : AddCommGroup C₀(α, β) :=
   fast_instance%
   DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ =>
     rfl
-
-/--
-Instance `instIsCentralScalar` / 实例 `instIsCentralScalar`
-
-English:
-instance instIsCentralScalar
-  signature: [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [SMulWithZero Rᵐᵒᵖ β]
-  body: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
-
-中文:
-实例 instIsCentralScalar
-  签名: [零 β] {R : 类型} [零 R] [带零标量乘法 R β] [带零标量乘法 Rᵐᵒᵖ β]
-  定义体: ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
-
-Depends on / 依赖: op_smul_eq_smul
+/-
+**ZeroAtInftyContinuousMap.instIsCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAt
+InftyContinuousMap`。
+形式化陈述：instIsCentralScalar [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [SMul
+WithZero Rᵐᵒᵖ β] [ContinuousConstSMul R β] [IsCentralScalar R β] : IsCentralScal
+ar R C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroAtInftyContinuousMap.ext`：ext {f g : C₀(α, β)} (h : forall x, f x = 
+g x) : f = g
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance instIsCentralScalar [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [SMulWithZero Rᵐᵒᵖ β]
     [ContinuousConstSMul R β] [IsCentralScalar R β] : IsCentralScalar R C₀(α, β) :=
   ⟨fun _ _ => ext fun _ => op_smul_eq_smul _ _⟩
-
-/--
-Instance `instSMulWithZero` / 实例 `instSMulWithZero`
-
-English:
-instance instSMulWithZero
-  signature: [Zero β] {R : Type*} [Zero R] [SMulWithZero R β]
-  body: fast_instance%
-  Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-中文:
-实例 instSMulWithZero
-  签名: [零 β] {R : 类型} [零 R] [带零标量乘法 R β]
-  定义体: fast_instance%
-  Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instSMulWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInf
+tyContinuousMap`。
+形式化陈述：instSMulWithZero [Zero β] {R : Type*} [Zero R] [SMulWithZero R β] [Continu
+ousConstSMul R β] : SMulWithZero R C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulWithZero [Zero β] {R : Type*} [Zero R] [SMulWithZero R β]
     [ContinuousConstSMul R β] : SMulWithZero R C₀(α, β) := fast_instance%
   Function.Injective.smulWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-/--
-Instance `instMulActionWithZero` / 实例 `instMulActionWithZero`
-
-English:
-instance instMulActionWithZero
-  signature: [Zero β] {R : Type*} [MonoidWithZero R] [MulActionWithZero R β]
-  body: fast_instance%
-  Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-中文:
-实例 instMulActionWithZero
-  签名: [零 β] {R : 类型} [带零幺半群 R] [带零乘法作用 R β]
-  定义体: fast_instance%
-  Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instMulActionWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Zero
+AtInftyContinuousMap`。
+形式化陈述：instMulActionWithZero [Zero β] {R : Type*} [MonoidWithZero R] [MulActionWi
+thZero R β] [ContinuousConstSMul R β] : MulActionWithZero R C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulActionWithZero [Zero β] {R : Type*} [MonoidWithZero R] [MulActionWithZero R β]
     [ContinuousConstSMul R β] : MulActionWithZero R C₀(α, β) := fast_instance%
   Function.Injective.mulActionWithZero ⟨_, coe_zero⟩ DFunLike.coe_injective coe_smul
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [AddCommMonoid β] [ContinuousAdd β] {R : Type*} [Semiring R] [Module R β]
-  body: fast_instance%
-  Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
-
-中文:
-实例 instModule
-  签名: [加法交换幺半群 β] [连续加法 β] {R : 类型} [半环 R] [模 R β]
-  定义体: fast_instance%
-  Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instModule** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyCont
+inuousMap`。
+形式化陈述：instModule [AddCommMonoid β] [ContinuousAdd β] {R : Type*} [Semiring R] [M
+odule R β] [ContinuousConstSMul R β] : Module R C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule [AddCommMonoid β] [ContinuousAdd β] {R : Type*} [Semiring R] [Module R β]
     [ContinuousConstSMul R β] : Module R C₀(α, β) := fast_instance%
   Function.Injective.module R ⟨⟨_, coe_zero⟩, coe_add⟩ DFunLike.coe_injective coe_smul
-
-/--
-Instance `instNonUnitalNonAssocSemiring` / 实例 `instNonUnitalNonAssocSemiring`
-
-English:
-instance instNonUnitalNonAssocSemiring
-  signature: [NonUnitalNonAssocSemiring β] [IsTopologicalSemiring β]
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-中文:
-实例 instNonUnitalNonAssocSemiring
-  签名: [非幺非结合半环 β] [是TopologicalSemiring β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名
+空间 `ZeroAtInftyContinuousMap`。
+形式化陈述：instNonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring β] [IsTopological
+Semiring β] : NonUnitalNonAssocSemiring C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
 -/
 instance instNonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring β] [IsTopologicalSemiring β] :
     NonUnitalNonAssocSemiring C₀(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-/--
-Instance `instNonUnitalSemiring` / 实例 `instNonUnitalSemiring`
-
-English:
-instance instNonUnitalSemiring
-  signature: [NonUnitalSemiring β] [IsTopologicalSemiring β]
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-中文:
-实例 instNonUnitalSemiring
-  签名: [非幺半环 β] [是TopologicalSemiring β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Zero
+AtInftyContinuousMap`。
+形式化陈述：instNonUnitalSemiring [NonUnitalSemiring β] [IsTopologicalSemiring β] : No
+nUnitalSemiring C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalSemiring [NonUnitalSemiring β] [IsTopologicalSemiring β] :
     NonUnitalSemiring C₀(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-/--
-Instance `instNonUnitalCommSemiring` / 实例 `instNonUnitalCommSemiring`
-
-English:
-instance instNonUnitalCommSemiring
-  signature: [NonUnitalCommSemiring β] [IsTopologicalSemiring β]
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-中文:
-实例 instNonUnitalCommSemiring
-  签名: [非幺交换半环 β] [是TopologicalSemiring β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `
+ZeroAtInftyContinuousMap`。
+形式化陈述：instNonUnitalCommSemiring [NonUnitalCommSemiring β] [IsTopologicalSemiring
+ β] : NonUnitalCommSemiring C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalCommSemiring [NonUnitalCommSemiring β] [IsTopologicalSemiring β] :
     NonUnitalCommSemiring C₀(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalCommSemiring _ coe_zero coe_add coe_mul fun _ _ => rfl
-
-/--
-Instance `instNonUnitalNonAssocRing` / 实例 `instNonUnitalNonAssocRing`
-
-English:
-instance instNonUnitalNonAssocRing
-  signature: [NonUnitalNonAssocRing β] [IsTopologicalRing β]
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instNonUnitalNonAssocRing
-  签名: [非幺非结合环 β] [是拓扑环 β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `
+ZeroAtInftyContinuousMap`。
+形式化陈述：instNonUnitalNonAssocRing [NonUnitalNonAssocRing β] [IsTopologicalRing β] 
+: NonUnitalNonAssocRing C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalNonAssocRing [NonUnitalNonAssocRing β] [IsTopologicalRing β] :
     NonUnitalNonAssocRing C₀(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalNonAssocRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instNonUnitalRing` / 实例 `instNonUnitalRing`
-
-English:
-instance instNonUnitalRing
-  signature: [NonUnitalRing β] [IsTopologicalRing β]
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
-    fun _ _ => rfl
-
-中文:
-实例 instNonUnitalRing
-  签名: [非幺环 β] [是拓扑环 β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
-    fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.nonUnitalRing, coe_add, coe_injective, coe_mul, coe_neg, coe_sub, coe_zero, fast_instance, nonUnitalRing
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalRing** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtIn
+ftyContinuousMap`。
+形式化陈述：instNonUnitalRing [NonUnitalRing β] [IsTopologicalRing β] : NonUnitalRing 
+C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalRing [NonUnitalRing β] [IsTopologicalRing β] : NonUnitalRing C₀(α, β) :=
   fast_instance%
   DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub (fun _ _ => rfl)
     fun _ _ => rfl
-
-/--
-Instance `instNonUnitalCommRing` / 实例 `instNonUnitalCommRing`
-
-English:
-instance instNonUnitalCommRing
-  signature: [NonUnitalCommRing β] [IsTopologicalRing β]
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instNonUnitalCommRing
-  签名: [非幺交换环 β] [是拓扑环 β]
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Zero
+AtInftyContinuousMap`。
+形式化陈述：instNonUnitalCommRing [NonUnitalCommRing β] [IsTopologicalRing β] : NonUni
+talCommRing C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalCommRing [NonUnitalCommRing β] [IsTopologicalRing β] :
     NonUnitalCommRing C₀(α, β) := fast_instance%
   DFunLike.coe_injective.nonUnitalCommRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β]
-  body: by
-    ext
-    simp only [smul_eq_mul, coe_mul, coe_smul, Pi.mul_apply, Pi.smul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_assoc]
-
-中文:
-实例 instIsScalarTower
-  签名: {R : 类型} [半环 R] [非幺非结合半环 β]
-  定义体: by
-    ext
-    simp only [smul_eq_mul, coe_mul, coe_smul, Pi.mul_apply, Pi.smul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_assoc]
-
-Depends on / 依赖: Pi.mul_apply, Pi.smul_apply, coe_mul, coe_smul, mul_apply, smul_apply, smul_assoc, smul_eq_mul
+/-
+**ZeroAtInftyContinuousMap.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtIn
+ftyContinuousMap`。
+形式化陈述：instIsScalarTower {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β] [
+IsTopologicalSemiring β] [Module R β] [ContinuousConstSMul R β] [IsScalarTower R
+ β β] : IsScalarTower R C₀(α, β) C₀(α, β) where smul_assoc r f g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `ZeroAtInftyContinuousMap.ext`：ext {f g : C₀(α, β)} (h : forall x, f x = 
+g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance instIsScalarTower {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β]
     [IsTopologicalSemiring β] [Module R β] [ContinuousConstSMul R β] [IsScalarTower R β β] :
@@ -1168,28 +768,27 @@ instance instIsScalarTower {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring �
   smul_assoc r f g := by
     ext
     simp only [smul_eq_mul, coe_mul, coe_smul, Pi.mul_apply, Pi.smul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_assoc]
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β]
-  body: by
-    ext
-    simp only [smul_eq_mul, coe_smul, coe_mul, Pi.smul_apply, Pi.mul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_comm]
-
-中文:
-实例 instSMulCommClass
-  签名: {R : 类型} [半环 R] [非幺非结合半环 β]
-  定义体: by
-    ext
-    simp only [smul_eq_mul, coe_smul, coe_mul, Pi.smul_apply, Pi.mul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_comm]
-
-Depends on / 依赖: Pi.mul_apply, Pi.smul_apply, coe_mul, coe_smul, mul_apply, smul_apply, smul_comm, smul_eq_mul
+    rw [← smul_eq_mul, ← smul_eq_mul, smul_assoc]
+/-
+**ZeroAtInftyContinuousMap.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtIn
+ftyContinuousMap`。
+形式化陈述：instSMulCommClass {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β] [
+IsTopologicalSemiring β] [Module R β] [ContinuousConstSMul R β] [SMulCommClass R
+ β β] : SMulCommClass R C₀(α, β) C₀(α, β) where smul_comm r f g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `ZeroAtInftyContinuousMap.ext`：ext {f g : C₀(α, β)} (h : forall x, f x = 
+g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance instSMulCommClass {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring β]
     [IsTopologicalSemiring β] [Module R β] [ContinuousConstSMul R β] [SMulCommClass R β β] :
@@ -1197,7 +796,7 @@ instance instSMulCommClass {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring �
   smul_comm r f g := by
     ext
     simp only [smul_eq_mul, coe_smul, coe_mul, Pi.smul_apply, Pi.mul_apply]
-    rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [smul_comm]
+    rw [← smul_eq_mul, ← smul_eq_mul, smul_comm]
 
 end AlgebraicStructure
 
@@ -1206,24 +805,27 @@ section Uniform
 variable [UniformSpace β] [UniformSpace γ] [Zero γ]
 variable [FunLike F β γ] [ZeroAtInftyContinuousMapClass F β γ]
 
-/--
-theorem `uniformContinuous` / 定理 `uniformContinuous`
-
-English:
-theorem uniformContinuous
-  given: (f : F)
-  statement: UniformContinuous (f : β -> γ)
-  proof: (map_continuous f).uniformContinuous_of_tendsto_cocompact (zero_at_infty f)
-
-中文:
-定理 uniformContinuous
-  条件: (f : F)
-  结论: 一致连续 (f : β -> γ)
-  证明: (map_continuous f).uniformContinuous_of_tendsto_cocompact (zero_at_infty f)
-
-Depends on / 依赖: map_continuous, uniformContinuous_of_tendsto_cocompact, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtIn
+ftyContinuousMap`。
+形式化陈述：uniformContinuous (f : F) : UniformContinuous (f : β -> γ)
+参数：f : F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.uniformContinuous_of_tendsto_cocompact`：Continuous.uniformCon
+tinuous_of_tendsto_cocompact {f : α -> β} {x : β} (h_cont : Continuous f) (hx : 
+Tendsto f (cocompact α) (𝓝 x)) : Unifor…
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `ZeroAtInftyContinuousMapClass.toContinuousMapClass`：∀ {F : Type u_2} {α 
+: outParam (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α} {in
+st_1 : Zero β}   {inst_2 : TopologicalSp…
+· 使用定理 `ZeroAtInftyContinuousMapClass.zero_at_infty`：∀ {F : Type u_2} {α : outPa
+ram (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α} {inst_1 : 
+Zero β}   {inst_2 : TopologicalSp…
 -/
-theorem uniformContinuous (f : F) : UniformContinuous (f : β -> γ) :=
+theorem uniformContinuous (f : F) : UniformContinuous (f : β → γ) :=
   (map_continuous f).uniformContinuous_of_tendsto_cocompact (zero_at_infty f)
 
 end Uniform
@@ -1243,144 +845,149 @@ open Metric Set
 
 variable [PseudoMetricSpace β] [Zero β] [FunLike F α β] [ZeroAtInftyContinuousMapClass F α β]
 
-/--
-theorem `bounded` / 定理 `bounded`
-
-English:
-theorem bounded
-  given: (f : F)
-  statement: exists C, forall x y : α, dist ((f : α -> β) x) (f y) <= C
-  proof: by
-  obtain ⟨K : Set α, hK₁, hK₂⟩ := mem_cocompact.mp
-    (tendsto_def.mp (zero_at_infty (f : F)) _ (closedBall_mem_nhds (0 : β) zero_lt_one))
-  obtain ⟨C, hC⟩ := (hK₁.image (map_continuous f)).isBounded.subset_closedBall (0 : β)
-  refine ⟨max C 1 + max C 1, fun x y => ?_⟩
-  have : forall x, f x in closedBall (0 : β) (max C 1) := by
-    intro x
-    by_cases hx : x in K
-    · exact (mem_closedBall.mp <| hC ⟨x, hx, rfl⟩).trans (le_max_left _ _)
-    · exact (mem_closedBall.mp <| mem_preimage.mp (hK₂ hx)).trans (le_max_right _ _)
-  exact (dist_triangle (f x) 0 (f y)).trans
-    (add_le_add (mem_closedBall.mp <| this x) (mem_closedBall'.mp <| this y))
-
-中文:
-定理 bounded
-  条件: (f : F)
-  结论: 存在 C, 对任意 x y : α, dist ((f : α -> β) x) (f y) <= C
-  证明: by
-  obtain ⟨K : Set α, hK₁, hK₂⟩ := mem_cocompact.mp
-    (tendsto_def.mp (zero_at_infty (f : F)) _ (closedBall_mem_nhds (0 : β) zero_lt_one))
-  obtain ⟨C, hC⟩ := (hK₁.image (map_continuous f)).isBounded.subset_closedBall (0 : β)
-  refine ⟨max C 1 + max C 1, fun x y => ?_⟩
-  have : forall x, f x in closedBall (0 : β) (max C 1) := by
-    intro x
-    by_cases hx : x in K
-    · exact (mem_closedBall.mp <| hC ⟨x, hx, rfl⟩).trans (le_max_left _ _)
-    · exact (mem_closedBall.mp <| mem_preimage.mp (hK₂ hx)).trans (le_max_right _ _)
-  exact (dist_triangle (f x) 0 (f y)).trans
-    (add_le_add (mem_closedBall.mp <| this x) (mem_closedBall'.mp <| this y))
+/-
+**ZeroAtInftyContinuousMap.bounded** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：∀ {F : Type u_1} {α : Type u} {β : Type v} [inst : TopologicalSpace α] [in
+st_1 : PseudoMetricSpace β] [inst_2 : Zero β]   [inst_3 : FunLike F α β] [ZeroAt
+InftyContinuousMapClass F α β] (f : F), ∃ C, ∀ (x y : α), dist (f x) (f y) ≤ C
+参数：f : F；x y : α；f x；f y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.mem_cocompact`：mem_cocompact : s in cocompact X ↔ exists t, IsCom
+pact t ∧ tᶜ subseteq s
+· 使用定理 `Filter.tendsto_def`：tendsto_def {f : α -> β} {l₁ : Filter α} {l₂ : Filte
+r β} : Tendsto f l₁ l₂ ↔ forall s in l₂, f ⁻¹' s in l₁
+· 使用定理 `ZeroAtInftyContinuousMapClass.zero_at_infty`：∀ {F : Type u_2} {α : outPa
+ram (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α} {inst_1 : 
+Zero β}   {inst_2 : TopologicalSp…
+· 使用定理 `Metric.closedBall_mem_nhds`：closedBall_mem_nhds (x : α) {ε : Real} (ε0 :
+ 0 < ε) : closedBall x ε in 𝓝 x
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Bornology.IsBounded.subset_closedBall`：∀ {α : Type u} {s : Set α} [inst 
+: PseudoMetricSpace α],   Bornology.IsBounded s → ∀ (c : α), ∃ r, s ⊆ Metric.clo
+sedBall c r
+· 使用定理 `IsCompact.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s : Se
+t α}, IsCompact s → Bornology.IsBounded s
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `ZeroAtInftyContinuousMapClass.toContinuousMapClass`：∀ {F : Type u_2} {α 
+: outParam (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α} {in
+st_1 : Zero β}   {inst_2 : TopologicalSp…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Metric.mem_closedBall`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x y 
+: α} {ε : ℝ}, y ∈ Metric.closedBall x ε ↔ dist y x ≤ ε
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用定理 `dist_triangle`：dist_triangle (x y z : α) : dist x z <= dist x y + dist y
+ z
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Metric.mem_closedBall'`：mem_closedBall' : y in closedBall x ε ↔ dist x y
+ <= ε
 -/
-protected theorem bounded (f : F) : exists C, forall x y : α, dist ((f : α -> β) x) (f y) <= C := by
+protected theorem bounded (f : F) : ∃ C, ∀ x y : α, dist ((f : α → β) x) (f y) ≤ C := by
   obtain ⟨K : Set α, hK₁, hK₂⟩ := mem_cocompact.mp
     (tendsto_def.mp (zero_at_infty (f : F)) _ (closedBall_mem_nhds (0 : β) zero_lt_one))
   obtain ⟨C, hC⟩ := (hK₁.image (map_continuous f)).isBounded.subset_closedBall (0 : β)
   refine ⟨max C 1 + max C 1, fun x y => ?_⟩
-  have : forall x, f x in closedBall (0 : β) (max C 1) := by
+  have : ∀ x, f x ∈ closedBall (0 : β) (max C 1) := by
     intro x
-    by_cases hx : x in K
+    by_cases hx : x ∈ K
     · exact (mem_closedBall.mp <| hC ⟨x, hx, rfl⟩).trans (le_max_left _ _)
     · exact (mem_closedBall.mp <| mem_preimage.mp (hK₂ hx)).trans (le_max_right _ _)
   exact (dist_triangle (f x) 0 (f y)).trans
     (add_le_add (mem_closedBall.mp <| this x) (mem_closedBall'.mp <| this y))
-
-/--
-theorem `isBounded_range` / 定理 `isBounded_range`
-
-English:
-theorem isBounded_range
-  given: (f : C₀(α, β))
-  statement: IsBounded (range f)
-  proof: isBounded_range_iff.2 (ZeroAtInftyContinuousMap.bounded f)
-
-中文:
-定理 isBounded_range
-  条件: (f : C₀(α, β))
-  结论: IsBounded (range f)
-  证明: isBounded_range_iff.2 (ZeroAtInftyContinuousMap.bounded f)
-
-Depends on / 依赖: ZeroAtInftyContinuousMap, ZeroAtInftyContinuousMap.bounded, bounded, isBounded_range_iff
+/-
+**ZeroAtInftyContinuousMap.isBounded_range** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInft
+yContinuousMap`。
+形式化陈述：isBounded_range (f : C₀(α, β)) : IsBounded (range f)
+参数：f : C₀(α, β)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.isBounded_range_iff`：isBounded_range_iff {f : β -> α} : IsBounded
+ (range f) ↔ exists C, forall x y, dist (f x) (f y) <= C
+· 使用定理 `ZeroAtInftyContinuousMap.bounded`：∀ {F : Type u_1} {α : Type u} {β : Typ
+e v} [inst : TopologicalSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero β
+]   [inst_3 : FunLike …
 -/
 theorem isBounded_range (f : C₀(α, β)) : IsBounded (range f) :=
   isBounded_range_iff.2 (ZeroAtInftyContinuousMap.bounded f)
-
-/--
-theorem `isBounded_image` / 定理 `isBounded_image`
-
-English:
-theorem isBounded_image
-  given: (f : C₀(α, β)) (s : Set α)
-  statement: IsBounded (f '' s)
-  proof: f.isBounded_range.subset image_subset_range _ _
-
-中文:
-定理 isBounded_image
-  条件: (f : C₀(α, β)) (s : 集合 α)
-  结论: IsBounded (f '' s)
-  证明: f.isBounded_range.subset image_subset_range _ _
-
-Depends on / 依赖: f.isBounded_range.subset, image_subset_range, isBounded_range, subset
+/-
+**ZeroAtInftyContinuousMap.isBounded_image** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInft
+yContinuousMap`。
+形式化陈述：isBounded_image (f : C₀(α, β)) (s : Set α) : IsBounded (f '' s)
+参数：f : C₀(α, β)；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `ZeroAtInftyContinuousMap.isBounded_range`：isBounded_range (f : C₀(α, β))
+ : IsBounded (range f)
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
 -/
 theorem isBounded_image (f : C₀(α, β)) (s : Set α) : IsBounded (f '' s) :=
-f.isBounded_range.subset image_subset_range _ _
-
+  f.isBounded_range.subset <| image_subset_range _ _
+/-
+**ZeroAtInftyContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinuousMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) instBoundedContinuousMapClass : BoundedContinuousMapClass F α β :=
   { ‹ZeroAtInftyContinuousMapClass F α β› with
     map_bounded := fun f => ZeroAtInftyContinuousMap.bounded f }
 
 /-- Construct a bounded continuous function from a continuous function vanishing at infinity. -/
 @[simps!]
-/--
-Definition of `toBCF` / `toBCF` 的定义
+/-
+**ZeroAtInftyContinuousMap.toBCF** 是 Mathlib 中的一个定义，位于命名空间 `ZeroAtInftyContinuou
+sMap`。
+形式化陈述：toBCF (f : C₀(α, β)) : α ->ᵇ β
+参数：f : C₀(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toBCF
-  signature: (f : C₀(α, β))
-  body: ⟨f, map_bounded f⟩
-
-中文:
-定义 toBCF
-  签名: (f : C₀(α, β))
-  定义体: ⟨f, map_bounded f⟩
-
-Depends on / 依赖: map_bounded
+--- 原说明 ---
+Construct a bounded continuous function from a continuous function vanishing at 
+infinity.
 -/
-def toBCF (f : C₀(α, β)) : α ->ᵇ β :=
+def toBCF (f : C₀(α, β)) : α →ᵇ β :=
   ⟨f, map_bounded f⟩
 
 section
 
 variable (α) (β)
 
-/--
-theorem `toBCF_injective` / 定理 `toBCF_injective`
-
-English:
-theorem toBCF_injective
-  statement: Function.Injective (toBCF : C₀(α, β) -> α ->ᵇ β)
-  proof: fun f g h => by
-  ext x
-  simpa only using! DFunLike.congr_fun h x
-
-中文:
-定理 toBCF_injective
-  结论: 函数.单射 (toBCF : C₀(α, β) -> α ->ᵇ β)
-  证明: fun f g h => by
-  ext x
-  simpa only using! DFunLike.congr_fun h x
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
+/-
+**ZeroAtInftyContinuousMap.toBCF_injective** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInft
+yContinuousMap`。
+形式化陈述：toBCF_injective : Function.Injective (toBCF : C₀(α, β) -> α ->ᵇ β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroAtInftyContinuousMap.ext`：ext {f g : C₀(α, β)} (h : forall x, f x = 
+g x) : f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem toBCF_injective : Function.Injective (toBCF : C₀(α, β) -> α ->ᵇ β) := fun f g h => by
+theorem toBCF_injective : Function.Injective (toBCF : C₀(α, β) → α →ᵇ β) := fun f g h => by
   ext x
   simpa only using! DFunLike.congr_fun h x
 
@@ -1388,154 +995,155 @@ end
 
 variable {f g : C₀(α, β)}
 
-/--
-Instance `instPseudoMetricSpace` / 实例 `instPseudoMetricSpace`
+/-- The type of continuous functions vanishing at infinity, with the uniform distance induced by the
+inclusion `ZeroAtInftyContinuousMap.toBCF`, is a pseudo-metric space. -/
+/-
+**ZeroAtInftyContinuousMap.instPseudoMetricSpace** 是 Mathlib 中的一个实例，位于命名空间 `Zero
+AtInftyContinuousMap`。
+形式化陈述：instPseudoMetricSpace : PseudoMetricSpace C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instPseudoMetricSpace
-  signature: : PseudoMetricSpace C₀(α, β)
-  body: fast_instance%
-  PseudoMetricSpace.induced toBCF inferInstance
-
-中文:
-实例 instPseudoMetricSpace
-  签名: : 伪度量空间 C₀(α, β)
-  定义体: fast_instance%
-  PseudoMetricSpace.induced toBCF inferInstance
-
-Depends on / 依赖: fast_instance
+--- 原说明 ---
+The type of continuous functions vanishing at infinity, with the uniform distanc
+e induced by the
+inclusion `ZeroAtInftyContinuousMap.toBCF`, is a pseudo-metric space.
 -/
 noncomputable instance instPseudoMetricSpace : PseudoMetricSpace C₀(α, β) := fast_instance%
   PseudoMetricSpace.induced toBCF inferInstance
 
-/--
-Instance `instMetricSpace` / 实例 `instMetricSpace`
+/-- The type of continuous functions vanishing at infinity, with the uniform distance induced by the
+inclusion `ZeroAtInftyContinuousMap.toBCF`, is a metric space. -/
+/-
+**ZeroAtInftyContinuousMap.instMetricSpace** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInft
+yContinuousMap`。
+形式化陈述：instMetricSpace {β : Type*} [MetricSpace β] [Zero β] : MetricSpace C₀(α, β
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instMetricSpace
-  signature: {β : Type*} [MetricSpace β] [Zero β]
-  body: fast_instance%
-  MetricSpace.induced _ (toBCF_injective α β) inferInstance
-
-@[simp]
-
-中文:
-实例 instMetricSpace
-  签名: {β : 类型} [度量空间 β] [零 β]
-  定义体: fast_instance%
-  MetricSpace.induced _ (toBCF_injective α β) inferInstance
-
-@[simp]
-
-Depends on / 依赖: fast_instance
+--- 原说明 ---
+The type of continuous functions vanishing at infinity, with the uniform distanc
+e induced by the
+inclusion `ZeroAtInftyContinuousMap.toBCF`, is a metric space.
 -/
 noncomputable instance instMetricSpace {β : Type*} [MetricSpace β] [Zero β] :
     MetricSpace C₀(α, β) := fast_instance%
   MetricSpace.induced _ (toBCF_injective α β) inferInstance
 
 @[simp]
-/--
-theorem `dist_toBCF_eq_dist` / 定理 `dist_toBCF_eq_dist`
-
-English:
-theorem dist_toBCF_eq_dist
-  given: {f g : C₀(α, β)}
-  statement: dist f.toBCF g.toBCF = dist f g
-  proof: rfl
-
-中文:
-定理 dist_toBCF_eq_dist
-  条件: {f g : C₀(α, β)}
-  结论: dist f.toBCF g.toBCF = dist f g
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.dist_toBCF_eq_dist** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtI
+nftyContinuousMap`。
+形式化陈述：dist_toBCF_eq_dist {f g : C₀(α, β)} : dist f.toBCF g.toBCF = dist f g
+参数：α, β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dist_toBCF_eq_dist {f g : C₀(α, β)} : dist f.toBCF g.toBCF = dist f g :=
   rfl
 
 open BoundedContinuousFunction
 
-/--
-theorem `tendsto_iff_tendstoUniformly` / 定理 `tendsto_iff_tendstoUniformly`
+/-- Convergence in the metric on `C₀(α, β)` is uniform convergence. -/
+/-
+**ZeroAtInftyContinuousMap.tendsto_iff_tendstoUniformly** 是 Mathlib 中的一个定理，位于命名空
+间 `ZeroAtInftyContinuousMap`。
+形式化陈述：tendsto_iff_tendstoUniformly {ι : Type*} {F : ι -> C₀(α, β)} {f : C₀(α, β)
+} {l : Filter ι} : Tendsto F l (𝓝 f) ↔ TendstoUniformly (fun i => F i) f l
+参数：α, β；α, β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoundedContinuousFunction.tendsto_iff_tendstoUniformly`：tendsto_iff_tend
+stoUniformly {ι : Type*} {F : ι -> α ->ᵇ β} {f : α ->ᵇ β} {l : Filter ι} : Tends
+to F l (𝓝 f) ↔ TendstoUniformly (fun i => F …
 
-English:
-theorem tendsto_iff_tendstoUniformly
-  given: {ι : Type*} {F : ι -> C₀(α, β)} {f : C₀(α, β)} {l : Filter ι}
-  proof: by
-  simpa only [Metric.tendsto_nhds] using!
-    @BoundedContinuousFunction.tendsto_iff_tendstoUniformly _ _ _ _ _ (fun i => (F i).toBCF)
-      f.toBCF l
-
-中文:
-定理 tendsto_iff_tendstoUniformly
-  条件: {ι : 类型} {F : ι -> C₀(α, β)} {f : C₀(α, β)} {l : 滤子 ι}
-  证明: by
-  simpa only [Metric.tendsto_nhds] using!
-    @BoundedContinuousFunction.tendsto_iff_tendstoUniformly _ _ _ _ _ (fun i => (F i).toBCF)
-      f.toBCF l
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.tendsto_iff_tendstoUniformly, Metric, Metric.tendsto_nhds, f.toBCF, tendsto_iff_tendstoUniformly, tendsto_nhds
+--- 原说明 ---
+Convergence in the metric on `C₀(α, β)` is uniform convergence.
 -/
-theorem tendsto_iff_tendstoUniformly {ι : Type*} {F : ι -> C₀(α, β)} {f : C₀(α, β)} {l : Filter ι} :
+theorem tendsto_iff_tendstoUniformly {ι : Type*} {F : ι → C₀(α, β)} {f : C₀(α, β)} {l : Filter ι} :
     Tendsto F l (𝓝 f) ↔ TendstoUniformly (fun i => F i) f l := by
   simpa only [Metric.tendsto_nhds] using!
     @BoundedContinuousFunction.tendsto_iff_tendstoUniformly _ _ _ _ _ (fun i => (F i).toBCF)
       f.toBCF l
-
-/--
-theorem `isometry_toBCF` / 定理 `isometry_toBCF`
-
-English:
-theorem isometry_toBCF
-  statement: Isometry (toBCF : C₀(α, β) -> α ->ᵇ β)
-  proof: by tauto
-
-中文:
-定理 isometry_toBCF
-  结论: 等距 (toBCF : C₀(α, β) -> α ->ᵇ β)
-  证明: by tauto
+/-
+**ZeroAtInftyContinuousMap.isometry_toBCF** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInfty
+ContinuousMap`。
+形式化陈述：isometry_toBCF : Isometry (toBCF : C₀(α, β) -> α ->ᵇ β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isometry_toBCF : Isometry (toBCF : C₀(α, β) -> α ->ᵇ β) := by tauto
-
-/--
-theorem `isClosed_range_toBCF` / 定理 `isClosed_range_toBCF`
-
-English:
-theorem isClosed_range_toBCF
-  statement: IsClosed (range (toBCF : C₀(α, β) -> α ->ᵇ β))
-  proof: by
-  refine isClosed_iff_clusterPt.mpr fun f hf => ?_
-  rw [clusterPt_principal_iff] at hf
-  have : Tendsto f (cocompact α) (𝓝 0) := by
-    refine Metric.tendsto_nhds.mpr fun ε hε => ?_
-    obtain ⟨_, hg, g, rfl⟩ := hf (ball f (ε / 2)) (ball_mem_nhds f <| half_pos hε)
-    refine (Metric.tendsto_nhds.mp (zero_at_infty g) (ε / 2) (half_pos hε)).mp
-      (Eventually.of_forall fun x hx => ?_)
-    calc
-      dist (f x) 0 <= dist (g.toBCF x) (f x) + dist (g x) 0 := dist_triangle_left _ _ _
-      _ < dist g.toBCF f + ε / 2 := add_lt_add_of_le_of_lt (dist_coe_le_dist x) hx
-      _ <= ε := by grw [mem_ball.1 hg, add_halves ε]
-  exact ⟨⟨f.toContinuousMap, this⟩, rfl⟩
-
-中文:
-定理 isClosed_range_toBCF
-  结论: 是闭集 (range (toBCF : C₀(α, β) -> α ->ᵇ β))
-  证明: by
-  refine isClosed_iff_clusterPt.mpr fun f hf => ?_
-  rw [clusterPt_principal_iff] at hf
-  have : Tendsto f (cocompact α) (𝓝 0) := by
-    refine Metric.tendsto_nhds.mpr fun ε hε => ?_
-    obtain ⟨_, hg, g, rfl⟩ := hf (ball f (ε / 2)) (ball_mem_nhds f <| half_pos hε)
-    refine (Metric.tendsto_nhds.mp (zero_at_infty g) (ε / 2) (half_pos hε)).mp
-      (Eventually.of_forall fun x hx => ?_)
-    calc
-      dist (f x) 0 <= dist (g.toBCF x) (f x) + dist (g x) 0 := dist_triangle_left _ _ _
-      _ < dist g.toBCF f + ε / 2 := add_lt_add_of_le_of_lt (dist_coe_le_dist x) hx
-      _ <= ε := by grw [mem_ball.1 hg, add_halves ε]
-  exact ⟨⟨f.toContinuousMap, this⟩, rfl⟩
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Metric, Metric.tendsto_nhds.mp, Metric.tendsto_nhds.mpr, Tendsto, add_lt_add_of_l, ball_mem_nhds, clusterPt_principal_iff, cocompact, dist_triangle_left, g.toBCF, half_pos, isClosed_iff_clusterPt, isClosed_iff_clusterPt.mpr, of_forall, tendsto_nhds, zero_at_infty
+theorem isometry_toBCF : Isometry (toBCF : C₀(α, β) → α →ᵇ β) := by tauto
+/-
+**ZeroAtInftyContinuousMap.isClosed_range_toBCF** 是 Mathlib 中的一个定理，位于命名空间 `ZeroA
+tInftyContinuousMap`。
+形式化陈述：isClosed_range_toBCF : IsClosed (range (toBCF : C₀(α, β) -> α ->ᵇ β))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isClosed_iff_clusterPt`：isClosed_iff_clusterPt : IsClosed s ↔ forall a, 
+ClusterPt a (𝓟 s) -> a in s
+· 使用定理 `Metric.tendsto_nhds`：tendsto_nhds {f : Filter β} {u : β -> α} {a : α} : 
+Tendsto u f (𝓝 a) ↔ forall ε > 0, forallᶠ x in f, dist (u x) a < ε
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `clusterPt_principal_iff`：clusterPt_principal_iff : ClusterPt x (𝓟 s) ↔ f
+orall U in 𝓝 x, (U inter s).Nonempty
+· 使用定理 `Metric.ball_mem_nhds`：ball_mem_nhds (x : α) {ε : Real} (ε0 : 0 < ε) : ba
+ll x ε in 𝓝 x
+· 使用定理 `half_pos`：half_pos (h : 0 < a) : 0 < a / 2
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ZeroAtInftyContinuousMapClass.zero_at_infty`：∀ {F : Type u_2} {α : outPa
+ram (Type u_3)} {β : outParam (Type u_4)} {inst : TopologicalSpace α} {inst_1 : 
+Zero β}   {inst_2 : TopologicalSp…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `dist_triangle_left`：dist_triangle_left (x y z : α) : dist x y <= dist z 
+x + dist z y
+· 使用定理 `add_lt_add_of_le_of_lt`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preord
+er α] [AddLeftStrictMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c < d → a 
++ c < b + d
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `BoundedContinuousFunction.dist_coe_le_dist`：dist_coe_le_dist (x : α) : d
+ist (f x) (g x) <= dist f g
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Metric.mem_ball`：mem_ball : y in ball x ε ↔ dist y x < ε
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_halves`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2] (a :
+ K), a / 2 + a / 2 = a
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem isClosed_range_toBCF : IsClosed (range (toBCF : C₀(α, β) -> α ->ᵇ β)) := by
+theorem isClosed_range_toBCF : IsClosed (range (toBCF : C₀(α, β) → α →ᵇ β)) := by
   refine isClosed_iff_clusterPt.mpr fun f hf => ?_
   rw [clusterPt_principal_iff] at hf
   have : Tendsto f (cocompact α) (𝓝 0) := by
@@ -1544,28 +1152,36 @@ theorem isClosed_range_toBCF : IsClosed (range (toBCF : C₀(α, β) -> α ->ᵇ
     refine (Metric.tendsto_nhds.mp (zero_at_infty g) (ε / 2) (half_pos hε)).mp
       (Eventually.of_forall fun x hx => ?_)
     calc
-      dist (f x) 0 <= dist (g.toBCF x) (f x) + dist (g x) 0 := dist_triangle_left _ _ _
+      dist (f x) 0 ≤ dist (g.toBCF x) (f x) + dist (g x) 0 := dist_triangle_left _ _ _
       _ < dist g.toBCF f + ε / 2 := add_lt_add_of_le_of_lt (dist_coe_le_dist x) hx
-      _ <= ε := by grw [mem_ball.1 hg, add_halves ε]
+      _ ≤ ε := by grw [mem_ball.1 hg, add_halves ε]
   exact ⟨⟨f.toContinuousMap, this⟩, rfl⟩
 
 
-/--
-Instance `instCompleteSpace` / 实例 `instCompleteSpace`
+/-- Continuous functions vanishing at infinity taking values in a complete space form a
+complete space. -/
+/-
+**ZeroAtInftyContinuousMap.instCompleteSpace** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtIn
+ftyContinuousMap`。
+形式化陈述：instCompleteSpace [CompleteSpace β] : CompleteSpace C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `completeSpace_iff_isComplete_range`：completeSpace_iff_isComplete_range {
+f : α -> β} (hf : IsUniformInducing f) : CompleteSpace α ↔ IsComplete (range f)
+· 使用定理 `Isometry.isUniformInducing`：isUniformInducing (hf : Isometry f) : IsUnif
+ormInducing f
+· 使用定理 `ZeroAtInftyContinuousMap.isometry_toBCF`：isometry_toBCF : Isometry (toBC
+F : C₀(α, β) -> α ->ᵇ β)
+· 使用定理 `IsClosed.isComplete`：IsClosed.isComplete [CompleteSpace α] {s : Set α} (
+h : IsClosed s) : IsComplete s
+· 使用定理 `ZeroAtInftyContinuousMap.isClosed_range_toBCF`：isClosed_range_toBCF : Is
+Closed (range (toBCF : C₀(α, β) -> α ->ᵇ β))
 
-English:
-instance instCompleteSpace
-  signature: [CompleteSpace β]
-  body: (completeSpace_iff_isComplete_range isometry_toBCF.isUniformInducing).mpr
-    isClosed_range_toBCF.isComplete
-
-中文:
-实例 instCompleteSpace
-  签名: [完备空间 β]
-  定义体: (completeSpace_iff_isComplete_range isometry_toBCF.isUniformInducing).mpr
-    isClosed_range_toBCF.isComplete
-
-Depends on / 依赖: completeSpace_iff_isComplete_range, isClosed_range_toBCF, isClosed_range_toBCF.isComplete, isComplete, isUniformInducing, isometry_toBCF, isometry_toBCF.isUniformInducing
+--- 原说明 ---
+Continuous functions vanishing at infinity taking values in a complete space for
+m a
+complete space.
 -/
 instance instCompleteSpace [CompleteSpace β] : CompleteSpace C₀(α, β) :=
   (completeSpace_iff_isComplete_range isometry_toBCF.isUniformInducing).mpr
@@ -1585,86 +1201,49 @@ field `𝕜` whenever `β` is as well.
 
 section NormedSpace
 
-/--
-Instance `instSeminormedAddCommGroup` / 实例 `instSeminormedAddCommGroup`
-
-English:
-instance instSeminormedAddCommGroup
-  signature: [SeminormedAddCommGroup β]
-  body: fast_instance%
-  SeminormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
-
-中文:
-实例 instSeminormedAddCommGroup
-  签名: [SeminormedAddComm群 β]
-  定义体: fast_instance%
-  SeminormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
-
-Depends on / 依赖: fast_instance
+/-
+**ZeroAtInftyContinuousMap.instSeminormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 
+`ZeroAtInftyContinuousMap`。
+形式化陈述：instSeminormedAddCommGroup [SeminormedAddCommGroup β] : SeminormedAddCommG
+roup C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 noncomputable instance instSeminormedAddCommGroup [SeminormedAddCommGroup β] :
     SeminormedAddCommGroup C₀(α, β) := fast_instance%
-  SeminormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
-
-/--
-Instance `instNormedAddCommGroup` / 实例 `instNormedAddCommGroup`
-
-English:
-instance instNormedAddCommGroup
-  signature: [NormedAddCommGroup β]
-  body: fast_instance%
-  NormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
-    (toBCF_injective α β)
-
-中文:
-实例 instNormedAddCommGroup
-  签名: [赋范交换加群 β]
-  定义体: fast_instance%
-  NormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
-    (toBCF_injective α β)
-
-Depends on / 依赖: fast_instance
+  SeminormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) →+ α →ᵇ β)
+/-
+**ZeroAtInftyContinuousMap.instNormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Zer
+oAtInftyContinuousMap`。
+形式化陈述：instNormedAddCommGroup [NormedAddCommGroup β] : NormedAddCommGroup C₀(α, β
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instNormedAddCommGroup [NormedAddCommGroup β] :
     NormedAddCommGroup C₀(α, β) := fast_instance%
-  NormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) ->+ α ->ᵇ β)
+  NormedAddCommGroup.induced _ _ (⟨⟨toBCF, rfl⟩, fun _ _ => rfl⟩ : C₀(α, β) →+ α →ᵇ β)
     (toBCF_injective α β)
 
 variable [SeminormedAddCommGroup β] {𝕜 : Type*} [NormedField 𝕜] [NormedSpace 𝕜 β]
 
 @[simp]
-/--
-theorem `norm_toBCF_eq_norm` / 定理 `norm_toBCF_eq_norm`
-
-English:
-theorem norm_toBCF_eq_norm
-  given: {f : C₀(α, β)}
-  statement: ‖f.toBCF‖ = ‖f‖
-  proof: rfl
-
-中文:
-定理 norm_toBCF_eq_norm
-  条件: {f : C₀(α, β)}
-  结论: ‖f.toBCF‖ = ‖f‖
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.norm_toBCF_eq_norm** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtI
+nftyContinuousMap`。
+形式化陈述：norm_toBCF_eq_norm {f : C₀(α, β)} : ‖f.toBCF‖ = ‖f‖
+参数：α, β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem norm_toBCF_eq_norm {f : C₀(α, β)} : ‖f.toBCF‖ = ‖f‖ :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NormedSpace 𝕜 C₀(α, β)
-  body: norm_smul_le k f.toBCF
-
-中文:
-实例 :
-  签名: 赋范空间 𝕜 C₀(α, β)
-  定义体: norm_smul_le k f.toBCF
-
-Depends on / 依赖: f.toBCF, norm_smul_le
+/-
+**ZeroAtInftyContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinuousMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : NormedSpace 𝕜 C₀(α, β) where
   norm_smul_le k f := norm_smul_le k f.toBCF
@@ -1673,80 +1252,49 @@ end NormedSpace
 
 section NormedRing
 
-/--
-Instance `instNonUnitalSeminormedRing` / 实例 `instNonUnitalSeminormedRing`
-
-English:
-instance instNonUnitalSeminormedRing
-  signature: [NonUnitalSeminormedRing β]
-  body: { instNonUnitalRing, instSeminormedAddCommGroup with
-    norm_mul_le f g := norm_mul_le f.toBCF g.toBCF }
-
-中文:
-实例 instNonUnitalSeminormedRing
-  签名: [非幺Seminormed环 β]
-  定义体: { instNonUnitalRing, instSeminormedAddCommGroup with
-    norm_mul_le f g := norm_mul_le f.toBCF g.toBCF }
-
-Depends on / 依赖: f.toBCF, g.toBCF, instNonUnitalRing, instSeminormedAddCommGroup, norm_mul_le
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalSeminormedRing** 是 Mathlib 中的一个实例，位于命名空间
+ `ZeroAtInftyContinuousMap`。
+形式化陈述：instNonUnitalSeminormedRing [NonUnitalSeminormedRing β] : NonUnitalSeminor
+medRing C₀(α, β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
 -/
 noncomputable instance instNonUnitalSeminormedRing [NonUnitalSeminormedRing β] :
     NonUnitalSeminormedRing C₀(α, β) :=
   { instNonUnitalRing, instSeminormedAddCommGroup with
     norm_mul_le f g := norm_mul_le f.toBCF g.toBCF }
-
-/--
-Instance `instNonUnitalNormedRing` / 实例 `instNonUnitalNormedRing`
-
-English:
-instance instNonUnitalNormedRing
-  signature: [NonUnitalNormedRing β]
-  body: { instNonUnitalSeminormedRing, instNormedAddCommGroup with }
-
-中文:
-实例 instNonUnitalNormedRing
-  签名: [非幺赋范环 β]
-  定义体: { instNonUnitalSeminormedRing, instNormedAddCommGroup with }
-
-Depends on / 依赖: instNonUnitalSeminormedRing, instNormedAddCommGroup
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalNormedRing** 是 Mathlib 中的一个实例，位于命名空间 `Ze
+roAtInftyContinuousMap`。
+形式化陈述：instNonUnitalNormedRing [NonUnitalNormedRing β] : NonUnitalNormedRing C₀(α
+, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instNonUnitalNormedRing [NonUnitalNormedRing β] :
     NonUnitalNormedRing C₀(α, β) :=
   { instNonUnitalSeminormedRing, instNormedAddCommGroup with }
-
-/--
-Instance `instNonUnitalSeminormedCommRing` / 实例 `instNonUnitalSeminormedCommRing`
-
-English:
-instance instNonUnitalSeminormedCommRing
-  signature: [NonUnitalSeminormedCommRing β]
-  body: { instNonUnitalSeminormedRing, instNonUnitalCommRing with }
-
-中文:
-实例 instNonUnitalSeminormedCommRing
-  签名: [非幺SeminormedComm环 β]
-  定义体: { instNonUnitalSeminormedRing, instNonUnitalCommRing with }
-
-Depends on / 依赖: instNonUnitalCommRing, instNonUnitalSeminormedRing
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalSeminormedCommRing** 是 Mathlib 中的一个实例，位于
+命名空间 `ZeroAtInftyContinuousMap`。
+形式化陈述：instNonUnitalSeminormedCommRing [NonUnitalSeminormedCommRing β] : NonUnita
+lSeminormedCommRing C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instNonUnitalSeminormedCommRing [NonUnitalSeminormedCommRing β] :
     NonUnitalSeminormedCommRing C₀(α, β) :=
   { instNonUnitalSeminormedRing, instNonUnitalCommRing with }
-
-/--
-Instance `instNonUnitalNormedCommRing` / 实例 `instNonUnitalNormedCommRing`
-
-English:
-instance instNonUnitalNormedCommRing
-  signature: [NonUnitalNormedCommRing β]
-  body: { instNonUnitalNormedRing, instNonUnitalCommRing with }
-
-中文:
-实例 instNonUnitalNormedCommRing
-  签名: [非幺NormedComm环 β]
-  定义体: { instNonUnitalNormedRing, instNonUnitalCommRing with }
-
-Depends on / 依赖: instNonUnitalCommRing, instNonUnitalNormedRing
+/-
+**ZeroAtInftyContinuousMap.instNonUnitalNormedCommRing** 是 Mathlib 中的一个实例，位于命名空间
+ `ZeroAtInftyContinuousMap`。
+形式化陈述：instNonUnitalNormedCommRing [NonUnitalNormedCommRing β] : NonUnitalNormedC
+ommRing C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instNonUnitalNormedCommRing [NonUnitalNormedCommRing β] :
     NonUnitalNormedCommRing C₀(α, β) :=
@@ -1771,30 +1319,12 @@ counterparts on `α →ᵇ β`. Ultimately, when `β` is a C⋆-ring, then so is
 
 variable [TopologicalSpace β] [AddMonoid β] [StarAddMonoid β] [ContinuousStar β]
 
-/--
-Instance `instStar` / 实例 `instStar`
-
-English:
-instance instStar
-  signature: : Star C₀(α, β) where
-  body: { toFun := fun x => star (f x)
-      continuous_toFun := (map_continuous f).star
-      zero_at_infty' := by
-        simpa only [star_zero] using! (continuous_star.tendsto (0 : β)).comp (zero_at_infty f) }
-
-@[simp]
-
-中文:
-实例 instStar
-  签名: : 对合 C₀(α, β) where
-  定义体: { toFun := fun x => star (f x)
-      continuous_toFun := (map_continuous f).star
-      zero_at_infty' := by
-        simpa only [star_zero] using! (continuous_star.tendsto (0 : β)).comp (zero_at_infty f) }
-
-@[simp]
-
-Depends on / 依赖: continuous_star, continuous_star.tendsto, continuous_toFun, map_continuous, star_zero, tendsto, zero_at_infty
+/-
+**ZeroAtInftyContinuousMap.instStar** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContin
+uousMap`。
+形式化陈述：instStar : Star C₀(α, β) where star f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStar : Star C₀(α, β) where
   star f :=
@@ -1804,58 +1334,33 @@ instance instStar : Star C₀(α, β) where
         simpa only [star_zero] using! (continuous_star.tendsto (0 : β)).comp (zero_at_infty f) }
 
 @[simp]
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: (f : C₀(α, β))
-  statement: ⇑(star f) = star (⇑f)
-  proof: rfl
-
-中文:
-定理 coe_star
-  条件: (f : C₀(α, β))
-  结论: ⇑(star f) = star (⇑f)
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContin
+uousMap`。
+形式化陈述：coe_star (f : C₀(α, β)) : ⇑(star f) = star (⇑f)
+参数：f : C₀(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_star (f : C₀(α, β)) : ⇑(star f) = star (⇑f) :=
   rfl
-
-/--
-theorem `star_apply` / 定理 `star_apply`
-
-English:
-theorem star_apply
-  given: (f : C₀(α, β)) (x : α)
-  statement: (star f) x = star (f x)
-  proof: rfl
-
-中文:
-定理 star_apply
-  条件: (f : C₀(α, β)) (x : α)
-  结论: (star f) x = star (f x)
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.star_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyCont
+inuousMap`。
+形式化陈述：star_apply (f : C₀(α, β)) (x : α) : (star f) x = star (f x)
+参数：f : C₀(α, β)；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_apply (f : C₀(α, β)) (x : α) : (star f) x = star (f x) :=
   rfl
-
-/--
-Instance `instStarAddMonoid` / 实例 `instStarAddMonoid`
-
-English:
-instance instStarAddMonoid
-  signature: [ContinuousAdd β]
-  body: ext fun x => star_star (f x)
-  star_add f g := ext fun x => star_add (f x) (g x)
-
-中文:
-实例 instStarAddMonoid
-  签名: [连续加法 β]
-  定义体: ext fun x => star_star (f x)
-  star_add f g := ext fun x => star_add (f x) (g x)
-
-Depends on / 依赖: star_star
+/-
+**ZeroAtInftyContinuousMap.instStarAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtIn
+ftyContinuousMap`。
+形式化陈述：instStarAddMonoid [ContinuousAdd β] : StarAddMonoid C₀(α, β) where star_in
+volutive f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStarAddMonoid [ContinuousAdd β] : StarAddMonoid C₀(α, β) where
   star_involutive f := ext fun x => star_star (f x)
@@ -1867,20 +1372,21 @@ section NormedStar
 
 variable [NormedAddCommGroup β] [StarAddMonoid β] [NormedStarGroup β]
 
-/--
-Instance `instNormedStarGroup` / 实例 `instNormedStarGroup`
-
-English:
-instance instNormedStarGroup
-  signature: : NormedStarGroup C₀(α, β) where
-  body: (norm_star f.toBCF :).le
-
-中文:
-实例 instNormedStarGroup
-  签名: : NormedStar群 C₀(α, β) where
-  定义体: (norm_star f.toBCF :).le
-
-Depends on / 依赖: f.toBCF, norm_star
+/-
+**ZeroAtInftyContinuousMap.instNormedStarGroup** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAt
+InftyContinuousMap`。
+形式化陈述：instNormedStarGroup : NormedStarGroup C₀(α, β) where norm_star_le f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedStarGroup.to_continuousStar`：∀ {E : Type u_2} [inst : SeminormedAd
+dCommGroup E] [inst_1 : StarAddMonoid E] [NormedStarGroup E], ContinuousStar E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用引理 `norm_star`：norm_star (x : E) : ‖x⋆‖ = ‖x‖
 -/
 instance instNormedStarGroup : NormedStarGroup C₀(α, β) where
   norm_star_le f := (norm_star f.toBCF :).le
@@ -1892,20 +1398,17 @@ section StarModule
 variable {𝕜 : Type*} [Zero 𝕜] [Star 𝕜] [AddMonoid β] [StarAddMonoid β] [TopologicalSpace β]
   [ContinuousStar β] [SMulWithZero 𝕜 β] [ContinuousConstSMul 𝕜 β] [StarModule 𝕜 β]
 
-/--
-Instance `instStarModule` / 实例 `instStarModule`
-
-English:
-instance instStarModule
-  signature: : StarModule 𝕜 C₀(α, β) where
-  body: ext fun x => star_smul k (f x)
-
-中文:
-实例 instStarModule
-  签名: : 对合模 𝕜 C₀(α, β) where
-  定义体: ext fun x => star_smul k (f x)
-
-Depends on / 依赖: star_smul
+/-
+**ZeroAtInftyContinuousMap.instStarModule** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInfty
+ContinuousMap`。
+形式化陈述：instStarModule : StarModule 𝕜 C₀(α, β) where star_smul k f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroAtInftyContinuousMap.ext`：ext {f g : C₀(α, β)} (h : forall x, f x = 
+g x) : f = g
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
 -/
 instance instStarModule : StarModule 𝕜 C₀(α, β) where
   star_smul k f := ext fun x => star_smul k (f x)
@@ -1917,22 +1420,12 @@ section StarRing
 variable [NonUnitalSemiring β] [StarRing β] [TopologicalSpace β] [ContinuousStar β]
   [IsTopologicalSemiring β]
 
-/--
-Instance `instStarRing` / 实例 `instStarRing`
-
-English:
-instance instStarRing
-  signature: : StarRing C₀(α, β)
-  body: { ZeroAtInftyContinuousMap.instStarAddMonoid with
-    star_mul := fun f g => ext fun x => star_mul (f x) (g x) }
-
-中文:
-实例 instStarRing
-  签名: : 对合环 C₀(α, β)
-  定义体: { ZeroAtInftyContinuousMap.instStarAddMonoid with
-    star_mul := fun f g => ext fun x => star_mul (f x) (g x) }
-
-Depends on / 依赖: ZeroAtInftyContinuousMap, ZeroAtInftyContinuousMap.instStarAddMonoid, instStarAddMonoid, star_mul
+/-
+**ZeroAtInftyContinuousMap.instStarRing** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyCo
+ntinuousMap`。
+形式化陈述：instStarRing : StarRing C₀(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStarRing : StarRing C₀(α, β) :=
   { ZeroAtInftyContinuousMap.instStarAddMonoid with
@@ -1942,20 +1435,25 @@ end StarRing
 
 section CStarRing
 
-/--
-Instance `instCStarRing` / 实例 `instCStarRing`
-
-English:
-instance instCStarRing
-  signature: [NonUnitalNormedRing β] [StarRing β] [CStarRing β]
-  body: CStarRing.norm_mul_self_le (x := f.toBCF)
-
-中文:
-实例 instCStarRing
-  签名: [非幺赋范环 β] [对合环 β] [CStar环 β]
-  定义体: CStarRing.norm_mul_self_le (x := f.toBCF)
-
-Depends on / 依赖: CStarRing, CStarRing.norm_mul_self_le, f.toBCF, norm_mul_self_le
+/-
+**ZeroAtInftyContinuousMap.instCStarRing** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyC
+ontinuousMap`。
+形式化陈述：instCStarRing [NonUnitalNormedRing β] [StarRing β] [CStarRing β] : CStarRi
+ng C₀(α, β) where norm_mul_self_le f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedStarGroup.to_continuousStar`：∀ {E : Type u_2} [inst : SeminormedAd
+dCommGroup E] [inst_1 : StarAddMonoid E] [NormedStarGroup E], ContinuousStar E
+· 使用定理 `CStarRing.to_normedStarGroup`：∀ {E : Type u_2} [inst : NonUnitalNormedRi
+ng E] [inst_1 : StarRing E] [CStarRing E], NormedStarGroup E
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `CStarRing.norm_mul_self_le`：∀ {E : Type u_4} {inst : NonUnitalNormedRing
+ E} {inst_1 : StarRing E} [self : CStarRing E] (x : E),   ‖x‖ * ‖x‖ ≤ ‖star x * 
+x‖
 -/
 instance instCStarRing [NonUnitalNormedRing β] [StarRing β] [CStarRing β] : CStarRing C₀(α, β) where
   norm_mul_self_le f := CStarRing.norm_mul_self_le (x := f.toBCF)
@@ -1971,220 +1469,158 @@ category of topological spaces with morphisms given by `CocompactMap`s.
 
 variable {δ : Type*} [TopologicalSpace β] [TopologicalSpace γ] [TopologicalSpace δ]
 
-local notation α " ->co " β => CocompactMap α β
+local notation α " →co " β => CocompactMap α β
 
 section
 
 variable [Zero δ]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of a continuous function vanishing at infinity with a cocompact map yields another
+continuous function vanishing at infinity. -/
+/-
+**ZeroAtInftyContinuousMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `ZeroAtInftyContinuous
+Map`。
+形式化陈述：comp (f : C₀(γ, δ)) (g : β ->co γ) : C₀(β, δ) where toContinuousMap
+参数：f : C₀(γ, δ)；g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : C₀(γ, δ)) (g : β ->co γ)
-  body: (f : C(γ, δ)).comp g
-  zero_at_infty' := (zero_at_infty f).comp (cocompact_tendsto g)
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : C₀(γ, δ)) (g : β ->co γ)
-  定义体: (f : C(γ, δ)).comp g
-  zero_at_infty' := (zero_at_infty f).comp (cocompact_tendsto g)
-
-@[simp]
+--- 原说明 ---
+Composition of a continuous function vanishing at infinity with a cocompact map 
+yields another
+continuous function vanishing at infinity.
 -/
-def comp (f : C₀(γ, δ)) (g : β ->co γ) : C₀(β, δ) where
+def comp (f : C₀(γ, δ)) (g : β →co γ) : C₀(β, δ) where
   toContinuousMap := (f : C(γ, δ)).comp g
   zero_at_infty' := (zero_at_infty f).comp (cocompact_tendsto g)
 
 @[simp]
-/--
-theorem `coe_comp_to_continuous_fun` / 定理 `coe_comp_to_continuous_fun`
-
-English:
-theorem coe_comp_to_continuous_fun
-  given: (f : C₀(γ, δ)) (g : β ->co γ)
-  statement: ((f.comp g) : β -> δ) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp_to_continuous_fun
-  条件: (f : C₀(γ, δ)) (g : β ->co γ)
-  结论: ((f.comp g) : β -> δ) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**ZeroAtInftyContinuousMap.coe_comp_to_continuous_fun** 是 Mathlib 中的一个定理，位于命名空间 
+`ZeroAtInftyContinuousMap`。
+形式化陈述：coe_comp_to_continuous_fun (f : C₀(γ, δ)) (g : β ->co γ) : ((f.comp g) : β
+ -> δ) = f ∘ g
+参数：f : C₀(γ, δ)；g : β ->co γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp_to_continuous_fun (f : C₀(γ, δ)) (g : β ->co γ) : ((f.comp g) : β -> δ) = f ∘ g :=
+theorem coe_comp_to_continuous_fun (f : C₀(γ, δ)) (g : β →co γ) : ((f.comp g) : β → δ) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : C₀(γ, δ))
-  statement: f.comp (CocompactMap.id γ) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : C₀(γ, δ))
-  结论: f.comp (余compact映射.id γ) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**ZeroAtInftyContinuousMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyContinu
+ousMap`。
+形式化陈述：comp_id (f : C₀(γ, δ)) : f.comp (CocompactMap.id γ) = f
+参数：f : C₀(γ, δ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZeroAtInftyContinuousMap.ext`：ext {f g : C₀(α, β)} (h : forall x, f x = 
+g x) : f = g
 -/
 theorem comp_id (f : C₀(γ, δ)) : f.comp (CocompactMap.id γ) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : C₀(γ, δ)) (g : β ->co γ) (h : α ->co β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : C₀(γ, δ)) (g : β ->co γ) (h : α ->co β)
-  证明: rfl
-
-@[simp]
+/-
+**ZeroAtInftyContinuousMap.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyCont
+inuousMap`。
+形式化陈述：comp_assoc (f : C₀(γ, δ)) (g : β ->co γ) (h : α ->co β) : (f.comp g).comp 
+h = f.comp (g.comp h)
+参数：f : C₀(γ, δ)；g : β ->co γ；h : α ->co β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc (f : C₀(γ, δ)) (g : β ->co γ) (h : α ->co β) :
+theorem comp_assoc (f : C₀(γ, δ)) (g : β →co γ) (h : α →co β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `zero_comp` / 定理 `zero_comp`
-
-English:
-theorem zero_comp
-  given: (g : β ->co γ)
-  statement: (0 : C₀(γ, δ)).comp g = 0
-  proof: rfl
-
-中文:
-定理 zero_comp
-  条件: (g : β ->co γ)
-  结论: (0 : C₀(γ, δ)).comp g = 0
-  证明: rfl
+/-
+**ZeroAtInftyContinuousMap.zero_comp** 是 Mathlib 中的一个定理，位于命名空间 `ZeroAtInftyConti
+nuousMap`。
+形式化陈述：zero_comp (g : β ->co γ) : (0 : C₀(γ, δ)).comp g = 0
+参数：g : β ->co γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zero_comp (g : β ->co γ) : (0 : C₀(γ, δ)).comp g = 0 :=
+theorem zero_comp (g : β →co γ) : (0 : C₀(γ, δ)).comp g = 0 :=
   rfl
 
 end
 
-/--
-Definition of `compAddMonoidHom` / `compAddMonoidHom` 的定义
+/-- Composition as an additive monoid homomorphism. -/
+/-
+**ZeroAtInftyContinuousMap.compAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `ZeroAtInf
+tyContinuousMap`。
+形式化陈述：compAddMonoidHom [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ) : C₀(γ, δ)
+ ->+ C₀(β, δ) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compAddMonoidHom
-  signature: [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ)
-  body: f.comp g
-  map_zero' := zero_comp g
-  map_add' _ _ := rfl
-
-中文:
-定义 compAddMonoidHom
-  签名: [加法幺半群 δ] [连续加法 δ] (g : β ->co γ)
-  定义体: f.comp g
-  map_zero' := zero_comp g
-  map_add' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as an additive monoid homomorphism.
 -/
-def compAddMonoidHom [AddMonoid δ] [ContinuousAdd δ] (g : β ->co γ) : C₀(γ, δ) ->+ C₀(β, δ) where
+def compAddMonoidHom [AddMonoid δ] [ContinuousAdd δ] (g : β →co γ) : C₀(γ, δ) →+ C₀(β, δ) where
   toFun f := f.comp g
   map_zero' := zero_comp g
   map_add' _ _ := rfl
 
-/--
-Definition of `compMulHom` / `compMulHom` 的定义
+/-- Composition as a semigroup homomorphism. -/
+/-
+**ZeroAtInftyContinuousMap.compMulHom** 是 Mathlib 中的一个定义，位于命名空间 `ZeroAtInftyCont
+inuousMap`。
+形式化陈述：compMulHom [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ) : C₀(γ, δ) ->
+ₙ* C₀(β, δ) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compMulHom
-  signature: [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ)
-  body: f.comp g
-  map_mul' _ _ := rfl
-
-中文:
-定义 compMulHom
-  签名: [乘零类 δ] [连续乘法 δ] (g : β ->co γ)
-  定义体: f.comp g
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as a semigroup homomorphism.
 -/
-def compMulHom [MulZeroClass δ] [ContinuousMul δ] (g : β ->co γ) : C₀(γ, δ) ->ₙ* C₀(β, δ) where
+def compMulHom [MulZeroClass δ] [ContinuousMul δ] (g : β →co γ) : C₀(γ, δ) →ₙ* C₀(β, δ) where
   toFun f := f.comp g
   map_mul' _ _ := rfl
 
-/--
-Definition of `compLinearMap` / `compLinearMap` 的定义
+/-- Composition as a linear map. -/
+/-
+**ZeroAtInftyContinuousMap.compLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `ZeroAtInftyC
+ontinuousMap`。
+形式化陈述：compLinearMap [AddCommMonoid δ] [ContinuousAdd δ] {R : Type*} [Semiring R]
+ [Module R δ] [ContinuousConstSMul R δ] (g : β ->co γ) : C₀(γ, δ) ->ₗ[R] C₀(β, δ
+) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compLinearMap
-  signature: [AddCommMonoid δ] [ContinuousAdd δ] {R : Type*} [Semiring R] [Module R δ]
-  body: f.comp g
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 compLinearMap
-  签名: [加法交换幺半群 δ] [连续加法 δ] {R : 类型} [半环 R] [模 R δ]
-  定义体: f.comp g
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as a linear map.
 -/
 def compLinearMap [AddCommMonoid δ] [ContinuousAdd δ] {R : Type*} [Semiring R] [Module R δ]
-    [ContinuousConstSMul R δ] (g : β ->co γ) : C₀(γ, δ) ->ₗ[R] C₀(β, δ) where
+    [ContinuousConstSMul R δ] (g : β →co γ) : C₀(γ, δ) →ₗ[R] C₀(β, δ) where
   toFun f := f.comp g
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-/--
-Definition of `compNonUnitalAlgHom` / `compNonUnitalAlgHom` 的定义
+/-- Composition as a non-unital algebra homomorphism. -/
+/-
+**ZeroAtInftyContinuousMap.compNonUnitalAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `ZeroAt
+InftyContinuousMap`。
+形式化陈述：compNonUnitalAlgHom {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring δ]
+ [IsTopologicalSemiring δ] [Module R δ] [ContinuousConstSMul R δ] (g : β ->co γ)
+ : C₀(γ, δ) ->ₙₐ[R] C₀(β, δ) where toFun f
+参数：g : β ->co γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compNonUnitalAlgHom
-  signature: {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring δ]
-  body: f.comp g
-  map_smul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 compNonUnitalAlgHom
-  签名: {R : 类型} [半环 R] [非幺非结合半环 δ]
-  定义体: f.comp g
-  map_smul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+Composition as a non-unital algebra homomorphism.
 -/
 def compNonUnitalAlgHom {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring δ]
-    [IsTopologicalSemiring δ] [Module R δ] [ContinuousConstSMul R δ] (g : β ->co γ) :
-    C₀(γ, δ) ->ₙₐ[R] C₀(β, δ) where
+    [IsTopologicalSemiring δ] [Module R δ] [ContinuousConstSMul R δ] (g : β →co γ) :
+    C₀(γ, δ) →ₙₐ[R] C₀(β, δ) where
   toFun f := f.comp g
   map_smul' _ _ := rfl
   map_zero' := rfl
@@ -2192,3 +1628,4 @@ def compNonUnitalAlgHom {R : Type*} [Semiring R] [NonUnitalNonAssocSemiring δ]
   map_mul' _ _ := rfl
 
 end ZeroAtInftyContinuousMap
+

@@ -33,7 +33,7 @@ They can't be instances themselves since they can cause loops.
 -- `Type` is a reserved word, switched to `Type'`
 section Type'
 
-variable (F G : Type*) {α γ : Type*} {β : α -> Type*} [DFunLike F α β] [FunLike G α γ]
+variable (F G : Type*) {α γ : Type*} {β : α → Type*} [DFunLike F α β] [FunLike G α γ]
 
 /-- All `DFunLike`s are finite if their domain and codomain are.
 
@@ -42,22 +42,26 @@ This is not an instance because specific `DFunLike` types might have a better-su
 See also `DFunLike.finite`.
 -/
 @[instance_reducible]
-/--
-Definition of `DFunLike.fintype` / `DFunLike.fintype` 的定义
+/-
+**DFunLike.fintype** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DFunLike.fintype [DecidableEq α] [Fintype α] [forall i, Fintype (β i)] : F
+intype F
+参数：β i。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 
-English:
-definition DFunLike.fintype
-  signature: [DecidableEq α] [Fintype α] [forall i, Fintype (β i)]
-  body: Fintype.ofInjective _ DFunLike.coe_injective
+--- 原说明 ---
+All `DFunLike`s are finite if their domain and codomain are.
 
-中文:
-定义 依赖函数状.fintype
-  签名: [DecidableEq α] [有限类型 α] [对任意 i, 有限类型 (β i)]
-  定义体: Fintype.ofInjective _ DFunLike.coe_injective
+This is not an instance because specific `DFunLike` types might have a better-su
+ited definition.
 
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, Fintype, Fintype.ofInjective, coe_injective, ofInjective
+See also `DFunLike.finite`.
 -/
-noncomputable def DFunLike.fintype [DecidableEq α] [Fintype α] [forall i, Fintype (β i)] : Fintype F :=
+noncomputable def DFunLike.fintype [DecidableEq α] [Fintype α] [∀ i, Fintype (β i)] : Fintype F :=
   Fintype.ofInjective _ DFunLike.coe_injective
 
 /-- All `FunLike`s are finite if their domain and codomain are.
@@ -66,20 +70,18 @@ Non-dependent version of `DFunLike.fintype` that might be easier to infer.
 This is not an instance because specific `FunLike` types might have a better-suited definition.
 -/
 @[instance_reducible]
-/--
-Definition of `FunLike.fintype` / `FunLike.fintype` 的定义
+/-
+**FunLike.fintype** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FunLike.fintype [DecidableEq α] [Fintype α] [Fintype γ] : Fintype G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FunLike.fintype
-  signature: [DecidableEq α] [Fintype α] [Fintype γ]
-  body: DFunLike.fintype G
+--- 原说明 ---
+All `FunLike`s are finite if their domain and codomain are.
 
-中文:
-定义 函数状.fintype
-  签名: [DecidableEq α] [有限类型 α] [有限类型 γ]
-  定义体: DFunLike.fintype G
-
-Depends on / 依赖: DFunLike, DFunLike.fintype, fintype
+Non-dependent version of `DFunLike.fintype` that might be easier to infer.
+This is not an instance because specific `FunLike` types might have a better-sui
+ted definition.
 -/
 noncomputable def FunLike.fintype [DecidableEq α] [Fintype α] [Fintype γ] : Fintype G :=
   DFunLike.fintype G
@@ -89,44 +91,50 @@ end Type'
 -- `Sort` is a reserved word, switched to `Sort'`
 section Sort'
 
-variable (F G : Sort*) {α γ : Sort*} {β : α -> Sort*} [DFunLike F α β] [FunLike G α γ]
+variable (F G : Sort*) {α γ : Sort*} {β : α → Sort*} [DFunLike F α β] [FunLike G α γ]
 
-/--
-theorem `DFunLike.finite` / 定理 `DFunLike.finite`
+/-- All `DFunLike`s are finite if their domain and codomain are.
 
-English:
-theorem DFunLike.finite
-  given: [Finite α] [forall i, Finite (β i)]
-  statement: Finite F
-  proof: Finite.of_injective _ DFunLike.coe_injective
-
-中文:
-定理 依赖函数状.finite
-  条件: [有限 α] [对任意 i, 有限 (β i)]
-  结论: 有限 F
-  证明: Finite.of_injective _ DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, Finite, Finite.of_injective, coe_injective, h.symm, of_injective
+Can't be an instance because it can cause infinite loops.
 -/
-theorem DFunLike.finite [Finite α] [forall i, Finite (β i)] : Finite F :=
+/-
+**DFunLike.finite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DFunLike.finite [Finite α] [forall i, Finite (β i)] : Finite F
+参数：β i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
+
+--- 原说明 ---
+All `DFunLike`s are finite if their domain and codomain are.
+
+Can't be an instance because it can cause infinite loops.
+-/
+theorem DFunLike.finite [Finite α] [∀ i, Finite (β i)] : Finite F :=
   Finite.of_injective _ DFunLike.coe_injective
 
-/--
-theorem `FunLike.finite` / 定理 `FunLike.finite`
+/-- All `FunLike`s are finite if their domain and codomain are.
 
-English:
-theorem FunLike.finite
-  given: [Finite α] [Finite γ]
-  statement: Finite G
-  proof: DFunLike.finite G
+Non-dependent version of `DFunLike.finite` that might be easier to infer.
+Can't be an instance because it can cause infinite loops.
+-/
+/-
+**FunLike.finite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FunLike.finite [Finite α] [Finite γ] : Finite G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.finite`：DFunLike.finite [Finite α] [forall i, Finite (β i)] : F
+inite F
 
-中文:
-定理 函数状.finite
-  条件: [有限 α] [有限 γ]
-  结论: 有限 G
-  证明: DFunLike.finite G
+--- 原说明 ---
+All `FunLike`s are finite if their domain and codomain are.
 
-Depends on / 依赖: DFunLike, DFunLike.finite, finite
+Non-dependent version of `DFunLike.finite` that might be easier to infer.
+Can't be an instance because it can cause infinite loops.
 -/
 theorem FunLike.finite [Finite α] [Finite γ] : Finite G :=
   DFunLike.finite G
@@ -134,6 +142,10 @@ theorem FunLike.finite [Finite α] [Finite γ] : Finite G :=
 end Sort'
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) FunLike.toDecidableEq {F α β : Type*}
     [DecidableEq β] [Fintype α] [FunLike F α β] : DecidableEq F :=
-  fun a b => decidable_of_iff ((a : α -> β) = b) DFunLike.coe_injective.eq_iff
+  fun a b ↦ decidable_of_iff ((a : α → β) = b) DFunLike.coe_injective.eq_iff

@@ -42,123 +42,63 @@ open CategoryTheory Limits
 
 namespace TopCat
 
-/--
-Definition of `isOpenEmbedding` / `isOpenEmbedding` 的定义
+/-- The morphism property on the category of topological spaces given by open embeddings. -/
+/-
+**TopCat.isOpenEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `TopCat`。
+形式化陈述：isOpenEmbedding : MorphismProperty TopCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isOpenEmbedding
-  signature: : MorphismProperty TopCat
-  body: fun _ _ f => Topology.IsOpenEmbedding f
-
-@[simp]
-
-中文:
-定义 isOpenEmbedding
-  签名: : MorphismProperty 顶元素范畴
-  定义体: fun _ _ f => Topology.IsOpenEmbedding f
-
-@[simp]
-
-Depends on / 依赖: IsOpenEmbedding, Topology, Topology.IsOpenEmbedding
+--- 原说明 ---
+The morphism property on the category of topological spaces given by open embedd
+ings.
 -/
 def isOpenEmbedding : MorphismProperty TopCat :=
-  fun _ _ f => Topology.IsOpenEmbedding f
+  fun _ _ f ↦ Topology.IsOpenEmbedding f
 
 @[simp]
-/--
-lemma `isOpenEmbedding_iff` / 引理 `isOpenEmbedding_iff`
-
-English:
-lemma isOpenEmbedding_iff
-  given: {X Y : TopCat.{u}} (f : X ⟶ Y)
-  proof: .rfl
-
-中文:
-引理 isOpenEmbedding_iff
-  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
-  证明: .rfl
+/-
+**TopCat.isOpenEmbedding_iff** 是 Mathlib 中的一个引理，位于命名空间 `TopCat`。
+形式化陈述：isOpenEmbedding_iff {X Y : TopCat.{u}} (f : X ⟶ Y) : isOpenEmbedding f ↔ T
+opology.IsOpenEmbedding f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isOpenEmbedding_iff {X Y : TopCat.{u}} (f : X ⟶ Y) :
     isOpenEmbedding f ↔ Topology.IsOpenEmbedding f := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: isOpenEmbedding.IsMultiplicative
-  body: .id
-  comp_mem _ _ hf hg := hg.comp hf
-
-中文:
-实例 :
-  签名: isOpenEmbedding.是Multiplicative
-  定义体: .id
-  comp_mem _ _ hf hg := hg.comp hf
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : isOpenEmbedding.IsMultiplicative where
   id_mem _ := .id
   comp_mem _ _ hf hg := hg.comp hf
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: isOpenEmbedding.RespectsIso
-  body: MorphismProperty.respectsIso_of_isStableUnderComposition fun _ _ f (_ : IsIso f) =>
-    (TopCat.homeoOfIso (asIso f)).isOpenEmbedding
-
-中文:
-实例 :
-  签名: isOpenEmbedding.RespectsIso
-  定义体: MorphismProperty.respectsIso_of_isStableUnderComposition fun _ _ f (_ : IsIso f) =>
-    (TopCat.homeoOfIso (asIso f)).isOpenEmbedding
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.respectsIso_of_isStableUnderComposition, TopCat, TopCat.homeoOfIso, homeoOfIso, isOpenEmbedding, respectsIso_of_isStableUnderComposition
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : isOpenEmbedding.RespectsIso :=
-  MorphismProperty.respectsIso_of_isStableUnderComposition fun _ _ f (_ : IsIso f) =>
+  MorphismProperty.respectsIso_of_isStableUnderComposition fun _ _ f (_ : IsIso f) ↦
     (TopCat.homeoOfIso (asIso f)).isOpenEmbedding
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: isOpenEmbedding.IsStableUnderBaseChange
-  body: .mk' fun _ _ _ _ _ _ hg => fst_isOpenEmbedding_of_right _ hg
-
-中文:
-实例 :
-  签名: isOpenEmbedding.是StableUnderBaseChange
-  定义体: .mk' fun _ _ _ _ _ _ hg => fst_isOpenEmbedding_of_right _ hg
-
-Depends on / 依赖: fst_isOpenEmbedding_of_right
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : isOpenEmbedding.IsStableUnderBaseChange :=
-  .mk' fun _ _ _ _ _ _ hg => fst_isOpenEmbedding_of_right _ hg
+  .mk' fun _ _ _ _ _ _ hg ↦ fst_isOpenEmbedding_of_right _ hg
 
-/--
-Definition of `precoverage` / `precoverage` 的定义
+/-- The precoverage on `TopCat` given by jointly surjective families of open embeddings. -/
+/-
+**TopCat.precoverage** 是 Mathlib 中的一个定义，位于命名空间 `TopCat`。
+形式化陈述：precoverage : Precoverage TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precoverage
-  signature: : Precoverage TopCat.{u}
-  body: Types.jointlySurjectivePrecoverage.comap (forget TopCat) ⊓ isOpenEmbedding.precoverage
-  deriving Precoverage.HasIsos, Precoverage.IsStableUnderComposition
-
-deriving instance Precoverage.IsStableUnderBaseChange for precoverage
-
-中文:
-定义 precoverage
-  签名: : Precoverage 顶元素范畴.{u}
-  定义体: Types.jointlySurjectivePrecoverage.comap (forget TopCat) ⊓ isOpenEmbedding.precoverage
-  deriving Precoverage.HasIsos, Precoverage.IsStableUnderComposition
-
-deriving instance Precoverage.IsStableUnderBaseChange for precoverage
-
-Depends on / 依赖: TopCat, Types.jointlySurjectivePrecoverage.comap, forget, isOpenEmbedding, isOpenEmbedding.precoverage, jointlySurjectivePrecoverage, precoverage
+--- 原说明 ---
+The precoverage on `TopCat` given by jointly surjective families of open embeddi
+ngs.
 -/
 def precoverage : Precoverage TopCat.{u} :=
     Types.jointlySurjectivePrecoverage.comap (forget TopCat) ⊓ isOpenEmbedding.precoverage
@@ -166,174 +106,159 @@ def precoverage : Precoverage TopCat.{u} :=
 
 deriving instance Precoverage.IsStableUnderBaseChange for precoverage
 
-/--
-Definition of `grothendieckTopology` / `grothendieckTopology` 的定义
+/-- The Grothendieck topology on the category of topological spaces is the topology given by
+jointly surjective open embeddings. -/
+/-
+**TopCat.grothendieckTopology** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat`。
+形式化陈述：grothendieckTopology : GrothendieckTopology TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation grothendieckTopology
-  signature: : GrothendieckTopology TopCat.{u}
-  body: precoverage.toGrothendieck
-
-中文:
-缩写 grothendieckTopology
-  签名: : Grothendieck拓扑 顶元素范畴.{u}
-  定义体: precoverage.toGrothendieck
-
-Depends on / 依赖: precoverage, precoverage.toGrothendieck, toGrothendieck
+--- 原说明 ---
+The Grothendieck topology on the category of topological spaces is the topology 
+given by
+jointly surjective open embeddings.
 -/
 abbrev grothendieckTopology : GrothendieckTopology TopCat.{u} :=
   precoverage.toGrothendieck
-
-/--
-lemma `exists_mem_zeroHypercover_range` / 引理 `exists_mem_zeroHypercover_range`
-
-English:
-lemma exists_mem_zeroHypercover_range
-  given: {X : TopCat.{u}} (E : precoverage.ZeroHypercover X)
-  proof: by
-  simpa using E.mem₀.left
-
-中文:
-引理 存在_mem_zeroHypercover_range
-  条件: {X : 顶元素范畴.{u}} (E : precoverage.ZeroHypercover X)
-  证明: by
-  simpa using E.mem₀.left
-
-Depends on / 依赖: E.mem
+/-
+**TopCat.exists_mem_zeroHypercover_range** 是 Mathlib 中的一个引理，位于命名空间 `TopCat`。
+形式化陈述：exists_mem_zeroHypercover_range {X : TopCat.{u}} (E : precoverage.ZeroHype
+rcover X) : forall x, exists (i : E.I₀), x in Set.range (E.f i)
+参数：E : precoverage.ZeroHypercover X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.Presieve.map_ofArrows`：map_ofArrows {X : C} {ι : Type*} {
+Y : ι -> C} (f : forall i, Y i ⟶ X) : (ofArrows Y f).map F = ofArrows _ (fun i =
+> F.map (f i))
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.mem₀`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {J : CategoryTheory.Precoverage C} {S : C}   (s
+elf : J.ZeroHypercover S), self.pres…
 -/
 lemma exists_mem_zeroHypercover_range {X : TopCat.{u}} (E : precoverage.ZeroHypercover X) :
-    forall x, exists (i : E.I₀), x in Set.range (E.f i) := by
+    ∀ x, ∃ (i : E.I₀), x ∈ Set.range (E.f i) := by
   simpa using E.mem₀.left
-
-/--
-lemma `isOpenEmbedding_f_zeroHypercover` / 引理 `isOpenEmbedding_f_zeroHypercover`
-
-English:
-lemma isOpenEmbedding_f_zeroHypercover
-  given: {X : TopCat.{u}} (E : precoverage.ZeroHypercover X)
-  proof: by
-  simpa using E.mem₀.right
-
-中文:
-引理 isOpenEmbedding_f_zeroHypercover
-  条件: {X : 顶元素范畴.{u}} (E : precoverage.ZeroHypercover X)
-  证明: by
-  simpa using E.mem₀.right
-
-Depends on / 依赖: E.mem
+/-
+**TopCat.isOpenEmbedding_f_zeroHypercover** 是 Mathlib 中的一个引理，位于命名空间 `TopCat`。
+形式化陈述：isOpenEmbedding_f_zeroHypercover {X : TopCat.{u}} (E : precoverage.ZeroHyp
+ercover X) : forall i, Topology.IsOpenEmbedding (E.f i)
+参数：E : precoverage.ZeroHypercover X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.mem₀`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {J : CategoryTheory.Precoverage C} {S : C}   (s
+elf : J.ZeroHypercover S), self.pres…
 -/
 lemma isOpenEmbedding_f_zeroHypercover {X : TopCat.{u}} (E : precoverage.ZeroHypercover X) :
-    forall i, Topology.IsOpenEmbedding (E.f i) := by
+    ∀ i, Topology.IsOpenEmbedding (E.f i) := by
   simpa using E.mem₀.right
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Precoverage.Small.{u} precoverage.{u}
-  body: .inf fun _ _ _ hRS hS _ _ hf => hS (hRS _ _ hf)
-
-中文:
-实例 :
-  签名: Precoverage.Small.{u} precoverage.{u}
-  定义体: .inf fun _ _ _ hRS hS _ _ hf => hS (hRS _ _ hf)
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Precoverage.Small.{u} precoverage.{u} :=
-  .inf fun _ _ _ hRS hS _ _ hf => hS (hRS _ _ hf)
+  .inf fun _ _ _ hRS hS _ _ hf ↦ hS (hRS _ _ hf)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `subcanonical_grothendieckTopology` / 实例 `subcanonical_grothendieckTopology`
+/-- The Grothendieck topology on `TopCat` is subcanonical. -/
+/-
+**TopCat.subcanonical_grothendieckTopology** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+形式化陈述：subcanonical_grothendieckTopology : grothendieckTopology.Subcanonical
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj`：
+of_isSheaf_yoneda_obj (J : GrothendieckTopology C) (h : forall X, Presieve.IsShe
+af J (yoneda.obj X)) : Subcanonical J where le_canonical
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBa
+seChange_of_small`：∀ {C : Type u_2} [inst : CategoryTheory.Category.{v_1, u_2} C
+] {J : CategoryTheory.Precoverage C}   [J.IsStableUnderBaseChange] [J.HasPullba…
+· 使用定理 `TopCat.instIsStableUnderBaseChangePrecoverage`：TopCat.precoverage.IsStab
+leUnderBaseChange
+· 使用定理 `CategoryTheory.Precoverage.instHasPullbacksOfHasPullbacks`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Precoverage C)  
+ [CategoryTheory.Limits.HasPullbacks C], J.HasP…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `TopCat.instSmallPrecoverage`：TopCat.precoverage.Small
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_arrows_iff`：isSheafFor_arrows_iff : (
+ofArrows X π).IsSheafFor P ↔ (forall (x : (i : I) -> P.obj (op (X i))), Arrows.C
+ompatible P π x -> exists! t, foral…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+· 使用引理 `TopCat.isOpenEmbedding_f_zeroHypercover`：isOpenEmbedding_f_zeroHypercove
+r {X : TopCat.{u}} (E : precoverage.ZeroHypercover X) : forall i, Topology.IsOpe
+nEmbedding (E.f i)
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `Homeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), Continuous ⇑h
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Topology.IsEmbedding.toHomeomorph_symm_apply`：toHomeomorph_symm_apply {f
+ : X -> Y} (hf : IsEmbedding f) (x : X) : hf.toHomeomorph.symm ⟨f x, by simp⟩ = 
+x
+· 使用引理 `TopCat.exists_mem_zeroHypercover_range`：exists_mem_zeroHypercover_range 
+{X : TopCat.{u}} (E : precoverage.ZeroHypercover X) : forall x, exists (i : E.I₀
+), x in Set.range (E.f i)
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `Topology.IsOpenEmbedding.isOpen_range`：∀ {X : Type u_1} {Y : Type u_2} [
+tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOpe
+nEmbedding f → IsOpen (Set.…
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+（共 33 条，此处仅展示前 30 条）
 
-English:
-instance subcanonical_grothendieckTopology
-  signature: : grothendieckTopology.Subcanonical
-  body: by
-  refine .of_isSheaf_yoneda_obj _ fun X => ?_
-  rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small]
-  intro Y 𝒰
-  rw [Presieve.isSheafFor_arrows_iff]
-  have heq (i y) : 𝒰.f i y = (Subtype.val : Set.range (𝒰.f i) -> Y) ⟨𝒰.f i y, by simp⟩ := rfl
-  refine fun x hx => ⟨?_, fun i => ?_, fun f hf => ?_⟩
-· refine ofHom ContinuousMap.liftCover (fun i => Set.range (𝒰.f i)) ?_ ?_ ?_
-    · intro i
-      exact ⟨(x i).hom ∘ (isOpenEmbedding_f_zeroHypercover 𝒰 i).toHomeomorph.symm, by fun_prop⟩
-    · intro i j y
-      simp only [Set.mem_range, ContinuousMap.coe_mk, Function.comp_apply, forall_exists_index]
-      intro xi hi xj hj
-      conv_lhs => simp only [← hi]
-      conv_rhs => simp only [← hj]
-      have := hx i j _ (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).fst
-        (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).snd (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).condition
-      dsimp at this
-      simpa using! congr($(this) ⟨(xi, xj), hi ▸ hj.symm⟩)
-    · intro x
-      obtain ⟨i, hi⟩ := exists_mem_zeroHypercover_range 𝒰 x
-      exact ⟨i, (isOpenEmbedding_f_zeroHypercover 𝒰 i).isOpen_range.mem_nhds hi⟩
-  · apply ConcreteCategory.hom_ext
-    intro
-    simp only [yoneda_obj_map, Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
-      hom_comp, ContinuousMap.comp_apply]
-    rw [heq]; rw [ContinuousMap.liftCover_coe]
-    simp
-  · dsimp
-    ext x
-    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range 𝒰 x
-    have := congr($(hf i).hom y)
-    dsimp at this ⊢
-    rw [this]; rw [heq]; rw [ContinuousMap.liftCover_coe]
-    simp
-
-中文:
-实例 subcanonical_grothendieckTopology
-  签名: : grothendieckTopology.子典范
-  定义体: by
-  refine .of_isSheaf_yoneda_obj _ fun X => ?_
-  rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small]
-  intro Y 𝒰
-  rw [Presieve.isSheafFor_arrows_iff]
-  have heq (i y) : 𝒰.f i y = (Subtype.val : Set.range (𝒰.f i) -> Y) ⟨𝒰.f i y, by simp⟩ := rfl
-  refine fun x hx => ⟨?_, fun i => ?_, fun f hf => ?_⟩
-· refine ofHom ContinuousMap.liftCover (fun i => Set.range (𝒰.f i)) ?_ ?_ ?_
-    · intro i
-      exact ⟨(x i).hom ∘ (isOpenEmbedding_f_zeroHypercover 𝒰 i).toHomeomorph.symm, by fun_prop⟩
-    · intro i j y
-      simp only [Set.mem_range, ContinuousMap.coe_mk, Function.comp_apply, forall_exists_index]
-      intro xi hi xj hj
-      conv_lhs => simp only [← hi]
-      conv_rhs => simp only [← hj]
-      have := hx i j _ (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).fst
-        (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).snd (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).condition
-      dsimp at this
-      simpa using! congr($(this) ⟨(xi, xj), hi ▸ hj.symm⟩)
-    · intro x
-      obtain ⟨i, hi⟩ := exists_mem_zeroHypercover_range 𝒰 x
-      exact ⟨i, (isOpenEmbedding_f_zeroHypercover 𝒰 i).isOpen_range.mem_nhds hi⟩
-  · apply ConcreteCategory.hom_ext
-    intro
-    simp only [yoneda_obj_map, Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
-      hom_comp, ContinuousMap.comp_apply]
-    rw [heq]; rw [ContinuousMap.liftCover_coe]
-    simp
-  · dsimp
-    ext x
-    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range 𝒰 x
-    have := congr($(hf i).hom y)
-    dsimp at this ⊢
-    rw [this]; rw [heq]; rw [ContinuousMap.liftCover_coe]
-    simp
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.liftCover, Precoverage, Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small, Presieve, Presieve.isSheafFor_arrows_iff, Set.range, Subtype, Subtype.val, fun_prop, isOpenEmbedding_f_zeroHypercover, isSheafFor_arrows_iff, isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small, liftCover, of_isSheaf_yoneda_obj, toHomeomorph, toHomeomorph.symm
+--- 原说明 ---
+The Grothendieck topology on `TopCat` is subcanonical.
 -/
 instance subcanonical_grothendieckTopology : grothendieckTopology.Subcanonical := by
-  refine .of_isSheaf_yoneda_obj _ fun X => ?_
+  refine .of_isSheaf_yoneda_obj _ fun X ↦ ?_
   rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small]
   intro Y 𝒰
   rw [Presieve.isSheafFor_arrows_iff]
-  have heq (i y) : 𝒰.f i y = (Subtype.val : Set.range (𝒰.f i) -> Y) ⟨𝒰.f i y, by simp⟩ := rfl
-  refine fun x hx => ⟨?_, fun i => ?_, fun f hf => ?_⟩
-· refine ofHom ContinuousMap.liftCover (fun i => Set.range (𝒰.f i)) ?_ ?_ ?_
+  have heq (i y) : 𝒰.f i y = (Subtype.val : Set.range (𝒰.f i) → Y) ⟨𝒰.f i y, by simp⟩ := rfl
+  refine fun x hx ↦ ⟨?_, fun i ↦ ?_, fun f hf ↦ ?_⟩
+  · refine ofHom <| ContinuousMap.liftCover (fun i ↦ Set.range (𝒰.f i)) ?_ ?_ ?_
     · intro i
       exact ⟨(x i).hom ∘ (isOpenEmbedding_f_zeroHypercover 𝒰 i).toHomeomorph.symm, by fun_prop⟩
     · intro i j y
@@ -352,58 +277,51 @@ instance subcanonical_grothendieckTopology : grothendieckTopology.Subcanonical :
     intro
     simp only [yoneda_obj_map, Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
       hom_comp, ContinuousMap.comp_apply]
-    rw [heq]; rw [ContinuousMap.liftCover_coe]
+    rw [heq, ContinuousMap.liftCover_coe]
     simp
   · dsimp
     ext x
     obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range 𝒰 x
     have := congr($(hf i).hom y)
     dsimp at this ⊢
-    rw [this]; rw [heq]; rw [ContinuousMap.liftCover_coe]
+    rw [this, heq, ContinuousMap.liftCover_coe]
     simp
-
-/--
-lemma `precoverage_le_comap_uliftFunctor` / 引理 `precoverage_le_comap_uliftFunctor`
-
-English:
-lemma precoverage_le_comap_uliftFunctor
-  proof: by
-  refine Precoverage.le_of_zeroHypercover fun X E => ?_
-  refine ⟨?_, ?_⟩
-  · simp only [Presieve.map_ofArrows, Precoverage.mem_comap_iff,
-      Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, ConcreteCategory.hom_ofHom,
-      Set.mem_range, TypeCat.Fun.coe_mk]
-    intro ⟨x⟩
-    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range E x
-    use i, ⟨y⟩
-    rfl
-  · simp only [Presieve.map_ofArrows, MorphismProperty.ofArrows_mem_precoverage,
-      isOpenEmbedding_iff]
-    intro i
-    exact (isOpenEmbedding_f_zeroHypercover _ _).uliftMap
-
-中文:
-引理 precoverage_le_comap_uliftFunctor
-  证明: by
-  refine Precoverage.le_of_zeroHypercover fun X E => ?_
-  refine ⟨?_, ?_⟩
-  · simp only [Presieve.map_ofArrows, Precoverage.mem_comap_iff,
-      Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, ConcreteCategory.hom_ofHom,
-      Set.mem_range, TypeCat.Fun.coe_mk]
-    intro ⟨x⟩
-    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range E x
-    use i, ⟨y⟩
-    rfl
-  · simp only [Presieve.map_ofArrows, MorphismProperty.ofArrows_mem_precoverage,
-      isOpenEmbedding_iff]
-    intro i
-    exact (isOpenEmbedding_f_zeroHypercover _ _).uliftMap
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, MorphismProperty, MorphismProperty.ofArrows_mem_precoverage, Precoverage, Precoverage.le_of_zeroHypercover, Precoverage.mem_comap_iff, Presieve, Presieve.map_ofArrows, Set.mem_range, TypeCat, TypeCat.Fun.coe_mk, Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, coe_mk, exists_mem_zeroHypercover_range, hom_ofHom, isOpenEmbedding_f_zeroHypercover, isOpenEmbedding_iff, le_of_zeroHypercover, map_ofArrows
+/-
+**TopCat.precoverage_le_comap_uliftFunctor** 是 Mathlib 中的一个引理，位于命名空间 `TopCat`。
+形式化陈述：precoverage_le_comap_uliftFunctor : precoverage.{u} <= precoverage.comap T
+opCat.uliftFunctor.{v}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Precoverage.le_of_zeroHypercover`：le_of_zeroHypercover {J
+ K : Precoverage C} (h : forall ⦃X : C⦄ ⦃E : ZeroHypercover.{max u v} J X⦄, E.pr
+esieve₀ in K X) : J <= K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Presieve.map_ofArrows`：map_ofArrows {X : C} {ι : Type*} {
+Y : ι -> C} (f : forall i, Y i ⟶ X) : (ofArrows Y f).map F = ofArrows _ (fun i =
+> F.map (f i))
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用引理 `TopCat.exists_mem_zeroHypercover_range`：exists_mem_zeroHypercover_range 
+{X : TopCat.{u}} (E : precoverage.ZeroHypercover X) : forall x, exists (i : E.I₀
+), x in Set.range (E.f i)
+· 使用引理 `Topology.IsOpenEmbedding.uliftMap`：Topology.IsOpenEmbedding.uliftMap {f 
+: X -> Y} (hf : IsOpenEmbedding f) : IsOpenEmbedding (ULift.map f)
+· 使用引理 `TopCat.isOpenEmbedding_f_zeroHypercover`：isOpenEmbedding_f_zeroHypercove
+r {X : TopCat.{u}} (E : precoverage.ZeroHypercover X) : forall i, Topology.IsOpe
+nEmbedding (E.f i)
 -/
 lemma precoverage_le_comap_uliftFunctor :
-    precoverage.{u} <= precoverage.comap TopCat.uliftFunctor.{v} := by
-  refine Precoverage.le_of_zeroHypercover fun X E => ?_
+    precoverage.{u} ≤ precoverage.comap TopCat.uliftFunctor.{v} := by
+  refine Precoverage.le_of_zeroHypercover fun X E ↦ ?_
   refine ⟨?_, ?_⟩
   · simp only [Presieve.map_ofArrows, Precoverage.mem_comap_iff,
       Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, ConcreteCategory.hom_ofHom,
@@ -416,28 +334,13 @@ lemma precoverage_le_comap_uliftFunctor :
       isOpenEmbedding_iff]
     intro i
     exact (isOpenEmbedding_f_zeroHypercover _ _).uliftMap
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: uliftFunctor.IsContinuous grothendieckTopology grothendieckTopology
-  body: by
-  apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
-  apply precoverage_le_comap_uliftFunctor
-
-中文:
-实例 :
-  签名: uliftFunctor.是连续 grothendieckTopology grothendieckTopology
-  定义体: by
-  apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
-  apply precoverage_le_comap_uliftFunctor
-
-Depends on / 依赖: Functor, Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy, isContinuous_toGrothendieck_of_pullbacksPreservedBy, precoverage_le_comap_uliftFunctor
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : uliftFunctor.IsContinuous grothendieckTopology grothendieckTopology := by
   apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
   apply precoverage_le_comap_uliftFunctor
 
 end TopCat
+

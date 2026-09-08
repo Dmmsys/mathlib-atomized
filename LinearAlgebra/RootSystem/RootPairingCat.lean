@@ -38,34 +38,15 @@ universe v u
 
 variable {R : Type u} [CommRing R]
 
-/--
-Definition of `RootPairingCat` / `RootPairingCat` 的定义
+/-- Objects in the category of root pairings. -/
+/-
+**RootPairingCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [CommRing R] → Type (max u (v + 1))
+参数：v + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RootPairingCat
-  parameters: (R : Type u) [CommRing R]
-  axioms and operations (8):
-    - weight : Type v
-    - [weightIsAddCommGroup : AddCommGroup weight]
-    - [weightIsModule : Module R weight]
-    - coweight : Type v
-    - [coweightIsAddCommGroup : AddCommGroup coweight]
-    - [coweightIsModule : Module R coweight]
-    - index : Type v
-    - pairing : RootPairing index R weight coweight
-
-中文:
-结构 RootPairing范畴
-  参数: (R : 类型u) [交换环 R]
-  公理与运算 (8 个):
-    - weight : 类型v
-    - [weightIsAddCommGroup : 加法交换群 weight]
-    - [weightIsModule : 模 R weight]
-    - coweight : 类型v
-    - [coweightIsAddCommGroup : 加法交换群 coweight]
-    - [coweightIsModule : 模 R coweight]
-    - index : 类型v
-    - pairing : RootPairing index R weight coweight
+--- 原说明 ---
+Objects in the category of root pairings.
 -/
 structure RootPairingCat (R : Type u) [CommRing R] where
   /-- The weight space of a root pairing. -/
@@ -86,24 +67,12 @@ attribute [instance] RootPairingCat.coweightIsAddCommGroup RootPairingCat.coweig
 
 namespace RootPairingCat
 
-/--
-Instance `category` / 实例 `category`
-
-English:
-instance category
-  signature: : Category.{v, max (v + 1) u} (RootPairingCat.{v} R) where
-  body: RootPairing.Hom P.pairing Q.pairing
-  id P := RootPairing.Hom.id P.pairing
-  comp f g := RootPairing.Hom.comp g f
-
-中文:
-实例 category
-  签名: : 范畴.{v, 最大值 (v + 1) u} (RootPairing范畴.{v} R) where
-  定义体: RootPairing.Hom P.pairing Q.pairing
-  id P := RootPairing.Hom.id P.pairing
-  comp f g := RootPairing.Hom.comp g f
-
-Depends on / 依赖: P.pairing, Q.pairing, RootPairing, RootPairing.Hom, pairing
+/-
+**RootPairingCat.category** 是 Mathlib 中的一个实例，位于命名空间 `RootPairingCat`。
+形式化陈述：category : Category.{v, max (v + 1) u} (RootPairingCat.{v} R) where Hom P 
+Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance category : Category.{v, max (v + 1) u} (RootPairingCat.{v} R) where
   Hom P Q := RootPairing.Hom P.pairing Q.pairing
@@ -111,3 +80,4 @@ instance category : Category.{v, max (v + 1) u} (RootPairingCat.{v} R) where
   comp f g := RootPairing.Hom.comp g f
 
 end RootPairingCat
+

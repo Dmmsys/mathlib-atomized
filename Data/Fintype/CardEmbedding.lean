@@ -29,20 +29,15 @@ open Nat
 
 namespace Fintype
 
-/--
-theorem `card_embedding_eq_of_unique` / 定理 `card_embedding_eq_of_unique`
-
-English:
-theorem card_embedding_eq_of_unique
-  given: {α β : Type*} [Unique α] [Fintype β] [Fintype (α ↪ β)]
-  proof: card_congr Equiv.uniqueEmbeddingEquivResult
-
-中文:
-定理 card_embedding_eq_of_unique
-  条件: {α β : 类型} [唯一 α] [有限类型 β] [有限类型 (α ↪ β)]
-  证明: card_congr Equiv.uniqueEmbeddingEquivResult
-
-Depends on / 依赖: Equiv.uniqueEmbeddingEquivResult, card_congr, uniqueEmbeddingEquivResult
+/-
+**Fintype.card_embedding_eq_of_unique** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：card_embedding_eq_of_unique {α β : Type*} [Unique α] [Fintype β] [Fintype 
+(α ↪ β)] : ‖α ↪ β‖ = ‖β‖
+参数：α ↪ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
 -/
 theorem card_embedding_eq_of_unique {α β : Type*} [Unique α] [Fintype β] [Fintype (α ↪ β)] :
     ‖α ↪ β‖ = ‖β‖ :=
@@ -52,74 +47,91 @@ theorem card_embedding_eq_of_unique {α β : Type*} [Unique α] [Fintype β] [Fi
 -- Porting note: `induction α using Fintype.induction_empty_option` can't work with the `Fintype α`
 -- instance so instead we make an ugly refine and `dsimp` a lot.
 @[simp]
-/--
-theorem `card_embedding_eq` / 定理 `card_embedding_eq`
-
-English:
-theorem card_embedding_eq
-  given: {α β : Type*} [Fintype α] [Fintype β] [emb : Fintype (α ↪ β)]
-  proof: by
-  rw [Subsingleton.elim emb Embedding.fintype]
-  refine Fintype.induction_empty_option (P := fun t => ‖t ↪ β‖ = ‖β‖.descFactorial ‖t‖)
-        (fun α₁ α₂ h₂ e ih => ?_) (?_) (fun γ h ih => ?_) α <;> clear! α
-  · let := Fintype.ofEquiv _ e.symm
-    rw [← card_congr (Equiv.embeddingCongr e (Equiv.refl β))]; rw [ih]; rw [card_congr e]
-  · rw [card_pempty, Nat.descFactorial_zero, card_eq_one_iff]
-    exact ⟨Embedding.ofIsEmpty, fun x => DFunLike.ext _ _ isEmptyElim⟩
-  · classical
-    rw [card_option]; rw [Nat.descFactorial_succ]; rw [card_congr (Embedding.optionEmbeddingEquiv γ β)]; rw [card_sigma]; rw [← ih]
-    simp only [Fintype.card_compl_set, Fintype.card_range, Finset.sum_const, Finset.card_univ,
-      Nat.nsmul_eq_mul, mul_comm]
-
-中文:
-定理 card_embedding_eq
-  条件: {α β : 类型} [有限类型 α] [有限类型 β] [emb : 有限类型 (α ↪ β)]
-  证明: by
-  rw [Subsingleton.elim emb Embedding.fintype]
-  refine Fintype.induction_empty_option (P := fun t => ‖t ↪ β‖ = ‖β‖.descFactorial ‖t‖)
-        (fun α₁ α₂ h₂ e ih => ?_) (?_) (fun γ h ih => ?_) α <;> clear! α
-  · let := Fintype.ofEquiv _ e.symm
-    rw [← card_congr (Equiv.embeddingCongr e (Equiv.refl β))]; rw [ih]; rw [card_congr e]
-  · rw [card_pempty, Nat.descFactorial_zero, card_eq_one_iff]
-    exact ⟨Embedding.ofIsEmpty, fun x => DFunLike.ext _ _ isEmptyElim⟩
-  · classical
-    rw [card_option]; rw [Nat.descFactorial_succ]; rw [card_congr (Embedding.optionEmbeddingEquiv γ β)]; rw [card_sigma]; rw [← ih]
-    simp only [Fintype.card_compl_set, Fintype.card_range, Finset.sum_const, Finset.card_univ,
-      Nat.nsmul_eq_mul, mul_comm]
-
-Depends on / 依赖: DFunLike, DFunLike.ext, Embedding, Embedding.fintype, Embedding.ofIsEmpty, Equiv.embeddingCongr, Equiv.refl, Fintype, Fintype.induction_empty_option, Fintype.ofEquiv, Nat.descFactorial_su, Nat.descFactorial_zero, Subsingleton, Subsingleton.elim, card_congr, card_eq_one_iff, card_option, card_pempty, classical, descFactorial
+/-
+**Fintype.card_embedding_eq** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：card_embedding_eq {α β : Type*} [Fintype α] [Fintype β] [emb : Fintype (α 
+↪ β)] : ‖α ↪ β‖ = ‖β‖.descFactorial ‖α‖
+参数：α ↪ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Fintype.induction_empty_option`：induction_empty_option {P : forall (α : 
+Type u) [Fintype α], Prop} (of_equiv : forall (α β) [Fintype β] (e : α ≃ β), @P 
+α (@Fintype.ofEquiv …
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Fintype.card_pempty`：Fintype.card_pempty : Fintype.card PEmpty = 0
+· 使用定理 `Nat.descFactorial_zero`：descFactorial_zero (n : Nat) : n.descFactorial 0
+ = 1
+· 使用定理 `Fintype.card_eq_one_iff`：card_eq_one_iff : card α = 1 ↔ exists x : α, fo
+rall y, y = x
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `Fintype.card_option`：Fintype.card_option {α : Type*} [Fintype α] : Finty
+pe.card (Option α) = Fintype.card α + 1
+· 使用定理 `Nat.descFactorial_succ`：descFactorial_succ (n k : Nat) : n.descFactorial
+ (k + 1) = (n - k) * n.descFactorial k
+· 使用定理 `Fintype.card_sigma`：∀ {ι : Type u_8} {α : ι → Type u_7} [inst : Fintype 
+ι] [inst_1 : (i : ι) → Fintype (α i)],   Fintype.card (Sigma α) = ∑ i, Fintype.c
+ard (α i…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Fintype.card_compl_set`：Fintype.card_compl_set [Fintype α] (s : Set α) [
+Fintype s] [Fintype (↥sᶜ : Sort _)] : Fintype.card (↥sᶜ : Sort _) = Fintype.card
+ α - Fintype…
+· 使用定理 `Fintype.card_range`：card_range {α β F : Type*} [FunLike F α β] [Embeddin
+gLike F α β] (f : F) [Fintype α] [Fintype (Set.range f)] : Fintype.card (Set.ran
+ge f) = …
+· 使用定理 `Function.instEmbeddingLikeEmbedding`：∀ {α : Sort u} {β : Sort v}, Embedd
+ingLike (α ↪ β) α β
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem card_embedding_eq {α β : Type*} [Fintype α] [Fintype β] [emb : Fintype (α ↪ β)] :
     ‖α ↪ β‖ = ‖β‖.descFactorial ‖α‖ := by
   rw [Subsingleton.elim emb Embedding.fintype]
-  refine Fintype.induction_empty_option (P := fun t => ‖t ↪ β‖ = ‖β‖.descFactorial ‖t‖)
-        (fun α₁ α₂ h₂ e ih => ?_) (?_) (fun γ h ih => ?_) α <;> clear! α
+  refine Fintype.induction_empty_option (P := fun t ↦ ‖t ↪ β‖ = ‖β‖.descFactorial ‖t‖)
+        (fun α₁ α₂ h₂ e ih ↦ ?_) (?_) (fun γ h ih ↦ ?_) α <;> clear! α
   · let := Fintype.ofEquiv _ e.symm
-    rw [← card_congr (Equiv.embeddingCongr e (Equiv.refl β))]; rw [ih]; rw [card_congr e]
+    rw [← card_congr (Equiv.embeddingCongr e (Equiv.refl β)), ih, card_congr e]
   · rw [card_pempty, Nat.descFactorial_zero, card_eq_one_iff]
-    exact ⟨Embedding.ofIsEmpty, fun x => DFunLike.ext _ _ isEmptyElim⟩
+    exact ⟨Embedding.ofIsEmpty, fun x ↦ DFunLike.ext _ _ isEmptyElim⟩
   · classical
-    rw [card_option]; rw [Nat.descFactorial_succ]; rw [card_congr (Embedding.optionEmbeddingEquiv γ β)]; rw [card_sigma]; rw [← ih]
+    rw [card_option, Nat.descFactorial_succ, card_congr (Embedding.optionEmbeddingEquiv γ β),
+        card_sigma, ← ih]
     simp only [Fintype.card_compl_set, Fintype.card_range, Finset.sum_const, Finset.card_univ,
       Nat.nsmul_eq_mul, mul_comm]
 
-/--
-theorem `card_embedding_eq_of_infinite` / 定理 `card_embedding_eq_of_infinite`
+/-- The cardinality of embeddings from an infinite type to a finite type is zero.
+This is a re-statement of the pigeonhole principle. -/
+/-
+**Fintype.card_embedding_eq_of_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：card_embedding_eq_of_infinite {α β : Type*} [Infinite α] [Finite β] [Finty
+pe (α ↪ β)] : ‖α ↪ β‖ = 0
+参数：α ↪ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_eq_zero`：∀ {α : Type u_1} [inst : Fintype α] [IsEmpty α], F
+intype.card α = 0
 
-English:
-theorem card_embedding_eq_of_infinite
-  given: {α β : Type*} [Infinite α] [Finite β] [Fintype (α ↪ β)]
-  proof: card_eq_zero
-
-中文:
-定理 card_embedding_eq_of_infinite
-  条件: {α β : 类型} [无限 α] [有限 β] [有限类型 (α ↪ β)]
-  证明: card_eq_zero
-
-Depends on / 依赖: card_eq_zero
+--- 原说明 ---
+The cardinality of embeddings from an infinite type to a finite type is zero.
+This is a re-statement of the pigeonhole principle.
 -/
 theorem card_embedding_eq_of_infinite {α β : Type*} [Infinite α] [Finite β] [Fintype (α ↪ β)] :
     ‖α ↪ β‖ = 0 :=
   card_eq_zero
 
 end Fintype
+

@@ -97,7 +97,7 @@ namespace WittVector
 
 universe u
 
-variable {p : Nat} {R S : Type u} {idx : Type*} [CommRing R] [CommRing S]
+variable {p : ℕ} {R S : Type u} {idx : Type*} [CommRing R] [CommRing S]
 
 local notation "𝕎" => WittVector p -- type as `\bbW`
 
@@ -109,237 +109,263 @@ variable (p)
 
 noncomputable section
 
-
-
-/--
-theorem `poly_eq_of_wittPolynomial_bind_eq'` / 定理 `poly_eq_of_wittPolynomial_bind_eq'`
-
-English:
-theorem poly_eq_of_wittPolynomial_bind_eq'
-  statement: [Fact p.Prime] (f g : Nat -> MvPolynomial (idx × Nat) Int)
-  proof: by
-  ext1 n
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  rw [← funext_iff] at h
-  replace h :=
-    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
-    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
-
-中文:
-定理 poly_eq_of_wittPolynomial_bind_eq'
-  结论: [Fact p.素] (f g : 自然数 -> 多元多项式 (idx × 自然数) 整数)
-  证明: by
-  ext1 n
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  rw [← funext_iff] at h
-  replace h :=
-    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
-    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
-
-Depends on / 依赖: Function, Function.comp_def, Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map, MvPolynomial.map_injective, castRingHom, cast_injective, comp_def, congr_arg, funext_iff, map_injective, map_wittPolynomial, replace, xInTermsOfW
+/-!
+### The `IsPoly` predicate
 -/
-theorem poly_eq_of_wittPolynomial_bind_eq' [Fact p.Prime] (f g : Nat -> MvPolynomial (idx × Nat) Int)
-    (h : forall n, bind₁ f (wittPolynomial p _ n) = bind₁ g (wittPolynomial p _ n)) : f = g := by
-  ext1 n
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  rw [← funext_iff] at h
-  replace h :=
-    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
-    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
 
-/--
-theorem `poly_eq_of_wittPolynomial_bind_eq` / 定理 `poly_eq_of_wittPolynomial_bind_eq`
 
-English:
-theorem poly_eq_of_wittPolynomial_bind_eq
-  statement: [Fact p.Prime] (f g : Nat -> MvPolynomial Nat Int)
-  proof: by
-  ext1 n
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  rw [← funext_iff] at h
-  replace h :=
-    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
-    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
+/-
+**WittVector.poly_eq_of_wittPolynomial_bind_eq'** 是 Mathlib 中的一个定理，位于命名空间 `WittV
+ector`。
+形式化陈述：poly_eq_of_wittPolynomial_bind_eq' [Fact p.Prime] (f g : Nat -> MvPolynomi
+al (idx × Nat) Int) (h : forall n, bind₁ f (wittPolynomial p _ n) = bind₁ g (wit
+tPolynomial p _ n)) : f = g
+参数：f g : Nat -> MvPolynomial (idx × Nat) Int；h : forall n, bind₁ f (wittPolynomi
+al p _ n) = bind₁ g (wittPolynomial p _ n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.map_bind₁`：map_bind₁ (f : R ->+* S) (g : σ -> MvPolynomial 
+τ R) (φ : MvPolynomial σ R) : map f (bind₁ g φ) = bind₁ (fun i : σ => (map f) (g
+ i)) (map f …
+· 使用定理 `map_wittPolynomial`：map_wittPolynomial (f : R ->+* S) (n : Nat) : map f 
+(W n) = W n
+· 使用定理 `bind₁_wittPolynomial_xInTermsOfW`：bind₁_wittPolynomial_xInTermsOfW [Inve
+rtible (p : R)] (n : Nat) : bind₁ (W_ R) (xInTermsOfW p R n) = X n
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
 
-中文:
-定理 poly_eq_of_wittPolynomial_bind_eq
-  结论: [Fact p.素] (f g : 自然数 -> 多元多项式 自然数 整数)
-  证明: by
-  ext1 n
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
-  rw [← funext_iff] at h
-  replace h :=
-    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
-    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
-
-Depends on / 依赖: ContinuousEval, ContinuousEval.toContinuousMapClass, ContinuousMapClass, Function, Function.comp_def, Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map, MvPolynomial.map_injective, castRingHom, cast_injective, comp_def, congr_arg, funext_iff, map_injective, map_wittPolynomial, replace, toContinuousMapClass, xInTermsOfW
+--- 原说明 ---
+### The `IsPoly` predicate
 -/
-theorem poly_eq_of_wittPolynomial_bind_eq [Fact p.Prime] (f g : Nat -> MvPolynomial Nat Int)
-    (h : forall n, bind₁ f (wittPolynomial p _ n) = bind₁ g (wittPolynomial p _ n)) : f = g := by
+theorem poly_eq_of_wittPolynomial_bind_eq' [Fact p.Prime] (f g : ℕ → MvPolynomial (idx × ℕ) ℤ)
+    (h : ∀ n, bind₁ f (wittPolynomial p _ n) = bind₁ g (wittPolynomial p _ n)) : f = g := by
   ext1 n
-  apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
   rw [← funext_iff] at h
   replace h :=
-    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
+    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom ℚ) ∘ fam) (xInTermsOfW p ℚ n)) h
+  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
+    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
+/-
+**WittVector.poly_eq_of_wittPolynomial_bind_eq** 是 Mathlib 中的一个定理，位于命名空间 `WittVe
+ctor`。
+形式化陈述：poly_eq_of_wittPolynomial_bind_eq [Fact p.Prime] (f g : Nat -> MvPolynomia
+l Nat Int) (h : forall n, bind₁ f (wittPolynomial p _ n) = bind₁ g (wittPolynomi
+al p _ n)) : f = g
+参数：f g : Nat -> MvPolynomial Nat Int；h : forall n, bind₁ f (wittPolynomial p _ n
+) = bind₁ g (wittPolynomial p _ n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MvPolynomial.map_injective`：map_injective (hf : Function.Injective f) : 
+Function.Injective (map f : MvPolynomial σ R -> MvPolynomial σ S₁)
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.map_bind₁`：map_bind₁ (f : R ->+* S) (g : σ -> MvPolynomial 
+τ R) (φ : MvPolynomial σ R) : map f (bind₁ g φ) = bind₁ (fun i : σ => (map f) (g
+ i)) (map f …
+· 使用定理 `map_wittPolynomial`：map_wittPolynomial (f : R ->+* S) (n : Nat) : map f 
+(W n) = W n
+· 使用定理 `bind₁_wittPolynomial_xInTermsOfW`：bind₁_wittPolynomial_xInTermsOfW [Inve
+rtible (p : R)] (n : Nat) : bind₁ (W_ R) (xInTermsOfW p R n) = X n
+· 使用定理 `MvPolynomial.bind₁_X_right`：bind₁_X_right (f : σ -> MvPolynomial τ R) (i
+ : σ) : bind₁ f (X i) = f i
+-/
+theorem poly_eq_of_wittPolynomial_bind_eq [Fact p.Prime] (f g : ℕ → MvPolynomial ℕ ℤ)
+    (h : ∀ n, bind₁ f (wittPolynomial p _ n) = bind₁ g (wittPolynomial p _ n)) : f = g := by
+  ext1 n
+  apply MvPolynomial.map_injective (Int.castRingHom ℚ) Int.cast_injective
+  rw [← funext_iff] at h
+  replace h :=
+    congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom ℚ) ∘ fam) (xInTermsOfW p ℚ n)) h
   simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
     bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
 
 -- Ideally, we would generalise this to n-ary functions
 -- But we don't have a good theory of n-ary compositions in mathlib
 /--
-Definition of `IsPoly` / `IsPoly` 的定义
+A function `f : Π R, 𝕎 R → 𝕎 R` that maps Witt vectors to Witt vectors over arbitrary base rings
+is said to be *polynomial* if there is a family of polynomials `φₙ` over `ℤ` such that the `n`th
+coefficient of `f x` is given by evaluating `φₙ` at the coefficients of `x`.
 
-English:
-class IsPoly
-  parameters: (f : forall ⦃R⦄ [CommRing R], WittVector p R -> 𝕎 R)
-  (no additional axioms)
+See also `WittVector.IsPoly₂` for the binary variant.
 
-中文:
-类 是Poly
-  参数: (f : 对任意 ⦃R⦄ [交换环 R], Witt向量 p R -> 𝕎 R)
-  (无附加公理)
-
-Depends on / 依赖: ContinuousEval, ContinuousEval.toContinuousEvalConst, ContinuousEvalConst, toContinuousEvalConst
+The `ghost_calc` tactic makes use of the `IsPoly` and `IsPoly₂` typeclass and its instances.
+(In Lean 3, there was an `@[is_poly]` attribute to manage these instances,
+because typeclass resolution did not play well with function composition.
+This no longer seems to be an issue, so that such instances can be defined directly.)
 -/
-class IsPoly (f : forall ⦃R⦄ [CommRing R], WittVector p R -> 𝕎 R) : Prop where mk' ::
+/-
+**WittVector.IsPoly** 是 Mathlib 中的一个归纳类型，位于命名空间 `WittVector`。
+形式化陈述：(p : ℕ) → (⦃R : Type u_2⦄ → [CommRing R] → WittVector p R → WittVector p R
+) → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A function `f : Π R, 𝕎 R → 𝕎 R` that maps Witt vectors to Witt vectors over arbi
+trary base rings
+is said to be *polynomial* if there is a family of polynomials `φₙ` over `ℤ` suc
+h that the `n`th
+coefficient of `f x` is given by evaluating `φₙ` at the coefficients of `x`.
+
+See also `WittVector.IsPoly₂` for the binary variant.
+
+The `ghost_calc` tactic makes use of the `IsPoly` and `IsPoly₂` typeclass and it
+s instances.
+(In Lean 3, there was an `@[is_poly]` attribute to manage these instances,
+because typeclass resolution did not play well with function composition.
+This no longer seems to be an issue, so that such instances can be defined direc
+tly.)
+-/
+class IsPoly (f : ∀ ⦃R⦄ [CommRing R], WittVector p R → 𝕎 R) : Prop where mk' ::
   poly :
-    exists φ : Nat -> MvPolynomial Nat Int,
-      forall ⦃R⦄ [CommRing R] (x : 𝕎 R), (f x).coeff = fun n => aeval x.coeff (φ n)
+    ∃ φ : ℕ → MvPolynomial ℕ ℤ,
+      ∀ ⦃R⦄ [CommRing R] (x : 𝕎 R), (f x).coeff = fun n => aeval x.coeff (φ n)
 
-/--
-Instance `idIsPoly` / 实例 `idIsPoly`
+/-- The identity function on Witt vectors is a polynomial function. -/
+/-
+**WittVector.idIsPoly** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：idIsPoly : IsPoly p fun _ _ => id
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance idIsPoly
-  signature: : IsPoly p fun _ _ => id
-  body: ⟨⟨X, by intros; simp only [aeval_X, id]⟩⟩
-
-中文:
-实例 idIsPoly
-  签名: : 是Poly p fun _ _ => id
-  定义体: ⟨⟨X, by intros; simp only [aeval_X, id]⟩⟩
-
-Depends on / 依赖: aeval_X, intros
+--- 原说明 ---
+The identity function on Witt vectors is a polynomial function.
 -/
 instance idIsPoly : IsPoly p fun _ _ => id :=
   ⟨⟨X, by intros; simp only [aeval_X, id]⟩⟩
-
-/--
-Instance `idIsPolyI'` / 实例 `idIsPolyI'`
-
-English:
-instance idIsPolyI'
-  signature: : IsPoly p fun _ _ a => a
-  body: WittVector.idIsPoly _
-
-中文:
-实例 idIsPolyI'
-  签名: : 是Poly p fun _ _ a => a
-  定义体: WittVector.idIsPoly _
-
-Depends on / 依赖: WittVector, WittVector.idIsPoly, idIsPoly
+/-
+**WittVector.idIsPolyI'** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：idIsPolyI' : IsPoly p fun _ _ a => a
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance idIsPolyI' : IsPoly p fun _ _ a => a :=
   WittVector.idIsPoly _
 
 namespace IsPoly
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (IsPoly p fun _ _ => id)
-  body: ⟨WittVector.idIsPoly p⟩
-
-中文:
-实例 :
-  签名: 可居 (是Poly p fun _ _ => id)
-  定义体: ⟨WittVector.idIsPoly p⟩
-
-Depends on / 依赖: WittVector, WittVector.idIsPoly, idIsPoly
+/-
+**WittVector.IsPoly.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector.IsPoly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (IsPoly p fun _ _ => id) :=
   ⟨WittVector.idIsPoly p⟩
 
 variable {p}
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: [Fact p.Prime] {f g} (hf : IsPoly p f) (hg : IsPoly p g)
-  proof: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  intros
-  ext n
-  rw [hf]; rw [hg]; rw [poly_eq_of_wittPolynomial_bind_eq p φ ψ]
-  intro k
-  apply MvPolynomial.funext
-  intro x
-  simp only [hom_bind₁]
-  specialize h (ULift Int) (mk p fun i => ⟨x i⟩) k
-  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
-  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
-  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
-  convert! h using 1
-  all_goals
-    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    ext1
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    simp only [coeff_mk]; rfl
-
-中文:
-定理 ext
-  结论: [Fact p.素] {f g} (hf : 是Poly p f) (hg : 是Poly p g)
-  证明: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  intros
-  ext n
-  rw [hf]; rw [hg]; rw [poly_eq_of_wittPolynomial_bind_eq p φ ψ]
-  intro k
-  apply MvPolynomial.funext
-  intro x
-  simp only [hom_bind₁]
-  specialize h (ULift Int) (mk p fun i => ⟨x i⟩) k
-  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
-  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
-  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
-  convert! h using 1
-  all_goals
-    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    ext1
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    simp only [coeff_mk]; rfl
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.eval, MvPolynomial.funext, RingEquiv, RingEquiv.coe_toRingHom, ULift.ringEquiv.symm, all_goals, coe_toRingHom, convert, ghostComponent_apply, injective, intros, poly_eq_of_wittPolynomial_bind_eq, ringEquiv, specialize
+/-
+**WittVector.IsPoly.ext** 是 Mathlib 中的一个定理，位于命名空间 `WittVector.IsPoly`。
+形式化陈述：ext [Fact p.Prime] {f g} (hf : IsPoly p f) (hg : IsPoly p g) (h : forall (
+R : Type u) [_Rcr : CommRing R] (x : 𝕎 R) (n : Nat), ghostComponent n (f x) = gh
+ostComponent n (g x)) : forall (R : Type u) [_Rcr : CommRing R] (x : 𝕎 R), f x =
+ g x
+参数：hf : IsPoly p f；hg : IsPoly p g；h : forall (R : Type u) [_Rcr : CommRing R] (
+x : 𝕎 R) (n : Nat), ghostComponent n (f x) = ghostComponent n (g x)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WittVector.ext`：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : 
+x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.poly_eq_of_wittPolynomial_bind_eq`：poly_eq_of_wittPolynomial_
+bind_eq [Fact p.Prime] (f g : Nat -> MvPolynomial Nat Int) (h : forall n, bind₁ 
+f (wittPolynomial p _ n) = bind₁ g…
+· 使用定理 `MvPolynomial.funext`：funext {σ : Type*} {p q : MvPolynomial σ R} (h : fo
+rall x : σ -> R, eval x p = eval x q) : p = q
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.hom_bind₁`：hom_bind₁ (f : MvPolynomial τ R ->+* S) (g : σ -
+> MvPolynomial τ R) (φ : MvPolynomial σ R) : f (bind₁ g φ) = eval₂Hom (f.comp C)
+ (fun i => f…
+· 使用定理 `RingEquiv.injective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Injecti
+ve ⇑e
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `MvPolynomial.map_eval₂Hom`：map_eval₂Hom [CommSemiring S₂] (f : R ->+* S₁
+) (g : σ -> S₁) (φ : S₁ ->+* S₂) (p : MvPolynomial σ R) : φ (eval₂Hom f g p) = e
+val₂Hom (φ.comp…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MvPolynomial.eval₂Hom_congr`：eval₂Hom_congr {f₁ f₂ : R ->+* S₁} {g₁ g₂ :
+ σ -> S₁} {p₁ p₂ : MvPolynomial σ R} : f₁ = f₂ -> g₁ = g₂ -> p₁ = p₂ -> eval₂Hom
+ f₁ g₁ p₁ = eval₂…
+· 使用定理 `RingHom.ext_int`：ext_int {R : Type*} [NonAssocSemiring R] (f g : Int ->+
+* R) : f = g
 -/
 theorem ext [Fact p.Prime] {f g} (hf : IsPoly p f) (hg : IsPoly p g)
-    (h : forall (R : Type u) [_Rcr : CommRing R] (x : 𝕎 R) (n : Nat),
+    (h : ∀ (R : Type u) [_Rcr : CommRing R] (x : 𝕎 R) (n : ℕ),
         ghostComponent n (f x) = ghostComponent n (g x)) :
-    forall (R : Type u) [_Rcr : CommRing R] (x : 𝕎 R), f x = g x := by
+    ∀ (R : Type u) [_Rcr : CommRing R] (x : 𝕎 R), f x = g x := by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
   intros
   ext n
-  rw [hf]; rw [hg]; rw [poly_eq_of_wittPolynomial_bind_eq p φ ψ]
+  rw [hf, hg, poly_eq_of_wittPolynomial_bind_eq p φ ψ]
   intro k
   apply MvPolynomial.funext
   intro x
   simp only [hom_bind₁]
-  specialize h (ULift Int) (mk p fun i => ⟨x i⟩) k
+  specialize h (ULift ℤ) (mk p fun i => ⟨x i⟩) k
   simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
-  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
+  apply (ULift.ringEquiv.symm : ℤ ≃+* _).injective
   simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
   convert! h using 1
   all_goals
@@ -349,30 +375,30 @@ theorem ext [Fact p.Prime] {f g} (hf : IsPoly p f) (hg : IsPoly p g)
     apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
     simp only [coeff_mk]; rfl
 
-/--
-Instance `comp` / 实例 `comp`
+/-- The composition of polynomial functions is polynomial. -/
+/-
+**WittVector.IsPoly.comp** 是 Mathlib 中的一个实例，位于命名空间 `WittVector.IsPoly`。
+形式化陈述：comp {g f} [hg : IsPoly p g] [hf : IsPoly p f] : IsPoly p fun R _Rcr => @g
+ R _Rcr ∘ @f R _Rcr
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.aeval_bind₁`：aeval_bind₁ [Algebra R S] (f : τ -> S) (g : σ 
+-> MvPolynomial τ R) (φ : MvPolynomial σ R) : aeval f (bind₁ g φ) = aeval (fun i
+ => aeval f (g…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance comp
-  signature: {g f} [hg : IsPoly p g] [hf : IsPoly p f]
-  body: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  use fun n => bind₁ φ (ψ n)
-  intros
-  simp only [aeval_bind₁, Function.comp, hg, hf]
-
-中文:
-实例 comp
-  签名: {g f} [hg : 是Poly p g] [hf : 是Poly p f]
-  定义体: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  use fun n => bind₁ φ (ψ n)
-  intros
-  simp only [aeval_bind₁, Function.comp, hg, hf]
-
-Depends on / 依赖: Function, Function.comp, intros
+--- 原说明 ---
+The composition of polynomial functions is polynomial.
 -/
 instance comp {g f} [hg : IsPoly p g] [hf : IsPoly p f] :
     IsPoly p fun R _Rcr => @g R _Rcr ∘ @f R _Rcr := by
@@ -384,75 +410,64 @@ instance comp {g f} [hg : IsPoly p g] [hf : IsPoly p f] :
 
 end IsPoly
 
-/--
-Definition of `IsPoly₂` / `IsPoly₂` 的定义
+/-- A binary function `f : Π R, 𝕎 R → 𝕎 R → 𝕎 R` on Witt vectors
+is said to be *polynomial* if there is a family of polynomials `φₙ` over `ℤ` such that the `n`th
+coefficient of `f x y` is given by evaluating `φₙ` at the coefficients of `x` and `y`.
 
-English:
-class IsPoly₂
-  parameters: (f : forall ⦃R⦄ [CommRing R], WittVector p R -> 𝕎 R -> 𝕎 R)
-  (no additional axioms)
+See also `WittVector.IsPoly` for the unary variant.
 
-中文:
-类 是Poly₂
-  参数: (f : 对任意 ⦃R⦄ [交换环 R], Witt向量 p R -> 𝕎 R -> 𝕎 R)
-  (无附加公理)
+The `ghost_calc` tactic makes use of the `IsPoly` and `IsPoly₂` typeclass and its instances.
+(In Lean 3, there was an `@[is_poly]` attribute to manage these instances,
+because typeclass resolution did not play well with function composition.
+This no longer seems to be an issue, so that such instances can be defined directly.)
 -/
-class IsPoly₂ (f : forall ⦃R⦄ [CommRing R], WittVector p R -> 𝕎 R -> 𝕎 R) : Prop where mk' ::
+/-
+**WittVector.IsPoly** 是 Mathlib 中的一个归纳类型，位于命名空间 `WittVector`。
+形式化陈述：(p : ℕ) → (⦃R : Type u_2⦄ → [CommRing R] → WittVector p R → WittVector p R
+) → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A binary function `f : Π R, 𝕎 R → 𝕎 R → 𝕎 R` on Witt vectors
+is said to be *polynomial* if there is a family of polynomials `φₙ` over `ℤ` suc
+h that the `n`th
+coefficient of `f x y` is given by evaluating `φₙ` at the coefficients of `x` an
+d `y`.
+
+See also `WittVector.IsPoly` for the unary variant.
+
+The `ghost_calc` tactic makes use of the `IsPoly` and `IsPoly₂` typeclass and it
+s instances.
+(In Lean 3, there was an `@[is_poly]` attribute to manage these instances,
+because typeclass resolution did not play well with function composition.
+This no longer seems to be an issue, so that such instances can be defined direc
+tly.)
+-/
+class IsPoly₂ (f : ∀ ⦃R⦄ [CommRing R], WittVector p R → 𝕎 R → 𝕎 R) : Prop where mk' ::
   poly :
-    exists φ : Nat -> MvPolynomial (Fin 2 × Nat) Int,
-      forall ⦃R⦄ [CommRing R] (x y : 𝕎 R), (f x y).coeff = fun n => peval (φ n) ![x.coeff, y.coeff]
+    ∃ φ : ℕ → MvPolynomial (Fin 2 × ℕ) ℤ,
+      ∀ ⦃R⦄ [CommRing R] (x y : 𝕎 R), (f x y).coeff = fun n => peval (φ n) ![x.coeff, y.coeff]
 
 variable {p}
 
-/--
-Instance `IsPoly₂.comp` / 实例 `IsPoly₂.comp`
+/-- The composition of polynomial functions is polynomial. -/
+/-
+**WittVector.IsPoly** 是 Mathlib 中的一个归纳类型，位于命名空间 `WittVector`。
+形式化陈述：(p : ℕ) → (⦃R : Type u_2⦄ → [CommRing R] → WittVector p R → WittVector p R
+) → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance IsPoly₂.comp
-  signature: {h f g} [hh : IsPoly₂ p h] [hf : IsPoly p f] [hg : IsPoly p g]
-  body: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  obtain ⟨χ, hh⟩ := hh
-  refine ⟨⟨fun n => bind₁ (uncurry <|
-    ![fun k => rename (Prod.mk (0 : Fin 2)) (φ k),
-      fun k => rename (Prod.mk (1 : Fin 2)) (ψ k)]) (χ n), ?_⟩⟩
-  intros
-  funext n
-  simp +unfoldPartialApp only [peval, aeval_bind₁, hh, hf, hg,
-    uncurry]
-  apply eval₂Hom_congr rfl _ rfl
-  ext ⟨i, n⟩
-  fin_cases i <;> simp [aeval_eq_eval₂Hom, eval₂Hom_rename, Function.comp_def]
-
-中文:
-实例 是Poly₂.comp
-  签名: {h f g} [hh : 是Poly₂ p h] [hf : 是Poly p f] [hg : 是Poly p g]
-  定义体: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  obtain ⟨χ, hh⟩ := hh
-  refine ⟨⟨fun n => bind₁ (uncurry <|
-    ![fun k => rename (Prod.mk (0 : Fin 2)) (φ k),
-      fun k => rename (Prod.mk (1 : Fin 2)) (ψ k)]) (χ n), ?_⟩⟩
-  intros
-  funext n
-  simp +unfoldPartialApp only [peval, aeval_bind₁, hh, hf, hg,
-    uncurry]
-  apply eval₂Hom_congr rfl _ rfl
-  ext ⟨i, n⟩
-  fin_cases i <;> simp [aeval_eq_eval₂Hom, eval₂Hom_rename, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, Prod.mk, comp_def, fin_cases, intros, uncurry, unfoldPartialApp
+--- 原说明 ---
+The composition of polynomial functions is polynomial.
 -/
 instance IsPoly₂.comp {h f g} [hh : IsPoly₂ p h] [hf : IsPoly p f] [hg : IsPoly p g] :
     IsPoly₂ p fun _ _Rcr x y => h (f x) (g y) := by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
   obtain ⟨χ, hh⟩ := hh
-  refine ⟨⟨fun n => bind₁ (uncurry <|
-    ![fun k => rename (Prod.mk (0 : Fin 2)) (φ k),
-      fun k => rename (Prod.mk (1 : Fin 2)) (ψ k)]) (χ n), ?_⟩⟩
+  refine ⟨⟨fun n ↦ bind₁ (uncurry <|
+    ![fun k ↦ rename (Prod.mk (0 : Fin 2)) (φ k),
+      fun k ↦ rename (Prod.mk (1 : Fin 2)) (ψ k)]) (χ n), ?_⟩⟩
   intros
   funext n
   simp +unfoldPartialApp only [peval, aeval_bind₁, hh, hf, hg,
@@ -461,30 +476,31 @@ instance IsPoly₂.comp {h f g} [hh : IsPoly₂ p h] [hf : IsPoly p f] [hg : IsP
   ext ⟨i, n⟩
   fin_cases i <;> simp [aeval_eq_eval₂Hom, eval₂Hom_rename, Function.comp_def]
 
-/--
-Instance `IsPoly.comp₂` / 实例 `IsPoly.comp₂`
+/-- The composition of a polynomial function with a binary polynomial function is polynomial. -/
+/-
+**WittVector.IsPoly.comp** 是 Mathlib 中的一个实例，位于命名空间 `WittVector.IsPoly`。
+形式化陈述：comp {g f} [hg : IsPoly p g] [hf : IsPoly p f] : IsPoly p fun R _Rcr => @g
+ R _Rcr ∘ @f R _Rcr
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.aeval_bind₁`：aeval_bind₁ [Algebra R S] (f : τ -> S) (g : σ 
+-> MvPolynomial τ R) (φ : MvPolynomial σ R) : aeval f (bind₁ g φ) = aeval (fun i
+ => aeval f (g…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance IsPoly.comp₂
-  signature: {g f} [hg : IsPoly p g] [hf : IsPoly₂ p f]
-  body: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  use fun n => bind₁ φ (ψ n)
-  intros
-  simp only [peval, aeval_bind₁, hg, hf]
-
-中文:
-实例 是Poly.comp₂
-  签名: {g f} [hg : 是Poly p g] [hf : 是Poly₂ p f]
-  定义体: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  use fun n => bind₁ φ (ψ n)
-  intros
-  simp only [peval, aeval_bind₁, hg, hf]
-
-Depends on / 依赖: intros
+--- 原说明 ---
+The composition of a polynomial function with a binary polynomial function is po
+lynomial.
 -/
 instance IsPoly.comp₂ {g f} [hg : IsPoly p g] [hf : IsPoly₂ p f] :
     IsPoly₂ p fun _ _Rcr x y => g (f x y) := by
@@ -494,34 +510,15 @@ instance IsPoly.comp₂ {g f} [hg : IsPoly p g] [hf : IsPoly₂ p f] :
   intros
   simp only [peval, aeval_bind₁, hg, hf]
 
-/--
-Instance `IsPoly₂.diag` / 实例 `IsPoly₂.diag`
+/-- The diagonal `fun x ↦ f x x` of a polynomial function `f` is polynomial. -/
+/-
+**WittVector.IsPoly** 是 Mathlib 中的一个归纳类型，位于命名空间 `WittVector`。
+形式化陈述：(p : ℕ) → (⦃R : Type u_2⦄ → [CommRing R] → WittVector p R → WittVector p R
+) → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance IsPoly₂.diag
-  signature: {f} [hf : IsPoly₂ p f]
-  body: by
-  obtain ⟨φ, hf⟩ := hf
-  refine ⟨⟨fun n => bind₁ (uncurry ![X, X]) (φ n), ?_⟩⟩
-  intros; funext n
-  simp +unfoldPartialApp only [hf, peval, uncurry, aeval_bind₁]
-  apply eval₂Hom_congr rfl _ rfl
-  ext ⟨i, k⟩
-  fin_cases i <;> simp
-
-中文:
-实例 是Poly₂.diag
-  签名: {f} [hf : 是Poly₂ p f]
-  定义体: by
-  obtain ⟨φ, hf⟩ := hf
-  refine ⟨⟨fun n => bind₁ (uncurry ![X, X]) (φ n), ?_⟩⟩
-  intros; funext n
-  simp +unfoldPartialApp only [hf, peval, uncurry, aeval_bind₁]
-  apply eval₂Hom_congr rfl _ rfl
-  ext ⟨i, k⟩
-  fin_cases i <;> simp
-
-Depends on / 依赖: fin_cases, intros, uncurry, unfoldPartialApp
+--- 原说明 ---
+The diagonal `fun x ↦ f x x` of a polynomial function `f` is polynomial.
 -/
 instance IsPoly₂.diag {f} [hf : IsPoly₂ p f] : IsPoly p fun _ _Rcr x => f x x := by
   obtain ⟨φ, hf⟩ := hf
@@ -532,33 +529,39 @@ instance IsPoly₂.diag {f} [hf : IsPoly₂ p f] : IsPoly p fun _ _Rcr x => f x 
   ext ⟨i, k⟩
   fin_cases i <;> simp
 
-/--
-Instance `negIsPoly` / 实例 `negIsPoly`
+/-- The additive negation is a polynomial function on Witt vectors. -/
+/-
+**WittVector.negIsPoly** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：negIsPoly [Fact p.Prime] : IsPoly p fun R _ => @Neg.neg (𝕎 R) _
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.neg_coeff`：neg_coeff (x : 𝕎 R) (n : Nat) : (-x).coeff n = pev
+al (wittNeg p n) ![x.coeff]
+· 使用定理 `MvPolynomial.aeval_eq_eval₂Hom`：aeval_eq_eval₂Hom (p : MvPolynomial σ R)
+ : aeval f p = eval₂Hom (algebraMap R S₁) f p
+· 使用定理 `MvPolynomial.eval₂Hom_rename`：eval₂Hom_rename : eval₂Hom f g (rename k p
+) = eval₂Hom f (g ∘ k) p
+· 使用定理 `MvPolynomial.eval₂Hom_congr`：eval₂Hom_congr {f₁ f₂ : R ->+* S₁} {g₁ g₂ :
+ σ -> S₁} {p₁ p₂ : MvPolynomial σ R} : f₁ = f₂ -> g₁ = g₂ -> p₁ = p₂ -> eval₂Hom
+ f₁ g₁ p₁ = eval₂…
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 
-English:
-instance negIsPoly
-  signature: [Fact p.Prime]
-  body: ⟨⟨fun n => rename Prod.snd (wittNeg p n), by
-      intros; funext n
-      rw [neg_coeff]; rw [aeval_eq_eval₂Hom]; rw [eval₂Hom_rename]
-      apply eval₂Hom_congr rfl _ rfl
-      ext ⟨i, k⟩; fin_cases i; rfl⟩⟩
-
-中文:
-实例 negIsPoly
-  签名: [Fact p.素]
-  定义体: ⟨⟨fun n => rename Prod.snd (wittNeg p n), by
-      intros; funext n
-      rw [neg_coeff]; rw [aeval_eq_eval₂Hom]; rw [eval₂Hom_rename]
-      apply eval₂Hom_congr rfl _ rfl
-      ext ⟨i, k⟩; fin_cases i; rfl⟩⟩
-
-Depends on / 依赖: Prod.snd, fin_cases, intros, neg_coeff, wittNeg
+--- 原说明 ---
+The additive negation is a polynomial function on Witt vectors.
 -/
 instance negIsPoly [Fact p.Prime] : IsPoly p fun R _ => @Neg.neg (𝕎 R) _ :=
   ⟨⟨fun n => rename Prod.snd (wittNeg p n), by
       intros; funext n
-      rw [neg_coeff]; rw [aeval_eq_eval₂Hom]; rw [eval₂Hom_rename]
+      rw [neg_coeff, aeval_eq_eval₂Hom, eval₂Hom_rename]
       apply eval₂Hom_congr rfl _ rfl
       ext ⟨i, k⟩; fin_cases i; rfl⟩⟩
 
@@ -566,131 +569,119 @@ section ZeroOne
 
 /- To avoid a theory of 0-ary functions (a.k.a. constants)
 we model them as constant unary functions. -/
-/--
-Instance `zeroIsPoly` / 实例 `zeroIsPoly`
+/-- The function that is constantly zero on Witt vectors is a polynomial function. -/
+/-
+**WittVector.zeroIsPoly** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：zeroIsPoly [Fact p.Prime] : IsPoly p fun _ _ _ => 0
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.zero_coeff`：zero_coeff (n : Nat) : (0 : 𝕎 R).coeff n = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance zeroIsPoly
-  signature: [Fact p.Prime]
-  body: ⟨⟨0, by intros; funext n; simp only [Pi.zero_apply, map_zero, zero_coeff]⟩⟩
-
-@[simp]
-
-中文:
-实例 zeroIsPoly
-  签名: [Fact p.素]
-  定义体: ⟨⟨0, by intros; funext n; simp only [Pi.zero_apply, map_zero, zero_coeff]⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Pi.zero_apply, intros, map_zero, zero_apply, zero_coeff
+--- 原说明 ---
+The function that is constantly zero on Witt vectors is a polynomial function.
 -/
 instance zeroIsPoly [Fact p.Prime] : IsPoly p fun _ _ _ => 0 :=
   ⟨⟨0, by intros; funext n; simp only [Pi.zero_apply, map_zero, zero_coeff]⟩⟩
 
 @[simp]
-/--
-theorem `bind₁_zero_wittPolynomial` / 定理 `bind₁_zero_wittPolynomial`
-
-English:
-theorem bind₁_zero_wittPolynomial
-  given: [Fact p.Prime] (n : Nat)
-  proof: by
-  rw [← aeval_eq_bind₁]; rw [aeval_zero]; rw [constantCoeff_wittPolynomial]; rw [map_zero]
-
-中文:
-定理 bind₁_zero_wittPolynomial
-  条件: [Fact p.素] (n : 自然数)
-  证明: by
-  rw [← aeval_eq_bind₁]; rw [aeval_zero]; rw [constantCoeff_wittPolynomial]; rw [map_zero]
-
-Depends on / 依赖: aeval_zero, constantCoeff_wittPolynomial, map_zero
+/-
+**WittVector.bind** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bind₁_zero_wittPolynomial [Fact p.Prime] (n : Nat) :
-    bind₁ (0 : Nat -> MvPolynomial Nat R) (wittPolynomial p R n) = 0 := by
-  rw [← aeval_eq_bind₁]; rw [aeval_zero]; rw [constantCoeff_wittPolynomial]; rw [map_zero]
+theorem bind₁_zero_wittPolynomial [Fact p.Prime] (n : ℕ) :
+    bind₁ (0 : ℕ → MvPolynomial ℕ R) (wittPolynomial p R n) = 0 := by
+  rw [← aeval_eq_bind₁, aeval_zero, constantCoeff_wittPolynomial, map_zero]
 
-/--
-Definition of `onePoly` / `onePoly` 的定义
+/-- The coefficients of `1 : 𝕎 R` as polynomials. -/
+/-
+**WittVector.onePoly** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：onePoly (n : Nat) : MvPolynomial Nat Int
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition onePoly
-  signature: (n : Nat)
-  body: if n = 0 then 1 else 0
-
-@[simp]
-
-中文:
-定义 onePoly
-  签名: (n : 自然数)
-  定义体: if n = 0 then 1 else 0
-
-@[simp]
+--- 原说明 ---
+The coefficients of `1 : 𝕎 R` as polynomials.
 -/
-def onePoly (n : Nat) : MvPolynomial Nat Int :=
+def onePoly (n : ℕ) : MvPolynomial ℕ ℤ :=
   if n = 0 then 1 else 0
 
 @[simp]
-/--
-theorem `bind₁_onePoly_wittPolynomial` / 定理 `bind₁_onePoly_wittPolynomial`
-
-English:
-theorem bind₁_onePoly_wittPolynomial
-  given: [hp : Fact p.Prime] (n : Nat)
-  proof: by
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]; rw [Finset.sum_eq_single 0]
-  · simp only [onePoly, one_pow, one_mul, map_pow, C_1, pow_zero, bind₁_X_right, if_true]
-  · intro i _hi hi0
-    simp only [onePoly, if_neg hi0, zero_pow (pow_ne_zero _ hp.1.ne_zero), mul_zero, map_pow,
-      bind₁_X_right, map_mul]
-  · simp
-
-中文:
-定理 bind₁_onePoly_wittPolynomial
-  条件: [hp : Fact p.素] (n : 自然数)
-  证明: by
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]; rw [Finset.sum_eq_single 0]
-  · simp only [onePoly, one_pow, one_mul, map_pow, C_1, pow_zero, bind₁_X_right, if_true]
-  · intro i _hi hi0
-    simp only [onePoly, if_neg hi0, zero_pow (pow_ne_zero _ hp.1.ne_zero), mul_zero, map_pow,
-      bind₁_X_right, map_mul]
-  · simp
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, if_neg, if_true, map_mul, map_pow, map_sum, mul_zero, ne_zero, onePoly, one_mul, one_pow, pow_ne_zero, pow_zero, sum_eq_single, wittPolynomial_eq_sum_C_mul_X_pow, zero_pow
+/-
+**WittVector.bind** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bind₁_onePoly_wittPolynomial [hp : Fact p.Prime] (n : Nat) :
-    bind₁ onePoly (wittPolynomial p Int n) = 1 := by
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]; rw [Finset.sum_eq_single 0]
+theorem bind₁_onePoly_wittPolynomial [hp : Fact p.Prime] (n : ℕ) :
+    bind₁ onePoly (wittPolynomial p ℤ n) = 1 := by
+  rw [wittPolynomial_eq_sum_C_mul_X_pow, map_sum, Finset.sum_eq_single 0]
   · simp only [onePoly, one_pow, one_mul, map_pow, C_1, pow_zero, bind₁_X_right, if_true]
   · intro i _hi hi0
     simp only [onePoly, if_neg hi0, zero_pow (pow_ne_zero _ hp.1.ne_zero), mul_zero, map_pow,
       bind₁_X_right, map_mul]
   · simp
 
-/--
-Instance `oneIsPoly` / 实例 `oneIsPoly`
+/-- The function that is constantly one on Witt vectors is a polynomial function. -/
+/-
+**WittVector.oneIsPoly** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：oneIsPoly [Fact p.Prime] : IsPoly p fun _ _ _ => 1
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.one_coeff_zero`：one_coeff_zero : (1 : 𝕎 R).coeff 0 = 1
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WittVector.one_coeff_eq_of_pos`：one_coeff_eq_of_pos (n : Nat) (hn : 0 < 
+n) : coeff (1 : 𝕎 R) n = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
 
-English:
-instance oneIsPoly
-  signature: [Fact p.Prime]
-  body: ⟨⟨onePoly, by
-      intros; funext n; cases n
-      · simp only [one_coeff_zero, onePoly, ite_true, map_one]
-      · simp only [Nat.succ_pos', one_coeff_eq_of_pos, onePoly, Nat.succ_ne_zero, ite_false,
-          map_zero]
-  ⟩⟩
-
-中文:
-实例 oneIsPoly
-  签名: [Fact p.素]
-  定义体: ⟨⟨onePoly, by
-      intros; funext n; cases n
-      · simp only [one_coeff_zero, onePoly, ite_true, map_one]
-      · simp only [Nat.succ_pos', one_coeff_eq_of_pos, onePoly, Nat.succ_ne_zero, ite_false,
-          map_zero]
-  ⟩⟩
-
-Depends on / 依赖: Nat.succ_ne_zero, Nat.succ_pos, intros, ite_false, ite_true, map_one, map_zero, onePoly, one_coeff_eq_of_pos, one_coeff_zero, succ_ne_zero, succ_pos
+--- 原说明 ---
+The function that is constantly one on Witt vectors is a polynomial function.
 -/
 instance oneIsPoly [Fact p.Prime] : IsPoly p fun _ _ _ => 1 :=
   ⟨⟨onePoly, by
@@ -702,171 +693,151 @@ instance oneIsPoly [Fact p.Prime] : IsPoly p fun _ _ _ => 1 :=
 
 end ZeroOne
 
-/--
-Instance `addIsPoly₂` / 实例 `addIsPoly₂`
+/-- Addition of Witt vectors is a polynomial function. -/
+/-
+**WittVector.addIsPoly** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance addIsPoly₂
-  signature: [Fact p.Prime]
-  body: ⟨⟨wittAdd p, by intros; ext; exact add_coeff _ _ _⟩⟩
-
-中文:
-实例 addIsPoly₂
-  签名: [Fact p.素]
-  定义体: ⟨⟨wittAdd p, by intros; ext; exact add_coeff _ _ _⟩⟩
-
-Depends on / 依赖: add_coeff, intros, wittAdd
+--- 原说明 ---
+Addition of Witt vectors is a polynomial function.
 -/
 instance addIsPoly₂ [Fact p.Prime] : IsPoly₂ p fun _ _ => (· + ·) :=
   ⟨⟨wittAdd p, by intros; ext; exact add_coeff _ _ _⟩⟩
 
-/--
-Instance `mulIsPoly₂` / 实例 `mulIsPoly₂`
+/-- Multiplication of Witt vectors is a polynomial function. -/
+/-
+**WittVector.mulIsPoly** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mulIsPoly₂
-  signature: [Fact p.Prime]
-  body: ⟨⟨wittMul p, by intros; ext; exact mul_coeff _ _ _⟩⟩
-
-中文:
-实例 mulIsPoly₂
-  签名: [Fact p.素]
-  定义体: ⟨⟨wittMul p, by intros; ext; exact mul_coeff _ _ _⟩⟩
-
-Depends on / 依赖: intros, mul_coeff, wittMul
+--- 原说明 ---
+Multiplication of Witt vectors is a polynomial function.
 -/
 instance mulIsPoly₂ [Fact p.Prime] : IsPoly₂ p fun _ _ => (· * ·) :=
   ⟨⟨wittMul p, by intros; ext; exact mul_coeff _ _ _⟩⟩
 
 -- unfortunately this is not universe polymorphic, merely because `f` isn't
-/--
-theorem `IsPoly.map` / 定理 `IsPoly.map`
-
-English:
-theorem IsPoly.map
-  given: [Fact p.Prime] {f} (hf : IsPoly p f) (g : R ->+* S) (x : 𝕎 R)
-  proof: by
-  -- this could be turned into a tactic “macro” (taking `hf` as parameter)
-  -- so that applications do not have to worry about the universe issue
-  -- see `IsPoly₂.map` for a slightly more general proof strategy
-  obtain ⟨φ, hf⟩ := hf
-  ext n
-  simp_rw [map_coeff, hf, map_aeval, funext (map_coeff g _), RingHom.ext_int _ (algebraMap Int S),
-    aeval_eq_eval₂Hom]
-
-中文:
-定理 是Poly.map
-  条件: [Fact p.素] {f} (hf : 是Poly p f) (g : R ->+* S) (x : 𝕎 R)
-  证明: by
-  -- this could be turned into a tactic “macro” (taking `hf` as parameter)
-  -- so that applications do not have to worry about the universe issue
-  -- see `IsPoly₂.map` for a slightly more general proof strategy
-  obtain ⟨φ, hf⟩ := hf
-  ext n
-  simp_rw [map_coeff, hf, map_aeval, funext (map_coeff g _), RingHom.ext_int _ (algebraMap Int S),
-    aeval_eq_eval₂Hom]
+/-
+**WittVector.IsPoly.map** 是 Mathlib 中的一个定理，位于命名空间 `WittVector.IsPoly`。
+形式化陈述：∀ {p : ℕ} {R S : Type u} [inst : CommRing R] [inst_1 : CommRing S] [inst_2
+ : Fact (Nat.Prime p)]   {f : ⦃R : Type u⦄ → [CommRing R] → WittVector p R → Wit
+tVector p R},   WittVector.IsPoly p f → ∀ (g : R →+* S) (x : WittVector p R), (W
+ittVector.map g) (f x) = f ((WittVector.map g) x)
+参数：Nat.Prime p；g : R →+* S；x : WittVector p R；WittVector.map g；f x；(WittVector.m
+ap g) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WittVector.ext`：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : 
+x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.map_aeval`：map_aeval {B : Type*} [CommSemiring B] (g : σ ->
+ S₁) (φ : S₁ ->+* B) (p : MvPolynomial σ R) : φ (aeval g p) = eval₂Hom (φ.comp (
+algebraMap R…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `WittVector.map_coeff`：map_coeff (f : R ->+* S) (x : 𝕎 R) (n : Nat) : (ma
+p f x).coeff n = f (x.coeff n)
+· 使用定理 `RingHom.ext_int`：ext_int {R : Type*} [NonAssocSemiring R] (f g : Int ->+
+* R) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem IsPoly.map [Fact p.Prime] {f} (hf : IsPoly p f) (g : R ->+* S) (x : 𝕎 R) :
+theorem IsPoly.map [Fact p.Prime] {f} (hf : IsPoly p f) (g : R →+* S) (x : 𝕎 R) :
     map g (f x) = f (map g x) := by
   -- this could be turned into a tactic “macro” (taking `hf` as parameter)
   -- so that applications do not have to worry about the universe issue
   -- see `IsPoly₂.map` for a slightly more general proof strategy
   obtain ⟨φ, hf⟩ := hf
   ext n
-  simp_rw [map_coeff, hf, map_aeval, funext (map_coeff g _), RingHom.ext_int _ (algebraMap Int S),
+  simp_rw [map_coeff, hf, map_aeval, funext (map_coeff g _), RingHom.ext_int _ (algebraMap ℤ S),
     aeval_eq_eval₂Hom]
 
 namespace IsPoly₂
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fact
-  signature: p.Prime] : Inhabited (IsPoly₂ p (fun _ _ => (· + ·)))
-  body: ⟨addIsPoly₂⟩
-
-中文:
-实例 [Fact
-  签名: p.素] : 可居 (是Poly₂ p (fun _ _ => (· + ·)))
-  定义体: ⟨addIsPoly₂⟩
+/-
+**WittVector.IsPoly₂.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector.IsPoly₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fact p.Prime] : Inhabited (IsPoly₂ p (fun _ _ => (· + ·))) :=
   ⟨addIsPoly₂⟩
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: [Fact p.Prime] {f g} (hf : IsPoly₂ p f) (hg : IsPoly₂ p g)
-  proof: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  intros
-  ext n
-  rw [hf]; rw [hg]; rw [poly_eq_of_wittPolynomial_bind_eq' p φ ψ]
-  intro k
-  apply MvPolynomial.funext
-  intro x
-  simp only [hom_bind₁]
-  specialize h (ULift Int) (mk p fun i => ⟨x (0, i)⟩) (mk p fun i => ⟨x (1, i)⟩) k
-  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
-  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
-  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
-  convert! h using 1
-  all_goals
-    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    ext1
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    ext ⟨b, _⟩
-    fin_cases b <;> simp only [coeff_mk, uncurry] <;> rfl
-
-中文:
-定理 ext
-  结论: [Fact p.素] {f g} (hf : 是Poly₂ p f) (hg : 是Poly₂ p g)
-  证明: by
-  obtain ⟨φ, hf⟩ := hf
-  obtain ⟨ψ, hg⟩ := hg
-  intros
-  ext n
-  rw [hf]; rw [hg]; rw [poly_eq_of_wittPolynomial_bind_eq' p φ ψ]
-  intro k
-  apply MvPolynomial.funext
-  intro x
-  simp only [hom_bind₁]
-  specialize h (ULift Int) (mk p fun i => ⟨x (0, i)⟩) (mk p fun i => ⟨x (1, i)⟩) k
-  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
-  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
-  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
-  convert! h using 1
-  all_goals
-    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    ext1
-    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-    ext ⟨b, _⟩
-    fin_cases b <;> simp only [coeff_mk, uncurry] <;> rfl
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.eval, MvPolynomial.funext, RingEquiv, RingEquiv.coe_toRingHom, ULift.ringEquiv.symm, all_goals, coe_toRingHom, convert, ghostComponent_apply, injective, intros, map_ev, poly_eq_of_wittPolynomial_bind_eq, ringEquiv, specialize
+/-
+**WittVector.IsPoly₂.ext** 是 Mathlib 中的一个定理，位于命名空间 `WittVector.IsPoly₂`。
+形式化陈述：ext [Fact p.Prime] {f g} (hf : IsPoly₂ p f) (hg : IsPoly₂ p g) (h : forall
+ (R : Type u) [_Rcr : CommRing R] (x y : 𝕎 R) (n : Nat), ghostComponent n (f x y
+) = ghostComponent n (g x y)) : forall (R) [_Rcr : CommRing R] (x y : 𝕎 R), f x 
+y = g x y
+参数：hf : IsPoly₂ p f；hg : IsPoly₂ p g；h : forall (R : Type u) [_Rcr : CommRing R]
+ (x y : 𝕎 R) (n : Nat), ghostComponent n (f x y) = ghostComponent n (g x y)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WittVector.ext`：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : 
+x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.poly_eq_of_wittPolynomial_bind_eq'`：poly_eq_of_wittPolynomial
+_bind_eq' [Fact p.Prime] (f g : Nat -> MvPolynomial (idx × Nat) Int) (h : forall
+ n, bind₁ f (wittPolynomial p _ n) …
+· 使用定理 `MvPolynomial.funext`：funext {σ : Type*} {p q : MvPolynomial σ R} (h : fo
+rall x : σ -> R, eval x p = eval x q) : p = q
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.hom_bind₁`：hom_bind₁ (f : MvPolynomial τ R ->+* S) (g : σ -
+> MvPolynomial τ R) (φ : MvPolynomial σ R) : f (bind₁ g φ) = eval₂Hom (f.comp C)
+ (fun i => f…
+· 使用定理 `RingEquiv.injective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Injecti
+ve ⇑e
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `MvPolynomial.map_eval₂Hom`：map_eval₂Hom [CommSemiring S₂] (f : R ->+* S₁
+) (g : σ -> S₁) (φ : S₁ ->+* S₂) (p : MvPolynomial σ R) : φ (eval₂Hom f g p) = e
+val₂Hom (φ.comp…
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MvPolynomial.eval₂Hom_congr`：eval₂Hom_congr {f₁ f₂ : R ->+* S₁} {g₁ g₂ :
+ σ -> S₁} {p₁ p₂ : MvPolynomial σ R} : f₁ = f₂ -> g₁ = g₂ -> p₁ = p₂ -> eval₂Hom
+ f₁ g₁ p₁ = eval₂…
+· 使用定理 `RingHom.ext_int`：ext_int {R : Type*} [NonAssocSemiring R] (f g : Int ->+
+* R) : f = g
+· 使用定理 `ULift.ext`：ext (x y : ULift α) (h : x.down = y.down) : x = y
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem ext [Fact p.Prime] {f g} (hf : IsPoly₂ p f) (hg : IsPoly₂ p g)
-    (h : forall (R : Type u) [_Rcr : CommRing R] (x y : 𝕎 R) (n : Nat),
+    (h : ∀ (R : Type u) [_Rcr : CommRing R] (x y : 𝕎 R) (n : ℕ),
         ghostComponent n (f x y) = ghostComponent n (g x y)) :
-    forall (R) [_Rcr : CommRing R] (x y : 𝕎 R), f x y = g x y := by
+    ∀ (R) [_Rcr : CommRing R] (x y : 𝕎 R), f x y = g x y := by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
   intros
   ext n
-  rw [hf]; rw [hg]; rw [poly_eq_of_wittPolynomial_bind_eq' p φ ψ]
+  rw [hf, hg, poly_eq_of_wittPolynomial_bind_eq' p φ ψ]
   intro k
   apply MvPolynomial.funext
   intro x
   simp only [hom_bind₁]
-  specialize h (ULift Int) (mk p fun i => ⟨x (0, i)⟩) (mk p fun i => ⟨x (1, i)⟩) k
+  specialize h (ULift ℤ) (mk p fun i => ⟨x (0, i)⟩) (mk p fun i => ⟨x (1, i)⟩) k
   simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
-  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
+  apply (ULift.ringEquiv.symm : ℤ ≃+* _).injective
   simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
   convert! h using 1
   all_goals
@@ -878,36 +849,51 @@ theorem ext [Fact p.Prime] {f g} (hf : IsPoly₂ p f) (hg : IsPoly₂ p g)
     fin_cases b <;> simp only [coeff_mk, uncurry] <;> rfl
 
 -- unfortunately this is not universe polymorphic, merely because `f` isn't
-/--
-theorem `map` / 定理 `map`
-
-English:
-theorem map
-  given: [Fact p.Prime] {f} (hf : IsPoly₂ p f) (g : R ->+* S) (x y : 𝕎 R)
-  proof: by
-  -- this could be turned into a tactic “macro” (taking `hf` as parameter)
-  -- so that applications do not have to worry about the universe issue
-  obtain ⟨φ, hf⟩ := hf
-  ext n
-  simp +unfoldPartialApp only [map_coeff, hf, map_aeval, peval, uncurry]
-  apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-  ext ⟨i, k⟩
-  fin_cases i <;> simp
-
-中文:
-定理 map
-  条件: [Fact p.素] {f} (hf : 是Poly₂ p f) (g : R ->+* S) (x y : 𝕎 R)
-  证明: by
-  -- this could be turned into a tactic “macro” (taking `hf` as parameter)
-  -- so that applications do not have to worry about the universe issue
-  obtain ⟨φ, hf⟩ := hf
-  ext n
-  simp +unfoldPartialApp only [map_coeff, hf, map_aeval, peval, uncurry]
-  apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
-  ext ⟨i, k⟩
-  fin_cases i <;> simp
+/-
+**WittVector.IsPoly₂.map** 是 Mathlib 中的一个定理，位于命名空间 `WittVector.IsPoly₂`。
+形式化陈述：map [Fact p.Prime] {f} (hf : IsPoly₂ p f) (g : R ->+* S) (x y : 𝕎 R) : map
+ g (f x y) = f (map g x) (map g y)
+参数：hf : IsPoly₂ p f；g : R ->+* S；x y : 𝕎 R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WittVector.ext`：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : 
+x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `MvPolynomial.map_aeval`：map_aeval {B : Type*} [CommSemiring B] (g : σ ->
+ S₁) (φ : S₁ ->+* B) (p : MvPolynomial σ R) : φ (aeval g p) = eval₂Hom (φ.comp (
+algebraMap R…
+· 使用定理 `MvPolynomial.eval₂Hom_congr`：eval₂Hom_congr {f₁ f₂ : R ->+* S₁} {g₁ g₂ :
+ σ -> S₁} {p₁ p₂ : MvPolynomial σ R} : f₁ = f₂ -> g₁ = g₂ -> p₁ = p₂ -> eval₂Hom
+ f₁ g₁ p₁ = eval₂…
+· 使用定理 `RingHom.ext_int`：ext_int {R : Type*} [NonAssocSemiring R] (f g : Int ->+
+* R) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
-theorem map [Fact p.Prime] {f} (hf : IsPoly₂ p f) (g : R ->+* S) (x y : 𝕎 R) :
+theorem map [Fact p.Prime] {f} (hf : IsPoly₂ p f) (g : R →+* S) (x y : 𝕎 R) :
     map g (f x y) = f (map g x) (map g y) := by
   -- this could be turned into a tactic “macro” (taking `hf` as parameter)
   -- so that applications do not have to worry about the universe issue
@@ -936,7 +922,7 @@ syntax (name := ghostSimp) "ghost_simp" (simpArgs)? : tactic
 
 macro_rules
   | `(tactic| ghost_simp $[[$simpArgs,*]]?) => do
-.getD #[] let args := simpArgs.map (·.getElems)
+    let args := simpArgs.map (·.getElems) |>.getD #[]
     `(tactic| simp only [← sub_eq_add_neg, ghost_simps, $args,*])
 
 
@@ -977,7 +963,7 @@ private meta def runIntro (ref : Syntax) (n : Name) : TacticM FVarId := do
 private meta def getLocalOrIntro (t : Term) : TacticM FVarId := do
   match t with
     | `(_) => runIntro t `_
-| `($id:ident) => getFVarId id > runIntro id id.getId
+    | `($id:ident) => getFVarId id <|> runIntro id id.getId
     | _ => Elab.throwUnsupportedSyntax
 
 elab_rules : tactic | `(tactic| ghost_calc $[$ids']*) => do
@@ -999,16 +985,17 @@ elab_rules : tactic | `(tactic| ghost_calc $[$ids']*) => do
     | #[x] => evalTactic (← `(tactic| refine IsPoly.ext (f := $fS) (g := $gS) ?_ ?_ ?_ _ $x))
     | #[x, y] => evalTactic (← `(tactic| refine IsPoly₂.ext (f := $fS) (g := $gS) ?_ ?_ ?_ _ $x $y))
     | _ => throwError "ghost_calc takes either one or two arguments"
-let nm ← withMainContext
+  let nm ← withMainContext <|
     if let .fvar fvarId := (R : Expr) then
       fvarId.getUserName
     else
       Meta.getUnusedUserName `R
-evalTactic ← `(tactic| iterate 2 infer_instance)
+  evalTactic <| ← `(tactic| iterate 2 infer_instance)
   let R := mkIdent nm
-evalTactic ← `(tactic| clear! $R)
-evalTactic ← `(tactic| intro $(mkIdent nm):ident $(mkIdent (.str nm "_inst")):ident $ids'*)
+  evalTactic <| ← `(tactic| clear! $R)
+  evalTactic <| ← `(tactic| intro $(mkIdent nm):ident $(mkIdent (.str nm "_inst")):ident $ids'*)
 
 end Tactic
 
 end WittVector
+

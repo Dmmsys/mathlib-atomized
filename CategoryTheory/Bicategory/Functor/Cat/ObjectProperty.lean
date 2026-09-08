@@ -37,20 +37,19 @@ namespace Pseudofunctor
 
 variable {B : Type u} [Bicategory.{w, v} B] (F : Pseudofunctor B Cat.{v', u'})
 
-/--
-Definition of `ObjectProperty` / `ObjectProperty` 的定义
+/-- If `F : Pseudofunctor B Cat`, this is the data of a property of
+objects in all categories `F.obj X` for `X : B`. -/
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.Pseudofunctor`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] → CategoryTheory.Pse
+udofunctor B CategoryTheory.Cat → Type (max u u')
+参数：max u u'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ObjectProperty
-  parameters: where
-  axioms and operations (1):
-    - prop((X : B)) : CategoryTheory.ObjectProperty (F.obj X)
-
-中文:
-结构 ObjectProperty
-  参数: where
-  公理与运算 (1 个):
-    - prop((X : B)) : 范畴论.ObjectProperty (F.obj X)
+--- 原说明 ---
+If `F : Pseudofunctor B Cat`, this is the data of a property of
+objects in all categories `F.obj X` for `X : B`.
 -/
 protected structure ObjectProperty where
   /-- A property of objects in the category `F.obj X` for all `X : B`. -/
@@ -60,37 +59,36 @@ namespace ObjectProperty
 
 variable {F} (P : F.ObjectProperty)
 
-/--
-Definition of `Obj` / `Obj` 的定义
+/-- Given `F : Pseudofunctor B Cat`, `P : F.ObjectProperty` and `X : B`, this is
+the full subcategory of `F.obj X` consisting of the objects satisfying the
+property `P`. -/
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.Obj** 是 Mathlib 中的一个缩写定义，位于命名空间 `C
+ategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：Obj (X : B)
+参数：X : B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Obj
-  signature: (X : B)
-  body: (P.prop X).FullSubcategory
-
-中文:
-缩写 Obj
-  签名: (X : B)
-  定义体: (P.prop X).FullSubcategory
-
-Depends on / 依赖: FullSubcategory, P.prop
+--- 原说明 ---
+Given `F : Pseudofunctor B Cat`, `P : F.ObjectProperty` and `X : B`, this is
+the full subcategory of `F.obj X` consisting of the objects satisfying the
+property `P`.
 -/
 abbrev Obj (X : B) := (P.prop X).FullSubcategory
 
-/--
-Definition of `IsClosedUnderMapObj` / `IsClosedUnderMapObj` 的定义
+/-- If `P` is a property of objects for a pseudofunctor `F` to `Cat`,
+this is the condition that `P` is preserved by the application of the functors `F.map`. -/
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.IsClosedUnderMapObj** 是 Mathlib 中的
+一个归纳类型，位于命名空间 `CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {F : CategoryT
+heory.Pseudofunctor B CategoryTheory.Cat} → F.ObjectProperty → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderMapObj
-  parameters: (P : F.ObjectProperty)
-  axioms and operations (1):
-    - map_obj((P) {X Y : B} {M : F.obj X} (hM : P.prop X M) (f : X ⟶ Y)) : P.prop Y ((F.map f).toFunctor.obj M)
-
-中文:
-类 是ClosedUnderMapObj
-  参数: (P : F.ObjectProperty)
-  公理与运算 (1 个):
-    - map_obj((P) {X Y : B} {M : F.obj X} (hM : P.prop X M) (f : X ⟶ Y)) : P.prop Y ((F.map f).toFunctor.obj M)
+--- 原说明 ---
+If `P` is a property of objects for a pseudofunctor `F` to `Cat`,
+this is the condition that `P` is preserved by the application of the functors `
+F.map`.
 -/
 class IsClosedUnderMapObj (P : F.ObjectProperty) : Prop where
   map_obj (P) {X Y : B} {M : F.obj X} (hM : P.prop X M) (f : X ⟶ Y) :
@@ -98,20 +96,20 @@ class IsClosedUnderMapObj (P : F.ObjectProperty) : Prop where
 
 export IsClosedUnderMapObj (map_obj)
 
-/--
-Definition of `IsClosedUnderIsomorphisms` / `IsClosedUnderIsomorphisms` 的定义
+/-- If `P` is a property of objects for a pseudofunctor `F` to `Cat`, this is the
+condition that all `P.prop : ObjectProperty (F.obj X)` for `X : B` are closed
+under isomorphisms. -/
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.IsClosedUnderIsomorphisms** 是 Math
+lib 中的一个归纳类型，位于命名空间 `CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {F : CategoryT
+heory.Pseudofunctor B CategoryTheory.Cat} → F.ObjectProperty → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderIsomorphisms
-  parameters: : Prop where
-  axioms and operations (1):
-    - isClosedUnderIsomorphisms((X : B)) : (P.prop X).IsClosedUnderIsomorphisms
-
-中文:
-类 在同构下封闭
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isClosedUnderIsomorphisms((X : B)) : (P.prop X).在同构下封闭
+--- 原说明 ---
+If `P` is a property of objects for a pseudofunctor `F` to `Cat`, this is the
+condition that all `P.prop : ObjectProperty (F.obj X)` for `X : B` are closed
+under isomorphisms.
 -/
 class IsClosedUnderIsomorphisms : Prop where
   isClosedUnderIsomorphisms (X : B) : (P.prop X).IsClosedUnderIsomorphisms
@@ -125,74 +123,57 @@ variable [P.IsClosedUnderMapObj]
 /-- Given a property `P` of objects for `F : Pseudofunctor B Cat` and a morphism `f : X ⟶ Y`
 in `B`, this is the functor `P.Obj X ⥤ P.Obj Y` that is induced by `F.map f`. -/
 @[simps!]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.map** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：map {X Y : B} (f : X ⟶ Y) : P.Obj X ⥤ P.Obj Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {X Y : B} (f : X ⟶ Y)
-  body: (P.prop Y).lift (ObjectProperty.ι _ ⋙ (F.map f).toFunctor)
-    (fun M => P.map_obj M.2 f)
-
-中文:
-定义 map
-  签名: {X Y : B} (f : X ⟶ Y)
-  定义体: (P.prop Y).lift (ObjectProperty.ι _ ⋙ (F.map f).toFunctor)
-    (fun M => P.map_obj M.2 f)
-
-Depends on / 依赖: F.map, ObjectProperty, P.map_obj, P.prop, map_obj, toFunctor
+--- 原说明 ---
+Given a property `P` of objects for `F : Pseudofunctor B Cat` and a morphism `f 
+: X ⟶ Y`
+in `B`, this is the functor `P.Obj X ⥤ P.Obj Y` that is induced by `F.map f`.
 -/
 def map {X Y : B} (f : X ⟶ Y) :
     P.Obj X ⥤ P.Obj Y :=
   (P.prop Y).lift (ObjectProperty.ι _ ⋙ (F.map f).toFunctor)
-    (fun M => P.map_obj M.2 f)
+    (fun M ↦ P.map_obj M.2 f)
 
 /-- Given a property `P` of objects for `F : Pseudofunctor B Cat` and
 a `2`-morphism in `B`, this is the induced natural transformation between
 the induced functors on the fullsubcategories of objects satisfying `P`. -/
 @[simps!]
-/--
-Definition of `map₂` / `map₂` 的定义
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.map** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：map {X Y : B} (f : X ⟶ Y) : P.Obj X ⥤ P.Obj Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: {X Y : B} {f g : X ⟶ Y} (α : f ⟶ g)
-  body: ((P.prop Y).fullyFaithfulι.whiskeringRight _).preimage
-    (Functor.whiskerLeft (P.prop X).ι (F.map₂ α).toNatTrans)
-
-中文:
-定义 map₂
-  签名: {X Y : B} {f g : X ⟶ Y} (α : f ⟶ g)
-  定义体: ((P.prop Y).fullyFaithfulι.whiskeringRight _).preimage
-    (Functor.whiskerLeft (P.prop X).ι (F.map₂ α).toNatTrans)
-
-Depends on / 依赖: F.map, Functor, Functor.whiskerLeft, P.prop, preimage, toNatTrans, whiskerLeft, whiskeringRight
+--- 原说明 ---
+Given a property `P` of objects for `F : Pseudofunctor B Cat` and
+a `2`-morphism in `B`, this is the induced natural transformation between
+the induced functors on the fullsubcategories of objects satisfying `P`.
 -/
 def map₂ {X Y : B} {f g : X ⟶ Y} (α : f ⟶ g) :
     P.map f ⟶ P.map g :=
   ((P.prop Y).fullyFaithfulι.whiskeringRight _).preimage
     (Functor.whiskerLeft (P.prop X).ι (F.map₂ α).toNatTrans)
 
-/--
-Definition of `mapId` / `mapId` 的定义
+/-- Auxiliary definition for `fullsubcategory`. -/
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.mapId** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：mapId (X : B) : P.map (𝟙 X) ≅ 𝟭 _
+参数：X : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapId
-  signature: (X : B)
-  body: ((P.prop X).fullyFaithfulι.whiskeringRight _).preimageIso
-    (Functor.isoWhiskerLeft (P.prop X).ι (Cat.Hom.toNatIso (F.mapId X)))
-
-@[simp]
-
-中文:
-定义 mapId
-  签名: (X : B)
-  定义体: ((P.prop X).fullyFaithfulι.whiskeringRight _).preimageIso
-    (Functor.isoWhiskerLeft (P.prop X).ι (Cat.Hom.toNatIso (F.mapId X)))
-
-@[simp]
-
-Depends on / 依赖: Cat.Hom.toNatIso, F.mapId, Functor, Functor.isoWhiskerLeft, P.prop, isoWhiskerLeft, preimageIso, toNatIso, whiskeringRight
+--- 原说明 ---
+Auxiliary definition for `fullsubcategory`.
 -/
 def mapId (X : B) :
     P.map (𝟙 X) ≅ 𝟭 _ :=
@@ -200,65 +181,45 @@ def mapId (X : B) :
     (Functor.isoWhiskerLeft (P.prop X).ι (Cat.Hom.toNatIso (F.mapId X)))
 
 @[simp]
-/--
-lemma `mapId_hom_app` / 引理 `mapId_hom_app`
-
-English:
-lemma mapId_hom_app
-  given: {X : B} (M : P.Obj X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapId_hom_app
-  条件: {X : B} (M : P.Obj X)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.mapId_hom_app** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：mapId_hom_app {X : B} (M : P.Obj X) : (P.mapId X).hom.app M = ObjectProper
+ty.homMk ((F.mapId X).hom.toNatTrans.app M.obj)
+参数：M : P.Obj X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapId_hom_app {X : B} (M : P.Obj X) :
   (P.mapId X).hom.app M = ObjectProperty.homMk
     ((F.mapId X).hom.toNatTrans.app M.obj) := rfl
 
 @[simp]
-/--
-lemma `mapId_inv_app` / 引理 `mapId_inv_app`
-
-English:
-lemma mapId_inv_app
-  given: {X : B} (M : P.Obj X)
-  proof: rfl
-
-中文:
-引理 mapId_inv_app
-  条件: {X : B} (M : P.Obj X)
-  证明: rfl
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.mapId_inv_app** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：mapId_inv_app {X : B} (M : P.Obj X) : (P.mapId X).inv.app M = ObjectProper
+ty.homMk ((F.mapId X).inv.toNatTrans.app M.obj)
+参数：M : P.Obj X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapId_inv_app {X : B} (M : P.Obj X) :
   (P.mapId X).inv.app M = ObjectProperty.homMk
     ((F.mapId X).inv.toNatTrans.app M.obj) := rfl
 
-/--
-Definition of `mapComp` / `mapComp` 的定义
+/-- Auxiliary definition for `fullsubcategory`. -/
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.mapComp** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：mapComp {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) : P.map (f ≫ g) ≅ P.map f ⋙ P.
+map g
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapComp
-  signature: {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z)
-  body: ((P.prop Z).fullyFaithfulι.whiskeringRight _).preimageIso
-    (Functor.isoWhiskerLeft (P.prop X).ι (Cat.Hom.toNatIso (F.mapComp f g)))
-
-@[simp]
-
-中文:
-定义 mapComp
-  签名: {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z)
-  定义体: ((P.prop Z).fullyFaithfulι.whiskeringRight _).preimageIso
-    (Functor.isoWhiskerLeft (P.prop X).ι (Cat.Hom.toNatIso (F.mapComp f g)))
-
-@[simp]
-
-Depends on / 依赖: Cat.Hom.toNatIso, F.mapComp, Functor, Functor.isoWhiskerLeft, P.prop, isoWhiskerLeft, mapComp, preimageIso, toNatIso, whiskeringRight
+--- 原说明 ---
+Auxiliary definition for `fullsubcategory`.
 -/
 def mapComp {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) :
     P.map (f ≫ g) ≅ P.map f ⋙ P.map g :=
@@ -266,40 +227,30 @@ def mapComp {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (Functor.isoWhiskerLeft (P.prop X).ι (Cat.Hom.toNatIso (F.mapComp f g)))
 
 @[simp]
-/--
-lemma `mapComp_hom_app` / 引理 `mapComp_hom_app`
-
-English:
-lemma mapComp_hom_app
-  given: {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mapComp_hom_app
-  条件: {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.mapComp_hom_app** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：mapComp_hom_app {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X) : (P.map
+Comp f g).hom.app M = ObjectProperty.homMk ((F.mapComp f g).hom.toNatTrans.app M
+.obj)
+参数：f : X ⟶ Y；g : Y ⟶ Z；M : P.Obj X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapComp_hom_app {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X) :
     (P.mapComp f g).hom.app M = ObjectProperty.homMk
       ((F.mapComp f g).hom.toNatTrans.app M.obj) := rfl
 
 @[simp]
-/--
-lemma `mapComp_inv_app` / 引理 `mapComp_inv_app`
-
-English:
-lemma mapComp_inv_app
-  given: {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X)
-  proof: rfl
-
-中文:
-引理 mapComp_inv_app
-  条件: {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X)
-  证明: rfl
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.mapComp_inv_app** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：mapComp_inv_app {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X) : (P.map
+Comp f g).inv.app M = ObjectProperty.homMk ((F.mapComp f g).inv.toNatTrans.app M
+.obj)
+参数：f : X ⟶ Y；g : Y ⟶ Z；M : P.Obj X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapComp_inv_app {X Y Z : B} (f : X ⟶ Y) (g : Y ⟶ Z) (M : P.Obj X) :
     (P.mapComp f g).inv.app M = ObjectProperty.homMk
@@ -310,28 +261,18 @@ set_option backward.isDefEq.respectTransparency false in
 the induced pseudofunctor which sends `X : B` to the full subcategory of `F.obj X`
 consisting of objects satisfying `P`. -/
 @[simps]
-/--
-Definition of `fullsubcategory` / `fullsubcategory` 的定义
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.fullsubcategory** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Pseudofunctor.ObjectProperty`。
+形式化陈述：fullsubcategory : Pseudofunctor B Cat where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullsubcategory
-  signature: : Pseudofunctor B Cat where
-  body: Cat.of (P.Obj X)
-  map f := Cat.Hom.ofFunctor (P.map f)
-  map₂ α := Cat.Hom₂.ofNatTrans (P.map₂ α)
-  mapId X := Cat.Hom.isoMk (P.mapId X)
-  mapComp f g := Cat.Hom.isoMk (P.mapComp f g)
-
-中文:
-定义 fullsubcategory
-  签名: : Pseudofunctor B Cat where
-  定义体: Cat.of (P.Obj X)
-  map f := Cat.Hom.ofFunctor (P.map f)
-  map₂ α := Cat.Hom₂.ofNatTrans (P.map₂ α)
-  mapId X := Cat.Hom.isoMk (P.mapId X)
-  mapComp f g := Cat.Hom.isoMk (P.mapComp f g)
-
-Depends on / 依赖: Cat.of, P.Obj
+--- 原说明 ---
+Given a property of objects `P` for a pseudofunctor from `B` to `Cat`, this is
+the induced pseudofunctor which sends `X : B` to the full subcategory of `F.obj 
+X`
+consisting of objects satisfying `P`.
 -/
 def fullsubcategory : Pseudofunctor B Cat where
   obj X := Cat.of (P.Obj X)
@@ -344,22 +285,13 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The inclusion of `P.fullsubcategory` in `F`. -/
 @[simps]
-/--
-Definition of `ι` / `ι` 的定义
+/-
+**CategoryTheory.Pseudofunctor.ObjectProperty.** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Pseudofunctor.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι
-  signature: : StrongTrans P.fullsubcategory F where
-  body: Cat.Hom.ofFunctor (P.prop (X := X)).ι
-  naturality f := Iso.refl _
-
-中文:
-定义 ι
-  签名: : StrongTrans P.fullsubcategory F where
-  定义体: Cat.Hom.ofFunctor (P.prop (X := X)).ι
-  naturality f := Iso.refl _
-
-Depends on / 依赖: Cat.Hom.ofFunctor, P.prop, ofFunctor
+--- 原说明 ---
+The inclusion of `P.fullsubcategory` in `F`.
 -/
 def ι : StrongTrans P.fullsubcategory F where
   app X := Cat.Hom.ofFunctor (P.prop (X := X)).ι
@@ -372,3 +304,4 @@ end ObjectProperty
 end Pseudofunctor
 
 end CategoryTheory
+

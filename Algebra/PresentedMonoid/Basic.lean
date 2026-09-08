@@ -37,55 +37,39 @@ generators `x : α` and relations `rels` as a quotient of a congruence structure
 @[to_additive /-- Given a set of relations, `rels`, over a type `α`, `PresentedAddMonoid` constructs
 the monoid with generators `x : α` and relations `rels` as a quotient of an AddCon structure over
 rels -/]
-/--
-Definition of `PresentedMonoid` / `PresentedMonoid` 的定义
-
-English:
-definition PresentedMonoid
-  signature: (rels : FreeMonoid α -> FreeMonoid α -> Prop)
-  body: (conGen rels).Quotient
-
-中文:
-定义 PresentedMonoid
-  签名: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
-  定义体: (conGen rels).Quotient
-
-Depends on / 依赖: Quotient, conGen
+/-
+**PresentedMonoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PresentedMonoid (rels : FreeMonoid α -> FreeMonoid α -> Prop)
+参数：rels : FreeMonoid α -> FreeMonoid α -> Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def PresentedMonoid (rels : FreeMonoid α -> FreeMonoid α -> Prop) := (conGen rels).Quotient
+def PresentedMonoid (rels : FreeMonoid α → FreeMonoid α → Prop) := (conGen rels).Quotient
 
 namespace PresentedMonoid
 
 open Set Submonoid
 
 @[to_additive]
-instance {rels : FreeMonoid α -> FreeMonoid α -> Prop} : Monoid (PresentedMonoid rels) :=
-inferInstanceAs Monoid (conGen rels).Quotient
+/-
+**PresentedMonoid.** 是 Mathlib 中的一个实例，位于命名空间 `PresentedMonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {rels : FreeMonoid α → FreeMonoid α → Prop} : Monoid (PresentedMonoid rels) :=
+  inferInstanceAs <| Monoid (conGen rels).Quotient
 
 /-- The quotient map from the free monoid on `α` to the presented monoid with the same generators
 and the given relations `rels`. -/
 @[to_additive /-- The quotient map from the free additive monoid on `α` to the presented additive
 monoid with the same generators and the given relations `rels` -/]
-/--
-Definition of `mk` / `mk` 的定义
-
-English:
-definition mk
-  signature: (rels : FreeMonoid α -> FreeMonoid α -> Prop)
-  body: Quotient.mk (conGen rels).toSetoid
-  map_one' := rfl
-  map_mul' := fun _ _ => rfl
-
-中文:
-定义 mk
-  签名: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
-  定义体: Quotient.mk (conGen rels).toSetoid
-  map_one' := rfl
-  map_mul' := fun _ _ => rfl
-
-Depends on / 依赖: Quotient, Quotient.mk, conGen, toSetoid
+/-
+**PresentedMonoid.mk** 是 Mathlib 中的一个定义，位于命名空间 `PresentedMonoid`。
+形式化陈述：mk (rels : FreeMonoid α -> FreeMonoid α -> Prop) : FreeMonoid α ->* Presen
+tedMonoid rels where toFun
+参数：rels : FreeMonoid α -> FreeMonoid α -> Prop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mk (rels : FreeMonoid α -> FreeMonoid α -> Prop) : FreeMonoid α ->* PresentedMonoid rels where
+def mk (rels : FreeMonoid α → FreeMonoid α → Prop) : FreeMonoid α →* PresentedMonoid rels where
   toFun := Quotient.mk (conGen rels).toSetoid
   map_one' := rfl
   map_mul' := fun _ _ => rfl
@@ -95,132 +79,96 @@ is mapped to the equivalence class of the image of `x` in `FreeMonoid α`. -/
 @[to_additive
 /-- `of` is the canonical map from `α` to a presented additive monoid with generators `x : α`. The
 term `x` is mapped to the equivalence class of the image of `x` in `FreeAddMonoid α`. -/]
-/--
-Definition of `of` / `of` 的定义
-
-English:
-definition of
-  signature: (rels : FreeMonoid α -> FreeMonoid α -> Prop) (x : α)
-  body: mk rels (.of x)
-
-中文:
-定义 of
-  签名: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题) (x : α)
-  定义体: mk rels (.of x)
+/-
+**PresentedMonoid.of** 是 Mathlib 中的一个定义，位于命名空间 `PresentedMonoid`。
+形式化陈述：of (rels : FreeMonoid α -> FreeMonoid α -> Prop) (x : α) : PresentedMonoid
+ rels
+参数：rels : FreeMonoid α -> FreeMonoid α -> Prop；x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def of (rels : FreeMonoid α -> FreeMonoid α -> Prop) (x : α) : PresentedMonoid rels :=
+def of (rels : FreeMonoid α → FreeMonoid α → Prop) (x : α) : PresentedMonoid rels :=
   mk rels (.of x)
 
 section inductionOn
 
-variable {α₁ α₂ α₃ : Type*} {rels₁ : FreeMonoid α₁ -> FreeMonoid α₁ -> Prop}
-  {rels₂ : FreeMonoid α₂ -> FreeMonoid α₂ -> Prop} {rels₃ : FreeMonoid α₃ -> FreeMonoid α₃ -> Prop}
+variable {α₁ α₂ α₃ : Type*} {rels₁ : FreeMonoid α₁ → FreeMonoid α₁ → Prop}
+  {rels₂ : FreeMonoid α₂ → FreeMonoid α₂ → Prop} {rels₃ : FreeMonoid α₃ → FreeMonoid α₃ → Prop}
 
 local notation "P₁" => PresentedMonoid rels₁
 local notation "P₂" => PresentedMonoid rels₂
 local notation "P₃" => PresentedMonoid rels₃
 
 @[to_additive (attr := elab_as_elim), induction_eliminator]
-/--
-theorem `inductionOn` / 定理 `inductionOn`
-
-English:
-theorem inductionOn
-  given: {δ : P₁ -> Prop} (q : P₁) (h : forall a, δ (mk rels₁ a))
-  statement: δ q
-  proof: Quotient.ind h q
-
-@[to_additive (attr := elab_as_elim)]
-
-中文:
-定理 inductionOn
-  条件: {δ : P₁ -> 命题} (q : P₁) (h : 对任意 a, δ (mk rels₁ a))
-  结论: δ q
-  证明: Quotient.ind h q
-
-@[to_additive (attr := elab_as_elim)]
+/-
+**PresentedMonoid.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid`。
+形式化陈述：∀ {α₁ : Type u_2} {rels₁ : FreeMonoid α₁ → FreeMonoid α₁ → Prop} {δ : Pres
+entedMonoid rels₁ → Prop}   (q : PresentedMonoid rels₁), (∀ (a : FreeMonoid α₁),
+ δ ((PresentedMonoid.mk rels₁) a)) → δ q
+参数：q : PresentedMonoid rels₁；∀ (a : FreeMonoid α₁), δ ((PresentedMonoid.mk rels₁
+) a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
 -/
-protected theorem inductionOn {δ : P₁ -> Prop} (q : P₁) (h : forall a, δ (mk rels₁ a)) : δ q :=
+protected theorem inductionOn {δ : P₁ → Prop} (q : P₁) (h : ∀ a, δ (mk rels₁ a)) : δ q :=
   Quotient.ind h q
 
 @[to_additive (attr := elab_as_elim)]
-/--
-theorem `inductionOn₂` / 定理 `inductionOn₂`
-
-English:
-theorem inductionOn₂
-  statement: {δ : P₁ -> P₂ -> Prop} (q₁ : P₁) (q₂ : P₂)
-  proof: Quotient.inductionOn₂ q₁ q₂ h
-
-@[to_additive (attr := elab_as_elim)]
-
-中文:
-定理 inductionOn₂
-  结论: {δ : P₁ -> P₂ -> 命题} (q₁ : P₁) (q₂ : P₂)
-  证明: Quotient.inductionOn₂ q₁ q₂ h
-
-@[to_additive (attr := elab_as_elim)]
+/-
+**PresentedMonoid.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid`。
+形式化陈述：∀ {α₁ : Type u_2} {rels₁ : FreeMonoid α₁ → FreeMonoid α₁ → Prop} {δ : Pres
+entedMonoid rels₁ → Prop}   (q : PresentedMonoid rels₁), (∀ (a : FreeMonoid α₁),
+ δ ((PresentedMonoid.mk rels₁) a)) → δ q
+参数：q : PresentedMonoid rels₁；∀ (a : FreeMonoid α₁), δ ((PresentedMonoid.mk rels₁
+) a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
 -/
-protected theorem inductionOn₂ {δ : P₁ -> P₂ -> Prop} (q₁ : P₁) (q₂ : P₂)
-    (h : forall a b, δ (mk rels₁ a) (mk rels₂ b)) : δ q₁ q₂ :=
+protected theorem inductionOn₂ {δ : P₁ → P₂ → Prop} (q₁ : P₁) (q₂ : P₂)
+    (h : ∀ a b, δ (mk rels₁ a) (mk rels₂ b)) : δ q₁ q₂ :=
   Quotient.inductionOn₂ q₁ q₂ h
 
 @[to_additive (attr := elab_as_elim)]
-/--
-theorem `inductionOn₃` / 定理 `inductionOn₃`
-
-English:
-theorem inductionOn₃
-  statement: {δ : P₁ -> P₂ -> P₃ -> Prop} (q₁ : P₁)
-  proof: Quotient.inductionOn₃ q₁ q₂ q₃ h
-
-中文:
-定理 inductionOn₃
-  结论: {δ : P₁ -> P₂ -> P₃ -> 命题} (q₁ : P₁)
-  证明: Quotient.inductionOn₃ q₁ q₂ q₃ h
+/-
+**PresentedMonoid.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid`。
+形式化陈述：∀ {α₁ : Type u_2} {rels₁ : FreeMonoid α₁ → FreeMonoid α₁ → Prop} {δ : Pres
+entedMonoid rels₁ → Prop}   (q : PresentedMonoid rels₁), (∀ (a : FreeMonoid α₁),
+ δ ((PresentedMonoid.mk rels₁) a)) → δ q
+参数：q : PresentedMonoid rels₁；∀ (a : FreeMonoid α₁), δ ((PresentedMonoid.mk rels₁
+) a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
 -/
-protected theorem inductionOn₃ {δ : P₁ -> P₂ -> P₃ -> Prop} (q₁ : P₁)
-    (q₂ : P₂) (q₃ : P₃) (h : forall a b c, δ (mk rels₁ a) (mk rels₂ b) (mk rels₃ c)) :
+protected theorem inductionOn₃ {δ : P₁ → P₂ → P₃ → Prop} (q₁ : P₁)
+    (q₂ : P₂) (q₃ : P₃) (h : ∀ a b c, δ (mk rels₁ a) (mk rels₂ b) (mk rels₃ c)) :
     δ q₁ q₂ q₃ :=
   Quotient.inductionOn₃ q₁ q₂ q₃ h
 
 end inductionOn
 
-variable {α : Type*} {rels : FreeMonoid α -> FreeMonoid α -> Prop} {x y : FreeMonoid α}
+variable {α : Type*} {rels : FreeMonoid α → FreeMonoid α → Prop} {x y : FreeMonoid α}
 
-/--
-lemma `mk_eq_mk_iff` / 引理 `mk_eq_mk_iff`
-
-English:
-lemma mk_eq_mk_iff
-  statement: mk rels x = mk rels y ↔ conGen rels x y
-  proof: Quotient.eq
-
-中文:
-引理 mk_eq_mk_iff
-  结论: mk rels x = mk rels y ↔ conGen rels x y
-  证明: Quotient.eq
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**PresentedMonoid.mk_eq_mk_iff** 是 Mathlib 中的一个引理，位于命名空间 `PresentedMonoid`。
+形式化陈述：mk_eq_mk_iff : mk rels x = mk rels y ↔ conGen rels x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 lemma mk_eq_mk_iff : mk rels x = mk rels y ↔ conGen rels x y := Quotient.eq
-
-/--
-lemma `mk_eq_mk_of_rel` / 引理 `mk_eq_mk_of_rel`
-
-English:
-lemma mk_eq_mk_of_rel
-  given: (h : rels x y)
-  statement: mk rels x = mk rels y
-  proof: mk_eq_mk_iff.2 (.of _ _ h)
-
-中文:
-引理 mk_eq_mk_of_rel
-  条件: (h : rels x y)
-  结论: mk rels x = mk rels y
-  证明: mk_eq_mk_iff.2 (.of _ _ h)
-
-Depends on / 依赖: mk_eq_mk_iff
+/-
+**PresentedMonoid.mk_eq_mk_of_rel** 是 Mathlib 中的一个引理，位于命名空间 `PresentedMonoid`。
+形式化陈述：mk_eq_mk_of_rel (h : rels x y) : mk rels x = mk rels y
+参数：h : rels x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `PresentedMonoid.mk_eq_mk_iff`：mk_eq_mk_iff : mk rels x = mk rels y ↔ con
+Gen rels x y
 -/
 lemma mk_eq_mk_of_rel (h : rels x y) : mk rels x = mk rels y := mk_eq_mk_iff.2 (.of _ _ h)
 
@@ -229,167 +177,129 @@ closure of the set of generators equals `⊤`. -/
 @[to_additive (attr := simp) /-- The generators of a presented additive monoid generate the
 presented additive monoid. That is, the additive submonoid closure of the set of generators equals
 `⊤`. -/]
-/--
-theorem `closure_range_of` / 定理 `closure_range_of`
-
-English:
-theorem closure_range_of
-  given: (rels : FreeMonoid α -> FreeMonoid α -> Prop)
-  proof: by
-  rw [Submonoid.eq_top_iff']
-  intro x
-  induction x with | _ a
-  induction a with
-  | one => exact Submonoid.one_mem _
-| of x => exact subset_closure by simp [range, of]
-  | mul x y hx hy => exact Submonoid.mul_mem _ hx hy
-
-@[to_additive]
-
-中文:
-定理 closure_range_of
-  条件: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
-  证明: by
-  rw [Submonoid.eq_top_iff']
-  intro x
-  induction x with | _ a
-  induction a with
-  | one => exact Submonoid.one_mem _
-| of x => exact subset_closure by simp [range, of]
-  | mul x y hx hy => exact Submonoid.mul_mem _ hx hy
-
-@[to_additive]
-
-Depends on / 依赖: Submonoid, Submonoid.eq_top_iff, Submonoid.mul_mem, Submonoid.one_mem, eq_top_iff, mul_mem, one_mem, subset_closure
+/-
+**PresentedMonoid.closure_range_of** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid`。
+形式化陈述：closure_range_of (rels : FreeMonoid α -> FreeMonoid α -> Prop) : Submonoid
+.closure (Set.range (of rels)) = ⊤
+参数：rels : FreeMonoid α -> FreeMonoid α -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submonoid.eq_top_iff'`：eq_top_iff' : S = ⊤ ↔ forall x : M, x in S
+· 使用定理 `PresentedMonoid.inductionOn`：∀ {α₁ : Type u_2} {rels₁ : FreeMonoid α₁ → 
+FreeMonoid α₁ → Prop} {δ : PresentedMonoid rels₁ → Prop}   (q : PresentedMonoid 
+rels₁), (∀ (a : F…
+· 使用定理 `FreeMonoid.inductionOn`：∀ {α : Type u_1} {motive : FreeMonoid α → Prop} 
+(z : FreeMonoid α),   motive 1 →     (∀ (x : α), motive (FreeMonoid.of x)) → (∀ 
+(x y : FreeM…
+· 使用定理 `Submonoid.one_mem`：∀ {M : Type u_1} [inst : MulOneClass M] (S : Submonoi
+d M), 1 ∈ S
+· 使用定理 `Submonoid.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Submonoid.mul_mem`：∀ {M : Type u_1} [inst : MulOneClass M] (S : Submonoi
+d M) {x y : M}, x ∈ S → y ∈ S → x * y ∈ S
 -/
-theorem closure_range_of (rels : FreeMonoid α -> FreeMonoid α -> Prop) :
+theorem closure_range_of (rels : FreeMonoid α → FreeMonoid α → Prop) :
     Submonoid.closure (Set.range (of rels)) = ⊤ := by
   rw [Submonoid.eq_top_iff']
   intro x
   induction x with | _ a
   induction a with
   | one => exact Submonoid.one_mem _
-| of x => exact subset_closure by simp [range, of]
+  | of x => exact subset_closure <| by simp [range, of]
   | mul x y hx hy => exact Submonoid.mul_mem _ hx hy
 
 @[to_additive]
-/--
-theorem `surjective_mk` / 定理 `surjective_mk`
-
-English:
-theorem surjective_mk
-  given: {rels : FreeMonoid α -> FreeMonoid α -> Prop}
-  proof: fun x => PresentedMonoid.inductionOn x fun a => .intro a rfl
-
-中文:
-定理 surjective_mk
-  条件: {rels : 自由幺半群 α -> 自由幺半群 α -> 命题}
-  证明: fun x => PresentedMonoid.inductionOn x fun a => .intro a rfl
-
-Depends on / 依赖: PresentedMonoid, PresentedMonoid.inductionOn, inductionOn
+/-
+**PresentedMonoid.surjective_mk** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid`。
+形式化陈述：surjective_mk {rels : FreeMonoid α -> FreeMonoid α -> Prop} : Function.Sur
+jective (mk rels)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PresentedMonoid.inductionOn`：∀ {α₁ : Type u_2} {rels₁ : FreeMonoid α₁ → 
+FreeMonoid α₁ → Prop} {δ : PresentedMonoid rels₁ → Prop}   (q : PresentedMonoid 
+rels₁), (∀ (a : F…
 -/
-theorem surjective_mk {rels : FreeMonoid α -> FreeMonoid α -> Prop} :
-    Function.Surjective (mk rels) := fun x => PresentedMonoid.inductionOn x fun a => .intro a rfl
+theorem surjective_mk {rels : FreeMonoid α → FreeMonoid α → Prop} :
+    Function.Surjective (mk rels) := fun x ↦ PresentedMonoid.inductionOn x fun a ↦ .intro a rfl
 
 section ToMonoid
-variable {α M : Type*} [Monoid M] (f : α -> M)
-variable {rels : FreeMonoid α -> FreeMonoid α -> Prop}
-variable (h : forall a b : FreeMonoid α, rels a b -> FreeMonoid.lift f a = FreeMonoid.lift f b)
+variable {α M : Type*} [Monoid M] (f : α → M)
+variable {rels : FreeMonoid α → FreeMonoid α → Prop}
+variable (h : ∀ a b : FreeMonoid α, rels a b → FreeMonoid.lift f a = FreeMonoid.lift f b)
 
 /-- The extension of a map `f : α → M` that satisfies the given relations to a monoid homomorphism
 from `PresentedMonoid rels → M`. -/
 @[to_additive /-- The extension of a map `f : α → M` that satisfies the given relations to an
 additive-monoid homomorphism from `PresentedAddMonoid rels → M` -/]
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: : PresentedMonoid rels ->* M
-  body: Con.lift _ (FreeMonoid.lift f) (Con.conGen_le.2 h)
-
-@[to_additive]
-
-中文:
-定义 lift
-  签名: : PresentedMonoid rels ->* M
-  定义体: Con.lift _ (FreeMonoid.lift f) (Con.conGen_le.2 h)
-
-@[to_additive]
-
-Depends on / 依赖: Con.conGen_le, Con.lift, FreeMonoid, FreeMonoid.lift, conGen_le
+/-
+**PresentedMonoid.lift** 是 Mathlib 中的一个定义，位于命名空间 `PresentedMonoid`。
+形式化陈述：lift : PresentedMonoid rels ->* M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def lift : PresentedMonoid rels ->* M :=
+def lift : PresentedMonoid rels →* M :=
   Con.lift _ (FreeMonoid.lift f) (Con.conGen_le.2 h)
 
 @[to_additive]
-/--
-theorem `toMonoid.unique` / 定理 `toMonoid.unique`
-
-English:
-theorem toMonoid.unique
-  statement: (g : MonoidHom (conGen rels).Quotient M)
-  proof: Con.lift_unique (Con.conGen_le.2 h) g (FreeMonoid.hom_eq hg)
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toMonoid.unique
-  结论: (g : 幺半群态射 (conGen rels).商 M)
-  证明: Con.lift_unique (Con.conGen_le.2 h) g (FreeMonoid.hom_eq hg)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Con.conGen_le, Con.lift_unique, FreeMonoid, FreeMonoid.hom_eq, conGen_le, hom_eq, lift_unique
+/-
+**PresentedMonoid.toMonoid.unique** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid.toM
+onoid`。
+形式化陈述：∀ {α : Type u_3} {M : Type u_4} [inst : Monoid M] (f : α → M) {rels : Free
+Monoid α → FreeMonoid α → Prop}   (h : ∀ (a b : FreeMonoid α), rels a b → (FreeM
+onoid.lift f) a = (FreeMonoid.lift f) b)   (g : (conGen rels).Quotient →* M), (∀
+ (a : α), g (PresentedMonoid.of rels a) = f a) → g = PresentedMonoid.lift f h
+参数：f : α → M；h : ∀ (a b : FreeMonoid α), rels a b → (FreeMonoid.lift f) a = (Fre
+eMonoid.lift f) b；g : (conGen rels).Quotient →* M；∀ (a : α), g (PresentedMonoid.
+of rels a) = f a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.lift_unique`：lift_unique (H : c <= ker f) (g : c.Quotient ->* P) (Hg
+ : g.comp c.mk' = f) : g = c.lift f H
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Con.conGen_le`：conGen_le {r : M -> M -> Prop} {c : Con M} : conGen r <= 
+c ↔ r <= ⇑c
+· 使用定理 `FreeMonoid.hom_eq`：hom_eq ⦃f g : FreeMonoid α ->* M⦄ (h : forall x, f (o
+f x) = g (of x)) : f = g
 -/
 theorem toMonoid.unique (g : MonoidHom (conGen rels).Quotient M)
-    (hg : forall a : α, g (of rels a) = f a) : g = lift f h :=
+    (hg : ∀ a : α, g (of rels a) = f a) : g = lift f h :=
   Con.lift_unique (Con.conGen_le.2 h) g (FreeMonoid.hom_eq hg)
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_of` / 定理 `lift_of`
-
-English:
-theorem lift_of
-  given: {x : α}
-  statement: lift f h (of rels x) = f x
-  proof: rfl
-
-中文:
-定理 lift_of
-  条件: {x : α}
-  结论: lift f h (of rels x) = f x
-  证明: rfl
+/-
+**PresentedMonoid.lift_of** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid`。
+形式化陈述：lift_of {x : α} : lift f h (of rels x) = f x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift_of {x : α} : lift f h (of rels x) = f x := rfl
 
 end ToMonoid
 
 @[to_additive (attr := ext)]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: {M : Type*} [Monoid M] (rels : FreeMonoid α -> FreeMonoid α -> Prop)
-  proof: by
-  apply MonoidHom.eq_of_eqOn_denseM (closure_range_of _)
-  grind [Set.eqOn_range]
-
-中文:
-定理 ext
-  结论: {M : 类型} [幺半群 M] (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
-  证明: by
-  apply MonoidHom.eq_of_eqOn_denseM (closure_range_of _)
-  grind [Set.eqOn_range]
-
-Depends on / 依赖: MonoidHom, MonoidHom.eq_of_eqOn_denseM, Set.eqOn_range, closure_range_of, eqOn_range, eq_of_eqOn_denseM
+/-
+**PresentedMonoid.ext** 是 Mathlib 中的一个定理，位于命名空间 `PresentedMonoid`。
+形式化陈述：ext {M : Type*} [Monoid M] (rels : FreeMonoid α -> FreeMonoid α -> Prop) {
+φ ψ : PresentedMonoid rels ->* M} (hx : forall (x : α), φ (.of rels x) = ψ (.of 
+rels x)) : φ = ψ
+参数：rels : FreeMonoid α -> FreeMonoid α -> Prop；hx : forall (x : α), φ (.of rels 
+x) = ψ (.of rels x)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.eq_of_eqOn_denseM`：eq_of_eqOn_denseM {s : Set M} (hs : closure
+ s = ⊤) {f g : M ->* N} (h : s.EqOn f g) : f = g
+· 使用定理 `PresentedMonoid.closure_range_of`：closure_range_of (rels : FreeMonoid α 
+-> FreeMonoid α -> Prop) : Submonoid.closure (Set.range (of rels)) = ⊤
 -/
-theorem ext {M : Type*} [Monoid M] (rels : FreeMonoid α -> FreeMonoid α -> Prop)
-    {φ ψ : PresentedMonoid rels ->* M} (hx : forall (x : α), φ (.of rels x) = ψ (.of rels x)) :
+theorem ext {M : Type*} [Monoid M] (rels : FreeMonoid α → FreeMonoid α → Prop)
+    {φ ψ : PresentedMonoid rels →* M} (hx : ∀ (x : α), φ (.of rels x) = ψ (.of rels x)) :
     φ = ψ := by
   apply MonoidHom.eq_of_eqOn_denseM (closure_range_of _)
   grind [Set.eqOn_range]
 
 end PresentedMonoid
+

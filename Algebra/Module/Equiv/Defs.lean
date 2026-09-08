@@ -45,23 +45,23 @@ variable {R R₁ R₂ R₃ R₄ S M M₁ M₂ M₃ M₄ N₁ N₂ : Type*}
 
 section
 
-/--
-Definition of `LinearEquiv` / `LinearEquiv` 的定义
+/-- A linear equivalence is an invertible linear map. -/
+/-
+**LinearEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u_14} →   {S : Type u_15} →     [inst : Semiring R] →       [ins
+t_1 : Semiring S] →         (σ : R →+* S) →           {σ' : S →+* R} →          
+   [RingHomInvPair σ σ'] →               [RingHomInvPair σ' σ] →                
+ (M : Type u_16) →                   (M₂ : Type u_17) →                     [ins
+t_4 : AddCommMonoid M] →                       [inst_5 : AddCommMonoid M₂] → [_r
+oot_.Module R M] → [_root_.Module S M₂] → Type (max u_16 u_17)
+参数：σ : R →+* S；M : Type u_16；M₂ : Type u_17；max u_16 u_17。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LinearEquiv
-  parameters: {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ : R ->+* S)
-  extends: LinearMap σ M M₂, M ≃+ M₂
-  (no additional axioms)
-
-中文:
-结构 线性等价
-  参数: {R : 类型} {S : 类型} [半环 R] [半环 S] (σ : R ->+* S)
-  继承: 线性映射 σ M M₂, M ≃+ M₂
-  (无附加公理)
+--- 原说明 ---
+A linear equivalence is an invertible linear map.
 -/
-structure LinearEquiv {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ : R ->+* S)
-  {σ' : S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ] (M : Type*) (M₂ : Type*)
+structure LinearEquiv {R : Type*} {S : Type*} [Semiring R] [Semiring S] (σ : R →+* S)
+  {σ' : S →+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ] (M : Type*) (M₂ : Type*)
   [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module S M₂] extends LinearMap σ M M₂, M ≃+ M₂
 
 attribute [coe] LinearEquiv.toLinearMap
@@ -89,47 +89,64 @@ notation:50 M " ≃ₛₗ[" σ "] " M₂ => LinearEquiv σ M M₂
 a plain linear map `M →ₗ M₂`. -/
 notation:50 M " ≃ₗ[" R "] " M₂ => LinearEquiv (RingHom.id R) M M₂
 
-/--
-Definition of `SemilinearEquivClass` / `SemilinearEquivClass` 的定义
+/-- `SemilinearEquivClass F σ M M₂` asserts `F` is a type of bundled `σ`-semilinear equivs
+`M → M₂`.
 
-English:
-class SemilinearEquivClass
-  parameters: (F : Type*) {R S : outParam Type*} [Semiring R] [Semiring S]
-  extends: AddEquivClass F M M₂
-  axioms and operations (1):
-    - map_smulₛₗ : forall (f : F) (r : R) (x : M), f (r • x) = σ r • f x
+See also `LinearEquivClass F R M M₂` for the case where `σ` is the identity map on `R`.
 
-中文:
-类 半线性等价类
-  参数: (F : 类型) {R S : outParam 类型} [半环 R] [半环 S]
-  继承: 加法等价类 F M M₂
-  公理与运算 (1 个):
-    - map_smulₛₗ : 对任意 (f : F) (r : R) (x : M), f (r • x) = σ r • f x
+A map `f` between an `R`-module and an `S`-module over a ring homomorphism `σ : R →+* S`
+is semilinear if it satisfies the two properties `f (x + y) = f x + f y` and
+`f (c • x) = (σ c) • f x`. -/
+/-
+**SemilinearEquivClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_14) →   {R : outParam (Type u_15)} →     {S : outParam (Type u
+_16)} →       [inst : Semiring R] →         [inst_1 : Semiring S] →           (σ
+ : outParam (R →+* S)) →             {σ' : outParam (S →+* R)} →               [
+RingHomInvPair σ σ'] →                 [RingHomInvPair σ' σ] →                  
+ (M : outParam (Type u_17)) →                     (M₂ : outParam (Type u_18)) → 
+                      [inst_4 : AddCommMonoid M] →                         [inst
+_5 : AddCommMonoid M₂] →                           [_root_.Module R M] → [_root_
+.Module S M₂] → [EquivLike F M M₂] → Prop
+参数：R →+* S；Type u_17；Type u_18。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`SemilinearEquivClass F σ M M₂` asserts `F` is a type of bundled `σ`-semilinear 
+equivs
+`M → M₂`.
+
+See also `LinearEquivClass F R M M₂` for the case where `σ` is the identity map 
+on `R`.
+
+A map `f` between an `R`-module and an `S`-module over a ring homomorphism `σ : 
+R →+* S`
+is semilinear if it satisfies the two properties `f (x + y) = f x + f y` and
+`f (c • x) = (σ c) • f x`.
 -/
 class SemilinearEquivClass (F : Type*) {R S : outParam Type*} [Semiring R] [Semiring S]
-  (σ : outParam <| R ->+* S) {σ' : outParam <| S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+  (σ : outParam <| R →+* S) {σ' : outParam <| S →+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
   (M M₂ : outParam Type*) [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module S M₂]
   [EquivLike F M M₂] : Prop
   extends AddEquivClass F M M₂ where
   /-- Applying a semilinear equivalence `f` over `σ` to `r • x` equals `σ r • f x`. -/
-  map_smulₛₗ : forall (f : F) (r : R) (x : M), f (r • x) = σ r • f x
+  map_smulₛₗ : ∀ (f : F) (r : R) (x : M), f (r • x) = σ r • f x
 
 -- `R, S, σ, σ'` become metavars, but it's OK since they are outparams.
 
-/--
-Definition of `LinearEquivClass` / `LinearEquivClass` 的定义
+/-- `LinearEquivClass F R M M₂` asserts `F` is a type of bundled `R`-linear equivs `M → M₂`.
+This is an abbreviation for `SemilinearEquivClass F (RingHom.id R) M M₂`.
+-/
+/-
+**LinearEquivClass** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：LinearEquivClass (F : Type*) (R M M₂ : outParam Type*) [Semiring R] [AddCo
+mmMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] [EquivLike F M M₂]
+参数：F : Type*；R M M₂ : outParam Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LinearEquivClass
-  signature: (F : Type*) (R M M₂ : outParam Type*) [Semiring R] [AddCommMonoid M]
-  body: SemilinearEquivClass F (RingHom.id R) M M₂
-
-中文:
-缩写 LinearEquivClass
-  签名: (F : 类型) (R M M₂ : outParam 类型) [半环 R] [加法交换幺半群 M]
-  定义体: SemilinearEquivClass F (RingHom.id R) M M₂
-
-Depends on / 依赖: RingHom, RingHom.id, SemilinearEquivClass
+--- 原说明 ---
+`LinearEquivClass F R M M₂` asserts `F` is a type of bundled `R`-linear equivs `
+M → M₂`.
+This is an abbreviation for `SemilinearEquivClass F (RingHom.id R) M M₂`.
 -/
 abbrev LinearEquivClass (F : Type*) (R M M₂ : outParam Type*) [Semiring R] [AddCommMonoid M]
     [AddCommMonoid M₂] [Module R M] [Module R M₂] [EquivLike F M M₂] :=
@@ -141,8 +158,12 @@ namespace SemilinearEquivClass
 
 variable (F : Type*) [Semiring R] [Semiring S]
 variable [AddCommMonoid M] [AddCommMonoid M₁] [AddCommMonoid M₂]
-variable [Module R M] [Module S M₂] {σ : R ->+* S} {σ' : S ->+* R}
+variable [Module R M] [Module S M₂] {σ : R →+* S} {σ' : S →+* R}
 
+/-
+**SemilinearEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `SemilinearEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
     [EquivLike F M M₂] [s : SemilinearEquivClass F σ M M₂] : SemilinearMapClass F σ M M₂ :=
   { s with }
@@ -151,22 +172,31 @@ variable {F}
 
 /-- Reinterpret an element of a type of semilinear equivalences as a semilinear equivalence. -/
 @[coe]
-/--
-Definition of `semilinearEquiv` / `semilinearEquiv` 的定义
+/-
+**SemilinearEquivClass.semilinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SemilinearEqui
+vClass`。
+形式化陈述：semilinearEquiv [RingHomInvPair σ σ'] [RingHomInvPair σ' σ] [EquivLike F M
+ M₂] [SemilinearEquivClass F σ M M₂] (f : F) : M ≃ₛₗ[σ] M₂
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearEquivClass.toAddEquivClass`：∀ {F : Type u_14} {R : outParam (T
+ype u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S} 
+  {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearMap.map_smul'`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring 
+R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_16}   {M₂ : Type u_17} [inst_
+2 : AddCo…
 
-English:
-definition semilinearEquiv
-  signature: [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-  body: { (f : M ≃+ M₂), (f : M ->ₛₗ[σ] M₂) with }
-
-中文:
-定义 semilinearEquiv
-  签名: [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-  定义体: { (f : M ≃+ M₂), (f : M ->ₛₗ[σ] M₂) with }
+--- 原说明 ---
+Reinterpret an element of a type of semilinear equivalences as a semilinear equi
+valence.
 -/
 def semilinearEquiv [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
     [EquivLike F M M₂] [SemilinearEquivClass F σ M M₂] (f : F) : M ≃ₛₗ[σ] M₂ :=
-  { (f : M ≃+ M₂), (f : M ->ₛₗ[σ] M₂) with }
+  { (f : M ≃+ M₂), (f : M →ₛₗ[σ] M₂) with }
 
 end SemilinearEquivClass
 
@@ -180,160 +210,105 @@ section
 
 variable [AddCommMonoid M] [AddCommMonoid M₁] [AddCommMonoid M₂]
 -- See note [implicit instance arguments]
-variable {modM : Module R M} {modM₂ : Module S M₂} {σ : R ->+* S} {σ' : S ->+* R}
+variable {modM : Module R M} {modM₂ : Module S M₂} {σ : R →+* S} {σ' : S →+* R}
 variable [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (M ≃ₛₗ[σ] M₂) (M ->ₛₗ[σ] M₂)
-  body: ⟨toLinearMap⟩
-
-中文:
-实例 :
-  签名: Coe (M ≃ₛₗ[σ] M₂) (M ->ₛₗ[σ] M₂)
-  定义体: ⟨toLinearMap⟩
-
-Depends on / 依赖: toLinearMap
+/-
+**LinearEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Coe (M ≃ₛₗ[σ] M₂) (M ->ₛₗ[σ] M₂) :=
+instance : Coe (M ≃ₛₗ[σ] M₂) (M →ₛₗ[σ] M₂) :=
   ⟨toLinearMap⟩
 
 -- This exists for compatibility, previously `≃ₗ[R]` extended `≃` instead of `≃+`.
 /-- The equivalence of types underlying a linear equivalence. -/
 @[implicit_reducible]
-/--
-Definition of `toEquiv` / `toEquiv` 的定义
+/-
+**LinearEquiv.toEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：toEquiv (e : M ≃ₛₗ[σ] M₂) : M ≃ M₂
+参数：e : M ≃ₛₗ[σ] M₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toEquiv
-  signature: (e : M ≃ₛₗ[σ] M₂)
-  body: e.toAddEquiv.toEquiv
-
-中文:
-定义 toEquiv
-  签名: (e : M ≃ₛₗ[σ] M₂)
-  定义体: e.toAddEquiv.toEquiv
-
-Depends on / 依赖: e.toAddEquiv.toEquiv, toAddEquiv, toEquiv
+--- 原说明 ---
+The equivalence of types underlying a linear equivalence.
 -/
 def toEquiv (e : M ≃ₛₗ[σ] M₂) : M ≃ M₂ := e.toAddEquiv.toEquiv
-
-/--
-theorem `toEquiv_injective` / 定理 `toEquiv_injective`
-
-English:
-theorem toEquiv_injective
-  proof: fun ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ h =>
-    (LinearEquiv.mk.injEq _ _ _ _ _ _ _ _).mpr
-      ⟨LinearMap.ext (congr_fun (Equiv.mk.inj h).1), (Equiv.mk.inj h).2⟩
-
-@[simp]
-
-中文:
-定理 toEquiv_injective
-  证明: fun ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ h =>
-    (LinearEquiv.mk.injEq _ _ _ _ _ _ _ _).mpr
-      ⟨LinearMap.ext (congr_fun (Equiv.mk.inj h).1), (Equiv.mk.inj h).2⟩
-
-@[simp]
-
-Depends on / 依赖: Injective
+/-
+**LinearEquiv.toEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toEquiv_injective : (toEquiv (modM
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.mk.injEq`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Equiv.mk.inj`：∀ {α : Sort u_1} {β : Sort u_2} {toFun : α → β} {invFun : 
+β → α}   {left_inv : autoParam (Function.LeftInverse invFun toFun) Equiv.left_in
+v.…
+· 使用定理 `LinearEquiv.left_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+· 使用定理 `LinearEquiv.right_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semirin
+g R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPa
+ir σ σ'] [i…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem toEquiv_injective :
-    (toEquiv (modM := modM) (modM₂ := modM₂) : (M ≃ₛₗ[σ] M₂) -> M ≃ M₂).Injective :=
-  fun ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ h =>
+    (toEquiv (modM := modM) (modM₂ := modM₂) : (M ≃ₛₗ[σ] M₂) → M ≃ M₂).Injective :=
+  fun ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ ⟨⟨⟨_, _⟩, _⟩, _, _, _⟩ h ↦
     (LinearEquiv.mk.injEq _ _ _ _ _ _ _ _).mpr
       ⟨LinearMap.ext (congr_fun (Equiv.mk.inj h).1), (Equiv.mk.inj h).2⟩
 
 @[simp]
-/--
-theorem `toEquiv_inj` / 定理 `toEquiv_inj`
-
-English:
-theorem toEquiv_inj
-  given: {e₁ e₂ : M ≃ₛₗ[σ] M₂}
-  statement: e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂
-  proof: toEquiv_injective.eq_iff
-
-中文:
-定理 toEquiv_inj
-  条件: {e₁ e₂ : M ≃ₛₗ[σ] M₂}
-  结论: e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂
-  证明: toEquiv_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toEquiv_injective, toEquiv_injective.eq_iff
+/-
+**LinearEquiv.toEquiv_inj** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toEquiv_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `LinearEquiv.toEquiv_injective`：toEquiv_injective : (toEquiv (modM
 -/
 theorem toEquiv_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂ :=
   toEquiv_injective.eq_iff
-
-/--
-theorem `toLinearMap_injective` / 定理 `toLinearMap_injective`
-
-English:
-theorem toLinearMap_injective
-  statement: Injective (toLinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
-  proof: fun _ _ H => toEquiv_injective Equiv.ext LinearMap.congr_fun H
-
-@[simp, norm_cast]
-
-中文:
-定理 toLinearMap_injective
-  结论: 单射 (toLinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
-  证明: fun _ _ H => toEquiv_injective Equiv.ext LinearMap.congr_fun H
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Equiv.ext, LinearMap, LinearMap.congr_fun, congr_fun, toEquiv_injective
+/-
+**LinearEquiv.toLinearMap_injective** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toLinearMap_injective : Injective (toLinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ
+] M₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.toEquiv_injective`：toEquiv_injective : (toEquiv (modM
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
 -/
-theorem toLinearMap_injective : Injective (toLinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂) :=
-fun _ _ H => toEquiv_injective Equiv.ext LinearMap.congr_fun H
+theorem toLinearMap_injective : Injective (toLinearMap : (M ≃ₛₗ[σ] M₂) → M →ₛₗ[σ] M₂) :=
+  fun _ _ H ↦ toEquiv_injective <| Equiv.ext <| LinearMap.congr_fun H
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_inj` / 定理 `toLinearMap_inj`
-
-English:
-theorem toLinearMap_inj
-  given: {e₁ e₂ : M ≃ₛₗ[σ] M₂}
-  statement: (↑e₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂
-  proof: toLinearMap_injective.eq_iff
-
-中文:
-定理 toLinearMap_inj
-  条件: {e₁ e₂ : M ≃ₛₗ[σ] M₂}
-  结论: (↑e₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂
-  证明: toLinearMap_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toLinearMap_injective, toLinearMap_injective.eq_iff
+/-
+**LinearEquiv.toLinearMap_inj** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e
+₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `LinearEquiv.toLinearMap_injective`：toLinearMap_injective : Injective (to
+LinearMap : (M ≃ₛₗ[σ] M₂) -> M ->ₛₗ[σ] M₂)
 -/
-theorem toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂ :=
+theorem toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e₁ : M →ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂ :=
   toLinearMap_injective.eq_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (M ≃ₛₗ[σ] M₂) M M₂
-  body: e.toFun
-  inv := LinearEquiv.invFun
-  coe_injective' _ _ h _ := toLinearMap_injective (DFunLike.coe_injective h)
-  left_inv := LinearEquiv.left_inv
-  right_inv := LinearEquiv.right_inv
-
-中文:
-实例 :
-  签名: 等价状 (M ≃ₛₗ[σ] M₂) M M₂
-  定义体: e.toFun
-  inv := LinearEquiv.invFun
-  coe_injective' _ _ h _ := toLinearMap_injective (DFunLike.coe_injective h)
-  left_inv := LinearEquiv.left_inv
-  right_inv := LinearEquiv.right_inv
-
-Depends on / 依赖: e.toFun
+/-
+**LinearEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (M ≃ₛₗ[σ] M₂) M M₂ where
   coe e := e.toFun
@@ -341,102 +316,50 @@ instance : EquivLike (M ≃ₛₗ[σ] M₂) M M₂ where
   coe_injective' _ _ h _ := toLinearMap_injective (DFunLike.coe_injective h)
   left_inv := LinearEquiv.left_inv
   right_inv := LinearEquiv.right_inv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilinearEquivClass (M ≃ₛₗ[σ] M₂) σ M M₂
-  body: (·.map_add')
-  map_smulₛₗ := (·.map_smul')
-
-中文:
-实例 :
-  签名: 半线性等价类 (M ≃ₛₗ[σ] M₂) σ M M₂
-  定义体: (·.map_add')
-  map_smulₛₗ := (·.map_smul')
-
-Depends on / 依赖: map_add
+/-
+**LinearEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilinearEquivClass (M ≃ₛₗ[σ] M₂) σ M M₂ where
   map_add := (·.map_add')
   map_smulₛₗ := (·.map_smul')
-
-/--
-theorem `toLinearMap_eq_coe` / 定理 `toLinearMap_eq_coe`
-
-English:
-theorem toLinearMap_eq_coe
-  given: {e : M ≃ₛₗ[σ] M₂}
-  statement: e.toLinearMap = SemilinearMapClass.semilinearMap e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearMap_eq_coe
-  条件: {e : M ≃ₛₗ[σ] M₂}
-  结论: e.toLinearMap = 半线性映射类.semilinearMap e
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.toLinearMap_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toLinearMap_eq_coe {e : M ≃ₛₗ[σ] M₂} : e.toLinearMap = SemilinearMapClass.
+semilinearMap e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearMap_eq_coe {e : M ≃ₛₗ[σ] M₂} : e.toLinearMap = SemilinearMapClass.semilinearMap e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: {f invFun left_inv right_inv}
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: {f invFun left_inv right_inv}
-  证明: rfl
+/-
+**LinearEquiv.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_mk {f invFun left_inv right_inv} : ((⟨f, invFun, left_inv, right_inv⟩ 
+: M ≃ₛₗ[σ] M₂) : M -> M₂) = f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk {f invFun left_inv right_inv} :
-    ((⟨f, invFun, left_inv, right_inv⟩ : M ≃ₛₗ[σ] M₂) : M -> M₂) = f := rfl
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: @Injective (M ≃ₛₗ[σ] M₂) (M -> M₂) DFunLike.coe
-  proof: DFunLike.coe_injective
-
-@[simp]
-
-中文:
-定理 coe_injective
-  结论: @单射 (M ≃ₛₗ[σ] M₂) (M -> M₂) 依赖函数状.coe
-  证明: DFunLike.coe_injective
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+    ((⟨f, invFun, left_inv, right_inv⟩ : M ≃ₛₗ[σ] M₂) : M → M₂) = f := rfl
+/-
+**LinearEquiv.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_injective : @Injective (M ≃ₛₗ[σ] M₂) (M -> M₂) DFunLike.coe
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coe_injective : @Injective (M ≃ₛₗ[σ] M₂) (M -> M₂) DFunLike.coe :=
+theorem coe_injective : @Injective (M ≃ₛₗ[σ] M₂) (M → M₂) DFunLike.coe :=
   DFunLike.coe_injective
 
 @[simp]
-/--
-lemma `_root_.SemilinearEquivClass.semilinearEquiv_apply` / 引理 `_root_.SemilinearEquivClass.semilinearEquiv_apply`
-
-English:
-lemma _root_.SemilinearEquivClass.semilinearEquiv_apply
-  statement: {F : Type*} [EquivLike F M M₂]
-  proof: rfl
-
-中文:
-引理 _root_.半线性等价类.semilinearEquiv_apply
-  结论: {F : 类型} [等价状 F M M₂]
-  证明: rfl
+/-
+**LinearEquiv._root_.SemilinearEquivClass.semilinearEquiv_apply** 是 Mathlib 中的一个
+引理，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.SemilinearEquivClass.semilinearEquiv_apply {F : Type*} [EquivLike F M M₂]
     [SemilinearEquivClass F σ M M₂] (f : F) (x : M) :
@@ -450,81 +373,44 @@ variable [Semiring R₁] [Semiring R₂] [Semiring R₃] [Semiring R₄]
 variable [AddCommMonoid M] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃]
 variable [AddCommMonoid M₄]
 variable [AddCommMonoid N₁] [AddCommMonoid N₂]
-variable {module_M : Module R M} {module_S_M₂ : Module S M₂} {σ : R ->+* S} {σ' : S ->+* R}
+variable {module_M : Module R M} {module_S_M₂ : Module S M₂} {σ : R →+* S} {σ' : S →+* R}
 variable {re₁ : RingHomInvPair σ σ'} {re₂ : RingHomInvPair σ' σ}
 variable (e e' : M ≃ₛₗ[σ] M₂)
 
 @[simp, norm_cast]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  statement: ⇑(e : M ->ₛₗ[σ] M₂) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_coe
-  结论: ⇑(e : M ->ₛₗ[σ] M₂) = e
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_coe : ⇑(e : M ->ₛₗ[σ] M₂) = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coe : ⇑(e : M ->ₛₗ[σ] M₂) = e :=
+theorem coe_coe : ⇑(e : M →ₛₗ[σ] M₂) = e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toEquiv` / 定理 `coe_toEquiv`
-
-English:
-theorem coe_toEquiv
-  statement: ⇑(e.toEquiv) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toEquiv
-  结论: ⇑(e.toEquiv) = e
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.coe_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_toEquiv : ⇑(e.toEquiv) = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toEquiv : ⇑(e.toEquiv) = e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toLinearMap` / 定理 `coe_toLinearMap`
-
-English:
-theorem coe_toLinearMap
-  statement: ⇑e.toLinearMap = e
-  proof: rfl
-
-中文:
-定理 coe_toLinearMap
-  结论: ⇑e.toLinearMap = e
-  证明: rfl
+/-
+**LinearEquiv.coe_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_toLinearMap : ⇑e.toLinearMap = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toLinearMap : ⇑e.toLinearMap = e :=
   rfl
-
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  statement: e.toFun = e
-  proof: by dsimp
-
-中文:
-定理 toFun_eq_coe
-  结论: e.toFun = e
-  证明: by dsimp
+/-
+**LinearEquiv.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toFun_eq_coe : e.toFun = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe : e.toFun = e := by dsimp
 
@@ -533,58 +419,40 @@ section
 variable {e e'}
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (h : forall x, e x = e' x)
-  statement: e = e'
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: (h : 对任意 x, e x = e' x)
-  结论: e = e'
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**LinearEquiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：ext (h : forall x, e x = e' x) : e = e'
+参数：h : forall x, e x = e' x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (h : forall x, e x = e' x) : e = e' :=
+theorem ext (h : ∀ x, e x = e' x) : e = e' :=
   DFunLike.ext _ _ h
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: {x x'}
-  statement: x = x' -> e x = e x'
-  proof: DFunLike.congr_arg e
-
-中文:
-定理 congr_arg
-  条件: {x x'}
-  结论: x = x' -> e x = e x'
-  证明: DFunLike.congr_arg e
+/-
+**LinearEquiv.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} {e : M ≃ₛₗ[σ] M₂} {x x' : M}, x = x' → e x = e x'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
 -/
-protected theorem congr_arg {x x'} : x = x' -> e x = e x' :=
+protected theorem congr_arg {x x'} : x = x' → e x = e x' :=
   DFunLike.congr_arg e
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: (h : e = e') (x : M)
-  statement: e x = e' x
-  proof: DFunLike.congr_fun h x
-
-中文:
-定理 congr_fun
-  条件: (h : e = e') (x : M)
-  结论: e x = e' x
-  证明: DFunLike.congr_fun h x
+/-
+**LinearEquiv.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} {e e' : M ≃ₛₗ[σ] M₂}, e = e' → ∀ (x : M), e x = e' x
+参数：x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 protected theorem congr_fun (h : e = e') (x : M) : e x = e' x :=
   DFunLike.congr_fun h x
@@ -597,20 +465,19 @@ variable (M R)
 
 /-- The identity map is a linear equivalence. -/
 @[refl]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**LinearEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：refl [Module R M] : M ≃ₗ[R] M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 
-English:
-definition refl
-  signature: [Module R M]
-  body: { LinearMap.id, Equiv.refl M with }
-
-中文:
-定义 refl
-  签名: [模 R M]
-  定义体: { LinearMap.id, Equiv.refl M with }
-
-Depends on / 依赖: Equiv.refl, LinearMap, LinearMap.id
+--- 原说明 ---
+The identity map is a linear equivalence.
 -/
 def refl [Module R M] : M ≃ₗ[R] M :=
   { LinearMap.id, Equiv.refl M with }
@@ -618,48 +485,38 @@ def refl [Module R M] : M ≃ₗ[R] M :=
 end
 
 @[simp]
-/--
-theorem `refl_apply` / 定理 `refl_apply`
-
-English:
-theorem refl_apply
-  given: [Module R M] (x : M)
-  statement: refl R M x = x
-  proof: rfl
-
-中文:
-定理 refl_apply
-  条件: [模 R M] (x : M)
-  结论: refl R M x = x
-  证明: rfl
+/-
+**LinearEquiv.refl_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：refl_apply [Module R M] (x : M) : refl R M x = x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_apply [Module R M] (x : M) : refl R M x = x :=
   rfl
 
 /-- Linear equivalences are symmetric. -/
 @[symm, implicit_reducible]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**LinearEquiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：symm (e : M ≃ₛₗ[σ] M₂) : M₂ ≃ₛₗ[σ'] M
+参数：e : M ≃ₛₗ[σ] M₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.left_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+· 使用定理 `LinearEquiv.right_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semirin
+g R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPa
+ir σ σ'] [i…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 
-English:
-definition symm
-  signature: (e : M ≃ₛₗ[σ] M₂)
-  body: { e.toLinearMap.inverse e.invFun e.left_inv e.right_inv,
-    e.toEquiv.symm with
-    toFun := e.toLinearMap.inverse e.invFun e.left_inv e.right_inv
-    invFun := e.toEquiv.symm.invFun
-    map_smul' r x := by rw [map_smulₛₗ] }
-
-中文:
-定义 symm
-  签名: (e : M ≃ₛₗ[σ] M₂)
-  定义体: { e.toLinearMap.inverse e.invFun e.left_inv e.right_inv,
-    e.toEquiv.symm with
-    toFun := e.toLinearMap.inverse e.invFun e.left_inv e.right_inv
-    invFun := e.toEquiv.symm.invFun
-    map_smul' r x := by rw [map_smulₛₗ] }
-
-Depends on / 依赖: e.invFun, e.left_inv, e.right_inv, e.toEquiv.symm, e.toEquiv.symm.invFun, e.toLinearMap.inverse, invFun, inverse, left_inv, map_smul, right_inv, toEquiv, toLinearMap
+--- 原说明 ---
+Linear equivalences are symmetric.
 -/
 def symm (e : M ≃ₛₗ[σ] M₂) : M₂ ≃ₛₗ[σ'] M :=
   { e.toLinearMap.inverse e.invFun e.left_inv e.right_inv,
@@ -668,135 +525,98 @@ def symm (e : M ≃ₛₗ[σ] M₂) : M₂ ≃ₛₗ[σ'] M :=
     invFun := e.toEquiv.symm.invFun
     map_smul' r x := by rw [map_smulₛₗ] }
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**LinearEquiv.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv.Simps`。
+形式化陈述：{R : Type u_14} →   {S : Type u_15} →     [inst : Semiring R] →       [ins
+t_1 : Semiring S] →         {σ : R →+* S} →           {σ' : S →+* R} →          
+   [inst_2 : RingHomInvPair σ σ'] →               [inst_3 : RingHomInvPair σ' σ]
+ →                 {M : Type u_16} →                   {M₂ : Type u_17} →       
+              [inst_4 : AddCommMonoid M] →                       [inst_5 : AddCo
+mmMonoid M₂] →                         [inst_6 : _root_.Module R M] → [inst_7 : 
+_root_.Module S M₂] → (M ≃ₛₗ[σ] M₂) → M → M₂
+参数：M ≃ₛₗ[σ] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: {R : Type*} {S : Type*} [Semiring R] [Semiring S]
-  body: e
-
-中文:
-定义 Simps.apply
-  签名: {R : 类型} {S : 类型} [半环 R] [半环 S]
-  定义体: e
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def Simps.apply {R : Type*} {S : Type*} [Semiring R] [Semiring S]
-    {σ : R ->+* S} {σ' : S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+    {σ : R →+* S} {σ' : S →+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
     {M : Type*} {M₂ : Type*} [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module S M₂]
-    (e : M ≃ₛₗ[σ] M₂) : M -> M₂ :=
+    (e : M ≃ₛₗ[σ] M₂) : M → M₂ :=
   e
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**LinearEquiv.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv.Simps`。
+形式化陈述：{R : Type u_14} →   {S : Type u_15} →     [inst : Semiring R] →       [ins
+t_1 : Semiring S] →         {σ : R →+* S} →           {σ' : S →+* R} →          
+   [inst_2 : RingHomInvPair σ σ'] →               [inst_3 : RingHomInvPair σ' σ]
+ →                 {M : Type u_16} →                   {M₂ : Type u_17} →       
+              [inst_4 : AddCommMonoid M] →                       [inst_5 : AddCo
+mmMonoid M₂] →                         [inst_6 : _root_.Module R M] → [inst_7 : 
+_root_.Module S M₂] → (M ≃ₛₗ[σ] M₂) → M₂ → M
+参数：M ≃ₛₗ[σ] M₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.symm_apply
-  signature: {R S : Type*} [Semiring R] [Semiring S]
-  body: e.symm
-
-initialize_simps_projections LinearEquiv (toFun -> apply, invFun -> symm_apply)
-
-@[simp]
-
-中文:
-定义 Simps.symm_apply
-  签名: {R S : 类型} [半环 R] [半环 S]
-  定义体: e.symm
-
-initialize_simps_projections LinearEquiv (toFun -> apply, invFun -> symm_apply)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def Simps.symm_apply {R S : Type*} [Semiring R] [Semiring S]
-    {σ : R ->+* S} {σ' : S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+    {σ : R →+* S} {σ' : S →+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
     {M M₂ : Type*} [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module S M₂]
-    (e : M ≃ₛₗ[σ] M₂) : M₂ -> M :=
+    (e : M ≃ₛₗ[σ] M₂) : M₂ → M :=
   e.symm
 
-initialize_simps_projections LinearEquiv (toFun -> apply, invFun -> symm_apply)
+initialize_simps_projections LinearEquiv (toFun → apply, invFun → symm_apply)
 
 @[simp]
-/--
-theorem `invFun_eq_symm` / 定理 `invFun_eq_symm`
-
-English:
-theorem invFun_eq_symm
-  statement: e.invFun = e.symm
-  proof: rfl
-
-中文:
-定理 invFun_eq_symm
-  结论: e.invFun = e.symm
-  证明: rfl
+/-
+**LinearEquiv.invFun_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：invFun_eq_symm : e.invFun = e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem invFun_eq_symm : e.invFun = e.symm :=
   rfl
-
-/--
-theorem `coe_toEquiv_symm` / 定理 `coe_toEquiv_symm`
-
-English:
-theorem coe_toEquiv_symm
-  statement: e.toEquiv.symm = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toEquiv_symm
-  结论: e.toEquiv.symm = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.coe_toEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_toEquiv_symm : e.toEquiv.symm = e.symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem coe_toEquiv_symm : e.toEquiv.symm = e.symm := rfl
 
 @[simp]
-/--
-theorem `toEquiv_symm` / 定理 `toEquiv_symm`
-
-English:
-theorem toEquiv_symm
-  statement: e.symm.toEquiv = e.toEquiv.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toEquiv_symm
-  结论: e.symm.toEquiv = e.toEquiv.symm
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.toEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toEquiv_symm : e.symm.toEquiv = e.toEquiv.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toEquiv_symm : e.symm.toEquiv = e.toEquiv.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_symm_toEquiv` / 定理 `coe_symm_toEquiv`
-
-English:
-theorem coe_symm_toEquiv
-  statement: ⇑e.toEquiv.symm = e.symm
-  proof: rfl
-
-中文:
-定理 coe_symm_toEquiv
-  结论: ⇑e.toEquiv.symm = e.symm
-  证明: rfl
+/-
+**LinearEquiv.coe_symm_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_symm_toEquiv : ⇑e.toEquiv.symm = e.symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem coe_symm_toEquiv : ⇑e.toEquiv.symm = e.symm := rfl
 
 variable {module_M₁ : Module R₁ M₁} {module_M₂ : Module R₂ M₂} {module_M₃ : Module R₃ M₃}
 variable {module_M₄ : Module R₄ M₄} {module_N₁ : Module R₁ N₁} {module_N₂ : Module R₁ N₂}
-variable {σ₁₂ : R₁ ->+* R₂} {σ₂₁ : R₂ ->+* R₁}
-variable {σ₁₃ : R₁ ->+* R₃} {σ₃₁ : R₃ ->+* R₁} [RingHomInvPair σ₁₃ σ₃₁] [RingHomInvPair σ₃₁ σ₁₃]
-variable {σ₁₄ : R₁ ->+* R₄} {σ₄₁ : R₄ ->+* R₁} [RingHomInvPair σ₁₄ σ₄₁] [RingHomInvPair σ₄₁ σ₁₄]
-variable {σ₂₃ : R₂ ->+* R₃} {σ₃₂ : R₃ ->+* R₂}
-variable {σ₂₄ : R₂ ->+* R₄} {σ₄₂ : R₄ ->+* R₂} [RingHomInvPair σ₂₄ σ₄₂] [RingHomInvPair σ₄₂ σ₂₄]
-variable {σ₃₄ : R₃ ->+* R₄} {σ₄₃ : R₄ ->+* R₃} [RingHomInvPair σ₃₄ σ₄₃] [RingHomInvPair σ₄₃ σ₃₄]
+variable {σ₁₂ : R₁ →+* R₂} {σ₂₁ : R₂ →+* R₁}
+variable {σ₁₃ : R₁ →+* R₃} {σ₃₁ : R₃ →+* R₁} [RingHomInvPair σ₁₃ σ₃₁] [RingHomInvPair σ₃₁ σ₁₃]
+variable {σ₁₄ : R₁ →+* R₄} {σ₄₁ : R₄ →+* R₁} [RingHomInvPair σ₁₄ σ₄₁] [RingHomInvPair σ₄₁ σ₁₄]
+variable {σ₂₃ : R₂ →+* R₃} {σ₃₂ : R₃ →+* R₂}
+variable {σ₂₄ : R₂ →+* R₄} {σ₄₂ : R₄ →+* R₂} [RingHomInvPair σ₂₄ σ₄₂] [RingHomInvPair σ₄₂ σ₂₄]
+variable {σ₃₄ : R₃ →+* R₄} {σ₄₃ : R₄ →+* R₃} [RingHomInvPair σ₃₄ σ₄₃] [RingHomInvPair σ₄₃ σ₃₄]
 variable {re₁₂ : RingHomInvPair σ₁₂ σ₂₁} {re₂₁ : RingHomInvPair σ₂₁ σ₁₂}
 variable {re₂₃ : RingHomInvPair σ₂₃ σ₃₂} {re₃₂ : RingHomInvPair σ₃₂ σ₂₃}
 variable [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [RingHomCompTriple σ₃₂ σ₂₁ σ₃₁]
@@ -810,18 +630,21 @@ set_option linter.overlappingInstances false in
 -- Note: the `RingHomCompTriple σ₃₂ σ₂₁ σ₃₁` is unused, but is convenient to carry around
 -- implicitly for lemmas like `LinearEquiv.self_trans_symm`.
 @[trans, nolint unusedArguments]
-/--
-Definition of `trans` / `trans` 的定义
-
-English:
-definition trans
-  body: { e₂₃.toLinearMap.comp e₁₂.toLinearMap, e₁₂.toEquiv.trans e₂₃.toEquiv with }
-
-中文:
-定义 trans
-  定义体: { e₂₃.toLinearMap.comp e₁₂.toLinearMap, e₁₂.toEquiv.trans e₂₃.toEquiv with }
-
-Depends on / 依赖: toEquiv, toEquiv.trans, toLinearMap, toLinearMap.comp
+/-
+**LinearEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：trans [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [RingHomCompTriple σ₃₂ σ₂₁ σ₃₁] {re₁
+₂ : RingHomInvPair σ₁₂ σ₂₁} {re₂₃ : RingHomInvPair σ₂₃ σ₃₂} [RingHomInvPair σ₁₃ 
+σ₃₁] {re₂₁ : RingHomInvPair σ₂₁ σ₁₂} {re₃₂ : RingHomInvPair σ₃₂ σ₂₃} [RingHomInv
+Pair σ₃₁ σ₁₃] (e₁₂ : M₁ ≃ₛₗ[σ₁₂] M₂) (e₂₃ : M₂ ≃ₛₗ[σ₂₃] M₃) : M₁ ≃ₛₗ[σ₁₃] M₃
+参数：e₁₂ : M₁ ≃ₛₗ[σ₁₂] M₂；e₂₃ : M₂ ≃ₛₗ[σ₂₃] M₃。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 def trans
     [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [RingHomCompTriple σ₃₂ σ₂₁ σ₃₁]
@@ -840,1117 +663,910 @@ notation3:80 (name := transNotation) e₁:80 " ≪≫ₗ " e₂:81 =>
 
 /-- `LinearEquiv.symm` defines an equivalence between `α ≃ₛₗ[σ] β` and `β ≃ₛₗ[σ] α`. -/
 @[simps!]
-/--
-Definition of `symmEquiv` / `symmEquiv` 的定义
+/-
+**LinearEquiv.symmEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：symmEquiv : (M ≃ₛₗ[σ] M₂) ≃ (M₂ ≃ₛₗ[σ'] M) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symmEquiv
-  signature: : (M ≃ₛₗ[σ] M₂) ≃ (M₂ ≃ₛₗ[σ'] M) where
-  body: .symm
-  invFun := .symm
-
-中文:
-定义 symmEquiv
-  签名: : (M ≃ₛₗ[σ] M₂) ≃ (M₂ ≃ₛₗ[σ'] M) where
-  定义体: .symm
-  invFun := .symm
+--- 原说明 ---
+`LinearEquiv.symm` defines an equivalence between `α ≃ₛₗ[σ] β` and `β ≃ₛₗ[σ] α`.
 -/
 def symmEquiv : (M ≃ₛₗ[σ] M₂) ≃ (M₂ ≃ₛₗ[σ'] M) where
   toFun := .symm
   invFun := .symm
 
 variable {e₁₂} {e₂₃}
-
-/--
-theorem `coe_toAddEquiv` / 定理 `coe_toAddEquiv`
-
-English:
-theorem coe_toAddEquiv
-  statement: e.toAddEquiv = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toAddEquiv
-  结论: e.toAddEquiv = e
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.coe_toAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_toAddEquiv : e.toAddEquiv = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toAddEquiv : e.toAddEquiv = e :=
   rfl
 
 @[simp]
-/--
-lemma `coe_addEquiv_apply` / 引理 `coe_addEquiv_apply`
-
-English:
-lemma coe_addEquiv_apply
-  given: (x : M)
-  statement: (e : M ≃+ M₂) x = e x
-  proof: rfl
-
-中文:
-引理 coe_addEquiv_apply
-  条件: (x : M)
-  结论: (e : M ≃+ M₂) x = e x
-  证明: rfl
+/-
+**LinearEquiv.coe_addEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_addEquiv_apply (x : M) : (e : M ≃+ M₂) x = e x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearEquivClass.toAddEquivClass`：∀ {F : Type u_14} {R : outParam (T
+ype u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S} 
+  {σ : outParam (R →+* S)}…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 lemma coe_addEquiv_apply (x : M) : (e : M ≃+ M₂) x = e x :=
   rfl
 
-/--
-theorem `toAddMonoidHom_commutes` / 定理 `toAddMonoidHom_commutes`
+/-- The two paths coercion can take to an `AddMonoidHom` are equivalent -/
+/-
+**LinearEquiv.toAddMonoidHom_commutes** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toAddMonoidHom_commutes : e.toLinearMap.toAddMonoidHom = e.toAddEquiv.toAd
+dMonoidHom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toAddMonoidHom_commutes
-  statement: e.toLinearMap.toAddMonoidHom = e.toAddEquiv.toAddMonoidHom
-  proof: rfl
-
-中文:
-定理 toAddMonoidHom_commutes
-  结论: e.toLinearMap.toAddMonoidHom = e.toAddEquiv.toAddMonoidHom
-  证明: rfl
+--- 原说明 ---
+The two paths coercion can take to an `AddMonoidHom` are equivalent
 -/
 theorem toAddMonoidHom_commutes : e.toLinearMap.toAddMonoidHom = e.toAddEquiv.toAddMonoidHom :=
   rfl
-
-/--
-lemma `coe_toAddEquiv_symm` / 引理 `coe_toAddEquiv_symm`
-
-English:
-lemma coe_toAddEquiv_symm
-  statement: (e₁₂.symm : M₂ ≃+ M₁) = (e₁₂ : M₁ ≃+ M₂).symm
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_toAddEquiv_symm
-  结论: (e₁₂.symm : M₂ ≃+ M₁) = (e₁₂ : M₁ ≃+ M₂).symm
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.coe_toAddEquiv_symm** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_toAddEquiv_symm : (e₁₂.symm : M₂ ≃+ M₁) = (e₁₂ : M₁ ≃+ M₂).symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearEquivClass.toAddEquivClass`：∀ {F : Type u_14} {R : outParam (T
+ype u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S} 
+  {σ : outParam (R →+* S)}…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 lemma coe_toAddEquiv_symm : (e₁₂.symm : M₂ ≃+ M₁) = (e₁₂ : M₁ ≃+ M₂).symm :=
   rfl
 
 @[simp]
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (c : M₁)
-  statement: (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃) c = e₂₃ (e₁₂ c)
-  proof: rfl
-
-中文:
-定理 trans_apply
-  条件: (c : M₁)
-  结论: (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃) c = e₂₃ (e₁₂ c)
-  证明: rfl
+/-
+**LinearEquiv.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：trans_apply (c : M₁) : (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃) c = e₂₃ (e₁₂ c)
+参数：c : M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_apply (c : M₁) : (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃) c = e₂₃ (e₁₂ c) :=
   rfl
-
-/--
-theorem `coe_trans` / 定理 `coe_trans`
-
-English:
-theorem coe_trans
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_trans
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.coe_trans** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_trans : (e₁₂.trans e₂₃ : M₁ ->ₛₗ[σ₁₃] M₃) = (e₂₃ : M₂ ->ₛₗ[σ₂₃] M₃).co
+mp (e₁₂ : M₁ ->ₛₗ[σ₁₂] M₂)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_trans :
-    (e₁₂.trans e₂₃ : M₁ ->ₛₗ[σ₁₃] M₃) = (e₂₃ : M₂ ->ₛₗ[σ₂₃] M₃).comp (e₁₂ : M₁ ->ₛₗ[σ₁₂] M₂) :=
+    (e₁₂.trans e₂₃ : M₁ →ₛₗ[σ₁₃] M₃) = (e₂₃ : M₂ →ₛₗ[σ₂₃] M₃).comp (e₁₂ : M₁ →ₛₗ[σ₁₂] M₂) :=
   rfl
 
 @[simp]
-/--
-theorem `apply_symm_apply` / 定理 `apply_symm_apply`
-
-English:
-theorem apply_symm_apply
-  given: (c : M₂)
-  statement: e (e.symm c) = c
-  proof: e.right_inv c
-
-@[simp]
-
-中文:
-定理 apply_symm_apply
-  条件: (c : M₂)
-  结论: e (e.symm c) = c
-  证明: e.right_inv c
-
-@[simp]
-
-Depends on / 依赖: e.right_inv, right_inv
+/-
+**LinearEquiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：apply_symm_apply (c : M₂) : e (e.symm c) = c
+参数：c : M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.right_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semirin
+g R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPa
+ir σ σ'] [i…
 -/
 theorem apply_symm_apply (c : M₂) : e (e.symm c) = c :=
   e.right_inv c
 
 @[simp]
-/--
-theorem `symm_apply_apply` / 定理 `symm_apply_apply`
-
-English:
-theorem symm_apply_apply
-  given: (b : M)
-  statement: e.symm (e b) = b
-  proof: e.left_inv b
-
-中文:
-定理 symm_apply_apply
-  条件: (b : M)
-  结论: e.symm (e b) = b
-  证明: e.left_inv b
-
-Depends on / 依赖: e.left_inv, left_inv
+/-
+**LinearEquiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_apply_apply (b : M) : e.symm (e b) = b
+参数：b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.left_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
 -/
 theorem symm_apply_apply (b : M) : e.symm (e b) = b :=
   e.left_inv b
-
-/--
-theorem `comp_symm` / 定理 `comp_symm`
-
-English:
-theorem comp_symm
-  statement: e.toLinearMap ∘ₛₗ e.symm.toLinearMap = LinearMap.id
-  proof: LinearMap.ext e.apply_symm_apply
-
-中文:
-定理 comp_symm
-  结论: e.toLinearMap ∘ₛₗ e.symm.toLinearMap = 线性映射.id
-  证明: LinearMap.ext e.apply_symm_apply
-
-Depends on / 依赖: LinearMap, LinearMap.ext, apply_symm_apply, e.apply_symm_apply
+/-
+**LinearEquiv.comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_symm : e.toLinearMap ∘ₛₗ e.symm.toLinearMap = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
 -/
 theorem comp_symm : e.toLinearMap ∘ₛₗ e.symm.toLinearMap = LinearMap.id :=
   LinearMap.ext e.apply_symm_apply
-
-/--
-theorem `symm_comp` / 定理 `symm_comp`
-
-English:
-theorem symm_comp
-  statement: e.symm.toLinearMap ∘ₛₗ e.toLinearMap = LinearMap.id
-  proof: LinearMap.ext e.symm_apply_apply
-
-@[simp]
-
-中文:
-定理 symm_comp
-  结论: e.symm.toLinearMap ∘ₛₗ e.toLinearMap = 线性映射.id
-  证明: LinearMap.ext e.symm_apply_apply
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.ext, e.symm_apply_apply, symm_apply_apply
+/-
+**LinearEquiv.symm_comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_comp : e.symm.toLinearMap ∘ₛₗ e.toLinearMap = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
 -/
 theorem symm_comp : e.symm.toLinearMap ∘ₛₗ e.toLinearMap = LinearMap.id :=
   LinearMap.ext e.symm_apply_apply
 
 @[simp]
-/--
-lemma `comp_symm_assoc` / 引理 `comp_symm_assoc`
-
-English:
-lemma comp_symm_assoc
-  given: (f : M₃ ->ₛₗ[σ₃₂] M₂) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂]
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 comp_symm_assoc
-  条件: (f : M₃ ->ₛₗ[σ₃₂] M₂) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂]
-  证明: by ext; simp
-
-@[simp]
+/-
+**LinearEquiv.comp_symm_assoc** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_symm_assoc (f : M₃ ->ₛₗ[σ₃₂] M₂) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁
+₂.toLinearMap ∘ₛₗ e₁₂.symm.toLinearMap ∘ₛₗ f = f
+参数：f : M₃ ->ₛₗ[σ₃₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma comp_symm_assoc (f : M₃ ->ₛₗ[σ₃₂] M₂) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂] :
+lemma comp_symm_assoc (f : M₃ →ₛₗ[σ₃₂] M₂) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂] :
     e₁₂.toLinearMap ∘ₛₗ e₁₂.symm.toLinearMap ∘ₛₗ f = f := by ext; simp
 
 @[simp]
-/--
-lemma `symm_comp_assoc` / 引理 `symm_comp_assoc`
-
-English:
-lemma symm_comp_assoc
-  given: (f : M₃ ->ₛₗ[σ₃₁] M₁) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂]
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 symm_comp_assoc
-  条件: (f : M₃ ->ₛₗ[σ₃₁] M₁) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂]
-  证明: by ext; simp
-
-@[simp]
+/-
+**LinearEquiv.symm_comp_assoc** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_comp_assoc (f : M₃ ->ₛₗ[σ₃₁] M₁) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁
+₂.symm.toLinearMap ∘ₛₗ e₁₂.toLinearMap ∘ₛₗ f = f
+参数：f : M₃ ->ₛₗ[σ₃₁] M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma symm_comp_assoc (f : M₃ ->ₛₗ[σ₃₁] M₁) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂] :
+lemma symm_comp_assoc (f : M₃ →ₛₗ[σ₃₁] M₁) [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂] :
     e₁₂.symm.toLinearMap ∘ₛₗ e₁₂.toLinearMap ∘ₛₗ f = f := by ext; simp
 
 @[simp]
-/--
-theorem `trans_symm` / 定理 `trans_symm`
-
-English:
-theorem trans_symm
-  statement: (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃).symm = e₂₃.symm.trans e₁₂.symm
-  proof: rfl
-
-中文:
-定理 trans_symm
-  结论: (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃).symm = e₂₃.symm.trans e₁₂.symm
-  证明: rfl
+/-
+**LinearEquiv.trans_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：trans_symm : (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃).symm = e₂₃.symm.trans e₁₂.sy
+mm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_symm : (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃).symm = e₂₃.symm.trans e₁₂.symm :=
   rfl
-
-/--
-theorem `symm_trans_apply` / 定理 `symm_trans_apply`
-
-English:
-theorem symm_trans_apply
-  given: (c : M₃)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_trans_apply
-  条件: (c : M₃)
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.symm_trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_trans_apply (c : M₃) : (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃).symm c = e₁₂.
+symm (e₂₃.symm c)
+参数：c : M₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_trans_apply (c : M₃) :
     (e₁₂.trans e₂₃ : M₁ ≃ₛₗ[σ₁₃] M₃).symm c = e₁₂.symm (e₂₃.symm c) :=
   rfl
 
 @[simp]
-/--
-theorem `trans_refl` / 定理 `trans_refl`
-
-English:
-theorem trans_refl
-  statement: e.trans (refl S M₂) = e
-  proof: toEquiv_injective e.toEquiv.trans_refl
-
-@[simp]
-
-中文:
-定理 trans_refl
-  结论: e.trans (refl S M₂) = e
-  证明: toEquiv_injective e.toEquiv.trans_refl
-
-@[simp]
-
-Depends on / 依赖: e.toEquiv.trans_refl, toEquiv, toEquiv_injective, trans_refl
+/-
+**LinearEquiv.trans_refl** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：trans_refl : e.trans (refl S M₂) = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.toEquiv_injective`：toEquiv_injective : (toEquiv (modM
+· 使用定理 `Equiv.trans_refl`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.trans (Equi
+v.refl β) = e
 -/
 theorem trans_refl : e.trans (refl S M₂) = e :=
   toEquiv_injective e.toEquiv.trans_refl
 
 @[simp]
-/--
-theorem `refl_trans` / 定理 `refl_trans`
-
-English:
-theorem refl_trans
-  statement: (refl R M).trans e = e
-  proof: toEquiv_injective e.toEquiv.refl_trans
-
-中文:
-定理 refl_trans
-  结论: (refl R M).trans e = e
-  证明: toEquiv_injective e.toEquiv.refl_trans
-
-Depends on / 依赖: e.toEquiv.refl_trans, refl_trans, toEquiv, toEquiv_injective
+/-
+**LinearEquiv.refl_trans** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：refl_trans : (refl R M).trans e = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.toEquiv_injective`：toEquiv_injective : (toEquiv (modM
+· 使用定理 `Equiv.refl_trans`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), (Equiv.refl α
+).trans e = e
 -/
 theorem refl_trans : (refl R M).trans e = e :=
   toEquiv_injective e.toEquiv.refl_trans
-
-/--
-theorem `symm_apply_eq` / 定理 `symm_apply_eq`
-
-English:
-theorem symm_apply_eq
-  given: {x y}
-  statement: e.symm x = y ↔ x = e y
-  proof: e.toEquiv.symm_apply_eq
-
-中文:
-定理 symm_apply_eq
-  条件: {x y}
-  结论: e.symm x = y ↔ x = e y
-  证明: e.toEquiv.symm_apply_eq
-
-Depends on / 依赖: e.toEquiv.symm_apply_eq, symm_apply_eq, toEquiv
+/-
+**LinearEquiv.symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
 -/
 theorem symm_apply_eq {x y} : e.symm x = y ↔ x = e y :=
   e.toEquiv.symm_apply_eq
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  given: {x y}
-  statement: y = e.symm x ↔ e y = x
-  proof: e.toEquiv.eq_symm_apply
-
-中文:
-定理 eq_symm_apply
-  条件: {x y}
-  结论: y = e.symm x ↔ e y = x
-  证明: e.toEquiv.eq_symm_apply
-
-Depends on / 依赖: e.toEquiv.eq_symm_apply, eq_symm_apply, toEquiv
+/-
+**LinearEquiv.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：eq_symm_apply {x y} : y = e.symm x ↔ e y = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem eq_symm_apply {x y} : y = e.symm x ↔ e y = x :=
   e.toEquiv.eq_symm_apply
-
-/--
-theorem `eq_comp_symm` / 定理 `eq_comp_symm`
-
-English:
-theorem eq_comp_symm
-  given: {α : Type*} (f : M₂ -> α) (g : M₁ -> α)
-  statement: f = g ∘ e₁₂.symm ↔ f ∘ e₁₂ = g
-  proof: e₁₂.toEquiv.eq_comp_symm f g
-
-中文:
-定理 eq_comp_symm
-  条件: {α : 类型} (f : M₂ -> α) (g : M₁ -> α)
-  结论: f = g ∘ e₁₂.symm ↔ f ∘ e₁₂ = g
-  证明: e₁₂.toEquiv.eq_comp_symm f g
-
-Depends on / 依赖: eq_comp_symm, toEquiv, toEquiv.eq_comp_symm
+/-
+**LinearEquiv.eq_comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：eq_comp_symm {α : Type*} (f : M₂ -> α) (g : M₁ -> α) : f = g ∘ e₁₂.symm ↔ 
+f ∘ e₁₂ = g
+参数：f : M₂ -> α；g : M₁ -> α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_comp_symm`：eq_comp_symm {α β γ} (e : α ≃ β) (f : β -> γ) (g : α
+ -> γ) : f = g ∘ e.symm ↔ f ∘ e = g
 -/
-theorem eq_comp_symm {α : Type*} (f : M₂ -> α) (g : M₁ -> α) : f = g ∘ e₁₂.symm ↔ f ∘ e₁₂ = g :=
+theorem eq_comp_symm {α : Type*} (f : M₂ → α) (g : M₁ → α) : f = g ∘ e₁₂.symm ↔ f ∘ e₁₂ = g :=
   e₁₂.toEquiv.eq_comp_symm f g
-
-/--
-theorem `comp_symm_eq` / 定理 `comp_symm_eq`
-
-English:
-theorem comp_symm_eq
-  given: {α : Type*} (f : M₂ -> α) (g : M₁ -> α)
-  statement: g ∘ e₁₂.symm = f ↔ g = f ∘ e₁₂
-  proof: e₁₂.toEquiv.comp_symm_eq f g
-
-中文:
-定理 comp_symm_eq
-  条件: {α : 类型} (f : M₂ -> α) (g : M₁ -> α)
-  结论: g ∘ e₁₂.symm = f ↔ g = f ∘ e₁₂
-  证明: e₁₂.toEquiv.comp_symm_eq f g
-
-Depends on / 依赖: comp_symm_eq, toEquiv, toEquiv.comp_symm_eq
+/-
+**LinearEquiv.comp_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_symm_eq {α : Type*} (f : M₂ -> α) (g : M₁ -> α) : g ∘ e₁₂.symm = f ↔ 
+g = f ∘ e₁₂
+参数：f : M₂ -> α；g : M₁ -> α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.comp_symm_eq`：comp_symm_eq {α β γ} (e : α ≃ β) (f : β -> γ) (g : α
+ -> γ) : g ∘ e.symm = f ↔ g = f ∘ e
 -/
-theorem comp_symm_eq {α : Type*} (f : M₂ -> α) (g : M₁ -> α) : g ∘ e₁₂.symm = f ↔ g = f ∘ e₁₂ :=
+theorem comp_symm_eq {α : Type*} (f : M₂ → α) (g : M₁ → α) : g ∘ e₁₂.symm = f ↔ g = f ∘ e₁₂ :=
   e₁₂.toEquiv.comp_symm_eq f g
-
-/--
-theorem `eq_symm_comp` / 定理 `eq_symm_comp`
-
-English:
-theorem eq_symm_comp
-  given: {α : Type*} (f : α -> M₁) (g : α -> M₂)
-  statement: f = e₁₂.symm ∘ g ↔ e₁₂ ∘ f = g
-  proof: e₁₂.toEquiv.eq_symm_comp f g
-
-中文:
-定理 eq_symm_comp
-  条件: {α : 类型} (f : α -> M₁) (g : α -> M₂)
-  结论: f = e₁₂.symm ∘ g ↔ e₁₂ ∘ f = g
-  证明: e₁₂.toEquiv.eq_symm_comp f g
-
-Depends on / 依赖: eq_symm_comp, toEquiv, toEquiv.eq_symm_comp
+/-
+**LinearEquiv.eq_symm_comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：eq_symm_comp {α : Type*} (f : α -> M₁) (g : α -> M₂) : f = e₁₂.symm ∘ g ↔ 
+e₁₂ ∘ f = g
+参数：f : α -> M₁；g : α -> M₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_symm_comp`：eq_symm_comp {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ
+ -> β) : f = e.symm ∘ g ↔ e ∘ f = g
 -/
-theorem eq_symm_comp {α : Type*} (f : α -> M₁) (g : α -> M₂) : f = e₁₂.symm ∘ g ↔ e₁₂ ∘ f = g :=
+theorem eq_symm_comp {α : Type*} (f : α → M₁) (g : α → M₂) : f = e₁₂.symm ∘ g ↔ e₁₂ ∘ f = g :=
   e₁₂.toEquiv.eq_symm_comp f g
-
-/--
-theorem `symm_comp_eq` / 定理 `symm_comp_eq`
-
-English:
-theorem symm_comp_eq
-  given: {α : Type*} (f : α -> M₁) (g : α -> M₂)
-  statement: e₁₂.symm ∘ g = f ↔ g = e₁₂ ∘ f
-  proof: e₁₂.toEquiv.symm_comp_eq f g
-
-@[simp]
-
-中文:
-定理 symm_comp_eq
-  条件: {α : 类型} (f : α -> M₁) (g : α -> M₂)
-  结论: e₁₂.symm ∘ g = f ↔ g = e₁₂ ∘ f
-  证明: e₁₂.toEquiv.symm_comp_eq f g
-
-@[simp]
-
-Depends on / 依赖: symm_comp_eq, toEquiv, toEquiv.symm_comp_eq
+/-
+**LinearEquiv.symm_comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_comp_eq {α : Type*} (f : α -> M₁) (g : α -> M₂) : e₁₂.symm ∘ g = f ↔ 
+g = e₁₂ ∘ f
+参数：f : α -> M₁；g : α -> M₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_comp_eq`：symm_comp_eq {α β γ} (e : α ≃ β) (f : γ -> α) (g : γ
+ -> β) : e.symm ∘ g = f ↔ g = e ∘ f
 -/
-theorem symm_comp_eq {α : Type*} (f : α -> M₁) (g : α -> M₂) : e₁₂.symm ∘ g = f ↔ g = e₁₂ ∘ f :=
+theorem symm_comp_eq {α : Type*} (f : α → M₁) (g : α → M₂) : e₁₂.symm ∘ g = f ↔ g = e₁₂ ∘ f :=
   e₁₂.toEquiv.symm_comp_eq f g
 
 @[simp]
-/--
-theorem `comp_coe` / 定理 `comp_coe`
-
-English:
-theorem comp_coe
-  given: (f : M₁ ≃ₛₗ[σ₁₂] M₂) (f' : M₂ ≃ₛₗ[σ₂₃] M₃)
-  proof: rfl
-
-中文:
-定理 comp_coe
-  条件: (f : M₁ ≃ₛₗ[σ₁₂] M₂) (f' : M₂ ≃ₛₗ[σ₂₃] M₃)
-  证明: rfl
+/-
+**LinearEquiv.comp_coe** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_coe (f : M₁ ≃ₛₗ[σ₁₂] M₂) (f' : M₂ ≃ₛₗ[σ₂₃] M₃) : (f' : M₂ ->ₛₗ[σ₂₃] M
+₃).comp (f : M₁ ->ₛₗ[σ₁₂] M₂) = (f.trans f' : M₁ ≃ₛₗ[σ₁₃] M₃)
+参数：f : M₁ ≃ₛₗ[σ₁₂] M₂；f' : M₂ ≃ₛₗ[σ₂₃] M₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_coe (f : M₁ ≃ₛₗ[σ₁₂] M₂) (f' : M₂ ≃ₛₗ[σ₂₃] M₃) :
-    (f' : M₂ ->ₛₗ[σ₂₃] M₃).comp (f : M₁ ->ₛₗ[σ₁₂] M₂) = (f.trans f' : M₁ ≃ₛₗ[σ₁₃] M₃) :=
+    (f' : M₂ →ₛₗ[σ₂₃] M₃).comp (f : M₁ →ₛₗ[σ₁₂] M₂) = (f.trans f' : M₁ ≃ₛₗ[σ₁₃] M₃) :=
   rfl
-
-/--
-lemma `trans_assoc` / 引理 `trans_assoc`
-
-English:
-lemma trans_assoc
-  given: (e₁₂ : M₁ ≃ₛₗ[σ₁₂] M₂) (e₂₃ : M₂ ≃ₛₗ[σ₂₃] M₃) (e₃₄ : M₃ ≃ₛₗ[σ₃₄] M₄)
-  proof: rfl
-
-中文:
-引理 trans_assoc
-  条件: (e₁₂ : M₁ ≃ₛₗ[σ₁₂] M₂) (e₂₃ : M₂ ≃ₛₗ[σ₂₃] M₃) (e₃₄ : M₃ ≃ₛₗ[σ₃₄] M₄)
-  证明: rfl
+/-
+**LinearEquiv.trans_assoc** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：trans_assoc (e₁₂ : M₁ ≃ₛₗ[σ₁₂] M₂) (e₂₃ : M₂ ≃ₛₗ[σ₂₃] M₃) (e₃₄ : M₃ ≃ₛₗ[σ₃
+₄] M₄) : (e₁₂.trans e₂₃).trans e₃₄ = e₁₂.trans (e₂₃.trans e₃₄)
+参数：e₁₂ : M₁ ≃ₛₗ[σ₁₂] M₂；e₂₃ : M₂ ≃ₛₗ[σ₂₃] M₃；e₃₄ : M₃ ≃ₛₗ[σ₃₄] M₄。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trans_assoc (e₁₂ : M₁ ≃ₛₗ[σ₁₂] M₂) (e₂₃ : M₂ ≃ₛₗ[σ₂₃] M₃) (e₃₄ : M₃ ≃ₛₗ[σ₃₄] M₄) :
     (e₁₂.trans e₂₃).trans e₃₄ = e₁₂.trans (e₂₃.trans e₃₄) := rfl
 
 variable [RingHomCompTriple σ₂₁ σ₁₃ σ₂₃] [RingHomCompTriple σ₃₁ σ₁₂ σ₃₂]
-
-/--
-theorem `eq_comp_toLinearMap_symm` / 定理 `eq_comp_toLinearMap_symm`
-
-English:
-theorem eq_comp_toLinearMap_symm
-  given: (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃)
-  proof: by
-  constructor <;> intro H <;> ext
-  · simp [H]
-  · simp [← H]
-
-中文:
-定理 eq_comp_toLinearMap_symm
-  条件: (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃)
-  证明: by
-  constructor <;> intro H <;> ext
-  · simp [H]
-  · simp [← H]
+/-
+**LinearEquiv.eq_comp_toLinearMap_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：eq_comp_toLinearMap_symm (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃) : f =
+ g.comp e₁₂.symm.toLinearMap ↔ f.comp e₁₂.toLinearMap = g
+参数：f : M₂ ->ₛₗ[σ₂₃] M₃；g : M₁ ->ₛₗ[σ₁₃] M₃。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
 -/
-theorem eq_comp_toLinearMap_symm (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃) :
+theorem eq_comp_toLinearMap_symm (f : M₂ →ₛₗ[σ₂₃] M₃) (g : M₁ →ₛₗ[σ₁₃] M₃) :
     f = g.comp e₁₂.symm.toLinearMap ↔ f.comp e₁₂.toLinearMap = g := by
   constructor <;> intro H <;> ext
   · simp [H]
   · simp [← H]
-
-/--
-theorem `comp_toLinearMap_symm_eq` / 定理 `comp_toLinearMap_symm_eq`
-
-English:
-theorem comp_toLinearMap_symm_eq
-  given: (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃)
-  proof: by
-  constructor <;> intro H <;> ext
-  · simp [← H]
-  · simp [H]
-
-中文:
-定理 comp_toLinearMap_symm_eq
-  条件: (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃)
-  证明: by
-  constructor <;> intro H <;> ext
-  · simp [← H]
-  · simp [H]
-
-Depends on / 依赖: map_subtype_le, p.subtype, subtype
+/-
+**LinearEquiv.comp_toLinearMap_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_toLinearMap_symm_eq (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃) : g.c
+omp e₁₂.symm.toLinearMap = f ↔ g = f.comp e₁₂.toLinearMap
+参数：f : M₂ ->ₛₗ[σ₂₃] M₃；g : M₁ ->ₛₗ[σ₁₃] M₃。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
 -/
-theorem comp_toLinearMap_symm_eq (f : M₂ ->ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃) :
+theorem comp_toLinearMap_symm_eq (f : M₂ →ₛₗ[σ₂₃] M₃) (g : M₁ →ₛₗ[σ₁₃] M₃) :
     g.comp e₁₂.symm.toLinearMap = f ↔ g = f.comp e₁₂.toLinearMap := by
   constructor <;> intro H <;> ext
   · simp [← H]
   · simp [H]
-
-/--
-theorem `eq_toLinearMap_symm_comp` / 定理 `eq_toLinearMap_symm_comp`
-
-English:
-theorem eq_toLinearMap_symm_comp
-  given: (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂)
-  proof: by
-  constructor <;> intro H <;> ext
-  · simp [H]
-  · simp [← H]
-
-中文:
-定理 eq_toLinearMap_symm_comp
-  条件: (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂)
-  证明: by
-  constructor <;> intro H <;> ext
-  · simp [H]
-  · simp [← H]
+/-
+**LinearEquiv.eq_toLinearMap_symm_comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：eq_toLinearMap_symm_comp (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂) : f =
+ e₁₂.symm.toLinearMap.comp g ↔ e₁₂.toLinearMap.comp f = g
+参数：f : M₃ ->ₛₗ[σ₃₁] M₁；g : M₃ ->ₛₗ[σ₃₂] M₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用引理 `LinearEquiv.comp_symm_assoc`：comp_symm_assoc (f : M₃ ->ₛₗ[σ₃₂] M₂) [Ring
+HomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁₂.toLinearMap ∘ₛₗ e₁₂.symm.toLinearMap ∘ₛₗ f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LinearEquiv.symm_comp_assoc`：symm_comp_assoc (f : M₃ ->ₛₗ[σ₃₁] M₁) [Ring
+HomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁₂.symm.toLinearMap ∘ₛₗ e₁₂.toLinearMap ∘ₛₗ f = f
 -/
-theorem eq_toLinearMap_symm_comp (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂) :
+theorem eq_toLinearMap_symm_comp (f : M₃ →ₛₗ[σ₃₁] M₁) (g : M₃ →ₛₗ[σ₃₂] M₂) :
     f = e₁₂.symm.toLinearMap.comp g ↔ e₁₂.toLinearMap.comp f = g := by
   constructor <;> intro H <;> ext
   · simp [H]
   · simp [← H]
-
-/--
-theorem `toLinearMap_symm_comp_eq` / 定理 `toLinearMap_symm_comp_eq`
-
-English:
-theorem toLinearMap_symm_comp_eq
-  given: (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂)
-  proof: by
-  constructor <;> intro H <;> ext
-  · simp [← H]
-  · simp [H]
-
-@[simp]
-
-中文:
-定理 toLinearMap_symm_comp_eq
-  条件: (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂)
-  证明: by
-  constructor <;> intro H <;> ext
-  · simp [← H]
-  · simp [H]
-
-@[simp]
+/-
+**LinearEquiv.toLinearMap_symm_comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：toLinearMap_symm_comp_eq (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂) : e₁₂
+.symm.toLinearMap.comp g = f ↔ g = e₁₂.toLinearMap.comp f
+参数：f : M₃ ->ₛₗ[σ₃₁] M₁；g : M₃ ->ₛₗ[σ₃₂] M₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LinearEquiv.comp_symm_assoc`：comp_symm_assoc (f : M₃ ->ₛₗ[σ₃₂] M₂) [Ring
+HomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁₂.toLinearMap ∘ₛₗ e₁₂.symm.toLinearMap ∘ₛₗ f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `LinearEquiv.symm_comp_assoc`：symm_comp_assoc (f : M₃ ->ₛₗ[σ₃₁] M₁) [Ring
+HomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁₂.symm.toLinearMap ∘ₛₗ e₁₂.toLinearMap ∘ₛₗ f = f
 -/
-theorem toLinearMap_symm_comp_eq (f : M₃ ->ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂) :
+theorem toLinearMap_symm_comp_eq (f : M₃ →ₛₗ[σ₃₁] M₁) (g : M₃ →ₛₗ[σ₃₂] M₂) :
     e₁₂.symm.toLinearMap.comp g = f ↔ g = e₁₂.toLinearMap.comp f := by
   constructor <;> intro H <;> ext
   · simp [← H]
   · simp [H]
 
 @[simp]
-/--
-theorem `comp_toLinearMap_eq_iff` / 定理 `comp_toLinearMap_eq_iff`
-
-English:
-theorem comp_toLinearMap_eq_iff
-  given: (f g : M₃ ->ₛₗ[σ₃₁] M₁)
-  proof: by
-  refine ⟨fun h => ?_, congrArg e₁₂.comp⟩
-  rw [← (toLinearMap_symm_comp_eq g (e₁₂.toLinearMap.comp f)).mpr h]; rw [eq_toLinearMap_symm_comp]
-
-@[simp]
-
-中文:
-定理 comp_toLinearMap_eq_iff
-  条件: (f g : M₃ ->ₛₗ[σ₃₁] M₁)
-  证明: by
-  refine ⟨fun h => ?_, congrArg e₁₂.comp⟩
-  rw [← (toLinearMap_symm_comp_eq g (e₁₂.toLinearMap.comp f)).mpr h]; rw [eq_toLinearMap_symm_comp]
-
-@[simp]
-
-Depends on / 依赖: eq_toLinearMap_symm_comp, toLinearMap, toLinearMap.comp, toLinearMap_symm_comp_eq
+/-
+**LinearEquiv.comp_toLinearMap_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_toLinearMap_eq_iff (f g : M₃ ->ₛₗ[σ₃₁] M₁) : e₁₂.toLinearMap.comp f =
+ e₁₂.toLinearMap.comp g ↔ f = g
+参数：f g : M₃ ->ₛₗ[σ₃₁] M₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.toLinearMap_symm_comp_eq`：toLinearMap_symm_comp_eq (f : M₃ -
+>ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂) : e₁₂.symm.toLinearMap.comp g = f ↔ g = e₁₂.t
+oLinearMap.comp f
+· 使用定理 `LinearEquiv.eq_toLinearMap_symm_comp`：eq_toLinearMap_symm_comp (f : M₃ -
+>ₛₗ[σ₃₁] M₁) (g : M₃ ->ₛₗ[σ₃₂] M₂) : f = e₁₂.symm.toLinearMap.comp g ↔ e₁₂.toLin
+earMap.comp f = g
 -/
-theorem comp_toLinearMap_eq_iff (f g : M₃ ->ₛₗ[σ₃₁] M₁) :
+theorem comp_toLinearMap_eq_iff (f g : M₃ →ₛₗ[σ₃₁] M₁) :
     e₁₂.toLinearMap.comp f = e₁₂.toLinearMap.comp g ↔ f = g := by
   refine ⟨fun h => ?_, congrArg e₁₂.comp⟩
-  rw [← (toLinearMap_symm_comp_eq g (e₁₂.toLinearMap.comp f)).mpr h]; rw [eq_toLinearMap_symm_comp]
+  rw [← (toLinearMap_symm_comp_eq g (e₁₂.toLinearMap.comp f)).mpr h, eq_toLinearMap_symm_comp]
 
 @[simp]
-/--
-theorem `eq_comp_toLinearMap_iff` / 定理 `eq_comp_toLinearMap_iff`
-
-English:
-theorem eq_comp_toLinearMap_iff
-  given: (f g : M₂ ->ₛₗ[σ₂₃] M₃)
-  proof: by
-  refine ⟨fun h => ?_, fun a => congrFun (congrArg LinearMap.comp a) e₁₂.toLinearMap⟩
-  rw [(eq_comp_toLinearMap_symm g (f.comp e₁₂.toLinearMap)).mpr h.symm]; rw [eq_comp_toLinearMap_symm]
-
-中文:
-定理 eq_comp_toLinearMap_iff
-  条件: (f g : M₂ ->ₛₗ[σ₂₃] M₃)
-  证明: by
-  refine ⟨fun h => ?_, fun a => congrFun (congrArg LinearMap.comp a) e₁₂.toLinearMap⟩
-  rw [(eq_comp_toLinearMap_symm g (f.comp e₁₂.toLinearMap)).mpr h.symm]; rw [eq_comp_toLinearMap_symm]
-
-Depends on / 依赖: LinearMap, LinearMap.comp, eq_comp_toLinearMap_symm, f.comp, h.symm, toLinearMap
+/-
+**LinearEquiv.eq_comp_toLinearMap_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：eq_comp_toLinearMap_iff (f g : M₂ ->ₛₗ[σ₂₃] M₃) : f.comp e₁₂.toLinearMap =
+ g.comp e₁₂.toLinearMap ↔ f = g
+参数：f g : M₂ ->ₛₗ[σ₂₃] M₃。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.eq_comp_toLinearMap_symm`：eq_comp_toLinearMap_symm (f : M₂ -
+>ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃) : f = g.comp e₁₂.symm.toLinearMap ↔ f.comp e₁
+₂.toLinearMap = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 -/
-theorem eq_comp_toLinearMap_iff (f g : M₂ ->ₛₗ[σ₂₃] M₃) :
+theorem eq_comp_toLinearMap_iff (f g : M₂ →ₛₗ[σ₂₃] M₃) :
     f.comp e₁₂.toLinearMap = g.comp e₁₂.toLinearMap ↔ f = g := by
-  refine ⟨fun h => ?_, fun a => congrFun (congrArg LinearMap.comp a) e₁₂.toLinearMap⟩
-  rw [(eq_comp_toLinearMap_symm g (f.comp e₁₂.toLinearMap)).mpr h.symm]; rw [eq_comp_toLinearMap_symm]
-
-/--
-lemma `comp_symm_cancel_left` / 引理 `comp_symm_cancel_left`
-
-English:
-lemma comp_symm_cancel_left
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₂] M₂)
-  proof: by ext; simp
-
-中文:
-引理 comp_symm_cancel_left
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₂] M₂)
-  证明: by ext; simp
+  refine ⟨fun h => ?_, fun a ↦ congrFun (congrArg LinearMap.comp a) e₁₂.toLinearMap⟩
+  rw [(eq_comp_toLinearMap_symm g (f.comp e₁₂.toLinearMap)).mpr h.symm, eq_comp_toLinearMap_symm]
+/-
+**LinearEquiv.comp_symm_cancel_left** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_symm_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₂] M₂) : e.toLin
+earMap ∘ₛₗ (e.symm.toLinearMap ∘ₛₗ f) = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₃ ->ₛₗ[σ₃₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearEquiv.comp_symm_assoc`：comp_symm_assoc (f : M₃ ->ₛₗ[σ₃₂] M₂) [Ring
+HomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁₂.toLinearMap ∘ₛₗ e₁₂.symm.toLinearMap ∘ₛₗ f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma comp_symm_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₂] M₂) :
+lemma comp_symm_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ →ₛₗ[σ₃₂] M₂) :
     e.toLinearMap ∘ₛₗ (e.symm.toLinearMap ∘ₛₗ f) = f := by ext; simp
-
-/--
-lemma `symm_comp_cancel_left` / 引理 `symm_comp_cancel_left`
-
-English:
-lemma symm_comp_cancel_left
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₁] M₁)
-  proof: by ext; simp
-
-中文:
-引理 symm_comp_cancel_left
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₁] M₁)
-  证明: by ext; simp
+/-
+**LinearEquiv.symm_comp_cancel_left** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_comp_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₁] M₁) : e.symm.
+toLinearMap ∘ₛₗ (e.toLinearMap ∘ₛₗ f) = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₃ ->ₛₗ[σ₃₁] M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearEquiv.symm_comp_assoc`：symm_comp_assoc (f : M₃ ->ₛₗ[σ₃₁] M₁) [Ring
+HomCompTriple σ₃₁ σ₁₂ σ₃₂] : e₁₂.symm.toLinearMap ∘ₛₗ e₁₂.toLinearMap ∘ₛₗ f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma symm_comp_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ->ₛₗ[σ₃₁] M₁) :
+lemma symm_comp_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ →ₛₗ[σ₃₁] M₁) :
     e.symm.toLinearMap ∘ₛₗ (e.toLinearMap ∘ₛₗ f) = f := by ext; simp
-
-/--
-lemma `comp_symm_cancel_right` / 引理 `comp_symm_cancel_right`
-
-English:
-lemma comp_symm_cancel_right
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ->ₛₗ[σ₂₃] M₃)
-  proof: by ext; simp
-
-中文:
-引理 comp_symm_cancel_right
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ->ₛₗ[σ₂₃] M₃)
-  证明: by ext; simp
+/-
+**LinearEquiv.comp_symm_cancel_right** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：comp_symm_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ->ₛₗ[σ₂₃] M₃) : (f ∘ₛₗ
+ e.toLinearMap) ∘ₛₗ e.symm.toLinearMap = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₂ ->ₛₗ[σ₂₃] M₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma comp_symm_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ->ₛₗ[σ₂₃] M₃) :
+lemma comp_symm_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ →ₛₗ[σ₂₃] M₃) :
     (f ∘ₛₗ e.toLinearMap) ∘ₛₗ e.symm.toLinearMap = f := by ext; simp
-
-/--
-lemma `symm_comp_cancel_right` / 引理 `symm_comp_cancel_right`
-
-English:
-lemma symm_comp_cancel_right
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ->ₛₗ[σ₁₃] M₃)
-  proof: by ext; simp
-
-中文:
-引理 symm_comp_cancel_right
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ->ₛₗ[σ₁₃] M₃)
-  证明: by ext; simp
+/-
+**LinearEquiv.symm_comp_cancel_right** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_comp_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ->ₛₗ[σ₁₃] M₃) : (f ∘ₛₗ
+ e.symm.toLinearMap) ∘ₛₗ e.toLinearMap = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₁ ->ₛₗ[σ₁₃] M₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma symm_comp_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ->ₛₗ[σ₁₃] M₃) :
+lemma symm_comp_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ →ₛₗ[σ₁₃] M₃) :
     (f ∘ₛₗ e.symm.toLinearMap) ∘ₛₗ e.toLinearMap = f := by ext; simp
-
-/--
-lemma `trans_symm_cancel_left` / 引理 `trans_symm_cancel_left`
-
-English:
-lemma trans_symm_cancel_left
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ≃ₛₗ[σ₁₃] M₃)
-  proof: by ext; simp
-
-中文:
-引理 trans_symm_cancel_left
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ≃ₛₗ[σ₁₃] M₃)
-  证明: by ext; simp
+/-
+**LinearEquiv.trans_symm_cancel_left** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：trans_symm_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ≃ₛₗ[σ₁₃] M₃) : e.trans
+ (e.symm.trans f) = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₁ ≃ₛₗ[σ₁₃] M₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma trans_symm_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₁ ≃ₛₗ[σ₁₃] M₃) :
     e.trans (e.symm.trans f) = f := by ext; simp
-
-/--
-lemma `symm_trans_cancel_left` / 引理 `symm_trans_cancel_left`
-
-English:
-lemma symm_trans_cancel_left
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ≃ₛₗ[σ₂₃] M₃)
-  proof: by ext; simp
-
-中文:
-引理 symm_trans_cancel_left
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ≃ₛₗ[σ₂₃] M₃)
-  证明: by ext; simp
+/-
+**LinearEquiv.symm_trans_cancel_left** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_trans_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ≃ₛₗ[σ₂₃] M₃) : e.symm.
+trans (e.trans f) = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₂ ≃ₛₗ[σ₂₃] M₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma symm_trans_cancel_left (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₂ ≃ₛₗ[σ₂₃] M₃) :
     e.symm.trans (e.trans f) = f := by ext; simp
-
-/--
-lemma `trans_symm_cancel_right` / 引理 `trans_symm_cancel_right`
-
-English:
-lemma trans_symm_cancel_right
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₁] M₁)
-  proof: by ext; simp
-
-中文:
-引理 trans_symm_cancel_right
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₁] M₁)
-  证明: by ext; simp
+/-
+**LinearEquiv.trans_symm_cancel_right** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：trans_symm_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₁] M₁) : (f.tra
+ns e).trans e.symm = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₃ ≃ₛₗ[σ₃₁] M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma trans_symm_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₁] M₁) :
     (f.trans e).trans e.symm = f := by ext; simp
-
-/--
-lemma `symm_trans_cancel_right` / 引理 `symm_trans_cancel_right`
-
-English:
-lemma symm_trans_cancel_right
-  given: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₂] M₂)
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 symm_trans_cancel_right
-  条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₂] M₂)
-  证明: by ext; simp
-
-@[simp]
+/-
+**LinearEquiv.symm_trans_cancel_right** 是 Mathlib 中的一个引理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_trans_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₂] M₂) : (f.tra
+ns e.symm).trans e = f
+参数：e : M₁ ≃ₛₗ[σ₁₂] M₂；f : M₃ ≃ₛₗ[σ₃₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma symm_trans_cancel_right (e : M₁ ≃ₛₗ[σ₁₂] M₂) (f : M₃ ≃ₛₗ[σ₃₂] M₂) :
     (f.trans e.symm).trans e = f := by ext; simp
 
 @[simp]
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  given: [Module R M]
-  statement: (refl R M).symm = LinearEquiv.refl R M
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 refl_symm
-  条件: [模 R M]
-  结论: (refl R M).symm = 线性等价.refl R M
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：refl_symm [Module R M] : (refl R M).symm = LinearEquiv.refl R M
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_symm [Module R M] : (refl R M).symm = LinearEquiv.refl R M :=
   rfl
 
 @[simp]
-/--
-theorem `self_trans_symm` / 定理 `self_trans_symm`
-
-English:
-theorem self_trans_symm
-  given: (f : M₁ ≃ₛₗ[σ₁₂] M₂)
-  statement: f.trans f.symm = LinearEquiv.refl R₁ M₁
-  proof: by
-  ext x
-  simp
-
-@[simp]
-
-中文:
-定理 self_trans_symm
-  条件: (f : M₁ ≃ₛₗ[σ₁₂] M₂)
-  结论: f.trans f.symm = 线性等价.refl R₁ M₁
-  证明: by
-  ext x
-  simp
-
-@[simp]
+/-
+**LinearEquiv.self_trans_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：self_trans_symm (f : M₁ ≃ₛₗ[σ₁₂] M₂) : f.trans f.symm = LinearEquiv.refl R
+₁ M₁
+参数：f : M₁ ≃ₛₗ[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem self_trans_symm (f : M₁ ≃ₛₗ[σ₁₂] M₂) : f.trans f.symm = LinearEquiv.refl R₁ M₁ := by
   ext x
   simp
 
 @[simp]
-/--
-theorem `symm_trans_self` / 定理 `symm_trans_self`
-
-English:
-theorem symm_trans_self
-  given: (f : M₁ ≃ₛₗ[σ₁₂] M₂)
-  statement: f.symm.trans f = LinearEquiv.refl R₂ M₂
-  proof: by
-  ext x
-  simp
-
-@[simp]
-
-中文:
-定理 symm_trans_self
-  条件: (f : M₁ ≃ₛₗ[σ₁₂] M₂)
-  结论: f.symm.trans f = 线性等价.refl R₂ M₂
-  证明: by
-  ext x
-  simp
-
-@[simp]
+/-
+**LinearEquiv.symm_trans_self** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_trans_self (f : M₁ ≃ₛₗ[σ₁₂] M₂) : f.symm.trans f = LinearEquiv.refl R
+₂ M₂
+参数：f : M₁ ≃ₛₗ[σ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem symm_trans_self (f : M₁ ≃ₛₗ[σ₁₂] M₂) : f.symm.trans f = LinearEquiv.refl R₂ M₂ := by
   ext x
   simp
 
 @[simp]
-/--
-theorem `refl_toLinearMap` / 定理 `refl_toLinearMap`
-
-English:
-theorem refl_toLinearMap
-  given: [Module R M]
-  statement: (LinearEquiv.refl R M : M ->ₗ[R] M) = LinearMap.id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 refl_toLinearMap
-  条件: [模 R M]
-  结论: (线性等价.refl R M : M ->ₗ[R] M) = 线性映射.id
-  证明: rfl
-
-@[simp]
+/-
+**LinearEquiv.refl_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：refl_toLinearMap [Module R M] : (LinearEquiv.refl R M : M ->ₗ[R] M) = Line
+arMap.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem refl_toLinearMap [Module R M] : (LinearEquiv.refl R M : M ->ₗ[R] M) = LinearMap.id :=
+theorem refl_toLinearMap [Module R M] : (LinearEquiv.refl R M : M →ₗ[R] M) = LinearMap.id :=
   rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (f h₁ h₂)
-  statement: (LinearEquiv.mk e f h₁ h₂ : M ≃ₛₗ[σ] M₂) = e
-  proof: ext fun _ => rfl
-
-中文:
-定理 mk_coe
-  条件: (f h₁ h₂)
-  结论: (线性等价.mk e f h₁ h₂ : M ≃ₛₗ[σ] M₂) = e
-  证明: ext fun _ => rfl
+/-
+**LinearEquiv.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：mk_coe (f h₁ h₂) : (LinearEquiv.mk e f h₁ h₂ : M ≃ₛₗ[σ] M₂) = e
+参数：f h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
 -/
 theorem mk_coe (f h₁ h₂) : (LinearEquiv.mk e f h₁ h₂ : M ≃ₛₗ[σ] M₂) = e :=
-  ext fun _ => rfl
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (a b : M)
-  statement: e (a + b) = e a + e b
-  proof: map_add e a b
-
-中文:
-定理 map_add
-  条件: (a b : M)
-  结论: e (a + b) = e a + e b
-  证明: map_add e a b
+  ext fun _ ↦ rfl
+/-
+**LinearEquiv.map_add** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} (e : M ≃ₛₗ[σ] M₂) (a b : M), e (a + b) = e a + e b
+参数：e : M ≃ₛₗ[σ] M₂；a b : M；a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 protected theorem map_add (a b : M) : e (a + b) = e a + e b :=
   map_add e a b
-
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  statement: e 0 = 0
-  proof: map_zero e
-
-中文:
-定理 map_zero
-  结论: e 0 = 0
-  证明: map_zero e
+/-
+**LinearEquiv.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} (e : M ≃ₛₗ[σ] M₂), e 0 = 0
+参数：e : M ≃ₛₗ[σ] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 protected theorem map_zero : e 0 = 0 :=
   map_zero e
-
-/--
-theorem `map_smulₛₗ` / 定理 `map_smulₛₗ`
-
-English:
-theorem map_smulₛₗ
-  given: (c : R) (x : M)
-  statement: e (c • x) = (σ : R -> S) c • e x
-  proof: e.map_smul' c x
-
-中文:
-定理 map_smulₛₗ
-  条件: (c : R) (x : M)
-  结论: e (c • x) = (σ : R -> S) c • e x
-  证明: e.map_smul' c x
+/-
+**LinearEquiv.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：map_smul (e : N₁ ≃ₗ[R₁] N₂) (c : R₁) (x : N₁) : e (c • x) = c • e x
+参数：e : N₁ ≃ₗ[R₁] N₂；c : R₁；x : N₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
-protected theorem map_smulₛₗ (c : R) (x : M) : e (c • x) = (σ : R -> S) c • e x :=
+protected theorem map_smulₛₗ (c : R) (x : M) : e (c • x) = (σ : R → S) c • e x :=
   e.map_smul' c x
-
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: (e : N₁ ≃ₗ[R₁] N₂) (c : R₁) (x : N₁)
-  statement: e (c • x) = c • e x
-  proof: map_smulₛₗ e c x
-
-中文:
-定理 map_smul
-  条件: (e : N₁ ≃ₗ[R₁] N₂) (c : R₁) (x : N₁)
-  结论: e (c • x) = c • e x
-  证明: map_smulₛₗ e c x
+/-
+**LinearEquiv.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：map_smul (e : N₁ ≃ₗ[R₁] N₂) (c : R₁) (x : N₁) : e (c • x) = c • e x
+参数：e : N₁ ≃ₗ[R₁] N₂；c : R₁；x : N₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 theorem map_smul (e : N₁ ≃ₗ[R₁] N₂) (c : R₁) (x : N₁) : e (c • x) = c • e x :=
   map_smulₛₗ e c x
-
-/--
-theorem `map_eq_zero_iff` / 定理 `map_eq_zero_iff`
-
-English:
-theorem map_eq_zero_iff
-  given: {x : M}
-  statement: e x = 0 ↔ x = 0
-  proof: e.toAddEquiv.map_eq_zero_iff
-
-中文:
-定理 map_eq_zero_iff
-  条件: {x : M}
-  结论: e x = 0 ↔ x = 0
-  证明: e.toAddEquiv.map_eq_zero_iff
-
-Depends on / 依赖: e.toAddEquiv.map_eq_zero_iff, map_eq_zero_iff, toAddEquiv
+/-
+**LinearEquiv.map_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：map_eq_zero_iff {x : M} : e x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.map_eq_zero_iff`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZer
+oClass M] [inst_1 : AddZeroClass N] (h : M ≃+ N) {x : M}, h x = 0 ↔ x = 0
 -/
 theorem map_eq_zero_iff {x : M} : e x = 0 ↔ x = 0 :=
   e.toAddEquiv.map_eq_zero_iff
-
-/--
-theorem `map_ne_zero_iff` / 定理 `map_ne_zero_iff`
-
-English:
-theorem map_ne_zero_iff
-  given: {x : M}
-  statement: e x != 0 ↔ x != 0
-  proof: e.toAddEquiv.map_ne_zero_iff
-
-@[simp]
-
-中文:
-定理 map_ne_zero_iff
-  条件: {x : M}
-  结论: e x != 0 ↔ x != 0
-  证明: e.toAddEquiv.map_ne_zero_iff
-
-@[simp]
-
-Depends on / 依赖: e.toAddEquiv.map_ne_zero_iff, map_ne_zero_iff, toAddEquiv
+/-
+**LinearEquiv.map_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：map_ne_zero_iff {x : M} : e x != 0 ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.map_ne_zero_iff`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZer
+oClass M] [inst_1 : AddZeroClass N] (h : M ≃+ N) {x : M}, h x ≠ 0 ↔ x ≠ 0
 -/
-theorem map_ne_zero_iff {x : M} : e x != 0 ↔ x != 0 :=
+theorem map_ne_zero_iff {x : M} : e x ≠ 0 ↔ x ≠ 0 :=
   e.toAddEquiv.map_ne_zero_iff
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (e : M ≃ₛₗ[σ] M₂)
-  statement: e.symm.symm = e
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (e : M ≃ₛₗ[σ] M₂)
-  结论: e.symm.symm = e
-  证明: rfl
+/-
+**LinearEquiv.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_symm (e : M ≃ₛₗ[σ] M₂) : e.symm.symm = e
+参数：e : M ≃ₛₗ[σ] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm (e : M ≃ₛₗ[σ] M₂) : e.symm.symm = e := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  given: [Module R M] [Module S M₂] [RingHomInvPair σ' σ] [RingHomInvPair σ σ']
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-中文:
-定理 symm_bijective
-  条件: [模 R M] [模 S M₂] [RingHomInvPair σ' σ] [RingHomInvPair σ σ']
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**LinearEquiv.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_bijective [Module R M] [Module S M₂] [RingHomInvPair σ' σ] [RingHomIn
+vPair σ σ'] : Function.Bijective (symm : (M ≃ₛₗ[σ] M₂) -> M₂ ≃ₛₗ[σ'] M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `LinearEquiv.symm_symm`：symm_symm (e : M ≃ₛₗ[σ] M₂) : e.symm.symm = e
 -/
 theorem symm_bijective [Module R M] [Module S M₂] [RingHomInvPair σ' σ] [RingHomInvPair σ σ'] :
-    Function.Bijective (symm : (M ≃ₛₗ[σ] M₂) -> M₂ ≃ₛₗ[σ'] M) :=
+    Function.Bijective (symm : (M ≃ₛₗ[σ] M₂) → M₂ ≃ₛₗ[σ'] M) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
-/--
-theorem `mk_coe'` / 定理 `mk_coe'`
-
-English:
-theorem mk_coe'
-  given: (f h₁ h₂ h₃ h₄)
-  proof: symm_bijective.injective ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 mk_coe'
-  条件: (f h₁ h₂ h₃ h₄)
-  证明: symm_bijective.injective ext fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: injective, symm_bijective, symm_bijective.injective
+/-
+**LinearEquiv.mk_coe'** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：mk_coe' (f h₁ h₂ h₃ h₄) : (LinearEquiv.mk ⟨⟨f, h₁⟩, h₂⟩ (⇑e) h₃ h₄ : M₂ ≃ₛ
+ₗ[σ'] M) = e.symm
+参数：f h₁ h₂ h₃ h₄。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `LinearEquiv.symm_bijective`：symm_bijective [Module R M] [Module S M₂] [R
+ingHomInvPair σ' σ] [RingHomInvPair σ σ'] : Function.Bijective (symm : (M ≃ₛₗ[σ]
+ M₂) -> M₂ ≃ₛₗ[σ…
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
 -/
 theorem mk_coe' (f h₁ h₂ h₃ h₄) :
     (LinearEquiv.mk ⟨⟨f, h₁⟩, h₂⟩ (⇑e) h₃ h₄ : M₂ ≃ₛₗ[σ'] M) = e.symm :=
-symm_bijective.injective ext fun _ => rfl
+  symm_bijective.injective <| ext fun _ ↦ rfl
 
 @[simp]
-/--
-theorem `symm_mk` / 定理 `symm_mk`
-
-English:
-theorem symm_mk
-  given: (toLinearMap invFun h₁ h₂)
-  statement: dsimp%
-  proof: rfl
-
-中文:
-定理 symm_mk
-  条件: (toLinearMap invFun h₁ h₂)
-  结论: dsimp%
-  证明: rfl
-
-Depends on / 依赖: invFun
+/-
+**LinearEquiv.symm_mk** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_mk (toLinearMap invFun h₁ h₂) : dsimp% (mk toLinearMap invFun h₁ h₂ :
+ M ≃ₛₗ[σ] M₂).symm = { (mk toLinearMap invFun h₁ h₂ : M ≃ₛₗ[σ] M₂).symm with toF
+un
+参数：toLinearMap invFun h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_mk (toLinearMap invFun h₁ h₂) : dsimp%
     (mk toLinearMap invFun h₁ h₂ : M ≃ₛₗ[σ] M₂).symm =
@@ -1959,22 +1575,17 @@ theorem symm_mk (toLinearMap invFun h₁ h₂) : dsimp%
         invFun := toLinearMap } :=
   rfl
 
-/--
-theorem `coe_symm_mk` / 定理 `coe_symm_mk`
+/-- For a more powerful version, see `coe_symm_mk'`. -/
+/-
+**LinearEquiv.coe_symm_mk** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_symm_mk [Module R M] [Module R M₂] {to_fun inv_fun map_add map_smul le
+ft_inv right_inv} : ⇑(⟨⟨⟨to_fun, map_add⟩, map_smul⟩, inv_fun, left_inv, right_i
+nv⟩ : M ≃ₗ[R] M₂).symm = inv_fun
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem coe_symm_mk
-  statement: [Module R M] [Module R M₂]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_symm_mk
-  结论: [模 R M] [模 R M₂]
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+For a more powerful version, see `coe_symm_mk'`.
 -/
 theorem coe_symm_mk [Module R M] [Module R M₂]
     {to_fun inv_fun map_add map_smul left_inv right_inv} :
@@ -1982,103 +1593,84 @@ theorem coe_symm_mk [Module R M] [Module R M₂]
   rfl
 
 @[simp]
-/--
-theorem `coe_symm_mk'` / 定理 `coe_symm_mk'`
-
-English:
-theorem coe_symm_mk'
-  statement: [Module R M] [Module R M₂]
-  proof: rfl
-
-中文:
-定理 coe_symm_mk'
-  结论: [模 R M] [模 R M₂]
-  证明: rfl
+/-
+**LinearEquiv.coe_symm_mk'** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_symm_mk' [Module R M] [Module R M₂] {f inv_fun left_inv right_inv} : ⇑
+(⟨f, inv_fun, left_inv, right_inv⟩ : M ≃ₗ[R] M₂).symm = inv_fun
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_symm_mk' [Module R M] [Module R M₂]
     {f inv_fun left_inv right_inv} :
     ⇑(⟨f, inv_fun, left_inv, right_inv⟩ : M ≃ₗ[R] M₂).symm = inv_fun := rfl
-
-/--
-theorem `bijective` / 定理 `bijective`
-
-English:
-theorem bijective
-  statement: Function.Bijective e
-  proof: e.toEquiv.bijective
-
-中文:
-定理 bijective
-  结论: 函数.双射 e
-  证明: e.toEquiv.bijective
+/-
+**LinearEquiv.bijective** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} (e : M ≃ₛₗ[σ] M₂), Function.Bijective ⇑e
+参数：e : M ≃ₛₗ[σ] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 protected theorem bijective : Function.Bijective e :=
   e.toEquiv.bijective
-
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  statement: Function.Injective e
-  proof: e.toEquiv.injective
-
-中文:
-定理 injective
-  结论: 函数.单射 e
-  证明: e.toEquiv.injective
+/-
+**LinearEquiv.injective** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} (e : M ≃ₛₗ[σ] M₂), Function.Injective ⇑e
+参数：e : M ≃ₛₗ[σ] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 protected theorem injective : Function.Injective e :=
   e.toEquiv.injective
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  statement: Function.Surjective e
-  proof: e.toEquiv.surjective
-
-中文:
-定理 surjective
-  结论: 函数.满射 e
-  证明: e.toEquiv.surjective
+/-
+**LinearEquiv.surjective** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} (e : M ≃ₛₗ[σ] M₂), Function.Surjective ⇑e
+参数：e : M ≃ₛₗ[σ] M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 protected theorem surjective : Function.Surjective e :=
   e.toEquiv.surjective
-
-/--
-theorem `image_eq_preimage_symm` / 定理 `image_eq_preimage_symm`
-
-English:
-theorem image_eq_preimage_symm
-  given: (s : Set M)
-  statement: e '' s = e.symm ⁻¹' s
-  proof: e.toEquiv.image_eq_preimage_symm s
-
-中文:
-定理 image_eq_preimage_symm
-  条件: (s : 集合 M)
-  结论: e '' s = e.symm ⁻¹' s
-  证明: e.toEquiv.image_eq_preimage_symm s
+/-
+**LinearEquiv.image_eq_preimage_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} (e : M ≃ₛₗ[σ] M₂) (s : Set M), ⇑e '' s = ⇑e.symm ⁻¹' s
+参数：e : M ≃ₛₗ[σ] M₂；s : Set M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 protected theorem image_eq_preimage_symm (s : Set M) : e '' s = e.symm ⁻¹' s :=
   e.toEquiv.image_eq_preimage_symm s
-
-/--
-theorem `image_symm_eq_preimage` / 定理 `image_symm_eq_preimage`
-
-English:
-theorem image_symm_eq_preimage
-  given: (s : Set M₂)
-  statement: e.symm '' s = e ⁻¹' s
-  proof: e.toEquiv.symm.image_eq_preimage_symm s
-
-中文:
-定理 image_symm_eq_preimage
-  条件: (s : 集合 M₂)
-  结论: e.symm '' s = e ⁻¹' s
-  证明: e.toEquiv.symm.image_eq_preimage_symm s
+/-
+**LinearEquiv.image_symm_eq_preimage** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M₂ : Type u_9} [inst : Sem
+iring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M] [inst_3 : AddCommMon
+oid M₂] {module_M : _root_.Module R M}   {module_S_M₂ : _root_.Module S M₂} {σ :
+ R →+* S} {σ' : S →+* R} {re₁ : RingHomInvPair σ σ'}   {re₂ : RingHomInvPair σ' 
+σ} (e : M ≃ₛₗ[σ] M₂) (s : Set M₂), ⇑e.symm '' s = ⇑e ⁻¹' s
+参数：e : M ≃ₛₗ[σ] M₂；s : Set M₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 protected theorem image_symm_eq_preimage (s : Set M₂) : e.symm '' s = e ⁻¹' s :=
   e.toEquiv.symm.image_eq_preimage_symm s
@@ -2090,129 +1682,91 @@ end
 Note that unlike `Equiv.cast`, this takes an equality of indices rather than an equality of types,
 to avoid having to deal with an equality of the algebraic structure itself. -/
 @[simps!]
-/--
-Definition of `cast` / `cast` 的定义
+/-
+**LinearEquiv.cast** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：{R : Type u_1} →   [inst : Semiring R] →     {ι : Type u_14} →       {M : 
+ι → Type u_15} →         [inst_1 : (i : ι) → AddCommMonoid (M i)] →           [i
+nst_2 : (i : ι) → _root_.Module R (M i)] → {i j : ι} → i = j → M i ≃ₗ[R] M j
+参数：i : ι；M i；i : ι；M i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cast
-  signature: {ι : Type*} {M : ι -> Type*}
-  body: AddEquiv.cast h
-  map_smul' _ _ := by cases h; rfl
+--- 原说明 ---
+`Equiv.cast (congrArg _ h)` as a linear equiv.
 
-中文:
-定义 cast
-  签名: {ι : 类型} {M : ι -> 类型}
-  定义体: AddEquiv.cast h
-  map_smul' _ _ := by cases h; rfl
+Note that unlike `Equiv.cast`, this takes an equality of indices rather than an 
+equality of types,
+to avoid having to deal with an equality of the algebraic structure itself.
 -/
-protected def cast {ι : Type*} {M : ι -> Type*}
-    [forall i, AddCommMonoid (M i)] [forall i, Module R (M i)] {i j : ι} (h : i = j) :
+protected def cast {ι : Type*} {M : ι → Type*}
+    [∀ i, AddCommMonoid (M i)] [∀ i, Module R (M i)] {i j : ι} (h : i = j) :
     M i ≃ₗ[R] M j where
   toAddEquiv := AddEquiv.cast h
   map_smul' _ _ := by cases h; rfl
 
 /-- Interpret a `RingEquiv` `f` as an `f`-semilinear equiv. -/
 @[simps]
-/--
-Definition of `_root_.RingEquiv.toSemilinearEquiv` / `_root_.RingEquiv.toSemilinearEquiv` 的定义
+/-
+**LinearEquiv._root_.RingEquiv.toSemilinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Line
+arEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.RingEquiv.toSemilinearEquiv
-  signature: (f : R ≃+* S)
-  body: RingHomInvPair.of_ringEquiv f
-    haveI := RingHomInvPair.symm (↑f : R ->+* S) (f.symm : S ->+* R)
-    R ≃ₛₗ[(↑f : R ->+* S)] S :=
-  haveI := RingHomInvPair.of_ringEquiv f
-  haveI := RingHomInvPair.symm (↑f : R ->+* S) (f.symm : S ->+* R)
-  { f with
-    toFun := f
-    map_smul' := f.map_mul }
-
-中文:
-定义 _root_.环等价.toSemilinearEquiv
-  签名: (f : R ≃+* S)
-  定义体: RingHomInvPair.of_ringEquiv f
-    haveI := RingHomInvPair.symm (↑f : R ->+* S) (f.symm : S ->+* R)
-    R ≃ₛₗ[(↑f : R ->+* S)] S :=
-  haveI := RingHomInvPair.of_ringEquiv f
-  haveI := RingHomInvPair.symm (↑f : R ->+* S) (f.symm : S ->+* R)
-  { f with
-    toFun := f
-    map_smul' := f.map_mul }
-
-Depends on / 依赖: RingHomInvPair, RingHomInvPair.of_ringEquiv, of_ringEquiv
+--- 原说明 ---
+Interpret a `RingEquiv` `f` as an `f`-semilinear equiv.
 -/
 def _root_.RingEquiv.toSemilinearEquiv (f : R ≃+* S) :
     haveI := RingHomInvPair.of_ringEquiv f
-    haveI := RingHomInvPair.symm (↑f : R ->+* S) (f.symm : S ->+* R)
-    R ≃ₛₗ[(↑f : R ->+* S)] S :=
+    haveI := RingHomInvPair.symm (↑f : R →+* S) (f.symm : S →+* R)
+    R ≃ₛₗ[(↑f : R →+* S)] S :=
   haveI := RingHomInvPair.of_ringEquiv f
-  haveI := RingHomInvPair.symm (↑f : R ->+* S) (f.symm : S ->+* R)
+  haveI := RingHomInvPair.symm (↑f : R →+* S) (f.symm : S →+* R)
   { f with
     toFun := f
     map_smul' := f.map_mul }
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `_root_.RingEquiv.symm_toSemilinearEquiv_symm_apply` / 引理 `_root_.RingEquiv.symm_toSemilinearEquiv_symm_apply`
-
-English:
-lemma _root_.RingEquiv.symm_toSemilinearEquiv_symm_apply
-  given: (f : R ≃+* S) (x : R)
-  proof: rfl
-
-中文:
-引理 _root_.环等价.symm_toSemilinearEquiv_symm_apply
-  条件: (f : R ≃+* S) (x : R)
-  证明: rfl
-
-Depends on / 依赖: RingHomClass, RingHomClass.toRingHom, toRingHom
+/-
+**LinearEquiv._root_.RingEquiv.symm_toSemilinearEquiv_symm_apply** 是 Mathlib 中的一
+个引理，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.RingEquiv.symm_toSemilinearEquiv_symm_apply (f : R ≃+* S) (x : R) :
   f.symm.toSemilinearEquiv.symm (σ' := RingHomClass.toRingHom f) x = f x := rfl
 
 variable [AddCommMonoid M]
 
-/--
-Definition of `ofInvolutive` / `ofInvolutive` 的定义
+/-- An involutive linear map is a linear equivalence. -/
+/-
+**LinearEquiv.ofInvolutive** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：ofInvolutive {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+ {_ : Module R M} (f : M ->ₛₗ[σ] M) (hf : Involutive f) : M ≃ₛₗ[σ] M
+参数：f : M ->ₛₗ[σ] M；hf : Involutive f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 
-English:
-definition ofInvolutive
-  signature: {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-  body: { f, hf.toPerm f with }
-
-@[simp]
-
-中文:
-定义 ofInvolutive
-  签名: {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-  定义体: { f, hf.toPerm f with }
-
-@[simp]
-
-Depends on / 依赖: hf.toPerm, toPerm
+--- 原说明 ---
+An involutive linear map is a linear equivalence.
 -/
-def ofInvolutive {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-    {_ : Module R M} (f : M ->ₛₗ[σ] M) (hf : Involutive f) : M ≃ₛₗ[σ] M :=
+def ofInvolutive {σ σ' : R →+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+    {_ : Module R M} (f : M →ₛₗ[σ] M) (hf : Involutive f) : M ≃ₛₗ[σ] M :=
   { f, hf.toPerm f with }
 
 @[simp]
-/--
-theorem `coe_ofInvolutive` / 定理 `coe_ofInvolutive`
-
-English:
-theorem coe_ofInvolutive
-  statement: {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-  proof: rfl
-
-中文:
-定理 coe_ofInvolutive
-  结论: {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-  证明: rfl
+/-
+**LinearEquiv.coe_ofInvolutive** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：coe_ofInvolutive {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ
+' σ] {_ : Module R M} (f : M ->ₛₗ[σ] M) (hf : Involutive f) : ⇑(ofInvolutive f h
+f) = f
+参数：f : M ->ₛₗ[σ] M；hf : Involutive f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_ofInvolutive {σ σ' : R ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
-    {_ : Module R M} (f : M ->ₛₗ[σ] M) (hf : Involutive f) : ⇑(ofInvolutive f hf) = f :=
+theorem coe_ofInvolutive {σ σ' : R →+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ]
+    {_ : Module R M} (f : M →ₛₗ[σ] M) (hf : Involutive f) : ⇑(ofInvolutive f hf) = f :=
   rfl
 
 end AddCommMonoid
@@ -2224,129 +1778,110 @@ variable {S R V W G : Type*} [Semiring R] [Semiring S]
   [AddCommMonoid G] [Module R G] [Module S G]
   [SMulCommClass R S W] [SMul S R] [IsScalarTower S R V] [IsScalarTower S R W]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Left scalar multiplication of a unit and a linear equivalence, as a linear equivalence. -/
+/-
+**LinearEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: SMul Sˣ (V ≃ₗ[R] W)
-  body: { __ := (α : S) • e.toLinearMap
-    invFun x := (↑α⁻¹ : S) • e.symm x
-    left_inv _ := by simp [LinearMapClass.map_smul_of_tower e.symm, smul_smul]
-    right_inv _ := by simp [smul_smul] }
-
-中文:
-实例 :
-  签名: 标量乘法 Sˣ (V ≃ₗ[R] W)
-  定义体: { __ := (α : S) • e.toLinearMap
-    invFun x := (↑α⁻¹ : S) • e.symm x
-    left_inv _ := by simp [LinearMapClass.map_smul_of_tower e.symm, smul_smul]
-    right_inv _ := by simp [smul_smul] }
-
-Depends on / 依赖: LinearMapClass, LinearMapClass.map_smul_of_tower, e.symm, e.toLinearMap, invFun, left_inv, map_smul_of_tower, right_inv, smul_smul, toLinearMap
+--- 原说明 ---
+Left scalar multiplication of a unit and a linear equivalence, as a linear equiv
+alence.
 -/
 instance : SMul Sˣ (V ≃ₗ[R] W) where smul α e :=
   { __ := (α : S) • e.toLinearMap
     invFun x := (↑α⁻¹ : S) • e.symm x
     left_inv _ := by simp [LinearMapClass.map_smul_of_tower e.symm, smul_smul]
     right_inv _ := by simp [smul_smul] }
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: (α : Sˣ) (e : V ≃ₗ[R] W) (x : V)
-  statement: (α • e) x = (α : S) • e x
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: (α : Sˣ) (e : V ≃ₗ[R] W) (x : V)
-  结论: (α • e) x = (α : S) • e x
-  证明: rfl
+/-
+**LinearEquiv.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {S : Type u_14} {R : Type u_15} {V : Type u_16} {W : Type u_17} [inst : 
+Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid V] [inst_3 : _root_.
+Module R V] [inst_4 : _root_.Module S V] [inst_5 : AddCommMonoid W]   [inst_6 : 
+_root_.Module R W] [inst_7 : _root_.Module S W] [inst_8 : SMulCommClass R S W] [
+inst_9 : SMul S R]   [inst_10 : IsScalarTower S R V] [inst_11 : IsScalarTower S 
+R W] (α : Sˣ) (e : V ≃ₗ[R] W) (x : V), (α • e) x = ↑α • e x
+参数：α : Sˣ；e : V ≃ₗ[R] W；x : V；α • e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem smul_apply (α : Sˣ) (e : V ≃ₗ[R] W) (x : V) : (α • e) x = (α : S) • e x := rfl
-
-/--
-theorem `symm_smul_apply` / 定理 `symm_smul_apply`
-
-English:
-theorem symm_smul_apply
-  given: (e : V ≃ₗ[R] W) (α : Sˣ) (x : W)
-  proof: rfl
-
-中文:
-定理 symm_smul_apply
-  条件: (e : V ≃ₗ[R] W) (α : Sˣ) (x : W)
-  证明: rfl
+/-
+**LinearEquiv.symm_smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_smul_apply (e : V ≃ₗ[R] W) (α : Sˣ) (x : W) : (α • e).symm x = (↑α⁻¹ 
+: S) • e.symm x
+参数：e : V ≃ₗ[R] W；α : Sˣ；x : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_smul_apply (e : V ≃ₗ[R] W) (α : Sˣ) (x : W) :
     (α • e).symm x = (↑α⁻¹ : S) • e.symm x := rfl
-
-/--
-theorem `symm_smul` / 定理 `symm_smul`
-
-English:
-theorem symm_smul
-  given: [SMulCommClass R S V] (e : V ≃ₗ[R] W) (α : Sˣ)
-  proof: rfl
-
-中文:
-定理 symm_smul
-  条件: [标量交换类 R S V] (e : V ≃ₗ[R] W) (α : Sˣ)
-  证明: rfl
+/-
+**LinearEquiv.symm_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {S : Type u_14} {R : Type u_15} {V : Type u_16} {W : Type u_17} [inst : 
+Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid V] [inst_3 : _root_.
+Module R V] [inst_4 : _root_.Module S V] [inst_5 : AddCommMonoid W]   [inst_6 : 
+_root_.Module R W] [inst_7 : _root_.Module S W] [inst_8 : SMulCommClass R S W] [
+inst_9 : SMul S R]   [inst_10 : IsScalarTower S R V] [inst_11 : IsScalarTower S 
+R W] [inst_12 : SMulCommClass R S V] (e : V ≃ₗ[R] W)   (α : Sˣ), (α • e).symm = 
+α⁻¹ • e.symm
+参数：e : V ≃ₗ[R] W；α : Sˣ；α • e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem symm_smul [SMulCommClass R S V] (e : V ≃ₗ[R] W) (α : Sˣ) :
     (α • e).symm = α⁻¹ • e.symm := rfl
-
-/--
-theorem `toLinearMap_smul` / 定理 `toLinearMap_smul`
-
-English:
-theorem toLinearMap_smul
-  given: (e : V ≃ₗ[R] W) (α : Sˣ)
-  proof: rfl
-
-中文:
-定理 toLinearMap_smul
-  条件: (e : V ≃ₗ[R] W) (α : Sˣ)
-  证明: rfl
+/-
+**LinearEquiv.toLinearMap_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：∀ {S : Type u_14} {R : Type u_15} {V : Type u_16} {W : Type u_17} [inst : 
+Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid V] [inst_3 : _root_.
+Module R V] [inst_4 : _root_.Module S V] [inst_5 : AddCommMonoid W]   [inst_6 : 
+_root_.Module R W] [inst_7 : _root_.Module S W] [inst_8 : SMulCommClass R S W] [
+inst_9 : SMul S R]   [inst_10 : IsScalarTower S R V] [inst_11 : IsScalarTower S 
+R W] (e : V ≃ₗ[R] W) (α : Sˣ), ↑(α • e) = ↑α • ↑e
+参数：e : V ≃ₗ[R] W；α : Sˣ；α • e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toLinearMap_smul (e : V ≃ₗ[R] W) (α : Sˣ) :
     (α • e).toLinearMap = (α : S) • e.toLinearMap := rfl
-
-/--
-theorem `smul_trans` / 定理 `smul_trans`
-
-English:
-theorem smul_trans
-  statement: [SMulCommClass R S V] [IsScalarTower S R G]
-  proof: by ext; simp [LinearMapClass.map_smul_of_tower f]
-
-中文:
-定理 smul_trans
-  结论: [标量交换类 R S V] [标量塔 S R G]
-  证明: by ext; simp [LinearMapClass.map_smul_of_tower f]
-
-Depends on / 依赖: LinearMapClass, LinearMapClass.map_smul_of_tower, map_smul_of_tower
+/-
+**LinearEquiv.smul_trans** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：smul_trans [SMulCommClass R S V] [IsScalarTower S R G] (α : Sˣ) (e : G ≃ₗ[
+R] V) (f : V ≃ₗ[R] W) : (α • e).trans f = α • (e.trans f)
+参数：α : Sˣ；e : G ≃ₗ[R] V；f : V ≃ₗ[R] W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMapClass.map_smul_of_tower`：∀ {M : Type u_8} {M₂ : Type u_10} [ins
+t : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type u_15}
+   [inst_2 : Semiring …
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_trans [SMulCommClass R S V] [IsScalarTower S R G]
     (α : Sˣ) (e : G ≃ₗ[R] V) (f : V ≃ₗ[R] W) :
     (α • e).trans f = α • (e.trans f) := by ext; simp [LinearMapClass.map_smul_of_tower f]
-
-/--
-theorem `trans_smul` / 定理 `trans_smul`
-
-English:
-theorem trans_smul
-  statement: [IsScalarTower S R G]
-  proof: by ext; simp
-
-中文:
-定理 trans_smul
-  结论: [标量塔 S R G]
-  证明: by ext; simp
+/-
+**LinearEquiv.trans_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：trans_smul [IsScalarTower S R G] (α : Sˣ) (e : G ≃ₗ[R] V) (f : V ≃ₗ[R] W) 
+: e.trans (α • f) = α • (e.trans f)
+参数：α : Sˣ；e : G ≃ₗ[R] V；f : V ≃ₗ[R] W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trans_smul [IsScalarTower S R G]
     (α : Sˣ) (e : G ≃ₗ[R] V) (f : V ≃ₗ[R] W) :
@@ -2354,3 +1889,4 @@ theorem trans_smul [IsScalarTower S R G]
 
 end smul
 end LinearEquiv
+

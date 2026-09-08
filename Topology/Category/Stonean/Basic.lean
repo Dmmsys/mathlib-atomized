@@ -46,24 +46,27 @@ universe u
 open CategoryTheory
 open scoped Topology
 
-/--
-Definition of `Stonean` / `Stonean` 的定义
+/-- `Stonean` is the category of extremally disconnected compact Hausdorff spaces. -/
+/-
+**Stonean** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Stonean
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Stonean
-  body: CompHausLike (fun X => ExtremallyDisconnected X)
-
-中文:
-缩写 Stonean
-  定义体: CompHausLike (fun X => ExtremallyDisconnected X)
-
-Depends on / 依赖: CompHausLike, ExtremallyDisconnected
+--- 原说明 ---
+`Stonean` is the category of extremally disconnected compact Hausdorff spaces.
 -/
-abbrev Stonean := CompHausLike (fun X => ExtremallyDisconnected X)
+abbrev Stonean := CompHausLike (fun X ↦ ExtremallyDisconnected X)
 
 namespace CompHaus
 
 /-- `Projective` implies `ExtremallyDisconnected`. -/
+/-
+**CompHaus.** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Projective` implies `ExtremallyDisconnected`.
+-/
 instance (X : CompHaus.{u}) [Projective X] : ExtremallyDisconnected X := by
   apply CompactT2.Projective.extremallyDisconnected
   intro A B _ _ _ _ _ _ f g hf hg hsurj
@@ -82,22 +85,18 @@ instance (X : CompHaus.{u}) [Projective X] : ExtremallyDisconnected X := by
 
 /-- `Projective` implies `Stonean`. -/
 @[simps!]
-/--
-Definition of `toStonean` / `toStonean` 的定义
+/-
+**CompHaus.toStonean** 是 Mathlib 中的一个定义，位于命名空间 `CompHaus`。
+形式化陈述：toStonean (X : CompHaus.{u}) [Projective X] : Stonean where toTop
+参数：X : CompHaus.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instCompactSpaceCarrierToTopTrue`：∀ {X : CompHaus}, CompactSpac
+e ↑X.toTop
+· 使用定理 `CompHaus.instT2SpaceCarrierToTopTrue`：∀ {X : CompHaus}, T2Space ↑X.toTop
 
-English:
-definition toStonean
-  signature: (X : CompHaus.{u}) [Projective X]
-  body: X.toTop
-  prop := inferInstance
-
-中文:
-定义 toStonean
-  签名: (X : CompHaus.{u}) [投射 X]
-  定义体: X.toTop
-  prop := inferInstance
-
-Depends on / 依赖: X.toTop
+--- 原说明 ---
+`Projective` implies `Stonean`.
 -/
 def toStonean (X : CompHaus.{u}) [Projective X] :
     Stonean where
@@ -108,110 +107,95 @@ end CompHaus
 
 namespace Stonean
 
-/--
-Definition of `toCompHaus` / `toCompHaus` 的定义
+/-- The (forgetful) functor from Stonean spaces to compact Hausdorff spaces. -/
+/-
+**Stonean.toCompHaus** 是 Mathlib 中的一个缩写定义，位于命名空间 `Stonean`。
+形式化陈述：toCompHaus : Stonean.{u} ⥤ CompHaus.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toCompHaus
-  signature: : Stonean.{u} ⥤ CompHaus.{u}
-  body: compHausLikeToCompHaus _
-
-中文:
-缩写 toCompHaus
-  签名: : Stonean.{u} ⥤ CompHaus.{u}
-  定义体: compHausLikeToCompHaus _
-
-Depends on / 依赖: compHausLikeToCompHaus
+--- 原说明 ---
+The (forgetful) functor from Stonean spaces to compact Hausdorff spaces.
 -/
 abbrev toCompHaus : Stonean.{u} ⥤ CompHaus.{u} :=
   compHausLikeToCompHaus _
 
-/--
-Definition of `fullyFaithfulToCompHaus` / `fullyFaithfulToCompHaus` 的定义
+/-- The forgetful functor `Stonean ⥤ CompHaus` is fully faithful. -/
+/-
+**Stonean.fullyFaithfulToCompHaus** 是 Mathlib 中的一个缩写定义，位于命名空间 `Stonean`。
+形式化陈述：fullyFaithfulToCompHaus : toCompHaus.FullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fullyFaithfulToCompHaus
-  signature: : toCompHaus.FullyFaithful
-  body: CompHausLike.fullyFaithfulToCompHausLike _
-
-中文:
-缩写 fullyFaithfulToCompHaus
-  签名: : toCompHaus.满忠实
-  定义体: CompHausLike.fullyFaithfulToCompHausLike _
-
-Depends on / 依赖: CompHausLike, CompHausLike.fullyFaithfulToCompHausLike, fullyFaithfulToCompHausLike
+--- 原说明 ---
+The forgetful functor `Stonean ⥤ CompHaus` is fully faithful.
 -/
 abbrev fullyFaithfulToCompHaus : toCompHaus.FullyFaithful :=
   CompHausLike.fullyFaithfulToCompHausLike _
 
 open CompHausLike
-
+/-
+**Stonean.** 是 Mathlib 中的一个实例，位于命名空间 `Stonean`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Type*) [TopologicalSpace X]
-    [ExtremallyDisconnected X] : HasProp (fun Y => ExtremallyDisconnected Y) X :=
+    [ExtremallyDisconnected X] : HasProp (fun Y ↦ ExtremallyDisconnected Y) X :=
   ⟨(inferInstance : ExtremallyDisconnected X)⟩
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a term of `Stonean` from a type endowed with the structure of a
+compact, Hausdorff and extremally disconnected topological space.
+-/
+/-
+**Stonean.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `Stonean`。
+形式化陈述：of (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X] [Extremal
+lyDisconnected X] : Stonean
+参数：X : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Stonean.instHasPropExtremallyDisconnectedCarrier`：∀ (X : Type u_1) [inst
+ : TopologicalSpace X] [ExtremallyDisconnected X],   CompHausLike.HasProp (fun Y
+ => ExtremallyDisconnected ↑Y) X
 
-English:
-abbreviation of
-  signature: (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
-  body: CompHausLike.of _ X
-
-中文:
-缩写 of
-  签名: (X : 类型) [拓扑空间 X] [紧空间 X] [T2空间 X]
-  定义体: CompHausLike.of _ X
-
-Depends on / 依赖: CompHausLike, CompHausLike.of
+--- 原说明 ---
+Construct a term of `Stonean` from a type endowed with the structure of a
+compact, Hausdorff and extremally disconnected topological space.
 -/
 abbrev of (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
     [ExtremallyDisconnected X] : Stonean := CompHausLike.of _ X
-
+/-
+**Stonean.** 是 Mathlib 中的一个实例，位于命名空间 `Stonean`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Stonean.{u}) : ExtremallyDisconnected X := X.prop
 
-/--
-Definition of `toProfinite` / `toProfinite` 的定义
+/-- The functor from Stonean spaces to profinite spaces. -/
+/-
+**Stonean.toProfinite** 是 Mathlib 中的一个缩写定义，位于命名空间 `Stonean`。
+形式化陈述：toProfinite : Stonean.{u} ⥤ Profinite.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toProfinite
-  signature: : Stonean.{u} ⥤ Profinite.{u}
-  body: CompHausLike.toCompHausLike (fun _ => inferInstance)
-
-中文:
-缩写 toProfinite
-  签名: : Stonean.{u} ⥤ Profinite.{u}
-  定义体: CompHausLike.toCompHausLike (fun _ => inferInstance)
-
-Depends on / 依赖: CompHausLike, CompHausLike.toCompHausLike, toCompHausLike
+--- 原说明 ---
+The functor from Stonean spaces to profinite spaces.
 -/
 abbrev toProfinite : Stonean.{u} ⥤ Profinite.{u} :=
-  CompHausLike.toCompHausLike (fun _ => inferInstance)
+  CompHausLike.toCompHausLike (fun _ ↦ inferInstance)
 
 /--
-Definition of `mkFinite` / `mkFinite` 的定义
+A finite discrete space as a Stonean space.
+-/
+/-
+**Stonean.mkFinite** 是 Mathlib 中的一个定义，位于命名空间 `Stonean`。
+形式化陈述：mkFinite (X : Type*) [Finite X] [TopologicalSpace X] [DiscreteTopology X] 
+: Stonean where toTop
+参数：X : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.compactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Finite 
+X], CompactSpace X
 
-English:
-definition mkFinite
-  signature: (X : Type*) [Finite X] [TopologicalSpace X] [DiscreteTopology X]
-  body: (CompHaus.of X).toTop
-  prop := by
-    dsimp
-    constructor
-    intro U _
-    apply isOpen_discrete (closure U)
-
-中文:
-定义 mkFinite
-  签名: (X : 类型) [有限 X] [拓扑空间 X] [离散拓扑 X]
-  定义体: (CompHaus.of X).toTop
-  prop := by
-    dsimp
-    constructor
-    intro U _
-    apply isOpen_discrete (closure U)
-
-Depends on / 依赖: CompHaus, CompHaus.of
+--- 原说明 ---
+A finite discrete space as a Stonean space.
 -/
 def mkFinite (X : Type*) [Finite X] [TopologicalSpace X] [DiscreteTopology X] : Stonean where
   toTop := (CompHaus.of X).toTop
@@ -223,73 +207,70 @@ def mkFinite (X : Type*) [Finite X] [TopologicalSpace X] [DiscreteTopology X] : 
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-lemma `epi_iff_surjective` / 引理 `epi_iff_surjective`
+A morphism in `Stonean` is an epi iff it is surjective.
+-/
+/-
+**Stonean.epi_iff_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Stonean`。
+形式化陈述：epi_iff_surjective {X Y : Stonean} (f : X ⟶ Y) : Epi f ↔ Function.Surjecti
+ve f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `isCompact_range`：isCompact_range [CompactSpace X] {f : X -> Y} (hf : Con
+tinuous f) : IsCompact (range f)
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `IsClosed.compl_mem_nhds`：IsClosed.compl_mem_nhds (hs : IsClosed s) (hx :
+ x ∉ s) : sᶜ in 𝓝 x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.mem_nhds_iff`：∀ {α : Type u} [t : To
+pologicalSpace α] {a : α} {s : Set α} {b : Set (Set α)},   TopologicalSpace.IsTo
+pologicalBasis b → (s ∈ nhds a ↔ ∃ t ∈…
+· 使用定理 `isTopologicalBasis_isClopen`：isTopologicalBasis_isClopen : IsTopological
+Basis { s : Set X | IsClopen s }
+· 使用定理 `TotallySeparatedSpace.totallyDisconnectedSpace`：∀ (α : Type u) [inst : T
+opologicalSpace α] [TotallySeparatedSpace α], TotallyDisconnectedSpace α
+· 使用定理 `instTotallySeparatedSpaceOfExtremallyDisconnectedOfT2Space`：∀ (X : Type 
+u) [inst : TopologicalSpace X] [ExtremallyDisconnected X] [T2Space X], TotallySe
+paratedSpace X
+· 使用定理 `Stonean.instExtremallyDisconnectedCarrierToTop`：∀ (X : Stonean), Extrema
+llyDisconnected ↑X.toTop
+· 使用定理 `instFiniteULift`：∀ {α : Type v} [Finite α], Finite (ULift.{u, v} α)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `instDiscreteTopologyULift`：∀ {X : Type u} [inst : TopologicalSpace X] [D
+iscreteTopology X], DiscreteTopology (ULift.{u_5, u} X)
+· 使用定理 `instDiscreteTopologyFin`：∀ {n : ℕ}, DiscreteTopology (Fin n)
+· 使用定理 `LocallyConstant.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topo
+logicalSpace X] [inst_1 : TopologicalSpace Y] (f : LocallyConstant X Y),   Conti
+nuous ⇑f
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+（共 40 条，此处仅展示前 30 条）
 
-English:
-lemma epi_iff_surjective
-  given: {X Y : Stonean} (f : X ⟶ Y)
-  proof: by
-  refine ⟨?_, fun h => ConcreteCategory.epi_of_surjective f h⟩
-  dsimp [Function.Surjective]
-  intro h y
-  by_contra! hy
-  let C := Set.range f
-  have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
-  let U := Cᶜ
-  have hUy : U in 𝓝 y := by
-    simp only [U, C, Set.mem_range, hy, exists_false, not_false_eq_true, hC.compl_mem_nhds]
-  obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
-  classical
-  let g : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom
-    ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
-  let h : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom ⟨fun _ => ⟨1⟩, continuous_const⟩
-  have H : h = g := by
-    rw [← cancel_epi f]
-    ext x
-    apply ULift.ext -- why is `ext` not doing this automatically?
-    change 1 = ite _ _ _ -- why is `dsimp` not getting me here?
-    rw [if_neg]
-    refine mt (hVU ·) ?_ -- what would be an idiomatic tactic for this step?
-    simpa only [U, Set.mem_compl_iff, Set.mem_range, not_exists, not_forall, not_not]
-      using! exists_apply_eq_apply f x
-  apply_fun fun e => (e y).down at H
-  change 1 = ite _ _ _ at H -- why is `dsimp at H` not getting me here?
-  rw [if_pos hyV] at H
-  exact one_ne_zero H
-
-中文:
-引理 epi_iff_surjective
-  条件: {X Y : Stonean} (f : X ⟶ Y)
-  证明: by
-  refine ⟨?_, fun h => ConcreteCategory.epi_of_surjective f h⟩
-  dsimp [Function.Surjective]
-  intro h y
-  by_contra! hy
-  let C := Set.range f
-  have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
-  let U := Cᶜ
-  have hUy : U in 𝓝 y := by
-    simp only [U, C, Set.mem_range, hy, exists_false, not_false_eq_true, hC.compl_mem_nhds]
-  obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
-  classical
-  let g : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom
-    ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
-  let h : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom ⟨fun _ => ⟨1⟩, continuous_const⟩
-  have H : h = g := by
-    rw [← cancel_epi f]
-    ext x
-    apply ULift.ext -- why is `ext` not doing this automatically?
-    change 1 = ite _ _ _ -- why is `dsimp` not getting me here?
-    rw [if_neg]
-    refine mt (hVU ·) ?_ -- what would be an idiomatic tactic for this step?
-    simpa only [U, Set.mem_compl_iff, Set.mem_range, not_exists, not_forall, not_not]
-      using! exists_apply_eq_apply f x
-  apply_fun fun e => (e y).down at H
-  change 1 = ite _ _ _ at H -- why is `dsimp at H` not getting me here?
-  rw [if_pos hyV] at H
-  exact one_ne_zero H
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.epi_of_surjective, ConcreteCategory.ofHom, Function, Function.Surjective, IsClosed, LocallyConstan, Set.mem_range, Set.range, Surjective, classical, compl_mem_nhds, continuous, epi_of_surjective, exists_false, f.hom.hom.continuous, hC.compl_mem_nhds, isClosed, isCompact_range, isTopologicalBasis_isClopen
+--- 原说明 ---
+A morphism in `Stonean` is an epi iff it is surjective.
 -/
 lemma epi_iff_surjective {X Y : Stonean} (f : X ⟶ Y) :
     Epi f ↔ Function.Surjective f := by
@@ -300,7 +281,7 @@ lemma epi_iff_surjective {X Y : Stonean} (f : X ⟶ Y) :
   let C := Set.range f
   have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
   let U := Cᶜ
-  have hUy : U in 𝓝 y := by
+  have hUy : U ∈ 𝓝 y := by
     simp only [U, C, Set.mem_range, hy, exists_false, not_false_eq_true, hC.compl_mem_nhds]
   obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
   classical
@@ -321,38 +302,46 @@ lemma epi_iff_surjective {X Y : Stonean} (f : X ⟶ Y) :
   rw [if_pos hyV] at H
   exact one_ne_zero H
 
-/--
-Instance `instProjectiveCompHausCompHaus` / 实例 `instProjectiveCompHausCompHaus`
+/-- Every Stonean space is projective in `CompHaus` -/
+/-
+**Stonean.instProjectiveCompHausCompHaus** 是 Mathlib 中的一个实例，位于命名空间 `Stonean`。
+形式化陈述：instProjectiveCompHausCompHaus (X : Stonean) : Projective (toCompHaus.obj 
+X) where factors
+参数：X : Stonean。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.prop`：∀ {P : TopCat → Prop} (self : CompHausLike P), P self
+.toTop
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CompHaus.epi_iff_surjective`：epi_iff_surjective {X Y : CompHaus.{u}} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
+· 使用定理 `CompactT2.ExtremallyDisconnected.projective`：∀ {A : Type u} [inst : Topo
+logicalSpace A] [ExtremallyDisconnected A] [CompactSpace A] [T2Space A],   Compa
+ctT2.Projective A
+· 使用定理 `CompHaus.instCompactSpaceCarrierToTopTrue`：∀ {X : CompHaus}, CompactSpac
+e ↑X.toTop
+· 使用定理 `CompHaus.instT2SpaceCarrierToTopTrue`：∀ {X : CompHaus}, T2Space ↑X.toTop
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHaus.instHasPropTrue`：∀ (X : Type u_1) [inst : TopologicalSpace X], 
+CompHausLike.HasProp (fun x => True) X
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-instance instProjectiveCompHausCompHaus
-  signature: (X : Stonean)
-  body: by
-    intro B C φ f _
-    have : ExtremallyDisconnected (toCompHaus.obj X).toTop := X.prop
-    have hf : Function.Surjective f := by rwa [← CompHaus.epi_iff_surjective]
-    obtain ⟨f', h⟩ := CompactT2.ExtremallyDisconnected.projective φ.hom.hom.continuous
-      f.hom.hom.continuous
-      hf
-    use ofHom _ ⟨f', h.left⟩
-    ext
-    exact congr_fun h.right _
-
-中文:
-实例 instProjectiveCompHausCompHaus
-  签名: (X : Stonean)
-  定义体: by
-    intro B C φ f _
-    have : ExtremallyDisconnected (toCompHaus.obj X).toTop := X.prop
-    have hf : Function.Surjective f := by rwa [← CompHaus.epi_iff_surjective]
-    obtain ⟨f', h⟩ := CompactT2.ExtremallyDisconnected.projective φ.hom.hom.continuous
-      f.hom.hom.continuous
-      hf
-    use ofHom _ ⟨f', h.left⟩
-    ext
-    exact congr_fun h.right _
-
-Depends on / 依赖: CompHaus, CompHaus.epi_iff_surjective, CompactT2, CompactT2.ExtremallyDisconnected.projective, ExtremallyDisconnected, Function, Function.Surjective, Surjective, X.prop, congr_fun, continuous, epi_iff_surjective, f.hom.hom.continuous, h.left, h.right, hom.hom.continuous, projective, toCompHaus, toCompHaus.obj
+--- 原说明 ---
+Every Stonean space is projective in `CompHaus`
 -/
 instance instProjectiveCompHausCompHaus (X : Stonean) : Projective (toCompHaus.obj X) where
   factors := by
@@ -367,6 +356,13 @@ instance instProjectiveCompHausCompHaus (X : Stonean) : Projective (toCompHaus.o
     exact congr_fun h.right _
 
 /-- Every Stonean space is projective in `Profinite` -/
+/-
+**Stonean.** 是 Mathlib 中的一个实例，位于命名空间 `Stonean`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Every Stonean space is projective in `Profinite`
+-/
 instance (X : Stonean) : Projective (toProfinite.obj X) where
   factors := by
     intro B C φ f _
@@ -380,6 +376,13 @@ instance (X : Stonean) : Projective (toProfinite.obj X) where
     exact congr_fun h.right _
 
 /-- Every Stonean space is projective in `Stonean`. -/
+/-
+**Stonean.** 是 Mathlib 中的一个实例，位于命名空间 `Stonean`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Every Stonean space is projective in `Stonean`.
+-/
 instance (X : Stonean) : Projective X where
   factors := by
     intro B C φ f _
@@ -400,22 +403,12 @@ namespace CompHaus
   down to `X` (see `CompHaus.presentation.π` and `CompHaus.presentation.epi_π`). It is a
   "constructive" witness to the fact that `CompHaus` has enough projectives. -/
 noncomputable
-/--
-Definition of `presentation` / `presentation` 的定义
-
-English:
-definition presentation
-  signature: (X : CompHaus)
-  body: (projectivePresentation X).p.1
-  prop := instExtremallyDisconnectedCarrierToTopTrueOfProjective X.projectivePresentation.p
-
-中文:
-定义 presentation
-  签名: (X : CompHaus)
-  定义体: (projectivePresentation X).p.1
-  prop := instExtremallyDisconnectedCarrierToTopTrueOfProjective X.projectivePresentation.p
-
-Depends on / 依赖: projectivePresentation
+/-
+**CompHaus.presentation** 是 Mathlib 中的一个定义，位于命名空间 `CompHaus`。
+形式化陈述：presentation (X : CompHaus) : Stonean where toTop
+参数：X : CompHaus。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def presentation (X : CompHaus) : Stonean where
   toTop := (projectivePresentation X).p.1
@@ -423,58 +416,29 @@ def presentation (X : CompHaus) : Stonean where
 
 /-- The morphism from `presentation X` to `X`. -/
 noncomputable
-/--
-Definition of `presentation.π` / `presentation.π` 的定义
-
-English:
-definition presentation.π
-  signature: (X : CompHaus)
-  body: (projectivePresentation X).f
-
-中文:
-定义 presentation.π
-  签名: (X : CompHaus)
-  定义体: (projectivePresentation X).f
-
-Depends on / 依赖: projectivePresentation
+/-
+**CompHaus.presentation.** 是 Mathlib 中的一个定义，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def presentation.π (X : CompHaus) : Stonean.toCompHaus.obj X.presentation ⟶ X :=
   (projectivePresentation X).f
 
 /-- The morphism from `presentation X` to `X` is an epimorphism. -/
 noncomputable
-/--
-Instance `presentation.epi_π` / 实例 `presentation.epi_π`
-
-English:
-instance presentation.epi_π
-  signature: (X : CompHaus)
-  body: (projectivePresentation X).epi
-
-中文:
-实例 presentation.epi_π
-  签名: (X : CompHaus)
-  定义体: (projectivePresentation X).epi
-
-Depends on / 依赖: projectivePresentation
+/-
+**CompHaus.presentation.epi_** 是 Mathlib 中的一个实例，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance presentation.epi_π (X : CompHaus) : Epi (π X) :=
   (projectivePresentation X).epi
 
-/--
-Definition of `_root_.Stonean.compHaus` / `_root_.Stonean.compHaus` 的定义
+/-- The underlying `CompHaus` of a `Stonean`. -/
+/-
+**CompHaus._root_.Stonean.compHaus** 是 Mathlib 中的一个缩写定义，位于命名空间 `CompHaus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.Stonean.compHaus
-  signature: (X : Stonean)
-  body: Stonean.toCompHaus.obj X
-
-中文:
-缩写 _root_.Stonean.compHaus
-  签名: (X : Stonean)
-  定义体: Stonean.toCompHaus.obj X
-
-Depends on / 依赖: Stonean, Stonean.toCompHaus.obj, toCompHaus
+--- 原说明 ---
+The underlying `CompHaus` of a `Stonean`.
 -/
 abbrev _root_.Stonean.compHaus (X : Stonean) := Stonean.toCompHaus.obj X
 
@@ -492,76 +456,49 @@ If `Z` is a Stonean space, `f : X ⟶ Y` an epi in `CompHaus` and `e : Z ⟶ Y` 
 `Z` is a projective object in `CompHaus`.
 -/
 noncomputable
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi f]
-  body: Projective.factorThru e f
-
-@[simp, reassoc]
-
-中文:
-定义 lift
-  签名: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [满态射 f]
-  定义体: Projective.factorThru e f
-
-@[simp, reassoc]
-
-Depends on / 依赖: Projective, Projective.factorThru, factorThru
+/-
+**CompHaus.lift** 是 Mathlib 中的一个定义，位于命名空间 `CompHaus`。
+形式化陈述：lift {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi 
+f] : Z.compHaus ⟶ X
+参数：e : Z.compHaus ⟶ Y；f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def lift {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi f] :
     Z.compHaus ⟶ X :=
   Projective.factorThru e f
 
 @[simp, reassoc]
-/--
-lemma `lift_lifts` / 引理 `lift_lifts`
-
-English:
-lemma lift_lifts
-  given: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi f]
-  proof: by simp [lift]
-
-中文:
-引理 lift_lifts
-  条件: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [满态射 f]
-  证明: by simp [lift]
+/-
+**CompHaus.lift_lifts** 是 Mathlib 中的一个引理，位于命名空间 `CompHaus`。
+形式化陈述：lift_lifts {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y)
+ [Epi f] : lift e f ≫ f = e
+参数：e : Z.compHaus ⟶ Y；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Projective.factorThru_comp`：factorThru_comp {P X E : C} [
+Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e] : factorThru f e ≫ e = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lift_lifts {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi f] :
     lift e f ≫ f = e := by simp [lift]
-
-/--
-lemma `Gleason` / 引理 `Gleason`
-
-English:
-lemma Gleason
-  given: (X : CompHaus.{u})
-  proof: by
-  constructor
-  · intro h
-    change ExtremallyDisconnected X.toStonean
-    infer_instance
-  · intro h
-    let X' : Stonean := ⟨X.toTop, inferInstance⟩
-    change Projective X'.compHaus
-    apply Stonean.instProjectiveCompHausCompHaus
-
-中文:
-引理 Gleason
-  条件: (X : CompHaus.{u})
-  证明: by
-  constructor
-  · intro h
-    change ExtremallyDisconnected X.toStonean
-    infer_instance
-  · intro h
-    let X' : Stonean := ⟨X.toTop, inferInstance⟩
-    change Projective X'.compHaus
-    apply Stonean.instProjectiveCompHausCompHaus
-
-Depends on / 依赖: ExtremallyDisconnected, Projective, Stonean, Stonean.instProjectiveCompHausCompHaus, X.toStonean, X.toTop, compHaus, infer_instance, instProjectiveCompHausCompHaus, toStonean
+/-
+**CompHaus.Gleason** 是 Mathlib 中的一个引理，位于命名空间 `CompHaus`。
+形式化陈述：Gleason (X : CompHaus.{u}) : Projective X ↔ ExtremallyDisconnected X
+参数：X : CompHaus.{u}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Stonean.instExtremallyDisconnectedCarrierToTop`：∀ (X : Stonean), Extrema
+llyDisconnected ↑X.toTop
+· 使用定理 `CompHaus.instCompactSpaceCarrierToTopTrue`：∀ {X : CompHaus}, CompactSpac
+e ↑X.toTop
+· 使用定理 `CompHaus.instT2SpaceCarrierToTopTrue`：∀ {X : CompHaus}, T2Space ↑X.toTop
 -/
 lemma Gleason (X : CompHaus.{u}) :
     Projective X ↔ ExtremallyDisconnected X := by
@@ -581,22 +518,12 @@ namespace Profinite
 /-- If `X` is profinite, `presentation X` is a Stonean space equipped with an epimorphism down to
 `X` (see `Profinite.presentation.π` and `Profinite.presentation.epi_π`). -/
 noncomputable
-/--
-Definition of `presentation` / `presentation` 的定义
-
-English:
-definition presentation
-  signature: (X : Profinite)
-  body: (profiniteToCompHaus.obj X).projectivePresentation.p.toTop
-  prop := (profiniteToCompHaus.obj X).presentation.prop
-
-中文:
-定义 presentation
-  签名: (X : Profinite)
-  定义体: (profiniteToCompHaus.obj X).projectivePresentation.p.toTop
-  prop := (profiniteToCompHaus.obj X).presentation.prop
-
-Depends on / 依赖: profiniteToCompHaus, profiniteToCompHaus.obj, projectivePresentation, projectivePresentation.p.toTop
+/-
+**Profinite.presentation** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：presentation (X : Profinite) : Stonean where toTop
+参数：X : Profinite。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def presentation (X : Profinite) : Stonean where
   toTop := (profiniteToCompHaus.obj X).projectivePresentation.p.toTop
@@ -604,44 +531,18 @@ def presentation (X : Profinite) : Stonean where
 
 /-- The morphism from `presentation X` to `X`. -/
 noncomputable
-/--
-Definition of `presentation.π` / `presentation.π` 的定义
-
-English:
-definition presentation.π
-  signature: (X : Profinite)
-  body: InducedCategory.homMk (profiniteToCompHaus.obj X).projectivePresentation.f.hom
-
-中文:
-定义 presentation.π
-  签名: (X : Profinite)
-  定义体: InducedCategory.homMk (profiniteToCompHaus.obj X).projectivePresentation.f.hom
+/-
+**Profinite.presentation.** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def presentation.π (X : Profinite) : Stonean.toProfinite.obj X.presentation ⟶ X :=
   InducedCategory.homMk (profiniteToCompHaus.obj X).projectivePresentation.f.hom
 
 /-- The morphism from `presentation X` to `X` is an epimorphism. -/
 noncomputable
-/--
-Instance `presentation.epi_π` / 实例 `presentation.epi_π`
-
-English:
-instance presentation.epi_π
-  signature: (X : Profinite)
-  body: by
-  have := (profiniteToCompHaus.obj X).projectivePresentation.epi
-  rw [CompHaus.epi_iff_surjective] at this
-  rw [epi_iff_surjective]
-  exact this
-
-中文:
-实例 presentation.epi_π
-  签名: (X : Profinite)
-  定义体: by
-  have := (profiniteToCompHaus.obj X).projectivePresentation.epi
-  rw [CompHaus.epi_iff_surjective] at this
-  rw [epi_iff_surjective]
-  exact this
+/-
+**Profinite.presentation.epi_** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance presentation.epi_π (X : Profinite) : Epi (π X) := by
   have := (profiniteToCompHaus.obj X).projectivePresentation.epi
@@ -663,63 +564,54 @@ then `lift e f` is a fixed (but arbitrary) lift of `e` to a morphism `Z ⟶ X`. 
 `CompHaus.lift e f` as a morphism in `Profinite`.
 -/
 noncomputable
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y) [Epi f]
-  body: Projective.factorThru e f
-
-@[simp, reassoc]
-
-中文:
-定义 lift
-  签名: {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y) [满态射 f]
-  定义体: Projective.factorThru e f
-
-@[simp, reassoc]
-
-Depends on / 依赖: Projective, Projective.factorThru, factorThru
+/-
+**Profinite.lift** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：lift {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (
+f : X ⟶ Y) [Epi f] : Stonean.toProfinite.obj Z ⟶ X
+参数：e : Stonean.toProfinite.obj Z ⟶ Y；f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Stonean.instProjectiveProfiniteObjToProfinite`：∀ (X : Stonean), Category
+Theory.Projective (Stonean.toProfinite.obj X)
 -/
 def lift {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y) [Epi f] :
     Stonean.toProfinite.obj Z ⟶ X := Projective.factorThru e f
 
 @[simp, reassoc]
-/--
-lemma `lift_lifts` / 引理 `lift_lifts`
-
-English:
-lemma lift_lifts
-  statement: {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y)
-  proof: by simp [lift]
-
-中文:
-引理 lift_lifts
-  结论: {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y)
-  证明: by simp [lift]
+/-
+**Profinite.lift_lifts** 是 Mathlib 中的一个引理，位于命名空间 `Profinite`。
+形式化陈述：lift_lifts {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z 
+⟶ Y) (f : X ⟶ Y) [Epi f] : lift e f ≫ f = e
+参数：e : Stonean.toProfinite.obj Z ⟶ Y；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Projective.factorThru_comp`：factorThru_comp {P X E : C} [
+Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e] : factorThru f e ≫ e = f
+· 使用定理 `Stonean.instProjectiveProfiniteObjToProfinite`：∀ (X : Stonean), Category
+Theory.Projective (Stonean.toProfinite.obj X)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma lift_lifts {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y)
     [Epi f] : lift e f ≫ f = e := by simp [lift]
-
-/--
-lemma `projective_of_extrDisc` / 引理 `projective_of_extrDisc`
-
-English:
-lemma projective_of_extrDisc
-  given: {X : Profinite.{u}} (hX : ExtremallyDisconnected X)
-  proof: by
-  change Projective (Stonean.toProfinite.obj ⟨X.toTop, inferInstance⟩)
-  exact inferInstance
-
-中文:
-引理 projective_of_extrDisc
-  条件: {X : Profinite.{u}} (hX : ExtremallyDisconnected X)
-  证明: by
-  change Projective (Stonean.toProfinite.obj ⟨X.toTop, inferInstance⟩)
-  exact inferInstance
-
-Depends on / 依赖: Projective, Stonean, Stonean.toProfinite.obj, X.toTop, toProfinite
+/-
+**Profinite.projective_of_extrDisc** 是 Mathlib 中的一个引理，位于命名空间 `Profinite`。
+形式化陈述：projective_of_extrDisc {X : Profinite.{u}} (hX : ExtremallyDisconnected X)
+ : Projective X
+参数：hX : ExtremallyDisconnected X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `Stonean.instProjectiveProfiniteObjToProfinite`：∀ (X : Stonean), Category
+Theory.Projective (Stonean.toProfinite.obj X)
 -/
 lemma projective_of_extrDisc {X : Profinite.{u}} (hX : ExtremallyDisconnected X) :
     Projective X := by
@@ -727,3 +619,4 @@ lemma projective_of_extrDisc {X : Profinite.{u}} (hX : ExtremallyDisconnected X)
   exact inferInstance
 
 end Profinite
+

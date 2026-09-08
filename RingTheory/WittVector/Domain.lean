@@ -42,7 +42,7 @@ namespace WittVector
 
 open Function
 
-variable {p : Nat} {R : Type*}
+variable {p : ℕ} {R : Type*}
 
 local notation "𝕎" => WittVector p -- type as `\bbW`
 
@@ -52,107 +52,88 @@ local notation "𝕎" => WittVector p -- type as `\bbW`
 
 
 /--
-Definition of `shift` / `shift` 的定义
-
-English:
-definition shift
-  signature: (x : 𝕎 R) (n : Nat)
-  body: @mk' p R fun i => x.coeff (n + i)
-
-中文:
-定义 shift
-  签名: (x : 𝕎 R) (n : 自然数)
-  定义体: @mk' p R fun i => x.coeff (n + i)
-
-Depends on / 依赖: x.coeff
+`WittVector.verschiebung` translates the entries of a Witt vector upward, inserting 0s in the gaps.
+`WittVector.shift` does the opposite, removing the first entries.
+This is mainly useful as an auxiliary construction for `WittVector.verschiebung_nonzero`.
 -/
-def shift (x : 𝕎 R) (n : Nat) : 𝕎 R :=
+/-
+**WittVector.shift** 是 Mathlib 中的一个定义，位于命名空间 `WittVector`。
+形式化陈述：shift (x : 𝕎 R) (n : Nat) : 𝕎 R
+参数：x : 𝕎 R；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`WittVector.verschiebung` translates the entries of a Witt vector upward, insert
+ing 0s in the gaps.
+`WittVector.shift` does the opposite, removing the first entries.
+This is mainly useful as an auxiliary construction for `WittVector.verschiebung_
+nonzero`.
+-/
+def shift (x : 𝕎 R) (n : ℕ) : 𝕎 R :=
   @mk' p R fun i => x.coeff (n + i)
-
-/--
-theorem `shift_coeff` / 定理 `shift_coeff`
-
-English:
-theorem shift_coeff
-  given: (x : 𝕎 R) (n k : Nat)
-  statement: (x.shift n).coeff k = x.coeff (n + k)
-  proof: rfl
-
-中文:
-定理 shift_coeff
-  条件: (x : 𝕎 R) (n k : 自然数)
-  结论: (x.shift n).coeff k = x.coeff (n + k)
-  证明: rfl
+/-
+**WittVector.shift_coeff** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：shift_coeff (x : 𝕎 R) (n k : Nat) : (x.shift n).coeff k = x.coeff (n + k)
+参数：x : 𝕎 R；n k : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem shift_coeff (x : 𝕎 R) (n k : Nat) : (x.shift n).coeff k = x.coeff (n + k) :=
+theorem shift_coeff (x : 𝕎 R) (n k : ℕ) : (x.shift n).coeff k = x.coeff (n + k) :=
   rfl
 
 variable [hp : Fact p.Prime] [CommRing R]
-
-/--
-theorem `verschiebung_shift` / 定理 `verschiebung_shift`
-
-English:
-theorem verschiebung_shift
-  given: (x : 𝕎 R) (k : Nat) (h : forall i < k + 1, x.coeff i = 0)
-  proof: by
-  ext ⟨j⟩
-  · rw [verschiebung_coeff_zero, shift_coeff, h]
-    apply Nat.lt_succ_self
-  · simp only [verschiebung_coeff_succ, shift]
-    congr 1
-    rw [Nat.add_succ]; rw [add_comm]; rw [Nat.add_succ]; rw [add_comm]
-
-中文:
-定理 verschiebung_shift
-  条件: (x : 𝕎 R) (k : 自然数) (h : 对任意 i < k + 1, x.coeff i = 0)
-  证明: by
-  ext ⟨j⟩
-  · rw [verschiebung_coeff_zero, shift_coeff, h]
-    apply Nat.lt_succ_self
-  · simp only [verschiebung_coeff_succ, shift]
-    congr 1
-    rw [Nat.add_succ]; rw [add_comm]; rw [Nat.add_succ]; rw [add_comm]
-
-Depends on / 依赖: Nat.add_succ, Nat.lt_succ_self, add_comm, add_succ, lt_succ_self, shift_coeff, verschiebung_coeff_succ, verschiebung_coeff_zero
+/-
+**WittVector.verschiebung_shift** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：verschiebung_shift (x : 𝕎 R) (k : Nat) (h : forall i < k + 1, x.coeff i = 
+0) : verschiebung (x.shift k.succ) = x.shift k
+参数：x : 𝕎 R；k : Nat；h : forall i < k + 1, x.coeff i = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WittVector.ext`：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : 
+x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WittVector.verschiebung_coeff_zero`：verschiebung_coeff_zero (x : 𝕎 R) : 
+(verschiebung x).coeff 0 = 0
+· 使用定理 `WittVector.shift_coeff`：shift_coeff (x : 𝕎 R) (n k : Nat) : (x.shift n).
+coeff k = x.coeff (n + k)
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `Nat.add_succ`：∀ (n m : ℕ), n + m.succ = (n + m).succ
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
-theorem verschiebung_shift (x : 𝕎 R) (k : Nat) (h : forall i < k + 1, x.coeff i = 0) :
+theorem verschiebung_shift (x : 𝕎 R) (k : ℕ) (h : ∀ i < k + 1, x.coeff i = 0) :
     verschiebung (x.shift k.succ) = x.shift k := by
   ext ⟨j⟩
   · rw [verschiebung_coeff_zero, shift_coeff, h]
     apply Nat.lt_succ_self
   · simp only [verschiebung_coeff_succ, shift]
     congr 1
-    rw [Nat.add_succ]; rw [add_comm]; rw [Nat.add_succ]; rw [add_comm]
-
-/--
-theorem `eq_iterate_verschiebung` / 定理 `eq_iterate_verschiebung`
-
-English:
-theorem eq_iterate_verschiebung
-  given: {x : 𝕎 R} {n : Nat} (h : forall i < n, x.coeff i = 0)
-  proof: by
-  induction n with
-  | zero => cases x; simp [shift]
-  | succ k ih =>
-    dsimp; rw [verschiebung_shift]
-    · exact ih fun i hi => h _ (hi.trans (Nat.lt_succ_self _))
-    · exact h
-
-中文:
-定理 eq_iterate_verschiebung
-  条件: {x : 𝕎 R} {n : 自然数} (h : 对任意 i < n, x.coeff i = 0)
-  证明: by
-  induction n with
-  | zero => cases x; simp [shift]
-  | succ k ih =>
-    dsimp; rw [verschiebung_shift]
-    · exact ih fun i hi => h _ (hi.trans (Nat.lt_succ_self _))
-    · exact h
-
-Depends on / 依赖: Nat.lt_succ_self, hi.trans, lt_succ_self, verschiebung_shift
+    rw [Nat.add_succ, add_comm, Nat.add_succ, add_comm]
+/-
+**WittVector.eq_iterate_verschiebung** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：eq_iterate_verschiebung {x : 𝕎 R} {n : Nat} (h : forall i < n, x.coeff i =
+ 0) : x = verschiebung^[n] (x.shift n)
+参数：h : forall i < n, x.coeff i = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WittVector.verschiebung_shift`：verschiebung_shift (x : 𝕎 R) (k : Nat) (h
+ : forall i < k + 1, x.coeff i = 0) : verschiebung (x.shift k.succ) = x.shift k
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
 -/
-theorem eq_iterate_verschiebung {x : 𝕎 R} {n : Nat} (h : forall i < n, x.coeff i = 0) :
+theorem eq_iterate_verschiebung {x : 𝕎 R} {n : ℕ} (h : ∀ i < n, x.coeff i = 0) :
     x = verschiebung^[n] (x.shift n) := by
   induction n with
   | zero => cases x; simp [shift]
@@ -160,46 +141,40 @@ theorem eq_iterate_verschiebung {x : 𝕎 R} {n : Nat} (h : forall i < n, x.coef
     dsimp; rw [verschiebung_shift]
     · exact ih fun i hi => h _ (hi.trans (Nat.lt_succ_self _))
     · exact h
-
-/--
-theorem `verschiebung_nonzero` / 定理 `verschiebung_nonzero`
-
-English:
-theorem verschiebung_nonzero
-  given: {x : 𝕎 R} (hx : x != 0)
-  proof: by
-  classical
-  have hex : exists k : Nat, x.coeff k != 0 := by
-    by_contra! hall
-    apply hx
-    ext i
-    simp only [hall, zero_coeff]
-  let n := Nat.find hex
-  use n, x.shift n
-  refine ⟨Nat.find_spec hex, eq_iterate_verschiebung fun i hi => not_not.mp ?_⟩
-  exact Nat.find_min hex hi
-
-中文:
-定理 verschiebung_nonzero
-  条件: {x : 𝕎 R} (hx : x != 0)
-  证明: by
-  classical
-  have hex : exists k : Nat, x.coeff k != 0 := by
-    by_contra! hall
-    apply hx
-    ext i
-    simp only [hall, zero_coeff]
-  let n := Nat.find hex
-  use n, x.shift n
-  refine ⟨Nat.find_spec hex, eq_iterate_verschiebung fun i hi => not_not.mp ?_⟩
-  exact Nat.find_min hex hi
-
-Depends on / 依赖: Nat.find, Nat.find_min, Nat.find_spec, classical, eq_iterate_verschiebung, find_min, find_spec, not_not, not_not.mp, x.coeff, x.shift, zero_coeff
+/-
+**WittVector.verschiebung_nonzero** 是 Mathlib 中的一个定理，位于命名空间 `WittVector`。
+形式化陈述：verschiebung_nonzero {x : 𝕎 R} (hx : x != 0) : exists n : Nat, exists x' :
+ 𝕎 R, x'.coeff 0 != 0 ∧ x = verschiebung^[n] x'
+参数：hx : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `WittVector.ext`：ext {x y : 𝕎 R} (h : forall n, x.coeff n = y.coeff n) : 
+x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `WittVector.zero_coeff`：zero_coeff (n : Nat) : (0 : 𝕎 R).coeff n = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.find_spec`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n),
+ p (Nat.find H)
+· 使用定理 `WittVector.eq_iterate_verschiebung`：eq_iterate_verschiebung {x : 𝕎 R} {n
+ : Nat} (h : forall i < n, x.coeff i = 0) : x = verschiebung^[n] (x.shift n)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `Nat.find_min`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n) {
+m : ℕ}, m < Nat.find H → ¬p m
 -/
-theorem verschiebung_nonzero {x : 𝕎 R} (hx : x != 0) :
-    exists n : Nat, exists x' : 𝕎 R, x'.coeff 0 != 0 ∧ x = verschiebung^[n] x' := by
+theorem verschiebung_nonzero {x : 𝕎 R} (hx : x ≠ 0) :
+    ∃ n : ℕ, ∃ x' : 𝕎 R, x'.coeff 0 ≠ 0 ∧ x = verschiebung^[n] x' := by
   classical
-  have hex : exists k : Nat, x.coeff k != 0 := by
+  have hex : ∃ k : ℕ, x.coeff k ≠ 0 := by
     by_contra! hall
     apply hx
     ext i
@@ -209,36 +184,26 @@ theorem verschiebung_nonzero {x : 𝕎 R} (hx : x != 0) :
   refine ⟨Nat.find_spec hex, eq_iterate_verschiebung fun i hi => not_not.mp ?_⟩
   exact Nat.find_min hex hi
 
+/-!
+## Witt vectors over a domain
+
+If `R` is an integral domain, then so is `𝕎 R`.
+This argument is adapted from
+<https://math.stackexchange.com/questions/4117247/ring-of-witt-vectors-over-an-integral-domain/4118723#4118723>.
+-/
 
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**WittVector.** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [CharP
-  signature: R p] [NoZeroDivisors R] : NoZeroDivisors (𝕎 R)
-  body: ⟨fun {x y} => by
-    contrapose!
-    rintro ⟨ha, hb⟩
-    rcases verschiebung_nonzero ha with ⟨na, wa, hwa0, rfl⟩
-    rcases verschiebung_nonzero hb with ⟨nb, wb, hwb0, rfl⟩
-    refine ne_of_apply_ne (fun x => x.coeff (na + nb)) ?_
-    rw [iterate_verschiebung_mul_coeff]; rw [zero_coeff]
-    exact mul_ne_zero (pow_ne_zero _ hwa0) (pow_ne_zero _ hwb0)⟩
+--- 原说明 ---
+## Witt vectors over a domain
 
-中文:
-实例 [特征p
-  签名: R p] [无零因子 R] : 无零因子 (𝕎 R)
-  定义体: ⟨fun {x y} => by
-    contrapose!
-    rintro ⟨ha, hb⟩
-    rcases verschiebung_nonzero ha with ⟨na, wa, hwa0, rfl⟩
-    rcases verschiebung_nonzero hb with ⟨nb, wb, hwb0, rfl⟩
-    refine ne_of_apply_ne (fun x => x.coeff (na + nb)) ?_
-    rw [iterate_verschiebung_mul_coeff]; rw [zero_coeff]
-    exact mul_ne_zero (pow_ne_zero _ hwa0) (pow_ne_zero _ hwb0)⟩
-
-Depends on / 依赖: contrapose, iterate_verschiebung_mul_coeff, mul_ne_zero, ne_of_apply_ne, pow_ne_zero, verschiebung_nonzero, x.coeff, zero_coeff
+If `R` is an integral domain, then so is `𝕎 R`.
+This argument is adapted from
+<https://math.stackexchange.com/questions/4117247/ring-of-witt-vectors-over-an-i
+ntegral-domain/4118723#4118723>.
 -/
 instance [CharP R p] [NoZeroDivisors R] : NoZeroDivisors (𝕎 R) :=
   ⟨fun {x y} => by
@@ -247,25 +212,27 @@ instance [CharP R p] [NoZeroDivisors R] : NoZeroDivisors (𝕎 R) :=
     rcases verschiebung_nonzero ha with ⟨na, wa, hwa0, rfl⟩
     rcases verschiebung_nonzero hb with ⟨nb, wb, hwb0, rfl⟩
     refine ne_of_apply_ne (fun x => x.coeff (na + nb)) ?_
-    rw [iterate_verschiebung_mul_coeff]; rw [zero_coeff]
+    rw [iterate_verschiebung_mul_coeff, zero_coeff]
     exact mul_ne_zero (pow_ne_zero _ hwa0) (pow_ne_zero _ hwb0)⟩
-
-/--
-Instance `instIsDomain` / 实例 `instIsDomain`
-
-English:
-instance instIsDomain
-  signature: [CharP R p] [IsDomain R]
-  body: NoZeroDivisors.to_isDomain _
-
-中文:
-实例 instIsDomain
-  签名: [特征p R p] [是整环 R]
-  定义体: NoZeroDivisors.to_isDomain _
-
-Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
+/-
+**WittVector.instIsDomain** 是 Mathlib 中的一个实例，位于命名空间 `WittVector`。
+形式化陈述：instIsDomain [CharP R p] [IsDomain R] : IsDomain (𝕎 R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `NoZeroDivisors.to_isDomain`：NoZeroDivisors.to_isDomain [Ring α] [h : Non
+trivial α] [NoZeroDivisors α] : IsDomain α
+· 使用定理 `WittVector.instNontrivial`：∀ {p : ℕ} {R : Type u_1} [CommRing R] [Fact (
+Nat.Prime p)] [Nontrivial R], Nontrivial (WittVector p R)
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `WittVector.instNoZeroDivisorsOfCharP`：∀ {p : ℕ} {R : Type u_1} [hp : Fac
+t (Nat.Prime p)] [inst : CommRing R] [CharP R p] [NoZeroDivisors R],   NoZeroDiv
+isors (WittVector p R)
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
 -/
 instance instIsDomain [CharP R p] [IsDomain R] : IsDomain (𝕎 R) :=
   NoZeroDivisors.to_isDomain _
 
 end WittVector
+

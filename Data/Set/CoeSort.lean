@@ -27,53 +27,48 @@ universe u v w
 
 variable {α : Type u} {β : Type v} {γ : Type w}
 
-/--
-Definition of `Elem` / `Elem` 的定义
+/-- Given the set `s`, `Elem s` is the `Type` of element of `s`.
 
-English:
-definition Elem
-  signature: (s : Set α)
-  body: {x // x in s}
-
-中文:
-定义 Elem
-  签名: (s : 集合 α)
-  定义体: {x // x in s}
+It is currently an abbreviation so that instance coming from `Subtype` are available.
+If you're interested in making it a `def`, as it probably should be,
+you'll then need to create additional instances (and possibly prove lemmas about them).
+See e.g. `Mathlib/Data/Set/Order.lean`.
 -/
-@[coe, reducible] def Elem (s : Set α) : Type u := {x // x in s}
+/-
+**Set.Elem** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+--- 原说明 ---
+Given the set `s`, `Elem s` is the `Type` of element of `s`.
 
-English:
-instance :
-  signature: CoeSort (Set α) (Type u)
-  body: ⟨Elem⟩
+It is currently an abbreviation so that instance coming from `Subtype` are avail
+able.
+If you're interested in making it a `def`, as it probably should be,
+you'll then need to create additional instances (and possibly prove lemmas about
+ them).
+See e.g. `Mathlib/Data/Set/Order.lean`.
+-/
+@[coe, reducible] def Elem (s : Set α) : Type u := {x // x ∈ s}
 
-中文:
-实例 :
-  签名: CoeSort (集合 α) (类型u)
-  定义体: ⟨Elem⟩
+/-- Coercion from a set to the corresponding subtype. -/
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Coercion from a set to the corresponding subtype.
 -/
 instance : CoeSort (Set α) (Type u) := ⟨Elem⟩
-
-/--
-theorem `elem_mem` / 定理 `elem_mem`
-
-English:
-theorem elem_mem
-  given: {σ α} [Membership σ α] {S : α}
-  proof: rfl
-
-中文:
-定理 elem_mem
-  条件: {σ α} [Membership σ α] {S : α}
-  证明: rfl
-
-Depends on / 依赖: oneTangentSpaceIcc
+/-
+**Set.elem_mem** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {σ : Type u_1} {α : Type u_2} [inst : Membership σ α] {S : α}, ↑{x | x ∈
+ S} = { x // x ∈ S }
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem elem_mem {σ α} [Membership σ α] {S : α} :
-    ↑{x : σ | x in S} = {x // x in S} :=
+    ↑{x : σ | x ∈ S} = {x // x ∈ S} :=
   rfl
 
 end Set
+

@@ -19,38 +19,29 @@ variable {α : Type*}
 
 namespace Fintype
 
-/--
-Instance `IsSquare.decidablePred` / 实例 `IsSquare.decidablePred`
-
-English:
-instance IsSquare.decidablePred
-  signature: [Mul α] [Fintype α] [DecidableEq α]
-  body: fun _ => Fintype.decidableExistsFintype
-
-中文:
-实例 IsSquare.decidablePred
-  签名: [乘法 α] [有限类型 α] [DecidableEq α]
-  定义体: fun _ => Fintype.decidableExistsFintype
-
-Depends on / 依赖: Fintype, Fintype.decidableExistsFintype, decidableExistsFintype
+/-
+**Fintype.IsSquare.decidablePred** 是 Mathlib 中的一个定义，位于命名空间 `Fintype.IsSquare`。
+形式化陈述：{α : Type u_1} → [inst : Mul α] → [Fintype α] → [DecidableEq α] → Decidabl
+ePred IsSquare
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance IsSquare.decidablePred [Mul α] [Fintype α] [DecidableEq α] :
-    DecidablePred (IsSquare : α -> Prop) := fun _ => Fintype.decidableExistsFintype
+    DecidablePred (IsSquare : α → Prop) := fun _ => Fintype.decidableExistsFintype
 
-/--
-Instance `card_fin_two` / 实例 `card_fin_two`
+/-- The cardinality of `Fin 2` is even, `Fact` version.
+This `Fact` is needed as an instance by `Matrix.SpecialLinearGroup.instNeg`. -/
+/-
+**Fintype.card_fin_two** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：card_fin_two : Fact (Even (Fintype.card (Fin 2)))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance card_fin_two
-  signature: : Fact (Even (Fintype.card (Fin 2)))
-  body: ⟨⟨1, rfl⟩⟩
-
-中文:
-实例 card_fin_two
-  签名: : Fact (Even (有限类型.card (有限集 2)))
-  定义体: ⟨⟨1, rfl⟩⟩
+--- 原说明 ---
+The cardinality of `Fin 2` is even, `Fact` version.
+This `Fact` is needed as an instance by `Matrix.SpecialLinearGroup.instNeg`.
 -/
 instance card_fin_two : Fact (Even (Fintype.card (Fin 2))) :=
   ⟨⟨1, rfl⟩⟩
 
 end Fintype
+

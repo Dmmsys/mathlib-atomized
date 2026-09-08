@@ -47,56 +47,47 @@ section
 
 variable [(pushforward.{v} φ).IsRightAdjoint]
 
-/--
-Definition of `pullback` / `pullback` 的定义
+/-- The pullback functor `SheafOfModules S ⥤ SheafOfModules R` induced by
+a morphism of sheaves of rings `S ⟶ (F.sheafPushforwardContinuous RingCat.{u} J K).obj R`,
+defined as the left adjoint functor to the pushforward, when it exists. -/
+/-
+**SheafOfModules.pullback** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：pullback : SheafOfModules.{v} S ⥤ SheafOfModules.{v} R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullback
-  signature: : SheafOfModules.{v} S ⥤ SheafOfModules.{v} R
-  body: (pushforward.{v} φ).leftAdjoint
-
-中文:
-定义 pullback
-  签名: : 模层.{v} S ⥤ 模层.{v} R
-  定义体: (pushforward.{v} φ).leftAdjoint
-
-Depends on / 依赖: leftAdjoint, pushforward
+--- 原说明 ---
+The pullback functor `SheafOfModules S ⥤ SheafOfModules R` induced by
+a morphism of sheaves of rings `S ⟶ (F.sheafPushforwardContinuous RingCat.{u} J 
+K).obj R`,
+defined as the left adjoint functor to the pushforward, when it exists.
 -/
 noncomputable def pullback : SheafOfModules.{v} S ⥤ SheafOfModules.{v} R :=
   (pushforward.{v} φ).leftAdjoint
 
-/--
-Definition of `pullbackPushforwardAdjunction` / `pullbackPushforwardAdjunction` 的定义
+/-- Given a continuous functor between sites `F`, and a morphism of sheaves of rings
+`S ⟶ (F.sheafPushforwardContinuous RingCat.{u} J K).obj R`, this is the adjunction
+between the corresponding pullback and pushforward functors on the categories
+of sheaves of modules. -/
+/-
+**SheafOfModules.pullbackPushforwardAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `SheafO
+fModules`。
+形式化陈述：pullbackPushforwardAdjunction : pullback.{v} φ ⊣ pushforward.{v} φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackPushforwardAdjunction
-  signature: : pullback.{v} φ ⊣ pushforward.{v} φ
-  body: Adjunction.ofIsRightAdjoint (pushforward φ)
-
-中文:
-定义 pullbackPushforwardAdjunction
-  签名: : pullback.{v} φ ⊣ pushforward.{v} φ
-  定义体: Adjunction.ofIsRightAdjoint (pushforward φ)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint, pushforward
+--- 原说明 ---
+Given a continuous functor between sites `F`, and a morphism of sheaves of rings
+`S ⟶ (F.sheafPushforwardContinuous RingCat.{u} J K).obj R`, this is the adjuncti
+on
+between the corresponding pullback and pushforward functors on the categories
+of sheaves of modules.
 -/
 noncomputable def pullbackPushforwardAdjunction : pullback.{v} φ ⊣ pushforward.{v} φ :=
   Adjunction.ofIsRightAdjoint (pushforward φ)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pullback.{v} φ).IsLeftAdjoint
-  body: (pullbackPushforwardAdjunction φ).isLeftAdjoint
-
-中文:
-实例 :
-  签名: (pullback.{v} φ).是左伴随
-  定义体: (pullbackPushforwardAdjunction φ).isLeftAdjoint
-
-Depends on / 依赖: isLeftAdjoint, pullbackPushforwardAdjunction
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pullback.{v} φ).IsLeftAdjoint :=
   (pullbackPushforwardAdjunction φ).isLeftAdjoint
@@ -112,54 +103,28 @@ namespace PullbackConstruction
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `adjunction` / `adjunction` 的定义
+/-- Construction of a left adjoint to the functor `pushforward.{v} φ` by using the
+pullback of presheaves of modules and the sheafification. -/
+/-
+**SheafOfModules.PullbackConstruction.adjunction** 是 Mathlib 中的一个定义，位于命名空间 `Shea
+fOfModules.PullbackConstruction`。
+形式化陈述：adjunction : (forget S ⋙ PresheafOfModules.pullback.{v} φ.hom ⋙ PresheafOf
+Modules.sheafification (R₀
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition adjunction
-  signature: :
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun F G =>
-        ((PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).homEquiv _ _).trans
-            (((PresheafOfModules.pullbackPushforwardAdjunction φ.hom).homEquiv F.val G.val).trans
-              ((fullyFaithfulForget S).homEquiv (Y := (pushforward φ).obj G)).symm)
-      homEquiv_naturality_left_symm := by
-        intros
-        dsimp [Functor.FullyFaithful.homEquiv]
-        -- these erw seem difficult to remove
-        erw [Adjunction.homEquiv_naturality_left_symm,
-          Adjunction.homEquiv_naturality_left_symm]
-        dsimp [pushforward_obj_val]
-        simp only [Functor.map_comp, Category.assoc]
-      homEquiv_naturality_right := by
-        tauto }
-
-中文:
-定义 adjunction
-  签名: :
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun F G =>
-        ((PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).homEquiv _ _).trans
-            (((PresheafOfModules.pullbackPushforwardAdjunction φ.hom).homEquiv F.val G.val).trans
-              ((fullyFaithfulForget S).homEquiv (Y := (pushforward φ).obj G)).symm)
-      homEquiv_naturality_left_symm := by
-        intros
-        dsimp [Functor.FullyFaithful.homEquiv]
-        -- these erw seem difficult to remove
-        erw [Adjunction.homEquiv_naturality_left_symm,
-          Adjunction.homEquiv_naturality_left_symm]
-        dsimp [pushforward_obj_val]
-        simp only [Functor.map_comp, Category.assoc]
-      homEquiv_naturality_right := by
-        tauto }
-
-Depends on / 依赖: R.obj, pushforward
+--- 原说明 ---
+Construction of a left adjoint to the functor `pushforward.{v} φ` by using the
+pullback of presheaves of modules and the sheafification.
 -/
 noncomputable def adjunction :
     (forget S ⋙ PresheafOfModules.pullback.{v} φ.hom ⋙
       PresheafOfModules.sheafification (R₀ := R.obj) (𝟙 R.obj)) ⊣ pushforward.{v} φ :=
   Adjunction.mkOfHomEquiv
-    { homEquiv := fun F G =>
+    { homEquiv := fun F G ↦
         ((PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).homEquiv _ _).trans
             (((PresheafOfModules.pullbackPushforwardAdjunction φ.hom).homEquiv F.val G.val).trans
               ((fullyFaithfulForget S).homEquiv (Y := (pushforward φ).obj G)).symm)
@@ -176,40 +141,30 @@ noncomputable def adjunction :
 
 end PullbackConstruction
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward.{v} φ).IsRightAdjoint
-  body: (PullbackConstruction.adjunction.{v} φ).isRightAdjoint
-
-中文:
-实例 :
-  签名: (pushforward.{v} φ).是右伴随
-  定义体: (PullbackConstruction.adjunction.{v} φ).isRightAdjoint
-
-Depends on / 依赖: PullbackConstruction, PullbackConstruction.adjunction, adjunction, isRightAdjoint
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward.{v} φ).IsRightAdjoint :=
   (PullbackConstruction.adjunction.{v} φ).isRightAdjoint
 
-/--
-Definition of `pullbackIso` / `pullbackIso` 的定义
+/-- The pullback functor on sheaves of modules can be described as a composition
+of the forget functor to presheaves, the pullback on presheaves of modules, and
+the sheafification functor. -/
+/-
+**SheafOfModules.pullbackIso** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：pullbackIso : pullback.{v} φ ≅ forget S ⋙ PresheafOfModules.pullback.{v} φ
+.hom ⋙ PresheafOfModules.sheafification (R₀
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforward`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {J : CategoryTheor…
 
-English:
-definition pullbackIso
-  signature: :
-  body: Adjunction.leftAdjointUniq (pullbackPushforwardAdjunction φ)
-    (PullbackConstruction.adjunction φ)
-
-中文:
-定义 pullbackIso
-  签名: :
-  定义体: Adjunction.leftAdjointUniq (pullbackPushforwardAdjunction φ)
-    (PullbackConstruction.adjunction φ)
-
-Depends on / 依赖: R.obj
+--- 原说明 ---
+The pullback functor on sheaves of modules can be described as a composition
+of the forget functor to presheaves, the pullback on presheaves of modules, and
+the sheafification functor.
 -/
 noncomputable def pullbackIso :
     pullback.{v} φ ≅
@@ -222,28 +177,21 @@ section
 
 variable [HasWeakSheafify J AddCommGrpCat.{v}] [J.WEqualsLocallyBijective AddCommGrpCat.{v}]
 
-/--
-Definition of `sheafificationCompPullback` / `sheafificationCompPullback` 的定义
+/-- The pullback of (pre)sheaves of modules commutes with the sheafification. -/
+/-
+**SheafOfModules.sheafificationCompPullback** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfMo
+dules`。
+形式化陈述：sheafificationCompPullback : PresheafOfModules.sheafification (𝟙 S.obj) ⋙ 
+pullback.{v} φ ≅ PresheafOfModules.pullback.{v} φ.hom ⋙ PresheafOfModules.sheafi
+fication (R₀
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforward`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {J : CategoryTheor…
 
-English:
-definition sheafificationCompPullback
-  signature: :
-  body: Adjunction.leftAdjointUniq
-    ((PresheafOfModules.sheafificationAdjunction (𝟙 S.obj)).comp
-      (pullbackPushforwardAdjunction φ))
-    ((PresheafOfModules.pullbackPushforwardAdjunction φ.hom).comp
-      (PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)))
-
-中文:
-定义 sheafificationCompPullback
-  签名: :
-  定义体: Adjunction.leftAdjointUniq
-    ((PresheafOfModules.sheafificationAdjunction (𝟙 S.obj)).comp
-      (pullbackPushforwardAdjunction φ))
-    ((PresheafOfModules.pullbackPushforwardAdjunction φ.hom).comp
-      (PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)))
-
-Depends on / 依赖: R.obj
+--- 原说明 ---
+The pullback of (pre)sheaves of modules commutes with the sheafification.
 -/
 noncomputable def sheafificationCompPullback :
     PresheafOfModules.sheafification (𝟙 S.obj) ⋙ pullback.{v} φ ≅
@@ -260,55 +208,47 @@ end
 end
 
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward.{v} (F := 𝟭 C) (𝟙 S)).IsRightAdjoint
-  body: Functor.isRightAdjoint_of_iso (pushforwardId S).symm
-
-中文:
-实例 :
-  签名: (pushforward.{v} (F := 𝟭 C) (𝟙 S)).是右伴随
-  定义体: Functor.isRightAdjoint_of_iso (pushforwardId S).symm
-
-Depends on / 依赖: IsRightAdjoint
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward.{v} (F := 𝟭 C) (𝟙 S)).IsRightAdjoint :=
   Functor.isRightAdjoint_of_iso (pushforwardId S).symm
 
 variable (S) in
-/--
-Definition of `pullbackId` / `pullbackId` 的定义
+/-- The pullback by the identity morphism identifies to the identity functor of the
+category of sheaves of modules. -/
+/-
+**SheafOfModules.pullbackId** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：pullbackId : pullback.{v} (F
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardIdSheafRingCat`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendieck
+Topology C}   {S : CategoryTheory.Sheaf J RingCa…
 
-English:
-definition pullbackId
-  signature: : pullback.{v} (F := 𝟭 C) (𝟙 S) ≅ 𝟭 _
-  body: ((pullbackPushforwardAdjunction.{v} (F := 𝟭 C) (𝟙 S))).leftAdjointIdIso (pushforwardId S)
-
-中文:
-定义 pullbackId
-  签名: : pullback.{v} (F := 𝟭 C) (𝟙 S) ≅ 𝟭 _
-  定义体: ((pullbackPushforwardAdjunction.{v} (F := 𝟭 C) (𝟙 S))).leftAdjointIdIso (pushforwardId S)
+--- 原说明 ---
+The pullback by the identity morphism identifies to the identity functor of the
+category of sheaves of modules.
 -/
 noncomputable def pullbackId : pullback.{v} (F := 𝟭 C) (𝟙 S) ≅ 𝟭 _ :=
   ((pullbackPushforwardAdjunction.{v} (F := 𝟭 C) (𝟙 S))).leftAdjointIdIso (pushforwardId S)
 
 variable (S) in
 @[simp]
-/--
-lemma `conjugateEquiv_pullbackId_hom` / 引理 `conjugateEquiv_pullbackId_hom`
-
-English:
-lemma conjugateEquiv_pullbackId_hom
-  proof: Adjunction.conjugateEquiv_leftAdjointIdIso_hom _ _
-
-中文:
-引理 conjugateEquiv_pullbackId_hom
-  证明: Adjunction.conjugateEquiv_leftAdjointIdIso_hom _ _
-
-Depends on / 依赖: Adjunction, Adjunction.conjugateEquiv_leftAdjointIdIso_hom, conjugateEquiv_leftAdjointIdIso_hom
+/-
+**SheafOfModules.conjugateEquiv_pullbackId_hom** 是 Mathlib 中的一个引理，位于命名空间 `SheafO
+fModules`。
+形式化陈述：conjugateEquiv_pullbackId_hom : conjugateEquiv .id (pullbackPushforwardAdj
+unction.{v} _) (pullbackId S).hom = (pushforwardId S).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.conjugateEquiv_leftAdjointIdIso_hom`：conjugate
+Equiv_leftAdjointIdIso_hom : conjugateEquiv .id adj (leftAdjointIdIso adj e).hom
+ = e.inv
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardIdSheafRingCat`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendieck
+Topology C}   {S : CategoryTheory.Sheaf J RingCa…
 -/
 lemma conjugateEquiv_pullbackId_hom :
     conjugateEquiv .id (pullbackPushforwardAdjunction.{v} _) (pullbackId S).hom =
@@ -327,49 +267,28 @@ variable {K' : GrothendieckTopology D'} {K'' : GrothendieckTopology D''}
 
 variable [(pushforward.{v} ψ).IsRightAdjoint]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (pushforward.{v} (F := F ⋙ G)
-  body: Functor.isRightAdjoint_of_iso (pushforwardComp.{v} φ ψ)
-
-中文:
-实例 :
-  签名: (pushforward.{v} (F := F ⋙ G)
-  定义体: Functor.isRightAdjoint_of_iso (pushforwardComp.{v} φ ψ)
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (pushforward.{v} (F := F ⋙ G)
     (φ ≫ (F.sheafPushforwardContinuous RingCat.{u} J K).map ψ)).IsRightAdjoint :=
   Functor.isRightAdjoint_of_iso (pushforwardComp.{v} φ ψ)
 
-/--
-Definition of `pullbackComp` / `pullbackComp` 的定义
+/-- The composition of two pullback functors on sheaves of modules identifies
+to the pullback for the composition. -/
+/-
+**SheafOfModules.pullbackComp** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：pullbackComp : pullback.{v} φ ⋙ pullback.{v} ψ ≅ pullback.{v} (F
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardCompSheafRingCatMapSheafPush
+forwardContinuous`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {D' : Type u₃} [in…
 
-English:
-definition pullbackComp
-  signature: :
-  body: Adjunction.leftAdjointCompIso
-    (pullbackPushforwardAdjunction.{v} φ) (pullbackPushforwardAdjunction.{v} ψ)
-    (pullbackPushforwardAdjunction.{v} (F := F ⋙ G)
-      (φ ≫ (F.sheafPushforwardContinuous RingCat.{u} J K).map ψ))
-    (pushforwardComp φ ψ)
-
-@[simp]
-
-中文:
-定义 pullbackComp
-  签名: :
-  定义体: Adjunction.leftAdjointCompIso
-    (pullbackPushforwardAdjunction.{v} φ) (pullbackPushforwardAdjunction.{v} ψ)
-    (pullbackPushforwardAdjunction.{v} (F := F ⋙ G)
-      (φ ≫ (F.sheafPushforwardContinuous RingCat.{u} J K).map ψ))
-    (pushforwardComp φ ψ)
-
-@[simp]
-
-Depends on / 依赖: F.sheafPushforwardContinuous, RingCat, sheafPushforwardContinuous
+--- 原说明 ---
+The composition of two pullback functors on sheaves of modules identifies
+to the pullback for the composition.
 -/
 noncomputable def pullbackComp :
     pullback.{v} φ ⋙ pullback.{v} ψ ≅
@@ -381,18 +300,20 @@ noncomputable def pullbackComp :
     (pushforwardComp φ ψ)
 
 @[simp]
-/--
-lemma `conjugateEquiv_pullbackComp_inv` / 引理 `conjugateEquiv_pullbackComp_inv`
-
-English:
-lemma conjugateEquiv_pullbackComp_inv
-  proof: Adjunction.conjugateEquiv_leftAdjointCompIso_inv _ _ _ _
-
-中文:
-引理 conjugateEquiv_pullbackComp_inv
-  证明: Adjunction.conjugateEquiv_leftAdjointCompIso_inv _ _ _ _
-
-Depends on / 依赖: Adjunction, Adjunction.conjugateEquiv_leftAdjointCompIso_inv, conjugateEquiv_leftAdjointCompIso_inv
+/-
+**SheafOfModules.conjugateEquiv_pullbackComp_inv** 是 Mathlib 中的一个引理，位于命名空间 `Shea
+fOfModules`。
+形式化陈述：conjugateEquiv_pullbackComp_inv : conjugateEquiv ((pullbackPushforwardAdju
+nction.{v} φ).comp (pullbackPushforwardAdjunction.{v} ψ)) (pullbackPushforwardAd
+junction.{v} _) (pullbackComp.{v} φ ψ).inv = (pushforwardComp.{v} φ ψ).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.conjugateEquiv_leftAdjointCompIso_inv`：conjuga
+teEquiv_leftAdjointCompIso_inv (e₀₁₂ : G₂₁ ⋙ G₁₀ ≅ G₂₀) : conjugateEquiv (adj₀₁.
+comp adj₁₂) adj₀₂ (leftAdjointCompIso adj₀₁ adj₁₂ adj…
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardCompSheafRingCatMapSheafPush
+forwardContinuous`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {D' : Type u₃} [in…
 -/
 lemma conjugateEquiv_pullbackComp_inv :
     conjugateEquiv ((pullbackPushforwardAdjunction.{v} φ).comp
@@ -409,17 +330,20 @@ variable {G' : D' ⥤ D''} {R'' : Sheaf K'' RingCat.{u}}
   (ψ' : R' ⟶ (G'.sheafPushforwardContinuous RingCat.{u} K' K'').obj R'')
 
 variable [(pushforward.{v} ψ').IsRightAdjoint]
-
-/--
-lemma `pullback_assoc` / 引理 `pullback_assoc`
-
-English:
-lemma pullback_assoc
-  proof: Adjunction.leftAdjointCompIso_assoc _ _ _ _ _ _ _ _ _ _ (pushforward_assoc φ ψ ψ')
-
-中文:
-引理 pullback_assoc
-  证明: Adjunction.leftAdjointCompIso_assoc _ _ _ _ _ _ _ _ _ _ (pushforward_assoc φ ψ ψ')
+/-
+**SheafOfModules.pullback_assoc** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：pullback_assoc : isoWhiskerLeft _ (pullbackComp.{v} ψ ψ') ≪≫ pullbackComp.
+{v} (G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.leftAdjointCompIso_assoc`：leftAdjointCompIso_a
+ssoc (e₀₁₂ : G₂₁ ⋙ G₁₀ ≅ G₂₀) (e₁₂₃ : G₃₂ ⋙ G₂₁ ≅ G₃₁) (e₀₁₃ : G₃₁ ⋙ G₁₀ ≅ G₃₀) 
+(e₀₂₃ : G₃₂ ⋙ G₂₀ ≅ G₃₀) (h : isoWhisker…
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardCompSheafRingCatMapSheafPush
+forwardContinuous`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {D' : Type u₃} [in…
+· 使用引理 `SheafOfModules.pushforward_assoc`：pushforward_assoc : (pushforward ψ').i
+soWhiskerLeft (pushforwardComp φ ψ) ≪≫ pushforwardComp (F
 -/
 lemma pullback_assoc :
     isoWhiskerLeft _ (pullbackComp.{v} ψ ψ') ≪≫
@@ -432,32 +356,37 @@ lemma pullback_assoc :
 
 end
 
-/--
-lemma `pullback_id_comp` / 引理 `pullback_id_comp`
-
-English:
-lemma pullback_id_comp
-  proof: Adjunction.leftAdjointCompIso_id_comp _ _ _ _ (pushforward_comp_id φ)
-
-中文:
-引理 pullback_id_comp
-  证明: Adjunction.leftAdjointCompIso_id_comp _ _ _ _ (pushforward_comp_id φ)
+/-
+**SheafOfModules.pullback_id_comp** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：pullback_id_comp : pullbackComp.{v} (F
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.leftAdjointCompIso_id_comp`：leftAdjointCompIso
+_id_comp {F₀₀' : C₀ ⥤ C₀} {F₀'₁ : C₀ ⥤ C₁} {G₀'₀ : C₀ ⥤ C₀} {G₁₀' : C₁ ⥤ C₀} (ad
+j₀₀' : F₀₀' ⊣ G₀'₀) (adj₀'₁ : F₀'₁ ⊣ G₁₀')…
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardIdSheafRingCat`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendieck
+Topology C}   {S : CategoryTheory.Sheaf J RingCa…
+· 使用引理 `SheafOfModules.pushforward_comp_id`：pushforward_comp_id : pushforwardCom
+p.{v} (F
 -/
 lemma pullback_id_comp :
     pullbackComp.{v} (F := 𝟭 C) (𝟙 S) φ =
       isoWhiskerRight (pullbackId S) (pullback φ) ≪≫ Functor.leftUnitor _ :=
   Adjunction.leftAdjointCompIso_id_comp _ _ _ _ (pushforward_comp_id φ)
-
-/--
-lemma `pullback_comp_id` / 引理 `pullback_comp_id`
-
-English:
-lemma pullback_comp_id
-  proof: Adjunction.leftAdjointCompIso_comp_id _ _ _ _ (pushforward_id_comp φ)
-
-中文:
-引理 pullback_comp_id
-  证明: Adjunction.leftAdjointCompIso_comp_id _ _ _ _ (pushforward_id_comp φ)
+/-
+**SheafOfModules.pullback_comp_id** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：pullback_comp_id : pullbackComp.{v} (G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.leftAdjointCompIso_comp_id`：leftAdjointCompIso
+_comp_id {F₀₁ : C₀ ⥤ C₁} {F₁₁' : C₁ ⥤ C₁} {G₁₀ : C₁ ⥤ C₀} {G₁'₁ : C₁ ⥤ C₁} (adj₀
+₁ : F₀₁ ⊣ G₁₀) (adj₁₁' : F₁₁' ⊣ G₁'₁) (e₀₁…
+· 使用定理 `SheafOfModules.instIsRightAdjointPushforwardIdSheafRingCat`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendieck
+Topology C}   {S : CategoryTheory.Sheaf J RingCa…
+· 使用引理 `SheafOfModules.pushforward_id_comp`：pushforward_id_comp : pushforwardCom
+p.{v} (G
 -/
 lemma pullback_comp_id :
     pullbackComp.{v} (G := 𝟭 _) φ (𝟙 R) =
@@ -465,3 +394,4 @@ lemma pullback_comp_id :
   Adjunction.leftAdjointCompIso_comp_id _ _ _ _ (pushforward_id_comp φ)
 
 end SheafOfModules
+

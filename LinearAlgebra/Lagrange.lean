@@ -45,37 +45,48 @@ open scoped Finset
 
 variable (s : Finset R)
 
-/--
-theorem `eq_zero_of_degree_lt_of_eval_finset_eq_zero` / 定理 `eq_zero_of_degree_lt_of_eval_finset_eq_zero`
-
-English:
-theorem eq_zero_of_degree_lt_of_eval_finset_eq_zero
-  statement: (degree_f_lt : f.degree < #s)
-  proof: by
-  rw [← mem_degreeLT] at degree_f_lt
-  simp_rw [eval_eq_sum_degreeLTEquiv degree_f_lt] at eval_f
-  rw [← degreeLTEquiv_eq_zero_iff_eq_zero degree_f_lt]
-  exact
-    Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero
-      (Injective.comp (Embedding.subtype _).inj' (equivFinOfCardEq (card_coe _)).symm.injective)
-      fun _ => eval_f _ (Finset.coe_mem _)
-
-中文:
-定理 eq_zero_of_degree_lt_of_eval_finset_eq_zero
-  结论: (degree_f_lt : f.degree < #s)
-  证明: by
-  rw [← mem_degreeLT] at degree_f_lt
-  simp_rw [eval_eq_sum_degreeLTEquiv degree_f_lt] at eval_f
-  rw [← degreeLTEquiv_eq_zero_iff_eq_zero degree_f_lt]
-  exact
-    Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero
-      (Injective.comp (Embedding.subtype _).inj' (equivFinOfCardEq (card_coe _)).symm.injective)
-      fun _ => eval_f _ (Finset.coe_mem _)
-
-Depends on / 依赖: Embedding, Embedding.subtype, Finset, Finset.coe_mem, Injective, Injective.comp, Matrix, Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero, card_coe, coe_mem, degreeLTEquiv_eq_zero_iff_eq_zero, degree_f_lt, eq_zero_of_forall_index_sum_mul_pow_eq_zero, equivFinOfCardEq, eval_eq_sum_degreeLTEquiv, eval_f, injective, mem_degreeLT, simp_rw, subtype
+/-
+**Polynomial.eq_zero_of_degree_lt_of_eval_finset_eq_zero** 是 Mathlib 中的一个定理，位于命名
+空间 `Polynomial`。
+形式化陈述：eq_zero_of_degree_lt_of_eval_finset_eq_zero (degree_f_lt : f.degree < #s) 
+(eval_f : forall x in s, f.eval x = 0) : f = 0
+参数：degree_f_lt : f.degree < #s；eval_f : forall x in s, f.eval x = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.mem_degreeLT`：mem_degreeLT {n : Nat} {f : R[X]} : f in degree
+LT R n ↔ degree f < n
+· 使用定理 `Polynomial.degreeLTEquiv_eq_zero_iff_eq_zero`：degreeLTEquiv_eq_zero_iff_
+eq_zero {n : Nat} {p : R[X]} (hp : p in degreeLT R n) : degreeLTEquiv _ _ ⟨p, hp
+⟩ = 0 ↔ p = 0
+· 使用定理 `Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero`：eq_zero_of_forall_in
+dex_sum_mul_pow_eq_zero [IsDomain R] {f v : Fin n -> R} (hf : Function.Injective
+ f) (hfv : forall j, (∑ i, v i * f j ^ (…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Fintype.card_coe`：Fintype.card_coe (s : Finset α) [Fintype s] : Fintype.
+card s = #s
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Function.Embedding.inj'`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ↪ β),
+ Function.Injective self.toFun
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval_eq_sum_degreeLTEquiv`：eval_eq_sum_degreeLTEquiv {n : Nat
+} {p : R[X]} (hp : p in degreeLT R n) (x : R) : p.eval x = ∑ i, degreeLTEquiv _ 
+_ ⟨p, hp⟩ i * x ^ (i : Nat…
+· 使用定理 `Finset.coe_mem`：coe_mem {s : Finset α} (x : (s : Set α)) : ↑x in s
 -/
 theorem eq_zero_of_degree_lt_of_eval_finset_eq_zero (degree_f_lt : f.degree < #s)
-    (eval_f : forall x in s, f.eval x = 0) : f = 0 := by
+    (eval_f : ∀ x ∈ s, f.eval x = 0) : f = 0 := by
   rw [← mem_degreeLT] at degree_f_lt
   simp_rw [eval_eq_sum_degreeLTEquiv degree_f_lt] at eval_f
   rw [← degreeLTEquiv_eq_zero_iff_eq_zero degree_f_lt]
@@ -83,90 +94,104 @@ theorem eq_zero_of_degree_lt_of_eval_finset_eq_zero (degree_f_lt : f.degree < #s
     Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero
       (Injective.comp (Embedding.subtype _).inj' (equivFinOfCardEq (card_coe _)).symm.injective)
       fun _ => eval_f _ (Finset.coe_mem _)
-
-/--
-theorem `eq_of_degree_sub_lt_of_eval_finset_eq` / 定理 `eq_of_degree_sub_lt_of_eval_finset_eq`
-
-English:
-theorem eq_of_degree_sub_lt_of_eval_finset_eq
-  statement: (degree_fg_lt : (f - g).degree < #s)
-  proof: by
-  rw [← sub_eq_zero]
-  refine eq_zero_of_degree_lt_of_eval_finset_eq_zero _ degree_fg_lt ?_
-  simp_rw [eval_sub, sub_eq_zero]
-  exact eval_fg
-
-中文:
-定理 eq_of_degree_sub_lt_of_eval_finset_eq
-  结论: (degree_fg_lt : (f - g).degree < #s)
-  证明: by
-  rw [← sub_eq_zero]
-  refine eq_zero_of_degree_lt_of_eval_finset_eq_zero _ degree_fg_lt ?_
-  simp_rw [eval_sub, sub_eq_zero]
-  exact eval_fg
-
-Depends on / 依赖: degree_fg_lt, eq_zero_of_degree_lt_of_eval_finset_eq_zero, eval_fg, eval_sub, simp_rw, sub_eq_zero
+/-
+**Polynomial.eq_of_degree_sub_lt_of_eval_finset_eq** 是 Mathlib 中的一个定理，位于命名空间 `Po
+lynomial`。
+形式化陈述：eq_of_degree_sub_lt_of_eval_finset_eq (degree_fg_lt : (f - g).degree < #s)
+ (eval_fg : forall x in s, f.eval x = g.eval x) : f = g
+参数：degree_fg_lt : (f - g).degree < #s；eval_fg : forall x in s, f.eval x = g.eval
+ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Polynomial.eq_zero_of_degree_lt_of_eval_finset_eq_zero`：eq_zero_of_degre
+e_lt_of_eval_finset_eq_zero (degree_f_lt : f.degree < #s) (eval_f : forall x in 
+s, f.eval x = 0) : f = 0
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
 -/
 theorem eq_of_degree_sub_lt_of_eval_finset_eq (degree_fg_lt : (f - g).degree < #s)
-    (eval_fg : forall x in s, f.eval x = g.eval x) : f = g := by
+    (eval_fg : ∀ x ∈ s, f.eval x = g.eval x) : f = g := by
   rw [← sub_eq_zero]
   refine eq_zero_of_degree_lt_of_eval_finset_eq_zero _ degree_fg_lt ?_
   simp_rw [eval_sub, sub_eq_zero]
   exact eval_fg
-
-/--
-theorem `eq_of_degrees_lt_of_eval_finset_eq` / 定理 `eq_of_degrees_lt_of_eval_finset_eq`
-
-English:
-theorem eq_of_degrees_lt_of_eval_finset_eq
-  statement: (degree_f_lt : f.degree < #s)
-  proof: by
-  rw [← mem_degreeLT] at degree_f_lt degree_g_lt
-  refine eq_of_degree_sub_lt_of_eval_finset_eq _ ?_ eval_fg
-  rw [← mem_degreeLT]; exact Submodule.sub_mem _ degree_f_lt degree_g_lt
-
-中文:
-定理 eq_of_degrees_lt_of_eval_finset_eq
-  结论: (degree_f_lt : f.degree < #s)
-  证明: by
-  rw [← mem_degreeLT] at degree_f_lt degree_g_lt
-  refine eq_of_degree_sub_lt_of_eval_finset_eq _ ?_ eval_fg
-  rw [← mem_degreeLT]; exact Submodule.sub_mem _ degree_f_lt degree_g_lt
-
-Depends on / 依赖: Submodule, Submodule.sub_mem, degree_f_lt, degree_g_lt, eq_of_degree_sub_lt_of_eval_finset_eq, eval_fg, mem_degreeLT, sub_mem
+/-
+**Polynomial.eq_of_degrees_lt_of_eval_finset_eq** 是 Mathlib 中的一个定理，位于命名空间 `Polyn
+omial`。
+形式化陈述：eq_of_degrees_lt_of_eval_finset_eq (degree_f_lt : f.degree < #s) (degree_g
+_lt : g.degree < #s) (eval_fg : forall x in s, f.eval x = g.eval x) : f = g
+参数：degree_f_lt : f.degree < #s；degree_g_lt : g.degree < #s；eval_fg : forall x in
+ s, f.eval x = g.eval x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eq_of_degree_sub_lt_of_eval_finset_eq`：eq_of_degree_sub_lt_of
+_eval_finset_eq (degree_fg_lt : (f - g).degree < #s) (eval_fg : forall x in s, f
+.eval x = g.eval x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.mem_degreeLT`：mem_degreeLT {n : Nat} {f : R[X]} : f in degree
+LT R n ↔ degree f < n
+· 使用定理 `Submodule.sub_mem`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst_1 :
+ AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x y : M},
+ x ∈ p …
 -/
 theorem eq_of_degrees_lt_of_eval_finset_eq (degree_f_lt : f.degree < #s)
-    (degree_g_lt : g.degree < #s) (eval_fg : forall x in s, f.eval x = g.eval x) : f = g := by
+    (degree_g_lt : g.degree < #s) (eval_fg : ∀ x ∈ s, f.eval x = g.eval x) : f = g := by
   rw [← mem_degreeLT] at degree_f_lt degree_g_lt
   refine eq_of_degree_sub_lt_of_eval_finset_eq _ ?_ eval_fg
   rw [← mem_degreeLT]; exact Submodule.sub_mem _ degree_f_lt degree_g_lt
 
 /--
-theorem `eq_of_degree_le_of_eval_finset_eq` / 定理 `eq_of_degree_le_of_eval_finset_eq`
+Two polynomials, with the same degree and leading coefficient, which have the same evaluation
+on a set of distinct values with cardinality equal to the degree, are equal.
+-/
+/-
+**Polynomial.eq_of_degree_le_of_eval_finset_eq** 是 Mathlib 中的一个定理，位于命名空间 `Polyno
+mial`。
+形式化陈述：eq_of_degree_le_of_eval_finset_eq (h_deg_le : f.degree <= #s) (h_deg_eq : 
+f.degree = g.degree) (hlc : f.leadingCoeff = g.leadingCoeff) (h_eval : forall x 
+in s, f.eval x = g.eval x) : f = g
+参数：h_deg_le : f.degree <= #s；h_deg_eq : f.degree = g.degree；hlc : f.leadingCoeff
+ = g.leadingCoeff；h_eval : forall x in s, f.eval x = g.eval x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Polynomial.degree_eq_bot`：degree_eq_bot : degree p = ⊥ ↔ p = 0
+· 使用定理 `Polynomial.degree_zero`：degree_zero : degree (0 : R[X]) = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.eq_of_degree_sub_lt_of_eval_finset_eq`：eq_of_degree_sub_lt_of
+_eval_finset_eq (degree_fg_lt : (f - g).degree < #s) (eval_fg : forall x in s, f
+.eval x = g.eval x) : f = g
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `Polynomial.degree_sub_lt_left`：degree_sub_lt_left (hd : degree p = degre
+e q) (hp0 : p != 0) (hlc : leadingCoeff p = leadingCoeff q) : degree (p - q) < d
+egree p
 
-English:
-theorem eq_of_degree_le_of_eval_finset_eq
-  proof: by
-  rcases eq_or_ne f 0 with rfl | hf
-  · rwa [degree_zero, eq_comm, degree_eq_bot, eq_comm] at h_deg_eq
-  · exact eq_of_degree_sub_lt_of_eval_finset_eq s
-      (lt_of_lt_of_le (degree_sub_lt_left h_deg_eq hf hlc) h_deg_le) h_eval
-
-中文:
-定理 eq_of_degree_le_of_eval_finset_eq
-  证明: by
-  rcases eq_or_ne f 0 with rfl | hf
-  · rwa [degree_zero, eq_comm, degree_eq_bot, eq_comm] at h_deg_eq
-  · exact eq_of_degree_sub_lt_of_eval_finset_eq s
-      (lt_of_lt_of_le (degree_sub_lt_left h_deg_eq hf hlc) h_deg_le) h_eval
-
-Depends on / 依赖: degree_eq_bot, degree_sub_lt_left, degree_zero, eq_comm, eq_of_degree_sub_lt_of_eval_finset_eq, eq_or_ne, h_deg_eq, h_deg_le, h_eval, lt_of_lt_of_le
+--- 原说明 ---
+Two polynomials, with the same degree and leading coefficient, which have the sa
+me evaluation
+on a set of distinct values with cardinality equal to the degree, are equal.
 -/
 theorem eq_of_degree_le_of_eval_finset_eq
-    (h_deg_le : f.degree <= #s)
+    (h_deg_le : f.degree ≤ #s)
     (h_deg_eq : f.degree = g.degree)
     (hlc : f.leadingCoeff = g.leadingCoeff)
-    (h_eval : forall x in s, f.eval x = g.eval x) :
+    (h_eval : ∀ x ∈ s, f.eval x = g.eval x) :
     f = g := by
   rcases eq_or_ne f 0 with rfl | hf
   · rwa [degree_zero, eq_comm, degree_eq_bot, eq_comm] at h_deg_eq
@@ -179,132 +204,128 @@ section Indexed
 
 open Finset
 
-variable {ι : Type*} {v : ι -> R} (s : Finset ι)
+variable {ι : Type*} {v : ι → R} (s : Finset ι)
 
-/--
-theorem `eq_zero_of_degree_lt_of_eval_index_eq_zero` / 定理 `eq_zero_of_degree_lt_of_eval_index_eq_zero`
-
-English:
-theorem eq_zero_of_degree_lt_of_eval_index_eq_zero
-  statement: (hvs : Set.InjOn v s)
-  proof: by
-  classical
-    rw [← card_image_of_injOn hvs] at degree_f_lt
-    refine eq_zero_of_degree_lt_of_eval_finset_eq_zero _ degree_f_lt ?_
-    intro x hx
-    rcases mem_image.mp hx with ⟨_, hj, rfl⟩
-    exact eval_f _ hj
-
-中文:
-定理 eq_zero_of_degree_lt_of_eval_index_eq_zero
-  结论: (hvs : 集合.单射限制 v s)
-  证明: by
-  classical
-    rw [← card_image_of_injOn hvs] at degree_f_lt
-    refine eq_zero_of_degree_lt_of_eval_finset_eq_zero _ degree_f_lt ?_
-    intro x hx
-    rcases mem_image.mp hx with ⟨_, hj, rfl⟩
-    exact eval_f _ hj
-
-Depends on / 依赖: card_image_of_injOn, classical, degree_f_lt, eq_zero_of_degree_lt_of_eval_finset_eq_zero, eval_f, mem_image, mem_image.mp
+/-
+**Polynomial.eq_zero_of_degree_lt_of_eval_index_eq_zero** 是 Mathlib 中的一个定理，位于命名空
+间 `Polynomial`。
+形式化陈述：eq_zero_of_degree_lt_of_eval_index_eq_zero (hvs : Set.InjOn v s) (degree_f
+_lt : f.degree < #s) (eval_f : forall i in s, f.eval (v i) = 0) : f = 0
+参数：hvs : Set.InjOn v s；degree_f_lt : f.degree < #s；eval_f : forall i in s, f.eva
+l (v i) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eq_zero_of_degree_lt_of_eval_finset_eq_zero`：eq_zero_of_degre
+e_lt_of_eval_finset_eq_zero (degree_f_lt : f.degree < #s) (eval_f : forall x in 
+s, f.eval x = 0) : f = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_image_of_injOn`：card_image_of_injOn [DecidableEq β] (H : Set
+.InjOn f s) : #(s.image f) = #s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_image`：mem_image : b in s.image f ↔ exists a in s, f a = b
 -/
 theorem eq_zero_of_degree_lt_of_eval_index_eq_zero (hvs : Set.InjOn v s)
-    (degree_f_lt : f.degree < #s) (eval_f : forall i in s, f.eval (v i) = 0) : f = 0 := by
+    (degree_f_lt : f.degree < #s) (eval_f : ∀ i ∈ s, f.eval (v i) = 0) : f = 0 := by
   classical
     rw [← card_image_of_injOn hvs] at degree_f_lt
     refine eq_zero_of_degree_lt_of_eval_finset_eq_zero _ degree_f_lt ?_
     intro x hx
     rcases mem_image.mp hx with ⟨_, hj, rfl⟩
     exact eval_f _ hj
-
-/--
-theorem `eq_of_degree_sub_lt_of_eval_index_eq` / 定理 `eq_of_degree_sub_lt_of_eval_index_eq`
-
-English:
-theorem eq_of_degree_sub_lt_of_eval_index_eq
-  statement: (hvs : Set.InjOn v s)
-  proof: by
-  rw [← sub_eq_zero]
-  refine eq_zero_of_degree_lt_of_eval_index_eq_zero _ hvs degree_fg_lt ?_
-  simp_rw [eval_sub, sub_eq_zero]
-  exact eval_fg
-
-中文:
-定理 eq_of_degree_sub_lt_of_eval_index_eq
-  结论: (hvs : 集合.单射限制 v s)
-  证明: by
-  rw [← sub_eq_zero]
-  refine eq_zero_of_degree_lt_of_eval_index_eq_zero _ hvs degree_fg_lt ?_
-  simp_rw [eval_sub, sub_eq_zero]
-  exact eval_fg
-
-Depends on / 依赖: degree_fg_lt, eq_zero_of_degree_lt_of_eval_index_eq_zero, eval_fg, eval_sub, simp_rw, sub_eq_zero
+/-
+**Polynomial.eq_of_degree_sub_lt_of_eval_index_eq** 是 Mathlib 中的一个定理，位于命名空间 `Pol
+ynomial`。
+形式化陈述：eq_of_degree_sub_lt_of_eval_index_eq (hvs : Set.InjOn v s) (degree_fg_lt :
+ (f - g).degree < #s) (eval_fg : forall i in s, f.eval (v i) = g.eval (v i)) : f
+ = g
+参数：hvs : Set.InjOn v s；degree_fg_lt : (f - g).degree < #s；eval_fg : forall i in 
+s, f.eval (v i) = g.eval (v i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Polynomial.eq_zero_of_degree_lt_of_eval_index_eq_zero`：eq_zero_of_degree
+_lt_of_eval_index_eq_zero (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s) (e
+val_f : forall i in s, f.eval (v i) = 0) : …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
 -/
 theorem eq_of_degree_sub_lt_of_eval_index_eq (hvs : Set.InjOn v s)
-    (degree_fg_lt : (f - g).degree < #s) (eval_fg : forall i in s, f.eval (v i) = g.eval (v i)) :
+    (degree_fg_lt : (f - g).degree < #s) (eval_fg : ∀ i ∈ s, f.eval (v i) = g.eval (v i)) :
     f = g := by
   rw [← sub_eq_zero]
   refine eq_zero_of_degree_lt_of_eval_index_eq_zero _ hvs degree_fg_lt ?_
   simp_rw [eval_sub, sub_eq_zero]
   exact eval_fg
-
-/--
-theorem `eq_of_degrees_lt_of_eval_index_eq` / 定理 `eq_of_degrees_lt_of_eval_index_eq`
-
-English:
-theorem eq_of_degrees_lt_of_eval_index_eq
-  statement: (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
-  proof: by
-  refine eq_of_degree_sub_lt_of_eval_index_eq _ hvs ?_ eval_fg
-  rw [← mem_degreeLT] at degree_f_lt degree_g_lt ⊢
-  exact Submodule.sub_mem _ degree_f_lt degree_g_lt
-
-中文:
-定理 eq_of_degrees_lt_of_eval_index_eq
-  结论: (hvs : 集合.单射限制 v s) (degree_f_lt : f.degree < #s)
-  证明: by
-  refine eq_of_degree_sub_lt_of_eval_index_eq _ hvs ?_ eval_fg
-  rw [← mem_degreeLT] at degree_f_lt degree_g_lt ⊢
-  exact Submodule.sub_mem _ degree_f_lt degree_g_lt
-
-Depends on / 依赖: Submodule, Submodule.sub_mem, degree_f_lt, degree_g_lt, eq_of_degree_sub_lt_of_eval_index_eq, eval_fg, mem_degreeLT, sub_mem
+/-
+**Polynomial.eq_of_degrees_lt_of_eval_index_eq** 是 Mathlib 中的一个定理，位于命名空间 `Polyno
+mial`。
+形式化陈述：eq_of_degrees_lt_of_eval_index_eq (hvs : Set.InjOn v s) (degree_f_lt : f.d
+egree < #s) (degree_g_lt : g.degree < #s) (eval_fg : forall i in s, f.eval (v i)
+ = g.eval (v i)) : f = g
+参数：hvs : Set.InjOn v s；degree_f_lt : f.degree < #s；degree_g_lt : g.degree < #s；e
+val_fg : forall i in s, f.eval (v i) = g.eval (v i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eq_of_degree_sub_lt_of_eval_index_eq`：eq_of_degree_sub_lt_of_
+eval_index_eq (hvs : Set.InjOn v s) (degree_fg_lt : (f - g).degree < #s) (eval_f
+g : forall i in s, f.eval (v i) = g.e…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.mem_degreeLT`：mem_degreeLT {n : Nat} {f : R[X]} : f in degree
+LT R n ↔ degree f < n
+· 使用定理 `Submodule.sub_mem`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst_1 :
+ AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x y : M},
+ x ∈ p …
 -/
 theorem eq_of_degrees_lt_of_eval_index_eq (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
-    (degree_g_lt : g.degree < #s) (eval_fg : forall i in s, f.eval (v i) = g.eval (v i)) : f = g := by
+    (degree_g_lt : g.degree < #s) (eval_fg : ∀ i ∈ s, f.eval (v i) = g.eval (v i)) : f = g := by
   refine eq_of_degree_sub_lt_of_eval_index_eq _ hvs ?_ eval_fg
   rw [← mem_degreeLT] at degree_f_lt degree_g_lt ⊢
   exact Submodule.sub_mem _ degree_f_lt degree_g_lt
-
-/--
-theorem `eq_of_degree_le_of_eval_index_eq` / 定理 `eq_of_degree_le_of_eval_index_eq`
-
-English:
-theorem eq_of_degree_le_of_eval_index_eq
-  statement: (hvs : Set.InjOn v s)
-  proof: by
-  rcases eq_or_ne f 0 with rfl | hf
-  · rwa [degree_zero, eq_comm, degree_eq_bot, eq_comm] at h_deg_eq
-  · exact eq_of_degree_sub_lt_of_eval_index_eq s hvs
-      (lt_of_lt_of_le (degree_sub_lt_left h_deg_eq hf hlc) h_deg_le)
-      h_eval
-
-中文:
-定理 eq_of_degree_le_of_eval_index_eq
-  结论: (hvs : 集合.单射限制 v s)
-  证明: by
-  rcases eq_or_ne f 0 with rfl | hf
-  · rwa [degree_zero, eq_comm, degree_eq_bot, eq_comm] at h_deg_eq
-  · exact eq_of_degree_sub_lt_of_eval_index_eq s hvs
-      (lt_of_lt_of_le (degree_sub_lt_left h_deg_eq hf hlc) h_deg_le)
-      h_eval
-
-Depends on / 依赖: degree_eq_bot, degree_sub_lt_left, degree_zero, eq_comm, eq_of_degree_sub_lt_of_eval_index_eq, eq_or_ne, h_deg_eq, h_deg_le, h_eval, lt_of_lt_of_le
+/-
+**Polynomial.eq_of_degree_le_of_eval_index_eq** 是 Mathlib 中的一个定理，位于命名空间 `Polynom
+ial`。
+形式化陈述：eq_of_degree_le_of_eval_index_eq (hvs : Set.InjOn v s) (h_deg_le : f.degre
+e <= #s) (h_deg_eq : f.degree = g.degree) (hlc : f.leadingCoeff = g.leadingCoeff
+) (h_eval : forall i in s, f.eval (v i) = g.eval (v i)) : f = g
+参数：hvs : Set.InjOn v s；h_deg_le : f.degree <= #s；h_deg_eq : f.degree = g.degree；
+hlc : f.leadingCoeff = g.leadingCoeff；h_eval : forall i in s, f.eval (v i) = g.e
+val (v i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Polynomial.degree_eq_bot`：degree_eq_bot : degree p = ⊥ ↔ p = 0
+· 使用定理 `Polynomial.degree_zero`：degree_zero : degree (0 : R[X]) = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.eq_of_degree_sub_lt_of_eval_index_eq`：eq_of_degree_sub_lt_of_
+eval_index_eq (hvs : Set.InjOn v s) (degree_fg_lt : (f - g).degree < #s) (eval_f
+g : forall i in s, f.eval (v i) = g.e…
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `Polynomial.degree_sub_lt_left`：degree_sub_lt_left (hd : degree p = degre
+e q) (hp0 : p != 0) (hlc : leadingCoeff p = leadingCoeff q) : degree (p - q) < d
+egree p
 -/
 theorem eq_of_degree_le_of_eval_index_eq (hvs : Set.InjOn v s)
-    (h_deg_le : f.degree <= #s)
+    (h_deg_le : f.degree ≤ #s)
     (h_deg_eq : f.degree = g.degree)
     (hlc : f.leadingCoeff = g.leadingCoeff)
-    (h_eval : forall i in s, f.eval (v i) = g.eval (v i)) : f = g := by
+    (h_eval : ∀ i ∈ s, f.eval (v i) = g.eval (v i)) : f = g := by
   rcases eq_or_ne f 0 with rfl | hf
   · rwa [degree_zero, eq_comm, degree_eq_bot, eq_comm] at h_deg_eq
   · exact eq_of_degree_sub_lt_of_eval_index_eq s hvs
@@ -327,68 +348,67 @@ section BasisDivisor
 variable {F : Type*} [Field F]
 variable {x y : F}
 
-/--
-Definition of `basisDivisor` / `basisDivisor` 的定义
+/-- `basisDivisor x y` is the unique linear or constant polynomial such that
+when evaluated at `x` it gives `1` and `y` it gives `0` (where when `x = y` it is identically `0`).
+Such polynomials are the building blocks for the Lagrange interpolants. -/
+/-
+**Lagrange.basisDivisor** 是 Mathlib 中的一个定义，位于命名空间 `Lagrange`。
+形式化陈述：basisDivisor (x y : F) : F[X]
+参数：x y : F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basisDivisor
-  signature: (x y : F)
-  body: C (x - y)⁻¹ * (X - C y)
-
-中文:
-定义 basisDivisor
-  签名: (x y : F)
-  定义体: C (x - y)⁻¹ * (X - C y)
+--- 原说明 ---
+`basisDivisor x y` is the unique linear or constant polynomial such that
+when evaluated at `x` it gives `1` and `y` it gives `0` (where when `x = y` it i
+s identically `0`).
+Such polynomials are the building blocks for the Lagrange interpolants.
 -/
 def basisDivisor (x y : F) : F[X] :=
   C (x - y)⁻¹ * (X - C y)
-
-/--
-theorem `basisDivisor_self` / 定理 `basisDivisor_self`
-
-English:
-theorem basisDivisor_self
-  statement: basisDivisor x x = 0
-  proof: by
-  simp only [basisDivisor, sub_self, inv_zero, map_zero, zero_mul]
-
-中文:
-定理 basisDivisor_self
-  结论: basisDivisor x x = 0
-  证明: by
-  simp only [basisDivisor, sub_self, inv_zero, map_zero, zero_mul]
-
-Depends on / 依赖: basisDivisor, inv_zero, map_zero, sub_self, zero_mul
+/-
+**Lagrange.basisDivisor_self** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basisDivisor_self : basisDivisor x x = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem basisDivisor_self : basisDivisor x x = 0 := by
   simp only [basisDivisor, sub_self, inv_zero, map_zero, zero_mul]
-
-/--
-theorem `basisDivisor_inj` / 定理 `basisDivisor_inj`
-
-English:
-theorem basisDivisor_inj
-  given: (hxy : basisDivisor x y = 0)
-  statement: x = y
-  proof: by
-  simp_rw [basisDivisor, mul_eq_zero, X_sub_C_ne_zero, or_false, C_eq_zero, inv_eq_zero,
-    sub_eq_zero] at hxy
-  exact hxy
-
-@[simp]
-
-中文:
-定理 basisDivisor_inj
-  条件: (hxy : basisDivisor x y = 0)
-  结论: x = y
-  证明: by
-  simp_rw [basisDivisor, mul_eq_zero, X_sub_C_ne_zero, or_false, C_eq_zero, inv_eq_zero,
-    sub_eq_zero] at hxy
-  exact hxy
-
-@[simp]
-
-Depends on / 依赖: C_eq_zero, X_sub_C_ne_zero, basisDivisor, inv_eq_zero, mul_eq_zero, or_false, simp_rw, sub_eq_zero
+/-
+**Lagrange.basisDivisor_inj** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basisDivisor_inj (hxy : basisDivisor x y = 0) : x = y
+参数：hxy : basisDivisor x y = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Polynomial.instNoZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [NoZer
+oDivisors R], NoZeroDivisors (Polynomial R)
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
 theorem basisDivisor_inj (hxy : basisDivisor x y = 0) : x = y := by
   simp_rw [basisDivisor, mul_eq_zero, X_sub_C_ne_zero, or_false, C_eq_zero, inv_eq_zero,
@@ -396,181 +416,150 @@ theorem basisDivisor_inj (hxy : basisDivisor x y = 0) : x = y := by
   exact hxy
 
 @[simp]
-/--
-theorem `basisDivisor_eq_zero_iff` / 定理 `basisDivisor_eq_zero_iff`
-
-English:
-theorem basisDivisor_eq_zero_iff
-  statement: basisDivisor x y = 0 ↔ x = y
-  proof: ⟨basisDivisor_inj, fun H => H ▸ basisDivisor_self⟩
-
-中文:
-定理 basisDivisor_eq_zero_iff
-  结论: basisDivisor x y = 0 ↔ x = y
-  证明: ⟨basisDivisor_inj, fun H => H ▸ basisDivisor_self⟩
-
-Depends on / 依赖: basisDivisor_inj, basisDivisor_self
+/-
+**Lagrange.basisDivisor_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basisDivisor_eq_zero_iff : basisDivisor x y = 0 ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Lagrange.basisDivisor_inj`：basisDivisor_inj (hxy : basisDivisor x y = 0)
+ : x = y
+· 使用定理 `Lagrange.basisDivisor_self`：basisDivisor_self : basisDivisor x x = 0
 -/
 theorem basisDivisor_eq_zero_iff : basisDivisor x y = 0 ↔ x = y :=
   ⟨basisDivisor_inj, fun H => H ▸ basisDivisor_self⟩
-
-/--
-theorem `basisDivisor_ne_zero_iff` / 定理 `basisDivisor_ne_zero_iff`
-
-English:
-theorem basisDivisor_ne_zero_iff
-  statement: basisDivisor x y != 0 ↔ x != y
-  proof: by
-  rw [Ne]; rw [basisDivisor_eq_zero_iff]
-
-中文:
-定理 basisDivisor_ne_zero_iff
-  结论: basisDivisor x y != 0 ↔ x != y
-  证明: by
-  rw [Ne]; rw [basisDivisor_eq_zero_iff]
-
-Depends on / 依赖: basisDivisor_eq_zero_iff
+/-
+**Lagrange.basisDivisor_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basisDivisor_ne_zero_iff : basisDivisor x y != 0 ↔ x != y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Lagrange.basisDivisor_eq_zero_iff`：basisDivisor_eq_zero_iff : basisDivis
+or x y = 0 ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem basisDivisor_ne_zero_iff : basisDivisor x y != 0 ↔ x != y := by
-  rw [Ne]; rw [basisDivisor_eq_zero_iff]
-
-/--
-theorem `degree_basisDivisor_of_ne` / 定理 `degree_basisDivisor_of_ne`
-
-English:
-theorem degree_basisDivisor_of_ne
-  given: (hxy : x != y)
-  statement: (basisDivisor x y).degree = 1
-  proof: by
-  rw [basisDivisor]; rw [degree_mul]; rw [degree_X_sub_C]; rw [degree_C]; rw [zero_add]
-  exact inv_ne_zero (sub_ne_zero_of_ne hxy)
-
-@[simp]
-
-中文:
-定理 degree_basisDivisor_of_ne
-  条件: (hxy : x != y)
-  结论: (basisDivisor x y).degree = 1
-  证明: by
-  rw [basisDivisor]; rw [degree_mul]; rw [degree_X_sub_C]; rw [degree_C]; rw [zero_add]
-  exact inv_ne_zero (sub_ne_zero_of_ne hxy)
-
-@[simp]
-
-Depends on / 依赖: basisDivisor, degree_C, degree_X_sub_C, degree_mul, inv_ne_zero, sub_ne_zero_of_ne, zero_add
+theorem basisDivisor_ne_zero_iff : basisDivisor x y ≠ 0 ↔ x ≠ y := by
+  rw [Ne, basisDivisor_eq_zero_iff]
+/-
+**Lagrange.degree_basisDivisor_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：degree_basisDivisor_of_ne (hxy : x != y) : (basisDivisor x y).degree = 1
+参数：hxy : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.basisDivisor.eq_1`：∀ {F : Type u_1} [inst : Field F] (x y : F),
+   Lagrange.basisDivisor x y = Polynomial.C (x - y)⁻¹ * (Polynomial.X - Polynomi
+al.C y)
+· 使用引理 `Polynomial.degree_mul`：degree_mul : degree (p * q) = degree p + degree q
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.degree_X_sub_C`：degree_X_sub_C (a : R) : degree (X - C a) = 1
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Polynomial.degree_C`：degree_C (ha : a != 0) : degree (C a) = (0 : WithBo
+t Nat)
+· 使用定理 `inv_ne_zero`：inv_ne_zero (h : a != 0) : a⁻¹ != 0
+· 使用定理 `sub_ne_zero_of_ne`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a ≠ b → a - b ≠ 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-theorem degree_basisDivisor_of_ne (hxy : x != y) : (basisDivisor x y).degree = 1 := by
-  rw [basisDivisor]; rw [degree_mul]; rw [degree_X_sub_C]; rw [degree_C]; rw [zero_add]
+theorem degree_basisDivisor_of_ne (hxy : x ≠ y) : (basisDivisor x y).degree = 1 := by
+  rw [basisDivisor, degree_mul, degree_X_sub_C, degree_C, zero_add]
   exact inv_ne_zero (sub_ne_zero_of_ne hxy)
 
 @[simp]
-/--
-theorem `degree_basisDivisor_self` / 定理 `degree_basisDivisor_self`
-
-English:
-theorem degree_basisDivisor_self
-  statement: (basisDivisor x x).degree = ⊥
-  proof: by
-  rw [basisDivisor_self]; rw [degree_zero]
-
-中文:
-定理 degree_basisDivisor_self
-  结论: (basisDivisor x x).degree = ⊥
-  证明: by
-  rw [basisDivisor_self]; rw [degree_zero]
-
-Depends on / 依赖: basisDivisor_self, degree_zero
+/-
+**Lagrange.degree_basisDivisor_self** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：degree_basisDivisor_self : (basisDivisor x x).degree = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.basisDivisor_self`：basisDivisor_self : basisDivisor x x = 0
+· 使用定理 `Polynomial.degree_zero`：degree_zero : degree (0 : R[X]) = ⊥
 -/
 theorem degree_basisDivisor_self : (basisDivisor x x).degree = ⊥ := by
-  rw [basisDivisor_self]; rw [degree_zero]
-
-/--
-theorem `natDegree_basisDivisor_self` / 定理 `natDegree_basisDivisor_self`
-
-English:
-theorem natDegree_basisDivisor_self
-  statement: (basisDivisor x x).natDegree = 0
-  proof: by
-  rw [basisDivisor_self]; rw [natDegree_zero]
-
-中文:
-定理 natDegree_basisDivisor_self
-  结论: (basisDivisor x x).natDegree = 0
-  证明: by
-  rw [basisDivisor_self]; rw [natDegree_zero]
-
-Depends on / 依赖: basisDivisor_self, natDegree_zero
+  rw [basisDivisor_self, degree_zero]
+/-
+**Lagrange.natDegree_basisDivisor_self** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：natDegree_basisDivisor_self : (basisDivisor x x).natDegree = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.basisDivisor_self`：basisDivisor_self : basisDivisor x x = 0
+· 使用定理 `Polynomial.natDegree_zero`：natDegree_zero : natDegree (0 : R[X]) = 0
 -/
 theorem natDegree_basisDivisor_self : (basisDivisor x x).natDegree = 0 := by
-  rw [basisDivisor_self]; rw [natDegree_zero]
-
-/--
-theorem `natDegree_basisDivisor_of_ne` / 定理 `natDegree_basisDivisor_of_ne`
-
-English:
-theorem natDegree_basisDivisor_of_ne
-  given: (hxy : x != y)
-  statement: (basisDivisor x y).natDegree = 1
-  proof: natDegree_eq_of_degree_eq_some (degree_basisDivisor_of_ne hxy)
-
-@[simp]
-
-中文:
-定理 natDegree_basisDivisor_of_ne
-  条件: (hxy : x != y)
-  结论: (basisDivisor x y).natDegree = 1
-  证明: natDegree_eq_of_degree_eq_some (degree_basisDivisor_of_ne hxy)
-
-@[simp]
-
-Depends on / 依赖: degree_basisDivisor_of_ne, natDegree_eq_of_degree_eq_some
+  rw [basisDivisor_self, natDegree_zero]
+/-
+**Lagrange.natDegree_basisDivisor_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：natDegree_basisDivisor_of_ne (hxy : x != y) : (basisDivisor x y).natDegree
+ = 1
+参数：hxy : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_eq_of_degree_eq_some`：natDegree_eq_of_degree_eq_som
+e {p : R[X]} {n : Nat} (h : degree p = n) : natDegree p = n
+· 使用定理 `Lagrange.degree_basisDivisor_of_ne`：degree_basisDivisor_of_ne (hxy : x !
+= y) : (basisDivisor x y).degree = 1
 -/
-theorem natDegree_basisDivisor_of_ne (hxy : x != y) : (basisDivisor x y).natDegree = 1 :=
+theorem natDegree_basisDivisor_of_ne (hxy : x ≠ y) : (basisDivisor x y).natDegree = 1 :=
   natDegree_eq_of_degree_eq_some (degree_basisDivisor_of_ne hxy)
 
 @[simp]
-/--
-theorem `eval_basisDivisor_right` / 定理 `eval_basisDivisor_right`
-
-English:
-theorem eval_basisDivisor_right
-  statement: eval y (basisDivisor x y) = 0
-  proof: by
-  simp only [basisDivisor, eval_mul, eval_C, eval_sub, eval_X, sub_self, mul_zero]
-
-中文:
-定理 eval_basisDivisor_right
-  结论: eval y (basisDivisor x y) = 0
-  证明: by
-  simp only [basisDivisor, eval_mul, eval_C, eval_sub, eval_X, sub_self, mul_zero]
-
-Depends on / 依赖: basisDivisor, eval_C, eval_X, eval_mul, eval_sub, mul_zero, sub_self
+/-
+**Lagrange.eval_basisDivisor_right** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_basisDivisor_right : eval y (basisDivisor x y) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_basisDivisor_right : eval y (basisDivisor x y) = 0 := by
   simp only [basisDivisor, eval_mul, eval_C, eval_sub, eval_X, sub_self, mul_zero]
-
-/--
-theorem `eval_basisDivisor_left_of_ne` / 定理 `eval_basisDivisor_left_of_ne`
-
-English:
-theorem eval_basisDivisor_left_of_ne
-  given: (hxy : x != y)
-  statement: eval x (basisDivisor x y) = 1
-  proof: by
-  simp only [basisDivisor, eval_mul, eval_C, eval_sub, eval_X]
-  exact inv_mul_cancel₀ (sub_ne_zero_of_ne hxy)
-
-中文:
-定理 eval_basisDivisor_left_of_ne
-  条件: (hxy : x != y)
-  结论: eval x (basisDivisor x y) = 1
-  证明: by
-  simp only [basisDivisor, eval_mul, eval_C, eval_sub, eval_X]
-  exact inv_mul_cancel₀ (sub_ne_zero_of_ne hxy)
-
-Depends on / 依赖: basisDivisor, eval_C, eval_X, eval_mul, eval_sub, sub_ne_zero_of_ne
+/-
+**Lagrange.eval_basisDivisor_left_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_basisDivisor_left_of_ne (hxy : x != y) : eval x (basisDivisor x y) = 
+1
+参数：hxy : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `sub_ne_zero_of_ne`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a ≠ b → a - b ≠ 0
 -/
-theorem eval_basisDivisor_left_of_ne (hxy : x != y) : eval x (basisDivisor x y) = 1 := by
+theorem eval_basisDivisor_left_of_ne (hxy : x ≠ y) : eval x (basisDivisor x y) = 1 := by
   simp only [basisDivisor, eval_mul, eval_C, eval_sub, eval_X]
   exact inv_mul_cancel₀ (sub_ne_zero_of_ne hxy)
 
@@ -579,405 +568,415 @@ end BasisDivisor
 section Basis
 
 variable {F : Type*} [Field F] {ι : Type*} [DecidableEq ι]
-variable {s : Finset ι} {v : ι -> F} {i j : ι}
+variable {s : Finset ι} {v : ι → F} {i j : ι}
 
 open Finset
 
-/--
-Definition of `basis` / `basis` 的定义
+/-- Lagrange basis polynomials indexed by `s : Finset ι`, defined at nodes `v i` for a
+map `v : ι → F`. For `i, j ∈ s`, `basis s v i` evaluates to 0 at `v j` for `i ≠ j`. When
+`v` is injective on `s`, `basis s v i` evaluates to 1 at `v i`. -/
+/-
+**Lagrange.basis** 是 Mathlib 中的一个定义，位于命名空间 `Lagrange`。
+形式化陈述：{F : Type u_1} → [inst : Field F] → {ι : Type u_2} → [DecidableEq ι] → Fin
+set ι → (ι → F) → ι → Polynomial F
+参数：ι → F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basis
-  signature: (s : Finset ι) (v : ι -> F) (i : ι)
-  body: ∏ j in s.erase i, basisDivisor (v i) (v j)
-
-@[simp]
-
-中文:
-定义 basis
-  签名: (s : 有限集 ι) (v : ι -> F) (i : ι)
-  定义体: ∏ j in s.erase i, basisDivisor (v i) (v j)
-
-@[simp]
+--- 原说明 ---
+Lagrange basis polynomials indexed by `s : Finset ι`, defined at nodes `v i` for
+ a
+map `v : ι → F`. For `i, j ∈ s`, `basis s v i` evaluates to 0 at `v j` for `i ≠ 
+j`. When
+`v` is injective on `s`, `basis s v i` evaluates to 1 at `v i`.
 -/
-protected def basis (s : Finset ι) (v : ι -> F) (i : ι) : F[X] :=
-  ∏ j in s.erase i, basisDivisor (v i) (v j)
+protected def basis (s : Finset ι) (v : ι → F) (i : ι) : F[X] :=
+  ∏ j ∈ s.erase i, basisDivisor (v i) (v j)
 
 @[simp]
-/--
-theorem `basis_empty` / 定理 `basis_empty`
-
-English:
-theorem basis_empty
-  statement: Lagrange.basis ∅ v i = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 basis_empty
-  结论: Lagrange.basis ∅ v i = 1
-  证明: rfl
-
-@[simp]
+/-
+**Lagrange.basis_empty** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basis_empty : Lagrange.basis ∅ v i = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem basis_empty : Lagrange.basis ∅ v i = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `basis_singleton` / 定理 `basis_singleton`
-
-English:
-theorem basis_singleton
-  given: (i : ι)
-  statement: Lagrange.basis {i} v i = 1
-  proof: by
-  rw [Lagrange.basis]; rw [erase_singleton]; rw [prod_empty]
-
-@[simp]
-
-中文:
-定理 basis_singleton
-  条件: (i : ι)
-  结论: Lagrange.basis {i} v i = 1
-  证明: by
-  rw [Lagrange.basis]; rw [erase_singleton]; rw [prod_empty]
-
-@[simp]
-
-Depends on / 依赖: Lagrange, Lagrange.basis, erase_singleton, prod_empty
+/-
+**Lagrange.basis_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basis_singleton (i : ι) : Lagrange.basis {i} v i = 1
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.basis.eq_1`：∀ {F : Type u_1} [inst : Field F] {ι : Type u_2} [i
+nst_1 : DecidableEq ι] (s : Finset ι) (v : ι → F) (i : ι),   Lagrange.basis s v 
+i = ∏ j ∈…
+· 使用定理 `Finset.erase_singleton`：erase_singleton (a : α) : ({a} : Finset α).erase
+ a = ∅
+· 使用定理 `Finset.prod_empty`：prod_empty : ∏ x in ∅, f x = 1
 -/
 theorem basis_singleton (i : ι) : Lagrange.basis {i} v i = 1 := by
-  rw [Lagrange.basis]; rw [erase_singleton]; rw [prod_empty]
+  rw [Lagrange.basis, erase_singleton, prod_empty]
 
 @[simp]
-/--
-theorem `basis_pair_left` / 定理 `basis_pair_left`
-
-English:
-theorem basis_pair_left
-  given: (hij : i != j)
-  statement: Lagrange.basis {i, j} v i = basisDivisor (v i) (v j)
-  proof: by
+/-
+**Lagrange.basis_pair_left** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basis_pair_left (hij : i != j) : Lagrange.basis {i, j} v i = basisDivisor 
+(v i) (v j)
+参数：hij : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Finset.erase_insert_eq_erase`：erase_insert_eq_erase (s : Finset α) (a : 
+α) : (insert a s).erase a = s.erase a
+· 使用定理 `Finset.erase_eq_of_notMem`：erase_eq_of_notMem {a : α} {s : Finset α} (h 
+: a ∉ s) : erase s a = s
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Finset.prod_singleton`：prod_singleton (f : ι -> M) (a : ι) : ∏ x in sing
+leton a, f x = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem basis_pair_left (hij : i ≠ j) : Lagrange.basis {i, j} v i = basisDivisor (v i) (v j) := by
   simp only [Lagrange.basis, hij, erase_insert_eq_erase, erase_eq_of_notMem, mem_singleton,
     not_false_iff, prod_singleton]
 
 @[simp]
-
-中文:
-定理 basis_pair_left
-  条件: (hij : i != j)
-  结论: Lagrange.basis {i, j} v i = basisDivisor (v i) (v j)
-  证明: by
-  simp only [Lagrange.basis, hij, erase_insert_eq_erase, erase_eq_of_notMem, mem_singleton,
-    not_false_iff, prod_singleton]
-
-@[simp]
-
-Depends on / 依赖: Lagrange, Lagrange.basis, erase_eq_of_notMem, erase_insert_eq_erase, mem_singleton, not_false_iff, prod_singleton
+/-
+**Lagrange.basis_pair_right** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basis_pair_right (hij : i != j) : Lagrange.basis {i, j} v j = basisDivisor
+ (v j) (v i)
+参数：hij : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.pair_comm`：pair_comm (a b : α) : ({a, b} : Finset α) = {b, a}
+· 使用定理 `Lagrange.basis_pair_left`：basis_pair_left (hij : i != j) : Lagrange.basi
+s {i, j} v i = basisDivisor (v i) (v j)
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem basis_pair_left (hij : i != j) : Lagrange.basis {i, j} v i = basisDivisor (v i) (v j) := by
-  simp only [Lagrange.basis, hij, erase_insert_eq_erase, erase_eq_of_notMem, mem_singleton,
-    not_false_iff, prod_singleton]
-
-@[simp]
-/--
-theorem `basis_pair_right` / 定理 `basis_pair_right`
-
-English:
-theorem basis_pair_right
-  given: (hij : i != j)
-  statement: Lagrange.basis {i, j} v j = basisDivisor (v j) (v i)
-  proof: by
+theorem basis_pair_right (hij : i ≠ j) : Lagrange.basis {i, j} v j = basisDivisor (v j) (v i) := by
   rw [pair_comm]
   exact basis_pair_left hij.symm
-
-中文:
-定理 basis_pair_right
-  条件: (hij : i != j)
-  结论: Lagrange.basis {i, j} v j = basisDivisor (v j) (v i)
-  证明: by
-  rw [pair_comm]
-  exact basis_pair_left hij.symm
-
-Depends on / 依赖: basis_pair_left, hij.symm, pair_comm
+/-
+**Lagrange.basis_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basis_ne_zero (hvs : Set.InjOn v s) (hi : i in s) : Lagrange.basis s v i !
+= 0
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Polynomial.instNoZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [NoZer
+oDivisors R], NoZeroDivisors (Polynomial R)
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.basisDivisor_eq_zero_iff`：basisDivisor_eq_zero_iff : basisDivis
+or x y = 0 ↔ x = y
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem basis_pair_right (hij : i != j) : Lagrange.basis {i, j} v j = basisDivisor (v j) (v i) := by
-  rw [pair_comm]
-  exact basis_pair_left hij.symm
-
-/--
-theorem `basis_ne_zero` / 定理 `basis_ne_zero`
-
-English:
-theorem basis_ne_zero
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  statement: Lagrange.basis s v i != 0
-  proof: by
+theorem basis_ne_zero (hvs : Set.InjOn v s) (hi : i ∈ s) : Lagrange.basis s v i ≠ 0 := by
   simp_rw [Lagrange.basis, prod_ne_zero_iff, Ne, mem_erase]
   rintro j ⟨hij, hj⟩
-  rw [basisDivisor_eq_zero_iff]; rw [hvs.eq_iff hi hj]
+  rw [basisDivisor_eq_zero_iff, hvs.eq_iff hi hj]
   exact hij.symm
 
 @[simp]
-
-中文:
-定理 basis_ne_zero
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  结论: Lagrange.basis s v i != 0
-  证明: by
-  simp_rw [Lagrange.basis, prod_ne_zero_iff, Ne, mem_erase]
-  rintro j ⟨hij, hj⟩
-  rw [basisDivisor_eq_zero_iff]; rw [hvs.eq_iff hi hj]
-  exact hij.symm
-
-@[simp]
-
-Depends on / 依赖: Lagrange, Lagrange.basis, basisDivisor_eq_zero_iff, eq_iff, hij.symm, hvs.eq_iff, mem_erase, prod_ne_zero_iff, simp_rw
+/-
+**Lagrange.eval_basis_self** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_basis_self (hvs : Set.InjOn v s) (hi : i in s) : (Lagrange.basis s v 
+i).eval (v i) = 1
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.basis.eq_1`：∀ {F : Type u_1} [inst : Field F] {ι : Type u_2} [i
+nst_1 : DecidableEq ι] (s : Finset ι) (v : ι → F) (i : ι),   Lagrange.basis s v 
+i = ∏ j ∈…
+· 使用定理 `Polynomial.eval_prod`：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X
+]) (x : R) : eval x (∏ j in s, p j) = ∏ j in s, eval x (p j)
+· 使用定理 `Finset.prod_eq_one`：prod_eq_one (h : forall x in s, f x = 1) : ∏ x in s,
+ f x = 1
+· 使用定理 `Lagrange.eval_basisDivisor_left_of_ne`：eval_basisDivisor_left_of_ne (hxy
+ : x != y) : eval x (basisDivisor x y) = 1
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem basis_ne_zero (hvs : Set.InjOn v s) (hi : i in s) : Lagrange.basis s v i != 0 := by
-  simp_rw [Lagrange.basis, prod_ne_zero_iff, Ne, mem_erase]
-  rintro j ⟨hij, hj⟩
-  rw [basisDivisor_eq_zero_iff]; rw [hvs.eq_iff hi hj]
-  exact hij.symm
-
-@[simp]
-/--
-theorem `eval_basis_self` / 定理 `eval_basis_self`
-
-English:
-theorem eval_basis_self
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  proof: by
-  rw [Lagrange.basis]; rw [eval_prod]
-  refine prod_eq_one fun j H => ?_
-  rw [eval_basisDivisor_left_of_ne]
-  rcases mem_erase.mp H with ⟨hij, hj⟩
-  exact mt (hvs hi hj) hij.symm
-
-@[simp]
-
-中文:
-定理 eval_basis_self
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  证明: by
-  rw [Lagrange.basis]; rw [eval_prod]
-  refine prod_eq_one fun j H => ?_
-  rw [eval_basisDivisor_left_of_ne]
-  rcases mem_erase.mp H with ⟨hij, hj⟩
-  exact mt (hvs hi hj) hij.symm
-
-@[simp]
-
-Depends on / 依赖: Lagrange, Lagrange.basis, eval_basisDivisor_left_of_ne, eval_prod, hij.symm, mem_erase, mem_erase.mp, prod_eq_one
--/
-theorem eval_basis_self (hvs : Set.InjOn v s) (hi : i in s) :
+theorem eval_basis_self (hvs : Set.InjOn v s) (hi : i ∈ s) :
     (Lagrange.basis s v i).eval (v i) = 1 := by
-  rw [Lagrange.basis]; rw [eval_prod]
+  rw [Lagrange.basis, eval_prod]
   refine prod_eq_one fun j H => ?_
   rw [eval_basisDivisor_left_of_ne]
   rcases mem_erase.mp H with ⟨hij, hj⟩
   exact mt (hvs hi hj) hij.symm
 
 @[simp]
-/--
-theorem `eval_basis_of_ne` / 定理 `eval_basis_of_ne`
-
-English:
-theorem eval_basis_of_ne
-  given: (hij : i != j) (hj : j in s)
-  statement: (Lagrange.basis s v i).eval (v j) = 0
-  proof: by
-  simp_rw [Lagrange.basis, eval_prod, prod_eq_zero_iff]
-  exact ⟨j, ⟨mem_erase.mpr ⟨hij.symm, hj⟩, eval_basisDivisor_right⟩⟩
-
-@[simp]
-
-中文:
-定理 eval_basis_of_ne
-  条件: (hij : i != j) (hj : j in s)
-  结论: (Lagrange.basis s v i).eval (v j) = 0
-  证明: by
-  simp_rw [Lagrange.basis, eval_prod, prod_eq_zero_iff]
-  exact ⟨j, ⟨mem_erase.mpr ⟨hij.symm, hj⟩, eval_basisDivisor_right⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Lagrange, Lagrange.basis, eval_basisDivisor_right, eval_prod, hij.symm, mem_erase, mem_erase.mpr, prod_eq_zero_iff, simp_rw
+/-
+**Lagrange.eval_basis_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_basis_of_ne (hij : i != j) (hj : j in s) : (Lagrange.basis s v i).eva
+l (v j) = 0
+参数：hij : i != j；hj : j in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_prod`：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X
+]) (x : R) : eval x (∏ j in s, p j) = ∏ j in s, eval x (p j)
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Lagrange.eval_basisDivisor_right`：eval_basisDivisor_right : eval y (basi
+sDivisor x y) = 0
 -/
-theorem eval_basis_of_ne (hij : i != j) (hj : j in s) : (Lagrange.basis s v i).eval (v j) = 0 := by
+theorem eval_basis_of_ne (hij : i ≠ j) (hj : j ∈ s) : (Lagrange.basis s v i).eval (v j) = 0 := by
   simp_rw [Lagrange.basis, eval_prod, prod_eq_zero_iff]
   exact ⟨j, ⟨mem_erase.mpr ⟨hij.symm, hj⟩, eval_basisDivisor_right⟩⟩
 
 @[simp]
-/--
-theorem `natDegree_basis` / 定理 `natDegree_basis`
-
-English:
-theorem natDegree_basis
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  proof: by
-  have H : forall j, j in s.erase i -> basisDivisor (v i) (v j) != 0 := by
-    simp_rw [Ne, mem_erase, basisDivisor_eq_zero_iff]
-    exact fun j ⟨hij₁, hj⟩ hij₂ => hij₁ (hvs hj hi hij₂.symm)
-  rw [← card_erase_of_mem hi]; rw [card_eq_sum_ones]
-  convert! natDegree_prod _ _ H using 1
-  refine sum_congr rfl fun j hj => (natDegree_basisDivisor_of_ne ?_).symm
-  rw [Ne]; rw [← basisDivisor_eq_zero_iff]
-  exact H _ hj
-
-中文:
-定理 natDegree_basis
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  证明: by
-  have H : forall j, j in s.erase i -> basisDivisor (v i) (v j) != 0 := by
-    simp_rw [Ne, mem_erase, basisDivisor_eq_zero_iff]
-    exact fun j ⟨hij₁, hj⟩ hij₂ => hij₁ (hvs hj hi hij₂.symm)
-  rw [← card_erase_of_mem hi]; rw [card_eq_sum_ones]
-  convert! natDegree_prod _ _ H using 1
-  refine sum_congr rfl fun j hj => (natDegree_basisDivisor_of_ne ?_).symm
-  rw [Ne]; rw [← basisDivisor_eq_zero_iff]
-  exact H _ hj
-
-Depends on / 依赖: basisDivisor, basisDivisor_eq_zero_iff, card_eq_sum_ones, card_erase_of_mem, convert, mem_erase, natDegree_basisDivisor_of_ne, natDegree_prod, s.erase, simp_rw, sum_congr
+/-
+**Lagrange.natDegree_basis** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：natDegree_basis (hvs : Set.InjOn v s) (hi : i in s) : (Lagrange.basis s v 
+i).natDegree = #s - 1
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_erase_of_mem`：card_erase_of_mem : a in s -> #(s.erase a) = #
+s - 1
+· 使用引理 `Finset.card_eq_sum_ones`：card_eq_sum_ones (s : Finset ι) : #s = ∑ _ in s
+, 1
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Lagrange.natDegree_basisDivisor_of_ne`：natDegree_basisDivisor_of_ne (hxy
+ : x != y) : (basisDivisor x y).natDegree = 1
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Lagrange.basisDivisor_eq_zero_iff`：basisDivisor_eq_zero_iff : basisDivis
+or x y = 0 ↔ x = y
+· 使用定理 `Polynomial.natDegree_prod`：natDegree_prod (h : forall i in s, f i != 0) 
+: (∏ i in s, f i).natDegree = ∑ i in s, (f i).natDegree
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
-theorem natDegree_basis (hvs : Set.InjOn v s) (hi : i in s) :
+theorem natDegree_basis (hvs : Set.InjOn v s) (hi : i ∈ s) :
     (Lagrange.basis s v i).natDegree = #s - 1 := by
-  have H : forall j, j in s.erase i -> basisDivisor (v i) (v j) != 0 := by
+  have H : ∀ j, j ∈ s.erase i → basisDivisor (v i) (v j) ≠ 0 := by
     simp_rw [Ne, mem_erase, basisDivisor_eq_zero_iff]
     exact fun j ⟨hij₁, hj⟩ hij₂ => hij₁ (hvs hj hi hij₂.symm)
-  rw [← card_erase_of_mem hi]; rw [card_eq_sum_ones]
+  rw [← card_erase_of_mem hi, card_eq_sum_ones]
   convert! natDegree_prod _ _ H using 1
   refine sum_congr rfl fun j hj => (natDegree_basisDivisor_of_ne ?_).symm
-  rw [Ne]; rw [← basisDivisor_eq_zero_iff]
+  rw [Ne, ← basisDivisor_eq_zero_iff]
   exact H _ hj
-
-/--
-theorem `degree_basis` / 定理 `degree_basis`
-
-English:
-theorem degree_basis
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  proof: by
-  rw [degree_eq_natDegree (basis_ne_zero hvs hi)]; rw [natDegree_basis hvs hi]
-
-中文:
-定理 degree_basis
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  证明: by
-  rw [degree_eq_natDegree (basis_ne_zero hvs hi)]; rw [natDegree_basis hvs hi]
-
-Depends on / 依赖: basis_ne_zero, degree_eq_natDegree, natDegree_basis
+/-
+**Lagrange.degree_basis** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：degree_basis (hvs : Set.InjOn v s) (hi : i in s) : (Lagrange.basis s v i).
+degree = ↑(#s - 1)
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_eq_natDegree`：degree_eq_natDegree (hp : p != 0) : degr
+ee p = (natDegree p : WithBot Nat)
+· 使用定理 `Lagrange.basis_ne_zero`：basis_ne_zero (hvs : Set.InjOn v s) (hi : i in s
+) : Lagrange.basis s v i != 0
+· 使用定理 `Lagrange.natDegree_basis`：natDegree_basis (hvs : Set.InjOn v s) (hi : i 
+in s) : (Lagrange.basis s v i).natDegree = #s - 1
 -/
-theorem degree_basis (hvs : Set.InjOn v s) (hi : i in s) :
+theorem degree_basis (hvs : Set.InjOn v s) (hi : i ∈ s) :
     (Lagrange.basis s v i).degree = ↑(#s - 1) := by
-  rw [degree_eq_natDegree (basis_ne_zero hvs hi)]; rw [natDegree_basis hvs hi]
-
-/--
-theorem `sum_basis` / 定理 `sum_basis`
-
-English:
-theorem sum_basis
-  given: (hvs : Set.InjOn v s) (hs : s.Nonempty)
-  proof: by
-  refine eq_of_degrees_lt_of_eval_index_eq s hvs (lt_of_le_of_lt (degree_sum_le _ _) ?_) ?_ ?_
-  · rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #s)]
-    intro i hi
-    rw [degree_basis hvs hi]; rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.pred_lt (card_ne_zero_of_mem hi)
-  · rw [degree_one, ← WithBot.coe_zero, Nat.cast_withBot, WithBot.coe_lt_coe]
-    exact Nonempty.card_pos hs
-  · intro i hi
-    rw [eval_finsetSum]; rw [eval_one]; rw [← add_sum_erase _ _ hi]; rw [eval_basis_self hvs hi]; rw [add_eq_left]
-    refine sum_eq_zero fun j hj => ?_
-    rcases mem_erase.mp hj with ⟨hij, _⟩
-    rw [eval_basis_of_ne hij hi]
-
-中文:
-定理 sum_basis
-  条件: (hvs : 集合.单射限制 v s) (hs : s.非空)
-  证明: by
-  refine eq_of_degrees_lt_of_eval_index_eq s hvs (lt_of_le_of_lt (degree_sum_le _ _) ?_) ?_ ?_
-  · rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #s)]
-    intro i hi
-    rw [degree_basis hvs hi]; rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.pred_lt (card_ne_zero_of_mem hi)
-  · rw [degree_one, ← WithBot.coe_zero, Nat.cast_withBot, WithBot.coe_lt_coe]
-    exact Nonempty.card_pos hs
-  · intro i hi
-    rw [eval_finsetSum]; rw [eval_one]; rw [← add_sum_erase _ _ hi]; rw [eval_basis_self hvs hi]; rw [add_eq_left]
-    refine sum_eq_zero fun j hj => ?_
-    rcases mem_erase.mp hj with ⟨hij, _⟩
-    rw [eval_basis_of_ne hij hi]
-
-Depends on / 依赖: Finset, Finset.sup_lt_iff, Nat.cast_withBot, Nat.pred_lt, Nonempty, Nonempty.card_pos, WithBot, WithBot.bot_lt_coe, WithBot.coe_lt_coe, WithBot.coe_zero, add_sum_erase, bot_lt_coe, card_ne_zero_of_mem, card_pos, cast_withBot, coe_lt_coe, coe_zero, degree_basis, degree_one, degree_sum_le
+  rw [degree_eq_natDegree (basis_ne_zero hvs hi), natDegree_basis hvs hi]
+/-
+**Lagrange.sum_basis** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：sum_basis (hvs : Set.InjOn v s) (hs : s.Nonempty) : ∑ j in s, Lagrange.bas
+is s v j = 1
+参数：hvs : Set.InjOn v s；hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eq_of_degrees_lt_of_eval_index_eq`：eq_of_degrees_lt_of_eval_i
+ndex_eq (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s) (degree_g_lt : g.deg
+ree < #s) (eval_fg : forall i in s…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Polynomial.degree_sum_le`：degree_sum_le (s : Finset ι) (f : ι -> R[X]) :
+ degree (∑ i in s, f i) <= s.sup fun b => degree (f b)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_withBot`：Nat.cast_withBot (n : Nat) : Nat.cast n = WithBot.some
+ n
+· 使用定理 `Finset.sup_lt_iff`：∀ {α : Type u_2} {ι : Type u_5} [inst : LinearOrder α
+] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α} {a : α},   ⊥ < a → (s.sup f <
+ a ↔ ∀ …
+· 使用引理 `WithBot.bot_lt_coe`：bot_lt_coe (a : α) : ⊥ < (a : WithBot α)
+· 使用定理 `Lagrange.degree_basis`：degree_basis (hvs : Set.InjOn v s) (hi : i in s) 
+: (Lagrange.basis s v i).degree = ↑(#s - 1)
+· 使用引理 `WithBot.coe_lt_coe`：coe_lt_coe : (a : WithBot α) < b ↔ a < b
+· 使用定理 `Nat.pred_lt`：∀ {n : ℕ}, n ≠ 0 → n.pred < n
+· 使用定理 `Finset.card_ne_zero_of_mem`：card_ne_zero_of_mem (h : a in s) : #s != 0
+· 使用定理 `Polynomial.degree_one`：degree_one : degree (1 : R[X]) = (0 : WithBot Nat
+)
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.coe_zero`：∀ {α : Type u} [inst : Zero α], ↑0 = 0
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
+· 使用定理 `Polynomial.eval_finsetSum`：eval_finsetSum (s : Finset ι) (g : ι -> R[X])
+ (x : R) : (∑ i in s, g i).eval x = ∑ i in s, (g i).eval x
+· 使用定理 `Polynomial.eval_one`：eval_one : (1 : R[X]).eval x = 1
+· 使用定理 `Finset.add_sum_erase`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] [inst_1 : DecidableEq ι] (s : Finset ι) (f : ι → M) {a : ι},   a ∈ s → f 
+a + ∑ x ∈ …
+· 使用定理 `Lagrange.eval_basis_self`：eval_basis_self (hvs : Set.InjOn v s) (hi : i 
+in s) : (Lagrange.basis s v i).eval (v i) = 1
+· 使用定理 `add_eq_left`：∀ {M : Type u_4} [inst : AddMonoid M] [IsLeftCancelAdd M] {
+a b : M}, a + b = a ↔ b = 0
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `Lagrange.eval_basis_of_ne`：eval_basis_of_ne (hij : i != j) (hj : j in s)
+ : (Lagrange.basis s v i).eval (v j) = 0
 -/
 theorem sum_basis (hvs : Set.InjOn v s) (hs : s.Nonempty) :
-    ∑ j in s, Lagrange.basis s v j = 1 := by
+    ∑ j ∈ s, Lagrange.basis s v j = 1 := by
   refine eq_of_degrees_lt_of_eval_index_eq s hvs (lt_of_le_of_lt (degree_sum_le _ _) ?_) ?_ ?_
   · rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #s)]
     intro i hi
-    rw [degree_basis hvs hi]; rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
+    rw [degree_basis hvs hi, Nat.cast_withBot, WithBot.coe_lt_coe]
     exact Nat.pred_lt (card_ne_zero_of_mem hi)
   · rw [degree_one, ← WithBot.coe_zero, Nat.cast_withBot, WithBot.coe_lt_coe]
     exact Nonempty.card_pos hs
   · intro i hi
-    rw [eval_finsetSum]; rw [eval_one]; rw [← add_sum_erase _ _ hi]; rw [eval_basis_self hvs hi]; rw [add_eq_left]
+    rw [eval_finsetSum, eval_one, ← add_sum_erase _ _ hi, eval_basis_self hvs hi,
+      add_eq_left]
     refine sum_eq_zero fun j hj => ?_
     rcases mem_erase.mp hj with ⟨hij, _⟩
     rw [eval_basis_of_ne hij hi]
-
-/--
-theorem `basisDivisor_add_symm` / 定理 `basisDivisor_add_symm`
-
-English:
-theorem basisDivisor_add_symm
-  given: {x y : F} (hxy : x != y)
-  proof: by
-  classical
-  rw [← sum_basis Function.injective_id.injOn ⟨x]; rw [mem_insert_self _ {y}⟩]; rw [sum_insert (notMem_singleton.mpr hxy)]; rw [sum_singleton]; rw [basis_pair_left hxy]; rw [basis_pair_right hxy]; rw [id]; rw [id]
-
-中文:
-定理 basisDivisor_add_symm
-  条件: {x y : F} (hxy : x != y)
-  证明: by
-  classical
-  rw [← sum_basis Function.injective_id.injOn ⟨x]; rw [mem_insert_self _ {y}⟩]; rw [sum_insert (notMem_singleton.mpr hxy)]; rw [sum_singleton]; rw [basis_pair_left hxy]; rw [basis_pair_right hxy]; rw [id]; rw [id]
-
-Depends on / 依赖: Function, Function.injective_id.injOn, basis_pair_left, basis_pair_right, classical, injective_id, mem_insert_self, notMem_singleton, notMem_singleton.mpr, sum_basis, sum_insert, sum_singleton
+/-
+**Lagrange.basisDivisor_add_symm** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：basisDivisor_add_symm {x y : F} (hxy : x != y) : basisDivisor x y + basisD
+ivisor y x = 1
+参数：hxy : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.sum_basis`：sum_basis (hvs : Set.InjOn v s) (hs : s.Nonempty) : 
+∑ j in s, Lagrange.basis s v j = 1
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.notMem_singleton`：notMem_singleton {a b : α} : a ∉ ({b} : Finset 
+α) ↔ a != b
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `Lagrange.basis_pair_left`：basis_pair_left (hij : i != j) : Lagrange.basi
+s {i, j} v i = basisDivisor (v i) (v j)
+· 使用定理 `Lagrange.basis_pair_right`：basis_pair_right (hij : i != j) : Lagrange.ba
+sis {i, j} v j = basisDivisor (v j) (v i)
+· 使用定理 `id.eq_1`：∀ {α : Sort u} (a : α), id a = a
 -/
-theorem basisDivisor_add_symm {x y : F} (hxy : x != y) :
+theorem basisDivisor_add_symm {x y : F} (hxy : x ≠ y) :
     basisDivisor x y + basisDivisor y x = 1 := by
   classical
-  rw [← sum_basis Function.injective_id.injOn ⟨x]; rw [mem_insert_self _ {y}⟩]; rw [sum_insert (notMem_singleton.mpr hxy)]; rw [sum_singleton]; rw [basis_pair_left hxy]; rw [basis_pair_right hxy]; rw [id]; rw [id]
-
-/--
-theorem `leadingCoeff_basis` / 定理 `leadingCoeff_basis`
-
-English:
-theorem leadingCoeff_basis
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  proof: by
-  have : (∏ j in s.erase i, (X - C (v j))).coeff (#s - 1) = 1 := by
-    simpa [hi] using (monic_prod_X_sub_C v (s.erase i)).coeff_natDegree
-  simp_rw [leadingCoeff, natDegree_basis hvs hi, Lagrange.basis]
-  simp [basisDivisor, Finset.prod_mul_distrib, ← map_prod, this]
-
-中文:
-定理 leadingCoeff_basis
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  证明: by
-  have : (∏ j in s.erase i, (X - C (v j))).coeff (#s - 1) = 1 := by
-    simpa [hi] using (monic_prod_X_sub_C v (s.erase i)).coeff_natDegree
-  simp_rw [leadingCoeff, natDegree_basis hvs hi, Lagrange.basis]
-  simp [basisDivisor, Finset.prod_mul_distrib, ← map_prod, this]
-
-Depends on / 依赖: Finset, Finset.prod_mul_distrib, Lagrange, Lagrange.basis, basisDivisor, coeff_natDegree, leadingCoeff, map_prod, monic_prod_X_sub_C, natDegree_basis, prod_mul_distrib, s.erase, simp_rw
+  rw [← sum_basis Function.injective_id.injOn ⟨x, mem_insert_self _ {y}⟩,
+    sum_insert (notMem_singleton.mpr hxy), sum_singleton, basis_pair_left hxy,
+    basis_pair_right hxy, id, id]
+/-
+**Lagrange.leadingCoeff_basis** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：leadingCoeff_basis (hvs : Set.InjOn v s) (hi : i in s) : (Lagrange.basis s
+ v i).leadingCoeff = (∏ j in s.erase i, ((v i) - (v j)))⁻¹
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.natDegree_finsetProd_X_sub_C_eq_card`：∀ {R : Type u} [inst : 
+CommRing R] [Nontrivial R] {α : Type u_1} (s : Finset α) (f : α → R),   (∏ a ∈ s
+, (Polynomial.X - Polynomial.C (f a))…
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Finset.card_erase_of_mem`：card_erase_of_mem : a in s -> #(s.erase a) = #
+s - 1
+· 使用定理 `Polynomial.Monic.coeff_natDegree`：∀ {R : Type u} [inst : Semiring R] {p 
+: Polynomial R}, p.Monic → p.coeff p.natDegree = 1
+· 使用定理 `Polynomial.monic_prod_X_sub_C`：monic_prod_X_sub_C {α : Type*} (b : α -> 
+R) (s : Finset α) : Monic (∏ a in s, (X - C (b a)))
+· 使用定理 `Lagrange.natDegree_basis`：natDegree_basis (hvs : Set.InjOn v s) (hi : i 
+in s) : (Lagrange.basis s v i).natDegree = #s - 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finset.prod_mul_distrib`：prod_mul_distrib : ∏ x in s, f x * g x = (∏ x i
+n s, f x) * ∏ x in s, g x
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Finset.prod_inv_distrib`：prod_inv_distrib (f : ι -> G) : (∏ x in s, (f x
+)⁻¹) = (∏ x in s, f x)⁻¹
+· 使用定理 `Polynomial.coeff_C_mul`：coeff_C_mul (p : R[X]) : coeff (C a * p) n = a *
+ coeff p n
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem leadingCoeff_basis (hvs : Set.InjOn v s) (hi : i in s) :
-    (Lagrange.basis s v i).leadingCoeff = (∏ j in s.erase i, ((v i) - (v j)))⁻¹ := by
-  have : (∏ j in s.erase i, (X - C (v j))).coeff (#s - 1) = 1 := by
+theorem leadingCoeff_basis (hvs : Set.InjOn v s) (hi : i ∈ s) :
+    (Lagrange.basis s v i).leadingCoeff = (∏ j ∈ s.erase i, ((v i) - (v j)))⁻¹ := by
+  have : (∏ j ∈ s.erase i, (X - C (v j))).coeff (#s - 1) = 1 := by
     simpa [hi] using (monic_prod_X_sub_C v (s.erase i)).coeff_natDegree
   simp_rw [leadingCoeff, natDegree_basis hvs hi, Lagrange.basis]
   simp [basisDivisor, Finset.prod_mul_distrib, ← map_prod, this]
@@ -987,7 +986,7 @@ end Basis
 section Interpolate
 
 variable {F : Type*} [Field F] {ι : Type*} [DecidableEq ι]
-variable {s t : Finset ι} {i j : ι} {v : ι -> F} (r r' : ι -> F)
+variable {s t : Finset ι} {i j : ι} {v : ι → F} (r r' : ι → F)
 
 open Finset
 
@@ -995,39 +994,22 @@ open Finset
 `s` and a value function `r : ι → F`, `interpolate s v r` is the unique
 polynomial of degree `< #s` that takes value `r i` on `v i` for all `i` in `s`. -/
 @[simps]
-/--
-Definition of `interpolate` / `interpolate` 的定义
+/-
+**Lagrange.interpolate** 是 Mathlib 中的一个定义，位于命名空间 `Lagrange`。
+形式化陈述：interpolate (s : Finset ι) (v : ι -> F) : (ι -> F) ->ₗ[F] F[X] where toFun
+ r
+参数：s : Finset ι；v : ι -> F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition interpolate
-  signature: (s : Finset ι) (v : ι -> F)
-  body: ∑ i in s, C (r i) * Lagrange.basis s v i
-  map_add' f g := by
-    simp_rw [← Finset.sum_add_distrib]
-    have h : (fun x => C (f x) * Lagrange.basis s v x + C (g x) * Lagrange.basis s v x) =
-    (fun x => C ((f + g) x) * Lagrange.basis s v x) := by
-      simp_rw [← add_mul, ← C_add, Pi.add_apply]
-    rw [h]
-  map_smul' c f := by
-    simp_rw [Finset.smul_sum, C_mul', smul_smul, Pi.smul_apply, RingHom.id_apply, smul_eq_mul]
-
-中文:
-定义 interpolate
-  签名: (s : 有限集 ι) (v : ι -> F)
-  定义体: ∑ i in s, C (r i) * Lagrange.basis s v i
-  map_add' f g := by
-    simp_rw [← Finset.sum_add_distrib]
-    have h : (fun x => C (f x) * Lagrange.basis s v x + C (g x) * Lagrange.basis s v x) =
-    (fun x => C ((f + g) x) * Lagrange.basis s v x) := by
-      simp_rw [← add_mul, ← C_add, Pi.add_apply]
-    rw [h]
-  map_smul' c f := by
-    simp_rw [Finset.smul_sum, C_mul', smul_smul, Pi.smul_apply, RingHom.id_apply, smul_eq_mul]
-
-Depends on / 依赖: Lagrange, Lagrange.basis
+--- 原说明 ---
+Lagrange interpolation: given a finset `s : Finset ι`, a nodal map `v : ι → F` i
+njective on
+`s` and a value function `r : ι → F`, `interpolate s v r` is the unique
+polynomial of degree `< #s` that takes value `r i` on `v i` for all `i` in `s`.
 -/
-def interpolate (s : Finset ι) (v : ι -> F) : (ι -> F) ->ₗ[F] F[X] where
-  toFun r := ∑ i in s, C (r i) * Lagrange.basis s v i
+def interpolate (s : Finset ι) (v : ι → F) : (ι → F) →ₗ[F] F[X] where
+  toFun r := ∑ i ∈ s, C (r i) * Lagrange.basis s v i
   map_add' f g := by
     simp_rw [← Finset.sum_add_distrib]
     have h : (fun x => C (f x) * Lagrange.basis s v x + C (g x) * Lagrange.basis s v x) =
@@ -1036,168 +1018,198 @@ def interpolate (s : Finset ι) (v : ι -> F) : (ι -> F) ->ₗ[F] F[X] where
     rw [h]
   map_smul' c f := by
     simp_rw [Finset.smul_sum, C_mul', smul_smul, Pi.smul_apply, RingHom.id_apply, smul_eq_mul]
-
-/--
-theorem `interpolate_empty` / 定理 `interpolate_empty`
-
-English:
-theorem interpolate_empty
-  statement: interpolate ∅ v r = 0
-  proof: by rw [interpolate_apply, sum_empty]
-
-中文:
-定理 interpolate_empty
-  结论: interpolate ∅ v r = 0
-  证明: by rw [interpolate_apply, sum_empty]
-
-Depends on / 依赖: interpolate_apply, sum_empty
+/-
+**Lagrange.interpolate_empty** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：interpolate_empty : interpolate ∅ v r = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_apply`：∀ {F : Type u_1} [inst : Field F] {ι : Type 
+u_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v r : ι → F),   (Lagrange.interpol
+ate s v) r = ∑ i…
+· 使用定理 `Finset.sum_empty`：∀ {ι : Type u_1} {M : Type u_3} {f : ι → M} [inst : Ad
+dCommMonoid M], ∑ x ∈ ∅, f x = 0
 -/
 theorem interpolate_empty : interpolate ∅ v r = 0 := by rw [interpolate_apply, sum_empty]
-
-/--
-theorem `interpolate_singleton` / 定理 `interpolate_singleton`
-
-English:
-theorem interpolate_singleton
-  statement: interpolate {i} v r = C (r i)
-  proof: by
-  rw [interpolate_apply]; rw [sum_singleton]; rw [basis_singleton]; rw [mul_one]
-
-中文:
-定理 interpolate_singleton
-  结论: interpolate {i} v r = C (r i)
-  证明: by
-  rw [interpolate_apply]; rw [sum_singleton]; rw [basis_singleton]; rw [mul_one]
-
-Depends on / 依赖: basis_singleton, interpolate_apply, mul_one, sum_singleton
+/-
+**Lagrange.interpolate_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：interpolate_singleton : interpolate {i} v r = C (r i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_apply`：∀ {F : Type u_1} [inst : Field F] {ι : Type 
+u_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v r : ι → F),   (Lagrange.interpol
+ate s v) r = ∑ i…
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `Lagrange.basis_singleton`：basis_singleton (i : ι) : Lagrange.basis {i} v
+ i = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem interpolate_singleton : interpolate {i} v r = C (r i) := by
-  rw [interpolate_apply]; rw [sum_singleton]; rw [basis_singleton]; rw [mul_one]
-
-/--
-theorem `interpolate_one` / 定理 `interpolate_one`
-
-English:
-theorem interpolate_one
-  given: (hvs : Set.InjOn v s) (hs : s.Nonempty)
-  statement: interpolate s v 1 = 1
-  proof: by
-  simp_rw [interpolate_apply, Pi.one_apply, map_one, one_mul]
-  exact sum_basis hvs hs
-
-中文:
-定理 interpolate_one
-  条件: (hvs : 集合.单射限制 v s) (hs : s.非空)
-  结论: interpolate s v 1 = 1
-  证明: by
-  simp_rw [interpolate_apply, Pi.one_apply, map_one, one_mul]
-  exact sum_basis hvs hs
-
-Depends on / 依赖: Pi.one_apply, interpolate_apply, map_one, one_apply, one_mul, simp_rw, sum_basis
+  rw [interpolate_apply, sum_singleton, basis_singleton, mul_one]
+/-
+**Lagrange.interpolate_one** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：interpolate_one (hvs : Set.InjOn v s) (hs : s.Nonempty) : interpolate s v 
+1 = 1
+参数：hvs : Set.InjOn v s；hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_apply`：∀ {F : Type u_1} [inst : Field F] {ι : Type 
+u_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v r : ι → F),   (Lagrange.interpol
+ate s v) r = ∑ i…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Lagrange.sum_basis`：sum_basis (hvs : Set.InjOn v s) (hs : s.Nonempty) : 
+∑ j in s, Lagrange.basis s v j = 1
 -/
 theorem interpolate_one (hvs : Set.InjOn v s) (hs : s.Nonempty) : interpolate s v 1 = 1 := by
   simp_rw [interpolate_apply, Pi.one_apply, map_one, one_mul]
   exact sum_basis hvs hs
-
-/--
-theorem `eval_interpolate_at_node` / 定理 `eval_interpolate_at_node`
-
-English:
-theorem eval_interpolate_at_node
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  proof: by
-  rw [interpolate_apply]; rw [eval_finsetSum]; rw [← add_sum_erase _ _ hi]
-  simp_rw [eval_mul, eval_C, eval_basis_self hvs hi, mul_one, add_eq_left]
-  refine sum_eq_zero fun j H => ?_
-  rw [eval_basis_of_ne (mem_erase.mp H).1 hi]; rw [mul_zero]
-
-中文:
-定理 eval_interpolate_at_node
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  证明: by
-  rw [interpolate_apply]; rw [eval_finsetSum]; rw [← add_sum_erase _ _ hi]
-  simp_rw [eval_mul, eval_C, eval_basis_self hvs hi, mul_one, add_eq_left]
-  refine sum_eq_zero fun j H => ?_
-  rw [eval_basis_of_ne (mem_erase.mp H).1 hi]; rw [mul_zero]
-
-Depends on / 依赖: add_eq_left, add_sum_erase, eval_C, eval_basis_of_ne, eval_basis_self, eval_finsetSum, eval_mul, interpolate_apply, mem_erase, mem_erase.mp, mul_one, mul_zero, simp_rw, sum_eq_zero
+/-
+**Lagrange.eval_interpolate_at_node** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_interpolate_at_node (hvs : Set.InjOn v s) (hi : i in s) : eval (v i) 
+(interpolate s v r) = r i
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_apply`：∀ {F : Type u_1} [inst : Field F] {ι : Type 
+u_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v r : ι → F),   (Lagrange.interpol
+ate s v) r = ∑ i…
+· 使用定理 `Polynomial.eval_finsetSum`：eval_finsetSum (s : Finset ι) (g : ι -> R[X])
+ (x : R) : (∑ i in s, g i).eval x = ∑ i in s, (g i).eval x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.add_sum_erase`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] [inst_1 : DecidableEq ι] (s : Finset ι) (f : ι → M) {a : ι},   a ∈ s → f 
+a + ∑ x ∈ …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Lagrange.eval_basis_self`：eval_basis_self (hvs : Set.InjOn v s) (hi : i 
+in s) : (Lagrange.basis s v i).eval (v i) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `Lagrange.eval_basis_of_ne`：eval_basis_of_ne (hij : i != j) (hj : j in s)
+ : (Lagrange.basis s v i).eval (v j) = 0
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem eval_interpolate_at_node (hvs : Set.InjOn v s) (hi : i in s) :
+theorem eval_interpolate_at_node (hvs : Set.InjOn v s) (hi : i ∈ s) :
     eval (v i) (interpolate s v r) = r i := by
-  rw [interpolate_apply]; rw [eval_finsetSum]; rw [← add_sum_erase _ _ hi]
+  rw [interpolate_apply, eval_finsetSum, ← add_sum_erase _ _ hi]
   simp_rw [eval_mul, eval_C, eval_basis_self hvs hi, mul_one, add_eq_left]
   refine sum_eq_zero fun j H => ?_
-  rw [eval_basis_of_ne (mem_erase.mp H).1 hi]; rw [mul_zero]
-
-/--
-theorem `degree_interpolate_le` / 定理 `degree_interpolate_le`
-
-English:
-theorem degree_interpolate_le
-  given: (hvs : Set.InjOn v s)
-  proof: by
-  refine (degree_sum_le _ _).trans ?_
-  rw [Finset.sup_le_iff]
-  intro i hi
-  rw [degree_mul]; rw [degree_basis hvs hi]
-  by_cases hr : r i = 0
-  · simpa only [hr, map_zero, degree_zero, WithBot.bot_add] using bot_le
-  · rw [degree_C hr, zero_add]
-
-中文:
-定理 degree_interpolate_le
-  条件: (hvs : 集合.单射限制 v s)
-  证明: by
-  refine (degree_sum_le _ _).trans ?_
-  rw [Finset.sup_le_iff]
-  intro i hi
-  rw [degree_mul]; rw [degree_basis hvs hi]
-  by_cases hr : r i = 0
-  · simpa only [hr, map_zero, degree_zero, WithBot.bot_add] using bot_le
-  · rw [degree_C hr, zero_add]
-
-Depends on / 依赖: Finset, Finset.sup_le_iff, WithBot, WithBot.bot_add, bot_add, bot_le, degree_C, degree_basis, degree_mul, degree_sum_le, degree_zero, map_zero, sup_le_iff, zero_add
+  rw [eval_basis_of_ne (mem_erase.mp H).1 hi, mul_zero]
+/-
+**Lagrange.degree_interpolate_le** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：degree_interpolate_le (hvs : Set.InjOn v s) : (interpolate s v r).degree <
+= ↑(#s - 1)
+参数：hvs : Set.InjOn v s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Polynomial.degree_sum_le`：degree_sum_le (s : Finset ι) (f : ι -> R[X]) :
+ degree (∑ i in s, f i) <= s.sup fun b => degree (f b)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_le_iff`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] [inst_1 : OrderBot α] {s : Finset β} {f : β → α} {a : α},   s.sup f ≤ a ↔ ∀
+ b ∈ s,…
+· 使用引理 `Polynomial.degree_mul`：degree_mul : degree (p * q) = degree p + degree q
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Lagrange.degree_basis`：degree_basis (hvs : Set.InjOn v s) (hi : i in s) 
+: (Lagrange.basis s v i).degree = ↑(#s - 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `Polynomial.degree_C`：degree_C (ha : a != 0) : degree (C a) = (0 : WithBo
+t Nat)
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 theorem degree_interpolate_le (hvs : Set.InjOn v s) :
-    (interpolate s v r).degree <= ↑(#s - 1) := by
+    (interpolate s v r).degree ≤ ↑(#s - 1) := by
   refine (degree_sum_le _ _).trans ?_
   rw [Finset.sup_le_iff]
   intro i hi
-  rw [degree_mul]; rw [degree_basis hvs hi]
+  rw [degree_mul, degree_basis hvs hi]
   by_cases hr : r i = 0
   · simpa only [hr, map_zero, degree_zero, WithBot.bot_add] using bot_le
   · rw [degree_C hr, zero_add]
-
-/--
-theorem `degree_interpolate_lt` / 定理 `degree_interpolate_lt`
-
-English:
-theorem degree_interpolate_lt
-  given: (hvs : Set.InjOn v s)
-  statement: (interpolate s v r).degree < #s
-  proof: by
-  rw [Nat.cast_withBot]
-  rcases eq_empty_or_nonempty s with (rfl | h)
-  · rw [interpolate_empty, degree_zero, card_empty]
-    exact WithBot.bot_lt_coe _
-  · refine lt_of_le_of_lt (degree_interpolate_le _ hvs) ?_
-    rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.sub_lt (Nonempty.card_pos h) zero_lt_one
-
-中文:
-定理 degree_interpolate_lt
-  条件: (hvs : 集合.单射限制 v s)
-  结论: (interpolate s v r).degree < #s
-  证明: by
-  rw [Nat.cast_withBot]
-  rcases eq_empty_or_nonempty s with (rfl | h)
-  · rw [interpolate_empty, degree_zero, card_empty]
-    exact WithBot.bot_lt_coe _
-  · refine lt_of_le_of_lt (degree_interpolate_le _ hvs) ?_
-    rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.sub_lt (Nonempty.card_pos h) zero_lt_one
-
-Depends on / 依赖: Nat.cast_withBot, Nat.sub_lt, Nonempty, Nonempty.card_pos, WithBot, WithBot.bot_lt_coe, WithBot.coe_lt_coe, bot_lt_coe, card_empty, card_pos, cast_withBot, coe_lt_coe, degree_interpolate_le, degree_zero, eq_empty_or_nonempty, interpolate_empty, lt_of_le_of_lt, sub_lt, zero_lt_one
+/-
+**Lagrange.degree_interpolate_lt** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：degree_interpolate_lt (hvs : Set.InjOn v s) : (interpolate s v r).degree <
+ #s
+参数：hvs : Set.InjOn v s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_withBot`：Nat.cast_withBot (n : Nat) : Nat.cast n = WithBot.some
+ n
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `Lagrange.interpolate_empty`：interpolate_empty : interpolate ∅ v r = 0
+· 使用定理 `Polynomial.degree_zero`：degree_zero : degree (0 : R[X]) = ⊥
+· 使用定理 `Finset.card_empty`：card_empty : #(∅ : Finset α) = 0
+· 使用引理 `WithBot.bot_lt_coe`：bot_lt_coe (a : α) : ⊥ < (a : WithBot α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Lagrange.degree_interpolate_le`：degree_interpolate_le (hvs : Set.InjOn v
+ s) : (interpolate s v r).degree <= ↑(#s - 1)
+· 使用引理 `WithBot.coe_lt_coe`：coe_lt_coe : (a : WithBot α) < b ↔ a < b
+· 使用定理 `Nat.sub_lt`：∀ {n m : ℕ}, 0 < n → 0 < m → n - m < n
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem degree_interpolate_lt (hvs : Set.InjOn v s) : (interpolate s v r).degree < #s := by
   rw [Nat.cast_withBot]
@@ -1205,220 +1217,180 @@ theorem degree_interpolate_lt (hvs : Set.InjOn v s) : (interpolate s v r).degree
   · rw [interpolate_empty, degree_zero, card_empty]
     exact WithBot.bot_lt_coe _
   · refine lt_of_le_of_lt (degree_interpolate_le _ hvs) ?_
-    rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
+    rw [Nat.cast_withBot, WithBot.coe_lt_coe]
     exact Nat.sub_lt (Nonempty.card_pos h) zero_lt_one
-
-/--
-theorem `degree_interpolate_erase_lt` / 定理 `degree_interpolate_erase_lt`
-
-English:
-theorem degree_interpolate_erase_lt
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  proof: by
-  rw [← Finset.card_erase_of_mem hi]
-  exact degree_interpolate_lt _ (Set.InjOn.mono (coe_subset.mpr (erase_subset _ _)) hvs)
-
-中文:
-定理 degree_interpolate_erase_lt
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  证明: by
-  rw [← Finset.card_erase_of_mem hi]
-  exact degree_interpolate_lt _ (Set.InjOn.mono (coe_subset.mpr (erase_subset _ _)) hvs)
-
-Depends on / 依赖: Finset, Finset.card_erase_of_mem, Set.InjOn.mono, card_erase_of_mem, coe_subset, coe_subset.mpr, degree_interpolate_lt, erase_subset
+/-
+**Lagrange.degree_interpolate_erase_lt** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：degree_interpolate_erase_lt (hvs : Set.InjOn v s) (hi : i in s) : (interpo
+late (s.erase i) v r).degree < ↑(#s - 1)
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_erase_of_mem`：card_erase_of_mem : a in s -> #(s.erase a) = #
+s - 1
+· 使用定理 `Lagrange.degree_interpolate_lt`：degree_interpolate_lt (hvs : Set.InjOn v
+ s) : (interpolate s v r).degree < #s
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `Finset.erase_subset`：erase_subset (a : α) (s : Finset α) : erase s a sub
+seteq s
 -/
-theorem degree_interpolate_erase_lt (hvs : Set.InjOn v s) (hi : i in s) :
+theorem degree_interpolate_erase_lt (hvs : Set.InjOn v s) (hi : i ∈ s) :
     (interpolate (s.erase i) v r).degree < ↑(#s - 1) := by
   rw [← Finset.card_erase_of_mem hi]
   exact degree_interpolate_lt _ (Set.InjOn.mono (coe_subset.mpr (erase_subset _ _)) hvs)
-
-/--
-theorem `values_eq_on_of_interpolate_eq` / 定理 `values_eq_on_of_interpolate_eq`
-
-English:
-theorem values_eq_on_of_interpolate_eq
-  statement: (hvs : Set.InjOn v s)
-  proof: fun _ hi => by
-  rw [← eval_interpolate_at_node r hvs hi]; rw [hrr']; rw [eval_interpolate_at_node r' hvs hi]
-
-中文:
-定理 values_eq_on_of_interpolate_eq
-  结论: (hvs : 集合.单射限制 v s)
-  证明: fun _ hi => by
-  rw [← eval_interpolate_at_node r hvs hi]; rw [hrr']; rw [eval_interpolate_at_node r' hvs hi]
-
-Depends on / 依赖: eval_interpolate_at_node
+/-
+**Lagrange.values_eq_on_of_interpolate_eq** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：values_eq_on_of_interpolate_eq (hvs : Set.InjOn v s) (hrr' : interpolate s
+ v r = interpolate s v r') : forall i in s, r i = r' i
+参数：hvs : Set.InjOn v s；hrr' : interpolate s v r = interpolate s v r'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.eval_interpolate_at_node`：eval_interpolate_at_node (hvs : Set.I
+njOn v s) (hi : i in s) : eval (v i) (interpolate s v r) = r i
 -/
 theorem values_eq_on_of_interpolate_eq (hvs : Set.InjOn v s)
-    (hrr' : interpolate s v r = interpolate s v r') : forall i in s, r i = r' i := fun _ hi => by
-  rw [← eval_interpolate_at_node r hvs hi]; rw [hrr']; rw [eval_interpolate_at_node r' hvs hi]
-
-/--
-theorem `interpolate_eq_of_values_eq_on` / 定理 `interpolate_eq_of_values_eq_on`
-
-English:
-theorem interpolate_eq_of_values_eq_on
-  given: (hrr' : forall i in s, r i = r' i)
-  proof: sum_congr rfl fun i hi => by rw [hrr' _ hi]
-
-中文:
-定理 interpolate_eq_of_values_eq_on
-  条件: (hrr' : 对任意 i in s, r i = r' i)
-  证明: sum_congr rfl fun i hi => by rw [hrr' _ hi]
-
-Depends on / 依赖: sum_congr
+    (hrr' : interpolate s v r = interpolate s v r') : ∀ i ∈ s, r i = r' i := fun _ hi => by
+  rw [← eval_interpolate_at_node r hvs hi, hrr', eval_interpolate_at_node r' hvs hi]
+/-
+**Lagrange.interpolate_eq_of_values_eq_on** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：interpolate_eq_of_values_eq_on (hrr' : forall i in s, r i = r' i) : interp
+olate s v r = interpolate s v r'
+参数：hrr' : forall i in s, r i = r' i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem interpolate_eq_of_values_eq_on (hrr' : forall i in s, r i = r' i) :
+theorem interpolate_eq_of_values_eq_on (hrr' : ∀ i ∈ s, r i = r' i) :
     interpolate s v r = interpolate s v r' :=
   sum_congr rfl fun i hi => by rw [hrr' _ hi]
-
-/--
-theorem `interpolate_eq_iff_values_eq_on` / 定理 `interpolate_eq_iff_values_eq_on`
-
-English:
-theorem interpolate_eq_iff_values_eq_on
-  given: (hvs : Set.InjOn v s)
-  proof: ⟨values_eq_on_of_interpolate_eq _ _ hvs, interpolate_eq_of_values_eq_on _ _⟩
-
-中文:
-定理 interpolate_eq_iff_values_eq_on
-  条件: (hvs : 集合.单射限制 v s)
-  证明: ⟨values_eq_on_of_interpolate_eq _ _ hvs, interpolate_eq_of_values_eq_on _ _⟩
-
-Depends on / 依赖: interpolate_eq_of_values_eq_on, values_eq_on_of_interpolate_eq
+/-
+**Lagrange.interpolate_eq_iff_values_eq_on** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：interpolate_eq_iff_values_eq_on (hvs : Set.InjOn v s) : interpolate s v r 
+= interpolate s v r' ↔ forall i in s, r i = r' i
+参数：hvs : Set.InjOn v s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Lagrange.values_eq_on_of_interpolate_eq`：values_eq_on_of_interpolate_eq 
+(hvs : Set.InjOn v s) (hrr' : interpolate s v r = interpolate s v r') : forall i
+ in s, r i = r' i
+· 使用定理 `Lagrange.interpolate_eq_of_values_eq_on`：interpolate_eq_of_values_eq_on 
+(hrr' : forall i in s, r i = r' i) : interpolate s v r = interpolate s v r'
 -/
 theorem interpolate_eq_iff_values_eq_on (hvs : Set.InjOn v s) :
-    interpolate s v r = interpolate s v r' ↔ forall i in s, r i = r' i :=
+    interpolate s v r = interpolate s v r' ↔ ∀ i ∈ s, r i = r' i :=
   ⟨values_eq_on_of_interpolate_eq _ _ hvs, interpolate_eq_of_values_eq_on _ _⟩
-
-/--
-theorem `eq_interpolate` / 定理 `eq_interpolate`
-
-English:
-theorem eq_interpolate
-  given: {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
-  proof: eq_of_degrees_lt_of_eval_index_eq _ hvs degree_f_lt (degree_interpolate_lt _ hvs) fun _ hi =>
-    (eval_interpolate_at_node (fun x => eval (v x) f) hvs hi).symm
-
-中文:
-定理 eq_interpolate
-  条件: {f : F[X]} (hvs : 集合.单射限制 v s) (degree_f_lt : f.degree < #s)
-  证明: eq_of_degrees_lt_of_eval_index_eq _ hvs degree_f_lt (degree_interpolate_lt _ hvs) fun _ hi =>
-    (eval_interpolate_at_node (fun x => eval (v x) f) hvs hi).symm
-
-Depends on / 依赖: degree_f_lt, degree_interpolate_lt, eq_of_degrees_lt_of_eval_index_eq, eval_interpolate_at_node
+/-
+**Lagrange.eq_interpolate** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eq_interpolate {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : f.degree < 
+#s) : f = interpolate s v fun i => f.eval (v i)
+参数：hvs : Set.InjOn v s；degree_f_lt : f.degree < #s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eq_of_degrees_lt_of_eval_index_eq`：eq_of_degrees_lt_of_eval_i
+ndex_eq (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s) (degree_g_lt : g.deg
+ree < #s) (eval_fg : forall i in s…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Lagrange.degree_interpolate_lt`：degree_interpolate_lt (hvs : Set.InjOn v
+ s) : (interpolate s v r).degree < #s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.eval_interpolate_at_node`：eval_interpolate_at_node (hvs : Set.I
+njOn v s) (hi : i in s) : eval (v i) (interpolate s v r) = r i
 -/
 theorem eq_interpolate {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s) :
     f = interpolate s v fun i => f.eval (v i) :=
   eq_of_degrees_lt_of_eval_index_eq _ hvs degree_f_lt (degree_interpolate_lt _ hvs) fun _ hi =>
-    (eval_interpolate_at_node (fun x => eval (v x) f) hvs hi).symm
-
-/--
-theorem `eq_interpolate_of_eval_eq` / 定理 `eq_interpolate_of_eval_eq`
-
-English:
-theorem eq_interpolate_of_eval_eq
-  statement: {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
-  proof: by
-  rw [eq_interpolate hvs degree_f_lt]
-  exact interpolate_eq_of_values_eq_on _ _ eval_f
-
-中文:
-定理 eq_interpolate_of_eval_eq
-  结论: {f : F[X]} (hvs : 集合.单射限制 v s) (degree_f_lt : f.degree < #s)
-  证明: by
-  rw [eq_interpolate hvs degree_f_lt]
-  exact interpolate_eq_of_values_eq_on _ _ eval_f
-
-Depends on / 依赖: degree_f_lt, eq_interpolate, eval_f, interpolate_eq_of_values_eq_on
+    (eval_interpolate_at_node (fun x ↦ eval (v x) f) hvs hi).symm
+/-
+**Lagrange.eq_interpolate_of_eval_eq** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eq_interpolate_of_eval_eq {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : 
+f.degree < #s) (eval_f : forall i in s, f.eval (v i) = r i) : f = interpolate s 
+v r
+参数：hvs : Set.InjOn v s；degree_f_lt : f.degree < #s；eval_f : forall i in s, f.eva
+l (v i) = r i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.eq_interpolate`：eq_interpolate {f : F[X]} (hvs : Set.InjOn v s)
+ (degree_f_lt : f.degree < #s) : f = interpolate s v fun i => f.eval (v i)
+· 使用定理 `Lagrange.interpolate_eq_of_values_eq_on`：interpolate_eq_of_values_eq_on 
+(hrr' : forall i in s, r i = r' i) : interpolate s v r = interpolate s v r'
 -/
 theorem eq_interpolate_of_eval_eq {f : F[X]} (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s)
-    (eval_f : forall i in s, f.eval (v i) = r i) : f = interpolate s v r := by
+    (eval_f : ∀ i ∈ s, f.eval (v i) = r i) : f = interpolate s v r := by
   rw [eq_interpolate hvs degree_f_lt]
   exact interpolate_eq_of_values_eq_on _ _ eval_f
 
-/--
-theorem `eq_interpolate_iff` / 定理 `eq_interpolate_iff`
+/-- This is the characteristic property of the interpolation: the interpolation is the
+unique polynomial of `degree < Fintype.card ι` which takes the value of the `r i` on the `v i`.
+-/
+/-
+**Lagrange.eq_interpolate_iff** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eq_interpolate_iff {f : F[X]} (hvs : Set.InjOn v s) : (f.degree < #s ∧ for
+all i in s, eval (v i) f = r i) ↔ f = interpolate s v r
+参数：hvs : Set.InjOn v s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Lagrange.eq_interpolate_of_eval_eq`：eq_interpolate_of_eval_eq {f : F[X]}
+ (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s) (eval_f : forall i in s, f.
+eval (v i) = r i) : f = …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.degree_interpolate_lt`：degree_interpolate_lt (hvs : Set.InjOn v
+ s) : (interpolate s v r).degree < #s
+· 使用定理 `Lagrange.eval_interpolate_at_node`：eval_interpolate_at_node (hvs : Set.I
+njOn v s) (hi : i in s) : eval (v i) (interpolate s v r) = r i
 
-English:
-theorem eq_interpolate_iff
-  given: {f : F[X]} (hvs : Set.InjOn v s)
-  proof: by
-  constructor <;> intro h
-  · exact eq_interpolate_of_eval_eq _ hvs h.1 h.2
-  · rw [h]
-    exact ⟨degree_interpolate_lt _ hvs, fun _ hi => eval_interpolate_at_node _ hvs hi⟩
-
-中文:
-定理 eq_interpolate_iff
-  条件: {f : F[X]} (hvs : 集合.单射限制 v s)
-  证明: by
-  constructor <;> intro h
-  · exact eq_interpolate_of_eval_eq _ hvs h.1 h.2
-  · rw [h]
-    exact ⟨degree_interpolate_lt _ hvs, fun _ hi => eval_interpolate_at_node _ hvs hi⟩
-
-Depends on / 依赖: degree_interpolate_lt, eq_interpolate_of_eval_eq, eval_interpolate_at_node
+--- 原说明 ---
+This is the characteristic property of the interpolation: the interpolation is t
+he
+unique polynomial of `degree < Fintype.card ι` which takes the value of the `r i
+` on the `v i`.
 -/
 theorem eq_interpolate_iff {f : F[X]} (hvs : Set.InjOn v s) :
-    (f.degree < #s ∧ forall i in s, eval (v i) f = r i) ↔ f = interpolate s v r := by
+    (f.degree < #s ∧ ∀ i ∈ s, eval (v i) f = r i) ↔ f = interpolate s v r := by
   constructor <;> intro h
   · exact eq_interpolate_of_eval_eq _ hvs h.1 h.2
   · rw [h]
     exact ⟨degree_interpolate_lt _ hvs, fun _ hi => eval_interpolate_at_node _ hvs hi⟩
 
-/--
-Definition of `funEquivDegreeLT` / `funEquivDegreeLT` 的定义
+/-- Lagrange interpolation induces isomorphism between functions from `s`
+and polynomials of degree less than `Fintype.card ι`. -/
+/-
+**Lagrange.funEquivDegreeLT** 是 Mathlib 中的一个定义，位于命名空间 `Lagrange`。
+形式化陈述：funEquivDegreeLT (hvs : Set.InjOn v s) : degreeLT F #s ≃ₗ[F] s -> F where 
+toFun f i
+参数：hvs : Set.InjOn v s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funEquivDegreeLT
-  signature: (hvs : Set.InjOn v s)
-  body: f.1.eval (v i)
-  map_add' _ _ := funext fun _ => eval_add
-map_smul' c f := funext by simp
-  invFun r :=
-    ⟨interpolate s v fun x => if hx : x in s then r ⟨x, hx⟩ else 0,
-mem_degreeLT.2 degree_interpolate_lt _ hvs⟩
-  left_inv := by
-    rintro ⟨f, hf⟩
-    simp only [Subtype.mk_eq_mk, dite_eq_ite]
-    rw [mem_degreeLT] at hf
-    conv => rhs; rw [eq_interpolate hvs hf]
-    exact interpolate_eq_of_values_eq_on _ _ fun _ hi => if_pos hi
-  right_inv := by
-    intro f
-    ext ⟨i, hi⟩
-    simp only [eval_interpolate_at_node _ hvs hi]
-    exact dif_pos hi
-
-中文:
-定义 funEquivDegreeLT
-  签名: (hvs : 集合.单射限制 v s)
-  定义体: f.1.eval (v i)
-  map_add' _ _ := funext fun _ => eval_add
-map_smul' c f := funext by simp
-  invFun r :=
-    ⟨interpolate s v fun x => if hx : x in s then r ⟨x, hx⟩ else 0,
-mem_degreeLT.2 degree_interpolate_lt _ hvs⟩
-  left_inv := by
-    rintro ⟨f, hf⟩
-    simp only [Subtype.mk_eq_mk, dite_eq_ite]
-    rw [mem_degreeLT] at hf
-    conv => rhs; rw [eq_interpolate hvs hf]
-    exact interpolate_eq_of_values_eq_on _ _ fun _ hi => if_pos hi
-  right_inv := by
-    intro f
-    ext ⟨i, hi⟩
-    simp only [eval_interpolate_at_node _ hvs hi]
-    exact dif_pos hi
+--- 原说明 ---
+Lagrange interpolation induces isomorphism between functions from `s`
+and polynomials of degree less than `Fintype.card ι`.
 -/
-def funEquivDegreeLT (hvs : Set.InjOn v s) : degreeLT F #s ≃ₗ[F] s -> F where
+def funEquivDegreeLT (hvs : Set.InjOn v s) : degreeLT F #s ≃ₗ[F] s → F where
   toFun f i := f.1.eval (v i)
   map_add' _ _ := funext fun _ => eval_add
-map_smul' c f := funext by simp
+  map_smul' c f := funext <| by simp
   invFun r :=
-    ⟨interpolate s v fun x => if hx : x in s then r ⟨x, hx⟩ else 0,
-mem_degreeLT.2 degree_interpolate_lt _ hvs⟩
+    ⟨interpolate s v fun x => if hx : x ∈ s then r ⟨x, hx⟩ else 0,
+      mem_degreeLT.2 <| degree_interpolate_lt _ hvs⟩
   left_inv := by
     rintro ⟨f, hf⟩
     simp only [Subtype.mk_eq_mk, dite_eq_ite]
@@ -1430,102 +1402,93 @@ mem_degreeLT.2 degree_interpolate_lt _ hvs⟩
     ext ⟨i, hi⟩
     simp only [eval_interpolate_at_node _ hvs hi]
     exact dif_pos hi
-
-/--
-theorem `interpolate_eq_sum_interpolate_insert_sdiff` / 定理 `interpolate_eq_sum_interpolate_insert_sdiff`
-
-English:
-theorem interpolate_eq_sum_interpolate_insert_sdiff
-  statement: (hvt : Set.InjOn v t) (hs : s.Nonempty)
-  proof: by
-  symm
-  refine eq_interpolate_of_eval_eq _ hvt (lt_of_le_of_lt (degree_sum_le _ _) ?_) fun i hi => ?_
-  · simp_rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #t), degree_mul]
-    intro i hi
-    have hs : 1 <= #s := Nonempty.card_pos ⟨_, hi⟩
-    have hst' : #s <= #t := card_le_card hst
-    have H : #t = 1 + (#t - #s) + (#s - 1) := by
-      rw [add_assoc]; rw [tsub_add_tsub_cancel hst' hs]; rw [← add_tsub_assoc_of_le (hs.trans hst')]; rw [Nat.succ_add_sub_one]; rw [zero_add]
-    rw [degree_basis (Set.InjOn.mono hst hvt) hi]; rw [H]; rw [WithBot.coe_add]; rw [Nat.cast_withBot]; rw [WithBot.add_lt_add_iff_right (@WithBot.coe_ne_bot _ (#s - 1))]
-    convert!
-      degree_interpolate_lt _
-        (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hst hi, sdiff_subset⟩)))
-    rw [card_insert_of_notMem (notMem_sdiff_of_mem_right hi)]; rw [card_sdiff_of_subset hst]; rw [add_comm]
-  · simp_rw [eval_finsetSum, eval_mul]
-    by_cases hi' : i in s
-    · rw [← add_sum_erase _ _ hi', eval_basis_self (hvt.mono hst) hi',
-        eval_interpolate_at_node _
-          (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hi, sdiff_subset⟩)))
-          (mem_insert_self _ _),
-        mul_one, add_eq_left]
-      refine sum_eq_zero fun j hj => ?_
-      rcases mem_erase.mp hj with ⟨hij, _⟩
-      rw [eval_basis_of_ne hij hi']; rw [mul_zero]
-    · have H : (∑ j in s, eval (v i) (Lagrange.basis s v j)) = 1 := by
-        rw [← eval_finsetSum]; rw [sum_basis (hvt.mono hst) hs]; rw [eval_one]
-      rw [← mul_one (r i)]; rw [← H]; rw [mul_sum]
-      refine sum_congr rfl fun j hj => ?_
-      congr
-      exact
-        eval_interpolate_at_node _ (hvt.mono (insert_subset_iff.mpr ⟨hst hj, sdiff_subset⟩))
-          (mem_insert.mpr (Or.inr (mem_sdiff.mpr ⟨hi, hi'⟩)))
-
-中文:
-定理 interpolate_eq_sum_interpolate_insert_sdiff
-  结论: (hvt : 集合.单射限制 v t) (hs : s.非空)
-  证明: by
-  symm
-  refine eq_interpolate_of_eval_eq _ hvt (lt_of_le_of_lt (degree_sum_le _ _) ?_) fun i hi => ?_
-  · simp_rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #t), degree_mul]
-    intro i hi
-    have hs : 1 <= #s := Nonempty.card_pos ⟨_, hi⟩
-    have hst' : #s <= #t := card_le_card hst
-    have H : #t = 1 + (#t - #s) + (#s - 1) := by
-      rw [add_assoc]; rw [tsub_add_tsub_cancel hst' hs]; rw [← add_tsub_assoc_of_le (hs.trans hst')]; rw [Nat.succ_add_sub_one]; rw [zero_add]
-    rw [degree_basis (Set.InjOn.mono hst hvt) hi]; rw [H]; rw [WithBot.coe_add]; rw [Nat.cast_withBot]; rw [WithBot.add_lt_add_iff_right (@WithBot.coe_ne_bot _ (#s - 1))]
-    convert!
-      degree_interpolate_lt _
-        (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hst hi, sdiff_subset⟩)))
-    rw [card_insert_of_notMem (notMem_sdiff_of_mem_right hi)]; rw [card_sdiff_of_subset hst]; rw [add_comm]
-  · simp_rw [eval_finsetSum, eval_mul]
-    by_cases hi' : i in s
-    · rw [← add_sum_erase _ _ hi', eval_basis_self (hvt.mono hst) hi',
-        eval_interpolate_at_node _
-          (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hi, sdiff_subset⟩)))
-          (mem_insert_self _ _),
-        mul_one, add_eq_left]
-      refine sum_eq_zero fun j hj => ?_
-      rcases mem_erase.mp hj with ⟨hij, _⟩
-      rw [eval_basis_of_ne hij hi']; rw [mul_zero]
-    · have H : (∑ j in s, eval (v i) (Lagrange.basis s v j)) = 1 := by
-        rw [← eval_finsetSum]; rw [sum_basis (hvt.mono hst) hs]; rw [eval_one]
-      rw [← mul_one (r i)]; rw [← H]; rw [mul_sum]
-      refine sum_congr rfl fun j hj => ?_
-      congr
-      exact
-        eval_interpolate_at_node _ (hvt.mono (insert_subset_iff.mpr ⟨hst hj, sdiff_subset⟩))
-          (mem_insert.mpr (Or.inr (mem_sdiff.mpr ⟨hi, hi'⟩)))
-
-Depends on / 依赖: Finset, Finset.sup_lt_iff, Nat.cast_withBot, Nat.succ_add_sub_one, Nonempty, Nonempty.card_pos, Set.InjOn.mono, WithBot, WithBot.bot_lt_coe, add_assoc, add_tsub_assoc_of_le, bot_lt_coe, card_le_card, card_pos, cast_withBot, degree_basis, degree_mul, degree_sum_le, eq_interpolate_of_eval_eq, hs.trans
+/-
+**Lagrange.interpolate_eq_sum_interpolate_insert_sdiff** 是 Mathlib 中的一个定理，位于命名空间
+ `Lagrange`。
+形式化陈述：interpolate_eq_sum_interpolate_insert_sdiff (hvt : Set.InjOn v t) (hs : s.
+Nonempty) (hst : s subseteq t) : interpolate t v r = ∑ i in s, interpolate (inse
+rt i (t \ s)) v r * Lagrange.basis s v i
+参数：hvt : Set.InjOn v t；hs : s.Nonempty；hst : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.eq_interpolate_of_eval_eq`：eq_interpolate_of_eval_eq {f : F[X]}
+ (hvs : Set.InjOn v s) (degree_f_lt : f.degree < #s) (eval_f : forall i in s, f.
+eval (v i) = r i) : f = …
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Polynomial.degree_sum_le`：degree_sum_le (s : Finset ι) (f : ι -> R[X]) :
+ degree (∑ i in s, f i) <= s.sup fun b => degree (f b)
+· 使用定理 `Finset.sup_lt_iff`：∀ {α : Type u_2} {ι : Type u_5} [inst : LinearOrder α
+] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α} {a : α},   ⊥ < a → (s.sup f <
+ a ↔ ∀ …
+· 使用引理 `WithBot.bot_lt_coe`：bot_lt_coe (a : α) : ⊥ < (a : WithBot α)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Polynomial.degree_mul`：degree_mul : degree (p * q) = degree p + degree q
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `tsub_add_tsub_cancel`：tsub_add_tsub_cancel (hab : b <= a) (hcb : c <= b)
+ : a - b + (b - c) = a - c
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `add_tsub_assoc_of_le`：add_tsub_assoc_of_le (h : c <= b) (a : α) : a + b 
+- c = a + (b - c)
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.succ_add_sub_one`：∀ (n m : ℕ), m.succ + n - 1 = m + n
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Lagrange.degree_basis`：degree_basis (hvs : Set.InjOn v s) (hi : i in s) 
+: (Lagrange.basis s v i).degree = ↑(#s - 1)
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `WithBot.coe_add`：∀ {α : Type u} [inst : Add α] (a b : α), ↑(a + b) = ↑a 
++ ↑b
+· 使用定理 `Nat.cast_withBot`：Nat.cast_withBot (n : Nat) : Nat.cast n = WithBot.some
+ n
+· 使用定理 `WithBot.add_lt_add_iff_right`：∀ {α : Type u} [inst : Add α] {x y z : Wit
+hBot α} [inst_1 : LT α] [AddRightStrictMono α] [AddRightReflectLT α],   z ≠ ⊥ → 
+(x + z < y + z ↔ x…
+（共 65 条，此处仅展示前 30 条）
 -/
 theorem interpolate_eq_sum_interpolate_insert_sdiff (hvt : Set.InjOn v t) (hs : s.Nonempty)
-    (hst : s subseteq t) :
-    interpolate t v r = ∑ i in s, interpolate (insert i (t \ s)) v r * Lagrange.basis s v i := by
+    (hst : s ⊆ t) :
+    interpolate t v r = ∑ i ∈ s, interpolate (insert i (t \ s)) v r * Lagrange.basis s v i := by
   symm
   refine eq_interpolate_of_eval_eq _ hvt (lt_of_le_of_lt (degree_sum_le _ _) ?_) fun i hi => ?_
   · simp_rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #t), degree_mul]
     intro i hi
-    have hs : 1 <= #s := Nonempty.card_pos ⟨_, hi⟩
-    have hst' : #s <= #t := card_le_card hst
+    have hs : 1 ≤ #s := Nonempty.card_pos ⟨_, hi⟩
+    have hst' : #s ≤ #t := card_le_card hst
     have H : #t = 1 + (#t - #s) + (#s - 1) := by
-      rw [add_assoc]; rw [tsub_add_tsub_cancel hst' hs]; rw [← add_tsub_assoc_of_le (hs.trans hst')]; rw [Nat.succ_add_sub_one]; rw [zero_add]
-    rw [degree_basis (Set.InjOn.mono hst hvt) hi]; rw [H]; rw [WithBot.coe_add]; rw [Nat.cast_withBot]; rw [WithBot.add_lt_add_iff_right (@WithBot.coe_ne_bot _ (#s - 1))]
+      rw [add_assoc, tsub_add_tsub_cancel hst' hs, ← add_tsub_assoc_of_le (hs.trans hst'),
+        Nat.succ_add_sub_one, zero_add]
+    rw [degree_basis (Set.InjOn.mono hst hvt) hi, H, WithBot.coe_add, Nat.cast_withBot,
+      WithBot.add_lt_add_iff_right (@WithBot.coe_ne_bot _ (#s - 1))]
     convert!
       degree_interpolate_lt _
         (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hst hi, sdiff_subset⟩)))
-    rw [card_insert_of_notMem (notMem_sdiff_of_mem_right hi)]; rw [card_sdiff_of_subset hst]; rw [add_comm]
+    rw [card_insert_of_notMem (notMem_sdiff_of_mem_right hi), card_sdiff_of_subset hst, add_comm]
   · simp_rw [eval_finsetSum, eval_mul]
-    by_cases hi' : i in s
+    by_cases hi' : i ∈ s
     · rw [← add_sum_erase _ _ hi', eval_basis_self (hvt.mono hst) hi',
         eval_interpolate_at_node _
           (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hi, sdiff_subset⟩)))
@@ -1533,303 +1496,390 @@ theorem interpolate_eq_sum_interpolate_insert_sdiff (hvt : Set.InjOn v t) (hs : 
         mul_one, add_eq_left]
       refine sum_eq_zero fun j hj => ?_
       rcases mem_erase.mp hj with ⟨hij, _⟩
-      rw [eval_basis_of_ne hij hi']; rw [mul_zero]
-    · have H : (∑ j in s, eval (v i) (Lagrange.basis s v j)) = 1 := by
-        rw [← eval_finsetSum]; rw [sum_basis (hvt.mono hst) hs]; rw [eval_one]
-      rw [← mul_one (r i)]; rw [← H]; rw [mul_sum]
+      rw [eval_basis_of_ne hij hi', mul_zero]
+    · have H : (∑ j ∈ s, eval (v i) (Lagrange.basis s v j)) = 1 := by
+        rw [← eval_finsetSum, sum_basis (hvt.mono hst) hs, eval_one]
+      rw [← mul_one (r i), ← H, mul_sum]
       refine sum_congr rfl fun j hj => ?_
       congr
       exact
         eval_interpolate_at_node _ (hvt.mono (insert_subset_iff.mpr ⟨hst hj, sdiff_subset⟩))
           (mem_insert.mpr (Or.inr (mem_sdiff.mpr ⟨hi, hi'⟩)))
-
-/--
-theorem `interpolate_eq_add_interpolate_erase` / 定理 `interpolate_eq_add_interpolate_erase`
-
-English:
-theorem interpolate_eq_add_interpolate_erase
-  statement: (hvs : Set.InjOn v s) (hi : i in s) (hj : j in s)
-  proof: by
-  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singleton_eq_erase]; rw [pair_comm]; rw [sdiff_insert_insert_of_mem_of_notMem hj (notMem_singleton.mpr hij.symm)]; rw [sdiff_singleton_eq_erase]
-  exact insert_subset_iff.mpr ⟨hi, singleton_subset_iff.mpr hj⟩
-
-中文:
-定理 interpolate_eq_add_interpolate_erase
-  结论: (hvs : 集合.单射限制 v s) (hi : i in s) (hj : j in s)
-  证明: by
-  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singleton_eq_erase]; rw [pair_comm]; rw [sdiff_insert_insert_of_mem_of_notMem hj (notMem_singleton.mpr hij.symm)]; rw [sdiff_singleton_eq_erase]
-  exact insert_subset_iff.mpr ⟨hi, singleton_subset_iff.mpr hj⟩
-
-Depends on / 依赖: basis_pair_left, basis_pair_right, hij.symm, insert_subset_iff, insert_subset_iff.mpr, interpolate_eq_sum_interpolate_insert_sdiff, mem_insert_self, notMem_singleton, notMem_singleton.mpr, pair_comm, sdiff_insert_insert_of_mem_of_notMem, sdiff_singleton_eq_erase, singleton_subset_iff, singleton_subset_iff.mpr, sum_insert, sum_singleton
+/-
+**Lagrange.interpolate_eq_add_interpolate_erase** 是 Mathlib 中的一个定理，位于命名空间 `Lagra
+nge`。
+形式化陈述：interpolate_eq_add_interpolate_erase (hvs : Set.InjOn v s) (hi : i in s) (
+hj : j in s) (hij : i != j) : interpolate s v r = interpolate (s.erase j) v r * 
+basisDivisor (v i) (v j) + interpolate (s.erase i) v r * basisDivisor (v j) (v i
+)
+参数：hvs : Set.InjOn v s；hi : i in s；hj : j in s；hij : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_eq_sum_interpolate_insert_sdiff`：interpolate_eq_sum
+_interpolate_insert_sdiff (hvt : Set.InjOn v t) (hs : s.Nonempty) (hst : s subse
+teq t) : interpolate t v r = ∑ i in s, int…
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.insert_subset_iff`：insert_subset_iff : insert a s subseteq t ↔ a 
+in t ∧ s subseteq t
+· 使用定理 `Finset.singleton_subset_iff`：singleton_subset_iff {s : Finset α} {a : α}
+ : {a} subseteq s ↔ a in s
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Finset.notMem_singleton`：notMem_singleton {a b : α} : a ∉ ({b} : Finset 
+α) ↔ a != b
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `Lagrange.basis_pair_left`：basis_pair_left (hij : i != j) : Lagrange.basi
+s {i, j} v i = basisDivisor (v i) (v j)
+· 使用定理 `Lagrange.basis_pair_right`：basis_pair_right (hij : i != j) : Lagrange.ba
+sis {i, j} v j = basisDivisor (v j) (v i)
+· 使用定理 `Finset.sdiff_insert_insert_of_mem_of_notMem`：sdiff_insert_insert_of_mem_
+of_notMem {s t : Finset α} {x : α} (hxs : x in s) (hxt : x ∉ t) : insert x (s \ 
+insert x t) = s \ t
+· 使用定理 `Finset.sdiff_singleton_eq_erase`：sdiff_singleton_eq_erase (a : α) (s : F
+inset α) : s \ {a} = s.erase a
+· 使用定理 `Finset.pair_comm`：pair_comm (a b : α) : ({a, b} : Finset α) = {b, a}
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem interpolate_eq_add_interpolate_erase (hvs : Set.InjOn v s) (hi : i in s) (hj : j in s)
-    (hij : i != j) :
+theorem interpolate_eq_add_interpolate_erase (hvs : Set.InjOn v s) (hi : i ∈ s) (hj : j ∈ s)
+    (hij : i ≠ j) :
     interpolate s v r =
       interpolate (s.erase j) v r * basisDivisor (v i) (v j) +
         interpolate (s.erase i) v r * basisDivisor (v j) (v i) := by
-  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singleton_eq_erase]; rw [pair_comm]; rw [sdiff_insert_insert_of_mem_of_notMem hj (notMem_singleton.mpr hij.symm)]; rw [sdiff_singleton_eq_erase]
+  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i, mem_insert_self i {j}⟩ _,
+    sum_insert (notMem_singleton.mpr hij), sum_singleton, basis_pair_left hij,
+    basis_pair_right hij, sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij),
+    sdiff_singleton_eq_erase, pair_comm,
+    sdiff_insert_insert_of_mem_of_notMem hj (notMem_singleton.mpr hij.symm),
+    sdiff_singleton_eq_erase]
   exact insert_subset_iff.mpr ⟨hi, singleton_subset_iff.mpr hj⟩
-
-/--
-theorem `interpolate_eq_sum` / 定理 `interpolate_eq_sum`
-
-English:
-theorem interpolate_eq_sum
-  statement: interpolate s v r =
-  proof: by
-  simp [Lagrange.basis, basisDivisor, div_eq_mul_inv, prod_mul_distrib, ← map_prod,
-    ← prod_inv_distrib, mul_assoc]
-
-中文:
-定理 interpolate_eq_sum
-  结论: interpolate s v r =
-  证明: by
-  simp [Lagrange.basis, basisDivisor, div_eq_mul_inv, prod_mul_distrib, ← map_prod,
-    ← prod_inv_distrib, mul_assoc]
-
-Depends on / 依赖: Lagrange, Lagrange.basis, basisDivisor, div_eq_mul_inv, map_prod, mul_assoc, prod_inv_distrib, prod_mul_distrib
+/-
+**Lagrange.interpolate_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：interpolate_eq_sum : interpolate s v r = ∑ i in s, C (r i / ∏ j in s.erase
+ i, (v i - v j)) * (∏ j in s.erase i, (X - C (v j)))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_apply`：∀ {F : Type u_1} [inst : Field F] {ι : Type 
+u_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v r : ι → F),   (Lagrange.interpol
+ate s v) r = ∑ i…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.prod_mul_distrib`：prod_mul_distrib : ∏ x in s, f x * g x = (∏ x i
+n s, f x) * ∏ x in s, g x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem interpolate_eq_sum : interpolate s v r =
-    ∑ i in s, C (r i / ∏ j in s.erase i, (v i - v j)) * (∏ j in s.erase i, (X - C (v j))) := by
+    ∑ i ∈ s, C (r i / ∏ j ∈ s.erase i, (v i - v j)) * (∏ j ∈ s.erase i, (X - C (v j))) := by
   simp [Lagrange.basis, basisDivisor, div_eq_mul_inv, prod_mul_distrib, ← map_prod,
     ← prod_inv_distrib, mul_assoc]
-
-/--
-theorem `iterate_derivative_interpolate` / 定理 `iterate_derivative_interpolate`
-
-English:
-theorem iterate_derivative_interpolate
-  given: (hvs : Set.InjOn v s) {k : Nat} (hk : k < #s)
-  proof: by
-  classical
-  simp_rw [interpolate_eq_sum, iterate_derivative_sum, iterate_derivative_C_mul, mul_sum s,
-    ← mul_assoc, mul_comm (k.factorial : F[X]), mul_assoc]
-  congr! 2 with i hi
-  have hvs' := hvs.mono (coe_subset.mpr (erase_subset i s))
-  calc
-    derivative^[k] (∏ j in s.erase i, (X - C (v j))) =
-    derivative^[k] (∏ vj in (s.erase i).image v, (X - C vj)) := by rw [Finset.prod_image hvs']
-    _ = k.factorial * ∑ t in ((s.erase i).image v).powersetCard (#s - (k + 1)),
-          ∏ va in t, (X - C va) := by
-        grind [iterate_derivative_prod_X_sub_C]
-    _ = k.factorial * ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (X - C (v a)) := by
-        rw [powersetCard_eq_filter]; rw [powerset_image]; rw [eq_comm]
-        congrm k.factorial * ?_
-        refine sum_nbij (·.image v) (fun a ha => ?hi) ?i_inj (fun t ht => ?i_surj) fun a ha => ?h
-        case hi => grind [card_image_of_injOn, hvs'.mono]
-        case i_inj => exact (image_injOn_powerset_of_injOn hvs').mono (by grind)
-        case i_surj => grind [card_image_of_injOn, hvs'.mono]
-case h => exact eq_comm.mp prod_image by grind [hvs'.mono]
-
-中文:
-定理 iterate_derivative_interpolate
-  条件: (hvs : 集合.单射限制 v s) {k : 自然数} (hk : k < #s)
-  证明: by
-  classical
-  simp_rw [interpolate_eq_sum, iterate_derivative_sum, iterate_derivative_C_mul, mul_sum s,
-    ← mul_assoc, mul_comm (k.factorial : F[X]), mul_assoc]
-  congr! 2 with i hi
-  have hvs' := hvs.mono (coe_subset.mpr (erase_subset i s))
-  calc
-    derivative^[k] (∏ j in s.erase i, (X - C (v j))) =
-    derivative^[k] (∏ vj in (s.erase i).image v, (X - C vj)) := by rw [Finset.prod_image hvs']
-    _ = k.factorial * ∑ t in ((s.erase i).image v).powersetCard (#s - (k + 1)),
-          ∏ va in t, (X - C va) := by
-        grind [iterate_derivative_prod_X_sub_C]
-    _ = k.factorial * ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (X - C (v a)) := by
-        rw [powersetCard_eq_filter]; rw [powerset_image]; rw [eq_comm]
-        congrm k.factorial * ?_
-        refine sum_nbij (·.image v) (fun a ha => ?hi) ?i_inj (fun t ht => ?i_surj) fun a ha => ?h
-        case hi => grind [card_image_of_injOn, hvs'.mono]
-        case i_inj => exact (image_injOn_powerset_of_injOn hvs').mono (by grind)
-        case i_surj => grind [card_image_of_injOn, hvs'.mono]
-case h => exact eq_comm.mp prod_image by grind [hvs'.mono]
-
-Depends on / 依赖: Finset, Finset.prod_image, classical, coe_subset, coe_subset.mpr, derivative, erase_subset, factorial, hvs.mono, interpolate_eq_sum, iterate, iterate_derivative_C_mul, iterate_derivative_sum, k.factorial, mul_assoc, mul_comm, mul_sum, powersetCard, prod_image, s.erase
+/-
+**Lagrange.iterate_derivative_interpolate** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：iterate_derivative_interpolate (hvs : Set.InjOn v s) {k : Nat} (hk : k < #
+s) : derivative^[k] (interpolate s v r) = k.factorial * ∑ i in s, C (r i / ∏ j i
+n s.erase i, (v i - v j)) * ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a 
+in t, (X - C (v a))
+参数：hvs : Set.InjOn v s；hk : k < #s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_eq_sum`：interpolate_eq_sum : interpolate s v r = ∑ 
+i in s, C (r i / ∏ j in s.erase i, (v i - v j)) * (∏ j in s.erase i, (X - C (v j
+)))
+· 使用定理 `Polynomial.iterate_derivative_sum`：iterate_derivative_sum (k : Nat) (s :
+ Finset ι) (f : ι -> R[X]) : derivative^[k] (∑ b in s, f b) = ∑ b in s, derivati
+ve^[k] (f b)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.iterate_derivative_C_mul`：iterate_derivative_C_mul (a : R) (p
+ : R[X]) (k : Nat) : derivative^[k] (C a * p) = C a * derivative^[k] p
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.InjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f : α →
+ β}, s₁ ⊆ s₂ → Set.InjOn f s₂ → Set.InjOn f s₁
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `Finset.erase_subset`：erase_subset (a : α) (s : Finset α) : erase s a sub
+seteq s
+· 使用定理 `Finset.prod_image`：prod_image [DecidableEq ι] {s : Finset κ} {g : κ -> ι
+} : Set.InjOn g s -> ∏ x in s.image g, f x = ∏ x in s, f (g x)
+· 使用定理 `Finset.powersetCard_eq_filter`：powersetCard_eq_filter {n} {s : Finset α}
+ : powersetCard n s = (powerset s).filter fun x => x.card = n
+· 使用定理 `Finset.powerset_image`：powerset_image {β : Type*} [DecidableEq β] {f : α
+ -> β} : (s.image f).powerset = s.powerset.image (·.image f)
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Finset.sum_nbij`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : 
+AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (i : ι 
+→ κ),…
+· 使用定理 `Finset.image_injOn_powerset_of_injOn`：image_injOn_powerset_of_injOn {β :
+ Type*} [DecidableEq β] {f : α -> β} (H : Set.InjOn f s) : Set.InjOn (α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem iterate_derivative_interpolate (hvs : Set.InjOn v s) {k : Nat} (hk : k < #s) :
+theorem iterate_derivative_interpolate (hvs : Set.InjOn v s) {k : ℕ} (hk : k < #s) :
     derivative^[k] (interpolate s v r) =
-      k.factorial * ∑ i in s, C (r i / ∏ j in s.erase i, (v i - v j)) *
-        ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (X - C (v a)) := by
+      k.factorial * ∑ i ∈ s, C (r i / ∏ j ∈ s.erase i, (v i - v j)) *
+        ∑ t ∈ (s.erase i).powersetCard (#s - (k + 1)), ∏ a ∈ t, (X - C (v a)) := by
   classical
   simp_rw [interpolate_eq_sum, iterate_derivative_sum, iterate_derivative_C_mul, mul_sum s,
     ← mul_assoc, mul_comm (k.factorial : F[X]), mul_assoc]
   congr! 2 with i hi
   have hvs' := hvs.mono (coe_subset.mpr (erase_subset i s))
   calc
-    derivative^[k] (∏ j in s.erase i, (X - C (v j))) =
-    derivative^[k] (∏ vj in (s.erase i).image v, (X - C vj)) := by rw [Finset.prod_image hvs']
-    _ = k.factorial * ∑ t in ((s.erase i).image v).powersetCard (#s - (k + 1)),
-          ∏ va in t, (X - C va) := by
+    derivative^[k] (∏ j ∈ s.erase i, (X - C (v j))) =
+    derivative^[k] (∏ vj ∈ (s.erase i).image v, (X - C vj)) := by rw [Finset.prod_image hvs']
+    _ = k.factorial * ∑ t ∈ ((s.erase i).image v).powersetCard (#s - (k + 1)),
+          ∏ va ∈ t, (X - C va) := by
         grind [iterate_derivative_prod_X_sub_C]
-    _ = k.factorial * ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (X - C (v a)) := by
-        rw [powersetCard_eq_filter]; rw [powerset_image]; rw [eq_comm]
+    _ = k.factorial * ∑ t ∈ (s.erase i).powersetCard (#s - (k + 1)), ∏ a ∈ t, (X - C (v a)) := by
+        rw [powersetCard_eq_filter, powerset_image, eq_comm]
         congrm k.factorial * ?_
-        refine sum_nbij (·.image v) (fun a ha => ?hi) ?i_inj (fun t ht => ?i_surj) fun a ha => ?h
+        refine sum_nbij (·.image v) (fun a ha ↦ ?hi) ?i_inj (fun t ht ↦ ?i_surj) fun a ha ↦ ?h
         case hi => grind [card_image_of_injOn, hvs'.mono]
         case i_inj => exact (image_injOn_powerset_of_injOn hvs').mono (by grind)
         case i_surj => grind [card_image_of_injOn, hvs'.mono]
-case h => exact eq_comm.mp prod_image by grind [hvs'.mono]
-
-/--
-theorem `eval_iterate_derivative_eq_sum` / 定理 `eval_iterate_derivative_eq_sum`
-
-English:
-theorem eval_iterate_derivative_eq_sum
-  statement: (hvs : Set.InjOn v s) {P : Polynomial F} (hP : P.degree < #s)
-  proof: by
-  nth_rewrite 1 [eq_interpolate hvs hP, iterate_derivative_interpolate _ hvs hk]
-  simp [eval_finsetSum, eval_prod]
-
-@[deprecated eq_interpolate (since := "2026-01-14")]
-
-中文:
-定理 eval_iterate_derivative_eq_sum
-  结论: (hvs : 集合.单射限制 v s) {P : 多项式 F} (hP : P.degree < #s)
-  证明: by
-  nth_rewrite 1 [eq_interpolate hvs hP, iterate_derivative_interpolate _ hvs hk]
-  simp [eval_finsetSum, eval_prod]
-
-@[deprecated eq_interpolate (since := "2026-01-14")]
-
-Depends on / 依赖: eq_interpolate, eval_finsetSum, eval_prod, iterate_derivative_interpolate, nth_rewrite
+        case h => exact eq_comm.mp <| prod_image <| by grind [hvs'.mono]
+/-
+**Lagrange.eval_iterate_derivative_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_iterate_derivative_eq_sum (hvs : Set.InjOn v s) {P : Polynomial F} (h
+P : P.degree < #s) {k : Nat} (hk : k < #s) (x : F) : (derivative^[k] P).eval x =
+ k.factorial * ∑ i in s, (P.eval (v i) / ∏ j in s.erase i, (v i - v j)) * ∑ t in
+ (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (x - v a)
+参数：hvs : Set.InjOn v s；hP : P.degree < #s；hk : k < #s；x : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.eq_interpolate`：eq_interpolate {f : F[X]} (hvs : Set.InjOn v s)
+ (degree_f_lt : f.degree < #s) : f = interpolate s v fun i => f.eval (v i)
+· 使用定理 `Lagrange.iterate_derivative_interpolate`：iterate_derivative_interpolate 
+(hvs : Set.InjOn v s) {k : Nat} (hk : k < #s) : derivative^[k] (interpolate s v 
+r) = k.factorial * ∑ i in s, …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_natCast`：eval_natCast {n : Nat} : (n : R[X]).eval x = n
+· 使用定理 `Polynomial.eval_finsetSum`：eval_finsetSum (s : Finset ι) (g : ι -> R[X])
+ (x : R) : (∑ i in s, g i).eval x = ∑ i in s, (g i).eval x
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Polynomial.eval_prod`：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X
+]) (x : R) : eval x (∏ j in s, p j) = ∏ j in s, eval x (p j)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_iterate_derivative_eq_sum (hvs : Set.InjOn v s) {P : Polynomial F} (hP : P.degree < #s)
-    {k : Nat} (hk : k < #s) (x : F) :
+    {k : ℕ} (hk : k < #s) (x : F) :
     (derivative^[k] P).eval x =
-      k.factorial * ∑ i in s, (P.eval (v i) / ∏ j in s.erase i, (v i - v j)) *
-        ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (x - v a) := by
+      k.factorial * ∑ i ∈ s, (P.eval (v i) / ∏ j ∈ s.erase i, (v i - v j)) *
+        ∑ t ∈ (s.erase i).powersetCard (#s - (k + 1)), ∏ a ∈ t, (x - v a) := by
   nth_rewrite 1 [eq_interpolate hvs hP, iterate_derivative_interpolate _ hvs hk]
   simp [eval_finsetSum, eval_prod]
 
 @[deprecated eq_interpolate (since := "2026-01-14")]
-/--
-theorem `interpolate_poly_eq_self` / 定理 `interpolate_poly_eq_self`
-
-English:
-theorem interpolate_poly_eq_self
-  proof: (eq_interpolate hvs hP).symm
-
-中文:
-定理 interpolate_poly_eq_self
-  证明: (eq_interpolate hvs hP).symm
-
-Depends on / 依赖: eq_interpolate
+/-
+**Lagrange.interpolate_poly_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：interpolate_poly_eq_self (hvs : Set.InjOn v s) {P : Polynomial F} (hP : P.
+degree < s.card) : interpolate s v (fun i => P.eval (v i)) = P
+参数：hvs : Set.InjOn v s；hP : P.degree < s.card。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.eq_interpolate`：eq_interpolate {f : F[X]} (hvs : Set.InjOn v s)
+ (degree_f_lt : f.degree < #s) : f = interpolate s v fun i => f.eval (v i)
 -/
 theorem interpolate_poly_eq_self
     (hvs : Set.InjOn v s) {P : Polynomial F} (hP : P.degree < s.card) :
     interpolate s v (fun i => P.eval (v i)) = P := (eq_interpolate hvs hP).symm
-
-/--
-theorem `coeff_eq_sum` / 定理 `coeff_eq_sum`
-
-English:
-theorem coeff_eq_sum
-  proof: by
-  nth_rewrite 1 [eq_interpolate hvs hP, interpolate_apply, finsetSum_coeff]
-  congr! with i hi
-  rw [coeff_C_mul]; rw [← natDegree_basis hvs hi]; rw [← leadingCoeff]; rw [leadingCoeff_basis hvs hi]
-  field_simp
-
-中文:
-定理 coeff_eq_sum
-  证明: by
-  nth_rewrite 1 [eq_interpolate hvs hP, interpolate_apply, finsetSum_coeff]
-  congr! with i hi
-  rw [coeff_C_mul]; rw [← natDegree_basis hvs hi]; rw [← leadingCoeff]; rw [leadingCoeff_basis hvs hi]
-  field_simp
-
-Depends on / 依赖: coeff_C_mul, eq_interpolate, finsetSum_coeff, interpolate_apply, leadingCoeff, leadingCoeff_basis, natDegree_basis, nth_rewrite
+/-
+**Lagrange.coeff_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：coeff_eq_sum (hvs : Set.InjOn v s) {P : Polynomial F} (hP : P.degree < #s)
+ : P.coeff (#s - 1) = ∑ i in s, (P.eval (v i)) / ∏ j in s.erase i, (v i - v j)
+参数：hvs : Set.InjOn v s；hP : P.degree < #s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.eq_interpolate`：eq_interpolate {f : F[X]} (hvs : Set.InjOn v s)
+ (degree_f_lt : f.degree < #s) : f = interpolate s v fun i => f.eval (v i)
+· 使用定理 `Lagrange.interpolate_apply`：∀ {F : Type u_1} [inst : Field F] {ι : Type 
+u_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v r : ι → F),   (Lagrange.interpol
+ate s v) r = ∑ i…
+· 使用定理 `Polynomial.finsetSum_coeff`：finsetSum_coeff {ι : Type*} (s : Finset ι) (
+f : ι -> R[X]) (n : Nat) : coeff (∑ b in s, f b) n = ∑ b in s, coeff (f b) n
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.coeff_C_mul`：coeff_C_mul (p : R[X]) : coeff (C a * p) n = a *
+ coeff p n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.natDegree_basis`：natDegree_basis (hvs : Set.InjOn v s) (hi : i 
+in s) : (Lagrange.basis s v i).natDegree = #s - 1
+· 使用定理 `Polynomial.leadingCoeff.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Po
+lynomial R), p.leadingCoeff = p.coeff p.natDegree
+· 使用定理 `Lagrange.leadingCoeff_basis`：leadingCoeff_basis (hvs : Set.InjOn v s) (h
+i : i in s) : (Lagrange.basis s v i).leadingCoeff = (∏ j in s.erase i, ((v i) - 
+(v j)))⁻¹
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval`：mul_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al * l₂.eval = l.eval) : x₁ *…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.inv_eq_eval`：inv_eq_eval [CommGroupWithZero 
+M] {l : NF M} {x : M} (h : x = l.eval) : x⁻¹ = (l⁻¹).eval
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval₃`：mul_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval * l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_subst`：eq_div_of_subst {M : Type*} [D
+iv M] {l l_n l_d n d : M} (h : l = l_n / l_d) (hn : l_n = n) (hd : l_d = d) : l 
+= n / d
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div'`：cons_eq_div_of_eq_di
+v' [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.
+eval / t_d.eval) : ((-n, e) ::ᵣ t).eval …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+（共 36 条，此处仅展示前 30 条）
 -/
 theorem coeff_eq_sum
     (hvs : Set.InjOn v s) {P : Polynomial F} (hP : P.degree < #s) :
-    P.coeff (#s - 1) = ∑ i in s, (P.eval (v i)) / ∏ j in s.erase i, (v i - v j) := by
+    P.coeff (#s - 1) = ∑ i ∈ s, (P.eval (v i)) / ∏ j ∈ s.erase i, (v i - v j) := by
   nth_rewrite 1 [eq_interpolate hvs hP, interpolate_apply, finsetSum_coeff]
   congr! with i hi
-  rw [coeff_C_mul]; rw [← natDegree_basis hvs hi]; rw [← leadingCoeff]; rw [leadingCoeff_basis hvs hi]
+  rw [coeff_C_mul, ← natDegree_basis hvs hi, ← leadingCoeff, leadingCoeff_basis hvs hi]
   field_simp
-
-/--
-theorem `leadingCoeff_eq_sum` / 定理 `leadingCoeff_eq_sum`
-
-English:
-theorem leadingCoeff_eq_sum
-  proof: by
-  lift P.degree to Nat using (by contrapose! hP; simp [hP]) with deg hdeg
-  rw [← WithBot.coe_one]; rw [← WithBot.coe_add] at hP
-  replace hP : #s = deg + 1 := WithBot.coe_eq_coe.mp hP
-  have hdegree : P.degree = ↑(#s - 1) := hdeg.symm.trans (WithBot.coe_eq_coe.mpr (by grind))
-  rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some hdegree]
-  exact coeff_eq_sum hvs (by rw [hdegree]; norm_cast; lia)
-
-中文:
-定理 leadingCoeff_eq_sum
-  证明: by
-  lift P.degree to Nat using (by contrapose! hP; simp [hP]) with deg hdeg
-  rw [← WithBot.coe_one]; rw [← WithBot.coe_add] at hP
-  replace hP : #s = deg + 1 := WithBot.coe_eq_coe.mp hP
-  have hdegree : P.degree = ↑(#s - 1) := hdeg.symm.trans (WithBot.coe_eq_coe.mpr (by grind))
-  rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some hdegree]
-  exact coeff_eq_sum hvs (by rw [hdegree]; norm_cast; lia)
-
-Depends on / 依赖: P.degree, WithBot, WithBot.coe_add, WithBot.coe_eq_coe.mp, WithBot.coe_eq_coe.mpr, WithBot.coe_one, coe_add, coe_eq_coe, coe_one, coeff_eq_sum, contrapose, degree, hdeg.symm.trans, hdegree, leadingCoeff, natDegree_eq_of_degree_eq_some, replace
+/-
+**Lagrange.leadingCoeff_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：leadingCoeff_eq_sum (hvs : Set.InjOn v s) {P : Polynomial F} (hP : #s = P.
+degree + 1) : P.leadingCoeff = ∑ i in s, (P.eval (v i)) / ∏ j in s.erase i, (v i
+ - v j)
+参数：hvs : Set.InjOn v s；hP : #s = P.degree + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₃`：contrapose₃ {p q : Prop} : (q -> 
+¬ p) -> (p -> ¬ q)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `WithBot.coe_eq_coe`：coe_eq_coe : (a : WithBot α) = b ↔ a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.coe_add`：∀ {α : Type u} [inst : Add α] (a b : α), ↑(a + b) = ↑a 
++ ↑b
+· 使用定理 `WithBot.coe_one`：∀ {α : Type u} [inst : One α], ↑1 = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Polynomial.leadingCoeff.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Po
+lynomial R), p.leadingCoeff = p.coeff p.natDegree
+· 使用定理 `Polynomial.natDegree_eq_of_degree_eq_some`：natDegree_eq_of_degree_eq_som
+e {p : R[X]} {n : Nat} (h : degree p = n) : natDegree p = n
+· 使用定理 `Lagrange.coeff_eq_sum`：coeff_eq_sum (hvs : Set.InjOn v s) {P : Polynomia
+l F} (hP : P.degree < #s) : P.coeff (#s - 1) = ∑ i in s, (P.eval (v i)) / ∏ j in
+ s.erase i,…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem leadingCoeff_eq_sum
     (hvs : Set.InjOn v s) {P : Polynomial F} (hP : #s = P.degree + 1) :
-    P.leadingCoeff = ∑ i in s, (P.eval (v i)) / ∏ j in s.erase i, (v i - v j) := by
-  lift P.degree to Nat using (by contrapose! hP; simp [hP]) with deg hdeg
-  rw [← WithBot.coe_one]; rw [← WithBot.coe_add] at hP
+    P.leadingCoeff = ∑ i ∈ s, (P.eval (v i)) / ∏ j ∈ s.erase i, (v i - v j) := by
+  lift P.degree to ℕ using (by contrapose! hP; simp [hP]) with deg hdeg
+  rw [← WithBot.coe_one, ← WithBot.coe_add] at hP
   replace hP : #s = deg + 1 := WithBot.coe_eq_coe.mp hP
   have hdegree : P.degree = ↑(#s - 1) := hdeg.symm.trans (WithBot.coe_eq_coe.mpr (by grind))
-  rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some hdegree]
+  rw [leadingCoeff, natDegree_eq_of_degree_eq_some hdegree]
   exact coeff_eq_sum hvs (by rw [hdegree]; norm_cast; lia)
-
-/--
-lemma `_root_.Polynomial.exists_eval_eq_iff` / 引理 `_root_.Polynomial.exists_eval_eq_iff`
-
-English:
-lemma _root_.Polynomial.exists_eval_eq_iff
-  given: {ι : Type*} [Finite ι] (x y : ι -> F)
-  proof: by
-  refine ⟨fun ⟨q, hq⟩ i j hij => by rw [← hq, ← hq, hij], fun hwd => ?_⟩
-  classical
-  have : Fintype ι := Fintype.ofFinite ι
-  have hinj : Set.InjOn (fun d : F => d) (Finset.univ.image x) := Function.injective_id.injOn
-  set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 with v_def
-  refine ⟨Lagrange.interpolate (Finset.univ.image x) (fun d : F => d) v, fun i => ?_⟩
-  rw [Lagrange.eval_interpolate_at_node _ hinj (by simp)]; rw [v_def]
-  simp only
-  split_ifs with h
-  · exact hwd _ _ h.choose_spec
-  · aesop
-
-中文:
-引理 _root_.多项式.存在_eval_eq_iff
-  条件: {ι : 类型} [有限 ι] (x y : ι -> F)
-  证明: by
-  refine ⟨fun ⟨q, hq⟩ i j hij => by rw [← hq, ← hq, hij], fun hwd => ?_⟩
-  classical
-  have : Fintype ι := Fintype.ofFinite ι
-  have hinj : Set.InjOn (fun d : F => d) (Finset.univ.image x) := Function.injective_id.injOn
-  set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 with v_def
-  refine ⟨Lagrange.interpolate (Finset.univ.image x) (fun d : F => d) v, fun i => ?_⟩
-  rw [Lagrange.eval_interpolate_at_node _ hinj (by simp)]; rw [v_def]
-  simp only
-  split_ifs with h
-  · exact hwd _ _ h.choose_spec
-  · aesop
-
-Depends on / 依赖: Finset, Finset.univ.image, Fintype, Fintype.ofFinite, Function, Function.injective_id.injOn, Lagrange, Lagrange.eval_interpolate_at_node, Lagrange.interpolate, Set.InjOn, classical, eval_interpolate_at_node, h.ch, h.choose, injective_id, interpolate, ofFinite, split_ifs, v_def
+/-
+**Lagrange._root_.Polynomial.exists_eval_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 `Lagra
+nge`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Polynomial.exists_eval_eq_iff {ι : Type*} [Finite ι] (x y : ι -> F) :
-    (exists q : F[X], forall i, q.eval (x i) = y i) ↔ forall i j, x i = x j -> y i = y j := by
-  refine ⟨fun ⟨q, hq⟩ i j hij => by rw [← hq, ← hq, hij], fun hwd => ?_⟩
+lemma _root_.Polynomial.exists_eval_eq_iff {ι : Type*} [Finite ι] (x y : ι → F) :
+    (∃ q : F[X], ∀ i, q.eval (x i) = y i) ↔ ∀ i j, x i = x j → y i = y j := by
+  refine ⟨fun ⟨q, hq⟩ i j hij ↦ by rw [← hq, ← hq, hij], fun hwd ↦ ?_⟩
   classical
   have : Fintype ι := Fintype.ofFinite ι
-  have hinj : Set.InjOn (fun d : F => d) (Finset.univ.image x) := Function.injective_id.injOn
-  set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 with v_def
-  refine ⟨Lagrange.interpolate (Finset.univ.image x) (fun d : F => d) v, fun i => ?_⟩
-  rw [Lagrange.eval_interpolate_at_node _ hinj (by simp)]; rw [v_def]
+  have hinj : Set.InjOn (fun d : F ↦ d) (Finset.univ.image x) := Function.injective_id.injOn
+  set v : F → F := fun z ↦ if h : ∃ i, x i = z then y h.choose else 0 with v_def
+  refine ⟨Lagrange.interpolate (Finset.univ.image x) (fun d : F ↦ d) v, fun i ↦ ?_⟩
+  rw [Lagrange.eval_interpolate_at_node _ hinj (by simp), v_def]
   simp only
   split_ifs with h
   · exact hwd _ _ h.choose_spec
@@ -1840,415 +1890,428 @@ end Interpolate
 section Nodal
 
 variable {R : Type*} [CommRing R] {ι : Type*}
-variable {s : Finset ι} {v : ι -> R}
+variable {s : Finset ι} {v : ι → R}
 
 open Finset Polynomial
 
-/--
-Definition of `nodal` / `nodal` 的定义
+/-- `nodal s v` is the unique monic polynomial whose roots are the nodes defined by `v` and `s`.
 
-English:
-definition nodal
-  signature: (s : Finset ι) (v : ι -> R)
-  body: ∏ i in s, (X - C (v i))
+That is, the roots of `nodal s v` are exactly the image of `v` on `s`,
+with appropriate multiplicity.
 
-中文:
-定义 nodal
-  签名: (s : 有限集 ι) (v : ι -> R)
-  定义体: ∏ i in s, (X - C (v i))
+We can use `nodal` to define the barycentric forms of the evaluated interpolant.
 -/
-def nodal (s : Finset ι) (v : ι -> R) : R[X] :=
-  ∏ i in s, (X - C (v i))
+/-
+**Lagrange.nodal** 是 Mathlib 中的一个定义，位于命名空间 `Lagrange`。
+形式化陈述：nodal (s : Finset ι) (v : ι -> R) : R[X]
+参数：s : Finset ι；v : ι -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-theorem `nodal_eq` / 定理 `nodal_eq`
+--- 原说明 ---
+`nodal s v` is the unique monic polynomial whose roots are the nodes defined by 
+`v` and `s`.
 
-English:
-theorem nodal_eq
-  given: (s : Finset ι) (v : ι -> R)
-  statement: nodal s v = ∏ i in s, (X - C (v i))
-  proof: rfl
+That is, the roots of `nodal s v` are exactly the image of `v` on `s`,
+with appropriate multiplicity.
 
-@[simp]
-
-中文:
-定理 nodal_eq
-  条件: (s : 有限集 ι) (v : ι -> R)
-  结论: nodal s v = ∏ i in s, (X - C (v i))
-  证明: rfl
-
-@[simp]
+We can use `nodal` to define the barycentric forms of the evaluated interpolant.
 -/
-theorem nodal_eq (s : Finset ι) (v : ι -> R) : nodal s v = ∏ i in s, (X - C (v i)) :=
+def nodal (s : Finset ι) (v : ι → R) : R[X] :=
+  ∏ i ∈ s, (X - C (v i))
+/-
+**Lagrange.nodal_eq** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodal_eq (s : Finset ι) (v : ι -> R) : nodal s v = ∏ i in s, (X - C (v i))
+参数：s : Finset ι；v : ι -> R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem nodal_eq (s : Finset ι) (v : ι → R) : nodal s v = ∏ i ∈ s, (X - C (v i)) :=
   rfl
 
 @[simp]
-/--
-theorem `nodal_empty` / 定理 `nodal_empty`
-
-English:
-theorem nodal_empty
-  statement: nodal ∅ v = 1
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-定理 nodal_empty
-  结论: nodal ∅ v = 1
-  证明: by
-  rfl
-
-@[simp]
+/-
+**Lagrange.nodal_empty** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodal_empty : nodal ∅ v = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nodal_empty : nodal ∅ v = 1 := by
   rfl
 
 @[simp]
-/--
-theorem `natDegree_nodal` / 定理 `natDegree_nodal`
-
-English:
-theorem natDegree_nodal
-  given: [Nontrivial R]
-  statement: (nodal s v).natDegree = #s
-  proof: by
-  simp_rw [nodal, natDegree_prod_of_monic (h := fun i _ => monic_X_sub_C (v i)),
-    natDegree_X_sub_C, sum_const, smul_eq_mul, mul_one]
-
-中文:
-定理 natDegree_nodal
-  条件: [非平凡 R]
-  结论: (nodal s v).natDegree = #s
-  证明: by
-  simp_rw [nodal, natDegree_prod_of_monic (h := fun i _ => monic_X_sub_C (v i)),
-    natDegree_X_sub_C, sum_const, smul_eq_mul, mul_one]
-
-Depends on / 依赖: monic_X_sub_C, mul_one, natDegree_X_sub_C, natDegree_prod_of_monic, simp_rw, smul_eq_mul, sum_const
+/-
+**Lagrange.natDegree_nodal** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：natDegree_nodal [Nontrivial R] : (nodal s v).natDegree = #s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.natDegree_prod_of_monic`：natDegree_prod_of_monic (h : forall 
+i in s, (f i).Monic) : (∏ i in s, f i).natDegree = ∑ i in s, (f i).natDegree
+· 使用定理 `Polynomial.monic_X_sub_C`：monic_X_sub_C (x : R) : Monic (X - C x)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.natDegree_X_sub_C`：natDegree_X_sub_C (x : R) : (X - C x).natD
+egree = 1
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem natDegree_nodal [Nontrivial R] : (nodal s v).natDegree = #s := by
   simp_rw [nodal, natDegree_prod_of_monic (h := fun i _ => monic_X_sub_C (v i)),
     natDegree_X_sub_C, sum_const, smul_eq_mul, mul_one]
-
-/--
-theorem `nodal_ne_zero` / 定理 `nodal_ne_zero`
-
-English:
-theorem nodal_ne_zero
-  given: [Nontrivial R]
-  statement: nodal s v != 0
-  proof: by
-  rcases s.eq_empty_or_nonempty with (rfl | h)
-  · exact one_ne_zero
-  · apply ne_zero_of_natDegree_gt (n := 0)
-    simp only [natDegree_nodal, h.card_pos]
-
-@[simp]
-
-中文:
-定理 nodal_ne_zero
-  条件: [非平凡 R]
-  结论: nodal s v != 0
-  证明: by
-  rcases s.eq_empty_or_nonempty with (rfl | h)
-  · exact one_ne_zero
-  · apply ne_zero_of_natDegree_gt (n := 0)
-    simp only [natDegree_nodal, h.card_pos]
-
-@[simp]
-
-Depends on / 依赖: card_pos, eq_empty_or_nonempty, h.card_pos, natDegree_nodal, ne_zero_of_natDegree_gt, one_ne_zero, s.eq_empty_or_nonempty
+/-
+**Lagrange.nodal_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodal_ne_zero [Nontrivial R] : nodal s v != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.ne_zero_of_natDegree_gt`：ne_zero_of_natDegree_gt {n : Nat} (h
+ : n < natDegree p) : p != 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.natDegree_nodal`：natDegree_nodal [Nontrivial R] : (nodal s v).n
+atDegree = #s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
 -/
-theorem nodal_ne_zero [Nontrivial R] : nodal s v != 0 := by
+theorem nodal_ne_zero [Nontrivial R] : nodal s v ≠ 0 := by
   rcases s.eq_empty_or_nonempty with (rfl | h)
   · exact one_ne_zero
   · apply ne_zero_of_natDegree_gt (n := 0)
     simp only [natDegree_nodal, h.card_pos]
 
 @[simp]
-/--
-theorem `degree_nodal` / 定理 `degree_nodal`
-
-English:
-theorem degree_nodal
-  given: [Nontrivial R]
-  statement: (nodal s v).degree = #s
-  proof: by
-  simp_rw [degree_eq_natDegree nodal_ne_zero, natDegree_nodal]
-
-中文:
-定理 degree_nodal
-  条件: [非平凡 R]
-  结论: (nodal s v).degree = #s
-  证明: by
-  simp_rw [degree_eq_natDegree nodal_ne_zero, natDegree_nodal]
-
-Depends on / 依赖: degree_eq_natDegree, natDegree_nodal, nodal_ne_zero, simp_rw
+/-
+**Lagrange.degree_nodal** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：degree_nodal [Nontrivial R] : (nodal s v).degree = #s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_eq_natDegree`：degree_eq_natDegree (hp : p != 0) : degr
+ee p = (natDegree p : WithBot Nat)
+· 使用定理 `Lagrange.nodal_ne_zero`：nodal_ne_zero [Nontrivial R] : nodal s v != 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Lagrange.natDegree_nodal`：natDegree_nodal [Nontrivial R] : (nodal s v).n
+atDegree = #s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem degree_nodal [Nontrivial R] : (nodal s v).degree = #s := by
   simp_rw [degree_eq_natDegree nodal_ne_zero, natDegree_nodal]
-
-/--
-theorem `nodal_monic` / 定理 `nodal_monic`
-
-English:
-theorem nodal_monic
-  statement: (nodal s v).Monic
-  proof: monic_prod_of_monic s (fun i => X - C (v i)) fun i _ => monic_X_sub_C (v i)
-
-中文:
-定理 nodal_monic
-  结论: (nodal s v).Monic
-  证明: monic_prod_of_monic s (fun i => X - C (v i)) fun i _ => monic_X_sub_C (v i)
-
-Depends on / 依赖: monic_X_sub_C, monic_prod_of_monic
+/-
+**Lagrange.nodal_monic** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodal_monic : (nodal s v).Monic
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.monic_prod_of_monic`：monic_prod_of_monic (s : Finset ι) (f : 
+ι -> R[X]) (hs : forall i in s, Monic (f i)) : Monic (∏ i in s, f i)
+· 使用定理 `Polynomial.monic_X_sub_C`：monic_X_sub_C (x : R) : Monic (X - C x)
 -/
 theorem nodal_monic : (nodal s v).Monic :=
-  monic_prod_of_monic s (fun i => X - C (v i)) fun i _ => monic_X_sub_C (v i)
-
-/--
-theorem `eval_nodal` / 定理 `eval_nodal`
-
-English:
-theorem eval_nodal
-  given: {x : R}
-  statement: (nodal s v).eval x = ∏ i in s, (x - v i)
-  proof: by
-  simp_rw [nodal, eval_prod, eval_sub, eval_X, eval_C]
-
-中文:
-定理 eval_nodal
-  条件: {x : R}
-  结论: (nodal s v).eval x = ∏ i in s, (x - v i)
-  证明: by
-  simp_rw [nodal, eval_prod, eval_sub, eval_X, eval_C]
-
-Depends on / 依赖: eval_C, eval_X, eval_prod, eval_sub, simp_rw
+  monic_prod_of_monic s (fun i ↦ X - C (v i)) fun i _ ↦ monic_X_sub_C (v i)
+/-
+**Lagrange.eval_nodal** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_nodal {x : R} : (nodal s v).eval x = ∏ i in s, (x - v i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_prod`：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X
+]) (x : R) : eval x (∏ j in s, p j) = ∏ j in s, eval x (p j)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem eval_nodal {x : R} : (nodal s v).eval x = ∏ i in s, (x - v i) := by
+theorem eval_nodal {x : R} : (nodal s v).eval x = ∏ i ∈ s, (x - v i) := by
   simp_rw [nodal, eval_prod, eval_sub, eval_X, eval_C]
-
-/--
-theorem `eval_nodal_at_node` / 定理 `eval_nodal_at_node`
-
-English:
-theorem eval_nodal_at_node
-  given: {i : ι} (hi : i in s)
-  statement: eval (v i) (nodal s v) = 0
-  proof: by
-  rw [eval_nodal]
-  exact s.prod_eq_zero hi (sub_self (v i))
-
-中文:
-定理 eval_nodal_at_node
-  条件: {i : ι} (hi : i in s)
-  结论: eval (v i) (nodal s v) = 0
-  证明: by
-  rw [eval_nodal]
-  exact s.prod_eq_zero hi (sub_self (v i))
-
-Depends on / 依赖: eval_nodal, prod_eq_zero, s.prod_eq_zero, sub_self
+/-
+**Lagrange.eval_nodal_at_node** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_nodal_at_node {i : ι} (hi : i in s) : eval (v i) (nodal s v) = 0
+参数：hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.eval_nodal`：eval_nodal {x : R} : (nodal s v).eval x = ∏ i in s,
+ (x - v i)
+· 使用引理 `Finset.prod_eq_zero`：prod_eq_zero (hi : i in s) (h : f i = 0) : ∏ j in s
+, f j = 0
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
-theorem eval_nodal_at_node {i : ι} (hi : i in s) : eval (v i) (nodal s v) = 0 := by
+theorem eval_nodal_at_node {i : ι} (hi : i ∈ s) : eval (v i) (nodal s v) = 0 := by
   rw [eval_nodal]
   exact s.prod_eq_zero hi (sub_self (v i))
-
-/--
-theorem `eval_nodal_not_at_node` / 定理 `eval_nodal_not_at_node`
-
-English:
-theorem eval_nodal_not_at_node
-  statement: [Nontrivial R] [NoZeroDivisors R] {x : R}
-  proof: by
-  simp_rw [nodal, eval_prod, prod_ne_zero_iff, eval_sub, eval_X, eval_C, sub_ne_zero]
-  exact hx
-
-中文:
-定理 eval_nodal_not_at_node
-  结论: [非平凡 R] [无零因子 R] {x : R}
-  证明: by
-  simp_rw [nodal, eval_prod, prod_ne_zero_iff, eval_sub, eval_X, eval_C, sub_ne_zero]
-  exact hx
-
-Depends on / 依赖: eval_C, eval_X, eval_prod, eval_sub, prod_ne_zero_iff, simp_rw, sub_ne_zero
+/-
+**Lagrange.eval_nodal_not_at_node** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_nodal_not_at_node [Nontrivial R] [NoZeroDivisors R] {x : R} (hx : for
+all i in s, x != v i) : eval x (nodal s v) != 0
+参数：hx : forall i in s, x != v i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_prod`：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X
+]) (x : R) : eval x (∏ j in s, p j) = ∏ j in s, eval x (p j)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
 -/
 theorem eval_nodal_not_at_node [Nontrivial R] [NoZeroDivisors R] {x : R}
-    (hx : forall i in s, x != v i) : eval x (nodal s v) != 0 := by
+    (hx : ∀ i ∈ s, x ≠ v i) : eval x (nodal s v) ≠ 0 := by
   simp_rw [nodal, eval_prod, prod_ne_zero_iff, eval_sub, eval_X, eval_C, sub_ne_zero]
   exact hx
-
-/--
-theorem `nodal_eq_mul_nodal_erase` / 定理 `nodal_eq_mul_nodal_erase`
-
-English:
-theorem nodal_eq_mul_nodal_erase
-  given: [DecidableEq ι] {i : ι} (hi : i in s)
-  proof: by
-    simp_rw [nodal, Finset.mul_prod_erase _ (fun x => X - C (v x)) hi]
-
-中文:
-定理 nodal_eq_mul_nodal_erase
-  条件: [DecidableEq ι] {i : ι} (hi : i in s)
-  证明: by
-    simp_rw [nodal, Finset.mul_prod_erase _ (fun x => X - C (v x)) hi]
-
-Depends on / 依赖: Finset, Finset.mul_prod_erase, mul_prod_erase, simp_rw
+/-
+**Lagrange.nodal_eq_mul_nodal_erase** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodal_eq_mul_nodal_erase [DecidableEq ι] {i : ι} (hi : i in s) : nodal s v
+ = (X - C (v i)) * nodal (s.erase i) v
+参数：hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.mul_prod_erase`：mul_prod_erase [DecidableEq ι] (s : Finset ι) (f 
+: ι -> M) {a : ι} (h : a in s) : (f a * ∏ x in s.erase a, f x) = ∏ x in s, f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nodal_eq_mul_nodal_erase [DecidableEq ι] {i : ι} (hi : i in s) :
+theorem nodal_eq_mul_nodal_erase [DecidableEq ι] {i : ι} (hi : i ∈ s) :
     nodal s v = (X - C (v i)) * nodal (s.erase i) v := by
     simp_rw [nodal, Finset.mul_prod_erase _ (fun x => X - C (v x)) hi]
-
-/--
-theorem `X_sub_C_dvd_nodal` / 定理 `X_sub_C_dvd_nodal`
-
-English:
-theorem X_sub_C_dvd_nodal
-  given: (v : ι -> R) {i : ι} (hi : i in s)
-  statement: X - C (v i) ∣ nodal s v
-  proof: by
-  classical
-  exact ⟨nodal (s.erase i) v, nodal_eq_mul_nodal_erase hi⟩
-
-中文:
-定理 X_sub_C_dvd_nodal
-  条件: (v : ι -> R) {i : ι} (hi : i in s)
-  结论: X - C (v i) ∣ nodal s v
-  证明: by
-  classical
-  exact ⟨nodal (s.erase i) v, nodal_eq_mul_nodal_erase hi⟩
-
-Depends on / 依赖: classical, nodal_eq_mul_nodal_erase, s.erase
+/-
+**Lagrange.X_sub_C_dvd_nodal** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：X_sub_C_dvd_nodal (v : ι -> R) {i : ι} (hi : i in s) : X - C (v i) ∣ nodal
+ s v
+参数：v : ι -> R；hi : i in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Lagrange.nodal_eq_mul_nodal_erase`：nodal_eq_mul_nodal_erase [DecidableEq
+ ι] {i : ι} (hi : i in s) : nodal s v = (X - C (v i)) * nodal (s.erase i) v
 -/
-theorem X_sub_C_dvd_nodal (v : ι -> R) {i : ι} (hi : i in s) : X - C (v i) ∣ nodal s v := by
+theorem X_sub_C_dvd_nodal (v : ι → R) {i : ι} (hi : i ∈ s) : X - C (v i) ∣ nodal s v := by
   classical
   exact ⟨nodal (s.erase i) v, nodal_eq_mul_nodal_erase hi⟩
-
-/--
-theorem `nodal_insert_eq_nodal` / 定理 `nodal_insert_eq_nodal`
-
-English:
-theorem nodal_insert_eq_nodal
-  given: [DecidableEq ι] {i : ι} (hi : i ∉ s)
-  proof: by
-  simp_rw [nodal, prod_insert hi]
-
-中文:
-定理 nodal_insert_eq_nodal
-  条件: [DecidableEq ι] {i : ι} (hi : i ∉ s)
-  证明: by
-  simp_rw [nodal, prod_insert hi]
-
-Depends on / 依赖: prod_insert, simp_rw
+/-
+**Lagrange.nodal_insert_eq_nodal** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodal_insert_eq_nodal [DecidableEq ι] {i : ι} (hi : i ∉ s) : nodal (insert
+ i s) v = (X - C (v i)) * nodal s v
+参数：hi : i ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nodal_insert_eq_nodal [DecidableEq ι] {i : ι} (hi : i ∉ s) :
     nodal (insert i s) v = (X - C (v i)) * nodal s v := by
   simp_rw [nodal, prod_insert hi]
-
-/--
-theorem `derivative_nodal` / 定理 `derivative_nodal`
-
-English:
-theorem derivative_nodal
-  given: [DecidableEq ι]
-  proof: by
-  refine s.induction_on ?_ fun i t hit IH => ?_
-  · rw [nodal_empty, derivative_one, sum_empty]
-  · rw [nodal_insert_eq_nodal hit, derivative_mul, IH, derivative_sub, derivative_X, derivative_C,
-      sub_zero, one_mul, sum_insert hit, mul_sum, erase_insert hit, add_right_inj]
-    refine sum_congr rfl fun j hjt => ?_
-    rw [t.erase_insert_of_ne (ne_of_mem_of_not_mem hjt hit).symm]; rw [nodal_insert_eq_nodal (mem_of_mem_erase.mt hit)]
-
-中文:
-定理 derivative_nodal
-  条件: [DecidableEq ι]
-  证明: by
-  refine s.induction_on ?_ fun i t hit IH => ?_
-  · rw [nodal_empty, derivative_one, sum_empty]
-  · rw [nodal_insert_eq_nodal hit, derivative_mul, IH, derivative_sub, derivative_X, derivative_C,
-      sub_zero, one_mul, sum_insert hit, mul_sum, erase_insert hit, add_right_inj]
-    refine sum_congr rfl fun j hjt => ?_
-    rw [t.erase_insert_of_ne (ne_of_mem_of_not_mem hjt hit).symm]; rw [nodal_insert_eq_nodal (mem_of_mem_erase.mt hit)]
-
-Depends on / 依赖: add_right_inj, derivative_C, derivative_X, derivative_mul, derivative_one, derivative_sub, erase_insert, erase_insert_of_ne, induction_on, mem_of_mem_erase, mem_of_mem_erase.mt, mul_sum, ne_of_mem_of_not_mem, nodal_empty, nodal_insert_eq_nodal, one_mul, s.induction_on, sub_zero, sum_congr, sum_empty
+/-
+**Lagrange.derivative_nodal** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：derivative_nodal [DecidableEq ι] : derivative (nodal s v) = ∑ i in s, noda
+l (s.erase i) v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.nodal_empty`：nodal_empty : nodal ∅ v = 1
+· 使用定理 `Polynomial.derivative_one`：derivative_one : derivative (1 : R[X]) = 0
+· 使用定理 `Finset.sum_empty`：∀ {ι : Type u_1} {M : Type u_3} {f : ι → M} [inst : Ad
+dCommMonoid M], ∑ x ∈ ∅, f x = 0
+· 使用定理 `Lagrange.nodal_insert_eq_nodal`：nodal_insert_eq_nodal [DecidableEq ι] {i
+ : ι} (hi : i ∉ s) : nodal (insert i s) v = (X - C (v i)) * nodal s v
+· 使用定理 `Polynomial.derivative_mul`：derivative_mul {f g : R[X]} : derivative (f *
+ g) = derivative f * g + f * derivative g
+· 使用定理 `Polynomial.derivative_sub`：derivative_sub {f g : R[X]} : derivative (f -
+ g) = derivative f - derivative g
+· 使用定理 `Polynomial.derivative_X`：derivative_X : derivative (X : R[X]) = 1
+· 使用定理 `Polynomial.derivative_C`：derivative_C {a : R} : derivative (C a) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `Finset.erase_insert`：erase_insert {a : α} {s : Finset α} (h : a ∉ s) : (
+insert a s).erase a = s
+· 使用定理 `add_right_inj`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] (a : 
+G) {b c : G}, a + b = a + c ↔ b = c
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.erase_insert_of_ne`：erase_insert_of_ne {a b : α} {s : Finset α} (
+h : a != b) : (insert a s).erase b = insert a (s.erase b)
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
+· 使用定理 `Function.mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Finset.mem_of_mem_erase`：mem_of_mem_erase : b in erase s a -> b in s
 -/
 theorem derivative_nodal [DecidableEq ι] :
-    derivative (nodal s v) = ∑ i in s, nodal (s.erase i) v := by
+    derivative (nodal s v) = ∑ i ∈ s, nodal (s.erase i) v := by
   refine s.induction_on ?_ fun i t hit IH => ?_
   · rw [nodal_empty, derivative_one, sum_empty]
   · rw [nodal_insert_eq_nodal hit, derivative_mul, IH, derivative_sub, derivative_X, derivative_C,
       sub_zero, one_mul, sum_insert hit, mul_sum, erase_insert hit, add_right_inj]
     refine sum_congr rfl fun j hjt => ?_
-    rw [t.erase_insert_of_ne (ne_of_mem_of_not_mem hjt hit).symm]; rw [nodal_insert_eq_nodal (mem_of_mem_erase.mt hit)]
-
-/--
-theorem `eval_nodal_derivative_eval_node_eq` / 定理 `eval_nodal_derivative_eval_node_eq`
-
-English:
-theorem eval_nodal_derivative_eval_node_eq
-  given: [DecidableEq ι] {i : ι} (hi : i in s)
-  proof: by
-  rw [derivative_nodal]; rw [eval_finsetSum]; rw [← add_sum_erase _ _ hi]; rw [add_eq_left]
-  exact sum_eq_zero fun j hj => (eval_nodal_at_node (mem_erase.mpr ⟨(mem_erase.mp hj).1.symm, hi⟩))
-
-中文:
-定理 eval_nodal_derivative_eval_node_eq
-  条件: [DecidableEq ι] {i : ι} (hi : i in s)
-  证明: by
-  rw [derivative_nodal]; rw [eval_finsetSum]; rw [← add_sum_erase _ _ hi]; rw [add_eq_left]
-  exact sum_eq_zero fun j hj => (eval_nodal_at_node (mem_erase.mpr ⟨(mem_erase.mp hj).1.symm, hi⟩))
-
-Depends on / 依赖: add_eq_left, add_sum_erase, derivative_nodal, eval_finsetSum, eval_nodal_at_node, mem_erase, mem_erase.mp, mem_erase.mpr, sum_eq_zero
+    rw [t.erase_insert_of_ne (ne_of_mem_of_not_mem hjt hit).symm,
+      nodal_insert_eq_nodal (mem_of_mem_erase.mt hit)]
+/-
+**Lagrange.eval_nodal_derivative_eval_node_eq** 是 Mathlib 中的一个定理，位于命名空间 `Lagrang
+e`。
+形式化陈述：eval_nodal_derivative_eval_node_eq [DecidableEq ι] {i : ι} (hi : i in s) :
+ eval (v i) (derivative (nodal s v)) = eval (v i) (nodal (s.erase i) v)
+参数：hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.derivative_nodal`：derivative_nodal [DecidableEq ι] : derivative
+ (nodal s v) = ∑ i in s, nodal (s.erase i) v
+· 使用定理 `Polynomial.eval_finsetSum`：eval_finsetSum (s : Finset ι) (g : ι -> R[X])
+ (x : R) : (∑ i in s, g i).eval x = ∑ i in s, (g i).eval x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.add_sum_erase`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] [inst_1 : DecidableEq ι] (s : Finset ι) (f : ι → M) {a : ι},   a ∈ s → f 
+a + ∑ x ∈ …
+· 使用定理 `add_eq_left`：∀ {M : Type u_4} [inst : AddMonoid M] [IsLeftCancelAdd M] {
+a b : M}, a + b = a ↔ b = 0
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `Lagrange.eval_nodal_at_node`：eval_nodal_at_node {i : ι} (hi : i in s) : 
+eval (v i) (nodal s v) = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem eval_nodal_derivative_eval_node_eq [DecidableEq ι] {i : ι} (hi : i in s) :
+theorem eval_nodal_derivative_eval_node_eq [DecidableEq ι] {i : ι} (hi : i ∈ s) :
     eval (v i) (derivative (nodal s v)) = eval (v i) (nodal (s.erase i) v) := by
-  rw [derivative_nodal]; rw [eval_finsetSum]; rw [← add_sum_erase _ _ hi]; rw [add_eq_left]
+  rw [derivative_nodal, eval_finsetSum, ← add_sum_erase _ _ hi, add_eq_left]
   exact sum_eq_zero fun j hj => (eval_nodal_at_node (mem_erase.mpr ⟨(mem_erase.mp hj).1.symm, hi⟩))
 
-/--
-theorem `nodal_subgroup_eq_X_pow_card_sub_one` / 定理 `nodal_subgroup_eq_X_pow_card_sub_one`
+/-- The vanishing polynomial on a multiplicative subgroup is of the form X ^ n - 1. -/
+/-
+**Lagrange.nodal_subgroup_eq_X_pow_card_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Lagra
+nge`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] [IsDomain R] (G : Subgroup Rˣ) [inst_
+2 : Fintype ↥G],   Lagrange.nodal (↑G).toFinset Units.val = Polynomial.X ^ Finty
+pe.card ↥G - 1
+参数：G : Subgroup Rˣ；↑G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_one`：degree_one : degree (1 : R[X]) = (0 : WithBot Nat
+)
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用引理 `Polynomial.degree_pow`：degree_pow [Nontrivial R] (p : R[X]) (n : Nat) : 
+degree (p ^ n) = n • degree p
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Polynomial.degree_X`：degree_X : degree (X : R[X]) = 1
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `WithBot.instIsOrderedRing`：∀ {α : Type u_1} [inst : DecidableEq α] [inst
+_1 : CommSemiring α] [inst_2 : PartialOrder α] [IsOrderedRing α]   [inst_4 : Can
+onicallyOrdered…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
+· 使用定理 `Polynomial.eq_of_degree_le_of_eval_index_eq`：eq_of_degree_le_of_eval_ind
+ex_eq (hvs : Set.InjOn v s) (h_deg_le : f.degree <= #s) (h_deg_eq : f.degree = g
+.degree) (hlc : f.leadingCoeff = …
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Units.val_injective`：∀ {α : Type u} [inst : Monoid α], Function.Injectiv
+e Units.val
+· 使用定理 `Lagrange.degree_nodal`：degree_nodal [Nontrivial R] : (nodal s v).degree 
+= #s
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
+· 使用定理 `Polynomial.degree_sub_eq_left_of_degree_lt`：degree_sub_eq_left_of_degree
+_lt (h : degree q < degree p) : degree (p - q) = degree p
+· 使用定理 `Nat.cast_inj`：cast_inj {m n : Nat} : (m : R) = n ↔ m = n
+· 使用定理 `Lagrange.nodal_monic`：nodal_monic : (nodal s v).Monic
+· 使用定理 `Polynomial.leadingCoeff_sub_of_degree_lt`：leadingCoeff_sub_of_degree_lt 
+(h : Polynomial.degree q < Polynomial.degree p) : (p - q).leadingCoeff = p.leadi
+ngCoeff
+· 使用定理 `Polynomial.monic_X_pow`：monic_X_pow (n : Nat) : Monic (X ^ n : R[X])
+· 使用定理 `Lagrange.eval_nodal_at_node`：eval_nodal_at_node {i : ι} (hi : i in s) : 
+eval (v i) (nodal s v) = 0
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_pow`：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+（共 36 条，此处仅展示前 30 条）
 
-English:
-theorem nodal_subgroup_eq_X_pow_card_sub_one
-  statement: [IsDomain R]
-  proof: by
-  have h : degree (1 : R[X]) < degree ((X : R[X]) ^ Fintype.card G) := by simp [Fintype.card_pos]
-  apply eq_of_degree_le_of_eval_index_eq (v := ((↑) : Rˣ -> R)) (G : Set Rˣ).toFinset
-  · exact Units.val_injective.injOn
-  · simp
-  · rw [degree_sub_eq_left_of_degree_lt h, degree_nodal, Set.toFinset_card, degree_pow, degree_X,
-      nsmul_eq_mul, mul_one, Nat.cast_inj]
-    exact rfl
-  · rw [nodal_monic, leadingCoeff_sub_of_degree_lt h, monic_X_pow]
-  · intro i hi
-    rw [eval_nodal_at_node hi]
-    replace hi : i in G := by simpa using hi
-    obtain ⟨g, rfl⟩ : exists g : G, g.val = i := ⟨⟨i, hi⟩, rfl⟩
-    simp [← Units.val_pow_eq_pow_val, ← Subgroup.coe_pow G]
-
-中文:
-定理 nodal_subgroup_eq_X_pow_card_sub_one
-  结论: [是整环 R]
-  证明: by
-  have h : degree (1 : R[X]) < degree ((X : R[X]) ^ Fintype.card G) := by simp [Fintype.card_pos]
-  apply eq_of_degree_le_of_eval_index_eq (v := ((↑) : Rˣ -> R)) (G : Set Rˣ).toFinset
-  · exact Units.val_injective.injOn
-  · simp
-  · rw [degree_sub_eq_left_of_degree_lt h, degree_nodal, Set.toFinset_card, degree_pow, degree_X,
-      nsmul_eq_mul, mul_one, Nat.cast_inj]
-    exact rfl
-  · rw [nodal_monic, leadingCoeff_sub_of_degree_lt h, monic_X_pow]
-  · intro i hi
-    rw [eval_nodal_at_node hi]
-    replace hi : i in G := by simpa using hi
-    obtain ⟨g, rfl⟩ : exists g : G, g.val = i := ⟨⟨i, hi⟩, rfl⟩
-    simp [← Units.val_pow_eq_pow_val, ← Subgroup.coe_pow G]
+--- 原说明 ---
+The vanishing polynomial on a multiplicative subgroup is of the form X ^ n - 1.
 -/
 @[simp] theorem nodal_subgroup_eq_X_pow_card_sub_one [IsDomain R]
     (G : Subgroup Rˣ) [Fintype G] :
-    nodal (G : Set Rˣ).toFinset ((↑) : Rˣ -> R) = X ^ (Fintype.card G) - 1 := by
+    nodal (G : Set Rˣ).toFinset ((↑) : Rˣ → R) = X ^ (Fintype.card G) - 1 := by
   have h : degree (1 : R[X]) < degree ((X : R[X]) ^ Fintype.card G) := by simp [Fintype.card_pos]
-  apply eq_of_degree_le_of_eval_index_eq (v := ((↑) : Rˣ -> R)) (G : Set Rˣ).toFinset
+  apply eq_of_degree_le_of_eval_index_eq (v := ((↑) : Rˣ → R)) (G : Set Rˣ).toFinset
   · exact Units.val_injective.injOn
   · simp
   · rw [degree_sub_eq_left_of_degree_lt h, degree_nodal, Set.toFinset_card, degree_pow, degree_X,
@@ -2257,8 +2320,8 @@ theorem nodal_subgroup_eq_X_pow_card_sub_one
   · rw [nodal_monic, leadingCoeff_sub_of_degree_lt h, monic_X_pow]
   · intro i hi
     rw [eval_nodal_at_node hi]
-    replace hi : i in G := by simpa using hi
-    obtain ⟨g, rfl⟩ : exists g : G, g.val = i := ⟨⟨i, hi⟩, rfl⟩
+    replace hi : i ∈ G := by simpa using hi
+    obtain ⟨g, rfl⟩ : ∃ g : G, g.val = i := ⟨⟨i, hi⟩, rfl⟩
     simp [← Units.val_pow_eq_pow_val, ← Subgroup.coe_pow G]
 
 end Nodal
@@ -2266,119 +2329,118 @@ end Nodal
 section NodalWeight
 
 variable {F : Type*} [Field F] {ι : Type*} [DecidableEq ι]
-variable {s : Finset ι} {v : ι -> F} {i : ι}
+variable {s : Finset ι} {v : ι → F} {i : ι}
 
 open Finset
 
-/--
-Definition of `nodalWeight` / `nodalWeight` 的定义
+/-- This defines the nodal weight for a given set of node indexes and node mapping function `v`. -/
+/-
+**Lagrange.nodalWeight** 是 Mathlib 中的一个定义，位于命名空间 `Lagrange`。
+形式化陈述：nodalWeight (s : Finset ι) (v : ι -> F) (i : ι)
+参数：s : Finset ι；v : ι -> F；i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nodalWeight
-  signature: (s : Finset ι) (v : ι -> F) (i : ι)
-  body: ∏ j in s.erase i, (v i - v j)⁻¹
-
-中文:
-定义 nodalWeight
-  签名: (s : 有限集 ι) (v : ι -> F) (i : ι)
-  定义体: ∏ j in s.erase i, (v i - v j)⁻¹
-
-Depends on / 依赖: s.erase
+--- 原说明 ---
+This defines the nodal weight for a given set of node indexes and node mapping f
+unction `v`.
 -/
-def nodalWeight (s : Finset ι) (v : ι -> F) (i : ι) :=
-  ∏ j in s.erase i, (v i - v j)⁻¹
-
-/--
-theorem `nodalWeight_eq_eval_nodal_erase_inv` / 定理 `nodalWeight_eq_eval_nodal_erase_inv`
-
-English:
-theorem nodalWeight_eq_eval_nodal_erase_inv
-  proof: by
-  rw [eval_nodal]; rw [nodalWeight]; rw [prod_inv_distrib]
-
-中文:
-定理 nodalWeight_eq_eval_nodal_erase_inv
-  证明: by
-  rw [eval_nodal]; rw [nodalWeight]; rw [prod_inv_distrib]
-
-Depends on / 依赖: eval_nodal, nodalWeight, prod_inv_distrib
+def nodalWeight (s : Finset ι) (v : ι → F) (i : ι) :=
+  ∏ j ∈ s.erase i, (v i - v j)⁻¹
+/-
+**Lagrange.nodalWeight_eq_eval_nodal_erase_inv** 是 Mathlib 中的一个定理，位于命名空间 `Lagran
+ge`。
+形式化陈述：nodalWeight_eq_eval_nodal_erase_inv : nodalWeight s v i = (eval (v i) (nod
+al (s.erase i) v))⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.eval_nodal`：eval_nodal {x : R} : (nodal s v).eval x = ∏ i in s,
+ (x - v i)
+· 使用定理 `Lagrange.nodalWeight.eq_1`：∀ {F : Type u_1} [inst : Field F] {ι : Type u
+_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v : ι → F) (i : ι),   Lagrange.noda
+lWeight s v i =…
+· 使用定理 `Finset.prod_inv_distrib`：prod_inv_distrib (f : ι -> G) : (∏ x in s, (f x
+)⁻¹) = (∏ x in s, f x)⁻¹
 -/
 theorem nodalWeight_eq_eval_nodal_erase_inv :
     nodalWeight s v i = (eval (v i) (nodal (s.erase i) v))⁻¹ := by
-  rw [eval_nodal]; rw [nodalWeight]; rw [prod_inv_distrib]
-
-/--
-theorem `nodal_erase_eq_nodal_div` / 定理 `nodal_erase_eq_nodal_div`
-
-English:
-theorem nodal_erase_eq_nodal_div
-  given: (hi : i in s)
-  proof: by
-  rw [nodal_eq_mul_nodal_erase hi]; rw [mul_div_cancel_left₀]
-  exact X_sub_C_ne_zero _
-
-中文:
-定理 nodal_erase_eq_nodal_div
-  条件: (hi : i in s)
-  证明: by
-  rw [nodal_eq_mul_nodal_erase hi]; rw [mul_div_cancel_left₀]
-  exact X_sub_C_ne_zero _
-
-Depends on / 依赖: X_sub_C_ne_zero, nodal_eq_mul_nodal_erase
+  rw [eval_nodal, nodalWeight, prod_inv_distrib]
+/-
+**Lagrange.nodal_erase_eq_nodal_div** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodal_erase_eq_nodal_div (hi : i in s) : nodal (s.erase i) v = nodal s v /
+ (X - C (v i))
+参数：hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.nodal_eq_mul_nodal_erase`：nodal_eq_mul_nodal_erase [DecidableEq
+ ι] {i : ι} (hi : i in s) : nodal s v = (X - C (v i)) * nodal (s.erase i) v
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+· 使用定理 `EuclideanDomain.toMulDivCancelClass`：∀ {R : Type u} [inst : EuclideanDom
+ain R], MulDivCancelClass R
+· 使用定理 `Polynomial.X_sub_C_ne_zero`：X_sub_C_ne_zero (r : R) : X - C r != 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
 -/
-theorem nodal_erase_eq_nodal_div (hi : i in s) :
+theorem nodal_erase_eq_nodal_div (hi : i ∈ s) :
     nodal (s.erase i) v = nodal s v / (X - C (v i)) := by
-  rw [nodal_eq_mul_nodal_erase hi]; rw [mul_div_cancel_left₀]
+  rw [nodal_eq_mul_nodal_erase hi, mul_div_cancel_left₀]
   exact X_sub_C_ne_zero _
-
-/--
-theorem `nodalWeight_eq_eval_derivative_nodal` / 定理 `nodalWeight_eq_eval_derivative_nodal`
-
-English:
-theorem nodalWeight_eq_eval_derivative_nodal
-  given: (hi : i in s)
-  proof: by
-  rw [eval_nodal_derivative_eval_node_eq hi]; rw [nodalWeight_eq_eval_nodal_erase_inv]
-
-中文:
-定理 nodalWeight_eq_eval_derivative_nodal
-  条件: (hi : i in s)
-  证明: by
-  rw [eval_nodal_derivative_eval_node_eq hi]; rw [nodalWeight_eq_eval_nodal_erase_inv]
-
-Depends on / 依赖: eval_nodal_derivative_eval_node_eq, nodalWeight_eq_eval_nodal_erase_inv
+/-
+**Lagrange.nodalWeight_eq_eval_derivative_nodal** 是 Mathlib 中的一个定理，位于命名空间 `Lagra
+nge`。
+形式化陈述：nodalWeight_eq_eval_derivative_nodal (hi : i in s) : nodalWeight s v i = (
+eval (v i) (Polynomial.derivative (nodal s v)))⁻¹
+参数：hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.eval_nodal_derivative_eval_node_eq`：eval_nodal_derivative_eval_
+node_eq [DecidableEq ι] {i : ι} (hi : i in s) : eval (v i) (derivative (nodal s 
+v)) = eval (v i) (nodal (s.erase …
+· 使用定理 `Lagrange.nodalWeight_eq_eval_nodal_erase_inv`：nodalWeight_eq_eval_nodal_
+erase_inv : nodalWeight s v i = (eval (v i) (nodal (s.erase i) v))⁻¹
 -/
-theorem nodalWeight_eq_eval_derivative_nodal (hi : i in s) :
+theorem nodalWeight_eq_eval_derivative_nodal (hi : i ∈ s) :
     nodalWeight s v i = (eval (v i) (Polynomial.derivative (nodal s v)))⁻¹ := by
-  rw [eval_nodal_derivative_eval_node_eq hi]; rw [nodalWeight_eq_eval_nodal_erase_inv]
-
-/--
-theorem `nodalWeight_ne_zero` / 定理 `nodalWeight_ne_zero`
-
-English:
-theorem nodalWeight_ne_zero
-  given: (hvs : Set.InjOn v s) (hi : i in s)
-  statement: nodalWeight s v i != 0
-  proof: by
-  rw [nodalWeight]; rw [prod_ne_zero_iff]
-  intro j hj
-  rcases mem_erase.mp hj with ⟨hij, hj⟩
-  exact inv_ne_zero (sub_ne_zero_of_ne (mt (hvs.eq_iff hi hj).mp hij.symm))
-
-中文:
-定理 nodalWeight_ne_zero
-  条件: (hvs : 集合.单射限制 v s) (hi : i in s)
-  结论: nodalWeight s v i != 0
-  证明: by
-  rw [nodalWeight]; rw [prod_ne_zero_iff]
-  intro j hj
-  rcases mem_erase.mp hj with ⟨hij, hj⟩
-  exact inv_ne_zero (sub_ne_zero_of_ne (mt (hvs.eq_iff hi hj).mp hij.symm))
-
-Depends on / 依赖: eq_iff, hij.symm, hvs.eq_iff, inv_ne_zero, mem_erase, mem_erase.mp, nodalWeight, prod_ne_zero_iff, sub_ne_zero_of_ne
+  rw [eval_nodal_derivative_eval_node_eq hi, nodalWeight_eq_eval_nodal_erase_inv]
+/-
+**Lagrange.nodalWeight_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：nodalWeight_ne_zero (hvs : Set.InjOn v s) (hi : i in s) : nodalWeight s v 
+i != 0
+参数：hvs : Set.InjOn v s；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.nodalWeight.eq_1`：∀ {F : Type u_1} [inst : Field F] {ι : Type u
+_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v : ι → F) (i : ι),   Lagrange.noda
+lWeight s v i =…
+· 使用引理 `Finset.prod_ne_zero_iff`：prod_ne_zero_iff : ∏ x in s, f x != 0 ↔ forall 
+a in s, f a != 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `inv_ne_zero`：inv_ne_zero (h : a != 0) : a⁻¹ != 0
+· 使用定理 `sub_ne_zero_of_ne`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a ≠ b → a - b ≠ 0
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Set.InjOn.eq_iff`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β
+} {x y : α}, Set.InjOn f s → x ∈ s → y ∈ s → (f x = f y ↔ x = y)
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem nodalWeight_ne_zero (hvs : Set.InjOn v s) (hi : i in s) : nodalWeight s v i != 0 := by
-  rw [nodalWeight]; rw [prod_ne_zero_iff]
+theorem nodalWeight_ne_zero (hvs : Set.InjOn v s) (hi : i ∈ s) : nodalWeight s v i ≠ 0 := by
+  rw [nodalWeight, prod_ne_zero_iff]
   intro j hj
   rcases mem_erase.mp hj with ⟨hij, hj⟩
   exact inv_ne_zero (sub_ne_zero_of_ne (mt (hvs.eq_iff hi hj).mp hij.symm))
@@ -2388,158 +2450,225 @@ end NodalWeight
 section LagrangeBarycentric
 
 variable {F : Type*} [Field F] {ι : Type*} [DecidableEq ι]
-variable {s : Finset ι} {v : ι -> F} (r : ι -> F) {i : ι} {x : F}
+variable {s : Finset ι} {v : ι → F} (r : ι → F) {i : ι} {x : F}
 
 open Finset
 
-/--
-theorem `basis_eq_prod_sub_inv_mul_nodal_div` / 定理 `basis_eq_prod_sub_inv_mul_nodal_div`
-
-English:
-theorem basis_eq_prod_sub_inv_mul_nodal_div
-  given: (hi : i in s)
-  proof: by
-  simp_rw [Lagrange.basis, basisDivisor, nodalWeight, prod_mul_distrib, map_prod, ←
-    nodal_erase_eq_nodal_div hi, nodal]
-
-中文:
-定理 basis_eq_prod_sub_inv_mul_nodal_div
-  条件: (hi : i in s)
-  证明: by
-  simp_rw [Lagrange.basis, basisDivisor, nodalWeight, prod_mul_distrib, map_prod, ←
-    nodal_erase_eq_nodal_div hi, nodal]
-
-Depends on / 依赖: Lagrange, Lagrange.basis, basisDivisor, map_prod, nodalWeight, nodal_erase_eq_nodal_div, prod_mul_distrib, simp_rw
+/-
+**Lagrange.basis_eq_prod_sub_inv_mul_nodal_div** 是 Mathlib 中的一个定理，位于命名空间 `Lagran
+ge`。
+形式化陈述：basis_eq_prod_sub_inv_mul_nodal_div (hi : i in s) : Lagrange.basis s v i =
+ C (nodalWeight s v i) * (nodal s v / (X - C (v i)))
+参数：hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_mul_distrib`：prod_mul_distrib : ∏ x in s, f x * g x = (∏ x i
+n s, f x) * ∏ x in s, g x
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.nodal_erase_eq_nodal_div`：nodal_erase_eq_nodal_div (hi : i in s
+) : nodal (s.erase i) v = nodal s v / (X - C (v i))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem basis_eq_prod_sub_inv_mul_nodal_div (hi : i in s) :
+theorem basis_eq_prod_sub_inv_mul_nodal_div (hi : i ∈ s) :
     Lagrange.basis s v i = C (nodalWeight s v i) * (nodal s v / (X - C (v i))) := by
   simp_rw [Lagrange.basis, basisDivisor, nodalWeight, prod_mul_distrib, map_prod, ←
     nodal_erase_eq_nodal_div hi, nodal]
-
-/--
-theorem `eval_basis_not_at_node` / 定理 `eval_basis_not_at_node`
-
-English:
-theorem eval_basis_not_at_node
-  given: (hi : i in s) (hxi : x != v i)
-  proof: by
-  rw [mul_comm]; rw [basis_eq_prod_sub_inv_mul_nodal_div hi]; rw [eval_mul]; rw [eval_C]; rw [←
-    nodal_erase_eq_nodal_div hi]; rw [eval_nodal]; rw [eval_nodal]; rw [mul_assoc]; rw [← mul_prod_erase _ _ hi]; rw [←
-    mul_assoc (x - v i)⁻¹]; rw [inv_mul_cancel₀ (sub_ne_zero_of_ne hxi)]; rw [one_mul]
-
-中文:
-定理 eval_basis_not_at_node
-  条件: (hi : i in s) (hxi : x != v i)
-  证明: by
-  rw [mul_comm]; rw [basis_eq_prod_sub_inv_mul_nodal_div hi]; rw [eval_mul]; rw [eval_C]; rw [←
-    nodal_erase_eq_nodal_div hi]; rw [eval_nodal]; rw [eval_nodal]; rw [mul_assoc]; rw [← mul_prod_erase _ _ hi]; rw [←
-    mul_assoc (x - v i)⁻¹]; rw [inv_mul_cancel₀ (sub_ne_zero_of_ne hxi)]; rw [one_mul]
-
-Depends on / 依赖: basis_eq_prod_sub_inv_mul_nodal_div, eval_C, eval_mul, eval_nodal, mul_assoc, mul_comm, mul_prod_erase, nodal_erase_eq_nodal_div, one_mul, sub_ne_zero_of_ne
+/-
+**Lagrange.eval_basis_not_at_node** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_basis_not_at_node (hi : i in s) (hxi : x != v i) : eval x (Lagrange.b
+asis s v i) = eval x (nodal s v) * (nodalWeight s v i * (x - v i)⁻¹)
+参数：hi : i in s；hxi : x != v i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Lagrange.basis_eq_prod_sub_inv_mul_nodal_div`：basis_eq_prod_sub_inv_mul_
+nodal_div (hi : i in s) : Lagrange.basis s v i = C (nodalWeight s v i) * (nodal 
+s v / (X - C (v i)))
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.nodal_erase_eq_nodal_div`：nodal_erase_eq_nodal_div (hi : i in s
+) : nodal (s.erase i) v = nodal s v / (X - C (v i))
+· 使用定理 `Lagrange.eval_nodal`：eval_nodal {x : R} : (nodal s v).eval x = ∏ i in s,
+ (x - v i)
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Finset.mul_prod_erase`：mul_prod_erase [DecidableEq ι] (s : Finset ι) (f 
+: ι -> M) {a : ι} (h : a in s) : (f a * ∏ x in s.erase a, f x) = ∏ x in s, f x
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `sub_ne_zero_of_ne`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a ≠ b → a - b ≠ 0
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem eval_basis_not_at_node (hi : i in s) (hxi : x != v i) :
+theorem eval_basis_not_at_node (hi : i ∈ s) (hxi : x ≠ v i) :
     eval x (Lagrange.basis s v i) = eval x (nodal s v) * (nodalWeight s v i * (x - v i)⁻¹) := by
-  rw [mul_comm]; rw [basis_eq_prod_sub_inv_mul_nodal_div hi]; rw [eval_mul]; rw [eval_C]; rw [←
-    nodal_erase_eq_nodal_div hi]; rw [eval_nodal]; rw [eval_nodal]; rw [mul_assoc]; rw [← mul_prod_erase _ _ hi]; rw [←
-    mul_assoc (x - v i)⁻¹]; rw [inv_mul_cancel₀ (sub_ne_zero_of_ne hxi)]; rw [one_mul]
-
-/--
-theorem `interpolate_eq_nodalWeight_mul_nodal_div_X_sub_C` / 定理 `interpolate_eq_nodalWeight_mul_nodal_div_X_sub_C`
-
-English:
-theorem interpolate_eq_nodalWeight_mul_nodal_div_X_sub_C
-  proof: sum_congr rfl fun j hj => by rw [mul_comm, basis_eq_prod_sub_inv_mul_nodal_div hj]
-
-中文:
-定理 interpolate_eq_nodalWeight_mul_nodal_div_X_sub_C
-  证明: sum_congr rfl fun j hj => by rw [mul_comm, basis_eq_prod_sub_inv_mul_nodal_div hj]
-
-Depends on / 依赖: basis_eq_prod_sub_inv_mul_nodal_div, mul_comm, sum_congr
+  rw [mul_comm, basis_eq_prod_sub_inv_mul_nodal_div hi, eval_mul, eval_C, ←
+    nodal_erase_eq_nodal_div hi, eval_nodal, eval_nodal, mul_assoc, ← mul_prod_erase _ _ hi, ←
+    mul_assoc (x - v i)⁻¹, inv_mul_cancel₀ (sub_ne_zero_of_ne hxi), one_mul]
+/-
+**Lagrange.interpolate_eq_nodalWeight_mul_nodal_div_X_sub_C** 是 Mathlib 中的一个定理，位
+于命名空间 `Lagrange`。
+形式化陈述：interpolate_eq_nodalWeight_mul_nodal_div_X_sub_C : interpolate s v r = ∑ i
+ in s, C (nodalWeight s v i) * (nodal s v / (X - C (v i))) * C (r i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Lagrange.basis_eq_prod_sub_inv_mul_nodal_div`：basis_eq_prod_sub_inv_mul_
+nodal_div (hi : i in s) : Lagrange.basis s v i = C (nodalWeight s v i) * (nodal 
+s v / (X - C (v i)))
 -/
 theorem interpolate_eq_nodalWeight_mul_nodal_div_X_sub_C :
-    interpolate s v r = ∑ i in s, C (nodalWeight s v i) * (nodal s v / (X - C (v i))) * C (r i) :=
+    interpolate s v r = ∑ i ∈ s, C (nodalWeight s v i) * (nodal s v / (X - C (v i))) * C (r i) :=
   sum_congr rfl fun j hj => by rw [mul_comm, basis_eq_prod_sub_inv_mul_nodal_div hj]
 
-/--
-theorem `eval_interpolate_not_at_node` / 定理 `eval_interpolate_not_at_node`
+/-- This is the first barycentric form of the Lagrange interpolant. -/
+/-
+**Lagrange.eval_interpolate_not_at_node** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_interpolate_not_at_node (hx : forall i in s, x != v i) : eval x (inte
+rpolate s v r) = eval x (nodal s v) * ∑ i in s, nodalWeight s v i * (x - v i)⁻¹ 
+* r i
+参数：hx : forall i in s, x != v i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lagrange.interpolate_apply`：∀ {F : Type u_1} [inst : Field F] {ι : Type 
+u_2} [inst_1 : DecidableEq ι] (s : Finset ι) (v r : ι → F),   (Lagrange.interpol
+ate s v) r = ∑ i…
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `Polynomial.eval_finsetSum`：eval_finsetSum (s : Finset ι) (g : ι -> R[X])
+ (x : R) : (∑ i in s, g i).eval x = ∑ i in s, (g i).eval x
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Lagrange.eval_basis_not_at_node`：eval_basis_not_at_node (hi : i in s) (h
+xi : x != v i) : eval x (Lagrange.basis s v i) = eval x (nodal s v) * (nodalWeig
+ht s v i * (x - v i)⁻…
 
-English:
-theorem eval_interpolate_not_at_node
-  given: (hx : forall i in s, x != v i)
-  proof: by
-  simp_rw [interpolate_apply, mul_sum, eval_finsetSum, eval_mul, eval_C]
-  refine sum_congr rfl fun i hi => ?_
-  rw [← mul_assoc]; rw [mul_comm]; rw [eval_basis_not_at_node hi (hx _ hi)]
-
-中文:
-定理 eval_interpolate_not_at_node
-  条件: (hx : 对任意 i in s, x != v i)
-  证明: by
-  simp_rw [interpolate_apply, mul_sum, eval_finsetSum, eval_mul, eval_C]
-  refine sum_congr rfl fun i hi => ?_
-  rw [← mul_assoc]; rw [mul_comm]; rw [eval_basis_not_at_node hi (hx _ hi)]
-
-Depends on / 依赖: eval_C, eval_basis_not_at_node, eval_finsetSum, eval_mul, interpolate_apply, mul_assoc, mul_comm, mul_sum, simp_rw, sum_congr
+--- 原说明 ---
+This is the first barycentric form of the Lagrange interpolant.
 -/
-theorem eval_interpolate_not_at_node (hx : forall i in s, x != v i) :
+theorem eval_interpolate_not_at_node (hx : ∀ i ∈ s, x ≠ v i) :
     eval x (interpolate s v r) =
-      eval x (nodal s v) * ∑ i in s, nodalWeight s v i * (x - v i)⁻¹ * r i := by
+      eval x (nodal s v) * ∑ i ∈ s, nodalWeight s v i * (x - v i)⁻¹ * r i := by
   simp_rw [interpolate_apply, mul_sum, eval_finsetSum, eval_mul, eval_C]
   refine sum_congr rfl fun i hi => ?_
-  rw [← mul_assoc]; rw [mul_comm]; rw [eval_basis_not_at_node hi (hx _ hi)]
-
-/--
-theorem `sum_nodalWeight_mul_inv_sub_ne_zero` / 定理 `sum_nodalWeight_mul_inv_sub_ne_zero`
-
-English:
-theorem sum_nodalWeight_mul_inv_sub_ne_zero
-  statement: (hvs : Set.InjOn v s) (hx : forall i in s, x != v i)
-  proof: @right_ne_zero_of_mul_eq_one _ _ _ (eval x (nodal s v)) _ by
-    simpa only [Pi.one_apply, interpolate_one hvs hs, eval_one, mul_one] using
-      (eval_interpolate_not_at_node 1 hx).symm
-
-中文:
-定理 sum_nodalWeight_mul_inv_sub_ne_zero
-  结论: (hvs : 集合.单射限制 v s) (hx : 对任意 i in s, x != v i)
-  证明: @right_ne_zero_of_mul_eq_one _ _ _ (eval x (nodal s v)) _ by
-    simpa only [Pi.one_apply, interpolate_one hvs hs, eval_one, mul_one] using
-      (eval_interpolate_not_at_node 1 hx).symm
-
-Depends on / 依赖: Pi.one_apply, eval_interpolate_not_at_node, eval_one, interpolate_one, mul_one, one_apply, right_ne_zero_of_mul_eq_one
+  rw [← mul_assoc, mul_comm, eval_basis_not_at_node hi (hx _ hi)]
+/-
+**Lagrange.sum_nodalWeight_mul_inv_sub_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Lagran
+ge`。
+形式化陈述：sum_nodalWeight_mul_inv_sub_ne_zero (hvs : Set.InjOn v s) (hx : forall i i
+n s, x != v i) (hs : s.Nonempty) : (∑ i in s, nodalWeight s v i * (x - v i)⁻¹) !
+= 0
+参数：hvs : Set.InjOn v s；hx : forall i in s, x != v i；hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `right_ne_zero_of_mul_eq_one`：right_ne_zero_of_mul_eq_one (h : a * b = 1)
+ : b != 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Lagrange.interpolate_one`：interpolate_one (hvs : Set.InjOn v s) (hs : s.
+Nonempty) : interpolate s v 1 = 1
+· 使用定理 `Polynomial.eval_one`：eval_one : (1 : R[X]).eval x = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lagrange.eval_interpolate_not_at_node`：eval_interpolate_not_at_node (hx 
+: forall i in s, x != v i) : eval x (interpolate s v r) = eval x (nodal s v) * ∑
+ i in s, nodalWeight s v i …
 -/
-theorem sum_nodalWeight_mul_inv_sub_ne_zero (hvs : Set.InjOn v s) (hx : forall i in s, x != v i)
-    (hs : s.Nonempty) : (∑ i in s, nodalWeight s v i * (x - v i)⁻¹) != 0 :=
-@right_ne_zero_of_mul_eq_one _ _ _ (eval x (nodal s v)) _ by
+theorem sum_nodalWeight_mul_inv_sub_ne_zero (hvs : Set.InjOn v s) (hx : ∀ i ∈ s, x ≠ v i)
+    (hs : s.Nonempty) : (∑ i ∈ s, nodalWeight s v i * (x - v i)⁻¹) ≠ 0 :=
+  @right_ne_zero_of_mul_eq_one _ _ _ (eval x (nodal s v)) _ <| by
     simpa only [Pi.one_apply, interpolate_one hvs hs, eval_one, mul_one] using
       (eval_interpolate_not_at_node 1 hx).symm
 
-/--
-theorem `eval_interpolate_not_at_node'` / 定理 `eval_interpolate_not_at_node'`
+/-- This is the second barycentric form of the Lagrange interpolant. -/
+/-
+**Lagrange.eval_interpolate_not_at_node'** 是 Mathlib 中的一个定理，位于命名空间 `Lagrange`。
+形式化陈述：eval_interpolate_not_at_node' (hvs : Set.InjOn v s) (hs : s.Nonempty) (hx 
+: forall i in s, x != v i) : eval x (interpolate s v r) = (∑ i in s, nodalWeight
+ s v i * (x - v i)⁻¹ * r i) / ∑ i in s, nodalWeight s v i * (x - v i)⁻¹
+参数：hvs : Set.InjOn v s；hs : s.Nonempty；hx : forall i in s, x != v i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Polynomial.eval_one`：eval_one : (1 : R[X]).eval x = 1
+· 使用定理 `Lagrange.interpolate_one`：interpolate_one (hvs : Set.InjOn v s) (hs : s.
+Nonempty) : interpolate s v 1 = 1
+· 使用定理 `Lagrange.eval_interpolate_not_at_node`：eval_interpolate_not_at_node (hx 
+: forall i in s, x != v i) : eval x (interpolate s v r) = eval x (nodal s v) * ∑
+ i in s, nodalWeight s v i …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `mul_div_mul_left`：mul_div_mul_left (a b : G₀) (hc : c != 0) : c * a / (c
+ * b) = a / b
+· 使用定理 `Lagrange.eval_nodal_not_at_node`：eval_nodal_not_at_node [Nontrivial R] [
+NoZeroDivisors R] {x : R} (hx : forall i in s, x != v i) : eval x (nodal s v) !=
+ 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem eval_interpolate_not_at_node'
-  statement: (hvs : Set.InjOn v s) (hs : s.Nonempty)
-  proof: by
-  rw [← div_one (eval x (interpolate s v r))]; rw [← @eval_one _ _ x]; rw [← interpolate_one hvs hs]; rw [eval_interpolate_not_at_node r hx]; rw [eval_interpolate_not_at_node 1 hx]
-  simp only [mul_div_mul_left _ _ (eval_nodal_not_at_node hx), Pi.one_apply, mul_one]
-
-中文:
-定理 eval_interpolate_not_at_node'
-  结论: (hvs : 集合.单射限制 v s) (hs : s.非空)
-  证明: by
-  rw [← div_one (eval x (interpolate s v r))]; rw [← @eval_one _ _ x]; rw [← interpolate_one hvs hs]; rw [eval_interpolate_not_at_node r hx]; rw [eval_interpolate_not_at_node 1 hx]
-  simp only [mul_div_mul_left _ _ (eval_nodal_not_at_node hx), Pi.one_apply, mul_one]
-
-Depends on / 依赖: Pi.one_apply, div_one, eval_interpolate_not_at_node, eval_nodal_not_at_node, eval_one, interpolate, interpolate_one, mul_div_mul_left, mul_one, one_apply
+--- 原说明 ---
+This is the second barycentric form of the Lagrange interpolant.
 -/
 theorem eval_interpolate_not_at_node' (hvs : Set.InjOn v s) (hs : s.Nonempty)
-    (hx : forall i in s, x != v i) :
+    (hx : ∀ i ∈ s, x ≠ v i) :
     eval x (interpolate s v r) =
-      (∑ i in s, nodalWeight s v i * (x - v i)⁻¹ * r i) /
-        ∑ i in s, nodalWeight s v i * (x - v i)⁻¹ := by
-  rw [← div_one (eval x (interpolate s v r))]; rw [← @eval_one _ _ x]; rw [← interpolate_one hvs hs]; rw [eval_interpolate_not_at_node r hx]; rw [eval_interpolate_not_at_node 1 hx]
+      (∑ i ∈ s, nodalWeight s v i * (x - v i)⁻¹ * r i) /
+        ∑ i ∈ s, nodalWeight s v i * (x - v i)⁻¹ := by
+  rw [← div_one (eval x (interpolate s v r)), ← @eval_one _ _ x, ← interpolate_one hvs hs,
+    eval_interpolate_not_at_node r hx, eval_interpolate_not_at_node 1 hx]
   simp only [mul_div_mul_left _ _ (eval_nodal_not_at_node hx), Pi.one_apply, mul_one]
 
 end LagrangeBarycentric
 
 end Lagrange
+

@@ -34,29 +34,19 @@ set_option linter.style.setOption false
 open Tactic
 
 /--
-Definition of `runTacForHeartbeats` / `runTacForHeartbeats` 的定义
+Run a tactic, optionally restoring the original state, and report just the number of heartbeats.
+-/
+/-
+**Mathlib.CountHeartbeats.runTacForHeartbeats** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.CountHeartbeats`。
+形式化陈述：runTacForHeartbeats (tac : TSyntax `Lean.Parser.Tactic.tacticSeq) (revert 
+: Bool
+参数：tac : TSyntax `Lean.Parser.Tactic.tacticSeq。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runTacForHeartbeats
-  signature: (tac : TSyntax `Lean.Parser.Tactic.tacticSeq) (revert : Bool := true)
-  body: do
-  let start ← IO.getNumHeartbeats
-  let s ← saveState
-  withOptions (fun opts => opts.set ``Elab.async false) do
-    evalTactic tac
-  if revert then restoreState s
-  return (← IO.getNumHeartbeats) - start
-
-中文:
-定义 runTacForHeartbeats
-  签名: (tac : TSyntax `Lean.Parser.Tactic.tacticSeq) (revert : 布尔值 := true)
-  定义体: do
-  let start ← IO.getNumHeartbeats
-  let s ← saveState
-  withOptions (fun opts => opts.set ``Elab.async false) do
-    evalTactic tac
-  if revert then restoreState s
-  return (← IO.getNumHeartbeats) - start
+--- 原说明 ---
+Run a tactic, optionally restoring the original state, and report just the numbe
+r of heartbeats.
 -/
 def runTacForHeartbeats (tac : TSyntax `Lean.Parser.Tactic.tacticSeq) (revert : Bool := true) :
     TacticM Nat := do
@@ -68,35 +58,18 @@ def runTacForHeartbeats (tac : TSyntax `Lean.Parser.Tactic.tacticSeq) (revert : 
   return (← IO.getNumHeartbeats) - start
 
 /--
-Definition of `variation` / `variation` 的定义
+Given a `List Nat`, return the minimum, maximum, and standard deviation.
+-/
+/-
+**Mathlib.CountHeartbeats.variation** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CountHear
+tbeats`。
+形式化陈述：variation (counts : List Nat) : List Nat
+参数：counts : List Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition variation
-  signature: (counts : List Nat)
-  body: let min := counts.min?.getD 0
-  let max := counts.max?.getD 0
-  let toFloat (n : Nat) := n.toUInt64.toFloat
-  let toNat (f : Float) := f.toUInt64.toNat
-  let counts' := counts.map toFloat
-  let μ : Float := counts'.foldl (· + ·) 0 / toFloat counts.length
-let stddev : Float := Float.sqrt
-    ((counts'.map fun i => (i - μ)^2).foldl (· + ·) 0) / toFloat counts.length
-  [min, max, toNat stddev]
-
-中文:
-定义 variation
-  签名: (counts : 列表 自然数)
-  定义体: let min := counts.min?.getD 0
-  let max := counts.max?.getD 0
-  let toFloat (n : Nat) := n.toUInt64.toFloat
-  let toNat (f : Float) := f.toUInt64.toNat
-  let counts' := counts.map toFloat
-  let μ : Float := counts'.foldl (· + ·) 0 / toFloat counts.length
-let stddev : Float := Float.sqrt
-    ((counts'.map fun i => (i - μ)^2).foldl (· + ·) 0) / toFloat counts.length
-  [min, max, toNat stddev]
-
-Depends on / 依赖: Float.sqrt, counts, counts.length, counts.map, counts.max, counts.min, f.toUInt64.toNat, length, n.toUInt64.toFloat, stddev, toFloat, toUInt64
+--- 原说明 ---
+Given a `List Nat`, return the minimum, maximum, and standard deviation.
 -/
 def variation (counts : List Nat) : List Nat :=
   let min := counts.min?.getD 0
@@ -105,28 +78,25 @@ def variation (counts : List Nat) : List Nat :=
   let toNat (f : Float) := f.toUInt64.toNat
   let counts' := counts.map toFloat
   let μ : Float := counts'.foldl (· + ·) 0 / toFloat counts.length
-let stddev : Float := Float.sqrt
+  let stddev : Float := Float.sqrt <|
     ((counts'.map fun i => (i - μ)^2).foldl (· + ·) 0) / toFloat counts.length
   [min, max, toNat stddev]
 
 /--
-Definition of `logVariation` / `logVariation` 的定义
+Given a `List Nat`, log an info message with the minimum, maximum, and standard deviation.
+-/
+/-
+**Mathlib.CountHeartbeats.logVariation** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CountH
+eartbeats`。
+形式化陈述：logVariation {m} [Monad m] [MonadLog m] [AddMessageContext m] [MonadOption
+s m] (counts : List Nat) : m Unit
+参数：counts : List Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition logVariation
-  signature: {m} [Monad m] [MonadLog m] [AddMessageContext m] [MonadOptions m]
-  body: do
-  if let [min, max, stddev] := variation counts then
-  -- convert `[min, max, stddev]` to user-facing heartbeats
-  logInfo s!"Min: {min / 1000} Max: {max / 1000} StdDev: {stddev / 10}%"
-
-中文:
-定义 logVariation
-  签名: {m} [单子 m] [MonadLog m] [AddMessageContext m] [MonadOptions m]
-  定义体: do
-  if let [min, max, stddev] := variation counts then
-  -- convert `[min, max, stddev]` to user-facing heartbeats
-  logInfo s!"Min: {min / 1000} Max: {max / 1000} StdDev: {stddev / 10}%"
+--- 原说明 ---
+Given a `List Nat`, log an info message with the minimum, maximum, and standard 
+deviation.
 -/
 def logVariation {m} [Monad m] [MonadLog m] [AddMessageContext m] [MonadOptions m]
     (counts : List Nat) : m Unit := do
@@ -170,19 +140,18 @@ elab "#count_heartbeats! " n:(num)? "in" ppLine tac:tacticSeq : tactic => do
   logVariation counts
 
 /--
-Definition of `roundDownIf` / `roundDownIf` 的定义
+Round down the number `n` to the nearest thousand, if `approx` is `true`.
+-/
+/-
+**Mathlib.CountHeartbeats.roundDownIf** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.CountHe
+artbeats`。
+形式化陈述：roundDownIf (n : Nat) (approx : Bool) : String
+参数：n : Nat；approx : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition roundDownIf
-  signature: (n : Nat) (approx : Bool)
-  body: if approx then s!"approximately {(n / 1000) * 1000}" else s!"{n}"
-
-中文:
-定义 roundDownIf
-  签名: (n : 自然数) (approx : 布尔值)
-  定义体: if approx then s!"approximately {(n / 1000) * 1000}" else s!"{n}"
-
-Depends on / 依赖: approx, approximately
+--- 原说明 ---
+Round down the number `n` to the nearest thousand, if `approx` is `true`.
 -/
 def roundDownIf (n : Nat) (approx : Bool) : String :=
   if approx then s!"approximately {(n / 1000) * 1000}" else s!"{n}"
@@ -229,7 +198,7 @@ elab "#count_heartbeats " approx:(&"approximately ")? "in" ppLine cmd:command : 
       logInfo
         m!"Used {roundElapsed} heartbeats, which is greater than the current maximum of {max}."
       let m : TSyntax `num := quote max'
-Command.liftCoreM MetaM.run' do
+      Command.liftCoreM <| MetaM.run' do
         Lean.Meta.Tactic.TryThis.addSuggestion (← getRef)
           (← (set_option hygiene false in `(command| set_option maxHeartbeats $m in $cmd)))
 
@@ -267,29 +236,18 @@ elab "guard_min_heartbeats " approx:(&"approximately ")? n:(num)? "in" ppLine cm
 
 set_option linter.style.maxHeartbeats false in
 /--
-Definition of `elabForHeartbeats` / `elabForHeartbeats` 的定义
+Run a command, optionally restoring the original state, and report just the number of heartbeats.
+-/
+/-
+**Mathlib.CountHeartbeats.elabForHeartbeats** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.C
+ountHeartbeats`。
+形式化陈述：elabForHeartbeats (cmd : TSyntax `command) (revert : Bool
+参数：cmd : TSyntax `command。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabForHeartbeats
-  signature: (cmd : TSyntax `command) (revert : Bool := true)
-  body: do
-  let start ← IO.getNumHeartbeats
-  let s ← get
-  elabCommand (← `(command| set_option maxHeartbeats 0 in $cmd))
-  if revert then set s
-  return (← IO.getNumHeartbeats) - start
-
-中文:
-定义 elabForHeartbeats
-  签名: (cmd : TSyntax `command) (revert : 布尔值 := true)
-  定义体: do
-  let start ← IO.getNumHeartbeats
-  let s ← get
-  elabCommand (← `(command| set_option maxHeartbeats 0 in $cmd))
-  if revert then set s
-  return (← IO.getNumHeartbeats) - start
-
-Depends on / 依赖: CommandElabM
+--- 原说明 ---
+Run a command, optionally restoring the original state, and report just the numb
+er of heartbeats.
 -/
 def elabForHeartbeats (cmd : TSyntax `command) (revert : Bool := true) : CommandElabM Nat := do
   let start ← IO.getNumHeartbeats
@@ -366,58 +324,13 @@ namespace CountHeartbeats
 @[inherit_doc Mathlib.Linter.linter.countHeartbeats,
 deprecated "use `#count_heartbeats in` or `set_option trace.profiler true` with \
   `set_option trace.profiler.useHeartbeats true`" (since := "2026-07-30")]
-/--
-Definition of `countHeartbeatsLinter` / `countHeartbeatsLinter` 的定义
-
-English:
-definition countHeartbeatsLinter
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-  unless getLinterValue linter.countHeartbeats (← getLinterOptions) do
-    return
-  if (← get).messages.hasErrors then
-    return
-  let mut msgs := #[]
-  if [``Lean.Parser.Command.declaration, `lemma].contains stx.getKind then
-    let s ← get
-    if getLinterValue linter.countHeartbeatsApprox (← getLinterOptions) then
-      elabCommand (← `(command| #count_heartbeats approximately in $(⟨stx⟩)))
-    else
-      elabCommand (← `(command| #count_heartbeats in $(⟨stx⟩)))
-    msgs := (← get).messages.unreported.toArray.filter (·.severity != .error)
-    set s
-  match stx.find? (·.isOfKind ``Parser.Command.declId) with
-    | some decl =>
-      for msg in msgs do logInfoAt decl m!"'{decl[0].getId}' {(← msg.toString).decapitalize}"
-    | none =>
-      for msg in msgs do logInfoAt stx m!"{← msg.toString}"
-
-中文:
-定义 countHeartbeatsLinter
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-  unless getLinterValue linter.countHeartbeats (← getLinterOptions) do
-    return
-  if (← get).messages.hasErrors then
-    return
-  let mut msgs := #[]
-  if [``Lean.Parser.Command.declaration, `lemma].contains stx.getKind then
-    let s ← get
-    if getLinterValue linter.countHeartbeatsApprox (← getLinterOptions) then
-      elabCommand (← `(command| #count_heartbeats approximately in $(⟨stx⟩)))
-    else
-      elabCommand (← `(command| #count_heartbeats in $(⟨stx⟩)))
-    msgs := (← get).messages.unreported.toArray.filter (·.severity != .error)
-    set s
-  match stx.find? (·.isOfKind ``Parser.Command.declId) with
-    | some decl =>
-      for msg in msgs do logInfoAt decl m!"'{decl[0].getId}' {(← msg.toString).decapitalize}"
-    | none =>
-      for msg in msgs do logInfoAt stx m!"{← msg.toString}"
-
-Depends on / 依赖: withSetOptionIn
+/-
+**Mathlib.Linter.CountHeartbeats.countHeartbeatsLinter** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Linter.CountHeartbeats`。
+形式化陈述：Linter
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def countHeartbeatsLinter : Linter where run := withSetOptionIn fun stx => do
+def countHeartbeatsLinter : Linter where run := withSetOptionIn fun stx ↦ do
   unless getLinterValue linter.countHeartbeats (← getLinterOptions) do
     return
   if (← get).messages.hasErrors then
@@ -457,3 +370,4 @@ deprecated_syntax countHeartbeats "use `#count_heartbeats in` or \
 end CountHeartbeats
 
 end Mathlib.Linter
+

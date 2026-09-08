@@ -46,61 +46,39 @@ section
 the four fields starting from `id_tensorHom_id` were provided by the auto_param -/
 /-- A category with an initial object and binary coproducts has a natural monoidal structure. -/
 @[instance_reducible]
-/--
-Definition of `monoidalOfHasFiniteCoproducts` / `monoidalOfHasFiniteCoproducts` 的定义
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：monoidalOfHasFiniteCoproducts [HasInitial C] [HasBinaryCoproducts C] : Mon
+oidalCategory C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coprod.associator_naturality`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasBinaryCo
+products C]   {X₁ X₂ X₃ Y₁ Y₂ Y₃ : C} (f…
+· 使用定理 `CategoryTheory.Limits.coprod.leftUnitor_naturality`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] {X Y : C}   [inst_1 : CategoryTheory.Limits
+.HasBinaryCoproducts C] [inst_2 : Catego…
+· 使用定理 `CategoryTheory.Limits.coprod.rightUnitor_naturality`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y : C}   [inst_1 : CategoryTheory.Limit
+s.HasBinaryCoproducts C] [inst_2 : Catego…
+· 使用定理 `CategoryTheory.Limits.coprod.pentagon`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasBinaryCoproducts C]  
+ (W X Y Z : C),   CategoryT…
+· 使用定理 `CategoryTheory.Limits.coprod.triangle`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasBinaryCoproducts C]  
+ [inst_2 : CategoryTheory.L…
 
-English:
-definition monoidalOfHasFiniteCoproducts
-  signature: [HasInitial C] [HasBinaryCoproducts C]
-  body: letI : MonoidalCategoryStruct C := {
-    tensorObj := fun X Y => X ⨿ Y
-    whiskerLeft := fun _ _ _ g => Limits.coprod.map (𝟙 _) g
-    whiskerRight := fun {_ _} f _ => Limits.coprod.map f (𝟙 _)
-    tensorHom := fun f g => Limits.coprod.map f g
-    tensorUnit := ⊥_ C
-    associator := coprod.associator
-    leftUnitor := coprod.leftUnitor
-    rightUnitor := coprod.rightUnitor
-  }
-  .ofTensorHom
-    (pentagon := coprod.pentagon)
-    (triangle := coprod.triangle)
-    (associator_naturality := @coprod.associator_naturality _ _ _)
-    (id_tensorHom_id := fun _ _ => coprod.map_id_id)
-    (tensorHom_comp_tensorHom := coprod.map_map)
-    (leftUnitor_naturality := coprod.leftUnitor_naturality)
-    (rightUnitor_naturality := coprod.rightUnitor_naturality)
-
-中文:
-定义 monoidalOfHasFiniteCoproducts
-  签名: [HasInitial C] [HasBinaryCoproducts C]
-  定义体: letI : MonoidalCategoryStruct C := {
-    tensorObj := fun X Y => X ⨿ Y
-    whiskerLeft := fun _ _ _ g => Limits.coprod.map (𝟙 _) g
-    whiskerRight := fun {_ _} f _ => Limits.coprod.map f (𝟙 _)
-    tensorHom := fun f g => Limits.coprod.map f g
-    tensorUnit := ⊥_ C
-    associator := coprod.associator
-    leftUnitor := coprod.leftUnitor
-    rightUnitor := coprod.rightUnitor
-  }
-  .ofTensorHom
-    (pentagon := coprod.pentagon)
-    (triangle := coprod.triangle)
-    (associator_naturality := @coprod.associator_naturality _ _ _)
-    (id_tensorHom_id := fun _ _ => coprod.map_id_id)
-    (tensorHom_comp_tensorHom := coprod.map_map)
-    (leftUnitor_naturality := coprod.leftUnitor_naturality)
-    (rightUnitor_naturality := coprod.rightUnitor_naturality)
-
-Depends on / 依赖: Limits, Limits.coprod.map, MonoidalCategoryStruct, associator, associator_naturality, coprod, coprod.associator, coprod.associator_naturality, coprod.leftUnitor, coprod.pentagon, coprod.rightUnitor, coprod.triangle, id_tensorHom_id, leftUnitor, ofTensorHom, pentagon, rightUnitor, tensorHom, tensorObj, tensorUnit
+--- 原说明 ---
+A category with an initial object and binary coproducts has a natural monoidal s
+tructure.
 -/
 def monoidalOfHasFiniteCoproducts [HasInitial C] [HasBinaryCoproducts C] : MonoidalCategory C :=
   letI : MonoidalCategoryStruct C := {
-    tensorObj := fun X Y => X ⨿ Y
-    whiskerLeft := fun _ _ _ g => Limits.coprod.map (𝟙 _) g
-    whiskerRight := fun {_ _} f _ => Limits.coprod.map f (𝟙 _)
-    tensorHom := fun f g => Limits.coprod.map f g
+    tensorObj := fun X Y ↦ X ⨿ Y
+    whiskerLeft := fun _ _ _ g ↦ Limits.coprod.map (𝟙 _) g
+    whiskerRight := fun {_ _} f _ ↦ Limits.coprod.map f (𝟙 _)
+    tensorHom := fun f g ↦ Limits.coprod.map f g
     tensorUnit := ⊥_ C
     associator := coprod.associator
     leftUnitor := coprod.leftUnitor
@@ -126,181 +104,100 @@ attribute [local instance] monoidalOfHasFiniteCoproducts
 open scoped MonoidalCategory
 
 @[simp]
-/--
-theorem `tensorObj` / 定理 `tensorObj`
-
-English:
-theorem tensorObj
-  given: (X Y : C)
-  statement: X otimes Y = (X ⨿ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorObj
-  条件: (X Y : C)
-  结论: X otimes Y = (X ⨿ Y)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.tensorObj** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：tensorObj (X Y : C) : X otimes Y = (X ⨿ Y)
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem tensorObj (X Y : C) : X otimes Y = (X ⨿ Y) :=
+theorem tensorObj (X Y : C) : X ⊗ Y = (X ⨿ Y) :=
   rfl
 
 @[simp]
-/--
-theorem `tensorHom` / 定理 `tensorHom`
-
-English:
-theorem tensorHom
-  given: {W X Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z)
-  statement: f otimesₘ g = Limits.coprod.map f g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorHom
-  条件: {W X Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z)
-  结论: f otimesₘ g = Limits.coprod.map f g
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.tensorHom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：tensorHom {W X Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : f otimesₘ g = Limits.cop
+rod.map f g
+参数：f : W ⟶ X；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem tensorHom {W X Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : f otimesₘ g = Limits.coprod.map f g :=
+theorem tensorHom {W X Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : f ⊗ₘ g = Limits.coprod.map f g :=
   rfl
 
 @[simp]
-/--
-theorem `whiskerLeft` / 定理 `whiskerLeft`
-
-English:
-theorem whiskerLeft
-  given: (X : C) {Y Z : C} (f : Y ⟶ Z)
-  statement: X ◁ f = Limits.coprod.map (𝟙 X) f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskerLeft
-  条件: (X : C) {Y Z : C} (f : Y ⟶ Z)
-  结论: X ◁ f = Limits.coprod.map (𝟙 X) f
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.whiskerLeft** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：whiskerLeft (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f = Limits.coprod.map (𝟙 X
+) f
+参数：X : C；f : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerLeft (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f = Limits.coprod.map (𝟙 X) f :=
   rfl
 
 @[simp]
-/--
-theorem `whiskerRight` / 定理 `whiskerRight`
-
-English:
-theorem whiskerRight
-  given: {X Y : C} (f : X ⟶ Y) (Z : C)
-  statement: f ▷ Z = Limits.coprod.map f (𝟙 Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskerRight
-  条件: {X Y : C} (f : X ⟶ Y) (Z : C)
-  结论: f ▷ Z = Limits.coprod.map f (𝟙 Z)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.whiskerRight** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：whiskerRight {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z = Limits.coprod.map f (
+𝟙 Z)
+参数：f : X ⟶ Y；Z : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerRight {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z = Limits.coprod.map f (𝟙 Z) :=
   rfl
 
 @[simp]
-/--
-theorem `leftUnitor_hom` / 定理 `leftUnitor_hom`
-
-English:
-theorem leftUnitor_hom
-  given: (X : C)
-  statement: (fun_ X).hom = coprod.desc (initial.to X) (𝟙 _)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 leftUnitor_hom
-  条件: (X : C)
-  结论: (fun_ X).hom = coprod.desc (initial.to X) (𝟙 _)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.leftUnitor_hom** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：leftUnitor_hom (X : C) : (fun_ X).hom = coprod.desc (initial.to X) (𝟙 _)
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem leftUnitor_hom (X : C) : (fun_ X).hom = coprod.desc (initial.to X) (𝟙 _) :=
+theorem leftUnitor_hom (X : C) : (λ_ X).hom = coprod.desc (initial.to X) (𝟙 _) :=
   rfl
 
 @[simp]
-/--
-theorem `rightUnitor_hom` / 定理 `rightUnitor_hom`
-
-English:
-theorem rightUnitor_hom
-  given: (X : C)
-  statement: (ρ_ X).hom = coprod.desc (𝟙 _) (initial.to X)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rightUnitor_hom
-  条件: (X : C)
-  结论: (ρ_ X).hom = coprod.desc (𝟙 _) (initial.to X)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.rightUnitor_hom** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：rightUnitor_hom (X : C) : (ρ_ X).hom = coprod.desc (𝟙 _) (initial.to X)
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rightUnitor_hom (X : C) : (ρ_ X).hom = coprod.desc (𝟙 _) (initial.to X) :=
   rfl
 
 @[simp]
-/--
-theorem `leftUnitor_inv` / 定理 `leftUnitor_inv`
-
-English:
-theorem leftUnitor_inv
-  given: (X : C)
-  statement: (fun_ X).inv = Limits.coprod.inr
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 leftUnitor_inv
-  条件: (X : C)
-  结论: (fun_ X).inv = Limits.coprod.inr
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.leftUnitor_inv** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：leftUnitor_inv (X : C) : (fun_ X).inv = Limits.coprod.inr
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem leftUnitor_inv (X : C) : (fun_ X).inv = Limits.coprod.inr :=
+theorem leftUnitor_inv (X : C) : (λ_ X).inv = Limits.coprod.inr :=
   rfl
 
 @[simp]
-/--
-theorem `rightUnitor_inv` / 定理 `rightUnitor_inv`
-
-English:
-theorem rightUnitor_inv
-  given: (X : C)
-  statement: (ρ_ X).inv = Limits.coprod.inl
-  proof: rfl
-
-中文:
-定理 rightUnitor_inv
-  条件: (X : C)
-  结论: (ρ_ X).inv = Limits.coprod.inl
-  证明: rfl
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.rightUnitor_inv** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：rightUnitor_inv (X : C) : (ρ_ X).inv = Limits.coprod.inl
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rightUnitor_inv (X : C) : (ρ_ X).inv = Limits.coprod.inl :=
   rfl
@@ -308,38 +205,27 @@ theorem rightUnitor_inv (X : C) : (ρ_ X).inv = Limits.coprod.inl :=
 -- We don't mark this as a simp lemma, even though in many particular
 -- categories the right-hand side will simplify significantly further.
 -- For now, we'll plan to create specialised simp lemmas in each particular category.
-/--
-theorem `associator_hom` / 定理 `associator_hom`
-
-English:
-theorem associator_hom
-  given: (X Y Z : C)
-  proof: rfl
-
-中文:
-定理 associator_hom
-  条件: (X Y Z : C)
-  证明: rfl
-
-Depends on / 依赖: equalizer_le, homOfLe
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.associator_hom** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：associator_hom (X Y Z : C) : (α_ X Y Z).hom = coprod.desc (coprod.desc cop
+rod.inl (coprod.inl ≫ coprod.inr)) (coprod.inr ≫ coprod.inr)
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem associator_hom (X Y Z : C) :
     (α_ X Y Z).hom =
       coprod.desc (coprod.desc coprod.inl (coprod.inl ≫ coprod.inr)) (coprod.inr ≫ coprod.inr) :=
   rfl
-
-/--
-theorem `associator_inv` / 定理 `associator_inv`
-
-English:
-theorem associator_inv
-  given: (X Y Z : C)
-  proof: rfl
-
-中文:
-定理 associator_inv
-  条件: (X Y Z : C)
-  证明: rfl
+/-
+**CategoryTheory.monoidalOfHasFiniteCoproducts.associator_inv** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.monoidalOfHasFiniteCoproducts`。
+形式化陈述：associator_inv (X Y Z : C) : (α_ X Y Z).inv = coprod.desc (coprod.inl ≫ co
+prod.inl) (coprod.desc (coprod.inr ≫ coprod.inl) coprod.inr)
+参数：X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem associator_inv (X Y Z : C) :
     (α_ X Y Z).inv =
@@ -358,30 +244,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The monoidal structure coming from finite coproducts is symmetric.
 -/
 @[simps, instance_reducible]
-/--
-Definition of `symmetricOfHasFiniteCoproducts` / `symmetricOfHasFiniteCoproducts` 的定义
+/-
+**CategoryTheory.symmetricOfHasFiniteCoproducts** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：symmetricOfHasFiniteCoproducts [HasInitial C] [HasBinaryCoproducts C] : Sy
+mmetricCategory C where braiding
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symmetricOfHasFiniteCoproducts
-  signature: [HasInitial C] [HasBinaryCoproducts C]
-  body: Limits.coprod.braiding
-  braiding_naturality_left f g := by simp
-  braiding_naturality_right f g := by simp
-  hexagon_forward X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_hom]; simp
-  hexagon_reverse X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_inv]; simp
-  symmetry X Y := by simp
-
-中文:
-定义 symmetricOfHasFiniteCoproducts
-  签名: [HasInitial C] [HasBinaryCoproducts C]
-  定义体: Limits.coprod.braiding
-  braiding_naturality_left f g := by simp
-  braiding_naturality_right f g := by simp
-  hexagon_forward X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_hom]; simp
-  hexagon_reverse X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_inv]; simp
-  symmetry X Y := by simp
-
-Depends on / 依赖: Limits, Limits.coprod.braiding, braiding, coprod
+--- 原说明 ---
+The monoidal structure coming from finite coproducts is symmetric.
 -/
 def symmetricOfHasFiniteCoproducts [HasInitial C] [HasBinaryCoproducts C] :
     SymmetricCategory C where
@@ -395,3 +267,4 @@ def symmetricOfHasFiniteCoproducts [HasInitial C] [HasBinaryCoproducts C] :
 end
 
 end CategoryTheory
+

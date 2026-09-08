@@ -25,88 +25,81 @@ public section
 namespace LinearMap
 variable {R M M₁ : Type*} [AddCommMonoid M] [AddCommMonoid M₁]
 
-/--
-theorem `surjective_iff_ne_zero` / 定理 `surjective_iff_ne_zero`
-
-English:
-theorem surjective_iff_ne_zero
-  given: [DivisionSemiring R] [Module R M] {f : M ->ₗ[R] R}
-  proof: by
-  refine ⟨ne_zero_of_surjective, fun hf z => ?_⟩
-  obtain ⟨y, hy⟩ : exists y, f y != 0 := by simpa [Ne, LinearMap.ext_iff] using hf
-  exact ⟨(z * (f y)⁻¹) • y, by simp [hy]⟩
-
-protected alias ⟨_, surjective⟩ := surjective_iff_ne_zero
-
-中文:
-定理 surjective_iff_ne_zero
-  条件: [除半环 R] [模 R M] {f : M ->ₗ[R] R}
-  证明: by
-  refine ⟨ne_zero_of_surjective, fun hf z => ?_⟩
-  obtain ⟨y, hy⟩ : exists y, f y != 0 := by simpa [Ne, LinearMap.ext_iff] using hf
-  exact ⟨(z * (f y)⁻¹) • y, by simp [hy]⟩
-
-protected alias ⟨_, surjective⟩ := surjective_iff_ne_zero
-
-Depends on / 依赖: LinearMap, LinearMap.ext_iff, ext_iff, ne_zero_of_surjective
+/-
+**LinearMap.surjective_iff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：surjective_iff_ne_zero [DivisionSemiring R] [Module R M] {f : M ->ₗ[R] R} 
+: Function.Surjective f ↔ f != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ne_zero_of_surjective`：ne_zero_of_surjective [Nontrivial M₂] {
+f : M ->ₛₗ[σ₁₂] M₂} (hf : Surjective f) : f != 0
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `inv_mul_cancel_right₀`：inv_mul_cancel_right₀ (h : b != 0) (a : G₀) : a *
+ b⁻¹ * b = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem surjective_iff_ne_zero [DivisionSemiring R] [Module R M] {f : M ->ₗ[R] R} :
-    Function.Surjective f ↔ f != 0 := by
-  refine ⟨ne_zero_of_surjective, fun hf z => ?_⟩
-  obtain ⟨y, hy⟩ : exists y, f y != 0 := by simpa [Ne, LinearMap.ext_iff] using hf
+theorem surjective_iff_ne_zero [DivisionSemiring R] [Module R M] {f : M →ₗ[R] R} :
+    Function.Surjective f ↔ f ≠ 0 := by
+  refine ⟨ne_zero_of_surjective, fun hf z ↦ ?_⟩
+  obtain ⟨y, hy⟩ : ∃ y, f y ≠ 0 := by simpa [Ne, LinearMap.ext_iff] using hf
   exact ⟨(z * (f y)⁻¹) • y, by simp [hy]⟩
 
 protected alias ⟨_, surjective⟩ := surjective_iff_ne_zero
-
-/--
-theorem `range_smulRight_apply_of_surjective` / 定理 `range_smulRight_apply_of_surjective`
-
-English:
-theorem range_smulRight_apply_of_surjective
-  statement: [Semiring R] [Module R M] [Module R M₁]
-  proof: Submodule.ext fun z => by
-  simp_rw [mem_range, smulRight_apply, Submodule.mem_span_singleton]
-  refine ⟨fun ⟨w, hw⟩ => ⟨f w, hw ▸ rfl⟩, fun ⟨w, hw⟩ => ?_⟩
-  obtain ⟨y, rfl⟩ := hf w
-  exact ⟨y, hw⟩
-
-中文:
-定理 range_smulRight_apply_of_surjective
-  结论: [半环 R] [模 R M] [模 R M₁]
-  证明: Submodule.ext fun z => by
-  simp_rw [mem_range, smulRight_apply, Submodule.mem_span_singleton]
-  refine ⟨fun ⟨w, hw⟩ => ⟨f w, hw ▸ rfl⟩, fun ⟨w, hw⟩ => ?_⟩
-  obtain ⟨y, rfl⟩ := hf w
-  exact ⟨y, hw⟩
-
-Depends on / 依赖: Submodule, Submodule.ext, Submodule.mem_span_singleton, mem_range, mem_span_singleton, simp_rw, smulRight_apply
+/-
+**LinearMap.range_smulRight_apply_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Linea
+rMap`。
+形式化陈述：range_smulRight_apply_of_surjective [Semiring R] [Module R M] [Module R M₁
+] {f : M ->ₗ[R] R} (hf : Function.Surjective f) (x : M₁) : range (f.smulRight x)
+ = Submodule.span R {x}
+参数：hf : Function.Surjective f；x : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem range_smulRight_apply_of_surjective [Semiring R] [Module R M] [Module R M₁]
-    {f : M ->ₗ[R] R} (hf : Function.Surjective f) (x : M₁) :
-    range (f.smulRight x) = Submodule.span R {x} := Submodule.ext fun z => by
+    {f : M →ₗ[R] R} (hf : Function.Surjective f) (x : M₁) :
+    range (f.smulRight x) = Submodule.span R {x} := Submodule.ext fun z ↦ by
   simp_rw [mem_range, smulRight_apply, Submodule.mem_span_singleton]
-  refine ⟨fun ⟨w, hw⟩ => ⟨f w, hw ▸ rfl⟩, fun ⟨w, hw⟩ => ?_⟩
+  refine ⟨fun ⟨w, hw⟩ ↦ ⟨f w, hw ▸ rfl⟩, fun ⟨w, hw⟩ ↦ ?_⟩
   obtain ⟨y, rfl⟩ := hf w
   exact ⟨y, hw⟩
-
-/--
-theorem `range_smulRight_apply` / 定理 `range_smulRight_apply`
-
-English:
-theorem range_smulRight_apply
-  statement: [DivisionSemiring R] [Module R M] [Module R M₁]
-  proof: range_smulRight_apply_of_surjective (f.surjective hf) x
-
-中文:
-定理 range_smulRight_apply
-  结论: [除半环 R] [模 R M] [模 R M₁]
-  证明: range_smulRight_apply_of_surjective (f.surjective hf) x
-
-Depends on / 依赖: f.surjective, range_smulRight_apply_of_surjective, surjective
+/-
+**LinearMap.range_smulRight_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：range_smulRight_apply [DivisionSemiring R] [Module R M] [Module R M₁] {f :
+ M ->ₗ[R] R} (hf : f != 0) (x : M₁) : range (f.smulRight x) = Submodule.span R {
+x}
+参数：hf : f != 0；x : M₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.range_smulRight_apply_of_surjective`：range_smulRight_apply_of_
+surjective [Semiring R] [Module R M] [Module R M₁] {f : M ->ₗ[R] R} (hf : Functi
+on.Surjective f) (x : M₁) : range (…
+· 使用定理 `LinearMap.surjective`：∀ {R : Type u_1} {M : Type u_2} [inst : AddCommMon
+oid M] [inst_1 : DivisionSemiring R] [inst_2 : _root_.Module R M]   {f : M →ₗ[R]
+ R}, f ≠ 0…
 -/
 theorem range_smulRight_apply [DivisionSemiring R] [Module R M] [Module R M₁]
-    {f : M ->ₗ[R] R} (hf : f != 0) (x : M₁) :
+    {f : M →ₗ[R] R} (hf : f ≠ 0) (x : M₁) :
     range (f.smulRight x) = Submodule.span R {x} :=
   range_smulRight_apply_of_surjective (f.surjective hf) x
 
 end LinearMap
+

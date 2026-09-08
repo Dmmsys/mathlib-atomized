@@ -32,123 +32,138 @@ open Equiv List MulAction Pointwise Set Subgroup
 
 variable {G α : Type*} [Group G] [MulAction G α]
 
-/--
-theorem `finite_compl_fixedBy_closure_iff` / 定理 `finite_compl_fixedBy_closure_iff`
+/-- If the support of each element in a generating set of a permutation group is finite,
+then the support of every element in the group is finite. -/
+/-
+**finite_compl_fixedBy_closure_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finite_compl_fixedBy_closure_iff {S : Set G} : (forall g in closure S, (fi
+xedBy α g)ᶜ.Finite) ↔ forall g in S, (fixedBy α g)ᶜ.Finite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Subgroup.closure_induction`：closure_induction {p : (g : G) -> g in closu
+re k -> Prop} (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1
+ (one_mem _)) (m…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.fixedBy_one_eq_univ`：fixedBy_one_eq_univ : fixedBy α (1 : M) =
+ Set.univ
+· 使用定理 `Set.compl_univ`：compl_univ : (univ : Set α)ᶜ = ∅
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Set.Finite.union`：∀ {α : Type u} {s t : Set α}, s.Finite → t.Finite → (s
+ ∪ t).Finite
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `MulAction.fixedBy_inv`：fixedBy_inv (g : G) : fixedBy α g⁻¹ = fixedBy α g
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem finite_compl_fixedBy_closure_iff
-  given: {S : Set G}
-  proof: ⟨fun h g hg => h g (subset_closure hg), fun h g hg => by
-    refine closure_induction h (by simp) (fun g g' _ _ hg hg' => (hg.union hg').subset ?_)
-      (by simp) hg
-    simp_rw [← compl_inter, compl_subset_compl, fixedBy_mul]⟩
-
-中文:
-定理 finite_compl_fixedBy_closure_iff
-  条件: {S : 集合 G}
-  证明: ⟨fun h g hg => h g (subset_closure hg), fun h g hg => by
-    refine closure_induction h (by simp) (fun g g' _ _ hg hg' => (hg.union hg').subset ?_)
-      (by simp) hg
-    simp_rw [← compl_inter, compl_subset_compl, fixedBy_mul]⟩
-
-Depends on / 依赖: closure_induction, compl_inter, compl_subset_compl, fixedBy_mul, hg.union, simp_rw, subset, subset_closure
+--- 原说明 ---
+If the support of each element in a generating set of a permutation group is fin
+ite,
+then the support of every element in the group is finite.
 -/
 theorem finite_compl_fixedBy_closure_iff {S : Set G} :
-    (forall g in closure S, (fixedBy α g)ᶜ.Finite) ↔ forall g in S, (fixedBy α g)ᶜ.Finite :=
-  ⟨fun h g hg => h g (subset_closure hg), fun h g hg => by
-    refine closure_induction h (by simp) (fun g g' _ _ hg hg' => (hg.union hg').subset ?_)
+    (∀ g ∈ closure S, (fixedBy α g)ᶜ.Finite) ↔ ∀ g ∈ S, (fixedBy α g)ᶜ.Finite :=
+  ⟨fun h g hg ↦ h g (subset_closure hg), fun h g hg ↦ by
+    refine closure_induction h (by simp) (fun g g' _ _ hg hg' ↦ (hg.union hg').subset ?_)
       (by simp) hg
     simp_rw [← compl_inter, compl_subset_compl, fixedBy_mul]⟩
 
-/--
-theorem `exists_smul_notMem_of_subset_orbit_closure` / 定理 `exists_smul_notMem_of_subset_orbit_closure`
+/-- Given a symmetric generating set of a permutation group, if T is a nonempty proper subset of
+an orbit, then there exists a generator that sends some element of T into the complement of T. -/
+/-
+**exists_smul_notMem_of_subset_orbit_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_smul_notMem_of_subset_orbit_closure (S : Set G) (T : Set α) {a : α}
+ (hS : forall g in S, g⁻¹ in S) (subset : T subseteq orbit (closure S) a) (notMe
+m : a ∉ T) (nonempty : T.Nonempty) : exists σ in S, exists a in T, σ • a ∉ T
+参数：S : Set G；T : Set α；hS : forall g in S, g⁻¹ in S；subset : T subseteq orbit (c
+losure S) a；notMem : a ∉ T；nonempty : T.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.smul_mem_smul_set_iff`：smul_mem_smul_set_iff : a • x in a • s ↔ x in
+ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
 
-English:
-theorem exists_smul_notMem_of_subset_orbit_closure
-  statement: (S : Set G) (T : Set α) {a : α}
-  proof: by
-  have key0 : ¬ closure S <= stabilizer G T := by
-    have ⟨b, hb⟩ := nonempty
-    obtain ⟨σ, rfl⟩ := subset hb
-    contrapose notMem with h
-    exact smul_mem_smul_set_iff.mp ((h σ.2).symm ▸ hb)
-  contrapose! key0
-  refine (closure_le _).mpr fun σ hσ => ?_
-  simp_rw [SetLike.mem_coe, mem_stabilizer_iff, Set.ext_iff, mem_smul_set_iff_inv_smul_mem]
-  exact fun a => ⟨fun h => smul_inv_smul σ a ▸ key0 σ hσ (σ⁻¹ • a) h, key0 σ⁻¹ (hS σ hσ) a⟩
-
-中文:
-定理 存在_smul_notMem_of_subset_orbit_closure
-  结论: (S : 集合 G) (T : 集合 α) {a : α}
-  证明: by
-  have key0 : ¬ closure S <= stabilizer G T := by
-    have ⟨b, hb⟩ := nonempty
-    obtain ⟨σ, rfl⟩ := subset hb
-    contrapose notMem with h
-    exact smul_mem_smul_set_iff.mp ((h σ.2).symm ▸ hb)
-  contrapose! key0
-  refine (closure_le _).mpr fun σ hσ => ?_
-  simp_rw [SetLike.mem_coe, mem_stabilizer_iff, Set.ext_iff, mem_smul_set_iff_inv_smul_mem]
-  exact fun a => ⟨fun h => smul_inv_smul σ a ▸ key0 σ hσ (σ⁻¹ • a) h, key0 σ⁻¹ (hS σ hσ) a⟩
-
-Depends on / 依赖: Set.ext_iff, SetLike, SetLike.mem_coe, closure, closure_le, contrapose, ext_iff, mem_coe, mem_smul_set_iff_inv_smul_mem, mem_stabilizer_iff, nonempty, notMem, simp_rw, smul_inv_smul, smul_mem_smul_set_iff, smul_mem_smul_set_iff.mp, stabilizer, subset
+--- 原说明 ---
+Given a symmetric generating set of a permutation group, if T is a nonempty prop
+er subset of
+an orbit, then there exists a generator that sends some element of T into the co
+mplement of T.
 -/
 theorem exists_smul_notMem_of_subset_orbit_closure (S : Set G) (T : Set α) {a : α}
-    (hS : forall g in S, g⁻¹ in S) (subset : T subseteq orbit (closure S) a) (notMem : a ∉ T)
-    (nonempty : T.Nonempty) : exists σ in S, exists a in T, σ • a ∉ T := by
-  have key0 : ¬ closure S <= stabilizer G T := by
+    (hS : ∀ g ∈ S, g⁻¹ ∈ S) (subset : T ⊆ orbit (closure S) a) (notMem : a ∉ T)
+    (nonempty : T.Nonempty) : ∃ σ ∈ S, ∃ a ∈ T, σ • a ∉ T := by
+  have key0 : ¬ closure S ≤ stabilizer G T := by
     have ⟨b, hb⟩ := nonempty
     obtain ⟨σ, rfl⟩ := subset hb
     contrapose notMem with h
     exact smul_mem_smul_set_iff.mp ((h σ.2).symm ▸ hb)
   contrapose! key0
-  refine (closure_le _).mpr fun σ hσ => ?_
+  refine (closure_le _).mpr fun σ hσ ↦ ?_
   simp_rw [SetLike.mem_coe, mem_stabilizer_iff, Set.ext_iff, mem_smul_set_iff_inv_smul_mem]
-  exact fun a => ⟨fun h => smul_inv_smul σ a ▸ key0 σ hσ (σ⁻¹ • a) h, key0 σ⁻¹ (hS σ hσ) a⟩
+  exact fun a ↦ ⟨fun h ↦ smul_inv_smul σ a ▸ key0 σ hσ (σ⁻¹ • a) h, key0 σ⁻¹ (hS σ hσ) a⟩
 
 variable [DecidableEq α]
-
-/--
-theorem `finite_compl_fixedBy_swap` / 定理 `finite_compl_fixedBy_swap`
-
-English:
-theorem finite_compl_fixedBy_swap
-  given: {x y : α}
-  statement: (fixedBy α (swap x y))ᶜ.Finite
-  proof: Set.Finite.subset (s := {x, y}) (by simp)
-    (compl_subset_comm.mp fun z h => by apply swap_apply_of_ne_of_ne <;> rintro rfl <;> simp at h)
-
-中文:
-定理 finite_compl_fixedBy_swap
-  条件: {x y : α}
-  结论: (fixedBy α (swap x y))ᶜ.有限
-  证明: Set.Finite.subset (s := {x, y}) (by simp)
-    (compl_subset_comm.mp fun z h => by apply swap_apply_of_ne_of_ne <;> rintro rfl <;> simp at h)
-
-Depends on / 依赖: Finite, Set.Finite.subset, compl_subset_comm, compl_subset_comm.mp, subset, swap_apply_of_ne_of_ne
+/-
+**finite_compl_fixedBy_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finite_compl_fixedBy_swap {x y : α} : (fixedBy α (swap x y))ᶜ.Finite
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.compl_subset_comm`：compl_subset_comm : sᶜ subseteq t ↔ tᶜ subseteq s
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
 theorem finite_compl_fixedBy_swap {x y : α} : (fixedBy α (swap x y))ᶜ.Finite :=
   Set.Finite.subset (s := {x, y}) (by simp)
-    (compl_subset_comm.mp fun z h => by apply swap_apply_of_ne_of_ne <;> rintro rfl <;> simp at h)
-
-/--
-theorem `Equiv.Perm.IsSwap.finite_compl_fixedBy` / 定理 `Equiv.Perm.IsSwap.finite_compl_fixedBy`
-
-English:
-theorem Equiv.Perm.IsSwap.finite_compl_fixedBy
-  given: {σ : Perm α} (h : σ.IsSwap)
-  proof: by
-  obtain ⟨x, y, -, rfl⟩ := h
-  exact finite_compl_fixedBy_swap
-
-中文:
-定理 等价.置换.IsSwap.finite_compl_fixedBy
-  条件: {σ : 置换 α} (h : σ.IsSwap)
-  证明: by
-  obtain ⟨x, y, -, rfl⟩ := h
-  exact finite_compl_fixedBy_swap
-
-Depends on / 依赖: finite_compl_fixedBy_swap
+    (compl_subset_comm.mp fun z h ↦ by apply swap_apply_of_ne_of_ne <;> rintro rfl <;> simp at h)
+/-
+**Equiv.Perm.IsSwap.finite_compl_fixedBy** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.Perm.IsSwap.finite_compl_fixedBy {σ : Perm α} (h : σ.IsSwap) : (fixe
+dBy α σ)ᶜ.Finite
+参数：h : σ.IsSwap。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_compl_fixedBy_swap`：finite_compl_fixedBy_swap {x y : α} : (fixedB
+y α (swap x y))ᶜ.Finite
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Equiv.Perm.IsSwap.finite_compl_fixedBy {σ : Perm α} (h : σ.IsSwap) :
     (fixedBy α σ)ᶜ.Finite := by
@@ -156,170 +171,205 @@ theorem Equiv.Perm.IsSwap.finite_compl_fixedBy {σ : Perm α} (h : σ.IsSwap) :
   exact finite_compl_fixedBy_swap
 
 -- this result cannot be moved to Perm/Basic since Perm/Basic is not allowed to import Submonoid
-/--
-theorem `SubmonoidClass.swap_mem_trans` / 定理 `SubmonoidClass.swap_mem_trans`
-
-English:
-theorem SubmonoidClass.swap_mem_trans
-  statement: {a b c : α} {C} [SetLike C (Perm α)]
-  proof: by
-  obtain rfl | hab' := eq_or_ne a b
-  · exact hbc
-  obtain rfl | hac := eq_or_ne a c
-  · exact swap_self a ▸ one_mem M
-  rw [Equiv.swap_comm]; rw [← swap_mul_swap_mul_swap hab' hac]
-  exact mul_mem (mul_mem hbc hab) hbc
-
-中文:
-定理 子幺半群类.swap_mem_trans
-  结论: {a b c : α} {C} [集合状 C (置换 α)]
-  证明: by
-  obtain rfl | hab' := eq_or_ne a b
-  · exact hbc
-  obtain rfl | hac := eq_or_ne a c
-  · exact swap_self a ▸ one_mem M
-  rw [Equiv.swap_comm]; rw [← swap_mul_swap_mul_swap hab' hac]
-  exact mul_mem (mul_mem hbc hab) hbc
-
-Depends on / 依赖: Equiv.swap_comm, eq_or_ne, mul_mem, one_mem, swap_comm, swap_mul_swap_mul_swap, swap_self
+/-
+**SubmonoidClass.swap_mem_trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SubmonoidClass.swap_mem_trans {a b c : α} {C} [SetLike C (Perm α)] [Submon
+oidClass C (Perm α)] (M : C) (hab : swap a b in M) (hbc : swap b c in M) : swap 
+a c in M
+参数：Perm α；Perm α；M : C；hab : swap a b in M；hbc : swap b c in M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.swap_self`：swap_self (a : α) : swap a a = Equiv.refl _
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.swap_comm`：swap_comm (a b : α) : swap a b = swap b a
+· 使用定理 `Equiv.swap_mul_swap_mul_swap`：∀ {α : Type u_4} [inst : DecidableEq α] {x
+ y z : α},   x ≠ y → x ≠ z → Equiv.swap y z * Equiv.swap x y * Equiv.swap y z = 
+Equiv.swap z x
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
 -/
 theorem SubmonoidClass.swap_mem_trans {a b c : α} {C} [SetLike C (Perm α)]
-    [SubmonoidClass C (Perm α)] (M : C) (hab : swap a b in M) (hbc : swap b c in M) :
-    swap a c in M := by
+    [SubmonoidClass C (Perm α)] (M : C) (hab : swap a b ∈ M) (hbc : swap b c ∈ M) :
+    swap a c ∈ M := by
   obtain rfl | hab' := eq_or_ne a b
   · exact hbc
   obtain rfl | hac := eq_or_ne a c
   · exact swap_self a ▸ one_mem M
-  rw [Equiv.swap_comm]; rw [← swap_mul_swap_mul_swap hab' hac]
+  rw [Equiv.swap_comm, ← swap_mul_swap_mul_swap hab' hac]
   exact mul_mem (mul_mem hbc hab) hbc
 
-/--
-theorem `swap_mem_closure_isSwap` / 定理 `swap_mem_closure_isSwap`
+/-- If a subgroup is generated by transpositions, then a transposition `swap x y` lies in the
+  subgroup if and only if `x` lies in the same orbit as `y`. -/
+/-
+**swap_mem_closure_isSwap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：swap_mem_closure_isSwap {S : Set (Perm α)} (hS : forall f in S, f.IsSwap) 
+{x y : α} : swap x y in closure S ↔ x in orbit (closure S) y
+参数：Perm α；hS : forall f in S, f.IsSwap。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.swap_apply_right`：swap_apply_right (a b : α) : swap a b b = a
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `exists_smul_notMem_of_subset_orbit_closure`：exists_smul_notMem_of_subset
+_orbit_closure (S : Set G) (T : Set α) {a : α} (hS : forall g in S, g⁻¹ in S) (s
+ubset : T subseteq orbit (closur…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.swap_inv`：∀ {α : Type u_4} [inst : DecidableEq α] (x y : α), (Equi
+v.swap x y)⁻¹ = Equiv.swap x y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MulAction.orbit_eq_iff`：orbit_eq_iff {a b : α} : orbit G a = orbit G b ↔
+ a in orbit G b
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.swap_self`：swap_self (a : α) : swap a a = Equiv.refl _
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
+· 使用定理 `SubmonoidClass.swap_mem_trans`：SubmonoidClass.swap_mem_trans {a b c : α}
+ {C} [SetLike C (Perm α)] [SubmonoidClass C (Perm α)] (M : C) (hab : swap a b in
+ M) (hbc : swap b c…
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `Equiv.swap_apply_ne_self_iff`：swap_apply_ne_self_iff {a b x : α} : swap 
+a b x != x ↔ a != b ∧ (x = a ∨ x = b)
+· 使用定理 `ne_comm`：∀ {α : Sort u_1} {a b : α}, a ≠ b ↔ b ≠ a
+· 使用定理 `Equiv.Perm.smul_def`：∀ {α : Type u_6} (f : Equiv.Perm α) (a : α), f • a 
+= f a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `Equiv.swap_comm`：swap_comm (a b : α) : swap a b = swap b a
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
 
-English:
-theorem swap_mem_closure_isSwap
-  given: {S : Set (Perm α)} (hS : forall f in S, f.IsSwap) {x y : α}
-  proof: by
-  refine ⟨fun h => ⟨⟨swap x y, h⟩, swap_apply_right x y⟩, fun hf => ?_⟩
-  by_contra h
-  have := exists_smul_notMem_of_subset_orbit_closure S {x | swap x y in closure S}
-    (fun f hf => ?_) (fun z hz => ?_) h ⟨y, ?_⟩
-  · obtain ⟨σ, hσ, a, ha, hσa⟩ := this
-    obtain ⟨z, w, hzw, rfl⟩ := hS σ hσ
-    have := ne_of_mem_of_not_mem ha hσa
-    rw [Perm.smul_def]; rw [ne_comm]; rw [swap_apply_ne_self_iff]; rw [and_iff_right hzw] at this
-    refine hσa (SubmonoidClass.swap_mem_trans (closure S) ?_ ha)
-    obtain rfl | rfl := this <;> simpa [Equiv.swap_comm] using subset_closure hσ
-  · obtain ⟨x, y, -, rfl⟩ := hS f hf; rwa [swap_inv]
-  · exact orbit_eq_iff.mpr hf ▸ ⟨⟨swap z y, hz⟩, swap_apply_right z y⟩
-  · rw [mem_ofPred, Equiv.swap_self]; apply one_mem
-
-中文:
-定理 swap_mem_closure_isSwap
-  条件: {S : 集合 (置换 α)} (hS : 对任意 f in S, f.IsSwap) {x y : α}
-  证明: by
-  refine ⟨fun h => ⟨⟨swap x y, h⟩, swap_apply_right x y⟩, fun hf => ?_⟩
-  by_contra h
-  have := exists_smul_notMem_of_subset_orbit_closure S {x | swap x y in closure S}
-    (fun f hf => ?_) (fun z hz => ?_) h ⟨y, ?_⟩
-  · obtain ⟨σ, hσ, a, ha, hσa⟩ := this
-    obtain ⟨z, w, hzw, rfl⟩ := hS σ hσ
-    have := ne_of_mem_of_not_mem ha hσa
-    rw [Perm.smul_def]; rw [ne_comm]; rw [swap_apply_ne_self_iff]; rw [and_iff_right hzw] at this
-    refine hσa (SubmonoidClass.swap_mem_trans (closure S) ?_ ha)
-    obtain rfl | rfl := this <;> simpa [Equiv.swap_comm] using subset_closure hσ
-  · obtain ⟨x, y, -, rfl⟩ := hS f hf; rwa [swap_inv]
-  · exact orbit_eq_iff.mpr hf ▸ ⟨⟨swap z y, hz⟩, swap_apply_right z y⟩
-  · rw [mem_ofPred, Equiv.swap_self]; apply one_mem
-
-Depends on / 依赖: Perm.smul_def, SubmonoidClass, SubmonoidClass.swap_mem_trans, and_iff_right, closure, exists_smul_notMem_of_subset_orbit_closure, ne_comm, ne_of_mem_of_not_mem, smul_def, swap_apply_ne_self_iff, swap_apply_right, swap_mem_trans
+--- 原说明 ---
+If a subgroup is generated by transpositions, then a transposition `swap x y` li
+es in the
+  subgroup if and only if `x` lies in the same orbit as `y`.
 -/
-theorem swap_mem_closure_isSwap {S : Set (Perm α)} (hS : forall f in S, f.IsSwap) {x y : α} :
-    swap x y in closure S ↔ x in orbit (closure S) y := by
-  refine ⟨fun h => ⟨⟨swap x y, h⟩, swap_apply_right x y⟩, fun hf => ?_⟩
+theorem swap_mem_closure_isSwap {S : Set (Perm α)} (hS : ∀ f ∈ S, f.IsSwap) {x y : α} :
+    swap x y ∈ closure S ↔ x ∈ orbit (closure S) y := by
+  refine ⟨fun h ↦ ⟨⟨swap x y, h⟩, swap_apply_right x y⟩, fun hf ↦ ?_⟩
   by_contra h
-  have := exists_smul_notMem_of_subset_orbit_closure S {x | swap x y in closure S}
-    (fun f hf => ?_) (fun z hz => ?_) h ⟨y, ?_⟩
+  have := exists_smul_notMem_of_subset_orbit_closure S {x | swap x y ∈ closure S}
+    (fun f hf ↦ ?_) (fun z hz ↦ ?_) h ⟨y, ?_⟩
   · obtain ⟨σ, hσ, a, ha, hσa⟩ := this
     obtain ⟨z, w, hzw, rfl⟩ := hS σ hσ
     have := ne_of_mem_of_not_mem ha hσa
-    rw [Perm.smul_def]; rw [ne_comm]; rw [swap_apply_ne_self_iff]; rw [and_iff_right hzw] at this
+    rw [Perm.smul_def, ne_comm, swap_apply_ne_self_iff, and_iff_right hzw] at this
     refine hσa (SubmonoidClass.swap_mem_trans (closure S) ?_ ha)
     obtain rfl | rfl := this <;> simpa [Equiv.swap_comm] using subset_closure hσ
   · obtain ⟨x, y, -, rfl⟩ := hS f hf; rwa [swap_inv]
   · exact orbit_eq_iff.mpr hf ▸ ⟨⟨swap z y, hz⟩, swap_apply_right z y⟩
   · rw [mem_ofPred, Equiv.swap_self]; apply one_mem
 
-/--
-theorem `mem_closure_isSwap` / 定理 `mem_closure_isSwap`
+/-- If a subgroup is generated by transpositions, then a permutation `f` lies in the subgroup if
+  and only if `f` has finite support and `f x` always lies in the same orbit as `x`. -/
+/-
+**mem_closure_isSwap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closure_isSwap {S : Set (Perm α)} (hS : forall f in S, f.IsSwap) {f : 
+Perm α} : f in closure S ↔ (fixedBy α f)ᶜ.Finite ∧ forall x, f x in orbit (closu
+re S) x
+参数：Perm α；hS : forall f in S, f.IsSwap。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `finite_compl_fixedBy_closure_iff`：finite_compl_fixedBy_closure_iff {S : 
+Set G} : (forall g in closure S, (fixedBy α g)ᶜ.Finite) ↔ forall g in S, (fixedB
+y α g)ᶜ.Finite
+· 使用定理 `Equiv.Perm.IsSwap.finite_compl_fixedBy`：Equiv.Perm.IsSwap.finite_compl_f
+ixedBy {σ : Perm α} (h : σ.IsSwap) : (fixedBy α σ)ᶜ.Finite
+· 使用定理 `MulAction.mem_orbit_iff`：mem_orbit_iff {a₁ a₂ : α} : a₂ in orbit γ a₁ ↔ 
+exists x : γ, x • a₁ = a₂
+· 使用定理 `Set.Finite.induction_on`：∀ {α : Type u} {motive : (s : Set α) → s.Finite
+ → Prop} (s : Set α) (hs : s.Finite),   motive ∅ ⋯ → (∀ {a : α} {s : Set α}, a ∉
+ s → ∀ (hs : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_mem_cancel_left`：mul_mem_cancel_left {x y : G} (h : x in H) : x * y 
+in H ↔ y in H
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `swap_mem_closure_isSwap`：swap_mem_closure_isSwap {S : Set (Perm α)} (hS 
+: forall f in S, f.IsSwap) {x y : α} : swap x y in closure S ↔ x in orbit (closu
+re S) y
+· 使用定理 `Equiv.Perm.mul_apply`：mul_apply (f g : Perm α) (x) : (f * g) x = f (g x)
+· 使用定理 `Equiv.swap_apply_def`：swap_apply_def (a b x : α) : swap a b x = if x = a
+ then b else if x = b then a else x
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `MulAction.orbit_eq_iff`：orbit_eq_iff {a b : α} : orbit G a = orbit G b ↔
+ a in orbit G b
+· 使用定理 `MulAction.mem_orbit_self`：mem_orbit_self (a : α) : a in orbit M a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+（共 32 条，此处仅展示前 30 条）
 
-English:
-theorem mem_closure_isSwap
-  given: {S : Set (Perm α)} (hS : forall f in S, f.IsSwap) {f : Perm α}
-  proof: by
-  refine ⟨fun hf => ⟨?_, fun x => mem_orbit_iff.mpr ⟨⟨f, hf⟩, rfl⟩⟩, ?_⟩
-  · exact finite_compl_fixedBy_closure_iff.mpr (fun f hf => (hS f hf).finite_compl_fixedBy) _ hf
-  rintro ⟨fin, hf⟩
-  set supp := (fixedBy α f)ᶜ with supp_eq
-  suffices h : (fixedBy α f)ᶜ subseteq supp -> f in closure S from h supp_eq.symm.subset
-  clear_value supp; clear supp_eq; revert f
-  apply fin.induction_on ..
-  · rintro f - emp; convert! (closure S).one_mem; ext; by_contra h; exact emp h
-  rintro a s - - ih f hf supp_subset
-  refine (mul_mem_cancel_left ((swap_mem_closure_isSwap hS).2 (hf a))).1
-    (ih (fun b => ?_) fun b hb => ?_)
-  · rw [Perm.mul_apply, swap_apply_def]; split_ifs with h1 h2
-    · rw [← orbit_eq_iff.mpr (hf b), h1, orbit_eq_iff.mpr (hf a)]; apply mem_orbit_self
-    · rw [← orbit_eq_iff.mpr (hf b), h2]; apply hf
-    · exact hf b
-  · contrapose hb
-    simp_rw [notMem_compl_iff, mem_fixedBy, Perm.smul_def, Perm.mul_apply, swap_apply_def,
-      apply_eq_iff_eq]
-    by_cases hb' : f b = b
-    · rw [hb']; split_ifs with h <;> simp only [h]
-    simp [show b = a by simpa [hb] using supp_subset hb']
-
-中文:
-定理 mem_closure_isSwap
-  条件: {S : 集合 (置换 α)} (hS : 对任意 f in S, f.IsSwap) {f : 置换 α}
-  证明: by
-  refine ⟨fun hf => ⟨?_, fun x => mem_orbit_iff.mpr ⟨⟨f, hf⟩, rfl⟩⟩, ?_⟩
-  · exact finite_compl_fixedBy_closure_iff.mpr (fun f hf => (hS f hf).finite_compl_fixedBy) _ hf
-  rintro ⟨fin, hf⟩
-  set supp := (fixedBy α f)ᶜ with supp_eq
-  suffices h : (fixedBy α f)ᶜ subseteq supp -> f in closure S from h supp_eq.symm.subset
-  clear_value supp; clear supp_eq; revert f
-  apply fin.induction_on ..
-  · rintro f - emp; convert! (closure S).one_mem; ext; by_contra h; exact emp h
-  rintro a s - - ih f hf supp_subset
-  refine (mul_mem_cancel_left ((swap_mem_closure_isSwap hS).2 (hf a))).1
-    (ih (fun b => ?_) fun b hb => ?_)
-  · rw [Perm.mul_apply, swap_apply_def]; split_ifs with h1 h2
-    · rw [← orbit_eq_iff.mpr (hf b), h1, orbit_eq_iff.mpr (hf a)]; apply mem_orbit_self
-    · rw [← orbit_eq_iff.mpr (hf b), h2]; apply hf
-    · exact hf b
-  · contrapose hb
-    simp_rw [notMem_compl_iff, mem_fixedBy, Perm.smul_def, Perm.mul_apply, swap_apply_def,
-      apply_eq_iff_eq]
-    by_cases hb' : f b = b
-    · rw [hb']; split_ifs with h <;> simp only [h]
-    simp [show b = a by simpa [hb] using supp_subset hb']
-
-Depends on / 依赖: clear_value, closure, convert, fin.induction_on, finite_compl_fixedBy, finite_compl_fixedBy_closure_iff, finite_compl_fixedBy_closure_iff.mpr, fixedBy, induction_on, mem_orbit_iff, mem_orbit_iff.mpr, one_mem, revert, subset, subseteq, supp_eq, supp_eq.symm.subset, supp_subset
+--- 原说明 ---
+If a subgroup is generated by transpositions, then a permutation `f` lies in the
+ subgroup if
+  and only if `f` has finite support and `f x` always lies in the same orbit as 
+`x`.
 -/
-theorem mem_closure_isSwap {S : Set (Perm α)} (hS : forall f in S, f.IsSwap) {f : Perm α} :
-    f in closure S ↔ (fixedBy α f)ᶜ.Finite ∧ forall x, f x in orbit (closure S) x := by
-  refine ⟨fun hf => ⟨?_, fun x => mem_orbit_iff.mpr ⟨⟨f, hf⟩, rfl⟩⟩, ?_⟩
-  · exact finite_compl_fixedBy_closure_iff.mpr (fun f hf => (hS f hf).finite_compl_fixedBy) _ hf
+theorem mem_closure_isSwap {S : Set (Perm α)} (hS : ∀ f ∈ S, f.IsSwap) {f : Perm α} :
+    f ∈ closure S ↔ (fixedBy α f)ᶜ.Finite ∧ ∀ x, f x ∈ orbit (closure S) x := by
+  refine ⟨fun hf ↦ ⟨?_, fun x ↦ mem_orbit_iff.mpr ⟨⟨f, hf⟩, rfl⟩⟩, ?_⟩
+  · exact finite_compl_fixedBy_closure_iff.mpr (fun f hf ↦ (hS f hf).finite_compl_fixedBy) _ hf
   rintro ⟨fin, hf⟩
   set supp := (fixedBy α f)ᶜ with supp_eq
-  suffices h : (fixedBy α f)ᶜ subseteq supp -> f in closure S from h supp_eq.symm.subset
+  suffices h : (fixedBy α f)ᶜ ⊆ supp → f ∈ closure S from h supp_eq.symm.subset
   clear_value supp; clear supp_eq; revert f
   apply fin.induction_on ..
   · rintro f - emp; convert! (closure S).one_mem; ext; by_contra h; exact emp h
   rintro a s - - ih f hf supp_subset
   refine (mul_mem_cancel_left ((swap_mem_closure_isSwap hS).2 (hf a))).1
-    (ih (fun b => ?_) fun b hb => ?_)
+    (ih (fun b ↦ ?_) fun b hb ↦ ?_)
   · rw [Perm.mul_apply, swap_apply_def]; split_ifs with h1 h2
     · rw [← orbit_eq_iff.mpr (hf b), h1, orbit_eq_iff.mpr (hf a)]; apply mem_orbit_self
     · rw [← orbit_eq_iff.mpr (hf b), h2]; apply hf
@@ -331,121 +381,143 @@ theorem mem_closure_isSwap {S : Set (Perm α)} (hS : forall f in S, f.IsSwap) {f
     · rw [hb']; split_ifs with h <;> simp only [h]
     simp [show b = a by simpa [hb] using supp_subset hb']
 
-/--
-theorem `mem_closure_isSwap'` / 定理 `mem_closure_isSwap'`
+/-- A permutation is a product of transpositions if and only if it has finite support. -/
+/-
+**mem_closure_isSwap'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_closure_isSwap' {f : Perm α} : f in closure {σ : Perm α | σ.IsSwap} ↔ 
+(fixedBy α f)ᶜ.Finite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `mem_closure_isSwap`：mem_closure_isSwap {S : Set (Perm α)} (hS : forall f
+ in S, f.IsSwap) {f : Perm α} : f in closure S ↔ (fixedBy α f)ᶜ.Finite ∧ forall 
+x, f x i…
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.swap_self`：swap_self (a : α) : swap a a = Equiv.refl _
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
 
-English:
-theorem mem_closure_isSwap'
-  given: {f : Perm α}
-  proof: by
-  refine (mem_closure_isSwap fun _ => id).trans
-    (and_iff_left fun x => ⟨⟨swap x (f x), ?_⟩, swap_apply_left x (f x)⟩)
-  by_cases h : x = f x
-  · rw [← h, Equiv.swap_self]
-    apply Subgroup.one_mem
-  · exact subset_closure ⟨x, f x, h, rfl⟩
-
-中文:
-定理 mem_closure_isSwap'
-  条件: {f : 置换 α}
-  证明: by
-  refine (mem_closure_isSwap fun _ => id).trans
-    (and_iff_left fun x => ⟨⟨swap x (f x), ?_⟩, swap_apply_left x (f x)⟩)
-  by_cases h : x = f x
-  · rw [← h, Equiv.swap_self]
-    apply Subgroup.one_mem
-  · exact subset_closure ⟨x, f x, h, rfl⟩
-
-Depends on / 依赖: Equiv.swap_self, Subgroup, Subgroup.one_mem, and_iff_left, mem_closure_isSwap, one_mem, subset_closure, swap_apply_left, swap_self
+--- 原说明 ---
+A permutation is a product of transpositions if and only if it has finite suppor
+t.
 -/
 theorem mem_closure_isSwap' {f : Perm α} :
-    f in closure {σ : Perm α | σ.IsSwap} ↔ (fixedBy α f)ᶜ.Finite := by
-  refine (mem_closure_isSwap fun _ => id).trans
-    (and_iff_left fun x => ⟨⟨swap x (f x), ?_⟩, swap_apply_left x (f x)⟩)
+    f ∈ closure {σ : Perm α | σ.IsSwap} ↔ (fixedBy α f)ᶜ.Finite := by
+  refine (mem_closure_isSwap fun _ ↦ id).trans
+    (and_iff_left fun x ↦ ⟨⟨swap x (f x), ?_⟩, swap_apply_left x (f x)⟩)
   by_cases h : x = f x
   · rw [← h, Equiv.swap_self]
     apply Subgroup.one_mem
   · exact subset_closure ⟨x, f x, h, rfl⟩
 
-/--
-theorem `closure_of_isSwap_of_isPretransitive` / 定理 `closure_of_isSwap_of_isPretransitive`
+/-- A transitive permutation group generated by transpositions must be the whole symmetric group -/
+/-
+**closure_of_isSwap_of_isPretransitive** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：closure_of_isSwap_of_isPretransitive [Finite α] {S : Set (Perm α)} (hS : f
+orall σ in S, σ.IsSwap) [MulAction.IsPretransitive (Subgroup.closure S) α] : Sub
+group.closure S = ⊤
+参数：Perm α；hS : forall σ in S, σ.IsSwap；Subgroup.closure S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `mem_closure_isSwap`：mem_closure_isSwap {S : Set (Perm α)} (hS : forall f
+ in S, f.IsSwap) {f : Perm α} : f in closure S ↔ (fixedBy α f)ᶜ.Finite ∧ forall 
+x, f x i…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulAction.orbit_eq_univ`：orbit_eq_univ [IsPretransitive M α] (a : α) : o
+rbit M a = Set.univ
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-theorem closure_of_isSwap_of_isPretransitive
-  statement: [Finite α] {S : Set (Perm α)} (hS : forall σ in S, σ.IsSwap)
-  proof: by
-  simp [eq_top_iff', mem_closure_isSwap hS, orbit_eq_univ, Set.toFinite]
-
-中文:
-定理 closure_of_isSwap_of_isPretransitive
-  结论: [有限 α] {S : 集合 (置换 α)} (hS : 对任意 σ in S, σ.IsSwap)
-  证明: by
-  simp [eq_top_iff', mem_closure_isSwap hS, orbit_eq_univ, Set.toFinite]
-
-Depends on / 依赖: Set.toFinite, eq_top_iff, mem_closure_isSwap, orbit_eq_univ, toFinite
+--- 原说明 ---
+A transitive permutation group generated by transpositions must be the whole sym
+metric group
 -/
-theorem closure_of_isSwap_of_isPretransitive [Finite α] {S : Set (Perm α)} (hS : forall σ in S, σ.IsSwap)
+theorem closure_of_isSwap_of_isPretransitive [Finite α] {S : Set (Perm α)} (hS : ∀ σ ∈ S, σ.IsSwap)
     [MulAction.IsPretransitive (Subgroup.closure S) α] : Subgroup.closure S = ⊤ := by
   simp [eq_top_iff', mem_closure_isSwap hS, orbit_eq_univ, Set.toFinite]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `surjective_of_isSwap_of_isPretransitive'` / 定理 `surjective_of_isSwap_of_isPretransitive'`
+/-- A transitive permutation group generated by transpositions must be the whole symmetric group -/
+/-
+**surjective_of_isSwap_of_isPretransitive'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：surjective_of_isSwap_of_isPretransitive' [Finite α] (S : Set G) (hS1 : for
+all σ in S, MulAction.toPermHom G α σ = 1 ∨ Perm.IsSwap (MulAction.toPermHom G α
+ σ)) (hS2 : Subgroup.closure S = ⊤) [h : MulAction.IsPretransitive G α] : Functi
+on.Surjective (MulAction.toPermHom G α)
+参数：S : Set G；hS1 : forall σ in S, MulAction.toPermHom G α σ = 1 ∨ Perm.IsSwap (M
+ulAction.toPermHom G α σ)；hS2 : Subgroup.closure S = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.closure_sdiff_one`：closure_sdiff_one (s : Set G) : closure (s \
+ {1}) = closure s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.map_closure`：map_closure (f : G ->* N) (s : Set G) : (closure 
+s).map f = closure (f '' s)
+· 使用定理 `MonoidHom.range_eq_map`：range_eq_map (f : G ->* N) : f.range = (⊤ : Subg
+roup G).map f
+· 使用定理 `MulAction.IsPretransitive.of_compHom`：∀ {M : Type u_4} {N : Type u_5} {α
+ : Type u_6} [inst : Monoid M] [inst_1 : Monoid N] [inst_2 : MulAction N α]   (f
+ : M →* N) [h : MulAction.…
+· 使用定理 `MonoidHom.range_eq_top`：range_eq_top {N} [Group N] {f : G ->* N} : f.ran
+ge = (⊤ : Subgroup N) ↔ Function.Surjective f
+· 使用定理 `closure_of_isSwap_of_isPretransitive`：closure_of_isSwap_of_isPretransiti
+ve [Finite α] {S : Set (Perm α)} (hS : forall σ in S, σ.IsSwap) [MulAction.IsPre
+transitive (Subgroup.closu…
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
 
-English:
-theorem surjective_of_isSwap_of_isPretransitive'
-  statement: [Finite α] (S : Set G)
-  proof: by
-  have h : closure ((toPermHom G α '' S) \ {1}) = (toPermHom G α).range := by
-    rw [closure_sdiff_one]; rw [← MonoidHom.map_closure]; rw [hS2]; rw [← MonoidHom.range_eq_map]
-  have := IsPretransitive.of_compHom (α := α) (toPermHom G α).rangeRestrict
-  rw [← h] at this
-  rw [← MonoidHom.range_eq_top]; rw [← h]; rw [closure_of_isSwap_of_isPretransitive]
-  rintro - ⟨⟨σ, hσ, rfl⟩, hσ1⟩
-  exact (hS1 σ hσ).resolve_left hσ1
-
-中文:
-定理 surjective_of_isSwap_of_isPretransitive'
-  结论: [有限 α] (S : 集合 G)
-  证明: by
-  have h : closure ((toPermHom G α '' S) \ {1}) = (toPermHom G α).range := by
-    rw [closure_sdiff_one]; rw [← MonoidHom.map_closure]; rw [hS2]; rw [← MonoidHom.range_eq_map]
-  have := IsPretransitive.of_compHom (α := α) (toPermHom G α).rangeRestrict
-  rw [← h] at this
-  rw [← MonoidHom.range_eq_top]; rw [← h]; rw [closure_of_isSwap_of_isPretransitive]
-  rintro - ⟨⟨σ, hσ, rfl⟩, hσ1⟩
-  exact (hS1 σ hσ).resolve_left hσ1
-
-Depends on / 依赖: IsPretransitive, IsPretransitive.of_compHom, MonoidHom, MonoidHom.map_closure, MonoidHom.range_eq_map, MonoidHom.range_eq_top, closure, closure_of_isSwap_of_isPretransitive, closure_sdiff_one, map_closure, of_compHom, rangeRestrict, range_eq_map, range_eq_top, resolve_left, toPermHom
+--- 原说明 ---
+A transitive permutation group generated by transpositions must be the whole sym
+metric group
 -/
 theorem surjective_of_isSwap_of_isPretransitive' [Finite α] (S : Set G)
-    (hS1 : forall σ in S, MulAction.toPermHom G α σ = 1 ∨ Perm.IsSwap (MulAction.toPermHom G α σ))
+    (hS1 : ∀ σ ∈ S, MulAction.toPermHom G α σ = 1 ∨ Perm.IsSwap (MulAction.toPermHom G α σ))
     (hS2 : Subgroup.closure S = ⊤) [h : MulAction.IsPretransitive G α] :
     Function.Surjective (MulAction.toPermHom G α) := by
   have h : closure ((toPermHom G α '' S) \ {1}) = (toPermHom G α).range := by
-    rw [closure_sdiff_one]; rw [← MonoidHom.map_closure]; rw [hS2]; rw [← MonoidHom.range_eq_map]
+    rw [closure_sdiff_one, ← MonoidHom.map_closure, hS2, ← MonoidHom.range_eq_map]
   have := IsPretransitive.of_compHom (α := α) (toPermHom G α).rangeRestrict
   rw [← h] at this
-  rw [← MonoidHom.range_eq_top]; rw [← h]; rw [closure_of_isSwap_of_isPretransitive]
+  rw [← MonoidHom.range_eq_top, ← h, closure_of_isSwap_of_isPretransitive]
   rintro - ⟨⟨σ, hσ, rfl⟩, hσ1⟩
   exact (hS1 σ hσ).resolve_left hσ1
 
-/--
-theorem `surjective_of_isSwap_of_isPretransitive` / 定理 `surjective_of_isSwap_of_isPretransitive`
+/-- A transitive permutation group generated by transpositions must be the whole symmetric group -/
+/-
+**surjective_of_isSwap_of_isPretransitive** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：surjective_of_isSwap_of_isPretransitive [Finite α] (S : Set G) (hS1 : fora
+ll σ in S, Perm.IsSwap (MulAction.toPermHom G α σ)) (hS2 : Subgroup.closure S = 
+⊤) [h : MulAction.IsPretransitive G α] : Function.Surjective (MulAction.toPermHo
+m G α)
+参数：S : Set G；hS1 : forall σ in S, Perm.IsSwap (MulAction.toPermHom G α σ)；hS2 : 
+Subgroup.closure S = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `surjective_of_isSwap_of_isPretransitive'`：surjective_of_isSwap_of_isPret
+ransitive' [Finite α] (S : Set G) (hS1 : forall σ in S, MulAction.toPermHom G α 
+σ = 1 ∨ Perm.IsSwap (MulAction…
 
-English:
-theorem surjective_of_isSwap_of_isPretransitive
-  statement: [Finite α] (S : Set G)
-  proof: surjective_of_isSwap_of_isPretransitive' S (fun σ hσ => Or.inr (hS1 σ hσ)) hS2
-
-中文:
-定理 surjective_of_isSwap_of_isPretransitive
-  结论: [有限 α] (S : 集合 G)
-  证明: surjective_of_isSwap_of_isPretransitive' S (fun σ hσ => Or.inr (hS1 σ hσ)) hS2
-
-Depends on / 依赖: Or.inr, surjective_of_isSwap_of_isPretransitive
+--- 原说明 ---
+A transitive permutation group generated by transpositions must be the whole sym
+metric group
 -/
 theorem surjective_of_isSwap_of_isPretransitive [Finite α] (S : Set G)
-    (hS1 : forall σ in S, Perm.IsSwap (MulAction.toPermHom G α σ)) (hS2 : Subgroup.closure S = ⊤)
+    (hS1 : ∀ σ ∈ S, Perm.IsSwap (MulAction.toPermHom G α σ)) (hS2 : Subgroup.closure S = ⊤)
     [h : MulAction.IsPretransitive G α] : Function.Surjective (MulAction.toPermHom G α) :=
-  surjective_of_isSwap_of_isPretransitive' S (fun σ hσ => Or.inr (hS1 σ hσ)) hS2
+  surjective_of_isSwap_of_isPretransitive' S (fun σ hσ ↦ Or.inr (hS1 σ hσ)) hS2

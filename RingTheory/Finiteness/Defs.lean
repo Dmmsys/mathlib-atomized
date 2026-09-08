@@ -38,135 +38,94 @@ variable {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
 
 open Set
 
-/--
-Definition of `FG` / `FG` 的定义
+/-- A submodule of `M` is finitely generated if it is the span of a finite subset of `M`. -/
+/-
+**Submodule.FG** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：FG (N : Submodule R M) : Prop
+参数：N : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FG
-  signature: (N : Submodule R M)
-  body: exists S : Finset M, span R ↑S = N
-
-中文:
-定义 FG
-  签名: (N : 子模 R M)
-  定义体: exists S : Finset M, span R ↑S = N
-
-Depends on / 依赖: Finset
+--- 原说明 ---
+A submodule of `M` is finitely generated if it is the span of a finite subset of
+ `M`.
 -/
 def FG (N : Submodule R M) : Prop :=
-  exists S : Finset M, span R ↑S = N
-
-/--
-theorem `fg_def` / 定理 `fg_def`
-
-English:
-theorem fg_def
-  given: {N : Submodule R M}
-  statement: N.FG ↔ exists S : Set M, S.Finite ∧ span R S = N
-  proof: by
-  refine ⟨fun ⟨t, h⟩ => ⟨_, t.finite_toSet, h⟩, ?_⟩
-  rintro ⟨t', h, rfl⟩
-  have := h.exists_finset_coe
-  tauto
-
-中文:
-定理 fg_def
-  条件: {N : 子模 R M}
-  结论: N.FG ↔ 存在 S : 集合 M, S.有限 ∧ span R S = N
-  证明: by
-  refine ⟨fun ⟨t, h⟩ => ⟨_, t.finite_toSet, h⟩, ?_⟩
-  rintro ⟨t', h, rfl⟩
-  have := h.exists_finset_coe
-  tauto
-
-Depends on / 依赖: exists_finset_coe, finite_toSet, h.exists_finset_coe, t.finite_toSet
+  ∃ S : Finset M, span R ↑S = N
+/-
+**Submodule.fg_def** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：fg_def {N : Submodule R M} : N.FG ↔ exists S : Set M, S.Finite ∧ span R S 
+= N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Set.Finite.exists_finset_coe`：∀ {α : Type u} {s : Set α}, s.Finite → ∃ s
+', ↑s' = s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem fg_def {N : Submodule R M} : N.FG ↔ exists S : Set M, S.Finite ∧ span R S = N := by
+theorem fg_def {N : Submodule R M} : N.FG ↔ ∃ S : Set M, S.Finite ∧ span R S = N := by
   refine ⟨fun ⟨t, h⟩ => ⟨_, t.finite_toSet, h⟩, ?_⟩
   rintro ⟨t', h, rfl⟩
   have := h.exists_finset_coe
   tauto
-
-/--
-theorem `fg_iff_addSubmonoid_fg` / 定理 `fg_iff_addSubmonoid_fg`
-
-English:
-theorem fg_iff_addSubmonoid_fg
-  given: (P : Submodule Nat M)
-  statement: P.FG ↔ P.toAddSubmonoid.FG
-  proof: ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure]⟩,
-    fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure] using hS⟩⟩
-
-中文:
-定理 fg_iff_addSubmonoid_fg
-  条件: (P : 子模 自然数 M)
-  结论: P.FG ↔ P.toAddSubmonoid.FG
-  证明: ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure]⟩,
-    fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure] using hS⟩⟩
-
-Depends on / 依赖: span_nat_eq_addSubmonoidClosure
+/-
+**Submodule.fg_iff_addSubmonoid_fg** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：fg_iff_addSubmonoid_fg (P : Submodule Nat M) : P.FG ↔ P.toAddSubmonoid.FG
+参数：P : Submodule Nat M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem fg_iff_addSubmonoid_fg (P : Submodule Nat M) : P.FG ↔ P.toAddSubmonoid.FG :=
+theorem fg_iff_addSubmonoid_fg (P : Submodule ℕ M) : P.FG ↔ P.toAddSubmonoid.FG :=
   ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure]⟩,
     fun ⟨S, hS⟩ => ⟨S, by simpa [← span_nat_eq_addSubmonoidClosure] using hS⟩⟩
-
-/--
-theorem `fg_iff_addSubgroup_fg` / 定理 `fg_iff_addSubgroup_fg`
-
-English:
-theorem fg_iff_addSubgroup_fg
-  given: {G : Type*} [AddCommGroup G] (P : Submodule Int G)
-  proof: ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure]⟩,
-    fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure] using hS⟩⟩
-
-中文:
-定理 fg_iff_addSubgroup_fg
-  条件: {G : 类型} [加法交换群 G] (P : 子模 整数 G)
-  证明: ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure]⟩,
-    fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure] using hS⟩⟩
-
-Depends on / 依赖: span_int_eq_addSubgroupClosure
+/-
+**Submodule.fg_iff_addSubgroup_fg** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：fg_iff_addSubgroup_fg {G : Type*} [AddCommGroup G] (P : Submodule Int G) :
+ P.FG ↔ P.toAddSubgroup.FG
+参数：P : Submodule Int G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubgroup.mk.injEq`：∀ {G : Type u_3} [inst : AddGroup G] (toAddSubmono
+id : AddSubmonoid G)   (neg_mem' : ∀ {x : G}, x ∈ toAddSubmonoid.carrier → -x ∈ 
+toAddSubmo…
+· 使用定理 `Submodule.neg_mem`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst_1 :
+ AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x : M}, x
+ ∈ p → …
 -/
-theorem fg_iff_addSubgroup_fg {G : Type*} [AddCommGroup G] (P : Submodule Int G) :
+theorem fg_iff_addSubgroup_fg {G : Type*} [AddCommGroup G] (P : Submodule ℤ G) :
     P.FG ↔ P.toAddSubgroup.FG :=
   ⟨fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure]⟩,
     fun ⟨S, hS⟩ => ⟨S, by simpa [← span_int_eq_addSubgroupClosure] using hS⟩⟩
-
-/--
-theorem `fg_iff_exists_fin_generating_family` / 定理 `fg_iff_exists_fin_generating_family`
-
-English:
-theorem fg_iff_exists_fin_generating_family
-  given: {N : Submodule R M}
-  proof: by
-  rw [fg_def]
-  constructor
-  · rintro ⟨S, Sfin, hS⟩
-    obtain ⟨n, f, rfl⟩ := Sfin.fin_embedding
-    exact ⟨n, f, hS⟩
-  · rintro ⟨n, s, hs⟩
-    exact ⟨range s, finite_range s, hs⟩
-
-universe w v u in
-
-中文:
-定理 fg_iff_存在_fin_generating_family
-  条件: {N : 子模 R M}
-  证明: by
-  rw [fg_def]
-  constructor
-  · rintro ⟨S, Sfin, hS⟩
-    obtain ⟨n, f, rfl⟩ := Sfin.fin_embedding
-    exact ⟨n, f, hS⟩
-  · rintro ⟨n, s, hs⟩
-    exact ⟨range s, finite_range s, hs⟩
-
-universe w v u in
-
-Depends on / 依赖: Sfin.fin_embedding, fg_def, fin_embedding, finite_range
+/-
+**Submodule.fg_iff_exists_fin_generating_family** 是 Mathlib 中的一个定理，位于命名空间 `Submo
+dule`。
+形式化陈述：fg_iff_exists_fin_generating_family {N : Submodule R M} : N.FG ↔ exists (n
+ : Nat) (s : Fin n -> M), span R (range s) = N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.fg_def`：fg_def {N : Submodule R M} : N.FG ↔ exists S : Set M, 
+S.Finite ∧ span R S = N
+· 使用定理 `Set.Finite.fin_embedding`：∀ {α : Type u} {s : Set α}, s.Finite → ∃ n f, 
+Set.range ⇑f = s
+· 使用定理 `Set.finite_range`：finite_range (f : ι -> α) [Finite ι] : (range f).Finit
+e
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 theorem fg_iff_exists_fin_generating_family {N : Submodule R M} :
-    N.FG ↔ exists (n : Nat) (s : Fin n -> M), span R (range s) = N := by
+    N.FG ↔ ∃ (n : ℕ) (s : Fin n → M), span R (range s) = N := by
   rw [fg_def]
   constructor
   · rintro ⟨S, Sfin, hS⟩
@@ -176,44 +135,38 @@ theorem fg_iff_exists_fin_generating_family {N : Submodule R M} :
     exact ⟨range s, finite_range s, hs⟩
 
 universe w v u in
-/--
-lemma `fg_iff_exists_finite_generating_family` / 引理 `fg_iff_exists_finite_generating_family`
-
-English:
-lemma fg_iff_exists_finite_generating_family
-  statement: {A : Type u} [Semiring A] {M : Type v}
-  proof: by
-  constructor
-  · intro hN
-    obtain ⟨n, f, h⟩ := fg_iff_exists_fin_generating_family.mp hN
-    refine ⟨ULift (Fin n), inferInstance, f ∘ ULift.down, ?_⟩
-    convert! h
-    ext
-    simp
-  · rintro ⟨G, _, g, hg⟩
-    have := Fintype.ofFinite (range g)
-    exact ⟨(range g).toFinset, by simpa⟩
-
-中文:
-引理 fg_iff_存在_finite_generating_family
-  结论: {A : 类型u} [半环 A] {M : 类型v}
-  证明: by
-  constructor
-  · intro hN
-    obtain ⟨n, f, h⟩ := fg_iff_exists_fin_generating_family.mp hN
-    refine ⟨ULift (Fin n), inferInstance, f ∘ ULift.down, ?_⟩
-    convert! h
-    ext
-    simp
-  · rintro ⟨G, _, g, hg⟩
-    have := Fintype.ofFinite (range g)
-    exact ⟨(range g).toFinset, by simpa⟩
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, ULift.down, convert, fg_iff_exists_fin_generating_family, fg_iff_exists_fin_generating_family.mp, ofFinite, toFinset
+/-
+**Submodule.fg_iff_exists_finite_generating_family** 是 Mathlib 中的一个引理，位于命名空间 `Su
+bmodule`。
+形式化陈述：fg_iff_exists_finite_generating_family {A : Type u} [Semiring A] {M : Type
+ v} [AddCommMonoid M] [Module A M] {N : Submodule A M} : N.FG ↔ exists (G : Type
+ w) (_ : Finite G) (g : G -> M), span A (range g) = N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.fg_iff_exists_fin_generating_family`：fg_iff_exists_fin_generat
+ing_family {N : Submodule R M} : N.FG ↔ exists (n : Nat) (s : Fin n -> M), span 
+R (range s) = N
+· 使用定理 `instFiniteULift`：∀ {α : Type v} [Finite α], Finite (ULift.{u, v} α)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
 -/
 lemma fg_iff_exists_finite_generating_family {A : Type u} [Semiring A] {M : Type v}
     [AddCommMonoid M] [Module A M] {N : Submodule A M} :
-    N.FG ↔ exists (G : Type w) (_ : Finite G) (g : G -> M), span A (range g) = N := by
+    N.FG ↔ ∃ (G : Type w) (_ : Finite G) (g : G → M), span A (range g) = N := by
   constructor
   · intro hN
     obtain ⟨n, f, h⟩ := fg_iff_exists_fin_generating_family.mp hN
@@ -224,47 +177,30 @@ lemma fg_iff_exists_finite_generating_family {A : Type u} [Semiring A] {M : Type
   · rintro ⟨G, _, g, hg⟩
     have := Fintype.ofFinite (range g)
     exact ⟨(range g).toFinset, by simpa⟩
-
-/--
-theorem `fg_span_iff_fg_span_finset_subset` / 定理 `fg_span_iff_fg_span_finset_subset`
-
-English:
-theorem fg_span_iff_fg_span_finset_subset
-  given: (s : Set M)
-  proof: by
-  constructor
-  · intro ⟨s'', hs''⟩
-obtain ⟨s', hs's, hss'⟩ := subset_span_finite_of_subset_span hs'' ▸ subset_span
-    refine ⟨s', hs's, ?_⟩
-    apply le_antisymm
-    · rwa [← hs'', span_le]
-    · rw [span_le]
-      exact le_trans hs's subset_span
-  · intro ⟨s', _, h⟩
-    exact ⟨s', h.symm⟩
-
-中文:
-定理 fg_span_iff_fg_span_finset_subset
-  条件: (s : 集合 M)
-  证明: by
-  constructor
-  · intro ⟨s'', hs''⟩
-obtain ⟨s', hs's, hss'⟩ := subset_span_finite_of_subset_span hs'' ▸ subset_span
-    refine ⟨s', hs's, ?_⟩
-    apply le_antisymm
-    · rwa [← hs'', span_le]
-    · rw [span_le]
-      exact le_trans hs's subset_span
-  · intro ⟨s', _, h⟩
-    exact ⟨s', h.symm⟩
-
-Depends on / 依赖: h.symm, le_antisymm, le_trans, span_le, subset_span, subset_span_finite_of_subset_span
+/-
+**Submodule.fg_span_iff_fg_span_finset_subset** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：fg_span_iff_fg_span_finset_subset (s : Set M) : (span R s).FG ↔ exists s' 
+: Finset M, ↑s' subseteq s ∧ span R s = span R s'
+参数：s : Set M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.subset_span_finite_of_subset_span`：subset_span_finite_of_subse
+t_span {s : Set M} {t : Finset M} (ht : (t : Set M) subseteq span R s) : exists 
+T : Finset M, ↑T subseteq s ∧ (t …
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
 -/
 theorem fg_span_iff_fg_span_finset_subset (s : Set M) :
-    (span R s).FG ↔ exists s' : Finset M, ↑s' subseteq s ∧ span R s = span R s' := by
+    (span R s).FG ↔ ∃ s' : Finset M, ↑s' ⊆ s ∧ span R s = span R s' := by
   constructor
   · intro ⟨s'', hs''⟩
-obtain ⟨s', hs's, hss'⟩ := subset_span_finite_of_subset_span hs'' ▸ subset_span
+    obtain ⟨s', hs's, hss'⟩ := subset_span_finite_of_subset_span <| hs'' ▸ subset_span
     refine ⟨s', hs's, ?_⟩
     apply le_antisymm
     · rwa [← hs'', span_le]
@@ -279,23 +215,24 @@ namespace Ideal
 
 variable {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Definition of `FG` / `FG` 的定义
+/-- An ideal of `R` is finitely generated if it is the span of a finite subset of `R`.
 
-English:
-definition FG
-  signature: (I : Ideal R)
-  body: exists S : Finset R, span ↑S = I
+This is defeq to `Submodule.FG`, but unfolds more nicely. -/
+/-
+**Ideal.FG** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：FG (I : Ideal R) : Prop
+参数：I : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 FG
-  签名: (I : 理想 R)
-  定义体: exists S : Finset R, span ↑S = I
+--- 原说明 ---
+An ideal of `R` is finitely generated if it is the span of a finite subset of `R
+`.
 
-Depends on / 依赖: Finset
+This is defeq to `Submodule.FG`, but unfolds more nicely.
 -/
 def FG (I : Ideal R) : Prop :=
-  exists S : Finset R, span ↑S = I
+  ∃ S : Finset R, span ↑S = I
 
 end Ideal
 
@@ -303,20 +240,16 @@ section ModuleAndAlgebra
 
 variable (R A B M N : Type*)
 
-/--
-Definition of `Module.Finite` / `Module.Finite` 的定义
+/-- A module over a semiring is `Module.Finite` if it is finitely generated as a module. -/
+/-
+**Module.Finite** 是 Mathlib 中的一个归纳类型，位于命名空间 `Module`。
+形式化陈述：(R : Type u_1) → (M : Type u_4) → [inst : Semiring R] → [inst_1 : AddCommM
+onoid M] → [_root_.Module R M] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Module.Finite
-  parameters: [Semiring R] [AddCommMonoid M] [Module R M]
-  axioms and operations (1):
-    - of_fg_top : : fg_top : (⊤ : Submodule R M).FG
-
-中文:
-类 模.有限
-  参数: [半环 R] [加法交换幺半群 M] [模 R M]
-  公理与运算 (1 个):
-    - of_fg_top : : fg_top : (⊤ : 子模 R M).FG
+--- 原说明 ---
+A module over a semiring is `Module.Finite` if it is finitely generated as a mod
+ule.
 -/
 protected class Module.Finite [Semiring R] [AddCommMonoid M] [Module R M] : Prop where
   of_fg_top ::
@@ -328,20 +261,19 @@ namespace Module
 
 variable [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]
 
-/--
-theorem `finite_def` / 定理 `finite_def`
+/-- See also `Module.Finite.iff_fg` for a version when `M` is itself a submodule. -/
+/-
+**Module.finite_def** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：finite_def {R M} [Semiring R] [AddCommMonoid M] [Module R M] : Module.Fini
+te R M ↔ (⊤ : Submodule R M).FG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.fg_top`：∀ {R : Type u_1} {M : Type u_4} {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Finit
+e R M], ⊤.…
 
-English:
-theorem finite_def
-  given: {R M} [Semiring R] [AddCommMonoid M] [Module R M]
-  proof: ⟨(·.fg_top), .of_fg_top⟩
-
-中文:
-定理 finite_def
-  条件: {R M} [半环 R] [加法交换幺半群 M] [模 R M]
-  证明: ⟨(·.fg_top), .of_fg_top⟩
-
-Depends on / 依赖: fg_top, of_fg_top
+--- 原说明 ---
+See also `Module.Finite.iff_fg` for a version when `M` is itself a submodule.
 -/
 theorem finite_def {R M} [Semiring R] [AddCommMonoid M] [Module R M] :
     Module.Finite R M ↔ (⊤ : Submodule R M).FG :=
@@ -351,115 +283,100 @@ namespace Finite
 
 open Submodule Set
 
-/--
-theorem `iff_addMonoid_fg` / 定理 `iff_addMonoid_fg`
-
-English:
-theorem iff_addMonoid_fg
-  given: {M : Type*} [AddCommMonoid M]
-  statement: Module.Finite Nat M ↔ AddMonoid.FG M
-  proof: ⟨fun h => AddMonoid.fg_def.mpr (fg_iff_addSubmonoid_fg ⊤).mp h.fg_top,
-fun h => of_fg_top (fg_iff_addSubmonoid_fg ⊤).mpr (AddMonoid.fg_def.mp h)⟩
-
-中文:
-定理 iff_addMonoid_fg
-  条件: {M : 类型} [加法交换幺半群 M]
-  结论: 模.有限 自然数 M ↔ 加法幺半群.FG M
-  证明: ⟨fun h => AddMonoid.fg_def.mpr (fg_iff_addSubmonoid_fg ⊤).mp h.fg_top,
-fun h => of_fg_top (fg_iff_addSubmonoid_fg ⊤).mpr (AddMonoid.fg_def.mp h)⟩
-
-Depends on / 依赖: AddMonoid, AddMonoid.fg_def.mp, AddMonoid.fg_def.mpr, fg_def, fg_iff_addSubmonoid_fg, fg_top, h.fg_top, of_fg_top
+/-
+**Module.Finite.iff_addMonoid_fg** 是 Mathlib 中的一个定理，位于命名空间 `Module.Finite`。
+形式化陈述：iff_addMonoid_fg {M : Type*} [AddCommMonoid M] : Module.Finite Nat M ↔ Add
+Monoid.FG M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AddMonoid.fg_def`：∀ {M : Type u_1} [inst : AddMonoid M], AddMonoid.FG M 
+↔ ⊤.FG
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.fg_iff_addSubmonoid_fg`：fg_iff_addSubmonoid_fg (P : Submodule 
+Nat M) : P.FG ↔ P.toAddSubmonoid.FG
+· 使用定理 `Module.Finite.fg_top`：∀ {R : Type u_1} {M : Type u_4} {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Finit
+e R M], ⊤.…
 -/
-theorem iff_addMonoid_fg {M : Type*} [AddCommMonoid M] : Module.Finite Nat M ↔ AddMonoid.FG M :=
-⟨fun h => AddMonoid.fg_def.mpr (fg_iff_addSubmonoid_fg ⊤).mp h.fg_top,
-fun h => of_fg_top (fg_iff_addSubmonoid_fg ⊤).mpr (AddMonoid.fg_def.mp h)⟩
-
-/--
-theorem `iff_addGroup_fg` / 定理 `iff_addGroup_fg`
-
-English:
-theorem iff_addGroup_fg
-  given: {G : Type*} [AddCommGroup G]
-  statement: Module.Finite Int G ↔ AddGroup.FG G
-  proof: ⟨fun h => AddGroup.fg_def.mpr (fg_iff_addSubgroup_fg ⊤).mp h.fg_top,
-fun h => of_fg_top (fg_iff_addSubgroup_fg ⊤).mpr (AddGroup.fg_def.mp h)⟩
-
-中文:
-定理 iff_addGroup_fg
-  条件: {G : 类型} [加法交换群 G]
-  结论: 模.有限 整数 G ↔ 加法群.FG G
-  证明: ⟨fun h => AddGroup.fg_def.mpr (fg_iff_addSubgroup_fg ⊤).mp h.fg_top,
-fun h => of_fg_top (fg_iff_addSubgroup_fg ⊤).mpr (AddGroup.fg_def.mp h)⟩
-
-Depends on / 依赖: AddGroup, AddGroup.fg_def.mp, AddGroup.fg_def.mpr, fg_def, fg_iff_addSubgroup_fg, fg_top, h.fg_top, of_fg_top
+theorem iff_addMonoid_fg {M : Type*} [AddCommMonoid M] : Module.Finite ℕ M ↔ AddMonoid.FG M :=
+  ⟨fun h => AddMonoid.fg_def.mpr <| (fg_iff_addSubmonoid_fg ⊤).mp h.fg_top,
+    fun h => of_fg_top <| (fg_iff_addSubmonoid_fg ⊤).mpr (AddMonoid.fg_def.mp h)⟩
+/-
+**Module.Finite.iff_addGroup_fg** 是 Mathlib 中的一个定理，位于命名空间 `Module.Finite`。
+形式化陈述：iff_addGroup_fg {G : Type*} [AddCommGroup G] : Module.Finite Int G ↔ AddGr
+oup.FG G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AddGroup.fg_def`：AddGroup.fg_def : AddGroup.FG H ↔ (⊤ : AddSubgroup H).F
+G
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.fg_iff_addSubgroup_fg`：fg_iff_addSubgroup_fg {G : Type*} [AddC
+ommGroup G] (P : Submodule Int G) : P.FG ↔ P.toAddSubgroup.FG
+· 使用定理 `Module.Finite.fg_top`：∀ {R : Type u_1} {M : Type u_4} {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Finit
+e R M], ⊤.…
 -/
-theorem iff_addGroup_fg {G : Type*} [AddCommGroup G] : Module.Finite Int G ↔ AddGroup.FG G :=
-⟨fun h => AddGroup.fg_def.mpr (fg_iff_addSubgroup_fg ⊤).mp h.fg_top,
-fun h => of_fg_top (fg_iff_addSubgroup_fg ⊤).mpr (AddGroup.fg_def.mp h)⟩
+theorem iff_addGroup_fg {G : Type*} [AddCommGroup G] : Module.Finite ℤ G ↔ AddGroup.FG G :=
+  ⟨fun h => AddGroup.fg_def.mpr <| (fg_iff_addSubgroup_fg ⊤).mp h.fg_top,
+    fun h => of_fg_top <| (fg_iff_addSubgroup_fg ⊤).mpr (AddGroup.fg_def.mp h)⟩
 
 variable {R M N}
 
-/--
-lemma `exists_fin` / 引理 `exists_fin`
+/-- See also `Module.Finite.exists_fin'`. -/
+/-
+**Module.Finite.exists_fin** 是 Mathlib 中的一个引理，位于命名空间 `Module.Finite`。
+形式化陈述：exists_fin [Module.Finite R M] : exists (n : Nat) (s : Fin n -> M), span R
+ (range s) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.fg_iff_exists_fin_generating_family`：fg_iff_exists_fin_generat
+ing_family {N : Submodule R M} : N.FG ↔ exists (n : Nat) (s : Fin n -> M), span 
+R (range s) = N
+· 使用定理 `Module.Finite.fg_top`：∀ {R : Type u_1} {M : Type u_4} {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Finit
+e R M], ⊤.…
 
-English:
-lemma exists_fin
-  given: [Module.Finite R M]
-  statement: exists (n : Nat) (s : Fin n -> M), span R (range s) = ⊤
-  proof: fg_iff_exists_fin_generating_family.mp fg_top
-
-中文:
-引理 存在_fin
-  条件: [模.有限 R M]
-  结论: 存在 (n : 自然数) (s : 有限集 n -> M), span R (range s) = ⊤
-  证明: fg_iff_exists_fin_generating_family.mp fg_top
-
-Depends on / 依赖: fg_iff_exists_fin_generating_family, fg_iff_exists_fin_generating_family.mp, fg_top
+--- 原说明 ---
+See also `Module.Finite.exists_fin'`.
 -/
-lemma exists_fin [Module.Finite R M] : exists (n : Nat) (s : Fin n -> M), span R (range s) = ⊤ :=
+lemma exists_fin [Module.Finite R M] : ∃ (n : ℕ) (s : Fin n → M), span R (range s) = ⊤ :=
   fg_iff_exists_fin_generating_family.mp fg_top
 
 end Finite
 
 end Module
 
-/--
-Instance `AddMonoid.FG.to_moduleFinite_nat` / 实例 `AddMonoid.FG.to_moduleFinite_nat`
-
-English:
-instance AddMonoid.FG.to_moduleFinite_nat
-  signature: {M : Type*} [AddCommMonoid M] [FG M]
-  body: Module.Finite.iff_addMonoid_fg.mpr ‹_›
-
-中文:
-实例 加法幺半群.FG.to_moduleFinite_nat
-  签名: {M : 类型} [加法交换幺半群 M] [FG M]
-  定义体: Module.Finite.iff_addMonoid_fg.mpr ‹_›
-
-Depends on / 依赖: Finite, Module, Module.Finite.iff_addMonoid_fg.mpr, iff_addMonoid_fg
+/-
+**AddMonoid.FG.to_moduleFinite_nat** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddMonoid.FG.to_moduleFinite_nat {M : Type*} [AddCommMonoid M] [FG M] : Mo
+dule.Finite Nat M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.Finite.iff_addMonoid_fg`：iff_addMonoid_fg {M : Type*} [AddCommMon
+oid M] : Module.Finite Nat M ↔ AddMonoid.FG M
 -/
 instance AddMonoid.FG.to_moduleFinite_nat {M : Type*} [AddCommMonoid M] [FG M] :
-    Module.Finite Nat M :=
+    Module.Finite ℕ M :=
   Module.Finite.iff_addMonoid_fg.mpr ‹_›
-
-/--
-Instance `AddMonoid.FG.to_moduleFinite_int` / 实例 `AddMonoid.FG.to_moduleFinite_int`
-
-English:
-instance AddMonoid.FG.to_moduleFinite_int
-  signature: {G : Type*} [AddCommGroup G] [FG G]
-  body: Module.Finite.iff_addGroup_fg.mpr AddGroup.fg_iff_addMonoid_fg.mpr ‹_›
-
-中文:
-实例 加法幺半群.FG.to_moduleFinite_int
-  签名: {G : 类型} [加法交换群 G] [FG G]
-  定义体: Module.Finite.iff_addGroup_fg.mpr AddGroup.fg_iff_addMonoid_fg.mpr ‹_›
-
-Depends on / 依赖: AddGroup, AddGroup.fg_iff_addMonoid_fg.mpr, Finite, Module, Module.Finite.iff_addGroup_fg.mpr, fg_iff_addMonoid_fg, iff_addGroup_fg
+/-
+**AddMonoid.FG.to_moduleFinite_int** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddMonoid.FG.to_moduleFinite_int {G : Type*} [AddCommGroup G] [FG G] : Mod
+ule.Finite Int G
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.Finite.iff_addGroup_fg`：iff_addGroup_fg {G : Type*} [AddCommGroup
+ G] : Module.Finite Int G ↔ AddGroup.FG G
+· 使用定理 `AddGroup.fg_iff_addMonoid_fg`：∀ {G : Type u_3} [inst : AddGroup G], AddG
+roup.FG G ↔ AddMonoid.FG G
 -/
 instance AddMonoid.FG.to_moduleFinite_int {G : Type*} [AddCommGroup G] [FG G] :
-    Module.Finite Int G :=
-Module.Finite.iff_addGroup_fg.mpr AddGroup.fg_iff_addMonoid_fg.mpr ‹_›
+    Module.Finite ℤ G :=
+  Module.Finite.iff_addGroup_fg.mpr <| AddGroup.fg_iff_addMonoid_fg.mpr ‹_›
 
 end ModuleAndAlgebra
 
@@ -469,52 +386,40 @@ variable {A B C : Type*} [CommRing A] [CommRing B] [CommRing C]
 
 /-- A ring morphism `A →+* B` is `RingHom.Finite` if `B` is finitely generated as `A`-module. -/
 @[algebraize Module.Finite, stacks 0563]
-/--
-Definition of `Finite` / `Finite` 的定义
+/-
+**RingHom.Finite** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：Finite (f : A ->+* B) : Prop
+参数：f : A ->+* B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Finite
-  signature: (f : A ->+* B)
-  body: letI : Algebra A B := f.toAlgebra
-  Module.Finite A B
-
-@[simp]
-
-中文:
-定义 有限
-  签名: (f : A ->+* B)
-  定义体: letI : Algebra A B := f.toAlgebra
-  Module.Finite A B
-
-@[simp]
-
-Depends on / 依赖: Algebra, Finite, Module, Module.Finite, f.toAlgebra, toAlgebra
+--- 原说明 ---
+A ring morphism `A →+* B` is `RingHom.Finite` if `B` is finitely generated as `A
+`-module.
 -/
-def Finite (f : A ->+* B) : Prop :=
+def Finite (f : A →+* B) : Prop :=
   letI : Algebra A B := f.toAlgebra
   Module.Finite A B
 
 @[simp]
-/--
-lemma `finite_algebraMap` / 引理 `finite_algebraMap`
-
-English:
-lemma finite_algebraMap
-  given: [Algebra A B]
-  proof: by
-  rw [Finite]; rw [toAlgebra_algebraMap]
-
-中文:
-引理 finite_algebraMap
-  条件: [代数 A B]
-  证明: by
-  rw [Finite]; rw [toAlgebra_algebraMap]
-
-Depends on / 依赖: Finite, toAlgebra_algebraMap
+/-
+**RingHom.finite_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `RingHom`。
+形式化陈述：finite_algebraMap [Algebra A B] : (algebraMap A B).Finite ↔ Module.Finite 
+A B
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.Finite.eq_1`：∀ {A : Type u_1} {B : Type u_2} [inst : CommRing A]
+ [inst_1 : CommRing B] (f : A →+* B), f.Finite = Module.Finite A B
+· 使用定理 `toAlgebra_algebraMap`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : CommSemiring S] [inst_2 : Algebra R S],   (algebraMap R S).toAlgebra
+ = inst_2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma finite_algebraMap [Algebra A B] :
     (algebraMap A B).Finite ↔ Module.Finite A B := by
-  rw [Finite]; rw [toAlgebra_algebraMap]
+  rw [Finite, toAlgebra_algebraMap]
 
 end RingHom
 
@@ -524,22 +429,21 @@ variable {R A B C : Type*} [CommRing R]
 variable [CommRing A] [CommRing B] [CommRing C]
 variable [Algebra R A] [Algebra R B] [Algebra R C]
 
-/--
-Definition of `Finite` / `Finite` 的定义
+/-- An algebra morphism `A →ₐ[R] B` is finite if it is finite as ring morphism.
+In other words, if `B` is finitely generated as `A`-module. -/
+/-
+**AlgHom.Finite** 是 Mathlib 中的一个定义，位于命名空间 `AlgHom`。
+形式化陈述：Finite (f : A ->ₐ[R] B) : Prop
+参数：f : A ->ₐ[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Finite
-  signature: (f : A ->ₐ[R] B)
-  body: f.toRingHom.Finite
-
-中文:
-定义 有限
-  签名: (f : A ->ₐ[R] B)
-  定义体: f.toRingHom.Finite
-
-Depends on / 依赖: Finite, f.toRingHom.Finite, toRingHom
+--- 原说明 ---
+An algebra morphism `A →ₐ[R] B` is finite if it is finite as ring morphism.
+In other words, if `B` is finitely generated as `A`-module.
 -/
-def Finite (f : A ->ₐ[R] B) : Prop :=
+def Finite (f : A →ₐ[R] B) : Prop :=
   f.toRingHom.Finite
 
 end AlgHom
+

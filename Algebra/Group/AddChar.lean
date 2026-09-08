@@ -61,31 +61,34 @@ variable (A : Type*) [AddMonoid A]
 -- The target
 variable (M : Type*) [Monoid M]
 
-/--
-Definition of `AddChar` / `AddChar` 的定义
+/-- `AddChar A M` is the type of maps `A → M`, for `A` an additive monoid and `M` a multiplicative
+monoid, which intertwine addition in `A` with multiplication in `M`.
 
-English:
-structure AddChar
-  parameters: where
-  axioms and operations (3):
-    - toFun : A -> M
-    - map_zero_eq_one' : toFun 0 = 1
-    - map_add_eq_mul' : forall a b : A, toFun (a + b) = toFun a * toFun b
+We only put the typeclasses needed for the definition, although in practice we are usually
+interested in much more specific cases (e.g. when `A` is a group and `M` a commutative ring).
+-/
+/-
+**AddChar** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u_1) → [AddMonoid A] → (M : Type u_2) → [Monoid M] → Type (max u
+_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 加法特征
-  参数: where
-  公理与运算 (3 个):
-    - toFun : A -> M
-    - map_zero_eq_one' : toFun 0 = 1
-    - map_add_eq_mul' : 对任意 a b : A, toFun (a + b) = toFun a * toFun b
+--- 原说明 ---
+`AddChar A M` is the type of maps `A → M`, for `A` an additive monoid and `M` a 
+multiplicative
+monoid, which intertwine addition in `A` with multiplication in `M`.
+
+We only put the typeclasses needed for the definition, although in practice we a
+re usually
+interested in much more specific cases (e.g. when `A` is a group and `M` a commu
+tative ring).
 -/
 structure AddChar where
   /-- The underlying function.
 
   Do not use this function directly. Instead use the coercion coming from the `FunLike`
   instance. -/
-  toFun : A -> M
+  toFun : A → M
   /-- The function maps `0` to `1`.
 
   Do not use this directly. Instead use `AddChar.map_zero_eq_one`. -/
@@ -93,7 +96,7 @@ structure AddChar where
   /-- The function maps addition in `A` to multiplication in `M`.
 
   Do not use this directly. Instead use `AddChar.map_add_eq_mul`. -/
-  map_add_eq_mul' : forall a b : A, toFun (a + b) = toFun a * toFun b
+  map_add_eq_mul' : ∀ a b : A, toFun (a + b) = toFun a * toFun b
 
 end AddCharDef
 
@@ -104,345 +107,242 @@ section Basic
 
 variable {A B M N : Type*} [AddMonoid A] [AddMonoid B] [Monoid M] [Monoid N] {ψ : AddChar A M}
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
+/-- Define coercion to a function. -/
+/-
+**AddChar.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instFunLike : FunLike (AddChar A M) A M where coe
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instFunLike
-  signature: : FunLike (AddChar A M) A M where
-  body: AddChar.toFun
-  coe_injective φ ψ h := by cases φ; cases ψ; congr
-
-initialize_simps_projections AddChar (toFun -> apply) -- needs to come after FunLike instance
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (加法特征 A M) A M where
-  定义体: AddChar.toFun
-  coe_injective φ ψ h := by cases φ; cases ψ; congr
-
-initialize_simps_projections AddChar (toFun -> apply) -- needs to come after FunLike instance
-
-Depends on / 依赖: AddChar, AddChar.toFun
+--- 原说明 ---
+Define coercion to a function.
 -/
 instance instFunLike : FunLike (AddChar A M) A M where
   coe := AddChar.toFun
   coe_injective φ ψ h := by cases φ; cases ψ; congr
 
-initialize_simps_projections AddChar (toFun -> apply) -- needs to come after FunLike instance
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: (f g : AddChar A M) (h : forall x : A, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-引理 ext
-  条件: (f g : 加法特征 A M) (h : 对任意 x : A, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext f g h
+initialize_simps_projections AddChar (toFun → apply) -- needs to come after FunLike instance
+/-
+**AddChar.ext** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+参数：f g : AddChar A M；∀ (x : A), f x = g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-@[ext] lemma ext (f g : AddChar A M) (h : forall x : A, f x = g x) : f = g :=
+@[ext] lemma ext (f g : AddChar A M) (h : ∀ x : A, f x = g x) : f = g :=
   DFunLike.ext f g h
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  statement: (f : A -> M)
-  proof: by
-  rfl
-
-中文:
-引理 coe_mk
-  结论: (f : A -> M)
-  证明: by
-  rfl
+/-
+**AddChar.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+f : A → M) (map_zero_eq_one' : f 0 = 1)   (map_add_eq_mul' : ∀ (a b : A), f (a +
+ b) = f a * f b),   ⇑{ toFun := f, map_zero_eq_one' := map_zero_eq_one', map_add
+_eq_mul' := map_add_eq_mul' } = f
+参数：f : A → M；map_zero_eq_one' : f 0 = 1；map_add_eq_mul' : ∀ (a b : A), f (a + b)
+ = f a * f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_mk (f : A -> M)
-    (map_zero_eq_one' : f 0 = 1) (map_add_eq_mul' : forall a b : A, f (a + b) = f a * f b) :
+@[simp] lemma coe_mk (f : A → M)
+    (map_zero_eq_one' : f 0 = 1) (map_add_eq_mul' : ∀ a b : A, f (a + b) = f a * f b) :
     AddChar.mk f map_zero_eq_one' map_add_eq_mul' = f := by
   rfl
 
-/--
-lemma `map_zero_eq_one` / 引理 `map_zero_eq_one`
+/-- An additive character maps `0` to `1`. -/
+/-
+**AddChar.map_zero_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : AddChar A M), ψ 0 = 1
+参数：ψ : AddChar A M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.map_zero_eq_one'`：∀ {A : Type u_1} [inst : AddMonoid A] {M : Typ
+e u_2} [inst_1 : Monoid M] (self : AddChar A M), self.toFun 0 = 1
 
-English:
-lemma map_zero_eq_one
-  given: (ψ : AddChar A M)
-  statement: ψ 0 = 1
-  proof: ψ.map_zero_eq_one'
-
-中文:
-引理 map_zero_eq_one
-  条件: (ψ : 加法特征 A M)
-  结论: ψ 0 = 1
-  证明: ψ.map_zero_eq_one'
+--- 原说明 ---
+An additive character maps `0` to `1`.
 -/
 @[simp] lemma map_zero_eq_one (ψ : AddChar A M) : ψ 0 = 1 := ψ.map_zero_eq_one'
 
-/--
-lemma `map_add_eq_mul` / 引理 `map_add_eq_mul`
+/-- An additive character maps sums to products. -/
+/-
+**AddChar.map_add_eq_mul** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：map_add_eq_mul (ψ : AddChar A M) (x y : A) : ψ (x + y) = ψ x * ψ y
+参数：ψ : AddChar A M；x y : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.map_add_eq_mul'`：∀ {A : Type u_1} [inst : AddMonoid A] {M : Type
+ u_2} [inst_1 : Monoid M] (self : AddChar A M) (a b : A),   self.toFun (a + b) =
+ self.toFun a…
 
-English:
-lemma map_add_eq_mul
-  given: (ψ : AddChar A M) (x y : A)
-  statement: ψ (x + y) = ψ x * ψ y
-  proof: ψ.map_add_eq_mul' x y
-
-中文:
-引理 map_add_eq_mul
-  条件: (ψ : 加法特征 A M) (x y : A)
-  结论: ψ (x + y) = ψ x * ψ y
-  证明: ψ.map_add_eq_mul' x y
-
-Depends on / 依赖: map_add_eq_mul
+--- 原说明 ---
+An additive character maps sums to products.
 -/
 lemma map_add_eq_mul (ψ : AddChar A M) (x y : A) : ψ (x + y) = ψ x * ψ y := ψ.map_add_eq_mul' x y
 
-/--
-Definition of `toMonoidHom` / `toMonoidHom` 的定义
+/-- Interpret an additive character as a monoid homomorphism. -/
+/-
+**AddChar.toMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：toMonoidHom (φ : AddChar A M) : Multiplicative A ->* M where toFun
+参数：φ : AddChar A M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.map_zero_eq_one'`：∀ {A : Type u_1} [inst : AddMonoid A] {M : Typ
+e u_2} [inst_1 : Monoid M] (self : AddChar A M), self.toFun 0 = 1
+· 使用定理 `AddChar.map_add_eq_mul'`：∀ {A : Type u_1} [inst : AddMonoid A] {M : Type
+ u_2} [inst_1 : Monoid M] (self : AddChar A M) (a b : A),   self.toFun (a + b) =
+ self.toFun a…
 
-English:
-definition toMonoidHom
-  signature: (φ : AddChar A M)
-  body: φ.toFun
-  map_one' := φ.map_zero_eq_one'
-  map_mul' := φ.map_add_eq_mul'
-
-中文:
-定义 toMonoidHom
-  签名: (φ : 加法特征 A M)
-  定义体: φ.toFun
-  map_one' := φ.map_zero_eq_one'
-  map_mul' := φ.map_add_eq_mul'
+--- 原说明 ---
+Interpret an additive character as a monoid homomorphism.
 -/
-def toMonoidHom (φ : AddChar A M) : Multiplicative A ->* M where
+def toMonoidHom (φ : AddChar A M) : Multiplicative A →* M where
   toFun := φ.toFun
   map_one' := φ.map_zero_eq_one'
   map_mul' := φ.map_add_eq_mul'
 
 -- this instance was a bad idea and conflicted with `instFunLike` above
-
-/--
-lemma `toMonoidHom_apply` / 引理 `toMonoidHom_apply`
-
-English:
-lemma toMonoidHom_apply
-  given: (ψ : AddChar A M) (a : Multiplicative A)
-  proof: rfl
-
-中文:
-引理 toMonoidHom_apply
-  条件: (ψ : 加法特征 A M) (a : Multiplicative A)
-  证明: rfl
+/-
+**AddChar.toMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : AddChar A M) (a : Multiplicative A),   ψ.toMonoidHom a = ψ (Multiplicative.t
+oAdd a)
+参数：ψ : AddChar A M；a : Multiplicative A；Multiplicative.toAdd a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toMonoidHom_apply (ψ : AddChar A M) (a : Multiplicative A) :
     ψ.toMonoidHom a = ψ a.toAdd :=
   rfl
 
-/--
-lemma `map_nsmul_eq_pow` / 引理 `map_nsmul_eq_pow`
+/-- An additive character maps multiples by natural numbers to powers. -/
+/-
+**AddChar.map_nsmul_eq_pow** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：map_nsmul_eq_pow (ψ : AddChar A M) (n : Nat) (x : A) : ψ (n • x) = ψ x ^ n
+参数：ψ : AddChar A M；n : Nat；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
 
-English:
-lemma map_nsmul_eq_pow
-  given: (ψ : AddChar A M) (n : Nat) (x : A)
-  statement: ψ (n • x) = ψ x ^ n
-  proof: ψ.toMonoidHom.map_pow x n
-
-中文:
-引理 map_nsmul_eq_pow
-  条件: (ψ : 加法特征 A M) (n : 自然数) (x : A)
-  结论: ψ (n • x) = ψ x ^ n
-  证明: ψ.toMonoidHom.map_pow x n
-
-Depends on / 依赖: map_pow, toMonoidHom, toMonoidHom.map_pow
+--- 原说明 ---
+An additive character maps multiples by natural numbers to powers.
 -/
-lemma map_nsmul_eq_pow (ψ : AddChar A M) (n : Nat) (x : A) : ψ (n • x) = ψ x ^ n :=
+lemma map_nsmul_eq_pow (ψ : AddChar A M) (n : ℕ) (x : A) : ψ (n • x) = ψ x ^ n :=
   ψ.toMonoidHom.map_pow x n
 
-/--
-Definition of `toMonoidHomEquiv` / `toMonoidHomEquiv` 的定义
+/-- Additive characters `A → M` are the same thing as monoid homomorphisms from `Multiplicative A`
+to `M`. -/
+/-
+**AddChar.toMonoidHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：toMonoidHomEquiv : AddChar A M ≃ (Multiplicative A ->* M) where toFun φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMonoidHomEquiv
-  signature: : AddChar A M ≃ (Multiplicative A ->* M) where
-  body: φ.toMonoidHom
-  invFun f :=
-  { toFun := f.toFun
-    map_zero_eq_one' := f.map_one'
-    map_add_eq_mul' := f.map_mul' }
-
-中文:
-定义 toMonoidHomEquiv
-  签名: : 加法特征 A M ≃ (Multiplicative A ->* M) where
-  定义体: φ.toMonoidHom
-  invFun f :=
-  { toFun := f.toFun
-    map_zero_eq_one' := f.map_one'
-    map_add_eq_mul' := f.map_mul' }
-
-Depends on / 依赖: toMonoidHom
+--- 原说明 ---
+Additive characters `A → M` are the same thing as monoid homomorphisms from `Mul
+tiplicative A`
+to `M`.
 -/
-def toMonoidHomEquiv : AddChar A M ≃ (Multiplicative A ->* M) where
+def toMonoidHomEquiv : AddChar A M ≃ (Multiplicative A →* M) where
   toFun φ := φ.toMonoidHom
   invFun f :=
   { toFun := f.toFun
     map_zero_eq_one' := f.map_one'
     map_add_eq_mul' := f.map_mul' }
-
-/--
-lemma `coe_toMonoidHomEquiv` / 引理 `coe_toMonoidHomEquiv`
-
-English:
-lemma coe_toMonoidHomEquiv
-  given: (ψ : AddChar A M)
-  proof: rfl
-
-中文:
-引理 coe_toMonoidHomEquiv
-  条件: (ψ : 加法特征 A M)
-  证明: rfl
+/-
+**AddChar.coe_toMonoidHomEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : AddChar A M),   ⇑(AddChar.toMonoidHomEquiv ψ) = ⇑ψ ∘ ⇑Multiplicative.toAdd
+参数：ψ : AddChar A M；AddChar.toMonoidHomEquiv ψ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_toMonoidHomEquiv (ψ : AddChar A M) :
     ⇑(toMonoidHomEquiv ψ) = ψ ∘ Multiplicative.toAdd := rfl
-
-/--
-lemma `coe_toMonoidHomEquiv_symm` / 引理 `coe_toMonoidHomEquiv_symm`
-
-English:
-lemma coe_toMonoidHomEquiv_symm
-  given: (ψ : Multiplicative A ->* M)
-  proof: rfl
-
-中文:
-引理 coe_toMonoidHomEquiv_symm
-  条件: (ψ : Multiplicative A ->* M)
-  证明: rfl
+/-
+**AddChar.coe_toMonoidHomEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : Multiplicative A →* M),   ⇑(AddChar.toMonoidHomEquiv.symm ψ) = ⇑ψ ∘ ⇑Multipl
+icative.ofAdd
+参数：ψ : Multiplicative A →* M；AddChar.toMonoidHomEquiv.symm ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp, norm_cast] lemma coe_toMonoidHomEquiv_symm (ψ : Multiplicative A ->* M) :
+@[simp, norm_cast] lemma coe_toMonoidHomEquiv_symm (ψ : Multiplicative A →* M) :
     ⇑(toMonoidHomEquiv.symm ψ) = ψ ∘ Multiplicative.ofAdd := rfl
-
-/--
-lemma `toMonoidHomEquiv_apply` / 引理 `toMonoidHomEquiv_apply`
-
-English:
-lemma toMonoidHomEquiv_apply
-  given: (ψ : AddChar A M) (a : Multiplicative A)
-  proof: rfl
-
-中文:
-引理 toMonoidHomEquiv_apply
-  条件: (ψ : 加法特征 A M) (a : Multiplicative A)
-  证明: rfl
+/-
+**AddChar.toMonoidHomEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : AddChar A M) (a : Multiplicative A),   (AddChar.toMonoidHomEquiv ψ) a = ψ (M
+ultiplicative.toAdd a)
+参数：ψ : AddChar A M；a : Multiplicative A；AddChar.toMonoidHomEquiv ψ；Multiplicativ
+e.toAdd a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toMonoidHomEquiv_apply (ψ : AddChar A M) (a : Multiplicative A) :
     toMonoidHomEquiv ψ a = ψ a.toAdd := rfl
-
-/--
-lemma `toMonoidHomEquiv_symm_apply` / 引理 `toMonoidHomEquiv_symm_apply`
-
-English:
-lemma toMonoidHomEquiv_symm_apply
-  given: (ψ : Multiplicative A ->* M) (a : A)
-  proof: rfl
-
-中文:
-引理 toMonoidHomEquiv_symm_apply
-  条件: (ψ : Multiplicative A ->* M) (a : A)
-  证明: rfl
+/-
+**AddChar.toMonoidHomEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : Multiplicative A →* M) (a : A),   (AddChar.toMonoidHomEquiv.symm ψ) a = ψ (M
+ultiplicative.ofAdd a)
+参数：ψ : Multiplicative A →* M；a : A；AddChar.toMonoidHomEquiv.symm ψ；Multiplicativ
+e.ofAdd a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] lemma toMonoidHomEquiv_symm_apply (ψ : Multiplicative A ->* M) (a : A) :
+@[simp] lemma toMonoidHomEquiv_symm_apply (ψ : Multiplicative A →* M) (a : A) :
     toMonoidHomEquiv.symm ψ a = ψ (Multiplicative.ofAdd a) := rfl
 
-/--
-Definition of `toAddMonoidHom` / `toAddMonoidHom` 的定义
+/-- Interpret an additive character as a monoid homomorphism. -/
+/-
+**AddChar.toAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：toAddMonoidHom (φ : AddChar A M) : A ->+ Additive M where toFun
+参数：φ : AddChar A M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.map_zero_eq_one'`：∀ {A : Type u_1} [inst : AddMonoid A] {M : Typ
+e u_2} [inst_1 : Monoid M] (self : AddChar A M), self.toFun 0 = 1
+· 使用定理 `AddChar.map_add_eq_mul'`：∀ {A : Type u_1} [inst : AddMonoid A] {M : Type
+ u_2} [inst_1 : Monoid M] (self : AddChar A M) (a b : A),   self.toFun (a + b) =
+ self.toFun a…
 
-English:
-definition toAddMonoidHom
-  signature: (φ : AddChar A M)
-  body: φ.toFun
-  map_zero' := φ.map_zero_eq_one'
-  map_add' := φ.map_add_eq_mul'
-
-中文:
-定义 toAddMonoidHom
-  签名: (φ : 加法特征 A M)
-  定义体: φ.toFun
-  map_zero' := φ.map_zero_eq_one'
-  map_add' := φ.map_add_eq_mul'
+--- 原说明 ---
+Interpret an additive character as a monoid homomorphism.
 -/
-def toAddMonoidHom (φ : AddChar A M) : A ->+ Additive M where
+def toAddMonoidHom (φ : AddChar A M) : A →+ Additive M where
   toFun := φ.toFun
   map_zero' := φ.map_zero_eq_one'
   map_add' := φ.map_add_eq_mul'
-
-/--
-lemma `coe_toAddMonoidHom` / 引理 `coe_toAddMonoidHom`
-
-English:
-lemma coe_toAddMonoidHom
-  given: (ψ : AddChar A M)
-  statement: ⇑ψ.toAddMonoidHom = Additive.ofMul ∘ ψ
-  proof: rfl
-
-中文:
-引理 coe_toAddMonoidHom
-  条件: (ψ : 加法特征 A M)
-  结论: ⇑ψ.toAddMonoidHom = 加性.ofMul ∘ ψ
-  证明: rfl
+/-
+**AddChar.coe_toAddMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : AddChar A M),   ⇑ψ.toAddMonoidHom = ⇑Additive.ofMul ∘ ⇑ψ
+参数：ψ : AddChar A M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toAddMonoidHom (ψ : AddChar A M) : ⇑ψ.toAddMonoidHom = Additive.ofMul ∘ ψ := rfl
-
-/--
-lemma `toAddMonoidHom_apply` / 引理 `toAddMonoidHom_apply`
-
-English:
-lemma toAddMonoidHom_apply
-  given: (ψ : AddChar A M) (a : A)
-  proof: rfl
-
-中文:
-引理 toAddMonoidHom_apply
-  条件: (ψ : 加法特征 A M) (a : A)
-  证明: rfl
+/-
+**AddChar.toAddMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : AddChar A M) (a : A),   ψ.toAddMonoidHom a = Additive.ofMul (ψ a)
+参数：ψ : AddChar A M；a : A；ψ a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toAddMonoidHom_apply (ψ : AddChar A M) (a : A) :
     ψ.toAddMonoidHom a = Additive.ofMul (ψ a) := rfl
 
-/--
-Definition of `toAddMonoidHomEquiv` / `toAddMonoidHomEquiv` 的定义
+/-- Additive characters `A → M` are the same thing as additive homomorphisms from `A` to
+`Additive M`. -/
+/-
+**AddChar.toAddMonoidHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：toAddMonoidHomEquiv : AddChar A M ≃ (A ->+ Additive M) where toFun φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAddMonoidHomEquiv
-  signature: : AddChar A M ≃ (A ->+ Additive M) where
-  body: φ.toAddMonoidHom
-  invFun f :=
-  { toFun := f.toFun
-    map_zero_eq_one' := f.map_zero'
-    map_add_eq_mul' := f.map_add' }
-
-@[simp, norm_cast]
-
-中文:
-定义 toAddMonoidHomEquiv
-  签名: : 加法特征 A M ≃ (A ->+ 加性 M) where
-  定义体: φ.toAddMonoidHom
-  invFun f :=
-  { toFun := f.toFun
-    map_zero_eq_one' := f.map_zero'
-    map_add_eq_mul' := f.map_add' }
-
-@[simp, norm_cast]
-
-Depends on / 依赖: toAddMonoidHom
+--- 原说明 ---
+Additive characters `A → M` are the same thing as additive homomorphisms from `A
+` to
+`Additive M`.
 -/
-def toAddMonoidHomEquiv : AddChar A M ≃ (A ->+ Additive M) where
+def toAddMonoidHomEquiv : AddChar A M ≃ (A →+ Additive M) where
   toFun φ := φ.toAddMonoidHom
   invFun f :=
   { toFun := f.toFun
@@ -450,549 +350,315 @@ def toAddMonoidHomEquiv : AddChar A M ≃ (A ->+ Additive M) where
     map_add_eq_mul' := f.map_add' }
 
 @[simp, norm_cast]
-/--
-lemma `coe_toAddMonoidHomEquiv` / 引理 `coe_toAddMonoidHomEquiv`
-
-English:
-lemma coe_toAddMonoidHomEquiv
-  given: (ψ : AddChar A M)
-  proof: rfl
-
-中文:
-引理 coe_toAddMonoidHomEquiv
-  条件: (ψ : 加法特征 A M)
-  证明: rfl
+/-
+**AddChar.coe_toAddMonoidHomEquiv** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：coe_toAddMonoidHomEquiv (ψ : AddChar A M) : ⇑(toAddMonoidHomEquiv ψ) = Add
+itive.ofMul ∘ ψ
+参数：ψ : AddChar A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_toAddMonoidHomEquiv (ψ : AddChar A M) :
     ⇑(toAddMonoidHomEquiv ψ) = Additive.ofMul ∘ ψ := rfl
-
-/--
-lemma `coe_toAddMonoidHomEquiv_symm` / 引理 `coe_toAddMonoidHomEquiv_symm`
-
-English:
-lemma coe_toAddMonoidHomEquiv_symm
-  given: (ψ : A ->+ Additive M)
-  proof: rfl
-
-中文:
-引理 coe_toAddMonoidHomEquiv_symm
-  条件: (ψ : A ->+ 加性 M)
-  证明: rfl
+/-
+**AddChar.coe_toAddMonoidHomEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : A →+ Additive M),   ⇑(AddChar.toAddMonoidHomEquiv.symm ψ) = ⇑Additive.toMul 
+∘ ⇑ψ
+参数：ψ : A →+ Additive M；AddChar.toAddMonoidHomEquiv.symm ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp, norm_cast] lemma coe_toAddMonoidHomEquiv_symm (ψ : A ->+ Additive M) :
+@[simp, norm_cast] lemma coe_toAddMonoidHomEquiv_symm (ψ : A →+ Additive M) :
     ⇑(toAddMonoidHomEquiv.symm ψ) = Additive.toMul ∘ ψ := rfl
-
-/--
-lemma `toAddMonoidHomEquiv_apply` / 引理 `toAddMonoidHomEquiv_apply`
-
-English:
-lemma toAddMonoidHomEquiv_apply
-  given: (ψ : AddChar A M) (a : A)
-  proof: rfl
-
-中文:
-引理 toAddMonoidHomEquiv_apply
-  条件: (ψ : 加法特征 A M) (a : A)
-  证明: rfl
+/-
+**AddChar.toAddMonoidHomEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : AddChar A M) (a : A),   (AddChar.toAddMonoidHomEquiv ψ) a = Additive.ofMul (
+ψ a)
+参数：ψ : AddChar A M；a : A；AddChar.toAddMonoidHomEquiv ψ；ψ a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toAddMonoidHomEquiv_apply (ψ : AddChar A M) (a : A) :
     toAddMonoidHomEquiv ψ a = Additive.ofMul (ψ a) := rfl
-
-/--
-lemma `toAddMonoidHomEquiv_symm_apply` / 引理 `toAddMonoidHomEquiv_symm_apply`
-
-English:
-lemma toAddMonoidHomEquiv_symm_apply
-  given: (ψ : A ->+ Additive M) (a : A)
-  proof: rfl
-
-中文:
-引理 toAddMonoidHomEquiv_symm_apply
-  条件: (ψ : A ->+ 加性 M) (a : A)
-  证明: rfl
+/-
+**AddChar.toAddMonoidHomEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+ψ : A →+ Additive M) (a : A),   (AddChar.toAddMonoidHomEquiv.symm ψ) a = Additiv
+e.toMul (ψ a)
+参数：ψ : A →+ Additive M；a : A；AddChar.toAddMonoidHomEquiv.symm ψ；ψ a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] lemma toAddMonoidHomEquiv_symm_apply (ψ : A ->+ Additive M) (a : A) :
+@[simp] lemma toAddMonoidHomEquiv_symm_apply (ψ : A →+ Additive M) (a : A) :
     toAddMonoidHomEquiv.symm ψ a = (ψ a).toMul := rfl
 
-/--
-Instance `instOne` / 实例 `instOne`
+/-- The trivial additive character (sending everything to `1`). -/
+/-
+**AddChar.instOne** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instOne : One (AddChar A M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instOne
-  signature: : One (AddChar A M)
-  body: toMonoidHomEquiv.one
-
-中文:
-实例 instOne
-  签名: : 幺 (加法特征 A M)
-  定义体: toMonoidHomEquiv.one
-
-Depends on / 依赖: toMonoidHomEquiv, toMonoidHomEquiv.one
+--- 原说明 ---
+The trivial additive character (sending everything to `1`).
 -/
 instance instOne : One (AddChar A M) := toMonoidHomEquiv.one
 
-/--
-Instance `instZero` / 实例 `instZero`
+/-- The trivial additive character (sending everything to `1`). -/
+/-
+**AddChar.instZero** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instZero : Zero (AddChar A M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instZero
-  signature: : Zero (AddChar A M)
-  body: ⟨1⟩
-
-中文:
-实例 instZero
-  签名: : 零 (加法特征 A M)
-  定义体: ⟨1⟩
+--- 原说明 ---
+The trivial additive character (sending everything to `1`).
 -/
 instance instZero : Zero (AddChar A M) := ⟨1⟩
-
-/--
-lemma `coe_one` / 引理 `coe_one`
-
-English:
-lemma coe_one
-  statement: ⇑(1 : AddChar A M) = 1
-  proof: rfl
-
-中文:
-引理 coe_one
-  结论: ⇑(1 : 加法特征 A M) = 1
-  证明: rfl
+/-
+**AddChar.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M], 
+⇑1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_one : ⇑(1 : AddChar A M) = 1 := rfl
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  statement: ⇑(0 : AddChar A M) = 1
-  proof: rfl
-
-中文:
-引理 coe_zero
-  结论: ⇑(0 : 加法特征 A M) = 1
-  证明: rfl
+/-
+**AddChar.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M], 
+⇑0 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_zero : ⇑(0 : AddChar A M) = 1 := rfl
-/--
-lemma `one_apply` / 引理 `one_apply`
-
-English:
-lemma one_apply
-  given: (a : A)
-  statement: (1 : AddChar A M) a = 1
-  proof: rfl
-
-中文:
-引理 one_apply
-  条件: (a : A)
-  结论: (1 : 加法特征 A M) a = 1
-  证明: rfl
+/-
+**AddChar.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+a : A), 1 a = 1
+参数：a : A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma one_apply (a : A) : (1 : AddChar A M) a = 1 := rfl
-/--
-lemma `zero_apply` / 引理 `zero_apply`
-
-English:
-lemma zero_apply
-  given: (a : A)
-  statement: (0 : AddChar A M) a = 1
-  proof: rfl
-
-中文:
-引理 zero_apply
-  条件: (a : A)
-  结论: (0 : 加法特征 A M) a = 1
-  证明: rfl
+/-
+**AddChar.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] (
+a : A), 0 a = 1
+参数：a : A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma zero_apply (a : A) : (0 : AddChar A M) a = 1 := rfl
-
-/--
-lemma `one_eq_zero` / 引理 `one_eq_zero`
-
-English:
-lemma one_eq_zero
-  statement: (1 : AddChar A M) = (0 : AddChar A M)
-  proof: rfl
-
-中文:
-引理 one_eq_zero
-  结论: (1 : 加法特征 A M) = (0 : 加法特征 A M)
-  证明: rfl
+/-
+**AddChar.one_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：one_eq_zero : (1 : AddChar A M) = (0 : AddChar A M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_eq_zero : (1 : AddChar A M) = (0 : AddChar A M) := rfl
-
-/--
-lemma `coe_eq_one` / 引理 `coe_eq_one`
-
-English:
-lemma coe_eq_one
-  statement: ⇑ψ = 1 ↔ ψ = 0
-  proof: by rw [← coe_zero, DFunLike.coe_fn_eq]
-
-中文:
-引理 coe_eq_one
-  结论: ⇑ψ = 1 ↔ ψ = 0
-  证明: by rw [← coe_zero, DFunLike.coe_fn_eq]
+/-
+**AddChar.coe_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M] {
+ψ : AddChar A M}, ⇑ψ = 1 ↔ ψ = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddChar.coe_zero`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [
+inst_1 : Monoid M], ⇑0 = 1
+· 使用定理 `DFunLike.coe_fn_eq`：coe_fn_eq {f g : F} : (f : forall a : α, β a) = (g :
+ forall a : α, β a) ↔ f = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp, norm_cast] lemma coe_eq_one : ⇑ψ = 1 ↔ ψ = 0 := by rw [← coe_zero, DFunLike.coe_fn_eq]
-
-/--
-lemma `toMonoidHomEquiv_zero` / 引理 `toMonoidHomEquiv_zero`
-
-English:
-lemma toMonoidHomEquiv_zero
-  statement: toMonoidHomEquiv (0 : AddChar A M) = 1
-  proof: rfl
-
-中文:
-引理 toMonoidHomEquiv_zero
-  结论: toMonoidHomEquiv (0 : 加法特征 A M) = 1
-  证明: rfl
+/-
+**AddChar.toMonoidHomEquiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M], 
+AddChar.toMonoidHomEquiv 0 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toMonoidHomEquiv_zero : toMonoidHomEquiv (0 : AddChar A M) = 1 := rfl
-/--
-lemma `toMonoidHomEquiv_symm_one` / 引理 `toMonoidHomEquiv_symm_one`
-
-English:
-lemma toMonoidHomEquiv_symm_one
-  proof: rfl
-
-中文:
-引理 toMonoidHomEquiv_symm_one
-  证明: rfl
+/-
+**AddChar.toMonoidHomEquiv_symm_one** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M], 
+AddChar.toMonoidHomEquiv.symm 1 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma toMonoidHomEquiv_symm_one :
-    toMonoidHomEquiv.symm (1 : Multiplicative A ->* M) = 0 := rfl
-
-/--
-lemma `toAddMonoidHomEquiv_zero` / 引理 `toAddMonoidHomEquiv_zero`
-
-English:
-lemma toAddMonoidHomEquiv_zero
-  statement: toAddMonoidHomEquiv (0 : AddChar A M) = 0
-  proof: rfl
-
-中文:
-引理 toAddMonoidHomEquiv_zero
-  结论: toAddMonoidHomEquiv (0 : 加法特征 A M) = 0
-  证明: rfl
+    toMonoidHomEquiv.symm (1 : Multiplicative A →* M) = 0 := rfl
+/-
+**AddChar.toAddMonoidHomEquiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M], 
+AddChar.toAddMonoidHomEquiv 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toAddMonoidHomEquiv_zero : toAddMonoidHomEquiv (0 : AddChar A M) = 0 := rfl
-/--
-lemma `toAddMonoidHomEquiv_symm_zero` / 引理 `toAddMonoidHomEquiv_symm_zero`
-
-English:
-lemma toAddMonoidHomEquiv_symm_zero
-  proof: rfl
-
-中文:
-引理 toAddMonoidHomEquiv_symm_zero
-  证明: rfl
+/-
+**AddChar.toAddMonoidHomEquiv_symm_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_1 : Monoid M], 
+AddChar.toAddMonoidHomEquiv.symm 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma toAddMonoidHomEquiv_symm_zero :
-    toAddMonoidHomEquiv.symm (0 : A ->+ Additive M) = 0 := rfl
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: : Inhabited (AddChar A M)
-  body: ⟨1⟩
-
-中文:
-实例 instInhabited
-  签名: : 可居 (加法特征 A M)
-  定义体: ⟨1⟩
+    toAddMonoidHomEquiv.symm (0 : A →+ Additive M) = 0 := rfl
+/-
+**AddChar.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instInhabited : Inhabited (AddChar A M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited : Inhabited (AddChar A M) := ⟨1⟩
 
-/--
-Definition of `_root_.MonoidHom.compAddChar` / `_root_.MonoidHom.compAddChar` 的定义
+/-- Composing a `MonoidHom` with an `AddChar` yields another `AddChar`. -/
+/-
+**AddChar._root_.MonoidHom.compAddChar** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.MonoidHom.compAddChar
-  signature: {N : Type*} [Monoid N] (f : M ->* N) (φ : AddChar A M)
-  body: toMonoidHomEquiv.symm (f.comp φ.toMonoidHom)
-
-@[simp, norm_cast]
-
-中文:
-定义 _root_.幺半群态射.compAddChar
-  签名: {N : 类型} [幺半群 N] (f : M ->* N) (φ : 加法特征 A M)
-  定义体: toMonoidHomEquiv.symm (f.comp φ.toMonoidHom)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: f.comp, toMonoidHom, toMonoidHomEquiv, toMonoidHomEquiv.symm
+--- 原说明 ---
+Composing a `MonoidHom` with an `AddChar` yields another `AddChar`.
 -/
-def _root_.MonoidHom.compAddChar {N : Type*} [Monoid N] (f : M ->* N) (φ : AddChar A M) :
+def _root_.MonoidHom.compAddChar {N : Type*} [Monoid N] (f : M →* N) (φ : AddChar A M) :
     AddChar A N := toMonoidHomEquiv.symm (f.comp φ.toMonoidHom)
 
 @[simp, norm_cast]
-/--
-lemma `_root_.MonoidHom.coe_compAddChar` / 引理 `_root_.MonoidHom.coe_compAddChar`
-
-English:
-lemma _root_.MonoidHom.coe_compAddChar
-  given: {N : Type*} [Monoid N] (f : M ->* N) (φ : AddChar A M)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 _root_.幺半群态射.coe_compAddChar
-  条件: {N : 类型} [幺半群 N] (f : M ->* N) (φ : 加法特征 A M)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**AddChar._root_.MonoidHom.coe_compAddChar** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.MonoidHom.coe_compAddChar {N : Type*} [Monoid N] (f : M ->* N) (φ : AddChar A M) :
+lemma _root_.MonoidHom.coe_compAddChar {N : Type*} [Monoid N] (f : M →* N) (φ : AddChar A M) :
     f.compAddChar φ = f ∘ φ :=
   rfl
 
 @[simp, norm_cast]
-/--
-lemma `_root_.MonoidHom.compAddChar_apply` / 引理 `_root_.MonoidHom.compAddChar_apply`
-
-English:
-lemma _root_.MonoidHom.compAddChar_apply
-  given: (f : M ->* N) (φ : AddChar A M)
-  statement: f.compAddChar φ = f ∘ φ
-  proof: rfl
-
-中文:
-引理 _root_.幺半群态射.compAddChar_apply
-  条件: (f : M ->* N) (φ : 加法特征 A M)
-  结论: f.compAddChar φ = f ∘ φ
-  证明: rfl
+/-
+**AddChar._root_.MonoidHom.compAddChar_apply** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.MonoidHom.compAddChar_apply (f : M ->* N) (φ : AddChar A M) : f.compAddChar φ = f ∘ φ :=
+lemma _root_.MonoidHom.compAddChar_apply (f : M →* N) (φ : AddChar A M) : f.compAddChar φ = f ∘ φ :=
   rfl
-
-/--
-lemma `_root_.MonoidHom.compAddChar_injective_left` / 引理 `_root_.MonoidHom.compAddChar_injective_left`
-
-English:
-lemma _root_.MonoidHom.compAddChar_injective_left
-  given: (ψ : AddChar A M) (hψ : Surjective ψ)
-  proof: by
-  rintro f g h; rw [DFunLike.ext'_iff] at h ⊢; exact hψ.injective_comp_right h
-
-中文:
-引理 _root_.幺半群态射.compAddChar_injective_left
-  条件: (ψ : 加法特征 A M) (hψ : 满射 ψ)
-  证明: by
-  rintro f g h; rw [DFunLike.ext'_iff] at h ⊢; exact hψ.injective_comp_right h
-
-Depends on / 依赖: DFunLike, DFunLike.ext, _iff, injective_comp_right
+/-
+**AddChar._root_.MonoidHom.compAddChar_injective_left** 是 Mathlib 中的一个引理，位于命名空间 
+`AddChar`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.MonoidHom.compAddChar_injective_left (ψ : AddChar A M) (hψ : Surjective ψ) :
-    Injective fun f : M ->* N => f.compAddChar ψ := by
+    Injective fun f : M →* N ↦ f.compAddChar ψ := by
   rintro f g h; rw [DFunLike.ext'_iff] at h ⊢; exact hψ.injective_comp_right h
-
-/--
-lemma `_root_.MonoidHom.compAddChar_injective_right` / 引理 `_root_.MonoidHom.compAddChar_injective_right`
-
-English:
-lemma _root_.MonoidHom.compAddChar_injective_right
-  given: (f : M ->* N) (hf : Injective f)
-  proof: by
-  rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.comp_left h
-
-中文:
-引理 _root_.幺半群态射.compAddChar_injective_right
-  条件: (f : M ->* N) (hf : 单射 f)
-  证明: by
-  rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.comp_left h
-
-Depends on / 依赖: DFunLike, DFunLike.ext, _iff, comp_left, hf.comp_left
+/-
+**AddChar._root_.MonoidHom.compAddChar_injective_right** 是 Mathlib 中的一个引理，位于命名空间
+ `AddChar`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.MonoidHom.compAddChar_injective_right (f : M ->* N) (hf : Injective f) :
-    Injective fun ψ : AddChar B M => f.compAddChar ψ := by
+lemma _root_.MonoidHom.compAddChar_injective_right (f : M →* N) (hf : Injective f) :
+    Injective fun ψ : AddChar B M ↦ f.compAddChar ψ := by
   rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.comp_left h
 
-/--
-Definition of `compAddMonoidHom` / `compAddMonoidHom` 的定义
+/-- Composing an `AddChar` with an `AddMonoidHom` yields another `AddChar`. -/
+/-
+**AddChar.compAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：compAddMonoidHom (φ : AddChar B M) (f : A ->+ B) : AddChar A M
+参数：φ : AddChar B M；f : A ->+ B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition compAddMonoidHom
-  signature: (φ : AddChar B M) (f : A ->+ B)
-  body: toAddMonoidHomEquiv.symm (φ.toAddMonoidHom.comp f)
-
-@[simp, norm_cast]
-
-中文:
-定义 compAddMonoidHom
-  签名: (φ : 加法特征 B M) (f : A ->+ B)
-  定义体: toAddMonoidHomEquiv.symm (φ.toAddMonoidHom.comp f)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: toAddMonoidHom, toAddMonoidHom.comp, toAddMonoidHomEquiv, toAddMonoidHomEquiv.symm
+--- 原说明 ---
+Composing an `AddChar` with an `AddMonoidHom` yields another `AddChar`.
 -/
-def compAddMonoidHom (φ : AddChar B M) (f : A ->+ B) : AddChar A M :=
+def compAddMonoidHom (φ : AddChar B M) (f : A →+ B) : AddChar A M :=
   toAddMonoidHomEquiv.symm (φ.toAddMonoidHom.comp f)
 
 @[simp, norm_cast]
-/--
-lemma `coe_compAddMonoidHom` / 引理 `coe_compAddMonoidHom`
-
-English:
-lemma coe_compAddMonoidHom
-  given: (φ : AddChar B M) (f : A ->+ B)
-  statement: φ.compAddMonoidHom f = φ ∘ f
-  proof: rfl
-
-中文:
-引理 coe_compAddMonoidHom
-  条件: (φ : 加法特征 B M) (f : A ->+ B)
-  结论: φ.compAddMonoidHom f = φ ∘ f
-  证明: rfl
+/-
+**AddChar.coe_compAddMonoidHom** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：coe_compAddMonoidHom (φ : AddChar B M) (f : A ->+ B) : φ.compAddMonoidHom 
+f = φ ∘ f
+参数：φ : AddChar B M；f : A ->+ B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_compAddMonoidHom (φ : AddChar B M) (f : A ->+ B) : φ.compAddMonoidHom f = φ ∘ f := rfl
-
-/--
-lemma `compAddMonoidHom_apply` / 引理 `compAddMonoidHom_apply`
-
-English:
-lemma compAddMonoidHom_apply
-  statement: (ψ : AddChar B M) (f : A ->+ B)
-  proof: rfl
-
-中文:
-引理 compAddMonoidHom_apply
-  结论: (ψ : 加法特征 B M) (f : A ->+ B)
-  证明: rfl
+lemma coe_compAddMonoidHom (φ : AddChar B M) (f : A →+ B) : φ.compAddMonoidHom f = φ ∘ f := rfl
+/-
+**AddChar.compAddMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {B : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : AddMonoid B] [inst_2 : Monoid M]   (ψ : AddChar B M) (f : A →+ B) (a : A), (
+ψ.compAddMonoidHom f) a = ψ (f a)
+参数：ψ : AddChar B M；f : A →+ B；a : A；ψ.compAddMonoidHom f；f a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma compAddMonoidHom_apply (ψ : AddChar B M) (f : A ->+ B)
+@[simp] lemma compAddMonoidHom_apply (ψ : AddChar B M) (f : A →+ B)
     (a : A) : ψ.compAddMonoidHom f a = ψ (f a) := rfl
-
-/--
-lemma `compAddMonoidHom_injective_left` / 引理 `compAddMonoidHom_injective_left`
-
-English:
-lemma compAddMonoidHom_injective_left
-  given: (f : A ->+ B) (hf : Surjective f)
-  proof: by
-  rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.injective_comp_right h
-
-中文:
-引理 compAddMonoidHom_injective_left
-  条件: (f : A ->+ B) (hf : 满射 f)
-  证明: by
-  rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.injective_comp_right h
-
-Depends on / 依赖: DFunLike, DFunLike.ext, _iff, hf.injective_comp_right, injective_comp_right
+/-
+**AddChar.compAddMonoidHom_injective_left** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：compAddMonoidHom_injective_left (f : A ->+ B) (hf : Surjective f) : Inject
+ive fun ψ : AddChar B M => ψ.compAddMonoidHom f
+参数：f : A ->+ B；hf : Surjective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFunLike.ext'_iff`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [i
+ : DFunLike F α β] {f g : F}, f = g ↔ ⇑f = ⇑g
+· 使用定理 `Function.Surjective.injective_comp_right`：∀ {α : Sort u_1} {β : Sort u_2
+} {γ : Sort u_3} {f : α → β}, Function.Surjective f → Function.Injective fun g =
+> g ∘ f
 -/
-lemma compAddMonoidHom_injective_left (f : A ->+ B) (hf : Surjective f) :
-    Injective fun ψ : AddChar B M => ψ.compAddMonoidHom f := by
+lemma compAddMonoidHom_injective_left (f : A →+ B) (hf : Surjective f) :
+    Injective fun ψ : AddChar B M ↦ ψ.compAddMonoidHom f := by
   rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.injective_comp_right h
-
-/--
-lemma `compAddMonoidHom_injective_right` / 引理 `compAddMonoidHom_injective_right`
-
-English:
-lemma compAddMonoidHom_injective_right
-  given: (ψ : AddChar B M) (hψ : Injective ψ)
-  proof: by
-  rintro f g h
-  rw [DFunLike.ext'_iff] at h ⊢; exact hψ.comp_left h
-
-中文:
-引理 compAddMonoidHom_injective_right
-  条件: (ψ : 加法特征 B M) (hψ : 单射 ψ)
-  证明: by
-  rintro f g h
-  rw [DFunLike.ext'_iff] at h ⊢; exact hψ.comp_left h
-
-Depends on / 依赖: DFunLike, DFunLike.ext, _iff, comp_left
+/-
+**AddChar.compAddMonoidHom_injective_right** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：compAddMonoidHom_injective_right (ψ : AddChar B M) (hψ : Injective ψ) : In
+jective fun f : A ->+ B => ψ.compAddMonoidHom f
+参数：ψ : AddChar B M；hψ : Injective ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFunLike.ext'_iff`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [i
+ : DFunLike F α β] {f g : F}, f = g ↔ ⇑f = ⇑g
+· 使用定理 `Function.Injective.comp_left`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort 
+u_3} {g : β → γ}, Function.Injective g → Function.Injective fun x => g ∘ x
 -/
 lemma compAddMonoidHom_injective_right (ψ : AddChar B M) (hψ : Injective ψ) :
-    Injective fun f : A ->+ B => ψ.compAddMonoidHom f := by
+    Injective fun f : A →+ B ↦ ψ.compAddMonoidHom f := by
   rintro f g h
   rw [DFunLike.ext'_iff] at h ⊢; exact hψ.comp_left h
-
-/--
-lemma `eq_one_iff` / 引理 `eq_one_iff`
-
-English:
-lemma eq_one_iff
-  statement: ψ = 1 ↔ forall x, ψ x = 1
-  proof: DFunLike.ext_iff
-
-中文:
-引理 eq_one_iff
-  结论: ψ = 1 ↔ 对任意 x, ψ x = 1
-  证明: DFunLike.ext_iff
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff
+/-
+**AddChar.eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：eq_one_iff : ψ = 1 ↔ forall x, ψ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-lemma eq_one_iff : ψ = 1 ↔ forall x, ψ x = 1 := DFunLike.ext_iff
-/--
-lemma `eq_zero_iff` / 引理 `eq_zero_iff`
-
-English:
-lemma eq_zero_iff
-  statement: ψ = 0 ↔ forall x, ψ x = 1
-  proof: DFunLike.ext_iff
-
-中文:
-引理 eq_zero_iff
-  结论: ψ = 0 ↔ 对任意 x, ψ x = 1
-  证明: DFunLike.ext_iff
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff
+lemma eq_one_iff : ψ = 1 ↔ ∀ x, ψ x = 1 := DFunLike.ext_iff
+/-
+**AddChar.eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：eq_zero_iff : ψ = 0 ↔ forall x, ψ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-lemma eq_zero_iff : ψ = 0 ↔ forall x, ψ x = 1 := DFunLike.ext_iff
-/--
-lemma `ne_one_iff` / 引理 `ne_one_iff`
-
-English:
-lemma ne_one_iff
-  statement: ψ != 1 ↔ exists x, ψ x != 1
-  proof: DFunLike.ne_iff
-
-中文:
-引理 ne_one_iff
-  结论: ψ != 1 ↔ 存在 x, ψ x != 1
-  证明: DFunLike.ne_iff
-
-Depends on / 依赖: DFunLike, DFunLike.ne_iff, ne_iff
+lemma eq_zero_iff : ψ = 0 ↔ ∀ x, ψ x = 1 := DFunLike.ext_iff
+/-
+**AddChar.ne_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：ne_one_iff : ψ != 1 ↔ exists x, ψ x != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ne_iff`：ne_iff {f g : F} : f != g ↔ exists a, f a != g a
 -/
-lemma ne_one_iff : ψ != 1 ↔ exists x, ψ x != 1 := DFunLike.ne_iff
-/--
-lemma `ne_zero_iff` / 引理 `ne_zero_iff`
-
-English:
-lemma ne_zero_iff
-  statement: ψ != 0 ↔ exists x, ψ x != 1
-  proof: DFunLike.ne_iff
-
-中文:
-引理 ne_zero_iff
-  结论: ψ != 0 ↔ 存在 x, ψ x != 1
-  证明: DFunLike.ne_iff
-
-Depends on / 依赖: DFunLike, DFunLike.ne_iff, ne_iff
+lemma ne_one_iff : ψ ≠ 1 ↔ ∃ x, ψ x ≠ 1 := DFunLike.ne_iff
+/-
+**AddChar.ne_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：ne_zero_iff : ψ != 0 ↔ exists x, ψ x != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ne_iff`：ne_iff {f g : F} : f != g ↔ exists a, f a != g a
 -/
-lemma ne_zero_iff : ψ != 0 ↔ exists x, ψ x != 1 := DFunLike.ne_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DecidableEq (AddChar A M)
-  body: Classical.decEq _
-
-中文:
-实例 :
-  签名: DecidableEq (加法特征 A M)
-  定义体: Classical.decEq _
-
-Depends on / 依赖: Classical, Classical.decEq
+lemma ne_zero_iff : ψ ≠ 0 ↔ ∃ x, ψ x ≠ 1 := DFunLike.ne_iff
+/-
+**AddChar.** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : DecidableEq (AddChar A M) := Classical.decEq _
 
@@ -1002,420 +668,278 @@ section toCommMonoid
 
 variable {ι A M : Type*} [AddMonoid A] [CommMonoid M]
 
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
+/-- When `M` is commutative, `AddChar A M` is a commutative monoid. -/
+/-
+**AddChar.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instCommMonoid : CommMonoid (AddChar A M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCommMonoid
-  signature: : CommMonoid (AddChar A M)
-  body: fast_instance% toMonoidHomEquiv.commMonoid
-
-中文:
-实例 instCommMonoid
-  签名: : 交换幺半群 (加法特征 A M)
-  定义体: fast_instance% toMonoidHomEquiv.commMonoid
-
-Depends on / 依赖: commMonoid, fast_instance, toMonoidHomEquiv, toMonoidHomEquiv.commMonoid
+--- 原说明 ---
+When `M` is commutative, `AddChar A M` is a commutative monoid.
 -/
 instance instCommMonoid : CommMonoid (AddChar A M) :=
   fast_instance% toMonoidHomEquiv.commMonoid
 
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
+/-- When `M` is commutative, `AddChar A M` is an additive commutative monoid. -/
+/-
+**AddChar.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instAddCommMonoid : AddCommMonoid (AddChar A M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instAddCommMonoid
-  signature: : AddCommMonoid (AddChar A M)
-  body: inferInstanceAs (AddCommMonoid (Additive (AddChar A M)))
-
-中文:
-实例 instAddCommMonoid
-  签名: : 加法交换幺半群 (加法特征 A M)
-  定义体: inferInstanceAs (AddCommMonoid (Additive (AddChar A M)))
-
-Depends on / 依赖: AddChar, AddCommMonoid, Additive
+--- 原说明 ---
+When `M` is commutative, `AddChar A M` is an additive commutative monoid.
 -/
 instance instAddCommMonoid : AddCommMonoid (AddChar A M) :=
   inferInstanceAs (AddCommMonoid (Additive (AddChar A M)))
-
-/--
-lemma `coe_mul` / 引理 `coe_mul`
-
-English:
-lemma coe_mul
-  given: (ψ χ : AddChar A M)
-  statement: ⇑(ψ * χ) = ψ * χ
-  proof: rfl
-
-中文:
-引理 coe_mul
-  条件: (ψ χ : 加法特征 A M)
-  结论: ⇑(ψ * χ) = ψ * χ
-  证明: rfl
+/-
+**AddChar.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ χ : AddChar A M), ⇑(ψ * χ) = ⇑ψ * ⇑χ
+参数：ψ χ : AddChar A M；ψ * χ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_mul (ψ χ : AddChar A M) : ⇑(ψ * χ) = ψ * χ := rfl
-/--
-lemma `coe_add` / 引理 `coe_add`
-
-English:
-lemma coe_add
-  given: (ψ χ : AddChar A M)
-  statement: ⇑(ψ + χ) = ψ * χ
-  proof: rfl
-
-中文:
-引理 coe_add
-  条件: (ψ χ : 加法特征 A M)
-  结论: ⇑(ψ + χ) = ψ * χ
-  证明: rfl
+/-
+**AddChar.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ χ : AddChar A M), ⇑(ψ + χ) = ⇑ψ * ⇑χ
+参数：ψ χ : AddChar A M；ψ + χ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_add (ψ χ : AddChar A M) : ⇑(ψ + χ) = ψ * χ := rfl
-/--
-lemma `coe_pow` / 引理 `coe_pow`
-
-English:
-lemma coe_pow
-  given: (ψ : AddChar A M) (n : Nat)
-  statement: ⇑(ψ ^ n) = ψ ^ n
-  proof: rfl
-
-中文:
-引理 coe_pow
-  条件: (ψ : 加法特征 A M) (n : 自然数)
-  结论: ⇑(ψ ^ n) = ψ ^ n
-  证明: rfl
+/-
+**AddChar.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ : AddChar A M) (n : ℕ),   ⇑(ψ ^ n) = ⇑ψ ^ n
+参数：ψ : AddChar A M；n : ℕ；ψ ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_pow (ψ : AddChar A M) (n : Nat) : ⇑(ψ ^ n) = ψ ^ n := rfl
-/--
-lemma `coe_nsmul` / 引理 `coe_nsmul`
-
-English:
-lemma coe_nsmul
-  given: (n : Nat) (ψ : AddChar A M)
-  statement: ⇑(n • ψ) = ψ ^ n
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_nsmul
-  条件: (n : 自然数) (ψ : 加法特征 A M)
-  结论: ⇑(n • ψ) = ψ ^ n
-  证明: rfl
-
-@[simp, norm_cast]
+@[simp, norm_cast] lemma coe_pow (ψ : AddChar A M) (n : ℕ) : ⇑(ψ ^ n) = ψ ^ n := rfl
+/-
+**AddChar.coe_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (n : ℕ) (ψ : AddChar A M),   ⇑(n • ψ) = ⇑ψ ^ n
+参数：n : ℕ；ψ : AddChar A M；n • ψ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_nsmul (n : Nat) (ψ : AddChar A M) : ⇑(n • ψ) = ψ ^ n := rfl
+@[simp, norm_cast] lemma coe_nsmul (n : ℕ) (ψ : AddChar A M) : ⇑(n • ψ) = ψ ^ n := rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_prod` / 引理 `coe_prod`
-
-English:
-lemma coe_prod
-  given: (s : Finset ι) (ψ : ι -> AddChar A M)
-  statement: ∏ i in s, ψ i = ∏ i in s, ⇑(ψ i)
-  proof: by
-  induction s using Finset.cons_induction <;> simp [*]
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_prod
-  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M)
-  结论: ∏ i in s, ψ i = ∏ i in s, ⇑(ψ i)
-  证明: by
-  induction s using Finset.cons_induction <;> simp [*]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Finset, Finset.cons_induction, cons_induction
+/-
+**AddChar.coe_prod** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：coe_prod (s : Finset ι) (ψ : ι -> AddChar A M) : ∏ i in s, ψ i = ∏ i in s,
+ ⇑(ψ i)
+参数：s : Finset ι；ψ : ι -> AddChar A M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_cons`：prod_cons (h : a ∉ s) : ∏ x in cons a s h, f x = f a *
+ ∏ x in s, f x
 -/
-lemma coe_prod (s : Finset ι) (ψ : ι -> AddChar A M) : ∏ i in s, ψ i = ∏ i in s, ⇑(ψ i) := by
+lemma coe_prod (s : Finset ι) (ψ : ι → AddChar A M) : ∏ i ∈ s, ψ i = ∏ i ∈ s, ⇑(ψ i) := by
   induction s using Finset.cons_induction <;> simp [*]
 
 @[simp, norm_cast]
-/--
-lemma `coe_sum` / 引理 `coe_sum`
-
-English:
-lemma coe_sum
-  given: (s : Finset ι) (ψ : ι -> AddChar A M)
-  statement: ∑ i in s, ψ i = ∏ i in s, ⇑(ψ i)
-  proof: by
-  induction s using Finset.cons_induction <;> simp [*]
-
-中文:
-引理 coe_sum
-  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M)
-  结论: ∑ i in s, ψ i = ∏ i in s, ⇑(ψ i)
-  证明: by
-  induction s using Finset.cons_induction <;> simp [*]
-
-Depends on / 依赖: Finset, Finset.cons_induction, cons_induction
+/-
+**AddChar.coe_sum** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：coe_sum (s : Finset ι) (ψ : ι -> AddChar A M) : ∑ i in s, ψ i = ∏ i in s, 
+⇑(ψ i)
+参数：s : Finset ι；ψ : ι -> AddChar A M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `Finset.prod_cons`：prod_cons (h : a ∉ s) : ∏ x in cons a s h, f x = f a *
+ ∏ x in s, f x
 -/
-lemma coe_sum (s : Finset ι) (ψ : ι -> AddChar A M) : ∑ i in s, ψ i = ∏ i in s, ⇑(ψ i) := by
+lemma coe_sum (s : Finset ι) (ψ : ι → AddChar A M) : ∑ i ∈ s, ψ i = ∏ i ∈ s, ⇑(ψ i) := by
   induction s using Finset.cons_induction <;> simp [*]
-
-/--
-lemma `mul_apply` / 引理 `mul_apply`
-
-English:
-lemma mul_apply
-  given: (ψ φ : AddChar A M) (a : A)
-  statement: (ψ * φ) a = ψ a * φ a
-  proof: rfl
-
-中文:
-引理 mul_apply
-  条件: (ψ φ : 加法特征 A M) (a : A)
-  结论: (ψ * φ) a = ψ a * φ a
-  证明: rfl
+/-
+**AddChar.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ φ : AddChar A M) (a : A),   (ψ * φ) a = ψ a * φ a
+参数：ψ φ : AddChar A M；a : A；ψ * φ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mul_apply (ψ φ : AddChar A M) (a : A) : (ψ * φ) a = ψ a * φ a := rfl
-/--
-lemma `add_apply` / 引理 `add_apply`
-
-English:
-lemma add_apply
-  given: (ψ φ : AddChar A M) (a : A)
-  statement: (ψ + φ) a = ψ a * φ a
-  proof: rfl
-
-中文:
-引理 add_apply
-  条件: (ψ φ : 加法特征 A M) (a : A)
-  结论: (ψ + φ) a = ψ a * φ a
-  证明: rfl
+/-
+**AddChar.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ φ : AddChar A M) (a : A),   (ψ + φ) a = ψ a * φ a
+参数：ψ φ : AddChar A M；a : A；ψ + φ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma add_apply (ψ φ : AddChar A M) (a : A) : (ψ + φ) a = ψ a * φ a := rfl
-/--
-lemma `pow_apply` / 引理 `pow_apply`
-
-English:
-lemma pow_apply
-  given: (ψ : AddChar A M) (n : Nat) (a : A)
-  statement: (ψ ^ n) a = (ψ a) ^ n
-  proof: rfl
-
-中文:
-引理 pow_apply
-  条件: (ψ : 加法特征 A M) (n : 自然数) (a : A)
-  结论: (ψ ^ n) a = (ψ a) ^ n
-  证明: rfl
+/-
+**AddChar.pow_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ : AddChar A M) (n : ℕ) (a : A),   (ψ ^ n) a = ψ a ^ n
+参数：ψ : AddChar A M；n : ℕ；a : A；ψ ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma pow_apply (ψ : AddChar A M) (n : Nat) (a : A) : (ψ ^ n) a = (ψ a) ^ n := rfl
-/--
-lemma `nsmul_apply` / 引理 `nsmul_apply`
-
-English:
-lemma nsmul_apply
-  given: (ψ : AddChar A M) (n : Nat) (a : A)
-  statement: (n • ψ) a = (ψ a) ^ n
-  proof: rfl
-
-中文:
-引理 nsmul_apply
-  条件: (ψ : 加法特征 A M) (n : 自然数) (a : A)
-  结论: (n • ψ) a = (ψ a) ^ n
-  证明: rfl
+@[simp] lemma pow_apply (ψ : AddChar A M) (n : ℕ) (a : A) : (ψ ^ n) a = (ψ a) ^ n := rfl
+/-
+**AddChar.nsmul_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ : AddChar A M) (n : ℕ) (a : A),   (n • ψ) a = ψ a ^ n
+参数：ψ : AddChar A M；n : ℕ；a : A；n • ψ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma nsmul_apply (ψ : AddChar A M) (n : Nat) (a : A) : (n • ψ) a = (ψ a) ^ n := rfl
-
-/--
-lemma `prod_apply` / 引理 `prod_apply`
-
-English:
-lemma prod_apply
-  given: (s : Finset ι) (ψ : ι -> AddChar A M) (a : A)
-  proof: by rw [coe_prod, Finset.prod_apply]
-
-中文:
-引理 prod_apply
-  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M) (a : A)
-  证明: by rw [coe_prod, Finset.prod_apply]
-
-Depends on / 依赖: Finset, Finset.prod_apply, coe_prod, prod_apply
+@[simp] lemma nsmul_apply (ψ : AddChar A M) (n : ℕ) (a : A) : (n • ψ) a = (ψ a) ^ n := rfl
+/-
+**AddChar.prod_apply** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：prod_apply (s : Finset ι) (ψ : ι -> AddChar A M) (a : A) : (∏ i in s, ψ i)
+ a = ∏ i in s, ψ i a
+参数：s : Finset ι；ψ : ι -> AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AddChar.coe_prod`：coe_prod (s : Finset ι) (ψ : ι -> AddChar A M) : ∏ i i
+n s, ψ i = ∏ i in s, ⇑(ψ i)
+· 使用定理 `Finset.prod_apply`：Finset.prod_apply {α : Type*} {M : α -> Type*} [foral
+l a, CommMonoid (M a)] (a : α) (s : Finset ι) (g : ι -> forall a, M a) : (∏ c in
+ s, g c…
 -/
-lemma prod_apply (s : Finset ι) (ψ : ι -> AddChar A M) (a : A) :
-    (∏ i in s, ψ i) a = ∏ i in s, ψ i a := by rw [coe_prod, Finset.prod_apply]
-
-/--
-lemma `sum_apply` / 引理 `sum_apply`
-
-English:
-lemma sum_apply
-  given: (s : Finset ι) (ψ : ι -> AddChar A M) (a : A)
-  proof: by rw [coe_sum, Finset.prod_apply]
-
-中文:
-引理 sum_apply
-  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M) (a : A)
-  证明: by rw [coe_sum, Finset.prod_apply]
-
-Depends on / 依赖: Finset, Finset.prod_apply, coe_sum, prod_apply
+lemma prod_apply (s : Finset ι) (ψ : ι → AddChar A M) (a : A) :
+    (∏ i ∈ s, ψ i) a = ∏ i ∈ s, ψ i a := by rw [coe_prod, Finset.prod_apply]
+/-
+**AddChar.sum_apply** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：sum_apply (s : Finset ι) (ψ : ι -> AddChar A M) (a : A) : (∑ i in s, ψ i) 
+a = ∏ i in s, ψ i a
+参数：s : Finset ι；ψ : ι -> AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AddChar.coe_sum`：coe_sum (s : Finset ι) (ψ : ι -> AddChar A M) : ∑ i in 
+s, ψ i = ∏ i in s, ⇑(ψ i)
+· 使用定理 `Finset.prod_apply`：Finset.prod_apply {α : Type*} {M : α -> Type*} [foral
+l a, CommMonoid (M a)] (a : α) (s : Finset ι) (g : ι -> forall a, M a) : (∏ c in
+ s, g c…
 -/
-lemma sum_apply (s : Finset ι) (ψ : ι -> AddChar A M) (a : A) :
-    (∑ i in s, ψ i) a = ∏ i in s, ψ i a := by rw [coe_sum, Finset.prod_apply]
-
-/--
-lemma `mul_eq_add` / 引理 `mul_eq_add`
-
-English:
-lemma mul_eq_add
-  given: (ψ χ : AddChar A M)
-  statement: ψ * χ = ψ + χ
-  proof: rfl
-
-中文:
-引理 mul_eq_add
-  条件: (ψ χ : 加法特征 A M)
-  结论: ψ * χ = ψ + χ
-  证明: rfl
+lemma sum_apply (s : Finset ι) (ψ : ι → AddChar A M) (a : A) :
+    (∑ i ∈ s, ψ i) a = ∏ i ∈ s, ψ i a := by rw [coe_sum, Finset.prod_apply]
+/-
+**AddChar.mul_eq_add** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：mul_eq_add (ψ χ : AddChar A M) : ψ * χ = ψ + χ
+参数：ψ χ : AddChar A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mul_eq_add (ψ χ : AddChar A M) : ψ * χ = ψ + χ := rfl
-/--
-lemma `pow_eq_nsmul` / 引理 `pow_eq_nsmul`
-
-English:
-lemma pow_eq_nsmul
-  given: (ψ : AddChar A M) (n : Nat)
-  statement: ψ ^ n = n • ψ
-  proof: rfl
-
-中文:
-引理 pow_eq_nsmul
-  条件: (ψ : 加法特征 A M) (n : 自然数)
-  结论: ψ ^ n = n • ψ
-  证明: rfl
+/-
+**AddChar.pow_eq_nsmul** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：pow_eq_nsmul (ψ : AddChar A M) (n : Nat) : ψ ^ n = n • ψ
+参数：ψ : AddChar A M；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma pow_eq_nsmul (ψ : AddChar A M) (n : Nat) : ψ ^ n = n • ψ := rfl
-/--
-lemma `prod_eq_sum` / 引理 `prod_eq_sum`
-
-English:
-lemma prod_eq_sum
-  given: (s : Finset ι) (ψ : ι -> AddChar A M)
-  statement: ∏ i in s, ψ i = ∑ i in s, ψ i
-  proof: rfl
-
-中文:
-引理 prod_eq_sum
-  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M)
-  结论: ∏ i in s, ψ i = ∑ i in s, ψ i
-  证明: rfl
+lemma pow_eq_nsmul (ψ : AddChar A M) (n : ℕ) : ψ ^ n = n • ψ := rfl
+/-
+**AddChar.prod_eq_sum** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：prod_eq_sum (s : Finset ι) (ψ : ι -> AddChar A M) : ∏ i in s, ψ i = ∑ i in
+ s, ψ i
+参数：s : Finset ι；ψ : ι -> AddChar A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma prod_eq_sum (s : Finset ι) (ψ : ι -> AddChar A M) : ∏ i in s, ψ i = ∑ i in s, ψ i := rfl
-
-/--
-lemma `toMonoidHomEquiv_add` / 引理 `toMonoidHomEquiv_add`
-
-English:
-lemma toMonoidHomEquiv_add
-  given: (ψ φ : AddChar A M)
-  proof: rfl
-
-中文:
-引理 toMonoidHomEquiv_add
-  条件: (ψ φ : 加法特征 A M)
-  证明: rfl
+lemma prod_eq_sum (s : Finset ι) (ψ : ι → AddChar A M) : ∏ i ∈ s, ψ i = ∑ i ∈ s, ψ i := rfl
+/-
+**AddChar.toMonoidHomEquiv_add** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ φ : AddChar A M),   AddChar.toMonoidHomEquiv (ψ + φ) = AddChar.toMonoidHom
+Equiv ψ * AddChar.toMonoidHomEquiv φ
+参数：ψ φ : AddChar A M；ψ + φ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toMonoidHomEquiv_add (ψ φ : AddChar A M) :
     toMonoidHomEquiv (ψ + φ) = toMonoidHomEquiv ψ * toMonoidHomEquiv φ := rfl
-/--
-lemma `toMonoidHomEquiv_symm_mul` / 引理 `toMonoidHomEquiv_symm_mul`
-
-English:
-lemma toMonoidHomEquiv_symm_mul
-  given: (ψ φ : Multiplicative A ->* M)
-  proof: rfl
-
-中文:
-引理 toMonoidHomEquiv_symm_mul
-  条件: (ψ φ : Multiplicative A ->* M)
-  证明: rfl
+/-
+**AddChar.toMonoidHomEquiv_symm_mul** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (ψ φ : Multiplicative A →* M),   AddChar.toMonoidHomEquiv.symm (ψ * φ) = AddC
+har.toMonoidHomEquiv.symm ψ + AddChar.toMonoidHomEquiv.symm φ
+参数：ψ φ : Multiplicative A →* M；ψ * φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] lemma toMonoidHomEquiv_symm_mul (ψ φ : Multiplicative A ->* M) :
+@[simp] lemma toMonoidHomEquiv_symm_mul (ψ φ : Multiplicative A →* M) :
     toMonoidHomEquiv.symm (ψ * φ) = toMonoidHomEquiv.symm ψ + toMonoidHomEquiv.symm φ := rfl
 
-/--
-Definition of `toMonoidHomMulEquiv` / `toMonoidHomMulEquiv` 的定义
+/-- The natural equivalence to `(Multiplicative A →* M)` is a monoid isomorphism. -/
+/-
+**AddChar.toMonoidHomMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：toMonoidHomMulEquiv : AddChar A M ≃* (Multiplicative A ->* M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMonoidHomMulEquiv
-  signature: : AddChar A M ≃* (Multiplicative A ->* M)
-  body: { toMonoidHomEquiv with map_mul' := fun φ ψ => by rfl }
-
-中文:
-定义 toMonoidHomMulEquiv
-  签名: : 加法特征 A M ≃* (Multiplicative A ->* M)
-  定义体: { toMonoidHomEquiv with map_mul' := fun φ ψ => by rfl }
-
-Depends on / 依赖: map_mul, toMonoidHomEquiv
+--- 原说明 ---
+The natural equivalence to `(Multiplicative A →* M)` is a monoid isomorphism.
 -/
-def toMonoidHomMulEquiv : AddChar A M ≃* (Multiplicative A ->* M) :=
-  { toMonoidHomEquiv with map_mul' := fun φ ψ => by rfl }
+def toMonoidHomMulEquiv : AddChar A M ≃* (Multiplicative A →* M) :=
+  { toMonoidHomEquiv with map_mul' := fun φ ψ ↦ by rfl }
 
-/--
-Definition of `toAddMonoidAddEquiv` / `toAddMonoidAddEquiv` 的定义
+/-- Additive characters `A → M` are the same thing as additive homomorphisms from `A` to
+`Additive M`. -/
+/-
+**AddChar.toAddMonoidAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：toAddMonoidAddEquiv : Additive (AddChar A M) ≃+ (A ->+ Additive M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAddMonoidAddEquiv
-  signature: : Additive (AddChar A M) ≃+ (A ->+ Additive M)
-  body: { toAddMonoidHomEquiv with map_add' := fun φ ψ => by rfl }
-
-中文:
-定义 toAddMonoidAddEquiv
-  签名: : 加性 (加法特征 A M) ≃+ (A ->+ 加性 M)
-  定义体: { toAddMonoidHomEquiv with map_add' := fun φ ψ => by rfl }
-
-Depends on / 依赖: map_add, toAddMonoidHomEquiv
+--- 原说明 ---
+Additive characters `A → M` are the same thing as additive homomorphisms from `A
+` to
+`Additive M`.
 -/
-def toAddMonoidAddEquiv : Additive (AddChar A M) ≃+ (A ->+ Additive M) :=
-  { toAddMonoidHomEquiv with map_add' := fun φ ψ => by rfl }
+def toAddMonoidAddEquiv : Additive (AddChar A M) ≃+ (A →+ Additive M) :=
+  { toAddMonoidHomEquiv with map_add' := fun φ ψ ↦ by rfl }
 
-/--
-Definition of `doubleDualEmb` / `doubleDualEmb` 的定义
+/-- The double dual embedding. -/
+/-
+**AddChar.doubleDualEmb** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：doubleDualEmb : A ->+ AddChar (AddChar A M) M where toFun a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition doubleDualEmb
-  signature: : A ->+ AddChar (AddChar A M) M where
-  body: { toFun := fun ψ => ψ a
+--- 原说明 ---
+The double dual embedding.
+-/
+def doubleDualEmb : A →+ AddChar (AddChar A M) M where
+  toFun a := { toFun := fun ψ ↦ ψ a
                map_zero_eq_one' := by simp
                map_add_eq_mul' := by simp }
   map_zero' := by ext; simp
   map_add' _ _ := by ext; simp [map_add_eq_mul]
-
-中文:
-定义 doubleDualEmb
-  签名: : A ->+ 加法特征 (加法特征 A M) M where
-  定义体: { toFun := fun ψ => ψ a
-               map_zero_eq_one' := by simp
-               map_add_eq_mul' := by simp }
-  map_zero' := by ext; simp
-  map_add' _ _ := by ext; simp [map_add_eq_mul]
--/
-def doubleDualEmb : A ->+ AddChar (AddChar A M) M where
-  toFun a := { toFun := fun ψ => ψ a
-               map_zero_eq_one' := by simp
-               map_add_eq_mul' := by simp }
-  map_zero' := by ext; simp
-  map_add' _ _ := by ext; simp [map_add_eq_mul]
-
-/--
-lemma `doubleDualEmb_apply` / 引理 `doubleDualEmb_apply`
-
-English:
-lemma doubleDualEmb_apply
-  given: (a : A) (ψ : AddChar A M)
-  statement: doubleDualEmb a ψ = ψ a
-  proof: rfl
-
-中文:
-引理 doubleDualEmb_apply
-  条件: (a : A) (ψ : 加法特征 A M)
-  结论: doubleDualEmb a ψ = ψ a
-  证明: rfl
+/-
+**AddChar.doubleDualEmb_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] [inst_1 : CommMonoid 
+M] (a : A) (ψ : AddChar A M),   (AddChar.doubleDualEmb a) ψ = ψ a
+参数：a : A；ψ : AddChar A M；AddChar.doubleDualEmb a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma doubleDualEmb_apply (a : A) (ψ : AddChar A M) : doubleDualEmb a ψ = ψ a := rfl
 
@@ -1425,32 +949,47 @@ section CommSemiring
 variable {A R : Type*} [AddGroup A] [Fintype A] [CommSemiring R] [IsDomain R]
   {ψ : AddChar A R}
 
-/--
-lemma `sum_eq_ite` / 引理 `sum_eq_ite`
-
-English:
-lemma sum_eq_ite
-  given: (ψ : AddChar A R) [Decidable (ψ = 0)]
-  proof: by
-  split_ifs with h
-  · simp [h]
-  obtain ⟨x, hx⟩ := ne_one_iff.1 h
-  refine eq_zero_of_mul_eq_self_left hx ?_
-  rw [Finset.mul_sum]
-  exact Fintype.sum_equiv (Equiv.addLeft x) _ _ fun y => (map_add_eq_mul ..).symm
-
-中文:
-引理 sum_eq_ite
-  条件: (ψ : 加法特征 A R) [可判定 (ψ = 0)]
-  证明: by
-  split_ifs with h
-  · simp [h]
-  obtain ⟨x, hx⟩ := ne_one_iff.1 h
-  refine eq_zero_of_mul_eq_self_left hx ?_
-  rw [Finset.mul_sum]
-  exact Fintype.sum_equiv (Equiv.addLeft x) _ _ fun y => (map_add_eq_mul ..).symm
-
-Depends on / 依赖: Equiv.addLeft, Finset, Finset.mul_sum, Fintype, Fintype.sum_equiv, addLeft, eq_zero_of_mul_eq_self_left, map_add_eq_mul, mul_sum, ne_one_iff, split_ifs, sum_equiv
+/-
+**AddChar.sum_eq_ite** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：sum_eq_ite (ψ : AddChar A R) [Decidable (ψ = 0)] : ∑ a, ψ a = if ψ = 0 the
+n ↑(card A) else 0
+参数：ψ : AddChar A R；ψ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `AddChar.ne_one_iff`：ne_one_iff : ψ != 1 ↔ exists x, ψ x != 1
+· 使用定理 `eq_zero_of_mul_eq_self_left`：eq_zero_of_mul_eq_self_left [IsRightCancelM
+ulZero M₀] (h₁ : b != 1) (h₂ : b * a = a) : a = 0
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `Fintype.sum_equiv`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst 
+: Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (f : 
+ι → M) …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AddChar.map_add_eq_mul`：map_add_eq_mul (ψ : AddChar A M) (x y : A) : ψ (
+x + y) = ψ x * ψ y
 -/
 lemma sum_eq_ite (ψ : AddChar A R) [Decidable (ψ = 0)] :
     ∑ a, ψ a = if ψ = 0 then ↑(card A) else 0 := by
@@ -1459,46 +998,38 @@ lemma sum_eq_ite (ψ : AddChar A R) [Decidable (ψ = 0)] :
   obtain ⟨x, hx⟩ := ne_one_iff.1 h
   refine eq_zero_of_mul_eq_self_left hx ?_
   rw [Finset.mul_sum]
-  exact Fintype.sum_equiv (Equiv.addLeft x) _ _ fun y => (map_add_eq_mul ..).symm
+  exact Fintype.sum_equiv (Equiv.addLeft x) _ _ fun y ↦ (map_add_eq_mul ..).symm
 
 variable [CharZero R]
-
-/--
-lemma `sum_eq_zero_iff_ne_zero` / 引理 `sum_eq_zero_iff_ne_zero`
-
-English:
-lemma sum_eq_zero_iff_ne_zero
-  statement: ∑ x, ψ x = 0 ↔ ψ != 0
-  proof: by
-  rw [sum_eq_ite]; rw [Ne.ite_eq_right_iff]; exact Nat.cast_ne_zero.2 Fintype.card_ne_zero
-
-中文:
-引理 sum_eq_zero_iff_ne_zero
-  结论: ∑ x, ψ x = 0 ↔ ψ != 0
-  证明: by
-  rw [sum_eq_ite]; rw [Ne.ite_eq_right_iff]; exact Nat.cast_ne_zero.2 Fintype.card_ne_zero
-
-Depends on / 依赖: Fintype, Fintype.card_ne_zero, Nat.cast_ne_zero, Ne.ite_eq_right_iff, card_ne_zero, cast_ne_zero, ite_eq_right_iff, sum_eq_ite
+/-
+**AddChar.sum_eq_zero_iff_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：sum_eq_zero_iff_ne_zero : ∑ x, ψ x = 0 ↔ ψ != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AddChar.sum_eq_ite`：sum_eq_ite (ψ : AddChar A R) [Decidable (ψ = 0)] : ∑
+ a, ψ a = if ψ = 0 then ↑(card A) else 0
+· 使用定理 `Ne.ite_eq_right_iff`：∀ {α : Sort u_1} {P : Prop} [inst : Decidable P] {a
+ b : α}, a ≠ b → ((if P then a else b) = b ↔ ¬P)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+· 使用定理 `Fintype.card_ne_zero`：card_ne_zero [Nonempty α] : card α != 0
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma sum_eq_zero_iff_ne_zero : ∑ x, ψ x = 0 ↔ ψ != 0 := by
-  rw [sum_eq_ite]; rw [Ne.ite_eq_right_iff]; exact Nat.cast_ne_zero.2 Fintype.card_ne_zero
-
-/--
-lemma `sum_ne_zero_iff_eq_zero` / 引理 `sum_ne_zero_iff_eq_zero`
-
-English:
-lemma sum_ne_zero_iff_eq_zero
-  statement: ∑ x, ψ x != 0 ↔ ψ = 0
-  proof: sum_eq_zero_iff_ne_zero.not_left
-
-中文:
-引理 sum_ne_zero_iff_eq_zero
-  结论: ∑ x, ψ x != 0 ↔ ψ = 0
-  证明: sum_eq_zero_iff_ne_zero.not_left
-
-Depends on / 依赖: not_left, sum_eq_zero_iff_ne_zero, sum_eq_zero_iff_ne_zero.not_left
+lemma sum_eq_zero_iff_ne_zero : ∑ x, ψ x = 0 ↔ ψ ≠ 0 := by
+  rw [sum_eq_ite, Ne.ite_eq_right_iff]; exact Nat.cast_ne_zero.2 Fintype.card_ne_zero
+/-
+**AddChar.sum_ne_zero_iff_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：sum_ne_zero_iff_eq_zero : ∑ x, ψ x != 0 ↔ ψ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not_left`：Iff.not_left (h : a ↔ ¬b) : ¬a ↔ b
+· 使用引理 `AddChar.sum_eq_zero_iff_ne_zero`：sum_eq_zero_iff_ne_zero : ∑ x, ψ x = 0 
+↔ ψ != 0
 -/
-lemma sum_ne_zero_iff_eq_zero : ∑ x, ψ x != 0 ↔ ψ = 0 := sum_eq_zero_iff_ne_zero.not_left
+lemma sum_ne_zero_iff_eq_zero : ∑ x, ψ x ≠ 0 ↔ ψ = 0 := sum_eq_zero_iff_ne_zero.not_left
 
 end CommSemiring
 
@@ -1509,106 +1040,68 @@ section fromAddCommGroup
 
 variable {A M : Type*} [AddCommGroup A] [CommMonoid M]
 
-/--
-Instance `instCommGroup` / 实例 `instCommGroup`
+/-- The additive characters on a commutative additive group form a commutative group.
 
-English:
-instance instCommGroup
-  signature: : CommGroup (AddChar A M) where
-  body: ψ.compAddMonoidHom negAddMonoidHom
-  inv_mul_cancel ψ := by ext1 x; simp [negAddMonoidHom, ← map_add_eq_mul]
+Note that the inverse is defined using negation on the domain; we do not assume `M` has an
+inversion operation for the definition (but see `AddChar.map_neg_eq_inv` below). -/
+/-
+**AddChar.instCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+形式化陈述：instCommGroup : CommGroup (AddChar A M) where inv ψ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 instCommGroup
-  签名: : 交换群 (加法特征 A M) where
-  定义体: ψ.compAddMonoidHom negAddMonoidHom
-  inv_mul_cancel ψ := by ext1 x; simp [negAddMonoidHom, ← map_add_eq_mul]
+--- 原说明 ---
+The additive characters on a commutative additive group form a commutative group
+.
 
-Depends on / 依赖: compAddMonoidHom, negAddMonoidHom
+Note that the inverse is defined using negation on the domain; we do not assume 
+`M` has an
+inversion operation for the definition (but see `AddChar.map_neg_eq_inv` below).
 -/
 instance instCommGroup : CommGroup (AddChar A M) where
   inv ψ := ψ.compAddMonoidHom negAddMonoidHom
   inv_mul_cancel ψ := by ext1 x; simp [negAddMonoidHom, ← map_add_eq_mul]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The additive characters on a commutative additive group form a commutative group. -/
+/-
+**AddChar.** 是 Mathlib 中的一个实例，位于命名空间 `AddChar`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: AddCommGroup (AddChar A M)
-  body: inferInstanceAs AddCommGroup (Additive (AddChar A M))
-
-中文:
-实例 :
-  签名: 加法交换群 (加法特征 A M)
-  定义体: inferInstanceAs AddCommGroup (Additive (AddChar A M))
-
-Depends on / 依赖: AddChar, AddCommGroup, Additive
+--- 原说明 ---
+The additive characters on a commutative additive group form a commutative group
+.
 -/
-instance : AddCommGroup (AddChar A M) := inferInstanceAs AddCommGroup (Additive (AddChar A M))
-
-/--
-lemma `inv_apply` / 引理 `inv_apply`
-
-English:
-lemma inv_apply
-  given: (ψ : AddChar A M) (a : A)
-  statement: ψ⁻¹ a = ψ (-a)
-  proof: rfl
-
-中文:
-引理 inv_apply
-  条件: (ψ : 加法特征 A M) (a : A)
-  结论: ψ⁻¹ a = ψ (-a)
-  证明: rfl
+instance : AddCommGroup (AddChar A M) := inferInstanceAs <| AddCommGroup (Additive (AddChar A M))
+/-
+**AddChar.inv_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_2} [inst : AddCommGroup A] [inst_1 : CommMono
+id M] (ψ : AddChar A M) (a : A),   ψ⁻¹ a = ψ (-a)
+参数：ψ : AddChar A M；a : A；-a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma inv_apply (ψ : AddChar A M) (a : A) : ψ⁻¹ a = ψ (-a) := rfl
-/--
-lemma `neg_apply` / 引理 `neg_apply`
-
-English:
-lemma neg_apply
-  given: (ψ : AddChar A M) (a : A)
-  statement: (-ψ) a = ψ (-a)
-  proof: rfl
-
-中文:
-引理 neg_apply
-  条件: (ψ : 加法特征 A M) (a : A)
-  结论: (-ψ) a = ψ (-a)
-  证明: rfl
+/-
+**AddChar.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_2} [inst : AddCommGroup A] [inst_1 : CommMono
+id M] (ψ : AddChar A M) (a : A),   (-ψ) a = ψ (-a)
+参数：ψ : AddChar A M；a : A；-ψ；-a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma neg_apply (ψ : AddChar A M) (a : A) : (-ψ) a = ψ (-a) := rfl
-/--
-lemma `div_apply` / 引理 `div_apply`
-
-English:
-lemma div_apply
-  given: (ψ χ : AddChar A M) (a : A)
-  statement: (ψ / χ) a = ψ a * χ (-a)
-  proof: rfl
-
-中文:
-引理 div_apply
-  条件: (ψ χ : 加法特征 A M) (a : A)
-  结论: (ψ / χ) a = ψ a * χ (-a)
-  证明: rfl
+/-
+**AddChar.div_apply** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：div_apply (ψ χ : AddChar A M) (a : A) : (ψ / χ) a = ψ a * χ (-a)
+参数：ψ χ : AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma div_apply (ψ χ : AddChar A M) (a : A) : (ψ / χ) a = ψ a * χ (-a) := rfl
-/--
-lemma `sub_apply` / 引理 `sub_apply`
-
-English:
-lemma sub_apply
-  given: (ψ χ : AddChar A M) (a : A)
-  statement: (ψ - χ) a = ψ a * χ (-a)
-  proof: rfl
-
-中文:
-引理 sub_apply
-  条件: (ψ χ : 加法特征 A M) (a : A)
-  结论: (ψ - χ) a = ψ a * χ (-a)
-  证明: rfl
+/-
+**AddChar.sub_apply** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：sub_apply (ψ χ : AddChar A M) (a : A) : (ψ - χ) a = ψ a * χ (-a)
+参数：ψ χ : AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sub_apply (ψ χ : AddChar A M) (a : A) : (ψ - χ) a = ψ a * χ (-a) := rfl
 
@@ -1616,25 +1109,23 @@ end fromAddCommGroup
 
 section fromAddGrouptoCommMonoid
 
-/--
-lemma `val_isUnit` / 引理 `val_isUnit`
+/-- The values of an additive character on an additive group are units. -/
+/-
+**AddChar.val_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：val_isUnit {A M} [AddGroup A] [Monoid M] (φ : AddChar A M) (a : A) : IsUni
+t (φ a)
+参数：φ : AddChar A M；a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用引理 `Group.isUnit`：Group.isUnit [Group α] (a : α) : IsUnit a
 
-English:
-lemma val_isUnit
-  given: {A M} [AddGroup A] [Monoid M] (φ : AddChar A M) (a : A)
-  statement: IsUnit (φ a)
-  proof: IsUnit.map φ.toMonoidHom Group.isUnit (Multiplicative.ofAdd a)
-
-中文:
-引理 val_isUnit
-  条件: {A M} [加法群 A] [幺半群 M] (φ : 加法特征 A M) (a : A)
-  结论: 是单位 (φ a)
-  证明: IsUnit.map φ.toMonoidHom Group.isUnit (Multiplicative.ofAdd a)
-
-Depends on / 依赖: Group.isUnit, IsUnit, IsUnit.map, Multiplicative, Multiplicative.ofAdd, isUnit, toMonoidHom
+--- 原说明 ---
+The values of an additive character on an additive group are units.
 -/
 lemma val_isUnit {A M} [AddGroup A] [Monoid M] (φ : AddChar A M) (a : A) : IsUnit (φ a) :=
-IsUnit.map φ.toMonoidHom Group.isUnit (Multiplicative.ofAdd a)
+  IsUnit.map φ.toMonoidHom <| Group.isUnit (Multiplicative.ofAdd a)
 
 end fromAddGrouptoCommMonoid
 
@@ -1642,49 +1133,48 @@ section fromAddGrouptoDivisionMonoid
 
 variable {A M : Type*} [AddGroup A] [DivisionMonoid M]
 
-/--
-lemma `map_neg_eq_inv` / 引理 `map_neg_eq_inv`
+/-- An additive character maps negatives to inverses (when defined) -/
+/-
+**AddChar.map_neg_eq_inv** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：map_neg_eq_inv (ψ : AddChar A M) (a : A) : ψ (-a) = (ψ a)⁻¹
+参数：ψ : AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_inv_of_mul_eq_one_left`：eq_inv_of_mul_eq_one_left (h : a * b = 1) : a
+ = b⁻¹
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `AddChar.map_zero_eq_one`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMono
+id A] [inst_1 : Monoid M] (ψ : AddChar A M), ψ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma map_neg_eq_inv
-  given: (ψ : AddChar A M) (a : A)
-  statement: ψ (-a) = (ψ a)⁻¹
-  proof: by
-  apply eq_inv_of_mul_eq_one_left
-  simp only [← map_add_eq_mul, neg_add_cancel, map_zero_eq_one]
-
-中文:
-引理 map_neg_eq_inv
-  条件: (ψ : 加法特征 A M) (a : A)
-  结论: ψ (-a) = (ψ a)⁻¹
-  证明: by
-  apply eq_inv_of_mul_eq_one_left
-  simp only [← map_add_eq_mul, neg_add_cancel, map_zero_eq_one]
-
-Depends on / 依赖: eq_inv_of_mul_eq_one_left, map_add_eq_mul, map_zero_eq_one, neg_add_cancel
+--- 原说明 ---
+An additive character maps negatives to inverses (when defined)
 -/
 lemma map_neg_eq_inv (ψ : AddChar A M) (a : A) : ψ (-a) = (ψ a)⁻¹ := by
   apply eq_inv_of_mul_eq_one_left
   simp only [← map_add_eq_mul, neg_add_cancel, map_zero_eq_one]
 
-/--
-lemma `map_zsmul_eq_zpow` / 引理 `map_zsmul_eq_zpow`
+/-- An additive character maps integer scalar multiples to integer powers. -/
+/-
+**AddChar.map_zsmul_eq_zpow** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：map_zsmul_eq_zpow (ψ : AddChar A M) (n : Int) (a : A) : ψ (n • a) = (ψ a) 
+^ n
+参数：ψ : AddChar A M；n : Int；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_zpow`：∀ {α : Type u_2} {β : Type u_3} [inst : Group α] [in
+st_1 : DivisionMonoid β] (f : α →* β) (g : α) (n : ℤ),   f (g ^ n) = f g ^ n
 
-English:
-lemma map_zsmul_eq_zpow
-  given: (ψ : AddChar A M) (n : Int) (a : A)
-  statement: ψ (n • a) = (ψ a) ^ n
-  proof: ψ.toMonoidHom.map_zpow a n
-
-中文:
-引理 map_zsmul_eq_zpow
-  条件: (ψ : 加法特征 A M) (n : 整数) (a : A)
-  结论: ψ (n • a) = (ψ a) ^ n
-  证明: ψ.toMonoidHom.map_zpow a n
-
-Depends on / 依赖: map_zpow, toMonoidHom, toMonoidHom.map_zpow
+--- 原说明 ---
+An additive character maps integer scalar multiples to integer powers.
 -/
-lemma map_zsmul_eq_zpow (ψ : AddChar A M) (n : Int) (a : A) : ψ (n • a) = (ψ a) ^ n :=
+lemma map_zsmul_eq_zpow (ψ : AddChar A M) (n : ℤ) (a : A) : ψ (n • a) = (ψ a) ^ n :=
   ψ.toMonoidHom.map_zpow a n
 
 end fromAddGrouptoDivisionMonoid
@@ -1692,162 +1182,128 @@ end fromAddGrouptoDivisionMonoid
 section fromAddCommGrouptoDivisionCommMonoid
 variable {A M : Type*} [AddCommGroup A] [DivisionCommMonoid M]
 
-/--
-lemma `inv_apply'` / 引理 `inv_apply'`
-
-English:
-lemma inv_apply'
-  given: (ψ : AddChar A M) (a : A)
-  statement: ψ⁻¹ a = (ψ a)⁻¹
-  proof: by rw [inv_apply, map_neg_eq_inv]
-
-中文:
-引理 inv_apply'
-  条件: (ψ : 加法特征 A M) (a : A)
-  结论: ψ⁻¹ a = (ψ a)⁻¹
-  证明: by rw [inv_apply, map_neg_eq_inv]
-
-Depends on / 依赖: inv_apply, map_neg_eq_inv
+/-
+**AddChar.inv_apply'** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：inv_apply' (ψ : AddChar A M) (a : A) : ψ⁻¹ a = (ψ a)⁻¹
+参数：ψ : AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.inv_apply`：∀ {A : Type u_1} {M : Type u_2} [inst : AddCommGroup 
+A] [inst_1 : CommMonoid M] (ψ : AddChar A M) (a : A),   ψ⁻¹ a = ψ (-a)
+· 使用引理 `AddChar.map_neg_eq_inv`：map_neg_eq_inv (ψ : AddChar A M) (a : A) : ψ (-a
+) = (ψ a)⁻¹
 -/
 lemma inv_apply' (ψ : AddChar A M) (a : A) : ψ⁻¹ a = (ψ a)⁻¹ := by rw [inv_apply, map_neg_eq_inv]
-/--
-lemma `neg_apply'` / 引理 `neg_apply'`
-
-English:
-lemma neg_apply'
-  given: (ψ : AddChar A M) (a : A)
-  statement: (-ψ) a = (ψ a)⁻¹
-  proof: map_neg_eq_inv _ _
-
-中文:
-引理 neg_apply'
-  条件: (ψ : 加法特征 A M) (a : A)
-  结论: (-ψ) a = (ψ a)⁻¹
-  证明: map_neg_eq_inv _ _
-
-Depends on / 依赖: map_neg_eq_inv
+/-
+**AddChar.neg_apply'** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：neg_apply' (ψ : AddChar A M) (a : A) : (-ψ) a = (ψ a)⁻¹
+参数：ψ : AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AddChar.map_neg_eq_inv`：map_neg_eq_inv (ψ : AddChar A M) (a : A) : ψ (-a
+) = (ψ a)⁻¹
 -/
 lemma neg_apply' (ψ : AddChar A M) (a : A) : (-ψ) a = (ψ a)⁻¹ := map_neg_eq_inv _ _
-
-/--
-lemma `div_apply'` / 引理 `div_apply'`
-
-English:
-lemma div_apply'
-  given: (ψ χ : AddChar A M) (a : A)
-  statement: (ψ / χ) a = ψ a / χ a
-  proof: by
-  rw [div_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
-
-中文:
-引理 div_apply'
-  条件: (ψ χ : 加法特征 A M) (a : A)
-  结论: (ψ / χ) a = ψ a / χ a
-  证明: by
-  rw [div_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
-
-Depends on / 依赖: div_apply, div_eq_mul_inv, map_neg_eq_inv
+/-
+**AddChar.div_apply'** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：div_apply' (ψ χ : AddChar A M) (a : A) : (ψ / χ) a = ψ a / χ a
+参数：ψ χ : AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AddChar.div_apply`：div_apply (ψ χ : AddChar A M) (a : A) : (ψ / χ) a = ψ
+ a * χ (-a)
+· 使用引理 `AddChar.map_neg_eq_inv`：map_neg_eq_inv (ψ : AddChar A M) (a : A) : ψ (-a
+) = (ψ a)⁻¹
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
 -/
 lemma div_apply' (ψ χ : AddChar A M) (a : A) : (ψ / χ) a = ψ a / χ a := by
-  rw [div_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
-
-/--
-lemma `sub_apply'` / 引理 `sub_apply'`
-
-English:
-lemma sub_apply'
-  given: (ψ χ : AddChar A M) (a : A)
-  statement: (ψ - χ) a = ψ a / χ a
-  proof: by
-  rw [sub_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
-
-中文:
-引理 sub_apply'
-  条件: (ψ χ : 加法特征 A M) (a : A)
-  结论: (ψ - χ) a = ψ a / χ a
-  证明: by
-  rw [sub_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
-
-Depends on / 依赖: div_eq_mul_inv, map_neg_eq_inv, sub_apply
+  rw [div_apply, map_neg_eq_inv, div_eq_mul_inv]
+/-
+**AddChar.sub_apply'** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：sub_apply' (ψ χ : AddChar A M) (a : A) : (ψ - χ) a = ψ a / χ a
+参数：ψ χ : AddChar A M；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AddChar.sub_apply`：sub_apply (ψ χ : AddChar A M) (a : A) : (ψ - χ) a = ψ
+ a * χ (-a)
+· 使用引理 `AddChar.map_neg_eq_inv`：map_neg_eq_inv (ψ : AddChar A M) (a : A) : ψ (-a
+) = (ψ a)⁻¹
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
 -/
 lemma sub_apply' (ψ χ : AddChar A M) (a : A) : (ψ - χ) a = ψ a / χ a := by
-  rw [sub_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
-
-/--
-lemma `zsmul_apply` / 引理 `zsmul_apply`
-
-English:
-lemma zsmul_apply
-  given: (n : Int) (ψ : AddChar A M) (a : A)
-  statement: (n • ψ) a = ψ a ^ n
-  proof: by
-  cases n <;> simp [-neg_apply, neg_apply']
-
-中文:
-引理 zsmul_apply
-  条件: (n : 整数) (ψ : 加法特征 A M) (a : A)
-  结论: (n • ψ) a = ψ a ^ n
-  证明: by
-  cases n <;> simp [-neg_apply, neg_apply']
+  rw [sub_apply, map_neg_eq_inv, div_eq_mul_inv]
+/-
+**AddChar.zsmul_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_2} [inst : AddCommGroup A] [inst_1 : Division
+CommMonoid M] (n : ℤ) (ψ : AddChar A M)   (a : A), (n • ψ) a = ψ a ^ n
+参数：n : ℤ；ψ : AddChar A M；a : A；n • ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `negSucc_zsmul`：negSucc_zsmul {G} [SubNegMonoid G] (a : G) (n : Nat) : In
+t.negSucc n • a = -((n + 1) • a)
+· 使用引理 `AddChar.neg_apply'`：neg_apply' (ψ : AddChar A M) (a : A) : (-ψ) a = (ψ a
+)⁻¹
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
 -/
-@[simp] lemma zsmul_apply (n : Int) (ψ : AddChar A M) (a : A) : (n • ψ) a = ψ a ^ n := by
+@[simp] lemma zsmul_apply (n : ℤ) (ψ : AddChar A M) (a : A) : (n • ψ) a = ψ a ^ n := by
   cases n <;> simp [-neg_apply, neg_apply']
-
-/--
-lemma `zpow_apply` / 引理 `zpow_apply`
-
-English:
-lemma zpow_apply
-  given: (ψ : AddChar A M) (n : Int) (a : A)
-  statement: (ψ ^ n) a = ψ a ^ n
-  proof: zsmul_apply ..
-
-中文:
-引理 zpow_apply
-  条件: (ψ : 加法特征 A M) (n : 整数) (a : A)
-  结论: (ψ ^ n) a = ψ a ^ n
-  证明: zsmul_apply ..
+/-
+**AddChar.zpow_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M : Type u_2} [inst : AddCommGroup A] [inst_1 : Division
+CommMonoid M] (ψ : AddChar A M) (n : ℤ)   (a : A), (ψ ^ n) a = ψ a ^ n
+参数：ψ : AddChar A M；n : ℤ；a : A；ψ ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.zsmul_apply`：∀ {A : Type u_1} {M : Type u_2} [inst : AddCommGrou
+p A] [inst_1 : DivisionCommMonoid M] (n : ℤ) (ψ : AddChar A M)   (a : A), (n • ψ
+) a = ψ a…
 -/
-@[simp] lemma zpow_apply (ψ : AddChar A M) (n : Int) (a : A) : (ψ ^ n) a = ψ a ^ n := zsmul_apply ..
-
-/--
-lemma `map_sub_eq_div` / 引理 `map_sub_eq_div`
-
-English:
-lemma map_sub_eq_div
-  given: (ψ : AddChar A M) (a b : A)
-  statement: ψ (a - b) = ψ a / ψ b
-  proof: ψ.toMonoidHom.map_div _ _
-
-中文:
-引理 map_sub_eq_div
-  条件: (ψ : 加法特征 A M) (a b : A)
-  结论: ψ (a - b) = ψ a / ψ b
-  证明: ψ.toMonoidHom.map_div _ _
-
-Depends on / 依赖: map_div, toMonoidHom, toMonoidHom.map_div
+@[simp] lemma zpow_apply (ψ : AddChar A M) (n : ℤ) (a : A) : (ψ ^ n) a = ψ a ^ n := zsmul_apply ..
+/-
+**AddChar.map_sub_eq_div** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：map_sub_eq_div (ψ : AddChar A M) (a b : A) : ψ (a - b) = ψ a / ψ b
+参数：ψ : AddChar A M；a b : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_div`：∀ {α : Type u_2} {β : Type u_3} [inst : Group α] [ins
+t_1 : DivisionMonoid β] (f : α →* β) (g h : α),   f (g / h) = f g / f h
 -/
 lemma map_sub_eq_div (ψ : AddChar A M) (a b : A) : ψ (a - b) = ψ a / ψ b :=
   ψ.toMonoidHom.map_div _ _
-
-/--
-lemma `injective_iff` / 引理 `injective_iff`
-
-English:
-lemma injective_iff
-  given: {ψ : AddChar A M}
-  statement: Injective ψ ↔ forall ⦃x⦄, ψ x = 1 -> x = 0
-  proof: ψ.toMonoidHom.ker_eq_bot_iff.symm.trans eq_bot_iff
-
-中文:
-引理 injective_iff
-  条件: {ψ : 加法特征 A M}
-  结论: 单射 ψ ↔ 对任意 ⦃x⦄, ψ x = 1 -> x = 0
-  证明: ψ.toMonoidHom.ker_eq_bot_iff.symm.trans eq_bot_iff
-
-Depends on / 依赖: eq_bot_iff, ker_eq_bot_iff, toMonoidHom, toMonoidHom.ker_eq_bot_iff.symm.trans
+/-
+**AddChar.injective_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：injective_iff {ψ : AddChar A M} : Injective ψ ↔ forall ⦃x⦄, ψ x = 1 -> x =
+ 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `MonoidHom.ker_eq_bot_iff`：ker_eq_bot_iff (f : G ->* M) : f.ker = ⊥ ↔ Fun
+ction.Injective f
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
 -/
-lemma injective_iff {ψ : AddChar A M} : Injective ψ ↔ forall ⦃x⦄, ψ x = 1 -> x = 0 :=
+lemma injective_iff {ψ : AddChar A M} : Injective ψ ↔ ∀ ⦃x⦄, ψ x = 1 → x = 0 :=
   ψ.toMonoidHom.ker_eq_bot_iff.symm.trans eq_bot_iff
 
 end fromAddCommGrouptoDivisionCommMonoid
@@ -1855,23 +1311,25 @@ end fromAddCommGrouptoDivisionCommMonoid
 section MonoidWithZero
 variable {A M₀ : Type*} [AddGroup A] [MonoidWithZero M₀] [Nontrivial M₀]
 
-/--
-lemma `coe_ne_zero` / 引理 `coe_ne_zero`
-
-English:
-lemma coe_ne_zero
-  given: (ψ : AddChar A M₀)
-  statement: (ψ : A -> M₀) != 0
-  proof: ne_iff.2 ⟨0, fun h => by simpa only [h, Pi.zero_apply, zero_ne_one] using map_zero_eq_one ψ⟩
-
-中文:
-引理 coe_ne_zero
-  条件: (ψ : 加法特征 A M₀)
-  结论: (ψ : A -> M₀) != 0
-  证明: ne_iff.2 ⟨0, fun h => by simpa only [h, Pi.zero_apply, zero_ne_one] using map_zero_eq_one ψ⟩
+/-
+**AddChar.coe_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {A : Type u_1} {M₀ : Type u_2} [inst : AddGroup A] [inst_1 : MonoidWithZ
+ero M₀] [Nontrivial M₀] (ψ : AddChar A M₀),   ⇑ψ ≠ 0
+参数：ψ : AddChar A M₀。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.ne_iff`：ne_iff {β : α -> Sort*} {f₁ f₂ : forall a, β a} : f₁ !=
+ f₂ ↔ exists a, f₁ a != f₂ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.map_zero_eq_one`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMono
+id A] [inst_1 : Monoid M] (ψ : AddChar A M), ψ 0 = 1
 -/
-@[simp] lemma coe_ne_zero (ψ : AddChar A M₀) : (ψ : A -> M₀) != 0 :=
-  ne_iff.2 ⟨0, fun h => by simpa only [h, Pi.zero_apply, zero_ne_one] using map_zero_eq_one ψ⟩
+@[simp] lemma coe_ne_zero (ψ : AddChar A M₀) : (ψ : A → M₀) ≠ 0 :=
+  ne_iff.2 ⟨0, fun h ↦ by simpa only [h, Pi.zero_apply, zero_ne_one] using map_zero_eq_one ψ⟩
 
 end MonoidWithZero
 
@@ -1883,156 +1341,150 @@ section Ring
 -- The domain and target of our additive characters. Now we restrict to a ring in the domain.
 variable {R M : Type*} [Ring R] [CommMonoid M]
 
-/--
-Definition of `mulShift` / `mulShift` 的定义
+/-- Define the multiplicative shift of an additive character.
+This satisfies `mulShift ψ a x = ψ (a * x)`. -/
+/-
+**AddChar.mulShift** 是 Mathlib 中的一个定义，位于命名空间 `AddChar`。
+形式化陈述：mulShift (ψ : AddChar R M) (r : R) : AddChar R M
+参数：ψ : AddChar R M；r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulShift
-  signature: (ψ : AddChar R M) (r : R)
-  body: ψ.compAddMonoidHom (AddMonoidHom.mulLeft r)
-
-中文:
-定义 mulShift
-  签名: (ψ : 加法特征 R M) (r : R)
-  定义体: ψ.compAddMonoidHom (AddMonoidHom.mulLeft r)
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, compAddMonoidHom, mulLeft
+--- 原说明 ---
+Define the multiplicative shift of an additive character.
+This satisfies `mulShift ψ a x = ψ (a * x)`.
 -/
 def mulShift (ψ : AddChar R M) (r : R) : AddChar R M :=
   ψ.compAddMonoidHom (AddMonoidHom.mulLeft r)
-
-/--
-lemma `mulShift_apply` / 引理 `mulShift_apply`
-
-English:
-lemma mulShift_apply
-  given: {ψ : AddChar R M} {r : R} {x : R}
-  statement: mulShift ψ r x = ψ (r * x)
-  proof: rfl
-
-中文:
-引理 mulShift_apply
-  条件: {ψ : 加法特征 R M} {r : R} {x : R}
-  结论: mulShift ψ r x = ψ (r * x)
-  证明: rfl
+/-
+**AddChar.mulShift_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : CommMonoid M] {ψ
+ : AddChar R M} {r x : R},   (ψ.mulShift r) x = ψ (r * x)
+参数：ψ.mulShift r；r * x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma mulShift_apply {ψ : AddChar R M} {r : R} {x : R} : mulShift ψ r x = ψ (r * x) :=
   rfl
 
-/--
-theorem `inv_mulShift` / 定理 `inv_mulShift`
+/-- `ψ⁻¹ = mulShift ψ (-1))`. -/
+/-
+**AddChar.inv_mulShift** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：inv_mulShift (ψ : AddChar R M) : ψ⁻¹ = mulShift ψ (-1)
+参数：ψ : AddChar R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.ext`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : Monoid M] (f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.inv_apply`：∀ {A : Type u_1} {M : Type u_2} [inst : AddCommGroup 
+A] [inst_1 : CommMonoid M] (ψ : AddChar A M) (a : A),   ψ⁻¹ a = ψ (-a)
+· 使用定理 `AddChar.mulShift_apply`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] 
+[inst_1 : CommMonoid M] {ψ : AddChar R M} {r x : R},   (ψ.mulShift r) x = ψ (r *
+ x)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 
-English:
-theorem inv_mulShift
-  given: (ψ : AddChar R M)
-  statement: ψ⁻¹ = mulShift ψ (-1)
-  proof: by
-  ext
-  rw [inv_apply]; rw [mulShift_apply]; rw [neg_mul]; rw [one_mul]
-
-中文:
-定理 inv_mulShift
-  条件: (ψ : 加法特征 R M)
-  结论: ψ⁻¹ = mulShift ψ (-1)
-  证明: by
-  ext
-  rw [inv_apply]; rw [mulShift_apply]; rw [neg_mul]; rw [one_mul]
-
-Depends on / 依赖: inv_apply, mulShift_apply, neg_mul, one_mul
+--- 原说明 ---
+`ψ⁻¹ = mulShift ψ (-1))`.
 -/
 theorem inv_mulShift (ψ : AddChar R M) : ψ⁻¹ = mulShift ψ (-1) := by
   ext
-  rw [inv_apply]; rw [mulShift_apply]; rw [neg_mul]; rw [one_mul]
+  rw [inv_apply, mulShift_apply, neg_mul, one_mul]
 
-/--
-theorem `mulShift_spec'` / 定理 `mulShift_spec'`
+/-- If `n` is a natural number, then `mulShift ψ n x = (ψ x) ^ n`. -/
+/-
+**AddChar.mulShift_spec'** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：mulShift_spec' (ψ : AddChar R M) (n : Nat) (x : R) : mulShift ψ n x = ψ x 
+^ n
+参数：ψ : AddChar R M；n : Nat；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.mulShift_apply`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] 
+[inst_1 : CommMonoid M] {ψ : AddChar R M} {r x : R},   (ψ.mulShift r) x = ψ (r *
+ x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用引理 `AddChar.map_nsmul_eq_pow`：map_nsmul_eq_pow (ψ : AddChar A M) (n : Nat) (
+x : A) : ψ (n • x) = ψ x ^ n
 
-English:
-theorem mulShift_spec'
-  given: (ψ : AddChar R M) (n : Nat) (x : R)
-  statement: mulShift ψ n x = ψ x ^ n
-  proof: by
-  rw [mulShift_apply]; rw [← nsmul_eq_mul]; rw [map_nsmul_eq_pow]
-
-中文:
-定理 mulShift_spec'
-  条件: (ψ : 加法特征 R M) (n : 自然数) (x : R)
-  结论: mulShift ψ n x = ψ x ^ n
-  证明: by
-  rw [mulShift_apply]; rw [← nsmul_eq_mul]; rw [map_nsmul_eq_pow]
-
-Depends on / 依赖: map_nsmul_eq_pow, mulShift_apply, nsmul_eq_mul
+--- 原说明 ---
+If `n` is a natural number, then `mulShift ψ n x = (ψ x) ^ n`.
 -/
-theorem mulShift_spec' (ψ : AddChar R M) (n : Nat) (x : R) : mulShift ψ n x = ψ x ^ n := by
-  rw [mulShift_apply]; rw [← nsmul_eq_mul]; rw [map_nsmul_eq_pow]
+theorem mulShift_spec' (ψ : AddChar R M) (n : ℕ) (x : R) : mulShift ψ n x = ψ x ^ n := by
+  rw [mulShift_apply, ← nsmul_eq_mul, map_nsmul_eq_pow]
 
-/--
-theorem `pow_mulShift` / 定理 `pow_mulShift`
+/-- If `n` is a natural number, then `ψ ^ n = mulShift ψ n`. -/
+/-
+**AddChar.pow_mulShift** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：pow_mulShift (ψ : AddChar R M) (n : Nat) : ψ ^ n = mulShift ψ n
+参数：ψ : AddChar R M；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.ext`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : Monoid M] (f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.pow_apply`：∀ {A : Type u_2} {M : Type u_3} [inst : AddMonoid A] 
+[inst_1 : CommMonoid M] (ψ : AddChar A M) (n : ℕ) (a : A),   (ψ ^ n) a = ψ a ^ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddChar.mulShift_spec'`：mulShift_spec' (ψ : AddChar R M) (n : Nat) (x : 
+R) : mulShift ψ n x = ψ x ^ n
 
-English:
-theorem pow_mulShift
-  given: (ψ : AddChar R M) (n : Nat)
-  statement: ψ ^ n = mulShift ψ n
-  proof: by
-  ext x
-  rw [pow_apply]; rw [← mulShift_spec']
-
-中文:
-定理 pow_mulShift
-  条件: (ψ : 加法特征 R M) (n : 自然数)
-  结论: ψ ^ n = mulShift ψ n
-  证明: by
-  ext x
-  rw [pow_apply]; rw [← mulShift_spec']
-
-Depends on / 依赖: mulShift_spec, pow_apply
+--- 原说明 ---
+If `n` is a natural number, then `ψ ^ n = mulShift ψ n`.
 -/
-theorem pow_mulShift (ψ : AddChar R M) (n : Nat) : ψ ^ n = mulShift ψ n := by
+theorem pow_mulShift (ψ : AddChar R M) (n : ℕ) : ψ ^ n = mulShift ψ n := by
   ext x
-  rw [pow_apply]; rw [← mulShift_spec']
+  rw [pow_apply, ← mulShift_spec']
 
-/--
-theorem `mulShift_mul` / 定理 `mulShift_mul`
+/-- The product of `mulShift ψ r` and `mulShift ψ s` is `mulShift ψ (r + s)`. -/
+/-
+**AddChar.mulShift_mul** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：mulShift_mul (ψ : AddChar R M) (r s : R) : mulShift ψ r * mulShift ψ s = m
+ulShift ψ (r + s)
+参数：ψ : AddChar R M；r s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.ext`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : Monoid M] (f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.mulShift_apply`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] 
+[inst_1 : CommMonoid M] {ψ : AddChar R M} {r x : R},   (ψ.mulShift r) x = ψ (r *
+ x)
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用引理 `AddChar.map_add_eq_mul`：map_add_eq_mul (ψ : AddChar A M) (x y : A) : ψ (
+x + y) = ψ x * ψ y
 
-English:
-theorem mulShift_mul
-  given: (ψ : AddChar R M) (r s : R)
-  proof: by
-  ext
-  rw [mulShift_apply]; rw [right_distrib]; rw [map_add_eq_mul]; norm_cast
-
-中文:
-定理 mulShift_mul
-  条件: (ψ : 加法特征 R M) (r s : R)
-  证明: by
-  ext
-  rw [mulShift_apply]; rw [right_distrib]; rw [map_add_eq_mul]; norm_cast
-
-Depends on / 依赖: map_add_eq_mul, mulShift_apply, right_distrib
+--- 原说明 ---
+The product of `mulShift ψ r` and `mulShift ψ s` is `mulShift ψ (r + s)`.
 -/
 theorem mulShift_mul (ψ : AddChar R M) (r s : R) :
     mulShift ψ r * mulShift ψ s = mulShift ψ (r + s) := by
   ext
-  rw [mulShift_apply]; rw [right_distrib]; rw [map_add_eq_mul]; norm_cast
-
-/--
-lemma `mulShift_mulShift` / 引理 `mulShift_mulShift`
-
-English:
-lemma mulShift_mulShift
-  given: (ψ : AddChar R M) (r s : R)
-  proof: by
-  ext
-  simp only [mulShift_apply, mul_assoc]
-
-中文:
-引理 mulShift_mulShift
-  条件: (ψ : 加法特征 R M) (r s : R)
-  证明: by
-  ext
-  simp only [mulShift_apply, mul_assoc]
-
-Depends on / 依赖: mulShift_apply, mul_assoc
+  rw [mulShift_apply, right_distrib, map_add_eq_mul]; norm_cast
+/-
+**AddChar.mulShift_mulShift** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：mulShift_mulShift (ψ : AddChar R M) (r s : R) : mulShift (mulShift ψ r) s 
+= mulShift ψ (r * s)
+参数：ψ : AddChar R M；r s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.ext`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : Monoid M] (f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mulShift_mulShift (ψ : AddChar R M) (r s : R) :
     mulShift (mulShift ψ r) s = mulShift ψ (r * s) := by
@@ -2041,88 +1493,77 @@ lemma mulShift_mulShift (ψ : AddChar R M) (r s : R) :
 
 /-- `mulShift ψ 0` is the trivial character. -/
 @[simp]
-/--
-theorem `mulShift_zero` / 定理 `mulShift_zero`
+/-
+**AddChar.mulShift_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddChar`。
+形式化陈述：mulShift_zero (ψ : AddChar R M) : mulShift ψ 0 = 1
+参数：ψ : AddChar R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.ext`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : Monoid M] (f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.mulShift_apply`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] 
+[inst_1 : CommMonoid M] {ψ : AddChar R M} {r x : R},   (ψ.mulShift r) x = ψ (r *
+ x)
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `AddChar.map_zero_eq_one`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMono
+id A] [inst_1 : Monoid M] (ψ : AddChar A M), ψ 0 = 1
+· 使用定理 `AddChar.one_apply`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] 
+[inst_1 : Monoid M] (a : A), 1 a = 1
 
-English:
-theorem mulShift_zero
-  given: (ψ : AddChar R M)
-  statement: mulShift ψ 0 = 1
-  proof: by
-  ext; rw [mulShift_apply, zero_mul, map_zero_eq_one, one_apply]
-
-@[simp]
-
-中文:
-定理 mulShift_zero
-  条件: (ψ : 加法特征 R M)
-  结论: mulShift ψ 0 = 1
-  证明: by
-  ext; rw [mulShift_apply, zero_mul, map_zero_eq_one, one_apply]
-
-@[simp]
-
-Depends on / 依赖: map_zero_eq_one, mulShift_apply, one_apply, zero_mul
+--- 原说明 ---
+`mulShift ψ 0` is the trivial character.
 -/
 theorem mulShift_zero (ψ : AddChar R M) : mulShift ψ 0 = 1 := by
   ext; rw [mulShift_apply, zero_mul, map_zero_eq_one, one_apply]
 
 @[simp]
-/--
-lemma `mulShift_one` / 引理 `mulShift_one`
-
-English:
-lemma mulShift_one
-  given: (ψ : AddChar R M)
-  statement: mulShift ψ 1 = ψ
-  proof: by
-  ext; rw [mulShift_apply, one_mul]
-
-中文:
-引理 mulShift_one
-  条件: (ψ : 加法特征 R M)
-  结论: mulShift ψ 1 = ψ
-  证明: by
-  ext; rw [mulShift_apply, one_mul]
-
-Depends on / 依赖: mulShift_apply, one_mul
+/-
+**AddChar.mulShift_one** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：mulShift_one (ψ : AddChar R M) : mulShift ψ 1 = ψ
+参数：ψ : AddChar R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.ext`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : Monoid M] (f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddChar.mulShift_apply`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] 
+[inst_1 : CommMonoid M] {ψ : AddChar R M} {r x : R},   (ψ.mulShift r) x = ψ (r *
+ x)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 lemma mulShift_one (ψ : AddChar R M) : mulShift ψ 1 = ψ := by
   ext; rw [mulShift_apply, one_mul]
-
-/--
-lemma `mulShift_unit_eq_one_iff` / 引理 `mulShift_unit_eq_one_iff`
-
-English:
-lemma mulShift_unit_eq_one_iff
-  given: (ψ : AddChar R M) {u : R} (hu : IsUnit u)
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · ext1 y
-    rw [show y = u * (hu.unit⁻¹ * y) by rw [← mul_assoc]; rw [IsUnit.mul_val_inv]; rw [one_mul]]
-    simpa only [mulShift_apply] using! DFunLike.ext_iff.mp h (hu.unit⁻¹ * y)
-  · solve_by_elim
-
-中文:
-引理 mulShift_unit_eq_one_iff
-  条件: (ψ : 加法特征 R M) {u : R} (hu : 是单位 u)
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · ext1 y
-    rw [show y = u * (hu.unit⁻¹ * y) by rw [← mul_assoc]; rw [IsUnit.mul_val_inv]; rw [one_mul]]
-    simpa only [mulShift_apply] using! DFunLike.ext_iff.mp h (hu.unit⁻¹ * y)
-  · solve_by_elim
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff.mp, IsUnit, IsUnit.mul_val_inv, ext_iff, hu.unit, mulShift_apply, mul_assoc, mul_val_inv, one_mul, solve_by_elim
+/-
+**AddChar.mulShift_unit_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：mulShift_unit_eq_one_iff (ψ : AddChar R M) {u : R} (hu : IsUnit u) : ψ.mul
+Shift u = 1 ↔ ψ = 1
+参数：ψ : AddChar R M；hu : IsUnit u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddChar.ext`：∀ {A : Type u_1} {M : Type u_3} [inst : AddMonoid A] [inst_
+1 : Monoid M] (f g : AddChar A M),   (∀ (x : A), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `IsUnit.mul_val_inv`：mul_val_inv (h : IsUnit a) : a * ↑h.unit⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
 lemma mulShift_unit_eq_one_iff (ψ : AddChar R M) {u : R} (hu : IsUnit u) :
     ψ.mulShift u = 1 ↔ ψ = 1 := by
-  refine ⟨fun h => ?_, ?_⟩
+  refine ⟨fun h ↦ ?_, ?_⟩
   · ext1 y
-    rw [show y = u * (hu.unit⁻¹ * y) by rw [← mul_assoc]; rw [IsUnit.mul_val_inv]; rw [one_mul]]
+    rw [show y = u * (hu.unit⁻¹ * y) by rw [← mul_assoc, IsUnit.mul_val_inv, one_mul]]
     simpa only [mulShift_apply] using! DFunLike.ext_iff.mp h (hu.unit⁻¹ * y)
   · solve_by_elim
 
 end Ring
 
 end AddChar
+

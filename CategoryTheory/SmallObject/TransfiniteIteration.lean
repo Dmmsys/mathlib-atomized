@@ -32,114 +32,93 @@ variable {C : Type u} [Category.{v} C] (Φ : SuccStruct C)
   [HasIterationOfShape J C]
 
 variable {J} in
-/--
-Definition of `iter` / `iter` 的定义
+/-- Given `Φ : SuccStruct C` and an element `j : J` in a well-ordered type,
+this is the unique element in `Φ.Iteration j`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.iter** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.SmallObject.SuccStruct`。
+形式化陈述：iter (j : J) : Φ.Iteration j
+参数：j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iter
-  signature: (j : J)
-  body: Classical.arbitrary _
-
-中文:
-定义 iter
-  签名: (j : J)
-  定义体: Classical.arbitrary _
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary
+--- 原说明 ---
+Given `Φ : SuccStruct C` and an element `j : J` in a well-ordered type,
+this is the unique element in `Φ.Iteration j`.
 -/
 noncomputable def iter (j : J) : Φ.Iteration j := Classical.arbitrary _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `iterationFunctor` / `iterationFunctor` 的定义
+/-- Given `Φ : SuccStruct C` and a well-ordered type `J`, this
+is the functor `J ⥤ C` which gives the iterations of `Φ` indexed by `J`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.iterationFunctor** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iterationFunctor : J ⥤ C where obj j
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterationFunctor
-  signature: : J ⥤ C where
-  body: (Φ.iter j).F.obj ⟨j, by simp⟩
-  map f := Iteration.mapObj _ _ (leOfHom f) _ _ (leOfHom f)
-
-中文:
-定义 iterationFunctor
-  签名: : J ⥤ C where
-  定义体: (Φ.iter j).F.obj ⟨j, by simp⟩
-  map f := Iteration.mapObj _ _ (leOfHom f) _ _ (leOfHom f)
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+Given `Φ : SuccStruct C` and a well-ordered type `J`, this
+is the functor `J ⥤ C` which gives the iterations of `Φ` indexed by `J`.
 -/
 noncomputable def iterationFunctor : J ⥤ C where
   obj j := (Φ.iter j).F.obj ⟨j, by simp⟩
   map f := Iteration.mapObj _ _ (leOfHom f) _ _ (leOfHom f)
 
-/--
-Definition of `iteration` / `iteration` 的定义
+/-- Given `Φ : SuccStruct C` and a well-ordered type `J`,
+this is an object of `C` which is the iteration of `Φ` to the power `J`:
+it is defined as the colimit of the functor `Φ.iterationFunctor J : J ⥤ C`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.iteration** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iteration : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iteration
-  signature: : C
-  body: colimit (Φ.iterationFunctor J)
-
-中文:
-定义 iteration
-  签名: : C
-  定义体: colimit (Φ.iterationFunctor J)
-
-Depends on / 依赖: colimit, iterationFunctor
+--- 原说明 ---
+Given `Φ : SuccStruct C` and a well-ordered type `J`,
+this is an object of `C` which is the iteration of `Φ` to the power `J`:
+it is defined as the colimit of the functor `Φ.iterationFunctor J : J ⥤ C`.
 -/
 noncomputable def iteration : C := colimit (Φ.iterationFunctor J)
 
-/--
-Definition of `iterationCocone` / `iterationCocone` 的定义
+/-- The colimit cocone expressing that `Φ.iteration J` is the colimit
+of `Φ.iterationFunctor J`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.iterationCocone** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iterationCocone : Cocone (Φ.iterationFunctor J)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterationCocone
-  signature: : Cocone (Φ.iterationFunctor J)
-  body: colimit.cocone _
-
-@[simp]
-
-中文:
-定义 iterationCocone
-  签名: : 余锥 (Φ.iterationFunctor J)
-  定义体: colimit.cocone _
-
-@[simp]
-
-Depends on / 依赖: cocone, colimit, colimit.cocone
+--- 原说明 ---
+The colimit cocone expressing that `Φ.iteration J` is the colimit
+of `Φ.iterationFunctor J`.
 -/
 noncomputable def iterationCocone : Cocone (Φ.iterationFunctor J) :=
   colimit.cocone _
 
 @[simp]
-/--
-lemma `iterationCocone_pt` / 引理 `iterationCocone_pt`
-
-English:
-lemma iterationCocone_pt
-  statement: (Φ.iterationCocone J).pt = Φ.iteration J
-  proof: rfl
-
-中文:
-引理 iterationCocone_pt
-  结论: (Φ.iterationCocone J).pt = Φ.iteration J
-  证明: rfl
+/-
+**CategoryTheory.SmallObject.SuccStruct.iterationCocone_pt** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iterationCocone_pt : (Φ.iterationCocone J).pt = Φ.iteration J
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma iterationCocone_pt : (Φ.iterationCocone J).pt = Φ.iteration J := rfl
 
-/--
-Definition of `isColimitIterationCocone` / `isColimitIterationCocone` 的定义
+/-- `Φ.iteration J` identifies to the colimit of `Φ.iterationFunctor J`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.isColimitIterationCocone** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：isColimitIterationCocone : IsColimit (Φ.iterationCocone J)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitIterationCocone
-  signature: : IsColimit (Φ.iterationCocone J)
-  body: colimit.isColimit _
-
-中文:
-定义 isColimitIterationCocone
-  签名: : 是余极限 (Φ.iterationCocone J)
-  定义体: colimit.isColimit _
-
-Depends on / 依赖: colimit, colimit.isColimit, isColimit
+--- 原说明 ---
+`Φ.iteration J` identifies to the colimit of `Φ.iterationFunctor J`.
 -/
 noncomputable def isColimitIterationCocone : IsColimit (Φ.iterationCocone J) :=
   colimit.isColimit _
@@ -147,51 +126,52 @@ noncomputable def isColimitIterationCocone : IsColimit (Φ.iterationCocone J) :=
 variable {J}
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `iterationFunctor_obj` / 引理 `iterationFunctor_obj`
-
-English:
-lemma iterationFunctor_obj
-  given: (i : J) {j : J} (iter : Φ.Iteration j) (hi : i <= j)
-  proof: Iteration.congr_obj (Φ.iter i) iter i (by simp) hi
-
-中文:
-引理 iterationFunctor_obj
-  条件: (i : J) {j : J} (iter : Φ.Iteration j) (hi : i <= j)
-  证明: Iteration.congr_obj (Φ.iter i) iter i (by simp) hi
-
-Depends on / 依赖: Iteration, Iteration.congr_obj, congr_obj
+/-
+**CategoryTheory.SmallObject.SuccStruct.iterationFunctor_obj** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iterationFunctor_obj (i : J) {j : J} (iter : Φ.Iteration j) (hi : i <= j) 
+: (Φ.iterationFunctor J).obj i = iter.F.obj ⟨i, hi⟩
+参数：i : J；iter : Φ.Iteration j；hi : i <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.Iteration.congr_obj`：congr_obj {j₁
+ j₂ : J} (iter₁ : Φ.Iteration j₁) (iter₂ : Φ.Iteration j₂) (k : J) (h₁ : k <= j₁
+) (h₂ : k <= j₂) : iter₁.F.obj ⟨k, h₁⟩ = iter₂.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-lemma iterationFunctor_obj (i : J) {j : J} (iter : Φ.Iteration j) (hi : i <= j) :
+lemma iterationFunctor_obj (i : J) {j : J} (iter : Φ.Iteration j) (hi : i ≤ j) :
     (Φ.iterationFunctor J).obj i = iter.F.obj ⟨i, hi⟩ :=
   Iteration.congr_obj (Φ.iter i) iter i (by simp) hi
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `arrowMk_iterationFunctor_map` / 引理 `arrowMk_iterationFunctor_map`
-
-English:
-lemma arrowMk_iterationFunctor_map
-  statement: (i₁ i₂ : J) (h₁₂ : i₁ <= i₂)
-  proof: by
-  dsimp [iterationFunctor]
-  rw [Iteration.arrow_mk_mapObj]
-  exact Arrow.ext (Iteration.congr_obj _ _ _ _ _)
-    (Iteration.congr_obj _ _ _ _ _) (Iteration.congr_map _ _ _ _ _)
-
-中文:
-引理 arrowMk_iterationFunctor_map
-  结论: (i₁ i₂ : J) (h₁₂ : i₁ <= i₂)
-  证明: by
-  dsimp [iterationFunctor]
-  rw [Iteration.arrow_mk_mapObj]
-  exact Arrow.ext (Iteration.congr_obj _ _ _ _ _)
-    (Iteration.congr_obj _ _ _ _ _) (Iteration.congr_map _ _ _ _ _)
-
-Depends on / 依赖: Arrow.ext, Iteration, Iteration.arrow_mk_mapObj, Iteration.congr_map, Iteration.congr_obj, arrow_mk_mapObj, congr_map, congr_obj, iterationFunctor
+/-
+**CategoryTheory.SmallObject.SuccStruct.arrowMk_iterationFunctor_map** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：arrowMk_iterationFunctor_map (i₁ i₂ : J) (h₁₂ : i₁ <= i₂) {j : J} (iter : 
+Φ.Iteration j) (hj : i₂ <= j) : Arrow.mk ((Φ.iterationFunctor J).map (homOfLE h₁
+₂)) = Arrow.mk (iter.F.map (homOfLE h₁₂ : ⟨i₁, h₁₂.trans hj⟩ ⟶ ⟨i₂, hj⟩))
+参数：i₁ i₂ : J；h₁₂ : i₁ <= i₂；iter : Φ.Iteration j；hj : i₂ <= j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.Iteration.arrow_mk_mapObj`：arrow_m
+k_mapObj {j₁ j₂ : J} (iter₁ : Φ.Iteration j₁) (iter₂ : Φ.Iteration j₂) {k₁ k₂ : 
+J} (h₁₂ : k₁ <= k₂) (h₁ : k₁ <= j₁) (h₂ : k₂ <= j₂) (…
+· 使用引理 `CategoryTheory.Arrow.ext`：ext {f g : Arrow T} (h₁ : f.left = g.left) (h₂
+ : f.right = g.right) (h₃ : f.hom = eqToHom h₁ ≫ g.hom ≫ eqToHom h₂.symm) : f = 
+g
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.Iteration.congr_obj`：congr_obj {j₁
+ j₂ : J} (iter₁ : Φ.Iteration j₁) (iter₂ : Φ.Iteration j₂) (k : J) (h₁ : k <= j₁
+) (h₂ : k <= j₂) : iter₁.F.obj ⟨k, h₁⟩ = iter₂.…
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.Iteration.congr_map`：congr_map {j₁
+ j₂ : J} (iter₁ : Φ.Iteration j₁) (iter₂ : Φ.Iteration j₂) {k₁ k₂ : J} (h : k₁ <
+= k₂) (h₁ : k₂ <= j₁) (h₂ : k₂ <= j₂) : iter₁.F…
 -/
-lemma arrowMk_iterationFunctor_map (i₁ i₂ : J) (h₁₂ : i₁ <= i₂)
-    {j : J} (iter : Φ.Iteration j) (hj : i₂ <= j) :
+lemma arrowMk_iterationFunctor_map (i₁ i₂ : J) (h₁₂ : i₁ ≤ i₂)
+    {j : J} (iter : Φ.Iteration j) (hj : i₂ ≤ j) :
     Arrow.mk ((Φ.iterationFunctor J).map (homOfLE h₁₂)) =
       Arrow.mk (iter.F.map (homOfLE h₁₂ : ⟨i₁, h₁₂.trans hj⟩ ⟶ ⟨i₂, hj⟩)) := by
   dsimp [iterationFunctor]
@@ -203,50 +183,16 @@ variable (J)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Φ.iterationFunctor J).IsWellOrderContinuous
-  body: ⟨by
-    let e : (Set.principalSegIio i).monotone.functor ⋙
-      (Φ.iterationFunctor J) ≅ restrictionLT (Φ.iter i).F (by simp) :=
-      NatIso.ofComponents (fun _ => eqToIso (Φ.iterationFunctor_obj _ _ _)) (by
-        rintro ⟨k₁, h₁⟩ ⟨k₂, h₂⟩ f
-        apply Arrow.mk_injective
-        simpa using! Φ.arrowMk_iterationFunctor_map k₁ k₂ (leOfHom f) (Φ.iter i) h₂.le)
-    refine (IsColimit.precomposeInvEquiv e _).1 ?_
-    refine IsColimit.ofIsoColimit ((Φ.iter i).isColimit i hi (by simp)) ?_
-    refine Cocone.ext (eqToIso (Φ.iterationFunctor_obj i (Φ.iter i) (by simp)).symm) ?_
-    rintro ⟨k, hk⟩
-    apply Arrow.mk_injective
-    simp [Φ.arrowMk_iterationFunctor_map k i hk.le (Φ.iter i) (by simp), e]⟩
-
-中文:
-实例 :
-  签名: (Φ.iterationFunctor J).是WellOrderContinuous
-  定义体: ⟨by
-    let e : (Set.principalSegIio i).monotone.functor ⋙
-      (Φ.iterationFunctor J) ≅ restrictionLT (Φ.iter i).F (by simp) :=
-      NatIso.ofComponents (fun _ => eqToIso (Φ.iterationFunctor_obj _ _ _)) (by
-        rintro ⟨k₁, h₁⟩ ⟨k₂, h₂⟩ f
-        apply Arrow.mk_injective
-        simpa using! Φ.arrowMk_iterationFunctor_map k₁ k₂ (leOfHom f) (Φ.iter i) h₂.le)
-    refine (IsColimit.precomposeInvEquiv e _).1 ?_
-    refine IsColimit.ofIsoColimit ((Φ.iter i).isColimit i hi (by simp)) ?_
-    refine Cocone.ext (eqToIso (Φ.iterationFunctor_obj i (Φ.iter i) (by simp)).symm) ?_
-    rintro ⟨k, hk⟩
-    apply Arrow.mk_injective
-    simp [Φ.arrowMk_iterationFunctor_map k i hk.le (Φ.iter i) (by simp), e]⟩
-
-Depends on / 依赖: Arrow.mk_injective, Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeInvEquiv, NatIso, NatIso.ofComponents, Set.principalSegIio, arrowMk_iterationFunctor_map, eqToIso, functor, isColimit, iterationFunctor, iterationFunctor_obj, leOfHom, mk_injective, monotone, monotone.functor, ofComponents
+/-
+**CategoryTheory.SmallObject.SuccStruct.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.SmallObject.SuccStruct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (Φ.iterationFunctor J).IsWellOrderContinuous where
   nonempty_isColimit i hi := ⟨by
     let e : (Set.principalSegIio i).monotone.functor ⋙
       (Φ.iterationFunctor J) ≅ restrictionLT (Φ.iter i).F (by simp) :=
-      NatIso.ofComponents (fun _ => eqToIso (Φ.iterationFunctor_obj _ _ _)) (by
+      NatIso.ofComponents (fun _ ↦ eqToIso (Φ.iterationFunctor_obj _ _ _)) (by
         rintro ⟨k₁, h₁⟩ ⟨k₂, h₂⟩ f
         apply Arrow.mk_injective
         simpa using! Φ.arrowMk_iterationFunctor_map k₁ k₂ (leOfHom f) (Φ.iter i) h₂.le)
@@ -258,49 +204,29 @@ instance : (Φ.iterationFunctor J).IsWellOrderContinuous where
     simp [Φ.arrowMk_iterationFunctor_map k i hk.le (Φ.iter i) (by simp), e]⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `iterationFunctorObjBotIso` / `iterationFunctorObjBotIso` 的定义
+/-- The isomorphism `(Φ.iterationFunctor J).obj ⊥ ≅ Φ.X₀`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.iterationFunctorObjBotIso** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iterationFunctorObjBotIso : (Φ.iterationFunctor J).obj ⊥ ≅ Φ.X₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterationFunctorObjBotIso
-  signature: : (Φ.iterationFunctor J).obj ⊥ ≅ Φ.X₀
-  body: eqToIso (Φ.iter ⊥).obj_bot
-
-中文:
-定义 iterationFunctorObjBotIso
-  签名: : (Φ.iterationFunctor J).obj ⊥ ≅ Φ.X₀
-  定义体: eqToIso (Φ.iter ⊥).obj_bot
-
-Depends on / 依赖: eqToIso, obj_bot
+--- 原说明 ---
+The isomorphism `(Φ.iterationFunctor J).obj ⊥ ≅ Φ.X₀`.
 -/
 noncomputable def iterationFunctorObjBotIso : (Φ.iterationFunctor J).obj ⊥ ≅ Φ.X₀ :=
   eqToIso (Φ.iter ⊥).obj_bot
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `ιIterationFunctor` / `ιIterationFunctor` 的定义
+/-- The natural map `Φ.X₀ ⟶ (Φ.iterationFunctor J).obj j`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.SmallObject.SuccStruct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιIterationFunctor
-  signature: :
-  body: (Φ.iterationFunctorObjBotIso J).inv ≫
-    (Φ.iterationFunctor J).map (homOfLE bot_le : ⊥ ⟶ j)
-  naturality _ _ f := by
-    dsimp
-    rw [id_comp]; rw [assoc]; rw [← Functor.map_comp]
-    rfl
-
-中文:
-定义 ιIterationFunctor
-  签名: :
-  定义体: (Φ.iterationFunctorObjBotIso J).inv ≫
-    (Φ.iterationFunctor J).map (homOfLE bot_le : ⊥ ⟶ j)
-  naturality _ _ f := by
-    dsimp
-    rw [id_comp]; rw [assoc]; rw [← Functor.map_comp]
-    rfl
-
-Depends on / 依赖: iterationFunctorObjBotIso
+--- 原说明 ---
+The natural map `Φ.X₀ ⟶ (Φ.iterationFunctor J).obj j`.
 -/
 noncomputable def ιIterationFunctor :
     (Functor.const _).obj Φ.X₀ ⟶ Φ.iterationFunctor J where
@@ -308,23 +234,20 @@ noncomputable def ιIterationFunctor :
     (Φ.iterationFunctor J).map (homOfLE bot_le : ⊥ ⟶ j)
   naturality _ _ f := by
     dsimp
-    rw [id_comp]; rw [assoc]; rw [← Functor.map_comp]
+    rw [id_comp, assoc, ← Functor.map_comp]
     rfl
 
-/--
-Definition of `ιIteration` / `ιIteration` 的定义
+/-- The canonical map `Φ.X₀ ⟶ Φ.iteration J` which is the `J`th-transfinite composition
+of maps `Φ.toSucc`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.SmallObject.SuccStruct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιIteration
-  signature: : Φ.X₀ ⟶ Φ.iteration J
-  body: (Φ.iterationFunctorObjBotIso J).inv ≫ colimit.ι _ ⊥
-
-中文:
-定义 ιIteration
-  签名: : Φ.X₀ ⟶ Φ.iteration J
-  定义体: (Φ.iterationFunctorObjBotIso J).inv ≫ colimit.ι _ ⊥
-
-Depends on / 依赖: colimit, iterationFunctorObjBotIso
+--- 原说明 ---
+The canonical map `Φ.X₀ ⟶ Φ.iteration J` which is the `J`th-transfinite composit
+ion
+of maps `Φ.toSucc`.
 -/
 noncomputable def ιIteration : Φ.X₀ ⟶ Φ.iteration J :=
   (Φ.iterationFunctorObjBotIso J).inv ≫ colimit.ι _ ⊥
@@ -332,38 +255,14 @@ noncomputable def ιIteration : Φ.X₀ ⟶ Φ.iteration J :=
 /-- The inclusion `Φ.ιIteration J` is a transfinite composition of
 shape `J` of morphisms in `Φ.prop`. -/
 @[simps]
-/--
-Definition of `transfiniteCompositionOfShapeιIteration` / `transfiniteCompositionOfShapeιIteration` 的定义
+/-
+**CategoryTheory.SmallObject.SuccStruct.transfiniteCompositionOfShape** 是 Mathli
+b 中的一个定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transfiniteCompositionOfShapeιIteration
-  signature: :
-  body: Φ.iterationFunctorObjBotIso J
-  map_mem j hj := by
-    have := (Φ.iter (Order.succ j)).prop_map_succ j (Order.lt_succ_of_not_isMax hj)
-    rw [prop_iff] at this ⊢
-    simp only [Φ.iterationFunctor_obj j (Φ.iter (Order.succ j)) (Order.le_succ j),
-      Φ.arrowMk_iterationFunctor_map _ _ (Order.le_succ j) (Φ.iter (Order.succ j)) (by simp),
-      this]
-  F := Φ.iterationFunctor J
-  incl := (Φ.iterationCocone J).ι
-  isColimit := Φ.isColimitIterationCocone J
-
-中文:
-定义 transfiniteCompositionOfShapeιIteration
-  签名: :
-  定义体: Φ.iterationFunctorObjBotIso J
-  map_mem j hj := by
-    have := (Φ.iter (Order.succ j)).prop_map_succ j (Order.lt_succ_of_not_isMax hj)
-    rw [prop_iff] at this ⊢
-    simp only [Φ.iterationFunctor_obj j (Φ.iter (Order.succ j)) (Order.le_succ j),
-      Φ.arrowMk_iterationFunctor_map _ _ (Order.le_succ j) (Φ.iter (Order.succ j)) (by simp),
-      this]
-  F := Φ.iterationFunctor J
-  incl := (Φ.iterationCocone J).ι
-  isColimit := Φ.isColimitIterationCocone J
-
-Depends on / 依赖: iterationFunctorObjBotIso
+--- 原说明 ---
+The inclusion `Φ.ιIteration J` is a transfinite composition of
+shape `J` of morphisms in `Φ.prop`.
 -/
 noncomputable def transfiniteCompositionOfShapeιIteration :
     Φ.prop.TransfiniteCompositionOfShape J (Φ.ιIteration J) where
@@ -379,44 +278,38 @@ noncomputable def transfiniteCompositionOfShapeιIteration :
   isColimit := Φ.isColimitIterationCocone J
 
 variable {J}
-
-/--
-lemma `prop_iterationFunctor_map_succ` / 引理 `prop_iterationFunctor_map_succ`
-
-English:
-lemma prop_iterationFunctor_map_succ
-  given: (j : J) (hj : ¬ IsMax j)
-  proof: (Φ.transfiniteCompositionOfShapeιIteration J).map_mem j hj
-
-中文:
-引理 prop_iterationFunctor_map_succ
-  条件: (j : J) (hj : ¬ IsMax j)
-  证明: (Φ.transfiniteCompositionOfShapeιIteration J).map_mem j hj
-
-Depends on / 依赖: map_mem
+/-
+**CategoryTheory.SmallObject.SuccStruct.prop_iterationFunctor_map_succ** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：prop_iterationFunctor_map_succ (j : J) (hj : ¬ IsMax j) : Φ.prop ((Φ.itera
+tionFunctor J).map (homOfLE (Order.le_succ j)))
+参数：j : J；hj : ¬ IsMax j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.TransfiniteCompositionOfShape.map_mem`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {W : CategoryTheory.Morp
+hismProperty C} {J : Type w}   [inst_1 : LinearOrder J] [in…
 -/
 lemma prop_iterationFunctor_map_succ (j : J) (hj : ¬ IsMax j) :
     Φ.prop ((Φ.iterationFunctor J).map (homOfLE (Order.le_succ j))) :=
   (Φ.transfiniteCompositionOfShapeιIteration J).map_mem j hj
 
-/--
-Definition of `iterationFunctorObjSuccIso` / `iterationFunctorObjSuccIso` 的定义
+/-- When `j` is not a maximal element, then
+`(Φ.iterationFunctor J).obj (Order.succ j)` is isomorphic to
+`Φ.succ ((Φ.iterationFunctor J).obj j)`. -/
+/-
+**CategoryTheory.SmallObject.SuccStruct.iterationFunctorObjSuccIso** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iterationFunctorObjSuccIso (j : J) (hj : ¬ IsMax j) : (Φ.iterationFunctor 
+J).obj (Order.succ j) ≅ Φ.succ ((Φ.iterationFunctor J).obj j)
+参数：j : J；hj : ¬ IsMax j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterationFunctorObjSuccIso
-  signature: (j : J) (hj : ¬ IsMax j)
-  body: eqToIso ((Φ.prop_iterationFunctor_map_succ j hj).succ_eq.symm)
-
-@[reassoc]
-
-中文:
-定义 iterationFunctorObjSuccIso
-  签名: (j : J) (hj : ¬ IsMax j)
-  定义体: eqToIso ((Φ.prop_iterationFunctor_map_succ j hj).succ_eq.symm)
-
-@[reassoc]
-
-Depends on / 依赖: eqToIso, prop_iterationFunctor_map_succ, succ_eq, succ_eq.symm
+--- 原说明 ---
+When `j` is not a maximal element, then
+`(Φ.iterationFunctor J).obj (Order.succ j)` is isomorphic to
+`Φ.succ ((Φ.iterationFunctor J).obj j)`.
 -/
 noncomputable def iterationFunctorObjSuccIso (j : J) (hj : ¬ IsMax j) :
     (Φ.iterationFunctor J).obj (Order.succ j) ≅
@@ -424,20 +317,22 @@ noncomputable def iterationFunctorObjSuccIso (j : J) (hj : ¬ IsMax j) :
   eqToIso ((Φ.prop_iterationFunctor_map_succ j hj).succ_eq.symm)
 
 @[reassoc]
-/--
-lemma `iterationFunctor_map_succ` / 引理 `iterationFunctor_map_succ`
-
-English:
-lemma iterationFunctor_map_succ
-  given: (j : J) (hj : ¬ IsMax j)
-  proof: (Φ.prop_iterationFunctor_map_succ j hj).fac
-
-中文:
-引理 iterationFunctor_map_succ
-  条件: (j : J) (hj : ¬ IsMax j)
-  证明: (Φ.prop_iterationFunctor_map_succ j hj).fac
-
-Depends on / 依赖: prop_iterationFunctor_map_succ
+/-
+**CategoryTheory.SmallObject.SuccStruct.iterationFunctor_map_succ** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.SmallObject.SuccStruct`。
+形式化陈述：iterationFunctor_map_succ (j : J) (hj : ¬ IsMax j) : (Φ.iterationFunctor J
+).map (homOfLE (Order.le_succ j)) = Φ.toSucc _ ≫ (Φ.iterationFunctorObjSuccIso j
+ hj).inv
+参数：j : J；hj : ¬ IsMax j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SmallObject.SuccStruct.prop.fac`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {Φ : CategoryTheory.SmallObject.SuccStruct C} {
+X Y : C}   {f : X ⟶ Y} (hf : Φ.prop …
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.prop_iterationFunctor_map_succ`：pr
+op_iterationFunctor_map_succ (j : J) (hj : ¬ IsMax j) : Φ.prop ((Φ.iterationFunc
+tor J).map (homOfLE (Order.le_succ j)))
 -/
 lemma iterationFunctor_map_succ (j : J) (hj : ¬ IsMax j) :
     (Φ.iterationFunctor J).map (homOfLE (Order.le_succ j)) =
@@ -445,3 +340,4 @@ lemma iterationFunctor_map_succ (j : J) (hj : ¬ IsMax j) :
   (Φ.prop_iterationFunctor_map_succ j hj).fac
 
 end CategoryTheory.SmallObject.SuccStruct
+

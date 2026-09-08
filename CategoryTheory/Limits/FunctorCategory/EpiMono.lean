@@ -32,68 +32,46 @@ section
 
 variable [HasPullbacks C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] (k
-  body: inferInstanceAs (Mono (((evaluation K C).obj k).map f))
-
-中文:
-实例 [单态射
-  签名: f] (k
-  定义体: inferInstanceAs (Mono (((evaluation K C).obj k).map f))
-
-Depends on / 依赖: evaluation
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] (k : K) : Mono (f.app k) :=
   inferInstanceAs (Mono (((evaluation K C).obj k).map f))
-
-/--
-lemma `NatTrans.mono_iff_mono_app` / 引理 `NatTrans.mono_iff_mono_app`
-
-English:
-lemma NatTrans.mono_iff_mono_app
-  statement: Mono f ↔ forall (k : K), Mono (f.app k)
-  proof: ⟨fun _ => inferInstance, fun _ => mono_of_mono_app _⟩
-
-中文:
-引理 自然变换.mono_iff_mono_app
-  结论: 单态射 f ↔ 对任意 (k : K), 单态射 (f.app k)
-  证明: ⟨fun _ => inferInstance, fun _ => mono_of_mono_app _⟩
-
-Depends on / 依赖: mono_of_mono_app
+/-
+**CategoryTheory.NatTrans.mono_iff_mono_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.NatTrans`。
+形式化陈述：∀ {K : Type u} [inst : CategoryTheory.Category.{v, u} K] {C : Type u'} [in
+st_1 : CategoryTheory.Category.{v', u'} C]   {F G : CategoryTheory.Functor K C} 
+(f : F ⟶ G) [CategoryTheory.Limits.HasPullbacks C],   CategoryTheory.Mono f ↔ ∀ 
+(k : K), CategoryTheory.Mono (f.app k)
+参数：f : F ⟶ G；k : K；f.app k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instMonoAppOfFunctor`：∀ {K : Type u} [inst : CategoryTheo
+ry.Category.{v, u} K] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C
+]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.NatTrans.mono_of_mono_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
 -/
-lemma NatTrans.mono_iff_mono_app : Mono f ↔ forall (k : K), Mono (f.app k) :=
-  ⟨fun _ => inferInstance, fun _ => mono_of_mono_app _⟩
+lemma NatTrans.mono_iff_mono_app : Mono f ↔ ∀ (k : K), Mono (f.app k) :=
+  ⟨fun _ ↦ inferInstance, fun _ ↦ mono_of_mono_app _⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mono
-  signature: f] (H
-  body: by
-  have : forall X, Mono ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
-  apply NatTrans.mono_of_mono_app
-
-中文:
-实例 [单态射
-  签名: f] (H
-  定义体: by
-  have : forall X, Mono ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
-  apply NatTrans.mono_of_mono_app
-
-Depends on / 依赖: NatTrans, NatTrans.mono_of_mono_app, infer_instance, intros, mono_of_mono_app, whiskerRight
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mono f] (H : C ⥤ D) [H.PreservesMonomorphisms] :
     Mono (whiskerRight f H) := by
-  have : forall X, Mono ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
+  have : ∀ X, Mono ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
   apply NatTrans.mono_of_mono_app
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) [F.PreservesMonomorphisms] :
     ((Functor.whiskeringRight K C D).obj F).PreservesMonomorphisms where
   preserves f _ := by dsimp; infer_instance
@@ -104,67 +82,41 @@ section
 
 variable [HasPushouts C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Epi
-  signature: f] (k
-  body: inferInstanceAs (Epi (((evaluation K C).obj k).map f))
-
-中文:
-实例 [满态射
-  签名: f] (k
-  定义体: inferInstanceAs (Epi (((evaluation K C).obj k).map f))
-
-Depends on / 依赖: evaluation
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Epi f] (k : K) : Epi (f.app k) :=
   inferInstanceAs (Epi (((evaluation K C).obj k).map f))
-
-/--
-lemma `NatTrans.epi_iff_epi_app` / 引理 `NatTrans.epi_iff_epi_app`
-
-English:
-lemma NatTrans.epi_iff_epi_app
-  statement: Epi f ↔ forall (k : K), Epi (f.app k)
-  proof: ⟨fun _ => inferInstance, fun _ => epi_of_epi_app _⟩
-
-中文:
-引理 自然变换.epi_iff_epi_app
-  结论: 满态射 f ↔ 对任意 (k : K), 满态射 (f.app k)
-  证明: ⟨fun _ => inferInstance, fun _ => epi_of_epi_app _⟩
-
-Depends on / 依赖: epi_of_epi_app
+/-
+**CategoryTheory.NatTrans.epi_iff_epi_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.NatTrans`。
+形式化陈述：∀ {K : Type u} [inst : CategoryTheory.Category.{v, u} K] {C : Type u'} [in
+st_1 : CategoryTheory.Category.{v', u'} C]   {F G : CategoryTheory.Functor K C} 
+(f : F ⟶ G) [CategoryTheory.Limits.HasPushouts C],   CategoryTheory.Epi f ↔ ∀ (k
+ : K), CategoryTheory.Epi (f.app k)
+参数：f : F ⟶ G；k : K；f.app k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instEpiAppOfFunctor`：∀ {K : Type u} [inst : CategoryTheor
+y.Category.{v, u} K] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C]
+   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.NatTrans.epi_of_epi_app`：epi_of_epi_app (α : F ⟶ G) [fora
+ll X : C, Epi (α.app X)] : Epi α
 -/
-lemma NatTrans.epi_iff_epi_app : Epi f ↔ forall (k : K), Epi (f.app k) :=
-  ⟨fun _ => inferInstance, fun _ => epi_of_epi_app _⟩
+lemma NatTrans.epi_iff_epi_app : Epi f ↔ ∀ (k : K), Epi (f.app k) :=
+  ⟨fun _ ↦ inferInstance, fun _ ↦ epi_of_epi_app _⟩
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Epi
-  signature: f] (H
-  body: by
-  have : forall X, Epi ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
-  apply NatTrans.epi_of_epi_app
-
-中文:
-实例 [满态射
-  签名: f] (H
-  定义体: by
-  have : forall X, Epi ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
-  apply NatTrans.epi_of_epi_app
-
-Depends on / 依赖: NatTrans, NatTrans.epi_of_epi_app, epi_of_epi_app, infer_instance, intros, whiskerRight
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Epi f] (H : C ⥤ D) [H.PreservesEpimorphisms] :
     Epi (whiskerRight f H) := by
-  have : forall X, Epi ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
+  have : ∀ X, Epi ((whiskerRight f H).app X) := by intros; dsimp; infer_instance
   apply NatTrans.epi_of_epi_app
 
 end
 
 end CategoryTheory
+

@@ -35,94 +35,81 @@ namespace BoundedContinuousFunction
 section NormedAddCommGroup
 
 variable [TopologicalSpace α] [SeminormedAddCommGroup β]
-variable (f g : α ->ᵇ β) {x : α} {C : Real}
+variable (f g : α →ᵇ β) {x : α} {C : ℝ}
 
-/--
-Instance `instNorm` / 实例 `instNorm`
-
-English:
-instance instNorm
-  signature: : Norm (α ->ᵇ β)
-  body: ⟨(dist · 0)⟩
-
-中文:
-实例 instNorm
-  签名: : 范数 (α ->ᵇ β)
-  定义体: ⟨(dist · 0)⟩
+/-
+**BoundedContinuousFunction.instNorm** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuou
+sFunction`。
+形式化陈述：instNorm : Norm (α ->ᵇ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNorm : Norm (α ->ᵇ β) := ⟨(dist · 0)⟩
-
-/--
-theorem `norm_def` / 定理 `norm_def`
-
-English:
-theorem norm_def
-  statement: ‖f‖ = dist f 0
-  proof: rfl
-
-中文:
-定理 norm_def
-  结论: ‖f‖ = dist f 0
-  证明: rfl
+instance instNorm : Norm (α →ᵇ β) := ⟨(dist · 0)⟩
+/-
+**BoundedContinuousFunction.norm_def** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuou
+sFunction`。
+形式化陈述：norm_def : ‖f‖ = dist f 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem norm_def : ‖f‖ = dist f 0 := rfl
 
-/--
-theorem `norm_eq` / 定理 `norm_eq`
+/-- The norm of a bounded continuous function is the supremum of `‖f x‖`.
+We use `sInf` to ensure that the definition works if `α` has no elements. -/
+/-
+**BoundedContinuousFunction.norm_eq** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：norm_eq (f : α ->ᵇ β) : ‖f‖ = sInf { C : Real | 0 <= C ∧ forall x : α, ‖f 
+x‖ <= C }
+参数：f : α ->ᵇ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem norm_eq
-  given: (f : α ->ᵇ β)
-  statement: ‖f‖ = sInf { C : Real | 0 <= C ∧ forall x : α, ‖f x‖ <= C }
-  proof: by
-  simp [norm_def, BoundedContinuousFunction.dist_eq]
-
-中文:
-定理 norm_eq
-  条件: (f : α ->ᵇ β)
-  结论: ‖f‖ = sInf { C : 实数 | 0 <= C ∧ 对任意 x : α, ‖f x‖ <= C }
-  证明: by
-  simp [norm_def, BoundedContinuousFunction.dist_eq]
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.dist_eq, dist_eq, norm_def
+--- 原说明 ---
+The norm of a bounded continuous function is the supremum of `‖f x‖`.
+We use `sInf` to ensure that the definition works if `α` has no elements.
 -/
-theorem norm_eq (f : α ->ᵇ β) : ‖f‖ = sInf { C : Real | 0 <= C ∧ forall x : α, ‖f x‖ <= C } := by
+theorem norm_eq (f : α →ᵇ β) : ‖f‖ = sInf { C : ℝ | 0 ≤ C ∧ ∀ x : α, ‖f x‖ ≤ C } := by
   simp [norm_def, BoundedContinuousFunction.dist_eq]
 
-/--
-theorem `norm_eq_of_nonempty` / 定理 `norm_eq_of_nonempty`
+/-- When the domain is non-empty, we do not need the `0 ≤ C` condition in the formula for `‖f‖` as a
+`sInf`. -/
+/-
+**BoundedContinuousFunction.norm_eq_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Bound
+edContinuousFunction`。
+形式化陈述：norm_eq_of_nonempty [h : Nonempty α] : ‖f‖ = sInf { C : Real | forall x : 
+α, ‖f x‖ <= C }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoundedContinuousFunction.norm_eq`：norm_eq (f : α ->ᵇ β) : ‖f‖ = sInf { 
+C : Real | 0 <= C ∧ forall x : α, ‖f x‖ <= C }
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 
-English:
-theorem norm_eq_of_nonempty
-  given: [h : Nonempty α]
-  statement: ‖f‖ = sInf { C : Real | forall x : α, ‖f x‖ <= C }
-  proof: by
-  obtain ⟨a⟩ := h
-  rw [norm_eq]
-  congr
-  ext
-  simp only [and_iff_right_iff_imp]
-  exact fun h' => le_trans (norm_nonneg (f a)) (h' a)
-
-@[simp]
-
-中文:
-定理 norm_eq_of_nonempty
-  条件: [h : 非空 α]
-  结论: ‖f‖ = sInf { C : 实数 | 对任意 x : α, ‖f x‖ <= C }
-  证明: by
-  obtain ⟨a⟩ := h
-  rw [norm_eq]
-  congr
-  ext
-  simp only [and_iff_right_iff_imp]
-  exact fun h' => le_trans (norm_nonneg (f a)) (h' a)
-
-@[simp]
-
-Depends on / 依赖: and_iff_right_iff_imp, le_trans, norm_eq, norm_nonneg
+--- 原说明 ---
+When the domain is non-empty, we do not need the `0 ≤ C` condition in the formul
+a for `‖f‖` as a
+`sInf`.
 -/
-theorem norm_eq_of_nonempty [h : Nonempty α] : ‖f‖ = sInf { C : Real | forall x : α, ‖f x‖ <= C } := by
+theorem norm_eq_of_nonempty [h : Nonempty α] : ‖f‖ = sInf { C : ℝ | ∀ x : α, ‖f x‖ ≤ C } := by
   obtain ⟨a⟩ := h
   rw [norm_eq]
   congr
@@ -131,979 +118,819 @@ theorem norm_eq_of_nonempty [h : Nonempty α] : ‖f‖ = sInf { C : Real | fora
   exact fun h' => le_trans (norm_nonneg (f a)) (h' a)
 
 @[simp]
-/--
-theorem `norm_eq_zero_of_empty` / 定理 `norm_eq_zero_of_empty`
-
-English:
-theorem norm_eq_zero_of_empty
-  given: [IsEmpty α]
-  statement: ‖f‖ = 0
-  proof: dist_zero_of_empty
-
-中文:
-定理 norm_eq_zero_of_empty
-  条件: [是空 α]
-  结论: ‖f‖ = 0
-  证明: dist_zero_of_empty
-
-Depends on / 依赖: dist_zero_of_empty
+/-
+**BoundedContinuousFunction.norm_eq_zero_of_empty** 是 Mathlib 中的一个定理，位于命名空间 `Bou
+ndedContinuousFunction`。
+形式化陈述：norm_eq_zero_of_empty [IsEmpty α] : ‖f‖ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.dist_zero_of_empty`：dist_zero_of_empty [IsEmpt
+y α] : dist f g = 0
 -/
 theorem norm_eq_zero_of_empty [IsEmpty α] : ‖f‖ = 0 :=
   dist_zero_of_empty
-
-/--
-theorem `norm_coe_le_norm` / 定理 `norm_coe_le_norm`
-
-English:
-theorem norm_coe_le_norm
-  given: (x : α)
-  statement: ‖f x‖ <= ‖f‖
-  proof: calc
-    ‖f x‖ = dist (f x) ((0 : α ->ᵇ β) x) := by simp [dist_zero_right]
-    _ <= ‖f‖ := dist_coe_le_dist _
-
-中文:
-定理 norm_coe_le_norm
-  条件: (x : α)
-  结论: ‖f x‖ <= ‖f‖
-  证明: calc
-    ‖f x‖ = dist (f x) ((0 : α ->ᵇ β) x) := by simp [dist_zero_right]
-    _ <= ‖f‖ := dist_coe_le_dist _
-
-Depends on / 依赖: dist_coe_le_dist, dist_zero_right
+/-
+**BoundedContinuousFunction.norm_coe_le_norm** 是 Mathlib 中的一个定理，位于命名空间 `BoundedC
+ontinuousFunction`。
+形式化陈述：norm_coe_le_norm (x : α) : ‖f x‖ <= ‖f‖
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `BoundedContinuousFunction.dist_coe_le_dist`：dist_coe_le_dist (x : α) : d
+ist (f x) (g x) <= dist f g
 -/
-theorem norm_coe_le_norm (x : α) : ‖f x‖ <= ‖f‖ :=
+theorem norm_coe_le_norm (x : α) : ‖f x‖ ≤ ‖f‖ :=
   calc
-    ‖f x‖ = dist (f x) ((0 : α ->ᵇ β) x) := by simp [dist_zero_right]
-    _ <= ‖f‖ := dist_coe_le_dist _
-
-/--
-lemma `neg_norm_le_apply` / 引理 `neg_norm_le_apply`
-
-English:
-lemma neg_norm_le_apply
-  given: (f : α ->ᵇ Real) (x : α)
-  proof: (abs_le.mp (norm_coe_le_norm f x)).1
-
-中文:
-引理 neg_norm_le_apply
-  条件: (f : α ->ᵇ 实数) (x : α)
-  证明: (abs_le.mp (norm_coe_le_norm f x)).1
-
-Depends on / 依赖: abs_le, abs_le.mp, norm_coe_le_norm
+    ‖f x‖ = dist (f x) ((0 : α →ᵇ β) x) := by simp [dist_zero_right]
+    _ ≤ ‖f‖ := dist_coe_le_dist _
+/-
+**BoundedContinuousFunction.neg_norm_le_apply** 是 Mathlib 中的一个引理，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：neg_norm_le_apply (f : α ->ᵇ Real) (x : α) : -‖f‖ <= f x
+参数：f : α ->ᵇ Real；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 -/
-lemma neg_norm_le_apply (f : α ->ᵇ Real) (x : α) :
-    -‖f‖ <= f x := (abs_le.mp (norm_coe_le_norm f x)).1
-
-/--
-lemma `apply_le_norm` / 引理 `apply_le_norm`
-
-English:
-lemma apply_le_norm
-  given: (f : α ->ᵇ Real) (x : α)
-  proof: (abs_le.mp (norm_coe_le_norm f x)).2
-
-中文:
-引理 apply_le_norm
-  条件: (f : α ->ᵇ 实数) (x : α)
-  证明: (abs_le.mp (norm_coe_le_norm f x)).2
-
-Depends on / 依赖: abs_le, abs_le.mp, norm_coe_le_norm
+lemma neg_norm_le_apply (f : α →ᵇ ℝ) (x : α) :
+    -‖f‖ ≤ f x := (abs_le.mp (norm_coe_le_norm f x)).1
+/-
+**BoundedContinuousFunction.apply_le_norm** 是 Mathlib 中的一个引理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：apply_le_norm (f : α ->ᵇ Real) (x : α) : f x <= ‖f‖
+参数：f : α ->ᵇ Real；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 -/
-lemma apply_le_norm (f : α ->ᵇ Real) (x : α) :
-    f x <= ‖f‖ := (abs_le.mp (norm_coe_le_norm f x)).2
-
-/--
-theorem `dist_le_two_norm'` / 定理 `dist_le_two_norm'`
-
-English:
-theorem dist_le_two_norm'
-  given: {f : γ -> β} {C : Real} (hC : forall x, ‖f x‖ <= C) (x y : γ)
-  proof: calc
-    dist (f x) (f y) <= ‖f x‖ + ‖f y‖ := dist_le_norm_add_norm _ _
-    _ <= C + C := add_le_add (hC x) (hC y)
-    _ = 2 * C := (two_mul _).symm
-
-中文:
-定理 dist_le_two_norm'
-  条件: {f : γ -> β} {C : 实数} (hC : 对任意 x, ‖f x‖ <= C) (x y : γ)
-  证明: calc
-    dist (f x) (f y) <= ‖f x‖ + ‖f y‖ := dist_le_norm_add_norm _ _
-    _ <= C + C := add_le_add (hC x) (hC y)
-    _ = 2 * C := (two_mul _).symm
-
-Depends on / 依赖: add_le_add, dist_le_norm_add_norm, two_mul
+lemma apply_le_norm (f : α →ᵇ ℝ) (x : α) :
+    f x ≤ ‖f‖ := (abs_le.mp (norm_coe_le_norm f x)).2
+/-
+**BoundedContinuousFunction.dist_le_two_norm'** 是 Mathlib 中的一个定理，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：dist_le_two_norm' {f : γ -> β} {C : Real} (hC : forall x, ‖f x‖ <= C) (x y
+ : γ) : dist (f x) (f y) <= 2 * C
+参数：hC : forall x, ‖f x‖ <= C；x y : γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `dist_le_norm_add_norm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a
+ b : E), dist a b ≤ ‖a‖ + ‖b‖
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
 -/
-theorem dist_le_two_norm' {f : γ -> β} {C : Real} (hC : forall x, ‖f x‖ <= C) (x y : γ) :
-    dist (f x) (f y) <= 2 * C :=
+theorem dist_le_two_norm' {f : γ → β} {C : ℝ} (hC : ∀ x, ‖f x‖ ≤ C) (x y : γ) :
+    dist (f x) (f y) ≤ 2 * C :=
   calc
-    dist (f x) (f y) <= ‖f x‖ + ‖f y‖ := dist_le_norm_add_norm _ _
-    _ <= C + C := add_le_add (hC x) (hC y)
+    dist (f x) (f y) ≤ ‖f x‖ + ‖f y‖ := dist_le_norm_add_norm _ _
+    _ ≤ C + C := add_le_add (hC x) (hC y)
     _ = 2 * C := (two_mul _).symm
 
-/--
-theorem `dist_le_two_norm` / 定理 `dist_le_two_norm`
+/-- Distance between the images of any two points is at most twice the norm of the function. -/
+/-
+**BoundedContinuousFunction.dist_le_two_norm** 是 Mathlib 中的一个定理，位于命名空间 `BoundedC
+ontinuousFunction`。
+形式化陈述：dist_le_two_norm (x y : α) : dist (f x) (f y) <= 2 * ‖f‖
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.dist_le_two_norm'`：dist_le_two_norm' {f : γ ->
+ β} {C : Real} (hC : forall x, ‖f x‖ <= C) (x y : γ) : dist (f x) (f y) <= 2 * C
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 
-English:
-theorem dist_le_two_norm
-  given: (x y : α)
-  statement: dist (f x) (f y) <= 2 * ‖f‖
-  proof: dist_le_two_norm' f.norm_coe_le_norm x y
-
-中文:
-定理 dist_le_two_norm
-  条件: (x y : α)
-  结论: dist (f x) (f y) <= 2 * ‖f‖
-  证明: dist_le_two_norm' f.norm_coe_le_norm x y
-
-Depends on / 依赖: dist_le_two_norm, f.norm_coe_le_norm, norm_coe_le_norm
+--- 原说明 ---
+Distance between the images of any two points is at most twice the norm of the f
+unction.
 -/
-theorem dist_le_two_norm (x y : α) : dist (f x) (f y) <= 2 * ‖f‖ :=
+theorem dist_le_two_norm (x y : α) : dist (f x) (f y) ≤ 2 * ‖f‖ :=
   dist_le_two_norm' f.norm_coe_le_norm x y
 
 variable {f}
 
-/--
-theorem `norm_le` / 定理 `norm_le`
+/-- The norm of a function is controlled by the supremum of the pointwise norms. -/
+/-
+**BoundedContinuousFunction.norm_le** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：norm_le (C0 : (0 : Real) <= C) : ‖f‖ <= C ↔ forall x : α, ‖f x‖ <= C
+参数：C0 : (0 : Real) <= C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `BoundedContinuousFunction.dist_le`：dist_le (C0 : (0 : Real) <= C) : dist
+ f g <= C ↔ forall x : α, dist (f x) (g x) <= C
 
-English:
-theorem norm_le
-  given: (C0 : (0 : Real) <= C)
-  statement: ‖f‖ <= C ↔ forall x : α, ‖f x‖ <= C
-  proof: by
-  simpa using! @dist_le _ _ _ _ f 0 _ C0
-
-中文:
-定理 norm_le
-  条件: (C0 : (0 : 实数) <= C)
-  结论: ‖f‖ <= C ↔ 对任意 x : α, ‖f x‖ <= C
-  证明: by
-  simpa using! @dist_le _ _ _ _ f 0 _ C0
-
-Depends on / 依赖: dist_le
+--- 原说明 ---
+The norm of a function is controlled by the supremum of the pointwise norms.
 -/
-theorem norm_le (C0 : (0 : Real) <= C) : ‖f‖ <= C ↔ forall x : α, ‖f x‖ <= C := by
+theorem norm_le (C0 : (0 : ℝ) ≤ C) : ‖f‖ ≤ C ↔ ∀ x : α, ‖f x‖ ≤ C := by
   simpa using! @dist_le _ _ _ _ f 0 _ C0
-
-/--
-theorem `norm_le_of_nonempty` / 定理 `norm_le_of_nonempty`
-
-English:
-theorem norm_le_of_nonempty
-  given: [Nonempty α] {f : α ->ᵇ β} {M : Real}
-  statement: ‖f‖ <= M ↔ forall x, ‖f x‖ <= M
-  proof: by
+/-
+**BoundedContinuousFunction.norm_le_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Bound
+edContinuousFunction`。
+形式化陈述：norm_le_of_nonempty [Nonempty α] {f : α ->ᵇ β} {M : Real} : ‖f‖ <= M ↔ for
+all x, ‖f x‖ <= M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `BoundedContinuousFunction.dist_le_iff_of_nonempty`：dist_le_iff_of_nonemp
+ty [Nonempty α] : dist f g <= C ↔ forall x, dist (f x) (g x) <= C
+-/
+theorem norm_le_of_nonempty [Nonempty α] {f : α →ᵇ β} {M : ℝ} : ‖f‖ ≤ M ↔ ∀ x, ‖f x‖ ≤ M := by
   simp_rw [norm_def, ← dist_zero_right]
   exact dist_le_iff_of_nonempty
-
-中文:
-定理 norm_le_of_nonempty
-  条件: [非空 α] {f : α ->ᵇ β} {M : 实数}
-  结论: ‖f‖ <= M ↔ 对任意 x, ‖f x‖ <= M
-  证明: by
-  simp_rw [norm_def, ← dist_zero_right]
-  exact dist_le_iff_of_nonempty
-
-Depends on / 依赖: dist_le_iff_of_nonempty, dist_zero_right, norm_def, simp_rw
+/-
+**BoundedContinuousFunction.norm_lt_iff_of_compact** 是 Mathlib 中的一个定理，位于命名空间 `Bo
+undedContinuousFunction`。
+形式化陈述：norm_lt_iff_of_compact [CompactSpace α] {f : α ->ᵇ β} {M : Real} (M0 : 0 <
+ M) : ‖f‖ < M ↔ forall x, ‖f x‖ < M
+参数：M0 : 0 < M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `BoundedContinuousFunction.dist_lt_iff_of_compact`：dist_lt_iff_of_compact
+ [CompactSpace α] (C0 : (0 : Real) < C) : dist f g < C ↔ forall x : α, dist (f x
+) (g x) < C
 -/
-theorem norm_le_of_nonempty [Nonempty α] {f : α ->ᵇ β} {M : Real} : ‖f‖ <= M ↔ forall x, ‖f x‖ <= M := by
-  simp_rw [norm_def, ← dist_zero_right]
-  exact dist_le_iff_of_nonempty
-
-/--
-theorem `norm_lt_iff_of_compact` / 定理 `norm_lt_iff_of_compact`
-
-English:
-theorem norm_lt_iff_of_compact
-  given: [CompactSpace α] {f : α ->ᵇ β} {M : Real} (M0 : 0 < M)
-  proof: by
+theorem norm_lt_iff_of_compact [CompactSpace α] {f : α →ᵇ β} {M : ℝ} (M0 : 0 < M) :
+    ‖f‖ < M ↔ ∀ x, ‖f x‖ < M := by
   simp_rw [norm_def, ← dist_zero_right]
   exact dist_lt_iff_of_compact M0
-
-中文:
-定理 norm_lt_iff_of_compact
-  条件: [紧空间 α] {f : α ->ᵇ β} {M : 实数} (M0 : 0 < M)
-  证明: by
-  simp_rw [norm_def, ← dist_zero_right]
-  exact dist_lt_iff_of_compact M0
-
-Depends on / 依赖: dist_lt_iff_of_compact, dist_zero_right, norm_def, simp_rw
+/-
+**BoundedContinuousFunction.norm_lt_iff_of_nonempty_compact** 是 Mathlib 中的一个定理，位
+于命名空间 `BoundedContinuousFunction`。
+形式化陈述：norm_lt_iff_of_nonempty_compact [Nonempty α] [CompactSpace α] {f : α ->ᵇ β
+} {M : Real} : ‖f‖ < M ↔ forall x, ‖f x‖ < M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `BoundedContinuousFunction.dist_lt_iff_of_nonempty_compact`：dist_lt_iff_o
+f_nonempty_compact [Nonempty α] [CompactSpace α] : dist f g < C ↔ forall x : α, 
+dist (f x) (g x) < C
 -/
-theorem norm_lt_iff_of_compact [CompactSpace α] {f : α ->ᵇ β} {M : Real} (M0 : 0 < M) :
-    ‖f‖ < M ↔ forall x, ‖f x‖ < M := by
-  simp_rw [norm_def, ← dist_zero_right]
-  exact dist_lt_iff_of_compact M0
-
-/--
-theorem `norm_lt_iff_of_nonempty_compact` / 定理 `norm_lt_iff_of_nonempty_compact`
-
-English:
-theorem norm_lt_iff_of_nonempty_compact
-  given: [Nonempty α] [CompactSpace α] {f : α ->ᵇ β} {M : Real}
-  proof: by
-  simp_rw [norm_def, ← dist_zero_right]
-  exact dist_lt_iff_of_nonempty_compact
-
-中文:
-定理 norm_lt_iff_of_nonempty_compact
-  条件: [非空 α] [紧空间 α] {f : α ->ᵇ β} {M : 实数}
-  证明: by
-  simp_rw [norm_def, ← dist_zero_right]
-  exact dist_lt_iff_of_nonempty_compact
-
-Depends on / 依赖: dist_lt_iff_of_nonempty_compact, dist_zero_right, norm_def, simp_rw
--/
-theorem norm_lt_iff_of_nonempty_compact [Nonempty α] [CompactSpace α] {f : α ->ᵇ β} {M : Real} :
-    ‖f‖ < M ↔ forall x, ‖f x‖ < M := by
+theorem norm_lt_iff_of_nonempty_compact [Nonempty α] [CompactSpace α] {f : α →ᵇ β} {M : ℝ} :
+    ‖f‖ < M ↔ ∀ x, ‖f x‖ < M := by
   simp_rw [norm_def, ← dist_zero_right]
   exact dist_lt_iff_of_nonempty_compact
 
 variable (f)
 
-/--
-theorem `norm_const_le` / 定理 `norm_const_le`
+/-- Norm of `const α b` is less than or equal to `‖b‖`. If `α` is nonempty,
+then it is equal to `‖b‖`. -/
+/-
+**BoundedContinuousFunction.norm_const_le** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：norm_const_le (b : β) : ‖const α b‖ <= ‖b‖
+参数：b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `BoundedContinuousFunction.norm_le`：norm_le (C0 : (0 : Real) <= C) : ‖f‖ 
+<= C ↔ forall x : α, ‖f x‖ <= C
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem norm_const_le
-  given: (b : β)
-  statement: ‖const α b‖ <= ‖b‖
-  proof: (norm_le (norm_nonneg b)).2 fun _ => le_rfl
-
-@[simp]
-
-中文:
-定理 norm_const_le
-  条件: (b : β)
-  结论: ‖const α b‖ <= ‖b‖
-  证明: (norm_le (norm_nonneg b)).2 fun _ => le_rfl
-
-@[simp]
-
-Depends on / 依赖: le_rfl, norm_le, norm_nonneg
+--- 原说明 ---
+Norm of `const α b` is less than or equal to `‖b‖`. If `α` is nonempty,
+then it is equal to `‖b‖`.
 -/
-theorem norm_const_le (b : β) : ‖const α b‖ <= ‖b‖ :=
+theorem norm_const_le (b : β) : ‖const α b‖ ≤ ‖b‖ :=
   (norm_le (norm_nonneg b)).2 fun _ => le_rfl
 
 @[simp]
-/--
-theorem `norm_const_eq` / 定理 `norm_const_eq`
-
-English:
-theorem norm_const_eq
-  given: [h : Nonempty α] (b : β)
-  statement: ‖const α b‖ = ‖b‖
-  proof: le_antisymm (norm_const_le b) h.elim fun x => (const α b).norm_coe_le_norm x
-
-中文:
-定理 norm_const_eq
-  条件: [h : 非空 α] (b : β)
-  结论: ‖const α b‖ = ‖b‖
-  证明: le_antisymm (norm_const_le b) h.elim fun x => (const α b).norm_coe_le_norm x
-
-Depends on / 依赖: h.elim, le_antisymm, norm_coe_le_norm, norm_const_le
+/-
+**BoundedContinuousFunction.norm_const_eq** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：norm_const_eq [h : Nonempty α] (b : β) : ‖const α b‖ = ‖b‖
+参数：b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `BoundedContinuousFunction.norm_const_le`：norm_const_le (b : β) : ‖const 
+α b‖ <= ‖b‖
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 -/
 theorem norm_const_eq [h : Nonempty α] (b : β) : ‖const α b‖ = ‖b‖ :=
-le_antisymm (norm_const_le b) h.elim fun x => (const α b).norm_coe_le_norm x
+  le_antisymm (norm_const_le b) <| h.elim fun x => (const α b).norm_coe_le_norm x
 
-/--
-Definition of `ofNormedAddCommGroup` / `ofNormedAddCommGroup` 的定义
+/-- Constructing a bounded continuous function from a uniformly bounded continuous
+function taking values in a normed group. -/
+/-
+**BoundedContinuousFunction.ofNormedAddCommGroup** 是 Mathlib 中的一个定义，位于命名空间 `Boun
+dedContinuousFunction`。
+形式化陈述：ofNormedAddCommGroup {α : Type u} {β : Type v} [TopologicalSpace α] [Semin
+ormedAddCommGroup β] (f : α -> β) (Hf : Continuous f) (C : Real) (H : forall x, 
+‖f x‖ <= C) : α ->ᵇ β
+参数：f : α -> β；Hf : Continuous f；C : Real；H : forall x, ‖f x‖ <= C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNormedAddCommGroup
-  signature: {α : Type u} {β : Type v} [TopologicalSpace α] [SeminormedAddCommGroup β]
-  body: ⟨⟨fun n => f n, Hf⟩, ⟨_, dist_le_two_norm' H⟩⟩
-
-@[simp]
-
-中文:
-定义 ofNormedAddCommGroup
-  签名: {α : 类型u} {β : 类型v} [拓扑空间 α] [SeminormedAddComm群 β]
-  定义体: ⟨⟨fun n => f n, Hf⟩, ⟨_, dist_le_two_norm' H⟩⟩
-
-@[simp]
-
-Depends on / 依赖: dist_le_two_norm
+--- 原说明 ---
+Constructing a bounded continuous function from a uniformly bounded continuous
+function taking values in a normed group.
 -/
 def ofNormedAddCommGroup {α : Type u} {β : Type v} [TopologicalSpace α] [SeminormedAddCommGroup β]
-    (f : α -> β) (Hf : Continuous f) (C : Real) (H : forall x, ‖f x‖ <= C) : α ->ᵇ β :=
+    (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C) : α →ᵇ β :=
   ⟨⟨fun n => f n, Hf⟩, ⟨_, dist_le_two_norm' H⟩⟩
 
 @[simp]
-/--
-theorem `coe_ofNormedAddCommGroup` / 定理 `coe_ofNormedAddCommGroup`
-
-English:
-theorem coe_ofNormedAddCommGroup
-  statement: {α : Type u} {β : Type v} [TopologicalSpace α]
-  proof: rfl
-
-中文:
-定理 coe_ofNormedAddCommGroup
-  结论: {α : 类型u} {β : 类型v} [拓扑空间 α]
-  证明: rfl
+/-
+**BoundedContinuousFunction.coe_ofNormedAddCommGroup** 是 Mathlib 中的一个定理，位于命名空间 `
+BoundedContinuousFunction`。
+形式化陈述：coe_ofNormedAddCommGroup {α : Type u} {β : Type v} [TopologicalSpace α] [S
+eminormedAddCommGroup β] (f : α -> β) (Hf : Continuous f) (C : Real) (H : forall
+ x, ‖f x‖ <= C) : (ofNormedAddCommGroup f Hf C H : α -> β) = f
+参数：f : α -> β；Hf : Continuous f；C : Real；H : forall x, ‖f x‖ <= C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ofNormedAddCommGroup {α : Type u} {β : Type v} [TopologicalSpace α]
-    [SeminormedAddCommGroup β] (f : α -> β) (Hf : Continuous f) (C : Real) (H : forall x, ‖f x‖ <= C) :
-    (ofNormedAddCommGroup f Hf C H : α -> β) = f := rfl
-
-/--
-theorem `norm_ofNormedAddCommGroup_le` / 定理 `norm_ofNormedAddCommGroup_le`
-
-English:
-theorem norm_ofNormedAddCommGroup_le
-  statement: {f : α -> β} (hfc : Continuous f) {C : Real} (hC : 0 <= C)
-  proof: (norm_le hC).2 hfC
-
-中文:
-定理 norm_ofNormedAddCommGroup_le
-  结论: {f : α -> β} (hfc : 连续 f) {C : 实数} (hC : 0 <= C)
-  证明: (norm_le hC).2 hfC
-
-Depends on / 依赖: norm_le
+    [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C) :
+    (ofNormedAddCommGroup f Hf C H : α → β) = f := rfl
+/-
+**BoundedContinuousFunction.norm_ofNormedAddCommGroup_le** 是 Mathlib 中的一个定理，位于命名
+空间 `BoundedContinuousFunction`。
+形式化陈述：norm_ofNormedAddCommGroup_le {f : α -> β} (hfc : Continuous f) {C : Real} 
+(hC : 0 <= C) (hfC : forall x, ‖f x‖ <= C) : ‖ofNormedAddCommGroup f hfc C hfC‖ 
+<= C
+参数：hfc : Continuous f；hC : 0 <= C；hfC : forall x, ‖f x‖ <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `BoundedContinuousFunction.norm_le`：norm_le (C0 : (0 : Real) <= C) : ‖f‖ 
+<= C ↔ forall x : α, ‖f x‖ <= C
 -/
-theorem norm_ofNormedAddCommGroup_le {f : α -> β} (hfc : Continuous f) {C : Real} (hC : 0 <= C)
-    (hfC : forall x, ‖f x‖ <= C) : ‖ofNormedAddCommGroup f hfc C hfC‖ <= C :=
+theorem norm_ofNormedAddCommGroup_le {f : α → β} (hfc : Continuous f) {C : ℝ} (hC : 0 ≤ C)
+    (hfC : ∀ x, ‖f x‖ ≤ C) : ‖ofNormedAddCommGroup f hfc C hfC‖ ≤ C :=
   (norm_le hC).2 hfC
 
-/--
-Definition of `ofNormedAddCommGroupDiscrete` / `ofNormedAddCommGroupDiscrete` 的定义
+/-- Constructing a bounded continuous function from a uniformly bounded
+function on a discrete space, taking values in a normed group. -/
+/-
+**BoundedContinuousFunction.ofNormedAddCommGroupDiscrete** 是 Mathlib 中的一个定义，位于命名
+空间 `BoundedContinuousFunction`。
+形式化陈述：ofNormedAddCommGroupDiscrete {α : Type u} {β : Type v} [TopologicalSpace α
+] [DiscreteTopology α] [SeminormedAddCommGroup β] (f : α -> β) (C : Real) (H : f
+orall x, norm (f x) <= C) : α ->ᵇ β
+参数：f : α -> β；C : Real；H : forall x, norm (f x) <= C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNormedAddCommGroupDiscrete
-  signature: {α : Type u} {β : Type v} [TopologicalSpace α] [DiscreteTopology α]
-  body: ofNormedAddCommGroup f continuous_of_discreteTopology C H
-
-@[simp]
-
-中文:
-定义 ofNormedAddCommGroupDiscrete
-  签名: {α : 类型u} {β : 类型v} [拓扑空间 α] [离散拓扑 α]
-  定义体: ofNormedAddCommGroup f continuous_of_discreteTopology C H
-
-@[simp]
-
-Depends on / 依赖: continuous_of_discreteTopology, ofNormedAddCommGroup
+--- 原说明 ---
+Constructing a bounded continuous function from a uniformly bounded
+function on a discrete space, taking values in a normed group.
 -/
 def ofNormedAddCommGroupDiscrete {α : Type u} {β : Type v} [TopologicalSpace α] [DiscreteTopology α]
-    [SeminormedAddCommGroup β] (f : α -> β) (C : Real) (H : forall x, norm (f x) <= C) : α ->ᵇ β :=
+    [SeminormedAddCommGroup β] (f : α → β) (C : ℝ) (H : ∀ x, norm (f x) ≤ C) : α →ᵇ β :=
   ofNormedAddCommGroup f continuous_of_discreteTopology C H
 
 @[simp]
-/--
-theorem `coe_ofNormedAddCommGroupDiscrete` / 定理 `coe_ofNormedAddCommGroupDiscrete`
-
-English:
-theorem coe_ofNormedAddCommGroupDiscrete
-  statement: {α : Type u} {β : Type v} [TopologicalSpace α]
-  proof: rfl
-
-中文:
-定理 coe_ofNormedAddCommGroupDiscrete
-  结论: {α : 类型u} {β : 类型v} [拓扑空间 α]
-  证明: rfl
+/-
+**BoundedContinuousFunction.coe_ofNormedAddCommGroupDiscrete** 是 Mathlib 中的一个定理，
+位于命名空间 `BoundedContinuousFunction`。
+形式化陈述：coe_ofNormedAddCommGroupDiscrete {α : Type u} {β : Type v} [TopologicalSpa
+ce α] [DiscreteTopology α] [SeminormedAddCommGroup β] (f : α -> β) (C : Real) (H
+ : forall x, ‖f x‖ <= C) : (ofNormedAddCommGroupDiscrete f C H : α -> β) = f
+参数：f : α -> β；C : Real；H : forall x, ‖f x‖ <= C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ofNormedAddCommGroupDiscrete {α : Type u} {β : Type v} [TopologicalSpace α]
-    [DiscreteTopology α] [SeminormedAddCommGroup β] (f : α -> β) (C : Real) (H : forall x, ‖f x‖ <= C) :
-    (ofNormedAddCommGroupDiscrete f C H : α -> β) = f := rfl
+    [DiscreteTopology α] [SeminormedAddCommGroup β] (f : α → β) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C) :
+    (ofNormedAddCommGroupDiscrete f C H : α → β) = f := rfl
 
-/--
-Definition of `normComp` / `normComp` 的定义
+/-- Taking the pointwise norm of a bounded continuous function with values in a
+`SeminormedAddCommGroup` yields a bounded continuous function with values in ℝ. -/
+/-
+**BoundedContinuousFunction.normComp** 是 Mathlib 中的一个定义，位于命名空间 `BoundedContinuou
+sFunction`。
+形式化陈述：normComp : α ->ᵇ Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normComp
-  signature: : α ->ᵇ Real
-  body: f.comp norm lipschitzWith_one_norm
-
-@[simp]
-
-中文:
-定义 normComp
-  签名: : α ->ᵇ 实数
-  定义体: f.comp norm lipschitzWith_one_norm
-
-@[simp]
-
-Depends on / 依赖: f.comp, lipschitzWith_one_norm
+--- 原说明 ---
+Taking the pointwise norm of a bounded continuous function with values in a
+`SeminormedAddCommGroup` yields a bounded continuous function with values in ℝ.
 -/
-def normComp : α ->ᵇ Real :=
+def normComp : α →ᵇ ℝ :=
   f.comp norm lipschitzWith_one_norm
 
 @[simp]
-/--
-theorem `coe_normComp` / 定理 `coe_normComp`
-
-English:
-theorem coe_normComp
-  statement: (f.normComp : α -> Real) = norm ∘ f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_normComp
-  结论: (f.normComp : α -> 实数) = norm ∘ f
-  证明: rfl
-
-@[simp]
+/-
+**BoundedContinuousFunction.coe_normComp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedConti
+nuousFunction`。
+形式化陈述：coe_normComp : (f.normComp : α -> Real) = norm ∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_normComp : (f.normComp : α -> Real) = norm ∘ f := rfl
+theorem coe_normComp : (f.normComp : α → ℝ) = norm ∘ f := rfl
 
 @[simp]
-/--
-theorem `norm_normComp` / 定理 `norm_normComp`
-
-English:
-theorem norm_normComp
-  statement: ‖f.normComp‖ = ‖f‖
-  proof: by
-  simp only [norm_eq, coe_normComp, norm_norm, Function.comp]
-
-中文:
-定理 norm_normComp
-  结论: ‖f.normComp‖ = ‖f‖
-  证明: by
-  simp only [norm_eq, coe_normComp, norm_norm, Function.comp]
-
-Depends on / 依赖: Function, Function.comp, coe_normComp, norm_eq, norm_norm
+/-
+**BoundedContinuousFunction.norm_normComp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCont
+inuousFunction`。
+形式化陈述：norm_normComp : ‖f.normComp‖ = ‖f‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoundedContinuousFunction.norm_eq`：norm_eq (f : α ->ᵇ β) : ‖f‖ = sInf { 
+C : Real | 0 <= C ∧ forall x : α, ‖f x‖ <= C }
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem norm_normComp : ‖f.normComp‖ = ‖f‖ := by
   simp only [norm_eq, coe_normComp, norm_norm, Function.comp]
-
-/--
-theorem `bddAbove_range_norm_comp` / 定理 `bddAbove_range_norm_comp`
-
-English:
-theorem bddAbove_range_norm_comp
-  statement: BddAbove Set.range norm ∘ f
-  proof: (@isBounded_range _ _ _ _ f.normComp).bddAbove
-
-中文:
-定理 bddAbove_range_norm_comp
-  结论: BddAbove 集合.range norm ∘ f
-  证明: (@isBounded_range _ _ _ _ f.normComp).bddAbove
-
-Depends on / 依赖: bddAbove, f.normComp, isBounded_range, normComp
+/-
+**BoundedContinuousFunction.bddAbove_range_norm_comp** 是 Mathlib 中的一个定理，位于命名空间 `
+BoundedContinuousFunction`。
+形式化陈述：bddAbove_range_norm_comp : BddAbove Set.range norm ∘ f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.bddAbove`：∀ {α : Type u_1} {s : Set α} [inst : Borno
+logy α] [inst_1 : Preorder α] [IsOrderBornology α],   Bornology.IsBounded s → Bd
+dAbove s
+· 使用定理 `BoundedContinuousFunction.isBounded_range`：isBounded_range (f : α ->ᵇ β)
+ : IsBounded (range f)
 -/
-theorem bddAbove_range_norm_comp : BddAbove Set.range norm ∘ f :=
+theorem bddAbove_range_norm_comp : BddAbove <| Set.range <| norm ∘ f :=
   (@isBounded_range _ _ _ _ f.normComp).bddAbove
-
-/--
-theorem `norm_eq_iSup_norm` / 定理 `norm_eq_iSup_norm`
-
-English:
-theorem norm_eq_iSup_norm
-  statement: ‖f‖ = ⨆ x : α, ‖f x‖
-  proof: by
-  simp_rw [norm_def, dist_eq_iSup, coe_zero, Pi.zero_apply, dist_zero_right]
-
-中文:
-定理 norm_eq_iSup_norm
-  结论: ‖f‖ = ⨆ x : α, ‖f x‖
-  证明: by
-  simp_rw [norm_def, dist_eq_iSup, coe_zero, Pi.zero_apply, dist_zero_right]
-
-Depends on / 依赖: Pi.zero_apply, coe_zero, dist_eq_iSup, dist_zero_right, norm_def, simp_rw, zero_apply
+/-
+**BoundedContinuousFunction.norm_eq_iSup_norm** 是 Mathlib 中的一个定理，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：norm_eq_iSup_norm : ‖f‖ = ⨆ x : α, ‖f x‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoundedContinuousFunction.dist_eq_iSup`：dist_eq_iSup : dist f g = ⨆ x : 
+α, dist (f x) (g x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem norm_eq_iSup_norm : ‖f‖ = ⨆ x : α, ‖f x‖ := by
   simp_rw [norm_def, dist_eq_iSup, coe_zero, Pi.zero_apply, dist_zero_right]
 
-/--
-Instance `instNormOneClass` / 实例 `instNormOneClass`
+/-- If `‖(1 : β)‖ = 1`, then `‖(1 : α →ᵇ β)‖ = 1` if `α` is nonempty. -/
+/-
+**BoundedContinuousFunction.instNormOneClass** 是 Mathlib 中的一个实例，位于命名空间 `BoundedC
+ontinuousFunction`。
+形式化陈述：instNormOneClass [Nonempty α] [One β] [NormOneClass β] : NormOneClass (α -
+>ᵇ β) where norm_one
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoundedContinuousFunction.norm_eq_iSup_norm`：norm_eq_iSup_norm : ‖f‖ = ⨆
+ x : α, ‖f x‖
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `ciSup_const`：ciSup_const [hι : Nonempty ι] {a : α} : ⨆ _ : ι, a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance instNormOneClass
-  signature: [Nonempty α] [One β] [NormOneClass β]
-  body: by simp only [norm_eq_iSup_norm, coe_one, Pi.one_apply, norm_one, ciSup_const]
-
-中文:
-实例 instNormOneClass
-  签名: [非空 α] [幺 β] [NormOne类 β]
-  定义体: by simp only [norm_eq_iSup_norm, coe_one, Pi.one_apply, norm_one, ciSup_const]
-
-Depends on / 依赖: Pi.one_apply, ciSup_const, coe_one, norm_eq_iSup_norm, norm_one, one_apply
+--- 原说明 ---
+If `‖(1 : β)‖ = 1`, then `‖(1 : α →ᵇ β)‖ = 1` if `α` is nonempty.
 -/
-instance instNormOneClass [Nonempty α] [One β] [NormOneClass β] : NormOneClass (α ->ᵇ β) where
+instance instNormOneClass [Nonempty α] [One β] [NormOneClass β] : NormOneClass (α →ᵇ β) where
   norm_one := by simp only [norm_eq_iSup_norm, coe_one, Pi.one_apply, norm_one, ciSup_const]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The pointwise opposite of a bounded continuous function is again bounded continuous. -/
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Neg (α ->ᵇ β)
-  body: ⟨fun f =>
-    ofNormedAddCommGroup (-f) f.continuous.neg ‖f‖ fun x =>
-      norm_neg ((⇑f) x) ▸ f.norm_coe_le_norm x⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 取负 (α ->ᵇ β)
-  定义体: ⟨fun f =>
-    ofNormedAddCommGroup (-f) f.continuous.neg ‖f‖ fun x =>
-      norm_neg ((⇑f) x) ▸ f.norm_coe_le_norm x⟩
-
-@[simp]
-
-Depends on / 依赖: continuous, f.continuous.neg, f.norm_coe_le_norm, norm_coe_le_norm, norm_neg, ofNormedAddCommGroup
+--- 原说明 ---
+The pointwise opposite of a bounded continuous function is again bounded continu
+ous.
 -/
-instance : Neg (α ->ᵇ β) :=
+instance : Neg (α →ᵇ β) :=
   ⟨fun f =>
     ofNormedAddCommGroup (-f) f.continuous.neg ‖f‖ fun x =>
       norm_neg ((⇑f) x) ▸ f.norm_coe_le_norm x⟩
 
 @[simp]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  statement: ⇑(-f) = -f
-  proof: rfl
-
-中文:
-定理 coe_neg
-  结论: ⇑(-f) = -f
-  证明: rfl
+/-
+**BoundedContinuousFunction.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：coe_neg : ⇑(-f) = -f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg : ⇑(-f) = -f := rfl
-
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  statement: (-f) x = -f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neg_apply
-  结论: (-f) x = -f x
-  证明: rfl
-
-@[simp]
+/-
+**BoundedContinuousFunction.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuo
+usFunction`。
+形式化陈述：neg_apply : (-f) x = -f x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply : (-f) x = -f x := rfl
 
 @[simp]
-/--
-theorem `mkOfCompact_neg` / 定理 `mkOfCompact_neg`
-
-English:
-theorem mkOfCompact_neg
-  given: [CompactSpace α] (f : C(α, β))
-  statement: mkOfCompact (-f) = -mkOfCompact f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mkOfCompact_neg
-  条件: [紧空间 α] (f : C(α, β))
-  结论: mkOfCompact (-f) = -mkOfCompact f
-  证明: rfl
-
-@[simp]
+/-
+**BoundedContinuousFunction.mkOfCompact_neg** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：mkOfCompact_neg [CompactSpace α] (f : C(α, β)) : mkOfCompact (-f) = -mkOfC
+ompact f
+参数：f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousNeg`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousNeg 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 theorem mkOfCompact_neg [CompactSpace α] (f : C(α, β)) : mkOfCompact (-f) = -mkOfCompact f := rfl
 
 @[simp]
-/--
-theorem `mkOfCompact_sub` / 定理 `mkOfCompact_sub`
-
-English:
-theorem mkOfCompact_sub
-  given: [CompactSpace α] (f g : C(α, β))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mkOfCompact_sub
-  条件: [紧空间 α] (f g : C(α, β))
-  证明: rfl
-
-@[simp]
+/-
+**BoundedContinuousFunction.mkOfCompact_sub** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：mkOfCompact_sub [CompactSpace α] (f g : C(α, β)) : mkOfCompact (f - g) = m
+kOfCompact f - mkOfCompact g
+参数：f g : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 theorem mkOfCompact_sub [CompactSpace α] (f g : C(α, β)) :
     mkOfCompact (f - g) = mkOfCompact f - mkOfCompact g := rfl
 
 @[simp]
-/--
-theorem `coe_zsmulRec` / 定理 `coe_zsmulRec`
-
-English:
-theorem coe_zsmulRec
-  statement: forall z, ⇑(zsmulRec (· • ·) z f) = z • ⇑f
-
-中文:
-定理 coe_zsmulRec
-  结论: 对任意 z, ⇑(zsmulRec (· • ·) z f) = z • ⇑f
+/-
+**BoundedContinuousFunction.coe_zsmulRec** 是 Mathlib 中的一个定理，位于命名空间 `BoundedConti
+nuousFunction`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] [inst_1 : Seminorm
+edAddCommGroup β]   (f : BoundedContinuousFunction α β) (z : ℤ), ⇑(zsmulRec (fun
+ x1 x2 => x1 • x2) z f) = z • ⇑f
+参数：f : BoundedContinuousFunction α β；z : ℤ；zsmulRec (fun x1 x2 => x1 • x2) z f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmulRec.eq_1`：∀ {G : Type u_1} [inst : Zero G] [inst_1 : Add G] [inst_2
+ : Neg G] (nsmul : ℕ → G → G) (x : G) (n : ℕ),   zsmulRec nsmul (Int.ofNat n) x 
+= n…
+· 使用定理 `Int.ofNat_eq_natCast`：∀ (n : ℕ), Int.ofNat n = ↑n
+· 使用定理 `BoundedContinuousFunction.coe_nsmul`：∀ {α : Type u} {R : Type u_2} [inst
+ : TopologicalSpace α] [inst_1 : PseudoMetricSpace R] [inst_2 : AddMonoid R]   [
+inst_3 : BoundedAdd R] [i…
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `zsmulRec.eq_2`：∀ {G : Type u_1} [inst : Zero G] [inst_1 : Add G] [inst_2
+ : Neg G] (nsmul : ℕ → G → G) (x : G) (n : ℕ),   zsmulRec nsmul (Int.negSucc n) 
+x =…
+· 使用定理 `negSucc_zsmul`：negSucc_zsmul {G} [SubNegMonoid G] (a : G) (n : Nat) : In
+t.negSucc n • a = -((n + 1) • a)
+· 使用定理 `BoundedContinuousFunction.coe_neg`：coe_neg : ⇑(-f) = -f
 -/
-theorem coe_zsmulRec : forall z, ⇑(zsmulRec (· • ·) z f) = z • ⇑f
+theorem coe_zsmulRec : ∀ z, ⇑(zsmulRec (· • ·) z f) = z • ⇑f
   | Int.ofNat n => by rw [zsmulRec, Int.ofNat_eq_natCast, coe_nsmul, natCast_zsmul]
   | Int.negSucc n => by rw [zsmulRec, negSucc_zsmul, coe_neg, coe_nsmul]
-
-/--
-Instance `instSMulInt` / 实例 `instSMulInt`
-
-English:
-instance instSMulInt
-  signature: : SMul Int (α ->ᵇ β) where
-  body: { toContinuousMap := n • f.toContinuousMap
-      map_bounded' := by simpa using (zsmulRec (· • ·) n f).map_bounded' }
-
-@[simp]
-
-中文:
-实例 instSMul整数
-  签名: : 标量乘法 整数 (α ->ᵇ β) where
-  定义体: { toContinuousMap := n • f.toContinuousMap
-      map_bounded' := by simpa using (zsmulRec (· • ·) n f).map_bounded' }
-
-@[simp]
-
-Depends on / 依赖: f.toContinuousMap, map_bounded, toContinuousMap, zsmulRec
+/-
+**BoundedContinuousFunction.instSMulInt** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：instSMulInt : SMul Int (α ->ᵇ β) where smul n f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
-instance instSMulInt : SMul Int (α ->ᵇ β) where
+instance instSMulInt : SMul ℤ (α →ᵇ β) where
   smul n f :=
     { toContinuousMap := n • f.toContinuousMap
       map_bounded' := by simpa using (zsmulRec (· • ·) n f).map_bounded' }
 
 @[simp]
-/--
-theorem `coe_zsmul` / 定理 `coe_zsmul`
-
-English:
-theorem coe_zsmul
-  given: (r : Int) (f : α ->ᵇ β)
-  statement: ⇑(r • f) = r • ⇑f
-  proof: rfl
+/-
+**BoundedContinuousFunction.coe_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuo
+usFunction`。
+形式化陈述：coe_zsmul (r : Int) (f : α ->ᵇ β) : ⇑(r • f) = r • ⇑f
+参数：r : Int；f : α ->ᵇ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem coe_zsmul (r : ℤ) (f : α →ᵇ β) : ⇑(r • f) = r • ⇑f := rfl
 
 @[simp]
-
-中文:
-定理 coe_zsmul
-  条件: (r : 整数) (f : α ->ᵇ β)
-  结论: ⇑(r • f) = r • ⇑f
-  证明: rfl
-
-@[simp]
+/-
+**BoundedContinuousFunction.zsmul_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：zsmul_apply (r : Int) (f : α ->ᵇ β) (v : α) : (r • f) v = r • f v
+参数：r : Int；f : α ->ᵇ β；v : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zsmul (r : Int) (f : α ->ᵇ β) : ⇑(r • f) = r • ⇑f := rfl
-
-@[simp]
-/--
-theorem `zsmul_apply` / 定理 `zsmul_apply`
-
-English:
-theorem zsmul_apply
-  given: (r : Int) (f : α ->ᵇ β) (v : α)
-  statement: (r • f) v = r • f v
-  proof: rfl
-
-中文:
-定理 zsmul_apply
-  条件: (r : 整数) (f : α ->ᵇ β) (v : α)
-  结论: (r • f) v = r • f v
-  证明: rfl
+theorem zsmul_apply (r : ℤ) (f : α →ᵇ β) (v : α) : (r • f) v = r • f v := rfl
+/-
+**BoundedContinuousFunction.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `BoundedC
+ontinuousFunction`。
+形式化陈述：instAddCommGroup : AddCommGroup (α ->ᵇ β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedSub`：∀ {R : Type u_1} [inst : SeminormedAddCommGroup R], Boun
+dedSub R
 -/
-theorem zsmul_apply (r : Int) (f : α ->ᵇ β) (v : α) : (r • f) v = r • f v := rfl
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: : AddCommGroup (α ->ᵇ β)
-  body: fast_instance%
+instance instAddCommGroup : AddCommGroup (α →ᵇ β) := fast_instance%
   DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_nsmul _ _)
     fun _ _ => coe_zsmul _ _
-
-中文:
-实例 instAddCommGroup
-  签名: : 加法交换群 (α ->ᵇ β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_nsmul _ _)
-    fun _ _ => coe_zsmul _ _
-
-Depends on / 依赖: fast_instance
+/-
+**BoundedContinuousFunction.instSeminormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间
+ `BoundedContinuousFunction`。
+形式化陈述：instSeminormedAddCommGroup : SeminormedAddCommGroup (α ->ᵇ β) where dist_e
+q f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAddCommGroup : AddCommGroup (α ->ᵇ β) := fast_instance%
-  DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_nsmul _ _)
-    fun _ _ => coe_zsmul _ _
-
-/--
-Instance `instSeminormedAddCommGroup` / 实例 `instSeminormedAddCommGroup`
-
-English:
-instance instSeminormedAddCommGroup
-  signature: : SeminormedAddCommGroup (α ->ᵇ β) where
-  body: by simp only [norm_eq, dist_eq, dist_eq_norm_neg_add, add_apply, neg_apply]
-
-中文:
-实例 instSeminormedAddCommGroup
-  签名: : SeminormedAddComm群 (α ->ᵇ β) where
-  定义体: by simp only [norm_eq, dist_eq, dist_eq_norm_neg_add, add_apply, neg_apply]
-
-Depends on / 依赖: add_apply, dist_eq, dist_eq_norm_neg_add, neg_apply, norm_eq
--/
-instance instSeminormedAddCommGroup : SeminormedAddCommGroup (α ->ᵇ β) where
+instance instSeminormedAddCommGroup : SeminormedAddCommGroup (α →ᵇ β) where
   dist_eq f g := by simp only [norm_eq, dist_eq, dist_eq_norm_neg_add, add_apply, neg_apply]
-
-/--
-Instance `instNormedAddCommGroup` / 实例 `instNormedAddCommGroup`
-
-English:
-instance instNormedAddCommGroup
-  signature: {α β} [TopologicalSpace α] [NormedAddCommGroup β]
-  body: { instSeminormedAddCommGroup with
-    eq_of_dist_eq_zero }
-
-中文:
-实例 instNormedAddCommGroup
-  签名: {α β} [拓扑空间 α] [赋范交换加群 β]
-  定义体: { instSeminormedAddCommGroup with
-    eq_of_dist_eq_zero }
-
-Depends on / 依赖: eq_of_dist_eq_zero, instSeminormedAddCommGroup
+/-
+**BoundedContinuousFunction.instNormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Bo
+undedContinuousFunction`。
+形式化陈述：instNormedAddCommGroup {α β} [TopologicalSpace α] [NormedAddCommGroup β] :
+ NormedAddCommGroup (α ->ᵇ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNormedAddCommGroup {α β} [TopologicalSpace α] [NormedAddCommGroup β] :
-    NormedAddCommGroup (α ->ᵇ β) :=
+    NormedAddCommGroup (α →ᵇ β) :=
   { instSeminormedAddCommGroup with
     eq_of_dist_eq_zero }
-
-/--
-theorem `nnnorm_def` / 定理 `nnnorm_def`
-
-English:
-theorem nnnorm_def
-  statement: ‖f‖₊ = nndist f 0
-  proof: rfl
-
-中文:
-定理 nnnorm_def
-  结论: ‖f‖₊ = nndist f 0
-  证明: rfl
+/-
+**BoundedContinuousFunction.nnnorm_def** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinu
+ousFunction`。
+形式化陈述：nnnorm_def : ‖f‖₊ = nndist f 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nnnorm_def : ‖f‖₊ = nndist f 0 := rfl
-
-/--
-theorem `nnnorm_coe_le_nnnorm` / 定理 `nnnorm_coe_le_nnnorm`
-
-English:
-theorem nnnorm_coe_le_nnnorm
-  given: (x : α)
-  statement: ‖f x‖₊ <= ‖f‖₊
-  proof: norm_coe_le_norm _ _
-
-中文:
-定理 nnnorm_coe_le_nnnorm
-  条件: (x : α)
-  结论: ‖f x‖₊ <= ‖f‖₊
-  证明: norm_coe_le_norm _ _
-
-Depends on / 依赖: norm_coe_le_norm
+/-
+**BoundedContinuousFunction.nnnorm_coe_le_nnnorm** 是 Mathlib 中的一个定理，位于命名空间 `Boun
+dedContinuousFunction`。
+形式化陈述：nnnorm_coe_le_nnnorm (x : α) : ‖f x‖₊ <= ‖f‖₊
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 -/
-theorem nnnorm_coe_le_nnnorm (x : α) : ‖f x‖₊ <= ‖f‖₊ :=
+theorem nnnorm_coe_le_nnnorm (x : α) : ‖f x‖₊ ≤ ‖f‖₊ :=
   norm_coe_le_norm _ _
-
-/--
-theorem `nndist_le_two_nnnorm` / 定理 `nndist_le_two_nnnorm`
-
-English:
-theorem nndist_le_two_nnnorm
-  given: (x y : α)
-  statement: nndist (f x) (f y) <= 2 * ‖f‖₊
-  proof: dist_le_two_norm _ _ _
-
-中文:
-定理 nndist_le_two_nnnorm
-  条件: (x y : α)
-  结论: nndist (f x) (f y) <= 2 * ‖f‖₊
-  证明: dist_le_two_norm _ _ _
-
-Depends on / 依赖: dist_le_two_norm
+/-
+**BoundedContinuousFunction.nndist_le_two_nnnorm** 是 Mathlib 中的一个定理，位于命名空间 `Boun
+dedContinuousFunction`。
+形式化陈述：nndist_le_two_nnnorm (x y : α) : nndist (f x) (f y) <= 2 * ‖f‖₊
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.dist_le_two_norm`：dist_le_two_norm (x y : α) :
+ dist (f x) (f y) <= 2 * ‖f‖
 -/
-theorem nndist_le_two_nnnorm (x y : α) : nndist (f x) (f y) <= 2 * ‖f‖₊ :=
+theorem nndist_le_two_nnnorm (x y : α) : nndist (f x) (f y) ≤ 2 * ‖f‖₊ :=
   dist_le_two_norm _ _ _
 
-/--
-theorem `nnnorm_le` / 定理 `nnnorm_le`
+/-- The `nnnorm` of a function is controlled by the supremum of the pointwise `nnnorm`s. -/
+/-
+**BoundedContinuousFunction.nnnorm_le** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuo
+usFunction`。
+形式化陈述：nnnorm_le (C : Real>=0) : ‖f‖₊ <= C ↔ forall x : α, ‖f x‖₊ <= C
+参数：C : Real>=0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.norm_le`：norm_le (C0 : (0 : Real) <= C) : ‖f‖ 
+<= C ↔ forall x : α, ‖f x‖ <= C
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 
-English:
-theorem nnnorm_le
-  given: (C : Real>=0)
-  statement: ‖f‖₊ <= C ↔ forall x : α, ‖f x‖₊ <= C
-  proof: norm_le C.prop
-
-中文:
-定理 nnnorm_le
-  条件: (C : 实数>=0)
-  结论: ‖f‖₊ <= C ↔ 对任意 x : α, ‖f x‖₊ <= C
-  证明: norm_le C.prop
-
-Depends on / 依赖: C.prop, norm_le
+--- 原说明 ---
+The `nnnorm` of a function is controlled by the supremum of the pointwise `nnnor
+m`s.
 -/
-theorem nnnorm_le (C : Real>=0) : ‖f‖₊ <= C ↔ forall x : α, ‖f x‖₊ <= C :=
+theorem nnnorm_le (C : ℝ≥0) : ‖f‖₊ ≤ C ↔ ∀ x : α, ‖f x‖₊ ≤ C :=
   norm_le C.prop
-
-/--
-theorem `nnnorm_const_le` / 定理 `nnnorm_const_le`
-
-English:
-theorem nnnorm_const_le
-  given: (b : β)
-  statement: ‖const α b‖₊ <= ‖b‖₊
-  proof: norm_const_le _
-
-@[simp]
-
-中文:
-定理 nnnorm_const_le
-  条件: (b : β)
-  结论: ‖const α b‖₊ <= ‖b‖₊
-  证明: norm_const_le _
-
-@[simp]
-
-Depends on / 依赖: norm_const_le
+/-
+**BoundedContinuousFunction.nnnorm_const_le** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：nnnorm_const_le (b : β) : ‖const α b‖₊ <= ‖b‖₊
+参数：b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedContinuousFunction.norm_const_le`：norm_const_le (b : β) : ‖const 
+α b‖ <= ‖b‖
 -/
-theorem nnnorm_const_le (b : β) : ‖const α b‖₊ <= ‖b‖₊ :=
+theorem nnnorm_const_le (b : β) : ‖const α b‖₊ ≤ ‖b‖₊ :=
   norm_const_le _
 
 @[simp]
-/--
-theorem `nnnorm_const_eq` / 定理 `nnnorm_const_eq`
-
-English:
-theorem nnnorm_const_eq
-  given: [Nonempty α] (b : β)
-  statement: ‖const α b‖₊ = ‖b‖₊
-  proof: Subtype.ext norm_const_eq _
-
-中文:
-定理 nnnorm_const_eq
-  条件: [非空 α] (b : β)
-  结论: ‖const α b‖₊ = ‖b‖₊
-  证明: Subtype.ext norm_const_eq _
-
-Depends on / 依赖: Subtype, Subtype.ext, norm_const_eq
+/-
+**BoundedContinuousFunction.nnnorm_const_eq** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：nnnorm_const_eq [Nonempty α] (b : β) : ‖const α b‖₊ = ‖b‖₊
+参数：b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `BoundedContinuousFunction.norm_const_eq`：norm_const_eq [h : Nonempty α] 
+(b : β) : ‖const α b‖ = ‖b‖
 -/
 theorem nnnorm_const_eq [Nonempty α] (b : β) : ‖const α b‖₊ = ‖b‖₊ :=
-Subtype.ext norm_const_eq _
-
-/--
-theorem `nnnorm_eq_iSup_nnnorm` / 定理 `nnnorm_eq_iSup_nnnorm`
-
-English:
-theorem nnnorm_eq_iSup_nnnorm
-  statement: ‖f‖₊ = ⨆ x : α, ‖f x‖₊
-  proof: Subtype.ext (norm_eq_iSup_norm f).trans by simp_rw [val_eq_coe, NNReal.coe_iSup, coe_nnnorm]
-
-中文:
-定理 nnnorm_eq_iSup_nnnorm
-  结论: ‖f‖₊ = ⨆ x : α, ‖f x‖₊
-  证明: Subtype.ext (norm_eq_iSup_norm f).trans by simp_rw [val_eq_coe, NNReal.coe_iSup, coe_nnnorm]
-
-Depends on / 依赖: NNReal, NNReal.coe_iSup, Subtype, Subtype.ext, coe_iSup, coe_nnnorm, norm_eq_iSup_norm, simp_rw, val_eq_coe
+  Subtype.ext <| norm_const_eq _
+/-
+**BoundedContinuousFunction.nnnorm_eq_iSup_nnnorm** 是 Mathlib 中的一个定理，位于命名空间 `Bou
+ndedContinuousFunction`。
+形式化陈述：nnnorm_eq_iSup_nnnorm : ‖f‖₊ = ⨆ x : α, ‖f x‖₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `BoundedContinuousFunction.norm_eq_iSup_norm`：norm_eq_iSup_norm : ‖f‖ = ⨆
+ x : α, ‖f x‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.coe_iSup`：coe_iSup {ι : Sort*} (s : ι -> Real>=0) : (↑(⨆ i, s i) 
+: Real) = ⨆ i, ↑(s i)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nnnorm_eq_iSup_nnnorm : ‖f‖₊ = ⨆ x : α, ‖f x‖₊ :=
-Subtype.ext (norm_eq_iSup_norm f).trans by simp_rw [val_eq_coe, NNReal.coe_iSup, coe_nnnorm]
-
-/--
-theorem `enorm_eq_iSup_enorm` / 定理 `enorm_eq_iSup_enorm`
-
-English:
-theorem enorm_eq_iSup_enorm
-  statement: ‖f‖ₑ = ⨆ x, ‖f x‖ₑ
-  proof: by
-  simpa only [← edist_zero_right] using! edist_eq_iSup
-
-中文:
-定理 enorm_eq_iSup_enorm
-  结论: ‖f‖ₑ = ⨆ x, ‖f x‖ₑ
-  证明: by
-  simpa only [← edist_zero_right] using! edist_eq_iSup
-
-Depends on / 依赖: edist_eq_iSup, edist_zero_right
+  Subtype.ext <| (norm_eq_iSup_norm f).trans <| by simp_rw [val_eq_coe, NNReal.coe_iSup, coe_nnnorm]
+/-
+**BoundedContinuousFunction.enorm_eq_iSup_enorm** 是 Mathlib 中的一个定理，位于命名空间 `Bound
+edContinuousFunction`。
+形式化陈述：enorm_eq_iSup_enorm : ‖f‖ₑ = ⨆ x, ‖f x‖ₑ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `BoundedContinuousFunction.edist_eq_iSup`：edist_eq_iSup : edist f g = ⨆ x
+, edist (f x) (g x)
 -/
 theorem enorm_eq_iSup_enorm : ‖f‖ₑ = ⨆ x, ‖f x‖ₑ := by
   simpa only [← edist_zero_right] using! edist_eq_iSup
-
-/--
-theorem `abs_sub_coe_le_dist` / 定理 `abs_sub_coe_le_dist`
-
-English:
-theorem abs_sub_coe_le_dist
-  statement: ‖f x - g x‖ <= dist f g
-  proof: by
+/-
+**BoundedContinuousFunction.abs_sub_coe_le_dist** 是 Mathlib 中的一个定理，位于命名空间 `Bound
+edContinuousFunction`。
+形式化陈述：abs_sub_coe_le_dist : ‖f x - g x‖ <= dist f g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
+· 使用定理 `instBoundedSub`：∀ {R : Type u_1} [inst : SeminormedAddCommGroup R], Boun
+dedSub R
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+-/
+theorem abs_sub_coe_le_dist : ‖f x - g x‖ ≤ dist f g := by
   rw [dist_eq_norm]
   exact (f - g).norm_coe_le_norm x
 
 @[deprecated (since := "2026-06-03")] alias abs_diff_coe_le_dist := abs_sub_coe_le_dist
-
-中文:
-定理 abs_sub_coe_le_dist
-  结论: ‖f x - g x‖ <= dist f g
-  证明: by
-  rw [dist_eq_norm]
-  exact (f - g).norm_coe_le_norm x
-
-@[deprecated (since := "2026-06-03")] alias abs_diff_coe_le_dist := abs_sub_coe_le_dist
-
-Depends on / 依赖: dist_eq_norm, norm_coe_le_norm
+/-
+**BoundedContinuousFunction.coe_le_coe_add_dist** 是 Mathlib 中的一个定理，位于命名空间 `Bound
+edContinuousFunction`。
+形式化陈述：coe_le_coe_add_dist {f g : α ->ᵇ Real} : f x <= g x + dist f g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_le_iff_le_add'`：∀ {α : Type u} [inst : AddCommGroup α] [inst_1 : LE 
+α] [AddLeftMono α] {a b c : α}, a - b ≤ c ↔ a ≤ b + c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `BoundedContinuousFunction.dist_coe_le_dist`：dist_coe_le_dist (x : α) : d
+ist (f x) (g x) <= dist f g
 -/
-theorem abs_sub_coe_le_dist : ‖f x - g x‖ <= dist f g := by
-  rw [dist_eq_norm]
-  exact (f - g).norm_coe_le_norm x
-
-@[deprecated (since := "2026-06-03")] alias abs_diff_coe_le_dist := abs_sub_coe_le_dist
-
-/--
-theorem `coe_le_coe_add_dist` / 定理 `coe_le_coe_add_dist`
-
-English:
-theorem coe_le_coe_add_dist
-  given: {f g : α ->ᵇ Real}
-  statement: f x <= g x + dist f g
-  proof: sub_le_iff_le_add'.1 (abs_le.1 <| @dist_coe_le_dist _ _ _ _ f g x).2
-
-中文:
-定理 coe_le_coe_add_dist
-  条件: {f g : α ->ᵇ 实数}
-  结论: f x <= g x + dist f g
-  证明: sub_le_iff_le_add'.1 (abs_le.1 <| @dist_coe_le_dist _ _ _ _ f g x).2
-
-Depends on / 依赖: abs_le, dist_coe_le_dist, sub_le_iff_le_add
+theorem coe_le_coe_add_dist {f g : α →ᵇ ℝ} : f x ≤ g x + dist f g :=
+  sub_le_iff_le_add'.1 <| (abs_le.1 <| @dist_coe_le_dist _ _ _ _ f g x).2
+/-
+**BoundedContinuousFunction.norm_compContinuous_le** 是 Mathlib 中的一个定理，位于命名空间 `Bo
+undedContinuousFunction`。
+形式化陈述：norm_compContinuous_le [TopologicalSpace γ] (f : α ->ᵇ β) (g : C(γ, α)) : 
+‖f.compContinuous g‖ <= ‖f‖
+参数：f : α ->ᵇ β；g : C(γ, α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LipschitzWith.dist_le_mul`：∀ {α : Type u} {β : Type v} [inst : PseudoMet
+ricSpace α] [inst_1 : PseudoMetricSpace β] {K : NNReal} {f : α → β},   Lipschitz
+With K f → ∀ (x…
+· 使用定理 `BoundedContinuousFunction.lipschitz_compContinuous`：lipschitz_compContin
+uous {δ : Type*} [TopologicalSpace δ] (g : C(δ, α)) : LipschitzWith 1 fun f : α 
+->ᵇ β => f.compContinuous g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.coe_one`：↑1 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem coe_le_coe_add_dist {f g : α ->ᵇ Real} : f x <= g x + dist f g :=
-sub_le_iff_le_add'.1 (abs_le.1 <| @dist_coe_le_dist _ _ _ _ f g x).2
-
-/--
-theorem `norm_compContinuous_le` / 定理 `norm_compContinuous_le`
-
-English:
-theorem norm_compContinuous_le
-  given: [TopologicalSpace γ] (f : α ->ᵇ β) (g : C(γ, α))
-  proof: ((lipschitz_compContinuous g).dist_le_mul f 0).trans by
-    rw [NNReal.coe_one]; rw [one_mul]; rw [dist_zero_right]
-
-中文:
-定理 norm_compContinuous_le
-  条件: [拓扑空间 γ] (f : α ->ᵇ β) (g : C(γ, α))
-  证明: ((lipschitz_compContinuous g).dist_le_mul f 0).trans by
-    rw [NNReal.coe_one]; rw [one_mul]; rw [dist_zero_right]
-
-Depends on / 依赖: NNReal, NNReal.coe_one, coe_one, dist_le_mul, dist_zero_right, lipschitz_compContinuous, one_mul
--/
-theorem norm_compContinuous_le [TopologicalSpace γ] (f : α ->ᵇ β) (g : C(γ, α)) :
-    ‖f.compContinuous g‖ <= ‖f‖ :=
-((lipschitz_compContinuous g).dist_le_mul f 0).trans by
-    rw [NNReal.coe_one]; rw [one_mul]; rw [dist_zero_right]
+theorem norm_compContinuous_le [TopologicalSpace γ] (f : α →ᵇ β) (g : C(γ, α)) :
+    ‖f.compContinuous g‖ ≤ ‖f‖ :=
+  ((lipschitz_compContinuous g).dist_le_mul f 0).trans <| by
+    rw [NNReal.coe_one, one_mul, dist_zero_right]
 
 end NormedAddCommGroup
 
@@ -1111,30 +938,17 @@ section NormedSpace
 
 variable {𝕜 : Type*}
 variable [TopologicalSpace α] [SeminormedAddCommGroup β]
-variable {f g : α ->ᵇ β} {x : α} {C : Real}
+variable {f g : α →ᵇ β} {x : α} {C : ℝ}
 
-/--
-Instance `instNormedSpace` / 实例 `instNormedSpace`
-
-English:
-instance instNormedSpace
-  signature: [NormedField 𝕜] [NormedSpace 𝕜 β]
-  body: ⟨fun c f => by
-    refine norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) ?_
-    exact fun x =>
-      norm_smul c (f x) ▸ mul_le_mul_of_nonneg_left (f.norm_coe_le_norm _) (norm_nonneg _)⟩
-
-中文:
-实例 instNormedSpace
-  签名: [赋范域 𝕜] [赋范空间 𝕜 β]
-  定义体: ⟨fun c f => by
-    refine norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) ?_
-    exact fun x =>
-      norm_smul c (f x) ▸ mul_le_mul_of_nonneg_left (f.norm_coe_le_norm _) (norm_nonneg _)⟩
-
-Depends on / 依赖: f.norm_coe_le_norm, mul_le_mul_of_nonneg_left, mul_nonneg, norm_coe_le_norm, norm_nonneg, norm_ofNormedAddCommGroup_le, norm_smul
+/-
+**BoundedContinuousFunction.instNormedSpace** 是 Mathlib 中的一个实例，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：instNormedSpace [NormedField 𝕜] [NormedSpace 𝕜 β] : NormedSpace 𝕜 (α ->ᵇ β
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNormedSpace [NormedField 𝕜] [NormedSpace 𝕜 β] : NormedSpace 𝕜 (α ->ᵇ β) :=
+instance instNormedSpace [NormedField 𝕜] [NormedSpace 𝕜 β] : NormedSpace 𝕜 (α →ᵇ β) :=
   ⟨fun c f => by
     refine norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) ?_
     exact fun x =>
@@ -1148,39 +962,23 @@ variable [SeminormedAddCommGroup γ] [NormedSpace 𝕜 γ]
 
 variable (α) in
 -- TODO does this work in the `IsBoundedSMul` setting, too?
-/--
-Definition of `_root_.ContinuousLinearMap.compLeftContinuousBounded` / `_root_.ContinuousLinearMap.compLeftContinuousBounded` 的定义
+/-- Postcomposition of bounded continuous functions into a normed module by a continuous linear map
+is a continuous linear map.
+Upgraded version of `ContinuousLinearMap.compLeftContinuous`, similar to `LinearMap.compLeft`. -/
+/-
+**BoundedContinuousFunction._root_.ContinuousLinearMap.compLeftContinuousBounded
+** 是 Mathlib 中的一个定义，位于命名空间 `BoundedContinuousFunction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.ContinuousLinearMap.compLeftContinuousBounded
-  signature: (g : β ->L[𝕜] γ)
-  body: LinearMap.mkContinuous
-    { toFun := fun f =>
-        ofNormedAddCommGroup (g ∘ f) (g.continuous.comp f.continuous) (‖g‖ * ‖f‖) fun x =>
-          g.le_opNorm_of_le (f.norm_coe_le_norm x)
-      map_add' := fun f g => by ext; simp
-      map_smul' := fun c f => by ext; simp } ‖g‖ fun f =>
-        norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg g) (norm_nonneg f))
-          (fun x => by exact g.le_opNorm_of_le (f.norm_coe_le_norm x))
-
-@[simp]
-
-中文:
-定义 _root_.连续线性映射.compLeftContinuousBounded
-  签名: (g : β ->L[𝕜] γ)
-  定义体: LinearMap.mkContinuous
-    { toFun := fun f =>
-        ofNormedAddCommGroup (g ∘ f) (g.continuous.comp f.continuous) (‖g‖ * ‖f‖) fun x =>
-          g.le_opNorm_of_le (f.norm_coe_le_norm x)
-      map_add' := fun f g => by ext; simp
-      map_smul' := fun c f => by ext; simp } ‖g‖ fun f =>
-        norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg g) (norm_nonneg f))
-          (fun x => by exact g.le_opNorm_of_le (f.norm_coe_le_norm x))
-
-@[simp]
+--- 原说明 ---
+Postcomposition of bounded continuous functions into a normed module by a contin
+uous linear map
+is a continuous linear map.
+Upgraded version of `ContinuousLinearMap.compLeftContinuous`, similar to `Linear
+Map.compLeft`.
 -/
-protected def _root_.ContinuousLinearMap.compLeftContinuousBounded (g : β ->L[𝕜] γ) :
-    (α ->ᵇ β) ->L[𝕜] α ->ᵇ γ :=
+protected def _root_.ContinuousLinearMap.compLeftContinuousBounded (g : β →L[𝕜] γ) :
+    (α →ᵇ β) →L[𝕜] α →ᵇ γ :=
   LinearMap.mkContinuous
     { toFun := fun f =>
         ofNormedAddCommGroup (g ∘ f) (g.continuous.comp f.continuous) (‖g‖ * ‖f‖) fun x =>
@@ -1191,20 +989,12 @@ protected def _root_.ContinuousLinearMap.compLeftContinuousBounded (g : β ->L[�
           (fun x => by exact g.le_opNorm_of_le (f.norm_coe_le_norm x))
 
 @[simp]
-/--
-theorem `_root_.ContinuousLinearMap.compLeftContinuousBounded_apply` / 定理 `_root_.ContinuousLinearMap.compLeftContinuousBounded_apply`
-
-English:
-theorem _root_.ContinuousLinearMap.compLeftContinuousBounded_apply
-  statement: (g : β ->L[𝕜] γ) (f : α ->ᵇ β)
-  proof: rfl
-
-中文:
-定理 _root_.连续线性映射.compLeftContinuousBounded_apply
-  结论: (g : β ->L[𝕜] γ) (f : α ->ᵇ β)
-  证明: rfl
+/-
+**BoundedContinuousFunction._root_.ContinuousLinearMap.compLeftContinuousBounded
+_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuousFunction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.ContinuousLinearMap.compLeftContinuousBounded_apply (g : β ->L[𝕜] γ) (f : α ->ᵇ β)
+theorem _root_.ContinuousLinearMap.compLeftContinuousBounded_apply (g : β →L[𝕜] γ) (f : α →ᵇ β)
     (x : α) : (g.compLeftContinuousBounded α f) x = g (f x) := rfl
 
 end compLeftContinuousBounded
@@ -1218,34 +1008,22 @@ section NormedField
 variable [TopologicalSpace γ] [NormedField 𝕜] [NormedSpace 𝕜 β]
 
 variable (β 𝕜) in
-/--
-Definition of `compContinuousCLM` / `compContinuousCLM` 的定义
+/-- Precomposition with a continuous map is a continuous linear map from bounded continuous
+functions to bounded continuous functions. -/
+/-
+**BoundedContinuousFunction.compContinuousCLM** 是 Mathlib 中的一个定义，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：compContinuousCLM (g : C(γ, α)) : (α ->ᵇ β) ->L[𝕜] γ ->ᵇ β
+参数：g : C(γ, α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compContinuousCLM
-  signature: (g : C(γ, α))
-  body: LinearMap.mkContinuous
-    { toFun f := f.compContinuous g,
-      map_add' := by intros; ext; simp,
-      map_smul' := by intros; ext; simp }
-    1 (by simpa using norm_compContinuous_le · g)
-
-@[simp]
-
-中文:
-定义 compContinuousCLM
-  签名: (g : C(γ, α))
-  定义体: LinearMap.mkContinuous
-    { toFun f := f.compContinuous g,
-      map_add' := by intros; ext; simp,
-      map_smul' := by intros; ext; simp }
-    1 (by simpa using norm_compContinuous_le · g)
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.mkContinuous, compContinuous, f.compContinuous, intros, map_add, map_smul, mkContinuous, norm_compContinuous_le
+--- 原说明 ---
+Precomposition with a continuous map is a continuous linear map from bounded con
+tinuous
+functions to bounded continuous functions.
 -/
-def compContinuousCLM (g : C(γ, α)) : (α ->ᵇ β) ->L[𝕜] γ ->ᵇ β :=
+def compContinuousCLM (g : C(γ, α)) : (α →ᵇ β) →L[𝕜] γ →ᵇ β :=
   LinearMap.mkContinuous
     { toFun f := f.compContinuous g,
       map_add' := by intros; ext; simp,
@@ -1253,20 +1031,25 @@ def compContinuousCLM (g : C(γ, α)) : (α ->ᵇ β) ->L[𝕜] γ ->ᵇ β :=
     1 (by simpa using norm_compContinuous_le · g)
 
 @[simp]
-/--
-theorem `compContinuousCLM_apply` / 定理 `compContinuousCLM_apply`
-
-English:
-theorem compContinuousCLM_apply
-  given: (f : α ->ᵇ β) (g : C(γ, α))
-  proof: rfl
-
-中文:
-定理 compContinuousCLM_apply
-  条件: (f : α ->ᵇ β) (g : C(γ, α))
-  证明: rfl
+/-
+**BoundedContinuousFunction.compContinuousCLM_apply** 是 Mathlib 中的一个定理，位于命名空间 `B
+oundedContinuousFunction`。
+形式化陈述：compContinuousCLM_apply (f : α ->ᵇ β) (g : C(γ, α)) : f.compContinuousCLM 
+β 𝕜 g = f.compContinuous g
+参数：f : α ->ᵇ β；g : C(γ, α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
-theorem compContinuousCLM_apply (f : α ->ᵇ β) (g : C(γ, α)) :
+theorem compContinuousCLM_apply (f : α →ᵇ β) (g : C(γ, α)) :
   f.compContinuousCLM β 𝕜 g = f.compContinuous g := rfl
 
 end NormedField
@@ -1275,29 +1058,26 @@ section NontriviallyNormedField
 
 variable [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 β] [SeminormedAddCommGroup γ]
 
-/--
-theorem `norm_compContinuousCLM_le_one` / 定理 `norm_compContinuousCLM_le_one`
-
-English:
-theorem norm_compContinuousCLM_le_one
-  given: (g : C(γ, α))
-  statement: ‖compContinuousCLM β 𝕜 g‖ <= 1
-  proof: by
-  refine (compContinuousCLM β 𝕜 g).opNorm_le_bound zero_le_one (fun x => ?_)
-  simpa using norm_compContinuous_le x g
-
-中文:
-定理 norm_compContinuousCLM_le_one
-  条件: (g : C(γ, α))
-  结论: ‖compContinuousCLM β 𝕜 g‖ <= 1
-  证明: by
-  refine (compContinuousCLM β 𝕜 g).opNorm_le_bound zero_le_one (fun x => ?_)
-  simpa using norm_compContinuous_le x g
-
-Depends on / 依赖: compContinuousCLM, norm_compContinuous_le, opNorm_le_bound, zero_le_one
+/-
+**BoundedContinuousFunction.norm_compContinuousCLM_le_one** 是 Mathlib 中的一个定理，位于命
+名空间 `BoundedContinuousFunction`。
+形式化陈述：norm_compContinuousCLM_le_one (g : C(γ, α)) : ‖compContinuousCLM β 𝕜 g‖ <=
+ 1
+参数：g : C(γ, α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `BoundedContinuousFunction.norm_compContinuous_le`：norm_compContinuous_le
+ [TopologicalSpace γ] (f : α ->ᵇ β) (g : C(γ, α)) : ‖f.compContinuous g‖ <= ‖f‖
 -/
-theorem norm_compContinuousCLM_le_one (g : C(γ, α)) : ‖compContinuousCLM β 𝕜 g‖ <= 1 := by
-  refine (compContinuousCLM β 𝕜 g).opNorm_le_bound zero_le_one (fun x => ?_)
+theorem norm_compContinuousCLM_le_one (g : C(γ, α)) : ‖compContinuousCLM β 𝕜 g‖ ≤ 1 := by
+  refine (compContinuousCLM β 𝕜 g).opNorm_le_bound zero_le_one (fun x ↦ ?_)
   simpa using norm_compContinuous_le x g
 
 end NontriviallyNormedField
@@ -1316,248 +1096,356 @@ section Seminormed
 
 variable [NonUnitalSeminormedRing R]
 
-/--
-Instance `instNonUnitalRing` / 实例 `instNonUnitalRing`
-
-English:
-instance instNonUnitalRing
-  signature: : NonUnitalRing (α ->ᵇ R)
-  body: fast_instance%
-  DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => coe_nsmul _ _) fun _ _ => coe_zsmul _ _
-
-中文:
-实例 instNonUnitalRing
-  签名: : 非幺环 (α ->ᵇ R)
-  定义体: fast_instance%
-  DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => coe_nsmul _ _) fun _ _ => coe_zsmul _ _
-
-Depends on / 依赖: fast_instance
+/-
+**BoundedContinuousFunction.instNonUnitalRing** 是 Mathlib 中的一个实例，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：instNonUnitalRing : NonUnitalRing (α ->ᵇ R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
 -/
-instance instNonUnitalRing : NonUnitalRing (α ->ᵇ R) := fast_instance%
+instance instNonUnitalRing : NonUnitalRing (α →ᵇ R) := fast_instance%
   DFunLike.coe_injective.nonUnitalRing _ coe_zero coe_add coe_mul coe_neg coe_sub
     (fun _ _ => coe_nsmul _ _) fun _ _ => coe_zsmul _ _
-
-/--
-Instance `instNonUnitalSeminormedRing` / 实例 `instNonUnitalSeminormedRing`
-
-English:
-instance instNonUnitalSeminormedRing
-  signature: : NonUnitalSeminormedRing (α ->ᵇ R) where
-  body: instSeminormedAddCommGroup
-  __ := instNonUnitalRing
-  norm_mul_le f g := norm_ofNormedAddCommGroup_le _ (by positivity)
-    (fun x => (norm_mul_le _ _).trans <| mul_le_mul
-      (norm_coe_le_norm f x) (norm_coe_le_norm g x) (norm_nonneg _) (norm_nonneg _))
-
-中文:
-实例 instNonUnitalSeminormedRing
-  签名: : 非幺Seminormed环 (α ->ᵇ R) where
-  定义体: instSeminormedAddCommGroup
-  __ := instNonUnitalRing
-  norm_mul_le f g := norm_ofNormedAddCommGroup_le _ (by positivity)
-    (fun x => (norm_mul_le _ _).trans <| mul_le_mul
-      (norm_coe_le_norm f x) (norm_coe_le_norm g x) (norm_nonneg _) (norm_nonneg _))
-
-Depends on / 依赖: instSeminormedAddCommGroup
+/-
+**BoundedContinuousFunction.instNonUnitalSeminormedRing** 是 Mathlib 中的一个实例，位于命名空
+间 `BoundedContinuousFunction`。
+形式化陈述：instNonUnitalSeminormedRing : NonUnitalSeminormedRing (α ->ᵇ R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNonUnitalSeminormedRing : NonUnitalSeminormedRing (α ->ᵇ R) where
+instance instNonUnitalSeminormedRing : NonUnitalSeminormedRing (α →ᵇ R) where
   __ := instSeminormedAddCommGroup
   __ := instNonUnitalRing
   norm_mul_le f g := norm_ofNormedAddCommGroup_le _ (by positivity)
-    (fun x => (norm_mul_le _ _).trans <| mul_le_mul
+    (fun x ↦ (norm_mul_le _ _).trans <| mul_le_mul
       (norm_coe_le_norm f x) (norm_coe_le_norm g x) (norm_nonneg _) (norm_nonneg _))
 
-/--
-lemma `norm_add_eq_max` / 引理 `norm_add_eq_max`
+/-- If the product of bounded continuous functions is zero, then the norm of their sum is the
+maximum of their norms. -/
+/-
+**BoundedContinuousFunction.norm_add_eq_max** 是 Mathlib 中的一个引理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：norm_add_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f +
+ g‖ = max ‖f‖ ‖g‖
+参数：h : f * g = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `IsRightCancelMulZero.to_noZeroDivisors`：∀ (M₀ : Type u_1) [inst : MulZer
+oClass M₀] [IsRightCancelMulZero M₀], NoZeroDivisors M₀
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `BoundedContinuousFunction.norm_le`：norm_le (C0 : (0 : Real) <= C) : ‖f‖ 
+<= C ↔ forall x : α, ‖f x‖ <= C
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_max_of_le_left`：le_max_of_le_left : a <= b -> a <= max b c
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma norm_add_eq_max
-  given: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
-  proof: by
-  have hfg : forall x, f x = 0 ∨ g x = 0 := by simpa [DFunLike.ext_iff, mul_eq_zero] using h
-  have hfg' x : ‖(f + g) x‖ = max ‖f x‖ ‖g x‖ := by obtain (h | h) := hfg x <;> simp [h]
-  have key (c : Real) (hc : 0 <= c) : ‖f + g‖ <= c ↔ max ‖f‖ ‖g‖ <= c := by
-    simp_rw [norm_le hc, hfg', max_le_iff, norm_le hc, forall_and]
-  exact le_antisymm (by rw [key]; positivity) (by rw [← key]; positivity)
-
-中文:
-引理 norm_add_eq_max
-  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
-  证明: by
-  have hfg : forall x, f x = 0 ∨ g x = 0 := by simpa [DFunLike.ext_iff, mul_eq_zero] using h
-  have hfg' x : ‖(f + g) x‖ = max ‖f x‖ ‖g x‖ := by obtain (h | h) := hfg x <;> simp [h]
-  have key (c : Real) (hc : 0 <= c) : ‖f + g‖ <= c ↔ max ‖f‖ ‖g‖ <= c := by
-    simp_rw [norm_le hc, hfg', max_le_iff, norm_le hc, forall_and]
-  exact le_antisymm (by rw [key]; positivity) (by rw [← key]; positivity)
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, forall_and, le_antisymm, max_le_iff, mul_eq_zero, norm_le, simp_rw
+--- 原说明 ---
+If the product of bounded continuous functions is zero, then the norm of their s
+um is the
+maximum of their norms.
 -/
-lemma norm_add_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) :
+lemma norm_add_eq_max [IsCancelMulZero R] {f g : α →ᵇ R} (h : f * g = 0) :
     ‖f + g‖ = max ‖f‖ ‖g‖ := by
-  have hfg : forall x, f x = 0 ∨ g x = 0 := by simpa [DFunLike.ext_iff, mul_eq_zero] using h
+  have hfg : ∀ x, f x = 0 ∨ g x = 0 := by simpa [DFunLike.ext_iff, mul_eq_zero] using h
   have hfg' x : ‖(f + g) x‖ = max ‖f x‖ ‖g x‖ := by obtain (h | h) := hfg x <;> simp [h]
-  have key (c : Real) (hc : 0 <= c) : ‖f + g‖ <= c ↔ max ‖f‖ ‖g‖ <= c := by
+  have key (c : ℝ) (hc : 0 ≤ c) : ‖f + g‖ ≤ c ↔ max ‖f‖ ‖g‖ ≤ c := by
     simp_rw [norm_le hc, hfg', max_le_iff, norm_le hc, forall_and]
   exact le_antisymm (by rw [key]; positivity) (by rw [← key]; positivity)
 
-/--
-lemma `nnnorm_add_eq_max` / 引理 `nnnorm_add_eq_max`
+/-- If the product of bounded continuous functions is zero, then the norm of their sum is the
+maximum of their norms. -/
+/-
+**BoundedContinuousFunction.nnnorm_add_eq_max** 是 Mathlib 中的一个引理，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：nnnorm_add_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f
+ + g‖₊ = max ‖f‖₊ ‖g‖₊
+参数：h : f * g = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用引理 `BoundedContinuousFunction.norm_add_eq_max`：norm_add_eq_max [IsCancelMulZ
+ero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f + g‖ = max ‖f‖ ‖g‖
 
-English:
-lemma nnnorm_add_eq_max
-  given: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
-  proof: NNReal.eq norm_add_eq_max h
-
-中文:
-引理 nnnorm_add_eq_max
-  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
-  证明: NNReal.eq norm_add_eq_max h
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_add_eq_max
+--- 原说明 ---
+If the product of bounded continuous functions is zero, then the norm of their s
+um is the
+maximum of their norms.
 -/
-lemma nnnorm_add_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) :
+lemma nnnorm_add_eq_max [IsCancelMulZero R] {f g : α →ᵇ R} (h : f * g = 0) :
     ‖f + g‖₊ = max ‖f‖₊ ‖g‖₊ :=
-NNReal.eq norm_add_eq_max h
-
-/--
-lemma `norm_sub_eq_max` / 引理 `norm_sub_eq_max`
-
-English:
-lemma norm_sub_eq_max
-  given: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
-  proof: by
-  simpa [sub_eq_add_neg] using norm_add_eq_max (f := f) (g := -g) (by simpa)
-
-中文:
-引理 norm_sub_eq_max
-  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
-  证明: by
-  simpa [sub_eq_add_neg] using norm_add_eq_max (f := f) (g := -g) (by simpa)
-
-Depends on / 依赖: norm_add_eq_max, sub_eq_add_neg
+  NNReal.eq <| norm_add_eq_max h
+/-
+**BoundedContinuousFunction.norm_sub_eq_max** 是 Mathlib 中的一个引理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：norm_sub_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f -
+ g‖ = max ‖f‖ ‖g‖
+参数：h : f * g = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `instBoundedSub`：∀ {R : Type u_1} [inst : SeminormedAddCommGroup R], Boun
+dedSub R
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用引理 `BoundedContinuousFunction.norm_add_eq_max`：norm_add_eq_max [IsCancelMulZ
+ero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f + g‖ = max ‖f‖ ‖g‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
 -/
-lemma norm_sub_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) :
+lemma norm_sub_eq_max [IsCancelMulZero R] {f g : α →ᵇ R} (h : f * g = 0) :
     ‖f - g‖ = max ‖f‖ ‖g‖ := by
   simpa [sub_eq_add_neg] using norm_add_eq_max (f := f) (g := -g) (by simpa)
-
-/--
-lemma `nnnorm_sub_eq_max` / 引理 `nnnorm_sub_eq_max`
-
-English:
-lemma nnnorm_sub_eq_max
-  given: [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0)
-  proof: NNReal.eq norm_sub_eq_max h
-
-中文:
-引理 nnnorm_sub_eq_max
-  条件: [是乘零消去 R] {f g : α ->ᵇ R} (h : f * g = 0)
-  证明: NNReal.eq norm_sub_eq_max h
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_sub_eq_max
+/-
+**BoundedContinuousFunction.nnnorm_sub_eq_max** 是 Mathlib 中的一个引理，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：nnnorm_sub_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f
+ - g‖₊ = max ‖f‖₊ ‖g‖₊
+参数：h : f * g = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `instBoundedSub`：∀ {R : Type u_1} [inst : SeminormedAddCommGroup R], Boun
+dedSub R
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用引理 `BoundedContinuousFunction.norm_sub_eq_max`：norm_sub_eq_max [IsCancelMulZ
+ero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f - g‖ = max ‖f‖ ‖g‖
 -/
-lemma nnnorm_sub_eq_max [IsCancelMulZero R] {f g : α ->ᵇ R} (h : f * g = 0) :
+lemma nnnorm_sub_eq_max [IsCancelMulZero R] {f g : α →ᵇ R} (h : f * g = 0) :
     ‖f - g‖₊ = max ‖f‖₊ ‖g‖₊ :=
-NNReal.eq norm_sub_eq_max h
+  NNReal.eq <| norm_sub_eq_max h
 
 open scoped Function in
-/--
-lemma `nnnorm_sum_eq_sup` / 引理 `nnnorm_sum_eq_sup`
+/-- If the pairwise products of bounded continuous functions are all zero, then the norm of their
+sum is the maximum of their norms. -/
+/-
+**BoundedContinuousFunction.nnnorm_sum_eq_sup** 是 Mathlib 中的一个引理，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：nnnorm_sum_eq_sup [IsCancelMulZero R] {ι : Type*} {f : ι -> (α ->ᵇ R)} (s 
+: Finset ι) (h : Pairwise ((· * · = 0) on f)) : ‖∑ i in s, f i‖₊ = s.sup (‖f ·‖₊
+)
+参数：α ->ᵇ R；s : Finset ι；h : Pairwise ((· * · = 0) on f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nnnorm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖₊ = 0
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `BoundedContinuousFunction.nnnorm_add_eq_max`：nnnorm_add_eq_max [IsCancel
+MulZero R] {f g : α ->ᵇ R} (h : f * g = 0) : ‖f + g‖₊ = max ‖f‖₊ ‖g‖₊
 
-English:
-lemma nnnorm_sum_eq_sup
-  statement: [IsCancelMulZero R] {ι : Type*} {f : ι -> (α ->ᵇ R)} (s : Finset ι)
-  proof: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert j s hj ih =>
-    suffices f j * ∑ i in s, f i = 0 by simpa [hj, ← ih] using nnnorm_add_eq_max this
-    simpa [Finset.mul_sum] using Finset.sum_eq_zero fun i hi => h (by grind)
-
-中文:
-引理 nnnorm_sum_eq_sup
-  结论: [是乘零消去 R] {ι : 类型} {f : ι -> (α ->ᵇ R)} (s : 有限集 ι)
-  证明: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert j s hj ih =>
-    suffices f j * ∑ i in s, f i = 0 by simpa [hj, ← ih] using nnnorm_add_eq_max this
-    simpa [Finset.mul_sum] using Finset.sum_eq_zero fun i hi => h (by grind)
-
-Depends on / 依赖: Finset, Finset.induction_on, Finset.mul_sum, Finset.sum_eq_zero, classical, induction_on, insert, mul_sum, nnnorm_add_eq_max, sum_eq_zero
+--- 原说明 ---
+If the pairwise products of bounded continuous functions are all zero, then the 
+norm of their
+sum is the maximum of their norms.
 -/
-lemma nnnorm_sum_eq_sup [IsCancelMulZero R] {ι : Type*} {f : ι -> (α ->ᵇ R)} (s : Finset ι)
+lemma nnnorm_sum_eq_sup [IsCancelMulZero R] {ι : Type*} {f : ι → (α →ᵇ R)} (s : Finset ι)
     (h : Pairwise ((· * · = 0) on f)) :
-    ‖∑ i in s, f i‖₊ = s.sup (‖f ·‖₊) := by
+    ‖∑ i ∈ s, f i‖₊ = s.sup (‖f ·‖₊) := by
   classical
   induction s using Finset.induction_on with
   | empty => simp
   | insert j s hj ih =>
-    suffices f j * ∑ i in s, f i = 0 by simpa [hj, ← ih] using nnnorm_add_eq_max this
-    simpa [Finset.mul_sum] using Finset.sum_eq_zero fun i hi => h (by grind)
+    suffices f j * ∑ i ∈ s, f i = 0 by simpa [hj, ← ih] using nnnorm_add_eq_max this
+    simpa [Finset.mul_sum] using Finset.sum_eq_zero fun i hi ↦ h (by grind)
 
 end Seminormed
 
-/--
-Instance `instNonUnitalSeminormedCommRing` / 实例 `instNonUnitalSeminormedCommRing`
-
-English:
-instance instNonUnitalSeminormedCommRing
-  signature: [NonUnitalSeminormedCommRing R]
-  body: ext fun _ => mul_comm ..
-
-中文:
-实例 instNonUnitalSeminormedCommRing
-  签名: [非幺SeminormedComm环 R]
-  定义体: ext fun _ => mul_comm ..
-
-Depends on / 依赖: mul_comm
+/-
+**BoundedContinuousFunction.instNonUnitalSeminormedCommRing** 是 Mathlib 中的一个实例，位
+于命名空间 `BoundedContinuousFunction`。
+形式化陈述：instNonUnitalSeminormedCommRing [NonUnitalSeminormedCommRing R] : NonUnita
+lSeminormedCommRing (α ->ᵇ R) where mul_comm _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalSeminormedCommRing [NonUnitalSeminormedCommRing R] :
-    NonUnitalSeminormedCommRing (α ->ᵇ R) where
-  mul_comm _ _ := ext fun _ => mul_comm ..
-
-/--
-Instance `instNonUnitalNormedRing` / 实例 `instNonUnitalNormedRing`
-
-English:
-instance instNonUnitalNormedRing
-  signature: [NonUnitalNormedRing R]
-  body: instNonUnitalSeminormedRing
-  __ := instNormedAddCommGroup
-
-中文:
-实例 instNonUnitalNormedRing
-  签名: [非幺赋范环 R]
-  定义体: instNonUnitalSeminormedRing
-  __ := instNormedAddCommGroup
-
-Depends on / 依赖: instNonUnitalSeminormedRing
+    NonUnitalSeminormedCommRing (α →ᵇ R) where
+  mul_comm _ _ := ext fun _ ↦ mul_comm ..
+/-
+**BoundedContinuousFunction.instNonUnitalNormedRing** 是 Mathlib 中的一个实例，位于命名空间 `B
+oundedContinuousFunction`。
+形式化陈述：instNonUnitalNormedRing [NonUnitalNormedRing R] : NonUnitalNormedRing (α -
+>ᵇ R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNonUnitalNormedRing [NonUnitalNormedRing R] : NonUnitalNormedRing (α ->ᵇ R) where
+instance instNonUnitalNormedRing [NonUnitalNormedRing R] : NonUnitalNormedRing (α →ᵇ R) where
   __ := instNonUnitalSeminormedRing
   __ := instNormedAddCommGroup
-
-/--
-Instance `instNonUnitalNormedCommRing` / 实例 `instNonUnitalNormedCommRing`
-
-English:
-instance instNonUnitalNormedCommRing
-  signature: [NonUnitalNormedCommRing R]
-  body: mul_comm
-
-中文:
-实例 instNonUnitalNormedCommRing
-  签名: [非幺NormedComm环 R]
-  定义体: mul_comm
-
-Depends on / 依赖: mul_comm
+/-
+**BoundedContinuousFunction.instNonUnitalNormedCommRing** 是 Mathlib 中的一个实例，位于命名空
+间 `BoundedContinuousFunction`。
+形式化陈述：instNonUnitalNormedCommRing [NonUnitalNormedCommRing R] : NonUnitalNormedC
+ommRing (α ->ᵇ R) where mul_comm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalNormedCommRing [NonUnitalNormedCommRing R] :
-    NonUnitalNormedCommRing (α ->ᵇ R) where
+    NonUnitalNormedCommRing (α →ᵇ R) where
   mul_comm := mul_comm
 
 end NonUnital
@@ -1567,238 +1455,140 @@ section Seminormed
 variable [SeminormedRing R]
 
 @[simp]
-/--
-theorem `coe_npowRec` / 定理 `coe_npowRec`
-
-English:
-theorem coe_npowRec
-  given: (f : α ->ᵇ R)
-  statement: forall n, ⇑(npowRec n f) = (⇑f) ^ n
-
-中文:
-定理 coe_npowRec
-  条件: (f : α ->ᵇ R)
-  结论: 对任意 n, ⇑(npowRec n f) = (⇑f) ^ n
+/-
+**BoundedContinuousFunction.coe_npowRec** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：∀ {α : Type u} [inst : TopologicalSpace α] {R : Type u_1} [inst_1 : Semino
+rmedRing R]   (f : BoundedContinuousFunction α R) (n : ℕ), ⇑(npowRec n f) = ⇑f ^
+ n
+参数：f : BoundedContinuousFunction α R；n : ℕ；npowRec n f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
 -/
-theorem coe_npowRec (f : α ->ᵇ R) : forall n, ⇑(npowRec n f) = (⇑f) ^ n
+theorem coe_npowRec (f : α →ᵇ R) : ∀ n, ⇑(npowRec n f) = (⇑f) ^ n
   | 0 => by rw [npowRec, pow_zero, coe_one]
   | n + 1 => by rw [npowRec, pow_succ, coe_mul, coe_npowRec f n]
-
-/--
-Instance `hasNatPow` / 实例 `hasNatPow`
-
-English:
-instance hasNatPow
-  signature: : Pow (α ->ᵇ R) Nat where
-  body: { toContinuousMap := f.toContinuousMap ^ n
-      map_bounded' := by simpa [coe_npowRec] using (npowRec n f).map_bounded' }
-
-中文:
-实例 has自然数Pow
-  签名: : 幂 (α ->ᵇ R) 自然数 where
-  定义体: { toContinuousMap := f.toContinuousMap ^ n
-      map_bounded' := by simpa [coe_npowRec] using (npowRec n f).map_bounded' }
-
-Depends on / 依赖: coe_npowRec, f.toContinuousMap, map_bounded, npowRec, toContinuousMap
+/-
+**BoundedContinuousFunction.hasNatPow** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuo
+usFunction`。
+形式化陈述：hasNatPow : Pow (α ->ᵇ R) Nat where pow f n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance hasNatPow : Pow (α ->ᵇ R) Nat where
+instance hasNatPow : Pow (α →ᵇ R) ℕ where
   pow f n :=
     { toContinuousMap := f.toContinuousMap ^ n
       map_bounded' := by simpa [coe_npowRec] using (npowRec n f).map_bounded' }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatCast (α ->ᵇ R)
-  body: ⟨fun n => BoundedContinuousFunction.const _ n⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 自然数嵌入 (α ->ᵇ R)
-  定义体: ⟨fun n => BoundedContinuousFunction.const _ n⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.const
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NatCast (α ->ᵇ R) :=
+instance : NatCast (α →ᵇ R) :=
   ⟨fun n => BoundedContinuousFunction.const _ n⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_natCast` / 定理 `coe_natCast`
-
-English:
-theorem coe_natCast
-  given: (n : Nat)
-  statement: ((n : α ->ᵇ R) : α -> R) = n
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_natCast
-  条件: (n : 自然数)
-  结论: ((n : α ->ᵇ R) : α -> R) = n
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**BoundedContinuousFunction.coe_natCast** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：coe_natCast (n : Nat) : ((n : α ->ᵇ R) : α -> R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_natCast (n : Nat) : ((n : α ->ᵇ R) : α -> R) = n := rfl
+theorem coe_natCast (n : ℕ) : ((n : α →ᵇ R) : α → R) = n := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_ofNat` / 定理 `coe_ofNat`
-
-English:
-theorem coe_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-中文:
-定理 coe_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
+/-
+**BoundedContinuousFunction.coe_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuo
+usFunction`。
+形式化陈述：coe_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : α ->ᵇ R) : α -> R) = ofN
+at(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_ofNat (n : Nat) [n.AtLeastTwo] :
-    ((ofNat(n) : α ->ᵇ R) : α -> R) = ofNat(n) :=
+theorem coe_ofNat (n : ℕ) [n.AtLeastTwo] :
+    ((ofNat(n) : α →ᵇ R) : α → R) = ofNat(n) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IntCast (α ->ᵇ R)
-  body: ⟨fun n => BoundedContinuousFunction.const _ n⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 整数嵌入 (α ->ᵇ R)
-  定义体: ⟨fun n => BoundedContinuousFunction.const _ n⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.const
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IntCast (α ->ᵇ R) :=
+instance : IntCast (α →ᵇ R) :=
   ⟨fun n => BoundedContinuousFunction.const _ n⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_intCast` / 定理 `coe_intCast`
-
-English:
-theorem coe_intCast
-  given: (n : Int)
-  statement: ((n : α ->ᵇ R) : α -> R) = n
-  proof: rfl
-
-中文:
-定理 coe_intCast
-  条件: (n : 整数)
-  结论: ((n : α ->ᵇ R) : α -> R) = n
-  证明: rfl
+/-
+**BoundedContinuousFunction.coe_intCast** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：coe_intCast (n : Int) : ((n : α ->ᵇ R) : α -> R) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_intCast (n : Int) : ((n : α ->ᵇ R) : α -> R) = n := rfl
-
-/--
-Instance `instRing` / 实例 `instRing`
-
-English:
-instance instRing
-  signature: : Ring (α ->ᵇ R)
-  body: fast_instance%
+theorem coe_intCast (n : ℤ) : ((n : α →ᵇ R) : α → R) = n := rfl
+/-
+**BoundedContinuousFunction.instRing** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuou
+sFunction`。
+形式化陈述：instRing : Ring (α ->ᵇ R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance instRing : Ring (α →ᵇ R) := fast_instance%
   DFunLike.coe_injective.ring _ coe_zero coe_one coe_add coe_mul coe_neg coe_sub
     (fun _ _ => coe_nsmul _ _) (fun _ _ => coe_zsmul _ _) (fun _ _ => coe_pow _ _) coe_natCast
     coe_intCast
-
-中文:
-实例 instRing
-  签名: : 环 (α ->ᵇ R)
-  定义体: fast_instance%
-  DFunLike.coe_injective.ring _ coe_zero coe_one coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => coe_nsmul _ _) (fun _ _ => coe_zsmul _ _) (fun _ _ => coe_pow _ _) coe_natCast
-    coe_intCast
-
-Depends on / 依赖: fast_instance
+/-
+**BoundedContinuousFunction.instSeminormedRing** 是 Mathlib 中的一个实例，位于命名空间 `Bounde
+dContinuousFunction`。
+形式化陈述：instSeminormedRing : SeminormedRing (α ->ᵇ R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instRing : Ring (α ->ᵇ R) := fast_instance%
-  DFunLike.coe_injective.ring _ coe_zero coe_one coe_add coe_mul coe_neg coe_sub
-    (fun _ _ => coe_nsmul _ _) (fun _ _ => coe_zsmul _ _) (fun _ _ => coe_pow _ _) coe_natCast
-    coe_intCast
-
-/--
-Instance `instSeminormedRing` / 实例 `instSeminormedRing`
-
-English:
-instance instSeminormedRing
-  signature: : SeminormedRing (α ->ᵇ R) where
-  body: instRing
-  __ := instNonUnitalSeminormedRing
-
-中文:
-实例 instSeminormedRing
-  签名: : Seminormed环 (α ->ᵇ R) where
-  定义体: instRing
-  __ := instNonUnitalSeminormedRing
-
-Depends on / 依赖: instRing
--/
-instance instSeminormedRing : SeminormedRing (α ->ᵇ R) where
+instance instSeminormedRing : SeminormedRing (α →ᵇ R) where
   __ := instRing
   __ := instNonUnitalSeminormedRing
 
 /-- Composition on the left by a (lipschitz-continuous) homomorphism of topological semirings, as a
 `RingHom`. Similar to `RingHom.compLeftContinuous`. -/
 @[simps!]
-/--
-Definition of `_root_.RingHom.compLeftContinuousBounded` / `_root_.RingHom.compLeftContinuousBounded` 的定义
+/-
+**BoundedContinuousFunction._root_.RingHom.compLeftContinuousBounded** 是 Mathlib
+ 中的一个定义，位于命名空间 `BoundedContinuousFunction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.RingHom.compLeftContinuousBounded
-  signature: (α : Type*)
-  body: { g.toMonoidHom.compLeftContinuousBounded α hg,
-    g.toAddMonoidHom.compLeftContinuousBounded α hg with }
-
-中文:
-定义 _root_.环态射.compLeftContinuousBounded
-  签名: (α : 类型)
-  定义体: { g.toMonoidHom.compLeftContinuousBounded α hg,
-    g.toAddMonoidHom.compLeftContinuousBounded α hg with }
+--- 原说明 ---
+Composition on the left by a (lipschitz-continuous) homomorphism of topological 
+semirings, as a
+`RingHom`. Similar to `RingHom.compLeftContinuous`.
 -/
 protected def _root_.RingHom.compLeftContinuousBounded (α : Type*)
     [TopologicalSpace α] [SeminormedRing β] [SeminormedRing γ]
-    (g : β ->+* γ) {C : NNReal} (hg : LipschitzWith C g) : (α ->ᵇ β) ->+* (α ->ᵇ γ) :=
+    (g : β →+* γ) {C : NNReal} (hg : LipschitzWith C g) : (α →ᵇ β) →+* (α →ᵇ γ) :=
   { g.toMonoidHom.compLeftContinuousBounded α hg,
     g.toAddMonoidHom.compLeftContinuousBounded α hg with }
 
 end Seminormed
 
-/--
-Instance `instNormedRing` / 实例 `instNormedRing`
-
-English:
-instance instNormedRing
-  signature: [NormedRing R]
-  body: instRing
-  __ := instNonUnitalNormedRing
-
-中文:
-实例 instNormedRing
-  签名: [赋范环 R]
-  定义体: instRing
-  __ := instNonUnitalNormedRing
-
-Depends on / 依赖: instRing
+/-
+**BoundedContinuousFunction.instNormedRing** 是 Mathlib 中的一个实例，位于命名空间 `BoundedCon
+tinuousFunction`。
+形式化陈述：instNormedRing [NormedRing R] : NormedRing (α ->ᵇ R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNormedRing [NormedRing R] : NormedRing (α ->ᵇ R) where
+instance instNormedRing [NormedRing R] : NormedRing (α →ᵇ R) where
   __ := instRing
   __ := instNonUnitalNormedRing
 
@@ -1808,63 +1598,35 @@ section NormedCommRing
 
 variable [TopologicalSpace α] {R : Type*}
 
-/--
-Instance `instCommRing` / 实例 `instCommRing`
-
-English:
-instance instCommRing
-  signature: [SeminormedCommRing R]
-  body: ext fun _ => mul_comm _ _
-
-中文:
-实例 instCommRing
-  签名: [SeminormedComm环 R]
-  定义体: ext fun _ => mul_comm _ _
-
-Depends on / 依赖: mul_comm
+/-
+**BoundedContinuousFunction.instCommRing** 是 Mathlib 中的一个实例，位于命名空间 `BoundedConti
+nuousFunction`。
+形式化陈述：instCommRing [SeminormedCommRing R] : CommRing (α ->ᵇ R) where mul_comm _ 
+_
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCommRing [SeminormedCommRing R] : CommRing (α ->ᵇ R) where
-  mul_comm _ _ := ext fun _ => mul_comm _ _
-
-/--
-Instance `instSeminormedCommRing` / 实例 `instSeminormedCommRing`
-
-English:
-instance instSeminormedCommRing
-  signature: [SeminormedCommRing R]
-  body: instCommRing
-  __ := instNonUnitalSeminormedRing
-
-中文:
-实例 instSeminormedCommRing
-  签名: [SeminormedComm环 R]
-  定义体: instCommRing
-  __ := instNonUnitalSeminormedRing
-
-Depends on / 依赖: instCommRing
+instance instCommRing [SeminormedCommRing R] : CommRing (α →ᵇ R) where
+  mul_comm _ _ := ext fun _ ↦ mul_comm _ _
+/-
+**BoundedContinuousFunction.instSeminormedCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Bo
+undedContinuousFunction`。
+形式化陈述：instSeminormedCommRing [SeminormedCommRing R] : SeminormedCommRing (α ->ᵇ 
+R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSeminormedCommRing [SeminormedCommRing R] : SeminormedCommRing (α ->ᵇ R) where
+instance instSeminormedCommRing [SeminormedCommRing R] : SeminormedCommRing (α →ᵇ R) where
   __ := instCommRing
   __ := instNonUnitalSeminormedRing
-
-/--
-Instance `instNormedCommRing` / 实例 `instNormedCommRing`
-
-English:
-instance instNormedCommRing
-  signature: [NormedCommRing R]
-  body: instSeminormedCommRing
-  __ := instNormedAddCommGroup
-
-中文:
-实例 instNormedCommRing
-  签名: [NormedComm环 R]
-  定义体: instSeminormedCommRing
-  __ := instNormedAddCommGroup
-
-Depends on / 依赖: instSeminormedCommRing
+/-
+**BoundedContinuousFunction.instNormedCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Bounde
+dContinuousFunction`。
+形式化陈述：instNormedCommRing [NormedCommRing R] : NormedCommRing (α ->ᵇ R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNormedCommRing [NormedCommRing R] : NormedCommRing (α ->ᵇ R) where
+instance instNormedCommRing [NormedCommRing R] : NormedCommRing (α →ᵇ R) where
   __ := instSeminormedCommRing
   __ := instNormedAddCommGroup
 
@@ -1876,59 +1638,27 @@ section NonUnitalAlgebra
 variable {𝕜 : Type*} [PseudoMetricSpace 𝕜] [TopologicalSpace α] [NonUnitalSeminormedRing β]
 variable [Zero 𝕜] [SMul 𝕜 β] [IsBoundedSMul 𝕜 β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsScalarTower
-  signature: 𝕜 β β] : IsScalarTower 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
-  body: ext fun _ => smul_mul_assoc ..
-
-中文:
-实例 [标量塔
-  签名: 𝕜 β β] : 标量塔 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
-  定义体: ext fun _ => smul_mul_assoc ..
-
-Depends on / 依赖: smul_mul_assoc
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsScalarTower 𝕜 β β] : IsScalarTower 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
-  smul_assoc _ _ _ := ext fun _ => smul_mul_assoc ..
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: 𝕜 β β] : SMulCommClass 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
-  body: ext fun _ => (mul_smul_comm ..).symm
-
-中文:
-实例 [标量交换类
-  签名: 𝕜 β β] : 标量交换类 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
-  定义体: ext fun _ => (mul_smul_comm ..).symm
-
-Depends on / 依赖: mul_smul_comm
+instance [IsScalarTower 𝕜 β β] : IsScalarTower 𝕜 (α →ᵇ β) (α →ᵇ β) where
+  smul_assoc _ _ _ := ext fun _ ↦ smul_mul_assoc ..
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMulCommClass 𝕜 β β] : SMulCommClass 𝕜 (α ->ᵇ β) (α ->ᵇ β) where
-  smul_comm _ _ _ := ext fun _ => (mul_smul_comm ..).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: 𝕜 β β] : SMulCommClass (α ->ᵇ β) 𝕜 (α ->ᵇ β) where
-  body: ext fun _ => mul_smul_comm ..
-
-中文:
-实例 [标量交换类
-  签名: 𝕜 β β] : 标量交换类 (α ->ᵇ β) 𝕜 (α ->ᵇ β) where
-  定义体: ext fun _ => mul_smul_comm ..
-
-Depends on / 依赖: mul_smul_comm
+instance [SMulCommClass 𝕜 β β] : SMulCommClass 𝕜 (α →ᵇ β) (α →ᵇ β) where
+  smul_comm _ _ _ := ext fun _ ↦ (mul_smul_comm ..).symm
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMulCommClass 𝕜 β β] : SMulCommClass (α ->ᵇ β) 𝕜 (α ->ᵇ β) where
-  smul_comm _ _ _ := ext fun _ => mul_smul_comm ..
+instance [SMulCommClass 𝕜 β β] : SMulCommClass (α →ᵇ β) 𝕜 (α →ᵇ β) where
+  smul_comm _ _ _ := ext fun _ ↦ mul_smul_comm ..
 
 end NonUnitalAlgebra
 
@@ -1937,103 +1667,87 @@ section NormedAlgebra
 variable {𝕜 : Type*} [NormedField 𝕜] [TopologicalSpace α]
 variable [NormedRing γ] [NormedAlgebra 𝕜 γ]
 
-/--
-Definition of `C` / `C` 的定义
+/-- `BoundedContinuousFunction.const` as a `RingHom`. -/
+/-
+**BoundedContinuousFunction.C** 是 Mathlib 中的一个定义，位于命名空间 `BoundedContinuousFuncti
+on`。
+形式化陈述：C : 𝕜 ->+* α ->ᵇ γ where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition C
-  signature: : 𝕜 ->+* α ->ᵇ γ where
-  body: fun c : 𝕜 => const α ((algebraMap 𝕜 γ) c)
-  map_one' := ext fun _ => (algebraMap 𝕜 γ).map_one
-  map_mul' _ _ := ext fun _ => (algebraMap 𝕜 γ).map_mul _ _
-  map_zero' := ext fun _ => (algebraMap 𝕜 γ).map_zero
-  map_add' _ _ := ext fun _ => (algebraMap 𝕜 γ).map_add _ _
-
-中文:
-定义 C
-  签名: : 𝕜 ->+* α ->ᵇ γ where
-  定义体: fun c : 𝕜 => const α ((algebraMap 𝕜 γ) c)
-  map_one' := ext fun _ => (algebraMap 𝕜 γ).map_one
-  map_mul' _ _ := ext fun _ => (algebraMap 𝕜 γ).map_mul _ _
-  map_zero' := ext fun _ => (algebraMap 𝕜 γ).map_zero
-  map_add' _ _ := ext fun _ => (algebraMap 𝕜 γ).map_add _ _
-
-Depends on / 依赖: algebraMap
+--- 原说明 ---
+`BoundedContinuousFunction.const` as a `RingHom`.
 -/
-def C : 𝕜 ->+* α ->ᵇ γ where
+def C : 𝕜 →+* α →ᵇ γ where
   toFun := fun c : 𝕜 => const α ((algebraMap 𝕜 γ) c)
   map_one' := ext fun _ => (algebraMap 𝕜 γ).map_one
   map_mul' _ _ := ext fun _ => (algebraMap 𝕜 γ).map_mul _ _
   map_zero' := ext fun _ => (algebraMap 𝕜 γ).map_zero
   map_add' _ _ := ext fun _ => (algebraMap 𝕜 γ).map_add _ _
-
-/--
-Instance `instAlgebra` / 实例 `instAlgebra`
-
-English:
-instance instAlgebra
-  signature: : Algebra 𝕜 (α ->ᵇ γ) where
-  body: C
-  commutes' _ _ := ext fun _ => Algebra.commutes' _ _
-  smul_def' _ _ := ext fun _ => Algebra.smul_def' _ _
-
-@[simp]
-
-中文:
-实例 instAlgebra
-  签名: : 代数 𝕜 (α ->ᵇ γ) where
-  定义体: C
-  commutes' _ _ := ext fun _ => Algebra.commutes' _ _
-  smul_def' _ _ := ext fun _ => Algebra.smul_def' _ _
-
-@[simp]
+/-
+**BoundedContinuousFunction.instAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：instAlgebra : Algebra 𝕜 (α ->ᵇ γ) where algebraMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instAlgebra : Algebra 𝕜 (α ->ᵇ γ) where
+instance instAlgebra : Algebra 𝕜 (α →ᵇ γ) where
   algebraMap := C
-  commutes' _ _ := ext fun _ => Algebra.commutes' _ _
-  smul_def' _ _ := ext fun _ => Algebra.smul_def' _ _
+  commutes' _ _ := ext fun _ ↦ Algebra.commutes' _ _
+  smul_def' _ _ := ext fun _ ↦ Algebra.smul_def' _ _
 
 @[simp]
-/--
-theorem `algebraMap_apply` / 定理 `algebraMap_apply`
-
-English:
-theorem algebraMap_apply
-  given: (k : 𝕜) (a : α)
-  statement: algebraMap 𝕜 (α ->ᵇ γ) k a = k • (1 : γ)
-  proof: by
-  simp only [Algebra.algebraMap_eq_smul_one, coe_smul, coe_one, Pi.one_apply]
-
-中文:
-定理 algebraMap_apply
-  条件: (k : 𝕜) (a : α)
-  结论: algebraMap 𝕜 (α ->ᵇ γ) k a = k • (1 : γ)
-  证明: by
-  simp only [Algebra.algebraMap_eq_smul_one, coe_smul, coe_one, Pi.one_apply]
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Pi.one_apply, algebraMap_eq_smul_one, coe_one, coe_smul, one_apply
+/-
+**BoundedContinuousFunction.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoundedC
+ontinuousFunction`。
+形式化陈述：algebraMap_apply (k : 𝕜) (a : α) : algebraMap 𝕜 (α ->ᵇ γ) k a = k • (1 : γ
+)
+参数：k : 𝕜；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instBoundedMul`：∀ {R : Type u_1} [inst : NonUnitalSeminormedRing R], Bou
+ndedMul R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem algebraMap_apply (k : 𝕜) (a : α) : algebraMap 𝕜 (α ->ᵇ γ) k a = k • (1 : γ) := by
+theorem algebraMap_apply (k : 𝕜) (a : α) : algebraMap 𝕜 (α →ᵇ γ) k a = k • (1 : γ) := by
   simp only [Algebra.algebraMap_eq_smul_one, coe_smul, coe_one, Pi.one_apply]
-
-/--
-Instance `instNormedAlgebra` / 实例 `instNormedAlgebra`
-
-English:
-instance instNormedAlgebra
-  signature: : NormedAlgebra 𝕜 (α ->ᵇ γ) where
-  body: instAlgebra
-  __ := instNormedSpace
-
-中文:
-实例 instNormedAlgebra
-  签名: : 赋范代数 𝕜 (α ->ᵇ γ) where
-  定义体: instAlgebra
-  __ := instNormedSpace
-
-Depends on / 依赖: instAlgebra
+/-
+**BoundedContinuousFunction.instNormedAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Bounded
+ContinuousFunction`。
+形式化陈述：instNormedAlgebra : NormedAlgebra 𝕜 (α ->ᵇ γ) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNormedAlgebra : NormedAlgebra 𝕜 (α ->ᵇ γ) where
+instance instNormedAlgebra : NormedAlgebra 𝕜 (α →ᵇ γ) where
   __ := instAlgebra
   __ := instNormedSpace
 
@@ -2042,56 +1756,44 @@ variable (𝕜)
 /-- Composition on the left by a (lipschitz-continuous) homomorphism of topological `R`-algebras,
 as an `AlgHom`. Similar to `AlgHom.compLeftContinuous`. -/
 @[simps!]
-/--
-Definition of `AlgHom.compLeftContinuousBounded` / `AlgHom.compLeftContinuousBounded` 的定义
+/-
+**BoundedContinuousFunction.AlgHom.compLeftContinuousBounded** 是 Mathlib 中的一个定义，
+位于命名空间 `BoundedContinuousFunction.AlgHom`。
+形式化陈述：{α : Type u} →   {β : Type v} →     {γ : Type w} →       (𝕜 : Type u_1) → 
+        [inst : NormedField 𝕜] →           [inst_1 : TopologicalSpace α] →      
+       [inst_2 : NormedRing γ] →               [inst_3 : NormedAlgebra 𝕜 γ] →   
+              [inst_4 : NormedRing β] →                   [inst_5 : NormedAlgebr
+a 𝕜 β] →                     (g : β →ₐ[𝕜] γ) →                       {C : NNReal
+} →                         LipschitzWith C ⇑g → BoundedContinuousFunction α β →
+ₐ[𝕜] BoundedContinuousFunction α γ
+参数：𝕜 : Type u_1；g : β →ₐ[𝕜] γ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AlgHom.compLeftContinuousBounded
-  signature: [NormedRing β] [NormedAlgebra 𝕜 β]
-  body: { g.toRingHom.compLeftContinuousBounded α hg with
-    commutes' := fun _ => DFunLike.ext _ _ fun _ => g.commutes' _ }
-
-中文:
-定义 代数态射.compLeftContinuousBounded
-  签名: [赋范环 β] [赋范代数 𝕜 β]
-  定义体: { g.toRingHom.compLeftContinuousBounded α hg with
-    commutes' := fun _ => DFunLike.ext _ _ fun _ => g.commutes' _ }
+--- 原说明 ---
+Composition on the left by a (lipschitz-continuous) homomorphism of topological 
+`R`-algebras,
+as an `AlgHom`. Similar to `AlgHom.compLeftContinuous`.
 -/
 protected def AlgHom.compLeftContinuousBounded [NormedRing β] [NormedAlgebra 𝕜 β]
-    (g : β ->ₐ[𝕜] γ) {C : NNReal} (hg : LipschitzWith C g) : (α ->ᵇ β) ->ₐ[𝕜] (α ->ᵇ γ) :=
+    (g : β →ₐ[𝕜] γ) {C : NNReal} (hg : LipschitzWith C g) : (α →ᵇ β) →ₐ[𝕜] (α →ᵇ γ) :=
   { g.toRingHom.compLeftContinuousBounded α hg with
     commutes' := fun _ => DFunLike.ext _ _ fun _ => g.commutes' _ }
 
 /-- The algebra-homomorphism forgetting that a bounded continuous function is bounded. -/
 @[simps]
-/--
-Definition of `toContinuousMapₐ` / `toContinuousMapₐ` 的定义
+/-
+**BoundedContinuousFunction.toContinuousMap** 是 Mathlib 中的一个定义，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：{α : Type u} →   {β : Type v} → [inst : TopologicalSpace α] → [inst_1 : Ps
+eudoMetricSpace β] → BoundedContinuousFunction α β → C(α, β)
+参数：α, β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toContinuousMapₐ
-  signature: : (α ->ᵇ γ) ->ₐ[𝕜] C(α, γ) where
-  body: (↑)
-  map_one' := rfl
-  map_mul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  commutes' _ := rfl
-
-@[simp]
-
-中文:
-定义 toContinuousMapₐ
-  签名: : (α ->ᵇ γ) ->ₐ[𝕜] C(α, γ) where
-  定义体: (↑)
-  map_one' := rfl
-  map_mul' _ _ := rfl
-  map_zero' := rfl
-  map_add' _ _ := rfl
-  commutes' _ := rfl
-
-@[simp]
+--- 原说明 ---
+The algebra-homomorphism forgetting that a bounded continuous function is bounde
+d.
 -/
-def toContinuousMapₐ : (α ->ᵇ γ) ->ₐ[𝕜] C(α, γ) where
+def toContinuousMapₐ : (α →ᵇ γ) →ₐ[𝕜] C(α, γ) where
   toFun := (↑)
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -2100,105 +1802,75 @@ def toContinuousMapₐ : (α ->ᵇ γ) ->ₐ[𝕜] C(α, γ) where
   commutes' _ := rfl
 
 @[simp]
-/--
-theorem `coe_toContinuousMapₐ` / 定理 `coe_toContinuousMapₐ`
-
-English:
-theorem coe_toContinuousMapₐ
-  given: (f : α ->ᵇ γ)
-  statement: (f.toContinuousMapₐ 𝕜 : α -> γ) = f
-  proof: rfl
-
-中文:
-定理 coe_toContinuousMapₐ
-  条件: (f : α ->ᵇ γ)
-  结论: (f.toContinuousMapₐ 𝕜 : α -> γ) = f
-  证明: rfl
+/-
+**BoundedContinuousFunction.coe_toContinuousMap** 是 Mathlib 中的一个定理，位于命名空间 `Bound
+edContinuousFunction`。
+形式化陈述：coe_toContinuousMap (f : α ->ᵇ β) : (f.toContinuousMap : α -> β) = f
+参数：f : α ->ᵇ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toContinuousMapₐ (f : α ->ᵇ γ) : (f.toContinuousMapₐ 𝕜 : α -> γ) = f := rfl
+theorem coe_toContinuousMapₐ (f : α →ᵇ γ) : (f.toContinuousMapₐ 𝕜 : α → γ) = f := rfl
 
 variable {𝕜} [SeminormedAddCommGroup β] [NormedSpace 𝕜 β]
 
+/-! ### Structure as normed module over scalar functions
 
-/--
-Instance `instSMul'` / 实例 `instSMul'`
+If `β` is a normed `𝕜`-space, then we show that the space of bounded continuous
+functions from `α` to `β` is naturally a module over the algebra of bounded continuous
+functions from `α` to `𝕜`. -/
 
-English:
-instance instSMul'
-  signature: : SMul (α ->ᵇ 𝕜) (α ->ᵇ β) where
-  body: ofNormedAddCommGroup (fun x => f x • g x) (f.continuous.smul g.continuous) (‖f‖ * ‖g‖) fun x =>
-      calc
-        ‖f x • g x‖ <= ‖f x‖ * ‖g x‖ := norm_smul_le _ _
-        _ <= ‖f‖ * ‖g‖ :=
-          mul_le_mul (f.norm_coe_le_norm _) (g.norm_coe_le_norm _) (norm_nonneg _) (norm_nonneg _)
+/-
+**BoundedContinuousFunction.instSMul'** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuo
+usFunction`。
+形式化陈述：instSMul' : SMul (α ->ᵇ 𝕜) (α ->ᵇ β) where smul f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 instSMul'
-  签名: : 标量乘法 (α ->ᵇ 𝕜) (α ->ᵇ β) where
-  定义体: ofNormedAddCommGroup (fun x => f x • g x) (f.continuous.smul g.continuous) (‖f‖ * ‖g‖) fun x =>
-      calc
-        ‖f x • g x‖ <= ‖f x‖ * ‖g x‖ := norm_smul_le _ _
-        _ <= ‖f‖ * ‖g‖ :=
-          mul_le_mul (f.norm_coe_le_norm _) (g.norm_coe_le_norm _) (norm_nonneg _) (norm_nonneg _)
+--- 原说明 ---
+### Structure as normed module over scalar functions
 
-Depends on / 依赖: continuous, f.continuous.smul, f.norm_coe_le_norm, g.continuous, g.norm_coe_le_norm, mul_le_mul, norm_coe_le_norm, norm_nonneg, norm_smul_le, ofNormedAddCommGroup
+If `β` is a normed `𝕜`-space, then we show that the space of bounded continuous
+functions from `α` to `β` is naturally a module over the algebra of bounded cont
+inuous
+functions from `α` to `𝕜`.
 -/
-instance instSMul' : SMul (α ->ᵇ 𝕜) (α ->ᵇ β) where
+instance instSMul' : SMul (α →ᵇ 𝕜) (α →ᵇ β) where
   smul f g :=
     ofNormedAddCommGroup (fun x => f x • g x) (f.continuous.smul g.continuous) (‖f‖ * ‖g‖) fun x =>
       calc
-        ‖f x • g x‖ <= ‖f x‖ * ‖g x‖ := norm_smul_le _ _
-        _ <= ‖f‖ * ‖g‖ :=
+        ‖f x • g x‖ ≤ ‖f x‖ * ‖g x‖ := norm_smul_le _ _
+        _ ≤ ‖f‖ * ‖g‖ :=
           mul_le_mul (f.norm_coe_le_norm _) (g.norm_coe_le_norm _) (norm_nonneg _) (norm_nonneg _)
-
-/--
-Instance `instModule'` / 实例 `instModule'`
-
-English:
-instance instModule'
-  signature: : Module (α ->ᵇ 𝕜) (α ->ᵇ β)
-  body: Module.ofMinimalAxioms
-      (fun c _ _ => ext fun a => smul_add (c a) _ _)
-      (fun _ _ _ => ext fun _ => add_smul _ _ _)
-      (fun _ _ _ => ext fun _ => mul_smul _ _ _)
-      (fun f => ext fun x => one_smul 𝕜 (f x))
-
-中文:
-实例 instModule'
-  签名: : 模 (α ->ᵇ 𝕜) (α ->ᵇ β)
-  定义体: Module.ofMinimalAxioms
-      (fun c _ _ => ext fun a => smul_add (c a) _ _)
-      (fun _ _ _ => ext fun _ => add_smul _ _ _)
-      (fun _ _ _ => ext fun _ => mul_smul _ _ _)
-      (fun f => ext fun x => one_smul 𝕜 (f x))
-
-Depends on / 依赖: Module, Module.ofMinimalAxioms, add_smul, mul_smul, ofMinimalAxioms, one_smul, smul_add
+/-
+**BoundedContinuousFunction.instModule'** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：instModule' : Module (α ->ᵇ 𝕜) (α ->ᵇ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instModule' : Module (α ->ᵇ 𝕜) (α ->ᵇ β) :=
+instance instModule' : Module (α →ᵇ 𝕜) (α →ᵇ β) :=
   Module.ofMinimalAxioms
       (fun c _ _ => ext fun a => smul_add (c a) _ _)
       (fun _ _ _ => ext fun _ => add_smul _ _ _)
       (fun _ _ _ => ext fun _ => mul_smul _ _ _)
       (fun f => ext fun x => one_smul 𝕜 (f x))
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/- TODO: When `NormedModule` has been added to `Analysis.Normed.Module.Basic`, this
+shows that the space of bounded continuous functions from `α` to `β` is naturally a normed
+module over the algebra of bounded continuous functions from `α` to `𝕜`. -/
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: IsBoundedSMul (α ->ᵇ 𝕜) (α ->ᵇ β)
-  body: IsBoundedSMul.of_norm_smul_le fun _ _ =>
-    norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) _
-
-中文:
-实例 :
-  签名: 是BoundedSMul (α ->ᵇ 𝕜) (α ->ᵇ β)
-  定义体: IsBoundedSMul.of_norm_smul_le fun _ _ =>
-    norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) _
-
-Depends on / 依赖: IsBoundedSMul, IsBoundedSMul.of_norm_smul_le, mul_nonneg, norm_nonneg, norm_ofNormedAddCommGroup_le, of_norm_smul_le
+--- 原说明 ---
+TODO: When `NormedModule` has been added to `Analysis.Normed.Module.Basic`, this
+shows that the space of bounded continuous functions from `α` to `β` is naturall
+y a normed
+module over the algebra of bounded continuous functions from `α` to `𝕜`.
 -/
-instance : IsBoundedSMul (α ->ᵇ 𝕜) (α ->ᵇ β) :=
+instance : IsBoundedSMul (α →ᵇ 𝕜) (α →ᵇ β) :=
   IsBoundedSMul.of_norm_smul_le fun _ _ =>
     norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg _) (norm_nonneg _)) _
 
@@ -2209,291 +1881,195 @@ section NormedLatticeOrderedGroup
 variable [TopologicalSpace α]
   [NormedAddCommGroup β] [Lattice β] [HasSolidNorm β] [IsOrderedAddMonoid β]
 
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: : PartialOrder (α ->ᵇ β)
-  body: PartialOrder.lift (fun f => f.toFun) (by simp [Injective])
-
-中文:
-实例 instPartialOrder
-  签名: : 偏序 (α ->ᵇ β)
-  定义体: PartialOrder.lift (fun f => f.toFun) (by simp [Injective])
-
-Depends on / 依赖: Injective, PartialOrder, PartialOrder.lift, f.toFun
+/-
+**BoundedContinuousFunction.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `BoundedC
+ontinuousFunction`。
+形式化陈述：instPartialOrder : PartialOrder (α ->ᵇ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instPartialOrder : PartialOrder (α ->ᵇ β) :=
+instance instPartialOrder : PartialOrder (α →ᵇ β) :=
   PartialOrder.lift (fun f => f.toFun) (by simp [Injective])
-
-/--
-Instance `instSup` / 实例 `instSup`
-
-English:
-instance instSup
-  signature: : Max (α ->ᵇ β) where
-  body: { toFun := f ⊔ g
-      continuous_toFun := f.continuous.sup g.continuous
-      map_bounded' := by
-        obtain ⟨C₁, hf⟩ := f.bounded
-        obtain ⟨C₂, hg⟩ := g.bounded
-        refine ⟨C₁ + C₂, fun x y => ?_⟩
-        simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_sup_sub_sup_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
-
-中文:
-实例 instSup
-  签名: : 最大值 (α ->ᵇ β) where
-  定义体: { toFun := f ⊔ g
-      continuous_toFun := f.continuous.sup g.continuous
-      map_bounded' := by
-        obtain ⟨C₁, hf⟩ := f.bounded
-        obtain ⟨C₂, hg⟩ := g.bounded
-        refine ⟨C₁ + C₂, fun x y => ?_⟩
-        simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_sup_sub_sup_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
-
-Depends on / 依赖: add_le_add, bounded, continuous, continuous_toFun, dist_eq_norm_sub, f.bounded, f.continuous.sup, g.bounded, g.continuous, map_bounded, norm_sup_sub_sup_le_add_norm, simp_rw
+/-
+**BoundedContinuousFunction.instSup** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：instSup : Max (α ->ᵇ β) where max f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSup : Max (α ->ᵇ β) where
+instance instSup : Max (α →ᵇ β) where
   max f g :=
     { toFun := f ⊔ g
       continuous_toFun := f.continuous.sup g.continuous
       map_bounded' := by
         obtain ⟨C₁, hf⟩ := f.bounded
         obtain ⟨C₂, hg⟩ := g.bounded
-        refine ⟨C₁ + C₂, fun x y => ?_⟩
+        refine ⟨C₁ + C₂, fun x y ↦ ?_⟩
         simp_rw [dist_eq_norm_sub] at hf hg ⊢
         exact (norm_sup_sub_sup_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
-
-/--
-Instance `instInf` / 实例 `instInf`
-
-English:
-instance instInf
-  signature: : Min (α ->ᵇ β) where
-  body: { toFun := f ⊓ g
-      continuous_toFun := f.continuous.inf g.continuous
-      map_bounded' := by
-        obtain ⟨C₁, hf⟩ := f.bounded
-        obtain ⟨C₂, hg⟩ := g.bounded
-        refine ⟨C₁ + C₂, fun x y => ?_⟩
-        simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_inf_sub_inf_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
-
-中文:
-实例 instInf
-  签名: : 最小值 (α ->ᵇ β) where
-  定义体: { toFun := f ⊓ g
-      continuous_toFun := f.continuous.inf g.continuous
-      map_bounded' := by
-        obtain ⟨C₁, hf⟩ := f.bounded
-        obtain ⟨C₂, hg⟩ := g.bounded
-        refine ⟨C₁ + C₂, fun x y => ?_⟩
-        simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_inf_sub_inf_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
-
-Depends on / 依赖: add_le_add, bounded, continuous, continuous_toFun, dist_eq_norm_sub, f.bounded, f.continuous.inf, g.bounded, g.continuous, map_bounded, norm_inf_sub_inf_le_add_norm, simp_rw
+/-
+**BoundedContinuousFunction.instInf** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：instInf : Min (α ->ᵇ β) where min f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instInf : Min (α ->ᵇ β) where
+instance instInf : Min (α →ᵇ β) where
   min f g :=
     { toFun := f ⊓ g
       continuous_toFun := f.continuous.inf g.continuous
       map_bounded' := by
         obtain ⟨C₁, hf⟩ := f.bounded
         obtain ⟨C₂, hg⟩ := g.bounded
-        refine ⟨C₁ + C₂, fun x y => ?_⟩
+        refine ⟨C₁ + C₂, fun x y ↦ ?_⟩
         simp_rw [dist_eq_norm_sub] at hf hg ⊢
         exact (norm_inf_sub_inf_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
-
-/--
-lemma `coe_sup` / 引理 `coe_sup`
-
-English:
-lemma coe_sup
-  given: (f g : α ->ᵇ β)
-  statement: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
-  proof: rfl
-
-中文:
-引理 coe_sup
-  条件: (f g : α ->ᵇ β)
-  结论: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
-  证明: rfl
+/-
+**BoundedContinuousFunction.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] [inst_1 : NormedAd
+dCommGroup β] [inst_2 : Lattice β]   [inst_3 : HasSolidNorm β] [inst_4 : IsOrder
+edAddMonoid β] (f g : BoundedContinuousFunction α β), ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
+参数：f g : BoundedContinuousFunction α β；f ⊔ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_sup (f g : α ->ᵇ β) : ⇑(f ⊔ g) = ⇑f ⊔ ⇑g := rfl
-
-/--
-lemma `coe_inf` / 引理 `coe_inf`
-
-English:
-lemma coe_inf
-  given: (f g : α ->ᵇ β)
-  statement: ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
-  proof: rfl
-
-中文:
-引理 coe_inf
-  条件: (f g : α ->ᵇ β)
-  结论: ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
-  证明: rfl
+@[simp, norm_cast] lemma coe_sup (f g : α →ᵇ β) : ⇑(f ⊔ g) = ⇑f ⊔ ⇑g := rfl
+/-
+**BoundedContinuousFunction.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] [inst_1 : NormedAd
+dCommGroup β] [inst_2 : Lattice β]   [inst_3 : HasSolidNorm β] [inst_4 : IsOrder
+edAddMonoid β] (f g : BoundedContinuousFunction α β), ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
+参数：f g : BoundedContinuousFunction α β；f ⊓ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_inf (f g : α ->ᵇ β) : ⇑(f ⊓ g) = ⇑f ⊓ ⇑g := rfl
-
-/--
-Instance `instSemilatticeSup` / 实例 `instSemilatticeSup`
-
-English:
-instance instSemilatticeSup
-  signature: : SemilatticeSup (α ->ᵇ β)
-  body: fast_instance%
+@[simp, norm_cast] lemma coe_inf (f g : α →ᵇ β) : ⇑(f ⊓ g) = ⇑f ⊓ ⇑g := rfl
+/-
+**BoundedContinuousFunction.instSemilatticeSup** 是 Mathlib 中的一个实例，位于命名空间 `Bounde
+dContinuousFunction`。
+形式化陈述：instSemilatticeSup : SemilatticeSup (α ->ᵇ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance instSemilatticeSup : SemilatticeSup (α →ᵇ β) := fast_instance%
   DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
-
-中文:
-实例 instSemilatticeSup
-  签名: : SemilatticeSup (α ->ᵇ β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
-
-Depends on / 依赖: fast_instance
+/-
+**BoundedContinuousFunction.instSemilatticeInf** 是 Mathlib 中的一个实例，位于命名空间 `Bounde
+dContinuousFunction`。
+形式化陈述：instSemilatticeInf : SemilatticeInf (α ->ᵇ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSemilatticeSup : SemilatticeSup (α ->ᵇ β) := fast_instance%
-  DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
-
-/--
-Instance `instSemilatticeInf` / 实例 `instSemilatticeInf`
-
-English:
-instance instSemilatticeInf
-  signature: : SemilatticeInf (α ->ᵇ β)
-  body: fast_instance%
+instance instSemilatticeInf : SemilatticeInf (α →ᵇ β) := fast_instance%
   DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-中文:
-实例 instSemilatticeInf
-  签名: : SemilatticeInf (α ->ᵇ β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-Depends on / 依赖: fast_instance
+/-
+**BoundedContinuousFunction.instLattice** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：instLattice : Lattice (α ->ᵇ β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSemilatticeInf : SemilatticeInf (α ->ᵇ β) := fast_instance%
-  DFunLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
-
-/--
-Instance `instLattice` / 实例 `instLattice`
-
-English:
-instance instLattice
-  signature: : Lattice (α ->ᵇ β)
-  body: fast_instance%
+instance instLattice : Lattice (α →ᵇ β) := fast_instance%
   DFunLike.coe_injective.lattice _ .rfl .rfl coe_sup coe_inf
-
-中文:
-实例 instLattice
-  签名: : 格 (α ->ᵇ β)
-  定义体: fast_instance%
-  DFunLike.coe_injective.lattice _ .rfl .rfl coe_sup coe_inf
-
-Depends on / 依赖: fast_instance
+/-
+**BoundedContinuousFunction.coe_abs** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContinuous
+Function`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] [inst_1 : NormedAd
+dCommGroup β] [inst_2 : Lattice β]   [inst_3 : HasSolidNorm β] [inst_4 : IsOrder
+edAddMonoid β] (f : BoundedContinuousFunction α β), ⇑|f| = |⇑f|
+参数：f : BoundedContinuousFunction α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instLattice : Lattice (α ->ᵇ β) := fast_instance%
-  DFunLike.coe_injective.lattice _ .rfl .rfl coe_sup coe_inf
-
-/--
-lemma `coe_abs` / 引理 `coe_abs`
-
-English:
-lemma coe_abs
-  given: (f : α ->ᵇ β)
-  statement: ⇑|f| = |⇑f|
-  proof: rfl
-
-中文:
-引理 coe_abs
-  条件: (f : α ->ᵇ β)
-  结论: ⇑|f| = |⇑f|
-  证明: rfl
+@[simp, norm_cast] lemma coe_abs (f : α →ᵇ β) : ⇑|f| = |⇑f| := rfl
+/-
+**BoundedContinuousFunction.coe_posPart** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] [inst_1 : NormedAd
+dCommGroup β] [inst_2 : Lattice β]   [inst_3 : HasSolidNorm β] [inst_4 : IsOrder
+edAddMonoid β] (f : BoundedContinuousFunction α β), ⇑f⁺ = (⇑f)⁺
+参数：f : BoundedContinuousFunction α β；⇑f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_abs (f : α ->ᵇ β) : ⇑|f| = |⇑f| := rfl
-/--
-lemma `coe_posPart` / 引理 `coe_posPart`
-
-English:
-lemma coe_posPart
-  given: (f : α ->ᵇ β)
-  statement: ⇑f⁺ = (⇑f)⁺
-  proof: rfl
-
-中文:
-引理 coe_posPart
-  条件: (f : α ->ᵇ β)
-  结论: ⇑f⁺ = (⇑f)⁺
-  证明: rfl
+@[simp, norm_cast] lemma coe_posPart (f : α →ᵇ β) : ⇑f⁺ = (⇑f)⁺ := rfl
+/-
+**BoundedContinuousFunction.coe_negPart** 是 Mathlib 中的一个定理，位于命名空间 `BoundedContin
+uousFunction`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] [inst_1 : NormedAd
+dCommGroup β] [inst_2 : Lattice β]   [inst_3 : HasSolidNorm β] [inst_4 : IsOrder
+edAddMonoid β] (f : BoundedContinuousFunction α β), ⇑f⁻ = (⇑f)⁻
+参数：f : BoundedContinuousFunction α β；⇑f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_posPart (f : α ->ᵇ β) : ⇑f⁺ = (⇑f)⁺ := rfl
-/--
-lemma `coe_negPart` / 引理 `coe_negPart`
-
-English:
-lemma coe_negPart
-  given: (f : α ->ᵇ β)
-  statement: ⇑f⁻ = (⇑f)⁻
-  proof: rfl
-
-中文:
-引理 coe_negPart
-  条件: (f : α ->ᵇ β)
-  结论: ⇑f⁻ = (⇑f)⁻
-  证明: rfl
+@[simp, norm_cast] lemma coe_negPart (f : α →ᵇ β) : ⇑f⁻ = (⇑f)⁻ := rfl
+/-
+**BoundedContinuousFunction.instHasSolidNorm** 是 Mathlib 中的一个实例，位于命名空间 `BoundedC
+ontinuousFunction`。
+形式化陈述：instHasSolidNorm : HasSolidNorm (α ->ᵇ β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasSolidNorm.solid`：∀ {α : Type u_1} {inst : NormedAddCommGroup α} {inst
+_1 : Lattice α} [self : HasSolidNorm α] ⦃x y : α⦄,   |x| ≤ |y| → ‖x‖ ≤ ‖y‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoundedContinuousFunction.norm_le`：norm_le (C0 : (0 : Real) <= C) : ‖f‖ 
+<= C ↔ forall x : α, ‖f x‖ <= C
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `BoundedContinuousFunction.norm_coe_le_norm`：norm_coe_le_norm (x : α) : ‖
+f x‖ <= ‖f‖
 -/
-@[simp, norm_cast] lemma coe_negPart (f : α ->ᵇ β) : ⇑f⁻ = (⇑f)⁻ := rfl
-
-/--
-Instance `instHasSolidNorm` / 实例 `instHasSolidNorm`
-
-English:
-instance instHasSolidNorm
-  signature: : HasSolidNorm (α ->ᵇ β)
-  body: { solid := by
-      intro f g h
-      have i1 : forall t, ‖f t‖ <= ‖g t‖ := fun t => HasSolidNorm.solid (h t)
-      rw [norm_le (norm_nonneg _)]
-      exact fun t => (i1 t).trans (norm_coe_le_norm g t) }
-
-中文:
-实例 instHasSolidNorm
-  签名: : 有Solid范数 (α ->ᵇ β)
-  定义体: { solid := by
-      intro f g h
-      have i1 : forall t, ‖f t‖ <= ‖g t‖ := fun t => HasSolidNorm.solid (h t)
-      rw [norm_le (norm_nonneg _)]
-      exact fun t => (i1 t).trans (norm_coe_le_norm g t) }
-
-Depends on / 依赖: HasSolidNorm, HasSolidNorm.solid, norm_coe_le_norm, norm_le, norm_nonneg
--/
-instance instHasSolidNorm : HasSolidNorm (α ->ᵇ β) :=
+instance instHasSolidNorm : HasSolidNorm (α →ᵇ β) :=
   { solid := by
       intro f g h
-      have i1 : forall t, ‖f t‖ <= ‖g t‖ := fun t => HasSolidNorm.solid (h t)
+      have i1 : ∀ t, ‖f t‖ ≤ ‖g t‖ := fun t => HasSolidNorm.solid (h t)
       rw [norm_le (norm_nonneg _)]
       exact fun t => (i1 t).trans (norm_coe_le_norm g t) }
-
-/--
-Instance `instIsOrderedAddMonoid` / 实例 `instIsOrderedAddMonoid`
-
-English:
-instance instIsOrderedAddMonoid
-  signature: : IsOrderedAddMonoid (α ->ᵇ β) where
-  body: by simpa using h₁ _
-
-中文:
-实例 instIsOrderedAddMonoid
-  签名: : 是OrderedAdd幺半群 (α ->ᵇ β) where
-  定义体: by simpa using h₁ _
+/-
+**BoundedContinuousFunction.instIsOrderedAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Bo
+undedContinuousFunction`。
+形式化陈述：instIsOrderedAddMonoid : IsOrderedAddMonoid (α ->ᵇ β) where add_le_add_lef
+t f g h₁ h t
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `SeminormedAddCommGroup.to_lipschitzAdd`：∀ {E : Type u_2} [inst : Seminor
+medAddCommGroup E], LipschitzAdd E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
 -/
-instance instIsOrderedAddMonoid : IsOrderedAddMonoid (α ->ᵇ β) where
+instance instIsOrderedAddMonoid : IsOrderedAddMonoid (α →ᵇ β) where
   add_le_add_left f g h₁ h t := by simpa using h₁ _
 
 end NormedLatticeOrderedGroup
@@ -2502,139 +2078,120 @@ section NonnegativePart
 
 variable [TopologicalSpace α]
 
-/--
-Definition of `nnrealPart` / `nnrealPart` 的定义
+/-- The nonnegative part of a bounded continuous `ℝ`-valued function as a bounded
+continuous `ℝ≥0`-valued function. -/
+/-
+**BoundedContinuousFunction.nnrealPart** 是 Mathlib 中的一个定义，位于命名空间 `BoundedContinu
+ousFunction`。
+形式化陈述：nnrealPart (f : α ->ᵇ Real) : α ->ᵇ Real>=0
+参数：f : α ->ᵇ Real。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nnrealPart
-  signature: (f : α ->ᵇ Real)
-  body: BoundedContinuousFunction.comp _ (show LipschitzWith 1 Real.toNNReal from lipschitzWith_posPart) f
-
-@[simp]
-
-中文:
-定义 nnrealPart
-  签名: (f : α ->ᵇ 实数)
-  定义体: BoundedContinuousFunction.comp _ (show LipschitzWith 1 Real.toNNReal from lipschitzWith_posPart) f
-
-@[simp]
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.comp, LipschitzWith, Real.toNNReal, lipschitzWith_posPart, toNNReal
+--- 原说明 ---
+The nonnegative part of a bounded continuous `ℝ`-valued function as a bounded
+continuous `ℝ≥0`-valued function.
 -/
-def nnrealPart (f : α ->ᵇ Real) : α ->ᵇ Real>=0 :=
+def nnrealPart (f : α →ᵇ ℝ) : α →ᵇ ℝ≥0 :=
   BoundedContinuousFunction.comp _ (show LipschitzWith 1 Real.toNNReal from lipschitzWith_posPart) f
 
 @[simp]
-/--
-theorem `nnrealPart_coeFn_eq` / 定理 `nnrealPart_coeFn_eq`
-
-English:
-theorem nnrealPart_coeFn_eq
-  given: (f : α ->ᵇ Real)
-  statement: ⇑f.nnrealPart = Real.toNNReal ∘ ⇑f
-  proof: rfl
-
-中文:
-定理 nnrealPart_coeFn_eq
-  条件: (f : α ->ᵇ 实数)
-  结论: ⇑f.nnrealPart = 实数.toNN实数 ∘ ⇑f
-  证明: rfl
+/-
+**BoundedContinuousFunction.nnrealPart_coeFn_eq** 是 Mathlib 中的一个定理，位于命名空间 `Bound
+edContinuousFunction`。
+形式化陈述：nnrealPart_coeFn_eq (f : α ->ᵇ Real) : ⇑f.nnrealPart = Real.toNNReal ∘ ⇑f
+参数：f : α ->ᵇ Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nnrealPart_coeFn_eq (f : α ->ᵇ Real) : ⇑f.nnrealPart = Real.toNNReal ∘ ⇑f := rfl
+theorem nnrealPart_coeFn_eq (f : α →ᵇ ℝ) : ⇑f.nnrealPart = Real.toNNReal ∘ ⇑f := rfl
 
-/--
-Definition of `nnnorm` / `nnnorm` 的定义
+/-- The absolute value of a bounded continuous `ℝ`-valued function as a bounded
+continuous `ℝ≥0`-valued function. -/
+/-
+**BoundedContinuousFunction.nnnorm** 是 Mathlib 中的一个定义，位于命名空间 `BoundedContinuousF
+unction`。
+形式化陈述：nnnorm (f : α ->ᵇ Real) : α ->ᵇ Real>=0
+参数：f : α ->ᵇ Real。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nnnorm
-  signature: (f : α ->ᵇ Real)
-  body: BoundedContinuousFunction.comp _
-    (show LipschitzWith 1 fun x : Real => ‖x‖₊ from lipschitzWith_one_norm) f
-
-@[simp]
-
-中文:
-定义 nnnorm
-  签名: (f : α ->ᵇ 实数)
-  定义体: BoundedContinuousFunction.comp _
-    (show LipschitzWith 1 fun x : Real => ‖x‖₊ from lipschitzWith_one_norm) f
-
-@[simp]
-
-Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.comp, LipschitzWith, lipschitzWith_one_norm
+--- 原说明 ---
+The absolute value of a bounded continuous `ℝ`-valued function as a bounded
+continuous `ℝ≥0`-valued function.
 -/
-def nnnorm (f : α ->ᵇ Real) : α ->ᵇ Real>=0 :=
+def nnnorm (f : α →ᵇ ℝ) : α →ᵇ ℝ≥0 :=
   BoundedContinuousFunction.comp _
-    (show LipschitzWith 1 fun x : Real => ‖x‖₊ from lipschitzWith_one_norm) f
+    (show LipschitzWith 1 fun x : ℝ => ‖x‖₊ from lipschitzWith_one_norm) f
 
 @[simp]
-/--
-theorem `nnnorm_coeFn_eq` / 定理 `nnnorm_coeFn_eq`
-
-English:
-theorem nnnorm_coeFn_eq
-  given: (f : α ->ᵇ Real)
-  statement: ⇑f.nnnorm = NNNorm.nnnorm ∘ ⇑f
-  proof: rfl
-
-中文:
-定理 nnnorm_coeFn_eq
-  条件: (f : α ->ᵇ 实数)
-  结论: ⇑f.nnnorm = NN范数.nnnorm ∘ ⇑f
-  证明: rfl
+/-
+**BoundedContinuousFunction.nnnorm_coeFn_eq** 是 Mathlib 中的一个定理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：nnnorm_coeFn_eq (f : α ->ᵇ Real) : ⇑f.nnnorm = NNNorm.nnnorm ∘ ⇑f
+参数：f : α ->ᵇ Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nnnorm_coeFn_eq (f : α ->ᵇ Real) : ⇑f.nnnorm = NNNorm.nnnorm ∘ ⇑f := rfl
+theorem nnnorm_coeFn_eq (f : α →ᵇ ℝ) : ⇑f.nnnorm = NNNorm.nnnorm ∘ ⇑f := rfl
 
 -- TODO: Use `posPart` and `negPart` here
-/--
-theorem `self_eq_nnrealPart_sub_nnrealPart_neg` / 定理 `self_eq_nnrealPart_sub_nnrealPart_neg`
+/-- Decompose a bounded continuous function to its positive and negative parts. -/
+/-
+**BoundedContinuousFunction.self_eq_nnrealPart_sub_nnrealPart_neg** 是 Mathlib 中的
+一个定理，位于命名空间 `BoundedContinuousFunction`。
+形式化陈述：self_eq_nnrealPart_sub_nnrealPart_neg (f : α ->ᵇ Real) : ⇑f = (↑) ∘ f.nnre
+alPart - (↑) ∘ (-f).nnrealPart
+参数：f : α ->ᵇ Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_zero_sub_max_neg_zero_eq_self`：∀ {α : Type u_1} [inst : AddGroup α] 
+[inst_1 : LinearOrder α] [AddLeftMono α] (a : α), max a 0 - max (-a) 0 = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem self_eq_nnrealPart_sub_nnrealPart_neg
-  given: (f : α ->ᵇ Real)
-  proof: by
-  funext x
-  dsimp
-  simp only [max_zero_sub_max_neg_zero_eq_self]
-
-中文:
-定理 self_eq_nnrealPart_sub_nnrealPart_neg
-  条件: (f : α ->ᵇ 实数)
-  证明: by
-  funext x
-  dsimp
-  simp only [max_zero_sub_max_neg_zero_eq_self]
-
-Depends on / 依赖: max_zero_sub_max_neg_zero_eq_self
+--- 原说明 ---
+Decompose a bounded continuous function to its positive and negative parts.
 -/
-theorem self_eq_nnrealPart_sub_nnrealPart_neg (f : α ->ᵇ Real) :
+theorem self_eq_nnrealPart_sub_nnrealPart_neg (f : α →ᵇ ℝ) :
     ⇑f = (↑) ∘ f.nnrealPart - (↑) ∘ (-f).nnrealPart := by
   funext x
   dsimp
   simp only [max_zero_sub_max_neg_zero_eq_self]
 
-/--
-theorem `abs_self_eq_nnrealPart_add_nnrealPart_neg` / 定理 `abs_self_eq_nnrealPart_add_nnrealPart_neg`
+/-- Express the absolute value of a bounded continuous function in terms of its
+positive and negative parts. -/
+/-
+**BoundedContinuousFunction.abs_self_eq_nnrealPart_add_nnrealPart_neg** 是 Mathli
+b 中的一个定理，位于命名空间 `BoundedContinuousFunction`。
+形式化陈述：abs_self_eq_nnrealPart_add_nnrealPart_neg (f : α ->ᵇ Real) : abs ∘ ⇑f = (↑
+) ∘ f.nnrealPart + (↑) ∘ (-f).nnrealPart
+参数：f : α ->ᵇ Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_zero_add_max_neg_zero_eq_abs_self`：∀ {G : Type u_1} [inst : AddCommG
+roup G] [inst_1 : LinearOrder G] [IsOrderedAddMonoid G] (a : G),   max a 0 + max
+ (-a) 0 = |a|
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem abs_self_eq_nnrealPart_add_nnrealPart_neg
-  given: (f : α ->ᵇ Real)
-  proof: by
-  funext x
-  dsimp
-  simp only [max_zero_add_max_neg_zero_eq_abs_self]
-
-中文:
-定理 abs_self_eq_nnrealPart_add_nnrealPart_neg
-  条件: (f : α ->ᵇ 实数)
-  证明: by
-  funext x
-  dsimp
-  simp only [max_zero_add_max_neg_zero_eq_abs_self]
-
-Depends on / 依赖: max_zero_add_max_neg_zero_eq_abs_self
+--- 原说明 ---
+Express the absolute value of a bounded continuous function in terms of its
+positive and negative parts.
 -/
-theorem abs_self_eq_nnrealPart_add_nnrealPart_neg (f : α ->ᵇ Real) :
+theorem abs_self_eq_nnrealPart_add_nnrealPart_neg (f : α →ᵇ ℝ) :
     abs ∘ ⇑f = (↑) ∘ f.nnrealPart + (↑) ∘ (-f).nnrealPart := by
   funext x
   dsimp
@@ -2647,61 +2204,157 @@ section
 variable {α : Type*} [TopologicalSpace α]
 
 -- TODO: `f + const _ ‖f‖` is just `f⁺`
-/--
-lemma `add_norm_nonneg` / 引理 `add_norm_nonneg`
-
-English:
-lemma add_norm_nonneg
-  given: (f : α ->ᵇ Real)
-  proof: by
-  intro x
-  simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, coe_zero, Pi.zero_apply, coe_add,
-    const_apply, Pi.add_apply]
-  linarith [(abs_le.mp (norm_coe_le_norm f x)).1]
-
-中文:
-引理 add_norm_nonneg
-  条件: (f : α ->ᵇ 实数)
-  证明: by
-  intro x
-  simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, coe_zero, Pi.zero_apply, coe_add,
-    const_apply, Pi.add_apply]
-  linarith [(abs_le.mp (norm_coe_le_norm f x)).1]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.toFun_eq_coe, Pi.add_apply, Pi.zero_apply, abs_le, abs_le.mp, add_apply, coe_add, coe_toContinuousMap, coe_zero, const_apply, norm_coe_le_norm, toFun_eq_coe, zero_apply
+/-
+**BoundedContinuousFunction.add_norm_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：add_norm_nonneg (f : α ->ᵇ Real) : 0 <= f + const _ ‖f‖
+参数：f : α ->ᵇ Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedAddOfLipschitzAdd`：∀ {R : Type u_1} [inst : PseudoMetricSpace
+ R] [inst_1 : AddMonoid R] [LipschitzAdd R], BoundedAdd R
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `BoundedContinuousFunction.const_apply`：∀ (α : Type u) {β : Type v} [inst
+ : TopologicalSpace α] [inst_1 : PseudoMetricSpace β] (b : β),   ⇑(BoundedContin
+uousFunction.const α b) = f…
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+（共 43 条，此处仅展示前 30 条）
 -/
-lemma add_norm_nonneg (f : α ->ᵇ Real) :
-    0 <= f + const _ ‖f‖ := by
+lemma add_norm_nonneg (f : α →ᵇ ℝ) :
+    0 ≤ f + const _ ‖f‖ := by
   intro x
   simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, coe_zero, Pi.zero_apply, coe_add,
     const_apply, Pi.add_apply]
   linarith [(abs_le.mp (norm_coe_le_norm f x)).1]
-
-/--
-lemma `norm_sub_nonneg` / 引理 `norm_sub_nonneg`
-
-English:
-lemma norm_sub_nonneg
-  given: (f : α ->ᵇ Real)
-  proof: by
-  intro x
-  simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, coe_zero, Pi.zero_apply, coe_sub,
-    const_apply, Pi.sub_apply]
-  linarith [(abs_le.mp (norm_coe_le_norm f x)).2]
-
-中文:
-引理 norm_sub_nonneg
-  条件: (f : α ->ᵇ 实数)
-  证明: by
-  intro x
-  simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, coe_zero, Pi.zero_apply, coe_sub,
-    const_apply, Pi.sub_apply]
-  linarith [(abs_le.mp (norm_coe_le_norm f x)).2]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.toFun_eq_coe, Pi.sub_apply, Pi.zero_apply, abs_le, abs_le.mp, coe_sub, coe_toContinuousMap, coe_zero, const_apply, norm_coe_le_norm, sub_apply, toFun_eq_coe, zero_apply
+/-
+**BoundedContinuousFunction.norm_sub_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `BoundedCo
+ntinuousFunction`。
+形式化陈述：norm_sub_nonneg (f : α ->ᵇ Real) : 0 <= const _ ‖f‖ - f
+参数：f : α ->ᵇ Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instBoundedSub`：∀ {R : Type u_1} [inst : SeminormedAddCommGroup R], Boun
+dedSub R
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `BoundedContinuousFunction.const_apply`：∀ (α : Type u) {β : Type v} [inst
+ : TopologicalSpace α] [inst_1 : PseudoMetricSpace β] (b : β),   ⇑(BoundedContin
+uousFunction.const α b) = f…
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero`：∀ {R : Type u_1} [in
+st : CommSemiring R] {a₁ a₂ b₁ b₂ c : R},   Mathlib.Meta.NormNum.IsNat (a₁ + b₁)
+ 0 → a₂ + b₂ = c → a₁ + a₂ + (b₁ + b₂) =…
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf_zero`：∀ {R : Type u_1} [inst :
+ CommSemiring R] {a b : R} (x : R) (e : ℕ),   Mathlib.Meta.NormNum.IsNat (a + b)
+ 0 → Mathlib.Meta.NormNum.IsNat (x ^…
+（共 40 条，此处仅展示前 30 条）
 -/
-lemma norm_sub_nonneg (f : α ->ᵇ Real) :
-    0 <= const _ ‖f‖ - f := by
+lemma norm_sub_nonneg (f : α →ᵇ ℝ) :
+    0 ≤ const _ ‖f‖ - f := by
   intro x
   simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, coe_zero, Pi.zero_apply, coe_sub,
     const_apply, Pi.sub_apply]
@@ -2710,3 +2363,4 @@ lemma norm_sub_nonneg (f : α ->ᵇ Real) :
 end
 
 end BoundedContinuousFunction
+

@@ -27,22 +27,17 @@ section SemigroupWithZero
 
 variable [SemigroupWithZero α] {a : α}
 
-/--
-theorem `eq_zero_of_zero_dvd` / 定理 `eq_zero_of_zero_dvd`
-
-English:
-theorem eq_zero_of_zero_dvd
-  given: (h : 0 ∣ a)
-  statement: a = 0
-  proof: Dvd.elim h fun c H' => H'.trans (zero_mul c)
-
-中文:
-定理 eq_zero_of_zero_dvd
-  条件: (h : 0 ∣ a)
-  结论: a = 0
-  证明: Dvd.elim h fun c H' => H'.trans (zero_mul c)
-
-Depends on / 依赖: Dvd.elim, zero_mul
+/-
+**eq_zero_of_zero_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_zero_of_zero_dvd (h : 0 ∣ a) : a = 0
+参数：h : 0 ∣ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.elim`：Dvd.elim {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : forall c, b =
+ a * c -> P) : P
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem eq_zero_of_zero_dvd (h : 0 ∣ a) : a = 0 :=
   Dvd.elim h fun c H' => H'.trans (zero_mul c)
@@ -50,28 +45,24 @@ theorem eq_zero_of_zero_dvd (h : 0 ∣ a) : a = 0 :=
 /-- Given an element `a` of a commutative semigroup with zero, there exists another element whose
 product with zero equals `a` iff `a` equals zero. -/
 @[simp]
-/--
-theorem `zero_dvd_iff` / 定理 `zero_dvd_iff`
+/-
+**zero_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：zero_dvd_iff : 0 ∣ a ↔ a = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_zero_of_zero_dvd`：eq_zero_of_zero_dvd (h : 0 ∣ a) : a = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem zero_dvd_iff
-  statement: 0 ∣ a ↔ a = 0
-  proof: ⟨eq_zero_of_zero_dvd, fun h => by
-    rw [h]
-    exact ⟨0, by simp⟩⟩
-
-@[simp]
-
-中文:
-定理 zero_dvd_iff
-  结论: 0 ∣ a ↔ a = 0
-  证明: ⟨eq_zero_of_zero_dvd, fun h => by
-    rw [h]
-    exact ⟨0, by simp⟩⟩
-
-@[simp]
-
-Depends on / 依赖: eq_zero_of_zero_dvd
+--- 原说明 ---
+Given an element `a` of a commutative semigroup with zero, there exists another 
+element whose
+product with zero equals `a` iff `a` equals zero.
 -/
 theorem zero_dvd_iff : 0 ∣ a ↔ a = 0 :=
   ⟨eq_zero_of_zero_dvd, fun h => by
@@ -79,63 +70,79 @@ theorem zero_dvd_iff : 0 ∣ a ↔ a = 0 :=
     exact ⟨0, by simp⟩⟩
 
 @[simp]
-/--
-theorem `dvd_zero` / 定理 `dvd_zero`
-
-English:
-theorem dvd_zero
-  given: (a : α)
-  statement: a ∣ 0
-  proof: Dvd.intro 0 (by simp)
-
-中文:
-定理 dvd_zero
-  条件: (a : α)
-  结论: a ∣ 0
-  证明: Dvd.intro 0 (by simp)
-
-Depends on / 依赖: Dvd.intro
+/-
+**dvd_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_zero (a : α) : a ∣ 0
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dvd_zero (a : α) : a ∣ 0 :=
   Dvd.intro 0 (by simp)
 
 end SemigroupWithZero
 
-/--
-theorem `mul_dvd_mul_iff_left` / 定理 `mul_dvd_mul_iff_left`
+/-- Given two elements `b`, `c` of a cancellative `MonoidWithZero` and a nonzero element `a`,
+`a*b` divides `a*c` iff `b` divides `c`. -/
+/-
+**mul_dvd_mul_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCancelMulZero α] {a b c : α
+} (ha : a != 0) : a * b ∣ a * c ↔ b ∣ c
+参数：ha : a != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用引理 `mul_right_inj'`：mul_right_inj' (ha : a != 0) : a * b = a * c ↔ b = c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mul_dvd_mul_iff_left
-  given: [MonoidWithZero α] [IsLeftCancelMulZero α] {a b c : α} (ha : a != 0)
-  proof: exists_congr fun d => by rw [mul_assoc, mul_right_inj' ha]
-
-中文:
-定理 mul_dvd_mul_iff_left
-  条件: [带零幺半群 α] [是左消去MulZero α] {a b c : α} (ha : a != 0)
-  证明: exists_congr fun d => by rw [mul_assoc, mul_right_inj' ha]
-
-Depends on / 依赖: exists_congr, mul_assoc, mul_right_inj
+--- 原说明 ---
+Given two elements `b`, `c` of a cancellative `MonoidWithZero` and a nonzero ele
+ment `a`,
+`a*b` divides `a*c` iff `b` divides `c`.
 -/
-theorem mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCancelMulZero α] {a b c : α} (ha : a != 0) :
+theorem mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCancelMulZero α] {a b c : α} (ha : a ≠ 0) :
     a * b ∣ a * c ↔ b ∣ c :=
   exists_congr fun d => by rw [mul_assoc, mul_right_inj' ha]
 
-/--
-theorem `mul_dvd_mul_iff_right` / 定理 `mul_dvd_mul_iff_right`
+/-- Given two elements `a`, `b` of a commutative cancellative `MonoidWithZero` and a nonzero
+element `c`, `a*c` divides `b*c` iff `a` divides `b`. -/
+/-
+**mul_dvd_mul_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_dvd_mul_iff_right [CommMonoidWithZero α] [IsCancelMulZero α] {a b c : 
+α} (hc : c != 0) : a * c ∣ b * c ↔ a ∣ b
+参数：hc : c != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用引理 `mul_left_inj'`：mul_left_inj' (hc : c != 0) : a * c = b * c ↔ a = b
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mul_dvd_mul_iff_right
-  given: [CommMonoidWithZero α] [IsCancelMulZero α] {a b c : α} (hc : c != 0)
-  proof: exists_congr fun d => by rw [mul_right_comm, mul_left_inj' hc]
-
-中文:
-定理 mul_dvd_mul_iff_right
-  条件: [带零交换幺半群 α] [是乘零消去 α] {a b c : α} (hc : c != 0)
-  证明: exists_congr fun d => by rw [mul_right_comm, mul_left_inj' hc]
-
-Depends on / 依赖: exists_congr, mul_left_inj, mul_right_comm
+--- 原说明 ---
+Given two elements `a`, `b` of a commutative cancellative `MonoidWithZero` and a
+ nonzero
+element `c`, `a*c` divides `b*c` iff `a` divides `b`.
 -/
-theorem mul_dvd_mul_iff_right [CommMonoidWithZero α] [IsCancelMulZero α] {a b c : α} (hc : c != 0) :
+theorem mul_dvd_mul_iff_right [CommMonoidWithZero α] [IsCancelMulZero α] {a b c : α} (hc : c ≠ 0) :
     a * c ∣ b * c ↔ a ∣ b :=
   exists_congr fun d => by rw [mul_right_comm, mul_left_inj' hc]
 
@@ -143,54 +150,36 @@ section CommMonoidWithZero
 
 variable [CommMonoidWithZero α]
 
-/--
-Definition of `DvdNotUnit` / `DvdNotUnit` 的定义
+/-- `DvdNotUnit a b` expresses that `a` divides `b` "strictly", i.e. that `b` divided by `a`
+is not a unit. -/
+/-
+**DvdNotUnit** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DvdNotUnit (a b : α) : Prop
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DvdNotUnit
-  signature: (a b : α)
-  body: a != 0 ∧ exists x, ¬IsUnit x ∧ b = a * x
-
-中文:
-定义 DvdNotUnit
-  签名: (a b : α)
-  定义体: a != 0 ∧ exists x, ¬IsUnit x ∧ b = a * x
-
-Depends on / 依赖: IsUnit
+--- 原说明 ---
+`DvdNotUnit a b` expresses that `a` divides `b` "strictly", i.e. that `b` divide
+d by `a`
+is not a unit.
 -/
 def DvdNotUnit (a b : α) : Prop :=
-  a != 0 ∧ exists x, ¬IsUnit x ∧ b = a * x
-
-/--
-theorem `dvdNotUnit_of_dvd_of_not_dvd` / 定理 `dvdNotUnit_of_dvd_of_not_dvd`
-
-English:
-theorem dvdNotUnit_of_dvd_of_not_dvd
-  given: {a b : α} (hd : a ∣ b) (hnd : ¬b ∣ a)
-  statement: DvdNotUnit a b
-  proof: by
-  constructor
-  · rintro rfl
-    exact hnd (dvd_zero _)
-  · rcases hd with ⟨c, rfl⟩
-    refine ⟨c, ?_, rfl⟩
-    rintro ⟨u, rfl⟩
-    simp at hnd
-
-中文:
-定理 dvdNotUnit_of_dvd_of_not_dvd
-  条件: {a b : α} (hd : a ∣ b) (hnd : ¬b ∣ a)
-  结论: DvdNotUnit a b
-  证明: by
-  constructor
-  · rintro rfl
-    exact hnd (dvd_zero _)
-  · rcases hd with ⟨c, rfl⟩
-    refine ⟨c, ?_, rfl⟩
-    rintro ⟨u, rfl⟩
-    simp at hnd
-
-Depends on / 依赖: dvd_zero
+  a ≠ 0 ∧ ∃ x, ¬IsUnit x ∧ b = a * x
+/-
+**dvdNotUnit_of_dvd_of_not_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvdNotUnit_of_dvd_of_not_dvd {a b : α} (hd : a ∣ b) (hnd : ¬b ∣ a) : DvdNo
+tUnit a b
+参数：hd : a ∣ b；hnd : ¬b ∣ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_zero`：dvd_zero (a : α) : a ∣ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
 theorem dvdNotUnit_of_dvd_of_not_dvd {a b : α} (hd : a ∣ b) (hnd : ¬b ∣ a) : DvdNotUnit a b := by
   constructor
@@ -202,145 +191,100 @@ theorem dvdNotUnit_of_dvd_of_not_dvd {a b : α} (hd : a ∣ b) (hnd : ¬b ∣ a)
     simp at hnd
 
 variable {x y : α}
-
-/--
-theorem `isRelPrime_zero_left` / 定理 `isRelPrime_zero_left`
-
-English:
-theorem isRelPrime_zero_left
-  statement: IsRelPrime 0 x ↔ IsUnit x
-  proof: ⟨(· (dvd_zero _) dvd_rfl), IsUnit.isRelPrime_right⟩
-
-中文:
-定理 isRelPrime_zero_left
-  结论: IsRelPrime 0 x ↔ 是单位 x
-  证明: ⟨(· (dvd_zero _) dvd_rfl), IsUnit.isRelPrime_right⟩
-
-Depends on / 依赖: IsUnit, IsUnit.isRelPrime_right, dvd_rfl, dvd_zero, isRelPrime_right
+/-
+**isRelPrime_zero_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRelPrime_zero_left : IsRelPrime 0 x ↔ IsUnit x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_zero`：dvd_zero (a : α) : a ∣ 0
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
+· 使用定理 `IsUnit.isRelPrime_right`：IsUnit.isRelPrime_right (h : IsUnit y) : IsRelP
+rime x y
 -/
 theorem isRelPrime_zero_left : IsRelPrime 0 x ↔ IsUnit x :=
   ⟨(· (dvd_zero _) dvd_rfl), IsUnit.isRelPrime_right⟩
-
-/--
-theorem `isRelPrime_zero_right` / 定理 `isRelPrime_zero_right`
-
-English:
-theorem isRelPrime_zero_right
-  statement: IsRelPrime x 0 ↔ IsUnit x
-  proof: isRelPrime_comm.trans isRelPrime_zero_left
-
-中文:
-定理 isRelPrime_zero_right
-  结论: IsRelPrime x 0 ↔ 是单位 x
-  证明: isRelPrime_comm.trans isRelPrime_zero_left
-
-Depends on / 依赖: isRelPrime_comm, isRelPrime_comm.trans, isRelPrime_zero_left
+/-
+**isRelPrime_zero_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRelPrime_zero_right : IsRelPrime x 0 ↔ IsUnit x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `isRelPrime_comm`：isRelPrime_comm : IsRelPrime x y ↔ IsRelPrime y x
+· 使用定理 `isRelPrime_zero_left`：isRelPrime_zero_left : IsRelPrime 0 x ↔ IsUnit x
 -/
 theorem isRelPrime_zero_right : IsRelPrime x 0 ↔ IsUnit x :=
   isRelPrime_comm.trans isRelPrime_zero_left
-
-/--
-theorem `not_isRelPrime_zero_zero` / 定理 `not_isRelPrime_zero_zero`
-
-English:
-theorem not_isRelPrime_zero_zero
-  given: [Nontrivial α]
-  statement: ¬IsRelPrime (0 : α) 0
-  proof: mt isRelPrime_zero_right.mp not_isUnit_zero
-
-中文:
-定理 not_isRelPrime_zero_zero
-  条件: [非平凡 α]
-  结论: ¬IsRelPrime (0 : α) 0
-  证明: mt isRelPrime_zero_right.mp not_isUnit_zero
-
-Depends on / 依赖: isRelPrime_zero_right, isRelPrime_zero_right.mp, not_isUnit_zero
+/-
+**not_isRelPrime_zero_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_isRelPrime_zero_zero [Nontrivial α] : ¬IsRelPrime (0 : α) 0
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isRelPrime_zero_right`：isRelPrime_zero_right : IsRelPrime x 0 ↔ IsUnit x
+· 使用定理 `not_isUnit_zero`：not_isUnit_zero [Nontrivial M₀] : ¬IsUnit (0 : M₀)
 -/
 theorem not_isRelPrime_zero_zero [Nontrivial α] : ¬IsRelPrime (0 : α) 0 :=
   mt isRelPrime_zero_right.mp not_isUnit_zero
-
-/--
-theorem `IsRelPrime.ne_zero_or_ne_zero` / 定理 `IsRelPrime.ne_zero_or_ne_zero`
-
-English:
-theorem IsRelPrime.ne_zero_or_ne_zero
-  given: [Nontrivial α] (h : IsRelPrime x y)
-  statement: x != 0 ∨ y != 0
-  proof: not_or_of_imp by rintro rfl rfl; exact not_isRelPrime_zero_zero h
-
-中文:
-定理 IsRelPrime.ne_zero_or_ne_zero
-  条件: [非平凡 α] (h : IsRelPrime x y)
-  结论: x != 0 ∨ y != 0
-  证明: not_or_of_imp by rintro rfl rfl; exact not_isRelPrime_zero_zero h
-
-Depends on / 依赖: not_isRelPrime_zero_zero, not_or_of_imp
+/-
+**IsRelPrime.ne_zero_or_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsRelPrime.ne_zero_or_ne_zero [Nontrivial α] (h : IsRelPrime x y) : x != 0
+ ∨ y != 0
+参数：h : IsRelPrime x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_or_of_imp`：not_or_of_imp : (a -> b) -> ¬a ∨ b
+· 使用定理 `not_isRelPrime_zero_zero`：not_isRelPrime_zero_zero [Nontrivial α] : ¬IsR
+elPrime (0 : α) 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem IsRelPrime.ne_zero_or_ne_zero [Nontrivial α] (h : IsRelPrime x y) : x != 0 ∨ y != 0 :=
-not_or_of_imp by rintro rfl rfl; exact not_isRelPrime_zero_zero h
+theorem IsRelPrime.ne_zero_or_ne_zero [Nontrivial α] (h : IsRelPrime x y) : x ≠ 0 ∨ y ≠ 0 :=
+  not_or_of_imp <| by rintro rfl rfl; exact not_isRelPrime_zero_zero h
 
 end CommMonoidWithZero
 
-/--
-theorem `isRelPrime_of_no_nonunits_factors` / 定理 `isRelPrime_of_no_nonunits_factors`
-
-English:
-theorem isRelPrime_of_no_nonunits_factors
-  statement: [MonoidWithZero α] {x y : α} (nonzero : ¬(x = 0 ∧ y = 0))
-  proof: by
-  refine fun z hx hy => by_contra fun h => H z h ?_ hx hy
-  rintro rfl; exact nonzero ⟨zero_dvd_iff.1 hx, zero_dvd_iff.1 hy⟩
-
-中文:
-定理 isRelPrime_of_no_nonunits_factors
-  结论: [带零幺半群 α] {x y : α} (nonzero : ¬(x = 0 ∧ y = 0))
-  证明: by
-  refine fun z hx hy => by_contra fun h => H z h ?_ hx hy
-  rintro rfl; exact nonzero ⟨zero_dvd_iff.1 hx, zero_dvd_iff.1 hy⟩
-
-Depends on / 依赖: nonzero, zero_dvd_iff
+/-
+**isRelPrime_of_no_nonunits_factors** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRelPrime_of_no_nonunits_factors [MonoidWithZero α] {x y : α} (nonzero : 
+¬(x = 0 ∧ y = 0)) (H : forall z, ¬ IsUnit z -> z != 0 -> z ∣ x -> ¬z ∣ y) : IsRe
+lPrime x y
+参数：nonzero : ¬(x = 0 ∧ y = 0)；H : forall z, ¬ IsUnit z -> z != 0 -> z ∣ x -> ¬z 
+∣ y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_contra`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `zero_dvd_iff`：zero_dvd_iff : 0 ∣ a ↔ a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isRelPrime_of_no_nonunits_factors [MonoidWithZero α] {x y : α} (nonzero : ¬(x = 0 ∧ y = 0))
-    (H : forall z, ¬ IsUnit z -> z != 0 -> z ∣ x -> ¬z ∣ y) : IsRelPrime x y := by
-  refine fun z hx hy => by_contra fun h => H z h ?_ hx hy
+    (H : ∀ z, ¬ IsUnit z → z ≠ 0 → z ∣ x → ¬z ∣ y) : IsRelPrime x y := by
+  refine fun z hx hy ↦ by_contra fun h ↦ H z h ?_ hx hy
   rintro rfl; exact nonzero ⟨zero_dvd_iff.1 hx, zero_dvd_iff.1 hy⟩
-
-/--
-theorem `dvd_and_not_dvd_iff` / 定理 `dvd_and_not_dvd_iff`
-
-English:
-theorem dvd_and_not_dvd_iff
-  given: [CommMonoidWithZero α] [IsCancelMulZero α] {x y : α}
-  proof: ⟨fun ⟨⟨d, hd⟩, hyx⟩ =>
-    ⟨fun hx0 => by simp [hx0] at hyx,
-      ⟨d, mt isUnit_iff_dvd_one.1 fun ⟨e, he⟩ => hyx ⟨e, by rw [hd, mul_assoc, ← he, mul_one]⟩,
-        hd⟩⟩,
-    fun ⟨hx0, d, hdu, hdx⟩ =>
-    ⟨⟨d, hdx⟩, fun ⟨e, he⟩ =>
-      hdu
-        (isUnit_of_dvd_one
-⟨e, mul_left_cancel₀ hx0 by conv =>
-            lhs
-            rw [he]; rw [hdx]
-            simp [mul_assoc]⟩)⟩⟩
-
-中文:
-定理 dvd_and_not_dvd_iff
-  条件: [带零交换幺半群 α] [是乘零消去 α] {x y : α}
-  证明: ⟨fun ⟨⟨d, hd⟩, hyx⟩ =>
-    ⟨fun hx0 => by simp [hx0] at hyx,
-      ⟨d, mt isUnit_iff_dvd_one.1 fun ⟨e, he⟩ => hyx ⟨e, by rw [hd, mul_assoc, ← he, mul_one]⟩,
-        hd⟩⟩,
-    fun ⟨hx0, d, hdu, hdx⟩ =>
-    ⟨⟨d, hdx⟩, fun ⟨e, he⟩ =>
-      hdu
-        (isUnit_of_dvd_one
-⟨e, mul_left_cancel₀ hx0 by conv =>
-            lhs
-            rw [he]; rw [hdx]
-            simp [mul_assoc]⟩)⟩⟩
-
-Depends on / 依赖: isUnit_iff_dvd_one, isUnit_of_dvd_one, mul_assoc, mul_one
+/-
+**dvd_and_not_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_and_not_dvd_iff [CommMonoidWithZero α] [IsCancelMulZero α] {x y : α} :
+ x ∣ y ∧ ¬y ∣ x ↔ DvdNotUnit x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isUnit_iff_dvd_one`：isUnit_iff_dvd_one {x : α} : IsUnit x ↔ x ∣ 1
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `isUnit_of_dvd_one`：isUnit_of_dvd_one {a : α} (h : a ∣ 1) : IsUnit (a : α
+)
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 theorem dvd_and_not_dvd_iff [CommMonoidWithZero α] [IsCancelMulZero α] {x y : α} :
     x ∣ y ∧ ¬y ∣ x ↔ DvdNotUnit x y :=
@@ -352,91 +296,67 @@ theorem dvd_and_not_dvd_iff [CommMonoidWithZero α] [IsCancelMulZero α] {x y : 
     ⟨⟨d, hdx⟩, fun ⟨e, he⟩ =>
       hdu
         (isUnit_of_dvd_one
-⟨e, mul_left_cancel₀ hx0 by conv =>
+          ⟨e, mul_left_cancel₀ hx0 <| by conv =>
             lhs
-            rw [he]; rw [hdx]
+            rw [he, hdx]
             simp [mul_assoc]⟩)⟩⟩
 
 section MonoidWithZero
 
 variable [MonoidWithZero α]
 
-/--
-theorem `ne_zero_of_dvd_ne_zero` / 定理 `ne_zero_of_dvd_ne_zero`
-
-English:
-theorem ne_zero_of_dvd_ne_zero
-  given: {p q : α} (h₁ : q != 0) (h₂ : p ∣ q)
-  statement: p != 0
-  proof: by
-  rcases h₂ with ⟨u, rfl⟩
-  exact left_ne_zero_of_mul h₁
-
-中文:
-定理 ne_zero_of_dvd_ne_zero
-  条件: {p q : α} (h₁ : q != 0) (h₂ : p ∣ q)
-  结论: p != 0
-  证明: by
-  rcases h₂ with ⟨u, rfl⟩
-  exact left_ne_zero_of_mul h₁
-
-Depends on / 依赖: left_ne_zero_of_mul
+/-
+**ne_zero_of_dvd_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ne_zero_of_dvd_ne_zero {p q : α} (h₁ : q != 0) (h₂ : p ∣ q) : p != 0
+参数：h₁ : q != 0；h₂ : p ∣ q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `left_ne_zero_of_mul`：left_ne_zero_of_mul : a * b != 0 -> a != 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ne_zero_of_dvd_ne_zero {p q : α} (h₁ : q != 0) (h₂ : p ∣ q) : p != 0 := by
+theorem ne_zero_of_dvd_ne_zero {p q : α} (h₁ : q ≠ 0) (h₂ : p ∣ q) : p ≠ 0 := by
   rcases h₂ with ⟨u, rfl⟩
   exact left_ne_zero_of_mul h₁
-
-/--
-theorem `isPrimal_zero` / 定理 `isPrimal_zero`
-
-English:
-theorem isPrimal_zero
-  statement: IsPrimal (0 : α)
-  proof: fun a b h => ⟨a, b, dvd_rfl, dvd_rfl, (zero_dvd_iff.mp h).symm⟩
-
-中文:
-定理 isPrimal_zero
-  结论: IsPrimal (0 : α)
-  证明: fun a b h => ⟨a, b, dvd_rfl, dvd_rfl, (zero_dvd_iff.mp h).symm⟩
-
-Depends on / 依赖: dvd_rfl, zero_dvd_iff, zero_dvd_iff.mp
+/-
+**isPrimal_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPrimal_zero : IsPrimal (0 : α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `zero_dvd_iff`：zero_dvd_iff : 0 ∣ a ↔ a = 0
 -/
 theorem isPrimal_zero : IsPrimal (0 : α) :=
-  fun a b h => ⟨a, b, dvd_rfl, dvd_rfl, (zero_dvd_iff.mp h).symm⟩
-
-/--
-theorem `IsPrimal.mul` / 定理 `IsPrimal.mul`
-
-English:
-theorem IsPrimal.mul
-  statement: {α} [CommMonoidWithZero α] [IsCancelMulZero α] {m n : α}
-  proof: by
-  obtain rfl | h0 := eq_or_ne m 0; · rwa [zero_mul]
-  intro b c h
-  obtain ⟨a₁, a₂, ⟨b, rfl⟩, ⟨c, rfl⟩, rfl⟩ := hm (dvd_of_mul_right_dvd h)
-  rw [mul_mul_mul_comm]; rw [mul_dvd_mul_iff_left h0] at h
-  obtain ⟨a₁', a₂', h₁, h₂, rfl⟩ := hn h
-  exact ⟨a₁ * a₁', a₂ * a₂', mul_dvd_mul_left _ h₁, mul_dvd_mul_left _ h₂, mul_mul_mul_comm _ _ _ _⟩
-
-中文:
-定理 IsPrimal.mul
-  结论: {α} [带零交换幺半群 α] [是乘零消去 α] {m n : α}
-  证明: by
-  obtain rfl | h0 := eq_or_ne m 0; · rwa [zero_mul]
-  intro b c h
-  obtain ⟨a₁, a₂, ⟨b, rfl⟩, ⟨c, rfl⟩, rfl⟩ := hm (dvd_of_mul_right_dvd h)
-  rw [mul_mul_mul_comm]; rw [mul_dvd_mul_iff_left h0] at h
-  obtain ⟨a₁', a₂', h₁, h₂, rfl⟩ := hn h
-  exact ⟨a₁ * a₁', a₂ * a₂', mul_dvd_mul_left _ h₁, mul_dvd_mul_left _ h₂, mul_mul_mul_comm _ _ _ _⟩
-
-Depends on / 依赖: dvd_of_mul_right_dvd, eq_or_ne, mul_dvd_mul_iff_left, mul_dvd_mul_left, mul_mul_mul_comm, zero_mul
+  fun a b h ↦ ⟨a, b, dvd_rfl, dvd_rfl, (zero_dvd_iff.mp h).symm⟩
+/-
+**IsPrimal.mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPrimal.mul {α} [CommMonoidWithZero α] [IsCancelMulZero α] {m n : α} (hm 
+: IsPrimal m) (hn : IsPrimal n) : IsPrimal (m * n)
+参数：hm : IsPrimal m；hn : IsPrimal n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dvd_of_mul_right_dvd`：dvd_of_mul_right_dvd (h : a * b ∣ c) : a ∣ c
+· 使用定理 `mul_dvd_mul_iff_left`：mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCan
+celMulZero α] {a b c : α} (ha : a != 0) : a * b ∣ a * c ↔ b ∣ c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `mul_mul_mul_comm`：mul_mul_mul_comm (a b c d : G) : a * b * (c * d) = a *
+ c * (b * d)
+· 使用定理 `mul_dvd_mul_left`：mul_dvd_mul_left (a : α) (h : b ∣ c) : a * b ∣ a * c
 -/
 theorem IsPrimal.mul {α} [CommMonoidWithZero α] [IsCancelMulZero α] {m n : α}
     (hm : IsPrimal m) (hn : IsPrimal n) : IsPrimal (m * n) := by
   obtain rfl | h0 := eq_or_ne m 0; · rwa [zero_mul]
   intro b c h
   obtain ⟨a₁, a₂, ⟨b, rfl⟩, ⟨c, rfl⟩, rfl⟩ := hm (dvd_of_mul_right_dvd h)
-  rw [mul_mul_mul_comm]; rw [mul_dvd_mul_iff_left h0] at h
+  rw [mul_mul_mul_comm, mul_dvd_mul_iff_left h0] at h
   obtain ⟨a₁', a₂', h₁, h₂, rfl⟩ := hn h
   exact ⟨a₁ * a₁', a₂ * a₂', mul_dvd_mul_left _ h₁, mul_dvd_mul_left _ h₂, mul_mul_mul_comm _ _ _ _⟩
 
@@ -444,156 +364,119 @@ end MonoidWithZero
 
 section CancelCommMonoidWithZero
 
-variable [CommMonoidWithZero α] [IsCancelMulZero α] {a b : α} {m n : Nat}
+variable [CommMonoidWithZero α] [IsCancelMulZero α] {a b : α} {m n : ℕ}
 
 section Subsingleton
 variable [Subsingleton αˣ]
 
-/--
-theorem `dvd_antisymm` / 定理 `dvd_antisymm`
-
-English:
-theorem dvd_antisymm
-  statement: a ∣ b -> b ∣ a -> a = b
-  proof: by
-  rintro ⟨c, rfl⟩ ⟨d, hcd⟩
-  rw [mul_assoc]; rw [eq_comm]; rw [mul_right_eq_self₀]; rw [mul_eq_one] at hcd
-  obtain ⟨rfl, -⟩ | rfl := hcd <;> simp
-
-中文:
-定理 dvd_antisymm
-  结论: a ∣ b -> b ∣ a -> a = b
-  证明: by
-  rintro ⟨c, rfl⟩ ⟨d, hcd⟩
-  rw [mul_assoc]; rw [eq_comm]; rw [mul_right_eq_self₀]; rw [mul_eq_one] at hcd
-  obtain ⟨rfl, -⟩ | rfl := hcd <;> simp
-
-Depends on / 依赖: eq_comm, mul_assoc, mul_eq_one
+/-
+**dvd_antisymm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_antisymm : a ∣ b -> b ∣ a -> a = b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_eq_one`：mul_eq_one : a * b = 1 ↔ a = 1 ∧ b = 1
+· 使用定理 `mul_right_eq_self₀`：mul_right_eq_self₀ [IsLeftCancelMulZero M₀] : a * b 
+= a ↔ b = 1 ∨ a = 0
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem dvd_antisymm : a ∣ b -> b ∣ a -> a = b := by
+theorem dvd_antisymm : a ∣ b → b ∣ a → a = b := by
   rintro ⟨c, rfl⟩ ⟨d, hcd⟩
-  rw [mul_assoc]; rw [eq_comm]; rw [mul_right_eq_self₀]; rw [mul_eq_one] at hcd
+  rw [mul_assoc, eq_comm, mul_right_eq_self₀, mul_eq_one] at hcd
   obtain ⟨rfl, -⟩ | rfl := hcd <;> simp
-
-/--
-theorem `dvd_antisymm'` / 定理 `dvd_antisymm'`
-
-English:
-theorem dvd_antisymm'
-  statement: a ∣ b -> b ∣ a -> b = a
-  proof: flip dvd_antisymm
-
-alias Dvd.dvd.antisymm := dvd_antisymm
-
-alias Dvd.dvd.antisymm' := dvd_antisymm'
-
-中文:
-定理 dvd_antisymm'
-  结论: a ∣ b -> b ∣ a -> b = a
-  证明: flip dvd_antisymm
-
-alias Dvd.dvd.antisymm := dvd_antisymm
-
-alias Dvd.dvd.antisymm' := dvd_antisymm'
-
-Depends on / 依赖: dvd_antisymm
+/-
+**dvd_antisymm'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_antisymm' : a ∣ b -> b ∣ a -> b = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_antisymm`：dvd_antisymm : a ∣ b -> b ∣ a -> a = b
 -/
-theorem dvd_antisymm' : a ∣ b -> b ∣ a -> b = a :=
+theorem dvd_antisymm' : a ∣ b → b ∣ a → b = a :=
   flip dvd_antisymm
 
 alias Dvd.dvd.antisymm := dvd_antisymm
 
 alias Dvd.dvd.antisymm' := dvd_antisymm'
-
-/--
-theorem `eq_of_forall_dvd` / 定理 `eq_of_forall_dvd`
-
-English:
-theorem eq_of_forall_dvd
-  given: (h : forall c, a ∣ c ↔ b ∣ c)
-  statement: a = b
-  proof: ((h _).2 dvd_rfl).antisymm (h _).1 dvd_rfl
-
-中文:
-定理 eq_of_对任意_dvd
-  条件: (h : 对任意 c, a ∣ c ↔ b ∣ c)
-  结论: a = b
-  证明: ((h _).2 dvd_rfl).antisymm (h _).1 dvd_rfl
-
-Depends on / 依赖: antisymm, dvd_rfl
+/-
+**eq_of_forall_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_of_forall_dvd (h : forall c, a ∣ c ↔ b ∣ c) : a = b
+参数：h : forall c, a ∣ c ↔ b ∣ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.antisymm`：∀ {α : Type u_1} [inst : CommMonoidWithZero α] [IsCanc
+elMulZero α] {a b : α} [Subsingleton αˣ], a ∣ b → b ∣ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem eq_of_forall_dvd (h : forall c, a ∣ c ↔ b ∣ c) : a = b :=
-((h _).2 dvd_rfl).antisymm (h _).1 dvd_rfl
-
-/--
-theorem `eq_of_forall_dvd'` / 定理 `eq_of_forall_dvd'`
-
-English:
-theorem eq_of_forall_dvd'
-  given: (h : forall c, c ∣ a ↔ c ∣ b)
-  statement: a = b
-  proof: ((h _).1 dvd_rfl).antisymm (h _).2 dvd_rfl
-
-中文:
-定理 eq_of_对任意_dvd'
-  条件: (h : 对任意 c, c ∣ a ↔ c ∣ b)
-  结论: a = b
-  证明: ((h _).1 dvd_rfl).antisymm (h _).2 dvd_rfl
-
-Depends on / 依赖: antisymm, dvd_rfl
+theorem eq_of_forall_dvd (h : ∀ c, a ∣ c ↔ b ∣ c) : a = b :=
+  ((h _).2 dvd_rfl).antisymm <| (h _).1 dvd_rfl
+/-
+**eq_of_forall_dvd'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_of_forall_dvd' (h : forall c, c ∣ a ↔ c ∣ b) : a = b
+参数：h : forall c, c ∣ a ↔ c ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.antisymm`：∀ {α : Type u_1} [inst : CommMonoidWithZero α] [IsCanc
+elMulZero α] {a b : α} [Subsingleton αˣ], a ∣ b → b ∣ a → a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem eq_of_forall_dvd' (h : forall c, c ∣ a ↔ c ∣ b) : a = b :=
-((h _).1 dvd_rfl).antisymm (h _).2 dvd_rfl
+theorem eq_of_forall_dvd' (h : ∀ c, c ∣ a ↔ c ∣ b) : a = b :=
+  ((h _).1 dvd_rfl).antisymm <| (h _).2 dvd_rfl
 
 end Subsingleton
 
-/--
-lemma `pow_dvd_pow_iff` / 引理 `pow_dvd_pow_iff`
-
-English:
-lemma pow_dvd_pow_iff
-  given: (ha₀ : a != 0) (ha : ¬IsUnit a)
-  statement: a ^ n ∣ a ^ m ↔ n <= m
-  proof: by
-  constructor
-  · intro h
-    rw [← not_lt]
-    intro hmn
-    apply ha
-    have : a ^ m * a ∣ a ^ m * 1 := by
-      rw [← pow_succ]; rw [mul_one]
-      exact (pow_dvd_pow _ (Nat.succ_le_of_lt hmn)).trans h
-    rwa [mul_dvd_mul_iff_left, ← isUnit_iff_dvd_one] at this
-    apply pow_ne_zero m ha₀
-  · apply pow_dvd_pow
-
-中文:
-引理 pow_dvd_pow_iff
-  条件: (ha₀ : a != 0) (ha : ¬是单位 a)
-  结论: a ^ n ∣ a ^ m ↔ n <= m
-  证明: by
-  constructor
-  · intro h
-    rw [← not_lt]
-    intro hmn
-    apply ha
-    have : a ^ m * a ∣ a ^ m * 1 := by
-      rw [← pow_succ]; rw [mul_one]
-      exact (pow_dvd_pow _ (Nat.succ_le_of_lt hmn)).trans h
-    rwa [mul_dvd_mul_iff_left, ← isUnit_iff_dvd_one] at this
-    apply pow_ne_zero m ha₀
-  · apply pow_dvd_pow
-
-Depends on / 依赖: Nat.succ_le_of_lt, isUnit_iff_dvd_one, mul_dvd_mul_iff_left, mul_one, not_lt, pow_dvd_pow, pow_ne_zero, pow_succ, succ_le_of_lt
+/-
+**pow_dvd_pow_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pow_dvd_pow_iff (ha₀ : a != 0) (ha : ¬IsUnit a) : a ^ n ∣ a ^ m ↔ n <= m
+参数：ha₀ : a != 0；ha : ¬IsUnit a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `isUnit_iff_dvd_one`：isUnit_iff_dvd_one {x : α} : IsUnit x ↔ x ∣ 1
+· 使用定理 `mul_dvd_mul_iff_left`：mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCan
+celMulZero α] {a b c : α} (ha : a != 0) : a * b ∣ a * c ↔ b ∣ c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsRightCancelMulZero.to_noZeroDivisors`：∀ (M₀ : Type u_1) [inst : MulZer
+oClass M₀] [IsRightCancelMulZero M₀], NoZeroDivisors M₀
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
 -/
-lemma pow_dvd_pow_iff (ha₀ : a != 0) (ha : ¬IsUnit a) : a ^ n ∣ a ^ m ↔ n <= m := by
+lemma pow_dvd_pow_iff (ha₀ : a ≠ 0) (ha : ¬IsUnit a) : a ^ n ∣ a ^ m ↔ n ≤ m := by
   constructor
   · intro h
     rw [← not_lt]
     intro hmn
     apply ha
     have : a ^ m * a ∣ a ^ m * 1 := by
-      rw [← pow_succ]; rw [mul_one]
+      rw [← pow_succ, mul_one]
       exact (pow_dvd_pow _ (Nat.succ_le_of_lt hmn)).trans h
     rwa [mul_dvd_mul_iff_left, ← isUnit_iff_dvd_one] at this
     apply pow_ne_zero m ha₀
@@ -606,36 +489,32 @@ variable [GroupWithZero α]
 
 /-- `∣` is not a useful definition if an inverse is available. -/
 @[simp]
-/--
-lemma `GroupWithZero.dvd_iff` / 引理 `GroupWithZero.dvd_iff`
+/-
+**GroupWithZero.dvd_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：GroupWithZero.dvd_iff {m n : α} : m ∣ n ↔ (m = 0 -> n = 0)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_inv_cancel_left₀`：mul_inv_cancel_left₀ (h : a != 0) (b : G₀) : a * (
+a⁻¹ * b) = b
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
 
-English:
-lemma GroupWithZero.dvd_iff
-  given: {m n : α}
-  statement: m ∣ n ↔ (m = 0 -> n = 0)
-  proof: by
-  refine ⟨fun ⟨a, ha⟩ hm => ?_, fun h => ?_⟩
-  · simp [hm, ha]
-  · refine ⟨m⁻¹ * n, ?_⟩
-    obtain rfl | hn := eq_or_ne n 0
-    · simp
-    · rw [mul_inv_cancel_left₀ (mt h hn)]
-
-中文:
-引理 带零群.dvd_iff
-  条件: {m n : α}
-  结论: m ∣ n ↔ (m = 0 -> n = 0)
-  证明: by
-  refine ⟨fun ⟨a, ha⟩ hm => ?_, fun h => ?_⟩
-  · simp [hm, ha]
-  · refine ⟨m⁻¹ * n, ?_⟩
-    obtain rfl | hn := eq_or_ne n 0
-    · simp
-    · rw [mul_inv_cancel_left₀ (mt h hn)]
-
-Depends on / 依赖: eq_or_ne
+--- 原说明 ---
+`∣` is not a useful definition if an inverse is available.
 -/
-lemma GroupWithZero.dvd_iff {m n : α} : m ∣ n ↔ (m = 0 -> n = 0) := by
+lemma GroupWithZero.dvd_iff {m n : α} : m ∣ n ↔ (m = 0 → n = 0) := by
   refine ⟨fun ⟨a, ha⟩ hm => ?_, fun h => ?_⟩
   · simp [hm, ha]
   · refine ⟨m⁻¹ * n, ?_⟩
@@ -644,3 +523,4 @@ lemma GroupWithZero.dvd_iff {m n : α} : m ∣ n ↔ (m = 0 -> n = 0) := by
     · rw [mul_inv_cancel_left₀ (mt h hn)]
 
 end GroupWithZero
+

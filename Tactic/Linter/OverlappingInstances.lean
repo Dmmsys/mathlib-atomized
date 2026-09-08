@@ -45,35 +45,28 @@ meta section
 
 namespace Mathlib.Linter.OverlappingInstances
 
-/--
-Definition of `eraseInstances` / `eraseInstances` 的定义
+/-- Clear the instances from the given application.
+This is used to deal with classes that have instance parameters.
+For example, if you have a local instance of `ContinuousAdd α` and `IsTopologicalAddGroup α`,
+then the two `ContinuousAdd α` instances may have slightly different `[Add α]` arguments. -/
+/-
+**Mathlib.Linter.OverlappingInstances.eraseInstances** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Linter.OverlappingInstances`。
+形式化陈述：eraseInstances (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eraseInstances
-  signature: (e : Expr)
-  body: do
-  e.withApp fun f args => do
-  let finfo ← getFunInfo f
-  let mut args := args
-  for param in finfo.paramInfo, i in *...args.size do
-    if param.binderInfo.isInstImplicit then
-      args := args.set! i default
-  return mkAppN f args
-
-中文:
-定义 eraseInstances
-  签名: (e : Expr)
-  定义体: do
-  e.withApp fun f args => do
-  let finfo ← getFunInfo f
-  let mut args := args
-  for param in finfo.paramInfo, i in *...args.size do
-    if param.binderInfo.isInstImplicit then
-      args := args.set! i default
-  return mkAppN f args
+--- 原说明 ---
+Clear the instances from the given application.
+This is used to deal with classes that have instance parameters.
+For example, if you have a local instance of `ContinuousAdd α` and `IsTopologica
+lAddGroup α`,
+then the two `ContinuousAdd α` instances may have slightly different `[Add α]` a
+rguments.
 -/
 def eraseInstances (e : Expr) : MetaM Expr := do
-  e.withApp fun f args => do
+  e.withApp fun f args ↦ do
   let finfo ← getFunInfo f
   let mut args := args
   for param in finfo.paramInfo, i in *...args.size do
@@ -81,32 +74,38 @@ def eraseInstances (e : Expr) : MetaM Expr := do
       args := args.set! i default
   return mkAppN f args
 
-/--
-Definition of `getAbstractProjections` / `getAbstractProjections` 的定义
+/-- Compute the parent classes of `cls`, excluding parent classes that have a parent themselves.
+The reason to exclude such classes is that if there is a duplication in such a class,
+then there will necessarily also be a duplication in its parent.
+If `cls` carries data, then only consider parents that carry data.
+If `cls` is a non-structure class, this simply returns `#[cls]`.
 
-English:
-definition getAbstractProjections
-  signature: (cls : Name)
-  body: do
-  let cinfo ← getConstInfo cls
-MetaM.run' forallTelescope cinfo.type fun xs type => do
-    withLocalDeclD `self (mkAppN (.const cls (cinfo.levelParams.map .param)) xs) fun inst => do
-.run' {} go cls inst #[] xs type.isProp
+The resulting expressions contain bound variables that correspond to the parameters of `cls`.
+The universe levels and bound variables need to be instantiated to get concrete data projections. -/
+/-
+**Mathlib.Linter.OverlappingInstances.getAbstractProjections** 是 Mathlib 中的一个定义，
+位于命名空间 `Mathlib.Linter.OverlappingInstances`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getAbstractProjections
-  签名: (cls : Name)
-  定义体: do
-  let cinfo ← getConstInfo cls
-MetaM.run' forallTelescope cinfo.type fun xs type => do
-    withLocalDeclD `self (mkAppN (.const cls (cinfo.levelParams.map .param)) xs) fun inst => do
-.run' {} go cls inst #[] xs type.isProp
+--- 原说明 ---
+Compute the parent classes of `cls`, excluding parent classes that have a parent
+ themselves.
+The reason to exclude such classes is that if there is a duplication in such a c
+lass,
+then there will necessarily also be a duplication in its parent.
+If `cls` carries data, then only consider parents that carry data.
+If `cls` is a non-structure class, this simply returns `#[cls]`.
+
+The resulting expressions contain bound variables that correspond to the paramet
+ers of `cls`.
+The universe levels and bound variables need to be instantiated to get concrete 
+data projections.
 -/
 partial def getAbstractProjections (cls : Name) : CoreM (Array Expr) := do
   let cinfo ← getConstInfo cls
-MetaM.run' forallTelescope cinfo.type fun xs type => do
-    withLocalDeclD `self (mkAppN (.const cls (cinfo.levelParams.map .param)) xs) fun inst => do
-.run' {} go cls inst #[] xs type.isProp
+  MetaM.run' <| forallTelescope cinfo.type fun xs type ↦ do
+    withLocalDeclD `self (mkAppN (.const cls (cinfo.levelParams.map .param)) xs) fun inst ↦ do
+      go cls inst #[] xs type.isProp |>.run' {}
 where
   go (cls : Name) (inst : Expr) (acc : Array Expr) (xs : Array Expr) (isProp : Bool) :
       StateRefT NameSet MetaM (Array Expr) := do
@@ -134,34 +133,19 @@ where
 /-- A cache for the result of `getAbstractDataProjections`. -/
 initialize classProjectionsCache : IO.Ref (NameMap (Array Expr)) ← IO.mkRef {}
 
-/--
-Definition of `getAbstractProjectionsCached` / `getAbstractProjectionsCached` 的定义
+/-- Return the result of `getAbstractDataProjections`, using a global cache.
+To ensure soundness, the cache is only used for imported declarations. -/
+/-
+**Mathlib.Linter.OverlappingInstances.getAbstractProjectionsCached** 是 Mathlib 中
+的一个定义，位于命名空间 `Mathlib.Linter.OverlappingInstances`。
+形式化陈述：getAbstractProjectionsCached (cls : Name) : CoreM (Array Expr)
+参数：cls : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getAbstractProjectionsCached
-  signature: (cls : Name)
-  body: do
-  if (← getEnv).isImportedConst cls then
-    if let some result := (← classProjectionsCache.get).find? cls then
-      return result
-    let result ← getAbstractProjections cls
-    classProjectionsCache.modify (·.insert cls result)
-    return result
-  else
-    getAbstractProjections cls
-
-中文:
-定义 getAbstractProjectionsCached
-  签名: (cls : Name)
-  定义体: do
-  if (← getEnv).isImportedConst cls then
-    if let some result := (← classProjectionsCache.get).find? cls then
-      return result
-    let result ← getAbstractProjections cls
-    classProjectionsCache.modify (·.insert cls result)
-    return result
-  else
-    getAbstractProjections cls
+--- 原说明 ---
+Return the result of `getAbstractDataProjections`, using a global cache.
+To ensure soundness, the cache is only used for imported declarations.
 -/
 def getAbstractProjectionsCached (cls : Name) : CoreM (Array Expr) := do
   if (← getEnv).isImportedConst cls then
@@ -173,62 +157,17 @@ def getAbstractProjectionsCached (cls : Name) : CoreM (Array Expr) := do
   else
     getAbstractProjections cls
 
-/--
-Definition of `findOverlappingInstances` / `findOverlappingInstances` 的定义
+/-- Find classes for which multiple different instances can be synthesized in the local context.
+The result maps classes to the (at least 2) local instances that generate them. -/
+/-
+**Mathlib.Linter.OverlappingInstances.findOverlappingInstances** 是 Mathlib 中的一个定
+义，位于命名空间 `Mathlib.Linter.OverlappingInstances`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findOverlappingInstances
-  signature: : MetaM (ExprMap (Array FVarId))
-  body: do
-  -- Maps a class to the collection of local instances that overlap on it.
-  -- This only includes overlaps of at least 2 local instances.
-  let mut overlaps : ExprMap (Array FVarId) := {}
-  -- Maps a class to the first local instance that produces an instance of it.
-  let mut encountered : ExprMap FVarId := {}
-  for decl in ← getLCtx do
-    if decl.binderInfo.isInstImplicit then
-      let type ← instantiateMVars decl.type
-      let projClasses ← forallTelescopeReducing (whnfType := true) type fun xs type => do
-        type.withApp fun f args => do
-        let .const cls us := f |
-          return #[] -- This can happen when using `set_option checkBinderAnnotations false`
-        let levelParams := (← getConstInfo cls).levelParams
-        let projs ← getAbstractProjectionsCached cls
-        projs.mapM fun proj =>
-mkForallFVars xs (proj.instantiateLevelParams levelParams us).instantiateRev args
-      for projCls in projClasses do
-        if let some fvarId' := encountered[projCls]? then
-          overlaps := overlaps.alter projCls (·.getD #[fvarId'] |>.push decl.fvarId)
-        else
-          encountered := encountered.insert projCls decl.fvarId
-  return overlaps
-
-中文:
-定义 findOverlappingInstances
-  签名: : MetaM (ExprMap (数组 FVarId))
-  定义体: do
-  -- Maps a class to the collection of local instances that overlap on it.
-  -- This only includes overlaps of at least 2 local instances.
-  let mut overlaps : ExprMap (Array FVarId) := {}
-  -- Maps a class to the first local instance that produces an instance of it.
-  let mut encountered : ExprMap FVarId := {}
-  for decl in ← getLCtx do
-    if decl.binderInfo.isInstImplicit then
-      let type ← instantiateMVars decl.type
-      let projClasses ← forallTelescopeReducing (whnfType := true) type fun xs type => do
-        type.withApp fun f args => do
-        let .const cls us := f |
-          return #[] -- This can happen when using `set_option checkBinderAnnotations false`
-        let levelParams := (← getConstInfo cls).levelParams
-        let projs ← getAbstractProjectionsCached cls
-        projs.mapM fun proj =>
-mkForallFVars xs (proj.instantiateLevelParams levelParams us).instantiateRev args
-      for projCls in projClasses do
-        if let some fvarId' := encountered[projCls]? then
-          overlaps := overlaps.alter projCls (·.getD #[fvarId'] |>.push decl.fvarId)
-        else
-          encountered := encountered.insert projCls decl.fvarId
-  return overlaps
+--- 原说明 ---
+Find classes for which multiple different instances can be synthesized in the lo
+cal context.
+The result maps classes to the (at least 2) local instances that generate them.
 -/
 partial def findOverlappingInstances : MetaM (ExprMap (Array FVarId)) := do
   -- Maps a class to the collection of local instances that overlap on it.
@@ -239,14 +178,14 @@ partial def findOverlappingInstances : MetaM (ExprMap (Array FVarId)) := do
   for decl in ← getLCtx do
     if decl.binderInfo.isInstImplicit then
       let type ← instantiateMVars decl.type
-      let projClasses ← forallTelescopeReducing (whnfType := true) type fun xs type => do
-        type.withApp fun f args => do
+      let projClasses ← forallTelescopeReducing (whnfType := true) type fun xs type ↦ do
+        type.withApp fun f args ↦ do
         let .const cls us := f |
           return #[] -- This can happen when using `set_option checkBinderAnnotations false`
         let levelParams := (← getConstInfo cls).levelParams
         let projs ← getAbstractProjectionsCached cls
-        projs.mapM fun proj =>
-mkForallFVars xs (proj.instantiateLevelParams levelParams us).instantiateRev args
+        projs.mapM fun proj ↦
+          mkForallFVars xs <| (proj.instantiateLevelParams levelParams us).instantiateRev args
       for projCls in projClasses do
         if let some fvarId' := encountered[projCls]? then
           overlaps := overlaps.alter projCls (·.getD #[fvarId'] |>.push decl.fvarId)
@@ -260,136 +199,21 @@ register_option linter.overlappingInstances : Bool := {
   descr := "enable the overlapping instances linter."
 }
 
-/--
-Definition of `runLinter` / `runLinter` 的定义
+/-- Report a warning message if there are any overlapping instances in the local context.
+For `Prop` instances, only report local instances that are redundant. -/
+/-
+**Mathlib.Linter.OverlappingInstances.runLinter** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Linter.OverlappingInstances`。
+形式化陈述：runLinter (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : Optio
+n Expr) : IO (Option MessageData)
+参数：ctx : ContextInfo；lctx : LocalContext；expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runLinter
-  signature: (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : Option Expr)
-  body: do
-  ctx.runMetaM lctx do
-  -- Add the hypotheses of the expected type to the local context, as it may have more instances.
-  expectedType?.elim id (forallTelescope · fun _ _ => ·) do
-  let overlaps ← findOverlappingInstances
-  if overlaps.isEmpty then
-    return none
-  -- Sort the suggestions in a (somewhat) deterministic way.
-  let overlaps := overlaps.toArray.qsort (·.1.lt ·.1)
-  let sortedOverlaps : Std.HashMap (Array FVarId) (Array Expr) :=
-    overlaps.foldl (init := {}) fun s (overlap, fvars) => s.alter fvars (·.getD #[] |>.push overlap)
-  let sortedOverlaps := sortedOverlaps.toArray.qsort (Array.lex ·.2 ·.2 Expr.lt)
-  let mut msgs := #[]
-  let mut needsDiamondMsg := false
-  for (fvars, overlaps) in sortedOverlaps do
-    let fvarTypes ← fvars.mapM (do instantiateMVars <| ← ·.getType)
-    -- If the overlapping instances are the same, use a simple message.
-    if fvarTypes.all (· == fvarTypes[0]!) then
-msgs := msgs.push
-        m!"There are {fvarTypes.size} `{.sbracket fvarTypes[0]!}` instances; one is sufficient."
-    else
-      let propOverlap ← overlaps.allM isProp
-      unless propOverlap do
-        needsDiamondMsg := true
-      -- Ignore `Prop` overlaps when data conflicts are present.
-      let overlaps ← if propOverlap then pure overlaps else overlaps.filterM (notM <| isProp ·)
-      let localInsts := (← getLCtx).decls.toList.reduceOption
-      -- Otherwise, figure out which instances can be synthesized from the other instances
-      let mut redundant := #[]
-      for fvar in fvars, type in fvarTypes do
-        let localInsts := localInsts.filter (·.fvarId != fvar)
-        if (← withLocalInstances localInsts (trySynthInstance type)) matches .some _ then
-          redundant := redundant.push type
-      -- For `Prop` overlaps, only warn if there is an instance that can be removed.
-      if propOverlap && redundant.isEmpty then
-        continue
-let fvarTypes := .andList fvarTypes.toList.map (m!"`{.sbracket ·}`")
-let overlaps := .andList overlaps.toList.map (m!"`{.sbracket ·}`")
-      let mut msg :=
-        m!"{fvarTypes} {if propOverlap then "each imply" else
-          "can be used to infer conflicting versions of"} {overlaps}."
-      unless redundant.isEmpty do
-let redundant' := .andList redundant.toList.map (m!"`{.sbracket ·}`")
-        msg := m!"{msg}\n💡️ Of these, {redundant'} may be removed."
-      msgs := msgs.push msg
-  if msgs.isEmpty then
-    return none
-  let inDecl ← if let some decl := ctx.parentDecl? then
-    pure m!" in `{← addMessageContextPartial (.ofConstName decl)}`" else pure ""
-  let mut msg := m!"Overlapping instance parameters{inDecl}:\n"
-  for overlapMsg in msgs do
-    msg := msg ++ m!"\n⚠️ {overlapMsg}"
-  if needsDiamondMsg then
-    msg := msg ++ m!"\n\n\
-      When a data-carrying type class has multiple potential instances coming from different \
-      instance parameters, then these potential instances are incompatible. This is an example of \
-      an \"instance diamond\", which leads to unexpected unification failures.\
-      \n\n\
-      Delete or combine some of your instance parameters to avoid this."
-  addMessageContextFull msg
-
-中文:
-定义 runLinter
-  签名: (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : 选项类型 Expr)
-  定义体: do
-  ctx.runMetaM lctx do
-  -- Add the hypotheses of the expected type to the local context, as it may have more instances.
-  expectedType?.elim id (forallTelescope · fun _ _ => ·) do
-  let overlaps ← findOverlappingInstances
-  if overlaps.isEmpty then
-    return none
-  -- Sort the suggestions in a (somewhat) deterministic way.
-  let overlaps := overlaps.toArray.qsort (·.1.lt ·.1)
-  let sortedOverlaps : Std.HashMap (Array FVarId) (Array Expr) :=
-    overlaps.foldl (init := {}) fun s (overlap, fvars) => s.alter fvars (·.getD #[] |>.push overlap)
-  let sortedOverlaps := sortedOverlaps.toArray.qsort (Array.lex ·.2 ·.2 Expr.lt)
-  let mut msgs := #[]
-  let mut needsDiamondMsg := false
-  for (fvars, overlaps) in sortedOverlaps do
-    let fvarTypes ← fvars.mapM (do instantiateMVars <| ← ·.getType)
-    -- If the overlapping instances are the same, use a simple message.
-    if fvarTypes.all (· == fvarTypes[0]!) then
-msgs := msgs.push
-        m!"There are {fvarTypes.size} `{.sbracket fvarTypes[0]!}` instances; one is sufficient."
-    else
-      let propOverlap ← overlaps.allM isProp
-      unless propOverlap do
-        needsDiamondMsg := true
-      -- Ignore `Prop` overlaps when data conflicts are present.
-      let overlaps ← if propOverlap then pure overlaps else overlaps.filterM (notM <| isProp ·)
-      let localInsts := (← getLCtx).decls.toList.reduceOption
-      -- Otherwise, figure out which instances can be synthesized from the other instances
-      let mut redundant := #[]
-      for fvar in fvars, type in fvarTypes do
-        let localInsts := localInsts.filter (·.fvarId != fvar)
-        if (← withLocalInstances localInsts (trySynthInstance type)) matches .some _ then
-          redundant := redundant.push type
-      -- For `Prop` overlaps, only warn if there is an instance that can be removed.
-      if propOverlap && redundant.isEmpty then
-        continue
-let fvarTypes := .andList fvarTypes.toList.map (m!"`{.sbracket ·}`")
-let overlaps := .andList overlaps.toList.map (m!"`{.sbracket ·}`")
-      let mut msg :=
-        m!"{fvarTypes} {if propOverlap then "each imply" else
-          "can be used to infer conflicting versions of"} {overlaps}."
-      unless redundant.isEmpty do
-let redundant' := .andList redundant.toList.map (m!"`{.sbracket ·}`")
-        msg := m!"{msg}\n💡️ Of these, {redundant'} may be removed."
-      msgs := msgs.push msg
-  if msgs.isEmpty then
-    return none
-  let inDecl ← if let some decl := ctx.parentDecl? then
-    pure m!" in `{← addMessageContextPartial (.ofConstName decl)}`" else pure ""
-  let mut msg := m!"Overlapping instance parameters{inDecl}:\n"
-  for overlapMsg in msgs do
-    msg := msg ++ m!"\n⚠️ {overlapMsg}"
-  if needsDiamondMsg then
-    msg := msg ++ m!"\n\n\
-      When a data-carrying type class has multiple potential instances coming from different \
-      instance parameters, then these potential instances are incompatible. This is an example of \
-      an \"instance diamond\", which leads to unexpected unification failures.\
-      \n\n\
-      Delete or combine some of your instance parameters to avoid this."
-  addMessageContextFull msg
+--- 原说明 ---
+Report a warning message if there are any overlapping instances in the local con
+text.
+For `Prop` instances, only report local instances that are redundant.
 -/
 def runLinter (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : Option Expr) :
     IO (Option MessageData) := do
@@ -402,7 +226,7 @@ def runLinter (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : Option 
   -- Sort the suggestions in a (somewhat) deterministic way.
   let overlaps := overlaps.toArray.qsort (·.1.lt ·.1)
   let sortedOverlaps : Std.HashMap (Array FVarId) (Array Expr) :=
-    overlaps.foldl (init := {}) fun s (overlap, fvars) => s.alter fvars (·.getD #[] |>.push overlap)
+    overlaps.foldl (init := {}) fun s (overlap, fvars) ↦ s.alter fvars (·.getD #[] |>.push overlap)
   let sortedOverlaps := sortedOverlaps.toArray.qsort (Array.lex ·.2 ·.2 Expr.lt)
   let mut msgs := #[]
   let mut needsDiamondMsg := false
@@ -410,7 +234,7 @@ def runLinter (ctx : ContextInfo) (lctx : LocalContext) (expectedType? : Option 
     let fvarTypes ← fvars.mapM (do instantiateMVars <| ← ·.getType)
     -- If the overlapping instances are the same, use a simple message.
     if fvarTypes.all (· == fvarTypes[0]!) then
-msgs := msgs.push
+      msgs := msgs.push <|
         m!"There are {fvarTypes.size} `{.sbracket fvarTypes[0]!}` instances; one is sufficient."
     else
       let propOverlap ← overlaps.allM isProp
@@ -428,13 +252,13 @@ msgs := msgs.push
       -- For `Prop` overlaps, only warn if there is an instance that can be removed.
       if propOverlap && redundant.isEmpty then
         continue
-let fvarTypes := .andList fvarTypes.toList.map (m!"`{.sbracket ·}`")
-let overlaps := .andList overlaps.toList.map (m!"`{.sbracket ·}`")
+      let fvarTypes := .andList <| fvarTypes.toList.map (m!"`{.sbracket ·}`")
+      let overlaps := .andList <| overlaps.toList.map (m!"`{.sbracket ·}`")
       let mut msg :=
         m!"{fvarTypes} {if propOverlap then "each imply" else
           "can be used to infer conflicting versions of"} {overlaps}."
       unless redundant.isEmpty do
-let redundant' := .andList redundant.toList.map (m!"`{.sbracket ·}`")
+        let redundant' := .andList <| redundant.toList.map (m!"`{.sbracket ·}`")
         msg := m!"{msg}\n💡️ Of these, {redundant'} may be removed."
       msgs := msgs.push msg
   if msgs.isEmpty then
@@ -457,51 +281,18 @@ initialize registerTraceClass `overlappingInstances
 
 open Linter in
 /--
-Definition of `overlappingInstances` / `overlappingInstances` 的定义
+Lints against data-carrying overlaps between instances in the local contexts of declarations.
+-/
+/-
+**Mathlib.Linter.OverlappingInstances.overlappingInstances** 是 Mathlib 中的一个定义，位于
+命名空间 `Mathlib.Linter.OverlappingInstances`。
+形式化陈述：overlappingInstances : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition overlappingInstances
-  signature: : Linter where
-  body: UnusedInstancesInType.withSetBoolOptionIn fun cmd => do
-    unless getLinterValue linter.overlappingInstances (← getLinterOptions) do
-      return
-    -- Note: we don't break on errors; we want to lint even on partial declarations
-    profileitM Exception "overlappingInstancesLinter" (← getOptions) do
-    for t in ← getInfoTrees do
-      for (ref, ctx, info) in t.getDeclBodyInfos do
-        let some (lctx, expectedType?) := info.getLCtx? | pure ()
-        withTraceNode `overlappingInstances
-          (fun _ => return m!"linting `{.ofConstName <| ctx.parentDecl?.getD .anonymous}`") do
-        let some msg ← runLinter ctx lctx expectedType? | pure ()
-        /- Log the warning from the declaration's selection range (usually the declaration name,
-        or `instance`) to the body if possible. This underlines the hypotheses and type,
-        and makes the warning visible in the infoview when the cursor is within the body. -/
-        let declRange? ← ctx.parentDecl?.bindM findDeclarationSyntaxRange?
-        let ref := declRange?.elim ref (mkNullNode #[.ofRange ·, ref])
-        logLint linter.overlappingInstances ref msg
-
-中文:
-定义 overlappingInstances
-  签名: : Linter where
-  定义体: UnusedInstancesInType.withSetBoolOptionIn fun cmd => do
-    unless getLinterValue linter.overlappingInstances (← getLinterOptions) do
-      return
-    -- Note: we don't break on errors; we want to lint even on partial declarations
-    profileitM Exception "overlappingInstancesLinter" (← getOptions) do
-    for t in ← getInfoTrees do
-      for (ref, ctx, info) in t.getDeclBodyInfos do
-        let some (lctx, expectedType?) := info.getLCtx? | pure ()
-        withTraceNode `overlappingInstances
-          (fun _ => return m!"linting `{.ofConstName <| ctx.parentDecl?.getD .anonymous}`") do
-        let some msg ← runLinter ctx lctx expectedType? | pure ()
-        /- Log the warning from the declaration's selection range (usually the declaration name,
-        or `instance`) to the body if possible. This underlines the hypotheses and type,
-        and makes the warning visible in the infoview when the cursor is within the body. -/
-        let declRange? ← ctx.parentDecl?.bindM findDeclarationSyntaxRange?
-        let ref := declRange?.elim ref (mkNullNode #[.ofRange ·, ref])
-        logLint linter.overlappingInstances ref msg
-
-Depends on / 依赖: UnusedInstancesInType, UnusedInstancesInType.withSetBoolOptionIn, withSetBoolOptionIn
+--- 原说明 ---
+Lints against data-carrying overlaps between instances in the local contexts of 
+declarations.
 -/
 def overlappingInstances : Linter where
   run := UnusedInstancesInType.withSetBoolOptionIn fun cmd => do
@@ -513,7 +304,7 @@ def overlappingInstances : Linter where
       for (ref, ctx, info) in t.getDeclBodyInfos do
         let some (lctx, expectedType?) := info.getLCtx? | pure ()
         withTraceNode `overlappingInstances
-          (fun _ => return m!"linting `{.ofConstName <| ctx.parentDecl?.getD .anonymous}`") do
+          (fun _ ↦ return m!"linting `{.ofConstName <| ctx.parentDecl?.getD .anonymous}`") do
         let some msg ← runLinter ctx lctx expectedType? | pure ()
         /- Log the warning from the declaration's selection range (usually the declaration name,
         or `instance`) to the body if possible. This underlines the hypotheses and type,
@@ -525,3 +316,4 @@ def overlappingInstances : Linter where
 initialize addLinter overlappingInstances
 
 end Mathlib.Linter.OverlappingInstances
+

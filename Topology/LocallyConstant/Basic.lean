@@ -30,1213 +30,872 @@ variable {X Y Z α : Type*} [TopologicalSpace X]
 open Set Filter
 open scoped Topology
 
-/--
-Definition of `IsLocallyConstant` / `IsLocallyConstant` 的定义
+/-- A function between topological spaces is locally constant if the preimage of any set is open. -/
+/-
+**IsLocallyConstant** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsLocallyConstant (f : X -> Y) : Prop
+参数：f : X -> Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocallyConstant
-  signature: (f : X -> Y)
-  body: forall s : Set Y, IsOpen (f ⁻¹' s)
-
-中文:
-定义 IsLocallyConstant
-  签名: (f : X -> Y)
-  定义体: forall s : Set Y, IsOpen (f ⁻¹' s)
-
-Depends on / 依赖: IsOpen
+--- 原说明 ---
+A function between topological spaces is locally constant if the preimage of any
+ set is open.
 -/
-def IsLocallyConstant (f : X -> Y) : Prop :=
-  forall s : Set Y, IsOpen (f ⁻¹' s)
+def IsLocallyConstant (f : X → Y) : Prop :=
+  ∀ s : Set Y, IsOpen (f ⁻¹' s)
 
 namespace IsLocallyConstant
 
 open List in
-/--
-theorem `tfae` / 定理 `tfae`
-
-English:
-theorem tfae
-  given: (f : X -> Y)
-  proof: by
-  tfae_have 1 -> 4 := fun h y => h {y}
-  tfae_have 4 -> 3 := fun h x => h (f x)
-  tfae_have 3 -> 2 := fun h x => IsOpen.mem_nhds (h x) rfl
-  tfae_have 2 -> 5
-  | h, x => by
-    rcases mem_nhds_iff.1 (h x) with ⟨U, eq, hU, hx⟩
-    exact ⟨U, hU, hx, eq⟩
-  tfae_have 5 -> 1
-  | h, s => by
-    refine isOpen_iff_forall_mem_open.2 fun x hx => ?_
-    rcases h x with ⟨U, hU, hxU, eq⟩
-exact ⟨U, fun x' hx' => mem_preimage.2 (eq x' hx').symm ▸ hx, hU, hxU⟩
-  tfae_finish
-
-@[nontriviality]
-
-中文:
-定理 tfae
-  条件: (f : X -> Y)
-  证明: by
-  tfae_have 1 -> 4 := fun h y => h {y}
-  tfae_have 4 -> 3 := fun h x => h (f x)
-  tfae_have 3 -> 2 := fun h x => IsOpen.mem_nhds (h x) rfl
-  tfae_have 2 -> 5
-  | h, x => by
-    rcases mem_nhds_iff.1 (h x) with ⟨U, eq, hU, hx⟩
-    exact ⟨U, hU, hx, eq⟩
-  tfae_have 5 -> 1
-  | h, s => by
-    refine isOpen_iff_forall_mem_open.2 fun x hx => ?_
-    rcases h x with ⟨U, hU, hxU, eq⟩
-exact ⟨U, fun x' hx' => mem_preimage.2 (eq x' hx').symm ▸ hx, hU, hxU⟩
-  tfae_finish
-
-@[nontriviality]
+/-
+**IsLocallyConstant.tfae** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] (f : X → Y),  
+ [IsLocallyConstant f, ∀ (x : X), ∀ᶠ (x' : X) in nhds x, f x' = f x, ∀ (x : X), 
+IsOpen {x' | f x' = f x},       ∀ (y : Y), IsOpen (f ⁻¹' {y}), ∀ (x : X), ∃ U, I
+sOpen U ∧ x ∈ U ∧ ∀ x' ∈ U, f x' = f x].TFAE
+参数：f : X → Y；x : X；x' : X；x : X；y : Y；f ⁻¹' {y}；x : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhds_iff`：mem_nhds_iff : s in 𝓝 x ↔ exists t subseteq s, IsOpen t ∧ 
+x in t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isOpen_iff_forall_mem_open`：isOpen_iff_forall_mem_open : IsOpen s ↔ fora
+ll x in s, exists t, t subseteq s ∧ IsOpen t ∧ x in t
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.tfae_of_cycle`：tfae_of_cycle {a b} {l : List Prop} (h_chain : List.
+IsChain (· -> ·) (a :: b :: l)) (h_last : getLastD l b -> a) : TFAE (a :: b :: l
+)
 -/
-protected theorem tfae (f : X -> Y) :
+protected theorem tfae (f : X → Y) :
     TFAE [IsLocallyConstant f,
-      forall x, forallᶠ x' in 𝓝 x, f x' = f x,
-      forall x, IsOpen { x' | f x' = f x },
-      forall y, IsOpen (f ⁻¹' {y}),
-      forall x, exists U : Set X, IsOpen U ∧ x in U ∧ forall x' in U, f x' = f x] := by
-  tfae_have 1 -> 4 := fun h y => h {y}
-  tfae_have 4 -> 3 := fun h x => h (f x)
-  tfae_have 3 -> 2 := fun h x => IsOpen.mem_nhds (h x) rfl
-  tfae_have 2 -> 5
+      ∀ x, ∀ᶠ x' in 𝓝 x, f x' = f x,
+      ∀ x, IsOpen { x' | f x' = f x },
+      ∀ y, IsOpen (f ⁻¹' {y}),
+      ∀ x, ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ ∀ x' ∈ U, f x' = f x] := by
+  tfae_have 1 → 4 := fun h y => h {y}
+  tfae_have 4 → 3 := fun h x => h (f x)
+  tfae_have 3 → 2 := fun h x => IsOpen.mem_nhds (h x) rfl
+  tfae_have 2 → 5
   | h, x => by
     rcases mem_nhds_iff.1 (h x) with ⟨U, eq, hU, hx⟩
     exact ⟨U, hU, hx, eq⟩
-  tfae_have 5 -> 1
+  tfae_have 5 → 1
   | h, s => by
-    refine isOpen_iff_forall_mem_open.2 fun x hx => ?_
+    refine isOpen_iff_forall_mem_open.2 fun x hx ↦ ?_
     rcases h x with ⟨U, hU, hxU, eq⟩
-exact ⟨U, fun x' hx' => mem_preimage.2 (eq x' hx').symm ▸ hx, hU, hxU⟩
+    exact ⟨U, fun x' hx' => mem_preimage.2 <| (eq x' hx').symm ▸ hx, hU, hxU⟩
   tfae_finish
 
 @[nontriviality]
-/--
-theorem `of_discrete` / 定理 `of_discrete`
-
-English:
-theorem of_discrete
-  given: [DiscreteTopology X] (f : X -> Y)
-  statement: IsLocallyConstant f
-  proof: fun _ =>
-  isOpen_discrete _
-
-中文:
-定理 of_discrete
-  条件: [离散拓扑 X] (f : X -> Y)
-  结论: IsLocallyConstant f
-  证明: fun _ =>
-  isOpen_discrete _
+/-
+**IsLocallyConstant.of_discrete** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：of_discrete [DiscreteTopology X] (f : X -> Y) : IsLocallyConstant f
+参数：f : X -> Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_discrete`：isOpen_discrete (s : Set α) : IsOpen s
 -/
-theorem of_discrete [DiscreteTopology X] (f : X -> Y) : IsLocallyConstant f := fun _ =>
+theorem of_discrete [DiscreteTopology X] (f : X → Y) : IsLocallyConstant f := fun _ =>
   isOpen_discrete _
-
-/--
-theorem `isOpen_fiber` / 定理 `isOpen_fiber`
-
-English:
-theorem isOpen_fiber
-  given: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  statement: IsOpen { x | f x = y }
-  proof: hf {y}
-
-中文:
-定理 isOpen_fiber
-  条件: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  结论: 是开集 { x | f x = y }
-  证明: hf {y}
+/-
+**IsLocallyConstant.isOpen_fiber** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：isOpen_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsOpen { x 
+| f x = y }
+参数：hf : IsLocallyConstant f；y : Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isOpen_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsOpen { x | f x = y } :=
+theorem isOpen_fiber {f : X → Y} (hf : IsLocallyConstant f) (y : Y) : IsOpen { x | f x = y } :=
   hf {y}
-
-/--
-theorem `isClosed_fiber` / 定理 `isClosed_fiber`
-
-English:
-theorem isClosed_fiber
-  given: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  statement: IsClosed { x | f x = y }
-  proof: ⟨hf {y}ᶜ⟩
-
-中文:
-定理 isClosed_fiber
-  条件: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  结论: 是闭集 { x | f x = y }
-  证明: ⟨hf {y}ᶜ⟩
+/-
+**IsLocallyConstant.isClosed_fiber** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`
+。
+形式化陈述：isClosed_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsClosed 
+{ x | f x = y }
+参数：hf : IsLocallyConstant f；y : Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isClosed_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsClosed { x | f x = y } :=
+theorem isClosed_fiber {f : X → Y} (hf : IsLocallyConstant f) (y : Y) : IsClosed { x | f x = y } :=
   ⟨hf {y}ᶜ⟩
-
-/--
-theorem `isClopen_fiber` / 定理 `isClopen_fiber`
-
-English:
-theorem isClopen_fiber
-  given: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  statement: IsClopen { x | f x = y }
-  proof: ⟨isClosed_fiber hf _, isOpen_fiber hf _⟩
-
-中文:
-定理 isClopen_fiber
-  条件: {f : X -> Y} (hf : IsLocallyConstant f) (y : Y)
-  结论: IsClopen { x | f x = y }
-  证明: ⟨isClosed_fiber hf _, isOpen_fiber hf _⟩
-
-Depends on / 依赖: isClosed_fiber, isOpen_fiber
+/-
+**IsLocallyConstant.isClopen_fiber** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`
+。
+形式化陈述：isClopen_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsClopen 
+{ x | f x = y }
+参数：hf : IsLocallyConstant f；y : Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.isClosed_fiber`：isClosed_fiber {f : X -> Y} (hf : IsLo
+callyConstant f) (y : Y) : IsClosed { x | f x = y }
+· 使用定理 `IsLocallyConstant.isOpen_fiber`：isOpen_fiber {f : X -> Y} (hf : IsLocall
+yConstant f) (y : Y) : IsOpen { x | f x = y }
 -/
-theorem isClopen_fiber {f : X -> Y} (hf : IsLocallyConstant f) (y : Y) : IsClopen { x | f x = y } :=
+theorem isClopen_fiber {f : X → Y} (hf : IsLocallyConstant f) (y : Y) : IsClopen { x | f x = y } :=
   ⟨isClosed_fiber hf _, isOpen_fiber hf _⟩
-
-/--
-theorem `iff_exists_open` / 定理 `iff_exists_open`
-
-English:
-theorem iff_exists_open
-  given: (f : X -> Y)
-  proof: (IsLocallyConstant.tfae f).out 0 4
-
-中文:
-定理 iff_存在_open
-  条件: (f : X -> Y)
-  证明: (IsLocallyConstant.tfae f).out 0 4
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.tfae
+/-
+**IsLocallyConstant.iff_exists_open** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant
+`。
+形式化陈述：iff_exists_open (f : X -> Y) : IsLocallyConstant f ↔ forall x, exists U : 
+Set X, IsOpen U ∧ x in U ∧ forall x' in U, f x' = f x
+参数：f : X -> Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `IsLocallyConstant.tfae`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] (f : X → Y),   [IsLocallyConstant f, ∀ (x : X), ∀ᶠ (x' : X) in nhds 
+x, f x' = f …
 -/
-theorem iff_exists_open (f : X -> Y) :
-    IsLocallyConstant f ↔ forall x, exists U : Set X, IsOpen U ∧ x in U ∧ forall x' in U, f x' = f x :=
+theorem iff_exists_open (f : X → Y) :
+    IsLocallyConstant f ↔ ∀ x, ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ ∀ x' ∈ U, f x' = f x :=
   (IsLocallyConstant.tfae f).out 0 4
-
-/--
-theorem `iff_eventually_eq` / 定理 `iff_eventually_eq`
-
-English:
-theorem iff_eventually_eq
-  given: (f : X -> Y)
-  statement: IsLocallyConstant f ↔ forall x, forallᶠ y in 𝓝 x, f y = f x
-  proof: (IsLocallyConstant.tfae f).out 0 1
-
-中文:
-定理 iff_eventually_eq
-  条件: (f : X -> Y)
-  结论: IsLocallyConstant f ↔ 对任意 x, 对任意ᶠ y in 𝓝 x, f y = f x
-  证明: (IsLocallyConstant.tfae f).out 0 1
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.tfae
+/-
+**IsLocallyConstant.iff_eventually_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConsta
+nt`。
+形式化陈述：iff_eventually_eq (f : X -> Y) : IsLocallyConstant f ↔ forall x, forallᶠ y
+ in 𝓝 x, f y = f x
+参数：f : X -> Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `IsLocallyConstant.tfae`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] (f : X → Y),   [IsLocallyConstant f, ∀ (x : X), ∀ᶠ (x' : X) in nhds 
+x, f x' = f …
 -/
-theorem iff_eventually_eq (f : X -> Y) : IsLocallyConstant f ↔ forall x, forallᶠ y in 𝓝 x, f y = f x :=
+theorem iff_eventually_eq (f : X → Y) : IsLocallyConstant f ↔ ∀ x, ∀ᶠ y in 𝓝 x, f y = f x :=
   (IsLocallyConstant.tfae f).out 0 1
-
-/--
-theorem `exists_open` / 定理 `exists_open`
-
-English:
-theorem exists_open
-  given: {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
-  proof: (iff_exists_open f).1 hf x
-
-中文:
-定理 存在_open
-  条件: {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
-  证明: (iff_exists_open f).1 hf x
-
-Depends on / 依赖: iff_exists_open
+/-
+**IsLocallyConstant.exists_open** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：exists_open {f : X -> Y} (hf : IsLocallyConstant f) (x : X) : exists U : S
+et X, IsOpen U ∧ x in U ∧ forall x' in U, f x' = f x
+参数：hf : IsLocallyConstant f；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsLocallyConstant.iff_exists_open`：iff_exists_open (f : X -> Y) : IsLoca
+llyConstant f ↔ forall x, exists U : Set X, IsOpen U ∧ x in U ∧ forall x' in U, 
+f x' = f x
 -/
-theorem exists_open {f : X -> Y} (hf : IsLocallyConstant f) (x : X) :
-    exists U : Set X, IsOpen U ∧ x in U ∧ forall x' in U, f x' = f x :=
+theorem exists_open {f : X → Y} (hf : IsLocallyConstant f) (x : X) :
+    ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ ∀ x' ∈ U, f x' = f x :=
   (iff_exists_open f).1 hf x
-
-/--
-theorem `eventually_eq` / 定理 `eventually_eq`
-
-English:
-theorem eventually_eq
-  given: {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
-  proof: (iff_eventually_eq f).1 hf x
-
-中文:
-定理 eventually_eq
-  条件: {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
-  证明: (iff_eventually_eq f).1 hf x
+/-
+**IsLocallyConstant.eventually_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] {f : X → Y},  
+ IsLocallyConstant f → ∀ (x : X), ∀ᶠ (y : X) in nhds x, f y = f x
+参数：x : X；y : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsLocallyConstant.iff_eventually_eq`：iff_eventually_eq (f : X -> Y) : Is
+LocallyConstant f ↔ forall x, forallᶠ y in 𝓝 x, f y = f x
 -/
-protected theorem eventually_eq {f : X -> Y} (hf : IsLocallyConstant f) (x : X) :
-    forallᶠ y in 𝓝 x, f y = f x :=
+protected theorem eventually_eq {f : X → Y} (hf : IsLocallyConstant f) (x : X) :
+    ∀ᶠ y in 𝓝 x, f y = f x :=
   (iff_eventually_eq f).1 hf x
-
-/--
-theorem `iff_isOpen_fiber_apply` / 定理 `iff_isOpen_fiber_apply`
-
-English:
-theorem iff_isOpen_fiber_apply
-  given: {f : X -> Y}
-  statement: IsLocallyConstant f ↔ forall x, IsOpen (f ⁻¹' {f x})
-  proof: (IsLocallyConstant.tfae f).out 0 2
-
-中文:
-定理 iff_isOpen_fiber_apply
-  条件: {f : X -> Y}
-  结论: IsLocallyConstant f ↔ 对任意 x, 是开集 (f ⁻¹' {f x})
-  证明: (IsLocallyConstant.tfae f).out 0 2
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.tfae
+/-
+**IsLocallyConstant.iff_isOpen_fiber_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyC
+onstant`。
+形式化陈述：iff_isOpen_fiber_apply {f : X -> Y} : IsLocallyConstant f ↔ forall x, IsOp
+en (f ⁻¹' {f x})
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `IsLocallyConstant.tfae`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] (f : X → Y),   [IsLocallyConstant f, ∀ (x : X), ∀ᶠ (x' : X) in nhds 
+x, f x' = f …
 -/
-theorem iff_isOpen_fiber_apply {f : X -> Y} : IsLocallyConstant f ↔ forall x, IsOpen (f ⁻¹' {f x}) :=
+theorem iff_isOpen_fiber_apply {f : X → Y} : IsLocallyConstant f ↔ ∀ x, IsOpen (f ⁻¹' {f x}) :=
   (IsLocallyConstant.tfae f).out 0 2
-
-/--
-theorem `iff_isOpen_fiber` / 定理 `iff_isOpen_fiber`
-
-English:
-theorem iff_isOpen_fiber
-  given: {f : X -> Y}
-  statement: IsLocallyConstant f ↔ forall y, IsOpen (f ⁻¹' {y})
-  proof: (IsLocallyConstant.tfae f).out 0 3
-
-中文:
-定理 iff_isOpen_fiber
-  条件: {f : X -> Y}
-  结论: IsLocallyConstant f ↔ 对任意 y, 是开集 (f ⁻¹' {y})
-  证明: (IsLocallyConstant.tfae f).out 0 3
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.tfae
+/-
+**IsLocallyConstant.iff_isOpen_fiber** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstan
+t`。
+形式化陈述：iff_isOpen_fiber {f : X -> Y} : IsLocallyConstant f ↔ forall y, IsOpen (f 
+⁻¹' {y})
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `IsLocallyConstant.tfae`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] (f : X → Y),   [IsLocallyConstant f, ∀ (x : X), ∀ᶠ (x' : X) in nhds 
+x, f x' = f …
 -/
-theorem iff_isOpen_fiber {f : X -> Y} : IsLocallyConstant f ↔ forall y, IsOpen (f ⁻¹' {y}) :=
+theorem iff_isOpen_fiber {f : X → Y} : IsLocallyConstant f ↔ ∀ y, IsOpen (f ⁻¹' {y}) :=
   (IsLocallyConstant.tfae f).out 0 3
-
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  given: [TopologicalSpace Y] {f : X -> Y} (hf : IsLocallyConstant f)
-  proof: ⟨fun _ _ => hf _⟩
-
-中文:
-定理 continuous
-  条件: [拓扑空间 Y] {f : X -> Y} (hf : IsLocallyConstant f)
-  证明: ⟨fun _ _ => hf _⟩
+/-
+**IsLocallyConstant.continuous** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y},   IsLocallyConstant f → Continuous f
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem continuous [TopologicalSpace Y] {f : X -> Y} (hf : IsLocallyConstant f) :
+protected theorem continuous [TopologicalSpace Y] {f : X → Y} (hf : IsLocallyConstant f) :
     Continuous f :=
   ⟨fun _ _ => hf _⟩
-
-/--
-theorem `iff_continuous` / 定理 `iff_continuous`
-
-English:
-theorem iff_continuous
-  given: {_ : TopologicalSpace Y} [DiscreteTopology Y] (f : X -> Y)
-  proof: ⟨IsLocallyConstant.continuous, fun h s => h.isOpen_preimage s (isOpen_discrete _)⟩
-
-中文:
-定理 iff_continuous
-  条件: {_ : 拓扑空间 Y} [离散拓扑 Y] (f : X -> Y)
-  证明: ⟨IsLocallyConstant.continuous, fun h s => h.isOpen_preimage s (isOpen_discrete _)⟩
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.continuous, continuous, h.isOpen_preimage, isOpen_discrete, isOpen_preimage
+/-
+**IsLocallyConstant.iff_continuous** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`
+。
+形式化陈述：iff_continuous {_ : TopologicalSpace Y} [DiscreteTopology Y] (f : X -> Y) 
+: IsLocallyConstant f ↔ Continuous f
+参数：f : X -> Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsLocallyConstant
+ f → Continuous f
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
+· 使用定理 `isOpen_discrete`：isOpen_discrete (s : Set α) : IsOpen s
 -/
-theorem iff_continuous {_ : TopologicalSpace Y} [DiscreteTopology Y] (f : X -> Y) :
+theorem iff_continuous {_ : TopologicalSpace Y} [DiscreteTopology Y] (f : X → Y) :
     IsLocallyConstant f ↔ Continuous f :=
   ⟨IsLocallyConstant.continuous, fun h s => h.isOpen_preimage s (isOpen_discrete _)⟩
-
-/--
-theorem `of_constant` / 定理 `of_constant`
-
-English:
-theorem of_constant
-  given: (f : X -> Y) (h : forall x y, f x = f y)
-  statement: IsLocallyConstant f
-  proof: (iff_eventually_eq f).2 fun _ => Eventually.of_forall fun _ => h _ _
-
-中文:
-定理 of_constant
-  条件: (f : X -> Y) (h : 对任意 x y, f x = f y)
-  结论: IsLocallyConstant f
-  证明: (iff_eventually_eq f).2 fun _ => Eventually.of_forall fun _ => h _ _
-
-Depends on / 依赖: Eventually, Eventually.of_forall, iff_eventually_eq, of_forall
+/-
+**IsLocallyConstant.of_constant** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：of_constant (f : X -> Y) (h : forall x y, f x = f y) : IsLocallyConstant f
+参数：f : X -> Y；h : forall x y, f x = f y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsLocallyConstant.iff_eventually_eq`：iff_eventually_eq (f : X -> Y) : Is
+LocallyConstant f ↔ forall x, forallᶠ y in 𝓝 x, f y = f x
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-theorem of_constant (f : X -> Y) (h : forall x y, f x = f y) : IsLocallyConstant f :=
+theorem of_constant (f : X → Y) (h : ∀ x y, f x = f y) : IsLocallyConstant f :=
   (iff_eventually_eq f).2 fun _ => Eventually.of_forall fun _ => h _ _
-
-/--
-theorem `const` / 定理 `const`
-
-English:
-theorem const
-  given: (y : Y)
-  statement: IsLocallyConstant (Function.const X y)
-  proof: of_constant _ fun _ _ => rfl
-
-中文:
-定理 const
-  条件: (y : Y)
-  结论: IsLocallyConstant (函数.const X y)
-  证明: of_constant _ fun _ _ => rfl
+/-
+**IsLocallyConstant.const** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] (y : Y), IsLoc
+allyConstant (Function.const X y)
+参数：y : Y；Function.const X y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.of_constant`：of_constant (f : X -> Y) (h : forall x y,
+ f x = f y) : IsLocallyConstant f
 -/
 protected theorem const (y : Y) : IsLocallyConstant (Function.const X y) :=
   of_constant _ fun _ _ => rfl
-
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: {f : X -> Y} (hf : IsLocallyConstant f) (g : Y -> Z)
-  proof: fun s => by
-  rw [Set.preimage_comp]
-  exact hf _
-
-中文:
-定理 comp
-  条件: {f : X -> Y} (hf : IsLocallyConstant f) (g : Y -> Z)
-  证明: fun s => by
-  rw [Set.preimage_comp]
-  exact hf _
+/-
+**IsLocallyConstant.comp** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst : TopologicalSpace X]
+ {f : X → Y},   IsLocallyConstant f → ∀ (g : Y → Z), IsLocallyConstant (g ∘ f)
+参数：g : Y → Z；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
 -/
-protected theorem comp {f : X -> Y} (hf : IsLocallyConstant f) (g : Y -> Z) :
+protected theorem comp {f : X → Y} (hf : IsLocallyConstant f) (g : Y → Z) :
     IsLocallyConstant (g ∘ f) := fun s => by
   rw [Set.preimage_comp]
   exact hf _
-
-/--
-theorem `prodMk` / 定理 `prodMk`
-
-English:
-theorem prodMk
-  statement: {Y'} {f : X -> Y} {f' : X -> Y'} (hf : IsLocallyConstant f)
-  proof: (iff_eventually_eq _).2 fun x =>
-(hf.eventually_eq x).mp (hf'.eventually_eq x).mono fun _ hf' hf => Prod.ext hf hf'
-
-中文:
-定理 prodMk
-  结论: {Y'} {f : X -> Y} {f' : X -> Y'} (hf : IsLocallyConstant f)
-  证明: (iff_eventually_eq _).2 fun x =>
-(hf.eventually_eq x).mp (hf'.eventually_eq x).mono fun _ hf' hf => Prod.ext hf hf'
-
-Depends on / 依赖: Prod.ext, eventually_eq, hf.eventually_eq, iff_eventually_eq
+/-
+**IsLocallyConstant.prodMk** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：prodMk {Y'} {f : X -> Y} {f' : X -> Y'} (hf : IsLocallyConstant f) (hf' : 
+IsLocallyConstant f') : IsLocallyConstant fun x => (f x, f' x)
+参数：hf : IsLocallyConstant f；hf' : IsLocallyConstant f'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsLocallyConstant.iff_eventually_eq`：iff_eventually_eq (f : X -> Y) : Is
+LocallyConstant f ↔ forall x, forallᶠ y in 𝓝 x, f y = f x
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `IsLocallyConstant.eventually_eq`：∀ {X : Type u_1} {Y : Type u_2} [inst :
+ TopologicalSpace X] {f : X → Y},   IsLocallyConstant f → ∀ (x : X), ∀ᶠ (y : X) 
+in nhds x, f y = f x
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
 -/
-theorem prodMk {Y'} {f : X -> Y} {f' : X -> Y'} (hf : IsLocallyConstant f)
+theorem prodMk {Y'} {f : X → Y} {f' : X → Y'} (hf : IsLocallyConstant f)
     (hf' : IsLocallyConstant f') : IsLocallyConstant fun x => (f x, f' x) :=
   (iff_eventually_eq _).2 fun x =>
-(hf.eventually_eq x).mp (hf'.eventually_eq x).mono fun _ hf' hf => Prod.ext hf hf'
-
-/--
-theorem `comp₂` / 定理 `comp₂`
-
-English:
-theorem comp₂
-  statement: {Y₁ Y₂ Z : Type*} {f : X -> Y₁} {g : X -> Y₂} (hf : IsLocallyConstant f)
-  proof: (hf.prodMk hg).comp fun x : Y₁ × Y₂ => h x.1 x.2
-
-中文:
-定理 comp₂
-  结论: {Y₁ Y₂ Z : 类型} {f : X -> Y₁} {g : X -> Y₂} (hf : IsLocallyConstant f)
-  证明: (hf.prodMk hg).comp fun x : Y₁ × Y₂ => h x.1 x.2
-
-Depends on / 依赖: hf.prodMk, prodMk
+    (hf.eventually_eq x).mp <| (hf'.eventually_eq x).mono fun _ hf' hf => Prod.ext hf hf'
+/-
+**IsLocallyConstant.comp** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst : TopologicalSpace X]
+ {f : X → Y},   IsLocallyConstant f → ∀ (g : Y → Z), IsLocallyConstant (g ∘ f)
+参数：g : Y → Z；g ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
 -/
-theorem comp₂ {Y₁ Y₂ Z : Type*} {f : X -> Y₁} {g : X -> Y₂} (hf : IsLocallyConstant f)
-    (hg : IsLocallyConstant g) (h : Y₁ -> Y₂ -> Z) : IsLocallyConstant fun x => h (f x) (g x) :=
+theorem comp₂ {Y₁ Y₂ Z : Type*} {f : X → Y₁} {g : X → Y₂} (hf : IsLocallyConstant f)
+    (hg : IsLocallyConstant g) (h : Y₁ → Y₂ → Z) : IsLocallyConstant fun x => h (f x) (g x) :=
   (hf.prodMk hg).comp fun x : Y₁ × Y₂ => h x.1 x.2
-
-/--
-theorem `comp_continuous` / 定理 `comp_continuous`
-
-English:
-theorem comp_continuous
-  statement: [TopologicalSpace Y] {g : Y -> Z} {f : X -> Y} (hg : IsLocallyConstant g)
-  proof: fun s => by
-  rw [Set.preimage_comp]
-  exact hf.isOpen_preimage _ (hg _)
-
-中文:
-定理 comp_continuous
-  结论: [拓扑空间 Y] {g : Y -> Z} {f : X -> Y} (hg : IsLocallyConstant g)
-  证明: fun s => by
-  rw [Set.preimage_comp]
-  exact hf.isOpen_preimage _ (hg _)
-
-Depends on / 依赖: Set.preimage_comp, hf.isOpen_preimage, isOpen_preimage, preimage_comp
+/-
+**IsLocallyConstant.comp_continuous** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant
+`。
+形式化陈述：comp_continuous [TopologicalSpace Y] {g : Y -> Z} {f : X -> Y} (hg : IsLoc
+allyConstant g) (hf : Continuous f) : IsLocallyConstant (g ∘ f)
+参数：hg : IsLocallyConstant g；hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `Continuous.isOpen_preimage`：∀ {X : Type u} {Y : Type v} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Continuous f → ∀ (s : S
+et Y), IsOpen s …
 -/
-theorem comp_continuous [TopologicalSpace Y] {g : Y -> Z} {f : X -> Y} (hg : IsLocallyConstant g)
+theorem comp_continuous [TopologicalSpace Y] {g : Y → Z} {f : X → Y} (hg : IsLocallyConstant g)
     (hf : Continuous f) : IsLocallyConstant (g ∘ f) := fun s => by
   rw [Set.preimage_comp]
   exact hf.isOpen_preimage _ (hg _)
 
-/--
-theorem `apply_eq_of_isPreconnected` / 定理 `apply_eq_of_isPreconnected`
+/-- A locally constant function is constant on any preconnected set. -/
+/-
+**IsLocallyConstant.apply_eq_of_isPreconnected** 是 Mathlib 中的一个定理，位于命名空间 `IsLoca
+llyConstant`。
+形式化陈述：apply_eq_of_isPreconnected {f : X -> Y} (hf : IsLocallyConstant f) {s : Se
+t X} (hs : IsPreconnected s) {x y : X} (hx : x in s) (hy : y in s) : f x = f y
+参数：hf : IsLocallyConstant f；hs : IsPreconnected s；hx : x in s；hy : y in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_compl_self`：inter_compl_self (s : Set α) : s inter sᶜ = ∅
+· 使用定理 `Set.inter_empty`：inter_empty (a : Set α) : a inter ∅ = ∅
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.union_compl_self`：union_compl_self (s : Set α) : s union sᶜ = univ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
 
-English:
-theorem apply_eq_of_isPreconnected
-  statement: {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X}
-  proof: by
-  let U := f ⁻¹' {f y}
-  suffices x ∉ Uᶜ from Classical.not_not.1 this
-  intro hxV
-  specialize hs U Uᶜ (hf {f y}) (hf {f y}ᶜ) _ ⟨y, ⟨hy, rfl⟩⟩ ⟨x, ⟨hx, hxV⟩⟩
-  · simp only [union_compl_self, subset_univ]
-  · simp only [inter_empty, Set.not_nonempty_empty, inter_compl_self] at hs
-
-中文:
-定理 apply_eq_of_isPreconnected
-  结论: {f : X -> Y} (hf : IsLocallyConstant f) {s : 集合 X}
-  证明: by
-  let U := f ⁻¹' {f y}
-  suffices x ∉ Uᶜ from Classical.not_not.1 this
-  intro hxV
-  specialize hs U Uᶜ (hf {f y}) (hf {f y}ᶜ) _ ⟨y, ⟨hy, rfl⟩⟩ ⟨x, ⟨hx, hxV⟩⟩
-  · simp only [union_compl_self, subset_univ]
-  · simp only [inter_empty, Set.not_nonempty_empty, inter_compl_self] at hs
-
-Depends on / 依赖: Classical, Classical.not_not, Set.not_nonempty_empty, inter_compl_self, inter_empty, not_nonempty_empty, not_not, specialize, subset_univ, union_compl_self
+--- 原说明 ---
+A locally constant function is constant on any preconnected set.
 -/
-theorem apply_eq_of_isPreconnected {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X}
-    (hs : IsPreconnected s) {x y : X} (hx : x in s) (hy : y in s) : f x = f y := by
+theorem apply_eq_of_isPreconnected {f : X → Y} (hf : IsLocallyConstant f) {s : Set X}
+    (hs : IsPreconnected s) {x y : X} (hx : x ∈ s) (hy : y ∈ s) : f x = f y := by
   let U := f ⁻¹' {f y}
   suffices x ∉ Uᶜ from Classical.not_not.1 this
   intro hxV
   specialize hs U Uᶜ (hf {f y}) (hf {f y}ᶜ) _ ⟨y, ⟨hy, rfl⟩⟩ ⟨x, ⟨hx, hxV⟩⟩
   · simp only [union_compl_self, subset_univ]
   · simp only [inter_empty, Set.not_nonempty_empty, inter_compl_self] at hs
-
-/--
-theorem `apply_eq_of_preconnectedSpace` / 定理 `apply_eq_of_preconnectedSpace`
-
-English:
-theorem apply_eq_of_preconnectedSpace
-  statement: [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f)
-  proof: hf.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
-
-中文:
-定理 apply_eq_of_preconnectedSpace
-  结论: [预连通空间 X] {f : X -> Y} (hf : IsLocallyConstant f)
-  证明: hf.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
-
-Depends on / 依赖: apply_eq_of_isPreconnected, hf.apply_eq_of_isPreconnected, isPreconnected_univ
+/-
+**IsLocallyConstant.apply_eq_of_preconnectedSpace** 是 Mathlib 中的一个定理，位于命名空间 `IsL
+ocallyConstant`。
+形式化陈述：apply_eq_of_preconnectedSpace [PreconnectedSpace X] {f : X -> Y} (hf : IsL
+ocallyConstant f) (x y : X) : f x = f y
+参数：hf : IsLocallyConstant f；x y : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.apply_eq_of_isPreconnected`：apply_eq_of_isPreconnected
+ {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X} (hs : IsPreconnected s) {x 
+y : X} (hx : x in s) (hy : y in s)…
+· 使用定理 `PreconnectedSpace.isPreconnected_univ`：∀ {α : Type u} {inst : Topologica
+lSpace α} [self : PreconnectedSpace α], IsPreconnected Set.univ
+· 使用定理 `trivial`：True
 -/
-theorem apply_eq_of_preconnectedSpace [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f)
+theorem apply_eq_of_preconnectedSpace [PreconnectedSpace X] {f : X → Y} (hf : IsLocallyConstant f)
     (x y : X) : f x = f y :=
   hf.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
-
-/--
-theorem `eq_const` / 定理 `eq_const`
-
-English:
-theorem eq_const
-  given: [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
-  proof: funext fun y => hf.apply_eq_of_preconnectedSpace y x
-
-中文:
-定理 eq_const
-  条件: [预连通空间 X] {f : X -> Y} (hf : IsLocallyConstant f) (x : X)
-  证明: funext fun y => hf.apply_eq_of_preconnectedSpace y x
-
-Depends on / 依赖: apply_eq_of_preconnectedSpace, hf.apply_eq_of_preconnectedSpace
+/-
+**IsLocallyConstant.eq_const** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：eq_const [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f) (x 
+: X) : f = Function.const X (f x)
+参数：hf : IsLocallyConstant f；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsLocallyConstant.apply_eq_of_preconnectedSpace`：apply_eq_of_preconnecte
+dSpace [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f) (x y : X) :
+ f x = f y
 -/
-theorem eq_const [PreconnectedSpace X] {f : X -> Y} (hf : IsLocallyConstant f) (x : X) :
+theorem eq_const [PreconnectedSpace X] {f : X → Y} (hf : IsLocallyConstant f) (x : X) :
     f = Function.const X (f x) :=
   funext fun y => hf.apply_eq_of_preconnectedSpace y x
-
-/--
-theorem `exists_eq_const` / 定理 `exists_eq_const`
-
-English:
-theorem exists_eq_const
-  given: [PreconnectedSpace X] [Nonempty Y] {f : X -> Y} (hf : IsLocallyConstant f)
-  proof: by
-  rcases isEmpty_or_nonempty X with h | h
-· exact ⟨Classical.arbitrary Y, funext h.elim⟩
-  · exact ⟨f (Classical.arbitrary X), hf.eq_const _⟩
-
-中文:
-定理 存在_eq_const
-  条件: [预连通空间 X] [非空 Y] {f : X -> Y} (hf : IsLocallyConstant f)
-  证明: by
-  rcases isEmpty_or_nonempty X with h | h
-· exact ⟨Classical.arbitrary Y, funext h.elim⟩
-  · exact ⟨f (Classical.arbitrary X), hf.eq_const _⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, eq_const, h.elim, hf.eq_const, isEmpty_or_nonempty
+/-
+**IsLocallyConstant.exists_eq_const** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant
+`。
+形式化陈述：exists_eq_const [PreconnectedSpace X] [Nonempty Y] {f : X -> Y} (hf : IsLo
+callyConstant f) : exists y, f = Function.const X y
+参数：hf : IsLocallyConstant f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsLocallyConstant.eq_const`：eq_const [PreconnectedSpace X] {f : X -> Y} 
+(hf : IsLocallyConstant f) (x : X) : f = Function.const X (f x)
 -/
-theorem exists_eq_const [PreconnectedSpace X] [Nonempty Y] {f : X -> Y} (hf : IsLocallyConstant f) :
-    exists y, f = Function.const X y := by
+theorem exists_eq_const [PreconnectedSpace X] [Nonempty Y] {f : X → Y} (hf : IsLocallyConstant f) :
+    ∃ y, f = Function.const X y := by
   rcases isEmpty_or_nonempty X with h | h
-· exact ⟨Classical.arbitrary Y, funext h.elim⟩
+  · exact ⟨Classical.arbitrary Y, funext <| h.elim⟩
   · exact ⟨f (Classical.arbitrary X), hf.eq_const _⟩
-
-/--
-theorem `iff_is_const` / 定理 `iff_is_const`
-
-English:
-theorem iff_is_const
-  given: [PreconnectedSpace X] {f : X -> Y}
-  statement: IsLocallyConstant f ↔ forall x y, f x = f y
-  proof: ⟨fun h _ _ => h.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial, of_constant _⟩
-
-中文:
-定理 iff_is_const
-  条件: [预连通空间 X] {f : X -> Y}
-  结论: IsLocallyConstant f ↔ 对任意 x y, f x = f y
-  证明: ⟨fun h _ _ => h.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial, of_constant _⟩
-
-Depends on / 依赖: apply_eq_of_isPreconnected, h.apply_eq_of_isPreconnected, isPreconnected_univ, of_constant
+/-
+**IsLocallyConstant.iff_is_const** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：iff_is_const [PreconnectedSpace X] {f : X -> Y} : IsLocallyConstant f ↔ fo
+rall x y, f x = f y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.apply_eq_of_isPreconnected`：apply_eq_of_isPreconnected
+ {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X} (hs : IsPreconnected s) {x 
+y : X} (hx : x in s) (hy : y in s)…
+· 使用定理 `PreconnectedSpace.isPreconnected_univ`：∀ {α : Type u} {inst : Topologica
+lSpace α} [self : PreconnectedSpace α], IsPreconnected Set.univ
+· 使用定理 `trivial`：True
+· 使用定理 `IsLocallyConstant.of_constant`：of_constant (f : X -> Y) (h : forall x y,
+ f x = f y) : IsLocallyConstant f
 -/
-theorem iff_is_const [PreconnectedSpace X] {f : X -> Y} : IsLocallyConstant f ↔ forall x y, f x = f y :=
+theorem iff_is_const [PreconnectedSpace X] {f : X → Y} : IsLocallyConstant f ↔ ∀ x y, f x = f y :=
   ⟨fun h _ _ => h.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial, of_constant _⟩
-
-/--
-theorem `range_finite` / 定理 `range_finite`
-
-English:
-theorem range_finite
-  given: [CompactSpace X] {f : X -> Y} (hf : IsLocallyConstant f)
-  proof: by
-  let : TopologicalSpace Y := ⊥; have := discreteTopology_bot Y
-  exact (isCompact_range hf.continuous).finite_of_discrete
-
-@[to_additive]
-
-中文:
-定理 range_finite
-  条件: [紧空间 X] {f : X -> Y} (hf : IsLocallyConstant f)
-  证明: by
-  let : TopologicalSpace Y := ⊥; have := discreteTopology_bot Y
-  exact (isCompact_range hf.continuous).finite_of_discrete
-
-@[to_additive]
-
-Depends on / 依赖: TopologicalSpace, continuous, discreteTopology_bot, finite_of_discrete, hf.continuous, isCompact_range
+/-
+**IsLocallyConstant.range_finite** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：range_finite [CompactSpace X] {f : X -> Y} (hf : IsLocallyConstant f) : (S
+et.range f).Finite
+参数：hf : IsLocallyConstant f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `discreteTopology_bot`：discreteTopology_bot (α : Type*) : @DiscreteTopolo
+gy α ⊥
+· 使用定理 `IsCompact.finite_of_discrete`：IsCompact.finite_of_discrete [DiscreteTopo
+logy X] (hs : IsCompact s) : s.Finite
+· 使用定理 `isCompact_range`：isCompact_range [CompactSpace X] {f : X -> Y} (hf : Con
+tinuous f) : IsCompact (range f)
+· 使用定理 `IsLocallyConstant.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsLocallyConstant
+ f → Continuous f
 -/
-theorem range_finite [CompactSpace X] {f : X -> Y} (hf : IsLocallyConstant f) :
+theorem range_finite [CompactSpace X] {f : X → Y} (hf : IsLocallyConstant f) :
     (Set.range f).Finite := by
   let : TopologicalSpace Y := ⊥; have := discreteTopology_bot Y
   exact (isCompact_range hf.continuous).finite_of_discrete
 
 @[to_additive]
-/--
-theorem `one` / 定理 `one`
-
-English:
-theorem one
-  given: [One Y]
-  statement: IsLocallyConstant (1 : X -> Y)
-  proof: IsLocallyConstant.const 1
-
-@[to_additive]
-
-中文:
-定理 one
-  条件: [幺 Y]
-  结论: IsLocallyConstant (1 : X -> Y)
-  证明: IsLocallyConstant.const 1
-
-@[to_additive]
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.const
+/-
+**IsLocallyConstant.one** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：one [One Y] : IsLocallyConstant (1 : X -> Y)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.const`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] (y : Y), IsLocallyConstant (Function.const X y)
 -/
-theorem one [One Y] : IsLocallyConstant (1 : X -> Y) := IsLocallyConstant.const 1
+theorem one [One Y] : IsLocallyConstant (1 : X → Y) := IsLocallyConstant.const 1
 
 @[to_additive]
-/--
-theorem `inv` / 定理 `inv`
-
-English:
-theorem inv
-  given: [Inv Y] ⦃f
-  statement: X -> Y⦄ (hf : IsLocallyConstant f) : IsLocallyConstant f⁻¹
-  proof: hf.comp fun x => x⁻¹
-
-@[to_additive]
-
-中文:
-定理 inv
-  条件: [取逆 Y] ⦃f
-  结论: X -> Y⦄ (hf : IsLocallyConstant f) : IsLocallyConstant f⁻¹
-  证明: hf.comp fun x => x⁻¹
-
-@[to_additive]
-
-Depends on / 依赖: hf.comp
+/-
+**IsLocallyConstant.inv** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：inv [Inv Y] ⦃f : X -> Y⦄ (hf : IsLocallyConstant f) : IsLocallyConstant f⁻
+¹
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [
+inst : TopologicalSpace X] {f : X → Y},   IsLocallyConstant f → ∀ (g : Y → Z), I
+sLocallyCons…
 -/
-theorem inv [Inv Y] ⦃f : X -> Y⦄ (hf : IsLocallyConstant f) : IsLocallyConstant f⁻¹ :=
+theorem inv [Inv Y] ⦃f : X → Y⦄ (hf : IsLocallyConstant f) : IsLocallyConstant f⁻¹ :=
   hf.comp fun x => x⁻¹
 
 @[to_additive]
-/--
-theorem `mul` / 定理 `mul`
-
-English:
-theorem mul
-  given: [Mul Y] ⦃f g
-  statement: X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
-  proof: hf.comp₂ hg (· * ·)
-
-@[to_additive]
-
-中文:
-定理 mul
-  条件: [乘法 Y] ⦃f g
-  结论: X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
-  证明: hf.comp₂ hg (· * ·)
-
-@[to_additive]
-
-Depends on / 依赖: hf.comp
+/-
+**IsLocallyConstant.mul** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：mul [Mul Y] ⦃f g : X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConst
+ant g) : IsLocallyConstant (f * g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.comp₂`：comp₂ {Y₁ Y₂ Z : Type*} {f : X -> Y₁} {g : X ->
+ Y₂} (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) (h : Y₁ -> Y₂ -> Z) :
+ IsLocallyCon…
 -/
-theorem mul [Mul Y] ⦃f g : X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
+theorem mul [Mul Y] ⦃f g : X → Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
     IsLocallyConstant (f * g) :=
   hf.comp₂ hg (· * ·)
 
 @[to_additive]
-/--
-theorem `div` / 定理 `div`
-
-English:
-theorem div
-  given: [Div Y] ⦃f g
-  statement: X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
-  proof: hf.comp₂ hg (· / ·)
-
-中文:
-定理 div
-  条件: [除法 Y] ⦃f g
-  结论: X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
-  证明: hf.comp₂ hg (· / ·)
-
-Depends on / 依赖: hf.comp
+/-
+**IsLocallyConstant.div** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：div [Div Y] ⦃f g : X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConst
+ant g) : IsLocallyConstant (f / g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.comp₂`：comp₂ {Y₁ Y₂ Z : Type*} {f : X -> Y₁} {g : X ->
+ Y₂} (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) (h : Y₁ -> Y₂ -> Z) :
+ IsLocallyCon…
 -/
-theorem div [Div Y] ⦃f g : X -> Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
+theorem div [Div Y] ⦃f g : X → Y⦄ (hf : IsLocallyConstant f) (hg : IsLocallyConstant g) :
     IsLocallyConstant (f / g) :=
   hf.comp₂ hg (· / ·)
 
-/--
-theorem `desc` / 定理 `desc`
+/-- If a composition of a function `f` followed by an injection `g` is locally
+constant, then the locally constant property descends to `f`. -/
+/-
+**IsLocallyConstant.desc** 是 Mathlib 中的一个定理，位于命名空间 `IsLocallyConstant`。
+形式化陈述：desc {α β : Type*} (f : X -> α) (g : α -> β) (h : IsLocallyConstant (g ∘ f
+)) (inj : Function.Injective g) : IsLocallyConstant f
+参数：f : X -> α；g : α -> β；h : IsLocallyConstant (g ∘ f)；inj : Function.Injective 
+g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `Set.preimage_preimage`：preimage_preimage {g : β -> γ} {f : α -> β} {s : 
+Set γ} : f ⁻¹' g ⁻¹' s = (fun x => g (f x)) ⁻¹' s
 
-English:
-theorem desc
-  statement: {α β : Type*} (f : X -> α) (g : α -> β) (h : IsLocallyConstant (g ∘ f))
-  proof: fun s => by
-  rw [← preimage_image_eq s inj]; rw [preimage_preimage]
-  exact h (g '' s)
-
-中文:
-定理 desc
-  结论: {α β : 类型} (f : X -> α) (g : α -> β) (h : IsLocallyConstant (g ∘ f))
-  证明: fun s => by
-  rw [← preimage_image_eq s inj]; rw [preimage_preimage]
-  exact h (g '' s)
-
-Depends on / 依赖: preimage_image_eq, preimage_preimage
+--- 原说明 ---
+If a composition of a function `f` followed by an injection `g` is locally
+constant, then the locally constant property descends to `f`.
 -/
-theorem desc {α β : Type*} (f : X -> α) (g : α -> β) (h : IsLocallyConstant (g ∘ f))
+theorem desc {α β : Type*} (f : X → α) (g : α → β) (h : IsLocallyConstant (g ∘ f))
     (inj : Function.Injective g) : IsLocallyConstant f := fun s => by
-  rw [← preimage_image_eq s inj]; rw [preimage_preimage]
+  rw [← preimage_image_eq s inj, preimage_preimage]
   exact h (g '' s)
-
-/--
-theorem `of_constant_on_connected_components` / 定理 `of_constant_on_connected_components`
-
-English:
-theorem of_constant_on_connected_components
-  statement: [LocallyConnectedSpace X] {f : X -> Y}
-  proof: (iff_exists_open _).2 fun x =>
-    ⟨connectedComponent x, isOpen_connectedComponent, mem_connectedComponent, h x⟩
-
-中文:
-定理 of_constant_on_connected_components
-  结论: [局部连通空间 X] {f : X -> Y}
-  证明: (iff_exists_open _).2 fun x =>
-    ⟨connectedComponent x, isOpen_connectedComponent, mem_connectedComponent, h x⟩
-
-Depends on / 依赖: connectedComponent, iff_exists_open, isOpen_connectedComponent, mem_connectedComponent
+/-
+**IsLocallyConstant.of_constant_on_connected_components** 是 Mathlib 中的一个定理，位于命名空
+间 `IsLocallyConstant`。
+形式化陈述：of_constant_on_connected_components [LocallyConnectedSpace X] {f : X -> Y}
+ (h : forall x, forall y in connectedComponent x, f y = f x) : IsLocallyConstant
+ f
+参数：h : forall x, forall y in connectedComponent x, f y = f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsLocallyConstant.iff_exists_open`：iff_exists_open (f : X -> Y) : IsLoca
+llyConstant f ↔ forall x, exists U : Set X, IsOpen U ∧ x in U ∧ forall x' in U, 
+f x' = f x
+· 使用定理 `isOpen_connectedComponent`：isOpen_connectedComponent [LocallyConnectedSp
+ace α] {x : α} : IsOpen (connectedComponent x)
+· 使用定理 `mem_connectedComponent`：mem_connectedComponent {x : α} : x in connectedC
+omponent x
 -/
-theorem of_constant_on_connected_components [LocallyConnectedSpace X] {f : X -> Y}
-    (h : forall x, forall y in connectedComponent x, f y = f x) : IsLocallyConstant f :=
+theorem of_constant_on_connected_components [LocallyConnectedSpace X] {f : X → Y}
+    (h : ∀ x, ∀ y ∈ connectedComponent x, f y = f x) : IsLocallyConstant f :=
   (iff_exists_open _).2 fun x =>
     ⟨connectedComponent x, isOpen_connectedComponent, mem_connectedComponent, h x⟩
-
-/--
-theorem `of_constant_on_connected_clopens` / 定理 `of_constant_on_connected_clopens`
-
-English:
-theorem of_constant_on_connected_clopens
-  statement: [LocallyConnectedSpace X] {f : X -> Y}
-  proof: of_constant_on_connected_components fun x =>
-    h (connectedComponent x) isConnected_connectedComponent isClopen_connectedComponent x
-      mem_connectedComponent
-
-中文:
-定理 of_constant_on_connected_clopens
-  结论: [局部连通空间 X] {f : X -> Y}
-  证明: of_constant_on_connected_components fun x =>
-    h (connectedComponent x) isConnected_connectedComponent isClopen_connectedComponent x
-      mem_connectedComponent
-
-Depends on / 依赖: connectedComponent, isClopen_connectedComponent, isConnected_connectedComponent, mem_connectedComponent, of_constant_on_connected_components
+/-
+**IsLocallyConstant.of_constant_on_connected_clopens** 是 Mathlib 中的一个定理，位于命名空间 `
+IsLocallyConstant`。
+形式化陈述：of_constant_on_connected_clopens [LocallyConnectedSpace X] {f : X -> Y} (h
+ : forall U : Set X, IsConnected U -> IsClopen U -> forall x in U, forall y in U
+, f y = f x) : IsLocallyConstant f
+参数：h : forall U : Set X, IsConnected U -> IsClopen U -> forall x in U, forall y 
+in U, f y = f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.of_constant_on_connected_components`：of_constant_on_co
+nnected_components [LocallyConnectedSpace X] {f : X -> Y} (h : forall x, forall 
+y in connectedComponent x, f y = f x) : IsL…
+· 使用定理 `isConnected_connectedComponent`：isConnected_connectedComponent {x : α} :
+ IsConnected (connectedComponent x)
+· 使用定理 `isClopen_connectedComponent`：isClopen_connectedComponent [LocallyConnect
+edSpace α] {x : α} : IsClopen (connectedComponent x)
+· 使用定理 `mem_connectedComponent`：mem_connectedComponent {x : α} : x in connectedC
+omponent x
 -/
-theorem of_constant_on_connected_clopens [LocallyConnectedSpace X] {f : X -> Y}
-    (h : forall U : Set X, IsConnected U -> IsClopen U -> forall x in U, forall y in U, f y = f x) :
+theorem of_constant_on_connected_clopens [LocallyConnectedSpace X] {f : X → Y}
+    (h : ∀ U : Set X, IsConnected U → IsClopen U → ∀ x ∈ U, ∀ y ∈ U, f y = f x) :
     IsLocallyConstant f :=
   of_constant_on_connected_components fun x =>
     h (connectedComponent x) isConnected_connectedComponent isClopen_connectedComponent x
       mem_connectedComponent
-
-/--
-theorem `of_constant_on_preconnected_clopens` / 定理 `of_constant_on_preconnected_clopens`
-
-English:
-theorem of_constant_on_preconnected_clopens
-  statement: [LocallyConnectedSpace X] {f : X -> Y}
-  proof: of_constant_on_connected_clopens fun U hU => h U hU.isPreconnected
-
-中文:
-定理 of_constant_on_preconnected_clopens
-  结论: [局部连通空间 X] {f : X -> Y}
-  证明: of_constant_on_connected_clopens fun U hU => h U hU.isPreconnected
-
-Depends on / 依赖: hU.isPreconnected, isPreconnected, of_constant_on_connected_clopens
+/-
+**IsLocallyConstant.of_constant_on_preconnected_clopens** 是 Mathlib 中的一个定理，位于命名空
+间 `IsLocallyConstant`。
+形式化陈述：of_constant_on_preconnected_clopens [LocallyConnectedSpace X] {f : X -> Y}
+ (h : forall U : Set X, IsPreconnected U -> IsClopen U -> forall x in U, forall 
+y in U, f y = f x) : IsLocallyConstant f
+参数：h : forall U : Set X, IsPreconnected U -> IsClopen U -> forall x in U, forall
+ y in U, f y = f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.of_constant_on_connected_clopens`：of_constant_on_conne
+cted_clopens [LocallyConnectedSpace X] {f : X -> Y} (h : forall U : Set X, IsCon
+nected U -> IsClopen U -> forall x in U,…
+· 使用定理 `IsConnected.isPreconnected`：IsConnected.isPreconnected {s : Set α} (h : 
+IsConnected s) : IsPreconnected s
 -/
-theorem of_constant_on_preconnected_clopens [LocallyConnectedSpace X] {f : X -> Y}
-    (h : forall U : Set X, IsPreconnected U -> IsClopen U -> forall x in U, forall y in U, f y = f x) :
+theorem of_constant_on_preconnected_clopens [LocallyConnectedSpace X] {f : X → Y}
+    (h : ∀ U : Set X, IsPreconnected U → IsClopen U → ∀ x ∈ U, ∀ y ∈ U, f y = f x) :
     IsLocallyConstant f :=
-  of_constant_on_connected_clopens fun U hU => h U hU.isPreconnected
+  of_constant_on_connected_clopens fun U hU ↦ h U hU.isPreconnected
 
 end IsLocallyConstant
 
-/--
-Definition of `LocallyConstant` / `LocallyConstant` 的定义
+/-- A (bundled) locally constant function from a topological space `X` to a type `Y`. -/
+/-
+**LocallyConstant** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_5) → Type u_6 → [TopologicalSpace X] → Type (max u_5 u_6)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LocallyConstant
-  parameters: (X Y : Type*) [TopologicalSpace X]
-  axioms and operations (2):
-    - toFun : X -> Y
-    - isLocallyConstant : IsLocallyConstant toFun
-
-中文:
-结构 局部常数
-  参数: (X Y : 类型) [拓扑空间 X]
-  公理与运算 (2 个):
-    - toFun : X -> Y
-    - isLocallyConstant : IsLocallyConstant toFun
+--- 原说明 ---
+A (bundled) locally constant function from a topological space `X` to a type `Y`
+.
 -/
 structure LocallyConstant (X Y : Type*) [TopologicalSpace X] where
   /-- The underlying function. -/
-  protected toFun : X -> Y
+  protected toFun : X → Y
   /-- The map is locally constant. -/
   protected isLocallyConstant : IsLocallyConstant toFun
 
 namespace LocallyConstant
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: Y] : Inhabited (LocallyConstant X Y)
-  body: ⟨⟨_, IsLocallyConstant.const default⟩⟩
-
-中文:
-实例 [可居
-  签名: Y] : 可居 (局部常数 X Y)
-  定义体: ⟨⟨_, IsLocallyConstant.const default⟩⟩
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.const
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited Y] : Inhabited (LocallyConstant X Y) :=
   ⟨⟨_, IsLocallyConstant.const default⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (LocallyConstant X Y) X Y
-  body: LocallyConstant.toFun
-  coe_injective := by rintro ⟨_, _⟩ ⟨_, _⟩ _; congr
-
-中文:
-实例 :
-  签名: 函数状 (局部常数 X Y) X Y
-  定义体: LocallyConstant.toFun
-  coe_injective := by rintro ⟨_, _⟩ ⟨_, _⟩ _; congr
-
-Depends on / 依赖: LocallyConstant, LocallyConstant.toFun
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (LocallyConstant X Y) X Y where
   coe := LocallyConstant.toFun
   coe_injective := by rintro ⟨_, _⟩ ⟨_, _⟩ _; congr
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projections]. -/
+/-
+**LocallyConstant.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant.Simps`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [inst : TopologicalSpace X] → LocallyCon
+stant X Y → X → Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (f : LocallyConstant X Y)
-  body: f
-
-initialize_simps_projections LocallyConstant (toFun -> apply)
-
-@[simp]
-
-中文:
-定义 Simps.apply
-  签名: (f : 局部常数 X Y)
-  定义体: f
-
-initialize_simps_projections LocallyConstant (toFun -> apply)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projections].
 -/
-def Simps.apply (f : LocallyConstant X Y) : X -> Y := f
+def Simps.apply (f : LocallyConstant X Y) : X → Y := f
 
-initialize_simps_projections LocallyConstant (toFun -> apply)
-
-@[simp]
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: (f : LocallyConstant X Y)
-  statement: f.toFun = f
-  proof: rfl
+initialize_simps_projections LocallyConstant (toFun → apply)
 
 @[simp]
-
-中文:
-定理 toFun_eq_coe
-  条件: (f : 局部常数 X Y)
-  结论: f.toFun = f
-  证明: rfl
-
-@[simp]
+/-
+**LocallyConstant.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：toFun_eq_coe (f : LocallyConstant X Y) : f.toFun = f
+参数：f : LocallyConstant X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe (f : LocallyConstant X Y) : f.toFun = f :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : X -> Y) (h)
-  statement: ⇑(⟨f, h⟩ : LocallyConstant X Y) = f
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (f : X -> Y) (h)
-  结论: ⇑(⟨f, h⟩ : 局部常数 X Y) = f
-  证明: rfl
+/-
+**LocallyConstant.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_mk (f : X -> Y) (h) : ⇑(⟨f, h⟩ : LocallyConstant X Y) = f
+参数：f : X -> Y；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : X -> Y) (h) : ⇑(⟨f, h⟩ : LocallyConstant X Y) = f :=
+theorem coe_mk (f : X → Y) (h) : ⇑(⟨f, h⟩ : LocallyConstant X Y) = f :=
   rfl
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : LocallyConstant X Y} (h : f = g) (x : X)
-  statement: f x = g x
-  proof: DFunLike.congr_fun h x
-
-中文:
-定理 congr_fun
-  条件: {f g : 局部常数 X Y} (h : f = g) (x : X)
-  结论: f x = g x
-  证明: DFunLike.congr_fun h x
+/-
+**LocallyConstant.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] {f g : Locally
+Constant X Y}, f = g → ∀ (x : X), f x = g x
+参数：x : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 protected theorem congr_fun {f g : LocallyConstant X Y} (h : f = g) (x : X) : f x = g x :=
   DFunLike.congr_fun h x
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: (f : LocallyConstant X Y) {x y : X} (h : x = y)
-  statement: f x = f y
-  proof: DFunLike.congr_arg f h
-
-中文:
-定理 congr_arg
-  条件: (f : 局部常数 X Y) {x y : X} (h : x = y)
-  结论: f x = f y
-  证明: DFunLike.congr_arg f h
+/-
+**LocallyConstant.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] (f : LocallyCo
+nstant X Y) {x y : X}, x = y → f x = f y
+参数：f : LocallyConstant X Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
 -/
 protected theorem congr_arg (f : LocallyConstant X Y) {x y : X} (h : x = y) : f x = f y :=
   DFunLike.congr_arg f h
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: @Function.Injective (LocallyConstant X Y) (X -> Y) (↑)
-  proof: fun _ _ =>
-  DFunLike.ext'
-
-@[norm_cast]
-
-中文:
-定理 coe_injective
-  结论: @函数.单射 (局部常数 X Y) (X -> Y) (↑)
-  证明: fun _ _ =>
-  DFunLike.ext'
-
-@[norm_cast]
+/-
+**LocallyConstant.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_injective : @Function.Injective (LocallyConstant X Y) (X -> Y) (↑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem coe_injective : @Function.Injective (LocallyConstant X Y) (X -> Y) (↑) := fun _ _ =>
+theorem coe_injective : @Function.Injective (LocallyConstant X Y) (X → Y) (↑) := fun _ _ =>
   DFunLike.ext'
 
 @[norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {f g : LocallyConstant X Y}
-  statement: (f : X -> Y) = g ↔ f = g
-  proof: coe_injective.eq_iff
-
-@[ext]
-
-中文:
-定理 coe_inj
-  条件: {f g : 局部常数 X Y}
-  结论: (f : X -> Y) = g ↔ f = g
-  证明: coe_injective.eq_iff
-
-@[ext]
-
-Depends on / 依赖: coe_injective, coe_injective.eq_iff, eq_iff
+/-
+**LocallyConstant.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_inj {f g : LocallyConstant X Y} : (f : X -> Y) = g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `LocallyConstant.coe_injective`：coe_injective : @Function.Injective (Loca
+llyConstant X Y) (X -> Y) (↑)
 -/
-theorem coe_inj {f g : LocallyConstant X Y} : (f : X -> Y) = g ↔ f = g :=
+theorem coe_inj {f g : LocallyConstant X Y} : (f : X → Y) = g ↔ f = g :=
   coe_injective.eq_iff
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: ⦃f g
-  statement: LocallyConstant X Y⦄ (h : forall x, f x = g x) : f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: ⦃f g
-  结论: 局部常数 X Y⦄ (h : 对任意 x, f x = g x) : f = g
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**LocallyConstant.ext** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x = g x) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x = g x) : f = g :=
+theorem ext ⦃f g : LocallyConstant X Y⦄ (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext _ _ h
 
 section CodomainTopologicalSpace
 
 variable [TopologicalSpace Y] (f : LocallyConstant X Y)
 
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  statement: Continuous f
-  proof: f.isLocallyConstant.continuous
-
-中文:
-定理 continuous
-  结论: 连续 f
-  证明: f.isLocallyConstant.continuous
+/-
+**LocallyConstant.continuous** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (f : LocallyConstant X Y),   Continuous ⇑f
+参数：f : LocallyConstant X Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsLocallyConstant
+ f → Continuous f
+· 使用定理 `LocallyConstant.isLocallyConstant`：∀ {X : Type u_5} {Y : Type u_6} [inst
+ : TopologicalSpace X] (self : LocallyConstant X Y), IsLocallyConstant self.toFu
+n
 -/
 protected theorem continuous : Continuous f :=
   f.isLocallyConstant.continuous
 
-/--
-Definition of `toContinuousMap` / `toContinuousMap` 的定义
+/-- We can turn a locally-constant function into a bundled `ContinuousMap`. -/
+/-
+**LocallyConstant.toContinuousMap** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} → [inst : TopologicalSpace X] → [inst_1 
+: TopologicalSpace Y] → LocallyConstant X Y → C(X, Y)
+参数：X, Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConstant.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topo
+logicalSpace X] [inst_1 : TopologicalSpace Y] (f : LocallyConstant X Y),   Conti
+nuous ⇑f
 
-English:
-definition toContinuousMap
-  signature: : C(X, Y)
-  body: ⟨f, f.continuous⟩
-
-中文:
-定义 toContinuousMap
-  签名: : C(X, Y)
-  定义体: ⟨f, f.continuous⟩
+--- 原说明 ---
+We can turn a locally-constant function into a bundled `ContinuousMap`.
 -/
 @[coe] def toContinuousMap : C(X, Y) :=
   ⟨f, f.continuous⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- As a shorthand, `LocallyConstant.toContinuousMap` is available as a coercion -/
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Coe (LocallyConstant X Y) C(X, Y)
-  body: ⟨toContinuousMap⟩
-
-中文:
-实例 :
-  签名: Coe (局部常数 X Y) C(X, Y)
-  定义体: ⟨toContinuousMap⟩
-
-Depends on / 依赖: toContinuousMap
+--- 原说明 ---
+As a shorthand, `LocallyConstant.toContinuousMap` is available as a coercion
 -/
 instance : Coe (LocallyConstant X Y) C(X, Y) := ⟨toContinuousMap⟩
-
-/--
-theorem `coe_continuousMap` / 定理 `coe_continuousMap`
-
-English:
-theorem coe_continuousMap
-  statement: ((f : C(X, Y)) : X -> Y) = (f : X -> Y)
-  proof: rfl
-
-中文:
-定理 coe_continuousMap
-  结论: ((f : C(X, Y)) : X -> Y) = (f : X -> Y)
-  证明: rfl
+/-
+**LocallyConstant.coe_continuousMap** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (f : LocallyConstant X Y),   ⇑↑f = ⇑f
+参数：f : LocallyConstant X Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_continuousMap : ((f : C(X, Y)) : X -> Y) = (f : X -> Y) := rfl
-
-/--
-theorem `toContinuousMap_injective` / 定理 `toContinuousMap_injective`
-
-English:
-theorem toContinuousMap_injective
-  proof: fun _ _ h =>
-  ext (ContinuousMap.congr_fun h)
-
-中文:
-定理 toContinuousMap_injective
-  证明: fun _ _ h =>
-  ext (ContinuousMap.congr_fun h)
+@[simp] theorem coe_continuousMap : ((f : C(X, Y)) : X → Y) = (f : X → Y) := rfl
+/-
+**LocallyConstant.toContinuousMap_injective** 是 Mathlib 中的一个定理，位于命名空间 `LocallyCo
+nstant`。
+形式化陈述：toContinuousMap_injective : Function.Injective (toContinuousMap : LocallyC
+onstant X Y -> C(X, Y))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConstant.ext`：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousMap.congr_fun`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] {f g : C(X, Y)},   f = g → ∀ (x : X),
+ f x = g x
 -/
 theorem toContinuousMap_injective :
-    Function.Injective (toContinuousMap : LocallyConstant X Y -> C(X, Y)) := fun _ _ h =>
+    Function.Injective (toContinuousMap : LocallyConstant X Y → C(X, Y)) := fun _ _ h =>
   ext (ContinuousMap.congr_fun h)
 
 end CodomainTopologicalSpace
 
-/--
-Definition of `const` / `const` 的定义
+/-- The constant locally constant function on `X` with value `y : Y`. -/
+/-
+**LocallyConstant.const** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：const (X : Type*) {Y : Type*} [TopologicalSpace X] (y : Y) : LocallyConsta
+nt X Y
+参数：X : Type*；y : Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.const`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] (y : Y), IsLocallyConstant (Function.const X y)
 
-English:
-definition const
-  signature: (X : Type*) {Y : Type*} [TopologicalSpace X] (y : Y)
-  body: ⟨Function.const X y, IsLocallyConstant.const _⟩
-
-@[simp]
-
-中文:
-定义 const
-  签名: (X : 类型) {Y : 类型} [拓扑空间 X] (y : Y)
-  定义体: ⟨Function.const X y, IsLocallyConstant.const _⟩
-
-@[simp]
-
-Depends on / 依赖: Function, Function.const, IsLocallyConstant, IsLocallyConstant.const
+--- 原说明 ---
+The constant locally constant function on `X` with value `y : Y`.
 -/
 def const (X : Type*) {Y : Type*} [TopologicalSpace X] (y : Y) : LocallyConstant X Y :=
   ⟨Function.const X y, IsLocallyConstant.const _⟩
 
 @[simp]
-/--
-theorem `coe_const` / 定理 `coe_const`
-
-English:
-theorem coe_const
-  given: (y : Y)
-  statement: (const X y : X -> Y) = Function.const X y
-  proof: rfl
-
-中文:
-定理 coe_const
-  条件: (y : Y)
-  结论: (const X y : X -> Y) = 函数.const X y
-  证明: rfl
+/-
+**LocallyConstant.coe_const** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_const (y : Y) : (const X y : X -> Y) = Function.const X y
+参数：y : Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_const (y : Y) : (const X y : X -> Y) = Function.const X y :=
+theorem coe_const (y : Y) : (const X y : X → Y) = Function.const X y :=
   rfl
 
 /-- Evaluation/projection as a locally constant function. -/
 @[simps]
-/--
-Definition of `eval` / `eval` 的定义
+/-
+**LocallyConstant.eval** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：eval {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace (X i)] (i : 
+ι) [DiscreteTopology (X i)] : LocallyConstant (Π i, X i) (X i) where toFun
+参数：X i；i : ι；X i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: {ι : Type*} {X : ι -> Type*}
-  body: fun f => f i
-isLocallyConstant := (IsLocallyConstant.iff_continuous _).mpr continuous_apply i
-
-中文:
-定义 eval
-  签名: {ι : 类型} {X : ι -> 类型}
-  定义体: fun f => f i
-isLocallyConstant := (IsLocallyConstant.iff_continuous _).mpr continuous_apply i
+--- 原说明 ---
+Evaluation/projection as a locally constant function.
 -/
-def eval {ι : Type*} {X : ι -> Type*}
-    [forall i, TopologicalSpace (X i)] (i : ι) [DiscreteTopology (X i)] :
+def eval {ι : Type*} {X : ι → Type*}
+    [∀ i, TopologicalSpace (X i)] (i : ι) [DiscreteTopology (X i)] :
     LocallyConstant (Π i, X i) (X i) where
-  toFun := fun f => f i
-isLocallyConstant := (IsLocallyConstant.iff_continuous _).mpr continuous_apply i
+  toFun := fun f ↦ f i
+  isLocallyConstant := (IsLocallyConstant.iff_continuous _).mpr <| continuous_apply i
 
-/--
-Definition of `ofIsClopen` / `ofIsClopen` 的定义
+/-- The locally constant function to `Fin 2` associated to a clopen set. -/
+/-
+**LocallyConstant.ofIsClopen** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：ofIsClopen {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidab
+le (x in U)] (hU : IsClopen U) : LocallyConstant X (Fin 2) where toFun x
+参数：x in U；hU : IsClopen U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsClopen
-  signature: {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidable (x in U)]
-  body: if x in U then 0 else 1
-  isLocallyConstant := by
-refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
-    · convert! hU.2 using 1
-      ext
-      simp only [mem_singleton_iff, Fin.one_eq_zero_iff, mem_preimage, ite_eq_left_iff,
-        Nat.succ_succ_ne_one]
-      tauto
-    · rw [← isClosed_compl_iff]
-      convert! hU.1
-      ext
-      simp
-
-@[simp]
-
-中文:
-定义 ofIsClopen
-  签名: {X : 类型} [拓扑空间 X] {U : 集合 X} [对任意 x, 可判定 (x in U)]
-  定义体: if x in U then 0 else 1
-  isLocallyConstant := by
-refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
-    · convert! hU.2 using 1
-      ext
-      simp only [mem_singleton_iff, Fin.one_eq_zero_iff, mem_preimage, ite_eq_left_iff,
-        Nat.succ_succ_ne_one]
-      tauto
-    · rw [← isClosed_compl_iff]
-      convert! hU.1
-      ext
-      simp
-
-@[simp]
+--- 原说明 ---
+The locally constant function to `Fin 2` associated to a clopen set.
 -/
-def ofIsClopen {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidable (x in U)]
+def ofIsClopen {X : Type*} [TopologicalSpace X] {U : Set X} [∀ x, Decidable (x ∈ U)]
     (hU : IsClopen U) : LocallyConstant X (Fin 2) where
-  toFun x := if x in U then 0 else 1
+  toFun x := if x ∈ U then 0 else 1
   isLocallyConstant := by
-refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
+    refine IsLocallyConstant.iff_isOpen_fiber.2 <| Fin.forall_fin_two.2 ⟨?_, ?_⟩
     · convert! hU.2 using 1
       ext
       simp only [mem_singleton_iff, Fin.one_eq_zero_iff, mem_preimage, ite_eq_left_iff,
@@ -1248,34 +907,27 @@ refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
       simp
 
 @[simp]
-/--
-theorem `ofIsClopen_fiber_zero` / 定理 `ofIsClopen_fiber_zero`
-
-English:
-theorem ofIsClopen_fiber_zero
-  statement: {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidable (x in U)]
-  proof: by
-  ext
-  simp only [ofIsClopen, mem_singleton_iff, Fin.one_eq_zero_iff, coe_mk, mem_preimage,
-    ite_eq_left_iff, Nat.succ_succ_ne_one]
-  tauto
-
-@[simp]
-
-中文:
-定理 ofIsClopen_fiber_zero
-  结论: {X : 类型} [拓扑空间 X] {U : 集合 X} [对任意 x, 可判定 (x in U)]
-  证明: by
-  ext
-  simp only [ofIsClopen, mem_singleton_iff, Fin.one_eq_zero_iff, coe_mk, mem_preimage,
-    ite_eq_left_iff, Nat.succ_succ_ne_one]
-  tauto
-
-@[simp]
-
-Depends on / 依赖: Fin.one_eq_zero_iff, Nat.succ_succ_ne_one, coe_mk, ite_eq_left_iff, mem_preimage, mem_singleton_iff, ofIsClopen, one_eq_zero_iff, succ_succ_ne_one
+/-
+**LocallyConstant.ofIsClopen_fiber_zero** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConsta
+nt`。
+形式化陈述：ofIsClopen_fiber_zero {X : Type*} [TopologicalSpace X] {U : Set X} [forall
+ x, Decidable (x in U)] (hU : IsClopen U) : ofIsClopen hU ⁻¹' ({0} : Set (Fin 2)
+) = U
+参数：x in U；hU : IsClopen U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 -/
-theorem ofIsClopen_fiber_zero {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidable (x in U)]
+theorem ofIsClopen_fiber_zero {X : Type*} [TopologicalSpace X] {U : Set X} [∀ x, Decidable (x ∈ U)]
     (hU : IsClopen U) : ofIsClopen hU ⁻¹' ({0} : Set (Fin 2)) = U := by
   ext
   simp only [ofIsClopen, mem_singleton_iff, Fin.one_eq_zero_iff, coe_mk, mem_preimage,
@@ -1283,295 +935,225 @@ theorem ofIsClopen_fiber_zero {X : Type*} [TopologicalSpace X] {U : Set X} [fora
   tauto
 
 @[simp]
-/--
-theorem `ofIsClopen_fiber_one` / 定理 `ofIsClopen_fiber_one`
-
-English:
-theorem ofIsClopen_fiber_one
-  statement: {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidable (x in U)]
-  proof: by
-  ext
-  simp only [ofIsClopen, mem_singleton_iff, coe_mk, Fin.zero_eq_one_iff, mem_preimage,
-    ite_eq_right_iff, mem_compl_iff, Nat.succ_succ_ne_one]
-
-中文:
-定理 ofIsClopen_fiber_one
-  结论: {X : 类型} [拓扑空间 X] {U : 集合 X} [对任意 x, 可判定 (x in U)]
-  证明: by
-  ext
-  simp only [ofIsClopen, mem_singleton_iff, coe_mk, Fin.zero_eq_one_iff, mem_preimage,
-    ite_eq_right_iff, mem_compl_iff, Nat.succ_succ_ne_one]
-
-Depends on / 依赖: Fin.zero_eq_one_iff, Nat.succ_succ_ne_one, coe_mk, ite_eq_right_iff, mem_compl_iff, mem_preimage, mem_singleton_iff, ofIsClopen, succ_succ_ne_one, zero_eq_one_iff
+/-
+**LocallyConstant.ofIsClopen_fiber_one** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstan
+t`。
+形式化陈述：ofIsClopen_fiber_one {X : Type*} [TopologicalSpace X] {U : Set X} [forall 
+x, Decidable (x in U)] (hU : IsClopen U) : ofIsClopen hU ⁻¹' ({1} : Set (Fin 2))
+ = Uᶜ
+参数：x in U；hU : IsClopen U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ofIsClopen_fiber_one {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidable (x in U)]
+theorem ofIsClopen_fiber_one {X : Type*} [TopologicalSpace X] {U : Set X} [∀ x, Decidable (x ∈ U)]
     (hU : IsClopen U) : ofIsClopen hU ⁻¹' ({1} : Set (Fin 2)) = Uᶜ := by
   ext
   simp only [ofIsClopen, mem_singleton_iff, coe_mk, Fin.zero_eq_one_iff, mem_preimage,
     ite_eq_right_iff, mem_compl_iff, Nat.succ_succ_ne_one]
-
-/--
-theorem `locallyConstant_eq_of_fiber_zero_eq` / 定理 `locallyConstant_eq_of_fiber_zero_eq`
-
-English:
-theorem locallyConstant_eq_of_fiber_zero_eq
-  statement: {X : Type*} [TopologicalSpace X]
-  proof: by
-  simp only [Set.ext_iff, mem_singleton_iff, mem_preimage] at h
-  ext1 x
-  exact Fin.fin_two_eq_of_eq_zero_iff (h x)
-
-中文:
-定理 locallyConstant_eq_of_fiber_zero_eq
-  结论: {X : 类型} [拓扑空间 X]
-  证明: by
-  simp only [Set.ext_iff, mem_singleton_iff, mem_preimage] at h
-  ext1 x
-  exact Fin.fin_two_eq_of_eq_zero_iff (h x)
-
-Depends on / 依赖: Fin.fin_two_eq_of_eq_zero_iff, Set.ext_iff, ext_iff, fin_two_eq_of_eq_zero_iff, mem_preimage, mem_singleton_iff
+/-
+**LocallyConstant.locallyConstant_eq_of_fiber_zero_eq** 是 Mathlib 中的一个定理，位于命名空间 
+`LocallyConstant`。
+形式化陈述：locallyConstant_eq_of_fiber_zero_eq {X : Type*} [TopologicalSpace X] (f g 
+: LocallyConstant X (Fin 2)) (h : f ⁻¹' ({0} : Set (Fin 2)) = g ⁻¹' {0}) : f = g
+参数：f g : LocallyConstant X (Fin 2)；h : f ⁻¹' ({0} : Set (Fin 2)) = g ⁻¹' {0}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LocallyConstant.ext`：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `Fin.fin_two_eq_of_eq_zero_iff`：∀ {a b : Fin 2}, (a = 0 ↔ b = 0) → a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem locallyConstant_eq_of_fiber_zero_eq {X : Type*} [TopologicalSpace X]
     (f g : LocallyConstant X (Fin 2)) (h : f ⁻¹' ({0} : Set (Fin 2)) = g ⁻¹' {0}) : f = g := by
   simp only [Set.ext_iff, mem_singleton_iff, mem_preimage] at h
   ext1 x
   exact Fin.fin_two_eq_of_eq_zero_iff (h x)
-
-/--
-theorem `range_finite` / 定理 `range_finite`
-
-English:
-theorem range_finite
-  given: [CompactSpace X] (f : LocallyConstant X Y)
-  statement: (Set.range f).Finite
-  proof: f.isLocallyConstant.range_finite
-
-中文:
-定理 range_finite
-  条件: [紧空间 X] (f : 局部常数 X Y)
-  结论: (集合.range f).有限
-  证明: f.isLocallyConstant.range_finite
-
-Depends on / 依赖: f.isLocallyConstant.range_finite, isLocallyConstant, range_finite
+/-
+**LocallyConstant.range_finite** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：range_finite [CompactSpace X] (f : LocallyConstant X Y) : (Set.range f).Fi
+nite
+参数：f : LocallyConstant X Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.range_finite`：range_finite [CompactSpace X] {f : X -> 
+Y} (hf : IsLocallyConstant f) : (Set.range f).Finite
+· 使用定理 `LocallyConstant.isLocallyConstant`：∀ {X : Type u_5} {Y : Type u_6} [inst
+ : TopologicalSpace X] (self : LocallyConstant X Y), IsLocallyConstant self.toFu
+n
 -/
 theorem range_finite [CompactSpace X] (f : LocallyConstant X Y) : (Set.range f).Finite :=
   f.isLocallyConstant.range_finite
-
-/--
-theorem `apply_eq_of_isPreconnected` / 定理 `apply_eq_of_isPreconnected`
-
-English:
-theorem apply_eq_of_isPreconnected
-  statement: (f : LocallyConstant X Y) {s : Set X} (hs : IsPreconnected s)
-  proof: f.isLocallyConstant.apply_eq_of_isPreconnected hs hx hy
-
-中文:
-定理 apply_eq_of_isPreconnected
-  结论: (f : 局部常数 X Y) {s : 集合 X} (hs : 是预连通 s)
-  证明: f.isLocallyConstant.apply_eq_of_isPreconnected hs hx hy
-
-Depends on / 依赖: apply_eq_of_isPreconnected, f.isLocallyConstant.apply_eq_of_isPreconnected, isLocallyConstant
+/-
+**LocallyConstant.apply_eq_of_isPreconnected** 是 Mathlib 中的一个定理，位于命名空间 `LocallyC
+onstant`。
+形式化陈述：apply_eq_of_isPreconnected (f : LocallyConstant X Y) {s : Set X} (hs : IsP
+reconnected s) {x y : X} (hx : x in s) (hy : y in s) : f x = f y
+参数：f : LocallyConstant X Y；hs : IsPreconnected s；hx : x in s；hy : y in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.apply_eq_of_isPreconnected`：apply_eq_of_isPreconnected
+ {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X} (hs : IsPreconnected s) {x 
+y : X} (hx : x in s) (hy : y in s)…
+· 使用定理 `LocallyConstant.isLocallyConstant`：∀ {X : Type u_5} {Y : Type u_6} [inst
+ : TopologicalSpace X] (self : LocallyConstant X Y), IsLocallyConstant self.toFu
+n
 -/
 theorem apply_eq_of_isPreconnected (f : LocallyConstant X Y) {s : Set X} (hs : IsPreconnected s)
-    {x y : X} (hx : x in s) (hy : y in s) : f x = f y :=
+    {x y : X} (hx : x ∈ s) (hy : y ∈ s) : f x = f y :=
   f.isLocallyConstant.apply_eq_of_isPreconnected hs hx hy
-
-/--
-theorem `apply_eq_of_preconnectedSpace` / 定理 `apply_eq_of_preconnectedSpace`
-
-English:
-theorem apply_eq_of_preconnectedSpace
-  given: [PreconnectedSpace X] (f : LocallyConstant X Y) (x y : X)
-  proof: f.isLocallyConstant.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
-
-中文:
-定理 apply_eq_of_preconnectedSpace
-  条件: [预连通空间 X] (f : 局部常数 X Y) (x y : X)
-  证明: f.isLocallyConstant.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
-
-Depends on / 依赖: apply_eq_of_isPreconnected, f.isLocallyConstant.apply_eq_of_isPreconnected, isLocallyConstant, isPreconnected_univ
+/-
+**LocallyConstant.apply_eq_of_preconnectedSpace** 是 Mathlib 中的一个定理，位于命名空间 `Local
+lyConstant`。
+形式化陈述：apply_eq_of_preconnectedSpace [PreconnectedSpace X] (f : LocallyConstant X
+ Y) (x y : X) : f x = f y
+参数：f : LocallyConstant X Y；x y : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.apply_eq_of_isPreconnected`：apply_eq_of_isPreconnected
+ {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X} (hs : IsPreconnected s) {x 
+y : X} (hx : x in s) (hy : y in s)…
+· 使用定理 `LocallyConstant.isLocallyConstant`：∀ {X : Type u_5} {Y : Type u_6} [inst
+ : TopologicalSpace X] (self : LocallyConstant X Y), IsLocallyConstant self.toFu
+n
+· 使用定理 `PreconnectedSpace.isPreconnected_univ`：∀ {α : Type u} {inst : Topologica
+lSpace α} [self : PreconnectedSpace α], IsPreconnected Set.univ
+· 使用定理 `trivial`：True
 -/
 theorem apply_eq_of_preconnectedSpace [PreconnectedSpace X] (f : LocallyConstant X Y) (x y : X) :
     f x = f y :=
   f.isLocallyConstant.apply_eq_of_isPreconnected isPreconnected_univ trivial trivial
-
-/--
-theorem `eq_const` / 定理 `eq_const`
-
-English:
-theorem eq_const
-  given: [PreconnectedSpace X] (f : LocallyConstant X Y) (x : X)
-  statement: f = const X (f x)
-  proof: ext fun _ => apply_eq_of_preconnectedSpace f _ _
-
-中文:
-定理 eq_const
-  条件: [预连通空间 X] (f : 局部常数 X Y) (x : X)
-  结论: f = const X (f x)
-  证明: ext fun _ => apply_eq_of_preconnectedSpace f _ _
-
-Depends on / 依赖: apply_eq_of_preconnectedSpace
+/-
+**LocallyConstant.eq_const** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：eq_const [PreconnectedSpace X] (f : LocallyConstant X Y) (x : X) : f = con
+st X (f x)
+参数：f : LocallyConstant X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConstant.ext`：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `LocallyConstant.apply_eq_of_preconnectedSpace`：apply_eq_of_preconnectedS
+pace [PreconnectedSpace X] (f : LocallyConstant X Y) (x y : X) : f x = f y
 -/
 theorem eq_const [PreconnectedSpace X] (f : LocallyConstant X Y) (x : X) : f = const X (f x) :=
   ext fun _ => apply_eq_of_preconnectedSpace f _ _
-
-/--
-theorem `exists_eq_const` / 定理 `exists_eq_const`
-
-English:
-theorem exists_eq_const
-  given: [PreconnectedSpace X] [Nonempty Y] (f : LocallyConstant X Y)
-  proof: by
-  rcases Classical.em (Nonempty X) with (⟨⟨x⟩⟩ | hX)
-  · exact ⟨f x, f.eq_const x⟩
-  · exact ⟨Classical.arbitrary Y, ext fun x => (hX ⟨x⟩).elim⟩
-
-中文:
-定理 存在_eq_const
-  条件: [预连通空间 X] [非空 Y] (f : 局部常数 X Y)
-  证明: by
-  rcases Classical.em (Nonempty X) with (⟨⟨x⟩⟩ | hX)
-  · exact ⟨f x, f.eq_const x⟩
-  · exact ⟨Classical.arbitrary Y, ext fun x => (hX ⟨x⟩).elim⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, Classical.em, Nonempty, arbitrary, eq_const, f.eq_const
+/-
+**LocallyConstant.exists_eq_const** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：exists_eq_const [PreconnectedSpace X] [Nonempty Y] (f : LocallyConstant X 
+Y) : exists y, f = const X y
+参数：f : LocallyConstant X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `LocallyConstant.eq_const`：eq_const [PreconnectedSpace X] (f : LocallyCon
+stant X Y) (x : X) : f = const X (f x)
+· 使用定理 `LocallyConstant.ext`：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x 
+= g x) : f = g
 -/
 theorem exists_eq_const [PreconnectedSpace X] [Nonempty Y] (f : LocallyConstant X Y) :
-    exists y, f = const X y := by
+    ∃ y, f = const X y := by
   rcases Classical.em (Nonempty X) with (⟨⟨x⟩⟩ | hX)
   · exact ⟨f x, f.eq_const x⟩
   · exact ⟨Classical.arbitrary Y, ext fun x => (hX ⟨x⟩).elim⟩
 
-/--
-Definition of `map` / `map` 的定义
+/-- Push forward of locally constant maps under any map, by post-composition. -/
+/-
+**LocallyConstant.map** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：map (f : Y -> Z) (g : LocallyConstant X Y) : LocallyConstant X Z
+参数：f : Y -> Z；g : LocallyConstant X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : Y -> Z) (g : LocallyConstant X Y)
-  body: ⟨f ∘ g, g.isLocallyConstant.comp f⟩
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : Y -> Z) (g : 局部常数 X Y)
-  定义体: ⟨f ∘ g, g.isLocallyConstant.comp f⟩
-
-@[simp]
-
-Depends on / 依赖: g.isLocallyConstant.comp, isLocallyConstant
+--- 原说明 ---
+Push forward of locally constant maps under any map, by post-composition.
 -/
-def map (f : Y -> Z) (g : LocallyConstant X Y) : LocallyConstant X Z :=
+def map (f : Y → Z) (g : LocallyConstant X Y) : LocallyConstant X Z :=
   ⟨f ∘ g, g.isLocallyConstant.comp f⟩
 
 @[simp]
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: (f : Y -> Z) (g : LocallyConstant X Y)
-  statement: ⇑(map f g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_apply
-  条件: (f : Y -> Z) (g : 局部常数 X Y)
-  结论: ⇑(map f g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**LocallyConstant.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：map_apply (f : Y -> Z) (g : LocallyConstant X Y) : ⇑(map f g) = f ∘ g
+参数：f : Y -> Z；g : LocallyConstant X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply (f : Y -> Z) (g : LocallyConstant X Y) : ⇑(map f g) = f ∘ g :=
+theorem map_apply (f : Y → Z) (g : LocallyConstant X Y) : ⇑(map f g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: @map X Y Y _ id = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_id
-  结论: @map X Y Y _ id = id
-  证明: rfl
-
-@[simp]
+/-
+**LocallyConstant.map_id** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：map_id : @map X Y Y _ id = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_id : @map X Y Y _ id = id := rfl
 
 @[simp]
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: {Y₁ Y₂ Y₃ : Type*} (g : Y₂ -> Y₃) (f : Y₁ -> Y₂)
-  proof: rfl
-
-中文:
-定理 map_comp
-  条件: {Y₁ Y₂ Y₃ : 类型} (g : Y₂ -> Y₃) (f : Y₁ -> Y₂)
-  证明: rfl
+/-
+**LocallyConstant.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：map_comp {Y₁ Y₂ Y₃ : Type*} (g : Y₂ -> Y₃) (f : Y₁ -> Y₂) : @map X _ _ _ g
+ ∘ map f = map (g ∘ f)
+参数：g : Y₂ -> Y₃；f : Y₁ -> Y₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_comp {Y₁ Y₂ Y₃ : Type*} (g : Y₂ -> Y₃) (f : Y₁ -> Y₂) :
+theorem map_comp {Y₁ Y₂ Y₃ : Type*} (g : Y₂ → Y₃) (f : Y₁ → Y₂) :
     @map X _ _ _ g ∘ map f = map (g ∘ f) := rfl
 
-/--
-Definition of `flip` / `flip` 的定义
+/-- Given a locally constant function to `α → β`, construct a family of locally constant
+functions with values in β indexed by α. -/
+/-
+**LocallyConstant.flip** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：flip {X α β : Type*} [TopologicalSpace X] (f : LocallyConstant X (α -> β))
+ (a : α) : LocallyConstant X β
+参数：f : LocallyConstant X (α -> β)；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flip
-  signature: {X α β : Type*} [TopologicalSpace X] (f : LocallyConstant X (α -> β)) (a : α)
-  body: f.map fun f => f a
-
-中文:
-定义 flip
-  签名: {X α β : 类型} [拓扑空间 X] (f : 局部常数 X (α -> β)) (a : α)
-  定义体: f.map fun f => f a
-
-Depends on / 依赖: f.map
+--- 原说明 ---
+Given a locally constant function to `α → β`, construct a family of locally cons
+tant
+functions with values in β indexed by α.
 -/
-def flip {X α β : Type*} [TopologicalSpace X] (f : LocallyConstant X (α -> β)) (a : α) :
+def flip {X α β : Type*} [TopologicalSpace X] (f : LocallyConstant X (α → β)) (a : α) :
     LocallyConstant X β :=
   f.map fun f => f a
 
-/--
-Definition of `unflip` / `unflip` 的定义
+/-- If α is finite, this constructs a locally constant function to `α → β` given a
+family of locally constant functions with values in β indexed by α. -/
+/-
+**LocallyConstant.unflip** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：unflip {X α β : Type*} [Finite α] [TopologicalSpace X] (f : α -> LocallyCo
+nstant X β) : LocallyConstant X (α -> β) where toFun x a
+参数：f : α -> LocallyConstant X β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unflip
-  signature: {X α β : Type*} [Finite α] [TopologicalSpace X] (f : α -> LocallyConstant X β)
-  body: f a x
-  isLocallyConstant := IsLocallyConstant.iff_isOpen_fiber.2 fun g => by
-    have : (fun (x : X) (a : α) => f a x) ⁻¹' {g} = ⋂ a : α, f a ⁻¹' {g a} := by
-      ext; simp [funext_iff]
-    rw [this]
-    exact isOpen_iInter_of_finite fun a => (f a).isLocallyConstant _
-
-@[simp]
-
-中文:
-定义 unflip
-  签名: {X α β : 类型} [有限 α] [拓扑空间 X] (f : α -> 局部常数 X β)
-  定义体: f a x
-  isLocallyConstant := IsLocallyConstant.iff_isOpen_fiber.2 fun g => by
-    have : (fun (x : X) (a : α) => f a x) ⁻¹' {g} = ⋂ a : α, f a ⁻¹' {g a} := by
-      ext; simp [funext_iff]
-    rw [this]
-    exact isOpen_iInter_of_finite fun a => (f a).isLocallyConstant _
-
-@[simp]
+--- 原说明 ---
+If α is finite, this constructs a locally constant function to `α → β` given a
+family of locally constant functions with values in β indexed by α.
 -/
-def unflip {X α β : Type*} [Finite α] [TopologicalSpace X] (f : α -> LocallyConstant X β) :
-    LocallyConstant X (α -> β) where
+def unflip {X α β : Type*} [Finite α] [TopologicalSpace X] (f : α → LocallyConstant X β) :
+    LocallyConstant X (α → β) where
   toFun x a := f a x
   isLocallyConstant := IsLocallyConstant.iff_isOpen_fiber.2 fun g => by
     have : (fun (x : X) (a : α) => f a x) ⁻¹' {g} = ⋂ a : α, f a ⁻¹' {g a} := by
@@ -1580,197 +1162,133 @@ def unflip {X α β : Type*} [Finite α] [TopologicalSpace X] (f : α -> Locally
     exact isOpen_iInter_of_finite fun a => (f a).isLocallyConstant _
 
 @[simp]
-/--
-theorem `unflip_flip` / 定理 `unflip_flip`
-
-English:
-theorem unflip_flip
-  statement: {X α β : Type*} [Finite α] [TopologicalSpace X]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unflip_flip
-  结论: {X α β : 类型} [有限 α] [拓扑空间 X]
-  证明: rfl
-
-@[simp]
+/-
+**LocallyConstant.unflip_flip** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：unflip_flip {X α β : Type*} [Finite α] [TopologicalSpace X] (f : LocallyCo
+nstant X (α -> β)) : unflip f.flip = f
+参数：f : LocallyConstant X (α -> β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unflip_flip {X α β : Type*} [Finite α] [TopologicalSpace X]
-    (f : LocallyConstant X (α -> β)) : unflip f.flip = f := rfl
+    (f : LocallyConstant X (α → β)) : unflip f.flip = f := rfl
 
 @[simp]
-/--
-theorem `flip_unflip` / 定理 `flip_unflip`
-
-English:
-theorem flip_unflip
-  statement: {X α β : Type*} [Finite α] [TopologicalSpace X]
-  proof: rfl
-
-中文:
-定理 flip_unflip
-  结论: {X α β : 类型} [有限 α] [拓扑空间 X]
-  证明: rfl
+/-
+**LocallyConstant.flip_unflip** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：flip_unflip {X α β : Type*} [Finite α] [TopologicalSpace X] (f : α -> Loca
+llyConstant X β) : (unflip f).flip = f
+参数：f : α -> LocallyConstant X β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem flip_unflip {X α β : Type*} [Finite α] [TopologicalSpace X]
-    (f : α -> LocallyConstant X β) : (unflip f).flip = f := rfl
+    (f : α → LocallyConstant X β) : (unflip f).flip = f := rfl
 
 section Comap
 
 variable [TopologicalSpace Y]
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- Pull back of locally constant maps under a continuous map, by pre-composition. -/
+/-
+**LocallyConstant.comap** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：comap (f : C(X, Y)) (g : LocallyConstant Y Z) : LocallyConstant X Z
+参数：f : C(X, Y)；g : LocallyConstant Y Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (f : C(X, Y)) (g : LocallyConstant Y Z)
-  body: ⟨g ∘ f, g.isLocallyConstant.comp_continuous f.continuous⟩
-
-@[simp]
-
-中文:
-定义 comap
-  签名: (f : C(X, Y)) (g : 局部常数 Y Z)
-  定义体: ⟨g ∘ f, g.isLocallyConstant.comp_continuous f.continuous⟩
-
-@[simp]
-
-Depends on / 依赖: comp_continuous, continuous, f.continuous, g.isLocallyConstant.comp_continuous, isLocallyConstant
+--- 原说明 ---
+Pull back of locally constant maps under a continuous map, by pre-composition.
 -/
 def comap (f : C(X, Y)) (g : LocallyConstant Y Z) : LocallyConstant X Z :=
   ⟨g ∘ f, g.isLocallyConstant.comp_continuous f.continuous⟩
 
 @[simp]
-/--
-theorem `coe_comap` / 定理 `coe_comap`
-
-English:
-theorem coe_comap
-  given: (f : C(X, Y)) (g : LocallyConstant Y Z)
-  proof: rfl
-
-中文:
-定理 coe_comap
-  条件: (f : C(X, Y)) (g : 局部常数 Y Z)
-  证明: rfl
+/-
+**LocallyConstant.coe_comap** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_comap (f : C(X, Y)) (g : LocallyConstant Y Z) : (comap f g) = g ∘ f
+参数：f : C(X, Y)；g : LocallyConstant Y Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comap (f : C(X, Y)) (g : LocallyConstant Y Z) :
     (comap f g) = g ∘ f := rfl
-
-/--
-theorem `coe_comap_apply` / 定理 `coe_comap_apply`
-
-English:
-theorem coe_comap_apply
-  given: (f : C(X, Y)) (g : LocallyConstant Y Z) (x : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comap_apply
-  条件: (f : C(X, Y)) (g : 局部常数 Y Z) (x : X)
-  证明: rfl
-
-@[simp]
+/-
+**LocallyConstant.coe_comap_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_comap_apply (f : C(X, Y)) (g : LocallyConstant Y Z) (x : X) : comap f 
+g x = g (f x)
+参数：f : C(X, Y)；g : LocallyConstant Y Z；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comap_apply (f : C(X, Y)) (g : LocallyConstant Y Z) (x : X) :
     comap f g x = g (f x) := rfl
 
 @[simp]
-/--
-theorem `comap_id` / 定理 `comap_id`
-
-English:
-theorem comap_id
-  statement: comap (@ContinuousMap.id X _) = @id (LocallyConstant X Z)
-  proof: rfl
-
-中文:
-定理 comap_id
-  结论: comap (@连续映射.id X _) = @id (局部常数 X Z)
-  证明: rfl
+/-
+**LocallyConstant.comap_id** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：comap_id : comap (@ContinuousMap.id X _) = @id (LocallyConstant X Z)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comap_id : comap (@ContinuousMap.id X _) = @id (LocallyConstant X Z) := rfl
-
-/--
-theorem `comap_comp` / 定理 `comap_comp`
-
-English:
-theorem comap_comp
-  given: {W : Type*} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y))
-  proof: rfl
-
-中文:
-定理 comap_comp
-  条件: {W : 类型} [拓扑空间 W] (f : C(W, X)) (g : C(X, Y))
-  证明: rfl
-
-Depends on / 依赖: g.comp
+/-
+**LocallyConstant.comap_comp** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：comap_comp {W : Type*} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y)) : 
+comap (Z
+参数：f : C(W, X)；g : C(X, Y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comap_comp {W : Type*} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y)) :
     comap (Z := Z) (g.comp f) = comap f ∘ comap g := rfl
-
-/--
-theorem `comap_comap` / 定理 `comap_comap`
-
-English:
-theorem comap_comap
-  statement: {W : Type*} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y))
-  proof: rfl
-
-中文:
-定理 comap_comap
-  结论: {W : 类型} [拓扑空间 W] (f : C(W, X)) (g : C(X, Y))
-  证明: rfl
+/-
+**LocallyConstant.comap_comap** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：comap_comap {W : Type*} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y)) (
+x : LocallyConstant Y Z) : comap f (comap g x) = comap (g.comp f) x
+参数：f : C(W, X)；g : C(X, Y)；x : LocallyConstant Y Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comap_comap {W : Type*} [TopologicalSpace W] (f : C(W, X)) (g : C(X, Y))
     (x : LocallyConstant Y Z) : comap f (comap g x) = comap (g.comp f) x := rfl
-
-/--
-theorem `comap_const` / 定理 `comap_const`
-
-English:
-theorem comap_const
-  given: (f : C(X, Y)) (y : Y) (h : forall x, f x = y)
-  proof: by
-  ext; simp [h]
-
-中文:
-定理 comap_const
-  条件: (f : C(X, Y)) (y : Y) (h : 对任意 x, f x = y)
-  证明: by
-  ext; simp [h]
+/-
+**LocallyConstant.comap_const** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：comap_const (f : C(X, Y)) (y : Y) (h : forall x, f x = y) : (comap f : Loc
+allyConstant Y Z -> LocallyConstant X Z) = fun g => const X (g y)
+参数：f : C(X, Y)；y : Y；h : forall x, f x = y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LocallyConstant.ext`：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comap_const (f : C(X, Y)) (y : Y) (h : forall x, f x = y) :
-    (comap f : LocallyConstant Y Z -> LocallyConstant X Z) = fun g => const X (g y) := by
+theorem comap_const (f : C(X, Y)) (y : Y) (h : ∀ x, f x = y) :
+    (comap f : LocallyConstant Y Z → LocallyConstant X Z) = fun g => const X (g y) := by
   ext; simp [h]
-
-/--
-lemma `comap_injective` / 引理 `comap_injective`
-
-English:
-lemma comap_injective
-  given: (f : C(X, Y)) (hfs : f.1.Surjective)
-  proof: by
-  intro a b h
-  ext y
-  obtain ⟨x, hx⟩ := hfs y
-  simpa [← hx] using LocallyConstant.congr_fun h x
-
-中文:
-引理 comap_injective
-  条件: (f : C(X, Y)) (hfs : f.1.满射)
-  证明: by
-  intro a b h
-  ext y
-  obtain ⟨x, hx⟩ := hfs y
-  simpa [← hx] using LocallyConstant.congr_fun h x
-
-Depends on / 依赖: Injective, LocallyConstant, LocallyConstant.congr_fun, congr_fun
+/-
+**LocallyConstant.comap_injective** 是 Mathlib 中的一个引理，位于命名空间 `LocallyConstant`。
+形式化陈述：comap_injective (f : C(X, Y)) (hfs : f.1.Surjective) : (comap (Z
+参数：f : C(X, Y)；hfs : f.1.Surjective。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConstant.ext`：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LocallyConstant.congr_fun`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topol
+ogicalSpace X] {f g : LocallyConstant X Y}, f = g → ∀ (x : X), f x = g x
 -/
 lemma comap_injective (f : C(X, Y)) (hfs : f.1.Surjective) :
     (comap (Z := Z) f).Injective := by
@@ -1783,45 +1301,40 @@ end Comap
 
 section Desc
 
-/--
-Definition of `desc` / `desc` 的定义
+/-- If a locally constant function factors through an injection, then it factors through a locally
+constant function. -/
+/-
+**LocallyConstant.desc** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：desc {X α β : Type*} [TopologicalSpace X] {g : α -> β} (f : X -> α) (h : L
+ocallyConstant X β) (cond : g ∘ f = h) (inj : Function.Injective g) : LocallyCon
+stant X α where toFun
+参数：f : X -> α；h : LocallyConstant X β；cond : g ∘ f = h；inj : Function.Injective 
+g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition desc
-  signature: {X α β : Type*} [TopologicalSpace X] {g : α -> β} (f : X -> α) (h : LocallyConstant X β)
-  body: f
-  isLocallyConstant := IsLocallyConstant.desc _ g (cond.symm ▸ h.isLocallyConstant) inj
-
-@[simp]
-
-中文:
-定义 desc
-  签名: {X α β : 类型} [拓扑空间 X] {g : α -> β} (f : X -> α) (h : 局部常数 X β)
-  定义体: f
-  isLocallyConstant := IsLocallyConstant.desc _ g (cond.symm ▸ h.isLocallyConstant) inj
-
-@[simp]
+--- 原说明 ---
+If a locally constant function factors through an injection, then it factors thr
+ough a locally
+constant function.
 -/
-def desc {X α β : Type*} [TopologicalSpace X] {g : α -> β} (f : X -> α) (h : LocallyConstant X β)
+def desc {X α β : Type*} [TopologicalSpace X] {g : α → β} (f : X → α) (h : LocallyConstant X β)
     (cond : g ∘ f = h) (inj : Function.Injective g) : LocallyConstant X α where
   toFun := f
   isLocallyConstant := IsLocallyConstant.desc _ g (cond.symm ▸ h.isLocallyConstant) inj
 
 @[simp]
-/--
-theorem `coe_desc` / 定理 `coe_desc`
-
-English:
-theorem coe_desc
-  statement: {X α β : Type*} [TopologicalSpace X] (f : X -> α) (g : α -> β)
-  proof: rfl
-
-中文:
-定理 coe_desc
-  结论: {X α β : 类型} [拓扑空间 X] (f : X -> α) (g : α -> β)
-  证明: rfl
+/-
+**LocallyConstant.coe_desc** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_desc {X α β : Type*} [TopologicalSpace X] (f : X -> α) (g : α -> β) (h
+ : LocallyConstant X β) (cond : g ∘ f = h) (inj : Function.Injective g) : ⇑(desc
+ f h cond inj) = f
+参数：f : X -> α；g : α -> β；h : LocallyConstant X β；cond : g ∘ f = h；inj : Function
+.Injective g。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_desc {X α β : Type*} [TopologicalSpace X] (f : X -> α) (g : α -> β)
+theorem coe_desc {X α β : Type*} [TopologicalSpace X] (f : X → α) (g : α → β)
     (h : LocallyConstant X β) (cond : g ∘ f = h) (inj : Function.Injective g) :
     ⇑(desc f h cond inj) = f :=
   rfl
@@ -1837,100 +1350,66 @@ variable {R : Type*} [One R] {U : Set X} (f : LocallyConstant X R)
 @[to_additive (attr := simps) /-- Given a clopen set `U` and a locally constant function `f`,
   `LocallyConstant.indicator` returns the locally constant function that is `f` on `U` and `0`
   otherwise. -/]
-/--
-Definition of `mulIndicator` / `mulIndicator` 的定义
-
-English:
-definition mulIndicator
-  signature: (hU : IsClopen U)
-  body: Set.mulIndicator U f
-  isLocallyConstant := fun s => by
-    rw [mulIndicator_preimage]; rw [Set.ite]; rw [Set.sdiff_eq]
-    exact ((f.2 s).inter hU.isOpen).union ((IsLocallyConstant.const 1 s).inter hU.compl.isOpen)
-
-中文:
-定义 mulIndicator
-  签名: (hU : IsClopen U)
-  定义体: Set.mulIndicator U f
-  isLocallyConstant := fun s => by
-    rw [mulIndicator_preimage]; rw [Set.ite]; rw [Set.sdiff_eq]
-    exact ((f.2 s).inter hU.isOpen).union ((IsLocallyConstant.const 1 s).inter hU.compl.isOpen)
-
-Depends on / 依赖: Set.mulIndicator, mulIndicator
+/-
+**LocallyConstant.mulIndicator** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：mulIndicator (hU : IsClopen U) : LocallyConstant X R where toFun
+参数：hU : IsClopen U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def mulIndicator (hU : IsClopen U) : LocallyConstant X R where
   toFun := Set.mulIndicator U f
   isLocallyConstant := fun s => by
-    rw [mulIndicator_preimage]; rw [Set.ite]; rw [Set.sdiff_eq]
+    rw [mulIndicator_preimage, Set.ite, Set.sdiff_eq]
     exact ((f.2 s).inter hU.isOpen).union ((IsLocallyConstant.const 1 s).inter hU.compl.isOpen)
 
 variable (a : X)
 
 open scoped Classical in
 @[to_additive]
-/--
-theorem `mulIndicator_apply_eq_if` / 定理 `mulIndicator_apply_eq_if`
-
-English:
-theorem mulIndicator_apply_eq_if
-  given: (hU : IsClopen U)
-  proof: Set.mulIndicator_apply U f a
-
-中文:
-定理 mulIndicator_apply_eq_if
-  条件: (hU : IsClopen U)
-  证明: Set.mulIndicator_apply U f a
-
-Depends on / 依赖: Set.mulIndicator_apply, mulIndicator_apply
+/-
+**LocallyConstant.mulIndicator_apply_eq_if** 是 Mathlib 中的一个定理，位于命名空间 `LocallyCon
+stant`。
+形式化陈述：mulIndicator_apply_eq_if (hU : IsClopen U) : mulIndicator f hU a = if a in
+ U then f a else 1
+参数：hU : IsClopen U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.mulIndicator_apply`：mulIndicator_apply (s : Set α) (f : α -> M) (a :
+ α) [Decidable (a in s)] : mulIndicator s f a = if a in s then f a else 1
 -/
 theorem mulIndicator_apply_eq_if (hU : IsClopen U) :
-    mulIndicator f hU a = if a in U then f a else 1 :=
+    mulIndicator f hU a = if a ∈ U then f a else 1 :=
   Set.mulIndicator_apply U f a
 
 variable {a}
 
 @[to_additive]
-/--
-theorem `mulIndicator_of_mem` / 定理 `mulIndicator_of_mem`
-
-English:
-theorem mulIndicator_of_mem
-  given: (hU : IsClopen U) (h : a in U)
-  statement: f.mulIndicator hU a = f a
-  proof: Set.mulIndicator_of_mem h _
-
-@[to_additive]
-
-中文:
-定理 mulIndicator_of_mem
-  条件: (hU : IsClopen U) (h : a in U)
-  结论: f.mulIndicator hU a = f a
-  证明: Set.mulIndicator_of_mem h _
-
-@[to_additive]
-
-Depends on / 依赖: Set.mulIndicator_of_mem, mulIndicator_of_mem
+/-
+**LocallyConstant.mulIndicator_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant
+`。
+形式化陈述：mulIndicator_of_mem (hU : IsClopen U) (h : a in U) : f.mulIndicator hU a =
+ f a
+参数：hU : IsClopen U；h : a in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.mulIndicator_of_mem`：mulIndicator_of_mem (h : a in s) (f : α -> M) :
+ mulIndicator s f a = f a
 -/
-theorem mulIndicator_of_mem (hU : IsClopen U) (h : a in U) : f.mulIndicator hU a = f a :=
+theorem mulIndicator_of_mem (hU : IsClopen U) (h : a ∈ U) : f.mulIndicator hU a = f a :=
   Set.mulIndicator_of_mem h _
 
 @[to_additive]
-/--
-theorem `mulIndicator_of_notMem` / 定理 `mulIndicator_of_notMem`
-
-English:
-theorem mulIndicator_of_notMem
-  given: (hU : IsClopen U) (h : a ∉ U)
-  statement: f.mulIndicator hU a = 1
-  proof: Set.mulIndicator_of_notMem h _
-
-中文:
-定理 mulIndicator_of_notMem
-  条件: (hU : IsClopen U) (h : a ∉ U)
-  结论: f.mulIndicator hU a = 1
-  证明: Set.mulIndicator_of_notMem h _
-
-Depends on / 依赖: Set.mulIndicator_of_notMem, mulIndicator_of_notMem
+/-
+**LocallyConstant.mulIndicator_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConst
+ant`。
+形式化陈述：mulIndicator_of_notMem (hU : IsClopen U) (h : a ∉ U) : f.mulIndicator hU a
+ = 1
+参数：hU : IsClopen U；h : a ∉ U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.mulIndicator_of_notMem`：mulIndicator_of_notMem (h : a ∉ s) (f : α ->
+ M) : mulIndicator s f a = 1
 -/
 theorem mulIndicator_of_notMem (hU : IsClopen U) (h : a ∉ U) : f.mulIndicator hU a = 1 :=
   Set.mulIndicator_of_notMem h _
@@ -1944,34 +1423,17 @@ The equivalence between `LocallyConstant X Z` and `LocallyConstant Y Z` given a
 homeomorphism `X ≃ₜ Y`
 -/
 @[simps]
-/--
-Definition of `congrLeft` / `congrLeft` 的定义
+/-
+**LocallyConstant.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：congrLeft [TopologicalSpace Y] (e : X ≃ₜ Y) : LocallyConstant X Z ≃ Locall
+yConstant Y Z where toFun
+参数：e : X ≃ₜ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrLeft
-  signature: [TopologicalSpace Y] (e : X ≃ₜ Y)
-  body: comap e.symm
-  invFun := comap e
-  left_inv := by
-    intro
-    simp [comap_comap]
-  right_inv := by
-    intro
-    simp [comap_comap]
-
-中文:
-定义 congrLeft
-  签名: [拓扑空间 Y] (e : X ≃ₜ Y)
-  定义体: comap e.symm
-  invFun := comap e
-  left_inv := by
-    intro
-    simp [comap_comap]
-  right_inv := by
-    intro
-    simp [comap_comap]
-
-Depends on / 依赖: e.symm
+--- 原说明 ---
+The equivalence between `LocallyConstant X Z` and `LocallyConstant Y Z` given a
+homeomorphism `X ≃ₜ Y`
 -/
 def congrLeft [TopologicalSpace Y] (e : X ≃ₜ Y) : LocallyConstant X Z ≃ LocallyConstant Y Z where
   toFun := comap e.symm
@@ -1988,24 +1450,18 @@ The equivalence between `LocallyConstant X Y` and `LocallyConstant X Z` given an
 equivalence `Y ≃ Z`
 -/
 @[simps]
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-
+**LocallyConstant.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：congrRight (e : Y ≃ Z) : LocallyConstant X Y ≃ LocallyConstant X Z where t
+oFun
+参数：e : Y ≃ Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition congrRight
-  signature: (e : Y ≃ Z)
-  body: map e
-  invFun := map e.symm
-  left_inv := by intro; ext; simp
-  right_inv := by intro; ext; simp
-
-中文:
-定义 congrRight
-  签名: (e : Y ≃ Z)
-  定义体: map e
-  invFun := map e.symm
-  left_inv := by intro; ext; simp
-  right_inv := by intro; ext; simp
+--- 原说明 ---
+The equivalence between `LocallyConstant X Y` and `LocallyConstant X Z` given an
+equivalence `Y ≃ Z`
 -/
 def congrRight (e : Y ≃ Z) : LocallyConstant X Y ≃ LocallyConstant X Z where
   toFun := map e
@@ -2015,27 +1471,25 @@ def congrRight (e : Y ≃ Z) : LocallyConstant X Y ≃ LocallyConstant X Z where
 
 variable (X) in
 /--
-Definition of `equivClopens` / `equivClopens` 的定义
-
-English:
-definition equivClopens
-  signature: [forall (s : Set X) x, Decidable (x in s)]
-  body: ⟨f ⁻¹' {0}, f.2.isClopen_fiber _⟩
-  invFun s := ofIsClopen s.2
-  left_inv _ := locallyConstant_eq_of_fiber_zero_eq _ _ (by simp)
-  right_inv _ := by simp
-
-中文:
-定义 equivClopens
-  签名: [对任意 (s : 集合 X) x, 可判定 (x in s)]
-  定义体: ⟨f ⁻¹' {0}, f.2.isClopen_fiber _⟩
-  invFun s := ofIsClopen s.2
-  left_inv _ := locallyConstant_eq_of_fiber_zero_eq _ _ (by simp)
-  right_inv _ := by simp
-
-Depends on / 依赖: isClopen_fiber
+The set of clopen subsets of a topological space is equivalent to the locally constant maps to
+a two-element set
 -/
-def equivClopens [forall (s : Set X) x, Decidable (x in s)] :
+/-
+**LocallyConstant.equivClopens** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：equivClopens [forall (s : Set X) x, Decidable (x in s)] : LocallyConstant 
+X (Fin 2) ≃ TopologicalSpace.Clopens X where toFun f
+参数：s : Set X；x in s。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Clopens.isClopen'`：∀ {α : Type u_4} [inst : Topological
+Space α] (self : TopologicalSpace.Clopens α), IsClopen self.carrier
+
+--- 原说明 ---
+The set of clopen subsets of a topological space is equivalent to the locally co
+nstant maps to
+a two-element set
+-/
+def equivClopens [∀ (s : Set X) x, Decidable (x ∈ s)] :
     LocallyConstant X (Fin 2) ≃ TopologicalSpace.Clopens X where
   toFun f := ⟨f ⁻¹' {0}, f.2.isClopen_fiber _⟩
   invFun s := ofIsClopen s.2
@@ -2046,64 +1500,37 @@ end Equiv
 
 section Piecewise
 
-/--
-Definition of `piecewise` / `piecewise` 的定义
+/-- Given two closed sets covering a topological space, and locally constant maps on these two sets,
+then if these two locally constant maps agree on the intersection, we get a piecewise defined
+locally constant map on the whole space.
 
-English:
-definition piecewise
-  signature: {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) (h : C₁ union C₂ = Set.univ)
-  body: if hi : i in C₁ then f ⟨i, hi⟩ else g ⟨i, (Set.compl_subset_iff_union.mpr h) hi⟩
-  isLocallyConstant := by
-    let dZ : TopologicalSpace Z := ⊥
-    have : DiscreteTopology Z := discreteTopology_bot Z
-    obtain ⟨f, hf⟩ := f
-    obtain ⟨g, hg⟩ := g
-    rw [IsLocallyConstant.iff_continuous] at hf hg ⊢
-    dsimp only [coe_mk]
-    rw [Set.union_eq_iUnion] at h
-    refine (locallyFinite_of_finite _).continuous h (fun i => ?_) (fun i => ?_)
-    · cases i <;> [exact h₂; exact h₁]
-    · cases i <;> rw [continuousOn_iff_continuous_domRestrict]
-      · convert! hg
-        ext x
-        simp only [cond_false, domRestrict_apply, Subtype.coe_eta, dite_eq_right_iff]
-        exact fun hx => hfg x ⟨hx, x.prop⟩
-      · simp only [cond_true, domRestrict_dite, Subtype.coe_eta]
-        exact hf
+TODO: Generalise this construction to `ContinuousMap`. -/
+/-
+**LocallyConstant.piecewise** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：piecewise {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) (h : C₁ un
+ion C₂ = Set.univ) (f : LocallyConstant C₁ Z) (g : LocallyConstant C₂ Z) (hfg : 
+forall (x : X) (hx : x in C₁ inter C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩) [DecidablePre
+d (· in C₁)] : LocallyConstant X Z where toFun i
+参数：h₁ : IsClosed C₁；h₂ : IsClosed C₂；h : C₁ union C₂ = Set.univ；f : LocallyConst
+ant C₁ Z；g : LocallyConstant C₂ Z；hfg : forall (x : X) (hx : x in C₁ inter C₂), 
+f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩；· in C₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Given two closed sets covering a topological space, and locally constant maps on
+ these two sets,
+then if these two locally constant maps agree on the intersection, we get a piec
+ewise defined
+locally constant map on the whole space.
 
-中文:
-定义 piecewise
-  签名: {C₁ C₂ : 集合 X} (h₁ : 是闭集 C₁) (h₂ : 是闭集 C₂) (h : C₁ union C₂ = 集合.univ)
-  定义体: if hi : i in C₁ then f ⟨i, hi⟩ else g ⟨i, (Set.compl_subset_iff_union.mpr h) hi⟩
-  isLocallyConstant := by
-    let dZ : TopologicalSpace Z := ⊥
-    have : DiscreteTopology Z := discreteTopology_bot Z
-    obtain ⟨f, hf⟩ := f
-    obtain ⟨g, hg⟩ := g
-    rw [IsLocallyConstant.iff_continuous] at hf hg ⊢
-    dsimp only [coe_mk]
-    rw [Set.union_eq_iUnion] at h
-    refine (locallyFinite_of_finite _).continuous h (fun i => ?_) (fun i => ?_)
-    · cases i <;> [exact h₂; exact h₁]
-    · cases i <;> rw [continuousOn_iff_continuous_domRestrict]
-      · convert! hg
-        ext x
-        simp only [cond_false, domRestrict_apply, Subtype.coe_eta, dite_eq_right_iff]
-        exact fun hx => hfg x ⟨hx, x.prop⟩
-      · simp only [cond_true, domRestrict_dite, Subtype.coe_eta]
-        exact hf
-
-@[simp]
-
-Depends on / 依赖: Set.compl_subset_iff_union.mpr, compl_subset_iff_union
+TODO: Generalise this construction to `ContinuousMap`.
 -/
-def piecewise {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) (h : C₁ union C₂ = Set.univ)
+def piecewise {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) (h : C₁ ∪ C₂ = Set.univ)
     (f : LocallyConstant C₁ Z) (g : LocallyConstant C₂ Z)
-    (hfg : forall (x : X) (hx : x in C₁ inter C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩)
-    [DecidablePred (· in C₁)] : LocallyConstant X Z where
-  toFun i := if hi : i in C₁ then f ⟨i, hi⟩ else g ⟨i, (Set.compl_subset_iff_union.mpr h) hi⟩
+    (hfg : ∀ (x : X) (hx : x ∈ C₁ ∩ C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩)
+    [DecidablePred (· ∈ C₁)] : LocallyConstant X Z where
+  toFun i := if hi : i ∈ C₁ then f ⟨i, hi⟩ else g ⟨i, (Set.compl_subset_iff_union.mpr h) hi⟩
   isLocallyConstant := by
     let dZ : TopologicalSpace Z := ⊥
     have : DiscreteTopology Z := discreteTopology_bot Z
@@ -2112,81 +1539,75 @@ def piecewise {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) 
     rw [IsLocallyConstant.iff_continuous] at hf hg ⊢
     dsimp only [coe_mk]
     rw [Set.union_eq_iUnion] at h
-    refine (locallyFinite_of_finite _).continuous h (fun i => ?_) (fun i => ?_)
+    refine (locallyFinite_of_finite _).continuous h (fun i ↦ ?_) (fun i ↦ ?_)
     · cases i <;> [exact h₂; exact h₁]
     · cases i <;> rw [continuousOn_iff_continuous_domRestrict]
       · convert! hg
         ext x
         simp only [cond_false, domRestrict_apply, Subtype.coe_eta, dite_eq_right_iff]
-        exact fun hx => hfg x ⟨hx, x.prop⟩
+        exact fun hx ↦ hfg x ⟨hx, x.prop⟩
       · simp only [cond_true, domRestrict_dite, Subtype.coe_eta]
         exact hf
 
 @[simp]
-/--
-lemma `piecewise_apply_left` / 引理 `piecewise_apply_left`
-
-English:
-lemma piecewise_apply_left
-  statement: {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂)
-  proof: by
-  simp only [piecewise,
-    coe_mk]
-  rw [dif_pos hx]
-
-@[simp]
-
-中文:
-引理 piecewise_apply_left
-  结论: {C₁ C₂ : 集合 X} (h₁ : 是闭集 C₁) (h₂ : 是闭集 C₂)
-  证明: by
-  simp only [piecewise,
-    coe_mk]
-  rw [dif_pos hx]
-
-@[simp]
-
-Depends on / 依赖: coe_mk, dif_pos, piecewise
+/-
+**LocallyConstant.piecewise_apply_left** 是 Mathlib 中的一个引理，位于命名空间 `LocallyConstan
+t`。
+形式化陈述：piecewise_apply_left {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂)
+ (h : C₁ union C₂ = Set.univ) (f : LocallyConstant C₁ Z) (g : LocallyConstant C₂
+ Z) (hfg : forall (x : X) (hx : x in C₁ inter C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩) [D
+ecidablePred (· in C₁)] (x : X) (hx : x in C₁) : piecewise h₁ h₂ h f g hfg x = f
+ ⟨x, hx⟩
+参数：h₁ : IsClosed C₁；h₂ : IsClosed C₂；h : C₁ union C₂ = Set.univ；f : LocallyConst
+ant C₁ Z；g : LocallyConstant C₂ Z；hfg : forall (x : X) (hx : x in C₁ inter C₂), 
+f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩；· in C₁；x : X；hx : x in C₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
 lemma piecewise_apply_left {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂)
-    (h : C₁ union C₂ = Set.univ) (f : LocallyConstant C₁ Z) (g : LocallyConstant C₂ Z)
-    (hfg : forall (x : X) (hx : x in C₁ inter C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩)
-    [DecidablePred (· in C₁)] (x : X) (hx : x in C₁) :
+    (h : C₁ ∪ C₂ = Set.univ) (f : LocallyConstant C₁ Z) (g : LocallyConstant C₂ Z)
+    (hfg : ∀ (x : X) (hx : x ∈ C₁ ∩ C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩)
+    [DecidablePred (· ∈ C₁)] (x : X) (hx : x ∈ C₁) :
     piecewise h₁ h₂ h f g hfg x = f ⟨x, hx⟩ := by
   simp only [piecewise,
     coe_mk]
   rw [dif_pos hx]
 
 @[simp]
-/--
-lemma `piecewise_apply_right` / 引理 `piecewise_apply_right`
-
-English:
-lemma piecewise_apply_right
-  statement: {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂)
-  proof: by
-  simp only [piecewise,
-    coe_mk]
-  split_ifs with h
-  · exact hfg x ⟨h, hx⟩
-  · rfl
-
-中文:
-引理 piecewise_apply_right
-  结论: {C₁ C₂ : 集合 X} (h₁ : 是闭集 C₁) (h₂ : 是闭集 C₂)
-  证明: by
-  simp only [piecewise,
-    coe_mk]
-  split_ifs with h
-  · exact hfg x ⟨h, hx⟩
-  · rfl
-
-Depends on / 依赖: coe_mk, piecewise, split_ifs
+/-
+**LocallyConstant.piecewise_apply_right** 是 Mathlib 中的一个引理，位于命名空间 `LocallyConsta
+nt`。
+形式化陈述：piecewise_apply_right {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂
+) (h : C₁ union C₂ = Set.univ) (f : LocallyConstant C₁ Z) (g : LocallyConstant C
+₂ Z) (hfg : forall (x : X) (hx : x in C₁ inter C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩) [
+DecidablePred (· in C₁)] (x : X) (hx : x in C₂) : piecewise h₁ h₂ h f g hfg x = 
+g ⟨x, hx⟩
+参数：h₁ : IsClosed C₁；h₂ : IsClosed C₂；h : C₁ union C₂ = Set.univ；f : LocallyConst
+ant C₁ Z；g : LocallyConstant C₂ Z；hfg : forall (x : X) (hx : x in C₁ inter C₂), 
+f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩；· in C₁；x : X；hx : x in C₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 lemma piecewise_apply_right {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂)
-    (h : C₁ union C₂ = Set.univ) (f : LocallyConstant C₁ Z) (g : LocallyConstant C₂ Z)
-    (hfg : forall (x : X) (hx : x in C₁ inter C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩)
-    [DecidablePred (· in C₁)] (x : X) (hx : x in C₂) :
+    (h : C₁ ∪ C₂ = Set.univ) (f : LocallyConstant C₁ Z) (g : LocallyConstant C₂ Z)
+    (hfg : ∀ (x : X) (hx : x ∈ C₁ ∩ C₂), f ⟨x, hx.1⟩ = g ⟨x, hx.2⟩)
+    [DecidablePred (· ∈ C₁)] (x : X) (hx : x ∈ C₂) :
     piecewise h₁ h₂ h f g hfg x = g ⟨x, hx⟩ := by
   simp only [piecewise,
     coe_mk]
@@ -2194,123 +1615,120 @@ lemma piecewise_apply_right {C₁ C₂ : Set X} (h₁ : IsClosed C₁) (h₂ : I
   · exact hfg x ⟨h, hx⟩
   · rfl
 
-/--
-Definition of `piecewise'` / `piecewise'` 的定义
+/-- A variant of `LocallyConstant.piecewise` where the two closed sets cover a subset.
 
-English:
-definition piecewise'
-  signature: {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
-  body: letI : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  piecewise (h₁.preimage continuous_subtype_val) (h₂.preimage continuous_subtype_val)
-    (by simpa [eq_univ_iff_forall] using! h₀)
-    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩)
-(f₂.comap ⟨(restrictPreimage C₂ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩) by
-      rintro ⟨x, hx₀⟩ ⟨hx₁ : x in C₁, hx₂ : x in C₂⟩
-      simpa using hf x ⟨hx₁, hx₂⟩
+TODO: Generalise this construction to `ContinuousMap`. -/
+/-
+**LocallyConstant.piecewise'** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：piecewise' {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClose
+d C₁) (h₂ : IsClosed C₂) (f₁ : LocallyConstant C₁ Z) (f₂ : LocallyConstant C₂ Z)
+ [DecidablePred (· in C₁)] (hf : forall x (hx : x in C₁ inter C₂), f₁ ⟨x, hx.1⟩ 
+= f₂ ⟨x, hx.2⟩) : LocallyConstant C₀ Z
+参数：h₀ : C₀ subseteq C₁ union C₂；h₁ : IsClosed C₁；h₂ : IsClosed C₂；f₁ : LocallyCo
+nstant C₁ Z；f₂ : LocallyConstant C₂ Z；· in C₁；hf : forall x (hx : x in C₁ inter 
+C₂), f₁ ⟨x, hx.1⟩ = f₂ ⟨x, hx.2⟩。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A variant of `LocallyConstant.piecewise` where the two closed sets cover a subse
+t.
 
-中文:
-定义 piecewise'
-  签名: {C₀ C₁ C₂ : 集合 X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : 是闭集 C₁)
-  定义体: letI : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  piecewise (h₁.preimage continuous_subtype_val) (h₂.preimage continuous_subtype_val)
-    (by simpa [eq_univ_iff_forall] using! h₀)
-    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩)
-(f₂.comap ⟨(restrictPreimage C₂ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩) by
-      rintro ⟨x, hx₀⟩ ⟨hx₁ : x in C₁, hx₂ : x in C₂⟩
-      simpa using hf x ⟨hx₁, hx₂⟩
-
-@[simp]
-
-Depends on / 依赖: Decidable, Iff.rfl, Subtype, Subtype.val, continuous_subtype_val, continuous_subtype_val.restrictPreimage, decidable_of_iff, eq_univ_iff_forall, piecewise, preimage, restrictPreimage
+TODO: Generalise this construction to `ContinuousMap`.
 -/
-def piecewise' {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
+def piecewise' {C₀ C₁ C₂ : Set X} (h₀ : C₀ ⊆ C₁ ∪ C₂) (h₁ : IsClosed C₁)
     (h₂ : IsClosed C₂) (f₁ : LocallyConstant C₁ Z) (f₂ : LocallyConstant C₂ Z)
-    [DecidablePred (· in C₁)] (hf : forall x (hx : x in C₁ inter C₂), f₁ ⟨x, hx.1⟩ = f₂ ⟨x, hx.2⟩) :
+    [DecidablePred (· ∈ C₁)] (hf : ∀ x (hx : x ∈ C₁ ∩ C₂), f₁ ⟨x, hx.1⟩ = f₂ ⟨x, hx.2⟩) :
     LocallyConstant C₀ Z :=
-  letI : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
+  letI : ∀ j : C₀, Decidable (j ∈ Subtype.val ⁻¹' C₁) := fun j ↦ decidable_of_iff (↑j ∈ C₁) Iff.rfl
   piecewise (h₁.preimage continuous_subtype_val) (h₂.preimage continuous_subtype_val)
     (by simpa [eq_univ_iff_forall] using! h₀)
-    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩)
-(f₂.comap ⟨(restrictPreimage C₂ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩) by
-      rintro ⟨x, hx₀⟩ ⟨hx₁ : x in C₁, hx₂ : x in C₂⟩
+    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ → X)), continuous_subtype_val.restrictPreimage⟩)
+    (f₂.comap ⟨(restrictPreimage C₂ ((↑) : C₀ → X)), continuous_subtype_val.restrictPreimage⟩) <| by
+      rintro ⟨x, hx₀⟩ ⟨hx₁ : x ∈ C₁, hx₂ : x ∈ C₂⟩
       simpa using hf x ⟨hx₁, hx₂⟩
 
 @[simp]
-/--
-lemma `piecewise'_apply_left` / 引理 `piecewise'_apply_left`
-
-English:
-lemma piecewise'_apply_left
-  statement: {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
-  proof: by
-  let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  rw [piecewise']; rw [piecewise_apply_left (f := (f₁.comap
-    ⟨(restrictPreimage C₁ ((↑) : C₀ -> X))]; rw [continuous_subtype_val.restrictPreimage⟩))
-    (hx := hx)]
-  rfl
-
-@[simp]
-
-中文:
-引理 piecewise'_apply_left
-  结论: {C₀ C₁ C₂ : 集合 X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : 是闭集 C₁)
-  证明: by
-  let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  rw [piecewise']; rw [piecewise_apply_left (f := (f₁.comap
-    ⟨(restrictPreimage C₁ ((↑) : C₀ -> X))]; rw [continuous_subtype_val.restrictPreimage⟩))
-    (hx := hx)]
-  rfl
-
-@[simp]
+/-
+**LocallyConstant.piecewise'_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConsta
+nt`。
+形式化陈述：∀ {X : Type u_1} {Z : Type u_3} [inst : TopologicalSpace X] {C₀ C₁ C₂ : Se
+t X} (h₀ : C₀ ⊆ C₁ ∪ C₂) (h₁ : IsClosed C₁)   (h₂ : IsClosed C₂) (f₁ : LocallyCo
+nstant (↑C₁) Z) (f₂ : LocallyConstant (↑C₂) Z)   [inst_1 : DecidablePred fun x =
+> x ∈ C₁] (hf : ∀ (x : X) (hx : x ∈ C₁ ∩ C₂), f₁ ⟨x, ⋯⟩ = f₂ ⟨x, ⋯⟩) (x : ↑C₀)  
+ (hx : ↑x ∈ C₁), (LocallyConstant.piecewise' h₀ h₁ h₂ f₁ f₂ hf) x = f₁ ⟨↑x, hx⟩
+参数：h₀ : C₀ ⊆ C₁ ∪ C₂；h₁ : IsClosed C₁；h₂ : IsClosed C₂；f₁ : LocallyConstant (↑C₁
+) Z；f₂ : LocallyConstant (↑C₂) Z；hf : ∀ (x : X) (hx : x ∈ C₁ ∩ C₂), f₁ ⟨x, ⋯⟩ = 
+f₂ ⟨x, ⋯⟩；x : ↑C₀；hx : ↑x ∈ C₁；LocallyConstant.piecewise' h₀ h₁ h₂ f₁ f₂ hf。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LocallyConstant.piecewise'.eq_1`：∀ {X : Type u_1} {Z : Type u_3} [inst :
+ TopologicalSpace X] {C₀ C₁ C₂ : Set X} (h₀ : C₀ ⊆ C₁ ∪ C₂) (h₁ : IsClosed C₁)  
+ (h₂ : IsClosed C₂) (…
+· 使用定理 `Continuous.restrictPreimage`：Continuous.restrictPreimage {f : X -> Y} {s
+ : Set Y} (h : Continuous f) : Continuous (s.restrictPreimage f)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用引理 `LocallyConstant.piecewise_apply_left`：piecewise_apply_left {C₁ C₂ : Set 
+X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) (h : C₁ union C₂ = Set.univ) (f : Local
+lyConstant C₁ Z) (g : Loca…
 -/
-lemma piecewise'_apply_left {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
+lemma piecewise'_apply_left {C₀ C₁ C₂ : Set X} (h₀ : C₀ ⊆ C₁ ∪ C₂) (h₁ : IsClosed C₁)
     (h₂ : IsClosed C₂) (f₁ : LocallyConstant C₁ Z) (f₂ : LocallyConstant C₂ Z)
-    [DecidablePred (· in C₁)] (hf : forall x (hx : x in C₁ inter C₂), f₁ ⟨x, hx.1⟩ = f₂ ⟨x, hx.2⟩)
-    (x : C₀) (hx : x.val in C₁) :
+    [DecidablePred (· ∈ C₁)] (hf : ∀ x (hx : x ∈ C₁ ∩ C₂), f₁ ⟨x, hx.1⟩ = f₂ ⟨x, hx.2⟩)
+    (x : C₀) (hx : x.val ∈ C₁) :
     piecewise' h₀ h₁ h₂ f₁ f₂ hf x = f₁ ⟨x.val, hx⟩ := by
-  let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  rw [piecewise']; rw [piecewise_apply_left (f := (f₁.comap
-    ⟨(restrictPreimage C₁ ((↑) : C₀ -> X))]; rw [continuous_subtype_val.restrictPreimage⟩))
+  let : ∀ j : C₀, Decidable (j ∈ Subtype.val ⁻¹' C₁) := fun j ↦ decidable_of_iff (↑j ∈ C₁) Iff.rfl
+  rw [piecewise', piecewise_apply_left (f := (f₁.comap
+    ⟨(restrictPreimage C₁ ((↑) : C₀ → X)), continuous_subtype_val.restrictPreimage⟩))
     (hx := hx)]
   rfl
 
 @[simp]
-/--
-lemma `piecewise'_apply_right` / 引理 `piecewise'_apply_right`
-
-English:
-lemma piecewise'_apply_right
-  statement: {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
-  proof: by
-  let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  rw [piecewise']; rw [piecewise_apply_right (f := (f₁.comap
-    ⟨(restrictPreimage C₁ ((↑) : C₀ -> X))]; rw [continuous_subtype_val.restrictPreimage⟩))
-    (hx := hx)]
-  rfl
-
-中文:
-引理 piecewise'_apply_right
-  结论: {C₀ C₁ C₂ : 集合 X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : 是闭集 C₁)
-  证明: by
-  let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  rw [piecewise']; rw [piecewise_apply_right (f := (f₁.comap
-    ⟨(restrictPreimage C₁ ((↑) : C₀ -> X))]; rw [continuous_subtype_val.restrictPreimage⟩))
-    (hx := hx)]
-  rfl
+/-
+**LocallyConstant.piecewise'_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConst
+ant`。
+形式化陈述：∀ {X : Type u_1} {Z : Type u_3} [inst : TopologicalSpace X] {C₀ C₁ C₂ : Se
+t X} (h₀ : C₀ ⊆ C₁ ∪ C₂) (h₁ : IsClosed C₁)   (h₂ : IsClosed C₂) (f₁ : LocallyCo
+nstant (↑C₁) Z) (f₂ : LocallyConstant (↑C₂) Z)   [inst_1 : DecidablePred fun x =
+> x ∈ C₁] (hf : ∀ (x : X) (hx : x ∈ C₁ ∩ C₂), f₁ ⟨x, ⋯⟩ = f₂ ⟨x, ⋯⟩) (x : ↑C₀)  
+ (hx : ↑x ∈ C₂), (LocallyConstant.piecewise' h₀ h₁ h₂ f₁ f₂ hf) x = f₂ ⟨↑x, hx⟩
+参数：h₀ : C₀ ⊆ C₁ ∪ C₂；h₁ : IsClosed C₁；h₂ : IsClosed C₂；f₁ : LocallyConstant (↑C₁
+) Z；f₂ : LocallyConstant (↑C₂) Z；hf : ∀ (x : X) (hx : x ∈ C₁ ∩ C₂), f₁ ⟨x, ⋯⟩ = 
+f₂ ⟨x, ⋯⟩；x : ↑C₀；hx : ↑x ∈ C₂；LocallyConstant.piecewise' h₀ h₁ h₂ f₁ f₂ hf。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LocallyConstant.piecewise'.eq_1`：∀ {X : Type u_1} {Z : Type u_3} [inst :
+ TopologicalSpace X] {C₀ C₁ C₂ : Set X} (h₀ : C₀ ⊆ C₁ ∪ C₂) (h₁ : IsClosed C₁)  
+ (h₂ : IsClosed C₂) (…
+· 使用定理 `Continuous.restrictPreimage`：Continuous.restrictPreimage {f : X -> Y} {s
+ : Set Y} (h : Continuous f) : Continuous (s.restrictPreimage f)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用引理 `LocallyConstant.piecewise_apply_right`：piecewise_apply_right {C₁ C₂ : Se
+t X} (h₁ : IsClosed C₁) (h₂ : IsClosed C₂) (h : C₁ union C₂ = Set.univ) (f : Loc
+allyConstant C₁ Z) (g : Loc…
 -/
-lemma piecewise'_apply_right {C₀ C₁ C₂ : Set X} (h₀ : C₀ subseteq C₁ union C₂) (h₁ : IsClosed C₁)
+lemma piecewise'_apply_right {C₀ C₁ C₂ : Set X} (h₀ : C₀ ⊆ C₁ ∪ C₂) (h₁ : IsClosed C₁)
     (h₂ : IsClosed C₂) (f₁ : LocallyConstant C₁ Z) (f₂ : LocallyConstant C₂ Z)
-    [DecidablePred (· in C₁)] (hf : forall x (hx : x in C₁ inter C₂), f₁ ⟨x, hx.1⟩ = f₂ ⟨x, hx.2⟩)
-    (x : C₀) (hx : x.val in C₂) :
+    [DecidablePred (· ∈ C₁)] (hf : ∀ x (hx : x ∈ C₁ ∩ C₂), f₁ ⟨x, hx.1⟩ = f₂ ⟨x, hx.2⟩)
+    (x : C₀) (hx : x.val ∈ C₂) :
     piecewise' h₀ h₁ h₂ f₁ f₂ hf x = f₂ ⟨x.val, hx⟩ := by
-  let : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
-  rw [piecewise']; rw [piecewise_apply_right (f := (f₁.comap
-    ⟨(restrictPreimage C₁ ((↑) : C₀ -> X))]; rw [continuous_subtype_val.restrictPreimage⟩))
+  let : ∀ j : C₀, Decidable (j ∈ Subtype.val ⁻¹' C₁) := fun j ↦ decidable_of_iff (↑j ∈ C₁) Iff.rfl
+  rw [piecewise', piecewise_apply_right (f := (f₁.comap
+    ⟨(restrictPreimage C₁ ((↑) : C₀ → X)), continuous_subtype_val.restrictPreimage⟩))
     (hx := hx)]
   rfl
 
 end Piecewise
 
 end LocallyConstant
+

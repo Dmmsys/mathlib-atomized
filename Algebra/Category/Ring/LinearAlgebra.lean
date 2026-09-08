@@ -27,32 +27,23 @@ open CategoryTheory Limits TensorProduct
 
 namespace CommRingCat
 
-/--
-lemma `nontrivial_of_isPushout_of_isField` / 引理 `nontrivial_of_isPushout_of_isField`
-
-English:
-lemma nontrivial_of_isPushout_of_isField
-  statement: {A B C D : CommRingCat.{u}}
-  proof: by
-  let : Field A := hA.toField
-  algebraize [f.hom, g.hom]
-  let e : D ≅ .of (B otimes[A] C) :=
-    IsColimit.coconePointUniqueUpToIso h.isColimit (CommRingCat.pushoutCoconeIsColimit A B C)
-  let e' : D ≃ B otimes[A] C := e.commRingCatIsoToRingEquiv.toEquiv
-  exact e'.nontrivial
-
-中文:
-引理 nontrivial_of_isPushout_of_isField
-  结论: {A B C D : 交换环范畴.{u}}
-  证明: by
-  let : Field A := hA.toField
-  algebraize [f.hom, g.hom]
-  let e : D ≅ .of (B otimes[A] C) :=
-    IsColimit.coconePointUniqueUpToIso h.isColimit (CommRingCat.pushoutCoconeIsColimit A B C)
-  let e' : D ≃ B otimes[A] C := e.commRingCatIsoToRingEquiv.toEquiv
-  exact e'.nontrivial
-
-Depends on / 依赖: CommRingCat, CommRingCat.pushoutCoconeIsColimit, IsColimit, IsColimit.coconePointUniqueUpToIso, algebraize, coconePointUniqueUpToIso, commRingCatIsoToRingEquiv, e.commRingCatIsoToRingEquiv.toEquiv, f.hom, g.hom, h.isColimit, hA.toField, isColimit, nontrivial, otimes, pushoutCoconeIsColimit, toEquiv, toField
+/-
+**CommRingCat.nontrivial_of_isPushout_of_isField** 是 Mathlib 中的一个引理，位于命名空间 `Comm
+RingCat`。
+形式化陈述：nontrivial_of_isPushout_of_isField {A B C D : CommRingCat.{u}} (hA : IsFie
+ld A) {f : A ⟶ B} {g : A ⟶ C} {inl : B ⟶ D} {inr : C ⟶ D} [Nontrivial B] [Nontri
+vial C] (h : IsPushout f g inl inr) : Nontrivial D
+参数：hA : IsField A；h : IsPushout f g inl inr。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nontrivial`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) [Nontrivia
+l β], Nontrivial α
+· 使用定理 `Module.FaithfullyFlat.instOfNontrivialOfFree`：∀ (R : Type u) (M : Type v
+) [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] [No
+ntrivial M]   [Module.Free R M], M…
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
 -/
 lemma nontrivial_of_isPushout_of_isField {A B C D : CommRingCat.{u}}
     (hA : IsField A) {f : A ⟶ B} {g : A ⟶ C} {inl : B ⟶ D} {inr : C ⟶ D}
@@ -60,9 +51,10 @@ lemma nontrivial_of_isPushout_of_isField {A B C D : CommRingCat.{u}}
     (h : IsPushout f g inl inr) : Nontrivial D := by
   let : Field A := hA.toField
   algebraize [f.hom, g.hom]
-  let e : D ≅ .of (B otimes[A] C) :=
+  let e : D ≅ .of (B ⊗[A] C) :=
     IsColimit.coconePointUniqueUpToIso h.isColimit (CommRingCat.pushoutCoconeIsColimit A B C)
-  let e' : D ≃ B otimes[A] C := e.commRingCatIsoToRingEquiv.toEquiv
+  let e' : D ≃ B ⊗[A] C := e.commRingCatIsoToRingEquiv.toEquiv
   exact e'.nontrivial
 
 end CommRingCat
+

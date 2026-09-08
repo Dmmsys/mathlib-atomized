@@ -47,268 +47,290 @@ Schroeder, Schroder
 open Finset
 
 namespace Nat
-variable {n : Nat}
+variable {n : ℕ}
 
-/--
-Definition of `largeSchroder` / `largeSchroder` 的定义
+/-- The recursive definition of the sequence of the large Schröder numbers :
+`a (n + 1) = a n + ∑ i : Fin n.succ, a i * a (n - i)` -/
+/-
+**Nat.largeSchroder** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition largeSchroder
-  signature: : Nat -> Nat
-
-中文:
-定义 largeSchroder
-  签名: : 自然数 -> 自然数
+--- 原说明 ---
+The recursive definition of the sequence of the large Schröder numbers :
+`a (n + 1) = a n + ∑ i : Fin n.succ, a i * a (n - i)`
 -/
-def largeSchroder : Nat -> Nat
+def largeSchroder : ℕ → ℕ
   | 0 => 1
   | n + 1 => largeSchroder n + ∑ i : Fin n.succ, largeSchroder i * largeSchroder (n - i)
-
-/--
-theorem `largeSchroder_zero` / 定理 `largeSchroder_zero`
-
-English:
-theorem largeSchroder_zero
-  statement: largeSchroder 0 = 1
-  proof: by simp [largeSchroder]
-
-中文:
-定理 largeSchroder_zero
-  结论: largeSchroder 0 = 1
-  证明: by simp [largeSchroder]
+/-
+**Nat.largeSchroder_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.largeSchroder 0 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.largeSchroder.eq_1`：Nat.largeSchroder 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem largeSchroder_zero : largeSchroder 0 = 1 := by simp [largeSchroder]
-/--
-theorem `largeSchroder_one` / 定理 `largeSchroder_one`
-
-English:
-theorem largeSchroder_one
-  statement: largeSchroder 1 = 2
-  proof: by simp [largeSchroder]
-
-中文:
-定理 largeSchroder_one
-  结论: largeSchroder 1 = 2
-  证明: by simp [largeSchroder]
+/-
+**Nat.largeSchroder_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.largeSchroder 1 = 2
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.largeSchroder.eq_2`：∀ (n : ℕ), n.succ.largeSchroder = n.largeSchrode
+r + ∑ i, (↑i).largeSchroder * (n - ↑i).largeSchroder
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.largeSchroder_zero`：Nat.largeSchroder 0 = 1
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Fin.val_eq_zero`：∀ (a : Fin 1), ↑a = 0
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem largeSchroder_one : largeSchroder 1 = 2 := by simp [largeSchroder]
-/--
-theorem `largeSchroder_two` / 定理 `largeSchroder_two`
-
-English:
-theorem largeSchroder_two
-  statement: largeSchroder 2 = 6
-  proof: by simp [largeSchroder]
-
-中文:
-定理 largeSchroder_two
-  结论: largeSchroder 2 = 6
-  证明: by simp [largeSchroder]
+/-
+**Nat.largeSchroder_two** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.largeSchroder 2 = 6
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.largeSchroder.eq_2`：∀ (n : ℕ), n.succ.largeSchroder = n.largeSchrode
+r + ∑ i, (↑i).largeSchroder * (n - ↑i).largeSchroder
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.largeSchroder_one`：Nat.largeSchroder 1 = 2
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Fin.sum_univ_two`：∀ {M : Type u_2} [inst : AddCommMonoid M] (f : Fin 2 →
+ M), ∑ i, f i = f 0 + f 1
+· 使用定理 `Nat.largeSchroder_zero`：Nat.largeSchroder 0 = 1
+· 使用定理 `tsub_zero`：tsub_zero (a : α) : a - 0 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Nat.mod_succ`：∀ (n : ℕ), n % n.succ = n
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem largeSchroder_two : largeSchroder 2 = 6 := by simp [largeSchroder]
-
-/--
-theorem `largeSchroder_succ` / 定理 `largeSchroder_succ`
-
-English:
-theorem largeSchroder_succ
-  given: (n : Nat)
-  proof: by
-  simp [largeSchroder, ← Iio_add_one_eq_Iic, Nat.Iio_eq_range, ← Fin.sum_univ_eq_sum_range]
-
-中文:
-定理 largeSchroder_succ
-  条件: (n : 自然数)
-  证明: by
-  simp [largeSchroder, ← Iio_add_one_eq_Iic, Nat.Iio_eq_range, ← Fin.sum_univ_eq_sum_range]
-
-Depends on / 依赖: Fin.sum_univ_eq_sum_range, Iio_add_one_eq_Iic, Iio_eq_range, Nat.Iio_eq_range, largeSchroder, sum_univ_eq_sum_range
+/-
+**Nat.largeSchroder_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：largeSchroder_succ (n : Nat) : largeSchroder (n + 1) = largeSchroder n + ∑
+ i <= n, largeSchroder i * largeSchroder (n - i)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.largeSchroder.eq_2`：∀ (n : ℕ), n.succ.largeSchroder = n.largeSchrode
+r + ∑ i, (↑i).largeSchroder * (n - ↑i).largeSchroder
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Nat.Iio_eq_range`：Iio_eq_range : Iio a = range a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem largeSchroder_succ (n : Nat) :
-    largeSchroder (n + 1) = largeSchroder n + ∑ i <= n, largeSchroder i * largeSchroder (n - i) := by
+theorem largeSchroder_succ (n : ℕ) :
+    largeSchroder (n + 1) = largeSchroder n + ∑ i ≤ n, largeSchroder i * largeSchroder (n - i) := by
   simp [largeSchroder, ← Iio_add_one_eq_Iic, Nat.Iio_eq_range, ← Fin.sum_univ_eq_sum_range]
-
-/--
-theorem `even_largeSchroder` / 定理 `even_largeSchroder`
-
-English:
-theorem even_largeSchroder
-  statement: forall {n : Nat}, n != 0 -> Even (largeSchroder n)
-  proof: k
-    · simpa using even_largeSchroder n.succ_ne_zero
-    have : k < n + 1 := by simp at hk; lia
-    exact .mul_right (even_largeSchroder k.succ_ne_zero) _
-
-中文:
-定理 even_largeSchroder
-  结论: 对任意 {n : 自然数}, n != 0 -> Even (largeSchroder n)
-  证明: k
-    · simpa using even_largeSchroder n.succ_ne_zero
-    have : k < n + 1 := by simp at hk; lia
-    exact .mul_right (even_largeSchroder k.succ_ne_zero) _
+/-
+**Nat.even_largeSchroder** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：even_largeSchroder : forall {n : Nat}, n != 0 -> Even (largeSchroder n) | 
+1, _ => by simp | n + 2, _ => by rw [largeSchroder_succ] refine .add (even_large
+Schroder n.succ_ne_zero) even_sum _ fun k hk => ?_ obtain _ | k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.even_largeSchroder._unary`：∀ (_x : (n : ℕ) ×' n ≠ 0), Even _x.1.larg
+eSchroder
 -/
-theorem even_largeSchroder : forall {n : Nat}, n != 0 -> Even (largeSchroder n)
+theorem even_largeSchroder : ∀ {n : ℕ}, n ≠ 0 → Even (largeSchroder n)
   | 1, _ => by simp
   | n + 2, _ => by
     rw [largeSchroder_succ]
-refine .add (even_largeSchroder n.succ_ne_zero) even_sum _ fun k hk => ?_
+    refine .add (even_largeSchroder n.succ_ne_zero) <| even_sum _ fun k hk ↦ ?_
     obtain _ | k := k
     · simpa using even_largeSchroder n.succ_ne_zero
     have : k < n + 1 := by simp at hk; lia
     exact .mul_right (even_largeSchroder k.succ_ne_zero) _
 
-/--
-Definition of `smallSchroder` / `smallSchroder` 的定义
+/-- The small Schröder number is equal to : `largeSchroder n = 2 * smallSchroder (n + 1), n ≥ 1` -/
+/-
+**Nat.smallSchroder** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smallSchroder
-  signature: : Nat -> Nat
-
-中文:
-定义 smallSchroder
-  签名: : 自然数 -> 自然数
+--- 原说明 ---
+The small Schröder number is equal to : `largeSchroder n = 2 * smallSchroder (n 
++ 1), n ≥ 1`
 -/
-def smallSchroder : Nat -> Nat
+def smallSchroder : ℕ → ℕ
   | 0 => 1
   | 1 => 1
   | n + 1 => largeSchroder n / 2
-
-/--
-lemma `smallSchroder_zero` / 引理 `smallSchroder_zero`
-
-English:
-lemma smallSchroder_zero
-  statement: smallSchroder 0 = 1
-  proof: by simp [smallSchroder]
-
-中文:
-引理 smallSchroder_zero
-  结论: smallSchroder 0 = 1
-  证明: by simp [smallSchroder]
+/-
+**Nat.smallSchroder_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.smallSchroder 0 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma smallSchroder_zero : smallSchroder 0 = 1 := by simp [smallSchroder]
-/--
-lemma `smallSchroder_one` / 引理 `smallSchroder_one`
-
-English:
-lemma smallSchroder_one
-  statement: smallSchroder 1 = 1
-  proof: by simp [smallSchroder]
-
-中文:
-引理 smallSchroder_one
-  结论: smallSchroder 1 = 1
-  证明: by simp [smallSchroder]
-
-Depends on / 依赖: Bifunctor, Bifunctor.functor, Functor, functor
+/-
+**Nat.smallSchroder_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.smallSchroder 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.Schroder.0.Nat.smallSchroder.
+match_1.eq_2`：∀ (motive : ℕ → Sort u_1) (h_1 : Unit → motive 0) (h_2 : Unit → mo
+tive 1) (h_3 : (n : ℕ) → motive n.succ),   (match 1 with     | 0 => h_1 ()…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma smallSchroder_one : smallSchroder 1 = 1 := by simp [smallSchroder]
-
-/--
-lemma `smallSchroder_succ_eq_largeSchroder_div_two` / 引理 `smallSchroder_succ_eq_largeSchroder_div_two`
-
-English:
-lemma smallSchroder_succ_eq_largeSchroder_div_two
-  given: (h : n != 0)
-  proof: by simp [smallSchroder]
-
-中文:
-引理 smallSchroder_succ_eq_largeSchroder_div_two
-  条件: (h : n != 0)
-  证明: by simp [smallSchroder]
-
-Depends on / 依赖: Bifunctor, Bifunctor.lawfulFunctor, LawfulBifunctor, lawfulFunctor, smallSchroder
+/-
+**Nat.smallSchroder_succ_eq_largeSchroder_div_two** 是 Mathlib 中的一个引理，位于命名空间 `Nat
+`。
+形式化陈述：smallSchroder_succ_eq_largeSchroder_div_two (h : n != 0) : smallSchroder (
+n + 1) = largeSchroder n / 2
+参数：h : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Combinatorics.Enumerative.Schroder.0.Nat.smallSchroder.
+match_1.eq_3`：∀ (motive : ℕ → Sort u_1) (n : ℕ) (h_1 : Unit → motive 0) (h_2 : U
+nit → motive 1) (h_3 : (n : ℕ) → motive n.succ),   (n = 0 → False) →     (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma smallSchroder_succ_eq_largeSchroder_div_two (h : n != 0) :
+lemma smallSchroder_succ_eq_largeSchroder_div_two (h : n ≠ 0) :
     smallSchroder (n + 1) = largeSchroder n / 2 := by simp [smallSchroder]
-
-/--
-lemma `two_mul_smallSchroder_succ` / 引理 `two_mul_smallSchroder_succ`
-
-English:
-lemma two_mul_smallSchroder_succ
-  given: (hn : n != 0)
-  statement: 2 * smallSchroder (n + 1) = largeSchroder n
-  proof: by
-  rw [smallSchroder_succ_eq_largeSchroder_div_two hn]; rw [Nat.mul_div_cancel_left' (even_largeSchroder hn).two_dvd]
-
-中文:
-引理 two_mul_smallSchroder_succ
-  条件: (hn : n != 0)
-  结论: 2 * smallSchroder (n + 1) = largeSchroder n
-  证明: by
-  rw [smallSchroder_succ_eq_largeSchroder_div_two hn]; rw [Nat.mul_div_cancel_left' (even_largeSchroder hn).two_dvd]
-
-Depends on / 依赖: Nat.mul_div_cancel_left, even_largeSchroder, mul_div_cancel_left, smallSchroder_succ_eq_largeSchroder_div_two, two_dvd
+/-
+**Nat.two_mul_smallSchroder_succ** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：two_mul_smallSchroder_succ (hn : n != 0) : 2 * smallSchroder (n + 1) = lar
+geSchroder n
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Nat.smallSchroder_succ_eq_largeSchroder_div_two`：smallSchroder_succ_eq_l
+argeSchroder_div_two (h : n != 0) : smallSchroder (n + 1) = largeSchroder n / 2
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.mul_div_cancel_left'`：∀ {a b : ℕ}, a ∣ b → a * (b / a) = b
+· 使用定理 `Even.two_dvd`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Even a → 2 ∣
+ a
+· 使用定理 `Nat.even_largeSchroder`：even_largeSchroder : forall {n : Nat}, n != 0 ->
+ Even (largeSchroder n) | 1, _ => by simp | n + 2, _ => by rw [largeSchroder_suc
+c] refine .a…
 -/
-lemma two_mul_smallSchroder_succ (hn : n != 0) : 2 * smallSchroder (n + 1) = largeSchroder n := by
-  rw [smallSchroder_succ_eq_largeSchroder_div_two hn]; rw [Nat.mul_div_cancel_left' (even_largeSchroder hn).two_dvd]
-
-/--
-theorem `smallSchroder_succ` / 定理 `smallSchroder_succ`
-
-English:
-theorem smallSchroder_succ
-  given: (hn : 1 < n)
-  proof: by
-  obtain _ | _ | n := n
-  · simp at hn
-  · simp at hn
-  refine Nat.mul_left_cancel zero_lt_two ?_
-  calc
-        2 * (n + 3).smallSchroder
-    _ = 3 * (n + 1).largeSchroder +
-          ∑ i in Ioo 0 (n + 1), i.largeSchroder * (n + 1 - i).largeSchroder := by
-      rw [two_mul_smallSchroder_succ]; rw [largeSchroder_succ]; rw [← Icc_bot]; rw [← sum_Ioc_add_eq_sum_Icc]; rw [← sum_Ioo_add_eq_sum_Ioc] <;> simp; lia
-    _ = 3 * (n + 1).largeSchroder +
-          ∑ i in Ioo 0 (n + 1), (2 * (i + 1).smallSchroder) * (2 * (n + 2 - i).smallSchroder) := by
-      congr! 2 with i hi
-      simp at hi
-      rw [← two_mul_smallSchroder_succ]; rw [← two_mul_smallSchroder_succ] <;>
-      · #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
-        we need to re-enable model-based theory combination in `lia` for this to go through. -/
-        lia +mbtc
-    _ = 6 * (n + 2).smallSchroder +
-          4 * ∑ i in Ioo 0 (n + 1), (i + 1).smallSchroder * (n + 2 - i).smallSchroder := by
-      rw [← two_mul_smallSchroder_succ (by lia)]
-      simp [mul_mul_mul_comm _ _ 2, ← Finset.mul_sum]
-      lia
-    _ = _ := by lia
-
-中文:
-定理 smallSchroder_succ
-  条件: (hn : 1 < n)
-  证明: by
-  obtain _ | _ | n := n
-  · simp at hn
-  · simp at hn
-  refine Nat.mul_left_cancel zero_lt_two ?_
-  calc
-        2 * (n + 3).smallSchroder
-    _ = 3 * (n + 1).largeSchroder +
-          ∑ i in Ioo 0 (n + 1), i.largeSchroder * (n + 1 - i).largeSchroder := by
-      rw [two_mul_smallSchroder_succ]; rw [largeSchroder_succ]; rw [← Icc_bot]; rw [← sum_Ioc_add_eq_sum_Icc]; rw [← sum_Ioo_add_eq_sum_Ioc] <;> simp; lia
-    _ = 3 * (n + 1).largeSchroder +
-          ∑ i in Ioo 0 (n + 1), (2 * (i + 1).smallSchroder) * (2 * (n + 2 - i).smallSchroder) := by
-      congr! 2 with i hi
-      simp at hi
-      rw [← two_mul_smallSchroder_succ]; rw [← two_mul_smallSchroder_succ] <;>
-      · #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
-        we need to re-enable model-based theory combination in `lia` for this to go through. -/
-        lia +mbtc
-    _ = 6 * (n + 2).smallSchroder +
-          4 * ∑ i in Ioo 0 (n + 1), (i + 1).smallSchroder * (n + 2 - i).smallSchroder := by
-      rw [← two_mul_smallSchroder_succ (by lia)]
-      simp [mul_mul_mul_comm _ _ 2, ← Finset.mul_sum]
-      lia
-    _ = _ := by lia
-
-Depends on / 依赖: Icc_bot, Nat.mul_left_cancel, i.largeSchroder, largeSchroder, largeSchroder_succ, mul_left_cancel, smallSchroder, sum_Ioc_add_eq_sum_Icc, sum_Ioo_add_eq_sum_Ioc, two_mul_smallSchroder_succ, zero_lt_two
+lemma two_mul_smallSchroder_succ (hn : n ≠ 0) : 2 * smallSchroder (n + 1) = largeSchroder n := by
+  rw [smallSchroder_succ_eq_largeSchroder_div_two hn,
+    Nat.mul_div_cancel_left' (even_largeSchroder hn).two_dvd]
+/-
+**Nat.smallSchroder_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：smallSchroder_succ (hn : 1 < n) : smallSchroder (n + 1) = 3 * n.smallSchro
+der + 2 * ∑ i in Ioo 0 (n - 1), (i + 1).smallSchroder * (n - i).smallSchroder
+参数：hn : 1 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.mul_left_cancel`：∀ {n m k : ℕ}, 0 < n → n * m = n * k → m = k
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `Nat.two_mul_smallSchroder_succ`：two_mul_smallSchroder_succ (hn : n != 0)
+ : 2 * smallSchroder (n + 1) = largeSchroder n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Nat.largeSchroder_succ`：largeSchroder_succ (n : Nat) : largeSchroder (n 
++ 1) = largeSchroder n + ∑ i <= n, largeSchroder i * largeSchroder (n - i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.Icc_bot`：Icc_bot [OrderBot α] : Icc (⊥ : α) a = Iic a
+· 使用定理 `Finset.sum_Ioc_add_eq_sum_Icc`：∀ {α : Type u_1} {M : Type u_2} [inst : A
+ddCommMonoid M] {f : α → M} {a b : α} [inst_1 : PartialOrder α]   [inst_2 : Loca
+llyFiniteOrder α], …
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `Finset.sum_Ioo_add_eq_sum_Ioc`：∀ {α : Type u_1} {M : Type u_2} [inst : A
+ddCommMonoid M] {f : α → M} {a b : α} [inst_1 : PartialOrder α]   [inst_2 : Loca
+llyFiniteOrder α], …
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+（共 37 条，此处仅展示前 30 条）
 -/
 theorem smallSchroder_succ (hn : 1 < n) :
     smallSchroder (n + 1) =
       3 * n.smallSchroder +
-          2 * ∑ i in Ioo 0 (n - 1), (i + 1).smallSchroder * (n - i).smallSchroder := by
+          2 * ∑ i ∈ Ioo 0 (n - 1), (i + 1).smallSchroder * (n - i).smallSchroder := by
   obtain _ | _ | n := n
   · simp at hn
   · simp at hn
@@ -316,21 +338,23 @@ theorem smallSchroder_succ (hn : 1 < n) :
   calc
         2 * (n + 3).smallSchroder
     _ = 3 * (n + 1).largeSchroder +
-          ∑ i in Ioo 0 (n + 1), i.largeSchroder * (n + 1 - i).largeSchroder := by
-      rw [two_mul_smallSchroder_succ]; rw [largeSchroder_succ]; rw [← Icc_bot]; rw [← sum_Ioc_add_eq_sum_Icc]; rw [← sum_Ioo_add_eq_sum_Ioc] <;> simp; lia
+          ∑ i ∈ Ioo 0 (n + 1), i.largeSchroder * (n + 1 - i).largeSchroder := by
+      rw [two_mul_smallSchroder_succ, largeSchroder_succ, ← Icc_bot, ← sum_Ioc_add_eq_sum_Icc,
+        ← sum_Ioo_add_eq_sum_Ioc] <;> simp; lia
     _ = 3 * (n + 1).largeSchroder +
-          ∑ i in Ioo 0 (n + 1), (2 * (i + 1).smallSchroder) * (2 * (n + 2 - i).smallSchroder) := by
+          ∑ i ∈ Ioo 0 (n + 1), (2 * (i + 1).smallSchroder) * (2 * (n + 2 - i).smallSchroder) := by
       congr! 2 with i hi
       simp at hi
-      rw [← two_mul_smallSchroder_succ]; rw [← two_mul_smallSchroder_succ] <;>
+      rw [← two_mul_smallSchroder_succ, ← two_mul_smallSchroder_succ] <;>
       · #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
         we need to re-enable model-based theory combination in `lia` for this to go through. -/
         lia +mbtc
     _ = 6 * (n + 2).smallSchroder +
-          4 * ∑ i in Ioo 0 (n + 1), (i + 1).smallSchroder * (n + 2 - i).smallSchroder := by
+          4 * ∑ i ∈ Ioo 0 (n + 1), (i + 1).smallSchroder * (n + 2 - i).smallSchroder := by
       rw [← two_mul_smallSchroder_succ (by lia)]
       simp [mul_mul_mul_comm _ _ 2, ← Finset.mul_sum]
       lia
     _ = _ := by lia
 
 end Nat
+

@@ -44,254 +44,283 @@ namespace BirdDet
 variable {R : Type*} [CommRing R]
 
 /--
-Definition of `get` / `get` 的定义
+`get n A i j` returns the (i, j)th entry of the `n × n` matrix whose entries are
+stored in `A` in row-major order.
 
-English:
-definition get
-  signature: (n : Nat) (A : Array R) (i j : Nat)
-  body: A.getD (n * i + j) 0
-
-中文:
-定义 get
-  签名: (n : 自然数) (A : 数组 R) (i j : 自然数)
-  定义体: A.getD (n * i + j) 0
+The function does not check the matrix index bounds.
 -/
-protected def get (n : Nat) (A : Array R) (i j : Nat) : R :=
+/-
+**BirdDet.get** 是 Mathlib 中的一个定义，位于命名空间 `BirdDet`。
+形式化陈述：{R : Type u_1} → [CommRing R] → ℕ → Array R → ℕ → ℕ → R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`get n A i j` returns the (i, j)th entry of the `n × n` matrix whose entries are
+stored in `A` in row-major order.
+
+The function does not check the matrix index bounds.
+-/
+protected def get (n : ℕ) (A : Array R) (i j : ℕ) : R :=
   A.getD (n * i + j) 0
 
-/--
-Definition of `sumFrom` / `sumFrom` 的定义
+/-- Sum `f lo + ... + f (n - 1)`. Returns zero when `n <= lo`. -/
+/-
+**BirdDet.sumFrom** 是 Mathlib 中的一个定义，位于命名空间 `BirdDet`。
+形式化陈述：{R : Type u_1} → [CommRing R] → ℕ → ℕ → (ℕ → R) → R
+参数：ℕ → R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sumFrom
-  signature: (n lo : Nat) (f : Nat -> R)
-  body: if lo < n then f lo + BirdDet.sumFrom n (lo + 1) f else 0
-
-中文:
-定义 sumFrom
-  签名: (n lo : 自然数) (f : 自然数 -> R)
-  定义体: if lo < n then f lo + BirdDet.sumFrom n (lo + 1) f else 0
+--- 原说明 ---
+Sum `f lo + ... + f (n - 1)`. Returns zero when `n <= lo`.
 -/
-protected def sumFrom (n lo : Nat) (f : Nat -> R) : R :=
+protected def sumFrom (n lo : ℕ) (f : ℕ → R) : R :=
   if lo < n then f lo + BirdDet.sumFrom n (lo + 1) f else 0
 
 /--
-Definition of `stepEntry` / `stepEntry` 的定义
+One entry of one scalar Bird recurrence step.
 
-English:
-definition stepEntry
-  signature: (n : Nat) (A : Array R) (F : Nat -> Nat -> R) (i j : Nat)
-  body: -(BirdDet.sumFrom n (i + 1) fun k => F k k) * BirdDet.get n A i j +
-    BirdDet.sumFrom n (i + 1) fun k => F i k * BirdDet.get n A k j
+Bird's paper defines a matrix recursion for an `n × n` matrix `A`:
 
-中文:
-定义 stepEntry
-  签名: (n : 自然数) (A : 数组 R) (F : 自然数 -> 自然数 -> R) (i j : 自然数)
-  定义体: -(BirdDet.sumFrom n (i + 1) fun k => F k k) * BirdDet.get n A i j +
-    BirdDet.sumFrom n (i + 1) fun k => F i k * BirdDet.get n A k j
+```
+F_0 = A
+F_{t+1} = μ(F_t) * A
+```
 
-Depends on / 依赖: BirdDet, BirdDet.get, BirdDet.sumFrom, sumFrom
+where `μ(F_t)` is obtained from `F_t` by replacing each diagonal entry
+`F_t k k` with the negative sum of the diagonal entries below it, setting the
+entries in the lower triangular part to 0, and leaving all other entries
+unchanged:
+
+```
+μ(F_t) =
+  0                                   if i >= j
+  - ∑ k from i+1 to n-1, F_t k k      if i = j
+  F_t i j                             if i < j
+```
+
+If we write out the entry-wise matrix multiplication `F_{t+1} i j = (μ(F_t) * A) i j`
+we obtain:
+
+```
+F_{t+1} i j =
+  - (∑ k from i+1 to n-1, F_t k k) * (A i j)
+  + ∑ k from i+1 to n-1, (F_t i k) * (A k j)
+```
 -/
-def stepEntry (n : Nat) (A : Array R) (F : Nat -> Nat -> R) (i j : Nat) : R :=
+/-
+**BirdDet.stepEntry** 是 Mathlib 中的一个定义，位于命名空间 `BirdDet`。
+形式化陈述：stepEntry (n : Nat) (A : Array R) (F : Nat -> Nat -> R) (i j : Nat) : R
+参数：n : Nat；A : Array R；F : Nat -> Nat -> R；i j : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+One entry of one scalar Bird recurrence step.
+
+Bird's paper defines a matrix recursion for an `n × n` matrix `A`:
+
+```
+F_0 = A
+F_{t+1} = μ(F_t) * A
+```
+
+where `μ(F_t)` is obtained from `F_t` by replacing each diagonal entry
+`F_t k k` with the negative sum of the diagonal entries below it, setting the
+entries in the lower triangular part to 0, and leaving all other entries
+unchanged:
+
+```
+μ(F_t) =
+  0                                   if i >= j
+  - ∑ k from i+1 to n-1, F_t k k      if i = j
+  F_t i j                             if i < j
+```
+
+If we write out the entry-wise matrix multiplication `F_{t+1} i j = (μ(F_t) * A)
+ i j`
+we obtain:
+
+```
+F_{t+1} i j =
+  - (∑ k from i+1 to n-1, F_t k k) * (A i j)
+  + ∑ k from i+1 to n-1, (F_t i k) * (A k j)
+```
+-/
+def stepEntry (n : ℕ) (A : Array R) (F : ℕ → ℕ → R) (i j : ℕ) : R :=
   -(BirdDet.sumFrom n (i + 1) fun k => F k k) * BirdDet.get n A i j +
     BirdDet.sumFrom n (i + 1) fun k => F i k * BirdDet.get n A k j
 
 /--
-Definition of `birdDet` / `birdDet` 的定义
-
-English:
-definition birdDet
-  signature: (n : Nat) (A : Array R)
-  body: match n with
-  | 0 => 1
-  | k + 1 => (-1 : R) ^ k * (stepEntry n A)^[k] (BirdDet.get n A) 0 0
-
-中文:
-定义 birdDet
-  签名: (n : 自然数) (A : 数组 R)
-  定义体: match n with
-  | 0 => 1
-  | k + 1 => (-1 : R) ^ k * (stepEntry n A)^[k] (BirdDet.get n A) 0 0
-
-Depends on / 依赖: BirdDet, BirdDet.get, stepEntry
+`birdDet n A` computes the determinant of the `n × n` matrix whose entries are
+stored in `A` in row-major order.
 -/
-def birdDet (n : Nat) (A : Array R) : R :=
+/-
+**BirdDet.birdDet** 是 Mathlib 中的一个定义，位于命名空间 `BirdDet`。
+形式化陈述：birdDet (n : Nat) (A : Array R) : R
+参数：n : Nat；A : Array R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`birdDet n A` computes the determinant of the `n × n` matrix whose entries are
+stored in `A` in row-major order.
+-/
+def birdDet (n : ℕ) (A : Array R) : R :=
   match n with
   | 0 => 1
   | k + 1 => (-1 : R) ^ k * (stepEntry n A)^[k] (BirdDet.get n A) 0 0
 
 /- Unfolding lemmas -/
 
-/--
-theorem `get_eq` / 定理 `get_eq`
+/-- Unfold a row-major matrix entry lookup. -/
+/-
+**BirdDet.get_eq** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：get_eq (n : Nat) (A : Array R) (i j : Nat) : BirdDet.get n A i j = A.getD 
+(n * i + j) 0
+参数：n : Nat；A : Array R；i j : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem get_eq
-  given: (n : Nat) (A : Array R) (i j : Nat)
-  proof: by
-  rfl
-
-中文:
-定理 get_eq
-  条件: (n : 自然数) (A : 数组 R) (i j : 自然数)
-  证明: by
-  rfl
+--- 原说明 ---
+Unfold a row-major matrix entry lookup.
 -/
-theorem get_eq (n : Nat) (A : Array R) (i j : Nat) :
+theorem get_eq (n : ℕ) (A : Array R) (i j : ℕ) :
     BirdDet.get n A i j = A.getD (n * i + j) 0 := by
   rfl
-
-/--
-theorem `sumFrom_step` / 定理 `sumFrom_step`
-
-English:
-theorem sumFrom_step
-  given: (n lo : Nat) (f : Nat -> R) (h : lo < n)
-  proof: by
-  rw [BirdDet.sumFrom]
-  simp [h]
-
-中文:
-定理 sumFrom_step
-  条件: (n lo : 自然数) (f : 自然数 -> R) (h : lo < n)
-  证明: by
-  rw [BirdDet.sumFrom]
-  simp [h]
-
-Depends on / 依赖: BirdDet, BirdDet.sumFrom, sumFrom
+/-
+**BirdDet.sumFrom_step** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：sumFrom_step (n lo : Nat) (f : Nat -> R) (h : lo < n) : BirdDet.sumFrom n 
+lo f = f lo + BirdDet.sumFrom n (lo + 1) f
+参数：n lo : Nat；f : Nat -> R；h : lo < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Determinant.Bird.Defs.0.BirdDet.su
+mFrom.eq_1`：∀ {R : Type u_1} [inst : CommRing R] (n lo : ℕ) (f : ℕ → R),   BirdD
+et.sumFrom n lo f = if lo < n then f lo + BirdDet.sumFrom n (lo + 1) f e…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sumFrom_step (n lo : Nat) (f : Nat -> R) (h : lo < n) :
+theorem sumFrom_step (n lo : ℕ) (f : ℕ → R) (h : lo < n) :
     BirdDet.sumFrom n lo f = f lo + BirdDet.sumFrom n (lo + 1) f := by
   rw [BirdDet.sumFrom]
   simp [h]
-
-/--
-theorem `sumFrom_stop` / 定理 `sumFrom_stop`
-
-English:
-theorem sumFrom_stop
-  given: (n lo : Nat) (f : Nat -> R) (h : ¬ lo < n)
-  proof: by
-  rw [BirdDet.sumFrom]
-  simp [h]
-
-中文:
-定理 sumFrom_stop
-  条件: (n lo : 自然数) (f : 自然数 -> R) (h : ¬ lo < n)
-  证明: by
-  rw [BirdDet.sumFrom]
-  simp [h]
-
-Depends on / 依赖: BirdDet, BirdDet.sumFrom, sumFrom
+/-
+**BirdDet.sumFrom_stop** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：sumFrom_stop (n lo : Nat) (f : Nat -> R) (h : ¬ lo < n) : BirdDet.sumFrom 
+n lo f = 0
+参数：n lo : Nat；f : Nat -> R；h : ¬ lo < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Determinant.Bird.Defs.0.BirdDet.su
+mFrom.eq_1`：∀ {R : Type u_1} [inst : CommRing R] (n lo : ℕ) (f : ℕ → R),   BirdD
+et.sumFrom n lo f = if lo < n then f lo + BirdDet.sumFrom n (lo + 1) f e…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sumFrom_stop (n lo : Nat) (f : Nat -> R) (h : ¬ lo < n) :
+theorem sumFrom_stop (n lo : ℕ) (f : ℕ → R) (h : ¬ lo < n) :
     BirdDet.sumFrom n lo f = 0 := by
   rw [BirdDet.sumFrom]
   simp [h]
 
 /-- Induction following the recursive structure of `sumFrom`. -/
 @[elab_as_elim]
-/--
-theorem `sumFrom_induct` / 定理 `sumFrom_induct`
+/-
+**BirdDet.sumFrom_induct** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：sumFrom_induct (n : Nat) (motive : Nat -> Prop) (step : forall lo, lo < n 
+-> motive (lo + 1) -> motive lo) (stop : forall lo, ¬lo < n -> motive lo) (lo : 
+Nat) : motive lo
+参数：n : Nat；motive : Nat -> Prop；step : forall lo, lo < n -> motive (lo + 1) -> m
+otive lo；stop : forall lo, ¬lo < n -> motive lo；lo : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BirdDet.sumFrom.induct`：∀ (n : ℕ) (motive : ℕ → Prop),   (∀ x < n, motiv
+e (x + 1) → motive x) → (∀ (x : ℕ), ¬x < n → motive x) → ∀ (lo : ℕ), motive lo
 
-English:
-theorem sumFrom_induct
-  statement: (n : Nat) (motive : Nat -> Prop)
-  proof: BirdDet.sumFrom.induct n motive step stop lo
-
-中文:
-定理 sumFrom_induct
-  结论: (n : 自然数) (motive : 自然数 -> 命题)
-  证明: BirdDet.sumFrom.induct n motive step stop lo
-
-Depends on / 依赖: BirdDet, BirdDet.sumFrom.induct, induct, motive, sumFrom
+--- 原说明 ---
+Induction following the recursive structure of `sumFrom`.
 -/
-theorem sumFrom_induct (n : Nat) (motive : Nat -> Prop)
-    (step : forall lo, lo < n -> motive (lo + 1) -> motive lo)
-    (stop : forall lo, ¬lo < n -> motive lo) (lo : Nat) : motive lo :=
+theorem sumFrom_induct (n : ℕ) (motive : ℕ → Prop)
+    (step : ∀ lo, lo < n → motive (lo + 1) → motive lo)
+    (stop : ∀ lo, ¬lo < n → motive lo) (lo : ℕ) : motive lo :=
   BirdDet.sumFrom.induct n motive step stop lo
 
-/--
-theorem `stepEntry_eq` / 定理 `stepEntry_eq`
+/-- Unfold one scalar Bird recurrence step to the entry-wise formula. -/
+/-
+**BirdDet.stepEntry_eq** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：stepEntry_eq (n : Nat) (A : Array R) (F : Nat -> Nat -> R) (i j : Nat) : s
+tepEntry n A F i j = -(BirdDet.sumFrom n (i + 1) fun k => F k k) * BirdDet.get n
+ A i j + BirdDet.sumFrom n (i + 1) fun k => F i k * BirdDet.get n A k j
+参数：n : Nat；A : Array R；F : Nat -> Nat -> R；i j : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem stepEntry_eq
-  given: (n : Nat) (A : Array R) (F : Nat -> Nat -> R) (i j : Nat)
-  proof: by
-  rfl
-
-中文:
-定理 stepEntry_eq
-  条件: (n : 自然数) (A : 数组 R) (F : 自然数 -> 自然数 -> R) (i j : 自然数)
-  证明: by
-  rfl
+--- 原说明 ---
+Unfold one scalar Bird recurrence step to the entry-wise formula.
 -/
-theorem stepEntry_eq (n : Nat) (A : Array R) (F : Nat -> Nat -> R) (i j : Nat) :
+theorem stepEntry_eq (n : ℕ) (A : Array R) (F : ℕ → ℕ → R) (i j : ℕ) :
     stepEntry n A F i j =
       -(BirdDet.sumFrom n (i + 1) fun k => F k k) * BirdDet.get n A i j
         + BirdDet.sumFrom n (i + 1) fun k => F i k * BirdDet.get n A k j := by
   rfl
-
-/--
-theorem `birdDet_zero` / 定理 `birdDet_zero`
-
-English:
-theorem birdDet_zero
-  given: (A : Array R)
-  statement: birdDet 0 A = 1
-  proof: by
-  rfl
-
-中文:
-定理 birdDet_zero
-  条件: (A : 数组 R)
-  结论: birdDet 0 A = 1
-  证明: by
-  rfl
+/-
+**BirdDet.birdDet_zero** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：birdDet_zero (A : Array R) : birdDet 0 A = 1
+参数：A : Array R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem birdDet_zero (A : Array R) : birdDet 0 A = 1 := by
   rfl
 
-/--
-theorem `birdDet_succ` / 定理 `birdDet_succ`
+/-- Unfold `birdDet` at a successor dimension. -/
+/-
+**BirdDet.birdDet_succ** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：birdDet_succ (k : Nat) (A : Array R) : birdDet (k + 1) A = (-1 : R) ^ k * 
+(stepEntry (k + 1) A)^[k] (BirdDet.get (k + 1) A) 0 0
+参数：k : Nat；A : Array R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Determinant.Bird.Defs.0.BirdDet.bi
+rdDet.eq_2`：∀ {R : Type u_1} [inst : CommRing R] (A : Array R) (k : ℕ),   BirdDe
+t.birdDet k.succ A = (-1) ^ k * (BirdDet.stepEntry k.succ A)^[k] (BirdDe…
 
-English:
-theorem birdDet_succ
-  given: (k : Nat) (A : Array R)
-  proof: by rw [birdDet]
-
-中文:
-定理 birdDet_succ
-  条件: (k : 自然数) (A : 数组 R)
-  证明: by rw [birdDet]
-
-Depends on / 依赖: birdDet
+--- 原说明 ---
+Unfold `birdDet` at a successor dimension.
 -/
-theorem birdDet_succ (k : Nat) (A : Array R) :
+theorem birdDet_succ (k : ℕ) (A : Array R) :
     birdDet (k + 1) A =
       (-1 : R) ^ k * (stepEntry (k + 1) A)^[k] (BirdDet.get (k + 1) A) 0 0 :=
   by rw [birdDet]
-
-/--
-theorem `birdDet_eq` / 定理 `birdDet_eq`
-
-English:
-theorem birdDet_eq
-  given: (n k : Nat) (A : Array R) (hn : n = k + 1)
-  proof: by
-  subst hn
-  exact birdDet_succ k A
-
-中文:
-定理 birdDet_eq
-  条件: (n k : 自然数) (A : 数组 R) (hn : n = k + 1)
-  证明: by
-  subst hn
-  exact birdDet_succ k A
-
-Depends on / 依赖: birdDet_succ
+/-
+**BirdDet.birdDet_eq** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet`。
+形式化陈述：birdDet_eq (n k : Nat) (A : Array R) (hn : n = k + 1) : birdDet n A = (-1 
+: R) ^ k * (stepEntry n A)^[k] (BirdDet.get n A) 0 0
+参数：n k : Nat；A : Array R；hn : n = k + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BirdDet.birdDet_succ`：birdDet_succ (k : Nat) (A : Array R) : birdDet (k 
++ 1) A = (-1 : R) ^ k * (stepEntry (k + 1) A)^[k] (BirdDet.get (k + 1) A) 0 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem birdDet_eq (n k : Nat) (A : Array R) (hn : n = k + 1) :
+theorem birdDet_eq (n k : ℕ) (A : Array R) (hn : n = k + 1) :
     birdDet n A = (-1 : R) ^ k * (stepEntry n A)^[k] (BirdDet.get n A) 0 0 := by
   subst hn
   exact birdDet_succ k A
@@ -300,109 +329,77 @@ namespace Spec
 
 open scoped BigOperators
 
-/--
-Definition of `stepEntry` / `stepEntry` 的定义
+/-- One entry of one Matrix/Fin Bird recurrence step. -/
+/-
+**BirdDet.Spec.stepEntry** 是 Mathlib 中的一个定义，位于命名空间 `BirdDet.Spec`。
+形式化陈述：stepEntry {n : Nat} (A F : Matrix (Fin n) (Fin n) R) : Matrix (Fin n) (Fin
+ n) R
+参数：A F : Matrix (Fin n) (Fin n) R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stepEntry
-  signature: {n : Nat} (A F : Matrix (Fin n) (Fin n) R)
-  body: .of fun i j => (-∑ k in Finset.Ioi i, F k k) * A i j +
-    ∑ k in Finset.Ioi i, F i k * A k j
-
-中文:
-定义 stepEntry
-  签名: {n : 自然数} (A F : 矩阵 (有限集 n) (有限集 n) R)
-  定义体: .of fun i j => (-∑ k in Finset.Ioi i, F k k) * A i j +
-    ∑ k in Finset.Ioi i, F i k * A k j
-
-Depends on / 依赖: Finset, Finset.Ioi
+--- 原说明 ---
+One entry of one Matrix/Fin Bird recurrence step.
 -/
-def stepEntry {n : Nat} (A F : Matrix (Fin n) (Fin n) R) : Matrix (Fin n) (Fin n) R :=
-  .of fun i j => (-∑ k in Finset.Ioi i, F k k) * A i j +
-    ∑ k in Finset.Ioi i, F i k * A k j
+def stepEntry {n : ℕ} (A F : Matrix (Fin n) (Fin n) R) : Matrix (Fin n) (Fin n) R :=
+  .of fun i j ↦ (-∑ k ∈ Finset.Ioi i, F k k) * A i j +
+    ∑ k ∈ Finset.Ioi i, F i k * A k j
 
-/--
-Definition of `birdDet` / `birdDet` 的定义
+/-- A version of the Bird determinant algorithm that is stated in terms of `Matrix`. -/
+/-
+**BirdDet.Spec.birdDet** 是 Mathlib 中的一个定义，位于命名空间 `BirdDet.Spec`。
+形式化陈述：birdDet {n : Nat} (A : Matrix (Fin n) (Fin n) R) : R
+参数：A : Matrix (Fin n) (Fin n) R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition birdDet
-  signature: {n : Nat} (A : Matrix (Fin n) (Fin n) R)
-  body: match n with
-  | 0 => 1
-  | k + 1 => (-1 : R) ^ k * (stepEntry A)^[k] A 0 0
-
-中文:
-定义 birdDet
-  签名: {n : 自然数} (A : 矩阵 (有限集 n) (有限集 n) R)
-  定义体: match n with
-  | 0 => 1
-  | k + 1 => (-1 : R) ^ k * (stepEntry A)^[k] A 0 0
-
-Depends on / 依赖: stepEntry
+--- 原说明 ---
+A version of the Bird determinant algorithm that is stated in terms of `Matrix`.
 -/
-def birdDet {n : Nat} (A : Matrix (Fin n) (Fin n) R) : R :=
+def birdDet {n : ℕ} (A : Matrix (Fin n) (Fin n) R) : R :=
   match n with
   | 0 => 1
   | k + 1 => (-1 : R) ^ k * (stepEntry A)^[k] A 0 0
-
-/--
-theorem `stepEntry_eq` / 定理 `stepEntry_eq`
-
-English:
-theorem stepEntry_eq
-  given: {n : Nat} (A F : Matrix (Fin n) (Fin n) R)
-  proof: by
-  rfl
-
-中文:
-定理 stepEntry_eq
-  条件: {n : 自然数} (A F : 矩阵 (有限集 n) (有限集 n) R)
-  证明: by
-  rfl
+/-
+**BirdDet.Spec.stepEntry_eq** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet.Spec`。
+形式化陈述：stepEntry_eq {n : Nat} (A F : Matrix (Fin n) (Fin n) R) : stepEntry A F = 
+.of fun i j => (-∑ k in Finset.Ioi i, F k k) * A i j + ∑ k in Finset.Ioi i, F i 
+k * A k j
+参数：A F : Matrix (Fin n) (Fin n) R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stepEntry_eq {n : Nat} (A F : Matrix (Fin n) (Fin n) R) :
+theorem stepEntry_eq {n : ℕ} (A F : Matrix (Fin n) (Fin n) R) :
     stepEntry A F =
-      .of fun i j => (-∑ k in Finset.Ioi i, F k k) * A i j
-        + ∑ k in Finset.Ioi i, F i k * A k j := by
+      .of fun i j ↦ (-∑ k ∈ Finset.Ioi i, F k k) * A i j
+        + ∑ k ∈ Finset.Ioi i, F i k * A k j := by
   rfl
-
-/--
-theorem `birdDetSpec_zero` / 定理 `birdDetSpec_zero`
-
-English:
-theorem birdDetSpec_zero
-  given: (A : Matrix (Fin 0) (Fin 0) R)
-  proof: by
-  rfl
-
-中文:
-定理 birdDetSpec_zero
-  条件: (A : 矩阵 (有限集 0) (有限集 0) R)
-  证明: by
-  rfl
+/-
+**BirdDet.Spec.birdDetSpec_zero** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet.Spec`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (A : Matrix (Fin 0) (Fin 0) R), BirdD
+et.Spec.birdDet A = 1
+参数：A : Matrix (Fin 0) (Fin 0) R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem birdDetSpec_zero (A : Matrix (Fin 0) (Fin 0) R) :
     birdDet A = 1 := by
   rfl
-
-/--
-theorem `birdDetSpec_succ` / 定理 `birdDetSpec_succ`
-
-English:
-theorem birdDetSpec_succ
-  given: {k : Nat} (A : Matrix (Fin (k + 1)) (Fin (k + 1)) R)
-  proof: by
-  rw [birdDet]
-
-中文:
-定理 birdDetSpec_succ
-  条件: {k : 自然数} (A : 矩阵 (有限集 (k + 1)) (有限集 (k + 1)) R)
-  证明: by
-  rw [birdDet]
-
-Depends on / 依赖: birdDet
+/-
+**BirdDet.Spec.birdDetSpec_succ** 是 Mathlib 中的一个定理，位于命名空间 `BirdDet.Spec`。
+形式化陈述：birdDetSpec_succ {k : Nat} (A : Matrix (Fin (k + 1)) (Fin (k + 1)) R) : bi
+rdDet A = (-1 : R) ^ k * (stepEntry A)^[k] A 0 0
+参数：A : Matrix (Fin (k + 1)) (Fin (k + 1)) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Determinant.Bird.Defs.0.BirdDet.Sp
+ec.birdDet.eq_2`：∀ {R : Type u_1} [inst : CommRing R] (k : ℕ) (A_2 : Matrix (Fin
+ (k + 1)) (Fin (k + 1)) R),   BirdDet.Spec.birdDet A_2 = (-1) ^ k * (BirdDet.…
 -/
-theorem birdDetSpec_succ {k : Nat} (A : Matrix (Fin (k + 1)) (Fin (k + 1)) R) :
+theorem birdDetSpec_succ {k : ℕ} (A : Matrix (Fin (k + 1)) (Fin (k + 1)) R) :
     birdDet A = (-1 : R) ^ k * (stepEntry A)^[k] A 0 0 := by
   rw [birdDet]
 
@@ -411,3 +408,4 @@ end Spec
 end BirdDet
 
 end
+

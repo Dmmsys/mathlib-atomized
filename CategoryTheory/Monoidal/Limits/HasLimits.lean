@@ -38,26 +38,10 @@ variable {J : Type u₁} [Category.{v₁} J]
     {F G : J ⥤ C} [HasColimit F] [HasColimit G]
 
 @[reassoc (attr := simp)]
-/--
-lemma `HasColimit.whiskerLeft_isoOfNatIso_ι_hom` / 引理 `HasColimit.whiskerLeft_isoOfNatIso_ι_hom`
-
-English:
-lemma HasColimit.whiskerLeft_isoOfNatIso_ι_hom
-  given: (w : F ≅ G) (j : J) {Q : C}
-  proof: by
-  simp [← MonoidalCategory.whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 有余极限.whiskerLeft_isoOf自然数Iso_ι_hom
-  条件: (w : F ≅ G) (j : J) {Q : C}
-  证明: by
-  simp [← MonoidalCategory.whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp, whiskerLeft_comp
+/-
+**CategoryTheory.MonoidalCategory.Limits.HasColimit.whiskerLeft_isoOfNatIso_** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MonoidalCategory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma HasColimit.whiskerLeft_isoOfNatIso_ι_hom (w : F ≅ G) (j : J) {Q : C} :
     Q ◁ colimit.ι F j ≫ Q ◁ (HasColimit.isoOfNatIso w).hom =
@@ -65,22 +49,10 @@ lemma HasColimit.whiskerLeft_isoOfNatIso_ι_hom (w : F ≅ G) (j : J) {Q : C} :
   simp [← MonoidalCategory.whiskerLeft_comp]
 
 @[reassoc (attr := simp)]
-/--
-lemma `HasColimit.isoOfNatIso_ι_hom_whiskerRight` / 引理 `HasColimit.isoOfNatIso_ι_hom_whiskerRight`
-
-English:
-lemma HasColimit.isoOfNatIso_ι_hom_whiskerRight
-  given: (w : F ≅ G) (j : J) {Q : C}
-  proof: by
-  simp [← MonoidalCategory.comp_whiskerRight]
-
-中文:
-引理 有余极限.isoOf自然数Iso_ι_hom_whiskerRight
-  条件: (w : F ≅ G) (j : J) {Q : C}
-  证明: by
-  simp [← MonoidalCategory.comp_whiskerRight]
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.comp_whiskerRight, comp_whiskerRight
+/-
+**CategoryTheory.MonoidalCategory.Limits.HasColimit.isoOfNatIso_** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.MonoidalCategory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma HasColimit.isoOfNatIso_ι_hom_whiskerRight (w : F ≅ G) (j : J) {Q : C} :
     colimit.ι F j ▷ Q ≫ (HasColimit.isoOfNatIso w).hom ▷ Q =
@@ -89,22 +61,10 @@ lemma HasColimit.isoOfNatIso_ι_hom_whiskerRight (w : F ≅ G) (j : J) {Q : C} :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `colimit.whiskerLeft_ι_desc` / 引理 `colimit.whiskerLeft_ι_desc`
-
-English:
-lemma colimit.whiskerLeft_ι_desc
-  given: (c : Cocone F) (j : J) {Q : C}
-  proof: by
-  simp [← MonoidalCategory.whiskerLeft_comp]
-
-中文:
-引理 colimit.whiskerLeft_ι_desc
-  条件: (c : 余锥 F) (j : J) {Q : C}
-  证明: by
-  simp [← MonoidalCategory.whiskerLeft_comp]
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp, whiskerLeft_comp
+/-
+**CategoryTheory.MonoidalCategory.Limits.colimit.whiskerLeft_** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.MonoidalCategory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma colimit.whiskerLeft_ι_desc (c : Cocone F) (j : J) {Q : C} :
     Q ◁ colimit.ι F j ≫ Q ◁ colimit.desc F c = Q ◁ c.ι.app j := by
@@ -112,22 +72,10 @@ lemma colimit.whiskerLeft_ι_desc (c : Cocone F) (j : J) {Q : C} :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `colimit.ι_desc_whiskerRight` / 引理 `colimit.ι_desc_whiskerRight`
-
-English:
-lemma colimit.ι_desc_whiskerRight
-  given: (c : Cocone F) (j : J) {Q : C}
-  proof: by
-  simp [← comp_whiskerRight]
-
-中文:
-引理 colimit.ι_desc_whiskerRight
-  条件: (c : 余锥 F) (j : J) {Q : C}
-  证明: by
-  simp [← comp_whiskerRight]
-
-Depends on / 依赖: comp_whiskerRight
+/-
+**CategoryTheory.MonoidalCategory.Limits.colimit.** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.MonoidalCategory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma colimit.ι_desc_whiskerRight (c : Cocone F) (j : J) {Q : C} :
     colimit.ι F j ▷ Q ≫ colimit.desc F c ▷ Q = c.ι.app j ▷ Q := by
@@ -138,3 +86,4 @@ end HasColimit
 end Limits
 
 end CategoryTheory.MonoidalCategory
+

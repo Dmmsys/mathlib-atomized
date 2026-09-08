@@ -33,78 +33,42 @@ variable {B : Type*} [Ring B] {M : Type*} [AddCommGroup M] [Module B M]
 
 namespace Presentation
 
-/--
-Definition of `RestrictScalarsData` / `RestrictScalarsData` 的定义
+/-- The additional data that is necessary in order to obtain a presentation
+of the restriction of scalars of a module. -/
+/-
+**Module.Presentation.RestrictScalarsData** 是 Mathlib 中的一个缩写定义，位于命名空间 `Module.Pr
+esentation`。
+形式化陈述：RestrictScalarsData : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RestrictScalarsData
-  signature: : Type _
-  body: (presB.finsupp presM.G).CokernelData
-    (LinearMap.restrictScalars A presM.map)
-    (fun (⟨g, g'⟩ : presB.G × presM.R) => presB.var g • Finsupp.single g' (1 : B))
-
-中文:
-缩写 RestrictScalarsData
-  签名: : 类型 _
-  定义体: (presB.finsupp presM.G).CokernelData
-    (LinearMap.restrictScalars A presM.map)
-    (fun (⟨g, g'⟩ : presB.G × presM.R) => presB.var g • Finsupp.single g' (1 : B))
-
-Depends on / 依赖: CokernelData, Finsupp, Finsupp.single, LinearMap, LinearMap.restrictScalars, finsupp, presB.G, presB.finsupp, presB.var, presM.G, presM.R, presM.map, restrictScalars, single
+--- 原说明 ---
+The additional data that is necessary in order to obtain a presentation
+of the restriction of scalars of a module.
 -/
 abbrev RestrictScalarsData : Type _ :=
   (presB.finsupp presM.G).CokernelData
     (LinearMap.restrictScalars A presM.map)
-    (fun (⟨g, g'⟩ : presB.G × presM.R) => presB.var g • Finsupp.single g' (1 : B))
+    (fun (⟨g, g'⟩ : presB.G × presM.R) ↦ presB.var g • Finsupp.single g' (1 : B))
 
 variable (data : presM.RestrictScalarsData presB)
 
-/--
-Definition of `restrictScalars` / `restrictScalars` 的定义
+/-- A presentation of the restriction of scalars from `B` to `A` of a `B`-module `M`,
+given a presentation of `M` as a `B`-module, a presentation of `B` as an `A`-module,
+and an additional data. -/
+/-
+**Module.Presentation.restrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `Module.Presenta
+tion`。
+形式化陈述：restrictScalars : Presentation A M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictScalars
-  signature: : Presentation A M
-  body: ofExact (g := LinearMap.restrictScalars A presM.π) (presB.finsupp presM.G) data
-    presM.exact presM.surjective_π (by
-      ext v
-      dsimp
-      simp only [Submodule.mem_top, iff_true]
-      apply Finsupp.induction
-      · simp
-      · intro r b w _ _ hw
-        refine Submodule.add_mem _ ?_ hw
-        obtain ⟨β, rfl⟩ := presB.surjective_π b
-        apply Finsupp.induction (motive := fun β => Finsupp.single r (presB.π β) in _)
-        · simp
-        · intro g a f _ _ hf
-          rw [map_add]; rw [Finsupp.single_add]
-          refine Submodule.add_mem _ ?_ hf
-          rw [← Finsupp.smul_single_one]; rw [← Finsupp.smul_single_one]; rw [map_smul]; rw [Relations.Solution.π_single]; rw [smul_assoc]
-          exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨⟨g, r⟩, rfl⟩))
-
-中文:
-定义 restrictScalars
-  签名: : 呈现 A M
-  定义体: ofExact (g := LinearMap.restrictScalars A presM.π) (presB.finsupp presM.G) data
-    presM.exact presM.surjective_π (by
-      ext v
-      dsimp
-      simp only [Submodule.mem_top, iff_true]
-      apply Finsupp.induction
-      · simp
-      · intro r b w _ _ hw
-        refine Submodule.add_mem _ ?_ hw
-        obtain ⟨β, rfl⟩ := presB.surjective_π b
-        apply Finsupp.induction (motive := fun β => Finsupp.single r (presB.π β) in _)
-        · simp
-        · intro g a f _ _ hf
-          rw [map_add]; rw [Finsupp.single_add]
-          refine Submodule.add_mem _ ?_ hf
-          rw [← Finsupp.smul_single_one]; rw [← Finsupp.smul_single_one]; rw [map_smul]; rw [Relations.Solution.π_single]; rw [smul_assoc]
-          exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨⟨g, r⟩, rfl⟩))
-
-Depends on / 依赖: Finsupp, Finsupp.induction, Finsupp.single, Finsupp.single_add, Finsupp.smul_single_one, LinearMap, LinearMap.restrictScalars, Submodule, Submodule.add_mem, Submodule.mem_top, add_mem, finsupp, iff_true, map_add, mem_top, motive, ofExact, presB.finsupp, presB.surjective_, presM.G
+--- 原说明 ---
+A presentation of the restriction of scalars from `B` to `A` of a `B`-module `M`
+,
+given a presentation of `M` as a `B`-module, a presentation of `B` as an `A`-mod
+ule,
+and an additional data.
 -/
 noncomputable def restrictScalars : Presentation A M :=
   ofExact (g := LinearMap.restrictScalars A presM.π) (presB.finsupp presM.G) data
@@ -117,14 +81,16 @@ noncomputable def restrictScalars : Presentation A M :=
       · intro r b w _ _ hw
         refine Submodule.add_mem _ ?_ hw
         obtain ⟨β, rfl⟩ := presB.surjective_π b
-        apply Finsupp.induction (motive := fun β => Finsupp.single r (presB.π β) in _)
+        apply Finsupp.induction (motive := fun β ↦ Finsupp.single r (presB.π β) ∈ _)
         · simp
         · intro g a f _ _ hf
-          rw [map_add]; rw [Finsupp.single_add]
+          rw [map_add, Finsupp.single_add]
           refine Submodule.add_mem _ ?_ hf
-          rw [← Finsupp.smul_single_one]; rw [← Finsupp.smul_single_one]; rw [map_smul]; rw [Relations.Solution.π_single]; rw [smul_assoc]
+          rw [← Finsupp.smul_single_one, ← Finsupp.smul_single_one,
+            map_smul, Relations.Solution.π_single, smul_assoc]
           exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨⟨g, r⟩, rfl⟩))
 
 end Presentation
 
 end Module
+

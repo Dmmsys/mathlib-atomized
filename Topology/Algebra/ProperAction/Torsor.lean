@@ -20,32 +20,9 @@ variable [TopologicalSpace V] [TopologicalSpace P] [IsTopologicalTorsor P]
 /-- If `P` is a topological torsor over `V`, the action of `V` on `P` is proper. -/
 @[to_additive /-- If `P` is a topological additive torsor over `V`, the additive action of `V` on
 `P` is proper. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ProperSMul V P
-  body: by
-    let Φ : V × P ≃ₜ P × P :=
-    { toFun vp := (vp.1 • vp.2, vp.2)
-      invFun pq := (pq.1 /ₛ pq.2, pq.2)
-      left_inv _ := by simp
-      right_inv _ := by simp }
-    exact Φ.isProperMap
-
-中文:
-实例 :
-  签名: 真标量乘法 V P
-  定义体: by
-    let Φ : V × P ≃ₜ P × P :=
-    { toFun vp := (vp.1 • vp.2, vp.2)
-      invFun pq := (pq.1 /ₛ pq.2, pq.2)
-      left_inv _ := by simp
-      right_inv _ := by simp }
-    exact Φ.isProperMap
-
-Depends on / 依赖: invFun, isProperMap, left_inv, right_inv
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ProperSMul V P where
   isProperMap_smul_pair := by

@@ -29,7 +29,7 @@ noncomputable section
 
 open Function
 
-variable {κ : Type*} {ι : κ -> Type*} {M : Type*}
+variable {κ : Type*} {ι : κ → Type*} {M : Type*}
 
 namespace Finsupp
 
@@ -37,65 +37,56 @@ section EmbSigma
 
 variable [Zero M]
 
-/--
-Definition of `embSigma` / `embSigma` 的定义
+/-- Embed a finitely supported function `f : ι k →₀ M` into the `k`-th summand
+of the sigma type `(Σ k, ι k) →₀ M`.
 
-English:
-definition embSigma
-  signature: {k : κ} (f : ι k ->₀ M)
-  body: embDomain (Embedding.sigmaMk k) f
+This is `Finsupp.embDomain` specialized to `Function.Embedding.sigmaMk k`. -/
+/-
+**Finsupp.embSigma** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：embSigma {k : κ} (f : ι k ->₀ M) : (Σ k, ι k) ->₀ M
+参数：f : ι k ->₀ M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[grind =]
+--- 原说明 ---
+Embed a finitely supported function `f : ι k →₀ M` into the `k`-th summand
+of the sigma type `(Σ k, ι k) →₀ M`.
 
-中文:
-定义 embSigma
-  签名: {k : κ} (f : ι k ->₀ M)
-  定义体: embDomain (Embedding.sigmaMk k) f
-
-@[grind =]
-
-Depends on / 依赖: Embedding, Embedding.sigmaMk, embDomain, sigmaMk
+This is `Finsupp.embDomain` specialized to `Function.Embedding.sigmaMk k`.
 -/
-def embSigma {k : κ} (f : ι k ->₀ M) : (Σ k, ι k) ->₀ M :=
+def embSigma {k : κ} (f : ι k →₀ M) : (Σ k, ι k) →₀ M :=
   embDomain (Embedding.sigmaMk k) f
 
 @[grind =]
-/--
-theorem `embSigma_apply` / 定理 `embSigma_apply`
-
-English:
-theorem embSigma_apply
-  given: [DecidableEq κ] {k : κ} (f : ι k ->₀ M) (i : Σ k, ι k)
-  proof: by
-  rcases i with ⟨k, i⟩
-  split_ifs with h
-  · subst h
-    simp only [embSigma, Embedding.sigmaMk]
-    apply embDomain_apply_self
-  · simp only [embSigma, Embedding.sigmaMk]
-    rw [embDomain_of_notMem_range]
-    simp_all
-
-@[simp]
-
-中文:
-定理 embSigma_apply
-  条件: [DecidableEq κ] {k : κ} (f : ι k ->₀ M) (i : Σ k, ι k)
-  证明: by
-  rcases i with ⟨k, i⟩
-  split_ifs with h
-  · subst h
-    simp only [embSigma, Embedding.sigmaMk]
-    apply embDomain_apply_self
-  · simp only [embSigma, Embedding.sigmaMk]
-    rw [embDomain_of_notMem_range]
-    simp_all
-
-@[simp]
-
-Depends on / 依赖: Embedding, Embedding.sigmaMk, embDomain_apply_self, embDomain_of_notMem_range, embSigma, sigmaMk, split_ifs
+/-
+**Finsupp.embSigma_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_apply [DecidableEq κ] {k : κ} (f : ι k ->₀ M) (i : Σ k, ι k) : em
+bSigma f i = if h : i.1 = k then f (h ▸ i.2) else 0
+参数：f : ι k ->₀ M；i : Σ k, ι k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Finsupp.embDomain_apply_self`：embDomain_apply_self (f : α ↪ β) (v : α ->
+₀ M) (a : α) : embDomain f v (f a) = v a
+· 使用定理 `sigma_mk_injective`：∀ {α : Type u_1} {β : α → Type u_4} {i : α}, Functio
+n.Injective (Sigma.mk i)
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Finsupp.embDomain_of_notMem_range`：embDomain_of_notMem_range (f : α ↪ β)
+ (v : α ->₀ M) (a : β) (h : a ∉ Set.range f) : embDomain f v a = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.range_sigmaMk`：range_sigmaMk (i : ι) : range (Sigma.mk i : α i -> Si
+gma α) = Sigma.fst ⁻¹' {i}
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem embSigma_apply [DecidableEq κ] {k : κ} (f : ι k ->₀ M) (i : Σ k, ι k) :
+theorem embSigma_apply [DecidableEq κ] {k : κ} (f : ι k →₀ M) (i : Σ k, ι k) :
     embSigma f i = if h : i.1 = k then f (h ▸ i.2) else 0 := by
   rcases i with ⟨k, i⟩
   split_ifs with h
@@ -107,184 +98,124 @@ theorem embSigma_apply [DecidableEq κ] {k : κ} (f : ι k ->₀ M) (i : Σ k, �
     simp_all
 
 @[simp]
-/--
-theorem `embSigma_apply_self` / 定理 `embSigma_apply_self`
-
-English:
-theorem embSigma_apply_self
-  given: {k : κ} (f : ι k ->₀ M) (i : ι k)
-  proof: by
-  rw [embSigma]
-  exact embDomain_apply_self (Embedding.sigmaMk k) f i
-
-中文:
-定理 embSigma_apply_self
-  条件: {k : κ} (f : ι k ->₀ M) (i : ι k)
-  证明: by
-  rw [embSigma]
-  exact embDomain_apply_self (Embedding.sigmaMk k) f i
-
-Depends on / 依赖: Embedding, Embedding.sigmaMk, embDomain_apply_self, embSigma, sigmaMk
+/-
+**Finsupp.embSigma_apply_self** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_apply_self {k : κ} (f : ι k ->₀ M) (i : ι k) : embSigma f ⟨k, i⟩ 
+= f i
+参数：f : ι k ->₀ M；i : ι k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.embSigma.eq_1`：∀ {κ : Type u_1} {ι : κ → Type u_2} {M : Type u_3
+} [inst : Zero M] {k : κ} (f : ι k →₀ M),   f.embSigma = Finsupp.embDomain (Func
+tion.Embedd…
+· 使用定理 `Finsupp.embDomain_apply_self`：embDomain_apply_self (f : α ↪ β) (v : α ->
+₀ M) (a : α) : embDomain f v (f a) = v a
 -/
-theorem embSigma_apply_self {k : κ} (f : ι k ->₀ M) (i : ι k) :
+theorem embSigma_apply_self {k : κ} (f : ι k →₀ M) (i : ι k) :
     embSigma f ⟨k, i⟩ = f i := by
   rw [embSigma]
   exact embDomain_apply_self (Embedding.sigmaMk k) f i
 
-/--
-theorem `embSigma_apply_of_ne` / 定理 `embSigma_apply_of_ne`
+/-- Values of `embSigma f` at indices outside the `k`-th summand are zero. -/
+/-
+**Finsupp.embSigma_apply_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_apply_of_ne {k k' : κ} (f : ι k ->₀ M) (hk : k' != k) (i : ι k') 
+: embSigma f ⟨k', i⟩ = 0
+参数：f : ι k ->₀ M；hk : k' != k；i : ι k'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.embDomain_of_notMem_range`：embDomain_of_notMem_range (f : α ↪ β)
+ (v : α ->₀ M) (a : β) (h : a ∉ Set.range f) : embDomain f v a = 0
 
-English:
-theorem embSigma_apply_of_ne
-  given: {k k' : κ} (f : ι k ->₀ M) (hk : k' != k) (i : ι k')
-  proof: by
-  apply embDomain_of_notMem_range
-  grind
-
-@[simp, grind =]
-
-中文:
-定理 embSigma_apply_of_ne
-  条件: {k k' : κ} (f : ι k ->₀ M) (hk : k' != k) (i : ι k')
-  证明: by
-  apply embDomain_of_notMem_range
-  grind
-
-@[simp, grind =]
-
-Depends on / 依赖: embDomain_of_notMem_range
+--- 原说明 ---
+Values of `embSigma f` at indices outside the `k`-th summand are zero.
 -/
-theorem embSigma_apply_of_ne {k k' : κ} (f : ι k ->₀ M) (hk : k' != k) (i : ι k') :
+theorem embSigma_apply_of_ne {k k' : κ} (f : ι k →₀ M) (hk : k' ≠ k) (i : ι k') :
     embSigma f ⟨k', i⟩ = 0 := by
   apply embDomain_of_notMem_range
   grind
 
 @[simp, grind =]
-/--
-theorem `support_embSigma` / 定理 `support_embSigma`
-
-English:
-theorem support_embSigma
-  given: {k : κ} (f : ι k ->₀ M)
-  proof: by
-  simp [embSigma]
-
-@[simp]
-
-中文:
-定理 support_embSigma
-  条件: {k : κ} (f : ι k ->₀ M)
-  证明: by
-  simp [embSigma]
-
-@[simp]
-
-Depends on / 依赖: embSigma
+/-
+**Finsupp.support_embSigma** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_embSigma {k : κ} (f : ι k ->₀ M) : (embSigma f).support = f.suppor
+t.map (Embedding.sigmaMk k)
+参数：f : ι k ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem support_embSigma {k : κ} (f : ι k ->₀ M) :
+theorem support_embSigma {k : κ} (f : ι k →₀ M) :
     (embSigma f).support = f.support.map (Embedding.sigmaMk k) := by
   simp [embSigma]
 
 @[simp]
-/--
-theorem `embSigma_zero` / 定理 `embSigma_zero`
-
-English:
-theorem embSigma_zero
-  given: {k : κ}
-  statement: embSigma (0 : ι k ->₀ M) = 0
-  proof: by
-  simp [embSigma]
-
-@[simp]
-
-中文:
-定理 embSigma_zero
-  条件: {k : κ}
-  结论: embSigma (0 : ι k ->₀ M) = 0
-  证明: by
-  simp [embSigma]
-
-@[simp]
-
-Depends on / 依赖: embSigma
+/-
+**Finsupp.embSigma_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_zero {k : κ} : embSigma (0 : ι k ->₀ M) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem embSigma_zero {k : κ} : embSigma (0 : ι k ->₀ M) = 0 := by
+theorem embSigma_zero {k : κ} : embSigma (0 : ι k →₀ M) = 0 := by
   simp [embSigma]
 
 @[simp]
-/--
-theorem `embSigma_eq_zero` / 定理 `embSigma_eq_zero`
-
-English:
-theorem embSigma_eq_zero
-  given: {k : κ} {f : ι k ->₀ M}
-  proof: by
-  simp [embSigma]
-
-中文:
-定理 embSigma_eq_zero
-  条件: {k : κ} {f : ι k ->₀ M}
-  证明: by
-  simp [embSigma]
-
-Depends on / 依赖: embSigma
+/-
+**Finsupp.embSigma_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_eq_zero {k : κ} {f : ι k ->₀ M} : embSigma f = 0 ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem embSigma_eq_zero {k : κ} {f : ι k ->₀ M} :
+theorem embSigma_eq_zero {k : κ} {f : ι k →₀ M} :
     embSigma f = 0 ↔ f = 0 := by
   simp [embSigma]
-
-/--
-theorem `embSigma_injective` / 定理 `embSigma_injective`
-
-English:
-theorem embSigma_injective
-  given: {k : κ}
-  proof: by
-  intro f g h
-  ext i
-  have := congr_fun (congrArg (⇑) h) ⟨k, i⟩
-  simpa using this
-
-@[simp]
-
-中文:
-定理 embSigma_injective
-  条件: {k : κ}
-  证明: by
-  intro f g h
-  ext i
-  have := congr_fun (congrArg (⇑) h) ⟨k, i⟩
-  simpa using this
-
-@[simp]
-
-Depends on / 依赖: congr_fun
+/-
+**Finsupp.embSigma_injective** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_injective {k : κ} : Injective (embSigma : (ι k ->₀ M) -> (Σ k, ι 
+k) ->₀ M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.embSigma_apply_self`：embSigma_apply_self {k : κ} (f : ι k ->₀ M)
+ (i : ι k) : embSigma f ⟨k, i⟩ = f i
 -/
 theorem embSigma_injective {k : κ} :
-    Injective (embSigma : (ι k ->₀ M) -> (Σ k, ι k) ->₀ M) := by
+    Injective (embSigma : (ι k →₀ M) → (Σ k, ι k) →₀ M) := by
   intro f g h
   ext i
   have := congr_fun (congrArg (⇑) h) ⟨k, i⟩
   simpa using this
 
 @[simp]
-/--
-theorem `embSigma_inj` / 定理 `embSigma_inj`
-
-English:
-theorem embSigma_inj
-  given: {k : κ} {f g : ι k ->₀ M}
-  proof: embSigma_injective.eq_iff
-
-中文:
-定理 embSigma_inj
-  条件: {k : κ} {f g : ι k ->₀ M}
-  证明: embSigma_injective.eq_iff
-
-Depends on / 依赖: embSigma_injective, embSigma_injective.eq_iff, eq_iff
+/-
+**Finsupp.embSigma_inj** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_inj {k : κ} {f g : ι k ->₀ M} : embSigma f = embSigma g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Finsupp.embSigma_injective`：embSigma_injective {k : κ} : Injective (embS
+igma : (ι k ->₀ M) -> (Σ k, ι k) ->₀ M)
 -/
-theorem embSigma_inj {k : κ} {f g : ι k ->₀ M} :
+theorem embSigma_inj {k : κ} {f g : ι k →₀ M} :
     embSigma f = embSigma g ↔ f = g :=
   embSigma_injective.eq_iff
 
@@ -294,32 +225,28 @@ section EmbSigmaAdd
 
 variable [AddMonoid M]
 
-/--
-theorem `embSigma_add` / 定理 `embSigma_add`
-
-English:
-theorem embSigma_add
-  given: {k : κ} (f g : ι k ->₀ M)
-  proof: by
-  ext ⟨k', i⟩
-  by_cases hk : k' = k
-  · subst hk
-    simp
-  · simp [embSigma_apply_of_ne _ hk]
-
-中文:
-定理 embSigma_add
-  条件: {k : κ} (f g : ι k ->₀ M)
-  证明: by
-  ext ⟨k', i⟩
-  by_cases hk : k' = k
-  · subst hk
-    simp
-  · simp [embSigma_apply_of_ne _ hk]
-
-Depends on / 依赖: embSigma_apply_of_ne
+/-
+**Finsupp.embSigma_add** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_add {k : κ} (f g : ι k ->₀ M) : embSigma (f + g) = embSigma f + e
+mbSigma g
+参数：f g : ι k ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.embSigma_apply_self`：embSigma_apply_self {k : κ} (f : ι k ->₀ M)
+ (i : ι k) : embSigma f ⟨k, i⟩ = f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finsupp.embSigma_apply_of_ne`：embSigma_apply_of_ne {k k' : κ} (f : ι k -
+>₀ M) (hk : k' != k) (i : ι k') : embSigma f ⟨k', i⟩ = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
-theorem embSigma_add {k : κ} (f g : ι k ->₀ M) :
+theorem embSigma_add {k : κ} (f g : ι k →₀ M) :
     embSigma (f + g) = embSigma f + embSigma g := by
   ext ⟨k', i⟩
   by_cases hk : k' = k
@@ -334,24 +261,13 @@ end EmbSigmaAdd
 section EmbSigmaSingle
 
 @[simp]
-/--
-theorem `embSigma_single` / 定理 `embSigma_single`
-
-English:
-theorem embSigma_single
-  given: [Zero M] {k : κ} (i : ι k) (m : M)
-  proof: by
-  classical
-  grind
-
-中文:
-定理 embSigma_single
-  条件: [零 M] {k : κ} (i : ι k) (m : M)
-  证明: by
-  classical
-  grind
-
-Depends on / 依赖: classical
+/-
+**Finsupp.embSigma_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embSigma_single [Zero M] {k : κ} (i : ι k) (m : M) : embSigma (single i m)
+ = single ⟨k, i⟩ m
+参数：i : ι k；m : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem embSigma_single [Zero M] {k : κ} (i : ι k) (m : M) :
     embSigma (single i m) = single ⟨k, i⟩ m := by
@@ -366,50 +282,58 @@ variable [Zero M]
 
 /-- `embSigma` is a left inverse to `split` at the same index. -/
 @[simp]
-/--
-theorem `split_embSigma_self` / 定理 `split_embSigma_self`
+/-
+**Finsupp.split_embSigma_self** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：split_embSigma_self {k : κ} (f : ι k ->₀ M) : split (embSigma f) k = f
+参数：f : ι k ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.split_apply`：split_apply (i : ι) (x : αs i) : split l i x = l ⟨i
+, x⟩
+· 使用定理 `Finsupp.embSigma_apply_self`：embSigma_apply_self {k : κ} (f : ι k ->₀ M)
+ (i : ι k) : embSigma f ⟨k, i⟩ = f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem split_embSigma_self
-  given: {k : κ} (f : ι k ->₀ M)
-  proof: by
-  ext i
-  simp [split_apply]
-
-中文:
-定理 split_embSigma_self
-  条件: {k : κ} (f : ι k ->₀ M)
-  证明: by
-  ext i
-  simp [split_apply]
-
-Depends on / 依赖: split_apply
+--- 原说明 ---
+`embSigma` is a left inverse to `split` at the same index.
 -/
-theorem split_embSigma_self {k : κ} (f : ι k ->₀ M) :
+theorem split_embSigma_self {k : κ} (f : ι k →₀ M) :
     split (embSigma f) k = f := by
   ext i
   simp [split_apply]
 
-/--
-theorem `split_embSigma_of_ne` / 定理 `split_embSigma_of_ne`
+/-- `split` returns zero at indices different from where `embSigma` embeds. -/
+/-
+**Finsupp.split_embSigma_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：split_embSigma_of_ne {k k' : κ} (f : ι k ->₀ M) (hk : k' != k) : split (em
+bSigma f) k' = 0
+参数：f : ι k ->₀ M；hk : k' != k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.split_apply`：split_apply (i : ι) (x : αs i) : split l i x = l ⟨i
+, x⟩
+· 使用定理 `Finsupp.embSigma_apply_of_ne`：embSigma_apply_of_ne {k k' : κ} (f : ι k -
+>₀ M) (hk : k' != k) (i : ι k') : embSigma f ⟨k', i⟩ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem split_embSigma_of_ne
-  given: {k k' : κ} (f : ι k ->₀ M) (hk : k' != k)
-  proof: by
-  ext i
-  simp [split_apply, embSigma_apply_of_ne _ hk]
-
-中文:
-定理 split_embSigma_of_ne
-  条件: {k k' : κ} (f : ι k ->₀ M) (hk : k' != k)
-  证明: by
-  ext i
-  simp [split_apply, embSigma_apply_of_ne _ hk]
-
-Depends on / 依赖: embSigma_apply_of_ne, split_apply
+--- 原说明 ---
+`split` returns zero at indices different from where `embSigma` embeds.
 -/
-theorem split_embSigma_of_ne {k k' : κ} (f : ι k ->₀ M) (hk : k' != k) :
+theorem split_embSigma_of_ne {k k' : κ} (f : ι k →₀ M) (hk : k' ≠ k) :
     split (embSigma f) k' = 0 := by
   ext i
   simp [split_apply, embSigma_apply_of_ne _ hk]
@@ -417,3 +341,4 @@ theorem split_embSigma_of_ne {k k' : κ} (f : ι k ->₀ M) (hk : k' != k) :
 end Split
 
 end Finsupp
+

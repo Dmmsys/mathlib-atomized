@@ -82,166 +82,128 @@ variable {R : Type*} [Semiring R] {E E' F F' G : Type*}
 
 noncomputable section
 
-/--
-Definition of `ContinuousLinearMap.HasLeftInverse` / `ContinuousLinearMap.HasLeftInverse` 的定义
+/-- A continuous linear map admits a left inverse which is a continuous linear map itself. -/
+/-
+**ContinuousLinearMap.HasLeftInverse** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：{R : Type u_1} →   [inst : Semiring R] →     {E : Type u_2} →       {F : T
+ype u_4} →         [inst_1 : TopologicalSpace E] →           [inst_2 : AddCommMo
+noid E] →             [inst_3 : _root_.Module R E] →               [inst_4 : Top
+ologicalSpace F] →                 [inst_5 : AddCommMonoid F] → [inst_6 : _root_
+.Module R F] → (E →L[R] F) → Prop
+参数：E →L[R] F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContinuousLinearMap.HasLeftInverse
-  signature: (f : E ->L[R] F)
-  body: exists g : F ->L[R] E, LeftInverse g f
-
-中文:
-定义 连续线性映射.HasLeftInverse
-  签名: (f : E ->L[R] F)
-  定义体: exists g : F ->L[R] E, LeftInverse g f
+--- 原说明 ---
+A continuous linear map admits a left inverse which is a continuous linear map i
+tself.
 -/
-@[expose] protected def ContinuousLinearMap.HasLeftInverse (f : E ->L[R] F) : Prop :=
-  exists g : F ->L[R] E, LeftInverse g f
+@[expose] protected def ContinuousLinearMap.HasLeftInverse (f : E →L[R] F) : Prop :=
+  ∃ g : F →L[R] E, LeftInverse g f
 
-/--
-Definition of `ContinuousLinearMap.HasRightInverse` / `ContinuousLinearMap.HasRightInverse` 的定义
+/-- A continuous linear map admits a right inverse which is a continuous linear map itself. -/
+/-
+**ContinuousLinearMap.HasRightInverse** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：{R : Type u_1} →   [inst : Semiring R] →     {E : Type u_2} →       {F : T
+ype u_4} →         [inst_1 : TopologicalSpace E] →           [inst_2 : AddCommMo
+noid E] →             [inst_3 : _root_.Module R E] →               [inst_4 : Top
+ologicalSpace F] →                 [inst_5 : AddCommMonoid F] → [inst_6 : _root_
+.Module R F] → (E →L[R] F) → Prop
+参数：E →L[R] F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContinuousLinearMap.HasRightInverse
-  signature: (f : E ->L[R] F)
-  body: exists g : F ->L[R] E, RightInverse g f
-
-中文:
-定义 连续线性映射.HasRightInverse
-  签名: (f : E ->L[R] F)
-  定义体: exists g : F ->L[R] E, RightInverse g f
+--- 原说明 ---
+A continuous linear map admits a right inverse which is a continuous linear map 
+itself.
 -/
-@[expose] protected def ContinuousLinearMap.HasRightInverse (f : E ->L[R] F) : Prop :=
-  exists g : F ->L[R] E, RightInverse g f
+@[expose] protected def ContinuousLinearMap.HasRightInverse (f : E →L[R] F) : Prop :=
+  ∃ g : F →L[R] E, RightInverse g f
 
 namespace ContinuousLinearMap
 
 namespace HasLeftInverse
 
-variable {f : E ->L[R] F}
+variable {f : E →L[R] F}
 
-/--
-Definition of `leftInverse` / `leftInverse` 的定义
+/-- Choice of continuous left inverse for `f : F →L[R] E`, given that such an inverse exists. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.leftInverse** 是 Mathlib 中的一个定义，位于命名空间 `Cont
+inuousLinearMap.HasLeftInverse`。
+形式化陈述：leftInverse (h : f.HasLeftInverse) : F ->L[R] E
+参数：h : f.HasLeftInverse。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftInverse
-  signature: (h : f.HasLeftInverse)
-  body: Classical.choose h
-
-中文:
-定义 leftInverse
-  签名: (h : f.HasLeftInverse)
-  定义体: Classical.choose h
-
-Depends on / 依赖: Classical, Classical.choose
+--- 原说明 ---
+Choice of continuous left inverse for `f : F →L[R] E`, given that such an invers
+e exists.
 -/
-def leftInverse (h : f.HasLeftInverse) : F ->L[R] E := Classical.choose h
-
-/--
-lemma `leftInverse_leftInverse` / 引理 `leftInverse_leftInverse`
-
-English:
-lemma leftInverse_leftInverse
-  given: (h : f.HasLeftInverse)
-  statement: LeftInverse h.leftInverse f
-  proof: Classical.choose_spec h
-
-中文:
-引理 leftInverse_leftInverse
-  条件: (h : f.HasLeftInverse)
-  结论: 左逆 h.leftInverse f
-  证明: Classical.choose_spec h
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec
+def leftInverse (h : f.HasLeftInverse) : F →L[R] E := Classical.choose h
+/-
+**ContinuousLinearMap.HasLeftInverse.leftInverse_leftInverse** 是 Mathlib 中的一个引理，
+位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：leftInverse_leftInverse (h : f.HasLeftInverse) : LeftInverse h.leftInverse
+ f
+参数：h : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma leftInverse_leftInverse (h : f.HasLeftInverse) : LeftInverse h.leftInverse f :=
   Classical.choose_spec h
-
-/--
-lemma `injective` / 引理 `injective`
-
-English:
-lemma injective
-  given: (h : f.HasLeftInverse)
-  statement: Injective f
-  proof: h.leftInverse_leftInverse.injective
-
-example (h : f.HasLeftInverse) (x : E) : h.leftInverse (f x) = x :=
-  h.leftInverse_leftInverse x
-
-中文:
-引理 injective
-  条件: (h : f.HasLeftInverse)
-  结论: 单射 f
-  证明: h.leftInverse_leftInverse.injective
-
-example (h : f.HasLeftInverse) (x : E) : h.leftInverse (f x) = x :=
-  h.leftInverse_leftInverse x
-
-Depends on / 依赖: h.leftInverse_leftInverse.injective, injective, leftInverse_leftInverse
+/-
+**ContinuousLinearMap.HasLeftInverse.injective** 是 Mathlib 中的一个引理，位于命名空间 `Contin
+uousLinearMap.HasLeftInverse`。
+形式化陈述：injective (h : f.HasLeftInverse) : Injective f
+参数：h : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.leftInverse_leftInverse`：leftInverse_
+leftInverse (h : f.HasLeftInverse) : LeftInverse h.leftInverse f
 -/
 lemma injective (h : f.HasLeftInverse) : Injective f :=
   h.leftInverse_leftInverse.injective
-
+/-
+**ContinuousLinearMap.HasLeftInverse.** 是 Mathlib 中的一个示例，位于命名空间 `ContinuousLinea
+rMap.HasLeftInverse`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (h : f.HasLeftInverse) (x : E) : h.leftInverse (f x) = x :=
   h.leftInverse_leftInverse x
-
-/--
-lemma `congr` / 引理 `congr`
-
-English:
-lemma congr
-  given: {g : E ->L[R] F} (hf : f.HasLeftInverse) (hfg : g = f)
-  proof: hfg ▸ hf
-
-中文:
-引理 congr
-  条件: {g : E ->L[R] F} (hf : f.HasLeftInverse) (hfg : g = f)
-  证明: hfg ▸ hf
+/-
+**ContinuousLinearMap.HasLeftInverse.congr** 是 Mathlib 中的一个引理，位于命名空间 `Continuous
+LinearMap.HasLeftInverse`。
+形式化陈述：congr {g : E ->L[R] F} (hf : f.HasLeftInverse) (hfg : g = f) : g.HasLeftIn
+verse
+参数：hf : f.HasLeftInverse；hfg : g = f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma congr {g : E ->L[R] F} (hf : f.HasLeftInverse) (hfg : g = f) :
+lemma congr {g : E →L[R] F} (hf : f.HasLeftInverse) (hfg : g = f) :
     g.HasLeftInverse :=
   hfg ▸ hf
 
-/--
-lemma `_root_.ContinuousLinearEquiv.hasLeftInverse` / 引理 `_root_.ContinuousLinearEquiv.hasLeftInverse`
+/-- A continuous linear equivalence has a continuous left inverse. -/
+/-
+**ContinuousLinearMap.HasLeftInverse._root_.ContinuousLinearEquiv.hasLeftInverse
+** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.ContinuousLinearEquiv.hasLeftInverse
-  given: (f : E ≃L[R] F)
-  proof: ⟨f.symm, rightInverse_of_comp (by simp)⟩
-
-中文:
-引理 _root_.连续线性等价.hasLeftInverse
-  条件: (f : E ≃L[R] F)
-  证明: ⟨f.symm, rightInverse_of_comp (by simp)⟩
-
-Depends on / 依赖: f.symm, rightInverse_of_comp
+--- 原说明 ---
+A continuous linear equivalence has a continuous left inverse.
 -/
 lemma _root_.ContinuousLinearEquiv.hasLeftInverse (f : E ≃L[R] F) :
     f.toContinuousLinearMap.HasLeftInverse :=
   ⟨f.symm, rightInverse_of_comp (by simp)⟩
-
-/--
-lemma `_root_.ContinuousLinearEquiv.leftInverse_hasLeftInverse` / 引理 `_root_.ContinuousLinearEquiv.leftInverse_hasLeftInverse`
-
-English:
-lemma _root_.ContinuousLinearEquiv.leftInverse_hasLeftInverse
-  given: (f : E ≃L[R] F)
-  proof: by
-  ext y
-  calc f.hasLeftInverse.leftInverse y
-    _ = f.hasLeftInverse.leftInverse (f (f.symm y)) := by simp
-    _ = f.symm y := f.hasLeftInverse.leftInverse_leftInverse (f.symm y)
-
-中文:
-引理 _root_.连续线性等价.leftInverse_hasLeftInverse
-  条件: (f : E ≃L[R] F)
-  证明: by
-  ext y
-  calc f.hasLeftInverse.leftInverse y
-    _ = f.hasLeftInverse.leftInverse (f (f.symm y)) := by simp
-    _ = f.symm y := f.hasLeftInverse.leftInverse_leftInverse (f.symm y)
+/-
+**ContinuousLinearMap.HasLeftInverse._root_.ContinuousLinearEquiv.leftInverse_ha
+sLeftInverse** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.ContinuousLinearEquiv.leftInverse_hasLeftInverse (f : E ≃L[R] F) :
     f.hasLeftInverse.leftInverse = f.symm := by
@@ -250,55 +212,48 @@ lemma _root_.ContinuousLinearEquiv.leftInverse_hasLeftInverse
     _ = f.hasLeftInverse.leftInverse (f (f.symm y)) := by simp
     _ = f.symm y := f.hasLeftInverse.leftInverse_leftInverse (f.symm y)
 
-/--
-lemma `of_isInvertible` / 引理 `of_isInvertible`
+/-- An invertible continuous linear map has a continuous left inverse. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.of_isInvertible** 是 Mathlib 中的一个引理，位于命名空间 `
+ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：of_isInvertible (hf : IsInvertible f) : f.HasLeftInverse
+参数：hf : IsInvertible f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearEquiv.hasLeftInverse`：∀ {R : Type u_1} [inst : Semiring 
+R] {E : Type u_2} {F : Type u_4} [inst_1 : TopologicalSpace E]   [inst_2 : AddCo
+mmMonoid E] [inst_3 : _roo…
 
-English:
-lemma of_isInvertible
-  given: (hf : IsInvertible f)
-  statement: f.HasLeftInverse
-  proof: by
-  obtain ⟨e, rfl⟩ := hf
-  exact e.hasLeftInverse
-
-中文:
-引理 of_isInvertible
-  条件: (hf : IsInvertible f)
-  结论: f.HasLeftInverse
-  证明: by
-  obtain ⟨e, rfl⟩ := hf
-  exact e.hasLeftInverse
-
-Depends on / 依赖: e.hasLeftInverse, hasLeftInverse
+--- 原说明 ---
+An invertible continuous linear map has a continuous left inverse.
 -/
 lemma of_isInvertible (hf : IsInvertible f) : f.HasLeftInverse := by
   obtain ⟨e, rfl⟩ := hf
   exact e.hasLeftInverse
 
-/--
-lemma `prodMap` / 引理 `prodMap`
+/-- If `f` and `g` admit continuous left inverses, so does `f × g`. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.prodMap** 是 Mathlib 中的一个引理，位于命名空间 `Continuo
+usLinearMap.HasLeftInverse`。
+形式化陈述：prodMap {g : E' ->L[R] F'} (hf : f.HasLeftInverse) (hg : g.HasLeftInverse)
+ : (f.prodMap g).HasLeftInverse
+参数：hf : f.HasLeftInverse；hg : g.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-lemma prodMap
-  given: {g : E' ->L[R] F'} (hf : f.HasLeftInverse) (hg : g.HasLeftInverse)
-  proof: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  use finv.prodMap ginv
-  simp [hfinv, hginv]
-
-中文:
-引理 prodMap
-  条件: {g : E' ->L[R] F'} (hf : f.HasLeftInverse) (hg : g.HasLeftInverse)
-  证明: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  use finv.prodMap ginv
-  simp [hfinv, hginv]
-
-Depends on / 依赖: finv.prodMap, prodMap
+--- 原说明 ---
+If `f` and `g` admit continuous left inverses, so does `f × g`.
 -/
-lemma prodMap {g : E' ->L[R] F'} (hf : f.HasLeftInverse) (hg : g.HasLeftInverse) :
+lemma prodMap {g : E' →L[R] F'} (hf : f.HasLeftInverse) (hg : g.HasLeftInverse) :
     (f.prodMap g).HasLeftInverse := by
   obtain ⟨finv, hfinv⟩ := hf
   obtain ⟨ginv, hginv⟩ := hg
@@ -306,150 +261,110 @@ lemma prodMap {g : E' ->L[R] F'} (hf : f.HasLeftInverse) (hg : g.HasLeftInverse)
   simp [hfinv, hginv]
 
 variable [TopologicalSpace G] [AddCommMonoid G] [Module R G]
-
-/--
-lemma `comp` / 引理 `comp`
-
-English:
-lemma comp
-  given: {g : F ->L[R] G} (hg : g.HasLeftInverse) (hf : f.HasLeftInverse)
-  proof: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  refine ⟨finv.comp ginv, fun x => ?_⟩
-  simp only [comp_apply]
-  rw [hginv]; rw [hfinv]
-
-中文:
-引理 comp
-  条件: {g : F ->L[R] G} (hg : g.HasLeftInverse) (hf : f.HasLeftInverse)
-  证明: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  refine ⟨finv.comp ginv, fun x => ?_⟩
-  simp only [comp_apply]
-  rw [hginv]; rw [hfinv]
-
-Depends on / 依赖: comp_apply, finv.comp
+/-
+**ContinuousLinearMap.HasLeftInverse.comp** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousL
+inearMap.HasLeftInverse`。
+形式化陈述：comp {g : F ->L[R] G} (hg : g.HasLeftInverse) (hf : f.HasLeftInverse) : (g
+.comp f).HasLeftInverse
+参数：hg : g.HasLeftInverse；hf : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma comp {g : F ->L[R] G} (hg : g.HasLeftInverse) (hf : f.HasLeftInverse) :
+lemma comp {g : F →L[R] G} (hg : g.HasLeftInverse) (hf : f.HasLeftInverse) :
     (g.comp f).HasLeftInverse := by
   obtain ⟨finv, hfinv⟩ := hf
   obtain ⟨ginv, hginv⟩ := hg
-  refine ⟨finv.comp ginv, fun x => ?_⟩
+  refine ⟨finv.comp ginv, fun x ↦ ?_⟩
   simp only [comp_apply]
-  rw [hginv]; rw [hfinv]
-
-/--
-lemma `of_comp` / 引理 `of_comp`
-
-English:
-lemma of_comp
-  given: {g : F ->L[R] G} (hfg : (g.comp f).HasLeftInverse)
-  proof: by
-  obtain ⟨fginv, hfginv⟩ := hfg
-  refine ⟨fginv.comp g, fun y => ?_⟩
-  simp only [comp_apply]
-  exact hfginv y
-
-中文:
-引理 of_comp
-  条件: {g : F ->L[R] G} (hfg : (g.comp f).HasLeftInverse)
-  证明: by
-  obtain ⟨fginv, hfginv⟩ := hfg
-  refine ⟨fginv.comp g, fun y => ?_⟩
-  simp only [comp_apply]
-  exact hfginv y
-
-Depends on / 依赖: comp_apply, fginv.comp, hfginv
+  rw [hginv, hfinv]
+/-
+**ContinuousLinearMap.HasLeftInverse.of_comp** 是 Mathlib 中的一个引理，位于命名空间 `Continuo
+usLinearMap.HasLeftInverse`。
+形式化陈述：of_comp {g : F ->L[R] G} (hfg : (g.comp f).HasLeftInverse) : f.HasLeftInve
+rse
+参数：hfg : (g.comp f).HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma of_comp {g : F ->L[R] G} (hfg : (g.comp f).HasLeftInverse) :
+lemma of_comp {g : F →L[R] G} (hfg : (g.comp f).HasLeftInverse) :
     f.HasLeftInverse := by
   obtain ⟨fginv, hfginv⟩ := hfg
-  refine ⟨fginv.comp g, fun y => ?_⟩
+  refine ⟨fginv.comp g, fun y ↦ ?_⟩
   simp only [comp_apply]
   exact hfginv y
-
-/--
-lemma `comp_continuousLinearEquivalence` / 引理 `comp_continuousLinearEquivalence`
-
-English:
-lemma comp_continuousLinearEquivalence
-  given: {f₀ : F' ≃L[R] E} (hf : f.HasLeftInverse)
-  proof: hf.comp f₀.hasLeftInverse
-
-中文:
-引理 comp_continuousLinearEquivalence
-  条件: {f₀ : F' ≃L[R] E} (hf : f.HasLeftInverse)
-  证明: hf.comp f₀.hasLeftInverse
-
-Depends on / 依赖: hasLeftInverse, hf.comp
+/-
+**ContinuousLinearMap.HasLeftInverse.comp_continuousLinearEquivalence** 是 Mathli
+b 中的一个引理，位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：comp_continuousLinearEquivalence {f₀ : F' ≃L[R] E} (hf : f.HasLeftInverse)
+ : (f.comp f₀.toContinuousLinearMap).HasLeftInverse
+参数：hf : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.comp`：comp {g : F ->L[R] G} (hg : g.H
+asLeftInverse) (hf : f.HasLeftInverse) : (g.comp f).HasLeftInverse
+· 使用定理 `ContinuousLinearEquiv.hasLeftInverse`：∀ {R : Type u_1} [inst : Semiring 
+R] {E : Type u_2} {F : Type u_4} [inst_1 : TopologicalSpace E]   [inst_2 : AddCo
+mmMonoid E] [inst_3 : _roo…
 -/
 lemma comp_continuousLinearEquivalence {f₀ : F' ≃L[R] E} (hf : f.HasLeftInverse) :
     (f.comp f₀.toContinuousLinearMap).HasLeftInverse :=
   hf.comp f₀.hasLeftInverse
-
-/--
-lemma `continuousLinearEquivalence_comp` / 引理 `continuousLinearEquivalence_comp`
-
-English:
-lemma continuousLinearEquivalence_comp
-  given: {g : F ≃L[R] F'} (hf : f.HasLeftInverse)
-  proof: g.hasLeftInverse.comp hf
-
-中文:
-引理 continuousLinearEquivalence_comp
-  条件: {g : F ≃L[R] F'} (hf : f.HasLeftInverse)
-  证明: g.hasLeftInverse.comp hf
-
-Depends on / 依赖: g.hasLeftInverse.comp, hasLeftInverse
+/-
+**ContinuousLinearMap.HasLeftInverse.continuousLinearEquivalence_comp** 是 Mathli
+b 中的一个引理，位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：continuousLinearEquivalence_comp {g : F ≃L[R] F'} (hf : f.HasLeftInverse) 
+: (g.toContinuousLinearMap.comp f).HasLeftInverse
+参数：hf : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.comp`：comp {g : F ->L[R] G} (hg : g.H
+asLeftInverse) (hf : f.HasLeftInverse) : (g.comp f).HasLeftInverse
+· 使用定理 `ContinuousLinearEquiv.hasLeftInverse`：∀ {R : Type u_1} [inst : Semiring 
+R] {E : Type u_2} {F : Type u_4} [inst_1 : TopologicalSpace E]   [inst_2 : AddCo
+mmMonoid E] [inst_3 : _roo…
 -/
 lemma continuousLinearEquivalence_comp {g : F ≃L[R] F'} (hf : f.HasLeftInverse) :
     (g.toContinuousLinearMap.comp f).HasLeftInverse :=
   g.hasLeftInverse.comp hf
 
-/--
-lemma `inl` / 引理 `inl`
+/-- `ContinuousLinearMap.inl` has a continuous left inverse. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.inl** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap.HasLeftInverse`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] {F : Type u_4} {G : Type u_6} [inst_1
+ : TopologicalSpace F]   [inst_2 : AddCommMonoid F] [inst_3 : _root_.Module R F]
+ [inst_4 : TopologicalSpace G] [inst_5 : AddCommMonoid G]   [inst_6 : _root_.Mod
+ule R G], (ContinuousLinearMap.inl R F G).HasLeftInverse
+参数：ContinuousLinearMap.inl R F G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma inl
-  statement: (ContinuousLinearMap.inl R F G).HasLeftInverse
-  proof: by
-  use ContinuousLinearMap.fst _ _ _
-  intro x
-  simp
-
-中文:
-引理 inl
-  结论: (连续线性映射.inl R F G).HasLeftInverse
-  证明: by
-  use ContinuousLinearMap.fst _ _ _
-  intro x
-  simp
+--- 原说明 ---
+`ContinuousLinearMap.inl` has a continuous left inverse.
 -/
 protected lemma inl : (ContinuousLinearMap.inl R F G).HasLeftInverse := by
   use ContinuousLinearMap.fst _ _ _
   intro x
   simp
 
-/--
-lemma `inr` / 引理 `inr`
+/-- `ContinuousLinearMap.inr` has a continuous left inverse. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.inr** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap.HasLeftInverse`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] {F : Type u_4} {G : Type u_6} [inst_1
+ : TopologicalSpace F]   [inst_2 : AddCommMonoid F] [inst_3 : _root_.Module R F]
+ [inst_4 : TopologicalSpace G] [inst_5 : AddCommMonoid G]   [inst_6 : _root_.Mod
+ule R G], (ContinuousLinearMap.inr R F G).HasLeftInverse
+参数：ContinuousLinearMap.inr R F G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma inr
-  statement: (ContinuousLinearMap.inr R F G).HasLeftInverse
-  proof: by
-  use ContinuousLinearMap.snd _ _ _
-  intro x
-  simp
-
-中文:
-引理 inr
-  结论: (连续线性映射.inr R F G).HasLeftInverse
-  证明: by
-  use ContinuousLinearMap.snd _ _ _
-  intro x
-  simp
+--- 原说明 ---
+`ContinuousLinearMap.inr` has a continuous left inverse.
 -/
 protected lemma inr : (ContinuousLinearMap.inr R F G).HasLeftInverse := by
   use ContinuousLinearMap.snd _ _ _
@@ -461,30 +376,32 @@ section NontriviallyNormedField
 variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E F : Type*}
   [TopologicalSpace E] [AddCommGroup E] [Module 𝕜 E] [IsTopologicalAddGroup E] [ContinuousSMul 𝕜 E]
   [TopologicalSpace F] [AddCommGroup F] [Module 𝕜 F] [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F]
-  [T2Space F] {f : E ->L[𝕜] F}
+  [T2Space F] {f : E →L[𝕜] F}
 
-/--
-lemma `of_injective_of_finiteDimensional` / 引理 `of_injective_of_finiteDimensional`
+/-- If `f : E → F` is injective and `E` is finite-dimensional,
+`f` has a continuous left inverse. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.of_injective_of_finiteDimensional** 是 Mathl
+ib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：of_injective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F
+] (hf : Injective f) : f.HasLeftInverse
+参数：hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.exists_leftInverse_of_injective`：LinearMap.exists_leftInverse_
+of_injective (f : V ->ₗ[K] V') (hf_inj : LinearMap.ker f = ⊥) : exists g : V' ->
+ₗ[K] V, g.comp f = LinearMap.id
+· 使用定理 `LinearMap.ker_eq_bot_of_injective`：ker_eq_bot_of_injective {f : M ->ₛₗ[τ
+₁₂] M₂} (hf : Injective f) : ker f = ⊥
+· 使用定理 `LinearMap.continuous_of_finiteDimensional`：LinearMap.continuous_of_finit
+eDimensional [T2Space E] [FiniteDimensional 𝕜 E] (f : E ->ₗ[𝕜] F') : Continuous 
+f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma of_injective_of_finiteDimensional
-  statement: [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
-  proof: by
-  -- An injective linear map has a linear inverse; this inverse is automatically continuous
-  -- because its domain is finite-dimensional.
-  obtain ⟨g, hg⟩ :=
-    f.toLinearMap.exists_leftInverse_of_injective (f.ker_eq_bot_of_injective hf)
-  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩, fun x => congr($hg x)⟩
-
-中文:
-引理 of_injective_of_finiteDimensional
-  结论: [完备空间 𝕜] [有限维 𝕜 F]
-  证明: by
-  -- An injective linear map has a linear inverse; this inverse is automatically continuous
-  -- because its domain is finite-dimensional.
-  obtain ⟨g, hg⟩ :=
-    f.toLinearMap.exists_leftInverse_of_injective (f.ker_eq_bot_of_injective hf)
-  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩, fun x => congr($hg x)⟩
+--- 原说明 ---
+If `f : E → F` is injective and `E` is finite-dimensional,
+`f` has a continuous left inverse.
 -/
 lemma of_injective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
     (hf : Injective f) :
@@ -493,7 +410,7 @@ lemma of_injective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional 
   -- because its domain is finite-dimensional.
   obtain ⟨g, hg⟩ :=
     f.toLinearMap.exists_leftInverse_of_injective (f.ker_eq_bot_of_injective hf)
-  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩, fun x => congr($hg x)⟩
+  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩, fun x ↦ congr($hg x)⟩
 
 end NontriviallyNormedField
 
@@ -503,43 +420,29 @@ section Ring
 -- The next lemmas assume we are working over a ring.
 variable {R E E' F F' G : Type*} [Ring R]
   [TopologicalSpace E] [AddCommGroup E] [Module R E]
-  [TopologicalSpace F] [AddCommGroup F] [Module R F] {f : E ->L[R] F}
+  [TopologicalSpace F] [AddCommGroup F] [Module R F] {f : E →L[R] F}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `closedComplemented_range` / 引理 `closedComplemented_range`
+/-- If `f` has a continuous left inverse, its range admits a closed complement. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.closedComplemented_range** 是 Mathlib 中的一个引理
+，位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：closedComplemented_range (hf : f.HasLeftInverse) : Submodule.ClosedComplem
+ented f.range
+参数：hf : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.leftInverse_leftInverse`：leftInverse_
+leftInverse (h : f.HasLeftInverse) : LeftInverse h.leftInverse f
 
-English:
-lemma closedComplemented_range
-  given: (hf : f.HasLeftInverse)
-  statement: Submodule.ClosedComplemented f.range
-  proof: by
-  -- Idea of proof: let g be a left inverse for f. Then ker g is a closed subspace of F,
-  -- and a complement to range f.
-  -- Mathlib's definition of closed complement takes a continuous projection to f.range instead
-  -- of a complementary subspace: consider `f.comp g` instead, which is continuous as both maps are,
-  -- and idempotent as a continuous left inverse.
-  use (f.comp hf.leftInverse).codRestrict f.range (by intro y; simp)
-  rintro ⟨y, x, rfl⟩
-  ext
-  simp only [coe_coe, coe_codRestrict_apply, comp_apply]
-  rw [hf.leftInverse_leftInverse]
-
-中文:
-引理 closedComplemented_range
-  条件: (hf : f.HasLeftInverse)
-  结论: 子模.ClosedComplemented f.range
-  证明: by
-  -- Idea of proof: let g be a left inverse for f. Then ker g is a closed subspace of F,
-  -- and a complement to range f.
-  -- Mathlib's definition of closed complement takes a continuous projection to f.range instead
-  -- of a complementary subspace: consider `f.comp g` instead, which is continuous as both maps are,
-  -- and idempotent as a continuous left inverse.
-  use (f.comp hf.leftInverse).codRestrict f.range (by intro y; simp)
-  rintro ⟨y, x, rfl⟩
-  ext
-  simp only [coe_coe, coe_codRestrict_apply, comp_apply]
-  rw [hf.leftInverse_leftInverse]
+--- 原说明 ---
+If `f` has a continuous left inverse, its range admits a closed complement.
 -/
 lemma closedComplemented_range (hf : f.HasLeftInverse) : Submodule.ClosedComplemented f.range := by
   -- Idea of proof: let g be a left inverse for f. Then ker g is a closed subspace of F,
@@ -557,90 +460,81 @@ section
 
 variable [T1Space F]
 
-/--
-lemma `isClosed_range` / 引理 `isClosed_range`
-
-English:
-lemma isClosed_range
-  given: (hf : f.HasLeftInverse) [IsTopologicalAddGroup F]
-  proof: by
-  -- `range f = ker (f ∘ g - id)` is closed since `f ∘ g - id` is continuous.
-  rw [← f.range_toLinearMap]; rw [← f.coe_range]; rw [f.range_eq_ker_of_leftInverse (hf.leftInverse_leftInverse)]
-  exact ((f.comp hf.leftInverse) - (ContinuousLinearMap.id R F)).isClosed_ker
-
-中文:
-引理 isClosed_range
-  条件: (hf : f.HasLeftInverse) [是拓扑加群 F]
-  证明: by
-  -- `range f = ker (f ∘ g - id)` is closed since `f ∘ g - id` is continuous.
-  rw [← f.range_toLinearMap]; rw [← f.coe_range]; rw [f.range_eq_ker_of_leftInverse (hf.leftInverse_leftInverse)]
-  exact ((f.comp hf.leftInverse) - (ContinuousLinearMap.id R F)).isClosed_ker
+/-
+**ContinuousLinearMap.HasLeftInverse.isClosed_range** 是 Mathlib 中的一个引理，位于命名空间 `C
+ontinuousLinearMap.HasLeftInverse`。
+形式化陈述：isClosed_range (hf : f.HasLeftInverse) [IsTopologicalAddGroup F] : IsClose
+d (range f)
+参数：hf : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ContinuousLinearMap.range_toLinearMap`：range_toLinearMap (f : M₁ ->SL[σ₁
+₂] M₂) : Set.range f.toLinearMap = Set.range f
+· 使用定理 `LinearMap.coe_range`：coe_range [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] 
+M₂) : (range f : Set M₂) = Set.range f
+· 使用引理 `LinearMap.range_eq_ker_of_leftInverse`：range_eq_ker_of_leftInverse {M P}
+ [AddCommGroup M] [Module R M] [AddCommGroup P] [Module R P] {f : M ->ₗ[R] P} {g
+ : P ->ₗ[R] M} (h : LeftInv…
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.leftInverse_leftInverse`：leftInverse_
+leftInverse (h : f.HasLeftInverse) : LeftInverse h.leftInverse f
+· 使用定理 `ContinuousLinearMap.isClosed_ker`：isClosed_ker [T1Space M₂] (f : M₁ ->SL
+[σ₁₂] M₂) : IsClosed (f.ker : Set M₁)
 -/
 lemma isClosed_range (hf : f.HasLeftInverse) [IsTopologicalAddGroup F] :
     IsClosed (range f) := by
   -- `range f = ker (f ∘ g - id)` is closed since `f ∘ g - id` is continuous.
-  rw [← f.range_toLinearMap]; rw [← f.coe_range]; rw [f.range_eq_ker_of_leftInverse (hf.leftInverse_leftInverse)]
+  rw [← f.range_toLinearMap, ← f.coe_range,
+    f.range_eq_ker_of_leftInverse (hf.leftInverse_leftInverse)]
   exact ((f.comp hf.leftInverse) - (ContinuousLinearMap.id R F)).isClosed_ker
 
-/--
-Definition of `complement` / `complement` 的定义
+/-- Choice of a closed complement of `range f` -/
+/-
+**ContinuousLinearMap.HasLeftInverse.complement** 是 Mathlib 中的一个定义，位于命名空间 `Conti
+nuousLinearMap.HasLeftInverse`。
+形式化陈述：complement (h : f.HasLeftInverse) : Submodule R F
+参数：h : f.HasLeftInverse。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.closedComplemented_range`：closedCompl
+emented_range (hf : f.HasLeftInverse) : Submodule.ClosedComplemented f.range
 
-English:
-definition complement
-  signature: (h : f.HasLeftInverse)
-  body: h.closedComplemented_range.complement
-
-中文:
-定义 complement
-  签名: (h : f.HasLeftInverse)
-  定义体: h.closedComplemented_range.complement
-
-Depends on / 依赖: closedComplemented_range, complement, h.closedComplemented_range.complement
+--- 原说明 ---
+Choice of a closed complement of `range f`
 -/
 def complement (h : f.HasLeftInverse) : Submodule R F :=
   h.closedComplemented_range.complement
-
-/--
-lemma `isClosed_complement` / 引理 `isClosed_complement`
-
-English:
-lemma isClosed_complement
-  given: (h : f.HasLeftInverse)
-  statement: IsClosed (X := F) h.complement
-  proof: h.closedComplemented_range.isClosed_complement
-
-omit [T1Space F] in
-
-中文:
-引理 isClosed_complement
-  条件: (h : f.HasLeftInverse)
-  结论: 是闭集 (X := F) h.complement
-  证明: h.closedComplemented_range.isClosed_complement
-
-omit [T1Space F] in
-
-Depends on / 依赖: complement, h.complement
+/-
+**ContinuousLinearMap.HasLeftInverse.isClosed_complement** 是 Mathlib 中的一个引理，位于命名
+空间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：isClosed_complement (h : f.HasLeftInverse) : IsClosed (X
+参数：h : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ClosedComplemented.isClosed_complement`：∀ {R : Type u_1} [inst
+ : Ring R] {M : Type u_2} [inst_1 : TopologicalSpace M] [inst_2 : AddCommGroup M
+]   [inst_3 : _root_.Module R M] {p : …
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.closedComplemented_range`：closedCompl
+emented_range (hf : f.HasLeftInverse) : Submodule.ClosedComplemented f.range
 -/
 lemma isClosed_complement (h : f.HasLeftInverse) : IsClosed (X := F) h.complement :=
   h.closedComplemented_range.isClosed_complement
 
 omit [T1Space F] in
-/--
-lemma `isCompl_complement` / 引理 `isCompl_complement`
-
-English:
-lemma isCompl_complement
-  given: (h : f.HasLeftInverse)
-  statement: IsCompl f.range h.complement
-  proof: h.closedComplemented_range.isCompl_complement
-
-中文:
-引理 isCompl_complement
-  条件: (h : f.HasLeftInverse)
-  结论: 是补集 f.range h.complement
-  证明: h.closedComplemented_range.isCompl_complement
-
-Depends on / 依赖: closedComplemented_range, h.closedComplemented_range.isCompl_complement, isCompl_complement
+/-
+**ContinuousLinearMap.HasLeftInverse.isCompl_complement** 是 Mathlib 中的一个引理，位于命名空
+间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：isCompl_complement (h : f.HasLeftInverse) : IsCompl f.range h.complement
+参数：h : f.HasLeftInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ClosedComplemented.isCompl_complement`：∀ {R : Type u_1} [inst 
+: Ring R] {M : Type u_2} [inst_1 : TopologicalSpace M] [inst_2 : AddCommGroup M]
+   [inst_3 : _root_.Module R M] {p : …
+· 使用引理 `ContinuousLinearMap.HasLeftInverse.closedComplemented_range`：closedCompl
+emented_range (hf : f.HasLeftInverse) : Submodule.ClosedComplemented f.range
 -/
 lemma isCompl_complement (h : f.HasLeftInverse) : IsCompl f.range h.complement :=
   h.closedComplemented_range.isCompl_complement
@@ -655,41 +549,46 @@ variable {R E F : Type*} [NontriviallyNormedField R]
   [NormedAddCommGroup E] [NormedSpace R E] [CompleteSpace E]
   [NormedAddCommGroup F] [NormedSpace R F] [CompleteSpace F]
 
-/--
-lemma `of_injective_of_isClosed_range_of_closedComplement_range` / 引理 `of_injective_of_isClosed_range_of_closedComplement_range`
+/-- A continuous linear map between Banach spaces has a continuous left inverse if it is injective,
+has closed range and its range has a closed complement. -/
+/-
+**ContinuousLinearMap.HasLeftInverse.of_injective_of_isClosed_range_of_closedCom
+plement_range** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasLeftInverse`。
+形式化陈述：of_injective_of_isClosed_range_of_closedComplement_range {f : E ->L[R] F} 
+(hf : Injective f) (hf' : IsClosed (range f)) (hf'' : Submodule.ClosedComplement
+ed f.range) : f.HasLeftInverse
+参数：hf : Injective f；hf' : IsClosed (range f)；hf'' : Submodule.ClosedComplemented
+ f.range。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousLinearMap.ker_codRestrict`：ker_codRestrict (f : M₁ ->SL[σ₁₂] M
+₂) (p : Submodule R₂ M₂) (h : forall x, f x in p) : ker (f.codRestrict p h : M₁ 
+->ₛₗ[σ₁₂] p) = ker (f : M…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.leftInverse_apply_of_inj`：LinearMap.leftInverse_apply_of_inj {
+f : V ->ₗ[K] V'} (h_inj : LinearMap.ker f = ⊥) (x : V) : f.leftInverse (f x) = x
 
-English:
-lemma of_injective_of_isClosed_range_of_closedComplement_range
-  statement: {f : E ->L[R] F}
-  proof: by
-  have : (f.rangeRestrict).ker = ⊥ := by
-    rw [ker_codRestrict]; exact LinearMap.ker_eq_bot.mpr hf
-  -- We compose the continuous inverse of `f : E → range f` with the projection `p : F → range f`.
-  obtain ⟨p, hp⟩ := hf''
-  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, fun x => ?_⟩
-  simpa [hp ⟨f x, by simp⟩] using! f.rangeRestrict.leftInverse_apply_of_inj this x
-
-中文:
-引理 of_injective_of_isClosed_range_of_closedComplement_range
-  结论: {f : E ->L[R] F}
-  证明: by
-  have : (f.rangeRestrict).ker = ⊥ := by
-    rw [ker_codRestrict]; exact LinearMap.ker_eq_bot.mpr hf
-  -- We compose the continuous inverse of `f : E → range f` with the projection `p : F → range f`.
-  obtain ⟨p, hp⟩ := hf''
-  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, fun x => ?_⟩
-  simpa [hp ⟨f x, by simp⟩] using! f.rangeRestrict.leftInverse_apply_of_inj this x
-
-Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mpr, f.rangeRestrict, ker_codRestrict, ker_eq_bot, rangeRestrict
+--- 原说明 ---
+A continuous linear map between Banach spaces has a continuous left inverse if i
+t is injective,
+has closed range and its range has a closed complement.
 -/
-lemma of_injective_of_isClosed_range_of_closedComplement_range {f : E ->L[R] F}
+lemma of_injective_of_isClosed_range_of_closedComplement_range {f : E →L[R] F}
     (hf : Injective f) (hf' : IsClosed (range f)) (hf'' : Submodule.ClosedComplemented f.range) :
     f.HasLeftInverse := by
   have : (f.rangeRestrict).ker = ⊥ := by
     rw [ker_codRestrict]; exact LinearMap.ker_eq_bot.mpr hf
   -- We compose the continuous inverse of `f : E → range f` with the projection `p : F → range f`.
   obtain ⟨p, hp⟩ := hf''
-  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, fun x => ?_⟩
+  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, fun x ↦ ?_⟩
   simpa [hp ⟨f x, by simp⟩] using! f.rangeRestrict.leftInverse_apply_of_inj this x
 
 end
@@ -698,172 +597,127 @@ end HasLeftInverse
 
 namespace HasRightInverse
 
-variable {f : E ->L[R] F}
+variable {f : E →L[R] F}
 
-/--
-Definition of `rightInverse` / `rightInverse` 的定义
+/-- Choice of continuous right inverse for `f : F →L[R] E`, given that such an inverse exists. -/
+/-
+**ContinuousLinearMap.HasRightInverse.rightInverse** 是 Mathlib 中的一个定义，位于命名空间 `Co
+ntinuousLinearMap.HasRightInverse`。
+形式化陈述：rightInverse (h : f.HasRightInverse) : F ->L[R] E
+参数：h : f.HasRightInverse。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightInverse
-  signature: (h : f.HasRightInverse)
-  body: Classical.choose h
-
-中文:
-定义 rightInverse
-  签名: (h : f.HasRightInverse)
-  定义体: Classical.choose h
-
-Depends on / 依赖: Classical, Classical.choose
+--- 原说明 ---
+Choice of continuous right inverse for `f : F →L[R] E`, given that such an inver
+se exists.
 -/
-def rightInverse (h : f.HasRightInverse) : F ->L[R] E := Classical.choose h
-
-/--
-lemma `rightInverse_rightInverse` / 引理 `rightInverse_rightInverse`
-
-English:
-lemma rightInverse_rightInverse
-  given: (h : f.HasRightInverse)
-  statement: RightInverse h.rightInverse f
-  proof: Classical.choose_spec h
-
-中文:
-引理 rightInverse_rightInverse
-  条件: (h : f.HasRightInverse)
-  结论: 右逆 h.rightInverse f
-  证明: Classical.choose_spec h
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec
+def rightInverse (h : f.HasRightInverse) : F →L[R] E := Classical.choose h
+/-
+**ContinuousLinearMap.HasRightInverse.rightInverse_rightInverse** 是 Mathlib 中的一个
+引理，位于命名空间 `ContinuousLinearMap.HasRightInverse`。
+形式化陈述：rightInverse_rightInverse (h : f.HasRightInverse) : RightInverse h.rightIn
+verse f
+参数：h : f.HasRightInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma rightInverse_rightInverse (h : f.HasRightInverse) : RightInverse h.rightInverse f :=
   Classical.choose_spec h
-
-/--
-lemma `surjective` / 引理 `surjective`
-
-English:
-lemma surjective
-  given: (h : f.HasRightInverse)
-  statement: Surjective f
-  proof: h.rightInverse_rightInverse.surjective
-
-中文:
-引理 surjective
-  条件: (h : f.HasRightInverse)
-  结论: 满射 f
-  证明: h.rightInverse_rightInverse.surjective
-
-Depends on / 依赖: h.rightInverse_rightInverse.surjective, rightInverse_rightInverse, surjective
+/-
+**ContinuousLinearMap.HasRightInverse.surjective** 是 Mathlib 中的一个引理，位于命名空间 `Cont
+inuousLinearMap.HasRightInverse`。
+形式化陈述：surjective (h : f.HasRightInverse) : Surjective f
+参数：h : f.HasRightInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用引理 `ContinuousLinearMap.HasRightInverse.rightInverse_rightInverse`：rightInve
+rse_rightInverse (h : f.HasRightInverse) : RightInverse h.rightInverse f
 -/
 lemma surjective (h : f.HasRightInverse) : Surjective f :=
   h.rightInverse_rightInverse.surjective
-
-/--
-lemma `congr` / 引理 `congr`
-
-English:
-lemma congr
-  given: {g : E ->L[R] F} (hf : f.HasRightInverse) (hfg : g = f)
-  proof: hfg ▸ hf
-
-中文:
-引理 congr
-  条件: {g : E ->L[R] F} (hf : f.HasRightInverse) (hfg : g = f)
-  证明: hfg ▸ hf
+/-
+**ContinuousLinearMap.HasRightInverse.congr** 是 Mathlib 中的一个引理，位于命名空间 `Continuou
+sLinearMap.HasRightInverse`。
+形式化陈述：congr {g : E ->L[R] F} (hf : f.HasRightInverse) (hfg : g = f) : g.HasRight
+Inverse
+参数：hf : f.HasRightInverse；hfg : g = f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma congr {g : E ->L[R] F} (hf : f.HasRightInverse) (hfg : g = f) :
+lemma congr {g : E →L[R] F} (hf : f.HasRightInverse) (hfg : g = f) :
     g.HasRightInverse :=
   hfg ▸ hf
 
-/--
-lemma `_root_.ContinuousLinearEquiv.hasRightInverse` / 引理 `_root_.ContinuousLinearEquiv.hasRightInverse`
+/-- A continuous linear equivalence has a continuous right inverse. -/
+/-
+**ContinuousLinearMap.HasRightInverse._root_.ContinuousLinearEquiv.hasRightInver
+se** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasRightInverse`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.ContinuousLinearEquiv.hasRightInverse
-  given: (f : E ≃L[R] F)
-  proof: ⟨f.symm, rightInverse_of_comp (by simp)⟩
-
-中文:
-引理 _root_.连续线性等价.hasRightInverse
-  条件: (f : E ≃L[R] F)
-  证明: ⟨f.symm, rightInverse_of_comp (by simp)⟩
-
-Depends on / 依赖: f.symm, rightInverse_of_comp
+--- 原说明 ---
+A continuous linear equivalence has a continuous right inverse.
 -/
 lemma _root_.ContinuousLinearEquiv.hasRightInverse (f : E ≃L[R] F) :
     f.toContinuousLinearMap.HasRightInverse :=
   ⟨f.symm, rightInverse_of_comp (by simp)⟩
-
-/--
-lemma `_root_.ContinuousLinearEquiv.rightInverse_hasRightInverse` / 引理 `_root_.ContinuousLinearEquiv.rightInverse_hasRightInverse`
-
-English:
-lemma _root_.ContinuousLinearEquiv.rightInverse_hasRightInverse
-  given: (f : E ≃L[R] F)
-  proof: by
-  ext y
-exact f.injective by simpa using f.hasRightInverse.rightInverse_rightInverse y
-
-中文:
-引理 _root_.连续线性等价.rightInverse_hasRightInverse
-  条件: (f : E ≃L[R] F)
-  证明: by
-  ext y
-exact f.injective by simpa using f.hasRightInverse.rightInverse_rightInverse y
+/-
+**ContinuousLinearMap.HasRightInverse._root_.ContinuousLinearEquiv.rightInverse_
+hasRightInverse** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasRightInverse`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma _root_.ContinuousLinearEquiv.rightInverse_hasRightInverse (f : E ≃L[R] F) :
     f.hasRightInverse.rightInverse = f.symm := by
   ext y
-exact f.injective by simpa using f.hasRightInverse.rightInverse_rightInverse y
+  exact f.injective <| by simpa using f.hasRightInverse.rightInverse_rightInverse y
 
-/--
-lemma `of_isInvertible` / 引理 `of_isInvertible`
+/-- An invertible continuous linear map has a continuous right inverse. -/
+/-
+**ContinuousLinearMap.HasRightInverse.of_isInvertible** 是 Mathlib 中的一个引理，位于命名空间 
+`ContinuousLinearMap.HasRightInverse`。
+形式化陈述：of_isInvertible (hf : IsInvertible f) : f.HasRightInverse
+参数：hf : IsInvertible f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearEquiv.hasRightInverse`：∀ {R : Type u_1} [inst : Semiring
+ R] {E : Type u_2} {F : Type u_4} [inst_1 : TopologicalSpace E]   [inst_2 : AddC
+ommMonoid E] [inst_3 : _roo…
 
-English:
-lemma of_isInvertible
-  given: (hf : IsInvertible f)
-  statement: f.HasRightInverse
-  proof: by
-  obtain ⟨e, rfl⟩ := hf
-  exact e.hasRightInverse
-
-中文:
-引理 of_isInvertible
-  条件: (hf : IsInvertible f)
-  结论: f.HasRightInverse
-  证明: by
-  obtain ⟨e, rfl⟩ := hf
-  exact e.hasRightInverse
-
-Depends on / 依赖: e.hasRightInverse, hasRightInverse
+--- 原说明 ---
+An invertible continuous linear map has a continuous right inverse.
 -/
 lemma of_isInvertible (hf : IsInvertible f) : f.HasRightInverse := by
   obtain ⟨e, rfl⟩ := hf
   exact e.hasRightInverse
 
-/--
-lemma `prodMap` / 引理 `prodMap`
+/-- If `f` and `g` split, then so does `f × g`. -/
+/-
+**ContinuousLinearMap.HasRightInverse.prodMap** 是 Mathlib 中的一个引理，位于命名空间 `Continu
+ousLinearMap.HasRightInverse`。
+形式化陈述：prodMap {g : E' ->L[R] F'} (hf : f.HasRightInverse) (hg : g.HasRightInvers
+e) : (f.prodMap g).HasRightInverse
+参数：hf : f.HasRightInverse；hg : g.HasRightInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-lemma prodMap
-  given: {g : E' ->L[R] F'} (hf : f.HasRightInverse) (hg : g.HasRightInverse)
-  proof: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  use finv.prodMap ginv
-  simp [hfinv, hginv]
-
-中文:
-引理 prodMap
-  条件: {g : E' ->L[R] F'} (hf : f.HasRightInverse) (hg : g.HasRightInverse)
-  证明: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  use finv.prodMap ginv
-  simp [hfinv, hginv]
-
-Depends on / 依赖: finv.prodMap, prodMap
+--- 原说明 ---
+If `f` and `g` split, then so does `f × g`.
 -/
-lemma prodMap {g : E' ->L[R] F'} (hf : f.HasRightInverse) (hg : g.HasRightInverse) :
+lemma prodMap {g : E' →L[R] F'} (hf : f.HasRightInverse) (hg : g.HasRightInverse) :
     (f.prodMap g).HasRightInverse := by
   obtain ⟨finv, hfinv⟩ := hf
   obtain ⟨ginv, hginv⟩ := hg
@@ -871,144 +725,130 @@ lemma prodMap {g : E' ->L[R] F'} (hf : f.HasRightInverse) (hg : g.HasRightInvers
   simp [hfinv, hginv]
 
 variable [TopologicalSpace G] [AddCommMonoid G] [Module R G]
-
-/--
-lemma `comp` / 引理 `comp`
-
-English:
-lemma comp
-  given: {g : F ->L[R] G} (hg : g.HasRightInverse) (hf : f.HasRightInverse)
-  proof: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  refine ⟨finv.comp ginv, fun x => ?_⟩
-  simp only [comp_apply]
-  rw [hfinv]; rw [hginv]
-
-中文:
-引理 comp
-  条件: {g : F ->L[R] G} (hg : g.HasRightInverse) (hf : f.HasRightInverse)
-  证明: by
-  obtain ⟨finv, hfinv⟩ := hf
-  obtain ⟨ginv, hginv⟩ := hg
-  refine ⟨finv.comp ginv, fun x => ?_⟩
-  simp only [comp_apply]
-  rw [hfinv]; rw [hginv]
-
-Depends on / 依赖: comp_apply, finv.comp
+/-
+**ContinuousLinearMap.HasRightInverse.comp** 是 Mathlib 中的一个引理，位于命名空间 `Continuous
+LinearMap.HasRightInverse`。
+形式化陈述：comp {g : F ->L[R] G} (hg : g.HasRightInverse) (hf : f.HasRightInverse) : 
+(g.comp f).HasRightInverse
+参数：hg : g.HasRightInverse；hf : f.HasRightInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma comp {g : F ->L[R] G} (hg : g.HasRightInverse) (hf : f.HasRightInverse) :
+lemma comp {g : F →L[R] G} (hg : g.HasRightInverse) (hf : f.HasRightInverse) :
     (g.comp f).HasRightInverse := by
   obtain ⟨finv, hfinv⟩ := hf
   obtain ⟨ginv, hginv⟩ := hg
-  refine ⟨finv.comp ginv, fun x => ?_⟩
+  refine ⟨finv.comp ginv, fun x ↦ ?_⟩
   simp only [comp_apply]
-  rw [hfinv]; rw [hginv]
-
-/--
-lemma `of_comp` / 引理 `of_comp`
-
-English:
-lemma of_comp
-  given: {g : F ->L[R] G} (hfg : (g.comp f).HasRightInverse)
-  proof: by
-  obtain ⟨fginv, hfginv⟩ := hfg
-  exact ⟨f.comp fginv, fun y => by simpa using hfginv y⟩
-
-中文:
-引理 of_comp
-  条件: {g : F ->L[R] G} (hfg : (g.comp f).HasRightInverse)
-  证明: by
-  obtain ⟨fginv, hfginv⟩ := hfg
-  exact ⟨f.comp fginv, fun y => by simpa using hfginv y⟩
-
-Depends on / 依赖: f.comp, hfginv
+  rw [hfinv, hginv]
+/-
+**ContinuousLinearMap.HasRightInverse.of_comp** 是 Mathlib 中的一个引理，位于命名空间 `Continu
+ousLinearMap.HasRightInverse`。
+形式化陈述：of_comp {g : F ->L[R] G} (hfg : (g.comp f).HasRightInverse) : g.HasRightIn
+verse
+参数：hfg : (g.comp f).HasRightInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma of_comp {g : F ->L[R] G} (hfg : (g.comp f).HasRightInverse) :
+lemma of_comp {g : F →L[R] G} (hfg : (g.comp f).HasRightInverse) :
     g.HasRightInverse := by
   obtain ⟨fginv, hfginv⟩ := hfg
-  exact ⟨f.comp fginv, fun y => by simpa using hfginv y⟩
-
-/--
-lemma `comp_continuousLinearEquivalence` / 引理 `comp_continuousLinearEquivalence`
-
-English:
-lemma comp_continuousLinearEquivalence
-  given: {f₀ : F' ≃L[R] E} (hf : f.HasRightInverse)
-  proof: hf.comp f₀.hasRightInverse
-
-中文:
-引理 comp_continuousLinearEquivalence
-  条件: {f₀ : F' ≃L[R] E} (hf : f.HasRightInverse)
-  证明: hf.comp f₀.hasRightInverse
-
-Depends on / 依赖: hasRightInverse, hf.comp
+  exact ⟨f.comp fginv, fun y ↦ by simpa using hfginv y⟩
+/-
+**ContinuousLinearMap.HasRightInverse.comp_continuousLinearEquivalence** 是 Mathl
+ib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasRightInverse`。
+形式化陈述：comp_continuousLinearEquivalence {f₀ : F' ≃L[R] E} (hf : f.HasRightInverse
+) : (f.comp f₀.toContinuousLinearMap).HasRightInverse
+参数：hf : f.HasRightInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.HasRightInverse.comp`：comp {g : F ->L[R] G} (hg : g.
+HasRightInverse) (hf : f.HasRightInverse) : (g.comp f).HasRightInverse
+· 使用定理 `ContinuousLinearEquiv.hasRightInverse`：∀ {R : Type u_1} [inst : Semiring
+ R] {E : Type u_2} {F : Type u_4} [inst_1 : TopologicalSpace E]   [inst_2 : AddC
+ommMonoid E] [inst_3 : _roo…
 -/
 lemma comp_continuousLinearEquivalence {f₀ : F' ≃L[R] E} (hf : f.HasRightInverse) :
     (f.comp f₀.toContinuousLinearMap).HasRightInverse :=
   hf.comp f₀.hasRightInverse
-
-/--
-lemma `continuousLinearEquivalence_comp` / 引理 `continuousLinearEquivalence_comp`
-
-English:
-lemma continuousLinearEquivalence_comp
-  given: {g : F ≃L[R] F'} (hf : f.HasRightInverse)
-  proof: g.hasRightInverse.comp hf
-
-中文:
-引理 continuousLinearEquivalence_comp
-  条件: {g : F ≃L[R] F'} (hf : f.HasRightInverse)
-  证明: g.hasRightInverse.comp hf
-
-Depends on / 依赖: g.hasRightInverse.comp, hasRightInverse
+/-
+**ContinuousLinearMap.HasRightInverse.continuousLinearEquivalence_comp** 是 Mathl
+ib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasRightInverse`。
+形式化陈述：continuousLinearEquivalence_comp {g : F ≃L[R] F'} (hf : f.HasRightInverse)
+ : (g.toContinuousLinearMap.comp f).HasRightInverse
+参数：hf : f.HasRightInverse。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousLinearMap.HasRightInverse.comp`：comp {g : F ->L[R] G} (hg : g.
+HasRightInverse) (hf : f.HasRightInverse) : (g.comp f).HasRightInverse
+· 使用定理 `ContinuousLinearEquiv.hasRightInverse`：∀ {R : Type u_1} [inst : Semiring
+ R] {E : Type u_2} {F : Type u_4} [inst_1 : TopologicalSpace E]   [inst_2 : AddC
+ommMonoid E] [inst_3 : _roo…
 -/
 lemma continuousLinearEquivalence_comp {g : F ≃L[R] F'} (hf : f.HasRightInverse) :
     (g.toContinuousLinearMap.comp f).HasRightInverse :=
   g.hasRightInverse.comp hf
 
-/--
-lemma `fst` / 引理 `fst`
+/-- `ContinuousLinearMap.fst` has a continuous right inverse. -/
+/-
+**ContinuousLinearMap.HasRightInverse.fst** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap.HasRightInverse`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] {F : Type u_4} {G : Type u_6} [inst_1
+ : TopologicalSpace F]   [inst_2 : AddCommMonoid F] [inst_3 : _root_.Module R F]
+ [inst_4 : TopologicalSpace G] [inst_5 : AddCommMonoid G]   [inst_6 : _root_.Mod
+ule R G], (ContinuousLinearMap.fst R F G).HasRightInverse
+参数：ContinuousLinearMap.fst R F G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma fst
-  statement: (ContinuousLinearMap.fst R F G).HasRightInverse
-  proof: by
-  use (ContinuousLinearMap.id _ _).prod 0
-  intro x
-  simp
-
-中文:
-引理 fst
-  结论: (连续线性映射.fst R F G).HasRightInverse
-  证明: by
-  use (ContinuousLinearMap.id _ _).prod 0
-  intro x
-  simp
+--- 原说明 ---
+`ContinuousLinearMap.fst` has a continuous right inverse.
 -/
 protected lemma fst : (ContinuousLinearMap.fst R F G).HasRightInverse := by
   use (ContinuousLinearMap.id _ _).prod 0
   intro x
   simp
 
-/--
-lemma `snd` / 引理 `snd`
+/-- `ContinuousLinearMap.snd` has a continuous right inverse. -/
+/-
+**ContinuousLinearMap.HasRightInverse.snd** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap.HasRightInverse`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] {F : Type u_4} {G : Type u_6} [inst_1
+ : TopologicalSpace F]   [inst_2 : AddCommMonoid F] [inst_3 : _root_.Module R F]
+ [inst_4 : TopologicalSpace G] [inst_5 : AddCommMonoid G]   [inst_6 : _root_.Mod
+ule R G], (ContinuousLinearMap.snd R F G).HasRightInverse
+参数：ContinuousLinearMap.snd R F G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma snd
-  statement: (ContinuousLinearMap.snd R F G).HasRightInverse
-  proof: by
-  use ContinuousLinearMap.prod 0 (.id R G)
-  intro x
-  simp
-
-中文:
-引理 snd
-  结论: (连续线性映射.snd R F G).HasRightInverse
-  证明: by
-  use ContinuousLinearMap.prod 0 (.id R G)
-  intro x
-  simp
+--- 原说明 ---
+`ContinuousLinearMap.snd` has a continuous right inverse.
 -/
 protected lemma snd : (ContinuousLinearMap.snd R F G).HasRightInverse := by
   use ContinuousLinearMap.prod 0 (.id R G)
@@ -1020,30 +860,38 @@ section NontriviallyNormedField
 variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E F : Type*}
   [TopologicalSpace E] [AddCommGroup E] [Module 𝕜 E] [IsTopologicalAddGroup E] [ContinuousSMul 𝕜 E]
   [TopologicalSpace F] [AddCommGroup F] [Module 𝕜 F] [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F]
-  [T2Space F] {f : E ->L[𝕜] F}
+  [T2Space F] {f : E →L[𝕜] F}
 
-/--
-lemma `of_surjective_of_finiteDimensional` / 引理 `of_surjective_of_finiteDimensional`
+/-- If `f : E → F` is surjective and `F` is finite-dimensional,
+`f` has a continuous right inverse. -/
+/-
+**ContinuousLinearMap.HasRightInverse.of_surjective_of_finiteDimensional** 是 Mat
+hlib 中的一个引理，位于命名空间 `ContinuousLinearMap.HasRightInverse`。
+形式化陈述：of_surjective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional 𝕜 
+F] (hf : Surjective f) : f.HasRightInverse
+参数：hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.exists_rightInverse_of_surjective`：∀ {R : Type u_1} [inst : Se
+miring R] {P : Type u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]
+   {M : Type u_3} [inst_3 : AddCo…
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `LinearMap.range_eq_top_of_surjective`：range_eq_top_of_surjective [RingHo
+mSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (hf : Surjective f) : range f = ⊤
+· 使用定理 `LinearMap.continuous_of_finiteDimensional`：LinearMap.continuous_of_finit
+eDimensional [T2Space E] [FiniteDimensional 𝕜 E] (f : E ->ₗ[𝕜] F') : Continuous 
+f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma of_surjective_of_finiteDimensional
-  statement: [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
-  proof: by
-  -- A surjective linear map has a linear inverse, which is automatically continuous
-  -- because its domain is finite-dimensional.
-  obtain ⟨g, hg⟩ :=
-    f.toLinearMap.exists_rightInverse_of_surjective (f.range_eq_top_of_surjective hf)
-  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x => congr($hg x)⟩
-
-中文:
-引理 of_surjective_of_finiteDimensional
-  结论: [完备空间 𝕜] [有限维 𝕜 F]
-  证明: by
-  -- A surjective linear map has a linear inverse, which is automatically continuous
-  -- because its domain is finite-dimensional.
-  obtain ⟨g, hg⟩ :=
-    f.toLinearMap.exists_rightInverse_of_surjective (f.range_eq_top_of_surjective hf)
-  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x => congr($hg x)⟩
+--- 原说明 ---
+If `f : E → F` is surjective and `F` is finite-dimensional,
+`f` has a continuous right inverse.
 -/
 lemma of_surjective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
     (hf : Surjective f) :
@@ -1052,7 +900,7 @@ lemma of_surjective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional
   -- because its domain is finite-dimensional.
   obtain ⟨g, hg⟩ :=
     f.toLinearMap.exists_rightInverse_of_surjective (f.range_eq_top_of_surjective hf)
-  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x => congr($hg x)⟩
+  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x ↦ congr($hg x)⟩
 
 end NontriviallyNormedField
 
@@ -1061,3 +909,4 @@ end HasRightInverse
 end ContinuousLinearMap
 
 end
+

@@ -55,56 +55,44 @@ namespace MeasureTheory
 
 variable {α β : Type*} {m : MeasurableSpace α}
 
-/--
-Definition of `VectorMeasure` / `VectorMeasure` 的定义
+/-- A vector measure on a measurable space `α` is a σ-additive `M`-valued function (for some `M`
+an additive monoid) such that the empty set and non-measurable sets are mapped to zero. -/
+/-
+**MeasureTheory.VectorMeasure** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：(α : Type u_3) → [MeasurableSpace α] → (M : Type u_4) → [AddCommMonoid M] 
+→ [TopologicalSpace M] → Type (max u_3 u_4)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure VectorMeasure
-  parameters: (α : Type*) [MeasurableSpace α] (M : Type*) [AddCommMonoid M]
-  axioms and operations (4):
-    - measureOf' : Set α -> M
-    - empty' : measureOf' ∅ = 0
-    - not_measurable'(⦃i) : Set α⦄ : ¬MeasurableSet i -> measureOf' i = 0
-    - m_iUnion'(⦃f) : Nat -> Set α⦄ : (forall i, MeasurableSet (f i)) -> Pairwise (Disjoint on f) -> HasSum (fun i => measureOf' (f i)) (measureOf' (⋃ i, f i))
-
-中文:
-结构 向量测度
-  参数: (α : 类型) [可测空间 α] (M : 类型) [加法交换幺半群 M]
-  公理与运算 (4 个):
-    - measureOf' : 集合 α -> M
-    - empty' : measureOf' ∅ = 0
-    - not_measurable'(⦃i) : 集合 α⦄ : ¬可测集 i -> measureOf' i = 0
-    - m_iUnion'(⦃f) : 自然数 -> 集合 α⦄ : (对任意 i, 可测集 (f i)) -> 两两 (Disjoint on f) -> HasSum (fun i => measureOf' (f i)) (measureOf' (⋃ i, f i))
+--- 原说明 ---
+A vector measure on a measurable space `α` is a σ-additive `M`-valued function (
+for some `M`
+an additive monoid) such that the empty set and non-measurable sets are mapped t
+o zero.
 -/
 structure VectorMeasure (α : Type*) [MeasurableSpace α] (M : Type*) [AddCommMonoid M]
     [TopologicalSpace M] where
   /-- The measure of sets -/
-  measureOf' : Set α -> M
+  measureOf' : Set α → M
   /-- The empty set has measure zero -/
   empty' : measureOf' ∅ = 0
   /-- Non-measurable sets have measure zero -/
-  not_measurable' ⦃i : Set α⦄ : ¬MeasurableSet i -> measureOf' i = 0
+  not_measurable' ⦃i : Set α⦄ : ¬MeasurableSet i → measureOf' i = 0
   /-- The measure is σ-additive -/
-  m_iUnion' ⦃f : Nat -> Set α⦄ : (forall i, MeasurableSet (f i)) -> Pairwise (Disjoint on f) ->
+  m_iUnion' ⦃f : ℕ → Set α⦄ : (∀ i, MeasurableSet (f i)) → Pairwise (Disjoint on f) →
     HasSum (fun i => measureOf' (f i)) (measureOf' (⋃ i, f i))
 
-/--
-Definition of `SignedMeasure` / `SignedMeasure` 的定义
+/-- A `SignedMeasure` is an `ℝ`-vector measure. -/
+/-
+**MeasureTheory.SignedMeasure** 是 Mathlib 中的一个缩写定义，位于命名空间 `MeasureTheory`。
+形式化陈述：SignedMeasure (α : Type*) [MeasurableSpace α]
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation SignedMeasure
-  signature: (α : Type*) [MeasurableSpace α]
-  body: VectorMeasure α Real
-
-中文:
-缩写 符号测度
-  签名: (α : 类型) [可测空间 α]
-  定义体: VectorMeasure α Real
-
-Depends on / 依赖: VectorMeasure
+--- 原说明 ---
+A `SignedMeasure` is an `ℝ`-vector measure.
 -/
 abbrev SignedMeasure (α : Type*) [MeasurableSpace α] :=
-  VectorMeasure α Real
+  VectorMeasure α ℝ
 
 open Set
 
@@ -114,28 +102,10 @@ section
 
 variable {M : Type*} [AddCommMonoid M] [TopologicalSpace M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (VectorMeasure α M) (Set α) M
-  body: VectorMeasure.measureOf'
-  coe_injective v w h := by
-    cases v; cases w; congr
-
-@[simp]
-
-中文:
-实例 :
-  签名: 函数状 (向量测度 α M) (集合 α) M
-  定义体: VectorMeasure.measureOf'
-  coe_injective v w h := by
-    cases v; cases w; congr
-
-@[simp]
-
-Depends on / 依赖: VectorMeasure, VectorMeasure.measureOf, measureOf
+/-
+**MeasureTheory.VectorMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.VectorMe
+asure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (VectorMeasure α M) (Set α) M where
   coe := VectorMeasure.measureOf'
@@ -143,148 +113,90 @@ instance : FunLike (VectorMeasure α M) (Set α) M where
     cases v; cases w; congr
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (v : Set α -> M) (h₁) (h₂) (h₃)
-  statement: (mk v h₁ h₂ h₃ : VectorMeasure α M) = v
-  proof: rfl
-
-initialize_simps_projections VectorMeasure (measureOf' -> apply)
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (v : 集合 α -> M) (h₁) (h₂) (h₃)
-  结论: (mk v h₁ h₂ h₃ : 向量测度 α M) = v
-  证明: rfl
-
-initialize_simps_projections VectorMeasure (measureOf' -> apply)
-
-@[simp]
+/-
+**MeasureTheory.VectorMeasure.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Ve
+ctorMeasure`。
+形式化陈述：coe_mk (v : Set α -> M) (h₁) (h₂) (h₃) : (mk v h₁ h₂ h₃ : VectorMeasure α 
+M) = v
+参数：v : Set α -> M；h₁；h₂；h₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (v : Set α -> M) (h₁) (h₂) (h₃) : (mk v h₁ h₂ h₃ : VectorMeasure α M) = v := rfl
+theorem coe_mk (v : Set α → M) (h₁) (h₂) (h₃) : (mk v h₁ h₂ h₃ : VectorMeasure α M) = v := rfl
 
-initialize_simps_projections VectorMeasure (measureOf' -> apply)
-
-@[simp]
-/--
-theorem `empty` / 定理 `empty`
-
-English:
-theorem empty
-  given: (v : VectorMeasure α M)
-  statement: v ∅ = 0
-  proof: v.empty'
+initialize_simps_projections VectorMeasure (measureOf' → apply)
 
 @[simp]
-
-中文:
-定理 empty
-  条件: (v : 向量测度 α M)
-  结论: v ∅ = 0
-  证明: v.empty'
-
-@[simp]
-
-Depends on / 依赖: v.empty
+/-
+**MeasureTheory.VectorMeasure.empty** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Vec
+torMeasure`。
+形式化陈述：empty (v : VectorMeasure α M) : v ∅ = 0
+参数：v : VectorMeasure α M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.empty'`：∀ {α : Type u_3} [inst : MeasurableS
+pace α] {M : Type u_4} [inst_1 : AddCommMonoid M] [inst_2 : TopologicalSpace M] 
+  (self : MeasureTheory.…
 -/
 theorem empty (v : VectorMeasure α M) : v ∅ = 0 :=
   v.empty'
 
 @[simp]
-/--
-theorem `not_measurable` / 定理 `not_measurable`
-
-English:
-theorem not_measurable
-  given: (v : VectorMeasure α M) {i : Set α} (hi : ¬MeasurableSet i)
-  statement: v i = 0
-  proof: v.not_measurable' hi
-
-中文:
-定理 not_measurable
-  条件: (v : 向量测度 α M) {i : 集合 α} (hi : ¬可测集 i)
-  结论: v i = 0
-  证明: v.not_measurable' hi
-
-Depends on / 依赖: not_measurable, v.not_measurable
+/-
+**MeasureTheory.VectorMeasure.not_measurable** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.VectorMeasure`。
+形式化陈述：not_measurable (v : VectorMeasure α M) {i : Set α} (hi : ¬MeasurableSet i)
+ : v i = 0
+参数：v : VectorMeasure α M；hi : ¬MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable'`：∀ {α : Type u_3} [inst : Me
+asurableSpace α] {M : Type u_4} [inst_1 : AddCommMonoid M] [inst_2 : Topological
+Space M]   (self : MeasureTheory.…
 -/
 theorem not_measurable (v : VectorMeasure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0 :=
   v.not_measurable' hi
-
-/--
-theorem `m_iUnion` / 定理 `m_iUnion`
-
-English:
-theorem m_iUnion
-  statement: (v : VectorMeasure α M) {f : Nat -> Set α} (hf₁ : forall i, MeasurableSet (f i))
-  proof: v.m_iUnion' hf₁ hf₂
-
-@[deprecated (since := "2026-06-10")] alias coe_injective := DFunLike.coe_injective
-
-@[deprecated (since := "2026-06-10")] alias ext_iff' := DFunLike.ext_iff
-
-中文:
-定理 m_iUnion
-  结论: (v : 向量测度 α M) {f : 自然数 -> 集合 α} (hf₁ : 对任意 i, 可测集 (f i))
-  证明: v.m_iUnion' hf₁ hf₂
-
-@[deprecated (since := "2026-06-10")] alias coe_injective := DFunLike.coe_injective
-
-@[deprecated (since := "2026-06-10")] alias ext_iff' := DFunLike.ext_iff
-
-Depends on / 依赖: m_iUnion, v.m_iUnion
+/-
+**MeasureTheory.VectorMeasure.m_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：m_iUnion (v : VectorMeasure α M) {f : Nat -> Set α} (hf₁ : forall i, Measu
+rableSet (f i)) (hf₂ : Pairwise (Disjoint on f)) : HasSum (fun i => v (f i)) (v 
+(⋃ i, f i))
+参数：v : VectorMeasure α M；hf₁ : forall i, MeasurableSet (f i)；hf₂ : Pairwise (Dis
+joint on f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.m_iUnion'`：∀ {α : Type u_3} [inst : Measurab
+leSpace α] {M : Type u_4} [inst_1 : AddCommMonoid M] [inst_2 : TopologicalSpace 
+M]   (self : MeasureTheory.…
 -/
-theorem m_iUnion (v : VectorMeasure α M) {f : Nat -> Set α} (hf₁ : forall i, MeasurableSet (f i))
+theorem m_iUnion (v : VectorMeasure α M) {f : ℕ → Set α} (hf₁ : ∀ i, MeasurableSet (f i))
     (hf₂ : Pairwise (Disjoint on f)) : HasSum (fun i => v (f i)) (v (⋃ i, f i)) :=
   v.m_iUnion' hf₁ hf₂
 
 @[deprecated (since := "2026-06-10")] alias coe_injective := DFunLike.coe_injective
 
 @[deprecated (since := "2026-06-10")] alias ext_iff' := DFunLike.ext_iff
-
-/--
-theorem `ext_iff` / 定理 `ext_iff`
-
-English:
-theorem ext_iff
-  given: (v w : VectorMeasure α M)
-  statement: v = w ↔ forall i : Set α, MeasurableSet i -> v i = w i
-  proof: by
-  constructor
-  · rintro rfl _ _
-    rfl
-  · rw [DFunLike.ext_iff]
-    intro h i
-    by_cases hi : MeasurableSet i
-    · exact h i hi
-    · simp_rw [not_measurable _ hi]
-
-@[ext]
-
-中文:
-定理 ext_iff
-  条件: (v w : 向量测度 α M)
-  结论: v = w ↔ 对任意 i : 集合 α, 可测集 i -> v i = w i
-  证明: by
-  constructor
-  · rintro rfl _ _
-    rfl
-  · rw [DFunLike.ext_iff]
-    intro h i
-    by_cases hi : MeasurableSet i
-    · exact h i hi
-    · simp_rw [not_measurable _ hi]
-
-@[ext]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, MeasurableSet, ext_iff, not_measurable, simp_rw
+/-
+**MeasureTheory.VectorMeasure.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.V
+ectorMeasure`。
+形式化陈述：ext_iff (v w : VectorMeasure α M) : v = w ↔ forall i : Set α, MeasurableSe
+t i -> v i = w i
+参数：v w : VectorMeasure α M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ext_iff (v w : VectorMeasure α M) : v = w ↔ forall i : Set α, MeasurableSet i -> v i = w i := by
+theorem ext_iff (v w : VectorMeasure α M) : v = w ↔ ∀ i : Set α, MeasurableSet i → v i = w i := by
   constructor
   · rintro rfl _ _
     rfl
@@ -295,555 +207,738 @@ theorem ext_iff (v w : VectorMeasure α M) : v = w ↔ forall i : Set α, Measur
     · simp_rw [not_measurable _ hi]
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {s t : VectorMeasure α M} (h : forall i : Set α, MeasurableSet i -> s i = t i)
-  statement: s = t
-  proof: (ext_iff s t).2 h
-
-中文:
-定理 ext
-  条件: {s t : 向量测度 α M} (h : 对任意 i : 集合 α, 可测集 i -> s i = t i)
-  结论: s = t
-  证明: (ext_iff s t).2 h
-
-Depends on / 依赖: ext_iff
+/-
+**MeasureTheory.VectorMeasure.ext** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Vecto
+rMeasure`。
+形式化陈述：ext {s t : VectorMeasure α M} (h : forall i : Set α, MeasurableSet i -> s 
+i = t i) : s = t
+参数：h : forall i : Set α, MeasurableSet i -> s i = t i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.VectorMeasure.ext_iff`：ext_iff (v w : VectorMeasure α M) :
+ v = w ↔ forall i : Set α, MeasurableSet i -> v i = w i
 -/
-theorem ext {s t : VectorMeasure α M} (h : forall i : Set α, MeasurableSet i -> s i = t i) : s = t :=
+theorem ext {s t : VectorMeasure α M} (h : ∀ i : Set α, MeasurableSet i → s i = t i) : s = t :=
   (ext_iff s t).2 h
 
-variable [Countable β] {v : VectorMeasure α M} {f : β -> Set α}
-
-/--
-theorem `hasSum_of_disjoint_iUnion` / 定理 `hasSum_of_disjoint_iUnion`
-
-English:
-theorem hasSum_of_disjoint_iUnion
-  given: (hm : forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f))
-  proof: by
-  rcases Countable.exists_injective_nat β with ⟨e, he⟩
-  rw [← hasSum_extend_zero he]
-  convert! m_iUnion v (f := Function.extend e f fun _ => ∅) _ _
-  · simp only [Pi.zero_def, Function.apply_extend v, Function.comp_def, empty]
-  · exact (iSup_extend_bot he _).symm
-  · simp [Function.apply_extend MeasurableSet, Function.comp_def, hm]
-  · exact hd.disjoint_extend_bot (he.factorsThrough _)
-
-中文:
-定理 hasSum_of_disjoint_iUnion
-  条件: (hm : 对任意 i, 可测集 (f i)) (hd : 两两 (Disjoint on f))
-  证明: by
-  rcases Countable.exists_injective_nat β with ⟨e, he⟩
-  rw [← hasSum_extend_zero he]
-  convert! m_iUnion v (f := Function.extend e f fun _ => ∅) _ _
-  · simp only [Pi.zero_def, Function.apply_extend v, Function.comp_def, empty]
-  · exact (iSup_extend_bot he _).symm
-  · simp [Function.apply_extend MeasurableSet, Function.comp_def, hm]
-  · exact hd.disjoint_extend_bot (he.factorsThrough _)
-
-Depends on / 依赖: Countable, Countable.exists_injective_nat, Function, Function.apply_extend, Function.comp_def, Function.extend, MeasurableSet, Pi.zero_def, apply_extend, comp_def, convert, disjoint_extend_bot, exists_injective_nat, extend, factorsThrough, hasSum_extend_zero, hd.disjoint_extend_bot, he.factorsThrough, iSup_extend_bot, m_iUnion
+variable [Countable β] {v : VectorMeasure α M} {f : β → Set α}
+/-
+**MeasureTheory.VectorMeasure.hasSum_of_disjoint_iUnion** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.VectorMeasure`。
+形式化陈述：hasSum_of_disjoint_iUnion (hm : forall i, MeasurableSet (f i)) (hd : Pairw
+ise (Disjoint on f)) : HasSum (fun i => v (f i)) (v (⋃ i, f i))
+参数：hm : forall i, MeasurableSet (f i)；hd : Pairwise (Disjoint on f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Countable.exists_injective_nat`：Countable.exists_injective_nat (α : Sort
+ u) [Countable α] : exists f : α -> Nat, Injective f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `hasSum_extend_zero`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst
+ : AddCommMonoid α] [inst_1 : TopologicalSpace α] {f : β → α}   {a : α} {g : β →
+ γ}, Fun…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Function.apply_extend`：apply_extend {δ} {g : α -> γ} (F : γ -> δ) (f : α
+ -> β) (e' : β -> γ) (b : β) : F (extend f g e' b) = extend f (F ∘ g) (F ∘ e') b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iSup_extend_bot`：iSup_extend_bot {e : ι -> β} (he : Injective e) (f : ι 
+-> α) : ⨆ j, extend e f ⊥ j = ⨆ i, f i
+· 使用定理 `MeasureTheory.VectorMeasure.m_iUnion`：m_iUnion (v : VectorMeasure α M) {
+f : Nat -> Set α} (hf₁ : forall i, MeasurableSet (f i)) (hf₂ : Pairwise (Disjoin
+t on f)) : HasSum (fun i =…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `Function.extend_const`：extend_const (f : α -> β) (c : γ) : extend f (fun
+ _ => c) (fun _ => c) = fun _ => c
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Pairwise.disjoint_extend_bot`：Pairwise.disjoint_extend_bot [PartialOrder
+ γ] [OrderBot γ] {e : α -> β} {f : α -> γ} (hf : Pairwise (Disjoint on f)) (he :
+ FactorsThrough f …
+· 使用定理 `Function.Injective.factorsThrough`：∀ {α : Sort u_1} {β : Sort u_2} {γ : 
+Sort u_3} {f : α → β},   Function.Injective f → ∀ (g : α → γ), Function.FactorsT
+hrough g f
 -/
-theorem hasSum_of_disjoint_iUnion (hm : forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) :
+theorem hasSum_of_disjoint_iUnion (hm : ∀ i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) :
     HasSum (fun i => v (f i)) (v (⋃ i, f i)) := by
   rcases Countable.exists_injective_nat β with ⟨e, he⟩
   rw [← hasSum_extend_zero he]
-  convert! m_iUnion v (f := Function.extend e f fun _ => ∅) _ _
+  convert! m_iUnion v (f := Function.extend e f fun _ ↦ ∅) _ _
   · simp only [Pi.zero_def, Function.apply_extend v, Function.comp_def, empty]
   · exact (iSup_extend_bot he _).symm
   · simp [Function.apply_extend MeasurableSet, Function.comp_def, hm]
   · exact hd.disjoint_extend_bot (he.factorsThrough _)
-
-/--
-theorem `of_if` / 定理 `of_if`
-
-English:
-theorem of_if
-  given: {ι : Type*} {x : ι} {B : Set ι} {A : Set α} [Decidable (x in B)]
-  proof: by
-  split_ifs with h <;> simp [h]
-
-中文:
-定理 of_if
-  条件: {ι : 类型} {x : ι} {B : 集合 ι} {A : 集合 α} [可判定 (x in B)]
-  证明: by
-  split_ifs with h <;> simp [h]
-
-Depends on / 依赖: split_ifs
+/-
+**MeasureTheory.VectorMeasure.of_if** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Vec
+torMeasure`。
+形式化陈述：of_if {ι : Type*} {x : ι} {B : Set ι} {A : Set α} [Decidable (x in B)] : v
+ (if x in B then A else ∅) = indicator B (fun _ => v A) x
+参数：x in B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.indicator_of_mem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] {s
+ : Set α} {a : α}, a ∈ s → ∀ (f : α → M), s.indicator f a = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `Set.indicator_of_notMem`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M]
+ {s : Set α} {a : α}, a ∉ s → ∀ (f : α → M), s.indicator f a = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem of_if {ι : Type*} {x : ι} {B : Set ι} {A : Set α} [Decidable (x in B)] :
-    v (if x in B then A else ∅) = indicator B (fun _ => v A) x := by
+theorem of_if {ι : Type*} {x : ι} {B : Set ι} {A : Set α} [Decidable (x ∈ B)] :
+    v (if x ∈ B then A else ∅) = indicator B (fun _ => v A) x := by
   split_ifs with h <;> simp [h]
 
 variable [T2Space M]
-
-/--
-theorem `of_disjoint_iUnion` / 定理 `of_disjoint_iUnion`
-
-English:
-theorem of_disjoint_iUnion
-  given: (hm : forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f))
-  proof: (hasSum_of_disjoint_iUnion hm hd).tsum_eq.symm
-
-中文:
-定理 of_disjoint_iUnion
-  条件: (hm : 对任意 i, 可测集 (f i)) (hd : 两两 (Disjoint on f))
-  证明: (hasSum_of_disjoint_iUnion hm hd).tsum_eq.symm
-
-Depends on / 依赖: hasSum_of_disjoint_iUnion, tsum_eq, tsum_eq.symm
+/-
+**MeasureTheory.VectorMeasure.of_disjoint_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.VectorMeasure`。
+形式化陈述：of_disjoint_iUnion (hm : forall i, MeasurableSet (f i)) (hd : Pairwise (Di
+sjoint on f)) : v (⋃ i, f i) = ∑' i, v (f i)
+参数：hm : forall i, MeasurableSet (f i)；hd : Pairwise (Disjoint on f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HasSum.tsum_eq`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α} {a : α} [T2
+Spac…
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `MeasureTheory.VectorMeasure.hasSum_of_disjoint_iUnion`：hasSum_of_disjoin
+t_iUnion (hm : forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : 
+HasSum (fun i => v (f i)) (v (⋃ i, f i))
 -/
-theorem of_disjoint_iUnion (hm : forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) :
+theorem of_disjoint_iUnion (hm : ∀ i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) :
     v (⋃ i, f i) = ∑' i, v (f i) :=
   (hasSum_of_disjoint_iUnion hm hd).tsum_eq.symm
-
-/--
-theorem `of_biUnion` / 定理 `of_biUnion`
-
-English:
-theorem of_biUnion
-  statement: {ι : Type*} {s : Set ι} {f : ι -> Set α} (hs : s.Countable)
-  proof: by
-  have := hs.toEncodable
-  rw [biUnion_eq_iUnion]
-  apply of_disjoint_iUnion
-  · exact fun x => h x x.2
-  · exact hd.on_injective Subtype.coe_injective fun x => x.2
-
-中文:
-定理 of_biUnion
-  结论: {ι : 类型} {s : 集合 ι} {f : ι -> 集合 α} (hs : s.可数)
-  证明: by
-  have := hs.toEncodable
-  rw [biUnion_eq_iUnion]
-  apply of_disjoint_iUnion
-  · exact fun x => h x x.2
-  · exact hd.on_injective Subtype.coe_injective fun x => x.2
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, biUnion_eq_iUnion, coe_injective, hd.on_injective, hs.toEncodable, of_disjoint_iUnion, on_injective, toEncodable
+/-
+**MeasureTheory.VectorMeasure.of_biUnion** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.VectorMeasure`。
+形式化陈述：of_biUnion {ι : Type*} {s : Set ι} {f : ι -> Set α} (hs : s.Countable) (hd
+ : s.Pairwise (Disjoint on f)) (h : forall b in s, MeasurableSet (f b)) : v (⋃ b
+ in s, f b) = ∑' p : s, v (f p)
+参数：hs : s.Countable；hd : s.Pairwise (Disjoint on f)；h : forall b in s, Measurabl
+eSet (f b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biUnion_eq_iUnion`：biUnion_eq_iUnion (s : Set α) (t : forall x in s,
+ Set β) : ⋃ x in s, t x ‹_› = ⋃ x : s, t x x.2
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.Pairwise.on_injective`：∀ {α : Type u_1} {ι : Type u_3} {r : α → α → 
+Prop} {f : ι → α} {s : Set α},   s.Pairwise r → Function.Injective f → (∀ (x : ι
+), f x ∈ s) → P…
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-theorem of_biUnion {ι : Type*} {s : Set ι} {f : ι -> Set α} (hs : s.Countable)
-    (hd : s.Pairwise (Disjoint on f)) (h : forall b in s, MeasurableSet (f b)) :
-    v (⋃ b in s, f b) = ∑' p : s, v (f p) := by
+theorem of_biUnion {ι : Type*} {s : Set ι} {f : ι → Set α} (hs : s.Countable)
+    (hd : s.Pairwise (Disjoint on f)) (h : ∀ b ∈ s, MeasurableSet (f b)) :
+    v (⋃ b ∈ s, f b) = ∑' p : s, v (f p) := by
   have := hs.toEncodable
   rw [biUnion_eq_iUnion]
   apply of_disjoint_iUnion
-  · exact fun x => h x x.2
+  · exact fun x ↦ h x x.2
   · exact hd.on_injective Subtype.coe_injective fun x => x.2
-
-/--
-theorem `of_biUnion_finset` / 定理 `of_biUnion_finset`
-
-English:
-theorem of_biUnion_finset
-  statement: {ι : Type*} {s : Finset ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f)
-  proof: by
-  rw [← Finset.sum_attach]; rw [Finset.attach_eq_univ]; rw [← tsum_fintype (L := .unconditional s)]
-  exact of_biUnion s.countable_toSet hd hm
-
-中文:
-定理 of_biUnion_finset
-  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 集合 α} (hd : PairwiseDisjoint (↑s) f)
-  证明: by
-  rw [← Finset.sum_attach]; rw [Finset.attach_eq_univ]; rw [← tsum_fintype (L := .unconditional s)]
-  exact of_biUnion s.countable_toSet hd hm
-
-Depends on / 依赖: Finset, Finset.attach_eq_univ, Finset.sum_attach, attach_eq_univ, countable_toSet, of_biUnion, s.countable_toSet, sum_attach, tsum_fintype, unconditional
+/-
+**MeasureTheory.VectorMeasure.of_biUnion_finset** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.VectorMeasure`。
+形式化陈述：of_biUnion_finset {ι : Type*} {s : Finset ι} {f : ι -> Set α} (hd : Pairwi
+seDisjoint (↑s) f) (hm : forall b in s, MeasurableSet (f b)) : v (⋃ b in s, f b)
+ = ∑ p in s, v (f p)
+参数：hd : PairwiseDisjoint (↑s) f；hm : forall b in s, MeasurableSet (f b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_attach`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMonoid
+ M] (s : Finset ι) (f : ι → M), ∑ x ∈ s.attach, f ↑x = ∑ x ∈ s, f x
+· 使用定理 `Finset.attach_eq_univ`：Finset.attach_eq_univ {s : Finset α} : s.attach =
+ Finset.univ
+· 使用定理 `tsum_fintype`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [
+inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] [inst_3 : Fin
+ty…
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `MeasureTheory.VectorMeasure.of_biUnion`：of_biUnion {ι : Type*} {s : Set 
+ι} {f : ι -> Set α} (hs : s.Countable) (hd : s.Pairwise (Disjoint on f)) (h : fo
+rall b in s, MeasurableSet (…
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
 -/
-theorem of_biUnion_finset {ι : Type*} {s : Finset ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f)
-    (hm : forall b in s, MeasurableSet (f b)) : v (⋃ b in s, f b) = ∑ p in s, v (f p) := by
-  rw [← Finset.sum_attach]; rw [Finset.attach_eq_univ]; rw [← tsum_fintype (L := .unconditional s)]
+theorem of_biUnion_finset {ι : Type*} {s : Finset ι} {f : ι → Set α} (hd : PairwiseDisjoint (↑s) f)
+    (hm : ∀ b ∈ s, MeasurableSet (f b)) : v (⋃ b ∈ s, f b) = ∑ p ∈ s, v (f p) := by
+  rw [← Finset.sum_attach, Finset.attach_eq_univ, ← tsum_fintype (L := .unconditional s)]
   exact of_biUnion s.countable_toSet hd hm
-
-/--
-theorem `of_union` / 定理 `of_union`
-
-English:
-theorem of_union
-  given: {A B : Set α} (h : Disjoint A B) (hA : MeasurableSet A) (hB : MeasurableSet B)
-  proof: by
-  rw [Set.union_eq_iUnion]; rw [of_disjoint_iUnion]; rw [tsum_fintype]; rw [Fintype.sum_bool]; rw [cond]; rw [cond]
-  exacts [fun b => Bool.casesOn b hB hA, pairwise_disjoint_on_bool.2 h]
-
-中文:
-定理 of_union
-  条件: {A B : 集合 α} (h : Disjoint A B) (hA : 可测集 A) (hB : 可测集 B)
-  证明: by
-  rw [Set.union_eq_iUnion]; rw [of_disjoint_iUnion]; rw [tsum_fintype]; rw [Fintype.sum_bool]; rw [cond]; rw [cond]
-  exacts [fun b => Bool.casesOn b hB hA, pairwise_disjoint_on_bool.2 h]
-
-Depends on / 依赖: Bool.casesOn, Fintype, Fintype.sum_bool, Set.union_eq_iUnion, casesOn, exacts, of_disjoint_iUnion, pairwise_disjoint_on_bool, sum_bool, tsum_fintype, union_eq_iUnion
+/-
+**MeasureTheory.VectorMeasure.of_union** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：of_union {A B : Set α} (h : Disjoint A B) (hA : MeasurableSet A) (hB : Mea
+surableSet B) : v (A union B) = v A + v B
+参数：h : Disjoint A B；hA : MeasurableSet A；hB : MeasurableSet B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_eq_iUnion`：union_eq_iUnion {s₁ s₂ : Set α} : s₁ union s₂ = ⋃ b
+ : Bool, cond b s₁ s₂
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pairwise_disjoint_on_bool`：pairwise_disjoint_on_bool [PartialOrder α] [O
+rderBot α] {a b : α} : Pairwise (Disjoint on fun c => cond c a b) ↔ Disjoint a b
+· 使用定理 `tsum_fintype`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [
+inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] [inst_3 : Fin
+ty…
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `Fintype.sum_bool`：∀ {α : Type u_1} [inst : AddCommMonoid α] (f : Bool → 
+α), ∑ b, f b = f true + f false
+· 使用定理 `cond.eq_1`：∀ {α : Sort u} (x y : α), (bif true then x else y) = x
+· 使用定理 `cond.eq_2`：∀ {α : Sort u} (x y : α), (bif false then x else y) = y
 -/
 theorem of_union {A B : Set α} (h : Disjoint A B) (hA : MeasurableSet A) (hB : MeasurableSet B) :
-    v (A union B) = v A + v B := by
-  rw [Set.union_eq_iUnion]; rw [of_disjoint_iUnion]; rw [tsum_fintype]; rw [Fintype.sum_bool]; rw [cond]; rw [cond]
+    v (A ∪ B) = v A + v B := by
+  rw [Set.union_eq_iUnion, of_disjoint_iUnion, tsum_fintype, Fintype.sum_bool, cond, cond]
   exacts [fun b => Bool.casesOn b hB hA, pairwise_disjoint_on_bool.2 h]
-
-/--
-theorem `of_add_of_sdiff` / 定理 `of_add_of_sdiff`
-
-English:
-theorem of_add_of_sdiff
-  given: {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B) (h : A subseteq B)
-  proof: by
-  rw [← of_union (@Set.disjoint_sdiff_right _ A B) hA (hB.diff hA)]; rw [Set.union_sdiff_cancel h]
-
-@[deprecated (since := "2026-06-03")] alias of_add_of_diff := of_add_of_sdiff
-
-中文:
-定理 of_add_of_sdiff
-  条件: {A B : 集合 α} (hA : 可测集 A) (hB : 可测集 B) (h : A subseteq B)
-  证明: by
-  rw [← of_union (@Set.disjoint_sdiff_right _ A B) hA (hB.diff hA)]; rw [Set.union_sdiff_cancel h]
-
-@[deprecated (since := "2026-06-03")] alias of_add_of_diff := of_add_of_sdiff
-
-Depends on / 依赖: Set.disjoint_sdiff_right, Set.union_sdiff_cancel, disjoint_sdiff_right, hB.diff, of_union, union_sdiff_cancel
+/-
+**MeasureTheory.VectorMeasure.of_add_of_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.VectorMeasure`。
+形式化陈述：of_add_of_sdiff {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B
+) (h : A subseteq B) : v A + v (B \ A) = v B
+参数：hA : MeasurableSet A；hB : MeasurableSet B；h : A subseteq B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.of_union`：of_union {A B : Set α} (h : Disjoi
+nt A B) (hA : MeasurableSet A) (hB : MeasurableSet B) : v (A union B) = v A + v 
+B
+· 使用引理 `Set.disjoint_sdiff_right`：disjoint_sdiff_right : Disjoint s (t \ s)
+· 使用定理 `MeasurableSet.diff`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : Se
+t α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ \ s₂)
+· 使用定理 `Set.union_sdiff_cancel`：union_sdiff_cancel {s t : Set α} (h : s subseteq
+ t) : s union t \ s = t
 -/
-theorem of_add_of_sdiff {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B) (h : A subseteq B) :
+theorem of_add_of_sdiff {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B) (h : A ⊆ B) :
     v A + v (B \ A) = v B := by
-  rw [← of_union (@Set.disjoint_sdiff_right _ A B) hA (hB.diff hA)]; rw [Set.union_sdiff_cancel h]
+  rw [← of_union (@Set.disjoint_sdiff_right _ A B) hA (hB.diff hA), Set.union_sdiff_cancel h]
 
 @[deprecated (since := "2026-06-03")] alias of_add_of_diff := of_add_of_sdiff
-
-/--
-theorem `of_sdiff` / 定理 `of_sdiff`
-
-English:
-theorem of_sdiff
-  statement: {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
-  proof: by
-  rw [← of_add_of_sdiff hA hB h]; rw [add_sub_cancel_left]
-
-@[deprecated (since := "2026-06-03")] alias of_diff := of_sdiff
-
-中文:
-定理 of_sdiff
-  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [T2空间 M]
-  证明: by
-  rw [← of_add_of_sdiff hA hB h]; rw [add_sub_cancel_left]
-
-@[deprecated (since := "2026-06-03")] alias of_diff := of_sdiff
-
-Depends on / 依赖: add_sub_cancel_left, of_add_of_sdiff
+/-
+**MeasureTheory.VectorMeasure.of_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：of_sdiff {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M] {v 
+: VectorMeasure α M} {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B)
+ (h : A subseteq B) : v (B \ A) = v B - v A
+参数：hA : MeasurableSet A；hB : MeasurableSet B；h : A subseteq B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.of_add_of_sdiff`：of_add_of_sdiff {A B : Set 
+α} (hA : MeasurableSet A) (hB : MeasurableSet B) (h : A subseteq B) : v A + v (B
+ \ A) = v B
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
 -/
 theorem of_sdiff {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
     {v : VectorMeasure α M} {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B)
-    (h : A subseteq B) : v (B \ A) = v B - v A := by
-  rw [← of_add_of_sdiff hA hB h]; rw [add_sub_cancel_left]
+    (h : A ⊆ B) : v (B \ A) = v B - v A := by
+  rw [← of_add_of_sdiff hA hB h, add_sub_cancel_left]
 
 @[deprecated (since := "2026-06-03")] alias of_diff := of_sdiff
-
-/--
-theorem `of_compl` / 定理 `of_compl`
-
-English:
-theorem of_compl
-  statement: {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
-  proof: by
-  simpa [compl_eq_univ_sdiff] using of_sdiff hA .univ (v := v) (subset_univ _)
-
-中文:
-定理 of_compl
-  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [T2空间 M]
-  证明: by
-  simpa [compl_eq_univ_sdiff] using of_sdiff hA .univ (v := v) (subset_univ _)
-
-Depends on / 依赖: compl_eq_univ_sdiff, of_sdiff, subset_univ
+/-
+**MeasureTheory.VectorMeasure.of_compl** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：of_compl {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M] {v 
+: VectorMeasure α M} {A : Set α} (hA : MeasurableSet A) : v Aᶜ = v univ - v A
+参数：hA : MeasurableSet A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.compl_eq_univ_sdiff`：compl_eq_univ_sdiff (s : Set α) : sᶜ = univ \ s
+· 使用定理 `MeasureTheory.VectorMeasure.of_sdiff`：of_sdiff {M : Type*} [AddCommGroup
+ M] [TopologicalSpace M] [T2Space M] {v : VectorMeasure α M} {A B : Set α} (hA :
+ MeasurableSet A) (hB : Me…
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 -/
 theorem of_compl {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
     {v : VectorMeasure α M} {A : Set α} (hA : MeasurableSet A) :
     v Aᶜ = v univ - v A := by
   simpa [compl_eq_univ_sdiff] using of_sdiff hA .univ (v := v) (subset_univ _)
-
-/--
-theorem `of_sdiff_of_sdiff_eq_zero` / 定理 `of_sdiff_of_sdiff_eq_zero`
-
-English:
-theorem of_sdiff_of_sdiff_eq_zero
-  statement: {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B)
-  proof: by
-  symm
-  calc
-    v A = v (A \ B union A inter B) := by simp only [Set.sdiff_union_inter]
-    _ = v (A \ B) + v (A inter B) := by
-      rw [of_union]
-      · rw [disjoint_comm]
-        exact Set.disjoint_of_subset_left A.inter_subset_right disjoint_sdiff_self_right
-      · exact hA.diff hB
-      · exact hA.inter hB
-    _ = v (A \ B) + v (A inter B union B \ A) := by
-      rw [of_union]; rw [h']; rw [add_zero]
-      · exact Set.disjoint_of_subset_left A.inter_subset_left disjoint_sdiff_self_right
-      · exact hA.inter hB
-      · exact hB.diff hA
-    _ = v (A \ B) + v B := by rw [Set.union_comm, Set.inter_comm, Set.sdiff_union_inter]
-
-@[deprecated (since := "2026-06-03")] alias of_diff_of_diff_eq_zero := of_sdiff_of_sdiff_eq_zero
-
-中文:
-定理 of_sdiff_of_sdiff_eq_zero
-  结论: {A B : 集合 α} (hA : 可测集 A) (hB : 可测集 B)
-  证明: by
-  symm
-  calc
-    v A = v (A \ B union A inter B) := by simp only [Set.sdiff_union_inter]
-    _ = v (A \ B) + v (A inter B) := by
-      rw [of_union]
-      · rw [disjoint_comm]
-        exact Set.disjoint_of_subset_left A.inter_subset_right disjoint_sdiff_self_right
-      · exact hA.diff hB
-      · exact hA.inter hB
-    _ = v (A \ B) + v (A inter B union B \ A) := by
-      rw [of_union]; rw [h']; rw [add_zero]
-      · exact Set.disjoint_of_subset_left A.inter_subset_left disjoint_sdiff_self_right
-      · exact hA.inter hB
-      · exact hB.diff hA
-    _ = v (A \ B) + v B := by rw [Set.union_comm, Set.inter_comm, Set.sdiff_union_inter]
-
-@[deprecated (since := "2026-06-03")] alias of_diff_of_diff_eq_zero := of_sdiff_of_sdiff_eq_zero
-
-Depends on / 依赖: A.inter_subset_left, A.inter_subset_right, Set.disjoint_of_subset_left, Set.sdiff_union_inter, Std.Refl, Std.Total, Std.Total.to_refl, add_zero, disjoint_comm, disjoint_of_subset_left, disjoint_sdiff_self_right, hA.diff, hA.inter, hB.diff, inter_subset_left, inter_subset_right, of_union, sdiff_union_inter, to_refl
+/-
+**MeasureTheory.VectorMeasure.of_sdiff_of_sdiff_eq_zero** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.VectorMeasure`。
+形式化陈述：of_sdiff_of_sdiff_eq_zero {A B : Set α} (hA : MeasurableSet A) (hB : Measu
+rableSet B) (h' : v (B \ A) = 0) : v (A \ B) + v B = v A
+参数：hA : MeasurableSet A；hB : MeasurableSet B；h' : v (B \ A) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_union_inter`：sdiff_union_inter (s t : Set α) : s \ t union s i
+nter t = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.VectorMeasure.of_union`：of_union {A B : Set α} (h : Disjoi
+nt A B) (hA : MeasurableSet A) (hB : MeasurableSet B) : v (A union B) = v A + v 
+B
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用引理 `Set.disjoint_of_subset_left`：disjoint_of_subset_left (h : s subseteq u) 
+(d : Disjoint u t) : Disjoint s t
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `disjoint_sdiff_self_right`：disjoint_sdiff_self_right : Disjoint x (y \ x
+)
+· 使用定理 `MeasurableSet.diff`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : Se
+t α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ \ s₂)
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
 theorem of_sdiff_of_sdiff_eq_zero {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B)
     (h' : v (B \ A) = 0) : v (A \ B) + v B = v A := by
   symm
   calc
-    v A = v (A \ B union A inter B) := by simp only [Set.sdiff_union_inter]
-    _ = v (A \ B) + v (A inter B) := by
+    v A = v (A \ B ∪ A ∩ B) := by simp only [Set.sdiff_union_inter]
+    _ = v (A \ B) + v (A ∩ B) := by
       rw [of_union]
       · rw [disjoint_comm]
         exact Set.disjoint_of_subset_left A.inter_subset_right disjoint_sdiff_self_right
       · exact hA.diff hB
       · exact hA.inter hB
-    _ = v (A \ B) + v (A inter B union B \ A) := by
-      rw [of_union]; rw [h']; rw [add_zero]
+    _ = v (A \ B) + v (A ∩ B ∪ B \ A) := by
+      rw [of_union, h', add_zero]
       · exact Set.disjoint_of_subset_left A.inter_subset_left disjoint_sdiff_self_right
       · exact hA.inter hB
       · exact hB.diff hA
     _ = v (A \ B) + v B := by rw [Set.union_comm, Set.inter_comm, Set.sdiff_union_inter]
 
 @[deprecated (since := "2026-06-03")] alias of_diff_of_diff_eq_zero := of_sdiff_of_sdiff_eq_zero
-
-/--
-theorem `of_iUnion_nonneg` / 定理 `of_iUnion_nonneg`
-
-English:
-theorem of_iUnion_nonneg
-  statement: {M : Type*} [TopologicalSpace M]
-  proof: (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonneg hf₃
-
-中文:
-定理 of_iUnion_nonneg
-  结论: {M : 类型} [拓扑空间 M]
-  证明: (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonneg hf₃
-
-Depends on / 依赖: of_disjoint_iUnion, tsum_nonneg, v.of_disjoint_iUnion
+/-
+**MeasureTheory.VectorMeasure.of_iUnion_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：of_iUnion_nonneg {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [Parti
+alOrder M] [IsOrderedAddMonoid M] [OrderClosedTopology M] {v : VectorMeasure α M
+} (hf₁ : forall i, MeasurableSet (f i)) (hf₂ : Pairwise (Disjoint on f)) (hf₃ : 
+forall i, 0 <= v (f i)) : 0 <= v (⋃ i, f i)
+参数：hf₁ : forall i, MeasurableSet (f i)；hf₂ : Pairwise (Disjoint on f)；hf₃ : fora
+ll i, 0 <= v (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsum_nonneg`：∀ {ι : Type u_1} {α : Type u_3} {L : SummationFilter ι} [in
+st : AddCommMonoid α] [inst_1 : Preorder α]   [IsOrderedAddMonoid α] [inst_3 : T
+o…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `OrderClosedTopology.to_t2Space`：∀ {α : Type u} [inst : TopologicalSpace 
+α] [inst_1 : PartialOrder α] [t : OrderClosedTopology α], T2Space α
 -/
 theorem of_iUnion_nonneg {M : Type*} [TopologicalSpace M]
     [AddCommMonoid M] [PartialOrder M] [IsOrderedAddMonoid M]
-    [OrderClosedTopology M] {v : VectorMeasure α M} (hf₁ : forall i, MeasurableSet (f i))
-    (hf₂ : Pairwise (Disjoint on f)) (hf₃ : forall i, 0 <= v (f i)) : 0 <= v (⋃ i, f i) :=
+    [OrderClosedTopology M] {v : VectorMeasure α M} (hf₁ : ∀ i, MeasurableSet (f i))
+    (hf₂ : Pairwise (Disjoint on f)) (hf₃ : ∀ i, 0 ≤ v (f i)) : 0 ≤ v (⋃ i, f i) :=
   (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonneg hf₃
-
-/--
-theorem `of_iUnion_nonpos` / 定理 `of_iUnion_nonpos`
-
-English:
-theorem of_iUnion_nonpos
-  statement: {M : Type*} [TopologicalSpace M]
-  proof: (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonpos hf₃
-
-中文:
-定理 of_iUnion_nonpos
-  结论: {M : 类型} [拓扑空间 M]
-  证明: (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonpos hf₃
-
-Depends on / 依赖: of_disjoint_iUnion, tsum_nonpos, v.of_disjoint_iUnion
+/-
+**MeasureTheory.VectorMeasure.of_iUnion_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：of_iUnion_nonpos {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [Parti
+alOrder M] [IsOrderedAddMonoid M] [OrderClosedTopology M] {v : VectorMeasure α M
+} (hf₁ : forall i, MeasurableSet (f i)) (hf₂ : Pairwise (Disjoint on f)) (hf₃ : 
+forall i, v (f i) <= 0) : v (⋃ i, f i) <= 0
+参数：hf₁ : forall i, MeasurableSet (f i)；hf₂ : Pairwise (Disjoint on f)；hf₃ : fora
+ll i, v (f i) <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsum_nonpos`：∀ {ι : Type u_1} {α : Type u_3} {L : SummationFilter ι} [in
+st : AddCommMonoid α] [inst_1 : Preorder α]   [IsOrderedAddMonoid α] [inst_3 : T
+o…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `OrderClosedTopology.to_t2Space`：∀ {α : Type u} [inst : TopologicalSpace 
+α] [inst_1 : PartialOrder α] [t : OrderClosedTopology α], T2Space α
 -/
 theorem of_iUnion_nonpos {M : Type*} [TopologicalSpace M]
     [AddCommMonoid M] [PartialOrder M] [IsOrderedAddMonoid M]
-    [OrderClosedTopology M] {v : VectorMeasure α M} (hf₁ : forall i, MeasurableSet (f i))
-    (hf₂ : Pairwise (Disjoint on f)) (hf₃ : forall i, v (f i) <= 0) : v (⋃ i, f i) <= 0 :=
+    [OrderClosedTopology M] {v : VectorMeasure α M} (hf₁ : ∀ i, MeasurableSet (f i))
+    (hf₂ : Pairwise (Disjoint on f)) (hf₃ : ∀ i, v (f i) ≤ 0) : v (⋃ i, f i) ≤ 0 :=
   (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonpos hf₃
-
-/--
-theorem `of_nonneg_disjoint_union_eq_zero` / 定理 `of_nonneg_disjoint_union_eq_zero`
-
-English:
-theorem of_nonneg_disjoint_union_eq_zero
-  statement: {s : SignedMeasure α} {A B : Set α} (h : Disjoint A B)
-  proof: by
-  rw [of_union h hA₁ hB₁] at hAB
-  linarith
-
-中文:
-定理 of_nonneg_disjoint_union_eq_zero
-  结论: {s : 符号测度 α} {A B : 集合 α} (h : Disjoint A B)
-  证明: by
-  rw [of_union h hA₁ hB₁] at hAB
-  linarith
-
-Depends on / 依赖: of_union
+/-
+**MeasureTheory.VectorMeasure.of_nonneg_disjoint_union_eq_zero** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：of_nonneg_disjoint_union_eq_zero {s : SignedMeasure α} {A B : Set α} (h : 
+Disjoint A B) (hA₁ : MeasurableSet A) (hB₁ : MeasurableSet B) (hA₂ : 0 <= s A) (
+hB₂ : 0 <= s B) (hAB : s (A union B) = 0) : s A = 0
+参数：h : Disjoint A B；hA₁ : MeasurableSet A；hB₁ : MeasurableSet B；hA₂ : 0 <= s A；h
+B₂ : 0 <= s B；hAB : s (A union B) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Linarith.eq_of_not_lt_of_not_gt`：eq_of_not_lt_of_not_gt {
+α} [LinearOrder α] (a b : α) (h1 : ¬ a < b) (h2 : ¬ b < a) : a = b
+· 使用定理 `Not.intro`：∀ {a : Prop}, (a → False) → ¬a
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero`：∀ {R : Type u_1} [in
+st : CommSemiring R] {a₁ a₂ b₁ b₂ c : R},   Mathlib.Meta.NormNum.IsNat (a₁ + b₁)
+ 0 → a₂ + b₂ = c → a₁ + a₂ + (b₁ + b₂) =…
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf_zero`：∀ {R : Type u_1} [inst :
+ CommSemiring R] {a b : R} (x : R) (e : ℕ),   Mathlib.Meta.NormNum.IsNat (a + b)
+ 0 → Mathlib.Meta.NormNum.IsNat (x ^…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_add`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HAdd.hAdd →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.of_raw`：∀ (α : Type u_1) [inst : Ring α] (n :
+ ℤ), Mathlib.Meta.NormNum.IsInt n.rawCast n
+· 使用定理 `Mathlib.Tactic.Linarith.add_lt_of_le_of_neg`：add_lt_of_le_of_neg [IsStri
+ctOrderedRing α] {a b c : α} (hbc : b <= c) (ha : a < 0) : b + a < c
+· 使用定理 `Mathlib.Tactic.Linarith.sub_nonpos_of_le`：sub_nonpos_of_le [IsOrderedRin
+g α] {a b : α} : a <= b -> a - b <= 0
+· 使用定理 `Mathlib.Tactic.Linarith.sub_neg_of_lt`：sub_neg_of_lt [IsOrderedRing α] {
+a b : α} : a < b -> a - b < 0
+（共 36 条，此处仅展示前 30 条）
 -/
 theorem of_nonneg_disjoint_union_eq_zero {s : SignedMeasure α} {A B : Set α} (h : Disjoint A B)
-    (hA₁ : MeasurableSet A) (hB₁ : MeasurableSet B) (hA₂ : 0 <= s A) (hB₂ : 0 <= s B)
-    (hAB : s (A union B) = 0) : s A = 0 := by
+    (hA₁ : MeasurableSet A) (hB₁ : MeasurableSet B) (hA₂ : 0 ≤ s A) (hB₂ : 0 ≤ s B)
+    (hAB : s (A ∪ B) = 0) : s A = 0 := by
   rw [of_union h hA₁ hB₁] at hAB
   linarith
-
-/--
-theorem `of_nonpos_disjoint_union_eq_zero` / 定理 `of_nonpos_disjoint_union_eq_zero`
-
-English:
-theorem of_nonpos_disjoint_union_eq_zero
-  statement: {s : SignedMeasure α} {A B : Set α} (h : Disjoint A B)
-  proof: by
-  rw [of_union h hA₁ hB₁] at hAB
-  linarith
-
-中文:
-定理 of_nonpos_disjoint_union_eq_zero
-  结论: {s : 符号测度 α} {A B : 集合 α} (h : Disjoint A B)
-  证明: by
-  rw [of_union h hA₁ hB₁] at hAB
-  linarith
-
-Depends on / 依赖: of_union
+/-
+**MeasureTheory.VectorMeasure.of_nonpos_disjoint_union_eq_zero** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：of_nonpos_disjoint_union_eq_zero {s : SignedMeasure α} {A B : Set α} (h : 
+Disjoint A B) (hA₁ : MeasurableSet A) (hB₁ : MeasurableSet B) (hA₂ : s A <= 0) (
+hB₂ : s B <= 0) (hAB : s (A union B) = 0) : s A = 0
+参数：h : Disjoint A B；hA₁ : MeasurableSet A；hB₁ : MeasurableSet B；hA₂ : s A <= 0；h
+B₂ : s B <= 0；hAB : s (A union B) = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Linarith.eq_of_not_lt_of_not_gt`：eq_of_not_lt_of_not_gt {
+α} [LinearOrder α] (a b : α) (h1 : ¬ a < b) (h2 : ¬ b < a) : a = b
+· 使用定理 `Not.intro`：∀ {a : Prop}, (a → False) → ¬a
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero`：∀ {R : Type u_1} [in
+st : CommSemiring R] {a₁ a₂ b₁ b₂ c : R},   Mathlib.Meta.NormNum.IsNat (a₁ + b₁)
+ 0 → a₂ + b₂ = c → a₁ + a₂ + (b₁ + b₂) =…
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf_zero`：∀ {R : Type u_1} [inst :
+ CommSemiring R] {a b : R} (x : R) (e : ℕ),   Mathlib.Meta.NormNum.IsNat (a + b)
+ 0 → Mathlib.Meta.NormNum.IsNat (x ^…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_add`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HAdd.hAdd →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.of_raw`：∀ (α : Type u_1) [inst : Ring α] (n :
+ ℤ), Mathlib.Meta.NormNum.IsInt n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Linarith.add_lt_of_le_of_neg`：add_lt_of_le_of_neg [IsStri
+ctOrderedRing α] {a b c : α} (hbc : b <= c) (ha : a < 0) : b + a < c
+（共 39 条，此处仅展示前 30 条）
 -/
 theorem of_nonpos_disjoint_union_eq_zero {s : SignedMeasure α} {A B : Set α} (h : Disjoint A B)
-    (hA₁ : MeasurableSet A) (hB₁ : MeasurableSet B) (hA₂ : s A <= 0) (hB₂ : s B <= 0)
-    (hAB : s (A union B) = 0) : s A = 0 := by
+    (hA₁ : MeasurableSet A) (hB₁ : MeasurableSet B) (hA₂ : s A ≤ 0) (hB₂ : s B ≤ 0)
+    (hAB : s (A ∪ B) = 0) : s A = 0 := by
   rw [of_union h hA₁ hB₁] at hAB
   linarith
-
-/--
-theorem `tendsto_vectorMeasure_iUnion_atTop_nat` / 定理 `tendsto_vectorMeasure_iUnion_atTop_nat`
-
-English:
-theorem tendsto_vectorMeasure_iUnion_atTop_nat
-  proof: by
-  set t : Nat -> Set α := disjointed s
-  have ht n : MeasurableSet (t n) := .disjointed (fun n => hs n) n
-  have : HasSum (fun n => v (t n)) (v (⋃ n, s n)) := by
-    rw [← iUnion_disjointed]
-    apply m_iUnion _ ht (disjoint_disjointed _)
-  convert! (HasSum.tendsto_sum_nat this).comp (tendsto_add_atTop_nat 1) with n
-  dsimp
-  rw [← of_biUnion_finset]
-  · rw [biUnion_range_succ_disjointed, Monotone.partialSups_eq hm]
-  · exact fun i hi j hj hij => disjoint_disjointed _ hij
-  · exact fun b hb => ht _
-
-中文:
-定理 tendsto_vectorMeasure_iUnion_atTop_nat
-  证明: by
-  set t : Nat -> Set α := disjointed s
-  have ht n : MeasurableSet (t n) := .disjointed (fun n => hs n) n
-  have : HasSum (fun n => v (t n)) (v (⋃ n, s n)) := by
-    rw [← iUnion_disjointed]
-    apply m_iUnion _ ht (disjoint_disjointed _)
-  convert! (HasSum.tendsto_sum_nat this).comp (tendsto_add_atTop_nat 1) with n
-  dsimp
-  rw [← of_biUnion_finset]
-  · rw [biUnion_range_succ_disjointed, Monotone.partialSups_eq hm]
-  · exact fun i hi j hj hij => disjoint_disjointed _ hij
-  · exact fun b hb => ht _
-
-Depends on / 依赖: HasSum, HasSum.tendsto_sum_nat, MeasurableSet, Monotone, Monotone.partialSups_eq, biUnion_range_succ_disjointed, convert, disjoint_disjointed, disjointed, iUnion_disjointed, m_iUnion, of_biUnion_finset, partialSups_eq, tendsto_add_atTop_nat, tendsto_sum_nat
+/-
+**MeasureTheory.VectorMeasure.tendsto_vectorMeasure_iUnion_atTop_nat** 是 Mathlib
+ 中的一个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：tendsto_vectorMeasure_iUnion_atTop_nat {s : Nat -> Set α} (hm : Monotone s
+) (hs : forall i, MeasurableSet (s i)) : Tendsto (fun n => v (s n)) atTop (𝓝 (v 
+(⋃ n, s n)))
+参数：hm : Monotone s；hs : forall i, MeasurableSet (s i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.disjointed`：∀ {α : Type u_1} {mα : MeasurableSpace α} {f :
+ ℕ → Set α},   (∀ (i : ℕ), MeasurableSet (f i)) → ∀ (n : ℕ), MeasurableSet (disj
+ointed f n)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iUnion_disjointed`：iUnion_disjointed [PartialOrder ι] [LocallyFiniteOrde
+rBot ι] {f : ι -> Set α} : ⋃ i, disjointed f i = ⋃ i, f i
+· 使用定理 `MeasureTheory.VectorMeasure.m_iUnion`：m_iUnion (v : VectorMeasure α M) {
+f : Nat -> Set α} (hf₁ : forall i, MeasurableSet (f i)) (hf₂ : Pairwise (Disjoin
+t on f)) : HasSum (fun i =…
+· 使用定理 `disjoint_disjointed`：disjoint_disjointed (f : ι -> α) : Pairwise (Disjoi
+nt on disjointed f)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.VectorMeasure.of_biUnion_finset`：of_biUnion_finset {ι : Ty
+pe*} {s : Finset ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f) (hm : forall
+ b in s, MeasurableSet (f b)) : v (…
+· 使用引理 `biUnion_range_succ_disjointed`：biUnion_range_succ_disjointed {α : Type*}
+ (f : Nat -> Set α) (n : Nat) : (⋃ i in Finset.range (n + 1), disjointed f i) = 
+partialSups f n
+· 使用定理 `Monotone.partialSups_eq`：Monotone.partialSups_eq {f : ι -> α} (hf : Mono
+tone f) : partialSups f = f
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `HasSum.tendsto_sum_nat`：∀ {M : Type u_1} [inst : AddCommMonoid M] [inst_
+1 : TopologicalSpace M] {m : M} {f : ℕ → M},   HasSum f m → Filter.Tendsto (fun 
+n => ∑ i ∈ F…
+· 使用定理 `Filter.tendsto_add_atTop_nat`：tendsto_add_atTop_nat (k : Nat) : Tendsto 
+(fun a => a + k) atTop atTop
 -/
 theorem tendsto_vectorMeasure_iUnion_atTop_nat
-    {s : Nat -> Set α} (hm : Monotone s) (hs : forall i, MeasurableSet (s i)) :
-    Tendsto (fun n => v (s n)) atTop (𝓝 (v (⋃ n, s n))) := by
-  set t : Nat -> Set α := disjointed s
-  have ht n : MeasurableSet (t n) := .disjointed (fun n => hs n) n
-  have : HasSum (fun n => v (t n)) (v (⋃ n, s n)) := by
+    {s : ℕ → Set α} (hm : Monotone s) (hs : ∀ i, MeasurableSet (s i)) :
+    Tendsto (fun n ↦ v (s n)) atTop (𝓝 (v (⋃ n, s n))) := by
+  set t : ℕ → Set α := disjointed s
+  have ht n : MeasurableSet (t n) := .disjointed (fun n ↦ hs n) n
+  have : HasSum (fun n ↦ v (t n)) (v (⋃ n, s n)) := by
     rw [← iUnion_disjointed]
     apply m_iUnion _ ht (disjoint_disjointed _)
   convert! (HasSum.tendsto_sum_nat this).comp (tendsto_add_atTop_nat 1) with n
   dsimp
   rw [← of_biUnion_finset]
   · rw [biUnion_range_succ_disjointed, Monotone.partialSups_eq hm]
-  · exact fun i hi j hj hij => disjoint_disjointed _ hij
-  · exact fun b hb => ht _
-
-/--
-theorem `tendsto_vectorMeasure_iInter_atTop_nat` / 定理 `tendsto_vectorMeasure_iInter_atTop_nat`
-
-English:
-theorem tendsto_vectorMeasure_iInter_atTop_nat
-  proof: by
-  have I n : v (s n) = v univ - v (s n)ᶜ := by simp [of_compl (hs n)]
-  have J : v (⋂ n, s n) = v univ - v (⋃ n, (s n)ᶜ) := by
-    rw [← of_compl (MeasurableSet.iUnion (fun n => (hs n).compl))]
-    simp
-  simp_rw [I, J]
-  apply tendsto_const_nhds.sub
-  exact tendsto_vectorMeasure_iUnion_atTop_nat (fun i j hij => by simpa using hm hij)
-    (fun i => (hs i).compl)
-
-中文:
-定理 tendsto_vectorMeasure_i整数er_atTop_nat
-  证明: by
-  have I n : v (s n) = v univ - v (s n)ᶜ := by simp [of_compl (hs n)]
-  have J : v (⋂ n, s n) = v univ - v (⋃ n, (s n)ᶜ) := by
-    rw [← of_compl (MeasurableSet.iUnion (fun n => (hs n).compl))]
-    simp
-  simp_rw [I, J]
-  apply tendsto_const_nhds.sub
-  exact tendsto_vectorMeasure_iUnion_atTop_nat (fun i j hij => by simpa using hm hij)
-    (fun i => (hs i).compl)
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, iUnion, of_compl, simp_rw, tendsto_const_nhds, tendsto_const_nhds.sub, tendsto_vectorMeasure_iUnion_atTop_nat
+  · exact fun i hi j hj hij ↦ disjoint_disjointed _ hij
+  · exact fun b hb ↦ ht _
+/-
+**MeasureTheory.VectorMeasure.tendsto_vectorMeasure_iInter_atTop_nat** 是 Mathlib
+ 中的一个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：tendsto_vectorMeasure_iInter_atTop_nat {M : Type*} [AddCommGroup M] [Topol
+ogicalSpace M] [T2Space M] [ContinuousSub M] {v : VectorMeasure α M} {s : Nat ->
+ Set α} (hm : Antitone s) (hs : forall i, MeasurableSet (s i)) : Tendsto (fun n 
+=> v (s n)) atTop (𝓝 (v (⋂ n, s n)))
+参数：hm : Antitone s；hs : forall i, MeasurableSet (s i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.of_compl`：of_compl {M : Type*} [AddCommGroup
+ M] [TopologicalSpace M] [T2Space M] {v : VectorMeasure α M} {A : Set α} (hA : M
+easurableSet A) : v Aᶜ = v…
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Set.compl_iUnion`：compl_iUnion (s : ι -> Set β) : (⋃ i, s i)ᶜ = ⋂ i, (s 
+i)ᶜ
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Filter.Tendsto.sub`：∀ {G : Type u_1} {α : Type u_2} [inst : TopologicalS
+pace G] [inst_1 : Sub G] [ContinuousSub G] {f g : α → G}   {l : Filter α} {a b :
+ G},   F…
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `MeasureTheory.VectorMeasure.tendsto_vectorMeasure_iUnion_atTop_nat`：tend
+sto_vectorMeasure_iUnion_atTop_nat {s : Nat -> Set α} (hm : Monotone s) (hs : fo
+rall i, MeasurableSet (s i)) : Tendsto (fun n => v (s n)…
 -/
 theorem tendsto_vectorMeasure_iInter_atTop_nat
     {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M] [ContinuousSub M]
-    {v : VectorMeasure α M} {s : Nat -> Set α} (hm : Antitone s) (hs : forall i, MeasurableSet (s i)) :
-    Tendsto (fun n => v (s n)) atTop (𝓝 (v (⋂ n, s n))) := by
+    {v : VectorMeasure α M} {s : ℕ → Set α} (hm : Antitone s) (hs : ∀ i, MeasurableSet (s i)) :
+    Tendsto (fun n ↦ v (s n)) atTop (𝓝 (v (⋂ n, s n))) := by
   have I n : v (s n) = v univ - v (s n)ᶜ := by simp [of_compl (hs n)]
   have J : v (⋂ n, s n) = v univ - v (⋃ n, (s n)ᶜ) := by
-    rw [← of_compl (MeasurableSet.iUnion (fun n => (hs n).compl))]
+    rw [← of_compl (MeasurableSet.iUnion (fun n ↦ (hs n).compl))]
     simp
   simp_rw [I, J]
   apply tendsto_const_nhds.sub
-  exact tendsto_vectorMeasure_iUnion_atTop_nat (fun i j hij => by simpa using hm hij)
-    (fun i => (hs i).compl)
+  exact tendsto_vectorMeasure_iUnion_atTop_nat (fun i j hij ↦ by simpa using hm hij)
+    (fun i ↦ (hs i).compl)
 
-/--
-theorem `ext_of_generateFrom` / 定理 `ext_of_generateFrom`
+/-- If two vector measures give the same mass to the whole space and coincide on a
+generating π-system, then they coincide. -/
+/-
+**MeasureTheory.VectorMeasure.ext_of_generateFrom** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.VectorMeasure`。
+形式化陈述：ext_of_generateFrom {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2S
+pace M] {X : Type*} {mX : MeasurableSpace X} {μ ν : VectorMeasure X M} (C : Set 
+(Set X)) (hμν : forall s in C, μ s = ν s) (hA : mX = MeasurableSpace.generateFro
+m C) (hC : IsPiSystem C) (h_univ : μ Set.univ = ν Set.univ) : μ = ν
+参数：C : Set (Set X)；hμν : forall s in C, μ s = ν s；hA : mX = MeasurableSpace.gene
+rateFrom C；hC : IsPiSystem C；h_univ : μ Set.univ = ν Set.univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `MeasurableSpace.induction_on_inter`：induction_on_inter {m : MeasurableSp
+ace α} {C : forall s : Set α, MeasurableSet s -> Prop} {s : Set (Set α)} (h_eq :
+ m = generateFrom s) (h_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.VectorMeasure.of_compl`：of_compl {M : Type*} [AddCommGroup
+ M] [TopologicalSpace M] [T2Space M] {v : VectorMeasure α M} {A : Set α} (hA : M
+easurableSet A) : v Aᶜ = v…
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem ext_of_generateFrom
-  statement: {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
-  proof: by
-  ext s hs
-  induction s, hs using MeasurableSpace.induction_on_inter hA hC with
-  | empty => simp
-  | basic t ht => exact hμν t ht
-  | compl t htm iht =>
-    simp [of_compl, iht, htm, h_univ]
-  | iUnion f hfd hfm ihf =>
-    simp [of_disjoint_iUnion, hfm, hfd, ihf]
-
-中文:
-定理 ext_of_generateFrom
-  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [T2空间 M]
-  证明: by
-  ext s hs
-  induction s, hs using MeasurableSpace.induction_on_inter hA hC with
-  | empty => simp
-  | basic t ht => exact hμν t ht
-  | compl t htm iht =>
-    simp [of_compl, iht, htm, h_univ]
-  | iUnion f hfd hfm ihf =>
-    simp [of_disjoint_iUnion, hfm, hfd, ihf]
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.induction_on_inter, h_univ, iUnion, induction_on_inter, of_compl, of_disjoint_iUnion
+--- 原说明 ---
+If two vector measures give the same mass to the whole space and coincide on a
+generating π-system, then they coincide.
 -/
 theorem ext_of_generateFrom {M : Type*} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
     {X : Type*} {mX : MeasurableSpace X} {μ ν : VectorMeasure X M}
-    (C : Set (Set X)) (hμν : forall s in C, μ s = ν s)
+    (C : Set (Set X)) (hμν : ∀ s ∈ C, μ s = ν s)
     (hA : mX = MeasurableSpace.generateFrom C) (hC : IsPiSystem C)
     (h_univ : μ Set.univ = ν Set.univ) : μ = ν := by
   ext s hs
@@ -865,67 +960,37 @@ variable {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R 
 /-- Given a scalar `r` and a vector measure `v`, `smul r v` is the vector measure corresponding to
 the set function `s : Set α => r • (v s)`. -/
 @[instance_reducible]
-/--
-Definition of `smul` / `smul` 的定义
+/-
+**MeasureTheory.VectorMeasure.smul** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vect
+orMeasure`。
+形式化陈述：smul (r : R) (v : VectorMeasure α M) : VectorMeasure α M where measureOf'
+参数：r : R；v : VectorMeasure α M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smul
-  signature: (r : R) (v : VectorMeasure α M)
-  body: r • ⇑v
-  empty' := by rw [Pi.smul_apply, empty, smul_zero]
-  not_measurable' _ hi := by rw [Pi.smul_apply, v.not_measurable hi, smul_zero]
-  m_iUnion' _ hf₁ hf₂ := by exact HasSum.const_smul _ (v.m_iUnion hf₁ hf₂)
-
-中文:
-定义 smul
-  签名: (r : R) (v : 向量测度 α M)
-  定义体: r • ⇑v
-  empty' := by rw [Pi.smul_apply, empty, smul_zero]
-  not_measurable' _ hi := by rw [Pi.smul_apply, v.not_measurable hi, smul_zero]
-  m_iUnion' _ hf₁ hf₂ := by exact HasSum.const_smul _ (v.m_iUnion hf₁ hf₂)
+--- 原说明 ---
+Given a scalar `r` and a vector measure `v`, `smul r v` is the vector measure co
+rresponding to
+the set function `s : Set α => r • (v s)`.
 -/
 def smul (r : R) (v : VectorMeasure α M) : VectorMeasure α M where
   measureOf' := r • ⇑v
   empty' := by rw [Pi.smul_apply, empty, smul_zero]
   not_measurable' _ hi := by rw [Pi.smul_apply, v.not_measurable hi, smul_zero]
   m_iUnion' _ hf₁ hf₂ := by exact HasSum.const_smul _ (v.m_iUnion hf₁ hf₂)
-
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: : SMul R (VectorMeasure α M)
-  body: ⟨smul⟩
-
-中文:
-实例 instSMul
-  签名: : 标量乘法 R (向量测度 α M)
-  定义体: ⟨smul⟩
+/-
+**MeasureTheory.VectorMeasure.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：instSMul : SMul R (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul : SMul R (VectorMeasure α M) :=
   ⟨smul⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSMulApply R (VectorMeasure α M) (Set α) M
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_smul := FunLike.coe_smul
-
-@[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
-
-中文:
-实例 :
-  签名: 是SMulApply R (向量测度 α M) (集合 α) M
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_smul := FunLike.coe_smul
-
-@[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
+/-
+**MeasureTheory.VectorMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.VectorMe
+asure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsSMulApply R (VectorMeasure α M) (Set α) M where
   smul_apply _ _ _ := rfl
@@ -940,124 +1005,76 @@ section AddCommMonoid
 
 variable {M : Type*} [AddCommMonoid M] [TopologicalSpace M]
 
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: : Zero (VectorMeasure α M)
-  body: ⟨⟨0, rfl, fun _ _ => rfl, fun _ _ _ => hasSum_zero⟩⟩
-
-中文:
-实例 instZero
-  签名: : 零 (向量测度 α M)
-  定义体: ⟨⟨0, rfl, fun _ _ => rfl, fun _ _ _ => hasSum_zero⟩⟩
-
-Depends on / 依赖: hasSum_zero
+/-
+**MeasureTheory.VectorMeasure.instZero** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：instZero : Zero (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero : Zero (VectorMeasure α M) :=
   ⟨⟨0, rfl, fun _ _ => rfl, fun _ _ _ => hasSum_zero⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroApply (VectorMeasure α M) (Set α) M
-  body: rfl
-
-中文:
-实例 :
-  签名: 是ZeroApply (向量测度 α M) (集合 α) M
-  定义体: rfl
+/-
+**MeasureTheory.VectorMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.VectorMe
+asure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZeroApply (VectorMeasure α M) (Set α) M where
   zero_apply _ := rfl
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: : Inhabited (VectorMeasure α M)
-  body: ⟨0⟩
-
-@[nontriviality]
-
-中文:
-实例 instInhabited
-  签名: : 可居 (向量测度 α M)
-  定义体: ⟨0⟩
-
-@[nontriviality]
+/-
+**MeasureTheory.VectorMeasure.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：instInhabited : Inhabited (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited : Inhabited (VectorMeasure α M) :=
   ⟨0⟩
 
 @[nontriviality]
-/--
-lemma `apply_eq_zero_of_isEmpty` / 引理 `apply_eq_zero_of_isEmpty`
-
-English:
-lemma apply_eq_zero_of_isEmpty
-  given: [IsEmpty α] (μ : VectorMeasure α M) (s : Set α)
-  proof: by
-  simp [eq_empty_of_isEmpty s]
-
-中文:
-引理 apply_eq_zero_of_isEmpty
-  条件: [是空 α] (μ : 向量测度 α M) (s : 集合 α)
-  证明: by
-  simp [eq_empty_of_isEmpty s]
-
-Depends on / 依赖: eq_empty_of_isEmpty, extend_partialOrder
+/-
+**MeasureTheory.VectorMeasure.apply_eq_zero_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间
+ `MeasureTheory.VectorMeasure`。
+形式化陈述：apply_eq_zero_of_isEmpty [IsEmpty α] (μ : VectorMeasure α M) (s : Set α) :
+ μ s = 0
+参数：μ : VectorMeasure α M；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.eq_empty_of_isEmpty`：eq_empty_of_isEmpty (s : Set α) [IsEmpty s] : s
+ = ∅
+· 使用定理 `instIsEmptySubtype`：∀ {α : Sort u} [IsEmpty α] (p : α → Prop), IsEmpty (
+Subtype p)
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma apply_eq_zero_of_isEmpty [IsEmpty α] (μ : VectorMeasure α M) (s : Set α) :
     μ s = 0 := by
   simp [eq_empty_of_isEmpty s]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : Subsingleton (VectorMeasure α M)
-  body: ⟨fun μ ν => by ext; rw [apply_eq_zero_of_isEmpty, apply_eq_zero_of_isEmpty]⟩
-
-中文:
-实例 [是空
-  签名: α] : 子单例 (向量测度 α M)
-  定义体: ⟨fun μ ν => by ext; rw [apply_eq_zero_of_isEmpty, apply_eq_zero_of_isEmpty]⟩
-
-Depends on / 依赖: apply_eq_zero_of_isEmpty
+/-
+**MeasureTheory.VectorMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.VectorMe
+asure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] : Subsingleton (VectorMeasure α M) :=
   ⟨fun μ ν => by ext; rw [apply_eq_zero_of_isEmpty, apply_eq_zero_of_isEmpty]⟩
-
-/--
-theorem `eq_zero_of_isEmpty` / 定理 `eq_zero_of_isEmpty`
-
-English:
-theorem eq_zero_of_isEmpty
-  given: [IsEmpty α] (μ : VectorMeasure α M)
-  statement: μ = 0
-  proof: Subsingleton.elim μ 0
-
-@[deprecated (since := "2026-06-10")] alias coe_zero := FunLike.coe_zero
-
-@[deprecated (since := "2026-06-10")] protected alias zero_apply := zero_apply
-
-中文:
-定理 eq_zero_of_isEmpty
-  条件: [是空 α] (μ : 向量测度 α M)
-  结论: μ = 0
-  证明: Subsingleton.elim μ 0
-
-@[deprecated (since := "2026-06-10")] alias coe_zero := FunLike.coe_zero
-
-@[deprecated (since := "2026-06-10")] protected alias zero_apply := zero_apply
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**MeasureTheory.VectorMeasure.eq_zero_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.VectorMeasure`。
+形式化陈述：eq_zero_of_isEmpty [IsEmpty α] (μ : VectorMeasure α M) : μ = 0
+参数：μ : VectorMeasure α M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `MeasureTheory.VectorMeasure.instSubsingletonOfIsEmpty`：∀ {α : Type u_1} 
+{m : MeasurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : Topolo
+gicalSpace M]   [IsEmpty α], Subsingleton (…
 -/
 theorem eq_zero_of_isEmpty [IsEmpty α] (μ : VectorMeasure α M) : μ = 0 :=
   Subsingleton.elim μ 0
@@ -1068,67 +1085,36 @@ theorem eq_zero_of_isEmpty [IsEmpty α] (μ : VectorMeasure α M) : μ = 0 :=
 
 variable [ContinuousAdd M]
 
-/--
-Definition of `add` / `add` 的定义
+/-- The sum of two vector measure is a vector measure. -/
+/-
+**MeasureTheory.VectorMeasure.add** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vecto
+rMeasure`。
+形式化陈述：add (v w : VectorMeasure α M) : VectorMeasure α M where measureOf'
+参数：v w : VectorMeasure α M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition add
-  signature: (v w : VectorMeasure α M)
-  body: v + w
-  empty' := by simp
-  not_measurable' _ hi := by rw [Pi.add_apply, v.not_measurable hi, w.not_measurable hi, add_zero]
-  m_iUnion' _ hf₁ hf₂ := HasSum.add (v.m_iUnion hf₁ hf₂) (w.m_iUnion hf₁ hf₂)
-
-中文:
-定义 add
-  签名: (v w : 向量测度 α M)
-  定义体: v + w
-  empty' := by simp
-  not_measurable' _ hi := by rw [Pi.add_apply, v.not_measurable hi, w.not_measurable hi, add_zero]
-  m_iUnion' _ hf₁ hf₂ := HasSum.add (v.m_iUnion hf₁ hf₂) (w.m_iUnion hf₁ hf₂)
+--- 原说明 ---
+The sum of two vector measure is a vector measure.
 -/
 def add (v w : VectorMeasure α M) : VectorMeasure α M where
   measureOf' := v + w
   empty' := by simp
   not_measurable' _ hi := by rw [Pi.add_apply, v.not_measurable hi, w.not_measurable hi, add_zero]
   m_iUnion' _ hf₁ hf₂ := HasSum.add (v.m_iUnion hf₁ hf₂) (w.m_iUnion hf₁ hf₂)
-
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: : Add (VectorMeasure α M)
-  body: ⟨add⟩
-
-中文:
-实例 instAdd
-  签名: : 加法 (向量测度 α M)
-  定义体: ⟨add⟩
+/-
+**MeasureTheory.VectorMeasure.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.V
+ectorMeasure`。
+形式化陈述：instAdd : Add (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAdd : Add (VectorMeasure α M) :=
   ⟨add⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsAddApply (VectorMeasure α M) (Set α) M
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_add := FunLike.coe_add
-
-@[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
-
-中文:
-实例 :
-  签名: 是加法Apply (向量测度 α M) (集合 α) M
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_add := FunLike.coe_add
-
-@[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
+/-
+**MeasureTheory.VectorMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.VectorMe
+asure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsAddApply (VectorMeasure α M) (Set α) M where
   add_apply _ _ _ := rfl
@@ -1136,33 +1122,12 @@ instance : IsAddApply (VectorMeasure α M) (Set α) M where
 @[deprecated (since := "2026-06-10")] alias coe_add := FunLike.coe_add
 
 @[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
-
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: : AddCommMonoid (VectorMeasure α M)
-  body: fast_instance% FunLike.addCommMonoid
-
-@[deprecated (since := "2026-06-10")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
-
-@[deprecated (since := "2026-06-10")] alias coeFnAddMonoidHom_apply := FunLike.coeAddMonoidHom_apply
-
-@[deprecated (since := "2026-06-10")] alias coe_finsetSum := FunLike.coe_sum
-
-中文:
-实例 instAddCommMonoid
-  签名: : 加法交换幺半群 (向量测度 α M)
-  定义体: fast_instance% FunLike.addCommMonoid
-
-@[deprecated (since := "2026-06-10")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
-
-@[deprecated (since := "2026-06-10")] alias coeFnAddMonoidHom_apply := FunLike.coeAddMonoidHom_apply
-
-@[deprecated (since := "2026-06-10")] alias coe_finsetSum := FunLike.coe_sum
-
-Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
+/-
+**MeasureTheory.VectorMeasure.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Measu
+reTheory.VectorMeasure`。
+形式化陈述：instAddCommMonoid : AddCommMonoid (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommMonoid : AddCommMonoid (VectorMeasure α M) :=
   fast_instance% FunLike.addCommMonoid
@@ -1179,67 +1144,36 @@ section AddCommGroup
 
 variable {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
 
-/--
-Definition of `neg` / `neg` 的定义
+/-- The negative of a vector measure is a vector measure. -/
+/-
+**MeasureTheory.VectorMeasure.neg** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vecto
+rMeasure`。
+形式化陈述：neg (v : VectorMeasure α M) : VectorMeasure α M where measureOf'
+参数：v : VectorMeasure α M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition neg
-  signature: (v : VectorMeasure α M)
-  body: -v
-  empty' := by simp
-  not_measurable' _ hi := by rw [Pi.neg_apply, neg_eq_zero, v.not_measurable hi]
-m_iUnion' _ hf₁ hf₂ := HasSum.neg v.m_iUnion hf₁ hf₂
-
-中文:
-定义 neg
-  签名: (v : 向量测度 α M)
-  定义体: -v
-  empty' := by simp
-  not_measurable' _ hi := by rw [Pi.neg_apply, neg_eq_zero, v.not_measurable hi]
-m_iUnion' _ hf₁ hf₂ := HasSum.neg v.m_iUnion hf₁ hf₂
+--- 原说明 ---
+The negative of a vector measure is a vector measure.
 -/
 def neg (v : VectorMeasure α M) : VectorMeasure α M where
   measureOf' := -v
   empty' := by simp
   not_measurable' _ hi := by rw [Pi.neg_apply, neg_eq_zero, v.not_measurable hi]
-m_iUnion' _ hf₁ hf₂ := HasSum.neg v.m_iUnion hf₁ hf₂
-
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: : Neg (VectorMeasure α M)
-  body: ⟨neg⟩
-
-中文:
-实例 instNeg
-  签名: : 取负 (向量测度 α M)
-  定义体: ⟨neg⟩
+  m_iUnion' _ hf₁ hf₂ := HasSum.neg <| v.m_iUnion hf₁ hf₂
+/-
+**MeasureTheory.VectorMeasure.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.V
+ectorMeasure`。
+形式化陈述：instNeg : Neg (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNeg : Neg (VectorMeasure α M) :=
   ⟨neg⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNegApply (VectorMeasure α M) (Set α) M
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_neg := FunLike.coe_neg
-
-@[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
-
-中文:
-实例 :
-  签名: 是NegApply (向量测度 α M) (集合 α) M
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_neg := FunLike.coe_neg
-
-@[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
+/-
+**MeasureTheory.VectorMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.VectorMe
+asure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsNegApply (VectorMeasure α M) (Set α) M where
   neg_apply _ _ := rfl
@@ -1248,67 +1182,36 @@ instance : IsNegApply (VectorMeasure α M) (Set α) M where
 
 @[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
 
-/--
-Definition of `sub` / `sub` 的定义
+/-- The difference of two vector measure is a vector measure. -/
+/-
+**MeasureTheory.VectorMeasure.sub** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vecto
+rMeasure`。
+形式化陈述：sub (v w : VectorMeasure α M) : VectorMeasure α M where measureOf'
+参数：v w : VectorMeasure α M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sub
-  signature: (v w : VectorMeasure α M)
-  body: v - w
-  empty' := by simp
-  not_measurable' _ hi := by rw [Pi.sub_apply, v.not_measurable hi, w.not_measurable hi, sub_zero]
-  m_iUnion' _ hf₁ hf₂ := HasSum.sub (v.m_iUnion hf₁ hf₂) (w.m_iUnion hf₁ hf₂)
-
-中文:
-定义 sub
-  签名: (v w : 向量测度 α M)
-  定义体: v - w
-  empty' := by simp
-  not_measurable' _ hi := by rw [Pi.sub_apply, v.not_measurable hi, w.not_measurable hi, sub_zero]
-  m_iUnion' _ hf₁ hf₂ := HasSum.sub (v.m_iUnion hf₁ hf₂) (w.m_iUnion hf₁ hf₂)
+--- 原说明 ---
+The difference of two vector measure is a vector measure.
 -/
 def sub (v w : VectorMeasure α M) : VectorMeasure α M where
   measureOf' := v - w
   empty' := by simp
   not_measurable' _ hi := by rw [Pi.sub_apply, v.not_measurable hi, w.not_measurable hi, sub_zero]
   m_iUnion' _ hf₁ hf₂ := HasSum.sub (v.m_iUnion hf₁ hf₂) (w.m_iUnion hf₁ hf₂)
-
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: : Sub (VectorMeasure α M)
-  body: ⟨sub⟩
-
-中文:
-实例 instSub
-  签名: : 减法 (向量测度 α M)
-  定义体: ⟨sub⟩
+/-
+**MeasureTheory.VectorMeasure.instSub** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.V
+ectorMeasure`。
+形式化陈述：instSub : Sub (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSub : Sub (VectorMeasure α M) :=
   ⟨sub⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSubApply (VectorMeasure α M) (Set α) M
-  body: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_sub := FunLike.coe_sub
-
-@[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
-
-中文:
-实例 :
-  签名: 是SubApply (向量测度 α M) (集合 α) M
-  定义体: rfl
-
-@[deprecated (since := "2026-06-10")] alias coe_sub := FunLike.coe_sub
-
-@[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
+/-
+**MeasureTheory.VectorMeasure.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.VectorMe
+asure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsSubApply (VectorMeasure α M) (Set α) M where
   sub_apply _ _ _ := rfl
@@ -1316,21 +1219,12 @@ instance : IsSubApply (VectorMeasure α M) (Set α) M where
 @[deprecated (since := "2026-06-10")] alias coe_sub := FunLike.coe_sub
 
 @[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: : AddCommGroup (VectorMeasure α M)
-  body: fast_instance% FunLike.addCommGroup
-
-中文:
-实例 instAddCommGroup
-  签名: : 加法交换群 (向量测度 α M)
-  定义体: fast_instance% FunLike.addCommGroup
-
-Depends on / 依赖: FunLike, FunLike.addCommGroup, addCommGroup, fast_instance
+/-
+**MeasureTheory.VectorMeasure.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：instAddCommGroup : AddCommGroup (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup : AddCommGroup (VectorMeasure α M) := fast_instance% FunLike.addCommGroup
 
@@ -1341,20 +1235,13 @@ section DistribMulAction
 variable {M : Type*} [AddCommMonoid M] [TopologicalSpace M]
 variable {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M]
 
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [ContinuousAdd M]
-  body: fast_instance% FunLike.distribMulAction
-
-中文:
-实例 instDistribMulAction
-  签名: [连续加法 M]
-  定义体: fast_instance% FunLike.distribMulAction
-
-Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
+/-
+**MeasureTheory.VectorMeasure.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Me
+asureTheory.VectorMeasure`。
+形式化陈述：instDistribMulAction [ContinuousAdd M] : DistribMulAction R (VectorMeasure
+ α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction [ContinuousAdd M] : DistribMulAction R (VectorMeasure α M) :=
   fast_instance% FunLike.distribMulAction
@@ -1366,20 +1253,12 @@ section Module
 variable {M : Type*} [AddCommMonoid M] [TopologicalSpace M]
 variable {R : Type*} [Semiring R] [Module R M] [ContinuousConstSMul R M]
 
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [ContinuousAdd M]
-  body: fast_instance% FunLike.module
-
-中文:
-实例 instModule
-  签名: [连续加法 M]
-  定义体: fast_instance% FunLike.module
-
-Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
+/-
+**MeasureTheory.VectorMeasure.instModule** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheor
+y.VectorMeasure`。
+形式化陈述：instModule [ContinuousAdd M] : Module R (VectorMeasure α M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule [ContinuousAdd M] : Module R (VectorMeasure α M) :=
   fast_instance% FunLike.module
@@ -1392,123 +1271,104 @@ variable {M : Type*} [AddCommMonoid M] [TopologicalSpace M] [MeasurableSpace β]
   {x : β} {v : M} {s : Set β}
 
 open scoped Classical in
-/--
-Definition of `dirac` / `dirac` 的定义
+/-- The Dirac vector measure with mass `v` at a point `x`. It gives mass `v` to measurable sets
+containing `x`, and `0` otherwise. -/
+/-
+**MeasureTheory.VectorMeasure.dirac** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vec
+torMeasure`。
+形式化陈述：dirac (x : β) (v : M) : VectorMeasure β M where measureOf' s
+参数：x : β；v : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dirac
-  signature: (x : β) (v : M)
-  body: if MeasurableSet s ∧ x in s then v else 0
-  empty' := by simp
-  not_measurable' := by simp +contextual
-  m_iUnion' f f_meas f_disj := by
-    by_cases hx : x in ⋃ i, f i; swap
-    · simp only [mem_iUnion, not_exists] at hx
-      simp [hx, hasSum_zero]
-    have : MeasurableSet (⋃ i, f i) := by
-      apply MeasurableSet.iUnion f_meas
-    simp only [f_meas, true_and, MeasurableSet.iUnion f_meas, hx, and_self, ↓reduceIte]
-    obtain ⟨j, hj⟩ : exists j, x in f j := by simpa using hx
-    nth_rewrite 2 [show v = if x in f j then v else 0 by simp [hj]]
-    apply hasSum_single
-    intro i hi
-    have : Disjoint (f i) (f j) := f_disj hi
-    grind
-
-中文:
-定义 dirac
-  签名: (x : β) (v : M)
-  定义体: if MeasurableSet s ∧ x in s then v else 0
-  empty' := by simp
-  not_measurable' := by simp +contextual
-  m_iUnion' f f_meas f_disj := by
-    by_cases hx : x in ⋃ i, f i; swap
-    · simp only [mem_iUnion, not_exists] at hx
-      simp [hx, hasSum_zero]
-    have : MeasurableSet (⋃ i, f i) := by
-      apply MeasurableSet.iUnion f_meas
-    simp only [f_meas, true_and, MeasurableSet.iUnion f_meas, hx, and_self, ↓reduceIte]
-    obtain ⟨j, hj⟩ : exists j, x in f j := by simpa using hx
-    nth_rewrite 2 [show v = if x in f j then v else 0 by simp [hj]]
-    apply hasSum_single
-    intro i hi
-    have : Disjoint (f i) (f j) := f_disj hi
-    grind
-
-Depends on / 依赖: MeasurableSet
+--- 原说明 ---
+The Dirac vector measure with mass `v` at a point `x`. It gives mass `v` to meas
+urable sets
+containing `x`, and `0` otherwise.
 -/
 def dirac (x : β) (v : M) : VectorMeasure β M where
-  measureOf' s := if MeasurableSet s ∧ x in s then v else 0
+  measureOf' s := if MeasurableSet s ∧ x ∈ s then v else 0
   empty' := by simp
   not_measurable' := by simp +contextual
   m_iUnion' f f_meas f_disj := by
-    by_cases hx : x in ⋃ i, f i; swap
+    by_cases hx : x ∈ ⋃ i, f i; swap
     · simp only [mem_iUnion, not_exists] at hx
       simp [hx, hasSum_zero]
     have : MeasurableSet (⋃ i, f i) := by
       apply MeasurableSet.iUnion f_meas
     simp only [f_meas, true_and, MeasurableSet.iUnion f_meas, hx, and_self, ↓reduceIte]
-    obtain ⟨j, hj⟩ : exists j, x in f j := by simpa using hx
-    nth_rewrite 2 [show v = if x in f j then v else 0 by simp [hj]]
+    obtain ⟨j, hj⟩ : ∃ j, x ∈ f j := by simpa using hx
+    nth_rewrite 2 [show v = if x ∈ f j then v else 0 by simp [hj]]
     apply hasSum_single
     intro i hi
     have : Disjoint (f i) (f j) := f_disj hi
     grind
-
-/--
-lemma `dirac_apply_of_mem` / 引理 `dirac_apply_of_mem`
-
-English:
-lemma dirac_apply_of_mem
-  given: (hs : MeasurableSet s) (hx : x in s)
-  statement: dirac x v s = v
-  proof: if_pos (And.intro hs hx)
-
-中文:
-引理 dirac_apply_of_mem
-  条件: (hs : 可测集 s) (hx : x in s)
-  结论: dirac x v s = v
-  证明: if_pos (And.intro hs hx)
+/-
+**MeasureTheory.VectorMeasure.dirac_apply_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.VectorMeasure`。
+形式化陈述：∀ {β : Type u_2} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : Topolog
+icalSpace M] [inst_2 : MeasurableSpace β]   {x : β} {v : M} {s : Set β}, Measura
+bleSet s → x ∈ s → (MeasureTheory.VectorMeasure.dirac x v) s = v
+参数：MeasureTheory.VectorMeasure.dirac x v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-@[simp] lemma dirac_apply_of_mem (hs : MeasurableSet s) (hx : x in s) : dirac x v s = v :=
+@[simp] lemma dirac_apply_of_mem (hs : MeasurableSet s) (hx : x ∈ s) : dirac x v s = v :=
   if_pos (And.intro hs hx)
-
-/--
-lemma `dirac_apply_of_notMem` / 引理 `dirac_apply_of_notMem`
-
-English:
-lemma dirac_apply_of_notMem
-  given: (hx : x ∉ s)
-  statement: dirac x v s = 0
-  proof: by
-  simp [dirac, hx]
-
-中文:
-引理 dirac_apply_of_notMem
-  条件: (hx : x ∉ s)
-  结论: dirac x v s = 0
-  证明: by
-  simp [dirac, hx]
+/-
+**MeasureTheory.VectorMeasure.dirac_apply_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.VectorMeasure`。
+形式化陈述：∀ {β : Type u_2} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : Topolog
+icalSpace M] [inst_2 : MeasurableSpace β]   {x : β} {v : M} {s : Set β}, x ∉ s →
+ (MeasureTheory.VectorMeasure.dirac x v) s = 0
+参数：MeasureTheory.VectorMeasure.dirac x v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma dirac_apply_of_notMem (hx : x ∉ s) : dirac x v s = 0 := by
   simp [dirac, hx]
-
-/--
-lemma `dirac_zero` / 引理 `dirac_zero`
-
-English:
-lemma dirac_zero
-  statement: dirac x (0 : M) = 0
-  proof: by
-  ext s hs
-  simp [dirac]
-
-中文:
-引理 dirac_zero
-  结论: dirac x (0 : M) = 0
-  证明: by
-  ext s hs
-  simp [dirac]
+/-
+**MeasureTheory.VectorMeasure.dirac_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.VectorMeasure`。
+形式化陈述：∀ {β : Type u_2} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : Topolog
+icalSpace M] [inst_2 : MeasurableSpace β]   {x : β}, MeasureTheory.VectorMeasure
+.dirac x 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `MeasureTheory.VectorMeasure.mk.congr_simp`：∀ {α : Type u_3} [inst : Meas
+urableSpace α] {M : Type u_4} [inst_1 : AddCommMonoid M] [inst_2 : TopologicalSp
+ace M]   (measureOf' measureOf'…
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma dirac_zero : dirac x (0 : M) = 0 := by
   ext s hs
@@ -1521,32 +1381,18 @@ end VectorMeasure
 namespace Measure
 
 open scoped Classical in
-/--
-Definition of `toSignedMeasure` / `toSignedMeasure` 的定义
+/-- A finite measure coerced into a real function is a signed measure. -/
+/-
+**MeasureTheory.Measure.toSignedMeasure** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory
+.Measure`。
+形式化陈述：toSignedMeasure (μ : Measure α) [hμ : IsFiniteMeasure μ] : SignedMeasure α
+ where measureOf' s
+参数：μ : Measure α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSignedMeasure
-  signature: (μ : Measure α) [hμ : IsFiniteMeasure μ]
-  body: if MeasurableSet s then μ.real s else 0
-  empty' := by simp
-  not_measurable' _ hi := if_neg hi
-  m_iUnion' f hf₁ hf₂ := by
-    simp only [*, MeasurableSet.iUnion hf₁, if_true, measure_iUnion hf₂ hf₁, measureReal_def]
-    rw [ENNReal.tsum_toReal_eq]
-    exacts [(summable_measure_toReal hf₁ hf₂).hasSum, fun _ => measure_ne_top _ _]
-
-中文:
-定义 toSignedMeasure
-  签名: (μ : 测度 α) [hμ : 是有限测度 μ]
-  定义体: if MeasurableSet s then μ.real s else 0
-  empty' := by simp
-  not_measurable' _ hi := if_neg hi
-  m_iUnion' f hf₁ hf₂ := by
-    simp only [*, MeasurableSet.iUnion hf₁, if_true, measure_iUnion hf₂ hf₁, measureReal_def]
-    rw [ENNReal.tsum_toReal_eq]
-    exacts [(summable_measure_toReal hf₁ hf₂).hasSum, fun _ => measure_ne_top _ _]
-
-Depends on / 依赖: MeasurableSet
+--- 原说明 ---
+A finite measure coerced into a real function is a signed measure.
 -/
 def toSignedMeasure (μ : Measure α) [hμ : IsFiniteMeasure μ] : SignedMeasure α where
   measureOf' s := if MeasurableSet s then μ.real s else 0
@@ -1555,40 +1401,31 @@ def toSignedMeasure (μ : Measure α) [hμ : IsFiniteMeasure μ] : SignedMeasure
   m_iUnion' f hf₁ hf₂ := by
     simp only [*, MeasurableSet.iUnion hf₁, if_true, measure_iUnion hf₂ hf₁, measureReal_def]
     rw [ENNReal.tsum_toReal_eq]
-    exacts [(summable_measure_toReal hf₁ hf₂).hasSum, fun _ => measure_ne_top _ _]
+    exacts [(summable_measure_toReal hf₁ hf₂).hasSum, fun _ ↦ measure_ne_top _ _]
 
 open scoped Classical in
 @[simp]
-/--
-theorem `toSignedMeasure_apply` / 定理 `toSignedMeasure_apply`
-
-English:
-theorem toSignedMeasure_apply
-  given: (μ : Measure α) [hμ : IsFiniteMeasure μ] (i : Set α)
-  proof: rfl
-
-中文:
-定理 toSignedMeasure_apply
-  条件: (μ : 测度 α) [hμ : 是有限测度 μ] (i : 集合 α)
-  证明: rfl
+/-
+**MeasureTheory.Measure.toSignedMeasure_apply** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.Measure`。
+形式化陈述：toSignedMeasure_apply (μ : Measure α) [hμ : IsFiniteMeasure μ] (i : Set α)
+ : μ.toSignedMeasure i = if MeasurableSet i then μ.real i else 0
+参数：μ : Measure α；i : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSignedMeasure_apply (μ : Measure α) [hμ : IsFiniteMeasure μ] (i : Set α) :
     μ.toSignedMeasure i = if MeasurableSet i then μ.real i else 0 := rfl
-
-/--
-theorem `toSignedMeasure_apply_measurable` / 定理 `toSignedMeasure_apply_measurable`
-
-English:
-theorem toSignedMeasure_apply_measurable
-  statement: {μ : Measure α} [IsFiniteMeasure μ] {i : Set α}
-  proof: if_pos hi
-
-中文:
-定理 toSignedMeasure_apply_measurable
-  结论: {μ : 测度 α} [是有限测度 μ] {i : 集合 α}
-  证明: if_pos hi
-
-Depends on / 依赖: if_pos
+/-
+**MeasureTheory.Measure.toSignedMeasure_apply_measurable** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.Measure`。
+形式化陈述：toSignedMeasure_apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : 
+Set α} (hi : MeasurableSet i) : μ.toSignedMeasure i = μ.real i
+参数：hi : MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem toSignedMeasure_apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : Set α}
     (hi : MeasurableSet i) : μ.toSignedMeasure i = μ.real i :=
@@ -1596,55 +1433,36 @@ theorem toSignedMeasure_apply_measurable {μ : Measure α} [IsFiniteMeasure μ] 
 
 -- Without this lemma, `singularPart_neg` in
 -- `Mathlib/MeasureTheory/Measure/Decomposition/Lebesgue.lean` is extremely slow
-/--
-theorem `toSignedMeasure_congr` / 定理 `toSignedMeasure_congr`
-
-English:
-theorem toSignedMeasure_congr
-  statement: {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteMeasure ν]
-  proof: by
-  congr
-
-中文:
-定理 toSignedMeasure_congr
-  结论: {μ ν : 测度 α} [是有限测度 μ] [是有限测度 ν]
-  证明: by
-  congr
+/-
+**MeasureTheory.Measure.toSignedMeasure_congr** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.Measure`。
+形式化陈述：toSignedMeasure_congr {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteMeasu
+re ν] (h : μ = ν) : μ.toSignedMeasure = ν.toSignedMeasure
+参数：h : μ = ν。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSignedMeasure_congr {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteMeasure ν]
     (h : μ = ν) : μ.toSignedMeasure = ν.toSignedMeasure := by
   congr
-
-/--
-theorem `toSignedMeasure_eq_toSignedMeasure_iff` / 定理 `toSignedMeasure_eq_toSignedMeasure_iff`
-
-English:
-theorem toSignedMeasure_eq_toSignedMeasure_iff
-  statement: {μ ν : Measure α} [IsFiniteMeasure μ]
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · ext1 i hi
-    have : μ.toSignedMeasure i = ν.toSignedMeasure i := by rw [h]
-    rwa [toSignedMeasure_apply_measurable hi, toSignedMeasure_apply_measurable hi,
-        measureReal_eq_measureReal_iff] at this
-  · congr
-
-@[simp]
-
-中文:
-定理 toSignedMeasure_eq_toSignedMeasure_iff
-  结论: {μ ν : 测度 α} [是有限测度 μ]
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · ext1 i hi
-    have : μ.toSignedMeasure i = ν.toSignedMeasure i := by rw [h]
-    rwa [toSignedMeasure_apply_measurable hi, toSignedMeasure_apply_measurable hi,
-        measureReal_eq_measureReal_iff] at this
-  · congr
-
-@[simp]
-
-Depends on / 依赖: measureReal_eq_measureReal_iff, toSignedMeasure, toSignedMeasure_apply_measurable
+/-
+**MeasureTheory.Measure.toSignedMeasure_eq_toSignedMeasure_iff** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：toSignedMeasure_eq_toSignedMeasure_iff {μ ν : Measure α} [IsFiniteMeasure 
+μ] [IsFiniteMeasure ν] : μ.toSignedMeasure = ν.toSignedMeasure ↔ μ = ν
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.measureReal_eq_measureReal_iff`：measureReal_eq_measureReal
+_iff {m : MeasurableSpace β} {ν : Measure β} {t : Set β} (h₁ : μ s != ∞
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `MeasureTheory.Measure.toSignedMeasure_apply_measurable`：toSignedMeasure_
+apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : Set α} (hi : Measurabl
+eSet i) : μ.toSignedMeasure i = μ.real i
 -/
 theorem toSignedMeasure_eq_toSignedMeasure_iff {μ ν : Measure α} [IsFiniteMeasure μ]
     [IsFiniteMeasure ν] : μ.toSignedMeasure = ν.toSignedMeasure ↔ μ = ν := by
@@ -1656,235 +1474,264 @@ theorem toSignedMeasure_eq_toSignedMeasure_iff {μ ν : Measure α} [IsFiniteMea
   · congr
 
 @[simp]
-/--
-theorem `toSignedMeasure_zero` / 定理 `toSignedMeasure_zero`
-
-English:
-theorem toSignedMeasure_zero
-  statement: (0 : Measure α).toSignedMeasure = 0
-  proof: by
-  ext i hi
-  simp [hi]
-
-@[simp]
-
-中文:
-定理 toSignedMeasure_zero
-  结论: (0 : 测度 α).toSignedMeasure = 0
-  证明: by
-  ext i hi
-  simp [hi]
-
-@[simp]
+/-
+**MeasureTheory.Measure.toSignedMeasure_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.Measure`。
+形式化陈述：toSignedMeasure_zero : (0 : Measure α).toSignedMeasure = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toSignedMeasure_zero : (0 : Measure α).toSignedMeasure = 0 := by
   ext i hi
   simp [hi]
 
 @[simp]
-/--
-theorem `toSignedMeasure_add` / 定理 `toSignedMeasure_add`
-
-English:
-theorem toSignedMeasure_add
-  given: (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
-  proof: by
-  ext i hi
-  rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_add_apply]; rw [_root_.add_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]
-
-@[simp]
-
-中文:
-定理 toSignedMeasure_add
-  条件: (μ ν : 测度 α) [是有限测度 μ] [是有限测度 ν]
-  证明: by
-  ext i hi
-  rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_add_apply]; rw [_root_.add_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.add_apply, add_apply, measureReal_add_apply, toSignedMeasure_apply_measurable
+/-
+**MeasureTheory.Measure.toSignedMeasure_add** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.Measure`。
+形式化陈述：toSignedMeasure_add (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure
+ ν] : (μ + ν).toSignedMeasure = μ.toSignedMeasure + ν.toSignedMeasure
+参数：μ ν : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.toSignedMeasure_apply_measurable`：toSignedMeasure_
+apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : Set α} (hi : Measurabl
+eSet i) : μ.toSignedMeasure i = μ.real i
+· 使用定理 `MeasureTheory.measureReal_add_apply`：measureReal_add_apply {μ₁ μ₂ : Meas
+ure α} (h₁ : μ₁ s != ∞
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
 -/
 theorem toSignedMeasure_add (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure ν] :
     (μ + ν).toSignedMeasure = μ.toSignedMeasure + ν.toSignedMeasure := by
   ext i hi
-  rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_add_apply]; rw [_root_.add_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]
+  rw [toSignedMeasure_apply_measurable hi, measureReal_add_apply,
+    _root_.add_apply, toSignedMeasure_apply_measurable hi,
+    toSignedMeasure_apply_measurable hi]
 
 @[simp]
-/--
-theorem `toSignedMeasure_smul` / 定理 `toSignedMeasure_smul`
-
-English:
-theorem toSignedMeasure_smul
-  given: (μ : Measure α) [IsFiniteMeasure μ] (r : Real>=0)
-  proof: by
-  ext i hi
-  rw [toSignedMeasure_apply_measurable hi]; rw [_root_.smul_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_nnreal_smul_apply]
-  rfl
-
-中文:
-定理 toSignedMeasure_smul
-  条件: (μ : 测度 α) [是有限测度 μ] (r : 实数>=0)
-  证明: by
-  ext i hi
-  rw [toSignedMeasure_apply_measurable hi]; rw [_root_.smul_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_nnreal_smul_apply]
-  rfl
-
-Depends on / 依赖: _root_, _root_.smul_apply, measureReal_nnreal_smul_apply, smul_apply, toSignedMeasure_apply_measurable
+/-
+**MeasureTheory.Measure.toSignedMeasure_smul** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.Measure`。
+形式化陈述：toSignedMeasure_smul (μ : Measure α) [IsFiniteMeasure μ] (r : Real>=0) : (
+r • μ).toSignedMeasure = r • μ.toSignedMeasure
+参数：μ : Measure α；r : Real>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.toSignedMeasure_apply_measurable`：toSignedMeasure_
+apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : Set α} (hi : Measurabl
+eSet i) : μ.toSignedMeasure i = μ.real i
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSMulApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M]   {R : Type u_4} [inst_2 : Se…
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `MeasureTheory.measureReal_nnreal_smul_apply`：∀ {α : Type u_1} {x : Measu
+rableSpace α} {μ : MeasureTheory.Measure α} {s : Set α} (c : NNReal),   (c • μ).
+real s = ↑c * μ.real s
 -/
-theorem toSignedMeasure_smul (μ : Measure α) [IsFiniteMeasure μ] (r : Real>=0) :
+theorem toSignedMeasure_smul (μ : Measure α) [IsFiniteMeasure μ] (r : ℝ≥0) :
     (r • μ).toSignedMeasure = r • μ.toSignedMeasure := by
   ext i hi
-  rw [toSignedMeasure_apply_measurable hi]; rw [_root_.smul_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_nnreal_smul_apply]
+  rw [toSignedMeasure_apply_measurable hi, _root_.smul_apply,
+    toSignedMeasure_apply_measurable hi, measureReal_nnreal_smul_apply]
   rfl
 
 open scoped Classical in
-/--
-Definition of `toENNRealVectorMeasure` / `toENNRealVectorMeasure` 的定义
+/-- A measure is a vector measure over `ℝ≥0∞`. -/
+/-
+**MeasureTheory.Measure.toENNRealVectorMeasure** 是 Mathlib 中的一个定义，位于命名空间 `Measur
+eTheory.Measure`。
+形式化陈述：toENNRealVectorMeasure (μ : Measure α) : VectorMeasure α Real>=0∞ where me
+asureOf' i
+参数：μ : Measure α。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toENNRealVectorMeasure
-  signature: (μ : Measure α)
-  body: if MeasurableSet i then μ i else 0
-  empty' := by simp
-  not_measurable' _ hi := if_neg hi
-  m_iUnion' _ hf₁ hf₂ := by
-    rw [Summable.hasSum_iff ENNReal.summable]; rw [if_pos (MeasurableSet.iUnion hf₁)]; rw [MeasureTheory.measure_iUnion hf₂ hf₁]
-    exact tsum_congr fun n => if_pos (hf₁ n)
-
-中文:
-定义 toENN实数VectorMeasure
-  签名: (μ : 测度 α)
-  定义体: if MeasurableSet i then μ i else 0
-  empty' := by simp
-  not_measurable' _ hi := if_neg hi
-  m_iUnion' _ hf₁ hf₂ := by
-    rw [Summable.hasSum_iff ENNReal.summable]; rw [if_pos (MeasurableSet.iUnion hf₁)]; rw [MeasureTheory.measure_iUnion hf₂ hf₁]
-    exact tsum_congr fun n => if_pos (hf₁ n)
-
-Depends on / 依赖: MeasurableSet
+--- 原说明 ---
+A measure is a vector measure over `ℝ≥0∞`.
 -/
-def toENNRealVectorMeasure (μ : Measure α) : VectorMeasure α Real>=0∞ where
+def toENNRealVectorMeasure (μ : Measure α) : VectorMeasure α ℝ≥0∞ where
   measureOf' i := if MeasurableSet i then μ i else 0
   empty' := by simp
   not_measurable' _ hi := if_neg hi
   m_iUnion' _ hf₁ hf₂ := by
-    rw [Summable.hasSum_iff ENNReal.summable]; rw [if_pos (MeasurableSet.iUnion hf₁)]; rw [MeasureTheory.measure_iUnion hf₂ hf₁]
+    rw [Summable.hasSum_iff ENNReal.summable, if_pos (MeasurableSet.iUnion hf₁),
+      MeasureTheory.measure_iUnion hf₂ hf₁]
     exact tsum_congr fun n => if_pos (hf₁ n)
 
 open scoped Classical in
 @[simp]
-/--
-theorem `toENNRealVectorMeasure_apply` / 定理 `toENNRealVectorMeasure_apply`
-
-English:
-theorem toENNRealVectorMeasure_apply
-  given: (μ : Measure α) (i : Set α)
-  proof: rfl
-
-中文:
-定理 toENN实数VectorMeasure_apply
-  条件: (μ : 测度 α) (i : 集合 α)
-  证明: rfl
+/-
+**MeasureTheory.Measure.toENNRealVectorMeasure_apply** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.Measure`。
+形式化陈述：toENNRealVectorMeasure_apply (μ : Measure α) (i : Set α) : μ.toENNRealVect
+orMeasure i = if MeasurableSet i then μ i else 0
+参数：μ : Measure α；i : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toENNRealVectorMeasure_apply (μ : Measure α) (i : Set α) :
     μ.toENNRealVectorMeasure i = if MeasurableSet i then μ i else 0 := rfl
-
-/--
-theorem `toENNRealVectorMeasure_apply_measurable` / 定理 `toENNRealVectorMeasure_apply_measurable`
-
-English:
-theorem toENNRealVectorMeasure_apply_measurable
-  given: {μ : Measure α} {i : Set α} (hi : MeasurableSet i)
-  proof: if_pos hi
-
-@[simp]
-
-中文:
-定理 toENN实数VectorMeasure_apply_measurable
-  条件: {μ : 测度 α} {i : 集合 α} (hi : 可测集 i)
-  证明: if_pos hi
-
-@[simp]
-
-Depends on / 依赖: if_pos
+/-
+**MeasureTheory.Measure.toENNRealVectorMeasure_apply_measurable** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：toENNRealVectorMeasure_apply_measurable {μ : Measure α} {i : Set α} (hi : 
+MeasurableSet i) : μ.toENNRealVectorMeasure i = μ i
+参数：hi : MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem toENNRealVectorMeasure_apply_measurable {μ : Measure α} {i : Set α} (hi : MeasurableSet i) :
     μ.toENNRealVectorMeasure i = μ i :=
   if_pos hi
 
 @[simp]
-/--
-theorem `toENNRealVectorMeasure_zero` / 定理 `toENNRealVectorMeasure_zero`
-
-English:
-theorem toENNRealVectorMeasure_zero
-  statement: (0 : Measure α).toENNRealVectorMeasure = 0
-  proof: by
-  ext i
-  simp
-
-@[simp]
-
-中文:
-定理 toENN实数VectorMeasure_zero
-  结论: (0 : 测度 α).toENN实数VectorMeasure = 0
-  证明: by
-  ext i
-  simp
-
-@[simp]
+/-
+**MeasureTheory.Measure.toENNRealVectorMeasure_zero** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.Measure`。
+形式化陈述：toENNRealVectorMeasure_zero : (0 : Measure α).toENNRealVectorMeasure = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toENNRealVectorMeasure_zero : (0 : Measure α).toENNRealVectorMeasure = 0 := by
   ext i
   simp
 
 @[simp]
-/--
-theorem `toENNRealVectorMeasure_add` / 定理 `toENNRealVectorMeasure_add`
-
-English:
-theorem toENNRealVectorMeasure_add
-  given: (μ ν : Measure α)
-  proof: by
-  refine MeasureTheory.VectorMeasure.ext fun i hi => ?_
-  rw [toENNRealVectorMeasure_apply_measurable hi]; rw [add_apply]; rw [_root_.add_apply]; rw [toENNRealVectorMeasure_apply_measurable hi]; rw [toENNRealVectorMeasure_apply_measurable hi]
-
-中文:
-定理 toENN实数VectorMeasure_add
-  条件: (μ ν : 测度 α)
-  证明: by
-  refine MeasureTheory.VectorMeasure.ext fun i hi => ?_
-  rw [toENNRealVectorMeasure_apply_measurable hi]; rw [add_apply]; rw [_root_.add_apply]; rw [toENNRealVectorMeasure_apply_measurable hi]; rw [toENNRealVectorMeasure_apply_measurable hi]
-
-Depends on / 依赖: MeasureTheory, MeasureTheory.VectorMeasure.ext, VectorMeasure, _root_, _root_.add_apply, add_apply, toENNRealVectorMeasure_apply_measurable
+/-
+**MeasureTheory.Measure.toENNRealVectorMeasure_add** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Measure`。
+形式化陈述：toENNRealVectorMeasure_add (μ ν : Measure α) : (μ + ν).toENNRealVectorMeas
+ure = μ.toENNRealVectorMeasure + ν.toENNRealVectorMeasure
+参数：μ ν : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.toENNRealVectorMeasure_apply_measurable`：toENNReal
+VectorMeasure_apply_measurable {μ : Measure α} {i : Set α} (hi : MeasurableSet i
+) : μ.toENNRealVectorMeasure i = μ i
+· 使用定理 `MeasureTheory.Measure.add_apply`：add_apply {_m : MeasurableSpace α} (μ₁ 
+μ₂ : Measure α) (s : Set α) : (μ₁ + μ₂) s = μ₁ s + μ₂ s
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
 -/
 theorem toENNRealVectorMeasure_add (μ ν : Measure α) :
     (μ + ν).toENNRealVectorMeasure = μ.toENNRealVectorMeasure + ν.toENNRealVectorMeasure := by
   refine MeasureTheory.VectorMeasure.ext fun i hi => ?_
-  rw [toENNRealVectorMeasure_apply_measurable hi]; rw [add_apply]; rw [_root_.add_apply]; rw [toENNRealVectorMeasure_apply_measurable hi]; rw [toENNRealVectorMeasure_apply_measurable hi]
-
-/--
-theorem `toSignedMeasure_sub_apply` / 定理 `toSignedMeasure_sub_apply`
-
-English:
-theorem toSignedMeasure_sub_apply
-  statement: {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteMeasure ν]
-  proof: by
-  rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [Measure.toSignedMeasure_apply_measurable hi]
-
-中文:
-定理 toSignedMeasure_sub_apply
-  结论: {μ ν : 测度 α} [是有限测度 μ] [是有限测度 ν]
-  证明: by
-  rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [Measure.toSignedMeasure_apply_measurable hi]
-
-Depends on / 依赖: Measure, Measure.toSignedMeasure_apply_measurable, _root_, _root_.sub_apply, sub_apply, toSignedMeasure_apply_measurable
+  rw [toENNRealVectorMeasure_apply_measurable hi, add_apply, _root_.add_apply,
+    toENNRealVectorMeasure_apply_measurable hi, toENNRealVectorMeasure_apply_measurable hi]
+/-
+**MeasureTheory.Measure.toSignedMeasure_sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.Measure`。
+形式化陈述：toSignedMeasure_sub_apply {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteM
+easure ν] {i : Set α} (hi : MeasurableSet i) : (μ.toSignedMeasure - ν.toSignedMe
+asure) i = μ.real i - ν.real i
+参数：hi : MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Sub β}   {inst_2 : Sub F} [self : IsSu…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSubApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `MeasureTheory.Measure.toSignedMeasure_apply_measurable`：toSignedMeasure_
+apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : Set α} (hi : Measurabl
+eSet i) : μ.toSignedMeasure i = μ.real i
 -/
 theorem toSignedMeasure_sub_apply {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteMeasure ν]
     {i : Set α} (hi : MeasurableSet i) :
     (μ.toSignedMeasure - ν.toSignedMeasure) i = μ.real i - ν.real i := by
-  rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [Measure.toSignedMeasure_apply_measurable hi]
+  rw [_root_.sub_apply, toSignedMeasure_apply_measurable hi,
+    Measure.toSignedMeasure_apply_measurable hi]
 
 end Measure
 
@@ -1894,147 +1741,159 @@ open Measure
 
 section
 
-/--
-Definition of `ennrealToMeasure` / `ennrealToMeasure` 的定义
+/-- A vector measure over `ℝ≥0∞` is a measure. -/
+/-
+**MeasureTheory.VectorMeasure.ennrealToMeasure** 是 Mathlib 中的一个定义，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：ennrealToMeasure {_ : MeasurableSpace α} (v : VectorMeasure α Real>=0∞) : 
+Measure α
+参数：v : VectorMeasure α Real>=0∞。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
 
-English:
-definition ennrealToMeasure
-  signature: {_ : MeasurableSpace α} (v : VectorMeasure α Real>=0∞)
-  body: ofMeasurable (fun s _ => v s) v.empty fun _ hf₁ hf₂ => v.of_disjoint_iUnion hf₁ hf₂
-
-中文:
-定义 ennrealToMeasure
-  签名: {_ : 可测空间 α} (v : 向量测度 α 实数>=0∞)
-  定义体: ofMeasurable (fun s _ => v s) v.empty fun _ hf₁ hf₂ => v.of_disjoint_iUnion hf₁ hf₂
-
-Depends on / 依赖: ofMeasurable, of_disjoint_iUnion, v.empty, v.of_disjoint_iUnion
+--- 原说明 ---
+A vector measure over `ℝ≥0∞` is a measure.
 -/
-def ennrealToMeasure {_ : MeasurableSpace α} (v : VectorMeasure α Real>=0∞) : Measure α :=
+def ennrealToMeasure {_ : MeasurableSpace α} (v : VectorMeasure α ℝ≥0∞) : Measure α :=
   ofMeasurable (fun s _ => v s) v.empty fun _ hf₁ hf₂ => v.of_disjoint_iUnion hf₁ hf₂
-
-/--
-theorem `ennrealToMeasure_apply` / 定理 `ennrealToMeasure_apply`
-
-English:
-theorem ennrealToMeasure_apply
-  statement: {m : MeasurableSpace α} {v : VectorMeasure α Real>=0∞} {s : Set α}
-  proof: by
-  rw [ennrealToMeasure]; rw [ofMeasurable_apply _ hs]
-
-@[simp]
-
-中文:
-定理 ennrealToMeasure_apply
-  结论: {m : 可测空间 α} {v : 向量测度 α 实数>=0∞} {s : 集合 α}
-  证明: by
-  rw [ennrealToMeasure]; rw [ofMeasurable_apply _ hs]
-
-@[simp]
-
-Depends on / 依赖: ennrealToMeasure, ofMeasurable_apply
+/-
+**MeasureTheory.VectorMeasure.ennrealToMeasure_apply** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.VectorMeasure`。
+形式化陈述：ennrealToMeasure_apply {m : MeasurableSpace α} {v : VectorMeasure α Real>=
+0∞} {s : Set α} (hs : MeasurableSet s) : ennrealToMeasure v s = v s
+参数：hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.ennrealToMeasure.eq_1`：∀ {α : Type u_1} {x :
+ MeasurableSpace α} (v : MeasureTheory.VectorMeasure α ENNReal),   v.ennrealToMe
+asure = MeasureTheory.Measure.ofMeasura…
+· 使用定理 `MeasureTheory.Measure.ofMeasurable_apply`：ofMeasurable_apply {m : forall
+ s : Set α, MeasurableSet s -> Real>=0∞} {m0 : m ∅ MeasurableSet.empty = 0} {mU 
+: forall ⦃f : Nat -> Set α⦄ (h…
 -/
-theorem ennrealToMeasure_apply {m : MeasurableSpace α} {v : VectorMeasure α Real>=0∞} {s : Set α}
+theorem ennrealToMeasure_apply {m : MeasurableSpace α} {v : VectorMeasure α ℝ≥0∞} {s : Set α}
     (hs : MeasurableSet s) : ennrealToMeasure v s = v s := by
-  rw [ennrealToMeasure]; rw [ofMeasurable_apply _ hs]
+  rw [ennrealToMeasure, ofMeasurable_apply _ hs]
 
 @[simp]
-/--
-theorem `ennrealToMeasure_zero` / 定理 `ennrealToMeasure_zero`
-
-English:
-theorem ennrealToMeasure_zero
-  statement: ennrealToMeasure (0 : VectorMeasure α Real>=0∞) = 0
-  proof: by
-  simp [ennrealToMeasure]
-
-@[simp]
-
-中文:
-定理 ennrealToMeasure_zero
-  结论: ennrealToMeasure (0 : 向量测度 α 实数>=0∞) = 0
-  证明: by
-  simp [ennrealToMeasure]
-
-@[simp]
-
-Depends on / 依赖: ennrealToMeasure
+/-
+**MeasureTheory.VectorMeasure.ennrealToMeasure_zero** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.VectorMeasure`。
+形式化陈述：ennrealToMeasure_zero : ennrealToMeasure (0 : VectorMeasure α Real>=0∞) = 
+0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `MeasurableSet.empty`：MeasurableSet.empty [MeasurableSpace α] : Measurabl
+eSet (∅ : Set α)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `MeasureTheory.Measure.ofMeasurable.congr_simp`：∀ {α : Type u_1} [inst : 
+MeasurableSpace α] (m m_1 : (s : Set α) → MeasurableSet s → ENNReal) (e_m : m = 
+m_1)   (m0 : m ∅ ⋯ = 0)   (mU :    …
+· 使用定理 `MeasureTheory.Measure.ofMeasurable_zero`：ofMeasurable_zero : ofMeasurabl
+e (α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ennrealToMeasure_zero : ennrealToMeasure (0 : VectorMeasure α Real>=0∞) = 0 := by
+theorem ennrealToMeasure_zero : ennrealToMeasure (0 : VectorMeasure α ℝ≥0∞) = 0 := by
   simp [ennrealToMeasure]
 
 @[simp]
-/--
-theorem `_root_.MeasureTheory.Measure.toENNRealVectorMeasure_ennrealToMeasure` / 定理 `_root_.MeasureTheory.Measure.toENNRealVectorMeasure_ennrealToMeasure`
-
-English:
-theorem _root_.MeasureTheory.Measure.toENNRealVectorMeasure_ennrealToMeasure
-  proof: ext fun s hs => by
-  rw [toENNRealVectorMeasure_apply_measurable hs]; rw [ennrealToMeasure_apply hs]
-
-@[simp]
-
-中文:
-定理 _root_.测度论.测度.toENN实数VectorMeasure_ennrealToMeasure
-  证明: ext fun s hs => by
-  rw [toENNRealVectorMeasure_apply_measurable hs]; rw [ennrealToMeasure_apply hs]
-
-@[simp]
-
-Depends on / 依赖: ennrealToMeasure_apply, toENNRealVectorMeasure_apply_measurable
+/-
+**MeasureTheory.VectorMeasure._root_.MeasureTheory.Measure.toENNRealVectorMeasur
+e_ennrealToMeasure** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasureTheory.Measure.toENNRealVectorMeasure_ennrealToMeasure
-    (μ : VectorMeasure α Real>=0∞) :
+    (μ : VectorMeasure α ℝ≥0∞) :
     toENNRealVectorMeasure (ennrealToMeasure μ) = μ := ext fun s hs => by
-  rw [toENNRealVectorMeasure_apply_measurable hs]; rw [ennrealToMeasure_apply hs]
+  rw [toENNRealVectorMeasure_apply_measurable hs, ennrealToMeasure_apply hs]
 
 @[simp]
-/--
-theorem `ennrealToMeasure_toENNRealVectorMeasure` / 定理 `ennrealToMeasure_toENNRealVectorMeasure`
-
-English:
-theorem ennrealToMeasure_toENNRealVectorMeasure
-  given: (μ : Measure α)
-  proof: Measure.ext fun s hs => by
-  rw [ennrealToMeasure_apply hs]; rw [toENNRealVectorMeasure_apply_measurable hs]
-
-中文:
-定理 ennrealToMeasure_toENN实数VectorMeasure
-  条件: (μ : 测度 α)
-  证明: Measure.ext fun s hs => by
-  rw [ennrealToMeasure_apply hs]; rw [toENNRealVectorMeasure_apply_measurable hs]
-
-Depends on / 依赖: Measure, Measure.ext, ennrealToMeasure_apply, toENNRealVectorMeasure_apply_measurable
+/-
+**MeasureTheory.VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure** 是 Mathli
+b 中的一个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：ennrealToMeasure_toENNRealVectorMeasure (μ : Measure α) : ennrealToMeasure
+ (toENNRealVectorMeasure μ) = μ
+参数：μ : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.ennrealToMeasure_apply`：ennrealToMeasure_app
+ly {m : MeasurableSpace α} {v : VectorMeasure α Real>=0∞} {s : Set α} (hs : Meas
+urableSet s) : ennrealToMeasure v s = v …
+· 使用定理 `MeasureTheory.Measure.toENNRealVectorMeasure_apply_measurable`：toENNReal
+VectorMeasure_apply_measurable {μ : Measure α} {i : Set α} (hi : MeasurableSet i
+) : μ.toENNRealVectorMeasure i = μ i
 -/
 theorem ennrealToMeasure_toENNRealVectorMeasure (μ : Measure α) :
     ennrealToMeasure (toENNRealVectorMeasure μ) = μ := Measure.ext fun s hs => by
-  rw [ennrealToMeasure_apply hs]; rw [toENNRealVectorMeasure_apply_measurable hs]
+  rw [ennrealToMeasure_apply hs, toENNRealVectorMeasure_apply_measurable hs]
 
 /-- The equiv between `VectorMeasure α ℝ≥0∞` and `Measure α` formed by
 `MeasureTheory.VectorMeasure.ennrealToMeasure` and
 `MeasureTheory.Measure.toENNRealVectorMeasure`. -/
 @[simps]
-/--
-Definition of `equivMeasure` / `equivMeasure` 的定义
+/-
+**MeasureTheory.VectorMeasure.equivMeasure** 是 Mathlib 中的一个定义，位于命名空间 `MeasureThe
+ory.VectorMeasure`。
+形式化陈述：equivMeasure [MeasurableSpace α] : VectorMeasure α Real>=0∞ ≃ Measure α wh
+ere toFun
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.toENNRealVectorMeasure_ennrealToMeasure`：∀ {α : Ty
+pe u_1} {m : MeasurableSpace α} (μ : MeasureTheory.VectorMeasure α ENNReal),   μ
+.ennrealToMeasure.toENNRealVectorMeasure = μ
+· 使用定理 `MeasureTheory.VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure`：enn
+realToMeasure_toENNRealVectorMeasure (μ : Measure α) : ennrealToMeasure (toENNRe
+alVectorMeasure μ) = μ
 
-English:
-definition equivMeasure
-  signature: [MeasurableSpace α]
-  body: ennrealToMeasure
-  invFun := toENNRealVectorMeasure
-  left_inv := toENNRealVectorMeasure_ennrealToMeasure
-  right_inv := ennrealToMeasure_toENNRealVectorMeasure
-
-中文:
-定义 equivMeasure
-  签名: [可测空间 α]
-  定义体: ennrealToMeasure
-  invFun := toENNRealVectorMeasure
-  left_inv := toENNRealVectorMeasure_ennrealToMeasure
-  right_inv := ennrealToMeasure_toENNRealVectorMeasure
-
-Depends on / 依赖: ennrealToMeasure
+--- 原说明 ---
+The equiv between `VectorMeasure α ℝ≥0∞` and `Measure α` formed by
+`MeasureTheory.VectorMeasure.ennrealToMeasure` and
+`MeasureTheory.Measure.toENNRealVectorMeasure`.
 -/
-def equivMeasure [MeasurableSpace α] : VectorMeasure α Real>=0∞ ≃ Measure α where
+def equivMeasure [MeasurableSpace α] : VectorMeasure α ℝ≥0∞ ≃ Measure α where
   toFun := ennrealToMeasure
   invFun := toENNRealVectorMeasure
   left_inv := toENNRealVectorMeasure_ennrealToMeasure
@@ -2049,40 +1908,19 @@ variable {M : Type*} [AddCommMonoid M] [TopologicalSpace M]
 variable (v : VectorMeasure α M)
 
 open scoped Classical in
-/--
-Definition of `map` / `map` 的定义
+/-- The pushforward of a vector measure along a function. -/
+/-
+**MeasureTheory.VectorMeasure.map** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vecto
+rMeasure`。
+形式化陈述：map (v : VectorMeasure α M) (f : α -> β) : VectorMeasure β M
+参数：v : VectorMeasure α M；f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (v : VectorMeasure α M) (f : α -> β)
-  body: if hf : Measurable f then
-    { measureOf' := fun s => if MeasurableSet s then v (f ⁻¹' s) else 0
-      empty' := by simp
-      not_measurable' := fun _ hi => if_neg hi
-      m_iUnion' := by
-        intro g hg₁ hg₂
-        convert! v.m_iUnion (fun i => hf (hg₁ i)) fun i j hij => (hg₂ hij).preimage _
-        · rw [if_pos (hg₁ _)]
-        · rw [Set.preimage_iUnion, if_pos (MeasurableSet.iUnion hg₁)] }
-  else 0
-
-中文:
-定义 map
-  签名: (v : 向量测度 α M) (f : α -> β)
-  定义体: if hf : Measurable f then
-    { measureOf' := fun s => if MeasurableSet s then v (f ⁻¹' s) else 0
-      empty' := by simp
-      not_measurable' := fun _ hi => if_neg hi
-      m_iUnion' := by
-        intro g hg₁ hg₂
-        convert! v.m_iUnion (fun i => hf (hg₁ i)) fun i j hij => (hg₂ hij).preimage _
-        · rw [if_pos (hg₁ _)]
-        · rw [Set.preimage_iUnion, if_pos (MeasurableSet.iUnion hg₁)] }
-  else 0
-
-Depends on / 依赖: Measurable, MeasurableSet, MeasurableSet.iUnion, Set.preimage_iUnion, convert, iUnion, if_neg, if_pos, m_iUnion, measureOf, not_measurable, preimage, preimage_iUnion, v.m_iUnion
+--- 原说明 ---
+The pushforward of a vector measure along a function.
 -/
-def map (v : VectorMeasure α M) (f : α -> β) : VectorMeasure β M :=
+def map (v : VectorMeasure α M) (f : α → β) : VectorMeasure β M :=
   if hf : Measurable f then
     { measureOf' := fun s => if MeasurableSet s then v (f ⁻¹' s) else 0
       empty' := by simp
@@ -2093,211 +1931,177 @@ def map (v : VectorMeasure α M) (f : α -> β) : VectorMeasure β M :=
         · rw [if_pos (hg₁ _)]
         · rw [Set.preimage_iUnion, if_pos (MeasurableSet.iUnion hg₁)] }
   else 0
-
-/--
-theorem `map_not_measurable` / 定理 `map_not_measurable`
-
-English:
-theorem map_not_measurable
-  given: {f : α -> β} (hf : ¬Measurable f)
-  statement: v.map f = 0
-  proof: dif_neg hf
-
-中文:
-定理 map_not_measurable
-  条件: {f : α -> β} (hf : ¬可测 f)
-  结论: v.map f = 0
-  证明: dif_neg hf
-
-Depends on / 依赖: dif_neg
+/-
+**MeasureTheory.VectorMeasure.map_not_measurable** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.VectorMeasure`。
+形式化陈述：map_not_measurable {f : α -> β} (hf : ¬Measurable f) : v.map f = 0
+参数：hf : ¬Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem map_not_measurable {f : α -> β} (hf : ¬Measurable f) : v.map f = 0 :=
+theorem map_not_measurable {f : α → β} (hf : ¬Measurable f) : v.map f = 0 :=
   dif_neg hf
-
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s)
-  proof: by
-  rw [map]; rw [dif_pos hf]
-  exact if_pos hs
-
-@[simp]
-
-中文:
-定理 map_apply
-  条件: {f : α -> β} (hf : 可测 f) {s : 集合 β} (hs : 可测集 s)
-  证明: by
-  rw [map]; rw [dif_pos hf]
-  exact if_pos hs
-
-@[simp]
-
-Depends on / 依赖: dif_pos, if_pos
+/-
+**MeasureTheory.VectorMeasure.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.VectorMeasure`。
+形式化陈述：map_apply {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet
+ s) : v.map f s = v (f ⁻¹' s)
+参数：hf : Measurable f；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.map.eq_1`：∀ {α : Type u_1} {β : Type u_2} {m
+α : MeasurableSpace α} [inst : MeasurableSpace β] {M : Type u_3}   [inst_1 : Add
+CommMonoid M] [inst_2 : To…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-theorem map_apply {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s) :
+theorem map_apply {f : α → β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s) :
     v.map f s = v (f ⁻¹' s) := by
-  rw [map]; rw [dif_pos hf]
+  rw [map, dif_pos hf]
   exact if_pos hs
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: v.map id = v
-  proof: ext fun i hi => by rw [map_apply v measurable_id hi, Set.preimage_id]
-
-@[simp]
-
-中文:
-定理 map_id
-  结论: v.map id = v
-  证明: ext fun i hi => by rw [map_apply v measurable_id hi, Set.preimage_id]
-
-@[simp]
-
-Depends on / 依赖: Set.preimage_id, map_apply, measurable_id, preimage_id
+/-
+**MeasureTheory.VectorMeasure.map_id** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Ve
+ctorMeasure`。
+形式化陈述：map_id : v.map id = v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.map_apply`：map_apply {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : v.map f s = v (f ⁻¹' s)
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
+· 使用定理 `Set.preimage_id`：preimage_id {s : Set α} : id ⁻¹' s = s
 -/
 theorem map_id : v.map id = v :=
   ext fun i hi => by rw [map_apply v measurable_id hi, Set.preimage_id]
 
 @[simp]
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : α -> β)
-  statement: (0 : VectorMeasure α M).map f = 0
-  proof: by
-  by_cases hf : Measurable f
-  · ext i hi
-    rw [map_apply _ hf hi]; rw [zero_apply]; rw [zero_apply]
-  · exact dif_neg hf
-
-中文:
-定理 map_zero
-  条件: (f : α -> β)
-  结论: (0 : 向量测度 α M).map f = 0
-  证明: by
-  by_cases hf : Measurable f
-  · ext i hi
-    rw [map_apply _ hf hi]; rw [zero_apply]; rw [zero_apply]
-  · exact dif_neg hf
-
-Depends on / 依赖: Measurable, dif_neg, map_apply, zero_apply
+/-
+**MeasureTheory.VectorMeasure.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：map_zero (f : α -> β) : (0 : VectorMeasure α M).map f = 0
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.map_apply`：map_apply {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : v.map f s = v (f ⁻¹' s)
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem map_zero (f : α -> β) : (0 : VectorMeasure α M).map f = 0 := by
+theorem map_zero (f : α → β) : (0 : VectorMeasure α M).map f = 0 := by
   by_cases hf : Measurable f
   · ext i hi
-    rw [map_apply _ hf hi]; rw [zero_apply]; rw [zero_apply]
+    rw [map_apply _ hf hi, zero_apply, zero_apply]
   · exact dif_neg hf
 
 section
 
 variable {N : Type*} [AddCommMonoid N] [TopologicalSpace N]
 
-/--
-Definition of `mapRange` / `mapRange` 的定义
+/-- Given a vector measure `v` on `M` and a continuous `AddMonoidHom` `f : M → N`, `f ∘ v` is a
+vector measure on `N`. -/
+/-
+**MeasureTheory.VectorMeasure.mapRange** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：mapRange (v : VectorMeasure α M) (f : M ->+ N) (hf : Continuous f) : Vecto
+rMeasure α N where measureOf' s
+参数：v : VectorMeasure α M；f : M ->+ N；hf : Continuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRange
-  signature: (v : VectorMeasure α M) (f : M ->+ N) (hf : Continuous f)
-  body: f (v s)
-  empty' := by rw [empty, AddMonoidHom.map_zero]
-  not_measurable' i hi := by rw [not_measurable v hi, AddMonoidHom.map_zero]
-  m_iUnion' _ hg₁ hg₂ := HasSum.map (v.m_iUnion hg₁ hg₂) f hf
-
-@[simp]
-
-中文:
-定义 mapRange
-  签名: (v : 向量测度 α M) (f : M ->+ N) (hf : 连续 f)
-  定义体: f (v s)
-  empty' := by rw [empty, AddMonoidHom.map_zero]
-  not_measurable' i hi := by rw [not_measurable v hi, AddMonoidHom.map_zero]
-  m_iUnion' _ hg₁ hg₂ := HasSum.map (v.m_iUnion hg₁ hg₂) f hf
-
-@[simp]
+--- 原说明 ---
+Given a vector measure `v` on `M` and a continuous `AddMonoidHom` `f : M → N`, `
+f ∘ v` is a
+vector measure on `N`.
 -/
-def mapRange (v : VectorMeasure α M) (f : M ->+ N) (hf : Continuous f) : VectorMeasure α N where
+def mapRange (v : VectorMeasure α M) (f : M →+ N) (hf : Continuous f) : VectorMeasure α N where
   measureOf' s := f (v s)
   empty' := by rw [empty, AddMonoidHom.map_zero]
   not_measurable' i hi := by rw [not_measurable v hi, AddMonoidHom.map_zero]
   m_iUnion' _ hg₁ hg₂ := HasSum.map (v.m_iUnion hg₁ hg₂) f hf
 
 @[simp]
-/--
-theorem `mapRange_apply` / 定理 `mapRange_apply`
-
-English:
-theorem mapRange_apply
-  given: {f : M ->+ N} (hf : Continuous f) {s : Set α}
-  statement: v.mapRange f hf s = f (v s)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapRange_apply
-  条件: {f : M ->+ N} (hf : 连续 f) {s : 集合 α}
-  结论: v.mapRange f hf s = f (v s)
-  证明: rfl
-
-@[simp]
+/-
+**MeasureTheory.VectorMeasure.mapRange_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.VectorMeasure`。
+形式化陈述：mapRange_apply {f : M ->+ N} (hf : Continuous f) {s : Set α} : v.mapRange 
+f hf s = f (v s)
+参数：hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapRange_apply {f : M ->+ N} (hf : Continuous f) {s : Set α} : v.mapRange f hf s = f (v s) :=
+theorem mapRange_apply {f : M →+ N} (hf : Continuous f) {s : Set α} : v.mapRange f hf s = f (v s) :=
   rfl
 
 @[simp]
-/--
-theorem `mapRange_id` / 定理 `mapRange_id`
-
-English:
-theorem mapRange_id
-  statement: v.mapRange (AddMonoidHom.id M) continuous_id = v
-  proof: by
-  ext
-  rfl
-
-@[simp]
-
-中文:
-定理 mapRange_id
-  结论: v.mapRange (加法幺半群态射.id M) continuous_id = v
-  证明: by
-  ext
-  rfl
-
-@[simp]
+/-
+**MeasureTheory.VectorMeasure.mapRange_id** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.VectorMeasure`。
+形式化陈述：mapRange_id : v.mapRange (AddMonoidHom.id M) continuous_id = v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
 theorem mapRange_id : v.mapRange (AddMonoidHom.id M) continuous_id = v := by
   ext
   rfl
 
 @[simp]
-/--
-theorem `mapRange_zero` / 定理 `mapRange_zero`
-
-English:
-theorem mapRange_zero
-  given: {f : M ->+ N} (hf : Continuous f)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 mapRange_zero
-  条件: {f : M ->+ N} (hf : 连续 f)
-  证明: by
-  ext
-  simp
+/-
+**MeasureTheory.VectorMeasure.mapRange_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：mapRange_zero {f : M ->+ N} (hf : Continuous f) : mapRange (0 : VectorMeas
+ure α M) f hf = 0
+参数：hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mapRange_zero {f : M ->+ N} (hf : Continuous f) :
+theorem mapRange_zero {f : M →+ N} (hf : Continuous f) :
     mapRange (0 : VectorMeasure α M) f hf = 0 := by
   ext
   simp
@@ -2307,49 +2111,64 @@ section ContinuousAdd
 variable [ContinuousAdd M] [ContinuousAdd N]
 
 @[simp]
-/--
-theorem `mapRange_add` / 定理 `mapRange_add`
-
-English:
-theorem mapRange_add
-  given: {v w : VectorMeasure α M} {f : M ->+ N} (hf : Continuous f)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 mapRange_add
-  条件: {v w : 向量测度 α M} {f : M ->+ N} (hf : 连续 f)
-  证明: by
-  ext
-  simp
+/-
+**MeasureTheory.VectorMeasure.mapRange_add** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.VectorMeasure`。
+形式化陈述：mapRange_add {v w : VectorMeasure α M} {f : M ->+ N} (hf : Continuous f) :
+ (v + w).mapRange f hf = v.mapRange f hf + w.mapRange f hf
+参数：hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mapRange_add {v w : VectorMeasure α M} {f : M ->+ N} (hf : Continuous f) :
+theorem mapRange_add {v w : VectorMeasure α M} {f : M →+ N} (hf : Continuous f) :
     (v + w).mapRange f hf = v.mapRange f hf + w.mapRange f hf := by
   ext
   simp
 
-/--
-Definition of `mapRangeHom` / `mapRangeHom` 的定义
+/-- Given a continuous `AddMonoidHom` `f : M → N`, `mapRangeHom` is the `AddMonoidHom` mapping the
+vector measure `v` on `M` to the vector measure `f ∘ v` on `N`. -/
+/-
+**MeasureTheory.VectorMeasure.mapRangeHom** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheo
+ry.VectorMeasure`。
+形式化陈述：mapRangeHom {α : Type*} [MeasurableSpace α] (f : M ->+ N) (hf : Continuous
+ f) : VectorMeasure α M ->+ VectorMeasure α N where toFun v
+参数：f : M ->+ N；hf : Continuous f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.mapRange_zero`：mapRange_zero {f : M ->+ N} (
+hf : Continuous f) : mapRange (0 : VectorMeasure α M) f hf = 0
+· 使用定理 `MeasureTheory.VectorMeasure.mapRange_add`：mapRange_add {v w : VectorMeas
+ure α M} {f : M ->+ N} (hf : Continuous f) : (v + w).mapRange f hf = v.mapRange 
+f hf + w.mapRange f hf
 
-English:
-definition mapRangeHom
-  signature: {α : Type*} [MeasurableSpace α] (f : M ->+ N) (hf : Continuous f)
-  body: v.mapRange f hf
-  map_zero' := mapRange_zero hf
-  map_add' _ _ := mapRange_add hf
-
-中文:
-定义 mapRangeHom
-  签名: {α : 类型} [可测空间 α] (f : M ->+ N) (hf : 连续 f)
-  定义体: v.mapRange f hf
-  map_zero' := mapRange_zero hf
-  map_add' _ _ := mapRange_add hf
-
-Depends on / 依赖: mapRange, v.mapRange
+--- 原说明 ---
+Given a continuous `AddMonoidHom` `f : M → N`, `mapRangeHom` is the `AddMonoidHo
+m` mapping the
+vector measure `v` on `M` to the vector measure `f ∘ v` on `N`.
 -/
-def mapRangeHom {α : Type*} [MeasurableSpace α] (f : M ->+ N) (hf : Continuous f) :
-    VectorMeasure α M ->+ VectorMeasure α N where
+def mapRangeHom {α : Type*} [MeasurableSpace α] (f : M →+ N) (hf : Continuous f) :
+    VectorMeasure α M →+ VectorMeasure α N where
   toFun v := v.mapRange f hf
   map_zero' := mapRange_zero hf
   map_add' _ _ := mapRange_add hf
@@ -2364,49 +2183,61 @@ variable [ContinuousConstSMul R M] [ContinuousConstSMul R N]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `mapRange_smul` / 定理 `mapRange_smul`
-
-English:
-theorem mapRange_smul
-  given: {v : VectorMeasure α M} {f : M ->ₗ[R] N} (hf : Continuous f) {c : R}
-  proof: by
-  ext; simp
-
-中文:
-定理 mapRange_smul
-  条件: {v : 向量测度 α M} {f : M ->ₗ[R] N} (hf : 连续 f) {c : R}
-  证明: by
-  ext; simp
+/-
+**MeasureTheory.VectorMeasure.mapRange_smul** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：mapRange_smul {v : VectorMeasure α M} {f : M ->ₗ[R] N} (hf : Continuous f)
+ {c : R} : (c • v).mapRange f.toAddMonoidHom hf = c • (v.mapRange f.toAddMonoidH
+om hf)
+参数：hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSMulApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M]   {R : Type u_4} [inst_2 : Se…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mapRange_smul {v : VectorMeasure α M} {f : M ->ₗ[R] N} (hf : Continuous f) {c : R} :
+theorem mapRange_smul {v : VectorMeasure α M} {f : M →ₗ[R] N} (hf : Continuous f) {c : R} :
     (c • v).mapRange f.toAddMonoidHom hf = c • (v.mapRange f.toAddMonoidHom hf) := by
   ext; simp
 
 variable [ContinuousAdd M] [ContinuousAdd N]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `mapRangeₗ` / `mapRangeₗ` 的定义
+/-- Given a continuous linear map `f : M → N`, `mapRangeₗ` is the linear map mapping the
+vector measure `v` on `M` to the vector measure `f ∘ v` on `N`. -/
+/-
+**MeasureTheory.VectorMeasure.mapRange** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：mapRange (v : VectorMeasure α M) (f : M ->+ N) (hf : Continuous f) : Vecto
+rMeasure α N where measureOf' s
+参数：v : VectorMeasure α M；f : M ->+ N；hf : Continuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRangeₗ
-  signature: {α : Type*} [MeasurableSpace α] (f : M ->ₗ[R] N) (hf : Continuous f)
-  body: v.mapRange f.toAddMonoidHom hf
-  map_add' _ _ := mapRange_add hf
-  map_smul' _ _ := mapRange_smul hf
-
-中文:
-定义 mapRangeₗ
-  签名: {α : 类型} [可测空间 α] (f : M ->ₗ[R] N) (hf : 连续 f)
-  定义体: v.mapRange f.toAddMonoidHom hf
-  map_add' _ _ := mapRange_add hf
-  map_smul' _ _ := mapRange_smul hf
-
-Depends on / 依赖: f.toAddMonoidHom, mapRange, toAddMonoidHom, v.mapRange
+--- 原说明 ---
+Given a continuous linear map `f : M → N`, `mapRangeₗ` is the linear map mapping
+ the
+vector measure `v` on `M` to the vector measure `f ∘ v` on `N`.
 -/
-def mapRangeₗ {α : Type*} [MeasurableSpace α] (f : M ->ₗ[R] N) (hf : Continuous f) :
-    VectorMeasure α M ->ₗ[R] VectorMeasure α N where
+def mapRangeₗ {α : Type*} [MeasurableSpace α] (f : M →ₗ[R] N) (hf : Continuous f) :
+    VectorMeasure α M →ₗ[R] VectorMeasure α N where
   toFun v := v.mapRange f.toAddMonoidHom hf
   map_add' _ _ := mapRange_add hf
   map_smul' _ _ := mapRange_smul hf
@@ -2416,44 +2247,21 @@ end Module
 end
 
 open scoped Classical in
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- The restriction of a vector measure on some set. -/
+/-
+**MeasureTheory.VectorMeasure.restrict** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：{α : Type u_1} →   {mα : MeasurableSpace α} →     {M : Type u_3} →       [
+inst : AddCommMonoid M] →         [inst_1 : TopologicalSpace M] → MeasureTheory.
+VectorMeasure α M → Set α → MeasureTheory.VectorMeasure α M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (v : VectorMeasure α M) (i : Set α)
-  body: if hi : MeasurableSet i then
-    { measureOf' := fun s => if MeasurableSet s then v (s inter i) else 0
-      empty' := by simp
-      not_measurable' := fun _ hi => if_neg hi
-      m_iUnion' := by
-        intro f hf₁ hf₂
-        convert!
-          v.m_iUnion (fun n => (hf₁ n).inter hi)
-            (hf₂.mono fun i j => Disjoint.mono inf_le_left inf_le_left)
-        · rw [if_pos (hf₁ _)]
-        · rw [Set.iUnion_inter, if_pos (MeasurableSet.iUnion hf₁)] }
-  else 0
-
-中文:
-定义 restrict
-  签名: (v : 向量测度 α M) (i : 集合 α)
-  定义体: if hi : MeasurableSet i then
-    { measureOf' := fun s => if MeasurableSet s then v (s inter i) else 0
-      empty' := by simp
-      not_measurable' := fun _ hi => if_neg hi
-      m_iUnion' := by
-        intro f hf₁ hf₂
-        convert!
-          v.m_iUnion (fun n => (hf₁ n).inter hi)
-            (hf₂.mono fun i j => Disjoint.mono inf_le_left inf_le_left)
-        · rw [if_pos (hf₁ _)]
-        · rw [Set.iUnion_inter, if_pos (MeasurableSet.iUnion hf₁)] }
-  else 0
+--- 原说明 ---
+The restriction of a vector measure on some set.
 -/
 @[no_expose] def restrict (v : VectorMeasure α M) (i : Set α) : VectorMeasure α M :=
   if hi : MeasurableSet i then
-    { measureOf' := fun s => if MeasurableSet s then v (s inter i) else 0
+    { measureOf' := fun s => if MeasurableSet s then v (s ∩ i) else 0
       empty' := by simp
       not_measurable' := fun _ hi => if_neg hi
       m_iUnion' := by
@@ -2464,272 +2272,283 @@ definition restrict
         · rw [if_pos (hf₁ _)]
         · rw [Set.iUnion_inter, if_pos (MeasurableSet.iUnion hf₁)] }
   else 0
-
-/--
-theorem `restrict_not_measurable` / 定理 `restrict_not_measurable`
-
-English:
-theorem restrict_not_measurable
-  given: {i : Set α} (hi : ¬MeasurableSet i)
-  statement: v.restrict i = 0
-  proof: dif_neg hi
-
-中文:
-定理 restrict_not_measurable
-  条件: {i : 集合 α} (hi : ¬可测集 i)
-  结论: v.restrict i = 0
-  证明: dif_neg hi
-
-Depends on / 依赖: dif_neg
+/-
+**MeasureTheory.VectorMeasure.restrict_not_measurable** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_not_measurable {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i
+ = 0
+参数：hi : ¬MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem restrict_not_measurable {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0 :=
   dif_neg hi
-
-/--
-theorem `restrict_apply` / 定理 `restrict_apply`
-
-English:
-theorem restrict_apply
-  given: {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j)
-  proof: by
-  rw [restrict]; rw [dif_pos hi]
-  exact if_pos hj
-
-中文:
-定理 restrict_apply
-  条件: {i : 集合 α} (hi : 可测集 i) {j : 集合 α} (hj : 可测集 j)
-  证明: by
-  rw [restrict]; rw [dif_pos hi]
-  exact if_pos hj
-
-Depends on / 依赖: dif_pos, if_pos, restrict
+/-
+**MeasureTheory.VectorMeasure.restrict_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.VectorMeasure`。
+形式化陈述：restrict_apply {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : Measur
+ableSet j) : v.restrict i j = v (j inter i)
+参数：hi : MeasurableSet i；hj : MeasurableSet j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.MeasureTheory.VectorMeasure.Basic.0.MeasureTheory.Vecto
+rMeasure.restrict.eq_1`：∀ {α : Type u_1} {mα : MeasurableSpace α} {M : Type u_3}
+ [inst : AddCommMonoid M] [inst_1 : TopologicalSpace M]   (v : MeasureTheory.Vec
+torM…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem restrict_apply {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) :
-    v.restrict i j = v (j inter i) := by
-  rw [restrict]; rw [dif_pos hi]
+    v.restrict i j = v (j ∩ i) := by
+  rw [restrict, dif_pos hi]
   exact if_pos hj
-
-/--
-theorem `restrict_apply_univ` / 定理 `restrict_apply_univ`
-
-English:
-theorem restrict_apply_univ
-  given: {i : Set α}
-  proof: by
-  by_cases hi : MeasurableSet i
-  · simp [restrict_apply, hi]
-  · simp [restrict_not_measurable, hi]
-
-中文:
-定理 restrict_apply_univ
-  条件: {i : 集合 α}
-  证明: by
-  by_cases hi : MeasurableSet i
-  · simp [restrict_apply, hi]
-  · simp [restrict_not_measurable, hi]
+/-
+**MeasureTheory.VectorMeasure.restrict_apply_univ** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.VectorMeasure`。
+形式化陈述：∀ {α : Type u_1} {mα : MeasurableSpace α} {M : Type u_3} [inst : AddCommMo
+noid M] [inst_1 : TopologicalSpace M]   (v : MeasureTheory.VectorMeasure α M) {i
+ : Set α}, (v.restrict i) Set.univ = v i
+参数：v : MeasureTheory.VectorMeasure α M；v.restrict i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_not_measurable`：restrict_not_measur
+able {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
 -/
 @[simp] theorem restrict_apply_univ {i : Set α} :
     v.restrict i univ = v i := by
   by_cases hi : MeasurableSet i
   · simp [restrict_apply, hi]
   · simp [restrict_not_measurable, hi]
-
-/--
-theorem `restrict_eq_self` / 定理 `restrict_eq_self`
-
-English:
-theorem restrict_eq_self
-  statement: {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j)
-  proof: by
-  rw [restrict_apply v hi hj]; rw [Set.inter_eq_left.2 hij]
-
-@[simp]
-
-中文:
-定理 restrict_eq_self
-  结论: {i : 集合 α} (hi : 可测集 i) {j : 集合 α} (hj : 可测集 j)
-  证明: by
-  rw [restrict_apply v hi hj]; rw [Set.inter_eq_left.2 hij]
-
-@[simp]
-
-Depends on / 依赖: Set.inter_eq_left, inter_eq_left, restrict_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：restrict_eq_self {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : Meas
+urableSet j) (hij : j subseteq i) : v.restrict i j = v j
+参数：hi : MeasurableSet i；hj : MeasurableSet j；hij : j subseteq i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
 -/
 theorem restrict_eq_self {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j)
-    (hij : j subseteq i) : v.restrict i j = v j := by
-  rw [restrict_apply v hi hj]; rw [Set.inter_eq_left.2 hij]
+    (hij : j ⊆ i) : v.restrict i j = v j := by
+  rw [restrict_apply v hi hj, Set.inter_eq_left.2 hij]
 
 @[simp]
-/--
-theorem `restrict_empty` / 定理 `restrict_empty`
-
-English:
-theorem restrict_empty
-  statement: v.restrict ∅ = 0
-  proof: ext fun i hi => by
-    rw [restrict_apply v MeasurableSet.empty hi]; rw [Set.inter_empty]; rw [v.empty]; rw [zero_apply]
-
-@[simp]
-
-中文:
-定理 restrict_empty
-  结论: v.restrict ∅ = 0
-  证明: ext fun i hi => by
-    rw [restrict_apply v MeasurableSet.empty hi]; rw [Set.inter_empty]; rw [v.empty]; rw [zero_apply]
-
-@[simp]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.empty, Set.inter_empty, inter_empty, restrict_apply, v.empty, zero_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_empty** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.VectorMeasure`。
+形式化陈述：restrict_empty : v.restrict ∅ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `MeasurableSet.empty`：MeasurableSet.empty [MeasurableSpace α] : Measurabl
+eSet (∅ : Set α)
+· 使用定理 `Set.inter_empty`：inter_empty (a : Set α) : a inter ∅ = ∅
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
 -/
 theorem restrict_empty : v.restrict ∅ = 0 :=
   ext fun i hi => by
-    rw [restrict_apply v MeasurableSet.empty hi]; rw [Set.inter_empty]; rw [v.empty]; rw [zero_apply]
+    rw [restrict_apply v MeasurableSet.empty hi, Set.inter_empty, v.empty, zero_apply]
 
 @[simp]
-/--
-theorem `restrict_univ` / 定理 `restrict_univ`
-
-English:
-theorem restrict_univ
-  statement: v.restrict Set.univ = v
-  proof: ext fun i hi => by rw [restrict_apply v MeasurableSet.univ hi, Set.inter_univ]
-
-@[simp]
-
-中文:
-定理 restrict_univ
-  结论: v.restrict 集合.univ = v
-  证明: ext fun i hi => by rw [restrict_apply v MeasurableSet.univ hi, Set.inter_univ]
-
-@[simp]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, Set.inter_univ, inter_univ, restrict_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_univ** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：restrict_univ : v.restrict Set.univ = v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
 -/
 theorem restrict_univ : v.restrict Set.univ = v :=
   ext fun i hi => by rw [restrict_apply v MeasurableSet.univ hi, Set.inter_univ]
 
 @[simp]
-/--
-theorem `restrict_zero` / 定理 `restrict_zero`
-
-English:
-theorem restrict_zero
-  given: {i : Set α}
-  statement: (0 : VectorMeasure α M).restrict i = 0
-  proof: by
-  by_cases hi : MeasurableSet i
-  · ext j hj
-    rw [restrict_apply 0 hi hj]; rw [zero_apply]; rw [zero_apply]
-  · exact dif_neg hi
-
-中文:
-定理 restrict_zero
-  条件: {i : 集合 α}
-  结论: (0 : 向量测度 α M).restrict i = 0
-  证明: by
-  by_cases hi : MeasurableSet i
-  · ext j hj
-    rw [restrict_apply 0 hi hj]; rw [zero_apply]; rw [zero_apply]
-  · exact dif_neg hi
-
-Depends on / 依赖: MeasurableSet, dif_neg, restrict_apply, zero_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：restrict_zero {i : Set α} : (0 : VectorMeasure α M).restrict i = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem restrict_zero {i : Set α} : (0 : VectorMeasure α M).restrict i = 0 := by
   by_cases hi : MeasurableSet i
   · ext j hj
-    rw [restrict_apply 0 hi hj]; rw [zero_apply]; rw [zero_apply]
+    rw [restrict_apply 0 hi hj, zero_apply, zero_apply]
   · exact dif_neg hi
-
-/--
-theorem `restrict_dirac` / 定理 `restrict_dirac`
-
-English:
-theorem restrict_dirac
-  given: {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) [Decidable (x in s)]
-  proof: by
-  classical
-  ext t ht
-  simp only [hs, ht, restrict_apply]
-  split_ifs with has <;> simp [dirac, ht, ht.inter hs, has]
-
-@[simp]
-
-中文:
-定理 restrict_dirac
-  条件: {s : 集合 α} {x : α} {m : M} (hs : 可测集 s) [可判定 (x in s)]
-  证明: by
-  classical
-  ext t ht
-  simp only [hs, ht, restrict_apply]
-  split_ifs with has <;> simp [dirac, ht, ht.inter hs, has]
-
-@[simp]
-
-Depends on / 依赖: classical, ht.inter, restrict_apply, split_ifs
+/-
+**MeasureTheory.VectorMeasure.restrict_dirac** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.VectorMeasure`。
+形式化陈述：restrict_dirac {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) [Decidab
+le (x in s)] : (dirac x m).restrict s = if x in s then dirac x m else 0
+参数：hs : MeasurableSet s；x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
 -/
-theorem restrict_dirac {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) [Decidable (x in s)] :
-    (dirac x m).restrict s = if x in s then dirac x m else 0 := by
+theorem restrict_dirac {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) [Decidable (x ∈ s)] :
+    (dirac x m).restrict s = if x ∈ s then dirac x m else 0 := by
   classical
   ext t ht
   simp only [hs, ht, restrict_apply]
   split_ifs with has <;> simp [dirac, ht, ht.inter hs, has]
 
 @[simp]
-/--
-theorem `restrict_dirac_of_mem` / 定理 `restrict_dirac_of_mem`
-
-English:
-theorem restrict_dirac_of_mem
-  given: {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) (hx : x in s)
-  proof: by
-  classical
-  simp [restrict_dirac, hs, hx]
-
-@[simp]
-
-中文:
-定理 restrict_dirac_of_mem
-  条件: {s : 集合 α} {x : α} {m : M} (hs : 可测集 s) (hx : x in s)
-  证明: by
-  classical
-  simp [restrict_dirac, hs, hx]
-
-@[simp]
-
-Depends on / 依赖: classical, restrict_dirac
+/-
+**MeasureTheory.VectorMeasure.restrict_dirac_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.VectorMeasure`。
+形式化陈述：restrict_dirac_of_mem {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) (
+hx : x in s) : (dirac x m).restrict s = dirac x m
+参数：hs : MeasurableSet s；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_dirac`：restrict_dirac {s : Set α} {
+x : α} {m : M} (hs : MeasurableSet s) [Decidable (x in s)] : (dirac x m).restric
+t s = if x in s then dirac x m e…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem restrict_dirac_of_mem {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) (hx : x in s) :
+theorem restrict_dirac_of_mem {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) (hx : x ∈ s) :
     (dirac x m).restrict s = dirac x m := by
   classical
   simp [restrict_dirac, hs, hx]
 
 @[simp]
-/--
-theorem `restrict_dirac_of_notMem` / 定理 `restrict_dirac_of_notMem`
-
-English:
-theorem restrict_dirac_of_notMem
-  given: {s : Set α} {x : α} {m : M} (hx : x ∉ s)
-  proof: by
-  classical
-  by_cases hs : MeasurableSet s
-  · simp [restrict_dirac, hs, hx]
-  · simp [restrict, hs]
-
-@[simp]
-
-中文:
-定理 restrict_dirac_of_notMem
-  条件: {s : 集合 α} {x : α} {m : M} (hx : x ∉ s)
-  证明: by
-  classical
-  by_cases hs : MeasurableSet s
-  · simp [restrict_dirac, hs, hx]
-  · simp [restrict, hs]
-
-@[simp]
-
-Depends on / 依赖: MeasurableSet, classical, restrict, restrict_dirac
+/-
+**MeasureTheory.VectorMeasure.restrict_dirac_of_notMem** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_dirac_of_notMem {s : Set α} {x : α} {m : M} (hx : x ∉ s) : (dirac
+ x m).restrict s = 0
+参数：hx : x ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_dirac`：restrict_dirac {s : Set α} {
+x : α} {m : M} (hs : MeasurableSet s) [Decidable (x in s)] : (dirac x m).restric
+t s = if x in s then dirac x m e…
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
 -/
 theorem restrict_dirac_of_notMem {s : Set α} {x : α} {m : M} (hx : x ∉ s) :
     (dirac x m).restrict s = 0 := by
@@ -2739,140 +2558,180 @@ theorem restrict_dirac_of_notMem {s : Set α} {x : α} {m : M} (hx : x ∉ s) :
   · simp [restrict, hs]
 
 @[simp]
-/--
-theorem `restrict_singleton` / 定理 `restrict_singleton`
-
-English:
-theorem restrict_singleton
-  given: {a : α}
-  statement: v.restrict {a} = dirac a (v {a})
-  proof: by
-  by_cases h : MeasurableSet {a}
-  · ext s hs
-    by_cases ha : a in s <;> simp [*, restrict_apply]
-  · simp [restrict, h]
-
-中文:
-定理 restrict_singleton
-  条件: {a : α}
-  结论: v.restrict {a} = dirac a (v {a})
-  证明: by
-  by_cases h : MeasurableSet {a}
-  · ext s hs
-    by_cases ha : a in s <;> simp [*, restrict_apply]
-  · simp [restrict, h]
-
-Depends on / 依赖: MeasurableSet, restrict, restrict_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.VectorMeasure`。
+形式化陈述：restrict_singleton {a : α} : v.restrict {a} = dirac a (v {a})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `Set.inter_singleton_of_mem`：∀ {α : Type u_1} {s : Set α} {a : α}, a ∈ s 
+→ s ∩ {a} = {a}
+· 使用定理 `MeasureTheory.VectorMeasure.dirac_apply_of_mem`：∀ {β : Type u_2} {M : Ty
+pe u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpace M] [inst_2 : Measura
+bleSpace β]   {x : β} {v : M} {s : S…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.inter_singleton_of_notMem`：∀ {α : Type u_1} {s : Set α} {a : α}, a ∉
+ s → s ∩ {a} = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `MeasureTheory.VectorMeasure.dirac_apply_of_notMem`：∀ {β : Type u_2} {M :
+ Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpace M] [inst_2 : Meas
+urableSpace β]   {x : β} {v : M} {s : S…
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
+· 使用定理 `MeasureTheory.VectorMeasure.dirac_zero`：∀ {β : Type u_2} {M : Type u_3} 
+[inst : AddCommMonoid M] [inst_1 : TopologicalSpace M] [inst_2 : MeasurableSpace
+ β]   {x : β}, MeasureTheory…
 -/
 theorem restrict_singleton {a : α} : v.restrict {a} = dirac a (v {a}) := by
   by_cases h : MeasurableSet {a}
   · ext s hs
-    by_cases ha : a in s <;> simp [*, restrict_apply]
+    by_cases ha : a ∈ s <;> simp [*, restrict_apply]
   · simp [restrict, h]
-
-/--
-theorem `restrict_restrict` / 定理 `restrict_restrict`
-
-English:
-theorem restrict_restrict
-  given: {s t : Set α} (hs : MeasurableSet s) (ht : MeasurableSet t)
-  proof: by
-  ext u hu
-  simp [restrict_apply, hs, hu, ht, Set.inter_assoc]
-
-中文:
-定理 restrict_restrict
-  条件: {s t : 集合 α} (hs : 可测集 s) (ht : 可测集 t)
-  证明: by
-  ext u hu
-  simp [restrict_apply, hs, hu, ht, Set.inter_assoc]
-
-Depends on / 依赖: Set.inter_assoc, inter_assoc, restrict_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_restrict** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.VectorMeasure`。
+形式化陈述：restrict_restrict {s t : Set α} (hs : MeasurableSet s) (ht : MeasurableSet
+ t) : (v.restrict t).restrict s = v.restrict (s inter t)
+参数：hs : MeasurableSet s；ht : MeasurableSet t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem restrict_restrict {s t : Set α} (hs : MeasurableSet s) (ht : MeasurableSet t) :
-    (v.restrict t).restrict s = v.restrict (s inter t) := by
+    (v.restrict t).restrict s = v.restrict (s ∩ t) := by
   ext u hu
   simp [restrict_apply, hs, hu, ht, Set.inter_assoc]
-
-/--
-theorem `restrict_map` / 定理 `restrict_map`
-
-English:
-theorem restrict_map
-  given: {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s)
-  proof: by
-  ext t ht
-  simp [map_apply, hs, hf hs, restrict_apply, ht, hf, hf ht]
-
-中文:
-定理 restrict_map
-  条件: {f : α -> β} (hf : 可测 f) {s : 集合 β} (hs : 可测集 s)
-  证明: by
-  ext t ht
-  simp [map_apply, hs, hf hs, restrict_apply, ht, hf, hf ht]
-
-Depends on / 依赖: map_apply, restrict_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_map** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.VectorMeasure`。
+形式化陈述：restrict_map {f : α -> β} (hf : Measurable f) {s : Set β} (hs : Measurable
+Set s) : (v.map f).restrict s = (v.restrict (f ⁻¹' s)).map f
+参数：hf : Measurable f；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `MeasureTheory.VectorMeasure.map_apply`：map_apply {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : v.map f s = v (f ⁻¹' s)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem restrict_map {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s) :
+theorem restrict_map {f : α → β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s) :
     (v.map f).restrict s = (v.restrict (f ⁻¹' s)).map f := by
   ext t ht
   simp [map_apply, hs, hf hs, restrict_apply, ht, hf, hf ht]
-
-/--
-theorem `restrict_toSignedMeasure` / 定理 `restrict_toSignedMeasure`
-
-English:
-theorem restrict_toSignedMeasure
-  statement: {μ : Measure α} [IsFiniteMeasure μ]
-  proof: by
-  ext t ht
-  rw [restrict_apply _ hs ht]; rw [Measure.toSignedMeasure_apply_measurable (ht.inter hs)]; rw [Measure.toSignedMeasure_apply_measurable ht]; rw [measureReal_restrict_apply ht]
-
-中文:
-定理 restrict_toSignedMeasure
-  结论: {μ : 测度 α} [是有限测度 μ]
-  证明: by
-  ext t ht
-  rw [restrict_apply _ hs ht]; rw [Measure.toSignedMeasure_apply_measurable (ht.inter hs)]; rw [Measure.toSignedMeasure_apply_measurable ht]; rw [measureReal_restrict_apply ht]
-
-Depends on / 依赖: Measure, Measure.toSignedMeasure_apply_measurable, ht.inter, measureReal_restrict_apply, restrict_apply, toSignedMeasure_apply_measurable
+/-
+**MeasureTheory.VectorMeasure.restrict_toSignedMeasure** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_toSignedMeasure {μ : Measure α} [IsFiniteMeasure μ] {s : Set α} (
+hs : MeasurableSet s) : μ.toSignedMeasure.restrict s = (μ.restrict s).toSignedMe
+asure
+参数：hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `MeasureTheory.Measure.toSignedMeasure_apply_measurable`：toSignedMeasure_
+apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : Set α} (hi : Measurabl
+eSet i) : μ.toSignedMeasure i = μ.real i
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `MeasureTheory.measureReal_restrict_apply`：measureReal_restrict_apply (ht
+ : MeasurableSet t) : (μ.restrict s).real t = μ.real (t inter s)
 -/
 theorem restrict_toSignedMeasure {μ : Measure α} [IsFiniteMeasure μ]
     {s : Set α} (hs : MeasurableSet s) :
     μ.toSignedMeasure.restrict s = (μ.restrict s).toSignedMeasure := by
   ext t ht
-  rw [restrict_apply _ hs ht]; rw [Measure.toSignedMeasure_apply_measurable (ht.inter hs)]; rw [Measure.toSignedMeasure_apply_measurable ht]; rw [measureReal_restrict_apply ht]
+  rw [restrict_apply _ hs ht, Measure.toSignedMeasure_apply_measurable (ht.inter hs),
+    Measure.toSignedMeasure_apply_measurable ht, measureReal_restrict_apply ht]
 
 section ContinuousAdd
 
 variable [ContinuousAdd M]
 
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (v w : VectorMeasure α M) (f : α -> β)
-  statement: (v + w).map f = v.map f + w.map f
-  proof: by
-  by_cases hf : Measurable f
-  · ext i hi
-    simp [map_apply _ hf hi]
-  · simp [map, dif_neg hf]
-
-中文:
-定理 map_add
-  条件: (v w : 向量测度 α M) (f : α -> β)
-  结论: (v + w).map f = v.map f + w.map f
-  证明: by
-  by_cases hf : Measurable f
-  · ext i hi
-    simp [map_apply _ hf hi]
-  · simp [map, dif_neg hf]
-
-Depends on / 依赖: Measurable, dif_neg, map_apply
+/-
+**MeasureTheory.VectorMeasure.map_add** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.V
+ectorMeasure`。
+形式化陈述：map_add (v w : VectorMeasure α M) (f : α -> β) : (v + w).map f = v.map f +
+ w.map f
+参数：v w : VectorMeasure α M；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.map_apply`：map_apply {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : v.map f s = v (f ⁻¹' s)
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用定理 `dite.congr_simp`：∀ {α : Sort u} (c : Prop) {h : Decidable c} [h_1 : Deci
+dable c] (t t_1 : c → α),   t = t_1 → ∀ (e e_1 : ¬c → α), e = e_1 → dite c t e =
+ dite…
+· 使用定理 `MeasureTheory.VectorMeasure.mk.congr_simp`：∀ {α : Type u_3} [inst : Meas
+urableSpace α] {M : Type u_4} [inst_1 : AddCommMonoid M] [inst_2 : TopologicalSp
+ace M]   (measureOf' measureOf'…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
-theorem map_add (v w : VectorMeasure α M) (f : α -> β) : (v + w).map f = v.map f + w.map f := by
+theorem map_add (v w : VectorMeasure α M) (f : α → β) : (v + w).map f = v.map f + w.map f := by
   by_cases hf : Measurable f
   · ext i hi
     simp [map_apply _ hf hi]
@@ -2880,57 +2739,56 @@ theorem map_add (v w : VectorMeasure α M) (f : α -> β) : (v + w).map f = v.ma
 
 /-- `VectorMeasure.map` as an additive monoid homomorphism. -/
 @[simps]
-/--
-Definition of `mapGm` / `mapGm` 的定义
+/-
+**MeasureTheory.VectorMeasure.mapGm** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vec
+torMeasure`。
+形式化陈述：mapGm {α : Type*} [MeasurableSpace α] (f : α -> β) : VectorMeasure α M ->+
+ VectorMeasure β M where toFun v
+参数：f : α -> β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.map_zero`：map_zero (f : α -> β) : (0 : Vecto
+rMeasure α M).map f = 0
+· 使用定理 `MeasureTheory.VectorMeasure.map_add`：map_add (v w : VectorMeasure α M) (
+f : α -> β) : (v + w).map f = v.map f + w.map f
 
-English:
-definition mapGm
-  signature: {α : Type*} [MeasurableSpace α] (f : α -> β)
-  body: v.map f
-  map_zero' := map_zero f
-  map_add' _ _ := map_add _ _ f
-
-@[simp]
-
-中文:
-定义 mapGm
-  签名: {α : 类型} [可测空间 α] (f : α -> β)
-  定义体: v.map f
-  map_zero' := map_zero f
-  map_add' _ _ := map_add _ _ f
-
-@[simp]
-
-Depends on / 依赖: v.map
+--- 原说明 ---
+`VectorMeasure.map` as an additive monoid homomorphism.
 -/
-def mapGm {α : Type*} [MeasurableSpace α] (f : α -> β) : VectorMeasure α M ->+ VectorMeasure β M where
+def mapGm {α : Type*} [MeasurableSpace α] (f : α → β) : VectorMeasure α M →+ VectorMeasure β M where
   toFun v := v.map f
   map_zero' := map_zero f
   map_add' _ _ := map_add _ _ f
 
 @[simp]
-/--
-theorem `restrict_add` / 定理 `restrict_add`
-
-English:
-theorem restrict_add
-  given: (v w : VectorMeasure α M) (i : Set α)
-  proof: by
-  by_cases hi : MeasurableSet i
-  · ext j hj
-    simp [restrict_apply _ hi hj]
-  · simp [restrict_not_measurable _ hi]
-
-中文:
-定理 restrict_add
-  条件: (v w : 向量测度 α M) (i : 集合 α)
-  证明: by
-  by_cases hi : MeasurableSet i
-  · ext j hj
-    simp [restrict_apply _ hi hj]
-  · simp [restrict_not_measurable _ hi]
-
-Depends on / 依赖: MeasurableSet, restrict_apply, restrict_not_measurable
+/-
+**MeasureTheory.VectorMeasure.restrict_add** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.VectorMeasure`。
+形式化陈述：restrict_add (v w : VectorMeasure α M) (i : Set α) : (v + w).restrict i = 
+v.restrict i + w.restrict i
+参数：v w : VectorMeasure α M；i : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_not_measurable`：restrict_not_measur
+able {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem restrict_add (v w : VectorMeasure α M) (i : Set α) :
     (v + w).restrict i = v.restrict i + w.restrict i := by
@@ -2941,27 +2799,24 @@ theorem restrict_add (v w : VectorMeasure α M) (i : Set α) :
 
 /-- `VectorMeasure.restrict` as an additive monoid homomorphism. -/
 @[simps]
-/--
-Definition of `restrictGm` / `restrictGm` 的定义
+/-
+**MeasureTheory.VectorMeasure.restrictGm** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheor
+y.VectorMeasure`。
+形式化陈述：restrictGm {α : Type*} [MeasurableSpace α] (i : Set α) : VectorMeasure α M
+ ->+ VectorMeasure α M where toFun v
+参数：i : Set α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_zero`：restrict_zero {i : Set α} : (
+0 : VectorMeasure α M).restrict i = 0
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_add`：restrict_add (v w : VectorMeas
+ure α M) (i : Set α) : (v + w).restrict i = v.restrict i + w.restrict i
 
-English:
-definition restrictGm
-  signature: {α : Type*} [MeasurableSpace α] (i : Set α)
-  body: v.restrict i
-  map_zero' := restrict_zero
-  map_add' _ _ := restrict_add _ _ i
-
-中文:
-定义 restrictGm
-  签名: {α : 类型} [可测空间 α] (i : 集合 α)
-  定义体: v.restrict i
-  map_zero' := restrict_zero
-  map_add' _ _ := restrict_add _ _ i
-
-Depends on / 依赖: restrict, v.restrict
+--- 原说明 ---
+`VectorMeasure.restrict` as an additive monoid homomorphism.
 -/
 def restrictGm {α : Type*} [MeasurableSpace α] (i : Set α) :
-    VectorMeasure α M ->+ VectorMeasure α M where
+    VectorMeasure α M →+ VectorMeasure α M where
   toFun v := v.restrict i
   map_zero' := restrict_zero
   map_add' _ _ := restrict_add _ _ i
@@ -2974,67 +2829,90 @@ variable {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [T2Space M] [Continu
 variable {v : VectorMeasure α M} {i s t : Set α}
 
 @[simp]
-/--
-theorem `restrict_add_restrict_compl` / 定理 `restrict_add_restrict_compl`
-
-English:
-theorem restrict_add_restrict_compl
-  given: (hi : MeasurableSet i)
-  proof: by
-  ext A hA
-  rw [_root_.add_apply]; rw [restrict_apply _ hi hA]; rw [restrict_apply _ hi.compl hA]; rw [← of_union _ (hA.inter hi) (hA.inter hi.compl)]
-  · simp
-.inter_left' A · exact disjoint_compl_right.inter_right' A
-
-中文:
-定理 restrict_add_restrict_compl
-  条件: (hi : 可测集 i)
-  证明: by
-  ext A hA
-  rw [_root_.add_apply]; rw [restrict_apply _ hi hA]; rw [restrict_apply _ hi.compl hA]; rw [← of_union _ (hA.inter hi) (hA.inter hi.compl)]
-  · simp
-.inter_left' A · exact disjoint_compl_right.inter_right' A
-
-Depends on / 依赖: _root_, _root_.add_apply, add_apply, disjoint_compl_right, disjoint_compl_right.inter_right, hA.inter, hi.compl, inter_left, inter_right, of_union, restrict_apply
+/-
+**MeasureTheory.VectorMeasure.restrict_add_restrict_compl** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_add_restrict_compl (hi : MeasurableSet i) : v.restrict i + v.rest
+rict iᶜ = v
+参数：hi : MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.of_union`：of_union {A B : Set α} (h : Disjoi
+nt A B) (hA : MeasurableSet A) (hB : MeasurableSet B) : v (A union B) = v A + v 
+B
+· 使用定理 `Disjoint.inter_left'`：inter_left' (u : Set α) (h : Disjoint s t) : Disjo
+int (u inter s) t
+· 使用定理 `Disjoint.inter_right'`：inter_right' (u : Set α) (h : Disjoint s t) : Dis
+joint s (u inter t)
+· 使用定理 `disjoint_compl_right`：disjoint_compl_right : Disjoint a aᶜ
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.inter_union_compl`：inter_union_compl (s t : Set α) : s inter t union
+ s inter tᶜ = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem restrict_add_restrict_compl (hi : MeasurableSet i) :
     v.restrict i + v.restrict iᶜ = v := by
   ext A hA
-  rw [_root_.add_apply]; rw [restrict_apply _ hi hA]; rw [restrict_apply _ hi.compl hA]; rw [← of_union _ (hA.inter hi) (hA.inter hi.compl)]
+  rw [_root_.add_apply, restrict_apply _ hi hA, restrict_apply _ hi.compl hA,
+    ← of_union _ (hA.inter hi) (hA.inter hi.compl)]
   · simp
-.inter_left' A · exact disjoint_compl_right.inter_right' A
-
-/--
-theorem `restrict_inter_add_sdiff` / 定理 `restrict_inter_add_sdiff`
-
-English:
-theorem restrict_inter_add_sdiff
-  given: (hs : MeasurableSet s) (ht : MeasurableSet t)
-  proof: by
-  ext u hu
-  simp only [_root_.add_apply, restrict_apply, hs, hu, hs.inter ht, hs.diff ht]
-  rw [← of_union (by grind) (hu.inter (hs.inter ht)) (hu.inter (hs.diff ht))]
-  congr
-  grind
-
-@[deprecated (since := "2026-06-03")] alias restrict_inter_add_diff := restrict_inter_add_sdiff
-
-中文:
-定理 restrict_inter_add_sdiff
-  条件: (hs : 可测集 s) (ht : 可测集 t)
-  证明: by
-  ext u hu
-  simp only [_root_.add_apply, restrict_apply, hs, hu, hs.inter ht, hs.diff ht]
-  rw [← of_union (by grind) (hu.inter (hs.inter ht)) (hu.inter (hs.diff ht))]
-  congr
-  grind
-
-@[deprecated (since := "2026-06-03")] alias restrict_inter_add_diff := restrict_inter_add_sdiff
-
-Depends on / 依赖: _root_, _root_.add_apply, add_apply, hs.diff, hs.inter, hu.inter, of_union, restrict_apply
+  · exact disjoint_compl_right.inter_right' A |>.inter_left' A
+/-
+**MeasureTheory.VectorMeasure.restrict_inter_add_sdiff** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_inter_add_sdiff (hs : MeasurableSet s) (ht : MeasurableSet t) : v
+.restrict (s inter t) + v.restrict (s \ t) = v.restrict s
+参数：hs : MeasurableSet s；ht : MeasurableSet t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `MeasurableSet.diff`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : Se
+t α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ \ s₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.of_union`：of_union {A B : Set α} (h : Disjoi
+nt A B) (hA : MeasurableSet A) (hB : MeasurableSet B) : v (A union B) = v A + v 
+B
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
 -/
 theorem restrict_inter_add_sdiff (hs : MeasurableSet s) (ht : MeasurableSet t) :
-    v.restrict (s inter t) + v.restrict (s \ t) = v.restrict s := by
+    v.restrict (s ∩ t) + v.restrict (s \ t) = v.restrict s := by
   ext u hu
   simp only [_root_.add_apply, restrict_apply, hs, hu, hs.inter ht, hs.diff ht]
   rw [← of_union (by grind) (hu.inter (hs.inter ht)) (hu.inter (hs.diff ht))]
@@ -3042,47 +2920,63 @@ theorem restrict_inter_add_sdiff (hs : MeasurableSet s) (ht : MeasurableSet t) :
   grind
 
 @[deprecated (since := "2026-06-03")] alias restrict_inter_add_diff := restrict_inter_add_sdiff
-
-/--
-theorem `restrict_union_add_inter` / 定理 `restrict_union_add_inter`
-
-English:
-theorem restrict_union_add_inter
-  given: (hs : MeasurableSet s) (ht : MeasurableSet t)
-  proof: by
-  rw [← v.restrict_inter_add_sdiff (hs.union ht) ht]; rw [union_inter_cancel_right]; rw [union_sdiff_right]; rw [← v.restrict_inter_add_sdiff hs ht]; rw [add_comm]; rw [← add_assoc]; rw [add_right_comm]
-
-中文:
-定理 restrict_union_add_inter
-  条件: (hs : 可测集 s) (ht : 可测集 t)
-  证明: by
-  rw [← v.restrict_inter_add_sdiff (hs.union ht) ht]; rw [union_inter_cancel_right]; rw [union_sdiff_right]; rw [← v.restrict_inter_add_sdiff hs ht]; rw [add_comm]; rw [← add_assoc]; rw [add_right_comm]
-
-Depends on / 依赖: add_assoc, add_comm, add_right_comm, hs.union, restrict_inter_add_sdiff, union_inter_cancel_right, union_sdiff_right, v.restrict_inter_add_sdiff
+/-
+**MeasureTheory.VectorMeasure.restrict_union_add_inter** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_union_add_inter (hs : MeasurableSet s) (ht : MeasurableSet t) : v
+.restrict (s union t) + v.restrict (s inter t) = v.restrict s + v.restrict t
+参数：hs : MeasurableSet s；ht : MeasurableSet t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_inter_add_sdiff`：restrict_inter_add
+_sdiff (hs : MeasurableSet s) (ht : MeasurableSet t) : v.restrict (s inter t) + 
+v.restrict (s \ t) = v.restrict s
+· 使用定理 `MeasurableSet.union`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∪ s₂)
+· 使用定理 `Set.union_inter_cancel_right`：union_inter_cancel_right {s t : Set α} : (
+s union t) inter t = t
+· 使用定理 `Set.union_sdiff_right`：union_sdiff_right {s t : Set α} : (s union t) \ t
+ = s \ t
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
 -/
 theorem restrict_union_add_inter (hs : MeasurableSet s) (ht : MeasurableSet t) :
-    v.restrict (s union t) + v.restrict (s inter t) = v.restrict s + v.restrict t := by
-  rw [← v.restrict_inter_add_sdiff (hs.union ht) ht]; rw [union_inter_cancel_right]; rw [union_sdiff_right]; rw [← v.restrict_inter_add_sdiff hs ht]; rw [add_comm]; rw [← add_assoc]; rw [add_right_comm]
-
-/--
-theorem `restrict_union` / 定理 `restrict_union`
-
-English:
-theorem restrict_union
-  given: (h : Disjoint s t) (hs : MeasurableSet s) (ht : MeasurableSet t)
-  proof: by
-  simp [← v.restrict_union_add_inter hs ht, disjoint_iff_inter_eq_empty.mp h]
-
-中文:
-定理 restrict_union
-  条件: (h : Disjoint s t) (hs : 可测集 s) (ht : 可测集 t)
-  证明: by
-  simp [← v.restrict_union_add_inter hs ht, disjoint_iff_inter_eq_empty.mp h]
-
-Depends on / 依赖: disjoint_iff_inter_eq_empty, disjoint_iff_inter_eq_empty.mp, restrict_union_add_inter, v.restrict_union_add_inter
+    v.restrict (s ∪ t) + v.restrict (s ∩ t) = v.restrict s + v.restrict t := by
+  rw [← v.restrict_inter_add_sdiff (hs.union ht) ht, union_inter_cancel_right, union_sdiff_right,
+    ← v.restrict_inter_add_sdiff hs ht, add_comm, ← add_assoc, add_right_comm]
+/-
+**MeasureTheory.VectorMeasure.restrict_union** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.VectorMeasure`。
+形式化陈述：restrict_union (h : Disjoint s t) (hs : MeasurableSet s) (ht : MeasurableS
+et t) : v.restrict (s union t) = v.restrict s + v.restrict t
+参数：h : Disjoint s t；hs : MeasurableSet s；ht : MeasurableSet t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_union_add_inter`：restrict_union_add
+_inter (hs : MeasurableSet s) (ht : MeasurableSet t) : v.restrict (s union t) + 
+v.restrict (s inter t) = v.restrict s + v.…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.disjoint_iff_inter_eq_empty`：disjoint_iff_inter_eq_empty : Disjoint 
+s t ↔ s inter t = ∅
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_empty`：restrict_empty : v.restrict 
+∅ = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem restrict_union (h : Disjoint s t) (hs : MeasurableSet s) (ht : MeasurableSet t) :
-    v.restrict (s union t) = v.restrict s + v.restrict t := by
+    v.restrict (s ∪ t) = v.restrict s + v.restrict t := by
   simp [← v.restrict_union_add_inter hs ht, disjoint_iff_inter_eq_empty.mp h]
 
 end Partition
@@ -3092,30 +2986,34 @@ section Sub
 variable {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
 
 @[simp]
-/--
-theorem `restrict_neg` / 定理 `restrict_neg`
-
-English:
-theorem restrict_neg
-  given: (v : VectorMeasure α M) (i : Set α)
-  proof: by
-  by_cases hi : MeasurableSet i
-  · ext j hj; simp [restrict_apply _ hi hj]
-  · simp [restrict_not_measurable _ hi]
-
-@[simp]
-
-中文:
-定理 restrict_neg
-  条件: (v : 向量测度 α M) (i : 集合 α)
-  证明: by
-  by_cases hi : MeasurableSet i
-  · ext j hj; simp [restrict_apply _ hi hj]
-  · simp [restrict_not_measurable _ hi]
-
-@[simp]
-
-Depends on / 依赖: MeasurableSet, restrict_apply, restrict_not_measurable
+/-
+**MeasureTheory.VectorMeasure.restrict_neg** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.VectorMeasure`。
+形式化陈述：restrict_neg (v : VectorMeasure α M) (i : Set α) : (-v).restrict i = -(v.r
+estrict i)
+参数：v : VectorMeasure α M；i : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_not_measurable`：restrict_not_measur
+able {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem restrict_neg (v : VectorMeasure α M) (i : Set α) :
     (-v).restrict i = -(v.restrict i) := by
@@ -3124,22 +3022,29 @@ theorem restrict_neg (v : VectorMeasure α M) (i : Set α) :
   · simp [restrict_not_measurable _ hi]
 
 @[simp]
-/--
-theorem `restrict_sub` / 定理 `restrict_sub`
-
-English:
-theorem restrict_sub
-  given: (v w : VectorMeasure α M) (i : Set α)
-  proof: by
-  simp [sub_eq_add_neg, restrict_add, restrict_neg]
-
-中文:
-定理 restrict_sub
-  条件: (v w : 向量测度 α M) (i : 集合 α)
-  证明: by
-  simp [sub_eq_add_neg, restrict_add, restrict_neg]
-
-Depends on / 依赖: restrict_add, restrict_neg, sub_eq_add_neg
+/-
+**MeasureTheory.VectorMeasure.restrict_sub** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.VectorMeasure`。
+形式化陈述：restrict_sub (v w : VectorMeasure α M) (i : Set α) : (v - w).restrict i = 
+v.restrict i - w.restrict i
+参数：v w : VectorMeasure α M；i : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_add`：restrict_add (v w : VectorMeas
+ure α M) (i : Set α) : (v + w).restrict i = v.restrict i + w.restrict i
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_neg`：restrict_neg (v : VectorMeasur
+e α M) (i : Set α) : (-v).restrict i = -(v.restrict i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem restrict_sub (v w : VectorMeasure α M) (i : Set α) :
     (v - w).restrict i = v.restrict i - w.restrict i := by
@@ -3156,42 +3061,42 @@ variable {M : Type*} [AddCommMonoid M] [TopologicalSpace M]
 variable {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M]
 
 @[simp]
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: {v : VectorMeasure α M} {f : α -> β} (c : R)
-  statement: (c • v).map f = c • v.map f
-  proof: by
-  by_cases hf : Measurable f
-  · ext i hi
-    simp [map_apply _ hf hi]
-  · simp only [map, dif_neg hf]
-    -- `smul_zero` does not work since we do not require `ContinuousAdd`
-    ext i
-    simp
-
-@[simp]
-
-中文:
-定理 map_smul
-  条件: {v : 向量测度 α M} {f : α -> β} (c : R)
-  结论: (c • v).map f = c • v.map f
-  证明: by
-  by_cases hf : Measurable f
-  · ext i hi
-    simp [map_apply _ hf hi]
-  · simp only [map, dif_neg hf]
-    -- `smul_zero` does not work since we do not require `ContinuousAdd`
-    ext i
-    simp
-
-@[simp]
-
-Depends on / 依赖: Measurable, dif_neg, map_apply
+/-
+**MeasureTheory.VectorMeasure.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：map_smul {v : VectorMeasure α M} {f : α -> β} (c : R) : (c • v).map f = c 
+• v.map f
+参数：c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.map_apply`：map_apply {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : v.map f s = v (f ⁻¹' s)
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSMulApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M]   {R : Type u_4} [inst_2 : Se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
-theorem map_smul {v : VectorMeasure α M} {f : α -> β} (c : R) : (c • v).map f = c • v.map f := by
+theorem map_smul {v : VectorMeasure α M} {f : α → β} (c : R) : (c • v).map f = c • v.map f := by
   by_cases hf : Measurable f
   · ext i hi
     simp [map_apply _ hf hi]
@@ -3201,34 +3106,41 @@ theorem map_smul {v : VectorMeasure α M} {f : α -> β} (c : R) : (c • v).map
     simp
 
 @[simp]
-/--
-theorem `restrict_smul` / 定理 `restrict_smul`
-
-English:
-theorem restrict_smul
-  given: {v : VectorMeasure α M} {i : Set α} (c : R)
-  proof: by
-  by_cases hi : MeasurableSet i
-  · ext j hj
-    simp [restrict_apply _ hi hj]
-  · simp only [restrict_not_measurable _ hi]
-    -- `smul_zero` does not work since we do not require `ContinuousAdd`
-    ext j
-    simp
-
-中文:
-定理 restrict_smul
-  条件: {v : 向量测度 α M} {i : 集合 α} (c : R)
-  证明: by
-  by_cases hi : MeasurableSet i
-  · ext j hj
-    simp [restrict_apply _ hi hj]
-  · simp only [restrict_not_measurable _ hi]
-    -- `smul_zero` does not work since we do not require `ContinuousAdd`
-    ext j
-    simp
-
-Depends on / 依赖: MeasurableSet, restrict_apply, restrict_not_measurable
+/-
+**MeasureTheory.VectorMeasure.restrict_smul** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：restrict_smul {v : VectorMeasure α M} {i : Set α} (c : R) : (c • v).restri
+ct i = c • v.restrict i
+参数：c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSMulApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M]   {R : Type u_4} [inst_2 : Se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_not_measurable`：restrict_not_measur
+able {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem restrict_smul {v : VectorMeasure α M} {i : Set α} (c : R) :
     (c • v).restrict i = c • v.restrict i := by
@@ -3250,52 +3162,36 @@ variable {R : Type*} [Semiring R] [Module R M] [ContinuousConstSMul R M] [Contin
 
 /-- `VectorMeasure.map` as a linear map. -/
 @[simps]
-/--
-Definition of `mapₗ` / `mapₗ` 的定义
+/-
+**MeasureTheory.VectorMeasure.map** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vecto
+rMeasure`。
+形式化陈述：map (v : VectorMeasure α M) (f : α -> β) : VectorMeasure β M
+参数：v : VectorMeasure α M；f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapₗ
-  signature: (f : α -> β)
-  body: v.map f
-  map_add' _ _ := map_add _ _ f
-  map_smul' _ _ := map_smul _
-
-中文:
-定义 mapₗ
-  签名: (f : α -> β)
-  定义体: v.map f
-  map_add' _ _ := map_add _ _ f
-  map_smul' _ _ := map_smul _
-
-Depends on / 依赖: v.map
+--- 原说明 ---
+`VectorMeasure.map` as a linear map.
 -/
-def mapₗ (f : α -> β) : VectorMeasure α M ->ₗ[R] VectorMeasure β M where
+def mapₗ (f : α → β) : VectorMeasure α M →ₗ[R] VectorMeasure β M where
   toFun v := v.map f
   map_add' _ _ := map_add _ _ f
   map_smul' _ _ := map_smul _
 
 /-- `VectorMeasure.restrict` as an additive monoid homomorphism. -/
 @[simps]
-/--
-Definition of `restrictₗ` / `restrictₗ` 的定义
+/-
+**MeasureTheory.VectorMeasure.restrict** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.
+VectorMeasure`。
+形式化陈述：{α : Type u_1} →   {mα : MeasurableSpace α} →     {M : Type u_3} →       [
+inst : AddCommMonoid M] →         [inst_1 : TopologicalSpace M] → MeasureTheory.
+VectorMeasure α M → Set α → MeasureTheory.VectorMeasure α M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictₗ
-  signature: (i : Set α)
-  body: v.restrict i
-  map_add' _ _ := restrict_add _ _ i
-  map_smul' _ _ := restrict_smul _
-
-中文:
-定义 restrictₗ
-  签名: (i : 集合 α)
-  定义体: v.restrict i
-  map_add' _ _ := restrict_add _ _ i
-  map_smul' _ _ := restrict_smul _
-
-Depends on / 依赖: restrict, v.restrict
+--- 原说明 ---
+`VectorMeasure.restrict` as an additive monoid homomorphism.
 -/
-def restrictₗ (i : Set α) : VectorMeasure α M ->ₗ[R] VectorMeasure α M where
+def restrictₗ (i : Set α) : VectorMeasure α M →ₗ[R] VectorMeasure α M where
   toFun v := v.restrict i
   map_add' _ _ := restrict_add _ _ i
   map_smul' _ _ := restrict_smul _
@@ -3306,76 +3202,50 @@ section
 
 variable {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [PartialOrder M]
 
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
+/-- Vector measures over a partially ordered monoid is partially ordered.
 
-English:
-instance instPartialOrder
-  signature: : PartialOrder (VectorMeasure α M) where
-  body: forall i, MeasurableSet i -> v i <= w i
-  le_refl _ _ _ := le_rfl
-  le_trans _ _ _ h₁ h₂ i hi := le_trans (h₁ i hi) (h₂ i hi)
-  le_antisymm _ _ h₁ h₂ := ext fun i hi => le_antisymm (h₁ i hi) (h₂ i hi)
+This definition is consistent with `Measure.instPartialOrder`. -/
+/-
+**MeasureTheory.VectorMeasure.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：instPartialOrder : PartialOrder (VectorMeasure α M) where le v w
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 instPartialOrder
-  签名: : 偏序 (向量测度 α M) where
-  定义体: forall i, MeasurableSet i -> v i <= w i
-  le_refl _ _ _ := le_rfl
-  le_trans _ _ _ h₁ h₂ i hi := le_trans (h₁ i hi) (h₂ i hi)
-  le_antisymm _ _ h₁ h₂ := ext fun i hi => le_antisymm (h₁ i hi) (h₂ i hi)
+--- 原说明 ---
+Vector measures over a partially ordered monoid is partially ordered.
 
-Depends on / 依赖: MeasurableSet
+This definition is consistent with `Measure.instPartialOrder`.
 -/
 instance instPartialOrder : PartialOrder (VectorMeasure α M) where
-  le v w := forall i, MeasurableSet i -> v i <= w i
+  le v w := ∀ i, MeasurableSet i → v i ≤ w i
   le_refl _ _ _ := le_rfl
   le_trans _ _ _ h₁ h₂ i hi := le_trans (h₁ i hi) (h₂ i hi)
   le_antisymm _ _ h₁ h₂ := ext fun i hi => le_antisymm (h₁ i hi) (h₂ i hi)
 
 variable {v w : VectorMeasure α M}
-
-/--
-theorem `le_iff` / 定理 `le_iff`
-
-English:
-theorem le_iff
-  statement: v <= w ↔ forall i, MeasurableSet i -> v i <= w i
-  proof: Iff.rfl
-
-中文:
-定理 le_iff
-  结论: v <= w ↔ 对任意 i, 可测集 i -> v i <= w i
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**MeasureTheory.VectorMeasure.le_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Ve
+ctorMeasure`。
+形式化陈述：le_iff : v <= w ↔ forall i, MeasurableSet i -> v i <= w i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_iff : v <= w ↔ forall i, MeasurableSet i -> v i <= w i := Iff.rfl
-
-/--
-theorem `le_iff'` / 定理 `le_iff'`
-
-English:
-theorem le_iff'
-  statement: v <= w ↔ forall i, v i <= w i
-  proof: by
-  refine ⟨fun h i => ?_, fun h i _ => h i⟩
-  by_cases hi : MeasurableSet i
-  · exact h i hi
-  · rw [v.not_measurable hi, w.not_measurable hi]
-
-中文:
-定理 le_iff'
-  结论: v <= w ↔ 对任意 i, v i <= w i
-  证明: by
-  refine ⟨fun h i => ?_, fun h i _ => h i⟩
-  by_cases hi : MeasurableSet i
-  · exact h i hi
-  · rw [v.not_measurable hi, w.not_measurable hi]
-
-Depends on / 依赖: MeasurableSet, not_measurable, v.not_measurable, w.not_measurable
+theorem le_iff : v ≤ w ↔ ∀ i, MeasurableSet i → v i ≤ w i := Iff.rfl
+/-
+**MeasureTheory.VectorMeasure.le_iff'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.V
+ectorMeasure`。
+形式化陈述：le_iff' : v <= w ↔ forall i, v i <= w i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem le_iff' : v <= w ↔ forall i, v i <= w i := by
+theorem le_iff' : v ≤ w ↔ ∀ i, v i ≤ w i := by
   refine ⟨fun h i => ?_, fun h i _ => h i⟩
   by_cases hi : MeasurableSet i
   · exact h i hi
@@ -3385,152 +3255,145 @@ end
 
 /-- `v ≤[i] w` is notation for `v.restrict i ≤ w.restrict i`. -/
 scoped[MeasureTheory]
-  notation3:50 v " <=[" i:50 "] " w:50 =>
-    MeasureTheory.VectorMeasure.restrict v i <= MeasureTheory.VectorMeasure.restrict w i
+  notation3:50 v " ≤[" i:50 "] " w:50 =>
+    MeasureTheory.VectorMeasure.restrict v i ≤ MeasureTheory.VectorMeasure.restrict w i
 
 section
 
 variable {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [PartialOrder M]
 variable (v w : VectorMeasure α M)
 
-/--
-theorem `restrict_le_restrict_iff` / 定理 `restrict_le_restrict_iff`
-
-English:
-theorem restrict_le_restrict_iff
-  given: {i : Set α} (hi : MeasurableSet i)
-  proof: ⟨fun h j hj₁ hj₂ => restrict_eq_self v hi hj₁ hj₂ ▸ restrict_eq_self w hi hj₁ hj₂ ▸ h j hj₁,
-    fun h => le_iff.1 fun _ hj =>
-      (restrict_apply v hi hj).symm ▸ (restrict_apply w hi hj).symm ▸
-      h (hj.inter hi) Set.inter_subset_right⟩
-
-中文:
-定理 restrict_le_restrict_iff
-  条件: {i : 集合 α} (hi : 可测集 i)
-  证明: ⟨fun h j hj₁ hj₂ => restrict_eq_self v hi hj₁ hj₂ ▸ restrict_eq_self w hi hj₁ hj₂ ▸ h j hj₁,
-    fun h => le_iff.1 fun _ hj =>
-      (restrict_apply v hi hj).symm ▸ (restrict_apply w hi hj).symm ▸
-      h (hj.inter hi) Set.inter_subset_right⟩
-
-Depends on / 依赖: Set.inter_subset_right, hj.inter, inter_subset_right, le_iff, restrict_apply, restrict_eq_self
+/-
+**MeasureTheory.VectorMeasure.restrict_le_restrict_iff** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_restrict_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ 
+forall ⦃j⦄, MeasurableSet j -> j subseteq i -> v j <= w j
+参数：hi : MeasurableSet i。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_eq_self`：restrict_eq_self {i : Set 
+α} (hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) (hij : j subseteq i
+) : v.restrict i j = v j
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.VectorMeasure.le_iff`：le_iff : v <= w ↔ forall i, Measurab
+leSet i -> v i <= w i
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
 -/
 theorem restrict_le_restrict_iff {i : Set α} (hi : MeasurableSet i) :
-    v <=[i] w ↔ forall ⦃j⦄, MeasurableSet j -> j subseteq i -> v j <= w j :=
+    v ≤[i] w ↔ ∀ ⦃j⦄, MeasurableSet j → j ⊆ i → v j ≤ w j :=
   ⟨fun h j hj₁ hj₂ => restrict_eq_self v hi hj₁ hj₂ ▸ restrict_eq_self w hi hj₁ hj₂ ▸ h j hj₁,
     fun h => le_iff.1 fun _ hj =>
       (restrict_apply v hi hj).symm ▸ (restrict_apply w hi hj).symm ▸
       h (hj.inter hi) Set.inter_subset_right⟩
-
-/--
-theorem `subset_le_of_restrict_le_restrict` / 定理 `subset_le_of_restrict_le_restrict`
-
-English:
-theorem subset_le_of_restrict_le_restrict
-  statement: {i : Set α} (hi : MeasurableSet i) (hi₂ : v <=[i] w)
-  proof: by
-  by_cases hj₁ : MeasurableSet j
-  · exact (restrict_le_restrict_iff _ _ hi).1 hi₂ hj₁ hj
-  · rw [v.not_measurable hj₁, w.not_measurable hj₁]
-
-中文:
-定理 subset_le_of_restrict_le_restrict
-  结论: {i : 集合 α} (hi : 可测集 i) (hi₂ : v <=[i] w)
-  证明: by
-  by_cases hj₁ : MeasurableSet j
-  · exact (restrict_le_restrict_iff _ _ hi).1 hi₂ hj₁ hj
-  · rw [v.not_measurable hj₁, w.not_measurable hj₁]
-
-Depends on / 依赖: MeasurableSet, not_measurable, restrict_le_restrict_iff, v.not_measurable, w.not_measurable
+/-
+**MeasureTheory.VectorMeasure.subset_le_of_restrict_le_restrict** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：subset_le_of_restrict_le_restrict {i : Set α} (hi : MeasurableSet i) (hi₂ 
+: v <=[i] w) {j : Set α} (hj : j subseteq i) : v j <= w j
+参数：hi : MeasurableSet i；hi₂ : v <=[i] w；hj : j subseteq i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem subset_le_of_restrict_le_restrict {i : Set α} (hi : MeasurableSet i) (hi₂ : v <=[i] w)
-    {j : Set α} (hj : j subseteq i) : v j <= w j := by
+theorem subset_le_of_restrict_le_restrict {i : Set α} (hi : MeasurableSet i) (hi₂ : v ≤[i] w)
+    {j : Set α} (hj : j ⊆ i) : v j ≤ w j := by
   by_cases hj₁ : MeasurableSet j
   · exact (restrict_le_restrict_iff _ _ hi).1 hi₂ hj₁ hj
   · rw [v.not_measurable hj₁, w.not_measurable hj₁]
-
-/--
-theorem `restrict_le_restrict_of_subset_le` / 定理 `restrict_le_restrict_of_subset_le`
-
-English:
-theorem restrict_le_restrict_of_subset_le
-  statement: {i : Set α}
-  proof: by
-  by_cases hi : MeasurableSet i
-  · exact (restrict_le_restrict_iff _ _ hi).2 h
-  · rw [restrict_not_measurable v hi, restrict_not_measurable w hi]
-
-中文:
-定理 restrict_le_restrict_of_subset_le
-  结论: {i : 集合 α}
-  证明: by
-  by_cases hi : MeasurableSet i
-  · exact (restrict_le_restrict_iff _ _ hi).2 h
-  · rw [restrict_not_measurable v hi, restrict_not_measurable w hi]
-
-Depends on / 依赖: MeasurableSet, restrict_le_restrict_iff, restrict_not_measurable
+/-
+**MeasureTheory.VectorMeasure.restrict_le_restrict_of_subset_le** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_restrict_of_subset_le {i : Set α} (h : forall ⦃j⦄, MeasurableS
+et j -> j subseteq i -> v j <= w j) : v <=[i] w
+参数：h : forall ⦃j⦄, MeasurableSet j -> j subseteq i -> v j <= w j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_not_measurable`：restrict_not_measur
+able {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 theorem restrict_le_restrict_of_subset_le {i : Set α}
-    (h : forall ⦃j⦄, MeasurableSet j -> j subseteq i -> v j <= w j) : v <=[i] w := by
+    (h : ∀ ⦃j⦄, MeasurableSet j → j ⊆ i → v j ≤ w j) : v ≤[i] w := by
   by_cases hi : MeasurableSet i
   · exact (restrict_le_restrict_iff _ _ hi).2 h
   · rw [restrict_not_measurable v hi, restrict_not_measurable w hi]
-
-/--
-theorem `restrict_le_restrict_subset` / 定理 `restrict_le_restrict_subset`
-
-English:
-theorem restrict_le_restrict_subset
-  statement: {i j : Set α} (hi₁ : MeasurableSet i) (hi₂ : v <=[i] w)
-  proof: restrict_le_restrict_of_subset_le v w fun _ _ hk₂ =>
-    subset_le_of_restrict_le_restrict v w hi₁ hi₂ (Set.Subset.trans hk₂ hij)
-
-中文:
-定理 restrict_le_restrict_subset
-  结论: {i j : 集合 α} (hi₁ : 可测集 i) (hi₂ : v <=[i] w)
-  证明: restrict_le_restrict_of_subset_le v w fun _ _ hk₂ =>
-    subset_le_of_restrict_le_restrict v w hi₁ hi₂ (Set.Subset.trans hk₂ hij)
-
-Depends on / 依赖: Set.Subset.trans, Subset, restrict_le_restrict_of_subset_le, subset_le_of_restrict_le_restrict
+/-
+**MeasureTheory.VectorMeasure.restrict_le_restrict_subset** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_restrict_subset {i j : Set α} (hi₁ : MeasurableSet i) (hi₂ : v
+ <=[i] w) (hij : j subseteq i) : v <=[j] w
+参数：hi₁ : MeasurableSet i；hi₂ : v <=[i] w；hij : j subseteq i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_of_subset_le`：restrict_
+le_restrict_of_subset_le {i : Set α} (h : forall ⦃j⦄, MeasurableSet j -> j subse
+teq i -> v j <= w j) : v <=[i] w
+· 使用定理 `MeasureTheory.VectorMeasure.subset_le_of_restrict_le_restrict`：subset_le
+_of_restrict_le_restrict {i : Set α} (hi : MeasurableSet i) (hi₂ : v <=[i] w) {j
+ : Set α} (hj : j subseteq i) : v j <= w j
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
 -/
-theorem restrict_le_restrict_subset {i j : Set α} (hi₁ : MeasurableSet i) (hi₂ : v <=[i] w)
-    (hij : j subseteq i) : v <=[j] w :=
+theorem restrict_le_restrict_subset {i j : Set α} (hi₁ : MeasurableSet i) (hi₂ : v ≤[i] w)
+    (hij : j ⊆ i) : v ≤[j] w :=
   restrict_le_restrict_of_subset_le v w fun _ _ hk₂ =>
     subset_le_of_restrict_le_restrict v w hi₁ hi₂ (Set.Subset.trans hk₂ hij)
-
-/--
-theorem `le_restrict_empty` / 定理 `le_restrict_empty`
-
-English:
-theorem le_restrict_empty
-  statement: v <=[∅] w
-  proof: by
-  simp
-
-中文:
-定理 le_restrict_empty
-  结论: v <=[∅] w
-  证明: by
-  simp
+/-
+**MeasureTheory.VectorMeasure.le_restrict_empty** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.VectorMeasure`。
+形式化陈述：le_restrict_empty : v <=[∅] w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_empty`：restrict_empty : v.restrict 
+∅ = 0
 -/
-theorem le_restrict_empty : v <=[∅] w := by
+theorem le_restrict_empty : v ≤[∅] w := by
   simp
-
-/--
-theorem `le_restrict_univ_iff_le` / 定理 `le_restrict_univ_iff_le`
-
-English:
-theorem le_restrict_univ_iff_le
-  statement: v <=[Set.univ] w ↔ v <= w
-  proof: by
-  simp
-
-中文:
-定理 le_restrict_univ_iff_le
-  结论: v <=[集合.univ] w ↔ v <= w
-  证明: by
-  simp
+/-
+**MeasureTheory.VectorMeasure.le_restrict_univ_iff_le** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.VectorMeasure`。
+形式化陈述：le_restrict_univ_iff_le : v <=[Set.univ] w ↔ v <= w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_univ`：restrict_univ : v.restrict Se
+t.univ = v
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem le_restrict_univ_iff_le : v <=[Set.univ] w ↔ v <= w := by
+theorem le_restrict_univ_iff_le : v ≤[Set.univ] w ↔ v ≤ w := by
   simp
 
 end
@@ -3541,31 +3404,27 @@ variable {M : Type*} [TopologicalSpace M]
   [AddCommGroup M] [PartialOrder M] [IsOrderedAddMonoid M] [IsTopologicalAddGroup M]
 variable (v w : VectorMeasure α M)
 
-nonrec theorem neg_le_neg {i : Set α} (hi : MeasurableSet i) (h : v <=[i] w) : -w <=[i] -v := by
+nonrec theorem neg_le_neg {i : Set α} (hi : MeasurableSet i) (h : v ≤[i] w) : -w ≤[i] -v := by
   intro j hj₁
-  rw [restrict_apply _ hi hj₁]; rw [restrict_apply _ hi hj₁]; rw [neg_apply]; rw [neg_apply]
+  rw [restrict_apply _ hi hj₁, restrict_apply _ hi hj₁, neg_apply, neg_apply]
   refine neg_le_neg ?_
-  rw [← restrict_apply _ hi hj₁]; rw [← restrict_apply _ hi hj₁]
+  rw [← restrict_apply _ hi hj₁, ← restrict_apply _ hi hj₁]
   exact h j hj₁
 
-/--
-theorem `neg_le_neg_iff` / 定理 `neg_le_neg_iff`
-
-English:
-theorem neg_le_neg_iff
-  given: {i : Set α} (hi : MeasurableSet i)
-  statement: -w <=[i] -v ↔ v <=[i] w
-  proof: ⟨fun h => neg_neg v ▸ neg_neg w ▸ neg_le_neg _ _ hi h, fun h => neg_le_neg _ _ hi h⟩
-
-中文:
-定理 neg_le_neg_iff
-  条件: {i : 集合 α} (hi : 可测集 i)
-  结论: -w <=[i] -v ↔ v <=[i] w
-  证明: ⟨fun h => neg_neg v ▸ neg_neg w ▸ neg_le_neg _ _ hi h, fun h => neg_le_neg _ _ hi h⟩
-
-Depends on / 依赖: neg_le_neg, neg_neg
+/-
+**MeasureTheory.VectorMeasure.neg_le_neg_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.VectorMeasure`。
+形式化陈述：neg_le_neg_iff {i : Set α} (hi : MeasurableSet i) : -w <=[i] -v ↔ v <=[i] 
+w
+参数：hi : MeasurableSet i。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.neg_le_neg`：∀ {α : Type u_1} {m : Measurable
+Space α} {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : AddCommGroup M]   
+[inst_2 : PartialOrder M] [I…
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
-theorem neg_le_neg_iff {i : Set α} (hi : MeasurableSet i) : -w <=[i] -v ↔ v <=[i] w :=
+theorem neg_le_neg_iff {i : Set α} (hi : MeasurableSet i) : -w ≤[i] -v ↔ v ≤[i] w :=
   ⟨fun h => neg_neg v ▸ neg_neg w ▸ neg_le_neg _ _ hi h, fun h => neg_le_neg _ _ hi h⟩
 
 end
@@ -3576,19 +3435,73 @@ variable {M : Type*} [TopologicalSpace M]
   [AddCommMonoid M] [PartialOrder M] [IsOrderedAddMonoid M] [OrderClosedTopology M]
 variable (v w : VectorMeasure α M) {i j : Set α}
 
-/--
-theorem `restrict_le_restrict_iUnion` / 定理 `restrict_le_restrict_iUnion`
-
-English:
-theorem restrict_le_restrict_iUnion
-  statement: {f : Nat -> Set α} (hf₁ : forall n, MeasurableSet (f n))
-  proof: by
+/-
+**MeasureTheory.VectorMeasure.restrict_le_restrict_iUnion** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_restrict_iUnion {f : Nat -> Set α} (hf₁ : forall n, Measurable
+Set (f n)) (hf₂ : forall n, v <=[f n] w) : v <=[⋃ n, f n] w
+参数：hf₁ : forall n, MeasurableSet (f n)；hf₂ : forall n, v <=[f n] w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_of_subset_le`：restrict_
+le_restrict_of_subset_le {i : Set α} (h : forall ⦃j⦄, MeasurableSet j -> j subse
+teq i -> v j <= w j) : v <=[i] w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_iUnion`：inter_iUnion (s : Set β) (t : ι -> Set β) : (s inter ⋃
+ i, t i) = ⋃ i, s inter t i
+· 使用定理 `iUnion_disjointed`：iUnion_disjointed [PartialOrder ι] [LocallyFiniteOrde
+rBot ι] {f : ι -> Set α} : ⋃ i, disjointed f i = ⋃ i, f i
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
+· 使用定理 `Pairwise.mono`：Pairwise.mono (h : t subseteq s) (hs : s.Pairwise r) : t.
+Pairwise r
+· 使用定理 `disjoint_disjointed`：disjoint_disjointed (f : ι -> α) : Pairwise (Disjoi
+nt on disjointed f)
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `MeasureTheory.VectorMeasure.of_disjoint_iUnion`：of_disjoint_iUnion (hm :
+ forall i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f)) : v (⋃ i, f i) =
+ ∑' i, v (f i)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `OrderClosedTopology.to_t2Space`：∀ {α : Type u} [inst : TopologicalSpace 
+α] [inst_1 : PartialOrder α] [t : OrderClosedTopology α], T2Space α
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `MeasurableSet.disjointed`：∀ {α : Type u_1} {mα : MeasurableSpace α} {f :
+ ℕ → Set α},   (∀ (i : ℕ), MeasurableSet (f i)) → ∀ (n : ℕ), MeasurableSet (disj
+ointed f n)
+· 使用定理 `Summable.tsum_le_tsum`：∀ {ι : Type u_1} {α : Type u_3} {L : SummationFil
+ter ι} [inst : AddCommMonoid α] [inst_1 : Preorder α]   [IsOrderedAddMonoid α] [
+inst_3 : To…
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `disjointed_subset`：disjointed_subset [Preorder ι] [LocallyFiniteOrderBot
+ ι] (f : ι -> Set α) (i : ι) : disjointed f i subseteq f i
+· 使用定理 `HasSum.summable`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α
+] [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α} {a : α}, H
+asSum…
+· 使用定理 `MeasureTheory.VectorMeasure.m_iUnion`：m_iUnion (v : VectorMeasure α M) {
+f : Nat -> Set α} (hf₁ : forall i, MeasurableSet (f i)) (hf₂ : Pairwise (Disjoin
+t on f)) : HasSum (fun i =…
+-/
+theorem restrict_le_restrict_iUnion {f : ℕ → Set α} (hf₁ : ∀ n, MeasurableSet (f n))
+    (hf₂ : ∀ n, v ≤[f n] w) : v ≤[⋃ n, f n] w := by
   refine restrict_le_restrict_of_subset_le v w fun a ha₁ ha₂ => ?_
-  have ha₃ : ⋃ n, a inter disjointed f n = a := by
+  have ha₃ : ⋃ n, a ∩ disjointed f n = a := by
     rwa [← Set.inter_iUnion, iUnion_disjointed, Set.inter_eq_left]
-  have ha₄ : Pairwise (Disjoint on fun n => a inter disjointed f n) :=
+  have ha₄ : Pairwise (Disjoint on fun n => a ∩ disjointed f n) :=
     (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
-  rw [← ha₃]; rw [v.of_disjoint_iUnion _ ha₄]; rw [w.of_disjoint_iUnion _ ha₄]
+  rw [← ha₃, v.of_disjoint_iUnion _ ha₄, w.of_disjoint_iUnion _ ha₄]
   · refine Summable.tsum_le_tsum (fun n => (restrict_le_restrict_iff v w (hf₁ n)).1 (hf₂ n) ?_ ?_)
       ?_ ?_
     · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
@@ -3602,62 +3515,56 @@ theorem restrict_le_restrict_iUnion
   · intro n
     exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
   · exact fun n => ha₁.inter (MeasurableSet.disjointed hf₁ n)
-
-中文:
-定理 restrict_le_restrict_iUnion
-  结论: {f : 自然数 -> 集合 α} (hf₁ : 对任意 n, 可测集 (f n))
-  证明: by
-  refine restrict_le_restrict_of_subset_le v w fun a ha₁ ha₂ => ?_
-  have ha₃ : ⋃ n, a inter disjointed f n = a := by
-    rwa [← Set.inter_iUnion, iUnion_disjointed, Set.inter_eq_left]
-  have ha₄ : Pairwise (Disjoint on fun n => a inter disjointed f n) :=
-    (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
-  rw [← ha₃]; rw [v.of_disjoint_iUnion _ ha₄]; rw [w.of_disjoint_iUnion _ ha₄]
-  · refine Summable.tsum_le_tsum (fun n => (restrict_le_restrict_iff v w (hf₁ n)).1 (hf₂ n) ?_ ?_)
-      ?_ ?_
-    · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-    · exact Set.Subset.trans Set.inter_subset_right (disjointed_subset _ _)
-    · refine (v.m_iUnion (fun n => ?_) ?_).summable
-      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
-    · refine (w.m_iUnion (fun n => ?_) ?_).summable
-      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
-  · intro n
-    exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-  · exact fun n => ha₁.inter (MeasurableSet.disjointed hf₁ n)
-
-Depends on / 依赖: Disjoint, Disjoint.mono, Pairwise, Set.inter_eq_left, Set.inter_iUnion, Summable, Summable.tsum_le_tsum, disjoint_disjointed, disjointed, iUnion_disjointed, inf_le_right, inter_eq_left, inter_iUnion, of_disjoint_iUnion, restrict_le_restrict_iff, restrict_le_restrict_of_subset_le, tsum_le_tsum, v.of_disjoint_iUnion, w.of_disjoint_iUnion
+/-
+**MeasureTheory.VectorMeasure.restrict_le_restrict_countable_iUnion** 是 Mathlib 
+中的一个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_restrict_countable_iUnion [Countable β] {f : β -> Set α} (hf₁ 
+: forall b, MeasurableSet (f b)) (hf₂ : forall b, v <=[f b] w) : v <=[⋃ b, f b] 
+w
+参数：hf₁ : forall b, MeasurableSet (f b)；hf₂ : forall b, v <=[f b] w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_encodable`：nonempty_encodable (α : Type*) [Countable α] : Nonem
+pty (Encodable α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Encodable.iUnion_decode₂`：iUnion_decode₂ (f : β -> Set α) : ⋃ (i : Nat) 
+(b in decode₂ β i), f b = ⋃ b, f b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iUnion`：restrict_le_res
+trict_iUnion {f : Nat -> Set α} (hf₁ : forall n, MeasurableSet (f n)) (hf₂ : for
+all n, v <=[f n] w) : v <=[⋃ n, f n] w
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `Prop.countable`：∀ (p : Prop), Countable p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_empty`：restrict_empty : v.restrict 
+∅ = 0
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `Set.iUnion_iUnion_eq_right`：iUnion_iUnion_eq_right {b : β} {s : forall x
+ : β, b = x -> Set α} : ⋃ (x) (h : b = x), s x h = s b rfl
 -/
-theorem restrict_le_restrict_iUnion {f : Nat -> Set α} (hf₁ : forall n, MeasurableSet (f n))
-    (hf₂ : forall n, v <=[f n] w) : v <=[⋃ n, f n] w := by
-  refine restrict_le_restrict_of_subset_le v w fun a ha₁ ha₂ => ?_
-  have ha₃ : ⋃ n, a inter disjointed f n = a := by
-    rwa [← Set.inter_iUnion, iUnion_disjointed, Set.inter_eq_left]
-  have ha₄ : Pairwise (Disjoint on fun n => a inter disjointed f n) :=
-    (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
-  rw [← ha₃]; rw [v.of_disjoint_iUnion _ ha₄]; rw [w.of_disjoint_iUnion _ ha₄]
-  · refine Summable.tsum_le_tsum (fun n => (restrict_le_restrict_iff v w (hf₁ n)).1 (hf₂ n) ?_ ?_)
-      ?_ ?_
-    · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-    · exact Set.Subset.trans Set.inter_subset_right (disjointed_subset _ _)
-    · refine (v.m_iUnion (fun n => ?_) ?_).summable
-      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
-    · refine (w.m_iUnion (fun n => ?_) ?_).summable
-      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
-  · intro n
-    exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
-  · exact fun n => ha₁.inter (MeasurableSet.disjointed hf₁ n)
-
-/--
-theorem `restrict_le_restrict_countable_iUnion` / 定理 `restrict_le_restrict_countable_iUnion`
-
-English:
-theorem restrict_le_restrict_countable_iUnion
-  statement: [Countable β] {f : β -> Set α}
-  proof: by
+theorem restrict_le_restrict_countable_iUnion [Countable β] {f : β → Set α}
+    (hf₁ : ∀ b, MeasurableSet (f b)) (hf₂ : ∀ b, v ≤[f b] w) : v ≤[⋃ b, f b] w := by
   cases nonempty_encodable β
   rw [← Encodable.iUnion_decode₂]
   refine restrict_le_restrict_iUnion v w ?_ ?_
@@ -3667,60 +3574,25 @@ theorem restrict_le_restrict_countable_iUnion
     rcases Encodable.decode₂ β n with - | b
     · simp
     · simp [hf₂ b]
-
-中文:
-定理 restrict_le_restrict_countable_iUnion
-  结论: [可数 β] {f : β -> 集合 α}
-  证明: by
-  cases nonempty_encodable β
-  rw [← Encodable.iUnion_decode₂]
-  refine restrict_le_restrict_iUnion v w ?_ ?_
-  · intro n
-    measurability
-  · intro n
-    rcases Encodable.decode₂ β n with - | b
-    · simp
-    · simp [hf₂ b]
-
-Depends on / 依赖: Encodable, Encodable.decode, Encodable.iUnion_decode, measurability, nonempty_encodable, restrict_le_restrict_iUnion
+/-
+**MeasureTheory.VectorMeasure.restrict_le_restrict_union** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_restrict_union (hi₁ : MeasurableSet i) (hi₂ : v <=[i] w) (hj₁ 
+: MeasurableSet j) (hj₂ : v <=[j] w) : v <=[i union j] w
+参数：hi₁ : MeasurableSet i；hi₂ : v <=[i] w；hj₁ : MeasurableSet j；hj₂ : v <=[j] w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_eq_iUnion`：union_eq_iUnion {s₁ s₂ : Set α} : s₁ union s₂ = ⋃ b
+ : Bool, cond b s₁ s₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_countable_iUnion`：restr
+ict_le_restrict_countable_iUnion [Countable β] {f : β -> Set α} (hf₁ : forall b,
+ MeasurableSet (f b)) (hf₂ : forall b, v <=[f b] w) : v…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-theorem restrict_le_restrict_countable_iUnion [Countable β] {f : β -> Set α}
-    (hf₁ : forall b, MeasurableSet (f b)) (hf₂ : forall b, v <=[f b] w) : v <=[⋃ b, f b] w := by
-  cases nonempty_encodable β
-  rw [← Encodable.iUnion_decode₂]
-  refine restrict_le_restrict_iUnion v w ?_ ?_
-  · intro n
-    measurability
-  · intro n
-    rcases Encodable.decode₂ β n with - | b
-    · simp
-    · simp [hf₂ b]
-
-/--
-theorem `restrict_le_restrict_union` / 定理 `restrict_le_restrict_union`
-
-English:
-theorem restrict_le_restrict_union
-  statement: (hi₁ : MeasurableSet i) (hi₂ : v <=[i] w) (hj₁ : MeasurableSet j)
-  proof: by
-  rw [Set.union_eq_iUnion]
-  refine restrict_le_restrict_countable_iUnion v w ?_ ?_
-  · measurability
-  · rintro (_ | _) <;> simpa
-
-中文:
-定理 restrict_le_restrict_union
-  结论: (hi₁ : 可测集 i) (hi₂ : v <=[i] w) (hj₁ : 可测集 j)
-  证明: by
-  rw [Set.union_eq_iUnion]
-  refine restrict_le_restrict_countable_iUnion v w ?_ ?_
-  · measurability
-  · rintro (_ | _) <;> simpa
-
-Depends on / 依赖: Set.union_eq_iUnion, measurability, restrict_le_restrict_countable_iUnion, union_eq_iUnion
--/
-theorem restrict_le_restrict_union (hi₁ : MeasurableSet i) (hi₂ : v <=[i] w) (hj₁ : MeasurableSet j)
-    (hj₂ : v <=[j] w) : v <=[i union j] w := by
+theorem restrict_le_restrict_union (hi₁ : MeasurableSet i) (hi₂ : v ≤[i] w) (hj₁ : MeasurableSet j)
+    (hj₂ : v ≤[j] w) : v ≤[i ∪ j] w := by
   rw [Set.union_eq_iUnion]
   refine restrict_le_restrict_countable_iUnion v w ?_ ?_
   · measurability
@@ -3733,189 +3605,148 @@ section
 variable {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [PartialOrder M]
 variable (v w : VectorMeasure α M) {i j : Set α}
 
-/--
-theorem `nonneg_of_zero_le_restrict` / 定理 `nonneg_of_zero_le_restrict`
-
-English:
-theorem nonneg_of_zero_le_restrict
-  given: (hi₂ : 0 <=[i] v)
-  statement: 0 <= v i
-  proof: by
-  by_cases hi₁ : MeasurableSet i
-  · exact (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hi₁ Set.Subset.rfl
-  · rw [v.not_measurable hi₁]
-
-中文:
-定理 nonneg_of_zero_le_restrict
-  条件: (hi₂ : 0 <=[i] v)
-  结论: 0 <= v i
-  证明: by
-  by_cases hi₁ : MeasurableSet i
-  · exact (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hi₁ Set.Subset.rfl
-  · rw [v.not_measurable hi₁]
-
-Depends on / 依赖: MeasurableSet, Set.Subset.rfl, Subset, not_measurable, restrict_le_restrict_iff, v.not_measurable
+/-
+**MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：nonneg_of_zero_le_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+参数：hi₂ : 0 <=[i] v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem nonneg_of_zero_le_restrict (hi₂ : 0 <=[i] v) : 0 <= v i := by
+theorem nonneg_of_zero_le_restrict (hi₂ : 0 ≤[i] v) : 0 ≤ v i := by
   by_cases hi₁ : MeasurableSet i
   · exact (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hi₁ Set.Subset.rfl
   · rw [v.not_measurable hi₁]
-
-/--
-theorem `nonpos_of_restrict_le_zero` / 定理 `nonpos_of_restrict_le_zero`
-
-English:
-theorem nonpos_of_restrict_le_zero
-  given: (hi₂ : v <=[i] 0)
-  statement: v i <= 0
-  proof: by
+/-
+**MeasureTheory.VectorMeasure.nonpos_of_restrict_le_zero** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：nonpos_of_restrict_le_zero (hi₂ : v <=[i] 0) : v i <= 0
+参数：hi₂ : v <=[i] 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+-/
+theorem nonpos_of_restrict_le_zero (hi₂ : v ≤[i] 0) : v i ≤ 0 := by
   by_cases hi₁ : MeasurableSet i
   · exact (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hi₁ Set.Subset.rfl
   · rw [v.not_measurable hi₁]
-
-中文:
-定理 nonpos_of_restrict_le_zero
-  条件: (hi₂ : v <=[i] 0)
-  结论: v i <= 0
-  证明: by
-  by_cases hi₁ : MeasurableSet i
-  · exact (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hi₁ Set.Subset.rfl
-  · rw [v.not_measurable hi₁]
-
-Depends on / 依赖: MeasurableSet, Set.Subset.rfl, Subset, not_measurable, restrict_le_restrict_iff, v.not_measurable
+/-
+**MeasureTheory.VectorMeasure.zero_le_restrict_not_measurable** 是 Mathlib 中的一个定理
+，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：zero_le_restrict_not_measurable (hi : ¬MeasurableSet i) : 0 <=[i] v
+参数：hi : ¬MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_zero`：restrict_zero {i : Set α} : (
+0 : VectorMeasure α M).restrict i = 0
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_not_measurable`：restrict_not_measur
+able {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem nonpos_of_restrict_le_zero (hi₂ : v <=[i] 0) : v i <= 0 := by
-  by_cases hi₁ : MeasurableSet i
-  · exact (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hi₁ Set.Subset.rfl
-  · rw [v.not_measurable hi₁]
-
-/--
-theorem `zero_le_restrict_not_measurable` / 定理 `zero_le_restrict_not_measurable`
-
-English:
-theorem zero_le_restrict_not_measurable
-  given: (hi : ¬MeasurableSet i)
-  statement: 0 <=[i] v
-  proof: by
-  rw [restrict_zero]; rw [restrict_not_measurable _ hi]
-
-中文:
-定理 zero_le_restrict_not_measurable
-  条件: (hi : ¬可测集 i)
-  结论: 0 <=[i] v
-  证明: by
-  rw [restrict_zero]; rw [restrict_not_measurable _ hi]
-
-Depends on / 依赖: restrict_not_measurable, restrict_zero
+theorem zero_le_restrict_not_measurable (hi : ¬MeasurableSet i) : 0 ≤[i] v := by
+  rw [restrict_zero, restrict_not_measurable _ hi]
+/-
+**MeasureTheory.VectorMeasure.restrict_le_zero_of_not_measurable** 是 Mathlib 中的一
+个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_zero_of_not_measurable (hi : ¬MeasurableSet i) : v <=[i] 0
+参数：hi : ¬MeasurableSet i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_zero`：restrict_zero {i : Set α} : (
+0 : VectorMeasure α M).restrict i = 0
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_not_measurable`：restrict_not_measur
+able {i : Set α} (hi : ¬MeasurableSet i) : v.restrict i = 0
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem zero_le_restrict_not_measurable (hi : ¬MeasurableSet i) : 0 <=[i] v := by
-  rw [restrict_zero]; rw [restrict_not_measurable _ hi]
-
-/--
-theorem `restrict_le_zero_of_not_measurable` / 定理 `restrict_le_zero_of_not_measurable`
-
-English:
-theorem restrict_le_zero_of_not_measurable
-  given: (hi : ¬MeasurableSet i)
-  statement: v <=[i] 0
-  proof: by
-  rw [restrict_zero]; rw [restrict_not_measurable _ hi]
-
-中文:
-定理 restrict_le_zero_of_not_measurable
-  条件: (hi : ¬可测集 i)
-  结论: v <=[i] 0
-  证明: by
-  rw [restrict_zero]; rw [restrict_not_measurable _ hi]
-
-Depends on / 依赖: restrict_not_measurable, restrict_zero
+theorem restrict_le_zero_of_not_measurable (hi : ¬MeasurableSet i) : v ≤[i] 0 := by
+  rw [restrict_zero, restrict_not_measurable _ hi]
+/-
+**MeasureTheory.VectorMeasure.measurable_of_not_zero_le_restrict** 是 Mathlib 中的一
+个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：measurable_of_not_zero_le_restrict (hi : ¬0 <=[i] v) : MeasurableSet i
+参数：hi : ¬0 <=[i] v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Not.imp_symm`：Not.imp_symm : (¬a -> b) -> ¬b -> a
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_not_measurable`：zero_le_res
+trict_not_measurable (hi : ¬MeasurableSet i) : 0 <=[i] v
 -/
-theorem restrict_le_zero_of_not_measurable (hi : ¬MeasurableSet i) : v <=[i] 0 := by
-  rw [restrict_zero]; rw [restrict_not_measurable _ hi]
-
-/--
-theorem `measurable_of_not_zero_le_restrict` / 定理 `measurable_of_not_zero_le_restrict`
-
-English:
-theorem measurable_of_not_zero_le_restrict
-  given: (hi : ¬0 <=[i] v)
-  statement: MeasurableSet i
-  proof: Not.imp_symm (zero_le_restrict_not_measurable _) hi
-
-中文:
-定理 measurable_of_not_zero_le_restrict
-  条件: (hi : ¬0 <=[i] v)
-  结论: 可测集 i
-  证明: Not.imp_symm (zero_le_restrict_not_measurable _) hi
-
-Depends on / 依赖: Not.imp_symm, imp_symm, zero_le_restrict_not_measurable
--/
-theorem measurable_of_not_zero_le_restrict (hi : ¬0 <=[i] v) : MeasurableSet i :=
+theorem measurable_of_not_zero_le_restrict (hi : ¬0 ≤[i] v) : MeasurableSet i :=
   Not.imp_symm (zero_le_restrict_not_measurable _) hi
-
-/--
-theorem `measurable_of_not_restrict_le_zero` / 定理 `measurable_of_not_restrict_le_zero`
-
-English:
-theorem measurable_of_not_restrict_le_zero
-  given: (hi : ¬v <=[i] 0)
-  statement: MeasurableSet i
-  proof: Not.imp_symm (restrict_le_zero_of_not_measurable _) hi
-
-中文:
-定理 measurable_of_not_restrict_le_zero
-  条件: (hi : ¬v <=[i] 0)
-  结论: 可测集 i
-  证明: Not.imp_symm (restrict_le_zero_of_not_measurable _) hi
-
-Depends on / 依赖: Not.imp_symm, imp_symm, restrict_le_zero_of_not_measurable
+/-
+**MeasureTheory.VectorMeasure.measurable_of_not_restrict_le_zero** 是 Mathlib 中的一
+个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：measurable_of_not_restrict_le_zero (hi : ¬v <=[i] 0) : MeasurableSet i
+参数：hi : ¬v <=[i] 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Not.imp_symm`：Not.imp_symm : (¬a -> b) -> ¬b -> a
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_zero_of_not_measurable`：restrict
+_le_zero_of_not_measurable (hi : ¬MeasurableSet i) : v <=[i] 0
 -/
-theorem measurable_of_not_restrict_le_zero (hi : ¬v <=[i] 0) : MeasurableSet i :=
+theorem measurable_of_not_restrict_le_zero (hi : ¬v ≤[i] 0) : MeasurableSet i :=
   Not.imp_symm (restrict_le_zero_of_not_measurable _) hi
-
-/--
-theorem `zero_le_restrict_subset` / 定理 `zero_le_restrict_subset`
-
-English:
-theorem zero_le_restrict_subset
-  given: (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v)
-  statement: 0 <=[j] v
-  proof: restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
-    (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
-
-中文:
-定理 zero_le_restrict_subset
-  条件: (hi₁ : 可测集 i) (hij : j subseteq i) (hi₂ : 0 <=[i] v)
-  结论: 0 <=[j] v
-  证明: restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
-    (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
-
-Depends on / 依赖: Set.Subset.trans, Subset, restrict_le_restrict_iff, restrict_le_restrict_of_subset_le
+/-
+**MeasureTheory.VectorMeasure.zero_le_restrict_subset** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.VectorMeasure`。
+形式化陈述：zero_le_restrict_subset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ 
+: 0 <=[i] v) : 0 <=[j] v
+参数：hi₁ : MeasurableSet i；hij : j subseteq i；hi₂ : 0 <=[i] v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_of_subset_le`：restrict_
+le_restrict_of_subset_le {i : Set α} (h : forall ⦃j⦄, MeasurableSet j -> j subse
+teq i -> v j <= w j) : v <=[i] w
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
 -/
-theorem zero_le_restrict_subset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v :=
+theorem zero_le_restrict_subset (hi₁ : MeasurableSet i) (hij : j ⊆ i) (hi₂ : 0 ≤[i] v) : 0 ≤[j] v :=
   restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
     (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
-
-/--
-theorem `restrict_le_zero_subset` / 定理 `restrict_le_zero_subset`
-
-English:
-theorem restrict_le_zero_subset
-  given: (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : v <=[i] 0)
-  statement: v <=[j] 0
-  proof: restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
-    (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
-
-中文:
-定理 restrict_le_zero_subset
-  条件: (hi₁ : 可测集 i) (hij : j subseteq i) (hi₂ : v <=[i] 0)
-  结论: v <=[j] 0
-  证明: restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
-    (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
-
-Depends on / 依赖: Set.Subset.trans, Subset, restrict_le_restrict_iff, restrict_le_restrict_of_subset_le
+/-
+**MeasureTheory.VectorMeasure.restrict_le_zero_subset** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.VectorMeasure`。
+形式化陈述：restrict_le_zero_subset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ 
+: v <=[i] 0) : v <=[j] 0
+参数：hi₁ : MeasurableSet i；hij : j subseteq i；hi₂ : v <=[i] 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_of_subset_le`：restrict_
+le_restrict_of_subset_le {i : Set α} (h : forall ⦃j⦄, MeasurableSet j -> j subse
+teq i -> v j <= w j) : v <=[i] w
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
 -/
-theorem restrict_le_zero_subset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : v <=[i] 0) : v <=[j] 0 :=
+theorem restrict_le_zero_subset (hi₁ : MeasurableSet i) (hij : j ⊆ i) (hi₂ : v ≤[i] 0) : v ≤[j] 0 :=
   restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
     (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
 
@@ -3926,31 +3757,29 @@ section
 variable {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [LinearOrder M]
 variable (v w : VectorMeasure α M) {i j : Set α}
 
-/--
-theorem `exists_pos_measure_of_not_restrict_le_zero` / 定理 `exists_pos_measure_of_not_restrict_le_zero`
-
-English:
-theorem exists_pos_measure_of_not_restrict_le_zero
-  given: (hi : ¬v <=[i] 0)
-  proof: by
-  have hi₁ : MeasurableSet i := measurable_of_not_restrict_le_zero _ hi
-  rw [restrict_le_restrict_iff _ _ hi₁] at hi
-  push Not at hi
-  exact hi
-
-中文:
-定理 存在_pos_measure_of_not_restrict_le_zero
-  条件: (hi : ¬v <=[i] 0)
-  证明: by
-  have hi₁ : MeasurableSet i := measurable_of_not_restrict_le_zero _ hi
-  rw [restrict_le_restrict_iff _ _ hi₁] at hi
-  push Not at hi
-  exact hi
-
-Depends on / 依赖: MeasurableSet, measurable_of_not_restrict_le_zero, restrict_le_restrict_iff
+/-
+**MeasureTheory.VectorMeasure.exists_pos_measure_of_not_restrict_le_zero** 是 Mat
+hlib 中的一个定理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：exists_pos_measure_of_not_restrict_le_zero (hi : ¬v <=[i] 0) : exists j : 
+Set α, MeasurableSet j ∧ j subseteq i ∧ 0 < v j
+参数：hi : ¬v <=[i] 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.measurable_of_not_restrict_le_zero`：measurab
+le_of_not_restrict_le_zero (hi : ¬v <=[i] 0) : MeasurableSet i
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_iff`：restrict_le_restri
+ct_iff {i : Set α} (hi : MeasurableSet i) : v <=[i] w ↔ forall ⦃j⦄, MeasurableSe
+t j -> j subseteq i -> v j <= w j
 -/
-theorem exists_pos_measure_of_not_restrict_le_zero (hi : ¬v <=[i] 0) :
-    exists j : Set α, MeasurableSet j ∧ j subseteq i ∧ 0 < v j := by
+theorem exists_pos_measure_of_not_restrict_le_zero (hi : ¬v ≤[i] 0) :
+    ∃ j : Set α, MeasurableSet j ∧ j ⊆ i ∧ 0 < v j := by
   have hi₁ : MeasurableSet i := measurable_of_not_restrict_le_zero _ hi
   rw [restrict_le_restrict_iff _ _ hi₁] at hi
   push Not at hi
@@ -3963,20 +3792,29 @@ section
 variable {M : Type*} [TopologicalSpace M] [AddCommMonoid M] [PartialOrder M]
   [AddLeftMono M] [ContinuousAdd M]
 
-/--
-Instance `instAddLeftMono` / 实例 `instAddLeftMono`
-
-English:
-instance instAddLeftMono
-  signature: : AddLeftMono (VectorMeasure α M)
-  body: ⟨fun _ _ _ h i hi => by simp only [_root_.add_apply]; grw [h i hi]⟩
-
-中文:
-实例 instAddLeftMono
-  签名: : AddLeftMono (向量测度 α M)
-  定义体: ⟨fun _ _ _ h i hi => by simp only [_root_.add_apply]; grw [h i hi]⟩
-
-Depends on / 依赖: _root_, _root_.add_apply, add_apply
+/-
+**MeasureTheory.VectorMeasure.instAddLeftMono** 是 Mathlib 中的一个实例，位于命名空间 `Measure
+Theory.VectorMeasure`。
+形式化陈述：instAddLeftMono : AddLeftMono (VectorMeasure α M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 instance instAddLeftMono : AddLeftMono (VectorMeasure α M) :=
   ⟨fun _ _ _ h i hi => by simp only [_root_.add_apply]; grw [h i hi]⟩
@@ -3989,27 +3827,22 @@ variable {L M N : Type*}
 variable [AddCommMonoid L] [TopologicalSpace L] [AddCommMonoid M] [TopologicalSpace M]
   [AddCommMonoid N] [TopologicalSpace N]
 
-/--
-Definition of `AbsolutelyContinuous` / `AbsolutelyContinuous` 的定义
+/-- A vector measure `v` is absolutely continuous with respect to a measure `μ` if for all sets
+`s`, `μ s = 0`, we have `v s = 0`. -/
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous** 是 Mathlib 中的一个定义，位于命名空间 `Me
+asureTheory.VectorMeasure`。
+形式化陈述：AbsolutelyContinuous (v : VectorMeasure α M) (w : VectorMeasure α N)
+参数：v : VectorMeasure α M；w : VectorMeasure α N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AbsolutelyContinuous
-  signature: (v : VectorMeasure α M) (w : VectorMeasure α N)
-  body: forall ⦃s : Set α⦄, w s = 0 -> v s = 0
-
-@[inherit_doc VectorMeasure.AbsolutelyContinuous]
-scoped[MeasureTheory] infixl:50 " ≪ᵥ " => MeasureTheory.VectorMeasure.AbsolutelyContinuous
-
-中文:
-定义 AbsolutelyContinuous
-  签名: (v : 向量测度 α M) (w : 向量测度 α N)
-  定义体: forall ⦃s : Set α⦄, w s = 0 -> v s = 0
-
-@[inherit_doc VectorMeasure.AbsolutelyContinuous]
-scoped[MeasureTheory] infixl:50 " ≪ᵥ " => MeasureTheory.VectorMeasure.AbsolutelyContinuous
+--- 原说明 ---
+A vector measure `v` is absolutely continuous with respect to a measure `μ` if f
+or all sets
+`s`, `μ s = 0`, we have `v s = 0`.
 -/
 def AbsolutelyContinuous (v : VectorMeasure α M) (w : VectorMeasure α N) :=
-  forall ⦃s : Set α⦄, w s = 0 -> v s = 0
+  ∀ ⦃s : Set α⦄, w s = 0 → v s = 0
 
 @[inherit_doc VectorMeasure.AbsolutelyContinuous]
 scoped[MeasureTheory] infixl:50 " ≪ᵥ " => MeasureTheory.VectorMeasure.AbsolutelyContinuous
@@ -4020,319 +3853,243 @@ namespace AbsolutelyContinuous
 
 variable {v : VectorMeasure α M} {w : VectorMeasure α N}
 
-/--
-theorem `mk` / 定理 `mk`
-
-English:
-theorem mk
-  given: (h : forall ⦃s : Set α⦄, MeasurableSet s -> w s = 0 -> v s = 0)
-  statement: v ≪ᵥ w
-  proof: by
-  intro s hs
-  by_cases hmeas : MeasurableSet s
-  · exact h hmeas hs
-  · exact not_measurable v hmeas
-
-中文:
-定理 mk
-  条件: (h : 对任意 ⦃s : 集合 α⦄, 可测集 s -> w s = 0 -> v s = 0)
-  结论: v ≪ᵥ w
-  证明: by
-  intro s hs
-  by_cases hmeas : MeasurableSet s
-  · exact h hmeas hs
-  · exact not_measurable v hmeas
-
-Depends on / 依赖: MeasurableSet, not_measurable
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.mk** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：mk (h : forall ⦃s : Set α⦄, MeasurableSet s -> w s = 0 -> v s = 0) : v ≪ᵥ 
+w
+参数：h : forall ⦃s : Set α⦄, MeasurableSet s -> w s = 0 -> v s = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
 -/
-theorem mk (h : forall ⦃s : Set α⦄, MeasurableSet s -> w s = 0 -> v s = 0) : v ≪ᵥ w := by
+theorem mk (h : ∀ ⦃s : Set α⦄, MeasurableSet s → w s = 0 → v s = 0) : v ≪ᵥ w := by
   intro s hs
   by_cases hmeas : MeasurableSet s
   · exact h hmeas hs
   · exact not_measurable v hmeas
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: {w : VectorMeasure α M} (h : v = w)
-  statement: v ≪ᵥ w
-  proof: fun _ hs => h.symm ▸ hs
-
-@[refl]
-
-中文:
-定理 eq
-  条件: {w : 向量测度 α M} (h : v = w)
-  结论: v ≪ᵥ w
-  证明: fun _ hs => h.symm ▸ hs
-
-@[refl]
-
-Depends on / 依赖: h.symm
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.eq** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：eq {w : VectorMeasure α M} (h : v = w) : v ≪ᵥ w
+参数：h : v = w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem eq {w : VectorMeasure α M} (h : v = w) : v ≪ᵥ w :=
   fun _ hs => h.symm ▸ hs
 
 @[refl]
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: (v : VectorMeasure α M)
-  statement: v ≪ᵥ v
-  proof: eq rfl
-
-@[trans]
-
-中文:
-定理 refl
-  条件: (v : 向量测度 α M)
-  结论: v ≪ᵥ v
-  证明: eq rfl
-
-@[trans]
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.refl** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：refl (v : VectorMeasure α M) : v ≪ᵥ v
+参数：v : VectorMeasure α M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.AbsolutelyContinuous.eq`：eq {w : VectorMeasu
+re α M} (h : v = w) : v ≪ᵥ w
 -/
 theorem refl (v : VectorMeasure α M) : v ≪ᵥ v :=
   eq rfl
 
 @[trans]
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  statement: {u : VectorMeasure α L} {v : VectorMeasure α M} {w : VectorMeasure α N} (huv : u ≪ᵥ v)
-  proof: fun _ hs => huv hvw hs
-
-中文:
-定理 trans
-  结论: {u : 向量测度 α L} {v : 向量测度 α M} {w : 向量测度 α N} (huv : u ≪ᵥ v)
-  证明: fun _ hs => huv hvw hs
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.trans** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：trans {u : VectorMeasure α L} {v : VectorMeasure α M} {w : VectorMeasure α
+ N} (huv : u ≪ᵥ v) (hvw : v ≪ᵥ w) : u ≪ᵥ w
+参数：huv : u ≪ᵥ v；hvw : v ≪ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans {u : VectorMeasure α L} {v : VectorMeasure α M} {w : VectorMeasure α N} (huv : u ≪ᵥ v)
     (hvw : v ≪ᵥ w) : u ≪ᵥ w :=
-fun _ hs => huv hvw hs
-
-/--
-theorem `zero` / 定理 `zero`
-
-English:
-theorem zero
-  given: (v : VectorMeasure α N)
-  statement: (0 : VectorMeasure α M) ≪ᵥ v
-  proof: fun s _ => zero_apply s
-
-中文:
-定理 zero
-  条件: (v : 向量测度 α N)
-  结论: (0 : 向量测度 α M) ≪ᵥ v
-  证明: fun s _ => zero_apply s
-
-Depends on / 依赖: zero_apply
+  fun _ hs => huv <| hvw hs
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.zero** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：zero (v : VectorMeasure α N) : (0 : VectorMeasure α M) ≪ᵥ v
+参数：v : VectorMeasure α N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
 -/
 theorem zero (v : VectorMeasure α N) : (0 : VectorMeasure α M) ≪ᵥ v :=
   fun s _ => zero_apply s
-
-/--
-theorem `neg_left` / 定理 `neg_left`
-
-English:
-theorem neg_left
-  statement: {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-  proof: by
-  intro s hs
-  rw [neg_apply]; rw [h hs]; rw [neg_zero]
-
-中文:
-定理 neg_left
-  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
-  证明: by
-  intro s hs
-  rw [neg_apply]; rw [h hs]; rw [neg_zero]
-
-Depends on / 依赖: neg_apply, neg_zero
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.neg_left** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：neg_left {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalA
+ddGroup M] {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ≪ᵥ w) : -v ≪ᵥ 
+w
+参数：h : v ≪ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem neg_left {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
     {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ≪ᵥ w) : -v ≪ᵥ w := by
   intro s hs
-  rw [neg_apply]; rw [h hs]; rw [neg_zero]
-
-/--
-theorem `neg_right` / 定理 `neg_right`
-
-English:
-theorem neg_right
-  statement: {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
-  proof: by
-  intro s hs
-  rw [neg_apply]; rw [neg_eq_zero] at hs
-  exact h hs
-
-中文:
-定理 neg_right
-  结论: {N : 类型} [加法交换群 N] [拓扑空间 N] [是拓扑加群 N]
-  证明: by
-  intro s hs
-  rw [neg_apply]; rw [neg_eq_zero] at hs
-  exact h hs
-
-Depends on / 依赖: neg_apply, neg_eq_zero
+  rw [neg_apply, h hs, neg_zero]
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.neg_right** 是 Mathlib 中的一个定理，
+位于命名空间 `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：neg_right {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopological
+AddGroup N] {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ≪ᵥ w) : v ≪ᵥ 
+-w
+参数：h : v ≪ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a =
+ 0 ↔ a = 0
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
 -/
 theorem neg_right {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
     {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ≪ᵥ w) : v ≪ᵥ -w := by
   intro s hs
-  rw [neg_apply]; rw [neg_eq_zero] at hs
+  rw [neg_apply, neg_eq_zero] at hs
   exact h hs
-
-/--
-theorem `add` / 定理 `add`
-
-English:
-theorem add
-  statement: [ContinuousAdd M] {v₁ v₂ : VectorMeasure α M} {w : VectorMeasure α N} (hv₁ : v₁ ≪ᵥ w)
-  proof: by
-  intro s hs
-  rw [_root_.add_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_add]
-
-中文:
-定理 add
-  结论: [连续加法 M] {v₁ v₂ : 向量测度 α M} {w : 向量测度 α N} (hv₁ : v₁ ≪ᵥ w)
-  证明: by
-  intro s hs
-  rw [_root_.add_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_add]
-
-Depends on / 依赖: _root_, _root_.add_apply, add_apply, zero_add
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.add** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：add [ContinuousAdd M] {v₁ v₂ : VectorMeasure α M} {w : VectorMeasure α N} 
+(hv₁ : v₁ ≪ᵥ w) (hv₂ : v₂ ≪ᵥ w) : v₁ + v₂ ≪ᵥ w
+参数：hv₁ : v₁ ≪ᵥ w；hv₂ : v₂ ≪ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem add [ContinuousAdd M] {v₁ v₂ : VectorMeasure α M} {w : VectorMeasure α N} (hv₁ : v₁ ≪ᵥ w)
     (hv₂ : v₂ ≪ᵥ w) : v₁ + v₂ ≪ᵥ w := by
   intro s hs
-  rw [_root_.add_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_add]
-
-/--
-theorem `sub` / 定理 `sub`
-
-English:
-theorem sub
-  statement: {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-  proof: by
-  intro s hs
-  rw [sub_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_sub]; rw [neg_zero]
-
-中文:
-定理 sub
-  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
-  证明: by
-  intro s hs
-  rw [sub_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_sub]; rw [neg_zero]
-
-Depends on / 依赖: neg_zero, sub_apply, zero_sub
+  rw [_root_.add_apply, hv₁ hs, hv₂ hs, zero_add]
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.sub** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：sub {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGro
+up M] {v₁ v₂ : VectorMeasure α M} {w : VectorMeasure α N} (hv₁ : v₁ ≪ᵥ w) (hv₂ :
+ v₂ ≪ᵥ w) : v₁ - v₂ ≪ᵥ w
+参数：hv₁ : v₁ ≪ᵥ w；hv₂ : v₂ ≪ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Sub β}   {inst_2 : Sub F} [self : IsSu…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSubApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem sub {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
     {v₁ v₂ : VectorMeasure α M} {w : VectorMeasure α N} (hv₁ : v₁ ≪ᵥ w) (hv₂ : v₂ ≪ᵥ w) :
     v₁ - v₂ ≪ᵥ w := by
   intro s hs
-  rw [sub_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_sub]; rw [neg_zero]
-
-/--
-theorem `smul` / 定理 `smul`
-
-English:
-theorem smul
-  statement: {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M] {r : R}
-  proof: by
-  intro s hs
-  rw [_root_.smul_apply]; rw [h hs]; rw [smul_zero]
-
-中文:
-定理 smul
-  结论: {R : 类型} [半环 R] [分配乘法作用 R M] [连续常数标量乘法 R M] {r : R}
-  证明: by
-  intro s hs
-  rw [_root_.smul_apply]; rw [h hs]; rw [smul_zero]
-
-Depends on / 依赖: _root_, _root_.smul_apply, smul_apply, smul_zero
+  rw [sub_apply, hv₁ hs, hv₂ hs, zero_sub, neg_zero]
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.smul** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：smul {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul 
+R M] {r : R} {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ≪ᵥ w) : r • 
+v ≪ᵥ w
+参数：h : v ≪ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSMulApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M]   {R : Type u_4} [inst_2 : Se…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem smul {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M] {r : R}
     {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ≪ᵥ w) : r • v ≪ᵥ w := by
   intro s hs
-  rw [_root_.smul_apply]; rw [h hs]; rw [smul_zero]
-
-/--
-theorem `map` / 定理 `map`
-
-English:
-theorem map
-  given: [MeasureSpace β] (h : v ≪ᵥ w) (f : α -> β)
-  statement: v.map f ≪ᵥ w.map f
-  proof: by
-  by_cases hf : Measurable f
-  · refine mk fun s hs hws => ?_
-    rw [map_apply _ hf hs] at hws ⊢
-    exact h hws
-  · intro s _
-    rw [map_not_measurable v hf]; rw [zero_apply]
-
-中文:
-定理 map
-  条件: [测度空间 β] (h : v ≪ᵥ w) (f : α -> β)
-  结论: v.map f ≪ᵥ w.map f
-  证明: by
-  by_cases hf : Measurable f
-  · refine mk fun s hs hws => ?_
-    rw [map_apply _ hf hs] at hws ⊢
-    exact h hws
-  · intro s _
-    rw [map_not_measurable v hf]; rw [zero_apply]
-
-Depends on / 依赖: Measurable, map_apply, map_not_measurable, zero_apply
+  rw [_root_.smul_apply, h hs, smul_zero]
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.map** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：map [MeasureSpace β] (h : v ≪ᵥ w) (f : α -> β) : v.map f ≪ᵥ w.map f
+参数：h : v ≪ᵥ w；f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.AbsolutelyContinuous.mk`：mk (h : forall ⦃s :
+ Set α⦄, MeasurableSet s -> w s = 0 -> v s = 0) : v ≪ᵥ w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.map_apply`：map_apply {f : α -> β} (hf : Meas
+urable f) {s : Set β} (hs : MeasurableSet s) : v.map f s = v (f ⁻¹' s)
+· 使用定理 `MeasureTheory.VectorMeasure.map_not_measurable`：map_not_measurable {f : 
+α -> β} (hf : ¬Measurable f) : v.map f = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
 -/
-theorem map [MeasureSpace β] (h : v ≪ᵥ w) (f : α -> β) : v.map f ≪ᵥ w.map f := by
+theorem map [MeasureSpace β] (h : v ≪ᵥ w) (f : α → β) : v.map f ≪ᵥ w.map f := by
   by_cases hf : Measurable f
   · refine mk fun s hs hws => ?_
     rw [map_apply _ hf hs] at hws ⊢
     exact h hws
   · intro s _
-    rw [map_not_measurable v hf]; rw [zero_apply]
-
-/--
-theorem `ennrealToMeasure` / 定理 `ennrealToMeasure`
-
-English:
-theorem ennrealToMeasure
-  given: {μ : VectorMeasure α Real>=0∞}
-  proof: by
-  constructor <;> intro h
-  · refine mk fun s hmeas hs => h ?_
-    rw [← hs]; rw [ennrealToMeasure_apply hmeas]
-  · intro s hs
-    by_cases hmeas : MeasurableSet s
-    · rw [ennrealToMeasure_apply hmeas] at hs
-      exact h hs
-    · exact not_measurable v hmeas
-
-中文:
-定理 ennrealToMeasure
-  条件: {μ : 向量测度 α 实数>=0∞}
-  证明: by
-  constructor <;> intro h
-  · refine mk fun s hmeas hs => h ?_
-    rw [← hs]; rw [ennrealToMeasure_apply hmeas]
-  · intro s hs
-    by_cases hmeas : MeasurableSet s
-    · rw [ennrealToMeasure_apply hmeas] at hs
-      exact h hs
-    · exact not_measurable v hmeas
-
-Depends on / 依赖: MeasurableSet, ennrealToMeasure_apply, not_measurable
+    rw [map_not_measurable v hf, zero_apply]
+/-
+**MeasureTheory.VectorMeasure.AbsolutelyContinuous.ennrealToMeasure** 是 Mathlib 
+中的一个定理，位于命名空间 `MeasureTheory.VectorMeasure.AbsolutelyContinuous`。
+形式化陈述：ennrealToMeasure {μ : VectorMeasure α Real>=0∞} : (forall ⦃s : Set α⦄, μ.e
+nnrealToMeasure s = 0 -> v s = 0) ↔ v ≪ᵥ μ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.AbsolutelyContinuous.mk`：mk (h : forall ⦃s :
+ Set α⦄, MeasurableSet s -> w s = 0 -> v s = 0) : v ≪ᵥ w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.ennrealToMeasure_apply`：ennrealToMeasure_app
+ly {m : MeasurableSpace α} {v : VectorMeasure α Real>=0∞} {s : Set α} (hs : Meas
+urableSet s) : ennrealToMeasure v s = v …
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
 -/
-theorem ennrealToMeasure {μ : VectorMeasure α Real>=0∞} :
-    (forall ⦃s : Set α⦄, μ.ennrealToMeasure s = 0 -> v s = 0) ↔ v ≪ᵥ μ := by
+theorem ennrealToMeasure {μ : VectorMeasure α ℝ≥0∞} :
+    (∀ ⦃s : Set α⦄, μ.ennrealToMeasure s = 0 → v s = 0) ↔ v ≪ᵥ μ := by
   constructor <;> intro h
   · refine mk fun s hmeas hs => h ?_
-    rw [← hs]; rw [ennrealToMeasure_apply hmeas]
+    rw [← hs, ennrealToMeasure_apply hmeas]
   · intro s hs
     by_cases hmeas : MeasurableSet s
     · rw [ennrealToMeasure_apply hmeas] at hs
@@ -4341,29 +4098,35 @@ theorem ennrealToMeasure {μ : VectorMeasure α Real>=0∞} :
 
 end AbsolutelyContinuous
 
-/--
-Definition of `MutuallySingular` / `MutuallySingular` 的定义
+/-- Two vector measures `v` and `w` are said to be mutually singular if there exists a measurable
+set `s`, such that for all `t ⊆ s`, `v t = 0` and for all `t ⊆ sᶜ`, `w t = 0`.
 
-English:
-definition MutuallySingular
-  signature: (v : VectorMeasure α M) (w : VectorMeasure α N)
-  body: exists s : Set α, MeasurableSet s ∧ (forall t subseteq s, v t = 0) ∧ forall t subseteq sᶜ, w t = 0
+We note that we do not require the measurability of `t` in the definition since this makes it easier
+to use. This is equivalent to the definition which requires measurability. To prove
+`MutuallySingular` with the measurability condition, use
+`MeasureTheory.VectorMeasure.MutuallySingular.mk`. -/
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular** 是 Mathlib 中的一个定义，位于命名空间 `Measur
+eTheory.VectorMeasure`。
+形式化陈述：MutuallySingular (v : VectorMeasure α M) (w : VectorMeasure α N) : Prop
+参数：v : VectorMeasure α M；w : VectorMeasure α N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[inherit_doc VectorMeasure.MutuallySingular]
-scoped[MeasureTheory] infixl:60 " ⟂ᵥ " => MeasureTheory.VectorMeasure.MutuallySingular
+--- 原说明 ---
+Two vector measures `v` and `w` are said to be mutually singular if there exists
+ a measurable
+set `s`, such that for all `t ⊆ s`, `v t = 0` and for all `t ⊆ sᶜ`, `w t = 0`.
 
-中文:
-定义 互奇异
-  签名: (v : 向量测度 α M) (w : 向量测度 α N)
-  定义体: exists s : Set α, MeasurableSet s ∧ (forall t subseteq s, v t = 0) ∧ forall t subseteq sᶜ, w t = 0
-
-@[inherit_doc VectorMeasure.MutuallySingular]
-scoped[MeasureTheory] infixl:60 " ⟂ᵥ " => MeasureTheory.VectorMeasure.MutuallySingular
-
-Depends on / 依赖: MeasurableSet, subseteq
+We note that we do not require the measurability of `t` in the definition since 
+this makes it easier
+to use. This is equivalent to the definition which requires measurability. To pr
+ove
+`MutuallySingular` with the measurability condition, use
+`MeasureTheory.VectorMeasure.MutuallySingular.mk`.
 -/
 def MutuallySingular (v : VectorMeasure α M) (w : VectorMeasure α N) : Prop :=
-  exists s : Set α, MeasurableSet s ∧ (forall t subseteq s, v t = 0) ∧ forall t subseteq sᶜ, w t = 0
+  ∃ s : Set α, MeasurableSet s ∧ (∀ t ⊆ s, v t = 0) ∧ ∀ t ⊆ sᶜ, w t = 0
 
 @[inherit_doc VectorMeasure.MutuallySingular]
 scoped[MeasureTheory] infixl:60 " ⟂ᵥ " => MeasureTheory.VectorMeasure.MutuallySingular
@@ -4372,321 +4135,274 @@ namespace MutuallySingular
 
 variable {v v₁ v₂ : VectorMeasure α M} {w w₁ w₂ : VectorMeasure α N}
 
-/--
-theorem `mk` / 定理 `mk`
-
-English:
-theorem mk
-  statement: (s : Set α) (hs : MeasurableSet s) (h₁ : forall t subseteq s, MeasurableSet t -> v t = 0)
-  proof: by
-  refine ⟨s, hs, fun t hst => ?_, fun t hst => ?_⟩ <;> by_cases ht : MeasurableSet t
-  · exact h₁ t hst ht
-  · exact not_measurable v ht
-  · exact h₂ t hst ht
-  · exact not_measurable w ht
-
-中文:
-定理 mk
-  结论: (s : 集合 α) (hs : 可测集 s) (h₁ : 对任意 t subseteq s, 可测集 t -> v t = 0)
-  证明: by
-  refine ⟨s, hs, fun t hst => ?_, fun t hst => ?_⟩ <;> by_cases ht : MeasurableSet t
-  · exact h₁ t hst ht
-  · exact not_measurable v ht
-  · exact h₂ t hst ht
-  · exact not_measurable w ht
-
-Depends on / 依赖: MeasurableSet, not_measurable
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.mk** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：mk (s : Set α) (hs : MeasurableSet s) (h₁ : forall t subseteq s, Measurabl
+eSet t -> v t = 0) (h₂ : forall t subseteq sᶜ, MeasurableSet t -> w t = 0) : v ⟂
+ᵥ w
+参数：s : Set α；hs : MeasurableSet s；h₁ : forall t subseteq s, MeasurableSet t -> v
+ t = 0；h₂ : forall t subseteq sᶜ, MeasurableSet t -> w t = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
 -/
-theorem mk (s : Set α) (hs : MeasurableSet s) (h₁ : forall t subseteq s, MeasurableSet t -> v t = 0)
-    (h₂ : forall t subseteq sᶜ, MeasurableSet t -> w t = 0) : v ⟂ᵥ w := by
+theorem mk (s : Set α) (hs : MeasurableSet s) (h₁ : ∀ t ⊆ s, MeasurableSet t → v t = 0)
+    (h₂ : ∀ t ⊆ sᶜ, MeasurableSet t → w t = 0) : v ⟂ᵥ w := by
   refine ⟨s, hs, fun t hst => ?_, fun t hst => ?_⟩ <;> by_cases ht : MeasurableSet t
   · exact h₁ t hst ht
   · exact not_measurable v ht
   · exact h₂ t hst ht
   · exact not_measurable w ht
-
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: (h : v ⟂ᵥ w)
-  statement: w ⟂ᵥ v
-  proof: let ⟨s, hmeas, hs₁, hs₂⟩ := h
-  ⟨sᶜ, hmeas.compl, hs₂, fun t ht => hs₁ _ (compl_compl s ▸ ht : t subseteq s)⟩
-
-中文:
-定理 symm
-  条件: (h : v ⟂ᵥ w)
-  结论: w ⟂ᵥ v
-  证明: let ⟨s, hmeas, hs₁, hs₂⟩ := h
-  ⟨sᶜ, hmeas.compl, hs₂, fun t ht => hs₁ _ (compl_compl s ▸ ht : t subseteq s)⟩
-
-Depends on / 依赖: compl_compl, hmeas.compl, subseteq
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.symm** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：symm (h : v ⟂ᵥ w) : w ⟂ᵥ v
+参数：h : v ⟂ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
 -/
 theorem symm (h : v ⟂ᵥ w) : w ⟂ᵥ v :=
   let ⟨s, hmeas, hs₁, hs₂⟩ := h
-  ⟨sᶜ, hmeas.compl, hs₂, fun t ht => hs₁ _ (compl_compl s ▸ ht : t subseteq s)⟩
-
-/--
-theorem `zero_right` / 定理 `zero_right`
-
-English:
-theorem zero_right
-  statement: v ⟂ᵥ (0 : VectorMeasure α N)
-  proof: ⟨∅, MeasurableSet.empty, fun _ ht => (Set.subset_empty_iff.1 ht).symm ▸ v.empty,
-    fun _ _ => zero_apply _⟩
-
-中文:
-定理 zero_right
-  结论: v ⟂ᵥ (0 : 向量测度 α N)
-  证明: ⟨∅, MeasurableSet.empty, fun _ ht => (Set.subset_empty_iff.1 ht).symm ▸ v.empty,
-    fun _ _ => zero_apply _⟩
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.empty, Set.subset_empty_iff, subset_empty_iff, v.empty, zero_apply
+  ⟨sᶜ, hmeas.compl, hs₂, fun t ht => hs₁ _ (compl_compl s ▸ ht : t ⊆ s)⟩
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.zero_right** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：zero_right : v ⟂ᵥ (0 : VectorMeasure α N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.empty`：MeasurableSet.empty [MeasurableSpace α] : Measurabl
+eSet (∅ : Set α)
+· 使用定理 `MeasureTheory.VectorMeasure.empty`：empty (v : VectorMeasure α M) : v ∅ =
+ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
 -/
 theorem zero_right : v ⟂ᵥ (0 : VectorMeasure α N) :=
   ⟨∅, MeasurableSet.empty, fun _ ht => (Set.subset_empty_iff.1 ht).symm ▸ v.empty,
     fun _ _ => zero_apply _⟩
-
-/--
-theorem `zero_left` / 定理 `zero_left`
-
-English:
-theorem zero_left
-  statement: (0 : VectorMeasure α M) ⟂ᵥ w
-  proof: zero_right.symm
-
-中文:
-定理 zero_left
-  结论: (0 : 向量测度 α M) ⟂ᵥ w
-  证明: zero_right.symm
-
-Depends on / 依赖: zero_right, zero_right.symm
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.zero_left** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：zero_left : (0 : VectorMeasure α M) ⟂ᵥ w
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.symm`：symm (h : v ⟂ᵥ w) : w
+ ⟂ᵥ v
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.zero_right`：zero_right : v 
+⟂ᵥ (0 : VectorMeasure α N)
 -/
 theorem zero_left : (0 : VectorMeasure α M) ⟂ᵥ w :=
   zero_right.symm
-
-/--
-theorem `add_left` / 定理 `add_left`
-
-English:
-theorem add_left
-  given: [T2Space N] [ContinuousAdd M] (h₁ : v₁ ⟂ᵥ w) (h₂ : v₂ ⟂ᵥ w)
-  statement: v₁ + v₂ ⟂ᵥ w
-  proof: by
-  obtain ⟨u, hmu, hu₁, hu₂⟩ := h₁
-  obtain ⟨v, hmv, hv₁, hv₂⟩ := h₂
-  refine mk (u inter v) (hmu.inter hmv) (fun t ht _ => ?_) fun t ht hmt => ?_
-  · rw [_root_.add_apply, hu₁ _ (Set.subset_inter_iff.1 ht).1, hv₁ _ (Set.subset_inter_iff.1 ht).2,
-      zero_add]
-  · rw [Set.compl_inter] at ht
-    rw [(_ : t = uᶜ inter t union vᶜ \ uᶜ inter t)]; rw [of_union _ (hmu.compl.inter hmt) ((hmv.compl.diff hmu.compl).inter hmt)]; rw [hu₂]; rw [hv₂]; rw [add_zero]
-    · exact Set.Subset.trans Set.inter_subset_left sdiff_subset
-    · exact Set.inter_subset_left
-    · exact disjoint_sdiff_self_right.mono Set.inter_subset_left Set.inter_subset_left
-    · apply Set.Subset.antisymm <;> intro x hx
-      · by_cases hxu' : x in uᶜ
-        · exact Or.inl ⟨hxu', hx⟩
-        rcases ht hx with (hxu | hxv)
-        exacts [False.elim (hxu' hxu), Or.inr ⟨⟨hxv, hxu'⟩, hx⟩]
-      · rcases hx with hx | hx <;> exact hx.2
-
-中文:
-定理 add_left
-  条件: [T2空间 N] [连续加法 M] (h₁ : v₁ ⟂ᵥ w) (h₂ : v₂ ⟂ᵥ w)
-  结论: v₁ + v₂ ⟂ᵥ w
-  证明: by
-  obtain ⟨u, hmu, hu₁, hu₂⟩ := h₁
-  obtain ⟨v, hmv, hv₁, hv₂⟩ := h₂
-  refine mk (u inter v) (hmu.inter hmv) (fun t ht _ => ?_) fun t ht hmt => ?_
-  · rw [_root_.add_apply, hu₁ _ (Set.subset_inter_iff.1 ht).1, hv₁ _ (Set.subset_inter_iff.1 ht).2,
-      zero_add]
-  · rw [Set.compl_inter] at ht
-    rw [(_ : t = uᶜ inter t union vᶜ \ uᶜ inter t)]; rw [of_union _ (hmu.compl.inter hmt) ((hmv.compl.diff hmu.compl).inter hmt)]; rw [hu₂]; rw [hv₂]; rw [add_zero]
-    · exact Set.Subset.trans Set.inter_subset_left sdiff_subset
-    · exact Set.inter_subset_left
-    · exact disjoint_sdiff_self_right.mono Set.inter_subset_left Set.inter_subset_left
-    · apply Set.Subset.antisymm <;> intro x hx
-      · by_cases hxu' : x in uᶜ
-        · exact Or.inl ⟨hxu', hx⟩
-        rcases ht hx with (hxu | hxv)
-        exacts [False.elim (hxu' hxu), Or.inr ⟨⟨hxv, hxu'⟩, hx⟩]
-      · rcases hx with hx | hx <;> exact hx.2
-
-Depends on / 依赖: Set.Subset.trans, Set.compl_inter, Set.inter_subset_left, Set.subset_inter_iff, Subset, _root_, _root_.add_apply, add_apply, add_zero, compl_inter, hmu.compl, hmu.compl.inter, hmu.inter, hmv.compl.diff, inter_subset_left, of_union, sdiff_subset, subset_inter_iff, zero_add
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.add_left** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：add_left [T2Space N] [ContinuousAdd M] (h₁ : v₁ ⟂ᵥ w) (h₂ : v₂ ⟂ᵥ w) : v₁ 
++ v₂ ⟂ᵥ w
+参数：h₁ : v₁ ⟂ᵥ w；h₂ : v₂ ⟂ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.mk`：mk (s : Set α) (hs : Me
+asurableSet s) (h₁ : forall t subseteq s, MeasurableSet t -> v t = 0) (h₂ : fora
+ll t subseteq sᶜ, MeasurableSet t -> …
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsAddApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSpa
+ce M]   [inst_2 : ContinuousAdd M],…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_inter_iff`：subset_inter_iff {s t r : Set α} : r subseteq s in
+ter t ↔ r subseteq s ∧ r subseteq t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Set.compl_inter`：compl_inter (s t : Set α) : (s inter t)ᶜ = sᶜ union tᶜ
+· 使用定理 `MeasureTheory.VectorMeasure.of_union`：of_union {A B : Set α} (h : Disjoi
+nt A B) (hA : MeasurableSet A) (hB : MeasurableSet B) : v (A union B) = v A + v 
+B
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `disjoint_sdiff_self_right`：disjoint_sdiff_self_right : Disjoint x (y \ x
+)
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `MeasurableSet.diff`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : Se
+t α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ \ s₂)
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem add_left [T2Space N] [ContinuousAdd M] (h₁ : v₁ ⟂ᵥ w) (h₂ : v₂ ⟂ᵥ w) : v₁ + v₂ ⟂ᵥ w := by
   obtain ⟨u, hmu, hu₁, hu₂⟩ := h₁
   obtain ⟨v, hmv, hv₁, hv₂⟩ := h₂
-  refine mk (u inter v) (hmu.inter hmv) (fun t ht _ => ?_) fun t ht hmt => ?_
+  refine mk (u ∩ v) (hmu.inter hmv) (fun t ht _ => ?_) fun t ht hmt => ?_
   · rw [_root_.add_apply, hu₁ _ (Set.subset_inter_iff.1 ht).1, hv₁ _ (Set.subset_inter_iff.1 ht).2,
       zero_add]
   · rw [Set.compl_inter] at ht
-    rw [(_ : t = uᶜ inter t union vᶜ \ uᶜ inter t)]; rw [of_union _ (hmu.compl.inter hmt) ((hmv.compl.diff hmu.compl).inter hmt)]; rw [hu₂]; rw [hv₂]; rw [add_zero]
+    rw [(_ : t = uᶜ ∩ t ∪ vᶜ \ uᶜ ∩ t),
+      of_union _ (hmu.compl.inter hmt) ((hmv.compl.diff hmu.compl).inter hmt), hu₂, hv₂, add_zero]
     · exact Set.Subset.trans Set.inter_subset_left sdiff_subset
     · exact Set.inter_subset_left
     · exact disjoint_sdiff_self_right.mono Set.inter_subset_left Set.inter_subset_left
     · apply Set.Subset.antisymm <;> intro x hx
-      · by_cases hxu' : x in uᶜ
+      · by_cases hxu' : x ∈ uᶜ
         · exact Or.inl ⟨hxu', hx⟩
         rcases ht hx with (hxu | hxv)
         exacts [False.elim (hxu' hxu), Or.inr ⟨⟨hxv, hxu'⟩, hx⟩]
       · rcases hx with hx | hx <;> exact hx.2
-
-/--
-theorem `add_right` / 定理 `add_right`
-
-English:
-theorem add_right
-  given: [T2Space M] [ContinuousAdd N] (h₁ : v ⟂ᵥ w₁) (h₂ : v ⟂ᵥ w₂)
-  statement: v ⟂ᵥ w₁ + w₂
-  proof: (add_left h₁.symm h₂.symm).symm
-
-中文:
-定理 add_right
-  条件: [T2空间 M] [连续加法 N] (h₁ : v ⟂ᵥ w₁) (h₂ : v ⟂ᵥ w₂)
-  结论: v ⟂ᵥ w₁ + w₂
-  证明: (add_left h₁.symm h₂.symm).symm
-
-Depends on / 依赖: add_left
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.add_right** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：add_right [T2Space M] [ContinuousAdd N] (h₁ : v ⟂ᵥ w₁) (h₂ : v ⟂ᵥ w₂) : v 
+⟂ᵥ w₁ + w₂
+参数：h₁ : v ⟂ᵥ w₁；h₂ : v ⟂ᵥ w₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.symm`：symm (h : v ⟂ᵥ w) : w
+ ⟂ᵥ v
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.add_left`：add_left [T2Space
+ N] [ContinuousAdd M] (h₁ : v₁ ⟂ᵥ w) (h₂ : v₂ ⟂ᵥ w) : v₁ + v₂ ⟂ᵥ w
 -/
 theorem add_right [T2Space M] [ContinuousAdd N] (h₁ : v ⟂ᵥ w₁) (h₂ : v ⟂ᵥ w₂) : v ⟂ᵥ w₁ + w₂ :=
   (add_left h₁.symm h₂.symm).symm
-
-/--
-theorem `smul_right` / 定理 `smul_right`
-
-English:
-theorem smul_right
-  statement: {R : Type*} [Semiring R] [DistribMulAction R N] [ContinuousConstSMul R N]
-  proof: let ⟨s, hmeas, hs₁, hs₂⟩ := h
-  ⟨s, hmeas, hs₁, fun t ht => by simp only [_root_.smul_apply, hs₂ t ht, smul_zero]⟩
-
-中文:
-定理 smul_right
-  结论: {R : 类型} [半环 R] [分配乘法作用 R N] [连续常数标量乘法 R N]
-  证明: let ⟨s, hmeas, hs₁, hs₂⟩ := h
-  ⟨s, hmeas, hs₁, fun t ht => by simp only [_root_.smul_apply, hs₂ t ht, smul_zero]⟩
-
-Depends on / 依赖: _root_, _root_.smul_apply, smul_apply, smul_zero
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.smul_right** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：smul_right {R : Type*} [Semiring R] [DistribMulAction R N] [ContinuousCons
+tSMul R N] (r : R) (h : v ⟂ᵥ w) : v ⟂ᵥ r • w
+参数：r : R；h : v ⟂ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsSMulApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M]   {R : Type u_4} [inst_2 : Se…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_right {R : Type*} [Semiring R] [DistribMulAction R N] [ContinuousConstSMul R N]
     (r : R) (h : v ⟂ᵥ w) : v ⟂ᵥ r • w :=
   let ⟨s, hmeas, hs₁, hs₂⟩ := h
   ⟨s, hmeas, hs₁, fun t ht => by simp only [_root_.smul_apply, hs₂ t ht, smul_zero]⟩
-
-/--
-theorem `smul_left` / 定理 `smul_left`
-
-English:
-theorem smul_left
-  statement: {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M] (r : R)
-  proof: (smul_right r h.symm).symm
-
-中文:
-定理 smul_left
-  结论: {R : 类型} [半环 R] [分配乘法作用 R M] [连续常数标量乘法 R M] (r : R)
-  证明: (smul_right r h.symm).symm
-
-Depends on / 依赖: h.symm, smul_right
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.smul_left** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：smul_left {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConst
+SMul R M] (r : R) (h : v ⟂ᵥ w) : r • v ⟂ᵥ w
+参数：r : R；h : v ⟂ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.symm`：symm (h : v ⟂ᵥ w) : w
+ ⟂ᵥ v
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.smul_right`：smul_right {R :
+ Type*} [Semiring R] [DistribMulAction R N] [ContinuousConstSMul R N] (r : R) (h
+ : v ⟂ᵥ w) : v ⟂ᵥ r • w
 -/
 theorem smul_left {R : Type*} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M] (r : R)
     (h : v ⟂ᵥ w) : r • v ⟂ᵥ w :=
   (smul_right r h.symm).symm
-
-/--
-theorem `neg_left` / 定理 `neg_left`
-
-English:
-theorem neg_left
-  statement: {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-  proof: by
-  obtain ⟨u, hmu, hu₁, hu₂⟩ := h
-  refine ⟨u, hmu, fun s hs => ?_, hu₂⟩
-  rw [neg_apply v s]; rw [neg_eq_zero]
-  exact hu₁ s hs
-
-中文:
-定理 neg_left
-  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
-  证明: by
-  obtain ⟨u, hmu, hu₁, hu₂⟩ := h
-  refine ⟨u, hmu, fun s hs => ?_, hu₂⟩
-  rw [neg_apply v s]; rw [neg_eq_zero]
-  exact hu₁ s hs
-
-Depends on / 依赖: neg_apply, neg_eq_zero
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.neg_left** 是 Mathlib 中的一个定理，位于命名空
+间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：neg_left {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalA
+ddGroup M] {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ⟂ᵥ w) : -v ⟂ᵥ 
+w
+参数：h : v ⟂ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `neg_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a =
+ 0 ↔ a = 0
 -/
 theorem neg_left {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
     {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ⟂ᵥ w) : -v ⟂ᵥ w := by
   obtain ⟨u, hmu, hu₁, hu₂⟩ := h
   refine ⟨u, hmu, fun s hs => ?_, hu₂⟩
-  rw [neg_apply v s]; rw [neg_eq_zero]
+  rw [neg_apply v s, neg_eq_zero]
   exact hu₁ s hs
-
-/--
-theorem `neg_right` / 定理 `neg_right`
-
-English:
-theorem neg_right
-  statement: {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
-  proof: h.symm.neg_left.symm
-
-@[simp]
-
-中文:
-定理 neg_right
-  结论: {N : 类型} [加法交换群 N] [拓扑空间 N] [是拓扑加群 N]
-  证明: h.symm.neg_left.symm
-
-@[simp]
-
-Depends on / 依赖: h.symm.neg_left.symm, neg_left
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.neg_right** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：neg_right {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopological
+AddGroup N] {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ⟂ᵥ w) : v ⟂ᵥ 
+-w
+参数：h : v ⟂ᵥ w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.symm`：symm (h : v ⟂ᵥ w) : w
+ ⟂ᵥ v
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.neg_left`：neg_left {M : Typ
+e*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M] {v : VectorM
+easure α M} {w : VectorMeasure α N} (h : v …
 -/
 theorem neg_right {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
     {v : VectorMeasure α M} {w : VectorMeasure α N} (h : v ⟂ᵥ w) : v ⟂ᵥ -w :=
   h.symm.neg_left.symm
 
 @[simp]
-/--
-theorem `neg_left_iff` / 定理 `neg_left_iff`
-
-English:
-theorem neg_left_iff
-  statement: {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-  proof: ⟨fun h => neg_neg v ▸ h.neg_left, neg_left⟩
-
-@[simp]
-
-中文:
-定理 neg_left_iff
-  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
-  证明: ⟨fun h => neg_neg v ▸ h.neg_left, neg_left⟩
-
-@[simp]
-
-Depends on / 依赖: h.neg_left, neg_left, neg_neg
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.neg_left_iff** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：neg_left_iff {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologi
+calAddGroup M] {v : VectorMeasure α M} {w : VectorMeasure α N} : -v ⟂ᵥ w ↔ v ⟂ᵥ 
+w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.neg_left`：neg_left {M : Typ
+e*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M] {v : VectorM
+easure α M} {w : VectorMeasure α N} (h : v …
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
 theorem neg_left_iff {M : Type*} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
     {v : VectorMeasure α M} {w : VectorMeasure α N} : -v ⟂ᵥ w ↔ v ⟂ᵥ w :=
   ⟨fun h => neg_neg v ▸ h.neg_left, neg_left⟩
 
 @[simp]
-/--
-theorem `neg_right_iff` / 定理 `neg_right_iff`
-
-English:
-theorem neg_right_iff
-  statement: {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
-  proof: ⟨fun h => neg_neg w ▸ h.neg_right, neg_right⟩
-
-中文:
-定理 neg_right_iff
-  结论: {N : 类型} [加法交换群 N] [拓扑空间 N] [是拓扑加群 N]
-  证明: ⟨fun h => neg_neg w ▸ h.neg_right, neg_right⟩
-
-Depends on / 依赖: h.neg_right, neg_neg, neg_right
+/-
+**MeasureTheory.VectorMeasure.MutuallySingular.neg_right_iff** 是 Mathlib 中的一个定理，
+位于命名空间 `MeasureTheory.VectorMeasure.MutuallySingular`。
+形式化陈述：neg_right_iff {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopolog
+icalAddGroup N] {v : VectorMeasure α M} {w : VectorMeasure α N} : v ⟂ᵥ -w ↔ v ⟂ᵥ
+ w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.MutuallySingular.neg_right`：neg_right {N : T
+ype*} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N] {v : Vecto
+rMeasure α M} {w : VectorMeasure α N} (h : v…
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
 theorem neg_right_iff {N : Type*} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
     {v : VectorMeasure α M} {w : VectorMeasure α N} : v ⟂ᵥ -w ↔ v ⟂ᵥ w :=
@@ -4699,151 +4415,101 @@ section Trim
 open scoped Classical in
 /-- Restriction of a vector measure onto a sub-σ-algebra. -/
 @[simps]
-/--
-Definition of `trim` / `trim` 的定义
+/-
+**MeasureTheory.VectorMeasure.trim** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vect
+orMeasure`。
+形式化陈述：trim {m n : MeasurableSpace α} (v : VectorMeasure α M) (hle : m <= n) : @V
+ectorMeasure α m M _ _
+参数：v : VectorMeasure α M；hle : m <= n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trim
-  signature: {m n : MeasurableSpace α} (v : VectorMeasure α M) (hle : m <= n)
-  body: @VectorMeasure.mk α m M _ _
-    (fun i => if MeasurableSet[m] i then v i else 0)
-    (by rw [if_pos (@MeasurableSet.empty _ m), v.empty])
-    (fun i hi => by rw [if_neg hi])
-    (fun f hf₁ hf₂ => by
-      have hf₁' : forall k, MeasurableSet[n] (f k) := fun k => hle _ (hf₁ k)
-      convert! v.m_iUnion hf₁' hf₂ using 1
-      · ext n
-        rw [if_pos (hf₁ n)]
-      · rw [if_pos (@MeasurableSet.iUnion _ _ m _ _ hf₁)])
-
-中文:
-定义 trim
-  签名: {m n : 可测空间 α} (v : 向量测度 α M) (hle : m <= n)
-  定义体: @VectorMeasure.mk α m M _ _
-    (fun i => if MeasurableSet[m] i then v i else 0)
-    (by rw [if_pos (@MeasurableSet.empty _ m), v.empty])
-    (fun i hi => by rw [if_neg hi])
-    (fun f hf₁ hf₂ => by
-      have hf₁' : forall k, MeasurableSet[n] (f k) := fun k => hle _ (hf₁ k)
-      convert! v.m_iUnion hf₁' hf₂ using 1
-      · ext n
-        rw [if_pos (hf₁ n)]
-      · rw [if_pos (@MeasurableSet.iUnion _ _ m _ _ hf₁)])
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.empty, MeasurableSet.iUnion, VectorMeasure, VectorMeasure.mk, convert, iUnion, if_neg, if_pos, m_iUnion, v.empty, v.m_iUnion
+--- 原说明 ---
+Restriction of a vector measure onto a sub-σ-algebra.
 -/
-def trim {m n : MeasurableSpace α} (v : VectorMeasure α M) (hle : m <= n) :
+def trim {m n : MeasurableSpace α} (v : VectorMeasure α M) (hle : m ≤ n) :
     @VectorMeasure α m M _ _ :=
   @VectorMeasure.mk α m M _ _
     (fun i => if MeasurableSet[m] i then v i else 0)
     (by rw [if_pos (@MeasurableSet.empty _ m), v.empty])
     (fun i hi => by rw [if_neg hi])
     (fun f hf₁ hf₂ => by
-      have hf₁' : forall k, MeasurableSet[n] (f k) := fun k => hle _ (hf₁ k)
+      have hf₁' : ∀ k, MeasurableSet[n] (f k) := fun k => hle _ (hf₁ k)
       convert! v.m_iUnion hf₁' hf₂ using 1
       · ext n
         rw [if_pos (hf₁ n)]
       · rw [if_pos (@MeasurableSet.iUnion _ _ m _ _ hf₁)])
 
 variable {n : MeasurableSpace α} {v : VectorMeasure α M}
-
-/--
-theorem `trim_eq_self` / 定理 `trim_eq_self`
-
-English:
-theorem trim_eq_self
-  statement: v.trim le_rfl = v
-  proof: by
-  ext i hi
-  exact if_pos hi
-
-@[simp]
-
-中文:
-定理 trim_eq_self
-  结论: v.trim le_rfl = v
-  证明: by
-  ext i hi
-  exact if_pos hi
-
-@[simp]
-
-Depends on / 依赖: if_pos
+/-
+**MeasureTheory.VectorMeasure.trim_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.VectorMeasure`。
+形式化陈述：trim_eq_self : v.trim le_rfl = v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem trim_eq_self : v.trim le_rfl = v := by
   ext i hi
   exact if_pos hi
 
 @[simp]
-/--
-theorem `zero_trim` / 定理 `zero_trim`
-
-English:
-theorem zero_trim
-  given: (hle : m <= n)
-  statement: (0 : VectorMeasure α M).trim hle = 0
-  proof: by
-  ext i hi
-  exact if_pos hi
-
-中文:
-定理 zero_trim
-  条件: (hle : m <= n)
-  结论: (0 : 向量测度 α M).trim hle = 0
-  证明: by
-  ext i hi
-  exact if_pos hi
-
-Depends on / 依赖: if_pos
+/-
+**MeasureTheory.VectorMeasure.zero_trim** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.VectorMeasure`。
+形式化陈述：zero_trim (hle : m <= n) : (0 : VectorMeasure α M).trim hle = 0
+参数：hle : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-theorem zero_trim (hle : m <= n) : (0 : VectorMeasure α M).trim hle = 0 := by
+theorem zero_trim (hle : m ≤ n) : (0 : VectorMeasure α M).trim hle = 0 := by
   ext i hi
   exact if_pos hi
-
-/--
-theorem `trim_measurableSet_eq` / 定理 `trim_measurableSet_eq`
-
-English:
-theorem trim_measurableSet_eq
-  given: (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i)
-  proof: if_pos hi
-
-中文:
-定理 trim_measurableSet_eq
-  条件: (hle : m <= n) {i : 集合 α} (hi : 可测集[m] i)
-  证明: if_pos hi
-
-Depends on / 依赖: if_pos
+/-
+**MeasureTheory.VectorMeasure.trim_measurableSet_eq** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.VectorMeasure`。
+形式化陈述：trim_measurableSet_eq (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i)
+ : v.trim hle i = v i
+参数：hle : m <= n；hi : MeasurableSet[m] i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-theorem trim_measurableSet_eq (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i) :
+theorem trim_measurableSet_eq (hle : m ≤ n) {i : Set α} (hi : MeasurableSet[m] i) :
     v.trim hle i = v i :=
   if_pos hi
-
-/--
-theorem `restrict_trim` / 定理 `restrict_trim`
-
-English:
-theorem restrict_trim
-  given: (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i)
-  proof: by
-  ext j hj
-  rw [@restrict_apply _ m]; rw [trim_measurableSet_eq hle hj]; rw [restrict_apply]; rw [trim_measurableSet_eq]
-  all_goals measurability
-
-中文:
-定理 restrict_trim
-  条件: (hle : m <= n) {i : 集合 α} (hi : 可测集[m] i)
-  证明: by
-  ext j hj
-  rw [@restrict_apply _ m]; rw [trim_measurableSet_eq hle hj]; rw [restrict_apply]; rw [trim_measurableSet_eq]
-  all_goals measurability
-
-Depends on / 依赖: all_goals, measurability, restrict_apply, trim_measurableSet_eq
+/-
+**MeasureTheory.VectorMeasure.restrict_trim** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：restrict_trim (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i) : @Vect
+orMeasure.restrict α m M _ _ (v.trim hle) i = (v.restrict i).trim hle
+参数：hle : m <= n；hi : MeasurableSet[m] i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `MeasureTheory.VectorMeasure.trim_measurableSet_eq`：trim_measurableSet_eq
+ (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i) : v.trim hle i = v i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-theorem restrict_trim (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i) :
+theorem restrict_trim (hle : m ≤ n) {i : Set α} (hi : MeasurableSet[m] i) :
     @VectorMeasure.restrict α m M _ _ (v.trim hle) i = (v.restrict i).trim hle := by
   ext j hj
-  rw [@restrict_apply _ m]; rw [trim_measurableSet_eq hle hj]; rw [restrict_apply]; rw [trim_measurableSet_eq]
+  rw [@restrict_apply _ m, trim_measurableSet_eq hle hj, restrict_apply, trim_measurableSet_eq]
   all_goals measurability
 
 end Trim
@@ -4858,302 +4524,400 @@ open VectorMeasure
 
 open MeasureTheory
 
-/--
-Definition of `toMeasureOfZeroLE'` / `toMeasureOfZeroLE'` 的定义
+/-- The underlying function for `SignedMeasure.toMeasureOfZeroLE`. -/
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfZeroLE'** 是 Mathlib 中的一个定义，位于命名空间 `Meas
+ureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfZeroLE' (s : SignedMeasure α) (i : Set α) (hi : 0 <=[i] s) (j :
+ Set α) (hj : MeasurableSet j) : Real>=0∞
+参数：s : SignedMeasure α；i : Set α；hi : 0 <=[i] s；j : Set α；hj : MeasurableSet j。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMeasureOfZeroLE'
-  signature: (s : SignedMeasure α) (i : Set α) (hi : 0 <=[i] s) (j : Set α)
-  body: ((↑) : Real>=0 -> Real>=0∞) (.mk (s.restrict i j) (le_trans (by simp) (hi j hj)))
-
-中文:
-定义 toMeasureOfZeroLE'
-  签名: (s : 符号测度 α) (i : 集合 α) (hi : 0 <=[i] s) (j : 集合 α)
-  定义体: ((↑) : Real>=0 -> Real>=0∞) (.mk (s.restrict i j) (le_trans (by simp) (hi j hj)))
-
-Depends on / 依赖: le_trans, restrict, s.restrict
+--- 原说明 ---
+The underlying function for `SignedMeasure.toMeasureOfZeroLE`.
 -/
-def toMeasureOfZeroLE' (s : SignedMeasure α) (i : Set α) (hi : 0 <=[i] s) (j : Set α)
-    (hj : MeasurableSet j) : Real>=0∞ :=
-  ((↑) : Real>=0 -> Real>=0∞) (.mk (s.restrict i j) (le_trans (by simp) (hi j hj)))
+def toMeasureOfZeroLE' (s : SignedMeasure α) (i : Set α) (hi : 0 ≤[i] s) (j : Set α)
+    (hj : MeasurableSet j) : ℝ≥0∞ :=
+  ((↑) : ℝ≥0 → ℝ≥0∞) (.mk (s.restrict i j) (le_trans (by simp) (hi j hj)))
 
-/--
-Definition of `toMeasureOfZeroLE` / `toMeasureOfZeroLE` 的定义
+/-- Given a signed measure `s` and a positive measurable set `i`, `toMeasureOfZeroLE`
+provides the measure, mapping measurable sets `j` to `s (i ∩ j)`. -/
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfZeroLE** 是 Mathlib 中的一个定义，位于命名空间 `Measu
+reTheory.SignedMeasure`。
+形式化陈述：toMeasureOfZeroLE (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i
+) (hi₂ : 0 <=[i] s) : Measure α
+参数：s : SignedMeasure α；i : Set α；hi₁ : MeasurableSet i；hi₂ : 0 <=[i] s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMeasureOfZeroLE
-  signature: (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : 0 <=[i] s)
-  body: by
-  refine Measure.ofMeasurable (s.toMeasureOfZeroLE' i hi₂) ?_ ?_
-  · simp_rw [toMeasureOfZeroLE', s.restrict_apply hi₁ MeasurableSet.empty, Set.empty_inter i,
-      s.empty]
-    rfl
-  · intro f hf₁ hf₂
-    have h₁ : forall n, MeasurableSet (i inter f n) := fun n => hi₁.inter (hf₁ n)
-    have h₂ : Pairwise (Disjoint on fun n : Nat => i inter f n) := by
-      intro n m hnm
-      exact ((hf₂ hnm).inf_left' i).inf_right' i
-    simp only [toMeasureOfZeroLE', s.restrict_apply hi₁ (MeasurableSet.iUnion hf₁), Set.inter_comm,
-      Set.inter_iUnion, s.of_disjoint_iUnion h₁ h₂]
-    have h : forall n, 0 <= s (i inter f n) := fun n =>
-      s.nonneg_of_zero_le_restrict (s.zero_le_restrict_subset hi₁ Set.inter_subset_left hi₂)
-    rw [NNReal.coe_tsum_of_nonneg h]; rw [ENNReal.coe_tsum]
-    · refine tsum_congr fun n => ?_
-      simp_rw [s.restrict_apply hi₁ (hf₁ n), Set.inter_comm]
-    · exact (NNReal.summable_mk h).2 (s.m_iUnion h₁ h₂).summable
-
-中文:
-定义 toMeasureOfZeroLE
-  签名: (s : 符号测度 α) (i : 集合 α) (hi₁ : 可测集 i) (hi₂ : 0 <=[i] s)
-  定义体: by
-  refine Measure.ofMeasurable (s.toMeasureOfZeroLE' i hi₂) ?_ ?_
-  · simp_rw [toMeasureOfZeroLE', s.restrict_apply hi₁ MeasurableSet.empty, Set.empty_inter i,
-      s.empty]
-    rfl
-  · intro f hf₁ hf₂
-    have h₁ : forall n, MeasurableSet (i inter f n) := fun n => hi₁.inter (hf₁ n)
-    have h₂ : Pairwise (Disjoint on fun n : Nat => i inter f n) := by
-      intro n m hnm
-      exact ((hf₂ hnm).inf_left' i).inf_right' i
-    simp only [toMeasureOfZeroLE', s.restrict_apply hi₁ (MeasurableSet.iUnion hf₁), Set.inter_comm,
-      Set.inter_iUnion, s.of_disjoint_iUnion h₁ h₂]
-    have h : forall n, 0 <= s (i inter f n) := fun n =>
-      s.nonneg_of_zero_le_restrict (s.zero_le_restrict_subset hi₁ Set.inter_subset_left hi₂)
-    rw [NNReal.coe_tsum_of_nonneg h]; rw [ENNReal.coe_tsum]
-    · refine tsum_congr fun n => ?_
-      simp_rw [s.restrict_apply hi₁ (hf₁ n), Set.inter_comm]
-    · exact (NNReal.summable_mk h).2 (s.m_iUnion h₁ h₂).summable
-
-Depends on / 依赖: Disjoint, MeasurableSet, MeasurableSet.empty, MeasurableSet.iUnion, Measure, Measure.ofMeasurable, Pairwise, Set.empty_inter, Set.inter_comm, Set.inter_iUni, empty_inter, iUnion, inf_left, inf_right, inter_comm, inter_iUni, ofMeasurable, restrict_apply, s.empty, s.restrict_apply
+--- 原说明 ---
+Given a signed measure `s` and a positive measurable set `i`, `toMeasureOfZeroLE
+`
+provides the measure, mapping measurable sets `j` to `s (i ∩ j)`.
 -/
-def toMeasureOfZeroLE (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : 0 <=[i] s) :
+def toMeasureOfZeroLE (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : 0 ≤[i] s) :
     Measure α := by
   refine Measure.ofMeasurable (s.toMeasureOfZeroLE' i hi₂) ?_ ?_
   · simp_rw [toMeasureOfZeroLE', s.restrict_apply hi₁ MeasurableSet.empty, Set.empty_inter i,
       s.empty]
     rfl
   · intro f hf₁ hf₂
-    have h₁ : forall n, MeasurableSet (i inter f n) := fun n => hi₁.inter (hf₁ n)
-    have h₂ : Pairwise (Disjoint on fun n : Nat => i inter f n) := by
+    have h₁ : ∀ n, MeasurableSet (i ∩ f n) := fun n => hi₁.inter (hf₁ n)
+    have h₂ : Pairwise (Disjoint on fun n : ℕ => i ∩ f n) := by
       intro n m hnm
       exact ((hf₂ hnm).inf_left' i).inf_right' i
     simp only [toMeasureOfZeroLE', s.restrict_apply hi₁ (MeasurableSet.iUnion hf₁), Set.inter_comm,
       Set.inter_iUnion, s.of_disjoint_iUnion h₁ h₂]
-    have h : forall n, 0 <= s (i inter f n) := fun n =>
+    have h : ∀ n, 0 ≤ s (i ∩ f n) := fun n =>
       s.nonneg_of_zero_le_restrict (s.zero_le_restrict_subset hi₁ Set.inter_subset_left hi₂)
-    rw [NNReal.coe_tsum_of_nonneg h]; rw [ENNReal.coe_tsum]
+    rw [NNReal.coe_tsum_of_nonneg h, ENNReal.coe_tsum]
     · refine tsum_congr fun n => ?_
       simp_rw [s.restrict_apply hi₁ (hf₁ n), Set.inter_comm]
     · exact (NNReal.summable_mk h).2 (s.m_iUnion h₁ h₂).summable
 
 variable (s : SignedMeasure α) {i j : Set α}
-
-/--
-theorem `toMeasureOfZeroLE_apply` / 定理 `toMeasureOfZeroLE_apply`
-
-English:
-theorem toMeasureOfZeroLE_apply
-  given: (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j)
-  proof: by
-  simp_rw [toMeasureOfZeroLE, Measure.ofMeasurable_apply _ hj₁, toMeasureOfZeroLE',
-    s.restrict_apply hi₁ hj₁, Set.inter_comm]
-
-中文:
-定理 toMeasureOfZeroLE_apply
-  条件: (hi : 0 <=[i] s) (hi₁ : 可测集 i) (hj₁ : 可测集 j)
-  证明: by
-  simp_rw [toMeasureOfZeroLE, Measure.ofMeasurable_apply _ hj₁, toMeasureOfZeroLE',
-    s.restrict_apply hi₁ hj₁, Set.inter_comm]
-
-Depends on / 依赖: Measure, Measure.ofMeasurable_apply, Set.inter_comm, inter_comm, ofMeasurable_apply, restrict_apply, s.restrict_apply, simp_rw, toMeasureOfZeroLE
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfZeroLE_apply** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfZeroLE_apply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : Me
+asurableSet j) : s.toMeasureOfZeroLE i hi₁ hi j = ((↑) : Real>=0 -> Real>=0∞) (.
+mk (s (i inter j)) (nonneg_of_zero_le_restrict s (zero_le_restrict_subset s hi₁ 
+Set.inter_subset_left hi)))
+参数：hi : 0 <=[i] s；hi₁ : MeasurableSet i；hj₁ : MeasurableSet j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableSet.empty`：MeasurableSet.empty [MeasurableSpace α] : Measurabl
+eSet (∅ : Set α)
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `MeasureTheory.Measure.ofMeasurable_apply`：ofMeasurable_apply {m : forall
+ s : Set α, MeasurableSet s -> Real>=0∞} {m0 : m ∅ MeasurableSet.empty = 0} {mU 
+: forall ⦃f : Nat -> Set α⦄ (h…
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMeasureOfZeroLE_apply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) :
-    s.toMeasureOfZeroLE i hi₁ hi j = ((↑) : Real>=0 -> Real>=0∞) (.mk (s (i inter j)) (nonneg_of_zero_le_restrict
+theorem toMeasureOfZeroLE_apply (hi : 0 ≤[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) :
+    s.toMeasureOfZeroLE i hi₁ hi j = ((↑) : ℝ≥0 → ℝ≥0∞) (.mk (s (i ∩ j)) (nonneg_of_zero_le_restrict
       s (zero_le_restrict_subset s hi₁ Set.inter_subset_left hi))) := by
   simp_rw [toMeasureOfZeroLE, Measure.ofMeasurable_apply _ hj₁, toMeasureOfZeroLE',
     s.restrict_apply hi₁ hj₁, Set.inter_comm]
-
-/--
-theorem `toMeasureOfZeroLE_real_apply` / 定理 `toMeasureOfZeroLE_real_apply`
-
-English:
-theorem toMeasureOfZeroLE_real_apply
-  statement: (hi : 0 <=[i] s) (hi₁ : MeasurableSet i)
-  proof: by
-  simp [measureReal_def, toMeasureOfZeroLE_apply, hj₁]
-
-中文:
-定理 toMeasureOfZeroLE_real_apply
-  结论: (hi : 0 <=[i] s) (hi₁ : 可测集 i)
-  证明: by
-  simp [measureReal_def, toMeasureOfZeroLE_apply, hj₁]
-
-Depends on / 依赖: measureReal_def, toMeasureOfZeroLE_apply
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfZeroLE_real_apply** 是 Mathlib 中的一个定理，位于
+命名空间 `MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfZeroLE_real_apply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁
+ : MeasurableSet j) : (s.toMeasureOfZeroLE i hi₁ hi).real j = s (i inter j)
+参数：hi : 0 <=[i] s；hi₁ : MeasurableSet i；hj₁ : MeasurableSet j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfZeroLE_apply`：toMeasureOfZeroLE_a
+pply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfZeroLE i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMeasureOfZeroLE_real_apply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i)
+theorem toMeasureOfZeroLE_real_apply (hi : 0 ≤[i] s) (hi₁ : MeasurableSet i)
     (hj₁ : MeasurableSet j) :
-    (s.toMeasureOfZeroLE i hi₁ hi).real j = s (i inter j) := by
+    (s.toMeasureOfZeroLE i hi₁ hi).real j = s (i ∩ j) := by
   simp [measureReal_def, toMeasureOfZeroLE_apply, hj₁]
 
-/--
-Definition of `toMeasureOfLEZero` / `toMeasureOfLEZero` 的定义
+/-- Given a signed measure `s` and a negative measurable set `i`, `toMeasureOfLEZero`
+provides the measure, mapping measurable sets `j` to `-s (i ∩ j)`. -/
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfLEZero** 是 Mathlib 中的一个定义，位于命名空间 `Measu
+reTheory.SignedMeasure`。
+形式化陈述：toMeasureOfLEZero (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i
+) (hi₂ : s <=[i] 0) : Measure α
+参数：s : SignedMeasure α；i : Set α；hi₁ : MeasurableSet i；hi₂ : s <=[i] 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
 
-English:
-definition toMeasureOfLEZero
-  signature: (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : s <=[i] 0)
-  body: toMeasureOfZeroLE (-s) i hi₁ @neg_zero (VectorMeasure α Real) _ ▸ neg_le_neg _ _ hi₁ hi₂
-
-中文:
-定义 toMeasureOfLEZero
-  签名: (s : 符号测度 α) (i : 集合 α) (hi₁ : 可测集 i) (hi₂ : s <=[i] 0)
-  定义体: toMeasureOfZeroLE (-s) i hi₁ @neg_zero (VectorMeasure α Real) _ ▸ neg_le_neg _ _ hi₁ hi₂
-
-Depends on / 依赖: VectorMeasure, neg_le_neg, neg_zero, toMeasureOfZeroLE
+--- 原说明 ---
+Given a signed measure `s` and a negative measurable set `i`, `toMeasureOfLEZero
+`
+provides the measure, mapping measurable sets `j` to `-s (i ∩ j)`.
 -/
-def toMeasureOfLEZero (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : s <=[i] 0) :
+def toMeasureOfLEZero (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : s ≤[i] 0) :
     Measure α :=
-toMeasureOfZeroLE (-s) i hi₁ @neg_zero (VectorMeasure α Real) _ ▸ neg_le_neg _ _ hi₁ hi₂
-
-/--
-theorem `toMeasureOfLEZero_apply` / 定理 `toMeasureOfLEZero_apply`
-
-English:
-theorem toMeasureOfLEZero_apply
-  given: (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j)
-  proof: by
-  simp [toMeasureOfLEZero, toMeasureOfZeroLE_apply _ _ _ hj₁]
-
-中文:
-定理 toMeasureOfLEZero_apply
-  条件: (hi : s <=[i] 0) (hi₁ : 可测集 i) (hj₁ : 可测集 j)
-  证明: by
-  simp [toMeasureOfLEZero, toMeasureOfZeroLE_apply _ _ _ hj₁]
-
-Depends on / 依赖: toMeasureOfLEZero, toMeasureOfZeroLE_apply
+  toMeasureOfZeroLE (-s) i hi₁ <| @neg_zero (VectorMeasure α ℝ) _ ▸ neg_le_neg _ _ hi₁ hi₂
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfLEZero_apply** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfLEZero_apply (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁ : Me
+asurableSet j) : s.toMeasureOfLEZero i hi₁ hi j = ((↑) : Real>=0 -> Real>=0∞) (N
+NReal.mk (-s (i inter j)) (neg_apply s (i inter j) ▸ nonneg_of_zero_le_restrict 
+_ (zero_le_restrict_subset _ hi₁ Set.inter_subset_left (@neg_zero (VectorMeasure
+ α Real) _ ▸ neg_le_neg _ _ hi₁ hi))))
+参数：hi : s <=[i] 0；hi₁ : MeasurableSet i；hj₁ : MeasurableSet j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.VectorMeasure.neg_le_neg`：∀ {α : Type u_1} {m : Measurable
+Space α} {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : AddCommGroup M]   
+[inst_2 : PartialOrder M] [I…
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfZeroLE_apply`：toMeasureOfZeroLE_a
+pply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfZeroLE i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMeasureOfLEZero_apply (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) :
+theorem toMeasureOfLEZero_apply (hi : s ≤[i] 0) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) :
     s.toMeasureOfLEZero i hi₁ hi j =
-    ((↑) : Real>=0 -> Real>=0∞) (NNReal.mk (-s (i inter j)) (neg_apply s (i inter j) ▸
+    ((↑) : ℝ≥0 → ℝ≥0∞) (NNReal.mk (-s (i ∩ j)) (neg_apply s (i ∩ j) ▸
       nonneg_of_zero_le_restrict _ (zero_le_restrict_subset _ hi₁ Set.inter_subset_left
-      (@neg_zero (VectorMeasure α Real) _ ▸ neg_le_neg _ _ hi₁ hi)))) := by
+      (@neg_zero (VectorMeasure α ℝ) _ ▸ neg_le_neg _ _ hi₁ hi)))) := by
   simp [toMeasureOfLEZero, toMeasureOfZeroLE_apply _ _ _ hj₁]
-
-/--
-theorem `toMeasureOfLEZero_real_apply` / 定理 `toMeasureOfLEZero_real_apply`
-
-English:
-theorem toMeasureOfLEZero_real_apply
-  statement: (hi : s <=[i] 0) (hi₁ : MeasurableSet i)
-  proof: by
-  simp [measureReal_def, toMeasureOfLEZero_apply _ hi hi₁ hj₁]
-
-中文:
-定理 toMeasureOfLEZero_real_apply
-  结论: (hi : s <=[i] 0) (hi₁ : 可测集 i)
-  证明: by
-  simp [measureReal_def, toMeasureOfLEZero_apply _ hi hi₁ hj₁]
-
-Depends on / 依赖: measureReal_def, toMeasureOfLEZero_apply
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfLEZero_real_apply** 是 Mathlib 中的一个定理，位于
+命名空间 `MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfLEZero_real_apply (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁
+ : MeasurableSet j) : (s.toMeasureOfLEZero i hi₁ hi).real j = -s (i inter j)
+参数：hi : s <=[i] 0；hi₁ : MeasurableSet i；hj₁ : MeasurableSet j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.VectorMeasure.neg_le_neg`：∀ {α : Type u_1} {m : Measurable
+Space α} {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : AddCommGroup M]   
+[inst_2 : PartialOrder M] [I…
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfLEZero_apply`：toMeasureOfLEZero_a
+pply (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfLEZero i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMeasureOfLEZero_real_apply (hi : s <=[i] 0) (hi₁ : MeasurableSet i)
+theorem toMeasureOfLEZero_real_apply (hi : s ≤[i] 0) (hi₁ : MeasurableSet i)
     (hj₁ : MeasurableSet j) :
-    (s.toMeasureOfLEZero i hi₁ hi).real j = -s (i inter j) := by
+    (s.toMeasureOfLEZero i hi₁ hi).real j = -s (i ∩ j) := by
   simp [measureReal_def, toMeasureOfLEZero_apply _ hi hi₁ hj₁]
 
-/--
-Instance `toMeasureOfZeroLE_finite` / 实例 `toMeasureOfZeroLE_finite`
+/-- `SignedMeasure.toMeasureOfZeroLE` is a finite measure. -/
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfZeroLE_finite** 是 Mathlib 中的一个实例，位于命名空间
+ `MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfZeroLE_finite (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) : IsFini
+teMeasure (s.toMeasureOfZeroLE i hi₁ hi) where measure_univ_lt_top
+参数：hi : 0 <=[i] s；hi₁ : MeasurableSet i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfZeroLE_apply`：toMeasureOfZeroLE_a
+pply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfZeroLE i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `ENNReal.coe_lt_top`：∀ {r : NNReal}, ↑r < ⊤
 
-English:
-instance toMeasureOfZeroLE_finite
-  signature: (hi : 0 <=[i] s) (hi₁ : MeasurableSet i)
-  body: by
-    rw [toMeasureOfZeroLE_apply s hi hi₁ MeasurableSet.univ]
-    exact ENNReal.coe_lt_top
-
-中文:
-实例 toMeasureOfZeroLE_finite
-  签名: (hi : 0 <=[i] s) (hi₁ : 可测集 i)
-  定义体: by
-    rw [toMeasureOfZeroLE_apply s hi hi₁ MeasurableSet.univ]
-    exact ENNReal.coe_lt_top
-
-Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, MeasurableSet, MeasurableSet.univ, coe_lt_top, toMeasureOfZeroLE_apply
+--- 原说明 ---
+`SignedMeasure.toMeasureOfZeroLE` is a finite measure.
 -/
-instance toMeasureOfZeroLE_finite (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) :
+instance toMeasureOfZeroLE_finite (hi : 0 ≤[i] s) (hi₁ : MeasurableSet i) :
     IsFiniteMeasure (s.toMeasureOfZeroLE i hi₁ hi) where
   measure_univ_lt_top := by
     rw [toMeasureOfZeroLE_apply s hi hi₁ MeasurableSet.univ]
     exact ENNReal.coe_lt_top
 
-/--
-Instance `toMeasureOfLEZero_finite` / 实例 `toMeasureOfLEZero_finite`
+/-- `SignedMeasure.toMeasureOfLEZero` is a finite measure. -/
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfLEZero_finite** 是 Mathlib 中的一个实例，位于命名空间
+ `MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfLEZero_finite (hi : s <=[i] 0) (hi₁ : MeasurableSet i) : IsFini
+teMeasure (s.toMeasureOfLEZero i hi₁ hi) where measure_univ_lt_top
+参数：hi : s <=[i] 0；hi₁ : MeasurableSet i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.VectorMeasure.neg_le_neg`：∀ {α : Type u_1} {m : Measurable
+Space α} {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : AddCommGroup M]   
+[inst_2 : PartialOrder M] [I…
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfLEZero_apply`：toMeasureOfLEZero_a
+pply (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfLEZero i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `ENNReal.coe_lt_top`：∀ {r : NNReal}, ↑r < ⊤
 
-English:
-instance toMeasureOfLEZero_finite
-  signature: (hi : s <=[i] 0) (hi₁ : MeasurableSet i)
-  body: by
-    rw [toMeasureOfLEZero_apply s hi hi₁ MeasurableSet.univ]
-    exact ENNReal.coe_lt_top
-
-中文:
-实例 toMeasureOfLEZero_finite
-  签名: (hi : s <=[i] 0) (hi₁ : 可测集 i)
-  定义体: by
-    rw [toMeasureOfLEZero_apply s hi hi₁ MeasurableSet.univ]
-    exact ENNReal.coe_lt_top
-
-Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, MeasurableSet, MeasurableSet.univ, coe_lt_top, toMeasureOfLEZero_apply
+--- 原说明 ---
+`SignedMeasure.toMeasureOfLEZero` is a finite measure.
 -/
-instance toMeasureOfLEZero_finite (hi : s <=[i] 0) (hi₁ : MeasurableSet i) :
+instance toMeasureOfLEZero_finite (hi : s ≤[i] 0) (hi₁ : MeasurableSet i) :
     IsFiniteMeasure (s.toMeasureOfLEZero i hi₁ hi) where
   measure_univ_lt_top := by
     rw [toMeasureOfLEZero_apply s hi hi₁ MeasurableSet.univ]
     exact ENNReal.coe_lt_top
-
-/--
-theorem `toMeasureOfZeroLE_toSignedMeasure` / 定理 `toMeasureOfZeroLE_toSignedMeasure`
-
-English:
-theorem toMeasureOfZeroLE_toSignedMeasure
-  given: (hs : 0 <=[Set.univ] s)
-  proof: by
-  ext i hi
-  simp [hi, toMeasureOfZeroLE_apply _ _ _ hi, measureReal_def]
-
-中文:
-定理 toMeasureOfZeroLE_toSignedMeasure
-  条件: (hs : 0 <=[集合.univ] s)
-  证明: by
-  ext i hi
-  simp [hi, toMeasureOfZeroLE_apply _ _ _ hi, measureReal_def]
-
-Depends on / 依赖: measureReal_def, toMeasureOfZeroLE_apply
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfZeroLE_toSignedMeasure** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfZeroLE_toSignedMeasure (hs : 0 <=[Set.univ] s) : (s.toMeasureOf
+ZeroLE Set.univ MeasurableSet.univ hs).toSignedMeasure = s
+参数：hs : 0 <=[Set.univ] s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfZeroLE_apply`：toMeasureOfZeroLE_a
+pply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfZeroLE i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMeasureOfZeroLE_toSignedMeasure (hs : 0 <=[Set.univ] s) :
+theorem toMeasureOfZeroLE_toSignedMeasure (hs : 0 ≤[Set.univ] s) :
     (s.toMeasureOfZeroLE Set.univ MeasurableSet.univ hs).toSignedMeasure = s := by
   ext i hi
   simp [hi, toMeasureOfZeroLE_apply _ _ _ hi, measureReal_def]
-
-/--
-theorem `toMeasureOfLEZero_toSignedMeasure` / 定理 `toMeasureOfLEZero_toSignedMeasure`
-
-English:
-theorem toMeasureOfLEZero_toSignedMeasure
-  given: (hs : s <=[Set.univ] 0)
-  proof: by
-  ext i hi
-  simp [hi, toMeasureOfLEZero_apply _ _ _ hi, measureReal_def]
-
-中文:
-定理 toMeasureOfLEZero_toSignedMeasure
-  条件: (hs : s <=[集合.univ] 0)
-  证明: by
-  ext i hi
-  simp [hi, toMeasureOfLEZero_apply _ _ _ hi, measureReal_def]
-
-Depends on / 依赖: measureReal_def, toMeasureOfLEZero_apply
+/-
+**MeasureTheory.SignedMeasure.toMeasureOfLEZero_toSignedMeasure** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.SignedMeasure`。
+形式化陈述：toMeasureOfLEZero_toSignedMeasure (hs : s <=[Set.univ] 0) : (s.toMeasureOf
+LEZero Set.univ MeasurableSet.univ hs).toSignedMeasure = -s
+参数：hs : s <=[Set.univ] 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.VectorMeasure.neg_le_neg`：∀ {α : Type u_1} {m : Measurable
+Space α} {M : Type u_3} [inst : TopologicalSpace M] [inst_1 : AddCommGroup M]   
+[inst_2 : PartialOrder M] [I…
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsNegApplySet`：∀ {α : Type u_1} {m : Mea
+surableSpace α} {M : Type u_3} [inst : AddCommGroup M] [inst_1 : TopologicalSpac
+e M]   [inst_2 : IsTopologicalAddGr…
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfLEZero_apply`：toMeasureOfLEZero_a
+pply (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfLEZero i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMeasureOfLEZero_toSignedMeasure (hs : s <=[Set.univ] 0) :
+theorem toMeasureOfLEZero_toSignedMeasure (hs : s ≤[Set.univ] 0) :
     (s.toMeasureOfLEZero Set.univ MeasurableSet.univ hs).toSignedMeasure = -s := by
   ext i hi
   simp [hi, toMeasureOfLEZero_apply _ _ _ hi, measureReal_def]
@@ -5166,116 +4930,160 @@ open VectorMeasure
 
 variable (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure ν] (s : Set α)
 
-/--
-theorem `zero_le_toSignedMeasure` / 定理 `zero_le_toSignedMeasure`
-
-English:
-theorem zero_le_toSignedMeasure
-  statement: 0 <= μ.toSignedMeasure
-  proof: by
-  rw [← le_restrict_univ_iff_le]
-  refine restrict_le_restrict_of_subset_le _ _ fun j hj₁ _ => ?_
-  simp [hj₁]
-
-中文:
-定理 zero_le_toSignedMeasure
-  结论: 0 <= μ.toSignedMeasure
-  证明: by
-  rw [← le_restrict_univ_iff_le]
-  refine restrict_le_restrict_of_subset_le _ _ fun j hj₁ _ => ?_
-  simp [hj₁]
-
-Depends on / 依赖: le_restrict_univ_iff_le, restrict_le_restrict_of_subset_le
+/-
+**MeasureTheory.Measure.zero_le_toSignedMeasure** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.Measure`。
+形式化陈述：zero_le_toSignedMeasure : 0 <= μ.toSignedMeasure
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.le_restrict_univ_iff_le`：le_restrict_univ_if
+f_le : v <=[Set.univ] w ↔ v <= w
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_le_restrict_of_subset_le`：restrict_
+le_restrict_of_subset_le {i : Set α} (h : forall ⦃j⦄, MeasurableSet j -> j subse
+teq i -> v j <= w j) : v <=[i] w
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `MeasureTheory.VectorMeasure.instIsZeroApplySet`：∀ {α : Type u_1} {m : Me
+asurableSpace α} {M : Type u_3} [inst : AddCommMonoid M] [inst_1 : TopologicalSp
+ace M],   IsZeroApply (MeasureTheory…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem zero_le_toSignedMeasure : 0 <= μ.toSignedMeasure := by
+theorem zero_le_toSignedMeasure : 0 ≤ μ.toSignedMeasure := by
   rw [← le_restrict_univ_iff_le]
   refine restrict_le_restrict_of_subset_le _ _ fun j hj₁ _ => ?_
   simp [hj₁]
-
-/--
-theorem `toSignedMeasure_toMeasureOfZeroLE` / 定理 `toSignedMeasure_toMeasureOfZeroLE`
-
-English:
-theorem toSignedMeasure_toMeasureOfZeroLE
-  proof: by
-  refine Measure.ext fun i hi => ?_
-  lift μ i to Real>=0 using (measure_lt_top _ _).ne with m hm
-  rw [SignedMeasure.toMeasureOfZeroLE_apply _ _ _ hi]; rw [ENNReal.coe_inj]
-  congr
-  simp [hi, ← hm, measureReal_def]
-
-中文:
-定理 toSignedMeasure_toMeasureOfZeroLE
-  证明: by
-  refine Measure.ext fun i hi => ?_
-  lift μ i to Real>=0 using (measure_lt_top _ _).ne with m hm
-  rw [SignedMeasure.toMeasureOfZeroLE_apply _ _ _ hi]; rw [ENNReal.coe_inj]
-  congr
-  simp [hi, ← hm, measureReal_def]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_inj, Measure, Measure.ext, SignedMeasure, SignedMeasure.toMeasureOfZeroLE_apply, coe_inj, measureReal_def, measure_lt_top, toMeasureOfZeroLE_apply
+/-
+**MeasureTheory.Measure.toSignedMeasure_toMeasureOfZeroLE** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.Measure`。
+形式化陈述：toSignedMeasure_toMeasureOfZeroLE : μ.toSignedMeasure.toMeasureOfZeroLE Se
+t.univ MeasurableSet.univ ((le_restrict_univ_iff_le _ _).2 (zero_le_toSignedMeas
+ure μ)) = μ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.VectorMeasure.le_restrict_univ_iff_le`：le_restrict_univ_if
+f_le : v <=[Set.univ] w ↔ v <= w
+· 使用定理 `MeasureTheory.Measure.zero_le_toSignedMeasure`：zero_le_toSignedMeasure :
+ 0 <= μ.toSignedMeasure
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `MeasureTheory.measure_lt_top`：measure_lt_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s < ∞
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.VectorMeasure.nonneg_of_zero_le_restrict`：nonneg_of_zero_l
+e_restrict (hi₂ : 0 <=[i] v) : 0 <= v i
+· 使用定理 `MeasureTheory.VectorMeasure.zero_le_restrict_subset`：zero_le_restrict_su
+bset (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v) : 0 <=[j] v
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.SignedMeasure.toMeasureOfZeroLE_apply`：toMeasureOfZeroLE_a
+pply (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j) : s.toMeas
+ureOfZeroLE i hi₁ hi j = ((↑) : Real>=0 -…
+· 使用定理 `ENNReal.coe_inj`：∀ {p q : NNReal}, ↑p = ↑q ↔ p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toSignedMeasure_toMeasureOfZeroLE :
     μ.toSignedMeasure.toMeasureOfZeroLE Set.univ MeasurableSet.univ
       ((le_restrict_univ_iff_le _ _).2 (zero_le_toSignedMeasure μ)) = μ := by
   refine Measure.ext fun i hi => ?_
-  lift μ i to Real>=0 using (measure_lt_top _ _).ne with m hm
-  rw [SignedMeasure.toMeasureOfZeroLE_apply _ _ _ hi]; rw [ENNReal.coe_inj]
+  lift μ i to ℝ≥0 using (measure_lt_top _ _).ne with m hm
+  rw [SignedMeasure.toMeasureOfZeroLE_apply _ _ _ hi, ENNReal.coe_inj]
   congr
   simp [hi, ← hm, measureReal_def]
-
-/--
-theorem `toSignedMeasure_restrict_eq_restrict_toSignedMeasure` / 定理 `toSignedMeasure_restrict_eq_restrict_toSignedMeasure`
-
-English:
-theorem toSignedMeasure_restrict_eq_restrict_toSignedMeasure
-  given: (hs : MeasurableSet s)
-  proof: by
-  ext A hA
-  simp [VectorMeasure.restrict_apply, hA, hs]
-
-中文:
-定理 toSignedMeasure_restrict_eq_restrict_toSignedMeasure
-  条件: (hs : 可测集 s)
-  证明: by
-  ext A hA
-  simp [VectorMeasure.restrict_apply, hA, hs]
-
-Depends on / 依赖: VectorMeasure, VectorMeasure.restrict_apply, restrict_apply
+/-
+**MeasureTheory.Measure.toSignedMeasure_restrict_eq_restrict_toSignedMeasure** 是
+ Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：toSignedMeasure_restrict_eq_restrict_toSignedMeasure (hs : MeasurableSet s
+) : μ.toSignedMeasure.restrict s = (μ.restrict s).toSignedMeasure
+参数：hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.VectorMeasure.ext`：ext {s t : VectorMeasure α M} (h : fora
+ll i : Set α, MeasurableSet i -> s i = t i) : s = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.VectorMeasure.restrict_apply`：restrict_apply {i : Set α} (
+hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j) : v.restrict i j = v (j
+ inter i)
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MeasureTheory.measureReal_restrict_apply`：measureReal_restrict_apply (ht
+ : MeasurableSet t) : (μ.restrict s).real t = μ.real (t inter s)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toSignedMeasure_restrict_eq_restrict_toSignedMeasure (hs : MeasurableSet s) :
     μ.toSignedMeasure.restrict s = (μ.restrict s).toSignedMeasure := by
   ext A hA
   simp [VectorMeasure.restrict_apply, hA, hs]
-
-/--
-theorem `toSignedMeasure_le_toSignedMeasure_iff` / 定理 `toSignedMeasure_le_toSignedMeasure_iff`
-
-English:
-theorem toSignedMeasure_le_toSignedMeasure_iff
-  proof: by
-  rw [Measure.le_iff]; rw [VectorMeasure.le_iff]
-  congrm forall s, (hs : MeasurableSet s) -> ?_
-  simp_rw [toSignedMeasure_apply_measurable hs, real_def]
-  apply ENNReal.toReal_le_toReal <;> finiteness
-
-中文:
-定理 toSignedMeasure_le_toSignedMeasure_iff
-  证明: by
-  rw [Measure.le_iff]; rw [VectorMeasure.le_iff]
-  congrm forall s, (hs : MeasurableSet s) -> ?_
-  simp_rw [toSignedMeasure_apply_measurable hs, real_def]
-  apply ENNReal.toReal_le_toReal <;> finiteness
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_le_toReal, MeasurableSet, Measure, Measure.le_iff, VectorMeasure, VectorMeasure.le_iff, congrm, finiteness, le_iff, real_def, simp_rw, toReal_le_toReal, toSignedMeasure_apply_measurable
+/-
+**MeasureTheory.Measure.toSignedMeasure_le_toSignedMeasure_iff** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.Measure`。
+形式化陈述：toSignedMeasure_le_toSignedMeasure_iff : μ.toSignedMeasure <= ν.toSignedMe
+asure ↔ μ <= ν
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.le_iff`：le_iff : μ₁ <= μ₂ ↔ forall s, MeasurableSe
+t s -> μ₁ s <= μ₂ s
+· 使用定理 `MeasureTheory.VectorMeasure.le_iff`：le_iff : v <= w ↔ forall i, Measurab
+leSet i -> v i <= w i
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.Measure.toSignedMeasure_apply_measurable`：toSignedMeasure_
+apply_measurable {μ : Measure α} [IsFiniteMeasure μ] {i : Set α} (hi : Measurabl
+eSet i) : μ.toSignedMeasure i = μ.real i
+· 使用定理 `MeasureTheory.Measure.real_def`：∀ {α : Type u_6} {m : MeasurableSpace α}
+ (μ : MeasureTheory.Measure α) (s : Set α), μ.real s = (μ s).toReal
+· 使用定理 `ENNReal.toReal_le_toReal`：toReal_le_toReal (ha : a != ∞) (hb : b != ∞) :
+ a.toReal <= b.toReal ↔ a <= b
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
 theorem toSignedMeasure_le_toSignedMeasure_iff :
-    μ.toSignedMeasure <= ν.toSignedMeasure ↔ μ <= ν := by
-  rw [Measure.le_iff]; rw [VectorMeasure.le_iff]
-  congrm forall s, (hs : MeasurableSet s) -> ?_
+    μ.toSignedMeasure ≤ ν.toSignedMeasure ↔ μ ≤ ν := by
+  rw [Measure.le_iff, VectorMeasure.le_iff]
+  congrm ∀ s, (hs : MeasurableSet s) → ?_
   simp_rw [toSignedMeasure_apply_measurable hs, real_def]
   apply ENNReal.toReal_le_toReal <;> finiteness
 
 end Measure
 
 end MeasureTheory
+

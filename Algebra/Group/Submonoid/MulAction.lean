@@ -31,30 +31,54 @@ section SetLike
 variable {S' : Type*} [SetLike S' M'] (s : S')
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [SMul M' α] : SMul s α where
   smul m a := (m : M') • a
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [SMul M' α] [IsLeftCancelSMul M' α] : IsLeftCancelSMul s α where
   left_cancel' x _ _ := IsLeftCancelSMul.left_cancel x.1 _ _
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [SMul M' α] [IsCancelSMul M' α] : IsCancelSMul s α where
-right_cancel' _ _ _ eq := Subtype.ext IsCancelSMul.right_cancel _ _ _ eq
+  right_cancel' _ _ _ eq := Subtype.ext <| IsCancelSMul.right_cancel _ _ _ eq
 
 section MulOneClass
 
 variable [MulOneClass M']
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [SMul M' β] [SMul α β] [SMulCommClass M' α β] : SMulCommClass s α β :=
   ⟨fun a _ _ => smul_comm (a : M') _ _⟩
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [SMul α β] [SMul M' β] [SMulCommClass α M' β] : SMulCommClass α s β :=
   ⟨fun a s => smul_comm a (s : M')⟩
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [SMul α β] [SMul M' α] [SMul M' β] [IsScalarTower M' α β] :
     IsScalarTower s α β :=
   ⟨fun a => smul_assoc (a : M')⟩
@@ -64,6 +88,10 @@ end MulOneClass
 variable [Monoid M'] [SubmonoidClass S' M']
 
 @[to_additive]
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [MulAction M' α] : MulAction s α where
   one_smul := one_smul M'
   mul_smul m₁ m₂ := mul_smul (m₁ : M') m₂
@@ -75,61 +103,43 @@ section MulOneClass
 variable [MulOneClass M']
 
 @[to_additive]
-/--
-Instance `smul` / 实例 `smul`
-
-English:
-instance smul
-  signature: [SMul M' α] (S : Submonoid M')
-  body: inferInstance
-
-@[to_additive]
-
-中文:
-实例 smul
-  签名: [标量乘法 M' α] (S : 子幺半群 M')
-  定义体: inferInstance
-
-@[to_additive]
+/-
+**Submonoid.smul** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：smul [SMul M' α] (S : Submonoid M') : SMul S α
+参数：S : Submonoid M'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smul [SMul M' α] (S : Submonoid M') : SMul S α :=
   inferInstance
 
 @[to_additive]
-/--
-Instance `smulCommClass_left` / 实例 `smulCommClass_left`
-
-English:
-instance smulCommClass_left
-  signature: [SMul M' β] [SMul α β] [SMulCommClass M' α β]
-  body: inferInstance
-
-@[to_additive]
-
-中文:
-实例 smulCommClass_left
-  签名: [标量乘法 M' β] [标量乘法 α β] [标量交换类 M' α β]
-  定义体: inferInstance
-
-@[to_additive]
+/-
+**Submonoid.smulCommClass_left** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：smulCommClass_left [SMul M' β] [SMul α β] [SMulCommClass M' α β] (S : Subm
+onoid M') : SMulCommClass S α β
+参数：S : Submonoid M'。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.instSMulCommClassSubtypeMem`：∀ {M' : Type u_1} {α : Type u_2} 
+{β : Type u_3} {S' : Type u_4} [inst : SetLike S' M'] (s : S') [inst_1 : SMul M'
+ β]   [inst_2 : SMul α β] […
 -/
 instance smulCommClass_left [SMul M' β] [SMul α β] [SMulCommClass M' α β]
     (S : Submonoid M') : SMulCommClass S α β :=
   inferInstance
 
 @[to_additive]
-/--
-Instance `smulCommClass_right` / 实例 `smulCommClass_right`
-
-English:
-instance smulCommClass_right
-  signature: [SMul α β] [SMul M' β] [SMulCommClass α M' β]
-  body: inferInstance
-
-中文:
-实例 smulCommClass_right
-  签名: [标量乘法 α β] [标量乘法 M' β] [标量交换类 α M' β]
-  定义体: inferInstance
+/-
+**Submonoid.smulCommClass_right** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：smulCommClass_right [SMul α β] [SMul M' β] [SMulCommClass α M' β] (S : Sub
+monoid M') : SMulCommClass α S β
+参数：S : Submonoid M'。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.instSMulCommClassSubtypeMem_1`：∀ {M' : Type u_1} {α : Type u_2
+} {β : Type u_3} {S' : Type u_4} [inst : SetLike S' M'] (s : S') [inst_1 : SMul 
+α β]   [inst_2 : SMul M' β] […
 -/
 instance smulCommClass_right [SMul α β] [SMul M' β] [SMulCommClass α M' β]
     (S : Submonoid M') : SMulCommClass α S β :=
@@ -137,18 +147,20 @@ instance smulCommClass_right [SMul α β] [SMul M' β] [SMulCommClass α M' β]
 
 /-- Note that this provides `IsScalarTower S M' M'` which is needed by `SMulMulAssoc`. -/
 @[to_additive]
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
+/-
+**Submonoid.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：isScalarTower [SMul α β] [SMul M' α] [SMul M' β] [IsScalarTower M' α β] (S
+ : Submonoid M') : IsScalarTower S α β
+参数：S : Submonoid M'。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.instIsScalarTowerSubtypeMem`：∀ {M' : Type u_1} {α : Type u_2} 
+{β : Type u_3} {S' : Type u_4} [inst : SetLike S' M'] (s : S') [inst_1 : SMul α 
+β]   [inst_2 : SMul M' α] […
 
-English:
-instance isScalarTower
-  signature: [SMul α β] [SMul M' α] [SMul M' β] [IsScalarTower M' α β]
-  body: inferInstance
-
-中文:
-实例 isScalarTower
-  签名: [标量乘法 α β] [标量乘法 M' α] [标量乘法 M' β] [标量塔 M' α β]
-  定义体: inferInstance
+--- 原说明 ---
+Note that this provides `IsScalarTower S M' M'` which is needed by `SMulMulAssoc
+`.
 -/
 instance isScalarTower [SMul α β] [SMul M' α] [SMul M' β] [IsScalarTower M' α β]
       (S : Submonoid M') :
@@ -158,44 +170,24 @@ instance isScalarTower [SMul α β] [SMul M' α] [SMul M' β] [IsScalarTower M' 
 section SMul
 variable [SMul M' α] {S : Submonoid M'}
 
-/--
-lemma `smul_def` / 引理 `smul_def`
-
-English:
-lemma smul_def
-  given: (g : S) (a : α)
-  statement: g • a = (g : M') • a
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_def
-  条件: (g : S) (a : α)
-  结论: g • a = (g : M') • a
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Submonoid.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：∀ {M' : Type u_1} {α : Type u_2} [inst : MulOneClass M'] [inst_1 : SMul M'
+ α] {S : Submonoid M'} (g : ↥S) (a : α),   g • a = ↑g • a
+参数：g : ↥S；a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] lemma smul_def (g : S) (a : α) : g • a = (g : M') • a := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_smul` / 引理 `mk_smul`
-
-English:
-lemma mk_smul
-  given: (g : M') (hg : g in S) (a : α)
-  statement: (⟨g, hg⟩ : S) • a = g • a
-  proof: rfl
-
-中文:
-引理 mk_smul
-  条件: (g : M') (hg : g in S) (a : α)
-  结论: (⟨g, hg⟩ : S) • a = g • a
-  证明: rfl
+/-
+**Submonoid.mk_smul** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：mk_smul (g : M') (hg : g in S) (a : α) : (⟨g, hg⟩ : S) • a = g • a
+参数：g : M'；hg : g in S；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_smul (g : M') (hg : g in S) (a : α) : (⟨g, hg⟩ : S) • a = g • a := rfl
+lemma mk_smul (g : M') (hg : g ∈ S) (a : α) : (⟨g, hg⟩ : S) • a = g • a := rfl
 
 end SMul
 end MulOneClass
@@ -205,45 +197,34 @@ variable [Monoid M']
 /-- The action by a submonoid is the action by the underlying monoid. -/
 @[to_additive
       /-- The additive action by an `AddSubmonoid` is the action by the underlying `AddMonoid`. -/]
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: [MulAction M' α] (S : Submonoid M')
-  body: inferInstance
-
-中文:
-实例 mulAction
-  签名: [乘法作用 M' α] (S : 子幺半群 M')
-  定义体: inferInstance
+/-
+**Submonoid.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：mulAction [MulAction M' α] (S : Submonoid M') : MulAction S α
+参数：S : Submonoid M'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction [MulAction M' α] (S : Submonoid M') : MulAction S α :=
   inferInstance
-
-/--
-Instance `smulDistribClass` / 实例 `smulDistribClass`
-
-English:
-instance smulDistribClass
-  signature: {β S : Type*} [SMul M' α] [SMul M' β] [SMul α β] [SetLike S M']
-  body: ⟨fun g _ _ => h.smul_distrib_smul g _ _⟩
-
-example {S : Submonoid M'} : IsScalarTower S M' M' := by infer_instance
-
-中文:
-实例 smulDistribClass
-  签名: {β S : 类型} [标量乘法 M' α] [标量乘法 M' β] [标量乘法 α β] [集合状 S M']
-  定义体: ⟨fun g _ _ => h.smul_distrib_smul g _ _⟩
-
-example {S : Submonoid M'} : IsScalarTower S M' M' := by infer_instance
-
-Depends on / 依赖: UniqueSums, UniqueSums.uniqueAdd_of_nonempty, h.smul_distrib_smul, smul_distrib_smul, uniqueAdd_of_nonempty
+/-
+**Submonoid.smulDistribClass** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：smulDistribClass {β S : Type*} [SMul M' α] [SMul M' β] [SMul α β] [SetLike
+ S M'] [h : SMulDistribClass M' α β] (N' : S) : SMulDistribClass N' α β
+参数：N' : S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulDistribClass.smul_distrib_smul`：∀ {G : Type u_9} {R : Type u_10} {S 
+: Type u_11} {inst : SMul G R} {inst_1 : SMul G S} {inst_2 : SMul R S}   [self :
+ SMulDistribClass G R S]…
 -/
 instance smulDistribClass {β S : Type*} [SMul M' α] [SMul M' β] [SMul α β] [SetLike S M']
     [h : SMulDistribClass M' α β] (N' : S) :
-    SMulDistribClass N' α β := ⟨fun g _ _ => h.smul_distrib_smul g _ _⟩
-
+    SMulDistribClass N' α β := ⟨fun g _ _ ↦ h.smul_distrib_smul g _ _⟩
+/-
+**Submonoid.** 是 Mathlib 中的一个示例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example {S : Submonoid M'} : IsScalarTower S M' M' := by infer_instance
 
 end Submonoid
+

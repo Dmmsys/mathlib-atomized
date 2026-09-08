@@ -26,393 +26,398 @@ open scoped ComplexConjugate
 variable {ι G R : Type*} [AddGroup G]
 
 section CommSemiring
-variable [CommSemiring R] [StarRing R] {f g : G -> R}
+variable [CommSemiring R] [StarRing R] {f g : G → R}
 
-/--
-Definition of `conjneg` / `conjneg` 的定义
+/-- Conjugation-negation. Sends `f` to `fun x ↦ conj (f (-x))`. -/
+/-
+**conjneg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：conjneg (f : G -> R) : G -> R
+参数：f : G -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conjneg
-  signature: (f : G -> R)
-  body: conj fun x => f (-x)
-
-中文:
-定义 conjneg
-  签名: (f : G -> R)
-  定义体: conj fun x => f (-x)
+--- 原说明 ---
+Conjugation-negation. Sends `f` to `fun x ↦ conj (f (-x))`.
 -/
-def conjneg (f : G -> R) : G -> R := conj fun x => f (-x)
-
-/--
-lemma `conjneg_apply` / 引理 `conjneg_apply`
-
-English:
-lemma conjneg_apply
-  given: (f : G -> R) (x : G)
-  statement: conjneg f x = conj (f (-x))
-  proof: rfl
-
-中文:
-引理 conjneg_apply
-  条件: (f : G -> R) (x : G)
-  结论: conjneg f x = conj (f (-x))
-  证明: rfl
+def conjneg (f : G → R) : G → R := conj fun x ↦ f (-x)
+/-
+**conjneg_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] (f : G → R) (x : G),   conjneg f x = (starRingEnd R) (
+f (-x))
+参数：f : G → R；x : G；starRingEnd R；f (-x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma conjneg_apply (f : G -> R) (x : G) : conjneg f x = conj (f (-x)) := rfl
-/--
-lemma `conjneg_conjneg` / 引理 `conjneg_conjneg`
-
-English:
-lemma conjneg_conjneg
-  given: (f : G -> R)
-  statement: conjneg (conjneg f) = f
-  proof: by ext; simp
-
-中文:
-引理 conjneg_conjneg
-  条件: (f : G -> R)
-  结论: conjneg (conjneg f) = f
-  证明: by ext; simp
+@[simp] lemma conjneg_apply (f : G → R) (x : G) : conjneg f x = conj (f (-x)) := rfl
+/-
+**conjneg_conjneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] (f : G → R),   conjneg (conjneg f) = f
+参数：f : G → R；conjneg f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `RingHomCompTriple.comp_apply`：comp_apply [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
+ {x : R₁} : σ₂₃ (σ₁₂ x) = σ₁₃ x
+· 使用定理 `RingHomInvPair.instStarRingEnd`：∀ {R : Type u} [inst : CommSemiring R] [
+inst_1 : StarRing R], RingHomInvPair (starRingEnd R) (starRingEnd R)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_conjneg (f : G -> R) : conjneg (conjneg f) = f := by ext; simp
-
-/--
-lemma `conjneg_involutive` / 引理 `conjneg_involutive`
-
-English:
-lemma conjneg_involutive
-  statement: Involutive (conjneg : (G -> R) -> G -> R)
-  proof: conjneg_conjneg
-
-中文:
-引理 conjneg_involutive
-  结论: 对合 (conjneg : (G -> R) -> G -> R)
-  证明: conjneg_conjneg
-
-Depends on / 依赖: conjneg_conjneg
+@[simp] lemma conjneg_conjneg (f : G → R) : conjneg (conjneg f) = f := by ext; simp
+/-
+**conjneg_involutive** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：conjneg_involutive : Involutive (conjneg : (G -> R) -> G -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `conjneg_conjneg`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [in
+st_1 : CommSemiring R] [inst_2 : StarRing R] (f : G → R),   conjneg (conjneg f) 
+= f
 -/
-lemma conjneg_involutive : Involutive (conjneg : (G -> R) -> G -> R) := conjneg_conjneg
-/--
-lemma `conjneg_bijective` / 引理 `conjneg_bijective`
-
-English:
-lemma conjneg_bijective
-  statement: Bijective (conjneg : (G -> R) -> G -> R)
-  proof: conjneg_involutive.bijective
-
-中文:
-引理 conjneg_bijective
-  结论: 双射 (conjneg : (G -> R) -> G -> R)
-  证明: conjneg_involutive.bijective
-
-Depends on / 依赖: bijective, conjneg_involutive, conjneg_involutive.bijective
+lemma conjneg_involutive : Involutive (conjneg : (G → R) → G → R) := conjneg_conjneg
+/-
+**conjneg_bijective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：conjneg_bijective : Bijective (conjneg : (G -> R) -> G -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.bijective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Bijective f
+· 使用引理 `conjneg_involutive`：conjneg_involutive : Involutive (conjneg : (G -> R) 
+-> G -> R)
 -/
-lemma conjneg_bijective : Bijective (conjneg : (G -> R) -> G -> R) := conjneg_involutive.bijective
-/--
-lemma `conjneg_injective` / 引理 `conjneg_injective`
-
-English:
-lemma conjneg_injective
-  statement: Injective (conjneg : (G -> R) -> G -> R)
-  proof: conjneg_involutive.injective
-
-中文:
-引理 conjneg_injective
-  结论: 单射 (conjneg : (G -> R) -> G -> R)
-  证明: conjneg_involutive.injective
-
-Depends on / 依赖: conjneg_involutive, conjneg_involutive.injective, injective
+lemma conjneg_bijective : Bijective (conjneg : (G → R) → G → R) := conjneg_involutive.bijective
+/-
+**conjneg_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：conjneg_injective : Injective (conjneg : (G -> R) -> G -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.injective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Injective f
+· 使用引理 `conjneg_involutive`：conjneg_involutive : Involutive (conjneg : (G -> R) 
+-> G -> R)
 -/
-lemma conjneg_injective : Injective (conjneg : (G -> R) -> G -> R) := conjneg_involutive.injective
-/--
-lemma `conjneg_surjective` / 引理 `conjneg_surjective`
-
-English:
-lemma conjneg_surjective
-  statement: Surjective (conjneg : (G -> R) -> G -> R)
-  proof: conjneg_involutive.surjective
-
-中文:
-引理 conjneg_surjective
-  结论: 满射 (conjneg : (G -> R) -> G -> R)
-  证明: conjneg_involutive.surjective
-
-Depends on / 依赖: conjneg_involutive, conjneg_involutive.surjective, surjective
+lemma conjneg_injective : Injective (conjneg : (G → R) → G → R) := conjneg_involutive.injective
+/-
+**conjneg_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：conjneg_surjective : Surjective (conjneg : (G -> R) -> G -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.surjective`：∀ {α : Sort u} {f : α → α}, Function.Inv
+olutive f → Function.Surjective f
+· 使用引理 `conjneg_involutive`：conjneg_involutive : Involutive (conjneg : (G -> R) 
+-> G -> R)
 -/
-lemma conjneg_surjective : Surjective (conjneg : (G -> R) -> G -> R) := conjneg_involutive.surjective
-
-/--
-lemma `conjneg_inj` / 引理 `conjneg_inj`
-
-English:
-lemma conjneg_inj
-  statement: conjneg f = conjneg g ↔ f = g
-  proof: conjneg_injective.eq_iff
-
-中文:
-引理 conjneg_inj
-  结论: conjneg f = conjneg g ↔ f = g
-  证明: conjneg_injective.eq_iff
+lemma conjneg_surjective : Surjective (conjneg : (G → R) → G → R) := conjneg_involutive.surjective
+/-
+**conjneg_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] {f g : G → R},   conjneg f = conjneg g ↔ f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `conjneg_injective`：conjneg_injective : Injective (conjneg : (G -> R) -> 
+G -> R)
 -/
 @[simp] lemma conjneg_inj : conjneg f = conjneg g ↔ f = g := conjneg_injective.eq_iff
-/--
-lemma `conjneg_ne_conjneg` / 引理 `conjneg_ne_conjneg`
-
-English:
-lemma conjneg_ne_conjneg
-  statement: conjneg f != conjneg g ↔ f != g
-  proof: conjneg_injective.ne_iff
-
-中文:
-引理 conjneg_ne_conjneg
-  结论: conjneg f != conjneg g ↔ f != g
-  证明: conjneg_injective.ne_iff
-
-Depends on / 依赖: conjneg_injective, conjneg_injective.ne_iff, ne_iff
+/-
+**conjneg_ne_conjneg** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：conjneg_ne_conjneg : conjneg f != conjneg g ↔ f != g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+· 使用引理 `conjneg_injective`：conjneg_injective : Injective (conjneg : (G -> R) -> 
+G -> R)
 -/
-lemma conjneg_ne_conjneg : conjneg f != conjneg g ↔ f != g := conjneg_injective.ne_iff
-
-/--
-lemma `conjneg_conj` / 引理 `conjneg_conj`
-
-English:
-lemma conjneg_conj
-  given: (f : G -> R)
-  statement: conjneg (conj f) = conj (conjneg f)
-  proof: rfl
-
-中文:
-引理 conjneg_conj
-  条件: (f : G -> R)
-  结论: conjneg (conj f) = conj (conjneg f)
-  证明: rfl
+lemma conjneg_ne_conjneg : conjneg f ≠ conjneg g ↔ f ≠ g := conjneg_injective.ne_iff
+/-
+**conjneg_conj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] (f : G → R),   conjneg ((starRingEnd (G → R)) f) = (st
+arRingEnd (G → R)) (conjneg f)
+参数：f : G → R；(starRingEnd (G → R)) f；starRingEnd (G → R)；conjneg f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma conjneg_conj (f : G -> R) : conjneg (conj f) = conj (conjneg f) := rfl
-
-/--
-lemma `conjneg_zero` / 引理 `conjneg_zero`
-
-English:
-lemma conjneg_zero
-  statement: conjneg (0 : G -> R) = 0
-  proof: by ext; simp
-
-中文:
-引理 conjneg_zero
-  结论: conjneg (0 : G -> R) = 0
-  证明: by ext; simp
+@[simp] lemma conjneg_conj (f : G → R) : conjneg (conj f) = conj (conjneg f) := rfl
+/-
+**conjneg_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R], conjneg 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_zero : conjneg (0 : G -> R) = 0 := by ext; simp
-/--
-lemma `conjneg_one` / 引理 `conjneg_one`
-
-English:
-lemma conjneg_one
-  statement: conjneg (1 : G -> R) = 1
-  proof: by ext; simp
-
-中文:
-引理 conjneg_one
-  结论: conjneg (1 : G -> R) = 1
-  证明: by ext; simp
+@[simp] lemma conjneg_zero : conjneg (0 : G → R) = 0 := by ext; simp
+/-
+**conjneg_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R], conjneg 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_one : conjneg (1 : G -> R) = 1 := by ext; simp
-/--
-lemma `conjneg_add` / 引理 `conjneg_add`
-
-English:
-lemma conjneg_add
-  given: (f g : G -> R)
-  statement: conjneg (f + g) = conjneg f + conjneg g
-  proof: by ext; simp
-
-中文:
-引理 conjneg_add
-  条件: (f g : G -> R)
-  结论: conjneg (f + g) = conjneg f + conjneg g
-  证明: by ext; simp
+@[simp] lemma conjneg_one : conjneg (1 : G → R) = 1 := by ext; simp
+/-
+**conjneg_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] (f g : G → R),   conjneg (f + g) = conjneg f + conjneg
+ g
+参数：f g : G → R；f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_add (f g : G -> R) : conjneg (f + g) = conjneg f + conjneg g := by ext; simp
-/--
-lemma `conjneg_mul` / 引理 `conjneg_mul`
-
-English:
-lemma conjneg_mul
-  given: (f g : G -> R)
-  statement: conjneg (f * g) = conjneg f * conjneg g
-  proof: by ext; simp
-
-中文:
-引理 conjneg_mul
-  条件: (f g : G -> R)
-  结论: conjneg (f * g) = conjneg f * conjneg g
-  证明: by ext; simp
+@[simp] lemma conjneg_add (f g : G → R) : conjneg (f + g) = conjneg f + conjneg g := by ext; simp
+/-
+**conjneg_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] (f g : G → R),   conjneg (f * g) = conjneg f * conjneg
+ g
+参数：f g : G → R；f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_mul (f g : G -> R) : conjneg (f * g) = conjneg f * conjneg g := by ext; simp
-
-/--
-lemma `conjneg_sum` / 引理 `conjneg_sum`
-
-English:
-lemma conjneg_sum
-  given: (s : Finset ι) (f : ι -> G -> R)
-  proof: by ext; simp
-
-中文:
-引理 conjneg_sum
-  条件: (s : 有限集 ι) (f : ι -> G -> R)
-  证明: by ext; simp
+@[simp] lemma conjneg_mul (f g : G → R) : conjneg (f * g) = conjneg f * conjneg g := by ext; simp
+/-
+**conjneg_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {ι : Type u_1} {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R]   (s : Finset ι) (f : ι → G → R), conjn
+eg (∑ i ∈ s, f i) = ∑ i ∈ s, conjneg (f i)
+参数：s : Finset ι；f : ι → G → R；∑ i ∈ s, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_sum (s : Finset ι) (f : ι -> G -> R) :
-    conjneg (∑ i in s, f i) = ∑ i in s, conjneg (f i) := by ext; simp
-
-/--
-lemma `conjneg_prod` / 引理 `conjneg_prod`
-
-English:
-lemma conjneg_prod
-  given: (s : Finset ι) (f : ι -> G -> R)
-  proof: by ext; simp
-
-中文:
-引理 conjneg_prod
-  条件: (s : 有限集 ι) (f : ι -> G -> R)
-  证明: by ext; simp
+@[simp] lemma conjneg_sum (s : Finset ι) (f : ι → G → R) :
+    conjneg (∑ i ∈ s, f i) = ∑ i ∈ s, conjneg (f i) := by ext; simp
+/-
+**conjneg_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {ι : Type u_1} {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R]   (s : Finset ι) (f : ι → G → R), conjn
+eg (∏ i ∈ s, f i) = ∏ i ∈ s, conjneg (f i)
+参数：s : Finset ι；f : ι → G → R；∏ i ∈ s, f i；f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_apply`：Finset.prod_apply {α : Type*} {M : α -> Type*} [foral
+l a, CommMonoid (M a)] (a : α) (s : Finset ι) (g : ι -> forall a, M a) : (∏ c in
+ s, g c…
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_prod (s : Finset ι) (f : ι -> G -> R) :
-    conjneg (∏ i in s, f i) = ∏ i in s, conjneg (f i) := by ext; simp
-
-/--
-lemma `conjneg_eq_zero` / 引理 `conjneg_eq_zero`
-
-English:
-lemma conjneg_eq_zero
-  statement: conjneg f = 0 ↔ f = 0
-  proof: by
-  rw [← conjneg_inj]; rw [conjneg_conjneg]; rw [conjneg_zero]
-
-中文:
-引理 conjneg_eq_zero
-  结论: conjneg f = 0 ↔ f = 0
-  证明: by
-  rw [← conjneg_inj]; rw [conjneg_conjneg]; rw [conjneg_zero]
+@[simp] lemma conjneg_prod (s : Finset ι) (f : ι → G → R) :
+    conjneg (∏ i ∈ s, f i) = ∏ i ∈ s, conjneg (f i) := by ext; simp
+/-
+**conjneg_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] {f : G → R},   conjneg f = 0 ↔ f = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `conjneg_inj`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R] {f g : G → R},   conjneg f = conjneg g 
+↔…
+· 使用定理 `conjneg_conjneg`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [in
+st_1 : CommSemiring R] [inst_2 : StarRing R] (f : G → R),   conjneg (conjneg f) 
+= f
+· 使用定理 `conjneg_zero`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_
+1 : CommSemiring R] [inst_2 : StarRing R], conjneg 0 = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma conjneg_eq_zero : conjneg f = 0 ↔ f = 0 := by
-  rw [← conjneg_inj]; rw [conjneg_conjneg]; rw [conjneg_zero]
-
-/--
-lemma `conjneg_eq_one` / 引理 `conjneg_eq_one`
-
-English:
-lemma conjneg_eq_one
-  statement: conjneg f = 1 ↔ f = 1
-  proof: by
-  rw [← conjneg_inj]; rw [conjneg_conjneg]; rw [conjneg_one]
-
-中文:
-引理 conjneg_eq_one
-  结论: conjneg f = 1 ↔ f = 1
-  证明: by
-  rw [← conjneg_inj]; rw [conjneg_conjneg]; rw [conjneg_one]
+  rw [← conjneg_inj, conjneg_conjneg, conjneg_zero]
+/-
+**conjneg_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] {f : G → R},   conjneg f = 1 ↔ f = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `conjneg_inj`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R] {f g : G → R},   conjneg f = conjneg g 
+↔…
+· 使用定理 `conjneg_conjneg`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [in
+st_1 : CommSemiring R] [inst_2 : StarRing R] (f : G → R),   conjneg (conjneg f) 
+= f
+· 使用定理 `conjneg_one`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R], conjneg 1 = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma conjneg_eq_one : conjneg f = 1 ↔ f = 1 := by
-  rw [← conjneg_inj]; rw [conjneg_conjneg]; rw [conjneg_one]
-
-/--
-lemma `conjneg_ne_zero` / 引理 `conjneg_ne_zero`
-
-English:
-lemma conjneg_ne_zero
-  statement: conjneg f != 0 ↔ f != 0
-  proof: conjneg_eq_zero.not
-
-中文:
-引理 conjneg_ne_zero
-  结论: conjneg f != 0 ↔ f != 0
-  证明: conjneg_eq_zero.not
-
-Depends on / 依赖: conjneg_eq_zero, conjneg_eq_zero.not
+  rw [← conjneg_inj, conjneg_conjneg, conjneg_one]
+/-
+**conjneg_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：conjneg_ne_zero : conjneg f != 0 ↔ f != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `conjneg_eq_zero`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [in
+st_1 : CommSemiring R] [inst_2 : StarRing R] {f : G → R},   conjneg f = 0 ↔ f = 
+0
 -/
-lemma conjneg_ne_zero : conjneg f != 0 ↔ f != 0 := conjneg_eq_zero.not
-/--
-lemma `conjneg_ne_one` / 引理 `conjneg_ne_one`
-
-English:
-lemma conjneg_ne_one
-  statement: conjneg f != 1 ↔ f != 1
-  proof: conjneg_eq_one.not
-
-中文:
-引理 conjneg_ne_one
-  结论: conjneg f != 1 ↔ f != 1
-  证明: conjneg_eq_one.not
-
-Depends on / 依赖: conjneg_eq_one, conjneg_eq_one.not
+lemma conjneg_ne_zero : conjneg f ≠ 0 ↔ f ≠ 0 := conjneg_eq_zero.not
+/-
+**conjneg_ne_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：conjneg_ne_one : conjneg f != 1 ↔ f != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `conjneg_eq_one`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [ins
+t_1 : CommSemiring R] [inst_2 : StarRing R] {f : G → R},   conjneg f = 1 ↔ f = 1
 -/
-lemma conjneg_ne_one : conjneg f != 1 ↔ f != 1 := conjneg_eq_one.not
-
-/--
-lemma `sum_conjneg` / 引理 `sum_conjneg`
-
-English:
-lemma sum_conjneg
-  given: [Fintype G] (f : G -> R)
-  statement: ∑ a, conjneg f a = ∑ a, conj (f a)
-  proof: Fintype.sum_equiv (Equiv.neg _) _ _ fun _ => rfl
-
-中文:
-引理 sum_conjneg
-  条件: [有限类型 G] (f : G -> R)
-  结论: ∑ a, conjneg f a = ∑ a, conj (f a)
-  证明: Fintype.sum_equiv (Equiv.neg _) _ _ fun _ => rfl
-
-Depends on / 依赖: Equiv.neg, Fintype, Fintype.sum_equiv, sum_equiv
+lemma conjneg_ne_one : conjneg f ≠ 1 ↔ f ≠ 1 := conjneg_eq_one.not
+/-
+**sum_conjneg** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sum_conjneg [Fintype G] (f : G -> R) : ∑ a, conjneg f a = ∑ a, conj (f a)
+参数：f : G -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.sum_equiv`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst 
+: Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (f : 
+ι → M) …
 -/
-lemma sum_conjneg [Fintype G] (f : G -> R) : ∑ a, conjneg f a = ∑ a, conj (f a) :=
-  Fintype.sum_equiv (Equiv.neg _) _ _ fun _ => rfl
-
-/--
-lemma `support_conjneg` / 引理 `support_conjneg`
-
-English:
-lemma support_conjneg
-  given: (f : G -> R)
-  statement: support (conjneg f) = -support f
-  proof: by
+lemma sum_conjneg [Fintype G] (f : G → R) : ∑ a, conjneg f a = ∑ a, conj (f a) :=
+  Fintype.sum_equiv (Equiv.neg _) _ _ fun _ ↦ rfl
+/-
+**support_conjneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommSemiring
+ R] [inst_2 : StarRing R] (f : G → R),   Function.support (conjneg f) = -Functio
+n.support f
+参数：f : G → R；conjneg f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+@[simp] lemma support_conjneg (f : G → R) : support (conjneg f) = -support f := by
   ext; simp [starRingEnd_apply]
 
-中文:
-引理 support_conjneg
-  条件: (f : G -> R)
-  结论: support (conjneg f) = -support f
-  证明: by
-  ext; simp [starRingEnd_apply]
+/-- `conjneg` bundled as a ring homomorphism. -/
+/-
+**conjnegRingHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{G : Type u_2} → {R : Type u_3} → [AddGroup G] → [inst : CommSemiring R] →
+ [StarRing R] → (G → R) →+* G → R
+参数：G → R。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `conjneg_one`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R], conjneg 1 = 1
+· 使用定理 `conjneg_mul`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R] (f g : G → R),   conjneg (f * g) = conj
+n…
+· 使用定理 `conjneg_zero`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_
+1 : CommSemiring R] [inst_2 : StarRing R], conjneg 0 = 0
+· 使用定理 `conjneg_add`：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1
+ : CommSemiring R] [inst_2 : StarRing R] (f g : G → R),   conjneg (f + g) = conj
+n…
+
+--- 原说明 ---
+`conjneg` bundled as a ring homomorphism.
 -/
-@[simp] lemma support_conjneg (f : G -> R) : support (conjneg f) = -support f := by
-  ext; simp [starRingEnd_apply]
-
-/--
-Definition of `conjnegRingHom` / `conjnegRingHom` 的定义
-
-English:
-definition conjnegRingHom
-  signature: : (G -> R) ->+* (G -> R) where
-  body: conjneg
-  map_zero' := conjneg_zero
-  map_one' := conjneg_one
-  map_add' := conjneg_add
-  map_mul' := conjneg_mul
-
-中文:
-定义 conjnegRingHom
-  签名: : (G -> R) ->+* (G -> R) where
-  定义体: conjneg
-  map_zero' := conjneg_zero
-  map_one' := conjneg_one
-  map_add' := conjneg_add
-  map_mul' := conjneg_mul
--/
-@[simps] def conjnegRingHom : (G -> R) ->+* (G -> R) where
+@[simps] def conjnegRingHom : (G → R) →+* (G → R) where
   toFun := conjneg
   map_zero' := conjneg_zero
   map_one' := conjneg_one
@@ -424,37 +429,50 @@ end CommSemiring
 section CommRing
 variable [CommRing R] [StarRing R]
 
-/--
-lemma `conjneg_sub` / 引理 `conjneg_sub`
-
-English:
-lemma conjneg_sub
-  given: (f g : G -> R)
-  statement: conjneg (f - g) = conjneg f - conjneg g
-  proof: by ext; simp
-
-中文:
-引理 conjneg_sub
-  条件: (f g : G -> R)
-  结论: conjneg (f - g) = conjneg f - conjneg g
-  证明: by ext; simp
+/-
+**conjneg_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommRing R] 
+[inst_2 : StarRing R] (f g : G → R),   conjneg (f - g) = conjneg f - conjneg g
+参数：f g : G → R；f - g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_sub (f g : G -> R) : conjneg (f - g) = conjneg f - conjneg g := by ext; simp
-/--
-lemma `conjneg_neg` / 引理 `conjneg_neg`
-
-English:
-lemma conjneg_neg
-  given: (f : G -> R)
-  statement: conjneg (-f) = -conjneg f
-  proof: by ext; simp
-
-中文:
-引理 conjneg_neg
-  条件: (f : G -> R)
-  结论: conjneg (-f) = -conjneg f
-  证明: by ext; simp
+@[simp] lemma conjneg_sub (f g : G → R) : conjneg (f - g) = conjneg f - conjneg g := by ext; simp
+/-
+**conjneg_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_2} {R : Type u_3} [inst : AddGroup G] [inst_1 : CommRing R] 
+[inst_2 : StarRing R] (f : G → R),   conjneg (-f) = -conjneg f
+参数：f : G → R；-f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma conjneg_neg (f : G -> R) : conjneg (-f) = -conjneg f := by ext; simp
+@[simp] lemma conjneg_neg (f : G → R) : conjneg (-f) = -conjneg f := by ext; simp
 
 end CommRing
+

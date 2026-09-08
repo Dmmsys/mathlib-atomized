@@ -37,92 +37,72 @@ namespace Ext
 
 section CovariantSequence
 
-/--
-lemma `hom_comp_singleFunctor_map_shift` / 引理 `hom_comp_singleFunctor_map_shift`
-
-English:
-lemma hom_comp_singleFunctor_map_shift
-  statement: [HasDerivedCategory.{w'} C]
-  proof: by
-  simp only [comp_hom, mk₀_hom, ShiftedHom.comp_mk₀]
-
-中文:
-引理 hom_comp_singleFunctor_map_shift
-  结论: [HasDerivedCategory.{w'} C]
-  证明: by
-  simp only [comp_hom, mk₀_hom, ShiftedHom.comp_mk₀]
-
-Depends on / 依赖: ShiftedHom, ShiftedHom.comp_mk, comp_hom
+/-
+**CategoryTheory.Abelian.Ext.hom_comp_singleFunctor_map_shift** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Abelian.Ext`。
+形式化陈述：hom_comp_singleFunctor_map_shift [HasDerivedCategory.{w'} C] {X Y Z : C} {
+n : Nat} (x : Ext X Y n) (f : Y ⟶ Z) : x.hom ≫ ((DerivedCategory.singleFunctor C
+ 0).map f)⟦(n : Int)⟧' = (x.comp (mk₀ f) (add_zero n)).hom
+参数：x : Ext X Y n；f : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Abelian.Ext.comp_hom`：comp_hom {a b : Nat} (α : Ext X Y a
+) (β : Ext Y Z b) {c : Nat} (h : a + b = c) : (α.comp β h).hom = α.hom.comp β.ho
+m (by lia)
+· 使用定理 `CategoryTheory.ShiftedHom.comp.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_
+2 : CategoryTheory.HasShift C M…
+· 使用引理 `CategoryTheory.Abelian.Ext.mk₀_hom`：mk₀_hom [HasDerivedCategory.{w'} C] 
+(f : X ⟶ Y) : (mk₀ f).hom = ShiftedHom.mk₀ _ (by simp) ((singleFunctor C 0).map 
+f)
+· 使用引理 `CategoryTheory.ShiftedHom.comp_mk₀`：comp_mk₀ {a : M} (f : ShiftedHom X Y
+ a) (m₀ : M) (hm₀ : m₀ = 0) (g : Y ⟶ Z) : f.comp (mk₀ m₀ hm₀ g) (by rw [hm₀, zer
+o_add]) = f ≫ g⟦a⟧'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_comp_singleFunctor_map_shift [HasDerivedCategory.{w'} C]
-    {X Y Z : C} {n : Nat} (x : Ext X Y n) (f : Y ⟶ Z) :
-    x.hom ≫ ((DerivedCategory.singleFunctor C 0).map f)⟦(n : Int)⟧' =
+    {X Y Z : C} {n : ℕ} (x : Ext X Y n) (f : Y ⟶ Z) :
+    x.hom ≫ ((DerivedCategory.singleFunctor C 0).map f)⟦(n : ℤ)⟧' =
       (x.comp (mk₀ f) (add_zero n)).hom := by
   simp only [comp_hom, mk₀_hom, ShiftedHom.comp_mk₀]
 
 variable {X : C} {S : ShortComplex C} (hS : S.ShortExact)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply` / 引理 `preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply`
-
-English:
-lemma preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply
-  proof: by
-  rw [Pretriangulated.preadditiveCoyoneda_homologySequenceδ_apply]; rw [comp_hom]; rw [hS.extClass_hom]; rw [ShiftedHom.comp]
-  rfl
-
-中文:
-引理 preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply
-  证明: by
-  rw [Pretriangulated.preadditiveCoyoneda_homologySequenceδ_apply]; rw [comp_hom]; rw [hS.extClass_hom]; rw [ShiftedHom.comp]
-  rfl
-
-Depends on / 依赖: Pretriangulated, Pretriangulated.preadditiveCoyoneda_homologySequence, ShiftedHom, ShiftedHom.comp, comp_hom, extClass_hom, hS.extClass_hom
+/-
+**CategoryTheory.Abelian.Ext.preadditiveCoyoneda_homologySequence** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply
-    [HasDerivedCategory.{w'} C] {X : C} {n₀ : Nat} (x : Ext X S.X₃ n₀)
-    {n₁ : Nat} (h : n₀ + 1 = n₁) :
+    [HasDerivedCategory.{w'} C] {X : C} {n₀ : ℕ} (x : Ext X S.X₃ n₀)
+    {n₁ : ℕ} (h : n₀ + 1 = n₁) :
     (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequenceδ
       hS.singleTriangle n₀ n₁ (by lia) x.hom =
         (x.comp hS.extClass h).hom := by
-  rw [Pretriangulated.preadditiveCoyoneda_homologySequenceδ_apply]; rw [comp_hom]; rw [hS.extClass_hom]; rw [ShiftedHom.comp]
+  rw [Pretriangulated.preadditiveCoyoneda_homologySequenceδ_apply,
+    comp_hom, hS.extClass_hom, ShiftedHom.comp]
   rfl
 
 variable (X)
 
 set_option backward.defeqAttrib.useBackward true in
 include hS in
-/--
-lemma `covariant_sequence_exact₂'` / 引理 `covariant_sequence_exact₂'`
+/-- Alternative formulation of `covariant_sequence_exact₂` -/
+/-
+**CategoryTheory.Abelian.Ext.covariant_sequence_exact** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma covariant_sequence_exact₂'
-  given: (n : Nat)
-  proof: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₂ _
-    (hS.singleTriangle_distinguished) n
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  all_goals ext x; apply hom_comp_singleFunctor_map_shift (C := C)
-
-中文:
-引理 covariant_sequence_exact₂'
-  条件: (n : 自然数)
-  证明: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₂ _
-    (hS.singleTriangle_distinguished) n
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  all_goals ext x; apply hom_comp_singleFunctor_map_shift (C := C)
-
-Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, all_goals, hS.singleTriangle_distinguished, homAddEquiv, hom_comp_singleFunctor_map_shift, of_ladder_addEquiv_of_exact, preadditiveCoyoneda, preadditiveCoyoneda.obj, singleFunctor, singleTriangle_distinguished, standard
+--- 原说明 ---
+Alternative formulation of `covariant_sequence_exact₂`
 -/
-lemma covariant_sequence_exact₂' (n : Nat) :
+lemma covariant_sequence_exact₂' (n : ℕ) :
     (ShortComplex.mk (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n)))
       (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n))) (by
         ext x
@@ -139,39 +119,17 @@ lemma covariant_sequence_exact₂' (n : Nat) :
 
 section
 
-variable (n₀ n₁ : Nat) (h : n₀ + 1 = n₁)
+variable (n₀ n₁ : ℕ) (h : n₀ + 1 = n₁)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `covariant_sequence_exact₃'` / 引理 `covariant_sequence_exact₃'`
+/-- Alternative formulation of `covariant_sequence_exact₃` -/
+/-
+**CategoryTheory.Abelian.Ext.covariant_sequence_exact** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma covariant_sequence_exact₃'
-  proof: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₃ _
-    (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
-  · ext x
-    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
-
-中文:
-引理 covariant_sequence_exact₃'
-  证明: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₃ _
-    (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
-  · ext x
-    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
-
-Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, hom_comp_singleFunctor_map_shift, of_ladder_addEquiv_of_exact, preadditiveCoyoneda, preadditiveCoyoneda.obj, singleFunctor, singleTriangle_distinguished, standard
+--- 原说明 ---
+Alternative formulation of `covariant_sequence_exact₃`
 -/
 lemma covariant_sequence_exact₃' :
     (ShortComplex.mk (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₀)))
@@ -191,36 +149,14 @@ lemma covariant_sequence_exact₃' :
     exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `covariant_sequence_exact₁'` / 引理 `covariant_sequence_exact₁'`
+/-- Alternative formulation of `covariant_sequence_exact₁` -/
+/-
+**CategoryTheory.Abelian.Ext.covariant_sequence_exact** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma covariant_sequence_exact₁'
-  proof: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₁ _
-    (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext x
-    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
-  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
-
-中文:
-引理 covariant_sequence_exact₁'
-  证明: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₁ _
-    (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext x
-    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
-  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
-
-Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, hom_comp_singleFunctor_map_shift, of_ladder_addEquiv_of_exact, preadditiveCoyoneda, preadditiveCoyoneda.obj, singleFunctor, singleTriangle_distinguished, standard
+--- 原说明 ---
+Alternative formulation of `covariant_sequence_exact₁`
 -/
 lemma covariant_sequence_exact₁' :
     (ShortComplex.mk
@@ -242,28 +178,24 @@ lemma covariant_sequence_exact₁' :
 
 open ComposableArrows
 
-/--
-Definition of `covariantSequence` / `covariantSequence` 的定义
+/-- Given a short exact short complex `S` in an abelian category `C` and an object `X : C`,
+this is the long exact sequence
+`Ext X S.X₁ n₀ → Ext X S.X₂ n₀ → Ext X S.X₃ n₀ → Ext X S.X₁ n₁ → Ext X S.X₂ n₁ → Ext X S.X₃ n₁`
+when `n₀ + 1 = n₁` -/
+/-
+**CategoryTheory.Abelian.Ext.covariantSequence** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Abelian.Ext`。
+形式化陈述：covariantSequence : ComposableArrows AddCommGrpCat.{w} 5
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition covariantSequence
-  signature: : ComposableArrows AddCommGrpCat.{w} 5
-  body: mk₅ (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₀)))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₀)))
-    (AddCommGrpCat.ofHom (hS.extClass.postcomp X h))
-    (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₁)))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₁)))
-
-中文:
-定义 covariantSequence
-  签名: : ComposableArrows 加法交换群范畴.{w} 5
-  定义体: mk₅ (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₀)))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₀)))
-    (AddCommGrpCat.ofHom (hS.extClass.postcomp X h))
-    (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₁)))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₁)))
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, add_zero, extClass, hS.extClass.postcomp, postcomp
+--- 原说明 ---
+Given a short exact short complex `S` in an abelian category `C` and an object `
+X : C`,
+this is the long exact sequence
+`Ext X S.X₁ n₀ → Ext X S.X₂ n₀ → Ext X S.X₃ n₀ → Ext X S.X₁ n₁ → Ext X S.X₂ n₁ →
+ Ext X S.X₃ n₁`
+when `n₀ + 1 = n₁`
 -/
 noncomputable def covariantSequence : ComposableArrows AddCommGrpCat.{w} 5 :=
   mk₅ (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₀)))
@@ -271,25 +203,28 @@ noncomputable def covariantSequence : ComposableArrows AddCommGrpCat.{w} 5 :=
     (AddCommGrpCat.ofHom (hS.extClass.postcomp X h))
     (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₁)))
     (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₁)))
-
-/--
-lemma `covariantSequence_exact` / 引理 `covariantSequence_exact`
-
-English:
-lemma covariantSequence_exact
-  proof: exact_of_δ₀ (covariant_sequence_exact₂' X hS n₀).exact_toComposableArrows
-    (exact_of_δ₀ (covariant_sequence_exact₃' X hS n₀ n₁ h).exact_toComposableArrows
-      (exact_of_δ₀ (covariant_sequence_exact₁' X hS n₀ n₁ h).exact_toComposableArrows
-        (covariant_sequence_exact₂' X hS n₁).exact_toComposableArrows))
-
-中文:
-引理 covariantSequence_exact
-  证明: exact_of_δ₀ (covariant_sequence_exact₂' X hS n₀).exact_toComposableArrows
-    (exact_of_δ₀ (covariant_sequence_exact₃' X hS n₀ n₁ h).exact_toComposableArrows
-      (exact_of_δ₀ (covariant_sequence_exact₁' X hS n₀ n₁ h).exact_toComposableArrows
-        (covariant_sequence_exact₂' X hS n₁).exact_toComposableArrows))
-
-Depends on / 依赖: exact_toComposableArrows
+/-
+**CategoryTheory.Abelian.Ext.covariantSequence_exact** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Abelian.Ext`。
+形式化陈述：covariantSequence_exact : (covariantSequence X hS n₀ n₁ h).Exact
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ComposableArrows.exact_of_δ₀`：exact_of_δ₀ {S : Composable
+Arrows C (n + 2)} (h : (mk₂ (S.map' 0 1) (S.map' 1 2)).Exact) (h₀ : S.δ₀.Exact) 
+: S.Exact
+· 使用定理 `CategoryTheory.ShortComplex.Exact.exact_toComposableArrows`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limi
+ts.HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `CategoryTheory.Abelian.Ext.covariant_sequence_exact₂'`：covariant_sequenc
+e_exact₂' (n : Nat) : (ShortComplex.mk (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp 
+X (add_zero n))) (AddCommGrpCat.ofHom ((mk₀…
+· 使用引理 `CategoryTheory.Abelian.Ext.covariant_sequence_exact₃'`：covariant_sequenc
+e_exact₃' : (ShortComplex.mk (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zer
+o n₀))) (AddCommGrpCat.ofHom (hS.extClass.p…
+· 使用引理 `CategoryTheory.Abelian.Ext.covariant_sequence_exact₁'`：covariant_sequenc
+e_exact₁' : (ShortComplex.mk (AddCommGrpCat.ofHom (hS.extClass.postcomp X h)) (A
+ddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (a…
 -/
 lemma covariantSequence_exact :
     (covariantSequence X hS n₀ n₁ h).Exact :=
@@ -300,139 +235,56 @@ lemma covariantSequence_exact :
 
 end
 
-/--
-lemma `covariant_sequence_exact₁` / 引理 `covariant_sequence_exact₁`
-
-English:
-lemma covariant_sequence_exact₁
-  statement: {n₁ : Nat} (x₁ : Ext X S.X₁ n₁)
-  proof: by
-  have := covariant_sequence_exact₁' X hS n₀ n₁ hn₀
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₁ hx₁
-
-include hS in
-
-中文:
-引理 covariant_sequence_exact₁
-  结论: {n₁ : 自然数} (x₁ : Ext X S.X₁ n₁)
-  证明: by
-  have := covariant_sequence_exact₁' X hS n₀ n₁ hn₀
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₁ hx₁
-
-include hS in
-
-Depends on / 依赖: ShortComplex, ShortComplex.ab_exact_iff, ab_exact_iff
+/-
+**CategoryTheory.Abelian.Ext.covariant_sequence_exact** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma covariant_sequence_exact₁ {n₁ : Nat} (x₁ : Ext X S.X₁ n₁)
-    (hx₁ : x₁.comp (mk₀ S.f) (add_zero n₁) = 0) {n₀ : Nat} (hn₀ : n₀ + 1 = n₁) :
-    exists (x₃ : Ext X S.X₃ n₀), x₃.comp hS.extClass hn₀ = x₁ := by
+lemma covariant_sequence_exact₁ {n₁ : ℕ} (x₁ : Ext X S.X₁ n₁)
+    (hx₁ : x₁.comp (mk₀ S.f) (add_zero n₁) = 0) {n₀ : ℕ} (hn₀ : n₀ + 1 = n₁) :
+    ∃ (x₃ : Ext X S.X₃ n₀), x₃.comp hS.extClass hn₀ = x₁ := by
   have := covariant_sequence_exact₁' X hS n₀ n₁ hn₀
   rw [ShortComplex.ab_exact_iff] at this
   exact this x₁ hx₁
 
 include hS in
-/--
-lemma `covariant_sequence_exact₂` / 引理 `covariant_sequence_exact₂`
-
-English:
-lemma covariant_sequence_exact₂
-  statement: {n : Nat} (x₂ : Ext X S.X₂ n)
-  proof: by
-  have := covariant_sequence_exact₂' X hS n
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₂ hx₂
-
-中文:
-引理 covariant_sequence_exact₂
-  结论: {n : 自然数} (x₂ : Ext X S.X₂ n)
-  证明: by
-  have := covariant_sequence_exact₂' X hS n
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₂ hx₂
-
-Depends on / 依赖: ShortComplex, ShortComplex.ab_exact_iff, ab_exact_iff
+/-
+**CategoryTheory.Abelian.Ext.covariant_sequence_exact** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma covariant_sequence_exact₂ {n : Nat} (x₂ : Ext X S.X₂ n)
+lemma covariant_sequence_exact₂ {n : ℕ} (x₂ : Ext X S.X₂ n)
     (hx₂ : x₂.comp (mk₀ S.g) (add_zero n) = 0) :
-    exists (x₁ : Ext X S.X₁ n), x₁.comp (mk₀ S.f) (add_zero n) = x₂ := by
+    ∃ (x₁ : Ext X S.X₁ n), x₁.comp (mk₀ S.f) (add_zero n) = x₂ := by
   have := covariant_sequence_exact₂' X hS n
   rw [ShortComplex.ab_exact_iff] at this
   exact this x₂ hx₂
-
-/--
-lemma `covariant_sequence_exact₃` / 引理 `covariant_sequence_exact₃`
-
-English:
-lemma covariant_sequence_exact₃
-  statement: {n₀ : Nat} (x₃ : Ext X S.X₃ n₀) {n₁ : Nat} (hn₁ : n₀ + 1 = n₁)
-  proof: by
-  have := covariant_sequence_exact₃' X hS n₀ n₁ hn₁
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₃ hx₃
-
-中文:
-引理 covariant_sequence_exact₃
-  结论: {n₀ : 自然数} (x₃ : Ext X S.X₃ n₀) {n₁ : 自然数} (hn₁ : n₀ + 1 = n₁)
-  证明: by
-  have := covariant_sequence_exact₃' X hS n₀ n₁ hn₁
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₃ hx₃
-
-Depends on / 依赖: ShortComplex, ShortComplex.ab_exact_iff, ab_exact_iff
+/-
+**CategoryTheory.Abelian.Ext.covariant_sequence_exact** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma covariant_sequence_exact₃ {n₀ : Nat} (x₃ : Ext X S.X₃ n₀) {n₁ : Nat} (hn₁ : n₀ + 1 = n₁)
+lemma covariant_sequence_exact₃ {n₀ : ℕ} (x₃ : Ext X S.X₃ n₀) {n₁ : ℕ} (hn₁ : n₀ + 1 = n₁)
     (hx₃ : x₃.comp hS.extClass hn₁ = 0) :
-    exists (x₂ : Ext X S.X₂ n₀), x₂.comp (mk₀ S.g) (add_zero n₀) = x₃ := by
+    ∃ (x₂ : Ext X S.X₂ n₀), x₂.comp (mk₀ S.g) (add_zero n₀) = x₃ := by
   have := covariant_sequence_exact₃' X hS n₀ n₁ hn₁
   rw [ShortComplex.ab_exact_iff] at this
   exact this x₃ hx₃
-
-/--
-lemma `postcomp_mk₀_injective_of_mono` / 引理 `postcomp_mk₀_injective_of_mono`
-
-English:
-lemma postcomp_mk₀_injective_of_mono
-  given: (L : C) {M N : C} (f : M ⟶ N) [hf : Mono f]
-  proof: by
-  rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
-  intro x hx
-  obtain ⟨g, rfl⟩ := Ext.addEquiv₀.symm.surjective x
-  simpa [← cancel_mono f] using hx
-
-中文:
-引理 postcomp_mk₀_injective_of_mono
-  条件: (L : C) {M N : C} (f : M ⟶ N) [hf : 单态射 f]
-  证明: by
-  rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
-  intro x hx
-  obtain ⟨g, rfl⟩ := Ext.addEquiv₀.symm.surjective x
-  simpa [← cancel_mono f] using hx
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.ker_eq_bot_iff, AddSubgroup, AddSubgroup.eq_bot_iff_forall, Ext.addEquiv, cancel_mono, eq_bot_iff_forall, ker_eq_bot_iff, surjective, symm.surjective
+/-
+**CategoryTheory.Abelian.Ext.postcomp_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma postcomp_mk₀_injective_of_mono (L : C) {M N : C} (f : M ⟶ N) [hf : Mono f] :
     Function.Injective ((Ext.mk₀ f).postcomp L (add_zero 0)) := by
-  rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
+  rw [← AddMonoidHom.ker_eq_bot_iff, AddSubgroup.eq_bot_iff_forall]
   intro x hx
   obtain ⟨g, rfl⟩ := Ext.addEquiv₀.symm.surjective x
   simpa [← cancel_mono f] using hx
-
-/--
-lemma `mono_postcomp_mk₀_of_mono` / 引理 `mono_postcomp_mk₀_of_mono`
-
-English:
-lemma mono_postcomp_mk₀_of_mono
-  given: (L : C) {M N : C} (f : M ⟶ N) [hf : Mono f]
-  proof: (AddCommGrpCat.mono_iff_injective _).mpr (postcomp_mk₀_injective_of_mono L f)
-
-中文:
-引理 mono_postcomp_mk₀_of_mono
-  条件: (L : C) {M N : C} (f : M ⟶ N) [hf : 单态射 f]
-  证明: (AddCommGrpCat.mono_iff_injective _).mpr (postcomp_mk₀_injective_of_mono L f)
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.mono_iff_injective, mono_iff_injective
+/-
+**CategoryTheory.Abelian.Ext.mono_postcomp_mk** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mono_postcomp_mk₀_of_mono (L : C) {M N : C} (f : M ⟶ N) [hf : Mono f] :
     Mono (AddCommGrpCat.ofHom <| (Ext.mk₀ f).postcomp L (add_zero 0)) :=
@@ -444,88 +296,68 @@ section ContravariantSequence
 
 variable {S : ShortComplex C} (hS : S.ShortExact) (Y : C)
 
-/--
-lemma `singleFunctor_map_comp_hom` / 引理 `singleFunctor_map_comp_hom`
-
-English:
-lemma singleFunctor_map_comp_hom
-  statement: [HasDerivedCategory.{w'} C]
-  proof: by
-  simp only [comp_hom, mk₀_hom, ShiftedHom.mk₀_comp]
-
-中文:
-引理 singleFunctor_map_comp_hom
-  结论: [HasDerivedCategory.{w'} C]
-  证明: by
-  simp only [comp_hom, mk₀_hom, ShiftedHom.mk₀_comp]
-
-Depends on / 依赖: ShiftedHom, ShiftedHom.mk, comp_hom
+/-
+**CategoryTheory.Abelian.Ext.singleFunctor_map_comp_hom** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Abelian.Ext`。
+形式化陈述：singleFunctor_map_comp_hom [HasDerivedCategory.{w'} C] {X Y Z : C} (f : X 
+⟶ Y) {n : Nat} (x : Ext Y Z n) : (DerivedCategory.singleFunctor C 0).map f ≫ x.h
+om = ((mk₀ f).comp x (zero_add n)).hom
+参数：f : X ⟶ Y；x : Ext Y Z n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Abelian.Ext.comp_hom`：comp_hom {a b : Nat} (α : Ext X Y a
+) (β : Ext Y Z b) {c : Nat} (h : a + b = c) : (α.comp β h).hom = α.hom.comp β.ho
+m (by lia)
+· 使用定理 `CategoryTheory.ShiftedHom.comp.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_
+2 : CategoryTheory.HasShift C M…
+· 使用引理 `CategoryTheory.Abelian.Ext.mk₀_hom`：mk₀_hom [HasDerivedCategory.{w'} C] 
+(f : X ⟶ Y) : (mk₀ f).hom = ShiftedHom.mk₀ _ (by simp) ((singleFunctor C 0).map 
+f)
+· 使用引理 `CategoryTheory.ShiftedHom.mk₀_comp`：mk₀_comp (m₀ : M) (hm₀ : m₀ = 0) (f 
+: X ⟶ Y) {a : M} (g : ShiftedHom Y Z a) : (mk₀ m₀ hm₀ f).comp g (by rw [hm₀, add
+_zero]) = f ≫ g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma singleFunctor_map_comp_hom [HasDerivedCategory.{w'} C]
-    {X Y Z : C} (f : X ⟶ Y) {n : Nat} (x : Ext Y Z n) :
+    {X Y Z : C} (f : X ⟶ Y) {n : ℕ} (x : Ext Y Z n) :
     (DerivedCategory.singleFunctor C 0).map f ≫ x.hom =
       ((mk₀ f).comp x (zero_add n)).hom := by
   simp only [comp_hom, mk₀_hom, ShiftedHom.mk₀_comp]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `preadditiveYoneda_homologySequenceδ_singleTriangle_apply` / 引理 `preadditiveYoneda_homologySequenceδ_singleTriangle_apply`
-
-English:
-lemma preadditiveYoneda_homologySequenceδ_singleTriangle_apply
-  proof: by
-  rw [preadditiveYoneda_homologySequenceδ_apply]; rw [comp_hom]; rw [hS.extClass_hom]; rw [ShiftedHom.comp]
-  rfl
-
-中文:
-引理 preadditiveYoneda_homologySequenceδ_singleTriangle_apply
-  证明: by
-  rw [preadditiveYoneda_homologySequenceδ_apply]; rw [comp_hom]; rw [hS.extClass_hom]; rw [ShiftedHom.comp]
-  rfl
-
-Depends on / 依赖: ShiftedHom, ShiftedHom.comp, comp_hom, extClass_hom, hS.extClass_hom
+/-
+**CategoryTheory.Abelian.Ext.preadditiveYoneda_homologySequence** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preadditiveYoneda_homologySequenceδ_singleTriangle_apply
-    [HasDerivedCategory.{w'} C] {Y : C} {n₀ : Nat} (x : Ext S.X₁ Y n₀)
-    {n₁ : Nat} (h : 1 + n₀ = n₁) :
+    [HasDerivedCategory.{w'} C] {Y : C} {n₀ : ℕ} (x : Ext S.X₁ Y n₀)
+    {n₁ : ℕ} (h : 1 + n₀ = n₁) :
     (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequenceδ
       ((triangleOpEquivalence _).functor.obj (op hS.singleTriangle)) n₀ n₁ (by lia) x.hom =
       (hS.extClass.comp x h).hom := by
-  rw [preadditiveYoneda_homologySequenceδ_apply]; rw [comp_hom]; rw [hS.extClass_hom]; rw [ShiftedHom.comp]
+  rw [preadditiveYoneda_homologySequenceδ_apply,
+    comp_hom, hS.extClass_hom, ShiftedHom.comp]
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
 include hS in
-/--
-lemma `contravariant_sequence_exact₂'` / 引理 `contravariant_sequence_exact₂'`
+/-- Alternative formulation of `contravariant_sequence_exact₂` -/
+/-
+**CategoryTheory.Abelian.Ext.contravariant_sequence_exact** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma contravariant_sequence_exact₂'
-  given: (n : Nat)
-  proof: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₂ _
-    (op_distinguished _ hS.singleTriangle_distinguished) n
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  all_goals ext; apply singleFunctor_map_comp_hom (C := C)
-
-中文:
-引理 contravariant_sequence_exact₂'
-  条件: (n : 自然数)
-  证明: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₂ _
-    (op_distinguished _ hS.singleTriangle_distinguished) n
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  all_goals ext; apply singleFunctor_map_comp_hom (C := C)
-
-Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, all_goals, hS.singleTriangle_distinguished, homAddEquiv, of_ladder_addEquiv_of_exact, op_distinguished, preadditiveYoneda, preadditiveYoneda.obj, singleFunctor, singleFunctor_map_comp_hom, singleTriangle_distinguished, standard
+--- 原说明 ---
+Alternative formulation of `contravariant_sequence_exact₂`
 -/
-lemma contravariant_sequence_exact₂' (n : Nat) :
+lemma contravariant_sequence_exact₂' (n : ℕ) :
     (ShortComplex.mk (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n)))
       (AddCommGrpCat.ofHom ((mk₀ S.f).precomp Y (zero_add n))) (by
         ext
@@ -541,37 +373,17 @@ lemma contravariant_sequence_exact₂' (n : Nat) :
 
 section
 
-variable (n₀ n₁ : Nat) (h : 1 + n₀ = n₁)
+variable (n₀ n₁ : ℕ) (h : 1 + n₀ = n₁)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `contravariant_sequence_exact₁'` / 引理 `contravariant_sequence_exact₁'`
+/-- Alternative formulation of `contravariant_sequence_exact₁` -/
+/-
+**CategoryTheory.Abelian.Ext.contravariant_sequence_exact** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma contravariant_sequence_exact₁'
-  proof: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₃ _
-    (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext; apply singleFunctor_map_comp_hom (C := C)
-  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
-
-中文:
-引理 contravariant_sequence_exact₁'
-  证明: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₃ _
-    (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext; apply singleFunctor_map_comp_hom (C := C)
-  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
-
-Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, of_ladder_addEquiv_of_exact, op_distinguished, preadditiveYoneda, preadditiveYoneda.obj, singleFunctor, singleFunctor_map_comp_hom, singleTriangle_distinguished, standard
+--- 原说明 ---
+Alternative formulation of `contravariant_sequence_exact₁`
 -/
 lemma contravariant_sequence_exact₁' :
     (ShortComplex.mk (AddCommGrpCat.ofHom (((mk₀ S.f).precomp Y (zero_add n₀))))
@@ -589,34 +401,14 @@ lemma contravariant_sequence_exact₁' :
   · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `contravariant_sequence_exact₃'` / 引理 `contravariant_sequence_exact₃'`
+/-- Alternative formulation of `contravariant_sequence_exact₃` -/
+/-
+**CategoryTheory.Abelian.Ext.contravariant_sequence_exact** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma contravariant_sequence_exact₃'
-  proof: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₁ _
-    (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
-  · ext; apply singleFunctor_map_comp_hom (C := C)
-
-中文:
-引理 contravariant_sequence_exact₃'
-  证明: by
-  let := HasDerivedCategory.standard C
-  have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₁ _
-    (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
-  rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
-    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
-  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
-  · ext; apply singleFunctor_map_comp_hom (C := C)
-
-Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, of_ladder_addEquiv_of_exact, op_distinguished, preadditiveYoneda, preadditiveYoneda.obj, singleFunctor, singleFunctor_map_comp_hom, singleTriangle_distinguished, standard
+--- 原说明 ---
+Alternative formulation of `contravariant_sequence_exact₃`
 -/
 lemma contravariant_sequence_exact₃' :
     (ShortComplex.mk (AddCommGrpCat.ofHom (hS.extClass.precomp Y h))
@@ -635,28 +427,24 @@ lemma contravariant_sequence_exact₃' :
 
 open ComposableArrows
 
-/--
-Definition of `contravariantSequence` / `contravariantSequence` 的定义
+/-- Given a short exact short complex `S` in an abelian category `C` and an object `Y : C`,
+this is the long exact sequence
+`Ext S.X₃ Y n₀ → Ext S.X₂ Y n₀ → Ext S.X₁ Y n₀ → Ext S.X₃ Y n₁ → Ext S.X₂ Y n₁ → Ext S.X₁ Y n₁`
+when `1 + n₀ = n₁`. -/
+/-
+**CategoryTheory.Abelian.Ext.contravariantSequence** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Abelian.Ext`。
+形式化陈述：contravariantSequence : ComposableArrows AddCommGrpCat.{w} 5
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition contravariantSequence
-  signature: : ComposableArrows AddCommGrpCat.{w} 5
-  body: mk₅ (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n₀)))
-    (AddCommGrpCat.ofHom ((mk₀ S.f).precomp Y (zero_add n₀)))
-    (AddCommGrpCat.ofHom (hS.extClass.precomp Y h))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n₁)))
-    (AddCommGrpCat.ofHom ((mk₀ S.f).precomp Y (zero_add n₁)))
-
-中文:
-定义 contravariantSequence
-  签名: : ComposableArrows 加法交换群范畴.{w} 5
-  定义体: mk₅ (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n₀)))
-    (AddCommGrpCat.ofHom ((mk₀ S.f).precomp Y (zero_add n₀)))
-    (AddCommGrpCat.ofHom (hS.extClass.precomp Y h))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n₁)))
-    (AddCommGrpCat.ofHom ((mk₀ S.f).precomp Y (zero_add n₁)))
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, extClass, hS.extClass.precomp, precomp, zero_add
+--- 原说明 ---
+Given a short exact short complex `S` in an abelian category `C` and an object `
+Y : C`,
+this is the long exact sequence
+`Ext S.X₃ Y n₀ → Ext S.X₂ Y n₀ → Ext S.X₁ Y n₀ → Ext S.X₃ Y n₁ → Ext S.X₂ Y n₁ →
+ Ext S.X₁ Y n₁`
+when `1 + n₀ = n₁`.
 -/
 noncomputable def contravariantSequence : ComposableArrows AddCommGrpCat.{w} 5 :=
   mk₅ (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n₀)))
@@ -664,25 +452,28 @@ noncomputable def contravariantSequence : ComposableArrows AddCommGrpCat.{w} 5 :
     (AddCommGrpCat.ofHom (hS.extClass.precomp Y h))
     (AddCommGrpCat.ofHom ((mk₀ S.g).precomp Y (zero_add n₁)))
     (AddCommGrpCat.ofHom ((mk₀ S.f).precomp Y (zero_add n₁)))
-
-/--
-lemma `contravariantSequence_exact` / 引理 `contravariantSequence_exact`
-
-English:
-lemma contravariantSequence_exact
-  proof: exact_of_δ₀ (contravariant_sequence_exact₂' hS Y n₀).exact_toComposableArrows
-    (exact_of_δ₀ (contravariant_sequence_exact₁' hS Y n₀ n₁ h).exact_toComposableArrows
-      (exact_of_δ₀ (contravariant_sequence_exact₃' hS Y n₀ n₁ h).exact_toComposableArrows
-        (contravariant_sequence_exact₂' hS Y n₁).exact_toComposableArrows))
-
-中文:
-引理 contravariantSequence_exact
-  证明: exact_of_δ₀ (contravariant_sequence_exact₂' hS Y n₀).exact_toComposableArrows
-    (exact_of_δ₀ (contravariant_sequence_exact₁' hS Y n₀ n₁ h).exact_toComposableArrows
-      (exact_of_δ₀ (contravariant_sequence_exact₃' hS Y n₀ n₁ h).exact_toComposableArrows
-        (contravariant_sequence_exact₂' hS Y n₁).exact_toComposableArrows))
-
-Depends on / 依赖: exact_toComposableArrows
+/-
+**CategoryTheory.Abelian.Ext.contravariantSequence_exact** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Abelian.Ext`。
+形式化陈述：contravariantSequence_exact : (contravariantSequence hS Y n₀ n₁ h).Exact
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ComposableArrows.exact_of_δ₀`：exact_of_δ₀ {S : Composable
+Arrows C (n + 2)} (h : (mk₂ (S.map' 0 1) (S.map' 1 2)).Exact) (h₀ : S.δ₀.Exact) 
+: S.Exact
+· 使用定理 `CategoryTheory.ShortComplex.Exact.exact_toComposableArrows`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limi
+ts.HasZeroMorphisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `CategoryTheory.Abelian.Ext.contravariant_sequence_exact₂'`：contravariant
+_sequence_exact₂' (n : Nat) : (ShortComplex.mk (AddCommGrpCat.ofHom ((mk₀ S.g).p
+recomp Y (zero_add n))) (AddCommGrpCat.ofHom ((…
+· 使用引理 `CategoryTheory.Abelian.Ext.contravariant_sequence_exact₁'`：contravariant
+_sequence_exact₁' : (ShortComplex.mk (AddCommGrpCat.ofHom (((mk₀ S.f).precomp Y 
+(zero_add n₀)))) (AddCommGrpCat.ofHom (hS.extCl…
+· 使用引理 `CategoryTheory.Abelian.Ext.contravariant_sequence_exact₃'`：contravariant
+_sequence_exact₃' : (ShortComplex.mk (AddCommGrpCat.ofHom (hS.extClass.precomp Y
+ h)) (AddCommGrpCat.ofHom (((mk₀ S.g).precomp Y…
 -/
 lemma contravariantSequence_exact :
     (contravariantSequence hS Y n₀ n₁ h).Exact :=
@@ -693,139 +484,56 @@ lemma contravariantSequence_exact :
 
 end
 
-/--
-lemma `contravariant_sequence_exact₁` / 引理 `contravariant_sequence_exact₁`
-
-English:
-lemma contravariant_sequence_exact₁
-  statement: {n₀ : Nat} (x₁ : Ext S.X₁ Y n₀) {n₁ : Nat} (hn₁ : 1 + n₀ = n₁)
-  proof: by
-  have := contravariant_sequence_exact₁' hS Y n₀ n₁ hn₁
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₁ hx₁
-
-include hS in
-
-中文:
-引理 contravariant_sequence_exact₁
-  结论: {n₀ : 自然数} (x₁ : Ext S.X₁ Y n₀) {n₁ : 自然数} (hn₁ : 1 + n₀ = n₁)
-  证明: by
-  have := contravariant_sequence_exact₁' hS Y n₀ n₁ hn₁
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₁ hx₁
-
-include hS in
-
-Depends on / 依赖: ShortComplex, ShortComplex.ab_exact_iff, ab_exact_iff, embeddingUp, infer_instance
+/-
+**CategoryTheory.Abelian.Ext.contravariant_sequence_exact** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contravariant_sequence_exact₁ {n₀ : Nat} (x₁ : Ext S.X₁ Y n₀) {n₁ : Nat} (hn₁ : 1 + n₀ = n₁)
+lemma contravariant_sequence_exact₁ {n₀ : ℕ} (x₁ : Ext S.X₁ Y n₀) {n₁ : ℕ} (hn₁ : 1 + n₀ = n₁)
     (hx₁ : hS.extClass.comp x₁ hn₁ = 0) :
-    exists (x₂ : Ext S.X₂ Y n₀), (mk₀ S.f).comp x₂ (zero_add n₀) = x₁ := by
+    ∃ (x₂ : Ext S.X₂ Y n₀), (mk₀ S.f).comp x₂ (zero_add n₀) = x₁ := by
   have := contravariant_sequence_exact₁' hS Y n₀ n₁ hn₁
   rw [ShortComplex.ab_exact_iff] at this
   exact this x₁ hx₁
 
 include hS in
-/--
-lemma `contravariant_sequence_exact₂` / 引理 `contravariant_sequence_exact₂`
-
-English:
-lemma contravariant_sequence_exact₂
-  statement: {n : Nat} (x₂ : Ext S.X₂ Y n)
-  proof: by
-  have := contravariant_sequence_exact₂' hS Y n
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₂ hx₂
-
-中文:
-引理 contravariant_sequence_exact₂
-  结论: {n : 自然数} (x₂ : Ext S.X₂ Y n)
-  证明: by
-  have := contravariant_sequence_exact₂' hS Y n
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₂ hx₂
-
-Depends on / 依赖: ShortComplex, ShortComplex.ab_exact_iff, ab_exact_iff, add_right_comm
+/-
+**CategoryTheory.Abelian.Ext.contravariant_sequence_exact** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contravariant_sequence_exact₂ {n : Nat} (x₂ : Ext S.X₂ Y n)
+lemma contravariant_sequence_exact₂ {n : ℕ} (x₂ : Ext S.X₂ Y n)
     (hx₂ : (mk₀ S.f).comp x₂ (zero_add n) = 0) :
-    exists (x₁ : Ext S.X₃ Y n), (mk₀ S.g).comp x₁ (zero_add n) = x₂ := by
+    ∃ (x₁ : Ext S.X₃ Y n), (mk₀ S.g).comp x₁ (zero_add n) = x₂ := by
   have := contravariant_sequence_exact₂' hS Y n
   rw [ShortComplex.ab_exact_iff] at this
   exact this x₂ hx₂
-
-/--
-lemma `contravariant_sequence_exact₃` / 引理 `contravariant_sequence_exact₃`
-
-English:
-lemma contravariant_sequence_exact₃
-  statement: {n₁ : Nat} (x₃ : Ext S.X₃ Y n₁)
-  proof: by
-  have := contravariant_sequence_exact₃' hS Y n₀ n₁ hn₀
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₃ hx₃
-
-中文:
-引理 contravariant_sequence_exact₃
-  结论: {n₁ : 自然数} (x₃ : Ext S.X₃ Y n₁)
-  证明: by
-  have := contravariant_sequence_exact₃' hS Y n₀ n₁ hn₀
-  rw [ShortComplex.ab_exact_iff] at this
-  exact this x₃ hx₃
-
-Depends on / 依赖: ShortComplex, ShortComplex.ab_exact_iff, ab_exact_iff
+/-
+**CategoryTheory.Abelian.Ext.contravariant_sequence_exact** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma contravariant_sequence_exact₃ {n₁ : Nat} (x₃ : Ext S.X₃ Y n₁)
-    (hx₃ : (mk₀ S.g).comp x₃ (zero_add n₁) = 0) {n₀ : Nat} (hn₀ : 1 + n₀ = n₁) :
-    exists (x₁ : Ext S.X₁ Y n₀), hS.extClass.comp x₁ hn₀ = x₃ := by
+lemma contravariant_sequence_exact₃ {n₁ : ℕ} (x₃ : Ext S.X₃ Y n₁)
+    (hx₃ : (mk₀ S.g).comp x₃ (zero_add n₁) = 0) {n₀ : ℕ} (hn₀ : 1 + n₀ = n₁) :
+    ∃ (x₁ : Ext S.X₁ Y n₀), hS.extClass.comp x₁ hn₀ = x₃ := by
   have := contravariant_sequence_exact₃' hS Y n₀ n₁ hn₀
   rw [ShortComplex.ab_exact_iff] at this
   exact this x₃ hx₃
-
-/--
-lemma `precomp_mk₀_injective_of_epi` / 引理 `precomp_mk₀_injective_of_epi`
-
-English:
-lemma precomp_mk₀_injective_of_epi
-  given: (L : C) {M N : C} (g : M ⟶ N) [hg : Epi g]
-  proof: by
-  rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
-  intro x hx
-  obtain ⟨f, rfl⟩ := Ext.addEquiv₀.symm.surjective x
-  simpa [← cancel_epi g] using hx
-
-中文:
-引理 precomp_mk₀_injective_of_epi
-  条件: (L : C) {M N : C} (g : M ⟶ N) [hg : 满态射 g]
-  证明: by
-  rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
-  intro x hx
-  obtain ⟨f, rfl⟩ := Ext.addEquiv₀.symm.surjective x
-  simpa [← cancel_epi g] using hx
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.ker_eq_bot_iff, AddSubgroup, AddSubgroup.eq_bot_iff_forall, Ext.addEquiv, cancel_epi, embeddingDown, eq_bot_iff_forall, infer_instance, ker_eq_bot_iff, surjective, symm.surjective
+/-
+**CategoryTheory.Abelian.Ext.precomp_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma precomp_mk₀_injective_of_epi (L : C) {M N : C} (g : M ⟶ N) [hg : Epi g] :
     Function.Injective ((Ext.mk₀ g).precomp L (zero_add 0)) := by
-  rw [← AddMonoidHom.ker_eq_bot_iff]; rw [AddSubgroup.eq_bot_iff_forall]
+  rw [← AddMonoidHom.ker_eq_bot_iff, AddSubgroup.eq_bot_iff_forall]
   intro x hx
   obtain ⟨f, rfl⟩ := Ext.addEquiv₀.symm.surjective x
   simpa [← cancel_epi g] using hx
-
-/--
-lemma `mono_precomp_mk₀_of_epi` / 引理 `mono_precomp_mk₀_of_epi`
-
-English:
-lemma mono_precomp_mk₀_of_epi
-  given: (L : C) {M N : C} (g : M ⟶ N) [hg : Epi g]
-  proof: (AddCommGrpCat.mono_iff_injective _).mpr (precomp_mk₀_injective_of_epi L g)
-
-中文:
-引理 mono_precomp_mk₀_of_epi
-  条件: (L : C) {M N : C} (g : M ⟶ N) [hg : 满态射 g]
-  证明: (AddCommGrpCat.mono_iff_injective _).mpr (precomp_mk₀_injective_of_epi L g)
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.mono_iff_injective, add_right_comm, mono_iff_injective
+/-
+**CategoryTheory.Abelian.Ext.mono_precomp_mk** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Abelian.Ext`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mono_precomp_mk₀_of_epi (L : C) {M N : C} (g : M ⟶ N) [hg : Epi g] :
     Mono (AddCommGrpCat.ofHom <| (Ext.mk₀ g).precomp L (zero_add 0)) :=
@@ -838,3 +546,4 @@ end Ext
 end Abelian
 
 end CategoryTheory
+

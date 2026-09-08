@@ -36,30 +36,36 @@ variable {R₀ : Cᵒᵖ ⥤ RingCat.{u}} {R : Sheaf J RingCat.{u}} (α : R₀ �
   [HasWeakSheafify J AddCommGrpCat.{v}]
 
 open MorphismProperty in
-/--
-lemma `inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms` / 引理 `inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms`
-
-English:
-lemma inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms
-  proof: by
-  rw [J.W_eq_inverseImage_isomorphisms]
-  ext P Q f
-  simp only [inverseImage_iff, isomorphisms.iff,
-    ← isIso_iff_of_reflects_iso _ (SheafOfModules.toSheaf.{v} R)]
-  exact (isomorphisms _).arrow_mk_iso_iff
-    (((Functor.mapArrowFunctor _ _).mapIso (sheafificationCompToSheaf.{v} α)).app (Arrow.mk f))
-
-中文:
-引理 inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms
-  证明: by
-  rw [J.W_eq_inverseImage_isomorphisms]
-  ext P Q f
-  simp only [inverseImage_iff, isomorphisms.iff,
-    ← isIso_iff_of_reflects_iso _ (SheafOfModules.toSheaf.{v} R)]
-  exact (isomorphisms _).arrow_mk_iso_iff
-    (((Functor.mapArrowFunctor _ _).mapIso (sheafificationCompToSheaf.{v} α)).app (Arrow.mk f))
-
-Depends on / 依赖: Arrow.mk, Functor, Functor.mapArrowFunctor, J.W_eq_inverseImage_isomorphisms, SheafOfModules, SheafOfModules.toSheaf, W_eq_inverseImage_isomorphisms, arrow_mk_iso_iff, inverseImage_iff, isIso_iff_of_reflects_iso, isomorphisms, isomorphisms.iff, mapArrowFunctor, mapIso, sheafificationCompToSheaf, toSheaf
+/-
+**PresheafOfModules.inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms** 是 M
+athlib 中的一个引理，位于命名空间 `PresheafOfModules`。
+形式化陈述：inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms : J.W.inverseImage 
+(toPresheaf R₀) = (isomorphisms _).inverseImage (sheafification α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.GrothendieckTopology.W_eq_inverseImage_isomorphisms`：W_eq
+_inverseImage_isomorphisms : J.W = (MorphismProperty.isomorphisms _).inverseImag
+e (presheafToSheaf J A)
+· 使用引理 `CategoryTheory.MorphismProperty.ext`：ext (W W' : MorphismProperty C) (h 
+: forall ⦃X Y : C⦄ (f : X ⟶ Y), W f ↔ W' f) : W = W'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
+· 使用定理 `PresheafOfModules.instReflectsIsomorphismsSheafOfModulesSheafAddCommGrpC
+atToSheaf_1`：∀ {C : Type u'} [inst : CategoryTheory.Category.{v', u'} C] {J : Ca
+tegoryTheory.GrothendieckTopology C}   {R : CategoryTheory.Sheaf J RingCa…
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.isomorphisms`：∀ (C : Type u)
+ [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.MorphismProperty.iso
+morphisms C).RespectsIso
 -/
 lemma inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms :
     J.W.inverseImage (toPresheaf R₀) = (isomorphisms _).inverseImage (sheafification α) := by
@@ -69,28 +75,13 @@ lemma inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms :
     ← isIso_iff_of_reflects_iso _ (SheafOfModules.toSheaf.{v} R)]
   exact (isomorphisms _).arrow_mk_iso_iff
     (((Functor.mapArrowFunctor _ _).mapIso (sheafificationCompToSheaf.{v} α)).app (Arrow.mk f))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (sheafification.{v} α).IsLocalization (J.W.inverseImage (toPresheaf R₀))
-  body: by
-  rw [inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms α]
-  exact (sheafificationAdjunction.{v} α).isLocalization
-
-中文:
-实例 :
-  签名: (sheafification.{v} α).是Localization (J.W.inverseImage (toPresheaf R₀))
-  定义体: by
-  rw [inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms α]
-  exact (sheafificationAdjunction.{v} α).isLocalization
-
-Depends on / 依赖: inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms, isLocalization, sheafificationAdjunction
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (sheafification.{v} α).IsLocalization (J.W.inverseImage (toPresheaf R₀)) := by
   rw [inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms α]
   exact (sheafificationAdjunction.{v} α).isLocalization
 
 end PresheafOfModules
+

@@ -36,16 +36,48 @@ variable {ι : Sort*} {α : Type*} [Field α] [LinearOrder α] [IsStrictOrderedR
 
 section MulActionWithZero
 
-variable [MulActionWithZero α Real] [IsOrderedModule α Real] {a : α}
+variable [MulActionWithZero α ℝ] [IsOrderedModule α ℝ] {a : α}
 
-/--
-theorem `Real.sInf_smul_of_nonneg` / 定理 `Real.sInf_smul_of_nonneg`
-
-English:
-theorem Real.sInf_smul_of_nonneg
-  given: (ha : 0 <= a) (s : Set Real)
-  statement: sInf (a • s) = a • sInf s
-  proof: by
+/-
+**Real.sInf_smul_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.sInf_smul_of_nonneg (ha : 0 <= a) (s : Set Real) : sInf (a • s) = a •
+ sInf s
+参数：ha : 0 <= a；s : Set Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.smul_set_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {a
+ : α}, a • ∅ = ∅
+· 使用定理 `Real.sInf_empty`：sInf_empty : sInf (∅ : Set Real) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Set.zero_smul_set`：∀ {α : Type u_1} {β : Type u_2} [inst : Zero α] [inst
+_1 : Zero β] [inst_2 : SMulWithZero α β] {s : Set β},   s.Nonempty → 0 • s = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `csInf_singleton`：∀ {α : Type u_1} [inst : ConditionallyCompletePartialOr
+derInf α] (a : α), sInf {a} = a
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `PosSMulMono.toPosSMulReflectLE`：∀ {𝕜 : Type u_1} {G : Type u_2} [inst : 
+Semifield 𝕜] [inst_1 : LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]   [inst_3 : Partia
+lOrder G] [inst_4 : …
+· 使用定理 `OrderIso.map_csInf'`：map_csInf' (e : α ≃o β) {s : Set α} (hne : s.Nonemp
+ty) (hbdd : BddBelow s) : e (sInf s) = sInf (e '' s)
+· 使用定理 `Real.sInf_of_not_bddBelow`：sInf_of_not_bddBelow (hs : ¬BddBelow s) : sIn
+f s = 0
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `bddBelow_smul_iff_of_pos`：∀ {α : Type u_1} {β : Type u_2} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : GroupWithZero α] [inst_3 : Zero β]   [inst
+_4 : MulAction…
+-/
+theorem Real.sInf_smul_of_nonneg (ha : 0 ≤ a) (s : Set ℝ) : sInf (a • s) = a • sInf s := by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · rw [smul_set_empty, Real.sInf_empty, smul_zero]
   obtain rfl | ha' := ha.eq_or_lt
@@ -55,63 +87,63 @@ theorem Real.sInf_smul_of_nonneg
   · exact ((OrderIso.smulRight ha').map_csInf' hs h).symm
   · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_pos ha').1 h),
         Real.sInf_of_not_bddBelow h, smul_zero]
-
-中文:
-定理 实数.sInf_smul_of_nonneg
-  条件: (ha : 0 <= a) (s : 集合 实数)
-  结论: sInf (a • s) = a • sInf s
-  证明: by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sInf_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csInf_singleton 0
-  by_cases h : BddBelow s
-  · exact ((OrderIso.smulRight ha').map_csInf' hs h).symm
-  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_pos ha').1 h),
-        Real.sInf_of_not_bddBelow h, smul_zero]
-
-Depends on / 依赖: BddBelow, OrderIso, OrderIso.smulRight, Real.sInf_empty, Real.sInf_of_not_bddBelow, bddBelow_smul_iff_of_pos, csInf_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csInf, s.eq_empty_or_nonempty, sInf_empty, sInf_of_not_bddBelow, smulRight, smul_set_empty, smul_zero, zero_smul, zero_smul_set
+/-
+**Real.smul_iInf_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.smul_iInf_of_nonneg (ha : 0 <= a) (f : ι -> Real) : (a • ⨅ i, f i) = 
+⨅ i, a • f i
+参数：ha : 0 <= a；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sInf_smul_of_nonneg`：Real.sInf_smul_of_nonneg (ha : 0 <= a) (s : Se
+t Real) : sInf (a • s) = a • sInf s
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
 -/
-theorem Real.sInf_smul_of_nonneg (ha : 0 <= a) (s : Set Real) : sInf (a • s) = a • sInf s := by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sInf_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csInf_singleton 0
-  by_cases h : BddBelow s
-  · exact ((OrderIso.smulRight ha').map_csInf' hs h).symm
-  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_pos ha').1 h),
-        Real.sInf_of_not_bddBelow h, smul_zero]
-
-/--
-theorem `Real.smul_iInf_of_nonneg` / 定理 `Real.smul_iInf_of_nonneg`
-
-English:
-theorem Real.smul_iInf_of_nonneg
-  given: (ha : 0 <= a) (f : ι -> Real)
-  statement: (a • ⨅ i, f i) = ⨅ i, a • f i
-  proof: (Real.sInf_smul_of_nonneg ha _).symm.trans congr_arg sInf (range_comp _ _).symm
-
-中文:
-定理 实数.smul_iInf_of_nonneg
-  条件: (ha : 0 <= a) (f : ι -> 实数)
-  结论: (a • ⨅ i, f i) = ⨅ i, a • f i
-  证明: (Real.sInf_smul_of_nonneg ha _).symm.trans congr_arg sInf (range_comp _ _).symm
-
-Depends on / 依赖: Real.sInf_smul_of_nonneg, congr_arg, range_comp, sInf_smul_of_nonneg, symm.trans
+theorem Real.smul_iInf_of_nonneg (ha : 0 ≤ a) (f : ι → ℝ) : (a • ⨅ i, f i) = ⨅ i, a • f i :=
+  (Real.sInf_smul_of_nonneg ha _).symm.trans <| congr_arg sInf <| (range_comp _ _).symm
+/-
+**Real.sSup_smul_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.sSup_smul_of_nonneg (ha : 0 <= a) (s : Set Real) : sSup (a • s) = a •
+ sSup s
+参数：ha : 0 <= a；s : Set Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.smul_set_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {a
+ : α}, a • ∅ = ∅
+· 使用定理 `Real.sSup_empty`：sSup_empty : sSup (∅ : Set Real) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Set.zero_smul_set`：∀ {α : Type u_1} {β : Type u_2} [inst : Zero α] [inst
+_1 : Zero β] [inst_2 : SMulWithZero α β] {s : Set β},   s.Nonempty → 0 • s = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `csSup_singleton`：csSup_singleton (a : α) : sSup {a} = a
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `PosSMulMono.toPosSMulReflectLE`：∀ {𝕜 : Type u_1} {G : Type u_2} [inst : 
+Semifield 𝕜] [inst_1 : LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]   [inst_3 : Partia
+lOrder G] [inst_4 : …
+· 使用定理 `OrderIso.map_csSup'`：map_csSup' (e : α ≃o β) {s : Set α} (hne : s.Nonemp
+ty) (hbdd : BddAbove s) : e (sSup s) = sSup (e '' s)
+· 使用引理 `Real.sSup_of_not_bddAbove`：sSup_of_not_bddAbove (hs : ¬BddAbove s) : sSu
+p s = 0
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `bddAbove_smul_iff_of_pos`：∀ {α : Type u_1} {β : Type u_2} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : GroupWithZero α] [inst_3 : Zero β]   [inst
+_4 : MulAction…
 -/
-theorem Real.smul_iInf_of_nonneg (ha : 0 <= a) (f : ι -> Real) : (a • ⨅ i, f i) = ⨅ i, a • f i :=
-(Real.sInf_smul_of_nonneg ha _).symm.trans congr_arg sInf (range_comp _ _).symm
-
-/--
-theorem `Real.sSup_smul_of_nonneg` / 定理 `Real.sSup_smul_of_nonneg`
-
-English:
-theorem Real.sSup_smul_of_nonneg
-  given: (ha : 0 <= a) (s : Set Real)
-  statement: sSup (a • s) = a • sSup s
-  proof: by
+theorem Real.sSup_smul_of_nonneg (ha : 0 ≤ a) (s : Set ℝ) : sSup (a • s) = a • sSup s := by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · rw [smul_set_empty, Real.sSup_empty, smul_zero]
   obtain rfl | ha' := ha.eq_or_lt
@@ -121,192 +153,164 @@ theorem Real.sSup_smul_of_nonneg
   · exact ((OrderIso.smulRight ha').map_csSup' hs h).symm
   · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_pos ha').1 h),
         Real.sSup_of_not_bddAbove h, smul_zero]
-
-中文:
-定理 实数.sSup_smul_of_nonneg
-  条件: (ha : 0 <= a) (s : 集合 实数)
-  结论: sSup (a • s) = a • sSup s
-  证明: by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sSup_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csSup_singleton 0
-  by_cases h : BddAbove s
-  · exact ((OrderIso.smulRight ha').map_csSup' hs h).symm
-  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_pos ha').1 h),
-        Real.sSup_of_not_bddAbove h, smul_zero]
-
-Depends on / 依赖: BddAbove, OrderIso, OrderIso.smulRight, Real.sSup_empty, Real.sSup_of_not_bddAbove, bddAbove_smul_iff_of_pos, csSup_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csSup, s.eq_empty_or_nonempty, sSup_empty, sSup_of_not_bddAbove, smulRight, smul_set_empty, smul_zero, zero_smul, zero_smul_set
+/-
+**Real.smul_iSup_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.smul_iSup_of_nonneg (ha : 0 <= a) (f : ι -> Real) : (a • ⨆ i, f i) = 
+⨆ i, a • f i
+参数：ha : 0 <= a；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sSup_smul_of_nonneg`：Real.sSup_smul_of_nonneg (ha : 0 <= a) (s : Se
+t Real) : sSup (a • s) = a • sSup s
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
 -/
-theorem Real.sSup_smul_of_nonneg (ha : 0 <= a) (s : Set Real) : sSup (a • s) = a • sSup s := by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sSup_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csSup_singleton 0
-  by_cases h : BddAbove s
-  · exact ((OrderIso.smulRight ha').map_csSup' hs h).symm
-  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_pos ha').1 h),
-        Real.sSup_of_not_bddAbove h, smul_zero]
-
-/--
-theorem `Real.smul_iSup_of_nonneg` / 定理 `Real.smul_iSup_of_nonneg`
-
-English:
-theorem Real.smul_iSup_of_nonneg
-  given: (ha : 0 <= a) (f : ι -> Real)
-  statement: (a • ⨆ i, f i) = ⨆ i, a • f i
-  proof: (Real.sSup_smul_of_nonneg ha _).symm.trans congr_arg sSup (range_comp _ _).symm
-
-中文:
-定理 实数.smul_iSup_of_nonneg
-  条件: (ha : 0 <= a) (f : ι -> 实数)
-  结论: (a • ⨆ i, f i) = ⨆ i, a • f i
-  证明: (Real.sSup_smul_of_nonneg ha _).symm.trans congr_arg sSup (range_comp _ _).symm
-
-Depends on / 依赖: Real.sSup_smul_of_nonneg, congr_arg, range_comp, sSup_smul_of_nonneg, symm.trans
--/
-theorem Real.smul_iSup_of_nonneg (ha : 0 <= a) (f : ι -> Real) : (a • ⨆ i, f i) = ⨆ i, a • f i :=
-(Real.sSup_smul_of_nonneg ha _).symm.trans congr_arg sSup (range_comp _ _).symm
+theorem Real.smul_iSup_of_nonneg (ha : 0 ≤ a) (f : ι → ℝ) : (a • ⨆ i, f i) = ⨆ i, a • f i :=
+  (Real.sSup_smul_of_nonneg ha _).symm.trans <| congr_arg sSup <| (range_comp _ _).symm
 
 end MulActionWithZero
 
 section Module
 
-variable [Module α Real] [IsOrderedModule α Real] {a : α}
+variable [Module α ℝ] [IsOrderedModule α ℝ] {a : α}
 
-/--
-theorem `Real.sInf_smul_of_nonpos` / 定理 `Real.sInf_smul_of_nonpos`
-
-English:
-theorem Real.sInf_smul_of_nonpos
-  given: (ha : a <= 0) (s : Set Real)
-  statement: sInf (a • s) = a • sSup s
-  proof: by
+/-
+**Real.sInf_smul_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.sInf_smul_of_nonpos (ha : a <= 0) (s : Set Real) : sInf (a • s) = a •
+ sSup s
+参数：ha : a <= 0；s : Set Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.smul_set_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {a
+ : α}, a • ∅ = ∅
+· 使用定理 `Real.sInf_empty`：sInf_empty : sInf (∅ : Set Real) = 0
+· 使用定理 `Real.sSup_empty`：sSup_empty : sSup (∅ : Set Real) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Set.zero_smul_set`：∀ {α : Type u_1} {β : Type u_2} [inst : Zero α] [inst
+_1 : Zero β] [inst_2 : SMulWithZero α β] {s : Set β},   s.Nonempty → 0 • s = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `csInf_singleton`：∀ {α : Type u_1} [inst : ConditionallyCompletePartialOr
+derInf α] (a : α), sInf {a} = a
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `OrderIso.map_csSup'`：map_csSup' (e : α ≃o β) {s : Set α} (hne : s.Nonemp
+ty) (hbdd : BddAbove s) : e (sSup s) = sSup (e '' s)
+· 使用定理 `Real.sInf_of_not_bddBelow`：sInf_of_not_bddBelow (hs : ¬BddBelow s) : sIn
+f s = 0
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `bddBelow_smul_iff_of_neg`：∀ {α : Type u_1} {β : Type u_2} [inst : Field 
+α] [inst_1 : LinearOrder α] [IsStrictOrderedRing α]   [inst_3 : AddCommGroup β] 
+[inst_4 : Part…
+· 使用引理 `Real.sSup_of_not_bddAbove`：sSup_of_not_bddAbove (hs : ¬BddAbove s) : sSu
+p s = 0
+-/
+theorem Real.sInf_smul_of_nonpos (ha : a ≤ 0) (s : Set ℝ) : sInf (a • s) = a • sSup s := by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · rw [smul_set_empty, Real.sInf_empty, Real.sSup_empty, smul_zero]
   obtain rfl | ha' := ha.eq_or_lt
   · rw [zero_smul_set hs, zero_smul]
     exact csInf_singleton 0
   by_cases h : BddAbove s
-  · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs h).symm
+  · exact ((OrderIso.smulRightDual ℝ ha').map_csSup' hs h).symm
   · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_neg ha').1 h),
         Real.sSup_of_not_bddAbove h, smul_zero]
-
-中文:
-定理 实数.sInf_smul_of_nonpos
-  条件: (ha : a <= 0) (s : 集合 实数)
-  结论: sInf (a • s) = a • sSup s
-  证明: by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sInf_empty, Real.sSup_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csInf_singleton 0
-  by_cases h : BddAbove s
-  · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs h).symm
-  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_neg ha').1 h),
-        Real.sSup_of_not_bddAbove h, smul_zero]
-
-Depends on / 依赖: BddAbove, OrderIso, OrderIso.smulRightDual, Real.sInf_empty, Real.sInf_of_not_bddBelow, Real.sSup_empty, Real.sSup_of_not_bddAbove, bddBelow_smul_iff_of_neg, csInf_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csSup, s.eq_empty_or_nonempty, sInf_empty, sInf_of_not_bddBelow, sSup_empty, sSup_of_not_bddAbove, smulRightDual, smul_set_empty
+/-
+**Real.smul_iSup_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.smul_iSup_of_nonpos (ha : a <= 0) (f : ι -> Real) : (a • ⨆ i, f i) = 
+⨅ i, a • f i
+参数：ha : a <= 0；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sInf_smul_of_nonpos`：Real.sInf_smul_of_nonpos (ha : a <= 0) (s : Se
+t Real) : sInf (a • s) = a • sSup s
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
 -/
-theorem Real.sInf_smul_of_nonpos (ha : a <= 0) (s : Set Real) : sInf (a • s) = a • sSup s := by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sInf_empty, Real.sSup_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csInf_singleton 0
-  by_cases h : BddAbove s
-  · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs h).symm
-  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_neg ha').1 h),
-        Real.sSup_of_not_bddAbove h, smul_zero]
-
-/--
-theorem `Real.smul_iSup_of_nonpos` / 定理 `Real.smul_iSup_of_nonpos`
-
-English:
-theorem Real.smul_iSup_of_nonpos
-  given: (ha : a <= 0) (f : ι -> Real)
-  statement: (a • ⨆ i, f i) = ⨅ i, a • f i
-  proof: (Real.sInf_smul_of_nonpos ha _).symm.trans congr_arg sInf (range_comp _ _).symm
-
-中文:
-定理 实数.smul_iSup_of_nonpos
-  条件: (ha : a <= 0) (f : ι -> 实数)
-  结论: (a • ⨆ i, f i) = ⨅ i, a • f i
-  证明: (Real.sInf_smul_of_nonpos ha _).symm.trans congr_arg sInf (range_comp _ _).symm
-
-Depends on / 依赖: Real.sInf_smul_of_nonpos, congr_arg, range_comp, sInf_smul_of_nonpos, symm.trans
+theorem Real.smul_iSup_of_nonpos (ha : a ≤ 0) (f : ι → ℝ) : (a • ⨆ i, f i) = ⨅ i, a • f i :=
+  (Real.sInf_smul_of_nonpos ha _).symm.trans <| congr_arg sInf <| (range_comp _ _).symm
+/-
+**Real.sSup_smul_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.sSup_smul_of_nonpos (ha : a <= 0) (s : Set Real) : sSup (a • s) = a •
+ sInf s
+参数：ha : a <= 0；s : Set Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.smul_set_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {a
+ : α}, a • ∅ = ∅
+· 使用定理 `Real.sSup_empty`：sSup_empty : sSup (∅ : Set Real) = 0
+· 使用定理 `Real.sInf_empty`：sInf_empty : sInf (∅ : Set Real) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Set.zero_smul_set`：∀ {α : Type u_1} {β : Type u_2} [inst : Zero α] [inst
+_1 : Zero β] [inst_2 : SMulWithZero α β] {s : Set β},   s.Nonempty → 0 • s = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `csSup_singleton`：csSup_singleton (a : α) : sSup {a} = a
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `OrderIso.map_csInf'`：map_csInf' (e : α ≃o β) {s : Set α} (hne : s.Nonemp
+ty) (hbdd : BddBelow s) : e (sInf s) = sInf (e '' s)
+· 使用引理 `Real.sSup_of_not_bddAbove`：sSup_of_not_bddAbove (hs : ¬BddAbove s) : sSu
+p s = 0
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `bddAbove_smul_iff_of_neg`：∀ {α : Type u_1} {β : Type u_2} [inst : Field 
+α] [inst_1 : LinearOrder α] [IsStrictOrderedRing α]   [inst_3 : AddCommGroup β] 
+[inst_4 : Part…
+· 使用定理 `Real.sInf_of_not_bddBelow`：sInf_of_not_bddBelow (hs : ¬BddBelow s) : sIn
+f s = 0
 -/
-theorem Real.smul_iSup_of_nonpos (ha : a <= 0) (f : ι -> Real) : (a • ⨆ i, f i) = ⨅ i, a • f i :=
-(Real.sInf_smul_of_nonpos ha _).symm.trans congr_arg sInf (range_comp _ _).symm
-
-/--
-theorem `Real.sSup_smul_of_nonpos` / 定理 `Real.sSup_smul_of_nonpos`
-
-English:
-theorem Real.sSup_smul_of_nonpos
-  given: (ha : a <= 0) (s : Set Real)
-  statement: sSup (a • s) = a • sInf s
-  proof: by
+theorem Real.sSup_smul_of_nonpos (ha : a ≤ 0) (s : Set ℝ) : sSup (a • s) = a • sInf s := by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · rw [smul_set_empty, Real.sSup_empty, Real.sInf_empty, smul_zero]
   obtain rfl | ha' := ha.eq_or_lt
   · rw [zero_smul_set hs, zero_smul]
     exact csSup_singleton 0
   by_cases h : BddBelow s
-  · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs h).symm
+  · exact ((OrderIso.smulRightDual ℝ ha').map_csInf' hs h).symm
   · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_neg ha').1 h),
         Real.sInf_of_not_bddBelow h, smul_zero]
-
-中文:
-定理 实数.sSup_smul_of_nonpos
-  条件: (ha : a <= 0) (s : 集合 实数)
-  结论: sSup (a • s) = a • sInf s
-  证明: by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sSup_empty, Real.sInf_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csSup_singleton 0
-  by_cases h : BddBelow s
-  · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs h).symm
-  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_neg ha').1 h),
-        Real.sInf_of_not_bddBelow h, smul_zero]
-
-Depends on / 依赖: BddBelow, OrderIso, OrderIso.smulRightDual, Real.sInf_empty, Real.sInf_of_not_bddBelow, Real.sSup_empty, Real.sSup_of_not_bddAbove, bddAbove_smul_iff_of_neg, csSup_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csInf, s.eq_empty_or_nonempty, sInf_empty, sInf_of_not_bddBelow, sSup_empty, sSup_of_not_bddAbove, smulRightDual, smul_set_empty
+/-
+**Real.smul_iInf_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.smul_iInf_of_nonpos (ha : a <= 0) (f : ι -> Real) : (a • ⨅ i, f i) = 
+⨆ i, a • f i
+参数：ha : a <= 0；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sSup_smul_of_nonpos`：Real.sSup_smul_of_nonpos (ha : a <= 0) (s : Se
+t Real) : sSup (a • s) = a • sInf s
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
 -/
-theorem Real.sSup_smul_of_nonpos (ha : a <= 0) (s : Set Real) : sSup (a • s) = a • sInf s := by
-  obtain rfl | hs := s.eq_empty_or_nonempty
-  · rw [smul_set_empty, Real.sSup_empty, Real.sInf_empty, smul_zero]
-  obtain rfl | ha' := ha.eq_or_lt
-  · rw [zero_smul_set hs, zero_smul]
-    exact csSup_singleton 0
-  by_cases h : BddBelow s
-  · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs h).symm
-  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_neg ha').1 h),
-        Real.sInf_of_not_bddBelow h, smul_zero]
-
-/--
-theorem `Real.smul_iInf_of_nonpos` / 定理 `Real.smul_iInf_of_nonpos`
-
-English:
-theorem Real.smul_iInf_of_nonpos
-  given: (ha : a <= 0) (f : ι -> Real)
-  statement: (a • ⨅ i, f i) = ⨆ i, a • f i
-  proof: (Real.sSup_smul_of_nonpos ha _).symm.trans congr_arg sSup (range_comp _ _).symm
-
-中文:
-定理 实数.smul_iInf_of_nonpos
-  条件: (ha : a <= 0) (f : ι -> 实数)
-  结论: (a • ⨅ i, f i) = ⨆ i, a • f i
-  证明: (Real.sSup_smul_of_nonpos ha _).symm.trans congr_arg sSup (range_comp _ _).symm
-
-Depends on / 依赖: Real.sSup_smul_of_nonpos, congr_arg, range_comp, sSup_smul_of_nonpos, symm.trans
--/
-theorem Real.smul_iInf_of_nonpos (ha : a <= 0) (f : ι -> Real) : (a • ⨅ i, f i) = ⨆ i, a • f i :=
-(Real.sSup_smul_of_nonpos ha _).symm.trans congr_arg sSup (range_comp _ _).symm
+theorem Real.smul_iInf_of_nonpos (ha : a ≤ 0) (f : ι → ℝ) : (a • ⨅ i, f i) = ⨆ i, a • f i :=
+  (Real.sSup_smul_of_nonpos ha _).symm.trans <| congr_arg sSup <| (range_comp _ _).symm
 
 end Module
 
@@ -315,174 +319,168 @@ end Module
 
 section Mul
 
-variable {r : Real}
+variable {r : ℝ}
 
-/--
-theorem `Real.mul_iInf_of_nonneg` / 定理 `Real.mul_iInf_of_nonneg`
-
-English:
-theorem Real.mul_iInf_of_nonneg
-  given: (ha : 0 <= r) (f : ι -> Real)
-  statement: (r * ⨅ i, f i) = ⨅ i, r * f i
-  proof: Real.smul_iInf_of_nonneg ha f
-
-中文:
-定理 实数.mul_iInf_of_nonneg
-  条件: (ha : 0 <= r) (f : ι -> 实数)
-  结论: (r * ⨅ i, f i) = ⨅ i, r * f i
-  证明: Real.smul_iInf_of_nonneg ha f
-
-Depends on / 依赖: Real.smul_iInf_of_nonneg, smul_iInf_of_nonneg
+/-
+**Real.mul_iInf_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.mul_iInf_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (r * ⨅ i, f i) = ⨅
+ i, r * f i
+参数：ha : 0 <= r；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.smul_iInf_of_nonneg`：Real.smul_iInf_of_nonneg (ha : 0 <= a) (f : ι 
+-> Real) : (a • ⨅ i, f i) = ⨅ i, a • f i
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
 -/
-theorem Real.mul_iInf_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (r * ⨅ i, f i) = ⨅ i, r * f i :=
+theorem Real.mul_iInf_of_nonneg (ha : 0 ≤ r) (f : ι → ℝ) : (r * ⨅ i, f i) = ⨅ i, r * f i :=
   Real.smul_iInf_of_nonneg ha f
-
-/--
-theorem `Real.mul_iSup_of_nonneg` / 定理 `Real.mul_iSup_of_nonneg`
-
-English:
-theorem Real.mul_iSup_of_nonneg
-  given: (ha : 0 <= r) (f : ι -> Real)
-  statement: (r * ⨆ i, f i) = ⨆ i, r * f i
-  proof: Real.smul_iSup_of_nonneg ha f
-
-中文:
-定理 实数.mul_iSup_of_nonneg
-  条件: (ha : 0 <= r) (f : ι -> 实数)
-  结论: (r * ⨆ i, f i) = ⨆ i, r * f i
-  证明: Real.smul_iSup_of_nonneg ha f
-
-Depends on / 依赖: Real.smul_iSup_of_nonneg, smul_iSup_of_nonneg
+/-
+**Real.mul_iSup_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.mul_iSup_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (r * ⨆ i, f i) = ⨆
+ i, r * f i
+参数：ha : 0 <= r；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.smul_iSup_of_nonneg`：Real.smul_iSup_of_nonneg (ha : 0 <= a) (f : ι 
+-> Real) : (a • ⨆ i, f i) = ⨆ i, a • f i
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
 -/
-theorem Real.mul_iSup_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (r * ⨆ i, f i) = ⨆ i, r * f i :=
+theorem Real.mul_iSup_of_nonneg (ha : 0 ≤ r) (f : ι → ℝ) : (r * ⨆ i, f i) = ⨆ i, r * f i :=
   Real.smul_iSup_of_nonneg ha f
-
-/--
-theorem `Real.mul_iInf_of_nonpos` / 定理 `Real.mul_iInf_of_nonpos`
-
-English:
-theorem Real.mul_iInf_of_nonpos
-  given: (ha : r <= 0) (f : ι -> Real)
-  statement: (r * ⨅ i, f i) = ⨆ i, r * f i
-  proof: Real.smul_iInf_of_nonpos ha f
-
-中文:
-定理 实数.mul_iInf_of_nonpos
-  条件: (ha : r <= 0) (f : ι -> 实数)
-  结论: (r * ⨅ i, f i) = ⨆ i, r * f i
-  证明: Real.smul_iInf_of_nonpos ha f
-
-Depends on / 依赖: Real.smul_iInf_of_nonpos, smul_iInf_of_nonpos
+/-
+**Real.mul_iInf_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.mul_iInf_of_nonpos (ha : r <= 0) (f : ι -> Real) : (r * ⨅ i, f i) = ⨆
+ i, r * f i
+参数：ha : r <= 0；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.smul_iInf_of_nonpos`：Real.smul_iInf_of_nonpos (ha : a <= 0) (f : ι 
+-> Real) : (a • ⨅ i, f i) = ⨆ i, a • f i
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
 -/
-theorem Real.mul_iInf_of_nonpos (ha : r <= 0) (f : ι -> Real) : (r * ⨅ i, f i) = ⨆ i, r * f i :=
+theorem Real.mul_iInf_of_nonpos (ha : r ≤ 0) (f : ι → ℝ) : (r * ⨅ i, f i) = ⨆ i, r * f i :=
   Real.smul_iInf_of_nonpos ha f
-
-/--
-theorem `Real.mul_iSup_of_nonpos` / 定理 `Real.mul_iSup_of_nonpos`
-
-English:
-theorem Real.mul_iSup_of_nonpos
-  given: (ha : r <= 0) (f : ι -> Real)
-  statement: (r * ⨆ i, f i) = ⨅ i, r * f i
-  proof: Real.smul_iSup_of_nonpos ha f
-
-中文:
-定理 实数.mul_iSup_of_nonpos
-  条件: (ha : r <= 0) (f : ι -> 实数)
-  结论: (r * ⨆ i, f i) = ⨅ i, r * f i
-  证明: Real.smul_iSup_of_nonpos ha f
-
-Depends on / 依赖: Real.smul_iSup_of_nonpos, smul_iSup_of_nonpos
+/-
+**Real.mul_iSup_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.mul_iSup_of_nonpos (ha : r <= 0) (f : ι -> Real) : (r * ⨆ i, f i) = ⨅
+ i, r * f i
+参数：ha : r <= 0；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.smul_iSup_of_nonpos`：Real.smul_iSup_of_nonpos (ha : a <= 0) (f : ι 
+-> Real) : (a • ⨆ i, f i) = ⨅ i, a • f i
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
 -/
-theorem Real.mul_iSup_of_nonpos (ha : r <= 0) (f : ι -> Real) : (r * ⨆ i, f i) = ⨅ i, r * f i :=
+theorem Real.mul_iSup_of_nonpos (ha : r ≤ 0) (f : ι → ℝ) : (r * ⨆ i, f i) = ⨅ i, r * f i :=
   Real.smul_iSup_of_nonpos ha f
-
-/--
-theorem `Real.iInf_mul_of_nonneg` / 定理 `Real.iInf_mul_of_nonneg`
-
-English:
-theorem Real.iInf_mul_of_nonneg
-  given: (ha : 0 <= r) (f : ι -> Real)
-  statement: (⨅ i, f i) * r = ⨅ i, f i * r
-  proof: by
+/-
+**Real.iInf_mul_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.iInf_mul_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (⨅ i, f i) * r = ⨅
+ i, f i * r
+参数：ha : 0 <= r；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Real.mul_iInf_of_nonneg`：Real.mul_iInf_of_nonneg (ha : 0 <= r) (f : ι ->
+ Real) : (r * ⨅ i, f i) = ⨅ i, r * f i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem Real.iInf_mul_of_nonneg (ha : 0 ≤ r) (f : ι → ℝ) : (⨅ i, f i) * r = ⨅ i, f i * r := by
   simp only [Real.mul_iInf_of_nonneg ha, mul_comm]
-
-中文:
-定理 实数.iInf_mul_of_nonneg
-  条件: (ha : 0 <= r) (f : ι -> 实数)
-  结论: (⨅ i, f i) * r = ⨅ i, f i * r
-  证明: by
-  simp only [Real.mul_iInf_of_nonneg ha, mul_comm]
-
-Depends on / 依赖: Real.mul_iInf_of_nonneg, mul_comm, mul_iInf_of_nonneg
+/-
+**Real.iSup_mul_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.iSup_mul_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (⨆ i, f i) * r = ⨆
+ i, f i * r
+参数：ha : 0 <= r；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Real.mul_iSup_of_nonneg`：Real.mul_iSup_of_nonneg (ha : 0 <= r) (f : ι ->
+ Real) : (r * ⨆ i, f i) = ⨆ i, r * f i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Real.iInf_mul_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (⨅ i, f i) * r = ⨅ i, f i * r := by
-  simp only [Real.mul_iInf_of_nonneg ha, mul_comm]
-
-/--
-theorem `Real.iSup_mul_of_nonneg` / 定理 `Real.iSup_mul_of_nonneg`
-
-English:
-theorem Real.iSup_mul_of_nonneg
-  given: (ha : 0 <= r) (f : ι -> Real)
-  statement: (⨆ i, f i) * r = ⨆ i, f i * r
-  proof: by
+theorem Real.iSup_mul_of_nonneg (ha : 0 ≤ r) (f : ι → ℝ) : (⨆ i, f i) * r = ⨆ i, f i * r := by
   simp only [Real.mul_iSup_of_nonneg ha, mul_comm]
-
-中文:
-定理 实数.iSup_mul_of_nonneg
-  条件: (ha : 0 <= r) (f : ι -> 实数)
-  结论: (⨆ i, f i) * r = ⨆ i, f i * r
-  证明: by
-  simp only [Real.mul_iSup_of_nonneg ha, mul_comm]
-
-Depends on / 依赖: Real.mul_iSup_of_nonneg, mul_comm, mul_iSup_of_nonneg
+/-
+**Real.iInf_mul_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.iInf_mul_of_nonpos (ha : r <= 0) (f : ι -> Real) : (⨅ i, f i) * r = ⨆
+ i, f i * r
+参数：ha : r <= 0；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Real.mul_iInf_of_nonpos`：Real.mul_iInf_of_nonpos (ha : r <= 0) (f : ι ->
+ Real) : (r * ⨅ i, f i) = ⨆ i, r * f i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Real.iSup_mul_of_nonneg (ha : 0 <= r) (f : ι -> Real) : (⨆ i, f i) * r = ⨆ i, f i * r := by
-  simp only [Real.mul_iSup_of_nonneg ha, mul_comm]
-
-/--
-theorem `Real.iInf_mul_of_nonpos` / 定理 `Real.iInf_mul_of_nonpos`
-
-English:
-theorem Real.iInf_mul_of_nonpos
-  given: (ha : r <= 0) (f : ι -> Real)
-  statement: (⨅ i, f i) * r = ⨆ i, f i * r
-  proof: by
+theorem Real.iInf_mul_of_nonpos (ha : r ≤ 0) (f : ι → ℝ) : (⨅ i, f i) * r = ⨆ i, f i * r := by
   simp only [Real.mul_iInf_of_nonpos ha, mul_comm]
-
-中文:
-定理 实数.iInf_mul_of_nonpos
-  条件: (ha : r <= 0) (f : ι -> 实数)
-  结论: (⨅ i, f i) * r = ⨆ i, f i * r
-  证明: by
-  simp only [Real.mul_iInf_of_nonpos ha, mul_comm]
-
-Depends on / 依赖: Real.mul_iInf_of_nonpos, mul_comm, mul_iInf_of_nonpos
+/-
+**Real.iSup_mul_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.iSup_mul_of_nonpos (ha : r <= 0) (f : ι -> Real) : (⨆ i, f i) * r = ⨅
+ i, f i * r
+参数：ha : r <= 0；f : ι -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Real.mul_iSup_of_nonpos`：Real.mul_iSup_of_nonpos (ha : r <= 0) (f : ι ->
+ Real) : (r * ⨆ i, f i) = ⨅ i, r * f i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Real.iInf_mul_of_nonpos (ha : r <= 0) (f : ι -> Real) : (⨅ i, f i) * r = ⨆ i, f i * r := by
-  simp only [Real.mul_iInf_of_nonpos ha, mul_comm]
-
-/--
-theorem `Real.iSup_mul_of_nonpos` / 定理 `Real.iSup_mul_of_nonpos`
-
-English:
-theorem Real.iSup_mul_of_nonpos
-  given: (ha : r <= 0) (f : ι -> Real)
-  statement: (⨆ i, f i) * r = ⨅ i, f i * r
-  proof: by
-  simp only [Real.mul_iSup_of_nonpos ha, mul_comm]
-
-中文:
-定理 实数.iSup_mul_of_nonpos
-  条件: (ha : r <= 0) (f : ι -> 实数)
-  结论: (⨆ i, f i) * r = ⨅ i, f i * r
-  证明: by
-  simp only [Real.mul_iSup_of_nonpos ha, mul_comm]
-
-Depends on / 依赖: Real.mul_iSup_of_nonpos, mul_comm, mul_iSup_of_nonpos
--/
-theorem Real.iSup_mul_of_nonpos (ha : r <= 0) (f : ι -> Real) : (⨆ i, f i) * r = ⨅ i, f i * r := by
+theorem Real.iSup_mul_of_nonpos (ha : r ≤ 0) (f : ι → ℝ) : (⨆ i, f i) * r = ⨅ i, f i * r := by
   simp only [Real.mul_iSup_of_nonpos ha, mul_comm]
 
 end Mul
+

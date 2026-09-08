@@ -21,41 +21,39 @@ public section
 
 variable {α : Type*} [Preorder α]
 
-/--
-Instance `NoMaxOrder.infinite` / 实例 `NoMaxOrder.infinite`
+/-- A nonempty preorder with no maximal element is infinite. -/
+/-
+**NoMaxOrder.infinite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NoMaxOrder.infinite [Nonempty α] [NoMaxOrder α] : Infinite α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_strictMono`：exists_strictMono [Nonempty α] [NoMaxOrder α] : e
+xists f : Nat -> α, StrictMono f
+· 使用定理 `Infinite.of_injective`：of_injective {α β} [Infinite β] (f : β -> α) (hf 
+: Injective f) : Infinite α
+· 使用定理 `instInfiniteNat`：Infinite ℕ
+· 使用定理 `StrictMono.injective`：StrictMono.injective (hf : StrictMono f) : Injecti
+ve f
 
-English:
-instance NoMaxOrder.infinite
-  signature: [Nonempty α] [NoMaxOrder α]
-  body: let ⟨f, hf⟩ := Nat.exists_strictMono α
-  Infinite.of_injective f hf.injective
-
-中文:
-实例 NoMax序.infinite
-  签名: [非空 α] [NoMax序 α]
-  定义体: let ⟨f, hf⟩ := Nat.exists_strictMono α
-  Infinite.of_injective f hf.injective
-
-Depends on / 依赖: Infinite, Infinite.of_injective, Nat.exists_strictMono, exists_strictMono, hf.injective, injective, of_injective
+--- 原说明 ---
+A nonempty preorder with no maximal element is infinite.
 -/
 instance NoMaxOrder.infinite [Nonempty α] [NoMaxOrder α] : Infinite α :=
   let ⟨f, hf⟩ := Nat.exists_strictMono α
   Infinite.of_injective f hf.injective
 
-/--
-Instance `NoMinOrder.infinite` / 实例 `NoMinOrder.infinite`
+/-- A nonempty preorder with no minimal element is infinite. -/
+/-
+**NoMinOrder.infinite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NoMinOrder.infinite [Nonempty α] [NoMinOrder α] : Infinite α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderDual.instNonempty`：∀ (α : Type u_2) [h : Nonempty α], Nonempty αᵒᵈ
+· 使用定理 `OrderDual.noMaxOrder`：∀ {α : Type u_1} [inst : LT α] [NoMinOrder α], NoM
+axOrder αᵒᵈ
 
-English:
-instance NoMinOrder.infinite
-  signature: [Nonempty α] [NoMinOrder α]
-  body: @NoMaxOrder.infinite αᵒᵈ _ _ _
-
-中文:
-实例 NoMin序.infinite
-  签名: [非空 α] [NoMin序 α]
-  定义体: @NoMaxOrder.infinite αᵒᵈ _ _ _
-
-Depends on / 依赖: NoMaxOrder, NoMaxOrder.infinite, infinite
+--- 原说明 ---
+A nonempty preorder with no minimal element is infinite.
 -/
 instance NoMinOrder.infinite [Nonempty α] [NoMinOrder α] : Infinite α :=
   @NoMaxOrder.infinite αᵒᵈ _ _ _
@@ -67,302 +65,192 @@ section DenselyOrdered
 variable [DenselyOrdered α] {a b : α} (h : a < b)
 include h
 
-/--
-theorem `Ioo.infinite` / 定理 `Ioo.infinite`
-
-English:
-theorem Ioo.infinite
-  statement: Infinite (Ioo a b)
-  proof: @NoMaxOrder.infinite _ _ (nonempty_Ioo_subtype h) _
-
-中文:
-定理 开区间.infinite
-  结论: 无限 (开区间 a b)
-  证明: @NoMaxOrder.infinite _ _ (nonempty_Ioo_subtype h) _
-
-Depends on / 依赖: NoMaxOrder, NoMaxOrder.infinite, infinite, nonempty_Ioo_subtype
+/-
+**Set.Ioo.infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioo`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [DenselyOrdered α] {a b : α}, a < b →
+ Infinite ↑(Set.Ioo a b)
+参数：Set.Ioo a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_Ioo_subtype`：nonempty_Ioo_subtype [DenselyOrdered α] (h : a
+ < b) : Nonempty (Ioo a b)
+· 使用定理 `Set.instNoMaxOrderElemIoo`：∀ (α : Type u_1) [inst : Preorder α] [Densely
+Ordered α] {x y : α}, NoMaxOrder ↑(Set.Ioo y x)
 -/
 theorem Ioo.infinite : Infinite (Ioo a b) :=
   @NoMaxOrder.infinite _ _ (nonempty_Ioo_subtype h) _
-
-/--
-theorem `Ioo_infinite` / 定理 `Ioo_infinite`
-
-English:
-theorem Ioo_infinite
-  statement: (Ioo a b).Infinite
-  proof: infinite_coe_iff.1 Ioo.infinite h
-
-中文:
-定理 Ioo_infinite
-  结论: (开区间 a b).无限
-  证明: infinite_coe_iff.1 Ioo.infinite h
-
-Depends on / 依赖: Ioo.infinite, infinite, infinite_coe_iff
+/-
+**Set.Ioo_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_infinite : (Ioo a b).Infinite
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.Ioo.infinite`：∀ {α : Type u_1} [inst : Preorder α] [DenselyOrdered α
+] {a b : α}, a < b → Infinite ↑(Set.Ioo a b)
 -/
 theorem Ioo_infinite : (Ioo a b).Infinite :=
-infinite_coe_iff.1 Ioo.infinite h
-
-/--
-theorem `Ico_infinite` / 定理 `Ico_infinite`
-
-English:
-theorem Ico_infinite
-  statement: (Ico a b).Infinite
-  proof: (Ioo_infinite h).mono Ioo_subset_Ico_self
-
-中文:
-定理 Ico_infinite
-  结论: (左闭右开区间 a b).无限
-  证明: (Ioo_infinite h).mono Ioo_subset_Ico_self
-
-Depends on / 依赖: Ioo_infinite, Ioo_subset_Ico_self
+  infinite_coe_iff.1 <| Ioo.infinite h
+/-
+**Set.Ico_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_infinite : (Ico a b).Infinite
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Infinite → t.
+Infinite
+· 使用定理 `Set.Ioo_subset_Ico_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo a b ⊆ Set.Ico a b
+· 使用定理 `Set.Ioo_infinite`：Ioo_infinite : (Ioo a b).Infinite
 -/
 theorem Ico_infinite : (Ico a b).Infinite :=
   (Ioo_infinite h).mono Ioo_subset_Ico_self
-
-/--
-theorem `Ico.infinite` / 定理 `Ico.infinite`
-
-English:
-theorem Ico.infinite
-  statement: Infinite (Ico a b)
-  proof: infinite_coe_iff.2 Ico_infinite h
-
-中文:
-定理 左闭右开区间.infinite
-  结论: 无限 (左闭右开区间 a b)
-  证明: infinite_coe_iff.2 Ico_infinite h
-
-Depends on / 依赖: Ico_infinite, infinite_coe_iff
+/-
+**Set.Ico.infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ico`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [DenselyOrdered α] {a b : α}, a < b →
+ Infinite ↑(Set.Ico a b)
+参数：Set.Ico a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.Ico_infinite`：Ico_infinite : (Ico a b).Infinite
 -/
 theorem Ico.infinite : Infinite (Ico a b) :=
-infinite_coe_iff.2 Ico_infinite h
-
-/--
-theorem `Ioc_infinite` / 定理 `Ioc_infinite`
-
-English:
-theorem Ioc_infinite
-  statement: (Ioc a b).Infinite
-  proof: (Ioo_infinite h).mono Ioo_subset_Ioc_self
-
-中文:
-定理 Ioc_infinite
-  结论: (左开右闭区间 a b).无限
-  证明: (Ioo_infinite h).mono Ioo_subset_Ioc_self
-
-Depends on / 依赖: Ioo_infinite, Ioo_subset_Ioc_self
+  infinite_coe_iff.2 <| Ico_infinite h
+/-
+**Set.Ioc_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_infinite : (Ioc a b).Infinite
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Infinite → t.
+Infinite
+· 使用定理 `Set.Ioo_subset_Ioc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo b a ⊆ Set.Ioc b a
+· 使用定理 `Set.Ioo_infinite`：Ioo_infinite : (Ioo a b).Infinite
 -/
 theorem Ioc_infinite : (Ioc a b).Infinite :=
   (Ioo_infinite h).mono Ioo_subset_Ioc_self
-
-/--
-theorem `Ioc.infinite` / 定理 `Ioc.infinite`
-
-English:
-theorem Ioc.infinite
-  statement: Infinite (Ioc a b)
-  proof: infinite_coe_iff.2 Ioc_infinite h
-
-中文:
-定理 左开右闭区间.infinite
-  结论: 无限 (左开右闭区间 a b)
-  证明: infinite_coe_iff.2 Ioc_infinite h
-
-Depends on / 依赖: Ioc_infinite, infinite_coe_iff
+/-
+**Set.Ioc.infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set.Ioc`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [DenselyOrdered α] {a b : α}, a < b →
+ Infinite ↑(Set.Ioc a b)
+参数：Set.Ioc a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.Ioc_infinite`：Ioc_infinite : (Ioc a b).Infinite
 -/
 theorem Ioc.infinite : Infinite (Ioc a b) :=
-infinite_coe_iff.2 Ioc_infinite h
-
-/--
-theorem `Icc_infinite` / 定理 `Icc_infinite`
-
-English:
-theorem Icc_infinite
-  statement: (Icc a b).Infinite
-  proof: (Ioo_infinite h).mono Ioo_subset_Icc_self
-
-中文:
-定理 Icc_infinite
-  结论: (闭区间 a b).无限
-  证明: (Ioo_infinite h).mono Ioo_subset_Icc_self
-
-Depends on / 依赖: Ioo_infinite, Ioo_subset_Icc_self
+  infinite_coe_iff.2 <| Ioc_infinite h
+/-
+**Set.Icc_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_infinite : (Icc a b).Infinite
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Infinite → t.
+Infinite
+· 使用定理 `Set.Ioo_subset_Icc_self`：Ioo_subset_Icc_self : Ioo a b subseteq Icc a b
+· 使用定理 `Set.Ioo_infinite`：Ioo_infinite : (Ioo a b).Infinite
 -/
 theorem Icc_infinite : (Icc a b).Infinite :=
   (Ioo_infinite h).mono Ioo_subset_Icc_self
-
-/--
-theorem `Icc.infinite` / 定理 `Icc.infinite`
-
-English:
-theorem Icc.infinite
-  statement: Infinite (Icc a b)
-  proof: infinite_coe_iff.2 Icc_infinite h
-
-中文:
-定理 闭区间.infinite
-  结论: 无限 (闭区间 a b)
-  证明: infinite_coe_iff.2 Icc_infinite h
-
-Depends on / 依赖: Icc_infinite, infinite_coe_iff
+/-
+**Set.Icc.infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [DenselyOrdered α] {a b : α}, a < b →
+ Infinite ↑(Set.Icc a b)
+参数：Set.Icc a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.Icc_infinite`：Icc_infinite : (Icc a b).Infinite
 -/
 theorem Icc.infinite : Infinite (Icc a b) :=
-infinite_coe_iff.2 Icc_infinite h
+  infinite_coe_iff.2 <| Icc_infinite h
 
 end DenselyOrdered
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NoMinOrder
-  signature: α] {a
-  body: NoMinOrder.infinite
-
-中文:
-实例 [NoMin序
-  签名: α] {a
-  定义体: NoMinOrder.infinite
-
-Depends on / 依赖: NoMinOrder, NoMinOrder.infinite, infinite
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NoMinOrder α] {a : α} : Infinite (Iio a) :=
   NoMinOrder.infinite
-
-/--
-theorem `Iio_infinite` / 定理 `Iio_infinite`
-
-English:
-theorem Iio_infinite
-  given: [NoMinOrder α] (a : α)
-  statement: (Iio a).Infinite
-  proof: infinite_coe_iff.1 inferInstance
-
-中文:
-定理 Iio_infinite
-  条件: [NoMin序 α] (a : α)
-  结论: (左无界右开区间 a).无限
-  证明: infinite_coe_iff.1 inferInstance
-
-Depends on / 依赖: infinite_coe_iff
+/-
+**Set.Iio_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_infinite [NoMinOrder α] (a : α) : (Iio a).Infinite
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.instInfiniteElemIioOfNoMinOrder`：∀ {α : Type u_1} [inst : Preorder α
+] [NoMinOrder α] {a : α}, Infinite ↑(Set.Iio a)
 -/
 theorem Iio_infinite [NoMinOrder α] (a : α) : (Iio a).Infinite :=
   infinite_coe_iff.1 inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NoMinOrder
-  signature: α] {a
-  body: NoMinOrder.infinite
-
-中文:
-实例 [NoMin序
-  签名: α] {a
-  定义体: NoMinOrder.infinite
-
-Depends on / 依赖: NoMinOrder, NoMinOrder.infinite, infinite
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NoMinOrder α] {a : α} : Infinite (Iic a) :=
   NoMinOrder.infinite
-
-/--
-theorem `Iic_infinite` / 定理 `Iic_infinite`
-
-English:
-theorem Iic_infinite
-  given: [NoMinOrder α] (a : α)
-  statement: (Iic a).Infinite
-  proof: infinite_coe_iff.1 inferInstance
-
-中文:
-定理 Iic_infinite
-  条件: [NoMin序 α] (a : α)
-  结论: (左无界右闭区间 a).无限
-  证明: infinite_coe_iff.1 inferInstance
-
-Depends on / 依赖: infinite_coe_iff
+/-
+**Set.Iic_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_infinite [NoMinOrder α] (a : α) : (Iic a).Infinite
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.instInfiniteElemIicOfNoMinOrder`：∀ {α : Type u_1} [inst : Preorder α
+] [NoMinOrder α] {a : α}, Infinite ↑(Set.Iic a)
 -/
 theorem Iic_infinite [NoMinOrder α] (a : α) : (Iic a).Infinite :=
   infinite_coe_iff.1 inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NoMaxOrder
-  signature: α] {a
-  body: NoMaxOrder.infinite
-
-中文:
-实例 [NoMax序
-  签名: α] {a
-  定义体: NoMaxOrder.infinite
-
-Depends on / 依赖: NoMaxOrder, NoMaxOrder.infinite, infinite
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NoMaxOrder α] {a : α} : Infinite (Ioi a) :=
   NoMaxOrder.infinite
-
-/--
-theorem `Ioi_infinite` / 定理 `Ioi_infinite`
-
-English:
-theorem Ioi_infinite
-  given: [NoMaxOrder α] (a : α)
-  statement: (Ioi a).Infinite
-  proof: infinite_coe_iff.1 inferInstance
-
-中文:
-定理 Ioi_infinite
-  条件: [NoMax序 α] (a : α)
-  结论: (左开右无界区间 a).无限
-  证明: infinite_coe_iff.1 inferInstance
-
-Depends on / 依赖: infinite_coe_iff
+/-
+**Set.Ioi_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_infinite [NoMaxOrder α] (a : α) : (Ioi a).Infinite
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.instInfiniteElemIoiOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α
+] [NoMaxOrder α] {a : α}, Infinite ↑(Set.Ioi a)
 -/
 theorem Ioi_infinite [NoMaxOrder α] (a : α) : (Ioi a).Infinite :=
   infinite_coe_iff.1 inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NoMaxOrder
-  signature: α] {a
-  body: NoMaxOrder.infinite
-
-中文:
-实例 [NoMax序
-  签名: α] {a
-  定义体: NoMaxOrder.infinite
-
-Depends on / 依赖: NoMaxOrder, NoMaxOrder.infinite, infinite
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NoMaxOrder α] {a : α} : Infinite (Ici a) :=
   NoMaxOrder.infinite
-
-/--
-theorem `Ici_infinite` / 定理 `Ici_infinite`
-
-English:
-theorem Ici_infinite
-  given: [NoMaxOrder α] (a : α)
-  statement: (Ici a).Infinite
-  proof: infinite_coe_iff.1 inferInstance
-
-中文:
-定理 Ici_infinite
-  条件: [NoMax序 α] (a : α)
-  结论: (左闭右无界区间 a).无限
-  证明: infinite_coe_iff.1 inferInstance
-
-Depends on / 依赖: infinite_coe_iff
+/-
+**Set.Ici_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ici_infinite [NoMaxOrder α] (a : α) : (Ici a).Infinite
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.infinite_coe_iff`：infinite_coe_iff {s : Set α} : Infinite s ↔ s.Infi
+nite
+· 使用定理 `Set.instInfiniteElemIciOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α
+] [NoMaxOrder α] {a : α}, Infinite ↑(Set.Ici a)
 -/
 theorem Ici_infinite [NoMaxOrder α] (a : α) : (Ici a).Infinite :=
   infinite_coe_iff.1 inferInstance
 
 end Set
+

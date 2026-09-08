@@ -23,65 +23,47 @@ variable {α : Type*}
 
 namespace DFinsupp
 
-/--
-Instance `addZeroClass'` / 实例 `addZeroClass'`
+/-- Non-dependent special case of `DFinsupp.addZeroClass` to help typeclass search. -/
+/-
+**DFinsupp.addZeroClass'** 是 Mathlib 中的一个实例，位于命名空间 `DFinsupp`。
+形式化陈述：addZeroClass' {β} [AddZeroClass β] : AddZeroClass (Π₀ _ : α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance addZeroClass'
-  signature: {β} [AddZeroClass β]
-  body: @DFinsupp.addZeroClass α (fun _ => β) _
-
-中文:
-实例 addZeroClass'
-  签名: {β} [加法零类 β]
-  定义体: @DFinsupp.addZeroClass α (fun _ => β) _
-
-Depends on / 依赖: DFinsupp, DFinsupp.addZeroClass, addZeroClass
+--- 原说明 ---
+Non-dependent special case of `DFinsupp.addZeroClass` to help typeclass search.
 -/
 instance addZeroClass' {β} [AddZeroClass β] : AddZeroClass (Π₀ _ : α, β) :=
-  @DFinsupp.addZeroClass α (fun _ => β) _
+  @DFinsupp.addZeroClass α (fun _ ↦ β) _
 
 variable [DecidableEq α]
 
-/--
-Definition of `toMultiset` / `toMultiset` 的定义
+/-- A DFinsupp version of `Finsupp.toMultiset`. -/
+/-
+**DFinsupp.toMultiset** 是 Mathlib 中的一个定义，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset : (Π₀ _ : α, Nat) ->+ Multiset α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMultiset
-  signature: : (Π₀ _ : α, Nat) ->+ Multiset α
-  body: DFinsupp.sumAddHom fun a : α => Multiset.replicateAddMonoidHom a
-
-@[simp]
-
-中文:
-定义 toMultiset
-  签名: : (Π₀ _ : α, 自然数) ->+ Multiset α
-  定义体: DFinsupp.sumAddHom fun a : α => Multiset.replicateAddMonoidHom a
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.sumAddHom, Multiset, Multiset.replicateAddMonoidHom, replicateAddMonoidHom, sumAddHom
+--- 原说明 ---
+A DFinsupp version of `Finsupp.toMultiset`.
 -/
-def toMultiset : (Π₀ _ : α, Nat) ->+ Multiset α :=
-  DFinsupp.sumAddHom fun a : α => Multiset.replicateAddMonoidHom a
+def toMultiset : (Π₀ _ : α, ℕ) →+ Multiset α :=
+  DFinsupp.sumAddHom fun a : α ↦ Multiset.replicateAddMonoidHom a
 
 @[simp]
-/--
-theorem `toMultiset_single` / 定理 `toMultiset_single`
-
-English:
-theorem toMultiset_single
-  given: (a : α) (n : Nat)
-  proof: DFinsupp.sumAddHom_single _ _ _
-
-中文:
-定理 toMultiset_single
-  条件: (a : α) (n : 自然数)
-  证明: DFinsupp.sumAddHom_single _ _ _
-
-Depends on / 依赖: DFinsupp, DFinsupp.sumAddHom_single, sumAddHom_single
+/-
+**DFinsupp.toMultiset_single** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_single (a : α) (n : Nat) : toMultiset (DFinsupp.single a n) = M
+ultiset.replicate n a
+参数：a : α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.sumAddHom_single`：sumAddHom_single [forall i, AddZeroClass (β i
+)] [AddCommMonoid γ] (φ : forall i, β i ->+ γ) (i) (x : β i) : sumAddHom φ (sing
+le i x) = φ i x
 -/
-theorem toMultiset_single (a : α) (n : Nat) :
+theorem toMultiset_single (a : α) (n : ℕ) :
     toMultiset (DFinsupp.single a n) = Multiset.replicate n a :=
   DFinsupp.sumAddHom_single _ _ _
 
@@ -91,320 +73,230 @@ namespace Multiset
 
 variable [DecidableEq α] {s t : Multiset α}
 
-/--
-Definition of `toDFinsupp` / `toDFinsupp` 的定义
+/-- A DFinsupp version of `Multiset.toFinsupp`. -/
+/-
+**Multiset.toDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp : Multiset α ->+ Π₀ _ : α, Nat where toFun s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toDFinsupp
-  signature: : Multiset α ->+ Π₀ _ : α, Nat where
-  body: { toFun := fun n => s.count n
-      support' := Trunc.mk ⟨s, fun i => (em (i in s)).imp_right Multiset.count_eq_zero_of_notMem⟩ }
-  map_zero' := rfl
-  map_add' _ _ := DFinsupp.ext fun _ => Multiset.count_add _ _ _
-
-@[simp]
-
-中文:
-定义 toDFinsupp
-  签名: : Multiset α ->+ Π₀ _ : α, 自然数 where
-  定义体: { toFun := fun n => s.count n
-      support' := Trunc.mk ⟨s, fun i => (em (i in s)).imp_right Multiset.count_eq_zero_of_notMem⟩ }
-  map_zero' := rfl
-  map_add' _ _ := DFinsupp.ext fun _ => Multiset.count_add _ _ _
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.ext, Multiset, Multiset.count_add, Multiset.count_eq_zero_of_notMem, Trunc.mk, count_add, count_eq_zero_of_notMem, imp_right, map_add, map_zero, s.count, support
+--- 原说明 ---
+A DFinsupp version of `Multiset.toFinsupp`.
 -/
-def toDFinsupp : Multiset α ->+ Π₀ _ : α, Nat where
+def toDFinsupp : Multiset α →+ Π₀ _ : α, ℕ where
   toFun s :=
-    { toFun := fun n => s.count n
-      support' := Trunc.mk ⟨s, fun i => (em (i in s)).imp_right Multiset.count_eq_zero_of_notMem⟩ }
+    { toFun := fun n ↦ s.count n
+      support' := Trunc.mk ⟨s, fun i ↦ (em (i ∈ s)).imp_right Multiset.count_eq_zero_of_notMem⟩ }
   map_zero' := rfl
-  map_add' _ _ := DFinsupp.ext fun _ => Multiset.count_add _ _ _
+  map_add' _ _ := DFinsupp.ext fun _ ↦ Multiset.count_add _ _ _
 
 @[simp]
-/--
-theorem `toDFinsupp_apply` / 定理 `toDFinsupp_apply`
-
-English:
-theorem toDFinsupp_apply
-  given: (s : Multiset α) (a : α)
-  statement: Multiset.toDFinsupp s a = s.count a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toDFinsupp_apply
-  条件: (s : Multiset α) (a : α)
-  结论: Multiset.toDFinsupp s a = s.count a
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.toDFinsupp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_apply (s : Multiset α) (a : α) : Multiset.toDFinsupp s a = s.co
+unt a
+参数：s : Multiset α；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toDFinsupp_apply (s : Multiset α) (a : α) : Multiset.toDFinsupp s a = s.count a :=
   rfl
 
 @[simp]
-/--
-theorem `toDFinsupp_support` / 定理 `toDFinsupp_support`
-
-English:
-theorem toDFinsupp_support
-  given: (s : Multiset α)
-  statement: s.toDFinsupp.support = s.toFinset
-  proof: Finset.filter_true_of_mem fun _ hx => count_ne_zero.mpr Multiset.mem_toFinset.1 hx
-
-中文:
-定理 toDFinsupp_support
-  条件: (s : Multiset α)
-  结论: s.toDFinsupp.support = s.toFinset
-  证明: Finset.filter_true_of_mem fun _ hx => count_ne_zero.mpr Multiset.mem_toFinset.1 hx
-
-Depends on / 依赖: Finset, Finset.filter_true_of_mem, Multiset, Multiset.mem_toFinset, count_ne_zero, count_ne_zero.mpr, filter_true_of_mem, mem_toFinset
+/-
+**Multiset.toDFinsupp_support** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_support (s : Multiset α) : s.toDFinsupp.support = s.toFinset
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.filter_true_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Decid
+ablePred p] {s : Finset α}, (∀ x ∈ s, p x) → Finset.filter p s = s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Multiset.count_ne_zero`：count_ne_zero {a : α} : count a s != 0 ↔ a in s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.mem_toFinset`：mem_toFinset {a : α} {s : Multiset α} : a in s.to
+Finset ↔ a in s
 -/
 theorem toDFinsupp_support (s : Multiset α) : s.toDFinsupp.support = s.toFinset :=
-Finset.filter_true_of_mem fun _ hx => count_ne_zero.mpr Multiset.mem_toFinset.1 hx
+  Finset.filter_true_of_mem fun _ hx ↦ count_ne_zero.mpr <| Multiset.mem_toFinset.1 hx
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toDFinsupp_replicate` / 定理 `toDFinsupp_replicate`
-
-English:
-theorem toDFinsupp_replicate
-  given: (a : α) (n : Nat)
-  proof: by
-  ext i
-  dsimp [toDFinsupp]
-  simp [count_replicate]
-
-@[simp]
-
-中文:
-定理 toDFinsupp_replicate
-  条件: (a : α) (n : 自然数)
-  证明: by
-  ext i
-  dsimp [toDFinsupp]
-  simp [count_replicate]
-
-@[simp]
-
-Depends on / 依赖: count_replicate, toDFinsupp
+/-
+**Multiset.toDFinsupp_replicate** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_replicate (a : α) (n : Nat) : toDFinsupp (Multiset.replicate n 
+a) = DFinsupp.single a n
+参数：a : α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.count_replicate`：count_replicate (a b : α) (n : Nat) : count a 
+(replicate n b) = if b = a then n else 0
+· 使用定理 `DFinsupp.single_apply`：single_apply {i i' b} : (single i b : Π₀ i, β i) 
+i' = if h : i = i' then Eq.recOn h b else 0
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `eq_rec_constant`：∀ {α : Sort u_1} {a a' : α} {β : Sort u_2} (y : β) (h :
+ a = a'), h ▸ y = y
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toDFinsupp_replicate (a : α) (n : Nat) :
+theorem toDFinsupp_replicate (a : α) (n : ℕ) :
     toDFinsupp (Multiset.replicate n a) = DFinsupp.single a n := by
   ext i
   dsimp [toDFinsupp]
   simp [count_replicate]
 
 @[simp]
-/--
-theorem `toDFinsupp_singleton` / 定理 `toDFinsupp_singleton`
-
-English:
-theorem toDFinsupp_singleton
-  given: (a : α)
-  statement: toDFinsupp {a} = DFinsupp.single a 1
-  proof: by
-  rw [← replicate_one]; rw [toDFinsupp_replicate]
-
-中文:
-定理 toDFinsupp_singleton
-  条件: (a : α)
-  结论: toDFinsupp {a} = 直和有限支撑.single a 1
-  证明: by
-  rw [← replicate_one]; rw [toDFinsupp_replicate]
-
-Depends on / 依赖: replicate_one, toDFinsupp_replicate
+/-
+**Multiset.toDFinsupp_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_singleton (a : α) : toDFinsupp {a} = DFinsupp.single a 1
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.replicate_one`：replicate_one (a : α) : replicate 1 a = {a}
+· 使用定理 `Multiset.toDFinsupp_replicate`：toDFinsupp_replicate (a : α) (n : Nat) : 
+toDFinsupp (Multiset.replicate n a) = DFinsupp.single a n
 -/
 theorem toDFinsupp_singleton (a : α) : toDFinsupp {a} = DFinsupp.single a 1 := by
-  rw [← replicate_one]; rw [toDFinsupp_replicate]
+  rw [← replicate_one, toDFinsupp_replicate]
 
 /-- `Multiset.toDFinsupp` as an `AddEquiv`. -/
 @[simps! apply symm_apply]
-/--
-Definition of `equivDFinsupp` / `equivDFinsupp` 的定义
+/-
+**Multiset.equivDFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：equivDFinsupp : Multiset α ≃+ Π₀ _ : α, Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivDFinsupp
-  signature: : Multiset α ≃+ Π₀ _ : α, Nat
-  body: AddMonoidHom.toAddEquiv Multiset.toDFinsupp DFinsupp.toMultiset (by ext; simp) (by ext; simp)
-
-@[simp]
-
-中文:
-定义 equivDFinsupp
-  签名: : Multiset α ≃+ Π₀ _ : α, 自然数
-  定义体: AddMonoidHom.toAddEquiv Multiset.toDFinsupp DFinsupp.toMultiset (by ext; simp) (by ext; simp)
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.toAddEquiv, DFinsupp, DFinsupp.toMultiset, Multiset, Multiset.toDFinsupp, toAddEquiv, toDFinsupp, toMultiset
+--- 原说明 ---
+`Multiset.toDFinsupp` as an `AddEquiv`.
 -/
-def equivDFinsupp : Multiset α ≃+ Π₀ _ : α, Nat :=
+def equivDFinsupp : Multiset α ≃+ Π₀ _ : α, ℕ :=
   AddMonoidHom.toAddEquiv Multiset.toDFinsupp DFinsupp.toMultiset (by ext; simp) (by ext; simp)
 
 @[simp]
-/--
-theorem `toDFinsupp_toMultiset` / 定理 `toDFinsupp_toMultiset`
-
-English:
-theorem toDFinsupp_toMultiset
-  given: (s : Multiset α)
-  statement: DFinsupp.toMultiset (Multiset.toDFinsupp s) = s
-  proof: equivDFinsupp.symm_apply_apply s
-
-中文:
-定理 toDFinsupp_toMultiset
-  条件: (s : Multiset α)
-  结论: 直和有限支撑.toMultiset (Multiset.toDFinsupp s) = s
-  证明: equivDFinsupp.symm_apply_apply s
-
-Depends on / 依赖: equivDFinsupp, equivDFinsupp.symm_apply_apply, symm_apply_apply
+/-
+**Multiset.toDFinsupp_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_toMultiset (s : Multiset α) : DFinsupp.toMultiset (Multiset.toD
+Finsupp s) = s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.symm_apply_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (x : M), e.symm (e x) = x
 -/
 theorem toDFinsupp_toMultiset (s : Multiset α) : DFinsupp.toMultiset (Multiset.toDFinsupp s) = s :=
   equivDFinsupp.symm_apply_apply s
-
-/--
-theorem `toDFinsupp_injective` / 定理 `toDFinsupp_injective`
-
-English:
-theorem toDFinsupp_injective
-  statement: Injective (toDFinsupp : Multiset α -> Π₀ _a, Nat)
-  proof: equivDFinsupp.injective
-
-@[simp]
-
-中文:
-定理 toDFinsupp_injective
-  结论: 单射 (toDFinsupp : Multiset α -> Π₀ _a, 自然数)
-  证明: equivDFinsupp.injective
-
-@[simp]
-
-Depends on / 依赖: equivDFinsupp, equivDFinsupp.injective, injective
+/-
+**Multiset.toDFinsupp_injective** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_injective : Injective (toDFinsupp : Multiset α -> Π₀ _a, Nat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
 -/
-theorem toDFinsupp_injective : Injective (toDFinsupp : Multiset α -> Π₀ _a, Nat) :=
+theorem toDFinsupp_injective : Injective (toDFinsupp : Multiset α → Π₀ _a, ℕ) :=
   equivDFinsupp.injective
 
 @[simp]
-/--
-theorem `toDFinsupp_inj` / 定理 `toDFinsupp_inj`
-
-English:
-theorem toDFinsupp_inj
-  statement: toDFinsupp s = toDFinsupp t ↔ s = t
-  proof: toDFinsupp_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 toDFinsupp_inj
-  结论: toDFinsupp s = toDFinsupp t ↔ s = t
-  证明: toDFinsupp_injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: eq_iff, toDFinsupp_injective, toDFinsupp_injective.eq_iff
+/-
+**Multiset.toDFinsupp_inj** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_inj : toDFinsupp s = toDFinsupp t ↔ s = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Multiset.toDFinsupp_injective`：toDFinsupp_injective : Injective (toDFins
+upp : Multiset α -> Π₀ _a, Nat)
 -/
 theorem toDFinsupp_inj : toDFinsupp s = toDFinsupp t ↔ s = t :=
   toDFinsupp_injective.eq_iff
 
 @[simp]
-/--
-theorem `toDFinsupp_le_toDFinsupp` / 定理 `toDFinsupp_le_toDFinsupp`
-
-English:
-theorem toDFinsupp_le_toDFinsupp
-  statement: toDFinsupp s <= toDFinsupp t ↔ s <= t
-  proof: by
-  simp [Multiset.le_iff_count, DFinsupp.le_def]
-
-@[simp]
-
-中文:
-定理 toDFinsupp_le_toDFinsupp
-  结论: toDFinsupp s <= toDFinsupp t ↔ s <= t
-  证明: by
-  simp [Multiset.le_iff_count, DFinsupp.le_def]
-
-@[simp]
-
-Depends on / 依赖: DFinsupp, DFinsupp.le_def, Multiset, Multiset.le_iff_count, le_def, le_iff_count
+/-
+**Multiset.toDFinsupp_le_toDFinsupp** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_le_toDFinsupp : toDFinsupp s <= toDFinsupp t ↔ s <= t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toDFinsupp_le_toDFinsupp : toDFinsupp s <= toDFinsupp t ↔ s <= t := by
+theorem toDFinsupp_le_toDFinsupp : toDFinsupp s ≤ toDFinsupp t ↔ s ≤ t := by
   simp [Multiset.le_iff_count, DFinsupp.le_def]
 
 @[simp]
-/--
-theorem `toDFinsupp_lt_toDFinsupp` / 定理 `toDFinsupp_lt_toDFinsupp`
-
-English:
-theorem toDFinsupp_lt_toDFinsupp
-  statement: toDFinsupp s < toDFinsupp t ↔ s < t
-  proof: lt_iff_lt_of_le_iff_le' toDFinsupp_le_toDFinsupp toDFinsupp_le_toDFinsupp
-
-@[simp]
-
-中文:
-定理 toDFinsupp_lt_toDFinsupp
-  结论: toDFinsupp s < toDFinsupp t ↔ s < t
-  证明: lt_iff_lt_of_le_iff_le' toDFinsupp_le_toDFinsupp toDFinsupp_le_toDFinsupp
-
-@[simp]
-
-Depends on / 依赖: lt_iff_lt_of_le_iff_le, toDFinsupp_le_toDFinsupp
+/-
+**Multiset.toDFinsupp_lt_toDFinsupp** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_lt_toDFinsupp : toDFinsupp s < toDFinsupp t ↔ s < t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le'`：lt_iff_lt_of_le_iff_le' {β} [Preorder α] [Preor
+der β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) (H' : b <= a ↔ d <= c) : b < a 
+↔ d < c
+· 使用定理 `Multiset.toDFinsupp_le_toDFinsupp`：toDFinsupp_le_toDFinsupp : toDFinsupp
+ s <= toDFinsupp t ↔ s <= t
 -/
 theorem toDFinsupp_lt_toDFinsupp : toDFinsupp s < toDFinsupp t ↔ s < t :=
   lt_iff_lt_of_le_iff_le' toDFinsupp_le_toDFinsupp toDFinsupp_le_toDFinsupp
 
 @[simp]
-/--
-theorem `toDFinsupp_inter` / 定理 `toDFinsupp_inter`
-
-English:
-theorem toDFinsupp_inter
-  given: (s t : Multiset α)
-  statement: toDFinsupp (s inter t) = toDFinsupp s ⊓ toDFinsupp t
-  proof: by
-  ext i; simp
-
-@[simp]
-
-中文:
-定理 toDFinsupp_inter
-  条件: (s t : Multiset α)
-  结论: toDFinsupp (s inter t) = toDFinsupp s ⊓ toDFinsupp t
-  证明: by
-  ext i; simp
-
-@[simp]
+/-
+**Multiset.toDFinsupp_inter** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_inter (s t : Multiset α) : toDFinsupp (s inter t) = toDFinsupp 
+s ⊓ toDFinsupp t
+参数：s t : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Multiset.count_inter`：count_inter (a : α) (s t : Multiset α) : count a (
+s inter t) = min (count a s) (count a t)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toDFinsupp_inter (s t : Multiset α) : toDFinsupp (s inter t) = toDFinsupp s ⊓ toDFinsupp t := by
+theorem toDFinsupp_inter (s t : Multiset α) : toDFinsupp (s ∩ t) = toDFinsupp s ⊓ toDFinsupp t := by
   ext i; simp
 
 @[simp]
-/--
-theorem `toDFinsupp_union` / 定理 `toDFinsupp_union`
-
-English:
-theorem toDFinsupp_union
-  given: (s t : Multiset α)
-  statement: toDFinsupp (s union t) = toDFinsupp s ⊔ toDFinsupp t
-  proof: by
-  ext i; simp
-
-中文:
-定理 toDFinsupp_union
-  条件: (s t : Multiset α)
-  结论: toDFinsupp (s union t) = toDFinsupp s ⊔ toDFinsupp t
-  证明: by
-  ext i; simp
+/-
+**Multiset.toDFinsupp_union** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toDFinsupp_union (s t : Multiset α) : toDFinsupp (s union t) = toDFinsupp 
+s ⊔ toDFinsupp t
+参数：s t : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.ext`：ext {f g : Π₀ i, β i} (h : forall i, f i = g i) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Multiset.count_union`：count_union (a : α) (s t : Multiset α) : count a (
+s union t) = max (count a s) (count a t)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toDFinsupp_union (s t : Multiset α) : toDFinsupp (s union t) = toDFinsupp s ⊔ toDFinsupp t := by
+theorem toDFinsupp_union (s t : Multiset α) : toDFinsupp (s ∪ t) = toDFinsupp s ⊔ toDFinsupp t := by
   ext i; simp
 
 end Multiset
@@ -412,115 +304,85 @@ end Multiset
 
 namespace DFinsupp
 
-variable [DecidableEq α] {f g : Π₀ _a : α, Nat}
+variable [DecidableEq α] {f g : Π₀ _a : α, ℕ}
 
 @[simp]
-/--
-theorem `toMultiset_toDFinsupp` / 定理 `toMultiset_toDFinsupp`
-
-English:
-theorem toMultiset_toDFinsupp
-  given: (f : Π₀ _ : α, Nat)
-  proof: Multiset.equivDFinsupp.apply_symm_apply f
-
-中文:
-定理 toMultiset_toDFinsupp
-  条件: (f : Π₀ _ : α, 自然数)
-  证明: Multiset.equivDFinsupp.apply_symm_apply f
-
-Depends on / 依赖: Multiset, Multiset.equivDFinsupp.apply_symm_apply, apply_symm_apply, equivDFinsupp
+/-
+**DFinsupp.toMultiset_toDFinsupp** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_toDFinsupp (f : Π₀ _ : α, Nat) : Multiset.toDFinsupp (DFinsupp.
+toMultiset f) = f
+参数：f : Π₀ _ : α, Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
 -/
-theorem toMultiset_toDFinsupp (f : Π₀ _ : α, Nat) :
+theorem toMultiset_toDFinsupp (f : Π₀ _ : α, ℕ) :
     Multiset.toDFinsupp (DFinsupp.toMultiset f) = f :=
   Multiset.equivDFinsupp.apply_symm_apply f
-
-/--
-theorem `toMultiset_injective` / 定理 `toMultiset_injective`
-
-English:
-theorem toMultiset_injective
-  statement: Injective (toMultiset : (Π₀ _a, Nat) -> Multiset α)
-  proof: Multiset.equivDFinsupp.symm.injective
-
-@[simp]
-
-中文:
-定理 toMultiset_injective
-  结论: 单射 (toMultiset : (Π₀ _a, 自然数) -> Multiset α)
-  证明: Multiset.equivDFinsupp.symm.injective
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.equivDFinsupp.symm.injective, equivDFinsupp, injective
+/-
+**DFinsupp.toMultiset_injective** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_injective : Injective (toMultiset : (Π₀ _a, Nat) -> Multiset α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
 -/
-theorem toMultiset_injective : Injective (toMultiset : (Π₀ _a, Nat) -> Multiset α) :=
+theorem toMultiset_injective : Injective (toMultiset : (Π₀ _a, ℕ) → Multiset α) :=
   Multiset.equivDFinsupp.symm.injective
 
 @[simp]
-/--
-theorem `toMultiset_inj` / 定理 `toMultiset_inj`
-
-English:
-theorem toMultiset_inj
-  statement: toMultiset f = toMultiset g ↔ f = g
-  proof: toMultiset_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 toMultiset_inj
-  结论: toMultiset f = toMultiset g ↔ f = g
-  证明: toMultiset_injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: eq_iff, toMultiset_injective, toMultiset_injective.eq_iff
+/-
+**DFinsupp.toMultiset_inj** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_inj : toMultiset f = toMultiset g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `DFinsupp.toMultiset_injective`：toMultiset_injective : Injective (toMulti
+set : (Π₀ _a, Nat) -> Multiset α)
 -/
 theorem toMultiset_inj : toMultiset f = toMultiset g ↔ f = g :=
   toMultiset_injective.eq_iff
 
 @[simp]
-/--
-theorem `toMultiset_le_toMultiset` / 定理 `toMultiset_le_toMultiset`
-
-English:
-theorem toMultiset_le_toMultiset
-  statement: toMultiset f <= toMultiset g ↔ f <= g
-  proof: by
-  simp_rw [← Multiset.toDFinsupp_le_toDFinsupp, toMultiset_toDFinsupp]
-
-@[simp]
-
-中文:
-定理 toMultiset_le_toMultiset
-  结论: toMultiset f <= toMultiset g ↔ f <= g
-  证明: by
-  simp_rw [← Multiset.toDFinsupp_le_toDFinsupp, toMultiset_toDFinsupp]
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.toDFinsupp_le_toDFinsupp, simp_rw, toDFinsupp_le_toDFinsupp, toMultiset_toDFinsupp
+/-
+**DFinsupp.toMultiset_le_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_le_toMultiset : toMultiset f <= toMultiset g ↔ f <= g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `DFinsupp.toMultiset_toDFinsupp`：toMultiset_toDFinsupp (f : Π₀ _ : α, Nat
+) : Multiset.toDFinsupp (DFinsupp.toMultiset f) = f
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toMultiset_le_toMultiset : toMultiset f <= toMultiset g ↔ f <= g := by
+theorem toMultiset_le_toMultiset : toMultiset f ≤ toMultiset g ↔ f ≤ g := by
   simp_rw [← Multiset.toDFinsupp_le_toDFinsupp, toMultiset_toDFinsupp]
 
 @[simp]
-/--
-theorem `toMultiset_lt_toMultiset` / 定理 `toMultiset_lt_toMultiset`
-
-English:
-theorem toMultiset_lt_toMultiset
-  statement: toMultiset f < toMultiset g ↔ f < g
-  proof: by
-  simp_rw [← Multiset.toDFinsupp_lt_toDFinsupp, toMultiset_toDFinsupp]
-
-中文:
-定理 toMultiset_lt_toMultiset
-  结论: toMultiset f < toMultiset g ↔ f < g
-  证明: by
-  simp_rw [← Multiset.toDFinsupp_lt_toDFinsupp, toMultiset_toDFinsupp]
-
-Depends on / 依赖: Multiset, Multiset.toDFinsupp_lt_toDFinsupp, simp_rw, toDFinsupp_lt_toDFinsupp, toMultiset_toDFinsupp
+/-
+**DFinsupp.toMultiset_lt_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_lt_toMultiset : toMultiset f < toMultiset g ↔ f < g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `DFinsupp.toMultiset_toDFinsupp`：toMultiset_toDFinsupp (f : Π₀ _ : α, Nat
+) : Multiset.toDFinsupp (DFinsupp.toMultiset f) = f
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toMultiset_lt_toMultiset : toMultiset f < toMultiset g ↔ f < g := by
   simp_rw [← Multiset.toDFinsupp_lt_toDFinsupp, toMultiset_toDFinsupp]
@@ -528,45 +390,50 @@ theorem toMultiset_lt_toMultiset : toMultiset f < toMultiset g ↔ f < g := by
 variable (f g)
 
 @[simp]
-/--
-theorem `toMultiset_inf` / 定理 `toMultiset_inf`
-
-English:
-theorem toMultiset_inf
-  statement: toMultiset (f ⊓ g) = toMultiset f inter toMultiset g
-  proof: Multiset.toDFinsupp_injective by simp
-
-@[simp]
-
-中文:
-定理 toMultiset_inf
-  结论: toMultiset (f ⊓ g) = toMultiset f inter toMultiset g
-  证明: Multiset.toDFinsupp_injective by simp
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.toDFinsupp_injective, toDFinsupp_injective
+/-
+**DFinsupp.toMultiset_inf** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_inf : toMultiset (f ⊓ g) = toMultiset f inter toMultiset g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.toDFinsupp_injective`：toDFinsupp_injective : Injective (toDFins
+upp : Multiset α -> Π₀ _a, Nat)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFinsupp.toMultiset_toDFinsupp`：toMultiset_toDFinsupp (f : Π₀ _ : α, Nat
+) : Multiset.toDFinsupp (DFinsupp.toMultiset f) = f
+· 使用定理 `Multiset.toDFinsupp_inter`：toDFinsupp_inter (s t : Multiset α) : toDFins
+upp (s inter t) = toDFinsupp s ⊓ toDFinsupp t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMultiset_inf : toMultiset (f ⊓ g) = toMultiset f inter toMultiset g :=
-Multiset.toDFinsupp_injective by simp
+theorem toMultiset_inf : toMultiset (f ⊓ g) = toMultiset f ∩ toMultiset g :=
+  Multiset.toDFinsupp_injective <| by simp
 
 @[simp]
-/--
-theorem `toMultiset_sup` / 定理 `toMultiset_sup`
-
-English:
-theorem toMultiset_sup
-  statement: toMultiset (f ⊔ g) = toMultiset f union toMultiset g
-  proof: Multiset.toDFinsupp_injective by simp
-
-中文:
-定理 toMultiset_sup
-  结论: toMultiset (f ⊔ g) = toMultiset f union toMultiset g
-  证明: Multiset.toDFinsupp_injective by simp
-
-Depends on / 依赖: Multiset, Multiset.toDFinsupp_injective, toDFinsupp_injective
+/-
+**DFinsupp.toMultiset_sup** 是 Mathlib 中的一个定理，位于命名空间 `DFinsupp`。
+形式化陈述：toMultiset_sup : toMultiset (f ⊔ g) = toMultiset f union toMultiset g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.toDFinsupp_injective`：toDFinsupp_injective : Injective (toDFins
+upp : Multiset α -> Π₀ _a, Nat)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFinsupp.toMultiset_toDFinsupp`：toMultiset_toDFinsupp (f : Π₀ _ : α, Nat
+) : Multiset.toDFinsupp (DFinsupp.toMultiset f) = f
+· 使用定理 `Multiset.toDFinsupp_union`：toDFinsupp_union (s t : Multiset α) : toDFins
+upp (s union t) = toDFinsupp s ⊔ toDFinsupp t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMultiset_sup : toMultiset (f ⊔ g) = toMultiset f union toMultiset g :=
-Multiset.toDFinsupp_injective by simp
+theorem toMultiset_sup : toMultiset (f ⊔ g) = toMultiset f ∪ toMultiset g :=
+  Multiset.toDFinsupp_injective <| by simp
 
 end DFinsupp
+

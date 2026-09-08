@@ -26,64 +26,49 @@ open Polynomial Submodule
 section Ring
 
 variable {R S A : Type*}
-variable [CommRing R] [Ring A] [Ring S] (f : R ->+* S)
+variable [CommRing R] [Ring A] [Ring S] (f : R →+* S)
 
 variable [Algebra R A] (R)
 
 variable (A)
 
-/--
-Definition of `Algebra.IsIntegral` / `Algebra.IsIntegral` 的定义
+/-- An algebra is integral if every element of the extension is integral over the base ring. -/
+/-
+**Algebra.IsIntegral** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra`。
+形式化陈述：(R : Type u_1) → (A : Type u_3) → [inst : CommRing R] → [inst_1 : Ring A] 
+→ [Algebra R A] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Algebra.IsIntegral
-  parameters: : Prop where
-  axioms and operations (1):
-    - isIntegral : forall x : A, IsIntegral R x
-
-中文:
-类 代数.是整
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isIntegral : 对任意 x : A, 是整 R x
+--- 原说明 ---
+An algebra is integral if every element of the extension is integral over the ba
+se ring.
 -/
 @[mk_iff] protected class Algebra.IsIntegral : Prop where
-  isIntegral : forall x : A, IsIntegral R x
+  isIntegral : ∀ x : A, IsIntegral R x
 
 variable {R A}
-
-/--
-lemma `Algebra.isIntegral_def` / 引理 `Algebra.isIntegral_def`
-
-English:
-lemma Algebra.isIntegral_def
-  statement: Algebra.IsIntegral R A ↔ forall x : A, IsIntegral R x
-  proof: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
-
-中文:
-引理 代数.is整数egral_def
-  结论: 代数.是整 R A ↔ 对任意 x : A, 是整 R x
-  证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
+/-
+**Algebra.isIntegral_def** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Algebra.isIntegral_def : Algebra.IsIntegral R A ↔ forall x : A, IsIntegral
+ R x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Algebra.isIntegral_def : Algebra.IsIntegral R A ↔ forall x : A, IsIntegral R x :=
-  ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
-
-/--
-lemma `algebraMap_isIntegral_iff` / 引理 `algebraMap_isIntegral_iff`
-
-English:
-lemma algebraMap_isIntegral_iff
-  statement: (algebraMap R A).IsIntegral ↔ Algebra.IsIntegral R A
-  proof: (Algebra.isIntegral_iff ..).symm
-
-中文:
-引理 algebraMap_is整数egral_iff
-  结论: (algebraMap R A).是整 ↔ 代数.是整 R A
-  证明: (Algebra.isIntegral_iff ..).symm
-
-Depends on / 依赖: Algebra, Algebra.isIntegral_iff, isIntegral_iff
+lemma Algebra.isIntegral_def : Algebra.IsIntegral R A ↔ ∀ x : A, IsIntegral R x :=
+  ⟨fun ⟨h⟩ ↦ h, fun h ↦ ⟨h⟩⟩
+/-
+**algebraMap_isIntegral_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：algebraMap_isIntegral_iff : (algebraMap R A).IsIntegral ↔ Algebra.IsIntegr
+al R A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Algebra.isIntegral_iff`：∀ (R : Type u_1) (A : Type u_3) [inst : CommRing
+ R] [inst_1 : Ring A] [inst_2 : Algebra R A],   Algebra.IsIntegral R A ↔ ∀ (x : 
+A), IsIntegr…
 -/
 lemma algebraMap_isIntegral_iff : (algebraMap R A).IsIntegral ↔ Algebra.IsIntegral R A :=
   (Algebra.isIntegral_iff ..).symm
 
 end Ring
+

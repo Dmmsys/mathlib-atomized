@@ -22,96 +22,84 @@ This file provides two equivalences for linearly ordered fintypes:
 
 open Finset
 
-/--
-Definition of `monoEquivOfFin` / `monoEquivOfFin` 的定义
+/-- Given a linearly ordered fintype `α` of cardinal `k`, the order isomorphism
+`monoEquivOfFin α h` is the increasing bijection between `Fin k` and `α`. Here, `h` is a proof
+that the cardinality of `α` is `k`. We use this instead of an isomorphism `Fin (card α) ≃o α` to
+avoid casting issues in further uses of this function. -/
+/-
+**monoEquivOfFin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：monoEquivOfFin (α : Type*) [Fintype α] [LinearOrder α] {k : Nat} (h : Fint
+ype.card α = k) : Fin k ≃o α
+参数：α : Type*；h : Fintype.card α = k。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
 
-English:
-definition monoEquivOfFin
-  signature: (α : Type*) [Fintype α] [LinearOrder α] {k : Nat} (h : Fintype.card α = k)
-  body: (univ.orderIsoOfFin h).trans (OrderIso.setCongr _ _ coe_univ).trans OrderIso.Set.univ
-
-中文:
-定义 monoEquivOfFin
-  签名: (α : 类型) [有限类型 α] [线性序 α] {k : 自然数} (h : 有限类型.card α = k)
-  定义体: (univ.orderIsoOfFin h).trans (OrderIso.setCongr _ _ coe_univ).trans OrderIso.Set.univ
-
-Depends on / 依赖: OrderIso, OrderIso.Set.univ, OrderIso.setCongr, coe_univ, orderIsoOfFin, setCongr, univ.orderIsoOfFin
+--- 原说明 ---
+Given a linearly ordered fintype `α` of cardinal `k`, the order isomorphism
+`monoEquivOfFin α h` is the increasing bijection between `Fin k` and `α`. Here, 
+`h` is a proof
+that the cardinality of `α` is `k`. We use this instead of an isomorphism `Fin (
+card α) ≃o α` to
+avoid casting issues in further uses of this function.
 -/
-def monoEquivOfFin (α : Type*) [Fintype α] [LinearOrder α] {k : Nat} (h : Fintype.card α = k) :
+def monoEquivOfFin (α : Type*) [Fintype α] [LinearOrder α] {k : ℕ} (h : Fintype.card α = k) :
     Fin k ≃o α :=
-(univ.orderIsoOfFin h).trans (OrderIso.setCongr _ _ coe_univ).trans OrderIso.Set.univ
+  (univ.orderIsoOfFin h).trans <| (OrderIso.setCongr _ _ coe_univ).trans OrderIso.Set.univ
 
-variable {α : Type*} [DecidableEq α] [Fintype α] [LinearOrder α] {m n : Nat} {s : Finset α}
+variable {α : Type*} [DecidableEq α] [Fintype α] [LinearOrder α] {m n : ℕ} {s : Finset α}
 
-/--
-Definition of `finSumEquivOfFinset` / `finSumEquivOfFinset` 的定义
+/-- If `α` is a linearly ordered fintype, `s : Finset α` has cardinality `m` and its complement has
+cardinality `n`, then `Fin m ⊕ Fin n ≃ α`. The equivalence sends elements of `Fin m` to
+elements of `s` and elements of `Fin n` to elements of `sᶜ` while preserving order on each
+"half" of `Fin m ⊕ Fin n` (using `Set.orderIsoOfFin`). -/
+/-
+**finSumEquivOfFinset** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSumEquivOfFinset (hm : #s = m) (hn : #sᶜ = n) : Fin m oplus Fin n ≃ α
+参数：hm : #s = m；hn : #sᶜ = n。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Finset.coe_compl`：coe_compl (s : Finset α) : ↑sᶜ = (↑s : Set α)ᶜ
 
-English:
-definition finSumEquivOfFinset
-  signature: (hm : #s = m) (hn : #sᶜ = n)
-  body: calc
-    Fin m oplus Fin n ≃ (s : Set α) oplus (sᶜ : Set α) :=
-Equiv.sumCongr (s.orderIsoOfFin hm).toEquiv
-(sᶜ.orderIsoOfFin hn).toEquiv.trans Equiv.setCongr s.coe_compl
-    _ ≃ α := Equiv.Set.sumCompl _
-
-@[simp]
-
-中文:
-定义 finSumEquivOfFinset
-  签名: (hm : #s = m) (hn : #sᶜ = n)
-  定义体: calc
-    Fin m oplus Fin n ≃ (s : Set α) oplus (sᶜ : Set α) :=
-Equiv.sumCongr (s.orderIsoOfFin hm).toEquiv
-(sᶜ.orderIsoOfFin hn).toEquiv.trans Equiv.setCongr s.coe_compl
-    _ ≃ α := Equiv.Set.sumCompl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.Set.sumCompl, Equiv.setCongr, Equiv.sumCongr, coe_compl, orderIsoOfFin, s.coe_compl, s.orderIsoOfFin, setCongr, sumCompl, sumCongr, toEquiv, toEquiv.trans
+--- 原说明 ---
+If `α` is a linearly ordered fintype, `s : Finset α` has cardinality `m` and its
+ complement has
+cardinality `n`, then `Fin m ⊕ Fin n ≃ α`. The equivalence sends elements of `Fi
+n m` to
+elements of `s` and elements of `Fin n` to elements of `sᶜ` while preserving ord
+er on each
+"half" of `Fin m ⊕ Fin n` (using `Set.orderIsoOfFin`).
 -/
-def finSumEquivOfFinset (hm : #s = m) (hn : #sᶜ = n) : Fin m oplus Fin n ≃ α :=
+def finSumEquivOfFinset (hm : #s = m) (hn : #sᶜ = n) : Fin m ⊕ Fin n ≃ α :=
   calc
-    Fin m oplus Fin n ≃ (s : Set α) oplus (sᶜ : Set α) :=
-Equiv.sumCongr (s.orderIsoOfFin hm).toEquiv
-(sᶜ.orderIsoOfFin hn).toEquiv.trans Equiv.setCongr s.coe_compl
+    Fin m ⊕ Fin n ≃ (s : Set α) ⊕ (sᶜ : Set α) :=
+      Equiv.sumCongr (s.orderIsoOfFin hm).toEquiv <|
+        (sᶜ.orderIsoOfFin hn).toEquiv.trans <| Equiv.setCongr s.coe_compl
     _ ≃ α := Equiv.Set.sumCompl _
 
 @[simp]
-/--
-theorem `finSumEquivOfFinset_inl` / 定理 `finSumEquivOfFinset_inl`
-
-English:
-theorem finSumEquivOfFinset_inl
-  given: (hm : #s = m) (hn : #sᶜ = n) (i : Fin m)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 finSumEquivOfFinset_inl
-  条件: (hm : #s = m) (hn : #sᶜ = n) (i : 有限集 m)
-  证明: rfl
-
-@[simp]
+/-
+**finSumEquivOfFinset_inl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumEquivOfFinset_inl (hm : #s = m) (hn : #sᶜ = n) (i : Fin m) : finSumE
+quivOfFinset hm hn (Sum.inl i) = s.orderEmbOfFin hm i
+参数：hm : #s = m；hn : #sᶜ = n；i : Fin m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finSumEquivOfFinset_inl (hm : #s = m) (hn : #sᶜ = n) (i : Fin m) :
     finSumEquivOfFinset hm hn (Sum.inl i) = s.orderEmbOfFin hm i :=
   rfl
 
 @[simp]
-/--
-theorem `finSumEquivOfFinset_inr` / 定理 `finSumEquivOfFinset_inr`
-
-English:
-theorem finSumEquivOfFinset_inr
-  given: (hm : #s = m) (hn : #sᶜ = n) (i : Fin n)
-  proof: rfl
-
-中文:
-定理 finSumEquivOfFinset_inr
-  条件: (hm : #s = m) (hn : #sᶜ = n) (i : 有限集 n)
-  证明: rfl
+/-
+**finSumEquivOfFinset_inr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finSumEquivOfFinset_inr (hm : #s = m) (hn : #sᶜ = n) (i : Fin n) : finSumE
+quivOfFinset hm hn (Sum.inr i) = sᶜ.orderEmbOfFin hn i
+参数：hm : #s = m；hn : #sᶜ = n；i : Fin n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem finSumEquivOfFinset_inr (hm : #s = m) (hn : #sᶜ = n) (i : Fin n) :
     finSumEquivOfFinset hm hn (Sum.inr i) = sᶜ.orderEmbOfFin hn i :=

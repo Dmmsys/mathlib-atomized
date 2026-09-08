@@ -42,101 +42,82 @@ variable {C : Type u} [Category.{v} C] [Abelian C] (P : ObjectProperty C)
 
 namespace ObjectProperty
 
-/--
-Definition of `IsSerreClass` / `IsSerreClass` 的定义
+/-- A Serre class in an abelian category consists of a predicate which
+holds for the zero object and is closed under subobjects, quotients, extensions. -/
+/-
+**CategoryTheory.ObjectProperty.IsSerreClass** 是 Mathlib 中的一个类，位于命名空间 `CategoryT
+heory.ObjectProperty`。
+形式化陈述：IsSerreClass : Prop extends P.ContainsZero, P.IsClosedUnderSubobjects, P.I
+sClosedUnderQuotients, P.IsClosedUnderExtensions where  variable [P.IsSerreClass
+]  example : P.IsClosedUnderIsomorphisms
+继承自：P.ContainsZero, P.IsClosedUnderSubobjects, P.IsClosedUnderQuotients, P.IsClo
+sedUnderExtensions。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSerreClass
-  parameters: : Prop extends P.ContainsZero,
-  extends: P.ContainsZero, 
-  (no additional axioms)
-
-中文:
-类 是Serre类
-  参数: : 命题 extends P.余ntainsZero,
-  继承: P.余ntainsZero, 
-  (无附加公理)
+--- 原说明 ---
+A Serre class in an abelian category consists of a predicate which
+holds for the zero object and is closed under subobjects, quotients, extensions.
 -/
 class IsSerreClass : Prop extends P.ContainsZero,
     P.IsClosedUnderSubobjects, P.IsClosedUnderQuotients,
     P.IsClosedUnderExtensions where
 
 variable [P.IsSerreClass]
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : P.IsClosedUnderIsomorphisms := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (⊤ : ObjectProperty C).IsSerreClass
-
-中文:
-实例 :
-  签名: (⊤ : ObjectProperty C).是Serre类
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (⊤ : ObjectProperty C).IsSerreClass where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSerreClass (IsZero (C := C))
-
-中文:
-实例 :
-  签名: 是Serre类 (是零 (C := C))
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsSerreClass (IsZero (C := C)) where
-
-/--
-lemma `prop_iff_of_shortExact` / 引理 `prop_iff_of_shortExact`
-
-English:
-lemma prop_iff_of_shortExact
-  given: {S : ShortComplex C} (hS : S.ShortExact)
-  proof: ⟨fun h => ⟨P.prop_X₁_of_shortExact hS h, P.prop_X₃_of_shortExact hS h⟩,
-    fun h => P.prop_X₂_of_shortExact hS h.1 h.2⟩
-
-中文:
-引理 prop_iff_of_shortExact
-  条件: {S : 短复形 C} (hS : S.短正合)
-  证明: ⟨fun h => ⟨P.prop_X₁_of_shortExact hS h, P.prop_X₃_of_shortExact hS h⟩,
-    fun h => P.prop_X₂_of_shortExact hS h.1 h.2⟩
-
-Depends on / 依赖: P.prop_X
+/-
+**CategoryTheory.ObjectProperty.prop_iff_of_shortExact** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ObjectProperty`。
+形式化陈述：prop_iff_of_shortExact {S : ShortComplex C} (hS : S.ShortExact) : P S.X₂ ↔
+ P S.X₁ ∧ P S.X₃
+参数：hS : S.ShortExact。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_X₁_of_shortExact`：prop_X₁_of_shortExa
+ct [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact) (h₂ : P S.X₂) :
+ P S.X₁
+· 使用定理 `CategoryTheory.ObjectProperty.IsSerreClass.toIsClosedUnderSubobjects`：∀ 
+{C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.
+Abelian C}   {P : CategoryTheory.ObjectProperty C} [self :…
+· 使用引理 `CategoryTheory.ObjectProperty.prop_X₃_of_shortExact`：prop_X₃_of_shortExa
+ct [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact) (h₂ : P S.X₂) :
+ P S.X₃
+· 使用定理 `CategoryTheory.ObjectProperty.IsSerreClass.toIsClosedUnderQuotients`：∀ {
+C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.A
+belian C}   {P : CategoryTheory.ObjectProperty C} [self :…
+· 使用引理 `CategoryTheory.ObjectProperty.prop_X₂_of_shortExact`：prop_X₂_of_shortExa
+ct [P.IsClosedUnderExtensions] {S : ShortComplex C} (hS : S.ShortExact) (h₁ : P 
+S.X₁) (h₃ : P S.X₃) : P S.X₂
+· 使用定理 `CategoryTheory.ObjectProperty.IsSerreClass.toIsClosedUnderExtensions`：∀ 
+{C : Type u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.
+Abelian C}   {P : CategoryTheory.ObjectProperty C} [self :…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma prop_iff_of_shortExact {S : ShortComplex C} (hS : S.ShortExact) :
     P S.X₂ ↔ P S.X₁ ∧ P S.X₃ :=
-  ⟨fun h => ⟨P.prop_X₁_of_shortExact hS h, P.prop_X₃_of_shortExact hS h⟩,
-    fun h => P.prop_X₂_of_shortExact hS h.1 h.2⟩
-
-/--
-lemma `prop_X₂_of_exact` / 引理 `prop_X₂_of_exact`
-
-English:
-lemma prop_X₂_of_exact
-  statement: {S : ShortComplex C} (hS : S.Exact)
-  proof: by
-  let d := S.homologyData
-  have := hS.epi_f' d.left
-  have := hS.mono_g' d.right
-  exact (P.prop_X₂_of_shortExact (hS.shortExact d)
-    (P.prop_of_epi d.left.f' h₁) (P.prop_of_mono d.right.g' h₃) :)
-
-中文:
-引理 prop_X₂_of_exact
-  结论: {S : 短复形 C} (hS : S.正合)
-  证明: by
-  let d := S.homologyData
-  have := hS.epi_f' d.left
-  have := hS.mono_g' d.right
-  exact (P.prop_X₂_of_shortExact (hS.shortExact d)
-    (P.prop_of_epi d.left.f' h₁) (P.prop_of_mono d.right.g' h₃) :)
-
-Depends on / 依赖: P.prop_X, P.prop_of_epi, P.prop_of_mono, S.homologyData, d.left, d.left.f, d.right, d.right.g, epi_f, hS.epi_f, hS.mono_g, hS.shortExact, homologyData, mono_g, prop_of_epi, prop_of_mono, shortExact
+  ⟨fun h ↦ ⟨P.prop_X₁_of_shortExact hS h, P.prop_X₃_of_shortExact hS h⟩,
+    fun h ↦ P.prop_X₂_of_shortExact hS h.1 h.2⟩
+/-
+**CategoryTheory.ObjectProperty.prop_X** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prop_X₂_of_exact {S : ShortComplex C} (hS : S.Exact)
     (h₁ : P S.X₁) (h₃ : P S.X₃) : P S.X₂ := by
@@ -145,7 +126,11 @@ lemma prop_X₂_of_exact {S : ShortComplex C} (hS : S.Exact)
   have := hS.mono_g' d.right
   exact (P.prop_X₂_of_shortExact (hS.shortExact d)
     (P.prop_of_epi d.left.f' h₁) (P.prop_of_mono d.right.g' h₃) :)
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : D ⥤ C) [PreservesFiniteLimits F]
     [PreservesFiniteColimits F] :
     (P.inverseImage F).IsSerreClass where
@@ -153,3 +138,4 @@ instance (F : D ⥤ C) [PreservesFiniteLimits F]
 end ObjectProperty
 
 end CategoryTheory
+

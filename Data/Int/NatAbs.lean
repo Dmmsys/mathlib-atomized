@@ -26,71 +26,43 @@ namespace Int
 
 /-- `Int.natAbs` as a bundled `MonoidWithZeroHom`. -/
 @[simps]
-/--
-Definition of `natAbsHom` / `natAbsHom` 的定义
+/-
+**Int.natAbsHom** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：natAbsHom : Int ->*₀ Nat where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natAbs_zero`：Int.natAbs 0 = 0
+· 使用定理 `Int.natAbs_one`：Int.natAbs 1 = 1
+· 使用定理 `Int.natAbs_mul`：∀ (a b : ℤ), (a * b).natAbs = a.natAbs * b.natAbs
 
-English:
-definition natAbsHom
-  signature: : Int ->*₀ Nat where
-  body: Int.natAbs
-  map_mul' := Int.natAbs_mul
-  map_one' := Int.natAbs_one
-  map_zero' := Int.natAbs_zero
-
-中文:
-定义 natAbsHom
-  签名: : 整数 ->*₀ 自然数 where
-  定义体: Int.natAbs
-  map_mul' := Int.natAbs_mul
-  map_one' := Int.natAbs_one
-  map_zero' := Int.natAbs_zero
-
-Depends on / 依赖: Int.natAbs, natAbs
+--- 原说明 ---
+`Int.natAbs` as a bundled `MonoidWithZeroHom`.
 -/
-def natAbsHom : Int ->*₀ Nat where
+def natAbsHom : ℤ →*₀ ℕ where
   toFun := Int.natAbs
   map_mul' := Int.natAbs_mul
   map_one' := Int.natAbs_one
   map_zero' := Int.natAbs_zero
-
-/--
-lemma `natAbs_natCast_sub_natCast_of_ge` / 引理 `natAbs_natCast_sub_natCast_of_ge`
-
-English:
-lemma natAbs_natCast_sub_natCast_of_ge
-  given: {a b : Nat} (h : b <= a)
-  statement: Int.natAbs (↑a - ↑b) = a - b
-  proof: by
-  lia
-
-中文:
-引理 natAbs_natCast_sub_natCast_of_ge
-  条件: {a b : 自然数} (h : b <= a)
-  结论: 整数.natAbs (↑a - ↑b) = a - b
-  证明: by
-  lia
+/-
+**Int.natAbs_natCast_sub_natCast_of_ge** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：natAbs_natCast_sub_natCast_of_ge {a b : Nat} (h : b <= a) : Int.natAbs (↑a
+ - ↑b) = a - b
+参数：h : b <= a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natAbs_natCast_sub_natCast_of_ge {a b : Nat} (h : b <= a) : Int.natAbs (↑a - ↑b) = a - b := by
+lemma natAbs_natCast_sub_natCast_of_ge {a b : ℕ} (h : b ≤ a) : Int.natAbs (↑a - ↑b) = a - b := by
   lia
-
-/--
-lemma `natAbs_natCast_sub_natCast_of_le` / 引理 `natAbs_natCast_sub_natCast_of_le`
-
-English:
-lemma natAbs_natCast_sub_natCast_of_le
-  given: {a b : Nat} (h : a <= b)
-  statement: Int.natAbs (↑a - ↑b) = b - a
-  proof: by
-  lia
-
-中文:
-引理 natAbs_natCast_sub_natCast_of_le
-  条件: {a b : 自然数} (h : a <= b)
-  结论: 整数.natAbs (↑a - ↑b) = b - a
-  证明: by
-  lia
+/-
+**Int.natAbs_natCast_sub_natCast_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：natAbs_natCast_sub_natCast_of_le {a b : Nat} (h : a <= b) : Int.natAbs (↑a
+ - ↑b) = b - a
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natAbs_natCast_sub_natCast_of_le {a b : Nat} (h : a <= b) : Int.natAbs (↑a - ↑b) = b - a := by
+lemma natAbs_natCast_sub_natCast_of_le {a b : ℕ} (h : a ≤ b) : Int.natAbs (↑a - ↑b) = b - a := by
   lia
 
 end Int
+

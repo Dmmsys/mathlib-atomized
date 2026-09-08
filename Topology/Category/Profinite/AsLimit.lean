@@ -43,63 +43,42 @@ universe u
 
 variable (X : Profinite.{u})
 
-/--
-Definition of `fintypeDiagram` / `fintypeDiagram` 的定义
+/-- The functor `DiscreteQuotient X ⥤ Fintype` whose limit is isomorphic to `X`. -/
+/-
+**Profinite.fintypeDiagram** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：fintypeDiagram : DiscreteQuotient X ⥤ FintypeCat where obj S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fintypeDiagram
-  signature: : DiscreteQuotient X ⥤ FintypeCat where
-  body: FintypeCat.of S
-  map f := FintypeCat.homMk (DiscreteQuotient.ofLE f.le)
-
-中文:
-定义 fintypeDiagram
-  签名: : DiscreteQuotient X ⥤ FintypeCat where
-  定义体: FintypeCat.of S
-  map f := FintypeCat.homMk (DiscreteQuotient.ofLE f.le)
-
-Depends on / 依赖: FintypeCat, FintypeCat.of
+--- 原说明 ---
+The functor `DiscreteQuotient X ⥤ Fintype` whose limit is isomorphic to `X`.
 -/
 def fintypeDiagram : DiscreteQuotient X ⥤ FintypeCat where
   obj S := FintypeCat.of S
   map f := FintypeCat.homMk (DiscreteQuotient.ofLE f.le)
 
-/--
-Definition of `diagram` / `diagram` 的定义
+/-- An abbreviation for `X.fintypeDiagram ⋙ FintypeCat.toProfinite`. -/
+/-
+**Profinite.diagram** 是 Mathlib 中的一个缩写定义，位于命名空间 `Profinite`。
+形式化陈述：diagram : DiscreteQuotient X ⥤ Profinite
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation diagram
-  signature: : DiscreteQuotient X ⥤ Profinite
-  body: X.fintypeDiagram ⋙ FintypeCat.toProfinite
-
-中文:
-缩写 diagram
-  签名: : DiscreteQuotient X ⥤ Profinite
-  定义体: X.fintypeDiagram ⋙ FintypeCat.toProfinite
-
-Depends on / 依赖: FintypeCat, FintypeCat.toProfinite, X.fintypeDiagram, fintypeDiagram, toProfinite
+--- 原说明 ---
+An abbreviation for `X.fintypeDiagram ⋙ FintypeCat.toProfinite`.
 -/
 abbrev diagram : DiscreteQuotient X ⥤ Profinite :=
   X.fintypeDiagram ⋙ FintypeCat.toProfinite
 
-/--
-Definition of `asLimitCone` / `asLimitCone` 的定义
+/-- A cone over `X.diagram` whose cone point is `X`. -/
+/-
+**Profinite.asLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：asLimitCone : CategoryTheory.Limits.Cone X.diagram
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asLimitCone
-  signature: : CategoryTheory.Limits.Cone X.diagram
-  body: { pt := X
-    π := { app := fun S => CompHausLike.ofHom (Y := X.diagram.obj S) _
-            ⟨S.proj, IsLocallyConstant.continuous (S.proj_isLocallyConstant)⟩ } }
-
-中文:
-定义 asLimitCone
-  签名: : 范畴论.Limits.锥 X.diagram
-  定义体: { pt := X
-    π := { app := fun S => CompHausLike.ofHom (Y := X.diagram.obj S) _
-            ⟨S.proj, IsLocallyConstant.continuous (S.proj_isLocallyConstant)⟩ } }
-
-Depends on / 依赖: CompHausLike, CompHausLike.ofHom, IsLocallyConstant, IsLocallyConstant.continuous, S.proj, S.proj_isLocallyConstant, X.diagram.obj, continuous, diagram, proj_isLocallyConstant
+--- 原说明 ---
+A cone over `X.diagram` whose cone point is `X`.
 -/
 def asLimitCone : CategoryTheory.Limits.Cone X.diagram :=
   { pt := X
@@ -107,50 +86,33 @@ def asLimitCone : CategoryTheory.Limits.Cone X.diagram :=
             ⟨S.proj, IsLocallyConstant.continuous (S.proj_isLocallyConstant)⟩ } }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isIso_asLimitCone_lift` / 实例 `isIso_asLimitCone_lift`
-
-English:
-instance isIso_asLimitCone_lift
-  signature: : IsIso ((limitConeIsLimit.{u, u} X.diagram).lift X.asLimitCone)
-  body: CompHausLike.isIso_of_bijective _
-    (by
-      refine ⟨fun a b h => ?_, fun a => ?_⟩
-      · refine DiscreteQuotient.eq_of_forall_proj_eq fun S => ?_
-        apply_fun fun f : (limitCone.{u, u} X.diagram).pt => f.val S at h
-        exact h
-      · obtain ⟨b, hb⟩ :=
-          DiscreteQuotient.exists_of_compat (fun S => a.val S) fun _ _ h => a.prop (homOfLE h)
-        use b
-        -- ext S : 3 -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` does not work, replaced with following
-        -- three lines.
-        apply Subtype.ext
-        apply funext
-        rintro S
-        -- Porting note: end replacement block
-        apply hb)
-
-中文:
-实例 isIso_asLimitCone_lift
-  签名: : 是同构 ((limitConeIsLimit.{u, u} X.diagram).lift X.asLimitCone)
-  定义体: CompHausLike.isIso_of_bijective _
-    (by
-      refine ⟨fun a b h => ?_, fun a => ?_⟩
-      · refine DiscreteQuotient.eq_of_forall_proj_eq fun S => ?_
-        apply_fun fun f : (limitCone.{u, u} X.diagram).pt => f.val S at h
-        exact h
-      · obtain ⟨b, hb⟩ :=
-          DiscreteQuotient.exists_of_compat (fun S => a.val S) fun _ _ h => a.prop (homOfLE h)
-        use b
-        -- ext S : 3 -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` does not work, replaced with following
-        -- three lines.
-        apply Subtype.ext
-        apply funext
-        rintro S
-        -- Porting note: end replacement block
-        apply hb)
-
-Depends on / 依赖: CompHausLike, CompHausLike.isIso_of_bijective, DiscreteQuotient, DiscreteQuotient.eq_of_forall_proj_eq, DiscreteQuotient.exists_of_compat, X.diagram, a.prop, a.val, apply_fun, diagram, eq_of_forall_proj_eq, exists_of_compat, f.val, homOfLE, isIso_of_bijective, limitCone
+/-
+**Profinite.isIso_asLimitCone_lift** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+形式化陈述：isIso_asLimitCone_lift : IsIso ((limitConeIsLimit.{u, u} X.diagram).lift X
+.asLimitCone)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.isIso_of_bijective`：isIso_of_bijective {X Y : CompHausLike.
+{u} P} (f : X ⟶ Y) (bij : Function.Bijective f) : IsIso f
+· 使用定理 `DiscreteQuotient.eq_of_forall_proj_eq`：eq_of_forall_proj_eq [T2Space X] 
+[CompactSpace X] [disc : TotallyDisconnectedSpace X] {x y : X} (h : forall Q : D
+iscreteQuotient X, Q.proj x…
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `Profinite.instTotallyDisconnectedSpaceCarrierToTop`：∀ {X : Profinite}, T
+otallyDisconnectedSpace ↑X.toTop
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DiscreteQuotient.exists_of_compat`：exists_of_compat [CompactSpace X] (Qs
+ : (Q : DiscreteQuotient X) -> Q) (compat : forall (A B : DiscreteQuotient X) (h
+ : A <= B), ofLE h (Qs …
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 instance isIso_asLimitCone_lift : IsIso ((limitConeIsLimit.{u, u} X.diagram).lift X.asLimitCone) :=
   CompHausLike.isIso_of_bijective _
@@ -171,76 +133,63 @@ instance isIso_asLimitCone_lift : IsIso ((limitConeIsLimit.{u, u} X.diagram).lif
         apply hb)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isoAsLimitConeLift` / `isoAsLimitConeLift` 的定义
+/-- The isomorphism between `X` and the explicit limit of `X.diagram`,
+induced by lifting `X.asLimitCone`.
+-/
+/-
+**Profinite.isoAsLimitConeLift** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：isoAsLimitConeLift : X ≅ (limitCone.{u, u} X.diagram).pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoAsLimitConeLift
-  signature: : X ≅ (limitCone.{u, u} X.diagram).pt
-  body: asIso (limitConeIsLimit.{u, u} _).lift X.asLimitCone
-
-中文:
-定义 isoAsLimitConeLift
-  签名: : X ≅ (limitCone.{u, u} X.diagram).pt
-  定义体: asIso (limitConeIsLimit.{u, u} _).lift X.asLimitCone
-
-Depends on / 依赖: X.asLimitCone, asLimitCone, limitConeIsLimit
+--- 原说明 ---
+The isomorphism between `X` and the explicit limit of `X.diagram`,
+induced by lifting `X.asLimitCone`.
 -/
 def isoAsLimitConeLift : X ≅ (limitCone.{u, u} X.diagram).pt :=
-asIso (limitConeIsLimit.{u, u} _).lift X.asLimitCone
+  asIso <| (limitConeIsLimit.{u, u} _).lift X.asLimitCone
 
-/--
-Definition of `asLimitConeIso` / `asLimitConeIso` 的定义
+/-- The isomorphism of cones `X.asLimitCone` and `Profinite.limitCone X.diagram`.
+The underlying isomorphism is defeq to `X.isoAsLimitConeLift`.
+-/
+/-
+**Profinite.asLimitConeIso** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：asLimitConeIso : X.asLimitCone ≅ limitCone.{u, u} _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asLimitConeIso
-  signature: : X.asLimitCone ≅ limitCone.{u, u} _
-  body: Limits.Cone.ext (isoAsLimitConeLift _) fun _ => rfl
-
-中文:
-定义 asLimitConeIso
-  签名: : X.asLimitCone ≅ limitCone.{u, u} _
-  定义体: Limits.Cone.ext (isoAsLimitConeLift _) fun _ => rfl
-
-Depends on / 依赖: Limits, Limits.Cone.ext, isoAsLimitConeLift
+--- 原说明 ---
+The isomorphism of cones `X.asLimitCone` and `Profinite.limitCone X.diagram`.
+The underlying isomorphism is defeq to `X.isoAsLimitConeLift`.
 -/
 def asLimitConeIso : X.asLimitCone ≅ limitCone.{u, u} _ :=
   Limits.Cone.ext (isoAsLimitConeLift _) fun _ => rfl
 
-/--
-Definition of `asLimit` / `asLimit` 的定义
+/-- `X.asLimitCone` is indeed a limit cone. -/
+/-
+**Profinite.asLimit** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：asLimit : CategoryTheory.Limits.IsLimit X.asLimitCone
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asLimit
-  signature: : CategoryTheory.Limits.IsLimit X.asLimitCone
-  body: Limits.IsLimit.ofIsoLimit (limitConeIsLimit _) X.asLimitConeIso.symm
-
-中文:
-定义 asLimit
-  签名: : 范畴论.Limits.是极限 X.asLimitCone
-  定义体: Limits.IsLimit.ofIsoLimit (limitConeIsLimit _) X.asLimitConeIso.symm
-
-Depends on / 依赖: IsLimit, Limits, Limits.IsLimit.ofIsoLimit, X.asLimitConeIso.symm, asLimitConeIso, limitConeIsLimit, ofIsoLimit
+--- 原说明 ---
+`X.asLimitCone` is indeed a limit cone.
 -/
 def asLimit : CategoryTheory.Limits.IsLimit X.asLimitCone :=
   Limits.IsLimit.ofIsoLimit (limitConeIsLimit _) X.asLimitConeIso.symm
 
-/--
-Definition of `lim` / `lim` 的定义
+/-- A bundled version of `X.asLimitCone` and `X.asLimit`. -/
+/-
+**Profinite.lim** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：lim : Limits.LimitCone X.diagram
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lim
-  signature: : Limits.LimitCone X.diagram
-  body: ⟨X.asLimitCone, X.asLimit⟩
-
-中文:
-定义 lim
-  签名: : Limits.极限锥 X.diagram
-  定义体: ⟨X.asLimitCone, X.asLimit⟩
-
-Depends on / 依赖: X.asLimit, X.asLimitCone, asLimit, asLimitCone
+--- 原说明 ---
+A bundled version of `X.asLimitCone` and `X.asLimit`.
 -/
 def lim : Limits.LimitCone X.diagram :=
   ⟨X.asLimitCone, X.asLimit⟩
 
 end Profinite
+

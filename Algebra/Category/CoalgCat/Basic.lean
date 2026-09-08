@@ -26,22 +26,15 @@ universe v u
 
 variable (R : Type u) [CommRing R]
 
-/--
-Definition of `CoalgCat` / `CoalgCat` 的定义
+/-- The category of `R`-coalgebras. -/
+/-
+**CoalgCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [CommRing R] → Type (max u (v + 1))
+参数：v + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CoalgCat
-  parameters: extends ModuleCat.{v} R
-  extends: ModuleCat.{v} R
-  axioms and operations (1):
-    - instCoalgebra : Coalgebra R carrier
-
-中文:
-结构 余alg范畴
-  参数: extends 模范畴.{v} R
-  继承: 模范畴.{v} R
-  公理与运算 (1 个):
-    - instCoalgebra : 余algebra R carrier
+--- 原说明 ---
+The category of `R`-coalgebras.
 -/
 structure CoalgCat extends ModuleCat.{v} R where
   instCoalgebra : Coalgebra R carrier
@@ -54,62 +47,34 @@ namespace CoalgCat
 
 open Coalgebra
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (CoalgCat.{v} R) (Type v)
-  body: ⟨(·.carrier)⟩
-
-中文:
-实例 :
-  签名: CoeSort (余alg范畴.{v} R) (类型v)
-  定义体: ⟨(·.carrier)⟩
-
-Depends on / 依赖: carrier
+/-
+**CoalgCat.** 是 Mathlib 中的一个实例，位于命名空间 `CoalgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (CoalgCat.{v} R) (Type v) :=
   ⟨(·.carrier)⟩
-
-/--
-theorem `moduleCat_of_toModuleCat` / 定理 `moduleCat_of_toModuleCat`
-
-English:
-theorem moduleCat_of_toModuleCat
-  given: (X : CoalgCat.{v} R)
-  proof: rfl
-
-中文:
-定理 moduleCat_of_toModuleCat
-  条件: (X : 余alg范畴.{v} R)
-  证明: rfl
+/-
+**CoalgCat.moduleCat_of_toModuleCat** 是 Mathlib 中的一个定理，位于命名空间 `CoalgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (X : CoalgCat R), ModuleCat.of R ↑X.toM
+oduleCat = X.toModuleCat
+参数：X : CoalgCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem moduleCat_of_toModuleCat (X : CoalgCat.{v} R) :
     ModuleCat.of R X.toModuleCat = X.toModuleCat :=
   rfl
 
 variable (R) in
-/--
-Definition of `of` / `of` 的定义
+/-- The object in the category of `R`-coalgebras associated to an `R`-coalgebra. -/
+/-
+**CoalgCat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `CoalgCat`。
+形式化陈述：of (X : Type v) [AddCommGroup X] [Module R X] [Coalgebra R X] : CoalgCat R
+参数：X : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (X : Type v) [AddCommGroup X] [Module R X] [Coalgebra R X]
-  body: { ModuleCat.of R X with
-    instCoalgebra := (inferInstance : Coalgebra R X) }
-
-@[simp]
-
-中文:
-缩写 of
-  签名: (X : 类型v) [加法交换群 X] [模 R X] [余algebra R X]
-  定义体: { ModuleCat.of R X with
-    instCoalgebra := (inferInstance : Coalgebra R X) }
-
-@[simp]
-
-Depends on / 依赖: Coalgebra, ModuleCat, ModuleCat.of, instCoalgebra
+--- 原说明 ---
+The object in the category of `R`-coalgebras associated to an `R`-coalgebra.
 -/
 abbrev of (X : Type v) [AddCommGroup X] [Module R X] [Coalgebra R X] :
     CoalgCat R :=
@@ -117,43 +82,23 @@ abbrev of (X : Type v) [AddCommGroup X] [Module R X] [Coalgebra R X] :
     instCoalgebra := (inferInstance : Coalgebra R X) }
 
 @[simp]
-/--
-lemma `of_comul` / 引理 `of_comul`
-
-English:
-lemma of_comul
-  given: {X : Type v} [AddCommGroup X] [Module R X] [Coalgebra R X]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 of_comul
-  条件: {X : 类型v} [加法交换群 X] [模 R X] [余algebra R X]
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Coalgebra, Coalgebra.comul
+/-
+**CoalgCat.of_comul** 是 Mathlib 中的一个引理，位于命名空间 `CoalgCat`。
+形式化陈述：of_comul {X : Type v} [AddCommGroup X] [Module R X] [Coalgebra R X] : Coal
+gebra.comul (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_comul {X : Type v} [AddCommGroup X] [Module R X] [Coalgebra R X] :
     Coalgebra.comul (A := of R X) = Coalgebra.comul (R := R) (A := X) := rfl
 
 @[simp]
-/--
-lemma `of_counit` / 引理 `of_counit`
-
-English:
-lemma of_counit
-  given: {X : Type v} [AddCommGroup X] [Module R X] [Coalgebra R X]
-  proof: rfl
-
-中文:
-引理 of_counit
-  条件: {X : 类型v} [加法交换群 X] [模 R X] [余algebra R X]
-  证明: rfl
-
-Depends on / 依赖: Coalgebra, Coalgebra.counit, counit
+/-
+**CoalgCat.of_counit** 是 Mathlib 中的一个引理，位于命名空间 `CoalgCat`。
+形式化陈述：of_counit {X : Type v} [AddCommGroup X] [Module R X] [Coalgebra R X] : Coa
+lgebra.counit (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_counit {X : Type v} [AddCommGroup X] [Module R X] [Coalgebra R X] :
     Coalgebra.counit (A := of R X) = Coalgebra.counit (R := R) (A := X) := rfl
@@ -161,201 +106,120 @@ lemma of_counit {X : Type v} [AddCommGroup X] [Module R X] [Coalgebra R X] :
 /-- A type alias for `CoalgHom` to avoid confusion between the categorical and
 algebraic spellings of composition. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CoalgCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CoalgCat`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → CoalgCat R → CoalgCat R → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (V W : CoalgCat.{v} R)
-  axioms and operations (1):
-    - toCoalgHom' : V ->ₗc[R] W
-
-中文:
-结构 态射
-  参数: (V W : 余alg范畴.{v} R)
-  公理与运算 (1 个):
-    - toCoalgHom' : V ->ₗc[R] W
+--- 原说明 ---
+A type alias for `CoalgHom` to avoid confusion between the categorical and
+algebraic spellings of composition.
 -/
 structure Hom (V W : CoalgCat.{v} R) where
   /-- The underlying `CoalgHom` -/
-  toCoalgHom' : V ->ₗc[R] W
-
-/--
-Instance `category` / 实例 `category`
-
-English:
-instance category
-  signature: : Category (CoalgCat.{v} R) where
-  body: Hom M N
-  id M := ⟨CoalgHom.id R M⟩
-  comp f g := ⟨CoalgHom.comp g.toCoalgHom' f.toCoalgHom'⟩
-
-中文:
-实例 category
-  签名: : 范畴 (余alg范畴.{v} R) where
-  定义体: Hom M N
-  id M := ⟨CoalgHom.id R M⟩
-  comp f g := ⟨CoalgHom.comp g.toCoalgHom' f.toCoalgHom'⟩
+  toCoalgHom' : V →ₗc[R] W
+/-
+**CoalgCat.category** 是 Mathlib 中的一个实例，位于命名空间 `CoalgCat`。
+形式化陈述：category : Category (CoalgCat.{v} R) where Hom M N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance category : Category (CoalgCat.{v} R) where
   Hom M N := Hom M N
   id M := ⟨CoalgHom.id R M⟩
   comp f g := ⟨CoalgHom.comp g.toCoalgHom' f.toCoalgHom'⟩
-
-/--
-Instance `concreteCategory` / 实例 `concreteCategory`
-
-English:
-instance concreteCategory
-  signature: : ConcreteCategory (CoalgCat.{v} R) (· ->ₗc[R] ·) where
-  body: f.toCoalgHom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 concreteCategory
-  签名: : 余ncrete范畴 (余alg范畴.{v} R) (· ->ₗc[R] ·) where
-  定义体: f.toCoalgHom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: f.toCoalgHom, toCoalgHom
+/-
+**CoalgCat.concreteCategory** 是 Mathlib 中的一个实例，位于命名空间 `CoalgCat`。
+形式化陈述：concreteCategory : ConcreteCategory (CoalgCat.{v} R) (· ->ₗc[R] ·) where h
+om f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance concreteCategory : ConcreteCategory (CoalgCat.{v} R) (· ->ₗc[R] ·) where
+instance concreteCategory : ConcreteCategory (CoalgCat.{v} R) (· →ₗc[R] ·) where
   hom f := f.toCoalgHom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.toCoalgHom` / `Hom.toCoalgHom` 的定义
+/-- Turn a morphism in `CoalgCat` back into a `CoalgHom`. -/
+/-
+**CoalgCat.Hom.toCoalgHom** 是 Mathlib 中的一个定义，位于命名空间 `CoalgCat.Hom`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → {X Y : CoalgCat R} → X.Hom Y → ↑X.toM
+oduleCat →ₗc[R] ↑Y.toModuleCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.toCoalgHom
-  signature: {X Y : CoalgCat.{v} R} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := CoalgCat.{v} R) f
-
-中文:
-缩写 态射.toCoalgHom
-  签名: {X Y : 余alg范畴.{v} R} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := CoalgCat.{v} R) f
-
-Depends on / 依赖: CoalgCat, ConcreteCategory, ConcreteCategory.hom
+--- 原说明 ---
+Turn a morphism in `CoalgCat` back into a `CoalgHom`.
 -/
-abbrev Hom.toCoalgHom {X Y : CoalgCat.{v} R} (f : Hom X Y) : X ->ₗc[R] Y :=
+abbrev Hom.toCoalgHom {X Y : CoalgCat.{v} R} (f : Hom X Y) : X →ₗc[R] Y :=
   ConcreteCategory.hom (C := CoalgCat.{v} R) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `CoalgHom` as a morphism in `CoalgCat R`. -/
+/-
+**CoalgCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CoalgCat`。
+形式化陈述：ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Modul
+e R Y] [Coalgebra R X] [Coalgebra R Y] (f : X ->ₗc[R] Y) : of R X ⟶ of R Y
+参数：f : X ->ₗc[R] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Module R Y]
-  body: ConcreteCategory.ofHom f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型v} [加法交换群 X] [模 R X] [加法交换群 Y] [模 R Y]
-  定义体: ConcreteCategory.ofHom f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a `CoalgHom` as a morphism in `CoalgCat R`.
 -/
 abbrev ofHom {X Y : Type v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Module R Y]
-    [Coalgebra R X] [Coalgebra R Y] (f : X ->ₗc[R] Y) :
+    [Coalgebra R X] [Coalgebra R Y] (f : X →ₗc[R] Y) :
     of R X ⟶ of R Y :=
   ConcreteCategory.ofHom f
-
-/--
-lemma `Hom.toCoalgHom_injective` / 引理 `Hom.toCoalgHom_injective`
-
-English:
-lemma Hom.toCoalgHom_injective
-  given: (V W : CoalgCat.{v} R)
-  proof: fun ⟨f⟩ ⟨g⟩ _ => by congr
-
-@[ext]
-
-中文:
-引理 态射.toCoalgHom_injective
-  条件: (V W : 余alg范畴.{v} R)
-  证明: fun ⟨f⟩ ⟨g⟩ _ => by congr
-
-@[ext]
+/-
+**CoalgCat.Hom.toCoalgHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `CoalgCat.Hom`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (V W : CoalgCat R), Function.Injective 
+CoalgCat.Hom.toCoalgHom'
+参数：V W : CoalgCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.toCoalgHom_injective (V W : CoalgCat.{v} R) :
-    Function.Injective (Hom.toCoalgHom' : Hom V W -> _) :=
+    Function.Injective (Hom.toCoalgHom' : Hom V W → _) :=
   fun ⟨f⟩ ⟨g⟩ _ => by congr
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {M N : CoalgCat.{v} R} (f g : M ⟶ N) (h : f.toCoalgHom = g.toCoalgHom)
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {M N : 余alg范畴.{v} R} (f g : M ⟶ N) (h : f.toCoalgHom = g.toCoalgHom)
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CoalgCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CoalgCat`。
+形式化陈述：hom_ext {M N : CoalgCat.{v} R} (f g : M ⟶ N) (h : f.toCoalgHom = g.toCoalg
+Hom) : f = g
+参数：f g : M ⟶ N；h : f.toCoalgHom = g.toCoalgHom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoalgCat.Hom.ext`：∀ {R : Type u} {inst : CommRing R} {V W : CoalgCat R} 
+{x y : V.Hom W}, x.toCoalgHom' = y.toCoalgHom' → x = y
 -/
 lemma hom_ext {M N : CoalgCat.{v} R} (f g : M ⟶ N) (h : f.toCoalgHom = g.toCoalgHom) :
     f = g :=
   Hom.ext h
-
-/--
-theorem `toCoalgHom_comp` / 定理 `toCoalgHom_comp`
-
-English:
-theorem toCoalgHom_comp
-  given: {M N U : CoalgCat.{v} R} (f : M ⟶ N) (g : N ⟶ U)
-  proof: rfl
-
-中文:
-定理 toCoalgHom_comp
-  条件: {M N U : 余alg范畴.{v} R} (f : M ⟶ N) (g : N ⟶ U)
-  证明: rfl
+/-
+**CoalgCat.toCoalgHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `CoalgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {M N U : CoalgCat R} (f : M ⟶ N) (g : N
+ ⟶ U),   CoalgCat.Hom.toCoalgHom (CategoryTheory.CategoryStruct.comp f g) =     
+(CoalgCat.Hom.toCoalgHom g).comp (CoalgCat.Hom.toCoalgHom f)
+参数：f : M ⟶ N；g : N ⟶ U；CategoryTheory.CategoryStruct.comp f g；CoalgCat.Hom.toCoa
+lgHom g；CoalgCat.Hom.toCoalgHom f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgHom_comp {M N U : CoalgCat.{v} R} (f : M ⟶ N) (g : N ⟶ U) :
     (f ≫ g).toCoalgHom = g.toCoalgHom.comp f.toCoalgHom :=
   rfl
-
-/--
-theorem `toCoalgHom_id` / 定理 `toCoalgHom_id`
-
-English:
-theorem toCoalgHom_id
-  given: {M : CoalgCat.{v} R}
-  proof: rfl
-
-中文:
-定理 toCoalgHom_id
-  条件: {M : 余alg范畴.{v} R}
-  证明: rfl
+/-
+**CoalgCat.toCoalgHom_id** 是 Mathlib 中的一个定理，位于命名空间 `CoalgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {M : CoalgCat R},   CoalgCat.Hom.toCoal
+gHom (CategoryTheory.CategoryStruct.id M) = CoalgHom.id R ↑M.toModuleCat
+参数：CategoryTheory.CategoryStruct.id M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgHom_id {M : CoalgCat.{v} R} :
     Hom.toCoalgHom (𝟙 M) = CoalgHom.id _ _ :=
   rfl
-
-/--
-Instance `hasForgetToModule` / 实例 `hasForgetToModule`
-
-English:
-instance hasForgetToModule
-  signature: : HasForget₂ (CoalgCat R) (ModuleCat R) where
-  body: { obj := fun M => ModuleCat.of R M
-      map := fun f => ModuleCat.ofHom f.toCoalgHom.toLinearMap }
-
-@[simp]
-
-中文:
-实例 hasForgetToModule
-  签名: : 有Forget₂ (余alg范畴 R) (模范畴 R) where
-  定义体: { obj := fun M => ModuleCat.of R M
-      map := fun f => ModuleCat.ofHom f.toCoalgHom.toLinearMap }
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, ModuleCat.ofHom, f.toCoalgHom.toLinearMap, toCoalgHom, toLinearMap
+/-
+**CoalgCat.hasForgetToModule** 是 Mathlib 中的一个实例，位于命名空间 `CoalgCat`。
+形式化陈述：hasForgetToModule : HasForget₂ (CoalgCat R) (ModuleCat R) where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToModule : HasForget₂ (CoalgCat R) (ModuleCat R) where
   forget₂ :=
@@ -363,43 +227,21 @@ instance hasForgetToModule : HasForget₂ (CoalgCat R) (ModuleCat R) where
       map := fun f => ModuleCat.ofHom f.toCoalgHom.toLinearMap }
 
 @[simp]
-/--
-theorem `forget₂_obj` / 定理 `forget₂_obj`
-
-English:
-theorem forget₂_obj
-  given: (X : CoalgCat R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂_obj
-  条件: (X : 余alg范畴 R)
-  证明: rfl
-
-@[simp]
+/-
+**CoalgCat.forget** 是 Mathlib 中的一个定理，位于命名空间 `CoalgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂_obj (X : CoalgCat R) :
     (forget₂ (CoalgCat R) (ModuleCat R)).obj X = ModuleCat.of R X :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂_map` / 定理 `forget₂_map`
-
-English:
-theorem forget₂_map
-  given: (X Y : CoalgCat R) (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-定理 forget₂_map
-  条件: (X Y : 余alg范畴 R) (f : X ⟶ Y)
-  证明: rfl
+/-
+**CoalgCat.forget** 是 Mathlib 中的一个定理，位于命名空间 `CoalgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂_map (X Y : CoalgCat R) (f : X ⟶ Y) :
-    (forget₂ (CoalgCat R) (ModuleCat R)).map f = ModuleCat.ofHom (f.toCoalgHom : X ->ₗ[R] Y) :=
+    (forget₂ (CoalgCat R) (ModuleCat R)).map f = ModuleCat.ofHom (f.toCoalgHom : X →ₗ[R] Y) :=
   rfl
 
 end CoalgCat
@@ -415,77 +257,54 @@ variable [Coalgebra R X] [Coalgebra R Y] [Coalgebra R Z]
 /-- Build an isomorphism in the category `CoalgCat R` from a
 `CoalgEquiv`. -/
 @[simps]
-/--
-Definition of `toCoalgIso` / `toCoalgIso` 的定义
+/-
+**CoalgEquiv.toCoalgIso** 是 Mathlib 中的一个定义，位于命名空间 `CoalgEquiv`。
+形式化陈述：toCoalgIso (e : X ≃ₗc[R] Y) : CoalgCat.of R X ≅ CoalgCat.of R Y where hom
+参数：e : X ≃ₗc[R] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCoalgIso
-  signature: (e : X ≃ₗc[R] Y)
-  body: CoalgCat.ofHom e
-  inv := CoalgCat.ofHom e.symm
-hom_inv_id := Hom.ext DFunLike.ext _ _ e.left_inv
-inv_hom_id := Hom.ext DFunLike.ext _ _ e.right_inv
-
-中文:
-定义 toCoalgIso
-  签名: (e : X ≃ₗc[R] Y)
-  定义体: CoalgCat.ofHom e
-  inv := CoalgCat.ofHom e.symm
-hom_inv_id := Hom.ext DFunLike.ext _ _ e.left_inv
-inv_hom_id := Hom.ext DFunLike.ext _ _ e.right_inv
-
-Depends on / 依赖: CoalgCat, CoalgCat.ofHom
+--- 原说明 ---
+Build an isomorphism in the category `CoalgCat R` from a
+`CoalgEquiv`.
 -/
 def toCoalgIso (e : X ≃ₗc[R] Y) : CoalgCat.of R X ≅ CoalgCat.of R Y where
   hom := CoalgCat.ofHom e
   inv := CoalgCat.ofHom e.symm
-hom_inv_id := Hom.ext DFunLike.ext _ _ e.left_inv
-inv_hom_id := Hom.ext DFunLike.ext _ _ e.right_inv
-
-/--
-theorem `toCoalgIso_refl` / 定理 `toCoalgIso_refl`
-
-English:
-theorem toCoalgIso_refl
-  proof: rfl
-
-中文:
-定理 toCoalgIso_refl
-  证明: rfl
+  hom_inv_id := Hom.ext <| DFunLike.ext _ _ e.left_inv
+  inv_hom_id := Hom.ext <| DFunLike.ext _ _ e.right_inv
+/-
+**CoalgEquiv.toCoalgIso_refl** 是 Mathlib 中的一个定理，位于命名空间 `CoalgEquiv`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X : Type v} [inst_1 : AddCommGroup X] 
+[inst_2 : _root_.Module R X]   [inst_3 : Coalgebra R X], (CoalgEquiv.refl R X).t
+oCoalgIso = CategoryTheory.Iso.refl (CoalgCat.of R X)
+参数：CoalgEquiv.refl R X；CoalgCat.of R X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgIso_refl :
     toCoalgIso (CoalgEquiv.refl R X) = .refl _ :=
   rfl
-
-/--
-theorem `toCoalgIso_symm` / 定理 `toCoalgIso_symm`
-
-English:
-theorem toCoalgIso_symm
-  given: (e : X ≃ₗc[R] Y)
-  proof: rfl
-
-中文:
-定理 toCoalgIso_symm
-  条件: (e : X ≃ₗc[R] Y)
-  证明: rfl
+/-
+**CoalgEquiv.toCoalgIso_symm** 是 Mathlib 中的一个定理，位于命名空间 `CoalgEquiv`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y : Type v} [inst_1 : AddCommGroup X
+] [inst_2 : _root_.Module R X]   [inst_3 : AddCommGroup Y] [inst_4 : _root_.Modu
+le R Y] [inst_5 : Coalgebra R X] [inst_6 : Coalgebra R Y]   (e : X ≃ₗc[R] Y), e.
+symm.toCoalgIso = e.toCoalgIso.symm
+参数：e : X ≃ₗc[R] Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgIso_symm (e : X ≃ₗc[R] Y) :
     toCoalgIso e.symm = (toCoalgIso e).symm :=
   rfl
-
-/--
-theorem `toCoalgIso_trans` / 定理 `toCoalgIso_trans`
-
-English:
-theorem toCoalgIso_trans
-  given: (e : X ≃ₗc[R] Y) (f : Y ≃ₗc[R] Z)
-  proof: rfl
-
-中文:
-定理 toCoalgIso_trans
-  条件: (e : X ≃ₗc[R] Y) (f : Y ≃ₗc[R] Z)
-  证明: rfl
+/-
+**CoalgEquiv.toCoalgIso_trans** 是 Mathlib 中的一个定理，位于命名空间 `CoalgEquiv`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y Z : Type v} [inst_1 : AddCommGroup
+ X] [inst_2 : _root_.Module R X]   [inst_3 : AddCommGroup Y] [inst_4 : _root_.Mo
+dule R Y] [inst_5 : AddCommGroup Z] [inst_6 : _root_.Module R Z]   [inst_7 : Coa
+lgebra R X] [inst_8 : Coalgebra R Y] [inst_9 : Coalgebra R Z] (e : X ≃ₗc[R] Y) (
+f : Y ≃ₗc[R] Z),   (e.trans f).toCoalgIso = e.toCoalgIso ≪≫ f.toCoalgIso
+参数：e : X ≃ₗc[R] Y；f : Y ≃ₗc[R] Z；e.trans f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgIso_trans (e : X ≃ₗc[R] Y) (f : Y ≃ₗc[R] Z) :
     toCoalgIso (e.trans f) = toCoalgIso e ≪≫ toCoalgIso f :=
@@ -499,94 +318,69 @@ open Coalgebra
 
 variable {X Y Z : CoalgCat.{v} R}
 
-/--
-Definition of `toCoalgEquiv` / `toCoalgEquiv` 的定义
+/-- Build a `CoalgEquiv` from an isomorphism in the category
+`CoalgCat R`. -/
+/-
+**CategoryTheory.Iso.toCoalgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Iso`
+。
+形式化陈述：toCoalgEquiv (i : X ≅ Y) : X ≃ₗc[R] Y
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCoalgEquiv
-  signature: (i : X ≅ Y)
-  body: { i.hom.toCoalgHom with
-    invFun := i.inv.toCoalgHom
-    left_inv := fun x => CoalgHom.congr_fun (congr_arg CoalgCat.Hom.toCoalgHom i.3) x
-    right_inv := fun x => CoalgHom.congr_fun (congr_arg CoalgCat.Hom.toCoalgHom i.4) x }
-
-中文:
-定义 toCoalgEquiv
-  签名: (i : X ≅ Y)
-  定义体: { i.hom.toCoalgHom with
-    invFun := i.inv.toCoalgHom
-    left_inv := fun x => CoalgHom.congr_fun (congr_arg CoalgCat.Hom.toCoalgHom i.3) x
-    right_inv := fun x => CoalgHom.congr_fun (congr_arg CoalgCat.Hom.toCoalgHom i.4) x }
-
-Depends on / 依赖: CoalgCat, CoalgCat.Hom.toCoalgHom, CoalgHom, CoalgHom.congr_fun, congr_arg, congr_fun, i.hom.toCoalgHom, i.inv.toCoalgHom, invFun, left_inv, right_inv, toCoalgHom
+--- 原说明 ---
+Build a `CoalgEquiv` from an isomorphism in the category
+`CoalgCat R`.
 -/
 def toCoalgEquiv (i : X ≅ Y) : X ≃ₗc[R] Y :=
   { i.hom.toCoalgHom with
     invFun := i.inv.toCoalgHom
     left_inv := fun x => CoalgHom.congr_fun (congr_arg CoalgCat.Hom.toCoalgHom i.3) x
     right_inv := fun x => CoalgHom.congr_fun (congr_arg CoalgCat.Hom.toCoalgHom i.4) x }
-
-/--
-theorem `toCoalgEquiv_toCoalgHom` / 定理 `toCoalgEquiv_toCoalgHom`
-
-English:
-theorem toCoalgEquiv_toCoalgHom
-  given: (i : X ≅ Y)
-  proof: rfl
-
-中文:
-定理 toCoalgEquiv_toCoalgHom
-  条件: (i : X ≅ Y)
-  证明: rfl
+/-
+**CategoryTheory.Iso.toCoalgEquiv_toCoalgHom** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y : CoalgCat R} (i : X ≅ Y), ↑i.toCo
+algEquiv = CoalgCat.Hom.toCoalgHom i.hom
+参数：i : X ≅ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoalgEquivClass.toCoalgHomClass`：∀ {F : Type u_5} {R : outParam (Type u_
+6)} {A : outParam (Type u_7)} {B : outParam (Type u_8)} {inst : CommSemiring R} 
+  {inst_1 : AddCommMo…
+· 使用定理 `CoalgEquiv.instCoalgEquivClass`：∀ {R : Type u_1} {A : Type u_2} {B : Typ
+e u_3} [inst : CommSemiring R] [inst_1 : AddCommMonoid A]   [inst_2 : AddCommMon
+oid B] [inst_3 : _ro…
 -/
 @[simp] theorem toCoalgEquiv_toCoalgHom (i : X ≅ Y) :
     i.toCoalgEquiv = i.hom.toCoalgHom := rfl
-
-/--
-theorem `toCoalgEquiv_refl` / 定理 `toCoalgEquiv_refl`
-
-English:
-theorem toCoalgEquiv_refl
-  statement: toCoalgEquiv (.refl X) = .refl _ _
-  proof: rfl
-
-中文:
-定理 toCoalgEquiv_refl
-  结论: toCoalgEquiv (.refl X) = .refl _ _
-  证明: rfl
+/-
+**CategoryTheory.Iso.toCoalgEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X : CoalgCat R},   (CategoryTheory.Iso
+.refl X).toCoalgEquiv = CoalgEquiv.refl R ↑X.toModuleCat
+参数：CategoryTheory.Iso.refl X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgEquiv_refl : toCoalgEquiv (.refl X) = .refl _ _ :=
   rfl
-
-/--
-theorem `toCoalgEquiv_symm` / 定理 `toCoalgEquiv_symm`
-
-English:
-theorem toCoalgEquiv_symm
-  given: (e : X ≅ Y)
-  proof: rfl
-
-中文:
-定理 toCoalgEquiv_symm
-  条件: (e : X ≅ Y)
-  证明: rfl
+/-
+**CategoryTheory.Iso.toCoalgEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y : CoalgCat R} (e : X ≅ Y), e.symm.
+toCoalgEquiv = e.toCoalgEquiv.symm
+参数：e : X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgEquiv_symm (e : X ≅ Y) :
     toCoalgEquiv e.symm = (toCoalgEquiv e).symm :=
   rfl
-
-/--
-theorem `toCoalgEquiv_trans` / 定理 `toCoalgEquiv_trans`
-
-English:
-theorem toCoalgEquiv_trans
-  given: (e : X ≅ Y) (f : Y ≅ Z)
-  proof: rfl
-
-中文:
-定理 toCoalgEquiv_trans
-  条件: (e : X ≅ Y) (f : Y ≅ Z)
-  证明: rfl
+/-
+**CategoryTheory.Iso.toCoalgEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y Z : CoalgCat R} (e : X ≅ Y) (f : Y
+ ≅ Z),   (e ≪≫ f).toCoalgEquiv = e.toCoalgEquiv.trans f.toCoalgEquiv
+参数：e : X ≅ Y；f : Y ≅ Z；e ≪≫ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toCoalgEquiv_trans (e : X ≅ Y) (f : Y ≅ Z) :
     toCoalgEquiv (e ≪≫ f) = e.toCoalgEquiv.trans f.toCoalgEquiv :=
@@ -594,26 +388,21 @@ theorem toCoalgEquiv_trans
 
 end CategoryTheory.Iso
 
-/--
-Instance `CoalgCat.forget_reflects_isos` / 实例 `CoalgCat.forget_reflects_isos`
-
-English:
-instance CoalgCat.forget_reflects_isos
-  signature: :
-  body: by
-    let i := asIso ((forget (CoalgCat.{v} R)).map f)
-    let e : X ≃ₗc[R] Y := { f.toCoalgHom, i.toEquiv with }
-    exact ⟨e.toCoalgIso.isIso_hom.1⟩
-
-中文:
-实例 余alg范畴.forget_reflects_isos
-  签名: :
-  定义体: by
-    let i := asIso ((forget (CoalgCat.{v} R)).map f)
-    let e : X ≃ₗc[R] Y := { f.toCoalgHom, i.toEquiv with }
-    exact ⟨e.toCoalgIso.isIso_hom.1⟩
-
-Depends on / 依赖: CoalgCat, e.toCoalgIso.isIso_hom, f.toCoalgHom, forget, i.toEquiv, isIso_hom, toCoalgHom, toCoalgIso, toEquiv
+/-
+**CoalgCat.forget_reflects_isos** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CoalgCat.forget_reflects_isos : (forget (CoalgCat.{v} R)).ReflectsIsomorph
+isms where reflects {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `CategoryTheory.IsIso.out`：∀ {C : Type u} {inst : CategoryTheory.Category
+.{v, u} C} {X Y : C} {f : X ⟶ Y} [self : CategoryTheory.IsIso f],   ∃ inv,     C
+ategoryTheory.…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance CoalgCat.forget_reflects_isos :
     (forget (CoalgCat.{v} R)).ReflectsIsomorphisms where

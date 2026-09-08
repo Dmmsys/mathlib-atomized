@@ -19,172 +19,75 @@ namespace ZeroHom
 section Zero
 variable [Zero A] [Zero B] [Zero C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulZeroClass
-  signature: M B] : SMulZeroClass M (ZeroHom A B) where
-  body: { toFun a := r • f a
-      map_zero' := by simp only [map_zero, smul_zero] }
-  smul_zero _ := ext fun _ => smul_zero _
-
-中文:
-实例 [SMulZero类
-  签名: M B] : SMulZero类 M (保零态射 A B) where
-  定义体: { toFun a := r • f a
-      map_zero' := by simp only [map_zero, smul_zero] }
-  smul_zero _ := ext fun _ => smul_zero _
-
-Depends on / 依赖: map_zero, smul_zero
+/-
+**ZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulZeroClass M B] : SMulZeroClass M (ZeroHom A B) where
   smul r f :=
     { toFun a := r • f a
       map_zero' := by simp only [map_zero, smul_zero] }
   smul_zero _ := ext fun _ => smul_zero _
-
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: [SMulZeroClass M B] (m : M) (f : ZeroHom A B)
-  statement: ⇑(m • f) = m • f
-  proof: rfl
-
-中文:
-定理 coe_smul
-  条件: [SMulZero类 M B] (m : M) (f : 保零态射 A B)
-  结论: ⇑(m • f) = m • f
-  证明: rfl
+/-
+**ZeroHom.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `ZeroHom`。
+形式化陈述：∀ {M : Type u_1} {A : Type u_3} {B : Type u_4} [inst : Zero A] [inst_1 : Z
+ero B] [inst_2 : SMulZeroClass M B] (m : M)   (f : ZeroHom A B), ⇑(m • f) = m • 
+⇑f
+参数：m : M；f : ZeroHom A B；m • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[norm_cast] theorem coe_smul [SMulZeroClass M B] (m : M) (f : ZeroHom A B) : ⇑(m • f) = m • f :=
   rfl
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: [SMulZeroClass M B] (m : M) (f : ZeroHom A B) (a : A)
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: [SMulZero类 M B] (m : M) (f : 保零态射 A B) (a : A)
-  证明: rfl
+/-
+**ZeroHom.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `ZeroHom`。
+形式化陈述：∀ {M : Type u_1} {A : Type u_3} {B : Type u_4} [inst : Zero A] [inst_1 : Z
+ero B] [inst_2 : SMulZeroClass M B] (m : M)   (f : ZeroHom A B) (a : A), (m • f)
+ a = m • f a
+参数：m : M；f : ZeroHom A B；a : A；m • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem smul_apply [SMulZeroClass M B] (m : M) (f : ZeroHom A B) (a : A) :
     (m • f) a = m • f a := rfl
-
-/--
-theorem `smul_comp` / 定理 `smul_comp`
-
-English:
-theorem smul_comp
-  given: [SMulZeroClass M C] (m : M) (g : ZeroHom B C) (f : ZeroHom A B)
-  proof: rfl
-
-中文:
-定理 smul_comp
-  条件: [SMulZero类 M C] (m : M) (g : 保零态射 B C) (f : 保零态射 A B)
-  证明: rfl
+/-
+**ZeroHom.smul_comp** 是 Mathlib 中的一个定理，位于命名空间 `ZeroHom`。
+形式化陈述：smul_comp [SMulZeroClass M C] (m : M) (g : ZeroHom B C) (f : ZeroHom A B) 
+: (m • g).comp f = m • g.comp f
+参数：m : M；g : ZeroHom B C；f : ZeroHom A B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_comp [SMulZeroClass M C] (m : M) (g : ZeroHom B C) (f : ZeroHom A B) :
     (m • g).comp f = m • g.comp f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulZeroClass
-  signature: M B] [SMulZeroClass N B] [SMulCommClass M N B] :
-  body: ext fun _ => smul_comm _ _ _
-
-中文:
-实例 [SMulZero类
-  签名: M B] [SMulZero类 N B] [标量交换类 M N B] :
-  定义体: ext fun _ => smul_comm _ _ _
-
-Depends on / 依赖: smul_comm
+/-
+**ZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulZeroClass M B] [SMulZeroClass N B] [SMulCommClass M N B] :
     SMulCommClass M N (ZeroHom A B) where
   smul_comm _ _ _ := ext fun _ => smul_comm _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M N] [SMulZeroClass M B] [SMulZeroClass N B] [IsScalarTower M N B] :
-  body: ext fun _ => smul_assoc _ _ _
-
-中文:
-实例 [标量乘法
-  签名: M N] [SMulZero类 M B] [SMulZero类 N B] [标量塔 M N B] :
-  定义体: ext fun _ => smul_assoc _ _ _
-
-Depends on / 依赖: smul_assoc
+/-
+**ZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M N] [SMulZeroClass M B] [SMulZeroClass N B] [IsScalarTower M N B] :
     IsScalarTower M N (ZeroHom A B) where
   smul_assoc _ _ _ := ext fun _ => smul_assoc _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulZeroClass
-  signature: M B] [SMulZeroClass Mᵐᵒᵖ B] [IsCentralScalar M B] :
-  body: ext fun _ => op_smul_eq_smul _ _
-
-中文:
-实例 [SMulZero类
-  签名: M B] [SMulZero类 Mᵐᵒᵖ B] [中心标量 M B] :
-  定义体: ext fun _ => op_smul_eq_smul _ _
-
-Depends on / 依赖: op_smul_eq_smul
+/-
+**ZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulZeroClass M B] [SMulZeroClass Mᵐᵒᵖ B] [IsCentralScalar M B] :
     IsCentralScalar M (ZeroHom A B) where
   op_smul_eq_smul _ _ := ext fun _ => op_smul_eq_smul _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: M] [SMulWithZero M B] : SMulWithZero M (ZeroHom A B) where
-  body: ext fun _ => zero_smul _ _
-
-中文:
-实例 [零
-  签名: M] [带零标量乘法 M B] : 带零标量乘法 M (保零态射 A B) where
-  定义体: ext fun _ => zero_smul _ _
-
-Depends on / 依赖: zero_smul
+/-
+**ZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero M] [SMulWithZero M B] : SMulWithZero M (ZeroHom A B) where
   zero_smul _ := ext fun _ => zero_smul _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonoidWithZero
-  signature: M] [MulActionWithZero M B] : MulActionWithZero M (ZeroHom A B) where
-  body: inferInstance
-  one_smul _ := ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
-
-中文:
-实例 [带零幺半群
-  签名: M] [带零乘法作用 M B] : 带零乘法作用 M (保零态射 A B) where
-  定义体: inferInstance
-  one_smul _ := ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
+/-
+**ZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MonoidWithZero M] [MulActionWithZero M B] : MulActionWithZero M (ZeroHom A B) where
   __ : SMulWithZero _ _ := inferInstance
@@ -200,184 +103,85 @@ namespace AddMonoidHom
 section
 variable [AddZeroClass A] [AddZeroClass B] [AddZeroClass C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: M B] : SMulZeroClass M (A ->+ B) where
-  body: { toFun a := r • f a
-      map_zero' := by simp only [map_zero, smul_zero]
-      map_add' _ _ := by simp only [map_add, smul_add] }
-  smul_zero _ := ext fun _ => smul_zero _
-
-中文:
-实例 [分配标量乘法
-  签名: M B] : SMulZero类 M (A ->+ B) where
-  定义体: { toFun a := r • f a
-      map_zero' := by simp only [map_zero, smul_zero]
-      map_add' _ _ := by simp only [map_add, smul_add] }
-  smul_zero _ := ext fun _ => smul_zero _
-
-Depends on / 依赖: map_add, map_zero, smul_add, smul_zero
+/-
+**AddMonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul M B] : SMulZeroClass M (A ->+ B) where
+instance [DistribSMul M B] : SMulZeroClass M (A →+ B) where
   smul r f :=
     { toFun a := r • f a
       map_zero' := by simp only [map_zero, smul_zero]
       map_add' _ _ := by simp only [map_add, smul_add] }
   smul_zero _ := ext fun _ => smul_zero _
-
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: [DistribSMul M B] (m : M) (f : A ->+ B)
-  statement: ⇑(m • f) = m • f
-  proof: rfl
-
-中文:
-定理 coe_smul
-  条件: [分配标量乘法 M B] (m : M) (f : A ->+ B)
-  结论: ⇑(m • f) = m • f
-  证明: rfl
+/-
+**AddMonoidHom.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `AddMonoidHom`。
+形式化陈述：∀ {M : Type u_1} {A : Type u_3} {B : Type u_4} [inst : AddZeroClass A] [in
+st_1 : AddZeroClass B]   [inst_2 : DistribSMul M B] (m : M) (f : A →+ B), ⇑(m • 
+f) = m • ⇑f
+参数：m : M；f : A →+ B；m • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[norm_cast] theorem coe_smul [DistribSMul M B] (m : M) (f : A ->+ B) : ⇑(m • f) = m • f := rfl
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: [DistribSMul M B] (m : M) (f : A ->+ B) (a : A)
-  statement: (m • f) a = m • f a
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: [分配标量乘法 M B] (m : M) (f : A ->+ B) (a : A)
-  结论: (m • f) a = m • f a
-  证明: rfl
+@[norm_cast] theorem coe_smul [DistribSMul M B] (m : M) (f : A →+ B) : ⇑(m • f) = m • f := rfl
+/-
+**AddMonoidHom.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddMonoidHom`。
+形式化陈述：∀ {M : Type u_1} {A : Type u_3} {B : Type u_4} [inst : AddZeroClass A] [in
+st_1 : AddZeroClass B]   [inst_2 : DistribSMul M B] (m : M) (f : A →+ B) (a : A)
+, (m • f) a = m • f a
+参数：m : M；f : A →+ B；a : A；m • f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem smul_apply [DistribSMul M B] (m : M) (f : A ->+ B) (a : A) : (m • f) a = m • f a :=
+@[simp] theorem smul_apply [DistribSMul M B] (m : M) (f : A →+ B) (a : A) : (m • f) a = m • f a :=
   rfl
-
-/--
-theorem `smul_comp` / 定理 `smul_comp`
-
-English:
-theorem smul_comp
-  given: [DistribSMul M C] (m : M) (g : B ->+ C) (f : A ->+ B)
-  proof: rfl
-
-中文:
-定理 smul_comp
-  条件: [分配标量乘法 M C] (m : M) (g : B ->+ C) (f : A ->+ B)
-  证明: rfl
+/-
+**AddMonoidHom.smul_comp** 是 Mathlib 中的一个定理，位于命名空间 `AddMonoidHom`。
+形式化陈述：smul_comp [DistribSMul M C] (m : M) (g : B ->+ C) (f : A ->+ B) : (m • g).
+comp f = m • g.comp f
+参数：m : M；g : B ->+ C；f : A ->+ B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_comp [DistribSMul M C] (m : M) (g : B ->+ C) (f : A ->+ B) :
+theorem smul_comp [DistribSMul M C] (m : M) (g : B →+ C) (f : A →+ B) :
     (m • g).comp f = m • g.comp f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: M B] [DistribSMul N B] [SMulCommClass M N B] :
-  body: ext fun _ => smul_comm _ _ _
-
-中文:
-实例 [分配标量乘法
-  签名: M B] [分配标量乘法 N B] [标量交换类 M N B] :
-  定义体: ext fun _ => smul_comm _ _ _
-
-Depends on / 依赖: smul_comm
+/-
+**AddMonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DistribSMul M B] [DistribSMul N B] [SMulCommClass M N B] :
-    SMulCommClass M N (A ->+ B) where
+    SMulCommClass M N (A →+ B) where
   smul_comm _ _ _ := ext fun _ => smul_comm _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M N] [DistribSMul M B] [DistribSMul N B] [IsScalarTower M N B] :
-  body: ext fun _ => smul_assoc _ _ _
-
-中文:
-实例 [标量乘法
-  签名: M N] [分配标量乘法 M B] [分配标量乘法 N B] [标量塔 M N B] :
-  定义体: ext fun _ => smul_assoc _ _ _
-
-Depends on / 依赖: smul_assoc
+/-
+**AddMonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M N] [DistribSMul M B] [DistribSMul N B] [IsScalarTower M N B] :
-    IsScalarTower M N (A ->+ B) where
+    IsScalarTower M N (A →+ B) where
   smul_assoc _ _ _ := ext fun _ => smul_assoc _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: M B] [DistribSMul Mᵐᵒᵖ B] [IsCentralScalar M B] :
-  body: ext fun _ => op_smul_eq_smul _ _
-
-中文:
-实例 [分配标量乘法
-  签名: M B] [分配标量乘法 Mᵐᵒᵖ B] [中心标量 M B] :
-  定义体: ext fun _ => op_smul_eq_smul _ _
-
-Depends on / 依赖: op_smul_eq_smul
+/-
+**AddMonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DistribSMul M B] [DistribSMul Mᵐᵒᵖ B] [IsCentralScalar M B] :
-    IsCentralScalar M (A ->+ B) where
+    IsCentralScalar M (A →+ B) where
   op_smul_eq_smul _ _ := ext fun _ => op_smul_eq_smul _ _
 
 end
 
 variable [AddZeroClass A] [AddCommMonoid B]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: M B] : DistribSMul M (A ->+ B) where
-  body: ext fun _ => smul_add _ _ _
-
-中文:
-实例 [分配标量乘法
-  签名: M B] : 分配标量乘法 M (A ->+ B) where
-  定义体: ext fun _ => smul_add _ _ _
-
-Depends on / 依赖: smul_add
+/-
+**AddMonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul M B] : DistribSMul M (A ->+ B) where
+instance [DistribSMul M B] : DistribSMul M (A →+ B) where
   smul_add _ _ _ := ext fun _ => smul_add _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [DistribMulAction M B] : DistribMulAction M (A ->+ B) where
-  body: inferInstance
-  one_smul _ := ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
-
-中文:
-实例 [幺半群
-  签名: M] [分配乘法作用 M B] : 分配乘法作用 M (A ->+ B) where
-  定义体: inferInstance
-  one_smul _ := ext fun _ => one_smul _ _
-  mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
+/-
+**AddMonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Monoid M] [DistribMulAction M B] : DistribMulAction M (A ->+ B) where
+instance [Monoid M] [DistribMulAction M B] : DistribMulAction M (A →+ B) where
   __ : DistribSMul _ _ := inferInstance
   one_smul _ := ext fun _ => one_smul _ _
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
 
 end AddMonoidHom
+

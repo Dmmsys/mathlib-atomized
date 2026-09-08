@@ -30,50 +30,35 @@ open CategoryTheory Category Pretriangulated
 namespace DerivedCategory
 
 variable {C : Type u} [Category.{v} C] [Abelian C] [HasDerivedCategory.{w} C]
-  {S : ShortComplex (CochainComplex C Int)} (hS : S.ShortExact)
+  {S : ShortComplex (CochainComplex C ℤ)} (hS : S.ShortExact)
 
-/--
-Definition of `triangleOfSESδ` / `triangleOfSESδ` 的定义
+/-- The connecting homomorphism `Q.obj (S.X₃) ⟶ (Q.obj S.X₁)⟦(1 : ℤ)⟧`
+in the derived category when `S` is a short exact short complex of
+cochain complexes in an abelian category. -/
+/-
+**DerivedCategory.triangleOfSES** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory`。
+形式化陈述：triangleOfSES : Triangle (DerivedCategory C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleOfSESδ
-  signature: :
-  body: have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
-  inv (Q.map (CochainComplex.mappingCone.descShortComplex S)) ≫
-    Q.map (CochainComplex.mappingCone.triangle S.f).mor₃ ≫
-    (Q.commShiftIso (1 : Int)).hom.app S.X₁
-
-中文:
-定义 triangleOfSESδ
-  签名: :
-  定义体: have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
-  inv (Q.map (CochainComplex.mappingCone.descShortComplex S)) ≫
-    Q.map (CochainComplex.mappingCone.triangle S.f).mor₃ ≫
-    (Q.commShiftIso (1 : Int)).hom.app S.X₁
-
-Depends on / 依赖: CochainComplex, CochainComplex.mappingCone.descShortComplex, CochainComplex.mappingCone.quasiIso_descShortComplex, CochainComplex.mappingCone.triangle, Q.commShiftIso, Q.map, commShiftIso, descShortComplex, hom.app, mappingCone, quasiIso_descShortComplex, triangle
+--- 原说明 ---
+The connecting homomorphism `Q.obj (S.X₃) ⟶ (Q.obj S.X₁)⟦(1 : ℤ)⟧`
+in the derived category when `S` is a short exact short complex of
+cochain complexes in an abelian category.
 -/
 noncomputable def triangleOfSESδ :
-    Q.obj (S.X₃) ⟶ (Q.obj S.X₁)⟦(1 : Int)⟧ :=
+    Q.obj (S.X₃) ⟶ (Q.obj S.X₁)⟦(1 : ℤ)⟧ :=
   have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
   inv (Q.map (CochainComplex.mappingCone.descShortComplex S)) ≫
     Q.map (CochainComplex.mappingCone.triangle S.f).mor₃ ≫
-    (Q.commShiftIso (1 : Int)).hom.app S.X₁
+    (Q.commShiftIso (1 : ℤ)).hom.app S.X₁
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `descShortComplex_triangleOfSESδ` / 引理 `descShortComplex_triangleOfSESδ`
-
-English:
-lemma descShortComplex_triangleOfSESδ
-  proof: by
-  simp [triangleOfSESδ]
-
-中文:
-引理 descShortComplex_triangleOfSESδ
-  证明: by
-  simp [triangleOfSESδ]
+/-
+**DerivedCategory.descShortComplex_triangleOfSES** 是 Mathlib 中的一个引理，位于命名空间 `Deri
+vedCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma descShortComplex_triangleOfSESδ :
     dsimp% Q.map (CochainComplex.mappingCone.descShortComplex S) ≫ triangleOfSESδ hS =
@@ -83,104 +68,63 @@ lemma descShortComplex_triangleOfSESδ :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `triangleOfSESδ_naturality` / 引理 `triangleOfSESδ_naturality`
-
-English:
-lemma triangleOfSESδ_naturality
-  statement: {S₁ S₂ : ShortComplex (CochainComplex C Int)}
-  proof: by
-  simp only [triangleOfSESδ, Category.assoc,
-    IsIso.inv_comp_eq]
-  rw [← Functor.comp_map]; rw [← (Q.commShiftIso (1 : Int)).hom.naturality]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Iso.app_hom]; rw [Iso.cancel_iso_hom_right]; rw [← Q.map_comp]
-  simp only [Functor.comp_map, ← CochainComplex.mappingCone.descShortComplex_naturality f,
-    Functor.map_comp, Category.assoc, IsIso.hom_inv_id, Category.comp_id]
-  rw [← Q.map_comp]; rw [← Q.map_comp]
-  congr 1
-  exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
-
-中文:
-引理 triangleOfSESδ_naturality
-  结论: {S₁ S₂ : 短复形 (上链复形 C 整数)}
-  证明: by
-  simp only [triangleOfSESδ, Category.assoc,
-    IsIso.inv_comp_eq]
-  rw [← Functor.comp_map]; rw [← (Q.commShiftIso (1 : Int)).hom.naturality]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Iso.app_hom]; rw [Iso.cancel_iso_hom_right]; rw [← Q.map_comp]
-  simp only [Functor.comp_map, ← CochainComplex.mappingCone.descShortComplex_naturality f,
-    Functor.map_comp, Category.assoc, IsIso.hom_inv_id, Category.comp_id]
-  rw [← Q.map_comp]; rw [← Q.map_comp]
-  congr 1
-  exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, CochainComplex, CochainComplex.mappingCone.descShortComplex_naturality, Functor, Functor.comp_map, Functor.map_comp, IsIso.hom_inv_id, IsIso.inv_comp_eq, Iso.app_hom, Iso.cancel_iso_hom_right, Q.commShiftIso, Q.map_comp, app_hom, cancel_iso_hom_right, commShiftIso, comp_id, comp_map, descShortComplex_naturality
+/-
+**DerivedCategory.triangleOfSES** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory`。
+形式化陈述：triangleOfSES : Triangle (DerivedCategory C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma triangleOfSESδ_naturality {S₁ S₂ : ShortComplex (CochainComplex C Int)}
+lemma triangleOfSESδ_naturality {S₁ S₂ : ShortComplex (CochainComplex C ℤ)}
     (hS₁ : S₁.ShortExact) (hS₂ : S₂.ShortExact) (f : S₁ ⟶ S₂) :
     triangleOfSESδ hS₁ ≫ (Q.map f.τ₁)⟦1⟧' = Q.map f.τ₃ ≫ triangleOfSESδ hS₂ := by
   simp only [triangleOfSESδ, Category.assoc,
     IsIso.inv_comp_eq]
-  rw [← Functor.comp_map]; rw [← (Q.commShiftIso (1 : Int)).hom.naturality]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Iso.app_hom]; rw [Iso.cancel_iso_hom_right]; rw [← Q.map_comp]
+  rw [← Functor.comp_map, ← (Q.commShiftIso (1 : ℤ)).hom.naturality, ← Category.assoc,
+    ← Category.assoc, ← Category.assoc, ← Category.assoc, ← Iso.app_hom,
+    Iso.cancel_iso_hom_right, ← Q.map_comp]
   simp only [Functor.comp_map, ← CochainComplex.mappingCone.descShortComplex_naturality f,
     Functor.map_comp, Category.assoc, IsIso.hom_inv_id, Category.comp_id]
-  rw [← Q.map_comp]; rw [← Q.map_comp]
+  rw [← Q.map_comp, ← Q.map_comp]
   congr 1
   exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
 
 /-- The distinguished triangle in the derived category associated to a short
 exact sequence of cochain complexes. -/
 @[simps!]
-/--
-Definition of `triangleOfSES` / `triangleOfSES` 的定义
+/-
+**DerivedCategory.triangleOfSES** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory`。
+形式化陈述：triangleOfSES : Triangle (DerivedCategory C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleOfSES
-  signature: : Triangle (DerivedCategory C)
-  body: Triangle.mk (Q.map S.f) (Q.map S.g) (triangleOfSESδ hS)
-
-中文:
-定义 triangleOfSES
-  签名: : Triangle (导出范畴 C)
-  定义体: Triangle.mk (Q.map S.f) (Q.map S.g) (triangleOfSESδ hS)
-
-Depends on / 依赖: Q.map, Triangle, Triangle.mk
+--- 原说明 ---
+The distinguished triangle in the derived category associated to a short
+exact sequence of cochain complexes.
 -/
 noncomputable def triangleOfSES : Triangle (DerivedCategory C) :=
   Triangle.mk (Q.map S.f) (Q.map S.g) (triangleOfSESδ hS)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `triangleOfSESIso` / `triangleOfSESIso` 的定义
+/-- The triangle `triangleOfSES` attached to a short exact sequence `S` of cochain
+complexes is isomorphic to the standard distinguished triangle associated to
+the morphism `S.f`. -/
+/-
+**DerivedCategory.triangleOfSESIso** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory`。
+形式化陈述：triangleOfSESIso : triangleOfSES hS ≅ Q.mapTriangle.obj (CochainComplex.ma
+ppingCone.triangle S.f)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.mappingCone.quasiIso_descShortComplex`：quasiIso_descShort
+Complex : QuasiIso (descShortComplex S) where quasiIsoAt n
+· 使用定理 `CategoryTheory.Abelian.hasBinaryBiproducts`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   CategoryTheo
+ry.Limits.HasBinaryBiproducts C
 
-English:
-definition triangleOfSESIso
-  signature: :
-  body: by
-  have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
-  refine Iso.symm (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _)
-    (asIso (Q.map (CochainComplex.mappingCone.descShortComplex S))) ?_ ?_ ?_)
-  · dsimp [triangleOfSES]
-    simp only [comp_id, id_comp]
-  · dsimp
-    simp only [← Q.map_comp, CochainComplex.mappingCone.inr_descShortComplex, id_comp]
-  · dsimp [triangleOfSESδ]
-    rw [CategoryTheory.Functor.map_id]; rw [comp_id]; rw [IsIso.hom_inv_id_assoc]
-
-中文:
-定义 triangleOfSESIso
-  签名: :
-  定义体: by
-  have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
-  refine Iso.symm (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _)
-    (asIso (Q.map (CochainComplex.mappingCone.descShortComplex S))) ?_ ?_ ?_)
-  · dsimp [triangleOfSES]
-    simp only [comp_id, id_comp]
-  · dsimp
-    simp only [← Q.map_comp, CochainComplex.mappingCone.inr_descShortComplex, id_comp]
-  · dsimp [triangleOfSESδ]
-    rw [CategoryTheory.Functor.map_id]; rw [comp_id]; rw [IsIso.hom_inv_id_assoc]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, CochainComplex, CochainComplex.mappingCone.descShortComplex, CochainComplex.mappingCone.inr_descShortComplex, CochainComplex.mappingCone.quasiIso_descShortComplex, Functor, IsIso.hom_inv_id_assoc, Iso.refl, Iso.symm, Q.map, Q.map_comp, Triangle, Triangle.isoMk, comp_id, descShortComplex, hom_inv_id_assoc, id_comp, inr_descShortComplex, map_comp
+--- 原说明 ---
+The triangle `triangleOfSES` attached to a short exact sequence `S` of cochain
+complexes is isomorphic to the standard distinguished triangle associated to
+the morphism `S.f`.
 -/
 noncomputable def triangleOfSESIso :
     triangleOfSES hS ≅ Q.mapTriangle.obj (CochainComplex.mappingCone.triangle S.f) := by
@@ -192,33 +136,39 @@ noncomputable def triangleOfSESIso :
   · dsimp
     simp only [← Q.map_comp, CochainComplex.mappingCone.inr_descShortComplex, id_comp]
   · dsimp [triangleOfSESδ]
-    rw [CategoryTheory.Functor.map_id]; rw [comp_id]; rw [IsIso.hom_inv_id_assoc]
-
-/--
-lemma `triangleOfSES_distinguished` / 引理 `triangleOfSES_distinguished`
-
-English:
-lemma triangleOfSES_distinguished
-  proof: by
-  rw [mem_distTriang_iff]
-  exact ⟨_, _, S.f, ⟨triangleOfSESIso hS⟩⟩
-
-中文:
-引理 triangleOfSES_distinguished
-  证明: by
-  rw [mem_distTriang_iff]
-  exact ⟨_, _, S.f, ⟨triangleOfSESIso hS⟩⟩
-
-Depends on / 依赖: mem_distTriang_iff, triangleOfSESIso
+    rw [CategoryTheory.Functor.map_id, comp_id, IsIso.hom_inv_id_assoc]
+/-
+**DerivedCategory.triangleOfSES_distinguished** 是 Mathlib 中的一个引理，位于命名空间 `Derived
+Category`。
+形式化陈述：triangleOfSES_distinguished : triangleOfSES hS in distTriang (DerivedCateg
+ory C)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `CategoryTheory.Abelian.hasBinaryBiproducts`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   CategoryTheo
+ry.Limits.HasBinaryBiproducts C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `DerivedCategory.mem_distTriang_iff`：mem_distTriang_iff (T : Triangle (De
+rivedCategory C)) : (T in distTriang (DerivedCategory C)) ↔ exists (X Y : Cochai
+nComplex C Int) (f : X ⟶…
 -/
 lemma triangleOfSES_distinguished :
-    triangleOfSES hS in distTriang (DerivedCategory C) := by
+    triangleOfSES hS ∈ distTriang (DerivedCategory C) := by
   rw [mem_distTriang_iff]
   exact ⟨_, _, S.f, ⟨triangleOfSESIso hS⟩⟩
 
 section map
 
-variable {S₁ S₂ : ShortComplex (CochainComplex C Int)} (h₁ : S₁.ShortExact) (h₂ : S₂.ShortExact)
+variable {S₁ S₂ : ShortComplex (CochainComplex C ℤ)} (h₁ : S₁.ShortExact) (h₂ : S₂.ShortExact)
   (f : S₁ ⟶ S₂)
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -228,38 +178,22 @@ The morphism `triangleOfSES h₁ ⟶ triangleOfSES h₂` that is induced by a mo
 exact sequences of cochain complexes.
 -/
 @[simps]
-/--
-Definition of `triangleOfSES.map` / `triangleOfSES.map` 的定义
+/-
+**DerivedCategory.triangleOfSES.map** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory.t
+riangleOfSES`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Abelian C] →       [inst_2 : HasDerivedCategory C] →         {S₁
+ S₂ : CategoryTheory.ShortComplex (CochainComplex C ℤ)} →           (h₁ : S₁.Sho
+rtExact) →             (h₂ : S₂.ShortExact) → (S₁ ⟶ S₂) → (DerivedCategory.trian
+gleOfSES h₁ ⟶ DerivedCategory.triangleOfSES h₂)
+参数：CochainComplex C ℤ；h₁ : S₁.ShortExact；h₂ : S₂.ShortExact；S₁ ⟶ S₂；DerivedCateg
+ory.triangleOfSES h₁ ⟶ DerivedCategory.triangleOfSES h₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleOfSES.map
-  signature: : triangleOfSES h₁ ⟶ triangleOfSES h₂ where
-  body: Q.map f.τ₁
-  hom₂ := Q.map f.τ₂
-  hom₃ := Q.map f.τ₃
-  comm₁ := by simp [← Functor.map_comp, f.comm₁₂]
-  comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
-  comm₃ := by
-    dsimp [triangleOfSES, triangleOfSESδ]
-    rw [assoc]; rw [assoc]; rw [IsIso.inv_comp_eq]; rw [← Functor.map_comp_assoc]; rw [← CochainComplex.mappingCone.map_descShortComplex]; rw [Functor.map_comp_assoc]; rw [IsIso.hom_inv_id_assoc]; rw [← Functor.commShiftIso_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
-    congr 2
-    exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
-
-中文:
-定义 triangleOfSES.map
-  签名: : triangleOfSES h₁ ⟶ triangleOfSES h₂ where
-  定义体: Q.map f.τ₁
-  hom₂ := Q.map f.τ₂
-  hom₃ := Q.map f.τ₃
-  comm₁ := by simp [← Functor.map_comp, f.comm₁₂]
-  comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
-  comm₃ := by
-    dsimp [triangleOfSES, triangleOfSESδ]
-    rw [assoc]; rw [assoc]; rw [IsIso.inv_comp_eq]; rw [← Functor.map_comp_assoc]; rw [← CochainComplex.mappingCone.map_descShortComplex]; rw [Functor.map_comp_assoc]; rw [IsIso.hom_inv_id_assoc]; rw [← Functor.commShiftIso_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
-    congr 2
-    exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
-
-Depends on / 依赖: Q.map
+--- 原说明 ---
+The morphism `triangleOfSES h₁ ⟶ triangleOfSES h₂` that is induced by a morphism
+ of short
+exact sequences of cochain complexes.
 -/
 noncomputable def triangleOfSES.map : triangleOfSES h₁ ⟶ triangleOfSES h₂ where
   hom₁ := Q.map f.τ₁
@@ -269,10 +203,15 @@ noncomputable def triangleOfSES.map : triangleOfSES h₁ ⟶ triangleOfSES h₂ 
   comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
   comm₃ := by
     dsimp [triangleOfSES, triangleOfSESδ]
-    rw [assoc]; rw [assoc]; rw [IsIso.inv_comp_eq]; rw [← Functor.map_comp_assoc]; rw [← CochainComplex.mappingCone.map_descShortComplex]; rw [Functor.map_comp_assoc]; rw [IsIso.hom_inv_id_assoc]; rw [← Functor.commShiftIso_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
+    rw [assoc, assoc, IsIso.inv_comp_eq, ← Functor.map_comp_assoc,
+      ← CochainComplex.mappingCone.map_descShortComplex,
+      Functor.map_comp_assoc, IsIso.hom_inv_id_assoc,
+      ← Functor.commShiftIso_hom_naturality,
+      ← Functor.map_comp_assoc, ← Functor.map_comp_assoc]
     congr 2
     exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
 
 end map
 
 end DerivedCategory
+

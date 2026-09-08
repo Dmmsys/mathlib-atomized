@@ -54,78 +54,107 @@ open Category Limits MonoidalCategory Distributive CartesianMonoidalCategory
 
 variable (C : Type u) [Category.{v} C] [CartesianMonoidalCategory C] [HasBinaryCoproducts C]
 
-/--
-Definition of `IsCartesianDistributive` / `IsCartesianDistributive` 的定义
+/-- A category `C` with finite products is Cartesian distributive if it is monoidal distributive
+with respect to the Cartesian monoidal structure. -/
+/-
+**CategoryTheory.IsCartesianDistributive** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：IsCartesianDistributive
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsCartesianDistributive
-  body: IsMonoidalDistrib C
-
-中文:
-缩写 IsCartesianDistributive
-  定义体: IsMonoidalDistrib C
-
-Depends on / 依赖: IsMonoidalDistrib
+--- 原说明 ---
+A category `C` with finite products is Cartesian distributive if it is monoidal 
+distributive
+with respect to the Cartesian monoidal structure.
 -/
 abbrev IsCartesianDistributive :=
   IsMonoidalDistrib C
 
 namespace IsCartesianDistributive
 
-/--
-lemma `of_isMonoidalLeftDistrib` / 引理 `of_isMonoidalLeftDistrib`
+/-- To show a category is Cartesian distributive it is enough to show it is left distributive.
+The right distributivity is inferred from symmetry of the Cartesian monoidal structure. -/
+/-
+**CategoryTheory.IsCartesianDistributive.of_isMonoidalLeftDistrib** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.IsCartesianDistributive`。
+形式化陈述：of_isMonoidalLeftDistrib [IsMonoidalLeftDistrib C] : IsCartesianDistributi
+ve C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDist
+rib`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v, u_1} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   [inst_2 : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.instNonemptyBraidedCategory`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.
+CartesianMonoidalCategory C],   Nonempty (CategoryTheory.B…
 
-English:
-lemma of_isMonoidalLeftDistrib
-  given: [IsMonoidalLeftDistrib C]
-  statement: IsCartesianDistributive C
-  proof: letI : BraidedCategory C := Nonempty.some inferInstance
-  SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib
-
-中文:
-引理 of_isMonoidalLeftDistrib
-  条件: [是MonoidalLeftDistrib C]
-  结论: IsCartesianDistributive C
-  证明: letI : BraidedCategory C := Nonempty.some inferInstance
-  SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib
-
-Depends on / 依赖: BraidedCategory, Nonempty, Nonempty.some, SymmetricCategory, SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib, isMonoidalDistrib_of_isMonoidalLeftDistrib
+--- 原说明 ---
+To show a category is Cartesian distributive it is enough to show it is left dis
+tributive.
+The right distributivity is inferred from symmetry of the Cartesian monoidal str
+ucture.
 -/
 lemma of_isMonoidalLeftDistrib [IsMonoidalLeftDistrib C] : IsCartesianDistributive C :=
   letI : BraidedCategory C := Nonempty.some inferInstance
   SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `monoCoprod` / 实例 `monoCoprod`
+/-- The coproduct coprojections are monic in a Cartesian distributive category. -/
+/-
+**CategoryTheory.IsCartesianDistributive.monoCoprod** 是 Mathlib 中的一个实例，位于命名空间 `C
+ategoryTheory.IsCartesianDistributive`。
+形式化陈述：monoCoprod [IsCartesianDistributive C] : MonoCoprod C
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.mk'`：mk' (h : forall A B : C, exists (c
+ : BinaryCofan A B) (_ : IsColimit c), Mono c.inl) : MonoCoprod C
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.SplitMono.mono`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} {f : Y ⟶ X} (se : CategoryTheory.SplitMono f),   Ca
+tegoryTheory.Mono f
+· 使用定理 `CategoryTheory.IsMonoidalDistrib.toIsMonoidalLeftDistrib`：∀ {C : Type u}
+ {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.MonoidalCate
+gory C}   {inst_2 : CategoryTheory.Limits.HasB…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.comp_lift`：comp_lift {V W X Y :
+ C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) : f ≫ lift g h = lift (f ≫ g) (f ≫ h)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.whiskerLeft_coprod_inl_leftDistrib_inv_assoc`：∀ {C : Type
+ u_1} [inst : CategoryTheory.Category.{v, u_1} C] [inst_1 : CategoryTheory.Monoi
+dalCategory C]   [inst_2 : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_whiskerLeft`：lift_whiskerL
+eft {X Y Z W : C} (f : X ⟶ Y) (g : X ⟶ Z) (h : Z ⟶ W) : lift f g ≫ (Y ◁ h) = lif
+t f (g ≫ h)
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
 
-English:
-instance monoCoprod
-  signature: [IsCartesianDistributive C]
-  body: MonoCoprod.mk' fun A B =>
-    ⟨_, coprodIsCoprod A B, ⟨fun {Z} f g he => by
-      let ι := coprod.inl (X := A) (Y := B)
-      have : Mono (Z ◁ ι) := SplitMono.mono
-        { retraction := (∂L Z A B).inv ≫ coprod.desc (𝟙 _) (fst Z B ≫ lift (𝟙 Z) f) }
-      have : lift (𝟙 Z) f = lift (𝟙 Z) g := by rw [← cancel_mono (Z ◁ ι)]; aesop
-      simpa only [lift_snd] using this =≫ snd _ _⟩⟩
-
-中文:
-实例 monoCoprod
-  签名: [IsCartesianDistributive C]
-  定义体: MonoCoprod.mk' fun A B =>
-    ⟨_, coprodIsCoprod A B, ⟨fun {Z} f g he => by
-      let ι := coprod.inl (X := A) (Y := B)
-      have : Mono (Z ◁ ι) := SplitMono.mono
-        { retraction := (∂L Z A B).inv ≫ coprod.desc (𝟙 _) (fst Z B ≫ lift (𝟙 Z) f) }
-      have : lift (𝟙 Z) f = lift (𝟙 Z) g := by rw [← cancel_mono (Z ◁ ι)]; aesop
-      simpa only [lift_snd] using this =≫ snd _ _⟩⟩
-
-Depends on / 依赖: MonoCoprod, MonoCoprod.mk, SplitMono, SplitMono.mono, cancel_mono, coprod, coprod.desc, coprod.inl, coprodIsCoprod, lift_snd, retraction
+--- 原说明 ---
+The coproduct coprojections are monic in a Cartesian distributive category.
 -/
 instance monoCoprod [IsCartesianDistributive C] : MonoCoprod C :=
   MonoCoprod.mk' fun A B =>
-    ⟨_, coprodIsCoprod A B, ⟨fun {Z} f g he => by
+    ⟨_, coprodIsCoprod A B, ⟨fun {Z} f g he ↦ by
       let ι := coprod.inl (X := A) (Y := B)
       have : Mono (Z ◁ ι) := SplitMono.mono
         { retraction := (∂L Z A B).inv ≫ coprod.desc (𝟙 _) (fst Z B ≫ lift (𝟙 Z) f) }
@@ -135,3 +164,4 @@ instance monoCoprod [IsCartesianDistributive C] : MonoCoprod C :=
 end IsCartesianDistributive
 
 end CategoryTheory
+

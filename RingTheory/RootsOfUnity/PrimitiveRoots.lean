@@ -60,184 +60,171 @@ variable {M N G R S F : Type*} [CommMonoid M] [CommMonoid N] [DivisionCommMonoid
 /-- An element `ζ` is a primitive `k`-th root of unity if `ζ ^ k = 1`,
 and if `l` satisfies `ζ ^ l = 1` then `k ∣ l`. -/
 @[mk_iff IsPrimitiveRoot.iff_def]
-/--
-Definition of `IsPrimitiveRoot` / `IsPrimitiveRoot` 的定义
+/-
+**IsPrimitiveRoot** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{M : Type u_1} → [CommMonoid M] → M → ℕ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsPrimitiveRoot
-  parameters: (ζ : M) (k : Nat)
-  axioms and operations (2):
-    - pow_eq_one : ζ ^ k = 1
-    - dvd_of_pow_eq_one : forall l : Nat, ζ ^ l = 1 -> k ∣ l
-
-中文:
-结构 是PrimitiveRoot
-  参数: (ζ : M) (k : 自然数)
-  公理与运算 (2 个):
-    - pow_eq_one : ζ ^ k = 1
-    - dvd_of_pow_eq_one : 对任意 l : 自然数, ζ ^ l = 1 -> k ∣ l
+--- 原说明 ---
+An element `ζ` is a primitive `k`-th root of unity if `ζ ^ k = 1`,
+and if `l` satisfies `ζ ^ l = 1` then `k ∣ l`.
 -/
-structure IsPrimitiveRoot (ζ : M) (k : Nat) : Prop where
+structure IsPrimitiveRoot (ζ : M) (k : ℕ) : Prop where
   pow_eq_one : ζ ^ k = 1
-  dvd_of_pow_eq_one : forall l : Nat, ζ ^ l = 1 -> k ∣ l
+  dvd_of_pow_eq_one : ∀ l : ℕ, ζ ^ l = 1 → k ∣ l
 
 /-- Turn a primitive root μ into a member of the `rootsOfUnity` subgroup. -/
 @[simps!]
-/--
-Definition of `IsPrimitiveRoot.toRootsOfUnity` / `IsPrimitiveRoot.toRootsOfUnity` 的定义
+/-
+**IsPrimitiveRoot.toRootsOfUnity** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsPrimitiveRoot.toRootsOfUnity {μ : M} {n : Nat} [NeZero n] (h : IsPrimiti
+veRoot μ n) : rootsOfUnity n M
+参数：h : IsPrimitiveRoot μ n。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 
-English:
-definition IsPrimitiveRoot.toRootsOfUnity
-  signature: {μ : M} {n : Nat} [NeZero n] (h : IsPrimitiveRoot μ n)
-  body: rootsOfUnity.mkOfPowEq μ h.pow_eq_one
-
-中文:
-定义 是PrimitiveRoot.toRootsOfUnity
-  签名: {μ : M} {n : 自然数} [NeZero n] (h : 是PrimitiveRoot μ n)
-  定义体: rootsOfUnity.mkOfPowEq μ h.pow_eq_one
-
-Depends on / 依赖: h.pow_eq_one, mkOfPowEq, pow_eq_one, rootsOfUnity, rootsOfUnity.mkOfPowEq
+--- 原说明 ---
+Turn a primitive root μ into a member of the `rootsOfUnity` subgroup.
 -/
-def IsPrimitiveRoot.toRootsOfUnity {μ : M} {n : Nat} [NeZero n] (h : IsPrimitiveRoot μ n) :
+def IsPrimitiveRoot.toRootsOfUnity {μ : M} {n : ℕ} [NeZero n] (h : IsPrimitiveRoot μ n) :
     rootsOfUnity n M :=
   rootsOfUnity.mkOfPowEq μ h.pow_eq_one
 
 section primitiveRoots
 
-variable {k : Nat}
+variable {k : ℕ}
 
 open scoped Classical in
-/--
-Definition of `primitiveRoots` / `primitiveRoots` 的定义
+/-- `primitiveRoots k R` is the finset of primitive `k`-th roots of unity
+in the integral domain `R`. -/
+/-
+**primitiveRoots** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：primitiveRoots (k : Nat) (R : Type*) [CommRing R] [IsDomain R] : Finset R
+参数：k : Nat；R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition primitiveRoots
-  signature: (k : Nat) (R : Type*) [CommRing R] [IsDomain R]
-  body: {ζ in (nthRoots k (1 : R)).toFinset | IsPrimitiveRoot ζ k}
-
-中文:
-定义 primitiveRoots
-  签名: (k : 自然数) (R : 类型) [交换环 R] [是整环 R]
-  定义体: {ζ in (nthRoots k (1 : R)).toFinset | IsPrimitiveRoot ζ k}
-
-Depends on / 依赖: IsPrimitiveRoot, nthRoots, toFinset
+--- 原说明 ---
+`primitiveRoots k R` is the finset of primitive `k`-th roots of unity
+in the integral domain `R`.
 -/
-def primitiveRoots (k : Nat) (R : Type*) [CommRing R] [IsDomain R] : Finset R :=
-  {ζ in (nthRoots k (1 : R)).toFinset | IsPrimitiveRoot ζ k}
+def primitiveRoots (k : ℕ) (R : Type*) [CommRing R] [IsDomain R] : Finset R :=
+  {ζ ∈ (nthRoots k (1 : R)).toFinset | IsPrimitiveRoot ζ k}
 
 variable [CommRing R] [IsDomain R]
 
 -- TODO?: replace `(h0 : 0 < k)` by `[NeZero k]`
 @[simp]
-/--
-theorem `mem_primitiveRoots` / 定理 `mem_primitiveRoots`
-
-English:
-theorem mem_primitiveRoots
-  given: {ζ : R} (h0 : 0 < k)
-  statement: ζ in primitiveRoots k R ↔ IsPrimitiveRoot ζ k
-  proof: by
-  classical
-  rw [primitiveRoots]; rw [mem_filter]; rw [Multiset.mem_toFinset]; rw [mem_nthRoots h0]; rw [and_iff_right_iff_imp]
-  exact IsPrimitiveRoot.pow_eq_one
-
-@[simp]
-
-中文:
-定理 mem_primitiveRoots
-  条件: {ζ : R} (h0 : 0 < k)
-  结论: ζ in primitiveRoots k R ↔ 是PrimitiveRoot ζ k
-  证明: by
-  classical
-  rw [primitiveRoots]; rw [mem_filter]; rw [Multiset.mem_toFinset]; rw [mem_nthRoots h0]; rw [and_iff_right_iff_imp]
-  exact IsPrimitiveRoot.pow_eq_one
-
-@[simp]
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.pow_eq_one, Multiset, Multiset.mem_toFinset, and_iff_right_iff_imp, classical, mem_filter, mem_nthRoots, mem_toFinset, pow_eq_one, primitiveRoots
+/-
+**mem_primitiveRoots** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ in primitiveRoots k R ↔ IsPrim
+itiveRoot ζ k
+参数：h0 : 0 < k。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `primitiveRoots.eq_1`：∀ (k : ℕ) (R : Type u_7) [inst : CommRing R] [inst_
+1 : IsDomain R],   primitiveRoots k R = {ζ ∈ (Polynomial.nthRoots k 1).toFinset 
+| IsPrimi…
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Multiset.mem_toFinset`：mem_toFinset {a : α} {s : Multiset α} : a in s.to
+Finset ↔ a in s
+· 使用定理 `Polynomial.mem_nthRoots`：mem_nthRoots {n : Nat} (hn : 0 < n) {a x : R} :
+ x in nthRoots n a ↔ x ^ n = a
+· 使用定理 `and_iff_right_iff_imp`：∀ {a b : Prop}, (a ∧ b ↔ b) ↔ b → a
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 -/
-theorem mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ in primitiveRoots k R ↔ IsPrimitiveRoot ζ k := by
+theorem mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ ∈ primitiveRoots k R ↔ IsPrimitiveRoot ζ k := by
   classical
-  rw [primitiveRoots]; rw [mem_filter]; rw [Multiset.mem_toFinset]; rw [mem_nthRoots h0]; rw [and_iff_right_iff_imp]
+  rw [primitiveRoots, mem_filter, Multiset.mem_toFinset, mem_nthRoots h0, and_iff_right_iff_imp]
   exact IsPrimitiveRoot.pow_eq_one
 
 @[simp]
-/--
-theorem `primitiveRoots_zero` / 定理 `primitiveRoots_zero`
-
-English:
-theorem primitiveRoots_zero
-  statement: primitiveRoots 0 R = ∅
-  proof: by
-  classical
-  rw [primitiveRoots]; rw [nthRoots_zero]; rw [Multiset.toFinset_zero]; rw [Finset.filter_empty]
-
-中文:
-定理 primitiveRoots_zero
-  结论: primitiveRoots 0 R = ∅
-  证明: by
-  classical
-  rw [primitiveRoots]; rw [nthRoots_zero]; rw [Multiset.toFinset_zero]; rw [Finset.filter_empty]
-
-Depends on / 依赖: Finset, Finset.filter_empty, Multiset, Multiset.toFinset_zero, classical, filter_empty, nthRoots_zero, primitiveRoots, toFinset_zero
+/-
+**primitiveRoots_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：primitiveRoots_zero : primitiveRoots 0 R = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `primitiveRoots.eq_1`：∀ (k : ℕ) (R : Type u_7) [inst : CommRing R] [inst_
+1 : IsDomain R],   primitiveRoots k R = {ζ ∈ (Polynomial.nthRoots k 1).toFinset 
+| IsPrimi…
+· 使用定理 `Polynomial.nthRoots_zero`：nthRoots_zero (r : R) : nthRoots 0 r = 0
+· 使用定理 `Multiset.toFinset_zero`：toFinset_zero : toFinset (0 : Multiset α) = ∅
+· 使用定理 `Finset.filter_empty`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePr
+ed p], Finset.filter p ∅ = ∅
 -/
 theorem primitiveRoots_zero : primitiveRoots 0 R = ∅ := by
   classical
-  rw [primitiveRoots]; rw [nthRoots_zero]; rw [Multiset.toFinset_zero]; rw [Finset.filter_empty]
-
-/--
-theorem `isPrimitiveRoot_of_mem_primitiveRoots` / 定理 `isPrimitiveRoot_of_mem_primitiveRoots`
-
-English:
-theorem isPrimitiveRoot_of_mem_primitiveRoots
-  given: {ζ : R} (h : ζ in primitiveRoots k R)
-  proof: k.eq_zero_or_pos.elim (fun hk => by simp [hk] at h) fun hk => (mem_primitiveRoots hk).1 h
-
-中文:
-定理 isPrimitiveRoot_of_mem_primitiveRoots
-  条件: {ζ : R} (h : ζ in primitiveRoots k R)
-  证明: k.eq_zero_or_pos.elim (fun hk => by simp [hk] at h) fun hk => (mem_primitiveRoots hk).1 h
-
-Depends on / 依赖: eq_zero_or_pos, k.eq_zero_or_pos.elim, mem_primitiveRoots
+  rw [primitiveRoots, nthRoots_zero, Multiset.toFinset_zero, Finset.filter_empty]
+/-
+**isPrimitiveRoot_of_mem_primitiveRoots** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPrimitiveRoot_of_mem_primitiveRoots {ζ : R} (h : ζ in primitiveRoots k R
+) : IsPrimitiveRoot ζ k
+参数：h : ζ in primitiveRoots k R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `primitiveRoots.congr_simp`：∀ (k k_1 : ℕ),   k = k_1 → ∀ (R : Type u_7) [
+inst : CommRing R] [inst_1 : IsDomain R], primitiveRoots k R = primitiveRoots k_
+1 R
+· 使用定理 `primitiveRoots_zero`：primitiveRoots_zero : primitiveRoots 0 R = ∅
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_primitiveRoots`：mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ in primi
+tiveRoots k R ↔ IsPrimitiveRoot ζ k
 -/
-theorem isPrimitiveRoot_of_mem_primitiveRoots {ζ : R} (h : ζ in primitiveRoots k R) :
+theorem isPrimitiveRoot_of_mem_primitiveRoots {ζ : R} (h : ζ ∈ primitiveRoots k R) :
     IsPrimitiveRoot ζ k :=
-  k.eq_zero_or_pos.elim (fun hk => by simp [hk] at h) fun hk => (mem_primitiveRoots hk).1 h
+  k.eq_zero_or_pos.elim (fun hk ↦ by simp [hk] at h) fun hk ↦ (mem_primitiveRoots hk).1 h
 
 end primitiveRoots
 
 namespace IsPrimitiveRoot
 
-variable {k l : Nat}
+variable {k l : ℕ}
 
-/--
-theorem `mk_of_lt` / 定理 `mk_of_lt`
-
-English:
-theorem mk_of_lt
-  given: (ζ : M) (hk : 0 < k) (h1 : ζ ^ k = 1) (h : forall l : Nat, 0 < l -> l < k -> ζ ^ l != 1)
-  proof: by
-  refine ⟨h1, fun l hl => ?_⟩
-  suffices k.gcd l = k from this ▸ k.gcd_dvd_right l
-  refine (Nat.le_of_dvd hk (k.gcd_dvd_left l)).eq_of_not_lt fun h' => ?_
-  exact h _ (Nat.gcd_pos_of_pos_left _ hk) h' (by simp [h1, hl])
-
-中文:
-定理 mk_of_lt
-  条件: (ζ : M) (hk : 0 < k) (h1 : ζ ^ k = 1) (h : 对任意 l : 自然数, 0 < l -> l < k -> ζ ^ l != 1)
-  证明: by
-  refine ⟨h1, fun l hl => ?_⟩
-  suffices k.gcd l = k from this ▸ k.gcd_dvd_right l
-  refine (Nat.le_of_dvd hk (k.gcd_dvd_left l)).eq_of_not_lt fun h' => ?_
-  exact h _ (Nat.gcd_pos_of_pos_left _ hk) h' (by simp [h1, hl])
-
-Depends on / 依赖: Nat.gcd_pos_of_pos_left, Nat.le_of_dvd, eq_of_not_lt, gcd_dvd_left, gcd_dvd_right, gcd_pos_of_pos_left, k.gcd, k.gcd_dvd_left, k.gcd_dvd_right, le_of_dvd
+/-
+**IsPrimitiveRoot.mk_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：mk_of_lt (ζ : M) (hk : 0 < k) (h1 : ζ ^ k = 1) (h : forall l : Nat, 0 < l 
+-> l < k -> ζ ^ l != 1) : IsPrimitiveRoot ζ k
+参数：ζ : M；hk : 0 < k；h1 : ζ ^ k = 1；h : forall l : Nat, 0 < l -> l < k -> ζ ^ l !
+= 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.eq_of_not_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, 
+a ≤ b → ¬a < b → a = b
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `Nat.gcd_dvd_left`：∀ (m n : ℕ), m.gcd n ∣ m
+· 使用定理 `Nat.gcd_pos_of_pos_left`：∀ {m : ℕ} (n : ℕ), 0 < m → 0 < m.gcd n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Nat.gcd_dvd_right`：∀ (m n : ℕ), m.gcd n ∣ n
 -/
-theorem mk_of_lt (ζ : M) (hk : 0 < k) (h1 : ζ ^ k = 1) (h : forall l : Nat, 0 < l -> l < k -> ζ ^ l != 1) :
+theorem mk_of_lt (ζ : M) (hk : 0 < k) (h1 : ζ ^ k = 1) (h : ∀ l : ℕ, 0 < l → l < k → ζ ^ l ≠ 1) :
     IsPrimitiveRoot ζ k := by
-  refine ⟨h1, fun l hl => ?_⟩
+  refine ⟨h1, fun l hl ↦ ?_⟩
   suffices k.gcd l = k from this ▸ k.gcd_dvd_right l
-  refine (Nat.le_of_dvd hk (k.gcd_dvd_left l)).eq_of_not_lt fun h' => ?_
+  refine (Nat.le_of_dvd hk (k.gcd_dvd_left l)).eq_of_not_lt fun h' ↦ ?_
   exact h _ (Nat.gcd_pos_of_pos_left _ hk) h' (by simp [h1, hl])
 
 section CommMonoid
@@ -245,220 +232,186 @@ section CommMonoid
 variable {ζ : M} {f : F}
 
 @[nontriviality]
-/--
-theorem `of_subsingleton` / 定理 `of_subsingleton`
-
-English:
-theorem of_subsingleton
-  given: [Subsingleton M] (x : M)
-  statement: IsPrimitiveRoot x 1
-  proof: ⟨Subsingleton.elim _ _, fun _ _ => one_dvd _⟩
-
-中文:
-定理 of_subsingleton
-  条件: [子单例 M] (x : M)
-  结论: 是PrimitiveRoot x 1
-  证明: ⟨Subsingleton.elim _ _, fun _ _ => one_dvd _⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, one_dvd
+/-
+**IsPrimitiveRoot.of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：of_subsingleton [Subsingleton M] (x : M) : IsPrimitiveRoot x 1
+参数：x : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `one_dvd`：one_dvd (a : α) : 1 ∣ a
 -/
 theorem of_subsingleton [Subsingleton M] (x : M) : IsPrimitiveRoot x 1 :=
-  ⟨Subsingleton.elim _ _, fun _ _ => one_dvd _⟩
-
-/--
-theorem `pow_eq_one_iff_dvd` / 定理 `pow_eq_one_iff_dvd`
-
-English:
-theorem pow_eq_one_iff_dvd
-  given: (h : IsPrimitiveRoot ζ k) (l : Nat)
-  statement: ζ ^ l = 1 ↔ k ∣ l
-  proof: ⟨h.dvd_of_pow_eq_one l, by
-    rintro ⟨i, rfl⟩; simp only [pow_mul, h.pow_eq_one, one_pow]⟩
-
-中文:
-定理 pow_eq_one_iff_dvd
-  条件: (h : 是PrimitiveRoot ζ k) (l : 自然数)
-  结论: ζ ^ l = 1 ↔ k ∣ l
-  证明: ⟨h.dvd_of_pow_eq_one l, by
-    rintro ⟨i, rfl⟩; simp only [pow_mul, h.pow_eq_one, one_pow]⟩
-
-Depends on / 依赖: dvd_of_pow_eq_one, h.dvd_of_pow_eq_one, h.pow_eq_one, one_pow, pow_eq_one, pow_mul
+  ⟨Subsingleton.elim _ _, fun _ _ ↦ one_dvd _⟩
+/-
+**IsPrimitiveRoot.pow_eq_one_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`
+。
+形式化陈述：pow_eq_one_iff_dvd (h : IsPrimitiveRoot ζ k) (l : Nat) : ζ ^ l = 1 ↔ k ∣ l
+参数：h : IsPrimitiveRoot ζ k；l : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem pow_eq_one_iff_dvd (h : IsPrimitiveRoot ζ k) (l : Nat) : ζ ^ l = 1 ↔ k ∣ l :=
+theorem pow_eq_one_iff_dvd (h : IsPrimitiveRoot ζ k) (l : ℕ) : ζ ^ l = 1 ↔ k ∣ l :=
   ⟨h.dvd_of_pow_eq_one l, by
     rintro ⟨i, rfl⟩; simp only [pow_mul, h.pow_eq_one, one_pow]⟩
-
-/--
-theorem `isUnit` / 定理 `isUnit`
-
-English:
-theorem isUnit
-  given: (h : IsPrimitiveRoot ζ k) (h0 : k != 0)
-  statement: IsUnit ζ
-  proof: .of_mul_eq_one (ζ ^ (k - 1)) by rw [← pow_succ', Nat.sub_one_add_one h0, h.pow_eq_one]
-
-中文:
-定理 isUnit
-  条件: (h : 是PrimitiveRoot ζ k) (h0 : k != 0)
-  结论: 是单位 ζ
-  证明: .of_mul_eq_one (ζ ^ (k - 1)) by rw [← pow_succ', Nat.sub_one_add_one h0, h.pow_eq_one]
-
-Depends on / 依赖: Nat.sub_one_add_one, h.pow_eq_one, of_mul_eq_one, pow_eq_one, pow_succ, sub_one_add_one
+/-
+**IsPrimitiveRoot.isUnit** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) : IsUnit ζ
+参数：h : IsPrimitiveRoot ζ k；h0 : k != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.of_mul_eq_one`：IsUnit.of_mul_eq_one [Monoid M] [IsDedekindFiniteM
+onoid M] {a : M} (b : M) (h : a * b = 1) : IsUnit a
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Nat.sub_one_add_one`：∀ {a : ℕ}, a ≠ 0 → a - 1 + 1 = a
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 -/
-theorem isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) : IsUnit ζ :=
-.of_mul_eq_one (ζ ^ (k - 1)) by rw [← pow_succ', Nat.sub_one_add_one h0, h.pow_eq_one]
-
-/--
-theorem `isOfFinOrder` / 定理 `isOfFinOrder`
-
-English:
-theorem isOfFinOrder
-  given: (h : IsPrimitiveRoot ζ k) (h0 : k != 0)
-  statement: IsOfFinOrder ζ
-  proof: ⟨k, Nat.ne_zero_iff_zero_lt.mp h0, (isPeriodicPt_mul_iff_pow_eq_one _).mpr h.pow_eq_one⟩
-
-中文:
-定理 isOfFinOrder
-  条件: (h : 是PrimitiveRoot ζ k) (h0 : k != 0)
-  结论: IsOfFinOrder ζ
-  证明: ⟨k, Nat.ne_zero_iff_zero_lt.mp h0, (isPeriodicPt_mul_iff_pow_eq_one _).mpr h.pow_eq_one⟩
-
-Depends on / 依赖: Nat.ne_zero_iff_zero_lt.mp, h.pow_eq_one, isPeriodicPt_mul_iff_pow_eq_one, ne_zero_iff_zero_lt, pow_eq_one
+theorem isUnit (h : IsPrimitiveRoot ζ k) (h0 : k ≠ 0) : IsUnit ζ :=
+  .of_mul_eq_one (ζ ^ (k - 1)) <| by rw [← pow_succ', Nat.sub_one_add_one h0, h.pow_eq_one]
+/-
+**IsPrimitiveRoot.isOfFinOrder** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：isOfFinOrder (h : IsPrimitiveRoot ζ k) (h0 : k != 0) : IsOfFinOrder ζ
+参数：h : IsPrimitiveRoot ζ k；h0 : k != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.ne_zero_iff_zero_lt`：∀ {n : ℕ}, n ≠ 0 ↔ 0 < n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isPeriodicPt_mul_iff_pow_eq_one`：isPeriodicPt_mul_iff_pow_eq_one (x : G)
+ : IsPeriodicPt (x * ·) n 1 ↔ x ^ n = 1
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 -/
-theorem isOfFinOrder (h : IsPrimitiveRoot ζ k) (h0 : k != 0) : IsOfFinOrder ζ :=
+theorem isOfFinOrder (h : IsPrimitiveRoot ζ k) (h0 : k ≠ 0) : IsOfFinOrder ζ :=
   ⟨k, Nat.ne_zero_iff_zero_lt.mp h0, (isPeriodicPt_mul_iff_pow_eq_one _).mpr h.pow_eq_one⟩
-
-/--
-theorem `pow_ne_one_of_pos_of_lt` / 定理 `pow_ne_one_of_pos_of_lt`
-
-English:
-theorem pow_ne_one_of_pos_of_lt
-  given: (h : IsPrimitiveRoot ζ k) (h0 : l != 0) (hl : l < k)
-  statement: ζ ^ l != 1
-  proof: mt (Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr h0) ∘ h.dvd_of_pow_eq_one _) not_le_of_gt hl
-
-中文:
-定理 pow_ne_one_of_pos_of_lt
-  条件: (h : 是PrimitiveRoot ζ k) (h0 : l != 0) (hl : l < k)
-  结论: ζ ^ l != 1
-  证明: mt (Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr h0) ∘ h.dvd_of_pow_eq_one _) not_le_of_gt hl
-
-Depends on / 依赖: Nat.le_of_dvd, Nat.pos_iff_ne_zero.mpr, dvd_of_pow_eq_one, h.dvd_of_pow_eq_one, le_of_dvd, not_le_of_gt, pos_iff_ne_zero
+/-
+**IsPrimitiveRoot.pow_ne_one_of_pos_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitive
+Root`。
+形式化陈述：pow_ne_one_of_pos_of_lt (h : IsPrimitiveRoot ζ k) (h0 : l != 0) (hl : l < 
+k) : ζ ^ l != 1
+参数：h : IsPrimitiveRoot ζ k；h0 : l != 0；hl : l < k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.pos_iff_ne_zero`：∀ {n : ℕ}, 0 < n ↔ n ≠ 0
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
-theorem pow_ne_one_of_pos_of_lt (h : IsPrimitiveRoot ζ k) (h0 : l != 0) (hl : l < k) : ζ ^ l != 1 :=
-mt (Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr h0) ∘ h.dvd_of_pow_eq_one _) not_le_of_gt hl
-
-/--
-theorem `ne_one` / 定理 `ne_one`
-
-English:
-theorem ne_one
-  given: (h : IsPrimitiveRoot ζ k) (hk : 1 < k)
-  statement: ζ != 1
-  proof: h.pow_ne_one_of_pos_of_lt one_ne_zero hk ∘ (pow_one ζ).trans
-
-中文:
-定理 ne_one
-  条件: (h : 是PrimitiveRoot ζ k) (hk : 1 < k)
-  结论: ζ != 1
-  证明: h.pow_ne_one_of_pos_of_lt one_ne_zero hk ∘ (pow_one ζ).trans
-
-Depends on / 依赖: h.pow_ne_one_of_pos_of_lt, one_ne_zero, pow_ne_one_of_pos_of_lt, pow_one
+theorem pow_ne_one_of_pos_of_lt (h : IsPrimitiveRoot ζ k) (h0 : l ≠ 0) (hl : l < k) : ζ ^ l ≠ 1 :=
+  mt (Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr h0) ∘ h.dvd_of_pow_eq_one _) <| not_le_of_gt hl
+/-
+**IsPrimitiveRoot.ne_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：ne_one (h : IsPrimitiveRoot ζ k) (hk : 1 < k) : ζ != 1
+参数：h : IsPrimitiveRoot ζ k；hk : 1 < k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.pow_ne_one_of_pos_of_lt`：pow_ne_one_of_pos_of_lt (h : Is
+PrimitiveRoot ζ k) (h0 : l != 0) (hl : l < k) : ζ ^ l != 1
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
 -/
-theorem ne_one (h : IsPrimitiveRoot ζ k) (hk : 1 < k) : ζ != 1 :=
+theorem ne_one (h : IsPrimitiveRoot ζ k) (hk : 1 < k) : ζ ≠ 1 :=
   h.pow_ne_one_of_pos_of_lt one_ne_zero hk ∘ (pow_one ζ).trans
-
-/--
-theorem `pow_inj` / 定理 `pow_inj`
-
-English:
-theorem pow_inj
-  given: (h : IsPrimitiveRoot ζ k) ⦃i j
-  statement: Nat⦄ (hi : i < k) (hj : j < k) (H : ζ ^ i = ζ ^ j) :
-  proof: by
-  wlog hij : i <= j generalizing i j
-  · exact (this hj hi H.symm (le_of_not_ge hij)).symm
-  apply le_antisymm hij
-  rw [← tsub_eq_zero_iff_le]
-  apply Nat.eq_zero_of_dvd_of_lt _ (lt_of_le_of_lt tsub_le_self hj)
-  apply h.dvd_of_pow_eq_one
-  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_left_inj]; rw [← pow_add]; rw [tsub_add_cancel_of_le hij]; rw [H]; rw [one_mul]
-
-中文:
-定理 pow_inj
-  条件: (h : 是PrimitiveRoot ζ k) ⦃i j
-  结论: 自然数⦄ (hi : i < k) (hj : j < k) (H : ζ ^ i = ζ ^ j) :
-  证明: by
-  wlog hij : i <= j generalizing i j
-  · exact (this hj hi H.symm (le_of_not_ge hij)).symm
-  apply le_antisymm hij
-  rw [← tsub_eq_zero_iff_le]
-  apply Nat.eq_zero_of_dvd_of_lt _ (lt_of_le_of_lt tsub_le_self hj)
-  apply h.dvd_of_pow_eq_one
-  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_left_inj]; rw [← pow_add]; rw [tsub_add_cancel_of_le hij]; rw [H]; rw [one_mul]
-
-Depends on / 依赖: H.symm, Nat.eq_zero_of_dvd_of_lt, Nat.ne_zero_of_lt, dvd_of_pow_eq_one, eq_zero_of_dvd_of_lt, generalizing, h.dvd_of_pow_eq_one, h.isUnit, isUnit, le_antisymm, le_of_not_ge, lt_of_le_of_lt, mul_left_inj, ne_zero_of_lt, one_mul, pow_add, tsub_add_cancel_of_le, tsub_eq_zero_iff_le, tsub_le_self
+/-
+**IsPrimitiveRoot.pow_inj** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow_inj (h : IsPrimitiveRoot ζ k) ⦃i j : Nat⦄ (hi : i < k) (hj : j < k) (H
+ : ζ ^ i = ζ ^ j) : i = j
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_eq_zero_iff_le`：tsub_eq_zero_iff_le : a - b = 0 ↔ a <= b
+· 使用定理 `Nat.eq_zero_of_dvd_of_lt`：∀ {a b : ℕ}, a ∣ b → b < a → b = 0
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `IsUnit.mul_left_inj`：mul_left_inj (h : IsUnit a) : b * a = c * a ↔ b = c
+· 使用定理 `IsUnit.pow`：∀ {M : Type u_1} [inst : Monoid M] {a : M} (n : ℕ), IsUnit a
+ → IsUnit (a ^ n)
+· 使用定理 `IsPrimitiveRoot.isUnit`：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) :
+ IsUnit ζ
+· 使用定理 `Nat.ne_zero_of_lt`：∀ {b a : ℕ}, b < a → a ≠ 0
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `tsub_le_self`：tsub_le_self : a - b <= a
+· 使用定理 `le_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b 
+→ b ≤ a
 -/
-theorem pow_inj (h : IsPrimitiveRoot ζ k) ⦃i j : Nat⦄ (hi : i < k) (hj : j < k) (H : ζ ^ i = ζ ^ j) :
+theorem pow_inj (h : IsPrimitiveRoot ζ k) ⦃i j : ℕ⦄ (hi : i < k) (hj : j < k) (H : ζ ^ i = ζ ^ j) :
     i = j := by
-  wlog hij : i <= j generalizing i j
+  wlog hij : i ≤ j generalizing i j
   · exact (this hj hi H.symm (le_of_not_ge hij)).symm
   apply le_antisymm hij
   rw [← tsub_eq_zero_iff_le]
   apply Nat.eq_zero_of_dvd_of_lt _ (lt_of_le_of_lt tsub_le_self hj)
   apply h.dvd_of_pow_eq_one
-  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_left_inj]; rw [← pow_add]; rw [tsub_add_cancel_of_le hij]; rw [H]; rw [one_mul]
-
-/--
-theorem `one` / 定理 `one`
-
-English:
-theorem one
-  statement: IsPrimitiveRoot (1 : M) 1
-  proof: { pow_eq_one := pow_one _
-    dvd_of_pow_eq_one := fun _ _ => one_dvd _ }
-
-@[simp]
-
-中文:
-定理 one
-  结论: 是PrimitiveRoot (1 : M) 1
-  证明: { pow_eq_one := pow_one _
-    dvd_of_pow_eq_one := fun _ _ => one_dvd _ }
-
-@[simp]
-
-Depends on / 依赖: dvd_of_pow_eq_one, one_dvd, pow_eq_one, pow_one
+  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_left_inj, ← pow_add,
+    tsub_add_cancel_of_le hij, H, one_mul]
+/-
+**IsPrimitiveRoot.one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：one : IsPrimitiveRoot (1 : M) 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `one_dvd`：one_dvd (a : α) : 1 ∣ a
 -/
 theorem one : IsPrimitiveRoot (1 : M) 1 :=
   { pow_eq_one := pow_one _
-    dvd_of_pow_eq_one := fun _ _ => one_dvd _ }
+    dvd_of_pow_eq_one := fun _ _ ↦ one_dvd _ }
 
 @[simp]
-/--
-theorem `one_right_iff` / 定理 `one_right_iff`
-
-English:
-theorem one_right_iff
-  statement: IsPrimitiveRoot ζ 1 ↔ ζ = 1
-  proof: by
-  constructor
-  · intro h; rw [← pow_one ζ, h.pow_eq_one]
-  · rintro rfl; exact one
-
-@[simp]
-
-中文:
-定理 one_right_iff
-  结论: 是PrimitiveRoot ζ 1 ↔ ζ = 1
-  证明: by
-  constructor
-  · intro h; rw [← pow_one ζ, h.pow_eq_one]
-  · rintro rfl; exact one
-
-@[simp]
-
-Depends on / 依赖: h.pow_eq_one, pow_eq_one, pow_one
+/-
+**IsPrimitiveRoot.one_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：one_right_iff : IsPrimitiveRoot ζ 1 ↔ ζ = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `IsPrimitiveRoot.one`：one : IsPrimitiveRoot (1 : M) 1
 -/
 theorem one_right_iff : IsPrimitiveRoot ζ 1 ↔ ζ = 1 := by
   constructor
@@ -466,51 +419,44 @@ theorem one_right_iff : IsPrimitiveRoot ζ 1 ↔ ζ = 1 := by
   · rintro rfl; exact one
 
 @[simp]
-/--
-theorem `one_left_iff` / 定理 `one_left_iff`
-
-English:
-theorem one_left_iff
-  statement: IsPrimitiveRoot (1 : M) k ↔ k = 1
-  proof: ⟨fun h => Nat.dvd_one.mp (h.dvd_of_pow_eq_one 1 (one_pow _)), fun e => e ▸ one⟩
-
-@[simp]
-
-中文:
-定理 one_left_iff
-  结论: 是PrimitiveRoot (1 : M) k ↔ k = 1
-  证明: ⟨fun h => Nat.dvd_one.mp (h.dvd_of_pow_eq_one 1 (one_pow _)), fun e => e ▸ one⟩
-
-@[simp]
-
-Depends on / 依赖: Nat.dvd_one.mp, dvd_of_pow_eq_one, dvd_one, h.dvd_of_pow_eq_one, one_pow
+/-
+**IsPrimitiveRoot.one_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：one_left_iff : IsPrimitiveRoot (1 : M) k ↔ k = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.dvd_one`：∀ {n : ℕ}, n ∣ 1 ↔ n = 1
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `IsPrimitiveRoot.one`：one : IsPrimitiveRoot (1 : M) 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem one_left_iff : IsPrimitiveRoot (1 : M) k ↔ k = 1 :=
-  ⟨fun h => Nat.dvd_one.mp (h.dvd_of_pow_eq_one 1 (one_pow _)), fun e => e ▸ one⟩
+  ⟨fun h ↦ Nat.dvd_one.mp (h.dvd_of_pow_eq_one 1 (one_pow _)), fun e ↦ e ▸ one⟩
 
 @[simp]
-/--
-theorem `coe_submonoidClass_iff` / 定理 `coe_submonoidClass_iff`
-
-English:
-theorem coe_submonoidClass_iff
-  statement: {M B : Type*} [CommMonoid M] [SetLike B M] [SubmonoidClass B M]
-  proof: by
-  simp_rw [iff_def]
-  norm_cast
-
-@[simp]
-
-中文:
-定理 coe_submonoidClass_iff
-  结论: {M B : 类型} [交换幺半群 M] [集合状 B M] [子幺半群类 B M]
-  证明: by
-  simp_rw [iff_def]
-  norm_cast
-
-@[simp]
-
-Depends on / 依赖: iff_def, simp_rw
+/-
+**IsPrimitiveRoot.coe_submonoidClass_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveR
+oot`。
+形式化陈述：coe_submonoidClass_iff {M B : Type*} [CommMonoid M] [SetLike B M] [Submono
+idClass B M] {N : B} {ζ : N} : IsPrimitiveRoot (ζ : M) k ↔ IsPrimitiveRoot ζ k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_submonoidClass_iff {M B : Type*} [CommMonoid M] [SetLike B M] [SubmonoidClass B M]
     {N : B} {ζ : N} : IsPrimitiveRoot (ζ : M) k ↔ IsPrimitiveRoot ζ k := by
@@ -518,100 +464,104 @@ theorem coe_submonoidClass_iff {M B : Type*} [CommMonoid M] [SetLike B M] [Submo
   norm_cast
 
 @[simp]
-/--
-theorem `coe_units_iff` / 定理 `coe_units_iff`
-
-English:
-theorem coe_units_iff
-  given: {ζ : Mˣ}
-  statement: IsPrimitiveRoot (ζ : M) k ↔ IsPrimitiveRoot ζ k
-  proof: by
-  simp only [iff_def, Units.ext_iff, Units.val_pow_eq_pow_val, Units.val_one]
-
-中文:
-定理 coe_units_iff
-  条件: {ζ : Mˣ}
-  结论: 是PrimitiveRoot (ζ : M) k ↔ 是PrimitiveRoot ζ k
-  证明: by
-  simp only [iff_def, Units.ext_iff, Units.val_pow_eq_pow_val, Units.val_one]
-
-Depends on / 依赖: Units.ext_iff, Units.val_one, Units.val_pow_eq_pow_val, ext_iff, iff_def, val_one, val_pow_eq_pow_val
+/-
+**IsPrimitiveRoot.coe_units_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot (ζ : M) k ↔ IsPrimitiveRoot ζ k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot (ζ : M) k ↔ IsPrimitiveRoot ζ k := by
   simp only [iff_def, Units.ext_iff, Units.val_pow_eq_pow_val, Units.val_one]
-
-/--
-lemma `isUnit_unit` / 引理 `isUnit_unit`
-
-English:
-lemma isUnit_unit
-  given: {ζ : M} {n} (hn) (hζ : IsPrimitiveRoot ζ n)
-  proof: coe_units_iff.mp hζ
-
-中文:
-引理 isUnit_unit
-  条件: {ζ : M} {n} (hn) (hζ : 是PrimitiveRoot ζ n)
-  证明: coe_units_iff.mp hζ
-
-Depends on / 依赖: coe_units_iff, coe_units_iff.mp
+/-
+**IsPrimitiveRoot.isUnit_unit** 是 Mathlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：isUnit_unit {ζ : M} {n} (hn) (hζ : IsPrimitiveRoot ζ n) : IsPrimitiveRoot 
+(hζ.isUnit hn).unit n
+参数：hn；hζ : IsPrimitiveRoot ζ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPrimitiveRoot.isUnit`：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) :
+ IsUnit ζ
+· 使用定理 `IsPrimitiveRoot.coe_units_iff`：coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot 
+(ζ : M) k ↔ IsPrimitiveRoot ζ k
 -/
 lemma isUnit_unit {ζ : M} {n} (hn) (hζ : IsPrimitiveRoot ζ n) :
     IsPrimitiveRoot (hζ.isUnit hn).unit n := coe_units_iff.mp hζ
-
-/--
-lemma `isUnit_unit'` / 引理 `isUnit_unit'`
-
-English:
-lemma isUnit_unit'
-  given: {ζ : G} {n} (hn) (hζ : IsPrimitiveRoot ζ n)
-  proof: coe_units_iff.mp hζ
-
-中文:
-引理 isUnit_unit'
-  条件: {ζ : G} {n} (hn) (hζ : 是PrimitiveRoot ζ n)
-  证明: coe_units_iff.mp hζ
-
-Depends on / 依赖: coe_units_iff, coe_units_iff.mp
+/-
+**IsPrimitiveRoot.isUnit_unit'** 是 Mathlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：isUnit_unit' {ζ : G} {n} (hn) (hζ : IsPrimitiveRoot ζ n) : IsPrimitiveRoot
+ (hζ.isUnit hn).unit' n
+参数：hn；hζ : IsPrimitiveRoot ζ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPrimitiveRoot.isUnit`：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) :
+ IsUnit ζ
+· 使用定理 `IsPrimitiveRoot.coe_units_iff`：coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot 
+(ζ : M) k ↔ IsPrimitiveRoot ζ k
 -/
 lemma isUnit_unit' {ζ : G} {n} (hn) (hζ : IsPrimitiveRoot ζ n) :
     IsPrimitiveRoot (hζ.isUnit hn).unit' n := coe_units_iff.mp hζ
-
-/--
-theorem `pow_of_coprime` / 定理 `pow_of_coprime`
-
-English:
-theorem pow_of_coprime
-  given: (h : IsPrimitiveRoot ζ k) (i : Nat) (hi : i.Coprime k)
-  proof: by
-  by_cases h0 : k = 0
-  · subst k; simp_all only [pow_one, Nat.coprime_zero_right]
-  rcases h.isUnit h0 with ⟨ζ, rfl⟩
-  rw [← Units.val_pow_eq_pow_val]
-  rw [coe_units_iff] at h ⊢
-  refine
-    { pow_eq_one := by rw [← pow_mul', pow_mul, h.pow_eq_one, one_pow]
-      dvd_of_pow_eq_one := fun l hl => h.dvd_of_pow_eq_one l ?_ }
-  rw [← pow_one ζ]; rw [← zpow_natCast ζ]; rw [← hi.gcd_eq_one]; rw [Nat.gcd_eq_gcd_ab]; rw [zpow_add]; rw [mul_pow]; rw [← zpow_natCast]; rw [← zpow_mul]; rw [mul_right_comm]
-  simp only [zpow_mul, hl, h.pow_eq_one, one_zpow, one_pow, one_mul, zpow_natCast]
-
-中文:
-定理 pow_of_coprime
-  条件: (h : 是PrimitiveRoot ζ k) (i : 自然数) (hi : i.Coprime k)
-  证明: by
-  by_cases h0 : k = 0
-  · subst k; simp_all only [pow_one, Nat.coprime_zero_right]
-  rcases h.isUnit h0 with ⟨ζ, rfl⟩
-  rw [← Units.val_pow_eq_pow_val]
-  rw [coe_units_iff] at h ⊢
-  refine
-    { pow_eq_one := by rw [← pow_mul', pow_mul, h.pow_eq_one, one_pow]
-      dvd_of_pow_eq_one := fun l hl => h.dvd_of_pow_eq_one l ?_ }
-  rw [← pow_one ζ]; rw [← zpow_natCast ζ]; rw [← hi.gcd_eq_one]; rw [Nat.gcd_eq_gcd_ab]; rw [zpow_add]; rw [mul_pow]; rw [← zpow_natCast]; rw [← zpow_mul]; rw [mul_right_comm]
-  simp only [zpow_mul, hl, h.pow_eq_one, one_zpow, one_pow, one_mul, zpow_natCast]
-
-Depends on / 依赖: Nat.coprime_zero_right, Nat.gcd_eq_gcd_ab, Units.val_pow_eq_pow_val, coe_units_iff, coprime_zero_right, dvd_of_pow_eq_one, gcd_eq_gcd_ab, gcd_eq_one, h.dvd_of_pow_eq_one, h.isUnit, h.pow_eq_one, hi.gcd_eq_one, isUnit, mul_pow, mul_right_comm, one_pow, pow_eq_one, pow_mul, pow_one, val_pow_eq_pow_val
+/-
+**IsPrimitiveRoot.pow_of_coprime** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow_of_coprime (h : IsPrimitiveRoot ζ k) (i : Nat) (hi : i.Coprime k) : Is
+PrimitiveRoot (ζ ^ i) k
+参数：h : IsPrimitiveRoot ζ k；i : Nat；hi : i.Coprime k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPrimitiveRoot.isUnit`：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) :
+ IsUnit ζ
+· 使用引理 `Units.val_pow_eq_pow_val`：val_pow_eq_pow_val (n : Nat) : ↑(a ^ n) = (a ^
+ n : α)
+· 使用定理 `IsPrimitiveRoot.coe_units_iff`：coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot 
+(ζ : M) k ↔ IsPrimitiveRoot ζ k
+· 使用引理 `pow_mul'`：pow_mul' (a : M) (m n : Nat) : a ^ (m * n) = (a ^ n) ^ m
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Nat.Coprime.gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n → m.gcd n = 1
+· 使用定理 `Nat.gcd_eq_gcd_ab`：gcd_eq_gcd_ab : (gcd x y : Int) = x * gcdA x y + y * 
+gcdB x y
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
+· 使用定理 `zpow_mul`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (m n : ℤ), 
+a ^ (m * n) = (a ^ m) ^ n
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `one_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (n : ℤ), 1 ^ n = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem pow_of_coprime (h : IsPrimitiveRoot ζ k) (i : Nat) (hi : i.Coprime k) :
+theorem pow_of_coprime (h : IsPrimitiveRoot ζ k) (i : ℕ) (hi : i.Coprime k) :
     IsPrimitiveRoot (ζ ^ i) k := by
   by_cases h0 : k = 0
   · subst k; simp_all only [pow_one, Nat.coprime_zero_right]
@@ -620,65 +570,59 @@ theorem pow_of_coprime (h : IsPrimitiveRoot ζ k) (i : Nat) (hi : i.Coprime k) :
   rw [coe_units_iff] at h ⊢
   refine
     { pow_eq_one := by rw [← pow_mul', pow_mul, h.pow_eq_one, one_pow]
-      dvd_of_pow_eq_one := fun l hl => h.dvd_of_pow_eq_one l ?_ }
-  rw [← pow_one ζ]; rw [← zpow_natCast ζ]; rw [← hi.gcd_eq_one]; rw [Nat.gcd_eq_gcd_ab]; rw [zpow_add]; rw [mul_pow]; rw [← zpow_natCast]; rw [← zpow_mul]; rw [mul_right_comm]
+      dvd_of_pow_eq_one := fun l hl ↦ h.dvd_of_pow_eq_one l ?_ }
+  rw [← pow_one ζ, ← zpow_natCast ζ, ← hi.gcd_eq_one, Nat.gcd_eq_gcd_ab, zpow_add, mul_pow,
+    ← zpow_natCast, ← zpow_mul, mul_right_comm]
   simp only [zpow_mul, hl, h.pow_eq_one, one_zpow, one_pow, one_mul, zpow_natCast]
-
-/--
-theorem `pow_of_prime` / 定理 `pow_of_prime`
-
-English:
-theorem pow_of_prime
-  given: (h : IsPrimitiveRoot ζ k) {p : Nat} (hprime : Nat.Prime p) (hdiv : ¬p ∣ k)
-  proof: h.pow_of_coprime p (hprime.coprime_iff_not_dvd.2 hdiv)
-
-中文:
-定理 pow_of_prime
-  条件: (h : 是PrimitiveRoot ζ k) {p : 自然数} (hprime : 自然数.素 p) (hdiv : ¬p ∣ k)
-  证明: h.pow_of_coprime p (hprime.coprime_iff_not_dvd.2 hdiv)
-
-Depends on / 依赖: coprime_iff_not_dvd, h.pow_of_coprime, hprime, hprime.coprime_iff_not_dvd, pow_of_coprime
+/-
+**IsPrimitiveRoot.pow_of_prime** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow_of_prime (h : IsPrimitiveRoot ζ k) {p : Nat} (hprime : Nat.Prime p) (h
+div : ¬p ∣ k) : IsPrimitiveRoot (ζ ^ p) k
+参数：h : IsPrimitiveRoot ζ k；hprime : Nat.Prime p；hdiv : ¬p ∣ k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.pow_of_coprime`：pow_of_coprime (h : IsPrimitiveRoot ζ k)
+ (i : Nat) (hi : i.Coprime k) : IsPrimitiveRoot (ζ ^ i) k
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.Prime.coprime_iff_not_dvd`：∀ {p n : ℕ}, Nat.Prime p → (p.Coprime n ↔
+ ¬p ∣ n)
 -/
-theorem pow_of_prime (h : IsPrimitiveRoot ζ k) {p : Nat} (hprime : Nat.Prime p) (hdiv : ¬p ∣ k) :
+theorem pow_of_prime (h : IsPrimitiveRoot ζ k) {p : ℕ} (hprime : Nat.Prime p) (hdiv : ¬p ∣ k) :
     IsPrimitiveRoot (ζ ^ p) k :=
   h.pow_of_coprime p (hprime.coprime_iff_not_dvd.2 hdiv)
-
-/--
-theorem `pow_iff_coprime` / 定理 `pow_iff_coprime`
-
-English:
-theorem pow_iff_coprime
-  given: (h : IsPrimitiveRoot ζ k) (h0 : 0 < k) (i : Nat)
-  proof: by
-  refine ⟨fun hi => ?_, h.pow_of_coprime i⟩
-  obtain ⟨a, ha⟩ := i.gcd_dvd_left k
-  obtain ⟨b, hb⟩ := i.gcd_dvd_right k
-  suffices b = k by
-    rwa [this, eq_comm, Nat.mul_eq_right h0.ne', ← Nat.coprime_iff_gcd_eq_one] at hb
-  rw [ha] at hi
-  rw [mul_comm] at hb
-  apply Nat.dvd_antisymm ⟨i.gcd k, hb⟩ (hi.dvd_of_pow_eq_one b _)
-  rw [← pow_mul']; rw [← mul_assoc]; rw [← hb]; rw [pow_mul]; rw [h.pow_eq_one]; rw [one_pow]
-
-中文:
-定理 pow_iff_coprime
-  条件: (h : 是PrimitiveRoot ζ k) (h0 : 0 < k) (i : 自然数)
-  证明: by
-  refine ⟨fun hi => ?_, h.pow_of_coprime i⟩
-  obtain ⟨a, ha⟩ := i.gcd_dvd_left k
-  obtain ⟨b, hb⟩ := i.gcd_dvd_right k
-  suffices b = k by
-    rwa [this, eq_comm, Nat.mul_eq_right h0.ne', ← Nat.coprime_iff_gcd_eq_one] at hb
-  rw [ha] at hi
-  rw [mul_comm] at hb
-  apply Nat.dvd_antisymm ⟨i.gcd k, hb⟩ (hi.dvd_of_pow_eq_one b _)
-  rw [← pow_mul']; rw [← mul_assoc]; rw [← hb]; rw [pow_mul]; rw [h.pow_eq_one]; rw [one_pow]
-
-Depends on / 依赖: Nat.coprime_iff_gcd_eq_one, Nat.dvd_antisymm, Nat.mul_eq_right, coprime_iff_gcd_eq_one, dvd_antisymm, dvd_of_pow_eq_one, eq_comm, gcd_dvd_left, gcd_dvd_right, h.pow_eq_one, h.pow_of_coprime, h0.ne, hi.dvd_of_pow_eq_one, i.gcd, i.gcd_dvd_left, i.gcd_dvd_right, mul_assoc, mul_comm, mul_eq_right, one_pow
+/-
+**IsPrimitiveRoot.pow_iff_coprime** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow_iff_coprime (h : IsPrimitiveRoot ζ k) (h0 : 0 < k) (i : Nat) : IsPrimi
+tiveRoot (ζ ^ i) k ↔ i.Coprime k
+参数：h : IsPrimitiveRoot ζ k；h0 : 0 < k；i : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.gcd_dvd_left`：∀ (m n : ℕ), m.gcd n ∣ m
+· 使用定理 `Nat.gcd_dvd_right`：∀ (m n : ℕ), m.gcd n ∣ n
+· 使用定理 `Nat.dvd_antisymm`：∀ {m n : ℕ}, m ∣ n → n ∣ m → m = n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `pow_mul'`：pow_mul' (a : M) (m n : Nat) : a ^ (m * n) = (a ^ n) ^ m
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `Nat.coprime_iff_gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n ↔ m.gcd n = 1
+· 使用定理 `Nat.mul_eq_right`：∀ {b a : ℕ}, b ≠ 0 → (a * b = b ↔ a = 1)
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `IsPrimitiveRoot.pow_of_coprime`：pow_of_coprime (h : IsPrimitiveRoot ζ k)
+ (i : Nat) (hi : i.Coprime k) : IsPrimitiveRoot (ζ ^ i) k
 -/
-theorem pow_iff_coprime (h : IsPrimitiveRoot ζ k) (h0 : 0 < k) (i : Nat) :
+theorem pow_iff_coprime (h : IsPrimitiveRoot ζ k) (h0 : 0 < k) (i : ℕ) :
     IsPrimitiveRoot (ζ ^ i) k ↔ i.Coprime k := by
-  refine ⟨fun hi => ?_, h.pow_of_coprime i⟩
+  refine ⟨fun hi ↦ ?_, h.pow_of_coprime i⟩
   obtain ⟨a, ha⟩ := i.gcd_dvd_left k
   obtain ⟨b, hb⟩ := i.gcd_dvd_right k
   suffices b = k by
@@ -686,156 +630,130 @@ theorem pow_iff_coprime (h : IsPrimitiveRoot ζ k) (h0 : 0 < k) (i : Nat) :
   rw [ha] at hi
   rw [mul_comm] at hb
   apply Nat.dvd_antisymm ⟨i.gcd k, hb⟩ (hi.dvd_of_pow_eq_one b _)
-  rw [← pow_mul']; rw [← mul_assoc]; rw [← hb]; rw [pow_mul]; rw [h.pow_eq_one]; rw [one_pow]
-
-/--
-theorem `orderOf` / 定理 `orderOf`
-
-English:
-theorem orderOf
-  given: (ζ : M)
-  statement: IsPrimitiveRoot ζ (orderOf ζ)
-  proof: ⟨pow_orderOf_eq_one ζ, fun _ => orderOf_dvd_of_pow_eq_one⟩
-
-中文:
-定理 orderOf
-  条件: (ζ : M)
-  结论: 是PrimitiveRoot ζ (orderOf ζ)
-  证明: ⟨pow_orderOf_eq_one ζ, fun _ => orderOf_dvd_of_pow_eq_one⟩
+  rw [← pow_mul', ← mul_assoc, ← hb, pow_mul, h.pow_eq_one, one_pow]
+/-
+**IsPrimitiveRoot.orderOf** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M), IsPrimitiveRoot ζ (orderOf
+ ζ)
+参数：ζ : M；orderOf ζ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_orderOf_eq_one`：pow_orderOf_eq_one (x : G) : x ^ orderOf x = 1
+· 使用定理 `orderOf_dvd_of_pow_eq_one`：orderOf_dvd_of_pow_eq_one (h : x ^ n = 1) : o
+rderOf x ∣ n
 -/
 protected theorem orderOf (ζ : M) : IsPrimitiveRoot ζ (orderOf ζ) :=
-  ⟨pow_orderOf_eq_one ζ, fun _ => orderOf_dvd_of_pow_eq_one⟩
-
-/--
-theorem `unique` / 定理 `unique`
-
-English:
-theorem unique
-  given: {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : IsPrimitiveRoot ζ l)
-  statement: k = l
-  proof: Nat.dvd_antisymm (hk.2 _ hl.1) (hl.2 _ hk.1)
-
-中文:
-定理 unique
-  条件: {ζ : M} (hk : 是PrimitiveRoot ζ k) (hl : 是PrimitiveRoot ζ l)
-  结论: k = l
-  证明: Nat.dvd_antisymm (hk.2 _ hl.1) (hl.2 _ hk.1)
-
-Depends on / 依赖: Nat.dvd_antisymm, dvd_antisymm
+  ⟨pow_orderOf_eq_one ζ, fun _ ↦ orderOf_dvd_of_pow_eq_one⟩
+/-
+**IsPrimitiveRoot.unique** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : IsPrimitiveRoot ζ l) : k =
+ l
+参数：hk : IsPrimitiveRoot ζ k；hl : IsPrimitiveRoot ζ l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.dvd_antisymm`：∀ {m n : ℕ}, m ∣ n → n ∣ m → m = n
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 -/
 theorem unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : IsPrimitiveRoot ζ l) : k = l :=
   Nat.dvd_antisymm (hk.2 _ hl.1) (hl.2 _ hk.1)
-
-/--
-theorem `eq_orderOf` / 定理 `eq_orderOf`
-
-English:
-theorem eq_orderOf
-  given: (h : IsPrimitiveRoot ζ k)
-  statement: k = orderOf ζ
-  proof: h.unique (IsPrimitiveRoot.orderOf ζ)
-
-中文:
-定理 eq_orderOf
-  条件: (h : 是PrimitiveRoot ζ k)
-  结论: k = orderOf ζ
-  证明: h.unique (IsPrimitiveRoot.orderOf ζ)
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.orderOf, h.unique, orderOf, unique
+/-
+**IsPrimitiveRoot.eq_orderOf** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = orderOf ζ
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.unique`：unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : 
+IsPrimitiveRoot ζ l) : k = l
+· 使用定理 `IsPrimitiveRoot.orderOf`：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M),
+ IsPrimitiveRoot ζ (orderOf ζ)
 -/
 theorem eq_orderOf (h : IsPrimitiveRoot ζ k) : k = orderOf ζ :=
   h.unique (IsPrimitiveRoot.orderOf ζ)
-
-/--
-theorem `iff` / 定理 `iff`
-
-English:
-theorem iff
-  given: (hk : 0 < k)
-  proof: by
-  refine ⟨fun h => ⟨h.pow_eq_one, fun l hl' hl => ?_⟩,
-    fun ⟨hζ, hl⟩ => IsPrimitiveRoot.mk_of_lt ζ hk hζ hl⟩
-  rw [h.eq_orderOf] at hl
-  exact pow_ne_one_of_lt_orderOf hl'.ne' hl
-
-中文:
-定理 iff
-  条件: (hk : 0 < k)
-  证明: by
-  refine ⟨fun h => ⟨h.pow_eq_one, fun l hl' hl => ?_⟩,
-    fun ⟨hζ, hl⟩ => IsPrimitiveRoot.mk_of_lt ζ hk hζ hl⟩
-  rw [h.eq_orderOf] at hl
-  exact pow_ne_one_of_lt_orderOf hl'.ne' hl
+/-
+**IsPrimitiveRoot.iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] {k : ℕ} {ζ : M},   0 < k → (IsPrimi
+tiveRoot ζ k ↔ ζ ^ k = 1 ∧ ∀ (l : ℕ), 0 < l → l < k → ζ ^ l ≠ 1)
+参数：IsPrimitiveRoot ζ k ↔ ζ ^ k = 1 ∧ ∀ (l : ℕ), 0 < l → l < k → ζ ^ l ≠ 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `pow_ne_one_of_lt_orderOf`：pow_ne_one_of_lt_orderOf (n0 : n != 0) (h : n 
+< orderOf x) : x ^ n != 1
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
+· 使用定理 `IsPrimitiveRoot.mk_of_lt`：mk_of_lt (ζ : M) (hk : 0 < k) (h1 : ζ ^ k = 1)
+ (h : forall l : Nat, 0 < l -> l < k -> ζ ^ l != 1) : IsPrimitiveRoot ζ k
 -/
 protected theorem iff (hk : 0 < k) :
-    IsPrimitiveRoot ζ k ↔ ζ ^ k = 1 ∧ forall l : Nat, 0 < l -> l < k -> ζ ^ l != 1 := by
-  refine ⟨fun h => ⟨h.pow_eq_one, fun l hl' hl => ?_⟩,
-    fun ⟨hζ, hl⟩ => IsPrimitiveRoot.mk_of_lt ζ hk hζ hl⟩
+    IsPrimitiveRoot ζ k ↔ ζ ^ k = 1 ∧ ∀ l : ℕ, 0 < l → l < k → ζ ^ l ≠ 1 := by
+  refine ⟨fun h ↦ ⟨h.pow_eq_one, fun l hl' hl ↦ ?_⟩,
+    fun ⟨hζ, hl⟩ ↦ IsPrimitiveRoot.mk_of_lt ζ hk hζ hl⟩
   rw [h.eq_orderOf] at hl
   exact pow_ne_one_of_lt_orderOf hl'.ne' hl
-
-/--
-theorem `not_iff` / 定理 `not_iff`
-
-English:
-theorem not_iff
-  statement: ¬IsPrimitiveRoot ζ k ↔ orderOf ζ != k
-  proof: ⟨fun h hk => h hk ▸ IsPrimitiveRoot.orderOf ζ,
-fun h hk => h.symm hk.unique IsPrimitiveRoot.orderOf ζ⟩
-
-中文:
-定理 not_iff
-  结论: ¬是PrimitiveRoot ζ k ↔ orderOf ζ != k
-  证明: ⟨fun h hk => h hk ▸ IsPrimitiveRoot.orderOf ζ,
-fun h hk => h.symm hk.unique IsPrimitiveRoot.orderOf ζ⟩
+/-
+**IsPrimitiveRoot.not_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] {k : ℕ} {ζ : M}, ¬IsPrimitiveRoot ζ
+ k ↔ orderOf ζ ≠ k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.orderOf`：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M),
+ IsPrimitiveRoot ζ (orderOf ζ)
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `IsPrimitiveRoot.unique`：unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : 
+IsPrimitiveRoot ζ l) : k = l
 -/
-protected theorem not_iff : ¬IsPrimitiveRoot ζ k ↔ orderOf ζ != k :=
-⟨fun h hk => h hk ▸ IsPrimitiveRoot.orderOf ζ,
-fun h hk => h.symm hk.unique IsPrimitiveRoot.orderOf ζ⟩
-
-/--
-theorem `iff_orderOf` / 定理 `iff_orderOf`
-
-English:
-theorem iff_orderOf
-  statement: IsPrimitiveRoot ζ k ↔ orderOf ζ = k
-  proof: not_iff_not.mp IsPrimitiveRoot.not_iff
-
-中文:
-定理 iff_orderOf
-  结论: 是PrimitiveRoot ζ k ↔ orderOf ζ = k
-  证明: not_iff_not.mp IsPrimitiveRoot.not_iff
+protected theorem not_iff : ¬IsPrimitiveRoot ζ k ↔ orderOf ζ ≠ k :=
+  ⟨fun h hk ↦ h <| hk ▸ IsPrimitiveRoot.orderOf ζ,
+    fun h hk ↦ h.symm <| hk.unique <| IsPrimitiveRoot.orderOf ζ⟩
+/-
+**IsPrimitiveRoot.iff_orderOf** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] {k : ℕ} {ζ : M}, IsPrimitiveRoot ζ 
+k ↔ orderOf ζ = k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `IsPrimitiveRoot.not_iff`：∀ {M : Type u_1} [inst : CommMonoid M] {k : ℕ} 
+{ζ : M}, ¬IsPrimitiveRoot ζ k ↔ orderOf ζ ≠ k
 -/
 protected theorem iff_orderOf : IsPrimitiveRoot ζ k ↔ orderOf ζ = k :=
   not_iff_not.mp IsPrimitiveRoot.not_iff
-
-/--
-theorem `pow_mul_pow_lcm` / 定理 `pow_mul_pow_lcm`
-
-English:
-theorem pow_mul_pow_lcm
-  statement: {ζ' : M} {k' : Nat} (hζ : IsPrimitiveRoot ζ k) (hζ' : IsPrimitiveRoot ζ' k')
-  proof: by
-  convert! IsPrimitiveRoot.orderOf _
-  convert!
-    ((Commute.all ζ ζ').orderOf_mul_pow_eq_lcm (by simpa [← hζ.eq_orderOf])
-        (by simpa [← hζ'.eq_orderOf])).symm using 2
-  all_goals simp [hζ.eq_orderOf, hζ'.eq_orderOf]
-
-中文:
-定理 pow_mul_pow_lcm
-  结论: {ζ' : M} {k' : 自然数} (hζ : 是PrimitiveRoot ζ k) (hζ' : 是PrimitiveRoot ζ' k')
-  证明: by
-  convert! IsPrimitiveRoot.orderOf _
-  convert!
-    ((Commute.all ζ ζ').orderOf_mul_pow_eq_lcm (by simpa [← hζ.eq_orderOf])
-        (by simpa [← hζ'.eq_orderOf])).symm using 2
-  all_goals simp [hζ.eq_orderOf, hζ'.eq_orderOf]
-
-Depends on / 依赖: Commute, Commute.all, IsPrimitiveRoot, IsPrimitiveRoot.orderOf, all_goals, convert, eq_orderOf, orderOf, orderOf_mul_pow_eq_lcm
+/-
+**IsPrimitiveRoot.pow_mul_pow_lcm** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow_mul_pow_lcm {ζ' : M} {k' : Nat} (hζ : IsPrimitiveRoot ζ k) (hζ' : IsPr
+imitiveRoot ζ' k') (hk : k != 0) (hk' : k' != 0) : IsPrimitiveRoot (ζ ^ (k / Nat
+.factorizationLCMLeft k k') * ζ' ^ (k' / Nat.factorizationLCMRight k k')) (Nat.l
+cm k k')
+参数：hζ : IsPrimitiveRoot ζ k；hζ' : IsPrimitiveRoot ζ' k'；hk : k != 0；hk' : k' != 
+0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Commute.orderOf_mul_pow_eq_lcm`：∀ {G : Type u} [inst : Monoid G] {x y : 
+G},   Commute x y →     orderOf x ≠ 0 →       orderOf y ≠ 0 →         orderOf   
+          (x ^ (orde…
+· 使用定理 `Commute.all`：∀ {S : Type u_3} [inst : CommMagma S] (a b : S), Commute a 
+b
+· 使用定理 `IsPrimitiveRoot.orderOf`：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M),
+ IsPrimitiveRoot ζ (orderOf ζ)
 -/
-theorem pow_mul_pow_lcm {ζ' : M} {k' : Nat} (hζ : IsPrimitiveRoot ζ k) (hζ' : IsPrimitiveRoot ζ' k')
-    (hk : k != 0) (hk' : k' != 0) :
+theorem pow_mul_pow_lcm {ζ' : M} {k' : ℕ} (hζ : IsPrimitiveRoot ζ k) (hζ' : IsPrimitiveRoot ζ' k')
+    (hk : k ≠ 0) (hk' : k' ≠ 0) :
     IsPrimitiveRoot
       (ζ ^ (k / Nat.factorizationLCMLeft k k') * ζ' ^ (k' / Nat.factorizationLCMRight k k'))
       (Nat.lcm k k') := by
@@ -844,192 +762,168 @@ theorem pow_mul_pow_lcm {ζ' : M} {k' : Nat} (hζ : IsPrimitiveRoot ζ k) (hζ' 
     ((Commute.all ζ ζ').orderOf_mul_pow_eq_lcm (by simpa [← hζ.eq_orderOf])
         (by simpa [← hζ'.eq_orderOf])).symm using 2
   all_goals simp [hζ.eq_orderOf, hζ'.eq_orderOf]
-
-/--
-theorem `pow_of_dvd` / 定理 `pow_of_dvd`
-
-English:
-theorem pow_of_dvd
-  given: (h : IsPrimitiveRoot ζ k) {p : Nat} (hp : p != 0) (hdiv : p ∣ k)
-  proof: by
-  rw [h.eq_orderOf] at hdiv ⊢
-  rw [← orderOf_pow_of_dvd hp hdiv]
-  exact IsPrimitiveRoot.orderOf _
-
-中文:
-定理 pow_of_dvd
-  条件: (h : 是PrimitiveRoot ζ k) {p : 自然数} (hp : p != 0) (hdiv : p ∣ k)
-  证明: by
-  rw [h.eq_orderOf] at hdiv ⊢
-  rw [← orderOf_pow_of_dvd hp hdiv]
-  exact IsPrimitiveRoot.orderOf _
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.orderOf, eq_orderOf, h.eq_orderOf, orderOf, orderOf_pow_of_dvd
+/-
+**IsPrimitiveRoot.pow_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow_of_dvd (h : IsPrimitiveRoot ζ k) {p : Nat} (hp : p != 0) (hdiv : p ∣ k
+) : IsPrimitiveRoot (ζ ^ p) (k / p)
+参数：h : IsPrimitiveRoot ζ k；hp : p != 0；hdiv : p ∣ k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `orderOf_pow_of_dvd`：orderOf_pow_of_dvd {x : G} {n : Nat} (hn : n != 0) (
+dvd : n ∣ orderOf x) : orderOf (x ^ n) = orderOf x / n
+· 使用定理 `IsPrimitiveRoot.orderOf`：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M),
+ IsPrimitiveRoot ζ (orderOf ζ)
 -/
-theorem pow_of_dvd (h : IsPrimitiveRoot ζ k) {p : Nat} (hp : p != 0) (hdiv : p ∣ k) :
+theorem pow_of_dvd (h : IsPrimitiveRoot ζ k) {p : ℕ} (hp : p ≠ 0) (hdiv : p ∣ k) :
     IsPrimitiveRoot (ζ ^ p) (k / p) := by
   rw [h.eq_orderOf] at hdiv ⊢
   rw [← orderOf_pow_of_dvd hp hdiv]
   exact IsPrimitiveRoot.orderOf _
 
-/--
-theorem `exists_pow_eq_pow_two_mul` / 定理 `exists_pow_eq_pow_two_mul`
+/-- If `ζ` is a primitive `k`-th root of unity with `k` odd, then every power of `ζ` is an even
+power of `ζ`. -/
+/-
+**IsPrimitiveRoot.exists_pow_eq_pow_two_mul** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimiti
+veRoot`。
+形式化陈述：exists_pow_eq_pow_two_mul (h : IsPrimitiveRoot ζ k) (hk : Odd k) (n : Nat)
+ : exists m, ζ ^ n = ζ ^ (2 * m)
+参数：h : IsPrimitiveRoot ζ k；hk : Odd k；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pow_eq_pow_two_mul`：exists_pow_eq_pow_two_mul {p : Nat} (hx : x ^
+ p = 1) (hp : Odd p) (n : Nat) : exists m, x ^ n = x ^ (2 * m)
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 
-English:
-theorem exists_pow_eq_pow_two_mul
-  given: (h : IsPrimitiveRoot ζ k) (hk : Odd k) (n : Nat)
-  proof: _root_.exists_pow_eq_pow_two_mul h.pow_eq_one hk n
-
-中文:
-定理 存在_pow_eq_pow_two_mul
-  条件: (h : 是PrimitiveRoot ζ k) (hk : Odd k) (n : 自然数)
-  证明: _root_.exists_pow_eq_pow_two_mul h.pow_eq_one hk n
-
-Depends on / 依赖: _root_, _root_.exists_pow_eq_pow_two_mul, exists_pow_eq_pow_two_mul, h.pow_eq_one, pow_eq_one
+--- 原说明 ---
+If `ζ` is a primitive `k`-th root of unity with `k` odd, then every power of `ζ`
+ is an even
+power of `ζ`.
 -/
-theorem exists_pow_eq_pow_two_mul (h : IsPrimitiveRoot ζ k) (hk : Odd k) (n : Nat) :
-    exists m, ζ ^ n = ζ ^ (2 * m) :=
+theorem exists_pow_eq_pow_two_mul (h : IsPrimitiveRoot ζ k) (hk : Odd k) (n : ℕ) :
+    ∃ m, ζ ^ n = ζ ^ (2 * m) :=
   _root_.exists_pow_eq_pow_two_mul h.pow_eq_one hk n
-
-/--
-theorem `mem_rootsOfUnity` / 定理 `mem_rootsOfUnity`
-
-English:
-theorem mem_rootsOfUnity
-  given: {ζ : Mˣ} {n : Nat} (h : IsPrimitiveRoot ζ n)
-  proof: h.pow_eq_one
-
-中文:
-定理 mem_rootsOfUnity
-  条件: {ζ : Mˣ} {n : 自然数} (h : 是PrimitiveRoot ζ n)
-  证明: h.pow_eq_one
+/-
+**IsPrimitiveRoot.mem_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : Mˣ} {n : ℕ}, IsPrimitiveRoot ζ
+ n → ζ ∈ rootsOfUnity n M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 -/
-protected theorem mem_rootsOfUnity {ζ : Mˣ} {n : Nat} (h : IsPrimitiveRoot ζ n) :
-    ζ in rootsOfUnity n M :=
+protected theorem mem_rootsOfUnity {ζ : Mˣ} {n : ℕ} (h : IsPrimitiveRoot ζ n) :
+    ζ ∈ rootsOfUnity n M :=
   h.pow_eq_one
 
-/--
-theorem `pow` / 定理 `pow`
+/-- If there is an `n`-th primitive root of unity in `R` and `b` divides `n`,
+then there is a `b`-th primitive root of unity in `R`. -/
+/-
+**IsPrimitiveRoot.pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow {n : Nat} {a b : Nat} (hn : 0 < n) (h : IsPrimitiveRoot ζ n) (hprod : 
+n = a * b) : IsPrimitiveRoot (ζ ^ a) b
+参数：hn : 0 < n；h : IsPrimitiveRoot ζ n；hprod : n = a * b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Nat.dvd_of_mul_dvd_mul_left`：∀ {k m n : ℕ}, 0 < k → k * m ∣ k * n → m ∣ 
+n
+· 使用定理 `Nat.pos_of_mul_pos_right`：∀ {a b : ℕ}, 0 < a * b → 0 < a
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem pow
-  given: {n : Nat} {a b : Nat} (hn : 0 < n) (h : IsPrimitiveRoot ζ n) (hprod : n = a * b)
-  proof: by
-  subst n
-  simp only [iff_def, ← pow_mul, h.pow_eq_one, true_and]
-  intro l hl
-exact Nat.dvd_of_mul_dvd_mul_left (Nat.pos_of_mul_pos_right hn) h.dvd_of_pow_eq_one _ hl
-
-中文:
-定理 pow
-  条件: {n : 自然数} {a b : 自然数} (hn : 0 < n) (h : 是PrimitiveRoot ζ n) (hprod : n = a * b)
-  证明: by
-  subst n
-  simp only [iff_def, ← pow_mul, h.pow_eq_one, true_and]
-  intro l hl
-exact Nat.dvd_of_mul_dvd_mul_left (Nat.pos_of_mul_pos_right hn) h.dvd_of_pow_eq_one _ hl
-
-Depends on / 依赖: Nat.dvd_of_mul_dvd_mul_left, Nat.pos_of_mul_pos_right, dvd_of_mul_dvd_mul_left, dvd_of_pow_eq_one, h.dvd_of_pow_eq_one, h.pow_eq_one, iff_def, pos_of_mul_pos_right, pow_eq_one, pow_mul, true_and
+--- 原说明 ---
+If there is an `n`-th primitive root of unity in `R` and `b` divides `n`,
+then there is a `b`-th primitive root of unity in `R`.
 -/
-theorem pow {n : Nat} {a b : Nat} (hn : 0 < n) (h : IsPrimitiveRoot ζ n) (hprod : n = a * b) :
+theorem pow {n : ℕ} {a b : ℕ} (hn : 0 < n) (h : IsPrimitiveRoot ζ n) (hprod : n = a * b) :
     IsPrimitiveRoot (ζ ^ a) b := by
   subst n
   simp only [iff_def, ← pow_mul, h.pow_eq_one, true_and]
   intro l hl
-exact Nat.dvd_of_mul_dvd_mul_left (Nat.pos_of_mul_pos_right hn) h.dvd_of_pow_eq_one _ hl
-
-/--
-lemma `injOn_pow` / 引理 `injOn_pow`
-
-English:
-lemma injOn_pow
-  given: {n : Nat} {ζ : M} (hζ : IsPrimitiveRoot ζ n)
-  proof: by
-  intro i hi j hj e
-  rw [Finset.coe_range]; rw [Set.mem_Iio] at hi hj
-  exact hζ.pow_inj hi hj e
-
-中文:
-引理 injOn_pow
-  条件: {n : 自然数} {ζ : M} (hζ : 是PrimitiveRoot ζ n)
-  证明: by
-  intro i hi j hj e
-  rw [Finset.coe_range]; rw [Set.mem_Iio] at hi hj
-  exact hζ.pow_inj hi hj e
-
-Depends on / 依赖: Finset, Finset.coe_range, Set.mem_Iio, coe_range, mem_Iio, pow_inj
+  exact Nat.dvd_of_mul_dvd_mul_left (Nat.pos_of_mul_pos_right hn) <| h.dvd_of_pow_eq_one _ hl
+/-
+**IsPrimitiveRoot.injOn_pow** 是 Mathlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：injOn_pow {n : Nat} {ζ : M} (hζ : IsPrimitiveRoot ζ n) : Set.InjOn (ζ ^ ·)
+ (Finset.range n)
+参数：hζ : IsPrimitiveRoot ζ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.pow_inj`：pow_inj (h : IsPrimitiveRoot ζ k) ⦃i j : Nat⦄ (
+hi : i < k) (hj : j < k) (H : ζ ^ i = ζ ^ j) : i = j
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_Iio`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Iio
+ b ↔ x < b
+· 使用定理 `Finset.coe_range`：coe_range (n : Nat) : (range n : Set Nat) = Set.Iio n
 -/
-lemma injOn_pow {n : Nat} {ζ : M} (hζ : IsPrimitiveRoot ζ n) :
+lemma injOn_pow {n : ℕ} {ζ : M} (hζ : IsPrimitiveRoot ζ n) :
     Set.InjOn (ζ ^ ·) (Finset.range n) := by
   intro i hi j hj e
-  rw [Finset.coe_range]; rw [Set.mem_Iio] at hi hj
+  rw [Finset.coe_range, Set.mem_Iio] at hi hj
   exact hζ.pow_inj hi hj e
-
-/--
-lemma `exists_pos` / 引理 `exists_pos`
-
-English:
-lemma exists_pos
-  given: {k : Nat} (hζ : ζ ^ k = 1) (hk : k != 0)
-  proof: ⟨orderOf ζ, by
-    rw [gt_iff_lt]; rw [orderOf_pos_iff]; rw [isOfFinOrder_iff_pow_eq_one]
-    exact ⟨k, Nat.pos_iff_ne_zero.mpr hk, hζ⟩, .orderOf _⟩
-
-中文:
-引理 存在_pos
-  条件: {k : 自然数} (hζ : ζ ^ k = 1) (hk : k != 0)
-  证明: ⟨orderOf ζ, by
-    rw [gt_iff_lt]; rw [orderOf_pos_iff]; rw [isOfFinOrder_iff_pow_eq_one]
-    exact ⟨k, Nat.pos_iff_ne_zero.mpr hk, hζ⟩, .orderOf _⟩
-
-Depends on / 依赖: Nat.pos_iff_ne_zero.mpr, gt_iff_lt, isOfFinOrder_iff_pow_eq_one, orderOf, orderOf_pos_iff, pos_iff_ne_zero
+/-
+**IsPrimitiveRoot.exists_pos** 是 Mathlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：exists_pos {k : Nat} (hζ : ζ ^ k = 1) (hk : k != 0) : exists k' > 0, IsPri
+mitiveRoot ζ k'
+参数：hζ : ζ ^ k = 1；hk : k != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `gt_iff_lt`：∀ {α : Type u_1} [inst : LT α] {x y : α}, x > y ↔ y < x
+· 使用定理 `orderOf_pos_iff`：orderOf_pos_iff : 0 < orderOf x ↔ IsOfFinOrder x
+· 使用定理 `isOfFinOrder_iff_pow_eq_one`：isOfFinOrder_iff_pow_eq_one : IsOfFinOrder 
+x ↔ exists n, 0 < n ∧ x ^ n = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.pos_iff_ne_zero`：∀ {n : ℕ}, 0 < n ↔ n ≠ 0
+· 使用定理 `IsPrimitiveRoot.orderOf`：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M),
+ IsPrimitiveRoot ζ (orderOf ζ)
 -/
-lemma exists_pos {k : Nat} (hζ : ζ ^ k = 1) (hk : k != 0) :
-    exists k' > 0, IsPrimitiveRoot ζ k' :=
+lemma exists_pos {k : ℕ} (hζ : ζ ^ k = 1) (hk : k ≠ 0) :
+    ∃ k' > 0, IsPrimitiveRoot ζ k' :=
   ⟨orderOf ζ, by
-    rw [gt_iff_lt]; rw [orderOf_pos_iff]; rw [isOfFinOrder_iff_pow_eq_one]
+    rw [gt_iff_lt, orderOf_pos_iff, isOfFinOrder_iff_pow_eq_one]
     exact ⟨k, Nat.pos_iff_ne_zero.mpr hk, hζ⟩, .orderOf _⟩
-
-/--
-lemma `existsUnique` / 引理 `existsUnique`
-
-English:
-lemma existsUnique
-  statement: exists! k, IsPrimitiveRoot ζ k
-  proof: ⟨_, .orderOf _, fun _ hl => unique hl (.orderOf _)⟩
-
-中文:
-引理 存在Unique
-  结论: 存在! k, 是PrimitiveRoot ζ k
-  证明: ⟨_, .orderOf _, fun _ hl => unique hl (.orderOf _)⟩
-
-Depends on / 依赖: orderOf, unique
+/-
+**IsPrimitiveRoot.existsUnique** 是 Mathlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：existsUnique : exists! k, IsPrimitiveRoot ζ k
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.orderOf`：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M),
+ IsPrimitiveRoot ζ (orderOf ζ)
+· 使用定理 `IsPrimitiveRoot.unique`：unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : 
+IsPrimitiveRoot ζ l) : k = l
 -/
-lemma existsUnique : exists! k, IsPrimitiveRoot ζ k :=
-  ⟨_, .orderOf _, fun _ hl => unique hl (.orderOf _)⟩
-
-/--
-theorem `_root_.isPrimitiveRoot_of_mem_rootsOfUnity` / 定理 `_root_.isPrimitiveRoot_of_mem_rootsOfUnity`
-
-English:
-theorem _root_.isPrimitiveRoot_of_mem_rootsOfUnity
-  statement: {u : Mˣ} {n : Nat} [NeZero n]
-  proof: ⟨orderOf u, (IsOfFinOrder.orderOf_pos ⟨n, NeZero.pos n,
-    (isPeriodicPt_mul_iff_pow_eq_one u).mpr hu⟩).ne', orderOf_dvd_of_pow_eq_one hu,
-    IsPrimitiveRoot.orderOf u⟩
-
-中文:
-定理 _root_.isPrimitiveRoot_of_mem_rootsOfUnity
-  结论: {u : Mˣ} {n : 自然数} [NeZero n]
-  证明: ⟨orderOf u, (IsOfFinOrder.orderOf_pos ⟨n, NeZero.pos n,
-    (isPeriodicPt_mul_iff_pow_eq_one u).mpr hu⟩).ne', orderOf_dvd_of_pow_eq_one hu,
-    IsPrimitiveRoot.orderOf u⟩
-
-Depends on / 依赖: IsOfFinOrder, IsOfFinOrder.orderOf_pos, IsPrimitiveRoot, IsPrimitiveRoot.orderOf, NeZero, NeZero.pos, isPeriodicPt_mul_iff_pow_eq_one, orderOf, orderOf_dvd_of_pow_eq_one, orderOf_pos
+lemma existsUnique : ∃! k, IsPrimitiveRoot ζ k :=
+  ⟨_, .orderOf _, fun _ hl ↦ unique hl (.orderOf _)⟩
+/-
+**IsPrimitiveRoot._root_.isPrimitiveRoot_of_mem_rootsOfUnity** 是 Mathlib 中的一个定理，
+位于命名空间 `IsPrimitiveRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.isPrimitiveRoot_of_mem_rootsOfUnity {u : Mˣ} {n : Nat} [NeZero n]
-    (hu : u in rootsOfUnity n M) :
-    exists d : Nat, d != 0 ∧ d ∣ n ∧ IsPrimitiveRoot u d :=
+theorem _root_.isPrimitiveRoot_of_mem_rootsOfUnity {u : Mˣ} {n : ℕ} [NeZero n]
+    (hu : u ∈ rootsOfUnity n M) :
+    ∃ d : ℕ, d ≠ 0 ∧ d ∣ n ∧ IsPrimitiveRoot u d :=
   ⟨orderOf u, (IsOfFinOrder.orderOf_pos ⟨n, NeZero.pos n,
     (isPeriodicPt_mul_iff_pow_eq_one u).mpr hu⟩).ne', orderOf_dvd_of_pow_eq_one hu,
     IsPrimitiveRoot.orderOf u⟩
@@ -1040,30 +934,28 @@ open Function
 
 variable [FunLike F M N]
 
-/--
-theorem `map_of_injective` / 定理 `map_of_injective`
-
-English:
-theorem map_of_injective
-  given: [MonoidHomClass F M N] (h : IsPrimitiveRoot ζ k) (hf : Injective f)
-  proof: by rw [← map_pow, h.pow_eq_one, map_one]
-  dvd_of_pow_eq_one := by
-    rw [h.eq_orderOf]
-    intro l hl
-    rw [← map_pow]; rw [← map_one f] at hl
-    exact orderOf_dvd_of_pow_eq_one (hf hl)
-
-中文:
-定理 map_of_injective
-  条件: [幺半群态射类 F M N] (h : 是PrimitiveRoot ζ k) (hf : 单射 f)
-  证明: by rw [← map_pow, h.pow_eq_one, map_one]
-  dvd_of_pow_eq_one := by
-    rw [h.eq_orderOf]
-    intro l hl
-    rw [← map_pow]; rw [← map_one f] at hl
-    exact orderOf_dvd_of_pow_eq_one (hf hl)
-
-Depends on / 依赖: dvd_of_pow_eq_one, eq_orderOf, h.eq_orderOf, h.pow_eq_one, map_one, map_pow, orderOf_dvd_of_pow_eq_one, pow_eq_one
+/-
+**IsPrimitiveRoot.map_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：map_of_injective [MonoidHomClass F M N] (h : IsPrimitiveRoot ζ k) (hf : In
+jective f) : IsPrimitiveRoot (f ζ) k where pow_eq_one
+参数：h : IsPrimitiveRoot ζ k；hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
+· 使用定理 `orderOf_dvd_of_pow_eq_one`：orderOf_dvd_of_pow_eq_one (h : x ^ n = 1) : o
+rderOf x ∣ n
 -/
 theorem map_of_injective [MonoidHomClass F M N] (h : IsPrimitiveRoot ζ k) (hf : Injective f) :
     IsPrimitiveRoot (f ζ) k where
@@ -1071,35 +963,32 @@ theorem map_of_injective [MonoidHomClass F M N] (h : IsPrimitiveRoot ζ k) (hf :
   dvd_of_pow_eq_one := by
     rw [h.eq_orderOf]
     intro l hl
-    rw [← map_pow]; rw [← map_one f] at hl
+    rw [← map_pow, ← map_one f] at hl
     exact orderOf_dvd_of_pow_eq_one (hf hl)
-
-/--
-theorem `of_map_of_injective` / 定理 `of_map_of_injective`
-
-English:
-theorem of_map_of_injective
-  statement: [MonoidHomClass F M N] (h : IsPrimitiveRoot (f ζ) k)
-  proof: by apply_fun f; rw [map_pow, map_one, h.pow_eq_one]
-  dvd_of_pow_eq_one := by
-    rw [h.eq_orderOf]
-    intro l hl
-    apply_fun f at hl
-    rw [map_pow]; rw [map_one] at hl
-    exact orderOf_dvd_of_pow_eq_one hl
-
-中文:
-定理 of_map_of_injective
-  结论: [幺半群态射类 F M N] (h : 是PrimitiveRoot (f ζ) k)
-  证明: by apply_fun f; rw [map_pow, map_one, h.pow_eq_one]
-  dvd_of_pow_eq_one := by
-    rw [h.eq_orderOf]
-    intro l hl
-    apply_fun f at hl
-    rw [map_pow]; rw [map_one] at hl
-    exact orderOf_dvd_of_pow_eq_one hl
-
-Depends on / 依赖: apply_fun, dvd_of_pow_eq_one, eq_orderOf, h.eq_orderOf, h.pow_eq_one, map_one, map_pow, orderOf_dvd_of_pow_eq_one, pow_eq_one
+/-
+**IsPrimitiveRoot.of_map_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot
+`。
+形式化陈述：of_map_of_injective [MonoidHomClass F M N] (h : IsPrimitiveRoot (f ζ) k) (
+hf : Injective f) : IsPrimitiveRoot ζ k where pow_eq_one
+参数：h : IsPrimitiveRoot (f ζ) k；hf : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
+· 使用定理 `orderOf_dvd_of_pow_eq_one`：orderOf_dvd_of_pow_eq_one (h : x ^ n = 1) : o
+rderOf x ∣ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem of_map_of_injective [MonoidHomClass F M N] (h : IsPrimitiveRoot (f ζ) k)
     (hf : Injective f) : IsPrimitiveRoot ζ k where
@@ -1108,23 +997,22 @@ theorem of_map_of_injective [MonoidHomClass F M N] (h : IsPrimitiveRoot (f ζ) k
     rw [h.eq_orderOf]
     intro l hl
     apply_fun f at hl
-    rw [map_pow]; rw [map_one] at hl
+    rw [map_pow, map_one] at hl
     exact orderOf_dvd_of_pow_eq_one hl
-
-/--
-theorem `map_iff_of_injective` / 定理 `map_iff_of_injective`
-
-English:
-theorem map_iff_of_injective
-  given: [MonoidHomClass F M N] (hf : Injective f)
-  proof: ⟨fun h => h.of_map_of_injective hf, fun h => h.map_of_injective hf⟩
-
-中文:
-定理 map_iff_of_injective
-  条件: [幺半群态射类 F M N] (hf : 单射 f)
-  证明: ⟨fun h => h.of_map_of_injective hf, fun h => h.map_of_injective hf⟩
-
-Depends on / 依赖: h.map_of_injective, h.of_map_of_injective, map_of_injective, of_map_of_injective
+/-
+**IsPrimitiveRoot.map_iff_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoo
+t`。
+形式化陈述：map_iff_of_injective [MonoidHomClass F M N] (hf : Injective f) : IsPrimiti
+veRoot (f ζ) k ↔ IsPrimitiveRoot ζ k
+参数：hf : Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.of_map_of_injective`：of_map_of_injective [MonoidHomClass
+ F M N] (h : IsPrimitiveRoot (f ζ) k) (hf : Injective f) : IsPrimitiveRoot ζ k w
+here pow_eq_one
+· 使用定理 `IsPrimitiveRoot.map_of_injective`：map_of_injective [MonoidHomClass F M N
+] (h : IsPrimitiveRoot ζ k) (hf : Injective f) : IsPrimitiveRoot (f ζ) k where p
+ow_eq_one
 -/
 theorem map_iff_of_injective [MonoidHomClass F M N] (hf : Injective f) :
     IsPrimitiveRoot (f ζ) k ↔ IsPrimitiveRoot ζ k :=
@@ -1138,43 +1026,37 @@ section CommMonoidWithZero
 
 variable {M₀ : Type*} [CommMonoidWithZero M₀]
 
-/--
-theorem `zero` / 定理 `zero`
-
-English:
-theorem zero
-  given: [Nontrivial M₀]
-  statement: IsPrimitiveRoot (0 : M₀) 0
-  proof: ⟨pow_zero 0, fun l hl => by simpa [zero_pow_eq] using hl⟩
-
-中文:
-定理 zero
-  条件: [非平凡 M₀]
-  结论: 是PrimitiveRoot (0 : M₀) 0
-  证明: ⟨pow_zero 0, fun l hl => by simpa [zero_pow_eq] using hl⟩
-
-Depends on / 依赖: pow_zero, zero_pow_eq
+/-
+**IsPrimitiveRoot.zero** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：zero [Nontrivial M₀] : IsPrimitiveRoot (0 : M₀) 0
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `zero_pow_eq`：zero_pow_eq (n : Nat) : (0 : M₀) ^ n = if n = 0 then 1 else
+ 0
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 theorem zero [Nontrivial M₀] : IsPrimitiveRoot (0 : M₀) 0 :=
-  ⟨pow_zero 0, fun l hl => by simpa [zero_pow_eq] using hl⟩
-
-/--
-theorem `ne_zero` / 定理 `ne_zero`
-
-English:
-theorem ne_zero
-  given: [Nontrivial M₀] {ζ : M₀} (h : IsPrimitiveRoot ζ k)
-  statement: k != 0 -> ζ != 0
-  proof: mt fun hn => h.unique (hn.symm ▸ IsPrimitiveRoot.zero)
-
-中文:
-定理 ne_zero
-  条件: [非平凡 M₀] {ζ : M₀} (h : 是PrimitiveRoot ζ k)
-  结论: k != 0 -> ζ != 0
-  证明: mt fun hn => h.unique (hn.symm ▸ IsPrimitiveRoot.zero)
+  ⟨pow_zero 0, fun l hl ↦ by simpa [zero_pow_eq] using hl⟩
+/-
+**IsPrimitiveRoot.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：∀ {k : ℕ} {M₀ : Type u_7} [inst : CommMonoidWithZero M₀] [Nontrivial M₀] {
+ζ : M₀}, IsPrimitiveRoot ζ k → k ≠ 0 → ζ ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `IsPrimitiveRoot.unique`：unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : 
+IsPrimitiveRoot ζ l) : k = l
+· 使用定理 `IsPrimitiveRoot.zero`：zero [Nontrivial M₀] : IsPrimitiveRoot (0 : M₀) 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-protected theorem ne_zero [Nontrivial M₀] {ζ : M₀} (h : IsPrimitiveRoot ζ k) : k != 0 -> ζ != 0 :=
-  mt fun hn => h.unique (hn.symm ▸ IsPrimitiveRoot.zero)
+protected theorem ne_zero [Nontrivial M₀] {ζ : M₀} (h : IsPrimitiveRoot ζ k) : k ≠ 0 → ζ ≠ 0 :=
+  mt fun hn ↦ h.unique (hn.symm ▸ IsPrimitiveRoot.zero)
 
 end CommMonoidWithZero
 
@@ -1182,26 +1064,23 @@ section CancelCommMonoidWithZero
 
 variable {M₀ : Type*} [CommMonoidWithZero M₀] [IsCancelMulZero M₀]
 
-/--
-lemma `injOn_pow_mul` / 引理 `injOn_pow_mul`
-
-English:
-lemma injOn_pow_mul
-  given: {n : Nat} {ζ : M₀} (hζ : IsPrimitiveRoot ζ n) {α : M₀} (hα : α != 0)
-  proof: fun i hi j hj e =>
-    hζ.injOn_pow hi hj (by simpa [mul_eq_mul_right_iff, or_iff_left hα] using e)
-
-中文:
-引理 injOn_pow_mul
-  条件: {n : 自然数} {ζ : M₀} (hζ : 是PrimitiveRoot ζ n) {α : M₀} (hα : α != 0)
-  证明: fun i hi j hj e =>
-    hζ.injOn_pow hi hj (by simpa [mul_eq_mul_right_iff, or_iff_left hα] using e)
-
-Depends on / 依赖: injOn_pow, mul_eq_mul_right_iff, or_iff_left
+/-
+**IsPrimitiveRoot.injOn_pow_mul** 是 Mathlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：injOn_pow_mul {n : Nat} {ζ : M₀} (hζ : IsPrimitiveRoot ζ n) {α : M₀} (hα :
+ α != 0) : Set.InjOn (ζ ^ · * α) (Finset.range n)
+参数：hζ : IsPrimitiveRoot ζ n；hα : α != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsPrimitiveRoot.injOn_pow`：injOn_pow {n : Nat} {ζ : M} (hζ : IsPrimitive
+Root ζ n) : Set.InjOn (ζ ^ ·) (Finset.range n)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `or_iff_left`：∀ {b a : Prop}, ¬b → (a ∨ b ↔ a)
 -/
-lemma injOn_pow_mul {n : Nat} {ζ : M₀} (hζ : IsPrimitiveRoot ζ n) {α : M₀} (hα : α != 0) :
+lemma injOn_pow_mul {n : ℕ} {ζ : M₀} (hζ : IsPrimitiveRoot ζ n) {α : M₀} (hα : α ≠ 0) :
     Set.InjOn (ζ ^ · * α) (Finset.range n) :=
-  fun i hi j hj e =>
+  fun i hi j hj e ↦
     hζ.injOn_pow hi hj (by simpa [mul_eq_mul_right_iff, or_iff_left hα] using e)
 
 end CancelCommMonoidWithZero
@@ -1210,162 +1089,149 @@ section DivisionCommMonoid
 
 variable {ζ : G}
 
-/--
-theorem `zpow_eq_one` / 定理 `zpow_eq_one`
-
-English:
-theorem zpow_eq_one
-  given: (h : IsPrimitiveRoot ζ k)
-  statement: ζ ^ (k : Int) = 1
-  proof: by
-  exact_mod_cast h.pow_eq_one
-
-中文:
-定理 zpow_eq_one
-  条件: (h : 是PrimitiveRoot ζ k)
-  结论: ζ ^ (k : 整数) = 1
-  证明: by
-  exact_mod_cast h.pow_eq_one
-
-Depends on / 依赖: h.pow_eq_one, pow_eq_one
+/-
+**IsPrimitiveRoot.zpow_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：zpow_eq_one (h : IsPrimitiveRoot ζ k) : ζ ^ (k : Int) = 1
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 -/
-theorem zpow_eq_one (h : IsPrimitiveRoot ζ k) : ζ ^ (k : Int) = 1 := by
+theorem zpow_eq_one (h : IsPrimitiveRoot ζ k) : ζ ^ (k : ℤ) = 1 := by
   exact_mod_cast h.pow_eq_one
-
-/--
-theorem `zpow_eq_one_iff_dvd` / 定理 `zpow_eq_one_iff_dvd`
-
-English:
-theorem zpow_eq_one_iff_dvd
-  given: (h : IsPrimitiveRoot ζ k) (l : Int)
-  statement: ζ ^ l = 1 ↔ (k : Int) ∣ l
-  proof: by
-  by_cases h0 : 0 <= l
-  · lift l to Nat using h0; exact_mod_cast h.pow_eq_one_iff_dvd l
-  · have : 0 <= -l := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
-    lift -l to Nat using this with l' hl'
-    rw [← dvd_neg]; rw [← hl']
-    norm_cast
-    rw [← h.pow_eq_one_iff_dvd]; rw [← inv_inj]; rw [← zpow_neg]; rw [← hl']; rw [zpow_natCast]; rw [inv_one]
-
-中文:
-定理 zpow_eq_one_iff_dvd
-  条件: (h : 是PrimitiveRoot ζ k) (l : 整数)
-  结论: ζ ^ l = 1 ↔ (k : 整数) ∣ l
-  证明: by
-  by_cases h0 : 0 <= l
-  · lift l to Nat using h0; exact_mod_cast h.pow_eq_one_iff_dvd l
-  · have : 0 <= -l := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
-    lift -l to Nat using this with l' hl'
-    rw [← dvd_neg]; rw [← hl']
-    norm_cast
-    rw [← h.pow_eq_one_iff_dvd]; rw [← inv_inj]; rw [← zpow_neg]; rw [← hl']; rw [zpow_natCast]; rw [inv_one]
-
-Depends on / 依赖: Int.lt_of_not_ge, Int.neg_pos_of_neg, dvd_neg, h.pow_eq_one_iff_dvd, inv_inj, inv_one, lt_of_not_ge, neg_pos_of_neg, pow_eq_one_iff_dvd, zpow_natCast, zpow_neg
+/-
+**IsPrimitiveRoot.zpow_eq_one_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot
+`。
+形式化陈述：zpow_eq_one_iff_dvd (h : IsPrimitiveRoot ζ k) (l : Int) : ζ ^ l = 1 ↔ (k :
+ Int) ∣ l
+参数：h : IsPrimitiveRoot ζ k；l : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `instCanLiftIntNatCastLeOfNat`：CanLift ℤ ℕ (fun n => ↑n) fun x => 0 ≤ x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `IsPrimitiveRoot.pow_eq_one_iff_dvd`：pow_eq_one_iff_dvd (h : IsPrimitiveR
+oot ζ k) (l : Nat) : ζ ^ l = 1 ↔ k ∣ l
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Int.neg_pos_of_neg`：∀ {a : ℤ}, a < 0 → 0 < -a
+· 使用定理 `Int.lt_of_not_ge`：∀ {a b : ℤ}, ¬a ≤ b → b < a
+· 使用定理 `dvd_neg`：dvd_neg : a ∣ -b ↔ a ∣ b
+· 使用定理 `inv_inj`：inv_inj : a⁻¹ = b⁻¹ ↔ a = b
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem zpow_eq_one_iff_dvd (h : IsPrimitiveRoot ζ k) (l : Int) : ζ ^ l = 1 ↔ (k : Int) ∣ l := by
-  by_cases h0 : 0 <= l
-  · lift l to Nat using h0; exact_mod_cast h.pow_eq_one_iff_dvd l
-  · have : 0 <= -l := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
-    lift -l to Nat using this with l' hl'
-    rw [← dvd_neg]; rw [← hl']
+theorem zpow_eq_one_iff_dvd (h : IsPrimitiveRoot ζ k) (l : ℤ) : ζ ^ l = 1 ↔ (k : ℤ) ∣ l := by
+  by_cases h0 : 0 ≤ l
+  · lift l to ℕ using h0; exact_mod_cast h.pow_eq_one_iff_dvd l
+  · have : 0 ≤ -l := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
+    lift -l to ℕ using this with l' hl'
+    rw [← dvd_neg, ← hl']
     norm_cast
-    rw [← h.pow_eq_one_iff_dvd]; rw [← inv_inj]; rw [← zpow_neg]; rw [← hl']; rw [zpow_natCast]; rw [inv_one]
-
-/--
-theorem `inv` / 定理 `inv`
-
-English:
-theorem inv
-  given: (h : IsPrimitiveRoot ζ k)
-  statement: IsPrimitiveRoot ζ⁻¹ k
-  proof: { pow_eq_one := by simp only [h.pow_eq_one, inv_one, inv_pow]
-    dvd_of_pow_eq_one := by
-      intro l hl
-      apply h.dvd_of_pow_eq_one l
-      rw [← inv_inj]; rw [← inv_pow]; rw [hl]; rw [inv_one] }
-
-@[simp]
-
-中文:
-定理 inv
-  条件: (h : 是PrimitiveRoot ζ k)
-  结论: 是PrimitiveRoot ζ⁻¹ k
-  证明: { pow_eq_one := by simp only [h.pow_eq_one, inv_one, inv_pow]
-    dvd_of_pow_eq_one := by
-      intro l hl
-      apply h.dvd_of_pow_eq_one l
-      rw [← inv_inj]; rw [← inv_pow]; rw [hl]; rw [inv_one] }
-
-@[simp]
-
-Depends on / 依赖: dvd_of_pow_eq_one, h.dvd_of_pow_eq_one, h.pow_eq_one, inv_inj, inv_one, inv_pow, pow_eq_one
+    rw [← h.pow_eq_one_iff_dvd, ← inv_inj, ← zpow_neg, ← hl', zpow_natCast, inv_one]
+/-
+**IsPrimitiveRoot.inv** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：inv (h : IsPrimitiveRoot ζ k) : IsPrimitiveRoot ζ⁻¹ k
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsPrimitiveRoot.dvd_of_pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M
+] {ζ : M} {k : ℕ}, IsPrimitiveRoot ζ k → ∀ (l : ℕ), ζ ^ l = 1 → k ∣ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_inj`：inv_inj : a⁻¹ = b⁻¹ ↔ a = b
 -/
 theorem inv (h : IsPrimitiveRoot ζ k) : IsPrimitiveRoot ζ⁻¹ k :=
   { pow_eq_one := by simp only [h.pow_eq_one, inv_one, inv_pow]
     dvd_of_pow_eq_one := by
       intro l hl
       apply h.dvd_of_pow_eq_one l
-      rw [← inv_inj]; rw [← inv_pow]; rw [hl]; rw [inv_one] }
+      rw [← inv_inj, ← inv_pow, hl, inv_one] }
 
 @[simp]
-/--
-theorem `inv_iff` / 定理 `inv_iff`
-
-English:
-theorem inv_iff
-  statement: IsPrimitiveRoot ζ⁻¹ k ↔ IsPrimitiveRoot ζ k
-  proof: ⟨fun h => inv_inv ζ ▸ inv h, fun h => inv h⟩
-
-中文:
-定理 inv_iff
-  结论: 是PrimitiveRoot ζ⁻¹ k ↔ 是PrimitiveRoot ζ k
-  证明: ⟨fun h => inv_inv ζ ▸ inv h, fun h => inv h⟩
-
-Depends on / 依赖: inv_inv
+/-
+**IsPrimitiveRoot.inv_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：inv_iff : IsPrimitiveRoot ζ⁻¹ k ↔ IsPrimitiveRoot ζ k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.inv`：inv (h : IsPrimitiveRoot ζ k) : IsPrimitiveRoot ζ⁻¹
+ k
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 theorem inv_iff : IsPrimitiveRoot ζ⁻¹ k ↔ IsPrimitiveRoot ζ k :=
-  ⟨fun h => inv_inv ζ ▸ inv h, fun h => inv h⟩
-
-/--
-theorem `zpow_of_gcd_eq_one` / 定理 `zpow_of_gcd_eq_one`
-
-English:
-theorem zpow_of_gcd_eq_one
-  given: (h : IsPrimitiveRoot ζ k) (i : Int) (hi : i.gcd k = 1)
-  proof: by
-  by_cases h0 : 0 <= i
-  · lift i to Nat using h0
-    exact_mod_cast h.pow_of_coprime i hi
-  have : 0 <= -i := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
-  lift -i to Nat using this with i' hi'
-  rw [← inv_iff]; rw [← zpow_neg]; rw [← hi']; rw [zpow_natCast]
-  apply h.pow_of_coprime
-  rwa [Int.gcd, ← Int.natAbs_neg, ← hi'] at hi
-
-中文:
-定理 zpow_of_gcd_eq_one
-  条件: (h : 是PrimitiveRoot ζ k) (i : 整数) (hi : i.最大公约数 k = 1)
-  证明: by
-  by_cases h0 : 0 <= i
-  · lift i to Nat using h0
-    exact_mod_cast h.pow_of_coprime i hi
-  have : 0 <= -i := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
-  lift -i to Nat using this with i' hi'
-  rw [← inv_iff]; rw [← zpow_neg]; rw [← hi']; rw [zpow_natCast]
-  apply h.pow_of_coprime
-  rwa [Int.gcd, ← Int.natAbs_neg, ← hi'] at hi
-
-Depends on / 依赖: CompactSpace, Finite, Finite.compactSpace, Int.gcd, Int.lt_of_not_ge, Int.natAbs_neg, Int.neg_pos_of_neg, compactSpace, h.pow_of_coprime, inv_iff, lt_of_not_ge, natAbs_neg, neg_pos_of_neg, pow_of_coprime, zpow_natCast, zpow_neg
+  ⟨fun h ↦ inv_inv ζ ▸ inv h, fun h ↦ inv h⟩
+/-
+**IsPrimitiveRoot.zpow_of_gcd_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`
+。
+形式化陈述：zpow_of_gcd_eq_one (h : IsPrimitiveRoot ζ k) (i : Int) (hi : i.gcd k = 1) 
+: IsPrimitiveRoot (ζ ^ i) k
+参数：h : IsPrimitiveRoot ζ k；i : Int；hi : i.gcd k = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `instCanLiftIntNatCastLeOfNat`：CanLift ℤ ℕ (fun n => ↑n) fun x => 0 ≤ x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `IsPrimitiveRoot.pow_of_coprime`：pow_of_coprime (h : IsPrimitiveRoot ζ k)
+ (i : Nat) (hi : i.Coprime k) : IsPrimitiveRoot (ζ ^ i) k
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Int.neg_pos_of_neg`：∀ {a : ℤ}, a < 0 → 0 < -a
+· 使用定理 `Int.lt_of_not_ge`：∀ {a b : ℤ}, ¬a ≤ b → b < a
+· 使用定理 `IsPrimitiveRoot.inv_iff`：inv_iff : IsPrimitiveRoot ζ⁻¹ k ↔ IsPrimitiveRo
+ot ζ k
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `Int.natAbs_neg`：∀ (a : ℤ), (-a).natAbs = a.natAbs
+· 使用定理 `Int.gcd.eq_1`：∀ (m n : ℤ), m.gcd n = m.natAbs.gcd n.natAbs
 -/
-theorem zpow_of_gcd_eq_one (h : IsPrimitiveRoot ζ k) (i : Int) (hi : i.gcd k = 1) :
+theorem zpow_of_gcd_eq_one (h : IsPrimitiveRoot ζ k) (i : ℤ) (hi : i.gcd k = 1) :
     IsPrimitiveRoot (ζ ^ i) k := by
-  by_cases h0 : 0 <= i
-  · lift i to Nat using h0
+  by_cases h0 : 0 ≤ i
+  · lift i to ℕ using h0
     exact_mod_cast h.pow_of_coprime i hi
-  have : 0 <= -i := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
-  lift -i to Nat using this with i' hi'
-  rw [← inv_iff]; rw [← zpow_neg]; rw [← hi']; rw [zpow_natCast]
+  have : 0 ≤ -i := (Int.neg_pos_of_neg <| Int.lt_of_not_ge h0).le
+  lift -i to ℕ using this with i' hi'
+  rw [← inv_iff, ← zpow_neg, ← hi', zpow_natCast]
   apply h.pow_of_coprime
   rwa [Int.gcd, ← Int.natAbs_neg, ← hi'] at hi
 
@@ -1373,72 +1239,78 @@ end DivisionCommMonoid
 
 section CommRing
 
-variable [CommRing R] {n n' : Nat} {ζ : R}
+variable [CommRing R] {n n' : ℕ} {ζ : R}
 
-/--
-theorem `sub_one_ne_zero` / 定理 `sub_one_ne_zero`
-
-English:
-theorem sub_one_ne_zero
-  given: (hn : 1 < n) (hζ : IsPrimitiveRoot ζ n)
-  statement: ζ - 1 != 0
-  proof: sub_ne_zero.mpr hζ.ne_one hn
-
-中文:
-定理 sub_one_ne_zero
-  条件: (hn : 1 < n) (hζ : 是PrimitiveRoot ζ n)
-  结论: ζ - 1 != 0
-  证明: sub_ne_zero.mpr hζ.ne_one hn
-
-Depends on / 依赖: CompactSpace, IndiscreteTopology, instCompactSpace, ne_one, sub_ne_zero, sub_ne_zero.mpr
+/-
+**IsPrimitiveRoot.sub_one_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：sub_one_ne_zero (hn : 1 < n) (hζ : IsPrimitiveRoot ζ n) : ζ - 1 != 0
+参数：hn : 1 < n；hζ : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_ne_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b ≠ 0 ↔
+ a ≠ b
+· 使用定理 `IsPrimitiveRoot.ne_one`：ne_one (h : IsPrimitiveRoot ζ k) (hk : 1 < k) : 
+ζ != 1
 -/
-theorem sub_one_ne_zero (hn : 1 < n) (hζ : IsPrimitiveRoot ζ n) : ζ - 1 != 0 :=
-sub_ne_zero.mpr hζ.ne_one hn
-
-/--
-theorem `isRoot` / 定理 `isRoot`
-
-English:
-theorem isRoot
-  given: (hζ : IsPrimitiveRoot ζ n)
-  statement: (X ^ n - 1 : R[X]).IsRoot ζ
-  proof: by
-  simp [hζ.pow_eq_one]
-
-中文:
-定理 isRoot
-  条件: (hζ : 是PrimitiveRoot ζ n)
-  结论: (X ^ n - 1 : R[X]).IsRoot ζ
-  证明: by
-  simp [hζ.pow_eq_one]
-
-Depends on / 依赖: pow_eq_one
+theorem sub_one_ne_zero (hn : 1 < n) (hζ : IsPrimitiveRoot ζ n) : ζ - 1 ≠ 0 :=
+  sub_ne_zero.mpr <| hζ.ne_one hn
+/-
+**IsPrimitiveRoot.isRoot** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：isRoot (hζ : IsPrimitiveRoot ζ n) : (X ^ n - 1 : R[X]).IsRoot ζ
+参数：hζ : IsPrimitiveRoot ζ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_pow`：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `Polynomial.eval_one`：eval_one : (1 : R[X]).eval x = 1
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isRoot (hζ : IsPrimitiveRoot ζ n) : (X ^ n - 1 : R[X]).IsRoot ζ := by
   simp [hζ.pow_eq_one]
-
-/--
-theorem `isRoot_of_dvd` / 定理 `isRoot_of_dvd`
-
-English:
-theorem isRoot_of_dvd
-  given: (hζ : IsPrimitiveRoot ζ n)
-  statement: n ∣ n' -> (X ^ n' - 1 : R[X]).IsRoot ζ
-  proof: by
-  rintro ⟨k, rfl⟩
-  simp [pow_mul, hζ.pow_eq_one]
-
-中文:
-定理 isRoot_of_dvd
-  条件: (hζ : 是PrimitiveRoot ζ n)
-  结论: n ∣ n' -> (X ^ n' - 1 : R[X]).IsRoot ζ
-  证明: by
-  rintro ⟨k, rfl⟩
-  simp [pow_mul, hζ.pow_eq_one]
-
-Depends on / 依赖: pow_eq_one, pow_mul
+/-
+**IsPrimitiveRoot.isRoot_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：isRoot_of_dvd (hζ : IsPrimitiveRoot ζ n) : n ∣ n' -> (X ^ n' - 1 : R[X]).I
+sRoot ζ
+参数：hζ : IsPrimitiveRoot ζ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_pow`：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `Polynomial.eval_one`：eval_one : (1 : R[X]).eval x = 1
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem isRoot_of_dvd (hζ : IsPrimitiveRoot ζ n) : n ∣ n' -> (X ^ n' - 1 : R[X]).IsRoot ζ := by
+theorem isRoot_of_dvd (hζ : IsPrimitiveRoot ζ n) : n ∣ n' → (X ^ n' - 1 : R[X]).IsRoot ζ := by
   rintro ⟨k, rfl⟩
   simp [pow_mul, hζ.pow_eq_one]
 
@@ -1449,88 +1321,101 @@ section IsDomain
 variable {ζ : R} [CommRing R] [IsDomain R]
 
 @[simp]
-/--
-theorem `primitiveRoots_one` / 定理 `primitiveRoots_one`
-
-English:
-theorem primitiveRoots_one
-  statement: primitiveRoots 1 R = {(1 : R)}
-  proof: by
-  refine Finset.eq_singleton_iff_unique_mem.2 ⟨?_, fun x hx => ?_⟩
-  · simp only [IsPrimitiveRoot.one_right_iff, mem_primitiveRoots zero_lt_one]
-  · rwa [mem_primitiveRoots zero_lt_one, IsPrimitiveRoot.one_right_iff] at hx
-
-中文:
-定理 primitiveRoots_one
-  结论: primitiveRoots 1 R = {(1 : R)}
-  证明: by
-  refine Finset.eq_singleton_iff_unique_mem.2 ⟨?_, fun x hx => ?_⟩
-  · simp only [IsPrimitiveRoot.one_right_iff, mem_primitiveRoots zero_lt_one]
-  · rwa [mem_primitiveRoots zero_lt_one, IsPrimitiveRoot.one_right_iff] at hx
-
-Depends on / 依赖: Finset, Finset.eq_singleton_iff_unique_mem, IsPrimitiveRoot, IsPrimitiveRoot.one_right_iff, eq_singleton_iff_unique_mem, mem_primitiveRoots, one_right_iff, zero_lt_one
+/-
+**IsPrimitiveRoot.primitiveRoots_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`
+。
+形式化陈述：primitiveRoots_one : primitiveRoots 1 R = {(1 : R)}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.eq_singleton_iff_unique_mem`：eq_singleton_iff_unique_mem {s : Fin
+set α} {a : α} : s = {a} ↔ a in s ∧ forall x in s, x = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mem_primitiveRoots`：mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ in primi
+tiveRoots k R ↔ IsPrimitiveRoot ζ k
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.one_right_iff`：one_right_iff : IsPrimitiveRoot ζ 1 ↔ ζ =
+ 1
 -/
 theorem primitiveRoots_one : primitiveRoots 1 R = {(1 : R)} := by
-  refine Finset.eq_singleton_iff_unique_mem.2 ⟨?_, fun x hx => ?_⟩
+  refine Finset.eq_singleton_iff_unique_mem.2 ⟨?_, fun x hx ↦ ?_⟩
   · simp only [IsPrimitiveRoot.one_right_iff, mem_primitiveRoots zero_lt_one]
   · rwa [mem_primitiveRoots zero_lt_one, IsPrimitiveRoot.one_right_iff] at hx
-
-/--
-theorem `neZero'` / 定理 `neZero'`
-
-English:
-theorem neZero'
-  given: {n : Nat} [NeZero n] (hζ : IsPrimitiveRoot ζ n)
-  statement: NeZero ((n : Nat) : R)
-  proof: by
-  let p := ringChar R
-  refine .of_not_dvd R (p := p) fun hpn => ?_
-  obtain ⟨n, rfl⟩ := hpn
-  have h : p != 0 ∧ n != 0 := by aesop
-  have : NeZero p := .mk h.1
-  have hp : Fact p.Prime := CharP.char_is_prime_of_pos R p
-  refine (hζ.pow_ne_one_of_pos_of_lt h.2 (lt_mul_of_one_lt_left (by grind) hp.1.one_lt) <|
-    frobenius_inj R p ?_).elim
-  rw [frobenius_def]; rw [← pow_mul']; rw [hζ.1]; rw [map_one]
-
-nonrec theorem mem_nthRootsFinset (hζ : IsPrimitiveRoot ζ k) (hk : 0 < k) :
-    ζ in nthRootsFinset k (1 : R) :=
-  (mem_nthRootsFinset hk (1 : R)).2 hζ.pow_eq_one
-
-中文:
-定理 neZero'
-  条件: {n : 自然数} [NeZero n] (hζ : 是PrimitiveRoot ζ n)
-  结论: NeZero ((n : 自然数) : R)
-  证明: by
-  let p := ringChar R
-  refine .of_not_dvd R (p := p) fun hpn => ?_
-  obtain ⟨n, rfl⟩ := hpn
-  have h : p != 0 ∧ n != 0 := by aesop
-  have : NeZero p := .mk h.1
-  have hp : Fact p.Prime := CharP.char_is_prime_of_pos R p
-  refine (hζ.pow_ne_one_of_pos_of_lt h.2 (lt_mul_of_one_lt_left (by grind) hp.1.one_lt) <|
-    frobenius_inj R p ?_).elim
-  rw [frobenius_def]; rw [← pow_mul']; rw [hζ.1]; rw [map_one]
-
-nonrec theorem mem_nthRootsFinset (hζ : IsPrimitiveRoot ζ k) (hk : 0 < k) :
-    ζ in nthRootsFinset k (1 : R) :=
-  (mem_nthRootsFinset hk (1 : R)).2 hζ.pow_eq_one
-
-Depends on / 依赖: CharP.char_is_prime_of_pos, NeZero, Sigma.univ, char_is_prime_of_pos, continuous_sigmaMk, frobenius_def, frobenius_inj, isCompact_iUnion, isCompact_range, lt_mul_of_one_lt_left, map_one, of_not_dvd, one_lt, p.Prime, pow_mul, pow_ne_one_of_pos_of_lt, ringChar
+/-
+**IsPrimitiveRoot.neZero'** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：neZero' {n : Nat} [NeZero n] (hζ : IsPrimitiveRoot ζ n) : NeZero ((n : Nat
+) : R)
+参数：hζ : IsPrimitiveRoot ζ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NeZero.of_not_dvd`：of_not_dvd [CharP R p] (h : ¬p ∣ n) : NeZero (n : R)
+· 使用定理 `ringChar.charP`：∀ (R : Type u_1) [inst : NonAssocSemiring R], CharP R (r
+ingChar R)
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `CharP.char_is_prime_of_pos`：char_is_prime_of_pos (p : Nat) [NeZero p] [C
+harP R p] : Fact p.Prime
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsPrimitiveRoot.pow_ne_one_of_pos_of_lt`：pow_ne_one_of_pos_of_lt (h : Is
+PrimitiveRoot ζ k) (h0 : l != 0) (hl : l < k) : ζ ^ l != 1
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `lt_mul_of_one_lt_left`：lt_mul_of_one_lt_left [MulPosStrictMono α] (hb : 
+0 < b) (h : 1 < a) : b < a * b
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `frobenius_inj`：frobenius_inj : Function.Injective (frobenius R p)
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用引理 `frobenius_def`：frobenius_def : frobenius R p x = x ^ p
+· 使用引理 `pow_mul'`：pow_mul' (a : M) (m n : Nat) : a ^ (m * n) = (a ^ n) ^ m
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem neZero' {n : Nat} [NeZero n] (hζ : IsPrimitiveRoot ζ n) : NeZero ((n : Nat) : R) := by
+theorem neZero' {n : ℕ} [NeZero n] (hζ : IsPrimitiveRoot ζ n) : NeZero ((n : ℕ) : R) := by
   let p := ringChar R
-  refine .of_not_dvd R (p := p) fun hpn => ?_
+  refine .of_not_dvd R (p := p) fun hpn ↦ ?_
   obtain ⟨n, rfl⟩ := hpn
-  have h : p != 0 ∧ n != 0 := by aesop
+  have h : p ≠ 0 ∧ n ≠ 0 := by aesop
   have : NeZero p := .mk h.1
   have hp : Fact p.Prime := CharP.char_is_prime_of_pos R p
   refine (hζ.pow_ne_one_of_pos_of_lt h.2 (lt_mul_of_one_lt_left (by grind) hp.1.one_lt) <|
     frobenius_inj R p ?_).elim
-  rw [frobenius_def]; rw [← pow_mul']; rw [hζ.1]; rw [map_one]
+  rw [frobenius_def, ← pow_mul', hζ.1, map_one]
 
 nonrec theorem mem_nthRootsFinset (hζ : IsPrimitiveRoot ζ k) (hk : 0 < k) :
-    ζ in nthRootsFinset k (1 : R) :=
+    ζ ∈ nthRootsFinset k (1 : R) :=
   (mem_nthRootsFinset hk (1 : R)).2 hζ.pow_eq_one
 
 end IsDomain
@@ -1539,182 +1424,175 @@ section IsDomain
 
 variable [CommRing R] {ζ : Rˣ} (h : IsPrimitiveRoot ζ k)
 
-/--
-theorem `eq_neg_one_of_two_right` / 定理 `eq_neg_one_of_two_right`
-
-English:
-theorem eq_neg_one_of_two_right
-  given: [NoZeroDivisors R] {ζ : R} (h : IsPrimitiveRoot ζ 2)
-  statement: ζ = -1
-  proof: (sq_eq_one_iff.mp h.pow_eq_one).resolve_left ne_one h one_lt_two
-
-中文:
-定理 eq_neg_one_of_two_right
-  条件: [无零因子 R] {ζ : R} (h : 是PrimitiveRoot ζ 2)
-  结论: ζ = -1
-  证明: (sq_eq_one_iff.mp h.pow_eq_one).resolve_left ne_one h one_lt_two
-
-Depends on / 依赖: h.pow_eq_one, ne_one, one_lt_two, pow_eq_one, resolve_left, sq_eq_one_iff, sq_eq_one_iff.mp
+/-
+**IsPrimitiveRoot.eq_neg_one_of_two_right** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitive
+Root`。
+形式化陈述：eq_neg_one_of_two_right [NoZeroDivisors R] {ζ : R} (h : IsPrimitiveRoot ζ 
+2) : ζ = -1
+参数：h : IsPrimitiveRoot ζ 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sq_eq_one_iff`：∀ {R : Type u} [inst : Ring R] {a : R} [NoZeroDivisors R]
+, a ^ 2 = 1 ↔ a = 1 ∨ a = -1
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `IsPrimitiveRoot.ne_one`：ne_one (h : IsPrimitiveRoot ζ k) (hk : 1 < k) : 
+ζ != 1
+· 使用引理 `one_lt_two`：one_lt_two [AddLeftStrictMono α] : (1 : α) < 2
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem eq_neg_one_of_two_right [NoZeroDivisors R] {ζ : R} (h : IsPrimitiveRoot ζ 2) : ζ = -1 :=
-(sq_eq_one_iff.mp h.pow_eq_one).resolve_left ne_one h one_lt_two
-
-/--
-theorem `neg_one` / 定理 `neg_one`
-
-English:
-theorem neg_one
-  given: (p : Nat) [Nontrivial R] [h : CharP R p] (hp : p != 2)
-  proof: by
-  convert! IsPrimitiveRoot.orderOf (-1 : R)
-  rw [orderOf_neg_one]; rw [if_neg <| by rwa [ringChar.eq_iff.mpr h]]
-
-中文:
-定理 neg_one
-  条件: (p : 自然数) [非平凡 R] [h : 特征p R p] (hp : p != 2)
-  证明: by
-  convert! IsPrimitiveRoot.orderOf (-1 : R)
-  rw [orderOf_neg_one]; rw [if_neg <| by rwa [ringChar.eq_iff.mpr h]]
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.orderOf, convert, eq_iff, if_neg, orderOf, orderOf_neg_one, ringChar, ringChar.eq_iff.mpr
+  (sq_eq_one_iff.mp h.pow_eq_one).resolve_left <| ne_one h one_lt_two
+/-
+**IsPrimitiveRoot.neg_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：neg_one (p : Nat) [Nontrivial R] [h : CharP R p] (hp : p != 2) : IsPrimiti
+veRoot (-1 : R) 2
+参数：p : Nat；hp : p != 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `orderOf_neg_one`：orderOf_neg_one {R} [Ring R] [Nontrivial R] : orderOf (
+-1 : R) = if ringChar R = 2 then 1 else 2
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `ringChar.eq_iff`：eq_iff {p : Nat} : ringChar R = p ↔ CharP R p
+· 使用定理 `IsPrimitiveRoot.orderOf`：∀ {M : Type u_1} [inst : CommMonoid M] (ζ : M),
+ IsPrimitiveRoot ζ (orderOf ζ)
 -/
-theorem neg_one (p : Nat) [Nontrivial R] [h : CharP R p] (hp : p != 2) :
+theorem neg_one (p : ℕ) [Nontrivial R] [h : CharP R p] (hp : p ≠ 2) :
     IsPrimitiveRoot (-1 : R) 2 := by
   convert! IsPrimitiveRoot.orderOf (-1 : R)
-  rw [orderOf_neg_one]; rw [if_neg <| by rwa [ringChar.eq_iff.mpr h]]
+  rw [orderOf_neg_one, if_neg <| by rwa [ringChar.eq_iff.mpr h]]
 
-/--
-theorem `geom_sum_eq_zero` / 定理 `geom_sum_eq_zero`
+/-- If `1 < k` then `(∑ i ∈ range k, ζ ^ i) = 0`. -/
+/-
+**IsPrimitiveRoot.geom_sum_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：geom_sum_eq_zero [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 <
+ k) : ∑ i in range k, ζ ^ i = 0
+参数：hζ : IsPrimitiveRoot ζ k；hk : 1 < k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_zero_of_ne_zero_of_mul_left_eq_zero`：eq_zero_of_ne_zero_of_mul_left_e
+q_zero (hx : x != 0) (hxy : x * y = 0) : y = 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `sub_ne_zero_of_ne`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a ≠ b → a - b ≠ 0
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `IsPrimitiveRoot.ne_one`：ne_one (h : IsPrimitiveRoot ζ k) (hk : 1 < k) : 
+ζ != 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `mul_neg_geom_sum`：mul_neg_geom_sum (x : R) (n : Nat) : ((1 - x) * ∑ i in
+ range n, x ^ i) = 1 - x ^ n
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 
-English:
-theorem geom_sum_eq_zero
-  given: [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k)
-  proof: by
-  refine eq_zero_of_ne_zero_of_mul_left_eq_zero (sub_ne_zero_of_ne (hζ.ne_one hk).symm) ?_
-  rw [mul_neg_geom_sum]; rw [hζ.pow_eq_one]; rw [sub_self]
-
-中文:
-定理 geom_sum_eq_zero
-  条件: [是整环 R] {ζ : R} (hζ : 是PrimitiveRoot ζ k) (hk : 1 < k)
-  证明: by
-  refine eq_zero_of_ne_zero_of_mul_left_eq_zero (sub_ne_zero_of_ne (hζ.ne_one hk).symm) ?_
-  rw [mul_neg_geom_sum]; rw [hζ.pow_eq_one]; rw [sub_self]
-
-Depends on / 依赖: eq_zero_of_ne_zero_of_mul_left_eq_zero, mul_neg_geom_sum, ne_one, pow_eq_one, sub_ne_zero_of_ne, sub_self
+--- 原说明 ---
+If `1 < k` then `(∑ i ∈ range k, ζ ^ i) = 0`.
 -/
 theorem geom_sum_eq_zero [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k) :
-    ∑ i in range k, ζ ^ i = 0 := by
+    ∑ i ∈ range k, ζ ^ i = 0 := by
   refine eq_zero_of_ne_zero_of_mul_left_eq_zero (sub_ne_zero_of_ne (hζ.ne_one hk).symm) ?_
-  rw [mul_neg_geom_sum]; rw [hζ.pow_eq_one]; rw [sub_self]
-
-/--
-theorem `isRoot_geom_sum` / 定理 `isRoot_geom_sum`
-
-English:
-theorem isRoot_geom_sum
-  given: [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k)
-  proof: by
-  simp [geom_sum_eq_zero hζ hk]
-
-中文:
-定理 isRoot_geom_sum
-  条件: [是整环 R] {ζ : R} (hζ : 是PrimitiveRoot ζ k) (hk : 1 < k)
-  证明: by
-  simp [geom_sum_eq_zero hζ hk]
-
-Depends on / 依赖: geom_sum_eq_zero
+  rw [mul_neg_geom_sum, hζ.pow_eq_one, sub_self]
+/-
+**IsPrimitiveRoot.isRoot_geom_sum** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：isRoot_geom_sum [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < 
+k) : (∑ i in range k, X ^ i).IsRoot ζ
+参数：hζ : IsPrimitiveRoot ζ k；hk : 1 < k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_geom_sum`：eval_geom_sum {R} [CommSemiring R] {n : Nat} {
+x : R} : eval x (∑ i in range n, X ^ i) = ∑ i in range n, x ^ i
+· 使用定理 `IsPrimitiveRoot.geom_sum_eq_zero`：geom_sum_eq_zero [IsDomain R] {ζ : R} 
+(hζ : IsPrimitiveRoot ζ k) (hk : 1 < k) : ∑ i in range k, ζ ^ i = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isRoot_geom_sum [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k) :
-    (∑ i in range k, X ^ i).IsRoot ζ := by
+    (∑ i ∈ range k, X ^ i).IsRoot ζ := by
   simp [geom_sum_eq_zero hζ hk]
 
-/--
-theorem `pow_sub_one_eq` / 定理 `pow_sub_one_eq`
+/-- If `1 < k`, then `ζ ^ k.pred = -(∑ i ∈ range k.pred, ζ ^ i)`. -/
+/-
+**IsPrimitiveRoot.pow_sub_one_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：pow_sub_one_eq [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k
+) : ζ ^ k.pred = -∑ i in range k.pred, ζ ^ i
+参数：hζ : IsPrimitiveRoot ζ k；hk : 1 < k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_neg_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a = -b ↔ a + b = 0
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
+· 使用定理 `Nat.succ_eq_add_one`：∀ (n : ℕ), n.succ = n + 1
+· 使用定理 `Nat.succ_pred_eq_of_pos`：∀ {n : ℕ}, 0 < n → n.pred.succ = n
+· 使用定理 `pos_of_gt`：∀ {α : Type u_1} {a b : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], a < b → 0 < b
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `IsPrimitiveRoot.geom_sum_eq_zero`：geom_sum_eq_zero [IsDomain R] {ζ : R} 
+(hζ : IsPrimitiveRoot ζ k) (hk : 1 < k) : ∑ i in range k, ζ ^ i = 0
 
-English:
-theorem pow_sub_one_eq
-  given: [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k)
-  proof: by
-  rw [eq_neg_iff_add_eq_zero]; rw [add_comm]; rw [← sum_range_succ]; rw [← Nat.succ_eq_add_one]; rw [Nat.succ_pred_eq_of_pos (pos_of_gt hk)]; rw [hζ.geom_sum_eq_zero hk]
-
-中文:
-定理 pow_sub_one_eq
-  条件: [是整环 R] {ζ : R} (hζ : 是PrimitiveRoot ζ k) (hk : 1 < k)
-  证明: by
-  rw [eq_neg_iff_add_eq_zero]; rw [add_comm]; rw [← sum_range_succ]; rw [← Nat.succ_eq_add_one]; rw [Nat.succ_pred_eq_of_pos (pos_of_gt hk)]; rw [hζ.geom_sum_eq_zero hk]
-
-Depends on / 依赖: Nat.succ_eq_add_one, Nat.succ_pred_eq_of_pos, NoncompactSpace, Nonempty, Prod.noncompactSpace_left, add_comm, eq_neg_iff_add_eq_zero, geom_sum_eq_zero, noncompactSpace_left, pos_of_gt, succ_eq_add_one, succ_pred_eq_of_pos, sum_range_succ
+--- 原说明 ---
+If `1 < k`, then `ζ ^ k.pred = -(∑ i ∈ range k.pred, ζ ^ i)`.
 -/
 theorem pow_sub_one_eq [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k) :
-    ζ ^ k.pred = -∑ i in range k.pred, ζ ^ i := by
-  rw [eq_neg_iff_add_eq_zero]; rw [add_comm]; rw [← sum_range_succ]; rw [← Nat.succ_eq_add_one]; rw [Nat.succ_pred_eq_of_pos (pos_of_gt hk)]; rw [hζ.geom_sum_eq_zero hk]
+    ζ ^ k.pred = -∑ i ∈ range k.pred, ζ ^ i := by
+  rw [eq_neg_iff_add_eq_zero, add_comm, ← sum_range_succ, ← Nat.succ_eq_add_one,
+    Nat.succ_pred_eq_of_pos (pos_of_gt hk), hζ.geom_sum_eq_zero hk]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `zmodEquivZPowers` / `zmodEquivZPowers` 的定义
+/-- The (additive) monoid equivalence between `ZMod k`
+and the powers of a primitive root of unity `ζ`. -/
+/-
+**IsPrimitiveRoot.zmodEquivZPowers** 是 Mathlib 中的一个定义，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：zmodEquivZPowers (h : IsPrimitiveRoot ζ k) : ZMod k ≃+ Additive (Subgroup.
+zpowers ζ)
+参数：h : IsPrimitiveRoot ζ k。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ZMod.intCast_rightInverse`：intCast_rightInverse : Function.RightInverse 
+(cast : ZMod n -> Int) ((↑) : Int -> ZMod n)
 
-English:
-definition zmodEquivZPowers
-  signature: (h : IsPrimitiveRoot ζ k)
-  body: AddEquiv.ofBijective
-    (AddMonoidHom.liftOfRightInverse (Int.castAddHom <| ZMod k) _ ZMod.intCast_rightInverse
-      ⟨{ toFun := fun i => Additive.ofMul (⟨_, i, rfl⟩ : Subgroup.zpowers ζ)
-          map_zero' := by simp only [zpow_zero]; rfl
-          map_add' := by intro i j; simp only [zpow_add]; rfl }, fun i hi => by
-        simp only [AddMonoidHom.mem_ker, CharP.intCast_eq_zero_iff (ZMod k) k, AddMonoidHom.coe_mk,
-          Int.coe_castAddHom] at hi ⊢
-        obtain ⟨i, rfl⟩ := hi
-        simp [zpow_mul, h.pow_eq_one, one_zpow, zpow_natCast]⟩)
-    (by
-      constructor
-      · rw [injective_iff_map_eq_zero]
-        intro i hi
-        rw [Subtype.ext_iff] at hi
-        have := (h.zpow_eq_one_iff_dvd _).mp hi
-        rw [← (CharP.intCast_eq_zero_iff (ZMod k) k _).mpr this]; rw [eq_comm]
-        exact ZMod.intCast_rightInverse i
-      · rintro ⟨ξ, i, rfl⟩
-        refine ⟨Int.castAddHom (ZMod k) i, ?_⟩
-        rw [AddMonoidHom.liftOfRightInverse_comp_apply]
-        rfl)
-
-@[simp]
-
-中文:
-定义 zmodEquivZPowers
-  签名: (h : 是PrimitiveRoot ζ k)
-  定义体: AddEquiv.ofBijective
-    (AddMonoidHom.liftOfRightInverse (Int.castAddHom <| ZMod k) _ ZMod.intCast_rightInverse
-      ⟨{ toFun := fun i => Additive.ofMul (⟨_, i, rfl⟩ : Subgroup.zpowers ζ)
-          map_zero' := by simp only [zpow_zero]; rfl
-          map_add' := by intro i j; simp only [zpow_add]; rfl }, fun i hi => by
-        simp only [AddMonoidHom.mem_ker, CharP.intCast_eq_zero_iff (ZMod k) k, AddMonoidHom.coe_mk,
-          Int.coe_castAddHom] at hi ⊢
-        obtain ⟨i, rfl⟩ := hi
-        simp [zpow_mul, h.pow_eq_one, one_zpow, zpow_natCast]⟩)
-    (by
-      constructor
-      · rw [injective_iff_map_eq_zero]
-        intro i hi
-        rw [Subtype.ext_iff] at hi
-        have := (h.zpow_eq_one_iff_dvd _).mp hi
-        rw [← (CharP.intCast_eq_zero_iff (ZMod k) k _).mpr this]; rw [eq_comm]
-        exact ZMod.intCast_rightInverse i
-      · rintro ⟨ξ, i, rfl⟩
-        refine ⟨Int.castAddHom (ZMod k) i, ?_⟩
-        rw [AddMonoidHom.liftOfRightInverse_comp_apply]
-        rfl)
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.ofBijective, AddMonoidHom, AddMonoidHom.coe_mk, AddMonoidHom.liftOfRightInverse, AddMonoidHom.mem_ker, Additive, Additive.ofMul, CharP.intCast_eq_zero_iff, Int.castAddHom, Int.coe_castAddHom, NoncompactSpace, Nonempty, Prod.noncompactSpace_right, Subgroup, Subgroup.zpowers, ZMod.intCast_rightInverse, castAddHom, coe_castAddHom, coe_mk
+--- 原说明 ---
+The (additive) monoid equivalence between `ZMod k`
+and the powers of a primitive root of unity `ζ`.
 -/
 def zmodEquivZPowers (h : IsPrimitiveRoot ζ k) : ZMod k ≃+ Additive (Subgroup.zpowers ζ) :=
   AddEquiv.ofBijective
     (AddMonoidHom.liftOfRightInverse (Int.castAddHom <| ZMod k) _ ZMod.intCast_rightInverse
-      ⟨{ toFun := fun i => Additive.ofMul (⟨_, i, rfl⟩ : Subgroup.zpowers ζ)
+      ⟨{  toFun := fun i ↦ Additive.ofMul (⟨_, i, rfl⟩ : Subgroup.zpowers ζ)
           map_zero' := by simp only [zpow_zero]; rfl
-          map_add' := by intro i j; simp only [zpow_add]; rfl }, fun i hi => by
+          map_add' := by intro i j; simp only [zpow_add]; rfl }, fun i hi ↦ by
         simp only [AddMonoidHom.mem_ker, CharP.intCast_eq_zero_iff (ZMod k) k, AddMonoidHom.coe_mk,
           Int.coe_castAddHom] at hi ⊢
         obtain ⟨i, rfl⟩ := hi
@@ -1725,7 +1603,7 @@ def zmodEquivZPowers (h : IsPrimitiveRoot ζ k) : ZMod k ≃+ Additive (Subgroup
         intro i hi
         rw [Subtype.ext_iff] at hi
         have := (h.zpow_eq_one_iff_dvd _).mp hi
-        rw [← (CharP.intCast_eq_zero_iff (ZMod k) k _).mpr this]; rw [eq_comm]
+        rw [← (CharP.intCast_eq_zero_iff (ZMod k) k _).mpr this, eq_comm]
         exact ZMod.intCast_rightInverse i
       · rintro ⟨ξ, i, rfl⟩
         refine ⟨Int.castAddHom (ZMod k) i, ?_⟩
@@ -1733,477 +1611,453 @@ def zmodEquivZPowers (h : IsPrimitiveRoot ζ k) : ZMod k ≃+ Additive (Subgroup
         rfl)
 
 @[simp]
-/--
-theorem `zmodEquivZPowers_apply_coe_int` / 定理 `zmodEquivZPowers_apply_coe_int`
-
-English:
-theorem zmodEquivZPowers_apply_coe_int
-  given: (i : Int)
-  proof: by
-  rw [zmodEquivZPowers]; rw [AddEquiv.ofBijective_apply] -- Porting note: Original proof didn't have `rw`
-  exact AddMonoidHom.liftOfRightInverse_comp_apply _ _ ZMod.intCast_rightInverse _ _
-
-@[simp]
-
-中文:
-定理 zmodEquivZPowers_apply_coe_int
-  条件: (i : 整数)
-  证明: by
-  rw [zmodEquivZPowers]; rw [AddEquiv.ofBijective_apply] -- Porting note: Original proof didn't have `rw`
-  exact AddMonoidHom.liftOfRightInverse_comp_apply _ _ ZMod.intCast_rightInverse _ _
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.ofBijective_apply, AddMonoidHom, AddMonoidHom.liftOfRightInverse_comp_apply, Original, Porting, ZMod.intCast_rightInverse, intCast_rightInverse, liftOfRightInverse_comp_apply, ofBijective_apply, zmodEquivZPowers
+/-
+**IsPrimitiveRoot.zmodEquivZPowers_apply_coe_int** 是 Mathlib 中的一个定理，位于命名空间 `IsPr
+imitiveRoot`。
+形式化陈述：zmodEquivZPowers_apply_coe_int (i : Int) : h.zmodEquivZPowers i = Additive
+.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ)
+参数：i : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZMod.intCast_rightInverse`：intCast_rightInverse : Function.RightInverse 
+(cast : ZMod n -> Int) ((↑) : Int -> ZMod n)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.zmodEquivZPowers.eq_1`：∀ {R : Type u_4} {k : ℕ} [inst : 
+CommRing R] {ζ : Rˣ} (h : IsPrimitiveRoot ζ k),   h.zmodEquivZPowers =     AddEq
+uiv.ofBijective       (((In…
+· 使用定理 `AddEquiv.ofBijective_apply`：∀ {M : Type u_9} {N : Type u_10} {F : Type u
+_11} [inst : Add M] [inst_1 : Add N] [inst_2 : FunLike F M N]   [inst_3 : AddHom
+Class F M N] (f …
+· 使用定理 `AddMonoidHom.liftOfRightInverse_comp_apply`：∀ {G₁ : Type u_5} {G₂ : Type
+ u_6} {G₃ : Type u_7} [inst : AddGroup G₁] [inst_1 : AddGroup G₂] [inst_2 : AddG
+roup G₃]   (f : G₁ →+ G₂) (f_neg…
 -/
-theorem zmodEquivZPowers_apply_coe_int (i : Int) :
+theorem zmodEquivZPowers_apply_coe_int (i : ℤ) :
     h.zmodEquivZPowers i = Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ) := by
-  rw [zmodEquivZPowers]; rw [AddEquiv.ofBijective_apply] -- Porting note: Original proof didn't have `rw`
+  rw [zmodEquivZPowers, AddEquiv.ofBijective_apply] -- Porting note: Original proof didn't have `rw`
   exact AddMonoidHom.liftOfRightInverse_comp_apply _ _ ZMod.intCast_rightInverse _ _
 
 @[simp]
-/--
-theorem `zmodEquivZPowers_apply_coe_nat` / 定理 `zmodEquivZPowers_apply_coe_nat`
-
-English:
-theorem zmodEquivZPowers_apply_coe_nat
-  given: (i : Nat)
-  proof: by
-  have : (i : ZMod k) = (i : Int) := by norm_cast
-  simp only [this, zmodEquivZPowers_apply_coe_int, zpow_natCast]
-
-@[simp]
-
-中文:
-定理 zmodEquivZPowers_apply_coe_nat
-  条件: (i : 自然数)
-  证明: by
-  have : (i : ZMod k) = (i : Int) := by norm_cast
-  simp only [this, zmodEquivZPowers_apply_coe_int, zpow_natCast]
-
-@[simp]
-
-Depends on / 依赖: zmodEquivZPowers_apply_coe_int, zpow_natCast
+/-
+**IsPrimitiveRoot.zmodEquivZPowers_apply_coe_nat** 是 Mathlib 中的一个定理，位于命名空间 `IsPr
+imitiveRoot`。
+形式化陈述：zmodEquivZPowers_apply_coe_nat (i : Nat) : h.zmodEquivZPowers i = Additive
+.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ)
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsPrimitiveRoot.zmodEquivZPowers_apply_coe_int`：zmodEquivZPowers_apply_c
+oe_int (i : Int) : h.zmodEquivZPowers i = Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subg
+roup.zpowers ζ)
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zmodEquivZPowers_apply_coe_nat (i : Nat) :
+theorem zmodEquivZPowers_apply_coe_nat (i : ℕ) :
     h.zmodEquivZPowers i = Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ) := by
-  have : (i : ZMod k) = (i : Int) := by norm_cast
+  have : (i : ZMod k) = (i : ℤ) := by norm_cast
   simp only [this, zmodEquivZPowers_apply_coe_int, zpow_natCast]
 
 @[simp]
-/--
-theorem `zmodEquivZPowers_symm_apply_zpow` / 定理 `zmodEquivZPowers_symm_apply_zpow`
-
-English:
-theorem zmodEquivZPowers_symm_apply_zpow
-  given: (i : Int)
-  proof: by
-  rw [← h.zmodEquivZPowers.symm_apply_apply i]; rw [zmodEquivZPowers_apply_coe_int]
-
-@[simp]
-
-中文:
-定理 zmodEquivZPowers_symm_apply_zpow
-  条件: (i : 整数)
-  证明: by
-  rw [← h.zmodEquivZPowers.symm_apply_apply i]; rw [zmodEquivZPowers_apply_coe_int]
-
-@[simp]
-
-Depends on / 依赖: h.zmodEquivZPowers.symm_apply_apply, symm_apply_apply, zmodEquivZPowers, zmodEquivZPowers_apply_coe_int
+/-
+**IsPrimitiveRoot.zmodEquivZPowers_symm_apply_zpow** 是 Mathlib 中的一个定理，位于命名空间 `Is
+PrimitiveRoot`。
+形式化陈述：zmodEquivZPowers_symm_apply_zpow (i : Int) : h.zmodEquivZPowers.symm (Addi
+tive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ)) = i
+参数：i : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddEquiv.symm_apply_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (x : M), e.symm (e x) = x
+· 使用定理 `IsPrimitiveRoot.zmodEquivZPowers_apply_coe_int`：zmodEquivZPowers_apply_c
+oe_int (i : Int) : h.zmodEquivZPowers i = Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subg
+roup.zpowers ζ)
 -/
-theorem zmodEquivZPowers_symm_apply_zpow (i : Int) :
+theorem zmodEquivZPowers_symm_apply_zpow (i : ℤ) :
     h.zmodEquivZPowers.symm (Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ)) = i := by
-  rw [← h.zmodEquivZPowers.symm_apply_apply i]; rw [zmodEquivZPowers_apply_coe_int]
+  rw [← h.zmodEquivZPowers.symm_apply_apply i, zmodEquivZPowers_apply_coe_int]
 
 @[simp]
-/--
-theorem `zmodEquivZPowers_symm_apply_zpow'` / 定理 `zmodEquivZPowers_symm_apply_zpow'`
-
-English:
-theorem zmodEquivZPowers_symm_apply_zpow'
-  given: (i : Int)
-  statement: h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i
-  proof: h.zmodEquivZPowers_symm_apply_zpow i
-
-@[simp]
-
-中文:
-定理 zmodEquivZPowers_symm_apply_zpow'
-  条件: (i : 整数)
-  结论: h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i
-  证明: h.zmodEquivZPowers_symm_apply_zpow i
-
-@[simp]
-
-Depends on / 依赖: h.zmodEquivZPowers_symm_apply_zpow, zmodEquivZPowers_symm_apply_zpow
+/-
+**IsPrimitiveRoot.zmodEquivZPowers_symm_apply_zpow'** 是 Mathlib 中的一个定理，位于命名空间 `I
+sPrimitiveRoot`。
+形式化陈述：zmodEquivZPowers_symm_apply_zpow' (i : Int) : h.zmodEquivZPowers.symm ⟨ζ ^
+ i, i, rfl⟩ = i
+参数：i : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.zmodEquivZPowers_symm_apply_zpow`：zmodEquivZPowers_symm_
+apply_zpow (i : Int) : h.zmodEquivZPowers.symm (Additive.ofMul (⟨ζ ^ i, i, rfl⟩ 
+: Subgroup.zpowers ζ)) = i
 -/
-theorem zmodEquivZPowers_symm_apply_zpow' (i : Int) : h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i :=
+theorem zmodEquivZPowers_symm_apply_zpow' (i : ℤ) : h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i :=
   h.zmodEquivZPowers_symm_apply_zpow i
 
 @[simp]
-/--
-theorem `zmodEquivZPowers_symm_apply_pow` / 定理 `zmodEquivZPowers_symm_apply_pow`
-
-English:
-theorem zmodEquivZPowers_symm_apply_pow
-  given: (i : Nat)
-  proof: by
-  rw [← h.zmodEquivZPowers.symm_apply_apply i]; rw [zmodEquivZPowers_apply_coe_nat]
-
-@[simp]
-
-中文:
-定理 zmodEquivZPowers_symm_apply_pow
-  条件: (i : 自然数)
-  证明: by
-  rw [← h.zmodEquivZPowers.symm_apply_apply i]; rw [zmodEquivZPowers_apply_coe_nat]
-
-@[simp]
-
-Depends on / 依赖: h.zmodEquivZPowers.symm_apply_apply, symm_apply_apply, zmodEquivZPowers, zmodEquivZPowers_apply_coe_nat
+/-
+**IsPrimitiveRoot.zmodEquivZPowers_symm_apply_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsP
+rimitiveRoot`。
+形式化陈述：zmodEquivZPowers_symm_apply_pow (i : Nat) : h.zmodEquivZPowers.symm (Addit
+ive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ)) = i
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddEquiv.symm_apply_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (x : M), e.symm (e x) = x
+· 使用定理 `IsPrimitiveRoot.zmodEquivZPowers_apply_coe_nat`：zmodEquivZPowers_apply_c
+oe_nat (i : Nat) : h.zmodEquivZPowers i = Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subg
+roup.zpowers ζ)
 -/
-theorem zmodEquivZPowers_symm_apply_pow (i : Nat) :
+theorem zmodEquivZPowers_symm_apply_pow (i : ℕ) :
     h.zmodEquivZPowers.symm (Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : Subgroup.zpowers ζ)) = i := by
-  rw [← h.zmodEquivZPowers.symm_apply_apply i]; rw [zmodEquivZPowers_apply_coe_nat]
+  rw [← h.zmodEquivZPowers.symm_apply_apply i, zmodEquivZPowers_apply_coe_nat]
 
 @[simp]
-/--
-theorem `zmodEquivZPowers_symm_apply_pow'` / 定理 `zmodEquivZPowers_symm_apply_pow'`
-
-English:
-theorem zmodEquivZPowers_symm_apply_pow'
-  given: (i : Nat)
-  statement: h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i
-  proof: h.zmodEquivZPowers_symm_apply_pow i
-
-中文:
-定理 zmodEquivZPowers_symm_apply_pow'
-  条件: (i : 自然数)
-  结论: h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i
-  证明: h.zmodEquivZPowers_symm_apply_pow i
-
-Depends on / 依赖: h.zmodEquivZPowers_symm_apply_pow, zmodEquivZPowers_symm_apply_pow
+/-
+**IsPrimitiveRoot.zmodEquivZPowers_symm_apply_pow'** 是 Mathlib 中的一个定理，位于命名空间 `Is
+PrimitiveRoot`。
+形式化陈述：zmodEquivZPowers_symm_apply_pow' (i : Nat) : h.zmodEquivZPowers.symm ⟨ζ ^ 
+i, i, rfl⟩ = i
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.zmodEquivZPowers_symm_apply_pow`：zmodEquivZPowers_symm_a
+pply_pow (i : Nat) : h.zmodEquivZPowers.symm (Additive.ofMul (⟨ζ ^ i, i, rfl⟩ : 
+Subgroup.zpowers ζ)) = i
 -/
-theorem zmodEquivZPowers_symm_apply_pow' (i : Nat) : h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i :=
+theorem zmodEquivZPowers_symm_apply_pow' (i : ℕ) : h.zmodEquivZPowers.symm ⟨ζ ^ i, i, rfl⟩ = i :=
   h.zmodEquivZPowers_symm_apply_pow i
 
 variable [IsDomain R]
-
-/--
-theorem `zpowers_eq` / 定理 `zpowers_eq`
-
-English:
-theorem zpowers_eq
-  given: {k : Nat} [NeZero k] {ζ : Rˣ} (h : IsPrimitiveRoot ζ k)
-  proof: by
-  apply Subgroup.eq_of_le_of_card_ge (Subgroup.zpowers_le_of_mem h.pow_eq_one)
-  calc
-    Nat.card (rootsOfUnity k R) <= k := card_rootsOfUnity R k
-    _ = Nat.card (ZMod k) := (Nat.card_zmod k).symm
-    _ = Nat.card (Subgroup.zpowers ζ) := Nat.card_congr h.zmodEquivZPowers.toEquiv
-
-中文:
-定理 zpowers_eq
-  条件: {k : 自然数} [NeZero k] {ζ : Rˣ} (h : 是PrimitiveRoot ζ k)
-  证明: by
-  apply Subgroup.eq_of_le_of_card_ge (Subgroup.zpowers_le_of_mem h.pow_eq_one)
-  calc
-    Nat.card (rootsOfUnity k R) <= k := card_rootsOfUnity R k
-    _ = Nat.card (ZMod k) := (Nat.card_zmod k).symm
-    _ = Nat.card (Subgroup.zpowers ζ) := Nat.card_congr h.zmodEquivZPowers.toEquiv
-
-Depends on / 依赖: Nat.card, Nat.card_congr, Nat.card_zmod, Subgroup, Subgroup.eq_of_le_of_card_ge, Subgroup.zpowers, Subgroup.zpowers_le_of_mem, card_congr, card_rootsOfUnity, card_zmod, eq_of_le_of_card_ge, h.pow_eq_one, h.zmodEquivZPowers.toEquiv, pow_eq_one, rootsOfUnity, toEquiv, zmodEquivZPowers, zpowers, zpowers_le_of_mem
+/-
+**IsPrimitiveRoot.zpowers_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：zpowers_eq {k : Nat} [NeZero k] {ζ : Rˣ} (h : IsPrimitiveRoot ζ k) : Subgr
+oup.zpowers ζ = rootsOfUnity k R
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.eq_of_le_of_card_ge`：eq_of_le_of_card_ge {H K : Subgroup G} [Fi
+nite K] (hle : H <= K) (hcard : Nat.card K <= Nat.card H) : H = K
+· 使用定理 `instFiniteSubtypeUnitsMemSubgroupRootsOfUnity`：∀ (R : Type u_4) (k : ℕ) 
+[NeZero k] [inst : CommRing R] [IsDomain R], Finite ↥(rootsOfUnity k R)
+· 使用定理 `Subgroup.zpowers_le_of_mem`：∀ {G : Type u_1} [inst : Group G] {g : G} {H
+ : Subgroup G}, g ∈ H → Subgroup.zpowers g ≤ H
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `card_rootsOfUnity`：card_rootsOfUnity : Nat.card (rootsOfUnity k R) <= k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_zmod`：card_zmod (n : Nat) : Nat.card (ZMod n) = n
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
 -/
-theorem zpowers_eq {k : Nat} [NeZero k] {ζ : Rˣ} (h : IsPrimitiveRoot ζ k) :
+theorem zpowers_eq {k : ℕ} [NeZero k] {ζ : Rˣ} (h : IsPrimitiveRoot ζ k) :
     Subgroup.zpowers ζ = rootsOfUnity k R := by
   apply Subgroup.eq_of_le_of_card_ge (Subgroup.zpowers_le_of_mem h.pow_eq_one)
   calc
-    Nat.card (rootsOfUnity k R) <= k := card_rootsOfUnity R k
+    Nat.card (rootsOfUnity k R) ≤ k := card_rootsOfUnity R k
     _ = Nat.card (ZMod k) := (Nat.card_zmod k).symm
     _ = Nat.card (Subgroup.zpowers ζ) := Nat.card_congr h.zmodEquivZPowers.toEquiv
-
-/--
-lemma `map_rootsOfUnity` / 引理 `map_rootsOfUnity`
-
-English:
-lemma map_rootsOfUnity
-  statement: {S F} [CommRing S] [IsDomain S] [FunLike F R S] [MonoidHomClass F R S]
-  proof: by
-  let : CommMonoid Sˣ := inferInstance
-  replace hζ := hζ.isUnit_unit NeZero.out
-  rw [← hζ.zpowers_eq]; rw [← (hζ.map_of_injective (Units.map_injective (f := (f : R ->* S)) hf)).zpowers_eq]; rw [MonoidHom.map_zpowers]
-
-中文:
-引理 map_rootsOfUnity
-  结论: {S F} [交换环 S] [是整环 S] [函数状 F R S] [幺半群态射类 F R S]
-  证明: by
-  let : CommMonoid Sˣ := inferInstance
-  replace hζ := hζ.isUnit_unit NeZero.out
-  rw [← hζ.zpowers_eq]; rw [← (hζ.map_of_injective (Units.map_injective (f := (f : R ->* S)) hf)).zpowers_eq]; rw [MonoidHom.map_zpowers]
-
-Depends on / 依赖: CommMonoid, MonoidHom, MonoidHom.map_zpowers, NeZero, NeZero.out, Units.map_injective, isUnit_unit, map_injective, map_of_injective, map_zpowers, replace, zpowers_eq
+/-
+**IsPrimitiveRoot.map_rootsOfUnity** 是 Mathlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：map_rootsOfUnity {S F} [CommRing S] [IsDomain S] [FunLike F R S] [MonoidHo
+mClass F R S] {ζ : R} {n : Nat} [NeZero n] (hζ : IsPrimitiveRoot ζ n) {f : F} (h
+f : Function.Injective f) : (rootsOfUnity n R).map (Units.map f) = rootsOfUnity 
+n S
+参数：hζ : IsPrimitiveRoot ζ n；hf : Function.Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.isUnit`：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) :
+ IsUnit ζ
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用引理 `IsPrimitiveRoot.isUnit_unit`：isUnit_unit {ζ : M} {n} (hn) (hζ : IsPrimit
+iveRoot ζ n) : IsPrimitiveRoot (hζ.isUnit hn).unit n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPrimitiveRoot.zpowers_eq`：zpowers_eq {k : Nat} [NeZero k] {ζ : Rˣ} (h 
+: IsPrimitiveRoot ζ k) : Subgroup.zpowers ζ = rootsOfUnity k R
+· 使用定理 `IsPrimitiveRoot.map_of_injective`：map_of_injective [MonoidHomClass F M N
+] (h : IsPrimitiveRoot ζ k) (hf : Injective f) : IsPrimitiveRoot (f ζ) k where p
+ow_eq_one
+· 使用定理 `Units.map_injective`：map_injective {f : M ->* N} (hf : Function.Injectiv
+e f) : Function.Injective (map f)
+· 使用定理 `MonoidHom.map_zpowers`：MonoidHom.map_zpowers (f : G ->* N) (x : G) : (Su
+bgroup.zpowers x).map f = Subgroup.zpowers (f x)
 -/
 lemma map_rootsOfUnity {S F} [CommRing S] [IsDomain S] [FunLike F R S] [MonoidHomClass F R S]
-    {ζ : R} {n : Nat} [NeZero n] (hζ : IsPrimitiveRoot ζ n) {f : F} (hf : Function.Injective f) :
+    {ζ : R} {n : ℕ} [NeZero n] (hζ : IsPrimitiveRoot ζ n) {f : F} (hf : Function.Injective f) :
     (rootsOfUnity n R).map (Units.map f) = rootsOfUnity n S := by
   let : CommMonoid Sˣ := inferInstance
   replace hζ := hζ.isUnit_unit NeZero.out
-  rw [← hζ.zpowers_eq]; rw [← (hζ.map_of_injective (Units.map_injective (f := (f : R ->* S)) hf)).zpowers_eq]; rw [MonoidHom.map_zpowers]
+  rw [← hζ.zpowers_eq,
+    ← (hζ.map_of_injective (Units.map_injective (f := (f : R →* S)) hf)).zpowers_eq,
+    MonoidHom.map_zpowers]
 
 /-- If `R` contains an `n`-th primitive root, and `S/R` is a ring extension,
 then the `n`-th roots of unity in `R` and `S` are isomorphic.
 Also see `IsPrimitiveRoot.map_rootsOfUnity` for the equality as `Subgroup Sˣ`. -/
 @[simps! -isSimp apply_coe_val apply_coe_inv_val]
 noncomputable
-/--
-Definition of `_root_.rootsOfUnityEquivOfPrimitiveRoots` / `_root_.rootsOfUnityEquivOfPrimitiveRoots` 的定义
-
-English:
-definition _root_.rootsOfUnityEquivOfPrimitiveRoots
-  signature: {S F} [CommRing S] [IsDomain S]
-  body: (Subgroup.equivMapOfInjective _ (Units.map f) (Units.map_injective hf)).trans
-    (MulEquiv.subgroupCongr <|
-      ((mem_primitiveRoots <| NeZero.pos n).mp hζ.choose_spec).map_rootsOfUnity hf)
-
-中文:
-定义 _root_.rootsOfUnityEquivOfPrimitiveRoots
-  签名: {S F} [交换环 S] [是整环 S]
-  定义体: (Subgroup.equivMapOfInjective _ (Units.map f) (Units.map_injective hf)).trans
-    (MulEquiv.subgroupCongr <|
-      ((mem_primitiveRoots <| NeZero.pos n).mp hζ.choose_spec).map_rootsOfUnity hf)
-
-Depends on / 依赖: MulEquiv, MulEquiv.subgroupCongr, NeZero, NeZero.pos, Subgroup, Subgroup.equivMapOfInjective, Units.map, Units.map_injective, choose_spec, equivMapOfInjective, map_injective, map_rootsOfUnity, mem_primitiveRoots, subgroupCongr
+/-
+**IsPrimitiveRoot._root_.rootsOfUnityEquivOfPrimitiveRoots** 是 Mathlib 中的一个定义，位于
+命名空间 `IsPrimitiveRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def _root_.rootsOfUnityEquivOfPrimitiveRoots {S F} [CommRing S] [IsDomain S]
     [FunLike F R S] [MonoidHomClass F R S]
-    {n : Nat} [NeZero n] {f : F} (hf : Function.Injective f) (hζ : (primitiveRoots n R).Nonempty) :
+    {n : ℕ} [NeZero n] {f : F} (hf : Function.Injective f) (hζ : (primitiveRoots n R).Nonempty) :
     (rootsOfUnity n R) ≃* rootsOfUnity n S :=
   (Subgroup.equivMapOfInjective _ (Units.map f) (Units.map_injective hf)).trans
     (MulEquiv.subgroupCongr <|
       ((mem_primitiveRoots <| NeZero.pos n).mp hζ.choose_spec).map_rootsOfUnity hf)
-
-/--
-lemma `_root_.rootsOfUnityEquivOfPrimitiveRoots_symm_apply` / 引理 `_root_.rootsOfUnityEquivOfPrimitiveRoots_symm_apply`
-
-English:
-lemma _root_.rootsOfUnityEquivOfPrimitiveRoots_symm_apply
-  proof: by
-  obtain ⟨ε, rfl⟩ := (rootsOfUnityEquivOfPrimitiveRoots hf hζ).surjective η
-  rw [MulEquiv.symm_apply_apply]; rw [val_rootsOfUnityEquivOfPrimitiveRoots_apply_coe]
-
-中文:
-引理 _root_.rootsOfUnityEquivOfPrimitiveRoots_symm_apply
-  证明: by
-  obtain ⟨ε, rfl⟩ := (rootsOfUnityEquivOfPrimitiveRoots hf hζ).surjective η
-  rw [MulEquiv.symm_apply_apply]; rw [val_rootsOfUnityEquivOfPrimitiveRoots_apply_coe]
-
-Depends on / 依赖: MulEquiv, MulEquiv.symm_apply_apply, rootsOfUnityEquivOfPrimitiveRoots, surjective, symm_apply_apply, val_rootsOfUnityEquivOfPrimitiveRoots_apply_coe
+/-
+**IsPrimitiveRoot._root_.rootsOfUnityEquivOfPrimitiveRoots_symm_apply** 是 Mathli
+b 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.rootsOfUnityEquivOfPrimitiveRoots_symm_apply
-    {S F} [CommRing S] [IsDomain S] [FunLike F R S] [MonoidHomClass F R S] {n : Nat} [NeZero n]
+    {S F} [CommRing S] [IsDomain S] [FunLike F R S] [MonoidHomClass F R S] {n : ℕ} [NeZero n]
     {f : F} (hf : Function.Injective f) (hζ : (primitiveRoots n R).Nonempty) (η) :
     f ((rootsOfUnityEquivOfPrimitiveRoots hf hζ).symm η : Rˣ) = (η : Sˣ) := by
   obtain ⟨ε, rfl⟩ := (rootsOfUnityEquivOfPrimitiveRoots hf hζ).surjective η
-  rw [MulEquiv.symm_apply_apply]; rw [val_rootsOfUnityEquivOfPrimitiveRoots_apply_coe]
-
-/--
-theorem `eq_pow_of_mem_rootsOfUnity` / 定理 `eq_pow_of_mem_rootsOfUnity`
-
-English:
-theorem eq_pow_of_mem_rootsOfUnity
-  statement: {k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k)
-  proof: by
-  obtain ⟨n, rfl⟩ : exists n : Int, ζ ^ n = ξ := by rwa [← h.zpowers_eq] at hξ
-  have hk0 : (0 : Int) < k := mod_cast NeZero.pos k
-  let i := n % k
-  have hi0 : 0 <= i := Int.emod_nonneg _ (ne_of_gt hk0)
-  lift i to Nat using hi0 with i₀ hi₀
-  refine ⟨i₀, ?_, ?_⟩
-  · zify; rw [hi₀]; exact Int.emod_lt_of_pos _ hk0
-  · rw [← zpow_natCast, hi₀, ← Int.emod_add_mul_ediv n k, zpow_add, zpow_mul, h.zpow_eq_one,
-      one_zpow, mul_one]
-
-中文:
-定理 eq_pow_of_mem_rootsOfUnity
-  结论: {k : 自然数} [NeZero k] {ζ ξ : Rˣ} (h : 是PrimitiveRoot ζ k)
-  证明: by
-  obtain ⟨n, rfl⟩ : exists n : Int, ζ ^ n = ξ := by rwa [← h.zpowers_eq] at hξ
-  have hk0 : (0 : Int) < k := mod_cast NeZero.pos k
-  let i := n % k
-  have hi0 : 0 <= i := Int.emod_nonneg _ (ne_of_gt hk0)
-  lift i to Nat using hi0 with i₀ hi₀
-  refine ⟨i₀, ?_, ?_⟩
-  · zify; rw [hi₀]; exact Int.emod_lt_of_pos _ hk0
-  · rw [← zpow_natCast, hi₀, ← Int.emod_add_mul_ediv n k, zpow_add, zpow_mul, h.zpow_eq_one,
-      one_zpow, mul_one]
-
-Depends on / 依赖: Int.emod_add_mul_ediv, Int.emod_lt_of_pos, Int.emod_nonneg, NeZero, NeZero.pos, emod_add_mul_ediv, emod_lt_of_pos, emod_nonneg, h.zpow_eq_one, h.zpowers_eq, mod_cast, mul_one, ne_of_gt, one_zpow, zpow_add, zpow_eq_one, zpow_mul, zpow_natCast, zpowers_eq
+  rw [MulEquiv.symm_apply_apply, val_rootsOfUnityEquivOfPrimitiveRoots_apply_coe]
+/-
+**IsPrimitiveRoot.eq_pow_of_mem_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimit
+iveRoot`。
+形式化陈述：eq_pow_of_mem_rootsOfUnity {k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiv
+eRoot ζ k) (hξ : ξ in rootsOfUnity k R) : exists i < k, ζ ^ i = ξ
+参数：h : IsPrimitiveRoot ζ k；hξ : ξ in rootsOfUnity k R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPrimitiveRoot.zpowers_eq`：zpowers_eq {k : Nat} [NeZero k] {ζ : Rˣ} (h 
+: IsPrimitiveRoot ζ k) : Subgroup.zpowers ζ = rootsOfUnity k R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `instCanLiftIntNatCastLeOfNat`：CanLift ℤ ℕ (fun n => ↑n) fun x => 0 ≤ x
+· 使用定理 `Int.emod_lt_of_pos`：∀ (a : ℤ) {b : ℤ}, 0 < b → a % b < b
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Int.emod_add_mul_ediv`：∀ (a b : ℤ), a % b + b * (a / b) = a
+· 使用引理 `zpow_add`：zpow_add (a : G) (m n : Int) : a ^ (m + n) = a ^ m * a ^ n
+· 使用定理 `zpow_mul`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (m n : ℤ), 
+a ^ (m * n) = (a ^ m) ^ n
+· 使用定理 `IsPrimitiveRoot.zpow_eq_one`：zpow_eq_one (h : IsPrimitiveRoot ζ k) : ζ ^
+ (k : Int) = 1
+· 使用定理 `one_zpow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (n : ℤ), 1 ^ n = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem eq_pow_of_mem_rootsOfUnity {k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k)
-    (hξ : ξ in rootsOfUnity k R) : exists i < k, ζ ^ i = ξ := by
-  obtain ⟨n, rfl⟩ : exists n : Int, ζ ^ n = ξ := by rwa [← h.zpowers_eq] at hξ
-  have hk0 : (0 : Int) < k := mod_cast NeZero.pos k
+theorem eq_pow_of_mem_rootsOfUnity {k : ℕ} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k)
+    (hξ : ξ ∈ rootsOfUnity k R) : ∃ i < k, ζ ^ i = ξ := by
+  obtain ⟨n, rfl⟩ : ∃ n : ℤ, ζ ^ n = ξ := by rwa [← h.zpowers_eq] at hξ
+  have hk0 : (0 : ℤ) < k := mod_cast NeZero.pos k
   let i := n % k
-  have hi0 : 0 <= i := Int.emod_nonneg _ (ne_of_gt hk0)
-  lift i to Nat using hi0 with i₀ hi₀
+  have hi0 : 0 ≤ i := Int.emod_nonneg _ (ne_of_gt hk0)
+  lift i to ℕ using hi0 with i₀ hi₀
   refine ⟨i₀, ?_, ?_⟩
   · zify; rw [hi₀]; exact Int.emod_lt_of_pos _ hk0
   · rw [← zpow_natCast, hi₀, ← Int.emod_add_mul_ediv n k, zpow_add, zpow_mul, h.zpow_eq_one,
       one_zpow, mul_one]
-
-/--
-theorem `eq_pow_of_pow_eq_one` / 定理 `eq_pow_of_pow_eq_one`
-
-English:
-theorem eq_pow_of_pow_eq_one
-  statement: {k : Nat} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k)
-  proof: by
-  lift ζ to Rˣ using h.isUnit NeZero.out
-lift ξ to Rˣ using .of_pow_eq_one hξ NeZero.ne k
-  simp only [← Units.val_pow_eq_pow_val, ← Units.ext_iff]
-  rw [coe_units_iff] at h
-exact h.eq_pow_of_mem_rootsOfUnity (mem_rootsOfUnity' k ξ).mpr hξ
-
-中文:
-定理 eq_pow_of_pow_eq_one
-  结论: {k : 自然数} [NeZero k] {ζ ξ : R} (h : 是PrimitiveRoot ζ k)
-  证明: by
-  lift ζ to Rˣ using h.isUnit NeZero.out
-lift ξ to Rˣ using .of_pow_eq_one hξ NeZero.ne k
-  simp only [← Units.val_pow_eq_pow_val, ← Units.ext_iff]
-  rw [coe_units_iff] at h
-exact h.eq_pow_of_mem_rootsOfUnity (mem_rootsOfUnity' k ξ).mpr hξ
-
-Depends on / 依赖: NeZero, NeZero.ne, NeZero.out, Units.ext_iff, Units.val_pow_eq_pow_val, coe_units_iff, eq_pow_of_mem_rootsOfUnity, ext_iff, h.eq_pow_of_mem_rootsOfUnity, h.isUnit, isUnit, mem_rootsOfUnity, of_pow_eq_one, val_pow_eq_pow_val
+/-
+**IsPrimitiveRoot.eq_pow_of_pow_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoo
+t`。
+形式化陈述：eq_pow_of_pow_eq_one {k : Nat} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ
+ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^ i = ξ
+参数：h : IsPrimitiveRoot ζ k；hξ : ξ ^ k = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `instCanLiftUnitsValIsUnit`：∀ {M : Type u_1} [inst : Monoid M], CanLift M
+ Mˣ Units.val IsUnit
+· 使用定理 `IsPrimitiveRoot.isUnit`：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) :
+ IsUnit ζ
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用引理 `IsUnit.of_pow_eq_one`：IsUnit.of_pow_eq_one (ha : a ^ n = 1) (hn : n != 0
+) : IsUnit a
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_mem_rootsOfUnity`：eq_pow_of_mem_rootsOfUnity {
+k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k) (hξ : ξ in rootsOfUnity
+ k R) : exists i < k, ζ ^ i = ξ
+· 使用定理 `IsPrimitiveRoot.coe_units_iff`：coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot 
+(ζ : M) k ↔ IsPrimitiveRoot ζ k
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_rootsOfUnity'`：mem_rootsOfUnity' (k : Nat) (ζ : Mˣ) : ζ in rootsOfUn
+ity k M ↔ (ζ : M) ^ k = 1
 -/
-theorem eq_pow_of_pow_eq_one {k : Nat} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k)
+theorem eq_pow_of_pow_eq_one {k : ℕ} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k)
     (hξ : ξ ^ k = 1) :
-    exists i < k, ζ ^ i = ξ := by
+    ∃ i < k, ζ ^ i = ξ := by
   lift ζ to Rˣ using h.isUnit NeZero.out
-lift ξ to Rˣ using .of_pow_eq_one hξ NeZero.ne k
+  lift ξ to Rˣ using .of_pow_eq_one hξ <| NeZero.ne k
   simp only [← Units.val_pow_eq_pow_val, ← Units.ext_iff]
   rw [coe_units_iff] at h
-exact h.eq_pow_of_mem_rootsOfUnity (mem_rootsOfUnity' k ξ).mpr hξ
-
-/--
-theorem `isPrimitiveRoot_iff'` / 定理 `isPrimitiveRoot_iff'`
-
-English:
-theorem isPrimitiveRoot_iff'
-  given: {k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k)
-  proof: by
+  exact h.eq_pow_of_mem_rootsOfUnity <| (mem_rootsOfUnity' k ξ).mpr hξ
+/-
+**IsPrimitiveRoot.isPrimitiveRoot_iff'** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoo
+t`。
+形式化陈述：isPrimitiveRoot_iff' {k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot 
+ζ k) : IsPrimitiveRoot ξ k ↔ exists i < k, i.Coprime k ∧ ζ ^ i = ξ
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_mem_rootsOfUnity`：eq_pow_of_mem_rootsOfUnity {
+k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k) (hξ : ξ in rootsOfUnity
+ k R) : exists i < k, ζ ^ i = ξ
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.pow_iff_coprime`：pow_iff_coprime (h : IsPrimitiveRoot ζ 
+k) (h0 : 0 < k) (i : Nat) : IsPrimitiveRoot (ζ ^ i) k ↔ i.Coprime k
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `IsPrimitiveRoot.pow_of_coprime`：pow_of_coprime (h : IsPrimitiveRoot ζ k)
+ (i : Nat) (hi : i.Coprime k) : IsPrimitiveRoot (ζ ^ i) k
+-/
+theorem isPrimitiveRoot_iff' {k : ℕ} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k) :
+    IsPrimitiveRoot ξ k ↔ ∃ i < k, i.Coprime k ∧ ζ ^ i = ξ := by
   constructor
   · intro hξ
     obtain ⟨i, hik, rfl⟩ := h.eq_pow_of_mem_rootsOfUnity hξ.pow_eq_one
     rw [h.pow_iff_coprime <| NeZero.pos k] at hξ
     exact ⟨i, hik, hξ, rfl⟩
   · rintro ⟨i, -, hi, rfl⟩; exact h.pow_of_coprime i hi
-
-中文:
-定理 isPrimitiveRoot_iff'
-  条件: {k : 自然数} [NeZero k] {ζ ξ : Rˣ} (h : 是PrimitiveRoot ζ k)
-  证明: by
-  constructor
-  · intro hξ
-    obtain ⟨i, hik, rfl⟩ := h.eq_pow_of_mem_rootsOfUnity hξ.pow_eq_one
-    rw [h.pow_iff_coprime <| NeZero.pos k] at hξ
-    exact ⟨i, hik, hξ, rfl⟩
-  · rintro ⟨i, -, hi, rfl⟩; exact h.pow_of_coprime i hi
-
-Depends on / 依赖: NeZero, NeZero.pos, eq_pow_of_mem_rootsOfUnity, h.eq_pow_of_mem_rootsOfUnity, h.pow_iff_coprime, h.pow_of_coprime, pow_eq_one, pow_iff_coprime, pow_of_coprime
+/-
+**IsPrimitiveRoot.isPrimitiveRoot_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot
+`。
+形式化陈述：isPrimitiveRoot_iff {k : Nat} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ 
+k) : IsPrimitiveRoot ξ k ↔ exists i < k, i.Coprime k ∧ ζ ^ i = ξ
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.pow_iff_coprime`：pow_iff_coprime (h : IsPrimitiveRoot ζ 
+k) (h0 : 0 < k) (i : Nat) : IsPrimitiveRoot (ζ ^ i) k ↔ i.Coprime k
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `IsPrimitiveRoot.pow_of_coprime`：pow_of_coprime (h : IsPrimitiveRoot ζ k)
+ (i : Nat) (hi : i.Coprime k) : IsPrimitiveRoot (ζ ^ i) k
 -/
-theorem isPrimitiveRoot_iff' {k : Nat} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k) :
-    IsPrimitiveRoot ξ k ↔ exists i < k, i.Coprime k ∧ ζ ^ i = ξ := by
-  constructor
-  · intro hξ
-    obtain ⟨i, hik, rfl⟩ := h.eq_pow_of_mem_rootsOfUnity hξ.pow_eq_one
-    rw [h.pow_iff_coprime <| NeZero.pos k] at hξ
-    exact ⟨i, hik, hξ, rfl⟩
-  · rintro ⟨i, -, hi, rfl⟩; exact h.pow_of_coprime i hi
-
-/--
-theorem `isPrimitiveRoot_iff` / 定理 `isPrimitiveRoot_iff`
-
-English:
-theorem isPrimitiveRoot_iff
-  given: {k : Nat} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k)
-  proof: by
+theorem isPrimitiveRoot_iff {k : ℕ} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) :
+    IsPrimitiveRoot ξ k ↔ ∃ i < k, i.Coprime k ∧ ζ ^ i = ξ := by
   constructor
   · intro hξ
     obtain ⟨i, hik, rfl⟩ := h.eq_pow_of_pow_eq_one hξ.pow_eq_one
     rw [h.pow_iff_coprime <| NeZero.pos k] at hξ
     exact ⟨i, hik, hξ, rfl⟩
   · rintro ⟨i, -, hi, rfl⟩; exact h.pow_of_coprime i hi
-
-中文:
-定理 isPrimitiveRoot_iff
-  条件: {k : 自然数} [NeZero k] {ζ ξ : R} (h : 是PrimitiveRoot ζ k)
-  证明: by
-  constructor
-  · intro hξ
-    obtain ⟨i, hik, rfl⟩ := h.eq_pow_of_pow_eq_one hξ.pow_eq_one
-    rw [h.pow_iff_coprime <| NeZero.pos k] at hξ
-    exact ⟨i, hik, hξ, rfl⟩
-  · rintro ⟨i, -, hi, rfl⟩; exact h.pow_of_coprime i hi
-
-Depends on / 依赖: NeZero, NeZero.pos, eq_pow_of_pow_eq_one, h.eq_pow_of_pow_eq_one, h.pow_iff_coprime, h.pow_of_coprime, pow_eq_one, pow_iff_coprime, pow_of_coprime
+/-
+**IsPrimitiveRoot.nthRoots_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：nthRoots_eq {n : Nat} {ζ : R} (hζ : IsPrimitiveRoot ζ n) {α a : R} (e : α 
+^ n = a) : nthRoots n a = (Multiset.range n).map (ζ ^ · * α)
+参数：hζ : IsPrimitiveRoot ζ n；e : α ^ n = a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.nthRoots_zero`：nthRoots_zero (r : R) : nthRoots 0 r = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.nthRoots.congr_simp`：∀ {R : Type u} [inst : CommRing R] [inst
+_1 : IsDomain R] (n n_1 : ℕ),   n = n_1 → ∀ (a a_1 : R), a = a_1 → Polynomial.nt
+hRoots n a = Polynom…
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Polynomial.nthRoots_zero_right`：nthRoots_zero_right {R} [CommRing R] [Is
+Domain R] (n : Nat) : nthRoots n (0 : R) = Multiset.replicate n 0
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Multiset.map_const'`：∀ {α : Type u_1} {β : Type v} (s : Multiset α) (b :
+ β), Multiset.map (fun x => b) s = Multiset.replicate s.card b
+· 使用定理 `Multiset.card_range`：card_range (n : Nat) : card (range n) = n
+· 使用定理 `Multiset.eq_of_le_of_card_le`：eq_of_le_of_card_le {s t : Multiset α} (h 
+: s <= t) : card t <= card s -> s = t
+· 使用定理 `Finset.range_val`：range_val (n : Nat) : (range n).1 = Multiset.range n
+· 使用定理 `Finset.image_val_of_injOn`：image_val_of_injOn (H : Set.InjOn f s) : (ima
+ge f s).1 = s.1.map f
+· 使用引理 `IsPrimitiveRoot.injOn_pow_mul`：injOn_pow_mul {n : Nat} {ζ : M₀} (hζ : Is
+PrimitiveRoot ζ n) {α : M₀} (hα : α != 0) : Set.InjOn (ζ ^ · * α) (Finset.range 
+n)
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Finset.val_le_iff_val_subset`：val_le_iff_val_subset {a : Finset α} {b : 
+Multiset α} : a.val <= b ↔ a.val subseteq b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Polynomial.mem_nthRoots`：mem_nthRoots {n : Nat} (hn : 0 < n) {a x : R} :
+ x in nthRoots n a ↔ x ^ n = a
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+（共 33 条，此处仅展示前 30 条）
 -/
-theorem isPrimitiveRoot_iff {k : Nat} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) :
-    IsPrimitiveRoot ξ k ↔ exists i < k, i.Coprime k ∧ ζ ^ i = ξ := by
-  constructor
-  · intro hξ
-    obtain ⟨i, hik, rfl⟩ := h.eq_pow_of_pow_eq_one hξ.pow_eq_one
-    rw [h.pow_iff_coprime <| NeZero.pos k] at hξ
-    exact ⟨i, hik, hξ, rfl⟩
-  · rintro ⟨i, -, hi, rfl⟩; exact h.pow_of_coprime i hi
-
-/--
-theorem `nthRoots_eq` / 定理 `nthRoots_eq`
-
-English:
-theorem nthRoots_eq
-  given: {n : Nat} {ζ : R} (hζ : IsPrimitiveRoot ζ n) {α a : R} (e : α ^ n = a)
-  proof: by
-  obtain (rfl | hn) := n.eq_zero_or_pos; · simp
-  by_cases hα : α = 0
-  · rw [hα, zero_pow hn.ne'] at e
-    simp only [hα, e.symm, nthRoots_zero_right, mul_zero,
-      Multiset.map_const', Multiset.card_range]
-  classical
-  symm; apply Multiset.eq_of_le_of_card_le
-  · rw [← Finset.range_val,
-      ← Finset.image_val_of_injOn (hζ.injOn_pow_mul hα), Finset.val_le_iff_val_subset]
-    intro x hx
-    simp only [Finset.image_val, Finset.range_val, Multiset.mem_dedup, Multiset.mem_map,
-      Multiset.mem_range] at hx
-    obtain ⟨m, _, rfl⟩ := hx
-    rw [mem_nthRoots hn]; rw [mul_pow]; rw [e]; rw [← pow_mul]; rw [mul_comm m]; rw [pow_mul]; rw [hζ.pow_eq_one]; rw [one_pow]; rw [one_mul]
-  · simpa only [Multiset.card_map, Multiset.card_range] using card_nthRoots n a
-
-中文:
-定理 nthRoots_eq
-  条件: {n : 自然数} {ζ : R} (hζ : 是PrimitiveRoot ζ n) {α a : R} (e : α ^ n = a)
-  证明: by
-  obtain (rfl | hn) := n.eq_zero_or_pos; · simp
-  by_cases hα : α = 0
-  · rw [hα, zero_pow hn.ne'] at e
-    simp only [hα, e.symm, nthRoots_zero_right, mul_zero,
-      Multiset.map_const', Multiset.card_range]
-  classical
-  symm; apply Multiset.eq_of_le_of_card_le
-  · rw [← Finset.range_val,
-      ← Finset.image_val_of_injOn (hζ.injOn_pow_mul hα), Finset.val_le_iff_val_subset]
-    intro x hx
-    simp only [Finset.image_val, Finset.range_val, Multiset.mem_dedup, Multiset.mem_map,
-      Multiset.mem_range] at hx
-    obtain ⟨m, _, rfl⟩ := hx
-    rw [mem_nthRoots hn]; rw [mul_pow]; rw [e]; rw [← pow_mul]; rw [mul_comm m]; rw [pow_mul]; rw [hζ.pow_eq_one]; rw [one_pow]; rw [one_mul]
-  · simpa only [Multiset.card_map, Multiset.card_range] using card_nthRoots n a
-
-Depends on / 依赖: Finset, Finset.image_val, Finset.image_val_of_injOn, Finset.range_val, Finset.val_le_iff_val_subset, Multiset, Multiset.card_range, Multiset.eq_of_le_of_card_le, Multiset.map_const, Multiset.mem_dedup, Multiset.mem_map, Multiset.mem_range, card_range, classical, e.symm, eq_of_le_of_card_le, eq_zero_or_pos, hn.ne, image_val, image_val_of_injOn
--/
-theorem nthRoots_eq {n : Nat} {ζ : R} (hζ : IsPrimitiveRoot ζ n) {α a : R} (e : α ^ n = a) :
+theorem nthRoots_eq {n : ℕ} {ζ : R} (hζ : IsPrimitiveRoot ζ n) {α a : R} (e : α ^ n = a) :
     nthRoots n a = (Multiset.range n).map (ζ ^ · * α) := by
   obtain (rfl | hn) := n.eq_zero_or_pos; · simp
   by_cases hα : α = 0
@@ -2218,348 +2072,389 @@ theorem nthRoots_eq {n : Nat} {ζ : R} (hζ : IsPrimitiveRoot ζ n) {α a : R} (
     simp only [Finset.image_val, Finset.range_val, Multiset.mem_dedup, Multiset.mem_map,
       Multiset.mem_range] at hx
     obtain ⟨m, _, rfl⟩ := hx
-    rw [mem_nthRoots hn]; rw [mul_pow]; rw [e]; rw [← pow_mul]; rw [mul_comm m]; rw [pow_mul]; rw [hζ.pow_eq_one]; rw [one_pow]; rw [one_mul]
+    rw [mem_nthRoots hn, mul_pow, e, ← pow_mul, mul_comm m,
+      pow_mul, hζ.pow_eq_one, one_pow, one_mul]
   · simpa only [Multiset.card_map, Multiset.card_range] using card_nthRoots n a
 
 /--
-theorem `adjoin_pair_eq` / 定理 `adjoin_pair_eq`
-
-English:
-theorem adjoin_pair_eq
-  statement: (S : Type*) [CommSemiring S] [Algebra S R] {ζ₁ ζ₂ : R} {k₁ : Nat} {k₂ : Nat}
-  proof: by
-  have : NeZero (k₁.lcm k₂) := ⟨Nat.lcm_ne_zero hk₁ hk₂⟩
-  refine le_antisymm (Algebra.adjoin_le ?_) (Algebra.adjoin_le ?_)
-  · refine Set.pair_subset_iff.mpr ⟨?_, ?_⟩
-· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
-(hζ₁.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_left k₂
-      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
-· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
-(hζ₂.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_right k₂
-      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
-  · have hζ' := IsPrimitiveRoot.pow_mul_pow_lcm hζ₁ hζ₂ hk₁ hk₂
-    obtain ⟨_, _, rfl⟩ := hζ'.eq_pow_of_pow_eq_one hζ.pow_eq_one
-    aesop
-
-中文:
-定理 adjoin_pair_eq
-  结论: (S : 类型) [交换半环 S] [代数 S R] {ζ₁ ζ₂ : R} {k₁ : 自然数} {k₂ : 自然数}
-  证明: by
-  have : NeZero (k₁.lcm k₂) := ⟨Nat.lcm_ne_zero hk₁ hk₂⟩
-  refine le_antisymm (Algebra.adjoin_le ?_) (Algebra.adjoin_le ?_)
-  · refine Set.pair_subset_iff.mpr ⟨?_, ?_⟩
-· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
-(hζ₁.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_left k₂
-      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
-· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
-(hζ₂.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_right k₂
-      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
-  · have hζ' := IsPrimitiveRoot.pow_mul_pow_lcm hζ₁ hζ₂ hk₁ hk₂
-    obtain ⟨_, _, rfl⟩ := hζ'.eq_pow_of_pow_eq_one hζ.pow_eq_one
-    aesop
-
-Depends on / 依赖: Algebra, Algebra.adjoin_le, Algebra.self_mem_adjoin_singleton, Nat.lcm_ne_zero, NeZero, Set.pair_subset_iff.mpr, Subalgebra, Subalgebra.pow_mem, adjoin_le, dvd_lcm_left, dvd_lcm_right, eq_pow_of_pow_eq_one, lcm_ne_zero, le_antisymm, pair_subset_iff, pow_eq_one_iff_dvd, pow_mem, self_mem_adjoin_singleton
+The sub-algebra generated by two roots of unity of order `k₁` and `k₂` resp. is the same as the one
+generated by a root of unity of order `lcm k₁ k₂`.
+See `IsPrimitiveRoot.pow_mul_pow_lcm` for how to construct a root of unity of order `lcm k₁ k₂`
+from roots of unity of order `k₁` and `k₂`.
 -/
-theorem adjoin_pair_eq (S : Type*) [CommSemiring S] [Algebra S R] {ζ₁ ζ₂ : R} {k₁ : Nat} {k₂ : Nat}
-    (hζ₁ : IsPrimitiveRoot ζ₁ k₁) (hζ₂ : IsPrimitiveRoot ζ₂ k₂) (hk₁ : k₁ != 0) (hk₂ : k₂ != 0)
+/-
+**IsPrimitiveRoot.adjoin_pair_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：adjoin_pair_eq (S : Type*) [CommSemiring S] [Algebra S R] {ζ₁ ζ₂ : R} {k₁ 
+: Nat} {k₂ : Nat} (hζ₁ : IsPrimitiveRoot ζ₁ k₁) (hζ₂ : IsPrimitiveRoot ζ₂ k₂) (h
+k₁ : k₁ != 0) (hk₂ : k₂ != 0) {ζ : R} (hζ : IsPrimitiveRoot ζ (k₁.lcm k₂)) : Alg
+ebra.adjoin S {ζ₁, ζ₂} = Algebra.adjoin S {ζ}
+参数：S : Type*；hζ₁ : IsPrimitiveRoot ζ₁ k₁；hζ₂ : IsPrimitiveRoot ζ₂ k₂；hk₁ : k₁ !=
+ 0；hk₂ : k₂ != 0；hζ : IsPrimitiveRoot ζ (k₁.lcm k₂)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.lcm_ne_zero`：∀ {m n : ℕ}, m ≠ 0 → n ≠ 0 → m.lcm n ≠ 0
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.pair_subset_iff`：pair_subset_iff : {a, b} subseteq s ↔ a in s ∧ b in
+ s
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `IsPrimitiveRoot.pow_eq_one_iff_dvd`：pow_eq_one_iff_dvd (h : IsPrimitiveR
+oot ζ k) (l : Nat) : ζ ^ l = 1 ↔ k ∣ l
+· 使用定理 `Nat.dvd_lcm_left`：∀ (m n : ℕ), m ∣ m.lcm n
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
+· 使用定理 `Nat.dvd_lcm_right`：∀ (m n : ℕ), n ∣ m.lcm n
+· 使用定理 `IsPrimitiveRoot.pow_mul_pow_lcm`：pow_mul_pow_lcm {ζ' : M} {k' : Nat} (hζ
+ : IsPrimitiveRoot ζ k) (hζ' : IsPrimitiveRoot ζ' k') (hk : k != 0) (hk' : k' !=
+ 0) : IsPrimitiveRoot…
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `pow_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : Set
+Like A M] [SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ …
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Algebra.mem_adjoin_of_mem`：mem_adjoin_of_mem {s : Set A} {x : A} (hx : x
+ in s) : x in adjoin R s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+
+--- 原说明 ---
+The sub-algebra generated by two roots of unity of order `k₁` and `k₂` resp. is 
+the same as the one
+generated by a root of unity of order `lcm k₁ k₂`.
+See `IsPrimitiveRoot.pow_mul_pow_lcm` for how to construct a root of unity of or
+der `lcm k₁ k₂`
+from roots of unity of order `k₁` and `k₂`.
+-/
+theorem adjoin_pair_eq (S : Type*) [CommSemiring S] [Algebra S R] {ζ₁ ζ₂ : R} {k₁ : ℕ} {k₂ : ℕ}
+    (hζ₁ : IsPrimitiveRoot ζ₁ k₁) (hζ₂ : IsPrimitiveRoot ζ₂ k₂) (hk₁ : k₁ ≠ 0) (hk₂ : k₂ ≠ 0)
     {ζ : R} (hζ : IsPrimitiveRoot ζ (k₁.lcm k₂)) :
     Algebra.adjoin S {ζ₁, ζ₂} = Algebra.adjoin S {ζ} := by
   have : NeZero (k₁.lcm k₂) := ⟨Nat.lcm_ne_zero hk₁ hk₂⟩
   refine le_antisymm (Algebra.adjoin_le ?_) (Algebra.adjoin_le ?_)
   · refine Set.pair_subset_iff.mpr ⟨?_, ?_⟩
-· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
-(hζ₁.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_left k₂
+    · obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one <|
+        (hζ₁.pow_eq_one_iff_dvd _).mpr <| k₁.dvd_lcm_left k₂
       exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
-· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
-(hζ₂.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_right k₂
+    · obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one <|
+        (hζ₂.pow_eq_one_iff_dvd _).mpr <| k₁.dvd_lcm_right k₂
       exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
   · have hζ' := IsPrimitiveRoot.pow_mul_pow_lcm hζ₁ hζ₂ hk₁ hk₂
     obtain ⟨_, _, rfl⟩ := hζ'.eq_pow_of_pow_eq_one hζ.pow_eq_one
     aesop
 
 open scoped Classical in
-/--
-theorem `card_nthRoots` / 定理 `card_nthRoots`
-
-English:
-theorem card_nthRoots
-  given: {n : Nat} {ζ : R} (hζ : IsPrimitiveRoot ζ n) (a : R)
-  proof: by
-  split_ifs with h
-  · obtain ⟨α, hα⟩ := h
-    rw [nthRoots_eq hζ hα]; rw [Multiset.card_map]; rw [Multiset.card_range]
-  · obtain (rfl | hn) := n.eq_zero_or_pos; · simp
-    push Not at h
-    simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
-
-中文:
-定理 card_nthRoots
-  条件: {n : 自然数} {ζ : R} (hζ : 是PrimitiveRoot ζ n) (a : R)
-  证明: by
-  split_ifs with h
-  · obtain ⟨α, hα⟩ := h
-    rw [nthRoots_eq hζ hα]; rw [Multiset.card_map]; rw [Multiset.card_range]
-  · obtain (rfl | hn) := n.eq_zero_or_pos; · simp
-    push Not at h
-    simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
-
-Depends on / 依赖: Multiset, Multiset.card_eq_zero, Multiset.card_map, Multiset.card_range, Multiset.eq_zero_iff_forall_notMem, card_eq_zero, card_map, card_range, eq_zero_iff_forall_notMem, eq_zero_or_pos, mem_nthRoots, n.eq_zero_or_pos, nthRoots_eq, split_ifs
+/-
+**IsPrimitiveRoot.card_nthRoots** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：card_nthRoots {n : Nat} {ζ : R} (hζ : IsPrimitiveRoot ζ n) (a : R) : Multi
+set.card (nthRoots n a) = if exists α, α ^ n = a then n else 0
+参数：hζ : IsPrimitiveRoot ζ n；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `IsPrimitiveRoot.nthRoots_eq`：nthRoots_eq {n : Nat} {ζ : R} (hζ : IsPrimi
+tiveRoot ζ n) {α a : R} (e : α ^ n = a) : nthRoots n a = (Multiset.range n).map 
+(ζ ^ · * α)
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
+· 使用定理 `Multiset.card_range`：card_range (n : Nat) : card (range n) = n
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.nthRoots_zero`：nthRoots_zero (r : R) : nthRoots 0 r = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Polynomial.mem_nthRoots`：mem_nthRoots {n : Nat} (hn : 0 < n) {a x : R} :
+ x in nthRoots n a ↔ x ^ n = a
 -/
-theorem card_nthRoots {n : Nat} {ζ : R} (hζ : IsPrimitiveRoot ζ n) (a : R) :
-    Multiset.card (nthRoots n a) = if exists α, α ^ n = a then n else 0 := by
+theorem card_nthRoots {n : ℕ} {ζ : R} (hζ : IsPrimitiveRoot ζ n) (a : R) :
+    Multiset.card (nthRoots n a) = if ∃ α, α ^ n = a then n else 0 := by
   split_ifs with h
   · obtain ⟨α, hα⟩ := h
-    rw [nthRoots_eq hζ hα]; rw [Multiset.card_map]; rw [Multiset.card_range]
+    rw [nthRoots_eq hζ hα, Multiset.card_map, Multiset.card_range]
   · obtain (rfl | hn) := n.eq_zero_or_pos; · simp
     push Not at h
     simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
 
-/--
-theorem `card_rootsOfUnity'` / 定理 `card_rootsOfUnity'`
+/-- A variant of `IsPrimitiveRoot.card_rootsOfUnity` for `ζ : Rˣ`. -/
+/-
+**IsPrimitiveRoot.card_rootsOfUnity'** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`
+。
+形式化陈述：card_rootsOfUnity' {n : Nat} [NeZero n] (h : IsPrimitiveRoot ζ n) : Nat.ca
+rd (rootsOfUnity n R) = n
+参数：h : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPrimitiveRoot.zpowers_eq`：zpowers_eq {k : Nat} [NeZero k] {ζ : Rˣ} (h 
+: IsPrimitiveRoot ζ k) : Subgroup.zpowers ζ = rootsOfUnity k R
+· 使用定理 `Nat.card_zpowers`：Nat.card_zpowers : Nat.card (zpowers a) = orderOf a
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
 
-English:
-theorem card_rootsOfUnity'
-  given: {n : Nat} [NeZero n] (h : IsPrimitiveRoot ζ n)
-  proof: by
-  rw [← h.zpowers_eq]; rw [Nat.card_zpowers]; rw [h.eq_orderOf]
-
-中文:
-定理 card_rootsOfUnity'
-  条件: {n : 自然数} [NeZero n] (h : 是PrimitiveRoot ζ n)
-  证明: by
-  rw [← h.zpowers_eq]; rw [Nat.card_zpowers]; rw [h.eq_orderOf]
-
-Depends on / 依赖: Nat.card_zpowers, card_zpowers, eq_orderOf, h.eq_orderOf, h.zpowers_eq, zpowers_eq
+--- 原说明 ---
+A variant of `IsPrimitiveRoot.card_rootsOfUnity` for `ζ : Rˣ`.
 -/
-theorem card_rootsOfUnity' {n : Nat} [NeZero n] (h : IsPrimitiveRoot ζ n) :
+theorem card_rootsOfUnity' {n : ℕ} [NeZero n] (h : IsPrimitiveRoot ζ n) :
     Nat.card (rootsOfUnity n R) = n := by
-  rw [← h.zpowers_eq]; rw [Nat.card_zpowers]; rw [h.eq_orderOf]
-
-/--
-theorem `card_rootsOfUnity` / 定理 `card_rootsOfUnity`
-
-English:
-theorem card_rootsOfUnity
-  given: {ζ : R} {n : Nat} [NeZero n] (h : IsPrimitiveRoot ζ n)
-  proof: by
-  obtain ⟨ζ, hζ⟩ := h.isUnit NeZero.out
-  rw [← hζ]; rw [IsPrimitiveRoot.coe_units_iff] at h
-  exact h.card_rootsOfUnity'
-
-中文:
-定理 card_rootsOfUnity
-  条件: {ζ : R} {n : 自然数} [NeZero n] (h : 是PrimitiveRoot ζ n)
-  证明: by
-  obtain ⟨ζ, hζ⟩ := h.isUnit NeZero.out
-  rw [← hζ]; rw [IsPrimitiveRoot.coe_units_iff] at h
-  exact h.card_rootsOfUnity'
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_units_iff, NeZero, NeZero.out, card_rootsOfUnity, coe_units_iff, h.card_rootsOfUnity, h.isUnit, isUnit
+  rw [← h.zpowers_eq, Nat.card_zpowers, h.eq_orderOf]
+/-
+**IsPrimitiveRoot.card_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：card_rootsOfUnity {ζ : R} {n : Nat} [NeZero n] (h : IsPrimitiveRoot ζ n) :
+ Nat.card (rootsOfUnity n R) = n
+参数：h : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.isUnit`：isUnit (h : IsPrimitiveRoot ζ k) (h0 : k != 0) :
+ IsUnit ζ
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用定理 `IsPrimitiveRoot.card_rootsOfUnity'`：card_rootsOfUnity' {n : Nat} [NeZero
+ n] (h : IsPrimitiveRoot ζ n) : Nat.card (rootsOfUnity n R) = n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.coe_units_iff`：coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot 
+(ζ : M) k ↔ IsPrimitiveRoot ζ k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem card_rootsOfUnity {ζ : R} {n : Nat} [NeZero n] (h : IsPrimitiveRoot ζ n) :
+theorem card_rootsOfUnity {ζ : R} {n : ℕ} [NeZero n] (h : IsPrimitiveRoot ζ n) :
     Nat.card (rootsOfUnity n R) = n := by
   obtain ⟨ζ, hζ⟩ := h.isUnit NeZero.out
-  rw [← hζ]; rw [IsPrimitiveRoot.coe_units_iff] at h
+  rw [← hζ, IsPrimitiveRoot.coe_units_iff] at h
   exact h.card_rootsOfUnity'
-
-/--
-lemma `_root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot` / 引理 `_root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot`
-
-English:
-lemma _root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot
-  given: {n : Nat} [NeZero n]
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨ζ, hζ⟩ => hζ.card_rootsOfUnity⟩
-  obtain ⟨⟨ζ, hζ'⟩, hζ⟩ := (rootsOfUnity.isCyclic R n).exists_ofOrder_eq_natCard
-  rw [h]; rw [← IsPrimitiveRoot.iff_orderOf]; rw [← coe_submonoidClass_iff]; rw [← IsPrimitiveRoot.coe_units_iff] at hζ
-  use ζ
-
-中文:
-引理 _root_.card_rootsOfUnity_eq_iff_存在_isPrimitiveRoot
-  条件: {n : 自然数} [NeZero n]
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨ζ, hζ⟩ => hζ.card_rootsOfUnity⟩
-  obtain ⟨⟨ζ, hζ'⟩, hζ⟩ := (rootsOfUnity.isCyclic R n).exists_ofOrder_eq_natCard
-  rw [h]; rw [← IsPrimitiveRoot.iff_orderOf]; rw [← coe_submonoidClass_iff]; rw [← IsPrimitiveRoot.coe_units_iff] at hζ
-  use ζ
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_units_iff, IsPrimitiveRoot.iff_orderOf, card_rootsOfUnity, coe_submonoidClass_iff, coe_units_iff, exists_ofOrder_eq_natCard, iff_orderOf, isCyclic, rootsOfUnity, rootsOfUnity.isCyclic
+/-
+**IsPrimitiveRoot._root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot** 是 Mat
+hlib 中的一个引理，位于命名空间 `IsPrimitiveRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot {n : Nat} [NeZero n] :
-    Nat.card (rootsOfUnity n R) = n ↔ exists ζ : R, IsPrimitiveRoot ζ n := by
-  refine ⟨fun h => ?_, fun ⟨ζ, hζ⟩ => hζ.card_rootsOfUnity⟩
+lemma _root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot {n : ℕ} [NeZero n] :
+    Nat.card (rootsOfUnity n R) = n ↔ ∃ ζ : R, IsPrimitiveRoot ζ n := by
+  refine ⟨fun h ↦ ?_, fun ⟨ζ, hζ⟩ ↦ hζ.card_rootsOfUnity⟩
   obtain ⟨⟨ζ, hζ'⟩, hζ⟩ := (rootsOfUnity.isCyclic R n).exists_ofOrder_eq_natCard
-  rw [h]; rw [← IsPrimitiveRoot.iff_orderOf]; rw [← coe_submonoidClass_iff]; rw [← IsPrimitiveRoot.coe_units_iff] at hζ
+  rw [h, ← IsPrimitiveRoot.iff_orderOf, ← coe_submonoidClass_iff,
+    ← IsPrimitiveRoot.coe_units_iff] at hζ
   use ζ
 
-/--
-theorem `card_nthRoots_one` / 定理 `card_nthRoots_one`
+/-- The cardinality of the multiset `nthRoots ↑n (1 : R)` is `n`
+if there is a primitive root of unity in `R`. -/
+/-
+**IsPrimitiveRoot.card_nthRoots_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：card_nthRoots_one {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) : Multiset.c
+ard (nthRoots n (1 : R)) = n
+参数：h : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.card_nthRoots`：card_nthRoots {n : Nat} {ζ : R} (hζ : IsP
+rimitiveRoot ζ n) (a : R) : Multiset.card (nthRoots n a) = if exists α, α ^ n = 
+a then n else 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `IsPrimitiveRoot.pow_eq_one`：∀ {M : Type u_1} [inst : CommMonoid M] {ζ : 
+M} {k : ℕ}, IsPrimitiveRoot ζ k → ζ ^ k = 1
 
-English:
-theorem card_nthRoots_one
-  given: {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n)
-  proof: by
-  rw [card_nthRoots h]; rw [if_pos ⟨ζ]; rw [h.pow_eq_one⟩]
-
-中文:
-定理 card_nthRoots_one
-  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
-  证明: by
-  rw [card_nthRoots h]; rw [if_pos ⟨ζ]; rw [h.pow_eq_one⟩]
-
-Depends on / 依赖: card_nthRoots, h.pow_eq_one, if_pos, pow_eq_one
+--- 原说明 ---
+The cardinality of the multiset `nthRoots ↑n (1 : R)` is `n`
+if there is a primitive root of unity in `R`.
 -/
-theorem card_nthRoots_one {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) :
+theorem card_nthRoots_one {ζ : R} {n : ℕ} (h : IsPrimitiveRoot ζ n) :
     Multiset.card (nthRoots n (1 : R)) = n := by
-  rw [card_nthRoots h]; rw [if_pos ⟨ζ]; rw [h.pow_eq_one⟩]
-
-/--
-theorem `nthRoots_nodup` / 定理 `nthRoots_nodup`
-
-English:
-theorem nthRoots_nodup
-  given: {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) {a : R} (ha : a != 0)
-  proof: by
-  obtain (rfl | hn) := n.eq_zero_or_pos; · simp
-  by_cases! h : exists α, α ^ n = a
-  · obtain ⟨α, hα⟩ := h
-    by_cases hα' : α = 0
-    · exact (ha (by rwa [hα', zero_pow hn.ne', eq_comm] at hα)).elim
-    rw [nthRoots_eq h hα]; rw [Multiset.nodup_map_iff_inj_on (Multiset.nodup_range n)]
-    exact h.injOn_pow_mul hα'
-  · suffices nthRoots n a = 0 by simp [this]
-    simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
-
-中文:
-定理 nthRoots_nodup
-  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n) {a : R} (ha : a != 0)
-  证明: by
-  obtain (rfl | hn) := n.eq_zero_or_pos; · simp
-  by_cases! h : exists α, α ^ n = a
-  · obtain ⟨α, hα⟩ := h
-    by_cases hα' : α = 0
-    · exact (ha (by rwa [hα', zero_pow hn.ne', eq_comm] at hα)).elim
-    rw [nthRoots_eq h hα]; rw [Multiset.nodup_map_iff_inj_on (Multiset.nodup_range n)]
-    exact h.injOn_pow_mul hα'
-  · suffices nthRoots n a = 0 by simp [this]
-    simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
-
-Depends on / 依赖: Multiset, Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, Multiset.nodup_map_iff_inj_on, Multiset.nodup_range, card_eq_zero, eq_comm, eq_zero_iff_forall_notMem, eq_zero_or_pos, h.injOn_pow_mul, hn.ne, injOn_pow_mul, mem_nthRoots, n.eq_zero_or_pos, nodup_map_iff_inj_on, nodup_range, nthRoots, nthRoots_eq, zero_pow
+  rw [card_nthRoots h, if_pos ⟨ζ, h.pow_eq_one⟩]
+/-
+**IsPrimitiveRoot.nthRoots_nodup** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：nthRoots_nodup {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) {a : R} (ha : a
+ != 0) : (nthRoots n a).Nodup
+参数：h : IsPrimitiveRoot ζ n；ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.nthRoots_zero`：nthRoots_zero (r : R) : nthRoots 0 r = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `IsPrimitiveRoot.nthRoots_eq`：nthRoots_eq {n : Nat} {ζ : R} (hζ : IsPrimi
+tiveRoot ζ n) {α a : R} (e : α ^ n = a) : nthRoots n a = (Multiset.range n).map 
+(ζ ^ · * α)
+· 使用定理 `Multiset.nodup_map_iff_inj_on`：nodup_map_iff_inj_on {f : α -> β} {s : Mu
+ltiset α} (d : Nodup s) : Nodup (map f s) ↔ forall x in s, forall y in s, f x = 
+f y -> x = y
+· 使用定理 `Multiset.nodup_range`：nodup_range (n : Nat) : Nodup (range n)
+· 使用引理 `IsPrimitiveRoot.injOn_pow_mul`：injOn_pow_mul {n : Nat} {ζ : M₀} (hζ : Is
+PrimitiveRoot ζ n) {α : M₀} (hα : α != 0) : Set.InjOn (ζ ^ · * α) (Finset.range 
+n)
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Polynomial.mem_nthRoots`：mem_nthRoots {n : Nat} (hn : 0 < n) {a x : R} :
+ x in nthRoots n a ↔ x ^ n = a
 -/
-theorem nthRoots_nodup {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) {a : R} (ha : a != 0) :
+theorem nthRoots_nodup {ζ : R} {n : ℕ} (h : IsPrimitiveRoot ζ n) {a : R} (ha : a ≠ 0) :
     (nthRoots n a).Nodup := by
   obtain (rfl | hn) := n.eq_zero_or_pos; · simp
-  by_cases! h : exists α, α ^ n = a
+  by_cases! h : ∃ α, α ^ n = a
   · obtain ⟨α, hα⟩ := h
     by_cases hα' : α = 0
     · exact (ha (by rwa [hα', zero_pow hn.ne', eq_comm] at hα)).elim
-    rw [nthRoots_eq h hα]; rw [Multiset.nodup_map_iff_inj_on (Multiset.nodup_range n)]
+    rw [nthRoots_eq h hα, Multiset.nodup_map_iff_inj_on (Multiset.nodup_range n)]
     exact h.injOn_pow_mul hα'
   · suffices nthRoots n a = 0 by simp [this]
     simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
 
-/--
-theorem `nthRoots_one_nodup` / 定理 `nthRoots_one_nodup`
+/-- The multiset `nthRoots ↑n (1 : R)` has no repeated elements
+if there is a primitive root of unity in `R`. -/
+/-
+**IsPrimitiveRoot.nthRoots_one_nodup** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`
+。
+形式化陈述：nthRoots_one_nodup {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) : (nthRoots
+ n (1 : R)).Nodup
+参数：h : IsPrimitiveRoot ζ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrimitiveRoot.nthRoots_nodup`：nthRoots_nodup {ζ : R} {n : Nat} (h : Is
+PrimitiveRoot ζ n) {a : R} (ha : a != 0) : (nthRoots n a).Nodup
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
 
-English:
-theorem nthRoots_one_nodup
-  given: {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n)
-  proof: h.nthRoots_nodup one_ne_zero
-
-中文:
-定理 nthRoots_one_nodup
-  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
-  证明: h.nthRoots_nodup one_ne_zero
-
-Depends on / 依赖: h.nthRoots_nodup, nthRoots_nodup, one_ne_zero
+--- 原说明 ---
+The multiset `nthRoots ↑n (1 : R)` has no repeated elements
+if there is a primitive root of unity in `R`.
 -/
-theorem nthRoots_one_nodup {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) :
+theorem nthRoots_one_nodup {ζ : R} {n : ℕ} (h : IsPrimitiveRoot ζ n) :
     (nthRoots n (1 : R)).Nodup :=
   h.nthRoots_nodup one_ne_zero
 
 -- Cannot be @[simp] because `ζ` cannot be inferred by `simp`.
-/--
-theorem `card_nthRootsFinset` / 定理 `card_nthRootsFinset`
-
-English:
-theorem card_nthRootsFinset
-  given: {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n)
-  proof: by
-  classical
-  rw [nthRootsFinset]; rw [← Multiset.toFinset_eq (nthRoots_one_nodup h)]; rw [card_mk]; rw [h.card_nthRoots_one]
-
-中文:
-定理 card_nthRootsFinset
-  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
-  证明: by
-  classical
-  rw [nthRootsFinset]; rw [← Multiset.toFinset_eq (nthRoots_one_nodup h)]; rw [card_mk]; rw [h.card_nthRoots_one]
-
-Depends on / 依赖: Multiset, Multiset.toFinset_eq, card_mk, card_nthRoots_one, classical, h.card_nthRoots_one, nthRootsFinset, nthRoots_one_nodup, toFinset_eq
+/-
+**IsPrimitiveRoot.card_nthRootsFinset** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot
+`。
+形式化陈述：card_nthRootsFinset {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) : #(nthRoo
+tsFinset n (1 : R)) = n
+参数：h : IsPrimitiveRoot ζ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.nthRootsFinset.eq_1`：∀ (n : ℕ) {R : Type u_1} (a : R) [inst :
+ CommRing R] [inst_1 : IsDomain R],   Polynomial.nthRootsFinset n a = (Polynomia
+l.nthRoots n a).toFi…
+· 使用定理 `IsPrimitiveRoot.nthRoots_one_nodup`：nthRoots_one_nodup {ζ : R} {n : Nat}
+ (h : IsPrimitiveRoot ζ n) : (nthRoots n (1 : R)).Nodup
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.toFinset_eq`：toFinset_eq {s : Multiset α} (n : Nodup s) : Finse
+t.mk s n = s.toFinset
+· 使用定理 `Finset.card_mk`：card_mk {m nodup} : #(⟨m, nodup⟩ : Finset α) = Multiset.
+card m
+· 使用定理 `IsPrimitiveRoot.card_nthRoots_one`：card_nthRoots_one {ζ : R} {n : Nat} (
+h : IsPrimitiveRoot ζ n) : Multiset.card (nthRoots n (1 : R)) = n
 -/
-theorem card_nthRootsFinset {ζ : R} {n : Nat} (h : IsPrimitiveRoot ζ n) :
+theorem card_nthRootsFinset {ζ : R} {n : ℕ} (h : IsPrimitiveRoot ζ n) :
     #(nthRootsFinset n (1 : R)) = n := by
   classical
-  rw [nthRootsFinset]; rw [← Multiset.toFinset_eq (nthRoots_one_nodup h)]; rw [card_mk]; rw [h.card_nthRoots_one]
+  rw [nthRootsFinset, ← Multiset.toFinset_eq (nthRoots_one_nodup h), card_mk, h.card_nthRoots_one]
 
 open scoped Nat
 
-/--
-theorem `card_primitiveRoots` / 定理 `card_primitiveRoots`
+/-- If an integral domain has a primitive `k`-th root of unity, then it has `φ k` of them. -/
+/-
+**IsPrimitiveRoot.card_primitiveRoots** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot
+`。
+形式化陈述：card_primitiveRoots {ζ : R} {k : Nat} (h : IsPrimitiveRoot ζ k) : #(primit
+iveRoots k R) = φ k
+参数：h : IsPrimitiveRoot ζ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `primitiveRoots.congr_simp`：∀ (k k_1 : ℕ),   k = k_1 → ∀ (R : Type u_7) [
+inst : CommRing R] [inst_1 : IsDomain R], primitiveRoots k R = primitiveRoots k_
+1 R
+· 使用定理 `primitiveRoots_zero`：primitiveRoots_zero : primitiveRoots 0 R = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.card_bij`：card_bij (i : forall a in s, β) (hi : forall a ha, i a 
+ha in t) (i_inj : forall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂) (i_surj 
+: for…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mem_primitiveRoots`：mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ in primi
+tiveRoots k R ↔ IsPrimitiveRoot ζ k
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `IsPrimitiveRoot.pow_of_coprime`：pow_of_coprime (h : IsPrimitiveRoot ζ k)
+ (i : Nat) (hi : i.Coprime k) : IsPrimitiveRoot (ζ ^ i) k
+· 使用定理 `Nat.Coprime.symm`：∀ {n m : ℕ}, n.Coprime m → m.Coprime n
+· 使用定理 `IsPrimitiveRoot.pow_inj`：pow_inj (h : IsPrimitiveRoot ζ k) ⦃i j : Nat⦄ (
+hi : i < k) (hj : j < k) (H : ζ ^ i = ζ ^ j) : i = j
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `IsPrimitiveRoot.isPrimitiveRoot_iff`：isPrimitiveRoot_iff {k : Nat} [NeZe
+ro k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) : IsPrimitiveRoot ξ k ↔ exists i < k, 
+i.Coprime k ∧ ζ ^ i = ξ
 
-English:
-theorem card_primitiveRoots
-  given: {ζ : R} {k : Nat} (h : IsPrimitiveRoot ζ k)
-  proof: by
-  by_cases h0 : k = 0
-  · simp [h0]
-  have : NeZero k := ⟨h0⟩
-  symm
-  refine Finset.card_bij (fun i _ => ζ ^ i) ?_ ?_ ?_
-  · simp only [and_imp, mem_filter, mem_range]
-    rintro i - hi
-    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]
-    exact h.pow_of_coprime i hi.symm
-  · simp only [and_imp, mem_filter, mem_range]
-    rintro i hi - j hj - H
-    exact h.pow_inj hi hj H
-  · simp only [exists_prop, mem_filter, mem_range]
-    intro ξ hξ
-    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]; rw [h.isPrimitiveRoot_iff] at hξ
-    rcases hξ with ⟨i, hin, hi, H⟩
-    exact ⟨i, ⟨hin, hi.symm⟩, H⟩
-
-中文:
-定理 card_primitiveRoots
-  条件: {ζ : R} {k : 自然数} (h : 是PrimitiveRoot ζ k)
-  证明: by
-  by_cases h0 : k = 0
-  · simp [h0]
-  have : NeZero k := ⟨h0⟩
-  symm
-  refine Finset.card_bij (fun i _ => ζ ^ i) ?_ ?_ ?_
-  · simp only [and_imp, mem_filter, mem_range]
-    rintro i - hi
-    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]
-    exact h.pow_of_coprime i hi.symm
-  · simp only [and_imp, mem_filter, mem_range]
-    rintro i hi - j hj - H
-    exact h.pow_inj hi hj H
-  · simp only [exists_prop, mem_filter, mem_range]
-    intro ξ hξ
-    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]; rw [h.isPrimitiveRoot_iff] at hξ
-    rcases hξ with ⟨i, hin, hi, H⟩
-    exact ⟨i, ⟨hin, hi.symm⟩, H⟩
-
-Depends on / 依赖: Finset, Finset.card_bij, Nat.pos_of_ne_zero, NeZero, and_imp, card_bij, exists_prop, h.isPrimitiveRoot_iff, h.pow_inj, h.pow_of_coprime, hi.symm, isPrimitiveRoot_iff, mem_filter, mem_primitiveRoots, mem_range, pos_of_ne_zero, pow_inj, pow_of_coprime
+--- 原说明 ---
+If an integral domain has a primitive `k`-th root of unity, then it has `φ k` of
+ them.
 -/
-theorem card_primitiveRoots {ζ : R} {k : Nat} (h : IsPrimitiveRoot ζ k) :
+theorem card_primitiveRoots {ζ : R} {k : ℕ} (h : IsPrimitiveRoot ζ k) :
     #(primitiveRoots k R) = φ k := by
   by_cases h0 : k = 0
   · simp [h0]
   have : NeZero k := ⟨h0⟩
   symm
-  refine Finset.card_bij (fun i _ => ζ ^ i) ?_ ?_ ?_
+  refine Finset.card_bij (fun i _ ↦ ζ ^ i) ?_ ?_ ?_
   · simp only [and_imp, mem_filter, mem_range]
     rintro i - hi
     rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]
@@ -2569,64 +2464,39 @@ theorem card_primitiveRoots {ζ : R} {k : Nat} (h : IsPrimitiveRoot ζ k) :
     exact h.pow_inj hi hj H
   · simp only [exists_prop, mem_filter, mem_range]
     intro ξ hξ
-    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]; rw [h.isPrimitiveRoot_iff] at hξ
+    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0), h.isPrimitiveRoot_iff] at hξ
     rcases hξ with ⟨i, hin, hi, H⟩
     exact ⟨i, ⟨hin, hi.symm⟩, H⟩
 
 /-- Equivalence of coprime powers of primitive roots. If a * b ≡ 1 (mod n), then x ↦ x ^ a and
     x ↦ x ^ b restricts to a bijection on the n-th primitive roots. -/
 @[simps]
-/--
-Definition of `primitiveRootsPowEquiv` / `primitiveRootsPowEquiv` 的定义
+/-
+**IsPrimitiveRoot.primitiveRootsPowEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsPrimitiveR
+oot`。
+形式化陈述：primitiveRootsPowEquiv {a b n : Nat} (h : a * b ≡ 1 [MOD n]) : primitiveRo
+ots n R ≃ primitiveRoots n R where toFun x
+参数：h : a * b ≡ 1 [MOD n]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition primitiveRootsPowEquiv
-  signature: {a b n : Nat} (h : a * b ≡ 1 [MOD n])
-  body: ⟨x.1 ^ a,
-    have hr : 0 < n := by by_contra! h; cases x; simp_all
-    have hr' : a.Coprime n := by
-      simpa [(a.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right a n)
-(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
-  invFun x := ⟨x.1 ^ b,
-    have hr : 0 < n := by by_contra! h; cases x; simp_all
-    have hr' : b.Coprime n := by
-      simpa [(b.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right b n)
-(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
-  left_inv x := by ext; simp [← pow_mul,
-    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
-  right_inv x := by ext; simp [← pow_mul, mul_comm b,
-    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
-
-中文:
-定义 primitiveRootsPowEquiv
-  签名: {a b n : 自然数} (h : a * b ≡ 1 [MOD n])
-  定义体: ⟨x.1 ^ a,
-    have hr : 0 < n := by by_contra! h; cases x; simp_all
-    have hr' : a.Coprime n := by
-      simpa [(a.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right a n)
-(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
-  invFun x := ⟨x.1 ^ b,
-    have hr : 0 < n := by by_contra! h; cases x; simp_all
-    have hr' : b.Coprime n := by
-      simpa [(b.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right b n)
-(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
-  left_inv x := by ext; simp [← pow_mul,
-    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
-  right_inv x := by ext; simp [← pow_mul, mul_comm b,
-    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
+--- 原说明 ---
+Equivalence of coprime powers of primitive roots. If a * b ≡ 1 (mod n), then x ↦
+ x ^ a and
+    x ↦ x ^ b restricts to a bijection on the n-th primitive roots.
 -/
-def primitiveRootsPowEquiv {a b n : Nat} (h : a * b ≡ 1 [MOD n]) :
+def primitiveRootsPowEquiv {a b n : ℕ} (h : a * b ≡ 1 [MOD n]) :
     primitiveRoots n R ≃ primitiveRoots n R where
   toFun x := ⟨x.1 ^ a,
     have hr : 0 < n := by by_contra! h; cases x; simp_all
     have hr' : a.Coprime n := by
       simpa [(a.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right a n)
-(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
+    (mem_primitiveRoots hr).mpr <| ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
   invFun x := ⟨x.1 ^ b,
     have hr : 0 < n := by by_contra! h; cases x; simp_all
     have hr' : b.Coprime n := by
       simpa [(b.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right b n)
-(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
+    (mem_primitiveRoots hr).mpr <| ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
   left_inv x := by ext; simp [← pow_mul,
     pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
   right_inv x := by ext; simp [← pow_mul, mul_comm b,
@@ -2635,135 +2505,109 @@ def primitiveRootsPowEquiv {a b n : Nat} (h : a * b ≡ 1 [MOD n]) :
 /-- Equivalence of coprime powers of primitive roots. Every `n`-th primitive root is taken to the
     `a`-th power given that `n` and `a` are coprime. -/
 @[simps! apply_coe]
-/--
-Definition of `primitiveRootsPowEquivOfCoprime` / `primitiveRootsPowEquivOfCoprime` 的定义
+/-
+**IsPrimitiveRoot.primitiveRootsPowEquivOfCoprime** 是 Mathlib 中的一个定义，位于命名空间 `IsP
+rimitiveRoot`。
+形式化陈述：primitiveRootsPowEquivOfCoprime {a n : Nat} (h : a.Coprime n) [NeZero n] :
+ primitiveRoots n R ≃ primitiveRoots n R
+参数：h : a.Coprime n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition primitiveRootsPowEquivOfCoprime
-  signature: {a n : Nat} (h : a.Coprime n) [NeZero n]
-  body: haveI h2 := Nat.exists_mul_mod_eq_of_coprime 1 h NeZero.out
-  haveI h3 : a * h2.choose ≡ 1 [MOD n] := by grind [Nat.ModEq]
-  primitiveRootsPowEquiv h3
-
-中文:
-定义 primitiveRootsPowEquivOfCoprime
-  签名: {a n : 自然数} (h : a.Coprime n) [NeZero n]
-  定义体: haveI h2 := Nat.exists_mul_mod_eq_of_coprime 1 h NeZero.out
-  haveI h3 : a * h2.choose ≡ 1 [MOD n] := by grind [Nat.ModEq]
-  primitiveRootsPowEquiv h3
-
-Depends on / 依赖: Nat.ModEq, Nat.exists_mul_mod_eq_of_coprime, NeZero, NeZero.out, exists_mul_mod_eq_of_coprime, h2.choose, primitiveRootsPowEquiv
+--- 原说明 ---
+Equivalence of coprime powers of primitive roots. Every `n`-th primitive root is
+ taken to the
+    `a`-th power given that `n` and `a` are coprime.
 -/
-def primitiveRootsPowEquivOfCoprime {a n : Nat} (h : a.Coprime n) [NeZero n] :
+def primitiveRootsPowEquivOfCoprime {a n : ℕ} (h : a.Coprime n) [NeZero n] :
     primitiveRoots n R ≃ primitiveRoots n R :=
   haveI h2 := Nat.exists_mul_mod_eq_of_coprime 1 h NeZero.out
   haveI h3 : a * h2.choose ≡ 1 [MOD n] := by grind [Nat.ModEq]
   primitiveRootsPowEquiv h3
 
-/--
-theorem `disjoint` / 定理 `disjoint`
+/-- The sets `primitiveRoots k R` are pairwise disjoint. -/
+/-
+**IsPrimitiveRoot.disjoint** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：disjoint {k l : Nat} (h : k != l) : Disjoint (primitiveRoots k R) (primiti
+veRoots l R)
+参数：h : k != l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s 
+-> a ∉ t
+· 使用定理 `IsPrimitiveRoot.unique`：unique {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : 
+IsPrimitiveRoot ζ l) : k = l
+· 使用定理 `isPrimitiveRoot_of_mem_primitiveRoots`：isPrimitiveRoot_of_mem_primitiveR
+oots {ζ : R} (h : ζ in primitiveRoots k R) : IsPrimitiveRoot ζ k
 
-English:
-theorem disjoint
-  given: {k l : Nat} (h : k != l)
-  statement: Disjoint (primitiveRoots k R) (primitiveRoots l R)
-  proof: Finset.disjoint_left.2 fun _ hk hl =>
-h
-(isPrimitiveRoot_of_mem_primitiveRoots hk).unique isPrimitiveRoot_of_mem_primitiveRoots hl
-
-中文:
-定理 disjoint
-  条件: {k l : 自然数} (h : k != l)
-  结论: Disjoint (primitiveRoots k R) (primitiveRoots l R)
-  证明: Finset.disjoint_left.2 fun _ hk hl =>
-h
-(isPrimitiveRoot_of_mem_primitiveRoots hk).unique isPrimitiveRoot_of_mem_primitiveRoots hl
-
-Depends on / 依赖: Finset, Finset.disjoint_left, disjoint_left, isPrimitiveRoot_of_mem_primitiveRoots, unique
+--- 原说明 ---
+The sets `primitiveRoots k R` are pairwise disjoint.
 -/
-theorem disjoint {k l : Nat} (h : k != l) : Disjoint (primitiveRoots k R) (primitiveRoots l R) :=
-  Finset.disjoint_left.2 fun _ hk hl =>
-h
-(isPrimitiveRoot_of_mem_primitiveRoots hk).unique isPrimitiveRoot_of_mem_primitiveRoots hl
+theorem disjoint {k l : ℕ} (h : k ≠ l) : Disjoint (primitiveRoots k R) (primitiveRoots l R) :=
+  Finset.disjoint_left.2 fun _ hk hl ↦
+    h <|
+      (isPrimitiveRoot_of_mem_primitiveRoots hk).unique <| isPrimitiveRoot_of_mem_primitiveRoots hl
 
 /-- `nthRoots n` as a `Finset` is equal to the union of `primitiveRoots i R` for `i ∣ n`. -/
 private -- marking as `private` since `nthRoots_one_eq_biUnion_primitiveRoots` can be used instead
-/--
-theorem `nthRoots_one_eq_biUnion_primitiveRoots'` / 定理 `nthRoots_one_eq_biUnion_primitiveRoots'`
-
-English:
-theorem nthRoots_one_eq_biUnion_primitiveRoots'
-  given: [DecidableEq R] {n : Nat} [NeZero n]
-  proof: by
-  ext x
-  suffices x ^ n = 1 ↔ exists a, a ∣ n ∧ x in primitiveRoots a R by
-    simpa [Polynomial.mem_nthRootsFinset (NeZero.pos n), (NeZero.ne n)]
-  constructor
-  · intro H
-    obtain ⟨k, hk, hx⟩ := exists_pos H (NeZero.ne n)
-    exact ⟨k, hx.2 _ H, (mem_primitiveRoots hk).mpr hx⟩
-  · rintro ⟨a, ⟨d, hd⟩, ha⟩
-    have hazero : 0 < a := Nat.pos_of_ne_zero fun ha₀ => by simp_all
-    rw [mem_primitiveRoots hazero] at ha
-    rw [hd]; rw [pow_mul]; rw [ha.pow_eq_one]; rw [one_pow]
-
-中文:
-定理 nthRoots_one_eq_biUnion_primitiveRoots'
-  条件: [DecidableEq R] {n : 自然数} [NeZero n]
-  证明: by
-  ext x
-  suffices x ^ n = 1 ↔ exists a, a ∣ n ∧ x in primitiveRoots a R by
-    simpa [Polynomial.mem_nthRootsFinset (NeZero.pos n), (NeZero.ne n)]
-  constructor
-  · intro H
-    obtain ⟨k, hk, hx⟩ := exists_pos H (NeZero.ne n)
-    exact ⟨k, hx.2 _ H, (mem_primitiveRoots hk).mpr hx⟩
-  · rintro ⟨a, ⟨d, hd⟩, ha⟩
-    have hazero : 0 < a := Nat.pos_of_ne_zero fun ha₀ => by simp_all
-    rw [mem_primitiveRoots hazero] at ha
-    rw [hd]; rw [pow_mul]; rw [ha.pow_eq_one]; rw [one_pow]
-
-Depends on / 依赖: Nat.pos_of_ne_zero, NeZero, NeZero.ne, NeZero.pos, Polynomial, Polynomial.mem_nthRootsFinset, exists_pos, ha.pow_eq_one, hazero, mem_nthRootsFinset, mem_primitiveRoots, one_pow, pos_of_ne_zero, pow_eq_one, pow_mul, primitiveRoots
+/-
+**IsPrimitiveRoot.nthRoots_one_eq_biUnion_primitiveRoots'** 是 Mathlib 中的一个定理，位于命
+名空间 `IsPrimitiveRoot`。
+形式化陈述：nthRoots_one_eq_biUnion_primitiveRoots' [DecidableEq R] {n : Nat} [NeZero 
+n] : nthRootsFinset n (1 : R) = (Nat.divisors n).biUnion fun i => primitiveRoots
+ i R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nthRoots_one_eq_biUnion_primitiveRoots' [DecidableEq R] {n : Nat} [NeZero n] :
-    nthRootsFinset n (1 : R) = (Nat.divisors n).biUnion fun i => primitiveRoots i R := by
+theorem nthRoots_one_eq_biUnion_primitiveRoots' [DecidableEq R] {n : ℕ} [NeZero n] :
+    nthRootsFinset n (1 : R) = (Nat.divisors n).biUnion fun i ↦ primitiveRoots i R := by
   ext x
-  suffices x ^ n = 1 ↔ exists a, a ∣ n ∧ x in primitiveRoots a R by
+  suffices x ^ n = 1 ↔ ∃ a, a ∣ n ∧ x ∈ primitiveRoots a R by
     simpa [Polynomial.mem_nthRootsFinset (NeZero.pos n), (NeZero.ne n)]
   constructor
   · intro H
     obtain ⟨k, hk, hx⟩ := exists_pos H (NeZero.ne n)
     exact ⟨k, hx.2 _ H, (mem_primitiveRoots hk).mpr hx⟩
   · rintro ⟨a, ⟨d, hd⟩, ha⟩
-    have hazero : 0 < a := Nat.pos_of_ne_zero fun ha₀ => by simp_all
+    have hazero : 0 < a := Nat.pos_of_ne_zero fun ha₀ ↦ by simp_all
     rw [mem_primitiveRoots hazero] at ha
-    rw [hd]; rw [pow_mul]; rw [ha.pow_eq_one]; rw [one_pow]
+    rw [hd, pow_mul, ha.pow_eq_one, one_pow]
 
-/--
-theorem `nthRoots_one_eq_biUnion_primitiveRoots` / 定理 `nthRoots_one_eq_biUnion_primitiveRoots`
+/-- `nthRoots n` as a `Finset` is equal to the union of `primitiveRoots i R` for `i ∣ n`. -/
+/-
+**IsPrimitiveRoot.nthRoots_one_eq_biUnion_primitiveRoots** 是 Mathlib 中的一个定理，位于命名
+空间 `IsPrimitiveRoot`。
+形式化陈述：nthRoots_one_eq_biUnion_primitiveRoots [DecidableEq R] {n : Nat} : nthRoot
+sFinset n (1 : R) = (Nat.divisors n).biUnion fun i => primitiveRoots i R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.nthRootsFinset.congr_simp`：∀ (n n_1 : ℕ),   n = n_1 →     ∀ {
+R : Type u_1} (a a_1 : R),       a = a_1 →         ∀ [inst : CommRing R] [inst_1
+ : IsDomain R], Polynomial…
+· 使用定理 `Polynomial.nthRootsFinset_zero`：nthRootsFinset_zero (a : R) : nthRootsFi
+nset 0 a = ∅
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.divisors_zero`：divisors_zero : divisors 0 = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `_private.Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots.0.IsPrimitiveRoo
+t.nthRoots_one_eq_biUnion_primitiveRoots'`：∀ {R : Type u_4} [inst : CommRing R] 
+[inst_1 : IsDomain R] [inst_2 : DecidableEq R] {n : ℕ} [NeZero n],   Polynomial.
+nthRootsFinset n 1 = n.…
 
-English:
-theorem nthRoots_one_eq_biUnion_primitiveRoots
-  given: [DecidableEq R] {n : Nat}
-  proof: by
-  by_cases hn : n = 0
-  · simp only [hn, nthRootsFinset_zero, Nat.divisors_zero, biUnion_empty]
-  have : NeZero n := ⟨hn⟩
-  exact nthRoots_one_eq_biUnion_primitiveRoots'
-
-中文:
-定理 nthRoots_one_eq_biUnion_primitiveRoots
-  条件: [DecidableEq R] {n : 自然数}
-  证明: by
-  by_cases hn : n = 0
-  · simp only [hn, nthRootsFinset_zero, Nat.divisors_zero, biUnion_empty]
-  have : NeZero n := ⟨hn⟩
-  exact nthRoots_one_eq_biUnion_primitiveRoots'
-
-Depends on / 依赖: Nat.divisors_zero, NeZero, biUnion_empty, divisors_zero, nthRootsFinset_zero, nthRoots_one_eq_biUnion_primitiveRoots
+--- 原说明 ---
+`nthRoots n` as a `Finset` is equal to the union of `primitiveRoots i R` for `i 
+∣ n`.
 -/
-theorem nthRoots_one_eq_biUnion_primitiveRoots [DecidableEq R] {n : Nat} :
-    nthRootsFinset n (1 : R) = (Nat.divisors n).biUnion fun i => primitiveRoots i R := by
+theorem nthRoots_one_eq_biUnion_primitiveRoots [DecidableEq R] {n : ℕ} :
+    nthRootsFinset n (1 : R) = (Nat.divisors n).biUnion fun i ↦ primitiveRoots i R := by
   by_cases hn : n = 0
   · simp only [hn, nthRootsFinset_zero, Nat.divisors_zero, biUnion_empty]
   have : NeZero n := ⟨hn⟩
@@ -2773,85 +2617,29 @@ end IsDomain
 
 section Automorphisms
 
-variable [CommRing S] [IsDomain S] {μ : S} {n : Nat} (hμ : IsPrimitiveRoot μ n) (R) [CommRing R]
+variable [CommRing S] [IsDomain S] {μ : S} {n : ℕ} (hμ : IsPrimitiveRoot μ n) (R) [CommRing R]
   [Algebra R S]
 
-/--
-Definition of `autToPow` / `autToPow` 的定义
+/-- The `MonoidHom` that takes an automorphism to the power of `μ` that `μ` gets mapped to
+under it. -/
+/-
+**IsPrimitiveRoot.autToPow** 是 Mathlib 中的一个定义，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：autToPow [NeZero n] : (S ≃ₐ[R] S) ->* (ZMod n)ˣ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition autToPow
-  signature: [NeZero n]
-  body: let μ' := hμ.toRootsOfUnity
-  have ho : orderOf μ' = n := by
-    refine Eq.trans ?_ hμ.eq_orderOf.symm -- `rw [hμ.eq_orderOf]` gives "motive not type correct"
-    rw [← hμ.val_toRootsOfUnity_coe]; rw [orderOf_units]; rw [Subgroup.orderOf_coe]
-  MonoidHom.toHomUnits
-    { toFun := fun σ => (map_rootsOfUnity_eq_pow_self σ.toAlgHom μ').choose
-      map_one' := by
-        generalize_proofs h1
-        have h := h1.choose_spec
-        replace h : μ' = μ' ^ h1.choose :=
-          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! h)
-        nth_rw 1 [← pow_one μ'] at h
-        convert! ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp h).symm
-        exact Nat.cast_one.symm
-      map_mul' := by
-        intro x y
-        generalize_proofs hxy' hx' hy'
-        have hxy := hxy'.choose_spec
-        replace hxy : x (((μ' : Sˣ) : S) ^ hy'.choose) = ((μ' : Sˣ) : S) ^ hxy'.choose :=
-          hy'.choose_spec ▸ hxy
-        rw [map_pow] at hxy
-        replace hxy : (((μ' : Sˣ) : S) ^ hx'.choose) ^ hy'.choose = ((μ' : Sˣ) : S) ^ hxy'.choose :=
-          hx'.choose_spec ▸ hxy
-        rw [← pow_mul] at hxy
-        replace hxy : μ' ^ (hx'.choose * hy'.choose) = μ' ^ hxy'.choose :=
-          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! hxy)
-        convert ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp hxy).symm
-        exact (Nat.cast_mul ..).symm }
-
-中文:
-定义 autToPow
-  签名: [NeZero n]
-  定义体: let μ' := hμ.toRootsOfUnity
-  have ho : orderOf μ' = n := by
-    refine Eq.trans ?_ hμ.eq_orderOf.symm -- `rw [hμ.eq_orderOf]` gives "motive not type correct"
-    rw [← hμ.val_toRootsOfUnity_coe]; rw [orderOf_units]; rw [Subgroup.orderOf_coe]
-  MonoidHom.toHomUnits
-    { toFun := fun σ => (map_rootsOfUnity_eq_pow_self σ.toAlgHom μ').choose
-      map_one' := by
-        generalize_proofs h1
-        have h := h1.choose_spec
-        replace h : μ' = μ' ^ h1.choose :=
-          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! h)
-        nth_rw 1 [← pow_one μ'] at h
-        convert! ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp h).symm
-        exact Nat.cast_one.symm
-      map_mul' := by
-        intro x y
-        generalize_proofs hxy' hx' hy'
-        have hxy := hxy'.choose_spec
-        replace hxy : x (((μ' : Sˣ) : S) ^ hy'.choose) = ((μ' : Sˣ) : S) ^ hxy'.choose :=
-          hy'.choose_spec ▸ hxy
-        rw [map_pow] at hxy
-        replace hxy : (((μ' : Sˣ) : S) ^ hx'.choose) ^ hy'.choose = ((μ' : Sˣ) : S) ^ hxy'.choose :=
-          hx'.choose_spec ▸ hxy
-        rw [← pow_mul] at hxy
-        replace hxy : μ' ^ (hx'.choose * hy'.choose) = μ' ^ hxy'.choose :=
-          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! hxy)
-        convert ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp hxy).symm
-        exact (Nat.cast_mul ..).symm }
-
-Depends on / 依赖: Eq.trans, MonoidHom, MonoidHom.toHomUnits, Subgroup, Subgroup.orderOf_coe, choose_spec, coe_injective, coe_pow, correct, eq_orderOf, eq_orderOf.symm, generalize_proofs, h1.choose, h1.choose_spec, map_one, map_rootsOfUnity_eq_pow_self, motive, orderOf, orderOf_coe, orderOf_units
+--- 原说明 ---
+The `MonoidHom` that takes an automorphism to the power of `μ` that `μ` gets map
+ped to
+under it.
 -/
-noncomputable def autToPow [NeZero n] : (S ≃ₐ[R] S) ->* (ZMod n)ˣ :=
+noncomputable def autToPow [NeZero n] : (S ≃ₐ[R] S) →* (ZMod n)ˣ :=
   let μ' := hμ.toRootsOfUnity
   have ho : orderOf μ' = n := by
     refine Eq.trans ?_ hμ.eq_orderOf.symm -- `rw [hμ.eq_orderOf]` gives "motive not type correct"
-    rw [← hμ.val_toRootsOfUnity_coe]; rw [orderOf_units]; rw [Subgroup.orderOf_coe]
+    rw [← hμ.val_toRootsOfUnity_coe, orderOf_units, Subgroup.orderOf_coe]
   MonoidHom.toHomUnits
-    { toFun := fun σ => (map_rootsOfUnity_eq_pow_self σ.toAlgHom μ').choose
+    { toFun := fun σ ↦ (map_rootsOfUnity_eq_pow_self σ.toAlgHom μ').choose
       map_one' := by
         generalize_proofs h1
         have h := h1.choose_spec
@@ -2876,22 +2664,14 @@ noncomputable def autToPow [NeZero n] : (S ≃ₐ[R] S) ->* (ZMod n)ˣ :=
         exact (Nat.cast_mul ..).symm }
 
 -- We are not using @[simps] in `autToPow` to avoid a timeout.
-/--
-theorem `coe_autToPow_apply` / 定理 `coe_autToPow_apply`
-
-English:
-theorem coe_autToPow_apply
-  given: [NeZero n] (f : S ≃ₐ[R] S)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_autToPow_apply
-  条件: [NeZero n] (f : S ≃ₐ[R] S)
-  证明: rfl
-
-@[simp]
+/-
+**IsPrimitiveRoot.coe_autToPow_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`
+。
+形式化陈述：coe_autToPow_apply [NeZero n] (f : S ≃ₐ[R] S) : (autToPow R hμ f : ZMod n)
+ = ((map_rootsOfUnity_eq_pow_self f hμ.toRootsOfUnity).choose : ZMod n)
+参数：f : S ≃ₐ[R] S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_autToPow_apply [NeZero n] (f : S ≃ₐ[R] S) :
     (autToPow R hμ f : ZMod n) =
@@ -2899,50 +2679,60 @@ theorem coe_autToPow_apply [NeZero n] (f : S ≃ₐ[R] S) :
   rfl
 
 @[simp]
-/--
-theorem `autToPow_spec` / 定理 `autToPow_spec`
-
-English:
-theorem autToPow_spec
-  given: [NeZero n] (f : S ≃ₐ[R] S)
-  statement: μ ^ (hμ.autToPow R f : ZMod n).val = f μ
-  proof: by
-  rw [IsPrimitiveRoot.coe_autToPow_apply]
-  generalize_proofs h
-  refine (?_ : ((hμ.toRootsOfUnity : Sˣ) : S) ^ _ = _).trans h.choose_spec.symm
-  rw [← rootsOfUnity.coe_pow]; rw [← rootsOfUnity.coe_pow]
-  congr 2
-  rw [pow_eq_pow_iff_modEq]; rw [ZMod.val_natCast]
-  conv => enter [2, 2]; rw [hμ.eq_orderOf]
-  rw [← Subgroup.orderOf_coe]; rw [← orderOf_units]
-  exact Nat.mod_modEq _ _
-
-中文:
-定理 autToPow_spec
-  条件: [NeZero n] (f : S ≃ₐ[R] S)
-  结论: μ ^ (hμ.autToPow R f : ZMod n).val = f μ
-  证明: by
-  rw [IsPrimitiveRoot.coe_autToPow_apply]
-  generalize_proofs h
-  refine (?_ : ((hμ.toRootsOfUnity : Sˣ) : S) ^ _ = _).trans h.choose_spec.symm
-  rw [← rootsOfUnity.coe_pow]; rw [← rootsOfUnity.coe_pow]
-  congr 2
-  rw [pow_eq_pow_iff_modEq]; rw [ZMod.val_natCast]
-  conv => enter [2, 2]; rw [hμ.eq_orderOf]
-  rw [← Subgroup.orderOf_coe]; rw [← orderOf_units]
-  exact Nat.mod_modEq _ _
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_autToPow_apply, Nat.mod_modEq, Subgroup, Subgroup.orderOf_coe, ZMod.val_natCast, choose_spec, coe_autToPow_apply, coe_pow, eq_orderOf, generalize_proofs, h.choose_spec.symm, mod_modEq, orderOf_coe, orderOf_units, pow_eq_pow_iff_modEq, rootsOfUnity, rootsOfUnity.coe_pow, toRootsOfUnity, val_natCast
+/-
+**IsPrimitiveRoot.autToPow_spec** 是 Mathlib 中的一个定理，位于命名空间 `IsPrimitiveRoot`。
+形式化陈述：autToPow_spec [NeZero n] (f : S ≃ₐ[R] S) : μ ^ (hμ.autToPow R f : ZMod n).
+val = f μ
+参数：f : S ≃ₐ[R] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_rootsOfUnity_eq_pow_self`：map_rootsOfUnity_eq_pow_self [FunLike F R 
+R] [MonoidHomClass F R R] (σ : F) (ζ : rootsOfUnity k R) : exists m : Nat, σ (ζ 
+: Rˣ) = ((ζ : Rˣ) …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.coe_autToPow_apply`：coe_autToPow_apply [NeZero n] (f : S
+ ≃ₐ[R] S) : (autToPow R hμ f : ZMod n) = ((map_rootsOfUnity_eq_pow_self f hμ.toR
+ootsOfUnity).choose : ZM…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `rootsOfUnity.coe_pow`：rootsOfUnity.coe_pow [CommMonoid R] (ζ : rootsOfUn
+ity k R) (m : Nat) : (((ζ ^ m :) : Rˣ) : R) = ((ζ : Rˣ) : R) ^ m
+· 使用定理 `pow_eq_pow_iff_modEq`：pow_eq_pow_iff_modEq : x ^ n = x ^ m ↔ n ≡ m [MOD 
+orderOf x]
+· 使用定理 `ZMod.val_natCast`：val_natCast (n a : Nat) : (a : ZMod n).val = a % n
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
+· 使用引理 `Subgroup.orderOf_coe`：orderOf_coe (a : H) : orderOf (a : G) = orderOf a
+· 使用定理 `orderOf_units`：orderOf_units {y : Gˣ} : orderOf (y : G) = orderOf y
+· 使用定理 `Nat.mod_modEq`：mod_modEq (a n) : a % n ≡ a [MOD n]
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 theorem autToPow_spec [NeZero n] (f : S ≃ₐ[R] S) : μ ^ (hμ.autToPow R f : ZMod n).val = f μ := by
   rw [IsPrimitiveRoot.coe_autToPow_apply]
   generalize_proofs h
   refine (?_ : ((hμ.toRootsOfUnity : Sˣ) : S) ^ _ = _).trans h.choose_spec.symm
-  rw [← rootsOfUnity.coe_pow]; rw [← rootsOfUnity.coe_pow]
+  rw [← rootsOfUnity.coe_pow, ← rootsOfUnity.coe_pow]
   congr 2
-  rw [pow_eq_pow_iff_modEq]; rw [ZMod.val_natCast]
+  rw [pow_eq_pow_iff_modEq, ZMod.val_natCast]
   conv => enter [2, 2]; rw [hμ.eq_orderOf]
-  rw [← Subgroup.orderOf_coe]; rw [← orderOf_units]
+  rw [← Subgroup.orderOf_coe, ← orderOf_units]
   exact Nat.mod_modEq _ _
 
 end Automorphisms
@@ -2953,155 +2743,185 @@ section nthRootsFinsetPrime
 
 open IsPrimitiveRoot
 
-variable [CommRing R] [IsDomain R] {p : Nat}
+variable [CommRing R] [IsDomain R] {p : ℕ}
 
-/--
-theorem `nthRootsFinset_eq_of_prime` / 定理 `nthRootsFinset_eq_of_prime`
+/-- If `p` is prime, the `p`-th roots of unity in an integral domain are exactly the primitive
+`p`-th roots of unity together with `1`. -/
+/-
+**nthRootsFinset_eq_of_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nthRootsFinset_eq_of_prime [DecidableEq R] (hp : p.Prime) : nthRootsFinset
+ p (1 : R) = primitiveRoots p R union {1}
+参数：hp : p.Prime。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPrimitiveRoot.nthRoots_one_eq_biUnion_primitiveRoots`：nthRoots_one_eq_
+biUnion_primitiveRoots [DecidableEq R] {n : Nat} : nthRootsFinset n (1 : R) = (N
+at.divisors n).biUnion fun i => primitiveRoo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.Prime.divisors`：∀ {p : ℕ}, Nat.Prime p → p.divisors = {1, p}
+· 使用引理 `Finset.biUnion_insert`：biUnion_insert [DecidableEq α] {a : α} : (insert 
+a s).biUnion t = t a union s.biUnion t
+· 使用定理 `IsPrimitiveRoot.primitiveRoots_one`：primitiveRoots_one : primitiveRoots 
+1 R = {(1 : R)}
+· 使用引理 `Finset.singleton_biUnion`：singleton_biUnion {a : α} : Finset.biUnion {a}
+ t = t a
+· 使用引理 `Finset.union_singleton`：union_singleton (x : α) (s : Finset α) : s union
+ {x} = insert x s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem nthRootsFinset_eq_of_prime
-  given: [DecidableEq R] (hp : p.Prime)
-  proof: by
-  simp [nthRoots_one_eq_biUnion_primitiveRoots, hp.divisors]
-
-中文:
-定理 nthRootsFinset_eq_of_prime
-  条件: [DecidableEq R] (hp : p.素)
-  证明: by
-  simp [nthRoots_one_eq_biUnion_primitiveRoots, hp.divisors]
-
-Depends on / 依赖: divisors, hp.divisors, nthRoots_one_eq_biUnion_primitiveRoots
+--- 原说明 ---
+If `p` is prime, the `p`-th roots of unity in an integral domain are exactly the
+ primitive
+`p`-th roots of unity together with `1`.
 -/
 theorem nthRootsFinset_eq_of_prime [DecidableEq R] (hp : p.Prime) :
-    nthRootsFinset p (1 : R) = primitiveRoots p R union {1} := by
+    nthRootsFinset p (1 : R) = primitiveRoots p R ∪ {1} := by
   simp [nthRoots_one_eq_biUnion_primitiveRoots, hp.divisors]
 
-/--
-theorem `mem_nthRootsFinset_iff_of_prime` / 定理 `mem_nthRootsFinset_iff_of_prime`
+/-- For `p` prime, an element of `R` is a `p`-th root of unity if and only if it is either a
+primitive `p`-th root of unity or `1`. -/
+/-
+**mem_nthRootsFinset_iff_of_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nthRootsFinset_iff_of_prime (hp : p.Prime) {η : R} : η in nthRootsFins
+et p (1 : R) ↔ IsPrimitiveRoot η p ∨ η = 1
+参数：hp : p.Prime。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nthRootsFinset_eq_of_prime`：nthRootsFinset_eq_of_prime [DecidableEq R] (
+hp : p.Prime) : nthRootsFinset p (1 : R) = primitiveRoots p R union {1}
+· 使用引理 `Finset.union_singleton`：union_singleton (x : α) (s : Finset α) : s union
+ {x} = insert x s
+· 使用定理 `mem_primitiveRoots`：mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ in primi
+tiveRoots k R ↔ IsPrimitiveRoot ζ k
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mem_nthRootsFinset_iff_of_prime
-  given: (hp : p.Prime) {η : R}
-  proof: by
-  classical
-  simp [nthRootsFinset_eq_of_prime hp, mem_primitiveRoots hp.pos, or_comm]
-
-中文:
-定理 mem_nthRootsFinset_iff_of_prime
-  条件: (hp : p.素) {η : R}
-  证明: by
-  classical
-  simp [nthRootsFinset_eq_of_prime hp, mem_primitiveRoots hp.pos, or_comm]
-
-Depends on / 依赖: classical, hp.pos, mem_primitiveRoots, nthRootsFinset_eq_of_prime, or_comm
+--- 原说明 ---
+For `p` prime, an element of `R` is a `p`-th root of unity if and only if it is 
+either a
+primitive `p`-th root of unity or `1`.
 -/
 theorem mem_nthRootsFinset_iff_of_prime (hp : p.Prime) {η : R} :
-    η in nthRootsFinset p (1 : R) ↔ IsPrimitiveRoot η p ∨ η = 1 := by
+    η ∈ nthRootsFinset p (1 : R) ↔ IsPrimitiveRoot η p ∨ η = 1 := by
   classical
   simp [nthRootsFinset_eq_of_prime hp, mem_primitiveRoots hp.pos, or_comm]
 
-/--
-theorem `isPrimitiveRoot_of_mem_nthRootsFinset` / 定理 `isPrimitiveRoot_of_mem_nthRootsFinset`
+/-- A `p`-th root of unity that is not `1`, with `p` prime, satisfies `IsPrimitiveRoot η p`. -/
+/-
+**isPrimitiveRoot_of_mem_nthRootsFinset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPrimitiveRoot_of_mem_nthRootsFinset (hp : p.Prime) {η : R} (hη : η in nt
+hRootsFinset p (1 : R)) (hne1 : η != 1) : IsPrimitiveRoot η p
+参数：hp : p.Prime；hη : η in nthRootsFinset p (1 : R)；hne1 : η != 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nthRootsFinset_iff_of_prime`：mem_nthRootsFinset_iff_of_prime (hp : p
+.Prime) {η : R} : η in nthRootsFinset p (1 : R) ↔ IsPrimitiveRoot η p ∨ η = 1
 
-English:
-theorem isPrimitiveRoot_of_mem_nthRootsFinset
-  statement: (hp : p.Prime) {η : R}
-  proof: ((mem_nthRootsFinset_iff_of_prime hp).1 hη).resolve_right hne1
-
-中文:
-定理 isPrimitiveRoot_of_mem_nthRootsFinset
-  结论: (hp : p.素) {η : R}
-  证明: ((mem_nthRootsFinset_iff_of_prime hp).1 hη).resolve_right hne1
-
-Depends on / 依赖: mem_nthRootsFinset_iff_of_prime, resolve_right
+--- 原说明 ---
+A `p`-th root of unity that is not `1`, with `p` prime, satisfies `IsPrimitiveRo
+ot η p`.
 -/
 theorem isPrimitiveRoot_of_mem_nthRootsFinset (hp : p.Prime) {η : R}
-    (hη : η in nthRootsFinset p (1 : R)) (hne1 : η != 1) : IsPrimitiveRoot η p :=
+    (hη : η ∈ nthRootsFinset p (1 : R)) (hne1 : η ≠ 1) : IsPrimitiveRoot η p :=
   ((mem_nthRootsFinset_iff_of_prime hp).1 hη).resolve_right hne1
 
-/--
-theorem `mem_primitiveRoots_of_mem_nthRootsFinset` / 定理 `mem_primitiveRoots_of_mem_nthRootsFinset`
+/-- A `p`-th root of unity that is not `1`, with `p` prime, is a primitive `p`-th root of unity. -/
+/-
+**mem_primitiveRoots_of_mem_nthRootsFinset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_primitiveRoots_of_mem_nthRootsFinset (hp : p.Prime) {η : R} (hη : η in
+ nthRootsFinset p (1 : R)) (hne1 : η != 1) : η in primitiveRoots p R
+参数：hp : p.Prime；hη : η in nthRootsFinset p (1 : R)；hne1 : η != 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_primitiveRoots`：mem_primitiveRoots {ζ : R} (h0 : 0 < k) : ζ in primi
+tiveRoots k R ↔ IsPrimitiveRoot ζ k
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `isPrimitiveRoot_of_mem_nthRootsFinset`：isPrimitiveRoot_of_mem_nthRootsFi
+nset (hp : p.Prime) {η : R} (hη : η in nthRootsFinset p (1 : R)) (hne1 : η != 1)
+ : IsPrimitiveRoot η p
 
-English:
-theorem mem_primitiveRoots_of_mem_nthRootsFinset
-  statement: (hp : p.Prime) {η : R}
-  proof: (mem_primitiveRoots hp.pos).2 (isPrimitiveRoot_of_mem_nthRootsFinset hp hη hne1)
-
-中文:
-定理 mem_primitiveRoots_of_mem_nthRootsFinset
-  结论: (hp : p.素) {η : R}
-  证明: (mem_primitiveRoots hp.pos).2 (isPrimitiveRoot_of_mem_nthRootsFinset hp hη hne1)
-
-Depends on / 依赖: hp.pos, isPrimitiveRoot_of_mem_nthRootsFinset, mem_primitiveRoots
+--- 原说明 ---
+A `p`-th root of unity that is not `1`, with `p` prime, is a primitive `p`-th ro
+ot of unity.
 -/
 theorem mem_primitiveRoots_of_mem_nthRootsFinset (hp : p.Prime) {η : R}
-    (hη : η in nthRootsFinset p (1 : R)) (hne1 : η != 1) : η in primitiveRoots p R :=
+    (hη : η ∈ nthRootsFinset p (1 : R)) (hne1 : η ≠ 1) : η ∈ primitiveRoots p R :=
   (mem_primitiveRoots hp.pos).2 (isPrimitiveRoot_of_mem_nthRootsFinset hp hη hne1)
 
 end nthRootsFinsetPrime
 
 section cyclic
 
-/--
-lemma `IsCyclic.exists_apply_ne_one` / 引理 `IsCyclic.exists_apply_ne_one`
+/-- If `G` is cyclic of order `n` and `G'` contains a primitive `n`th root of unity,
+then for each `a : G` with `a ≠ 1` there is a homomorphism `φ : G →* G'` such that `φ a ≠ 1`. -/
+/-
+**IsCyclic.exists_apply_ne_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsCyclic.exists_apply_ne_one {G G' : Type*} [Group G] [IsCyclic G] [Finite
+ G] [CommGroup G'] (hG' : exists ζ : G', IsPrimitiveRoot ζ (Nat.card G)) ⦃a : G⦄
+ (ha : a != 1) : exists φ : G ->* G', φ a != 1
+参数：hG' : exists ζ : G', IsPrimitiveRoot ζ (Nat.card G)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclic.exists_generator`：IsCyclic.exists_generator [Group α] [IsCyclic
+ α] : exists g : α, forall x, x in zpowers g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPrimitiveRoot.eq_orderOf`：eq_orderOf (h : IsPrimitiveRoot ζ k) : k = o
+rderOf ζ
+· 使用定理 `orderOf_eq_card_of_forall_mem_zpowers`：orderOf_eq_card_of_forall_mem_zpo
+wers {g : α} (hx : forall x, x in zpowers g) : orderOf g = Nat.card α
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
+· 使用引理 `monoidHomOfForallMemZpowers_apply_gen`：monoidHomOfForallMemZpowers_apply
+_gen : monoidHomOfForallMemZpowers hg hg' g = g'
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Submonoid.mem_powers_iff`：mem_powers_iff (x z : M) : x in powers z ↔ exi
+sts n : Nat, z ^ n = x
+· 使用引理 `mem_powers_iff_mem_zpowers`：mem_powers_iff_mem_zpowers : y in powers x ↔
+ y in zpowers x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPrimitiveRoot.pow_eq_one_iff_dvd`：pow_eq_one_iff_dvd (h : IsPrimitiveR
+oot ζ k) (l : Nat) : ζ ^ l = 1 ↔ k ∣ l
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `pow_card_eq_one`：pow_card_eq_one : x ^ Fintype.card G = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
 
-English:
-lemma IsCyclic.exists_apply_ne_one
-  statement: {G G' : Type*} [Group G] [IsCyclic G] [Finite G]
-  proof: by
-  let inst : Fintype G := Fintype.ofFinite _
-  obtain ⟨ζ, hζ⟩ := hG'
-  -- pick a generator `g` of `G`
-  obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
-  have hζg : orderOf ζ ∣ orderOf g := by
-    rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_card]
-  -- use the homomorphism `φ` given by `g ↦ ζ`
-  let φ := monoidHomOfForallMemZpowers hg hζg
-  have hφg : IsPrimitiveRoot (φ g) (Nat.card G) := by
-    rwa [monoidHomOfForallMemZpowers_apply_gen hg hζg]
-  use φ
-  contrapose ha
-  specialize hg a
-  rw [← mem_powers_iff_mem_zpowers]; rw [Submonoid.mem_powers_iff] at hg
-  obtain ⟨k, hk⟩ := hg
-  rw [← hk]; rw [map_pow] at ha
-  obtain ⟨l, rfl⟩ := (hφg.pow_eq_one_iff_dvd k).mp ha
-  rw [← hk]; rw [pow_mul]; rw [Nat.card_eq_fintype_card]; rw [pow_card_eq_one]; rw [one_pow]
-
-中文:
-引理 是循环.存在_apply_ne_one
-  结论: {G G' : 类型} [群 G] [是循环 G] [有限 G]
-  证明: by
-  let inst : Fintype G := Fintype.ofFinite _
-  obtain ⟨ζ, hζ⟩ := hG'
-  -- pick a generator `g` of `G`
-  obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
-  have hζg : orderOf ζ ∣ orderOf g := by
-    rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_card]
-  -- use the homomorphism `φ` given by `g ↦ ζ`
-  let φ := monoidHomOfForallMemZpowers hg hζg
-  have hφg : IsPrimitiveRoot (φ g) (Nat.card G) := by
-    rwa [monoidHomOfForallMemZpowers_apply_gen hg hζg]
-  use φ
-  contrapose ha
-  specialize hg a
-  rw [← mem_powers_iff_mem_zpowers]; rw [Submonoid.mem_powers_iff] at hg
-  obtain ⟨k, hk⟩ := hg
-  rw [← hk]; rw [map_pow] at ha
-  obtain ⟨l, rfl⟩ := (hφg.pow_eq_one_iff_dvd k).mp ha
-  rw [← hk]; rw [pow_mul]; rw [Nat.card_eq_fintype_card]; rw [pow_card_eq_one]; rw [one_pow]
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, ofFinite
+--- 原说明 ---
+If `G` is cyclic of order `n` and `G'` contains a primitive `n`th root of unity,
+then for each `a : G` with `a ≠ 1` there is a homomorphism `φ : G →* G'` such th
+at `φ a ≠ 1`.
 -/
 lemma IsCyclic.exists_apply_ne_one {G G' : Type*} [Group G] [IsCyclic G] [Finite G]
-    [CommGroup G'] (hG' : exists ζ : G', IsPrimitiveRoot ζ (Nat.card G)) ⦃a : G⦄ (ha : a != 1) :
-    exists φ : G ->* G', φ a != 1 := by
+    [CommGroup G'] (hG' : ∃ ζ : G', IsPrimitiveRoot ζ (Nat.card G)) ⦃a : G⦄ (ha : a ≠ 1) :
+    ∃ φ : G →* G', φ a ≠ 1 := by
   let inst : Fintype G := Fintype.ofFinite _
   obtain ⟨ζ, hζ⟩ := hG'
   -- pick a generator `g` of `G`
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
   have hζg : orderOf ζ ∣ orderOf g := by
-    rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_card]
+    rw [← hζ.eq_orderOf, orderOf_eq_card_of_forall_mem_zpowers hg, Nat.card_eq_fintype_card]
   -- use the homomorphism `φ` given by `g ↦ ζ`
   let φ := monoidHomOfForallMemZpowers hg hζg
   have hφg : IsPrimitiveRoot (φ g) (Nat.card G) := by
@@ -3109,47 +2929,59 @@ lemma IsCyclic.exists_apply_ne_one {G G' : Type*} [Group G] [IsCyclic G] [Finite
   use φ
   contrapose ha
   specialize hg a
-  rw [← mem_powers_iff_mem_zpowers]; rw [Submonoid.mem_powers_iff] at hg
+  rw [← mem_powers_iff_mem_zpowers, Submonoid.mem_powers_iff] at hg
   obtain ⟨k, hk⟩ := hg
-  rw [← hk]; rw [map_pow] at ha
+  rw [← hk, map_pow] at ha
   obtain ⟨l, rfl⟩ := (hφg.pow_eq_one_iff_dvd k).mp ha
-  rw [← hk]; rw [pow_mul]; rw [Nat.card_eq_fintype_card]; rw [pow_card_eq_one]; rw [one_pow]
+  rw [← hk, pow_mul, Nat.card_eq_fintype_card, pow_card_eq_one, one_pow]
 
-/--
-lemma `ZMod.exists_monoidHom_apply_ne_one` / 引理 `ZMod.exists_monoidHom_apply_ne_one`
+/-- If `M` is a commutative group that contains a primitive `n`th root of unity
+and `a : ZMod n` is nonzero, then there exists a group homomorphism `φ` from the
+additive group `ZMod n` to the multiplicative group `Mˣ` such that `φ a ≠ 1`. -/
+/-
+**ZMod.exists_monoidHom_apply_ne_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ZMod.exists_monoidHom_apply_ne_one {M : Type*} [CommMonoid M] {n : Nat} [N
+eZero n] (hG : exists ζ : M, IsPrimitiveRoot ζ n) {a : ZMod n} (ha : a != 0) : e
+xists φ : Multiplicative (ZMod n) ->* Mˣ, φ (Multiplicative.ofAdd a) != 1
+参数：hG : exists ζ : M, IsPrimitiveRoot ζ n；ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.card_multiplicative`：∀ (α : Type u_1) [inst : Fintype α], Fintyp
+e.card (Multiplicative α) = Fintype.card α
+· 使用定理 `ZMod.card`：card (n : Nat) [Fintype (ZMod n)] : Fintype.card (ZMod n) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `IsCyclic.exists_apply_ne_one`：IsCyclic.exists_apply_ne_one {G G' : Type*
+} [Group G] [IsCyclic G] [Finite G] [CommGroup G'] (hG' : exists ζ : G', IsPrimi
+tiveRoot ζ (Nat.ca…
+· 使用定理 `instFiniteMultiplicative`：∀ {α : Type u} [Finite α], Finite (Multiplicat
+ive α)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPrimitiveRoot.coe_units_iff`：coe_units_iff {ζ : Mˣ} : IsPrimitiveRoot 
+(ζ : M) k ↔ IsPrimitiveRoot ζ k
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 
-English:
-lemma ZMod.exists_monoidHom_apply_ne_one
-  statement: {M : Type*} [CommMonoid M] {n : Nat} [NeZero n]
-  proof: by
-  obtain ⟨ζ, hζ⟩ := hG
-  have hc : n = Nat.card (Multiplicative (ZMod n)) := by
-    simp only [Nat.card_eq_fintype_card, Fintype.card_multiplicative, card]
-  exact IsCyclic.exists_apply_ne_one
-(hc ▸ ⟨hζ.toRootsOfUnity.val, IsPrimitiveRoot.coe_units_iff.mp hζ⟩)
-    by simp only [ne_eq, ofAdd_eq_one, ha, not_false_eq_true]
-
-中文:
-引理 ZMod.存在_monoidHom_apply_ne_one
-  结论: {M : 类型} [交换幺半群 M] {n : 自然数} [NeZero n]
-  证明: by
-  obtain ⟨ζ, hζ⟩ := hG
-  have hc : n = Nat.card (Multiplicative (ZMod n)) := by
-    simp only [Nat.card_eq_fintype_card, Fintype.card_multiplicative, card]
-  exact IsCyclic.exists_apply_ne_one
-(hc ▸ ⟨hζ.toRootsOfUnity.val, IsPrimitiveRoot.coe_units_iff.mp hζ⟩)
-    by simp only [ne_eq, ofAdd_eq_one, ha, not_false_eq_true]
-
-Depends on / 依赖: Fintype, Fintype.card_multiplicative, IsCyclic, IsCyclic.exists_apply_ne_one, IsPrimitiveRoot, IsPrimitiveRoot.coe_units_iff.mp, Multiplicative, Nat.card, Nat.card_eq_fintype_card, card_eq_fintype_card, card_multiplicative, coe_units_iff, exists_apply_ne_one, ne_eq, not_false_eq_true, ofAdd_eq_one, toRootsOfUnity, toRootsOfUnity.val
+--- 原说明 ---
+If `M` is a commutative group that contains a primitive `n`th root of unity
+and `a : ZMod n` is nonzero, then there exists a group homomorphism `φ` from the
+additive group `ZMod n` to the multiplicative group `Mˣ` such that `φ a ≠ 1`.
 -/
-lemma ZMod.exists_monoidHom_apply_ne_one {M : Type*} [CommMonoid M] {n : Nat} [NeZero n]
-    (hG : exists ζ : M, IsPrimitiveRoot ζ n) {a : ZMod n} (ha : a != 0) :
-    exists φ : Multiplicative (ZMod n) ->* Mˣ, φ (Multiplicative.ofAdd a) != 1 := by
+lemma ZMod.exists_monoidHom_apply_ne_one {M : Type*} [CommMonoid M] {n : ℕ} [NeZero n]
+    (hG : ∃ ζ : M, IsPrimitiveRoot ζ n) {a : ZMod n} (ha : a ≠ 0) :
+    ∃ φ : Multiplicative (ZMod n) →* Mˣ, φ (Multiplicative.ofAdd a) ≠ 1 := by
   obtain ⟨ζ, hζ⟩ := hG
   have hc : n = Nat.card (Multiplicative (ZMod n)) := by
     simp only [Nat.card_eq_fintype_card, Fintype.card_multiplicative, card]
   exact IsCyclic.exists_apply_ne_one
-(hc ▸ ⟨hζ.toRootsOfUnity.val, IsPrimitiveRoot.coe_units_iff.mp hζ⟩)
+    (hc ▸ ⟨hζ.toRootsOfUnity.val, IsPrimitiveRoot.coe_units_iff.mp hζ⟩) <|
     by simp only [ne_eq, ofAdd_eq_one, ha, not_false_eq_true]
 
 end cyclic
+

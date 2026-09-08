@@ -25,47 +25,20 @@ namespace Lean
 open Elab Meta
 
 /--
-Definition of `toModifiers` / `toModifiers` 的定义
+Return the modifiers of declaration `nm` with (optional) docstring `newDoc`.
+Currently, recursive or partial definitions are not supported, and no attributes are provided.
+-/
+/-
+**Lean.toModifiers** 是 Mathlib 中的一个定义，位于命名空间 `Lean`。
+形式化陈述：toModifiers (nm : Name) (newDoc : Option (TSyntax `Lean.Parser.Command.doc
+Comment)
+参数：nm : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toModifiers
-  signature: (nm : Name) (newDoc : Option (TSyntax `Lean.Parser.Command.docComment) := none)
-  body: do
-  let env ← getEnv
-  let d ← getConstInfo nm
-  let mods : Modifiers :=
-  { docString? := newDoc
-    visibility :=
-    if isPrivateName nm then
-      Visibility.private
-    else
-      Visibility.regular
-    isProtected := isProtected env nm
-    computeKind := if (env.find? <| nm.mkStr "_cstage1").isSome then .regular else .noncomputable
-    recKind := RecKind.default -- nonrec only matters for name resolution, so is irrelevant (?)
-    isUnsafe := d.isUnsafe
-    attrs := #[] }
-  return mods
-
-中文:
-定义 toModifiers
-  签名: (nm : Name) (newDoc : 选项类型 (TSyntax `Lean.Parser.Command.docComment) := none)
-  定义体: do
-  let env ← getEnv
-  let d ← getConstInfo nm
-  let mods : Modifiers :=
-  { docString? := newDoc
-    visibility :=
-    if isPrivateName nm then
-      Visibility.private
-    else
-      Visibility.regular
-    isProtected := isProtected env nm
-    computeKind := if (env.find? <| nm.mkStr "_cstage1").isSome then .regular else .noncomputable
-    recKind := RecKind.default -- nonrec only matters for name resolution, so is irrelevant (?)
-    isUnsafe := d.isUnsafe
-    attrs := #[] }
-  return mods
+--- 原说明 ---
+Return the modifiers of declaration `nm` with (optional) docstring `newDoc`.
+Currently, recursive or partial definitions are not supported, and no attributes
+ are provided.
 -/
 def toModifiers (nm : Name) (newDoc : Option (TSyntax `Lean.Parser.Command.docComment) := none) :
     CoreM Modifiers := do
@@ -86,43 +59,25 @@ def toModifiers (nm : Name) (newDoc : Option (TSyntax `Lean.Parser.Command.docCo
   return mods
 
 /--
-Definition of `toPreDefinition` / `toPreDefinition` 的定义
+Make a PreDefinition taking some metadata from declaration `nm`.
+You can provide a new type, value and (optional) docstring, but the remaining information is taken
+from `nm`.
+Currently only implemented for definitions and theorems. Also see docstring of `toModifiers`
+-/
+/-
+**Lean.toPreDefinition** 是 Mathlib 中的一个定义，位于命名空间 `Lean`。
+形式化陈述：toPreDefinition (nm newNm : Name) (newType newValue : Expr) (newDoc : Opti
+on (TSyntax `Lean.Parser.Command.docComment)
+参数：nm newNm : Name；newType newValue : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPreDefinition
-  signature: (nm newNm : Name) (newType newValue : Expr)
-  body: do
-  let d ← getConstInfo nm
-  let mods ← toModifiers nm newDoc
-  let predef : PreDefinition :=
-  { ref := Syntax.missing
-    binders := mkNullNode #[]
-    kind := if d.isDef then DefKind.def else DefKind.theorem
-    levelParams := d.levelParams
-    modifiers := mods
-    declName := newNm
-    type := newType
-    value := newValue
-    termination := .none }
-  return predef
-
-中文:
-定义 toPreDefinition
-  签名: (nm newNm : Name) (newType newValue : Expr)
-  定义体: do
-  let d ← getConstInfo nm
-  let mods ← toModifiers nm newDoc
-  let predef : PreDefinition :=
-  { ref := Syntax.missing
-    binders := mkNullNode #[]
-    kind := if d.isDef then DefKind.def else DefKind.theorem
-    levelParams := d.levelParams
-    modifiers := mods
-    declName := newNm
-    type := newType
-    value := newValue
-    termination := .none }
-  return predef
+--- 原说明 ---
+Make a PreDefinition taking some metadata from declaration `nm`.
+You can provide a new type, value and (optional) docstring, but the remaining in
+formation is taken
+from `nm`.
+Currently only implemented for definitions and theorems. Also see docstring of `
+toModifiers`
 -/
 def toPreDefinition (nm newNm : Name) (newType newValue : Expr)
     (newDoc : Option (TSyntax `Lean.Parser.Command.docComment) := none) :
@@ -141,52 +96,30 @@ def toPreDefinition (nm newNm : Name) (newType newValue : Expr)
     termination := .none }
   return predef
 
-/--
-Definition of `setProtected` / `setProtected` 的定义
+/-- Make `nm` protected. -/
+/-
+**Lean.setProtected** 是 Mathlib 中的一个定义，位于命名空间 `Lean`。
+形式化陈述：setProtected {m : Type -> Type} [MonadEnv m] (nm : Name) : m Unit
+参数：nm : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setProtected
-  signature: {m : Type -> Type} [MonadEnv m] (nm : Name)
-  body: modifyEnv (addProtected · nm)
-
-中文:
-定义 setProtected
-  签名: {m : 类型 -> 类型} [MonadEnv m] (nm : Name)
-  定义体: modifyEnv (addProtected · nm)
-
-Depends on / 依赖: BoundedLENhdsClass, OrderTop, OrderTop.to_BoundedLENhdsClass, addProtected, modifyEnv, to_BoundedLENhdsClass
+--- 原说明 ---
+Make `nm` protected.
 -/
-def setProtected {m : Type -> Type} [MonadEnv m] (nm : Name) : m Unit :=
+def setProtected {m : Type → Type} [MonadEnv m] (nm : Name) : m Unit :=
   modifyEnv (addProtected · nm)
 
-/--
-Definition of `MVarId.rintroWithPats` / `MVarId.rintroWithPats` 的定义
+/-- Introduce variables, using rintro patterns from a specified list. -/
+/-
+**Lean.MVarId.rintroWithPats** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MVarId`。
+形式化陈述：MVarId → List (TSyntax `rintroPat) → optParam (Option ℕ) none → MetaM (Lis
+t MVarId × List (TSyntax `rintroPat))
+参数：TSyntax `rintroPat；Option ℕ；List MVarId × List (TSyntax `rintroPat)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MVarId.rintroWithPats
-  signature: (g : MVarId) (patterns : List (TSyntax `rintroPat))
-  body: do
-  let n ← numIntros?.getDM (return getIntrosSize (← instantiateMVars (← g.getType)))
-  if n == 0 then
-    return ([g], patterns)
-  let (pats, remaining) := patterns.splitAt n
-  let pats := pats.toArray
-  let pats := (n - pats.size).repeat (·.push (Unhygienic.run `(rintroPat| _))) pats
-  return (← RCases.rintro pats none g |>.run', remaining)
-
-中文:
-定义 MVarId.rintroWithPats
-  签名: (g : MVarId) (patterns : 列表 (TSyntax `rintroPat))
-  定义体: do
-  let n ← numIntros?.getDM (return getIntrosSize (← instantiateMVars (← g.getType)))
-  if n == 0 then
-    return ([g], patterns)
-  let (pats, remaining) := patterns.splitAt n
-  let pats := pats.toArray
-  let pats := (n - pats.size).repeat (·.push (Unhygienic.run `(rintroPat| _))) pats
-  return (← RCases.rintro pats none g |>.run', remaining)
-
-Depends on / 依赖: BoundedGENhdsClass, MVarId, OrderBot, OrderBot.to_BoundedGENhdsClass, TSyntax, rintroPat, to_BoundedGENhdsClass
+--- 原说明 ---
+Introduce variables, using rintro patterns from a specified list.
 -/
 def MVarId.rintroWithPats (g : MVarId) (patterns : List (TSyntax `rintroPat))
     (numIntros? : Option Nat := none) : MetaM (List MVarId × List (TSyntax `rintroPat)) := do
@@ -200,56 +133,17 @@ def MVarId.rintroWithPats (g : MVarId) (patterns : List (TSyntax `rintroPat))
 
 /-- Introduce variables, giving them names from a specified list. -/
 @[deprecated MVarId.rintroWithPats (since := "2026-04-17")]
-/--
-Definition of `MVarId.introsWithBinderIdents` / `MVarId.introsWithBinderIdents` 的定义
+/-
+**Lean.MVarId.introsWithBinderIdents** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MVarId`。
+形式化陈述：MVarId →   List (TSyntax `Lean.binderIdent) →     optParam (Option ℕ) none
+ → MetaM (List (TSyntax `Lean.binderIdent) × Array FVarId × MVarId)
+参数：TSyntax `Lean.binderIdent；Option ℕ；List (TSyntax `Lean.binderIdent) × Array F
+VarId × MVarId。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition MVarId.introsWithBinderIdents
-  body: do
-  let type ← g.getType
-  let type ← Lean.instantiateMVars type
-  let n := getIntrosSize type
-  let n := match maxIntros? with | none => n | some maxIntros => min n maxIntros
-  if n == 0 then
-    return (ids, #[], g)
-  let mut ids := ids
-  let mut names := #[]
-  for _ in [0:n] do
-    names := names.push (ids.headD (Unhygienic.run `(binderIdent| _)))
-    ids := ids.tail
-let (xs, g) ← g.introN n names.toList.map fun stx =>
-    match stx.raw with
-    | `(binderIdent| $n:ident) => n.getId
-    | _ => `_
-  g.withContext do
-    for n in names, fvar in xs do
-      (Expr.fvar fvar).addLocalVarInfoForBinderIdent n
-  return (ids, xs, g)
-
-中文:
-定义 MVarId.introsWithBinderIdents
-  定义体: do
-  let type ← g.getType
-  let type ← Lean.instantiateMVars type
-  let n := getIntrosSize type
-  let n := match maxIntros? with | none => n | some maxIntros => min n maxIntros
-  if n == 0 then
-    return (ids, #[], g)
-  let mut ids := ids
-  let mut names := #[]
-  for _ in [0:n] do
-    names := names.push (ids.headD (Unhygienic.run `(binderIdent| _)))
-    ids := ids.tail
-let (xs, g) ← g.introN n names.toList.map fun stx =>
-    match stx.raw with
-    | `(binderIdent| $n:ident) => n.getId
-    | _ => `_
-  g.withContext do
-    for n in names, fvar in xs do
-      (Expr.fvar fvar).addLocalVarInfoForBinderIdent n
-  return (ids, xs, g)
-
-Depends on / 依赖: BoundedLENhdsClass, BoundedLENhdsClass.of_closedIciTopology, LinearOrder, of_closedIciTopology
+--- 原说明 ---
+Introduce variables, giving them names from a specified list.
 -/
 def MVarId.introsWithBinderIdents
     (g : MVarId) (ids : List (TSyntax ``binderIdent)) (maxIntros? : Option Nat := none) :
@@ -265,7 +159,7 @@ def MVarId.introsWithBinderIdents
   for _ in [0:n] do
     names := names.push (ids.headD (Unhygienic.run `(binderIdent| _)))
     ids := ids.tail
-let (xs, g) ← g.introN n names.toList.map fun stx =>
+  let (xs, g) ← g.introN n <| names.toList.map fun stx =>
     match stx.raw with
     | `(binderIdent| $n:ident) => n.getId
     | _ => `_
@@ -285,67 +179,60 @@ syntax usingArg := " using " term
 
 open Lean Parser.Tactic
 
-/--
-Definition of `getSimpArgs` / `getSimpArgs` 的定义
+/-- Extract the arguments from a `simpArgs` syntax as an array of syntaxes -/
+/-
+**Mathlib.Tactic.getSimpArgs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Syntax → Elab.Tactic.TacticM (Array Syntax)
+参数：Array Syntax。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getSimpArgs
-  signature: : Syntax -> TacticM (Array Syntax)
-
-中文:
-定义 getSimpArgs
-  签名: : Syntax -> TacticM (数组 Syntax)
-
-Depends on / 依赖: BoundedGENhdsClass, BoundedGENhdsClass.of_closedIicTopology, LinearOrder, of_closedIicTopology
+--- 原说明 ---
+Extract the arguments from a `simpArgs` syntax as an array of syntaxes
 -/
-def getSimpArgs : Syntax -> TacticM (Array Syntax)
+def getSimpArgs : Syntax → TacticM (Array Syntax)
   | `(simpArgs| [$args,*]) => pure args.getElems
-  | _ => Elab.throwUnsupportedSyntax
+  | _                      => Elab.throwUnsupportedSyntax
 
-/--
-Definition of `getDSimpArgs` / `getDSimpArgs` 的定义
+/-- Extract the arguments from a `dsimpArgs` syntax as an array of syntaxes -/
+/-
+**Mathlib.Tactic.getDSimpArgs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Syntax → Elab.Tactic.TacticM (Array Syntax)
+参数：Array Syntax。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getDSimpArgs
-  signature: : Syntax -> TacticM (Array Syntax)
-
-中文:
-定义 getDSimpArgs
-  签名: : Syntax -> TacticM (数组 Syntax)
+--- 原说明 ---
+Extract the arguments from a `dsimpArgs` syntax as an array of syntaxes
 -/
-def getDSimpArgs : Syntax -> TacticM (Array Syntax)
+def getDSimpArgs : Syntax → TacticM (Array Syntax)
   | `(dsimpArgs| [$args,*]) => pure args.getElems
-  | _ => Elab.throwUnsupportedSyntax
+  | _                       => Elab.throwUnsupportedSyntax
 
-/--
-Definition of `getWithArgs` / `getWithArgs` 的定义
+/-- Extract the arguments from a `withArgs` syntax as an array of syntaxes -/
+/-
+**Mathlib.Tactic.getWithArgs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Syntax → Elab.Tactic.TacticM (Array Syntax)
+参数：Array Syntax。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getWithArgs
-  signature: : Syntax -> TacticM (Array Syntax)
-
-中文:
-定义 getWithArgs
-  签名: : Syntax -> TacticM (数组 Syntax)
+--- 原说明 ---
+Extract the arguments from a `withArgs` syntax as an array of syntaxes
 -/
-def getWithArgs : Syntax -> TacticM (Array Syntax)
+def getWithArgs : Syntax → TacticM (Array Syntax)
   | `(withArgs| with $args*) => pure args
-  | _ => Elab.throwUnsupportedSyntax
+  | _                        => Elab.throwUnsupportedSyntax
 
-/--
-Definition of `getUsingArg` / `getUsingArg` 的定义
+/-- Extract the argument from a `usingArg` syntax as a syntax term -/
+/-
+**Mathlib.Tactic.getUsingArg** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Syntax → Elab.Tactic.TacticM Syntax
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getUsingArg
-  signature: : Syntax -> TacticM Syntax
-
-中文:
-定义 getUsingArg
-  签名: : Syntax -> TacticM Syntax
+--- 原说明 ---
+Extract the argument from a `usingArg` syntax as a syntax term
 -/
-def getUsingArg : Syntax -> TacticM Syntax
+def getUsingArg : Syntax → TacticM Syntax
   | `(usingArg| using $e) => pure e
-  | _ => Elab.throwUnsupportedSyntax
+  | _                     => Elab.throwUnsupportedSyntax
 
 /--
 `repeat1 tac` applies `tac` to main goal at least once. If the application succeeds,
@@ -357,50 +244,35 @@ end Mathlib.Tactic
 
 namespace Lean.Elab.Tactic
 
-/--
-Definition of `filterOutImplementationDetails` / `filterOutImplementationDetails` 的定义
+/-- Given a local context and an array of `FVarIds` assumed to be in that local context, remove all
+implementation details. -/
+/-
+**Lean.Elab.Tactic.filterOutImplementationDetails** 是 Mathlib 中的一个定义，位于命名空间 `Lea
+n.Elab.Tactic`。
+形式化陈述：filterOutImplementationDetails (lctx : LocalContext) (fvarIds : Array FVar
+Id) : Array FVarId
+参数：lctx : LocalContext；fvarIds : Array FVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition filterOutImplementationDetails
-  signature: (lctx : LocalContext) (fvarIds : Array FVarId)
-  body: fvarIds.filter (fun fvar => ! (lctx.fvarIdToDecl.find! fvar).isImplementationDetail)
-
-中文:
-定义 filterOutImplementationDetails
-  签名: (lctx : LocalContext) (fvarIds : 数组 FVarId)
-  定义体: fvarIds.filter (fun fvar => ! (lctx.fvarIdToDecl.find! fvar).isImplementationDetail)
-
-Depends on / 依赖: filter, fvarIdToDecl, fvarIds, fvarIds.filter, isImplementationDetail, lctx.fvarIdToDecl.find
+--- 原说明 ---
+Given a local context and an array of `FVarIds` assumed to be in that local cont
+ext, remove all
+implementation details.
 -/
 def filterOutImplementationDetails (lctx : LocalContext) (fvarIds : Array FVarId) : Array FVarId :=
   fvarIds.filter (fun fvar => ! (lctx.fvarIdToDecl.find! fvar).isImplementationDetail)
 
-/--
-Definition of `getFVarIdAt` / `getFVarIdAt` 的定义
+/-- Elaborate syntax for an `FVarId` in the local context of the given goal. -/
+/-
+**Lean.Elab.Tactic.getFVarIdAt** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：getFVarIdAt (goal : MVarId) (id : Syntax) : TacticM FVarId
+参数：goal : MVarId；id : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getFVarIdAt
-  signature: (goal : MVarId) (id : Syntax)
-  body: withRef id do
-  -- use apply-like elaboration to suppress insertion of implicit arguments
-  let e ← goal.withContext do
-    elabTermForApply id (mayPostpone := false)
-  match e with
-  | Expr.fvar fvarId => return fvarId
-  | _ => throwError "unexpected term '{e}'; expected single reference to variable"
-
-中文:
-定义 getFVarIdAt
-  签名: (goal : MVarId) (id : Syntax)
-  定义体: withRef id do
-  -- use apply-like elaboration to suppress insertion of implicit arguments
-  let e ← goal.withContext do
-    elabTermForApply id (mayPostpone := false)
-  match e with
-  | Expr.fvar fvarId => return fvarId
-  | _ => throwError "unexpected term '{e}'; expected single reference to variable"
-
-Depends on / 依赖: withRef
+--- 原说明 ---
+Elaborate syntax for an `FVarId` in the local context of the given goal.
 -/
 def getFVarIdAt (goal : MVarId) (id : Syntax) : TacticM FVarId := withRef id do
   -- use apply-like elaboration to suppress insertion of implicit arguments
@@ -408,36 +280,31 @@ def getFVarIdAt (goal : MVarId) (id : Syntax) : TacticM FVarId := withRef id do
     elabTermForApply id (mayPostpone := false)
   match e with
   | Expr.fvar fvarId => return fvarId
-  | _ => throwError "unexpected term '{e}'; expected single reference to variable"
+  | _                => throwError "unexpected term '{e}'; expected single reference to variable"
 
-/--
-Definition of `getFVarIdsAt` / `getFVarIdsAt` 的定义
+/-- Get the array of `FVarId`s in the local context of the given `goal`.
 
-English:
-definition getFVarIdsAt
-  signature: (goal : MVarId) (ids : Option (Array Syntax) := none)
-  body: goal.withContext do
-    let lctx := (← goal.getDecl).lctx
-    let fvarIds ← match ids with
-    | none => pure lctx.getFVarIds
-| some ids => ids.mapM getFVarIdAt goal
-    if includeImplementationDetails then
-      return fvarIds
-    else
-      return filterOutImplementationDetails lctx fvarIds
+If `ids` is specified, elaborate them in the local context of the given goal to obtain the array of
+`FVarId`s.
 
-中文:
-定义 getFVarIdsAt
-  签名: (goal : MVarId) (ids : 选项类型 (数组 Syntax) := none)
-  定义体: goal.withContext do
-    let lctx := (← goal.getDecl).lctx
-    let fvarIds ← match ids with
-    | none => pure lctx.getFVarIds
-| some ids => ids.mapM getFVarIdAt goal
-    if includeImplementationDetails then
-      return fvarIds
-    else
-      return filterOutImplementationDetails lctx fvarIds
+If `includeImplementationDetails` is `false` (the default), we filter out implementation details
+(`implDecl`s and `auxDecl`s) from the resulting list of `FVarId`s. -/
+/-
+**Lean.Elab.Tactic.getFVarIdsAt** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：getFVarIdsAt (goal : MVarId) (ids : Option (Array Syntax)
+参数：goal : MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Get the array of `FVarId`s in the local context of the given `goal`.
+
+If `ids` is specified, elaborate them in the local context of the given goal to 
+obtain the array of
+`FVarId`s.
+
+If `includeImplementationDetails` is `false` (the default), we filter out implem
+entation details
+(`implDecl`s and `auxDecl`s) from the resulting list of `FVarId`s.
 -/
 def getFVarIdsAt (goal : MVarId) (ids : Option (Array Syntax) := none)
     (includeImplementationDetails : Bool := false) : TacticM (Array FVarId) :=
@@ -445,54 +312,32 @@ def getFVarIdsAt (goal : MVarId) (ids : Option (Array Syntax) := none)
     let lctx := (← goal.getDecl).lctx
     let fvarIds ← match ids with
     | none => pure lctx.getFVarIds
-| some ids => ids.mapM getFVarIdAt goal
+    | some ids => ids.mapM <| getFVarIdAt goal
     if includeImplementationDetails then
       return fvarIds
     else
       return filterOutImplementationDetails lctx fvarIds
 
 /--
-Definition of `allGoals` / `allGoals` 的定义
+Run a tactic on all goals, and always succeeds.
 
-English:
-definition allGoals
-  signature: (tac : TacticM Unit)
-  body: do
-  let mvarIds ← getGoals
-  let mut mvarIdsNew := #[]
-  for mvarId in mvarIds do
-    unless (← mvarId.isAssigned) do
-      setGoals [mvarId]
-      try
-        tac
-        mvarIdsNew := mvarIdsNew ++ (← getUnsolvedGoals)
-      catch ex =>
-        if (← read).recover then
-          logException ex
-          mvarIdsNew := mvarIdsNew.push mvarId
-        else
-          throw ex
-  setGoals mvarIdsNew.toList
+(This is parallel to `Lean.Elab.Tactic.evalAllGoals` in core,
+which takes a `Syntax` rather than `TacticM Unit`.
+This function could be moved to core and `evalAllGoals` refactored to use it.)
+-/
+/-
+**Lean.Elab.Tactic.allGoals** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：allGoals (tac : TacticM Unit) : TacticM Unit
+参数：tac : TacticM Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 allGoals
-  签名: (tac : TacticM 单元)
-  定义体: do
-  let mvarIds ← getGoals
-  let mut mvarIdsNew := #[]
-  for mvarId in mvarIds do
-    unless (← mvarId.isAssigned) do
-      setGoals [mvarId]
-      try
-        tac
-        mvarIdsNew := mvarIdsNew ++ (← getUnsolvedGoals)
-      catch ex =>
-        if (← read).recover then
-          logException ex
-          mvarIdsNew := mvarIdsNew.push mvarId
-        else
-          throw ex
-  setGoals mvarIdsNew.toList
+--- 原说明 ---
+Run a tactic on all goals, and always succeeds.
+
+(This is parallel to `Lean.Elab.Tactic.evalAllGoals` in core,
+which takes a `Syntax` rather than `TacticM Unit`.
+This function could be moved to core and `evalAllGoals` refactored to use it.)
 -/
 def allGoals (tac : TacticM Unit) : TacticM Unit := do
   let mvarIds ← getGoals
@@ -511,117 +356,111 @@ def allGoals (tac : TacticM Unit) : TacticM Unit := do
           throw ex
   setGoals mvarIdsNew.toList
 
-/--
-Definition of `andThenOnSubgoals` / `andThenOnSubgoals` 的定义
+/-- Simulates the `<;>` tactic combinator.
+First runs `tac1` and then runs `tac2` on all newly-generated subgoals.
+-/
+/-
+**Lean.Elab.Tactic.andThenOnSubgoals** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic
+`。
+形式化陈述：andThenOnSubgoals (tac1 : TacticM Unit) (tac2 : TacticM Unit) : TacticM Un
+it
+参数：tac1 : TacticM Unit；tac2 : TacticM Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition andThenOnSubgoals
-  signature: (tac1 : TacticM Unit) (tac2 : TacticM Unit)
-  body: focus do tac1; allGoals tac2
-
-universe u
-
-中文:
-定义 andThenOnSubgoals
-  签名: (tac1 : TacticM 单元) (tac2 : TacticM 单元)
-  定义体: focus do tac1; allGoals tac2
-
-universe u
-
-Depends on / 依赖: allGoals
+--- 原说明 ---
+Simulates the `<;>` tactic combinator.
+First runs `tac1` and then runs `tac2` on all newly-generated subgoals.
 -/
 def andThenOnSubgoals (tac1 : TacticM Unit) (tac2 : TacticM Unit) : TacticM Unit :=
   focus do tac1; allGoals tac2
 
 universe u
-variable {m : Type -> Type u} [Monad m] [MonadExcept Exception m]
+variable {m : Type → Type u} [Monad m] [MonadExcept Exception m]
 
-/--
-Definition of `iterateAtMost` / `iterateAtMost` 的定义
+/-- Repeats a tactic at most `n` times, stopping sooner if the
+tactic fails. Always succeeds. -/
+/-
+**Lean.Elab.Tactic.iterateAtMost** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：{m : Type → Type u} → [Monad m] → [MonadExcept Exception m] → ℕ → m Unit →
+ m Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterateAtMost
-  signature: : Nat -> m Unit -> m Unit
-
-中文:
-定义 iterateAtMost
-  签名: : 自然数 -> m 单元 -> m 单元
+--- 原说明 ---
+Repeats a tactic at most `n` times, stopping sooner if the
+tactic fails. Always succeeds.
 -/
-def iterateAtMost : Nat -> m Unit -> m Unit
+def iterateAtMost : Nat → m Unit → m Unit
   | 0, _ => pure ()
   | n + 1, tac => try tac; iterateAtMost n tac catch _ => pure ()
 
-/--
-Definition of `iterateExactly'` / `iterateExactly'` 的定义
-
-English:
-definition iterateExactly'
-  signature: : Nat -> m Unit -> m Unit
-
-中文:
-定义 iterateExactly'
-  签名: : 自然数 -> m 单元 -> m 单元
+/-- `iterateExactly' n t` executes `t` `n` times. If any iteration fails, the whole tactic fails.
 -/
-def iterateExactly' : Nat -> m Unit -> m Unit
+/-
+**Lean.Elab.Tactic.iterateExactly'** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：{m : Type → Type u} → [Monad m] → ℕ → m Unit → m Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`iterateExactly' n t` executes `t` `n` times. If any iteration fails, the whole 
+tactic fails.
+-/
+def iterateExactly' : Nat → m Unit → m Unit
   | 0, _ => pure ()
   | n + 1, tac => tac *> iterateExactly' n tac
 
 /--
-Definition of `iterateRange` / `iterateRange` 的定义
-
-English:
-definition iterateRange
-  signature: : Nat -> Nat -> m Unit -> m Unit
-
-中文:
-定义 iterateRange
-  签名: : 自然数 -> 自然数 -> m 单元 -> m 单元
-
-Depends on / 依赖: iterateUntilFailure
+`iterateRange m n t`: Repeat the given tactic at least `m` times and
+at most `n` times or until `t` fails. Fails if `t` does not run at least `m` times.
 -/
-def iterateRange : Nat -> Nat -> m Unit -> m Unit
-  | 0, 0, _ => pure ()
+/-
+**Lean.Elab.Tactic.iterateRange** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：iterateRange : Nat -> Nat -> m Unit -> m Unit | 0, 0, _ => pure () | 0, b,
+ tac => iterateAtMost b tac | (a+1), n, tac => do tac; iterateRange a (n-1) tac 
+ /-- Repeats a tactic until it fails. Always succeeds. -/ partial def iterateUnt
+ilFailure (tac : m Unit) : m Unit
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`iterateRange m n t`: Repeat the given tactic at least `m` times and
+at most `n` times or until `t` fails. Fails if `t` does not run at least `m` tim
+es.
+-/
+def iterateRange : Nat → Nat → m Unit → m Unit
+  | 0, 0, _   => pure ()
   | 0, b, tac => iterateAtMost b tac
   | (a+1), n, tac => do tac; iterateRange a (n-1) tac
 
-/--
-Definition of `iterateUntilFailure` / `iterateUntilFailure` 的定义
+/-- Repeats a tactic until it fails. Always succeeds. -/
+/-
+**Lean.Elab.Tactic.iterateUntilFailure** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean.Elab.T
+actic`。
+形式化陈述：{m : Type → Type u} → [Monad m] → [MonadExcept Exception m] → m Unit → m U
+nit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterateUntilFailure
-  signature: (tac : m Unit)
-  body: try tac; iterateUntilFailure tac catch _ => pure ()
-
-中文:
-定义 iterateUntilFailure
-  签名: (tac : m 单元)
-  定义体: try tac; iterateUntilFailure tac catch _ => pure ()
+--- 原说明 ---
+Repeats a tactic until it fails. Always succeeds.
 -/
 partial def iterateUntilFailure (tac : m Unit) : m Unit :=
   try tac; iterateUntilFailure tac catch _ => pure ()
 
-/--
-Definition of `iterateUntilFailureWithResults` / `iterateUntilFailureWithResults` 的定义
+/-- `iterateUntilFailureWithResults` is a helper tactic which accumulates the list of results
+obtained from iterating `tac` until it fails. Always succeeds.
+-/
+/-
+**Lean.Elab.Tactic.iterateUntilFailureWithResults** 是 Mathlib 中的一个不透明定义，位于命名空间 `
+Lean.Elab.Tactic`。
+形式化陈述：{m : Type → Type u} → [Monad m] → [MonadExcept Exception m] → {α : Type} →
+ m α → m (List α)
+参数：List α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterateUntilFailureWithResults
-  signature: {α : Type} (tac : m α)
-  body: do
-  try
-    let a ← tac
-    let l ← iterateUntilFailureWithResults tac
-    pure (a :: l)
-  catch _ => pure []
-
-中文:
-定义 iterateUntilFailureWithResults
-  签名: {α : 类型} (tac : m α)
-  定义体: do
-  try
-    let a ← tac
-    let l ← iterateUntilFailureWithResults tac
-    pure (a :: l)
-  catch _ => pure []
+--- 原说明 ---
+`iterateUntilFailureWithResults` is a helper tactic which accumulates the list o
+f results
+obtained from iterating `tac` until it fails. Always succeeds.
 -/
 partial def iterateUntilFailureWithResults {α : Type} (tac : m α) : m (List α) := do
   try
@@ -630,22 +469,20 @@ partial def iterateUntilFailureWithResults {α : Type} (tac : m α) : m (List α
     pure (a :: l)
   catch _ => pure []
 
-/--
-Definition of `iterateUntilFailureCount` / `iterateUntilFailureCount` 的定义
+/-- `iterateUntilFailureCount` is similar to `iterateUntilFailure` except it counts
+the number of successful calls to `tac`. Always succeeds.
+-/
+/-
+**Lean.Elab.Tactic.iterateUntilFailureCount** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab
+.Tactic`。
+形式化陈述：iterateUntilFailureCount {α : Type} (tac : m α) : m Nat
+参数：tac : m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterateUntilFailureCount
-  signature: {α : Type} (tac : m α)
-  body: do
-  let r ← iterateUntilFailureWithResults tac
-  return r.length
-
-中文:
-定义 iterateUntilFailureCount
-  签名: {α : 类型} (tac : m α)
-  定义体: do
-  let r ← iterateUntilFailureWithResults tac
-  return r.length
+--- 原说明 ---
+`iterateUntilFailureCount` is similar to `iterateUntilFailure` except it counts
+the number of successful calls to `tac`. Always succeeds.
 -/
 def iterateUntilFailureCount {α : Type} (tac : m α) : m Nat := do
   let r ← iterateUntilFailureWithResults tac
@@ -656,52 +493,36 @@ end Lean.Elab.Tactic
 namespace Mathlib
 open Lean
 
-/--
-Definition of `getPackageDir` / `getPackageDir` 的定义
+/-- Returns the root directory which contains the package root file, e.g. `Mathlib.lean`. -/
+/-
+**Mathlib.getPackageDir** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib`。
+形式化陈述：getPackageDir (pkg : String) : IO System.FilePath
+参数：pkg : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getPackageDir
-  signature: (pkg : String)
-  body: do
-  let sp ← getSrcSearchPath
-  let root? ← sp.findM? fun p =>
-(p / pkg).isDir ((p / pkg).withExtension "lean").pathExists
-  if let some root := root? then return root
-throw IO.userError s!"Could not find {pkg} directory. \
-    Make sure the LEAN_SRC_PATH environment variable is set correctly."
-
-中文:
-定义 getPackageDir
-  签名: (pkg : String)
-  定义体: do
-  let sp ← getSrcSearchPath
-  let root? ← sp.findM? fun p =>
-(p / pkg).isDir ((p / pkg).withExtension "lean").pathExists
-  if let some root := root? then return root
-throw IO.userError s!"Could not find {pkg} directory. \
-    Make sure the LEAN_SRC_PATH environment variable is set correctly."
+--- 原说明 ---
+Returns the root directory which contains the package root file, e.g. `Mathlib.l
+ean`.
 -/
 def getPackageDir (pkg : String) : IO System.FilePath := do
   let sp ← getSrcSearchPath
   let root? ← sp.findM? fun p =>
-(p / pkg).isDir ((p / pkg).withExtension "lean").pathExists
+    (p / pkg).isDir <||> ((p / pkg).withExtension "lean").pathExists
   if let some root := root? then return root
-throw IO.userError s!"Could not find {pkg} directory. \
+  throw <| IO.userError s!"Could not find {pkg} directory. \
     Make sure the LEAN_SRC_PATH environment variable is set correctly."
 
-/--
-Definition of `getMathlibDir` / `getMathlibDir` 的定义
+/-- Returns the mathlib root directory. -/
+/-
+**Mathlib.getMathlibDir** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib`。
+形式化陈述：getMathlibDir
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getMathlibDir
-  body: getPackageDir "Mathlib"
-
-中文:
-定义 getMathlibDir
-  定义体: getPackageDir "Mathlib"
-
-Depends on / 依赖: Mathlib, getPackageDir
+--- 原说明 ---
+Returns the mathlib root directory.
 -/
 def getMathlibDir := getPackageDir "Mathlib"
 
 end Mathlib
+

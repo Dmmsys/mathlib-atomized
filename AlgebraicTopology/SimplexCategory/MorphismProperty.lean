@@ -26,98 +26,74 @@ open CategoryTheory
 
 namespace SimplexCategory
 
-/--
-lemma `Truncated.morphismProperty_eq_top` / 引理 `Truncated.morphismProperty_eq_top`
-
-English:
-lemma Truncated.morphismProperty_eq_top
-  proof: by
-  ext ⟨a, ha⟩ ⟨b, hb⟩ f
-  simp only [MorphismProperty.top_apply, iff_true]
-  induction a using SimplexCategory.rec with | _ a
-  induction b using SimplexCategory.rec with | _ b
-  dsimp at ha hb
-  generalize h : a + b = c
-  induction c generalizing a b with
-  | zero =>
-    obtain rfl : a = 0 := by lia
-    obtain rfl : b = 0 := by lia
-    obtain rfl : f = 𝟙 _ := by
-      ext i : 3
-      apply Subsingleton.elim (α := Fin 1)
-    apply MorphismProperty.id_mem
-  | succ c hc =>
-    by_cases h₁ : Function.Surjective f.hom.toOrderHom; swap
-    · obtain _ | b := b
-      · exact (h₁ (fun _ => ⟨0, Subsingleton.elim (α := Fin 1) _ _⟩)).elim
-      · obtain ⟨i, g', hf'⟩ := eq_comp_δ_of_not_surjective _ h₁
-        replace hf' : f = Hom.tr g' ≫ Hom.tr (SimplexCategory.δ i) :=
-          InducedCategory.hom_ext hf'
-        rw [hf']
-        exact W.comp_mem _ _ (hc _ _ _ _ _ (by lia))
-          (δ_mem _ (by lia) _)
-    by_cases h₂ : Function.Injective f.hom.toOrderHom; swap
-    · obtain _ | a := a
-      · exact (h₂ (Function.injective_of_subsingleton (α := Fin 1) _)).elim
-      · obtain ⟨i, g', hf'⟩ := eq_σ_comp_of_not_injective _ h₂
-        replace hf' : f = Hom.tr (SimplexCategory.σ i) ≫ Hom.tr g' :=
-          InducedCategory.hom_ext hf'
-        rw [hf']
-        exact W.comp_mem _ _ (σ_mem _ (by lia) _) (hc _ _ _ _ _ (by lia))
-    rw [← epi_iff_surjective] at h₁
-    rw [← mono_iff_injective] at h₂
-    obtain rfl : a = b := le_antisymm (len_le_of_mono f.hom) (len_le_of_epi f.hom)
-    obtain rfl : f = 𝟙 _ := ObjectProperty.hom_ext _ (SimplexCategory.eq_id_of_epi _)
-    apply W.id_mem
-
-中文:
-引理 Truncated.morphismProperty_eq_top
-  证明: by
-  ext ⟨a, ha⟩ ⟨b, hb⟩ f
-  simp only [MorphismProperty.top_apply, iff_true]
-  induction a using SimplexCategory.rec with | _ a
-  induction b using SimplexCategory.rec with | _ b
-  dsimp at ha hb
-  generalize h : a + b = c
-  induction c generalizing a b with
-  | zero =>
-    obtain rfl : a = 0 := by lia
-    obtain rfl : b = 0 := by lia
-    obtain rfl : f = 𝟙 _ := by
-      ext i : 3
-      apply Subsingleton.elim (α := Fin 1)
-    apply MorphismProperty.id_mem
-  | succ c hc =>
-    by_cases h₁ : Function.Surjective f.hom.toOrderHom; swap
-    · obtain _ | b := b
-      · exact (h₁ (fun _ => ⟨0, Subsingleton.elim (α := Fin 1) _ _⟩)).elim
-      · obtain ⟨i, g', hf'⟩ := eq_comp_δ_of_not_surjective _ h₁
-        replace hf' : f = Hom.tr g' ≫ Hom.tr (SimplexCategory.δ i) :=
-          InducedCategory.hom_ext hf'
-        rw [hf']
-        exact W.comp_mem _ _ (hc _ _ _ _ _ (by lia))
-          (δ_mem _ (by lia) _)
-    by_cases h₂ : Function.Injective f.hom.toOrderHom; swap
-    · obtain _ | a := a
-      · exact (h₂ (Function.injective_of_subsingleton (α := Fin 1) _)).elim
-      · obtain ⟨i, g', hf'⟩ := eq_σ_comp_of_not_injective _ h₂
-        replace hf' : f = Hom.tr (SimplexCategory.σ i) ≫ Hom.tr g' :=
-          InducedCategory.hom_ext hf'
-        rw [hf']
-        exact W.comp_mem _ _ (σ_mem _ (by lia) _) (hc _ _ _ _ _ (by lia))
-    rw [← epi_iff_surjective] at h₁
-    rw [← mono_iff_injective] at h₂
-    obtain rfl : a = b := le_antisymm (len_le_of_mono f.hom) (len_le_of_epi f.hom)
-    obtain rfl : f = 𝟙 _ := ObjectProperty.hom_ext _ (SimplexCategory.eq_id_of_epi _)
-    apply W.id_mem
-
-Depends on / 依赖: Function, Function.Surjective, MorphismProperty, MorphismProperty.id_mem, MorphismProperty.top_apply, SimplexCategory, SimplexCategory.rec, Subsingleton, Subsingleton.elim, Surjective, f.hom.toOrderHom, generalize, generalizing, id_mem, iff_true, toOrderHom, top_apply
+/-
+**SimplexCategory.Truncated.morphismProperty_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `S
+implexCategory.Truncated`。
+形式化陈述：∀ {d : ℕ} (W : CategoryTheory.MorphismProperty (SimplexCategory.Truncated 
+d)) [W.IsMultiplicative],   (∀ (n : ℕ) (hn : n < d) (i : Fin (n + 2)), W (Simple
+xCategory.Truncated.δ d i ⋯ ⋯)) →     (∀ (n : ℕ) (hn : n < d) (i : Fin (n + 1)),
+ W (SimplexCategory.Truncated.σ d i ⋯ ⋯)) → W = ⊤
+参数：W : CategoryTheory.MorphismProperty (SimplexCategory.Truncated d)；∀ (n : ℕ) (
+hn : n < d) (i : Fin (n + 2)), W (SimplexCategory.Truncated.δ d i ⋯ ⋯)；∀ (n : ℕ)
+ (hn : n < d) (i : Fin (n + 1)), W (SimplexCategory.Truncated.σ d i ⋯ ⋯)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.ext`：ext (W W' : MorphismProperty C) (h 
+: forall ⦃X Y : C⦄ (f : X ⟶ Y), W f ↔ W' f) : W = W'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toContainsIdentities`：∀
+ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheory.Morp
+hismProperty C}   [self : W.IsMultiplicative], W.ContainsId…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimplexCategory.Truncated.Hom.ext`：∀ {n : ℕ} {a b : SimplexCategory.Trun
+cated n} (f g : a ⟶ b),   SimplexCategory.Hom.toOrderHom f.hom = SimplexCategory
+.Hom.toOrderHom g.hom →…
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
+· 使用引理 `CategoryTheory.ObjectProperty.hom_ext`：hom_ext {X Y : P.FullSubcategory}
+ {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用定理 `SimplexCategory.eq_id_of_epi`：eq_id_of_epi {x : SimplexCategory} (i : x 
+⟶ x) [Epi i] : i = 𝟙 _
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `SimplexCategory.len_le_of_mono`：len_le_of_mono {x y : SimplexCategory} (
+f : x ⟶ y) [Mono f] : x.len <= y.len
+· 使用定理 `SimplexCategory.mono_iff_injective`：mono_iff_injective {n m : SimplexCat
+egory} {f : n ⟶ m} : Mono f ↔ Function.Injective f.toOrderHom
+· 使用定理 `SimplexCategory.len_le_of_epi`：len_le_of_epi {x y : SimplexCategory} (f 
+: x ⟶ y) [Epi f] : y.len <= x.len
+· 使用定理 `SimplexCategory.epi_iff_surjective`：epi_iff_surjective {n m : SimplexCat
+egory} {f : n ⟶ m} : Epi f ↔ Function.Surjective f.toOrderHom
+· 使用定理 `Function.injective_of_subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} [Sub
+singleton α] (f : α → β), Function.Injective f
+· 使用定理 `SimplexCategory.eq_σ_comp_of_not_injective`：eq_σ_comp_of_not_injective {
+n : Nat} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ') (hθ : ¬Function.Injective θ.t
+oOrderHom) : exists (i : Fin (n …
+· 使用引理 `CategoryTheory.InducedCategory.hom_ext`：hom_ext {X Y : InducedCategory D
+ F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g
+· 使用引理 `CategoryTheory.MorphismProperty.comp_mem`：comp_mem (W : MorphismProperty
+ C) [W.IsStableUnderComposition] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W f) 
+(hg : W g) : W (f ≫ g)
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SimplexCategory.eq_comp_δ_of_not_surjective`：eq_comp_δ_of_not_surjective
+ {n : Nat} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌) (hθ : ¬Function.Surjective θ.
+toOrderHom) : exists (i : Fin (n …
 -/
 lemma Truncated.morphismProperty_eq_top
-    {d : Nat} (W : MorphismProperty (Truncated d)) [W.IsMultiplicative]
-    (δ_mem : forall (n : Nat) (hn : n < d) (i : Fin (n + 2)),
+    {d : ℕ} (W : MorphismProperty (Truncated d)) [W.IsMultiplicative]
+    (δ_mem : ∀ (n : ℕ) (hn : n < d) (i : Fin (n + 2)),
       W (Truncated.δ d i (by dsimp; lia) (by dsimp; lia)))
-    (σ_mem : forall (n : Nat) (hn : n < d) (i : Fin (n + 1)),
+    (σ_mem : ∀ (n : ℕ) (hn : n < d) (i : Fin (n + 1)),
       W (Truncated.σ d i (by dsimp; lia) (by dsimp; lia))) :
     W = ⊤ := by
   ext ⟨a, ha⟩ ⟨b, hb⟩ f
@@ -137,7 +113,7 @@ lemma Truncated.morphismProperty_eq_top
   | succ c hc =>
     by_cases h₁ : Function.Surjective f.hom.toOrderHom; swap
     · obtain _ | b := b
-      · exact (h₁ (fun _ => ⟨0, Subsingleton.elim (α := Fin 1) _ _⟩)).elim
+      · exact (h₁ (fun _ ↦ ⟨0, Subsingleton.elim (α := Fin 1) _ _⟩)).elim
       · obtain ⟨i, g', hf'⟩ := eq_comp_δ_of_not_surjective _ h₁
         replace hf' : f = Hom.tr g' ≫ Hom.tr (SimplexCategory.δ i) :=
           InducedCategory.hom_ext hf'
@@ -157,44 +133,39 @@ lemma Truncated.morphismProperty_eq_top
     obtain rfl : a = b := le_antisymm (len_le_of_mono f.hom) (len_le_of_epi f.hom)
     obtain rfl : f = 𝟙 _ := ObjectProperty.hom_ext _ (SimplexCategory.eq_id_of_epi _)
     apply W.id_mem
-
-/--
-lemma `morphismProperty_eq_top` / 引理 `morphismProperty_eq_top`
-
-English:
-lemma morphismProperty_eq_top
-  proof: by
-  have hW (d : Nat) : W.inverseImage (Truncated.inclusion d) = ⊤ :=
-    Truncated.morphismProperty_eq_top _ (fun _ _ i => δ_mem i)
-      (fun _ _ i => σ_mem i)
-  ext a b f
-  simp only [MorphismProperty.top_apply, iff_true]
-  change W.inverseImage (Truncated.inclusion (max a.len b.len))
-    (Truncated.Hom.tr f (ha := by simp) (hb := by simp))
-  simp only [hW, MorphismProperty.top_apply]
-
-中文:
-引理 morphismProperty_eq_top
-  证明: by
-  have hW (d : Nat) : W.inverseImage (Truncated.inclusion d) = ⊤ :=
-    Truncated.morphismProperty_eq_top _ (fun _ _ i => δ_mem i)
-      (fun _ _ i => σ_mem i)
-  ext a b f
-  simp only [MorphismProperty.top_apply, iff_true]
-  change W.inverseImage (Truncated.inclusion (max a.len b.len))
-    (Truncated.Hom.tr f (ha := by simp) (hb := by simp))
-  simp only [hW, MorphismProperty.top_apply]
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.top_apply, Truncated, Truncated.Hom.tr, Truncated.inclusion, Truncated.morphismProperty_eq_top, W.inverseImage, a.len, b.len, iff_true, inclusion, inverseImage, morphismProperty_eq_top, top_apply
+/-
+**SimplexCategory.morphismProperty_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCate
+gory`。
+形式化陈述：morphismProperty_eq_top (W : MorphismProperty SimplexCategory) [W.IsMultip
+licative] (δ_mem : forall {n : Nat} (i : Fin (n + 2)), W (SimplexCategory.δ i)) 
+(σ_mem : forall {n : Nat} (i : Fin (n + 1)), W (SimplexCategory.σ i)) : W = ⊤
+参数：W : MorphismProperty SimplexCategory；δ_mem : forall {n : Nat} (i : Fin (n + 2
+)), W (SimplexCategory.δ i)；σ_mem : forall {n : Nat} (i : Fin (n + 1)), W (Simpl
+exCategory.σ i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.Truncated.morphismProperty_eq_top`：∀ {d : ℕ} (W : Catego
+ryTheory.MorphismProperty (SimplexCategory.Truncated d)) [W.IsMultiplicative],  
+ (∀ (n : ℕ) (hn : n < d) (i : Fin (n + …
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instInverseImage`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u'} [inst_1 : Cate
+goryTheory.Category.{v', u'} D]   {P : CategoryTheory.M…
+· 使用引理 `CategoryTheory.MorphismProperty.ext`：ext (W W' : MorphismProperty C) (h 
+: forall ⦃X Y : C⦄ (f : X ⟶ Y), W f ↔ W' f) : W = W'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 lemma morphismProperty_eq_top
     (W : MorphismProperty SimplexCategory) [W.IsMultiplicative]
-    (δ_mem : forall {n : Nat} (i : Fin (n + 2)), W (SimplexCategory.δ i))
-    (σ_mem : forall {n : Nat} (i : Fin (n + 1)), W (SimplexCategory.σ i)) :
+    (δ_mem : ∀ {n : ℕ} (i : Fin (n + 2)), W (SimplexCategory.δ i))
+    (σ_mem : ∀ {n : ℕ} (i : Fin (n + 1)), W (SimplexCategory.σ i)) :
     W = ⊤ := by
-  have hW (d : Nat) : W.inverseImage (Truncated.inclusion d) = ⊤ :=
-    Truncated.morphismProperty_eq_top _ (fun _ _ i => δ_mem i)
-      (fun _ _ i => σ_mem i)
+  have hW (d : ℕ) : W.inverseImage (Truncated.inclusion d) = ⊤ :=
+    Truncated.morphismProperty_eq_top _ (fun _ _ i ↦ δ_mem i)
+      (fun _ _ i ↦ σ_mem i)
   ext a b f
   simp only [MorphismProperty.top_apply, iff_true]
   change W.inverseImage (Truncated.inclusion (max a.len b.len))
@@ -202,3 +173,4 @@ lemma morphismProperty_eq_top
   simp only [hW, MorphismProperty.top_apply]
 
 end SimplexCategory
+

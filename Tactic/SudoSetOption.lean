@@ -17,48 +17,21 @@ public meta section
 
 open Lean Elab
 
-/--
-Definition of `setOption` / `setOption` 的定义
-
-English:
-definition setOption
-  signature: {m : Type -> Type} [Monad m] [MonadError m]
-  body: do
-  let val ← match val with
-| Syntax.ident _ _ `true _ => pure DataValue.ofBool true
-| Syntax.ident _ _ `false _ => pure DataValue.ofBool false
-    | _ => match val.isNatLit? with
-| some num => pure DataValue.ofNat num
-      | none => match val.isStrLit? with
-| some str => pure DataValue.ofString str
-        | none => throwError "unsupported option value {val}"
-pure opts.insert name.getId val
-
-中文:
-定义 setOption
-  签名: {m : 类型 -> 类型} [单子 m] [MonadError m]
-  定义体: do
-  let val ← match val with
-| Syntax.ident _ _ `true _ => pure DataValue.ofBool true
-| Syntax.ident _ _ `false _ => pure DataValue.ofBool false
-    | _ => match val.isNatLit? with
-| some num => pure DataValue.ofNat num
-      | none => match val.isStrLit? with
-| some str => pure DataValue.ofString str
-        | none => throwError "unsupported option value {val}"
-pure opts.insert name.getId val
+/-
+**setOption** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def setOption {m : Type -> Type} [Monad m] [MonadError m]
+private def setOption {m : Type → Type} [Monad m] [MonadError m]
     (name val : Syntax) (opts : Options) : m Options := do
   let val ← match val with
-| Syntax.ident _ _ `true _ => pure DataValue.ofBool true
-| Syntax.ident _ _ `false _ => pure DataValue.ofBool false
+    | Syntax.ident _ _ `true _  => pure <| DataValue.ofBool true
+    | Syntax.ident _ _ `false _ => pure <| DataValue.ofBool false
     | _ => match val.isNatLit? with
-| some num => pure DataValue.ofNat num
+      | some num => pure <| DataValue.ofNat num
       | none => match val.isStrLit? with
-| some str => pure DataValue.ofString str
+        | some str => pure <| DataValue.ofString str
         | none => throwError "unsupported option value {val}"
-pure opts.insert name.getId val
+  pure <| opts.insert name.getId val
 
 open Elab.Command in
 /--
@@ -67,8 +40,8 @@ but it also allows to set undeclared options.
 -/
 elab "sudo " "set_option " n:ident ppSpace val:term : command => do
   let options ← setOption n val (← getOptions)
-  modify fun s => { s with maxRecDepth := maxRecDepth.get options }
-  modifyScope fun scope => { scope with opts := options }
+  modify fun s ↦ { s with maxRecDepth := maxRecDepth.get options }
+  modifyScope fun scope ↦ { scope with opts := options }
 
 open Elab.Term in
 /--
@@ -77,7 +50,7 @@ but it also allows to set undeclared options.
 -/
 elab "sudo " "set_option " n:ident ppSpace val:term " in " body:term : term <= expectedType => do
   let options ← setOption n val (← getOptions)
-  withTheReader Core.Context (fun ctx =>
+  withTheReader Core.Context (fun ctx ↦
       { ctx with maxRecDepth := maxRecDepth.get options, options := options }) do
     elabTerm body expectedType
 
@@ -85,3 +58,4 @@ elab "sudo " "set_option " n:ident ppSpace val:term " in " body:term : term <= e
 sudo set_option trace.Elab.resuming true in #check 4
 #check sudo set_option trace.Elab.resuming true in by exact 4
 -/
+

@@ -30,254 +30,157 @@ section AddBasic
 
 variable [AddMonoid M] [Preorder M] [AddLeftStrictMono M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add { x : M // 0 < x }
-  body: ⟨fun x y => ⟨x + y, add_pos x.2 y.2⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 加法 { x : M // 0 < x }
-  定义体: ⟨fun x y => ⟨x + y, add_pos x.2 y.2⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: add_pos
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add { x : M // 0 < x } :=
   ⟨fun x y => ⟨x + y, add_pos x.2 y.2⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (x y : { x : M // 0 < x })
-  statement: ↑(x + y) = (x + y : M)
-  proof: rfl
-
-中文:
-定理 coe_add
-  条件: (x y : { x : M // 0 < x })
-  结论: ↑(x + y) = (x + y : M)
-  证明: rfl
+/-
+**Positive.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Positive`。
+形式化陈述：coe_add (x y : { x : M // 0 < x }) : ↑(x + y) = (x + y : M)
+参数：x y : { x : M // 0 < x }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_add (x y : { x : M // 0 < x }) : ↑(x + y) = (x + y : M) :=
   rfl
-
-/--
-Instance `addSemigroup` / 实例 `addSemigroup`
-
-English:
-instance addSemigroup
-  signature: : AddSemigroup { x : M // 0 < x }
-  body: fast_instance%
-  Subtype.coe_injective.addSemigroup _ coe_add
-
-中文:
-实例 addSemigroup
-  签名: : 加法半群 { x : M // 0 < x }
-  定义体: fast_instance%
-  Subtype.coe_injective.addSemigroup _ coe_add
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.addSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addSemigroup : AddSemigroup { x : M // 0 < x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addSemigroup : AddSemigroup { x : M // 0 < x } := fast_instance%
   Subtype.coe_injective.addSemigroup _ coe_add
-
-/--
-Instance `addCommSemigroup` / 实例 `addCommSemigroup`
-
-English:
-instance addCommSemigroup
-  signature: {M : Type*} [AddCommMonoid M] [Preorder M]
-  body: fast_instance%
-  Subtype.coe_injective.addCommSemigroup _ coe_add
-
-中文:
-实例 addCommSemigroup
-  签名: {M : 类型} [加法交换幺半群 M] [预序 M]
-  定义体: fast_instance%
-  Subtype.coe_injective.addCommSemigroup _ coe_add
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.addCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addCommSemigroup {M : Type*} [AddCommMonoid M] [Preorder M] [AddLeftStrict
+Mono M] : AddCommSemigroup { x : M // 0 < x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommSemigroup {M : Type*} [AddCommMonoid M] [Preorder M]
     [AddLeftStrictMono M] : AddCommSemigroup { x : M // 0 < x } := fast_instance%
   Subtype.coe_injective.addCommSemigroup _ coe_add
-
-/--
-Instance `addLeftCancelSemigroup` / 实例 `addLeftCancelSemigroup`
-
-English:
-instance addLeftCancelSemigroup
-  signature: {M : Type*} [AddLeftCancelMonoid M] [Preorder M]
-  body: fast_instance%
-  Subtype.coe_injective.addLeftCancelSemigroup _ coe_add
-
-中文:
-实例 addLeftCancelSemigroup
-  签名: {M : 类型} [加法左消去幺半群 M] [预序 M]
-  定义体: fast_instance%
-  Subtype.coe_injective.addLeftCancelSemigroup _ coe_add
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.addLeftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addLeftCancelSemigroup {M : Type*} [AddLeftCancelMonoid M] [Preorder M] [A
+ddLeftStrictMono M] : AddLeftCancelSemigroup { x : M // 0 < x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addLeftCancelSemigroup {M : Type*} [AddLeftCancelMonoid M] [Preorder M]
     [AddLeftStrictMono M] : AddLeftCancelSemigroup { x : M // 0 < x } := fast_instance%
   Subtype.coe_injective.addLeftCancelSemigroup _ coe_add
-
-/--
-Instance `addRightCancelSemigroup` / 实例 `addRightCancelSemigroup`
-
-English:
-instance addRightCancelSemigroup
-  signature: {M : Type*} [AddRightCancelMonoid M] [Preorder M]
-  body: fast_instance%
-  Subtype.coe_injective.addRightCancelSemigroup _ coe_add
-
-中文:
-实例 addRightCancelSemigroup
-  签名: {M : 类型} [加法右消去幺半群 M] [预序 M]
-  定义体: fast_instance%
-  Subtype.coe_injective.addRightCancelSemigroup _ coe_add
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.addRightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addRightCancelSemigroup {M : Type*} [AddRightCancelMonoid M] [Preorder M] 
+[AddLeftStrictMono M] : AddRightCancelSemigroup { x : M // 0 < x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addRightCancelSemigroup {M : Type*} [AddRightCancelMonoid M] [Preorder M]
     [AddLeftStrictMono M] : AddRightCancelSemigroup { x : M // 0 < x } := fast_instance%
   Subtype.coe_injective.addRightCancelSemigroup _ coe_add
-
-/--
-Instance `addLeftStrictMono` / 实例 `addLeftStrictMono`
-
-English:
-instance addLeftStrictMono
-  signature: : AddLeftStrictMono { x : M // 0 < x }
-  body: ⟨fun _ y z hyz => Subtype.coe_lt_coe.1 add_lt_add_right (show (y : M) < z from hyz) _⟩
-
-中文:
-实例 addLeftStrictMono
-  签名: : AddLeftStrictMono { x : M // 0 < x }
-  定义体: ⟨fun _ y z hyz => Subtype.coe_lt_coe.1 add_lt_add_right (show (y : M) < z from hyz) _⟩
-
-Depends on / 依赖: Subtype, Subtype.coe_lt_coe, add_lt_add_right, coe_lt_coe
+/-
+**Positive.addLeftStrictMono** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addLeftStrictMono : AddLeftStrictMono { x : M // 0 < x }
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_lt_coe`：coe_lt_coe [LT α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) < y ↔ x < y
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
 -/
 instance addLeftStrictMono : AddLeftStrictMono { x : M // 0 < x } :=
-⟨fun _ y z hyz => Subtype.coe_lt_coe.1 add_lt_add_right (show (y : M) < z from hyz) _⟩
-
-/--
-Instance `addRightStrictMono` / 实例 `addRightStrictMono`
-
-English:
-instance addRightStrictMono
-  signature: [AddRightStrictMono M]
-  body: ⟨fun _ y z hyz => Subtype.coe_lt_coe.1 add_lt_add_left (show (y : M) < z from hyz) _⟩
-
-中文:
-实例 addRightStrictMono
-  签名: [AddRightStrictMono M]
-  定义体: ⟨fun _ y z hyz => Subtype.coe_lt_coe.1 add_lt_add_left (show (y : M) < z from hyz) _⟩
-
-Depends on / 依赖: Subtype, Subtype.coe_lt_coe, add_lt_add_left, coe_lt_coe
+  ⟨fun _ y z hyz => Subtype.coe_lt_coe.1 <| add_lt_add_right (show (y : M) < z from hyz) _⟩
+/-
+**Positive.addRightStrictMono** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addRightStrictMono [AddRightStrictMono M] : AddRightStrictMono { x : M // 
+0 < x }
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_lt_coe`：coe_lt_coe [LT α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) < y ↔ x < y
+· 使用定理 `add_lt_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [i : Ad
+dRightStrictMono α] {b c : α}, b < c → ∀ (a : α), b + a < c + a
 -/
 instance addRightStrictMono [AddRightStrictMono M] : AddRightStrictMono { x : M // 0 < x } :=
-⟨fun _ y z hyz => Subtype.coe_lt_coe.1 add_lt_add_left (show (y : M) < z from hyz) _⟩
-
-/--
-Instance `addLeftReflectLT` / 实例 `addLeftReflectLT`
-
-English:
-instance addLeftReflectLT
-  signature: [AddLeftReflectLT M]
-  body: ⟨fun _ _ _ h => Subtype.coe_lt_coe.1 lt_of_add_lt_add_left h⟩
-
-中文:
-实例 addLeftReflectLT
-  签名: [AddLeftReflectLT M]
-  定义体: ⟨fun _ _ _ h => Subtype.coe_lt_coe.1 lt_of_add_lt_add_left h⟩
-
-Depends on / 依赖: Subtype, Subtype.coe_lt_coe, coe_lt_coe, lt_of_add_lt_add_left
+  ⟨fun _ y z hyz => Subtype.coe_lt_coe.1 <| add_lt_add_left (show (y : M) < z from hyz) _⟩
+/-
+**Positive.addLeftReflectLT** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addLeftReflectLT [AddLeftReflectLT M] : AddLeftReflectLT { x : M // 0 < x 
+}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_lt_coe`：coe_lt_coe [LT α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) < y ↔ x < y
+· 使用定理 `lt_of_add_lt_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [
+AddLeftReflectLT α] {a b c : α}, a + b < a + c → b < c
 -/
 instance addLeftReflectLT [AddLeftReflectLT M] : AddLeftReflectLT { x : M // 0 < x } :=
-⟨fun _ _ _ h => Subtype.coe_lt_coe.1 lt_of_add_lt_add_left h⟩
-
-/--
-Instance `addRightReflectLT` / 实例 `addRightReflectLT`
-
-English:
-instance addRightReflectLT
-  signature: [AddRightReflectLT M]
-  body: ⟨fun _ _ _ h => Subtype.coe_lt_coe.1 lt_of_add_lt_add_right h⟩
-
-中文:
-实例 addRightReflectLT
-  签名: [AddRightReflectLT M]
-  定义体: ⟨fun _ _ _ h => Subtype.coe_lt_coe.1 lt_of_add_lt_add_right h⟩
-
-Depends on / 依赖: Subtype, Subtype.coe_lt_coe, coe_lt_coe, lt_of_add_lt_add_right
+  ⟨fun _ _ _ h => Subtype.coe_lt_coe.1 <| lt_of_add_lt_add_left h⟩
+/-
+**Positive.addRightReflectLT** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addRightReflectLT [AddRightReflectLT M] : AddRightReflectLT { x : M // 0 <
+ x }
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_lt_coe`：coe_lt_coe [LT α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) < y ↔ x < y
+· 使用定理 `lt_of_add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] 
+[i : AddRightReflectLT α] {a b c : α}, b + a < c + a → b < c
 -/
 instance addRightReflectLT [AddRightReflectLT M] : AddRightReflectLT { x : M // 0 < x } :=
-⟨fun _ _ _ h => Subtype.coe_lt_coe.1 lt_of_add_lt_add_right h⟩
-
-/--
-Instance `addLeftReflectLE` / 实例 `addLeftReflectLE`
-
-English:
-instance addLeftReflectLE
-  signature: [AddLeftReflectLE M]
-  body: Subtype.coe_le_coe.mp le_of_add_le_add_left h
-
-中文:
-实例 addLeftReflectLE
-  签名: [加法LeftReflectLE M]
-  定义体: Subtype.coe_le_coe.mp le_of_add_le_add_left h
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, le_of_add_le_add_left
+  ⟨fun _ _ _ h => Subtype.coe_lt_coe.1 <| lt_of_add_lt_add_right h⟩
+/-
+**Positive.addLeftReflectLE** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addLeftReflectLE [AddLeftReflectLE M] : AddLeftReflectLE { x : M // 0 < x 
+} where le_of_add_le_add_left h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用定理 `le_of_add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [
+AddLeftReflectLE α] {a b c : α}, a + b ≤ a + c → b ≤ c
 -/
 instance addLeftReflectLE [AddLeftReflectLE M] : AddLeftReflectLE { x : M // 0 < x } where
-le_of_add_le_add_left h := Subtype.coe_le_coe.mp le_of_add_le_add_left h
-
-/--
-Instance `addRightReflectLE` / 实例 `addRightReflectLE`
-
-English:
-instance addRightReflectLE
-  signature: [AddRightReflectLE M]
-  body: Subtype.coe_le_coe.mp le_of_add_le_add_right h
-
-中文:
-实例 addRightReflectLE
-  签名: [加法RightReflectLE M]
-  定义体: Subtype.coe_le_coe.mp le_of_add_le_add_right h
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, le_of_add_le_add_right
+  le_of_add_le_add_left h := Subtype.coe_le_coe.mp <| le_of_add_le_add_left h
+/-
+**Positive.addRightReflectLE** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addRightReflectLE [AddRightReflectLE M] : AddRightReflectLE { x : M // 0 <
+ x } where le_of_add_le_add_right h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用定理 `le_of_add_le_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] 
+[AddRightReflectLE α] {a b c : α}, b + a ≤ c + a → b ≤ c
 -/
 instance addRightReflectLE [AddRightReflectLE M] : AddRightReflectLE { x : M // 0 < x } where
-le_of_add_le_add_right h := Subtype.coe_le_coe.mp le_of_add_le_add_right h
+  le_of_add_le_add_right h := Subtype.coe_le_coe.mp <| le_of_add_le_add_right h
 
 end AddBasic
 
-/--
-Instance `addLeftMono` / 实例 `addLeftMono`
-
-English:
-instance addLeftMono
-  signature: [AddMonoid M] [PartialOrder M] [AddLeftStrictMono M]
-  body: ⟨@fun _ _ _ h₁ => StrictMono.monotone (fun _ _ h => add_lt_add_right h _) h₁⟩
-
-中文:
-实例 addLeftMono
-  签名: [加法幺半群 M] [偏序 M] [AddLeftStrictMono M]
-  定义体: ⟨@fun _ _ _ h₁ => StrictMono.monotone (fun _ _ h => add_lt_add_right h _) h₁⟩
-
-Depends on / 依赖: StrictMono, StrictMono.monotone, add_lt_add_right, monotone
+/-
+**Positive.addLeftMono** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：addLeftMono [AddMonoid M] [PartialOrder M] [AddLeftStrictMono M] : AddLeft
+Mono { x : M // 0 < x }
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
 -/
 instance addLeftMono [AddMonoid M] [PartialOrder M] [AddLeftStrictMono M] :
     AddLeftMono { x : M // 0 < x } :=
@@ -287,182 +190,72 @@ section Mul
 
 variable [Semiring R] [PartialOrder R] [IsStrictOrderedRing R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul { x : R // 0 < x }
-  body: ⟨fun x y => ⟨x * y, mul_pos x.2 y.2⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 乘法 { x : R // 0 < x }
-  定义体: ⟨fun x y => ⟨x * y, mul_pos x.2 y.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: mul_pos
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul { x : R // 0 < x } :=
   ⟨fun x y => ⟨x * y, mul_pos x.2 y.2⟩⟩
 
 @[simp]
-/--
-theorem `val_mul` / 定理 `val_mul`
-
-English:
-theorem val_mul
-  given: (x y : { x : R // 0 < x })
-  statement: ↑(x * y) = (x * y : R)
-  proof: rfl
-
-中文:
-定理 val_mul
-  条件: (x y : { x : R // 0 < x })
-  结论: ↑(x * y) = (x * y : R)
-  证明: rfl
+/-
+**Positive.val_mul** 是 Mathlib 中的一个定理，位于命名空间 `Positive`。
+形式化陈述：val_mul (x y : { x : R // 0 < x }) : ↑(x * y) = (x * y : R)
+参数：x y : { x : R // 0 < x }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_mul (x y : { x : R // 0 < x }) : ↑(x * y) = (x * y : R) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow { x : R // 0 < x } Nat
-  body: ⟨fun x n => ⟨(x : R) ^ n, pow_pos x.2 n⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幂 { x : R // 0 < x } 自然数
-  定义体: ⟨fun x n => ⟨(x : R) ^ n, pow_pos x.2 n⟩⟩
-
-@[simp]
-
-Depends on / 依赖: pow_pos
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow { x : R // 0 < x } Nat :=
+instance : Pow { x : R // 0 < x } ℕ :=
   ⟨fun x n => ⟨(x : R) ^ n, pow_pos x.2 n⟩⟩
 
 @[simp]
-/--
-theorem `val_pow` / 定理 `val_pow`
-
-English:
-theorem val_pow
-  given: (x : { x : R // 0 < x }) (n : Nat)
-  proof: rfl
-
-中文:
-定理 val_pow
-  条件: (x : { x : R // 0 < x }) (n : 自然数)
-  证明: rfl
+/-
+**Positive.val_pow** 是 Mathlib 中的一个定理，位于命名空间 `Positive`。
+形式化陈述：val_pow (x : { x : R // 0 < x }) (n : Nat) : ↑(x ^ n) = (x : R) ^ n
+参数：x : { x : R // 0 < x }；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem val_pow (x : { x : R // 0 < x }) (n : Nat) :
+theorem val_pow (x : { x : R // 0 < x }) (n : ℕ) :
     ↑(x ^ n) = (x : R) ^ n :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Semigroup { x : R // 0 < x }
-  body: fast_instance%
-  Subtype.coe_injective.semigroup Subtype.val val_mul
-
-中文:
-实例 :
-  签名: 半群 { x : R // 0 < x }
-  定义体: fast_instance%
-  Subtype.coe_injective.semigroup Subtype.val val_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Semigroup { x : R // 0 < x } := fast_instance%
   Subtype.coe_injective.semigroup Subtype.val val_mul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Distrib { x : R // 0 < x }
-  body: fast_instance%
-  Subtype.coe_injective.distrib _ coe_add val_mul
-
-中文:
-实例 :
-  签名: Distrib { x : R // 0 < x }
-  定义体: fast_instance%
-  Subtype.coe_injective.distrib _ coe_add val_mul
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Distrib { x : R // 0 < x } := fast_instance%
   Subtype.coe_injective.distrib _ coe_add val_mul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One { x : R // 0 < x }
-  body: ⟨⟨1, one_pos⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺 { x : R // 0 < x }
-  定义体: ⟨⟨1, one_pos⟩⟩
-
-@[simp]
-
-Depends on / 依赖: one_pos
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One { x : R // 0 < x } :=
   ⟨⟨1, one_pos⟩⟩
 
 @[simp]
-/--
-theorem `val_one` / 定理 `val_one`
-
-English:
-theorem val_one
-  statement: ((1 : { x : R // 0 < x }) : R) = 1
-  proof: rfl
-
-中文:
-定理 val_one
-  结论: ((1 : { x : R // 0 < x }) : R) = 1
-  证明: rfl
+/-
+**Positive.val_one** 是 Mathlib 中的一个定理，位于命名空间 `Positive`。
+形式化陈述：val_one : ((1 : { x : R // 0 < x }) : R) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_one : ((1 : { x : R // 0 < x }) : R) = 1 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid { x : R // 0 < x }
-  body: fast_instance%
-  Subtype.coe_injective.monoid _ val_one val_mul val_pow
-
-中文:
-实例 :
-  签名: 幺半群 { x : R // 0 < x }
-  定义体: fast_instance%
-  Subtype.coe_injective.monoid _ val_one val_mul val_pow
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Monoid { x : R // 0 < x } := fast_instance%
   Subtype.coe_injective.monoid _ val_one val_mul val_pow
@@ -471,58 +264,67 @@ end Mul
 
 section mul_comm
 
-/--
-Instance `commMonoid` / 实例 `commMonoid`
-
-English:
-instance commMonoid
-  signature: [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
-  body: fast_instance%
-  Subtype.coe_injective.commMonoid (M₂ := R) (Subtype.val) val_one val_mul val_pow
-
-中文:
-实例 commMonoid
-  签名: [交换半环 R] [偏序 R] [是StrictOrdered环 R]
-  定义体: fast_instance%
-  Subtype.coe_injective.commMonoid (M₂ := R) (Subtype.val) val_one val_mul val_pow
-
-Depends on / 依赖: fast_instance
+/-
+**Positive.commMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：commMonoid [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R] : Com
+mMonoid { x : R // 0 < x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commMonoid [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R] :
     CommMonoid { x : R // 0 < x } := fast_instance%
   Subtype.coe_injective.commMonoid (M₂ := R) (Subtype.val) val_one val_mul val_pow
-
-/--
-Instance `isOrderedMonoid` / 实例 `isOrderedMonoid`
-
-English:
-instance isOrderedMonoid
-  signature: [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
-  body: Subtype.coe_le_coe.1 mul_le_mul_of_nonneg_right hxy c.2.le
-
-中文:
-实例 isOrderedMonoid
-  签名: [交换半环 R] [偏序 R] [是StrictOrdered环 R]
-  定义体: Subtype.coe_le_coe.1 mul_le_mul_of_nonneg_right hxy c.2.le
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe, coe_le_coe, mul_le_mul_of_nonneg_right
+/-
+**Positive.isOrderedMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：isOrderedMonoid [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R] 
+: IsOrderedMonoid { x : R // 0 < x } where mul_le_mul_left _ _ hxy c
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance isOrderedMonoid [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R] :
     IsOrderedMonoid { x : R // 0 < x } where
-mul_le_mul_left _ _ hxy c := Subtype.coe_le_coe.1 mul_le_mul_of_nonneg_right hxy c.2.le
+  mul_le_mul_left _ _ hxy c := Subtype.coe_le_coe.1 <| mul_le_mul_of_nonneg_right hxy c.2.le
 
-/--
-Instance `isOrderedCancelMonoid` / 实例 `isOrderedCancelMonoid`
+/-- If `R` is a nontrivial linear ordered commutative semiring, then `{x : R // 0 < x}` is a linear
+ordered cancellative commutative monoid. -/
+/-
+**Positive.isOrderedCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Positive`。
+形式化陈述：isOrderedCancelMonoid [CommSemiring R] [LinearOrder R] [IsStrictOrderedRin
+g R] : IsOrderedCancelMonoid { x : R // 0 < x } where le_of_mul_le_mul_left a _ 
+_
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_le_mul_iff_right₀`：mul_le_mul_iff_right₀ [PosMulMono α] [PosMulRefle
+ctLE α] (a0 : 0 < a) : a * b <= a * c ↔ b <= c
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-instance isOrderedCancelMonoid
-  signature: [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]
-  body: (mul_le_mul_iff_right₀ a.2).1
-
-中文:
-实例 isOrderedCancelMonoid
-  签名: [交换半环 R] [线性序 R] [是StrictOrdered环 R]
-  定义体: (mul_le_mul_iff_right₀ a.2).1
+--- 原说明 ---
+If `R` is a nontrivial linear ordered commutative semiring, then `{x : R // 0 < 
+x}` is a linear
+ordered cancellative commutative monoid.
 -/
 instance isOrderedCancelMonoid [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R] :
     IsOrderedCancelMonoid { x : R // 0 < x } where
@@ -531,3 +333,4 @@ instance isOrderedCancelMonoid [CommSemiring R] [LinearOrder R] [IsStrictOrdered
 end mul_comm
 
 end Positive
+

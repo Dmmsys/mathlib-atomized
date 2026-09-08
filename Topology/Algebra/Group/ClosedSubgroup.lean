@@ -34,42 +34,26 @@ universe u v
 
 /-- The type of closed subgroups of a topological group. -/
 @[ext]
-/--
-Definition of `ClosedSubgroup` / `ClosedSubgroup` 的定义
+/-
+**ClosedSubgroup** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u) → [Group G] → [TopologicalSpace G] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ClosedSubgroup
-  parameters: (G : Type u) [Group G] [TopologicalSpace G]
-  extends: Subgroup G
-  axioms and operations (1):
-    - isClosed' : IsClosed carrier
-
-中文:
-结构 闭子群
-  参数: (G : 类型u) [群 G] [拓扑空间 G]
-  继承: 子群 G
-  公理与运算 (1 个):
-    - isClosed' : 是闭集 carrier
+--- 原说明 ---
+The type of closed subgroups of a topological group.
 -/
 structure ClosedSubgroup (G : Type u) [Group G] [TopologicalSpace G] extends Subgroup G where
   isClosed' : IsClosed carrier
 
 /-- The type of closed subgroups of an additive topological group. -/
 @[ext]
-/--
-Definition of `ClosedAddSubgroup` / `ClosedAddSubgroup` 的定义
+/-
+**ClosedAddSubgroup** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u) → [AddGroup G] → [TopologicalSpace G] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ClosedAddSubgroup
-  parameters: (G : Type u) [AddGroup G] [TopologicalSpace G]
-  axioms and operations (1):
-    - isClosed' : IsClosed carrier
-
-中文:
-结构 ClosedAdd子群
-  参数: (G : 类型u) [加法群 G] [拓扑空间 G]
-  公理与运算 (1 个):
-    - isClosed' : 是闭集 carrier
+--- 原说明 ---
+The type of closed subgroups of an additive topological group.
 -/
 structure ClosedAddSubgroup (G : Type u) [AddGroup G] [TopologicalSpace G] extends
     AddSubgroup G where
@@ -85,95 +69,44 @@ variable (G : Type u) [Group G] [TopologicalSpace G]
 
 variable {G} in
 @[to_additive]
-/--
-theorem `toSubgroup_injective` / 定理 `toSubgroup_injective`
-
-English:
-theorem toSubgroup_injective
-  statement: Function.Injective
-  proof: fun A B h => by
-  ext
-  rw [h]
-
-@[to_additive]
-
-中文:
-定理 toSubgroup_injective
-  结论: 函数.单射
-  证明: fun A B h => by
-  ext
-  rw [h]
-
-@[to_additive]
+/-
+**ClosedSubgroup.toSubgroup_injective** 是 Mathlib 中的一个定理，位于命名空间 `ClosedSubgroup`
+。
+形式化陈述：toSubgroup_injective : Function.Injective (ClosedSubgroup.toSubgroup : Clo
+sedSubgroup G -> Subgroup G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosedSubgroup.ext`：∀ {G : Type u} {inst : Group G} {inst_1 : Topologica
+lSpace G} {x y : ClosedSubgroup G},   (↑x).carrier = (↑y).carrier → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toSubgroup_injective : Function.Injective
-    (ClosedSubgroup.toSubgroup : ClosedSubgroup G -> Subgroup G) :=
-  fun A B h => by
+    (ClosedSubgroup.toSubgroup : ClosedSubgroup G → Subgroup G) :=
+  fun A B h ↦ by
   ext
   rw [h]
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (ClosedSubgroup G) G
-  body: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-中文:
-实例 :
-  签名: 集合状 (闭子群 G) G
-  定义体: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
+/-
+**ClosedSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `ClosedSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (ClosedSubgroup G) G where
   coe U := U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (ClosedSubgroup G)
-  body: .ofSetLike (ClosedSubgroup G) G
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 偏序 (闭子群 G)
-  定义体: .ofSetLike (ClosedSubgroup G) G
-
-@[to_additive]
+  coe_injective _ _ h := toSubgroup_injective <| SetLike.ext' h
+/-
+**ClosedSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `ClosedSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance : PartialOrder (ClosedSubgroup G) := .ofSetLike (ClosedSubgroup G) G
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SubgroupClass (ClosedSubgroup G) G
-  body: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 子群类 (闭子群 G) G
-  定义体: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-@[to_additive]
-
-Depends on / 依赖: Subsemigroup, Subsemigroup.mul_mem, mul_mem
+/-
+**ClosedSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `ClosedSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SubgroupClass (ClosedSubgroup G) G where
   mul_mem := Subsemigroup.mul_mem' _
@@ -181,89 +114,39 @@ instance : SubgroupClass (ClosedSubgroup G) G where
   inv_mem := Subgroup.inv_mem' _
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (ClosedSubgroup G) (Subgroup G)
-  body: toSubgroup
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: Coe (闭子群 G) (子群 G)
-  定义体: toSubgroup
-
-@[to_additive]
-
-Depends on / 依赖: toSubgroup
+/-
+**ClosedSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `ClosedSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe (ClosedSubgroup G) (Subgroup G) where
   coe := toSubgroup
 
 @[to_additive]
-/--
-Instance `instInfClosedSubgroup` / 实例 `instInfClosedSubgroup`
-
-English:
-instance instInfClosedSubgroup
-  signature: : Min (ClosedSubgroup G)
-  body: ⟨fun U V => ⟨U ⊓ V, U.isClosed'.inter V.isClosed'⟩⟩
-
-@[to_additive]
-
-中文:
-实例 instInfClosedSubgroup
-  签名: : 最小值 (闭子群 G)
-  定义体: ⟨fun U V => ⟨U ⊓ V, U.isClosed'.inter V.isClosed'⟩⟩
-
-@[to_additive]
-
-Depends on / 依赖: U.isClosed, V.isClosed, isClosed
+/-
+**ClosedSubgroup.instInfClosedSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `ClosedSubgroup
+`。
+形式化陈述：instInfClosedSubgroup : Min (ClosedSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInfClosedSubgroup : Min (ClosedSubgroup G) :=
-  ⟨fun U V => ⟨U ⊓ V, U.isClosed'.inter V.isClosed'⟩⟩
+  ⟨fun U V ↦ ⟨U ⊓ V, U.isClosed'.inter V.isClosed'⟩⟩
 
 @[to_additive]
-/--
-Instance `instSemilatticeInfClosedSubgroup` / 实例 `instSemilatticeInfClosedSubgroup`
-
-English:
-instance instSemilatticeInfClosedSubgroup
-  signature: : SemilatticeInf (ClosedSubgroup G)
-  body: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 instSemilatticeInfClosedSubgroup
-  签名: : SemilatticeInf (闭子群 G)
-  定义体: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.semilatticeInf, coe_injective, semilatticeInf
+/-
+**ClosedSubgroup.instSemilatticeInfClosedSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `Clo
+sedSubgroup`。
+形式化陈述：instSemilatticeInfClosedSubgroup : SemilatticeInf (ClosedSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemilatticeInfClosedSubgroup : SemilatticeInf (ClosedSubgroup G) :=
-  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
+  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ ↦ rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CompactSpace
-  signature: G] (H
-  body: isCompact_iff_compactSpace.mp (IsClosed.isCompact H.isClosed')
-
-中文:
-实例 [紧空间
-  签名: G] (H
-  定义体: isCompact_iff_compactSpace.mp (IsClosed.isCompact H.isClosed')
-
-Depends on / 依赖: H.isClosed, IsClosed, IsClosed.isCompact, isClosed, isCompact, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp
+/-
+**ClosedSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `ClosedSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CompactSpace G] (H : ClosedSubgroup G) : CompactSpace H :=
   isCompact_iff_compactSpace.mp (IsClosed.isCompact H.isClosed')
@@ -277,34 +160,30 @@ namespace Subgroup
 variable {G : Type u} [Group G] [TopologicalSpace G] [SeparatelyContinuousMul G]
 
 @[to_additive]
-/--
-lemma `normalCore_isClosed` / 引理 `normalCore_isClosed`
-
-English:
-lemma normalCore_isClosed
-  given: (H : Subgroup G) (h : IsClosed (H : Set G))
-  proof: by
-  rw [normalCore_eq_iInf_comap_conj]
-  push_cast
-  apply isClosed_iInter
-  intro g
-  exact h.preimage (IsTopologicalGroup.continuous_conj g)
-
-@[to_additive]
-
-中文:
-引理 normalCore_isClosed
-  条件: (H : 子群 G) (h : 是闭集 (H : 集合 G))
-  证明: by
-  rw [normalCore_eq_iInf_comap_conj]
-  push_cast
-  apply isClosed_iInter
-  intro g
-  exact h.preimage (IsTopologicalGroup.continuous_conj g)
-
-@[to_additive]
-
-Depends on / 依赖: IsTopologicalGroup, IsTopologicalGroup.continuous_conj, continuous_conj, h.preimage, isClosed_iInter, normalCore_eq_iInf_comap_conj, preimage
+/-
+**Subgroup.normalCore_isClosed** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+形式化陈述：normalCore_isClosed (H : Subgroup G) (h : IsClosed (H : Set G)) : IsClosed
+ (H.normalCore : Set G)
+参数：H : Subgroup G；h : IsClosed (H : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.normalCore_eq_iInf_comap_conj`：normalCore_eq_iInf_comap_conj (H
+ : Subgroup G) : H.normalCore = ⨅ g : G, H.comap (MulAut.conj g)
+· 使用定理 `Subgroup.coe_iInf`：coe_iInf {ι : Sort*} {S : ι -> Subgroup G} : (↑(⨅ i, 
+S i) : Set G) = ⋂ i, S i
+· 使用定理 `isClosed_iInter`：isClosed_iInter {f : ι -> Set X} (h : forall i, IsClose
+d (f i)) : IsClosed (⋂ i, f i)
+· 使用定理 `IsClosed.preimage`：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h 
+: IsClosed t) : IsClosed (f ⁻¹' t)
+· 使用定理 `IsTopologicalGroup.continuous_conj`：IsTopologicalGroup.continuous_conj [
+SeparatelyContinuousMul G] (g : G) : Continuous fun h : G => g * h * g⁻¹
 -/
 lemma normalCore_isClosed (H : Subgroup G) (h : IsClosed (H : Set G)) :
     IsClosed (H.normalCore : Set G) := by
@@ -315,26 +194,21 @@ lemma normalCore_isClosed (H : Subgroup G) (h : IsClosed (H : Set G)) :
   exact h.preimage (IsTopologicalGroup.continuous_conj g)
 
 @[to_additive]
-/--
-lemma `isOpen_of_isClosed_of_finiteIndex` / 引理 `isOpen_of_isClosed_of_finiteIndex`
-
-English:
-lemma isOpen_of_isClosed_of_finiteIndex
-  statement: (H : Subgroup G) [H.FiniteIndex]
-  proof: by
-  rw [← QuotientGroup.t1Space_iff] at h
-  rw [← QuotientGroup.discreteTopology_iff]
-  infer_instance
-
-中文:
-引理 isOpen_of_isClosed_of_finiteIndex
-  结论: (H : 子群 G) [H.FiniteIndex]
-  证明: by
-  rw [← QuotientGroup.t1Space_iff] at h
-  rw [← QuotientGroup.discreteTopology_iff]
-  infer_instance
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.discreteTopology_iff, QuotientGroup.t1Space_iff, discreteTopology_iff, infer_instance, t1Space_iff
+/-
+**Subgroup.isOpen_of_isClosed_of_finiteIndex** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup
+`。
+形式化陈述：isOpen_of_isClosed_of_finiteIndex (H : Subgroup G) [H.FiniteIndex] (h : Is
+Closed (H : Set G)) : IsOpen (H : Set G)
+参数：H : Subgroup G；h : IsClosed (H : Set G)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.discreteTopology_iff`：discreteTopology_iff : DiscreteTopol
+ogy (G ⧸ N) ↔ IsOpen (N : Set G)
+· 使用定理 `QuotientGroup.t1Space_iff`：t1Space_iff : T1Space (G ⧸ N) ↔ IsClosed (N :
+ Set G)
 -/
 lemma isOpen_of_isClosed_of_finiteIndex (H : Subgroup G) [H.FiniteIndex]
     (h : IsClosed (H : Set G)) : IsOpen (H : Set G) := by
@@ -345,3 +219,4 @@ lemma isOpen_of_isClosed_of_finiteIndex (H : Subgroup G) [H.FiniteIndex]
 end Subgroup
 
 end
+

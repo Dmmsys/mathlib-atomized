@@ -27,28 +27,20 @@ variable {N : Type*} [Group N]
 
 namespace Subgroup
 
-/--
-theorem `range_zpowersHom` / 定理 `range_zpowersHom`
-
-English:
-theorem range_zpowersHom
-  given: (g : G)
-  statement: (zpowersHom G g).range = zpowers g
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 range_zpowersHom
-  条件: (g : G)
-  结论: (zpowersHom G g).range = zpowers g
-  证明: rfl
-
-@[to_additive]
+/-
+**Subgroup.range_zpowersHom** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：range_zpowersHom (g : G) : (zpowersHom G g).range = zpowers g
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem range_zpowersHom (g : G) : (zpowersHom G g).range = zpowers g := rfl
 
 @[to_additive]
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (a : G) : Countable (zpowers a) := Set.rangeFactorization_surjective.countable
 
 end Subgroup
@@ -56,70 +48,57 @@ end Subgroup
 namespace AddSubgroup
 
 @[simp]
-/--
-theorem `range_zmultiplesHom` / 定理 `range_zmultiplesHom`
-
-English:
-theorem range_zmultiplesHom
-  given: (a : A)
-  statement: (zmultiplesHom A a).range = zmultiples a
-  proof: rfl
-
-中文:
-定理 range_zmultiplesHom
-  条件: (a : A)
-  结论: (zmultiplesHom A a).range = zmultiples a
-  证明: rfl
+/-
+**AddSubgroup.range_zmultiplesHom** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup`。
+形式化陈述：range_zmultiplesHom (a : A) : (zmultiplesHom A a).range = zmultiples a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem range_zmultiplesHom (a : A) : (zmultiplesHom A a).range = zmultiples a :=
   rfl
 
 section Ring
 
-variable {R : Type*} [Ring R] (r : R) (k : Int)
+variable {R : Type*} [Ring R] (r : R) (k : ℤ)
 
 @[simp]
-/--
-theorem `intCast_mul_mem_zmultiples` / 定理 `intCast_mul_mem_zmultiples`
-
-English:
-theorem intCast_mul_mem_zmultiples
-  statement: ↑(k : Int) * r in zmultiples r
-  proof: by
-  simpa only [← zsmul_eq_mul] using zsmul_mem_zmultiples r k
-
-@[simp]
-
-中文:
-定理 intCast_mul_mem_zmultiples
-  结论: ↑(k : 整数) * r in zmultiples r
-  证明: by
-  simpa only [← zsmul_eq_mul] using zsmul_mem_zmultiples r k
-
-@[simp]
-
-Depends on / 依赖: zsmul_eq_mul, zsmul_mem_zmultiples
+/-
+**AddSubgroup.intCast_mul_mem_zmultiples** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup`
+。
+形式化陈述：intCast_mul_mem_zmultiples : ↑(k : Int) * r in zmultiples r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubgroup.zsmul_mem_zmultiples`：∀ {G : Type u_1} [inst : AddGroup G] (
+g : G) (k : ℤ), k • g ∈ AddSubgroup.zmultiples g
 -/
-theorem intCast_mul_mem_zmultiples : ↑(k : Int) * r in zmultiples r := by
+theorem intCast_mul_mem_zmultiples : ↑(k : ℤ) * r ∈ zmultiples r := by
   simpa only [← zsmul_eq_mul] using zsmul_mem_zmultiples r k
 
 @[simp]
-/--
-theorem `intCast_mem_zmultiples_one` / 定理 `intCast_mem_zmultiples_one`
-
-English:
-theorem intCast_mem_zmultiples_one
-  statement: ↑(k : Int) in zmultiples (1 : R)
-  proof: mem_zmultiples_iff.mp ⟨k, by simp⟩
-
-中文:
-定理 intCast_mem_zmultiples_one
-  结论: ↑(k : 整数) in zmultiples (1 : R)
-  证明: mem_zmultiples_iff.mp ⟨k, by simp⟩
-
-Depends on / 依赖: mem_zmultiples_iff, mem_zmultiples_iff.mp
+/-
+**AddSubgroup.intCast_mem_zmultiples_one** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup`
+。
+形式化陈述：intCast_mem_zmultiples_one : ↑(k : Int) in zmultiples (1 : R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AddSubgroup.mem_zmultiples_iff`：∀ {G : Type u_1} [inst : AddGroup G] {g 
+h : G}, h ∈ AddSubgroup.zmultiples g ↔ ∃ k, k • g = h
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem intCast_mem_zmultiples_one : ↑(k : Int) in zmultiples (1 : R) :=
+theorem intCast_mem_zmultiples_one : ↑(k : ℤ) ∈ zmultiples (1 : R) :=
   mem_zmultiples_iff.mp ⟨k, by simp⟩
 
 end Ring
@@ -130,129 +109,120 @@ namespace Int
 
 open AddSubgroup
 
-/--
-lemma `range_castAddHom` / 引理 `range_castAddHom`
-
-English:
-lemma range_castAddHom
-  given: {A : Type*} [AddGroupWithOne A]
-  proof: by
-  ext a
-  simp_rw [AddMonoidHom.mem_range, Int.coe_castAddHom, AddSubgroup.mem_zmultiples_iff, zsmul_one]
-
-中文:
-引理 range_castAddHom
-  条件: {A : 类型} [加法带幺群 A]
-  证明: by
-  ext a
-  simp_rw [AddMonoidHom.mem_range, Int.coe_castAddHom, AddSubgroup.mem_zmultiples_iff, zsmul_one]
+/-
+**Int.range_castAddHom** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {A : Type u_4} [inst : AddGroupWithOne A], (Int.castAddHom A).range = Ad
+dSubgroup.zmultiples 1
+参数：Int.castAddHom A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.ext`：∀ {G : Type u_1} [inst : AddGroup G] {H K : AddSubgroup
+ G}, (∀ (x : G), x ∈ H ↔ x ∈ K) → H = K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zsmul_one`：∀ {R : Type u_1} [inst : AddGroupWithOne R] (n : ℤ), n • 1 = 
+↑n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma range_castAddHom {A : Type*} [AddGroupWithOne A] :
     (castAddHom A).range = zmultiples 1 := by
   ext a
   simp_rw [AddMonoidHom.mem_range, Int.coe_castAddHom, AddSubgroup.mem_zmultiples_iff, zsmul_one]
-
-/--
-lemma `range_nsmulAddMonoidHom` / 引理 `range_nsmulAddMonoidHom`
-
-English:
-lemma range_nsmulAddMonoidHom
-  given: (n : Nat)
-  statement: (nsmulAddMonoidHom n).range = zmultiples (n : Int)
-  proof: by
+/-
+**Int.range_nsmulAddMonoidHom** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：range_nsmulAddMonoidHom (n : Nat) : (nsmulAddMonoidHom n).range = zmultipl
+es (n : Int)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.ext`：∀ {G : Type u_1} [inst : AddGroup G] {H K : AddSubgroup
+ G}, (∀ (x : G), x ∈ H ↔ x ∈ K) → H = K
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `nsmulAddMonoidHom_apply`：∀ {α : Type u_1} [inst : AddCommMonoid α] (n : 
+ℕ) (x : α), (nsmulAddMonoidHom n) x = n • x
+-/
+lemma range_nsmulAddMonoidHom (n : ℕ) : (nsmulAddMonoidHom n).range = zmultiples (n : ℤ) := by
   ext m : 1
   simp [mem_zmultiples_iff, dvd_def]
   grind
-
-中文:
-引理 range_nsmulAddMonoidHom
-  条件: (n : 自然数)
-  结论: (nsmulAddMonoidHom n).range = zmultiples (n : 整数)
-  证明: by
-  ext m : 1
-  simp [mem_zmultiples_iff, dvd_def]
-  grind
-
-Depends on / 依赖: dvd_def, mem_zmultiples_iff
+/-
+**Int.closure_eq_zmultiples** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：closure_eq_zmultiples (a b : Int) : closure {a, b} = zmultiples (a.gcd b :
+ Int)
+参数：a b : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.gcd_eq_gcd_ab`：∀ (x y : ℤ), ↑(x.gcd y) = x * x.gcdA y + y * x.gcdB y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-lemma range_nsmulAddMonoidHom (n : Nat) : (nsmulAddMonoidHom n).range = zmultiples (n : Int) := by
-  ext m : 1
-  simp [mem_zmultiples_iff, dvd_def]
-  grind
-
-/--
-theorem `closure_eq_zmultiples` / 定理 `closure_eq_zmultiples`
-
-English:
-theorem closure_eq_zmultiples
-  given: (a b : Int)
-  statement: closure {a, b} = zmultiples (a.gcd b : Int)
-  proof: by
+theorem closure_eq_zmultiples (a b : ℤ) : closure {a, b} = zmultiples (a.gcd b : ℤ) := by
   apply le_antisymm
   · grind [closure_le, mem_zmultiples_iff, SetLike.mem_coe, gcd_dvd_left, gcd_dvd_right]
   · simp [zmultiples_le, mem_closure_pair, gcd_eq_gcd_ab, mul_comm]
-
-中文:
-定理 closure_eq_zmultiples
-  条件: (a b : 整数)
-  结论: closure {a, b} = zmultiples (a.最大公约数 b : 整数)
-  证明: by
-  apply le_antisymm
-  · grind [closure_le, mem_zmultiples_iff, SetLike.mem_coe, gcd_dvd_left, gcd_dvd_right]
-  · simp [zmultiples_le, mem_closure_pair, gcd_eq_gcd_ab, mul_comm]
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, closure_le, gcd_dvd_left, gcd_dvd_right, gcd_eq_gcd_ab, le_antisymm, mem_closure_pair, mem_coe, mem_zmultiples_iff, mul_comm, zmultiples_le
+/-
+**Int.zmultiples_sup** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：zmultiples_sup (a b : Int) : zmultiples a ⊔ zmultiples b = zmultiples (a.g
+cd b : Int)
+参数：a b : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AddSubgroup.zmultiples_eq_closure`：∀ {G : Type u_1} [inst : AddGroup G] 
+(g : G), AddSubgroup.zmultiples g = AddSubgroup.closure {g}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem closure_eq_zmultiples (a b : Int) : closure {a, b} = zmultiples (a.gcd b : Int) := by
-  apply le_antisymm
-  · grind [closure_le, mem_zmultiples_iff, SetLike.mem_coe, gcd_dvd_left, gcd_dvd_right]
-  · simp [zmultiples_le, mem_closure_pair, gcd_eq_gcd_ab, mul_comm]
-
-/--
-theorem `zmultiples_sup` / 定理 `zmultiples_sup`
-
-English:
-theorem zmultiples_sup
-  given: (a b : Int)
-  statement: zmultiples a ⊔ zmultiples b = zmultiples (a.gcd b : Int)
-  proof: by
+theorem zmultiples_sup (a b : ℤ) : zmultiples a ⊔ zmultiples b = zmultiples (a.gcd b : ℤ) := by
   simp_rw [← closure_eq_zmultiples, zmultiples_eq_closure, ← closure_union, Set.singleton_union]
-
-中文:
-定理 zmultiples_sup
-  条件: (a b : 整数)
-  结论: zmultiples a ⊔ zmultiples b = zmultiples (a.最大公约数 b : 整数)
-  证明: by
-  simp_rw [← closure_eq_zmultiples, zmultiples_eq_closure, ← closure_union, Set.singleton_union]
-
-Depends on / 依赖: Set.singleton_union, closure_eq_zmultiples, closure_union, simp_rw, singleton_union, zmultiples_eq_closure
+/-
+**Int.zmultiples_inf** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：zmultiples_inf (a b : Int) : zmultiples a ⊓ zmultiples b = zmultiples (a.l
+cm b : Int)
+参数：a b : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.ext`：∀ {G : Type u_1} [inst : AddGroup G] {H K : AddSubgroup
+ G}, (∀ (x : G), x ∈ H ↔ x ∈ K) → H = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem zmultiples_sup (a b : Int) : zmultiples a ⊔ zmultiples b = zmultiples (a.gcd b : Int) := by
-  simp_rw [← closure_eq_zmultiples, zmultiples_eq_closure, ← closure_union, Set.singleton_union]
-
-/--
-theorem `zmultiples_inf` / 定理 `zmultiples_inf`
-
-English:
-theorem zmultiples_inf
-  given: (a b : Int)
-  statement: zmultiples a ⊓ zmultiples b = zmultiples (a.lcm b : Int)
-  proof: by
-  ext
-  simp [mem_zmultiples_iff, coe_lcm_dvd_iff]
-
-中文:
-定理 zmultiples_inf
-  条件: (a b : 整数)
-  结论: zmultiples a ⊓ zmultiples b = zmultiples (a.最小公倍数 b : 整数)
-  证明: by
-  ext
-  simp [mem_zmultiples_iff, coe_lcm_dvd_iff]
-
-Depends on / 依赖: coe_lcm_dvd_iff, mem_zmultiples_iff
--/
-theorem zmultiples_inf (a b : Int) : zmultiples a ⊓ zmultiples b = zmultiples (a.lcm b : Int) := by
+theorem zmultiples_inf (a b : ℤ) : zmultiples a ⊓ zmultiples b = zmultiples (a.lcm b : ℤ) := by
   ext
   simp [mem_zmultiples_iff, coe_lcm_dvd_iff]
 
 end Int
+

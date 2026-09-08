@@ -36,51 +36,34 @@ open CategoryTheory
 variable (R : Type (u + 1)) [Ring R]
 
 /--
-Definition of `CondensedMod` / `CondensedMod` 的定义
+The category of condensed `R`-modules, defined as sheaves of `R`-modules over
+`CompHaus` with respect to the coherent Grothendieck topology.
+-/
+/-
+**CondensedMod** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：CondensedMod
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CondensedMod
-  body: Condensed.{u} (ModuleCat.{u + 1} R)
-
-中文:
-缩写 CondensedMod
-  定义体: Condensed.{u} (ModuleCat.{u + 1} R)
-
-Depends on / 依赖: Condensed, ModuleCat
+--- 原说明 ---
+The category of condensed `R`-modules, defined as sheaves of `R`-modules over
+`CompHaus` with respect to the coherent Grothendieck topology.
 -/
 abbrev CondensedMod := Condensed.{u} (ModuleCat.{u + 1} R)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Abelian (CondensedMod.{u} R)
-  body: sheafIsAbelian
-
-中文:
-实例 :
-  签名: 交换 (CondensedMod.{u} R)
-  定义体: sheafIsAbelian
-
-Depends on / 依赖: sheafIsAbelian
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Abelian (CondensedMod.{u} R) := sheafIsAbelian
 
-/--
-Definition of `Condensed.forget` / `Condensed.forget` 的定义
+/-- The forgetful functor from condensed `R`-modules to condensed sets. -/
+/-
+**Condensed.forget** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Condensed.forget : CondensedMod R ⥤ CondensedSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Condensed.forget
-  signature: : CondensedMod R ⥤ CondensedSet
-  body: sheafCompose _ (CategoryTheory.forget _)
-
-中文:
-定义 Condensed.forget
-  签名: : CondensedMod R ⥤ CondensedSet
-  定义体: sheafCompose _ (CategoryTheory.forget _)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.forget, forget, sheafCompose
+--- 原说明 ---
+The forgetful functor from condensed `R`-modules to condensed sets.
 -/
 def Condensed.forget : CondensedMod R ⥤ CondensedSet := sheafCompose _ (CategoryTheory.forget _)
 
@@ -88,132 +71,96 @@ def Condensed.forget : CondensedMod R ⥤ CondensedSet := sheafCompose _ (Catego
 The left adjoint to the forgetful functor. The *free condensed `R`-module* on a condensed set.
 -/
 noncomputable
-/--
-Definition of `Condensed.free` / `Condensed.free` 的定义
-
-English:
-definition Condensed.free
-  signature: : CondensedSet ⥤ CondensedMod R
-  body: Sheaf.composeAndSheafify _ (ModuleCat.free R)
-
-中文:
-定义 Condensed.free
-  签名: : CondensedSet ⥤ CondensedMod R
-  定义体: Sheaf.composeAndSheafify _ (ModuleCat.free R)
-
-Depends on / 依赖: ModuleCat, ModuleCat.free, Sheaf.composeAndSheafify, composeAndSheafify
+/-
+**Condensed.free** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Condensed.free : CondensedSet ⥤ CondensedMod R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def Condensed.free : CondensedSet ⥤ CondensedMod R :=
   Sheaf.composeAndSheafify _ (ModuleCat.free R)
 
 /-- The condensed version of the free-forgetful adjunction. -/
 noncomputable
-/--
-Definition of `Condensed.freeForgetAdjunction` / `Condensed.freeForgetAdjunction` 的定义
-
-English:
-definition Condensed.freeForgetAdjunction
-  signature: : free R ⊣ forget R
-  body: Sheaf.adjunction _ (ModuleCat.adj R)
-
-中文:
-定义 Condensed.freeForgetAdjunction
-  签名: : free R ⊣ forget R
-  定义体: Sheaf.adjunction _ (ModuleCat.adj R)
-
-Depends on / 依赖: ModuleCat, ModuleCat.adj, Sheaf.adjunction, adjunction
+/-
+**Condensed.freeForgetAdjunction** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Condensed.freeForgetAdjunction : free R ⊣ forget R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def Condensed.freeForgetAdjunction : free R ⊣ forget R := Sheaf.adjunction _ (ModuleCat.adj R)
 
 /--
-Definition of `CondensedAb` / `CondensedAb` 的定义
-
-English:
-abbreviation CondensedAb
-  body: CondensedMod.{u} (ULift Int)
-
-noncomputable example : Abelian CondensedAb.{u} := inferInstance
-
-中文:
-缩写 CondensedAb
-  定义体: CondensedMod.{u} (ULift Int)
-
-noncomputable example : Abelian CondensedAb.{u} := inferInstance
-
-Depends on / 依赖: CondensedMod
+The category of condensed abelian groups is defined as condensed `ℤ`-modules.
 -/
-abbrev CondensedAb := CondensedMod.{u} (ULift Int)
+/-
+**CondensedAb** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：CondensedAb
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
+--- 原说明 ---
+The category of condensed abelian groups is defined as condensed `ℤ`-modules.
+-/
+abbrev CondensedAb := CondensedMod.{u} (ULift ℤ)
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example : Abelian CondensedAb.{u} := inferInstance
 
-/--
-Definition of `Condensed.abForget` / `Condensed.abForget` 的定义
+/-- The forgetful functor from condensed abelian groups to condensed sets. -/
+/-
+**Condensed.abForget** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Condensed.abForget : CondensedAb ⥤ CondensedSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Condensed.abForget
-  signature: : CondensedAb ⥤ CondensedSet
-  body: forget _
-
-中文:
-缩写 Condensed.abForget
-  签名: : CondensedAb ⥤ CondensedSet
-  定义体: forget _
-
-Depends on / 依赖: forget
+--- 原说明 ---
+The forgetful functor from condensed abelian groups to condensed sets.
 -/
 abbrev Condensed.abForget : CondensedAb ⥤ CondensedSet := forget _
 
-/--
-Definition of `Condensed.freeAb` / `Condensed.freeAb` 的定义
+/-- The free condensed abelian group on a condensed set. -/
+/-
+**Condensed.freeAb** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Condensed.freeAb : CondensedSet ⥤ CondensedAb
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Condensed.freeAb
-  signature: : CondensedSet ⥤ CondensedAb
-  body: free _
-
-中文:
-缩写 Condensed.freeAb
-  签名: : CondensedSet ⥤ CondensedAb
-  定义体: free _
+--- 原说明 ---
+The free condensed abelian group on a condensed set.
 -/
 noncomputable abbrev Condensed.freeAb : CondensedSet ⥤ CondensedAb := free _
 
-/--
-Definition of `Condensed.setAbAdjunction` / `Condensed.setAbAdjunction` 的定义
+/-- The free-forgetful adjunction for condensed abelian groups. -/
+/-
+**Condensed.setAbAdjunction** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Condensed.setAbAdjunction : freeAb ⊣ abForget
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Condensed.setAbAdjunction
-  signature: : freeAb ⊣ abForget
-  body: freeForgetAdjunction _
-
-中文:
-缩写 Condensed.setAbAdjunction
-  签名: : freeAb ⊣ abForget
-  定义体: freeForgetAdjunction _
-
-Depends on / 依赖: freeForgetAdjunction
+--- 原说明 ---
+The free-forgetful adjunction for condensed abelian groups.
 -/
 noncomputable abbrev Condensed.setAbAdjunction : freeAb ⊣ abForget := freeForgetAdjunction _
 
 namespace CondensedMod
 
-/--
-lemma `hom_naturality_apply` / 引理 `hom_naturality_apply`
-
-English:
-lemma hom_naturality_apply
-  statement: {X Y : CondensedMod.{u} R} (f : X ⟶ Y) {S T : CompHausᵒᵖ} (g : S ⟶ T)
-  proof: NatTrans.naturality_apply f.hom g x
-
-中文:
-引理 hom_naturality_apply
-  结论: {X Y : CondensedMod.{u} R} (f : X ⟶ Y) {S T : CompHausᵒᵖ} (g : S ⟶ T)
-  证明: NatTrans.naturality_apply f.hom g x
-
-Depends on / 依赖: NatTrans, NatTrans.naturality_apply, f.hom, naturality_apply
+/-
+**CondensedMod.hom_naturality_apply** 是 Mathlib 中的一个引理，位于命名空间 `CondensedMod`。
+形式化陈述：hom_naturality_apply {X Y : CondensedMod.{u} R} (f : X ⟶ Y) {S T : CompHau
+sᵒᵖ} (g : S ⟶ T) (x : X.obj.obj S) : f.hom.app T (X.obj.map g x) = Y.obj.map g (
+f.hom.app S x)
+参数：f : X ⟶ Y；g : S ⟶ T；x : X.obj.obj S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
 -/
 lemma hom_naturality_apply {X Y : CondensedMod.{u} R} (f : X ⟶ Y) {S T : CompHausᵒᵖ} (g : S ⟶ T)
     (x : X.obj.obj S) : f.hom.app T (X.obj.map g x) = Y.obj.map g (f.hom.app S x) :=
   NatTrans.naturality_apply f.hom g x
 
 end CondensedMod
+

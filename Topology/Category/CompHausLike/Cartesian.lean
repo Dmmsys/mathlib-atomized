@@ -27,59 +27,61 @@ open CategoryTheory Limits
 
 namespace CompHausLike
 
-variable {P : TopCat.{u} -> Prop} (X Y : CompHausLike.{u} P)
+variable {P : TopCat.{u} → Prop} (X Y : CompHausLike.{u} P)
 
 section Product
 
 variable [HasProp P (X × Y)]
 
 /--
-Definition of `productCone` / `productCone` 的定义
+Explicit binary fan in `CompHausLike P`, given that the predicate `P` is preserved under taking
+type-theoretic products.
+-/
+/-
+**CompHausLike.productCone** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：productCone : BinaryFan X Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
 
-English:
-definition productCone
-  signature: : BinaryFan X Y
-  body: BinaryFan.mk (P := CompHausLike.of P (X × Y))
-    (ofHom _ { toFun := Prod.fst }) (ofHom _ { toFun := Prod.snd })
-
-中文:
-定义 productCone
-  签名: : BinaryFan X Y
-  定义体: BinaryFan.mk (P := CompHausLike.of P (X × Y))
-    (ofHom _ { toFun := Prod.fst }) (ofHom _ { toFun := Prod.snd })
-
-Depends on / 依赖: BinaryFan, BinaryFan.mk, CompHausLike, CompHausLike.of, Prod.fst, Prod.snd
+--- 原说明 ---
+Explicit binary fan in `CompHausLike P`, given that the predicate `P` is preserv
+ed under taking
+type-theoretic products.
 -/
 def productCone : BinaryFan X Y :=
   BinaryFan.mk (P := CompHausLike.of P (X × Y))
     (ofHom _ { toFun := Prod.fst }) (ofHom _ { toFun := Prod.snd })
 
 /--
-Definition of `productIsLimit` / `productIsLimit` 的定义
+When the predicate `P` is preserved under taking type-theoretic products, that product is a
+category-theoretic product in `CompHausLike P`.
+-/
+/-
+**CompHausLike.productIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：productIsLimit : IsLimit (productCone X Y)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
 
-English:
-definition productIsLimit
-  signature: : IsLimit (productCone X Y)
-  body: by
-  refine BinaryFan.isLimitMk (fun s => ofHom _ { toFun x := (s.fst x, s.snd x) })
-    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_
-  ext x
-  exacts [ConcreteCategory.congr_hom h₁ _, ConcreteCategory.congr_hom h₂ _]
-
-中文:
-定义 productIsLimit
-  签名: : 是极限 (productCone X Y)
-  定义体: by
-  refine BinaryFan.isLimitMk (fun s => ofHom _ { toFun x := (s.fst x, s.snd x) })
-    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_
-  ext x
-  exacts [ConcreteCategory.congr_hom h₁ _, ConcreteCategory.congr_hom h₂ _]
-
-Depends on / 依赖: BinaryFan, BinaryFan.isLimitMk, ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, exacts, isLimitMk, rfl_cat, s.fst, s.snd
+--- 原说明 ---
+When the predicate `P` is preserved under taking type-theoretic products, that p
+roduct is a
+category-theoretic product in `CompHausLike P`.
 -/
 def productIsLimit : IsLimit (productCone X Y) := by
-  refine BinaryFan.isLimitMk (fun s => ofHom _ { toFun x := (s.fst x, s.snd x) })
-    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_
+  refine BinaryFan.isLimitMk (fun s ↦ ofHom _ { toFun x := (s.fst x, s.snd x) })
+    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ ↦ ?_
   ext x
   exacts [ConcreteCategory.congr_hom h₁ _, ConcreteCategory.congr_hom h₂ _]
 
@@ -92,87 +94,98 @@ keep it as a def and turn it on as an instance for the explicit examples of `Com
 needed.
 -/
 @[instance_reducible]
-/--
-Definition of `cartesianMonoidalCategory` / `cartesianMonoidalCategory` 的定义
+/-
+**CompHausLike.cartesianMonoidalCategory** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike
+`。
+形式化陈述：cartesianMonoidalCategory [forall (X Y : CompHausLike.{u} P), HasProp P (X
+ × Y)] [HasProp P PUnit.{u + 1}] : CartesianMonoidalCategory (CompHausLike.{u} P
+)
+参数：X Y : CompHausLike.{u} P；X × Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `DiscreteTopology.toT2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X]
+ [DiscreteTopology X], T2Space X
+· 使用定理 `instDiscreteTopologyPUnit`：DiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition cartesianMonoidalCategory
-  signature: [forall (X Y : CompHausLike.{u} P), HasProp P (X × Y)]
-  body: .ofChosenFiniteProducts
-    ⟨_, CompHausLike.isTerminalPUnit⟩
-    (fun X Y => ⟨productCone X Y, productIsLimit X Y⟩)
+--- 原说明 ---
+When the predicate `P` is preserved under taking type-theoretic products and `PU
+nit` satisfies it,
+then `CompHausLike P` is a cartesian monoidal category.
 
-中文:
-定义 cartesianMonoidalCategory
-  签名: [对任意 (X Y : 余mpHausLike.{u} P), 有命题 P (X × Y)]
-  定义体: .ofChosenFiniteProducts
-    ⟨_, CompHausLike.isTerminalPUnit⟩
-    (fun X Y => ⟨productCone X Y, productIsLimit X Y⟩)
-
-Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit, isTerminalPUnit, ofChosenFiniteProducts, productCone, productIsLimit
+This could be an instance but that causes some slowness issues with typeclass se
+arch, therefore we
+keep it as a def and turn it on as an instance for the explicit examples of `Com
+pHausLike` as
+needed.
 -/
-def cartesianMonoidalCategory [forall (X Y : CompHausLike.{u} P), HasProp P (X × Y)]
+def cartesianMonoidalCategory [∀ (X Y : CompHausLike.{u} P), HasProp P (X × Y)]
     [HasProp P PUnit.{u + 1}] : CartesianMonoidalCategory (CompHausLike.{u} P) :=
   .ofChosenFiniteProducts
     ⟨_, CompHausLike.isTerminalPUnit⟩
-    (fun X Y => ⟨productCone X Y, productIsLimit X Y⟩)
+    (fun X Y ↦ ⟨productCone X Y, productIsLimit X Y⟩)
 
 end Product
 
 section Coproduct
 
-variable [HasProp P (X oplus Y)]
+variable [HasProp P (X ⊕ Y)]
 
 /--
-Definition of `coproductCocone` / `coproductCocone` 的定义
-
-English:
-definition coproductCocone
-  signature: : BinaryCofan X Y
-  body: BinaryCofan.mk (P := CompHausLike.of P (X oplus Y))
-  (ofHom _ { toFun := Sum.inl }) (ofHom _ { toFun := Sum.inr })
-
-中文:
-定义 coproductCocone
-  签名: : BinaryCofan X Y
-  定义体: BinaryCofan.mk (P := CompHausLike.of P (X oplus Y))
-  (ofHom _ { toFun := Sum.inl }) (ofHom _ { toFun := Sum.inr })
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.mk, CompHausLike, CompHausLike.of
+Explicit binary cofan in `CompHausLike P`, given that the predicate `P` is preserved under taking
+type-theoretic sums.
 -/
-def coproductCocone : BinaryCofan X Y := BinaryCofan.mk (P := CompHausLike.of P (X oplus Y))
+/-
+**CompHausLike.coproductCocone** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：coproductCocone : BinaryCofan X Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
+
+--- 原说明 ---
+Explicit binary cofan in `CompHausLike P`, given that the predicate `P` is prese
+rved under taking
+type-theoretic sums.
+-/
+def coproductCocone : BinaryCofan X Y := BinaryCofan.mk (P := CompHausLike.of P (X ⊕ Y))
   (ofHom _ { toFun := Sum.inl }) (ofHom _ { toFun := Sum.inr })
 
 set_option backward.isDefEq.respectTransparency.types false in
 /--
-Definition of `coproductIsColimit` / `coproductIsColimit` 的定义
+When the predicate `P` is preserved under taking type-theoretic sums, that sum is a
+category-theoretic coproduct in `CompHausLike P`.
+-/
+/-
+**CompHausLike.coproductIsColimit** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：coproductIsColimit : IsColimit (coproductCocone X Y)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
 
-English:
-definition coproductIsColimit
-  signature: : IsColimit (coproductCocone X Y)
-  body: by
-  refine BinaryCofan.isColimitMk (fun s => ofHom _ { toFun := Sum.elim s.inl s.inr })
-    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_
-  ext ⟨⟩
-  exacts [ConcreteCategory.congr_hom h₁ _, ConcreteCategory.congr_hom h₂ _]
-
-中文:
-定义 coproductIsColimit
-  签名: : 是余极限 (coproductCocone X Y)
-  定义体: by
-  refine BinaryCofan.isColimitMk (fun s => ofHom _ { toFun := Sum.elim s.inl s.inr })
-    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_
-  ext ⟨⟩
-  exacts [ConcreteCategory.congr_hom h₁ _, ConcreteCategory.congr_hom h₂ _]
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.isColimitMk, ConcreteCategory, ConcreteCategory.congr_hom, Sum.elim, congr_hom, exacts, isColimitMk, rfl_cat, s.inl, s.inr
+--- 原说明 ---
+When the predicate `P` is preserved under taking type-theoretic sums, that sum i
+s a
+category-theoretic coproduct in `CompHausLike P`.
 -/
 def coproductIsColimit : IsColimit (coproductCocone X Y) := by
-  refine BinaryCofan.isColimitMk (fun s => ofHom _ { toFun := Sum.elim s.inl s.inr })
-    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ => ?_
+  refine BinaryCofan.isColimitMk (fun s ↦ ofHom _ { toFun := Sum.elim s.inl s.inr })
+    (by rfl_cat) (by rfl_cat) fun _ _ h₁ h₂ ↦ ?_
   ext ⟨⟩
   exacts [ConcreteCategory.congr_hom h₁ _, ConcreteCategory.congr_hom h₂ _]
 
 end Coproduct
 
 end CompHausLike
+

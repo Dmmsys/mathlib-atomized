@@ -33,41 +33,67 @@ section NumDen
 variable (A : Type*) [CommRing A] [IsDomain A] [UniqueFactorizationMonoid A]
 variable {K : Type*} [Field K] [Algebra A K] [IsFractionRing A K]
 
-/--
-theorem `exists_reduced_fraction` / 定理 `exists_reduced_fraction`
-
-English:
-theorem exists_reduced_fraction
-  given: (x : K)
-  proof: by
-  obtain ⟨⟨b, b_nonzero⟩, a, hab⟩ := exists_integer_multiple (nonZeroDivisors A) x
-  obtain ⟨a', b', c', no_factor, rfl, rfl⟩ :=
-    UniqueFactorizationMonoid.exists_reduced_factors' a b
-      (mem_nonZeroDivisors_iff_ne_zero.mp b_nonzero)
-  obtain ⟨_, b'_nonzero⟩ := mul_mem_nonZeroDivisors.mp b_nonzero
-  refine ⟨a', ⟨b', b'_nonzero⟩, no_factor, ?_⟩
-  refine mul_left_cancel₀ (IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors b_nonzero) ?_
-  simp only [map_mul, Algebra.smul_def] at *
-  rw [← hab]; rw [mul_assoc]; rw [mk'_spec' _ a' ⟨b']; rw [b'_nonzero⟩]
-
-中文:
-定理 存在_reduced_fraction
-  条件: (x : K)
-  证明: by
-  obtain ⟨⟨b, b_nonzero⟩, a, hab⟩ := exists_integer_multiple (nonZeroDivisors A) x
-  obtain ⟨a', b', c', no_factor, rfl, rfl⟩ :=
-    UniqueFactorizationMonoid.exists_reduced_factors' a b
-      (mem_nonZeroDivisors_iff_ne_zero.mp b_nonzero)
-  obtain ⟨_, b'_nonzero⟩ := mul_mem_nonZeroDivisors.mp b_nonzero
-  refine ⟨a', ⟨b', b'_nonzero⟩, no_factor, ?_⟩
-  refine mul_left_cancel₀ (IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors b_nonzero) ?_
-  simp only [map_mul, Algebra.smul_def] at *
-  rw [← hab]; rw [mul_assoc]; rw [mk'_spec' _ a' ⟨b']; rw [b'_nonzero⟩]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors, UniqueFactorizationMonoid, UniqueFactorizationMonoid.exists_reduced_factors, _nonzero, b_nonzero, exists_integer_multiple, exists_reduced_factors, map_mul, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mp, mul_assoc, mul_mem_nonZeroDivisors, mul_mem_nonZeroDivisors.mp, no_factor, nonZeroDivisors, smul_def, to_map_ne_zero_of_mem_nonZeroDivisors
+/-
+**IsFractionRing.exists_reduced_fraction** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRi
+ng`。
+形式化陈述：exists_reduced_fraction (x : K) : exists (a : A) (b : nonZeroDivisors A), 
+IsRelPrime a b ∧ mk' K a b = x
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.exists_integer_multiple`：exists_integer_multiple (a : S) 
+: exists b : M, IsInteger R ((b : R) • a)
+· 使用定理 `UniqueFactorizationMonoid.exists_reduced_factors'`：exists_reduced_factor
+s' (a b : R) (hb : b != 0) : exists a' b' c', IsRelPrime a' b' ∧ c' * a' = a ∧ c
+' * b' = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nonZeroDivisors_iff_ne_zero`：∀ {M₀ : Type u_2} [inst : MonoidWithZer
+o M₀] {x : M₀} [NoZeroDivisors M₀] [Nontrivial M₀],   x ∈ nonZeroDivisors M₀ ↔ x
+ ≠ 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用引理 `mul_mem_nonZeroDivisors`：mul_mem_nonZeroDivisors : a * b in M₀⁰ ↔ a in M
+₀⁰ ∧ b in M₀⁰ where mp h
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors`：∀ {R : Type u_1} [
+inst : CommRing R] {K : Type u_5} [inst_1 : CommRing K] [inst_2 : Algebra R K] [
+IsFractionRing R K]   [Nontrivial R] {x : …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `IsLocalization.mk'_spec'`：∀ {R : Type u_1} [inst : CommSemiring R] {M : 
+Submonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [
+inst_3 : IsLoc…
 -/
 theorem exists_reduced_fraction (x : K) :
-    exists (a : A) (b : nonZeroDivisors A), IsRelPrime a b ∧ mk' K a b = x := by
+    ∃ (a : A) (b : nonZeroDivisors A), IsRelPrime a b ∧ mk' K a b = x := by
   obtain ⟨⟨b, b_nonzero⟩, a, hab⟩ := exists_integer_multiple (nonZeroDivisors A) x
   obtain ⟨a', b', c', no_factor, rfl, rfl⟩ :=
     UniqueFactorizationMonoid.exists_reduced_factors' a b
@@ -76,227 +102,237 @@ theorem exists_reduced_fraction (x : K) :
   refine ⟨a', ⟨b', b'_nonzero⟩, no_factor, ?_⟩
   refine mul_left_cancel₀ (IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors b_nonzero) ?_
   simp only [map_mul, Algebra.smul_def] at *
-  rw [← hab]; rw [mul_assoc]; rw [mk'_spec' _ a' ⟨b']; rw [b'_nonzero⟩]
+  rw [← hab, mul_assoc, mk'_spec' _ a' ⟨b', b'_nonzero⟩]
 
-/--
-Definition of `num` / `num` 的定义
+/-- `f.num x` is the numerator of `x : f.codomain` as a reduced fraction. -/
+/-
+**IsFractionRing.num** 是 Mathlib 中的一个定义，位于命名空间 `IsFractionRing`。
+形式化陈述：num (x : K) : A
+参数：x : K。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsFractionRing.exists_reduced_fraction`：exists_reduced_fraction (x : K) 
+: exists (a : A) (b : nonZeroDivisors A), IsRelPrime a b ∧ mk' K a b = x
 
-English:
-definition num
-  signature: (x : K)
-  body: Classical.choose (exists_reduced_fraction A x)
-
-中文:
-定义 num
-  签名: (x : K)
-  定义体: Classical.choose (exists_reduced_fraction A x)
-
-Depends on / 依赖: Classical, Classical.choose, exists_reduced_fraction
+--- 原说明 ---
+`f.num x` is the numerator of `x : f.codomain` as a reduced fraction.
 -/
 noncomputable def num (x : K) : A :=
   Classical.choose (exists_reduced_fraction A x)
 
-/--
-Definition of `den` / `den` 的定义
+/-- `f.den x` is the denominator of `x : f.codomain` as a reduced fraction. -/
+/-
+**IsFractionRing.den** 是 Mathlib 中的一个定义，位于命名空间 `IsFractionRing`。
+形式化陈述：den (x : K) : nonZeroDivisors A
+参数：x : K。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsFractionRing.exists_reduced_fraction`：exists_reduced_fraction (x : K) 
+: exists (a : A) (b : nonZeroDivisors A), IsRelPrime a b ∧ mk' K a b = x
 
-English:
-definition den
-  signature: (x : K)
-  body: Classical.choose (Classical.choose_spec (exists_reduced_fraction A x))
-
-中文:
-定义 den
-  签名: (x : K)
-  定义体: Classical.choose (Classical.choose_spec (exists_reduced_fraction A x))
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, DiscreteTopology, Monoid, TopologicalSpace, choose_spec, exists_reduced_fraction
+--- 原说明 ---
+`f.den x` is the denominator of `x : f.codomain` as a reduced fraction.
 -/
 noncomputable def den (x : K) : nonZeroDivisors A :=
   Classical.choose (Classical.choose_spec (exists_reduced_fraction A x))
-
-/--
-theorem `num_den_reduced` / 定理 `num_den_reduced`
-
-English:
-theorem num_den_reduced
-  given: (x : K)
-  statement: IsRelPrime (num A x) (den A x)
-  proof: (Classical.choose_spec (Classical.choose_spec (exists_reduced_fraction A x))).1
-
-中文:
-定理 num_den_reduced
-  条件: (x : K)
-  结论: IsRelPrime (num A x) (den A x)
-  证明: (Classical.choose_spec (Classical.choose_spec (exists_reduced_fraction A x))).1
-
-Depends on / 依赖: Classical, Classical.choose_spec, ContinuousInv, TopologicalSpace, choose_spec, exists_reduced_fraction
+/-
+**IsFractionRing.num_den_reduced** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：num_den_reduced (x : K) : IsRelPrime (num A x) (den A x)
+参数：x : K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsFractionRing.exists_reduced_fraction`：exists_reduced_fraction (x : K) 
+: exists (a : A) (b : nonZeroDivisors A), IsRelPrime a b ∧ mk' K a b = x
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 theorem num_den_reduced (x : K) : IsRelPrime (num A x) (den A x) :=
   (Classical.choose_spec (Classical.choose_spec (exists_reduced_fraction A x))).1
 
 -- `@[simp]` normal form is called `mk'_num_den'`.
-/--
-theorem `mk'_num_den` / 定理 `mk'_num_den`
-
-English:
-theorem mk'_num_den
-  given: (x : K)
-  statement: mk' K (num A x) (den A x) = x
-  proof: (Classical.choose_spec (Classical.choose_spec (exists_reduced_fraction A x))).2
-
-@[simp]
-
-中文:
-定理 mk'_num_den
-  条件: (x : K)
-  结论: mk' K (num A x) (den A x) = x
-  证明: (Classical.choose_spec (Classical.choose_spec (exists_reduced_fraction A x))).2
-
-@[simp]
-
-Depends on / 依赖: GroupWithZero
+/-
+**IsFractionRing.mk'_num_den** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：∀ (A : Type u_1) [inst : CommRing A] [inst_1 : IsDomain A] [inst_2 : Uniqu
+eFactorizationMonoid A] {K : Type u_2}   [inst_3 : Field K] [inst_4 : Algebra A 
+K] [inst_5 : IsFractionRing A K] (x : K),   IsLocalization.mk' K (IsFractionRing
+.num A x) (IsFractionRing.den A x) = x
+参数：A : Type u_1；x : K；IsFractionRing.num A x；IsFractionRing.den A x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsFractionRing.exists_reduced_fraction`：exists_reduced_fraction (x : K) 
+: exists (a : A) (b : nonZeroDivisors A), IsRelPrime a b ∧ mk' K a b = x
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 theorem mk'_num_den (x : K) : mk' K (num A x) (den A x) = x :=
   (Classical.choose_spec (Classical.choose_spec (exists_reduced_fraction A x))).2
 
 @[simp]
-/--
-theorem `mk'_num_den'` / 定理 `mk'_num_den'`
-
-English:
-theorem mk'_num_den'
-  given: (x : K)
-  statement: algebraMap A K (num A x) / algebraMap A K (den A x) = x
-  proof: by
-  rw [← mk'_eq_div]
-  apply mk'_num_den
-
-中文:
-定理 mk'_num_den'
-  条件: (x : K)
-  结论: algebraMap A K (num A x) / algebraMap A K (den A x) = x
-  证明: by
-  rw [← mk'_eq_div]
-  apply mk'_num_den
+/-
+**IsFractionRing.mk'_num_den'** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：∀ (A : Type u_1) [inst : CommRing A] [inst_1 : IsDomain A] [inst_2 : Uniqu
+eFactorizationMonoid A] {K : Type u_2}   [inst_3 : Field K] [inst_4 : Algebra A 
+K] [inst_5 : IsFractionRing A K] (x : K),   (algebraMap A K) (IsFractionRing.num
+ A x) / (algebraMap A K) ↑(IsFractionRing.den A x) = x
+参数：A : Type u_1；x : K；algebraMap A K；IsFractionRing.num A x；algebraMap A K；IsFra
+ctionRing.den A x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsFractionRing.mk'_eq_div`：∀ {A : Type u_4} [inst : CommRing A] {K : Typ
+e u_5} [inst_1 : Field K] [inst_2 : Algebra A K]   [inst_3 : IsFractionRing A K]
+ {r : A} (s : ↥…
+· 使用定理 `IsFractionRing.mk'_num_den`：∀ (A : Type u_1) [inst : CommRing A] [inst_1
+ : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 :
+ Field K] [inst_…
 -/
 theorem mk'_num_den' (x : K) : algebraMap A K (num A x) / algebraMap A K (den A x) = x := by
   rw [← mk'_eq_div]
   apply mk'_num_den
 
 variable {A}
-
-/--
-theorem `num_mul_den_eq_num_iff_eq` / 定理 `num_mul_den_eq_num_iff_eq`
-
-English:
-theorem num_mul_den_eq_num_iff_eq
-  given: {x y : K}
-  proof: ⟨fun h => by simpa only [mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h =>
-    eq_mk'_iff_mul_eq.mp (by rw [h, mk'_num_den])⟩
-
-中文:
-定理 num_mul_den_eq_num_iff_eq
-  条件: {x y : K}
-  证明: ⟨fun h => by simpa only [mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h =>
-    eq_mk'_iff_mul_eq.mp (by rw [h, mk'_num_den])⟩
-
-Depends on / 依赖: _iff_mul_eq, _iff_mul_eq.mp, _iff_mul_eq.mpr, _num_den, eq_mk
+/-
+**IsFractionRing.num_mul_den_eq_num_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsFraction
+Ring`。
+形式化陈述：num_mul_den_eq_num_iff_eq {x y : K} : x * algebraMap A K (den A y) = algeb
+raMap A K (num A y) ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFractionRing.mk'_num_den`：∀ (A : Type u_1) [inst : CommRing A] [inst_1
+ : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 :
+ Field K] [inst_…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsLocalization.eq_mk'_iff_mul_eq`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebr
+a R S] [inst_3 : IsLoc…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem num_mul_den_eq_num_iff_eq {x y : K} :
     x * algebraMap A K (den A y) = algebraMap A K (num A y) ↔ x = y :=
-  ⟨fun h => by simpa only [mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h =>
+  ⟨fun h => by simpa only [mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h ↦
     eq_mk'_iff_mul_eq.mp (by rw [h, mk'_num_den])⟩
-
-/--
-theorem `num_mul_den_eq_num_iff_eq'` / 定理 `num_mul_den_eq_num_iff_eq'`
-
-English:
-theorem num_mul_den_eq_num_iff_eq'
-  given: {x y : K}
-  proof: ⟨fun h => by simpa only [eq_comm, mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h =>
-    eq_mk'_iff_mul_eq.mp (by rw [h, mk'_num_den])⟩
-
-中文:
-定理 num_mul_den_eq_num_iff_eq'
-  条件: {x y : K}
-  证明: ⟨fun h => by simpa only [eq_comm, mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h =>
-    eq_mk'_iff_mul_eq.mp (by rw [h, mk'_num_den])⟩
-
-Depends on / 依赖: _iff_mul_eq, _iff_mul_eq.mp, _iff_mul_eq.mpr, _num_den, eq_comm, eq_mk
+/-
+**IsFractionRing.num_mul_den_eq_num_iff_eq'** 是 Mathlib 中的一个定理，位于命名空间 `IsFractio
+nRing`。
+形式化陈述：num_mul_den_eq_num_iff_eq' {x y : K} : y * algebraMap A K (den A x) = alge
+braMap A K (num A x) ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFractionRing.mk'_num_den`：∀ (A : Type u_1) [inst : CommRing A] [inst_1
+ : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 :
+ Field K] [inst_…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsLocalization.eq_mk'_iff_mul_eq`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebr
+a R S] [inst_3 : IsLoc…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem num_mul_den_eq_num_iff_eq' {x y : K} :
     y * algebraMap A K (den A x) = algebraMap A K (num A x) ↔ x = y :=
-  ⟨fun h => by simpa only [eq_comm, mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h =>
+  ⟨fun h ↦ by simpa only [eq_comm, mk'_num_den] using eq_mk'_iff_mul_eq.mpr h, fun h ↦
     eq_mk'_iff_mul_eq.mp (by rw [h, mk'_num_den])⟩
-
-/--
-theorem `num_mul_den_eq_num_mul_den_iff_eq` / 定理 `num_mul_den_eq_num_mul_den_iff_eq`
-
-English:
-theorem num_mul_den_eq_num_mul_den_iff_eq
-  given: {x y : K}
-  proof: ⟨fun h => by simpa only [mk'_num_den] using mk'_eq_of_eq' (S := K) h, fun h => by rw [h]⟩
-
-中文:
-定理 num_mul_den_eq_num_mul_den_iff_eq
-  条件: {x y : K}
-  证明: ⟨fun h => by simpa only [mk'_num_den] using mk'_eq_of_eq' (S := K) h, fun h => by rw [h]⟩
-
-Depends on / 依赖: _eq_of_eq, _num_den
+/-
+**IsFractionRing.num_mul_den_eq_num_mul_den_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `Is
+FractionRing`。
+形式化陈述：num_mul_den_eq_num_mul_den_iff_eq {x y : K} : num A y * den A x = num A x 
+* den A y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFractionRing.mk'_num_den`：∀ (A : Type u_1) [inst : CommRing A] [inst_1
+ : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 :
+ Field K] [inst_…
+· 使用定理 `IsLocalization.mk'_eq_of_eq'`：∀ {R : Type u_1} [inst : CommSemiring R] {
+M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R 
+S] [inst_3 : IsLoc…
 -/
 theorem num_mul_den_eq_num_mul_den_iff_eq {x y : K} :
     num A y * den A x = num A x * den A y ↔ x = y :=
-  ⟨fun h => by simpa only [mk'_num_den] using mk'_eq_of_eq' (S := K) h, fun h => by rw [h]⟩
-
-/--
-theorem `eq_zero_of_num_eq_zero` / 定理 `eq_zero_of_num_eq_zero`
-
-English:
-theorem eq_zero_of_num_eq_zero
-  given: {x : K} (h : num A x = 0)
-  statement: x = 0
-  proof: (num_mul_den_eq_num_iff_eq' (A := A)).mp (by rw [zero_mul, h, map_zero])
-
-@[simp]
-
-中文:
-定理 eq_zero_of_num_eq_zero
-  条件: {x : K} (h : num A x = 0)
-  结论: x = 0
-  证明: (num_mul_den_eq_num_iff_eq' (A := A)).mp (by rw [zero_mul, h, map_zero])
-
-@[simp]
-
-Depends on / 依赖: map_zero, num_mul_den_eq_num_iff_eq, zero_mul
+  ⟨fun h ↦ by simpa only [mk'_num_den] using mk'_eq_of_eq' (S := K) h, fun h ↦ by rw [h]⟩
+/-
+**IsFractionRing.eq_zero_of_num_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRin
+g`。
+形式化陈述：eq_zero_of_num_eq_zero {x : K} (h : num A x = 0) : x = 0
+参数：h : num A x = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsFractionRing.num_mul_den_eq_num_iff_eq'`：num_mul_den_eq_num_iff_eq' {x
+ y : K} : y * algebraMap A K (den A x) = algebraMap A K (num A x) ↔ x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 theorem eq_zero_of_num_eq_zero {x : K} (h : num A x = 0) : x = 0 :=
   (num_mul_den_eq_num_iff_eq' (A := A)).mp (by rw [zero_mul, h, map_zero])
 
 @[simp]
-/--
-lemma `num_zero` / 引理 `num_zero`
-
-English:
-lemma num_zero
-  statement: IsFractionRing.num A (0 : K) = 0
-  proof: by
-  have := mk'_num_den' A (0 : K)
-  simp only [div_eq_zero_iff] at this
-  simp_all
-
-@[simp]
-
-中文:
-引理 num_zero
-  结论: IsFractionRing.num A (0 : K) = 0
-  证明: by
-  have := mk'_num_den' A (0 : K)
-  simp only [div_eq_zero_iff] at this
-  simp_all
-
-@[simp]
-
-Depends on / 依赖: _num_den, div_eq_zero_iff
+/-
+**IsFractionRing.num_zero** 是 Mathlib 中的一个引理，位于命名空间 `IsFractionRing`。
+形式化陈述：num_zero : IsFractionRing.num A (0 : K) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFractionRing.mk'_num_den'`：∀ (A : Type u_1) [inst : CommRing A] [inst_
+1 : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 
+: Field K] [inst_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma num_zero : IsFractionRing.num A (0 : K) = 0 := by
   have := mk'_num_den' A (0 : K)
@@ -304,105 +340,131 @@ lemma num_zero : IsFractionRing.num A (0 : K) = 0 := by
   simp_all
 
 @[simp]
-/--
-lemma `num_eq_zero` / 引理 `num_eq_zero`
-
-English:
-lemma num_eq_zero
-  given: (x : K)
-  statement: IsFractionRing.num A x = 0 ↔ x = 0
-  proof: ⟨eq_zero_of_num_eq_zero, fun h => h ▸ num_zero⟩
-
-中文:
-引理 num_eq_zero
-  条件: (x : K)
-  结论: IsFractionRing.num A x = 0 ↔ x = 0
-  证明: ⟨eq_zero_of_num_eq_zero, fun h => h ▸ num_zero⟩
-
-Depends on / 依赖: eq_zero_of_num_eq_zero, num_zero
+/-
+**IsFractionRing.num_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `IsFractionRing`。
+形式化陈述：num_eq_zero (x : K) : IsFractionRing.num A x = 0 ↔ x = 0
+参数：x : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFractionRing.eq_zero_of_num_eq_zero`：eq_zero_of_num_eq_zero {x : K} (h
+ : num A x = 0) : x = 0
+· 使用引理 `IsFractionRing.num_zero`：num_zero : IsFractionRing.num A (0 : K) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma num_eq_zero (x : K) : IsFractionRing.num A x = 0 ↔ x = 0 :=
-  ⟨eq_zero_of_num_eq_zero, fun h => h ▸ num_zero⟩
-
-/--
-theorem `isInteger_of_isUnit_den` / 定理 `isInteger_of_isUnit_den`
-
-English:
-theorem isInteger_of_isUnit_den
-  given: {x : K} (h : IsUnit (den A x : A))
-  statement: IsInteger A x
-  proof: by
-  obtain ⟨d, hd⟩ := h
-  have d_ne_zero : algebraMap A K (den A x) != 0 :=
-    IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors (den A x).2
-  use ↑d⁻¹ * num A x
-  refine _root_.trans ?_ (mk'_num_den A x)
-  rw [map_mul]; rw [map_units_inv]; rw [hd]
-  apply mul_left_cancel₀ d_ne_zero
-  rw [← mul_assoc]; rw [mul_inv_cancel₀ d_ne_zero]; rw [one_mul]; rw [mk'_spec']
-
-中文:
-定理 is整数eger_of_isUnit_den
-  条件: {x : K} (h : 是单位 (den A x : A))
-  结论: Is整数eger A x
-  证明: by
-  obtain ⟨d, hd⟩ := h
-  have d_ne_zero : algebraMap A K (den A x) != 0 :=
-    IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors (den A x).2
-  use ↑d⁻¹ * num A x
-  refine _root_.trans ?_ (mk'_num_den A x)
-  rw [map_mul]; rw [map_units_inv]; rw [hd]
-  apply mul_left_cancel₀ d_ne_zero
-  rw [← mul_assoc]; rw [mul_inv_cancel₀ d_ne_zero]; rw [one_mul]; rw [mk'_spec']
-
-Depends on / 依赖: IsFractionRing, IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors, _num_den, _root_, _root_.trans, _spec, algebraMap, d_ne_zero, map_mul, map_units_inv, mul_assoc, one_mul, to_map_ne_zero_of_mem_nonZeroDivisors
+  ⟨eq_zero_of_num_eq_zero, fun h ↦ h ▸ num_zero⟩
+/-
+**IsFractionRing.isInteger_of_isUnit_den** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRi
+ng`。
+形式化陈述：isInteger_of_isUnit_den {x : K} (h : IsUnit (den A x : A)) : IsInteger A x
+参数：h : IsUnit (den A x : A)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors`：∀ {R : Type u_1} [
+inst : CommRing R] {K : Type u_5} [inst_1 : CommRing K] [inst_2 : Algebra R K] [
+IsFractionRing R K]   [Nontrivial R] {x : …
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `map_units_inv`：∀ {M : Type u} [inst : Monoid M] {α : Type u_1} [inst_1 :
+ DivisionMonoid α] {F : Type u_2} [inst_2 : FunLike F M α]   [MonoidHomClass F M
+ α]…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `IsLocalization.mk'_spec'`：∀ {R : Type u_1} [inst : CommSemiring R] {M : 
+Submonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [
+inst_3 : IsLoc…
+· 使用定理 `IsFractionRing.mk'_num_den`：∀ (A : Type u_1) [inst : CommRing A] [inst_1
+ : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 :
+ Field K] [inst_…
 -/
 theorem isInteger_of_isUnit_den {x : K} (h : IsUnit (den A x : A)) : IsInteger A x := by
   obtain ⟨d, hd⟩ := h
-  have d_ne_zero : algebraMap A K (den A x) != 0 :=
+  have d_ne_zero : algebraMap A K (den A x) ≠ 0 :=
     IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors (den A x).2
   use ↑d⁻¹ * num A x
   refine _root_.trans ?_ (mk'_num_den A x)
-  rw [map_mul]; rw [map_units_inv]; rw [hd]
+  rw [map_mul, map_units_inv, hd]
   apply mul_left_cancel₀ d_ne_zero
-  rw [← mul_assoc]; rw [mul_inv_cancel₀ d_ne_zero]; rw [one_mul]; rw [mk'_spec']
-
-/--
-theorem `isUnit_den_iff` / 定理 `isUnit_den_iff`
-
-English:
-theorem isUnit_den_iff
-  given: (x : K)
-  statement: IsUnit (den A x : A) ↔ IsLocalization.IsInteger A x where
-  proof: isInteger_of_isUnit_den
-  mpr h := by
-    have ⟨v, h⟩ := h
-    apply IsRelPrime.isUnit_of_dvd (num_den_reduced A x).symm
-    use v
-    apply_fun algebraMap A K
-    · simp only [map_mul, h]
-      rw [mul_comm]; rw [← div_eq_iff]
-      · simp only [mk'_num_den']
-      simp
-    exact FaithfulSMul.algebraMap_injective A K
-
-中文:
-定理 isUnit_den_iff
-  条件: (x : K)
-  结论: 是单位 (den A x : A) ↔ 是Localization.Is整数eger A x where
-  证明: isInteger_of_isUnit_den
-  mpr h := by
-    have ⟨v, h⟩ := h
-    apply IsRelPrime.isUnit_of_dvd (num_den_reduced A x).symm
-    use v
-    apply_fun algebraMap A K
-    · simp only [map_mul, h]
-      rw [mul_comm]; rw [← div_eq_iff]
-      · simp only [mk'_num_den']
-      simp
-    exact FaithfulSMul.algebraMap_injective A K
-
-Depends on / 依赖: isInteger_of_isUnit_den
+  rw [← mul_assoc, mul_inv_cancel₀ d_ne_zero, one_mul, mk'_spec']
+/-
+**IsFractionRing.isUnit_den_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：isUnit_den_iff (x : K) : IsUnit (den A x : A) ↔ IsLocalization.IsInteger A
+ x where mp
+参数：x : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFractionRing.isInteger_of_isUnit_den`：isInteger_of_isUnit_den {x : K} 
+(h : IsUnit (den A x : A)) : IsInteger A x
+· 使用定理 `IsRelPrime.isUnit_of_dvd`：IsRelPrime.isUnit_of_dvd (H : IsRelPrime x y) 
+(d : x ∣ y) : IsUnit x
+· 使用定理 `IsRelPrime.symm`：∀ {α : Type u_1} [inst : CommMonoid α] {x y : α}, IsRel
+Prime x y → IsRelPrime y x
+· 使用定理 `IsFractionRing.num_den_reduced`：num_den_reduced (x : K) : IsRelPrime (nu
+m A x) (den A x)
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `div_eq_iff`：div_eq_iff (hb : b != 0) : a / b = c ↔ a = c * b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsFractionRing.mk'_num_den'`：∀ (A : Type u_1) [inst : CommRing A] [inst_
+1 : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 
+: Field K] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isUnit_den_iff (x : K) : IsUnit (den A x : A) ↔ IsLocalization.IsInteger A x where
   mp := isInteger_of_isUnit_den
@@ -412,140 +474,178 @@ theorem isUnit_den_iff (x : K) : IsUnit (den A x : A) ↔ IsLocalization.IsInteg
     use v
     apply_fun algebraMap A K
     · simp only [map_mul, h]
-      rw [mul_comm]; rw [← div_eq_iff]
+      rw [mul_comm, ← div_eq_iff]
       · simp only [mk'_num_den']
       simp
     exact FaithfulSMul.algebraMap_injective A K
-
-/--
-theorem `isUnit_den_zero` / 定理 `isUnit_den_zero`
-
-English:
-theorem isUnit_den_zero
-  statement: IsUnit (den A (0 : K) : A)
-  proof: by
-  simp [isUnit_den_iff, IsLocalization.isInteger_zero]
-
-中文:
-定理 isUnit_den_zero
-  结论: 是单位 (den A (0 : K) : A)
-  证明: by
-  simp [isUnit_den_iff, IsLocalization.isInteger_zero]
-
-Depends on / 依赖: IsLocalization, IsLocalization.isInteger_zero, isInteger_zero, isUnit_den_iff
+/-
+**IsFractionRing.isUnit_den_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：isUnit_den_zero : IsUnit (den A (0 : K) : A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem isUnit_den_zero : IsUnit (den A (0 : K) : A) := by
   simp [isUnit_den_iff, IsLocalization.isInteger_zero]
-
-/--
-lemma `associated_den_num_inv` / 引理 `associated_den_num_inv`
-
-English:
-lemma associated_den_num_inv
-  given: (x : K) (hx : x != 0)
-  statement: Associated (den A x : A) (num A x⁻¹)
-  proof: associated_of_dvd_dvd
-    (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x).symm <|
-dvd_of_mul_left_dvd (a := (den A x⁻¹ : A)) dvd_of_eq
-FaithfulSMul.algebraMap_injective A K Eq.symm eq_of_div_eq_one
-      (by simp [mul_div_mul_comm, hx]))
-    (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x⁻¹) <|
-dvd_of_mul_left_dvd (a := (num A x : A)) dvd_of_eq
-FaithfulSMul.algebraMap_injective A K eq_of_div_eq_one
-      (by simp [mul_div_mul_comm, hx]))
-
-中文:
-引理 associated_den_num_inv
-  条件: (x : K) (hx : x != 0)
-  结论: Associated (den A x : A) (num A x⁻¹)
-  证明: associated_of_dvd_dvd
-    (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x).symm <|
-dvd_of_mul_left_dvd (a := (den A x⁻¹ : A)) dvd_of_eq
-FaithfulSMul.algebraMap_injective A K Eq.symm eq_of_div_eq_one
-      (by simp [mul_div_mul_comm, hx]))
-    (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x⁻¹) <|
-dvd_of_mul_left_dvd (a := (num A x : A)) dvd_of_eq
-FaithfulSMul.algebraMap_injective A K eq_of_div_eq_one
-      (by simp [mul_div_mul_comm, hx]))
-
-Depends on / 依赖: Eq.symm, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsFractionRing, IsFractionRing.num_den_reduced, IsRelPrime, IsRelPrime.dvd_of_dvd_mul_right, algebraMap_injective, associated_of_dvd_dvd, dvd_of_dvd_mul_right, dvd_of_eq, dvd_of_mul_left_dvd, eq_of_div_eq_one, mul_div_mul_comm, num_den_reduced
+/-
+**IsFractionRing.associated_den_num_inv** 是 Mathlib 中的一个引理，位于命名空间 `IsFractionRin
+g`。
+形式化陈述：associated_den_num_inv (x : K) (hx : x != 0) : Associated (den A x : A) (n
+um A x⁻¹)
+参数：x : K；hx : x != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `associated_of_dvd_dvd`：associated_of_dvd_dvd [MonoidWithZero M] [IsLeftC
+ancelMulZero M] {a b : M} (hab : a ∣ b) (hba : b ∣ a) : a ~ᵤ b
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `IsRelPrime.dvd_of_dvd_mul_right`：IsRelPrime.dvd_of_dvd_mul_right (H1 : I
+sRelPrime x z) (H2 : x ∣ y * z) : x ∣ y
+· 使用定理 `instDecompositionMonoidOfIsGCDMonoid`：∀ {α : Type u_1} [inst : CommMonoi
+dWithZero α] [h : IsGCDMonoid α], DecompositionMonoid α
+· 使用定理 `instIsGCDMonoidOfUniqueFactorizationMonoid`：∀ (α : Type u_2) [inst : Com
+mMonoidWithZero α] [UniqueFactorizationMonoid α], IsGCDMonoid α
+· 使用定理 `IsRelPrime.symm`：∀ {α : Type u_1} [inst : CommMonoid α] {x y : α}, IsRel
+Prime x y → IsRelPrime y x
+· 使用定理 `IsFractionRing.num_den_reduced`：num_den_reduced (x : K) : IsRelPrime (nu
+m A x) (den A x)
+· 使用定理 `dvd_of_mul_left_dvd`：dvd_of_mul_left_dvd (h : a * b ∣ c) : b ∣ c
+· 使用定理 `dvd_of_eq`：dvd_of_eq (h : a = b) : a ∣ b
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_div_eq_one`：eq_of_div_eq_one (h : a / b = 1) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `mul_div_mul_comm`：mul_div_mul_comm : a * b / (c * d) = a / c * (b / d)
+· 使用定理 `IsFractionRing.mk'_num_den'`：∀ (A : Type u_1) [inst : CommRing A] [inst_
+1 : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 
+: Field K] [inst_…
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
 -/
-lemma associated_den_num_inv (x : K) (hx : x != 0) : Associated (den A x : A) (num A x⁻¹) :=
+lemma associated_den_num_inv (x : K) (hx : x ≠ 0) : Associated (den A x : A) (num A x⁻¹) :=
   associated_of_dvd_dvd
     (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x).symm <|
-dvd_of_mul_left_dvd (a := (den A x⁻¹ : A)) dvd_of_eq
-FaithfulSMul.algebraMap_injective A K Eq.symm eq_of_div_eq_one
+      dvd_of_mul_left_dvd (a := (den A x⁻¹ : A)) <| dvd_of_eq <|
+      FaithfulSMul.algebraMap_injective A K <| Eq.symm <| eq_of_div_eq_one
       (by simp [mul_div_mul_comm, hx]))
     (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x⁻¹) <|
-dvd_of_mul_left_dvd (a := (num A x : A)) dvd_of_eq
-FaithfulSMul.algebraMap_injective A K eq_of_div_eq_one
+      dvd_of_mul_left_dvd (a := (num A x : A)) <| dvd_of_eq <|
+      FaithfulSMul.algebraMap_injective A K <| eq_of_div_eq_one
       (by simp [mul_div_mul_comm, hx]))
-
-/--
-lemma `associated_num_den_inv` / 引理 `associated_num_den_inv`
-
-English:
-lemma associated_num_den_inv
-  given: (x : K) (hx : x != 0)
-  statement: Associated (num A x : A) (den A x⁻¹)
-  proof: by
-  have : Associated (num A x⁻¹⁻¹ : A) (den A x⁻¹) :=
-    (associated_den_num_inv x⁻¹ (inv_ne_zero hx)).symm
-  rw [inv_inv] at this
-  exact this
-
-中文:
-引理 associated_num_den_inv
-  条件: (x : K) (hx : x != 0)
-  结论: Associated (num A x : A) (den A x⁻¹)
-  证明: by
-  have : Associated (num A x⁻¹⁻¹ : A) (den A x⁻¹) :=
-    (associated_den_num_inv x⁻¹ (inv_ne_zero hx)).symm
-  rw [inv_inv] at this
-  exact this
-
-Depends on / 依赖: Associated, associated_den_num_inv, inv_inv, inv_ne_zero
+/-
+**IsFractionRing.associated_num_den_inv** 是 Mathlib 中的一个引理，位于命名空间 `IsFractionRin
+g`。
+形式化陈述：associated_num_den_inv (x : K) (hx : x != 0) : Associated (num A x : A) (d
+en A x⁻¹)
+参数：x : K；hx : x != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用引理 `IsFractionRing.associated_den_num_inv`：associated_den_num_inv (x : K) (h
+x : x != 0) : Associated (den A x : A) (num A x⁻¹)
+· 使用定理 `inv_ne_zero`：inv_ne_zero (h : a != 0) : a⁻¹ != 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
-lemma associated_num_den_inv (x : K) (hx : x != 0) : Associated (num A x : A) (den A x⁻¹) := by
+lemma associated_num_den_inv (x : K) (hx : x ≠ 0) : Associated (num A x : A) (den A x⁻¹) := by
   have : Associated (num A x⁻¹⁻¹ : A) (den A x⁻¹) :=
     (associated_den_num_inv x⁻¹ (inv_ne_zero hx)).symm
   rw [inv_inv] at this
   exact this
 
 variable (A) in
-/--
-theorem `num_den_unique` / 定理 `num_den_unique`
-
-English:
-theorem num_den_unique
-  statement: (x : K) (n : A) (d : nonZeroDivisors A) (pr : IsRelPrime n d)
-  proof: by
-  rw [← IsFractionRing.mk'_num_den A x]; rw [IsLocalization.mk'_eq_iff_eq']; rw [(FaithfulSMul.algebraMap_injective _ _).eq_iff] at h
-  refine ⟨associated_of_dvd_dvd
-      ((num_den_reduced A x).dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _)
-      (pr.dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _),
-    associated_of_dvd_dvd
-      ((num_den_reduced A x).symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)
-      (pr.symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)⟩
-
-中文:
-定理 num_den_unique
-  结论: (x : K) (n : A) (d : nonZeroDivisors A) (pr : IsRelPrime n d)
-  证明: by
-  rw [← IsFractionRing.mk'_num_den A x]; rw [IsLocalization.mk'_eq_iff_eq']; rw [(FaithfulSMul.algebraMap_injective _ _).eq_iff] at h
-  refine ⟨associated_of_dvd_dvd
-      ((num_den_reduced A x).dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _)
-      (pr.dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _),
-    associated_of_dvd_dvd
-      ((num_den_reduced A x).symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)
-      (pr.symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)⟩
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsFractionRing, IsFractionRing.mk, IsLocalization, IsLocalization.mk, _eq_iff_eq, _num_den, algebraMap_injective, associated_of_dvd_dvd, dvd_mul_left, dvd_mul_right, dvd_of_dvd_mul_left, dvd_of_dvd_mul_right, eq_iff, num_den_reduced, pr.dvd_of_dvd_mul_right, pr.symm.dvd_of_dvd_mul_left, symm.dvd_of_dvd_mul_left
+/-
+**IsFractionRing.num_den_unique** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：num_den_unique (x : K) (n : A) (d : nonZeroDivisors A) (pr : IsRelPrime n 
+d) (h : IsLocalization.mk' K n d = x) : Associated (num A x) n ∧ Associated (den
+ A x : A) d
+参数：x : K；n : A；d : nonZeroDivisors A；pr : IsRelPrime n d；h : IsLocalization.mk' 
+K n d = x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `associated_of_dvd_dvd`：associated_of_dvd_dvd [MonoidWithZero M] [IsLeftC
+ancelMulZero M] {a b : M} (hab : a ∣ b) (hba : b ∣ a) : a ~ᵤ b
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `IsRelPrime.dvd_of_dvd_mul_right`：IsRelPrime.dvd_of_dvd_mul_right (H1 : I
+sRelPrime x z) (H2 : x ∣ y * z) : x ∣ y
+· 使用定理 `instDecompositionMonoidOfIsGCDMonoid`：∀ {α : Type u_1} [inst : CommMonoi
+dWithZero α] [h : IsGCDMonoid α], DecompositionMonoid α
+· 使用定理 `instIsGCDMonoidOfUniqueFactorizationMonoid`：∀ (α : Type u_2) [inst : Com
+mMonoidWithZero α] [UniqueFactorizationMonoid α], IsGCDMonoid α
+· 使用定理 `IsFractionRing.num_den_reduced`：num_den_reduced (x : K) : IsRelPrime (nu
+m A x) (den A x)
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `FaithfulSMul.to_isTorsionFree`：∀ (R : Type u_1) (A : Type u_3) [inst : C
+ommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A] [FaithfulSMul R A]  
+ [Nontrivial R] [Is…
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsLocalization.mk'_eq_iff_eq'`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R
+ S] [inst_3 : IsLoc…
+· 使用定理 `IsFractionRing.mk'_num_den`：∀ (A : Type u_1) [inst : CommRing A] [inst_1
+ : IsDomain A] [inst_2 : UniqueFactorizationMonoid A] {K : Type u_2}   [inst_3 :
+ Field K] [inst_…
+· 使用定理 `IsRelPrime.dvd_of_dvd_mul_left`：IsRelPrime.dvd_of_dvd_mul_left (H1 : IsR
+elPrime x y) (H2 : x ∣ y * z) : x ∣ z
+· 使用定理 `IsRelPrime.symm`：∀ {α : Type u_1} [inst : CommMonoid α] {x y : α}, IsRel
+Prime x y → IsRelPrime y x
+· 使用定理 `dvd_mul_left`：dvd_mul_left (a b : α) : a ∣ b * a
 -/
 theorem num_den_unique (x : K) (n : A) (d : nonZeroDivisors A) (pr : IsRelPrime n d)
     (h : IsLocalization.mk' K n d = x) :
     Associated (num A x) n ∧ Associated (den A x : A) d := by
-  rw [← IsFractionRing.mk'_num_den A x]; rw [IsLocalization.mk'_eq_iff_eq']; rw [(FaithfulSMul.algebraMap_injective _ _).eq_iff] at h
+  rw [← IsFractionRing.mk'_num_den A x, IsLocalization.mk'_eq_iff_eq',
+    (FaithfulSMul.algebraMap_injective _ _).eq_iff] at h
   refine ⟨associated_of_dvd_dvd
       ((num_den_reduced A x).dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _)
       (pr.dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _),
@@ -557,3 +657,4 @@ theorem num_den_unique (x : K) (n : A) (d : nonZeroDivisors A) (pr : IsRelPrime 
 end NumDen
 
 end IsFractionRing
+

@@ -24,99 +24,62 @@ namespace Module.Basis
 
 variable {ι : Type*} [Semiring R] [AddCommMonoid H] [Module R H]
 
-/--
-Definition of `mulOpposite` / `mulOpposite` 的定义
+/-- The multiplicative opposite of a basis: `b.mulOpposite i ↦ op (b i)`. -/
+/-
+**Module.Basis.mulOpposite** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：mulOpposite (b : Basis ι R H) : Basis ι R Hᵐᵒᵖ
+参数：b : Basis ι R H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulOpposite
-  signature: (b : Basis ι R H)
-  body: b.map (opLinearEquiv R)
-
-@[simp]
-
-中文:
-定义 mulOpposite
-  签名: (b : 基 ι R H)
-  定义体: b.map (opLinearEquiv R)
-
-@[simp]
-
-Depends on / 依赖: b.map, opLinearEquiv
+--- 原说明 ---
+The multiplicative opposite of a basis: `b.mulOpposite i ↦ op (b i)`.
 -/
 noncomputable def mulOpposite (b : Basis ι R H) : Basis ι R Hᵐᵒᵖ :=
   b.map (opLinearEquiv R)
 
 @[simp]
-/--
-theorem `mulOpposite_apply` / 定理 `mulOpposite_apply`
-
-English:
-theorem mulOpposite_apply
-  given: (b : Basis ι R H) (i : ι)
-  proof: rfl
-
-中文:
-定理 mulOpposite_apply
-  条件: (b : 基 ι R H) (i : ι)
-  证明: rfl
+/-
+**Module.Basis.mulOpposite_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：mulOpposite_apply (b : Basis ι R H) (i : ι) : b.mulOpposite i = op (b i)
+参数：b : Basis ι R H；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mulOpposite_apply (b : Basis ι R H) (i : ι) :
     b.mulOpposite i = op (b i) := rfl
-
-/--
-theorem `mulOpposite_repr_eq` / 定理 `mulOpposite_repr_eq`
-
-English:
-theorem mulOpposite_repr_eq
-  given: (b : Basis ι R H)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mulOpposite_repr_eq
-  条件: (b : 基 ι R H)
-  证明: rfl
-
-@[simp]
+/-
+**Module.Basis.mulOpposite_repr_eq** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：mulOpposite_repr_eq (b : Basis ι R H) : b.mulOpposite.repr = (opLinearEqui
+v R).symm.trans b.repr
+参数：b : Basis ι R H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mulOpposite_repr_eq (b : Basis ι R H) :
     b.mulOpposite.repr = (opLinearEquiv R).symm.trans b.repr := rfl
 
 @[simp]
-/--
-theorem `repr_unop_eq_mulOpposite_repr` / 定理 `repr_unop_eq_mulOpposite_repr`
-
-English:
-theorem repr_unop_eq_mulOpposite_repr
-  given: (b : Basis ι R H) (x : Hᵐᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 repr_unop_eq_mulOpposite_repr
-  条件: (b : 基 ι R H) (x : Hᵐᵒᵖ)
-  证明: rfl
-
-@[simp]
+/-
+**Module.Basis.repr_unop_eq_mulOpposite_repr** 是 Mathlib 中的一个定理，位于命名空间 `Module.B
+asis`。
+形式化陈述：repr_unop_eq_mulOpposite_repr (b : Basis ι R H) (x : Hᵐᵒᵖ) : b.repr (unop 
+x) = b.mulOpposite.repr x
+参数：b : Basis ι R H；x : Hᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem repr_unop_eq_mulOpposite_repr (b : Basis ι R H) (x : Hᵐᵒᵖ) :
     b.repr (unop x) = b.mulOpposite.repr x := rfl
 
 @[simp]
-/--
-theorem `mulOpposite_repr_op` / 定理 `mulOpposite_repr_op`
-
-English:
-theorem mulOpposite_repr_op
-  given: (b : Basis ι R H) (x : H)
-  proof: rfl
-
-中文:
-定理 mulOpposite_repr_op
-  条件: (b : 基 ι R H) (x : H)
-  证明: rfl
+/-
+**Module.Basis.mulOpposite_repr_op** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：mulOpposite_repr_op (b : Basis ι R H) (x : H) : b.mulOpposite.repr (op x) 
+= b.repr x
+参数：b : Basis ι R H；x : H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mulOpposite_repr_op (b : Basis ι R H) (x : H) :
     b.mulOpposite.repr (op x) = b.repr x := rfl
@@ -125,90 +88,60 @@ end Module.Basis
 
 namespace MulOpposite
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DivisionRing
-  signature: R] [AddCommGroup H] [Module R H]
-  body: FiniteDimensional.of_finite_basis
-  (Basis.ofVectorSpace R H).mulOpposite (Basis.ofVectorSpaceIndex R H).toFinite
-
-中文:
-实例 [除环
-  签名: R] [加法交换群 H] [模 R H]
-  定义体: FiniteDimensional.of_finite_basis
-  (Basis.ofVectorSpace R H).mulOpposite (Basis.ofVectorSpaceIndex R H).toFinite
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_finite_basis, of_finite_basis
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DivisionRing R] [AddCommGroup H] [Module R H]
     [FiniteDimensional R H] : FiniteDimensional R Hᵐᵒᵖ := FiniteDimensional.of_finite_basis
   (Basis.ofVectorSpace R H).mulOpposite (Basis.ofVectorSpaceIndex R H).toFinite
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [AddCommMonoid H] [Module R H]
-  body: let ⟨b⟩ := Module.Free.exists_basis (R := R) (M := H)
-  Module.Free.of_basis b.2.mulOpposite
-
-中文:
-实例 [半环
-  签名: R] [加法交换幺半群 H] [模 R H]
-  定义体: let ⟨b⟩ := Module.Free.exists_basis (R := R) (M := H)
-  Module.Free.of_basis b.2.mulOpposite
-
-Depends on / 依赖: Module, Module.Free.exists_basis, Module.Free.of_basis, exists_basis, mulOpposite, of_basis
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring R] [AddCommMonoid H] [Module R H]
     [Module.Free R H] : Module.Free R Hᵐᵒᵖ :=
   let ⟨b⟩ := Module.Free.exists_basis (R := R) (M := H)
   Module.Free.of_basis b.2.mulOpposite
-
-/--
-theorem `rank` / 定理 `rank`
-
-English:
-theorem rank
-  statement: [Semiring R] [StrongRankCondition R] [AddCommMonoid H] [Module R H]
-  proof: Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨(opLinearEquiv R).symm⟩
-
-中文:
-定理 rank
-  结论: [半环 R] [StrongRankCondition R] [加法交换幺半群 H] [模 R H]
-  证明: Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨(opLinearEquiv R).symm⟩
-
-Depends on / 依赖: Module, Module.nonempty_linearEquiv_iff_rank_eq.mp, nonempty_linearEquiv_iff_rank_eq, opLinearEquiv
+/-
+**MulOpposite.rank** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：rank [Semiring R] [StrongRankCondition R] [AddCommMonoid H] [Module R H] [
+Module.Free R H] : Module.rank R Hᵐᵒᵖ = Module.rank R H
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.nonempty_linearEquiv_iff_rank_eq`：Module.nonempty_linearEquiv_iff
+_rank_eq : Nonempty (M ≃ₗ[R] M₁) ↔ Module.rank R M = Module.rank R M₁
+· 使用定理 `MulOpposite.instFree`：∀ {R : Type u_1} {H : Type u_2} [inst : Semiring R
+] [inst_1 : AddCommMonoid H] [inst_2 : _root_.Module R H]   [Module.Free R H], M
+odule.Free…
 -/
 theorem rank [Semiring R] [StrongRankCondition R] [AddCommMonoid H] [Module R H]
     [Module.Free R H] : Module.rank R Hᵐᵒᵖ = Module.rank R H :=
   Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨(opLinearEquiv R).symm⟩
-
-/--
-theorem `finrank` / 定理 `finrank`
-
-English:
-theorem finrank
-  given: [DivisionRing R] [AddCommGroup H] [Module R H]
-  proof: by
-  let b := Basis.ofVectorSpace R H
-  rw [Module.finrank_eq_nat_card_basis b]; rw [Module.finrank_eq_nat_card_basis b.mulOpposite]
-
-中文:
-定理 finrank
-  条件: [除环 R] [加法交换群 H] [模 R H]
-  证明: by
-  let b := Basis.ofVectorSpace R H
-  rw [Module.finrank_eq_nat_card_basis b]; rw [Module.finrank_eq_nat_card_basis b.mulOpposite]
-
-Depends on / 依赖: Basis.ofVectorSpace, Module, Module.finrank_eq_nat_card_basis, b.mulOpposite, finrank_eq_nat_card_basis, mulOpposite, ofVectorSpace
+/-
+**MulOpposite.finrank** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：finrank [DivisionRing R] [AddCommGroup H] [Module R H] : Module.finrank R 
+Hᵐᵒᵖ = Module.finrank R H
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.finrank_eq_nat_card_basis`：finrank_eq_nat_card_basis (h : Basis ι
+ R M) : finrank R M = Nat.card ι
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
 -/
 theorem finrank [DivisionRing R] [AddCommGroup H] [Module R H] :
     Module.finrank R Hᵐᵒᵖ = Module.finrank R H := by
   let b := Basis.ofVectorSpace R H
-  rw [Module.finrank_eq_nat_card_basis b]; rw [Module.finrank_eq_nat_card_basis b.mulOpposite]
+  rw [Module.finrank_eq_nat_card_basis b, Module.finrank_eq_nat_card_basis b.mulOpposite]
 
 end MulOpposite
+

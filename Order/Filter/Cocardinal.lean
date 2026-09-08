@@ -30,104 +30,94 @@ variable {α : Type u} {c : Cardinal.{u}} {hreg : c.IsRegular}
 namespace Filter
 
 variable (α) in
-/--
-Definition of `cocardinal` / `cocardinal` 的定义
+/-- The filter defined by all sets that have a complement with at most cardinality `c`. For a union
+of `c` sets of `c` elements to have `c` elements, we need that `c` is a regular cardinal. -/
+/-
+**Filter.cocardinal** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：cocardinal (hreg : c.IsRegular) : Filter α
+参数：hreg : c.IsRegular。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cocardinal
-  signature: (hreg : c.IsRegular)
-  body: by
-  apply ofCardinalUnion {s | Cardinal.mk s < c} (natCast_lt_aleph0.trans_le hreg.aleph0_le)
-· refine fun s hS hSc => lt_of_le_of_lt (mk_sUnion_le _) mul_lt_of_lt hreg.aleph0_le hS ?_
-    apply iSup_lt_of_lt_cof_ord _ fun i => hSc i.1 i.2
-    rwa [hreg.cof_ord]
-  · exact fun _ hSc _ ht => lt_of_le_of_lt (mk_le_mk_of_subset ht) hSc
-
-@[simp]
-
-中文:
-定义 cocardinal
-  签名: (hreg : c.是正则)
-  定义体: by
-  apply ofCardinalUnion {s | Cardinal.mk s < c} (natCast_lt_aleph0.trans_le hreg.aleph0_le)
-· refine fun s hS hSc => lt_of_le_of_lt (mk_sUnion_le _) mul_lt_of_lt hreg.aleph0_le hS ?_
-    apply iSup_lt_of_lt_cof_ord _ fun i => hSc i.1 i.2
-    rwa [hreg.cof_ord]
-  · exact fun _ hSc _ ht => lt_of_le_of_lt (mk_le_mk_of_subset ht) hSc
-
-@[simp]
-
-Depends on / 依赖: Cardinal, Cardinal.mk, aleph0_le, cof_ord, hreg.aleph0_le, hreg.cof_ord, iSup_lt_of_lt_cof_ord, lt_of_le_of_lt, mk_le_mk_of_subset, mk_sUnion_le, mul_lt_of_lt, natCast_lt_aleph0, natCast_lt_aleph0.trans_le, ofCardinalUnion, trans_le
+--- 原说明 ---
+The filter defined by all sets that have a complement with at most cardinality `
+c`. For a union
+of `c` sets of `c` elements to have `c` elements, we need that `c` is a regular 
+cardinal.
 -/
 def cocardinal (hreg : c.IsRegular) : Filter α := by
   apply ofCardinalUnion {s | Cardinal.mk s < c} (natCast_lt_aleph0.trans_le hreg.aleph0_le)
-· refine fun s hS hSc => lt_of_le_of_lt (mk_sUnion_le _) mul_lt_of_lt hreg.aleph0_le hS ?_
-    apply iSup_lt_of_lt_cof_ord _ fun i => hSc i.1 i.2
+  · refine fun s hS hSc ↦ lt_of_le_of_lt (mk_sUnion_le _) <| mul_lt_of_lt hreg.aleph0_le hS ?_
+    apply iSup_lt_of_lt_cof_ord _ fun i ↦ hSc i.1 i.2
     rwa [hreg.cof_ord]
-  · exact fun _ hSc _ ht => lt_of_le_of_lt (mk_le_mk_of_subset ht) hSc
+  · exact fun _ hSc _ ht ↦ lt_of_le_of_lt (mk_le_mk_of_subset ht) hSc
 
 @[simp]
-/--
-theorem `mem_cocardinal` / 定理 `mem_cocardinal`
-
-English:
-theorem mem_cocardinal
-  given: {s : Set α}
-  proof: Iff.rfl
-
-中文:
-定理 mem_cocardinal
-  条件: {s : 集合 α}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_cocardinal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_cocardinal {s : Set α} : s in cocardinal α hreg ↔ Cardinal.mk (sᶜ : Se
+t α) < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_cocardinal {s : Set α} :
-    s in cocardinal α hreg ↔ Cardinal.mk (sᶜ : Set α) < c := Iff.rfl
-
-/--
-lemma `cocardinal_aleph0_eq_cofinite` / 引理 `cocardinal_aleph0_eq_cofinite`
-
-English:
-lemma cocardinal_aleph0_eq_cofinite
-  proof: by
-  aesop
-
-中文:
-引理 cocardinal_aleph0_eq_cofinite
-  证明: by
-  aesop
+    s ∈ cocardinal α hreg ↔ Cardinal.mk (sᶜ : Set α) < c := Iff.rfl
+/-
+**Filter.cocardinal_aleph0_eq_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u}, Filter.cocardinal α Cardinal.isRegular_aleph0 = Filter.cof
+inite
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.ext`：∀ {α : Type u_1} {f g : Filter α}, (∀ (s : Set α), s ∈ f ↔ s
+ ∈ g) → f = g
+· 使用定理 `Cardinal.isRegular_aleph0`：isRegular_aleph0 : IsRegular ℵ₀
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma cocardinal_aleph0_eq_cofinite :
     cocardinal (α := α) isRegular_aleph0 = cofinite := by
   aesop
-
-/--
-Instance `instCardinalInterFilter_cocardinal` / 实例 `instCardinalInterFilter_cocardinal`
-
-English:
-instance instCardinalInterFilter_cocardinal
-  signature: : CardinalInterFilter (cocardinal (α := α) hreg) c where
-  body: by
-    grw [mem_cocardinal, Set.compl_sInter, mk_sUnion_le]
-    apply mul_lt_of_lt hreg.aleph0_le (mk_image_le.trans_lt hS) (iSup_lt_of_lt_cof_ord ..)
-    · rw [hreg.cof_ord]
-      exact mk_image_le.trans_lt hS
-    · aesop
-
-@[simp]
-
-中文:
-实例 instCardinal整数erFilter_cocardinal
-  签名: : Cardinal整数erFilter (cocardinal (α := α) hreg) c where
-  定义体: by
-    grw [mem_cocardinal, Set.compl_sInter, mk_sUnion_le]
-    apply mul_lt_of_lt hreg.aleph0_le (mk_image_le.trans_lt hS) (iSup_lt_of_lt_cof_ord ..)
-    · rw [hreg.cof_ord]
-      exact mk_image_le.trans_lt hS
-    · aesop
-
-@[simp]
+/-
+**Filter.instCardinalInterFilter_cocardinal** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instCardinalInterFilter_cocardinal : CardinalInterFilter (cocardinal (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_cocardinal`：mem_cocardinal {s : Set α} : s in cocardinal α hr
+eg ↔ Cardinal.mk (sᶜ : Set α) < c
+· 使用定理 `Set.compl_sInter`：compl_sInter (S : Set (Set α)) : (⋂₀ S)ᶜ = ⋃₀ (compl '
+' S)
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `Cardinal.mk_sUnion_le`：mk_sUnion_le {α : Type u} (A : Set (Set α)) : #(⋃
+₀ A) <= #A * ⨆ s : A, #s
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Cardinal.mul_lt_of_lt`：mul_lt_of_lt {a b c : Cardinal} (hc : ℵ₀ <= c) (h
+a : a < c) (hb : b < c) : a * b < c
+· 使用定理 `Cardinal.IsRegular.aleph0_le`：∀ {c : Cardinal.{u_1}}, c.IsRegular → Card
+inal.aleph0 ≤ c
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Cardinal.mk_image_le`：mk_image_le {α β : Type u} {f : α -> β} {s : Set α
+} : #(f '' s) <= #s
+· 使用定理 `Cardinal.iSup_lt_of_lt_cof_ord`：∀ {α : Type u} {f : α → Cardinal.{u}} {a
+ : Cardinal.{u}},   Cardinal.mk α < a.ord.cof → (∀ (i : α), f i < a) → ⨆ i, f i 
+< a
+· 使用定理 `Cardinal.IsRegular.cof_ord`：∀ {c : Cardinal.{u_1}}, c.IsRegular → c.ord.
+cof = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
 -/
 instance instCardinalInterFilter_cocardinal : CardinalInterFilter (cocardinal (α := α) hreg) c where
   cardinal_sInter_mem S hS hSs := by
@@ -138,52 +128,36 @@ instance instCardinalInterFilter_cocardinal : CardinalInterFilter (cocardinal (�
     · aesop
 
 @[simp]
-/--
-theorem `eventually_cocardinal` / 定理 `eventually_cocardinal`
-
-English:
-theorem eventually_cocardinal
-  given: {p : α -> Prop}
-  proof: Iff.rfl
-
-中文:
-定理 eventually_cocardinal
-  条件: {p : α -> 命题}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.eventually_cocardinal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：eventually_cocardinal {p : α -> Prop} : (forallᶠ x in cocardinal α hreg, p
+ x) ↔ #{ x | ¬p x } < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem eventually_cocardinal {p : α -> Prop} :
-    (forallᶠ x in cocardinal α hreg, p x) ↔ #{ x | ¬p x } < c := Iff.rfl
-
-/--
-theorem `hasBasis_cocardinal` / 定理 `hasBasis_cocardinal`
-
-English:
-theorem hasBasis_cocardinal
-  statement: HasBasis (cocardinal α hreg) (fun s : Set α => #s < c) compl
-  proof: ⟨fun s =>
-    ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ => by
-      have : #↑sᶜ < c := by
-        apply lt_of_le_of_lt _ htf
-        rw [compl_subset_comm] at hts
-        apply Cardinal.mk_le_mk_of_subset hts
-      simp_all only [mem_cocardinal] ⟩⟩
-
-中文:
-定理 hasBasis_cocardinal
-  结论: 有基 (cocardinal α hreg) (fun s : 集合 α => #s < c) compl
-  证明: ⟨fun s =>
-    ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ => by
-      have : #↑sᶜ < c := by
-        apply lt_of_le_of_lt _ htf
-        rw [compl_subset_comm] at hts
-        apply Cardinal.mk_le_mk_of_subset hts
-      simp_all only [mem_cocardinal] ⟩⟩
-
-Depends on / 依赖: Cardinal, Cardinal.mk_le_mk_of_subset, compl_compl, compl_subset_comm, lt_of_le_of_lt, mem_cocardinal, mk_le_mk_of_subset, subset
+theorem eventually_cocardinal {p : α → Prop} :
+    (∀ᶠ x in cocardinal α hreg, p x) ↔ #{ x | ¬p x } < c := Iff.rfl
+/-
+**Filter.hasBasis_cocardinal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：hasBasis_cocardinal : HasBasis (cocardinal α hreg) (fun s : Set α => #s < 
+c) compl
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Cardinal.mk_le_mk_of_subset`：mk_le_mk_of_subset {α} {s t : Set α} (h : s
+ subseteq t) : #s <= #t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.compl_subset_comm`：compl_subset_comm : sᶜ subseteq t ↔ tᶜ subseteq s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem hasBasis_cocardinal : HasBasis (cocardinal α hreg) (fun s : Set α => #s < c) compl :=
+theorem hasBasis_cocardinal : HasBasis (cocardinal α hreg) (fun s : Set α ↦ #s < c) compl :=
   ⟨fun s =>
     ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ => by
       have : #↑sᶜ < c := by
@@ -191,205 +165,155 @@ theorem hasBasis_cocardinal : HasBasis (cocardinal α hreg) (fun s : Set α => #
         rw [compl_subset_comm] at hts
         apply Cardinal.mk_le_mk_of_subset hts
       simp_all only [mem_cocardinal] ⟩⟩
-
-/--
-theorem `frequently_cocardinal` / 定理 `frequently_cocardinal`
-
-English:
-theorem frequently_cocardinal
-  given: {p : α -> Prop}
-  proof: by
-  simp only [Filter.Frequently, eventually_cocardinal, not_not, coe_ofPred, not_lt]
-
-中文:
-定理 frequently_cocardinal
-  条件: {p : α -> 命题}
-  证明: by
-  simp only [Filter.Frequently, eventually_cocardinal, not_not, coe_ofPred, not_lt]
-
-Depends on / 依赖: Filter, Filter.Frequently, Frequently, coe_ofPred, eventually_cocardinal, not_lt, not_not
+/-
+**Filter.frequently_cocardinal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：frequently_cocardinal {p : α -> Prop} : (existsᶠ x in cocardinal α hreg, p
+ x) ↔ c <= #{ x | p x }
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem frequently_cocardinal {p : α -> Prop} :
-    (existsᶠ x in cocardinal α hreg, p x) ↔ c <= #{ x | p x } := by
+theorem frequently_cocardinal {p : α → Prop} :
+    (∃ᶠ x in cocardinal α hreg, p x) ↔ c ≤ #{ x | p x } := by
   simp only [Filter.Frequently, eventually_cocardinal, not_not, coe_ofPred, not_lt]
-
-/--
-lemma `frequently_cocardinal_mem` / 引理 `frequently_cocardinal_mem`
-
-English:
-lemma frequently_cocardinal_mem
-  given: {s : Set α}
-  proof: frequently_cocardinal
-
-@[simp]
-
-中文:
-引理 frequently_cocardinal_mem
-  条件: {s : 集合 α}
-  证明: frequently_cocardinal
-
-@[simp]
-
-Depends on / 依赖: frequently_cocardinal
+/-
+**Filter.frequently_cocardinal_mem** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：frequently_cocardinal_mem {s : Set α} : (existsᶠ x in cocardinal α hreg, x
+ in s) ↔ c <= #s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.frequently_cocardinal`：frequently_cocardinal {p : α -> Prop} : (e
+xistsᶠ x in cocardinal α hreg, p x) ↔ c <= #{ x | p x }
 -/
 lemma frequently_cocardinal_mem {s : Set α} :
-    (existsᶠ x in cocardinal α hreg, x in s) ↔ c <= #s := frequently_cocardinal
+    (∃ᶠ x in cocardinal α hreg, x ∈ s) ↔ c ≤ #s := frequently_cocardinal
 
 @[simp]
-/--
-lemma `cocardinal_inf_principal_neBot_iff` / 引理 `cocardinal_inf_principal_neBot_iff`
-
-English:
-lemma cocardinal_inf_principal_neBot_iff
-  given: {s : Set α}
-  proof: frequently_mem_iff_neBot.symm.trans frequently_cocardinal
-
-中文:
-引理 cocardinal_inf_principal_neBot_iff
-  条件: {s : 集合 α}
-  证明: frequently_mem_iff_neBot.symm.trans frequently_cocardinal
-
-Depends on / 依赖: frequently_cocardinal, frequently_mem_iff_neBot, frequently_mem_iff_neBot.symm.trans
+/-
+**Filter.cocardinal_inf_principal_neBot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：cocardinal_inf_principal_neBot_iff {s : Set α} : (cocardinal α hreg ⊓ 𝓟 s)
+.NeBot ↔ c <= #s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Filter.frequently_mem_iff_neBot`：frequently_mem_iff_neBot {l : Filter α}
+ {s : Set α} : (existsᶠ x in l, x in s) ↔ NeBot (l ⊓ 𝓟 s)
+· 使用定理 `Filter.frequently_cocardinal`：frequently_cocardinal {p : α -> Prop} : (e
+xistsᶠ x in cocardinal α hreg, p x) ↔ c <= #{ x | p x }
 -/
 lemma cocardinal_inf_principal_neBot_iff {s : Set α} :
-    (cocardinal α hreg ⊓ 𝓟 s).NeBot ↔ c <= #s :=
+    (cocardinal α hreg ⊓ 𝓟 s).NeBot ↔ c ≤ #s :=
   frequently_mem_iff_neBot.symm.trans frequently_cocardinal
-
-/--
-theorem `compl_mem_cocardinal_of_card_lt` / 定理 `compl_mem_cocardinal_of_card_lt`
-
-English:
-theorem compl_mem_cocardinal_of_card_lt
-  given: {s : Set α} (hs : #s < c)
-  proof: mem_cocardinal.2 (compl_compl s).symm ▸ hs
-
-中文:
-定理 compl_mem_cocardinal_of_card_lt
-  条件: {s : 集合 α} (hs : #s < c)
-  证明: mem_cocardinal.2 (compl_compl s).symm ▸ hs
-
-Depends on / 依赖: compl_compl, mem_cocardinal
+/-
+**Filter.compl_mem_cocardinal_of_card_lt** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：compl_mem_cocardinal_of_card_lt {s : Set α} (hs : #s < c) : sᶜ in cocardin
+al α hreg
+参数：hs : #s < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_cocardinal`：mem_cocardinal {s : Set α} : s in cocardinal α hr
+eg ↔ Cardinal.mk (sᶜ : Set α) < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
 -/
 theorem compl_mem_cocardinal_of_card_lt {s : Set α} (hs : #s < c) :
-    sᶜ in cocardinal α hreg :=
-mem_cocardinal.2 (compl_compl s).symm ▸ hs
-
-/--
-theorem `_root_.Set.Finite.compl_mem_cocardinal` / 定理 `_root_.Set.Finite.compl_mem_cocardinal`
-
-English:
-theorem _root_.Set.Finite.compl_mem_cocardinal
-  given: {s : Set α} (hs : s.Finite)
-  proof: compl_mem_cocardinal_of_card_lt lt_of_lt_of_le (Finite.lt_aleph0 hs) (hreg.aleph0_le)
-
-中文:
-定理 _root_.集合.有限.compl_mem_cocardinal
-  条件: {s : 集合 α} (hs : s.有限)
-  证明: compl_mem_cocardinal_of_card_lt lt_of_lt_of_le (Finite.lt_aleph0 hs) (hreg.aleph0_le)
-
-Depends on / 依赖: Finite, Finite.lt_aleph0, aleph0_le, compl_mem_cocardinal_of_card_lt, hreg.aleph0_le, lt_aleph0, lt_of_lt_of_le
+    sᶜ ∈ cocardinal α hreg :=
+  mem_cocardinal.2 <| (compl_compl s).symm ▸ hs
+/-
+**Filter._root_.Set.Finite.compl_mem_cocardinal** 是 Mathlib 中的一个定理，位于命名空间 `Filte
+r`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Set.Finite.compl_mem_cocardinal {s : Set α} (hs : s.Finite) :
-    sᶜ in cocardinal α hreg :=
-compl_mem_cocardinal_of_card_lt lt_of_lt_of_le (Finite.lt_aleph0 hs) (hreg.aleph0_le)
-
-/--
-theorem `eventually_cocardinal_notMem_of_card_lt` / 定理 `eventually_cocardinal_notMem_of_card_lt`
-
-English:
-theorem eventually_cocardinal_notMem_of_card_lt
-  given: {s : Set α} (hs : #s < c)
-  proof: compl_mem_cocardinal_of_card_lt hs
-
-中文:
-定理 eventually_cocardinal_notMem_of_card_lt
-  条件: {s : 集合 α} (hs : #s < c)
-  证明: compl_mem_cocardinal_of_card_lt hs
-
-Depends on / 依赖: compl_mem_cocardinal_of_card_lt
+    sᶜ ∈ cocardinal α hreg :=
+  compl_mem_cocardinal_of_card_lt <| lt_of_lt_of_le (Finite.lt_aleph0 hs) (hreg.aleph0_le)
+/-
+**Filter.eventually_cocardinal_notMem_of_card_lt** 是 Mathlib 中的一个定理，位于命名空间 `Filt
+er`。
+形式化陈述：eventually_cocardinal_notMem_of_card_lt {s : Set α} (hs : #s < c) : forall
+ᶠ x in cocardinal α hreg, x ∉ s
+参数：hs : #s < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.compl_mem_cocardinal_of_card_lt`：compl_mem_cocardinal_of_card_lt 
+{s : Set α} (hs : #s < c) : sᶜ in cocardinal α hreg
 -/
 theorem eventually_cocardinal_notMem_of_card_lt {s : Set α} (hs : #s < c) :
-    forallᶠ x in cocardinal α hreg, x ∉ s :=
+    ∀ᶠ x in cocardinal α hreg, x ∉ s :=
   compl_mem_cocardinal_of_card_lt hs
-
-/--
-theorem `_root_.Finset.eventually_cocardinal_notMem` / 定理 `_root_.Finset.eventually_cocardinal_notMem`
-
-English:
-theorem _root_.Finset.eventually_cocardinal_notMem
-  given: (s : Finset α)
-  proof: eventually_cocardinal_notMem_of_card_lt (finset_card_lt_aleph0 s).trans_le (hreg.aleph0_le)
-
-中文:
-定理 _root_.有限集.eventually_cocardinal_notMem
-  条件: (s : 有限集 α)
-  证明: eventually_cocardinal_notMem_of_card_lt (finset_card_lt_aleph0 s).trans_le (hreg.aleph0_le)
-
-Depends on / 依赖: aleph0_le, eventually_cocardinal_notMem_of_card_lt, finset_card_lt_aleph0, hreg.aleph0_le, trans_le
+/-
+**Filter._root_.Finset.eventually_cocardinal_notMem** 是 Mathlib 中的一个定理，位于命名空间 `F
+ilter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Finset.eventually_cocardinal_notMem (s : Finset α) :
-    forallᶠ x in cocardinal α hreg, x ∉ s :=
-eventually_cocardinal_notMem_of_card_lt (finset_card_lt_aleph0 s).trans_le (hreg.aleph0_le)
-
-/--
-theorem `eventually_cocardinal_ne` / 定理 `eventually_cocardinal_ne`
-
-English:
-theorem eventually_cocardinal_ne
-  given: (x : α)
-  statement: forallᶠ a in cocardinal α hreg, a != x
-  proof: by
-  simpa [Set.finite_singleton x] using hreg.nat_lt 1
-
-中文:
-定理 eventually_cocardinal_ne
-  条件: (x : α)
-  结论: 对任意ᶠ a in cocardinal α hreg, a != x
-  证明: by
-  simpa [Set.finite_singleton x] using hreg.nat_lt 1
-
-Depends on / 依赖: Set.finite_singleton, finite_singleton, hreg.nat_lt, nat_lt
+    ∀ᶠ x in cocardinal α hreg, x ∉ s :=
+  eventually_cocardinal_notMem_of_card_lt <| (finset_card_lt_aleph0 s).trans_le (hreg.aleph0_le)
+/-
+**Filter.eventually_cocardinal_ne** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：eventually_cocardinal_ne (x : α) : forallᶠ a in cocardinal α hreg, a != x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Cardinal.mk_fintype`：mk_fintype (α : Type u) [h : Fintype α] : #α = Fint
+ype.card α
+· 使用定理 `Fintype.card_unique`：card_unique [Unique α] [h : Fintype α] : Fintype.ca
+rd α = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Cardinal.IsRegular.nat_lt`：∀ {c : Cardinal.{u_1}}, c.IsRegular → ∀ (n : 
+ℕ), ↑n < c
 -/
-theorem eventually_cocardinal_ne (x : α) : forallᶠ a in cocardinal α hreg, a != x := by
+theorem eventually_cocardinal_ne (x : α) : ∀ᶠ a in cocardinal α hreg, a ≠ x := by
   simpa [Set.finite_singleton x] using hreg.nat_lt 1
 
-/--
-Definition of `cocountable` / `cocountable` 的定义
+/-- The filter defined by all sets that have countable complements. -/
+/-
+**Filter.cocountable** 是 Mathlib 中的一个缩写定义，位于命名空间 `Filter`。
+形式化陈述：cocountable : Filter α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.isRegular_aleph_one`：isRegular_aleph_one : IsRegular ℵ₁
 
-English:
-abbreviation cocountable
-  signature: : Filter α
-  body: cocardinal α Cardinal.isRegular_aleph_one
-
-中文:
-缩写 cocountable
-  签名: : 滤子 α
-  定义体: cocardinal α Cardinal.isRegular_aleph_one
-
-Depends on / 依赖: Cardinal, Cardinal.isRegular_aleph_one, cocardinal, isRegular_aleph_one
+--- 原说明 ---
+The filter defined by all sets that have countable complements.
 -/
 noncomputable abbrev cocountable : Filter α := cocardinal α Cardinal.isRegular_aleph_one
-
-/--
-theorem `mem_cocountable` / 定理 `mem_cocountable`
-
-English:
-theorem mem_cocountable
-  given: {s : Set α}
-  statement: s in cocountable ↔ (sᶜ : Set α).Countable
-  proof: by
-  rw [← Cardinal.le_aleph0_iff_set_countable]; rw [mem_cocardinal]; rw [lt_aleph_one_iff]
-
-中文:
-定理 mem_cocountable
-  条件: {s : 集合 α}
-  结论: s in cocountable ↔ (sᶜ : 集合 α).可数
-  证明: by
-  rw [← Cardinal.le_aleph0_iff_set_countable]; rw [mem_cocardinal]; rw [lt_aleph_one_iff]
-
-Depends on / 依赖: Cardinal, Cardinal.le_aleph0_iff_set_countable, le_aleph0_iff_set_countable, lt_aleph_one_iff, mem_cocardinal
+/-
+**Filter.mem_cocountable** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_cocountable {s : Set α} : s in cocountable ↔ (sᶜ : Set α).Countable
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.le_aleph0_iff_set_countable`：le_aleph0_iff_set_countable {s : S
+et α} : #s <= ℵ₀ ↔ s.Countable
+· 使用定理 `Cardinal.isRegular_aleph_one`：isRegular_aleph_one : IsRegular ℵ₁
+· 使用定理 `Filter.mem_cocardinal`：mem_cocardinal {s : Set α} : s in cocardinal α hr
+eg ↔ Cardinal.mk (sᶜ : Set α) < c
+· 使用定理 `Cardinal.lt_aleph_one_iff`：lt_aleph_one_iff {c : Cardinal} : c < ℵ₁ ↔ c 
+<= ℵ₀
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_cocountable {s : Set α} : s in cocountable ↔ (sᶜ : Set α).Countable := by
-  rw [← Cardinal.le_aleph0_iff_set_countable]; rw [mem_cocardinal]; rw [lt_aleph_one_iff]
+theorem mem_cocountable {s : Set α} : s ∈ cocountable ↔ (sᶜ : Set α).Countable := by
+  rw [← Cardinal.le_aleph0_iff_set_countable, mem_cocardinal, lt_aleph_one_iff]
 
 end Filter
+

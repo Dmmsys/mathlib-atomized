@@ -59,758 +59,528 @@ section Subgraph
 /-- `IsSubgraph H G` is NOT the preferred spelling for the subgraph relation. Please use
 `H ≤ G` instead. -/
 @[mk_iff]
-/--
-Definition of `IsSubgraph` / `IsSubgraph` 的定义
+/-
+**Graph.IsSubgraph** 是 Mathlib 中的一个结构，位于命名空间 `Graph`。
+形式化陈述：IsSubgraph (H G : Graph α β) : Prop where vertexSet_mono : V(H) subseteq V
+(G)
+参数：H G : Graph α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSubgraph
-  parameters: (H G : Graph α β)
-  axioms and operations (2):
-    - vertexSet_mono : V(H) subseteq V(G)  [default: by aesop]
-    - isLink_mono : forall ⦃e x y⦄, H.IsLink e x y -> G.IsLink e x y  [default: by aesop]
-
-中文:
-结构 是子图
-  参数: (H G : 图 α β)
-  公理与运算 (2 个):
-    - vertexSet_mono : V(H) subseteq V(G)  [默认: by aesop]
-    - isLink_mono : 对任意 ⦃e x y⦄, H.IsLink e x y -> G.IsLink e x y  [默认: by aesop]
-
-Depends on / 依赖: G.IsLink, H.IsLink, IsLink, isLink_mono
+--- 原说明 ---
+`IsSubgraph H G` is NOT the preferred spelling for the subgraph relation. Please
+ use
+`H ≤ G` instead.
 -/
 structure IsSubgraph (H G : Graph α β) : Prop where
-  vertexSet_mono : V(H) subseteq V(G) := by aesop
-  isLink_mono : forall ⦃e x y⦄, H.IsLink e x y -> G.IsLink e x y := by aesop
+  vertexSet_mono : V(H) ⊆ V(G) := by aesop
+  isLink_mono : ∀ ⦃e x y⦄, H.IsLink e x y → G.IsLink e x y := by aesop
 
-attribute [gcongr, grind ->] IsSubgraph.vertexSet_mono
-
-/--
-lemma `IsSubgraph.trans` / 引理 `IsSubgraph.trans`
-
-English:
-lemma IsSubgraph.trans
-  given: (h₁ : H.IsSubgraph G) (h₂ : G.IsSubgraph G₁)
-  statement: H.IsSubgraph G₁
-  proof: ⟨h₁.1.trans h₂.1, fun _ _ _ h => h₂.2 (h₁.2 h)⟩
-
-中文:
-引理 是子图.trans
-  条件: (h₁ : H.是子图 G) (h₂ : G.是子图 G₁)
-  结论: H.是子图 G₁
-  证明: ⟨h₁.1.trans h₂.1, fun _ _ _ h => h₂.2 (h₁.2 h)⟩
+attribute [gcongr, grind →] IsSubgraph.vertexSet_mono
+/-
+**Graph.IsSubgraph.trans** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G G₁ H : Graph α β}, H.IsSubgraph G → G.I
+sSubgraph G₁ → H.IsSubgraph G₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `Graph.IsSubgraph.isLink_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : Gra
+ph α β}, H.IsSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, H.IsLink e x y → G.IsLink e x y
 -/
 lemma IsSubgraph.trans (h₁ : H.IsSubgraph G) (h₂ : G.IsSubgraph G₁) : H.IsSubgraph G₁ :=
-  ⟨h₁.1.trans h₂.1, fun _ _ _ h => h₂.2 (h₁.2 h)⟩
-
-/--
-lemma `IsSubgraph.antisymm` / 引理 `IsSubgraph.antisymm`
-
-English:
-lemma IsSubgraph.antisymm
-  given: (h₁ : H.IsSubgraph G) (h₂ : G.IsSubgraph H)
-  statement: H = G
-  proof: Graph.ext (h₁.1.antisymm h₂.1) fun _ _ _ => ⟨(h₁.2 ·), (h₂.2 ·)⟩
-
-中文:
-引理 是子图.antisymm
-  条件: (h₁ : H.是子图 G) (h₂ : G.是子图 H)
-  结论: H = G
-  证明: Graph.ext (h₁.1.antisymm h₂.1) fun _ _ _ => ⟨(h₁.2 ·), (h₂.2 ·)⟩
-
-Depends on / 依赖: Graph.ext, antisymm
+  ⟨h₁.1.trans h₂.1, fun _ _ _ h ↦ h₂.2 (h₁.2 h)⟩
+/-
+**Graph.IsSubgraph.antisymm** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, H.IsSubgraph G → G.IsSu
+bgraph H → H = G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.ext`：∀ {α : Type u_1} {β : Type u_2} {G₁ G₂ : Graph α β},   G₁.ver
+texSet = G₂.vertexSet → (∀ (e : β) (x y : α), G₁.IsLink e x y ↔ G₂.IsLink e x y…
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `Graph.IsSubgraph.isLink_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : Gra
+ph α β}, H.IsSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, H.IsLink e x y → G.IsLink e x y
 -/
 lemma IsSubgraph.antisymm (h₁ : H.IsSubgraph G) (h₂ : G.IsSubgraph H) : H = G :=
-  Graph.ext (h₁.1.antisymm h₂.1) fun _ _ _ => ⟨(h₁.2 ·), (h₂.2 ·)⟩
+  Graph.ext (h₁.1.antisymm h₂.1) fun _ _ _ ↦ ⟨(h₁.2 ·), (h₂.2 ·)⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `H ≤ G` means `H` is a subgraph of `G`. It is defined as `V(H) ⊆ V(G)` and every link of `H`
+being a link of `G`. -/
+/-
+**Graph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PartialOrder (Graph α β)
-  body: IsSubgraph
-  le_refl _ := ⟨le_rfl, fun _ _ _ h => h⟩
-  le_trans _ _ _ h₁ h₂ := h₁.trans h₂
-  le_antisymm G H h₁ h₂ := h₁.antisymm h₂
-
-@[simp]
-
-中文:
-实例 :
-  签名: 偏序 (图 α β)
-  定义体: IsSubgraph
-  le_refl _ := ⟨le_rfl, fun _ _ _ h => h⟩
-  le_trans _ _ _ h₁ h₂ := h₁.trans h₂
-  le_antisymm G H h₁ h₂ := h₁.antisymm h₂
-
-@[simp]
-
-Depends on / 依赖: IsSubgraph
+--- 原说明 ---
+`H ≤ G` means `H` is a subgraph of `G`. It is defined as `V(H) ⊆ V(G)` and every
+ link of `H`
+being a link of `G`.
 -/
 instance : PartialOrder (Graph α β) where
   le := IsSubgraph
-  le_refl _ := ⟨le_rfl, fun _ _ _ h => h⟩
+  le_refl _ := ⟨le_rfl, fun _ _ _ h ↦ h⟩
   le_trans _ _ _ h₁ h₂ := h₁.trans h₂
   le_antisymm G H h₁ h₂ := h₁.antisymm h₂
 
 @[simp]
-/--
-lemma `isSubgraph_iff_le` / 引理 `isSubgraph_iff_le`
-
-English:
-lemma isSubgraph_iff_le
-  statement: H.IsSubgraph G ↔ H <= G
-  proof: .rfl
-
-@[gcongr]
-
-中文:
-引理 isSubgraph_iff_le
-  结论: H.是子图 G ↔ H <= G
-  证明: .rfl
-
-@[gcongr]
+/-
+**Graph.isSubgraph_iff_le** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：isSubgraph_iff_le : H.IsSubgraph G ↔ H <= G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma isSubgraph_iff_le : H.IsSubgraph G ↔ H <= G := .rfl
+lemma isSubgraph_iff_le : H.IsSubgraph G ↔ H ≤ G := .rfl
 
 @[gcongr]
-/--
-lemma `IsLink.mono` / 引理 `IsLink.mono`
-
-English:
-lemma IsLink.mono
-  given: (hHG : H <= G) (h : H.IsLink e x y)
-  statement: G.IsLink e x y
-  proof: hHG.2 h
-
-@[gcongr, grind ->]
-
-中文:
-引理 IsLink.mono
-  条件: (hHG : H <= G) (h : H.IsLink e x y)
-  结论: G.IsLink e x y
-  证明: hHG.2 h
-
-@[gcongr, grind ->]
+/-
+**Graph.IsLink.mono** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsLink`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G H : Graph α β}, H ≤ G
+ → H.IsLink e x y → G.IsLink e x y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsSubgraph.isLink_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : Gra
+ph α β}, H.IsSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, H.IsLink e x y → G.IsLink e x y
 -/
-lemma IsLink.mono (hHG : H <= G) (h : H.IsLink e x y) : G.IsLink e x y := hHG.2 h
+lemma IsLink.mono (hHG : H ≤ G) (h : H.IsLink e x y) : G.IsLink e x y := hHG.2 h
 
-@[gcongr, grind ->]
-/--
-lemma `IsSubgraph.edgeSet_mono` / 引理 `IsSubgraph.edgeSet_mono`
-
-English:
-lemma IsSubgraph.edgeSet_mono
-  given: (h : H <= G)
-  statement: E(H) subseteq E(G)
-  proof: by
+@[gcongr, grind →]
+/-
+**Graph.IsSubgraph.edgeSet_mono** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, H ≤ G → H.edgeSet ⊆ G.e
+dgeSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.exists_isLink_of_mem_edgeSet`：exists_isLink_of_mem_edgeSet (h : e 
+in E(G)) : exists x y, G.IsLink e x y
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
+-/
+lemma IsSubgraph.edgeSet_mono (h : H ≤ G) : E(H) ⊆ E(G) := by
   intro e he
   obtain ⟨x, y, h'⟩ := exists_isLink_of_mem_edgeSet he
   exact (h'.mono h).edge_mem
-
-中文:
-引理 是子图.edgeSet_mono
-  条件: (h : H <= G)
-  结论: E(H) subseteq E(G)
-  证明: by
-  intro e he
-  obtain ⟨x, y, h'⟩ := exists_isLink_of_mem_edgeSet he
-  exact (h'.mono h).edge_mem
-
-Depends on / 依赖: edge_mem, exists_isLink_of_mem_edgeSet
+/-
+**Graph.IsLink.anti_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsSubgraph.edgeSet_mono (h : H <= G) : E(H) subseteq E(G) := by
-  intro e he
-  obtain ⟨x, y, h'⟩ := exists_isLink_of_mem_edgeSet he
-  exact (h'.mono h).edge_mem
-
-/--
-lemma `IsLink.anti_of_mem` / 引理 `IsLink.anti_of_mem`
-
-English:
-lemma IsLink.anti_of_mem
-  given: (h : G.IsLink e x y) (hHG : H <= G) (he : e in E(H))
-  proof: by
-  obtain ⟨u, v, huv⟩ := exists_isLink_of_mem_edgeSet he
-  obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := (huv.mono hHG).eq_and_eq_or_eq_and_eq h
-  · assumption
-  exact huv.symm
-
-中文:
-引理 IsLink.anti_of_mem
-  条件: (h : G.IsLink e x y) (hHG : H <= G) (he : e in E(H))
-  证明: by
-  obtain ⟨u, v, huv⟩ := exists_isLink_of_mem_edgeSet he
-  obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := (huv.mono hHG).eq_and_eq_or_eq_and_eq h
-  · assumption
-  exact huv.symm
--/
-private lemma IsLink.anti_of_mem (h : G.IsLink e x y) (hHG : H <= G) (he : e in E(H)) :
+private lemma IsLink.anti_of_mem (h : G.IsLink e x y) (hHG : H ≤ G) (he : e ∈ E(H)) :
     H.IsLink e x y := by
   obtain ⟨u, v, huv⟩ := exists_isLink_of_mem_edgeSet he
   obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := (huv.mono hHG).eq_and_eq_or_eq_and_eq h
   · assumption
   exact huv.symm
-
-/--
-lemma `IsSubgraph.isLink_iff` / 引理 `IsSubgraph.isLink_iff`
-
-English:
-lemma IsSubgraph.isLink_iff
-  given: (hHG : H <= G) (he : e in E(H))
-  statement: H.IsLink e x y ↔ G.IsLink e x y
-  proof: ⟨fun h => h.mono hHG, fun h => h.anti_of_mem hHG he⟩
-
-中文:
-引理 是子图.isLink_iff
-  条件: (hHG : H <= G) (he : e in E(H))
-  结论: H.IsLink e x y ↔ G.IsLink e x y
-  证明: ⟨fun h => h.mono hHG, fun h => h.anti_of_mem hHG he⟩
-
-Depends on / 依赖: anti_of_mem, h.anti_of_mem, h.mono
+/-
+**Graph.IsSubgraph.isLink_iff** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G H : Graph α β},   H ≤
+ G → e ∈ H.edgeSet → (H.IsLink e x y ↔ G.IsLink e x y)
+参数：H.IsLink e x y ↔ G.IsLink e x y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
+· 使用定理 `_private.Mathlib.Combinatorics.Graph.Subgraph.0.Graph.IsLink.anti_of_mem
+`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G H : Graph α β},   G.IsLin
+k e x y → H ≤ G → e ∈ H.edgeSet → H.IsLink e x y
 -/
-lemma IsSubgraph.isLink_iff (hHG : H <= G) (he : e in E(H)) : H.IsLink e x y ↔ G.IsLink e x y :=
-  ⟨fun h => h.mono hHG, fun h => h.anti_of_mem hHG he⟩
-
-/--
-lemma `IsSubgraph.isLink_eqOn` / 引理 `IsSubgraph.isLink_eqOn`
-
-English:
-lemma IsSubgraph.isLink_eqOn
-  given: (hHG : H <= G)
-  statement: EqOn H.IsLink G.IsLink E(H)
-  proof: by
+lemma IsSubgraph.isLink_iff (hHG : H ≤ G) (he : e ∈ E(H)) : H.IsLink e x y ↔ G.IsLink e x y :=
+  ⟨fun h ↦ h.mono hHG, fun h ↦ h.anti_of_mem hHG he⟩
+/-
+**Graph.IsSubgraph.isLink_eqOn** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, H ≤ G → Set.EqOn H.IsLi
+nk G.IsLink H.edgeSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.IsSubgraph.isLink_iff`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {
+e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsLink e x y ↔ G.IsLink e
+ x y)
+-/
+lemma IsSubgraph.isLink_eqOn (hHG : H ≤ G) : EqOn H.IsLink G.IsLink E(H) := by
   rintro e he
   ext x y
   exact isLink_iff hHG he
 
-中文:
-引理 是子图.isLink_eqOn
-  条件: (hHG : H <= G)
-  结论: EqOn H.IsLink G.IsLink E(H)
-  证明: by
-  rintro e he
-  ext x y
-  exact isLink_iff hHG he
+/-- Two subgraphs of the same graph are compatible. -/
+/-
+**Graph.Compatible.of_le_le** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Graph α β}, H₁ ≤ G → H₂ ≤ G → H
+₁.Compatible H₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Graph.IsSubgraph.isLink_iff`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {
+e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsLink e x y ↔ G.IsLink e
+ x y)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
 
-Depends on / 依赖: isLink_iff
+--- 原说明 ---
+Two subgraphs of the same graph are compatible.
 -/
-lemma IsSubgraph.isLink_eqOn (hHG : H <= G) : EqOn H.IsLink G.IsLink E(H) := by
-  rintro e he
-  ext x y
-  exact isLink_iff hHG he
-
-/--
-lemma `Compatible.of_le_le` / 引理 `Compatible.of_le_le`
-
-English:
-lemma Compatible.of_le_le
-  given: (hH₁G : H₁ <= G) (hH₂G : H₂ <= G)
-  statement: H₁.Compatible H₂
-  proof: .trans (hH₂G.isLink_iff he₂).symm fun _ he₁ he₂ _ _ => hH₁G.isLink_iff he₁
-
-中文:
-引理 余mpatible.of_le_le
-  条件: (hH₁G : H₁ <= G) (hH₂G : H₂ <= G)
-  结论: H₁.余mpatible H₂
-  证明: .trans (hH₂G.isLink_iff he₂).symm fun _ he₁ he₂ _ _ => hH₁G.isLink_iff he₁
-
-Depends on / 依赖: G.isLink_iff, isLink_iff
+lemma Compatible.of_le_le (hH₁G : H₁ ≤ G) (hH₂G : H₂ ≤ G) : H₁.Compatible H₂ :=
+  fun _ he₁ he₂ _ _ ↦ hH₁G.isLink_iff he₁ |>.trans <| (hH₂G.isLink_iff he₂).symm
+/-
+**Graph.Compatible.of_le** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, H ≤ G → H.Compatible G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma Compatible.of_le_le (hH₁G : H₁ <= G) (hH₂G : H₂ <= G) : H₁.Compatible H₂ :=
-.trans (hH₂G.isLink_iff he₂).symm fun _ he₁ he₂ _ _ => hH₁G.isLink_iff he₁
-
-/--
-lemma `Compatible.of_le` / 引理 `Compatible.of_le`
-
-English:
-lemma Compatible.of_le
-  given: (hHG : H <= G)
-  statement: H.Compatible G
-  proof: .of_le_le hHG le_rfl
-
-中文:
-引理 余mpatible.of_le
-  条件: (hHG : H <= G)
-  结论: H.余mpatible G
-  证明: .of_le_le hHG le_rfl
-
-Depends on / 依赖: le_rfl, of_le_le
+lemma Compatible.of_le (hHG : H ≤ G) : H.Compatible G := .of_le_le hHG le_rfl
+/-
+**Graph.Compatible.of_ge** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, G ≤ H → H.Compatible G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma Compatible.of_le (hHG : H <= G) : H.Compatible G := .of_le_le hHG le_rfl
-/--
-lemma `Compatible.of_ge` / 引理 `Compatible.of_ge`
-
-English:
-lemma Compatible.of_ge
-  given: (hHG : G <= H)
-  statement: H.Compatible G
-  proof: .of_le_le le_rfl hHG
+lemma Compatible.of_ge (hHG : G ≤ H) : H.Compatible G := .of_le_le le_rfl hHG
 
 alias IsSubgraph.compatible := Compatible.of_le
 alias IsSubgraph.compatible' := Compatible.of_ge
-
-中文:
-引理 余mpatible.of_ge
-  条件: (hHG : G <= H)
-  结论: H.余mpatible G
-  证明: .of_le_le le_rfl hHG
-
-alias IsSubgraph.compatible := Compatible.of_le
-alias IsSubgraph.compatible' := Compatible.of_ge
-
-Depends on / 依赖: le_rfl, of_le_le
+/-
+**Graph.Compatible.anti_left** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G G₁ H : Graph α β}, G₁ ≤ G → G.Compatibl
+e H → G₁.Compatible H
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Graph.IsSubgraph.isLink_iff`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {
+e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsLink e x y ↔ G.IsLink e
+ x y)
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
 -/
-lemma Compatible.of_ge (hHG : G <= H) : H.Compatible G := .of_le_le le_rfl hHG
-
-alias IsSubgraph.compatible := Compatible.of_le
-alias IsSubgraph.compatible' := Compatible.of_ge
-
-/--
-lemma `Compatible.anti_left` / 引理 `Compatible.anti_left`
-
-English:
-lemma Compatible.anti_left
-  given: (hG₁G : G₁ <= G) (h : Compatible G H)
-  statement: Compatible G₁ H
-  proof: .trans h (hG₁G.edgeSet_mono he₁) he₂ .. fun _ he₁ he₂ _ _ => hG₁G.isLink_iff he₁
-
-中文:
-引理 余mpatible.anti_left
-  条件: (hG₁G : G₁ <= G) (h : 余mpatible G H)
-  结论: 余mpatible G₁ H
-  证明: .trans h (hG₁G.edgeSet_mono he₁) he₂ .. fun _ he₁ he₂ _ _ => hG₁G.isLink_iff he₁
-
-Depends on / 依赖: G.edgeSet_mono, G.isLink_iff, edgeSet_mono, isLink_iff
+lemma Compatible.anti_left (hG₁G : G₁ ≤ G) (h : Compatible G H) : Compatible G₁ H :=
+  fun _ he₁ he₂ _ _ ↦ hG₁G.isLink_iff he₁ |>.trans <| h (hG₁G.edgeSet_mono he₁) he₂ ..
+/-
+**Graph.Compatible.anti_right** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H H₁ : Graph α β}, H₁ ≤ H → G.Compatibl
+e H → G.Compatible H₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.symm`：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}
+, G.Compatible H → H.Compatible G
+· 使用定理 `Graph.Compatible.anti_left`：∀ {α : Type u_1} {β : Type u_2} {G G₁ H : Gr
+aph α β}, G₁ ≤ G → G.Compatible H → G₁.Compatible H
 -/
-lemma Compatible.anti_left (hG₁G : G₁ <= G) (h : Compatible G H) : Compatible G₁ H :=
-.trans h (hG₁G.edgeSet_mono he₁) he₂ .. fun _ he₁ he₂ _ _ => hG₁G.isLink_iff he₁
-
-/--
-lemma `Compatible.anti_right` / 引理 `Compatible.anti_right`
-
-English:
-lemma Compatible.anti_right
-  given: (hH₁H : H₁ <= H) (h : Compatible G H)
-  statement: Compatible G H₁
-  proof: (h.symm.anti_left hH₁H).symm
-
-中文:
-引理 余mpatible.anti_right
-  条件: (hH₁H : H₁ <= H) (h : 余mpatible G H)
-  结论: 余mpatible G H₁
-  证明: (h.symm.anti_left hH₁H).symm
-
-Depends on / 依赖: anti_left, h.symm.anti_left
--/
-lemma Compatible.anti_right (hH₁H : H₁ <= H) (h : Compatible G H) : Compatible G H₁ :=
+lemma Compatible.anti_right (hH₁H : H₁ ≤ H) (h : Compatible G H) : Compatible G H₁ :=
   (h.symm.anti_left hH₁H).symm
-
-/--
-lemma `Compatible.anti` / 引理 `Compatible.anti`
-
-English:
-lemma Compatible.anti
-  given: (hG₁G : G₁ <= G) (hH₁H : H₁ <= H) (h : G.Compatible H)
-  statement: G₁.Compatible H₁
-  proof: (h.anti_left hG₁G).anti_right hH₁H
-
-@[gcongr]
-
-中文:
-引理 余mpatible.anti
-  条件: (hG₁G : G₁ <= G) (hH₁H : H₁ <= H) (h : G.余mpatible H)
-  结论: G₁.余mpatible H₁
-  证明: (h.anti_left hG₁G).anti_right hH₁H
-
-@[gcongr]
-
-Depends on / 依赖: anti_left, anti_right, h.anti_left
+/-
+**Graph.Compatible.anti** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G G₁ H H₁ : Graph α β}, G₁ ≤ G → H₁ ≤ H →
+ G.Compatible H → G₁.Compatible H₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.anti_right`：∀ {α : Type u_1} {β : Type u_2} {G H H₁ : G
+raph α β}, H₁ ≤ H → G.Compatible H → G.Compatible H₁
+· 使用定理 `Graph.Compatible.anti_left`：∀ {α : Type u_1} {β : Type u_2} {G G₁ H : Gr
+aph α β}, G₁ ≤ G → G.Compatible H → G₁.Compatible H
 -/
-lemma Compatible.anti (hG₁G : G₁ <= G) (hH₁H : H₁ <= H) (h : G.Compatible H) : G₁.Compatible H₁ :=
+lemma Compatible.anti (hG₁G : G₁ ≤ G) (hH₁H : H₁ ≤ H) (h : G.Compatible H) : G₁.Compatible H₁ :=
   (h.anti_left hG₁G).anti_right hH₁H
 
 @[gcongr]
-/--
-lemma `Inc.mono` / 引理 `Inc.mono`
-
-English:
-lemma Inc.mono
-  given: (hHG : H <= G) (h : H.Inc e x)
-  statement: G.Inc e x
-  proof: (h.choose_spec.mono hHG).inc_left
-
-中文:
-引理 Inc.mono
-  条件: (hHG : H <= G) (h : H.Inc e x)
-  结论: G.Inc e x
-  证明: (h.choose_spec.mono hHG).inc_left
-
-Depends on / 依赖: choose_spec, h.choose_spec.mono, inc_left
+/-
+**Graph.Inc.mono** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Inc`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : Graph α β}, H ≤ G →
+ H.Inc e x → G.Inc e x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.inc_left`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → G.Inc e x
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-lemma Inc.mono (hHG : H <= G) (h : H.Inc e x) : G.Inc e x :=
+lemma Inc.mono (hHG : H ≤ G) (h : H.Inc e x) : G.Inc e x :=
   (h.choose_spec.mono hHG).inc_left
-
-/--
-lemma `IsSubgraph.inc_congr` / 引理 `IsSubgraph.inc_congr`
-
-English:
-lemma IsSubgraph.inc_congr
-  given: (hHG : H <= G) (he : e in E(H))
-  statement: H.Inc e x ↔ G.Inc e x
-  proof: by
-  simp_rw [Graph.Inc, hHG.isLink_iff he]
-
-中文:
-引理 是子图.inc_congr
-  条件: (hHG : H <= G) (he : e in E(H))
-  结论: H.Inc e x ↔ G.Inc e x
-  证明: by
-  simp_rw [Graph.Inc, hHG.isLink_iff he]
-
-Depends on / 依赖: Graph.Inc, hHG.isLink_iff, isLink_iff, simp_rw
+/-
+**Graph.IsSubgraph.inc_congr** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : Graph α β}, H ≤ G →
+ e ∈ H.edgeSet → (H.Inc e x ↔ G.Inc e x)
+参数：H.Inc e x ↔ G.Inc e x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.IsSubgraph.isLink_iff`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {
+e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsLink e x y ↔ G.IsLink e
+ x y)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma IsSubgraph.inc_congr (hHG : H <= G) (he : e in E(H)) : H.Inc e x ↔ G.Inc e x := by
+lemma IsSubgraph.inc_congr (hHG : H ≤ G) (he : e ∈ E(H)) : H.Inc e x ↔ G.Inc e x := by
   simp_rw [Graph.Inc, hHG.isLink_iff he]
-
-/--
-lemma `IsSubgraph.inc_eqOn` / 引理 `IsSubgraph.inc_eqOn`
-
-English:
-lemma IsSubgraph.inc_eqOn
-  given: (hHG : H <= G)
-  statement: EqOn H.Inc G.Inc E(H)
-  proof: by
+/-
+**Graph.IsSubgraph.inc_eqOn** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, H ≤ G → Set.EqOn H.Inc 
+G.Inc H.edgeSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.IsSubgraph.inc_congr`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e :
+ β} {G H : Graph α β}, H ≤ G → e ∈ H.edgeSet → (H.Inc e x ↔ G.Inc e x)
+-/
+lemma IsSubgraph.inc_eqOn (hHG : H ≤ G) : EqOn H.Inc G.Inc E(H) := by
   rintro e he
   ext x
   exact hHG.inc_congr he
-
-中文:
-引理 是子图.inc_eqOn
-  条件: (hHG : H <= G)
-  结论: EqOn H.Inc G.Inc E(H)
-  证明: by
-  rintro e he
-  ext x
-  exact hHG.inc_congr he
-
-Depends on / 依赖: hHG.inc_congr, inc_congr
+/-
+**Graph.IsLoopAt.mono** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsLoopAt`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : Graph α β}, H ≤ G →
+ H.IsLoopAt e x → G.IsLoopAt e x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
 -/
-lemma IsSubgraph.inc_eqOn (hHG : H <= G) : EqOn H.Inc G.Inc E(H) := by
-  rintro e he
-  ext x
-  exact hHG.inc_congr he
-
-/--
-lemma `IsLoopAt.mono` / 引理 `IsLoopAt.mono`
-
-English:
-lemma IsLoopAt.mono
-  given: (hHG : H <= G) (h : H.IsLoopAt e x)
-  statement: G.IsLoopAt e x
-  proof: IsLink.mono hHG h
-
-中文:
-引理 IsLoopAt.mono
-  条件: (hHG : H <= G) (h : H.IsLoopAt e x)
-  结论: G.IsLoopAt e x
-  证明: IsLink.mono hHG h
-
-Depends on / 依赖: IsLink, IsLink.mono
--/
-lemma IsLoopAt.mono (hHG : H <= G) (h : H.IsLoopAt e x) : G.IsLoopAt e x :=
+lemma IsLoopAt.mono (hHG : H ≤ G) (h : H.IsLoopAt e x) : G.IsLoopAt e x :=
   IsLink.mono hHG h
-
-/--
-lemma `IsSubgraph.isLoopAt_congr` / 引理 `IsSubgraph.isLoopAt_congr`
-
-English:
-lemma IsSubgraph.isLoopAt_congr
-  given: (hHG : H <= G) (he : e in E(H))
-  proof: by
-  unfold Graph.IsLoopAt
-  rw [hHG.isLink_iff he]
-
-中文:
-引理 是子图.isLoopAt_congr
-  条件: (hHG : H <= G) (he : e in E(H))
-  证明: by
-  unfold Graph.IsLoopAt
-  rw [hHG.isLink_iff he]
-
-Depends on / 依赖: Graph.IsLoopAt, IsLoopAt, hHG.isLink_iff, isLink_iff
+/-
+**Graph.IsSubgraph.isLoopAt_congr** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : Graph α β},   H ≤ G
+ → e ∈ H.edgeSet → (H.IsLoopAt e x ↔ G.IsLoopAt e x)
+参数：H.IsLoopAt e x ↔ G.IsLoopAt e x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.IsSubgraph.isLink_iff`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {
+e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsLink e x y ↔ G.IsLink e
+ x y)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma IsSubgraph.isLoopAt_congr (hHG : H <= G) (he : e in E(H)) :
+lemma IsSubgraph.isLoopAt_congr (hHG : H ≤ G) (he : e ∈ E(H)) :
     H.IsLoopAt e x ↔ G.IsLoopAt e x := by
   unfold Graph.IsLoopAt
   rw [hHG.isLink_iff he]
-
-/--
-lemma `IsSubgraph.isLoopAt_eqOn` / 引理 `IsSubgraph.isLoopAt_eqOn`
-
-English:
-lemma IsSubgraph.isLoopAt_eqOn
-  given: (hHG : H <= G)
-  statement: EqOn H.IsLoopAt G.IsLoopAt E(H)
-  proof: by
+/-
+**Graph.IsSubgraph.isLoopAt_eqOn** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, H ≤ G → Set.EqOn H.IsLo
+opAt G.IsLoopAt H.edgeSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.IsSubgraph.isLoopAt_congr`：∀ {α : Type u_1} {β : Type u_2} {x : α}
+ {e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsLoopAt e x ↔ G.IsLoop
+At e x)
+-/
+lemma IsSubgraph.isLoopAt_eqOn (hHG : H ≤ G) : EqOn H.IsLoopAt G.IsLoopAt E(H) := by
   rintro e he
   ext x
   exact hHG.isLoopAt_congr he
-
-中文:
-引理 是子图.isLoopAt_eqOn
-  条件: (hHG : H <= G)
-  结论: EqOn H.IsLoopAt G.IsLoopAt E(H)
-  证明: by
-  rintro e he
-  ext x
-  exact hHG.isLoopAt_congr he
-
-Depends on / 依赖: hHG.isLoopAt_congr, isLoopAt_congr
+/-
+**Graph.IsNonloopAt.mono** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsNonloopAt`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : Graph α β}, H ≤ G →
+ H.IsNonloopAt e x → G.IsNonloopAt e x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
 -/
-lemma IsSubgraph.isLoopAt_eqOn (hHG : H <= G) : EqOn H.IsLoopAt G.IsLoopAt E(H) := by
-  rintro e he
-  ext x
-  exact hHG.isLoopAt_congr he
-
-/--
-lemma `IsNonloopAt.mono` / 引理 `IsNonloopAt.mono`
-
-English:
-lemma IsNonloopAt.mono
-  given: (hHG : H <= G) (h : H.IsNonloopAt e x)
-  statement: G.IsNonloopAt e x
-  proof: by
+lemma IsNonloopAt.mono (hHG : H ≤ G) (h : H.IsNonloopAt e x) : G.IsNonloopAt e x := by
   obtain ⟨y, hxy, he⟩ := h
   exact ⟨y, hxy, he.mono hHG⟩
-
-中文:
-引理 IsNonloopAt.mono
-  条件: (hHG : H <= G) (h : H.IsNonloopAt e x)
-  结论: G.IsNonloopAt e x
-  证明: by
-  obtain ⟨y, hxy, he⟩ := h
-  exact ⟨y, hxy, he.mono hHG⟩
-
-Depends on / 依赖: he.mono
+/-
+**Graph.IsSubgraph.isNonloopAt_congr** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph
+`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : Graph α β},   H ≤ G
+ → e ∈ H.edgeSet → (H.IsNonloopAt e x ↔ G.IsNonloopAt e x)
+参数：H.IsNonloopAt e x ↔ G.IsNonloopAt e x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.IsSubgraph.isLink_iff`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {
+e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsLink e x y ↔ G.IsLink e
+ x y)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma IsNonloopAt.mono (hHG : H <= G) (h : H.IsNonloopAt e x) : G.IsNonloopAt e x := by
-  obtain ⟨y, hxy, he⟩ := h
-  exact ⟨y, hxy, he.mono hHG⟩
-
-/--
-lemma `IsSubgraph.isNonloopAt_congr` / 引理 `IsSubgraph.isNonloopAt_congr`
-
-English:
-lemma IsSubgraph.isNonloopAt_congr
-  given: (hHG : H <= G) (he : e in E(H))
-  proof: by
-  simp_rw [Graph.IsNonloopAt, hHG.isLink_iff he]
-
-中文:
-引理 是子图.isNonloopAt_congr
-  条件: (hHG : H <= G) (he : e in E(H))
-  证明: by
-  simp_rw [Graph.IsNonloopAt, hHG.isLink_iff he]
-
-Depends on / 依赖: Graph.IsNonloopAt, IsNonloopAt, hHG.isLink_iff, isLink_iff, simp_rw
--/
-lemma IsSubgraph.isNonloopAt_congr (hHG : H <= G) (he : e in E(H)) :
+lemma IsSubgraph.isNonloopAt_congr (hHG : H ≤ G) (he : e ∈ E(H)) :
     H.IsNonloopAt e x ↔ G.IsNonloopAt e x := by
   simp_rw [Graph.IsNonloopAt, hHG.isLink_iff he]
-
-/--
-lemma `IsSubgraph.isNonloopAt_eqOn` / 引理 `IsSubgraph.isNonloopAt_eqOn`
-
-English:
-lemma IsSubgraph.isNonloopAt_eqOn
-  given: (hHG : H <= G)
-  statement: EqOn H.IsNonloopAt G.IsNonloopAt E(H)
-  proof: by
-  rintro e he
-  ext x
-  exact hHG.isNonloopAt_congr he
-
-@[gcongr]
-
-中文:
-引理 是子图.isNonloopAt_eqOn
-  条件: (hHG : H <= G)
-  结论: EqOn H.IsNonloopAt G.IsNonloopAt E(H)
-  证明: by
-  rintro e he
-  ext x
-  exact hHG.isNonloopAt_congr he
-
-@[gcongr]
-
-Depends on / 依赖: hHG.isNonloopAt_congr, isNonloopAt_congr
+/-
+**Graph.IsSubgraph.isNonloopAt_eqOn** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSubgraph`
+。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}, H ≤ G → Set.EqOn H.IsNo
+nloopAt G.IsNonloopAt H.edgeSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.IsSubgraph.isNonloopAt_congr`：∀ {α : Type u_1} {β : Type u_2} {x :
+ α} {e : β} {G H : Graph α β},   H ≤ G → e ∈ H.edgeSet → (H.IsNonloopAt e x ↔ G.
+IsNonloopAt e x)
 -/
-lemma IsSubgraph.isNonloopAt_eqOn (hHG : H <= G) : EqOn H.IsNonloopAt G.IsNonloopAt E(H) := by
+lemma IsSubgraph.isNonloopAt_eqOn (hHG : H ≤ G) : EqOn H.IsNonloopAt G.IsNonloopAt E(H) := by
   rintro e he
   ext x
   exact hHG.isNonloopAt_congr he
 
 @[gcongr]
-/--
-lemma `Adj.mono` / 引理 `Adj.mono`
-
-English:
-lemma Adj.mono
-  given: (hHG : H <= G) (h : H.Adj x y)
-  statement: G.Adj x y
-  proof: (h.choose_spec.mono hHG).adj
-
-中文:
-引理 伴随.mono
-  条件: (hHG : H <= G) (h : H.伴随 x y)
-  结论: G.伴随 x y
-  证明: (h.choose_spec.mono hHG).adj
-
-Depends on / 依赖: choose_spec, h.choose_spec.mono
+/-
+**Graph.Adj.mono** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Adj`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {x y : α} {G H : Graph α β}, H ≤ G → H.Adj
+ x y → G.Adj x y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.adj`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G :
+ Graph α β}, G.IsLink e x y → G.Adj x y
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-lemma Adj.mono (hHG : H <= G) (h : H.Adj x y) : G.Adj x y :=
+lemma Adj.mono (hHG : H ≤ G) (h : H.Adj x y) : G.Adj x y :=
   (h.choose_spec.mono hHG).adj
-
-/--
-lemma `le_iff_compatible_subset_subset` / 引理 `le_iff_compatible_subset_subset`
-
-English:
-lemma le_iff_compatible_subset_subset
-  statement: G <= H ↔ Compatible G H ∧ V(G) subseteq V(H) ∧ E(G) subseteq E(H)
-  proof: ⟨fun h => ⟨.of_le h, h.1, h.edgeSet_mono⟩, fun ⟨h, hV, hE⟩ =>
-.mp hxy⟩⟩ ⟨hV, fun _ _ _ hxy => h hxy.edge_mem (hE hxy.edge_mem) ..
-
-中文:
-引理 le_iff_compatible_subset_subset
-  结论: G <= H ↔ 余mpatible G H ∧ V(G) subseteq V(H) ∧ E(G) subseteq E(H)
-  证明: ⟨fun h => ⟨.of_le h, h.1, h.edgeSet_mono⟩, fun ⟨h, hV, hE⟩ =>
-.mp hxy⟩⟩ ⟨hV, fun _ _ _ hxy => h hxy.edge_mem (hE hxy.edge_mem) ..
-
-Depends on / 依赖: edgeSet_mono, edge_mem, h.edgeSet_mono, hxy.edge_mem, of_le
+/-
+**Graph.le_iff_compatible_subset_subset** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：le_iff_compatible_subset_subset : G <= H ↔ Compatible G H ∧ V(G) subseteq 
+V(H) ∧ E(G) subseteq E(H)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.of_le`：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β
+}, H ≤ G → H.Compatible G
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
 -/
-lemma le_iff_compatible_subset_subset : G <= H ↔ Compatible G H ∧ V(G) subseteq V(H) ∧ E(G) subseteq E(H) :=
-  ⟨fun h => ⟨.of_le h, h.1, h.edgeSet_mono⟩, fun ⟨h, hV, hE⟩ =>
-.mp hxy⟩⟩ ⟨hV, fun _ _ _ hxy => h hxy.edge_mem (hE hxy.edge_mem) ..
-
-/--
-lemma `Compatible.le_iff` / 引理 `Compatible.le_iff`
-
-English:
-lemma Compatible.le_iff
-  given: (hH : Compatible H₁ H₂)
-  statement: H₁ <= H₂ ↔ V(H₁) subseteq V(H₂) ∧ E(H₁) subseteq E(H₂)
-  proof: le_iff_compatible_subset_subset.trans (by tauto)
-
-中文:
-引理 余mpatible.le_iff
-  条件: (hH : 余mpatible H₁ H₂)
-  结论: H₁ <= H₂ ↔ V(H₁) subseteq V(H₂) ∧ E(H₁) subseteq E(H₂)
-  证明: le_iff_compatible_subset_subset.trans (by tauto)
-
-Depends on / 依赖: le_iff_compatible_subset_subset, le_iff_compatible_subset_subset.trans
+lemma le_iff_compatible_subset_subset : G ≤ H ↔ Compatible G H ∧ V(G) ⊆ V(H) ∧ E(G) ⊆ E(H) :=
+  ⟨fun h ↦ ⟨.of_le h, h.1, h.edgeSet_mono⟩, fun ⟨h, hV, hE⟩ ↦
+    ⟨hV, fun _ _ _ hxy ↦ h hxy.edge_mem (hE hxy.edge_mem) .. |>.mp hxy⟩⟩
+/-
+**Graph.Compatible.le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β},   H₁.Compatible H₂ → 
+(H₁ ≤ H₂ ↔ H₁.vertexSet ⊆ H₂.vertexSet ∧ H₁.edgeSet ⊆ H₂.edgeSet)
+参数：H₁ ≤ H₂ ↔ H₁.vertexSet ⊆ H₂.vertexSet ∧ H₁.edgeSet ⊆ H₂.edgeSet。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用引理 `Graph.le_iff_compatible_subset_subset`：le_iff_compatible_subset_subset :
+ G <= H ↔ Compatible G H ∧ V(G) subseteq V(H) ∧ E(G) subseteq E(H)
 -/
-lemma Compatible.le_iff (hH : Compatible H₁ H₂) : H₁ <= H₂ ↔ V(H₁) subseteq V(H₂) ∧ E(H₁) subseteq E(H₂) :=
+lemma Compatible.le_iff (hH : Compatible H₁ H₂) : H₁ ≤ H₂ ↔ V(H₁) ⊆ V(H₂) ∧ E(H₁) ⊆ E(H₂) :=
   le_iff_compatible_subset_subset.trans (by tauto)
-
-/--
-lemma `Compatible.ext` / 引理 `Compatible.ext`
-
-English:
-lemma Compatible.ext
-  given: (hV : V(H₁) = V(H₂)) (hE : E(H₁) = E(H₂)) (h : Compatible H₁ H₂)
-  statement: H₁ = H₂
-  proof: (h.le_iff.mpr ⟨hV.subset, hE.subset⟩).antisymm h.symm.le_iff.mpr ⟨hV.superset, hE.superset⟩
-
-中文:
-引理 余mpatible.ext
-  条件: (hV : V(H₁) = V(H₂)) (hE : E(H₁) = E(H₂)) (h : 余mpatible H₁ H₂)
-  结论: H₁ = H₂
-  证明: (h.le_iff.mpr ⟨hV.subset, hE.subset⟩).antisymm h.symm.le_iff.mpr ⟨hV.superset, hE.superset⟩
-
-Depends on / 依赖: antisymm, h.le_iff.mpr, h.symm.le_iff.mpr, hE.subset, hE.superset, hV.subset, hV.superset, le_iff, subset, superset
+/-
+**Graph.Compatible.ext** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Compatible`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β},   H₁.vertexSet = H₂.v
+ertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → H₁ = H₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Graph.Compatible.le_iff`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph 
+α β},   H₁.Compatible H₂ → (H₁ ≤ H₂ ↔ H₁.vertexSet ⊆ H₂.vertexSet ∧ H₁.edgeSet ⊆
+ H₂.edgeSet)
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `Graph.Compatible.symm`：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β}
+, G.Compatible H → H.Compatible G
+· 使用定理 `Eq.superset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] {a b : α}, a = b → b ⊆ a
 -/
 lemma Compatible.ext (hV : V(H₁) = V(H₂)) (hE : E(H₁) = E(H₂)) (h : Compatible H₁ H₂) : H₁ = H₂ :=
-(h.le_iff.mpr ⟨hV.subset, hE.subset⟩).antisymm h.symm.le_iff.mpr ⟨hV.superset, hE.superset⟩
-
-/--
-lemma `vertexSet_ssubset_or_edgeSet_ssubset_of_lt` / 引理 `vertexSet_ssubset_or_edgeSet_ssubset_of_lt`
-
-English:
-lemma vertexSet_ssubset_or_edgeSet_ssubset_of_lt
-  given: (hGH : G < H)
-  statement: V(G) ⊂ V(H) ∨ E(G) ⊂ E(H)
-  proof: by
-  rw [lt_iff_le_and_ne] at hGH
-  simp only [ssubset_iff_subset_ne, hGH.1.vertexSet_mono, ne_eq, true_and, hGH.1.edgeSet_mono]
-  by_contra! heq
-exact hGH.2 hGH.1.compatible.ext heq.1 heq.2
-
-@[simp]
-
-中文:
-引理 vertexSet_ssubset_or_edgeSet_ssubset_of_lt
-  条件: (hGH : G < H)
-  结论: V(G) ⊂ V(H) ∨ E(G) ⊂ E(H)
-  证明: by
-  rw [lt_iff_le_and_ne] at hGH
-  simp only [ssubset_iff_subset_ne, hGH.1.vertexSet_mono, ne_eq, true_and, hGH.1.edgeSet_mono]
-  by_contra! heq
-exact hGH.2 hGH.1.compatible.ext heq.1 heq.2
-
-@[simp]
-
-Depends on / 依赖: compatible, compatible.ext, edgeSet_mono, lt_iff_le_and_ne, ne_eq, ssubset_iff_subset_ne, true_and, vertexSet_mono
+  (h.le_iff.mpr ⟨hV.subset, hE.subset⟩).antisymm <| h.symm.le_iff.mpr ⟨hV.superset, hE.superset⟩
+/-
+**Graph.vertexSet_ssubset_or_edgeSet_ssubset_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Gr
+aph`。
+形式化陈述：vertexSet_ssubset_or_edgeSet_ssubset_of_lt (hGH : G < H) : V(G) ⊂ V(H) ∨ E
+(G) ⊂ E(H)
+参数：hGH : G < H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `Graph.IsSubgraph.compatible`：∀ {α : Type u_1} {β : Type u_2} {G H : Grap
+h α β}, H ≤ G → H.Compatible G
 -/
 lemma vertexSet_ssubset_or_edgeSet_ssubset_of_lt (hGH : G < H) : V(G) ⊂ V(H) ∨ E(G) ⊂ E(H) := by
   rw [lt_iff_le_and_ne] at hGH
   simp only [ssubset_iff_subset_ne, hGH.1.vertexSet_mono, ne_eq, true_and, hGH.1.edgeSet_mono]
   by_contra! heq
-exact hGH.2 hGH.1.compatible.ext heq.1 heq.2
+  exact hGH.2 <| hGH.1.compatible.ext heq.1 heq.2
 
 @[simp]
-/--
-lemma `noEdge_le_iff` / 引理 `noEdge_le_iff`
-
-English:
-lemma noEdge_le_iff
-  statement: noEdge X β <= G ↔ X subseteq V(G)
-  proof: ⟨(·.vertexSet_mono), fun h => ⟨h, by simp⟩⟩
-
-@[simp]
-
-中文:
-引理 noEdge_le_iff
-  结论: noEdge X β <= G ↔ X subseteq V(G)
-  证明: ⟨(·.vertexSet_mono), fun h => ⟨h, by simp⟩⟩
-
-@[simp]
-
-Depends on / 依赖: vertexSet_mono
+/-
+**Graph.noEdge_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：noEdge_le_iff : noEdge X β <= G ↔ X subseteq V(G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Graph.edgeSet_noEdge`：∀ {α : Type u_1} (vertexSet : Set α) (β : Type u_3
+), (Graph.noEdge vertexSet β).edgeSet = ∅
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma noEdge_le_iff : noEdge X β <= G ↔ X subseteq V(G) := ⟨(·.vertexSet_mono), fun h => ⟨h, by simp⟩⟩
+lemma noEdge_le_iff : noEdge X β ≤ G ↔ X ⊆ V(G) := ⟨(·.vertexSet_mono), fun h ↦ ⟨h, by simp⟩⟩
 
 @[simp]
-/--
-lemma `le_noEdge_iff` / 引理 `le_noEdge_iff`
-
-English:
-lemma le_noEdge_iff
-  statement: G <= noEdge X β ↔ V(G) subseteq X ∧ E(G) = ∅
-  proof: ⟨fun h => ⟨h.vertexSet_mono, subset_empty_iff.1 h.edgeSet_mono⟩,
-    fun h => ⟨h.1, fun e x y he => by simpa [h] using he.edge_mem⟩⟩
-
-中文:
-引理 le_noEdge_iff
-  结论: G <= noEdge X β ↔ V(G) subseteq X ∧ E(G) = ∅
-  证明: ⟨fun h => ⟨h.vertexSet_mono, subset_empty_iff.1 h.edgeSet_mono⟩,
-    fun h => ⟨h.1, fun e x y he => by simpa [h] using he.edge_mem⟩⟩
-
-Depends on / 依赖: edgeSet_mono, edge_mem, h.edgeSet_mono, h.vertexSet_mono, he.edge_mem, subset_empty_iff, vertexSet_mono
+/-
+**Graph.le_noEdge_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：le_noEdge_iff : G <= noEdge X β ↔ V(G) subseteq X ∧ E(G) = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Graph.edgeSet_noEdge`：∀ {α : Type u_1} (vertexSet : Set α) (β : Type u_3
+), (Graph.noEdge vertexSet β).edgeSet = ∅
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
 -/
-lemma le_noEdge_iff : G <= noEdge X β ↔ V(G) subseteq X ∧ E(G) = ∅ :=
-  ⟨fun h => ⟨h.vertexSet_mono, subset_empty_iff.1 h.edgeSet_mono⟩,
-    fun h => ⟨h.1, fun e x y he => by simpa [h] using he.edge_mem⟩⟩
+lemma le_noEdge_iff : G ≤ noEdge X β ↔ V(G) ⊆ X ∧ E(G) = ∅ :=
+  ⟨fun h ↦ ⟨h.vertexSet_mono, subset_empty_iff.1 h.edgeSet_mono⟩,
+    fun h ↦ ⟨h.1, fun e x y he ↦ by simpa [h] using he.edge_mem⟩⟩
 
 end Subgraph
 
@@ -820,171 +590,147 @@ section SpanningSubgraph
 
 /-- `H ≤s G` (`Graph.IsSpanningSubgraph`) is a subgraph of `G` with the same vertex set. -/
 @[mk_iff]
-/--
-Definition of `IsSpanningSubgraph` / `IsSpanningSubgraph` 的定义
+/-
+**Graph.IsSpanningSubgraph** 是 Mathlib 中的一个归纳类型，位于命名空间 `Graph`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Graph α β → Graph α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSpanningSubgraph
-  parameters: (H G : Graph α β)
-  extends: le : H <= G
-  axioms and operations (1):
-    - vertexSet_eq : V(H) = V(G)
-
-中文:
-结构 是SpanningSubgraph
-  参数: (H G : 图 α β)
-  继承: le : H <= G
-  公理与运算 (1 个):
-    - vertexSet_eq : V(H) = V(G)
+--- 原说明 ---
+`H ≤s G` (`Graph.IsSpanningSubgraph`) is a subgraph of `G` with the same vertex 
+set.
 -/
-structure IsSpanningSubgraph (H G : Graph α β) : Prop extends le : H <= G where
+structure IsSpanningSubgraph (H G : Graph α β) : Prop extends le : H ≤ G where
   vertexSet_eq : V(H) = V(G)
 
 @[inherit_doc IsSpanningSubgraph]
-infixl:50 " <=s " => Graph.IsSpanningSubgraph
+infixl:50 " ≤s " => Graph.IsSpanningSubgraph
 
 namespace IsSpanningSubgraph
 
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  given: (h₁ : G <=s G₁) (h₂ : G₁ <=s G₂)
-  statement: G <=s G₂
-  proof: ⟨h₁.le.trans h₂.le, h₁.vertexSet_eq.trans h₂.vertexSet_eq⟩
-
-中文:
-引理 trans
-  条件: (h₁ : G <=s G₁) (h₂ : G₁ <=s G₂)
-  结论: G <=s G₂
-  证明: ⟨h₁.le.trans h₂.le, h₁.vertexSet_eq.trans h₂.vertexSet_eq⟩
+/-
+**Graph.IsSpanningSubgraph.trans** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSpanningSubg
+raph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G G₁ G₂ : Graph α β}, G ≤s G₁ → G₁ ≤s G₂ 
+→ G ≤s G₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsSubgraph.trans`：∀ {α : Type u_1} {β : Type u_2} {G G₁ H : Graph 
+α β}, H.IsSubgraph G → G.IsSubgraph G₁ → H.IsSubgraph G₁
+· 使用定理 `Graph.IsSpanningSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Grap
+h α β}, H ≤s G → H.IsSubgraph G
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Graph.IsSpanningSubgraph.vertexSet_eq`：∀ {α : Type u_1} {β : Type u_2} {
+H G : Graph α β}, H ≤s G → H.vertexSet = G.vertexSet
 -/
-protected lemma trans (h₁ : G <=s G₁) (h₂ : G₁ <=s G₂) : G <=s G₂ :=
+protected lemma trans (h₁ : G ≤s G₁) (h₂ : G₁ ≤s G₂) : G ≤s G₂ :=
   ⟨h₁.le.trans h₂.le, h₁.vertexSet_eq.trans h₂.vertexSet_eq⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPartialOrder (Graph α β) (· <=s ·)
-  body: ⟨le_refl G, rfl⟩
-  trans _ _ _ h₁ h₂ := h₁.trans h₂
-  antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
-
-中文:
-实例 :
-  签名: 是偏序 (图 α β) (· <=s ·)
-  定义体: ⟨le_refl G, rfl⟩
-  trans _ _ _ h₁ h₂ := h₁.trans h₂
-  antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
-
-Depends on / 依赖: le_refl
+/-
+**Graph.IsSpanningSubgraph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph.IsSpanningSubgraph`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsPartialOrder (Graph α β) (· <=s ·) where
+instance : IsPartialOrder (Graph α β) (· ≤s ·) where
   refl G := ⟨le_refl G, rfl⟩
   trans _ _ _ h₁ h₂ := h₁.trans h₂
   antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
-
-/--
-lemma `rfl` / 引理 `rfl`
-
-English:
-lemma rfl
-  statement: G <=s G
-  proof: refl G
-
-中文:
-引理 rfl
-  结论: G <=s G
-  证明: refl G
+/-
+**Graph.IsSpanningSubgraph.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsSpanningSubgra
+ph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β}, G ≤s G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsPartialOrder.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self :
+ IsPartialOrder α r], IsPreorder α r
+· 使用定理 `Graph.IsSpanningSubgraph.instIsPartialOrder`：∀ {α : Type u_1} {β : Type 
+u_2}, IsPartialOrder (Graph α β) fun x1 x2 => x1 ≤s x2
 -/
-@[simp] protected lemma rfl : G <=s G := refl G
-
-/--
-lemma `anti_right` / 引理 `anti_right`
-
-English:
-lemma anti_right
-  given: (hHK : H <= K) (hKG : K <= G) (h : H <=s G)
-  statement: H <=s K where
-  proof: hHK
-vertexSet_eq := hHK.vertexSet_mono.antisymm hKG.vertexSet_mono.trans_eq h.vertexSet_eq.symm
-
-中文:
-引理 anti_right
-  条件: (hHK : H <= K) (hKG : K <= G) (h : H <=s G)
-  结论: H <=s K where
-  证明: hHK
-vertexSet_eq := hHK.vertexSet_mono.antisymm hKG.vertexSet_mono.trans_eq h.vertexSet_eq.symm
+@[simp] protected lemma rfl : G ≤s G := refl G
+/-
+**Graph.IsSpanningSubgraph.anti_right** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsSpannin
+gSubgraph`。
+形式化陈述：anti_right (hHK : H <= K) (hKG : K <= G) (h : H <=s G) : H <=s K where le
+参数：hHK : H <= K；hKG : K <= G；h : H <=s G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Graph.IsSpanningSubgraph.vertexSet_eq`：∀ {α : Type u_1} {β : Type u_2} {
+H G : Graph α β}, H ≤s G → H.vertexSet = G.vertexSet
 -/
-lemma anti_right (hHK : H <= K) (hKG : K <= G) (h : H <=s G) : H <=s K where
+lemma anti_right (hHK : H ≤ K) (hKG : K ≤ G) (h : H ≤s G) : H ≤s K where
   le := hHK
-vertexSet_eq := hHK.vertexSet_mono.antisymm hKG.vertexSet_mono.trans_eq h.vertexSet_eq.symm
-
-/--
-lemma `mono_left` / 引理 `mono_left`
-
-English:
-lemma mono_left
-  given: (hHK : H <= K) (hKG : K <= G) (h : H <=s G)
-  statement: K <=s G where
-  proof: hKG
-vertexSet_eq := hKG.vertexSet_mono.antisymm h.vertexSet_eq.symm.le.trans hHK.vertexSet_mono
-
-中文:
-引理 mono_left
-  条件: (hHK : H <= K) (hKG : K <= G) (h : H <=s G)
-  结论: K <=s G where
-  证明: hKG
-vertexSet_eq := hKG.vertexSet_mono.antisymm h.vertexSet_eq.symm.le.trans hHK.vertexSet_mono
+  vertexSet_eq := hHK.vertexSet_mono.antisymm <| hKG.vertexSet_mono.trans_eq h.vertexSet_eq.symm
+/-
+**Graph.IsSpanningSubgraph.mono_left** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsSpanning
+Subgraph`。
+形式化陈述：mono_left (hHK : H <= K) (hKG : K <= G) (h : H <=s G) : K <=s G where le
+参数：hHK : H <= K；hKG : K <= G；h : H <=s G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Graph.IsSpanningSubgraph.vertexSet_eq`：∀ {α : Type u_1} {β : Type u_2} {
+H G : Graph α β}, H ≤s G → H.vertexSet = G.vertexSet
 -/
-lemma mono_left (hHK : H <= K) (hKG : K <= G) (h : H <=s G) : K <=s G where
+lemma mono_left (hHK : H ≤ K) (hKG : K ≤ G) (h : H ≤s G) : K ≤s G where
   le := hKG
-vertexSet_eq := hKG.vertexSet_mono.antisymm h.vertexSet_eq.symm.le.trans hHK.vertexSet_mono
-
-/--
-lemma `ext_of_edgeSet` / 引理 `ext_of_edgeSet`
-
-English:
-lemma ext_of_edgeSet
-  given: (hE : E(H) = E(G)) (h : H <=s G)
-  statement: H = G
-  proof: h.compatible.ext h.vertexSet_eq hE
-
-@[gcongr]
-
-中文:
-引理 ext_of_edgeSet
-  条件: (hE : E(H) = E(G)) (h : H <=s G)
-  结论: H = G
-  证明: h.compatible.ext h.vertexSet_eq hE
-
-@[gcongr]
-
-Depends on / 依赖: compatible, h.compatible.ext, h.vertexSet_eq, vertexSet_eq
+  vertexSet_eq := hKG.vertexSet_mono.antisymm <| h.vertexSet_eq.symm.le.trans hHK.vertexSet_mono
+/-
+**Graph.IsSpanningSubgraph.ext_of_edgeSet** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsSpa
+nningSubgraph`。
+形式化陈述：ext_of_edgeSet (hE : E(H) = E(G)) (h : H <=s G) : H = G
+参数：hE : E(H) = E(G)；h : H <=s G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用定理 `Graph.IsSpanningSubgraph.vertexSet_eq`：∀ {α : Type u_1} {β : Type u_2} {
+H G : Graph α β}, H ≤s G → H.vertexSet = G.vertexSet
+· 使用定理 `Graph.IsSubgraph.compatible`：∀ {α : Type u_1} {β : Type u_2} {G H : Grap
+h α β}, H ≤ G → H.Compatible G
+· 使用定理 `Graph.IsSpanningSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Grap
+h α β}, H ≤s G → H.IsSubgraph G
 -/
-lemma ext_of_edgeSet (hE : E(H) = E(G)) (h : H <=s G) : H = G :=
+lemma ext_of_edgeSet (hE : E(H) = E(G)) (h : H ≤s G) : H = G :=
   h.compatible.ext h.vertexSet_eq hE
 
 @[gcongr]
-/--
-lemma `banana_mono` / 引理 `banana_mono`
-
-English:
-lemma banana_mono
-  given: (hF : F₁ subseteq F₂)
-  statement: banana u v F₁ <=s banana u v F₂ where
-  proof: rfl
-
-中文:
-引理 banana_mono
-  条件: (hF : F₁ subseteq F₂)
-  结论: banana u v F₁ <=s banana u v F₂ where
-  证明: rfl
+/-
+**Graph.IsSpanningSubgraph.banana_mono** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsSpanni
+ngSubgraph`。
+形式化陈述：banana_mono (hF : F₁ subseteq F₂) : banana u v F₁ <=s banana u v F₂ where 
+vertexSet_eq
+参数：hF : F₁ subseteq F₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.vertexSet_banana`：∀ {α : Type u_1} {β : Type u_2} (u v : α) (edgeS
+et : Set β), (Graph.banana u v edgeSet).vertexSet = {u, v}
+· 使用定理 `Graph.banana_isLink`：∀ {α : Type u_1} {β : Type u_2} (u v : α) (edgeSet 
+: Set β) (e : β) (x y : α),   (Graph.banana u v edgeSet).IsLink e x y = (e ∈ edg
+eSet ∧ (x…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-lemma banana_mono (hF : F₁ subseteq F₂) : banana u v F₁ <=s banana u v F₂ where
+lemma banana_mono (hF : F₁ ⊆ F₂) : banana u v F₁ ≤s banana u v F₂ where
   vertexSet_eq := rfl
 
 end IsSpanningSubgraph
@@ -998,233 +744,225 @@ section InducedSubgraph
 /-- `H ≤i G` (`Graph.IsInducedSubgraph`) is a subgraph of `G` such that every link of `G`
 involving two vertices of `H` is also a link of `H`. -/
 @[mk_iff]
-/--
-Definition of `IsInducedSubgraph` / `IsInducedSubgraph` 的定义
+/-
+**Graph.IsInducedSubgraph** 是 Mathlib 中的一个归纳类型，位于命名空间 `Graph`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Graph α β → Graph α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsInducedSubgraph
-  parameters: (H G : Graph α β)
-  extends: le : H <= G
-  axioms and operations (1):
-    - isLink_of_mem_mem : forall ⦃e x y⦄, G.IsLink e x y -> x in V(H) -> y in V(H) -> H.IsLink e x y
-
-中文:
-结构 是InducedSubgraph
-  参数: (H G : 图 α β)
-  继承: le : H <= G
-  公理与运算 (1 个):
-    - isLink_of_mem_mem : 对任意 ⦃e x y⦄, G.IsLink e x y -> x in V(H) -> y in V(H) -> H.IsLink e x y
+--- 原说明 ---
+`H ≤i G` (`Graph.IsInducedSubgraph`) is a subgraph of `G` such that every link o
+f `G`
+involving two vertices of `H` is also a link of `H`.
 -/
-structure IsInducedSubgraph (H G : Graph α β) : Prop extends le : H <= G where
-  isLink_of_mem_mem : forall ⦃e x y⦄, G.IsLink e x y -> x in V(H) -> y in V(H) -> H.IsLink e x y
+structure IsInducedSubgraph (H G : Graph α β) : Prop extends le : H ≤ G where
+  isLink_of_mem_mem : ∀ ⦃e x y⦄, G.IsLink e x y → x ∈ V(H) → y ∈ V(H) → H.IsLink e x y
 
 @[inherit_doc IsInducedSubgraph]
-scoped infixl:50 " <=i " => Graph.IsInducedSubgraph
+scoped infixl:50 " ≤i " => Graph.IsInducedSubgraph
 
 namespace IsInducedSubgraph
 
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  given: (h₁ : G <=i G₁) (h₂ : G₁ <=i G₂)
-  statement: G <=i G₂
-  proof: ⟨h₁.le.trans h₂.le, fun _ _ _ h hx hy => h₁.isLink_of_mem_mem
-    (h₂.isLink_of_mem_mem h (h₁.vertexSet_mono hx) (h₁.vertexSet_mono hy)) hx hy⟩
-
-中文:
-引理 trans
-  条件: (h₁ : G <=i G₁) (h₂ : G₁ <=i G₂)
-  结论: G <=i G₂
-  证明: ⟨h₁.le.trans h₂.le, fun _ _ _ h hx hy => h₁.isLink_of_mem_mem
-    (h₂.isLink_of_mem_mem h (h₁.vertexSet_mono hx) (h₁.vertexSet_mono hy)) hx hy⟩
+/-
+**Graph.IsInducedSubgraph.trans** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsInducedSubgra
+ph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G G₁ G₂ : Graph α β},   G.IsInducedSubgra
+ph G₁ → G₁.IsInducedSubgraph G₂ → G.IsInducedSubgraph G₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsSubgraph.trans`：∀ {α : Type u_1} {β : Type u_2} {G G₁ H : Graph 
+α β}, H.IsSubgraph G → G.IsSubgraph G₁ → H.IsSubgraph G₁
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
 -/
-protected lemma trans (h₁ : G <=i G₁) (h₂ : G₁ <=i G₂) : G <=i G₂ :=
-  ⟨h₁.le.trans h₂.le, fun _ _ _ h hx hy => h₁.isLink_of_mem_mem
+protected lemma trans (h₁ : G ≤i G₁) (h₂ : G₁ ≤i G₂) : G ≤i G₂ :=
+  ⟨h₁.le.trans h₂.le, fun _ _ _ h hx hy ↦ h₁.isLink_of_mem_mem
     (h₂.isLink_of_mem_mem h (h₁.vertexSet_mono hx) (h₁.vertexSet_mono hy)) hx hy⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPartialOrder (Graph α β) (· <=i ·)
-  body: ⟨le_refl G, by tauto⟩
-  trans _ _ _ h₁ h₂ := h₁.trans h₂
-  antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
-
-中文:
-实例 :
-  签名: 是偏序 (图 α β) (· <=i ·)
-  定义体: ⟨le_refl G, by tauto⟩
-  trans _ _ _ h₁ h₂ := h₁.trans h₂
-  antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
-
-Depends on / 依赖: le_refl
+/-
+**Graph.IsInducedSubgraph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph.IsInducedSubgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsPartialOrder (Graph α β) (· <=i ·) where
+instance : IsPartialOrder (Graph α β) (· ≤i ·) where
   refl G := ⟨le_refl G, by tauto⟩
   trans _ _ _ h₁ h₂ := h₁.trans h₂
   antisymm _ _ h₁ h₂ := h₁.1.antisymm h₂.1
-
-/--
-lemma `rfl` / 引理 `rfl`
-
-English:
-lemma rfl
-  statement: G <=i G
-  proof: refl G
-
-中文:
-引理 rfl
-  结论: G <=i G
-  证明: refl G
+/-
+**Graph.IsInducedSubgraph.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsInducedSubgraph
+`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β}, G.IsInducedSubgraph G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsPartialOrder.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self :
+ IsPartialOrder α r], IsPreorder α r
+· 使用定理 `Graph.IsInducedSubgraph.instIsPartialOrder`：∀ {α : Type u_1} {β : Type u
+_2}, IsPartialOrder (Graph α β) fun x1 x2 => x1.IsInducedSubgraph x2
 -/
-@[simp] protected lemma rfl : G <=i G := refl G
-
-/--
-lemma `isLink_congr` / 引理 `isLink_congr`
-
-English:
-lemma isLink_congr
-  given: (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G)
-  proof: ⟨(·.mono h.le), fun hxy => h.isLink_of_mem_mem hxy hx hy⟩
-
-中文:
-引理 isLink_congr
-  条件: (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G)
-  证明: ⟨(·.mono h.le), fun hxy => h.isLink_of_mem_mem hxy hx hy⟩
-
-Depends on / 依赖: h.isLink_of_mem_mem, h.le, isLink_of_mem_mem
+@[simp] protected lemma rfl : G ≤i G := refl G
+/-
+**Graph.IsInducedSubgraph.isLink_congr** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsInduce
+dSubgraph`。
+形式化陈述：isLink_congr (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G) : H.IsLink e 
+x y ↔ G.IsLink e x y
+参数：hx : x in V(H)；hy : y in V(H)；h : H <=i G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
 -/
-lemma isLink_congr (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G) :
+lemma isLink_congr (hx : x ∈ V(H)) (hy : y ∈ V(H)) (h : H ≤i G) :
     H.IsLink e x y ↔ G.IsLink e x y :=
-  ⟨(·.mono h.le), fun hxy => h.isLink_of_mem_mem hxy hx hy⟩
-
-/--
-lemma `adj_congr` / 引理 `adj_congr`
-
-English:
-lemma adj_congr
-  given: (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G)
-  statement: H.Adj x y ↔ G.Adj x y
-  proof: ⟨(·.mono h.le), fun ⟨_, hxy⟩ => (h.isLink_of_mem_mem hxy hx hy).adj⟩
-
-中文:
-引理 adj_congr
-  条件: (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G)
-  结论: H.伴随 x y ↔ G.伴随 x y
-  证明: ⟨(·.mono h.le), fun ⟨_, hxy⟩ => (h.isLink_of_mem_mem hxy hx hy).adj⟩
-
-Depends on / 依赖: h.isLink_of_mem_mem, h.le, isLink_of_mem_mem
+  ⟨(·.mono h.le), fun hxy ↦ h.isLink_of_mem_mem hxy hx hy⟩
+/-
+**Graph.IsInducedSubgraph.adj_congr** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsInducedSu
+bgraph`。
+形式化陈述：adj_congr (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G) : H.Adj x y ↔ G.
+Adj x y
+参数：hx : x in V(H)；hy : y in V(H)；h : H <=i G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Adj.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {G H : Graph α
+ β}, H ≤ G → H.Adj x y → G.Adj x y
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsLink.adj`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G :
+ Graph α β}, G.IsLink e x y → G.Adj x y
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
 -/
-lemma adj_congr (hx : x in V(H)) (hy : y in V(H)) (h : H <=i G) : H.Adj x y ↔ G.Adj x y :=
-  ⟨(·.mono h.le), fun ⟨_, hxy⟩ => (h.isLink_of_mem_mem hxy hx hy).adj⟩
-
-/--
-lemma `anti_right` / 引理 `anti_right`
-
-English:
-lemma anti_right
-  given: (hHK : H <= K) (hKG : K <= G) (h : H <=i G)
-  statement: H <=i K where
-  proof: hHK
-  isLink_of_mem_mem _ _ _ hxy hx hy := h.isLink_of_mem_mem (hxy.mono hKG) hx hy
-
-中文:
-引理 anti_right
-  条件: (hHK : H <= K) (hKG : K <= G) (h : H <=i G)
-  结论: H <=i K where
-  证明: hHK
-  isLink_of_mem_mem _ _ _ hxy hx hy := h.isLink_of_mem_mem (hxy.mono hKG) hx hy
+lemma adj_congr (hx : x ∈ V(H)) (hy : y ∈ V(H)) (h : H ≤i G) : H.Adj x y ↔ G.Adj x y :=
+  ⟨(·.mono h.le), fun ⟨_, hxy⟩ ↦ (h.isLink_of_mem_mem hxy hx hy).adj⟩
+/-
+**Graph.IsInducedSubgraph.anti_right** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsInducedS
+ubgraph`。
+形式化陈述：anti_right (hHK : H <= K) (hKG : K <= G) (h : H <=i G) : H <=i K where le
+参数：hHK : H <= K；hKG : K <= G；h : H <=i G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
 -/
-lemma anti_right (hHK : H <= K) (hKG : K <= G) (h : H <=i G) : H <=i K where
+lemma anti_right (hHK : H ≤ K) (hKG : K ≤ G) (h : H ≤i G) : H ≤i K where
   le := hHK
   isLink_of_mem_mem _ _ _ hxy hx hy := h.isLink_of_mem_mem (hxy.mono hKG) hx hy
-
-/--
-lemma `le_of_le_subset` / 引理 `le_of_le_subset`
-
-English:
-lemma le_of_le_subset
-  given: (h' : K <= G) (hsu : V(K) subseteq V(H)) (h : H <=i G)
-  statement: K <= H
-  proof: by
-  refine (Compatible.of_le_le h' h.le).le_iff.mpr ⟨hsu, fun e he => ?_⟩
-  obtain ⟨u, v, huv⟩ := K.exists_isLink_of_mem_edgeSet he
-.edge_mem exact h.2 (huv.mono h') (hsu huv.left_mem) (hsu huv.right_mem)
-
-中文:
-引理 le_of_le_subset
-  条件: (h' : K <= G) (hsu : V(K) subseteq V(H)) (h : H <=i G)
-  结论: K <= H
-  证明: by
-  refine (Compatible.of_le_le h' h.le).le_iff.mpr ⟨hsu, fun e he => ?_⟩
-  obtain ⟨u, v, huv⟩ := K.exists_isLink_of_mem_edgeSet he
-.edge_mem exact h.2 (huv.mono h') (hsu huv.left_mem) (hsu huv.right_mem)
-
-Depends on / 依赖: Compatible, Compatible.of_le_le, K.exists_isLink_of_mem_edgeSet, edge_mem, exists_isLink_of_mem_edgeSet, h.le, huv.left_mem, huv.mono, huv.right_mem, le_iff, le_iff.mpr, left_mem, of_le_le, right_mem
+/-
+**Graph.IsInducedSubgraph.le_of_le_subset** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsInd
+ucedSubgraph`。
+形式化陈述：le_of_le_subset (h' : K <= G) (hsu : V(K) subseteq V(H)) (h : H <=i G) : K
+ <= H
+参数：h' : K <= G；hsu : V(K) subseteq V(H)；h : H <=i G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Graph.Compatible.le_iff`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph 
+α β},   H₁.Compatible H₂ → (H₁ ≤ H₂ ↔ H₁.vertexSet ⊆ H₂.vertexSet ∧ H₁.edgeSet ⊆
+ H₂.edgeSet)
+· 使用定理 `Graph.Compatible.of_le_le`：∀ {α : Type u_1} {β : Type u_2} {G H₁ H₂ : Gr
+aph α β}, H₁ ≤ G → H₂ ≤ G → H₁.Compatible H₂
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用引理 `Graph.exists_isLink_of_mem_edgeSet`：exists_isLink_of_mem_edgeSet (h : e 
+in E(G)) : exists x y, G.IsLink e x y
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `Graph.IsLink.right_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β
+} {G : Graph α β}, G.IsLink e x y → y ∈ G.vertexSet
 -/
-lemma le_of_le_subset (h' : K <= G) (hsu : V(K) subseteq V(H)) (h : H <=i G) : K <= H := by
-  refine (Compatible.of_le_le h' h.le).le_iff.mpr ⟨hsu, fun e he => ?_⟩
+lemma le_of_le_subset (h' : K ≤ G) (hsu : V(K) ⊆ V(H)) (h : H ≤i G) : K ≤ H := by
+  refine (Compatible.of_le_le h' h.le).le_iff.mpr ⟨hsu, fun e he ↦ ?_⟩
   obtain ⟨u, v, huv⟩ := K.exists_isLink_of_mem_edgeSet he
-.edge_mem exact h.2 (huv.mono h') (hsu huv.left_mem) (hsu huv.right_mem)
-
-/--
-lemma `ext_of_vertexSet` / 引理 `ext_of_vertexSet`
-
-English:
-lemma ext_of_vertexSet
-  given: (hV : V(H) = V(G)) (h : H <=i G)
-  statement: H = G
-  proof: h.compatible.ext hV antisymm h.edgeSet_mono fun e he => by
-    obtain ⟨_, _, hxy⟩ := G.exists_isLink_of_mem_edgeSet he
-.edge_mem exact h.isLink_of_mem_mem hxy (hV ▸ hxy.left_mem) (hV ▸ hxy.right_mem)
-
-中文:
-引理 ext_of_vertexSet
-  条件: (hV : V(H) = V(G)) (h : H <=i G)
-  结论: H = G
-  证明: h.compatible.ext hV antisymm h.edgeSet_mono fun e he => by
-    obtain ⟨_, _, hxy⟩ := G.exists_isLink_of_mem_edgeSet he
-.edge_mem exact h.isLink_of_mem_mem hxy (hV ▸ hxy.left_mem) (hV ▸ hxy.right_mem)
-
-Depends on / 依赖: ExceptT, ExceptT.callCC, G.exists_isLink_of_mem_edgeSet, antisymm, callCC, compatible, edgeSet_mono, edge_mem, exists_isLink_of_mem_edgeSet, h.compatible.ext, h.edgeSet_mono, h.isLink_of_mem_mem, hxy.left_mem, hxy.right_mem, isLink_of_mem_mem, left_mem, right_mem
+  exact h.2 (huv.mono h') (hsu huv.left_mem) (hsu huv.right_mem) |>.edge_mem
+/-
+**Graph.IsInducedSubgraph.ext_of_vertexSet** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsIn
+ducedSubgraph`。
+形式化陈述：ext_of_vertexSet (hV : V(H) = V(G)) (h : H <=i G) : H = G
+参数：hV : V(H) = V(G)；h : H <=i G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Compatible.ext`：∀ {α : Type u_1} {β : Type u_2} {H₁ H₂ : Graph α β
+},   H₁.vertexSet = H₂.vertexSet → H₁.edgeSet = H₂.edgeSet → H₁.Compatible H₂ → 
+H₁ = H₂
+· 使用引理 `antisymm`：antisymm [Std.Antisymm r] : a ≺ b -> b ≺ a -> a = b
+· 使用定理 `Graph.IsSubgraph.edgeSet_mono`：∀ {α : Type u_1} {β : Type u_2} {G H : Gr
+aph α β}, H ≤ G → H.edgeSet ⊆ G.edgeSet
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用引理 `Graph.exists_isLink_of_mem_edgeSet`：exists_isLink_of_mem_edgeSet (h : e 
+in E(G)) : exists x y, G.IsLink e x y
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Graph.IsLink.right_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β
+} {G : Graph α β}, G.IsLink e x y → y ∈ G.vertexSet
+· 使用定理 `Graph.IsSubgraph.compatible`：∀ {α : Type u_1} {β : Type u_2} {G H : Grap
+h α β}, H ≤ G → H.Compatible G
 -/
-lemma ext_of_vertexSet (hV : V(H) = V(G)) (h : H <=i G) : H = G :=
-h.compatible.ext hV antisymm h.edgeSet_mono fun e he => by
+lemma ext_of_vertexSet (hV : V(H) = V(G)) (h : H ≤i G) : H = G :=
+  h.compatible.ext hV <| antisymm h.edgeSet_mono <| fun e he ↦ by
     obtain ⟨_, _, hxy⟩ := G.exists_isLink_of_mem_edgeSet he
-.edge_mem exact h.isLink_of_mem_mem hxy (hV ▸ hxy.left_mem) (hV ▸ hxy.right_mem)
+    exact h.isLink_of_mem_mem hxy (hV ▸ hxy.left_mem) (hV ▸ hxy.right_mem) |>.edge_mem
 
 end IsInducedSubgraph
 
-/--
-lemma `IsSubgraph.not_isInducedSubgraph_iff` / 引理 `IsSubgraph.not_isInducedSubgraph_iff`
-
-English:
-lemma IsSubgraph.not_isInducedSubgraph_iff
-  given: (hHG : H <= G)
-  proof: by
-  contrapose!; symm
-  exact ⟨fun hnind => ⟨hHG, fun e x y hxy hx hy => hxy.anti_of_mem hHG (hnind e x y hxy hx hy)⟩,
-.edge_mem⟩ fun hind _ _ _ hexy hx hy => hind.isLink_of_mem_mem hexy hx hy
-
-中文:
-引理 是子图.not_isInducedSubgraph_iff
-  条件: (hHG : H <= G)
-  证明: by
-  contrapose!; symm
-  exact ⟨fun hnind => ⟨hHG, fun e x y hxy hx hy => hxy.anti_of_mem hHG (hnind e x y hxy hx hy)⟩,
-.edge_mem⟩ fun hind _ _ _ hexy hx hy => hind.isLink_of_mem_mem hexy hx hy
-
-Depends on / 依赖: ExceptT, ExceptT.callCC, ExceptT.goto_mkLabel, ExceptT.run_bind, ExceptT.run_mk, Function, Function.comp, anti_of_mem, bind_assoc, callCC, callCC_bind_left, callCC_bind_right, callCC_dummy, contrapose, edge_mem, goto_mkLabel, hind.isLink_of_mem_mem, hxy.anti_of_mem, intros, isLink_of_mem_mem
+/-
+**Graph.IsSubgraph.not_isInducedSubgraph_iff** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Is
+Subgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β},   H ≤ G → (¬H.IsInduced
+Subgraph G ↔ ∃ e x y, G.IsLink e x y ∧ x ∈ H.vertexSet ∧ y ∈ H.vertexSet ∧ e ∉ H
+.edgeSet)
+参数：¬H.IsInducedSubgraph G ↔ ∃ e x y, G.IsLink e x y ∧ x ∈ H.vertexSet ∧ y ∈ H.ve
+rtexSet ∧ e ∉ H.edgeSet。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₂`：contrapose_iff₂ {p q : Prop} 
+: (p ↔ ¬ q) -> (¬ p ↔ q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `_private.Mathlib.Combinatorics.Graph.Subgraph.0.Graph.IsLink.anti_of_mem
+`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G H : Graph α β},   G.IsLin
+k e x y → H ≤ G → e ∈ H.edgeSet → H.IsLink e x y
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
 -/
-lemma IsSubgraph.not_isInducedSubgraph_iff (hHG : H <= G) :
-    ¬ H <=i G ↔ exists e x y, G.IsLink e x y ∧ x in V(H) ∧ y in V(H) ∧ e ∉ E(H) := by
+lemma IsSubgraph.not_isInducedSubgraph_iff (hHG : H ≤ G) :
+    ¬ H ≤i G ↔ ∃ e x y, G.IsLink e x y ∧ x ∈ V(H) ∧ y ∈ V(H) ∧ e ∉ E(H) := by
   contrapose!; symm
-  exact ⟨fun hnind => ⟨hHG, fun e x y hxy hx hy => hxy.anti_of_mem hHG (hnind e x y hxy hx hy)⟩,
-.edge_mem⟩ fun hind _ _ _ hexy hx hy => hind.isLink_of_mem_mem hexy hx hy
+  exact ⟨fun hnind ↦ ⟨hHG, fun e x y hxy hx hy => hxy.anti_of_mem hHG (hnind e x y hxy hx hy)⟩,
+    fun hind _ _ _ hexy hx hy ↦ hind.isLink_of_mem_mem hexy hx hy |>.edge_mem⟩
 
 end InducedSubgraph
 
@@ -1234,327 +972,304 @@ section ClosedSubgraph
 
 /-- `H ≤c G` (`Graph.IsClosedSubgraph`) is a union of components of `G`. -/
 @[mk_iff]
-/--
-Definition of `IsClosedSubgraph` / `IsClosedSubgraph` 的定义
+/-
+**Graph.IsClosedSubgraph** 是 Mathlib 中的一个归纳类型，位于命名空间 `Graph`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Graph α β → Graph α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsClosedSubgraph
-  parameters: (H G : Graph α β)
-  axioms and operations (1):
-    - closed : forall ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H)
-
-中文:
-结构 是ClosedSubgraph
-  参数: (H G : 图 α β)
-  公理与运算 (1 个):
-    - closed : 对任意 ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H)
+--- 原说明 ---
+`H ≤c G` (`Graph.IsClosedSubgraph`) is a union of components of `G`.
 -/
 structure IsClosedSubgraph (H G : Graph α β) : Prop extends
   isInducedSubgraph : IsInducedSubgraph H G where
-  closed : forall ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H)
+  closed : ∀ ⦃e x⦄, G.Inc e x → x ∈ V(H) → e ∈ E(H)
 
 @[inherit_doc IsClosedSubgraph]
-scoped infixl:50 " <=c " => Graph.IsClosedSubgraph
+scoped infixl:50 " ≤c " => Graph.IsClosedSubgraph
 
 namespace IsClosedSubgraph
 
-/--
-lemma `mk'` / 引理 `mk'`
-
-English:
-lemma mk'
-  given: (hHG : H <= G) (hclosed : forall ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H))
-  statement: H <=c G where
-  proof: hHG
-  isLink_of_mem_mem _ _ _ he hx _ := he.anti_of_mem hHG (hclosed he.inc_left hx)
-  closed _ _ he hx := hclosed he hx
-
-中文:
-引理 mk'
-  条件: (hHG : H <= G) (hclosed : 对任意 ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H))
-  结论: H <=c G where
-  证明: hHG
-  isLink_of_mem_mem _ _ _ he hx _ := he.anti_of_mem hHG (hclosed he.inc_left hx)
-  closed _ _ he hx := hclosed he hx
+/-
+**Graph.IsClosedSubgraph.mk'** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsClosedSubgraph`。
+形式化陈述：mk' (hHG : H <= G) (hclosed : forall ⦃e x⦄, G.Inc e x -> x in V(H) -> e in
+ E(H)) : H <=c G where le
+参数：hHG : H <= G；hclosed : forall ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Combinatorics.Graph.Subgraph.0.Graph.IsLink.anti_of_mem
+`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G H : Graph α β},   G.IsLin
+k e x y → H ≤ G → e ∈ H.edgeSet → H.IsLink e x y
+· 使用定理 `Graph.IsLink.inc_left`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → G.Inc e x
 -/
-lemma mk' (hHG : H <= G) (hclosed : forall ⦃e x⦄, G.Inc e x -> x in V(H) -> e in E(H)) : H <=c G where
+lemma mk' (hHG : H ≤ G) (hclosed : ∀ ⦃e x⦄, G.Inc e x → x ∈ V(H) → e ∈ E(H)) : H ≤c G where
   le := hHG
   isLink_of_mem_mem _ _ _ he hx _ := he.anti_of_mem hHG (hclosed he.inc_left hx)
   closed _ _ he hx := hclosed he hx
-
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  given: (h₁ : G <=c G₁) (h₂ : G₁ <=c G₂)
-  statement: G <=c G₂
-  proof: mk' (h₁.le.trans h₂.le) fun _ _ h hx => h₁.closed (h.of_compatible h₂.compatible'
-    (h₂.closed h (h₁.vertexSet_mono hx))) hx
-
-中文:
-引理 trans
-  条件: (h₁ : G <=c G₁) (h₂ : G₁ <=c G₂)
-  结论: G <=c G₂
-  证明: mk' (h₁.le.trans h₂.le) fun _ _ h hx => h₁.closed (h.of_compatible h₂.compatible'
-    (h₂.closed h (h₁.vertexSet_mono hx))) hx
+/-
+**Graph.IsClosedSubgraph.trans** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsClosedSubgraph
+`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G G₁ G₂ : Graph α β},   G.IsClosedSubgrap
+h G₁ → G₁.IsClosedSubgraph G₂ → G.IsClosedSubgraph G₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.IsClosedSubgraph.mk'`：mk' (hHG : H <= G) (hclosed : forall ⦃e x⦄, 
+G.Inc e x -> x in V(H) -> e in E(H)) : H <=c G where le
+· 使用定理 `Graph.IsSubgraph.trans`：∀ {α : Type u_1} {β : Type u_2} {G G₁ H : Graph 
+α β}, H.IsSubgraph G → G.IsSubgraph G₁ → H.IsSubgraph G₁
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.isInducedSubgraph`：∀ {α : Type u_1} {β : Type u_2
+} {H G : Graph α β}, H.IsClosedSubgraph G → H.IsInducedSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.closed`：∀ {α : Type u_1} {β : Type u_2} {H G : Gr
+aph α β},   H.IsClosedSubgraph G → ∀ ⦃e : β⦄ ⦃x : α⦄, G.Inc e x → x ∈ H.vertexSe
+t → e ∈ H.edgeSet
+· 使用定理 `Graph.Inc.of_compatible`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β}
+ {G H : Graph α β},   G.Compatible H → e ∈ H.edgeSet → G.Inc e x → H.Inc e x
+· 使用定理 `Graph.IsSubgraph.compatible'`：∀ {α : Type u_1} {β : Type u_2} {G H : Gra
+ph α β}, G ≤ H → H.Compatible G
+· 使用定理 `Graph.IsSubgraph.vertexSet_mono`：∀ {α : Type u_1} {β : Type u_2} {H G : 
+Graph α β}, H.IsSubgraph G → H.vertexSet ⊆ G.vertexSet
 -/
-protected lemma trans (h₁ : G <=c G₁) (h₂ : G₁ <=c G₂) : G <=c G₂ :=
-  mk' (h₁.le.trans h₂.le) fun _ _ h hx => h₁.closed (h.of_compatible h₂.compatible'
+protected lemma trans (h₁ : G ≤c G₁) (h₂ : G₁ ≤c G₂) : G ≤c G₂ :=
+  mk' (h₁.le.trans h₂.le) fun _ _ h hx ↦ h₁.closed (h.of_compatible h₂.compatible'
     (h₂.closed h (h₁.vertexSet_mono hx))) hx
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPartialOrder (Graph α β) (· <=c ·)
-  body: mk' le_rfl fun _ _ h _ => h.edge_mem
+/-
+**Graph.IsClosedSubgraph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph.IsClosedSubgraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : IsPartialOrder (Graph α β) (· ≤c ·) where
+  refl _ := mk' le_rfl fun _ _ h _ ↦ h.edge_mem
   trans _ _ _ h₁ h₂ := h₁.trans h₂
   antisymm _ _ h₁ h₂ := h₁.le.antisymm h₂.le
-
-中文:
-实例 :
-  签名: 是偏序 (图 α β) (· <=c ·)
-  定义体: mk' le_rfl fun _ _ h _ => h.edge_mem
-  trans _ _ _ h₁ h₂ := h₁.trans h₂
-  antisymm _ _ h₁ h₂ := h₁.le.antisymm h₂.le
-
-Depends on / 依赖: edge_mem, h.edge_mem, le_rfl
+/-
+**Graph.IsClosedSubgraph.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsClosedSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β}, G.IsClosedSubgraph G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsPartialOrder.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self :
+ IsPartialOrder α r], IsPreorder α r
+· 使用定理 `Graph.IsClosedSubgraph.instIsPartialOrder`：∀ {α : Type u_1} {β : Type u_
+2}, IsPartialOrder (Graph α β) fun x1 x2 => x1.IsClosedSubgraph x2
 -/
-instance : IsPartialOrder (Graph α β) (· <=c ·) where
-  refl _ := mk' le_rfl fun _ _ h _ => h.edge_mem
-  trans _ _ _ h₁ h₂ := h₁.trans h₂
-  antisymm _ _ h₁ h₂ := h₁.le.antisymm h₂.le
-
-/--
-lemma `rfl` / 引理 `rfl`
-
-English:
-lemma rfl
-  statement: G <=c G
-  proof: refl G
-
-中文:
-引理 rfl
-  结论: G <=c G
-  证明: refl G
+@[simp] protected lemma rfl : G ≤c G := refl G
+/-
+**Graph.IsClosedSubgraph.inc_congr** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsClosedSubg
+raph`。
+形式化陈述：inc_congr (hx : x in V(H)) (hHG : H <=c G) : H.Inc e x ↔ G.Inc e x
+参数：hx : x in V(H)；hHG : H <=c G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Inc.mono`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : G
+raph α β}, H ≤ G → H.Inc e x → G.Inc e x
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.isInducedSubgraph`：∀ {α : Type u_1} {β : Type u_2
+} {H G : Graph α β}, H.IsClosedSubgraph G → H.IsInducedSubgraph G
+· 使用定理 `Graph.Inc.of_compatible`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β}
+ {G H : Graph α β},   G.Compatible H → e ∈ H.edgeSet → G.Inc e x → H.Inc e x
+· 使用定理 `Graph.IsSubgraph.compatible'`：∀ {α : Type u_1} {β : Type u_2} {G H : Gra
+ph α β}, G ≤ H → H.Compatible G
+· 使用定理 `Graph.IsClosedSubgraph.closed`：∀ {α : Type u_1} {β : Type u_2} {H G : Gr
+aph α β},   H.IsClosedSubgraph G → ∀ ⦃e : β⦄ ⦃x : α⦄, G.Inc e x → x ∈ H.vertexSe
+t → e ∈ H.edgeSet
 -/
-@[simp] protected lemma rfl : G <=c G := refl G
-
-/--
-lemma `inc_congr` / 引理 `inc_congr`
-
-English:
-lemma inc_congr
-  given: (hx : x in V(H)) (hHG : H <=c G)
-  statement: H.Inc e x ↔ G.Inc e x
-  proof: ⟨(·.mono hHG.le), fun he => he.of_compatible hHG.compatible' (hHG.closed he hx)⟩
-
-中文:
-引理 inc_congr
-  条件: (hx : x in V(H)) (hHG : H <=c G)
-  结论: H.Inc e x ↔ G.Inc e x
-  证明: ⟨(·.mono hHG.le), fun he => he.of_compatible hHG.compatible' (hHG.closed he hx)⟩
-
-Depends on / 依赖: closed, compatible, hHG.closed, hHG.compatible, hHG.le, he.of_compatible, of_compatible
+lemma inc_congr (hx : x ∈ V(H)) (hHG : H ≤c G) : H.Inc e x ↔ G.Inc e x :=
+  ⟨(·.mono hHG.le), fun he ↦ he.of_compatible hHG.compatible' (hHG.closed he hx)⟩
+/-
+**Graph.IsClosedSubgraph.isLink_congr** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsClosedS
+ubgraph`。
+形式化陈述：isLink_congr (hx : x in V(H)) (hHG : H <=c G) : H.IsLink e x y ↔ G.IsLink 
+e x y
+参数：hx : x in V(H)；hHG : H <=c G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.isInducedSubgraph`：∀ {α : Type u_1} {β : Type u_2
+} {H G : Graph α β}, H.IsClosedSubgraph G → H.IsInducedSubgraph G
+· 使用定理 `_private.Mathlib.Combinatorics.Graph.Subgraph.0.Graph.IsLink.anti_of_mem
+`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G H : Graph α β},   G.IsLin
+k e x y → H ≤ G → e ∈ H.edgeSet → H.IsLink e x y
+· 使用定理 `Graph.Inc.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G :
+ Graph α β}, G.Inc e x → e ∈ G.edgeSet
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Graph.IsClosedSubgraph.inc_congr`：inc_congr (hx : x in V(H)) (hHG : H <=
+c G) : H.Inc e x ↔ G.Inc e x
+· 使用定理 `Graph.IsLink.inc_left`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → G.Inc e x
 -/
-lemma inc_congr (hx : x in V(H)) (hHG : H <=c G) : H.Inc e x ↔ G.Inc e x :=
-  ⟨(·.mono hHG.le), fun he => he.of_compatible hHG.compatible' (hHG.closed he hx)⟩
-
-/--
-lemma `isLink_congr` / 引理 `isLink_congr`
-
-English:
-lemma isLink_congr
-  given: (hx : x in V(H)) (hHG : H <=c G)
-  statement: H.IsLink e x y ↔ G.IsLink e x y
-  proof: ⟨(·.mono hHG.le), fun h => h.anti_of_mem hHG.le ((hHG.inc_congr hx).mpr h.inc_left).edge_mem⟩
-
-中文:
-引理 isLink_congr
-  条件: (hx : x in V(H)) (hHG : H <=c G)
-  结论: H.IsLink e x y ↔ G.IsLink e x y
-  证明: ⟨(·.mono hHG.le), fun h => h.anti_of_mem hHG.le ((hHG.inc_congr hx).mpr h.inc_left).edge_mem⟩
-
-Depends on / 依赖: anti_of_mem, edge_mem, h.anti_of_mem, h.inc_left, hHG.inc_congr, hHG.le, inc_congr, inc_left
+lemma isLink_congr (hx : x ∈ V(H)) (hHG : H ≤c G) : H.IsLink e x y ↔ G.IsLink e x y :=
+  ⟨(·.mono hHG.le), fun h ↦ h.anti_of_mem hHG.le ((hHG.inc_congr hx).mpr h.inc_left).edge_mem⟩
+/-
+**Graph.IsClosedSubgraph.mem_iff_of_isLink** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsCl
+osedSubgraph`。
+形式化陈述：mem_iff_of_isLink (he : G.IsLink e x y) (hHG : H <=c G) : x in V(H) ↔ y in
+ V(H)
+参数：he : G.IsLink e x y；hHG : H <=c G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.IsLink.right_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β
+} {G : Graph α β}, G.IsLink e x y → y ∈ G.vertexSet
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Graph.IsClosedSubgraph.isLink_congr`：isLink_congr (hx : x in V(H)) (hHG 
+: H <=c G) : H.IsLink e x y ↔ G.IsLink e x y
+· 使用引理 `Graph.isLink_comm`：isLink_comm : G.IsLink e x y ↔ G.IsLink e y x
 -/
-lemma isLink_congr (hx : x in V(H)) (hHG : H <=c G) : H.IsLink e x y ↔ G.IsLink e x y :=
-  ⟨(·.mono hHG.le), fun h => h.anti_of_mem hHG.le ((hHG.inc_congr hx).mpr h.inc_left).edge_mem⟩
-
-/--
-lemma `mem_iff_of_isLink` / 引理 `mem_iff_of_isLink`
-
-English:
-lemma mem_iff_of_isLink
-  given: (he : G.IsLink e x y) (hHG : H <=c G)
-  statement: x in V(H) ↔ y in V(H)
-  proof: by
-  refine ⟨fun hin => ?_, fun hin => ?_⟩
+lemma mem_iff_of_isLink (he : G.IsLink e x y) (hHG : H ≤c G) : x ∈ V(H) ↔ y ∈ V(H) := by
+  refine ⟨fun hin ↦ ?_, fun hin ↦ ?_⟩
   on_goal 2 => rw [isLink_comm] at he
   all_goals rw [← hHG.isLink_congr hin] at he; exact he.right_mem
-
-中文:
-引理 mem_iff_of_isLink
-  条件: (he : G.IsLink e x y) (hHG : H <=c G)
-  结论: x in V(H) ↔ y in V(H)
-  证明: by
-  refine ⟨fun hin => ?_, fun hin => ?_⟩
-  on_goal 2 => rw [isLink_comm] at he
-  all_goals rw [← hHG.isLink_congr hin] at he; exact he.right_mem
-
-Depends on / 依赖: WriterT, WriterT.callCC, all_goals, callCC, hHG.isLink_congr, he.right_mem, isLink_comm, isLink_congr, on_goal, right_mem
+/-
+**Graph.IsClosedSubgraph.mem_tfae_of_isLink** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsC
+losedSubgraph`。
+形式化陈述：mem_tfae_of_isLink (he : G.IsLink e x y) (hHG : H <=c G) : List.TFAE [x in
+ V(H), y in V(H), e in E(H)]
+参数：he : G.IsLink e x y；hHG : H <=c G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Graph.IsClosedSubgraph.mem_iff_of_isLink`：mem_iff_of_isLink (he : G.IsLi
+nk e x y) (hHG : H <=c G) : x in V(H) ↔ y in V(H)
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Graph.IsClosedSubgraph.isLink_congr`：isLink_congr (hx : x in V(H)) (hHG 
+: H <=c G) : H.IsLink e x y ↔ G.IsLink e x y
+· 使用定理 `Graph.IsLink.symm`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+: Graph α β}, G.IsLink e x y → G.IsLink e y x
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `_private.Mathlib.Combinatorics.Graph.Subgraph.0.Graph.IsLink.anti_of_mem
+`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G H : Graph α β},   G.IsLin
+k e x y → H ≤ G → e ∈ H.edgeSet → H.IsLink e x y
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.isInducedSubgraph`：∀ {α : Type u_1} {β : Type u_2
+} {H G : Graph α β}, H.IsClosedSubgraph G → H.IsInducedSubgraph G
+· 使用定理 `List.tfae_of_cycle`：tfae_of_cycle {a b} {l : List Prop} (h_chain : List.
+IsChain (· -> ·) (a :: b :: l)) (h_last : getLastD l b -> a) : TFAE (a :: b :: l
+)
 -/
-lemma mem_iff_of_isLink (he : G.IsLink e x y) (hHG : H <=c G) : x in V(H) ↔ y in V(H) := by
-  refine ⟨fun hin => ?_, fun hin => ?_⟩
-  on_goal 2 => rw [isLink_comm] at he
-  all_goals rw [← hHG.isLink_congr hin] at he; exact he.right_mem
-
-/--
-lemma `mem_tfae_of_isLink` / 引理 `mem_tfae_of_isLink`
-
-English:
-lemma mem_tfae_of_isLink
-  given: (he : G.IsLink e x y) (hHG : H <=c G)
-  proof: by
-  tfae_have 1 -> 2 := (hHG.mem_iff_of_isLink he).mp
-  tfae_have 2 -> 3 := (hHG.isLink_congr · |>.mpr he.symm |>.edge_mem)
-  tfae_have 3 -> 1 := (he.anti_of_mem hHG.le · |>.left_mem)
+lemma mem_tfae_of_isLink (he : G.IsLink e x y) (hHG : H ≤c G) :
+    List.TFAE [x ∈ V(H), y ∈ V(H), e ∈ E(H)] := by
+  tfae_have 1 → 2 := (hHG.mem_iff_of_isLink he).mp
+  tfae_have 2 → 3 := (hHG.isLink_congr · |>.mpr he.symm |>.edge_mem)
+  tfae_have 3 → 1 := (he.anti_of_mem hHG.le · |>.left_mem)
   tfae_finish
-
-中文:
-引理 mem_tfae_of_isLink
-  条件: (he : G.IsLink e x y) (hHG : H <=c G)
-  证明: by
-  tfae_have 1 -> 2 := (hHG.mem_iff_of_isLink he).mp
-  tfae_have 2 -> 3 := (hHG.isLink_congr · |>.mpr he.symm |>.edge_mem)
-  tfae_have 3 -> 1 := (he.anti_of_mem hHG.le · |>.left_mem)
-  tfae_finish
-
-Depends on / 依赖: WriterT, WriterT.callCC, anti_of_mem, callCC, edge_mem, hHG.isLink_congr, hHG.le, hHG.mem_iff_of_isLink, he.anti_of_mem, he.symm, isLink_congr, left_mem, mem_iff_of_isLink, tfae_finish, tfae_have
+/-
+**Graph.IsClosedSubgraph.adj_congr** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsClosedSubg
+raph`。
+形式化陈述：adj_congr (hx : x in V(H)) (hHG : H <=c G) : H.Adj x y ↔ G.Adj x y
+参数：hx : x in V(H)；hHG : H <=c G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Adj.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {G H : Graph α
+ β}, H ≤ G → H.Adj x y → G.Adj x y
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.isInducedSubgraph`：∀ {α : Type u_1} {β : Type u_2
+} {H G : Graph α β}, H.IsClosedSubgraph G → H.IsInducedSubgraph G
+· 使用定理 `Graph.IsLink.adj`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G :
+ Graph α β}, G.IsLink e x y → G.Adj x y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Graph.IsClosedSubgraph.isLink_congr`：isLink_congr (hx : x in V(H)) (hHG 
+: H <=c G) : H.IsLink e x y ↔ G.IsLink e x y
 -/
-lemma mem_tfae_of_isLink (he : G.IsLink e x y) (hHG : H <=c G) :
-    List.TFAE [x in V(H), y in V(H), e in E(H)] := by
-  tfae_have 1 -> 2 := (hHG.mem_iff_of_isLink he).mp
-  tfae_have 2 -> 3 := (hHG.isLink_congr · |>.mpr he.symm |>.edge_mem)
-  tfae_have 3 -> 1 := (he.anti_of_mem hHG.le · |>.left_mem)
-  tfae_finish
-
-/--
-lemma `adj_congr` / 引理 `adj_congr`
-
-English:
-lemma adj_congr
-  given: (hx : x in V(H)) (hHG : H <=c G)
-  statement: H.Adj x y ↔ G.Adj x y
-  proof: ⟨(·.mono hHG.le), fun ⟨_, hxy⟩ => (hHG.isLink_congr hx |>.mpr hxy).adj⟩
-
-中文:
-引理 adj_congr
-  条件: (hx : x in V(H)) (hHG : H <=c G)
-  结论: H.伴随 x y ↔ G.伴随 x y
-  证明: ⟨(·.mono hHG.le), fun ⟨_, hxy⟩ => (hHG.isLink_congr hx |>.mpr hxy).adj⟩
-
-Depends on / 依赖: hHG.isLink_congr, hHG.le, isLink_congr
+lemma adj_congr (hx : x ∈ V(H)) (hHG : H ≤c G) : H.Adj x y ↔ G.Adj x y :=
+  ⟨(·.mono hHG.le), fun ⟨_, hxy⟩ ↦ (hHG.isLink_congr hx |>.mpr hxy).adj⟩
+/-
+**Graph.IsClosedSubgraph.mem_iff_of_adj** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsClose
+dSubgraph`。
+形式化陈述：mem_iff_of_adj (hxy : G.Adj x y) (hHG : H <=c G) : x in V(H) ↔ y in V(H)
+参数：hxy : G.Adj x y；hHG : H <=c G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.IsClosedSubgraph.mem_iff_of_isLink`：mem_iff_of_isLink (he : G.IsLi
+nk e x y) (hHG : H <=c G) : x in V(H) ↔ y in V(H)
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-lemma adj_congr (hx : x in V(H)) (hHG : H <=c G) : H.Adj x y ↔ G.Adj x y :=
-  ⟨(·.mono hHG.le), fun ⟨_, hxy⟩ => (hHG.isLink_congr hx |>.mpr hxy).adj⟩
-
-/--
-lemma `mem_iff_of_adj` / 引理 `mem_iff_of_adj`
-
-English:
-lemma mem_iff_of_adj
-  given: (hxy : G.Adj x y) (hHG : H <=c G)
-  statement: x in V(H) ↔ y in V(H)
-  proof: hHG.mem_iff_of_isLink hxy.choose_spec
-
-中文:
-引理 mem_iff_of_adj
-  条件: (hxy : G.伴随 x y) (hHG : H <=c G)
-  结论: x in V(H) ↔ y in V(H)
-  证明: hHG.mem_iff_of_isLink hxy.choose_spec
-
-Depends on / 依赖: StateT, StateT.callCC, callCC, choose_spec, hHG.mem_iff_of_isLink, hxy.choose_spec, mem_iff_of_isLink
--/
-lemma mem_iff_of_adj (hxy : G.Adj x y) (hHG : H <=c G) : x in V(H) ↔ y in V(H) :=
+lemma mem_iff_of_adj (hxy : G.Adj x y) (hHG : H ≤c G) : x ∈ V(H) ↔ y ∈ V(H) :=
   hHG.mem_iff_of_isLink hxy.choose_spec
-
-/--
-lemma `anti_right` / 引理 `anti_right`
-
-English:
-lemma anti_right
-  given: (hHG₁ : H <= G₁) (hG₁ : G₁ <= G) (hHG : H <=c G)
-  statement: H <=c G₁
-  proof: .edge_mem .mpr (he.mono hG₁) mk' hHG₁ fun _ _ he hx => hHG.inc_congr hx
-
-中文:
-引理 anti_right
-  条件: (hHG₁ : H <= G₁) (hG₁ : G₁ <= G) (hHG : H <=c G)
-  结论: H <=c G₁
-  证明: .edge_mem .mpr (he.mono hG₁) mk' hHG₁ fun _ _ he hx => hHG.inc_congr hx
-
-Depends on / 依赖: StateT, StateT.callCC, StateT.goto_mkLabel, StateT.run_bind, StateT.run_mk, callCC, callCC_bind_left, callCC_bind_right, callCC_dummy, edge_mem, goto_mkLabel, hHG.inc_congr, he.mono, inc_congr, intros, run_bind, run_mk
+/-
+**Graph.IsClosedSubgraph.anti_right** 是 Mathlib 中的一个引理，位于命名空间 `Graph.IsClosedSub
+graph`。
+形式化陈述：anti_right (hHG₁ : H <= G₁) (hG₁ : G₁ <= G) (hHG : H <=c G) : H <=c G₁
+参数：hHG₁ : H <= G₁；hG₁ : G₁ <= G；hHG : H <=c G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.IsClosedSubgraph.mk'`：mk' (hHG : H <= G) (hclosed : forall ⦃e x⦄, 
+G.Inc e x -> x in V(H) -> e in E(H)) : H <=c G where le
+· 使用定理 `Graph.Inc.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G :
+ Graph α β}, G.Inc e x → e ∈ G.edgeSet
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Graph.IsClosedSubgraph.inc_congr`：inc_congr (hx : x in V(H)) (hHG : H <=
+c G) : H.Inc e x ↔ G.Inc e x
+· 使用定理 `Graph.Inc.mono`：∀ {α : Type u_1} {β : Type u_2} {x : α} {e : β} {G H : G
+raph α β}, H ≤ G → H.Inc e x → G.Inc e x
 -/
-lemma anti_right (hHG₁ : H <= G₁) (hG₁ : G₁ <= G) (hHG : H <=c G) : H <=c G₁ :=
-.edge_mem .mpr (he.mono hG₁) mk' hHG₁ fun _ _ he hx => hHG.inc_congr hx
+lemma anti_right (hHG₁ : H ≤ G₁) (hG₁ : G₁ ≤ G) (hHG : H ≤c G) : H ≤c G₁ :=
+  mk' hHG₁ fun _ _ he hx ↦ hHG.inc_congr hx |>.mpr (he.mono hG₁) |>.edge_mem
 
 end IsClosedSubgraph
 
-/--
-lemma `IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj` / 引理 `IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj`
-
-English:
-lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj
-  given: (hHG : H <=i G)
-  proof: by
-  contrapose!; symm
-  exact ⟨fun hncl => ⟨hHG, fun e x ⟨y, hexy⟩ hxH =>
-.edge_mem⟩, hHG.isLink_of_mem_mem hexy hxH (hncl x y ⟨e, hexy⟩ hxH)
-    fun hcl _ _ hexy => (hcl.mem_iff_of_adj hexy).mp⟩
-
-中文:
-引理 是InducedSubgraph.not_isClosedSubgraph_iff_存在_adj
-  条件: (hHG : H <=i G)
-  证明: by
-  contrapose!; symm
-  exact ⟨fun hncl => ⟨hHG, fun e x ⟨y, hexy⟩ hxH =>
-.edge_mem⟩, hHG.isLink_of_mem_mem hexy hxH (hncl x y ⟨e, hexy⟩ hxH)
-    fun hcl _ _ hexy => (hcl.mem_iff_of_adj hexy).mp⟩
-
-Depends on / 依赖: contrapose, edge_mem, hHG.isLink_of_mem_mem, hcl.mem_iff_of_adj, isLink_of_mem_mem, mem_iff_of_adj
+/-
+**Graph.IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj** 是 Mathlib 中的一个定理
+，位于命名空间 `Graph.IsInducedSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β},   H.IsInducedSubgraph G
+ → (¬H.IsClosedSubgraph G ↔ ∃ x y, G.Adj x y ∧ x ∈ H.vertexSet ∧ y ∉ H.vertexSet
+)
+参数：¬H.IsClosedSubgraph G ↔ ∃ x y, G.Adj x y ∧ x ∈ H.vertexSet ∧ y ∉ H.vertexSet。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₂`：contrapose_iff₂ {p q : Prop} 
+: (p ↔ ¬ q) -> (¬ p ↔ q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Graph.IsLink.edge_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → e ∈ G.edgeSet
+· 使用定理 `Graph.IsInducedSubgraph.isLink_of_mem_mem`：∀ {α : Type u_1} {β : Type u_
+2} {H G : Graph α β},   H.IsInducedSubgraph G → ∀ ⦃e : β⦄ ⦃x y : α⦄, G.IsLink e 
+x y → x ∈ H.vertexSet → y ∈ H.v…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Graph.IsClosedSubgraph.mem_iff_of_adj`：mem_iff_of_adj (hxy : G.Adj x y) 
+(hHG : H <=c G) : x in V(H) ↔ y in V(H)
 -/
-lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj (hHG : H <=i G) :
-    ¬ H <=c G ↔ exists x y, G.Adj x y ∧ x in V(H) ∧ y ∉ V(H) := by
+lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj (hHG : H ≤i G) :
+    ¬ H ≤c G ↔ ∃ x y, G.Adj x y ∧ x ∈ V(H) ∧ y ∉ V(H) := by
   contrapose!; symm
-  exact ⟨fun hncl => ⟨hHG, fun e x ⟨y, hexy⟩ hxH =>
-.edge_mem⟩, hHG.isLink_of_mem_mem hexy hxH (hncl x y ⟨e, hexy⟩ hxH)
-    fun hcl _ _ hexy => (hcl.mem_iff_of_adj hexy).mp⟩
-
-/--
-lemma `IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink` / 引理 `IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink`
-
-English:
-lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink
-  given: (hHG : H <=i G)
-  proof: by
-  rw [hHG.not_isClosedSubgraph_iff_exists_adj]
-  unfold Adj
-  tauto
-
-中文:
-引理 是InducedSubgraph.not_isClosedSubgraph_iff_存在_isLink
-  条件: (hHG : H <=i G)
-  证明: by
-  rw [hHG.not_isClosedSubgraph_iff_exists_adj]
-  unfold Adj
-  tauto
-
-Depends on / 依赖: ReaderT, ReaderT.callCC, callCC, hHG.not_isClosedSubgraph_iff_exists_adj, not_isClosedSubgraph_iff_exists_adj
+  exact ⟨fun hncl ↦ ⟨hHG, fun e x ⟨y, hexy⟩ hxH =>
+    hHG.isLink_of_mem_mem hexy hxH (hncl x y ⟨e, hexy⟩ hxH) |>.edge_mem⟩,
+    fun hcl _ _ hexy ↦ (hcl.mem_iff_of_adj hexy).mp⟩
+/-
+**Graph.IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink** 是 Mathlib 中的一
+个定理，位于命名空间 `Graph.IsInducedSubgraph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β},   H.IsInducedSubgraph G
+ → (¬H.IsClosedSubgraph G ↔ ∃ e x y, G.IsLink e x y ∧ x ∈ H.vertexSet ∧ y ∉ H.ve
+rtexSet)
+参数：¬H.IsClosedSubgraph G ↔ ∃ e x y, G.IsLink e x y ∧ x ∈ H.vertexSet ∧ y ∉ H.ver
+texSet。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.IsInducedSubgraph.not_isClosedSubgraph_iff_exists_adj`：∀ {α : Type
+ u_1} {β : Type u_2} {G H : Graph α β},   H.IsInducedSubgraph G → (¬H.IsClosedSu
+bgraph G ↔ ∃ x y, G.Adj x y ∧ x ∈ H.vertexSet ∧ y…
 -/
-lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink (hHG : H <=i G) :
-    ¬ H <=c G ↔ exists e x y, G.IsLink e x y ∧ x in V(H) ∧ y ∉ V(H) := by
+lemma IsInducedSubgraph.not_isClosedSubgraph_iff_exists_isLink (hHG : H ≤i G) :
+    ¬ H ≤c G ↔ ∃ e x y, G.IsLink e x y ∧ x ∈ V(H) ∧ y ∉ V(H) := by
   rw [hHG.not_isClosedSubgraph_iff_exists_adj]
   unfold Adj
   tauto
@@ -1563,322 +1278,231 @@ end ClosedSubgraph
 
 section OrderBot
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderBot (Graph α β)
-  body: noEdge ∅ β
-  bot_le G := by constructor <;> simp
-
-中文:
-实例 :
-  签名: 有底序 (图 α β)
-  定义体: noEdge ∅ β
-  bot_le G := by constructor <;> simp
-
-Depends on / 依赖: ReaderT, ReaderT.callCC, ReaderT.goto_mkLabel, ReaderT.run_bind, ReaderT.run_monadLift, callCC, callCC_bind_left, callCC_bind_right, callCC_dummy, goto_mkLabel, intros, monadLift_self, noEdge, run_bind, run_monadLift
+/-
+**Graph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderBot (Graph α β) where
   bot := noEdge ∅ β
   bot_le G := by constructor <;> simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Graph α β)
-  body: ⊥
-
-中文:
-实例 :
-  签名: 可居 (图 α β)
-  定义体: ⊥
+/-
+**Graph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Graph α β) where
   default := ⊥
-
-/--
-lemma `noEdge_empty` / 引理 `noEdge_empty`
-
-English:
-lemma noEdge_empty
-  statement: Graph.noEdge (∅ : Set α) β = ⊥
-  proof: rfl
-
-中文:
-引理 noEdge_empty
-  结论: 图.noEdge (∅ : 集合 α) β = ⊥
-  证明: rfl
+/-
+**Graph.noEdge_empty** 是 Mathlib 中的一个定理，位于命名空间 `Graph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, Graph.noEdge ∅ β = ⊥
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, grind =] lemma noEdge_empty : Graph.noEdge (∅ : Set α) β = ⊥ := rfl
-
-/--
-lemma `vertexSet_bot` / 引理 `vertexSet_bot`
-
-English:
-lemma vertexSet_bot
-  statement: V((⊥ : Graph α β)) = ∅
-  proof: rfl
-
-中文:
-引理 vertexSet_bot
-  结论: V((⊥ : 图 α β)) = ∅
-  证明: rfl
+/-
+**Graph.vertexSet_bot** 是 Mathlib 中的一个定理，位于命名空间 `Graph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, ⊥.vertexSet = ∅
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma vertexSet_bot : V((⊥ : Graph α β)) = ∅ := rfl
-
-/--
-lemma `edgeSet_bot` / 引理 `edgeSet_bot`
-
-English:
-lemma edgeSet_bot
-  statement: E((⊥ : Graph α β)) = ∅
-  proof: rfl
-
-中文:
-引理 edgeSet_bot
-  结论: E((⊥ : 图 α β)) = ∅
-  证明: rfl
+/-
+**Graph.edgeSet_bot** 是 Mathlib 中的一个定理，位于命名空间 `Graph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, ⊥.edgeSet = ∅
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma edgeSet_bot : E((⊥ : Graph α β)) = ∅ := rfl
-
-/--
-lemma `bot_isClosedSubgraph` / 引理 `bot_isClosedSubgraph`
-
-English:
-lemma bot_isClosedSubgraph
-  given: (G : Graph α β)
-  statement: ⊥ <=c G
-  proof: IsClosedSubgraph.mk' bot_le (by simp)
-
-中文:
-引理 bot_isClosedSubgraph
-  条件: (G : 图 α β)
-  结论: ⊥ <=c G
-  证明: IsClosedSubgraph.mk' bot_le (by simp)
+/-
+**Graph.bot_isClosedSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `Graph`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β), ⊥.IsClosedSubgraph G
+参数：G : Graph α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.IsClosedSubgraph.mk'`：mk' (hHG : H <= G) (hclosed : forall ⦃e x⦄, 
+G.Inc e x -> x in V(H) -> e in E(H)) : H <=c G where le
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-@[simp] lemma bot_isClosedSubgraph (G : Graph α β) : ⊥ <=c G := IsClosedSubgraph.mk' bot_le (by simp)
-
-/--
-lemma `eq_bot_or_vertexSet_nonempty` / 引理 `eq_bot_or_vertexSet_nonempty`
-
-English:
-lemma eq_bot_or_vertexSet_nonempty
-  given: (G : Graph α β)
-  statement: G = ⊥ ∨ V(G).Nonempty
-  proof: by
-  refine (em (V(G) = ∅)).elim (fun he => .inl (Graph.ext he fun e x y => ?_)) (Or.inr ∘
-    nonempty_iff_ne_empty.mpr)
-  simp only [edgeSet_bot, mem_empty_iff_false, not_false_eq_true, not_isLink_of_notMem_edgeSet,
-    iff_false]
-  exact fun h => by simpa [he] using h.left_mem
-
-中文:
-引理 eq_bot_or_vertexSet_nonempty
-  条件: (G : 图 α β)
-  结论: G = ⊥ ∨ V(G).非空
-  证明: by
-  refine (em (V(G) = ∅)).elim (fun he => .inl (Graph.ext he fun e x y => ?_)) (Or.inr ∘
-    nonempty_iff_ne_empty.mpr)
-  simp only [edgeSet_bot, mem_empty_iff_false, not_false_eq_true, not_isLink_of_notMem_edgeSet,
-    iff_false]
-  exact fun h => by simpa [he] using h.left_mem
-
-Depends on / 依赖: Graph.ext, Or.inr, edgeSet_bot, h.left_mem, iff_false, left_mem, mem_empty_iff_false, nonempty_iff_ne_empty, nonempty_iff_ne_empty.mpr, not_false_eq_true, not_isLink_of_notMem_edgeSet
+@[simp] lemma bot_isClosedSubgraph (G : Graph α β) : ⊥ ≤c G := IsClosedSubgraph.mk' bot_le (by simp)
+/-
+**Graph.eq_bot_or_vertexSet_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：eq_bot_or_vertexSet_nonempty (G : Graph α β) : G = ⊥ ∨ V(G).Nonempty
+参数：G : Graph α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Graph.ext`：∀ {α : Type u_1} {β : Type u_2} {G₁ G₂ : Graph α β},   G₁.ver
+texSet = G₂.vertexSet → (∀ (e : β) (x y : α), G₁.IsLink e x y ↔ G₂.IsLink e x y…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
 -/
 lemma eq_bot_or_vertexSet_nonempty (G : Graph α β) : G = ⊥ ∨ V(G).Nonempty := by
-  refine (em (V(G) = ∅)).elim (fun he => .inl (Graph.ext he fun e x y => ?_)) (Or.inr ∘
+  refine (em (V(G) = ∅)).elim (fun he ↦ .inl (Graph.ext he fun e x y ↦ ?_)) (Or.inr ∘
     nonempty_iff_ne_empty.mpr)
   simp only [edgeSet_bot, mem_empty_iff_false, not_false_eq_true, not_isLink_of_notMem_edgeSet,
     iff_false]
-  exact fun h => by simpa [he] using h.left_mem
-
-/--
-lemma `vertexSet_eq_empty_iff` / 引理 `vertexSet_eq_empty_iff`
-
-English:
-lemma vertexSet_eq_empty_iff
-  statement: V(G) = ∅ ↔ G = ⊥
-  proof: by
-  refine ⟨fun h => bot_le.antisymm' ⟨by simp [h], fun e x y he => ?_⟩, fun h => by simp [h]⟩
-  simpa [h] using he.left_mem
-
-@[push, simp]
-
-中文:
-引理 vertexSet_eq_empty_iff
-  结论: V(G) = ∅ ↔ G = ⊥
-  证明: by
-  refine ⟨fun h => bot_le.antisymm' ⟨by simp [h], fun e x y he => ?_⟩, fun h => by simp [h]⟩
-  simpa [h] using he.left_mem
-
-@[push, simp]
-
-Depends on / 依赖: antisymm, bot_le, bot_le.antisymm, he.left_mem, left_mem
+  exact fun h ↦ by simpa [he] using h.left_mem
+/-
+**Graph.vertexSet_eq_empty_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：vertexSet_eq_empty_iff : V(G) = ∅ ↔ G = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma vertexSet_eq_empty_iff : V(G) = ∅ ↔ G = ⊥ := by
-  refine ⟨fun h => bot_le.antisymm' ⟨by simp [h], fun e x y he => ?_⟩, fun h => by simp [h]⟩
+  refine ⟨fun h ↦ bot_le.antisymm' ⟨by simp [h], fun e x y he ↦ ?_⟩, fun h ↦ by simp [h]⟩
   simpa [h] using he.left_mem
 
 @[push, simp]
-/--
-lemma `ne_bot_iff` / 引理 `ne_bot_iff`
-
-English:
-lemma ne_bot_iff
-  statement: G != ⊥ ↔ V(G).Nonempty
-  proof: not_iff_not.mp by simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
-
-@[push, simp]
-
-中文:
-引理 ne_bot_iff
-  结论: G != ⊥ ↔ V(G).非空
-  证明: not_iff_not.mp by simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
-
-@[push, simp]
-
-Depends on / 依赖: not_iff_not, not_iff_not.mp, not_nonempty_iff_eq_empty, vertexSet_eq_empty_iff
+/-
+**Graph.ne_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：ne_bot_iff : G != ⊥ ↔ V(G).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma ne_bot_iff : G != ⊥ ↔ V(G).Nonempty :=
-not_iff_not.mp by simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
+lemma ne_bot_iff : G ≠ ⊥ ↔ V(G).Nonempty :=
+  not_iff_not.mp <| by simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
 
 @[push, simp]
-/--
-lemma `vertexSet_not_nonempty_iff` / 引理 `vertexSet_not_nonempty_iff`
-
-English:
-lemma vertexSet_not_nonempty_iff
-  statement: ¬ V(G).Nonempty ↔ G = ⊥
-  proof: by
-  simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
-
-中文:
-引理 vertexSet_not_nonempty_iff
-  结论: ¬ V(G).非空 ↔ G = ⊥
-  证明: by
-  simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
-
-Depends on / 依赖: not_nonempty_iff_eq_empty, vertexSet_eq_empty_iff
+/-
+**Graph.vertexSet_not_nonempty_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：vertexSet_not_nonempty_iff : ¬ V(G).Nonempty ↔ G = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma vertexSet_not_nonempty_iff : ¬ V(G).Nonempty ↔ G = ⊥ := by
   simp [vertexSet_eq_empty_iff, not_nonempty_iff_eq_empty]
-
-/--
-lemma `ne_bot_of_mem_vertexSet` / 引理 `ne_bot_of_mem_vertexSet`
-
-English:
-lemma ne_bot_of_mem_vertexSet
-  given: (h : x in V(G))
-  statement: G != ⊥
-  proof: ne_bot_iff.mpr ⟨x, h⟩
-
-@[simp]
-
-中文:
-引理 ne_bot_of_mem_vertexSet
-  条件: (h : x in V(G))
-  结论: G != ⊥
-  证明: ne_bot_iff.mpr ⟨x, h⟩
-
-@[simp]
-
-Depends on / 依赖: ne_bot_iff, ne_bot_iff.mpr
+/-
+**Graph.ne_bot_of_mem_vertexSet** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：ne_bot_of_mem_vertexSet (h : x in V(G)) : G != ⊥
+参数：h : x in V(G)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Graph.ne_bot_iff`：ne_bot_iff : G != ⊥ ↔ V(G).Nonempty
 -/
-lemma ne_bot_of_mem_vertexSet (h : x in V(G)) : G != ⊥ := ne_bot_iff.mpr ⟨x, h⟩
+lemma ne_bot_of_mem_vertexSet (h : x ∈ V(G)) : G ≠ ⊥ := ne_bot_iff.mpr ⟨x, h⟩
 
 @[simp]
-/--
-lemma `isSpanningSubgraph_bot_iff` / 引理 `isSpanningSubgraph_bot_iff`
-
-English:
-lemma isSpanningSubgraph_bot_iff
-  statement: G <=s ⊥ ↔ G = ⊥
-  proof: ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
-
-@[simp]
-
-中文:
-引理 isSpanningSubgraph_bot_iff
-  结论: G <=s ⊥ ↔ G = ⊥
-  证明: ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
-
-@[simp]
-
-Depends on / 依赖: h.le, le_bot_iff, le_bot_iff.mp
+/-
+**Graph.isSpanningSubgraph_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：isSpanningSubgraph_bot_iff : G <=s ⊥ ↔ G = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `Graph.IsSpanningSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Grap
+h α β}, H ≤s G → H.IsSubgraph G
+· 使用定理 `Graph.IsSpanningSubgraph.rfl`：∀ {α : Type u_1} {β : Type u_2} {G : Graph
+ α β}, G ≤s G
 -/
-lemma isSpanningSubgraph_bot_iff : G <=s ⊥ ↔ G = ⊥ :=
+lemma isSpanningSubgraph_bot_iff : G ≤s ⊥ ↔ G = ⊥ :=
   ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
 
 @[simp]
-/--
-lemma `isInducedSubgraph_bot_iff` / 引理 `isInducedSubgraph_bot_iff`
-
-English:
-lemma isInducedSubgraph_bot_iff
-  statement: G <=i ⊥ ↔ G = ⊥
-  proof: ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
-
-@[simp]
-
-中文:
-引理 isInducedSubgraph_bot_iff
-  结论: G <=i ⊥ ↔ G = ⊥
-  证明: ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
-
-@[simp]
-
-Depends on / 依赖: h.le, le_bot_iff, le_bot_iff.mp
+/-
+**Graph.isInducedSubgraph_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：isInducedSubgraph_bot_iff : G <=i ⊥ ↔ G = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsInducedSubgraph.rfl`：∀ {α : Type u_1} {β : Type u_2} {G : Graph 
+α β}, G.IsInducedSubgraph G
 -/
-lemma isInducedSubgraph_bot_iff : G <=i ⊥ ↔ G = ⊥ :=
+lemma isInducedSubgraph_bot_iff : G ≤i ⊥ ↔ G = ⊥ :=
   ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
 
 @[simp]
-/--
-lemma `isClosedSubgraph_bot_iff` / 引理 `isClosedSubgraph_bot_iff`
-
-English:
-lemma isClosedSubgraph_bot_iff
-  statement: G <=c ⊥ ↔ G = ⊥
-  proof: ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
-
-中文:
-引理 isClosedSubgraph_bot_iff
-  结论: G <=c ⊥ ↔ G = ⊥
-  证明: ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
-
-Depends on / 依赖: h.le, le_bot_iff, le_bot_iff.mp
+/-
+**Graph.isClosedSubgraph_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：isClosedSubgraph_bot_iff : G <=c ⊥ ↔ G = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `Graph.IsInducedSubgraph.le`：∀ {α : Type u_1} {β : Type u_2} {H G : Graph
+ α β}, H.IsInducedSubgraph G → H.IsSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.isInducedSubgraph`：∀ {α : Type u_1} {β : Type u_2
+} {H G : Graph α β}, H.IsClosedSubgraph G → H.IsInducedSubgraph G
+· 使用定理 `Graph.IsClosedSubgraph.rfl`：∀ {α : Type u_1} {β : Type u_2} {G : Graph α
+ β}, G.IsClosedSubgraph G
 -/
-lemma isClosedSubgraph_bot_iff : G <=c ⊥ ↔ G = ⊥ :=
+lemma isClosedSubgraph_bot_iff : G ≤c ⊥ ↔ G = ⊥ :=
   ⟨fun h => le_bot_iff.mp h.le, fun h => h ▸ .rfl⟩
-
-/--
-lemma `not_disjoint_of_mem_mem` / 引理 `not_disjoint_of_mem_mem`
-
-English:
-lemma not_disjoint_of_mem_mem
-  given: (h : x in V(G)) (h' : x in V(H))
-  statement: ¬ Disjoint G H
-  proof: by
-  simp only [Disjoint, le_bot_iff, not_forall, ne_eq, ne_bot_iff]
-  use noEdge {x} β
-  simp [h, h']
-
-中文:
-引理 not_disjoint_of_mem_mem
-  条件: (h : x in V(G)) (h' : x in V(H))
-  结论: ¬ Disjoint G H
-  证明: by
-  simp only [Disjoint, le_bot_iff, not_forall, ne_eq, ne_bot_iff]
-  use noEdge {x} β
-  simp [h, h']
-
-Depends on / 依赖: Disjoint, le_bot_iff, ne_bot_iff, ne_eq, noEdge, not_forall
+/-
+**Graph.not_disjoint_of_mem_mem** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：not_disjoint_of_mem_mem (h : x in V(G)) (h' : x in V(H)) : ¬ Disjoint G H
+参数：h : x in V(G)；h' : x in V(H)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Graph.vertexSet_noEdge`：∀ {α : Type u_1} (vertexSet : Set α) (β : Type u
+_3), (Graph.noEdge vertexSet β).vertexSet = vertexSet
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-lemma not_disjoint_of_mem_mem (h : x in V(G)) (h' : x in V(H)) : ¬ Disjoint G H := by
+lemma not_disjoint_of_mem_mem (h : x ∈ V(G)) (h' : x ∈ V(H)) : ¬ Disjoint G H := by
   simp only [Disjoint, le_bot_iff, not_forall, ne_eq, ne_bot_iff]
   use noEdge {x} β
   simp [h, h']
@@ -1886,3 +1510,4 @@ lemma not_disjoint_of_mem_mem (h : x in V(G)) (h' : x in V(H)) : ¬ Disjoint G H
 end OrderBot
 
 end Graph
+

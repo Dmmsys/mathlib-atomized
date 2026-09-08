@@ -60,26 +60,18 @@ namespace Topology
 
 Note: In general the upper set topology does not coincide with the upper topology. -/
 @[instance_reducible]
-/--
-Definition of `upperSet` / `upperSet` 的定义
+/-
+**Topology.upperSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：upperSet (α : Type*) [Preorder α] : TopologicalSpace α where IsOpen
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition upperSet
-  signature: (α : Type*) [Preorder α]
-  body: IsUpperSet
-  isOpen_univ := isUpperSet_univ
-  isOpen_inter _ _ := IsUpperSet.inter
-  isOpen_sUnion _ := isUpperSet_sUnion
+--- 原说明 ---
+Topology whose open sets are upper sets.
 
-中文:
-定义 upperSet
-  签名: (α : 类型) [预序 α]
-  定义体: IsUpperSet
-  isOpen_univ := isUpperSet_univ
-  isOpen_inter _ _ := IsUpperSet.inter
-  isOpen_sUnion _ := isUpperSet_sUnion
-
-Depends on / 依赖: IsUpperSet
+Note: In general the upper set topology does not coincide with the upper topolog
+y.
 -/
 def upperSet (α : Type*) [Preorder α] : TopologicalSpace α where
   IsOpen := IsUpperSet
@@ -91,26 +83,18 @@ def upperSet (α : Type*) [Preorder α] : TopologicalSpace α where
 
 Note: In general the lower set topology does not coincide with the lower topology. -/
 @[instance_reducible]
-/--
-Definition of `lowerSet` / `lowerSet` 的定义
+/-
+**Topology.lowerSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：lowerSet (α : Type*) [Preorder α] : TopologicalSpace α where IsOpen
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lowerSet
-  signature: (α : Type*) [Preorder α]
-  body: IsLowerSet
-  isOpen_univ := isLowerSet_univ
-  isOpen_inter _ _ := IsLowerSet.inter
-  isOpen_sUnion _ := isLowerSet_sUnion
+--- 原说明 ---
+Topology whose open sets are lower sets.
 
-中文:
-定义 lowerSet
-  签名: (α : 类型) [预序 α]
-  定义体: IsLowerSet
-  isOpen_univ := isLowerSet_univ
-  isOpen_inter _ _ := IsLowerSet.inter
-  isOpen_sUnion _ := isLowerSet_sUnion
-
-Depends on / 依赖: IsLowerSet
+Note: In general the lower set topology does not coincide with the lower topolog
+y.
 -/
 def lowerSet (α : Type*) [Preorder α] : TopologicalSpace α where
   IsOpen := IsLowerSet
@@ -118,313 +102,205 @@ def lowerSet (α : Type*) [Preorder α] : TopologicalSpace α where
   isOpen_inter _ _ := IsLowerSet.inter
   isOpen_sUnion _ := isLowerSet_sUnion
 
-/--
-Definition of `WithUpperSet` / `WithUpperSet` 的定义
+/-- Type synonym for a preorder equipped with the upper set topology. -/
+/-
+**Topology.WithUpperSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：WithUpperSet (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithUpperSet
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 WithUpperSet
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+Type synonym for a preorder equipped with the upper set topology.
 -/
 def WithUpperSet (α : Type*) := α
 
 namespace WithUpperSet
 
-/--
-Definition of `toUpperSet` / `toUpperSet` 的定义
+/-- `toUpperSet` is the identity function to the `WithUpperSet` of a type. -/
+/-
+**Topology.WithUpperSet.toUpperSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithUpper
+Set`。
+形式化陈述：{α : Type u_1} → α ≃ Topology.WithUpperSet α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toUpperSet
-  signature: : α ≃ WithUpperSet α
-  body: Equiv.refl _
-
-中文:
-定义 toUpperSet
-  签名: : α ≃ WithUpperSet α
-  定义体: Equiv.refl _
+--- 原说明 ---
+`toUpperSet` is the identity function to the `WithUpperSet` of a type.
 -/
 @[match_pattern] def toUpperSet : α ≃ WithUpperSet α := Equiv.refl _
 
-/--
-Definition of `ofUpperSet` / `ofUpperSet` 的定义
+/-- `ofUpperSet` is the identity function from the `WithUpperSet` of a type. -/
+/-
+**Topology.WithUpperSet.ofUpperSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithUpper
+Set`。
+形式化陈述：{α : Type u_1} → Topology.WithUpperSet α ≃ α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofUpperSet
-  signature: : WithUpperSet α ≃ α
-  body: Equiv.refl _
-
-中文:
-定义 ofUpperSet
-  签名: : WithUpperSet α ≃ α
-  定义体: Equiv.refl _
+--- 原说明 ---
+`ofUpperSet` is the identity function from the `WithUpperSet` of a type.
 -/
 @[match_pattern] def ofUpperSet : WithUpperSet α ≃ α := Equiv.refl _
+/-
+**Topology.WithUpperSet.toUpperSet_symm** 是 Mathlib 中的一个定理，位于命名空间 `Topology.With
+UpperSet`。
+形式化陈述：∀ {α : Type u_1}, Topology.WithUpperSet.toUpperSet.symm = Topology.WithUpp
+erSet.ofUpperSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-/--
-lemma `toUpperSet_symm` / 引理 `toUpperSet_symm`
-
-English:
-lemma toUpperSet_symm
-  statement: (@toUpperSet α).symm = ofUpperSet
-  proof: rfl
-
-中文:
-引理 toUpperSet_symm
-  结论: (@toUpperSet α).symm = ofUpperSet
-  证明: rfl
+--- 原说明 ---
+`ofUpperSet` is the identity function from the `WithUpperSet` of a type.
 -/
 @[simp] lemma toUpperSet_symm : (@toUpperSet α).symm = ofUpperSet := rfl
-/--
-lemma `ofUpperSet_symm` / 引理 `ofUpperSet_symm`
+/-
+**Topology.WithUpperSet.ofUpperSet_symm** 是 Mathlib 中的一个定理，位于命名空间 `Topology.With
+UpperSet`。
+形式化陈述：∀ {α : Type u_1}, Topology.WithUpperSet.ofUpperSet.symm = Topology.WithUpp
+erSet.toUpperSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-lemma ofUpperSet_symm
-  statement: (@ofUpperSet α).symm = toUpperSet
-  proof: rfl
-
-中文:
-引理 ofUpperSet_symm
-  结论: (@ofUpperSet α).symm = toUpperSet
-  证明: rfl
+--- 原说明 ---
+`ofUpperSet` is the identity function from the `WithUpperSet` of a type.
 -/
 @[simp] lemma ofUpperSet_symm : (@ofUpperSet α).symm = toUpperSet := rfl
-/--
-lemma `toUpperSet_ofUpperSet` / 引理 `toUpperSet_ofUpperSet`
+/-
+**Topology.WithUpperSet.toUpperSet_ofUpperSet** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+y.WithUpperSet`。
+形式化陈述：∀ {α : Type u_1} (a : Topology.WithUpperSet α),   Topology.WithUpperSet.to
+UpperSet (Topology.WithUpperSet.ofUpperSet a) = a
+参数：a : Topology.WithUpperSet α；Topology.WithUpperSet.ofUpperSet a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma toUpperSet_ofUpperSet
-  given: (a : WithUpperSet α)
-  statement: toUpperSet (ofUpperSet a) = a
-  proof: rfl
-
-中文:
-引理 toUpperSet_ofUpperSet
-  条件: (a : WithUpperSet α)
-  结论: toUpperSet (ofUpperSet a) = a
-  证明: rfl
+--- 原说明 ---
+`ofUpperSet` is the identity function from the `WithUpperSet` of a type.
 -/
 @[simp] lemma toUpperSet_ofUpperSet (a : WithUpperSet α) : toUpperSet (ofUpperSet a) = a := rfl
-/--
-lemma `ofUpperSet_toUpperSet` / 引理 `ofUpperSet_toUpperSet`
+/-
+**Topology.WithUpperSet.ofUpperSet_toUpperSet** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+y.WithUpperSet`。
+形式化陈述：∀ {α : Type u_1} (a : α), Topology.WithUpperSet.ofUpperSet (Topology.WithU
+pperSet.toUpperSet a) = a
+参数：a : α；Topology.WithUpperSet.toUpperSet a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ofUpperSet_toUpperSet
-  given: (a : α)
-  statement: ofUpperSet (toUpperSet a) = a
-  proof: rfl
-
-中文:
-引理 ofUpperSet_toUpperSet
-  条件: (a : α)
-  结论: ofUpperSet (toUpperSet a) = a
-  证明: rfl
+--- 原说明 ---
+`ofUpperSet` is the identity function from the `WithUpperSet` of a type.
 -/
 @[simp] lemma ofUpperSet_toUpperSet (a : α) : ofUpperSet (toUpperSet a) = a := rfl
-/--
-lemma `toUpperSet_inj` / 引理 `toUpperSet_inj`
+/-
+**Topology.WithUpperSet.toUpperSet_inj** 是 Mathlib 中的一个引理，位于命名空间 `Topology.WithU
+pperSet`。
+形式化陈述：toUpperSet_inj {a b : α} : toUpperSet a = toUpperSet b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma toUpperSet_inj
-  given: {a b : α}
-  statement: toUpperSet a = toUpperSet b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-引理 toUpperSet_inj
-  条件: {a b : α}
-  结论: toUpperSet a = toUpperSet b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+`ofUpperSet` is the identity function from the `WithUpperSet` of a type.
 -/
 lemma toUpperSet_inj {a b : α} : toUpperSet a = toUpperSet b ↔ a = b := Iff.rfl
-/--
-lemma `ofUpperSet_inj` / 引理 `ofUpperSet_inj`
-
-English:
-lemma ofUpperSet_inj
-  given: {a b : WithUpperSet α}
-  statement: ofUpperSet a = ofUpperSet b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-引理 ofUpperSet_inj
-  条件: {a b : WithUpperSet α}
-  结论: ofUpperSet a = ofUpperSet b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Topology.WithUpperSet.ofUpperSet_inj** 是 Mathlib 中的一个引理，位于命名空间 `Topology.WithU
+pperSet`。
+形式化陈述：ofUpperSet_inj {a b : WithUpperSet α} : ofUpperSet a = ofUpperSet b ↔ a = 
+b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma ofUpperSet_inj {a b : WithUpperSet α} : ofUpperSet a = ofUpperSet b ↔ a = b := Iff.rfl
 
 /-- A recursor for `WithUpperSet`. Use as `induction x`. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**Topology.WithUpperSet.rec** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithUpperSet`。
+形式化陈述：{α : Type u_1} →   {motive : Topology.WithUpperSet α → Sort u_4} →     ((a
+ : α) → motive (Topology.WithUpperSet.toUpperSet a)) → (a : Topology.WithUpperSe
+t α) → motive a
+参数：(a : α) → motive (Topology.WithUpperSet.toUpperSet a)；a : Topology.WithUpperS
+et α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: {motive : WithUpperSet α -> Sort*} (toUpperSet : forall a, motive (toUpperSet a))
-  body: fun a => toUpperSet (ofUpperSet a)
-
-中文:
-定义 rec
-  签名: {motive : WithUpperSet α -> 类型层*} (toUpperSet : 对任意 a, motive (toUpperSet a))
-  定义体: fun a => toUpperSet (ofUpperSet a)
+--- 原说明 ---
+A recursor for `WithUpperSet`. Use as `induction x`.
 -/
-protected def rec {motive : WithUpperSet α -> Sort*} (toUpperSet : forall a, motive (toUpperSet a)) :
-    forall a, motive a :=
+protected def rec {motive : WithUpperSet α → Sort*} (toUpperSet : ∀ a, motive (toUpperSet a)) :
+    ∀ a, motive a :=
   fun a => toUpperSet (ofUpperSet a)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] : Nonempty (WithUpperSet α)
-  body: ‹Nonempty α›
-
-中文:
-实例 [非空
-  签名: α] : 非空 (WithUpperSet α)
-  定义体: ‹Nonempty α›
-
-Depends on / 依赖: Nonempty
+/-
+**Topology.WithUpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithUpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty α] : Nonempty (WithUpperSet α) := ‹Nonempty α›
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (WithUpperSet α)
-  body: ‹Inhabited α›
-
-中文:
-实例 [可居
-  签名: α] : 可居 (WithUpperSet α)
-  定义体: ‹Inhabited α›
-
-Depends on / 依赖: Inhabited
+/-
+**Topology.WithUpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithUpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (WithUpperSet α) := ‹Inhabited α›
 
 variable [Preorder α] [Preorder β]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preorder (WithUpperSet α)
-  body: ‹Preorder α›
-
-中文:
-实例 :
-  签名: 预序 (WithUpperSet α)
-  定义体: ‹Preorder α›
-
-Depends on / 依赖: Preorder
+/-
+**Topology.WithUpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithUpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preorder (WithUpperSet α) := ‹Preorder α›
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: TopologicalSpace (WithUpperSet α)
-  body: fast_instance% upperSet α
-
-中文:
-实例 :
-  签名: 拓扑空间 (WithUpperSet α)
-  定义体: fast_instance% upperSet α
-
-Depends on / 依赖: fast_instance, upperSet
+/-
+**Topology.WithUpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithUpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : TopologicalSpace (WithUpperSet α) :=
   fast_instance% upperSet α
-
-/--
-lemma `ofUpperSet_le_iff` / 引理 `ofUpperSet_le_iff`
-
-English:
-lemma ofUpperSet_le_iff
-  given: {a b : WithUpperSet α}
-  statement: ofUpperSet a <= ofUpperSet b ↔ a <= b
-  proof: Iff.rfl
-
-中文:
-引理 ofUpperSet_le_iff
-  条件: {a b : WithUpperSet α}
-  结论: ofUpperSet a <= ofUpperSet b ↔ a <= b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Topology.WithUpperSet.ofUpperSet_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topology.Wi
+thUpperSet`。
+形式化陈述：ofUpperSet_le_iff {a b : WithUpperSet α} : ofUpperSet a <= ofUpperSet b ↔ 
+a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma ofUpperSet_le_iff {a b : WithUpperSet α} : ofUpperSet a <= ofUpperSet b ↔ a <= b := Iff.rfl
-/--
-lemma `toUpperSet_le_iff` / 引理 `toUpperSet_le_iff`
-
-English:
-lemma toUpperSet_le_iff
-  given: {a b : α}
-  statement: toUpperSet a <= toUpperSet b ↔ a <= b
-  proof: Iff.rfl
-
-中文:
-引理 toUpperSet_le_iff
-  条件: {a b : α}
-  结论: toUpperSet a <= toUpperSet b ↔ a <= b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+lemma ofUpperSet_le_iff {a b : WithUpperSet α} : ofUpperSet a ≤ ofUpperSet b ↔ a ≤ b := Iff.rfl
+/-
+**Topology.WithUpperSet.toUpperSet_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topology.Wi
+thUpperSet`。
+形式化陈述：toUpperSet_le_iff {a b : α} : toUpperSet a <= toUpperSet b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma toUpperSet_le_iff {a b : α} : toUpperSet a <= toUpperSet b ↔ a <= b := Iff.rfl
+lemma toUpperSet_le_iff {a b : α} : toUpperSet a ≤ toUpperSet b ↔ a ≤ b := Iff.rfl
 
-/--
-Definition of `ofUpperSetOrderIso` / `ofUpperSetOrderIso` 的定义
+/-- `ofUpperSet` as an `OrderIso` -/
+/-
+**Topology.WithUpperSet.ofUpperSetOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Topology.W
+ithUpperSet`。
+形式化陈述：ofUpperSetOrderIso : WithUpperSet α ≃o α where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.WithUpperSet.ofUpperSet_le_iff`：ofUpperSet_le_iff {a b : WithUp
+perSet α} : ofUpperSet a <= ofUpperSet b ↔ a <= b
 
-English:
-definition ofUpperSetOrderIso
-  signature: : WithUpperSet α ≃o α where
-  body: ofUpperSet
-  map_rel_iff' := ofUpperSet_le_iff
-
-中文:
-定义 ofUpperSetOrderIso
-  签名: : WithUpperSet α ≃o α where
-  定义体: ofUpperSet
-  map_rel_iff' := ofUpperSet_le_iff
-
-Depends on / 依赖: ofUpperSet
+--- 原说明 ---
+`ofUpperSet` as an `OrderIso`
 -/
 def ofUpperSetOrderIso : WithUpperSet α ≃o α where
   toEquiv := ofUpperSet
   map_rel_iff' := ofUpperSet_le_iff
 
-/--
-Definition of `toUpperSetOrderIso` / `toUpperSetOrderIso` 的定义
+/-- `toUpperSet` as an `OrderIso` -/
+/-
+**Topology.WithUpperSet.toUpperSetOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Topology.W
+ithUpperSet`。
+形式化陈述：toUpperSetOrderIso : α ≃o WithUpperSet α where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.WithUpperSet.toUpperSet_le_iff`：toUpperSet_le_iff {a b : α} : t
+oUpperSet a <= toUpperSet b ↔ a <= b
 
-English:
-definition toUpperSetOrderIso
-  signature: : α ≃o WithUpperSet α where
-  body: toUpperSet
-  map_rel_iff' := toUpperSet_le_iff
-
-中文:
-定义 toUpperSetOrderIso
-  签名: : α ≃o WithUpperSet α where
-  定义体: toUpperSet
-  map_rel_iff' := toUpperSet_le_iff
-
-Depends on / 依赖: toUpperSet
+--- 原说明 ---
+`toUpperSet` as an `OrderIso`
 -/
 def toUpperSetOrderIso : α ≃o WithUpperSet α where
   toEquiv := toUpperSet
@@ -432,313 +308,205 @@ def toUpperSetOrderIso : α ≃o WithUpperSet α where
 
 end WithUpperSet
 
-/--
-Definition of `WithLowerSet` / `WithLowerSet` 的定义
+/-- Type synonym for a preorder equipped with the lower set topology. -/
+/-
+**Topology.WithLowerSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：WithLowerSet (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithLowerSet
-  signature: (α : Type*)
-  body: α
-
-中文:
-定义 WithLowerSet
-  签名: (α : 类型)
-  定义体: α
+--- 原说明 ---
+Type synonym for a preorder equipped with the lower set topology.
 -/
 def WithLowerSet (α : Type*) := α
 
 namespace WithLowerSet
 
-/--
-Definition of `toLowerSet` / `toLowerSet` 的定义
+/-- `toLowerSet` is the identity function to the `WithLowerSet` of a type. -/
+/-
+**Topology.WithLowerSet.toLowerSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithLower
+Set`。
+形式化陈述：{α : Type u_1} → α ≃ Topology.WithLowerSet α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toLowerSet
-  signature: : α ≃ WithLowerSet α
-  body: Equiv.refl _
-
-中文:
-定义 toLowerSet
-  签名: : α ≃ WithLowerSet α
-  定义体: Equiv.refl _
+--- 原说明 ---
+`toLowerSet` is the identity function to the `WithLowerSet` of a type.
 -/
 @[match_pattern] def toLowerSet : α ≃ WithLowerSet α := Equiv.refl _
 
-/--
-Definition of `ofLowerSet` / `ofLowerSet` 的定义
+/-- `ofLowerSet` is the identity function from the `WithLowerSet` of a type. -/
+/-
+**Topology.WithLowerSet.ofLowerSet** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithLower
+Set`。
+形式化陈述：{α : Type u_1} → Topology.WithLowerSet α ≃ α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofLowerSet
-  signature: : WithLowerSet α ≃ α
-  body: Equiv.refl _
-
-中文:
-定义 ofLowerSet
-  签名: : WithLowerSet α ≃ α
-  定义体: Equiv.refl _
+--- 原说明 ---
+`ofLowerSet` is the identity function from the `WithLowerSet` of a type.
 -/
 @[match_pattern] def ofLowerSet : WithLowerSet α ≃ α := Equiv.refl _
+/-
+**Topology.WithLowerSet.toLowerSet_symm** 是 Mathlib 中的一个定理，位于命名空间 `Topology.With
+LowerSet`。
+形式化陈述：∀ {α : Type u_1}, Topology.WithLowerSet.toLowerSet.symm = Topology.WithLow
+erSet.ofLowerSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-/--
-lemma `toLowerSet_symm` / 引理 `toLowerSet_symm`
-
-English:
-lemma toLowerSet_symm
-  statement: (@toLowerSet α).symm = ofLowerSet
-  proof: rfl
-
-中文:
-引理 toLowerSet_symm
-  结论: (@toLowerSet α).symm = ofLowerSet
-  证明: rfl
+--- 原说明 ---
+`ofLowerSet` is the identity function from the `WithLowerSet` of a type.
 -/
 @[simp] lemma toLowerSet_symm : (@toLowerSet α).symm = ofLowerSet := rfl
-/--
-lemma `ofLowerSet_symm` / 引理 `ofLowerSet_symm`
+/-
+**Topology.WithLowerSet.ofLowerSet_symm** 是 Mathlib 中的一个定理，位于命名空间 `Topology.With
+LowerSet`。
+形式化陈述：∀ {α : Type u_1}, Topology.WithLowerSet.ofLowerSet.symm = Topology.WithLow
+erSet.toLowerSet
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-lemma ofLowerSet_symm
-  statement: (@ofLowerSet α).symm = toLowerSet
-  proof: rfl
-
-中文:
-引理 ofLowerSet_symm
-  结论: (@ofLowerSet α).symm = toLowerSet
-  证明: rfl
+--- 原说明 ---
+`ofLowerSet` is the identity function from the `WithLowerSet` of a type.
 -/
 @[simp] lemma ofLowerSet_symm : (@ofLowerSet α).symm = toLowerSet := rfl
-/--
-lemma `toLowerSet_ofLowerSet` / 引理 `toLowerSet_ofLowerSet`
+/-
+**Topology.WithLowerSet.toLowerSet_ofLowerSet** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+y.WithLowerSet`。
+形式化陈述：∀ {α : Type u_1} (a : Topology.WithLowerSet α),   Topology.WithLowerSet.to
+LowerSet (Topology.WithLowerSet.ofLowerSet a) = a
+参数：a : Topology.WithLowerSet α；Topology.WithLowerSet.ofLowerSet a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma toLowerSet_ofLowerSet
-  given: (a : WithLowerSet α)
-  statement: toLowerSet (ofLowerSet a) = a
-  proof: rfl
-
-中文:
-引理 toLowerSet_ofLowerSet
-  条件: (a : WithLowerSet α)
-  结论: toLowerSet (ofLowerSet a) = a
-  证明: rfl
+--- 原说明 ---
+`ofLowerSet` is the identity function from the `WithLowerSet` of a type.
 -/
 @[simp] lemma toLowerSet_ofLowerSet (a : WithLowerSet α) : toLowerSet (ofLowerSet a) = a := rfl
-/--
-lemma `ofLowerSet_toLowerSet` / 引理 `ofLowerSet_toLowerSet`
+/-
+**Topology.WithLowerSet.ofLowerSet_toLowerSet** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+y.WithLowerSet`。
+形式化陈述：∀ {α : Type u_1} (a : α), Topology.WithLowerSet.ofLowerSet (Topology.WithL
+owerSet.toLowerSet a) = a
+参数：a : α；Topology.WithLowerSet.toLowerSet a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ofLowerSet_toLowerSet
-  given: (a : α)
-  statement: ofLowerSet (toLowerSet a) = a
-  proof: rfl
-
-中文:
-引理 ofLowerSet_toLowerSet
-  条件: (a : α)
-  结论: ofLowerSet (toLowerSet a) = a
-  证明: rfl
+--- 原说明 ---
+`ofLowerSet` is the identity function from the `WithLowerSet` of a type.
 -/
 @[simp] lemma ofLowerSet_toLowerSet (a : α) : ofLowerSet (toLowerSet a) = a := rfl
-/--
-lemma `toLowerSet_inj` / 引理 `toLowerSet_inj`
+/-
+**Topology.WithLowerSet.toLowerSet_inj** 是 Mathlib 中的一个引理，位于命名空间 `Topology.WithL
+owerSet`。
+形式化陈述：toLowerSet_inj {a b : α} : toLowerSet a = toLowerSet b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma toLowerSet_inj
-  given: {a b : α}
-  statement: toLowerSet a = toLowerSet b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-引理 toLowerSet_inj
-  条件: {a b : α}
-  结论: toLowerSet a = toLowerSet b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+`ofLowerSet` is the identity function from the `WithLowerSet` of a type.
 -/
 lemma toLowerSet_inj {a b : α} : toLowerSet a = toLowerSet b ↔ a = b := Iff.rfl
-/--
-lemma `ofLowerSet_inj` / 引理 `ofLowerSet_inj`
-
-English:
-lemma ofLowerSet_inj
-  given: {a b : WithLowerSet α}
-  statement: ofLowerSet a = ofLowerSet b ↔ a = b
-  proof: Iff.rfl
-
-中文:
-引理 ofLowerSet_inj
-  条件: {a b : WithLowerSet α}
-  结论: ofLowerSet a = ofLowerSet b ↔ a = b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Topology.WithLowerSet.ofLowerSet_inj** 是 Mathlib 中的一个引理，位于命名空间 `Topology.WithL
+owerSet`。
+形式化陈述：ofLowerSet_inj {a b : WithLowerSet α} : ofLowerSet a = ofLowerSet b ↔ a = 
+b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma ofLowerSet_inj {a b : WithLowerSet α} : ofLowerSet a = ofLowerSet b ↔ a = b := Iff.rfl
 
 /-- A recursor for `WithLowerSet`. Use as `induction x`. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**Topology.WithLowerSet.rec** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithLowerSet`。
+形式化陈述：{α : Type u_1} →   {motive : Topology.WithLowerSet α → Sort u_4} →     ((a
+ : α) → motive (Topology.WithLowerSet.toLowerSet a)) → (a : Topology.WithLowerSe
+t α) → motive a
+参数：(a : α) → motive (Topology.WithLowerSet.toLowerSet a)；a : Topology.WithLowerS
+et α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: {motive : WithLowerSet α -> Sort*} (toLowerSet : forall a, motive (toLowerSet a))
-  body: fun a => toLowerSet (ofLowerSet a)
-
-中文:
-定义 rec
-  签名: {motive : WithLowerSet α -> 类型层*} (toLowerSet : 对任意 a, motive (toLowerSet a))
-  定义体: fun a => toLowerSet (ofLowerSet a)
+--- 原说明 ---
+A recursor for `WithLowerSet`. Use as `induction x`.
 -/
-protected def rec {motive : WithLowerSet α -> Sort*} (toLowerSet : forall a, motive (toLowerSet a)) :
-    forall a, motive a :=
+protected def rec {motive : WithLowerSet α → Sort*} (toLowerSet : ∀ a, motive (toLowerSet a)) :
+    ∀ a, motive a :=
   fun a => toLowerSet (ofLowerSet a)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] : Nonempty (WithLowerSet α)
-  body: ‹Nonempty α›
-
-中文:
-实例 [非空
-  签名: α] : 非空 (WithLowerSet α)
-  定义体: ‹Nonempty α›
-
-Depends on / 依赖: Nonempty
+/-
+**Topology.WithLowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithLowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty α] : Nonempty (WithLowerSet α) := ‹Nonempty α›
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (WithLowerSet α)
-  body: ‹Inhabited α›
-
-中文:
-实例 [可居
-  签名: α] : 可居 (WithLowerSet α)
-  定义体: ‹Inhabited α›
-
-Depends on / 依赖: Inhabited
+/-
+**Topology.WithLowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithLowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (WithLowerSet α) := ‹Inhabited α›
 
 variable [Preorder α]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preorder (WithLowerSet α)
-  body: ‹Preorder α›
-
-中文:
-实例 :
-  签名: 预序 (WithLowerSet α)
-  定义体: ‹Preorder α›
-
-Depends on / 依赖: Preorder
+/-
+**Topology.WithLowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithLowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preorder (WithLowerSet α) := ‹Preorder α›
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: TopologicalSpace (WithLowerSet α)
-  body: fast_instance% lowerSet α
-
-中文:
-实例 :
-  签名: 拓扑空间 (WithLowerSet α)
-  定义体: fast_instance% lowerSet α
-
-Depends on / 依赖: fast_instance, lowerSet
+/-
+**Topology.WithLowerSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.WithLowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : TopologicalSpace (WithLowerSet α) :=
   fast_instance% lowerSet α
-
-/--
-lemma `ofLowerSet_le_iff` / 引理 `ofLowerSet_le_iff`
-
-English:
-lemma ofLowerSet_le_iff
-  given: {a b : WithLowerSet α}
-  statement: ofLowerSet a <= ofLowerSet b ↔ a <= b
-  proof: Iff.rfl
-
-中文:
-引理 ofLowerSet_le_iff
-  条件: {a b : WithLowerSet α}
-  结论: ofLowerSet a <= ofLowerSet b ↔ a <= b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Topology.WithLowerSet.ofLowerSet_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topology.Wi
+thLowerSet`。
+形式化陈述：ofLowerSet_le_iff {a b : WithLowerSet α} : ofLowerSet a <= ofLowerSet b ↔ 
+a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma ofLowerSet_le_iff {a b : WithLowerSet α} : ofLowerSet a <= ofLowerSet b ↔ a <= b := Iff.rfl
-/--
-lemma `toLowerSet_le_iff` / 引理 `toLowerSet_le_iff`
-
-English:
-lemma toLowerSet_le_iff
-  given: {a b : α}
-  statement: toLowerSet a <= toLowerSet b ↔ a <= b
-  proof: Iff.rfl
-
-中文:
-引理 toLowerSet_le_iff
-  条件: {a b : α}
-  结论: toLowerSet a <= toLowerSet b ↔ a <= b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+lemma ofLowerSet_le_iff {a b : WithLowerSet α} : ofLowerSet a ≤ ofLowerSet b ↔ a ≤ b := Iff.rfl
+/-
+**Topology.WithLowerSet.toLowerSet_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Topology.Wi
+thLowerSet`。
+形式化陈述：toLowerSet_le_iff {a b : α} : toLowerSet a <= toLowerSet b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma toLowerSet_le_iff {a b : α} : toLowerSet a <= toLowerSet b ↔ a <= b := Iff.rfl
+lemma toLowerSet_le_iff {a b : α} : toLowerSet a ≤ toLowerSet b ↔ a ≤ b := Iff.rfl
 
-/--
-Definition of `ofLowerSetOrderIso` / `ofLowerSetOrderIso` 的定义
+/-- `ofLowerSet` as an `OrderIso` -/
+/-
+**Topology.WithLowerSet.ofLowerSetOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Topology.W
+ithLowerSet`。
+形式化陈述：ofLowerSetOrderIso : WithLowerSet α ≃o α where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.WithLowerSet.ofLowerSet_le_iff`：ofLowerSet_le_iff {a b : WithLo
+werSet α} : ofLowerSet a <= ofLowerSet b ↔ a <= b
 
-English:
-definition ofLowerSetOrderIso
-  signature: : WithLowerSet α ≃o α where
-  body: ofLowerSet
-  map_rel_iff' := ofLowerSet_le_iff
-
-中文:
-定义 ofLowerSetOrderIso
-  签名: : WithLowerSet α ≃o α where
-  定义体: ofLowerSet
-  map_rel_iff' := ofLowerSet_le_iff
-
-Depends on / 依赖: ofLowerSet
+--- 原说明 ---
+`ofLowerSet` as an `OrderIso`
 -/
 def ofLowerSetOrderIso : WithLowerSet α ≃o α where
   toEquiv := ofLowerSet
   map_rel_iff' := ofLowerSet_le_iff
 
-/--
-Definition of `toLowerSetOrderIso` / `toLowerSetOrderIso` 的定义
+/-- `toLowerSet` as an `OrderIso` -/
+/-
+**Topology.WithLowerSet.toLowerSetOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Topology.W
+ithLowerSet`。
+形式化陈述：toLowerSetOrderIso : α ≃o WithLowerSet α where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.WithLowerSet.toLowerSet_le_iff`：toLowerSet_le_iff {a b : α} : t
+oLowerSet a <= toLowerSet b ↔ a <= b
 
-English:
-definition toLowerSetOrderIso
-  signature: : α ≃o WithLowerSet α where
-  body: toLowerSet
-  map_rel_iff' := toLowerSet_le_iff
-
-中文:
-定义 toLowerSetOrderIso
-  签名: : α ≃o WithLowerSet α where
-  定义体: toLowerSet
-  map_rel_iff' := toLowerSet_le_iff
-
-Depends on / 依赖: toLowerSet
+--- 原说明 ---
+`toLowerSet` as an `OrderIso`
 -/
 def toLowerSetOrderIso : α ≃o WithLowerSet α where
   toEquiv := toLowerSet
@@ -747,29 +515,20 @@ def toLowerSetOrderIso : α ≃o WithLowerSet α where
 end WithLowerSet
 
 /--
-Definition of `WithUpperSet.toDualHomeomorph` / `WithUpperSet.toDualHomeomorph` 的定义
+The Upper Set topology is homeomorphic to the Lower Set topology on the dual order
+-/
+/-
+**Topology.WithUpperSet.toDualHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Topology.Wit
+hUpperSet`。
+形式化陈述：{α : Type u_1} → [inst : Preorder α] → Topology.WithUpperSet α ≃ₜ Topology
+.WithLowerSet αᵒᵈ
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderDual.toDual_ofDual`：∀ {α : Type u_1} (a : αᵒᵈ), OrderDual.toDual (O
+rderDual.ofDual a) = a
 
-English:
-definition WithUpperSet.toDualHomeomorph
-  signature: [Preorder α]
-  body: OrderDual.toDual
-  invFun := OrderDual.ofDual
-  left_inv := OrderDual.toDual_ofDual
-  right_inv := OrderDual.ofDual_toDual
-  continuous_toFun := continuous_coinduced_rng
-  continuous_invFun := continuous_coinduced_rng
-
-中文:
-定义 WithUpperSet.toDualHomeomorph
-  签名: [预序 α]
-  定义体: OrderDual.toDual
-  invFun := OrderDual.ofDual
-  left_inv := OrderDual.toDual_ofDual
-  right_inv := OrderDual.ofDual_toDual
-  continuous_toFun := continuous_coinduced_rng
-  continuous_invFun := continuous_coinduced_rng
-
-Depends on / 依赖: OrderDual, OrderDual.toDual, toDual
+--- 原说明 ---
+The Upper Set topology is homeomorphic to the Lower Set topology on the dual ord
+er
 -/
 def WithUpperSet.toDualHomeomorph [Preorder α] : WithUpperSet α ≃ₜ WithLowerSet αᵒᵈ where
   toFun := OrderDual.toDual
@@ -779,117 +538,64 @@ def WithUpperSet.toDualHomeomorph [Preorder α] : WithUpperSet α ≃ₜ WithLow
   continuous_toFun := continuous_coinduced_rng
   continuous_invFun := continuous_coinduced_rng
 
-/--
-Definition of `IsUpperSet` / `IsUpperSet` 的定义
+/-- Prop-valued mixin for an ordered topological space to be
+The upper set topology is the topology where the open sets are the upper sets. In general the upper
+set topology does not coincide with the upper topology.
+-/
+/-
+**Topology.IsUpperSet** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：(α : Type u_4) → [t : TopologicalSpace α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsUpperSet
-  parameters: (α : Type*) [t : TopologicalSpace α] [Preorder α]
-  axioms and operations (1):
-    - topology_eq_upperSetTopology : t = upperSet α
-
-中文:
-类 是上集
-  参数: (α : 类型) [t : 拓扑空间 α] [预序 α]
-  公理与运算 (1 个):
-    - topology_eq_upperSetTopology : t = upperSet α
+--- 原说明 ---
+Prop-valued mixin for an ordered topological space to be
+The upper set topology is the topology where the open sets are the upper sets. I
+n general the upper
+set topology does not coincide with the upper topology.
 -/
 protected class IsUpperSet (α : Type*) [t : TopologicalSpace α] [Preorder α] : Prop where
   topology_eq_upperSetTopology : t = upperSet α
 
 attribute [nolint docBlame] IsUpperSet.topology_eq_upperSetTopology
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] : Topology.IsUpperSet (WithUpperSet α)
-  body: ⟨rfl⟩
-
-中文:
-实例 [预序
-  签名: α] : 拓扑.是上集 (WithUpperSet α)
-  定义体: ⟨rfl⟩
+/-
+**Topology.** 是 Mathlib 中的一个实例，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] : Topology.IsUpperSet (WithUpperSet α) := ⟨rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] : @Topology.IsUpperSet α (upperSet α) _
-  body: by
-  let := upperSet α
-  exact ⟨rfl⟩
-
-中文:
-实例 [预序
-  签名: α] : @拓扑.是上集 α (upperSet α) _
-  定义体: by
-  let := upperSet α
-  exact ⟨rfl⟩
-
-Depends on / 依赖: upperSet
+/-
+**Topology.** 是 Mathlib 中的一个实例，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] : @Topology.IsUpperSet α (upperSet α) _ := by
   let := upperSet α
   exact ⟨rfl⟩
 
 /--
-Definition of `IsLowerSet` / `IsLowerSet` 的定义
+The lower set topology is the topology where the open sets are the lower sets. In general the lower
+set topology does not coincide with the lower topology.
+-/
+/-
+**Topology.IsLowerSet** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：(α : Type u_4) → [t : TopologicalSpace α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLowerSet
-  parameters: (α : Type*) [t : TopologicalSpace α] [Preorder α]
-  axioms and operations (1):
-    - topology_eq_lowerSetTopology : t = lowerSet α
-
-中文:
-类 是下集
-  参数: (α : 类型) [t : 拓扑空间 α] [预序 α]
-  公理与运算 (1 个):
-    - topology_eq_lowerSetTopology : t = lowerSet α
+--- 原说明 ---
+The lower set topology is the topology where the open sets are the lower sets. I
+n general the lower
+set topology does not coincide with the lower topology.
 -/
 protected class IsLowerSet (α : Type*) [t : TopologicalSpace α] [Preorder α] : Prop where
   topology_eq_lowerSetTopology : t = lowerSet α
 
 attribute [nolint docBlame] IsLowerSet.topology_eq_lowerSetTopology
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] : Topology.IsLowerSet (WithLowerSet α)
-  body: ⟨rfl⟩
-
-中文:
-实例 [预序
-  签名: α] : 拓扑.是下集 (WithLowerSet α)
-  定义体: ⟨rfl⟩
+/-
+**Topology.** 是 Mathlib 中的一个实例，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] : Topology.IsLowerSet (WithLowerSet α) := ⟨rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: α] : @Topology.IsLowerSet α (lowerSet α) _
-  body: by
-  let := lowerSet α
-  exact ⟨rfl⟩
-
-中文:
-实例 [预序
-  签名: α] : @拓扑.是下集 α (lowerSet α) _
-  定义体: by
-  let := lowerSet α
-  exact ⟨rfl⟩
-
-Depends on / 依赖: lowerSet
+/-
+**Topology.** 是 Mathlib 中的一个实例，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder α] : @Topology.IsLowerSet α (lowerSet α) _ := by
   let := lowerSet α
@@ -902,150 +608,120 @@ section Preorder
 variable (α)
 variable [Preorder α] [TopologicalSpace α] [Topology.IsUpperSet α] {s : Set α}
 
-/--
-lemma `topology_eq` / 引理 `topology_eq`
-
-English:
-lemma topology_eq
-  statement: ‹_› = upperSet α
-  proof: topology_eq_upperSetTopology
-
-中文:
-引理 topology_eq
-  结论: ‹_› = upperSet α
-  证明: topology_eq_upperSetTopology
-
-Depends on / 依赖: topology_eq_upperSetTopology
+/-
+**Topology.IsUpperSet.topology_eq** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsUpperSet
+`。
+形式化陈述：topology_eq : ‹_› = upperSet α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsUpperSet.topology_eq_upperSetTopology`：∀ {α : Type u_4} {t : 
+TopologicalSpace α} {inst : Preorder α} [self : Topology.IsUpperSet α], t = Topo
+logy.upperSet α
 -/
 lemma topology_eq : ‹_› = upperSet α := topology_eq_upperSetTopology
 
 variable {α}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_root_.OrderDual.instIsLowerSet` / 实例 `_root_.OrderDual.instIsLowerSet`
-
-English:
-instance _root_.OrderDual.instIsLowerSet
-  signature: : Topology.IsLowerSet αᵒᵈ where
-  body: by ext; rw [IsUpperSet.topology_eq α]
-
-中文:
-实例 _root_.OrderDual.instIsLowerSet
-  签名: : 拓扑.是下集 αᵒᵈ where
-  定义体: by ext; rw [IsUpperSet.topology_eq α]
-
-Depends on / 依赖: IsUpperSet, IsUpperSet.topology_eq, topology_eq
+/-
+**Topology.IsUpperSet._root_.OrderDual.instIsLowerSet** 是 Mathlib 中的一个实例，位于命名空间 
+`Topology.IsUpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.OrderDual.instIsLowerSet : Topology.IsLowerSet αᵒᵈ where
   topology_eq_lowerSetTopology := by ext; rw [IsUpperSet.topology_eq α]
 
-/--
-Definition of `WithUpperSetHomeomorph` / `WithUpperSetHomeomorph` 的定义
+/-- If `α` is equipped with the upper set topology, then it is homeomorphic to
+`WithUpperSet α`. -/
+/-
+**Topology.IsUpperSet.WithUpperSetHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Topology
+.IsUpperSet`。
+形式化陈述：WithUpperSetHomeomorph : WithUpperSet α ≃ₜ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithUpperSetHomeomorph
-  signature: : WithUpperSet α ≃ₜ α
-  body: WithUpperSet.ofUpperSet.toHomeomorphOfIsInducing ⟨topology_eq α ▸ induced_id.symm⟩
-
-中文:
-定义 WithUpperSetHomeomorph
-  签名: : WithUpperSet α ≃ₜ α
-  定义体: WithUpperSet.ofUpperSet.toHomeomorphOfIsInducing ⟨topology_eq α ▸ induced_id.symm⟩
-
-Depends on / 依赖: WithUpperSet, WithUpperSet.ofUpperSet.toHomeomorphOfIsInducing, induced_id, induced_id.symm, ofUpperSet, toHomeomorphOfIsInducing, topology_eq
+--- 原说明 ---
+If `α` is equipped with the upper set topology, then it is homeomorphic to
+`WithUpperSet α`.
 -/
 def WithUpperSetHomeomorph : WithUpperSet α ≃ₜ α :=
   WithUpperSet.ofUpperSet.toHomeomorphOfIsInducing ⟨topology_eq α ▸ induced_id.symm⟩
-
-/--
-lemma `isOpen_iff_isUpperSet` / 引理 `isOpen_iff_isUpperSet`
-
-English:
-lemma isOpen_iff_isUpperSet
-  statement: IsOpen s ↔ IsUpperSet s
-  proof: by
-  rw [topology_eq α]
-  rfl
-
-中文:
-引理 isOpen_iff_isUpperSet
-  结论: 是开集 s ↔ 是上集 s
-  证明: by
-  rw [topology_eq α]
-  rfl
-
-Depends on / 依赖: topology_eq
+/-
+**Topology.IsUpperSet.isOpen_iff_isUpperSet** 是 Mathlib 中的一个引理，位于命名空间 `Topology.
+IsUpperSet`。
+形式化陈述：isOpen_iff_isUpperSet : IsOpen s ↔ IsUpperSet s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsUpperSet.topology_eq`：topology_eq : ‹_› = upperSet α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isOpen_iff_isUpperSet : IsOpen s ↔ IsUpperSet s := by
   rw [topology_eq α]
   rfl
-
-/--
-Instance `toAlexandrovDiscrete` / 实例 `toAlexandrovDiscrete`
-
-English:
-instance toAlexandrovDiscrete
-  signature: : AlexandrovDiscrete α where
-  body: by simpa only [isOpen_iff_isUpperSet] using isUpperSet_sInter (α := α)
-
-中文:
-实例 toAlexandrovDiscrete
-  签名: : AlexandrovDiscrete α where
-  定义体: by simpa only [isOpen_iff_isUpperSet] using isUpperSet_sInter (α := α)
-
-Depends on / 依赖: isOpen_iff_isUpperSet, isUpperSet_sInter
+/-
+**Topology.IsUpperSet.toAlexandrovDiscrete** 是 Mathlib 中的一个实例，位于命名空间 `Topology.I
+sUpperSet`。
+形式化陈述：toAlexandrovDiscrete : AlexandrovDiscrete α where isOpen_sInter S
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `isUpperSet_sInter`：isUpperSet_sInter {S : Set (Set α)} (hf : forall s in
+ S, IsUpperSet s) : IsUpperSet (⋂₀ S)
 -/
 instance toAlexandrovDiscrete : AlexandrovDiscrete α where
   isOpen_sInter S := by simpa only [isOpen_iff_isUpperSet] using isUpperSet_sInter (α := α)
 
 -- c.f. isClosed_iff_lower_and_subset_implies_LUB_mem
-/--
-lemma `isClosed_iff_isLower` / 引理 `isClosed_iff_isLower`
-
-English:
-lemma isClosed_iff_isLower
-  statement: IsClosed s ↔ IsLowerSet s
-  proof: by
-  rw [← isOpen_compl_iff]; rw [isOpen_iff_isUpperSet]; rw [isLowerSet_compl.symm]; rw [compl_compl]
-
-中文:
-引理 isClosed_iff_isLower
-  结论: 是闭集 s ↔ 是下集 s
-  证明: by
-  rw [← isOpen_compl_iff]; rw [isOpen_iff_isUpperSet]; rw [isLowerSet_compl.symm]; rw [compl_compl]
-
-Depends on / 依赖: compl_compl, isLowerSet_compl, isLowerSet_compl.symm, isOpen_compl_iff, isOpen_iff_isUpperSet
+/-
+**Topology.IsUpperSet.isClosed_iff_isLower** 是 Mathlib 中的一个引理，位于命名空间 `Topology.I
+sUpperSet`。
+形式化陈述：isClosed_iff_isLower : IsClosed s ↔ IsLowerSet s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isOpen_compl_iff`：∀ {X : Type u} {s : Set X} [inst : TopologicalSpace X]
+, IsOpen sᶜ ↔ IsClosed s
+· 使用引理 `Topology.IsUpperSet.isOpen_iff_isUpperSet`：isOpen_iff_isUpperSet : IsOpe
+n s ↔ IsUpperSet s
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `isLowerSet_compl`：∀ {α : Type u_1} [inst : LE α] {s : Set α}, IsLowerSet
+ sᶜ ↔ IsUpperSet s
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isClosed_iff_isLower : IsClosed s ↔ IsLowerSet s := by
-  rw [← isOpen_compl_iff]; rw [isOpen_iff_isUpperSet]; rw [isLowerSet_compl.symm]; rw [compl_compl]
-
-/--
-lemma `closure_eq_lowerClosure` / 引理 `closure_eq_lowerClosure`
-
-English:
-lemma closure_eq_lowerClosure
-  given: {s : Set α}
-  statement: closure s = lowerClosure s
-  proof: by
-  rw [subset_antisymm_iff]
-  refine ⟨?_, lowerClosure_min subset_closure (isClosed_iff_isLower.1 isClosed_closure)⟩
-  · apply closure_minimal subset_lowerClosure _
-    rw [isClosed_iff_isLower]
-    exact LowerSet.lower (lowerClosure s)
-
-中文:
-引理 closure_eq_lowerClosure
-  条件: {s : 集合 α}
-  结论: closure s = lowerClosure s
-  证明: by
-  rw [subset_antisymm_iff]
-  refine ⟨?_, lowerClosure_min subset_closure (isClosed_iff_isLower.1 isClosed_closure)⟩
-  · apply closure_minimal subset_lowerClosure _
-    rw [isClosed_iff_isLower]
-    exact LowerSet.lower (lowerClosure s)
-
-Depends on / 依赖: LowerSet, LowerSet.lower, closure_minimal, isClosed_closure, isClosed_iff_isLower, lowerClosure, lowerClosure_min, subset_antisymm_iff, subset_closure, subset_lowerClosure
+  rw [← isOpen_compl_iff, isOpen_iff_isUpperSet,
+    isLowerSet_compl.symm, compl_compl]
+/-
+**Topology.IsUpperSet.closure_eq_lowerClosure** 是 Mathlib 中的一个引理，位于命名空间 `Topolog
+y.IsUpperSet`。
+形式化陈述：closure_eq_lowerClosure {s : Set α} : closure s = lowerClosure s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `subset_antisymm_iff`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst 
+: PartialOrder α] {a b : α}, a = b ↔ a ⊆ b ∧ b ⊆ a
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
+· 使用定理 `subset_lowerClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, s
+ ⊆ ↑(lowerClosure s)
+· 使用引理 `Topology.IsUpperSet.isClosed_iff_isLower`：isClosed_iff_isLower : IsClose
+d s ↔ IsLowerSet s
+· 使用定理 `LowerSet.lower`：∀ {α : Type u_1} [inst : LE α] (s : LowerSet α), IsLower
+Set ↑s
+· 使用定理 `lowerClosure_min`：∀ {α : Type u_1} [inst : Preorder α] {s t : Set α}, s 
+⊆ t → IsLowerSet t → ↑(lowerClosure s) ⊆ t
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
 -/
 lemma closure_eq_lowerClosure {s : Set α} : closure s = lowerClosure s := by
   rw [subset_antisymm_iff]
@@ -1055,174 +731,138 @@ lemma closure_eq_lowerClosure {s : Set α} : closure s = lowerClosure s := by
     exact LowerSet.lower (lowerClosure s)
 
 /--
-lemma `closure_singleton` / 引理 `closure_singleton`
+The closure of a singleton `{a}` in the upper set topology is the right-closed left-infinite
+interval $(-∞,a]$.
+-/
+/-
+**Topology.IsUpperSet.closure_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsUp
+perSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : TopologicalSpace α] [Topolo
+gy.IsUpperSet α] {a : α},   closure {a} = Set.Iic a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsUpperSet.closure_eq_lowerClosure`：closure_eq_lowerClosure {s 
+: Set α} : closure s = lowerClosure s
+· 使用定理 `lowerClosure_singleton`：∀ {α : Type u_1} [inst : Preorder α] (a : α), lo
+werClosure {a} = LowerSet.Iic a
 
-English:
-lemma closure_singleton
-  given: {a : α}
-  statement: closure {a} = Iic a
-  proof: by
-  rw [closure_eq_lowerClosure]; rw [lowerClosure_singleton]
-  rfl
-
-中文:
-引理 closure_singleton
-  条件: {a : α}
-  结论: closure {a} = 左无界右闭区间 a
-  证明: by
-  rw [closure_eq_lowerClosure]; rw [lowerClosure_singleton]
-  rfl
+--- 原说明 ---
+The closure of a singleton `{a}` in the upper set topology is the right-closed l
+eft-infinite
+interval $(-∞,a]$.
 -/
 @[simp] lemma closure_singleton {a : α} : closure {a} = Iic a := by
-  rw [closure_eq_lowerClosure]; rw [lowerClosure_singleton]
+  rw [closure_eq_lowerClosure, lowerClosure_singleton]
   rfl
-
-/--
-lemma `specializes_iff_le` / 引理 `specializes_iff_le`
-
-English:
-lemma specializes_iff_le
-  given: {a b : α}
-  statement: a ⤳ b ↔ b <= a
-  proof: by
-  simp only [specializes_iff_closure_subset, closure_singleton, Iic_subset_Iic]
-
-中文:
-引理 specializes_iff_le
-  条件: {a b : α}
-  结论: a ⤳ b ↔ b <= a
-  证明: by
-  simp only [specializes_iff_closure_subset, closure_singleton, Iic_subset_Iic]
-
-Depends on / 依赖: Iic_subset_Iic, closure_singleton, specializes_iff_closure_subset
+/-
+**Topology.IsUpperSet.specializes_iff_le** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsU
+pperSet`。
+形式化陈述：specializes_iff_le {a b : α} : a ⤳ b ↔ b <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Topology.IsUpperSet.closure_singleton`：∀ {α : Type u_1} [inst : Preorder
+ α] [inst_1 : TopologicalSpace α] [Topology.IsUpperSet α] {a : α},   closure {a}
+ = Set.Iic a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma specializes_iff_le {a b : α} : a ⤳ b ↔ b <= a := by
+lemma specializes_iff_le {a b : α} : a ⤳ b ↔ b ≤ a := by
   simp only [specializes_iff_closure_subset, closure_singleton, Iic_subset_Iic]
-
-/--
-lemma `nhdsKer_eq_upperClosure` / 引理 `nhdsKer_eq_upperClosure`
-
-English:
-lemma nhdsKer_eq_upperClosure
-  given: (s : Set α)
-  statement: nhdsKer s = ↑(upperClosure s)
-  proof: by
-  ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
-
-中文:
-引理 nhdsKer_eq_upperClosure
-  条件: (s : 集合 α)
-  结论: nhdsKer s = ↑(upperClosure s)
-  证明: by
-  ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
-
-Depends on / 依赖: mem_nhdsKer_iff_specializes, specializes_iff_le
+/-
+**Topology.IsUpperSet.nhdsKer_eq_upperClosure** 是 Mathlib 中的一个引理，位于命名空间 `Topolog
+y.IsUpperSet`。
+形式化陈述：nhdsKer_eq_upperClosure (s : Set α) : nhdsKer s = ↑(upperClosure s)
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma nhdsKer_eq_upperClosure (s : Set α) : nhdsKer s = ↑(upperClosure s) := by
   ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
-
-/--
-lemma `nhdsKer_singleton` / 引理 `nhdsKer_singleton`
-
-English:
-lemma nhdsKer_singleton
-  given: (a : α)
-  statement: nhdsKer {a} = Ici a
-  proof: by
-  rw [nhdsKer_eq_upperClosure]; rw [upperClosure_singleton]; rw [UpperSet.coe_Ici]
-
-中文:
-引理 nhdsKer_singleton
-  条件: (a : α)
-  结论: nhdsKer {a} = 左闭右无界区间 a
-  证明: by
-  rw [nhdsKer_eq_upperClosure]; rw [upperClosure_singleton]; rw [UpperSet.coe_Ici]
+/-
+**Topology.IsUpperSet.nhdsKer_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsUp
+perSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : TopologicalSpace α] [Topolo
+gy.IsUpperSet α] (a : α),   nhdsKer {a} = Set.Ici a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsUpperSet.nhdsKer_eq_upperClosure`：nhdsKer_eq_upperClosure (s 
+: Set α) : nhdsKer s = ↑(upperClosure s)
+· 使用定理 `upperClosure_singleton`：upperClosure_singleton (a : α) : upperClosure ({
+a} : Set α) = UpperSet.Ici a
+· 使用定理 `UpperSet.coe_Ici`：coe_Ici (a : α) : ↑(Ici a) = Set.Ici a
 -/
 @[simp] lemma nhdsKer_singleton (a : α) : nhdsKer {a} = Ici a := by
-  rw [nhdsKer_eq_upperClosure]; rw [upperClosure_singleton]; rw [UpperSet.coe_Ici]
-
-/--
-lemma `nhds_eq_principal_Ici` / 引理 `nhds_eq_principal_Ici`
-
-English:
-lemma nhds_eq_principal_Ici
-  given: (a : α)
-  statement: 𝓝 a = 𝓟 (Ici a)
-  proof: by
-  rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
-
-中文:
-引理 nhds_eq_principal_Ici
-  条件: (a : α)
-  结论: 𝓝 a = 𝓟 (左闭右无界区间 a)
-  证明: by
-  rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
-
-Depends on / 依赖: nhdsKer_singleton, principal_nhdsKer_singleton
+  rw [nhdsKer_eq_upperClosure, upperClosure_singleton, UpperSet.coe_Ici]
+/-
+**Topology.IsUpperSet.nhds_eq_principal_Ici** 是 Mathlib 中的一个引理，位于命名空间 `Topology.
+IsUpperSet`。
+形式化陈述：nhds_eq_principal_Ici (a : α) : 𝓝 a = 𝓟 (Ici a)
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `principal_nhdsKer_singleton`：∀ {α : Type u_3} [inst : TopologicalSpace α
+] [AlexandrovDiscrete α] (a : α), Filter.principal (nhdsKer {a}) = nhds a
+· 使用定理 `Topology.IsUpperSet.nhdsKer_singleton`：∀ {α : Type u_1} [inst : Preorder
+ α] [inst_1 : TopologicalSpace α] [Topology.IsUpperSet α] (a : α),   nhdsKer {a}
+ = Set.Ici a
 -/
 lemma nhds_eq_principal_Ici (a : α) : 𝓝 a = 𝓟 (Ici a) := by
-  rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
-
-/--
-lemma `nhdsSet_eq_principal_upperClosure` / 引理 `nhdsSet_eq_principal_upperClosure`
-
-English:
-lemma nhdsSet_eq_principal_upperClosure
-  given: (s : Set α)
-  statement: 𝓝ˢ s = 𝓟 ↑(upperClosure s)
-  proof: by
-  rw [← principal_nhdsKer]; rw [nhdsKer_eq_upperClosure]
-
-中文:
-引理 nhdsSet_eq_principal_upperClosure
-  条件: (s : 集合 α)
-  结论: 𝓝ˢ s = 𝓟 ↑(upperClosure s)
-  证明: by
-  rw [← principal_nhdsKer]; rw [nhdsKer_eq_upperClosure]
-
-Depends on / 依赖: nhdsKer_eq_upperClosure, principal_nhdsKer
+  rw [← principal_nhdsKer_singleton, nhdsKer_singleton]
+/-
+**Topology.IsUpperSet.nhdsSet_eq_principal_upperClosure** 是 Mathlib 中的一个引理，位于命名空
+间 `Topology.IsUpperSet`。
+形式化陈述：nhdsSet_eq_principal_upperClosure (s : Set α) : 𝓝ˢ s = 𝓟 ↑(upperClosure s)
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `principal_nhdsKer`：∀ {α : Type u_3} [inst : TopologicalSpace α] [Alexand
+rovDiscrete α] (s : Set α),   Filter.principal (nhdsKer s) = nhdsSet s
+· 使用引理 `Topology.IsUpperSet.nhdsKer_eq_upperClosure`：nhdsKer_eq_upperClosure (s 
+: Set α) : nhdsKer s = ↑(upperClosure s)
 -/
 lemma nhdsSet_eq_principal_upperClosure (s : Set α) : 𝓝ˢ s = 𝓟 ↑(upperClosure s) := by
-  rw [← principal_nhdsKer]; rw [nhdsKer_eq_upperClosure]
+  rw [← principal_nhdsKer, nhdsKer_eq_upperClosure]
 
 end Preorder
 
-/--
-lemma `_root_.Topology.isUpperSet_iff_nhds` / 引理 `_root_.Topology.isUpperSet_iff_nhds`
-
-English:
-lemma _root_.Topology.isUpperSet_iff_nhds
-  given: {α : Type*} [TopologicalSpace α] [Preorder α]
-  proof: nhds_eq_principal_Ici a
-  mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Ici]⟩
-
-中文:
-引理 _root_.拓扑.isUpperSet_iff_nhds
-  条件: {α : 类型} [拓扑空间 α] [预序 α]
-  证明: nhds_eq_principal_Ici a
-  mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Ici]⟩
+/-
+**Topology.IsUpperSet._root_.Topology.isUpperSet_iff_nhds** 是 Mathlib 中的一个引理，位于命
+名空间 `Topology.IsUpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma _root_.Topology.isUpperSet_iff_nhds {α : Type*} [TopologicalSpace α] [Preorder α] :
-    Topology.IsUpperSet α ↔ (forall a : α, 𝓝 a = 𝓟 (Ici a)) where
+    Topology.IsUpperSet α ↔ (∀ a : α, 𝓝 a = 𝓟 (Ici a)) where
   mp _ a := nhds_eq_principal_Ici a
   mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Ici]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Topology.IsUpperSet Prop
-  body: by
-  simp [Topology.isUpperSet_iff_nhds, Prop.forall]
-
-中文:
-实例 :
-  签名: 拓扑.是上集 命题
-  定义体: by
-  simp [Topology.isUpperSet_iff_nhds, Prop.forall]
-
-Depends on / 依赖: Prop.forall, Topology, Topology.isUpperSet_iff_nhds, isUpperSet_iff_nhds
+/-
+**Topology.IsUpperSet.** 是 Mathlib 中的一个实例，位于命名空间 `Topology.IsUpperSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Topology.IsUpperSet Prop := by
   simp [Topology.isUpperSet_iff_nhds, Prop.forall]
@@ -1233,100 +873,91 @@ variable [Preorder α] [Preorder β]
 
 open Topology
 
-/--
-lemma `monotone_iff_continuous` / 引理 `monotone_iff_continuous`
-
-English:
-lemma monotone_iff_continuous
-  statement: [TopologicalSpace α] [TopologicalSpace β]
-  proof: by
-  constructor
-  · intro hf
-    simp_rw [continuous_def, isOpen_iff_isUpperSet]
-    exact fun _ hs => IsUpperSet.preimage hs hf
-  · intro hf a b hab
-    rw [← mem_Iic]; rw [← closure_singleton] at hab ⊢
-    apply Continuous.closure_preimage_subset hf {f b}
-    apply mem_of_mem_of_subset hab
-    apply closure_mono
-    rw [singleton_subset_iff]; rw [mem_preimage]; rw [mem_singleton_iff]
-
-中文:
-引理 monotone_iff_continuous
-  结论: [拓扑空间 α] [拓扑空间 β]
-  证明: by
-  constructor
-  · intro hf
-    simp_rw [continuous_def, isOpen_iff_isUpperSet]
-    exact fun _ hs => IsUpperSet.preimage hs hf
-  · intro hf a b hab
-    rw [← mem_Iic]; rw [← closure_singleton] at hab ⊢
-    apply Continuous.closure_preimage_subset hf {f b}
-    apply mem_of_mem_of_subset hab
-    apply closure_mono
-    rw [singleton_subset_iff]; rw [mem_preimage]; rw [mem_singleton_iff]
+/-
+**Topology.IsUpperSet.monotone_iff_continuous** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+y.IsUpperSet`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [inst_1 : Preorder β] 
+[inst_2 : TopologicalSpace α]   [inst_3 : TopologicalSpace β] [Topology.IsUpperS
+et α] [Topology.IsUpperSet β] {f : α → β}, Monotone f ↔ Continuous f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsUpperSet.preimage`：IsUpperSet.preimage (hs : IsUpperSet s) {f : β -> α
+} (hf : Monotone f) : IsUpperSet (f ⁻¹' s : Set β)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Iic
+ b ↔ x ≤ b
+· 使用定理 `Topology.IsUpperSet.closure_singleton`：∀ {α : Type u_1} [inst : Preorder
+ α] [inst_1 : TopologicalSpace α] [Topology.IsUpperSet α] {a : α},   closure {a}
+ = Set.Iic a
+· 使用定理 `Continuous.closure_preimage_subset`：Continuous.closure_preimage_subset (
+hf : Continuous f) (t : Set Y) : closure (f ⁻¹' t) subseteq f ⁻¹' closure t
+· 使用定理 `Set.mem_of_mem_of_subset`：mem_of_mem_of_subset {x : α} {s t : Set α} (hx
+ : x in s) (h : s subseteq t) : x in t
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
 -/
 protected lemma monotone_iff_continuous [TopologicalSpace α] [TopologicalSpace β]
-    [Topology.IsUpperSet α] [Topology.IsUpperSet β] {f : α -> β} : Monotone f ↔ Continuous f := by
+    [Topology.IsUpperSet α] [Topology.IsUpperSet β] {f : α → β} : Monotone f ↔ Continuous f := by
   constructor
   · intro hf
     simp_rw [continuous_def, isOpen_iff_isUpperSet]
-    exact fun _ hs => IsUpperSet.preimage hs hf
+    exact fun _ hs ↦ IsUpperSet.preimage hs hf
   · intro hf a b hab
-    rw [← mem_Iic]; rw [← closure_singleton] at hab ⊢
+    rw [← mem_Iic, ← closure_singleton] at hab ⊢
     apply Continuous.closure_preimage_subset hf {f b}
     apply mem_of_mem_of_subset hab
     apply closure_mono
-    rw [singleton_subset_iff]; rw [mem_preimage]; rw [mem_singleton_iff]
-
-/--
-lemma `monotone_to_upperTopology_continuous` / 引理 `monotone_to_upperTopology_continuous`
-
-English:
-lemma monotone_to_upperTopology_continuous
-  statement: [TopologicalSpace α] [TopologicalSpace β]
-  proof: by
-  simp_rw [continuous_def, isOpen_iff_isUpperSet]
-  intro s hs
-  exact (IsUpper.isUpperSet_of_isOpen hs).preimage hf
-
-中文:
-引理 monotone_to_upperTopology_continuous
-  结论: [拓扑空间 α] [拓扑空间 β]
-  证明: by
-  simp_rw [continuous_def, isOpen_iff_isUpperSet]
-  intro s hs
-  exact (IsUpper.isUpperSet_of_isOpen hs).preimage hf
-
-Depends on / 依赖: IsUpper, IsUpper.isUpperSet_of_isOpen, continuous_def, isOpen_iff_isUpperSet, isUpperSet_of_isOpen, preimage, simp_rw
+    rw [singleton_subset_iff, mem_preimage, mem_singleton_iff]
+/-
+**Topology.IsUpperSet.monotone_to_upperTopology_continuous** 是 Mathlib 中的一个引理，位于
+命名空间 `Topology.IsUpperSet`。
+形式化陈述：monotone_to_upperTopology_continuous [TopologicalSpace α] [TopologicalSpac
+e β] [Topology.IsUpperSet α] [IsUpper β] {f : α -> β} (hf : Monotone f) : Contin
+uous f
+参数：hf : Monotone f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsUpperSet.preimage`：IsUpperSet.preimage (hs : IsUpperSet s) {f : β -> α
+} (hf : Monotone f) : IsUpperSet (f ⁻¹' s : Set β)
+· 使用定理 `Topology.IsUpper.isUpperSet_of_isOpen`：isUpperSet_of_isOpen (h : IsOpen 
+s) : IsUpperSet s
 -/
 lemma monotone_to_upperTopology_continuous [TopologicalSpace α] [TopologicalSpace β]
-    [Topology.IsUpperSet α] [IsUpper β] {f : α -> β} (hf : Monotone f) : Continuous f := by
+    [Topology.IsUpperSet α] [IsUpper β] {f : α → β} (hf : Monotone f) : Continuous f := by
   simp_rw [continuous_def, isOpen_iff_isUpperSet]
   intro s hs
   exact (IsUpper.isUpperSet_of_isOpen hs).preimage hf
-
-/--
-lemma `upperSet_le_upper` / 引理 `upperSet_le_upper`
-
-English:
-lemma upperSet_le_upper
-  statement: {t₁ t₂ : TopologicalSpace α} [@Topology.IsUpperSet α t₁ _]
-  proof: fun s hs => by
-  rw [@isOpen_iff_isUpperSet α _ t₁]
-  exact IsUpper.isUpperSet_of_isOpen hs
-
-中文:
-引理 upperSet_le_upper
-  结论: {t₁ t₂ : 拓扑空间 α} [@拓扑.是上集 α t₁ _]
-  证明: fun s hs => by
-  rw [@isOpen_iff_isUpperSet α _ t₁]
-  exact IsUpper.isUpperSet_of_isOpen hs
-
-Depends on / 依赖: IsUpper, IsUpper.isUpperSet_of_isOpen, isOpen_iff_isUpperSet, isUpperSet_of_isOpen
+/-
+**Topology.IsUpperSet.upperSet_le_upper** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsUp
+perSet`。
+形式化陈述：upperSet_le_upper {t₁ t₂ : TopologicalSpace α} [@Topology.IsUpperSet α t₁ 
+_] [@Topology.IsUpper α t₂ _] : t₁ <= t₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsUpperSet.isOpen_iff_isUpperSet`：isOpen_iff_isUpperSet : IsOpe
+n s ↔ IsUpperSet s
+· 使用定理 `Topology.IsUpper.isUpperSet_of_isOpen`：isUpperSet_of_isOpen (h : IsOpen 
+s) : IsUpperSet s
 -/
 lemma upperSet_le_upper {t₁ t₂ : TopologicalSpace α} [@Topology.IsUpperSet α t₁ _]
-    [@Topology.IsUpper α t₂ _] : t₁ <= t₂ := fun s hs => by
+    [@Topology.IsUpper α t₂ _] : t₁ ≤ t₂ := fun s hs => by
   rw [@isOpen_iff_isUpperSet α _ t₁]
   exact IsUpper.isUpperSet_of_isOpen hs
 
@@ -1341,286 +972,228 @@ section Preorder
 variable (α)
 variable [Preorder α] [TopologicalSpace α] [Topology.IsLowerSet α] {s : Set α}
 
-/--
-lemma `topology_eq` / 引理 `topology_eq`
-
-English:
-lemma topology_eq
-  statement: ‹_› = lowerSet α
-  proof: topology_eq_lowerSetTopology
-
-中文:
-引理 topology_eq
-  结论: ‹_› = lowerSet α
-  证明: topology_eq_lowerSetTopology
-
-Depends on / 依赖: topology_eq_lowerSetTopology
+/-
+**Topology.IsLowerSet.topology_eq** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsLowerSet
+`。
+形式化陈述：topology_eq : ‹_› = lowerSet α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsLowerSet.topology_eq_lowerSetTopology`：∀ {α : Type u_4} {t : 
+TopologicalSpace α} {inst : Preorder α} [self : Topology.IsLowerSet α], t = Topo
+logy.lowerSet α
 -/
 lemma topology_eq : ‹_› = lowerSet α := topology_eq_lowerSetTopology
 
 variable {α}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_root_.OrderDual.instIsUpperSet` / 实例 `_root_.OrderDual.instIsUpperSet`
-
-English:
-instance _root_.OrderDual.instIsUpperSet
-  signature: : Topology.IsUpperSet αᵒᵈ where
-  body: by ext; rw [IsLowerSet.topology_eq α]
-
-中文:
-实例 _root_.OrderDual.instIsUpperSet
-  签名: : 拓扑.是上集 αᵒᵈ where
-  定义体: by ext; rw [IsLowerSet.topology_eq α]
-
-Depends on / 依赖: IsLowerSet, IsLowerSet.topology_eq, topology_eq
+/-
+**Topology.IsLowerSet._root_.OrderDual.instIsUpperSet** 是 Mathlib 中的一个实例，位于命名空间 
+`Topology.IsLowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.OrderDual.instIsUpperSet : Topology.IsUpperSet αᵒᵈ where
   topology_eq_upperSetTopology := by ext; rw [IsLowerSet.topology_eq α]
 
-/--
-Definition of `WithLowerSetHomeomorph` / `WithLowerSetHomeomorph` 的定义
+/-- If `α` is equipped with the lower set topology, then it is homeomorphic to `WithLowerSet α`. -/
+/-
+**Topology.IsLowerSet.WithLowerSetHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Topology
+.IsLowerSet`。
+形式化陈述：WithLowerSetHomeomorph : WithLowerSet α ≃ₜ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithLowerSetHomeomorph
-  signature: : WithLowerSet α ≃ₜ α
-  body: WithLowerSet.ofLowerSet.toHomeomorphOfIsInducing ⟨topology_eq α ▸ induced_id.symm⟩
-
-中文:
-定义 WithLowerSetHomeomorph
-  签名: : WithLowerSet α ≃ₜ α
-  定义体: WithLowerSet.ofLowerSet.toHomeomorphOfIsInducing ⟨topology_eq α ▸ induced_id.symm⟩
-
-Depends on / 依赖: WithLowerSet, WithLowerSet.ofLowerSet.toHomeomorphOfIsInducing, induced_id, induced_id.symm, ofLowerSet, toHomeomorphOfIsInducing, topology_eq
+--- 原说明 ---
+If `α` is equipped with the lower set topology, then it is homeomorphic to `With
+LowerSet α`.
 -/
 def WithLowerSetHomeomorph : WithLowerSet α ≃ₜ α :=
   WithLowerSet.ofLowerSet.toHomeomorphOfIsInducing ⟨topology_eq α ▸ induced_id.symm⟩
-
-/--
-lemma `isOpen_iff_isLowerSet` / 引理 `isOpen_iff_isLowerSet`
-
-English:
-lemma isOpen_iff_isLowerSet
-  statement: IsOpen s ↔ IsLowerSet s
-  proof: by rw [topology_eq α]; rfl
-
-中文:
-引理 isOpen_iff_isLowerSet
-  结论: 是开集 s ↔ 是下集 s
-  证明: by rw [topology_eq α]; rfl
-
-Depends on / 依赖: topology_eq
+/-
+**Topology.IsLowerSet.isOpen_iff_isLowerSet** 是 Mathlib 中的一个引理，位于命名空间 `Topology.
+IsLowerSet`。
+形式化陈述：isOpen_iff_isLowerSet : IsOpen s ↔ IsLowerSet s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsLowerSet.topology_eq`：topology_eq : ‹_› = lowerSet α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isOpen_iff_isLowerSet : IsOpen s ↔ IsLowerSet s := by rw [topology_eq α]; rfl
-
-/--
-Instance `toAlexandrovDiscrete` / 实例 `toAlexandrovDiscrete`
-
-English:
-instance toAlexandrovDiscrete
-  signature: : AlexandrovDiscrete α
-  body: IsUpperSet.toAlexandrovDiscrete (α := αᵒᵈ)
-
-中文:
-实例 toAlexandrovDiscrete
-  签名: : AlexandrovDiscrete α
-  定义体: IsUpperSet.toAlexandrovDiscrete (α := αᵒᵈ)
-
-Depends on / 依赖: IsUpperSet, IsUpperSet.toAlexandrovDiscrete, toAlexandrovDiscrete
+/-
+**Topology.IsLowerSet.toAlexandrovDiscrete** 是 Mathlib 中的一个实例，位于命名空间 `Topology.I
+sLowerSet`。
+形式化陈述：toAlexandrovDiscrete : AlexandrovDiscrete α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderDual.instIsUpperSet`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 :
+ TopologicalSpace α] [Topology.IsLowerSet α], Topology.IsUpperSet αᵒᵈ
 -/
 instance toAlexandrovDiscrete : AlexandrovDiscrete α := IsUpperSet.toAlexandrovDiscrete (α := αᵒᵈ)
-
-/--
-lemma `isClosed_iff_isUpper` / 引理 `isClosed_iff_isUpper`
-
-English:
-lemma isClosed_iff_isUpper
-  statement: IsClosed s ↔ IsUpperSet s
-  proof: by
-  rw [← isOpen_compl_iff]; rw [isOpen_iff_isLowerSet]; rw [isUpperSet_compl.symm]; rw [compl_compl]
-
-中文:
-引理 isClosed_iff_isUpper
-  结论: 是闭集 s ↔ 是上集 s
-  证明: by
-  rw [← isOpen_compl_iff]; rw [isOpen_iff_isLowerSet]; rw [isUpperSet_compl.symm]; rw [compl_compl]
-
-Depends on / 依赖: compl_compl, isOpen_compl_iff, isOpen_iff_isLowerSet, isUpperSet_compl, isUpperSet_compl.symm
+/-
+**Topology.IsLowerSet.isClosed_iff_isUpper** 是 Mathlib 中的一个引理，位于命名空间 `Topology.I
+sLowerSet`。
+形式化陈述：isClosed_iff_isUpper : IsClosed s ↔ IsUpperSet s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isOpen_compl_iff`：∀ {X : Type u} {s : Set X} [inst : TopologicalSpace X]
+, IsOpen sᶜ ↔ IsClosed s
+· 使用引理 `Topology.IsLowerSet.isOpen_iff_isLowerSet`：isOpen_iff_isLowerSet : IsOpe
+n s ↔ IsLowerSet s
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `isUpperSet_compl`：isUpperSet_compl : IsUpperSet sᶜ ↔ IsLowerSet s
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isClosed_iff_isUpper : IsClosed s ↔ IsUpperSet s := by
-  rw [← isOpen_compl_iff]; rw [isOpen_iff_isLowerSet]; rw [isUpperSet_compl.symm]; rw [compl_compl]
-
-/--
-lemma `closure_eq_upperClosure` / 引理 `closure_eq_upperClosure`
-
-English:
-lemma closure_eq_upperClosure
-  given: {s : Set α}
-  statement: closure s = upperClosure s
-  proof: IsUpperSet.closure_eq_lowerClosure (α := αᵒᵈ)
-
-中文:
-引理 closure_eq_upperClosure
-  条件: {s : 集合 α}
-  结论: closure s = upperClosure s
-  证明: IsUpperSet.closure_eq_lowerClosure (α := αᵒᵈ)
-
-Depends on / 依赖: IsUpperSet, IsUpperSet.closure_eq_lowerClosure, closure_eq_lowerClosure
+  rw [← isOpen_compl_iff, isOpen_iff_isLowerSet, isUpperSet_compl.symm, compl_compl]
+/-
+**Topology.IsLowerSet.closure_eq_upperClosure** 是 Mathlib 中的一个引理，位于命名空间 `Topolog
+y.IsLowerSet`。
+形式化陈述：closure_eq_upperClosure {s : Set α} : closure s = upperClosure s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsUpperSet.closure_eq_lowerClosure`：closure_eq_lowerClosure {s 
+: Set α} : closure s = lowerClosure s
+· 使用定理 `OrderDual.instIsUpperSet`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 :
+ TopologicalSpace α] [Topology.IsLowerSet α], Topology.IsUpperSet αᵒᵈ
 -/
 lemma closure_eq_upperClosure {s : Set α} : closure s = upperClosure s :=
   IsUpperSet.closure_eq_lowerClosure (α := αᵒᵈ)
 
 /--
-lemma `closure_singleton` / 引理 `closure_singleton`
+The closure of a singleton `{a}` in the lower set topology is the right-closed left-infinite
+interval $(-∞,a]$.
+-/
+/-
+**Topology.IsLowerSet.closure_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsLo
+werSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : TopologicalSpace α] [Topolo
+gy.IsLowerSet α] {a : α},   closure {a} = Set.Ici a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsLowerSet.closure_eq_upperClosure`：closure_eq_upperClosure {s 
+: Set α} : closure s = upperClosure s
+· 使用定理 `upperClosure_singleton`：upperClosure_singleton (a : α) : upperClosure ({
+a} : Set α) = UpperSet.Ici a
 
-English:
-lemma closure_singleton
-  given: {a : α}
-  statement: closure {a} = Ici a
-  proof: by
-  rw [closure_eq_upperClosure]; rw [upperClosure_singleton]
-  rfl
-
-中文:
-引理 closure_singleton
-  条件: {a : α}
-  结论: closure {a} = 左闭右无界区间 a
-  证明: by
-  rw [closure_eq_upperClosure]; rw [upperClosure_singleton]
-  rfl
+--- 原说明 ---
+The closure of a singleton `{a}` in the lower set topology is the right-closed l
+eft-infinite
+interval $(-∞,a]$.
 -/
 @[simp] lemma closure_singleton {a : α} : closure {a} = Ici a := by
-  rw [closure_eq_upperClosure]; rw [upperClosure_singleton]
+  rw [closure_eq_upperClosure, upperClosure_singleton]
   rfl
-
-/--
-lemma `specializes_iff_le` / 引理 `specializes_iff_le`
-
-English:
-lemma specializes_iff_le
-  given: {a b : α}
-  statement: a ⤳ b ↔ a <= b
-  proof: by
-  simp only [specializes_iff_closure_subset, closure_singleton, Ici_subset_Ici]
-
-中文:
-引理 specializes_iff_le
-  条件: {a b : α}
-  结论: a ⤳ b ↔ a <= b
-  证明: by
-  simp only [specializes_iff_closure_subset, closure_singleton, Ici_subset_Ici]
-
-Depends on / 依赖: Ici_subset_Ici, closure_singleton, specializes_iff_closure_subset
+/-
+**Topology.IsLowerSet.specializes_iff_le** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsL
+owerSet`。
+形式化陈述：specializes_iff_le {a b : α} : a ⤳ b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Topology.IsLowerSet.closure_singleton`：∀ {α : Type u_1} [inst : Preorder
+ α] [inst_1 : TopologicalSpace α] [Topology.IsLowerSet α] {a : α},   closure {a}
+ = Set.Ici a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma specializes_iff_le {a b : α} : a ⤳ b ↔ a <= b := by
+lemma specializes_iff_le {a b : α} : a ⤳ b ↔ a ≤ b := by
   simp only [specializes_iff_closure_subset, closure_singleton, Ici_subset_Ici]
-
-/--
-lemma `nhdsKer_eq_lowerClosure` / 引理 `nhdsKer_eq_lowerClosure`
-
-English:
-lemma nhdsKer_eq_lowerClosure
-  given: (s : Set α)
-  statement: nhdsKer s = ↑(lowerClosure s)
-  proof: by
-  ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
-
-中文:
-引理 nhdsKer_eq_lowerClosure
-  条件: (s : 集合 α)
-  结论: nhdsKer s = ↑(lowerClosure s)
-  证明: by
-  ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
-
-Depends on / 依赖: mem_nhdsKer_iff_specializes, specializes_iff_le
+/-
+**Topology.IsLowerSet.nhdsKer_eq_lowerClosure** 是 Mathlib 中的一个引理，位于命名空间 `Topolog
+y.IsLowerSet`。
+形式化陈述：nhdsKer_eq_lowerClosure (s : Set α) : nhdsKer s = ↑(lowerClosure s)
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma nhdsKer_eq_lowerClosure (s : Set α) : nhdsKer s = ↑(lowerClosure s) := by
   ext; simp [mem_nhdsKer_iff_specializes, specializes_iff_le]
-
-/--
-lemma `nhdsKer_singleton` / 引理 `nhdsKer_singleton`
-
-English:
-lemma nhdsKer_singleton
-  given: (a : α)
-  statement: nhdsKer {a} = Iic a
-  proof: by
-  rw [nhdsKer_eq_lowerClosure]; rw [lowerClosure_singleton]; rw [LowerSet.coe_Iic]
-
-中文:
-引理 nhdsKer_singleton
-  条件: (a : α)
-  结论: nhdsKer {a} = 左无界右闭区间 a
-  证明: by
-  rw [nhdsKer_eq_lowerClosure]; rw [lowerClosure_singleton]; rw [LowerSet.coe_Iic]
+/-
+**Topology.IsLowerSet.nhdsKer_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsLo
+werSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : TopologicalSpace α] [Topolo
+gy.IsLowerSet α] (a : α),   nhdsKer {a} = Set.Iic a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsLowerSet.nhdsKer_eq_lowerClosure`：nhdsKer_eq_lowerClosure (s 
+: Set α) : nhdsKer s = ↑(lowerClosure s)
+· 使用定理 `lowerClosure_singleton`：∀ {α : Type u_1} [inst : Preorder α] (a : α), lo
+werClosure {a} = LowerSet.Iic a
+· 使用定理 `LowerSet.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] (a : α), ↑(LowerS
+et.Iic a) = Set.Iic a
 -/
 @[simp] lemma nhdsKer_singleton (a : α) : nhdsKer {a} = Iic a := by
-  rw [nhdsKer_eq_lowerClosure]; rw [lowerClosure_singleton]; rw [LowerSet.coe_Iic]
-
-/--
-lemma `nhds_eq_principal_Iic` / 引理 `nhds_eq_principal_Iic`
-
-English:
-lemma nhds_eq_principal_Iic
-  given: (a : α)
-  statement: 𝓝 a = 𝓟 (Iic a)
-  proof: by
-  rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
-
-中文:
-引理 nhds_eq_principal_Iic
-  条件: (a : α)
-  结论: 𝓝 a = 𝓟 (左无界右闭区间 a)
-  证明: by
-  rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
-
-Depends on / 依赖: nhdsKer_singleton, principal_nhdsKer_singleton
+  rw [nhdsKer_eq_lowerClosure, lowerClosure_singleton, LowerSet.coe_Iic]
+/-
+**Topology.IsLowerSet.nhds_eq_principal_Iic** 是 Mathlib 中的一个引理，位于命名空间 `Topology.
+IsLowerSet`。
+形式化陈述：nhds_eq_principal_Iic (a : α) : 𝓝 a = 𝓟 (Iic a)
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `principal_nhdsKer_singleton`：∀ {α : Type u_3} [inst : TopologicalSpace α
+] [AlexandrovDiscrete α] (a : α), Filter.principal (nhdsKer {a}) = nhds a
+· 使用定理 `Topology.IsLowerSet.nhdsKer_singleton`：∀ {α : Type u_1} [inst : Preorder
+ α] [inst_1 : TopologicalSpace α] [Topology.IsLowerSet α] (a : α),   nhdsKer {a}
+ = Set.Iic a
 -/
 lemma nhds_eq_principal_Iic (a : α) : 𝓝 a = 𝓟 (Iic a) := by
-  rw [← principal_nhdsKer_singleton]; rw [nhdsKer_singleton]
-
-/--
-lemma `nhdsSet_eq_principal_lowerClosure` / 引理 `nhdsSet_eq_principal_lowerClosure`
-
-English:
-lemma nhdsSet_eq_principal_lowerClosure
-  given: (s : Set α)
-  statement: 𝓝ˢ s = 𝓟 ↑(lowerClosure s)
-  proof: by
-  rw [← principal_nhdsKer]; rw [nhdsKer_eq_lowerClosure]
-
-中文:
-引理 nhdsSet_eq_principal_lowerClosure
-  条件: (s : 集合 α)
-  结论: 𝓝ˢ s = 𝓟 ↑(lowerClosure s)
-  证明: by
-  rw [← principal_nhdsKer]; rw [nhdsKer_eq_lowerClosure]
-
-Depends on / 依赖: nhdsKer_eq_lowerClosure, principal_nhdsKer
+  rw [← principal_nhdsKer_singleton, nhdsKer_singleton]
+/-
+**Topology.IsLowerSet.nhdsSet_eq_principal_lowerClosure** 是 Mathlib 中的一个引理，位于命名空
+间 `Topology.IsLowerSet`。
+形式化陈述：nhdsSet_eq_principal_lowerClosure (s : Set α) : 𝓝ˢ s = 𝓟 ↑(lowerClosure s)
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `principal_nhdsKer`：∀ {α : Type u_3} [inst : TopologicalSpace α] [Alexand
+rovDiscrete α] (s : Set α),   Filter.principal (nhdsKer s) = nhdsSet s
+· 使用引理 `Topology.IsLowerSet.nhdsKer_eq_lowerClosure`：nhdsKer_eq_lowerClosure (s 
+: Set α) : nhdsKer s = ↑(lowerClosure s)
 -/
 lemma nhdsSet_eq_principal_lowerClosure (s : Set α) : 𝓝ˢ s = 𝓟 ↑(lowerClosure s) := by
-  rw [← principal_nhdsKer]; rw [nhdsKer_eq_lowerClosure]
+  rw [← principal_nhdsKer, nhdsKer_eq_lowerClosure]
 
 end Preorder
 
-/--
-lemma `_root_.Topology.isLowerSet_iff_nhds` / 引理 `_root_.Topology.isLowerSet_iff_nhds`
-
-English:
-lemma _root_.Topology.isLowerSet_iff_nhds
-  given: {α : Type*} [TopologicalSpace α] [Preorder α]
-  proof: nhds_eq_principal_Iic a
-  mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Iic]⟩
-
-中文:
-引理 _root_.拓扑.isLowerSet_iff_nhds
-  条件: {α : 类型} [拓扑空间 α] [预序 α]
-  证明: nhds_eq_principal_Iic a
-  mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Iic]⟩
+/-
+**Topology.IsLowerSet._root_.Topology.isLowerSet_iff_nhds** 是 Mathlib 中的一个引理，位于命
+名空间 `Topology.IsLowerSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma _root_.Topology.isLowerSet_iff_nhds {α : Type*} [TopologicalSpace α] [Preorder α] :
-    Topology.IsLowerSet α ↔ (forall a : α, 𝓝 a = 𝓟 (Iic a)) where
+    Topology.IsLowerSet α ↔ (∀ a : α, 𝓝 a = 𝓟 (Iic a)) where
   mp _ a := nhds_eq_principal_Iic a
   mpr hα := ⟨by simp [TopologicalSpace.ext_iff_nhds, hα, nhds_eq_principal_Iic]⟩
 
@@ -1631,71 +1204,68 @@ variable [Preorder α] [Preorder β]
 open Topology
 open OrderDual
 
-/--
-lemma `monotone_iff_continuous` / 引理 `monotone_iff_continuous`
-
-English:
-lemma monotone_iff_continuous
-  statement: [TopologicalSpace α] [TopologicalSpace β]
-  proof: by
-  rw [← monotone_dual_iff]
-  exact IsUpperSet.monotone_iff_continuous (α := αᵒᵈ) (β := βᵒᵈ)
-    (f := (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ))
-
-中文:
-引理 monotone_iff_continuous
-  结论: [拓扑空间 α] [拓扑空间 β]
-  证明: by
-  rw [← monotone_dual_iff]
-  exact IsUpperSet.monotone_iff_continuous (α := αᵒᵈ) (β := βᵒᵈ)
-    (f := (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ))
+/-
+**Topology.IsLowerSet.monotone_iff_continuous** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+y.IsLowerSet`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [inst_1 : Preorder β] 
+[inst_2 : TopologicalSpace α]   [inst_3 : TopologicalSpace β] [Topology.IsLowerS
+et α] [Topology.IsLowerSet β] {f : α → β}, Monotone f ↔ Continuous f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `monotone_dual_iff`：monotone_dual_iff : Monotone (toDual ∘ f ∘ ofDual : α
+ᵒᵈ -> βᵒᵈ) ↔ Monotone f
+· 使用定理 `Topology.IsUpperSet.monotone_iff_continuous`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : TopologicalSpace α]   [
+inst_3 : TopologicalSpace β] [Top…
+· 使用定理 `OrderDual.instIsUpperSet`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 :
+ TopologicalSpace α] [Topology.IsLowerSet α], Topology.IsUpperSet αᵒᵈ
 -/
 protected lemma monotone_iff_continuous [TopologicalSpace α] [TopologicalSpace β]
-    [Topology.IsLowerSet α] [Topology.IsLowerSet β] {f : α -> β} : Monotone f ↔ Continuous f := by
+    [Topology.IsLowerSet α] [Topology.IsLowerSet β] {f : α → β} : Monotone f ↔ Continuous f := by
   rw [← monotone_dual_iff]
   exact IsUpperSet.monotone_iff_continuous (α := αᵒᵈ) (β := βᵒᵈ)
-    (f := (toDual ∘ f ∘ ofDual : αᵒᵈ -> βᵒᵈ))
-
-/--
-lemma `monotone_to_lowerTopology_continuous` / 引理 `monotone_to_lowerTopology_continuous`
-
-English:
-lemma monotone_to_lowerTopology_continuous
-  statement: [TopologicalSpace α] [TopologicalSpace β]
-  proof: IsUpperSet.monotone_to_upperTopology_continuous (α := αᵒᵈ) (β := βᵒᵈ) hf.dual
-
-中文:
-引理 monotone_to_lowerTopology_continuous
-  结论: [拓扑空间 α] [拓扑空间 β]
-  证明: IsUpperSet.monotone_to_upperTopology_continuous (α := αᵒᵈ) (β := βᵒᵈ) hf.dual
-
-Depends on / 依赖: IsUpperSet, IsUpperSet.monotone_to_upperTopology_continuous, hf.dual, monotone_to_upperTopology_continuous
+    (f := (toDual ∘ f ∘ ofDual : αᵒᵈ → βᵒᵈ))
+/-
+**Topology.IsLowerSet.monotone_to_lowerTopology_continuous** 是 Mathlib 中的一个引理，位于
+命名空间 `Topology.IsLowerSet`。
+形式化陈述：monotone_to_lowerTopology_continuous [TopologicalSpace α] [TopologicalSpac
+e β] [Topology.IsLowerSet α] [IsLower β] {f : α -> β} (hf : Monotone f) : Contin
+uous f
+参数：hf : Monotone f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsUpperSet.monotone_to_upperTopology_continuous`：monotone_to_up
+perTopology_continuous [TopologicalSpace α] [TopologicalSpace β] [Topology.IsUpp
+erSet α] [IsUpper β] {f : α -> β} (hf : Monoto…
+· 使用定理 `OrderDual.instIsUpperSet`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 :
+ TopologicalSpace α] [Topology.IsLowerSet α], Topology.IsUpperSet αᵒᵈ
+· 使用定理 `OrderDual.instIsUpper`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : To
+pologicalSpace α] [Topology.IsLower α], Topology.IsUpper αᵒᵈ
+· 使用定理 `Monotone.dual`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 :
+ Preorder β] {f : α → β},   Monotone f → Monotone (⇑OrderDual.toDual ∘ f ∘ ⇑Orde
+rDu…
 -/
 lemma monotone_to_lowerTopology_continuous [TopologicalSpace α] [TopologicalSpace β]
-    [Topology.IsLowerSet α] [IsLower β] {f : α -> β} (hf : Monotone f) : Continuous f :=
+    [Topology.IsLowerSet α] [IsLower β] {f : α → β} (hf : Monotone f) : Continuous f :=
   IsUpperSet.monotone_to_upperTopology_continuous (α := αᵒᵈ) (β := βᵒᵈ) hf.dual
-
-/--
-lemma `lowerSet_le_lower` / 引理 `lowerSet_le_lower`
-
-English:
-lemma lowerSet_le_lower
-  statement: {t₁ t₂ : TopologicalSpace α} [@Topology.IsLowerSet α t₁ _]
-  proof: fun s hs => by
-  rw [@isOpen_iff_isLowerSet α _ t₁]
-  exact IsLower.isLowerSet_of_isOpen hs
-
-中文:
-引理 lowerSet_le_lower
-  结论: {t₁ t₂ : 拓扑空间 α} [@拓扑.是下集 α t₁ _]
-  证明: fun s hs => by
-  rw [@isOpen_iff_isLowerSet α _ t₁]
-  exact IsLower.isLowerSet_of_isOpen hs
-
-Depends on / 依赖: IsLower, IsLower.isLowerSet_of_isOpen, isLowerSet_of_isOpen, isOpen_iff_isLowerSet
+/-
+**Topology.IsLowerSet.lowerSet_le_lower** 是 Mathlib 中的一个引理，位于命名空间 `Topology.IsLo
+werSet`。
+形式化陈述：lowerSet_le_lower {t₁ t₂ : TopologicalSpace α} [@Topology.IsLowerSet α t₁ 
+_] [@IsLower α t₂ _] : t₁ <= t₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Topology.IsLowerSet.isOpen_iff_isLowerSet`：isOpen_iff_isLowerSet : IsOpe
+n s ↔ IsLowerSet s
+· 使用定理 `Topology.IsLower.isLowerSet_of_isOpen`：isLowerSet_of_isOpen (h : IsOpen 
+s) : IsLowerSet s
 -/
 lemma lowerSet_le_lower {t₁ t₂ : TopologicalSpace α} [@Topology.IsLowerSet α t₁ _]
-    [@IsLower α t₂ _] : t₁ <= t₂ := fun s hs => by
+    [@IsLower α t₂ _] : t₁ ≤ t₂ := fun s hs => by
   rw [@isOpen_iff_isLowerSet α _ t₁]
   exact IsLower.isLowerSet_of_isOpen hs
 
@@ -1703,47 +1273,31 @@ end maps
 
 end IsLowerSet
 
-/--
-lemma `isUpperSet_orderDual` / 引理 `isUpperSet_orderDual`
-
-English:
-lemma isUpperSet_orderDual
-  given: [Preorder α] [TopologicalSpace α]
-  proof: by
-  constructor
-  · apply OrderDual.instIsLowerSet
-  · apply OrderDual.instIsUpperSet
-
-中文:
-引理 isUpperSet_orderDual
-  条件: [预序 α] [拓扑空间 α]
-  证明: by
-  constructor
-  · apply OrderDual.instIsLowerSet
-  · apply OrderDual.instIsUpperSet
-
-Depends on / 依赖: OrderDual, OrderDual.instIsLowerSet, OrderDual.instIsUpperSet, instIsLowerSet, instIsUpperSet
+/-
+**Topology.isUpperSet_orderDual** 是 Mathlib 中的一个引理，位于命名空间 `Topology`。
+形式化陈述：isUpperSet_orderDual [Preorder α] [TopologicalSpace α] : Topology.IsUpperS
+et αᵒᵈ ↔ Topology.IsLowerSet α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderDual.instIsLowerSet`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 :
+ TopologicalSpace α] [Topology.IsUpperSet α], Topology.IsLowerSet αᵒᵈ
+· 使用定理 `OrderDual.instIsUpperSet`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 :
+ TopologicalSpace α] [Topology.IsLowerSet α], Topology.IsUpperSet αᵒᵈ
 -/
 lemma isUpperSet_orderDual [Preorder α] [TopologicalSpace α] :
     Topology.IsUpperSet αᵒᵈ ↔ Topology.IsLowerSet α := by
   constructor
   · apply OrderDual.instIsLowerSet
   · apply OrderDual.instIsUpperSet
-
-/--
-lemma `isLowerSet_orderDual` / 引理 `isLowerSet_orderDual`
-
-English:
-lemma isLowerSet_orderDual
-  given: [Preorder α] [TopologicalSpace α]
-  proof: isUpperSet_orderDual.symm
-
-中文:
-引理 isLowerSet_orderDual
-  条件: [预序 α] [拓扑空间 α]
-  证明: isUpperSet_orderDual.symm
-
-Depends on / 依赖: isUpperSet_orderDual, isUpperSet_orderDual.symm
+/-
+**Topology.isLowerSet_orderDual** 是 Mathlib 中的一个引理，位于命名空间 `Topology`。
+形式化陈述：isLowerSet_orderDual [Preorder α] [TopologicalSpace α] : Topology.IsLowerS
+et αᵒᵈ ↔ Topology.IsUpperSet α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Topology.isUpperSet_orderDual`：isUpperSet_orderDual [Preorder α] [Topolo
+gicalSpace α] : Topology.IsUpperSet αᵒᵈ ↔ Topology.IsLowerSet α
 -/
 lemma isLowerSet_orderDual [Preorder α] [TopologicalSpace α] :
     Topology.IsLowerSet αᵒᵈ ↔ Topology.IsUpperSet α := isUpperSet_orderDual.symm
@@ -1751,124 +1305,104 @@ lemma isLowerSet_orderDual [Preorder α] [TopologicalSpace α] :
 namespace WithUpperSet
 variable [Preorder α] [Preorder β] [Preorder γ]
 
-/--
-Definition of `map` / `map` 的定义
+/-- A monotone map between preorders spaces induces a continuous map between themselves considered
+with the upper set topology. -/
+/-
+**Topology.WithUpperSet.map** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithUpperSet`。
+形式化陈述：map (f : α ->o β) : C(WithUpperSet α, WithUpperSet β) where toFun
+参数：f : α ->o β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α ->o β)
-  body: toUpperSet ∘ f ∘ ofUpperSet
-  continuous_toFun := continuous_def.2 fun _s hs => IsUpperSet.preimage hs f.monotone
-
-中文:
-定义 map
-  签名: (f : α ->o β)
-  定义体: toUpperSet ∘ f ∘ ofUpperSet
-  continuous_toFun := continuous_def.2 fun _s hs => IsUpperSet.preimage hs f.monotone
-
-Depends on / 依赖: ofUpperSet, toUpperSet
+--- 原说明 ---
+A monotone map between preorders spaces induces a continuous map between themsel
+ves considered
+with the upper set topology.
 -/
-def map (f : α ->o β) : C(WithUpperSet α, WithUpperSet β) where
+def map (f : α →o β) : C(WithUpperSet α, WithUpperSet β) where
   toFun := toUpperSet ∘ f ∘ ofUpperSet
-  continuous_toFun := continuous_def.2 fun _s hs => IsUpperSet.preimage hs f.monotone
-
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  statement: map (OrderHom.id : α ->o α) = ContinuousMap.id _
-  proof: rfl
-
-中文:
-引理 map_id
-  结论: map (序态射.id : α ->o α) = 连续映射.id _
-  证明: rfl
+  continuous_toFun := continuous_def.2 fun _s hs ↦ IsUpperSet.preimage hs f.monotone
+/-
+**Topology.WithUpperSet.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Topology.WithUpperSet`
+。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α], Topology.WithUpperSet.map OrderHom.i
+d = ContinuousMap.id (Topology.WithUpperSet α)
+参数：Topology.WithUpperSet α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma map_id : map (OrderHom.id : α ->o α) = ContinuousMap.id _ := rfl
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: (g : β ->o γ) (f : α ->o β)
-  statement: map (g.comp f) = (map g).comp (map f)
-  proof: rfl
-
-中文:
-引理 map_comp
-  条件: (g : β ->o γ) (f : α ->o β)
-  结论: map (g.comp f) = (map g).comp (map f)
-  证明: rfl
+@[simp] lemma map_id : map (OrderHom.id : α →o α) = ContinuousMap.id _ := rfl
+/-
+**Topology.WithUpperSet.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `Topology.WithUpperSe
+t`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : Preorder α] [inst_1
+ : Preorder β] [inst_2 : Preorder γ]   (g : β →o γ) (f : α →o β),   Topology.Wit
+hUpperSet.map (g.comp f) = (Topology.WithUpperSet.map g).comp (Topology.WithUppe
+rSet.map f)
+参数：g : β →o γ；f : α →o β；g.comp f；Topology.WithUpperSet.map g；Topology.WithUpper
+Set.map f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma map_comp (g : β ->o γ) (f : α ->o β) : map (g.comp f) = (map g).comp (map f) := rfl
-
-/--
-lemma `toUpperSet_specializes_toUpperSet` / 引理 `toUpperSet_specializes_toUpperSet`
-
-English:
-lemma toUpperSet_specializes_toUpperSet
-  given: {a b : α}
-  proof: by
-  simp_rw [specializes_iff_closure_subset, IsUpperSet.closure_singleton, Iic_subset_Iic,
-    toUpperSet_le_iff]
-
-中文:
-引理 toUpperSet_specializes_toUpperSet
-  条件: {a b : α}
-  证明: by
-  simp_rw [specializes_iff_closure_subset, IsUpperSet.closure_singleton, Iic_subset_Iic,
-    toUpperSet_le_iff]
+@[simp] lemma map_comp (g : β →o γ) (f : α →o β) : map (g.comp f) = (map g).comp (map f) := rfl
+/-
+**Topology.WithUpperSet.toUpperSet_specializes_toUpperSet** 是 Mathlib 中的一个定理，位于命
+名空间 `Topology.WithUpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b : α},   Topology.WithUpperSet.to
+UpperSet a ⤳ Topology.WithUpperSet.toUpperSet b ↔ b ≤ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Topology.IsUpperSet.closure_singleton`：∀ {α : Type u_1} [inst : Preorder
+ α] [inst_1 : TopologicalSpace α] [Topology.IsUpperSet α] {a : α},   closure {a}
+ = Set.Iic a
+· 使用定理 `Topology.instIsUpperSetWithUpperSet`：∀ {α : Type u_1} [inst : Preorder α
+], Topology.IsUpperSet (Topology.WithUpperSet α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toUpperSet_specializes_toUpperSet {a b : α} :
-    toUpperSet a ⤳ toUpperSet b ↔ b <= a := by
+    toUpperSet a ⤳ toUpperSet b ↔ b ≤ a := by
   simp_rw [specializes_iff_closure_subset, IsUpperSet.closure_singleton, Iic_subset_Iic,
     toUpperSet_le_iff]
-
-/--
-lemma `ofUpperSet_le_ofUpperSet` / 引理 `ofUpperSet_le_ofUpperSet`
-
-English:
-lemma ofUpperSet_le_ofUpperSet
-  given: {a b : WithUpperSet α}
-  proof: toUpperSet_specializes_toUpperSet.symm
-
-中文:
-引理 ofUpperSet_le_ofUpperSet
-  条件: {a b : WithUpperSet α}
-  证明: toUpperSet_specializes_toUpperSet.symm
+/-
+**Topology.WithUpperSet.ofUpperSet_le_ofUpperSet** 是 Mathlib 中的一个定理，位于命名空间 `Topo
+logy.WithUpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b : Topology.WithUpperSet α},   To
+pology.WithUpperSet.ofUpperSet a ≤ Topology.WithUpperSet.ofUpperSet b ↔ b ⤳ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Topology.WithUpperSet.toUpperSet_specializes_toUpperSet`：∀ {α : Type u_1
+} [inst : Preorder α] {a b : α},   Topology.WithUpperSet.toUpperSet a ⤳ Topology
+.WithUpperSet.toUpperSet b ↔ b ≤ a
 -/
 @[simp] lemma ofUpperSet_le_ofUpperSet {a b : WithUpperSet α} :
-    ofUpperSet a <= ofUpperSet b ↔ b ⤳ a := toUpperSet_specializes_toUpperSet.symm
-
-/--
-lemma `isUpperSet_toUpperSet_preimage` / 引理 `isUpperSet_toUpperSet_preimage`
-
-English:
-lemma isUpperSet_toUpperSet_preimage
-  given: {s : Set (WithUpperSet α)}
-  proof: Iff.rfl
-
-中文:
-引理 isUpperSet_toUpperSet_preimage
-  条件: {s : 集合 (WithUpperSet α)}
-  证明: Iff.rfl
+    ofUpperSet a ≤ ofUpperSet b ↔ b ⤳ a := toUpperSet_specializes_toUpperSet.symm
+/-
+**Topology.WithUpperSet.isUpperSet_toUpperSet_preimage** 是 Mathlib 中的一个定理，位于命名空间
+ `Topology.WithUpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : Set (Topology.WithUpperSet α)}, 
+  IsUpperSet (⇑Topology.WithUpperSet.toUpperSet ⁻¹' s) ↔ IsOpen s
+参数：Topology.WithUpperSet α；⇑Topology.WithUpperSet.toUpperSet ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isUpperSet_toUpperSet_preimage {s : Set (WithUpperSet α)} :
     IsUpperSet (toUpperSet ⁻¹' s) ↔ IsOpen s := Iff.rfl
-
-/--
-lemma `isOpen_ofUpperSet_preimage` / 引理 `isOpen_ofUpperSet_preimage`
-
-English:
-lemma isOpen_ofUpperSet_preimage
-  given: {s : Set α}
-  proof: isUpperSet_toUpperSet_preimage.symm
-
-中文:
-引理 isOpen_ofUpperSet_preimage
-  条件: {s : 集合 α}
-  证明: isUpperSet_toUpperSet_preimage.symm
+/-
+**Topology.WithUpperSet.isOpen_ofUpperSet_preimage** 是 Mathlib 中的一个定理，位于命名空间 `To
+pology.WithUpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, IsOpen (⇑Topology.WithUp
+perSet.ofUpperSet ⁻¹' s) ↔ IsUpperSet s
+参数：⇑Topology.WithUpperSet.ofUpperSet ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Topology.WithUpperSet.isUpperSet_toUpperSet_preimage`：∀ {α : Type u_1} [
+inst : Preorder α] {s : Set (Topology.WithUpperSet α)},   IsUpperSet (⇑Topology.
+WithUpperSet.toUpperSet ⁻¹' s) ↔ IsOpen s
 -/
 @[simp] lemma isOpen_ofUpperSet_preimage {s : Set α} :
     IsOpen (ofUpperSet ⁻¹' s) ↔ IsUpperSet s := isUpperSet_toUpperSet_preimage.symm
@@ -1878,127 +1412,108 @@ end WithUpperSet
 namespace WithLowerSet
 variable [Preorder α] [Preorder β] [Preorder γ]
 
-/--
-Definition of `map` / `map` 的定义
+/-- A monotone map between preorders spaces induces a continuous map between themselves considered
+with the lower set topology. -/
+/-
+**Topology.WithLowerSet.map** 是 Mathlib 中的一个定义，位于命名空间 `Topology.WithLowerSet`。
+形式化陈述：map (f : α ->o β) : C(WithLowerSet α, WithLowerSet β) where toFun
+参数：f : α ->o β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α ->o β)
-  body: toLowerSet ∘ f ∘ ofLowerSet
-  continuous_toFun := continuous_def.2 fun _s hs => IsLowerSet.preimage hs f.monotone
-
-中文:
-定义 map
-  签名: (f : α ->o β)
-  定义体: toLowerSet ∘ f ∘ ofLowerSet
-  continuous_toFun := continuous_def.2 fun _s hs => IsLowerSet.preimage hs f.monotone
-
-Depends on / 依赖: ofLowerSet, toLowerSet
+--- 原说明 ---
+A monotone map between preorders spaces induces a continuous map between themsel
+ves considered
+with the lower set topology.
 -/
-def map (f : α ->o β) : C(WithLowerSet α, WithLowerSet β) where
+def map (f : α →o β) : C(WithLowerSet α, WithLowerSet β) where
   toFun := toLowerSet ∘ f ∘ ofLowerSet
-  continuous_toFun := continuous_def.2 fun _s hs => IsLowerSet.preimage hs f.monotone
-
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  statement: map (OrderHom.id : α ->o α) = ContinuousMap.id _
-  proof: rfl
-
-中文:
-引理 map_id
-  结论: map (序态射.id : α ->o α) = 连续映射.id _
-  证明: rfl
+  continuous_toFun := continuous_def.2 fun _s hs ↦ IsLowerSet.preimage hs f.monotone
+/-
+**Topology.WithLowerSet.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Topology.WithLowerSet`
+。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α], Topology.WithLowerSet.map OrderHom.i
+d = ContinuousMap.id (Topology.WithLowerSet α)
+参数：Topology.WithLowerSet α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma map_id : map (OrderHom.id : α ->o α) = ContinuousMap.id _ := rfl
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: (g : β ->o γ) (f : α ->o β)
-  statement: map (g.comp f) = (map g).comp (map f)
-  proof: rfl
-
-中文:
-引理 map_comp
-  条件: (g : β ->o γ) (f : α ->o β)
-  结论: map (g.comp f) = (map g).comp (map f)
-  证明: rfl
+@[simp] lemma map_id : map (OrderHom.id : α →o α) = ContinuousMap.id _ := rfl
+/-
+**Topology.WithLowerSet.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `Topology.WithLowerSe
+t`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : Preorder α] [inst_1
+ : Preorder β] [inst_2 : Preorder γ]   (g : β →o γ) (f : α →o β),   Topology.Wit
+hLowerSet.map (g.comp f) = (Topology.WithLowerSet.map g).comp (Topology.WithLowe
+rSet.map f)
+参数：g : β →o γ；f : α →o β；g.comp f；Topology.WithLowerSet.map g；Topology.WithLower
+Set.map f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma map_comp (g : β ->o γ) (f : α ->o β) : map (g.comp f) = (map g).comp (map f) := rfl
-
-/--
-lemma `toLowerSet_specializes_toLowerSet` / 引理 `toLowerSet_specializes_toLowerSet`
-
-English:
-lemma toLowerSet_specializes_toLowerSet
-  given: {a b : α}
-  proof: by
-  simp_rw [specializes_iff_closure_subset, IsLowerSet.closure_singleton, Ici_subset_Ici,
-    toLowerSet_le_iff]
-
-中文:
-引理 toLowerSet_specializes_toLowerSet
-  条件: {a b : α}
-  证明: by
-  simp_rw [specializes_iff_closure_subset, IsLowerSet.closure_singleton, Ici_subset_Ici,
-    toLowerSet_le_iff]
+@[simp] lemma map_comp (g : β →o γ) (f : α →o β) : map (g.comp f) = (map g).comp (map f) := rfl
+/-
+**Topology.WithLowerSet.toLowerSet_specializes_toLowerSet** 是 Mathlib 中的一个定理，位于命
+名空间 `Topology.WithLowerSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b : α},   Topology.WithLowerSet.to
+LowerSet a ⤳ Topology.WithLowerSet.toLowerSet b ↔ a ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Topology.IsLowerSet.closure_singleton`：∀ {α : Type u_1} [inst : Preorder
+ α] [inst_1 : TopologicalSpace α] [Topology.IsLowerSet α] {a : α},   closure {a}
+ = Set.Ici a
+· 使用定理 `Topology.instIsLowerSetWithLowerSet`：∀ {α : Type u_1} [inst : Preorder α
+], Topology.IsLowerSet (Topology.WithLowerSet α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toLowerSet_specializes_toLowerSet {a b : α} :
-    toLowerSet a ⤳ toLowerSet b ↔ a <= b := by
+    toLowerSet a ⤳ toLowerSet b ↔ a ≤ b := by
   simp_rw [specializes_iff_closure_subset, IsLowerSet.closure_singleton, Ici_subset_Ici,
     toLowerSet_le_iff]
-
-/--
-lemma `ofLowerSet_le_ofLowerSet` / 引理 `ofLowerSet_le_ofLowerSet`
-
-English:
-lemma ofLowerSet_le_ofLowerSet
-  given: {a b : WithLowerSet α}
-  proof: toLowerSet_specializes_toLowerSet.symm
-
-中文:
-引理 ofLowerSet_le_ofLowerSet
-  条件: {a b : WithLowerSet α}
-  证明: toLowerSet_specializes_toLowerSet.symm
+/-
+**Topology.WithLowerSet.ofLowerSet_le_ofLowerSet** 是 Mathlib 中的一个定理，位于命名空间 `Topo
+logy.WithLowerSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b : Topology.WithLowerSet α},   To
+pology.WithLowerSet.ofLowerSet a ≤ Topology.WithLowerSet.ofLowerSet b ↔ a ⤳ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Topology.WithLowerSet.toLowerSet_specializes_toLowerSet`：∀ {α : Type u_1
+} [inst : Preorder α] {a b : α},   Topology.WithLowerSet.toLowerSet a ⤳ Topology
+.WithLowerSet.toLowerSet b ↔ a ≤ b
 -/
 @[simp] lemma ofLowerSet_le_ofLowerSet {a b : WithLowerSet α} :
-    ofLowerSet a <= ofLowerSet b ↔ a ⤳ b := toLowerSet_specializes_toLowerSet.symm
-
-/--
-lemma `isLowerSet_toLowerSet_preimage` / 引理 `isLowerSet_toLowerSet_preimage`
-
-English:
-lemma isLowerSet_toLowerSet_preimage
-  given: {s : Set (WithLowerSet α)}
-  proof: Iff.rfl
-
-中文:
-引理 isLowerSet_toLowerSet_preimage
-  条件: {s : 集合 (WithLowerSet α)}
-  证明: Iff.rfl
+    ofLowerSet a ≤ ofLowerSet b ↔ a ⤳ b := toLowerSet_specializes_toLowerSet.symm
+/-
+**Topology.WithLowerSet.isLowerSet_toLowerSet_preimage** 是 Mathlib 中的一个定理，位于命名空间
+ `Topology.WithLowerSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : Set (Topology.WithLowerSet α)}, 
+  IsLowerSet (⇑Topology.WithLowerSet.toLowerSet ⁻¹' s) ↔ IsOpen s
+参数：Topology.WithLowerSet α；⇑Topology.WithLowerSet.toLowerSet ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isLowerSet_toLowerSet_preimage {s : Set (WithLowerSet α)} :
     IsLowerSet (toLowerSet ⁻¹' s) ↔ IsOpen s := Iff.rfl
-
-/--
-lemma `isOpen_ofLowerSet_preimage` / 引理 `isOpen_ofLowerSet_preimage`
-
-English:
-lemma isOpen_ofLowerSet_preimage
-  given: {s : Set α}
-  proof: isLowerSet_toLowerSet_preimage.symm
-
-中文:
-引理 isOpen_ofLowerSet_preimage
-  条件: {s : 集合 α}
-  证明: isLowerSet_toLowerSet_preimage.symm
+/-
+**Topology.WithLowerSet.isOpen_ofLowerSet_preimage** 是 Mathlib 中的一个定理，位于命名空间 `To
+pology.WithLowerSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, IsOpen (⇑Topology.WithLo
+werSet.ofLowerSet ⁻¹' s) ↔ IsLowerSet s
+参数：⇑Topology.WithLowerSet.ofLowerSet ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Topology.WithLowerSet.isLowerSet_toLowerSet_preimage`：∀ {α : Type u_1} [
+inst : Preorder α] {s : Set (Topology.WithLowerSet α)},   IsLowerSet (⇑Topology.
+WithLowerSet.toLowerSet ⁻¹' s) ↔ IsOpen s
 -/
 @[simp] lemma isOpen_ofLowerSet_preimage {s : Set α} :
     IsOpen (ofLowerSet ⁻¹' s) ↔ IsLowerSet s := isLowerSet_toLowerSet_preimage.symm
 
 end WithLowerSet
 end Topology
+

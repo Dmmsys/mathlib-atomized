@@ -40,18 +40,31 @@ open Lean Meta Elab Tactic
 or the local context at reducible transparency. -/
 syntax (name := failIfNoProgress) "fail_if_no_progress " tacticSeq : tactic
 
-/--
-Definition of `lctxIsDefEq` / `lctxIsDefEq` 的定义
+/-- `lctxIsDefEq l₁ l₂` compares two lists of `Option LocalDecl`s (as returned from e.g.
+`(← (← getMainGoal).getDecl).lctx.decls.toList`). It returns `true` if they have the same
+local declarations in the same order (up to defeq, without setting mvars), and `false` otherwise.
 
-English:
-definition lctxIsDefEq
-  signature: : (l₁ l₂ : List (Option LocalDecl)) -> MetaM Bool
+Assumption: this function is run with one of the local contexts as the current `MetaM` local
+context, and one of the two lists consists of the `LocalDecl`s of that context. -/
+/-
+**Mathlib.Tactic.lctxIsDefEq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：List (Option LocalDecl) → List (Option LocalDecl) → MetaM Bool
+参数：Option LocalDecl；Option LocalDecl。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 lctxIsDefEq
-  签名: : (l₁ l₂ : 列表 (选项类型 LocalDecl)) -> MetaM 布尔值
+--- 原说明 ---
+`lctxIsDefEq l₁ l₂` compares two lists of `Option LocalDecl`s (as returned from 
+e.g.
+`(← (← getMainGoal).getDecl).lctx.decls.toList`). It returns `true` if they have
+ the same
+local declarations in the same order (up to defeq, without setting mvars), and `
+false` otherwise.
+
+Assumption: this function is run with one of the local contexts as the current `
+MetaM` local
+context, and one of the two lists consists of the `LocalDecl`s of that context.
 -/
-def lctxIsDefEq : (l₁ l₂ : List (Option LocalDecl)) -> MetaM Bool
+def lctxIsDefEq : (l₁ l₂ : List (Option LocalDecl)) → MetaM Bool
   | none :: l₁, l₂ => lctxIsDefEq l₁ l₂
   | l₁, none :: l₂ => lctxIsDefEq l₁ l₂
   | some d₁ :: l₁, some d₂ :: l₂ => do
@@ -69,56 +82,18 @@ def lctxIsDefEq : (l₁ l₂ : List (Option LocalDecl)) -> MetaM Bool
   | [], [] => return true
   | _, _ => return false
 
-/--
-Definition of `runAndFailIfNoProgress` / `runAndFailIfNoProgress` 的定义
+/-- Run `tacs : TacticM Unit` on `goal`, and fail if no progress is made. -/
+/-
+**Mathlib.Tactic.runAndFailIfNoProgress** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c`。
+形式化陈述：runAndFailIfNoProgress (goal : MVarId) (tacs : TacticM Unit) : TacticM (Li
+st MVarId)
+参数：goal : MVarId；tacs : TacticM Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runAndFailIfNoProgress
-  signature: (goal : MVarId) (tacs : TacticM Unit)
-  body: do
-  let l ← run goal tacs
-  try
-    let [newGoal] := l | failure
-    goal.withContext do
-      -- Check that the local contexts are compatible
-      let ctxDecls := (← goal.getDecl).lctx.decls.toList
-      let newCtxDecls := (← newGoal.getDecl).lctx.decls.toList
-guard ← withNewMCtxDepth withReducible lctxIsDefEq ctxDecls newCtxDecls
-      -- They are compatible, so now we can check that the goals are equivalent
-guard ← withNewMCtxDepth withReducible isDefEq (← newGoal.getType) (← goal.getType)
-  catch _ =>
-    return l
-  throwError "no progress made on\n{goal}"
-
-elab_rules : tactic
-| `(tactic| fail_if_no_progress $tacs) => do
-  let goal ← getMainGoal
-  let l ← runAndFailIfNoProgress goal (evalTactic tacs)
-  replaceMainGoal l
-
-中文:
-定义 runAndFailIfNoProgress
-  签名: (goal : MVarId) (tacs : TacticM 单元)
-  定义体: do
-  let l ← run goal tacs
-  try
-    let [newGoal] := l | failure
-    goal.withContext do
-      -- Check that the local contexts are compatible
-      let ctxDecls := (← goal.getDecl).lctx.decls.toList
-      let newCtxDecls := (← newGoal.getDecl).lctx.decls.toList
-guard ← withNewMCtxDepth withReducible lctxIsDefEq ctxDecls newCtxDecls
-      -- They are compatible, so now we can check that the goals are equivalent
-guard ← withNewMCtxDepth withReducible isDefEq (← newGoal.getType) (← goal.getType)
-  catch _ =>
-    return l
-  throwError "no progress made on\n{goal}"
-
-elab_rules : tactic
-| `(tactic| fail_if_no_progress $tacs) => do
-  let goal ← getMainGoal
-  let l ← runAndFailIfNoProgress goal (evalTactic tacs)
-  replaceMainGoal l
+--- 原说明 ---
+Run `tacs : TacticM Unit` on `goal`, and fail if no progress is made.
 -/
 def runAndFailIfNoProgress (goal : MVarId) (tacs : TacticM Unit) : TacticM (List MVarId) := do
   let l ← run goal tacs
@@ -128,9 +103,9 @@ def runAndFailIfNoProgress (goal : MVarId) (tacs : TacticM Unit) : TacticM (List
       -- Check that the local contexts are compatible
       let ctxDecls := (← goal.getDecl).lctx.decls.toList
       let newCtxDecls := (← newGoal.getDecl).lctx.decls.toList
-guard ← withNewMCtxDepth withReducible lctxIsDefEq ctxDecls newCtxDecls
+      guard <|← withNewMCtxDepth <| withReducible <| lctxIsDefEq ctxDecls newCtxDecls
       -- They are compatible, so now we can check that the goals are equivalent
-guard ← withNewMCtxDepth withReducible isDefEq (← newGoal.getType) (← goal.getType)
+      guard <|← withNewMCtxDepth <| withReducible <| isDefEq (← newGoal.getType) (← goal.getType)
   catch _ =>
     return l
   throwError "no progress made on\n{goal}"
@@ -142,3 +117,4 @@ elab_rules : tactic
   replaceMainGoal l
 
 end Mathlib.Tactic
+

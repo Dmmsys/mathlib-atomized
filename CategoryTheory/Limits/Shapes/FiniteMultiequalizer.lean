@@ -22,34 +22,18 @@ namespace WalkingMulticospan
 
 variable {J : MulticospanShape} [Fintype J.L] [Fintype J.R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fintype (WalkingMulticospan J)
-  body: .ofEquiv _ (proxy_equiv% (WalkingMulticospan J))
-
-中文:
-实例 :
-  签名: 有限类型 (WalkingMulticospan J)
-  定义体: .ofEquiv _ (proxy_equiv% (WalkingMulticospan J))
-
-Depends on / 依赖: WalkingMulticospan, ofEquiv, proxy_equiv
+/-
+**CategoryTheory.Limits.WalkingMulticospan.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Limits.WalkingMulticospan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Fintype (WalkingMulticospan J) := .ofEquiv _ (proxy_equiv% (WalkingMulticospan J))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: J.L] [DecidableEq J.R] : FinCategory (WalkingMulticospan J) where
-
-中文:
-实例 [DecidableEq
-  签名: J.L] [DecidableEq J.R] : 有限范畴 (WalkingMulticospan J) where
+/-
+**CategoryTheory.Limits.WalkingMulticospan.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Limits.WalkingMulticospan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq J.L] [DecidableEq J.R] : FinCategory (WalkingMulticospan J) where
   fintypeHom
@@ -59,7 +43,7 @@ instance [DecidableEq J.L] [DecidableEq J.R] : FinCategory (WalkingMulticospan J
         split_ifs with h₁ h₂
         · simp only [Multiset.singleton_add, Multiset.nodup_cons, Multiset.mem_singleton,
             Multiset.nodup_singleton, and_true]
-          let f : ((left a : WalkingMulticospan J) ⟶ right b) -> Prop
+          let f : ((left a : WalkingMulticospan J) ⟶ right b) → Prop
             | .fst a => True
             | .snd a => False
           apply ne_of_apply_ne f
@@ -76,34 +60,18 @@ namespace WalkingMultispan
 
 variable {J : MultispanShape} [Fintype J.L] [Fintype J.R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fintype (WalkingMultispan J)
-  body: .ofEquiv _ (proxy_equiv% (WalkingMultispan J))
-
-中文:
-实例 :
-  签名: 有限类型 (WalkingMultispan J)
-  定义体: .ofEquiv _ (proxy_equiv% (WalkingMultispan J))
-
-Depends on / 依赖: WalkingMultispan, ofEquiv, proxy_equiv
+/-
+**CategoryTheory.Limits.WalkingMultispan.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Limits.WalkingMultispan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Fintype (WalkingMultispan J) := .ofEquiv _ (proxy_equiv% (WalkingMultispan J))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: J.L] [DecidableEq J.R] : FinCategory (WalkingMultispan J) where
-
-中文:
-实例 [DecidableEq
-  签名: J.L] [DecidableEq J.R] : 有限范畴 (WalkingMultispan J) where
+/-
+**CategoryTheory.Limits.WalkingMultispan.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Limits.WalkingMultispan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq J.L] [DecidableEq J.R] : FinCategory (WalkingMultispan J) where
   fintypeHom
@@ -113,7 +81,7 @@ instance [DecidableEq J.L] [DecidableEq J.R] : FinCategory (WalkingMultispan J) 
         split_ifs with h₁ h₂
         · simp only [Multiset.singleton_add, Multiset.nodup_cons, Multiset.mem_singleton,
             Multiset.nodup_singleton, and_true]
-          let f : ((left a : WalkingMultispan J) ⟶ right b) -> Prop
+          let f : ((left a : WalkingMultispan J) ⟶ right b) → Prop
             | .fst a => True
             | .snd a => False
           apply ne_of_apply_ne f
@@ -127,3 +95,4 @@ instance [DecidableEq J.L] [DecidableEq J.R] : FinCategory (WalkingMultispan J) 
 end WalkingMultispan
 
 end CategoryTheory.Limits
+

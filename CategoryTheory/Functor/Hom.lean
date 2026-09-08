@@ -27,25 +27,20 @@ variable (C : Type u) [Category.{v} C]
 /-- `Functor.hom` is the hom-pairing, sending `(X, Y)` to `X ⟶ Y`, contravariant in `X` and
 covariant in `Y`. -/
 @[simps]
-/--
-Definition of `hom` / `hom` 的定义
+/-
+**CategoryTheory.Functor.hom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：hom : Cᵒᵖ × C ⥤ Type v where obj p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hom
-  signature: : Cᵒᵖ × C ⥤ Type v where
-  body: unop p.1 ⟶ p.2
-  map f := ↾fun h => f.1.unop ≫ h ≫ f.2
-
-中文:
-定义 hom
-  签名: : Cᵒᵖ × C ⥤ 类型v where
-  定义体: unop p.1 ⟶ p.2
-  map f := ↾fun h => f.1.unop ≫ h ≫ f.2
-
-Depends on / 依赖: HasPullbacks, hasStrongEpiImages_of_hasPullbacks_of_hasEqualizers
+--- 原说明 ---
+`Functor.hom` is the hom-pairing, sending `(X, Y)` to `X ⟶ Y`, contravariant in 
+`X` and
+covariant in `Y`.
 -/
 def hom : Cᵒᵖ × C ⥤ Type v where
   obj p := unop p.1 ⟶ p.2
   map f := ↾fun h => f.1.unop ≫ h ≫ f.2
 
 end CategoryTheory.Functor
+

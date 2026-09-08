@@ -34,55 +34,23 @@ variable (F : J ⥤ HomologicalComplex C c)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isLimitOfEval` / `isLimitOfEval` 的定义
+/-- A cone in `HomologicalComplex C c` is limit if the induced cones obtained
+by applying `eval C c i : HomologicalComplex C c ⥤ C` for all `i` are limit. -/
+/-
+**HomologicalComplex.isLimitOfEval** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex
+`。
+形式化陈述：isLimitOfEval (s : Cone F) (hs : forall (i : ι), IsLimit ((eval C c i).map
+Cone s)) : IsLimit s where lift t
+参数：s : Cone F；hs : forall (i : ι), IsLimit ((eval C c i).mapCone s)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitOfEval
-  signature: (s : Cone F)
-  body: { f := fun i => (hs i).lift ((eval C c i).mapCone t)
-      comm' := fun i i' _ => by
-        apply IsLimit.hom_ext (hs i')
-        intro j
-        have eq := fun k => (hs k).fac ((eval C c k).mapCone t)
-        simp only [Functor.mapCone_π_app, eval_map] at eq
-        simp only [Functor.mapCone_π_app, eval_map, assoc]
-        rw [eq i']; rw [← Hom.comm]; rw [reassoc_of% (eq i)]; rw [Hom.comm] }
-  fac t j := by
-    ext i
-    apply (hs i).fac
-  uniq t m hm := by
-    ext i
-    apply (hs i).uniq ((eval C c i).mapCone t)
-    intro j
-    dsimp
-    simp only [← comp_f, hm]
-
-中文:
-定义 isLimitOfEval
-  签名: (s : 锥 F)
-  定义体: { f := fun i => (hs i).lift ((eval C c i).mapCone t)
-      comm' := fun i i' _ => by
-        apply IsLimit.hom_ext (hs i')
-        intro j
-        have eq := fun k => (hs k).fac ((eval C c k).mapCone t)
-        simp only [Functor.mapCone_π_app, eval_map] at eq
-        simp only [Functor.mapCone_π_app, eval_map, assoc]
-        rw [eq i']; rw [← Hom.comm]; rw [reassoc_of% (eq i)]; rw [Hom.comm] }
-  fac t j := by
-    ext i
-    apply (hs i).fac
-  uniq t m hm := by
-    ext i
-    apply (hs i).uniq ((eval C c i).mapCone t)
-    intro j
-    dsimp
-    simp only [← comp_f, hm]
-
-Depends on / 依赖: Functor, Functor.mapCone_, Hom.comm, IsLimit, IsLimit.hom_ext, SingleFunctors, SingleFunctors.postcomp, comp_f, eval_map, hom_ext, infer_instance, mapCone, postcomp, reassoc_of, singleFunctor, singleFunctors
+--- 原说明 ---
+A cone in `HomologicalComplex C c` is limit if the induced cones obtained
+by applying `eval C c i : HomologicalComplex C c ⥤ C` for all `i` are limit.
 -/
 def isLimitOfEval (s : Cone F)
-    (hs : forall (i : ι), IsLimit ((eval C c i).mapCone s)) : IsLimit s where
+    (hs : ∀ (i : ι), IsLimit ((eval C c i).mapCone s)) : IsLimit s where
   lift t :=
     { f := fun i => (hs i).lift ((eval C c i).mapCone t)
       comm' := fun i i' _ => by
@@ -91,7 +59,7 @@ def isLimitOfEval (s : Cone F)
         have eq := fun k => (hs k).fac ((eval C c k).mapCone t)
         simp only [Functor.mapCone_π_app, eval_map] at eq
         simp only [Functor.mapCone_π_app, eval_map, assoc]
-        rw [eq i']; rw [← Hom.comm]; rw [reassoc_of% (eq i)]; rw [Hom.comm] }
+        rw [eq i', ← Hom.comm, reassoc_of% (eq i), Hom.comm] }
   fac t j := by
     ext i
     apply (hs i).fac
@@ -102,53 +70,24 @@ def isLimitOfEval (s : Cone F)
     dsimp
     simp only [← comp_f, hm]
 
-variable [forall (n : ι), HasLimit (F ⋙ eval C c n)]
+variable [∀ (n : ι), HasLimit (F ⋙ eval C c n)]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- A cone for a functor `F : J ⥤ HomologicalComplex C c` which is given in degree `n` by
 the limit `F ⋙ eval C c n`. -/
 @[simps]
-/--
-Definition of `coneOfHasLimitEval` / `coneOfHasLimitEval` 的定义
+/-
+**HomologicalComplex.coneOfHasLimitEval** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalCo
+mplex`。
+形式化陈述：coneOfHasLimitEval : Cone F where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneOfHasLimitEval
-  signature: : Cone F where
-  body: { X := fun n => limit (F ⋙ eval C c n)
-      d := fun n m => limMap { app := fun j => (F.obj j).d n m }
-      shape := fun {n m} h => by
-        ext j
-        rw [limMap_π]
-        dsimp
-        rw [(F.obj j).shape _ _ h]; rw [comp_zero]; rw [zero_comp] }
-  π :=
-    { app := fun j => { f := fun _ => limit.π _ j }
-      naturality := fun i j φ => by
-        ext n
-        dsimp
-        simp only [Category.id_comp]
-        rw [← eval_map]; rw [← Functor.comp_map]; rw [limit.w] }
-
-中文:
-定义 coneOfHasLimitEval
-  签名: : 锥 F where
-  定义体: { X := fun n => limit (F ⋙ eval C c n)
-      d := fun n m => limMap { app := fun j => (F.obj j).d n m }
-      shape := fun {n m} h => by
-        ext j
-        rw [limMap_π]
-        dsimp
-        rw [(F.obj j).shape _ _ h]; rw [comp_zero]; rw [zero_comp] }
-  π :=
-    { app := fun j => { f := fun _ => limit.π _ j }
-      naturality := fun i j φ => by
-        ext n
-        dsimp
-        simp only [Category.id_comp]
-        rw [← eval_map]; rw [← Functor.comp_map]; rw [limit.w] }
-
-Depends on / 依赖: Category, Category.id_comp, CochainComplex, CochainComplex.singleFunctor, F.obj, Functor, Functor.Linear, Functor.comp_map, HomotopyCategory, HomotopyCategory.quotient, Linear, comp_map, comp_zero, eval_map, id_comp, limMap, limit.w, naturality, quotient, singleFunctor
+--- 原说明 ---
+A cone for a functor `F : J ⥤ HomologicalComplex C c` which is given in degree `
+n` by
+the limit `F ⋙ eval C c n`.
 -/
 noncomputable def coneOfHasLimitEval : Cone F where
   pt :=
@@ -158,136 +97,68 @@ noncomputable def coneOfHasLimitEval : Cone F where
         ext j
         rw [limMap_π]
         dsimp
-        rw [(F.obj j).shape _ _ h]; rw [comp_zero]; rw [zero_comp] }
+        rw [(F.obj j).shape _ _ h, comp_zero, zero_comp] }
   π :=
     { app := fun j => { f := fun _ => limit.π _ j }
       naturality := fun i j φ => by
         ext n
         dsimp
         simp only [Category.id_comp]
-        rw [← eval_map]; rw [← Functor.comp_map]; rw [limit.w] }
+        rw [← eval_map, ← Functor.comp_map, limit.w] }
 
-/--
-Definition of `isLimitConeOfHasLimitEval` / `isLimitConeOfHasLimitEval` 的定义
+/-- The cone `coneOfHasLimitEval F` is limit. -/
+/-
+**HomologicalComplex.isLimitConeOfHasLimitEval** 是 Mathlib 中的一个定义，位于命名空间 `Homolo
+gicalComplex`。
+形式化陈述：isLimitConeOfHasLimitEval : IsLimit (coneOfHasLimitEval F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitConeOfHasLimitEval
-  signature: : IsLimit (coneOfHasLimitEval F)
-  body: isLimitOfEval _ _ (fun _ => limit.isLimit _)
-
-中文:
-定义 isLimitConeOfHasLimitEval
-  签名: : 是极限 (coneOfHasLimitEval F)
-  定义体: isLimitOfEval _ _ (fun _ => limit.isLimit _)
-
-Depends on / 依赖: isLimit, isLimitOfEval, limit.isLimit
+--- 原说明 ---
+The cone `coneOfHasLimitEval F` is limit.
 -/
 noncomputable def isLimitConeOfHasLimitEval : IsLimit (coneOfHasLimitEval F) :=
   isLimitOfEval _ _ (fun _ => limit.isLimit _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimit F
-  body: ⟨⟨⟨_, isLimitConeOfHasLimitEval F⟩⟩⟩
-
-中文:
-实例 :
-  签名: 有极限 F
-  定义体: ⟨⟨⟨_, isLimitConeOfHasLimitEval F⟩⟩⟩
-
-Depends on / 依赖: isLimitConeOfHasLimitEval
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimit F := ⟨⟨⟨_, isLimitConeOfHasLimitEval F⟩⟩⟩
-
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (n : ι) : PreservesLimit F (eval C c n) :=
   preservesLimit_of_preserves_limit_cone (isLimitConeOfHasLimitEval F) (limit.isLimit _)
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimitsOfShape
-  signature: J C] : HasLimitsOfShape J (HomologicalComplex C c)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 [有形状极限
-  签名: J C] : 有形状极限 J (同调复形 C c)
-  定义体: ⟨inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasLimitsOfShape J C] : HasLimitsOfShape J (HomologicalComplex C c) := ⟨inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimitsOfShape
-  signature: J C] (n
-  body: ⟨inferInstance⟩
-
-中文:
-实例 [有形状极限
-  签名: J C] (n
-  定义体: ⟨inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [HasLimitsOfShape J C] (n : ι) :
     PreservesLimitsOfShape J (eval C c n) := ⟨inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteLimits
-  signature: C] : HasFiniteLimits (HomologicalComplex C c)
-  body: ⟨fun _ _ => inferInstance⟩
-
-中文:
-实例 [有有限极限
-  签名: C] : 有有限极限 (同调复形 C c)
-  定义体: ⟨fun _ _ => inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteLimits C] : HasFiniteLimits (HomologicalComplex C c) :=
   ⟨fun _ _ => inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteLimits
-  signature: C] (n
-  body: ⟨fun _ _ _ => inferInstance⟩
-
-中文:
-实例 [有有限极限
-  签名: C] (n
-  定义体: ⟨fun _ _ _ => inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [HasFiniteLimits C] (n : ι) : PreservesFiniteLimits (eval C c n) :=
   ⟨fun _ _ _ => inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteLimits
-  signature: C] {K L
-  body: by
-  change Mono ((HomologicalComplex.eval C c n).map φ)
-  infer_instance
-
-中文:
-实例 [有有限极限
-  签名: C] {K L
-  定义体: by
-  change Mono ((HomologicalComplex.eval C c n).map φ)
-  infer_instance
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.eval, infer_instance
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteLimits C] {K L : HomologicalComplex C c} (φ : K ⟶ L) [Mono φ] (n : ι) :
     Mono (φ.f n) := by
@@ -300,55 +171,23 @@ variable (F : J ⥤ HomologicalComplex C c)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isColimitOfEval` / `isColimitOfEval` 的定义
+/-- A cocone in `HomologicalComplex C c` is colimit if the induced cocones obtained
+by applying `eval C c i : HomologicalComplex C c ⥤ C` for all `i` are colimit. -/
+/-
+**HomologicalComplex.isColimitOfEval** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalCompl
+ex`。
+形式化陈述：isColimitOfEval (s : Cocone F) (hs : forall (i : ι), IsColimit ((eval C c 
+i).mapCocone s)) : IsColimit s where desc t
+参数：s : Cocone F；hs : forall (i : ι), IsColimit ((eval C c i).mapCocone s)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitOfEval
-  signature: (s : Cocone F)
-  body: { f := fun i => (hs i).desc ((eval C c i).mapCocone t)
-      comm' := fun i i' _ => by
-        apply IsColimit.hom_ext (hs i)
-        intro j
-        have eq := fun k => (hs k).fac ((eval C c k).mapCocone t)
-        simp only [Functor.mapCocone_ι_app, eval_map] at eq
-        simp only [Functor.mapCocone_ι_app, eval_map]
-        rw [reassoc_of% (eq i)]; rw [Hom.comm_assoc]; rw [eq i']; rw [Hom.comm] }
-  fac t j := by
-    ext i
-    apply (hs i).fac
-  uniq t m hm := by
-    ext i
-    apply (hs i).uniq ((eval C c i).mapCocone t)
-    intro j
-    dsimp
-    simp only [← comp_f, hm]
-
-中文:
-定义 isColimitOfEval
-  签名: (s : 余锥 F)
-  定义体: { f := fun i => (hs i).desc ((eval C c i).mapCocone t)
-      comm' := fun i i' _ => by
-        apply IsColimit.hom_ext (hs i)
-        intro j
-        have eq := fun k => (hs k).fac ((eval C c k).mapCocone t)
-        simp only [Functor.mapCocone_ι_app, eval_map] at eq
-        simp only [Functor.mapCocone_ι_app, eval_map]
-        rw [reassoc_of% (eq i)]; rw [Hom.comm_assoc]; rw [eq i']; rw [Hom.comm] }
-  fac t j := by
-    ext i
-    apply (hs i).fac
-  uniq t m hm := by
-    ext i
-    apply (hs i).uniq ((eval C c i).mapCocone t)
-    intro j
-    dsimp
-    simp only [← comp_f, hm]
-
-Depends on / 依赖: Functor, Functor.mapCocone_, Hom.comm, Hom.comm_assoc, IsColimit, IsColimit.hom_ext, comm_assoc, comp_f, eval_map, hom_ext, mapCocone, reassoc_of
+--- 原说明 ---
+A cocone in `HomologicalComplex C c` is colimit if the induced cocones obtained
+by applying `eval C c i : HomologicalComplex C c ⥤ C` for all `i` are colimit.
 -/
 def isColimitOfEval (s : Cocone F)
-    (hs : forall (i : ι), IsColimit ((eval C c i).mapCocone s)) : IsColimit s where
+    (hs : ∀ (i : ι), IsColimit ((eval C c i).mapCocone s)) : IsColimit s where
   desc t :=
     { f := fun i => (hs i).desc ((eval C c i).mapCocone t)
       comm' := fun i i' _ => by
@@ -357,7 +196,7 @@ def isColimitOfEval (s : Cocone F)
         have eq := fun k => (hs k).fac ((eval C c k).mapCocone t)
         simp only [Functor.mapCocone_ι_app, eval_map] at eq
         simp only [Functor.mapCocone_ι_app, eval_map]
-        rw [reassoc_of% (eq i)]; rw [Hom.comm_assoc]; rw [eq i']; rw [Hom.comm] }
+        rw [reassoc_of% (eq i), Hom.comm_assoc, eq i', Hom.comm] }
   fac t j := by
     ext i
     apply (hs i).fac
@@ -369,53 +208,24 @@ def isColimitOfEval (s : Cocone F)
     simp only [← comp_f, hm]
 
 
-variable [forall (n : ι), HasColimit (F ⋙ HomologicalComplex.eval C c n)]
+variable [∀ (n : ι), HasColimit (F ⋙ HomologicalComplex.eval C c n)]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- A cocone for a functor `F : J ⥤ HomologicalComplex C c` which is given in degree `n` by
 the colimit of `F ⋙ eval C c n`. -/
 @[simps]
-/--
-Definition of `coconeOfHasColimitEval` / `coconeOfHasColimitEval` 的定义
+/-
+**HomologicalComplex.coconeOfHasColimitEval** 是 Mathlib 中的一个定义，位于命名空间 `Homologic
+alComplex`。
+形式化陈述：coconeOfHasColimitEval : Cocone F where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeOfHasColimitEval
-  signature: : Cocone F where
-  body: { X := fun n => colimit (F ⋙ eval C c n)
-      d := fun n m => colimMap { app := fun j => (F.obj j).d n m }
-      shape := fun {n m} h => by
-        ext j
-        rw [ι_colimMap]
-        dsimp
-        rw [(F.obj j).shape _ _ h]; rw [zero_comp]; rw [comp_zero] }
-  ι :=
-    { app := fun j => { f := fun n => colimit.ι (F ⋙ eval C c n) j }
-      naturality := fun i j φ => by
-        ext n
-        dsimp
-        simp only [Category.comp_id]
-        rw [← eval_map]; rw [← Functor.comp_map]; rw [colimit.w] }
-
-中文:
-定义 coconeOfHasColimitEval
-  签名: : 余锥 F where
-  定义体: { X := fun n => colimit (F ⋙ eval C c n)
-      d := fun n m => colimMap { app := fun j => (F.obj j).d n m }
-      shape := fun {n m} h => by
-        ext j
-        rw [ι_colimMap]
-        dsimp
-        rw [(F.obj j).shape _ _ h]; rw [zero_comp]; rw [comp_zero] }
-  ι :=
-    { app := fun j => { f := fun n => colimit.ι (F ⋙ eval C c n) j }
-      naturality := fun i j φ => by
-        ext n
-        dsimp
-        simp only [Category.comp_id]
-        rw [← eval_map]; rw [← Functor.comp_map]; rw [colimit.w] }
-
-Depends on / 依赖: Category, Category.comp_id, F.obj, Functor, Functor.comp_map, colimMap, colimit, colimit.w, comp_id, comp_map, comp_zero, eval_map, naturality, zero_comp
+--- 原说明 ---
+A cocone for a functor `F : J ⥤ HomologicalComplex C c` which is given in degree
+ `n` by
+the colimit of `F ⋙ eval C c n`.
 -/
 noncomputable def coconeOfHasColimitEval : Cocone F where
   pt :=
@@ -425,217 +235,136 @@ noncomputable def coconeOfHasColimitEval : Cocone F where
         ext j
         rw [ι_colimMap]
         dsimp
-        rw [(F.obj j).shape _ _ h]; rw [zero_comp]; rw [comp_zero] }
+        rw [(F.obj j).shape _ _ h, zero_comp, comp_zero] }
   ι :=
     { app := fun j => { f := fun n => colimit.ι (F ⋙ eval C c n) j }
       naturality := fun i j φ => by
         ext n
         dsimp
         simp only [Category.comp_id]
-        rw [← eval_map]; rw [← Functor.comp_map]; rw [colimit.w] }
+        rw [← eval_map, ← Functor.comp_map, colimit.w] }
 
-/--
-Definition of `isColimitCoconeOfHasColimitEval` / `isColimitCoconeOfHasColimitEval` 的定义
+/-- The cocone `coconeOfHasLimitEval F` is colimit. -/
+/-
+**HomologicalComplex.isColimitCoconeOfHasColimitEval** 是 Mathlib 中的一个定义，位于命名空间 `
+HomologicalComplex`。
+形式化陈述：isColimitCoconeOfHasColimitEval : IsColimit (coconeOfHasColimitEval F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCoconeOfHasColimitEval
-  signature: : IsColimit (coconeOfHasColimitEval F)
-  body: isColimitOfEval _ _ (fun _ => colimit.isColimit _)
-
-中文:
-定义 isColimitCoconeOfHasColimitEval
-  签名: : 是余极限 (coconeOfHasColimitEval F)
-  定义体: isColimitOfEval _ _ (fun _ => colimit.isColimit _)
-
-Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimitOfEval
+--- 原说明 ---
+The cocone `coconeOfHasLimitEval F` is colimit.
 -/
 noncomputable def isColimitCoconeOfHasColimitEval : IsColimit (coconeOfHasColimitEval F) :=
   isColimitOfEval _ _ (fun _ => colimit.isColimit _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimit F
-  body: ⟨⟨⟨_, isColimitCoconeOfHasColimitEval F⟩⟩⟩
-
-中文:
-实例 :
-  签名: 有余极限 F
-  定义体: ⟨⟨⟨_, isColimitCoconeOfHasColimitEval F⟩⟩⟩
-
-Depends on / 依赖: isColimitCoconeOfHasColimitEval
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimit F := ⟨⟨⟨_, isColimitCoconeOfHasColimitEval F⟩⟩⟩
-
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (n : ι) : PreservesColimit F (eval C c n) :=
   preservesColimit_of_preserves_colimit_cocone (isColimitCoconeOfHasColimitEval F)
     (colimit.isColimit _)
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimitsOfShape
-  signature: J C] : HasColimitsOfShape J (HomologicalComplex C c)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 [有形状余极限
-  签名: J C] : 有形状余极限 J (同调复形 C c)
-  定义体: ⟨inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasColimitsOfShape J C] : HasColimitsOfShape J (HomologicalComplex C c) := ⟨inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimitsOfShape
-  signature: J C] (n
-  body: ⟨inferInstance⟩
-
-中文:
-实例 [有形状余极限
-  签名: J C] (n
-  定义体: ⟨inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [HasColimitsOfShape J C] (n : ι) :
     PreservesColimitsOfShape J (eval C c n) := ⟨inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteColimits
-  signature: C] : HasFiniteColimits (HomologicalComplex C c)
-  body: ⟨fun _ _ => inferInstance⟩
-
-中文:
-实例 [有有限余极限
-  签名: C] : 有有限余极限 (同调复形 C c)
-  定义体: ⟨fun _ _ => inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteColimits C] : HasFiniteColimits (HomologicalComplex C c) :=
   ⟨fun _ _ => inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteColimits
-  signature: C] (n
-  body: ⟨fun _ _ _ => inferInstance⟩
-
-中文:
-实例 [有有限余极限
-  签名: C] (n
-  定义体: ⟨fun _ _ _ => inferInstance⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [HasFiniteColimits C] (n : ι) :
     PreservesFiniteColimits (eval C c n) := ⟨fun _ _ _ => inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteColimits
-  signature: C] {K L
-  body: by
-  change Epi ((HomologicalComplex.eval C c n).map φ)
-  infer_instance
-
-中文:
-实例 [有有限余极限
-  签名: C] {K L
-  定义体: by
-  change Epi ((HomologicalComplex.eval C c n).map φ)
-  infer_instance
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.eval, infer_instance
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteColimits C] {K L : HomologicalComplex C c} (φ : K ⟶ L) [Epi φ] (n : ι) :
     Epi (φ.f n) := by
   change Epi ((HomologicalComplex.eval C c n).map φ)
   infer_instance
 
-/--
-lemma `preservesLimitsOfShape_of_eval` / 引理 `preservesLimitsOfShape_of_eval`
+/-- A functor `D ⥤ HomologicalComplex C c` preserves limits of shape `J`
+if for any `i`, `G ⋙ eval C c i` does. -/
+/-
+**HomologicalComplex.preservesLimitsOfShape_of_eval** 是 Mathlib 中的一个引理，位于命名空间 `H
+omologicalComplex`。
+形式化陈述：preservesLimitsOfShape_of_eval {D : Type*} [Category* D] (G : D ⥤ Homologi
+calComplex C c) (_ : forall (i : ι), PreservesLimitsOfShape J (G ⋙ eval C c i)) 
+: PreservesLimitsOfShape J G
+参数：G : D ⥤ HomologicalComplex C c；_ : forall (i : ι), PreservesLimitsOfShape J (
+G ⋙ eval C c i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
 
-English:
-lemma preservesLimitsOfShape_of_eval
-  statement: {D : Type*} [Category* D]
-  proof: ⟨fun {_} => ⟨fun hs => ⟨isLimitOfEval _ _
-    (fun i => isLimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
-
-中文:
-引理 preservesLimitsOfShape_of_eval
-  结论: {D : 类型} [范畴* D]
-  证明: ⟨fun {_} => ⟨fun hs => ⟨isLimitOfEval _ _
-    (fun i => isLimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
-
-Depends on / 依赖: isLimitOfEval, isLimitOfPreserves
+--- 原说明 ---
+A functor `D ⥤ HomologicalComplex C c` preserves limits of shape `J`
+if for any `i`, `G ⋙ eval C c i` does.
 -/
 lemma preservesLimitsOfShape_of_eval {D : Type*} [Category* D]
     (G : D ⥤ HomologicalComplex C c)
-    (_ : forall (i : ι), PreservesLimitsOfShape J (G ⋙ eval C c i)) :
+    (_ : ∀ (i : ι), PreservesLimitsOfShape J (G ⋙ eval C c i)) :
     PreservesLimitsOfShape J G :=
-  ⟨fun {_} => ⟨fun hs => ⟨isLimitOfEval _ _
+  ⟨fun {_} => ⟨fun hs ↦ ⟨isLimitOfEval _ _
     (fun i => isLimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
 
-/--
-lemma `preservesColimitsOfShape_of_eval` / 引理 `preservesColimitsOfShape_of_eval`
+/-- A functor `D ⥤ HomologicalComplex C c` preserves colimits of shape `J`
+if for any `i`, `G ⋙ eval C c i` does. -/
+/-
+**HomologicalComplex.preservesColimitsOfShape_of_eval** 是 Mathlib 中的一个引理，位于命名空间 
+`HomologicalComplex`。
+形式化陈述：preservesColimitsOfShape_of_eval {D : Type*} [Category* D] (G : D ⥤ Homolo
+gicalComplex C c) (_ : forall (i : ι), PreservesColimitsOfShape J (G ⋙ eval C c 
+i)) : PreservesColimitsOfShape J G
+参数：G : D ⥤ HomologicalComplex C c；_ : forall (i : ι), PreservesColimitsOfShape J
+ (G ⋙ eval C c i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
 
-English:
-lemma preservesColimitsOfShape_of_eval
-  statement: {D : Type*} [Category* D]
-  proof: ⟨fun {_} => ⟨fun hs => ⟨isColimitOfEval _ _
-    (fun i => isColimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
-
-中文:
-引理 preservesColimitsOfShape_of_eval
-  结论: {D : 类型} [范畴* D]
-  证明: ⟨fun {_} => ⟨fun hs => ⟨isColimitOfEval _ _
-    (fun i => isColimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
-
-Depends on / 依赖: isColimitOfEval, isColimitOfPreserves
+--- 原说明 ---
+A functor `D ⥤ HomologicalComplex C c` preserves colimits of shape `J`
+if for any `i`, `G ⋙ eval C c i` does.
 -/
 lemma preservesColimitsOfShape_of_eval {D : Type*} [Category* D]
     (G : D ⥤ HomologicalComplex C c)
-    (_ : forall (i : ι), PreservesColimitsOfShape J (G ⋙ eval C c i)) :
+    (_ : ∀ (i : ι), PreservesColimitsOfShape J (G ⋙ eval C c i)) :
     PreservesColimitsOfShape J G :=
-  ⟨fun {_} => ⟨fun hs => ⟨isColimitOfEval _ _
+  ⟨fun {_} => ⟨fun hs ↦ ⟨isColimitOfEval _ _
     (fun i => isColimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
 
 section
 
 variable [HasZeroObject C] [DecidableEq ι] (i : ι)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesLimitsOfShape J (single C c i)
-  body: preservesLimitsOfShape_of_eval _ (fun j => by
-    by_cases h : j = i
-    · subst h
-      exact preservesLimitsOfShape_of_natIso (singleCompEvalIsoSelf C c j).symm
-    · exact Functor.preservesLimitsOfShape_of_isZero _ (isZero_single_comp_eval C c _ _ h) _)
-
-中文:
-实例 :
-  签名: 保持形状极限 J (single C c i)
-  定义体: preservesLimitsOfShape_of_eval _ (fun j => by
-    by_cases h : j = i
-    · subst h
-      exact preservesLimitsOfShape_of_natIso (singleCompEvalIsoSelf C c j).symm
-    · exact Functor.preservesLimitsOfShape_of_isZero _ (isZero_single_comp_eval C c _ _ h) _)
-
-Depends on / 依赖: Functor, Functor.preservesLimitsOfShape_of_isZero, isZero_single_comp_eval, preservesLimitsOfShape_of_eval, preservesLimitsOfShape_of_isZero, preservesLimitsOfShape_of_natIso, singleCompEvalIsoSelf
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PreservesLimitsOfShape J (single C c i) :=
   preservesLimitsOfShape_of_eval _ (fun j => by
@@ -643,29 +372,9 @@ noncomputable instance : PreservesLimitsOfShape J (single C c i) :=
     · subst h
       exact preservesLimitsOfShape_of_natIso (singleCompEvalIsoSelf C c j).symm
     · exact Functor.preservesLimitsOfShape_of_isZero _ (isZero_single_comp_eval C c _ _ h) _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimitsOfShape J (single C c i)
-  body: preservesColimitsOfShape_of_eval _ (fun j => by
-    by_cases h : j = i
-    · subst h
-      exact preservesColimitsOfShape_of_natIso (singleCompEvalIsoSelf C c j).symm
-    · exact Functor.preservesColimitsOfShape_of_isZero _ (isZero_single_comp_eval C c _ _ h) _)
-
-中文:
-实例 :
-  签名: 保持形状余极限 J (single C c i)
-  定义体: preservesColimitsOfShape_of_eval _ (fun j => by
-    by_cases h : j = i
-    · subst h
-      exact preservesColimitsOfShape_of_natIso (singleCompEvalIsoSelf C c j).symm
-    · exact Functor.preservesColimitsOfShape_of_isZero _ (isZero_single_comp_eval C c _ _ h) _)
-
-Depends on / 依赖: Functor, Functor.preservesColimitsOfShape_of_isZero, isZero_single_comp_eval, preservesColimitsOfShape_of_eval, preservesColimitsOfShape_of_isZero, preservesColimitsOfShape_of_natIso, singleCompEvalIsoSelf
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PreservesColimitsOfShape J (single C c i) :=
   preservesColimitsOfShape_of_eval _ (fun j => by
@@ -673,41 +382,18 @@ noncomputable instance : PreservesColimitsOfShape J (single C c i) :=
     · subst h
       exact preservesColimitsOfShape_of_natIso (singleCompEvalIsoSelf C c j).symm
     · exact Functor.preservesColimitsOfShape_of_isZero _ (isZero_single_comp_eval C c _ _ h) _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteLimits (single C c i)
-  body: ⟨by intros; infer_instance⟩
-
-中文:
-实例 :
-  签名: 保持FiniteLimits (single C c i)
-  定义体: ⟨by intros; infer_instance⟩
-
-Depends on / 依赖: infer_instance, intros
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PreservesFiniteLimits (single C c i) := ⟨by intros; infer_instance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteColimits (single C c i)
-  body: ⟨by intros; infer_instance⟩
-
-中文:
-实例 :
-  签名: 保持FiniteColimits (single C c i)
-  定义体: ⟨by intros; infer_instance⟩
-
-Depends on / 依赖: infer_instance, intros
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PreservesFiniteColimits (single C c i) := ⟨by intros; infer_instance⟩
 
 end
 
 end HomologicalComplex
+

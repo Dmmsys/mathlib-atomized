@@ -61,7 +61,11 @@ alternating group permutation simple characteristic index
 @[expose] public section
 
 -- An example on how to determine the order of an element of a finite group.
-example : orderOf (-1 : Intˣ) = 2 :=
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : orderOf (-1 : ℤˣ) = 2 :=
   orderOf_eq_prime (Int.units_sq _) (by decide)
 
 open Equiv Equiv.Perm Subgroup Fintype
@@ -71,74 +75,39 @@ variable (α : Type*) [Fintype α] [DecidableEq α]
 /-- The alternating group on a finite type, realized as a subgroup of `Equiv.Perm`.
   For $A_n$, use `alternatingGroup (Fin n)`. -/
 @[wikidata Q438814]
-/--
-Definition of `alternatingGroup` / `alternatingGroup` 的定义
+/-
+**alternatingGroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：alternatingGroup : Subgroup (Perm α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition alternatingGroup
-  signature: : Subgroup (Perm α)
-  body: sign.ker
-
-中文:
-定义 alternatingGroup
-  签名: : 子群 (置换 α)
-  定义体: sign.ker
-
-Depends on / 依赖: sign.ker
+--- 原说明 ---
+The alternating group on a finite type, realized as a subgroup of `Equiv.Perm`.
+  For $A_n$, use `alternatingGroup (Fin n)`.
 -/
 def alternatingGroup : Subgroup (Perm α) :=
   sign.ker
-
-/--
-Instance `alternatingGroup.instFintype` / 实例 `alternatingGroup.instFintype`
-
-English:
-instance alternatingGroup.instFintype
-  signature: : Fintype (alternatingGroup α)
-  body: @Subtype.fintype _ _ sign.decidableMemKer _
-
-中文:
-实例 alternatingGroup.instFintype
-  签名: : 有限类型 (alternatingGroup α)
-  定义体: @Subtype.fintype _ _ sign.decidableMemKer _
-
-Depends on / 依赖: Subtype, Subtype.fintype, decidableMemKer, fintype, sign.decidableMemKer
+/-
+**alternatingGroup.instFintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：alternatingGroup.instFintype : Fintype (alternatingGroup α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance alternatingGroup.instFintype : Fintype (alternatingGroup α) :=
   @Subtype.fintype _ _ sign.decidableMemKer _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: α] : Unique (alternatingGroup α)
-  body: ⟨⟨1⟩, fun ⟨p, _⟩ => Subtype.ext (Subsingleton.elim p _)⟩
-
-中文:
-实例 [子单例
-  签名: α] : 唯一 (alternatingGroup α)
-  定义体: ⟨⟨1⟩, fun ⟨p, _⟩ => Subtype.ext (Subsingleton.elim p _)⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, Subtype, Subtype.ext
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton α] : Unique (alternatingGroup α) :=
   ⟨⟨1⟩, fun ⟨p, _⟩ => Subtype.ext (Subsingleton.elim p _)⟩
 
 variable {α}
-
-/--
-theorem `alternatingGroup_eq_sign_ker` / 定理 `alternatingGroup_eq_sign_ker`
-
-English:
-theorem alternatingGroup_eq_sign_ker
-  statement: alternatingGroup α = sign.ker
-  proof: rfl
-
-中文:
-定理 alternatingGroup_eq_sign_ker
-  结论: alternatingGroup α = sign.ker
-  证明: rfl
+/-
+**alternatingGroup_eq_sign_ker** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：alternatingGroup_eq_sign_ker : alternatingGroup α = sign.ker
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem alternatingGroup_eq_sign_ker : alternatingGroup α = sign.ker :=
   rfl
@@ -146,266 +115,267 @@ theorem alternatingGroup_eq_sign_ker : alternatingGroup α = sign.ker :=
 namespace Equiv.Perm
 
 @[simp]
-/--
-theorem `mem_alternatingGroup` / 定理 `mem_alternatingGroup`
-
-English:
-theorem mem_alternatingGroup
-  given: {f : Perm α}
-  statement: f in alternatingGroup α ↔ sign f = 1
-  proof: sign.mem_ker
-
-中文:
-定理 mem_alternatingGroup
-  条件: {f : 置换 α}
-  结论: f in alternatingGroup α ↔ sign f = 1
-  证明: sign.mem_ker
-
-Depends on / 依赖: mem_ker, sign.mem_ker
+/-
+**Equiv.Perm.mem_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：mem_alternatingGroup {f : Perm α} : f in alternatingGroup α ↔ sign f = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.mem_ker`：mem_ker {f : G ->* M} {x : G} : x in f.ker ↔ f x = 1
 -/
-theorem mem_alternatingGroup {f : Perm α} : f in alternatingGroup α ↔ sign f = 1 :=
+theorem mem_alternatingGroup {f : Perm α} : f ∈ alternatingGroup α ↔ sign f = 1 :=
   sign.mem_ker
-
-/--
-theorem `mul_mem_alternatingGroup_of_isSwap` / 定理 `mul_mem_alternatingGroup_of_isSwap`
-
-English:
-theorem mul_mem_alternatingGroup_of_isSwap
-  given: {g g' : Perm α} (hg : IsSwap g) (hg' : IsSwap g')
-  proof: by
-  simp [mem_alternatingGroup, map_mul, hg.sign_eq, hg'.sign_eq]
-
-中文:
-定理 mul_mem_alternatingGroup_of_isSwap
-  条件: {g g' : 置换 α} (hg : IsSwap g) (hg' : IsSwap g')
-  证明: by
-  simp [mem_alternatingGroup, map_mul, hg.sign_eq, hg'.sign_eq]
-
-Depends on / 依赖: hg.sign_eq, map_mul, mem_alternatingGroup, sign_eq
+/-
+**Equiv.Perm.mul_mem_alternatingGroup_of_isSwap** 是 Mathlib 中的一个定理，位于命名空间 `Equiv
+.Perm`。
+形式化陈述：mul_mem_alternatingGroup_of_isSwap {g g' : Perm α} (hg : IsSwap g) (hg' : 
+IsSwap g') : g * g' in alternatingGroup α
+参数：hg : IsSwap g；hg' : IsSwap g'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.Perm.IsSwap.sign_eq`：∀ {α : Type u} [inst : DecidableEq α] [inst_1
+ : Fintype α] {f : Equiv.Perm α}, f.IsSwap → Equiv.Perm.sign f = -1
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_mem_alternatingGroup_of_isSwap {g g' : Perm α} (hg : IsSwap g) (hg' : IsSwap g') :
-    g * g' in alternatingGroup α := by
+    g * g' ∈ alternatingGroup α := by
   simp [mem_alternatingGroup, map_mul, hg.sign_eq, hg'.sign_eq]
-
-/--
-theorem `prod_list_swap_mem_alternatingGroup_iff_even_length` / 定理 `prod_list_swap_mem_alternatingGroup_iff_even_length`
-
-English:
-theorem prod_list_swap_mem_alternatingGroup_iff_even_length
-  statement: {l : List (Perm α)}
-  proof: by
-  rw [mem_alternatingGroup]; rw [sign_prod_list_swap hl]; rw [neg_one_pow_eq_one_iff_even]
-  decide
-
-中文:
-定理 prod_list_swap_mem_alternatingGroup_iff_even_length
-  结论: {l : 列表 (置换 α)}
-  证明: by
-  rw [mem_alternatingGroup]; rw [sign_prod_list_swap hl]; rw [neg_one_pow_eq_one_iff_even]
-  decide
-
-Depends on / 依赖: mem_alternatingGroup, neg_one_pow_eq_one_iff_even, sign_prod_list_swap
+/-
+**Equiv.Perm.prod_list_swap_mem_alternatingGroup_iff_even_length** 是 Mathlib 中的一
+个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：prod_list_swap_mem_alternatingGroup_iff_even_length {l : List (Perm α)} (h
+l : forall g in l, IsSwap g) : l.prod in alternatingGroup α ↔ Even l.length
+参数：Perm α；hl : forall g in l, IsSwap g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.mem_alternatingGroup`：mem_alternatingGroup {f : Perm α} : f i
+n alternatingGroup α ↔ sign f = 1
+· 使用定理 `Equiv.Perm.sign_prod_list_swap`：sign_prod_list_swap {l : List (Perm α)} 
+(hl : forall g in l, IsSwap g) : sign l.prod = (-1) ^ l.length
+· 使用引理 `neg_one_pow_eq_one_iff_even`：neg_one_pow_eq_one_iff_even (h : (-1 : R) !
+= 1) : (-1 : R) ^ n = 1 ↔ Even n
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem prod_list_swap_mem_alternatingGroup_iff_even_length {l : List (Perm α)}
-    (hl : forall g in l, IsSwap g) : l.prod in alternatingGroup α ↔ Even l.length := by
-  rw [mem_alternatingGroup]; rw [sign_prod_list_swap hl]; rw [neg_one_pow_eq_one_iff_even]
+    (hl : ∀ g ∈ l, IsSwap g) : l.prod ∈ alternatingGroup α ↔ Even l.length := by
+  rw [mem_alternatingGroup, sign_prod_list_swap hl, neg_one_pow_eq_one_iff_even]
   decide
-
-/--
-theorem `IsThreeCycle.mem_alternatingGroup` / 定理 `IsThreeCycle.mem_alternatingGroup`
-
-English:
-theorem IsThreeCycle.mem_alternatingGroup
-  given: {f : Perm α} (h : IsThreeCycle f)
-  proof: Perm.mem_alternatingGroup.mpr h.sign
-
-中文:
-定理 IsThreeCycle.mem_alternatingGroup
-  条件: {f : 置换 α} (h : IsThreeCycle f)
-  证明: Perm.mem_alternatingGroup.mpr h.sign
-
-Depends on / 依赖: Perm.mem_alternatingGroup.mpr, h.sign, mem_alternatingGroup
+/-
+**Equiv.Perm.IsThreeCycle.mem_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.
+Perm.IsThreeCycle`。
+形式化陈述：∀ {α : Type u_1} [inst : Fintype α] [inst_1 : DecidableEq α] {f : Equiv.Pe
+rm α}, f.IsThreeCycle → f ∈ alternatingGroup α
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.mem_alternatingGroup`：mem_alternatingGroup {f : Perm α} : f i
+n alternatingGroup α ↔ sign f = 1
+· 使用定理 `Equiv.Perm.IsThreeCycle.sign`：sign (h : IsThreeCycle σ) : sign σ = 1
 -/
 theorem IsThreeCycle.mem_alternatingGroup {f : Perm α} (h : IsThreeCycle f) :
-    f in alternatingGroup α :=
+    f ∈ alternatingGroup α :=
   Perm.mem_alternatingGroup.mpr h.sign
-
-/--
-theorem `finRotate_bit1_mem_alternatingGroup` / 定理 `finRotate_bit1_mem_alternatingGroup`
-
-English:
-theorem finRotate_bit1_mem_alternatingGroup
-  given: {n : Nat}
-  proof: by
-  simp [mem_alternatingGroup]
-
-中文:
-定理 finRotate_bit1_mem_alternatingGroup
-  条件: {n : 自然数}
-  证明: by
-  simp [mem_alternatingGroup]
-
-Depends on / 依赖: mem_alternatingGroup
+/-
+**Equiv.Perm.finRotate_bit1_mem_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 `Equi
+v.Perm`。
+形式化陈述：finRotate_bit1_mem_alternatingGroup {n : Nat} : finRotate (2 * n + 1) in a
+lternatingGroup (Fin (2 * n + 1))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sign_finRotate`：sign_finRotate (n : Nat) : Perm.sign (finRotate n) = (-1
+) ^ (n - 1)
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Even.neg_pow`：∀ {α : Type u_2} [inst : Monoid α] [inst_1 : HasDistribNeg
+ α] {n : ℕ}, Even n → ∀ (a : α), (-a) ^ n = a ^ n
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finRotate_bit1_mem_alternatingGroup {n : Nat} :
-    finRotate (2 * n + 1) in alternatingGroup (Fin (2 * n + 1)) := by
+theorem finRotate_bit1_mem_alternatingGroup {n : ℕ} :
+    finRotate (2 * n + 1) ∈ alternatingGroup (Fin (2 * n + 1)) := by
   simp [mem_alternatingGroup]
 
 end Equiv.Perm
 
 @[simp]
-/--
-theorem `alternatingGroup.index_eq_two` / 定理 `alternatingGroup.index_eq_two`
-
-English:
-theorem alternatingGroup.index_eq_two
-  given: [Nontrivial α]
-  proof: by
-  rw [alternatingGroup]; rw [index_ker]; rw [MonoidHom.range_eq_top.mpr (sign_surjective α)]
-  simp_rw [mem_top, Nat.card_eq_fintype_card, card_subtype_true, card_units_int]
-
-@[nontriviality]
-
-中文:
-定理 alternatingGroup.index_eq_two
-  条件: [非平凡 α]
-  证明: by
-  rw [alternatingGroup]; rw [index_ker]; rw [MonoidHom.range_eq_top.mpr (sign_surjective α)]
-  simp_rw [mem_top, Nat.card_eq_fintype_card, card_subtype_true, card_units_int]
-
-@[nontriviality]
-
-Depends on / 依赖: MonoidHom, MonoidHom.range_eq_top.mpr, Nat.card_eq_fintype_card, alternatingGroup, card_eq_fintype_card, card_subtype_true, card_units_int, index_ker, mem_top, range_eq_top, sign_surjective, simp_rw
+/-
+**alternatingGroup.index_eq_two** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：alternatingGroup.index_eq_two [Nontrivial α] : (alternatingGroup α).index 
+= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `alternatingGroup.eq_1`：∀ (α : Type u_1) [inst : Fintype α] [inst_1 : Dec
+idableEq α], alternatingGroup α = Equiv.Perm.sign.ker
+· 使用定理 `Subgroup.index_ker`：index_ker (f : G ->* G') : f.ker.index = Nat.card f.
+range
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MonoidHom.range_eq_top`：range_eq_top {N} [Group N] {f : G ->* N} : f.ran
+ge = (⊤ : Subgroup N) ↔ Function.Surjective f
+· 使用定理 `Equiv.Perm.sign_surjective`：sign_surjective [Nontrivial α] : Function.Su
+rjective (sign : Perm α -> Intˣ)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.card_subtype_true`：Fintype.card_subtype_true [Fintype α] {h : Fi
+ntype {_a : α // True}} : @Fintype.card {_a // True} h = Fintype.card α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem alternatingGroup.index_eq_two [Nontrivial α] :
     (alternatingGroup α).index = 2 := by
-  rw [alternatingGroup]; rw [index_ker]; rw [MonoidHom.range_eq_top.mpr (sign_surjective α)]
+  rw [alternatingGroup, index_ker, MonoidHom.range_eq_top.mpr (sign_surjective α)]
   simp_rw [mem_top, Nat.card_eq_fintype_card, card_subtype_true, card_units_int]
 
 @[nontriviality]
-/--
-theorem `alternatingGroup.index_eq_one` / 定理 `alternatingGroup.index_eq_one`
-
-English:
-theorem alternatingGroup.index_eq_one
-  given: [Subsingleton α]
-  statement: (alternatingGroup α).index = 1
-  proof: by
-  rw [Subgroup.index_eq_one]; apply Subsingleton.elim
-
-中文:
-定理 alternatingGroup.index_eq_one
-  条件: [子单例 α]
-  结论: (alternatingGroup α).index = 1
-  证明: by
-  rw [Subgroup.index_eq_one]; apply Subsingleton.elim
-
-Depends on / 依赖: Subgroup, Subgroup.index_eq_one, Subsingleton, Subsingleton.elim, index_eq_one
+/-
+**alternatingGroup.index_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：alternatingGroup.index_eq_one [Subsingleton α] : (alternatingGroup α).inde
+x = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.index_eq_one`：index_eq_one : H.index = 1 ↔ H = ⊤
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem alternatingGroup.index_eq_one [Subsingleton α] : (alternatingGroup α).index = 1 := by
   rw [Subgroup.index_eq_one]; apply Subsingleton.elim
 
 /-- The group isomorphism between `alternatingGroup`s induced by the given `Equiv`. -/
 @[simps ! apply_coe]
-/--
-Definition of `Equiv.altCongrHom` / `Equiv.altCongrHom` 的定义
+/-
+**Equiv.altCongrHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.altCongrHom {β : Type*} [Fintype β] [DecidableEq β] (e : α ≃ β) : ↥(
+alternatingGroup α) ≃* ↥(alternatingGroup β)
+参数：e : α ≃ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equiv.altCongrHom
-  signature: {β : Type*} [Fintype β] [DecidableEq β] (e : α ≃ β)
-  body: .trans e.permCongrHom.subgroupMap (alternatingGroup α)
-MulEquiv.subgroupCongr by simp [Subgroup.ext_iff, Subgroup.map_equiv_eq_comap_symm]
-
-中文:
-定义 等价.altCongrHom
-  签名: {β : 类型} [有限类型 β] [DecidableEq β] (e : α ≃ β)
-  定义体: .trans e.permCongrHom.subgroupMap (alternatingGroup α)
-MulEquiv.subgroupCongr by simp [Subgroup.ext_iff, Subgroup.map_equiv_eq_comap_symm]
-
-Depends on / 依赖: MulEquiv, MulEquiv.subgroupCongr, Subgroup, Subgroup.ext_iff, Subgroup.map_equiv_eq_comap_symm, alternatingGroup, e.permCongrHom.subgroupMap, ext_iff, map_equiv_eq_comap_symm, permCongrHom, subgroupCongr, subgroupMap
+--- 原说明 ---
+The group isomorphism between `alternatingGroup`s induced by the given `Equiv`.
 -/
 def Equiv.altCongrHom {β : Type*} [Fintype β] [DecidableEq β] (e : α ≃ β) :
     ↥(alternatingGroup α) ≃* ↥(alternatingGroup β) :=
-.trans e.permCongrHom.subgroupMap (alternatingGroup α)
-MulEquiv.subgroupCongr by simp [Subgroup.ext_iff, Subgroup.map_equiv_eq_comap_symm]
-
-/--
-theorem `two_mul_nat_card_alternatingGroup` / 定理 `two_mul_nat_card_alternatingGroup`
-
-English:
-theorem two_mul_nat_card_alternatingGroup
-  given: [Nontrivial α]
-  proof: by
-  simp only [← alternatingGroup.index_eq_two (α := α), index_mul_card]
-
-中文:
-定理 two_mul_nat_card_alternatingGroup
-  条件: [非平凡 α]
-  证明: by
-  simp only [← alternatingGroup.index_eq_two (α := α), index_mul_card]
-
-Depends on / 依赖: alternatingGroup, alternatingGroup.index_eq_two, index_eq_two, index_mul_card
+  e.permCongrHom.subgroupMap (alternatingGroup α) |>.trans <|
+    MulEquiv.subgroupCongr <| by simp [Subgroup.ext_iff, Subgroup.map_equiv_eq_comap_symm]
+/-
+**two_mul_nat_card_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：two_mul_nat_card_alternatingGroup [Nontrivial α] : 2 * Nat.card (alternati
+ngGroup α) = Nat.card (Perm α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `alternatingGroup.index_eq_two`：alternatingGroup.index_eq_two [Nontrivial
+ α] : (alternatingGroup α).index = 2
+· 使用定理 `Subgroup.index_mul_card`：index_mul_card : H.index * Nat.card H = Nat.car
+d G
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem two_mul_nat_card_alternatingGroup [Nontrivial α] :
     2 * Nat.card (alternatingGroup α) = Nat.card (Perm α) := by
   simp only [← alternatingGroup.index_eq_two (α := α), index_mul_card]
-
-/--
-theorem `two_mul_card_alternatingGroup` / 定理 `two_mul_card_alternatingGroup`
-
-English:
-theorem two_mul_card_alternatingGroup
-  given: [Nontrivial α]
-  proof: by
-  simp only [← Nat.card_eq_fintype_card, two_mul_nat_card_alternatingGroup]
-
-中文:
-定理 two_mul_card_alternatingGroup
-  条件: [非平凡 α]
-  证明: by
-  simp only [← Nat.card_eq_fintype_card, two_mul_nat_card_alternatingGroup]
-
-Depends on / 依赖: Nat.card_eq_fintype_card, card_eq_fintype_card, two_mul_nat_card_alternatingGroup
+/-
+**two_mul_card_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：two_mul_card_alternatingGroup [Nontrivial α] : 2 * card (alternatingGroup 
+α) = card (Perm α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_mul_nat_card_alternatingGroup`：two_mul_nat_card_alternatingGroup [No
+ntrivial α] : 2 * Nat.card (alternatingGroup α) = Nat.card (Perm α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem two_mul_card_alternatingGroup [Nontrivial α] :
     2 * card (alternatingGroup α) = card (Perm α) := by
   simp only [← Nat.card_eq_fintype_card, two_mul_nat_card_alternatingGroup]
-
-/--
-theorem `card_alternatingGroup` / 定理 `card_alternatingGroup`
-
-English:
-theorem card_alternatingGroup
-  given: [Nontrivial α]
-  proof: Nat.eq_div_of_mul_eq_right two_ne_zero (two_mul_card_alternatingGroup.trans card_perm)
-
-中文:
-定理 card_alternatingGroup
-  条件: [非平凡 α]
-  证明: Nat.eq_div_of_mul_eq_right two_ne_zero (two_mul_card_alternatingGroup.trans card_perm)
-
-Depends on / 依赖: Nat.eq_div_of_mul_eq_right, card_perm, eq_div_of_mul_eq_right, two_mul_card_alternatingGroup, two_mul_card_alternatingGroup.trans, two_ne_zero
+/-
+**card_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：card_alternatingGroup [Nontrivial α] : card (alternatingGroup α) = (card α
+).factorial / 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_div_of_mul_eq_right`：∀ {c a b : ℕ}, c ≠ 0 → c * a = b → a = b / c
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `two_mul_card_alternatingGroup`：two_mul_card_alternatingGroup [Nontrivial
+ α] : 2 * card (alternatingGroup α) = card (Perm α)
+· 使用定理 `Fintype.card_perm`：Fintype.card_perm [Fintype α] : Fintype.card (Perm α)
+ = (Fintype.card α)!
 -/
 theorem card_alternatingGroup [Nontrivial α] :
     card (alternatingGroup α) = (card α).factorial / 2 :=
   Nat.eq_div_of_mul_eq_right two_ne_zero (two_mul_card_alternatingGroup.trans card_perm)
-
-/--
-theorem `nat_card_alternatingGroup` / 定理 `nat_card_alternatingGroup`
-
-English:
-theorem nat_card_alternatingGroup
-  given: [Nontrivial α]
-  proof: by
-  simp only [Nat.card_eq_fintype_card, card_alternatingGroup]
-
-中文:
-定理 nat_card_alternatingGroup
-  条件: [非平凡 α]
-  证明: by
-  simp only [Nat.card_eq_fintype_card, card_alternatingGroup]
-
-Depends on / 依赖: Nat.card_eq_fintype_card, card_alternatingGroup, card_eq_fintype_card
+/-
+**nat_card_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nat_card_alternatingGroup [Nontrivial α] : Nat.card (alternatingGroup α) =
+ (Nat.card α).factorial / 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `card_alternatingGroup`：card_alternatingGroup [Nontrivial α] : card (alte
+rnatingGroup α) = (card α).factorial / 2
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nat_card_alternatingGroup [Nontrivial α] :
     Nat.card (alternatingGroup α) = (Nat.card α).factorial / 2 := by
@@ -413,34 +383,54 @@ theorem nat_card_alternatingGroup [Nontrivial α] :
 
 namespace alternatingGroup
 
-/--
-theorem `isCyclic_of_card_le_three` / 定理 `isCyclic_of_card_le_three`
-
-English:
-theorem isCyclic_of_card_le_three
-  given: (hα : Nat.card α <= 3)
-  proof: by
-  cases subsingleton_or_nontrivial α
-  · infer_instance
-  have : 1 < Nat.card α := Finite.one_lt_card
-  apply isCyclic_of_card_dvd_prime (p := 3)
-  rw [nat_card_alternatingGroup]
-  interval_cases (Nat.card α) <;> simp [Nat.factorial_succ]
-
-中文:
-定理 isCyclic_of_card_le_three
-  条件: (hα : 自然数.card α <= 3)
-  证明: by
-  cases subsingleton_or_nontrivial α
-  · infer_instance
-  have : 1 < Nat.card α := Finite.one_lt_card
-  apply isCyclic_of_card_dvd_prime (p := 3)
-  rw [nat_card_alternatingGroup]
-  interval_cases (Nat.card α) <;> simp [Nat.factorial_succ]
-
-Depends on / 依赖: Finite, Finite.one_lt_card, Nat.card, Nat.factorial_succ, factorial_succ, infer_instance, interval_cases, isCyclic_of_card_dvd_prime, nat_card_alternatingGroup, one_lt_card, subsingleton_or_nontrivial
+/-
+**alternatingGroup.isCyclic_of_card_le_three** 是 Mathlib 中的一个定理，位于命名空间 `alternat
+ingGroup`。
+形式化陈述：isCyclic_of_card_le_three (hα : Nat.card α <= 3) : IsCyclic (alternatingGr
+oup α)
+参数：hα : Nat.card α <= 3。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `isCyclic_of_subsingleton`：∀ {α : Type u_1} [inst : Group α] [Subsingleto
+n α], IsCyclic α
+· 使用定理 `Finite.one_lt_card`：one_lt_card [Finite α] [h : Nontrivial α] : 1 < Nat.
+card α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `isCyclic_of_card_dvd_prime`：isCyclic_of_card_dvd_prime {p : Nat} [hp : F
+act p.Prime] (h : Nat.card α ∣ p) : IsCyclic α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nat_card_alternatingGroup`：nat_card_alternatingGroup [Nontrivial α] : Na
+t.card (alternatingGroup α) = (Nat.card α).factorial / 2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Mathlib.Tactic.IntervalCases.of_le_right`：of_le_right [LE α] (h : (a : α
+) <= b) (eq : b = b') : a <= b'
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.div_self`：∀ {n : ℕ}, 0 < n → n / n = 1
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.ge_of_not_lt`：∀ {n m : ℕ}, ¬n < m → n ≥ m
+· 使用定理 `Nat.gt_of_not_le`：∀ {n m : ℕ}, ¬n ≤ m → n > m
+· 使用定理 `Mathlib.Tactic.IntervalCases.of_lt_left`：of_lt_left [LinearOrder α] (h :
+ (a : α) < b) (eq : a = a') : ¬b <= a'
 -/
-theorem isCyclic_of_card_le_three (hα : Nat.card α <= 3) :
+theorem isCyclic_of_card_le_three (hα : Nat.card α ≤ 3) :
     IsCyclic (alternatingGroup α) := by
   cases subsingleton_or_nontrivial α
   · infer_instance
@@ -448,146 +438,145 @@ theorem isCyclic_of_card_le_three (hα : Nat.card α <= 3) :
   apply isCyclic_of_card_dvd_prime (p := 3)
   rw [nat_card_alternatingGroup]
   interval_cases (Nat.card α) <;> simp [Nat.factorial_succ]
-
-/--
-theorem `isMulCommutative_of_card_le_three` / 定理 `isMulCommutative_of_card_le_three`
-
-English:
-theorem isMulCommutative_of_card_le_three
-  given: (hα : Nat.card α <= 3)
-  proof: (isCyclic_of_card_le_three hα).isMulCommutative
-
-中文:
-定理 isMulCommutative_of_card_le_three
-  条件: (hα : 自然数.card α <= 3)
-  证明: (isCyclic_of_card_le_three hα).isMulCommutative
-
-Depends on / 依赖: isCyclic_of_card_le_three, isMulCommutative
+/-
+**alternatingGroup.isMulCommutative_of_card_le_three** 是 Mathlib 中的一个定理，位于命名空间 `
+alternatingGroup`。
+形式化陈述：isMulCommutative_of_card_le_three (hα : Nat.card α <= 3) : IsMulCommutativ
+e (alternatingGroup α)
+参数：hα : Nat.card α <= 3。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `alternatingGroup.isCyclic_of_card_le_three`：isCyclic_of_card_le_three (h
+α : Nat.card α <= 3) : IsCyclic (alternatingGroup α)
 -/
-theorem isMulCommutative_of_card_le_three (hα : Nat.card α <= 3) :
+theorem isMulCommutative_of_card_le_three (hα : Nat.card α ≤ 3) :
     IsMulCommutative (alternatingGroup α) :=
   (isCyclic_of_card_le_three hα).isMulCommutative
 
 /- The converse assertions will be shown later, after it is proved
-that the center of `alternatingGroup α` is trivial when `4 ≤ Nat.card α` -/
+that the center of `alternatingGroup α` is trivial when  `4 ≤ Nat.card α` -/
 
 open Equiv.Perm
 
-/--
-Instance `normal` / 实例 `normal`
-
-English:
-instance normal
-  signature: : (alternatingGroup α).Normal
-  body: sign.normal_ker
-
-中文:
-实例 normal
-  签名: : (alternatingGroup α).正规
-  定义体: sign.normal_ker
-
-Depends on / 依赖: normal_ker, sign.normal_ker
+/-
+**alternatingGroup.normal** 是 Mathlib 中的一个实例，位于命名空间 `alternatingGroup`。
+形式化陈述：normal : (alternatingGroup α).Normal
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.normal_ker`：∀ {G : Type u_1} [inst : Group G] {M : Type u_7} [
+inst_1 : MulOneClass M] (f : G →* M), f.ker.Normal
 -/
 instance normal : (alternatingGroup α).Normal :=
   sign.normal_ker
-
-/--
-theorem `isConj_of` / 定理 `isConj_of`
-
-English:
-theorem isConj_of
-  statement: {σ τ : alternatingGroup α} (hc : IsConj (σ : Perm α) (τ : Perm α))
-  proof: by
-  obtain ⟨σ, hσ⟩ := σ
-  obtain ⟨τ, hτ⟩ := τ
-  obtain ⟨π, hπ⟩ := isConj_iff.1 hc
-  rw [Subtype.coe_mk]; rw [Subtype.coe_mk] at hπ
-  rcases Int.units_eq_one_or (Perm.sign π) with h | h
-  · rw [isConj_iff]
-    refine ⟨⟨π, mem_alternatingGroup.mp h⟩, Subtype.val_injective ?_⟩
-    simpa only [Subtype.val, Subgroup.coe_mul, coe_inv, coe_mk] using! hπ
-  · have h2 : 2 <= σ.supportᶜ.card := by
-      rw [Finset.card_compl]; rw [le_tsub_iff_left σ.support.card_le_univ]
-      exact hσ
-    obtain ⟨a, ha, b, hb, ab⟩ := Finset.one_lt_card.1 h2
-    refine isConj_iff.2 ⟨⟨π * swap a b, ?_⟩, Subtype.val_injective ?_⟩
-    · rw [mem_alternatingGroup, map_mul, h, sign_swap ab, Int.units_mul_self]
-    · simp only [← hπ, Subgroup.coe_mul]
-      have hd : Disjoint (swap a b) σ := by
-        rw [disjoint_iff_disjoint_support]; rw [support_swap ab]; rw [Finset.disjoint_insert_left]; rw [Finset.disjoint_singleton_left]
-        exact ⟨Finset.mem_compl.1 ha, Finset.mem_compl.1 hb⟩
-      simp [mul_assoc, hd.commute.eq]
-
-中文:
-定理 isConj_of
-  结论: {σ τ : alternatingGroup α} (hc : IsConj (σ : 置换 α) (τ : 置换 α))
-  证明: by
-  obtain ⟨σ, hσ⟩ := σ
-  obtain ⟨τ, hτ⟩ := τ
-  obtain ⟨π, hπ⟩ := isConj_iff.1 hc
-  rw [Subtype.coe_mk]; rw [Subtype.coe_mk] at hπ
-  rcases Int.units_eq_one_or (Perm.sign π) with h | h
-  · rw [isConj_iff]
-    refine ⟨⟨π, mem_alternatingGroup.mp h⟩, Subtype.val_injective ?_⟩
-    simpa only [Subtype.val, Subgroup.coe_mul, coe_inv, coe_mk] using! hπ
-  · have h2 : 2 <= σ.supportᶜ.card := by
-      rw [Finset.card_compl]; rw [le_tsub_iff_left σ.support.card_le_univ]
-      exact hσ
-    obtain ⟨a, ha, b, hb, ab⟩ := Finset.one_lt_card.1 h2
-    refine isConj_iff.2 ⟨⟨π * swap a b, ?_⟩, Subtype.val_injective ?_⟩
-    · rw [mem_alternatingGroup, map_mul, h, sign_swap ab, Int.units_mul_self]
-    · simp only [← hπ, Subgroup.coe_mul]
-      have hd : Disjoint (swap a b) σ := by
-        rw [disjoint_iff_disjoint_support]; rw [support_swap ab]; rw [Finset.disjoint_insert_left]; rw [Finset.disjoint_singleton_left]
-        exact ⟨Finset.mem_compl.1 ha, Finset.mem_compl.1 hb⟩
-      simp [mul_assoc, hd.commute.eq]
-
-Depends on / 依赖: Finset, Finset.card_compl, Finset.one_lt_card, Int.units_eq_one_or, Perm.sign, Subgroup, Subgroup.coe_mul, Subtype, Subtype.coe_mk, Subtype.val, Subtype.val_injective, card_compl, card_le_univ, coe_inv, coe_mk, coe_mul, isConj_iff, le_tsub_iff_left, mem_alternatingGroup, mem_alternatingGroup.mp
+/-
+**alternatingGroup.isConj_of** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGroup`。
+形式化陈述：isConj_of {σ τ : alternatingGroup α} (hc : IsConj (σ : Perm α) (τ : Perm α
+)) (hσ : (σ : Perm α).support.card + 2 <= Fintype.card α) : IsConj σ τ
+参数：hc : IsConj (σ : Perm α) (τ : Perm α)；hσ : (σ : Perm α).support.card + 2 <= F
+intype.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isConj_iff`：isConj_iff {a b : α} : IsConj a b ↔ exists c : α, c * a * c⁻
+¹ = b
+· 使用引理 `Int.units_eq_one_or`：units_eq_one_or (u : Intˣ) : u = 1 ∨ u = -1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.mem_alternatingGroup`：mem_alternatingGroup {f : Perm α} : f i
+n alternatingGroup α ↔ sign f = 1
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `Finset.card_compl`：Finset.card_compl [DecidableEq α] [Fintype α] (s : Fi
+nset α) : #sᶜ = Fintype.card α - #s
+· 使用定理 `le_tsub_iff_left`：le_tsub_iff_left (h : a <= c) : b <= c - a ↔ a + b <= 
+c
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Finset.card_le_univ`：Finset.card_le_univ [Fintype α] (s : Finset α) : #s
+ <= Fintype.card α
+· 使用定理 `Finset.one_lt_card`：one_lt_card : 1 < #s ↔ exists a in s, exists b in s,
+ a != b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Equiv.Perm.sign_swap`：sign_swap {x y : α} (h : x != y) : sign (swap x y)
+ = -1
+· 使用定理 `Int.units_mul_self`：units_mul_self (u : Intˣ) : u * u = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.disjoint_iff_disjoint_support`：disjoint_iff_disjoint_support 
+: Disjoint f g ↔ _root_.Disjoint f.support g.support
+· 使用定理 `Equiv.Perm.support_swap`：support_swap {x y : α} (h : x != y) : support (
+swap x y) = {x, y}
+· 使用定理 `Finset.disjoint_insert_left`：disjoint_insert_left : Disjoint (insert a s
+) t ↔ a ∉ t ∧ Disjoint s t
+· 使用定理 `Finset.disjoint_singleton_left`：disjoint_singleton_left : Disjoint (sing
+leton a) s ↔ a ∉ s
+· 使用定理 `Finset.mem_compl`：mem_compl : a in sᶜ ↔ a ∉ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+（共 35 条，此处仅展示前 30 条）
 -/
 theorem isConj_of {σ τ : alternatingGroup α} (hc : IsConj (σ : Perm α) (τ : Perm α))
-    (hσ : (σ : Perm α).support.card + 2 <= Fintype.card α) : IsConj σ τ := by
+    (hσ : (σ : Perm α).support.card + 2 ≤ Fintype.card α) : IsConj σ τ := by
   obtain ⟨σ, hσ⟩ := σ
   obtain ⟨τ, hτ⟩ := τ
   obtain ⟨π, hπ⟩ := isConj_iff.1 hc
-  rw [Subtype.coe_mk]; rw [Subtype.coe_mk] at hπ
+  rw [Subtype.coe_mk, Subtype.coe_mk] at hπ
   rcases Int.units_eq_one_or (Perm.sign π) with h | h
   · rw [isConj_iff]
     refine ⟨⟨π, mem_alternatingGroup.mp h⟩, Subtype.val_injective ?_⟩
     simpa only [Subtype.val, Subgroup.coe_mul, coe_inv, coe_mk] using! hπ
-  · have h2 : 2 <= σ.supportᶜ.card := by
-      rw [Finset.card_compl]; rw [le_tsub_iff_left σ.support.card_le_univ]
+  · have h2 : 2 ≤ σ.supportᶜ.card := by
+      rw [Finset.card_compl, le_tsub_iff_left σ.support.card_le_univ]
       exact hσ
     obtain ⟨a, ha, b, hb, ab⟩ := Finset.one_lt_card.1 h2
     refine isConj_iff.2 ⟨⟨π * swap a b, ?_⟩, Subtype.val_injective ?_⟩
     · rw [mem_alternatingGroup, map_mul, h, sign_swap ab, Int.units_mul_self]
     · simp only [← hπ, Subgroup.coe_mul]
       have hd : Disjoint (swap a b) σ := by
-        rw [disjoint_iff_disjoint_support]; rw [support_swap ab]; rw [Finset.disjoint_insert_left]; rw [Finset.disjoint_singleton_left]
+        rw [disjoint_iff_disjoint_support, support_swap ab, Finset.disjoint_insert_left,
+          Finset.disjoint_singleton_left]
         exact ⟨Finset.mem_compl.1 ha, Finset.mem_compl.1 hb⟩
       simp [mul_assoc, hd.commute.eq]
-
-/--
-theorem `isThreeCycle_isConj` / 定理 `isThreeCycle_isConj`
-
-English:
-theorem isThreeCycle_isConj
-  statement: (h5 : 5 <= Nat.card α) {σ τ : alternatingGroup α}
-  proof: by
-  simp only [Nat.card_eq_fintype_card] at h5
-  exact alternatingGroup.isConj_of (isConj_iff_cycleType_eq.2 (hσ.trans hτ.symm))
-    (by rwa [hσ.card_support])
-
-中文:
-定理 isThreeCycle_isConj
-  结论: (h5 : 5 <= 自然数.card α) {σ τ : alternatingGroup α}
-  证明: by
-  simp only [Nat.card_eq_fintype_card] at h5
-  exact alternatingGroup.isConj_of (isConj_iff_cycleType_eq.2 (hσ.trans hτ.symm))
-    (by rwa [hσ.card_support])
-
-Depends on / 依赖: Nat.card_eq_fintype_card, alternatingGroup, alternatingGroup.isConj_of, card_eq_fintype_card, card_support, isConj_iff_cycleType_eq, isConj_of
+/-
+**alternatingGroup.isThreeCycle_isConj** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGro
+up`。
+形式化陈述：isThreeCycle_isConj (h5 : 5 <= Nat.card α) {σ τ : alternatingGroup α} (hσ 
+: IsThreeCycle (σ : Perm α)) (hτ : IsThreeCycle (τ : Perm α)) : IsConj σ τ
+参数：h5 : 5 <= Nat.card α；hσ : IsThreeCycle (σ : Perm α)；hτ : IsThreeCycle (τ : Pe
+rm α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `alternatingGroup.isConj_of`：isConj_of {σ τ : alternatingGroup α} (hc : I
+sConj (σ : Perm α) (τ : Perm α)) (hσ : (σ : Perm α).support.card + 2 <= Fintype.
+card α) : IsConj…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.isConj_iff_cycleType_eq`：isConj_iff_cycleType_eq {σ τ : Perm 
+α} : IsConj σ τ ↔ σ.cycleType = τ.cycleType
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.IsThreeCycle.card_support`：card_support (h : IsThreeCycle σ) 
+: #σ.support = 3
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
 -/
-theorem isThreeCycle_isConj (h5 : 5 <= Nat.card α) {σ τ : alternatingGroup α}
+theorem isThreeCycle_isConj (h5 : 5 ≤ Nat.card α) {σ τ : alternatingGroup α}
     (hσ : IsThreeCycle (σ : Perm α)) (hτ : IsThreeCycle (τ : Perm α)) : IsConj σ τ := by
   simp only [Nat.card_eq_fintype_card] at h5
   exact alternatingGroup.isConj_of (isConj_iff_cycleType_eq.2 (hσ.trans hτ.symm))
@@ -600,61 +589,62 @@ namespace Equiv.Perm
 open alternatingGroup
 
 @[simp]
-/--
-theorem `closure_three_cycles_eq_alternating` / 定理 `closure_three_cycles_eq_alternating`
-
-English:
-theorem closure_three_cycles_eq_alternating
-  proof: by
-  refine closure_eq_of_le _ (fun _ => IsThreeCycle.mem_alternatingGroup) fun σ hσ => ?_
-  suffices hind :
-    forall (n : Nat) (l : List (Perm α)) (_ : forall g, g in l -> IsSwap g) (_ : l.length = 2 * n),
-      l.prod in closure { σ : Perm α | IsThreeCycle σ } by
-    obtain ⟨l, rfl, hl⟩ := truncSwapFactors σ
-    obtain ⟨n, hn⟩ := (prod_list_swap_mem_alternatingGroup_iff_even_length hl).1 hσ
-    rw [← two_mul] at hn
-    exact hind n l hl hn
-  intro n
-  induction n with intro l hl hn
-  | zero => simp [List.length_eq_zero_iff.1 hn, one_mem]
-  | succ n ih =>
-    rw [Nat.mul_succ] at hn
-    obtain ⟨a, l, rfl⟩ := l.exists_of_length_succ hn
-    rw [List.length_cons]; rw [Nat.succ_inj] at hn
-    obtain ⟨b, l, rfl⟩ := l.exists_of_length_succ hn
-    rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]
-    apply mul_mem <;> grind [IsSwap.mul_mem_closure_three_cycles]
-
-中文:
-定理 closure_three_cycles_eq_alternating
-  证明: by
-  refine closure_eq_of_le _ (fun _ => IsThreeCycle.mem_alternatingGroup) fun σ hσ => ?_
-  suffices hind :
-    forall (n : Nat) (l : List (Perm α)) (_ : forall g, g in l -> IsSwap g) (_ : l.length = 2 * n),
-      l.prod in closure { σ : Perm α | IsThreeCycle σ } by
-    obtain ⟨l, rfl, hl⟩ := truncSwapFactors σ
-    obtain ⟨n, hn⟩ := (prod_list_swap_mem_alternatingGroup_iff_even_length hl).1 hσ
-    rw [← two_mul] at hn
-    exact hind n l hl hn
-  intro n
-  induction n with intro l hl hn
-  | zero => simp [List.length_eq_zero_iff.1 hn, one_mem]
-  | succ n ih =>
-    rw [Nat.mul_succ] at hn
-    obtain ⟨a, l, rfl⟩ := l.exists_of_length_succ hn
-    rw [List.length_cons]; rw [Nat.succ_inj] at hn
-    obtain ⟨b, l, rfl⟩ := l.exists_of_length_succ hn
-    rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]
-    apply mul_mem <;> grind [IsSwap.mul_mem_closure_three_cycles]
-
-Depends on / 依赖: IsSwap, IsThreeCycle, IsThreeCycle.mem_alternatingGroup, List.length_eq_zero_iff, closure, closure_eq_of_le, l.length, l.prod, length, length_eq_zero_iff, mem_alternatingGroup, prod_list_swap_mem_alternatingGroup_iff_even_length, truncSwapFactors, two_mul
+/-
+**Equiv.Perm.closure_three_cycles_eq_alternating** 是 Mathlib 中的一个定理，位于命名空间 `Equi
+v.Perm`。
+形式化陈述：closure_three_cycles_eq_alternating : closure { σ : Perm α | IsThreeCycle 
+σ } = alternatingGroup α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.closure_eq_of_le`：closure_eq_of_le (h₁ : k subseteq K) (h₂ : K 
+<= closure k) : closure k = K
+· 使用定理 `Equiv.Perm.IsThreeCycle.mem_alternatingGroup`：∀ {α : Type u_1} [inst : F
+intype α] [inst_1 : DecidableEq α] {f : Equiv.Perm α}, f.IsThreeCycle → f ∈ alte
+rnatingGroup α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.length_eq_zero_iff`：∀ {α : Type u_1} {l : List α}, l.length = 0 ↔ l
+ = []
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `List.exists_of_length_succ`：∀ {α : Type u} {n : ℕ} (l : List α), l.lengt
+h = n + 1 → ∃ h t, l = h :: t
+· 使用定理 `Nat.mul_succ`：∀ (n m : ℕ), n * m.succ = n * m + n
+· 使用定理 `Nat.succ_inj`：∀ {a b : ℕ}, a.succ = b.succ ↔ a = b
+· 使用定理 `List.length_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).length
+ = as.length + 1
+· 使用定理 `List.prod_cons`：∀ {α : Type u} [inst : Mul α] [inst_1 : One α] {a : α} {
+l : List α}, (a :: l).prod = a * l.prod
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Equiv.Perm.prod_list_swap_mem_alternatingGroup_iff_even_length`：prod_lis
+t_swap_mem_alternatingGroup_iff_even_length {l : List (Perm α)} (hl : forall g i
+n l, IsSwap g) : l.prod in alternatingGroup α ↔ Even…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
 -/
 theorem closure_three_cycles_eq_alternating :
     closure { σ : Perm α | IsThreeCycle σ } = alternatingGroup α := by
-  refine closure_eq_of_le _ (fun _ => IsThreeCycle.mem_alternatingGroup) fun σ hσ => ?_
+  refine closure_eq_of_le _ (fun _ ↦ IsThreeCycle.mem_alternatingGroup) fun σ hσ ↦ ?_
   suffices hind :
-    forall (n : Nat) (l : List (Perm α)) (_ : forall g, g in l -> IsSwap g) (_ : l.length = 2 * n),
-      l.prod in closure { σ : Perm α | IsThreeCycle σ } by
+    ∀ (n : ℕ) (l : List (Perm α)) (_ : ∀ g, g ∈ l → IsSwap g) (_ : l.length = 2 * n),
+      l.prod ∈ closure { σ : Perm α | IsThreeCycle σ } by
     obtain ⟨l, rfl, hl⟩ := truncSwapFactors σ
     obtain ⟨n, hn⟩ := (prod_list_swap_mem_alternatingGroup_iff_even_length hl).1 hσ
     rw [← two_mul] at hn
@@ -665,116 +655,108 @@ theorem closure_three_cycles_eq_alternating :
   | succ n ih =>
     rw [Nat.mul_succ] at hn
     obtain ⟨a, l, rfl⟩ := l.exists_of_length_succ hn
-    rw [List.length_cons]; rw [Nat.succ_inj] at hn
+    rw [List.length_cons, Nat.succ_inj] at hn
     obtain ⟨b, l, rfl⟩ := l.exists_of_length_succ hn
-    rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]
+    rw [List.prod_cons, List.prod_cons, ← mul_assoc]
     apply mul_mem <;> grind [IsSwap.mul_mem_closure_three_cycles]
-
-/--
-theorem `isThreeCycle_subset_alternatingGroup` / 定理 `isThreeCycle_subset_alternatingGroup`
-
-English:
-theorem isThreeCycle_subset_alternatingGroup
-  proof: fun _ => IsThreeCycle.mem_alternatingGroup
-
-中文:
-定理 isThreeCycle_subset_alternatingGroup
-  证明: fun _ => IsThreeCycle.mem_alternatingGroup
-
-Depends on / 依赖: IsThreeCycle, IsThreeCycle.mem_alternatingGroup, mem_alternatingGroup
+/-
+**Equiv.Perm.isThreeCycle_subset_alternatingGroup** 是 Mathlib 中的一个定理，位于命名空间 `Equ
+iv.Perm`。
+形式化陈述：isThreeCycle_subset_alternatingGroup : {g : Perm α | g.IsThreeCycle} subse
+teq alternatingGroup α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsThreeCycle.mem_alternatingGroup`：∀ {α : Type u_1} [inst : F
+intype α] [inst_1 : DecidableEq α] {f : Equiv.Perm α}, f.IsThreeCycle → f ∈ alte
+rnatingGroup α
 -/
 theorem isThreeCycle_subset_alternatingGroup :
-    {g : Perm α | g.IsThreeCycle} subseteq alternatingGroup α :=
-  fun _ => IsThreeCycle.mem_alternatingGroup
-
-/--
-theorem `_root_.alternatingGroup.closure_isThreeCycles_eq_top` / 定理 `_root_.alternatingGroup.closure_isThreeCycles_eq_top`
-
-English:
-theorem _root_.alternatingGroup.closure_isThreeCycles_eq_top
-  proof: by
-  rw [← map_subtype_inj]; rw [MonoidHom.map_closure]
-  have : (alternatingGroup α).subtype '' _ = {g : Perm α | IsThreeCycle g} :=
-    Subtype.coe_image_of_subset isThreeCycle_subset_alternatingGroup
-  aesop
-
-中文:
-定理 _root_.alternatingGroup.closure_isThreeCycles_eq_top
-  证明: by
-  rw [← map_subtype_inj]; rw [MonoidHom.map_closure]
-  have : (alternatingGroup α).subtype '' _ = {g : Perm α | IsThreeCycle g} :=
-    Subtype.coe_image_of_subset isThreeCycle_subset_alternatingGroup
-  aesop
-
-Depends on / 依赖: IsThreeCycle, MonoidHom, MonoidHom.map_closure, Subtype, Subtype.coe_image_of_subset, alternatingGroup, coe_image_of_subset, isThreeCycle_subset_alternatingGroup, map_closure, map_subtype_inj, subtype
+    {g : Perm α | g.IsThreeCycle} ⊆ alternatingGroup α :=
+  fun _ ↦ IsThreeCycle.mem_alternatingGroup
+/-
+**Equiv.Perm._root_.alternatingGroup.closure_isThreeCycles_eq_top** 是 Mathlib 中的
+一个定理，位于命名空间 `Equiv.Perm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.alternatingGroup.closure_isThreeCycles_eq_top :
     Subgroup.closure {g : alternatingGroup α | Equiv.Perm.IsThreeCycle (g : Equiv.Perm α)} = ⊤ := by
-  rw [← map_subtype_inj]; rw [MonoidHom.map_closure]
+  rw [← map_subtype_inj, MonoidHom.map_closure]
   have : (alternatingGroup α).subtype '' _ = {g : Perm α | IsThreeCycle g} :=
     Subtype.coe_image_of_subset isThreeCycle_subset_alternatingGroup
   aesop
 
-/--
-theorem `closure_cycleType_eq_two_two_eq_alternatingGroup` / 定理 `closure_cycleType_eq_two_two_eq_alternatingGroup`
+/-- The alternating group is the closure of the set of permutations with cycle type (2, 2). -/
+/-
+**Equiv.Perm.closure_cycleType_eq_two_two_eq_alternatingGroup** 是 Mathlib 中的一个定理
+，位于命名空间 `Equiv.Perm`。
+形式化陈述：closure_cycleType_eq_two_two_eq_alternatingGroup (h5 : 5 <= Nat.card α) : 
+Subgroup.closure {g : Perm α | g.cycleType = {2, 2}} = alternatingGroup α
+参数：h5 : 5 <= Nat.card α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.Perm.sign_of_cycleType`：sign_of_cycleType (f : Perm α) : sign f = 
+(-1 : Intˣ) ^ (f.cycleType.sum + Multiset.card f.cycleType)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.sum_cons`：∀ {M : Type u_3} [inst : AddCommMonoid M] (a : M) (s 
+: Multiset M), (a ::ₘ s).sum = a + s.sum
+· 使用定理 `Multiset.sum_singleton`：∀ {M : Type u_3} [inst : AddCommMonoid M] (a : M
+), {a}.sum = a
+· 使用定理 `Multiset.card_cons`：card_cons (a : α) (s : Multiset α) : card (a ::ₘ s) 
+= card s + 1
+· 使用定理 `Multiset.card_singleton`：card_singleton (a : α) : card ({a} : Multiset α
+) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.closure_three_cycles_eq_alternating`：closure_three_cycles_eq_
+alternating : closure { σ : Perm α | IsThreeCycle σ } = alternatingGroup α
+· 使用定理 `Equiv.Perm.IsCycle.nonempty_support`：∀ {α : Type u_2} [inst : Fintype α]
+ [inst_1 : DecidableEq α] {g : Equiv.Perm α}, g.IsCycle → g.support.Nonempty
+· 使用定理 `Equiv.Perm.IsThreeCycle.isCycle`：isCycle (h : IsThreeCycle σ) : IsCycle 
+σ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.Perm.IsThreeCycle.support_eq_iff_mem_support`：∀ {α : Type u_1} [in
+st : Fintype α] [inst_1 : DecidableEq α] {g : Equiv.Perm α} {a : α},   g.IsThree
+Cycle → (g.support = {a, g a, g (g a)} ↔…
+· 使用定理 `Equiv.Perm.IsThreeCycle.nodup_iff_mem_support`：∀ {α : Type u_1} [inst : 
+Fintype α] [inst_1 : DecidableEq α] {g : Equiv.Perm α} {a : α},   g.IsThreeCycle
+ → ([a, g a, g (g a)].Nodup ↔ a ∈ g…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.one_lt_card_iff`：one_lt_card_iff : 1 < #s ↔ exists a b, a in s ∧ 
+b in s ∧ a != b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Equiv.swap_mul_self_mul`：∀ {α : Type u_4} [inst : DecidableEq α] (i j : 
+α) (σ : Equiv.Perm α), Equiv.swap i j * (Equiv.swap i j * σ) = σ
+· 使用定理 `Equiv.Perm.IsThreeCycle.eq_swap_mul_swap_iff_mem_support`：∀ {α : Type u_
+1} [inst : Fintype α] [inst_1 : DecidableEq α] {g : Equiv.Perm α} {a : α},   g.I
+sThreeCycle → (g = Equiv.swap a (g a) * Equiv.…
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+（共 31 条，此处仅展示前 30 条）
 
-English:
-theorem closure_cycleType_eq_two_two_eq_alternatingGroup
-  given: (h5 : 5 <= Nat.card α)
-  proof: by
-  apply le_antisymm
-  · rw [Subgroup.closure_le]
-    intro g hg
-    simp only [Set.mem_ofPred_eq] at hg
-    simp [mem_alternatingGroup, sign_of_cycleType, hg, ← Units.val_inj]
-  · rw [← Equiv.Perm.closure_three_cycles_eq_alternating, Subgroup.closure_le]
-    intro g hg3
-    obtain ⟨a, ha⟩ := hg3.isCycle.nonempty_support
-    have h_support := hg3.support_eq_iff_mem_support.mpr ha
-    have h_nodup := hg3.nodup_iff_mem_support.mpr ha
-    have : 1 < g.supportᶜ.card := by grind [Finset.card_compl, Nat.card_eq_fintype_card]
-    obtain ⟨b, c, hb, hc, hbc⟩ := Finset.one_lt_card_iff.mp this
-    have H : g = (swap a (g a) * (swap b c)) * (swap b c * (swap (g a) (g (g a)))) := by
-      simp [mul_assoc, ← hg3.eq_swap_mul_swap_iff_mem_support.mpr ha]
-    rw [H]
-    apply mul_mem <;>
-    · apply Subgroup.subset_closure
-      exact cycleType_swap_mul_swap_of_nodup (by grind [Finset.mem_compl])
-
-@[deprecated (since := "2026-03-10")]
-alias closure_cycleType_eq_2_2_eq_alternatingGroup :=
-  closure_cycleType_eq_two_two_eq_alternatingGroup
-
-中文:
-定理 closure_cycleType_eq_two_two_eq_alternatingGroup
-  条件: (h5 : 5 <= 自然数.card α)
-  证明: by
-  apply le_antisymm
-  · rw [Subgroup.closure_le]
-    intro g hg
-    simp only [Set.mem_ofPred_eq] at hg
-    simp [mem_alternatingGroup, sign_of_cycleType, hg, ← Units.val_inj]
-  · rw [← Equiv.Perm.closure_three_cycles_eq_alternating, Subgroup.closure_le]
-    intro g hg3
-    obtain ⟨a, ha⟩ := hg3.isCycle.nonempty_support
-    have h_support := hg3.support_eq_iff_mem_support.mpr ha
-    have h_nodup := hg3.nodup_iff_mem_support.mpr ha
-    have : 1 < g.supportᶜ.card := by grind [Finset.card_compl, Nat.card_eq_fintype_card]
-    obtain ⟨b, c, hb, hc, hbc⟩ := Finset.one_lt_card_iff.mp this
-    have H : g = (swap a (g a) * (swap b c)) * (swap b c * (swap (g a) (g (g a)))) := by
-      simp [mul_assoc, ← hg3.eq_swap_mul_swap_iff_mem_support.mpr ha]
-    rw [H]
-    apply mul_mem <;>
-    · apply Subgroup.subset_closure
-      exact cycleType_swap_mul_swap_of_nodup (by grind [Finset.mem_compl])
-
-@[deprecated (since := "2026-03-10")]
-alias closure_cycleType_eq_2_2_eq_alternatingGroup :=
-  closure_cycleType_eq_two_two_eq_alternatingGroup
-
-Depends on / 依赖: Equiv.Perm.closure_three_cycles_eq_alternating, Finset, Finset.card_compl, Nat.card_eq_fintype_card, Set.mem_ofPred_eq, Subgroup, Subgroup.closure_le, Units.val_inj, card_compl, card_eq_fintype_card, closure_le, closure_three_cycles_eq_alternating, g.support, h_nodup, h_support, hg3.isCycle.nonempty_support, hg3.nodup_iff_mem_support.mpr, hg3.support_eq_iff_mem_support.mpr, isCycle, le_antisymm
+--- 原说明 ---
+The alternating group is the closure of the set of permutations with cycle type 
+(2, 2).
 -/
-theorem closure_cycleType_eq_two_two_eq_alternatingGroup (h5 : 5 <= Nat.card α) :
+theorem closure_cycleType_eq_two_two_eq_alternatingGroup (h5 : 5 ≤ Nat.card α) :
     Subgroup.closure {g : Perm α | g.cycleType = {2, 2}} = alternatingGroup α := by
   apply le_antisymm
   · rw [Subgroup.closure_le]
@@ -798,117 +780,136 @@ theorem closure_cycleType_eq_two_two_eq_alternatingGroup (h5 : 5 <= Nat.card α)
 @[deprecated (since := "2026-03-10")]
 alias closure_cycleType_eq_2_2_eq_alternatingGroup :=
   closure_cycleType_eq_two_two_eq_alternatingGroup
-
-/--
-theorem `cycleType_eq_two_two_subset_alternatingGroup` / 定理 `cycleType_eq_two_two_subset_alternatingGroup`
-
-English:
-theorem cycleType_eq_two_two_subset_alternatingGroup
-  proof: by
-  intro g hg
-  rw [Set.mem_ofPred_eq] at hg
-  simp [sign_of_cycleType, hg, ← Units.val_inj]
-
-中文:
-定理 cycleType_eq_two_two_subset_alternatingGroup
-  证明: by
-  intro g hg
-  rw [Set.mem_ofPred_eq] at hg
-  simp [sign_of_cycleType, hg, ← Units.val_inj]
-
-Depends on / 依赖: Set.mem_ofPred_eq, Units.val_inj, mem_ofPred_eq, sign_of_cycleType, val_inj
+/-
+**Equiv.Perm.cycleType_eq_two_two_subset_alternatingGroup** 是 Mathlib 中的一个定理，位于命
+名空间 `Equiv.Perm`。
+形式化陈述：cycleType_eq_two_two_subset_alternatingGroup : {g : Perm α | g.cycleType =
+ {2, 2}} subseteq alternatingGroup α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.sign_of_cycleType`：sign_of_cycleType (f : Perm α) : sign f = 
+(-1 : Intˣ) ^ (f.cycleType.sum + Multiset.card f.cycleType)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
+· 使用定理 `Multiset.sum_cons`：∀ {M : Type u_3} [inst : AddCommMonoid M] (a : M) (s 
+: Multiset M), (a ::ₘ s).sum = a + s.sum
+· 使用定理 `Multiset.sum_singleton`：∀ {M : Type u_3} [inst : AddCommMonoid M] (a : M
+), {a}.sum = a
+· 使用定理 `Multiset.card_cons`：card_cons (a : α) (s : Multiset α) : card (a ::ₘ s) 
+= card s + 1
+· 使用定理 `Multiset.card_singleton`：card_singleton (a : α) : card ({a} : Multiset α
+) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem cycleType_eq_two_two_subset_alternatingGroup :
-    {g : Perm α | g.cycleType = {2, 2}} subseteq alternatingGroup α := by
+    {g : Perm α | g.cycleType = {2, 2}} ⊆ alternatingGroup α := by
   intro g hg
   rw [Set.mem_ofPred_eq] at hg
   simp [sign_of_cycleType, hg, ← Units.val_inj]
-
-/--
-theorem `_root_.alternatingGroup.closure_cycleType_eq_two_two_eq_top` / 定理 `_root_.alternatingGroup.closure_cycleType_eq_two_two_eq_top`
-
-English:
-theorem _root_.alternatingGroup.closure_cycleType_eq_two_two_eq_top
-  given: (h5 : 5 <= Nat.card α)
-  proof: by
-  rw [← map_subtype_inj]; rw [MonoidHom.map_closure]
-  have : (alternatingGroup α).subtype '' _ = {g : Perm α | g.cycleType = {2, 2}} :=
-    Subtype.coe_image_of_subset cycleType_eq_two_two_subset_alternatingGroup
-  have := closure_cycleType_eq_two_two_eq_alternatingGroup h5
-  aesop
-
-中文:
-定理 _root_.alternatingGroup.closure_cycleType_eq_two_two_eq_top
-  条件: (h5 : 5 <= 自然数.card α)
-  证明: by
-  rw [← map_subtype_inj]; rw [MonoidHom.map_closure]
-  have : (alternatingGroup α).subtype '' _ = {g : Perm α | g.cycleType = {2, 2}} :=
-    Subtype.coe_image_of_subset cycleType_eq_two_two_subset_alternatingGroup
-  have := closure_cycleType_eq_two_two_eq_alternatingGroup h5
-  aesop
-
-Depends on / 依赖: MonoidHom, MonoidHom.map_closure, Subtype, Subtype.coe_image_of_subset, alternatingGroup, closure_cycleType_eq_two_two_eq_alternatingGroup, coe_image_of_subset, cycleType, cycleType_eq_two_two_subset_alternatingGroup, g.cycleType, map_closure, map_subtype_inj, subtype
+/-
+**Equiv.Perm._root_.alternatingGroup.closure_cycleType_eq_two_two_eq_top** 是 Mat
+hlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.alternatingGroup.closure_cycleType_eq_two_two_eq_top (h5 : 5 <= Nat.card α) :
+theorem _root_.alternatingGroup.closure_cycleType_eq_two_two_eq_top (h5 : 5 ≤ Nat.card α) :
     Subgroup.closure {g : alternatingGroup α | (g : Perm α).cycleType = {2, 2}} = ⊤ := by
-  rw [← map_subtype_inj]; rw [MonoidHom.map_closure]
+  rw [← map_subtype_inj, MonoidHom.map_closure]
   have : (alternatingGroup α).subtype '' _ = {g : Perm α | g.cycleType = {2, 2}} :=
     Subtype.coe_image_of_subset cycleType_eq_two_two_subset_alternatingGroup
   have := closure_cycleType_eq_two_two_eq_alternatingGroup h5
   aesop
 
-/--
-theorem `isThreeCycle_sq_of_three_mem_cycleType_five` / 定理 `isThreeCycle_sq_of_three_mem_cycleType_five`
+/-- Part of proving $A_5$ is simple. Shows that the square of any element of $A_5$ with a 3-cycle in
+  its cycle decomposition is a 3-cycle, so the normal closure of the original element must be
+  $A_5$. -/
+/-
+**Equiv.Perm.isThreeCycle_sq_of_three_mem_cycleType_five** 是 Mathlib 中的一个定理，位于命名
+空间 `Equiv.Perm`。
+形式化陈述：isThreeCycle_sq_of_three_mem_cycleType_five {g : Perm (Fin 5)} (h : 3 in c
+ycleType g) : IsThreeCycle (g * g)
+参数：Fin 5；h : 3 in cycleType g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.mem_cycleType_iff`：mem_cycleType_iff {n : Nat} {σ : Perm α} :
+ n in cycleType σ ↔ exists c τ, σ = c * τ ∧ Disjoint c τ ∧ IsCycle c ∧ c.support
+.card = n
+· 使用定理 `Equiv.Perm.IsThreeCycle.congr_simp`：∀ {α : Type u_1} [inst : Fintype α] 
+{inst_1 : DecidableEq α} [inst_2 : DecidableEq α] (σ σ_1 : Equiv.Perm α),   σ = 
+σ_1 → σ.IsThreeCycle = σ…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `Equiv.Perm.Disjoint.commute`：∀ {α : Type u_1} {f g : Equiv.Perm α}, f.Di
+sjoint g → Commute f g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.lcm_cycleType`：lcm_cycleType (σ : Perm α) : σ.cycleType.lcm =
+ orderOf σ
+· 使用定理 `Multiset.lcm_dvd`：lcm_dvd {s : Multiset α} {a : α} : s.lcm ∣ a ↔ forall 
+b in s, b ∣ a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Equiv.Perm.two_le_of_mem_cycleType`：two_le_of_mem_cycleType {σ : Perm α}
+ {n : Nat} (h : n in σ.cycleType) : 2 <= n
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Equiv.Perm.le_card_support_of_mem_cycleType`：le_card_support_of_mem_cycl
+eType {n : Nat} {σ : Perm α} (h : n in cycleType σ) : n <= #σ.support
+· 使用定理 `le_of_add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [
+AddLeftReflectLE α] {a b c : α}, a + b ≤ a + c → b ≤ c
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Equiv.Perm.Disjoint.card_support_mul`：∀ {α : Type u_1} [inst : Decidable
+Eq α] [inst_1 : Fintype α] {f g : Equiv.Perm α},   f.Disjoint g → (f * g).suppor
+t.card = f.support.card + …
+· 使用定理 `Finset.card_le_univ`：Finset.card_le_univ [Fintype α] (s : Finset α) : #s
+ <= Fintype.card α
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `orderOf_dvd_iff_pow_eq_one`：orderOf_dvd_iff_pow_eq_one {n : Nat} : order
+Of x ∣ n ↔ x ^ n = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Equiv.Perm.IsThreeCycle.isThreeCycle_sq`：isThreeCycle_sq {g : Perm α} (h
+t : IsThreeCycle g) : IsThreeCycle (g * g)
+· 使用定理 `card_support_eq_three_iff`：∀ {α : Type u_1} [inst : Fintype α] [inst_1 :
+ DecidableEq α] {σ : Equiv.Perm α}, σ.support.card = 3 ↔ σ.IsThreeCycle
 
-English:
-theorem isThreeCycle_sq_of_three_mem_cycleType_five
-  given: {g : Perm (Fin 5)} (h : 3 in cycleType g)
-  proof: by
-  obtain ⟨c, g', rfl, hd, _, h3⟩ := mem_cycleType_iff.1 h
-  simp only [mul_assoc]
-  rw [hd.commute.eq]; rw [← mul_assoc g']
-  suffices hg' : orderOf g' ∣ 2 by
-    rw [← pow_two]; rw [orderOf_dvd_iff_pow_eq_one.1 hg']; rw [one_mul]
-    exact (card_support_eq_three_iff.1 h3).isThreeCycle_sq
-  rw [← lcm_cycleType]; rw [Multiset.lcm_dvd]
-  intro n hn
-  rw [le_antisymm (two_le_of_mem_cycleType hn) (le_trans (le_card_support_of_mem_cycleType hn) _)]
-  apply le_of_add_le_add_left
-  rw [← hd.card_support_mul]; rw [h3]
-  exact (c * g').support.card_le_univ
-
-中文:
-定理 isThreeCycle_sq_of_three_mem_cycleType_five
-  条件: {g : 置换 (有限集 5)} (h : 3 in cycleType g)
-  证明: by
-  obtain ⟨c, g', rfl, hd, _, h3⟩ := mem_cycleType_iff.1 h
-  simp only [mul_assoc]
-  rw [hd.commute.eq]; rw [← mul_assoc g']
-  suffices hg' : orderOf g' ∣ 2 by
-    rw [← pow_two]; rw [orderOf_dvd_iff_pow_eq_one.1 hg']; rw [one_mul]
-    exact (card_support_eq_three_iff.1 h3).isThreeCycle_sq
-  rw [← lcm_cycleType]; rw [Multiset.lcm_dvd]
-  intro n hn
-  rw [le_antisymm (two_le_of_mem_cycleType hn) (le_trans (le_card_support_of_mem_cycleType hn) _)]
-  apply le_of_add_le_add_left
-  rw [← hd.card_support_mul]; rw [h3]
-  exact (c * g').support.card_le_univ
-
-Depends on / 依赖: Multiset, Multiset.lcm_dvd, card_support_eq_three_iff, card_support_mul, commute, hd.card_support_mul, hd.commute.eq, isThreeCycle_sq, lcm_cycleType, lcm_dvd, le_antisymm, le_card_support_of_mem_cycleType, le_of_add_le_add_left, le_trans, mem_cycleType_iff, mul_assoc, one_mul, orderOf, orderOf_dvd_iff_pow_eq_one, pow_two
+--- 原说明 ---
+Part of proving $A_5$ is simple. Shows that the square of any element of $A_5$ w
+ith a 3-cycle in
+  its cycle decomposition is a 3-cycle, so the normal closure of the original el
+ement must be
+  $A_5$.
 -/
-theorem isThreeCycle_sq_of_three_mem_cycleType_five {g : Perm (Fin 5)} (h : 3 in cycleType g) :
+theorem isThreeCycle_sq_of_three_mem_cycleType_five {g : Perm (Fin 5)} (h : 3 ∈ cycleType g) :
     IsThreeCycle (g * g) := by
   obtain ⟨c, g', rfl, hd, _, h3⟩ := mem_cycleType_iff.1 h
   simp only [mul_assoc]
-  rw [hd.commute.eq]; rw [← mul_assoc g']
+  rw [hd.commute.eq, ← mul_assoc g']
   suffices hg' : orderOf g' ∣ 2 by
-    rw [← pow_two]; rw [orderOf_dvd_iff_pow_eq_one.1 hg']; rw [one_mul]
+    rw [← pow_two, orderOf_dvd_iff_pow_eq_one.1 hg', one_mul]
     exact (card_support_eq_three_iff.1 h3).isThreeCycle_sq
-  rw [← lcm_cycleType]; rw [Multiset.lcm_dvd]
+  rw [← lcm_cycleType, Multiset.lcm_dvd]
   intro n hn
   rw [le_antisymm (two_le_of_mem_cycleType hn) (le_trans (le_card_support_of_mem_cycleType hn) _)]
   apply le_of_add_le_add_left
-  rw [← hd.card_support_mul]; rw [h3]
+  rw [← hd.card_support_mul, h3]
   exact (c * g').support.card_le_univ
 
 end Equiv.Perm
@@ -917,81 +918,97 @@ namespace alternatingGroup
 
 open Equiv.Perm
 
-/--
-theorem `eq_bot_of_card_le_two` / 定理 `eq_bot_of_card_le_two`
-
-English:
-theorem eq_bot_of_card_le_two
-  given: (h2 : Nat.card α <= 2)
-  statement: alternatingGroup α = ⊥
-  proof: by
-  nontriviality α
-  suffices hα' : Nat.card α = 2 by
-    rw [Subgroup.eq_bot_iff_card]; rw [← Nat.mul_right_inj (a := 2) (by simp)]; rw [two_mul_nat_card_alternatingGroup]; rw [mul_one]; rw [Nat.card_perm]; rw [hα']; rw [Nat.factorial_two]
-  refine h2.antisymm ?_
-  simpa [Nat.card_eq_fintype_card] using! Fintype.one_lt_card
-
-中文:
-定理 eq_bot_of_card_le_two
-  条件: (h2 : 自然数.card α <= 2)
-  结论: alternatingGroup α = ⊥
-  证明: by
-  nontriviality α
-  suffices hα' : Nat.card α = 2 by
-    rw [Subgroup.eq_bot_iff_card]; rw [← Nat.mul_right_inj (a := 2) (by simp)]; rw [two_mul_nat_card_alternatingGroup]; rw [mul_one]; rw [Nat.card_perm]; rw [hα']; rw [Nat.factorial_two]
-  refine h2.antisymm ?_
-  simpa [Nat.card_eq_fintype_card] using! Fintype.one_lt_card
-
-Depends on / 依赖: Fintype, Fintype.one_lt_card, Nat.card, Nat.card_eq_fintype_card, Nat.card_perm, Nat.factorial_two, Nat.mul_right_inj, Subgroup, Subgroup.eq_bot_iff_card, antisymm, card_eq_fintype_card, card_perm, eq_bot_iff_card, factorial_two, h2.antisymm, mul_one, mul_right_inj, nontriviality, one_lt_card, two_mul_nat_card_alternatingGroup
+/-
+**alternatingGroup.eq_bot_of_card_le_two** 是 Mathlib 中的一个定理，位于命名空间 `alternatingG
+roup`。
+形式化陈述：eq_bot_of_card_le_two (h2 : Nat.card α <= 2) : alternatingGroup α = ⊥
+参数：h2 : Nat.card α <= 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.one_lt_card`：one_lt_card [h : Nontrivial α] : 1 < Fintype.card α
+· 使用定理 `Subgroup.eq_bot_iff_card`：∀ {G : Type u_1} [inst : Group G] (H : Subgrou
+p G), H = ⊥ ↔ Nat.card ↥H = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.mul_right_inj`：∀ {a b c : ℕ}, a ≠ 0 → (a * b = a * c ↔ b = c)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `two_mul_nat_card_alternatingGroup`：two_mul_nat_card_alternatingGroup [No
+ntrivial α] : 2 * Nat.card (alternatingGroup α) = Nat.card (Perm α)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Nat.card_perm`：card_perm : Nat.card (Perm α) = (Nat.card α)!
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Nat.factorial_two`：Nat.factorial 2 = 2
 -/
-theorem eq_bot_of_card_le_two (h2 : Nat.card α <= 2) : alternatingGroup α = ⊥ := by
+theorem eq_bot_of_card_le_two (h2 : Nat.card α ≤ 2) : alternatingGroup α = ⊥ := by
   nontriviality α
   suffices hα' : Nat.card α = 2 by
-    rw [Subgroup.eq_bot_iff_card]; rw [← Nat.mul_right_inj (a := 2) (by simp)]; rw [two_mul_nat_card_alternatingGroup]; rw [mul_one]; rw [Nat.card_perm]; rw [hα']; rw [Nat.factorial_two]
+    rw [Subgroup.eq_bot_iff_card, ← Nat.mul_right_inj (a := 2) (by simp),
+      two_mul_nat_card_alternatingGroup, mul_one, Nat.card_perm, hα', Nat.factorial_two]
   refine h2.antisymm ?_
   simpa [Nat.card_eq_fintype_card] using! Fintype.one_lt_card
-
-/--
-theorem `nontrivial_of_three_le_card` / 定理 `nontrivial_of_three_le_card`
-
-English:
-theorem nontrivial_of_three_le_card
-  given: (h3 : 3 <= Nat.card α)
-  statement: Nontrivial (alternatingGroup α)
-  proof: by
-  have : Nontrivial α := by
-    rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
-    refine lt_of_lt_of_le (by decide) h3
-  rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
-  refine lt_of_mul_lt_mul_left ?_ (le_of_lt Nat.prime_two.pos)
-  rw [two_mul_nat_card_alternatingGroup]; rw [Nat.card_perm]; rw [← Nat.succ_le_iff]
-  exact le_trans h3 (Nat.card α).self_le_factorial
-
-中文:
-定理 nontrivial_of_three_le_card
-  条件: (h3 : 3 <= 自然数.card α)
-  结论: 非平凡 (alternatingGroup α)
-  证明: by
-  have : Nontrivial α := by
-    rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
-    refine lt_of_lt_of_le (by decide) h3
-  rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
-  refine lt_of_mul_lt_mul_left ?_ (le_of_lt Nat.prime_two.pos)
-  rw [two_mul_nat_card_alternatingGroup]; rw [Nat.card_perm]; rw [← Nat.succ_le_iff]
-  exact le_trans h3 (Nat.card α).self_le_factorial
-
-Depends on / 依赖: Fintype, Fintype.one_lt_card_iff_nontrivial, Nat.card, Nat.card_eq_fintype_card, Nat.card_perm, Nat.prime_two.pos, Nat.succ_le_iff, Nontrivial, card_eq_fintype_card, card_perm, le_of_lt, le_trans, lt_of_lt_of_le, lt_of_mul_lt_mul_left, one_lt_card_iff_nontrivial, prime_two, self_le_factorial, succ_le_iff, two_mul_nat_card_alternatingGroup
+/-
+**alternatingGroup.nontrivial_of_three_le_card** 是 Mathlib 中的一个定理，位于命名空间 `altern
+atingGroup`。
+形式化陈述：nontrivial_of_three_le_card (h3 : 3 <= Nat.card α) : Nontrivial (alternati
+ngGroup α)
+参数：h3 : 3 <= Nat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fintype.one_lt_card_iff_nontrivial`：one_lt_card_iff_nontrivial : 1 < car
+d α ↔ Nontrivial α
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `lt_of_mul_lt_mul_left`：lt_of_mul_lt_mul_left [PosMulReflectLT α] (h : a 
+* b < a * c) (a0 : 0 <= a) : b < c
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `two_mul_nat_card_alternatingGroup`：two_mul_nat_card_alternatingGroup [No
+ntrivial α] : 2 * Nat.card (alternatingGroup α) = Nat.card (Perm α)
+· 使用定理 `Nat.card_perm`：card_perm : Nat.card (Perm α) = (Nat.card α)!
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Nat.succ_le_iff`：∀ {m n : ℕ}, m.succ ≤ n ↔ m < n
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Nat.self_le_factorial`：∀ (n : ℕ), n ≤ n.factorial
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Nat.prime_two`：prime_two : Prime 2
 -/
-theorem nontrivial_of_three_le_card (h3 : 3 <= Nat.card α) : Nontrivial (alternatingGroup α) := by
+theorem nontrivial_of_three_le_card (h3 : 3 ≤ Nat.card α) : Nontrivial (alternatingGroup α) := by
   have : Nontrivial α := by
-    rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
+    rw [← Fintype.one_lt_card_iff_nontrivial, ← Nat.card_eq_fintype_card]
     refine lt_of_lt_of_le (by decide) h3
-  rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
+  rw [← Fintype.one_lt_card_iff_nontrivial, ← Nat.card_eq_fintype_card]
   refine lt_of_mul_lt_mul_left ?_ (le_of_lt Nat.prime_two.pos)
-  rw [two_mul_nat_card_alternatingGroup]; rw [Nat.card_perm]; rw [← Nat.succ_le_iff]
+  rw [two_mul_nat_card_alternatingGroup, Nat.card_perm, ← Nat.succ_le_iff]
   exact le_trans h3 (Nat.card α).self_le_factorial
-
-instance {n : Nat} : Nontrivial (alternatingGroup (Fin (n + 3))) :=
+/-
+**alternatingGroup.** 是 Mathlib 中的一个实例，位于命名空间 `alternatingGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {n : ℕ} : Nontrivial (alternatingGroup (Fin (n + 3))) :=
   nontrivial_of_three_le_card (by simp)
 
 /-- Shows that any non-identity element of $A_5$ whose cycle decomposition consists only of swaps
@@ -999,159 +1016,148 @@ instance {n : Nat} : Nontrivial (alternatingGroup (Fin (n + 3))) :=
   in $A_5$ is $A_5$. -/
 @[deprecated "This was an auxilliary lemma for the proof of simplicity of A_5 which has now been
 superceded by `alternatingGroup.isSimpleGroup`." (since := "2026-04-28")]
-/--
-theorem `isConj_swap_mul_swap_of_cycleType_two` / 定理 `isConj_swap_mul_swap_of_cycleType_two`
-
-English:
-theorem isConj_swap_mul_swap_of_cycleType_two
-  statement: {g : Perm (Fin 5)} (ha : g in alternatingGroup (Fin 5))
-  proof: by
-  have h := g.support.card_le_univ
-  rw [← Multiset.eq_replicate_card] at h2
-  rw [← sum_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [smul_eq_mul] at h
-  have h : Multiset.card g.cycleType <= 3 :=
-    le_of_mul_le_mul_right (le_trans h (by norm_num only [card_fin])) (by simp)
-  rw [mem_alternatingGroup]; rw [sign_of_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [Multiset.card_replicate]; rw [smul_eq_mul]; rw [pow_add]; rw [pow_mul]; rw [Int.units_pow_two]; rw [one_mul]; rw [neg_one_pow_eq_one_iff_even] at ha
-  swap; · decide
-  rw [isConj_iff_cycleType_eq]; rw [h2]
-  interval_cases h_1 : Multiset.card g.cycleType
-  · exact (h1 (card_cycleType_eq_zero.1 h_1)).elim
-  · simp at ha
-  · have h04 : (0 : Fin 5) != 4 := by decide
-    have h13 : (1 : Fin 5) != 3 := by decide
-    rw [Disjoint.cycleType_mul]; rw [(isCycle_swap h04).cycleType]; rw [(isCycle_swap h13).cycleType]; rw [card_support_swap h04]; rw [card_support_swap h13]
-    · simp
-    · rw [disjoint_iff_disjoint_support, support_swap h04, support_swap h13]
-      decide
-  · contradiction
-
-中文:
-定理 isConj_swap_mul_swap_of_cycleType_two
-  结论: {g : 置换 (有限集 5)} (ha : g in alternatingGroup (有限集 5))
-  证明: by
-  have h := g.support.card_le_univ
-  rw [← Multiset.eq_replicate_card] at h2
-  rw [← sum_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [smul_eq_mul] at h
-  have h : Multiset.card g.cycleType <= 3 :=
-    le_of_mul_le_mul_right (le_trans h (by norm_num only [card_fin])) (by simp)
-  rw [mem_alternatingGroup]; rw [sign_of_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [Multiset.card_replicate]; rw [smul_eq_mul]; rw [pow_add]; rw [pow_mul]; rw [Int.units_pow_two]; rw [one_mul]; rw [neg_one_pow_eq_one_iff_even] at ha
-  swap; · decide
-  rw [isConj_iff_cycleType_eq]; rw [h2]
-  interval_cases h_1 : Multiset.card g.cycleType
-  · exact (h1 (card_cycleType_eq_zero.1 h_1)).elim
-  · simp at ha
-  · have h04 : (0 : Fin 5) != 4 := by decide
-    have h13 : (1 : Fin 5) != 3 := by decide
-    rw [Disjoint.cycleType_mul]; rw [(isCycle_swap h04).cycleType]; rw [(isCycle_swap h13).cycleType]; rw [card_support_swap h04]; rw [card_support_swap h13]
-    · simp
-    · rw [disjoint_iff_disjoint_support, support_swap h04, support_swap h13]
-      decide
-  · contradiction
-
-Depends on / 依赖: Int.units_pow_two, Multiset, Multiset.card, Multiset.card_replicate, Multiset.eq_replicate_card, Multiset.sum_replicate, card_fin, card_le_univ, card_replicate, cycleType, eq_replicate_card, g.cycleType, g.support.card_le_univ, le_of_mul_le_mul_right, le_trans, mem_alternatingGroup, neg_one_pow_eq_o, one_mul, pow_add, pow_mul
+/-
+**alternatingGroup.isConj_swap_mul_swap_of_cycleType_two** 是 Mathlib 中的一个定理，位于命名
+空间 `alternatingGroup`。
+形式化陈述：isConj_swap_mul_swap_of_cycleType_two {g : Perm (Fin 5)} (ha : g in altern
+atingGroup (Fin 5)) (h1 : g != 1) (h2 : forall n, n in cycleType (g : Perm (Fin 
+5)) -> n = 2) : IsConj (swap 0 4 * swap 1 3) g
+参数：Fin 5；ha : g in alternatingGroup (Fin 5)；h1 : g != 1；h2 : forall n, n in cycl
+eType (g : Perm (Fin 5)) -> n = 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_le_univ`：Finset.card_le_univ [Fintype α] (s : Finset α) : #s
+ <= Fintype.card α
+· 使用定理 `le_of_mul_le_mul_right`：le_of_mul_le_mul_right [MulPosReflectLE α] (bc :
+ b * a <= c * a) (a0 : 0 < a) : b <= c
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `Multiset.sum_replicate`：∀ {M : Type u_3} [inst : AddCommMonoid M] (n : ℕ
+) (a : M), (Multiset.replicate n a).sum = n • a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.eq_replicate_card`：eq_replicate_card {a : α} {s : Multiset α} :
+ s = replicate (card s) a ↔ forall b in s, b = a
+· 使用定理 `Equiv.Perm.sum_cycleType`：sum_cycleType (σ : Perm α) : σ.cycleType.sum =
+ #σ.support
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Mathlib.Meta.NormNum.isNat_le_true`：∀ {α : Type u_1} [inst : Semiring α]
+ [inst_1 : PartialOrder α] [IsOrderedRing α] {a b : α} {a' b' : ℕ},   Mathlib.Me
+ta.NormNum.IsNat a a' → …
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Equiv.Perm.isConj_iff_cycleType_eq`：isConj_iff_cycleType_eq {σ τ : Perm 
+α} : IsConj σ τ ↔ σ.cycleType = τ.cycleType
+· 使用定理 `of_decide_eq_false`：∀ {p : Prop} [inst : Decidable p], decide p = false 
+→ ¬p
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Mathlib.Tactic.IntervalCases.of_le_right`：of_le_right [LE α] (h : (a : α
+) <= b) (eq : b = b') : a <= b'
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用引理 `neg_one_pow_eq_one_iff_even`：neg_one_pow_eq_one_iff_even (h : (-1 : R) !
+= 1) : (-1 : R) ^ n = 1 ↔ Even n
+（共 49 条，此处仅展示前 30 条）
 -/
-theorem isConj_swap_mul_swap_of_cycleType_two {g : Perm (Fin 5)} (ha : g in alternatingGroup (Fin 5))
-    (h1 : g != 1) (h2 : forall n, n in cycleType (g : Perm (Fin 5)) -> n = 2) :
+theorem isConj_swap_mul_swap_of_cycleType_two {g : Perm (Fin 5)} (ha : g ∈ alternatingGroup (Fin 5))
+    (h1 : g ≠ 1) (h2 : ∀ n, n ∈ cycleType (g : Perm (Fin 5)) → n = 2) :
     IsConj (swap 0 4 * swap 1 3) g := by
   have h := g.support.card_le_univ
   rw [← Multiset.eq_replicate_card] at h2
-  rw [← sum_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [smul_eq_mul] at h
-  have h : Multiset.card g.cycleType <= 3 :=
+  rw [← sum_cycleType, h2, Multiset.sum_replicate, smul_eq_mul] at h
+  have h : Multiset.card g.cycleType ≤ 3 :=
     le_of_mul_le_mul_right (le_trans h (by norm_num only [card_fin])) (by simp)
-  rw [mem_alternatingGroup]; rw [sign_of_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [Multiset.card_replicate]; rw [smul_eq_mul]; rw [pow_add]; rw [pow_mul]; rw [Int.units_pow_two]; rw [one_mul]; rw [neg_one_pow_eq_one_iff_even] at ha
+  rw [mem_alternatingGroup, sign_of_cycleType, h2, Multiset.sum_replicate, Multiset.card_replicate,
+    smul_eq_mul, pow_add, pow_mul, Int.units_pow_two, one_mul, neg_one_pow_eq_one_iff_even] at ha
   swap; · decide
-  rw [isConj_iff_cycleType_eq]; rw [h2]
+  rw [isConj_iff_cycleType_eq, h2]
   interval_cases h_1 : Multiset.card g.cycleType
   · exact (h1 (card_cycleType_eq_zero.1 h_1)).elim
   · simp at ha
-  · have h04 : (0 : Fin 5) != 4 := by decide
-    have h13 : (1 : Fin 5) != 3 := by decide
-    rw [Disjoint.cycleType_mul]; rw [(isCycle_swap h04).cycleType]; rw [(isCycle_swap h13).cycleType]; rw [card_support_swap h04]; rw [card_support_swap h13]
+  · have h04 : (0 : Fin 5) ≠ 4 := by decide
+    have h13 : (1 : Fin 5) ≠ 3 := by decide
+    rw [Disjoint.cycleType_mul, (isCycle_swap h04).cycleType, (isCycle_swap h13).cycleType,
+      card_support_swap h04, card_support_swap h13]
     · simp
     · rw [disjoint_iff_disjoint_support, support_swap h04, support_swap h13]
       decide
   · contradiction
-
-/--
-theorem `center_eq_bot` / 定理 `center_eq_bot`
-
-English:
-theorem center_eq_bot
-  given: (hα4 : 4 <= Nat.card α)
-  proof: by
-  rw [eq_bot_iff]
-  rintro ⟨g, hg⟩ hg'
-  simp only [Subgroup.mem_bot]
-  simp only [← Subtype.coe_inj, Subgroup.coe_one, ← support_eq_empty_iff,
-    Finset.eq_empty_iff_forall_notMem]
-  intro a ha
-  have hab : g a != a := by rw [← mem_support]; exact ha
-  have : 2 <= (({a, g a} : Finset α)ᶜ).card := by
-    rw [← Nat.add_le_add_iff_left]; rw [Finset.card_add_card_compl]
-    rw [← Nat.card_eq_fintype_card]
-    rw [Finset.card_pair hab.symm]
-    exact hα4
-  rw [← Nat.lt_iff_add_one_le]; rw [Finset.one_lt_card_iff] at this
-  obtain ⟨c, d, hc, hd, hcd⟩ := this
-  simp only [Finset.compl_insert, Finset.mem_erase, ← ne_eq, Finset.mem_compl,
-    Finset.mem_singleton] at hc hd
-  let k := swap (g a) d * swap (g a) c
-  have hka : k • a = a := by
-    simp only [Perm.smul_def, coe_mul, Function.comp_apply, k]
-    rw [swap_apply_of_ne_of_ne (x := a) hab.symm hc.1.symm]
-    rw [swap_apply_of_ne_of_ne hab.symm hd.1.symm]
-  have hkga : k • (g a) = c := by
-    simp only [Perm.smul_def, coe_mul, Function.comp_apply, swap_apply_left, k]
-    rw [swap_apply_of_ne_of_ne hc.2 hcd]
-  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a != c by
-    apply this; simp [← hkga]
-  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a = (⟨g, hg⟩ : alternatingGroup α) • k • a by
-    rw [this]; rw [hka]; exact hc.right.symm
-  rw [Subgroup.mem_center_iff] at hg'
-  suffices k in alternatingGroup α by
-    simp only [← Subgroup.mk_smul k this, ← mul_smul, hg']
-  simp [k, hc.2.symm, hd.2.symm]
-
-中文:
-定理 center_eq_bot
-  条件: (hα4 : 4 <= 自然数.card α)
-  证明: by
-  rw [eq_bot_iff]
-  rintro ⟨g, hg⟩ hg'
-  simp only [Subgroup.mem_bot]
-  simp only [← Subtype.coe_inj, Subgroup.coe_one, ← support_eq_empty_iff,
-    Finset.eq_empty_iff_forall_notMem]
-  intro a ha
-  have hab : g a != a := by rw [← mem_support]; exact ha
-  have : 2 <= (({a, g a} : Finset α)ᶜ).card := by
-    rw [← Nat.add_le_add_iff_left]; rw [Finset.card_add_card_compl]
-    rw [← Nat.card_eq_fintype_card]
-    rw [Finset.card_pair hab.symm]
-    exact hα4
-  rw [← Nat.lt_iff_add_one_le]; rw [Finset.one_lt_card_iff] at this
-  obtain ⟨c, d, hc, hd, hcd⟩ := this
-  simp only [Finset.compl_insert, Finset.mem_erase, ← ne_eq, Finset.mem_compl,
-    Finset.mem_singleton] at hc hd
-  let k := swap (g a) d * swap (g a) c
-  have hka : k • a = a := by
-    simp only [Perm.smul_def, coe_mul, Function.comp_apply, k]
-    rw [swap_apply_of_ne_of_ne (x := a) hab.symm hc.1.symm]
-    rw [swap_apply_of_ne_of_ne hab.symm hd.1.symm]
-  have hkga : k • (g a) = c := by
-    simp only [Perm.smul_def, coe_mul, Function.comp_apply, swap_apply_left, k]
-    rw [swap_apply_of_ne_of_ne hc.2 hcd]
-  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a != c by
-    apply this; simp [← hkga]
-  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a = (⟨g, hg⟩ : alternatingGroup α) • k • a by
-    rw [this]; rw [hka]; exact hc.right.symm
-  rw [Subgroup.mem_center_iff] at hg'
-  suffices k in alternatingGroup α by
-    simp only [← Subgroup.mk_smul k this, ← mul_smul, hg']
-  simp [k, hc.2.symm, hd.2.symm]
-
-Depends on / 依赖: Finset, Finset.card_add_card_compl, Finset.card_pair, Finset.eq_empty_iff_forall_notMem, Finset.one_lt_card_iff, Nat.add_le_add_iff_left, Nat.card_eq_fintype_card, Nat.lt_iff_add_one_le, Subgroup, Subgroup.coe_one, Subgroup.mem_bot, Subtype, Subtype.coe_inj, add_le_add_iff_left, card_add_card_compl, card_eq_fintype_card, card_pair, coe_inj, coe_one, eq_bot_iff
+/-
+**alternatingGroup.center_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGroup`。
+形式化陈述：center_eq_bot (hα4 : 4 <= Nat.card α) : Subgroup.center (alternatingGroup 
+α) = ⊥
+参数：hα4 : 4 <= Nat.card α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `Nat.add_le_add_iff_left`：∀ {m k n : ℕ}, n + m ≤ n + k ↔ m ≤ k
+· 使用定理 `Finset.card_add_card_compl`：Finset.card_add_card_compl [DecidableEq α] [
+Fintype α] (s : Finset α) : #s + #sᶜ = Fintype.card α
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Finset.card_pair`：∀ {α : Type u_1} {a b : α} [inst : DecidableEq α], a ≠
+ b → {a, b}.card = 2
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Finset.one_lt_card_iff`：one_lt_card_iff : 1 < #s ↔ exists a b, a in s ∧ 
+b in s ∧ a != b
+· 使用定理 `Nat.lt_iff_add_one_le`：∀ {m n : ℕ}, m < n ↔ m + 1 ≤ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.Perm.coe_mul`：∀ {α : Type u_4} (f g : Equiv.Perm α), ⇑(f * g) = ⇑f
+ ∘ ⇑g
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.compl_insert`：compl_insert : (insert a s)ᶜ = sᶜ.erase a
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.Perm.sign_mul`：sign_mul (f g : Perm α) : sign (f * g) = sign f * s
+ign g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.Perm.sign_swap'`：sign_swap' {x y : α} : sign (swap x y) = if x = y
+ then 1 else -1
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 32 条，此处仅展示前 30 条）
 -/
-theorem center_eq_bot (hα4 : 4 <= Nat.card α) :
+theorem center_eq_bot (hα4 : 4 ≤ Nat.card α) :
     Subgroup.center (alternatingGroup α) = ⊥ := by
   rw [eq_bot_iff]
   rintro ⟨g, hg⟩ hg'
@@ -1159,13 +1165,13 @@ theorem center_eq_bot (hα4 : 4 <= Nat.card α) :
   simp only [← Subtype.coe_inj, Subgroup.coe_one, ← support_eq_empty_iff,
     Finset.eq_empty_iff_forall_notMem]
   intro a ha
-  have hab : g a != a := by rw [← mem_support]; exact ha
-  have : 2 <= (({a, g a} : Finset α)ᶜ).card := by
-    rw [← Nat.add_le_add_iff_left]; rw [Finset.card_add_card_compl]
+  have hab : g a ≠ a := by rw [← mem_support]; exact ha
+  have : 2 ≤ (({a, g a} : Finset α)ᶜ).card := by
+    rw [← Nat.add_le_add_iff_left, Finset.card_add_card_compl]
     rw [← Nat.card_eq_fintype_card]
     rw [Finset.card_pair hab.symm]
     exact hα4
-  rw [← Nat.lt_iff_add_one_le]; rw [Finset.one_lt_card_iff] at this
+  rw [← Nat.lt_iff_add_one_le, Finset.one_lt_card_iff] at this
   obtain ⟨c, d, hc, hd, hcd⟩ := this
   simp only [Finset.compl_insert, Finset.mem_erase, ← ne_eq, Finset.mem_compl,
     Finset.mem_singleton] at hc hd
@@ -1177,47 +1183,47 @@ theorem center_eq_bot (hα4 : 4 <= Nat.card α) :
   have hkga : k • (g a) = c := by
     simp only [Perm.smul_def, coe_mul, Function.comp_apply, swap_apply_left, k]
     rw [swap_apply_of_ne_of_ne hc.2 hcd]
-  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a != c by
+  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a ≠ c by
     apply this; simp [← hkga]
   suffices k • (⟨g, hg⟩ : alternatingGroup α) • a = (⟨g, hg⟩ : alternatingGroup α) • k • a by
-    rw [this]; rw [hka]; exact hc.right.symm
+    rw [this, hka]; exact hc.right.symm
   rw [Subgroup.mem_center_iff] at hg'
-  suffices k in alternatingGroup α by
+  suffices k ∈ alternatingGroup α by
     simp only [← Subgroup.mk_smul k this, ← mul_smul, hg']
   simp [k, hc.2.symm, hd.2.symm]
-
-/--
-theorem `isMulCommutative_iff_card_le_three` / 定理 `isMulCommutative_iff_card_le_three`
-
-English:
-theorem isMulCommutative_iff_card_le_three
-  proof: by
-  refine ⟨fun H => ?_, fun h => (isCyclic_of_card_le_three h).isMulCommutative⟩
-  rw [← not_lt]
-  intro h
-  suffices Subsingleton (alternatingGroup α) by
-    rw [← not_nontrivial_iff_subsingleton] at this
-    apply this
-    exact nontrivial_of_three_le_card h.le
-  simpa [center_eq_top_iff.mpr H, eq_comm, subsingleton_iff_bot_eq_top] using center_eq_bot h
-
-中文:
-定理 isMulCommutative_iff_card_le_three
-  证明: by
-  refine ⟨fun H => ?_, fun h => (isCyclic_of_card_le_three h).isMulCommutative⟩
-  rw [← not_lt]
-  intro h
-  suffices Subsingleton (alternatingGroup α) by
-    rw [← not_nontrivial_iff_subsingleton] at this
-    apply this
-    exact nontrivial_of_three_le_card h.le
-  simpa [center_eq_top_iff.mpr H, eq_comm, subsingleton_iff_bot_eq_top] using center_eq_bot h
-
-Depends on / 依赖: Subsingleton, alternatingGroup, center_eq_bot, center_eq_top_iff, center_eq_top_iff.mpr, eq_comm, h.le, isCyclic_of_card_le_three, isMulCommutative, nontrivial_of_three_le_card, not_lt, not_nontrivial_iff_subsingleton, subsingleton_iff_bot_eq_top
+/-
+**alternatingGroup.isMulCommutative_iff_card_le_three** 是 Mathlib 中的一个定理，位于命名空间 
+`alternatingGroup`。
+形式化陈述：isMulCommutative_iff_card_le_three : IsMulCommutative (alternatingGroup α)
+ ↔ Nat.card α <= 3
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.center_eq_top_iff`：center_eq_top_iff : center G = ⊤ ↔ IsMulComm
+utative G
+· 使用定理 `alternatingGroup.center_eq_bot`：center_eq_bot (hα4 : 4 <= Nat.card α) : 
+Subgroup.center (alternatingGroup α) = ⊥
+· 使用定理 `not_nontrivial_iff_subsingleton`：not_nontrivial_iff_subsingleton : ¬Nont
+rivial α ↔ Subsingleton α
+· 使用定理 `alternatingGroup.nontrivial_of_three_le_card`：nontrivial_of_three_le_car
+d (h3 : 3 <= Nat.card α) : Nontrivial (alternatingGroup α)
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `alternatingGroup.isCyclic_of_card_le_three`：isCyclic_of_card_le_three (h
+α : Nat.card α <= 3) : IsCyclic (alternatingGroup α)
 -/
 theorem isMulCommutative_iff_card_le_three :
-    IsMulCommutative (alternatingGroup α) ↔ Nat.card α <= 3 := by
-  refine ⟨fun H => ?_, fun h => (isCyclic_of_card_le_three h).isMulCommutative⟩
+    IsMulCommutative (alternatingGroup α) ↔ Nat.card α ≤ 3 := by
+  refine ⟨fun H ↦ ?_, fun h ↦ (isCyclic_of_card_le_three h).isMulCommutative⟩
   rw [← not_lt]
   intro h
   suffices Subsingleton (alternatingGroup α) by
@@ -1225,236 +1231,213 @@ theorem isMulCommutative_iff_card_le_three :
     apply this
     exact nontrivial_of_three_le_card h.le
   simpa [center_eq_top_iff.mpr H, eq_comm, subsingleton_iff_bot_eq_top] using center_eq_bot h
-
-/--
-theorem `isCyclic_iff_card_le_three` / 定理 `isCyclic_iff_card_le_three`
-
-English:
-theorem isCyclic_iff_card_le_three
-  proof: ⟨fun _ => by rw [← isMulCommutative_iff_card_le_three]; exact IsCyclic.isMulCommutative,
-   isCyclic_of_card_le_three⟩
-
-中文:
-定理 isCyclic_iff_card_le_three
-  证明: ⟨fun _ => by rw [← isMulCommutative_iff_card_le_three]; exact IsCyclic.isMulCommutative,
-   isCyclic_of_card_le_three⟩
-
-Depends on / 依赖: IsCyclic, IsCyclic.isMulCommutative, isCyclic_of_card_le_three, isMulCommutative, isMulCommutative_iff_card_le_three
+/-
+**alternatingGroup.isCyclic_iff_card_le_three** 是 Mathlib 中的一个定理，位于命名空间 `alterna
+tingGroup`。
+形式化陈述：isCyclic_iff_card_le_three : IsCyclic (alternatingGroup α) ↔ Nat.card α <=
+ 3
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `alternatingGroup.isMulCommutative_iff_card_le_three`：isMulCommutative_if
+f_card_le_three : IsMulCommutative (alternatingGroup α) ↔ Nat.card α <= 3
+· 使用定理 `alternatingGroup.isCyclic_of_card_le_three`：isCyclic_of_card_le_three (h
+α : Nat.card α <= 3) : IsCyclic (alternatingGroup α)
 -/
 theorem isCyclic_iff_card_le_three :
-    IsCyclic (alternatingGroup α) ↔ Nat.card α <= 3 :=
-  ⟨fun _ => by rw [← isMulCommutative_iff_card_le_three]; exact IsCyclic.isMulCommutative,
+    IsCyclic (alternatingGroup α) ↔ Nat.card α ≤ 3 :=
+  ⟨fun _ ↦ by rw [← isMulCommutative_iff_card_le_three]; exact IsCyclic.isMulCommutative,
    isCyclic_of_card_le_three⟩
 
-/--
-Definition of `ofSubtype` / `ofSubtype` 的定义
+/-- The element of `alternatingGroup α` induced by an element
+of `alternatingGroup s`, when `s : Finset α`. -/
+/-
+**alternatingGroup.ofSubtype** 是 Mathlib 中的一个定义，位于命名空间 `alternatingGroup`。
+形式化陈述：ofSubtype (s : Finset α) : alternatingGroup s ->* alternatingGroup α where
+ toFun x
+参数：s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubtype
-  signature: (s : Finset α)
-  body: ⟨Perm.ofSubtype (x : Perm s), by
-    rw [mem_alternatingGroup]; rw [sign_ofSubtype]; rw [mem_alternatingGroup.mp x.prop]⟩
-  map_mul' := by simp
-  map_one' := by simp
-
-中文:
-定义 ofSubtype
-  签名: (s : 有限集 α)
-  定义体: ⟨Perm.ofSubtype (x : Perm s), by
-    rw [mem_alternatingGroup]; rw [sign_ofSubtype]; rw [mem_alternatingGroup.mp x.prop]⟩
-  map_mul' := by simp
-  map_one' := by simp
-
-Depends on / 依赖: Perm.ofSubtype, map_mul, map_one, mem_alternatingGroup, mem_alternatingGroup.mp, ofSubtype, sign_ofSubtype, x.prop
+--- 原说明 ---
+The element of `alternatingGroup α` induced by an element
+of `alternatingGroup s`, when `s : Finset α`.
 -/
-def ofSubtype (s : Finset α) : alternatingGroup s ->* alternatingGroup α where
+def ofSubtype (s : Finset α) : alternatingGroup s →* alternatingGroup α where
   toFun x := ⟨Perm.ofSubtype (x : Perm s), by
-    rw [mem_alternatingGroup]; rw [sign_ofSubtype]; rw [mem_alternatingGroup.mp x.prop]⟩
+    rw [mem_alternatingGroup, sign_ofSubtype, mem_alternatingGroup.mp x.prop]⟩
   map_mul' := by simp
   map_one' := by simp
-
-/--
-theorem `ofSubtype_injective` / 定理 `ofSubtype_injective`
-
-English:
-theorem ofSubtype_injective
-  given: {s : Finset α}
-  statement: Function.Injective (ofSubtype s)
-  proof: by
-  rw [← Function.Injective.of_comp_iff (alternatingGroup α).subtype_injective]
-  exact Perm.ofSubtype_injective.comp (alternatingGroup s).subtype_injective
-
-中文:
-定理 ofSubtype_injective
-  条件: {s : 有限集 α}
-  结论: 函数.单射 (ofSubtype s)
-  证明: by
-  rw [← Function.Injective.of_comp_iff (alternatingGroup α).subtype_injective]
-  exact Perm.ofSubtype_injective.comp (alternatingGroup s).subtype_injective
-
-Depends on / 依赖: Function, Function.Injective.of_comp_iff, Injective, Perm.ofSubtype_injective.comp, alternatingGroup, ofSubtype_injective, of_comp_iff, subtype_injective
+/-
+**alternatingGroup.ofSubtype_injective** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGro
+up`。
+形式化陈述：ofSubtype_injective {s : Finset α} : Function.Injective (ofSubtype s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} {f : α → β},   Function.Injective f → ∀ (g : γ → α), Function.Injective (
+f ∘ g) ↔ Function.In…
+· 使用引理 `Subgroup.subtype_injective`：subtype_injective (s : Subgroup G) : Functio
+n.Injective s.subtype
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Equiv.Perm.ofSubtype_injective`：ofSubtype_injective : Function.Injective
+ (ofSubtype : Perm (Subtype p) -> Perm α)
 -/
 theorem ofSubtype_injective {s : Finset α} : Function.Injective (ofSubtype s) := by
   rw [← Function.Injective.of_comp_iff (alternatingGroup α).subtype_injective]
   exact Perm.ofSubtype_injective.comp (alternatingGroup s).subtype_injective
-
-/--
-theorem `ofSubtype_inj` / 定理 `ofSubtype_inj`
-
-English:
-theorem ofSubtype_inj
-  given: {s : Finset α} {g h : alternatingGroup s}
-  proof: ofSubtype_injective.eq_iff
-
-中文:
-定理 ofSubtype_inj
-  条件: {s : 有限集 α} {g h : alternatingGroup s}
-  证明: ofSubtype_injective.eq_iff
-
-Depends on / 依赖: eq_iff, ofSubtype_injective, ofSubtype_injective.eq_iff
+/-
+**alternatingGroup.ofSubtype_inj** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGroup`。
+形式化陈述：ofSubtype_inj {s : Finset α} {g h : alternatingGroup s} : ofSubtype s g = 
+ofSubtype s h ↔ g = h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `alternatingGroup.ofSubtype_injective`：ofSubtype_injective {s : Finset α}
+ : Function.Injective (ofSubtype s)
 -/
 theorem ofSubtype_inj {s : Finset α} {g h : alternatingGroup s} :
     ofSubtype s g = ofSubtype s h ↔ g = h :=
   ofSubtype_injective.eq_iff
-
-/--
-theorem `coe_ofSubtype` / 定理 `coe_ofSubtype`
-
-English:
-theorem coe_ofSubtype
-  given: (s : Finset α) (k : alternatingGroup s)
-  proof: by
-  rfl
-
-中文:
-定理 coe_ofSubtype
-  条件: (s : 有限集 α) (k : alternatingGroup s)
-  证明: by
-  rfl
+/-
+**alternatingGroup.coe_ofSubtype** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGroup`。
+形式化陈述：coe_ofSubtype (s : Finset α) (k : alternatingGroup s) : (ofSubtype s k : E
+quiv.Perm α) = Equiv.Perm.ofSubtype k.1
+参数：s : Finset α；k : alternatingGroup s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ofSubtype (s : Finset α) (k : alternatingGroup s) :
     (ofSubtype s k : Equiv.Perm α) = Equiv.Perm.ofSubtype k.1 := by
   rfl
-
-/--
-theorem `map_ofSubtype` / 定理 `map_ofSubtype`
-
-English:
-theorem map_ofSubtype
-  given: (s : Finset α)
-  proof: by
-  ext k
-  rw [Subgroup.mem_map]; rw [Subgroup.mem_inf]; rw [MonoidHom.mem_range]
-  grind [sign_ofSubtype, mem_alternatingGroup]
-
-中文:
-定理 map_ofSubtype
-  条件: (s : 有限集 α)
-  证明: by
-  ext k
-  rw [Subgroup.mem_map]; rw [Subgroup.mem_inf]; rw [MonoidHom.mem_range]
-  grind [sign_ofSubtype, mem_alternatingGroup]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_range, Subgroup, Subgroup.mem_inf, Subgroup.mem_map, mem_alternatingGroup, mem_inf, mem_map, mem_range, sign_ofSubtype
+/-
+**alternatingGroup.map_ofSubtype** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGroup`。
+形式化陈述：map_ofSubtype (s : Finset α) : (alternatingGroup s).map (Perm.ofSubtype : 
+Perm s ->* Perm α) = (Perm.ofSubtype : Perm s ->* Perm α).range ⊓ (alternatingGr
+oup α)
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.mem_map`：mem_map {f : G ->* N} {K : Subgroup G} {y : N} : y in 
+K.map f ↔ exists x in K, f x = y
+· 使用定理 `Subgroup.mem_inf`：mem_inf {p p' : Subgroup G} {x : G} : x in p ⊓ p' ↔ x 
+in p ∧ x in p'
+· 使用定理 `MonoidHom.mem_range`：mem_range {f : G ->* N} {y : N} : y in f.range ↔ ex
+ists x, f x = y
 -/
 theorem map_ofSubtype (s : Finset α) :
-    (alternatingGroup s).map (Perm.ofSubtype : Perm s ->* Perm α) =
-      (Perm.ofSubtype : Perm s ->* Perm α).range ⊓ (alternatingGroup α) := by
+    (alternatingGroup s).map (Perm.ofSubtype : Perm s →* Perm α) =
+      (Perm.ofSubtype : Perm s →* Perm α).range ⊓ (alternatingGroup α) := by
   ext k
-  rw [Subgroup.mem_map]; rw [Subgroup.mem_inf]; rw [MonoidHom.mem_range]
+  rw [Subgroup.mem_map, Subgroup.mem_inf, MonoidHom.mem_range]
   grind [sign_ofSubtype, mem_alternatingGroup]
-
-/--
-theorem `ofSubtype_comp_subtype` / 定理 `ofSubtype_comp_subtype`
-
-English:
-theorem ofSubtype_comp_subtype
-  given: (s : Finset α)
-  statement: (alternatingGroup α).subtype.comp (ofSubtype s) =
-  proof: by
-  rfl
-
-中文:
-定理 ofSubtype_comp_subtype
-  条件: (s : 有限集 α)
-  结论: (alternatingGroup α).subtype.comp (ofSubtype s) =
-  证明: by
-  rfl
+/-
+**alternatingGroup.ofSubtype_comp_subtype** 是 Mathlib 中的一个定理，位于命名空间 `alternating
+Group`。
+形式化陈述：ofSubtype_comp_subtype (s : Finset α) : (alternatingGroup α).subtype.comp 
+(ofSubtype s) = Perm.ofSubtype.comp (alternatingGroup s).subtype
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofSubtype_comp_subtype (s : Finset α) : (alternatingGroup α).subtype.comp (ofSubtype s) =
     Perm.ofSubtype.comp (alternatingGroup s).subtype := by
   rfl
-
-/--
-theorem `range_ofSubtype` / 定理 `range_ofSubtype`
-
-English:
-theorem range_ofSubtype
-  given: (s : Finset α)
-  statement: (ofSubtype s).range =
-  proof: by
-  rw [← map_subtype_inj]; rw [← MonoidHom.range_comp]; rw [ofSubtype_comp_subtype]; rw [MonoidHom.range_comp]; rw [range_subtype]; rw [subgroupOf_map_subtype]; rw [map_ofSubtype]
-
-中文:
-定理 range_ofSubtype
-  条件: (s : 有限集 α)
-  结论: (ofSubtype s).range =
-  证明: by
-  rw [← map_subtype_inj]; rw [← MonoidHom.range_comp]; rw [ofSubtype_comp_subtype]; rw [MonoidHom.range_comp]; rw [range_subtype]; rw [subgroupOf_map_subtype]; rw [map_ofSubtype]
-
-Depends on / 依赖: MonoidHom, MonoidHom.range_comp, alternatingGroup, map_ofSubtype, map_subtype_inj, ofSubtype_comp_subtype, range.subgroupOf, range_comp, range_subtype, subgroupOf, subgroupOf_map_subtype
+/-
+**alternatingGroup.range_ofSubtype** 是 Mathlib 中的一个定理，位于命名空间 `alternatingGroup`。
+形式化陈述：range_ofSubtype (s : Finset α) : (ofSubtype s).range = (Perm.ofSubtype (p
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.map_subtype_inj`：map_subtype_inj {H : Subgroup G} {K L : Subgro
+up H} : K.map H.subtype = L.map H.subtype ↔ K = L
+· 使用引理 `MonoidHom.range_comp`：range_comp (g : N ->* P) (f : G ->* N) : (g.comp f
+).range = f.range.map g
+· 使用定理 `alternatingGroup.ofSubtype_comp_subtype`：ofSubtype_comp_subtype (s : Fin
+set α) : (alternatingGroup α).subtype.comp (ofSubtype s) = Perm.ofSubtype.comp (
+alternatingGroup s).subtype
+· 使用定理 `Subgroup.range_subtype`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup 
+G), H.subtype.range = H
+· 使用定理 `Subgroup.subgroupOf_map_subtype`：subgroupOf_map_subtype (H K : Subgroup 
+G) : (H.subgroupOf K).map K.subtype = H ⊓ K
+· 使用定理 `alternatingGroup.map_ofSubtype`：map_ofSubtype (s : Finset α) : (alternat
+ingGroup s).map (Perm.ofSubtype : Perm s ->* Perm α) = (Perm.ofSubtype : Perm s 
+->* Perm α).range ⊓ …
 -/
 theorem range_ofSubtype (s : Finset α) : (ofSubtype s).range =
-    (Perm.ofSubtype (p := (· in s))).range.subgroupOf (alternatingGroup α) := by
-  rw [← map_subtype_inj]; rw [← MonoidHom.range_comp]; rw [ofSubtype_comp_subtype]; rw [MonoidHom.range_comp]; rw [range_subtype]; rw [subgroupOf_map_subtype]; rw [map_ofSubtype]
-
-/--
-theorem `mem_range_ofSubtype_iff` / 定理 `mem_range_ofSubtype_iff`
-
-English:
-theorem mem_range_ofSubtype_iff
-  given: (s : Finset α) (k : alternatingGroup α)
-  proof: by
-  rw [range_ofSubtype]; rw [mem_subgroupOf]; rw [Perm.mem_range_ofSubtype_iff]
-  simp
-
-中文:
-定理 mem_range_ofSubtype_iff
-  条件: (s : 有限集 α) (k : alternatingGroup α)
-  证明: by
-  rw [range_ofSubtype]; rw [mem_subgroupOf]; rw [Perm.mem_range_ofSubtype_iff]
-  simp
-
-Depends on / 依赖: Perm.mem_range_ofSubtype_iff, mem_range_ofSubtype_iff, mem_subgroupOf, range_ofSubtype
+    (Perm.ofSubtype (p := (· ∈ s))).range.subgroupOf (alternatingGroup α) := by
+  rw [← map_subtype_inj, ← MonoidHom.range_comp, ofSubtype_comp_subtype, MonoidHom.range_comp,
+    range_subtype, subgroupOf_map_subtype, map_ofSubtype]
+/-
+**alternatingGroup.mem_range_ofSubtype_iff** 是 Mathlib 中的一个定理，位于命名空间 `alternatin
+gGroup`。
+形式化陈述：mem_range_ofSubtype_iff (s : Finset α) (k : alternatingGroup α) : k in (of
+Subtype s).range ↔ (k : Perm α).support subseteq s
+参数：s : Finset α；k : alternatingGroup α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `alternatingGroup.range_ofSubtype`：range_ofSubtype (s : Finset α) : (ofSu
+btype s).range = (Perm.ofSubtype (p
+· 使用定理 `Subgroup.mem_subgroupOf`：mem_subgroupOf {H K : Subgroup G} {h : K} : h i
+n H.subgroupOf K ↔ (h : G) in H
+· 使用定理 `Equiv.Perm.mem_range_ofSubtype_iff`：mem_range_ofSubtype_iff {p : α -> Pr
+op} [DecidablePred p] {g : Perm α} : g in (ofSubtype : Perm (Subtype p) ->* Perm
+ α).range ↔ (g.support :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_range_ofSubtype_iff (s : Finset α) (k : alternatingGroup α) :
-    k in (ofSubtype s).range ↔ (k : Perm α).support subseteq s := by
-  rw [range_ofSubtype]; rw [mem_subgroupOf]; rw [Perm.mem_range_ofSubtype_iff]
+    k ∈ (ofSubtype s).range ↔ (k : Perm α).support ⊆ s := by
+  rw [range_ofSubtype, mem_subgroupOf, Perm.mem_range_ofSubtype_iff]
   simp
 
 open scoped Pointwise in
-/--
-theorem `conj_smul_range_ofSubtype` / 定理 `conj_smul_range_ofSubtype`
-
-English:
-theorem conj_smul_range_ofSubtype
-  given: (s : Finset α) (g : alternatingGroup α)
-  proof: by
-  ext k
-  simp_rw [mem_pointwise_smul_iff_inv_smul_mem, mem_range_ofSubtype_iff, ← map_inv,
-    MulAut.smul_def, ← ConjAct.toConjAct_smul_eq_mulAut_conj, ConjAct.coe_smul]
-  simp [support_conj_eq_smul_support, Finset.subset_smul_finset_iff, Subgroup.smul_def]
-
-中文:
-定理 conj_smul_range_ofSubtype
-  条件: (s : 有限集 α) (g : alternatingGroup α)
-  证明: by
-  ext k
-  simp_rw [mem_pointwise_smul_iff_inv_smul_mem, mem_range_ofSubtype_iff, ← map_inv,
-    MulAut.smul_def, ← ConjAct.toConjAct_smul_eq_mulAut_conj, ConjAct.coe_smul]
-  simp [support_conj_eq_smul_support, Finset.subset_smul_finset_iff, Subgroup.smul_def]
-
-Depends on / 依赖: ConjAct, ConjAct.coe_smul, ConjAct.toConjAct_smul_eq_mulAut_conj, Finset, Finset.subset_smul_finset_iff, MulAut, MulAut.smul_def, Subgroup, Subgroup.smul_def, coe_smul, map_inv, mem_pointwise_smul_iff_inv_smul_mem, mem_range_ofSubtype_iff, simp_rw, smul_def, subset_smul_finset_iff, support_conj_eq_smul_support, toConjAct_smul_eq_mulAut_conj
+/-
+**alternatingGroup.conj_smul_range_ofSubtype** 是 Mathlib 中的一个定理，位于命名空间 `alternat
+ingGroup`。
+形式化陈述：conj_smul_range_ofSubtype (s : Finset α) (g : alternatingGroup α) : MulAut
+.conj g • (ofSubtype s).range = (ofSubtype (g • s)).range
+参数：s : Finset α；g : alternatingGroup α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ConjAct.coe_smul`：coe_smul {G : Type*} [Group G] {H : Subgroup G} (g h :
+ H) : (ConjAct.toConjAct g • h).1 = ConjAct.toConjAct g.1 • h.1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.Perm.support_conj_eq_smul_support`：support_conj_eq_smul_support (k
+ : ConjAct (Perm α)) (g : Equiv.Perm α) : (k • g).support = k.ofConjAct • g.supp
+ort
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem conj_smul_range_ofSubtype (s : Finset α) (g : alternatingGroup α) :
     MulAut.conj g • (ofSubtype s).range = (ofSubtype (g • s)).range := by
@@ -1469,86 +1452,122 @@ namespace Equiv.Perm
 
 open Subgroup Group
 
-/--
-theorem `eq_alternatingGroup_of_index_eq_two` / 定理 `eq_alternatingGroup_of_index_eq_two`
+/-- The alternating group is the only subgroup of index 2 of the permutation group. -/
+/-
+**Equiv.Perm.eq_alternatingGroup_of_index_eq_two** 是 Mathlib 中的一个定理，位于命名空间 `Equi
+v.Perm`。
+形式化陈述：eq_alternatingGroup_of_index_eq_two {G : Subgroup (Equiv.Perm α)} (hG : G.
+index = 2) : G = alternatingGroup α
+参数：Equiv.Perm α；hG : G.index = 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.closure_isSwap`：closure_isSwap [Finite α] : Subgroup.closure 
+{ σ : Perm α | IsSwap σ } = ⊤
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Subgroup.index_top`：index_top : (⊤ : Subgroup G).index = 1
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `Equiv.Perm.swap_induction_on`：swap_induction_on [Finite α] {motive : Per
+m α -> Prop} (f : Perm α) (one : motive 1) (swap_mul : forall f x y, x != y -> m
+otive f -> motive …
+· 使用定理 `iff_of_true`：∀ {a b : Prop}, a → b → (a ↔ b)
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Subgroup.mul_mem_iff_of_index_two`：mul_mem_iff_of_index_two (h : H.index
+ = 2) {a b : G} : a * b in H ↔ (a in H ↔ b in H)
+· 使用定理 `alternatingGroup.index_eq_two`：alternatingGroup.index_eq_two [Nontrivial
+ α] : (alternatingGroup α).index = 2
+· 使用定理 `iff_congr`：∀ {p₁ p₂ q₁ q₂ : Prop}, (p₁ ↔ p₂) → (q₁ ↔ q₂) → ((p₁ ↔ q₁) ↔ 
+(p₂ ↔ q₂))
+· 使用定理 `iff_of_false`：∀ {a b : Prop}, ¬a → ¬b → (a ↔ b)
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isConj_iff`：isConj_iff {a b : α} : IsConj a b ↔ exists c : α, c * a * c⁻
+¹ = b
+· 使用定理 `Equiv.Perm.isConj_swap`：isConj_swap {w x y z : α} (hwx : w != x) (hyz : 
+y != z) : IsConj (swap w x) (swap y z)
+（共 36 条，此处仅展示前 30 条）
 
-English:
-theorem eq_alternatingGroup_of_index_eq_two
-  given: {G : Subgroup (Equiv.Perm α)} (hG : G.index = 2)
-  proof: by
-  nontriviality α
-  obtain ⟨_, ⟨a, b, hab, rfl⟩, habG⟩ : exists g : Perm α, g.IsSwap ∧ g ∉ G := by
-    by_contra! h
-    suffices G = ⊤ by rw [this, Subgroup.index_top] at hG; cases hG
-    rwa [eq_top_iff, ← closure_isSwap, G.closure_le]
-  ext g
-  refine swap_induction_on g (iff_of_true G.one_mem <| map_one _) fun g x y hxy ih => ?_
-  rw [mul_mem_iff_of_index_two hG]; rw [mul_mem_iff_of_index_two alternatingGroup.index_eq_two]; rw [ih]
-  refine iff_congr (iff_of_false ?_ (by cases (sign_swap hxy).symm.trans ·)) Iff.rfl
-  contrapose habG
-  rw [← (isConj_iff.mp <| isConj_swap hxy hab).choose_spec]
-  exact (normal_of_index_eq_two hG).conj_mem _ habG _
-
-中文:
-定理 eq_alternatingGroup_of_index_eq_two
-  条件: {G : 子群 (等价.置换 α)} (hG : G.index = 2)
-  证明: by
-  nontriviality α
-  obtain ⟨_, ⟨a, b, hab, rfl⟩, habG⟩ : exists g : Perm α, g.IsSwap ∧ g ∉ G := by
-    by_contra! h
-    suffices G = ⊤ by rw [this, Subgroup.index_top] at hG; cases hG
-    rwa [eq_top_iff, ← closure_isSwap, G.closure_le]
-  ext g
-  refine swap_induction_on g (iff_of_true G.one_mem <| map_one _) fun g x y hxy ih => ?_
-  rw [mul_mem_iff_of_index_two hG]; rw [mul_mem_iff_of_index_two alternatingGroup.index_eq_two]; rw [ih]
-  refine iff_congr (iff_of_false ?_ (by cases (sign_swap hxy).symm.trans ·)) Iff.rfl
-  contrapose habG
-  rw [← (isConj_iff.mp <| isConj_swap hxy hab).choose_spec]
-  exact (normal_of_index_eq_two hG).conj_mem _ habG _
-
-Depends on / 依赖: G.closure_le, G.one_mem, Iff.r, IsSwap, Subgroup, Subgroup.index_top, alternatingGroup, alternatingGroup.index_eq_two, closure_isSwap, closure_le, eq_top_iff, g.IsSwap, iff_congr, iff_of_false, iff_of_true, index_eq_two, index_top, map_one, mul_mem_iff_of_index_two, nontriviality
+--- 原说明 ---
+The alternating group is the only subgroup of index 2 of the permutation group.
 -/
 theorem eq_alternatingGroup_of_index_eq_two {G : Subgroup (Equiv.Perm α)} (hG : G.index = 2) :
     G = alternatingGroup α := by
   nontriviality α
-  obtain ⟨_, ⟨a, b, hab, rfl⟩, habG⟩ : exists g : Perm α, g.IsSwap ∧ g ∉ G := by
+  obtain ⟨_, ⟨a, b, hab, rfl⟩, habG⟩ : ∃ g : Perm α, g.IsSwap ∧ g ∉ G := by
     by_contra! h
     suffices G = ⊤ by rw [this, Subgroup.index_top] at hG; cases hG
     rwa [eq_top_iff, ← closure_isSwap, G.closure_le]
   ext g
-  refine swap_induction_on g (iff_of_true G.one_mem <| map_one _) fun g x y hxy ih => ?_
-  rw [mul_mem_iff_of_index_two hG]; rw [mul_mem_iff_of_index_two alternatingGroup.index_eq_two]; rw [ih]
+  refine swap_induction_on g (iff_of_true G.one_mem <| map_one _) fun g x y hxy ih ↦ ?_
+  rw [mul_mem_iff_of_index_two hG, mul_mem_iff_of_index_two alternatingGroup.index_eq_two, ih]
   refine iff_congr (iff_of_false ?_ (by cases (sign_swap hxy).symm.trans ·)) Iff.rfl
   contrapose habG
   rw [← (isConj_iff.mp <| isConj_swap hxy hab).choose_spec]
   exact (normal_of_index_eq_two hG).conj_mem _ habG _
 
-/--
-theorem `alternatingGroup_le_of_index_le_two` / 定理 `alternatingGroup_le_of_index_le_two`
+/-- A subgroup of the permutation group of index ≤ 2 contains the alternating group. -/
+/-
+**Equiv.Perm.alternatingGroup_le_of_index_le_two** 是 Mathlib 中的一个定理，位于命名空间 `Equi
+v.Perm`。
+形式化陈述：alternatingGroup_le_of_index_le_two {G : Subgroup (Equiv.Perm α)} (hG : G.
+index <= 2) : alternatingGroup α <= G
+参数：Equiv.Perm α；hG : G.index <= 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `Subgroup.index_ne_zero_of_finite`：index_ne_zero_of_finite [hH : Finite (
+G ⧸ H)] : H.index != 0
+· 使用定理 `Subgroup.finiteIndex_of_finite`：∀ {G : Type u_1} [inst : Group G] {H : S
+ubgroup G} [Finite G], H.FiniteIndex
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `LE.le.eq_or_lt'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a = b ∨ b < a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.succ_le_iff`：∀ {m n : ℕ}, m.succ ≤ n ↔ m < n
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.index_eq_one`：index_eq_one : H.index = 1 ↔ H = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.Perm.eq_alternatingGroup_of_index_eq_two`：eq_alternatingGroup_of_i
+ndex_eq_two {G : Subgroup (Equiv.Perm α)} (hG : G.index = 2) : G = alternatingGr
+oup α
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-theorem alternatingGroup_le_of_index_le_two
-  proof: by
-  rcases G.index.eq_zero_or_pos with h | h
-  · exact (index_ne_zero_of_finite h).elim
-  rcases (Nat.succ_le_iff.mpr h).eq_or_lt' with h | h
-  · exact index_eq_one.mp h ▸ le_top
-  rw [eq_alternatingGroup_of_index_eq_two (hG.antisymm h)]
-
-中文:
-定理 alternatingGroup_le_of_index_le_two
-  证明: by
-  rcases G.index.eq_zero_or_pos with h | h
-  · exact (index_ne_zero_of_finite h).elim
-  rcases (Nat.succ_le_iff.mpr h).eq_or_lt' with h | h
-  · exact index_eq_one.mp h ▸ le_top
-  rw [eq_alternatingGroup_of_index_eq_two (hG.antisymm h)]
-
-Depends on / 依赖: G.index.eq_zero_or_pos, Nat.succ_le_iff.mpr, antisymm, eq_alternatingGroup_of_index_eq_two, eq_or_lt, eq_zero_or_pos, hG.antisymm, index_eq_one, index_eq_one.mp, index_ne_zero_of_finite, le_top, succ_le_iff
+--- 原说明 ---
+A subgroup of the permutation group of index ≤ 2 contains the alternating group.
 -/
 theorem alternatingGroup_le_of_index_le_two
-    {G : Subgroup (Equiv.Perm α)} (hG : G.index <= 2) :
-    alternatingGroup α <= G := by
+    {G : Subgroup (Equiv.Perm α)} (hG : G.index ≤ 2) :
+    alternatingGroup α ≤ G := by
   rcases G.index.eq_zero_or_pos with h | h
   · exact (index_ne_zero_of_finite h).elim
   rcases (Nat.succ_le_iff.mpr h).eq_or_lt' with h | h
@@ -1557,29 +1576,16 @@ theorem alternatingGroup_le_of_index_le_two
 
 end Equiv.Perm
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The alternating group is a characteristic subgroup of the permutation group. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (alternatingGroup α).Characteristic
-  body: by
-    nontriviality α
-    apply eq_alternatingGroup_of_index_eq_two
-    rw [index_comap_of_surjective _ (Equiv.surjective _)]; rw [alternatingGroup.index_eq_two]
-
-中文:
-实例 :
-  签名: (alternatingGroup α).特征
-  定义体: by
-    nontriviality α
-    apply eq_alternatingGroup_of_index_eq_two
-    rw [index_comap_of_surjective _ (Equiv.surjective _)]; rw [alternatingGroup.index_eq_two]
-
-Depends on / 依赖: Equiv.surjective, alternatingGroup, alternatingGroup.index_eq_two, eq_alternatingGroup_of_index_eq_two, index_comap_of_surjective, index_eq_two, nontriviality, surjective
+--- 原说明 ---
+The alternating group is a characteristic subgroup of the permutation group.
 -/
 instance : (alternatingGroup α).Characteristic where
   fixed φ := by
     nontriviality α
     apply eq_alternatingGroup_of_index_eq_two
-    rw [index_comap_of_surjective _ (Equiv.surjective _)]; rw [alternatingGroup.index_eq_two]
+    rw [index_comap_of_surjective _ (Equiv.surjective _), alternatingGroup.index_eq_two]

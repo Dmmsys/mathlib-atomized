@@ -30,53 +30,49 @@ variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 
 namespace CatCenter
 
-/--
-Definition of `localization` / `localization` 的定义
+/-- Given `r : CatCenter C` and `L : C ⥤ D` a localization functor with respect
+to `W : MorphismProperty D`, this is the induced element in `CatCenter D`
+obtained by localization. -/
+/-
+**CategoryTheory.CatCenter.localization** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.CatCenter`。
+形式化陈述：localization : CatCenter D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition localization
-  signature: : CatCenter D
-  body: Localization.liftNatTrans L W L L (𝟭 D) (𝟭 D) (Functor.whiskerRight r L)
-
-@[simp]
-
-中文:
-定义 localization
-  签名: : CatCenter D
-  定义体: Localization.liftNatTrans L W L L (𝟭 D) (𝟭 D) (Functor.whiskerRight r L)
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.whiskerRight, Localization, Localization.liftNatTrans, liftNatTrans, whiskerRight
+--- 原说明 ---
+Given `r : CatCenter C` and `L : C ⥤ D` a localization functor with respect
+to `W : MorphismProperty D`, this is the induced element in `CatCenter D`
+obtained by localization.
 -/
 noncomputable def localization : CatCenter D :=
   Localization.liftNatTrans L W L L (𝟭 D) (𝟭 D) (Functor.whiskerRight r L)
 
 @[simp]
-/--
-lemma `localization_app` / 引理 `localization_app`
-
-English:
-lemma localization_app
-  given: (X : C)
-  proof: by
-  dsimp [localization]
-  simp only [Localization.liftNatTrans_app, Functor.id_obj, Functor.whiskerRight_app,
-    NatTrans.naturality, Functor.comp_map, Functor.id_map, Iso.hom_inv_id_app_assoc]
-
-include W
-
-中文:
-引理 localization_app
-  条件: (X : C)
-  证明: by
-  dsimp [localization]
-  simp only [Localization.liftNatTrans_app, Functor.id_obj, Functor.whiskerRight_app,
-    NatTrans.naturality, Functor.comp_map, Functor.id_map, Iso.hom_inv_id_app_assoc]
-
-include W
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.id_map, Functor.id_obj, Functor.whiskerRight_app, Iso.hom_inv_id_app_assoc, Localization, Localization.liftNatTrans_app, NatTrans, NatTrans.naturality, comp_map, hom_inv_id_app_assoc, id_map, id_obj, liftNatTrans_app, localization, naturality, whiskerRight_app
+/-
+**CategoryTheory.CatCenter.localization_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.CatCenter`。
+形式化陈述：localization_app (X : C) : (r.localization L W).app (L.obj X) = L.map (r.a
+pp X)
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Localization.liftNatTrans_app`：liftNatTrans_app (F₁ F₂ : 
+C ⥤ E) (F₁' F₂' : D ⥤ E) [Lifting L W F₁ F₁'] [Lifting L W F₂ F₂'] (τ : F₁ ⟶ F₂)
+ (X : C) : (liftNatTrans L W F₁ F₂…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma localization_app (X : C) :
     (r.localization L W).app (L.obj X) = L.map (r.app X) := by
@@ -85,55 +81,66 @@ lemma localization_app (X : C) :
     NatTrans.naturality, Functor.comp_map, Functor.id_map, Iso.hom_inv_id_app_assoc]
 
 include W
-
-/--
-lemma `ext_of_localization` / 引理 `ext_of_localization`
-
-English:
-lemma ext_of_localization
-  statement: (r s : CatCenter D)
-  proof: Localization.natTrans_ext L W h
-
-中文:
-引理 ext_of_localization
-  结论: (r s : CatCenter D)
-  证明: Localization.natTrans_ext L W h
-
-Depends on / 依赖: Localization, Localization.natTrans_ext, natTrans_ext
+/-
+**CategoryTheory.CatCenter.ext_of_localization** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.CatCenter`。
+形式化陈述：ext_of_localization (r s : CatCenter D) (h : forall (X : C), r.app (L.obj 
+X) = s.app (L.obj X)) : r = s
+参数：r s : CatCenter D；h : forall (X : C), r.app (L.obj X) = s.app (L.obj X)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.natTrans_ext`：natTrans_ext (L : C ⥤ D) (W) [
+L.IsLocalization W] {F₁ F₂ : D ⥤ E} {τ τ' : F₁ ⟶ F₂} (h : forall X : C, τ.app (L
+.obj X) = τ'.app (L.obj X)) : …
 -/
 lemma ext_of_localization (r s : CatCenter D)
-    (h : forall (X : C), r.app (L.obj X) = s.app (L.obj X)) : r = s :=
+    (h : ∀ (X : C), r.app (L.obj X) = s.app (L.obj X)) : r = s :=
   Localization.natTrans_ext L W h
-
-/--
-lemma `localization_one` / 引理 `localization_one`
-
-English:
-lemma localization_one
-  proof: ext_of_localization L W _ _ (fun X => by simp)
-
-中文:
-引理 localization_one
-  证明: ext_of_localization L W _ _ (fun X => by simp)
-
-Depends on / 依赖: ext_of_localization
+/-
+**CategoryTheory.CatCenter.localization_one** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.CatCenter`。
+形式化陈述：localization_one : (1 : CatCenter C).localization L W = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CatCenter.ext_of_localization`：ext_of_localization (r s :
+ CatCenter D) (h : forall (X : C), r.app (L.obj X) = s.app (L.obj X)) : r = s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CatCenter.localization_app`：localization_app (X : C) : (r
+.localization L W).app (L.obj X) = L.map (r.app X)
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma localization_one :
     (1 : CatCenter C).localization L W = 1 :=
   ext_of_localization L W _ _ (fun X => by simp)
-
-/--
-lemma `localization_mul` / 引理 `localization_mul`
-
-English:
-lemma localization_mul
-  proof: ext_of_localization L W _ _ (fun X => by simp)
-
-中文:
-引理 localization_mul
-  证明: ext_of_localization L W _ _ (fun X => by simp)
-
-Depends on / 依赖: ext_of_localization
+/-
+**CategoryTheory.CatCenter.localization_mul** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.CatCenter`。
+形式化陈述：localization_mul : (r * s).localization L W = r.localization L W * s.local
+ization L W
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CatCenter.ext_of_localization`：ext_of_localization (r s :
+ CatCenter D) (h : forall (X : C), r.app (L.obj X) = s.app (L.obj X)) : r = s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CatCenter.localization_app`：localization_app (X : C) : (r
+.localization L W).app (L.obj X) = L.map (r.app X)
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma localization_mul :
     (r * s).localization L W = r.localization L W * s.localization L W :=
@@ -144,64 +151,83 @@ section Preadditive
 variable [Preadditive C] [Preadditive D] [L.Additive]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `localization_zero` / 引理 `localization_zero`
-
-English:
-lemma localization_zero
-  proof: ext_of_localization L W _ _ (fun X => by simp)
-
-中文:
-引理 localization_zero
-  证明: ext_of_localization L W _ _ (fun X => by simp)
-
-Depends on / 依赖: ext_of_localization
+/-
+**CategoryTheory.CatCenter.localization_zero** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.CatCenter`。
+形式化陈述：localization_zero : (0 : CatCenter C).localization L W = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CatCenter.ext_of_localization`：ext_of_localization (r s :
+ CatCenter D) (h : forall (X : C), r.app (L.obj X) = s.app (L.obj X)) : r = s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CatCenter.localization_app`：localization_app (X : C) : (r
+.localization L W).app (L.obj X) = L.map (r.app X)
+· 使用定理 `CategoryTheory.Functor.map_zero`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   [inst_2 : Category…
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma localization_zero :
     (0 : CatCenter C).localization L W = 0 :=
   ext_of_localization L W _ _ (fun X => by simp)
-
-/--
-lemma `localization_add` / 引理 `localization_add`
-
-English:
-lemma localization_add
-  proof: ext_of_localization L W _ _ (by simp)
-
-中文:
-引理 localization_add
-  证明: ext_of_localization L W _ _ (by simp)
-
-Depends on / 依赖: ext_of_localization
+/-
+**CategoryTheory.CatCenter.localization_add** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.CatCenter`。
+形式化陈述：localization_add : (r + s).localization L W = r.localization L W + s.local
+ization L W
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CatCenter.ext_of_localization`：ext_of_localization (r s :
+ CatCenter D) (h : forall (X : C), r.app (L.obj X) = s.app (L.obj X)) : r = s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CatCenter.localization_app`：localization_app (X : C) : (r
+.localization L W).app (L.obj X) = L.map (r.app X)
+· 使用定理 `CategoryTheory.Functor.map_add`：map_add {X Y : C} {f g : X ⟶ Y} : F.map 
+(f + g) = F.map f + F.map g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma localization_add :
     (r + s).localization L W = r.localization L W + s.localization L W :=
   ext_of_localization L W _ _ (by simp)
 
-/--
-Definition of `localizationRingHom` / `localizationRingHom` 的定义
+/-- The morphism of rings `CatCenter C →+* CatCenter D` when `L : C ⥤ D`
+is an additive localization functor between preadditive categories. -/
+/-
+**CategoryTheory.CatCenter.localizationRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.CatCenter`。
+形式化陈述：localizationRingHom : CatCenter C ->+* CatCenter D where toFun r
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.CatCenter.localization_one`：localization_one : (1 : CatCe
+nter C).localization L W = 1
+· 使用引理 `CategoryTheory.CatCenter.localization_mul`：localization_mul : (r * s).lo
+calization L W = r.localization L W * s.localization L W
+· 使用引理 `CategoryTheory.CatCenter.localization_zero`：localization_zero : (0 : Cat
+Center C).localization L W = 0
+· 使用引理 `CategoryTheory.CatCenter.localization_add`：localization_add : (r + s).lo
+calization L W = r.localization L W + s.localization L W
 
-English:
-definition localizationRingHom
-  signature: : CatCenter C ->+* CatCenter D where
-  body: r.localization L W
-  map_zero' := localization_zero L W
-  map_one' := localization_one L W
-  map_add' _ _ := localization_add _ _ _ _
-  map_mul' _ _ := localization_mul _ _ _ _
-
-中文:
-定义 localizationRingHom
-  签名: : CatCenter C ->+* CatCenter D where
-  定义体: r.localization L W
-  map_zero' := localization_zero L W
-  map_one' := localization_one L W
-  map_add' _ _ := localization_add _ _ _ _
-  map_mul' _ _ := localization_mul _ _ _ _
-
-Depends on / 依赖: localization, r.localization
+--- 原说明 ---
+The morphism of rings `CatCenter C →+* CatCenter D` when `L : C ⥤ D`
+is an additive localization functor between preadditive categories.
 -/
-noncomputable def localizationRingHom : CatCenter C ->+* CatCenter D where
+noncomputable def localizationRingHom : CatCenter C →+* CatCenter D where
   toFun r := r.localization L W
   map_zero' := localization_zero L W
   map_one' := localization_one L W
@@ -213,3 +239,4 @@ end Preadditive
 end CatCenter
 
 end CategoryTheory
+

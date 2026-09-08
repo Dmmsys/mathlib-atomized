@@ -53,44 +53,30 @@ variable {α : Type*} {β : Type*}
 /-! ### Basic properties of Polish spaces -/
 
 
-/--
-Definition of `PolishSpace` / `PolishSpace` 的定义
+/-- A Polish space is a topological space with second countable topology, that can be endowed
+with a metric for which it is complete.
 
-English:
-class PolishSpace
-  parameters: (α : Type*) [h : TopologicalSpace α]
-  extends: SecondCountableTopology α, IsCompletelyMetrizableSpace α
-  (no additional axioms)
+To endow a Polish space with a complete metric space structure, do
+`letI := upgradeIsCompletelyMetrizable α`.
+-/
+/-
+**PolishSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_3) → [h : TopologicalSpace α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 Polish空间
-  参数: (α : 类型) [h : 拓扑空间 α]
-  继承: 第二可数拓扑 α, 是余mpletelyMetrizable空间 α
-  (无附加公理)
+--- 原说明 ---
+A Polish space is a topological space with second countable topology, that can b
+e endowed
+with a metric for which it is complete.
+
+To endow a Polish space with a complete metric space structure, do
+`letI := upgradeIsCompletelyMetrizable α`.
 -/
 class PolishSpace (α : Type*) [h : TopologicalSpace α] : Prop
     extends SecondCountableTopology α, IsCompletelyMetrizableSpace α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TopologicalSpace
-  signature: α] [SeparableSpace α] [IsCompletelyMetrizableSpace α] :
-  body: by
-  let := upgradeIsCompletelyMetrizable α
-  have := UniformSpace.secondCountable_of_separable α
-  constructor
-
-中文:
-实例 [拓扑空间
-  签名: α] [可分空间 α] [是余mpletelyMetrizable空间 α] :
-  定义体: by
-  let := upgradeIsCompletelyMetrizable α
-  have := UniformSpace.secondCountable_of_separable α
-  constructor
-
-Depends on / 依赖: UniformSpace, UniformSpace.secondCountable_of_separable, secondCountable_of_separable, upgradeIsCompletelyMetrizable
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TopologicalSpace α] [SeparableSpace α] [IsCompletelyMetrizableSpace α] :
     PolishSpace α := by
@@ -100,59 +86,48 @@ instance [TopologicalSpace α] [SeparableSpace α] [IsCompletelyMetrizableSpace 
 
 namespace PolishSpace
 
-/--
-theorem `exists_nat_nat_continuous_surjective` / 定理 `exists_nat_nat_continuous_surjective`
+/-- Any nonempty Polish space is the continuous image of the fundamental space `ℕ → ℕ`. -/
+/-
+**PolishSpace.exists_nat_nat_continuous_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Po
+lishSpace`。
+形式化陈述：exists_nat_nat_continuous_surjective (α : Type*) [TopologicalSpace α] [Pol
+ishSpace α] [Nonempty α] : exists f : (Nat -> Nat) -> α, Continuous f ∧ Surjecti
+ve f
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_nat_nat_continuous_surjective_of_completeSpace`：exists_nat_nat_co
+ntinuous_surjective_of_completeSpace (α : Type*) [MetricSpace α] [CompleteSpace 
+α] [SecondCountableTopology α] [Nonempty α]…
+· 使用定理 `PolishSpace.toIsCompletelyMetrizableSpace`：∀ {α : Type u_3} {h : Topolog
+icalSpace α} [self : PolishSpace α], TopologicalSpace.IsCompletelyMetrizableSpac
+e α
+· 使用定理 `TopologicalSpace.UpgradedIsCompletelyMetrizableSpace.toCompleteSpace`：∀ 
+{X : Type u_3} [self : TopologicalSpace.UpgradedIsCompletelyMetrizableSpace X], 
+CompleteSpace X
+· 使用定理 `PolishSpace.toSecondCountableTopology`：∀ {α : Type u_3} {h : Topological
+Space α} [self : PolishSpace α], SecondCountableTopology α
 
-English:
-theorem exists_nat_nat_continuous_surjective
-  statement: (α : Type*) [TopologicalSpace α] [PolishSpace α]
-  proof: letI := upgradeIsCompletelyMetrizable α
-  exists_nat_nat_continuous_surjective_of_completeSpace α
-
-中文:
-定理 存在_nat_nat_continuous_surjective
-  结论: (α : 类型) [拓扑空间 α] [Polish空间 α]
-  证明: letI := upgradeIsCompletelyMetrizable α
-  exists_nat_nat_continuous_surjective_of_completeSpace α
-
-Depends on / 依赖: exists_nat_nat_continuous_surjective_of_completeSpace, upgradeIsCompletelyMetrizable
+--- 原说明 ---
+Any nonempty Polish space is the continuous image of the fundamental space `ℕ → 
+ℕ`.
 -/
 theorem exists_nat_nat_continuous_surjective (α : Type*) [TopologicalSpace α] [PolishSpace α]
-    [Nonempty α] : exists f : (Nat -> Nat) -> α, Continuous f ∧ Surjective f :=
+    [Nonempty α] : ∃ f : (ℕ → ℕ) → α, Continuous f ∧ Surjective f :=
   letI := upgradeIsCompletelyMetrizable α
   exists_nat_nat_continuous_surjective_of_completeSpace α
 
-/--
-theorem `_root_.Topology.IsClosedEmbedding.polishSpace` / 定理 `_root_.Topology.IsClosedEmbedding.polishSpace`
+/-- Given a closed embedding into a Polish space, the source space is also Polish. -/
+/-
+**PolishSpace._root_.Topology.IsClosedEmbedding.polishSpace** 是 Mathlib 中的一个定理，位
+于命名空间 `PolishSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Topology.IsClosedEmbedding.polishSpace
-  statement: [TopologicalSpace α] [TopologicalSpace β]
-  proof: by
-  let := upgradeIsCompletelyMetrizable β
-  let : MetricSpace α := hf.isEmbedding.comapMetricSpace f
-  have : SecondCountableTopology α := hf.isEmbedding.secondCountableTopology
-  have : CompleteSpace α := by
-    rw [completeSpace_iff_isComplete_range hf.isEmbedding.to_isometry.isUniformInducing]
-    exact hf.isClosed_range.isComplete
-  infer_instance
-
-中文:
-定理 _root_.拓扑.是闭嵌入.polishSpace
-  结论: [拓扑空间 α] [拓扑空间 β]
-  证明: by
-  let := upgradeIsCompletelyMetrizable β
-  let : MetricSpace α := hf.isEmbedding.comapMetricSpace f
-  have : SecondCountableTopology α := hf.isEmbedding.secondCountableTopology
-  have : CompleteSpace α := by
-    rw [completeSpace_iff_isComplete_range hf.isEmbedding.to_isometry.isUniformInducing]
-    exact hf.isClosed_range.isComplete
-  infer_instance
-
-Depends on / 依赖: CompleteSpace, MetricSpace, SecondCountableTopology, comapMetricSpace, completeSpace_iff_isComplete_range, hf.isClosed_range.isComplete, hf.isEmbedding.comapMetricSpace, hf.isEmbedding.secondCountableTopology, hf.isEmbedding.to_isometry.isUniformInducing, infer_instance, isClosed_range, isComplete, isEmbedding, isUniformInducing, secondCountableTopology, to_isometry, upgradeIsCompletelyMetrizable
+--- 原说明 ---
+Given a closed embedding into a Polish space, the source space is also Polish.
 -/
 theorem _root_.Topology.IsClosedEmbedding.polishSpace [TopologicalSpace α] [TopologicalSpace β]
-    [PolishSpace β] {f : α -> β} (hf : IsClosedEmbedding f) : PolishSpace α := by
+    [PolishSpace β] {f : α → β} (hf : IsClosedEmbedding f) : PolishSpace α := by
   let := upgradeIsCompletelyMetrizable β
   let : MetricSpace α := hf.isEmbedding.comapMetricSpace f
   have : SecondCountableTopology α := hf.isEmbedding.secondCountableTopology
@@ -161,172 +136,156 @@ theorem _root_.Topology.IsClosedEmbedding.polishSpace [TopologicalSpace α] [Top
     exact hf.isClosed_range.isComplete
   infer_instance
 
-/--
-theorem `_root_.Equiv.polishSpace_induced` / 定理 `_root_.Equiv.polishSpace_induced`
+/-- Pulling back a Polish topology under an equiv gives again a Polish topology. -/
+/-
+**PolishSpace._root_.Equiv.polishSpace_induced** 是 Mathlib 中的一个定理，位于命名空间 `Polish
+Space`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Equiv.polishSpace_induced
-  given: [t : TopologicalSpace β] [PolishSpace β] (f : α ≃ β)
-  proof: letI : TopologicalSpace α := t.induced f
-  (f.toHomeomorphOfIsInducing ⟨rfl⟩).isClosedEmbedding.polishSpace
-
-中文:
-定理 _root_.等价.polishSpace_induced
-  条件: [t : 拓扑空间 β] [Polish空间 β] (f : α ≃ β)
-  证明: letI : TopologicalSpace α := t.induced f
-  (f.toHomeomorphOfIsInducing ⟨rfl⟩).isClosedEmbedding.polishSpace
-
-Depends on / 依赖: TopologicalSpace, f.toHomeomorphOfIsInducing, induced, isClosedEmbedding, isClosedEmbedding.polishSpace, polishSpace, t.induced, toHomeomorphOfIsInducing
+--- 原说明 ---
+Pulling back a Polish topology under an equiv gives again a Polish topology.
 -/
 theorem _root_.Equiv.polishSpace_induced [t : TopologicalSpace β] [PolishSpace β] (f : α ≃ β) :
     @PolishSpace α (t.induced f) :=
   letI : TopologicalSpace α := t.induced f
   (f.toHomeomorphOfIsInducing ⟨rfl⟩).isClosedEmbedding.polishSpace
 
-/--
-theorem `_root_.IsClosed.polishSpace` / 定理 `_root_.IsClosed.polishSpace`
+/-- A closed subset of a Polish space is also Polish. -/
+/-
+**PolishSpace._root_.IsClosed.polishSpace** 是 Mathlib 中的一个定理，位于命名空间 `PolishSpace
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.IsClosed.polishSpace
-  statement: [TopologicalSpace α] [PolishSpace α] {s : Set α}
-  proof: hs.isClosedEmbedding_subtypeVal.polishSpace
-
-中文:
-定理 _root_.是闭集.polishSpace
-  结论: [拓扑空间 α] [Polish空间 α] {s : 集合 α}
-  证明: hs.isClosedEmbedding_subtypeVal.polishSpace
-
-Depends on / 依赖: hs.isClosedEmbedding_subtypeVal.polishSpace, isClosedEmbedding_subtypeVal, polishSpace
+--- 原说明 ---
+A closed subset of a Polish space is also Polish.
 -/
 theorem _root_.IsClosed.polishSpace [TopologicalSpace α] [PolishSpace α] {s : Set α}
     (hs : IsClosed s) : PolishSpace s :=
   hs.isClosedEmbedding_subtypeVal.polishSpace
-
-/--
-theorem `_root_.CompletePseudometrizable.iInf` / 定理 `_root_.CompletePseudometrizable.iInf`
-
-English:
-theorem _root_.CompletePseudometrizable.iInf
-  statement: {ι : Type*} [Countable ι]
-  proof: by
-  choose u hcomp hcount hut using ht
-  obtain rfl : t = fun i => (u i).toTopologicalSpace := (funext hut).symm
-  refine ⟨⨅ i, u i, .iInf hcomp ht₀, ?_, UniformSpace.toTopologicalSpace_iInf⟩
-  rw [iInf_uniformity]
-  infer_instance
-
-中文:
-定理 _root_.CompletePseudometrizable.iInf
-  结论: {ι : 类型} [可数 ι]
-  证明: by
-  choose u hcomp hcount hut using ht
-  obtain rfl : t = fun i => (u i).toTopologicalSpace := (funext hut).symm
-  refine ⟨⨅ i, u i, .iInf hcomp ht₀, ?_, UniformSpace.toTopologicalSpace_iInf⟩
-  rw [iInf_uniformity]
-  infer_instance
+/-
+**PolishSpace._root_.CompletePseudometrizable.iInf** 是 Mathlib 中的一个定理，位于命名空间 `Po
+lishSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem _root_.CompletePseudometrizable.iInf {ι : Type*} [Countable ι]
-    {t : ι -> TopologicalSpace α} (ht₀ : exists t₀, @T2Space α t₀ ∧ forall i, t i <= t₀)
-    (ht : forall i, exists u : UniformSpace α, CompleteSpace α ∧ 𝓤[u].IsCountablyGenerated ∧
+    {t : ι → TopologicalSpace α} (ht₀ : ∃ t₀, @T2Space α t₀ ∧ ∀ i, t i ≤ t₀)
+    (ht : ∀ i, ∃ u : UniformSpace α, CompleteSpace α ∧ 𝓤[u].IsCountablyGenerated ∧
       u.toTopologicalSpace = t i) :
-    exists u : UniformSpace α, CompleteSpace α ∧
+    ∃ u : UniformSpace α, CompleteSpace α ∧
       𝓤[u].IsCountablyGenerated ∧ u.toTopologicalSpace = ⨅ i, t i := by
   choose u hcomp hcount hut using ht
-  obtain rfl : t = fun i => (u i).toTopologicalSpace := (funext hut).symm
+  obtain rfl : t = fun i ↦ (u i).toTopologicalSpace := (funext hut).symm
   refine ⟨⨅ i, u i, .iInf hcomp ht₀, ?_, UniformSpace.toTopologicalSpace_iInf⟩
   rw [iInf_uniformity]
   infer_instance
-
-/--
-theorem `iInf` / 定理 `iInf`
-
-English:
-theorem iInf
-  statement: {ι : Type*} [Countable ι] {t : ι -> TopologicalSpace α}
-  proof: by
-  rcases ht₀ with ⟨i₀, hi₀⟩
-  rcases CompletePseudometrizable.iInf ⟨t i₀, letI := t i₀; haveI := ht i₀; inferInstance, hi₀⟩
-    fun i =>
-      letI := t i; haveI := ht i; letI := upgradeIsCompletelyMetrizable α
-      ⟨inferInstance, inferInstance, inferInstance, rfl⟩
-    with ⟨u, hcomp, hcount, htop⟩
-  rw [← htop]
-  have : @SecondCountableTopology α u.toTopologicalSpace :=
-    htop.symm ▸ secondCountableTopology_iInf fun i => letI := t i; (ht i).toSecondCountableTopology
-  have : @T1Space α u.toTopologicalSpace :=
-    htop.symm ▸ t1Space_antitone (iInf_le _ i₀) (by let := t i₀; have := ht i₀; infer_instance)
-  infer_instance
-
-中文:
-定理 iInf
-  结论: {ι : 类型} [可数 ι] {t : ι -> 拓扑空间 α}
-  证明: by
-  rcases ht₀ with ⟨i₀, hi₀⟩
-  rcases CompletePseudometrizable.iInf ⟨t i₀, letI := t i₀; haveI := ht i₀; inferInstance, hi₀⟩
-    fun i =>
-      letI := t i; haveI := ht i; letI := upgradeIsCompletelyMetrizable α
-      ⟨inferInstance, inferInstance, inferInstance, rfl⟩
-    with ⟨u, hcomp, hcount, htop⟩
-  rw [← htop]
-  have : @SecondCountableTopology α u.toTopologicalSpace :=
-    htop.symm ▸ secondCountableTopology_iInf fun i => letI := t i; (ht i).toSecondCountableTopology
-  have : @T1Space α u.toTopologicalSpace :=
-    htop.symm ▸ t1Space_antitone (iInf_le _ i₀) (by let := t i₀; have := ht i₀; infer_instance)
-  infer_instance
+/-
+**PolishSpace.iInf** 是 Mathlib 中的一个定理，位于命名空间 `PolishSpace`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_3} [Countable ι] {t : ι → TopologicalSpace α}
+,   (∃ i₀, ∀ (i : ι), t i ≤ t i₀) → (∀ (i : ι), PolishSpace α) → PolishSpace α
+参数：∃ i₀, ∀ (i : ι), t i ≤ t i₀；∀ (i : ι), PolishSpace α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompletePseudometrizable.iInf`：∀ {α : Type u_1} {ι : Type u_3} [Countabl
+e ι] {t : ι → TopologicalSpace α},   (∃ t₀, T2Space α ∧ ∀ (i : ι), t i ≤ t₀) →  
+   (∀ (i : ι), ∃ u,…
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.MetrizableSpace`：∀ {X : Typ
+e u_1} [inst : TopologicalSpace X] [TopologicalSpace.IsCompletelyMetrizableSpace
+ X],   TopologicalSpace.MetrizableSpace X
+· 使用定理 `PolishSpace.toIsCompletelyMetrizableSpace`：∀ {α : Type u_3} {h : Topolog
+icalSpace α} [self : PolishSpace α], TopologicalSpace.IsCompletelyMetrizableSpac
+e α
+· 使用定理 `TopologicalSpace.UpgradedIsCompletelyMetrizableSpace.toCompleteSpace`：∀ 
+{X : Type u_3} [self : TopologicalSpace.UpgradedIsCompletelyMetrizableSpace X], 
+CompleteSpace X
+· 使用定理 `EMetric.instIsCountablyGeneratedUniformity`：∀ {α : Type u} [inst : Pseud
+oEMetricSpace α], (uniformity α).IsCountablyGenerated
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `TopologicalSpace.secondCountableTopology_iInf`：secondCountableTopology_i
+Inf {α ι} [Countable ι] {t : ι -> TopologicalSpace α} (ht : forall i, @SecondCou
+ntableTopology α (t i)) : @SecondCo…
+· 使用定理 `PolishSpace.toSecondCountableTopology`：∀ {α : Type u_3} {h : Topological
+Space α} [self : PolishSpace α], SecondCountableTopology α
+· 使用定理 `t1Space_antitone`：t1Space_antitone {X} : Antitone (@T1Space X)
+· 使用定理 `iInf_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] (f :
+ ι → α) (i : ι), iInf f ≤ f i
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `instPolishSpaceOfSeparableSpaceOfIsCompletelyMetrizableSpace`：∀ {α : Typ
+e u_1} [inst : TopologicalSpace α] [TopologicalSpace.SeparableSpace α]   [Topolo
+gicalSpace.IsCompletelyMetrizableSpace α], PolishS…
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.of_completeSpace_metrizable
+`：∀ {X : Type u_1} [inst : UniformSpace X] [CompleteSpace X] [(uniformity X).IsC
+ountablyGenerated] [T0Space X],   TopologicalSpace.IsCompletel…
+· 使用定理 `T3Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T3
+Space X], T0Space X
+· 使用定理 `T4Space.t3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T4Space X
+], T3Space X
+· 使用定理 `instT4SpaceOfT1SpaceOfNormalSpace`：∀ {X : Type u_1} [inst : TopologicalS
+pace X] [T1Space X] [NormalSpace X], T4Space X
+· 使用定理 `CompletelyNormalSpace.toNormalSpace`：∀ {X : Type u_1} [inst : Topologica
+lSpace X] [CompletelyNormalSpace X], NormalSpace X
+· 使用定理 `UniformSpace.completelyNormalSpace_of_isCountablyGenerated_uniformity`：∀
+ {α : Type u} [inst : UniformSpace α] [(uniformity α).IsCountablyGenerated], Com
+pletelyNormalSpace α
 -/
-protected theorem iInf {ι : Type*} [Countable ι] {t : ι -> TopologicalSpace α}
-    (ht₀ : exists i₀, forall i, t i <= t i₀) (ht : forall i, @PolishSpace α (t i)) : @PolishSpace α (⨅ i, t i) := by
+protected theorem iInf {ι : Type*} [Countable ι] {t : ι → TopologicalSpace α}
+    (ht₀ : ∃ i₀, ∀ i, t i ≤ t i₀) (ht : ∀ i, @PolishSpace α (t i)) : @PolishSpace α (⨅ i, t i) := by
   rcases ht₀ with ⟨i₀, hi₀⟩
   rcases CompletePseudometrizable.iInf ⟨t i₀, letI := t i₀; haveI := ht i₀; inferInstance, hi₀⟩
-    fun i =>
+    fun i ↦
       letI := t i; haveI := ht i; letI := upgradeIsCompletelyMetrizable α
       ⟨inferInstance, inferInstance, inferInstance, rfl⟩
     with ⟨u, hcomp, hcount, htop⟩
   rw [← htop]
   have : @SecondCountableTopology α u.toTopologicalSpace :=
-    htop.symm ▸ secondCountableTopology_iInf fun i => letI := t i; (ht i).toSecondCountableTopology
+    htop.symm ▸ secondCountableTopology_iInf fun i ↦ letI := t i; (ht i).toSecondCountableTopology
   have : @T1Space α u.toTopologicalSpace :=
     htop.symm ▸ t1Space_antitone (iInf_le _ i₀) (by let := t i₀; have := ht i₀; infer_instance)
   infer_instance
 
-/--
-theorem `exists_polishSpace_forall_le` / 定理 `exists_polishSpace_forall_le`
+/-- Given a Polish space, and countably many finer Polish topologies, there exists another Polish
+topology which is finer than all of them. -/
+/-
+**PolishSpace.exists_polishSpace_forall_le** 是 Mathlib 中的一个定理，位于命名空间 `PolishSpac
+e`。
+形式化陈述：exists_polishSpace_forall_le {ι : Type*} [Countable ι] [t : TopologicalSpa
+ce α] [p : PolishSpace α] (m : ι -> TopologicalSpace α) (hm : forall n, m n <= t
+) (h'm : forall n, @PolishSpace α (m n)) : exists t' : TopologicalSpace α, (fora
+ll n, t' <= m n) ∧ t' <= t ∧ @PolishSpace α t'
+参数：m : ι -> TopologicalSpace α；hm : forall n, m n <= t；h'm : forall n, @PolishSp
+ace α (m n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iInf_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] (f :
+ ι → α) (i : ι), iInf f ≤ f i
+· 使用定理 `PolishSpace.iInf`：∀ {α : Type u_1} {ι : Type u_3} [Countable ι] {t : ι →
+ TopologicalSpace α},   (∃ i₀, ∀ (i : ι), t i ≤ t i₀) → (∀ (i : ι), PolishSpace 
+α) → P…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Option.forall`：∀ {α : Type u_1} {p : Option α → Prop}, (∀ (x : Option α)
+, p x) ↔ p none ∧ ∀ (x : α), p (some x)
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem exists_polishSpace_forall_le
-  statement: {ι : Type*} [Countable ι] [t : TopologicalSpace α]
-  proof: ⟨⨅ i : Option ι, i.elim t m, fun i => iInf_le _ (some i), iInf_le _ none,
-.iInf ⟨none, Option.forall.2 ⟨le_rfl, hm⟩⟩ Option.forall.2 ⟨p, h'm⟩⟩
-
-中文:
-定理 存在_polishSpace_对任意_le
-  结论: {ι : 类型} [可数 ι] [t : 拓扑空间 α]
-  证明: ⟨⨅ i : Option ι, i.elim t m, fun i => iInf_le _ (some i), iInf_le _ none,
-.iInf ⟨none, Option.forall.2 ⟨le_rfl, hm⟩⟩ Option.forall.2 ⟨p, h'm⟩⟩
-
-Depends on / 依赖: Option.forall, i.elim, iInf_le, le_rfl
+--- 原说明 ---
+Given a Polish space, and countably many finer Polish topologies, there exists a
+nother Polish
+topology which is finer than all of them.
 -/
 theorem exists_polishSpace_forall_le {ι : Type*} [Countable ι] [t : TopologicalSpace α]
-    [p : PolishSpace α] (m : ι -> TopologicalSpace α) (hm : forall n, m n <= t)
-    (h'm : forall n, @PolishSpace α (m n)) :
-    exists t' : TopologicalSpace α, (forall n, t' <= m n) ∧ t' <= t ∧ @PolishSpace α t' :=
-  ⟨⨅ i : Option ι, i.elim t m, fun i => iInf_le _ (some i), iInf_le _ none,
-.iInf ⟨none, Option.forall.2 ⟨le_rfl, hm⟩⟩ Option.forall.2 ⟨p, h'm⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PolishSpace ENNReal
-  body: ENNReal.orderIsoUnitIntervalBirational.toHomeomorph.isClosedEmbedding.polishSpace
-
-中文:
-实例 :
-  签名: Polish空间 广义非负实数
-  定义体: ENNReal.orderIsoUnitIntervalBirational.toHomeomorph.isClosedEmbedding.polishSpace
-
-Depends on / 依赖: ENNReal, ENNReal.orderIsoUnitIntervalBirational.toHomeomorph.isClosedEmbedding.polishSpace, isClosedEmbedding, orderIsoUnitIntervalBirational, polishSpace, toHomeomorph
+    [p : PolishSpace α] (m : ι → TopologicalSpace α) (hm : ∀ n, m n ≤ t)
+    (h'm : ∀ n, @PolishSpace α (m n)) :
+    ∃ t' : TopologicalSpace α, (∀ n, t' ≤ m n) ∧ t' ≤ t ∧ @PolishSpace α t' :=
+  ⟨⨅ i : Option ι, i.elim t m, fun i ↦ iInf_le _ (some i), iInf_le _ none,
+    .iInf ⟨none, Option.forall.2 ⟨le_rfl, hm⟩⟩ <| Option.forall.2 ⟨p, h'm⟩⟩
+/-
+**PolishSpace.** 是 Mathlib 中的一个实例，位于命名空间 `PolishSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PolishSpace ENNReal :=
   ENNReal.orderIsoUnitIntervalBirational.toHomeomorph.isClosedEmbedding.polishSpace
@@ -346,338 +305,256 @@ namespace TopologicalSpace.Opens
 
 variable [MetricSpace α] {s : Opens α}
 
-/--
-Definition of `CompleteCopy` / `CompleteCopy` 的定义
+/-- A type synonym for a subset `s` of a metric space, on which we will construct another metric
+for which it will be complete. -/
+/-
+**TopologicalSpace.Opens.CompleteCopy** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpac
+e.Opens`。
+形式化陈述：CompleteCopy {α : Type*} [MetricSpace α] (s : Opens α) : Type _
+参数：s : Opens α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CompleteCopy
-  signature: {α : Type*} [MetricSpace α] (s : Opens α)
-  body: s
-
-中文:
-定义 CompleteCopy
-  签名: {α : 类型} [度量空间 α] (s : Opens α)
-  定义体: s
+--- 原说明 ---
+A type synonym for a subset `s` of a metric space, on which we will construct an
+other metric
+for which it will be complete.
 -/
 def CompleteCopy {α : Type*} [MetricSpace α] (s : Opens α) : Type _ := s
 
 namespace CompleteCopy
 
-/--
-Instance `instDist` / 实例 `instDist`
+/-- A distance on an open subset `s` of a metric space, designed to make it complete.  It is given
+by `dist' x y = dist x y + |1 / dist x sᶜ - 1 / dist y sᶜ|`, where the second term blows up close to
+the boundary to ensure that Cauchy sequences for `dist'` remain well inside `s`. -/
+/-
+**TopologicalSpace.Opens.CompleteCopy.instDist** 是 Mathlib 中的一个实例，位于命名空间 `Topolo
+gicalSpace.Opens.CompleteCopy`。
+形式化陈述：instDist : Dist (CompleteCopy s) where dist x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instDist
-  signature: : Dist (CompleteCopy s) where
-  body: dist x.1 y.1 + abs (1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ)
-
-中文:
-实例 instDist
-  签名: : Dist (CompleteCopy s) where
-  定义体: dist x.1 y.1 + abs (1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ)
-
-Depends on / 依赖: infDist
+--- 原说明 ---
+A distance on an open subset `s` of a metric space, designed to make it complete
+.  It is given
+by `dist' x y = dist x y + |1 / dist x sᶜ - 1 / dist y sᶜ|`, where the second te
+rm blows up close to
+the boundary to ensure that Cauchy sequences for `dist'` remain well inside `s`.
 -/
 instance instDist : Dist (CompleteCopy s) where
   dist x y := dist x.1 y.1 + abs (1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ)
-
-/--
-theorem `dist_eq` / 定理 `dist_eq`
-
-English:
-theorem dist_eq
-  given: (x y : CompleteCopy s)
-  proof: rfl
-
-中文:
-定理 dist_eq
-  条件: (x y : CompleteCopy s)
-  证明: rfl
+/-
+**TopologicalSpace.Opens.CompleteCopy.dist_eq** 是 Mathlib 中的一个定理，位于命名空间 `Topolog
+icalSpace.Opens.CompleteCopy`。
+形式化陈述：dist_eq (x y : CompleteCopy s) : dist x y = dist x.1 y.1 + abs (1 / infDis
+t x.1 sᶜ - 1 / infDist y.1 sᶜ)
+参数：x y : CompleteCopy s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dist_eq (x y : CompleteCopy s) :
     dist x y = dist x.1 y.1 + abs (1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ) :=
   rfl
-
-/--
-theorem `dist_val_le_dist` / 定理 `dist_val_le_dist`
-
-English:
-theorem dist_val_le_dist
-  given: (x y : CompleteCopy s)
-  statement: dist x.1 y.1 <= dist x y
-  proof: le_add_of_nonneg_right (abs_nonneg _)
-
-中文:
-定理 dist_val_le_dist
-  条件: (x y : CompleteCopy s)
-  结论: dist x.1 y.1 <= dist x y
-  证明: le_add_of_nonneg_right (abs_nonneg _)
-
-Depends on / 依赖: abs_nonneg, le_add_of_nonneg_right
+/-
+**TopologicalSpace.Opens.CompleteCopy.dist_val_le_dist** 是 Mathlib 中的一个定理，位于命名空间
+ `TopologicalSpace.Opens.CompleteCopy`。
+形式化陈述：dist_val_le_dist (x y : CompleteCopy s) : dist x.1 y.1 <= dist x y
+参数：x y : CompleteCopy s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_add_of_nonneg_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : LE α] [AddLeftMono α] {a b : α}, 0 ≤ b → a ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 -/
-theorem dist_val_le_dist (x y : CompleteCopy s) : dist x.1 y.1 <= dist x y :=
+theorem dist_val_le_dist (x y : CompleteCopy s) : dist x.1 y.1 ≤ dist x y :=
   le_add_of_nonneg_right (abs_nonneg _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: TopologicalSpace (CompleteCopy s)
-  body: inferInstanceAs (TopologicalSpace s)
-
-中文:
-实例 :
-  签名: 拓扑空间 (CompleteCopy s)
-  定义体: inferInstanceAs (TopologicalSpace s)
-
-Depends on / 依赖: TopologicalSpace
+/-
+**TopologicalSpace.Opens.CompleteCopy.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.Opens.CompleteCopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : TopologicalSpace (CompleteCopy s) := inferInstanceAs (TopologicalSpace s)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SecondCountableTopology
-  signature: α] : SecondCountableTopology (CompleteCopy s)
-  body: inferInstanceAs (SecondCountableTopology s)
-
-中文:
-实例 [第二可数拓扑
-  签名: α] : 第二可数拓扑 (CompleteCopy s)
-  定义体: inferInstanceAs (SecondCountableTopology s)
-
-Depends on / 依赖: SecondCountableTopology
+/-
+**TopologicalSpace.Opens.CompleteCopy.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.Opens.CompleteCopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SecondCountableTopology α] : SecondCountableTopology (CompleteCopy s) :=
   inferInstanceAs (SecondCountableTopology s)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T0Space (CompleteCopy s)
-  body: inferInstanceAs (T0Space s)
-
-中文:
-实例 :
-  签名: T0空间 (CompleteCopy s)
-  定义体: inferInstanceAs (T0Space s)
-
-Depends on / 依赖: T0Space
+/-
+**TopologicalSpace.Opens.CompleteCopy.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.Opens.CompleteCopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : T0Space (CompleteCopy s) := inferInstanceAs (T0Space s)
 
 /--
-Instance `instMetricSpace` / 实例 `instMetricSpace`
+A metric space structure on a subset `s` of a metric space, designed to make it complete
+if `s` is open. It is given by `dist' x y = dist x y + |1 / dist x sᶜ - 1 / dist y sᶜ|`, where the
+second term blows up close to the boundary to ensure that Cauchy sequences for `dist'` remain well
+inside `s`.
 
-English:
-instance instMetricSpace
-  signature: : MetricSpace (CompleteCopy s)
-  body: by
-  refine @MetricSpace.ofT0PseudoMetricSpace (CompleteCopy s)
-    (.ofDistTopology dist (fun _ => ?_) (fun _ _ => ?_) (fun x y z => ?_) fun t => ?_) _
-  · simp only [dist_eq, dist_self, one_div, sub_self, abs_zero, add_zero]
-  · simp only [dist_eq, dist_comm, abs_sub_comm]
-  · calc
-      dist x z = dist x.1 z.1 + |1 / infDist x.1 sᶜ - 1 / infDist z.1 sᶜ| := rfl
-      _ <= dist x.1 y.1 + dist y.1 z.1 + (|1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ| +
-            |1 / infDist y.1 sᶜ - 1 / infDist z.1 sᶜ|) :=
-        add_le_add (dist_triangle _ _ _) (dist_triangle (1 / infDist _ _) _ _)
-      _ = dist x y + dist y z := add_add_add_comm ..
-  · refine ⟨fun h x hx => ?_, fun h => isOpen_iff_mem_nhds.2 fun x hx => ?_⟩
-    · rcases (Metric.isOpen_iff (α := s)).1 h x hx with ⟨ε, ε0, hε⟩
-exact ⟨ε, ε0, fun y hy => hε (dist_comm _ _).trans_lt (dist_val_le_dist _ _).trans_lt hy⟩
-    · rcases h x hx with ⟨ε, ε0, hε⟩
-      simp only [dist_eq, one_div] at hε
-      have : Tendsto (fun y : s => dist x.1 y.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist y.1 sᶜ)⁻¹|)
-          (𝓝 x) (𝓝 (dist x.1 x.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist x.1 sᶜ)⁻¹|)) := by
-        refine (tendsto_const_nhds.dist continuous_subtype_val.continuousAt).add
-          (tendsto_const_nhds.sub <| ?_).abs
-        refine (continuousAt_inv_infDist_pt ?_).comp continuous_subtype_val.continuousAt
-        rw [s.isOpen.isClosed_compl.closure_eq]; rw [mem_compl_iff]; rw [not_not]
-        exact x.2
-      simp only [dist_self, sub_self, abs_zero, zero_add] at this
-      exact mem_of_superset (this <| gt_mem_nhds ε0) hε
+This definition ensures the `TopologicalSpace` structure on
+`TopologicalSpace.Opens.CompleteCopy s` is definitionally equal to the original one.
+-/
+/-
+**TopologicalSpace.Opens.CompleteCopy.instMetricSpace** 是 Mathlib 中的一个实例，位于命名空间 
+`TopologicalSpace.Opens.CompleteCopy`。
+形式化陈述：instMetricSpace : MetricSpace (CompleteCopy s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Opens.CompleteCopy.instT0Space`：∀ {α : Type u_1} [inst 
+: MetricSpace α] {s : TopologicalSpace.Opens α}, T0Space s.CompleteCopy
 
-中文:
-实例 instMetricSpace
-  签名: : 度量空间 (CompleteCopy s)
-  定义体: by
-  refine @MetricSpace.ofT0PseudoMetricSpace (CompleteCopy s)
-    (.ofDistTopology dist (fun _ => ?_) (fun _ _ => ?_) (fun x y z => ?_) fun t => ?_) _
-  · simp only [dist_eq, dist_self, one_div, sub_self, abs_zero, add_zero]
-  · simp only [dist_eq, dist_comm, abs_sub_comm]
-  · calc
-      dist x z = dist x.1 z.1 + |1 / infDist x.1 sᶜ - 1 / infDist z.1 sᶜ| := rfl
-      _ <= dist x.1 y.1 + dist y.1 z.1 + (|1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ| +
-            |1 / infDist y.1 sᶜ - 1 / infDist z.1 sᶜ|) :=
-        add_le_add (dist_triangle _ _ _) (dist_triangle (1 / infDist _ _) _ _)
-      _ = dist x y + dist y z := add_add_add_comm ..
-  · refine ⟨fun h x hx => ?_, fun h => isOpen_iff_mem_nhds.2 fun x hx => ?_⟩
-    · rcases (Metric.isOpen_iff (α := s)).1 h x hx with ⟨ε, ε0, hε⟩
-exact ⟨ε, ε0, fun y hy => hε (dist_comm _ _).trans_lt (dist_val_le_dist _ _).trans_lt hy⟩
-    · rcases h x hx with ⟨ε, ε0, hε⟩
-      simp only [dist_eq, one_div] at hε
-      have : Tendsto (fun y : s => dist x.1 y.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist y.1 sᶜ)⁻¹|)
-          (𝓝 x) (𝓝 (dist x.1 x.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist x.1 sᶜ)⁻¹|)) := by
-        refine (tendsto_const_nhds.dist continuous_subtype_val.continuousAt).add
-          (tendsto_const_nhds.sub <| ?_).abs
-        refine (continuousAt_inv_infDist_pt ?_).comp continuous_subtype_val.continuousAt
-        rw [s.isOpen.isClosed_compl.closure_eq]; rw [mem_compl_iff]; rw [not_not]
-        exact x.2
-      simp only [dist_self, sub_self, abs_zero, zero_add] at this
-      exact mem_of_superset (this <| gt_mem_nhds ε0) hε
+--- 原说明 ---
+A metric space structure on a subset `s` of a metric space, designed to make it 
+complete
+if `s` is open. It is given by `dist' x y = dist x y + |1 / dist x sᶜ - 1 / dist
+ y sᶜ|`, where the
+second term blows up close to the boundary to ensure that Cauchy sequences for `
+dist'` remain well
+inside `s`.
 
-Depends on / 依赖: CompleteCopy, MetricSpace, MetricSpace.ofT0PseudoMetricSpace, abs_sub_comm, abs_zero, add_le_add, add_zero, dist_comm, dist_eq, dist_self, dist_triangle, infDist, ofDistTopology, ofT0PseudoMetricSpace, one_div, sub_self
+This definition ensures the `TopologicalSpace` structure on
+`TopologicalSpace.Opens.CompleteCopy s` is definitionally equal to the original 
+one.
 -/
 instance instMetricSpace : MetricSpace (CompleteCopy s) := by
   refine @MetricSpace.ofT0PseudoMetricSpace (CompleteCopy s)
-    (.ofDistTopology dist (fun _ => ?_) (fun _ _ => ?_) (fun x y z => ?_) fun t => ?_) _
+    (.ofDistTopology dist (fun _ ↦ ?_) (fun _ _ ↦ ?_) (fun x y z ↦ ?_) fun t ↦ ?_) _
   · simp only [dist_eq, dist_self, one_div, sub_self, abs_zero, add_zero]
   · simp only [dist_eq, dist_comm, abs_sub_comm]
   · calc
       dist x z = dist x.1 z.1 + |1 / infDist x.1 sᶜ - 1 / infDist z.1 sᶜ| := rfl
-      _ <= dist x.1 y.1 + dist y.1 z.1 + (|1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ| +
+      _ ≤ dist x.1 y.1 + dist y.1 z.1 + (|1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ| +
             |1 / infDist y.1 sᶜ - 1 / infDist z.1 sᶜ|) :=
         add_le_add (dist_triangle _ _ _) (dist_triangle (1 / infDist _ _) _ _)
       _ = dist x y + dist y z := add_add_add_comm ..
-  · refine ⟨fun h x hx => ?_, fun h => isOpen_iff_mem_nhds.2 fun x hx => ?_⟩
+  · refine ⟨fun h x hx ↦ ?_, fun h ↦ isOpen_iff_mem_nhds.2 fun x hx ↦ ?_⟩
     · rcases (Metric.isOpen_iff (α := s)).1 h x hx with ⟨ε, ε0, hε⟩
-exact ⟨ε, ε0, fun y hy => hε (dist_comm _ _).trans_lt (dist_val_le_dist _ _).trans_lt hy⟩
+      exact ⟨ε, ε0, fun y hy ↦ hε <| (dist_comm _ _).trans_lt <| (dist_val_le_dist _ _).trans_lt hy⟩
     · rcases h x hx with ⟨ε, ε0, hε⟩
       simp only [dist_eq, one_div] at hε
-      have : Tendsto (fun y : s => dist x.1 y.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist y.1 sᶜ)⁻¹|)
+      have : Tendsto (fun y : s ↦ dist x.1 y.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist y.1 sᶜ)⁻¹|)
           (𝓝 x) (𝓝 (dist x.1 x.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist x.1 sᶜ)⁻¹|)) := by
         refine (tendsto_const_nhds.dist continuous_subtype_val.continuousAt).add
           (tendsto_const_nhds.sub <| ?_).abs
         refine (continuousAt_inv_infDist_pt ?_).comp continuous_subtype_val.continuousAt
-        rw [s.isOpen.isClosed_compl.closure_eq]; rw [mem_compl_iff]; rw [not_not]
+        rw [s.isOpen.isClosed_compl.closure_eq, mem_compl_iff, not_not]
         exact x.2
       simp only [dist_self, sub_self, abs_zero, zero_add] at this
       exact mem_of_superset (this <| gt_mem_nhds ε0) hε
-
-/--
-Instance `instCompleteSpace` / 实例 `instCompleteSpace`
-
-English:
-instance instCompleteSpace
-  signature: [CompleteSpace α]
-  body: by
-  refine Metric.complete_of_convergent_controlled_sequences ((1 / 2) ^ ·) (by simp) fun u hu => ?_
-  have A : CauchySeq fun n => (u n).1 := by
-    refine cauchySeq_of_le_tendsto_0 (fun n : Nat => (1 / 2) ^ n) (fun n m N hNn hNm => ?_) ?_
-    · exact (dist_val_le_dist (u n) (u m)).trans (hu N n m hNn hNm).le
-    · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by simp) (by norm_num)
-  obtain ⟨x, xlim⟩ : exists x, Tendsto (fun n => (u n).1) atTop (𝓝 x) := cauchySeq_tendsto_of_complete A
-  by_cases xs : x in s
-  · exact ⟨⟨x, xs⟩, tendsto_subtype_rng.2 xlim⟩
-  obtain ⟨C, hC⟩ : exists C, forall n, 1 / infDist (u n).1 sᶜ < C := by
-    refine ⟨(1 / 2) ^ 0 + 1 / infDist (u 0).1 sᶜ, fun n => ?_⟩
-    rw [← sub_lt_iff_lt_add]
-    calc
-      _ <= |1 / infDist (u n).1 sᶜ - 1 / infDist (u 0).1 sᶜ| := le_abs_self _
-      _ = |1 / infDist (u 0).1 sᶜ - 1 / infDist (u n).1 sᶜ| := abs_sub_comm _ _
-      _ <= dist (u 0) (u n) := le_add_of_nonneg_left dist_nonneg
-      _ < (1 / 2) ^ 0 := hu 0 0 n le_rfl n.zero_le
-  have Cpos : 0 < C := lt_of_le_of_lt (div_nonneg zero_le_one infDist_nonneg) (hC 0)
-  have Hmem : forall {y}, y in s ↔ 0 < infDist y sᶜ := fun {y} => by
-    rw [← s.isOpen.isClosed_compl.notMem_iff_infDist_pos ⟨x]; rw [xs⟩]; exact not_not.symm
-  have I : forall n, 1 / C <= infDist (u n).1 sᶜ := fun n => by
-    have : 0 < infDist (u n).1 sᶜ := Hmem.1 (u n).2
-    rw [div_le_iff₀' Cpos]
-    exact (div_le_iff₀ this).1 (hC n).le
-  have I' : 1 / C <= infDist x sᶜ :=
-    have : Tendsto (fun n => infDist (u n).1 sᶜ) atTop (𝓝 (infDist x sᶜ)) :=
-      ((continuous_infDist_pt (sᶜ : Set α)).tendsto x).comp xlim
-    ge_of_tendsto' this I
-  exact absurd (Hmem.2 <| lt_of_lt_of_le (div_pos one_pos Cpos) I') xs
-
-中文:
-实例 instCompleteSpace
-  签名: [完备空间 α]
-  定义体: by
-  refine Metric.complete_of_convergent_controlled_sequences ((1 / 2) ^ ·) (by simp) fun u hu => ?_
-  have A : CauchySeq fun n => (u n).1 := by
-    refine cauchySeq_of_le_tendsto_0 (fun n : Nat => (1 / 2) ^ n) (fun n m N hNn hNm => ?_) ?_
-    · exact (dist_val_le_dist (u n) (u m)).trans (hu N n m hNn hNm).le
-    · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by simp) (by norm_num)
-  obtain ⟨x, xlim⟩ : exists x, Tendsto (fun n => (u n).1) atTop (𝓝 x) := cauchySeq_tendsto_of_complete A
-  by_cases xs : x in s
-  · exact ⟨⟨x, xs⟩, tendsto_subtype_rng.2 xlim⟩
-  obtain ⟨C, hC⟩ : exists C, forall n, 1 / infDist (u n).1 sᶜ < C := by
-    refine ⟨(1 / 2) ^ 0 + 1 / infDist (u 0).1 sᶜ, fun n => ?_⟩
-    rw [← sub_lt_iff_lt_add]
-    calc
-      _ <= |1 / infDist (u n).1 sᶜ - 1 / infDist (u 0).1 sᶜ| := le_abs_self _
-      _ = |1 / infDist (u 0).1 sᶜ - 1 / infDist (u n).1 sᶜ| := abs_sub_comm _ _
-      _ <= dist (u 0) (u n) := le_add_of_nonneg_left dist_nonneg
-      _ < (1 / 2) ^ 0 := hu 0 0 n le_rfl n.zero_le
-  have Cpos : 0 < C := lt_of_le_of_lt (div_nonneg zero_le_one infDist_nonneg) (hC 0)
-  have Hmem : forall {y}, y in s ↔ 0 < infDist y sᶜ := fun {y} => by
-    rw [← s.isOpen.isClosed_compl.notMem_iff_infDist_pos ⟨x]; rw [xs⟩]; exact not_not.symm
-  have I : forall n, 1 / C <= infDist (u n).1 sᶜ := fun n => by
-    have : 0 < infDist (u n).1 sᶜ := Hmem.1 (u n).2
-    rw [div_le_iff₀' Cpos]
-    exact (div_le_iff₀ this).1 (hC n).le
-  have I' : 1 / C <= infDist x sᶜ :=
-    have : Tendsto (fun n => infDist (u n).1 sᶜ) atTop (𝓝 (infDist x sᶜ)) :=
-      ((continuous_infDist_pt (sᶜ : Set α)).tendsto x).comp xlim
-    ge_of_tendsto' this I
-  exact absurd (Hmem.2 <| lt_of_lt_of_le (div_pos one_pos Cpos) I') xs
-
-Depends on / 依赖: CauchySeq, Metric, Metric.complete_of_convergent_controlled_sequences, Tendsto, cauchySeq_of_le_tendsto_0, cauchySeq_tendsto_of_complete, complete_of_convergent_controlled_sequences, dist_val_le_dist, tendsto_pow_atTop_nhds_zero_of_lt_one
+/-
+**TopologicalSpace.Opens.CompleteCopy.instCompleteSpace** 是 Mathlib 中的一个实例，位于命名空
+间 `TopologicalSpace.Opens.CompleteCopy`。
+形式化陈述：instCompleteSpace [CompleteSpace α] : CompleteSpace (CompleteCopy s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.complete_of_convergent_controlled_sequences`：Metric.complete_of_c
+onvergent_controlled_sequences (B : Nat -> Real) (hB : forall n, 0 < B n) (H : f
+orall u : Nat -> α, (forall N n m : Nat,…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `cauchySeq_of_le_tendsto_0`：cauchySeq_of_le_tendsto_0 {s : β -> α} (b : β
+ -> Real) (h : forall n m N : β, N <= n -> N <= m -> dist (s n) (s m) <= b N) (h
+₀ : Tendsto b a…
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `TopologicalSpace.Opens.CompleteCopy.dist_val_le_dist`：dist_val_le_dist (
+x y : CompleteCopy s) : dist x.1 y.1 <= dist x y
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `tendsto_pow_atTop_nhds_zero_of_lt_one`：tendsto_pow_atTop_nhds_zero_of_lt
+_one {𝕜 : Type*} [Semifield 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [ExistsAd
+dOfLE 𝕜] [Archimedean 𝕜] [T…
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_lt_true`：isNNRat_lt_true [Semiring α] [Line
+arOrder α] [IsStrictOrderedRing α] : {a b : α} -> {na nb : Nat} -> {da db : Nat}
+ -> IsNNRat a na da -> IsN…
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_div`：∀ {α : Type u} [inst : DivisionSemirin
+g α] {a b : α} {cn cd : ℕ},   Mathlib.Meta.NormNum.IsNNRat (a * b⁻¹) cn cd → Mat
+hlib.Meta.NormNum.IsNN…
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_mul`：isNNRat_mul {α} [Semiring α] {f : α ->
+ α -> α} {a b : α} {na nb nc : Nat} {da db dc k : Nat} : f = HMul.hMul -> IsNNRa
+t a na da -> IsNNRat b…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isNNRat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsN
+NRat a n 1
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_inv_pos`：isNNRat_inv_pos {α} [DivisionSemir
+ing α] [CharZero α] {a : α} {n d : Nat} : IsNNRat a (Nat.succ n) d -> IsNNRat a⁻
+¹ d (Nat.succ n)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+（共 77 条，此处仅展示前 30 条）
 -/
 instance instCompleteSpace [CompleteSpace α] : CompleteSpace (CompleteCopy s) := by
-  refine Metric.complete_of_convergent_controlled_sequences ((1 / 2) ^ ·) (by simp) fun u hu => ?_
+  refine Metric.complete_of_convergent_controlled_sequences ((1 / 2) ^ ·) (by simp) fun u hu ↦ ?_
   have A : CauchySeq fun n => (u n).1 := by
-    refine cauchySeq_of_le_tendsto_0 (fun n : Nat => (1 / 2) ^ n) (fun n m N hNn hNm => ?_) ?_
+    refine cauchySeq_of_le_tendsto_0 (fun n : ℕ => (1 / 2) ^ n) (fun n m N hNn hNm => ?_) ?_
     · exact (dist_val_le_dist (u n) (u m)).trans (hu N n m hNn hNm).le
     · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by simp) (by norm_num)
-  obtain ⟨x, xlim⟩ : exists x, Tendsto (fun n => (u n).1) atTop (𝓝 x) := cauchySeq_tendsto_of_complete A
-  by_cases xs : x in s
+  obtain ⟨x, xlim⟩ : ∃ x, Tendsto (fun n => (u n).1) atTop (𝓝 x) := cauchySeq_tendsto_of_complete A
+  by_cases xs : x ∈ s
   · exact ⟨⟨x, xs⟩, tendsto_subtype_rng.2 xlim⟩
-  obtain ⟨C, hC⟩ : exists C, forall n, 1 / infDist (u n).1 sᶜ < C := by
-    refine ⟨(1 / 2) ^ 0 + 1 / infDist (u 0).1 sᶜ, fun n => ?_⟩
+  obtain ⟨C, hC⟩ : ∃ C, ∀ n, 1 / infDist (u n).1 sᶜ < C := by
+    refine ⟨(1 / 2) ^ 0 + 1 / infDist (u 0).1 sᶜ, fun n ↦ ?_⟩
     rw [← sub_lt_iff_lt_add]
     calc
-      _ <= |1 / infDist (u n).1 sᶜ - 1 / infDist (u 0).1 sᶜ| := le_abs_self _
+      _ ≤ |1 / infDist (u n).1 sᶜ - 1 / infDist (u 0).1 sᶜ| := le_abs_self _
       _ = |1 / infDist (u 0).1 sᶜ - 1 / infDist (u n).1 sᶜ| := abs_sub_comm _ _
-      _ <= dist (u 0) (u n) := le_add_of_nonneg_left dist_nonneg
+      _ ≤ dist (u 0) (u n) := le_add_of_nonneg_left dist_nonneg
       _ < (1 / 2) ^ 0 := hu 0 0 n le_rfl n.zero_le
   have Cpos : 0 < C := lt_of_le_of_lt (div_nonneg zero_le_one infDist_nonneg) (hC 0)
-  have Hmem : forall {y}, y in s ↔ 0 < infDist y sᶜ := fun {y} => by
-    rw [← s.isOpen.isClosed_compl.notMem_iff_infDist_pos ⟨x]; rw [xs⟩]; exact not_not.symm
-  have I : forall n, 1 / C <= infDist (u n).1 sᶜ := fun n => by
+  have Hmem : ∀ {y}, y ∈ s ↔ 0 < infDist y sᶜ := fun {y} ↦ by
+    rw [← s.isOpen.isClosed_compl.notMem_iff_infDist_pos ⟨x, xs⟩]; exact not_not.symm
+  have I : ∀ n, 1 / C ≤ infDist (u n).1 sᶜ := fun n ↦ by
     have : 0 < infDist (u n).1 sᶜ := Hmem.1 (u n).2
     rw [div_le_iff₀' Cpos]
     exact (div_le_iff₀ this).1 (hC n).le
-  have I' : 1 / C <= infDist x sᶜ :=
+  have I' : 1 / C ≤ infDist x sᶜ :=
     have : Tendsto (fun n => infDist (u n).1 sᶜ) atTop (𝓝 (infDist x sᶜ)) :=
       ((continuous_infDist_pt (sᶜ : Set α)).tendsto x).comp xlim
     ge_of_tendsto' this I
   exact absurd (Hmem.2 <| lt_of_lt_of_le (div_pos one_pos Cpos) I') xs
 
-/--
-theorem `_root_.IsOpen.polishSpace` / 定理 `_root_.IsOpen.polishSpace`
+/-- An open subset of a Polish space is also Polish. -/
+/-
+**TopologicalSpace.Opens.CompleteCopy._root_.IsOpen.polishSpace** 是 Mathlib 中的一个
+定理，位于命名空间 `TopologicalSpace.Opens.CompleteCopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.IsOpen.polishSpace
-  statement: {α : Type*} [TopologicalSpace α] [PolishSpace α] {s : Set α}
-  proof: by
-  let := upgradeIsCompletelyMetrizable α
-  lift s to Opens α using hs
-  exact inferInstanceAs (PolishSpace s.CompleteCopy)
-
-中文:
-定理 _root_.是开集.polishSpace
-  结论: {α : 类型} [拓扑空间 α] [Polish空间 α] {s : 集合 α}
-  证明: by
-  let := upgradeIsCompletelyMetrizable α
-  lift s to Opens α using hs
-  exact inferInstanceAs (PolishSpace s.CompleteCopy)
-
-Depends on / 依赖: CompleteCopy, PolishSpace, s.CompleteCopy, upgradeIsCompletelyMetrizable
+--- 原说明 ---
+An open subset of a Polish space is also Polish.
 -/
 theorem _root_.IsOpen.polishSpace {α : Type*} [TopologicalSpace α] [PolishSpace α] {s : Set α}
     (hs : IsOpen s) : PolishSpace s := by
@@ -693,70 +570,37 @@ namespace PolishSpace
 
 /-! ### Clopenable sets in Polish spaces -/
 
-/--
-Definition of `IsClopenable` / `IsClopenable` 的定义
+/-- A set in a topological space is clopenable if there exists a finer Polish topology for which
+this set is open and closed. It turns out that this notion is equivalent to being Borel-measurable,
+but this is nontrivial (see `isClopenable_iff_measurableSet`). -/
+/-
+**PolishSpace.IsClopenable** 是 Mathlib 中的一个定义，位于命名空间 `PolishSpace`。
+形式化陈述：IsClopenable [t : TopologicalSpace α] (s : Set α) : Prop
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsClopenable
-  signature: [t : TopologicalSpace α] (s : Set α)
-  body: exists t' : TopologicalSpace α, t' <= t ∧ @PolishSpace α t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s
-
-中文:
-定义 IsClopenable
-  签名: [t : 拓扑空间 α] (s : 集合 α)
-  定义体: exists t' : TopologicalSpace α, t' <= t ∧ @PolishSpace α t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s
-
-Depends on / 依赖: IsClosed, IsOpen, PolishSpace, TopologicalSpace
+--- 原说明 ---
+A set in a topological space is clopenable if there exists a finer Polish topolo
+gy for which
+this set is open and closed. It turns out that this notion is equivalent to bein
+g Borel-measurable,
+but this is nontrivial (see `isClopenable_iff_measurableSet`).
 -/
 def IsClopenable [t : TopologicalSpace α] (s : Set α) : Prop :=
-  exists t' : TopologicalSpace α, t' <= t ∧ @PolishSpace α t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s
+  ∃ t' : TopologicalSpace α, t' ≤ t ∧ @PolishSpace α t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s
 
-/--
-theorem `_root_.IsClosed.isClopenable` / 定理 `_root_.IsClosed.isClopenable`
+/-- Given a closed set `s` in a Polish space, one can construct a finer Polish topology for
+which `s` is both open and closed. -/
+/-
+**PolishSpace._root_.IsClosed.isClopenable** 是 Mathlib 中的一个定理，位于命名空间 `PolishSpac
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.IsClosed.isClopenable
-  statement: [TopologicalSpace α] [PolishSpace α] {s : Set α}
-  proof: by
-  /- Both sets `s` and `sᶜ` admit a Polish topology. So does their disjoint union `s ⊕ sᶜ`.
-    Pulling back this topology by the canonical bijection with `α` gives the desired Polish
-    topology in which `s` is both open and closed. -/
-  classical
-  have : PolishSpace s := hs.polishSpace
-  let t : Set α := sᶜ
-  have : PolishSpace t := hs.isOpen_compl.polishSpace
-  let f : s oplus t ≃ α := Equiv.Set.sumCompl s
-  have hle : TopologicalSpace.coinduced f instTopologicalSpaceSum <= ‹_› := by
-    simp only [instTopologicalSpaceSum, coinduced_sup, coinduced_compose, sup_le_iff,
-      ← continuous_iff_coinduced_le]
-    exact ⟨continuous_subtype_val, continuous_subtype_val⟩
-  refine ⟨.coinduced f instTopologicalSpaceSum, hle, ?_, hs.mono hle, ?_⟩
-  · rw [← f.induced_symm]
-    exact f.symm.polishSpace_induced
-  · rw [isOpen_coinduced, isOpen_sum_iff]
-    simp [preimage_preimage, f, t]
-
-中文:
-定理 _root_.是闭集.isClopenable
-  结论: [拓扑空间 α] [Polish空间 α] {s : 集合 α}
-  证明: by
-  /- Both sets `s` and `sᶜ` admit a Polish topology. So does their disjoint union `s ⊕ sᶜ`.
-    Pulling back this topology by the canonical bijection with `α` gives the desired Polish
-    topology in which `s` is both open and closed. -/
-  classical
-  have : PolishSpace s := hs.polishSpace
-  let t : Set α := sᶜ
-  have : PolishSpace t := hs.isOpen_compl.polishSpace
-  let f : s oplus t ≃ α := Equiv.Set.sumCompl s
-  have hle : TopologicalSpace.coinduced f instTopologicalSpaceSum <= ‹_› := by
-    simp only [instTopologicalSpaceSum, coinduced_sup, coinduced_compose, sup_le_iff,
-      ← continuous_iff_coinduced_le]
-    exact ⟨continuous_subtype_val, continuous_subtype_val⟩
-  refine ⟨.coinduced f instTopologicalSpaceSum, hle, ?_, hs.mono hle, ?_⟩
-  · rw [← f.induced_symm]
-    exact f.symm.polishSpace_induced
-  · rw [isOpen_coinduced, isOpen_sum_iff]
-    simp [preimage_preimage, f, t]
+--- 原说明 ---
+Given a closed set `s` in a Polish space, one can construct a finer Polish topol
+ogy for
+which `s` is both open and closed.
 -/
 theorem _root_.IsClosed.isClopenable [TopologicalSpace α] [PolishSpace α] {s : Set α}
     (hs : IsClosed s) : IsClopenable s := by
@@ -767,8 +611,8 @@ theorem _root_.IsClosed.isClopenable [TopologicalSpace α] [PolishSpace α] {s :
   have : PolishSpace s := hs.polishSpace
   let t : Set α := sᶜ
   have : PolishSpace t := hs.isOpen_compl.polishSpace
-  let f : s oplus t ≃ α := Equiv.Set.sumCompl s
-  have hle : TopologicalSpace.coinduced f instTopologicalSpaceSum <= ‹_› := by
+  let f : s ⊕ t ≃ α := Equiv.Set.sumCompl s
+  have hle : TopologicalSpace.coinduced f instTopologicalSpaceSum ≤ ‹_› := by
     simp only [instTopologicalSpaceSum, coinduced_sup, coinduced_compose, sup_le_iff,
       ← continuous_iff_coinduced_le]
     exact ⟨continuous_subtype_val, continuous_subtype_val⟩
@@ -777,108 +621,69 @@ theorem _root_.IsClosed.isClopenable [TopologicalSpace α] [PolishSpace α] {s :
     exact f.symm.polishSpace_induced
   · rw [isOpen_coinduced, isOpen_sum_iff]
     simp [preimage_preimage, f, t]
-
-/--
-theorem `IsClopenable.compl` / 定理 `IsClopenable.compl`
-
-English:
-theorem IsClopenable.compl
-  given: [TopologicalSpace α] {s : Set α} (hs : IsClopenable s)
-  proof: by
-  rcases hs with ⟨t, t_le, t_polish, h, h'⟩
-  exact ⟨t, t_le, t_polish, @IsOpen.isClosed_compl α t s h', @IsClosed.isOpen_compl α t s h⟩
-
-中文:
-定理 IsClopenable.compl
-  条件: [拓扑空间 α] {s : 集合 α} (hs : IsClopenable s)
-  证明: by
-  rcases hs with ⟨t, t_le, t_polish, h, h'⟩
-  exact ⟨t, t_le, t_polish, @IsOpen.isClosed_compl α t s h', @IsClosed.isOpen_compl α t s h⟩
-
-Depends on / 依赖: IsClosed, IsClosed.isOpen_compl, IsOpen, IsOpen.isClosed_compl, isClosed_compl, isOpen_compl, t_le, t_polish
+/-
+**PolishSpace.IsClopenable.compl** 是 Mathlib 中的一个定理，位于命名空间 `PolishSpace.IsClopen
+able`。
+形式化陈述：∀ {α : Type u_1} [inst : TopologicalSpace α] {s : Set α}, PolishSpace.IsCl
+openable s → PolishSpace.IsClopenable sᶜ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.isClosed_compl`：∀ {X : Type u} [inst : TopologicalSpace X] {s : S
+et X}, IsOpen s → IsClosed sᶜ
+· 使用定理 `IsClosed.isOpen_compl`：∀ {X : Type u} {inst : TopologicalSpace X} {s : S
+et X} [self : IsClosed s], IsOpen sᶜ
 -/
 theorem IsClopenable.compl [TopologicalSpace α] {s : Set α} (hs : IsClopenable s) :
     IsClopenable sᶜ := by
   rcases hs with ⟨t, t_le, t_polish, h, h'⟩
   exact ⟨t, t_le, t_polish, @IsOpen.isClosed_compl α t s h', @IsClosed.isOpen_compl α t s h⟩
-
-/--
-theorem `_root_.IsOpen.isClopenable` / 定理 `_root_.IsOpen.isClopenable`
-
-English:
-theorem _root_.IsOpen.isClopenable
-  statement: [TopologicalSpace α] [PolishSpace α] {s : Set α}
-  proof: by
-  simpa using hs.isClosed_compl.isClopenable.compl
-
-中文:
-定理 _root_.是开集.isClopenable
-  结论: [拓扑空间 α] [Polish空间 α] {s : 集合 α}
-  证明: by
-  simpa using hs.isClosed_compl.isClopenable.compl
-
-Depends on / 依赖: hs.isClosed_compl.isClopenable.compl, isClopenable, isClosed_compl
+/-
+**PolishSpace._root_.IsOpen.isClopenable** 是 Mathlib 中的一个定理，位于命名空间 `PolishSpace`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsOpen.isClopenable [TopologicalSpace α] [PolishSpace α] {s : Set α}
     (hs : IsOpen s) : IsClopenable s := by
   simpa using hs.isClosed_compl.isClopenable.compl
 
 -- TODO: generalize for free to `[Countable ι] {s : ι → Set α}`
-/--
-theorem `IsClopenable.iUnion` / 定理 `IsClopenable.iUnion`
-
-English:
-theorem IsClopenable.iUnion
-  statement: [t : TopologicalSpace α] [PolishSpace α] {s : Nat -> Set α}
-  proof: by
-  choose m mt m_polish _ m_open using hs
-  obtain ⟨t', t'm, -, t'_polish⟩ :
-      exists t' : TopologicalSpace α, (forall n : Nat, t' <= m n) ∧ t' <= t ∧ @PolishSpace α t' :=
-    exists_polishSpace_forall_le m mt m_polish
-  have A : IsOpen[t'] (⋃ n, s n) := by
-    apply isOpen_iUnion
-    intro n
-    apply t'm n
-    exact m_open n
-  obtain ⟨t'', t''_le, t''_polish, h1, h2⟩ : exists t'' : TopologicalSpace α,
-      t'' <= t' ∧ @PolishSpace α t'' ∧ IsClosed[t''] (⋃ n, s n) ∧ IsOpen[t''] (⋃ n, s n) :=
-    @IsOpen.isClopenable α t' t'_polish _ A
-  exact ⟨t'', t''_le.trans ((t'm 0).trans (mt 0)), t''_polish, h1, h2⟩
-
-中文:
-定理 IsClopenable.iUnion
-  结论: [t : 拓扑空间 α] [Polish空间 α] {s : 自然数 -> 集合 α}
-  证明: by
-  choose m mt m_polish _ m_open using hs
-  obtain ⟨t', t'm, -, t'_polish⟩ :
-      exists t' : TopologicalSpace α, (forall n : Nat, t' <= m n) ∧ t' <= t ∧ @PolishSpace α t' :=
-    exists_polishSpace_forall_le m mt m_polish
-  have A : IsOpen[t'] (⋃ n, s n) := by
-    apply isOpen_iUnion
-    intro n
-    apply t'm n
-    exact m_open n
-  obtain ⟨t'', t''_le, t''_polish, h1, h2⟩ : exists t'' : TopologicalSpace α,
-      t'' <= t' ∧ @PolishSpace α t'' ∧ IsClosed[t''] (⋃ n, s n) ∧ IsOpen[t''] (⋃ n, s n) :=
-    @IsOpen.isClopenable α t' t'_polish _ A
-  exact ⟨t'', t''_le.trans ((t'm 0).trans (mt 0)), t''_polish, h1, h2⟩
-
-Depends on / 依赖: IsClosed, IsOpen, IsOpen.isClopenable, PolishSpace, TopologicalSpace, _polish, exists_polishSpace_forall_le, isClopenable, isOpen_iUnion, m_open, m_polish
+/-
+**PolishSpace.IsClopenable.iUnion** 是 Mathlib 中的一个定理，位于命名空间 `PolishSpace.IsClope
+nable`。
+形式化陈述：∀ {α : Type u_1} [t : TopologicalSpace α] [PolishSpace α] {s : ℕ → Set α},
+   (∀ (n : ℕ), PolishSpace.IsClopenable (s n)) → PolishSpace.IsClopenable (⋃ n, 
+s n)
+参数：∀ (n : ℕ), PolishSpace.IsClopenable (s n)；⋃ n, s n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PolishSpace.exists_polishSpace_forall_le`：exists_polishSpace_forall_le {
+ι : Type*} [Countable ι] [t : TopologicalSpace α] [p : PolishSpace α] (m : ι -> 
+TopologicalSpace α) (hm : fora…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `IsOpen.isClopenable`：∀ {α : Type u_1} [inst : TopologicalSpace α] [Polis
+hSpace α] {s : Set α}, IsOpen s → PolishSpace.IsClopenable s
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem IsClopenable.iUnion [t : TopologicalSpace α] [PolishSpace α] {s : Nat -> Set α}
-    (hs : forall n, IsClopenable (s n)) : IsClopenable (⋃ n, s n) := by
+theorem IsClopenable.iUnion [t : TopologicalSpace α] [PolishSpace α] {s : ℕ → Set α}
+    (hs : ∀ n, IsClopenable (s n)) : IsClopenable (⋃ n, s n) := by
   choose m mt m_polish _ m_open using hs
   obtain ⟨t', t'm, -, t'_polish⟩ :
-      exists t' : TopologicalSpace α, (forall n : Nat, t' <= m n) ∧ t' <= t ∧ @PolishSpace α t' :=
+      ∃ t' : TopologicalSpace α, (∀ n : ℕ, t' ≤ m n) ∧ t' ≤ t ∧ @PolishSpace α t' :=
     exists_polishSpace_forall_le m mt m_polish
   have A : IsOpen[t'] (⋃ n, s n) := by
     apply isOpen_iUnion
     intro n
     apply t'm n
     exact m_open n
-  obtain ⟨t'', t''_le, t''_polish, h1, h2⟩ : exists t'' : TopologicalSpace α,
-      t'' <= t' ∧ @PolishSpace α t'' ∧ IsClosed[t''] (⋃ n, s n) ∧ IsOpen[t''] (⋃ n, s n) :=
+  obtain ⟨t'', t''_le, t''_polish, h1, h2⟩ : ∃ t'' : TopologicalSpace α,
+      t'' ≤ t' ∧ @PolishSpace α t'' ∧ IsClosed[t''] (⋃ n, s n) ∧ IsOpen[t''] (⋃ n, s n) :=
     @IsOpen.isClopenable α t' t'_polish _ A
   exact ⟨t'', t''_le.trans ((t'm 0).trans (mt 0)), t''_polish, h1, h2⟩
 
 end PolishSpace
+

@@ -36,36 +36,36 @@ variable {R : Type*} [CommSemiring R] (M : Submonoid R) (S : Type*) [CommSemirin
 variable [Algebra R S] [IsLocalization M S]
 
 variable {M S} in
-/--
-theorem `mk'_mem_iff` / 定理 `mk'_mem_iff`
-
-English:
-theorem mk'_mem_iff
-  given: {x} {y : M} {I : Ideal S}
-  statement: mk' S x y in I ↔ algebraMap R S x in I
-  proof: by
-  constructor <;> intro h
-  · rw [← mk'_spec S x y, mul_comm]
-    exact I.mul_mem_left ((algebraMap R S) y) h
-  · rw [← mk'_spec S x y] at h
-    obtain ⟨b, hb⟩ := isUnit_iff_exists_inv.1 (map_units S y)
-    have := I.mul_mem_left b h
-    rwa [mul_comm, mul_assoc, hb, mul_one] at this
-
-中文:
-定理 mk'_mem_iff
-  条件: {x} {y : M} {I : 理想 S}
-  结论: mk' S x y in I ↔ algebraMap R S x in I
-  证明: by
-  constructor <;> intro h
-  · rw [← mk'_spec S x y, mul_comm]
-    exact I.mul_mem_left ((algebraMap R S) y) h
-  · rw [← mk'_spec S x y] at h
-    obtain ⟨b, hb⟩ := isUnit_iff_exists_inv.1 (map_units S y)
-    have := I.mul_mem_left b h
-    rwa [mul_comm, mul_assoc, hb, mul_one] at this
+/-
+**IsLocalization.mk'_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {M : Submonoid R} {S : Type u_2} 
+[inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [inst_3 : IsLocalization M S]
+ {x : R} {y : ↥M} {I : Ideal S},   IsLocalization.mk' S x y ∈ I ↔ (algebraMap R 
+S) x ∈ I
+参数：algebraMap R S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.mk'_spec`：∀ {R : Type u_1} [inst : CommSemiring R] {M : S
+ubmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [i
+nst_3 : IsLoc…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isUnit_iff_exists_inv`：isUnit_iff_exists_inv [Monoid M] [IsDedekindFinit
+eMonoid M] {a : M} : IsUnit a ↔ exists b, a * b = 1
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem mk'_mem_iff {x} {y : M} {I : Ideal S} : mk' S x y in I ↔ algebraMap R S x in I := by
+theorem mk'_mem_iff {x} {y : M} {I : Ideal S} : mk' S x y ∈ I ↔ algebraMap R S x ∈ I := by
   constructor <;> intro h
   · rw [← mk'_spec S x y, mul_comm]
     exact I.mul_mem_left ((algebraMap R S) y) h
@@ -74,217 +74,270 @@ theorem mk'_mem_iff {x} {y : M} {I : Ideal S} : mk' S x y in I ↔ algebraMap R 
     have := I.mul_mem_left b h
     rwa [mul_comm, mul_assoc, hb, mul_one] at this
 
-/--
-Definition of `map_ideal` / `map_ideal` 的定义
+/-- Explicit characterization of the ideal given by `Ideal.map (algebraMap R S) I`.
+In practice, this ideal differs only in that the carrier set is defined explicitly.
+This definition is only meant to be used in proving `mem_map_algebraMap_iff`,
+and any proof that needs to refer to the explicit carrier set should use that theorem. -/
+/-
+**IsLocalization.map_ideal** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map_ideal
-  signature: (I : Ideal R)
-  body: Submodule.localized' S M (Algebra.linearMap R S) I
-
-中文:
-定义 map_ideal
-  签名: (I : 理想 R)
-  定义体: Submodule.localized' S M (Algebra.linearMap R S) I
-
-Depends on / 依赖: e.symm
+--- 原说明 ---
+Explicit characterization of the ideal given by `Ideal.map (algebraMap R S) I`.
+In practice, this ideal differs only in that the carrier set is defined explicit
+ly.
+This definition is only meant to be used in proving `mem_map_algebraMap_iff`,
+and any proof that needs to refer to the explicit carrier set should use that th
+eorem.
 -/
 private def map_ideal (I : Ideal R) : Ideal S :=
   Submodule.localized' S M (Algebra.linearMap R S) I
-
-/--
-theorem `mem_map_algebraMap_iff` / 定理 `mem_map_algebraMap_iff`
-
-English:
-theorem mem_map_algebraMap_iff
-  given: {I : Ideal R} {z}
-  statement: z in Ideal.map (algebraMap R S) I ↔
-  proof: by
-  rw [← show map_ideal M S I = Ideal.map (algebraMap R S) I by
-    rw [map_ideal]; rw [Ideal.map]; rw [Ideal.span]; rw [Submodule.localized'_eq_span]; rw [Algebra.coe_linearMap],
-    map_ideal, Submodule.mem_localized']
-  constructor
-  · rintro ⟨x, hx, s, rfl⟩
-    exact ⟨⟨⟨x, hx⟩, s⟩, by rw [← IsLocalization.mk'_eq_mk', IsLocalization.mk'_spec]⟩
-  · rintro ⟨⟨⟨x, hx⟩, s⟩, h⟩
-    refine ⟨x, hx, s, ?_⟩
-    rw [← IsLocalization.mk'_eq_mk']; rw [eq_comm]; rw [IsLocalization.eq_mk'_iff_mul_eq]
-    exact h
-
-中文:
-定理 mem_map_algebraMap_iff
-  条件: {I : 理想 R} {z}
-  结论: z in 理想.map (algebraMap R S) I ↔
-  证明: by
-  rw [← show map_ideal M S I = Ideal.map (algebraMap R S) I by
-    rw [map_ideal]; rw [Ideal.map]; rw [Ideal.span]; rw [Submodule.localized'_eq_span]; rw [Algebra.coe_linearMap],
-    map_ideal, Submodule.mem_localized']
-  constructor
-  · rintro ⟨x, hx, s, rfl⟩
-    exact ⟨⟨⟨x, hx⟩, s⟩, by rw [← IsLocalization.mk'_eq_mk', IsLocalization.mk'_spec]⟩
-  · rintro ⟨⟨⟨x, hx⟩, s⟩, h⟩
-    refine ⟨x, hx, s, ?_⟩
-    rw [← IsLocalization.mk'_eq_mk']; rw [eq_comm]; rw [IsLocalization.eq_mk'_iff_mul_eq]
-    exact h
-
-Depends on / 依赖: Algebra, Algebra.coe_linearMap, Ideal.map, Ideal.span, IsLocalization, IsLocalization.eq_mk, IsLocalization.mk, Submodule, Submodule.localized, Submodule.mem_localized, _eq_mk, _eq_span, _iff_mul_eq, _spec, algebraMap, coe_linearMap, eq_comm, eq_mk, localized, map_ideal
+/-
+**IsLocalization.mem_map_algebraMap_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalizatio
+n`。
+形式化陈述：mem_map_algebraMap_iff {I : Ideal R} {z} : z in Ideal.map (algebraMap R S)
+ I ↔ exists x : I × M, z * algebraMap R S x.2 = algebraMap R S x.1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `instIsLocalizedModuleLinearMapOfIsLocalization`：∀ {R : Type u_1} [inst :
+ CommSemiring R] (S : Submonoid R) (A : Type u_2) [inst_1 : CommSemiring A]   [i
+nst_2 : Algebra R A] [IsLocalization…
+· 使用定理 `_private.Mathlib.RingTheory.Localization.Ideal.0.IsLocalization.map_idea
+l.eq_1`：∀ {R : Type u_1} [inst : CommSemiring R] (M : Submonoid R) (S : Type u_2
+) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [inst_3 : IsLoc…
+· 使用定理 `Ideal.map.eq_1`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semir
+ing R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   (I : Ideal R), I
+deal…
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `Submodule.localized'_eq_span`：∀ {R : Type u_1} (S : Type u_2) {M : Type 
+u_3} {N : Type u_4} [inst : CommSemiring R] [inst_1 : CommSemiring S]   [inst_2 
+: AddCommMonoid M]…
+· 使用定理 `Algebra.coe_linearMap`：coe_linearMap : ⇑(Algebra.linearMap R A) = algebr
+aMap R A
+· 使用引理 `Submodule.mem_localized'`：mem_localized' (x : N) : x in localized' S p f
+ M' ↔ exists m in M', exists s : p, IsLocalizedModule.mk' f m s = x
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.mk'_eq_mk'`：∀ {R : Type u_1} [inst : CommSemiring R] (S :
+ Submonoid R) (A : Type u_2) [inst_1 : CommSemiring A]   [inst_2 : Algebra R A] 
+[inst_3 : IsLoc…
+· 使用定理 `IsLocalization.mk'_spec`：∀ {R : Type u_1} [inst : CommSemiring R] {M : S
+ubmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [i
+nst_3 : IsLoc…
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `IsLocalization.eq_mk'_iff_mul_eq`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebr
+a R S] [inst_3 : IsLoc…
 -/
-theorem mem_map_algebraMap_iff {I : Ideal R} {z} : z in Ideal.map (algebraMap R S) I ↔
-    exists x : I × M, z * algebraMap R S x.2 = algebraMap R S x.1 := by
+theorem mem_map_algebraMap_iff {I : Ideal R} {z} : z ∈ Ideal.map (algebraMap R S) I ↔
+    ∃ x : I × M, z * algebraMap R S x.2 = algebraMap R S x.1 := by
   rw [← show map_ideal M S I = Ideal.map (algebraMap R S) I by
-    rw [map_ideal]; rw [Ideal.map]; rw [Ideal.span]; rw [Submodule.localized'_eq_span]; rw [Algebra.coe_linearMap],
+    rw [map_ideal, Ideal.map, Ideal.span, Submodule.localized'_eq_span, Algebra.coe_linearMap],
     map_ideal, Submodule.mem_localized']
   constructor
   · rintro ⟨x, hx, s, rfl⟩
     exact ⟨⟨⟨x, hx⟩, s⟩, by rw [← IsLocalization.mk'_eq_mk', IsLocalization.mk'_spec]⟩
   · rintro ⟨⟨⟨x, hx⟩, s⟩, h⟩
     refine ⟨x, hx, s, ?_⟩
-    rw [← IsLocalization.mk'_eq_mk']; rw [eq_comm]; rw [IsLocalization.eq_mk'_iff_mul_eq]
+    rw [← IsLocalization.mk'_eq_mk', eq_comm, IsLocalization.eq_mk'_iff_mul_eq]
     exact h
-
-/--
-lemma `mk'_mem_map_algebraMap_iff` / 引理 `mk'_mem_map_algebraMap_iff`
-
-English:
-lemma mk'_mem_map_algebraMap_iff
-  given: (I : Ideal R) (x : R) (s : M)
-  proof: by
-  rw [← Ideal.unit_mul_mem_iff_mem _ (IsLocalization.map_units S s)]; rw [IsLocalization.mk'_spec']; rw [IsLocalization.mem_map_algebraMap_iff M]
-  simp_rw [← map_mul, IsLocalization.eq_iff_exists M, mul_comm x, ← mul_assoc, ← Submonoid.coe_mul]
-  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ => ⟨_, (c * t).2, h ▸ I.mul_mem_left c.1 y.2⟩, fun ⟨s, hs, h⟩ =>
-    ⟨⟨⟨_, h⟩, ⟨s, hs⟩⟩, 1, by simp⟩⟩
-
-中文:
-引理 mk'_mem_map_algebraMap_iff
-  条件: (I : 理想 R) (x : R) (s : M)
-  证明: by
-  rw [← Ideal.unit_mul_mem_iff_mem _ (IsLocalization.map_units S s)]; rw [IsLocalization.mk'_spec']; rw [IsLocalization.mem_map_algebraMap_iff M]
-  simp_rw [← map_mul, IsLocalization.eq_iff_exists M, mul_comm x, ← mul_assoc, ← Submonoid.coe_mul]
-  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ => ⟨_, (c * t).2, h ▸ I.mul_mem_left c.1 y.2⟩, fun ⟨s, hs, h⟩ =>
-    ⟨⟨⟨_, h⟩, ⟨s, hs⟩⟩, 1, by simp⟩⟩
+/-
+**IsLocalization.mk'_mem_map_algebraMap_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsLocaliz
+ation`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] (M : Submonoid R) (S : Type u_2) 
+[inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [inst_3 : IsLocalization M S]
+ (I : Ideal R) (x : R) (s : ↥M),   IsLocalization.mk' S x s ∈ Ideal.map (algebra
+Map R S) I ↔ ∃ s ∈ M, s * x ∈ I
+参数：M : Submonoid R；S : Type u_2；I : Ideal R；x : R；s : ↥M；algebraMap R S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.unit_mul_mem_iff_mem`：unit_mul_mem_iff_mem {x y : α} (hy : IsUnit 
+y) : y * x in I ↔ x in I
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
+· 使用定理 `IsLocalization.mk'_spec'`：∀ {R : Type u_1} [inst : CommSemiring R] {M : 
+Submonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [
+inst_3 : IsLoc…
+· 使用定理 `IsLocalization.mem_map_algebraMap_iff`：mem_map_algebraMap_iff {I : Ideal
+ R} {z} : z in Ideal.map (algebraMap R S) I ↔ exists x : I × M, z * algebraMap R
+ S x.2 = algebraMap R S x.1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `IsLocalization.eq_iff_exists`：eq_iff_exists {x y} : algebraMap R S x = a
+lgebraMap R S y ↔ exists c : M, ↑c * x = ↑c * y
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mk'_mem_map_algebraMap_iff (I : Ideal R) (x : R) (s : M) :
-    IsLocalization.mk' S x s in I.map (algebraMap R S) ↔ exists s in M, s * x in I := by
-  rw [← Ideal.unit_mul_mem_iff_mem _ (IsLocalization.map_units S s)]; rw [IsLocalization.mk'_spec']; rw [IsLocalization.mem_map_algebraMap_iff M]
+    IsLocalization.mk' S x s ∈ I.map (algebraMap R S) ↔ ∃ s ∈ M, s * x ∈ I := by
+  rw [← Ideal.unit_mul_mem_iff_mem _ (IsLocalization.map_units S s), IsLocalization.mk'_spec',
+    IsLocalization.mem_map_algebraMap_iff M]
   simp_rw [← map_mul, IsLocalization.eq_iff_exists M, mul_comm x, ← mul_assoc, ← Submonoid.coe_mul]
-  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ => ⟨_, (c * t).2, h ▸ I.mul_mem_left c.1 y.2⟩, fun ⟨s, hs, h⟩ =>
+  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ ↦ ⟨_, (c * t).2, h ▸ I.mul_mem_left c.1 y.2⟩, fun ⟨s, hs, h⟩ ↦
     ⟨⟨⟨_, h⟩, ⟨s, hs⟩⟩, 1, by simp⟩⟩
-
-/--
-lemma `algebraMap_mem_map_algebraMap_iff` / 引理 `algebraMap_mem_map_algebraMap_iff`
-
-English:
-lemma algebraMap_mem_map_algebraMap_iff
-  given: (I : Ideal R) (x : R)
-  proof: by
-  rw [← IsLocalization.mk'_one (M := M)]; rw [mk'_mem_map_algebraMap_iff]
-
-中文:
-引理 algebraMap_mem_map_algebraMap_iff
-  条件: (I : 理想 R) (x : R)
-  证明: by
-  rw [← IsLocalization.mk'_one (M := M)]; rw [mk'_mem_map_algebraMap_iff]
-
-Depends on / 依赖: IsLocalization, IsLocalization.mk, _mem_map_algebraMap_iff, _one
+/-
+**IsLocalization.algebraMap_mem_map_algebraMap_iff** 是 Mathlib 中的一个引理，位于命名空间 `Is
+Localization`。
+形式化陈述：algebraMap_mem_map_algebraMap_iff (I : Ideal R) (x : R) : algebraMap R S x
+ in I.map (algebraMap R S) ↔ exists m in M, m * x in I
+参数：I : Ideal R；x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.mk'_one`：∀ {R : Type u_1} [inst : CommSemiring R] {M : Su
+bmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [in
+st_3 : IsLoc…
+· 使用定理 `IsLocalization.mk'_mem_map_algebraMap_iff`：∀ {R : Type u_1} [inst : Comm
+Semiring R] (M : Submonoid R) (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2
+ : Algebra R S] [inst_3 : IsLoc…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma algebraMap_mem_map_algebraMap_iff (I : Ideal R) (x : R) :
-    algebraMap R S x in I.map (algebraMap R S) ↔
-      exists m in M, m * x in I := by
-  rw [← IsLocalization.mk'_one (M := M)]; rw [mk'_mem_map_algebraMap_iff]
-
-/--
-lemma `map_algebraMap_ne_top_iff_disjoint` / 引理 `map_algebraMap_ne_top_iff_disjoint`
-
-English:
-lemma map_algebraMap_ne_top_iff_disjoint
-  given: (I : Ideal R)
-  proof: by
-  simp only [ne_eq, Ideal.eq_top_iff_one, ← map_one (algebraMap R S), not_iff_comm,
-    IsLocalization.algebraMap_mem_map_algebraMap_iff M]
-  simp [Set.disjoint_left]
-
-中文:
-引理 map_algebraMap_ne_top_iff_disjoint
-  条件: (I : 理想 R)
-  证明: by
-  simp only [ne_eq, Ideal.eq_top_iff_one, ← map_one (algebraMap R S), not_iff_comm,
-    IsLocalization.algebraMap_mem_map_algebraMap_iff M]
-  simp [Set.disjoint_left]
-
-Depends on / 依赖: Ideal.eq_top_iff_one, IsLocalization, IsLocalization.algebraMap_mem_map_algebraMap_iff, Set.disjoint_left, algebraMap, algebraMap_mem_map_algebraMap_iff, disjoint_left, eq_top_iff_one, map_one, ne_eq, not_iff_comm
+    algebraMap R S x ∈ I.map (algebraMap R S) ↔
+      ∃ m ∈ M, m * x ∈ I := by
+  rw [← IsLocalization.mk'_one (M := M), mk'_mem_map_algebraMap_iff]
+/-
+**IsLocalization.map_algebraMap_ne_top_iff_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `I
+sLocalization`。
+形式化陈述：map_algebraMap_ne_top_iff_disjoint (I : Ideal R) : I.map (algebraMap R S) 
+!= ⊤ ↔ Disjoint (M : Set R) (I : Set R)
+参数：I : Ideal R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `IsLocalization.algebraMap_mem_map_algebraMap_iff`：algebraMap_mem_map_alg
+ebraMap_iff (I : Ideal R) (x : R) : algebraMap R S x in I.map (algebraMap R S) ↔
+ exists m in M, m * x in I
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma map_algebraMap_ne_top_iff_disjoint (I : Ideal R) :
-    I.map (algebraMap R S) != ⊤ ↔ Disjoint (M : Set R) (I : Set R) := by
+    I.map (algebraMap R S) ≠ ⊤ ↔ Disjoint (M : Set R) (I : Set R) := by
   simp only [ne_eq, Ideal.eq_top_iff_one, ← map_one (algebraMap R S), not_iff_comm,
     IsLocalization.algebraMap_mem_map_algebraMap_iff M]
   simp [Set.disjoint_left]
 
 set_option backward.isDefEq.respectTransparency false in
 include M in
-/--
-theorem `map_inf` / 定理 `map_inf`
-
-English:
-theorem map_inf
-  given: (I J : Ideal R)
-  proof: by
-  refine le_antisymm (Ideal.map_inf_le (algebraMap R S)) fun x hx => ?_
-  simp only [Ideal.mem_inf, IsLocalization.mem_map_algebraMap_iff M, Prod.exists] at hx ⊢
-  obtain ⟨⟨⟨i, hi⟩, mi, hi'⟩, ⟨j, hj⟩, mj, hj'⟩ := hx
-  simp only [← IsLocalization.eq_mk'_iff_mul_eq] at hi' hj'
-  obtain ⟨m, hm⟩ := IsLocalization.eq.mp (hi'.symm.trans hj')
-  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm]; rw [← mul_comm (j : R)] at hm
-  refine ⟨⟨i * (m * mj : M), I.mul_mem_right _ hi, hm ▸ J.mul_mem_right _ hj⟩, mi * (m * mj), ?_⟩
-  rwa [← IsLocalization.eq_mk'_iff_mul_eq, Subtype.coe_mk, IsLocalization.mk'_cancel]
-
-中文:
-定理 map_inf
-  条件: (I J : 理想 R)
-  证明: by
-  refine le_antisymm (Ideal.map_inf_le (algebraMap R S)) fun x hx => ?_
-  simp only [Ideal.mem_inf, IsLocalization.mem_map_algebraMap_iff M, Prod.exists] at hx ⊢
-  obtain ⟨⟨⟨i, hi⟩, mi, hi'⟩, ⟨j, hj⟩, mj, hj'⟩ := hx
-  simp only [← IsLocalization.eq_mk'_iff_mul_eq] at hi' hj'
-  obtain ⟨m, hm⟩ := IsLocalization.eq.mp (hi'.symm.trans hj')
-  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm]; rw [← mul_comm (j : R)] at hm
-  refine ⟨⟨i * (m * mj : M), I.mul_mem_right _ hi, hm ▸ J.mul_mem_right _ hj⟩, mi * (m * mj), ?_⟩
-  rwa [← IsLocalization.eq_mk'_iff_mul_eq, Subtype.coe_mk, IsLocalization.mk'_cancel]
+/-
+**IsLocalization.map_inf** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] (M : Submonoid R) (S : Type u_2) 
+[inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [IsLocalization M S] (I J : I
+deal R),   Ideal.map (algebraMap R S) (I ⊓ J) = Ideal.map (algebraMap R S) I ⊓ I
+deal.map (algebraMap R S) J
+参数：M : Submonoid R；S : Type u_2；I J : Ideal R；algebraMap R S；I ⊓ J；algebraMap R 
+S；algebraMap R S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ideal.map_inf_le`：map_inf_le : map f (I ⊓ J) <= map f I ⊓ map f J
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsLocalization.mem_map_algebraMap_iff`：mem_map_algebraMap_iff {I : Ideal
+ R} {z} : z in Ideal.map (algebraMap R S) I ↔ exists x : I × M, z * algebraMap R
+ S x.2 = algebraMap R S x.1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.eq`：∀ {R : Type u_1} [inst : CommSemiring R] {M : Submono
+id R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [inst_3 
+: IsLoc…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.mul_mem_right`：mul_mem_right {α} {a : α} (b : α) [Semiring α] (I :
+ Ideal α) [I.IsTwoSided] (h : a in I) : a * b in I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `IsLocalization.eq_mk'_iff_mul_eq`：∀ {R : Type u_1} [inst : CommSemiring 
+R] {M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebr
+a R S] [inst_3 : IsLoc…
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `IsLocalization.mk'_cancel`：∀ {R : Type u_1} [inst : CommSemiring R] {M :
+ Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] 
+[inst_3 : IsLoc…
 -/
 protected theorem map_inf (I J : Ideal R) :
     (I ⊓ J).map (algebraMap R S) = I.map (algebraMap R S) ⊓ J.map (algebraMap R S) := by
-  refine le_antisymm (Ideal.map_inf_le (algebraMap R S)) fun x hx => ?_
+  refine le_antisymm (Ideal.map_inf_le (algebraMap R S)) fun x hx ↦ ?_
   simp only [Ideal.mem_inf, IsLocalization.mem_map_algebraMap_iff M, Prod.exists] at hx ⊢
   obtain ⟨⟨⟨i, hi⟩, mi, hi'⟩, ⟨j, hj⟩, mj, hj'⟩ := hx
   simp only [← IsLocalization.eq_mk'_iff_mul_eq] at hi' hj'
   obtain ⟨m, hm⟩ := IsLocalization.eq.mp (hi'.symm.trans hj')
-  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm]; rw [← mul_comm (j : R)] at hm
+  rw [← mul_assoc, ← mul_assoc, mul_comm, ← mul_comm (j : R)] at hm
   refine ⟨⟨i * (m * mj : M), I.mul_mem_right _ hi, hm ▸ J.mul_mem_right _ hj⟩, mi * (m * mj), ?_⟩
   rwa [← IsLocalization.eq_mk'_iff_mul_eq, Subtype.coe_mk, IsLocalization.mk'_cancel]
 
-/--
-Definition of `mapFrameHom` / `mapFrameHom` 的定义
+/-- `IsLocalization.map_inf` as an `FrameHom`. -/
+/-
+**IsLocalization.mapFrameHom** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：mapFrameHom : FrameHom (Ideal R) (Ideal S) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.map_inf`：∀ {R : Type u_1} [inst : CommSemiring R] (M : Su
+bmonoid R) (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [Is
+Localization…
 
-English:
-definition mapFrameHom
-  signature: : FrameHom (Ideal R) (Ideal S) where
-  body: Ideal.map (algebraMap R S)
-  map_inf' := IsLocalization.map_inf M S
-  map_top' := Ideal.map_top (algebraMap R S)
-  map_sSup' _ := (Ideal.gc_map_comap (algebraMap R S)).l_sSup.trans sSup_image.symm
-
-@[simp]
-
-中文:
-定义 mapFrameHom
-  签名: : 框架态射 (理想 R) (理想 S) where
-  定义体: Ideal.map (algebraMap R S)
-  map_inf' := IsLocalization.map_inf M S
-  map_top' := Ideal.map_top (algebraMap R S)
-  map_sSup' _ := (Ideal.gc_map_comap (algebraMap R S)).l_sSup.trans sSup_image.symm
-
-@[simp]
-
-Depends on / 依赖: Ideal.map, algebraMap
+--- 原说明 ---
+`IsLocalization.map_inf` as an `FrameHom`.
 -/
 def mapFrameHom : FrameHom (Ideal R) (Ideal S) where
   toFun := Ideal.map (algebraMap R S)
@@ -293,60 +346,50 @@ def mapFrameHom : FrameHom (Ideal R) (Ideal S) where
   map_sSup' _ := (Ideal.gc_map_comap (algebraMap R S)).l_sSup.trans sSup_image.symm
 
 @[simp]
-/--
-lemma `mapFrameHom_apply` / 引理 `mapFrameHom_apply`
-
-English:
-lemma mapFrameHom_apply
-  given: (I : Ideal R)
-  proof: rfl
-
-include M in
-
-中文:
-引理 mapFrameHom_apply
-  条件: (I : 理想 R)
-  证明: rfl
-
-include M in
+/-
+**IsLocalization.mapFrameHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalization`。
+形式化陈述：mapFrameHom_apply (I : Ideal R) : IsLocalization.mapFrameHom M S I = I.map
+ (algebraMap R S)
+参数：I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapFrameHom_apply (I : Ideal R) :
     IsLocalization.mapFrameHom M S I = I.map (algebraMap R S) :=
   rfl
 
 include M in
-/--
-theorem `map_under` / 定理 `map_under`
-
-English:
-theorem map_under
-  given: (J : Ideal S)
-  proof: le_antisymm (Ideal.map_le_iff_le_comap.2 le_rfl) fun x hJ => by
-    obtain ⟨r, s, hx⟩ := exists_mk'_eq M x
-    rw [← hx] at hJ ⊢
-    exact
-      Ideal.mul_mem_right _ _
-        (Ideal.mem_map_of_mem _
-          (show (algebraMap R S) r in J from
-            mk'_spec S r s ▸ J.mul_mem_right ((algebraMap R S) s) hJ))
-
-@[deprecated (since := "2026-04-09")] alias map_comap := map_under
-
-中文:
-定理 map_under
-  条件: (J : 理想 S)
-  证明: le_antisymm (Ideal.map_le_iff_le_comap.2 le_rfl) fun x hJ => by
-    obtain ⟨r, s, hx⟩ := exists_mk'_eq M x
-    rw [← hx] at hJ ⊢
-    exact
-      Ideal.mul_mem_right _ _
-        (Ideal.mem_map_of_mem _
-          (show (algebraMap R S) r in J from
-            mk'_spec S r s ▸ J.mul_mem_right ((algebraMap R S) s) hJ))
-
-@[deprecated (since := "2026-04-09")] alias map_comap := map_under
-
-Depends on / 依赖: Ideal.map_le_iff_le_comap, Ideal.mem_map_of_mem, Ideal.mul_mem_right, J.mul_mem_right, _spec, algebraMap, exists_mk, le_antisymm, le_rfl, map_le_iff_le_comap, mem_map_of_mem, mul_mem_right
+/-
+**IsLocalization.map_under** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：map_under (J : Ideal S) : Ideal.map (algebraMap R S) (J.under R) = J
+参数：J : Ideal S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.map_le_iff_le_comap`：map_le_iff_le_comap [RingHomClass F R S] : ma
+p f I <= K ↔ I <= comap f K
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.exists_mk'_eq`：∀ {R : Type u_1} [inst : CommSemiring R] (
+M : Submonoid R) {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R 
+S] [inst_3 : IsLoc…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.mul_mem_right`：mul_mem_right {α} {a : α} (b : α) [Semiring α] (I :
+ Ideal α) [I.IsTwoSided] (h : a in I) : a * b in I
+· 使用定理 `Submonoid.LocalizationMap.map_units`：map_units (f : LocalizationMap S N)
+ (y : S) : IsUnit (f y)
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.mem_map_of_mem`：mem_map_of_mem (f : F) {I : Ideal R} {x : R} (h : 
+x in I) : f x in map f I
+· 使用定理 `IsLocalization.mk'_spec`：∀ {R : Type u_1} [inst : CommSemiring R] {M : S
+ubmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [i
+nst_3 : IsLoc…
 -/
 theorem map_under (J : Ideal S) :
     Ideal.map (algebraMap R S) (J.under R) = J :=
@@ -356,59 +399,58 @@ theorem map_under (J : Ideal S) :
     exact
       Ideal.mul_mem_right _ _
         (Ideal.mem_map_of_mem _
-          (show (algebraMap R S) r in J from
+          (show (algebraMap R S) r ∈ J from
             mk'_spec S r s ▸ J.mul_mem_right ((algebraMap R S) s) hJ))
 
 @[deprecated (since := "2026-04-09")] alias map_comap := map_under
-
-/--
-theorem `under_map_of_isPrimary_disjoint` / 定理 `under_map_of_isPrimary_disjoint`
-
-English:
-theorem under_map_of_isPrimary_disjoint
-  proof: by
-  have key : Disjoint (M : Set R) I.radical := by
-    contrapose hM
-    rw [Set.not_disjoint_iff] at hM ⊢
-    obtain ⟨a, ha, k, hk⟩ := hM
-    exact ⟨a ^ k, pow_mem ha k, hk⟩
-  refine le_antisymm (fun a ha => ?_) Ideal.le_comap_map
-  rw [Ideal.mem_comap]; rw [IsLocalization.mem_map_algebraMap_iff M S] at ha
-  obtain ⟨⟨b, s⟩, h⟩ := ha
-  replace h : algebraMap R S (s * a) = algebraMap R S b := by
-    simpa only [← map_mul, mul_comm] using h
-  obtain ⟨c, hc⟩ := (IsLocalization.eq_iff_exists M S).1 h
-  have : a * (c * s : M) in I := by
-    rw [mul_comm]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [hc]
-    exact I.mul_mem_left c b.2
-  exact ((Ideal.isPrimary_iff.mp hI).2 this).resolve_right (Set.disjoint_left.mp key (c * s).2)
-
-@[deprecated (since := "2026-04-09")] alias comap_map_of_isPrimary_disjoint :=
-  under_map_of_isPrimary_disjoint
-
-中文:
-定理 under_map_of_isPrimary_disjoint
-  证明: by
-  have key : Disjoint (M : Set R) I.radical := by
-    contrapose hM
-    rw [Set.not_disjoint_iff] at hM ⊢
-    obtain ⟨a, ha, k, hk⟩ := hM
-    exact ⟨a ^ k, pow_mem ha k, hk⟩
-  refine le_antisymm (fun a ha => ?_) Ideal.le_comap_map
-  rw [Ideal.mem_comap]; rw [IsLocalization.mem_map_algebraMap_iff M S] at ha
-  obtain ⟨⟨b, s⟩, h⟩ := ha
-  replace h : algebraMap R S (s * a) = algebraMap R S b := by
-    simpa only [← map_mul, mul_comm] using h
-  obtain ⟨c, hc⟩ := (IsLocalization.eq_iff_exists M S).1 h
-  have : a * (c * s : M) in I := by
-    rw [mul_comm]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [hc]
-    exact I.mul_mem_left c b.2
-  exact ((Ideal.isPrimary_iff.mp hI).2 this).resolve_right (Set.disjoint_left.mp key (c * s).2)
-
-@[deprecated (since := "2026-04-09")] alias comap_map_of_isPrimary_disjoint :=
-  under_map_of_isPrimary_disjoint
-
-Depends on / 依赖: Disjoint, I.radical, Ideal.le_comap_map, Ideal.mem_comap, IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.mem_map_algebraMap_iff, Set.not_disjoint_iff, algebraMap, contrapose, eq_iff_exists, le_antisymm, le_comap_map, map_mul, mem_comap, mem_map_algebraMap_iff, mul_comm, not_disjoint_iff, pow_mem, radical
+/-
+**IsLocalization.under_map_of_isPrimary_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `IsLo
+calization`。
+形式化陈述：under_map_of_isPrimary_disjoint {I : Ideal R} (hI : I.IsPrimary) (hM : Dis
+joint (M : Set R) I) : (Ideal.map (algebraMap R S) I).under R = I
+参数：hI : I.IsPrimary；hM : Disjoint (M : Set R) I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.not_disjoint_iff`：not_disjoint_iff : ¬Disjoint s t ↔ exists x, x in 
+s ∧ x in t
+· 使用定理 `pow_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : Set
+Like A M] [SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ …
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IsLocalization.mem_map_algebraMap_iff`：mem_map_algebraMap_iff {I : Ideal
+ R} {z} : z in Ideal.map (algebraMap R S) I ↔ exists x : I × M, z * algebraMap R
+ S x.2 = algebraMap R S x.1
+· 使用定理 `Ideal.mem_comap`：mem_comap [RingHomClass F R S] {x} : x in comap f K ↔ f
+ x in K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsLocalization.eq_iff_exists`：eq_iff_exists {x y} : algebraMap R S x = a
+lgebraMap R S y ↔ exists c : M, ↑c * x = ↑c * y
+· 使用定理 `Submonoid.coe_mul`：coe_mul (x y : S) : (↑(x * y) : M) = ↑x * ↑y
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Ideal.isPrimary_iff`：isPrimary_iff {I : Ideal R} : I.IsPrimary ↔ I != ⊤ 
+∧ forall {x y : R}, x * y in I -> x in I ∨ y in radical I
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
+· 使用定理 `Ideal.le_comap_map`：le_comap_map : I <= (I.map f).comap f
 -/
 theorem under_map_of_isPrimary_disjoint
     {I : Ideal R} (hI : I.IsPrimary) (hM : Disjoint (M : Set R) I) :
@@ -418,40 +460,32 @@ theorem under_map_of_isPrimary_disjoint
     rw [Set.not_disjoint_iff] at hM ⊢
     obtain ⟨a, ha, k, hk⟩ := hM
     exact ⟨a ^ k, pow_mem ha k, hk⟩
-  refine le_antisymm (fun a ha => ?_) Ideal.le_comap_map
-  rw [Ideal.mem_comap]; rw [IsLocalization.mem_map_algebraMap_iff M S] at ha
+  refine le_antisymm (fun a ha ↦ ?_) Ideal.le_comap_map
+  rw [Ideal.mem_comap, IsLocalization.mem_map_algebraMap_iff M S] at ha
   obtain ⟨⟨b, s⟩, h⟩ := ha
   replace h : algebraMap R S (s * a) = algebraMap R S b := by
     simpa only [← map_mul, mul_comm] using h
   obtain ⟨c, hc⟩ := (IsLocalization.eq_iff_exists M S).1 h
-  have : a * (c * s : M) in I := by
-    rw [mul_comm]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [hc]
+  have : a * (c * s : M) ∈ I := by
+    rw [mul_comm, Submonoid.coe_mul, mul_assoc, hc]
     exact I.mul_mem_left c b.2
   exact ((Ideal.isPrimary_iff.mp hI).2 this).resolve_right (Set.disjoint_left.mp key (c * s).2)
 
 @[deprecated (since := "2026-04-09")] alias comap_map_of_isPrimary_disjoint :=
   under_map_of_isPrimary_disjoint
-
-/--
-theorem `under_map_of_isPrime_disjoint` / 定理 `under_map_of_isPrime_disjoint`
-
-English:
-theorem under_map_of_isPrime_disjoint
-  given: {I : Ideal R} (hI : I.IsPrime) (hM : Disjoint (M : Set R) I)
-  proof: under_map_of_isPrimary_disjoint M S hI.isPrimary hM
-
-@[deprecated (since := "2026-04-09")] alias comap_map_of_isPrime_disjoint :=
-  under_map_of_isPrime_disjoint
-
-中文:
-定理 under_map_of_isPrime_disjoint
-  条件: {I : 理想 R} (hI : I.是素) (hM : Disjoint (M : 集合 R) I)
-  证明: under_map_of_isPrimary_disjoint M S hI.isPrimary hM
-
-@[deprecated (since := "2026-04-09")] alias comap_map_of_isPrime_disjoint :=
-  under_map_of_isPrime_disjoint
-
-Depends on / 依赖: hI.isPrimary, isPrimary, under_map_of_isPrimary_disjoint
+/-
+**IsLocalization.under_map_of_isPrime_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `IsLoca
+lization`。
+形式化陈述：under_map_of_isPrime_disjoint {I : Ideal R} (hI : I.IsPrime) (hM : Disjoin
+t (M : Set R) I) : (Ideal.map (algebraMap R S) I).under R = I
+参数：hI : I.IsPrime；hM : Disjoint (M : Set R) I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.under_map_of_isPrimary_disjoint`：under_map_of_isPrimary_d
+isjoint {I : Ideal R} (hI : I.IsPrimary) (hM : Disjoint (M : Set R) I) : (Ideal.
+map (algebraMap R S) I).under R = I
+· 使用定理 `Ideal.IsPrime.isPrimary`：∀ {R : Type u_1} [inst : CommSemiring R] {I : I
+deal R}, I.IsPrime → I.IsPrimary
 -/
 theorem under_map_of_isPrime_disjoint {I : Ideal R} (hI : I.IsPrime) (hM : Disjoint (M : Set R) I) :
     (Ideal.map (algebraMap R S) I).under R = I :=
@@ -459,56 +493,35 @@ theorem under_map_of_isPrime_disjoint {I : Ideal R} (hI : I.IsPrime) (hM : Disjo
 
 @[deprecated (since := "2026-04-09")] alias comap_map_of_isPrime_disjoint :=
   under_map_of_isPrime_disjoint
-
-/--
-theorem `liesOver_map_of_isPrime_disjoint` / 定理 `liesOver_map_of_isPrime_disjoint`
-
-English:
-theorem liesOver_map_of_isPrime_disjoint
-  given: {I : Ideal R} [I.IsPrime] (hM : Disjoint (M : Set R) I)
-  proof: ⟨(under_map_of_isPrime_disjoint M S ‹_› hM).symm⟩
-
-中文:
-定理 liesOver_map_of_isPrime_disjoint
-  条件: {I : 理想 R} [I.是素] (hM : Disjoint (M : 集合 R) I)
-  证明: ⟨(under_map_of_isPrime_disjoint M S ‹_› hM).symm⟩
-
-Depends on / 依赖: under_map_of_isPrime_disjoint
+/-
+**IsLocalization.liesOver_map_of_isPrime_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `IsL
+ocalization`。
+形式化陈述：liesOver_map_of_isPrime_disjoint {I : Ideal R} [I.IsPrime] (hM : Disjoint 
+(M : Set R) I) : (I.map (algebraMap R S)).LiesOver I
+参数：hM : Disjoint (M : Set R) I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.under_map_of_isPrime_disjoint`：under_map_of_isPrime_disjo
+int {I : Ideal R} (hI : I.IsPrime) (hM : Disjoint (M : Set R) I) : (Ideal.map (a
+lgebraMap R S) I).under R = I
 -/
 theorem liesOver_map_of_isPrime_disjoint {I : Ideal R} [I.IsPrime] (hM : Disjoint (M : Set R) I) :
     (I.map (algebraMap R S)).LiesOver I :=
   ⟨(under_map_of_isPrime_disjoint M S ‹_› hM).symm⟩
 
-/--
-Definition of `orderEmbedding` / `orderEmbedding` 的定义
+/-- If `S` is the localization of `R` at a submonoid, the ordering of ideals of `S` is
+embedded in the ordering of ideals of `R`. -/
+/-
+**IsLocalization.orderEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：orderEmbedding : Ideal S ↪o Ideal R where toFun J
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderEmbedding
-  signature: : Ideal S ↪o Ideal R where
-  body: J.under R
-  inj' := Function.LeftInverse.injective (map_under M S)
-  map_rel_iff' := by
-    rintro J₁ J₂
-    constructor
-    · exact fun hJ => (map_under M S) J₁ ▸ (map_under M S) J₂ ▸ Ideal.map_mono hJ
-    · exact fun hJ => Ideal.comap_mono hJ
-
-include M in
-
-中文:
-定义 orderEmbedding
-  签名: : 理想 S ↪o 理想 R where
-  定义体: J.under R
-  inj' := Function.LeftInverse.injective (map_under M S)
-  map_rel_iff' := by
-    rintro J₁ J₂
-    constructor
-    · exact fun hJ => (map_under M S) J₁ ▸ (map_under M S) J₂ ▸ Ideal.map_mono hJ
-    · exact fun hJ => Ideal.comap_mono hJ
-
-include M in
-
-Depends on / 依赖: J.under
+--- 原说明 ---
+If `S` is the localization of `R` at a submonoid, the ordering of ideals of `S` 
+is
+embedded in the ordering of ideals of `R`.
 -/
 def orderEmbedding : Ideal S ↪o Ideal R where
   toFun J := J.under R
@@ -520,89 +533,83 @@ def orderEmbedding : Ideal S ↪o Ideal R where
     · exact fun hJ => Ideal.comap_mono hJ
 
 include M in
-/--
-theorem `under_le_under_iff` / 定理 `under_le_under_iff`
-
-English:
-theorem under_le_under_iff
-  given: {I J : Ideal S}
-  proof: by
-  exact (IsLocalization.orderEmbedding M S).le_iff_le
-
-@[deprecated (since := "2026-04-09")] alias comap_le_comap_iff := under_le_under_iff
-
-中文:
-定理 under_le_under_iff
-  条件: {I J : 理想 S}
-  证明: by
-  exact (IsLocalization.orderEmbedding M S).le_iff_le
-
-@[deprecated (since := "2026-04-09")] alias comap_le_comap_iff := under_le_under_iff
-
-Depends on / 依赖: IsLocalization, IsLocalization.orderEmbedding, le_iff_le, orderEmbedding
+/-
+**IsLocalization.under_le_under_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：under_le_under_iff {I J : Ideal S} : I.under R <= J.under R ↔ I <= J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderEmbedding.le_iff_le`：le_iff_le {a b} : f a <= f b ↔ a <= b
 -/
 theorem under_le_under_iff {I J : Ideal S} :
-    I.under R <= J.under R ↔ I <= J := by
+    I.under R ≤ J.under R ↔ I ≤ J := by
   exact (IsLocalization.orderEmbedding M S).le_iff_le
 
 @[deprecated (since := "2026-04-09")] alias comap_le_comap_iff := under_le_under_iff
 
-/--
-theorem `isPrime_iff_isPrime_disjoint` / 定理 `isPrime_iff_isPrime_disjoint`
+/-- If `R` is a ring, then prime ideals in the localization at `M`
+correspond to prime ideals in the original ring `R` that are disjoint from `M`.
+This lemma gives the particular case for an ideal and its comap,
+see `le_rel_iso_of_prime` for the more general relation isomorphism -/
+/-
+**IsLocalization.isPrime_iff_isPrime_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `IsLocal
+ization`。
+形式化陈述：isPrime_iff_isPrime_disjoint (J : Ideal S) : J.IsPrime ↔ (J.under R).IsPri
+me ∧ Disjoint (M : Set R) (J.under R)
+参数：J : Ideal S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.IsPrime.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}, 
+I.IsPrime → I ≠ ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderEmbedding.le_iff_le`：le_iff_le {a b} : f a <= f b ↔ a <= b
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Ideal.IsPrime.mem_or_mem`：∀ {α : Type u} [inst : Semiring α] {I : Ideal 
+α}, I.IsPrime → ∀ {x y : α}, x * y ∈ I → x ∈ I ∨ y ∈ I
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `Ideal.mem_comap`：mem_comap [RingHomClass F R S] {x} : x in comap f K ↔ f
+ x in K
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
+· 使用定理 `Ideal.eq_top_of_isUnit_mem`：eq_top_of_isUnit_mem {x} (hx : x in I) (h : 
+IsUnit x) : I = ⊤
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.exists_mk'_eq`：∀ {R : Type u_1} [inst : CommSemiring R] (
+M : Submonoid R) {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R 
+S] [inst_3 : IsLoc…
+· 使用定理 `IsLocalization.mk'_mul`：∀ {R : Type u_1} [inst : CommSemiring R] {M : Su
+bmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [in
+st_3 : IsLoc…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.IsPrime.mul_mem_iff_mem_or_mem`：∀ {α : Type u} [inst : Semiring α]
+ {I : Ideal α} [I.IsTwoSided], I.IsPrime → ∀ {x y : α}, x * y ∈ I ↔ x ∈ I ∨ y ∈ 
+I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsLocalization.mk'_mem_iff`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R S]
+ [inst_3 : IsLoc…
 
-English:
-theorem isPrime_iff_isPrime_disjoint
-  given: (J : Ideal S)
-  proof: by
-  constructor
-  · refine fun h =>
-      ⟨⟨?_, ?_⟩,
-        Set.disjoint_left.mpr fun m hm1 hm2 =>
-          h.ne_top (Ideal.eq_top_of_isUnit_mem _ hm2 (map_units S ⟨m, hm1⟩))⟩
-    · refine fun hJ => h.ne_top ?_
-      rw [eq_top_iff]; rw [← (orderEmbedding M S).le_iff_le]
-      exact le_of_eq hJ.symm
-    · intro x y hxy
-      rw [Ideal.mem_comap]; rw [map_mul] at hxy
-      exact h.mem_or_mem hxy
-  · refine fun h => ⟨fun hJ => h.left.ne_top (eq_top_iff.2 ?_), ?_⟩
-    · rwa [eq_top_iff, ← (orderEmbedding M S).le_iff_le] at hJ
-    · intro x y hxy
-      obtain ⟨a, s, ha⟩ := exists_mk'_eq M x
-      obtain ⟨b, t, hb⟩ := exists_mk'_eq M y
-      have : mk' S (a * b) (s * t) in J := by rwa [mk'_mul, ha, hb]
-      rw [mk'_mem_iff]; rw [← Ideal.mem_comap] at this
-      have this₂ := (h.1).mul_mem_iff_mem_or_mem.1 this
-      rw [Ideal.mem_comap]; rw [Ideal.mem_comap] at this₂
-      rwa [← ha, ← hb, mk'_mem_iff, mk'_mem_iff]
-
-中文:
-定理 isPrime_iff_isPrime_disjoint
-  条件: (J : 理想 S)
-  证明: by
-  constructor
-  · refine fun h =>
-      ⟨⟨?_, ?_⟩,
-        Set.disjoint_left.mpr fun m hm1 hm2 =>
-          h.ne_top (Ideal.eq_top_of_isUnit_mem _ hm2 (map_units S ⟨m, hm1⟩))⟩
-    · refine fun hJ => h.ne_top ?_
-      rw [eq_top_iff]; rw [← (orderEmbedding M S).le_iff_le]
-      exact le_of_eq hJ.symm
-    · intro x y hxy
-      rw [Ideal.mem_comap]; rw [map_mul] at hxy
-      exact h.mem_or_mem hxy
-  · refine fun h => ⟨fun hJ => h.left.ne_top (eq_top_iff.2 ?_), ?_⟩
-    · rwa [eq_top_iff, ← (orderEmbedding M S).le_iff_le] at hJ
-    · intro x y hxy
-      obtain ⟨a, s, ha⟩ := exists_mk'_eq M x
-      obtain ⟨b, t, hb⟩ := exists_mk'_eq M y
-      have : mk' S (a * b) (s * t) in J := by rwa [mk'_mul, ha, hb]
-      rw [mk'_mem_iff]; rw [← Ideal.mem_comap] at this
-      have this₂ := (h.1).mul_mem_iff_mem_or_mem.1 this
-      rw [Ideal.mem_comap]; rw [Ideal.mem_comap] at this₂
-      rwa [← ha, ← hb, mk'_mem_iff, mk'_mem_iff]
-
-Depends on / 依赖: Ideal.eq_top_of_isUnit_mem, Ideal.mem_comap, Set.disjoint_left.mpr, disjoint_left, eq_top_iff, eq_top_of_isUnit_mem, h.left.ne_top, h.mem_or_mem, h.ne_top, hJ.symm, le_iff_le, le_of_eq, map_mul, map_units, mem_comap, mem_or_mem, ne_top, orderEmbedding
+--- 原说明 ---
+If `R` is a ring, then prime ideals in the localization at `M`
+correspond to prime ideals in the original ring `R` that are disjoint from `M`.
+This lemma gives the particular case for an ideal and its comap,
+see `le_rel_iso_of_prime` for the more general relation isomorphism
 -/
 theorem isPrime_iff_isPrime_disjoint (J : Ideal S) :
     J.IsPrime ↔ (J.under R).IsPrime ∧ Disjoint (M : Set R) (J.under R) := by
@@ -612,80 +619,77 @@ theorem isPrime_iff_isPrime_disjoint (J : Ideal S) :
         Set.disjoint_left.mpr fun m hm1 hm2 =>
           h.ne_top (Ideal.eq_top_of_isUnit_mem _ hm2 (map_units S ⟨m, hm1⟩))⟩
     · refine fun hJ => h.ne_top ?_
-      rw [eq_top_iff]; rw [← (orderEmbedding M S).le_iff_le]
+      rw [eq_top_iff, ← (orderEmbedding M S).le_iff_le]
       exact le_of_eq hJ.symm
     · intro x y hxy
-      rw [Ideal.mem_comap]; rw [map_mul] at hxy
+      rw [Ideal.mem_comap, map_mul] at hxy
       exact h.mem_or_mem hxy
   · refine fun h => ⟨fun hJ => h.left.ne_top (eq_top_iff.2 ?_), ?_⟩
     · rwa [eq_top_iff, ← (orderEmbedding M S).le_iff_le] at hJ
     · intro x y hxy
       obtain ⟨a, s, ha⟩ := exists_mk'_eq M x
       obtain ⟨b, t, hb⟩ := exists_mk'_eq M y
-      have : mk' S (a * b) (s * t) in J := by rwa [mk'_mul, ha, hb]
-      rw [mk'_mem_iff]; rw [← Ideal.mem_comap] at this
+      have : mk' S (a * b) (s * t) ∈ J := by rwa [mk'_mul, ha, hb]
+      rw [mk'_mem_iff, ← Ideal.mem_comap] at this
       have this₂ := (h.1).mul_mem_iff_mem_or_mem.1 this
-      rw [Ideal.mem_comap]; rw [Ideal.mem_comap] at this₂
+      rw [Ideal.mem_comap, Ideal.mem_comap] at this₂
       rwa [← ha, ← hb, mk'_mem_iff, mk'_mem_iff]
 
-/--
-theorem `isPrime_of_isPrime_disjoint` / 定理 `isPrime_of_isPrime_disjoint`
+/-- If `R` is a ring, then prime ideals in the localization at `M`
+correspond to prime ideals in the original ring `R` that are disjoint from `M`.
+This lemma gives the particular case for an ideal and its map,
+see `le_rel_iso_of_prime` for the more general relation isomorphism, and the reverse implication -/
+/-
+**IsLocalization.isPrime_of_isPrime_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `IsLocali
+zation`。
+形式化陈述：isPrime_of_isPrime_disjoint (I : Ideal R) (hp : I.IsPrime) (hd : Disjoint 
+(M : Set R) ↑I) : (Ideal.map (algebraMap R S) I).IsPrime
+参数：I : Ideal R；hp : I.IsPrime；hd : Disjoint (M : Set R) ↑I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.isPrime_iff_isPrime_disjoint`：isPrime_iff_isPrime_disjoin
+t (J : Ideal S) : J.IsPrime ↔ (J.under R).IsPrime ∧ Disjoint (M : Set R) (J.unde
+r R)
+· 使用定理 `IsLocalization.under_map_of_isPrime_disjoint`：under_map_of_isPrime_disjo
+int {I : Ideal R} (hI : I.IsPrime) (hM : Disjoint (M : Set R) I) : (Ideal.map (a
+lgebraMap R S) I).under R = I
 
-English:
-theorem isPrime_of_isPrime_disjoint
-  given: (I : Ideal R) (hp : I.IsPrime) (hd : Disjoint (M : Set R) ↑I)
-  proof: by
-  rw [isPrime_iff_isPrime_disjoint M S]; rw [under_map_of_isPrime_disjoint M S hp hd]
-  exact ⟨hp, hd⟩
-
-中文:
-定理 isPrime_of_isPrime_disjoint
-  条件: (I : 理想 R) (hp : I.是素) (hd : Disjoint (M : 集合 R) ↑I)
-  证明: by
-  rw [isPrime_iff_isPrime_disjoint M S]; rw [under_map_of_isPrime_disjoint M S hp hd]
-  exact ⟨hp, hd⟩
-
-Depends on / 依赖: isPrime_iff_isPrime_disjoint, under_map_of_isPrime_disjoint
+--- 原说明 ---
+If `R` is a ring, then prime ideals in the localization at `M`
+correspond to prime ideals in the original ring `R` that are disjoint from `M`.
+This lemma gives the particular case for an ideal and its map,
+see `le_rel_iso_of_prime` for the more general relation isomorphism, and the rev
+erse implication
 -/
 theorem isPrime_of_isPrime_disjoint (I : Ideal R) (hp : I.IsPrime) (hd : Disjoint (M : Set R) ↑I) :
     (Ideal.map (algebraMap R S) I).IsPrime := by
-  rw [isPrime_iff_isPrime_disjoint M S]; rw [under_map_of_isPrime_disjoint M S hp hd]
+  rw [isPrime_iff_isPrime_disjoint M S, under_map_of_isPrime_disjoint M S hp hd]
   exact ⟨hp, hd⟩
-
-/--
-theorem `disjoint_under_iff` / 定理 `disjoint_under_iff`
-
-English:
-theorem disjoint_under_iff
-  given: (J : Ideal S)
-  proof: by
-  rw [← iff_not_comm]; rw [Set.not_disjoint_iff]
-  constructor
-  · rintro rfl
-    exact ⟨1, M.one_mem, ⟨⟩⟩
-  · rintro ⟨x, hxM, hxJ⟩
-    exact J.eq_top_of_isUnit_mem hxJ (IsLocalization.map_units S ⟨x, hxM⟩)
-
-@[deprecated (since := "2026-04-09")] alias disjoint_comap_iff := disjoint_under_iff
-
-中文:
-定理 disjoint_under_iff
-  条件: (J : 理想 S)
-  证明: by
-  rw [← iff_not_comm]; rw [Set.not_disjoint_iff]
-  constructor
-  · rintro rfl
-    exact ⟨1, M.one_mem, ⟨⟩⟩
-  · rintro ⟨x, hxM, hxJ⟩
-    exact J.eq_top_of_isUnit_mem hxJ (IsLocalization.map_units S ⟨x, hxM⟩)
-
-@[deprecated (since := "2026-04-09")] alias disjoint_comap_iff := disjoint_under_iff
-
-Depends on / 依赖: IsLocalization, IsLocalization.map_units, J.eq_top_of_isUnit_mem, M.one_mem, Set.not_disjoint_iff, eq_top_of_isUnit_mem, iff_not_comm, map_units, not_disjoint_iff, one_mem
+/-
+**IsLocalization.disjoint_under_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：disjoint_under_iff (J : Ideal S) : Disjoint (M : Set R) (J.under R) ↔ J !=
+ ⊤
+参数：J : Ideal S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iff_not_comm`：iff_not_comm : (a ↔ ¬b) ↔ (b ↔ ¬a)
+· 使用引理 `Set.not_disjoint_iff`：not_disjoint_iff : ¬Disjoint s t ↔ exists x, x in 
+s ∧ x in t
+· 使用定理 `Submonoid.one_mem`：∀ {M : Type u_1} [inst : MulOneClass M] (S : Submonoi
+d M), 1 ∈ S
+· 使用定理 `Ideal.eq_top_of_isUnit_mem`：eq_top_of_isUnit_mem {x} (hx : x in I) (h : 
+IsUnit x) : I = ⊤
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
 -/
 theorem disjoint_under_iff (J : Ideal S) :
-    Disjoint (M : Set R) (J.under R) ↔ J != ⊤ := by
-  rw [← iff_not_comm]; rw [Set.not_disjoint_iff]
+    Disjoint (M : Set R) (J.under R) ↔ J ≠ ⊤ := by
+  rw [← iff_not_comm, Set.not_disjoint_iff]
   constructor
   · rintro rfl
     exact ⟨1, M.one_mem, ⟨⟩⟩
@@ -694,34 +698,20 @@ theorem disjoint_under_iff (J : Ideal S) :
 
 @[deprecated (since := "2026-04-09")] alias disjoint_comap_iff := disjoint_under_iff
 
-/--
-Definition of `orderIsoOfPrime` / `orderIsoOfPrime` 的定义
+/-- If `R` is a ring, then prime ideals in the localization at `M`
+correspond to prime ideals in the original ring `R` that are disjoint from `M` -/
+/-
+**IsLocalization.orderIsoOfPrime** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：{R : Type u_1} →   [inst : CommSemiring R] →     (M : Submonoid R) →      
+ (S : Type u_2) →         [inst_1 : CommSemiring S] →           [inst_2 : Algebr
+a R S] → [IsLocalization M S] → { p // p.IsPrime } ≃o { p // p.IsPrime ∧ Disjoin
+t ↑M ↑p }
+参数：M : Submonoid R；S : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoOfPrime
-  signature: :
-  body: ⟨p.1.under R, (isPrime_iff_isPrime_disjoint M S p.1).1 p.2⟩
-  invFun p := ⟨Ideal.map (algebraMap R S) p.1, isPrime_of_isPrime_disjoint M S p.1 p.2.1 p.2.2⟩
-  left_inv J := Subtype.ext (map_under M S J)
-  right_inv I := Subtype.ext (under_map_of_isPrime_disjoint M S I.2.1 I.2.2)
-  map_rel_iff' {I I'} := by
-    constructor
-    · exact fun h => show I.val <= I'.val from map_under M S I.val ▸
-        map_under M S I'.val ▸ Ideal.map_mono h
-    exact fun h x hx => h hx
-
-中文:
-定义 orderIsoOfPrime
-  签名: :
-  定义体: ⟨p.1.under R, (isPrime_iff_isPrime_disjoint M S p.1).1 p.2⟩
-  invFun p := ⟨Ideal.map (algebraMap R S) p.1, isPrime_of_isPrime_disjoint M S p.1 p.2.1 p.2.2⟩
-  left_inv J := Subtype.ext (map_under M S J)
-  right_inv I := Subtype.ext (under_map_of_isPrime_disjoint M S I.2.1 I.2.2)
-  map_rel_iff' {I I'} := by
-    constructor
-    · exact fun h => show I.val <= I'.val from map_under M S I.val ▸
-        map_under M S I'.val ▸ Ideal.map_mono h
-    exact fun h x hx => h hx
+--- 原说明 ---
+If `R` is a ring, then prime ideals in the localization at `M`
+correspond to prime ideals in the original ring `R` that are disjoint from `M`
 -/
 @[simps] def orderIsoOfPrime :
     { p : Ideal S // p.IsPrime } ≃o { p : Ideal R // p.IsPrime ∧ Disjoint (M : Set R) ↑p } where
@@ -731,61 +721,110 @@ definition orderIsoOfPrime
   right_inv I := Subtype.ext (under_map_of_isPrime_disjoint M S I.2.1 I.2.2)
   map_rel_iff' {I I'} := by
     constructor
-    · exact fun h => show I.val <= I'.val from map_under M S I.val ▸
+    · exact fun h => show I.val ≤ I'.val from map_under M S I.val ▸
         map_under M S I'.val ▸ Ideal.map_mono h
     exact fun h x hx => h hx
 
-/--
-Definition of `primeSpectrumOrderIso` / `primeSpectrumOrderIso` 的定义
+/-- The prime spectrum of the localization of a ring at a submonoid `M` are in
+order-preserving bijection with subset of the prime spectrum of the ring consisting of
+prime ideals disjoint from `M`. -/
+/-
+**IsLocalization.primeSpectrumOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization
+`。
+形式化陈述：{R : Type u_1} →   [inst : CommSemiring R] →     (M : Submonoid R) →      
+ (S : Type u_2) →         [inst_1 : CommSemiring S] →           [inst_2 : Algebr
+a R S] → [IsLocalization M S] → PrimeSpectrum S ≃o { p // Disjoint ↑M ↑p.asIdeal
+ }
+参数：M : Submonoid R；S : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition primeSpectrumOrderIso
-  signature: :
-  body: (PrimeSpectrum.equivSubtype S).trans (orderIsoOfPrime M S).trans
-    ⟨⟨fun p => ⟨⟨p, p.2.1⟩, p.2.2⟩, fun p => ⟨p.1.1, p.1.2, p.2⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
-
-include M in
-
-中文:
-定义 primeSpectrumOrderIso
-  签名: :
-  定义体: (PrimeSpectrum.equivSubtype S).trans (orderIsoOfPrime M S).trans
-    ⟨⟨fun p => ⟨⟨p, p.2.1⟩, p.2.2⟩, fun p => ⟨p.1.1, p.1.2, p.2⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
-
-include M in
+--- 原说明 ---
+The prime spectrum of the localization of a ring at a submonoid `M` are in
+order-preserving bijection with subset of the prime spectrum of the ring consist
+ing of
+prime ideals disjoint from `M`.
 -/
 @[simps!] def primeSpectrumOrderIso :
     PrimeSpectrum S ≃o {p : PrimeSpectrum R // Disjoint (M : Set R) p.asIdeal} :=
-(PrimeSpectrum.equivSubtype S).trans (orderIsoOfPrime M S).trans
-    ⟨⟨fun p => ⟨⟨p, p.2.1⟩, p.2.2⟩, fun p => ⟨p.1.1, p.1.2, p.2⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
+  (PrimeSpectrum.equivSubtype S).trans <| (orderIsoOfPrime M S).trans
+    ⟨⟨fun p ↦ ⟨⟨p, p.2.1⟩, p.2.2⟩, fun p ↦ ⟨p.1.1, p.1.2, p.2⟩, fun _ ↦ rfl, fun _ ↦ rfl⟩, .rfl⟩
 
 include M in
-/--
-lemma `map_radical` / 引理 `map_radical`
-
-English:
-lemma map_radical
-  given: (I : Ideal R)
-  proof: by
-  refine (I.map_radical_le (algebraMap R S)).antisymm ?_
-  rintro x ⟨n, hn⟩
-  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
-  simp only [← IsLocalization.mk'_pow, IsLocalization.mk'_mem_map_algebraMap_iff M] at hn ⊢
-  obtain ⟨s, hs, h⟩ := hn
-  refine ⟨s, hs, n + 1, by convert! I.mul_mem_left (s ^ n * x) h; ring⟩
-
-中文:
-引理 map_radical
-  条件: (I : 理想 R)
-  证明: by
-  refine (I.map_radical_le (algebraMap R S)).antisymm ?_
-  rintro x ⟨n, hn⟩
-  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
-  simp only [← IsLocalization.mk'_pow, IsLocalization.mk'_mem_map_algebraMap_iff M] at hn ⊢
-  obtain ⟨s, hs, h⟩ := hn
-  refine ⟨s, hs, n + 1, by convert! I.mul_mem_left (s ^ n * x) h; ring⟩
-
-Depends on / 依赖: I.map_radical_le, I.mul_mem_left, IsLocalization, IsLocalization.exists_mk, IsLocalization.mk, _mem_map_algebraMap_iff, _pow, algebraMap, antisymm, convert, exists_mk, map_radical_le, mul_mem_left
+/-
+**IsLocalization.map_radical** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalization`。
+形式化陈述：map_radical (I : Ideal R) : I.radical.map (algebraMap R S) = (I.map (algeb
+raMap R S)).radical
+参数：I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ideal.map_radical_le`：map_radical_le : map f (radical I) <= radical (map
+ f I)
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.exists_mk'_eq`：∀ {R : Type u_1} [inst : CommSemiring R] (
+M : Submonoid R) {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R 
+S] [inst_3 : IsLoc…
+· 使用定理 `IsLocalization.mk'_mem_map_algebraMap_iff`：∀ {R : Type u_1} [inst : Comm
+Semiring R] (M : Submonoid R) (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2
+ : Algebra R S] [inst_3 : IsLoc…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' c : R} {b b' : ℕ}, a = a' → b = b' → a' ^ b' = c → a ^ b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a c₁ c₂ : R} {b₁ b₂ : ℕ} {d : R},   a ^ b₁ = c₁ → a ^ b₂ = c₂ → c₁ * c₂ = 
+d → a ^ (b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_one_cast_of_isNat`：∀ {R : Type u_1} [inst
+ : CommSemiring R] (a : R) (b : ℕ), Mathlib.Meta.NormNum.IsNat b 1 → a ^ b = a
+（共 35 条，此处仅展示前 30 条）
 -/
 lemma map_radical (I : Ideal R) :
     I.radical.map (algebraMap R S) = (I.map (algebraMap R S)).radical := by
@@ -795,58 +834,49 @@ lemma map_radical (I : Ideal R) :
   simp only [← IsLocalization.mk'_pow, IsLocalization.mk'_mem_map_algebraMap_iff M] at hn ⊢
   obtain ⟨s, hs, h⟩ := hn
   refine ⟨s, hs, n + 1, by convert! I.mul_mem_left (s ^ n * x) h; ring⟩
-
-/--
-theorem `ideal_eq_iInf_under_map_away` / 定理 `ideal_eq_iInf_under_map_away`
-
-English:
-theorem ideal_eq_iInf_under_map_away
-  given: {S : Finset R} (hS : Ideal.span (α := R) S = ⊤) (I : Ideal R)
-  proof: by
-  apply le_antisymm
-  · simp only [le_iInf₂_iff, ← Ideal.map_le_iff_le_comap, le_refl, implies_true]
-  · intro x hx
-    apply Submodule.mem_of_span_eq_top_of_smul_pow_mem _ _ hS
-    rintro ⟨s, hs⟩
-    simp only [Ideal.mem_iInf, Ideal.mem_comap] at hx
-    obtain ⟨⟨y, ⟨_, n, rfl⟩⟩, e⟩ :=
-      (IsLocalization.mem_map_algebraMap_iff (.powers s) _).mp (hx s hs)
-    dsimp only at e
-    rw [← map_mul]; rw [IsLocalization.eq_iff_exists (.powers s)] at e
-    obtain ⟨⟨_, m, rfl⟩, e⟩ := e
-    use m + n
-    dsimp at e ⊢
-    rw [pow_add]; rw [mul_assoc]; rw [← mul_comm x]; rw [e]
-    exact I.mul_mem_left _ y.2
-
-@[deprecated (since := "2026-04-09")] alias ideal_eq_iInf_comap_map_away :=
-  ideal_eq_iInf_under_map_away
-
-中文:
-定理 ideal_eq_iInf_under_map_away
-  条件: {S : 有限集 R} (hS : 理想.span (α := R) S = ⊤) (I : 理想 R)
-  证明: by
-  apply le_antisymm
-  · simp only [le_iInf₂_iff, ← Ideal.map_le_iff_le_comap, le_refl, implies_true]
-  · intro x hx
-    apply Submodule.mem_of_span_eq_top_of_smul_pow_mem _ _ hS
-    rintro ⟨s, hs⟩
-    simp only [Ideal.mem_iInf, Ideal.mem_comap] at hx
-    obtain ⟨⟨y, ⟨_, n, rfl⟩⟩, e⟩ :=
-      (IsLocalization.mem_map_algebraMap_iff (.powers s) _).mp (hx s hs)
-    dsimp only at e
-    rw [← map_mul]; rw [IsLocalization.eq_iff_exists (.powers s)] at e
-    obtain ⟨⟨_, m, rfl⟩, e⟩ := e
-    use m + n
-    dsimp at e ⊢
-    rw [pow_add]; rw [mul_assoc]; rw [← mul_comm x]; rw [e]
-    exact I.mul_mem_left _ y.2
-
-@[deprecated (since := "2026-04-09")] alias ideal_eq_iInf_comap_map_away :=
-  ideal_eq_iInf_under_map_away
+/-
+**IsLocalization.ideal_eq_iInf_under_map_away** 是 Mathlib 中的一个定理，位于命名空间 `IsLocal
+ization`。
+形式化陈述：ideal_eq_iInf_under_map_away {S : Finset R} (hS : Ideal.span (α
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Submodule.mem_of_span_eq_top_of_smul_pow_mem`：mem_of_span_eq_top_of_smul
+_pow_mem (M' : Submodule R M) (s : Set R) (hs : Ideal.span s = ⊤) (x : M) (H : f
+orall r : s, exists n : Nat, ((r :…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsLocalization.mem_map_algebraMap_iff`：mem_map_algebraMap_iff {I : Ideal
+ R} {z} : z in Ideal.map (algebraMap R S) I ↔ exists x : I × M, z * algebraMap R
+ S x.2 = algebraMap R S x.1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.eq_iff_exists`：eq_iff_exists {x y} : algebraMap R S x = a
+lgebraMap R S y ↔ exists c : M, ↑c * x = ↑c * y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem ideal_eq_iInf_under_map_away {S : Finset R} (hS : Ideal.span (α := R) S = ⊤) (I : Ideal R) :
-    I = ⨅ f in S, (I.map (algebraMap R (Localization.Away f))).under R := by
+    I = ⨅ f ∈ S, (I.map (algebraMap R (Localization.Away f))).under R := by
   apply le_antisymm
   · simp only [le_iInf₂_iff, ← Ideal.map_le_iff_le_comap, le_refl, implies_true]
   · intro x hx
@@ -856,42 +886,36 @@ theorem ideal_eq_iInf_under_map_away {S : Finset R} (hS : Ideal.span (α := R) S
     obtain ⟨⟨y, ⟨_, n, rfl⟩⟩, e⟩ :=
       (IsLocalization.mem_map_algebraMap_iff (.powers s) _).mp (hx s hs)
     dsimp only at e
-    rw [← map_mul]; rw [IsLocalization.eq_iff_exists (.powers s)] at e
+    rw [← map_mul, IsLocalization.eq_iff_exists (.powers s)] at e
     obtain ⟨⟨_, m, rfl⟩, e⟩ := e
     use m + n
     dsimp at e ⊢
-    rw [pow_add]; rw [mul_assoc]; rw [← mul_comm x]; rw [e]
+    rw [pow_add, mul_assoc, ← mul_comm x, e]
     exact I.mul_mem_left _ y.2
 
 @[deprecated (since := "2026-04-09")] alias ideal_eq_iInf_comap_map_away :=
   ideal_eq_iInf_under_map_away
-
-/--
-lemma `map_eq_top_of_not_subset` / 引理 `map_eq_top_of_not_subset`
-
-English:
-lemma map_eq_top_of_not_subset
-  given: {I : Ideal R} (hle : ¬ (I : Set R) subseteq Mᶜ)
-  proof: by
-  simp only [Set.not_subset_iff_exists_mem_notMem, Set.mem_compl_iff, not_not] at hle
-  obtain ⟨y, hy, hny⟩ := hle
-  apply Ideal.eq_top_of_isUnit_mem
-  · exact Ideal.mem_map_of_mem (algebraMap R _) hy
-  · exact IsLocalization.map_units _ (⟨y, hny⟩ : M)
-
-中文:
-引理 map_eq_top_of_not_subset
-  条件: {I : 理想 R} (hle : ¬ (I : 集合 R) subseteq Mᶜ)
-  证明: by
-  simp only [Set.not_subset_iff_exists_mem_notMem, Set.mem_compl_iff, not_not] at hle
-  obtain ⟨y, hy, hny⟩ := hle
-  apply Ideal.eq_top_of_isUnit_mem
-  · exact Ideal.mem_map_of_mem (algebraMap R _) hy
-  · exact IsLocalization.map_units _ (⟨y, hny⟩ : M)
-
-Depends on / 依赖: Ideal.eq_top_of_isUnit_mem, Ideal.mem_map_of_mem, IsLocalization, IsLocalization.map_units, Set.mem_compl_iff, Set.not_subset_iff_exists_mem_notMem, algebraMap, eq_top_of_isUnit_mem, map_units, mem_compl_iff, mem_map_of_mem, not_not, not_subset_iff_exists_mem_notMem
+/-
+**IsLocalization.map_eq_top_of_not_subset** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalizat
+ion`。
+形式化陈述：map_eq_top_of_not_subset {I : Ideal R} (hle : ¬ (I : Set R) subseteq Mᶜ) :
+ Ideal.map (algebraMap R S) I = ⊤
+参数：hle : ¬ (I : Set R) subseteq Mᶜ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Ideal.eq_top_of_isUnit_mem`：eq_top_of_isUnit_mem {x} (hx : x in I) (h : 
+IsUnit x) : I = ⊤
+· 使用定理 `Ideal.mem_map_of_mem`：mem_map_of_mem (f : F) {I : Ideal R} {x : R} (h : 
+x in I) : f x in map f I
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
 -/
-lemma map_eq_top_of_not_subset {I : Ideal R} (hle : ¬ (I : Set R) subseteq Mᶜ) :
+lemma map_eq_top_of_not_subset {I : Ideal R} (hle : ¬ (I : Set R) ⊆ Mᶜ) :
     Ideal.map (algebraMap R S) I = ⊤ := by
   simp only [Set.not_subset_iff_exists_mem_notMem, Set.mem_compl_iff, not_not] at hle
   obtain ⟨y, hy, hny⟩ := hle
@@ -907,81 +931,87 @@ variable {R : Type*} [CommRing R] (M : Submonoid R) (S : Type*) [CommRing S]
 variable [Algebra R S] [IsLocalization M S]
 
 include M in
-/--
-theorem `surjective_quotientMap_of_maximal_of_localization` / 定理 `surjective_quotientMap_of_maximal_of_localization`
+/-- `quotientMap` applied to maximal ideals of a localization is `surjective`.
+  The quotient by a maximal ideal is a field, so inverses to elements already exist,
+  and the localization necessarily maps the equivalence class of the inverse in the localization -/
+/-
+**IsLocalization.surjective_quotientMap_of_maximal_of_localization** 是 Mathlib 中
+的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：surjective_quotientMap_of_maximal_of_localization {I : Ideal S} [I.IsPrime
+] {J : Ideal R} {H : J <= I.under R} (hI : (I.under R).IsMaximal) : Function.Sur
+jective (Ideal.quotientMap I (algebraMap R S) H)
+参数：hI : (I.under R).IsMaximal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.exists_mk'_eq`：∀ {R : Type u_1} [inst : CommSemiring R] (
+M : Submonoid R) {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R 
+S] [inst_3 : IsLoc…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.eq_top_iff_one`：eq_top_iff_one : I = ⊤ ↔ (1 : α) in I
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.mk'_eq_mul_mk'_one`：∀ {R : Type u_1} [inst : CommSemiring
+ R] {M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algeb
+ra R S] [inst_3 : IsLoc…
+· 使用定理 `IsLocalization.mk'_self`：∀ {R : Type u_1} [inst : CommSemiring R] {M : S
+ubmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [i
+nst_3 : IsLoc…
+· 使用定理 `Ideal.mul_mem_right`：mul_mem_right {α} {a : α} (b : α) [Semiring α] (I :
+ Ideal α) [I.IsTwoSided] (h : a in I) : a * b in I
+· 使用定理 `Ideal.mem_comap`：mem_comap [RingHomClass F R S] {x} : x in comap f K ↔ f
+ x in K
+· 使用定理 `Ideal.Quotient.eq_zero_iff_mem`：eq_zero_iff_mem : mk I a = 0 ↔ a in I
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsField.mul_inv_cancel`：∀ {R : Type u} [inst : Semiring R], IsField R → 
+∀ {a : R}, a ≠ 0 → ∃ b, a * b = 1
+· 使用定理 `Ideal.Quotient.maximal_ideal_iff_isField_quotient`：maximal_ideal_iff_isF
+ield_quotient {R} [CommRing R] (I : Ideal R) : I.IsMaximal ↔ IsField (R ⧸ I)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Ideal.quotientMap_mk`：quotientMap_mk {J : Ideal R} {I : Ideal S} [I.IsTw
+oSided] [J.IsTwoSided] {f : R ->+* S} {H : J <= I.comap f} {x : R} : quotientMap
+ I f H (Qu…
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+（共 43 条，此处仅展示前 30 条）
 
-English:
-theorem surjective_quotientMap_of_maximal_of_localization
-  statement: {I : Ideal S} [I.IsPrime] {J : Ideal R}
-  proof: by
-  intro s
-  obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective s
-  obtain ⟨r, ⟨m, hm⟩, rfl⟩ := exists_mk'_eq M s
-  by_cases hM : (Ideal.Quotient.mk (I.comap (algebraMap R S))) m = 0
-  · have : I = ⊤ := by
-      rw [Ideal.eq_top_iff_one]
-      rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_comap] at hM
-      convert! I.mul_mem_right (mk' S (1 : R) ⟨m, hm⟩) hM
-      rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]
-    exact ⟨0, eq_comm.1 (by simp [Ideal.Quotient.eq_zero_iff_mem, this])⟩
-  · rw [Ideal.Quotient.maximal_ideal_iff_isField_quotient] at hI
-    obtain ⟨n, hn⟩ := hI.3 hM
-    obtain ⟨rn, rfl⟩ := Ideal.Quotient.mk_surjective n
-    refine ⟨(Ideal.Quotient.mk J) (r * rn), ?_⟩
-    -- The rest of the proof is essentially just algebraic manipulations to prove the equality
-    replace hn := congr_arg (Ideal.quotientMap I (algebraMap R S) le_rfl) hn
-    rw [map_one]; rw [map_mul] at hn
-    rw [Ideal.quotientMap_mk]; rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [←
-      Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]; rw [mk'_eq_mul_mk'_one]
-    simp only [mul_eq_mul_left_iff, map_mul]
-    refine
-      Or.inl
-        (mul_left_cancel₀ (M₀ := S ⧸ I)
-          (fun hn =>
-            hM
-              (Ideal.Quotient.eq_zero_iff_mem.2
-                (Ideal.mem_comap.2 (Ideal.Quotient.eq_zero_iff_mem.1 hn))))
-          (_root_.trans hn ?_))
-    rw [← map_mul]; rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]; rw [map_one]
-
-中文:
-定理 surjective_quotientMap_of_maximal_of_localization
-  结论: {I : 理想 S} [I.是素] {J : 理想 R}
-  证明: by
-  intro s
-  obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective s
-  obtain ⟨r, ⟨m, hm⟩, rfl⟩ := exists_mk'_eq M s
-  by_cases hM : (Ideal.Quotient.mk (I.comap (algebraMap R S))) m = 0
-  · have : I = ⊤ := by
-      rw [Ideal.eq_top_iff_one]
-      rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_comap] at hM
-      convert! I.mul_mem_right (mk' S (1 : R) ⟨m, hm⟩) hM
-      rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]
-    exact ⟨0, eq_comm.1 (by simp [Ideal.Quotient.eq_zero_iff_mem, this])⟩
-  · rw [Ideal.Quotient.maximal_ideal_iff_isField_quotient] at hI
-    obtain ⟨n, hn⟩ := hI.3 hM
-    obtain ⟨rn, rfl⟩ := Ideal.Quotient.mk_surjective n
-    refine ⟨(Ideal.Quotient.mk J) (r * rn), ?_⟩
-    -- The rest of the proof is essentially just algebraic manipulations to prove the equality
-    replace hn := congr_arg (Ideal.quotientMap I (algebraMap R S) le_rfl) hn
-    rw [map_one]; rw [map_mul] at hn
-    rw [Ideal.quotientMap_mk]; rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [←
-      Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]; rw [mk'_eq_mul_mk'_one]
-    simp only [mul_eq_mul_left_iff, map_mul]
-    refine
-      Or.inl
-        (mul_left_cancel₀ (M₀ := S ⧸ I)
-          (fun hn =>
-            hM
-              (Ideal.Quotient.eq_zero_iff_mem.2
-                (Ideal.mem_comap.2 (Ideal.Quotient.eq_zero_iff_mem.1 hn))))
-          (_root_.trans hn ?_))
-    rw [← map_mul]; rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]; rw [map_one]
-
-Depends on / 依赖: I.comap, I.mul_mem_right, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.maximal_ideal_iff_isField_quoti, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.eq_top_iff_one, Ideal.mem_comap, Quotient, _eq_mul_mk, _one, _self, algebraMap, convert, eq_comm, eq_top_iff_one, eq_zero_iff_mem, exists_mk, maximal_ideal_iff_isField_quoti, mem_comap
+--- 原说明 ---
+`quotientMap` applied to maximal ideals of a localization is `surjective`.
+  The quotient by a maximal ideal is a field, so inverses to elements already ex
+ist,
+  and the localization necessarily maps the equivalence class of the inverse in 
+the localization
 -/
 theorem surjective_quotientMap_of_maximal_of_localization {I : Ideal S} [I.IsPrime] {J : Ideal R}
-    {H : J <= I.under R} (hI : (I.under R).IsMaximal) :
+    {H : J ≤ I.under R} (hI : (I.under R).IsMaximal) :
     Function.Surjective (Ideal.quotientMap I (algebraMap R S) H) := by
   intro s
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective s
@@ -989,9 +1019,9 @@ theorem surjective_quotientMap_of_maximal_of_localization {I : Ideal S} [I.IsPri
   by_cases hM : (Ideal.Quotient.mk (I.comap (algebraMap R S))) m = 0
   · have : I = ⊤ := by
       rw [Ideal.eq_top_iff_one]
-      rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_comap] at hM
+      rw [Ideal.Quotient.eq_zero_iff_mem, Ideal.mem_comap] at hM
       convert! I.mul_mem_right (mk' S (1 : R) ⟨m, hm⟩) hM
-      rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]
+      rw [← mk'_eq_mul_mk'_one, mk'_self]
     exact ⟨0, eq_comm.1 (by simp [Ideal.Quotient.eq_zero_iff_mem, this])⟩
   · rw [Ideal.Quotient.maximal_ideal_iff_isField_quotient] at hI
     obtain ⟨n, hn⟩ := hI.3 hM
@@ -999,9 +1029,9 @@ theorem surjective_quotientMap_of_maximal_of_localization {I : Ideal S} [I.IsPri
     refine ⟨(Ideal.Quotient.mk J) (r * rn), ?_⟩
     -- The rest of the proof is essentially just algebraic manipulations to prove the equality
     replace hn := congr_arg (Ideal.quotientMap I (algebraMap R S) le_rfl) hn
-    rw [map_one]; rw [map_mul] at hn
-    rw [Ideal.quotientMap_mk]; rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [←
-      Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]; rw [mk'_eq_mul_mk'_one]
+    rw [map_one, map_mul] at hn
+    rw [Ideal.quotientMap_mk, ← sub_eq_zero, ← map_sub, Ideal.Quotient.eq_zero_iff_mem, ←
+      Ideal.Quotient.eq_zero_iff_mem, map_sub, sub_eq_zero, mk'_eq_mul_mk'_one]
     simp only [mul_eq_mul_left_iff, map_mul]
     refine
       Or.inl
@@ -1011,41 +1041,37 @@ theorem surjective_quotientMap_of_maximal_of_localization {I : Ideal S} [I.IsPri
               (Ideal.Quotient.eq_zero_iff_mem.2
                 (Ideal.mem_comap.2 (Ideal.Quotient.eq_zero_iff_mem.1 hn))))
           (_root_.trans hn ?_))
-    rw [← map_mul]; rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]; rw [map_one]
+    rw [← map_mul, ← mk'_eq_mul_mk'_one, mk'_self, map_one]
 
 open nonZeroDivisors
-
-/--
-theorem `bot_lt_under_prime` / 定理 `bot_lt_under_prime`
-
-English:
-theorem bot_lt_under_prime
-  statement: [IsDomain R] (hM : M <= R⁰) (p : Ideal S) [hpp : p.IsPrime]
-  proof: by
-  have : IsDomain S := isDomain_of_le_nonZeroDivisors _ hM
-  rw [← Ideal.comap_bot_of_injective (algebraMap R S) (IsLocalization.injective _ hM)]
-  convert!
-    (orderIsoOfPrime M S).lt_iff_lt.mpr
-      (show (⟨⊥, Ideal.isPrime_bot⟩ : { p : Ideal S // p.IsPrime }) < ⟨p, hpp⟩ from hp0.bot_lt)
-
-@[deprecated (since := "2026-04-09")] alias bot_lt_comap_prime := bot_lt_under_prime
-
-中文:
-定理 bot_lt_under_prime
-  结论: [是整环 R] (hM : M <= R⁰) (p : 理想 S) [hpp : p.是素]
-  证明: by
-  have : IsDomain S := isDomain_of_le_nonZeroDivisors _ hM
-  rw [← Ideal.comap_bot_of_injective (algebraMap R S) (IsLocalization.injective _ hM)]
-  convert!
-    (orderIsoOfPrime M S).lt_iff_lt.mpr
-      (show (⟨⊥, Ideal.isPrime_bot⟩ : { p : Ideal S // p.IsPrime }) < ⟨p, hpp⟩ from hp0.bot_lt)
-
-@[deprecated (since := "2026-04-09")] alias bot_lt_comap_prime := bot_lt_under_prime
-
-Depends on / 依赖: Ideal.comap_bot_of_injective, Ideal.isPrime_bot, IsDomain, IsLocalization, IsLocalization.injective, IsPrime, algebraMap, bot_lt, comap_bot_of_injective, convert, hp0.bot_lt, injective, isDomain_of_le_nonZeroDivisors, isPrime_bot, lt_iff_lt, lt_iff_lt.mpr, orderIsoOfPrime, p.IsPrime
+/-
+**IsLocalization.bot_lt_under_prime** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：bot_lt_under_prime [IsDomain R] (hM : M <= R⁰) (p : Ideal S) [hpp : p.IsPr
+ime] (hp0 : p != ⊥) : ⊥ < p.under R
+参数：hM : M <= R⁰；p : Ideal S；hp0 : p != ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.isDomain_of_le_nonZeroDivisors`：isDomain_of_le_nonZeroDiv
+isors (hM : M <= nonZeroDivisors R) : IsDomain S where __ : IsCancelMulZero S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.comap_bot_of_injective`：comap_bot_of_injective (hf : Function.Inje
+ctive f) : Ideal.comap f ⊥ = ⊥
+· 使用定理 `IsLocalization.injective`：∀ {R : Type u_1} [inst : CommRing R] {M : Subm
+onoid R} (S : Type u_2) [inst_1 : CommRing S] [inst_2 : Algebra R S]   [IsLocali
+zation M S], M…
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `OrderIso.lt_iff_lt`：lt_iff_lt (e : α ≃o β) {x y : α} : e x < e y ↔ x < y
+· 使用定理 `Ne.bot_lt`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α] 
+{a : α}, a ≠ ⊥ → ⊥ < a
 -/
-theorem bot_lt_under_prime [IsDomain R] (hM : M <= R⁰) (p : Ideal S) [hpp : p.IsPrime]
-    (hp0 : p != ⊥) : ⊥ < p.under R := by
+theorem bot_lt_under_prime [IsDomain R] (hM : M ≤ R⁰) (p : Ideal S) [hpp : p.IsPrime]
+    (hp0 : p ≠ ⊥) : ⊥ < p.under R := by
   have : IsDomain S := isDomain_of_le_nonZeroDivisors _ hM
   rw [← Ideal.comap_bot_of_injective (algebraMap R S) (IsLocalization.injective _ hM)]
   convert!
@@ -1056,64 +1082,18 @@ theorem bot_lt_under_prime [IsDomain R] (hM : M <= R⁰) (p : Ideal S) [hpp : p.
 
 set_option backward.isDefEq.respectTransparency false in
 variable (R) in
-/--
-lemma `_root_.Module.IsTorsionFree.of_isLocalization` / 引理 `_root_.Module.IsTorsionFree.of_isLocalization`
-
-English:
-lemma _root_.Module.IsTorsionFree.of_isLocalization
-  statement: [IsDomain R] [IsDomain S] {Rₚ Sₚ : Type*}
-  proof: by
-  have e : Algebra.algebraMapSubmonoid S M <= S⁰ :=
-Submonoid.map_le_of_le_comap _ hM.trans
-      (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
-        (FaithfulSMul.algebraMap_injective _ _))
-  have : IsDomain Sₚ := IsLocalization.isDomain_of_le_nonZeroDivisors _ e
-  have : algebraMap Rₚ Sₚ = IsLocalization.map (T := Algebra.algebraMapSubmonoid S M) Sₚ
-    (algebraMap R S) (Submonoid.le_comap_map M) := by
-    apply IsLocalization.ringHom_ext M
-    simp only [IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-  rw [Module.isTorsionFree_iff_algebraMap_injective]; rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
-  intro x hx
-  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
-  simp only [IsLocalization.map_mk', IsLocalization.mk'_eq_zero_iff,
-    Subtype.exists, exists_prop, this] at hx ⊢
-  obtain ⟨_, ⟨a, ha, rfl⟩, H⟩ := hx
-  simp only [← map_mul,
-    (injective_iff_map_eq_zero' _).mp (FaithfulSMul.algebraMap_injective R S)] at H
-  exact ⟨a, ha, H⟩
-
-中文:
-引理 _root_.模.是无挠.of_isLocalization
-  结论: [是整环 R] [是整环 S] {Rₚ Sₚ : 类型}
-  证明: by
-  have e : Algebra.algebraMapSubmonoid S M <= S⁰ :=
-Submonoid.map_le_of_le_comap _ hM.trans
-      (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
-        (FaithfulSMul.algebraMap_injective _ _))
-  have : IsDomain Sₚ := IsLocalization.isDomain_of_le_nonZeroDivisors _ e
-  have : algebraMap Rₚ Sₚ = IsLocalization.map (T := Algebra.algebraMapSubmonoid S M) Sₚ
-    (algebraMap R S) (Submonoid.le_comap_map M) := by
-    apply IsLocalization.ringHom_ext M
-    simp only [IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-  rw [Module.isTorsionFree_iff_algebraMap_injective]; rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
-  intro x hx
-  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
-  simp only [IsLocalization.map_mk', IsLocalization.mk'_eq_zero_iff,
-    Subtype.exists, exists_prop, this] at hx ⊢
-  obtain ⟨_, ⟨a, ha, rfl⟩, H⟩ := hx
-  simp only [← map_mul,
-    (injective_iff_map_eq_zero' _).mp (FaithfulSMul.algebraMap_injective R S)] at H
-  exact ⟨a, ha, H⟩
-
-Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsDomain, IsLocalization, IsLocalization.isDomain_of_le_nonZeroDivisors, IsLocalization.map, IsLocalization.map_comp, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.algebraMap_eq, Submonoid, Submonoid.le_comap_map, Submonoid.map_le_of_le_comap, algebraMap, algebraMapSubmonoid, algebraMap_eq, algebraMap_injective, hM.trans
+/-
+**IsLocalization._root_.Module.IsTorsionFree.of_isLocalization** 是 Mathlib 中的一个引
+理，位于命名空间 `IsLocalization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Module.IsTorsionFree.of_isLocalization [IsDomain R] [IsDomain S] {Rₚ Sₚ : Type*}
     [CommRing Rₚ] [IsDomain Rₚ] [CommRing Sₚ] [Algebra R Rₚ] [Algebra R Sₚ] [Algebra S Sₚ]
-    [Algebra Rₚ Sₚ] [IsScalarTower R S Sₚ] [IsScalarTower R Rₚ Sₚ] {M : Submonoid R} (hM : M <= R⁰)
+    [Algebra Rₚ Sₚ] [IsScalarTower R S Sₚ] [IsScalarTower R Rₚ Sₚ] {M : Submonoid R} (hM : M ≤ R⁰)
     [IsLocalization M Rₚ] [IsLocalization (Algebra.algebraMapSubmonoid S M) Sₚ]
     [Module.IsTorsionFree R S] : Module.IsTorsionFree Rₚ Sₚ := by
-  have e : Algebra.algebraMapSubmonoid S M <= S⁰ :=
-Submonoid.map_le_of_le_comap _ hM.trans
+  have e : Algebra.algebraMapSubmonoid S M ≤ S⁰ :=
+    Submonoid.map_le_of_le_comap _ <| hM.trans
       (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
         (FaithfulSMul.algebraMap_injective _ _))
   have : IsDomain Sₚ := IsLocalization.isDomain_of_le_nonZeroDivisors _ e
@@ -1121,7 +1101,8 @@ Submonoid.map_le_of_le_comap _ hM.trans
     (algebraMap R S) (Submonoid.le_comap_map M) := by
     apply IsLocalization.ringHom_ext M
     simp only [IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-  rw [Module.isTorsionFree_iff_algebraMap_injective]; rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
+  rw [Module.isTorsionFree_iff_algebraMap_injective, RingHom.injective_iff_ker_eq_bot,
+    RingHom.ker_eq_bot_iff_eq_zero]
   intro x hx
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
   simp only [IsLocalization.map_mk', IsLocalization.mk'_eq_zero_iff,
@@ -1130,56 +1111,76 @@ Submonoid.map_le_of_le_comap _ hM.trans
   simp only [← map_mul,
     (injective_iff_map_eq_zero' _).mp (FaithfulSMul.algebraMap_injective R S)] at H
   exact ⟨a, ha, H⟩
-
-/--
-lemma `of_surjective` / 引理 `of_surjective`
-
-English:
-lemma of_surjective
-  statement: {R' S' : Type*} [CommRing R'] [CommRing S'] [Algebra R' S']
-  proof: by
-    rintro ⟨_, y, hy, rfl⟩
-    simpa only [← RingHom.comp_apply, H] using (IsLocalization.map_units S ⟨y, hy⟩).map g
-  surj := by
-    intro z
-    obtain ⟨z, rfl⟩ := hg z
-    obtain ⟨⟨r, s⟩, e⟩ := IsLocalization.surj M z
-    refine ⟨⟨f r, _, s.1, s.2, rfl⟩, ?_⟩
-    simpa only [map_mul, ← RingHom.comp_apply, H] using DFunLike.congr_arg g e
-  exists_of_eq := by
-    intro x y e
-    obtain ⟨x, rfl⟩ := hf x
-    obtain ⟨y, rfl⟩ := hf y
-    rw [← sub_eq_zero]; rw [← map_sub]; rw [← map_sub]; rw [← RingHom.comp_apply]; rw [← H]; rw [RingHom.comp_apply]; rw [← IsLocalization.mk'_one (M := M)] at e
-    obtain ⟨r, hr, hr'⟩ := (IsLocalization.mk'_mem_map_algebraMap_iff M _ _ _ _).mp (H' e)
-    exact ⟨⟨_, r, hr, rfl⟩, by simpa [sub_eq_zero, mul_sub] using hr'⟩
-
-中文:
-引理 of_surjective
-  结论: {R' S' : 类型} [交换环 R'] [交换环 S'] [代数 R' S']
-  证明: by
-    rintro ⟨_, y, hy, rfl⟩
-    simpa only [← RingHom.comp_apply, H] using (IsLocalization.map_units S ⟨y, hy⟩).map g
-  surj := by
-    intro z
-    obtain ⟨z, rfl⟩ := hg z
-    obtain ⟨⟨r, s⟩, e⟩ := IsLocalization.surj M z
-    refine ⟨⟨f r, _, s.1, s.2, rfl⟩, ?_⟩
-    simpa only [map_mul, ← RingHom.comp_apply, H] using DFunLike.congr_arg g e
-  exists_of_eq := by
-    intro x y e
-    obtain ⟨x, rfl⟩ := hf x
-    obtain ⟨y, rfl⟩ := hf y
-    rw [← sub_eq_zero]; rw [← map_sub]; rw [← map_sub]; rw [← RingHom.comp_apply]; rw [← H]; rw [RingHom.comp_apply]; rw [← IsLocalization.mk'_one (M := M)] at e
-    obtain ⟨r, hr, hr'⟩ := (IsLocalization.mk'_mem_map_algebraMap_iff M _ _ _ _).mp (H' e)
-    exact ⟨⟨_, r, hr, rfl⟩, by simpa [sub_eq_zero, mul_sub] using hr'⟩
-
-Depends on / 依赖: DFunLike, DFunLike.congr_arg, IsLocalization, IsLocalization.map_units, IsLocalization.surj, RingHom, RingHom.comp_ap, RingHom.comp_apply, comp_ap, comp_apply, congr_arg, exists_of_eq, map_mul, map_sub, map_units, sub_eq_zero
+/-
+**IsLocalization.of_surjective** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalization`。
+形式化陈述：of_surjective {R' S' : Type*} [CommRing R'] [CommRing S'] [Algebra R' S'] 
+(f : R ->+* R') (hf : Function.Surjective f) (g : S ->+* S') (hg : Function.Surj
+ective g) (H : g.comp (algebraMap R S) = (algebraMap _ _).comp f) (H' : RingHom.
+ker g <= (RingHom.ker f).map (algebraMap R S)) : IsLocalization (M.map f) S' whe
+re map_units
+参数：f : R ->+* R'；hf : Function.Surjective f；g : S ->+* S'；hg : Function.Surjecti
+ve g；H : g.comp (algebraMap R S) = (algebraMap _ _).comp f；H' : RingHom.ker g <=
+ (RingHom.ker f).map (algebraMap R S)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
+· 使用定理 `IsLocalization.surj`：surj : forall z : S, exists x : R × M, z * algebraM
+ap R S x.2 = algebraMap R S x.1
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.mk'_mem_map_algebraMap_iff`：∀ {R : Type u_1} [inst : Comm
+Semiring R] (M : Submonoid R) (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2
+ : Algebra R S] [inst_3 : IsLoc…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.mk'_one`：∀ {R : Type u_1} [inst : CommSemiring R] {M : Su
+bmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [in
+st_3 : IsLoc…
+· 使用定理 `RingHom.comp_apply`：comp_apply (hnp : β ->+* γ) (hmn : α ->+* β) (x : α)
+ : (hnp.comp hmn : α -> γ) x = hnp (hmn x)
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
 -/
 lemma of_surjective {R' S' : Type*} [CommRing R'] [CommRing S'] [Algebra R' S']
-    (f : R ->+* R') (hf : Function.Surjective f) (g : S ->+* S') (hg : Function.Surjective g)
+    (f : R →+* R') (hf : Function.Surjective f) (g : S →+* S') (hg : Function.Surjective g)
     (H : g.comp (algebraMap R S) = (algebraMap _ _).comp f)
-    (H' : RingHom.ker g <= (RingHom.ker f).map (algebraMap R S)) : IsLocalization (M.map f) S' where
+    (H' : RingHom.ker g ≤ (RingHom.ker f).map (algebraMap R S)) : IsLocalization (M.map f) S' where
   map_units := by
     rintro ⟨_, y, hy, rfl⟩
     simpa only [← RingHom.comp_apply, H] using (IsLocalization.map_units S ⟨y, hy⟩).map g
@@ -1193,16 +1194,24 @@ lemma of_surjective {R' S' : Type*} [CommRing R'] [CommRing S'] [Algebra R' S']
     intro x y e
     obtain ⟨x, rfl⟩ := hf x
     obtain ⟨y, rfl⟩ := hf y
-    rw [← sub_eq_zero]; rw [← map_sub]; rw [← map_sub]; rw [← RingHom.comp_apply]; rw [← H]; rw [RingHom.comp_apply]; rw [← IsLocalization.mk'_one (M := M)] at e
+    rw [← sub_eq_zero, ← map_sub, ← map_sub, ← RingHom.comp_apply, ← H, RingHom.comp_apply,
+      ← IsLocalization.mk'_one (M := M)] at e
     obtain ⟨r, hr, hr'⟩ := (IsLocalization.mk'_mem_map_algebraMap_iff M _ _ _ _).mp (H' e)
     exact ⟨⟨_, r, hr, rfl⟩, by simpa [sub_eq_zero, mul_sub] using hr'⟩
-
+/-
+**IsLocalization.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (I : Ideal R) :
     IsLocalization (Algebra.algebraMapSubmonoid (R ⧸ I) M) (S ⧸ I.map (algebraMap R S)) :=
   of_surjective M S (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
     (Ideal.Quotient.mk (I.map (algebraMap R S))) Ideal.Quotient.mk_surjective rfl (by simp)
 
 open Algebra in
+/-
+**IsLocalization.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P : Ideal R} [P.IsPrime] [IsDomain R] [IsDomain S] [FaithfulSMul R S] :
     IsDomain (Localization (algebraMapSubmonoid S P.primeCompl)) :=
   isDomain_localization (map_le_nonZeroDivisors_of_injective _
@@ -1211,3 +1220,4 @@ instance {P : Ideal R} [P.IsPrime] [IsDomain R] [IsDomain S] [FaithfulSMul R S] 
 end CommRing
 
 end IsLocalization
+

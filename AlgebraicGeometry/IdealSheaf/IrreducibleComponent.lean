@@ -36,237 +36,166 @@ universe u
 
 namespace AlgebraicGeometry.Scheme
 
-variable (X : Scheme.{u}) (Z : Set X) (hZ : Z in irreducibleComponents X) [IsNoetherian X]
+variable (X : Scheme.{u}) (Z : Set X) (hZ : Z ∈ irreducibleComponents X) [IsNoetherian X]
 
-/--
-Definition of `irreducibleComponentOpen` / `irreducibleComponentOpen` 的定义
+/-- The complement of the irreducible components unequal to `Z` of a Noetherian scheme. -/
+/-
+**AlgebraicGeometry.Scheme.irreducibleComponentOpen** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry.Scheme`。
+形式化陈述：irreducibleComponentOpen : Opens X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition irreducibleComponentOpen
-  signature: : Opens X
-  body: ⟨(⋃₀ (irreducibleComponents X \ {Z}))ᶜ, by
-    rw [Set.sUnion_eq_biUnion]; rw [isOpen_compl_iff]
-    exact TopologicalSpace.NoetherianSpace.finite_irreducibleComponents.sdiff.isClosed_biUnion
-      fun W hW => isClosed_of_mem_irreducibleComponents W hW.1⟩
-
-中文:
-定义 irreducibleComponentOpen
-  签名: : Opens X
-  定义体: ⟨(⋃₀ (irreducibleComponents X \ {Z}))ᶜ, by
-    rw [Set.sUnion_eq_biUnion]; rw [isOpen_compl_iff]
-    exact TopologicalSpace.NoetherianSpace.finite_irreducibleComponents.sdiff.isClosed_biUnion
-      fun W hW => isClosed_of_mem_irreducibleComponents W hW.1⟩
-
-Depends on / 依赖: NoetherianSpace, Set.sUnion_eq_biUnion, TopologicalSpace, TopologicalSpace.NoetherianSpace.finite_irreducibleComponents.sdiff.isClosed_biUnion, finite_irreducibleComponents, irreducibleComponents, isClosed_biUnion, isClosed_of_mem_irreducibleComponents, isOpen_compl_iff, sUnion_eq_biUnion
+--- 原说明 ---
+The complement of the irreducible components unequal to `Z` of a Noetherian sche
+me.
 -/
 def irreducibleComponentOpen : Opens X :=
   ⟨(⋃₀ (irreducibleComponents X \ {Z}))ᶜ, by
-    rw [Set.sUnion_eq_biUnion]; rw [isOpen_compl_iff]
+    rw [Set.sUnion_eq_biUnion, isOpen_compl_iff]
     exact TopologicalSpace.NoetherianSpace.finite_irreducibleComponents.sdiff.isClosed_biUnion
-      fun W hW => isClosed_of_mem_irreducibleComponents W hW.1⟩
+      fun W hW ↦ isClosed_of_mem_irreducibleComponents W hW.1⟩
 
-/--
-Definition of `irreducibleComponentIdeal` / `irreducibleComponentIdeal` 的定义
+/-- The ideal sheaf data associated to an irreducible component of a Noetherian scheme. -/
+/-
+**AlgebraicGeometry.Scheme.irreducibleComponentIdeal** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.Scheme`。
+形式化陈述：irreducibleComponentIdeal : X.IdealSheafData where __
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.IdealSheafData.map_ideal_basicOpen`：∀ {X : Alge
+braicGeometry.Scheme} (self : X.IdealSheafData) (U : ↑X.affineOpens)   (f : ↑(X.
+presheaf.obj (Opposite.op ↑U))),   Ideal.map (Com…
 
-English:
-definition irreducibleComponentIdeal
-  signature: : X.IdealSheafData where
-  body: (irreducibleComponentOpen X Z).ι.ker
-  supportSet := Z
-  supportSet_eq_iInter_zeroLocus := by
-    rw [← IdealSheafData.coe_support_eq_eq_iInter_zeroLocus]; rw [Hom.support_ker]; rw [Opens.range_ι]
-    exact (closure_sUnion_irreducibleComponents_sdiff_singleton
-      TopologicalSpace.NoetherianSpace.finite_irreducibleComponents Z hZ).symm
-
-中文:
-定义 irreducibleComponentIdeal
-  签名: : X.IdealSheafData where
-  定义体: (irreducibleComponentOpen X Z).ι.ker
-  supportSet := Z
-  supportSet_eq_iInter_zeroLocus := by
-    rw [← IdealSheafData.coe_support_eq_eq_iInter_zeroLocus]; rw [Hom.support_ker]; rw [Opens.range_ι]
-    exact (closure_sUnion_irreducibleComponents_sdiff_singleton
-      TopologicalSpace.NoetherianSpace.finite_irreducibleComponents Z hZ).symm
-
-Depends on / 依赖: irreducibleComponentOpen
+--- 原说明 ---
+The ideal sheaf data associated to an irreducible component of a Noetherian sche
+me.
 -/
 def irreducibleComponentIdeal : X.IdealSheafData where
   __ := (irreducibleComponentOpen X Z).ι.ker
   supportSet := Z
   supportSet_eq_iInter_zeroLocus := by
-    rw [← IdealSheafData.coe_support_eq_eq_iInter_zeroLocus]; rw [Hom.support_ker]; rw [Opens.range_ι]
+    rw [← IdealSheafData.coe_support_eq_eq_iInter_zeroLocus, Hom.support_ker, Opens.range_ι]
     exact (closure_sUnion_irreducibleComponents_sdiff_singleton
       TopologicalSpace.NoetherianSpace.finite_irreducibleComponents Z hZ).symm
-
-/--
-theorem `irreducibleComponentIdeal_def` / 定理 `irreducibleComponentIdeal_def`
-
-English:
-theorem irreducibleComponentIdeal_def
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 irreducibleComponentIdeal_def
-  证明: by
-  ext
-  rfl
+/-
+**AlgebraicGeometry.Scheme.irreducibleComponentIdeal_def** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：irreducibleComponentIdeal_def : irreducibleComponentIdeal X Z hZ = (irredu
+cibleComponentOpen X Z).ι.ker
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.IdealSheafData.ext`：∀ {X : AlgebraicGeometry.Sc
+heme} {I J : X.IdealSheafData}, I.ideal = J.ideal → I = J
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem irreducibleComponentIdeal_def :
     irreducibleComponentIdeal X Z hZ = (irreducibleComponentOpen X Z).ι.ker := by
   ext
   rfl
 
-/--
-Definition of `irreducibleComponent` / `irreducibleComponent` 的定义
+/-- The subscheme structure on an irreducible component of a Noetherian scheme. -/
+/-
+**AlgebraicGeometry.Scheme.irreducibleComponent** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.Scheme`。
+形式化陈述：irreducibleComponent : Scheme
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition irreducibleComponent
-  signature: : Scheme
-  body: (X.irreducibleComponentIdeal Z hZ).subscheme
-
-中文:
-定义 irreducibleComponent
-  签名: : 概形
-  定义体: (X.irreducibleComponentIdeal Z hZ).subscheme
-
-Depends on / 依赖: X.irreducibleComponentIdeal, irreducibleComponentIdeal, subscheme
+--- 原说明 ---
+The subscheme structure on an irreducible component of a Noetherian scheme.
 -/
 noncomputable def irreducibleComponent : Scheme :=
   (X.irreducibleComponentIdeal Z hZ).subscheme
 
-/--
-Definition of `irreducibleComponentι` / `irreducibleComponentι` 的定义
+/-- The inclusion from an irreducible component of a Noetherian scheme. -/
+/-
+**AlgebraicGeometry.Scheme.irreducibleComponent** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.Scheme`。
+形式化陈述：irreducibleComponent : Scheme
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition irreducibleComponentι
-  signature: : X.irreducibleComponent Z hZ ⟶ X
-  body: (X.irreducibleComponentIdeal Z hZ).subschemeι
-
-中文:
-定义 irreducibleComponentι
-  签名: : X.irreducibleComponent Z hZ ⟶ X
-  定义体: (X.irreducibleComponentIdeal Z hZ).subschemeι
-
-Depends on / 依赖: X.irreducibleComponentIdeal, irreducibleComponentIdeal
+--- 原说明 ---
+The inclusion from an irreducible component of a Noetherian scheme.
 -/
 noncomputable def irreducibleComponentι : X.irreducibleComponent Z hZ ⟶ X :=
   (X.irreducibleComponentIdeal Z hZ).subschemeι
-
-/--
-lemma `irreducibleComponentι_apply` / 引理 `irreducibleComponentι_apply`
-
-English:
-lemma irreducibleComponentι_apply
-  given: (x : X.irreducibleComponent Z hZ)
-  proof: rfl
-
-中文:
-引理 irreducibleComponentι_apply
-  条件: (x : X.irreducibleComponent Z hZ)
-  证明: rfl
+/-
+**AlgebraicGeometry.Scheme.irreducibleComponent** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.Scheme`。
+形式化陈述：irreducibleComponent : Scheme
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma irreducibleComponentι_apply (x : X.irreducibleComponent Z hZ) :
     X.irreducibleComponentι Z hZ x = x.1 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsClosedImmersion (X.irreducibleComponentι Z hZ)
-  body: inferInstanceAs (IsClosedImmersion (X.irreducibleComponentIdeal Z hZ).subschemeι)
-
-中文:
-实例 :
-  签名: 是闭浸入 (X.irreducibleComponentι Z hZ)
-  定义体: inferInstanceAs (IsClosedImmersion (X.irreducibleComponentIdeal Z hZ).subschemeι)
-
-Depends on / 依赖: IsClosedImmersion, X.irreducibleComponentIdeal, irreducibleComponentIdeal
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsClosedImmersion (X.irreducibleComponentι Z hZ) :=
   inferInstanceAs (IsClosedImmersion (X.irreducibleComponentIdeal Z hZ).subschemeι)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IrreducibleSpace (X.irreducibleComponent Z hZ)
-  body: Subtype.irreducibleSpace hZ.1
-
-include hZ in
-
-中文:
-实例 :
-  签名: 不可约空间 (X.irreducibleComponent Z hZ)
-  定义体: Subtype.irreducibleSpace hZ.1
-
-include hZ in
-
-Depends on / 依赖: Subtype, Subtype.irreducibleSpace, irreducibleSpace
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IrreducibleSpace (X.irreducibleComponent Z hZ) :=
   Subtype.irreducibleSpace hZ.1
 
 include hZ in
-/--
-theorem `irreducibleComponentOpen_eq_top` / 定理 `irreducibleComponentOpen_eq_top`
-
-English:
-theorem irreducibleComponentOpen_eq_top
-  given: [IrreducibleSpace X]
-  proof: by
-  rw [irreducibleComponents_eq_singleton]; rw [Set.mem_singleton_iff] at hZ
-  simp [irreducibleComponentOpen, irreducibleComponents_eq_singleton, hZ]
-
-中文:
-定理 irreducibleComponentOpen_eq_top
-  条件: [不可约空间 X]
-  证明: by
-  rw [irreducibleComponents_eq_singleton]; rw [Set.mem_singleton_iff] at hZ
-  simp [irreducibleComponentOpen, irreducibleComponents_eq_singleton, hZ]
-
-Depends on / 依赖: Set.mem_singleton_iff, irreducibleComponentOpen, irreducibleComponents_eq_singleton, mem_singleton_iff
+/-
+**AlgebraicGeometry.Scheme.irreducibleComponentOpen_eq_top** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：irreducibleComponentOpen_eq_top [IrreducibleSpace X] : irreducibleComponen
+tOpen X Z = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopologicalSpace.Opens.mk.congr_simp`：∀ {α : Type u_2} [inst : Topologic
+alSpace α] (carrier carrier_1 : Set α) (e_carrier : carrier = carrier_1)   (is_o
+pen' : IsOpen carrier), { …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `irreducibleComponents_eq_singleton`：irreducibleComponents_eq_singleton [
+IrreducibleSpace X] : irreducibleComponents X = {univ}
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `sdiff_self`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a :
+ α}, a \ a = ⊥
+· 使用定理 `Set.sUnion_empty`：sUnion_empty : ⋃₀ ∅ = (∅ : Set α)
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem irreducibleComponentOpen_eq_top [IrreducibleSpace X] :
     irreducibleComponentOpen X Z = ⊤ := by
-  rw [irreducibleComponents_eq_singleton]; rw [Set.mem_singleton_iff] at hZ
+  rw [irreducibleComponents_eq_singleton, Set.mem_singleton_iff] at hZ
   simp [irreducibleComponentOpen, irreducibleComponents_eq_singleton, hZ]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IrreducibleSpace
-  signature: X] : CategoryTheory.IsIso (X.irreducibleComponentι Z hZ)
-  body: by
-  have : CategoryTheory.IsIso (irreducibleComponentOpen X Z).ι := by
-    rw [irreducibleComponentOpen_eq_top X Z hZ]
-    exact X.topIso.isIso_hom
-  rw [irreducibleComponentι]; rw [isIso_subschemeι_iff_eq_bot]; rw [irreducibleComponentIdeal_def]; rw [irreducibleComponentOpen_eq_top X Z hZ]
-  exact X.topIso.hom.ker_eq_bot_of_isIso
-
-中文:
-实例 [不可约空间
-  签名: X] : 范畴论.是同构 (X.irreducibleComponentι Z hZ)
-  定义体: by
-  have : CategoryTheory.IsIso (irreducibleComponentOpen X Z).ι := by
-    rw [irreducibleComponentOpen_eq_top X Z hZ]
-    exact X.topIso.isIso_hom
-  rw [irreducibleComponentι]; rw [isIso_subschemeι_iff_eq_bot]; rw [irreducibleComponentIdeal_def]; rw [irreducibleComponentOpen_eq_top X Z hZ]
-  exact X.topIso.hom.ker_eq_bot_of_isIso
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.IsIso, X.topIso.hom.ker_eq_bot_of_isIso, X.topIso.isIso_hom, irreducibleComponentIdeal_def, irreducibleComponentOpen, irreducibleComponentOpen_eq_top, isIso_hom, ker_eq_bot_of_isIso, topIso
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IrreducibleSpace X] : CategoryTheory.IsIso (X.irreducibleComponentι Z hZ) := by
   have : CategoryTheory.IsIso (irreducibleComponentOpen X Z).ι := by
     rw [irreducibleComponentOpen_eq_top X Z hZ]
     exact X.topIso.isIso_hom
-  rw [irreducibleComponentι]; rw [isIso_subschemeι_iff_eq_bot]; rw [irreducibleComponentIdeal_def]; rw [irreducibleComponentOpen_eq_top X Z hZ]
+  rw [irreducibleComponentι, isIso_subschemeι_iff_eq_bot, irreducibleComponentIdeal_def,
+    irreducibleComponentOpen_eq_top X Z hZ]
   exact X.topIso.hom.ker_eq_bot_of_isIso
 
 end AlgebraicGeometry.Scheme
+

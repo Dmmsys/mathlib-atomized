@@ -32,50 +32,25 @@ section
 variable (I : Type u₂) [Category.{v₂} I]
 
 set_option backward.privateInPublic true in
-/--
-Definition of `incl` / `incl` 的定义
-
-English:
-abbreviation incl
-  signature: : Discrete I ⥤ I
-  body: Discrete.functor id
-
-中文:
-缩写 incl
-  签名: : 离散 I ⥤ I
-  定义体: Discrete.functor id
+/-
+**CategoryTheory.Functor.incl** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Functo
+r`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private abbrev incl : Discrete I ⥤ I := Discrete.functor id
 
 variable (C : Type u₁) [Category.{v₁} C] [MonoidalCategory C] [MonoidalClosed C]
 
-variable [forall (F : Discrete I ⥤ C), (Discrete.functor id).HasRightKanExtension F]
+variable [∀ (F : Discrete I ⥤ C), (Discrete.functor id).HasRightKanExtension F]
 -- is also implied by: `[HasLimitsOfSize.{u₂, max u₂ v₂} C]`
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ReflectsIsomorphisms (whiskeringLeft _ _ C).obj (incl I)
-  body: by
-    simp only [NatTrans.isIso_iff_isIso_app] at *
-    intro X
-    exact h ⟨X⟩
-
-中文:
-实例 :
-  签名: 反映同构 (whiskeringLeft _ _ C).obj (incl I)
-  定义体: by
-    simp only [NatTrans.isIso_iff_isIso_app] at *
-    intro X
-    exact h ⟨X⟩
-
-Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, isIso_iff_isIso_app
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ReflectsIsomorphisms (whiskeringLeft _ _ C).obj (incl I) where
+instance : ReflectsIsomorphisms <| (whiskeringLeft _ _ C).obj (incl I) where
   reflects f h := by
     simp only [NatTrans.isIso_iff_isIso_app] at *
     intro X
@@ -85,42 +60,18 @@ variable [HasLimitsOfShape WalkingParallelPair C]
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Comonad.PreservesLimitOfIsCoreflexivePair ((whiskeringLeft _ _ C).obj (incl I))
-  body: ⟨inferInstance⟩
-
-中文:
-实例 :
-  签名: 余单子.保持LimitOfIsCoreflexivePair ((whiskeringLeft _ _ C).obj (incl I))
-  定义体: ⟨inferInstance⟩
-
-Depends on / 依赖: precoherent
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Comonad.PreservesLimitOfIsCoreflexivePair ((whiskeringLeft _ _ C).obj (incl I)) :=
   ⟨inferInstance⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ComonadicLeftAdjoint ((whiskeringLeft _ _ C).obj (incl I))
-  body: Comonad.comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms
-    ((incl I).ranAdjunction C)
-
-中文:
-实例 :
-  签名: 余monadicLeftAdjoint ((whiskeringLeft _ _ C).obj (incl I))
-  定义体: Comonad.comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms
-    ((incl I).ranAdjunction C)
-
-Depends on / 依赖: Comonad, Comonad.comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms, comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms, ranAdjunction
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ComonadicLeftAdjoint ((whiskeringLeft _ _ C).obj (incl I)) :=
   Comonad.comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms
@@ -128,6 +79,10 @@ instance : ComonadicLeftAdjoint ((whiskeringLeft _ _ C).obj (incl I)) :=
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : I ⥤ C) : IsLeftAdjoint (tensorLeft (incl I ⋙ F)) :=
   (ihom.adjunction (incl I ⋙ F)).isLeftAdjoint
 
@@ -135,28 +90,16 @@ set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 /-- Auxiliary definition for `functorCategoryMonoidalClosed` -/
 @[instance_reducible]
-/--
-Definition of `functorCategoryClosed` / `functorCategoryClosed` 的定义
+/-
+**CategoryTheory.Functor.functorCategoryClosed** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：functorCategoryClosed (F : I ⥤ C) : Closed F
+参数：F : I ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorCategoryClosed
-  signature: (F : I ⥤ C)
-  body: have := (ihom.adjunction (incl I ⋙ F)).isLeftAdjoint
-  have := isLeftAdjoint_square_lift_comonadic (tensorLeft F) ((whiskeringLeft _ _ C).obj (incl I))
-    ((whiskeringLeft _ _ C).obj (incl I)) (tensorLeft (incl I ⋙ F)) (Iso.refl _)
-  { rightAdj := (tensorLeft F).rightAdjoint
-    adj := Adjunction.ofIsLeftAdjoint (tensorLeft F) }
-
-中文:
-定义 functorCategoryClosed
-  签名: (F : I ⥤ C)
-  定义体: have := (ihom.adjunction (incl I ⋙ F)).isLeftAdjoint
-  have := isLeftAdjoint_square_lift_comonadic (tensorLeft F) ((whiskeringLeft _ _ C).obj (incl I))
-    ((whiskeringLeft _ _ C).obj (incl I)) (tensorLeft (incl I ⋙ F)) (Iso.refl _)
-  { rightAdj := (tensorLeft F).rightAdjoint
-    adj := Adjunction.ofIsLeftAdjoint (tensorLeft F) }
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, Iso.refl, adjunction, ihom.adjunction, isLeftAdjoint, isLeftAdjoint_square_lift_comonadic, ofIsLeftAdjoint, rightAdj, rightAdjoint, tensorLeft, whiskeringLeft
+--- 原说明 ---
+Auxiliary definition for `functorCategoryMonoidalClosed`
 -/
 def functorCategoryClosed (F : I ⥤ C) : Closed F :=
   have := (ihom.adjunction (incl I ⋙ F)).isLeftAdjoint
@@ -173,20 +116,21 @@ Note: this is defined completely abstractly, and does not have any good definiti
 See the TODO in the module docstring.
 -/
 @[instance_reducible]
-/--
-Definition of `functorCategoryMonoidalClosed` / `functorCategoryMonoidalClosed` 的定义
+/-
+**CategoryTheory.Functor.functorCategoryMonoidalClosed** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor`。
+形式化陈述：functorCategoryMonoidalClosed : MonoidalClosed (I ⥤ C) where closed F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorCategoryMonoidalClosed
-  signature: : MonoidalClosed (I ⥤ C) where
-  body: functorCategoryClosed I C F
+--- 原说明 ---
+Assuming the existence of certain limits, functors into a monoidal closed catego
+ry form a
+monoidal closed category.
 
-中文:
-定义 functorCategoryMonoidalClosed
-  签名: : 幺半群闭 (I ⥤ C) where
-  定义体: functorCategoryClosed I C F
-
-Depends on / 依赖: functorCategoryClosed
+Note: this is defined completely abstractly, and does not have any good definiti
+onal properties.
+See the TODO in the module docstring.
 -/
 def functorCategoryMonoidalClosed : MonoidalClosed (I ⥤ C) where
   closed F := functorCategoryClosed I C F
@@ -194,3 +138,4 @@ def functorCategoryMonoidalClosed : MonoidalClosed (I ⥤ C) where
 end
 
 end CategoryTheory.Functor
+

@@ -22,300 +22,226 @@ variable {α β : Type*} {l : Filter α}
 
 namespace Filter
 
-/--
-Definition of `Subsingleton` / `Subsingleton` 的定义
+/-- We say that a filter is a *subsingleton* if there exists a subsingleton set
+that belongs to the filter. -/
+/-
+**Filter.Subsingleton** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → Filter α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Subsingleton
-  signature: (l : Filter α)
-  body: exists s in l, Set.Subsingleton s
-
-中文:
-定义 子单例
-  签名: (l : 滤子 α)
-  定义体: exists s in l, Set.Subsingleton s
+--- 原说明 ---
+We say that a filter is a *subsingleton* if there exists a subsingleton set
+that belongs to the filter.
 -/
-protected def Subsingleton (l : Filter α) : Prop := exists s in l, Set.Subsingleton s
-
-/--
-theorem `HasBasis.subsingleton_iff` / 定理 `HasBasis.subsingleton_iff`
-
-English:
-theorem HasBasis.subsingleton_iff
-  given: {ι : Sort*} {p : ι -> Prop} {s : ι -> Set α} (h : l.HasBasis p s)
-  proof: h.exists_iff fun _ _ hsub h => h.anti hsub
-
-中文:
-定理 有基.subsingleton_iff
-  条件: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 α} (h : l.有基 p s)
-  证明: h.exists_iff fun _ _ hsub h => h.anti hsub
-
-Depends on / 依赖: exists_iff, h.anti, h.exists_iff
+protected def Subsingleton (l : Filter α) : Prop := ∃ s ∈ l, Set.Subsingleton s
+/-
+**Filter.HasBasis.subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasBasis`。
+形式化陈述：∀ {α : Type u_1} {l : Filter α} {ι : Sort u_3} {p : ι → Prop} {s : ι → Set
+ α},   l.HasBasis p s → (l.Subsingleton ↔ ∃ i, p i ∧ (s i).Subsingleton)
+参数：l.Subsingleton ↔ ∃ i, p i ∧ (s i).Subsingleton。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.exists_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {P : Set α → Prop}, (∀ ⦃
+s t : Set α⦄, s …
+· 使用定理 `Set.Subsingleton.anti`：∀ {α : Type u} {s t : Set α}, t.Subsingleton → s 
+⊆ t → s.Subsingleton
 -/
-theorem HasBasis.subsingleton_iff {ι : Sort*} {p : ι -> Prop} {s : ι -> Set α} (h : l.HasBasis p s) :
-    l.Subsingleton ↔ exists i, p i ∧ (s i).Subsingleton :=
-  h.exists_iff fun _ _ hsub h => h.anti hsub
-
-/--
-theorem `Subsingleton.anti` / 定理 `Subsingleton.anti`
-
-English:
-theorem Subsingleton.anti
-  given: {l'} (hl : l.Subsingleton) (hl' : l' <= l)
-  statement: l'.Subsingleton
-  proof: let ⟨s, hsl, hs⟩ := hl; ⟨s, hl' hsl, hs⟩
-
-@[nontriviality]
-
-中文:
-定理 子单例.anti
-  条件: {l'} (hl : l.子单例) (hl' : l' <= l)
-  结论: l'.子单例
-  证明: let ⟨s, hsl, hs⟩ := hl; ⟨s, hl' hsl, hs⟩
-
-@[nontriviality]
+theorem HasBasis.subsingleton_iff {ι : Sort*} {p : ι → Prop} {s : ι → Set α} (h : l.HasBasis p s) :
+    l.Subsingleton ↔ ∃ i, p i ∧ (s i).Subsingleton :=
+  h.exists_iff fun _ _ hsub h ↦ h.anti hsub
+/-
+**Filter.Subsingleton.anti** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Subsingleton`。
+形式化陈述：∀ {α : Type u_1} {l l' : Filter α}, l.Subsingleton → l' ≤ l → l'.Subsingle
+ton
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subsingleton.anti {l'} (hl : l.Subsingleton) (hl' : l' <= l) : l'.Subsingleton :=
+theorem Subsingleton.anti {l'} (hl : l.Subsingleton) (hl' : l' ≤ l) : l'.Subsingleton :=
   let ⟨s, hsl, hs⟩ := hl; ⟨s, hl' hsl, hs⟩
 
 @[nontriviality]
-/--
-theorem `Subsingleton.of_subsingleton` / 定理 `Subsingleton.of_subsingleton`
-
-English:
-theorem Subsingleton.of_subsingleton
-  given: [Subsingleton α]
-  statement: l.Subsingleton
-  proof: ⟨univ, univ_mem, subsingleton_univ⟩
-
-中文:
-定理 子单例.of_subsingleton
-  条件: [子单例 α]
-  结论: l.子单例
-  证明: ⟨univ, univ_mem, subsingleton_univ⟩
-
-Depends on / 依赖: subsingleton_univ, univ_mem
+/-
+**Filter.Subsingleton.of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Subsingl
+eton`。
+形式化陈述：∀ {α : Type u_1} {l : Filter α} [Subsingleton α], l.Subsingleton
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
+· 使用定理 `Set.subsingleton_univ`：subsingleton_univ [Subsingleton α] : (univ : Set 
+α).Subsingleton
 -/
 theorem Subsingleton.of_subsingleton [Subsingleton α] : l.Subsingleton :=
   ⟨univ, univ_mem, subsingleton_univ⟩
-
-/--
-theorem `Subsingleton.map` / 定理 `Subsingleton.map`
-
-English:
-theorem Subsingleton.map
-  given: (hl : l.Subsingleton) (f : α -> β)
-  statement: (map f l).Subsingleton
-  proof: let ⟨s, hsl, hs⟩ := hl; ⟨f '' s, image_mem_map hsl, hs.image f⟩
-
-中文:
-定理 子单例.map
-  条件: (hl : l.子单例) (f : α -> β)
-  结论: (map f l).子单例
-  证明: let ⟨s, hsl, hs⟩ := hl; ⟨f '' s, image_mem_map hsl, hs.image f⟩
-
-Depends on / 依赖: hs.image, image_mem_map
+/-
+**Filter.Subsingleton.map** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Subsingleton`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {l : Filter α}, l.Subsingleton → ∀ (f : α 
+→ β), (Filter.map f l).Subsingleton
+参数：f : α → β；Filter.map f l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.image_mem_map`：image_mem_map (hs : s in f) : m '' s in map m f
+· 使用定理 `Set.Subsingleton.image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s.S
+ubsingleton → ∀ (f : α → β), (f '' s).Subsingleton
 -/
-theorem Subsingleton.map (hl : l.Subsingleton) (f : α -> β) : (map f l).Subsingleton :=
+theorem Subsingleton.map (hl : l.Subsingleton) (f : α → β) : (map f l).Subsingleton :=
   let ⟨s, hsl, hs⟩ := hl; ⟨f '' s, image_mem_map hsl, hs.image f⟩
-
-/--
-theorem `Subsingleton.prod` / 定理 `Subsingleton.prod`
-
-English:
-theorem Subsingleton.prod
-  given: (hl : l.Subsingleton) {l' : Filter β} (hl' : l'.Subsingleton)
-  proof: let ⟨s, hsl, hs⟩ := hl; let ⟨t, htl', ht⟩ := hl'; ⟨s ×ˢ t, prod_mem_prod hsl htl', hs.prod ht⟩
-
-@[simp]
-
-中文:
-定理 子单例.乘积
-  条件: (hl : l.子单例) {l' : 滤子 β} (hl' : l'.子单例)
-  证明: let ⟨s, hsl, hs⟩ := hl; let ⟨t, htl', ht⟩ := hl'; ⟨s ×ˢ t, prod_mem_prod hsl htl', hs.prod ht⟩
-
-@[simp]
+/-
+**Filter.Subsingleton.prod** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Subsingleton`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {l : Filter α},   l.Subsingleton → ∀ {l' :
+ Filter β}, l'.Subsingleton → (l ×ˢ l').Subsingleton
+参数：l ×ˢ l'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.prod_mem_prod`：prod_mem_prod (hs : s in f) (ht : t in g) : s ×ˢ t
+ in f ×ˢ g
+· 使用定理 `Set.Subsingleton.prod`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : 
+Set β}, s.Subsingleton → t.Subsingleton → (s ×ˢ t).Subsingleton
 -/
 theorem Subsingleton.prod (hl : l.Subsingleton) {l' : Filter β} (hl' : l'.Subsingleton) :
     (l ×ˢ l').Subsingleton :=
   let ⟨s, hsl, hs⟩ := hl; let ⟨t, htl', ht⟩ := hl'; ⟨s ×ˢ t, prod_mem_prod hsl htl', hs.prod ht⟩
 
 @[simp]
-/--
-theorem `subsingleton_pure` / 定理 `subsingleton_pure`
-
-English:
-theorem subsingleton_pure
-  given: {a : α}
-  statement: Filter.Subsingleton (pure a)
-  proof: ⟨{a}, rfl, subsingleton_singleton⟩
-
-@[simp]
-
-中文:
-定理 subsingleton_pure
-  条件: {a : α}
-  结论: 滤子.子单例 (pure a)
-  证明: ⟨{a}, rfl, subsingleton_singleton⟩
-
-@[simp]
-
-Depends on / 依赖: subsingleton_singleton
+/-
+**Filter.subsingleton_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：subsingleton_pure {a : α} : Filter.Subsingleton (pure a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subsingleton_singleton`：subsingleton_singleton {a} : ({a} : Set α).S
+ubsingleton
 -/
 theorem subsingleton_pure {a : α} : Filter.Subsingleton (pure a) :=
   ⟨{a}, rfl, subsingleton_singleton⟩
 
 @[simp]
-/--
-theorem `subsingleton_bot` / 定理 `subsingleton_bot`
-
-English:
-theorem subsingleton_bot
-  statement: Filter.Subsingleton (⊥ : Filter α)
-  proof: ⟨∅, trivial, subsingleton_empty⟩
-
-中文:
-定理 subsingleton_bot
-  结论: 滤子.子单例 (⊥ : 滤子 α)
-  证明: ⟨∅, trivial, subsingleton_empty⟩
-
-Depends on / 依赖: subsingleton_empty
+/-
+**Filter.subsingleton_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：subsingleton_bot : Filter.Subsingleton (⊥ : Filter α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `Set.subsingleton_empty`：subsingleton_empty : (∅ : Set α).Subsingleton
 -/
 theorem subsingleton_bot : Filter.Subsingleton (⊥ : Filter α) :=
   ⟨∅, trivial, subsingleton_empty⟩
 
-/--
-theorem `Subsingleton.exists_eq_pure` / 定理 `Subsingleton.exists_eq_pure`
+/-- A nontrivial subsingleton filter is equal to `pure a` for some `a`. -/
+/-
+**Filter.Subsingleton.exists_eq_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Subsingle
+ton`。
+形式化陈述：∀ {α : Type u_1} {l : Filter α} [l.NeBot], l.Subsingleton → ∃ a, l = pure 
+a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.exists_eq_singleton_iff_nonempty_subsingleton`：exists_eq_singleton_i
+ff_nonempty_subsingleton : (exists a : α, s = {a}) ↔ s.Nonempty ∧ s.Subsingleton
+· 使用定理 `Filter.nonempty_of_mem`：nonempty_of_mem {f : Filter α} [hf : NeBot f] {s
+ : Set α} (hs : s in f) : s.Nonempty
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.NeBot.le_pure_iff`：∀ {α : Type u} {f : Filter α} {a : α}, f.NeBot
+ → (f ≤ pure a ↔ f = pure a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.le_pure_iff`：le_pure_iff {f : Filter α} {a : α} : f <= pure a ↔ {
+a} in f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem Subsingleton.exists_eq_pure
-  given: [l.NeBot] (hl : l.Subsingleton)
-  statement: exists a, l = pure a
-  proof: by
+--- 原说明 ---
+A nontrivial subsingleton filter is equal to `pure a` for some `a`.
+-/
+theorem Subsingleton.exists_eq_pure [l.NeBot] (hl : l.Subsingleton) : ∃ a, l = pure a := by
   rcases hl with ⟨s, hsl, hs⟩
   rcases exists_eq_singleton_iff_nonempty_subsingleton.2 ⟨nonempty_of_mem hsl, hs⟩ with ⟨a, rfl⟩
   refine ⟨a, (NeBot.le_pure_iff ‹_›).1 ?_⟩
   rwa [le_pure_iff]
 
-中文:
-定理 子单例.存在_eq_pure
-  条件: [l.NeBot] (hl : l.子单例)
-  结论: 存在 a, l = pure a
-  证明: by
-  rcases hl with ⟨s, hsl, hs⟩
-  rcases exists_eq_singleton_iff_nonempty_subsingleton.2 ⟨nonempty_of_mem hsl, hs⟩ with ⟨a, rfl⟩
-  refine ⟨a, (NeBot.le_pure_iff ‹_›).1 ?_⟩
-  rwa [le_pure_iff]
+/-- A filter is a subsingleton iff it is equal to `⊥` or to `pure a` for some `a`. -/
+/-
+**Filter.subsingleton_iff_bot_or_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：subsingleton_iff_bot_or_pure : l.Subsingleton ↔ l = ⊥ ∨ exists a, l = pure
+ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `Filter.Subsingleton.exists_eq_pure`：∀ {α : Type u_1} {l : Filter α} [l.N
+eBot], l.Subsingleton → ∃ a, l = pure a
+· 使用定理 `Filter.eq_or_neBot`：eq_or_neBot (f : Filter α) : f = ⊥ ∨ NeBot f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-Depends on / 依赖: NeBot.le_pure_iff, exists_eq_singleton_iff_nonempty_subsingleton, le_pure_iff, nonempty_of_mem
+--- 原说明 ---
+A filter is a subsingleton iff it is equal to `⊥` or to `pure a` for some `a`.
 -/
-theorem Subsingleton.exists_eq_pure [l.NeBot] (hl : l.Subsingleton) : exists a, l = pure a := by
-  rcases hl with ⟨s, hsl, hs⟩
-  rcases exists_eq_singleton_iff_nonempty_subsingleton.2 ⟨nonempty_of_mem hsl, hs⟩ with ⟨a, rfl⟩
-  refine ⟨a, (NeBot.le_pure_iff ‹_›).1 ?_⟩
-  rwa [le_pure_iff]
-
-/--
-theorem `subsingleton_iff_bot_or_pure` / 定理 `subsingleton_iff_bot_or_pure`
-
-English:
-theorem subsingleton_iff_bot_or_pure
-  statement: l.Subsingleton ↔ l = ⊥ ∨ exists a, l = pure a
-  proof: by
-  refine ⟨fun hl => ?_, ?_⟩
+theorem subsingleton_iff_bot_or_pure : l.Subsingleton ↔ l = ⊥ ∨ ∃ a, l = pure a := by
+  refine ⟨fun hl ↦ ?_, ?_⟩
   · exact (eq_or_neBot l).imp_right (@Subsingleton.exists_eq_pure _ _ · hl)
   · rintro (rfl | ⟨a, rfl⟩) <;> simp
 
-中文:
-定理 subsingleton_iff_bot_or_pure
-  结论: l.子单例 ↔ l = ⊥ ∨ 存在 a, l = pure a
-  证明: by
-  refine ⟨fun hl => ?_, ?_⟩
-  · exact (eq_or_neBot l).imp_right (@Subsingleton.exists_eq_pure _ _ · hl)
-  · rintro (rfl | ⟨a, rfl⟩) <;> simp
+/-- In a nonempty type, a filter is a subsingleton iff
+it is less than or equal to a pure filter. -/
+/-
+**Filter.subsingleton_iff_exists_le_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：subsingleton_iff_exists_le_pure [Nonempty α] : l.Subsingleton ↔ exists a, 
+l <= pure a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eq_or_neBot`：eq_or_neBot (f : Filter α) : f = ⊥ ∨ NeBot f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Filter.NeBot.ne`：∀ {α : Type u} {f : Filter α}, f.NeBot → f ≠ ⊥
+· 使用定理 `Filter.NeBot.le_pure_iff`：∀ {α : Type u} {f : Filter α} {a : α}, f.NeBot
+ → (f ≤ pure a ↔ f = pure a)
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
 
-Depends on / 依赖: Subsingleton, Subsingleton.exists_eq_pure, eq_or_neBot, exists_eq_pure, imp_right
+--- 原说明 ---
+In a nonempty type, a filter is a subsingleton iff
+it is less than or equal to a pure filter.
 -/
-theorem subsingleton_iff_bot_or_pure : l.Subsingleton ↔ l = ⊥ ∨ exists a, l = pure a := by
-  refine ⟨fun hl => ?_, ?_⟩
-  · exact (eq_or_neBot l).imp_right (@Subsingleton.exists_eq_pure _ _ · hl)
-  · rintro (rfl | ⟨a, rfl⟩) <;> simp
-
-/--
-theorem `subsingleton_iff_exists_le_pure` / 定理 `subsingleton_iff_exists_le_pure`
-
-English:
-theorem subsingleton_iff_exists_le_pure
-  given: [Nonempty α]
-  statement: l.Subsingleton ↔ exists a, l <= pure a
-  proof: by
+theorem subsingleton_iff_exists_le_pure [Nonempty α] : l.Subsingleton ↔ ∃ a, l ≤ pure a := by
   rcases eq_or_neBot l with rfl | hbot
   · simp
   · simp [subsingleton_iff_bot_or_pure, ← hbot.le_pure_iff, hbot.ne]
-
-中文:
-定理 subsingleton_iff_存在_le_pure
-  条件: [非空 α]
-  结论: l.子单例 ↔ 存在 a, l <= pure a
-  证明: by
-  rcases eq_or_neBot l with rfl | hbot
-  · simp
-  · simp [subsingleton_iff_bot_or_pure, ← hbot.le_pure_iff, hbot.ne]
-
-Depends on / 依赖: eq_or_neBot, hbot.le_pure_iff, hbot.ne, le_pure_iff, subsingleton_iff_bot_or_pure
+/-
+**Filter.subsingleton_iff_exists_singleton_mem** 是 Mathlib 中的一个定理，位于命名空间 `Filter
+`。
+形式化陈述：subsingleton_iff_exists_singleton_mem [Nonempty α] : l.Subsingleton ↔ exis
+ts a, {a} in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem subsingleton_iff_exists_le_pure [Nonempty α] : l.Subsingleton ↔ exists a, l <= pure a := by
-  rcases eq_or_neBot l with rfl | hbot
-  · simp
-  · simp [subsingleton_iff_bot_or_pure, ← hbot.le_pure_iff, hbot.ne]
-
-/--
-theorem `subsingleton_iff_exists_singleton_mem` / 定理 `subsingleton_iff_exists_singleton_mem`
-
-English:
-theorem subsingleton_iff_exists_singleton_mem
-  given: [Nonempty α]
-  statement: l.Subsingleton ↔ exists a, {a} in l
-  proof: by
-  simp only [subsingleton_iff_exists_le_pure, le_pure_iff]
-
-中文:
-定理 subsingleton_iff_存在_singleton_mem
-  条件: [非空 α]
-  结论: l.子单例 ↔ 存在 a, {a} in l
-  证明: by
-  simp only [subsingleton_iff_exists_le_pure, le_pure_iff]
-
-Depends on / 依赖: le_pure_iff, subsingleton_iff_exists_le_pure
--/
-theorem subsingleton_iff_exists_singleton_mem [Nonempty α] : l.Subsingleton ↔ exists a, {a} in l := by
+theorem subsingleton_iff_exists_singleton_mem [Nonempty α] : l.Subsingleton ↔ ∃ a, {a} ∈ l := by
   simp only [subsingleton_iff_exists_le_pure, le_pure_iff]
 
 /-- A subsingleton filter on a nonempty type is less than or equal to `pure a` for some `a`. -/
 alias ⟨Subsingleton.exists_le_pure, _⟩ := subsingleton_iff_exists_le_pure
 
-/--
-lemma `Subsingleton.isCountablyGenerated` / 引理 `Subsingleton.isCountablyGenerated`
-
-English:
-lemma Subsingleton.isCountablyGenerated
-  given: (hl : l.Subsingleton)
-  statement: IsCountablyGenerated l
-  proof: by
-  rcases subsingleton_iff_bot_or_pure.1 hl with rfl | ⟨x, rfl⟩
-  · exact isCountablyGenerated_bot
-  · exact isCountablyGenerated_pure x
-
-中文:
-引理 子单例.isCountablyGenerated
-  条件: (hl : l.子单例)
-  结论: 是余untablyGenerated l
-  证明: by
-  rcases subsingleton_iff_bot_or_pure.1 hl with rfl | ⟨x, rfl⟩
-  · exact isCountablyGenerated_bot
-  · exact isCountablyGenerated_pure x
-
-Depends on / 依赖: isCountablyGenerated_bot, isCountablyGenerated_pure, subsingleton_iff_bot_or_pure
+/-
+**Filter.Subsingleton.isCountablyGenerated** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Sub
+singleton`。
+形式化陈述：∀ {α : Type u_1} {l : Filter α}, l.Subsingleton → l.IsCountablyGenerated
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.subsingleton_iff_bot_or_pure`：subsingleton_iff_bot_or_pure : l.Su
+bsingleton ↔ l = ⊥ ∨ exists a, l = pure a
+· 使用定理 `Filter.isCountablyGenerated_bot`：isCountablyGenerated_bot : IsCountablyG
+enerated (⊥ : Filter α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.isCountablyGenerated_pure`：isCountablyGenerated_pure (a : α) : Is
+CountablyGenerated (pure a)
 -/
 lemma Subsingleton.isCountablyGenerated (hl : l.Subsingleton) : IsCountablyGenerated l := by
   rcases subsingleton_iff_bot_or_pure.1 hl with rfl | ⟨x, rfl⟩
@@ -323,3 +249,4 @@ lemma Subsingleton.isCountablyGenerated (hl : l.Subsingleton) : IsCountablyGener
   · exact isCountablyGenerated_pure x
 
 end Filter
+

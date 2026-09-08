@@ -28,22 +28,15 @@ open Lean Meta Qq
 namespace RingNF
 open Mathlib.Tactic.Ring
 
-/--
-Inductive type `RingMode` / 归纳类型 `RingMode`
+/-- The normalization style for `ring_nf`. -/
+/-
+**Mathlib.Tactic.RingNF.RingMode** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.Rin
+gNF`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive RingMode
-  parameters: where
-  constructors (2):
-    - SOP: 
-    - raw: 
-
-中文:
-归纳类型 RingMode
-  参数: where
-  构造子 (2 个):
-    - SOP: 
-    - raw: 
+--- 原说明 ---
+The normalization style for `ring_nf`.
 -/
 inductive RingMode where
   /-- Sum-of-products form, like `x + x * y * 2 + z ^ 2`. -/
@@ -52,26 +45,17 @@ inductive RingMode where
   | raw
   deriving Inhabited, BEq, Repr
 
-/--
-Definition of `Config` / `Config` 的定义
+/-- Configuration for `ring_nf`. -/
+/-
+**Mathlib.Tactic.RingNF.Config** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.RingNF`
+。
+形式化陈述：Config extends AtomM.Recurse.Config where /-- How to behave if no progress
+ is made: warn, error or keep silent. Default to error -/ ifUnchanged
+继承自：AtomM.Recurse.Config。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Config
-  parameters: extends AtomM.Recurse.Config
-  extends: AtomM.Recurse.Config
-  axioms and operations (2):
-    - ifUnchanged : = BehaviorIfUnchanged.error
-    - mode : = RingMode.SOP
-
-中文:
-结构 余nfig
-  参数: extends AtomM.Recurse.余nfig
-  继承: AtomM.Recurse.余nfig
-  公理与运算 (2 个):
-    - ifUnchanged : = BehaviorIfUnchanged.error
-    - mode : = RingMode.SOP
-
-Depends on / 依赖: BehaviorIfUnchanged, BehaviorIfUnchanged.error
+--- 原说明 ---
+Configuration for `ring_nf`.
 -/
 structure Config extends AtomM.Recurse.Config where
   /-- How to behave if no progress is made: warn, error or keep silent. Default to error -/
@@ -87,259 +71,202 @@ attribute [nolint unusedArguments] Mathlib.Tactic.RingNF.instReprConfig.repr
 declare_config_elab elabConfig Config
 
 /--
-Definition of `evalExpr` / `evalExpr` 的定义
+Evaluates an expression `e` into a normalized representation as a polynomial.
 
-English:
-definition evalExpr
-  signature: (e : Expr)
-  body: do
-let e ← withReducible whnf e
-  guard e.isApp -- all interesting ring expressions are applications
-  let ⟨u, α, e⟩ ← inferTypeQ' e
-  let sα ← synthInstanceQ q(CommSemiring $α)
-  let c ← Common.mkCache sα
-  let ⟨a, _, pa⟩ ← match
-    (← Common.isAtomOrDerivable (ringCompute c) c q($e)) with
-  | none => Common.eval rcNat (ringCompute c) c e
-    -- `none` indicates that `eval` will find something algebraic.
-  | some none => failure -- No point rewriting atoms
-  | some (some r) => pure r -- Nothing algebraic for `eval` to use, but `norm_num` simplifies.
-  pure { expr := a, proof? := pa }
+This is a variant of `Mathlib.Tactic.Ring.eval`, the main driver of the `ring` tactic.
+It differs in
+* operating on `Expr` (input) and `Simp.Result` (output), rather than typed `Qq` versions of these;
+* throwing an error if the expression `e` is an atom for the `ring` tactic.
+-/
+/-
+**Mathlib.Tactic.RingNF.evalExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.RingN
+F`。
+形式化陈述：evalExpr (e : Expr) : AtomM Simp.Result
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 evalExpr
-  签名: (e : Expr)
-  定义体: do
-let e ← withReducible whnf e
-  guard e.isApp -- all interesting ring expressions are applications
-  let ⟨u, α, e⟩ ← inferTypeQ' e
-  let sα ← synthInstanceQ q(CommSemiring $α)
-  let c ← Common.mkCache sα
-  let ⟨a, _, pa⟩ ← match
-    (← Common.isAtomOrDerivable (ringCompute c) c q($e)) with
-  | none => Common.eval rcNat (ringCompute c) c e
-    -- `none` indicates that `eval` will find something algebraic.
-  | some none => failure -- No point rewriting atoms
-  | some (some r) => pure r -- Nothing algebraic for `eval` to use, but `norm_num` simplifies.
-  pure { expr := a, proof? := pa }
+--- 原说明 ---
+Evaluates an expression `e` into a normalized representation as a polynomial.
+
+This is a variant of `Mathlib.Tactic.Ring.eval`, the main driver of the `ring` t
+actic.
+It differs in
+* operating on `Expr` (input) and `Simp.Result` (output), rather than typed `Qq`
+ versions of these;
+* throwing an error if the expression `e` is an atom for the `ring` tactic.
 -/
 def evalExpr (e : Expr) : AtomM Simp.Result := do
-let e ← withReducible whnf e
+  let e ← withReducible <| whnf e
   guard e.isApp -- all interesting ring expressions are applications
   let ⟨u, α, e⟩ ← inferTypeQ' e
   let sα ← synthInstanceQ q(CommSemiring $α)
   let c ← Common.mkCache sα
   let ⟨a, _, pa⟩ ← match
     (← Common.isAtomOrDerivable (ringCompute c) c q($e)) with
-  | none => Common.eval rcNat (ringCompute c) c e
+  | none => Common.eval rcℕ (ringCompute c) c e
     -- `none` indicates that `eval` will find something algebraic.
   | some none => failure -- No point rewriting atoms
   | some (some r) => pure r -- Nothing algebraic for `eval` to use, but `norm_num` simplifies.
   pure { expr := a, proof? := pa }
 
-variable {R : Type*} [CommSemiring R] {n d : Nat}
-
-/--
-theorem `add_assoc_rev` / 定理 `add_assoc_rev`
-
-English:
-theorem add_assoc_rev
-  given: (a b c : R)
-  statement: a + (b + c) = a + b + c
-  proof: (add_assoc ..).symm
-
-中文:
-定理 add_assoc_rev
-  条件: (a b c : R)
-  结论: a + (b + c) = a + b + c
-  证明: (add_assoc ..).symm
-
-Depends on / 依赖: add_assoc
+variable {R : Type*} [CommSemiring R] {n d : ℕ}
+/-
+**Mathlib.Tactic.RingNF.add_assoc_rev** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+RingNF`。
+形式化陈述：add_assoc_rev (a b c : R) : a + (b + c) = a + b + c
+参数：a b c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
 -/
 theorem add_assoc_rev (a b c : R) : a + (b + c) = a + b + c := (add_assoc ..).symm
-/--
-theorem `mul_assoc_rev` / 定理 `mul_assoc_rev`
-
-English:
-theorem mul_assoc_rev
-  given: (a b c : R)
-  statement: a * (b * c) = a * b * c
-  proof: (mul_assoc ..).symm
-
-中文:
-定理 mul_assoc_rev
-  条件: (a b c : R)
-  结论: a * (b * c) = a * b * c
-  证明: (mul_assoc ..).symm
-
-Depends on / 依赖: mul_assoc
+/-
+**Mathlib.Tactic.RingNF.mul_assoc_rev** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+RingNF`。
+形式化陈述：mul_assoc_rev (a b c : R) : a * (b * c) = a * b * c
+参数：a b c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem mul_assoc_rev (a b c : R) : a * (b * c) = a * b * c := (mul_assoc ..).symm
-/--
-theorem `mul_neg` / 定理 `mul_neg`
-
-English:
-theorem mul_neg
-  given: {R} [Ring R] (a b : R)
-  statement: a * -b = -(a * b)
-  proof: by simp
-
-中文:
-定理 mul_neg
-  条件: {R} [环 R] (a b : R)
-  结论: a * -b = -(a * b)
-  证明: by simp
+/-
+**Mathlib.Tactic.RingNF.mul_neg** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.RingNF
+`。
+形式化陈述：mul_neg {R} [Ring R] (a b : R) : a * -b = -(a * b)
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_neg {R} [Ring R] (a b : R) : a * -b = -(a * b) := by simp
-/--
-theorem `add_neg` / 定理 `add_neg`
-
-English:
-theorem add_neg
-  given: {R} [Ring R] (a b : R)
-  statement: a + -b = a - b
-  proof: (sub_eq_add_neg ..).symm
-
-中文:
-定理 add_neg
-  条件: {R} [环 R] (a b : R)
-  结论: a + -b = a - b
-  证明: (sub_eq_add_neg ..).symm
-
-Depends on / 依赖: sub_eq_add_neg
+/-
+**Mathlib.Tactic.RingNF.add_neg** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.RingNF
+`。
+形式化陈述：add_neg {R} [Ring R] (a b : R) : a + -b = a - b
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
 theorem add_neg {R} [Ring R] (a b : R) : a + -b = a - b := (sub_eq_add_neg ..).symm
-/--
-theorem `nat_rawCast_0` / 定理 `nat_rawCast_0`
-
-English:
-theorem nat_rawCast_0
-  statement: (Nat.rawCast 0 : R) = 0
-  proof: by simp
-
-中文:
-定理 nat_rawCast_0
-  结论: (自然数.rawCast 0 : R) = 0
-  证明: by simp
+/-
+**Mathlib.Tactic.RingNF.nat_rawCast_0** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+RingNF`。
+形式化陈述：nat_rawCast_0 : (Nat.rawCast 0 : R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nat_rawCast_0 : (Nat.rawCast 0 : R) = 0 := by simp
-/--
-theorem `nat_rawCast_1` / 定理 `nat_rawCast_1`
-
-English:
-theorem nat_rawCast_1
-  statement: (Nat.rawCast 1 : R) = 1
-  proof: by simp
-
-中文:
-定理 nat_rawCast_1
-  结论: (自然数.rawCast 1 : R) = 1
-  证明: by simp
+/-
+**Mathlib.Tactic.RingNF.nat_rawCast_1** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+RingNF`。
+形式化陈述：nat_rawCast_1 : (Nat.rawCast 1 : R) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nat_rawCast_1 : (Nat.rawCast 1 : R) = 1 := by simp
-/--
-theorem `nat_rawCast_2` / 定理 `nat_rawCast_2`
-
-English:
-theorem nat_rawCast_2
-  given: [Nat.AtLeastTwo n]
-  statement: (Nat.rawCast n : R) = OfNat.ofNat n
-  proof: rfl
-
-中文:
-定理 nat_rawCast_2
-  条件: [自然数.AtLeastTwo n]
-  结论: (自然数.rawCast n : R) = Of自然数.of自然数 n
-  证明: rfl
+/-
+**Mathlib.Tactic.RingNF.nat_rawCast_2** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+RingNF`。
+形式化陈述：nat_rawCast_2 [Nat.AtLeastTwo n] : (Nat.rawCast n : R) = OfNat.ofNat n
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nat_rawCast_2 [Nat.AtLeastTwo n] : (Nat.rawCast n : R) = OfNat.ofNat n := rfl
-/--
-theorem `int_rawCast_neg` / 定理 `int_rawCast_neg`
-
-English:
-theorem int_rawCast_neg
-  given: {R} [Ring R]
-  statement: (Int.rawCast (.negOfNat n) : R) = -Nat.rawCast n
-  proof: by simp
-
-中文:
-定理 int_rawCast_neg
-  条件: {R} [环 R]
-  结论: (整数.rawCast (.negOf自然数 n) : R) = -自然数.rawCast n
-  证明: by simp
+/-
+**Mathlib.Tactic.RingNF.int_rawCast_neg** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tacti
+c.RingNF`。
+形式化陈述：int_rawCast_neg {R} [Ring R] : (Int.rawCast (.negOfNat n) : R) = -Nat.rawC
+ast n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_negOfNat`：cast_negOfNat (n : Nat) : ((negOfNat n : Int) : R) = 
+-n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem int_rawCast_neg {R} [Ring R] : (Int.rawCast (.negOfNat n) : R) = -Nat.rawCast n := by simp
-/--
-theorem `nnrat_rawCast` / 定理 `nnrat_rawCast`
-
-English:
-theorem nnrat_rawCast
-  given: {R} [DivisionSemiring R]
-  proof: by simp
-
-中文:
-定理 nnrat_rawCast
-  条件: {R} [除半环 R]
-  证明: by simp
+/-
+**Mathlib.Tactic.RingNF.nnrat_rawCast** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+RingNF`。
+形式化陈述：nnrat_rawCast {R} [DivisionSemiring R] : (NNRat.rawCast n d : R) = Nat.raw
+Cast n / Nat.rawCast d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nnrat_rawCast {R} [DivisionSemiring R] :
     (NNRat.rawCast n d : R) = Nat.rawCast n / Nat.rawCast d := by simp
-/--
-theorem `rat_rawCast_neg` / 定理 `rat_rawCast_neg`
-
-English:
-theorem rat_rawCast_neg
-  given: {R} [DivisionRing R]
-  proof: by simp
-
-中文:
-定理 rat_rawCast_neg
-  条件: {R} [除环 R]
-  证明: by simp
+/-
+**Mathlib.Tactic.RingNF.rat_rawCast_neg** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tacti
+c.RingNF`。
+形式化陈述：rat_rawCast_neg {R} [DivisionRing R] : (Rat.rawCast (.negOfNat n) d : R) =
+ Int.rawCast (.negOfNat n) / Nat.rawCast d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_negOfNat`：cast_negOfNat (n : Nat) : ((negOfNat n : Int) : R) = 
+-n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rat_rawCast_neg {R} [DivisionRing R] :
     (Rat.rawCast (.negOfNat n) d : R) = Int.rawCast (.negOfNat n) / Nat.rawCast d := by simp
 
-/--
-Definition of `cleanup` / `cleanup` 的定义
+/-- A cleanup routine, which simplifies normalized polynomials to a more human-friendly format. -/
+/-
+**Mathlib.Tactic.RingNF.cleanup** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.RingNF
+`。
+形式化陈述：cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result
+参数：cfg : RingNF.Config；r : Simp.Result。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cleanup
-  signature: (cfg : RingNF.Config) (r : Simp.Result)
-  body: do
-  match cfg.mode with
-  | .raw => pure r
-  | .SOP => do
-    let thms : SimpTheorems := {}
-    let thms ← [``add_zero, ``_root_.mul_one, ``_root_.pow_one, ``mul_neg, ``add_neg
-      ].foldlM (·.addConst ·) thms
-    let thms ← [``nat_rawCast_0, ``nat_rawCast_1, ``nat_rawCast_2, ``int_rawCast_neg,
-      ``nnrat_rawCast, ``rat_rawCast_neg, ``add_assoc_rev, ``mul_assoc_rev
-      ].foldlM (·.addConst · (post := false)) thms
-    let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
-      (simpTheorems := #[thms])
-      (congrTheorems := ← getSimpCongrTheorems)
-pure ←
-      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
-
-中文:
-定义 cleanup
-  签名: (cfg : RingNF.余nfig) (r : Simp.Result)
-  定义体: do
-  match cfg.mode with
-  | .raw => pure r
-  | .SOP => do
-    let thms : SimpTheorems := {}
-    let thms ← [``add_zero, ``_root_.mul_one, ``_root_.pow_one, ``mul_neg, ``add_neg
-      ].foldlM (·.addConst ·) thms
-    let thms ← [``nat_rawCast_0, ``nat_rawCast_1, ``nat_rawCast_2, ``int_rawCast_neg,
-      ``nnrat_rawCast, ``rat_rawCast_neg, ``add_assoc_rev, ``mul_assoc_rev
-      ].foldlM (·.addConst · (post := false)) thms
-    let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
-      (simpTheorems := #[thms])
-      (congrTheorems := ← getSimpCongrTheorems)
-pure ←
-      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
+--- 原说明 ---
+A cleanup routine, which simplifies normalized polynomials to a more human-frien
+dly format.
 -/
 def cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
   match cfg.mode with
@@ -354,7 +281,7 @@ def cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
     let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
       (simpTheorems := #[thms])
       (congrTheorems := ← getSimpCongrTheorems)
-pure ←
+    pure <| ←
       r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 
 /-- Overrides the default error message in `ring1` to use a prettified version of the goal. -/
@@ -410,49 +337,24 @@ elab (name := ring1NF) "ring1_nf" tk:"!"? cfg:optConfig : tactic => do
   let mut cfg ← elabConfig cfg
   if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
   let s ← IO.mkRef {}
-  liftMetaMAtMain fun g => AtomM.RecurseM.run s cfg.toConfig
-(wellBehavedDischarge := true) evalExpr (cleanup cfg) proveEq g
+  liftMetaMAtMain fun g ↦ AtomM.RecurseM.run s cfg.toConfig
+    (wellBehavedDischarge := true) evalExpr (cleanup cfg) <| proveEq g
 
 @[tactic_alt ring1]
 macro "ring1_nf!" cfg:optConfig : tactic =>
   `(tactic| ring1_nf ! $cfg:optConfig)
 
-/--
-Definition of `elabRingNFConv` / `elabRingNFConv` 的定义
+/-- Elaborator for the `ring_nf` tactic. -/
+/-
+**Mathlib.Tactic.RingNF.elabRingNFConv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.RingNF`。
+形式化陈述：Elab.Tactic.Tactic
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabRingNFConv
-  signature: : Tactic
-  body: fun stx => match stx with
-  | `(conv| ring_nf $[!%$tk]? $cfg:optConfig) => withMainContext do
-    let mut cfg ← elabConfig cfg
-    if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
-    let s ← IO.mkRef {}
-    Conv.applySimpResult
-      (← AtomM.recurse s cfg.toConfig (wellBehavedDischarge := true) evalExpr (cleanup cfg)
-        (← instantiateMVars (← Conv.getLhs)))
-  | _ => Elab.throwUnsupportedSyntax
-
-@[inherit_doc ringNF] macro "ring_nf!" cfg:optConfig : conv =>
-  `(conv| ring_nf ! $cfg:optConfig)
-
-中文:
-定义 elabRingNFConv
-  签名: : Tactic
-  定义体: fun stx => match stx with
-  | `(conv| ring_nf $[!%$tk]? $cfg:optConfig) => withMainContext do
-    let mut cfg ← elabConfig cfg
-    if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
-    let s ← IO.mkRef {}
-    Conv.applySimpResult
-      (← AtomM.recurse s cfg.toConfig (wellBehavedDischarge := true) evalExpr (cleanup cfg)
-        (← instantiateMVars (← Conv.getLhs)))
-  | _ => Elab.throwUnsupportedSyntax
-
-@[inherit_doc ringNF] macro "ring_nf!" cfg:optConfig : conv =>
-  `(conv| ring_nf ! $cfg:optConfig)
+--- 原说明 ---
+Elaborator for the `ring_nf` tactic.
 -/
-@[tactic ringNFConv] def elabRingNFConv : Tactic := fun stx => match stx with
+@[tactic ringNFConv] def elabRingNFConv : Tactic := fun stx ↦ match stx with
   | `(conv| ring_nf $[!%$tk]? $cfg:optConfig) => withMainContext do
     let mut cfg ← elabConfig cfg
     if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
@@ -521,3 +423,4 @@ We register `ring` with the `hint` tactic.
 -/
 
 register_hint 1000 ring
+

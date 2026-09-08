@@ -20,47 +20,26 @@ for type synonyms.
 
 open NNReal
 
-variable {ι E F : Type*} {G : ι -> Type*}
+variable {ι E F : Type*} {G : ι → Type*}
 
 /-! ### `PUnit` -/
 
 namespace PUnit
 
-/--
-Instance `normedAddCommGroup` / 实例 `normedAddCommGroup`
-
-English:
-instance normedAddCommGroup
-  signature: : NormedAddCommGroup PUnit where
-  body: Function.const _ 0
-  dist_eq _ _ := rfl
-
-中文:
-实例 normedAddCommGroup
-  签名: : 赋范交换加群 命题单元 where
-  定义体: Function.const _ 0
-  dist_eq _ _ := rfl
-
-Depends on / 依赖: Function, Function.const
+/-
+**PUnit.normedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：normedAddCommGroup : NormedAddCommGroup PUnit where norm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance normedAddCommGroup : NormedAddCommGroup PUnit where
   norm := Function.const _ 0
   dist_eq _ _ := rfl
-
-/--
-lemma `norm_eq_zero` / 引理 `norm_eq_zero`
-
-English:
-lemma norm_eq_zero
-  given: (x : PUnit)
-  statement: ‖x‖ = 0
-  proof: rfl
-
-中文:
-引理 norm_eq_zero
-  条件: (x : 命题单元)
-  结论: ‖x‖ = 0
-  证明: rfl
+/-
+**PUnit.norm_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `PUnit`。
+形式化陈述：∀ (x : PUnit.{u_5 + 1}), ‖x‖ = 0
+参数：x : PUnit.{u_5 + 1}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_eq_zero (x : PUnit) : ‖x‖ = 0 := rfl
 
@@ -72,71 +51,33 @@ namespace ULift
 section Norm
 variable [Norm E]
 
-/--
-Instance `norm` / 实例 `norm`
-
-English:
-instance norm
-  signature: : Norm (ULift E) where norm x
-  body: ‖x.down‖
-
-中文:
-实例 norm
-  签名: : 范数 (类型层提升 E) where norm x
-  定义体: ‖x.down‖
-
-Depends on / 依赖: x.down
+/-
+**ULift.norm** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：norm : Norm (ULift E) where norm x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance norm : Norm (ULift E) where norm x := ‖x.down‖
-
-/--
-lemma `norm_def` / 引理 `norm_def`
-
-English:
-lemma norm_def
-  given: (x : ULift E)
-  statement: ‖x‖ = ‖x.down‖
-  proof: rfl
-
-中文:
-引理 norm_def
-  条件: (x : 类型层提升 E)
-  结论: ‖x‖ = ‖x.down‖
-  证明: rfl
+/-
+**ULift.norm_def** 是 Mathlib 中的一个引理，位于命名空间 `ULift`。
+形式化陈述：norm_def (x : ULift E) : ‖x‖ = ‖x.down‖
+参数：x : ULift E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma norm_def (x : ULift E) : ‖x‖ = ‖x.down‖ := rfl
-
-/--
-lemma `norm_up` / 引理 `norm_up`
-
-English:
-lemma norm_up
-  given: (x : E)
-  statement: ‖ULift.up x‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_up
-  条件: (x : E)
-  结论: ‖类型层提升.up x‖ = ‖x‖
-  证明: rfl
+/-
+**ULift.norm_up** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : E), ‖{ down := x }‖ = ‖x‖
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_up (x : E) : ‖ULift.up x‖ = ‖x‖ := rfl
-
-/--
-lemma `norm_down` / 引理 `norm_down`
-
-English:
-lemma norm_down
-  given: (x : ULift E)
-  statement: ‖x.down‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_down
-  条件: (x : 类型层提升 E)
-  结论: ‖x.down‖ = ‖x‖
-  证明: rfl
+/-
+**ULift.norm_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : ULift.{u_5, u_2} E), ‖x.down‖ = ‖x‖
+参数：x : ULift.{u_5, u_2} E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_down (x : ULift E) : ‖x.down‖ = ‖x‖ := rfl
 
@@ -145,204 +86,94 @@ end Norm
 section NNNorm
 variable [NNNorm E]
 
-/--
-Instance `nnnorm` / 实例 `nnnorm`
-
-English:
-instance nnnorm
-  signature: : NNNorm (ULift E) where nnnorm x
-  body: ‖x.down‖₊
-
-中文:
-实例 nnnorm
-  签名: : NN范数 (类型层提升 E) where nnnorm x
-  定义体: ‖x.down‖₊
-
-Depends on / 依赖: x.down
+/-
+**ULift.nnnorm** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：nnnorm : NNNorm (ULift E) where nnnorm x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nnnorm : NNNorm (ULift E) where nnnorm x := ‖x.down‖₊
-
-/--
-lemma `nnnorm_def` / 引理 `nnnorm_def`
-
-English:
-lemma nnnorm_def
-  given: (x : ULift E)
-  statement: ‖x‖₊ = ‖x.down‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_def
-  条件: (x : 类型层提升 E)
-  结论: ‖x‖₊ = ‖x.down‖₊
-  证明: rfl
+/-
+**ULift.nnnorm_def** 是 Mathlib 中的一个引理，位于命名空间 `ULift`。
+形式化陈述：nnnorm_def (x : ULift E) : ‖x‖₊ = ‖x.down‖₊
+参数：x : ULift E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma nnnorm_def (x : ULift E) : ‖x‖₊ = ‖x.down‖₊ := rfl
-
-/--
-lemma `nnnorm_up` / 引理 `nnnorm_up`
-
-English:
-lemma nnnorm_up
-  given: (x : E)
-  statement: ‖ULift.up x‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_up
-  条件: (x : E)
-  结论: ‖类型层提升.up x‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**ULift.nnnorm_up** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : E), ‖{ down := x }‖₊ = ‖x‖₊
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_up (x : E) : ‖ULift.up x‖₊ = ‖x‖₊ := rfl
-
-/--
-lemma `nnnorm_down` / 引理 `nnnorm_down`
-
-English:
-lemma nnnorm_down
-  given: (x : ULift E)
-  statement: ‖x.down‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_down
-  条件: (x : 类型层提升 E)
-  结论: ‖x.down‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**ULift.nnnorm_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : ULift.{u_5, u_2} E), ‖x.down‖₊ = ‖
+x‖₊
+参数：x : ULift.{u_5, u_2} E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_down (x : ULift E) : ‖x.down‖₊ = ‖x‖₊ := rfl
 
 end NNNorm
 
 @[to_additive]
-/--
-Instance `seminormedGroup` / 实例 `seminormedGroup`
-
-English:
-instance seminormedGroup
-  signature: [SeminormedGroup E]
-  body: SeminormedGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-
-@[to_additive]
-
-中文:
-实例 seminormedGroup
-  签名: [半赋范群 E]
-  定义体: SeminormedGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-
-@[to_additive]
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.induced, ULift.down, induced, map_mul, map_one
+/-
+**ULift.seminormedGroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：seminormedGroup [SeminormedGroup E] : SeminormedGroup (ULift E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance seminormedGroup [SeminormedGroup E] : SeminormedGroup (ULift E) :=
   SeminormedGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
+    map_mul' := fun _ _ => rfl : ULift E →* E }
 
 @[to_additive]
-/--
-Instance `seminormedCommGroup` / 实例 `seminormedCommGroup`
-
-English:
-instance seminormedCommGroup
-  signature: [SeminormedCommGroup E]
-  body: SeminormedCommGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-
-@[to_additive]
-
-中文:
-实例 seminormedCommGroup
-  签名: [SeminormedComm群 E]
-  定义体: SeminormedCommGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-
-@[to_additive]
-
-Depends on / 依赖: SeminormedCommGroup, SeminormedCommGroup.induced, ULift.down, induced, map_mul, map_one
+/-
+**ULift.seminormedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：seminormedCommGroup [SeminormedCommGroup E] : SeminormedCommGroup (ULift E
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance seminormedCommGroup [SeminormedCommGroup E] : SeminormedCommGroup (ULift E) :=
   SeminormedCommGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
+    map_mul' := fun _ _ => rfl : ULift E →* E }
 
 @[to_additive]
-/--
-Instance `normedGroup` / 实例 `normedGroup`
-
-English:
-instance normedGroup
-  signature: [NormedGroup E]
-  body: NormedGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-  down_injective
-
-@[to_additive]
-
-中文:
-实例 normedGroup
-  签名: [赋范群 E]
-  定义体: NormedGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-  down_injective
-
-@[to_additive]
-
-Depends on / 依赖: NormedGroup, NormedGroup.induced, ULift.down, down_injective, induced, map_mul, map_one
+/-
+**ULift.normedGroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：normedGroup [NormedGroup E] : NormedGroup (ULift E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ULift.down_injective`：∀ {α : Type u_1}, Function.Injective ULift.down
 -/
 instance normedGroup [NormedGroup E] : NormedGroup (ULift E) :=
   NormedGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
+    map_mul' := fun _ _ => rfl : ULift E →* E }
   down_injective
 
 @[to_additive]
-/--
-Instance `normedCommGroup` / 实例 `normedCommGroup`
-
-English:
-instance normedCommGroup
-  signature: [NormedCommGroup E]
-  body: NormedCommGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-  down_injective
-
-中文:
-实例 normedCommGroup
-  签名: [NormedComm群 E]
-  定义体: NormedCommGroup.induced _ _
-  { toFun := ULift.down,
-    map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
-  down_injective
-
-Depends on / 依赖: NormedCommGroup, NormedCommGroup.induced, ULift.down, down_injective, induced, map_mul, map_one
+/-
+**ULift.normedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：normedCommGroup [NormedCommGroup E] : NormedCommGroup (ULift E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ULift.down_injective`：∀ {α : Type u_1}, Function.Injective ULift.down
 -/
 instance normedCommGroup [NormedCommGroup E] : NormedCommGroup (ULift E) :=
   NormedCommGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
-    map_mul' := fun _ _ => rfl : ULift E ->* E }
+    map_mul' := fun _ _ => rfl : ULift E →* E }
   down_injective
 
 end ULift
@@ -356,100 +187,48 @@ open Additive Multiplicative
 section Norm
 variable [Norm E]
 
-/--
-Instance `Additive.toNorm` / 实例 `Additive.toNorm`
-
-English:
-instance Additive.toNorm
-  signature: : Norm (Additive E)
-  body: ‹Norm E›
-
-中文:
-实例 加性.toNorm
-  签名: : 范数 (加性 E)
-  定义体: ‹Norm E›
+/-
+**Additive.toNorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.toNorm : Norm (Additive E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.toNorm : Norm (Additive E) := ‹Norm E›
-/--
-Instance `Multiplicative.toNorm` / 实例 `Multiplicative.toNorm`
-
-English:
-instance Multiplicative.toNorm
-  signature: : Norm (Multiplicative E)
-  body: ‹Norm E›
-
-中文:
-实例 Multiplicative.toNorm
-  签名: : 范数 (Multiplicative E)
-  定义体: ‹Norm E›
+/-
+**Multiplicative.toNorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.toNorm : Norm (Multiplicative E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.toNorm : Norm (Multiplicative E) := ‹Norm E›
-
-/--
-lemma `norm_toMul` / 引理 `norm_toMul`
-
-English:
-lemma norm_toMul
-  given: (x : Additive E)
-  statement: ‖(x.toMul : E)‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_toMul
-  条件: (x : 加性 E)
-  结论: ‖(x.toMul : E)‖ = ‖x‖
-  证明: rfl
+/-
+**norm_toMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : Additive E), ‖Additive.toMul x‖ = ‖x
+‖
+参数：x : Additive E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_toMul (x : Additive E) : ‖(x.toMul : E)‖ = ‖x‖ := rfl
-
-/--
-lemma `norm_ofMul` / 引理 `norm_ofMul`
-
-English:
-lemma norm_ofMul
-  given: (x : E)
-  statement: ‖ofMul x‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_ofMul
-  条件: (x : E)
-  结论: ‖ofMul x‖ = ‖x‖
-  证明: rfl
+/-
+**norm_ofMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : E), ‖Additive.ofMul x‖ = ‖x‖
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_ofMul (x : E) : ‖ofMul x‖ = ‖x‖ := rfl
-
-/--
-lemma `norm_toAdd` / 引理 `norm_toAdd`
-
-English:
-lemma norm_toAdd
-  given: (x : Multiplicative E)
-  statement: ‖(x.toAdd : E)‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_toAdd
-  条件: (x : Multiplicative E)
-  结论: ‖(x.toAdd : E)‖ = ‖x‖
-  证明: rfl
+/-
+**norm_toAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : Multiplicative E), ‖Multiplicative.t
+oAdd x‖ = ‖x‖
+参数：x : Multiplicative E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_toAdd (x : Multiplicative E) : ‖(x.toAdd : E)‖ = ‖x‖ := rfl
-
-/--
-lemma `norm_ofAdd` / 引理 `norm_ofAdd`
-
-English:
-lemma norm_ofAdd
-  given: (x : E)
-  statement: ‖ofAdd x‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_ofAdd
-  条件: (x : E)
-  结论: ‖ofAdd x‖ = ‖x‖
-  证明: rfl
+/-
+**norm_ofAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : E), ‖Multiplicative.ofAdd x‖ = ‖x‖
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_ofAdd (x : E) : ‖ofAdd x‖ = ‖x‖ := rfl
 
@@ -458,276 +237,131 @@ end Norm
 section NNNorm
 variable [NNNorm E]
 
-/--
-Instance `Additive.toNNNorm` / 实例 `Additive.toNNNorm`
-
-English:
-instance Additive.toNNNorm
-  signature: : NNNorm (Additive E)
-  body: ‹NNNorm E›
-
-中文:
-实例 加性.toNNNorm
-  签名: : NN范数 (加性 E)
-  定义体: ‹NNNorm E›
-
-Depends on / 依赖: NNNorm
+/-
+**Additive.toNNNorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.toNNNorm : NNNorm (Additive E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.toNNNorm : NNNorm (Additive E) := ‹NNNorm E›
-
-/--
-Instance `Multiplicative.toNNNorm` / 实例 `Multiplicative.toNNNorm`
-
-English:
-instance Multiplicative.toNNNorm
-  signature: : NNNorm (Multiplicative E)
-  body: ‹NNNorm E›
-
-中文:
-实例 Multiplicative.toNNNorm
-  签名: : NN范数 (Multiplicative E)
-  定义体: ‹NNNorm E›
-
-Depends on / 依赖: NNNorm
+/-
+**Multiplicative.toNNNorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.toNNNorm : NNNorm (Multiplicative E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.toNNNorm : NNNorm (Multiplicative E) := ‹NNNorm E›
-
-/--
-lemma `nnnorm_toMul` / 引理 `nnnorm_toMul`
-
-English:
-lemma nnnorm_toMul
-  given: (x : Additive E)
-  statement: ‖(x.toMul : E)‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_toMul
-  条件: (x : 加性 E)
-  结论: ‖(x.toMul : E)‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**nnnorm_toMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : Additive E), ‖Additive.toMul x‖₊ =
+ ‖x‖₊
+参数：x : Additive E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_toMul (x : Additive E) : ‖(x.toMul : E)‖₊ = ‖x‖₊ := rfl
-
-/--
-lemma `nnnorm_ofMul` / 引理 `nnnorm_ofMul`
-
-English:
-lemma nnnorm_ofMul
-  given: (x : E)
-  statement: ‖ofMul x‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_ofMul
-  条件: (x : E)
-  结论: ‖ofMul x‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**nnnorm_ofMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : E), ‖Additive.ofMul x‖₊ = ‖x‖₊
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_ofMul (x : E) : ‖ofMul x‖₊ = ‖x‖₊ := rfl
-
-/--
-lemma `nnnorm_toAdd` / 引理 `nnnorm_toAdd`
-
-English:
-lemma nnnorm_toAdd
-  given: (x : Multiplicative E)
-  statement: ‖(x.toAdd : E)‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_toAdd
-  条件: (x : Multiplicative E)
-  结论: ‖(x.toAdd : E)‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**nnnorm_toAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : Multiplicative E), ‖Multiplicative
+.toAdd x‖₊ = ‖x‖₊
+参数：x : Multiplicative E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_toAdd (x : Multiplicative E) : ‖(x.toAdd : E)‖₊ = ‖x‖₊ := rfl
-
-/--
-lemma `nnnorm_ofAdd` / 引理 `nnnorm_ofAdd`
-
-English:
-lemma nnnorm_ofAdd
-  given: (x : E)
-  statement: ‖ofAdd x‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_ofAdd
-  条件: (x : E)
-  结论: ‖ofAdd x‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**nnnorm_ofAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : E), ‖Multiplicative.ofAdd x‖₊ = ‖x
+‖₊
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_ofAdd (x : E) : ‖ofAdd x‖₊ = ‖x‖₊ := rfl
 
 end NNNorm
 
-/--
-Instance `Additive.seminormedAddGroup` / 实例 `Additive.seminormedAddGroup`
-
-English:
-instance Additive.seminormedAddGroup
-  signature: [SeminormedGroup E]
-  body: dist_eq_norm_inv_mul x.toMul y.toMul
-
-中文:
-实例 加性.seminormedAddGroup
-  签名: [半赋范群 E]
-  定义体: dist_eq_norm_inv_mul x.toMul y.toMul
-
-Depends on / 依赖: dist_eq_norm_inv_mul, x.toMul, y.toMul
+/-
+**Additive.seminormedAddGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.seminormedAddGroup [SeminormedGroup E] : SeminormedAddGroup (Addi
+tive E) where dist_eq x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.seminormedAddGroup [SeminormedGroup E] : SeminormedAddGroup (Additive E) where
   dist_eq x y := dist_eq_norm_inv_mul x.toMul y.toMul
-
-
-/--
-Instance `Multiplicative.seminormedGroup` / 实例 `Multiplicative.seminormedGroup`
-
-English:
-instance Multiplicative.seminormedGroup
-  signature: [SeminormedAddGroup E]
-  body: dist_eq_norm_neg_add x.toAdd y.toAdd
-
-中文:
-实例 Multiplicative.seminormedGroup
-  签名: [半赋范加群 E]
-  定义体: dist_eq_norm_neg_add x.toAdd y.toAdd
-
-Depends on / 依赖: dist_eq_norm_neg_add, x.toAdd, y.toAdd
+/-
+**Multiplicative.seminormedGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.seminormedGroup [SeminormedAddGroup E] : SeminormedGroup (M
+ultiplicative E) where dist_eq x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.seminormedGroup [SeminormedAddGroup E] :
     SeminormedGroup (Multiplicative E) where
   dist_eq x y := dist_eq_norm_neg_add x.toAdd y.toAdd
-
-/--
-Instance `Additive.seminormedCommGroup` / 实例 `Additive.seminormedCommGroup`
-
-English:
-instance Additive.seminormedCommGroup
-  signature: [SeminormedCommGroup E]
-  body: { Additive.seminormedAddGroup with
-    add_comm := add_comm }
-
-中文:
-实例 加性.seminormedCommGroup
-  签名: [SeminormedComm群 E]
-  定义体: { Additive.seminormedAddGroup with
-    add_comm := add_comm }
-
-Depends on / 依赖: Additive, Additive.seminormedAddGroup, add_comm, seminormedAddGroup
+/-
+**Additive.seminormedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.seminormedCommGroup [SeminormedCommGroup E] : SeminormedAddCommGr
+oup (Additive E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.seminormedCommGroup [SeminormedCommGroup E] :
     SeminormedAddCommGroup (Additive E) :=
   { Additive.seminormedAddGroup with
     add_comm := add_comm }
-
-/--
-Instance `Multiplicative.seminormedAddCommGroup` / 实例 `Multiplicative.seminormedAddCommGroup`
-
-English:
-instance Multiplicative.seminormedAddCommGroup
-  signature: [SeminormedAddCommGroup E]
-  body: { Multiplicative.seminormedGroup with
-    mul_comm := mul_comm }
-
-中文:
-实例 Multiplicative.seminormedAddCommGroup
-  签名: [SeminormedAddComm群 E]
-  定义体: { Multiplicative.seminormedGroup with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: Multiplicative, Multiplicative.seminormedGroup, _pos, exp_pos, le_log_iff_exp_le, log_stirlingSeq_bounded_by_constant, mul_comm, seminormedGroup, stirlingSeq
+/-
+**Multiplicative.seminormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.seminormedAddCommGroup [SeminormedAddCommGroup E] : Seminor
+medCommGroup (Multiplicative E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.seminormedAddCommGroup [SeminormedAddCommGroup E] :
     SeminormedCommGroup (Multiplicative E) :=
   { Multiplicative.seminormedGroup with
     mul_comm := mul_comm }
-
-/--
-Instance `Additive.normedAddGroup` / 实例 `Additive.normedAddGroup`
-
-English:
-instance Additive.normedAddGroup
-  signature: [NormedGroup E]
-  body: { Additive.seminormedAddGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 加性.normedAddGroup
-  签名: [赋范群 E]
-  定义体: { Additive.seminormedAddGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Additive, Additive.seminormedAddGroup, eq_of_dist_eq_zero, seminormedAddGroup
+/-
+**Additive.normedAddGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.normedAddGroup [NormedGroup E] : NormedAddGroup (Additive E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.normedAddGroup [NormedGroup E] : NormedAddGroup (Additive E) :=
   { Additive.seminormedAddGroup with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-/--
-Instance `Multiplicative.normedGroup` / 实例 `Multiplicative.normedGroup`
-
-English:
-instance Multiplicative.normedGroup
-  signature: [NormedAddGroup E]
-  body: { Multiplicative.seminormedGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 Multiplicative.normedGroup
-  签名: [赋范加群 E]
-  定义体: { Multiplicative.seminormedGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Multiplicative, Multiplicative.seminormedGroup, eq_of_dist_eq_zero, seminormedGroup
+/-
+**Multiplicative.normedGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.normedGroup [NormedAddGroup E] : NormedGroup (Multiplicativ
+e E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.normedGroup [NormedAddGroup E] : NormedGroup (Multiplicative E) :=
   { Multiplicative.seminormedGroup with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-/--
-Instance `Additive.normedAddCommGroup` / 实例 `Additive.normedAddCommGroup`
-
-English:
-instance Additive.normedAddCommGroup
-  signature: [NormedCommGroup E]
-  body: { Additive.seminormedAddGroup with
-    add_comm := add_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 加性.normedAddCommGroup
-  签名: [NormedComm群 E]
-  定义体: { Additive.seminormedAddGroup with
-    add_comm := add_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Additive, Additive.seminormedAddGroup, add_comm, eq_of_dist_eq_zero, seminormedAddGroup
+/-
+**Additive.normedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.normedAddCommGroup [NormedCommGroup E] : NormedAddCommGroup (Addi
+tive E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.normedAddCommGroup [NormedCommGroup E] : NormedAddCommGroup (Additive E) :=
   { Additive.seminormedAddGroup with
     add_comm := add_comm
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-/--
-Instance `Multiplicative.normedCommGroup` / 实例 `Multiplicative.normedCommGroup`
-
-English:
-instance Multiplicative.normedCommGroup
-  signature: [NormedAddCommGroup E]
-  body: { Multiplicative.seminormedGroup with
-    mul_comm := mul_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 Multiplicative.normedCommGroup
-  签名: [赋范交换加群 E]
-  定义体: { Multiplicative.seminormedGroup with
-    mul_comm := mul_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Multiplicative, Multiplicative.seminormedGroup, eq_of_dist_eq_zero, mul_comm, seminormedGroup
+/-
+**Multiplicative.normedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.normedCommGroup [NormedAddCommGroup E] : NormedCommGroup (M
+ultiplicative E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.normedCommGroup [NormedAddCommGroup E] :
     NormedCommGroup (Multiplicative E) :=
@@ -745,55 +379,26 @@ open OrderDual
 section Norm
 variable [Norm E]
 
-/--
-Instance `OrderDual.toNorm` / 实例 `OrderDual.toNorm`
-
-English:
-instance OrderDual.toNorm
-  signature: : Norm Eᵒᵈ where
-  body: ‖ofDual x‖
-
-中文:
-实例 OrderDual.toNorm
-  签名: : 范数 Eᵒᵈ where
-  定义体: ‖ofDual x‖
-
-Depends on / 依赖: ofDual
+/-
+**OrderDual.toNorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：OrderDual.toNorm : Norm Eᵒᵈ where norm x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance OrderDual.toNorm : Norm Eᵒᵈ where
   norm x := ‖ofDual x‖
-
-/--
-lemma `norm_toDual` / 引理 `norm_toDual`
-
-English:
-lemma norm_toDual
-  given: (x : E)
-  statement: ‖toDual x‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_toDual
-  条件: (x : E)
-  结论: ‖toDual x‖ = ‖x‖
-  证明: rfl
+/-
+**norm_toDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : E), ‖OrderDual.toDual x‖ = ‖x‖
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_toDual (x : E) : ‖toDual x‖ = ‖x‖ := rfl
-
-/--
-lemma `norm_ofDual` / 引理 `norm_ofDual`
-
-English:
-lemma norm_ofDual
-  given: (x : Eᵒᵈ)
-  statement: ‖ofDual x‖ = ‖x‖
-  proof: rfl
-
-中文:
-引理 norm_ofDual
-  条件: (x : Eᵒᵈ)
-  结论: ‖ofDual x‖ = ‖x‖
-  证明: rfl
+/-
+**norm_ofDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : Norm E] (x : Eᵒᵈ), ‖OrderDual.ofDual x‖ = ‖x‖
+参数：x : Eᵒᵈ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma norm_ofDual (x : Eᵒᵈ) : ‖ofDual x‖ = ‖x‖ := rfl
 
@@ -802,55 +407,26 @@ end Norm
 section NNNorm
 variable [NNNorm E]
 
-/--
-Instance `OrderDual.toNNNorm` / 实例 `OrderDual.toNNNorm`
-
-English:
-instance OrderDual.toNNNorm
-  signature: : NNNorm Eᵒᵈ where
-  body: ‖ofDual x‖₊
-
-中文:
-实例 OrderDual.toNNNorm
-  签名: : NN范数 Eᵒᵈ where
-  定义体: ‖ofDual x‖₊
-
-Depends on / 依赖: ofDual
+/-
+**OrderDual.toNNNorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：OrderDual.toNNNorm : NNNorm Eᵒᵈ where nnnorm x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance OrderDual.toNNNorm : NNNorm Eᵒᵈ where
   nnnorm x := ‖ofDual x‖₊
-
-/--
-lemma `nnnorm_toDual` / 引理 `nnnorm_toDual`
-
-English:
-lemma nnnorm_toDual
-  given: (x : E)
-  statement: ‖toDual x‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_toDual
-  条件: (x : E)
-  结论: ‖toDual x‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**nnnorm_toDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : E), ‖OrderDual.toDual x‖₊ = ‖x‖₊
+参数：x : E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_toDual (x : E) : ‖toDual x‖₊ = ‖x‖₊ := rfl
-
-/--
-lemma `nnnorm_ofDual` / 引理 `nnnorm_ofDual`
-
-English:
-lemma nnnorm_ofDual
-  given: (x : Eᵒᵈ)
-  statement: ‖ofDual x‖₊ = ‖x‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_ofDual
-  条件: (x : Eᵒᵈ)
-  结论: ‖ofDual x‖₊ = ‖x‖₊
-  证明: rfl
+/-
+**nnnorm_ofDual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {E : Type u_2} [inst : NNNorm E] (x : Eᵒᵈ), ‖OrderDual.ofDual x‖₊ = ‖x‖₊
+参数：x : Eᵒᵈ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nnnorm_ofDual (x : Eᵒᵈ) : ‖ofDual x‖₊ = ‖x‖₊ := rfl
 
@@ -860,23 +436,39 @@ namespace OrderDual
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) seminormedGroup [SeminormedGroup E] : SeminormedGroup Eᵒᵈ :=
-inferInstanceAs SeminormedGroup E
+  inferInstanceAs <| SeminormedGroup E
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) seminormedCommGroup [SeminormedCommGroup E] : SeminormedCommGroup Eᵒᵈ :=
-inferInstanceAs SeminormedCommGroup E
+  inferInstanceAs <| SeminormedCommGroup E
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) normedGroup [NormedGroup E] : NormedGroup Eᵒᵈ :=
-inferInstanceAs NormedGroup E
+  inferInstanceAs <| NormedGroup E
 
 -- See note [lower instance priority]
 @[to_additive]
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) normedCommGroup [NormedCommGroup E] : NormedCommGroup Eᵒᵈ :=
-inferInstanceAs NormedCommGroup E
+  inferInstanceAs <| NormedCommGroup E
 
 end OrderDual
 end OrderDual
@@ -884,111 +476,60 @@ end OrderDual
 /-! ### Binary product of normed groups -/
 
 section Norm
-variable [Norm E] [Norm F] {x : E × F} {r : Real}
+variable [Norm E] [Norm F] {x : E × F} {r : ℝ}
 
-/--
-Instance `Prod.toNorm` / 实例 `Prod.toNorm`
-
-English:
-instance Prod.toNorm
-  signature: : Norm (E × F) where norm x
-  body: ‖x.1‖ ⊔ ‖x.2‖
-
-中文:
-实例 积类型.toNorm
-  签名: : 范数 (E × F) where norm x
-  定义体: ‖x.1‖ ⊔ ‖x.2‖
+/-
+**Prod.toNorm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.toNorm : Norm (E × F) where norm x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prod.toNorm : Norm (E × F) where norm x := ‖x.1‖ ⊔ ‖x.2‖
-
-/--
-lemma `Prod.norm_def` / 引理 `Prod.norm_def`
-
-English:
-lemma Prod.norm_def
-  given: (x : E × F)
-  statement: ‖x‖ = max ‖x.1‖ ‖x.2‖
-  proof: rfl
-
-中文:
-引理 积类型.norm_def
-  条件: (x : E × F)
-  结论: ‖x‖ = 最大值 ‖x.1‖ ‖x.2‖
-  证明: rfl
+/-
+**Prod.norm_def** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Prod.norm_def (x : E × F) : ‖x‖ = max ‖x.1‖ ‖x.2‖
+参数：x : E × F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Prod.norm_def (x : E × F) : ‖x‖ = max ‖x.1‖ ‖x.2‖ := rfl
-
-/--
-lemma `Prod.norm_mk` / 引理 `Prod.norm_mk`
-
-English:
-lemma Prod.norm_mk
-  given: (x : E) (y : F)
-  statement: ‖(x, y)‖ = max ‖x‖ ‖y‖
-  proof: rfl
-
-中文:
-引理 积类型.norm_mk
-  条件: (x : E) (y : F)
-  结论: ‖(x, y)‖ = 最大值 ‖x‖ ‖y‖
-  证明: rfl
+/-
+**Prod.norm_mk** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：∀ {E : Type u_2} {F : Type u_3} [inst : Norm E] [inst_1 : Norm F] (x : E) 
+(y : F), ‖(x, y)‖ = max ‖x‖ ‖y‖
+参数：x : E；y : F；x, y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma Prod.norm_mk (x : E) (y : F) : ‖(x, y)‖ = max ‖x‖ ‖y‖ := rfl
-
-/--
-lemma `norm_fst_le` / 引理 `norm_fst_le`
-
-English:
-lemma norm_fst_le
-  given: (x : E × F)
-  statement: ‖x.1‖ <= ‖x‖
-  proof: le_max_left _ _
-
-中文:
-引理 norm_fst_le
-  条件: (x : E × F)
-  结论: ‖x.1‖ <= ‖x‖
-  证明: le_max_left _ _
-
-Depends on / 依赖: le_max_left
+/-
+**norm_fst_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_fst_le (x : E × F) : ‖x.1‖ <= ‖x‖
+参数：x : E × F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
 -/
-lemma norm_fst_le (x : E × F) : ‖x.1‖ <= ‖x‖ := le_max_left _ _
-
-/--
-lemma `norm_snd_le` / 引理 `norm_snd_le`
-
-English:
-lemma norm_snd_le
-  given: (x : E × F)
-  statement: ‖x.2‖ <= ‖x‖
-  proof: le_max_right _ _
-
-中文:
-引理 norm_snd_le
-  条件: (x : E × F)
-  结论: ‖x.2‖ <= ‖x‖
-  证明: le_max_right _ _
-
-Depends on / 依赖: le_max_right
+lemma norm_fst_le (x : E × F) : ‖x.1‖ ≤ ‖x‖ := le_max_left _ _
+/-
+**norm_snd_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_snd_le (x : E × F) : ‖x.2‖ <= ‖x‖
+参数：x : E × F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-lemma norm_snd_le (x : E × F) : ‖x.2‖ <= ‖x‖ := le_max_right _ _
-
-/--
-lemma `norm_prod_le_iff` / 引理 `norm_prod_le_iff`
-
-English:
-lemma norm_prod_le_iff
-  statement: ‖x‖ <= r ↔ ‖x.1‖ <= r ∧ ‖x.2‖ <= r
-  proof: max_le_iff
-
-中文:
-引理 norm_prod_le_iff
-  结论: ‖x‖ <= r ↔ ‖x.1‖ <= r ∧ ‖x.2‖ <= r
-  证明: max_le_iff
-
-Depends on / 依赖: max_le_iff
+lemma norm_snd_le (x : E × F) : ‖x.2‖ ≤ ‖x‖ := le_max_right _ _
+/-
+**norm_prod_le_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_prod_le_iff : ‖x‖ <= r ↔ ‖x.1‖ <= r ∧ ‖x.2‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_le_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, max a b ≤
+ c ↔ a ≤ c ∧ b ≤ c
 -/
-lemma norm_prod_le_iff : ‖x‖ <= r ↔ ‖x.1‖ <= r ∧ ‖x.2‖ <= r := max_le_iff
+lemma norm_prod_le_iff : ‖x‖ ≤ r ↔ ‖x.1‖ ≤ r ∧ ‖x.2‖ ≤ r := max_le_iff
 
 end Norm
 
@@ -997,20 +538,14 @@ variable [SeminormedGroup E] [SeminormedGroup F]
 
 /-- Product of seminormed groups, using the sup norm. -/
 @[to_additive /-- Product of seminormed groups, using the sup norm. -/]
-/--
-Instance `Prod.seminormedGroup` / 实例 `Prod.seminormedGroup`
+/-
+**Prod.seminormedGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.seminormedGroup : SeminormedGroup (E × F) where dist_eq x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Prod.seminormedGroup
-  signature: : SeminormedGroup (E × F) where
-  body: by simp [Prod.norm_def, Prod.dist_eq, dist_eq_norm_inv_mul]
-
-中文:
-实例 积类型.seminormedGroup
-  签名: : 半赋范群 (E × F) where
-  定义体: by simp [Prod.norm_def, Prod.dist_eq, dist_eq_norm_inv_mul]
-
-Depends on / 依赖: Prod.dist_eq, Prod.norm_def, dist_eq, dist_eq_norm_inv_mul, norm_def
+--- 原说明 ---
+Product of seminormed groups, using the sup norm.
 -/
 instance Prod.seminormedGroup : SeminormedGroup (E × F) where
   dist_eq x y := by simp [Prod.norm_def, Prod.dist_eq, dist_eq_norm_inv_mul]
@@ -1019,39 +554,26 @@ instance Prod.seminormedGroup : SeminormedGroup (E × F) where
 Earlier, this name was used for the additive version. -/
 @[to_additive Prod.nnnorm_def /-- Additive version of `Prod.nnnorm_def'`.
 Earlier, this name was used for the multiplicative version. -/]
-/--
-lemma `Prod.nnnorm_def'` / 引理 `Prod.nnnorm_def'`
-
-English:
-lemma Prod.nnnorm_def'
-  given: (x : E × F)
-  statement: ‖x‖₊ = max ‖x.1‖₊ ‖x.2‖₊
-  proof: rfl
-
-中文:
-引理 积类型.nnnorm_def'
-  条件: (x : E × F)
-  结论: ‖x‖₊ = 最大值 ‖x.1‖₊ ‖x.2‖₊
-  证明: rfl
+/-
+**Prod.nnnorm_def'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Prod.nnnorm_def' (x : E × F) : ‖x‖₊ = max ‖x.1‖₊ ‖x.2‖₊
+参数：x : E × F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Prod.nnnorm_def' (x : E × F) : ‖x‖₊ = max ‖x.1‖₊ ‖x.2‖₊ := rfl
 
 /-- Multiplicative version of `Prod.nnnorm_mk`. -/
 @[to_additive (attr := simp) Prod.nnnorm_mk /-- Additive version of `Prod.nnnorm_mk'`. -/]
-/--
-lemma `Prod.nnnorm_mk'` / 引理 `Prod.nnnorm_mk'`
+/-
+**Prod.nnnorm_mk'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Prod.nnnorm_mk' (x : E) (y : F) : ‖(x, y)‖₊ = max ‖x‖₊ ‖y‖₊
+参数：x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Prod.nnnorm_mk'
-  given: (x : E) (y : F)
-  statement: ‖(x, y)‖₊ = max ‖x‖₊ ‖y‖₊
-  proof: rfl
-
-中文:
-引理 积类型.nnnorm_mk'
-  条件: (x : E) (y : F)
-  结论: ‖(x, y)‖₊ = 最大值 ‖x‖₊ ‖y‖₊
-  证明: rfl
+--- 原说明 ---
+Multiplicative version of `Prod.nnnorm_mk`.
 -/
 lemma Prod.nnnorm_mk' (x : E) (y : F) : ‖(x, y)‖₊ = max ‖x‖₊ ‖y‖₊ := rfl
 
@@ -1061,22 +583,15 @@ namespace Prod
 
 /-- Product of seminormed groups, using the sup norm. -/
 @[to_additive /-- Product of seminormed groups, using the sup norm. -/]
-/--
-Instance `seminormedCommGroup` / 实例 `seminormedCommGroup`
+/-
+**Prod.seminormedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：seminormedCommGroup [SeminormedCommGroup E] [SeminormedCommGroup F] : Semi
+normedCommGroup (E × F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance seminormedCommGroup
-  signature: [SeminormedCommGroup E] [SeminormedCommGroup F]
-  body: { Prod.seminormedGroup with
-    mul_comm := mul_comm }
-
-中文:
-实例 seminormedCommGroup
-  签名: [SeminormedComm群 E] [SeminormedComm群 F]
-  定义体: { Prod.seminormedGroup with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: Prod.seminormedGroup, mul_comm, seminormedGroup
+--- 原说明 ---
+Product of seminormed groups, using the sup norm.
 -/
 instance seminormedCommGroup [SeminormedCommGroup E] [SeminormedCommGroup F] :
     SeminormedCommGroup (E × F) :=
@@ -1085,22 +600,14 @@ instance seminormedCommGroup [SeminormedCommGroup E] [SeminormedCommGroup F] :
 
 /-- Product of normed groups, using the sup norm. -/
 @[to_additive /-- Product of normed groups, using the sup norm. -/]
-/--
-Instance `normedGroup` / 实例 `normedGroup`
+/-
+**Prod.normedGroup** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：normedGroup [NormedGroup E] [NormedGroup F] : NormedGroup (E × F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance normedGroup
-  signature: [NormedGroup E] [NormedGroup F]
-  body: { Prod.seminormedGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 normedGroup
-  签名: [赋范群 E] [赋范群 F]
-  定义体: { Prod.seminormedGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Prod.seminormedGroup, eq_of_dist_eq_zero, seminormedGroup
+--- 原说明 ---
+Product of normed groups, using the sup norm.
 -/
 instance normedGroup [NormedGroup E] [NormedGroup F] : NormedGroup (E × F) :=
   { Prod.seminormedGroup with
@@ -1108,24 +615,15 @@ instance normedGroup [NormedGroup E] [NormedGroup F] : NormedGroup (E × F) :=
 
 /-- Product of normed groups, using the sup norm. -/
 @[to_additive /-- Product of normed groups, using the sup norm. -/]
-/--
-Instance `normedCommGroup` / 实例 `normedCommGroup`
+/-
+**Prod.normedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：normedCommGroup [NormedCommGroup E] [NormedCommGroup F] : NormedCommGroup 
+(E × F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance normedCommGroup
-  signature: [NormedCommGroup E] [NormedCommGroup F]
-  body: { Prod.seminormedGroup with
-    mul_comm := mul_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 normedCommGroup
-  签名: [NormedComm群 E] [NormedComm群 F]
-  定义体: { Prod.seminormedGroup with
-    mul_comm := mul_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Prod.seminormedGroup, eq_of_dist_eq_zero, mul_comm, seminormedGroup
+--- 原说明 ---
+Product of normed groups, using the sup norm.
 -/
 instance normedCommGroup [NormedCommGroup E] [NormedCommGroup F] : NormedCommGroup (E × F) :=
   { Prod.seminormedGroup with
@@ -1140,79 +638,44 @@ section Pi
 variable [Fintype ι]
 
 section SeminormedGroup
-variable [forall i, SeminormedGroup (G i)] [SeminormedGroup E] (f : forall i, G i) {x : forall i, G i} {r : Real}
+variable [∀ i, SeminormedGroup (G i)] [SeminormedGroup E] (f : ∀ i, G i) {x : ∀ i, G i} {r : ℝ}
 
 /-- Finite product of seminormed groups, using the sup norm. -/
 @[to_additive /-- Finite product of seminormed groups, using the sup norm. -/]
-/--
-Instance `Pi.seminormedGroup` / 实例 `Pi.seminormedGroup`
+/-
+**Pi.seminormedGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.seminormedGroup : SeminormedGroup (forall i, G i) where norm f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Pi.seminormedGroup
-  signature: : SeminormedGroup (forall i, G i) where
-  body: ↑(Finset.univ.sup fun b => ‖f b‖₊)
-  dist_eq x y :=
-congr_arg (toReal : Real>=0 -> Real)
-congr_arg (Finset.sup Finset.univ) funext fun a =>
-        show nndist (x a) (y a) = ‖(x a)⁻¹ * y a‖₊ from nndist_eq_nnnorm_inv_mul (x a) (y a)
-
-@[to_additive Pi.norm_def]
-
-中文:
-实例 依赖函数类型.seminormedGroup
-  签名: : 半赋范群 (对任意 i, G i) where
-  定义体: ↑(Finset.univ.sup fun b => ‖f b‖₊)
-  dist_eq x y :=
-congr_arg (toReal : Real>=0 -> Real)
-congr_arg (Finset.sup Finset.univ) funext fun a =>
-        show nndist (x a) (y a) = ‖(x a)⁻¹ * y a‖₊ from nndist_eq_nnnorm_inv_mul (x a) (y a)
-
-@[to_additive Pi.norm_def]
-
-Depends on / 依赖: Finset, Finset.univ.sup
+--- 原说明 ---
+Finite product of seminormed groups, using the sup norm.
 -/
-instance Pi.seminormedGroup : SeminormedGroup (forall i, G i) where
+instance Pi.seminormedGroup : SeminormedGroup (∀ i, G i) where
   norm f := ↑(Finset.univ.sup fun b => ‖f b‖₊)
   dist_eq x y :=
-congr_arg (toReal : Real>=0 -> Real)
-congr_arg (Finset.sup Finset.univ) funext fun a =>
+    congr_arg (toReal : ℝ≥0 → ℝ) <|
+      congr_arg (Finset.sup Finset.univ) <| funext fun a =>
         show nndist (x a) (y a) = ‖(x a)⁻¹ * y a‖₊ from nndist_eq_nnnorm_inv_mul (x a) (y a)
 
 @[to_additive Pi.norm_def]
-/--
-lemma `Pi.norm_def'` / 引理 `Pi.norm_def'`
-
-English:
-lemma Pi.norm_def'
-  statement: ‖f‖ = ↑(Finset.univ.sup fun b => ‖f b‖₊)
-  proof: rfl
-
-@[to_additive Pi.nnnorm_def]
-
-中文:
-引理 依赖函数类型.norm_def'
-  结论: ‖f‖ = ↑(有限集.univ.上确界 fun b => ‖f b‖₊)
-  证明: rfl
-
-@[to_additive Pi.nnnorm_def]
+/-
+**Pi.norm_def'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.norm_def' : ‖f‖ = ↑(Finset.univ.sup fun b => ‖f b‖₊)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Pi.norm_def' : ‖f‖ = ↑(Finset.univ.sup fun b => ‖f b‖₊) := rfl
 
 @[to_additive Pi.nnnorm_def]
-/--
-lemma `Pi.nnnorm_def'` / 引理 `Pi.nnnorm_def'`
-
-English:
-lemma Pi.nnnorm_def'
-  statement: ‖f‖₊ = Finset.univ.sup fun b => ‖f b‖₊
-  proof: Subtype.eta _ _
-
-中文:
-引理 依赖函数类型.nnnorm_def'
-  结论: ‖f‖₊ = 有限集.univ.上确界 fun b => ‖f b‖₊
-  证明: Subtype.eta _ _
-
-Depends on / 依赖: Subtype, Subtype.eta
+/-
+**Pi.nnnorm_def'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.nnnorm_def' : ‖f‖₊ = Finset.univ.sup fun b => ‖f b‖₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.eta`：∀ {α : Sort u} {p : α → Prop} (a : { x // p x }) (h : p ↑a)
+, ⟨↑a, h⟩ = a
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
 -/
 lemma Pi.nnnorm_def' : ‖f‖₊ = Finset.univ.sup fun b => ‖f b‖₊ := Subtype.eta _ _
 
@@ -1220,338 +683,226 @@ lemma Pi.nnnorm_def' : ‖f‖₊ = Finset.univ.sup fun b => ‖f b‖₊ := Sub
 component is. -/
 @[to_additive pi_norm_le_iff_of_nonneg /-- The seminorm of an element in a product space is `≤ r` if
 and only if the norm of each component is. -/]
-/--
-lemma `pi_norm_le_iff_of_nonneg'` / 引理 `pi_norm_le_iff_of_nonneg'`
-
-English:
-lemma pi_norm_le_iff_of_nonneg'
-  given: (hr : 0 <= r)
-  statement: ‖x‖ <= r ↔ forall i, ‖x i‖ <= r
-  proof: by
-  simp only [← dist_one_right, dist_pi_le_iff hr, Pi.one_apply]
-
-@[to_additive pi_nnnorm_le_iff]
-
-中文:
-引理 pi_norm_le_iff_of_nonneg'
-  条件: (hr : 0 <= r)
-  结论: ‖x‖ <= r ↔ 对任意 i, ‖x i‖ <= r
-  证明: by
-  simp only [← dist_one_right, dist_pi_le_iff hr, Pi.one_apply]
-
-@[to_additive pi_nnnorm_le_iff]
-
-Depends on / 依赖: Pi.one_apply, dist_one_right, dist_pi_le_iff, one_apply
+/-
+**pi_norm_le_iff_of_nonneg'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_norm_le_iff_of_nonneg' (hr : 0 <= r) : ‖x‖ <= r ↔ forall i, ‖x i‖ <= r
+参数：hr : 0 <= r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `dist_pi_le_iff`：dist_pi_le_iff {f g : forall b, X b} {r : Real} (hr : 0 
+<= r) : dist f g <= r ↔ forall b, dist (f b) (g b) <= r
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma pi_norm_le_iff_of_nonneg' (hr : 0 <= r) : ‖x‖ <= r ↔ forall i, ‖x i‖ <= r := by
+lemma pi_norm_le_iff_of_nonneg' (hr : 0 ≤ r) : ‖x‖ ≤ r ↔ ∀ i, ‖x i‖ ≤ r := by
   simp only [← dist_one_right, dist_pi_le_iff hr, Pi.one_apply]
 
 @[to_additive pi_nnnorm_le_iff]
-/--
-lemma `pi_nnnorm_le_iff'` / 引理 `pi_nnnorm_le_iff'`
-
-English:
-lemma pi_nnnorm_le_iff'
-  given: {r : Real>=0}
-  statement: ‖x‖₊ <= r ↔ forall i, ‖x i‖₊ <= r
-  proof: pi_norm_le_iff_of_nonneg' r.coe_nonneg
-
-@[to_additive pi_norm_le_iff_of_nonempty]
-
-中文:
-引理 pi_nnnorm_le_iff'
-  条件: {r : 实数>=0}
-  结论: ‖x‖₊ <= r ↔ 对任意 i, ‖x i‖₊ <= r
-  证明: pi_norm_le_iff_of_nonneg' r.coe_nonneg
-
-@[to_additive pi_norm_le_iff_of_nonempty]
-
-Depends on / 依赖: coe_nonneg, pi_norm_le_iff_of_nonneg, r.coe_nonneg
+/-
+**pi_nnnorm_le_iff'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_nnnorm_le_iff' {r : Real>=0} : ‖x‖₊ <= r ↔ forall i, ‖x i‖₊ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pi_norm_le_iff_of_nonneg'`：pi_norm_le_iff_of_nonneg' (hr : 0 <= r) : ‖x‖
+ <= r ↔ forall i, ‖x i‖ <= r
+· 使用定理 `NNReal.coe_nonneg`：∀ (r : NNReal), 0 ≤ ↑r
 -/
-lemma pi_nnnorm_le_iff' {r : Real>=0} : ‖x‖₊ <= r ↔ forall i, ‖x i‖₊ <= r :=
+lemma pi_nnnorm_le_iff' {r : ℝ≥0} : ‖x‖₊ ≤ r ↔ ∀ i, ‖x i‖₊ ≤ r :=
   pi_norm_le_iff_of_nonneg' r.coe_nonneg
 
 @[to_additive pi_norm_le_iff_of_nonempty]
-/--
-lemma `pi_norm_le_iff_of_nonempty'` / 引理 `pi_norm_le_iff_of_nonempty'`
-
-English:
-lemma pi_norm_le_iff_of_nonempty'
-  given: [Nonempty ι]
-  statement: ‖f‖ <= r ↔ forall b, ‖f b‖ <= r
-  proof: by
-  by_cases hr : 0 <= r
-  · exact pi_norm_le_iff_of_nonneg' hr
-  · exact
-      iff_of_false (fun h => hr <| (norm_nonneg' _).trans h) fun h =>
-hr (norm_nonneg' _).trans h Classical.arbitrary _
-
-中文:
-引理 pi_norm_le_iff_of_nonempty'
-  条件: [非空 ι]
-  结论: ‖f‖ <= r ↔ 对任意 b, ‖f b‖ <= r
-  证明: by
-  by_cases hr : 0 <= r
-  · exact pi_norm_le_iff_of_nonneg' hr
-  · exact
-      iff_of_false (fun h => hr <| (norm_nonneg' _).trans h) fun h =>
-hr (norm_nonneg' _).trans h Classical.arbitrary _
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, iff_of_false, norm_nonneg, pi_norm_le_iff_of_nonneg
+/-
+**pi_norm_le_iff_of_nonempty'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_norm_le_iff_of_nonempty' [Nonempty ι] : ‖f‖ <= r ↔ forall b, ‖f b‖ <= r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pi_norm_le_iff_of_nonneg'`：pi_norm_le_iff_of_nonneg' (hr : 0 <= r) : ‖x‖
+ <= r ↔ forall i, ‖x i‖ <= r
+· 使用定理 `iff_of_false`：∀ {a b : Prop}, ¬a → ¬b → (a ↔ b)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
 -/
-lemma pi_norm_le_iff_of_nonempty' [Nonempty ι] : ‖f‖ <= r ↔ forall b, ‖f b‖ <= r := by
-  by_cases hr : 0 <= r
+lemma pi_norm_le_iff_of_nonempty' [Nonempty ι] : ‖f‖ ≤ r ↔ ∀ b, ‖f b‖ ≤ r := by
+  by_cases hr : 0 ≤ r
   · exact pi_norm_le_iff_of_nonneg' hr
   · exact
       iff_of_false (fun h => hr <| (norm_nonneg' _).trans h) fun h =>
-hr (norm_nonneg' _).trans h Classical.arbitrary _
+        hr <| (norm_nonneg' _).trans <| h <| Classical.arbitrary _
 
 /-- The seminorm of an element in a product space is `< r` if and only if the norm of each
 component is. -/
 @[to_additive pi_norm_lt_iff /-- The seminorm of an element in a product space is `< r` if and only
 if the norm of each component is. -/]
-/--
-lemma `pi_norm_lt_iff'` / 引理 `pi_norm_lt_iff'`
-
-English:
-lemma pi_norm_lt_iff'
-  given: (hr : 0 < r)
-  statement: ‖x‖ < r ↔ forall i, ‖x i‖ < r
-  proof: by
-  simp only [← dist_one_right, dist_pi_lt_iff hr, Pi.one_apply]
-
-@[to_additive pi_nnnorm_lt_iff]
-
-中文:
-引理 pi_norm_lt_iff'
-  条件: (hr : 0 < r)
-  结论: ‖x‖ < r ↔ 对任意 i, ‖x i‖ < r
-  证明: by
-  simp only [← dist_one_right, dist_pi_lt_iff hr, Pi.one_apply]
-
-@[to_additive pi_nnnorm_lt_iff]
-
-Depends on / 依赖: Pi.one_apply, dist_one_right, dist_pi_lt_iff, one_apply
+/-
+**pi_norm_lt_iff'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_norm_lt_iff' (hr : 0 < r) : ‖x‖ < r ↔ forall i, ‖x i‖ < r
+参数：hr : 0 < r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `dist_pi_lt_iff`：dist_pi_lt_iff {f g : forall b, X b} {r : Real} (hr : 0 
+< r) : dist f g < r ↔ forall b, dist (f b) (g b) < r
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma pi_norm_lt_iff' (hr : 0 < r) : ‖x‖ < r ↔ forall i, ‖x i‖ < r := by
+lemma pi_norm_lt_iff' (hr : 0 < r) : ‖x‖ < r ↔ ∀ i, ‖x i‖ < r := by
   simp only [← dist_one_right, dist_pi_lt_iff hr, Pi.one_apply]
 
 @[to_additive pi_nnnorm_lt_iff]
-/--
-lemma `pi_nnnorm_lt_iff'` / 引理 `pi_nnnorm_lt_iff'`
-
-English:
-lemma pi_nnnorm_lt_iff'
-  given: {r : Real>=0} (hr : 0 < r)
-  statement: ‖x‖₊ < r ↔ forall i, ‖x i‖₊ < r
-  proof: pi_norm_lt_iff' hr
-
-@[to_additive norm_le_pi_norm]
-
-中文:
-引理 pi_nnnorm_lt_iff'
-  条件: {r : 实数>=0} (hr : 0 < r)
-  结论: ‖x‖₊ < r ↔ 对任意 i, ‖x i‖₊ < r
-  证明: pi_norm_lt_iff' hr
-
-@[to_additive norm_le_pi_norm]
-
-Depends on / 依赖: pi_norm_lt_iff
+/-
+**pi_nnnorm_lt_iff'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_nnnorm_lt_iff' {r : Real>=0} (hr : 0 < r) : ‖x‖₊ < r ↔ forall i, ‖x i‖₊
+ < r
+参数：hr : 0 < r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pi_norm_lt_iff'`：pi_norm_lt_iff' (hr : 0 < r) : ‖x‖ < r ↔ forall i, ‖x i
+‖ < r
 -/
-lemma pi_nnnorm_lt_iff' {r : Real>=0} (hr : 0 < r) : ‖x‖₊ < r ↔ forall i, ‖x i‖₊ < r :=
+lemma pi_nnnorm_lt_iff' {r : ℝ≥0} (hr : 0 < r) : ‖x‖₊ < r ↔ ∀ i, ‖x i‖₊ < r :=
   pi_norm_lt_iff' hr
 
 @[to_additive norm_le_pi_norm]
-/--
-lemma `norm_le_pi_norm'` / 引理 `norm_le_pi_norm'`
-
-English:
-lemma norm_le_pi_norm'
-  given: (i : ι)
-  statement: ‖f i‖ <= ‖f‖
-  proof: (pi_norm_le_iff_of_nonneg' <| norm_nonneg' _).1 le_rfl i
-
-@[to_additive nnnorm_le_pi_nnnorm]
-
-中文:
-引理 norm_le_pi_norm'
-  条件: (i : ι)
-  结论: ‖f i‖ <= ‖f‖
-  证明: (pi_norm_le_iff_of_nonneg' <| norm_nonneg' _).1 le_rfl i
-
-@[to_additive nnnorm_le_pi_nnnorm]
-
-Depends on / 依赖: le_rfl, norm_nonneg, pi_norm_le_iff_of_nonneg
+/-
+**norm_le_pi_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：norm_le_pi_norm' (i : ι) : ‖f i‖ <= ‖f‖
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `pi_norm_le_iff_of_nonneg'`：pi_norm_le_iff_of_nonneg' (hr : 0 <= r) : ‖x‖
+ <= r ↔ forall i, ‖x i‖ <= r
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma norm_le_pi_norm' (i : ι) : ‖f i‖ <= ‖f‖ :=
+lemma norm_le_pi_norm' (i : ι) : ‖f i‖ ≤ ‖f‖ :=
   (pi_norm_le_iff_of_nonneg' <| norm_nonneg' _).1 le_rfl i
 
 @[to_additive nnnorm_le_pi_nnnorm]
-/--
-lemma `nnnorm_le_pi_nnnorm'` / 引理 `nnnorm_le_pi_nnnorm'`
-
-English:
-lemma nnnorm_le_pi_nnnorm'
-  given: (i : ι)
-  statement: ‖f i‖₊ <= ‖f‖₊
-  proof: norm_le_pi_norm' _ i
-
-@[to_additive pi_norm_const_le]
-
-中文:
-引理 nnnorm_le_pi_nnnorm'
-  条件: (i : ι)
-  结论: ‖f i‖₊ <= ‖f‖₊
-  证明: norm_le_pi_norm' _ i
-
-@[to_additive pi_norm_const_le]
-
-Depends on / 依赖: norm_le_pi_norm
+/-
+**nnnorm_le_pi_nnnorm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nnnorm_le_pi_nnnorm' (i : ι) : ‖f i‖₊ <= ‖f‖₊
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `norm_le_pi_norm'`：norm_le_pi_norm' (i : ι) : ‖f i‖ <= ‖f‖
 -/
-lemma nnnorm_le_pi_nnnorm' (i : ι) : ‖f i‖₊ <= ‖f‖₊ :=
+lemma nnnorm_le_pi_nnnorm' (i : ι) : ‖f i‖₊ ≤ ‖f‖₊ :=
   norm_le_pi_norm' _ i
 
 @[to_additive pi_norm_const_le]
-/--
-lemma `pi_norm_const_le'` / 引理 `pi_norm_const_le'`
-
-English:
-lemma pi_norm_const_le'
-  given: (a : E)
-  statement: ‖fun _ : ι => a‖ <= ‖a‖
-  proof: (pi_norm_le_iff_of_nonneg' <| norm_nonneg' _).2 fun _ => le_rfl
-
-@[to_additive pi_nnnorm_const_le]
-
-中文:
-引理 pi_norm_const_le'
-  条件: (a : E)
-  结论: ‖fun _ : ι => a‖ <= ‖a‖
-  证明: (pi_norm_le_iff_of_nonneg' <| norm_nonneg' _).2 fun _ => le_rfl
-
-@[to_additive pi_nnnorm_const_le]
-
-Depends on / 依赖: le_rfl, norm_nonneg, pi_norm_le_iff_of_nonneg
+/-
+**pi_norm_const_le'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_norm_const_le' (a : E) : ‖fun _ : ι => a‖ <= ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `pi_norm_le_iff_of_nonneg'`：pi_norm_le_iff_of_nonneg' (hr : 0 <= r) : ‖x‖
+ <= r ↔ forall i, ‖x i‖ <= r
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma pi_norm_const_le' (a : E) : ‖fun _ : ι => a‖ <= ‖a‖ :=
+lemma pi_norm_const_le' (a : E) : ‖fun _ : ι => a‖ ≤ ‖a‖ :=
   (pi_norm_le_iff_of_nonneg' <| norm_nonneg' _).2 fun _ => le_rfl
 
 @[to_additive pi_nnnorm_const_le]
-/--
-lemma `pi_nnnorm_const_le'` / 引理 `pi_nnnorm_const_le'`
-
-English:
-lemma pi_nnnorm_const_le'
-  given: (a : E)
-  statement: ‖fun _ : ι => a‖₊ <= ‖a‖₊
-  proof: pi_norm_const_le' _
-
-@[to_additive (attr := simp) pi_norm_const]
-
-中文:
-引理 pi_nnnorm_const_le'
-  条件: (a : E)
-  结论: ‖fun _ : ι => a‖₊ <= ‖a‖₊
-  证明: pi_norm_const_le' _
-
-@[to_additive (attr := simp) pi_norm_const]
-
-Depends on / 依赖: pi_norm_const_le
+/-
+**pi_nnnorm_const_le'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_nnnorm_const_le' (a : E) : ‖fun _ : ι => a‖₊ <= ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `pi_norm_const_le'`：pi_norm_const_le' (a : E) : ‖fun _ : ι => a‖ <= ‖a‖
 -/
-lemma pi_nnnorm_const_le' (a : E) : ‖fun _ : ι => a‖₊ <= ‖a‖₊ :=
+lemma pi_nnnorm_const_le' (a : E) : ‖fun _ : ι => a‖₊ ≤ ‖a‖₊ :=
   pi_norm_const_le' _
 
 @[to_additive (attr := simp) pi_norm_const]
-/--
-lemma `pi_norm_const'` / 引理 `pi_norm_const'`
-
-English:
-lemma pi_norm_const'
-  given: [Nonempty ι] (a : E)
-  statement: ‖fun _i : ι => a‖ = ‖a‖
-  proof: by
-  simpa only [← dist_one_right] using! dist_pi_const a 1
-
-@[to_additive (attr := simp) pi_nnnorm_const]
-
-中文:
-引理 pi_norm_const'
-  条件: [非空 ι] (a : E)
-  结论: ‖fun _i : ι => a‖ = ‖a‖
-  证明: by
-  simpa only [← dist_one_right] using! dist_pi_const a 1
-
-@[to_additive (attr := simp) pi_nnnorm_const]
-
-Depends on / 依赖: dist_one_right, dist_pi_const
+/-
+**pi_norm_const'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_norm_const' [Nonempty ι] (a : E) : ‖fun _i : ι => a‖ = ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `dist_pi_const`：dist_pi_const [Nonempty β] (a b : α) : (dist (fun _ : β =
+> a) fun _ => b) = dist a b
 -/
 lemma pi_norm_const' [Nonempty ι] (a : E) : ‖fun _i : ι => a‖ = ‖a‖ := by
   simpa only [← dist_one_right] using! dist_pi_const a 1
 
 @[to_additive (attr := simp) pi_nnnorm_const]
-/--
-lemma `pi_nnnorm_const'` / 引理 `pi_nnnorm_const'`
-
-English:
-lemma pi_nnnorm_const'
-  given: [Nonempty ι] (a : E)
-  statement: ‖fun _i : ι => a‖₊ = ‖a‖₊
-  proof: NNReal.eq pi_norm_const' a
-
-@[to_additive pi_norm_comp_le]
-
-中文:
-引理 pi_nnnorm_const'
-  条件: [非空 ι] (a : E)
-  结论: ‖fun _i : ι => a‖₊ = ‖a‖₊
-  证明: NNReal.eq pi_norm_const' a
-
-@[to_additive pi_norm_comp_le]
-
-Depends on / 依赖: NNReal, NNReal.eq, pi_norm_const
+/-
+**pi_nnnorm_const'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_nnnorm_const' [Nonempty ι] (a : E) : ‖fun _i : ι => a‖₊ = ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用引理 `pi_norm_const'`：pi_norm_const' [Nonempty ι] (a : E) : ‖fun _i : ι => a‖ 
+= ‖a‖
 -/
 lemma pi_nnnorm_const' [Nonempty ι] (a : E) : ‖fun _i : ι => a‖₊ = ‖a‖₊ :=
-NNReal.eq pi_norm_const' a
+  NNReal.eq <| pi_norm_const' a
 
 @[to_additive pi_norm_comp_le]
-/--
-lemma `pi_norm_comp_le'` / 引理 `pi_norm_comp_le'`
-
-English:
-lemma pi_norm_comp_le'
-  given: [Fintype F] (g : ι -> E) (f : F -> ι)
-  statement: ‖g ∘ f‖ <= ‖g‖
-  proof: by
-  rw [pi_norm_le_iff_of_nonneg' (by positivity)]
-  exact fun x => norm_le_pi_norm' g (f x)
-
-@[to_additive IsGreatest.pi_norm]
-
-中文:
-引理 pi_norm_comp_le'
-  条件: [有限类型 F] (g : ι -> E) (f : F -> ι)
-  结论: ‖g ∘ f‖ <= ‖g‖
-  证明: by
-  rw [pi_norm_le_iff_of_nonneg' (by positivity)]
-  exact fun x => norm_le_pi_norm' g (f x)
-
-@[to_additive IsGreatest.pi_norm]
-
-Depends on / 依赖: norm_le_pi_norm, pi_norm_le_iff_of_nonneg
+/-
+**pi_norm_comp_le'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pi_norm_comp_le' [Fintype F] (g : ι -> E) (f : F -> ι) : ‖g ∘ f‖ <= ‖g‖
+参数：g : ι -> E；f : F -> ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pi_norm_le_iff_of_nonneg'`：pi_norm_le_iff_of_nonneg' (hr : 0 <= r) : ‖x‖
+ <= r ↔ forall i, ‖x i‖ <= r
+· 使用定理 `norm_nonneg'`：norm_nonneg' (a : E) : 0 <= ‖a‖
+· 使用引理 `norm_le_pi_norm'`：norm_le_pi_norm' (i : ι) : ‖f i‖ <= ‖f‖
 -/
-lemma pi_norm_comp_le' [Fintype F] (g : ι -> E) (f : F -> ι) : ‖g ∘ f‖ <= ‖g‖ := by
+lemma pi_norm_comp_le' [Fintype F] (g : ι → E) (f : F → ι) : ‖g ∘ f‖ ≤ ‖g‖ := by
   rw [pi_norm_le_iff_of_nonneg' (by positivity)]
-  exact fun x => norm_le_pi_norm' g (f x)
+  exact fun x ↦ norm_le_pi_norm' g (f x)
 
 @[to_additive IsGreatest.pi_norm]
-/--
-lemma `IsGreatest.pi_norm'` / 引理 `IsGreatest.pi_norm'`
-
-English:
-lemma IsGreatest.pi_norm'
-  given: [Nonempty ι] (f : ι -> E)
-  statement: IsGreatest (Set.range (‖f ·‖)) ‖f‖
-  proof: by
+/-
+**IsGreatest.pi_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsGreatest.pi_norm' [Nonempty ι] (f : ι -> E) : IsGreatest (Set.range (‖f 
+·‖)) ‖f‖
+参数：f : ι -> E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Pi.norm_def'`：Pi.norm_def' : ‖f‖ = ↑(Finset.univ.sup fun b => ‖f b‖₊)
+· 使用定理 `Finset.exists_mem_eq_sup`：exists_mem_eq_sup [OrderBot α] (s : Finset ι) 
+(h : s.Nonempty) (f : ι -> α) : exists i, i in s ∧ s.sup f = f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `norm_le_pi_norm'`：norm_le_pi_norm' (i : ι) : ‖f i‖ <= ‖f‖
+-/
+lemma IsGreatest.pi_norm' [Nonempty ι] (f : ι → E) : IsGreatest (Set.range (‖f ·‖)) ‖f‖ := by
   constructor
   · rw [Pi.norm_def' f]
     obtain ⟨x, -, hx⟩ := (Finset.univ (α := ι)).exists_mem_eq_sup (by simp) (‖f ·‖₊)
@@ -1560,63 +911,37 @@ lemma IsGreatest.pi_norm'
     exact norm_le_pi_norm' f x
 
 @[to_additive Function.Surjective.pi_norm_comp]
-
-中文:
-引理 IsGreatest.pi_norm'
-  条件: [非空 ι] (f : ι -> E)
-  结论: IsGreatest (集合.range (‖f ·‖)) ‖f‖
-  证明: by
-  constructor
-  · rw [Pi.norm_def' f]
-    obtain ⟨x, -, hx⟩ := (Finset.univ (α := ι)).exists_mem_eq_sup (by simp) (‖f ·‖₊)
-    simp [hx]
-  · rintro - ⟨x, rfl⟩
-    exact norm_le_pi_norm' f x
-
-@[to_additive Function.Surjective.pi_norm_comp]
-
-Depends on / 依赖: Finset, Finset.univ, Pi.norm_def, exists_mem_eq_sup, norm_def, norm_le_pi_norm
+/-
+**Function.Surjective.pi_norm_comp'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Surjective.pi_norm_comp' [Fintype F] {f : ι -> F} (hf : Function.
+Surjective f) (g : F -> E) : ‖g ∘ f‖ = ‖g‖
+参数：hf : Function.Surjective f；g : F -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `Function.isEmpty`：∀ {α : Sort u} {β : Sort v} [IsEmpty β] (f : α → β), I
+sEmpty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `norm_one'`：norm_one' : ‖(1 : E)‖ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `pi_norm_comp_le'`：pi_norm_comp_le' [Fintype F] (g : ι -> E) (f : F -> ι)
+ : ‖g ∘ f‖ <= ‖g‖
+· 使用引理 `IsGreatest.pi_norm'`：IsGreatest.pi_norm' [Nonempty ι] (f : ι -> E) : IsG
+reatest (Set.range (‖f ·‖)) ‖f‖
+· 使用引理 `norm_le_pi_norm'`：norm_le_pi_norm' (i : ι) : ‖f i‖ <= ‖f‖
 -/
-lemma IsGreatest.pi_norm' [Nonempty ι] (f : ι -> E) : IsGreatest (Set.range (‖f ·‖)) ‖f‖ := by
-  constructor
-  · rw [Pi.norm_def' f]
-    obtain ⟨x, -, hx⟩ := (Finset.univ (α := ι)).exists_mem_eq_sup (by simp) (‖f ·‖₊)
-    simp [hx]
-  · rintro - ⟨x, rfl⟩
-    exact norm_le_pi_norm' f x
-
-@[to_additive Function.Surjective.pi_norm_comp]
-/--
-lemma `Function.Surjective.pi_norm_comp'` / 引理 `Function.Surjective.pi_norm_comp'`
-
-English:
-lemma Function.Surjective.pi_norm_comp'
-  statement: [Fintype F] {f : ι -> F} (hf : Function.Surjective f)
-  proof: by
-  obtain (h | h) := isEmpty_or_nonempty F
-  · have : IsEmpty ι := f.isEmpty
-    simp [Subsingleton.elim g 1]
-  apply le_antisymm (pi_norm_comp_le' g f)
-  obtain ⟨⟨x, h⟩, -⟩ := IsGreatest.pi_norm' g
-  obtain ⟨y, rfl⟩ := hf x
-  exact h ▸ norm_le_pi_norm' (g ∘ f) y
-
-中文:
-引理 函数.满射.pi_norm_comp'
-  结论: [有限类型 F] {f : ι -> F} (hf : 函数.满射 f)
-  证明: by
-  obtain (h | h) := isEmpty_or_nonempty F
-  · have : IsEmpty ι := f.isEmpty
-    simp [Subsingleton.elim g 1]
-  apply le_antisymm (pi_norm_comp_le' g f)
-  obtain ⟨⟨x, h⟩, -⟩ := IsGreatest.pi_norm' g
-  obtain ⟨y, rfl⟩ := hf x
-  exact h ▸ norm_le_pi_norm' (g ∘ f) y
-
-Depends on / 依赖: IsEmpty, IsGreatest, IsGreatest.pi_norm, Subsingleton, Subsingleton.elim, f.isEmpty, isEmpty, isEmpty_or_nonempty, le_antisymm, norm_le_pi_norm, pi_norm, pi_norm_comp_le
--/
-lemma Function.Surjective.pi_norm_comp' [Fintype F] {f : ι -> F} (hf : Function.Surjective f)
-    (g : F -> E) : ‖g ∘ f‖ = ‖g‖ := by
+lemma Function.Surjective.pi_norm_comp' [Fintype F] {f : ι → F} (hf : Function.Surjective f)
+    (g : F → E) : ‖g ∘ f‖ = ‖g‖ := by
   obtain (h | h) := isEmpty_or_nonempty F
   · have : IsEmpty ι := f.isEmpty
     simp [Subsingleton.elim g 1]
@@ -1628,188 +953,177 @@ lemma Function.Surjective.pi_norm_comp' [Fintype F] {f : ι -> F} (hf : Function
 /-- The $L^1$ norm is less than the $L^\infty$ norm scaled by the cardinality. -/
 @[to_additive Pi.sum_norm_apply_le_norm /-- The $L^1$ norm is less than the $L^\infty$ norm scaled
 by the cardinality. -/]
-/--
-lemma `Pi.sum_norm_apply_le_norm'` / 引理 `Pi.sum_norm_apply_le_norm'`
-
-English:
-lemma Pi.sum_norm_apply_le_norm'
-  statement: ∑ i, ‖f i‖ <= Fintype.card ι • ‖f‖
-  proof: Finset.sum_le_card_nsmul _ _ _ fun i _hi => norm_le_pi_norm' _ i
-
-中文:
-引理 依赖函数类型.sum_norm_apply_le_norm'
-  结论: ∑ i, ‖f i‖ <= 有限类型.card ι • ‖f‖
-  证明: Finset.sum_le_card_nsmul _ _ _ fun i _hi => norm_le_pi_norm' _ i
-
-Depends on / 依赖: Finset, Finset.sum_le_card_nsmul, norm_le_pi_norm, sum_le_card_nsmul
+/-
+**Pi.sum_norm_apply_le_norm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.sum_norm_apply_le_norm' : ∑ i, ‖f i‖ <= Fintype.card ι • ‖f‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_le_card_nsmul`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCom
+mMonoid N] [inst_1 : Preorder N] [AddLeftMono N] (s : Finset ι)   (f : ι → N) (n
+ : N), (∀ x ∈ …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `norm_le_pi_norm'`：norm_le_pi_norm' (i : ι) : ‖f i‖ <= ‖f‖
 -/
-lemma Pi.sum_norm_apply_le_norm' : ∑ i, ‖f i‖ <= Fintype.card ι • ‖f‖ :=
+lemma Pi.sum_norm_apply_le_norm' : ∑ i, ‖f i‖ ≤ Fintype.card ι • ‖f‖ :=
   Finset.sum_le_card_nsmul _ _ _ fun i _hi => norm_le_pi_norm' _ i
 
 /-- The $L^1$ norm is less than the $L^\infty$ norm scaled by the cardinality. -/
 @[to_additive Pi.sum_nnnorm_apply_le_nnnorm /-- The $L^1$ norm is less than the $L^\infty$ norm
 scaled by the cardinality. -/]
-/--
-lemma `Pi.sum_nnnorm_apply_le_nnnorm'` / 引理 `Pi.sum_nnnorm_apply_le_nnnorm'`
-
-English:
-lemma Pi.sum_nnnorm_apply_le_nnnorm'
-  statement: ∑ i, ‖f i‖₊ <= Fintype.card ι • ‖f‖₊
-  proof: (NNReal.coe_sum ..).trans_le Pi.sum_norm_apply_le_norm' _
-
-中文:
-引理 依赖函数类型.sum_nnnorm_apply_le_nnnorm'
-  结论: ∑ i, ‖f i‖₊ <= 有限类型.card ι • ‖f‖₊
-  证明: (NNReal.coe_sum ..).trans_le Pi.sum_norm_apply_le_norm' _
-
-Depends on / 依赖: NNReal, NNReal.coe_sum, Pi.sum_norm_apply_le_norm, coe_sum, sum_norm_apply_le_norm, trans_le
+/-
+**Pi.sum_nnnorm_apply_le_nnnorm'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.sum_nnnorm_apply_le_nnnorm' : ∑ i, ‖f i‖₊ <= Fintype.card ι • ‖f‖₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `NNReal.coe_sum`：coe_sum (s : Finset ι) (f : ι -> Real>=0) : ∑ i in s, f 
+i = ∑ i in s, (f i : Real)
+· 使用引理 `Pi.sum_norm_apply_le_norm'`：Pi.sum_norm_apply_le_norm' : ∑ i, ‖f i‖ <= F
+intype.card ι • ‖f‖
 -/
-lemma Pi.sum_nnnorm_apply_le_nnnorm' : ∑ i, ‖f i‖₊ <= Fintype.card ι • ‖f‖₊ :=
-(NNReal.coe_sum ..).trans_le Pi.sum_norm_apply_le_norm' _
+lemma Pi.sum_nnnorm_apply_le_nnnorm' : ∑ i, ‖f i‖₊ ≤ Fintype.card ι • ‖f‖₊ :=
+  (NNReal.coe_sum ..).trans_le <| Pi.sum_norm_apply_le_norm' _
 
 end SeminormedGroup
 
 /-- Finite product of seminormed groups, using the sup norm. -/
 @[to_additive /-- Finite product of seminormed groups, using the sup norm. -/]
-/--
-Instance `Pi.seminormedCommGroup` / 实例 `Pi.seminormedCommGroup`
+/-
+**Pi.seminormedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.seminormedCommGroup [forall i, SeminormedCommGroup (G i)] : SeminormedC
+ommGroup (forall i, G i)
+参数：G i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Pi.seminormedCommGroup
-  signature: [forall i, SeminormedCommGroup (G i)]
-  body: { Pi.seminormedGroup with
-    mul_comm := mul_comm }
-
-中文:
-实例 依赖函数类型.seminormedCommGroup
-  签名: [对任意 i, SeminormedComm群 (G i)]
-  定义体: { Pi.seminormedGroup with
-    mul_comm := mul_comm }
-
-Depends on / 依赖: Pi.seminormedGroup, mul_comm, seminormedGroup
+--- 原说明 ---
+Finite product of seminormed groups, using the sup norm.
 -/
-instance Pi.seminormedCommGroup [forall i, SeminormedCommGroup (G i)] : SeminormedCommGroup (forall i, G i) :=
+instance Pi.seminormedCommGroup [∀ i, SeminormedCommGroup (G i)] : SeminormedCommGroup (∀ i, G i) :=
   { Pi.seminormedGroup with
     mul_comm := mul_comm }
 
 /-- Finite product of normed groups, using the sup norm. -/
 @[to_additive /-- Finite product of seminormed groups, using the sup norm. -/]
-/--
-Instance `Pi.normedGroup` / 实例 `Pi.normedGroup`
+/-
+**Pi.normedGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.normedGroup [forall i, NormedGroup (G i)] : NormedGroup (forall i, G i)
+参数：G i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Pi.normedGroup
-  signature: [forall i, NormedGroup (G i)]
-  body: { Pi.seminormedGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 依赖函数类型.normedGroup
-  签名: [对任意 i, 赋范群 (G i)]
-  定义体: { Pi.seminormedGroup with
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Pi.seminormedGroup, eq_of_dist_eq_zero, seminormedGroup
+--- 原说明 ---
+Finite product of normed groups, using the sup norm.
 -/
-instance Pi.normedGroup [forall i, NormedGroup (G i)] : NormedGroup (forall i, G i) :=
+instance Pi.normedGroup [∀ i, NormedGroup (G i)] : NormedGroup (∀ i, G i) :=
   { Pi.seminormedGroup with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 /-- Finite product of normed groups, using the sup norm. -/
 @[to_additive /-- Finite product of seminormed groups, using the sup norm. -/]
-/--
-Instance `Pi.normedCommGroup` / 实例 `Pi.normedCommGroup`
+/-
+**Pi.normedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.normedCommGroup [forall i, NormedCommGroup (G i)] : NormedCommGroup (fo
+rall i, G i)
+参数：G i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Pi.normedCommGroup
-  signature: [forall i, NormedCommGroup (G i)]
-  body: { Pi.seminormedGroup with
-    mul_comm := mul_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-中文:
-实例 依赖函数类型.normedCommGroup
-  签名: [对任意 i, NormedComm群 (G i)]
-  定义体: { Pi.seminormedGroup with
-    mul_comm := mul_comm
-    eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-Depends on / 依赖: Pi.seminormedGroup, eq_of_dist_eq_zero, mul_comm, seminormedGroup
+--- 原说明 ---
+Finite product of normed groups, using the sup norm.
 -/
-instance Pi.normedCommGroup [forall i, NormedCommGroup (G i)] : NormedCommGroup (forall i, G i) :=
+instance Pi.normedCommGroup [∀ i, NormedCommGroup (G i)] : NormedCommGroup (∀ i, G i) :=
   { Pi.seminormedGroup with
     mul_comm := mul_comm
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
-
-/--
-theorem `Pi.nnnorm_single` / 定理 `Pi.nnnorm_single`
-
-English:
-theorem Pi.nnnorm_single
-  given: [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : ι} (y : G i)
-  proof: by
-  have H : forall b, ‖single i y b‖₊ = single (M := fun _ => Real>=0) i ‖y‖₊ b := by
-    intro b
-    refine Pi.apply_single (fun i (x : G i) => ‖x‖₊) ?_ i y b
-    simp
-  simp [Pi.nnnorm_def, H, Pi.single_apply, Finset.sup_ite, Finset.filter_eq']
-
-中文:
-定理 依赖函数类型.nnnorm_single
-  条件: [DecidableEq ι] [对任意 i, 赋范交换加群 (G i)] {i : ι} (y : G i)
-  证明: by
-  have H : forall b, ‖single i y b‖₊ = single (M := fun _ => Real>=0) i ‖y‖₊ b := by
-    intro b
-    refine Pi.apply_single (fun i (x : G i) => ‖x‖₊) ?_ i y b
-    simp
-  simp [Pi.nnnorm_def, H, Pi.single_apply, Finset.sup_ite, Finset.filter_eq']
-
-Depends on / 依赖: Finset, Finset.filter_eq, Finset.sup_ite, Pi.apply_single, Pi.nnnorm_def, Pi.single_apply, apply_single, filter_eq, nnnorm_def, single, single_apply, sup_ite
+/-
+**Pi.nnnorm_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Pi.nnnorm_single [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i :
+ ι} (y : G i) : ‖Pi.single i y‖₊ = ‖y‖₊
+参数：G i；y : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.apply_single`：∀ {ι : Type u_1} {M : ι → Type u_6} {N : ι → Type u_7} 
+[inst : (i : ι) → Zero (M i)] [inst_1 : (i : ι) → Zero (N i)]   [inst_2 : Decida
+bleEq…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nnnorm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖₊ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Pi.nnnorm_def`：∀ {ι : Type u_1} {G : ι → Type u_4} [inst : Fintype ι] [i
+nst_1 : (i : ι) → SeminormedAddGroup (G i)]   (f : (i : ι) → G i), ‖f‖₊ = Finset
+.un…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Pi.single_apply`：∀ {ι : Type u_1} [inst : DecidableEq ι] {M : Type u_9} 
+[inst_1 : Zero M] (i : ι) (x : M) (i' : ι),   Pi.single i x i' = if i' = i then 
+x els…
+· 使用定理 `Finset.sup_ite`：sup_ite (p : β -> Prop) [DecidablePred p] : (s.sup fun i
+ => ite (p i) (f i) (g i)) = (s.filter p).sup f ⊔ (s.filter fun i => ¬p i).sup g
+· 使用定理 `Finset.filter_eq'`：filter_eq' [DecidableEq β] (s : Finset β) (b : β) : (
+s.filter fun a => a = b) = ite (b in s) {b} ∅
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Finset.sup_singleton`：sup_singleton {b : β} : ({b} : Finset β).sup f = f
+ b
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 -/
-theorem Pi.nnnorm_single [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : ι} (y : G i) :
+theorem Pi.nnnorm_single [DecidableEq ι] [∀ i, NormedAddCommGroup (G i)] {i : ι} (y : G i) :
     ‖Pi.single i y‖₊ = ‖y‖₊ := by
-  have H : forall b, ‖single i y b‖₊ = single (M := fun _ => Real>=0) i ‖y‖₊ b := by
+  have H : ∀ b, ‖single i y b‖₊ = single (M := fun _ ↦ ℝ≥0) i ‖y‖₊ b := by
     intro b
-    refine Pi.apply_single (fun i (x : G i) => ‖x‖₊) ?_ i y b
+    refine Pi.apply_single (fun i (x : G i) ↦ ‖x‖₊) ?_ i y b
     simp
   simp [Pi.nnnorm_def, H, Pi.single_apply, Finset.sup_ite, Finset.filter_eq']
-
-/--
-lemma `Pi.enorm_single` / 引理 `Pi.enorm_single`
-
-English:
-lemma Pi.enorm_single
-  given: [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : ι} (y : G i)
-  proof: by simp [enorm, Pi.nnnorm_single]
-
-中文:
-引理 依赖函数类型.enorm_single
-  条件: [DecidableEq ι] [对任意 i, 赋范交换加群 (G i)] {i : ι} (y : G i)
-  证明: by simp [enorm, Pi.nnnorm_single]
-
-Depends on / 依赖: Pi.nnnorm_single, nnnorm_single
+/-
+**Pi.enorm_single** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.enorm_single [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : 
+ι} (y : G i) : ‖Pi.single i y‖ₑ = ‖y‖ₑ
+参数：G i；y : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.nnnorm_single`：Pi.nnnorm_single [DecidableEq ι] [forall i, NormedAddC
+ommGroup (G i)] {i : ι} (y : G i) : ‖Pi.single i y‖₊ = ‖y‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.enorm_single [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : ι} (y : G i) :
+lemma Pi.enorm_single [DecidableEq ι] [∀ i, NormedAddCommGroup (G i)] {i : ι} (y : G i) :
     ‖Pi.single i y‖ₑ = ‖y‖ₑ := by simp [enorm, Pi.nnnorm_single]
-
-/--
-theorem `Pi.norm_single` / 定理 `Pi.norm_single`
-
-English:
-theorem Pi.norm_single
-  given: [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : ι} (y : G i)
-  proof: congr_arg Subtype.val Pi.nnnorm_single y
-
-中文:
-定理 依赖函数类型.norm_single
-  条件: [DecidableEq ι] [对任意 i, 赋范交换加群 (G i)] {i : ι} (y : G i)
-  证明: congr_arg Subtype.val Pi.nnnorm_single y
-
-Depends on / 依赖: Pi.nnnorm_single, Subtype, Subtype.val, congr_arg, nnnorm_single
+/-
+**Pi.norm_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Pi.norm_single [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : ι
+} (y : G i) : ‖Pi.single i y‖ = ‖y‖
+参数：G i；y : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Pi.nnnorm_single`：Pi.nnnorm_single [DecidableEq ι] [forall i, NormedAddC
+ommGroup (G i)] {i : ι} (y : G i) : ‖Pi.single i y‖₊ = ‖y‖₊
 -/
-theorem Pi.norm_single [DecidableEq ι] [forall i, NormedAddCommGroup (G i)] {i : ι} (y : G i) :
+theorem Pi.norm_single [DecidableEq ι] [∀ i, NormedAddCommGroup (G i)] {i : ι} (y : G i) :
     ‖Pi.single i y‖ = ‖y‖ :=
-congr_arg Subtype.val Pi.nnnorm_single y
+  congr_arg Subtype.val <| Pi.nnnorm_single y
 
 end Pi
 
@@ -1817,156 +1131,99 @@ end Pi
 
 namespace MulOpposite
 
-/--
-Instance `instSeminormedAddGroup` / 实例 `instSeminormedAddGroup`
+/-- The (additive) norm on the multiplicative opposite is the same as the norm on the original type.
 
-English:
-instance instSeminormedAddGroup
-  signature: [SeminormedAddGroup E]
-  body: instPseudoMetricSpace
-  norm x := ‖x.unop‖
-  dist_eq _ _ := dist_eq_norm_neg_add _ _
+Note that we do not provide this more generally as `Norm Eᵐᵒᵖ`, as this is not always a good
+choice of norm in the multiplicative `SeminormedGroup E` case.
 
-中文:
-实例 instSeminormedAddGroup
-  签名: [半赋范加群 E]
-  定义体: instPseudoMetricSpace
-  norm x := ‖x.unop‖
-  dist_eq _ _ := dist_eq_norm_neg_add _ _
+We could repeat this instance to provide a `[SeminormedGroup E] : SeminormedGroup Eᵃᵒᵖ` instance,
+but that case would likely never be used.
+-/
+/-
+**MulOpposite.instSeminormedAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instSeminormedAddGroup [SeminormedAddGroup E] : SeminormedAddGroup Eᵐᵒᵖ wh
+ere __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: instPseudoMetricSpace
+--- 原说明 ---
+The (additive) norm on the multiplicative opposite is the same as the norm on th
+e original type.
+
+Note that we do not provide this more generally as `Norm Eᵐᵒᵖ`, as this is not a
+lways a good
+choice of norm in the multiplicative `SeminormedGroup E` case.
+
+We could repeat this instance to provide a `[SeminormedGroup E] : SeminormedGrou
+p Eᵃᵒᵖ` instance,
+but that case would likely never be used.
 -/
 instance instSeminormedAddGroup [SeminormedAddGroup E] : SeminormedAddGroup Eᵐᵒᵖ where
   __ := instPseudoMetricSpace
   norm x := ‖x.unop‖
   dist_eq _ _ := dist_eq_norm_neg_add _ _
-
-/--
-lemma `norm_op` / 引理 `norm_op`
-
-English:
-lemma norm_op
-  given: [SeminormedAddGroup E] (a : E)
-  statement: ‖MulOpposite.op a‖ = ‖a‖
-  proof: rfl
-
-中文:
-引理 norm_op
-  条件: [半赋范加群 E] (a : E)
-  结论: ‖MulOpposite.op a‖ = ‖a‖
-  证明: rfl
+/-
+**MulOpposite.norm_op** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：norm_op [SeminormedAddGroup E] (a : E) : ‖MulOpposite.op a‖ = ‖a‖
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma norm_op [SeminormedAddGroup E] (a : E) : ‖MulOpposite.op a‖ = ‖a‖ := rfl
-
-/--
-lemma `norm_unop` / 引理 `norm_unop`
-
-English:
-lemma norm_unop
-  given: [SeminormedAddGroup E] (a : Eᵐᵒᵖ)
-  statement: ‖MulOpposite.unop a‖ = ‖a‖
-  proof: rfl
-
-中文:
-引理 norm_unop
-  条件: [半赋范加群 E] (a : Eᵐᵒᵖ)
-  结论: ‖MulOpposite.unop a‖ = ‖a‖
-  证明: rfl
+/-
+**MulOpposite.norm_unop** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：norm_unop [SeminormedAddGroup E] (a : Eᵐᵒᵖ) : ‖MulOpposite.unop a‖ = ‖a‖
+参数：a : Eᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma norm_unop [SeminormedAddGroup E] (a : Eᵐᵒᵖ) : ‖MulOpposite.unop a‖ = ‖a‖ := rfl
-
-/--
-lemma `nnnorm_op` / 引理 `nnnorm_op`
-
-English:
-lemma nnnorm_op
-  given: [SeminormedAddGroup E] (a : E)
-  statement: ‖MulOpposite.op a‖₊ = ‖a‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_op
-  条件: [半赋范加群 E] (a : E)
-  结论: ‖MulOpposite.op a‖₊ = ‖a‖₊
-  证明: rfl
+/-
+**MulOpposite.nnnorm_op** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：nnnorm_op [SeminormedAddGroup E] (a : E) : ‖MulOpposite.op a‖₊ = ‖a‖₊
+参数：a : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma nnnorm_op [SeminormedAddGroup E] (a : E) : ‖MulOpposite.op a‖₊ = ‖a‖₊ := rfl
-
-/--
-lemma `nnnorm_unop` / 引理 `nnnorm_unop`
-
-English:
-lemma nnnorm_unop
-  given: [SeminormedAddGroup E] (a : Eᵐᵒᵖ)
-  statement: ‖MulOpposite.unop a‖₊ = ‖a‖₊
-  proof: rfl
-
-中文:
-引理 nnnorm_unop
-  条件: [半赋范加群 E] (a : Eᵐᵒᵖ)
-  结论: ‖MulOpposite.unop a‖₊ = ‖a‖₊
-  证明: rfl
+/-
+**MulOpposite.nnnorm_unop** 是 Mathlib 中的一个引理，位于命名空间 `MulOpposite`。
+形式化陈述：nnnorm_unop [SeminormedAddGroup E] (a : Eᵐᵒᵖ) : ‖MulOpposite.unop a‖₊ = ‖a
+‖₊
+参数：a : Eᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma nnnorm_unop [SeminormedAddGroup E] (a : Eᵐᵒᵖ) : ‖MulOpposite.unop a‖₊ = ‖a‖₊ := rfl
-
-/--
-Instance `instNormedAddGroup` / 实例 `instNormedAddGroup`
-
-English:
-instance instNormedAddGroup
-  signature: [NormedAddGroup E]
-  body: instMetricSpace
-  __ := instSeminormedAddGroup
-
-中文:
-实例 instNormedAddGroup
-  签名: [赋范加群 E]
-  定义体: instMetricSpace
-  __ := instSeminormedAddGroup
-
-Depends on / 依赖: instMetricSpace
+/-
+**MulOpposite.instNormedAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instNormedAddGroup [NormedAddGroup E] : NormedAddGroup Eᵐᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNormedAddGroup [NormedAddGroup E] : NormedAddGroup Eᵐᵒᵖ where
   __ := instMetricSpace
   __ := instSeminormedAddGroup
-
-/--
-Instance `instSeminormedAddCommGroup` / 实例 `instSeminormedAddCommGroup`
-
-English:
-instance instSeminormedAddCommGroup
-  signature: [SeminormedAddCommGroup E]
-  body: dist_eq_norm_neg_add _ _
-
-中文:
-实例 instSeminormedAddCommGroup
-  签名: [SeminormedAddComm群 E]
-  定义体: dist_eq_norm_neg_add _ _
-
-Depends on / 依赖: dist_eq_norm_neg_add
+/-
+**MulOpposite.instSeminormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`
+。
+形式化陈述：instSeminormedAddCommGroup [SeminormedAddCommGroup E] : SeminormedAddCommG
+roup Eᵐᵒᵖ where dist_eq _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSeminormedAddCommGroup [SeminormedAddCommGroup E] : SeminormedAddCommGroup Eᵐᵒᵖ where
   dist_eq _ _ := dist_eq_norm_neg_add _ _
-
-/--
-Instance `instNormedAddCommGroup` / 实例 `instNormedAddCommGroup`
-
-English:
-instance instNormedAddCommGroup
-  signature: [NormedAddCommGroup E]
-  body: instSeminormedAddCommGroup
-  __ := instNormedAddGroup
-
-中文:
-实例 instNormedAddCommGroup
-  签名: [赋范交换加群 E]
-  定义体: instSeminormedAddCommGroup
-  __ := instNormedAddGroup
-
-Depends on / 依赖: instSeminormedAddCommGroup
+/-
+**MulOpposite.instNormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instNormedAddCommGroup [NormedAddCommGroup E] : NormedAddCommGroup Eᵐᵒᵖ wh
+ere __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNormedAddCommGroup [NormedAddCommGroup E] : NormedAddCommGroup Eᵐᵒᵖ where
   __ := instSeminormedAddCommGroup
   __ := instNormedAddGroup
 
 end MulOpposite
+

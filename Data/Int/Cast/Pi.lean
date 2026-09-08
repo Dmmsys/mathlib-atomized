@@ -24,87 +24,51 @@ assert_not_exists IsOrderedMonoid RingHom
 
 namespace Pi
 
-variable {ι : Type*} {π : ι -> Type*} [forall i, IntCast (π i)]
+variable {ι : Type*} {π : ι → Type*} [∀ i, IntCast (π i)]
 
-/--
-Instance `instIntCast` / 实例 `instIntCast`
-
-English:
-instance instIntCast
-  signature: : IntCast (forall i, π i) where intCast n _
-  body: n
-
-@[simp]
-
-中文:
-实例 inst整数Cast
-  签名: : 整数嵌入 (对任意 i, π i) where intCast n _
-  定义体: n
-
-@[simp]
+/-
+**Pi.instIntCast** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：instIntCast : IntCast (forall i, π i) where intCast n _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instIntCast : IntCast (forall i, π i) where intCast n _ := n
+instance instIntCast : IntCast (∀ i, π i) where intCast n _ := n
 
 @[simp]
-/--
-theorem `intCast_apply` / 定理 `intCast_apply`
-
-English:
-theorem intCast_apply
-  given: (n : Int) (i : ι)
-  statement: (n : forall i, π i) i = n
-  proof: rfl
-
-@[push ←]
-
-中文:
-定理 intCast_apply
-  条件: (n : 整数) (i : ι)
-  结论: (n : 对任意 i, π i) i = n
-  证明: rfl
-
-@[push ←]
+/-
+**Pi.intCast_apply** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：intCast_apply (n : Int) (i : ι) : (n : forall i, π i) i = n
+参数：n : Int；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem intCast_apply (n : Int) (i : ι) : (n : forall i, π i) i = n :=
+theorem intCast_apply (n : ℤ) (i : ι) : (n : ∀ i, π i) i = n :=
   rfl
 
 @[push ←]
-/--
-theorem `intCast_def` / 定理 `intCast_def`
-
-English:
-theorem intCast_def
-  given: (n : Int)
-  statement: (n : forall i, π i) = fun _ => ↑n
-  proof: rfl
-
-中文:
-定理 intCast_def
-  条件: (n : 整数)
-  结论: (n : 对任意 i, π i) = fun _ => ↑n
-  证明: rfl
+/-
+**Pi.intCast_def** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：intCast_def (n : Int) : (n : forall i, π i) = fun _ => ↑n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem intCast_def (n : Int) : (n : forall i, π i) = fun _ => ↑n :=
+theorem intCast_def (n : ℤ) : (n : ∀ i, π i) = fun _ => ↑n :=
   rfl
 
 end Pi
 
 @[simp]
-/--
-theorem `Sum.elim_intCast_intCast` / 定理 `Sum.elim_intCast_intCast`
-
-English:
-theorem Sum.elim_intCast_intCast
-  given: {α β γ : Type*} [IntCast γ] (n : Int)
-  proof: Sum.elim_lam_const_lam_const (γ := γ) n
-
-中文:
-定理 和.elim_intCast_intCast
-  条件: {α β γ : 类型} [整数嵌入 γ] (n : 整数)
-  证明: Sum.elim_lam_const_lam_const (γ := γ) n
-
-Depends on / 依赖: Sum.elim_lam_const_lam_const, elim_lam_const_lam_const
+/-
+**Sum.elim_intCast_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Sum.elim_intCast_intCast {α β γ : Type*} [IntCast γ] (n : Int) : Sum.elim 
+(n : α -> γ) (n : β -> γ) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sum.elim_lam_const_lam_const`：∀ {γ : Sort u_1} {α : Type u_2} {β : Type 
+u_3} (c : γ), (Sum.elim (fun x => c) fun x => c) = fun x => c
 -/
-theorem Sum.elim_intCast_intCast {α β γ : Type*} [IntCast γ] (n : Int) :
-    Sum.elim (n : α -> γ) (n : β -> γ) = n :=
+theorem Sum.elim_intCast_intCast {α β γ : Type*} [IntCast γ] (n : ℤ) :
+    Sum.elim (n : α → γ) (n : β → γ) = n :=
   Sum.elim_lam_const_lam_const (γ := γ) n

@@ -33,24 +33,9 @@ namespace CategoryTheory.Types
 
 open MorphismProperty Limits ConcreteCategory
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (monomorphisms (Type u)).IsStableUnderCobaseChange
-  body: by
-    simp only [monomorphisms.iff] at ht ⊢
-    exact Limits.Types.pushoutCocone_inr_mono_of_isColimit sq.flip.isColimit
-
-中文:
-实例 :
-  签名: (monomorphisms (类型u)).是StableUnderCobaseChange
-  定义体: by
-    simp only [monomorphisms.iff] at ht ⊢
-    exact Limits.Types.pushoutCocone_inr_mono_of_isColimit sq.flip.isColimit
-
-Depends on / 依赖: Limits, Limits.Types.pushoutCocone_inr_mono_of_isColimit, isColimit, monomorphisms, monomorphisms.iff, pushoutCocone_inr_mono_of_isColimit, sq.flip.isColimit
+/-
+**CategoryTheory.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (monomorphisms (Type u)).IsStableUnderCobaseChange where
   of_isPushout {X₁ X₂ X₃ X₄ t l r b} sq ht := by
@@ -59,67 +44,31 @@ instance : (monomorphisms (Type u)).IsStableUnderCobaseChange where
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsStableUnderFilteredColimits.{v', u'}
-  body: ⟨fun F₁ F₂ c₁ c₂ hc₁ hc₂ f hf φ hφ => by
-    simp only [functorCategory, monomorphisms.iff, mono_iff_injective] at hf ⊢
-    replace hφ (j : J) := congr_hom (hφ j)
-    simp only [Functor.const_obj_obj, comp_apply] at hφ
-    intro x₁ y₁ h
-    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : exists (j : J) (x₁' y₁' : F₁.obj j),
-        x₁ = c₁.ι.app j x₁' ∧ y₁ = c₁.ι.app j y₁' := by
-      obtain ⟨j, x₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ x₁
-      obtain ⟨l, y₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ y₁
-      exact ⟨_, _, _, congr_hom (c₁.w (IsFiltered.leftToMax j l)).symm _,
-        congr_hom (c₁.w (IsFiltered.rightToMax j l)).symm _⟩
-    simp only [Functor.const_obj_obj, hφ] at h
-    obtain ⟨k, α, hk⟩ := (Types.FilteredColimit.isColimit_eq_iff' hc₂ _ _).1 h
-    simp only [← NatTrans.naturality_apply] at hk
-    rw [← c₁.w α]; rw [comp_apply]; rw [comp_apply]; rw [hf _ hk]⟩
-
-中文:
-实例 :
-  签名: MorphismProperty.是StableUnderFilteredColimits.{v', u'}
-  定义体: ⟨fun F₁ F₂ c₁ c₂ hc₁ hc₂ f hf φ hφ => by
-    simp only [functorCategory, monomorphisms.iff, mono_iff_injective] at hf ⊢
-    replace hφ (j : J) := congr_hom (hφ j)
-    simp only [Functor.const_obj_obj, comp_apply] at hφ
-    intro x₁ y₁ h
-    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : exists (j : J) (x₁' y₁' : F₁.obj j),
-        x₁ = c₁.ι.app j x₁' ∧ y₁ = c₁.ι.app j y₁' := by
-      obtain ⟨j, x₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ x₁
-      obtain ⟨l, y₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ y₁
-      exact ⟨_, _, _, congr_hom (c₁.w (IsFiltered.leftToMax j l)).symm _,
-        congr_hom (c₁.w (IsFiltered.rightToMax j l)).symm _⟩
-    simp only [Functor.const_obj_obj, hφ] at h
-    obtain ⟨k, α, hk⟩ := (Types.FilteredColimit.isColimit_eq_iff' hc₂ _ _).1 h
-    simp only [← NatTrans.naturality_apply] at hk
-    rw [← c₁.w α]; rw [comp_apply]; rw [comp_apply]; rw [hf _ hk]⟩
-
-Depends on / 依赖: Functor, Functor.const_obj_obj, Types.jointly_surjective_of_isColimit, comp_apply, congr_hom, const_obj_obj, functorCategory, jointly_surjective_of_isColimit, mono_iff_injective, monomorphisms, monomorphisms.iff, replace
+/-
+**CategoryTheory.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsStableUnderFilteredColimits.{v', u'}
     (monomorphisms (Type u)) where
-  isStableUnderColimitsOfShape J _ _ := ⟨fun F₁ F₂ c₁ c₂ hc₁ hc₂ f hf φ hφ => by
+  isStableUnderColimitsOfShape J _ _ := ⟨fun F₁ F₂ c₁ c₂ hc₁ hc₂ f hf φ hφ ↦ by
     simp only [functorCategory, monomorphisms.iff, mono_iff_injective] at hf ⊢
     replace hφ (j : J) := congr_hom (hφ j)
     simp only [Functor.const_obj_obj, comp_apply] at hφ
     intro x₁ y₁ h
-    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : exists (j : J) (x₁' y₁' : F₁.obj j),
+    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : ∃ (j : J) (x₁' y₁' : F₁.obj j),
         x₁ = c₁.ι.app j x₁' ∧ y₁ = c₁.ι.app j y₁' := by
       obtain ⟨j, x₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ x₁
       obtain ⟨l, y₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ y₁
-      exact ⟨_, _, _, congr_hom (c₁.w (IsFiltered.leftToMax j l)).symm _,
+      exact ⟨_,  _, _, congr_hom (c₁.w (IsFiltered.leftToMax j l)).symm _,
         congr_hom (c₁.w (IsFiltered.rightToMax j l)).symm _⟩
     simp only [Functor.const_obj_obj, hφ] at h
     obtain ⟨k, α, hk⟩ := (Types.FilteredColimit.isColimit_eq_iff' hc₂ _ _).1 h
     simp only [← NatTrans.naturality_apply] at hk
-    rw [← c₁.w α]; rw [comp_apply]; rw [comp_apply]; rw [hf _ hk]⟩
-
+    rw [← c₁.w α, comp_apply, comp_apply, hf _ hk]⟩
+/-
+**CategoryTheory.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (T : Type u') : MorphismProperty.IsStableUnderCoproductsOfShape
     (monomorphisms (Type u)) T :=
   IsStableUnderCoproductsOfShape.mk _ _ (by
@@ -139,18 +88,11 @@ instance (T : Type u') : MorphismProperty.IsStableUnderCoproductsOfShape
     obtain rfl := Cofan.eq_of_inj_apply_eq_of_isColimit (coproductIsCoproduct X₂) _ _ hx
     obtain rfl := h _ (Cofan.inj_injective_of_isColimit (coproductIsCoproduct X₂) i₁ hx)
     rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsStableUnderCoproducts (monomorphisms (Type u))
-
-中文:
-实例 :
-  签名: MorphismProperty.是StableUnderCoproducts (monomorphisms (类型u))
+/-
+**CategoryTheory.Types.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Types`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsStableUnderCoproducts (monomorphisms (Type u)) where
 
 end CategoryTheory.Types
+

@@ -24,41 +24,35 @@ noncomputable section
 
 open Filter Metric Set
 
-/--
-Instance `Real.instCompleteSpace` / 实例 `Real.instCompleteSpace`
-
-English:
-instance Real.instCompleteSpace
-  signature: : CompleteSpace Real
-  body: by
-  apply complete_of_cauchySeq_tendsto
-  intro u hu
-  let c : CauSeq Real abs := ⟨u, Metric.cauchySeq_iff'.1 hu⟩
-  refine ⟨c.lim, fun s h => ?_⟩
-  rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
-  have := c.equiv_lim ε ε0
-  simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn => hε (hN n hn)
-
-中文:
-实例 实数.instCompleteSpace
-  签名: : 完备空间 实数
-  定义体: by
-  apply complete_of_cauchySeq_tendsto
-  intro u hu
-  let c : CauSeq Real abs := ⟨u, Metric.cauchySeq_iff'.1 hu⟩
-  refine ⟨c.lim, fun s h => ?_⟩
-  rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
-  have := c.equiv_lim ε ε0
-  simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn => hε (hN n hn)
-
-Depends on / 依赖: CauSeq, Metric, Metric.cauchySeq_iff, Metric.mem_nhds_iff, c.equiv_lim, c.lim, cauchySeq_iff, complete_of_cauchySeq_tendsto, equiv_lim, mem_atTop_sets, mem_map, mem_nhds_iff, this.imp
+/-
+**Real.instCompleteSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Real.instCompleteSpace : CompleteSpace Real
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.complete_of_cauchySeq_tendsto`：Metric.complete_of_cauchySeq_tends
+to : (forall u : Nat -> α, CauchySeq u -> exists a, Tendsto u atTop (𝓝 a)) -> Co
+mpleteSpace α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.cauchySeq_iff'`：Metric.cauchySeq_iff' {u : β -> α} : CauchySeq u 
+↔ forall ε > 0, exists N, forall n >= N, dist (u n) (u N) < ε
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Real.instIsCompleteAbs`：CauSeq.IsComplete ℝ abs
+· 使用定理 `Metric.mem_nhds_iff`：mem_nhds_iff : s in 𝓝 x ↔ exists ε > 0, ball x ε su
+bseteq s
+· 使用定理 `CauSeq.equiv_lim`：equiv_lim (s : CauSeq β abv) : s ≈ const abv (lim s)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
 -/
-instance Real.instCompleteSpace : CompleteSpace Real := by
+instance Real.instCompleteSpace : CompleteSpace ℝ := by
   apply complete_of_cauchySeq_tendsto
   intro u hu
-  let c : CauSeq Real abs := ⟨u, Metric.cauchySeq_iff'.1 hu⟩
+  let c : CauSeq ℝ abs := ⟨u, Metric.cauchySeq_iff'.1 hu⟩
   refine ⟨c.lim, fun s h => ?_⟩
   rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
   have := c.equiv_lim ε ε0
@@ -67,118 +61,77 @@ instance Real.instCompleteSpace : CompleteSpace Real := by
 
 namespace NNReal
 
+/-!
+### Topology on `ℝ≥0`
+All the instances are inherited from the corresponding structures on the reals.
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: TopologicalSpace Real>=0
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 拓扑空间 实数>=0
-  定义体: inferInstance
 -/
-instance : TopologicalSpace Real>=0 := inferInstance
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**NNReal.** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CompleteSpace Real>=0
-  body: isClosed_Ici.completeSpace_coe
-
-@[fun_prop]
-
-中文:
-实例 :
-  签名: 完备空间 实数>=0
-  定义体: isClosed_Ici.completeSpace_coe
-
-@[fun_prop]
-
-Depends on / 依赖: completeSpace_coe, isClosed_Ici, isClosed_Ici.completeSpace_coe
+--- 原说明 ---
+### Topology on `ℝ≥0`
+All the instances are inherited from the corresponding structures on the reals.
 -/
-instance : CompleteSpace Real>=0 :=
+instance : TopologicalSpace ℝ≥0 := inferInstance
+/-
+**NNReal.** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : CompleteSpace ℝ≥0 :=
   isClosed_Ici.completeSpace_coe
 
 @[fun_prop]
-/--
-theorem `continuous_coe` / 定理 `continuous_coe`
-
-English:
-theorem continuous_coe
-  statement: Continuous ((↑) : Real>=0 -> Real)
-  proof: continuous_subtype_val
-
-中文:
-定理 continuous_coe
-  结论: 连续 ((↑) : 实数>=0 -> 实数)
-  证明: continuous_subtype_val
-
-Depends on / 依赖: continuous_subtype_val
+/-
+**NNReal.continuous_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：continuous_coe : Continuous ((↑) : Real>=0 -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
 -/
-theorem continuous_coe : Continuous ((↑) : Real>=0 -> Real) :=
+theorem continuous_coe : Continuous ((↑) : ℝ≥0 → ℝ) :=
   continuous_subtype_val
 
 /-- Embedding of `ℝ≥0` to `ℝ` as a bundled continuous map. -/
 @[simps -fullyApplied]
-/--
-Definition of `_root_.ContinuousMap.coeNNRealReal` / `_root_.ContinuousMap.coeNNRealReal` 的定义
+/-
+**NNReal._root_.ContinuousMap.coeNNRealReal** 是 Mathlib 中的一个定义，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.ContinuousMap.coeNNRealReal
-  signature: : C(Real>=0, Real)
-  body: ⟨(↑), continuous_coe⟩
-
-@[simp]
-
-中文:
-定义 _root_.连续映射.coeNN实数实数
-  签名: : C(实数>=0, 实数)
-  定义体: ⟨(↑), continuous_coe⟩
-
-@[simp]
-
-Depends on / 依赖: continuous_coe
+--- 原说明 ---
+Embedding of `ℝ≥0` to `ℝ` as a bundled continuous map.
 -/
-def _root_.ContinuousMap.coeNNRealReal : C(Real>=0, Real) :=
+def _root_.ContinuousMap.coeNNRealReal : C(ℝ≥0, ℝ) :=
   ⟨(↑), continuous_coe⟩
 
 @[simp]
-/--
-lemma `coeNNRealReal_zero` / 引理 `coeNNRealReal_zero`
-
-English:
-lemma coeNNRealReal_zero
-  statement: ContinuousMap.coeNNRealReal 0 = 0
-  proof: rfl
-
-中文:
-引理 coeNN实数实数_zero
-  结论: 连续映射.coeNN实数实数 0 = 0
-  证明: rfl
+/-
+**NNReal.coeNNRealReal_zero** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：coeNNRealReal_zero : ContinuousMap.coeNNRealReal 0 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coeNNRealReal_zero : ContinuousMap.coeNNRealReal 0 = 0 := rfl
-
-/--
-Instance `ContinuousMap.canLift` / 实例 `ContinuousMap.canLift`
-
-English:
-instance ContinuousMap.canLift
-  signature: {X : Type*} [TopologicalSpace X]
-  body: ⟨⟨fun x => .mk (f x) (hf x), f.2.subtype_mk _⟩, DFunLike.ext' rfl⟩
-
-中文:
-实例 连续映射.canLift
-  签名: {X : 类型} [拓扑空间 X]
-  定义体: ⟨⟨fun x => .mk (f x) (hf x), f.2.subtype_mk _⟩, DFunLike.ext' rfl⟩
+/-
+**NNReal.ContinuousMap.canLift** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.ContinuousMap`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X],   CanLift C(X, ℝ) C(X, NNRea
+l) ContinuousMap.coeNNRealReal.comp fun f => ∀ (x : X), 0 ≤ f x
+参数：X, ℝ；X, NNReal；x : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `ContinuousMap.continuous_toFun`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+TopologicalSpace X] [inst_1 : TopologicalSpace Y] (self : C(X, Y)),   Continuous
+ self.toFun
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
 instance ContinuousMap.canLift {X : Type*} [TopologicalSpace X] :
-    CanLift C(X, Real) C(X, Real>=0) ContinuousMap.coeNNRealReal.comp fun f => forall x, 0 <= f x where
+    CanLift C(X, ℝ) C(X, ℝ≥0) ContinuousMap.coeNNRealReal.comp fun f => ∀ x, 0 ≤ f x where
   prf f hf := ⟨⟨fun x => .mk (f x) (hf x), f.2.subtype_mk _⟩, DFunLike.ext' rfl⟩
 
 end NNReal
+

@@ -59,40 +59,36 @@ variable {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommG
 namespace RootPairing
 
 /-- A morphism of root pairings is a pair of mutually transposed maps of weight and coweight spaces
-that preserves roots and coroots. We make the map of indexing sets explicit. -/
+that preserves roots and coroots.  We make the map of indexing sets explicit. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**RootPairing.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `RootPairing`。
+形式化陈述：{ι : Type u_1} →   {R : Type u_2} →     {M : Type u_3} →       {N : Type u
+_4} →         [inst : CommRing R] →           [inst_1 : AddCommGroup M] →       
+      [inst_2 : _root_.Module R M] →               [inst_3 : AddCommGroup N] →  
+               [inst_4 : _root_.Module R N] →                   {ι₂ : Type u_5} 
+→                     {M₂ : Type u_6} →                       {N₂ : Type u_7} → 
+                        [inst_5 : AddCommGroup M₂] →                           [
+inst_6 : _root_.Module R M₂] →                             [inst_7 : AddCommGrou
+p N₂] →                               [inst_8 : _root_.Module R N₂] →           
+                      RootPairing ι R M N →                                   Ro
+otPairing ι₂ R M₂ N₂ → Type (max (max (max (max (max u_1 u_3) u_4) u_5) u_6) u_7
+)
+参数：max (max (max (max (max u_1 u_3) u_4) u_5) u_6) u_7。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: {ι₂ M₂ N₂ : Type*}
-  axioms and operations (6):
-    - weightMap : M ->ₗ[R] M₂
-    - coweightMap : N₂ ->ₗ[R] N
-    - indexEquiv : ι ≃ ι₂
-    - weight_coweight_transpose : weightMap.dualMap ∘ₗ Q.flip.toPerfPair = P.flip.toPerfPair ∘ₗ coweightMap
-    - root_weightMap : weightMap ∘ P.root = Q.root ∘ indexEquiv
-    - coroot_coweightMap : coweightMap ∘ Q.coroot = P.coroot ∘ indexEquiv.symm
-
-中文:
-结构 态射
-  参数: {ι₂ M₂ N₂ : 类型}
-  公理与运算 (6 个):
-    - weightMap : M ->ₗ[R] M₂
-    - coweightMap : N₂ ->ₗ[R] N
-    - indexEquiv : ι ≃ ι₂
-    - weight_coweight_transpose : weightMap.dualMap ∘ₗ Q.flip.toPerfPair = P.flip.toPerfPair ∘ₗ coweightMap
-    - root_weightMap : weightMap ∘ P.root = Q.root ∘ indexEquiv
-    - coroot_coweightMap : coweightMap ∘ Q.coroot = P.coroot ∘ indexEquiv.symm
+--- 原说明 ---
+A morphism of root pairings is a pair of mutually transposed maps of weight and 
+coweight spaces
+that preserves roots and coroots.  We make the map of indexing sets explicit.
 -/
 structure Hom {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
     (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) where
   /-- A linear map on weight space. -/
-  weightMap : M ->ₗ[R] M₂
+  weightMap : M →ₗ[R] M₂
   /-- A contravariant linear map on coweight space. -/
-  coweightMap : N₂ ->ₗ[R] N
+  coweightMap : N₂ →ₗ[R] N
   /-- A bijection on index sets. -/
   indexEquiv : ι ≃ ι₂
   weight_coweight_transpose :
@@ -102,62 +98,71 @@ structure Hom {ι₂ M₂ N₂ : Type*}
 
 namespace Hom
 
-/--
-lemma `weight_coweight_transpose_apply` / 引理 `weight_coweight_transpose_apply`
-
-English:
-lemma weight_coweight_transpose_apply
-  statement: {ι₂ M₂ N₂ : Type*}
-  proof: Eq.mp (propext LinearMap.ext_iff) f.weight_coweight_transpose x
-
-中文:
-引理 weight_coweight_transpose_apply
-  结论: {ι₂ M₂ N₂ : 类型}
-  证明: Eq.mp (propext LinearMap.ext_iff) f.weight_coweight_transpose x
-
-Depends on / 依赖: Eq.mp, LinearMap, LinearMap.ext_iff, ext_iff, f.weight_coweight_transpose, propext, weight_coweight_transpose
+/-
+**RootPairing.Hom.weight_coweight_transpose_apply** 是 Mathlib 中的一个引理，位于命名空间 `Roo
+tPairing.Hom`。
+形式化陈述：weight_coweight_transpose_apply {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Modu
+le R M₂] [AddCommGroup N₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPair
+ing ι₂ R M₂ N₂) (x : N₂) (f : Hom P Q) : f.weightMap.dualMap (Q.flip.toPerfPair 
+x) = P.flip.toPerfPair (f.coweightMap x)
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；x : N₂；f : Hom P Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `RootPairing.isPerfPair_toLinearMap`：∀ {ι : Type u_1} {R : Type u_2} {M :
+ Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_
+2 : _root_.Module R M] […
+· 使用定理 `LinearMap.ext_iff`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ : 
+Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M
+] [inst…
+· 使用定理 `RootPairing.Hom.weight_coweight_transpose`：∀ {ι : Type u_1} {R : Type u_
+2} {M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]  
+ [inst_2 : _root_.Module R M] […
 -/
 lemma weight_coweight_transpose_apply {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
     (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (x : N₂) (f : Hom P Q) :
     f.weightMap.dualMap (Q.flip.toPerfPair x) = P.flip.toPerfPair (f.coweightMap x) :=
   Eq.mp (propext LinearMap.ext_iff) f.weight_coweight_transpose x
-
-/--
-lemma `root_weightMap_apply` / 引理 `root_weightMap_apply`
-
-English:
-lemma root_weightMap_apply
-  statement: {ι₂ M₂ N₂ : Type*}
-  proof: Eq.mp (propext funext_iff) f.root_weightMap i
-
-中文:
-引理 root_weightMap_apply
-  结论: {ι₂ M₂ N₂ : 类型}
-  证明: Eq.mp (propext funext_iff) f.root_weightMap i
-
-Depends on / 依赖: Eq.mp, f.root_weightMap, funext_iff, propext, root_weightMap
+/-
+**RootPairing.Hom.root_weightMap_apply** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Ho
+m`。
+形式化陈述：root_weightMap_apply {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [A
+ddCommGroup N₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂
+ N₂) (i : ι) (f : Hom P Q) : f.weightMap (P.root i) = Q.root (f.indexEquiv i)
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；i : ι；f : Hom P Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
+· 使用定理 `RootPairing.Hom.root_weightMap`：∀ {ι : Type u_1} {R : Type u_2} {M : Typ
+e u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_2 : 
+_root_.Module R M] […
 -/
 lemma root_weightMap_apply {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
     (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (i : ι) (f : Hom P Q) :
     f.weightMap (P.root i) = Q.root (f.indexEquiv i) :=
   Eq.mp (propext funext_iff) f.root_weightMap i
-
-/--
-lemma `coroot_coweightMap_apply` / 引理 `coroot_coweightMap_apply`
-
-English:
-lemma coroot_coweightMap_apply
-  statement: {ι₂ M₂ N₂ : Type*}
-  proof: Eq.mp (propext funext_iff) f.coroot_coweightMap i
-
-中文:
-引理 coroot_coweightMap_apply
-  结论: {ι₂ M₂ N₂ : 类型}
-  证明: Eq.mp (propext funext_iff) f.coroot_coweightMap i
-
-Depends on / 依赖: Eq.mp, coroot_coweightMap, f.coroot_coweightMap, funext_iff, propext
+/-
+**RootPairing.Hom.coroot_coweightMap_apply** 是 Mathlib 中的一个引理，位于命名空间 `RootPairin
+g.Hom`。
+形式化陈述：coroot_coweightMap_apply {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂
+] [AddCommGroup N₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ 
+R M₂ N₂) (i : ι₂) (f : Hom P Q) : f.coweightMap (Q.coroot i) = P.coroot (f.index
+Equiv.symm i)
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；i : ι₂；f : Hom P Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
+· 使用定理 `RootPairing.Hom.coroot_coweightMap`：∀ {ι : Type u_1} {R : Type u_2} {M :
+ Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_
+2 : _root_.Module R M] […
 -/
 lemma coroot_coweightMap_apply {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -167,30 +172,16 @@ lemma coroot_coweightMap_apply {ι₂ M₂ N₂ : Type*}
 
 /-- The identity morphism of a root pairing. -/
 @[simps!]
-/--
-Definition of `id` / `id` 的定义
+/-
+**RootPairing.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Hom`。
+形式化陈述：id (P : RootPairing ι R M N) : Hom P P where weightMap
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition id
-  signature: (P : RootPairing ι R M N)
-  body: LinearMap.id
-  coweightMap := LinearMap.id
-  indexEquiv := Equiv.refl ι
-  weight_coweight_transpose := by simp
-  root_weightMap := by simp
-  coroot_coweightMap := by simp
-
-中文:
-定义 id
-  签名: (P : RootPairing ι R M N)
-  定义体: LinearMap.id
-  coweightMap := LinearMap.id
-  indexEquiv := Equiv.refl ι
-  weight_coweight_transpose := by simp
-  root_weightMap := by simp
-  coroot_coweightMap := by simp
-
-Depends on / 依赖: LinearMap, LinearMap.id
+--- 原说明 ---
+The identity morphism of a root pairing.
 -/
 def id (P : RootPairing ι R M N) : Hom P P where
   weightMap := LinearMap.id
@@ -202,52 +193,20 @@ def id (P : RootPairing ι R M N) : Hom P P where
 
 /-- Composition of morphisms -/
 @[simps!]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**RootPairing.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Hom`。
+形式化陈述：comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommG
+roup N₁] [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module
+ R N₂] {P : RootPairing ι R M N} {P₁ : RootPairing ι₁ R M₁ N₁} {P₂ : RootPairing
+ ι₂ R M₂ N₂} (g : Hom P₁ P₂) (f : Hom P P₁) : Hom P P₂ where weightMap
+参数：g : Hom P₁ P₂；f : Hom P P₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition comp
-  signature: {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
-  body: g.weightMap ∘ₗ f.weightMap
-  coweightMap := f.coweightMap ∘ₗ g.coweightMap
-  indexEquiv := f.indexEquiv.trans g.indexEquiv
-  weight_coweight_transpose := by
-    ext φ x
-    rw [← LinearMap.dualMap_comp_dualMap]; rw [← LinearMap.comp_assoc _ f.coweightMap]; rw [← f.weight_coweight_transpose]; rw [LinearMap.comp_assoc g.coweightMap]; rw [← g.weight_coweight_transpose]; rw [← LinearMap.comp_assoc]
-  root_weightMap := by
-    ext i
-    simp only [LinearMap.coe_comp, Equiv.coe_trans]
-    rw [comp_assoc]; rw [f.root_weightMap]; rw [← comp_assoc]; rw [g.root_weightMap]; rw [comp_assoc]
-  coroot_coweightMap := by
-    ext i
-    simp only [LinearMap.coe_comp]
-    rw [comp_assoc]; rw [g.coroot_coweightMap]; rw [← comp_assoc]; rw [f.coroot_coweightMap]; rw [comp_assoc]
-    simp
-
-@[simp]
-
-中文:
-定义 comp
-  签名: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [加法交换群 M₁] [模 R M₁] [加法交换群 N₁]
-  定义体: g.weightMap ∘ₗ f.weightMap
-  coweightMap := f.coweightMap ∘ₗ g.coweightMap
-  indexEquiv := f.indexEquiv.trans g.indexEquiv
-  weight_coweight_transpose := by
-    ext φ x
-    rw [← LinearMap.dualMap_comp_dualMap]; rw [← LinearMap.comp_assoc _ f.coweightMap]; rw [← f.weight_coweight_transpose]; rw [LinearMap.comp_assoc g.coweightMap]; rw [← g.weight_coweight_transpose]; rw [← LinearMap.comp_assoc]
-  root_weightMap := by
-    ext i
-    simp only [LinearMap.coe_comp, Equiv.coe_trans]
-    rw [comp_assoc]; rw [f.root_weightMap]; rw [← comp_assoc]; rw [g.root_weightMap]; rw [comp_assoc]
-  coroot_coweightMap := by
-    ext i
-    simp only [LinearMap.coe_comp]
-    rw [comp_assoc]; rw [g.coroot_coweightMap]; rw [← comp_assoc]; rw [f.coroot_coweightMap]; rw [comp_assoc]
-    simp
-
-@[simp]
-
-Depends on / 依赖: f.weightMap, g.weightMap, weightMap
+--- 原说明 ---
+Composition of morphisms
 -/
 def comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
     [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -258,36 +217,60 @@ def comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R
   indexEquiv := f.indexEquiv.trans g.indexEquiv
   weight_coweight_transpose := by
     ext φ x
-    rw [← LinearMap.dualMap_comp_dualMap]; rw [← LinearMap.comp_assoc _ f.coweightMap]; rw [← f.weight_coweight_transpose]; rw [LinearMap.comp_assoc g.coweightMap]; rw [← g.weight_coweight_transpose]; rw [← LinearMap.comp_assoc]
+    rw [← LinearMap.dualMap_comp_dualMap, ← LinearMap.comp_assoc _ f.coweightMap,
+      ← f.weight_coweight_transpose, LinearMap.comp_assoc g.coweightMap,
+      ← g.weight_coweight_transpose, ← LinearMap.comp_assoc]
   root_weightMap := by
     ext i
     simp only [LinearMap.coe_comp, Equiv.coe_trans]
-    rw [comp_assoc]; rw [f.root_weightMap]; rw [← comp_assoc]; rw [g.root_weightMap]; rw [comp_assoc]
+    rw [comp_assoc, f.root_weightMap, ← comp_assoc, g.root_weightMap, comp_assoc]
   coroot_coweightMap := by
     ext i
     simp only [LinearMap.coe_comp]
-    rw [comp_assoc]; rw [g.coroot_coweightMap]; rw [← comp_assoc]; rw [f.coroot_coweightMap]; rw [comp_assoc]
+    rw [comp_assoc, g.coroot_coweightMap, ← comp_assoc, f.coroot_coweightMap, comp_assoc]
     simp
 
 @[simp]
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  statement: {ι₂ M₂ N₂ : Type*}
-  proof: by
-  ext x <;> simp
-
-@[simp]
-
-中文:
-引理 id_comp
-  结论: {ι₂ M₂ N₂ : 类型}
-  证明: by
-  ext x <;> simp
-
-@[simp]
+/-
+**RootPairing.Hom.id_comp** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：id_comp {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N
+₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (f : Hom
+ P Q) : comp f (id P) = f
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : Hom P Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Hom.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N :
+ Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Modu
+le R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RootPairing.Hom.comp_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Hom.id_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M :
+ Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_
+2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RootPairing.Hom.comp_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Hom.id_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `RootPairing.Hom.comp_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Hom.id_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {M 
+: Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst
+_2 : _root_.Module R M] […
 -/
 lemma id_comp {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -296,24 +279,46 @@ lemma id_comp {ι₂ M₂ N₂ : Type*}
   ext x <;> simp
 
 @[simp]
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  statement: {ι₂ M₂ N₂ : Type*}
-  proof: by
-  ext x <;> simp
-
-@[simp]
-
-中文:
-引理 comp_id
-  结论: {ι₂ M₂ N₂ : 类型}
-  证明: by
-  ext x <;> simp
-
-@[simp]
+/-
+**RootPairing.Hom.comp_id** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：comp_id {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N
+₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (f : Hom
+ P Q) : comp (id Q) f = f
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : Hom P Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Hom.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N :
+ Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Modu
+le R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RootPairing.Hom.comp_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Hom.id_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M :
+ Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_
+2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RootPairing.Hom.comp_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Hom.id_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `RootPairing.Hom.comp_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Hom.id_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {M 
+: Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst
+_2 : _root_.Module R M] […
 -/
 lemma comp_id {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -322,20 +327,40 @@ lemma comp_id {ι₂ M₂ N₂ : Type*}
   ext x <;> simp
 
 @[simp]
-/--
-lemma `comp_assoc` / 引理 `comp_assoc`
-
-English:
-lemma comp_assoc
-  statement: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddCommGroup M₁] [Module R M₁]
-  proof: by
-  ext <;> simp
-
-中文:
-引理 comp_assoc
-  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : 类型} [加法交换群 M₁] [模 R M₁]
-  证明: by
-  ext <;> simp
+/-
+**RootPairing.Hom.comp_assoc** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：comp_assoc {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddCommGroup M₁] [Module 
+R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGr
+oup N₂] [Module R N₂] [AddCommGroup M₃] [Module R M₃] [AddCommGroup N₃] [Module 
+R N₃] {P : RootPairing ι R M N} {P₁ : RootPairing ι₁ R M₁ N₁} {P₂ : RootPairing 
+ι₂ R M₂ N₂} {P₃ : RootPairing ι₃ R M₃ N₃} (h : Hom P₂ P₃) (g : Hom P₁ P₂) (f : H
+om P P₁) : comp (comp h g) f = comp h (comp g f)
+参数：h : Hom P₂ P₃；g : Hom P₁ P₂；f : Hom P P₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Hom.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N :
+ Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Modu
+le R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RootPairing.Hom.comp_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RootPairing.Hom.comp_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `RootPairing.Hom.comp_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
 -/
 lemma comp_assoc {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddCommGroup M₁] [Module R M₁]
     [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -346,6 +371,13 @@ lemma comp_assoc {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddC
   ext <;> simp
 
 /-- The endomorphism monoid of a root pairing. -/
+/-
+**RootPairing.Hom.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The endomorphism monoid of a root pairing.
+-/
 instance (P : RootPairing ι R M N) : Monoid (Hom P P) where
   mul := comp
   mul_assoc := comp_assoc
@@ -354,214 +386,142 @@ instance (P : RootPairing ι R M N) : Monoid (Hom P P) where
   mul_one := comp_id P P
 
 @[simp]
-/--
-lemma `weightMap_one` / 引理 `weightMap_one`
-
-English:
-lemma weightMap_one
-  given: (P : RootPairing ι R M N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 weightMap_one
-  条件: (P : RootPairing ι R M N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+/-
+**RootPairing.Hom.weightMap_one** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：weightMap_one (P : RootPairing ι R M N) : weightMap (P
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightMap_one (P : RootPairing ι R M N) :
     weightMap (P := P) (Q := P) 1 = LinearMap.id (R := R) (M := M) :=
   rfl
 
 @[simp]
-/--
-lemma `coweightMap_one` / 引理 `coweightMap_one`
-
-English:
-lemma coweightMap_one
-  given: (P : RootPairing ι R M N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coweightMap_one
-  条件: (P : RootPairing ι R M N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+/-
+**RootPairing.Hom.coweightMap_one** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：coweightMap_one (P : RootPairing ι R M N) : coweightMap (P
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coweightMap_one (P : RootPairing ι R M N) :
     coweightMap (P := P) (Q := P) 1 = LinearMap.id (R := R) (M := N) :=
   rfl
 
 @[simp]
-/--
-lemma `indexEquiv_one` / 引理 `indexEquiv_one`
-
-English:
-lemma indexEquiv_one
-  given: (P : RootPairing ι R M N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 indexEquiv_one
-  条件: (P : RootPairing ι R M N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+/-
+**RootPairing.Hom.indexEquiv_one** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：indexEquiv_one (P : RootPairing ι R M N) : indexEquiv (P
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma indexEquiv_one (P : RootPairing ι R M N) :
     indexEquiv (P := P) (Q := P) 1 = Equiv.refl ι :=
   rfl
 
 @[simp]
-/--
-lemma `weightMap_mul` / 引理 `weightMap_mul`
-
-English:
-lemma weightMap_mul
-  given: (P : RootPairing ι R M N) (x y : Hom P P)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 weightMap_mul
-  条件: (P : RootPairing ι R M N) (x y : 态射 P P)
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Hom.weightMap_mul** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：weightMap_mul (P : RootPairing ι R M N) (x y : Hom P P) : weightMap (x * y
+) = weightMap x ∘ₗ weightMap y
+参数：P : RootPairing ι R M N；x y : Hom P P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightMap_mul (P : RootPairing ι R M N) (x y : Hom P P) :
     weightMap (x * y) = weightMap x ∘ₗ weightMap y :=
   rfl
 
 @[simp]
-/--
-lemma `coweightMap_mul` / 引理 `coweightMap_mul`
-
-English:
-lemma coweightMap_mul
-  given: (P : RootPairing ι R M N) (x y : Hom P P)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coweightMap_mul
-  条件: (P : RootPairing ι R M N) (x y : 态射 P P)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: AEMeasurable, IsZeroOrProbabilityMeasure, IsZeroOrProbabilityMeasure.measure_univ, isZeroOrProbabilityMeasure_iff, measure_univ
+/-
+**RootPairing.Hom.coweightMap_mul** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：coweightMap_mul (P : RootPairing ι R M N) (x y : Hom P P) : coweightMap (x
+ * y) = coweightMap y ∘ₗ coweightMap x
+参数：P : RootPairing ι R M N；x y : Hom P P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coweightMap_mul (P : RootPairing ι R M N) (x y : Hom P P) :
     coweightMap (x * y) = coweightMap y ∘ₗ coweightMap x :=
   rfl
 
 @[simp]
-/--
-lemma `indexEquiv_mul` / 引理 `indexEquiv_mul`
-
-English:
-lemma indexEquiv_mul
-  given: (P : RootPairing ι R M N) (x y : Hom P P)
-  proof: rfl
-
-中文:
-引理 indexEquiv_mul
-  条件: (P : RootPairing ι R M N) (x y : 态射 P P)
-  证明: rfl
+/-
+**RootPairing.Hom.indexEquiv_mul** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom`。
+形式化陈述：indexEquiv_mul (P : RootPairing ι R M N) (x y : Hom P P) : indexEquiv (x *
+ y) = indexEquiv x ∘ indexEquiv y
+参数：P : RootPairing ι R M N；x y : Hom P P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma indexEquiv_mul (P : RootPairing ι R M N) (x y : Hom P P) :
     indexEquiv (x * y) = indexEquiv x ∘ indexEquiv y :=
   rfl
 
-/--
-Definition of `_root_.RootPairing.End` / `_root_.RootPairing.End` 的定义
+/-- The endomorphism monoid of a root pairing. -/
+/-
+**RootPairing.Hom._root_.RootPairing.End** 是 Mathlib 中的一个缩写定义，位于命名空间 `RootPairin
+g.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.RootPairing.End
-  signature: (P : RootPairing ι R M N)
-  body: Hom P P
-
-中文:
-缩写 _root_.RootPairing.End
-  签名: (P : RootPairing ι R M N)
-  定义体: Hom P P
+--- 原说明 ---
+The endomorphism monoid of a root pairing.
 -/
 abbrev _root_.RootPairing.End (P : RootPairing ι R M N) := Hom P P
 
-/--
-Definition of `weightHom` / `weightHom` 的定义
+/-- The weight space representation of endomorphisms -/
+/-
+**RootPairing.Hom.weightHom** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Hom`。
+形式化陈述：weightHom (P : RootPairing ι R M N) : End P ->* (Module.End R M) where toF
+un g
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weightHom
-  signature: (P : RootPairing ι R M N)
-  body: Hom.weightMap (P := P) (Q := P) g
-  map_mul' g h := by ext; simp
-  map_one' := by ext; simp
-
-中文:
-定义 weightHom
-  签名: (P : RootPairing ι R M N)
-  定义体: Hom.weightMap (P := P) (Q := P) g
-  map_mul' g h := by ext; simp
-  map_one' := by ext; simp
-
-Depends on / 依赖: Hom.weightMap, weightMap
+--- 原说明 ---
+The weight space representation of endomorphisms
 -/
-def weightHom (P : RootPairing ι R M N) : End P ->* (Module.End R M) where
+def weightHom (P : RootPairing ι R M N) : End P →* (Module.End R M) where
   toFun g := Hom.weightMap (P := P) (Q := P) g
   map_mul' g h := by ext; simp
   map_one' := by ext; simp
-
-/--
-lemma `weightHom_injective` / 引理 `weightHom_injective`
-
-English:
-lemma weightHom_injective
-  given: (P : RootPairing ι R M N)
-  statement: Injective (weightHom P)
-  proof: by
-  intro f g hfg
-  ext x
-  · exact LinearMap.congr_fun hfg x
-  · refine LinearEquiv.injective P.flip.toPerfPair ?_
-    simp_rw [← weight_coweight_transpose_apply]
-    exact congrFun (congrArg DFunLike.coe (congrArg LinearMap.dualMap hfg)) (P.flip.toPerfPair x)
-  · refine Embedding.injective P.root ?_
-    simp_rw [← root_weightMap_apply]
-    exact congrFun (congrArg DFunLike.coe hfg) (P.root x)
-
-中文:
-引理 weightHom_injective
-  条件: (P : RootPairing ι R M N)
-  结论: 单射 (weightHom P)
-  证明: by
-  intro f g hfg
-  ext x
-  · exact LinearMap.congr_fun hfg x
-  · refine LinearEquiv.injective P.flip.toPerfPair ?_
-    simp_rw [← weight_coweight_transpose_apply]
-    exact congrFun (congrArg DFunLike.coe (congrArg LinearMap.dualMap hfg)) (P.flip.toPerfPair x)
-  · refine Embedding.injective P.root ?_
-    simp_rw [← root_weightMap_apply]
-    exact congrFun (congrArg DFunLike.coe hfg) (P.root x)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, Embedding, Embedding.injective, LinearEquiv, LinearEquiv.injective, LinearMap, LinearMap.congr_fun, LinearMap.dualMap, P.flip.toPerfPair, P.root, congr_fun, dualMap, injective, root_weightMap_apply, simp_rw, toPerfPair, weight_coweight_transpose_apply
+/-
+**RootPairing.Hom.weightHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Hom
+`。
+形式化陈述：weightHom_injective (P : RootPairing ι R M N) : Injective (weightHom P)
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Hom.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N :
+ Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Modu
+le R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `RootPairing.isPerfPair_toLinearMap`：∀ {ι : Type u_1} {R : Type u_2} {M :
+ Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_
+2 : _root_.Module R M] […
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
 -/
 lemma weightHom_injective (P : RootPairing ι R M N) : Injective (weightHom P) := by
   intro f g hfg
@@ -574,94 +534,79 @@ lemma weightHom_injective (P : RootPairing ι R M N) : Injective (weightHom P) :
     simp_rw [← root_weightMap_apply]
     exact congrFun (congrArg DFunLike.coe hfg) (P.root x)
 
-/--
-Definition of `coweightHom` / `coweightHom` 的定义
+/-- The coweight space representation of endomorphisms -/
+/-
+**RootPairing.Hom.coweightHom** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Hom`。
+形式化陈述：coweightHom (P : RootPairing ι R M N) : End P ->* (N ->ₗ[R] N)ᵐᵒᵖ where to
+Fun g
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coweightHom
-  signature: (P : RootPairing ι R M N)
-  body: MulOpposite.op (Hom.coweightMap (P := P) (Q := P) g)
-  map_mul' g h := by
-    simp only [← MulOpposite.op_mul, coweightMap_mul, Module.End.mul_eq_comp]
-  map_one' := by
-    simp only [MulOpposite.op_eq_one_iff, coweightMap_one, Module.End.one_eq_id]
-
-中文:
-定义 coweightHom
-  签名: (P : RootPairing ι R M N)
-  定义体: MulOpposite.op (Hom.coweightMap (P := P) (Q := P) g)
-  map_mul' g h := by
-    simp only [← MulOpposite.op_mul, coweightMap_mul, Module.End.mul_eq_comp]
-  map_one' := by
-    simp only [MulOpposite.op_eq_one_iff, coweightMap_one, Module.End.one_eq_id]
-
-Depends on / 依赖: Hom.coweightMap, MulOpposite, MulOpposite.op, coweightMap
+--- 原说明 ---
+The coweight space representation of endomorphisms
 -/
-def coweightHom (P : RootPairing ι R M N) : End P ->* (N ->ₗ[R] N)ᵐᵒᵖ where
+def coweightHom (P : RootPairing ι R M N) : End P →* (N →ₗ[R] N)ᵐᵒᵖ where
   toFun g := MulOpposite.op (Hom.coweightMap (P := P) (Q := P) g)
   map_mul' g h := by
     simp only [← MulOpposite.op_mul, coweightMap_mul, Module.End.mul_eq_comp]
   map_one' := by
     simp only [MulOpposite.op_eq_one_iff, coweightMap_one, Module.End.one_eq_id]
-
-/--
-lemma `coweightHom_injective` / 引理 `coweightHom_injective`
-
-English:
-lemma coweightHom_injective
-  given: (P : RootPairing ι R M N)
-  statement: Injective (coweightHom P)
-  proof: by
-  intro f g hfg
-  ext x
-  · dsimp [coweightHom] at hfg
-    rw [MulOpposite.op_inj] at hfg
-    have h := congrArg (LinearMap.comp (M₃ := Module.Dual R M) (σ₂₃ := .id R) P.flip.toPerfPair) hfg
-    rw [← f.weight_coweight_transpose]; rw [← g.weight_coweight_transpose] at h
-    have : f.weightMap = g.weightMap := by
-      have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
-      refine (Module.dualMap_dualMap_eq_iff R M).mp (congrArg LinearMap.dualMap
-        ((LinearEquiv.eq_comp_toLinearMap_iff f.weightMap.dualMap g.weightMap.dualMap).mp h))
-    exact congrFun (congrArg DFunLike.coe this) x
-  · dsimp [coweightHom] at hfg
-    simp_all
-  · dsimp [coweightHom] at hfg
-    rw [MulOpposite.op_inj] at hfg
-    set y := f.indexEquiv x with hy
-    have : f.coweightMap (P.coroot y) = g.coweightMap (P.coroot y) := by
-      exact congrFun (congrArg DFunLike.coe hfg) (P.coroot y)
-    rw [coroot_coweightMap_apply]; rw [coroot_coweightMap_apply]; rw [Embedding.apply_eq_iff_eq]; rw [hy] at this
-    rw [Equiv.symm_apply_apply] at this
-    rw [this]; rw [Equiv.apply_symm_apply]
-
-中文:
-引理 coweightHom_injective
-  条件: (P : RootPairing ι R M N)
-  结论: 单射 (coweightHom P)
-  证明: by
-  intro f g hfg
-  ext x
-  · dsimp [coweightHom] at hfg
-    rw [MulOpposite.op_inj] at hfg
-    have h := congrArg (LinearMap.comp (M₃ := Module.Dual R M) (σ₂₃ := .id R) P.flip.toPerfPair) hfg
-    rw [← f.weight_coweight_transpose]; rw [← g.weight_coweight_transpose] at h
-    have : f.weightMap = g.weightMap := by
-      have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
-      refine (Module.dualMap_dualMap_eq_iff R M).mp (congrArg LinearMap.dualMap
-        ((LinearEquiv.eq_comp_toLinearMap_iff f.weightMap.dualMap g.weightMap.dualMap).mp h))
-    exact congrFun (congrArg DFunLike.coe this) x
-  · dsimp [coweightHom] at hfg
-    simp_all
-  · dsimp [coweightHom] at hfg
-    rw [MulOpposite.op_inj] at hfg
-    set y := f.indexEquiv x with hy
-    have : f.coweightMap (P.coroot y) = g.coweightMap (P.coroot y) := by
-      exact congrFun (congrArg DFunLike.coe hfg) (P.coroot y)
-    rw [coroot_coweightMap_apply]; rw [coroot_coweightMap_apply]; rw [Embedding.apply_eq_iff_eq]; rw [hy] at this
-    rw [Equiv.symm_apply_apply] at this
-    rw [this]; rw [Equiv.apply_symm_apply]
-
-Depends on / 依赖: IsReflexive, LinearEquiv, LinearEquiv.eq_comp_toLinearMap_iff, LinearMap, LinearMap.comp, LinearMap.dualMap, Module, Module.Dual, Module.IsReflexive, Module.dualMap_dualMap_eq_iff, MulOpposite, MulOpposite.op_inj, P.flip.toPerfPair, P.toLinearMap, coweightHom, dualMap, dualMap_dualMap_eq_iff, eq_comp_toLinearMap_iff, f.weightMap, f.weightMap.dualMap
+/-
+**RootPairing.Hom.coweightHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.H
+om`。
+形式化陈述：coweightHom_injective (P : RootPairing ι R M N) : Injective (coweightHom P
+)
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Hom.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N :
+ Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Modu
+le R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `RootPairing.isPerfPair_toLinearMap`：∀ {ι : Type u_1} {R : Type u_2} {M :
+ Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_
+2 : _root_.Module R M] […
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulOpposite.op_inj`：op_inj {x y : α} : op x = op y ↔ x = y
+· 使用定理 `Module.IsReflexive.of_isPerfPair`：∀ {R : Type u_1} {M : Type u_3} {N : T
+ype u_5} [inst : AddCommGroup M] [inst_1 : AddCommGroup N] [inst_2 : CommRing R]
+   [inst_3 : _root_.Mo…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.dualMap_dualMap_eq_iff`：∀ (R : Type u_3) (M : Type u_4) [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Module
+.IsReflexive R M] {…
+· 使用定理 `LinearEquiv.eq_comp_toLinearMap_iff`：eq_comp_toLinearMap_iff (f g : M₂ -
+>ₛₗ[σ₂₃] M₃) : f.comp e₁₂.toLinearMap = g.comp e₁₂.toLinearMap ↔ f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RootPairing.Hom.weight_coweight_transpose`：∀ {ι : Type u_1} {R : Type u_
+2} {M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]  
+ [inst_2 : _root_.Module R M] […
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Function.Embedding.apply_eq_iff_eq`：apply_eq_iff_eq {α β} (f : α ↪ β) (x
+ y : α) : f x = f y ↔ x = y
+· 使用引理 `RootPairing.Hom.coroot_coweightMap_apply`：coroot_coweightMap_apply {ι₂ M
+₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂] (P
+ : RootPairing ι R M N) (Q : R…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 lemma coweightHom_injective (P : RootPairing ι R M N) : Injective (coweightHom P) := by
   intro f g hfg
@@ -669,7 +614,7 @@ lemma coweightHom_injective (P : RootPairing ι R M N) : Injective (coweightHom 
   · dsimp [coweightHom] at hfg
     rw [MulOpposite.op_inj] at hfg
     have h := congrArg (LinearMap.comp (M₃ := Module.Dual R M) (σ₂₃ := .id R) P.flip.toPerfPair) hfg
-    rw [← f.weight_coweight_transpose]; rw [← g.weight_coweight_transpose] at h
+    rw [← f.weight_coweight_transpose, ← g.weight_coweight_transpose] at h
     have : f.weightMap = g.weightMap := by
       have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
       refine (Module.dualMap_dualMap_eq_iff R M).mp (congrArg LinearMap.dualMap
@@ -682,30 +627,22 @@ lemma coweightHom_injective (P : RootPairing ι R M N) : Injective (coweightHom 
     set y := f.indexEquiv x with hy
     have : f.coweightMap (P.coroot y) = g.coweightMap (P.coroot y) := by
       exact congrFun (congrArg DFunLike.coe hfg) (P.coroot y)
-    rw [coroot_coweightMap_apply]; rw [coroot_coweightMap_apply]; rw [Embedding.apply_eq_iff_eq]; rw [hy] at this
+    rw [coroot_coweightMap_apply, coroot_coweightMap_apply, Embedding.apply_eq_iff_eq, hy] at this
     rw [Equiv.symm_apply_apply] at this
-    rw [this]; rw [Equiv.apply_symm_apply]
+    rw [this, Equiv.apply_symm_apply]
 
-/--
-Definition of `indexHom` / `indexHom` 的定义
+/-- The permutation representation of the endomorphism monoid on the root index set -/
+/-
+**RootPairing.Hom.indexHom** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Hom`。
+形式化陈述：indexHom (P : RootPairing ι R M N) : End P ->* (ι ≃ ι) where toFun f
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition indexHom
-  signature: (P : RootPairing ι R M N)
-  body: Hom.indexEquiv f
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-中文:
-定义 indexHom
-  签名: (P : RootPairing ι R M N)
-  定义体: Hom.indexEquiv f
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-Depends on / 依赖: Hom.indexEquiv, indexEquiv
+--- 原说明 ---
+The permutation representation of the endomorphism monoid on the root index set
 -/
-def indexHom (P : RootPairing ι R M N) : End P ->* (ι ≃ ι) where
+def indexHom (P : RootPairing ι R M N) : End P →* (ι ≃ ι) where
   toFun f := Hom.indexEquiv f
   map_one' := by ext; simp
   map_mul' x y := by ext; simp
@@ -721,24 +658,28 @@ bijective.
 
 See also `RootPairing.Equiv.toEndUnit`. -/
 @[ext]
-/--
-Definition of `Equiv` / `Equiv` 的定义
+/-
+**RootPairing.Equiv** 是 Mathlib 中的一个归纳类型，位于命名空间 `RootPairing`。
+形式化陈述：{ι : Type u_1} →   {R : Type u_2} →     {M : Type u_3} →       {N : Type u
+_4} →         [inst : CommRing R] →           [inst_1 : AddCommGroup M] →       
+      [inst_2 : _root_.Module R M] →               [inst_3 : AddCommGroup N] →  
+               [inst_4 : _root_.Module R N] →                   {ι₂ : Type u_5} 
+→                     {M₂ : Type u_6} →                       {N₂ : Type u_7} → 
+                        [inst_5 : AddCommGroup M₂] →                           [
+inst_6 : _root_.Module R M₂] →                             [inst_7 : AddCommGrou
+p N₂] →                               [inst_8 : _root_.Module R N₂] →           
+                      RootPairing ι R M N →                                   Ro
+otPairing ι₂ R M₂ N₂ → Type (max (max (max (max (max u_1 u_3) u_4) u_5) u_6) u_7
+)
+参数：max (max (max (max (max u_1 u_3) u_4) u_5) u_6) u_7。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Equiv
-  parameters: extends Hom P Q
-  extends: Hom P Q
-  axioms and operations (2):
-    - bijective_weightMap : Bijective weightMap
-    - bijective_coweightMap : Bijective coweightMap
+--- 原说明 ---
+An equivalence of root pairings is a morphism where the maps of weight and cowei
+ght spaces are
+bijective.
 
-中文:
-结构 等价
-  参数: extends 态射 P Q
-  继承: 态射 P Q
-  公理与运算 (2 个):
-    - bijective_weightMap : 双射 weightMap
-    - bijective_coweightMap : 双射 coweightMap
+See also `RootPairing.Equiv.toEndUnit`.
 -/
 protected structure Equiv extends Hom P Q where
   bijective_weightMap : Bijective weightMap
@@ -751,186 +692,140 @@ add_decl_doc Equiv.toHom
 
 namespace Equiv
 
-/--
-Definition of `weightEquiv` / `weightEquiv` 的定义
+/-- The linear equivalence of weight spaces given by an equivalence of root pairings. -/
+/-
+**RootPairing.Equiv.weightEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：weightEquiv (e : RootPairing.Equiv P Q) : M ≃ₗ[R] M₂
+参数：e : RootPairing.Equiv P Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Equiv.bijective_weightMap`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
 
-English:
-definition weightEquiv
-  signature: (e : RootPairing.Equiv P Q)
-  body: LinearEquiv.ofBijective _ e.bijective_weightMap
-
-@[simp]
-
-中文:
-定义 weightEquiv
-  签名: (e : RootPairing.等价 P Q)
-  定义体: LinearEquiv.ofBijective _ e.bijective_weightMap
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, bijective_weightMap, e.bijective_weightMap, ofBijective
+--- 原说明 ---
+The linear equivalence of weight spaces given by an equivalence of root pairings
+.
 -/
 def weightEquiv (e : RootPairing.Equiv P Q) : M ≃ₗ[R] M₂ :=
     LinearEquiv.ofBijective _ e.bijective_weightMap
 
 @[simp]
-/--
-lemma `weightEquiv_apply` / 引理 `weightEquiv_apply`
-
-English:
-lemma weightEquiv_apply
-  given: (e : RootPairing.Equiv P Q) (m : M)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 weightEquiv_apply
-  条件: (e : RootPairing.等价 P Q) (m : M)
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.weightEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equ
+iv`。
+形式化陈述：weightEquiv_apply (e : RootPairing.Equiv P Q) (m : M) : weightEquiv P Q e 
+m = e.toHom.weightMap m
+参数：e : RootPairing.Equiv P Q；m : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightEquiv_apply (e : RootPairing.Equiv P Q) (m : M) :
     weightEquiv P Q e m = e.toHom.weightMap m :=
   rfl
 
 @[simp]
-/--
-lemma `weightEquiv_symm_weightMap` / 引理 `weightEquiv_symm_weightMap`
-
-English:
-lemma weightEquiv_symm_weightMap
-  given: (e : RootPairing.Equiv P Q) (m : M)
-  proof: (LinearEquiv.symm_apply_eq (weightEquiv P Q e)).mpr rfl
-
-@[simp]
-
-中文:
-引理 weightEquiv_symm_weightMap
-  条件: (e : RootPairing.等价 P Q) (m : M)
-  证明: (LinearEquiv.symm_apply_eq (weightEquiv P Q e)).mpr rfl
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_eq, symm_apply_eq, weightEquiv
+/-
+**RootPairing.Equiv.weightEquiv_symm_weightMap** 是 Mathlib 中的一个引理，位于命名空间 `RootPa
+iring.Equiv`。
+形式化陈述：weightEquiv_symm_weightMap (e : RootPairing.Equiv P Q) (m : M) : (weightEq
+uiv P Q e).symm (e.toHom.weightMap m) = m
+参数：e : RootPairing.Equiv P Q；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.symm_apply_eq`：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
 -/
 lemma weightEquiv_symm_weightMap (e : RootPairing.Equiv P Q) (m : M) :
     (weightEquiv P Q e).symm (e.toHom.weightMap m) = m :=
   (LinearEquiv.symm_apply_eq (weightEquiv P Q e)).mpr rfl
 
 @[simp]
-/--
-lemma `weightMap_weightEquiv_symm` / 引理 `weightMap_weightEquiv_symm`
-
-English:
-lemma weightMap_weightEquiv_symm
-  given: (e : RootPairing.Equiv P Q) (m : M₂)
-  proof: by
-  rw [← weightEquiv_apply]
-  exact LinearEquiv.apply_symm_apply (weightEquiv P Q e) m
-
-中文:
-引理 weightMap_weightEquiv_symm
-  条件: (e : RootPairing.等价 P Q) (m : M₂)
-  证明: by
-  rw [← weightEquiv_apply]
-  exact LinearEquiv.apply_symm_apply (weightEquiv P Q e) m
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.apply_symm_apply, apply_symm_apply, weightEquiv, weightEquiv_apply
+/-
+**RootPairing.Equiv.weightMap_weightEquiv_symm** 是 Mathlib 中的一个引理，位于命名空间 `RootPa
+iring.Equiv`。
+形式化陈述：weightMap_weightEquiv_symm (e : RootPairing.Equiv P Q) (m : M₂) : e.toHom.
+weightMap ((weightEquiv P Q e).symm m) = m
+参数：e : RootPairing.Equiv P Q；m : M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `RootPairing.Equiv.weightEquiv_apply`：weightEquiv_apply (e : RootPairing.
+Equiv P Q) (m : M) : weightEquiv P Q e m = e.toHom.weightMap m
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
 -/
 lemma weightMap_weightEquiv_symm (e : RootPairing.Equiv P Q) (m : M₂) :
     e.toHom.weightMap ((weightEquiv P Q e).symm m) = m := by
   rw [← weightEquiv_apply]
   exact LinearEquiv.apply_symm_apply (weightEquiv P Q e) m
 
-/--
-Definition of `coweightEquiv` / `coweightEquiv` 的定义
+/-- The contravariant equivalence of coweight spaces given by an equivalence of root pairings. -/
+/-
+**RootPairing.Equiv.coweightEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：coweightEquiv (e : RootPairing.Equiv P Q) : N₂ ≃ₗ[R] N
+参数：e : RootPairing.Equiv P Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Equiv.bijective_coweightMap`：∀ {ι : Type u_1} {R : Type u_2}
+ {M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [
+inst_2 : _root_.Module R M] […
 
-English:
-definition coweightEquiv
-  signature: (e : RootPairing.Equiv P Q)
-  body: LinearEquiv.ofBijective _ e.bijective_coweightMap
-
-@[simp]
-
-中文:
-定义 coweightEquiv
-  签名: (e : RootPairing.等价 P Q)
-  定义体: LinearEquiv.ofBijective _ e.bijective_coweightMap
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, bijective_coweightMap, e.bijective_coweightMap, ofBijective
+--- 原说明 ---
+The contravariant equivalence of coweight spaces given by an equivalence of root
+ pairings.
 -/
 def coweightEquiv (e : RootPairing.Equiv P Q) : N₂ ≃ₗ[R] N :=
   LinearEquiv.ofBijective _ e.bijective_coweightMap
 
 @[simp]
-/--
-lemma `coweightEquiv_apply` / 引理 `coweightEquiv_apply`
-
-English:
-lemma coweightEquiv_apply
-  given: (e : RootPairing.Equiv P Q) (n : N₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coweightEquiv_apply
-  条件: (e : RootPairing.等价 P Q) (n : N₂)
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.coweightEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.E
+quiv`。
+形式化陈述：coweightEquiv_apply (e : RootPairing.Equiv P Q) (n : N₂) : coweightEquiv P
+ Q e n = e.toHom.coweightMap n
+参数：e : RootPairing.Equiv P Q；n : N₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coweightEquiv_apply (e : RootPairing.Equiv P Q) (n : N₂) :
     coweightEquiv P Q e n = e.toHom.coweightMap n :=
   rfl
 
 @[simp]
-/--
-lemma `coweightEquiv_symm_coweightMap` / 引理 `coweightEquiv_symm_coweightMap`
-
-English:
-lemma coweightEquiv_symm_coweightMap
-  given: (e : RootPairing.Equiv P Q) (n : N₂)
-  proof: (LinearEquiv.symm_apply_eq (coweightEquiv P Q e)).mpr rfl
-
-@[simp]
-
-中文:
-引理 coweightEquiv_symm_coweightMap
-  条件: (e : RootPairing.等价 P Q) (n : N₂)
-  证明: (LinearEquiv.symm_apply_eq (coweightEquiv P Q e)).mpr rfl
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_eq, coweightEquiv, symm_apply_eq
+/-
+**RootPairing.Equiv.coweightEquiv_symm_coweightMap** 是 Mathlib 中的一个引理，位于命名空间 `Ro
+otPairing.Equiv`。
+形式化陈述：coweightEquiv_symm_coweightMap (e : RootPairing.Equiv P Q) (n : N₂) : (cow
+eightEquiv P Q e).symm (e.toHom.coweightMap n) = n
+参数：e : RootPairing.Equiv P Q；n : N₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.symm_apply_eq`：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
 -/
 lemma coweightEquiv_symm_coweightMap (e : RootPairing.Equiv P Q) (n : N₂) :
     (coweightEquiv P Q e).symm (e.toHom.coweightMap n) = n :=
   (LinearEquiv.symm_apply_eq (coweightEquiv P Q e)).mpr rfl
 
 @[simp]
-/--
-lemma `coweightMap_coweightEquiv_symm` / 引理 `coweightMap_coweightEquiv_symm`
-
-English:
-lemma coweightMap_coweightEquiv_symm
-  given: (e : RootPairing.Equiv P Q) (n : N)
-  proof: by
-  rw [← coweightEquiv_apply]
-  exact LinearEquiv.apply_symm_apply (coweightEquiv P Q e) n
-
-中文:
-引理 coweightMap_coweightEquiv_symm
-  条件: (e : RootPairing.等价 P Q) (n : N)
-  证明: by
-  rw [← coweightEquiv_apply]
-  exact LinearEquiv.apply_symm_apply (coweightEquiv P Q e) n
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.apply_symm_apply, apply_symm_apply, coweightEquiv, coweightEquiv_apply
+/-
+**RootPairing.Equiv.coweightMap_coweightEquiv_symm** 是 Mathlib 中的一个引理，位于命名空间 `Ro
+otPairing.Equiv`。
+形式化陈述：coweightMap_coweightEquiv_symm (e : RootPairing.Equiv P Q) (n : N) : e.toH
+om.coweightMap ((coweightEquiv P Q e).symm n) = n
+参数：e : RootPairing.Equiv P Q；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `RootPairing.Equiv.coweightEquiv_apply`：coweightEquiv_apply (e : RootPair
+ing.Equiv P Q) (n : N₂) : coweightEquiv P Q e n = e.toHom.coweightMap n
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
 -/
 lemma coweightMap_coweightEquiv_symm (e : RootPairing.Equiv P Q) (n : N) :
     e.toHom.coweightMap ((coweightEquiv P Q e).symm n) = n := by
@@ -939,60 +834,35 @@ lemma coweightMap_coweightEquiv_symm (e : RootPairing.Equiv P Q) (n : N) :
 
 /-- The identity equivalence of a root pairing. -/
 @[simps!]
-/--
-Definition of `id` / `id` 的定义
+/-
+**RootPairing.Equiv.id** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：id (P : RootPairing ι R M N) : RootPairing.Equiv P P
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (P : RootPairing ι R M N)
-  body: { Hom.id P with
-    bijective_weightMap := _root_.id bijective_id
-    bijective_coweightMap := _root_.id bijective_id }
-
-中文:
-定义 id
-  签名: (P : RootPairing ι R M N)
-  定义体: { Hom.id P with
-    bijective_weightMap := _root_.id bijective_id
-    bijective_coweightMap := _root_.id bijective_id }
-
-Depends on / 依赖: Hom.id, _root_, _root_.id, bijective_coweightMap, bijective_id, bijective_weightMap
+--- 原说明 ---
+The identity equivalence of a root pairing.
 -/
 def id (P : RootPairing ι R M N) : RootPairing.Equiv P P :=
   { Hom.id P with
     bijective_weightMap := _root_.id bijective_id
     bijective_coweightMap := _root_.id bijective_id }
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of equivalences -/
+/-
+**RootPairing.Equiv.comp** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommG
+roup N₁] [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module
+ R N₂] {P : RootPairing ι R M N} {P₁ : RootPairing ι₁ R M₁ N₁} {P₂ : RootPairing
+ ι₂ R M₂ N₂} (g : RootPairing.Equiv P₁ P₂) (f : RootPairing.Equiv P P₁) : RootPa
+iring.Equiv P P₂
+参数：g : RootPairing.Equiv P₁ P₂；f : RootPairing.Equiv P P₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
-  body: { Hom.comp g.toHom f.toHom with
-    bijective_weightMap := by
-      simp only [Hom.comp, LinearMap.coe_comp]
-      exact Bijective.comp g.bijective_weightMap f.bijective_weightMap
-    bijective_coweightMap := by
-      simp only [Hom.comp, LinearMap.coe_comp]
-      exact Bijective.comp f.bijective_coweightMap g.bijective_coweightMap }
-
-@[simp]
-
-中文:
-定义 comp
-  签名: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [加法交换群 M₁] [模 R M₁] [加法交换群 N₁]
-  定义体: { Hom.comp g.toHom f.toHom with
-    bijective_weightMap := by
-      simp only [Hom.comp, LinearMap.coe_comp]
-      exact Bijective.comp g.bijective_weightMap f.bijective_weightMap
-    bijective_coweightMap := by
-      simp only [Hom.comp, LinearMap.coe_comp]
-      exact Bijective.comp f.bijective_coweightMap g.bijective_coweightMap }
-
-@[simp]
-
-Depends on / 依赖: Bijective, Bijective.comp, Hom.comp, LinearMap, LinearMap.coe_comp, bijective_coweightMap, bijective_weightMap, coe_comp, f.bijective_coweightMap, f.bijective_weightMap, f.toHom, g.bijective_coweightMap, g.bijective_weightMap, g.toHom
+--- 原说明 ---
+Composition of equivalences
 -/
 def comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
     [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -1007,24 +877,16 @@ def comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R
       exact Bijective.comp f.bijective_coweightMap g.bijective_coweightMap }
 
 @[simp]
-/--
-lemma `toHom_comp` / 引理 `toHom_comp`
-
-English:
-lemma toHom_comp
-  statement: {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 toHom_comp
-  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ : 类型} [加法交换群 M₁] [模 R M₁] [加法交换群 N₁]
-  证明: by
-  rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.toHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [Ad
+dCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [
+Module R N₂] {P : RootPairing ι R M N} {P₁ : RootPairing ι₁ R M₁ N₁} {P₂ : RootP
+airing ι₂ R M₂ N₂} (g : RootPairing.Equiv P₁ P₂) (f : RootPairing.Equiv P P₁) : 
+(Equiv.comp g f).toHom = Hom.comp g.toHom f.toHom
+参数：g : RootPairing.Equiv P₁ P₂；f : RootPairing.Equiv P P₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁]
     [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -1034,24 +896,49 @@ lemma toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [AddCommGroup M₁] [
   rfl
 
 @[simp]
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  statement: {ι₂ M₂ N₂ : Type*}
-  proof: by
-  ext x <;> simp
-
-@[simp]
-
-中文:
-引理 id_comp
-  结论: {ι₂ M₂ N₂ : 类型}
-  证明: by
-  ext x <;> simp
-
-@[simp]
+/-
+**RootPairing.Equiv.id_comp** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：id_comp {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N
+₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (f : Roo
+tPairing.Equiv P Q) : comp f (id P) = f
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : RootPairing.Equiv P Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Equiv.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N
+ : Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Mo
+dule R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RootPairing.Equiv.toHom_comp`：toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [Ad
+dCommGroup M₁] [Module R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [
+Module R M₂] [AddC…
+· 使用定理 `RootPairing.Hom.comp_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Equiv.id_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RootPairing.Hom.comp_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Equiv.id_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `RootPairing.Hom.comp_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Equiv.id_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
 -/
 lemma id_comp {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -1060,24 +947,49 @@ lemma id_comp {ι₂ M₂ N₂ : Type*}
   ext x <;> simp
 
 @[simp]
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  statement: {ι₂ M₂ N₂ : Type*}
-  proof: by
-  ext x <;> simp
-
-@[simp]
-
-中文:
-引理 comp_id
-  结论: {ι₂ M₂ N₂ : 类型}
-  证明: by
-  ext x <;> simp
-
-@[simp]
+/-
+**RootPairing.Equiv.comp_id** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：comp_id {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N
+₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (f : Roo
+tPairing.Equiv P Q) : comp (id Q) f = f
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : RootPairing.Equiv P Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Equiv.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N
+ : Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Mo
+dule R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RootPairing.Equiv.toHom_comp`：toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [Ad
+dCommGroup M₁] [Module R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [
+Module R M₂] [AddC…
+· 使用定理 `RootPairing.Hom.comp_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Equiv.id_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RootPairing.Hom.comp_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Equiv.id_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `RootPairing.Hom.comp_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
+· 使用定理 `RootPairing.Equiv.id_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
 -/
 lemma comp_id {ι₂ M₂ N₂ : Type*}
     [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -1086,20 +998,50 @@ lemma comp_id {ι₂ M₂ N₂ : Type*}
   ext x <;> simp
 
 @[simp]
-/--
-lemma `comp_assoc` / 引理 `comp_assoc`
-
-English:
-lemma comp_assoc
-  statement: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddCommGroup M₁] [Module R M₁]
-  proof: by
-  ext <;> simp
-
-中文:
-引理 comp_assoc
-  结论: {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : 类型} [加法交换群 M₁] [模 R M₁]
-  证明: by
-  ext <;> simp
+/-
+**RootPairing.Equiv.comp_assoc** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：comp_assoc {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddCommGroup M₁] [Module 
+R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGr
+oup N₂] [Module R N₂] [AddCommGroup M₃] [Module R M₃] [AddCommGroup N₃] [Module 
+R N₃] {P : RootPairing ι R M N} {P₁ : RootPairing ι₁ R M₁ N₁} {P₂ : RootPairing 
+ι₂ R M₂ N₂} {P₃ : RootPairing ι₃ R M₃ N₃} (h : RootPairing.Equiv P₂ P₃) (g : Roo
+tPairing.Equiv P₁ P₂) (f : RootPairing.Equiv P P₁) : comp (comp h g) f = comp h 
+(comp g f)
+参数：h : RootPairing.Equiv P₂ P₃；g : RootPairing.Equiv P₁ P₂；f : RootPairing.Equiv
+ P P₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Equiv.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N
+ : Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Mo
+dule R M} {…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `RootPairing.Equiv.toHom_comp`：toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [Ad
+dCommGroup M₁] [Module R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [
+Module R M₂] [AddC…
+· 使用引理 `RootPairing.Hom.comp_assoc`：comp_assoc {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Typ
+e*} [AddCommGroup M₁] [Module R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGrou
+p M₂] [Module R …
+· 使用定理 `RootPairing.Hom.comp_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RootPairing.Hom.comp_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `RootPairing.Hom.comp_indexEquiv_apply`：∀ {ι : Type u_1} {R : Type u_2} {
+M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [in
+st_2 : _root_.Module R M] […
 -/
 lemma comp_assoc {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddCommGroup M₁] [Module R M₁]
     [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
@@ -1110,6 +1052,13 @@ lemma comp_assoc {ι₁ M₁ N₁ ι₂ M₂ N₂ ι₃ M₃ N₃ : Type*} [AddC
   ext <;> simp
 
 /-- Equivalences form a monoid. -/
+/-
+**RootPairing.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Equivalences form a monoid.
+-/
 instance (P : RootPairing ι R M N) : Monoid (RootPairing.Equiv P P) where
   mul := comp
   mul_assoc := comp_assoc
@@ -1118,273 +1067,157 @@ instance (P : RootPairing ι R M N) : Monoid (RootPairing.Equiv P P) where
   mul_one := comp_id P P
 
 @[simp]
-/--
-lemma `weightEquiv_one` / 引理 `weightEquiv_one`
-
-English:
-lemma weightEquiv_one
-  given: (P : RootPairing ι R M N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 weightEquiv_one
-  条件: (P : RootPairing ι R M N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+/-
+**RootPairing.Equiv.weightEquiv_one** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv
+`。
+形式化陈述：weightEquiv_one (P : RootPairing ι R M N) : weightEquiv (P
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightEquiv_one (P : RootPairing ι R M N) :
     weightEquiv (P := P) (Q := P) 1 = LinearMap.id (R := R) (M := M) :=
   rfl
 
 @[simp]
-/--
-lemma `coweightEquiv_one` / 引理 `coweightEquiv_one`
-
-English:
-lemma coweightEquiv_one
-  given: (P : RootPairing ι R M N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coweightEquiv_one
-  条件: (P : RootPairing ι R M N)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id
+/-
+**RootPairing.Equiv.coweightEquiv_one** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equ
+iv`。
+形式化陈述：coweightEquiv_one (P : RootPairing ι R M N) : coweightEquiv (P
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coweightEquiv_one (P : RootPairing ι R M N) :
     coweightEquiv (P := P) (Q := P) 1 = LinearMap.id (R := R) (M := N) :=
   rfl
 
 @[simp]
-/--
-lemma `toHom_one` / 引理 `toHom_one`
-
-English:
-lemma toHom_one
-  given: (P : RootPairing ι R M N)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toHom_one
-  条件: (P : RootPairing ι R M N)
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.toHom_one** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：toHom_one (P : RootPairing ι R M N) : (1 : RootPairing.Equiv P P).toHom = 
+(1 : RootPairing.Hom P P)
+参数：P : RootPairing ι R M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toHom_one (P : RootPairing ι R M N) :
     (1 : RootPairing.Equiv P P).toHom = (1 : RootPairing.Hom P P) :=
   rfl
 
 @[simp]
-/--
-lemma `mul_eq_comp` / 引理 `mul_eq_comp`
-
-English:
-lemma mul_eq_comp
-  given: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mul_eq_comp
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.mul_eq_comp** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：mul_eq_comp {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) : x * 
+y = Equiv.comp x y
+参数：x y : RootPairing.Equiv P P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mul_eq_comp {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) :
     x * y = Equiv.comp x y :=
   rfl
 
 @[simp]
-/--
-lemma `weightEquiv_comp_toLin` / 引理 `weightEquiv_comp_toLin`
-
-English:
-lemma weightEquiv_comp_toLin
-  given: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-引理 weightEquiv_comp_toLin
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**RootPairing.Equiv.weightEquiv_comp_toLin** 是 Mathlib 中的一个引理，位于命名空间 `RootPairin
+g.Equiv`。
+形式化陈述：weightEquiv_comp_toLin {P : RootPairing ι R M N} (x y : RootPairing.Equiv 
+P P) : weightEquiv P P (Equiv.comp x y) = weightEquiv P P y ≪≫ₗ weightEquiv P P 
+x
+参数：x y : RootPairing.Equiv P P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RootPairing.Equiv.toHom_comp`：toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [Ad
+dCommGroup M₁] [Module R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [
+Module R M₂] [AddC…
+· 使用定理 `RootPairing.Hom.comp_weightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} {M
+ : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [ins
+t_2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma weightEquiv_comp_toLin {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) :
     weightEquiv P P (Equiv.comp x y) = weightEquiv P P y ≪≫ₗ weightEquiv P P x := by
   ext; simp
 
 @[simp]
-/--
-lemma `weightEquiv_mul` / 引理 `weightEquiv_mul`
-
-English:
-lemma weightEquiv_mul
-  given: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 weightEquiv_mul
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
-  证明: by
-  rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.weightEquiv_mul** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv
+`。
+形式化陈述：weightEquiv_mul {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) : 
+weightEquiv P P x * weightEquiv P P y = weightEquiv P P y ≪≫ₗ weightEquiv P P x
+参数：x y : RootPairing.Equiv P P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightEquiv_mul {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) :
     weightEquiv P P x * weightEquiv P P y = weightEquiv P P y ≪≫ₗ weightEquiv P P x := by
   rfl
 
 @[simp]
-/--
-lemma `coweightEquiv_comp_toLin` / 引理 `coweightEquiv_comp_toLin`
-
-English:
-lemma coweightEquiv_comp_toLin
-  given: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-引理 coweightEquiv_comp_toLin
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**RootPairing.Equiv.coweightEquiv_comp_toLin** 是 Mathlib 中的一个引理，位于命名空间 `RootPair
+ing.Equiv`。
+形式化陈述：coweightEquiv_comp_toLin {P : RootPairing ι R M N} (x y : RootPairing.Equi
+v P P) : coweightEquiv P P (Equiv.comp x y) = coweightEquiv P P x ≪≫ₗ coweightEq
+uiv P P y
+参数：x y : RootPairing.Equiv P P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RootPairing.Equiv.toHom_comp`：toHom_comp {ι₁ M₁ N₁ ι₂ M₂ N₂ : Type*} [Ad
+dCommGroup M₁] [Module R M₁] [AddCommGroup N₁] [Module R N₁] [AddCommGroup M₂] [
+Module R M₂] [AddC…
+· 使用定理 `RootPairing.Hom.comp_coweightMap_apply`：∀ {ι : Type u_1} {R : Type u_2} 
+{M : Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [i
+nst_2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coweightEquiv_comp_toLin {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) :
     coweightEquiv P P (Equiv.comp x y) = coweightEquiv P P x ≪≫ₗ coweightEquiv P P y := by
   ext; simp
 
 @[simp]
-/--
-lemma `coweightEquiv_mul` / 引理 `coweightEquiv_mul`
-
-English:
-lemma coweightEquiv_mul
-  given: {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P)
-  proof: by
-  rfl
-
-中文:
-引理 coweightEquiv_mul
-  条件: {P : RootPairing ι R M N} (x y : RootPairing.等价 P P)
-  证明: by
-  rfl
+/-
+**RootPairing.Equiv.coweightEquiv_mul** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equ
+iv`。
+形式化陈述：coweightEquiv_mul {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) 
+: coweightEquiv P P x * coweightEquiv P P y = coweightEquiv P P y ≪≫ₗ coweightEq
+uiv P P x
+参数：x y : RootPairing.Equiv P P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coweightEquiv_mul {P : RootPairing ι R M N} (x y : RootPairing.Equiv P P) :
     coweightEquiv P P x * coweightEquiv P P y = coweightEquiv P P y ≪≫ₗ coweightEquiv P P x := by
   rfl
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- The inverse of a root pairing equivalence. -/
+/-
+**RootPairing.Equiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：symm {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] 
+[Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (f : RootPa
+iring.Equiv P Q) : RootPairing.Equiv Q P where weightMap
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : RootPairing.Equiv P Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition symm
-  signature: {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
-  body: (weightEquiv P Q f).symm
-  coweightMap := (coweightEquiv P Q f).symm
-  indexEquiv := f.indexEquiv.symm
-  weight_coweight_transpose := by
-    ext n m
-    nth_rw 2 [show m = (weightEquiv P Q f) ((weightEquiv P Q f).symm m) by
-      exact (LinearEquiv.symm_apply_eq (weightEquiv P Q f)).mp rfl]
-    nth_rw 1 [show n = (coweightEquiv P Q f) ((coweightEquiv P Q f).symm n) by
-      exact (LinearEquiv.symm_apply_eq (coweightEquiv P Q f)).mp rfl]
-    have := f.weight_coweight_transpose
-    rw [LinearMap.ext_iff₂] at this
-    exact Eq.symm (this ((coweightEquiv P Q f).symm n) ((weightEquiv P Q f).symm m))
-  root_weightMap := by
-    ext i
-    simp only [LinearEquiv.coe_coe, comp_apply]
-    have := f.root_weightMap
-    rw [funext_iff] at this
-    specialize this (f.indexEquiv.symm i)
-    simp only [comp_apply, Equiv.apply_symm_apply] at this
-    simp [← this]
-  coroot_coweightMap := by
-    ext i
-    simp only [LinearEquiv.coe_coe, comp_apply, Equiv.symm_symm]
-    have := f.coroot_coweightMap
-    rw [funext_iff] at this
-    specialize this (f.indexEquiv i)
-    simp only [comp_apply, Equiv.symm_apply_apply] at this
-    simp [← this]
-  bijective_weightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (weightEquiv P Q f).symm
-  bijective_coweightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (coweightEquiv P Q f).symm
-
-@[simp]
-
-中文:
-定义 symm
-  签名: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂] [模 R N₂]
-  定义体: (weightEquiv P Q f).symm
-  coweightMap := (coweightEquiv P Q f).symm
-  indexEquiv := f.indexEquiv.symm
-  weight_coweight_transpose := by
-    ext n m
-    nth_rw 2 [show m = (weightEquiv P Q f) ((weightEquiv P Q f).symm m) by
-      exact (LinearEquiv.symm_apply_eq (weightEquiv P Q f)).mp rfl]
-    nth_rw 1 [show n = (coweightEquiv P Q f) ((coweightEquiv P Q f).symm n) by
-      exact (LinearEquiv.symm_apply_eq (coweightEquiv P Q f)).mp rfl]
-    have := f.weight_coweight_transpose
-    rw [LinearMap.ext_iff₂] at this
-    exact Eq.symm (this ((coweightEquiv P Q f).symm n) ((weightEquiv P Q f).symm m))
-  root_weightMap := by
-    ext i
-    simp only [LinearEquiv.coe_coe, comp_apply]
-    have := f.root_weightMap
-    rw [funext_iff] at this
-    specialize this (f.indexEquiv.symm i)
-    simp only [comp_apply, Equiv.apply_symm_apply] at this
-    simp [← this]
-  coroot_coweightMap := by
-    ext i
-    simp only [LinearEquiv.coe_coe, comp_apply, Equiv.symm_symm]
-    have := f.coroot_coweightMap
-    rw [funext_iff] at this
-    specialize this (f.indexEquiv i)
-    simp only [comp_apply, Equiv.symm_apply_apply] at this
-    simp [← this]
-  bijective_weightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (weightEquiv P Q f).symm
-  bijective_coweightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (coweightEquiv P Q f).symm
-
-@[simp]
-
-Depends on / 依赖: weightEquiv
+--- 原说明 ---
+The inverse of a root pairing equivalence.
 -/
 def symm {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂] [Module R N₂]
     (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (f : RootPairing.Equiv P Q) :
@@ -1425,22 +1258,14 @@ def symm {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommG
     exact LinearEquiv.bijective (coweightEquiv P Q f).symm
 
 @[simp]
-/--
-lemma `inv_weightMap` / 引理 `inv_weightMap`
-
-English:
-lemma inv_weightMap
-  statement: {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inv_weightMap
-  结论: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂]
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.inv_weightMap** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：inv_weightMap {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommG
+roup N₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (f
+ : RootPairing.Equiv P Q) : (symm P Q f).weightMap = (weightEquiv P Q f).symm
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : RootPairing.Equiv P Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_weightMap {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
     [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂)
@@ -1448,22 +1273,16 @@ lemma inv_weightMap {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂
   rfl
 
 @[simp]
-/--
-lemma `inv_coweightMap` / 引理 `inv_coweightMap`
-
-English:
-lemma inv_coweightMap
-  statement: {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inv_coweightMap
-  结论: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂]
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.inv_coweightMap** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv
+`。
+形式化陈述：inv_coweightMap {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCom
+mGroup N₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) 
+(f : RootPairing.Equiv P Q) : (symm P Q f).coweightMap = (coweightEquiv P Q f).s
+ymm
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : RootPairing.Equiv P Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_coweightMap {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
     [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂)
@@ -1471,18 +1290,16 @@ lemma inv_coweightMap {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M�
   rfl
 
 @[simp]
-/--
-lemma `inv_indexEquiv` / 引理 `inv_indexEquiv`
-
-English:
-lemma inv_indexEquiv
-  statement: {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
-  proof: rfl
-
-中文:
-引理 inv_indexEquiv
-  结论: {ι₂ M₂ N₂ : 类型} [加法交换群 M₂] [模 R M₂] [加法交换群 N₂]
-  证明: rfl
+/-
+**RootPairing.Equiv.inv_indexEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`
+。
+形式化陈述：inv_indexEquiv {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddComm
+Group N₂] [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂) (
+f : RootPairing.Equiv P Q) : (symm P Q f).indexEquiv = (Hom.indexEquiv f.toHom).
+symm
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : RootPairing.Equiv P Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_indexEquiv {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M₂] [AddCommGroup N₂]
     [Module R N₂] (P : RootPairing ι R M N) (Q : RootPairing ι₂ R M₂ N₂)
@@ -1490,6 +1307,13 @@ lemma inv_indexEquiv {ι₂ M₂ N₂ : Type*} [AddCommGroup M₂] [Module R M�
   rfl
 
 /-- Equivalences form a group. -/
+/-
+**RootPairing.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Equivalences form a group.
+-/
 instance (P : RootPairing ι R M N) : Group (RootPairing.Equiv P P) where
   mul := comp
   mul_assoc := comp_assoc
@@ -1505,56 +1329,27 @@ instance (P : RootPairing ι R M N) : Group (RootPairing.Equiv P P) where
       simp
     · simp
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- For finite roots systems in characteristic zero, a linear equivalence preserving roots, also
+preserves coroots, and is thus an equivalence of root systems. -/
+/-
+**RootPairing.Equiv.mk'** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：mk' [IsDomain R] [CharZero R] [Module.IsTorsionFree R M₂] [Finite ι₂] (P :
+ RootPairing ι R M N) [P.IsRootSystem] (Q : RootPairing ι₂ R M₂ N₂) [Q.IsRootSys
+tem] (f : M ≃ₗ[R] M₂) (e : ι ≃ ι₂) (hf : forall i, f (P.root i) = Q.root (e i)) 
+: P.Equiv Q where weightMap
+参数：P : RootPairing ι R M N；Q : RootPairing ι₂ R M₂ N₂；f : M ≃ₗ[R] M₂；e : ι ≃ ι₂；
+hf : forall i, f (P.root i) = Q.root (e i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: [IsDomain R] [CharZero R] [Module.IsTorsionFree R M₂] [Finite ι₂]
-  body: f
-  coweightMap := Q.flip.toPerfPair.trans (f.dualMap.trans P.flip.toPerfPair.symm)
-  indexEquiv := e
-  weight_coweight_transpose := by ext; simp
-  root_weightMap := by ext; simp [hf]
-  coroot_coweightMap := by
-let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.toPerfPair.symm
-    suffices Q = P.map e f g by
-      ext i
-      rw [LinearEquiv.coe_coe]; rw [comp_apply]; rw [← LinearEquiv.eq_symm_apply]
-      conv_lhs => rw [this]
-      rfl
-    apply IsRootSystem.ext <;> ext
-    · simp [RootPairing.map, RootPairing.map, g]
-    · simp [hf, RootPairing.map, RootPairing.map]
-  bijective_weightMap := LinearEquiv.bijective _
-  bijective_coweightMap := LinearEquiv.bijective _
-
-中文:
-定义 mk'
-  签名: [是整环 R] [特征零 R] [模.是无挠 R M₂] [有限 ι₂]
-  定义体: f
-  coweightMap := Q.flip.toPerfPair.trans (f.dualMap.trans P.flip.toPerfPair.symm)
-  indexEquiv := e
-  weight_coweight_transpose := by ext; simp
-  root_weightMap := by ext; simp [hf]
-  coroot_coweightMap := by
-let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.toPerfPair.symm
-    suffices Q = P.map e f g by
-      ext i
-      rw [LinearEquiv.coe_coe]; rw [comp_apply]; rw [← LinearEquiv.eq_symm_apply]
-      conv_lhs => rw [this]
-      rfl
-    apply IsRootSystem.ext <;> ext
-    · simp [RootPairing.map, RootPairing.map, g]
-    · simp [hf, RootPairing.map, RootPairing.map]
-  bijective_weightMap := LinearEquiv.bijective _
-  bijective_coweightMap := LinearEquiv.bijective _
-
-Depends on / 依赖: SFinite, SigmaFinite, disjointed, disjointed_subset, infer_instance, measure_mono, measure_spanningSets_lt_top, restrict, spanningSets, sum_restrict_disjointed_spanningSets, trans_lt
+--- 原说明 ---
+For finite roots systems in characteristic zero, a linear equivalence preserving
+ roots, also
+preserves coroots, and is thus an equivalence of root systems.
 -/
 def mk' [IsDomain R] [CharZero R] [Module.IsTorsionFree R M₂] [Finite ι₂]
     (P : RootPairing ι R M N) [P.IsRootSystem] (Q : RootPairing ι₂ R M₂ N₂) [Q.IsRootSystem]
-    (f : M ≃ₗ[R] M₂) (e : ι ≃ ι₂) (hf : forall i, f (P.root i) = Q.root (e i)) :
+    (f : M ≃ₗ[R] M₂) (e : ι ≃ ι₂) (hf : ∀ i, f (P.root i) = Q.root (e i)) :
     P.Equiv Q where
   weightMap := f
   coweightMap := Q.flip.toPerfPair.trans (f.dualMap.trans P.flip.toPerfPair.symm)
@@ -1562,10 +1357,10 @@ def mk' [IsDomain R] [CharZero R] [Module.IsTorsionFree R M₂] [Finite ι₂]
   weight_coweight_transpose := by ext; simp
   root_weightMap := by ext; simp [hf]
   coroot_coweightMap := by
-let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.toPerfPair.symm
+    let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans <| f.symm.dualMap.trans Q.flip.toPerfPair.symm
     suffices Q = P.map e f g by
       ext i
-      rw [LinearEquiv.coe_coe]; rw [comp_apply]; rw [← LinearEquiv.eq_symm_apply]
+      rw [LinearEquiv.coe_coe, comp_apply, ← LinearEquiv.eq_symm_apply]
       conv_lhs => rw [this]
       rfl
     apply IsRootSystem.ext <;> ext
@@ -1576,99 +1371,33 @@ let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.
 
 end Equiv
 
-/--
-Definition of `Aut` / `Aut` 的定义
+/-- The automorphism group of a root pairing. -/
+/-
+**RootPairing.Aut** 是 Mathlib 中的一个缩写定义，位于命名空间 `RootPairing`。
+形式化陈述：Aut (P : RootPairing ι R M N)
+参数：P : RootPairing ι R M N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Aut
-  signature: (P : RootPairing ι R M N)
-  body: (RootPairing.Equiv P P)
-
-中文:
-缩写 Aut
-  签名: (P : RootPairing ι R M N)
-  定义体: (RootPairing.Equiv P P)
-
-Depends on / 依赖: RootPairing, RootPairing.Equiv
+--- 原说明 ---
+The automorphism group of a root pairing.
 -/
 abbrev Aut (P : RootPairing ι R M N) := (RootPairing.Equiv P P)
 
 namespace Equiv
 
-/--
-Definition of `toEndUnit` / `toEndUnit` 的定义
+/-- The isomorphism between the automorphism group of a root pairing and the group of invertible
+endomorphisms. -/
+/-
+**RootPairing.Equiv.toEndUnit** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：toEndUnit (P : RootPairing ι R M N) : Aut P ≃* (End P)ˣ where toFun f
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toEndUnit
-  signature: (P : RootPairing ι R M N)
-  body: { val := f.toHom
-    inv := (Equiv.symm P P f).toHom
-    val_inv := by ext <;> simp
-    inv_val := by ext <;> simp }
-  invFun f :=
-  { f.val with
-    bijective_weightMap := by
-      refine bijective_iff_has_inverse.mpr ?_
-      use f.inv.weightMap
-      constructor
-      · refine leftInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.weightMap_mul]; rw [f.inv_val]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
-      · refine rightInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.weightMap_mul]; rw [f.val_inv]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
-    bijective_coweightMap := by
-      refine bijective_iff_has_inverse.mpr ?_
-      use f.inv.coweightMap
-      constructor
-      · refine leftInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.coweightMap_mul]; rw [f.val_inv]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe]
-      · refine rightInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.coweightMap_mul]; rw [f.inv_val]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe] }
-  left_inv f := by simp
-  right_inv f := by simp
-  map_mul' f g := by
-    simp only [Equiv.mul_eq_comp, Equiv.toHom_comp]
-    ext <;> simp
-
-中文:
-定义 toEndUnit
-  签名: (P : RootPairing ι R M N)
-  定义体: { val := f.toHom
-    inv := (Equiv.symm P P f).toHom
-    val_inv := by ext <;> simp
-    inv_val := by ext <;> simp }
-  invFun f :=
-  { f.val with
-    bijective_weightMap := by
-      refine bijective_iff_has_inverse.mpr ?_
-      use f.inv.weightMap
-      constructor
-      · refine leftInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.weightMap_mul]; rw [f.inv_val]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
-      · refine rightInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.weightMap_mul]; rw [f.val_inv]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
-    bijective_coweightMap := by
-      refine bijective_iff_has_inverse.mpr ?_
-      use f.inv.coweightMap
-      constructor
-      · refine leftInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.coweightMap_mul]; rw [f.val_inv]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe]
-      · refine rightInverse_iff_comp.mpr ?_
-        simp only [← @LinearMap.coe_comp]
-        rw [← Hom.coweightMap_mul]; rw [f.inv_val]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe] }
-  left_inv f := by simp
-  right_inv f := by simp
-  map_mul' f g := by
-    simp only [Equiv.mul_eq_comp, Equiv.toHom_comp]
-    ext <;> simp
-
-Depends on / 依赖: Equiv.symm, Hom.weightMap_mul, Hom.weightMap_one, LinearMap, LinearMap.coe_comp, LinearMap.id_coe, bijective_iff_has_inverse, bijective_iff_has_inverse.mpr, bijective_weightMap, coe_comp, f.inv.weightMap, f.inv_val, f.toHom, f.val, f.val_inv, id_coe, invFun, inv_val, leftInverse_iff_comp, leftInverse_iff_comp.mpr
+--- 原说明 ---
+The isomorphism between the automorphism group of a root pairing and the group o
+f invertible
+endomorphisms.
 -/
 def toEndUnit (P : RootPairing ι R M N) : Aut P ≃* (End P)ˣ where
   toFun f :=
@@ -1684,56 +1413,42 @@ def toEndUnit (P : RootPairing ι R M N) : Aut P ≃* (End P)ˣ where
       constructor
       · refine leftInverse_iff_comp.mpr ?_
         simp only [← @LinearMap.coe_comp]
-        rw [← Hom.weightMap_mul]; rw [f.inv_val]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
+        rw [← Hom.weightMap_mul, f.inv_val, Hom.weightMap_one, LinearMap.id_coe]
       · refine rightInverse_iff_comp.mpr ?_
         simp only [← @LinearMap.coe_comp]
-        rw [← Hom.weightMap_mul]; rw [f.val_inv]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
+        rw [← Hom.weightMap_mul, f.val_inv, Hom.weightMap_one, LinearMap.id_coe]
     bijective_coweightMap := by
       refine bijective_iff_has_inverse.mpr ?_
       use f.inv.coweightMap
       constructor
       · refine leftInverse_iff_comp.mpr ?_
         simp only [← @LinearMap.coe_comp]
-        rw [← Hom.coweightMap_mul]; rw [f.val_inv]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe]
+        rw [← Hom.coweightMap_mul, f.val_inv, Hom.coweightMap_one, LinearMap.id_coe]
       · refine rightInverse_iff_comp.mpr ?_
         simp only [← @LinearMap.coe_comp]
-        rw [← Hom.coweightMap_mul]; rw [f.inv_val]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe] }
+        rw [← Hom.coweightMap_mul, f.inv_val, Hom.coweightMap_one, LinearMap.id_coe] }
   left_inv f := by simp
   right_inv f := by simp
   map_mul' f g := by
     simp only [Equiv.mul_eq_comp, Equiv.toHom_comp]
     ext <;> simp
-
-/--
-lemma `toEndUnit_val` / 引理 `toEndUnit_val`
-
-English:
-lemma toEndUnit_val
-  given: (P : RootPairing ι R M N) (g : Aut P)
-  statement: (toEndUnit P g).val = g.toHom
-  proof: rfl
-
-中文:
-引理 toEndUnit_val
-  条件: (P : RootPairing ι R M N) (g : Aut P)
-  结论: (toEndUnit P g).val = g.toHom
-  证明: rfl
+/-
+**RootPairing.Equiv.toEndUnit_val** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：toEndUnit_val (P : RootPairing ι R M N) (g : Aut P) : (toEndUnit P g).val 
+= g.toHom
+参数：P : RootPairing ι R M N；g : Aut P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toEndUnit_val (P : RootPairing ι R M N) (g : Aut P) : (toEndUnit P g).val = g.toHom :=
   rfl
-
-/--
-lemma `toEndUnit_inv` / 引理 `toEndUnit_inv`
-
-English:
-lemma toEndUnit_inv
-  given: (P : RootPairing ι R M N) (g : Aut P)
-  proof: rfl
-
-中文:
-引理 toEndUnit_inv
-  条件: (P : RootPairing ι R M N) (g : Aut P)
-  证明: rfl
+/-
+**RootPairing.Equiv.toEndUnit_inv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：toEndUnit_inv (P : RootPairing ι R M N) (g : Aut P) : (toEndUnit P g).inv 
+= (symm P P g).toHom
+参数：P : RootPairing ι R M N；g : Aut P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toEndUnit_inv (P : RootPairing ι R M N) (g : Aut P) :
     (toEndUnit P g).inv = (symm P P g).toHom :=
@@ -1741,103 +1456,70 @@ lemma toEndUnit_inv (P : RootPairing ι R M N) (g : Aut P) :
 
 /-- The weight space representation of automorphisms -/
 @[simps]
-/--
-Definition of `weightHom` / `weightHom` 的定义
+/-
+**RootPairing.Equiv.weightHom** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：weightHom (P : RootPairing ι R M N) : Aut P ->* (M ≃ₗ[R] M) where toFun
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weightHom
-  signature: (P : RootPairing ι R M N)
-  body: weightEquiv P P
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-中文:
-定义 weightHom
-  签名: (P : RootPairing ι R M N)
-  定义体: weightEquiv P P
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-Depends on / 依赖: weightEquiv
+--- 原说明 ---
+The weight space representation of automorphisms
 -/
-def weightHom (P : RootPairing ι R M N) : Aut P ->* (M ≃ₗ[R] M) where
+def weightHom (P : RootPairing ι R M N) : Aut P →* (M ≃ₗ[R] M) where
   toFun := weightEquiv P P
   map_one' := by ext; simp
   map_mul' x y := by ext; simp
-
-/--
-lemma `weightHom_toLinearMap` / 引理 `weightHom_toLinearMap`
-
-English:
-lemma weightHom_toLinearMap
-  given: {P : RootPairing ι R M N} (g : Aut P)
-  proof: rfl
-
-中文:
-引理 weightHom_toLinearMap
-  条件: {P : RootPairing ι R M N} (g : Aut P)
-  证明: rfl
+/-
+**RootPairing.Equiv.weightHom_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing
+.Equiv`。
+形式化陈述：weightHom_toLinearMap {P : RootPairing ι R M N} (g : Aut P) : (weightHom P
+ g).toLinearMap = Hom.weightHom P g.toHom
+参数：g : Aut P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightHom_toLinearMap {P : RootPairing ι R M N} (g : Aut P) :
     (weightHom P g).toLinearMap = Hom.weightHom P g.toHom :=
   rfl
-
-/--
-lemma `weightHom_injective` / 引理 `weightHom_injective`
-
-English:
-lemma weightHom_injective
-  given: (P : RootPairing ι R M N)
-  statement: Injective (Equiv.weightHom P)
-  proof: by
-  refine Injective.of_comp (f := LinearEquiv.toLinearMap) fun g g' hgg' => ?_
-  let h : (weightHom P g).toLinearMap = (weightHom P g').toLinearMap := hgg' --`have` gets lint
-  rw [weightHom_toLinearMap]; rw [weightHom_toLinearMap] at h
-  suffices h' : g.toHom = g'.toHom by
-    exact Equiv.ext hgg' (congrArg Hom.coweightMap h') (congrArg Hom.indexEquiv h')
-  exact Hom.weightHom_injective P hgg'
-
-@[simp]
-
-中文:
-引理 weightHom_injective
-  条件: (P : RootPairing ι R M N)
-  结论: 单射 (等价.weightHom P)
-  证明: by
-  refine Injective.of_comp (f := LinearEquiv.toLinearMap) fun g g' hgg' => ?_
-  let h : (weightHom P g).toLinearMap = (weightHom P g').toLinearMap := hgg' --`have` gets lint
-  rw [weightHom_toLinearMap]; rw [weightHom_toLinearMap] at h
-  suffices h' : g.toHom = g'.toHom by
-    exact Equiv.ext hgg' (congrArg Hom.coweightMap h') (congrArg Hom.indexEquiv h')
-  exact Hom.weightHom_injective P hgg'
-
-@[simp]
-
-Depends on / 依赖: Equiv.ext, Hom.coweightMap, Hom.indexEquiv, Hom.weightHom_injective, Injective, Injective.of_comp, LinearEquiv, LinearEquiv.toLinearMap, coweightMap, g.toHom, indexEquiv, of_comp, toLinearMap, weightHom, weightHom_injective, weightHom_toLinearMap
+/-
+**RootPairing.Equiv.weightHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.E
+quiv`。
+形式化陈述：weightHom_injective (P : RootPairing ι R M N) : Injective (Equiv.weightHom
+ P)
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用引理 `RootPairing.Hom.weightHom_injective`：weightHom_injective (P : RootPairin
+g ι R M N) : Injective (weightHom P)
+· 使用定理 `RootPairing.Equiv.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N
+ : Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Mo
+dule R M} {…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma weightHom_injective (P : RootPairing ι R M N) : Injective (Equiv.weightHom P) := by
   refine Injective.of_comp (f := LinearEquiv.toLinearMap) fun g g' hgg' => ?_
   let h : (weightHom P g).toLinearMap = (weightHom P g').toLinearMap := hgg' --`have` gets lint
-  rw [weightHom_toLinearMap]; rw [weightHom_toLinearMap] at h
+  rw [weightHom_toLinearMap, weightHom_toLinearMap] at h
   suffices h' : g.toHom = g'.toHom by
     exact Equiv.ext hgg' (congrArg Hom.coweightMap h') (congrArg Hom.indexEquiv h')
   exact Hom.weightHom_injective P hgg'
 
 @[simp]
-/--
-lemma `weightEquiv_inv` / 引理 `weightEquiv_inv`
-
-English:
-lemma weightEquiv_inv
-  given: {P : RootPairing ι R M N} (g : Aut P)
-  proof: LinearEquiv.toLinearMap_inj.mp rfl
-
-中文:
-引理 weightEquiv_inv
-  条件: {P : RootPairing ι R M N} (g : Aut P)
-  证明: LinearEquiv.toLinearMap_inj.mp rfl
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_inj.mp, toLinearMap_inj
+/-
+**RootPairing.Equiv.weightEquiv_inv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv
+`。
+形式化陈述：weightEquiv_inv {P : RootPairing ι R M N} (g : Aut P) : weightEquiv P P g⁻
+¹ = (weightEquiv P P g)⁻¹
+参数：g : Aut P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearEquiv.toLinearMap_inj`：toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e
+₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂
 -/
 lemma weightEquiv_inv {P : RootPairing ι R M N} (g : Aut P) :
     weightEquiv P P g⁻¹ = (weightEquiv P P g)⁻¹ :=
@@ -1845,142 +1527,105 @@ lemma weightEquiv_inv {P : RootPairing ι R M N} (g : Aut P) :
 
 /-- The coweight space representation of automorphisms -/
 @[simps]
-/--
-Definition of `coweightHom` / `coweightHom` 的定义
+/-
+**RootPairing.Equiv.coweightHom** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：coweightHom (P : RootPairing ι R M N) : Aut P ->* (N ≃ₗ[R] N)ᵐᵒᵖ where toF
+un g
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coweightHom
-  signature: (P : RootPairing ι R M N)
-  body: MulOpposite.op (coweightEquiv P P g)
-  map_one' := by
-    simp only [MulOpposite.op_eq_one_iff]
-    exact LinearEquiv.toLinearMap_inj.mp rfl
-  map_mul' := by
-    simp only [mul_eq_comp, coweightEquiv_comp_toLin]
-    exact fun x y => rfl
-
-中文:
-定义 coweightHom
-  签名: (P : RootPairing ι R M N)
-  定义体: MulOpposite.op (coweightEquiv P P g)
-  map_one' := by
-    simp only [MulOpposite.op_eq_one_iff]
-    exact LinearEquiv.toLinearMap_inj.mp rfl
-  map_mul' := by
-    simp only [mul_eq_comp, coweightEquiv_comp_toLin]
-    exact fun x y => rfl
-
-Depends on / 依赖: MulOpposite, MulOpposite.op, coweightEquiv
+--- 原说明 ---
+The coweight space representation of automorphisms
 -/
-def coweightHom (P : RootPairing ι R M N) : Aut P ->* (N ≃ₗ[R] N)ᵐᵒᵖ where
+def coweightHom (P : RootPairing ι R M N) : Aut P →* (N ≃ₗ[R] N)ᵐᵒᵖ where
   toFun g := MulOpposite.op (coweightEquiv P P g)
   map_one' := by
     simp only [MulOpposite.op_eq_one_iff]
     exact LinearEquiv.toLinearMap_inj.mp rfl
   map_mul' := by
     simp only [mul_eq_comp, coweightEquiv_comp_toLin]
-    exact fun x y => rfl
-
-/--
-lemma `coweightHom_toLinearMap` / 引理 `coweightHom_toLinearMap`
-
-English:
-lemma coweightHom_toLinearMap
-  given: {P : RootPairing ι R M N} (g : Aut P)
-  proof: rfl
-
-中文:
-引理 coweightHom_toLinearMap
-  条件: {P : RootPairing ι R M N} (g : Aut P)
-  证明: rfl
+    exact fun x y ↦ rfl
+/-
+**RootPairing.Equiv.coweightHom_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `RootPairi
+ng.Equiv`。
+形式化陈述：coweightHom_toLinearMap {P : RootPairing ι R M N} (g : Aut P) : (MulOpposi
+te.unop (coweightHom P g)).toLinearMap = MulOpposite.unop (Hom.coweightHom P g.t
+oHom)
+参数：g : Aut P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coweightHom_toLinearMap {P : RootPairing ι R M N} (g : Aut P) :
     (MulOpposite.unop (coweightHom P g)).toLinearMap =
       MulOpposite.unop (Hom.coweightHom P g.toHom) :=
   rfl
-
-/--
-lemma `coweightHom_injective` / 引理 `coweightHom_injective`
-
-English:
-lemma coweightHom_injective
-  given: (P : RootPairing ι R M N)
-  statement: Injective (Equiv.coweightHom P)
-  proof: by
-  refine Injective.of_comp (f := fun a => MulOpposite.op a) fun g g' hgg' => ?_
-  have h : (MulOpposite.unop (coweightHom P g)).toLinearMap =
-      (MulOpposite.unop (coweightHom P g')).toLinearMap := by
-    simp_all
-  rw [coweightHom_toLinearMap]; rw [coweightHom_toLinearMap] at h
-  suffices h' : g.toHom = g'.toHom by
-    exact Equiv.ext (congrArg Hom.weightMap h') h (congrArg Hom.indexEquiv h')
-  apply Hom.coweightHom_injective P
-  exact MulOpposite.unop_inj.mp h
-
-中文:
-引理 coweightHom_injective
-  条件: (P : RootPairing ι R M N)
-  结论: 单射 (等价.coweightHom P)
-  证明: by
-  refine Injective.of_comp (f := fun a => MulOpposite.op a) fun g g' hgg' => ?_
-  have h : (MulOpposite.unop (coweightHom P g)).toLinearMap =
-      (MulOpposite.unop (coweightHom P g')).toLinearMap := by
-    simp_all
-  rw [coweightHom_toLinearMap]; rw [coweightHom_toLinearMap] at h
-  suffices h' : g.toHom = g'.toHom by
-    exact Equiv.ext (congrArg Hom.weightMap h') h (congrArg Hom.indexEquiv h')
-  apply Hom.coweightHom_injective P
-  exact MulOpposite.unop_inj.mp h
-
-Depends on / 依赖: Equiv.ext, Hom.coweightHom_injective, Hom.indexEquiv, Hom.weightMap, Injective, Injective.of_comp, MulOpposite, MulOpposite.op, MulOpposite.unop, MulOpposite.unop_inj.mp, coweightHom, coweightHom_injective, coweightHom_toLinearMap, g.toHom, indexEquiv, of_comp, toLinearMap, unop_inj, weightMap
+/-
+**RootPairing.Equiv.coweightHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing
+.Equiv`。
+形式化陈述：coweightHom_injective (P : RootPairing ι R M N) : Injective (Equiv.coweigh
+tHom P)
+参数：P : RootPairing ι R M N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RootPairing.Equiv.coweightHom_apply`：∀ {ι : Type u_1} {R : Type u_2} {M 
+: Type u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst
+_2 : _root_.Module R M] […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `RootPairing.Hom.coweightHom_injective`：coweightHom_injective (P : RootPa
+iring ι R M N) : Injective (coweightHom P)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MulOpposite.unop_inj`：unop_inj {x y : αᵐᵒᵖ} : unop x = unop y ↔ x = y
+· 使用引理 `RootPairing.Equiv.coweightHom_toLinearMap`：coweightHom_toLinearMap {P : 
+RootPairing ι R M N} (g : Aut P) : (MulOpposite.unop (coweightHom P g)).toLinear
+Map = MulOpposite.unop (Hom.cow…
+· 使用定理 `RootPairing.Equiv.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N
+ : Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Mo
+dule R M} {…
 -/
 lemma coweightHom_injective (P : RootPairing ι R M N) : Injective (Equiv.coweightHom P) := by
   refine Injective.of_comp (f := fun a => MulOpposite.op a) fun g g' hgg' => ?_
   have h : (MulOpposite.unop (coweightHom P g)).toLinearMap =
       (MulOpposite.unop (coweightHom P g')).toLinearMap := by
     simp_all
-  rw [coweightHom_toLinearMap]; rw [coweightHom_toLinearMap] at h
+  rw [coweightHom_toLinearMap, coweightHom_toLinearMap] at h
   suffices h' : g.toHom = g'.toHom by
     exact Equiv.ext (congrArg Hom.weightMap h') h (congrArg Hom.indexEquiv h')
   apply Hom.coweightHom_injective P
   exact MulOpposite.unop_inj.mp h
-
-/--
-lemma `coweightHom_op` / 引理 `coweightHom_op`
-
-English:
-lemma coweightHom_op
-  given: {P : RootPairing ι R M N} (g : Aut P)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coweightHom_op
-  条件: {P : RootPairing ι R M N} (g : Aut P)
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.coweightHom_op** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`
+。
+形式化陈述：coweightHom_op {P : RootPairing ι R M N} (g : Aut P) : MulOpposite.unop (c
+oweightHom P g) = coweightEquiv P P g
+参数：g : Aut P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coweightHom_op {P : RootPairing ι R M N} (g : Aut P) :
     MulOpposite.unop (coweightHom P g) = coweightEquiv P P g :=
   rfl
 
 @[simp]
-/--
-lemma `coweightEquiv_inv` / 引理 `coweightEquiv_inv`
-
-English:
-lemma coweightEquiv_inv
-  given: {P : RootPairing ι R M N} (g : Aut P)
-  proof: LinearEquiv.toLinearMap_inj.mp rfl
-
-中文:
-引理 coweightEquiv_inv
-  条件: {P : RootPairing ι R M N} (g : Aut P)
-  证明: LinearEquiv.toLinearMap_inj.mp rfl
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_inj.mp, toLinearMap_inj
+/-
+**RootPairing.Equiv.coweightEquiv_inv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equ
+iv`。
+形式化陈述：coweightEquiv_inv {P : RootPairing ι R M N} (g : Aut P) : coweightEquiv P 
+P g⁻¹ = (coweightEquiv P P g)⁻¹
+参数：g : Aut P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearEquiv.toLinearMap_inj`：toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e
+₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂
 -/
 lemma coweightEquiv_inv {P : RootPairing ι R M N} (g : Aut P) :
     coweightEquiv P P g⁻¹ = (coweightEquiv P P g)⁻¹ :=
@@ -1988,94 +1633,45 @@ lemma coweightEquiv_inv {P : RootPairing ι R M N} (g : Aut P) :
 
 /-- The permutation representation of the automorphism group on the root index set -/
 @[simps]
-/--
-Definition of `indexHom` / `indexHom` 的定义
+/-
+**RootPairing.Equiv.indexHom** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：indexHom (P : RootPairing ι R M N) : Aut P ->* (ι ≃ ι) where toFun g
+参数：P : RootPairing ι R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition indexHom
-  signature: (P : RootPairing ι R M N)
-  body: g.toHom.indexEquiv
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-@[simp]
-
-中文:
-定义 indexHom
-  签名: (P : RootPairing ι R M N)
-  定义体: g.toHom.indexEquiv
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp
-
-@[simp]
-
-Depends on / 依赖: g.toHom.indexEquiv, indexEquiv
+--- 原说明 ---
+The permutation representation of the automorphism group on the root index set
 -/
-def indexHom (P : RootPairing ι R M N) : Aut P ->* (ι ≃ ι) where
+def indexHom (P : RootPairing ι R M N) : Aut P →* (ι ≃ ι) where
   toFun g := g.toHom.indexEquiv
   map_one' := by ext; simp
   map_mul' x y := by ext; simp
 
 @[simp]
-/--
-lemma `indexEquiv_inv` / 引理 `indexEquiv_inv`
-
-English:
-lemma indexEquiv_inv
-  given: {P : RootPairing ι R M N} (g : Aut P)
-  proof: rfl
-
-中文:
-引理 indexEquiv_inv
-  条件: {P : RootPairing ι R M N} (g : Aut P)
-  证明: rfl
+/-
+**RootPairing.Equiv.indexEquiv_inv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`
+。
+形式化陈述：indexEquiv_inv {P : RootPairing ι R M N} (g : Aut P) : (g⁻¹).toHom.indexEq
+uiv = (indexHom P g)⁻¹
+参数：g : Aut P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma indexEquiv_inv {P : RootPairing ι R M N} (g : Aut P) :
     (g⁻¹).toHom.indexEquiv = (indexHom P g)⁻¹ :=
   rfl
 
-/--
-Definition of `reflection` / `reflection` 的定义
+/-- The automorphism of a root pairing given by a reflection. -/
+/-
+**RootPairing.Equiv.reflection** 是 Mathlib 中的一个定义，位于命名空间 `RootPairing.Equiv`。
+形式化陈述：reflection (P : RootPairing ι R M N) (i : ι) : Aut P where weightMap
+参数：P : RootPairing ι R M N；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reflection
-  signature: (P : RootPairing ι R M N) (i : ι)
-  body: P.reflection i
-  coweightMap := P.coreflection i
-  indexEquiv := P.reflectionPerm i
-  weight_coweight_transpose := by
-    ext f x; simpa [reflection_apply, coreflection_apply] using mul_comm ..
-  root_weightMap := by ext; simp
-  coroot_coweightMap := by ext; simp
-  bijective_weightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (P.reflection i)
-  bijective_coweightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (P.coreflection i)
-
-@[simp]
-
-中文:
-定义 reflection
-  签名: (P : RootPairing ι R M N) (i : ι)
-  定义体: P.reflection i
-  coweightMap := P.coreflection i
-  indexEquiv := P.reflectionPerm i
-  weight_coweight_transpose := by
-    ext f x; simpa [reflection_apply, coreflection_apply] using mul_comm ..
-  root_weightMap := by ext; simp
-  coroot_coweightMap := by ext; simp
-  bijective_weightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (P.reflection i)
-  bijective_coweightMap := by
-    simp only [LinearEquiv.coe_coe]
-    exact LinearEquiv.bijective (P.coreflection i)
-
-@[simp]
-
-Depends on / 依赖: P.reflection, reflection
+--- 原说明 ---
+The automorphism of a root pairing given by a reflection.
 -/
 def reflection (P : RootPairing ι R M N) (i : ι) : Aut P where
   weightMap := P.reflection i
@@ -2093,98 +1689,94 @@ def reflection (P : RootPairing ι R M N) (i : ι) : Aut P where
     exact LinearEquiv.bijective (P.coreflection i)
 
 @[simp]
-/--
-lemma `reflection_weightEquiv` / 引理 `reflection_weightEquiv`
-
-English:
-lemma reflection_weightEquiv
-  given: (P : RootPairing ι R M N) (i : ι)
-  proof: LinearEquiv.toLinearMap_inj.mp rfl
-
-@[simp]
-
-中文:
-引理 reflection_weightEquiv
-  条件: (P : RootPairing ι R M N) (i : ι)
-  证明: LinearEquiv.toLinearMap_inj.mp rfl
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_inj.mp, toLinearMap_inj
+/-
+**RootPairing.Equiv.reflection_weightEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairin
+g.Equiv`。
+形式化陈述：reflection_weightEquiv (P : RootPairing ι R M N) (i : ι) : (reflection P i
+).weightEquiv = P.reflection i
+参数：P : RootPairing ι R M N；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearEquiv.toLinearMap_inj`：toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e
+₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂
 -/
 lemma reflection_weightEquiv (P : RootPairing ι R M N) (i : ι) :
     (reflection P i).weightEquiv = P.reflection i :=
   LinearEquiv.toLinearMap_inj.mp rfl
 
 @[simp]
-/--
-lemma `reflection_coweightEquiv` / 引理 `reflection_coweightEquiv`
-
-English:
-lemma reflection_coweightEquiv
-  given: (P : RootPairing ι R M N) (i : ι)
-  proof: LinearEquiv.toLinearMap_inj.mp rfl
-
-@[simp]
-
-中文:
-引理 reflection_coweightEquiv
-  条件: (P : RootPairing ι R M N) (i : ι)
-  证明: LinearEquiv.toLinearMap_inj.mp rfl
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_inj.mp, toLinearMap_inj
+/-
+**RootPairing.Equiv.reflection_coweightEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RootPair
+ing.Equiv`。
+形式化陈述：reflection_coweightEquiv (P : RootPairing ι R M N) (i : ι) : (reflection P
+ i).coweightEquiv = P.coreflection i
+参数：P : RootPairing ι R M N；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearEquiv.toLinearMap_inj`：toLinearMap_inj {e₁ e₂ : M ≃ₛₗ[σ] M₂} : (↑e
+₁ : M ->ₛₗ[σ] M₂) = e₂ ↔ e₁ = e₂
 -/
 lemma reflection_coweightEquiv (P : RootPairing ι R M N) (i : ι) :
     (reflection P i).coweightEquiv = P.coreflection i :=
   LinearEquiv.toLinearMap_inj.mp rfl
 
 @[simp]
-/--
-lemma `reflection_indexEquiv` / 引理 `reflection_indexEquiv`
-
-English:
-lemma reflection_indexEquiv
-  given: (P : RootPairing ι R M N) (i : ι)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 reflection_indexEquiv
-  条件: (P : RootPairing ι R M N) (i : ι)
-  证明: rfl
-
-@[simp]
+/-
+**RootPairing.Equiv.reflection_indexEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing
+.Equiv`。
+形式化陈述：reflection_indexEquiv (P : RootPairing ι R M N) (i : ι) : (reflection P i)
+.indexEquiv = P.reflectionPerm i
+参数：P : RootPairing ι R M N；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma reflection_indexEquiv (P : RootPairing ι R M N) (i : ι) :
     (reflection P i).indexEquiv = P.reflectionPerm i :=
   rfl
 
 @[simp]
-/--
-lemma `reflection_inv` / 引理 `reflection_inv`
-
-English:
-lemma reflection_inv
-  given: (P : RootPairing ι R M N) (i : ι)
-  proof: by
-  refine Equiv.ext ?_ ?_ ?_
-  · exact LinearMap.ext_iff.mpr (fun x => by simp [← weightEquiv_apply])
-  · exact LinearMap.ext_iff.mpr (fun x => by simp [← coweightEquiv_apply])
-  · exact _root_.Equiv.ext (fun j => by simp)
-
-中文:
-引理 reflection_inv
-  条件: (P : RootPairing ι R M N) (i : ι)
-  证明: by
-  refine Equiv.ext ?_ ?_ ?_
-  · exact LinearMap.ext_iff.mpr (fun x => by simp [← weightEquiv_apply])
-  · exact LinearMap.ext_iff.mpr (fun x => by simp [← coweightEquiv_apply])
-  · exact _root_.Equiv.ext (fun j => by simp)
-
-Depends on / 依赖: Equiv.ext, LinearMap, LinearMap.ext_iff.mpr, _root_, _root_.Equiv.ext, coweightEquiv_apply, ext_iff, weightEquiv_apply
+/-
+**RootPairing.Equiv.reflection_inv** 是 Mathlib 中的一个引理，位于命名空间 `RootPairing.Equiv`
+。
+形式化陈述：reflection_inv (P : RootPairing ι R M N) (i : ι) : (reflection P i)⁻¹ = (r
+eflection P i)
+参数：P : RootPairing ι R M N；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootPairing.Equiv.ext`：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N
+ : Type u_4} {inst : CommRing R} {inst_1 : AddCommGroup M}   {inst_2 : _root_.Mo
+dule R M} {…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.ext_iff`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ : 
+Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M
+] [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `RootPairing.Equiv.weightEquiv_inv`：weightEquiv_inv {P : RootPairing ι R 
+M N} (g : Aut P) : weightEquiv P P g⁻¹ = (weightEquiv P P g)⁻¹
+· 使用引理 `RootPairing.Equiv.reflection_weightEquiv`：reflection_weightEquiv (P : Ro
+otPairing ι R M N) (i : ι) : (reflection P i).weightEquiv = P.reflection i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `RootPairing.Equiv.coweightEquiv_inv`：coweightEquiv_inv {P : RootPairing 
+ι R M N} (g : Aut P) : coweightEquiv P P g⁻¹ = (coweightEquiv P P g)⁻¹
+· 使用引理 `RootPairing.Equiv.reflection_coweightEquiv`：reflection_coweightEquiv (P 
+: RootPairing ι R M N) (i : ι) : (reflection P i).coweightEquiv = P.coreflection
+ i
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `RootPairing.Equiv.indexHom_apply`：∀ {ι : Type u_1} {R : Type u_2} {M : T
+ype u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_2 
+: _root_.Module R M] […
+· 使用引理 `RootPairing.reflectionPerm_inv`：reflectionPerm_inv : (P.reflectionPerm i
+)⁻¹ = P.reflectionPerm i
 -/
 lemma reflection_inv (P : RootPairing ι R M N) (i : ι) :
     (reflection P i)⁻¹ = (reflection P i) := by
@@ -2192,29 +1784,9 @@ lemma reflection_inv (P : RootPairing ι R M N) (i : ι) :
   · exact LinearMap.ext_iff.mpr (fun x => by simp [← weightEquiv_apply])
   · exact LinearMap.ext_iff.mpr (fun x => by simp [← coweightEquiv_apply])
   · exact _root_.Equiv.ext (fun j => by simp)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DistribMulAction P.Aut M
-  body: weightHom P w x
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-  smul_zero w := show weightHom P w 0 = 0 by simp
-  smul_add w x y := show weightHom P w (x + y) = weightHom P w x + weightHom P w y by simp
-
-中文:
-实例 :
-  签名: 分配乘法作用 P.Aut M
-  定义体: weightHom P w x
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-  smul_zero w := show weightHom P w 0 = 0 by simp
-  smul_add w x y := show weightHom P w (x + y) = weightHom P w x + weightHom P w y by simp
-
-Depends on / 依赖: weightHom
+/-
+**RootPairing.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DistribMulAction P.Aut M where
   smul w x := weightHom P w x
@@ -2222,70 +1794,41 @@ instance : DistribMulAction P.Aut M where
   mul_smul _ _ _ := rfl
   smul_zero w := show weightHom P w 0 = 0 by simp
   smul_add w x y := show weightHom P w (x + y) = weightHom P w x + weightHom P w y by simp
-
-/--
-lemma `reflection_smul` / 引理 `reflection_smul`
-
-English:
-lemma reflection_smul
-  given: (i : ι) (x : M)
-  statement: Equiv.reflection P i • x = P.reflection i x
-  proof: rfl
-
-中文:
-引理 reflection_smul
-  条件: (i : ι) (x : M)
-  结论: 等价.reflection P i • x = P.reflection i x
-  证明: rfl
+/-
+**RootPairing.Equiv.reflection_smul** 是 Mathlib 中的一个定理，位于命名空间 `RootPairing.Equiv
+`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N : Type u_4} [inst : Comm
+Ring R] [inst_1 : AddCommGroup M]   [inst_2 : _root_.Module R M] [inst_3 : AddCo
+mmGroup N] [inst_4 : _root_.Module R N] (P : RootPairing ι R M N) (i : ι)   (x :
+ M), RootPairing.Equiv.reflection P i • x = (P.reflection i) x
+参数：P : RootPairing ι R M N；i : ι；x : M；P.reflection i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma reflection_smul (i : ι) (x : M) : Equiv.reflection P i • x = P.reflection i x := rfl
-
-/--
-lemma `root_indexEquiv_eq_smul` / 引理 `root_indexEquiv_eq_smul`
-
-English:
-lemma root_indexEquiv_eq_smul
-  given: (i : ι) (g : P.Aut)
-  proof: by
-  simpa using! (congr_fun g.root_weightMap i).symm
-
-中文:
-引理 root_indexEquiv_eq_smul
-  条件: (i : ι) (g : P.Aut)
-  证明: by
-  simpa using! (congr_fun g.root_weightMap i).symm
+/-
+**RootPairing.Equiv.root_indexEquiv_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `RootPairi
+ng.Equiv`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_3} {N : Type u_4} [inst : Comm
+Ring R] [inst_1 : AddCommGroup M]   [inst_2 : _root_.Module R M] [inst_3 : AddCo
+mmGroup N] [inst_4 : _root_.Module R N] (P : RootPairing ι R M N) (i : ι)   (g :
+ P.Aut), P.root ((↑g).indexEquiv i) = g • P.root i
+参数：P : RootPairing ι R M N；i : ι；g : P.Aut；(↑g).indexEquiv i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `RootPairing.Hom.root_weightMap`：∀ {ι : Type u_1} {R : Type u_2} {M : Typ
+e u_3} {N : Type u_4} [inst : CommRing R] [inst_1 : AddCommGroup M]   [inst_2 : 
+_root_.Module R M] […
 -/
 @[simp] lemma root_indexEquiv_eq_smul (i : ι) (g : P.Aut) :
     P.root (g.indexEquiv i) = g • P.root i := by
   simpa using! (congr_fun g.root_weightMap i).symm
 
 open MulOpposite in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DistribMulAction P.Autᵐᵒᵖ N
-  body: unop (coweightHom P (unop w)) x
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-  smul_zero w := show unop (coweightHom P (unop w)) 0 = 0 by simp
-  smul_add w x y := by
-    change unop (coweightHom P _) (x + y) = unop (coweightHom P _) x + unop (coweightHom P _) y
-    simp
-
-中文:
-实例 :
-  签名: 分配乘法作用 P.Autᵐᵒᵖ N
-  定义体: unop (coweightHom P (unop w)) x
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-  smul_zero w := show unop (coweightHom P (unop w)) 0 = 0 by simp
-  smul_add w x y := by
-    change unop (coweightHom P _) (x + y) = unop (coweightHom P _) x + unop (coweightHom P _) y
-    simp
-
-Depends on / 依赖: IsFiniteMeasure, IsFiniteMeasure.toSigmaFinite, MeasurableSpace, Measure, coweightHom, toSigmaFinite
+/-
+**RootPairing.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DistribMulAction P.Autᵐᵒᵖ N where
   smul w x := unop (coweightHom P (unop w)) x
@@ -2295,68 +1838,25 @@ instance : DistribMulAction P.Autᵐᵒᵖ N where
   smul_add w x y := by
     change unop (coweightHom P _) (x + y) = unop (coweightHom P _) x + unop (coweightHom P _) y
     simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulCommClass P.Aut R M
-  body: show weightHom P w (t • x) = t • weightHom P w x by simp
-
-中文:
-实例 :
-  签名: 标量交换类 P.Aut R M
-  定义体: show weightHom P w (t • x) = t • weightHom P w x by simp
-
-Depends on / 依赖: weightHom
+/-
+**RootPairing.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulCommClass P.Aut R M where
   smul_comm w t x := show weightHom P w (t • x) = t • weightHom P w x by simp
 
 open MulOpposite in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulCommClass P.Autᵐᵒᵖ R N
-  body: by
-    change unop (coweightHom P (unop w)) (t • x) = t • unop (coweightHom P (unop w)) x
-    simp
-
-中文:
-实例 :
-  签名: 标量交换类 P.Autᵐᵒᵖ R N
-  定义体: by
-    change unop (coweightHom P (unop w)) (t • x) = t • unop (coweightHom P (unop w)) x
-    simp
-
-Depends on / 依赖: coweightHom
+/-
+**RootPairing.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulCommClass P.Autᵐᵒᵖ R N where
   smul_comm w t x := by
     change unop (coweightHom P (unop w)) (t • x) = t • unop (coweightHom P (unop w)) x
     simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction P.Aut ι
-  body: Equiv.indexHom P w i
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-
-中文:
-实例 :
-  签名: 乘法作用 P.Aut ι
-  定义体: Equiv.indexHom P w i
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-
-Depends on / 依赖: Equiv.indexHom, indexHom
+/-
+**RootPairing.Equiv.** 是 Mathlib 中的一个实例，位于命名空间 `RootPairing.Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction P.Aut ι where
   smul w i := Equiv.indexHom P w i
@@ -2366,3 +1866,4 @@ instance : MulAction P.Aut ι where
 end Equiv
 
 end RootPairing
+

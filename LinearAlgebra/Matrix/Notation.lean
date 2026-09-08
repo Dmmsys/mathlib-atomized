@@ -46,7 +46,7 @@ namespace Matrix
 
 universe u uₘ uₙ uₒ
 
-variable {α : Type u} {o n m : Nat} {m' : Type uₘ} {n' : Type uₙ} {o' : Type uₒ}
+variable {α : Type u} {o n m : ℕ} {m' : Type uₘ} {n' : Type uₙ} {o' : Type uₒ}
 
 open Matrix
 
@@ -58,13 +58,13 @@ open Qq in
 /-- `Matrix.mkLiteralQ !![a, b; c, d]` produces the term `q(!![$a, $b; $c, $d])`. -/
 meta def mkLiteralQ {u : Level} {α : Q(Type u)} {m n : Nat} (elems : Matrix (Fin m) (Fin n) Q($α)) :
     Q(Matrix (Fin $m) (Fin $n) $α) :=
-  let elems := PiFin.mkLiteralQ (α := q(Fin $n -> $α)) fun i => PiFin.mkLiteralQ fun j => elems i j
+  let elems := PiFin.mkLiteralQ (α := q(Fin $n → $α)) fun i => PiFin.mkLiteralQ fun j => elems i j
   q(Matrix.of $elems)
 
 /-- Matrices can be reflected whenever their entries can. We insert a `Matrix.of` to
 prevent immediate decay to a function. -/
 protected meta instance toExpr [ToLevel.{u}] [ToLevel.{uₘ}] [ToLevel.{uₙ}]
-    [Lean.ToExpr α] [Lean.ToExpr m'] [Lean.ToExpr n'] [Lean.ToExpr (m' -> n' -> α)] :
+    [Lean.ToExpr α] [Lean.ToExpr m'] [Lean.ToExpr n'] [Lean.ToExpr (m' → n' → α)] :
     Lean.ToExpr (Matrix m' n' α) :=
   have eα : Q(Type $(toLevel.{u})) := toTypeExpr α
   have em' : Q(Type $(toLevel.{uₘ})) := toTypeExpr m'
@@ -72,7 +72,7 @@ protected meta instance toExpr [ToLevel.{u}] [ToLevel.{uₘ}] [ToLevel.{uₙ}]
   { toTypeExpr :=
     q(Matrix $eα $em' $en')
     toExpr := fun M =>
-      have eM : Q($em' -> $en' -> $eα) := toExpr (show m' -> n' -> α from M)
+      have eM : Q($em' → $en' → $eα) := toExpr (show m' → n' → α from M)
       q(Matrix.of $eM) }
 
 end toExpr
@@ -124,8 +124,8 @@ macro_rules
 
 /-- Delaborator for the `!![]` notation. -/
 @[app_delab DFunLike.coe]
-meta def delabMatrixNotation : Delab := whenNotPPOption getPPExplicit
-whenPPOption getPPNotation
+meta def delabMatrixNotation : Delab := whenNotPPOption getPPExplicit <|
+  whenPPOption getPPNotation <|
   withOverApp 6 do
     let mkApp3 (.const ``Matrix.of _) (.app (.const ``Fin _) em) (.app (.const ``Fin _) en) _ :=
       (← getExpr).appFn!.appArg! | failure
@@ -133,7 +133,7 @@ whenPPOption getPPNotation
     let some n ← withNatValue en (pure ∘ some) | failure
     withAppArg do
       if m = 0 then
-guard (← getExpr).isAppOfArity ``vecEmpty 1
+        guard <| (← getExpr).isAppOfArity ``vecEmpty 1
         let commas := .replicate n (mkAtom ",")
         `(!![$[,%$commas]*])
       else
@@ -146,107 +146,84 @@ guard (← getExpr).isAppOfArity ``vecEmpty 1
 
 end Parser
 
-variable (a b : Nat)
+variable (a b : ℕ)
 
-/--
-Instance `repr` / 实例 `repr`
+/-- Use `![...]` notation for displaying a `Fin`-indexed matrix, for example:
 
-English:
-instance repr
-  signature: [Repr α]
-  body: (Std.Format.bracket "!![" · "]")
-(Std.Format.joinSep · (";" ++ Std.Format.line))
-        (List.finRange m).map fun i =>
-Std.Format.fill -- wrap line in a single place rather than all at once
-(Std.Format.joinSep · ("," ++ Std.Format.line))
-            (List.finRange n).map fun j => _root_.repr (f i j)
+```
+#eval !![1, 2; 3, 4] + !![3, 4; 5, 6]  -- !![4, 6; 8, 10]
+```
+-/
+/-
+**Matrix.repr** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：repr [Repr α] : Repr (Matrix (Fin m) (Fin n) α) where reprPrec f _p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Use `![...]` notation for displaying a `Fin`-indexed matrix, for example:
 
-中文:
-实例 repr
-  签名: [Repr α]
-  定义体: (Std.Format.bracket "!![" · "]")
-(Std.Format.joinSep · (";" ++ Std.Format.line))
-        (List.finRange m).map fun i =>
-Std.Format.fill -- wrap line in a single place rather than all at once
-(Std.Format.joinSep · ("," ++ Std.Format.line))
-            (List.finRange n).map fun j => _root_.repr (f i j)
-
-@[simp]
-
-Depends on / 依赖: Format, List.finRange, Std.Format.bracket, Std.Format.fill, Std.Format.joinSep, Std.Format.line, _root_, _root_.repr, bracket, finRange, joinSep, rather, single
+```
+#eval !![1, 2; 3, 4] + !![3, 4; 5, 6]  -- !![4, 6; 8, 10]
+```
 -/
 instance repr [Repr α] : Repr (Matrix (Fin m) (Fin n) α) where
   reprPrec f _p :=
-(Std.Format.bracket "!![" · "]")
-(Std.Format.joinSep · (";" ++ Std.Format.line))
+    (Std.Format.bracket "!![" · "]") <|
+      (Std.Format.joinSep · (";" ++ Std.Format.line)) <|
         (List.finRange m).map fun i =>
-Std.Format.fill -- wrap line in a single place rather than all at once
-(Std.Format.joinSep · ("," ++ Std.Format.line))
+          Std.Format.fill <|  -- wrap line in a single place rather than all at once
+            (Std.Format.joinSep · ("," ++ Std.Format.line)) <|
             (List.finRange n).map fun j => _root_.repr (f i j)
 
 @[simp]
-/--
-theorem `cons_val'` / 定理 `cons_val'`
-
-English:
-theorem cons_val'
-  given: (v : n' -> α) (B : Fin m -> n' -> α) (i j)
-  proof: by refine Fin.cases ?_ ?_ i <;> simp
-
-@[simp]
-
-中文:
-定理 cons_val'
-  条件: (v : n' -> α) (B : 有限集 m -> n' -> α) (i j)
-  证明: by refine Fin.cases ?_ ?_ i <;> simp
-
-@[simp]
-
-Depends on / 依赖: Fin.cases
+/-
+**Matrix.cons_val'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) : vecCons v B i j = v
+ecCons (v j) (fun i => B i j) i
+参数：v : n' -> α；B : Fin m -> n' -> α；i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+theorem cons_val' (v : n' → α) (B : Fin m → n' → α) (i j) :
     vecCons v B i j = vecCons (v j) (fun i => B i j) i := by refine Fin.cases ?_ ?_ i <;> simp
 
 @[simp]
-/--
-theorem `head_val'` / 定理 `head_val'`
-
-English:
-theorem head_val'
-  given: (B : Fin m.succ -> n' -> α) (j : n')
-  statement: (vecHead fun i => B i j) = vecHead B j
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 head_val'
-  条件: (B : 有限集 m.succ -> n' -> α) (j : n')
-  结论: (vecHead fun i => B i j) = vecHead B j
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.head_val'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：head_val' (B : Fin m.succ -> n' -> α) (j : n') : (vecHead fun i => B i j) 
+= vecHead B j
+参数：B : Fin m.succ -> n' -> α；j : n'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem head_val' (B : Fin m.succ -> n' -> α) (j : n') : (vecHead fun i => B i j) = vecHead B j :=
+theorem head_val' (B : Fin m.succ → n' → α) (j : n') : (vecHead fun i => B i j) = vecHead B j :=
   rfl
 
 @[simp]
-/--
-theorem `tail_val'` / 定理 `tail_val'`
-
-English:
-theorem tail_val'
-  given: (B : Fin m.succ -> n' -> α) (j : n')
-  proof: rfl
-
-中文:
-定理 tail_val'
-  条件: (B : 有限集 m.succ -> n' -> α) (j : n')
-  证明: rfl
+/-
+**Matrix.tail_val'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：tail_val' (B : Fin m.succ -> n' -> α) (j : n') : (vecTail fun i => B i j) 
+= fun i => vecTail B i j
+参数：B : Fin m.succ -> n' -> α；j : n'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem tail_val' (B : Fin m.succ -> n' -> α) (j : n') :
+theorem tail_val' (B : Fin m.succ → n' → α) (j : n') :
     (vecTail fun i => B i j) = fun i => vecTail B i j := rfl
 
 section DotProduct
@@ -254,92 +231,96 @@ section DotProduct
 variable [AddCommMonoid α] [Mul α]
 
 @[simp]
-/--
-theorem `dotProduct_of_isEmpty` / 定理 `dotProduct_of_isEmpty`
-
-English:
-theorem dotProduct_of_isEmpty
-  given: [Fintype n'] [IsEmpty n'] (v w : n' -> α)
-  statement: v ⬝ᵥ w = 0
-  proof: Finset.sum_of_isEmpty _
-
-@[simp]
-
-中文:
-定理 dotProduct_of_isEmpty
-  条件: [有限类型 n'] [是空 n'] (v w : n' -> α)
-  结论: v ⬝ᵥ w = 0
-  证明: Finset.sum_of_isEmpty _
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_of_isEmpty, sum_of_isEmpty
+/-
+**Matrix.dotProduct_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：dotProduct_of_isEmpty [Fintype n'] [IsEmpty n'] (v w : n' -> α) : v ⬝ᵥ w =
+ 0
+参数：v w : n' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_of_isEmpty`：∀ {ι : Type u_1} {M : Type u_3} {f : ι → M} [inst
+ : AddCommMonoid M] [IsEmpty ι] (s : Finset ι), ∑ i ∈ s, f i = 0
 -/
-theorem dotProduct_of_isEmpty [Fintype n'] [IsEmpty n'] (v w : n' -> α) : v ⬝ᵥ w = 0 :=
+theorem dotProduct_of_isEmpty [Fintype n'] [IsEmpty n'] (v w : n' → α) : v ⬝ᵥ w = 0 :=
   Finset.sum_of_isEmpty _
 
 @[simp]
-/--
-theorem `cons_dotProduct` / 定理 `cons_dotProduct`
-
-English:
-theorem cons_dotProduct
-  given: (x : α) (v : Fin n -> α) (w : Fin n.succ -> α)
-  proof: by
-  simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
-
-@[simp]
-
-中文:
-定理 cons_dotProduct
-  条件: (x : α) (v : 有限集 n -> α) (w : 有限集 n.succ -> α)
-  证明: by
-  simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
-
-@[simp]
-
-Depends on / 依赖: Fin.sum_univ_succ, dotProduct, sum_univ_succ, vecHead, vecTail
+/-
+**Matrix.cons_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_dotProduct (x : α) (v : Fin n -> α) (w : Fin n.succ -> α) : vecCons x
+ v ⬝ᵥ w = x * vecHead w + v ⬝ᵥ vecTail w
+参数：x : α；v : Fin n -> α；w : Fin n.succ -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.sum_univ_succ`：∀ {M : Type u_2} [inst : AddCommMonoid M] {n : ℕ} (f 
+: Fin (n + 1) → M), ∑ i, f i = f 0 + ∑ i, f i.succ
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_dotProduct (x : α) (v : Fin n -> α) (w : Fin n.succ -> α) :
+theorem cons_dotProduct (x : α) (v : Fin n → α) (w : Fin n.succ → α) :
     vecCons x v ⬝ᵥ w = x * vecHead w + v ⬝ᵥ vecTail w := by
   simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
 
 @[simp]
-/--
-theorem `dotProduct_cons` / 定理 `dotProduct_cons`
-
-English:
-theorem dotProduct_cons
-  given: (v : Fin n.succ -> α) (x : α) (w : Fin n -> α)
-  proof: by
-  simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
-
-中文:
-定理 dotProduct_cons
-  条件: (v : 有限集 n.succ -> α) (x : α) (w : 有限集 n -> α)
-  证明: by
-  simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
-
-Depends on / 依赖: Fin.sum_univ_succ, dotProduct, sum_univ_succ, vecHead, vecTail
+/-
+**Matrix.dotProduct_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：dotProduct_cons (v : Fin n.succ -> α) (x : α) (w : Fin n -> α) : v ⬝ᵥ vecC
+ons x w = vecHead v * x + vecTail v ⬝ᵥ w
+参数：v : Fin n.succ -> α；x : α；w : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.sum_univ_succ`：∀ {M : Type u_2} [inst : AddCommMonoid M] {n : ℕ} (f 
+: Fin (n + 1) → M), ∑ i, f i = f 0 + ∑ i, f i.succ
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dotProduct_cons (v : Fin n.succ -> α) (x : α) (w : Fin n -> α) :
+theorem dotProduct_cons (v : Fin n.succ → α) (x : α) (w : Fin n → α) :
     v ⬝ᵥ vecCons x w = vecHead v * x + vecTail v ⬝ᵥ w := by
   simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
-
-/--
-theorem `cons_dotProduct_cons` / 定理 `cons_dotProduct_cons`
-
-English:
-theorem cons_dotProduct_cons
-  given: (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α)
-  proof: by simp
-
-中文:
-定理 cons_dotProduct_cons
-  条件: (x : α) (v : 有限集 n -> α) (y : α) (w : 有限集 n -> α)
-  证明: by simp
+/-
+**Matrix.cons_dotProduct_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_dotProduct_cons (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α) : v
+ecCons x v ⬝ᵥ vecCons y w = x * y + v ⬝ᵥ w
+参数：x : α；v : Fin n -> α；y : α；w : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.dotProduct_cons`：dotProduct_cons (v : Fin n.succ -> α) (x : α) (w
+ : Fin n -> α) : v ⬝ᵥ vecCons x w = vecHead v * x + vecTail v ⬝ᵥ w
+· 使用定理 `Matrix.tail_cons`：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons 
+x u) = u
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_dotProduct_cons (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α) :
+theorem cons_dotProduct_cons (x : α) (v : Fin n → α) (y : α) (w : Fin n → α) :
     vecCons x v ⬝ᵥ vecCons y w = x * y + v ⬝ᵥ w := by simp
 
 end DotProduct
@@ -347,125 +328,139 @@ end DotProduct
 section Diagonal
 variable [Zero α]
 
-/--
-theorem `diagonal_fin_one` / 定理 `diagonal_fin_one`
-
-English:
-theorem diagonal_fin_one
-  given: (d : Fin 1 -> α)
-  statement: diagonal d = !![d 0]
-  proof: by
-  simp [← Matrix.ext_iff]
-
-中文:
-定理 diagonal_fin_one
-  条件: (d : 有限集 1 -> α)
-  结论: diagonal d = !![d 0]
-  证明: by
-  simp [← Matrix.ext_iff]
-
-Depends on / 依赖: Matrix, Matrix.ext_iff, ext_iff
+/-
+**Matrix.diagonal_fin_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_fin_one (d : Fin 1 -> α) : diagonal d = !![d 0]
+参数：d : Fin 1 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem diagonal_fin_one (d : Fin 1 -> α) : diagonal d = !![d 0] := by
+theorem diagonal_fin_one (d : Fin 1 → α) : diagonal d = !![d 0] := by
   simp [← Matrix.ext_iff]
-
-/--
-theorem `diagonal_vec1` / 定理 `diagonal_vec1`
-
-English:
-theorem diagonal_vec1
-  given: (a : α)
-  statement: diagonal ![a] = !![a]
-  proof: diagonal_fin_one ![a]
-
-中文:
-定理 diagonal_vec1
-  条件: (a : α)
-  结论: diagonal ![a] = !![a]
-  证明: diagonal_fin_one ![a]
-
-Depends on / 依赖: diagonal_fin_one
+/-
+**Matrix.diagonal_vec1** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_vec1 (a : α) : diagonal ![a] = !![a]
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.diagonal_fin_one`：diagonal_fin_one (d : Fin 1 -> α) : diagonal d 
+= !![d 0]
 -/
 theorem diagonal_vec1 (a : α) : diagonal ![a] = !![a] :=
   diagonal_fin_one ![a]
-
-/--
-theorem `diagonal_fin_two` / 定理 `diagonal_fin_two`
-
-English:
-theorem diagonal_fin_two
-  given: (d : Fin 2 -> α)
-  statement: diagonal d = !![d 0, 0; 0, d 1]
-  proof: by
-  simp [← Matrix.ext_iff]
-
-中文:
-定理 diagonal_fin_two
-  条件: (d : 有限集 2 -> α)
-  结论: diagonal d = !![d 0, 0; 0, d 1]
-  证明: by
-  simp [← Matrix.ext_iff]
-
-Depends on / 依赖: Matrix, Matrix.ext_iff, ext_iff
+/-
+**Matrix.diagonal_fin_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_fin_two (d : Fin 2 -> α) : diagonal d = !![d 0, 0; 0, d 1]
+参数：d : Fin 2 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Matrix.diagonal_apply_ne`：diagonal_apply_ne [Zero α] (d : n -> α) {i j :
+ n} (h : i != j) : (diagonal d) i j = 0
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-theorem diagonal_fin_two (d : Fin 2 -> α) : diagonal d = !![d 0, 0; 0, d 1] := by
+theorem diagonal_fin_two (d : Fin 2 → α) : diagonal d = !![d 0, 0; 0, d 1] := by
   simp [← Matrix.ext_iff]
-
-/--
-theorem `diagonal_vec2` / 定理 `diagonal_vec2`
-
-English:
-theorem diagonal_vec2
-  given: (a b : α)
-  statement: diagonal ![a, b] = !![a, 0; 0, b]
-  proof: diagonal_fin_two ![a, b]
-
-中文:
-定理 diagonal_vec2
-  条件: (a b : α)
-  结论: diagonal ![a, b] = !![a, 0; 0, b]
-  证明: diagonal_fin_two ![a, b]
-
-Depends on / 依赖: diagonal_fin_two
+/-
+**Matrix.diagonal_vec2** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_vec2 (a b : α) : diagonal ![a, b] = !![a, 0; 0, b]
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.diagonal_fin_two`：diagonal_fin_two (d : Fin 2 -> α) : diagonal d 
+= !![d 0, 0; 0, d 1]
 -/
 theorem diagonal_vec2 (a b : α) : diagonal ![a, b] = !![a, 0; 0, b] :=
   diagonal_fin_two ![a, b]
-
-/--
-theorem `diagonal_fin_three` / 定理 `diagonal_fin_three`
-
-English:
-theorem diagonal_fin_three
-  given: (d : Fin 3 -> α)
-  proof: by
-  simp [← Matrix.ext_iff, Fin.forall_fin_succ]
-
-中文:
-定理 diagonal_fin_three
-  条件: (d : 有限集 3 -> α)
-  证明: by
-  simp [← Matrix.ext_iff, Fin.forall_fin_succ]
-
-Depends on / 依赖: Fin.forall_fin_succ, Matrix, Matrix.ext_iff, ext_iff, forall_fin_succ
+/-
+**Matrix.diagonal_fin_three** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_fin_three (d : Fin 3 -> α) : diagonal d = !![d 0, 0, 0; 0, d 1, 0
+; 0, 0, d 2]
+参数：d : Fin 3 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Matrix.diagonal_apply_ne`：diagonal_apply_ne [Zero α] (d : n -> α) {i j :
+ n} (h : i != j) : (diagonal d) i j = 0
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_false_of_decide`：∀ {p : Prop} {x : Decidable p}, decide p = false → p
+ = False
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
-theorem diagonal_fin_three (d : Fin 3 -> α) :
+theorem diagonal_fin_three (d : Fin 3 → α) :
     diagonal d = !![d 0, 0, 0; 0, d 1, 0; 0, 0, d 2] := by
   simp [← Matrix.ext_iff, Fin.forall_fin_succ]
-
-/--
-theorem `diagonal_vec3` / 定理 `diagonal_vec3`
-
-English:
-theorem diagonal_vec3
-  given: (a b c : α)
-  proof: diagonal_fin_three ![a, b, c]
-
-中文:
-定理 diagonal_vec3
-  条件: (a b c : α)
-  证明: diagonal_fin_three ![a, b, c]
-
-Depends on / 依赖: diagonal_fin_three
+/-
+**Matrix.diagonal_vec3** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_vec3 (a b c : α) : diagonal ![a, b, c] = !![a, 0, 0; 0, b, 0; 0, 
+0, c]
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.diagonal_fin_three`：diagonal_fin_three (d : Fin 3 -> α) : diagona
+l d = !![d 0, 0, 0; 0, d 1, 0; 0, 0, d 2]
 -/
 theorem diagonal_vec3 (a b c : α) :
     diagonal ![a, b, c] = !![a, 0, 0; 0, b, 0; 0, 0, c] :=
@@ -478,91 +473,69 @@ section ColRow
 variable {ι : Type*}
 
 @[simp]
-/--
-theorem `replicateCol_empty` / 定理 `replicateCol_empty`
-
-English:
-theorem replicateCol_empty
-  given: (v : Fin 0 -> α)
-  statement: replicateCol ι v = of vecEmpty
-  proof: empty_eq _
-
-中文:
-定理 replicateCol_empty
-  条件: (v : 有限集 0 -> α)
-  结论: replicateCol ι v = of vecEmpty
-  证明: empty_eq _
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.replicateCol_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：replicateCol_empty (v : Fin 0 -> α) : replicateCol ι v = of vecEmpty
+参数：v : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem replicateCol_empty (v : Fin 0 -> α) : replicateCol ι v = of vecEmpty :=
+theorem replicateCol_empty (v : Fin 0 → α) : replicateCol ι v = of vecEmpty :=
   empty_eq _
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `replicateCol_cons` / 定理 `replicateCol_cons`
-
-English:
-theorem replicateCol_cons
-  given: (x : α) (u : Fin m -> α)
-  proof: by
-  ext i j
-  refine Fin.cases ?_ ?_ i <;> simp
-
-@[simp]
-
-中文:
-定理 replicateCol_cons
-  条件: (x : α) (u : 有限集 m -> α)
-  证明: by
-  ext i j
-  refine Fin.cases ?_ ?_ i <;> simp
-
-@[simp]
-
-Depends on / 依赖: Fin.cases
+/-
+**Matrix.replicateCol_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：replicateCol_cons (x : α) (u : Fin m -> α) : replicateCol ι (vecCons x u) 
+= of (vecCons (fun _ => x) (replicateCol ι u))
+参数：x : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem replicateCol_cons (x : α) (u : Fin m -> α) :
+theorem replicateCol_cons (x : α) (u : Fin m → α) :
     replicateCol ι (vecCons x u) = of (vecCons (fun _ => x) (replicateCol ι u)) := by
   ext i j
   refine Fin.cases ?_ ?_ i <;> simp
 
 @[simp]
-/--
-theorem `replicateRow_empty` / 定理 `replicateRow_empty`
-
-English:
-theorem replicateRow_empty
-  statement: replicateRow ι (vecEmpty : Fin 0 -> α) = of fun _ => vecEmpty
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 replicateRow_empty
-  结论: replicateRow ι (vecEmpty : 有限集 0 -> α) = of fun _ => vecEmpty
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.replicateRow_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：replicateRow_empty : replicateRow ι (vecEmpty : Fin 0 -> α) = of fun _ => 
+vecEmpty
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem replicateRow_empty : replicateRow ι (vecEmpty : Fin 0 -> α) = of fun _ => vecEmpty := rfl
+theorem replicateRow_empty : replicateRow ι (vecEmpty : Fin 0 → α) = of fun _ => vecEmpty := rfl
 
 @[simp]
-/--
-theorem `replicateRow_cons` / 定理 `replicateRow_cons`
-
-English:
-theorem replicateRow_cons
-  given: (x : α) (u : Fin m -> α)
-  proof: rfl
-
-中文:
-定理 replicateRow_cons
-  条件: (x : α) (u : 有限集 m -> α)
-  证明: rfl
+/-
+**Matrix.replicateRow_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：replicateRow_cons (x : α) (u : Fin m -> α) : replicateRow ι (vecCons x u) 
+= of fun _ => vecCons x u
+参数：x : α；u : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem replicateRow_cons (x : α) (u : Fin m -> α) :
+theorem replicateRow_cons (x : α) (u : Fin m → α) :
     replicateRow ι (vecCons x u) = of fun _ => vecCons x u :=
   rfl
 
@@ -571,122 +544,90 @@ end ColRow
 section Transpose
 
 @[simp]
-/--
-theorem `transpose_empty_rows` / 定理 `transpose_empty_rows`
-
-English:
-theorem transpose_empty_rows
-  given: (A : Matrix m' (Fin 0) α)
-  statement: Aᵀ = of ![]
-  proof: empty_eq _
-
-@[simp]
-
-中文:
-定理 transpose_empty_rows
-  条件: (A : 矩阵 m' (有限集 0) α)
-  结论: Aᵀ = of ![]
-  证明: empty_eq _
-
-@[simp]
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.transpose_empty_rows** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_empty_rows (A : Matrix m' (Fin 0) α) : Aᵀ = of ![]
+参数：A : Matrix m' (Fin 0) α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
 theorem transpose_empty_rows (A : Matrix m' (Fin 0) α) : Aᵀ = of ![] :=
   empty_eq _
 
 @[simp]
-/--
-theorem `transpose_empty_cols` / 定理 `transpose_empty_cols`
-
-English:
-theorem transpose_empty_cols
-  given: (A : Matrix (Fin 0) m' α)
-  statement: Aᵀ = of fun _ => ![]
-  proof: funext fun _ => empty_eq _
-
-中文:
-定理 transpose_empty_cols
-  条件: (A : 矩阵 (有限集 0) m' α)
-  结论: Aᵀ = of fun _ => ![]
-  证明: funext fun _ => empty_eq _
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.transpose_empty_cols** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_empty_cols (A : Matrix (Fin 0) m' α) : Aᵀ = of fun _ => ![]
+参数：A : Matrix (Fin 0) m' α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
 theorem transpose_empty_cols (A : Matrix (Fin 0) m' α) : Aᵀ = of fun _ => ![] :=
   funext fun _ => empty_eq _
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `cons_transpose` / 定理 `cons_transpose`
-
-English:
-theorem cons_transpose
-  given: (v : n' -> α) (A : Matrix (Fin m) n' α)
-  proof: by
-  ext i j
-  refine Fin.cases ?_ ?_ j <;> simp
-
-@[simp]
-
-中文:
-定理 cons_transpose
-  条件: (v : n' -> α) (A : 矩阵 (有限集 m) n' α)
-  证明: by
-  ext i j
-  refine Fin.cases ?_ ?_ j <;> simp
-
-@[simp]
-
-Depends on / 依赖: Fin.cases
+/-
+**Matrix.cons_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_transpose (v : n' -> α) (A : Matrix (Fin m) n' α) : (of (vecCons v A)
+)ᵀ = of fun i => vecCons (v i) (Aᵀ i)
+参数：v : n' -> α；A : Matrix (Fin m) n' α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem cons_transpose (v : n' -> α) (A : Matrix (Fin m) n' α) :
+theorem cons_transpose (v : n' → α) (A : Matrix (Fin m) n' α) :
     (of (vecCons v A))ᵀ = of fun i => vecCons (v i) (Aᵀ i) := by
   ext i j
   refine Fin.cases ?_ ?_ j <;> simp
 
 @[simp]
-/--
-theorem `head_transpose` / 定理 `head_transpose`
-
-English:
-theorem head_transpose
-  given: (A : Matrix m' (Fin n.succ) α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 head_transpose
-  条件: (A : 矩阵 m' (有限集 n.succ) α)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.head_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：head_transpose (A : Matrix m' (Fin n.succ) α) : vecHead (of.symm Aᵀ) = vec
+Head ∘ of.symm A
+参数：A : Matrix m' (Fin n.succ) α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem head_transpose (A : Matrix m' (Fin n.succ) α) :
     vecHead (of.symm Aᵀ) = vecHead ∘ of.symm A :=
   rfl
 
 @[simp]
-/--
-theorem `tail_transpose` / 定理 `tail_transpose`
-
-English:
-theorem tail_transpose
-  given: (A : Matrix m' (Fin n.succ) α)
-  statement: vecTail (of.symm Aᵀ) = (vecTail ∘ A)ᵀ
-  proof: by
-  ext i j
-  rfl
-
-中文:
-定理 tail_transpose
-  条件: (A : 矩阵 m' (有限集 n.succ) α)
-  结论: vecTail (of.symm Aᵀ) = (vecTail ∘ A)ᵀ
-  证明: by
-  ext i j
-  rfl
+/-
+**Matrix.tail_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：tail_transpose (A : Matrix m' (Fin n.succ) α) : vecTail (of.symm Aᵀ) = (ve
+cTail ∘ A)ᵀ
+参数：A : Matrix m' (Fin n.succ) α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem tail_transpose (A : Matrix m' (Fin n.succ) α) : vecTail (of.symm Aᵀ) = (vecTail ∘ A)ᵀ := by
   ext i j
@@ -699,119 +640,91 @@ section Mul
 variable [NonUnitalNonAssocSemiring α]
 
 @[simp]
-/--
-theorem `empty_mul` / 定理 `empty_mul`
-
-English:
-theorem empty_mul
-  given: [Fintype n'] (A : Matrix (Fin 0) n' α) (B : Matrix n' o' α)
-  statement: A * B = of ![]
-  proof: empty_eq _
-
-@[simp]
-
-中文:
-定理 empty_mul
-  条件: [有限类型 n'] (A : 矩阵 (有限集 0) n' α) (B : 矩阵 n' o' α)
-  结论: A * B = of ![]
-  证明: empty_eq _
-
-@[simp]
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.empty_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_mul [Fintype n'] (A : Matrix (Fin 0) n' α) (B : Matrix n' o' α) : A 
+* B = of ![]
+参数：A : Matrix (Fin 0) n' α；B : Matrix n' o' α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
 theorem empty_mul [Fintype n'] (A : Matrix (Fin 0) n' α) (B : Matrix n' o' α) : A * B = of ![] :=
   empty_eq _
 
 @[simp]
-/--
-theorem `empty_mul_empty` / 定理 `empty_mul_empty`
-
-English:
-theorem empty_mul_empty
-  given: (A : Matrix m' (Fin 0) α) (B : Matrix (Fin 0) o' α)
-  statement: A * B = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 empty_mul_empty
-  条件: (A : 矩阵 m' (有限集 0) α) (B : 矩阵 (有限集 0) o' α)
-  结论: A * B = 0
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.empty_mul_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_mul_empty (A : Matrix m' (Fin 0) α) (B : Matrix (Fin 0) o' α) : A * 
+B = 0
+参数：A : Matrix m' (Fin 0) α；B : Matrix (Fin 0) o' α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem empty_mul_empty (A : Matrix m' (Fin 0) α) (B : Matrix (Fin 0) o' α) : A * B = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `mul_empty` / 定理 `mul_empty`
-
-English:
-theorem mul_empty
-  given: [Fintype n'] (A : Matrix m' n' α) (B : Matrix n' (Fin 0) α)
-  proof: funext fun _ => empty_eq _
-
-中文:
-定理 mul_empty
-  条件: [有限类型 n'] (A : 矩阵 m' n' α) (B : 矩阵 n' (有限集 0) α)
-  证明: funext fun _ => empty_eq _
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.mul_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_empty [Fintype n'] (A : Matrix m' n' α) (B : Matrix n' (Fin 0) α) : A 
+* B = of fun _ => ![]
+参数：A : Matrix m' n' α；B : Matrix n' (Fin 0) α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
 theorem mul_empty [Fintype n'] (A : Matrix m' n' α) (B : Matrix n' (Fin 0) α) :
     A * B = of fun _ => ![] :=
   funext fun _ => empty_eq _
-
-/--
-theorem `mul_val_succ` / 定理 `mul_val_succ`
-
-English:
-theorem mul_val_succ
-  statement: [Fintype n'] (A : Matrix (Fin m.succ) n' α) (B : Matrix n' o' α) (i : Fin m)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mul_val_succ
-  结论: [有限类型 n'] (A : 矩阵 (有限集 m.succ) n' α) (B : 矩阵 n' o' α) (i : 有限集 m)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.mul_val_succ** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_val_succ [Fintype n'] (A : Matrix (Fin m.succ) n' α) (B : Matrix n' o'
+ α) (i : Fin m) (j : o') : (A * B) i.succ j = (of (vecTail (of.symm A)) * B) i j
+参数：A : Matrix (Fin m.succ) n' α；B : Matrix n' o' α；i : Fin m；j : o'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_val_succ [Fintype n'] (A : Matrix (Fin m.succ) n' α) (B : Matrix n' o' α) (i : Fin m)
     (j : o') : (A * B) i.succ j = (of (vecTail (of.symm A)) * B) i j :=
   rfl
 
 @[simp]
-/--
-theorem `cons_mul` / 定理 `cons_mul`
-
-English:
-theorem cons_mul
-  given: [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (B : Matrix n' o' α)
-  proof: by
-  ext i j
-  refine Fin.cases ?_ ?_ i
-  · rfl
-  simp [mul_val_succ]
-
-中文:
-定理 cons_mul
-  条件: [有限类型 n'] (v : n' -> α) (A : 有限集 m -> n' -> α) (B : 矩阵 n' o' α)
-  证明: by
-  ext i j
-  refine Fin.cases ?_ ?_ i
-  · rfl
-  simp [mul_val_succ]
-
-Depends on / 依赖: Fin.cases, mul_val_succ
+/-
+**Matrix.cons_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_mul [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (B : Matrix n' 
+o' α) : of (vecCons v A) * B = of (vecCons (v ᵥ* B) (of.symm (of A * B)))
+参数：v : n' -> α；A : Fin m -> n' -> α；B : Matrix n' o' α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Matrix.tail_cons`：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons 
+x u) = u
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem cons_mul [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (B : Matrix n' o' α) :
+theorem cons_mul [Fintype n'] (v : n' → α) (A : Fin m → n' → α) (B : Matrix n' o' α) :
     of (vecCons v A) * B = of (vecCons (v ᵥ* B) (of.symm (of A * B))) := by
   ext i j
   refine Fin.cases ?_ ?_ i
@@ -825,121 +738,100 @@ section VecMul
 variable [NonUnitalNonAssocSemiring α]
 
 @[simp]
-/--
-theorem `empty_vecMul` / 定理 `empty_vecMul`
-
-English:
-theorem empty_vecMul
-  given: (v : Fin 0 -> α) (B : Matrix (Fin 0) o' α)
-  statement: v ᵥ* B = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 empty_vecMul
-  条件: (v : 有限集 0 -> α) (B : 矩阵 (有限集 0) o' α)
-  结论: v ᵥ* B = 0
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.empty_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_vecMul (v : Fin 0 -> α) (B : Matrix (Fin 0) o' α) : v ᵥ* B = 0
+参数：v : Fin 0 -> α；B : Matrix (Fin 0) o' α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem empty_vecMul (v : Fin 0 -> α) (B : Matrix (Fin 0) o' α) : v ᵥ* B = 0 :=
+theorem empty_vecMul (v : Fin 0 → α) (B : Matrix (Fin 0) o' α) : v ᵥ* B = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `vecMul_empty` / 定理 `vecMul_empty`
-
-English:
-theorem vecMul_empty
-  given: [Fintype n'] (v : n' -> α) (B : Matrix n' (Fin 0) α)
-  statement: v ᵥ* B = ![]
-  proof: empty_eq _
-
-@[simp]
-
-中文:
-定理 vecMul_empty
-  条件: [有限类型 n'] (v : n' -> α) (B : 矩阵 n' (有限集 0) α)
-  结论: v ᵥ* B = ![]
-  证明: empty_eq _
-
-@[simp]
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.vecMul_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_empty [Fintype n'] (v : n' -> α) (B : Matrix n' (Fin 0) α) : v ᵥ* B
+ = ![]
+参数：v : n' -> α；B : Matrix n' (Fin 0) α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem vecMul_empty [Fintype n'] (v : n' -> α) (B : Matrix n' (Fin 0) α) : v ᵥ* B = ![] :=
+theorem vecMul_empty [Fintype n'] (v : n' → α) (B : Matrix n' (Fin 0) α) : v ᵥ* B = ![] :=
   empty_eq _
 
 @[simp]
-/--
-theorem `cons_vecMul` / 定理 `cons_vecMul`
-
-English:
-theorem cons_vecMul
-  given: (x : α) (v : Fin n -> α) (B : Fin n.succ -> o' -> α)
-  proof: by
-  ext i
-  simp [vecMul]
-
-@[simp]
-
-中文:
-定理 cons_vecMul
-  条件: (x : α) (v : 有限集 n -> α) (B : 有限集 n.succ -> o' -> α)
-  证明: by
-  ext i
-  simp [vecMul]
-
-@[simp]
-
-Depends on / 依赖: vecMul
+/-
+**Matrix.cons_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vecMul (x : α) (v : Fin n -> α) (B : Fin n.succ -> o' -> α) : vecCons
+ x v ᵥ* of B = x • vecHead B + v ᵥ* of (vecTail B)
+参数：x : α；v : Fin n -> α；B : Fin n.succ -> o' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_dotProduct`：cons_dotProduct (x : α) (v : Fin n -> α) (w : Fi
+n n.succ -> α) : vecCons x v ⬝ᵥ w = x * vecHead w + v ⬝ᵥ vecTail w
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_vecMul (x : α) (v : Fin n -> α) (B : Fin n.succ -> o' -> α) :
+theorem cons_vecMul (x : α) (v : Fin n → α) (B : Fin n.succ → o' → α) :
     vecCons x v ᵥ* of B = x • vecHead B + v ᵥ* of (vecTail B) := by
   ext i
   simp [vecMul]
 
 @[simp]
-/--
-theorem `vecMul_cons` / 定理 `vecMul_cons`
-
-English:
-theorem vecMul_cons
-  given: (v : Fin n.succ -> α) (w : o' -> α) (B : Fin n -> o' -> α)
-  proof: by
-  ext i
-  simp [vecMul]
-
-中文:
-定理 vecMul_cons
-  条件: (v : 有限集 n.succ -> α) (w : o' -> α) (B : 有限集 n -> o' -> α)
-  证明: by
-  ext i
-  simp [vecMul]
-
-Depends on / 依赖: vecMul
+/-
+**Matrix.vecMul_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMul_cons (v : Fin n.succ -> α) (w : o' -> α) (B : Fin n -> o' -> α) : v
+ ᵥ* of (vecCons w B) = vecHead v • w + vecTail v ᵥ* of B
+参数：v : Fin n.succ -> α；w : o' -> α；B : Fin n -> o' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `Matrix.dotProduct_cons`：dotProduct_cons (v : Fin n.succ -> α) (x : α) (w
+ : Fin n -> α) : v ⬝ᵥ vecCons x w = vecHead v * x + vecTail v ⬝ᵥ w
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem vecMul_cons (v : Fin n.succ -> α) (w : o' -> α) (B : Fin n -> o' -> α) :
+theorem vecMul_cons (v : Fin n.succ → α) (w : o' → α) (B : Fin n → o' → α) :
     v ᵥ* of (vecCons w B) = vecHead v • w + vecTail v ᵥ* of B := by
   ext i
   simp [vecMul]
-
-/--
-theorem `cons_vecMul_cons` / 定理 `cons_vecMul_cons`
-
-English:
-theorem cons_vecMul_cons
-  given: (x : α) (v : Fin n -> α) (w : o' -> α) (B : Fin n -> o' -> α)
-  proof: by simp
-
-中文:
-定理 cons_vecMul_cons
-  条件: (x : α) (v : 有限集 n -> α) (w : o' -> α) (B : 有限集 n -> o' -> α)
-  证明: by simp
+/-
+**Matrix.cons_vecMul_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vecMul_cons (x : α) (v : Fin n -> α) (w : o' -> α) (B : Fin n -> o' -
+> α) : vecCons x v ᵥ* of (vecCons w B) = x • w + v ᵥ* of B
+参数：x : α；v : Fin n -> α；w : o' -> α；B : Fin n -> o' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecMul_cons`：vecMul_cons (v : Fin n.succ -> α) (w : o' -> α) (B :
+ Fin n -> o' -> α) : v ᵥ* of (vecCons w B) = vecHead v • w + vecTail v ᵥ* of B
+· 使用定理 `Matrix.tail_cons`：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons 
+x u) = u
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cons_vecMul_cons (x : α) (v : Fin n -> α) (w : o' -> α) (B : Fin n -> o' -> α) :
+theorem cons_vecMul_cons (x : α) (v : Fin n → α) (w : o' → α) (B : Fin n → o' → α) :
     vecCons x v ᵥ* of (vecCons w B) = x • w + v ᵥ* of B := by simp
 
 end VecMul
@@ -949,104 +841,87 @@ section MulVec
 variable [NonUnitalNonAssocSemiring α]
 
 @[simp]
-/--
-theorem `empty_mulVec` / 定理 `empty_mulVec`
-
-English:
-theorem empty_mulVec
-  given: [Fintype n'] (A : Matrix (Fin 0) n' α) (v : n' -> α)
-  statement: A *ᵥ v = ![]
-  proof: empty_eq _
-
-@[simp]
-
-中文:
-定理 empty_mulVec
-  条件: [有限类型 n'] (A : 矩阵 (有限集 0) n' α) (v : n' -> α)
-  结论: A *ᵥ v = ![]
-  证明: empty_eq _
-
-@[simp]
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.empty_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_mulVec [Fintype n'] (A : Matrix (Fin 0) n' α) (v : n' -> α) : A *ᵥ v
+ = ![]
+参数：A : Matrix (Fin 0) n' α；v : n' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem empty_mulVec [Fintype n'] (A : Matrix (Fin 0) n' α) (v : n' -> α) : A *ᵥ v = ![] :=
+theorem empty_mulVec [Fintype n'] (A : Matrix (Fin 0) n' α) (v : n' → α) : A *ᵥ v = ![] :=
   empty_eq _
 
 @[simp]
-/--
-theorem `mulVec_empty` / 定理 `mulVec_empty`
-
-English:
-theorem mulVec_empty
-  given: (A : Matrix m' (Fin 0) α) (v : Fin 0 -> α)
-  statement: A *ᵥ v = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mulVec_empty
-  条件: (A : 矩阵 m' (有限集 0) α) (v : 有限集 0 -> α)
-  结论: A *ᵥ v = 0
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.mulVec_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_empty (A : Matrix m' (Fin 0) α) (v : Fin 0 -> α) : A *ᵥ v = 0
+参数：A : Matrix m' (Fin 0) α；v : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mulVec_empty (A : Matrix m' (Fin 0) α) (v : Fin 0 -> α) : A *ᵥ v = 0 :=
+theorem mulVec_empty (A : Matrix m' (Fin 0) α) (v : Fin 0 → α) : A *ᵥ v = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `cons_mulVec` / 定理 `cons_mulVec`
-
-English:
-theorem cons_mulVec
-  given: [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (w : n' -> α)
-  proof: by
-  ext i
-  refine Fin.cases ?_ ?_ i <;> simp [mulVec]
-
-@[simp]
-
-中文:
-定理 cons_mulVec
-  条件: [有限类型 n'] (v : n' -> α) (A : 有限集 m -> n' -> α) (w : n' -> α)
-  证明: by
-  ext i
-  refine Fin.cases ?_ ?_ i <;> simp [mulVec]
-
-@[simp]
-
-Depends on / 依赖: Fin.cases, mulVec
+/-
+**Matrix.cons_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_mulVec [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (w : n' -> α
+) : (of <| vecCons v A) *ᵥ w = vecCons (v ⬝ᵥ w) (of A *ᵥ w)
+参数：v : n' -> α；A : Fin m -> n' -> α；w : n' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem cons_mulVec [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (w : n' -> α) :
+theorem cons_mulVec [Fintype n'] (v : n' → α) (A : Fin m → n' → α) (w : n' → α) :
     (of <| vecCons v A) *ᵥ w = vecCons (v ⬝ᵥ w) (of A *ᵥ w) := by
   ext i
   refine Fin.cases ?_ ?_ i <;> simp [mulVec]
 
 @[simp]
-/--
-theorem `mulVec_cons` / 定理 `mulVec_cons`
-
-English:
-theorem mulVec_cons
-  statement: {α} [NonUnitalCommSemiring α] (A : m' -> Fin n.succ -> α) (x : α)
-  proof: by
-  ext i
-  simp [mulVec, mul_comm]
-
-中文:
-定理 mulVec_cons
-  结论: {α} [非幺交换半环 α] (A : m' -> 有限集 n.succ -> α) (x : α)
-  证明: by
-  ext i
-  simp [mulVec, mul_comm]
-
-Depends on / 依赖: mulVec, mul_comm
+/-
+**Matrix.mulVec_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mulVec_cons {α} [NonUnitalCommSemiring α] (A : m' -> Fin n.succ -> α) (x :
+ α) (v : Fin n -> α) : (of A) *ᵥ (vecCons x v) = x • vecHead ∘ A + (of (vecTail 
+∘ A)) *ᵥ v
+参数：A : m' -> Fin n.succ -> α；x : α；v : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.dotProduct_cons`：dotProduct_cons (v : Fin n.succ -> α) (x : α) (w
+ : Fin n -> α) : v ⬝ᵥ vecCons x w = vecHead v * x + vecTail v ⬝ᵥ w
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mulVec_cons {α} [NonUnitalCommSemiring α] (A : m' -> Fin n.succ -> α) (x : α)
-    (v : Fin n -> α) : (of A) *ᵥ (vecCons x v) = x • vecHead ∘ A + (of (vecTail ∘ A)) *ᵥ v := by
+theorem mulVec_cons {α} [NonUnitalCommSemiring α] (A : m' → Fin n.succ → α) (x : α)
+    (v : Fin n → α) : (of A) *ᵥ (vecCons x v) = x • vecHead ∘ A + (of (vecTail ∘ A)) *ᵥ v := by
   ext i
   simp [mulVec, mul_comm]
 
@@ -1057,96 +932,76 @@ section VecMulVec
 variable [NonUnitalNonAssocSemiring α]
 
 @[simp]
-/--
-theorem `empty_vecMulVec` / 定理 `empty_vecMulVec`
-
-English:
-theorem empty_vecMulVec
-  given: (v : Fin 0 -> α) (w : n' -> α)
-  statement: vecMulVec v w = of ![]
-  proof: empty_eq _
-
-@[simp]
-
-中文:
-定理 empty_vecMulVec
-  条件: (v : 有限集 0 -> α) (w : n' -> α)
-  结论: vecMulVec v w = of ![]
-  证明: empty_eq _
-
-@[simp]
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.empty_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：empty_vecMulVec (v : Fin 0 -> α) (w : n' -> α) : vecMulVec v w = of ![]
+参数：v : Fin 0 -> α；w : n' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem empty_vecMulVec (v : Fin 0 -> α) (w : n' -> α) : vecMulVec v w = of ![] :=
+theorem empty_vecMulVec (v : Fin 0 → α) (w : n' → α) : vecMulVec v w = of ![] :=
   empty_eq _
 
 @[simp]
-/--
-theorem `vecMulVec_empty` / 定理 `vecMulVec_empty`
-
-English:
-theorem vecMulVec_empty
-  given: (v : m' -> α) (w : Fin 0 -> α)
-  statement: vecMulVec v w = of fun _ => ![]
-  proof: funext fun _ => empty_eq _
-
-中文:
-定理 vecMulVec_empty
-  条件: (v : m' -> α) (w : 有限集 0 -> α)
-  结论: vecMulVec v w = of fun _ => ![]
-  证明: funext fun _ => empty_eq _
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.vecMulVec_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_empty (v : m' -> α) (w : Fin 0 -> α) : vecMulVec v w = of fun _ 
+=> ![]
+参数：v : m' -> α；w : Fin 0 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem vecMulVec_empty (v : m' -> α) (w : Fin 0 -> α) : vecMulVec v w = of fun _ => ![] :=
+theorem vecMulVec_empty (v : m' → α) (w : Fin 0 → α) : vecMulVec v w = of fun _ => ![] :=
   funext fun _ => empty_eq _
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `cons_vecMulVec` / 定理 `cons_vecMulVec`
-
-English:
-theorem cons_vecMulVec
-  given: (x : α) (v : Fin m -> α) (w : n' -> α)
-  proof: by
-  ext i
-  refine Fin.cases ?_ ?_ i <;> simp [vecMulVec]
-
-@[simp]
-
-中文:
-定理 cons_vecMulVec
-  条件: (x : α) (v : 有限集 m -> α) (w : n' -> α)
-  证明: by
-  ext i
-  refine Fin.cases ?_ ?_ i <;> simp [vecMulVec]
-
-@[simp]
-
-Depends on / 依赖: Fin.cases, vecMulVec
+/-
+**Matrix.cons_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：cons_vecMulVec (x : α) (v : Fin m -> α) (w : n' -> α) : vecMulVec (vecCons
+ x v) w = vecCons (x • w) (vecMulVec v w)
+参数：x : α；v : Fin m -> α；w : n' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem cons_vecMulVec (x : α) (v : Fin m -> α) (w : n' -> α) :
+theorem cons_vecMulVec (x : α) (v : Fin m → α) (w : n' → α) :
     vecMulVec (vecCons x v) w = vecCons (x • w) (vecMulVec v w) := by
   ext i
   refine Fin.cases ?_ ?_ i <;> simp [vecMulVec]
 
 @[simp]
-/--
-theorem `vecMulVec_cons` / 定理 `vecMulVec_cons`
-
-English:
-theorem vecMulVec_cons
-  given: (v : m' -> α) (x : α) (w : Fin n -> α)
-  proof: rfl
-
-中文:
-定理 vecMulVec_cons
-  条件: (v : m' -> α) (x : α) (w : 有限集 n -> α)
-  证明: rfl
+/-
+**Matrix.vecMulVec_cons** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vecMulVec_cons (v : m' -> α) (x : α) (w : Fin n -> α) : vecMulVec v (vecCo
+ns x w) = of fun i => v i • vecCons x w
+参数：v : m' -> α；x : α；w : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vecMulVec_cons (v : m' -> α) (x : α) (w : Fin n -> α) :
+theorem vecMulVec_cons (v : m' → α) (x : α) (w : Fin n → α) :
     vecMulVec v (vecCons x w) = of fun i => v i • vecCons x w := rfl
 
 end VecMulVec
@@ -1155,24 +1010,15 @@ section SMul
 
 variable [NonUnitalNonAssocSemiring α]
 
-/--
-theorem `smul_mat_empty` / 定理 `smul_mat_empty`
-
-English:
-theorem smul_mat_empty
-  given: {m' : Type*} (x : α) (A : Fin 0 -> m' -> α)
-  statement: x • A = ![]
-  proof: empty_eq _
-
-中文:
-定理 smul_mat_empty
-  条件: {m' : 类型} (x : α) (A : 有限集 0 -> m' -> α)
-  结论: x • A = ![]
-  证明: empty_eq _
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.smul_mat_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_mat_empty {m' : Type*} (x : α) (A : Fin 0 -> m' -> α) : x • A = ![]
+参数：x : α；A : Fin 0 -> m' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem smul_mat_empty {m' : Type*} (x : α) (A : Fin 0 -> m' -> α) : x • A = ![] :=
+theorem smul_mat_empty {m' : Type*} (x : α) (A : Fin 0 → m' → α) : x • A = ![] :=
   empty_eq _
 
 end SMul
@@ -1180,90 +1026,99 @@ end SMul
 section Submatrix
 
 @[simp]
-/--
-theorem `submatrix_empty` / 定理 `submatrix_empty`
-
-English:
-theorem submatrix_empty
-  given: (A : Matrix m' n' α) (row : Fin 0 -> m') (col : o' -> n')
-  proof: empty_eq _
-
-中文:
-定理 submatrix_empty
-  条件: (A : 矩阵 m' n' α) (row : 有限集 0 -> m') (col : o' -> n')
-  证明: empty_eq _
-
-Depends on / 依赖: empty_eq
+/-
+**Matrix.submatrix_empty** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_empty (A : Matrix m' n' α) (row : Fin 0 -> m') (col : o' -> n') 
+: submatrix A row col = of ![]
+参数：A : Matrix m' n' α；row : Fin 0 -> m'；col : o' -> n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.empty_eq`：empty_eq (v : Fin 0 -> α) : v = ![]
 -/
-theorem submatrix_empty (A : Matrix m' n' α) (row : Fin 0 -> m') (col : o' -> n') :
+theorem submatrix_empty (A : Matrix m' n' α) (row : Fin 0 → m') (col : o' → n') :
     submatrix A row col = of ![] :=
   empty_eq _
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `submatrix_cons_row` / 定理 `submatrix_cons_row`
-
-English:
-theorem submatrix_cons_row
-  given: (A : Matrix m' n' α) (i : m') (row : Fin m -> m') (col : o' -> n')
-  proof: by
-  ext i j
-  refine Fin.cases ?_ ?_ i <;> simp [submatrix]
-
-中文:
-定理 submatrix_cons_row
-  条件: (A : 矩阵 m' n' α) (i : m') (row : 有限集 m -> m') (col : o' -> n')
-  证明: by
-  ext i j
-  refine Fin.cases ?_ ?_ i <;> simp [submatrix]
-
-Depends on / 依赖: Fin.cases, submatrix
+/-
+**Matrix.submatrix_cons_row** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_cons_row (A : Matrix m' n' α) (i : m') (row : Fin m -> m') (col 
+: o' -> n') : submatrix A (vecCons i row) col = vecCons (fun j => A i (col j)) (
+submatrix A row col)
+参数：A : Matrix m' n' α；i : m'；row : Fin m -> m'；col : o' -> n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem submatrix_cons_row (A : Matrix m' n' α) (i : m') (row : Fin m -> m') (col : o' -> n') :
+theorem submatrix_cons_row (A : Matrix m' n' α) (i : m') (row : Fin m → m') (col : o' → n') :
     submatrix A (vecCons i row) col = vecCons (fun j => A i (col j)) (submatrix A row col) := by
   ext i j
   refine Fin.cases ?_ ?_ i <;> simp [submatrix]
 
 /-- Updating a row then removing it is the same as removing it. -/
 @[simp]
-/--
-theorem `submatrix_updateRow_succAbove` / 定理 `submatrix_updateRow_succAbove`
+/-
+**Matrix.submatrix_updateRow_succAbove** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_updateRow_succAbove (A : Matrix (Fin m.succ) n' α) (v : n' -> α)
+ (f : o' -> n') (i : Fin m.succ) : (A.updateRow i v).submatrix i.succAbove f = A
+.submatrix i.succAbove f
+参数：A : Matrix (Fin m.succ) n' α；v : n' -> α；f : o' -> n'；i : Fin m.succ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.updateRow_ne`：updateRow_ne [DecidableEq m] {i' : m} (i_ne : i' !=
+ i) : updateRow M i b i' = M i'
+· 使用引理 `Fin.succAbove_ne`：succAbove_ne (p : Fin (n + 1)) (i : Fin n) : p.succAbo
+ve i != p
 
-English:
-theorem submatrix_updateRow_succAbove
-  statement: (A : Matrix (Fin m.succ) n' α) (v : n' -> α) (f : o' -> n')
-  proof: ext fun r s => (congr_fun (updateRow_ne (Fin.succAbove_ne i r) : _ = A _) (f s) :)
-
-中文:
-定理 submatrix_updateRow_succAbove
-  结论: (A : 矩阵 (有限集 m.succ) n' α) (v : n' -> α) (f : o' -> n')
-  证明: ext fun r s => (congr_fun (updateRow_ne (Fin.succAbove_ne i r) : _ = A _) (f s) :)
-
-Depends on / 依赖: Fin.succAbove_ne, congr_fun, succAbove_ne, updateRow_ne
+--- 原说明 ---
+Updating a row then removing it is the same as removing it.
 -/
-theorem submatrix_updateRow_succAbove (A : Matrix (Fin m.succ) n' α) (v : n' -> α) (f : o' -> n')
+theorem submatrix_updateRow_succAbove (A : Matrix (Fin m.succ) n' α) (v : n' → α) (f : o' → n')
     (i : Fin m.succ) : (A.updateRow i v).submatrix i.succAbove f = A.submatrix i.succAbove f :=
   ext fun r s => (congr_fun (updateRow_ne (Fin.succAbove_ne i r) : _ = A _) (f s) :)
 
 /-- Updating a column then removing it is the same as removing it. -/
 @[simp]
-/--
-theorem `submatrix_updateCol_succAbove` / 定理 `submatrix_updateCol_succAbove`
+/-
+**Matrix.submatrix_updateCol_succAbove** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_updateCol_succAbove (A : Matrix m' (Fin n.succ) α) (v : m' -> α)
+ (f : o' -> m') (i : Fin n.succ) : (A.updateCol i v).submatrix f i.succAbove = A
+.submatrix f i.succAbove
+参数：A : Matrix m' (Fin n.succ) α；v : m' -> α；f : o' -> m'；i : Fin n.succ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Matrix.updateCol_ne`：updateCol_ne [DecidableEq n] {j' : n} (j_ne : j' !=
+ j) : updateCol M j c i j' = M i j'
+· 使用引理 `Fin.succAbove_ne`：succAbove_ne (p : Fin (n + 1)) (i : Fin n) : p.succAbo
+ve i != p
 
-English:
-theorem submatrix_updateCol_succAbove
-  statement: (A : Matrix m' (Fin n.succ) α) (v : m' -> α) (f : o' -> m')
-  proof: ext fun _r s => updateCol_ne (Fin.succAbove_ne i s)
-
-中文:
-定理 submatrix_updateCol_succAbove
-  结论: (A : 矩阵 m' (有限集 n.succ) α) (v : m' -> α) (f : o' -> m')
-  证明: ext fun _r s => updateCol_ne (Fin.succAbove_ne i s)
-
-Depends on / 依赖: Fin.succAbove_ne, succAbove_ne, updateCol_ne
+--- 原说明 ---
+Updating a column then removing it is the same as removing it.
 -/
-theorem submatrix_updateCol_succAbove (A : Matrix m' (Fin n.succ) α) (v : m' -> α) (f : o' -> m')
+theorem submatrix_updateCol_succAbove (A : Matrix m' (Fin n.succ) α) (v : m' → α) (f : o' → m')
     (i : Fin n.succ) : (A.updateCol i v).submatrix f i.succAbove = A.submatrix f i.succAbove :=
   ext fun _r s => updateCol_ne (Fin.succAbove_ne i s)
 
@@ -1275,47 +1130,37 @@ section One
 
 variable [Zero α] [One α]
 
-/--
-theorem `one_fin_two` / 定理 `one_fin_two`
-
-English:
-theorem one_fin_two
-  statement: (1 : Matrix (Fin 2) (Fin 2) α) = !![1, 0; 0, 1]
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-中文:
-定理 one_fin_two
-  结论: (1 : 矩阵 (有限集 2) (有限集 2) α) = !![1, 0; 0, 1]
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-Depends on / 依赖: fin_cases
+/-
+**Matrix.one_fin_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_fin_two : (1 : Matrix (Fin 2) (Fin 2) α) = !![1, 0; 0, 1]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem one_fin_two : (1 : Matrix (Fin 2) (Fin 2) α) = !![1, 0; 0, 1] := by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
-
-/--
-theorem `one_fin_three` / 定理 `one_fin_three`
-
-English:
-theorem one_fin_three
-  statement: (1 : Matrix (Fin 3) (Fin 3) α) = !![1, 0, 0; 0, 1, 0; 0, 0, 1]
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-中文:
-定理 one_fin_three
-  结论: (1 : 矩阵 (有限集 3) (有限集 3) α) = !![1, 0, 0; 0, 1, 0; 0, 0, 1]
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-Depends on / 依赖: fin_cases
+/-
+**Matrix.one_fin_three** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_fin_three : (1 : Matrix (Fin 3) (Fin 3) α) = !![1, 0, 0; 0, 1, 0; 0, 0
+, 1]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem one_fin_three : (1 : Matrix (Fin 3) (Fin 3) α) = !![1, 0, 0; 0, 1, 0; 0, 0, 1] := by
   ext i j
@@ -1326,140 +1171,112 @@ end One
 section AddMonoidWithOne
 variable [AddMonoidWithOne α]
 
-/--
-theorem `natCast_fin_two` / 定理 `natCast_fin_two`
-
-English:
-theorem natCast_fin_two
-  given: (n : Nat)
-  statement: (n : Matrix (Fin 2) (Fin 2) α) = !![↑n, 0; 0, ↑n]
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-中文:
-定理 natCast_fin_two
-  条件: (n : 自然数)
-  结论: (n : 矩阵 (有限集 2) (有限集 2) α) = !![↑n, 0; 0, ↑n]
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-Depends on / 依赖: fin_cases
+/-
+**Matrix.natCast_fin_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：natCast_fin_two (n : Nat) : (n : Matrix (Fin 2) (Fin 2) α) = !![↑n, 0; 0, 
+↑n]
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
-theorem natCast_fin_two (n : Nat) : (n : Matrix (Fin 2) (Fin 2) α) = !![↑n, 0; 0, ↑n] := by
+theorem natCast_fin_two (n : ℕ) : (n : Matrix (Fin 2) (Fin 2) α) = !![↑n, 0; 0, ↑n] := by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
-
-/--
-theorem `natCast_fin_three` / 定理 `natCast_fin_three`
-
-English:
-theorem natCast_fin_three
-  given: (n : Nat)
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-中文:
-定理 natCast_fin_three
-  条件: (n : 自然数)
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-Depends on / 依赖: fin_cases
+/-
+**Matrix.natCast_fin_three** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：natCast_fin_three (n : Nat) : (n : Matrix (Fin 3) (Fin 3) α) = !![↑n, 0, 0
+; 0, ↑n, 0; 0, 0, ↑n]
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
-theorem natCast_fin_three (n : Nat) :
+theorem natCast_fin_three (n : ℕ) :
     (n : Matrix (Fin 3) (Fin 3) α) = !![↑n, 0, 0; 0, ↑n, 0; 0, 0, ↑n] := by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
-
-/--
-theorem `ofNat_fin_two` / 定理 `ofNat_fin_two`
-
-English:
-theorem ofNat_fin_two
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: natCast_fin_two _
-
-中文:
-定理 of自然数_fin_two
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: natCast_fin_two _
-
-Depends on / 依赖: natCast_fin_two
+/-
+**Matrix.ofNat_fin_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ofNat_fin_two (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Matrix (Fin 2) (Fin 2
+) α) = !![ofNat(n), 0; 0, ofNat(n)]
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.natCast_fin_two`：natCast_fin_two (n : Nat) : (n : Matrix (Fin 2) 
+(Fin 2) α) = !![↑n, 0; 0, ↑n]
 -/
-theorem ofNat_fin_two (n : Nat) [n.AtLeastTwo] :
+theorem ofNat_fin_two (n : ℕ) [n.AtLeastTwo] :
     (ofNat(n) : Matrix (Fin 2) (Fin 2) α) =
       !![ofNat(n), 0; 0, ofNat(n)] :=
   natCast_fin_two _
-
-/--
-theorem `ofNat_fin_three` / 定理 `ofNat_fin_three`
-
-English:
-theorem ofNat_fin_three
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: natCast_fin_three _
-
-中文:
-定理 of自然数_fin_three
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: natCast_fin_three _
-
-Depends on / 依赖: natCast_fin_three
+/-
+**Matrix.ofNat_fin_three** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ofNat_fin_three (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Matrix (Fin 3) (Fin
+ 3) α) = !![ofNat(n), 0, 0; 0, ofNat(n), 0; 0, 0, ofNat(n)]
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.natCast_fin_three`：natCast_fin_three (n : Nat) : (n : Matrix (Fin
+ 3) (Fin 3) α) = !![↑n, 0, 0; 0, ↑n, 0; 0, 0, ↑n]
 -/
-theorem ofNat_fin_three (n : Nat) [n.AtLeastTwo] :
+theorem ofNat_fin_three (n : ℕ) [n.AtLeastTwo] :
     (ofNat(n) : Matrix (Fin 3) (Fin 3) α) =
       !![ofNat(n), 0, 0; 0, ofNat(n), 0; 0, 0, ofNat(n)] :=
   natCast_fin_three _
 
 end AddMonoidWithOne
 
-/--
-theorem `eta_fin_two` / 定理 `eta_fin_two`
-
-English:
-theorem eta_fin_two
-  given: (A : Matrix (Fin 2) (Fin 2) α)
-  statement: A = !![A 0 0, A 0 1; A 1 0, A 1 1]
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-中文:
-定理 eta_fin_two
-  条件: (A : 矩阵 (有限集 2) (有限集 2) α)
-  结论: A = !![A 0 0, A 0 1; A 1 0, A 1 1]
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-Depends on / 依赖: fin_cases
+/-
+**Matrix.eta_fin_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：eta_fin_two (A : Matrix (Fin 2) (Fin 2) α) : A = !![A 0 0, A 0 1; A 1 0, A
+ 1 1]
+参数：A : Matrix (Fin 2) (Fin 2) α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem eta_fin_two (A : Matrix (Fin 2) (Fin 2) α) : A = !![A 0 0, A 0 1; A 1 0, A 1 1] := by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
-
-/--
-theorem `eta_fin_three` / 定理 `eta_fin_three`
-
-English:
-theorem eta_fin_three
-  given: (A : Matrix (Fin 3) (Fin 3) α)
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-中文:
-定理 eta_fin_three
-  条件: (A : 矩阵 (有限集 3) (有限集 3) α)
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> rfl
-
-Depends on / 依赖: fin_cases
+/-
+**Matrix.eta_fin_three** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：eta_fin_three (A : Matrix (Fin 3) (Fin 3) α) : A = !![A 0 0, A 0 1, A 0 2;
+ A 1 0, A 1 1, A 1 2; A 2 0, A 2 1, A 2 2]
+参数：A : Matrix (Fin 3) (Fin 3) α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem eta_fin_three (A : Matrix (Fin 3) (Fin 3) α) :
     A = !![A 0 0, A 0 1, A 0 2;
@@ -1467,25 +1284,52 @@ theorem eta_fin_three (A : Matrix (Fin 3) (Fin 3) α) :
            A 2 0, A 2 1, A 2 2] := by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
-
-/--
-theorem `mul_fin_two` / 定理 `mul_fin_two`
-
-English:
-theorem mul_fin_two
-  given: [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b₁₂ b₂₁ b₂₂ : α)
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_succ]
-
-中文:
-定理 mul_fin_two
-  条件: [加法交换幺半群 α] [乘法 α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b₁₂ b₂₁ b₂₂ : α)
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_succ]
-
-Depends on / 依赖: Fin.sum_univ_succ, Matrix, Matrix.mul_apply, fin_cases, mul_apply, sum_univ_succ
+/-
+**Matrix.mul_fin_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_fin_two [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b₁₂ b₂₁ b₂₂ : α
+) : !![a₁₁, a₁₂; a₂₁, a₂₂] * !![b₁₁, b₁₂; b₂₁, b₂₂] = !![a₁₁ * b₁₁ + a₁₂ * b₂₁, 
+a₁₁ * b₁₂ + a₁₂ * b₂₂; a₂₁ * b₁₁ + a₂₂ * b₂₁, a₂₁ * b₁₂ + a₂₂ * b₂₂]
+参数：a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b₁₂ b₂₁ b₂₂ : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Fin.sum_univ_succ`：∀ {M : Type u_2} [inst : AddCommMonoid M] {n : ℕ} (f 
+: Fin (n + 1) → M), ∑ i, f i = f 0 + ∑ i, f i.succ
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem mul_fin_two [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b₁₂ b₂₁ b₂₂ : α) :
     !![a₁₁, a₁₂;
@@ -1496,26 +1340,56 @@ theorem mul_fin_two [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂
   fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_succ]
 
 set_option linter.style.whitespace false in -- Preserve the formatting of the matrices.
-/--
-theorem `mul_fin_three` / 定理 `mul_fin_three`
-
-English:
-theorem mul_fin_three
-  statement: [AddCommMonoid α] [Mul α]
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j
-    <;> simp [Matrix.mul_apply, Fin.sum_univ_succ, ← add_assoc]
-
-中文:
-定理 mul_fin_three
-  结论: [加法交换幺半群 α] [乘法 α]
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j
-    <;> simp [Matrix.mul_apply, Fin.sum_univ_succ, ← add_assoc]
-
-Depends on / 依赖: Fin.sum_univ_succ, Matrix, Matrix.mul_apply, add_assoc, fin_cases, mul_apply, sum_univ_succ
+/-
+**Matrix.mul_fin_three** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：mul_fin_three [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₁₃ a₂₁ a₂₂ a₂₃ a₃₁ a₃₂ a
+₃₃ b₁₁ b₁₂ b₁₃ b₂₁ b₂₂ b₂₃ b₃₁ b₃₂ b₃₃ : α) : !![a₁₁, a₁₂, a₁₃; a₂₁, a₂₂, a₂₃; a
+₃₁, a₃₂, a₃₃] * !![b₁₁, b₁₂, b₁₃; b₂₁, b₂₂, b₂₃; b₃₁, b₃₂, b₃₃] = !![a₁₁*b₁₁ + a
+₁₂*b₂₁ + a₁₃*b₃₁, a₁₁*b₁₂ + a₁₂*b₂₂ + a₁₃*b₃₂, a₁₁*b₁₃ + a₁₂*b₂₃ + a₁₃*b₃₃; a₂₁*
+b₁₁ + a₂₂*b₂₁ + a₂₃*b₃₁, a₂₁*b₁₂ + a₂₂*b₂₂ + a₂₃*b₃₂, a₂₁*b₁₃ + a₂₂*b₂₃ + a₂₃*b₃
+₃; a₃₁*b₁₁ + a₃₂*b₂₁ + a₃₃*b₃₁, a₃₁*b₁₂ + a₃₂*b₂₂ + a₃₃*b₃₂, a₃₁*b₁₃ + a₃₂*b₂₃ +
+ a₃₃*b₃₃]
+参数：a₁₁ a₁₂ a₁₃ a₂₁ a₂₂ a₂₃ a₃₁ a₃₂ a₃₃ b₁₁ b₁₂ b₁₃ b₂₁ b₂₂ b₂₃ b₃₁ b₃₂ b₃₃ : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Fin.sum_univ_succ`：∀ {M : Type u_2} [inst : AddCommMonoid M] {n : ℕ} (f 
+: Fin (n + 1) → M), ∑ i, f i = f 0 + ∑ i, f i.succ
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem mul_fin_three [AddCommMonoid α] [Mul α]
     (a₁₁ a₁₂ a₁₃ a₂₁ a₂₂ a₂₃ a₃₁ a₃₂ a₃₃ b₁₁ b₁₂ b₁₃ b₂₁ b₂₂ b₂₃ b₃₁ b₃₂ b₃₃ : α) :
@@ -1530,186 +1404,204 @@ theorem mul_fin_three [AddCommMonoid α] [Mul α]
   ext i j
   fin_cases i <;> fin_cases j
     <;> simp [Matrix.mul_apply, Fin.sum_univ_succ, ← add_assoc]
-
-/--
-theorem `vec2_eq` / 定理 `vec2_eq`
-
-English:
-theorem vec2_eq
-  given: {a₀ a₁ b₀ b₁ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁)
-  statement: ![a₀, a₁] = ![b₀, b₁]
-  proof: by
-  simp [h₀, h₁]
-
-中文:
-定理 vec2_eq
-  条件: {a₀ a₁ b₀ b₁ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁)
-  结论: ![a₀, a₁] = ![b₀, b₁]
-  证明: by
-  simp [h₀, h₁]
+/-
+**Matrix.vec2_eq** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec2_eq {a₀ a₁ b₀ b₁ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁) : ![a₀, a₁] = ![b₀
+, b₁]
+参数：h₀ : a₀ = b₀；h₁ : a₁ = b₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem vec2_eq {a₀ a₁ b₀ b₁ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁) : ![a₀, a₁] = ![b₀, b₁] := by
   simp [h₀, h₁]
-
-/--
-theorem `vec3_eq` / 定理 `vec3_eq`
-
-English:
-theorem vec3_eq
-  given: {a₀ a₁ a₂ b₀ b₁ b₂ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁) (h₂ : a₂ = b₂)
-  proof: by
-  simp [h₀, h₁, h₂]
-
-中文:
-定理 vec3_eq
-  条件: {a₀ a₁ a₂ b₀ b₁ b₂ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁) (h₂ : a₂ = b₂)
-  证明: by
-  simp [h₀, h₁, h₂]
+/-
+**Matrix.vec3_eq** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec3_eq {a₀ a₁ a₂ b₀ b₁ b₂ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁) (h₂ : a₂ = b
+₂) : ![a₀, a₁, a₂] = ![b₀, b₁, b₂]
+参数：h₀ : a₀ = b₀；h₁ : a₁ = b₁；h₂ : a₂ = b₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem vec3_eq {a₀ a₁ a₂ b₀ b₁ b₂ : α} (h₀ : a₀ = b₀) (h₁ : a₁ = b₁) (h₂ : a₂ = b₂) :
     ![a₀, a₁, a₂] = ![b₀, b₁, b₂] := by
   simp [h₀, h₁, h₂]
-
-/--
-theorem `vec2_add` / 定理 `vec2_add`
-
-English:
-theorem vec2_add
-  given: [Add α] (a₀ a₁ b₀ b₁ : α)
-  statement: ![a₀, a₁] + ![b₀, b₁] = ![a₀ + b₀, a₁ + b₁]
-  proof: by
-  simp
-
-中文:
-定理 vec2_add
-  条件: [加法 α] (a₀ a₁ b₀ b₁ : α)
-  结论: ![a₀, a₁] + ![b₀, b₁] = ![a₀ + b₀, a₁ + b₁]
-  证明: by
-  simp
+/-
+**Matrix.vec2_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec2_add [Add α] (a₀ a₁ b₀ b₁ : α) : ![a₀, a₁] + ![b₀, b₁] = ![a₀ + b₀, a₁
+ + b₁]
+参数：a₀ a₁ b₀ b₁ : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.add_cons`：∀ {α : Type u_1} {n : ℕ} [inst : Add α] (v : Fin n.succ
+ → α) (y : α) (w : Fin n → α),   v + Matrix.vecCons y w = Matrix.vecCons (Matrix
+.vecH…
+· 使用定理 `Matrix.tail_cons`：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons 
+x u) = u
+· 使用定理 `Matrix.empty_add_empty`：∀ {α : Type u_1} [inst : Add α] (v w : Fin 0 → α
+), v + w = ![]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem vec2_add [Add α] (a₀ a₁ b₀ b₁ : α) : ![a₀, a₁] + ![b₀, b₁] = ![a₀ + b₀, a₁ + b₁] := by
   simp
-
-/--
-theorem `vec3_add` / 定理 `vec3_add`
-
-English:
-theorem vec3_add
-  given: [Add α] (a₀ a₁ a₂ b₀ b₁ b₂ : α)
-  proof: by
-  simp
-
-中文:
-定理 vec3_add
-  条件: [加法 α] (a₀ a₁ a₂ b₀ b₁ b₂ : α)
-  证明: by
-  simp
+/-
+**Matrix.vec3_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec3_add [Add α] (a₀ a₁ a₂ b₀ b₁ b₂ : α) : ![a₀, a₁, a₂] + ![b₀, b₁, b₂] =
+ ![a₀ + b₀, a₁ + b₁, a₂ + b₂]
+参数：a₀ a₁ a₂ b₀ b₁ b₂ : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.add_cons`：∀ {α : Type u_1} {n : ℕ} [inst : Add α] (v : Fin n.succ
+ → α) (y : α) (w : Fin n → α),   v + Matrix.vecCons y w = Matrix.vecCons (Matrix
+.vecH…
+· 使用定理 `Matrix.tail_cons`：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons 
+x u) = u
+· 使用定理 `Matrix.empty_add_empty`：∀ {α : Type u_1} [inst : Add α] (v w : Fin 0 → α
+), v + w = ![]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem vec3_add [Add α] (a₀ a₁ a₂ b₀ b₁ b₂ : α) :
     ![a₀, a₁, a₂] + ![b₀, b₁, b₂] = ![a₀ + b₀, a₁ + b₁, a₂ + b₂] := by
   simp
-
-/--
-theorem `smul_vec2` / 定理 `smul_vec2`
-
-English:
-theorem smul_vec2
-  given: {R : Type*} [SMul R α] (x : R) (a₀ a₁ : α)
-  proof: by
-  simp
-
-中文:
-定理 smul_vec2
-  条件: {R : 类型} [标量乘法 R α] (x : R) (a₀ a₁ : α)
-  证明: by
-  simp
+/-
+**Matrix.smul_vec2** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_vec2 {R : Type*} [SMul R α] (x : R) (a₀ a₁ : α) : x • ![a₀, a₁] = ![x
+ • a₀, x • a₁]
+参数：x : R；a₀ a₁ : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.smul_cons`：∀ {α : Type u_1} {M : Type u_2} {n : ℕ} [inst : SMul M
+ α] (x : M) (y : α) (v : Fin n → α),   x • Matrix.vecCons y v = Matrix.vecCons (
+x • y)…
+· 使用定理 `Matrix.smul_empty`：∀ {α : Type u_1} {M : Type u_2} [inst : SMul M α] (x 
+: M) (v : Fin 0 → α), x • v = ![]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_vec2 {R : Type*} [SMul R α] (x : R) (a₀ a₁ : α) :
     x • ![a₀, a₁] = ![x • a₀, x • a₁] := by
   simp
-
-/--
-theorem `smul_vec3` / 定理 `smul_vec3`
-
-English:
-theorem smul_vec3
-  given: {R : Type*} [SMul R α] (x : R) (a₀ a₁ a₂ : α)
-  proof: by
-  simp
-
-中文:
-定理 smul_vec3
-  条件: {R : 类型} [标量乘法 R α] (x : R) (a₀ a₁ a₂ : α)
-  证明: by
-  simp
+/-
+**Matrix.smul_vec3** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_vec3 {R : Type*} [SMul R α] (x : R) (a₀ a₁ a₂ : α) : x • ![a₀, a₁, a₂
+] = ![x • a₀, x • a₁, x • a₂]
+参数：x : R；a₀ a₁ a₂ : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.smul_cons`：∀ {α : Type u_1} {M : Type u_2} {n : ℕ} [inst : SMul M
+ α] (x : M) (y : α) (v : Fin n → α),   x • Matrix.vecCons y v = Matrix.vecCons (
+x • y)…
+· 使用定理 `Matrix.smul_empty`：∀ {α : Type u_1} {M : Type u_2} [inst : SMul M α] (x 
+: M) (v : Fin 0 → α), x • v = ![]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_vec3 {R : Type*} [SMul R α] (x : R) (a₀ a₁ a₂ : α) :
     x • ![a₀, a₁, a₂] = ![x • a₀, x • a₁, x • a₂] := by
   simp
 
 variable [AddCommMonoid α] [Mul α]
-
-/--
-theorem `vec2_dotProduct'` / 定理 `vec2_dotProduct'`
-
-English:
-theorem vec2_dotProduct'
-  given: {a₀ a₁ b₀ b₁ : α}
-  statement: ![a₀, a₁] ⬝ᵥ ![b₀, b₁] = a₀ * b₀ + a₁ * b₁
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-定理 vec2_dotProduct'
-  条件: {a₀ a₁ b₀ b₁ : α}
-  结论: ![a₀, a₁] ⬝ᵥ ![b₀, b₁] = a₀ * b₀ + a₁ * b₁
-  证明: by
-  simp
-
-@[simp]
+/-
+**Matrix.vec2_dotProduct'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec2_dotProduct' {a₀ a₁ b₀ b₁ : α} : ![a₀, a₁] ⬝ᵥ ![b₀, b₁] = a₀ * b₀ + a₁
+ * b₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.dotProduct_cons`：dotProduct_cons (v : Fin n.succ -> α) (x : α) (w
+ : Fin n -> α) : v ⬝ᵥ vecCons x w = vecHead v * x + vecTail v ⬝ᵥ w
+· 使用定理 `Matrix.tail_cons`：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons 
+x u) = u
+· 使用定理 `Matrix.dotProduct_of_isEmpty`：dotProduct_of_isEmpty [Fintype n'] [IsEmpt
+y n'] (v w : n' -> α) : v ⬝ᵥ w = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem vec2_dotProduct' {a₀ a₁ b₀ b₁ : α} : ![a₀, a₁] ⬝ᵥ ![b₀, b₁] = a₀ * b₀ + a₁ * b₁ := by
   simp
 
 @[simp]
-/--
-theorem `vec2_dotProduct` / 定理 `vec2_dotProduct`
-
-English:
-theorem vec2_dotProduct
-  given: (v w : Fin 2 -> α)
-  statement: v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1
-  proof: vec2_dotProduct'
-
-中文:
-定理 vec2_dotProduct
-  条件: (v w : 有限集 2 -> α)
-  结论: v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1
-  证明: vec2_dotProduct'
-
-Depends on / 依赖: vec2_dotProduct
+/-
+**Matrix.vec2_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec2_dotProduct (v w : Fin 2 -> α) : v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1
+参数：v w : Fin 2 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.vec2_dotProduct'`：vec2_dotProduct' {a₀ a₁ b₀ b₁ : α} : ![a₀, a₁] 
+⬝ᵥ ![b₀, b₁] = a₀ * b₀ + a₁ * b₁
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
 -/
-theorem vec2_dotProduct (v w : Fin 2 -> α) : v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 :=
+theorem vec2_dotProduct (v w : Fin 2 → α) : v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 :=
   vec2_dotProduct'
-
-/--
-theorem `vec3_dotProduct'` / 定理 `vec3_dotProduct'`
-
-English:
-theorem vec3_dotProduct'
-  given: {a₀ a₁ a₂ b₀ b₁ b₂ : α}
-  proof: by
-  simp [add_assoc]
-
-中文:
-定理 vec3_dotProduct'
-  条件: {a₀ a₁ a₂ b₀ b₁ b₂ : α}
-  证明: by
-  simp [add_assoc]
-
-Depends on / 依赖: add_assoc
+/-
+**Matrix.vec3_dotProduct'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec3_dotProduct' {a₀ a₁ a₂ b₀ b₁ b₂ : α} : ![a₀, a₁, a₂] ⬝ᵥ ![b₀, b₁, b₂] 
+= a₀ * b₀ + a₁ * b₁ + a₂ * b₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.dotProduct_cons`：dotProduct_cons (v : Fin n.succ -> α) (x : α) (w
+ : Fin n -> α) : v ⬝ᵥ vecCons x w = vecHead v * x + vecTail v ⬝ᵥ w
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.tail_cons`：tail_cons (x : α) (u : Fin m -> α) : vecTail (vecCons 
+x u) = u
+· 使用定理 `Matrix.dotProduct_of_isEmpty`：dotProduct_of_isEmpty [Fintype n'] [IsEmpt
+y n'] (v w : n' -> α) : v ⬝ᵥ w = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem vec3_dotProduct' {a₀ a₁ a₂ b₀ b₁ b₂ : α} :
     ![a₀, a₁, a₂] ⬝ᵥ ![b₀, b₁, b₂] = a₀ * b₀ + a₁ * b₁ + a₂ * b₂ := by
@@ -1717,24 +1609,19 @@ theorem vec3_dotProduct' {a₀ a₁ a₂ b₀ b₁ b₂ : α} :
 
 -- This is not tagged `@[simp]` because it does not mesh well with simp lemmas for
 -- dot and cross products in dimension 3.
-/--
-theorem `vec3_dotProduct` / 定理 `vec3_dotProduct`
-
-English:
-theorem vec3_dotProduct
-  given: (v w : Fin 3 -> α)
-  statement: v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 + v 2 * w 2
-  proof: vec3_dotProduct'
-
-中文:
-定理 vec3_dotProduct
-  条件: (v w : 有限集 3 -> α)
-  结论: v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 + v 2 * w 2
-  证明: vec3_dotProduct'
-
-Depends on / 依赖: vec3_dotProduct
+/-
+**Matrix.vec3_dotProduct** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：vec3_dotProduct (v w : Fin 3 -> α) : v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 + v 2 
+* w 2
+参数：v w : Fin 3 -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.vec3_dotProduct'`：vec3_dotProduct' {a₀ a₁ a₂ b₀ b₁ b₂ : α} : ![a₀
+, a₁, a₂] ⬝ᵥ ![b₀, b₁, b₂] = a₀ * b₀ + a₁ * b₁ + a₂ * b₂
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
 -/
-theorem vec3_dotProduct (v w : Fin 3 -> α) : v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 + v 2 * w 2 :=
+theorem vec3_dotProduct (v w : Fin 3 → α) : v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 + v 2 * w 2 :=
   vec3_dotProduct'
 
 end Vec2AndVec3
@@ -1742,29 +1629,40 @@ end Vec2AndVec3
 end Matrix
 
 @[simp]
-/--
-lemma `injective_pair_iff_ne` / 引理 `injective_pair_iff_ne`
-
-English:
-lemma injective_pair_iff_ne
-  given: {α : Type*} {x y : α}
-  proof: by
-  refine ⟨fun h => ?_, fun h a b h' => ?_⟩
-  · simpa using h.ne Fin.zero_ne_one
-  · fin_cases a <;> fin_cases b <;> aesop
-
-中文:
-引理 injective_pair_iff_ne
-  条件: {α : 类型} {x y : α}
-  证明: by
-  refine ⟨fun h => ?_, fun h a b h' => ?_⟩
-  · simpa using h.ne Fin.zero_ne_one
-  · fin_cases a <;> fin_cases b <;> aesop
-
-Depends on / 依赖: Fin.zero_ne_one, fin_cases, h.ne, zero_ne_one
+/-
+**injective_pair_iff_ne** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：injective_pair_iff_ne {α : Type*} {x y : α} : Function.Injective ![x, y] ↔
+ x != y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `Fin.zero_ne_one`：∀ {n : ℕ}, 0 ≠ 1
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
 lemma injective_pair_iff_ne {α : Type*} {x y : α} :
-    Function.Injective ![x, y] ↔ x != y := by
-  refine ⟨fun h => ?_, fun h a b h' => ?_⟩
+    Function.Injective ![x, y] ↔ x ≠ y := by
+  refine ⟨fun h ↦ ?_, fun h a b h' ↦ ?_⟩
   · simpa using h.ne Fin.zero_ne_one
   · fin_cases a <;> fin_cases b <;> aesop

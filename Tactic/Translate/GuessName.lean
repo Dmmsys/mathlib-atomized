@@ -20,22 +20,15 @@ open Lean Std
 namespace Mathlib.Tactic.GuessName
 open GuessName -- currently needed to enable projection notation
 
-/--
-Definition of `GuessNameData` / `GuessNameData` 的定义
+/-- The data that is required to guess the name of a translation. -/
+/-
+**Mathlib.Tactic.GuessName.GuessNameData** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Ta
+ctic.GuessName`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GuessNameData
-  parameters: where
-  axioms and operations (2):
-    - nameDict : Std.HashMap String (List String)
-    - abbreviationDict : Std.HashMap String String
-
-中文:
-结构 GuessNameData
-  参数: where
-  公理与运算 (2 个):
-    - nameDict : Std.HashMap String (列表 String)
-    - abbreviationDict : Std.HashMap String String
+--- 原说明 ---
+The data that is required to guess the name of a translation.
 -/
 structure GuessNameData where
   /--
@@ -58,24 +51,34 @@ structure GuessNameData where
   abbreviationDict : Std.HashMap String String
   deriving Inhabited
 
-/--
-Definition of `endCapitalNames` / `endCapitalNames` 的定义
+/-- A set of strings of names that end in a capital letter.
+* If the string contains a lowercase letter, the string should be split between the first occurrence
+  of a lower-case letter followed by an upper-case letter.
+* If multiple strings have the same prefix, they should be grouped by prefix
+* In this case, the second list should be prefix-free
+  (no element can be a prefix of a later element)
 
-English:
-definition endCapitalNames
-  signature: : TreeMap String (List String) compare
-  body: -- todo: we want something like
-  -- endCapitalNamesOfList ["LE", "LT", "GE", "GT", "WF", "CoeTC", "CoeT", "CoeHTCT"]
-  .ofList [("LE", [""]), ("LT", [""]), ("GE", [""]), ("GT", [""]), ("WF", [""]),
-    ("Coe", ["TC", "T", "HTCT"])]
+Todo: automate the translation from `String` to an element in this `TreeMap`
+  (but this would require having something similar to the `rb_lmap` from Lean 3). -/
+/-
+**Mathlib.Tactic.GuessName.endCapitalNames** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.GuessName`。
+形式化陈述：endCapitalNames : TreeMap String (List String) compare
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 endCapitalNames
-  签名: : TreeMap String (列表 String) compare
-  定义体: -- todo: we want something like
-  -- endCapitalNamesOfList ["LE", "LT", "GE", "GT", "WF", "CoeTC", "CoeT", "CoeHTCT"]
-  .ofList [("LE", [""]), ("LT", [""]), ("GE", [""]), ("GT", [""]), ("WF", [""]),
-    ("Coe", ["TC", "T", "HTCT"])]
+--- 原说明 ---
+A set of strings of names that end in a capital letter.
+* If the string contains a lowercase letter, the string should be split between 
+the first occurrence
+  of a lower-case letter followed by an upper-case letter.
+* If multiple strings have the same prefix, they should be grouped by prefix
+* In this case, the second list should be prefix-free
+  (no element can be a prefix of a later element)
+
+Todo: automate the translation from `String` to an element in this `TreeMap`
+  (but this would require having something similar to the `rb_lmap` from Lean 3)
+.
 -/
 def endCapitalNames : TreeMap String (List String) compare :=
   -- todo: we want something like
@@ -84,66 +87,27 @@ def endCapitalNames : TreeMap String (List String) compare :=
     ("Coe", ["TC", "T", "HTCT"])]
 
 open String in
-/--
-Definition of `String.splitCase` / `String.splitCase` 的定义
+/-- This function takes a String and splits it into separate parts based on the following
+[naming conventions](https://leanprover-community.github.io/contribute/naming.html).
 
-English:
-definition String.splitCase
-  signature: (s : String) (i₀ : Pos.Raw := 0) (r : List String := [])
-  body: Id.run do
-  -- We test if we need to split between `i₀` and `i₁`.
-  let i₁ := i₀.next s
-  if i₁.atEnd s then
-    -- If `i₀` is the last position, return the list.
-    let r := s::r
-    return r.reverse
-  /- We split the string in three cases
-  * We split on both sides of `_` to keep them there when rejoining the string;
-  * We split after a name in `endCapitalNames`;
-  * We split after a lower-case letter that is followed by an upper-case letter
-    (unless it is part of a name in `endCapitalNames`). -/
-  if i₀.get s == '_' || i₁.get s == '_' then
-return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
-      (String.Pos.Raw.extract s 0 i₁)::r
-  if (i₁.get s).isUpper then
-    if let some strs := endCapitalNames[String.Pos.Raw.extract s 0 i₁]? then
-      if let some (pref, newS) := strs.findSome?
-        fun x : String => (String.Pos.Raw.extract s i₁ s.rawEndPos).dropPrefix? x
-.map (x, ·.toString) then
-return splitCase newS 0 (String.Pos.Raw.extract s 0 i₁ ++ pref)::r
-    if !(i₀.get s).isUpper then
-return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
-        (String.Pos.Raw.extract s 0 i₁)::r
-  return splitCase s i₁ r
+E.g. `#eval "InvHMulLEConjugate₂SMul_ne_top".splitCase` yields
+`["Inv", "HMul", "LE", "Conjugate₂", "SMul", "_", "ne", "_", "top"]`. -/
+/-
+**Mathlib.Tactic.GuessName.String.splitCase** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathli
+b.Tactic.GuessName.String`。
+形式化陈述：String → optParam String.Pos.Raw 0 → optParam (List String) [] → List Stri
+ng
+参数：List String。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 String.splitCase
-  签名: (s : String) (i₀ : Pos.Raw := 0) (r : 列表 String := [])
-  定义体: Id.run do
-  -- We test if we need to split between `i₀` and `i₁`.
-  let i₁ := i₀.next s
-  if i₁.atEnd s then
-    -- If `i₀` is the last position, return the list.
-    let r := s::r
-    return r.reverse
-  /- We split the string in three cases
-  * We split on both sides of `_` to keep them there when rejoining the string;
-  * We split after a name in `endCapitalNames`;
-  * We split after a lower-case letter that is followed by an upper-case letter
-    (unless it is part of a name in `endCapitalNames`). -/
-  if i₀.get s == '_' || i₁.get s == '_' then
-return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
-      (String.Pos.Raw.extract s 0 i₁)::r
-  if (i₁.get s).isUpper then
-    if let some strs := endCapitalNames[String.Pos.Raw.extract s 0 i₁]? then
-      if let some (pref, newS) := strs.findSome?
-        fun x : String => (String.Pos.Raw.extract s i₁ s.rawEndPos).dropPrefix? x
-.map (x, ·.toString) then
-return splitCase newS 0 (String.Pos.Raw.extract s 0 i₁ ++ pref)::r
-    if !(i₀.get s).isUpper then
-return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
-        (String.Pos.Raw.extract s 0 i₁)::r
-  return splitCase s i₁ r
+--- 原说明 ---
+This function takes a String and splits it into separate parts based on the foll
+owing
+[naming conventions](https://leanprover-community.github.io/contribute/naming.ht
+ml).
+
+E.g. `#eval "InvHMulLEConjugate₂SMul_ne_top".splitCase` yields
+`["Inv", "HMul", "LE", "Conjugate₂", "SMul", "_", "ne", "_", "top"]`.
 -/
 partial def String.splitCase (s : String) (i₀ : Pos.Raw := 0) (r : List String := []) :
     List String := Id.run do
@@ -159,101 +123,102 @@ partial def String.splitCase (s : String) (i₀ : Pos.Raw := 0) (r : List String
   * We split after a lower-case letter that is followed by an upper-case letter
     (unless it is part of a name in `endCapitalNames`). -/
   if i₀.get s == '_' || i₁.get s == '_' then
-return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
+    return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0 <|
       (String.Pos.Raw.extract s 0 i₁)::r
   if (i₁.get s).isUpper then
     if let some strs := endCapitalNames[String.Pos.Raw.extract s 0 i₁]? then
       if let some (pref, newS) := strs.findSome?
-        fun x : String => (String.Pos.Raw.extract s i₁ s.rawEndPos).dropPrefix? x
-.map (x, ·.toString) then
-return splitCase newS 0 (String.Pos.Raw.extract s 0 i₁ ++ pref)::r
+        fun x : String ↦ (String.Pos.Raw.extract s i₁ s.rawEndPos).dropPrefix? x
+          |>.map (x, ·.toString) then
+        return splitCase newS 0 <| (String.Pos.Raw.extract s 0 i₁ ++ pref)::r
     if !(i₀.get s).isUpper then
-return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
+      return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0 <|
         (String.Pos.Raw.extract s 0 i₁)::r
   return splitCase s i₁ r
 
-/--
-Definition of `String.decapitalizeSeq` / `String.decapitalizeSeq` 的定义
+/-- Replaces characters in `s` by lower-casing the first characters until a non-upper-case character
+is found. -/
+/-
+**Mathlib.Tactic.GuessName.String.decapitalizeSeq** 是 Mathlib 中的一个不透明定义，位于命名空间 `
+Mathlib.Tactic.GuessName.String`。
+形式化陈述：String → optParam String.Pos.Raw 0 → String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition String.decapitalizeSeq
-  signature: (s : String) (i : String.Pos.Raw := 0)
-  body: if i.atEnd s || !(i.get s).isUpper then
-    s
-  else
-decapitalizeSeq (i.set s (i.get s).toLower) i.next s
-
-中文:
-定义 String.decapitalizeSeq
-  签名: (s : String) (i : String.Pos.Raw := 0)
-  定义体: if i.atEnd s || !(i.get s).isUpper then
-    s
-  else
-decapitalizeSeq (i.set s (i.get s).toLower) i.next s
+--- 原说明 ---
+Replaces characters in `s` by lower-casing the first characters until a non-uppe
+r-case character
+is found.
 -/
 partial def String.decapitalizeSeq (s : String) (i : String.Pos.Raw := 0) : String :=
   if i.atEnd s || !(i.get s).isUpper then
     s
   else
-decapitalizeSeq (i.set s (i.get s).toLower) i.next s
+    decapitalizeSeq (i.set s (i.get s).toLower) <| i.next s
 
-/--
-Definition of `decapitalizeLike` / `decapitalizeLike` 的定义
+/-- If `r` starts with an upper-case letter, return `s`, otherwise return `s` with the
+initial sequence of upper-case letters lower-cased. -/
+/-
+**Mathlib.Tactic.GuessName.decapitalizeLike** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.GuessName`。
+形式化陈述：decapitalizeLike (r : String) (s : String)
+参数：r : String；s : String。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decapitalizeLike
-  signature: (r : String) (s : String)
-  body: .isUpper then s else s.decapitalizeSeq if String.Pos.Raw.get r 0
-
-中文:
-定义 decapitalizeLike
-  签名: (r : String) (s : String)
-  定义体: .isUpper then s else s.decapitalizeSeq if String.Pos.Raw.get r 0
-
-Depends on / 依赖: String.Pos.Raw.get, decapitalizeSeq, isUpper, s.decapitalizeSeq
+--- 原说明 ---
+If `r` starts with an upper-case letter, return `s`, otherwise return `s` with t
+he
+initial sequence of upper-case letters lower-cased.
 -/
 def decapitalizeLike (r : String) (s : String) :=
-.isUpper then s else s.decapitalizeSeq if String.Pos.Raw.get r 0
+  if String.Pos.Raw.get r 0 |>.isUpper then s else s.decapitalizeSeq
 
-/--
-Definition of `decapitalizeFirstLike` / `decapitalizeFirstLike` 的定义
+/-- Decapitalize the first element of a list if `s` starts with a lower-case letter.
+Note that we need to decapitalize multiple characters in some cases,
+in examples like `HMul` or `HAdd`. -/
+/-
+**Mathlib.Tactic.GuessName.decapitalizeFirstLike** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.GuessName`。
+形式化陈述：String → List String → List String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decapitalizeFirstLike
-  signature: (s : String)
-
-中文:
-定义 decapitalizeFirstLike
-  签名: (s : String)
+--- 原说明 ---
+Decapitalize the first element of a list if `s` starts with a lower-case letter.
+Note that we need to decapitalize multiple characters in some cases,
+in examples like `HMul` or `HAdd`.
 -/
-def decapitalizeFirstLike (s : String) : List String -> List String
+def decapitalizeFirstLike (s : String) : List String → List String
   | x :: r => decapitalizeLike s x :: r
   | [] => []
 
 /--
-Definition of `applyNameDict` / `applyNameDict` 的定义
+Apply the `nameDict` and decapitalize the output like the input.
 
-English:
-definition applyNameDict
-  signature: (g : GuessNameData)
-  body: match g.nameDict.get? x.toLower with
-      | some y => decapitalizeFirstLike x y
-      | none => [x]
-    z ++ applyNameDict g s
-  | [] => []
-
-中文:
-定义 applyNameDict
-  签名: (g : GuessNameData)
-  定义体: match g.nameDict.get? x.toLower with
-      | some y => decapitalizeFirstLike x y
-      | none => [x]
-    z ++ applyNameDict g s
-  | [] => []
-
-Depends on / 依赖: g.nameDict.get, nameDict, toLower, x.toLower
+E.g.
+```
+#eval applyNameDict ["Inv", "HMul", "LE", "Conjugate₂", "SMul", "_", "ne", "_", "top"]
+```
+yields `["Neg", "HAdd", "LE", "Conjugate₂", "VAdd", "_", "ne", "_", "top"]`.
 -/
-def applyNameDict (g : GuessNameData) : List String -> List String
+/-
+**Mathlib.Tactic.GuessName.applyNameDict** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.GuessName`。
+形式化陈述：applyNameDict (g : GuessNameData) : List String -> List String | x :: s =>
+ let z
+参数：g : GuessNameData。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Apply the `nameDict` and decapitalize the output like the input.
+
+E.g.
+```
+#eval applyNameDict ["Inv", "HMul", "LE", "Conjugate₂", "SMul", "_", "ne", "_", 
+"top"]
+```
+yields `["Neg", "HAdd", "LE", "Conjugate₂", "VAdd", "_", "ne", "_", "top"]`.
+-/
+def applyNameDict (g : GuessNameData) : List String → List String
   | x :: s =>
     let z := match g.nameDict.get? x.toLower with
       | some y => decapitalizeFirstLike x y
@@ -261,46 +226,28 @@ def applyNameDict (g : GuessNameData) : List String -> List String
     z ++ applyNameDict g s
   | [] => []
 
-/--
-Definition of `fixAbbreviationAux` / `fixAbbreviationAux` 的定义
+/-- Helper for `fixAbbreviation`.
+Note: this function has a quadratic number of recursive calls, but is not a performance
+bottleneck. -/
+/-
+**Mathlib.Tactic.GuessName.fixAbbreviationAux** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.GuessName`。
+形式化陈述：fixAbbreviationAux (g : GuessNameData) : List String -> List String -> Str
+ing | [], [] => "" | [], x::s => x ++ fixAbbreviationAux g s [] | pre::l, s' => 
+let s
+参数：g : GuessNameData。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fixAbbreviationAux
-  signature: (g : GuessNameData)
-  body: s' ++ [pre]
-    let t := String.join s
-    /- If a name starts with upper-case, and contains an underscore, it cannot match anything in
-    the abbreviation dictionary. This is necessary to correctly translate something like
-    `fixAbbreviation ["eventually", "LE", "_", "one"]` to `"eventuallyLE_one"`, since otherwise the
-    substring `LE_zero` gets replaced by `Nonpos`. -/
-    if pre == "_" && (String.Pos.Raw.get t 0).isUpper then
-      s[0]! ++ fixAbbreviationAux g (s.drop 1 ++ l) []
-    else match g.abbreviationDict.get? t.decapitalizeSeq with
-    | some post => decapitalizeLike t post ++ fixAbbreviationAux g l []
-    | none => fixAbbreviationAux g l s
-  termination_by l s => (l.length + s.length, l.length)
-  decreasing_by all_goals grind
-
-中文:
-定义 fixAbbreviationAux
-  签名: (g : GuessNameData)
-  定义体: s' ++ [pre]
-    let t := String.join s
-    /- If a name starts with upper-case, and contains an underscore, it cannot match anything in
-    the abbreviation dictionary. This is necessary to correctly translate something like
-    `fixAbbreviation ["eventually", "LE", "_", "one"]` to `"eventuallyLE_one"`, since otherwise the
-    substring `LE_zero` gets replaced by `Nonpos`. -/
-    if pre == "_" && (String.Pos.Raw.get t 0).isUpper then
-      s[0]! ++ fixAbbreviationAux g (s.drop 1 ++ l) []
-    else match g.abbreviationDict.get? t.decapitalizeSeq with
-    | some post => decapitalizeLike t post ++ fixAbbreviationAux g l []
-    | none => fixAbbreviationAux g l s
-  termination_by l s => (l.length + s.length, l.length)
-  decreasing_by all_goals grind
+--- 原说明 ---
+Helper for `fixAbbreviation`.
+Note: this function has a quadratic number of recursive calls, but is not a perf
+ormance
+bottleneck.
 -/
-def fixAbbreviationAux (g : GuessNameData) : List String -> List String -> String
-  | [], [] => ""
-  | [], x::s => x ++ fixAbbreviationAux g s []
+def fixAbbreviationAux (g : GuessNameData) : List String → List String → String
+  | [], []     => ""
+  | [], x::s   => x ++ fixAbbreviationAux g s []
   | pre::l, s' =>
     let s := s' ++ [pre]
     let t := String.join s
@@ -312,123 +259,118 @@ def fixAbbreviationAux (g : GuessNameData) : List String -> List String -> Strin
       s[0]! ++ fixAbbreviationAux g (s.drop 1 ++ l) []
     else match g.abbreviationDict.get? t.decapitalizeSeq with
     | some post => decapitalizeLike t post ++ fixAbbreviationAux g l []
-    | none => fixAbbreviationAux g l s
+    | none      => fixAbbreviationAux g l s
   termination_by l s => (l.length + s.length, l.length)
   decreasing_by all_goals grind
 
-/--
-Definition of `fixAbbreviation` / `fixAbbreviation` 的定义
+/-- Replace substrings according to `abbreviationDict`, matching the case of the first letter.
 
-English:
-definition fixAbbreviation
-  signature: (g : GuessNameData) (l : List String)
-  body: fixAbbreviationAux g l []
+Example:
+```
+#eval applyNameDict ["Mul", "Support"]
+```
+gives the preliminary translation `["Add", "Support"]`. Subsequently
+```
+#eval fixAbbreviation ["Add", "Support"]
+```
+"fixes" this translation and returns `Support`.
+-/
+/-
+**Mathlib.Tactic.GuessName.fixAbbreviation** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.GuessName`。
+形式化陈述：fixAbbreviation (g : GuessNameData) (l : List String) : String
+参数：g : GuessNameData；l : List String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 fixAbbreviation
-  签名: (g : GuessNameData) (l : 列表 String)
-  定义体: fixAbbreviationAux g l []
+--- 原说明 ---
+Replace substrings according to `abbreviationDict`, matching the case of the fir
+st letter.
 
-Depends on / 依赖: fixAbbreviationAux
+Example:
+```
+#eval applyNameDict ["Mul", "Support"]
+```
+gives the preliminary translation `["Add", "Support"]`. Subsequently
+```
+#eval fixAbbreviation ["Add", "Support"]
+```
+"fixes" this translation and returns `Support`.
 -/
 def fixAbbreviation (g : GuessNameData) (l : List String) : String :=
   fixAbbreviationAux g l []
 
 /--
-Definition of `guessName` / `guessName` 的定义
-
-English:
-definition guessName
-  signature: (g : GuessNameData)
-  body: String.mapTokens '\''
-  fun s =>
-fixAbbreviation g
-applyNameDict g
-    s.splitCase
-
-中文:
-定义 guessName
-  签名: (g : GuessNameData)
-  定义体: String.mapTokens '\''
-  fun s =>
-fixAbbreviation g
-applyNameDict g
-    s.splitCase
-
-Depends on / 依赖: String.mapTokens, applyNameDict, fixAbbreviation, mapTokens, s.splitCase, splitCase
+Autogenerate additive name.
+This runs in several steps:
+1) Split according to capitalisation rule and at `_`.
+2) Apply word-by-word translation rules.
+3) Fix up abbreviations that are not word-by-word translations, like "addComm" or "Nonneg".
 -/
-def guessName (g : GuessNameData) : String -> String :=
-String.mapTokens '\''
+/-
+**Mathlib.Tactic.GuessName.guessName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.G
+uessName`。
+形式化陈述：guessName (g : GuessNameData) : String -> String
+参数：g : GuessNameData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Autogenerate additive name.
+This runs in several steps:
+1) Split according to capitalisation rule and at `_`.
+2) Apply word-by-word translation rules.
+3) Fix up abbreviations that are not word-by-word translations, like "addComm" o
+r "Nonneg".
+-/
+def guessName (g : GuessNameData) : String → String :=
+  String.mapTokens '\'' <|
   fun s =>
-fixAbbreviation g
-applyNameDict g
+    fixAbbreviation g <|
+    applyNameDict g <|
     s.splitCase
 
-/--
-Definition of `GuessNameExt` / `GuessNameExt` 的定义
+/-- Environment extension used for guessing the translation of a name. -/
+/-
+**Mathlib.Tactic.GuessName.GuessNameExt** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tac
+tic.GuessName`。
+形式化陈述：GuessNameExt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation GuessNameExt
-  body: EnvExtension GuessNameData
-
-中文:
-缩写 GuessNameExt
-  定义体: EnvExtension GuessNameData
-
-Depends on / 依赖: EnvExtension, GuessNameData
+--- 原说明 ---
+Environment extension used for guessing the translation of a name.
 -/
 abbrev GuessNameExt := EnvExtension GuessNameData
 
-/--
-Definition of `registerGuessNameExt` / `registerGuessNameExt` 的定义
+/-- Register a new `GuessNameExt`. -/
+/-
+**Mathlib.Tactic.GuessName.registerGuessNameExt** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.GuessName`。
+形式化陈述：registerGuessNameExt (data : GuessNameData) : IO GuessNameExt
+参数：data : GuessNameData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition registerGuessNameExt
-  signature: (data : GuessNameData)
-  body: do
-  registerEnvExtension (pure data)
-
-中文:
-定义 registerGuessNameExt
-  签名: (data : GuessNameData)
-  定义体: do
-  registerEnvExtension (pure data)
+--- 原说明 ---
+Register a new `GuessNameExt`.
 -/
 def registerGuessNameExt (data : GuessNameData) : IO GuessNameExt := do
   registerEnvExtension (pure data)
 
-/--
-Definition of `GuessNameExt.addTranslation` / `GuessNameExt.addTranslation` 的定义
+/-- Add the translation `src ↦ tgt` to the `GuessNameExt`.
+Both `src` and `tgt` should be capitalized.
+This change persists until the end of the current file, but it does not persist through imports. -/
+/-
+**Mathlib.Tactic.GuessName.GuessNameExt.addTranslation** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Tactic.GuessName.GuessNameExt`。
+形式化陈述：Mathlib.Tactic.GuessName.GuessNameExt → Ident → Ident → CommandElabM Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GuessNameExt.addTranslation
-  signature: (ext : GuessNameExt) (srcId tgtId : Ident)
-  body: do
-  let src := srcId.getId.toString
-  let tgt := tgtId.getId.toString
-  unless src.front.isUpper do throwErrorAt srcId "`{src}` should be capitalized"
-  unless tgt.front.isUpper do throwErrorAt tgtId "`{tgt}` should be capitalized"
-  modifyEnv fun env => ext.modifyState env fun data =>
-    let src := src.decapitalizeSeq
-    if src.splitCase matches [_] then
-      { data with nameDict := data.nameDict.insert src tgt.splitCase }
-    else
-      { data with abbreviationDict := data.abbreviationDict.insert src tgt }
-
-中文:
-定义 GuessNameExt.addTranslation
-  签名: (ext : GuessNameExt) (srcId tgtId : Ident)
-  定义体: do
-  let src := srcId.getId.toString
-  let tgt := tgtId.getId.toString
-  unless src.front.isUpper do throwErrorAt srcId "`{src}` should be capitalized"
-  unless tgt.front.isUpper do throwErrorAt tgtId "`{tgt}` should be capitalized"
-  modifyEnv fun env => ext.modifyState env fun data =>
-    let src := src.decapitalizeSeq
-    if src.splitCase matches [_] then
-      { data with nameDict := data.nameDict.insert src tgt.splitCase }
-    else
-      { data with abbreviationDict := data.abbreviationDict.insert src tgt }
+--- 原说明 ---
+Add the translation `src ↦ tgt` to the `GuessNameExt`.
+Both `src` and `tgt` should be capitalized.
+This change persists until the end of the current file, but it does not persist 
+through imports.
 -/
 def GuessNameExt.addTranslation (ext : GuessNameExt) (srcId tgtId : Ident) :
     Elab.Command.CommandElabM Unit := do
@@ -436,7 +378,7 @@ def GuessNameExt.addTranslation (ext : GuessNameExt) (srcId tgtId : Ident) :
   let tgt := tgtId.getId.toString
   unless src.front.isUpper do throwErrorAt srcId "`{src}` should be capitalized"
   unless tgt.front.isUpper do throwErrorAt tgtId "`{tgt}` should be capitalized"
-  modifyEnv fun env => ext.modifyState env fun data =>
+  modifyEnv fun env ↦ ext.modifyState env fun data ↦
     let src := src.decapitalizeSeq
     if src.splitCase matches [_] then
       { data with nameDict := data.nameDict.insert src tgt.splitCase }
@@ -444,3 +386,4 @@ def GuessNameExt.addTranslation (ext : GuessNameExt) (srcId tgtId : Ident) :
       { data with abbreviationDict := data.abbreviationDict.insert src tgt }
 
 end Mathlib.Tactic.GuessName
+

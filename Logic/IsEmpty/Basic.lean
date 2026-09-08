@@ -18,710 +18,474 @@ public section
 variable {α β γ : Sort*}
 
 @[simp, push]
-/--
-theorem `not_nonempty_iff` / 定理 `not_nonempty_iff`
-
-English:
-theorem not_nonempty_iff
-  statement: ¬Nonempty α ↔ IsEmpty α
-  proof: ⟨fun h => ⟨fun x => h ⟨x⟩⟩, fun h1 h2 => h2.elim h1.elim⟩
-
-@[simp, push]
-
-中文:
-定理 not_nonempty_iff
-  结论: ¬非空 α ↔ 是空 α
-  证明: ⟨fun h => ⟨fun x => h ⟨x⟩⟩, fun h1 h2 => h2.elim h1.elim⟩
-
-@[simp, push]
-
-Depends on / 依赖: h1.elim, h2.elim
+/-
+**not_nonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_nonempty_iff : ¬Nonempty α ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
 -/
 theorem not_nonempty_iff : ¬Nonempty α ↔ IsEmpty α :=
-  ⟨fun h => ⟨fun x => h ⟨x⟩⟩, fun h1 h2 => h2.elim h1.elim⟩
+  ⟨fun h ↦ ⟨fun x ↦ h ⟨x⟩⟩, fun h1 h2 ↦ h2.elim h1.elim⟩
 
 @[simp, push]
-/--
-theorem `not_isEmpty_iff` / 定理 `not_isEmpty_iff`
-
-English:
-theorem not_isEmpty_iff
-  statement: ¬IsEmpty α ↔ Nonempty α
-  proof: not_iff_comm.mp not_nonempty_iff
-
-@[simp]
-
-中文:
-定理 not_isEmpty_iff
-  结论: ¬是空 α ↔ 非空 α
-  证明: not_iff_comm.mp not_nonempty_iff
-
-@[simp]
-
-Depends on / 依赖: not_iff_comm, not_iff_comm.mp, not_nonempty_iff
+/-
+**not_isEmpty_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_isEmpty_iff : ¬IsEmpty α ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_comm`：not_iff_comm : (¬a ↔ b) ↔ (¬b ↔ a)
+· 使用定理 `not_nonempty_iff`：not_nonempty_iff : ¬Nonempty α ↔ IsEmpty α
 -/
 theorem not_isEmpty_iff : ¬IsEmpty α ↔ Nonempty α :=
   not_iff_comm.mp not_nonempty_iff
 
 @[simp]
-/--
-theorem `isEmpty_Prop` / 定理 `isEmpty_Prop`
-
-English:
-theorem isEmpty_Prop
-  given: {p : Prop}
-  statement: IsEmpty p ↔ ¬p
-  proof: by
-  simp only [← not_nonempty_iff, nonempty_prop]
-
-@[simp]
-
-中文:
-定理 isEmpty_Prop
-  条件: {p : 命题}
-  结论: 是空 p ↔ ¬p
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_prop]
-
-@[simp]
-
-Depends on / 依赖: nonempty_prop, not_nonempty_iff
+/-
+**isEmpty_Prop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_Prop {p : Prop} : IsEmpty p ↔ ¬p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isEmpty_Prop {p : Prop} : IsEmpty p ↔ ¬p := by
   simp only [← not_nonempty_iff, nonempty_prop]
 
 @[simp]
-/--
-theorem `isEmpty_pi` / 定理 `isEmpty_pi`
-
-English:
-theorem isEmpty_pi
-  given: {π : α -> Sort*}
-  statement: IsEmpty (forall a, π a) ↔ exists a, IsEmpty (π a)
-  proof: by
-  simp only [← not_nonempty_iff, Classical.nonempty_pi, not_forall]
-
-中文:
-定理 isEmpty_pi
-  条件: {π : α -> 类型层*}
-  结论: 是空 (对任意 a, π a) ↔ 存在 a, 是空 (π a)
-  证明: by
-  simp only [← not_nonempty_iff, Classical.nonempty_pi, not_forall]
-
-Depends on / 依赖: Classical, Classical.nonempty_pi, nonempty_pi, not_forall, not_nonempty_iff
+/-
+**isEmpty_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_pi {π : α -> Sort*} : IsEmpty (forall a, π a) ↔ exists a, IsEmpty 
+(π a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isEmpty_pi {π : α -> Sort*} : IsEmpty (forall a, π a) ↔ exists a, IsEmpty (π a) := by
+theorem isEmpty_pi {π : α → Sort*} : IsEmpty (∀ a, π a) ↔ ∃ a, IsEmpty (π a) := by
   simp only [← not_nonempty_iff, Classical.nonempty_pi, not_forall]
-
-/--
-theorem `isEmpty_fun` / 定理 `isEmpty_fun`
-
-English:
-theorem isEmpty_fun
-  statement: IsEmpty (α -> β) ↔ Nonempty α ∧ IsEmpty β
-  proof: by
-  rw [isEmpty_pi]; rw [← exists_true_iff_nonempty]; rw [← exists_and_right]; rw [true_and]
-
-@[simp]
-
-中文:
-定理 isEmpty_fun
-  结论: 是空 (α -> β) ↔ 非空 α ∧ 是空 β
-  证明: by
-  rw [isEmpty_pi]; rw [← exists_true_iff_nonempty]; rw [← exists_and_right]; rw [true_and]
-
-@[simp]
-
-Depends on / 依赖: exists_and_right, exists_true_iff_nonempty, isEmpty_pi, true_and
+/-
+**isEmpty_fun** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_fun : IsEmpty (α -> β) ↔ Nonempty α ∧ IsEmpty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isEmpty_pi`：isEmpty_pi {π : α -> Sort*} : IsEmpty (forall a, π a) ↔ exis
+ts a, IsEmpty (π a)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `exists_true_iff_nonempty`：exists_true_iff_nonempty {α : Sort*} : (exists
+ _ : α, True) ↔ Nonempty α
+· 使用定理 `exists_and_right`：∀ {α : Sort u_1} {p : α → Prop} {b : Prop}, (∃ x, p x 
+∧ b) ↔ (∃ x, p x) ∧ b
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem isEmpty_fun : IsEmpty (α -> β) ↔ Nonempty α ∧ IsEmpty β := by
-  rw [isEmpty_pi]; rw [← exists_true_iff_nonempty]; rw [← exists_and_right]; rw [true_and]
+theorem isEmpty_fun : IsEmpty (α → β) ↔ Nonempty α ∧ IsEmpty β := by
+  rw [isEmpty_pi, ← exists_true_iff_nonempty, ← exists_and_right, true_and]
 
 @[simp]
-/--
-theorem `nonempty_fun` / 定理 `nonempty_fun`
-
-English:
-theorem nonempty_fun
-  statement: Nonempty (α -> β) ↔ IsEmpty α ∨ Nonempty β
-  proof: not_iff_not.mp by rw [not_or, not_nonempty_iff, not_nonempty_iff, isEmpty_fun, not_isEmpty_iff]
-
-@[simp]
-
-中文:
-定理 nonempty_fun
-  结论: 非空 (α -> β) ↔ 是空 α ∨ 非空 β
-  证明: not_iff_not.mp by rw [not_or, not_nonempty_iff, not_nonempty_iff, isEmpty_fun, not_isEmpty_iff]
-
-@[simp]
-
-Depends on / 依赖: isEmpty_fun, not_iff_not, not_iff_not.mp, not_isEmpty_iff, not_nonempty_iff, not_or
+/-
+**nonempty_fun** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nonempty_fun : Nonempty (α -> β) ↔ IsEmpty α ∨ Nonempty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `not_nonempty_iff`：not_nonempty_iff : ¬Nonempty α ↔ IsEmpty α
+· 使用定理 `isEmpty_fun`：isEmpty_fun : IsEmpty (α -> β) ↔ Nonempty α ∧ IsEmpty β
+· 使用定理 `not_isEmpty_iff`：not_isEmpty_iff : ¬IsEmpty α ↔ Nonempty α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nonempty_fun : Nonempty (α -> β) ↔ IsEmpty α ∨ Nonempty β :=
-not_iff_not.mp by rw [not_or, not_nonempty_iff, not_nonempty_iff, isEmpty_fun, not_isEmpty_iff]
+theorem nonempty_fun : Nonempty (α → β) ↔ IsEmpty α ∨ Nonempty β :=
+  not_iff_not.mp <| by rw [not_or, not_nonempty_iff, not_nonempty_iff, isEmpty_fun, not_isEmpty_iff]
 
 @[simp]
-/--
-theorem `isEmpty_sigma` / 定理 `isEmpty_sigma`
-
-English:
-theorem isEmpty_sigma
-  given: {α} {E : α -> Type*}
-  statement: IsEmpty (Sigma E) ↔ forall a, IsEmpty (E a)
-  proof: by
+/-
+**isEmpty_sigma** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_sigma {α} {E : α -> Type*} : IsEmpty (Sigma E) ↔ forall a, IsEmpty
+ (E a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem isEmpty_sigma {α} {E : α → Type*} : IsEmpty (Sigma E) ↔ ∀ a, IsEmpty (E a) := by
   simp only [← not_nonempty_iff, nonempty_sigma, not_exists]
 
 @[simp]
-
-中文:
-定理 isEmpty_sigma
-  条件: {α} {E : α -> 类型}
-  结论: 是空 (依赖和类型 E) ↔ 对任意 a, 是空 (E a)
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_sigma, not_exists]
-
-@[simp]
-
-Depends on / 依赖: nonempty_sigma, not_exists, not_nonempty_iff
+/-
+**isEmpty_psigma** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_psigma {α} {E : α -> Sort*} : IsEmpty (PSigma E) ↔ forall a, IsEmp
+ty (E a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isEmpty_sigma {α} {E : α -> Type*} : IsEmpty (Sigma E) ↔ forall a, IsEmpty (E a) := by
-  simp only [← not_nonempty_iff, nonempty_sigma, not_exists]
-
-@[simp]
-/--
-theorem `isEmpty_psigma` / 定理 `isEmpty_psigma`
-
-English:
-theorem isEmpty_psigma
-  given: {α} {E : α -> Sort*}
-  statement: IsEmpty (PSigma E) ↔ forall a, IsEmpty (E a)
-  proof: by
+theorem isEmpty_psigma {α} {E : α → Sort*} : IsEmpty (PSigma E) ↔ ∀ a, IsEmpty (E a) := by
   simp only [← not_nonempty_iff, nonempty_psigma, not_exists]
-
-中文:
-定理 isEmpty_psigma
-  条件: {α} {E : α -> 类型层*}
-  结论: 是空 (命题和类型 E) ↔ 对任意 a, 是空 (E a)
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_psigma, not_exists]
-
-Depends on / 依赖: nonempty_psigma, not_exists, not_nonempty_iff
+/-
+**isEmpty_subtype** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_subtype (p : α -> Prop) : IsEmpty (Subtype p) ↔ forall x, ¬p x
+参数：p : α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isEmpty_psigma {α} {E : α -> Sort*} : IsEmpty (PSigma E) ↔ forall a, IsEmpty (E a) := by
-  simp only [← not_nonempty_iff, nonempty_psigma, not_exists]
-
-/--
-theorem `isEmpty_subtype` / 定理 `isEmpty_subtype`
-
-English:
-theorem isEmpty_subtype
-  given: (p : α -> Prop)
-  statement: IsEmpty (Subtype p) ↔ forall x, ¬p x
-  proof: by
+theorem isEmpty_subtype (p : α → Prop) : IsEmpty (Subtype p) ↔ ∀ x, ¬p x := by
   simp only [← not_nonempty_iff, nonempty_subtype, not_exists]
 
 @[simp]
-
-中文:
-定理 isEmpty_subtype
-  条件: (p : α -> 命题)
-  结论: 是空 (子类型 p) ↔ 对任意 x, ¬p x
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_subtype, not_exists]
-
-@[simp]
-
-Depends on / 依赖: nonempty_subtype, not_exists, not_nonempty_iff
--/
-theorem isEmpty_subtype (p : α -> Prop) : IsEmpty (Subtype p) ↔ forall x, ¬p x := by
-  simp only [← not_nonempty_iff, nonempty_subtype, not_exists]
-
-@[simp]
-/--
-theorem `isEmpty_prod` / 定理 `isEmpty_prod`
-
-English:
-theorem isEmpty_prod
-  given: {α β : Type*}
-  statement: IsEmpty (α × β) ↔ IsEmpty α ∨ IsEmpty β
-  proof: by
-  simp only [← not_nonempty_iff, nonempty_prod, not_and_or]
-
-@[simp]
-
-中文:
-定理 isEmpty_prod
-  条件: {α β : 类型}
-  结论: 是空 (α × β) ↔ 是空 α ∨ 是空 β
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_prod, not_and_or]
-
-@[simp]
-
-Depends on / 依赖: nonempty_prod, not_and_or, not_nonempty_iff
+/-
+**isEmpty_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_prod {α β : Type*} : IsEmpty (α × β) ↔ IsEmpty α ∨ IsEmpty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isEmpty_prod {α β : Type*} : IsEmpty (α × β) ↔ IsEmpty α ∨ IsEmpty β := by
   simp only [← not_nonempty_iff, nonempty_prod, not_and_or]
 
 @[simp]
-/--
-theorem `isEmpty_pprod` / 定理 `isEmpty_pprod`
-
-English:
-theorem isEmpty_pprod
-  statement: IsEmpty (PProd α β) ↔ IsEmpty α ∨ IsEmpty β
-  proof: by
-  simp only [← not_nonempty_iff, nonempty_pprod, not_and_or]
-
-@[simp]
-
-中文:
-定理 isEmpty_pprod
-  结论: 是空 (命题积类型 α β) ↔ 是空 α ∨ 是空 β
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_pprod, not_and_or]
-
-@[simp]
-
-Depends on / 依赖: nonempty_pprod, not_and_or, not_nonempty_iff
+/-
+**isEmpty_pprod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_pprod : IsEmpty (PProd α β) ↔ IsEmpty α ∨ IsEmpty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isEmpty_pprod : IsEmpty (PProd α β) ↔ IsEmpty α ∨ IsEmpty β := by
   simp only [← not_nonempty_iff, nonempty_pprod, not_and_or]
 
 @[simp]
-/--
-theorem `isEmpty_sum` / 定理 `isEmpty_sum`
-
-English:
-theorem isEmpty_sum
-  given: {α β}
-  statement: IsEmpty (α oplus β) ↔ IsEmpty α ∧ IsEmpty β
-  proof: by
-  simp only [← not_nonempty_iff, nonempty_sum, not_or]
-
-@[simp]
-
-中文:
-定理 isEmpty_sum
-  条件: {α β}
-  结论: 是空 (α oplus β) ↔ 是空 α ∧ 是空 β
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_sum, not_or]
-
-@[simp]
-
-Depends on / 依赖: nonempty_sum, not_nonempty_iff, not_or
+/-
+**isEmpty_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_sum {α β} : IsEmpty (α oplus β) ↔ IsEmpty α ∧ IsEmpty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isEmpty_sum {α β} : IsEmpty (α oplus β) ↔ IsEmpty α ∧ IsEmpty β := by
+theorem isEmpty_sum {α β} : IsEmpty (α ⊕ β) ↔ IsEmpty α ∧ IsEmpty β := by
   simp only [← not_nonempty_iff, nonempty_sum, not_or]
 
 @[simp]
-/--
-theorem `isEmpty_psum` / 定理 `isEmpty_psum`
-
-English:
-theorem isEmpty_psum
-  given: {α β}
-  statement: IsEmpty (α oplus' β) ↔ IsEmpty α ∧ IsEmpty β
-  proof: by
-  simp only [← not_nonempty_iff, nonempty_psum, not_or]
-
-@[simp]
-
-中文:
-定理 isEmpty_psum
-  条件: {α β}
-  结论: 是空 (α oplus' β) ↔ 是空 α ∧ 是空 β
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_psum, not_or]
-
-@[simp]
-
-Depends on / 依赖: nonempty_psum, not_nonempty_iff, not_or
+/-
+**isEmpty_psum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_psum {α β} : IsEmpty (α oplus' β) ↔ IsEmpty α ∧ IsEmpty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isEmpty_psum {α β} : IsEmpty (α oplus' β) ↔ IsEmpty α ∧ IsEmpty β := by
+theorem isEmpty_psum {α β} : IsEmpty (α ⊕' β) ↔ IsEmpty α ∧ IsEmpty β := by
   simp only [← not_nonempty_iff, nonempty_psum, not_or]
 
 @[simp]
-/--
-theorem `isEmpty_ulift` / 定理 `isEmpty_ulift`
-
-English:
-theorem isEmpty_ulift
-  given: {α}
-  statement: IsEmpty (ULift α) ↔ IsEmpty α
-  proof: by
-  simp only [← not_nonempty_iff, nonempty_ulift]
-
-@[simp]
-
-中文:
-定理 isEmpty_ulift
-  条件: {α}
-  结论: 是空 (类型层提升 α) ↔ 是空 α
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_ulift]
-
-@[simp]
-
-Depends on / 依赖: nonempty_ulift, not_nonempty_iff
+/-
+**isEmpty_ulift** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_ulift {α} : IsEmpty (ULift α) ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isEmpty_ulift {α} : IsEmpty (ULift α) ↔ IsEmpty α := by
   simp only [← not_nonempty_iff, nonempty_ulift]
 
 @[simp]
-/--
-theorem `isEmpty_plift` / 定理 `isEmpty_plift`
-
-English:
-theorem isEmpty_plift
-  given: {α}
-  statement: IsEmpty (PLift α) ↔ IsEmpty α
-  proof: by
-  simp only [← not_nonempty_iff, nonempty_plift]
-
-中文:
-定理 isEmpty_plift
-  条件: {α}
-  结论: 是空 (命题层提升 α) ↔ 是空 α
-  证明: by
-  simp only [← not_nonempty_iff, nonempty_plift]
-
-Depends on / 依赖: nonempty_plift, not_nonempty_iff
+/-
+**isEmpty_plift** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_plift {α} : IsEmpty (PLift α) ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isEmpty_plift {α} : IsEmpty (PLift α) ↔ IsEmpty α := by
   simp only [← not_nonempty_iff, nonempty_plift]
-
-/--
-theorem `wellFounded_of_isEmpty` / 定理 `wellFounded_of_isEmpty`
-
-English:
-theorem wellFounded_of_isEmpty
-  given: {α} [IsEmpty α] (r : α -> α -> Prop)
-  statement: WellFounded r
-  proof: ⟨isEmptyElim⟩
-
-中文:
-定理 wellFounded_of_isEmpty
-  条件: {α} [是空 α] (r : α -> α -> 命题)
-  结论: 良基 r
-  证明: ⟨isEmptyElim⟩
-
-Depends on / 依赖: isEmptyElim
+/-
+**wellFounded_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wellFounded_of_isEmpty {α} [IsEmpty α] (r : α -> α -> Prop) : WellFounded 
+r
+参数：r : α -> α -> Prop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem wellFounded_of_isEmpty {α} [IsEmpty α] (r : α -> α -> Prop) : WellFounded r :=
+theorem wellFounded_of_isEmpty {α} [IsEmpty α] (r : α → α → Prop) : WellFounded r :=
   ⟨isEmptyElim⟩
 
 variable (α)
-
-/--
-theorem `isEmpty_or_nonempty` / 定理 `isEmpty_or_nonempty`
-
-English:
-theorem isEmpty_or_nonempty
-  statement: IsEmpty α ∨ Nonempty α
-  proof: (em <| IsEmpty α).elim Or.inl Or.inr ∘ not_isEmpty_iff.mp
-
-@[simp]
-
-中文:
-定理 isEmpty_or_nonempty
-  结论: 是空 α ∨ 非空 α
-  证明: (em <| IsEmpty α).elim Or.inl Or.inr ∘ not_isEmpty_iff.mp
-
-@[simp]
-
-Depends on / 依赖: IsEmpty, Or.inl, Or.inr, not_isEmpty_iff, not_isEmpty_iff.mp
+/-
+**isEmpty_or_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_isEmpty_iff`：not_isEmpty_iff : ¬IsEmpty α ↔ Nonempty α
 -/
 theorem isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α :=
-(em <| IsEmpty α).elim Or.inl Or.inr ∘ not_isEmpty_iff.mp
+  (em <| IsEmpty α).elim Or.inl <| Or.inr ∘ not_isEmpty_iff.mp
 
 @[simp]
-/--
-theorem `not_isEmpty_of_nonempty` / 定理 `not_isEmpty_of_nonempty`
-
-English:
-theorem not_isEmpty_of_nonempty
-  given: [h : Nonempty α]
-  statement: ¬IsEmpty α
-  proof: not_isEmpty_iff.mpr h
-
-中文:
-定理 not_isEmpty_of_nonempty
-  条件: [h : 非空 α]
-  结论: ¬是空 α
-  证明: not_isEmpty_iff.mpr h
-
-Depends on / 依赖: not_isEmpty_iff, not_isEmpty_iff.mpr
+/-
+**not_isEmpty_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_isEmpty_of_nonempty [h : Nonempty α] : ¬IsEmpty α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_isEmpty_iff`：not_isEmpty_iff : ¬IsEmpty α ↔ Nonempty α
 -/
 theorem not_isEmpty_of_nonempty [h : Nonempty α] : ¬IsEmpty α :=
   not_isEmpty_iff.mpr h
 
 variable {α}
-
-/--
-theorem `Function.extend_of_isEmpty` / 定理 `Function.extend_of_isEmpty`
-
-English:
-theorem Function.extend_of_isEmpty
-  given: [IsEmpty α] (f : α -> β) (g : α -> γ) (h : β -> γ)
-  proof: funext fun _ => (Function.extend_apply' _ _ _) fun ⟨a, _⟩ => isEmptyElim a
-
-中文:
-定理 函数.extend_of_isEmpty
-  条件: [是空 α] (f : α -> β) (g : α -> γ) (h : β -> γ)
-  证明: funext fun _ => (Function.extend_apply' _ _ _) fun ⟨a, _⟩ => isEmptyElim a
-
-Depends on / 依赖: Function, Function.extend_apply, extend_apply, isEmptyElim
+/-
+**Function.extend_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.extend_of_isEmpty [IsEmpty α] (f : α -> β) (g : α -> γ) (h : β ->
+ γ) : Function.extend f g h = h
+参数：f : α -> β；g : α -> γ；h : β -> γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.extend_apply'`：extend_apply' (g : α -> γ) (e' : β -> γ) (b : β)
+ (hb : ¬exists a, f a = b) : extend f g e' b = e' b
 -/
-theorem Function.extend_of_isEmpty [IsEmpty α] (f : α -> β) (g : α -> γ) (h : β -> γ) :
+theorem Function.extend_of_isEmpty [IsEmpty α] (f : α → β) (g : α → γ) (h : β → γ) :
     Function.extend f g h = h :=
-  funext fun _ => (Function.extend_apply' _ _ _) fun ⟨a, _⟩ => isEmptyElim a
+  funext fun _ ↦ (Function.extend_apply' _ _ _) fun ⟨a, _⟩ ↦ isEmptyElim a
 
 open Relator
 
-variable {α β : Type*} (R : α -> β -> Prop)
+variable {α β : Type*} (R : α → β → Prop)
 
 @[simp]
-/--
-theorem `leftTotal_empty` / 定理 `leftTotal_empty`
-
-English:
-theorem leftTotal_empty
-  given: [IsEmpty α]
-  statement: LeftTotal R
-  proof: by
-  simp only [LeftTotal, IsEmpty.forall_iff]
-
-中文:
-定理 leftTotal_empty
-  条件: [是空 α]
-  结论: LeftTotal R
-  证明: by
-  simp only [LeftTotal, IsEmpty.forall_iff]
-
-Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, LeftTotal, forall_iff
+/-
+**leftTotal_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：leftTotal_empty [IsEmpty α] : LeftTotal R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 theorem leftTotal_empty [IsEmpty α] : LeftTotal R := by
   simp only [LeftTotal, IsEmpty.forall_iff]
-
-/--
-theorem `leftTotal_iff_isEmpty_left` / 定理 `leftTotal_iff_isEmpty_left`
-
-English:
-theorem leftTotal_iff_isEmpty_left
-  given: [IsEmpty β]
-  statement: LeftTotal R ↔ IsEmpty α
-  proof: by
-  simp only [LeftTotal, IsEmpty.exists_iff, isEmpty_iff]
-
-@[simp]
-
-中文:
-定理 leftTotal_iff_isEmpty_left
-  条件: [是空 β]
-  结论: LeftTotal R ↔ 是空 α
-  证明: by
-  simp only [LeftTotal, IsEmpty.exists_iff, isEmpty_iff]
-
-@[simp]
-
-Depends on / 依赖: IsEmpty, IsEmpty.exists_iff, LeftTotal, exists_iff, isEmpty_iff
+/-
+**leftTotal_iff_isEmpty_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：leftTotal_iff_isEmpty_left [IsEmpty β] : LeftTotal R ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem leftTotal_iff_isEmpty_left [IsEmpty β] : LeftTotal R ↔ IsEmpty α := by
   simp only [LeftTotal, IsEmpty.exists_iff, isEmpty_iff]
 
 @[simp]
-/--
-theorem `rightTotal_empty` / 定理 `rightTotal_empty`
-
-English:
-theorem rightTotal_empty
-  given: [IsEmpty β]
-  statement: RightTotal R
-  proof: by
-  simp only [RightTotal, IsEmpty.forall_iff]
-
-中文:
-定理 rightTotal_empty
-  条件: [是空 β]
-  结论: RightTotal R
-  证明: by
-  simp only [RightTotal, IsEmpty.forall_iff]
-
-Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, RightTotal, forall_iff
+/-
+**rightTotal_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rightTotal_empty [IsEmpty β] : RightTotal R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 theorem rightTotal_empty [IsEmpty β] : RightTotal R := by
   simp only [RightTotal, IsEmpty.forall_iff]
-
-/--
-theorem `rightTotal_iff_isEmpty_right` / 定理 `rightTotal_iff_isEmpty_right`
-
-English:
-theorem rightTotal_iff_isEmpty_right
-  given: [IsEmpty α]
-  statement: RightTotal R ↔ IsEmpty β
-  proof: by
-  simp only [RightTotal, IsEmpty.exists_iff, isEmpty_iff]
-
-@[simp]
-
-中文:
-定理 rightTotal_iff_isEmpty_right
-  条件: [是空 α]
-  结论: RightTotal R ↔ 是空 β
-  证明: by
-  simp only [RightTotal, IsEmpty.exists_iff, isEmpty_iff]
-
-@[simp]
-
-Depends on / 依赖: IsEmpty, IsEmpty.exists_iff, RightTotal, exists_iff, isEmpty_iff
+/-
+**rightTotal_iff_isEmpty_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rightTotal_iff_isEmpty_right [IsEmpty α] : RightTotal R ↔ IsEmpty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem rightTotal_iff_isEmpty_right [IsEmpty α] : RightTotal R ↔ IsEmpty β := by
   simp only [RightTotal, IsEmpty.exists_iff, isEmpty_iff]
 
 @[simp]
-/--
-theorem `biTotal_empty` / 定理 `biTotal_empty`
-
-English:
-theorem biTotal_empty
-  given: [IsEmpty α] [IsEmpty β]
-  statement: BiTotal R
-  proof: ⟨leftTotal_empty R, rightTotal_empty R⟩
-
-中文:
-定理 biTotal_empty
-  条件: [是空 α] [是空 β]
-  结论: BiTotal R
-  证明: ⟨leftTotal_empty R, rightTotal_empty R⟩
-
-Depends on / 依赖: leftTotal_empty, rightTotal_empty
+/-
+**biTotal_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：biTotal_empty [IsEmpty α] [IsEmpty β] : BiTotal R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `leftTotal_empty`：leftTotal_empty [IsEmpty α] : LeftTotal R
+· 使用定理 `rightTotal_empty`：rightTotal_empty [IsEmpty β] : RightTotal R
 -/
 theorem biTotal_empty [IsEmpty α] [IsEmpty β] : BiTotal R :=
   ⟨leftTotal_empty R, rightTotal_empty R⟩
-
-/--
-theorem `biTotal_iff_isEmpty_right` / 定理 `biTotal_iff_isEmpty_right`
-
-English:
-theorem biTotal_iff_isEmpty_right
-  given: [IsEmpty α]
-  statement: BiTotal R ↔ IsEmpty β
-  proof: by
-  simp only [BiTotal, leftTotal_empty, rightTotal_iff_isEmpty_right, true_and]
-
-中文:
-定理 biTotal_iff_isEmpty_right
-  条件: [是空 α]
-  结论: BiTotal R ↔ 是空 β
-  证明: by
-  simp only [BiTotal, leftTotal_empty, rightTotal_iff_isEmpty_right, true_and]
-
-Depends on / 依赖: BiTotal, leftTotal_empty, rightTotal_iff_isEmpty_right, true_and
+/-
+**biTotal_iff_isEmpty_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：biTotal_iff_isEmpty_right [IsEmpty α] : BiTotal R ↔ IsEmpty β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem biTotal_iff_isEmpty_right [IsEmpty α] : BiTotal R ↔ IsEmpty β := by
   simp only [BiTotal, leftTotal_empty, rightTotal_iff_isEmpty_right, true_and]
-
-/--
-theorem `biTotal_iff_isEmpty_left` / 定理 `biTotal_iff_isEmpty_left`
-
-English:
-theorem biTotal_iff_isEmpty_left
-  given: [IsEmpty β]
-  statement: BiTotal R ↔ IsEmpty α
-  proof: by
-  simp only [BiTotal, leftTotal_iff_isEmpty_left, rightTotal_empty, and_true]
-
-中文:
-定理 biTotal_iff_isEmpty_left
-  条件: [是空 β]
-  结论: BiTotal R ↔ 是空 α
-  证明: by
-  simp only [BiTotal, leftTotal_iff_isEmpty_left, rightTotal_empty, and_true]
-
-Depends on / 依赖: BiTotal, and_true, leftTotal_iff_isEmpty_left, rightTotal_empty
+/-
+**biTotal_iff_isEmpty_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：biTotal_iff_isEmpty_left [IsEmpty β] : BiTotal R ↔ IsEmpty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem biTotal_iff_isEmpty_left [IsEmpty β] : BiTotal R ↔ IsEmpty α := by
   simp only [BiTotal, leftTotal_iff_isEmpty_left, rightTotal_empty, and_true]
-
-/--
-theorem `Function.Surjective.of_isEmpty` / 定理 `Function.Surjective.of_isEmpty`
-
-English:
-theorem Function.Surjective.of_isEmpty
-  given: [IsEmpty β] (f : α -> β)
-  statement: f.Surjective
-  proof: IsEmpty.elim ‹_›
-
-中文:
-定理 函数.满射.of_isEmpty
-  条件: [是空 β] (f : α -> β)
-  结论: f.满射
-  证明: IsEmpty.elim ‹_›
-
-Depends on / 依赖: IsEmpty, IsEmpty.elim
+/-
+**Function.Surjective.of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Surjective.of_isEmpty [IsEmpty β] (f : α -> β) : f.Surjective
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Function.Surjective.of_isEmpty [IsEmpty β] (f : α -> β) : f.Surjective := IsEmpty.elim ‹_›
-
-/--
-theorem `Function.surjective_iff_isEmpty` / 定理 `Function.surjective_iff_isEmpty`
-
-English:
-theorem Function.surjective_iff_isEmpty
-  given: [IsEmpty α] (f : α -> β)
-  statement: f.Surjective ↔ IsEmpty β
-  proof: ⟨Surjective.isEmpty, fun _ => .of_isEmpty f⟩
-
-中文:
-定理 函数.surjective_iff_isEmpty
-  条件: [是空 α] (f : α -> β)
-  结论: f.满射 ↔ 是空 β
-  证明: ⟨Surjective.isEmpty, fun _ => .of_isEmpty f⟩
-
-Depends on / 依赖: Surjective, Surjective.isEmpty, isEmpty, of_isEmpty
+theorem Function.Surjective.of_isEmpty [IsEmpty β] (f : α → β) : f.Surjective := IsEmpty.elim ‹_›
+/-
+**Function.surjective_iff_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.surjective_iff_isEmpty [IsEmpty α] (f : α -> β) : f.Surjective ↔ 
+IsEmpty β
+参数：f : α -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.isEmpty`：Function.Surjective.isEmpty [IsEmpty α] {f 
+: α -> β} (hf : f.Surjective) : IsEmpty β
+· 使用定理 `Function.Surjective.of_isEmpty`：Function.Surjective.of_isEmpty [IsEmpty 
+β] (f : α -> β) : f.Surjective
 -/
-theorem Function.surjective_iff_isEmpty [IsEmpty α] (f : α -> β) : f.Surjective ↔ IsEmpty β :=
-  ⟨Surjective.isEmpty, fun _ => .of_isEmpty f⟩
-
-/--
-theorem `Function.Bijective.of_isEmpty` / 定理 `Function.Bijective.of_isEmpty`
-
-English:
-theorem Function.Bijective.of_isEmpty
-  given: (f : α -> β) [IsEmpty β]
-  statement: f.Bijective
-  proof: have := f.isEmpty
-  ⟨injective_of_subsingleton f, .of_isEmpty f⟩
-
-中文:
-定理 函数.双射.of_isEmpty
-  条件: (f : α -> β) [是空 β]
-  结论: f.双射
-  证明: have := f.isEmpty
-  ⟨injective_of_subsingleton f, .of_isEmpty f⟩
-
-Depends on / 依赖: f.isEmpty, injective_of_subsingleton, isEmpty, of_isEmpty
+theorem Function.surjective_iff_isEmpty [IsEmpty α] (f : α → β) : f.Surjective ↔ IsEmpty β :=
+  ⟨Surjective.isEmpty, fun _ ↦ .of_isEmpty f⟩
+/-
+**Function.Bijective.of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Bijective.of_isEmpty (f : α -> β) [IsEmpty β] : f.Bijective
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.isEmpty`：∀ {α : Sort u} {β : Sort v} [IsEmpty β] (f : α → β), I
+sEmpty α
+· 使用定理 `Function.injective_of_subsingleton`：∀ {α : Sort u_1} {β : Sort u_2} [Sub
+singleton α] (f : α → β), Function.Injective f
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `Function.Surjective.of_isEmpty`：Function.Surjective.of_isEmpty [IsEmpty 
+β] (f : α -> β) : f.Surjective
 -/
-theorem Function.Bijective.of_isEmpty (f : α -> β) [IsEmpty β] : f.Bijective :=
+theorem Function.Bijective.of_isEmpty (f : α → β) [IsEmpty β] : f.Bijective :=
   have := f.isEmpty
   ⟨injective_of_subsingleton f, .of_isEmpty f⟩
-
-/--
-theorem `Function.not_surjective_of_isEmpty_of_nonempty` / 定理 `Function.not_surjective_of_isEmpty_of_nonempty`
-
-English:
-theorem Function.not_surjective_of_isEmpty_of_nonempty
-  given: [IsEmpty α] [Nonempty β] (f : α -> β)
-  proof: (not_isEmpty_of_nonempty β ·.isEmpty)
-
-中文:
-定理 函数.not_surjective_of_isEmpty_of_nonempty
-  条件: [是空 α] [非空 β] (f : α -> β)
-  证明: (not_isEmpty_of_nonempty β ·.isEmpty)
-
-Depends on / 依赖: isEmpty, not_isEmpty_of_nonempty
+/-
+**Function.not_surjective_of_isEmpty_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.not_surjective_of_isEmpty_of_nonempty [IsEmpty α] [Nonempty β] (f
+ : α -> β) : ¬f.Surjective
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_isEmpty_of_nonempty`：not_isEmpty_of_nonempty [h : Nonempty α] : ¬IsE
+mpty α
+· 使用定理 `Function.Surjective.isEmpty`：Function.Surjective.isEmpty [IsEmpty α] {f 
+: α -> β} (hf : f.Surjective) : IsEmpty β
 -/
-theorem Function.not_surjective_of_isEmpty_of_nonempty [IsEmpty α] [Nonempty β] (f : α -> β) :
+theorem Function.not_surjective_of_isEmpty_of_nonempty [IsEmpty α] [Nonempty β] (f : α → β) :
     ¬f.Surjective :=
   (not_isEmpty_of_nonempty β ·.isEmpty)

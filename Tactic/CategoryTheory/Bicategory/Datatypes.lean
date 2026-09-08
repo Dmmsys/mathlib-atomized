@@ -25,96 +25,68 @@ open CategoryTheory Mathlib.Tactic.BicategoryLike Bicategory
 
 namespace Mathlib.Tactic.Bicategory
 
-/--
-Definition of `srcExpr` / `srcExpr` 的定义
+/-- The domain of a morphism. -/
+/-
+**Mathlib.Tactic.Bicategory.srcExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+category`。
+形式化陈述：srcExpr (η : Expr) : MetaM Expr
+参数：η : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition srcExpr
-  signature: (η : Expr)
-  body: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Quiver.Hom, #[_, _, f, _]) => return f
-  | _ => throwError m!"{η} is not a morphism"
-
-中文:
-定义 srcExpr
-  签名: (η : Expr)
-  定义体: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Quiver.Hom, #[_, _, f, _]) => return f
-  | _ => throwError m!"{η} is not a morphism"
+--- 原说明 ---
+The domain of a morphism.
 -/
 def srcExpr (η : Expr) : MetaM Expr := do
   match (← whnfR (← inferType η)).getAppFnArgs with
   | (``Quiver.Hom, #[_, _, f, _]) => return f
   | _ => throwError m!"{η} is not a morphism"
 
-/--
-Definition of `tgtExpr` / `tgtExpr` 的定义
+/-- The codomain of a morphism. -/
+/-
+**Mathlib.Tactic.Bicategory.tgtExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+category`。
+形式化陈述：tgtExpr (η : Expr) : MetaM Expr
+参数：η : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tgtExpr
-  signature: (η : Expr)
-  body: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Quiver.Hom, #[_, _, _, g]) => return g
-  | _ => throwError m!"{η} is not a morphism"
-
-中文:
-定义 tgtExpr
-  签名: (η : Expr)
-  定义体: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Quiver.Hom, #[_, _, _, g]) => return g
-  | _ => throwError m!"{η} is not a morphism"
+--- 原说明 ---
+The codomain of a morphism.
 -/
 def tgtExpr (η : Expr) : MetaM Expr := do
   match (← whnfR (← inferType η)).getAppFnArgs with
   | (``Quiver.Hom, #[_, _, _, g]) => return g
   | _ => throwError m!"{η} is not a morphism"
 
-/--
-Definition of `srcExprOfIso` / `srcExprOfIso` 的定义
+/-- The domain of an isomorphism. -/
+/-
+**Mathlib.Tactic.Bicategory.srcExprOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Bicategory`。
+形式化陈述：srcExprOfIso (η : Expr) : MetaM Expr
+参数：η : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition srcExprOfIso
-  signature: (η : Expr)
-  body: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Iso, #[_, _, f, _]) => return f
-  | _ => throwError m!"{η} is not a morphism"
-
-中文:
-定义 srcExprOfIso
-  签名: (η : Expr)
-  定义体: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Iso, #[_, _, f, _]) => return f
-  | _ => throwError m!"{η} is not a morphism"
+--- 原说明 ---
+The domain of an isomorphism.
 -/
 def srcExprOfIso (η : Expr) : MetaM Expr := do
   match (← whnfR (← inferType η)).getAppFnArgs with
   | (``Iso, #[_, _, f, _]) => return f
   | _ => throwError m!"{η} is not a morphism"
 
-/--
-Definition of `tgtExprOfIso` / `tgtExprOfIso` 的定义
+/-- The codomain of an isomorphism. -/
+/-
+**Mathlib.Tactic.Bicategory.tgtExprOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Bicategory`。
+形式化陈述：tgtExprOfIso (η : Expr) : MetaM Expr
+参数：η : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tgtExprOfIso
-  signature: (η : Expr)
-  body: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Iso, #[_, _, _, g]) => return g
-  | _ => throwError m!"{η} is not a morphism"
-
-中文:
-定义 tgtExprOfIso
-  签名: (η : Expr)
-  定义体: do
-  match (← whnfR (← inferType η)).getAppFnArgs with
-  | (``Iso, #[_, _, _, g]) => return g
-  | _ => throwError m!"{η} is not a morphism"
+--- 原说明 ---
+The codomain of an isomorphism.
 -/
 def tgtExprOfIso (η : Expr) : MetaM Expr := do
   match (← whnfR (← inferType η)).getAppFnArgs with
@@ -123,28 +95,15 @@ def tgtExprOfIso (η : Expr) : MetaM Expr := do
 
 initialize registerTraceClass `bicategory
 
-/--
-Definition of `Context` / `Context` 的定义
+/-- The context for evaluating expressions. -/
+/-
+**Mathlib.Tactic.Bicategory.Context** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.
+Bicategory`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Context
-  parameters: where
-  axioms and operations (5):
-    - level₂ : Level
-    - level₁ : Level
-    - level₀ : Level
-    - B : Q(Type level₀)
-    - instBicategory : Q(Bicategory.{level₂, level₁} $B)
-
-中文:
-结构 余ntext
-  参数: where
-  公理与运算 (5 个):
-    - level₂ : Level
-    - level₁ : Level
-    - level₀ : Level
-    - B : Q(类型 level₀)
-    - instBicategory : Q(双范畴.{level₂, level₁} $B)
+--- 原说明 ---
+The context for evaluating expressions.
 -/
 structure Context where
   /-- The level for 2-morphisms. -/
@@ -158,57 +117,24 @@ structure Context where
   /-- The bicategory instance. -/
   instBicategory : Q(Bicategory.{level₂, level₁} $B)
 
-/--
-Definition of `mkContext?` / `mkContext?` 的定义
+/-- Populate a `context` object for evaluating `e`. -/
+/-
+**Mathlib.Tactic.Bicategory.mkContext** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Bicategory`。
+形式化陈述：mkContext? (e : Expr) : MetaM (Option Context)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkContext?
-  signature: (e : Expr)
-  body: do
-  let e ← instantiateMVars e
-let type ← instantiateMVars ← inferType e
-  match (← whnfR (← inferType e)).getAppFnArgs with
-  | (``Quiver.Hom, #[_, _, f, _]) =>
-let fType ← instantiateMVars ← inferType f
-    match (← whnfR fType).getAppFnArgs with
-    | (``Quiver.Hom, #[_, _, a, _]) =>
-      let B ← inferType a
-      let .succ level₀ ← getLevel B | return none
-      let .succ level₁ ← getLevel fType | return none
-      let .succ level₂ ← getLevel type | return none
-      let some instBicategory ← synthInstance?
-        (mkAppN (.const ``Bicategory [level₂, level₁, level₀]) #[B]) | return none
-      return some ⟨level₂, level₁, level₀, B, instBicategory⟩
-    | _ => return none
-  | _ => return none
-
-中文:
-定义 mkContext?
-  签名: (e : Expr)
-  定义体: do
-  let e ← instantiateMVars e
-let type ← instantiateMVars ← inferType e
-  match (← whnfR (← inferType e)).getAppFnArgs with
-  | (``Quiver.Hom, #[_, _, f, _]) =>
-let fType ← instantiateMVars ← inferType f
-    match (← whnfR fType).getAppFnArgs with
-    | (``Quiver.Hom, #[_, _, a, _]) =>
-      let B ← inferType a
-      let .succ level₀ ← getLevel B | return none
-      let .succ level₁ ← getLevel fType | return none
-      let .succ level₂ ← getLevel type | return none
-      let some instBicategory ← synthInstance?
-        (mkAppN (.const ``Bicategory [level₂, level₁, level₀]) #[B]) | return none
-      return some ⟨level₂, level₁, level₀, B, instBicategory⟩
-    | _ => return none
-  | _ => return none
+--- 原说明 ---
+Populate a `context` object for evaluating `e`.
 -/
 def mkContext? (e : Expr) : MetaM (Option Context) := do
   let e ← instantiateMVars e
-let type ← instantiateMVars ← inferType e
+  let type ← instantiateMVars <| ← inferType e
   match (← whnfR (← inferType e)).getAppFnArgs with
   | (``Quiver.Hom, #[_, _, f, _]) =>
-let fType ← instantiateMVars ← inferType f
+    let fType ← instantiateMVars <| ← inferType f
     match (← whnfR fType).getAppFnArgs with
     | (``Quiver.Hom, #[_, _, a, _]) =>
       let B ← inferType a
@@ -220,78 +146,29 @@ let fType ← instantiateMVars ← inferType f
       return some ⟨level₂, level₁, level₀, B, instBicategory⟩
     | _ => return none
   | _ => return none
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BicategoryLike.Context Bicategory.Context
-  body: Bicategory.mkContext?
-
-中文:
-实例 :
-  签名: BicategoryLike.余ntext 双范畴.余ntext
-  定义体: Bicategory.mkContext?
-
-Depends on / 依赖: Bicategory, Bicategory.mkContext, e.symm, mkContext
+/-
+**Mathlib.Tactic.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BicategoryLike.Context Bicategory.Context where
   mkContext? := Bicategory.mkContext?
 
-/--
-Definition of `BicategoryM` / `BicategoryM` 的定义
+/-- The monad for the normalization of 2-morphisms. -/
+/-
+**Mathlib.Tactic.Bicategory.BicategoryM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tac
+tic.Bicategory`。
+形式化陈述：BicategoryM
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation BicategoryM
-  body: CoherenceM Context
-
-中文:
-缩写 BicategoryM
-  定义体: CoherenceM Context
-
-Depends on / 依赖: CoherenceM, Context
+--- 原说明 ---
+The monad for the normalization of 2-morphisms.
 -/
 abbrev BicategoryM := CoherenceM Context
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonadMor₁ BicategoryM
-  body: do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a_e : Q($ctx.B) := a.e
-    return .id q(𝟙 $a_e) a
-  comp₁M f g := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    return .comp q($f_e ≫ $g_e) f g
-
-中文:
-实例 :
-  签名: MonadMor₁ BicategoryM
-  定义体: do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a_e : Q($ctx.B) := a.e
-    return .id q(𝟙 $a_e) a
-  comp₁M f g := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    return .comp q($f_e ≫ $g_e) f g
+/-
+**Mathlib.Tactic.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonadMor₁ BicategoryM where
   id₁M a := do
@@ -314,352 +191,125 @@ section
 universe w v u
 variable {B : Type u} [Bicategory.{w, v} B] {a b c : B}
 
-/--
-theorem `structuralIso_inv` / 定理 `structuralIso_inv`
-
-English:
-theorem structuralIso_inv
-  given: {f g : a ⟶ b} (η : f ≅ g)
-  proof: by
-  simp only [Iso.symm_hom]
-
-中文:
-定理 structuralIso_inv
-  条件: {f g : a ⟶ b} (η : f ≅ g)
-  证明: by
-  simp only [Iso.symm_hom]
-
-Depends on / 依赖: Iso.symm_hom, symm_hom
+/-
+**Mathlib.Tactic.Bicategory.structuralIso_inv** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib
+.Tactic.Bicategory`。
+形式化陈述：structuralIso_inv {f g : a ⟶ b} (η : f ≅ g) : η.symm.hom = η.inv
+参数：η : f ≅ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem structuralIso_inv {f g : a ⟶ b} (η : f ≅ g) :
     η.symm.hom = η.inv := by
   simp only [Iso.symm_hom]
-
-/--
-theorem `structuralIsoOfExpr_comp` / 定理 `structuralIsoOfExpr_comp`
-
-English:
-theorem structuralIsoOfExpr_comp
-  statement: {f g h : a ⟶ b}
-  proof: by
-  simp [ih_η, ih_θ]
-
-中文:
-定理 structuralIsoOfExpr_comp
-  结论: {f g h : a ⟶ b}
-  证明: by
-  simp [ih_η, ih_θ]
+/-
+**Mathlib.Tactic.Bicategory.structuralIsoOfExpr_comp** 是 Mathlib 中的一个定理，位于命名空间 `
+Mathlib.Tactic.Bicategory`。
+形式化陈述：structuralIsoOfExpr_comp {f g h : a ⟶ b} (η : f ⟶ g) (η' : f ≅ g) (ih_η : 
+η'.hom = η) (θ : g ⟶ h) (θ' : g ≅ h) (ih_θ : θ'.hom = θ) : (η' ≪≫ θ').hom = η ≫ 
+θ
+参数：η : f ⟶ g；η' : f ≅ g；ih_η : η'.hom = η；θ : g ⟶ h；θ' : g ≅ h；ih_θ : θ'.hom = θ
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem structuralIsoOfExpr_comp {f g h : a ⟶ b}
     (η : f ⟶ g) (η' : f ≅ g) (ih_η : η'.hom = η)
     (θ : g ⟶ h) (θ' : g ≅ h) (ih_θ : θ'.hom = θ) :
-    (η' ≪≫ θ').hom = η ≫ θ := by
+    (η' ≪≫ θ').hom  = η ≫ θ := by
   simp [ih_η, ih_θ]
-
-/--
-theorem `structuralIsoOfExpr_whiskerLeft` / 定理 `structuralIsoOfExpr_whiskerLeft`
-
-English:
-theorem structuralIsoOfExpr_whiskerLeft
-  statement: (f : a ⟶ b) {g h : b ⟶ c}
-  proof: by
-  simp [ih_η]
-
-中文:
-定理 structuralIsoOfExpr_whiskerLeft
-  结论: (f : a ⟶ b) {g h : b ⟶ c}
-  证明: by
-  simp [ih_η]
+/-
+**Mathlib.Tactic.Bicategory.structuralIsoOfExpr_whiskerLeft** 是 Mathlib 中的一个定理，位
+于命名空间 `Mathlib.Tactic.Bicategory`。
+形式化陈述：structuralIsoOfExpr_whiskerLeft (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) (η' 
+: g ≅ h) (ih_η : η'.hom = η) : (whiskerLeftIso f η').hom = f ◁ η
+参数：f : a ⟶ b；η : g ⟶ h；η' : g ≅ h；ih_η : η'.hom = η。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeftIso_hom`：∀ {B : Type u} [inst : Cat
+egoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h),   (
+CategoryTheory.Bicategory.whiskerL…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem structuralIsoOfExpr_whiskerLeft (f : a ⟶ b) {g h : b ⟶ c}
     (η : g ⟶ h) (η' : g ≅ h) (ih_η : η'.hom = η) :
     (whiskerLeftIso f η').hom = f ◁ η := by
   simp [ih_η]
-
-/--
-theorem `structuralIsoOfExpr_whiskerRight` / 定理 `structuralIsoOfExpr_whiskerRight`
-
-English:
-theorem structuralIsoOfExpr_whiskerRight
-  statement: {f g : a ⟶ b} (h : b ⟶ c)
-  proof: by
-  simp [ih_η]
-
-中文:
-定理 structuralIsoOfExpr_whiskerRight
-  结论: {f g : a ⟶ b} (h : b ⟶ c)
-  证明: by
-  simp [ih_η]
+/-
+**Mathlib.Tactic.Bicategory.structuralIsoOfExpr_whiskerRight** 是 Mathlib 中的一个定理，
+位于命名空间 `Mathlib.Tactic.Bicategory`。
+形式化陈述：structuralIsoOfExpr_whiskerRight {f g : a ⟶ b} (h : b ⟶ c) (η : f ⟶ g) (η'
+ : f ≅ g) (ih_η : η'.hom = η) : (whiskerRightIso η' h).hom = η ▷ h
+参数：h : b ⟶ c；η : f ⟶ g；η' : f ≅ g；ih_η : η'.hom = η。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRightIso_hom`：∀ {B : Type u} [inst : Ca
+tegoryTheory.Bicategory B] {a b c : B} {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c),   
+(CategoryTheory.Bicategory.whiskerR…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem structuralIsoOfExpr_whiskerRight {f g : a ⟶ b} (h : b ⟶ c)
     (η : f ⟶ g) (η' : f ≅ g) (ih_η : η'.hom = η) :
     (whiskerRightIso η' h).hom = η ▷ h := by
   simp [ih_η]
-
-/--
-theorem `StructuralOfExpr_bicategoricalComp` / 定理 `StructuralOfExpr_bicategoricalComp`
-
-English:
-theorem StructuralOfExpr_bicategoricalComp
-  statement: {f g h i : a ⟶ b} [BicategoricalCoherence g h]
-  proof: by
-  simp [ih_η, ih_θ, bicategoricalIsoComp, bicategoricalComp]
-
-中文:
-定理 StructuralOfExpr_bicategoricalComp
-  结论: {f g h i : a ⟶ b} [BicategoricalCoherence g h]
-  证明: by
-  simp [ih_η, ih_θ, bicategoricalIsoComp, bicategoricalComp]
-
-Depends on / 依赖: bicategoricalComp, bicategoricalIsoComp
+/-
+**Mathlib.Tactic.Bicategory.StructuralOfExpr_bicategoricalComp** 是 Mathlib 中的一个定
+理，位于命名空间 `Mathlib.Tactic.Bicategory`。
+形式化陈述：StructuralOfExpr_bicategoricalComp {f g h i : a ⟶ b} [BicategoricalCoheren
+ce g h] (η : f ⟶ g) (η' : f ≅ g) (ih_η : η'.hom = η) (θ : h ⟶ i) (θ' : h ≅ i) (i
+h_θ : θ'.hom = θ) : (bicategoricalIsoComp η' θ').hom = η otimes≫ θ
+参数：η : f ⟶ g；η' : f ≅ g；ih_η : η'.hom = η；θ : h ⟶ i；θ' : h ≅ i；ih_θ : θ'.hom = θ
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem StructuralOfExpr_bicategoricalComp {f g h i : a ⟶ b} [BicategoricalCoherence g h]
     (η : f ⟶ g) (η' : f ≅ g) (ih_η : η'.hom = η) (θ : h ⟶ i) (θ' : h ≅ i) (ih_θ : θ'.hom = θ) :
-    (bicategoricalIsoComp η' θ').hom = η otimes≫ θ := by
+    (bicategoricalIsoComp η' θ').hom = η ⊗≫ θ := by
   simp [ih_η, ih_θ, bicategoricalIsoComp, bicategoricalComp]
 
 end
 
 open MonadMor₁
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonadMor₂Iso BicategoryM
-  body: do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have d : Q($ctx.B) := h.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    have h_e : Q($c ⟶ $d) := h.e
-    return .associator q(α_ $f_e $g_e $h_e) f g h
-  leftUnitorM f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    return .leftUnitor q(fun_ $f_e) f
-  rightUnitorM f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    return .rightUnitor q(ρ_ $f_e) f
-  id₂M f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    return .id q(Iso.refl $f_e) f
-  coherenceHomM f g inst := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have inst : Q(BicategoricalCoherence $f_e $g_e) := inst
-    match (← whnfI inst).getAppFnArgs with
-    | (``BicategoricalCoherence.mk, #[_, _, _, _, _, _, α]) =>
-      let e : Q($f_e ≅ $g_e) := q(BicategoricalCoherence.iso)
-      return ⟨e, f, g, inst, α⟩
-    | _ => throwError m!"failed to unfold {inst}"
-  comp₂M η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    have θ_e : Q($g_e ≅ $h_e) := θ.e
-    return .comp q($η_e ≪≫ $θ_e) f g h η θ
-  whiskerLeftM f η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let g ← η.srcM
-    let h ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($g_e ≅ $h_e) := η.e
-    return .whiskerLeft q(whiskerLeftIso $f_e $η_e) f g h η
-  whiskerRightM η h := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := h.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .whiskerRight q(whiskerRightIso $η_e $h_e) f g η h
-  horizontalCompM _ _ := throwError "horizontal composition is not implemented"
-  symmM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .inv q(Iso.symm $η_e) f g η
-  coherenceCompM α η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.srcM
-    let i ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have i_e : Q($a ⟶ $b) := i.e
-    have _inst : Q(BicategoricalCoherence $g_e $h_e) := α.inst
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    have θ_e : Q($h_e ≅ $i_e) := θ.e
-    return .coherenceComp q($η_e ≪otimes≫ $θ_e) f g h i α η θ
-
-中文:
-实例 :
-  签名: MonadMor₂Iso BicategoryM
-  定义体: do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have d : Q($ctx.B) := h.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    have h_e : Q($c ⟶ $d) := h.e
-    return .associator q(α_ $f_e $g_e $h_e) f g h
-  leftUnitorM f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    return .leftUnitor q(fun_ $f_e) f
-  rightUnitorM f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    return .rightUnitor q(ρ_ $f_e) f
-  id₂M f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    return .id q(Iso.refl $f_e) f
-  coherenceHomM f g inst := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have inst : Q(BicategoricalCoherence $f_e $g_e) := inst
-    match (← whnfI inst).getAppFnArgs with
-    | (``BicategoricalCoherence.mk, #[_, _, _, _, _, _, α]) =>
-      let e : Q($f_e ≅ $g_e) := q(BicategoricalCoherence.iso)
-      return ⟨e, f, g, inst, α⟩
-    | _ => throwError m!"failed to unfold {inst}"
-  comp₂M η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    have θ_e : Q($g_e ≅ $h_e) := θ.e
-    return .comp q($η_e ≪≫ $θ_e) f g h η θ
-  whiskerLeftM f η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let g ← η.srcM
-    let h ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($g_e ≅ $h_e) := η.e
-    return .whiskerLeft q(whiskerLeftIso $f_e $η_e) f g h η
-  whiskerRightM η h := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := h.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .whiskerRight q(whiskerRightIso $η_e $h_e) f g η h
-  horizontalCompM _ _ := throwError "horizontal composition is not implemented"
-  symmM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .inv q(Iso.symm $η_e) f g η
-  coherenceCompM α η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.srcM
-    let i ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have i_e : Q($a ⟶ $b) := i.e
-    have _inst : Q(BicategoricalCoherence $g_e $h_e) := α.inst
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    have θ_e : Q($h_e ≅ $i_e) := θ.e
-    return .coherenceComp q($η_e ≪otimes≫ $θ_e) f g h i α η θ
+/-
+**Mathlib.Tactic.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonadMor₂Iso BicategoryM where
   associatorM f g h := do
@@ -679,7 +329,7 @@ instance : MonadMor₂Iso BicategoryM where
     have a : Q($ctx.B) := f.src.e
     have b : Q($ctx.B) := f.tgt.e
     have f_e : Q($a ⟶ $b) := f.e
-    return .leftUnitor q(fun_ $f_e) f
+    return .leftUnitor q(λ_ $f_e) f
   rightUnitorM f := do
     let ctx ← read
     let _bicat := ctx.instBicategory
@@ -775,324 +425,13 @@ instance : MonadMor₂Iso BicategoryM where
     have _inst : Q(BicategoricalCoherence $g_e $h_e) := α.inst
     have η_e : Q($f_e ≅ $g_e) := η.e
     have θ_e : Q($h_e ≅ $i_e) := θ.e
-    return .coherenceComp q($η_e ≪otimes≫ $θ_e) f g h i α η θ
+    return .coherenceComp q($η_e ≪⊗≫ $θ_e) f g h i α η θ
 
 open MonadMor₂Iso
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonadMor₂ BicategoryM
-  body: do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    let e : Q($f_e ⟶ $g_e) := q(Iso.hom $η_e)
-    have eq : Q(Iso.hom $η_e = $e) := q(rfl)
-    return .isoHom q(Iso.hom $η_e) ⟨η, eq⟩ η
-  atomHomM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f := η.src
-    let g := η.tgt
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .mk q(Iso.hom $η_e) f g
-  invM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    let e : Q($g_e ⟶ $f_e) := q(Iso.inv $η_e)
-    let η_inv ← symmM η
-    let eq : Q(Iso.inv $η_e = $e) := q(Iso.symm_hom $η_e)
-    return .isoInv e ⟨η_inv, eq⟩ η
-  atomInvM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f := η.src
-    let g := η.tgt
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .mk q(Iso.inv $η_e) g f
-  id₂M f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    let e : Q($f_e ⟶ $f_e) := q(𝟙 $f_e)
-    let eq : Q(𝟙 $f_e = $e) := q(Iso.refl_hom $f_e)
-return .id e ⟨.structuralAtom ← id₂M f, eq⟩ f
-  comp₂M η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have η_e : Q($f_e ⟶ $g_e) := η.e
-    have θ_e : Q($g_e ⟶ $h_e) := θ.e
-    let iso_lift? ← (match (η.isoLift?, θ.isoLift?) with
-      | (some η_iso, some θ_iso) =>
-        have η_iso_e : Q($f_e ≅ $g_e) := η_iso.e.e
-        have θ_iso_e : Q($g_e ≅ $h_e) := θ_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        have θ_iso_eq : Q(Iso.hom $θ_iso_e = $θ_e) := θ_iso.eq
-        let eq := q(structuralIsoOfExpr_comp _ _ $η_iso_eq _ _ $θ_iso_eq)
-        return some ⟨← comp₂M η_iso.e θ_iso.e, eq⟩
-      | _ => return none)
-    let e : Q($f_e ⟶ $h_e) := q($η_e ≫ $θ_e)
-    return .comp e iso_lift? f g h η θ
-  whiskerLeftM f η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let g ← η.srcM
-    let h ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($g_e ⟶ $h_e) := η.e
-    let iso_lift? ← (match η.isoLift? with
-      | some η_iso => do
-        have η_iso_e : Q($g_e ≅ $h_e) := η_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        let eq := q(structuralIsoOfExpr_whiskerLeft $f_e _ _ $η_iso_eq)
-        return some ⟨← whiskerLeftM f η_iso.e, eq⟩
-      | _ => return none)
-    let e : Q($f_e ≫ $g_e ⟶ $f_e ≫ $h_e) := q($f_e ◁ $η_e)
-    return .whiskerLeft e iso_lift? f g h η
-  whiskerRightM η h := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := h.src.e
-    have c : Q($ctx.B) := h.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($f_e ⟶ $g_e) := η.e
-    let iso_lift? ← (match η.isoLift? with
-      | some η_iso => do
-        have η_iso_e : Q($f_e ≅ $g_e) := η_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        let eq := q(structuralIsoOfExpr_whiskerRight $h_e _ _ $η_iso_eq)
-        return some ⟨← whiskerRightM η_iso.e h, eq⟩
-      | _ => return none)
-    let e : Q($f_e ≫ $h_e ⟶ $g_e ≫ $h_e) := q($η_e ▷ $h_e)
-    return .whiskerRight e iso_lift? f g η h
-  horizontalCompM _ _ := throwError "horizontal composition is not implemented"
-  coherenceCompM α η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.srcM
-    let i ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have i_e : Q($a ⟶ $b) := i.e
-    have _inst : Q(BicategoricalCoherence $g_e $h_e) := α.inst
-    have η_e : Q($f_e ⟶ $g_e) := η.e
-    have θ_e : Q($h_e ⟶ $i_e) := θ.e
-    let iso_lift? ← (match (η.isoLift?, θ.isoLift?) with
-      | (some η_iso, some θ_iso) => do
-        have η_iso_e : Q($f_e ≅ $g_e) := η_iso.e.e
-        have θ_iso_e : Q($h_e ≅ $i_e) := θ_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        have θ_iso_eq : Q(Iso.hom $θ_iso_e = $θ_e) := θ_iso.eq
-        let eq := q(StructuralOfExpr_bicategoricalComp _ _ $η_iso_eq _ _ $θ_iso_eq)
-        return some ⟨← coherenceCompM α η_iso.e θ_iso.e, eq⟩
-      | _ => return none)
-    let e : Q($f_e ⟶ $i_e) := q($η_e otimes≫ $θ_e)
-    return .coherenceComp e iso_lift? f g h i α η θ
-
-中文:
-实例 :
-  签名: MonadMor₂ BicategoryM
-  定义体: do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    let e : Q($f_e ⟶ $g_e) := q(Iso.hom $η_e)
-    have eq : Q(Iso.hom $η_e = $e) := q(rfl)
-    return .isoHom q(Iso.hom $η_e) ⟨η, eq⟩ η
-  atomHomM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f := η.src
-    let g := η.tgt
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .mk q(Iso.hom $η_e) f g
-  invM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    let e : Q($g_e ⟶ $f_e) := q(Iso.inv $η_e)
-    let η_inv ← symmM η
-    let eq : Q(Iso.inv $η_e = $e) := q(Iso.symm_hom $η_e)
-    return .isoInv e ⟨η_inv, eq⟩ η
-  atomInvM η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f := η.src
-    let g := η.tgt
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have η_e : Q($f_e ≅ $g_e) := η.e
-    return .mk q(Iso.inv $η_e) g f
-  id₂M f := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    let e : Q($f_e ⟶ $f_e) := q(𝟙 $f_e)
-    let eq : Q(𝟙 $f_e = $e) := q(Iso.refl_hom $f_e)
-return .id e ⟨.structuralAtom ← id₂M f, eq⟩ f
-  comp₂M η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have η_e : Q($f_e ⟶ $g_e) := η.e
-    have θ_e : Q($g_e ⟶ $h_e) := θ.e
-    let iso_lift? ← (match (η.isoLift?, θ.isoLift?) with
-      | (some η_iso, some θ_iso) =>
-        have η_iso_e : Q($f_e ≅ $g_e) := η_iso.e.e
-        have θ_iso_e : Q($g_e ≅ $h_e) := θ_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        have θ_iso_eq : Q(Iso.hom $θ_iso_e = $θ_e) := θ_iso.eq
-        let eq := q(structuralIsoOfExpr_comp _ _ $η_iso_eq _ _ $θ_iso_eq)
-        return some ⟨← comp₂M η_iso.e θ_iso.e, eq⟩
-      | _ => return none)
-    let e : Q($f_e ⟶ $h_e) := q($η_e ≫ $θ_e)
-    return .comp e iso_lift? f g h η θ
-  whiskerLeftM f η := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let g ← η.srcM
-    let h ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have c : Q($ctx.B) := g.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($b ⟶ $c) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($g_e ⟶ $h_e) := η.e
-    let iso_lift? ← (match η.isoLift? with
-      | some η_iso => do
-        have η_iso_e : Q($g_e ≅ $h_e) := η_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        let eq := q(structuralIsoOfExpr_whiskerLeft $f_e _ _ $η_iso_eq)
-        return some ⟨← whiskerLeftM f η_iso.e, eq⟩
-      | _ => return none)
-    let e : Q($f_e ≫ $g_e ⟶ $f_e ≫ $h_e) := q($f_e ◁ $η_e)
-    return .whiskerLeft e iso_lift? f g h η
-  whiskerRightM η h := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := h.src.e
-    have c : Q($ctx.B) := h.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($b ⟶ $c) := h.e
-    have η_e : Q($f_e ⟶ $g_e) := η.e
-    let iso_lift? ← (match η.isoLift? with
-      | some η_iso => do
-        have η_iso_e : Q($f_e ≅ $g_e) := η_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        let eq := q(structuralIsoOfExpr_whiskerRight $h_e _ _ $η_iso_eq)
-        return some ⟨← whiskerRightM η_iso.e h, eq⟩
-      | _ => return none)
-    let e : Q($f_e ≫ $h_e ⟶ $g_e ≫ $h_e) := q($η_e ▷ $h_e)
-    return .whiskerRight e iso_lift? f g η h
-  horizontalCompM _ _ := throwError "horizontal composition is not implemented"
-  coherenceCompM α η θ := do
-    let ctx ← read
-    let _bicat := ctx.instBicategory
-    let f ← η.srcM
-    let g ← η.tgtM
-    let h ← θ.srcM
-    let i ← θ.tgtM
-    have a : Q($ctx.B) := f.src.e
-    have b : Q($ctx.B) := f.tgt.e
-    have f_e : Q($a ⟶ $b) := f.e
-    have g_e : Q($a ⟶ $b) := g.e
-    have h_e : Q($a ⟶ $b) := h.e
-    have i_e : Q($a ⟶ $b) := i.e
-    have _inst : Q(BicategoricalCoherence $g_e $h_e) := α.inst
-    have η_e : Q($f_e ⟶ $g_e) := η.e
-    have θ_e : Q($h_e ⟶ $i_e) := θ.e
-    let iso_lift? ← (match (η.isoLift?, θ.isoLift?) with
-      | (some η_iso, some θ_iso) => do
-        have η_iso_e : Q($f_e ≅ $g_e) := η_iso.e.e
-        have θ_iso_e : Q($h_e ≅ $i_e) := θ_iso.e.e
-        have η_iso_eq : Q(Iso.hom $η_iso_e = $η_e) := η_iso.eq
-        have θ_iso_eq : Q(Iso.hom $θ_iso_e = $θ_e) := θ_iso.eq
-        let eq := q(StructuralOfExpr_bicategoricalComp _ _ $η_iso_eq _ _ $θ_iso_eq)
-        return some ⟨← coherenceCompM α η_iso.e θ_iso.e, eq⟩
-      | _ => return none)
-    let e : Q($f_e ⟶ $i_e) := q($η_e otimes≫ $θ_e)
-    return .coherenceComp e iso_lift? f g h i α η θ
+/-
+**Mathlib.Tactic.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonadMor₂ BicategoryM where
   homM η := do
@@ -1152,7 +491,7 @@ instance : MonadMor₂ BicategoryM where
     have f_e : Q($a ⟶ $b) := f.e
     let e : Q($f_e ⟶ $f_e) := q(𝟙 $f_e)
     let eq : Q(𝟙 $f_e = $e) := q(Iso.refl_hom $f_e)
-return .id e ⟨.structuralAtom ← id₂M f, eq⟩ f
+    return .id e ⟨.structuralAtom <| ← id₂M f, eq⟩ f
   comp₂M η θ := do
     let ctx ← read
     let _bicat := ctx.instBicategory
@@ -1245,89 +584,38 @@ return .id e ⟨.structuralAtom ← id₂M f, eq⟩ f
         let eq := q(StructuralOfExpr_bicategoricalComp _ _ $η_iso_eq _ _ $θ_iso_eq)
         return some ⟨← coherenceCompM α η_iso.e θ_iso.e, eq⟩
       | _ => return none)
-    let e : Q($f_e ⟶ $i_e) := q($η_e otimes≫ $θ_e)
+    let e : Q($f_e ⟶ $i_e) := q($η_e ⊗≫ $θ_e)
     return .coherenceComp e iso_lift? f g h i α η θ
 
-/--
-Definition of `id₁?` / `id₁?` 的定义
+/-- Check that `e` is definitionally equal to `𝟙 a`. -/
+/-
+**Mathlib.Tactic.Bicategory.id** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bicateg
+ory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id₁?
-  signature: (e : Expr)
-  body: do
-  let ctx ← read
-  let _bicat := ctx.instBicategory
-  let a : Q($ctx.B) ← mkFreshExprMVar ctx.B
-if ← withDefault isDefEq e q(𝟙 $a) then
-    return some ⟨← instantiateMVars a⟩
-  else
-    return none
-
-中文:
-定义 id₁?
-  签名: (e : Expr)
-  定义体: do
-  let ctx ← read
-  let _bicat := ctx.instBicategory
-  let a : Q($ctx.B) ← mkFreshExprMVar ctx.B
-if ← withDefault isDefEq e q(𝟙 $a) then
-    return some ⟨← instantiateMVars a⟩
-  else
-    return none
+--- 原说明 ---
+Check that `e` is definitionally equal to `𝟙 a`.
 -/
 def id₁? (e : Expr) : BicategoryM (Option Obj) := do
   let ctx ← read
   let _bicat := ctx.instBicategory
   let a : Q($ctx.B) ← mkFreshExprMVar ctx.B
-if ← withDefault isDefEq e q(𝟙 $a) then
+  if ← withDefault <| isDefEq e q(𝟙 $a) then
     return some ⟨← instantiateMVars a⟩
   else
     return none
 
-/--
-Definition of `comp?` / `comp?` 的定义
+/-- Return `(f, g)` if `e` is definitionally equal to `f ≫ g`. -/
+/-
+**Mathlib.Tactic.Bicategory.comp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bicat
+egory`。
+形式化陈述：comp? (e : Expr) : BicategoryM (Option (Mor₁ × Mor₁))
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp?
-  signature: (e : Expr)
-  body: do
-  let ctx ← read
-  let _bicat := ctx.instBicategory
-  let a ← mkFreshExprMVarQ ctx.B
-  let b ← mkFreshExprMVarQ ctx.B
-  let c ← mkFreshExprMVarQ ctx.B
-  let f ← mkFreshExprMVarQ q($a ⟶ $b)
-  let g ← mkFreshExprMVarQ q($b ⟶ $c)
-if ← withDefault isDefEq e q($f ≫ $g) then
-    let a ← instantiateMVars a
-    let b ← instantiateMVars b
-    let c ← instantiateMVars c
-    let f ← instantiateMVars f
-    let g ← instantiateMVars g
-    return some ((.of ⟨f, ⟨a⟩, ⟨b⟩⟩), .of ⟨g, ⟨b⟩, ⟨c⟩⟩)
-  else
-    return none
-
-中文:
-定义 comp?
-  签名: (e : Expr)
-  定义体: do
-  let ctx ← read
-  let _bicat := ctx.instBicategory
-  let a ← mkFreshExprMVarQ ctx.B
-  let b ← mkFreshExprMVarQ ctx.B
-  let c ← mkFreshExprMVarQ ctx.B
-  let f ← mkFreshExprMVarQ q($a ⟶ $b)
-  let g ← mkFreshExprMVarQ q($b ⟶ $c)
-if ← withDefault isDefEq e q($f ≫ $g) then
-    let a ← instantiateMVars a
-    let b ← instantiateMVars b
-    let c ← instantiateMVars c
-    let f ← instantiateMVars f
-    let g ← instantiateMVars g
-    return some ((.of ⟨f, ⟨a⟩, ⟨b⟩⟩), .of ⟨g, ⟨b⟩, ⟨c⟩⟩)
-  else
-    return none
+--- 原说明 ---
+Return `(f, g)` if `e` is definitionally equal to `f ≫ g`.
 -/
 def comp? (e : Expr) : BicategoryM (Option (Mor₁ × Mor₁)) := do
   let ctx ← read
@@ -1337,7 +625,7 @@ def comp? (e : Expr) : BicategoryM (Option (Mor₁ × Mor₁)) := do
   let c ← mkFreshExprMVarQ ctx.B
   let f ← mkFreshExprMVarQ q($a ⟶ $b)
   let g ← mkFreshExprMVarQ q($b ⟶ $c)
-if ← withDefault isDefEq e q($f ≫ $g) then
+  if ← withDefault <| isDefEq e q($f ≫ $g) then
     let a ← instantiateMVars a
     let b ← instantiateMVars b
     let c ← instantiateMVars c
@@ -1347,46 +635,14 @@ if ← withDefault isDefEq e q($f ≫ $g) then
   else
     return none
 
-/--
-Definition of `mor₁OfExpr` / `mor₁OfExpr` 的定义
+/-- Construct a `Mor₁` expression from a Lean expression. -/
+/-
+**Mathlib.Tactic.Bicategory.mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bicate
+gory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mor₁OfExpr
-  signature: (e : Expr)
-  body: do
-  let e ← instantiateMVars e
-  if e.hasExprMVar then
-    throwError m!"expression contains metavariables:\n{e}"
-  if let some f := (← get).cache.find? e then
-    return f
-  let f ←
-    if let some a ← id₁? e then
-      MonadMor₁.id₁M a
-    else if let some (f, g) ← comp? e then
-      MonadMor₁.comp₁M (← mor₁OfExpr f.e) (← mor₁OfExpr g.e)
-    else
-      return Mor₁.of ⟨e, ⟨← srcExpr e⟩, ⟨ ← tgtExpr e⟩⟩
-  modify fun s => { s with cache := s.cache.insert e f }
-  return f
-
-中文:
-定义 mor₁OfExpr
-  签名: (e : Expr)
-  定义体: do
-  let e ← instantiateMVars e
-  if e.hasExprMVar then
-    throwError m!"expression contains metavariables:\n{e}"
-  if let some f := (← get).cache.find? e then
-    return f
-  let f ←
-    if let some a ← id₁? e then
-      MonadMor₁.id₁M a
-    else if let some (f, g) ← comp? e then
-      MonadMor₁.comp₁M (← mor₁OfExpr f.e) (← mor₁OfExpr g.e)
-    else
-      return Mor₁.of ⟨e, ⟨← srcExpr e⟩, ⟨ ← tgtExpr e⟩⟩
-  modify fun s => { s with cache := s.cache.insert e f }
-  return f
+--- 原说明 ---
+Construct a `Mor₁` expression from a Lean expression.
 -/
 partial def mor₁OfExpr (e : Expr) : BicategoryM Mor₁ := do
   let e ← instantiateMVars e
@@ -1403,83 +659,22 @@ partial def mor₁OfExpr (e : Expr) : BicategoryM Mor₁ := do
       return Mor₁.of ⟨e, ⟨← srcExpr e⟩, ⟨ ← tgtExpr e⟩⟩
   modify fun s => { s with cache := s.cache.insert e f }
   return f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MkMor₁ BicategoryM
-  body: mor₁OfExpr
-
-中文:
-实例 :
-  签名: MkMor₁ BicategoryM
-  定义体: mor₁OfExpr
+/-
+**Mathlib.Tactic.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MkMor₁ BicategoryM where
   ofExpr := mor₁OfExpr
 
-/--
-Definition of `Mor₂IsoOfExpr` / `Mor₂IsoOfExpr` 的定义
+/-- Construct a `Mor₂Iso` term from a Lean expression. -/
+/-
+**Mathlib.Tactic.Bicategory.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bicate
+gory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂IsoOfExpr
-  signature: (e : Expr)
-  body: do
-  match (← whnfR e).getAppFnArgs with
-  | (``Bicategory.associator, #[_, _, _, _, _, _, f, g, h]) =>
-    associatorM' (← MkMor₁.ofExpr f) (← MkMor₁.ofExpr g) (← MkMor₁.ofExpr h)
-  | (``Bicategory.leftUnitor, #[_, _, _, _, f]) =>
-    leftUnitorM' (← MkMor₁.ofExpr f)
-  | (``Bicategory.rightUnitor, #[_, _, _, _, f]) =>
-    rightUnitorM' (← MkMor₁.ofExpr f)
-  | (``Iso.refl, #[_, _, f]) =>
-    id₂M' (← MkMor₁.ofExpr f)
-  | (``Iso.symm, #[_, _, _, _, η]) =>
-    symmM (← Mor₂IsoOfExpr η)
-  | (``Iso.trans, #[_, _, _, _, _, η, θ]) =>
-    comp₂M (← Mor₂IsoOfExpr η) (← Mor₂IsoOfExpr θ)
-  | (``Bicategory.whiskerLeftIso, #[_, _, _, _, _, f, _, _, η]) =>
-    whiskerLeftM (← MkMor₁.ofExpr f) (← Mor₂IsoOfExpr η)
-  | (``Bicategory.whiskerRightIso, #[_, _, _, _, _, _, _, η, h]) =>
-    whiskerRightM (← Mor₂IsoOfExpr η) (← MkMor₁.ofExpr h)
-  | (``bicategoricalIsoComp, #[_, _, _, _, _, g, h, _, inst, η, θ]) =>
-    let α ← coherenceHomM (← MkMor₁.ofExpr g) (← MkMor₁.ofExpr h) inst
-    coherenceCompM α (← Mor₂IsoOfExpr η) (← Mor₂IsoOfExpr θ)
-  | (``BicategoricalCoherence.iso, #[_, _, _, _, f, g, inst]) =>
-    coherenceHomM' (← MkMor₁.ofExpr f) (← MkMor₁.ofExpr g) inst
-  | _ =>
-    return .of ⟨e, ← MkMor₁.ofExpr (← srcExprOfIso e), ← MkMor₁.ofExpr (← tgtExprOfIso e)⟩
-
-中文:
-定义 Mor₂IsoOfExpr
-  签名: (e : Expr)
-  定义体: do
-  match (← whnfR e).getAppFnArgs with
-  | (``Bicategory.associator, #[_, _, _, _, _, _, f, g, h]) =>
-    associatorM' (← MkMor₁.ofExpr f) (← MkMor₁.ofExpr g) (← MkMor₁.ofExpr h)
-  | (``Bicategory.leftUnitor, #[_, _, _, _, f]) =>
-    leftUnitorM' (← MkMor₁.ofExpr f)
-  | (``Bicategory.rightUnitor, #[_, _, _, _, f]) =>
-    rightUnitorM' (← MkMor₁.ofExpr f)
-  | (``Iso.refl, #[_, _, f]) =>
-    id₂M' (← MkMor₁.ofExpr f)
-  | (``Iso.symm, #[_, _, _, _, η]) =>
-    symmM (← Mor₂IsoOfExpr η)
-  | (``Iso.trans, #[_, _, _, _, _, η, θ]) =>
-    comp₂M (← Mor₂IsoOfExpr η) (← Mor₂IsoOfExpr θ)
-  | (``Bicategory.whiskerLeftIso, #[_, _, _, _, _, f, _, _, η]) =>
-    whiskerLeftM (← MkMor₁.ofExpr f) (← Mor₂IsoOfExpr η)
-  | (``Bicategory.whiskerRightIso, #[_, _, _, _, _, _, _, η, h]) =>
-    whiskerRightM (← Mor₂IsoOfExpr η) (← MkMor₁.ofExpr h)
-  | (``bicategoricalIsoComp, #[_, _, _, _, _, g, h, _, inst, η, θ]) =>
-    let α ← coherenceHomM (← MkMor₁.ofExpr g) (← MkMor₁.ofExpr h) inst
-    coherenceCompM α (← Mor₂IsoOfExpr η) (← Mor₂IsoOfExpr θ)
-  | (``BicategoricalCoherence.iso, #[_, _, _, _, f, g, inst]) =>
-    coherenceHomM' (← MkMor₁.ofExpr f) (← MkMor₁.ofExpr g) inst
-  | _ =>
-    return .of ⟨e, ← MkMor₁.ofExpr (← srcExprOfIso e), ← MkMor₁.ofExpr (← tgtExprOfIso e)⟩
+--- 原说明 ---
+Construct a `Mor₂Iso` term from a Lean expression.
 -/
 partial def Mor₂IsoOfExpr (e : Expr) : BicategoryM Mor₂Iso := do
   match (← whnfR e).getAppFnArgs with
@@ -1508,56 +703,14 @@ partial def Mor₂IsoOfExpr (e : Expr) : BicategoryM Mor₂Iso := do
     return .of ⟨e, ← MkMor₁.ofExpr (← srcExprOfIso e), ← MkMor₁.ofExpr (← tgtExprOfIso e)⟩
 
 open MonadMor₂ in
-/--
-Definition of `Mor₂OfExpr` / `Mor₂OfExpr` 的定义
+/-- Construct a `Mor₂` term from a Lean expression. -/
+/-
+**Mathlib.Tactic.Bicategory.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bicate
+gory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂OfExpr
-  signature: (e : Expr)
-  body: do
-  match ← whnfR e with
-  -- whnfR version of `Iso.hom η`
-  | .proj ``Iso 0 η => homM (← Mor₂IsoOfExpr η)
-  -- whnfR version of `Iso.inv η`
-  | .proj ``Iso 1 η => invM (← Mor₂IsoOfExpr η)
-  | .app .. => match (← whnfR e).getAppFnArgs with
-    | (``CategoryStruct.id, #[_, _, f]) => id₂M (← MkMor₁.ofExpr f)
-    | (``CategoryStruct.comp, #[_, _, _, _, _, η, θ]) =>
-      comp₂M (← Mor₂OfExpr η) (← Mor₂OfExpr θ)
-    | (``Bicategory.whiskerLeft, #[_, _, _, _, _, f, _, _, η]) =>
-      whiskerLeftM (← MkMor₁.ofExpr f) (← Mor₂OfExpr η)
-    | (``Bicategory.whiskerRight, #[_, _, _, _, _, _, _, η, h]) =>
-      whiskerRightM (← Mor₂OfExpr η) (← MkMor₁.ofExpr h)
-    | (``bicategoricalComp, #[_, _, _, _, _, g, h, _, inst, η, θ]) =>
-      let α ← coherenceHomM (← MkMor₁.ofExpr g) (← MkMor₁.ofExpr h) inst
-      coherenceCompM α (← Mor₂OfExpr η) (← Mor₂OfExpr θ)
-    | _ => return .of ⟨e, ← MkMor₁.ofExpr (← srcExpr e), ← MkMor₁.ofExpr (← tgtExpr e)⟩
-  | _ =>
-    return .of ⟨e, ← MkMor₁.ofExpr (← srcExpr e), ← MkMor₁.ofExpr (← tgtExpr e)⟩
-
-中文:
-定义 Mor₂OfExpr
-  签名: (e : Expr)
-  定义体: do
-  match ← whnfR e with
-  -- whnfR version of `Iso.hom η`
-  | .proj ``Iso 0 η => homM (← Mor₂IsoOfExpr η)
-  -- whnfR version of `Iso.inv η`
-  | .proj ``Iso 1 η => invM (← Mor₂IsoOfExpr η)
-  | .app .. => match (← whnfR e).getAppFnArgs with
-    | (``CategoryStruct.id, #[_, _, f]) => id₂M (← MkMor₁.ofExpr f)
-    | (``CategoryStruct.comp, #[_, _, _, _, _, η, θ]) =>
-      comp₂M (← Mor₂OfExpr η) (← Mor₂OfExpr θ)
-    | (``Bicategory.whiskerLeft, #[_, _, _, _, _, f, _, _, η]) =>
-      whiskerLeftM (← MkMor₁.ofExpr f) (← Mor₂OfExpr η)
-    | (``Bicategory.whiskerRight, #[_, _, _, _, _, _, _, η, h]) =>
-      whiskerRightM (← Mor₂OfExpr η) (← MkMor₁.ofExpr h)
-    | (``bicategoricalComp, #[_, _, _, _, _, g, h, _, inst, η, θ]) =>
-      let α ← coherenceHomM (← MkMor₁.ofExpr g) (← MkMor₁.ofExpr h) inst
-      coherenceCompM α (← Mor₂OfExpr η) (← Mor₂OfExpr θ)
-    | _ => return .of ⟨e, ← MkMor₁.ofExpr (← srcExpr e), ← MkMor₁.ofExpr (← tgtExpr e)⟩
-  | _ =>
-    return .of ⟨e, ← MkMor₁.ofExpr (← srcExpr e), ← MkMor₁.ofExpr (← tgtExpr e)⟩
+--- 原说明 ---
+Construct a `Mor₂` term from a Lean expression.
 -/
 partial def Mor₂OfExpr (e : Expr) : BicategoryM Mor₂ := do
   match ← whnfR e with
@@ -1579,37 +732,20 @@ partial def Mor₂OfExpr (e : Expr) : BicategoryM Mor₂ := do
     | _ => return .of ⟨e, ← MkMor₁.ofExpr (← srcExpr e), ← MkMor₁.ofExpr (← tgtExpr e)⟩
   | _ =>
     return .of ⟨e, ← MkMor₁.ofExpr (← srcExpr e), ← MkMor₁.ofExpr (← tgtExpr e)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BicategoryLike.MkMor₂ BicategoryM
-  body: Mor₂OfExpr
-
-中文:
-实例 :
-  签名: BicategoryLike.MkMor₂ BicategoryM
-  定义体: Mor₂OfExpr
+/-
+**Mathlib.Tactic.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BicategoryLike.MkMor₂ BicategoryM where
   ofExpr := Mor₂OfExpr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonadCoherehnceHom BicategoryM
-  body: Mor₂IsoOfExpr α.unfold
-
-中文:
-实例 :
-  签名: MonadCoherehnce态射 BicategoryM
-  定义体: Mor₂IsoOfExpr α.unfold
+/-
+**Mathlib.Tactic.Bicategory.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Bicategor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonadCoherehnceHom BicategoryM where
   unfoldM α := Mor₂IsoOfExpr α.unfold
 
 end Mathlib.Tactic.Bicategory
+

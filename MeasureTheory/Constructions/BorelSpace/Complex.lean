@@ -15,40 +15,31 @@ public section
 
 noncomputable section
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) RCLike.measurableSpace {𝕜 : Type*} [RCLike 𝕜] : MeasurableSpace 𝕜 :=
   borel 𝕜
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) RCLike.borelSpace {𝕜 : Type*} [RCLike 𝕜] : BorelSpace 𝕜 :=
   ⟨rfl⟩
-
-/--
-Instance `Complex.measurableSpace` / 实例 `Complex.measurableSpace`
-
-English:
-instance Complex.measurableSpace
-  signature: : MeasurableSpace Complex
-  body: borel Complex
-
-中文:
-实例 复形.measurableSpace
-  签名: : 可测空间 复形
-  定义体: borel Complex
+/-
+**Complex.measurableSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Complex.measurableSpace : MeasurableSpace Complex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Complex.measurableSpace : MeasurableSpace Complex :=
-  borel Complex
-
-/--
-Instance `Complex.borelSpace` / 实例 `Complex.borelSpace`
-
-English:
-instance Complex.borelSpace
-  signature: : BorelSpace Complex
-  body: ⟨rfl⟩
-
-中文:
-实例 复形.borelSpace
-  签名: : Borel空间 复形
-  定义体: ⟨rfl⟩
+instance Complex.measurableSpace : MeasurableSpace ℂ :=
+  borel ℂ
+/-
+**Complex.borelSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Complex.borelSpace : BorelSpace Complex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Complex.borelSpace : BorelSpace Complex :=
+instance Complex.borelSpace : BorelSpace ℂ :=
   ⟨rfl⟩

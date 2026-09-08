@@ -20,33 +20,27 @@ Note that we already have `Stream` to represent a similar object, hence the awkw
 universe u v w
 variable {α : Type u} {β : Type v} {δ : Type w}
 
-/--
-Definition of `Stream'` / `Stream'` 的定义
+/-- A stream `Stream' α` is an infinite sequence of elements of `α`. -/
+/-
+**Stream'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Stream' (α : Type u)
+参数：α : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Stream'
-  signature: (α : Type u)
-  body: Nat -> α
-
-中文:
-定义 Stream'
-  签名: (α : 类型u)
-  定义体: Nat -> α
+--- 原说明 ---
+A stream `Stream' α` is an infinite sequence of elements of `α`.
 -/
-def Stream' (α : Type u) := Nat -> α
+def Stream' (α : Type u) := ℕ → α
 
 namespace Stream'
 
-/--
-Definition of `cons` / `cons` 的定义
+/-- Prepend an element to a stream. -/
+/-
+**Stream.cons** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cons
-  signature: (a : α) (s : Stream' α)
-
-中文:
-定义 cons
-  签名: (a : α) (s : Stream' α)
+--- 原说明 ---
+Prepend an element to a stream.
 -/
 def cons (a : α) (s : Stream' α) : Stream' α
   | 0 => a
@@ -54,522 +48,373 @@ def cons (a : α) (s : Stream' α) : Stream' α
 
 @[inherit_doc] scoped infixr:67 " :: " => cons
 
-/--
-Definition of `get` / `get` 的定义
+/-- Get the `n`-th element of a stream. -/
+/-
+**Stream.get** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition get
-  signature: (s : Stream' α) (n : Nat)
-  body: s n
-
-中文:
-定义 get
-  签名: (s : Stream' α) (n : 自然数)
-  定义体: s n
+--- 原说明 ---
+Get the `n`-th element of a stream.
 -/
-def get (s : Stream' α) (n : Nat) : α := s n
+def get (s : Stream' α) (n : ℕ) : α := s n
 
-/--
-Definition of `head` / `head` 的定义
+/-- Head of a stream: `Stream'.head s = Stream'.get s 0`. -/
+/-
+**Stream.head** 是 Mathlib 中的一个缩写定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation head
-  signature: (s : Stream' α)
-  body: s.get 0
-
-中文:
-缩写 head
-  签名: (s : Stream' α)
-  定义体: s.get 0
-
-Depends on / 依赖: s.get
+--- 原说明 ---
+Head of a stream: `Stream'.head s = Stream'.get s 0`.
 -/
 abbrev head (s : Stream' α) : α := s.get 0
 
-/--
-Definition of `tail` / `tail` 的定义
+/-- Tail of a stream: `Stream'.tail (h :: t) = t`. -/
+/-
+**Stream.tail** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tail
-  signature: (s : Stream' α)
-  body: fun i => s.get (i + 1)
-
-中文:
-定义 tail
-  签名: (s : Stream' α)
-  定义体: fun i => s.get (i + 1)
-
-Depends on / 依赖: s.get
+--- 原说明 ---
+Tail of a stream: `Stream'.tail (h :: t) = t`.
 -/
 def tail (s : Stream' α) : Stream' α := fun i => s.get (i + 1)
 
-/--
-Definition of `drop` / `drop` 的定义
+/-- Drop first `n` elements of a stream. -/
+/-
+**Stream.drop** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition drop
-  signature: (n : Nat) (s : Stream' α)
-  body: fun i => s.get (i + n)
-
-中文:
-定义 drop
-  签名: (n : 自然数) (s : Stream' α)
-  定义体: fun i => s.get (i + n)
-
-Depends on / 依赖: s.get
+--- 原说明 ---
+Drop first `n` elements of a stream.
 -/
-def drop (n : Nat) (s : Stream' α) : Stream' α := fun i => s.get (i + n)
+def drop (n : ℕ) (s : Stream' α) : Stream' α := fun i => s.get (i + n)
 
-/--
-Definition of `All` / `All` 的定义
+/-- Proposition saying that all elements of a stream satisfy a predicate. -/
+/-
+**Stream.All** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition All
-  signature: (p : α -> Prop) (s : Stream' α)
-  body: forall n, p (get s n)
-
-中文:
-定义 All
-  签名: (p : α -> 命题) (s : Stream' α)
-  定义体: forall n, p (get s n)
+--- 原说明 ---
+Proposition saying that all elements of a stream satisfy a predicate.
 -/
-def All (p : α -> Prop) (s : Stream' α) := forall n, p (get s n)
+def All (p : α → Prop) (s : Stream' α) := ∀ n, p (get s n)
 
-/--
-Definition of `Any` / `Any` 的定义
+/-- Proposition saying that at least one element of a stream satisfies a predicate. -/
+/-
+**Stream.Any** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Any
-  signature: (p : α -> Prop) (s : Stream' α)
-  body: exists n, p (get s n)
-
-中文:
-定义 Any
-  签名: (p : α -> 命题) (s : Stream' α)
-  定义体: exists n, p (get s n)
+--- 原说明 ---
+Proposition saying that at least one element of a stream satisfies a predicate.
 -/
-def Any (p : α -> Prop) (s : Stream' α) := exists n, p (get s n)
+def Any (p : α → Prop) (s : Stream' α) := ∃ n, p (get s n)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `a ∈ s` means that `a = Stream'.get n s` for some `n`. -/
+/-
+**Stream.** 是 Mathlib 中的一个实例，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Membership α (Stream' α)
-  body: ⟨fun s a => Any (fun b => a = b) s⟩
-
-中文:
-实例 :
-  签名: Membership α (Stream' α)
-  定义体: ⟨fun s a => Any (fun b => a = b) s⟩
+--- 原说明 ---
+`a ∈ s` means that `a = Stream'.get n s` for some `n`.
 -/
 instance : Membership α (Stream' α) :=
   ⟨fun s a => Any (fun b => a = b) s⟩
 
-/--
-Definition of `map` / `map` 的定义
+/-- Apply a function `f` to all elements of a stream `s`. -/
+/-
+**Stream.map** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β) (s : Stream' α)
-  body: fun n => f (get s n)
-
-中文:
-定义 map
-  签名: (f : α -> β) (s : Stream' α)
-  定义体: fun n => f (get s n)
+--- 原说明 ---
+Apply a function `f` to all elements of a stream `s`.
 -/
-def map (f : α -> β) (s : Stream' α) : Stream' β := fun n => f (get s n)
+def map (f : α → β) (s : Stream' α) : Stream' β := fun n => f (get s n)
 
-/--
-Definition of `zip` / `zip` 的定义
+/-- Zip two streams using a binary operation:
+`Stream'.get n (Stream'.zip f s₁ s₂) = f (Stream'.get s₁) (Stream'.get s₂)`. -/
+/-
+**Stream.zip** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zip
-  signature: (f : α -> β -> δ) (s₁ : Stream' α) (s₂ : Stream' β)
-  body: fun n => f (get s₁ n) (get s₂ n)
-
-中文:
-定义 zip
-  签名: (f : α -> β -> δ) (s₁ : Stream' α) (s₂ : Stream' β)
-  定义体: fun n => f (get s₁ n) (get s₂ n)
+--- 原说明 ---
+Zip two streams using a binary operation:
+`Stream'.get n (Stream'.zip f s₁ s₂) = f (Stream'.get s₁) (Stream'.get s₂)`.
 -/
-def zip (f : α -> β -> δ) (s₁ : Stream' α) (s₂ : Stream' β) : Stream' δ :=
+def zip (f : α → β → δ) (s₁ : Stream' α) (s₂ : Stream' β) : Stream' δ :=
   fun n => f (get s₁ n) (get s₂ n)
 
-/--
-Definition of `enum` / `enum` 的定义
+/-- Enumerate a stream by tagging each element with its index. -/
+/-
+**Stream.enum** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enum
-  signature: (s : Stream' α)
-  body: fun n => (n, s.get n)
-
-中文:
-定义 enum
-  签名: (s : Stream' α)
-  定义体: fun n => (n, s.get n)
-
-Depends on / 依赖: s.get
+--- 原说明 ---
+Enumerate a stream by tagging each element with its index.
 -/
-def enum (s : Stream' α) : Stream' (Nat × α) := fun n => (n, s.get n)
+def enum (s : Stream' α) : Stream' (ℕ × α) := fun n => (n, s.get n)
 
-/--
-Definition of `const` / `const` 的定义
+/-- The constant stream: `Stream'.get n (Stream'.const a) = a`. -/
+/-
+**Stream.const** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: (a : α)
-  body: fun _ => a
-
-中文:
-定义 const
-  签名: (a : α)
-  定义体: fun _ => a
+--- 原说明 ---
+The constant stream: `Stream'.get n (Stream'.const a) = a`.
 -/
 def const (a : α) : Stream' α := fun _ => a
 
-/--
-Definition of `iterate` / `iterate` 的定义
+/-- Iterates of a function as a stream. -/
+/-
+**Stream.iterate** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterate
-  signature: (f : α -> α) (a : α)
-
-中文:
-定义 iterate
-  签名: (f : α -> α) (a : α)
+--- 原说明 ---
+Iterates of a function as a stream.
 -/
-def iterate (f : α -> α) (a : α) : Stream' α
+def iterate (f : α → α) (a : α) : Stream' α
   | 0 => a
   | n + 1 => f (iterate f a n)
 
-/--
-Definition of `corec` / `corec` 的定义
-
-English:
-definition corec
-  signature: (f : α -> β) (g : α -> α)
-  body: fun a => map f (iterate g a)
-
-中文:
-定义 corec
-  签名: (f : α -> β) (g : α -> α)
-  定义体: fun a => map f (iterate g a)
-
-Depends on / 依赖: iterate
+/-- Given functions `f : α → β` and `g : α → α`, `corec f g` creates a stream by:
+1. Starting with an initial value `a : α`
+2. Applying `g` repeatedly to get a stream of α values
+3. Applying `f` to each value to convert them to β
 -/
-def corec (f : α -> β) (g : α -> α) : α -> Stream' β := fun a => map f (iterate g a)
+/-
+**Stream.corec** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `corecOn` / `corecOn` 的定义
-
-English:
-definition corecOn
-  signature: (a : α) (f : α -> β) (g : α -> α)
-  body: corec f g a
-
-中文:
-定义 corecOn
-  签名: (a : α) (f : α -> β) (g : α -> α)
-  定义体: corec f g a
+--- 原说明 ---
+Given functions `f : α → β` and `g : α → α`, `corec f g` creates a stream by:
+1. Starting with an initial value `a : α`
+2. Applying `g` repeatedly to get a stream of α values
+3. Applying `f` to each value to convert them to β
 -/
-def corecOn (a : α) (f : α -> β) (g : α -> α) : Stream' β :=
+def corec (f : α → β) (g : α → α) : α → Stream' β := fun a => map f (iterate g a)
+
+/-- Given an initial value `a : α` and functions `f : α → β` and `g : α → α`,
+`corecOn a f g` creates a stream by repeatedly:
+1. Applying `f` to the current value to get the next stream element
+2. Applying `g` to get the next value to process
+
+This is equivalent to `corec f g a`. -/
+/-
+**Stream.corecOn** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given an initial value `a : α` and functions `f : α → β` and `g : α → α`,
+`corecOn a f g` creates a stream by repeatedly:
+1. Applying `f` to the current value to get the next stream element
+2. Applying `g` to get the next value to process
+
+This is equivalent to `corec f g a`.
+-/
+def corecOn (a : α) (f : α → β) (g : α → α) : Stream' β :=
   corec f g a
 
-/--
-Definition of `corec'` / `corec'` 的定义
+/-- Given a function `f : α → β × α`, `corec' f` creates a stream by repeatedly:
+1. Starting with an initial value `a : α`
+2. Applying `f` to get both the next stream element (β) and next state value (α)
 
-English:
-definition corec'
-  signature: (f : α -> β × α)
-  body: corec (Prod.fst ∘ f) (Prod.snd ∘ f)
+This is a more convenient form when the next element and state are computed together. -/
+/-
+**Stream.corec'** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 corec'
-  签名: (f : α -> β × α)
-  定义体: corec (Prod.fst ∘ f) (Prod.snd ∘ f)
+--- 原说明 ---
+Given a function `f : α → β × α`, `corec' f` creates a stream by repeatedly:
+1. Starting with an initial value `a : α`
+2. Applying `f` to get both the next stream element (β) and next state value (α)
 
-Depends on / 依赖: CommGroup, CommGroup.center_eq_top, CommGroup.isNilpotent, IsNilpotent, Prod.fst, Prod.snd, center_eq_top, isNilpotent, upperCentralSeries_one
+This is a more convenient form when the next element and state are computed toge
+ther.
 -/
-def corec' (f : α -> β × α) : α -> Stream' β :=
+def corec' (f : α → β × α) : α → Stream' β :=
   corec (Prod.fst ∘ f) (Prod.snd ∘ f)
 
-/--
-Definition of `corecState` / `corecState` 的定义
+/-- Use a state monad to generate a stream through corecursion -/
+/-
+**Stream.corecState** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition corecState
-  signature: {σ α} (cmd : StateM σ α) (s : σ)
-  body: corec Prod.fst (cmd.run ∘ Prod.snd) (cmd.run s)
-
-中文:
-定义 corecState
-  签名: {σ α} (cmd : StateM σ α) (s : σ)
-  定义体: corec Prod.fst (cmd.run ∘ Prod.snd) (cmd.run s)
-
-Depends on / 依赖: Prod.fst, Prod.snd, cmd.run
+--- 原说明 ---
+Use a state monad to generate a stream through corecursion
 -/
 def corecState {σ α} (cmd : StateM σ α) (s : σ) : Stream' α :=
   corec Prod.fst (cmd.run ∘ Prod.snd) (cmd.run s)
 
 -- corec is also known as unfolds
-/--
-Definition of `unfolds` / `unfolds` 的定义
-
-English:
-abbreviation unfolds
-  signature: (g : α -> β) (f : α -> α) (a : α)
-  body: corec g f a
-
-中文:
-缩写 unfolds
-  签名: (g : α -> β) (f : α -> α) (a : α)
-  定义体: corec g f a
+/-
+**Stream.unfolds** 是 Mathlib 中的一个缩写定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev unfolds (g : α -> β) (f : α -> α) (a : α) : Stream' β :=
+abbrev unfolds (g : α → β) (f : α → α) (a : α) : Stream' β :=
   corec g f a
 
-/--
-Definition of `interleave` / `interleave` 的定义
+/-- Interleave two streams. -/
+/-
+**Stream.interleave** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition interleave
-  signature: (s₁ s₂ : Stream' α)
-  body: corecOn (s₁, s₂) (fun ⟨s₁, _⟩ => head s₁) fun ⟨s₁, s₂⟩ => (s₂, tail s₁)
-
-@[inherit_doc] infixl:65 " ⋈ " => interleave
-
-中文:
-定义 interleave
-  签名: (s₁ s₂ : Stream' α)
-  定义体: corecOn (s₁, s₂) (fun ⟨s₁, _⟩ => head s₁) fun ⟨s₁, s₂⟩ => (s₂, tail s₁)
-
-@[inherit_doc] infixl:65 " ⋈ " => interleave
-
-Depends on / 依赖: corecOn
+--- 原说明 ---
+Interleave two streams.
 -/
 def interleave (s₁ s₂ : Stream' α) : Stream' α :=
   corecOn (s₁, s₂) (fun ⟨s₁, _⟩ => head s₁) fun ⟨s₁, s₂⟩ => (s₂, tail s₁)
 
 @[inherit_doc] infixl:65 " ⋈ " => interleave
 
-/--
-Definition of `even` / `even` 的定义
+/-- Elements of a stream with even indices. -/
+/-
+**Stream.even** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition even
-  signature: (s : Stream' α)
-  body: corec head (fun s => tail (tail s)) s
-
-中文:
-定义 even
-  签名: (s : Stream' α)
-  定义体: corec head (fun s => tail (tail s)) s
+--- 原说明 ---
+Elements of a stream with even indices.
 -/
 def even (s : Stream' α) : Stream' α :=
   corec head (fun s => tail (tail s)) s
 
-/--
-Definition of `odd` / `odd` 的定义
+/-- Elements of a stream with odd indices. -/
+/-
+**Stream.odd** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition odd
-  signature: (s : Stream' α)
-  body: even (tail s)
-
-中文:
-定义 odd
-  签名: (s : Stream' α)
-  定义体: even (tail s)
+--- 原说明 ---
+Elements of a stream with odd indices.
 -/
 def odd (s : Stream' α) : Stream' α :=
   even (tail s)
 
-/--
-Definition of `appendStream'` / `appendStream'` 的定义
+/-- Append a stream to a list. -/
+/-
+**Stream.appendStream'** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition appendStream'
-  signature: : List α -> Stream' α -> Stream' α
-
-中文:
-定义 appendStream'
-  签名: : 列表 α -> Stream' α -> Stream' α
+--- 原说明 ---
+Append a stream to a list.
 -/
-def appendStream' : List α -> Stream' α -> Stream' α
+def appendStream' : List α → Stream' α → Stream' α
   | [], s => s
   | List.cons a l, s => a::appendStream' l s
 
 @[inherit_doc] infixl:65 " ++ₛ " => appendStream'
 
-/--
-Definition of `take` / `take` 的定义
+/-- `take n s` returns a list of the `n` first elements of stream `s` -/
+/-
+**Stream.take** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition take
-  signature: : Nat -> Stream' α -> List α
-
-中文:
-定义 take
-  签名: : 自然数 -> Stream' α -> 列表 α
+--- 原说明 ---
+`take n s` returns a list of the `n` first elements of stream `s`
 -/
-def take : Nat -> Stream' α -> List α
+def take : ℕ → Stream' α → List α
   | 0, _ => []
   | n + 1, s => List.cons (head s) (take n (tail s))
 
-/--
-Definition of `cycleF` / `cycleF` 的定义
+/-- An auxiliary definition for `Stream'.cycle` corecursive def -/
+/-
+**Stream.cycleF** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cycleF
-  signature: : α × List α × α × List α -> α
-
-中文:
-定义 cycleF
-  签名: : α × 列表 α × α × 列表 α -> α
+--- 原说明 ---
+An auxiliary definition for `Stream'.cycle` corecursive def
 -/
-protected def cycleF : α × List α × α × List α -> α
+protected def cycleF : α × List α × α × List α → α
   | (v, _, _, _) => v
 
-/--
-Definition of `cycleG` / `cycleG` 的定义
+/-- An auxiliary definition for `Stream'.cycle` corecursive def -/
+/-
+**Stream.cycleG** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cycleG
-  signature: : α × List α × α × List α -> α × List α × α × List α
-
-中文:
-定义 cycleG
-  签名: : α × 列表 α × α × 列表 α -> α × 列表 α × α × 列表 α
+--- 原说明 ---
+An auxiliary definition for `Stream'.cycle` corecursive def
 -/
-protected def cycleG : α × List α × α × List α -> α × List α × α × List α
+protected def cycleG : α × List α × α × List α → α × List α × α × List α
   | (_, [], v₀, l₀) => (v₀, l₀, v₀, l₀)
   | (_, List.cons v₂ l₂, v₀, l₀) => (v₂, l₂, v₀, l₀)
 
-/--
-Definition of `cycle` / `cycle` 的定义
+/-- Interpret a nonempty list as a cyclic stream. -/
+/-
+**Stream.cycle** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cycle
-  signature: : forall l : List α, l != [] -> Stream' α
-
-中文:
-定义 cycle
-  签名: : 对任意 l : 列表 α, l != [] -> Stream' α
+--- 原说明 ---
+Interpret a nonempty list as a cyclic stream.
 -/
-def cycle : forall l : List α, l != [] -> Stream' α
+def cycle : ∀ l : List α, l ≠ [] → Stream' α
   | [], h => absurd rfl h
   | List.cons a l, _ => corec Stream'.cycleF Stream'.cycleG (a, l, a, l)
 
-/--
-Definition of `tails` / `tails` 的定义
+/-- Tails of a stream, starting with `Stream'.tail s`. -/
+/-
+**Stream.tails** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tails
-  signature: (s : Stream' α)
-  body: corec id tail (tail s)
-
-中文:
-定义 tails
-  签名: (s : Stream' α)
-  定义体: corec id tail (tail s)
+--- 原说明 ---
+Tails of a stream, starting with `Stream'.tail s`.
 -/
 def tails (s : Stream' α) : Stream' (Stream' α) :=
   corec id tail (tail s)
 
-/--
-Definition of `initsCore` / `initsCore` 的定义
+/-- An auxiliary definition for `Stream'.inits`. -/
+/-
+**Stream.initsCore** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initsCore
-  signature: (l : List α) (s : Stream' α)
-  body: corecOn (l, s) (fun ⟨a, _⟩ => a) fun p =>
-    match p with
-    | (l', s') => (l' ++ [head s'], tail s')
-
-中文:
-定义 initsCore
-  签名: (l : 列表 α) (s : Stream' α)
-  定义体: corecOn (l, s) (fun ⟨a, _⟩ => a) fun p =>
-    match p with
-    | (l', s') => (l' ++ [head s'], tail s')
-
-Depends on / 依赖: corecOn
+--- 原说明 ---
+An auxiliary definition for `Stream'.inits`.
 -/
 def initsCore (l : List α) (s : Stream' α) : Stream' (List α) :=
   corecOn (l, s) (fun ⟨a, _⟩ => a) fun p =>
     match p with
     | (l', s') => (l' ++ [head s'], tail s')
 
-/--
-Definition of `inits` / `inits` 的定义
+/-- Nonempty initial segments of a stream. -/
+/-
+**Stream.inits** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inits
-  signature: (s : Stream' α)
-  body: initsCore [head s] (tail s)
-
-中文:
-定义 inits
-  签名: (s : Stream' α)
-  定义体: initsCore [head s] (tail s)
-
-Depends on / 依赖: initsCore
+--- 原说明 ---
+Nonempty initial segments of a stream.
 -/
 def inits (s : Stream' α) : Stream' (List α) :=
   initsCore [head s] (tail s)
 
-/--
-Definition of `pure` / `pure` 的定义
+/-- A constant stream, same as `Stream'.const`. -/
+/-
+**Stream.pure** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pure
-  signature: (a : α)
-  body: const a
-
-中文:
-定义 pure
-  签名: (a : α)
-  定义体: const a
+--- 原说明 ---
+A constant stream, same as `Stream'.const`.
 -/
 def pure (a : α) : Stream' α :=
   const a
 
-/--
-Definition of `apply` / `apply` 的定义
+/-- Given a stream of functions and a stream of values, apply `n`-th function to `n`-th value. -/
+/-
+**Stream.apply** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition apply
-  signature: (f : Stream' (α -> β)) (s : Stream' α)
-  body: fun n => (get f n) (get s n)
-
-@[inherit_doc] infixl:75 " ⊛ " => apply -- input as `\circledast`
-
-中文:
-定义 apply
-  签名: (f : Stream' (α -> β)) (s : Stream' α)
-  定义体: fun n => (get f n) (get s n)
-
-@[inherit_doc] infixl:75 " ⊛ " => apply -- input as `\circledast`
+--- 原说明 ---
+Given a stream of functions and a stream of values, apply `n`-th function to `n`
+-th value.
 -/
-def apply (f : Stream' (α -> β)) (s : Stream' α) : Stream' β := fun n => (get f n) (get s n)
+def apply (f : Stream' (α → β)) (s : Stream' α) : Stream' β := fun n => (get f n) (get s n)
 
 @[inherit_doc] infixl:75 " ⊛ " => apply -- input as `\circledast`
 
-/--
-Definition of `nats` / `nats` 的定义
+/-- The stream of natural numbers: `Stream'.get n Stream'.nats = n`. -/
+/-
+**Stream.nats** 是 Mathlib 中的一个定义，位于命名空间 `Stream`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nats
-  signature: : Stream' Nat
-  body: fun n => n
-
-中文:
-定义 nats
-  签名: : Stream' 自然数
-  定义体: fun n => n
+--- 原说明 ---
+The stream of natural numbers: `Stream'.get n Stream'.nats = n`.
 -/
-def nats : Stream' Nat := fun n => n
+def nats : Stream' ℕ := fun n => n
 
 end Stream'
+

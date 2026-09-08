@@ -18,110 +18,98 @@ public section
 namespace WithBot
 variable {α : Type*} [Preorder α] [OrderBot α] [AddMonoidWithOne α] [SuccAddOrder α]
 
-/--
-lemma `succ_natCast` / 引理 `succ_natCast`
-
-English:
-lemma succ_natCast
-  given: (n : Nat)
-  statement: succ (n : WithBot α) = n + 1
-  proof: by
-  rw [← WithBot.coe_natCast]; rw [succ_coe]; rw [Order.succ_eq_add_one]
-
-中文:
-引理 succ_natCast
-  条件: (n : 自然数)
-  结论: succ (n : WithBot α) = n + 1
-  证明: by
-  rw [← WithBot.coe_natCast]; rw [succ_coe]; rw [Order.succ_eq_add_one]
-
-Depends on / 依赖: Order.succ_eq_add_one, WithBot, WithBot.coe_natCast, coe_natCast, succ_coe, succ_eq_add_one
+/-
+**WithBot.succ_natCast** 是 Mathlib 中的一个引理，位于命名空间 `WithBot`。
+形式化陈述：succ_natCast (n : Nat) : succ (n : WithBot α) = n + 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.coe_natCast`：∀ {α : Type u} [inst : AddMonoidWithOne α] (n : ℕ),
+ ↑↑n = ↑n
+· 使用定理 `WithBot.succ_coe`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBo
+t α] [inst_2 : SuccOrder α] (a : α), (↑a).succ = Order.succ a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
 -/
-lemma succ_natCast (n : Nat) : succ (n : WithBot α) = n + 1 := by
-  rw [← WithBot.coe_natCast]; rw [succ_coe]; rw [Order.succ_eq_add_one]
-
-/--
-lemma `succ_zero` / 引理 `succ_zero`
-
-English:
-lemma succ_zero
-  statement: succ (0 : WithBot α) = 1
-  proof: by simpa using succ_natCast (α := α) 0
-
-@[simp]
-
-中文:
-引理 succ_zero
-  结论: succ (0 : WithBot α) = 1
-  证明: by simpa using succ_natCast (α := α) 0
-
-@[simp]
+lemma succ_natCast (n : ℕ) : succ (n : WithBot α) = n + 1 := by
+  rw [← WithBot.coe_natCast, succ_coe, Order.succ_eq_add_one]
+/-
+**WithBot.succ_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] [inst_2 : AddMo
+noidWithOne α] [inst_3 : SuccAddOrder α],   WithBot.succ 0 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `WithBot.succ_natCast`：succ_natCast (n : Nat) : succ (n : WithBot α) = n 
++ 1
 -/
 @[simp] lemma succ_zero : succ (0 : WithBot α) = 1 := by simpa using succ_natCast (α := α) 0
 
 @[simp]
-/--
-lemma `succ_one` / 引理 `succ_one`
-
-English:
-lemma succ_one
-  statement: succ (1 : WithBot α) = 2
-  proof: by
-  simpa [one_add_one_eq_two] using succ_natCast (α := α) 1
-
-@[simp]
-
-中文:
-引理 succ_one
-  结论: succ (1 : WithBot α) = 2
-  证明: by
-  simpa [one_add_one_eq_two] using succ_natCast (α := α) 1
-
-@[simp]
-
-Depends on / 依赖: one_add_one_eq_two, succ_natCast
+/-
+**WithBot.succ_one** 是 Mathlib 中的一个引理，位于命名空间 `WithBot`。
+形式化陈述：succ_one : succ (1 : WithBot α) = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用引理 `WithBot.succ_natCast`：succ_natCast (n : Nat) : succ (n : WithBot α) = n 
++ 1
 -/
 lemma succ_one : succ (1 : WithBot α) = 2 := by
   simpa [one_add_one_eq_two] using succ_natCast (α := α) 1
 
 @[simp]
-/--
-lemma `succ_ofNat` / 引理 `succ_ofNat`
-
-English:
-lemma succ_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: succ_natCast n
-
-中文:
-引理 succ_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: succ_natCast n
-
-Depends on / 依赖: succ_natCast
+/-
+**WithBot.succ_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `WithBot`。
+形式化陈述：succ_ofNat (n : Nat) [n.AtLeastTwo] : succ (ofNat(n) : WithBot α) = ofNat(
+n) + 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithBot.succ_natCast`：succ_natCast (n : Nat) : succ (n : WithBot α) = n 
++ 1
 -/
-lemma succ_ofNat (n : Nat) [n.AtLeastTwo] :
+lemma succ_ofNat (n : ℕ) [n.AtLeastTwo] :
     succ (ofNat(n) : WithBot α) = ofNat(n) + 1 := succ_natCast n
-
-/--
-lemma `one_le_iff_pos` / 引理 `one_le_iff_pos`
-
-English:
-lemma one_le_iff_pos
-  statement: {α : Type*} [PartialOrder α] [AddMonoidWithOne α]
-  proof: by
-  cases a <;> simp [Order.one_le_iff_pos]
-
-中文:
-引理 one_le_iff_pos
-  结论: {α : 类型} [偏序 α] [加法带幺幺半群 α]
-  证明: by
-  cases a <;> simp [Order.one_le_iff_pos]
-
-Depends on / 依赖: Order.one_le_iff_pos, one_le_iff_pos
+/-
+**WithBot.one_le_iff_pos** 是 Mathlib 中的一个引理，位于命名空间 `WithBot`。
+形式化陈述：one_le_iff_pos {α : Type*} [PartialOrder α] [AddMonoidWithOne α] [ZeroLEOn
+eClass α] [NeZero (1 : α)] [SuccAddOrder α] (a : WithBot α) : 1 <= a ↔ 0 < a
+参数：1 : α；a : WithBot α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma one_le_iff_pos {α : Type*} [PartialOrder α] [AddMonoidWithOne α]
-    [ZeroLEOneClass α] [NeZero (1 : α)] [SuccAddOrder α] (a : WithBot α) : 1 <= a ↔ 0 < a := by
+    [ZeroLEOneClass α] [NeZero (1 : α)] [SuccAddOrder α] (a : WithBot α) : 1 ≤ a ↔ 0 < a := by
   cases a <;> simp [Order.one_le_iff_pos]
 
 end WithBot
+

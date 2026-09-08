@@ -24,212 +24,223 @@ variable {𝕜 E F G : Type*} [NontriviallyNormedField 𝕜]
   [NormedAddCommGroup E] [NormedSpace 𝕜 E]
   [NormedAddCommGroup F] [NormedSpace 𝕜 F]
   [NormedAddCommGroup G] [NormedSpace 𝕜 G]
-  {n : Nat}
+  {n : ℕ}
 
 namespace ContinuousAlternatingMap
 
-/--
-Definition of `curryLeft` / `curryLeft` 的定义
+/-- Given a continuous alternating map `f` in `n+1` variables, split the first variable to obtain
+a continuous linear map into continuous alternating maps in `n` variables,
+given by `x ↦ (m ↦ f (Matrix.vecCons x m))`.
+It can be thought of as a map $Hom(\bigwedge^{n+1} M, N) \to Hom(M, Hom(\bigwedge^n M, N))$.
 
-English:
-definition curryLeft
-  signature: (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
-  body: AlternatingMap.mkContinuousLinear f.toAlternatingMap.curryLeft ‖f‖
-    f.toContinuousMultilinearMap.norm_map_cons_le
+This is `ContinuousMultilinearMap.curryLeft` for `AlternatingMap`. See also
+`ContinuousAlternatingMap.curryLeftLI`. -/
+/-
+**ContinuousAlternatingMap.curryLeft** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAltern
+atingMap`。
+形式化陈述：curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F
+参数：f : E [⋀^Fin (n + 1)]->L[𝕜] F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Given a continuous alternating map `f` in `n+1` variables, split the first varia
+ble to obtain
+a continuous linear map into continuous alternating maps in `n` variables,
+given by `x ↦ (m ↦ f (Matrix.vecCons x m))`.
+It can be thought of as a map $Hom(\bigwedge^{n+1} M, N) \to Hom(M, Hom(\bigwedg
+e^n M, N))$.
 
-中文:
-定义 curryLeft
-  签名: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
-  定义体: AlternatingMap.mkContinuousLinear f.toAlternatingMap.curryLeft ‖f‖
-    f.toContinuousMultilinearMap.norm_map_cons_le
-
-@[simp]
-
-Depends on / 依赖: AlternatingMap, AlternatingMap.mkContinuousLinear, curryLeft, f.toAlternatingMap.curryLeft, f.toContinuousMultilinearMap.norm_map_cons_le, mkContinuousLinear, norm_map_cons_le, toAlternatingMap, toContinuousMultilinearMap
+This is `ContinuousMultilinearMap.curryLeft` for `AlternatingMap`. See also
+`ContinuousAlternatingMap.curryLeftLI`.
 -/
-noncomputable def curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) : E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F :=
+noncomputable def curryLeft (f : E [⋀^Fin (n + 1)]→L[𝕜] F) : E →L[𝕜] E [⋀^Fin n]→L[𝕜] F :=
   AlternatingMap.mkContinuousLinear f.toAlternatingMap.curryLeft ‖f‖
     f.toContinuousMultilinearMap.norm_map_cons_le
 
 @[simp]
-/--
-lemma `toContinuousMultilinearMap_curryLeft` / 引理 `toContinuousMultilinearMap_curryLeft`
-
-English:
-lemma toContinuousMultilinearMap_curryLeft
-  given: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toContinuousMultilinearMap_curryLeft
-  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (x : E)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlternatingMap.toContinuousMultilinearMap_curryLeft** 是 Mathlib 中的一个
+引理，位于命名空间 `ContinuousAlternatingMap`。
+形式化陈述：toContinuousMultilinearMap_curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : 
+E) : (f.curryLeft x).toContinuousMultilinearMap = f.toContinuousMultilinearMap.c
+urryLeft x
+参数：f : E [⋀^Fin (n + 1)]->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-lemma toContinuousMultilinearMap_curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E) :
+lemma toContinuousMultilinearMap_curryLeft (f : E [⋀^Fin (n + 1)]→L[𝕜] F) (x : E) :
     (f.curryLeft x).toContinuousMultilinearMap = f.toContinuousMultilinearMap.curryLeft x :=
   rfl
 
 @[simp]
-/--
-lemma `toAlternatingMap_curryLeft` / 引理 `toAlternatingMap_curryLeft`
-
-English:
-lemma toAlternatingMap_curryLeft
-  given: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toAlternatingMap_curryLeft
-  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (x : E)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlternatingMap.toAlternatingMap_curryLeft** 是 Mathlib 中的一个引理，位于命名空间 
+`ContinuousAlternatingMap`。
+形式化陈述：toAlternatingMap_curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E) : (f.cu
+rryLeft x).toAlternatingMap = f.toAlternatingMap.curryLeft x
+参数：f : E [⋀^Fin (n + 1)]->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-lemma toAlternatingMap_curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E) :
+lemma toAlternatingMap_curryLeft (f : E [⋀^Fin (n + 1)]→L[𝕜] F) (x : E) :
     (f.curryLeft x).toAlternatingMap = f.toAlternatingMap.curryLeft x :=
   rfl
 
 @[simp]
-/--
-lemma `norm_curryLeft` / 引理 `norm_curryLeft`
-
-English:
-lemma norm_curryLeft
-  given: (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
-  statement: ‖f.curryLeft‖ = ‖f‖
-  proof: f.toContinuousMultilinearMap.curryLeft_norm
-
-@[simp]
-
-中文:
-引理 norm_curryLeft
-  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
-  结论: ‖f.curryLeft‖ = ‖f‖
-  证明: f.toContinuousMultilinearMap.curryLeft_norm
-
-@[simp]
-
-Depends on / 依赖: curryLeft_norm, f.toContinuousMultilinearMap.curryLeft_norm, toContinuousMultilinearMap
+/-
+**ContinuousAlternatingMap.norm_curryLeft** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousA
+lternatingMap`。
+形式化陈述：norm_curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) : ‖f.curryLeft‖ = ‖f‖
+参数：f : E [⋀^Fin (n + 1)]->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.curryLeft_norm`：ContinuousMultilinearMap.curryL
+eft_norm (f : ContinuousMultilinearMap 𝕜 Ei G) : ‖f.curryLeft‖ = ‖f‖
 -/
-lemma norm_curryLeft (f : E [⋀^Fin (n + 1)]->L[𝕜] F) : ‖f.curryLeft‖ = ‖f‖ :=
+lemma norm_curryLeft (f : E [⋀^Fin (n + 1)]→L[𝕜] F) : ‖f.curryLeft‖ = ‖f‖ :=
   f.toContinuousMultilinearMap.curryLeft_norm
 
 @[simp]
-/--
-theorem `curryLeft_apply_apply` / 定理 `curryLeft_apply_apply`
-
-English:
-theorem curryLeft_apply_apply
-  given: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E) (v : Fin n -> E)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_apply_apply
-  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (x : E) (v : 有限集 n -> E)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlternatingMap.curryLeft_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+inuousAlternatingMap`。
+形式化陈述：curryLeft_apply_apply (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E) (v : Fin n -
+> E) : curryLeft f x v = f (Matrix.vecCons x v)
+参数：f : E [⋀^Fin (n + 1)]->L[𝕜] F；x : E；v : Fin n -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem curryLeft_apply_apply (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E) (v : Fin n -> E) :
+theorem curryLeft_apply_apply (f : E [⋀^Fin (n + 1)]→L[𝕜] F) (x : E) (v : Fin n → E) :
     curryLeft f x v = f (Matrix.vecCons x v) :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_zero` / 定理 `curryLeft_zero`
-
-English:
-theorem curryLeft_zero
-  statement: curryLeft (0 : E [⋀^Fin (n + 1)]->L[𝕜] F) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_zero
-  结论: curryLeft (0 : E [⋀^有限集 (n + 1)]->L[𝕜] F) = 0
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlternatingMap.curryLeft_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousA
+lternatingMap`。
+形式化陈述：curryLeft_zero : curryLeft (0 : E [⋀^Fin (n + 1)]->L[𝕜] F) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem curryLeft_zero : curryLeft (0 : E [⋀^Fin (n + 1)]->L[𝕜] F) = 0 :=
+theorem curryLeft_zero : curryLeft (0 : E [⋀^Fin (n + 1)]→L[𝕜] F) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_add` / 定理 `curryLeft_add`
-
-English:
-theorem curryLeft_add
-  given: (f g : E [⋀^Fin (n + 1)]->L[𝕜] F)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_add
-  条件: (f g : E [⋀^有限集 (n + 1)]->L[𝕜] F)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlternatingMap.curryLeft_add** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousAl
+ternatingMap`。
+形式化陈述：curryLeft_add (f g : E [⋀^Fin (n + 1)]->L[𝕜] F) : curryLeft (f + g) = curr
+yLeft f + curryLeft g
+参数：f g : E [⋀^Fin (n + 1)]->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem curryLeft_add (f g : E [⋀^Fin (n + 1)]->L[𝕜] F) :
+theorem curryLeft_add (f g : E [⋀^Fin (n + 1)]→L[𝕜] F) :
     curryLeft (f + g) = curryLeft f + curryLeft g :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_smul` / 定理 `curryLeft_smul`
-
-English:
-theorem curryLeft_smul
-  given: (r : 𝕜) (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
-  proof: rfl
-
-中文:
-定理 curryLeft_smul
-  条件: (r : 𝕜) (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
-  证明: rfl
+/-
+**ContinuousAlternatingMap.curryLeft_smul** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousA
+lternatingMap`。
+形式化陈述：curryLeft_smul (r : 𝕜) (f : E [⋀^Fin (n + 1)]->L[𝕜] F) : curryLeft (r • f)
+ = r • curryLeft f
+参数：r : 𝕜；f : E [⋀^Fin (n + 1)]->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem curryLeft_smul (r : 𝕜) (f : E [⋀^Fin (n + 1)]->L[𝕜] F) :
+theorem curryLeft_smul (r : 𝕜) (f : E [⋀^Fin (n + 1)]→L[𝕜] F) :
     curryLeft (r • f) = r • curryLeft f :=
   rfl
 
 /-- `ContinuousAlternatingMap.curryLeft` as a `LinearIsometry`. -/
 @[simps]
-/--
-Definition of `curryLeftLI` / `curryLeftLI` 的定义
+/-
+**ContinuousAlternatingMap.curryLeftLI** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousAlte
+rnatingMap`。
+形式化陈述：curryLeftLI : (E [⋀^Fin (n + 1)]->L[𝕜] F) ->ₗᵢ[𝕜] (E ->L[𝕜] E [⋀^Fin n]->L
+[𝕜] F) where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlternatingMap.curryLeft_add`：curryLeft_add (f g : E [⋀^Fin (n
+ + 1)]->L[𝕜] F) : curryLeft (f + g) = curryLeft f + curryLeft g
+· 使用定理 `ContinuousAlternatingMap.curryLeft_smul`：curryLeft_smul (r : 𝕜) (f : E [
+⋀^Fin (n + 1)]->L[𝕜] F) : curryLeft (r • f) = r • curryLeft f
+· 使用引理 `ContinuousAlternatingMap.norm_curryLeft`：norm_curryLeft (f : E [⋀^Fin (n
+ + 1)]->L[𝕜] F) : ‖f.curryLeft‖ = ‖f‖
 
-English:
-definition curryLeftLI
-  signature: :
-  body: f.curryLeft
-  map_add' := curryLeft_add
-  map_smul' := curryLeft_smul
-  norm_map' := norm_curryLeft
-
-中文:
-定义 curryLeftLI
-  签名: :
-  定义体: f.curryLeft
-  map_add' := curryLeft_add
-  map_smul' := curryLeft_smul
-  norm_map' := norm_curryLeft
-
-Depends on / 依赖: curryLeft, f.curryLeft
+--- 原说明 ---
+`ContinuousAlternatingMap.curryLeft` as a `LinearIsometry`.
 -/
 noncomputable def curryLeftLI :
-    (E [⋀^Fin (n + 1)]->L[𝕜] F) ->ₗᵢ[𝕜] (E ->L[𝕜] E [⋀^Fin n]->L[𝕜] F) where
+    (E [⋀^Fin (n + 1)]→L[𝕜] F) →ₗᵢ[𝕜] (E →L[𝕜] E [⋀^Fin n]→L[𝕜] F) where
   toFun f := f.curryLeft
   map_add' := curryLeft_add
   map_smul' := curryLeft_smul
@@ -237,71 +248,121 @@ noncomputable def curryLeftLI :
 
 /-- Currying with the same element twice gives the zero map. -/
 @[simp]
-/--
-theorem `curryLeft_same` / 定理 `curryLeft_same`
+/-
+**ContinuousAlternatingMap.curryLeft_same** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousA
+lternatingMap`。
+形式化陈述：curryLeft_same (f : E [⋀^Fin (n + 2)]->L[𝕜] F) (x : E) : (f.curryLeft x).c
+urryLeft x = 0
+参数：f : E [⋀^Fin (n + 2)]->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlternatingMap.ext`：ext {f g : M [⋀^ι]->L[R] N} (H : forall x,
+ f x = g x) : f = g
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousAlternatingMap.map_eq_zero_of_eq`：map_eq_zero_of_eq (v : ι -> 
+M) {i j : ι} (h : v i = v j) (hij : i != j) : f v = 0
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.cons_zero`：cons_zero : cons x p 0 = x
+· 使用定理 `Fin.cons_one`：cons_one {α : Fin (n + 2) -> Sort*} (x : α 0) (p : forall 
+i : Fin n.succ, α i.succ) : cons x p 1 = p 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Fin.zero_ne_one`：∀ {n : ℕ}, 0 ≠ 1
 
-English:
-theorem curryLeft_same
-  given: (f : E [⋀^Fin (n + 2)]->L[𝕜] F) (x : E)
-  proof: ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
-
-@[simp]
-
-中文:
-定理 curryLeft_same
-  条件: (f : E [⋀^有限集 (n + 2)]->L[𝕜] F) (x : E)
-  证明: ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
-
-@[simp]
-
-Depends on / 依赖: Fin.zero_ne_one, f.map_eq_zero_of_eq, map_eq_zero_of_eq, zero_ne_one
+--- 原说明 ---
+Currying with the same element twice gives the zero map.
 -/
-theorem curryLeft_same (f : E [⋀^Fin (n + 2)]->L[𝕜] F) (x : E) :
+theorem curryLeft_same (f : E [⋀^Fin (n + 2)]→L[𝕜] F) (x : E) :
     (f.curryLeft x).curryLeft x = 0 :=
-  ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
+  ext fun _ ↦ f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
 
 @[simp]
-/--
-theorem `curryLeft_compContinuousAlternatingMap` / 定理 `curryLeft_compContinuousAlternatingMap`
-
-English:
-theorem curryLeft_compContinuousAlternatingMap
-  statement: (g : F ->L[𝕜] G) (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_compContinuousAlternatingMap
-  结论: (g : F ->L[𝕜] G) (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousAlternatingMap.curryLeft_compContinuousAlternatingMap** 是 Mathlib 中的
+一个定理，位于命名空间 `ContinuousAlternatingMap`。
+形式化陈述：curryLeft_compContinuousAlternatingMap (g : F ->L[𝕜] G) (f : E [⋀^Fin (n +
+ 1)]->L[𝕜] F) (x : E) : (g.compContinuousAlternatingMap f).curryLeft x = g.compC
+ontinuousAlternatingMap (f.curryLeft x)
+参数：g : F ->L[𝕜] G；f : E [⋀^Fin (n + 1)]->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem curryLeft_compContinuousAlternatingMap (g : F ->L[𝕜] G) (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
+theorem curryLeft_compContinuousAlternatingMap (g : F →L[𝕜] G) (f : E [⋀^Fin (n + 1)]→L[𝕜] F)
     (x : E) :
     (g.compContinuousAlternatingMap f).curryLeft x =
       g.compContinuousAlternatingMap (f.curryLeft x) :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_compContinuousLinearMap` / 定理 `curryLeft_compContinuousLinearMap`
-
-English:
-theorem curryLeft_compContinuousLinearMap
-  given: (g : F [⋀^Fin (n + 1)]->L[𝕜] G) (f : E ->L[𝕜] F) (x : E)
-  proof: ext fun v => congr_arg g funext fun i => by cases i using Fin.cases <;> simp
-
-中文:
-定理 curryLeft_compContinuousLinearMap
-  条件: (g : F [⋀^有限集 (n + 1)]->L[𝕜] G) (f : E ->L[𝕜] F) (x : E)
-  证明: ext fun v => congr_arg g funext fun i => by cases i using Fin.cases <;> simp
-
-Depends on / 依赖: Fin.cases, congr_arg
+/-
+**ContinuousAlternatingMap.curryLeft_compContinuousLinearMap** 是 Mathlib 中的一个定理，
+位于命名空间 `ContinuousAlternatingMap`。
+形式化陈述：curryLeft_compContinuousLinearMap (g : F [⋀^Fin (n + 1)]->L[𝕜] G) (f : E -
+>L[𝕜] F) (x : E) : (g.compContinuousLinearMap f).curryLeft x = (g.curryLeft (f x
+)).compContinuousLinearMap f
+参数：g : F [⋀^Fin (n + 1)]->L[𝕜] G；f : E ->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAlternatingMap.ext`：ext {f g : M [⋀^ι]->L[R] N} (H : forall x,
+ f x = g x) : f = g
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.cons_zero`：cons_zero : cons x p 0 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.cons_succ`：cons_succ : cons x p i.succ = p i
 -/
-theorem curryLeft_compContinuousLinearMap (g : F [⋀^Fin (n + 1)]->L[𝕜] G) (f : E ->L[𝕜] F) (x : E) :
+theorem curryLeft_compContinuousLinearMap (g : F [⋀^Fin (n + 1)]→L[𝕜] G) (f : E →L[𝕜] F) (x : E) :
     (g.compContinuousLinearMap f).curryLeft x = (g.curryLeft (f x)).compContinuousLinearMap f :=
-ext fun v => congr_arg g funext fun i => by cases i using Fin.cases <;> simp
+  ext fun v ↦ congr_arg g <| funext fun i ↦ by cases i using Fin.cases <;> simp
 
 end ContinuousAlternatingMap
+

@@ -46,29 +46,22 @@ open Set LinearMap Module Submodule
 
 universe u v
 
-variable (σ : Type u) (R : Type v) [CommSemiring R] (p m : Nat)
+variable (σ : Type u) (R : Type v) [CommSemiring R] (p m : ℕ)
 
 namespace MvPolynomial
 
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {σ R : Type*} [CommSemiring R] [Small.{u} R] [Small.{u} σ] :
     Small.{u} (MvPolynomial σ R) := small_map AddMonoidAlgebra.coeffEquiv
 
 section CharP
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharP
-  signature: R p] : CharP (MvPolynomial σ R) p where
-  body: by rw [← C_eq_coe_nat, ← C_0, C_inj, CharP.cast_eq_zero_iff R p]
-
-中文:
-实例 [特征p
-  签名: R p] : 特征p (多元多项式 σ R) p where
-  定义体: by rw [← C_eq_coe_nat, ← C_0, C_inj, CharP.cast_eq_zero_iff R p]
-
-Depends on / 依赖: C_eq_coe_nat, C_inj, CharP.cast_eq_zero_iff, cast_eq_zero_iff
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharP R p] : CharP (MvPolynomial σ R) p where
   cast_eq_zero_iff n := by rw [← C_eq_coe_nat, ← C_0, C_inj, CharP.cast_eq_zero_iff R p]
@@ -77,20 +70,9 @@ end CharP
 
 section CharZero
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: R] : CharZero (MvPolynomial σ R) where
-  body: by rwa [← C_eq_coe_nat, ← C_eq_coe_nat, C_inj, Nat.cast_inj] at hxy
-
-中文:
-实例 [特征零
-  签名: R] : 特征零 (多元多项式 σ R) where
-  定义体: by rwa [← C_eq_coe_nat, ← C_eq_coe_nat, C_inj, Nat.cast_inj] at hxy
-
-Depends on / 依赖: C_eq_coe_nat, C_inj, Nat.cast_inj, cast_inj
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharZero R] : CharZero (MvPolynomial σ R) where
   cast_injective x y hxy := by rwa [← C_eq_coe_nat, ← C_eq_coe_nat, C_inj, Nat.cast_inj] at hxy
@@ -101,22 +83,9 @@ section ExpChar
 
 variable [ExpChar R p]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ExpChar (MvPolynomial σ R) p
-  body: by
-  cases ‹ExpChar R p›; exacts [ExpChar.zero, ExpChar.prime ‹_›]
-
-中文:
-实例 :
-  签名: ExpChar (多元多项式 σ R) p
-  定义体: by
-  cases ‹ExpChar R p›; exacts [ExpChar.zero, ExpChar.prime ‹_›]
-
-Depends on / 依赖: ExpChar, ExpChar.prime, ExpChar.zero, exacts
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ExpChar (MvPolynomial σ R) p := by
   cases ‹ExpChar R p›; exacts [ExpChar.zero, ExpChar.prime ‹_›]
@@ -125,25 +94,19 @@ end ExpChar
 
 section Homomorphism
 
-/--
-theorem `map_eq_map` / 定理 `map_eq_map`
-
-English:
-theorem map_eq_map
-  statement: {R S : Type*} [CommSemiring R] [CommSemiring S] (p : MvPolynomial σ R)
-  proof: rfl
-
-@[deprecated (since := "2026-06-18")] alias mapRange_eq_map := map_eq_map
-
-中文:
-定理 map_eq_map
-  结论: {R S : 类型} [交换半环 R] [交换半环 S] (p : 多元多项式 σ R)
-  证明: rfl
-
-@[deprecated (since := "2026-06-18")] alias mapRange_eq_map := map_eq_map
+/-
+**MvPolynomial.map_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：map_eq_map {R S : Type*} [CommSemiring R] [CommSemiring S] (p : MvPolynomi
+al σ R) (f : R ->+* S) : AddMonoidAlgebra.map f p = map f p
+参数：p : MvPolynomial σ R；f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
 theorem map_eq_map {R S : Type*} [CommSemiring R] [CommSemiring S] (p : MvPolynomial σ R)
-    (f : R ->+* S) : AddMonoidAlgebra.map f p = map f p := rfl
+    (f : R →+* S) : AddMonoidAlgebra.map f p = map f p := rfl
 
 @[deprecated (since := "2026-06-18")] alias mapRange_eq_map := map_eq_map
 
@@ -153,157 +116,153 @@ section Degree
 
 variable {σ}
 
-/--
-Definition of `restrictSupport` / `restrictSupport` 的定义
+/-- The submodule of polynomials that are sum of monomials in the set `s`. -/
+/-
+**MvPolynomial.restrictSupport** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictSupport (s : Set (σ ->₀ Nat)) : Submodule R (MvPolynomial σ R)
+参数：s : Set (σ ->₀ Nat)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictSupport
-  signature: (s : Set (σ ->₀ Nat))
-  body: AddMonoidAlgebra.supported R R s
-
-中文:
-定义 restrictSupport
-  签名: (s : 集合 (σ ->₀ 自然数))
-  定义体: AddMonoidAlgebra.supported R R s
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supported, supported
+--- 原说明 ---
+The submodule of polynomials that are sum of monomials in the set `s`.
 -/
-def restrictSupport (s : Set (σ ->₀ Nat)) : Submodule R (MvPolynomial σ R) :=
+def restrictSupport (s : Set (σ →₀ ℕ)) : Submodule R (MvPolynomial σ R) :=
   AddMonoidAlgebra.supported R R s
 
-/--
-Definition of `basisRestrictSupport` / `basisRestrictSupport` 的定义
+/-- `restrictSupport R s` has a canonical `R`-basis indexed by `s`. -/
+/-
+**MvPolynomial.basisRestrictSupport** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：basisRestrictSupport (s : Set (σ ->₀ Nat)) : Basis s R (restrictSupport R 
+s) where repr
+参数：s : Set (σ ->₀ Nat)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basisRestrictSupport
-  signature: (s : Set (σ ->₀ Nat))
-  body: AddMonoidAlgebra.supportedEquivFinsupp s
-
-中文:
-定义 basisRestrictSupport
-  签名: (s : 集合 (σ ->₀ 自然数))
-  定义体: AddMonoidAlgebra.supportedEquivFinsupp s
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supportedEquivFinsupp, supportedEquivFinsupp
+--- 原说明 ---
+`restrictSupport R s` has a canonical `R`-basis indexed by `s`.
 -/
-def basisRestrictSupport (s : Set (σ ->₀ Nat)) : Basis s R (restrictSupport R s) where
+def basisRestrictSupport (s : Set (σ →₀ ℕ)) : Basis s R (restrictSupport R s) where
   repr := AddMonoidAlgebra.supportedEquivFinsupp s
-
-/--
-theorem `restrictSupport_mono` / 定理 `restrictSupport_mono`
-
-English:
-theorem restrictSupport_mono
-  given: {s t : Set (σ ->₀ Nat)} (h : s subseteq t)
-  proof: AddMonoidAlgebra.supported_mono h
-
-中文:
-定理 restrictSupport_mono
-  条件: {s t : 集合 (σ ->₀ 自然数)} (h : s subseteq t)
-  证明: AddMonoidAlgebra.supported_mono h
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supported_mono, supported_mono
+/-
+**MvPolynomial.restrictSupport_mono** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictSupport_mono {s t : Set (σ ->₀ Nat)} (h : s subseteq t) : restrict
+Support R s <= restrictSupport R t
+参数：σ ->₀ Nat；h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.supported_mono`：∀ {R : Type u_1} {S : Type u_2} {M : Ty
+pe u_3} [inst : Semiring R] [inst_1 : Semiring S] [inst_2 : _root_.Module R S]  
+ {s t : Set M}, s ⊆ t…
 -/
-theorem restrictSupport_mono {s t : Set (σ ->₀ Nat)} (h : s subseteq t) :
-    restrictSupport R s <= restrictSupport R t := AddMonoidAlgebra.supported_mono h
-
-/--
-lemma `restrictSupport_eq_span` / 引理 `restrictSupport_eq_span`
-
-English:
-lemma restrictSupport_eq_span
-  given: (s : Set (σ ->₀ Nat))
-  proof: AddMonoidAlgebra.supported_eq_span_single ..
-
-中文:
-引理 restrictSupport_eq_span
-  条件: (s : 集合 (σ ->₀ 自然数))
-  证明: AddMonoidAlgebra.supported_eq_span_single ..
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supported_eq_span_single, supported_eq_span_single
+theorem restrictSupport_mono {s t : Set (σ →₀ ℕ)} (h : s ⊆ t) :
+    restrictSupport R s ≤ restrictSupport R t := AddMonoidAlgebra.supported_mono h
+/-
+**MvPolynomial.restrictSupport_eq_span** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictSupport_eq_span (s : Set (σ ->₀ Nat)) : restrictSupport R s = .spa
+n _ ((monomial · 1) '' s)
+参数：s : Set (σ ->₀ Nat)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.supported_eq_span_single`：∀ (R : Type u_1) {M : Type u_
+3} [inst : Semiring R] (s : Set M),   AddMonoidAlgebra.supported R R s = Submodu
+le.span R ((fun m => AddMonoidA…
 -/
-lemma restrictSupport_eq_span (s : Set (σ ->₀ Nat)) :
+lemma restrictSupport_eq_span (s : Set (σ →₀ ℕ)) :
     restrictSupport R s = .span _ ((monomial · 1) '' s) :=
   AddMonoidAlgebra.supported_eq_span_single ..
-
-/--
-lemma `mem_restrictSupport_iff` / 引理 `mem_restrictSupport_iff`
-
-English:
-lemma mem_restrictSupport_iff
-  given: {s : Set (σ ->₀ Nat)} {r : MvPolynomial σ R}
-  proof: .rfl
-
-@[simp]
-
-中文:
-引理 mem_restrictSupport_iff
-  条件: {s : 集合 (σ ->₀ 自然数)} {r : 多元多项式 σ R}
-  证明: .rfl
-
-@[simp]
+/-
+**MvPolynomial.mem_restrictSupport_iff** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：mem_restrictSupport_iff {s : Set (σ ->₀ Nat)} {r : MvPolynomial σ R} : r i
+n restrictSupport R s ↔ ↑r.support subseteq s
+参数：σ ->₀ Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_restrictSupport_iff {s : Set (σ ->₀ Nat)} {r : MvPolynomial σ R} :
-    r in restrictSupport R s ↔ ↑r.support subseteq s := .rfl
+lemma mem_restrictSupport_iff {s : Set (σ →₀ ℕ)} {r : MvPolynomial σ R} :
+    r ∈ restrictSupport R s ↔ ↑r.support ⊆ s := .rfl
 
 @[simp]
-/--
-lemma `monomial_mem_restrictSupport` / 引理 `monomial_mem_restrictSupport`
-
-English:
-lemma monomial_mem_restrictSupport
-  given: {s : Set (σ ->₀ Nat)} {m} {r : R}
-  proof: by
-  classical
-  by_cases r = 0 <;> simp [mem_restrictSupport_iff, support_monomial, *]
-
-中文:
-引理 monomial_mem_restrictSupport
-  条件: {s : 集合 (σ ->₀ 自然数)} {m} {r : R}
-  证明: by
-  classical
-  by_cases r = 0 <;> simp [mem_restrictSupport_iff, support_monomial, *]
-
-Depends on / 依赖: classical, mem_restrictSupport_iff, support_monomial
+/-
+**MvPolynomial.monomial_mem_restrictSupport** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynom
+ial`。
+形式化陈述：monomial_mem_restrictSupport {s : Set (σ ->₀ Nat)} {m} {r : R} : monomial 
+m r in restrictSupport R s ↔ m in s ∨ r = 0
+参数：σ ->₀ Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `MvPolynomial.support_monomial`：support_monomial [h : Decidable (a = 0)] 
+: (monomial s a).support = if a = 0 then ∅ else {s}
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
-lemma monomial_mem_restrictSupport {s : Set (σ ->₀ Nat)} {m} {r : R} :
-    monomial m r in restrictSupport R s ↔ m in s ∨ r = 0 := by
+lemma monomial_mem_restrictSupport {s : Set (σ →₀ ℕ)} {m} {r : R} :
+    monomial m r ∈ restrictSupport R s ↔ m ∈ s ∨ r = 0 := by
   classical
   by_cases r = 0 <;> simp [mem_restrictSupport_iff, support_monomial, *]
 
 open scoped Pointwise in
-/--
-lemma `restrictSupport_add` / 引理 `restrictSupport_add`
-
-English:
-lemma restrictSupport_add
-  given: (s t : Set (σ ->₀ Nat))
-  proof: by
-  apply le_antisymm
-  · rw [restrictSupport_eq_span, Submodule.span_le, Set.image_subset_iff, Set.add_subset_iff]
-    intro x hx y hy
-    simp [show monomial (x + y) (1 : R) = monomial x 1 * monomial y 1 by simp, -monomial_mul,
-      *, Submodule.mul_mem_mul]
-  · rw [restrictSupport_eq_span, restrictSupport_eq_span, Submodule.span_mul_span,
-      Submodule.span_le, Set.mul_subset_iff]
-    simp +contextual [Set.add_mem_add]
-
-中文:
-引理 restrictSupport_add
-  条件: (s t : 集合 (σ ->₀ 自然数))
-  证明: by
-  apply le_antisymm
-  · rw [restrictSupport_eq_span, Submodule.span_le, Set.image_subset_iff, Set.add_subset_iff]
-    intro x hx y hy
-    simp [show monomial (x + y) (1 : R) = monomial x 1 * monomial y 1 by simp, -monomial_mul,
-      *, Submodule.mul_mem_mul]
-  · rw [restrictSupport_eq_span, restrictSupport_eq_span, Submodule.span_mul_span,
-      Submodule.span_le, Set.mul_subset_iff]
-    simp +contextual [Set.add_mem_add]
-
-Depends on / 依赖: Set.add_mem_add, Set.add_subset_iff, Set.image_subset_iff, Set.mul_subset_iff, Submodule, Submodule.mul_mem_mul, Submodule.span_le, Submodule.span_mul_span, add_mem_add, add_subset_iff, contextual, image_subset_iff, le_antisymm, monomial, monomial_mul, mul_mem_mul, mul_subset_iff, restrictSupport_eq_span, span_le, span_mul_span
+/-
+**MvPolynomial.restrictSupport_add** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictSupport_add (s t : Set (σ ->₀ Nat)) : restrictSupport R (s + t) = 
+restrictSupport R s * restrictSupport R t
+参数：s t : Set (σ ->₀ Nat)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.restrictSupport_eq_span`：restrictSupport_eq_span (s : Set (
+σ ->₀ Nat)) : restrictSupport R s = .span _ ((monomial · 1) '' s)
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `Set.add_subset_iff`：∀ {α : Type u_2} [inst : Add α] {s t u : Set α}, s +
+ t ⊆ u ↔ ∀ x ∈ s, ∀ y ∈ t, x + y ∈ u
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MvPolynomial.monomial_mul`：monomial_mul {s s' : σ ->₀ Nat} {a b : R} : m
+onomial s a * monomial s' b = monomial (s + s') (a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Submodule.span_mul_span`：span_mul_span : span R S * span R T = span R (S
+ * T)
+· 使用定理 `Set.mul_subset_iff`：mul_subset_iff : s * t subseteq u ↔ forall x in s, f
+orall y in t, x * y in u
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma restrictSupport_add (s t : Set (σ ->₀ Nat)) :
+lemma restrictSupport_add (s t : Set (σ →₀ ℕ)) :
     restrictSupport R (s + t) = restrictSupport R s * restrictSupport R t := by
   apply le_antisymm
   · rw [restrictSupport_eq_span, Submodule.span_le, Set.image_subset_iff, Set.add_subset_iff]
@@ -315,42 +274,41 @@ lemma restrictSupport_add (s t : Set (σ ->₀ Nat)) :
     simp +contextual [Set.add_mem_add]
 
 open scoped Pointwise in
-/--
-lemma `restrictSupport_zero` / 引理 `restrictSupport_zero`
-
-English:
-lemma restrictSupport_zero
-  statement: restrictSupport R (0 : Set (σ ->₀ Nat)) = 1
-  proof: by
-  classical
-  apply le_antisymm
-  · rw [restrictSupport_eq_span, Submodule.span_le, Set.image_subset_iff]
-    simp only [monomial, AddMonoidAlgebra.lsingle_apply, zero_subset, mem_preimage,
-      ← AddMonoidAlgebra.one_def, SetLike.mem_coe, Submodule.mem_one, algebraMap_eq]
-    exact ⟨1, by simp⟩
-  · rintro _ ⟨x, rfl⟩
-    simp [mem_restrictSupport_iff, subset_def, coeff, AddMonoidAlgebra.one_def,
-      Finsupp.single_apply]
-
-@[simp]
-
-中文:
-引理 restrictSupport_zero
-  结论: restrictSupport R (0 : 集合 (σ ->₀ 自然数)) = 1
-  证明: by
-  classical
-  apply le_antisymm
-  · rw [restrictSupport_eq_span, Submodule.span_le, Set.image_subset_iff]
-    simp only [monomial, AddMonoidAlgebra.lsingle_apply, zero_subset, mem_preimage,
-      ← AddMonoidAlgebra.one_def, SetLike.mem_coe, Submodule.mem_one, algebraMap_eq]
-    exact ⟨1, by simp⟩
-  · rintro _ ⟨x, rfl⟩
-    simp [mem_restrictSupport_iff, subset_def, coeff, AddMonoidAlgebra.one_def,
-      Finsupp.single_apply]
-
-@[simp]
+/-
+**MvPolynomial.restrictSupport_zero** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：∀ {σ : Type u} (R : Type v) [inst : CommSemiring R], MvPolynomial.restrict
+Support R 0 = 1
+参数：R : Type v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.restrictSupport_eq_span`：restrictSupport_eq_span (s : Set (
+σ ->₀ Nat)) : restrictSupport R s = .span _ ((monomial · 1) '' s)
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearMap.toSpanSingleton_apply`：∀ (R : Type u_1) (M : Type u_4) [inst :
+ Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] (x : M)   (
+b : R), (LinearMap.to…
+· 使用定理 `AddMonoidAlgebra.smul_single`：∀ {R : Type u_1} {M : Type u_4} [inst : Se
+miring R] {A : Type u_8} [inst_1 : SMulZeroClass A R] (a : A) (m : M) (r : R),  
+ a • AddMonoidAlge…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-@[simp] lemma restrictSupport_zero : restrictSupport R (0 : Set (σ ->₀ Nat)) = 1 := by
+@[simp] lemma restrictSupport_zero : restrictSupport R (0 : Set (σ →₀ ℕ)) = 1 := by
   classical
   apply le_antisymm
   · rw [restrictSupport_eq_span, Submodule.span_le, Set.image_subset_iff]
@@ -362,394 +320,322 @@ lemma restrictSupport_zero
       Finsupp.single_apply]
 
 @[simp]
-/--
-lemma `restrictSupport_univ` / 引理 `restrictSupport_univ`
-
-English:
-lemma restrictSupport_univ
-  statement: restrictSupport R (.univ : Set (σ ->₀ Nat)) = ⊤
-  proof: by
-  ext; simp [mem_restrictSupport_iff]
-
-中文:
-引理 restrictSupport_univ
-  结论: restrictSupport R (.univ : 集合 (σ ->₀ 自然数)) = ⊤
-  证明: by
-  ext; simp [mem_restrictSupport_iff]
-
-Depends on / 依赖: mem_restrictSupport_iff
+/-
+**MvPolynomial.restrictSupport_univ** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictSupport_univ : restrictSupport R (.univ : Set (σ ->₀ Nat)) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma restrictSupport_univ : restrictSupport R (.univ : Set (σ ->₀ Nat)) = ⊤ := by
+lemma restrictSupport_univ : restrictSupport R (.univ : Set (σ →₀ ℕ)) = ⊤ := by
   ext; simp [mem_restrictSupport_iff]
 
 open scoped Pointwise in
-/--
-lemma `restrictSupport_nsmul` / 引理 `restrictSupport_nsmul`
-
-English:
-lemma restrictSupport_nsmul
-  given: (n : Nat) (s : Set (σ ->₀ Nat))
-  proof: by
-  induction n <;> simp [add_smul, restrictSupport_add, *, pow_succ]
-
-中文:
-引理 restrictSupport_nsmul
-  条件: (n : 自然数) (s : 集合 (σ ->₀ 自然数))
-  证明: by
-  induction n <;> simp [add_smul, restrictSupport_add, *, pow_succ]
-
-Depends on / 依赖: add_smul, pow_succ, restrictSupport_add
+/-
+**MvPolynomial.restrictSupport_nsmul** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictSupport_nsmul (n : Nat) (s : Set (σ ->₀ Nat)) : restrictSupport R 
+(n • s) = restrictSupport R s ^ n
+参数：n : Nat；s : Set (σ ->₀ Nat)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
+· 使用定理 `MvPolynomial.restrictSupport_zero`：∀ {σ : Type u} (R : Type v) [inst : C
+ommSemiring R], MvPolynomial.restrictSupport R 0 = 1
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用引理 `MvPolynomial.restrictSupport_add`：restrictSupport_add (s t : Set (σ ->₀ 
+Nat)) : restrictSupport R (s + t) = restrictSupport R s * restrictSupport R t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
 -/
-lemma restrictSupport_nsmul (n : Nat) (s : Set (σ ->₀ Nat)) :
+lemma restrictSupport_nsmul (n : ℕ) (s : Set (σ →₀ ℕ)) :
     restrictSupport R (n • s) = restrictSupport R s ^ n := by
   induction n <;> simp [add_smul, restrictSupport_add, *, pow_succ]
 
-/--
-Definition of `restrictSupportIdeal` / `restrictSupportIdeal` 的定义
+/-- The ideal defined by `restrictSupport R s` when `s` is an upper set. -/
+/-
+**MvPolynomial.restrictSupportIdeal** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictSupportIdeal (s : Set (σ ->₀ Nat)) (hs : IsUpperSet s) : Ideal (Mv
+Polynomial σ R) where __
+参数：s : Set (σ ->₀ Nat)；hs : IsUpperSet s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictSupportIdeal
-  signature: (s : Set (σ ->₀ Nat)) (hs : IsUpperSet s)
-  body: restrictSupport R s
-  smul_mem' x y hy m (hm : m in (x * y).support) := by
-    classical
-    simp only [mem_support_iff, coeff_mul, ne_eq] at hm
-    obtain ⟨⟨i, j⟩, hij, e⟩ := Finset.exists_ne_zero_of_sum_ne_zero hm
-    refine hs (by simp_all [eq_comm]) (hy (show j in y.support by aesop))
-
-中文:
-定义 restrictSupportIdeal
-  签名: (s : 集合 (σ ->₀ 自然数)) (hs : 是上集 s)
-  定义体: restrictSupport R s
-  smul_mem' x y hy m (hm : m in (x * y).support) := by
-    classical
-    simp only [mem_support_iff, coeff_mul, ne_eq] at hm
-    obtain ⟨⟨i, j⟩, hij, e⟩ := Finset.exists_ne_zero_of_sum_ne_zero hm
-    refine hs (by simp_all [eq_comm]) (hy (show j in y.support by aesop))
-
-Depends on / 依赖: restrictSupport
+--- 原说明 ---
+The ideal defined by `restrictSupport R s` when `s` is an upper set.
 -/
-def restrictSupportIdeal (s : Set (σ ->₀ Nat)) (hs : IsUpperSet s) :
+def restrictSupportIdeal (s : Set (σ →₀ ℕ)) (hs : IsUpperSet s) :
     Ideal (MvPolynomial σ R) where
   __ := restrictSupport R s
-  smul_mem' x y hy m (hm : m in (x * y).support) := by
+  smul_mem' x y hy m (hm : m ∈ (x * y).support) := by
     classical
     simp only [mem_support_iff, coeff_mul, ne_eq] at hm
     obtain ⟨⟨i, j⟩, hij, e⟩ := Finset.exists_ne_zero_of_sum_ne_zero hm
-    refine hs (by simp_all [eq_comm]) (hy (show j in y.support by aesop))
+    refine hs (by simp_all [eq_comm]) (hy (show j ∈ y.support by aesop))
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `restrictScalars_restrictSupportIdeal` / 引理 `restrictScalars_restrictSupportIdeal`
-
-English:
-lemma restrictScalars_restrictSupportIdeal
-  given: (s : Set (σ ->₀ Nat)) (hs)
-  proof: rfl
-
-中文:
-引理 restrictScalars_restrictSupportIdeal
-  条件: (s : 集合 (σ ->₀ 自然数)) (hs)
-  证明: rfl
-
-Depends on / 依赖: restrictScalars, restrictSupport
+/-
+**MvPolynomial.restrictScalars_restrictSupportIdeal** 是 Mathlib 中的一个引理，位于命名空间 `M
+vPolynomial`。
+形式化陈述：restrictScalars_restrictSupportIdeal (s : Set (σ ->₀ Nat)) (hs) : (restric
+tSupportIdeal (R
+参数：s : Set (σ ->₀ Nat)；hs。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
-lemma restrictScalars_restrictSupportIdeal (s : Set (σ ->₀ Nat)) (hs) :
+lemma restrictScalars_restrictSupportIdeal (s : Set (σ →₀ ℕ)) (hs) :
     (restrictSupportIdeal (R := R) s hs).restrictScalars R = restrictSupport R s :=
   rfl
 
 variable (σ)
 
-/--
-Definition of `restrictTotalDegree` / `restrictTotalDegree` 的定义
+/-- The submodule of polynomials of total degree less than or equal to `m`. -/
+/-
+**MvPolynomial.restrictTotalDegree** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictTotalDegree (m : Nat) : Submodule R (MvPolynomial σ R)
+参数：m : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictTotalDegree
-  signature: (m : Nat)
-  body: restrictSupport R { n | (n.sum fun _ e => e) <= m }
-
-中文:
-定义 restrictTotalDegree
-  签名: (m : 自然数)
-  定义体: restrictSupport R { n | (n.sum fun _ e => e) <= m }
-
-Depends on / 依赖: n.sum, restrictSupport
+--- 原说明 ---
+The submodule of polynomials of total degree less than or equal to `m`.
 -/
-def restrictTotalDegree (m : Nat) : Submodule R (MvPolynomial σ R) :=
-  restrictSupport R { n | (n.sum fun _ e => e) <= m }
+def restrictTotalDegree (m : ℕ) : Submodule R (MvPolynomial σ R) :=
+  restrictSupport R { n | (n.sum fun _ e => e) ≤ m }
 
-/--
-Definition of `restrictDegree` / `restrictDegree` 的定义
+/-- The submodule of polynomials such that the degree with respect to each individual variable is
+less than or equal to `m`. -/
+/-
+**MvPolynomial.restrictDegree** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：restrictDegree (m : Nat) : Submodule R (MvPolynomial σ R)
+参数：m : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictDegree
-  signature: (m : Nat)
-  body: restrictSupport R { n | forall i, n i <= m }
-
-中文:
-定义 restrictDegree
-  签名: (m : 自然数)
-  定义体: restrictSupport R { n | forall i, n i <= m }
-
-Depends on / 依赖: restrictSupport
+--- 原说明 ---
+The submodule of polynomials such that the degree with respect to each individua
+l variable is
+less than or equal to `m`.
 -/
-def restrictDegree (m : Nat) : Submodule R (MvPolynomial σ R) :=
-  restrictSupport R { n | forall i, n i <= m }
+def restrictDegree (m : ℕ) : Submodule R (MvPolynomial σ R) :=
+  restrictSupport R { n | ∀ i, n i ≤ m }
 
 variable {R}
-
-/--
-theorem `mem_restrictTotalDegree` / 定理 `mem_restrictTotalDegree`
-
-English:
-theorem mem_restrictTotalDegree
-  given: (p : MvPolynomial σ R)
-  proof: by
-  rw [totalDegree]; rw [Finset.sup_le_iff]
-  rfl
-
-中文:
-定理 mem_restrictTotalDegree
-  条件: (p : 多元多项式 σ R)
-  证明: by
-  rw [totalDegree]; rw [Finset.sup_le_iff]
-  rfl
-
-Depends on / 依赖: Finset, Finset.sup_le_iff, sup_le_iff, totalDegree
+/-
+**MvPolynomial.mem_restrictTotalDegree** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：mem_restrictTotalDegree (p : MvPolynomial σ R) : p in restrictTotalDegree 
+σ R m ↔ p.totalDegree <= m
+参数：p : MvPolynomial σ R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.totalDegree.eq_1`：∀ {R : Type u} {σ : Type u_1} [inst : Com
+mSemiring R] (p : MvPolynomial σ R),   p.totalDegree = p.support.sup fun s => s.
+sum fun x e => e
+· 使用定理 `Finset.sup_le_iff`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] [inst_1 : OrderBot α] {s : Finset β} {f : β → α} {a : α},   s.sup f ≤ a ↔ ∀
+ b ∈ s,…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_restrictTotalDegree (p : MvPolynomial σ R) :
-    p in restrictTotalDegree σ R m ↔ p.totalDegree <= m := by
-  rw [totalDegree]; rw [Finset.sup_le_iff]
+    p ∈ restrictTotalDegree σ R m ↔ p.totalDegree ≤ m := by
+  rw [totalDegree, Finset.sup_le_iff]
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mem_restrictDegree` / 定理 `mem_restrictDegree`
-
-English:
-theorem mem_restrictDegree
-  given: (p : MvPolynomial σ R) (n : Nat)
-  proof: by
-  rw [restrictDegree]; rw [restrictSupport]; rw [AddMonoidAlgebra.mem_supported]
-  rfl
-
-中文:
-定理 mem_restrictDegree
-  条件: (p : 多元多项式 σ R) (n : 自然数)
-  证明: by
-  rw [restrictDegree]; rw [restrictSupport]; rw [AddMonoidAlgebra.mem_supported]
-  rfl
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.mem_supported, mem_supported, restrictDegree, restrictSupport
+/-
+**MvPolynomial.mem_restrictDegree** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：mem_restrictDegree (p : MvPolynomial σ R) (n : Nat) : p in restrictDegree 
+σ R n ↔ forall s in p.support, forall i, (s : σ ->₀ Nat) i <= n
+参数：p : MvPolynomial σ R；n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.restrictDegree.eq_1`：∀ (σ : Type u) (R : Type v) [inst : Co
+mmSemiring R] (m : ℕ),   MvPolynomial.restrictDegree σ R m = MvPolynomial.restri
+ctSupport R {n | ∀ (i …
+· 使用定理 `MvPolynomial.restrictSupport.eq_1`：∀ {σ : Type u} (R : Type v) [inst : C
+ommSemiring R] (s : Set (σ →₀ ℕ)),   MvPolynomial.restrictSupport R s = AddMonoi
+dAlgebra.supported R R …
+· 使用定理 `AddMonoidAlgebra.mem_supported`：∀ {R : Type u_1} {S : Type u_2} {M : Typ
+e u_3} [inst : Semiring R] [inst_1 : Semiring S] [inst_2 : _root_.Module R S]   
+{s : Set M} {x : Add…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_restrictDegree (p : MvPolynomial σ R) (n : Nat) :
-    p in restrictDegree σ R n ↔ forall s in p.support, forall i, (s : σ ->₀ Nat) i <= n := by
-  rw [restrictDegree]; rw [restrictSupport]; rw [AddMonoidAlgebra.mem_supported]
+theorem mem_restrictDegree (p : MvPolynomial σ R) (n : ℕ) :
+    p ∈ restrictDegree σ R n ↔ ∀ s ∈ p.support, ∀ i, (s : σ →₀ ℕ) i ≤ n := by
+  rw [restrictDegree, restrictSupport, AddMonoidAlgebra.mem_supported]
   rfl
-
-/--
-theorem `mem_restrictDegree_iff_sup` / 定理 `mem_restrictDegree_iff_sup`
-
-English:
-theorem mem_restrictDegree_iff_sup
-  given: [DecidableEq σ] (p : MvPolynomial σ R) (n : Nat)
-  proof: by
-  simp only [mem_restrictDegree, degrees_def, Multiset.count_finset_sup, Finsupp.count_toMultiset,
-    Finset.sup_le_iff]
-  exact ⟨fun h n s hs => h s hs n, fun h s hs n => h n s hs⟩
-
-中文:
-定理 mem_restrictDegree_iff_sup
-  条件: [DecidableEq σ] (p : 多元多项式 σ R) (n : 自然数)
-  证明: by
-  simp only [mem_restrictDegree, degrees_def, Multiset.count_finset_sup, Finsupp.count_toMultiset,
-    Finset.sup_le_iff]
-  exact ⟨fun h n s hs => h s hs n, fun h s hs n => h n s hs⟩
-
-Depends on / 依赖: Finset, Finset.sup_le_iff, Finsupp, Finsupp.count_toMultiset, Multiset, Multiset.count_finset_sup, count_finset_sup, count_toMultiset, degrees_def, mem_restrictDegree, sup_le_iff
+/-
+**MvPolynomial.mem_restrictDegree_iff_sup** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomia
+l`。
+形式化陈述：mem_restrictDegree_iff_sup [DecidableEq σ] (p : MvPolynomial σ R) (n : Nat
+) : p in restrictDegree σ R n ↔ forall i, p.degrees.count i <= n
+参数：p : MvPolynomial σ R；n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.count.congr_simp`：∀ {α : Type u_1} {inst : DecidableEq α} [inst
+_1 : DecidableEq α] (a a_1 : α),   a = a_1 → ∀ (a_2 a_3 : Multiset α), a_2 = a_3
+ → Multiset.cou…
+· 使用定理 `MvPolynomial.degrees_def`：degrees_def [DecidableEq σ] (p : MvPolynomial 
+σ R) : p.degrees = p.support.sup fun s : σ ->₀ Nat => Finsupp.toMultiset s
+· 使用定理 `Multiset.count_finset_sup`：count_finset_sup [DecidableEq β] (s : Finset 
+α) (f : α -> Multiset β) (b : β) : count b (s.sup f) = s.sup fun a => count b (f
+ a)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finsupp.count_toMultiset`：count_toMultiset [DecidableEq α] (f : α ->₀ Na
+t) (a : α) : (toMultiset f).count a = f a
 -/
-theorem mem_restrictDegree_iff_sup [DecidableEq σ] (p : MvPolynomial σ R) (n : Nat) :
-    p in restrictDegree σ R n ↔ forall i, p.degrees.count i <= n := by
+theorem mem_restrictDegree_iff_sup [DecidableEq σ] (p : MvPolynomial σ R) (n : ℕ) :
+    p ∈ restrictDegree σ R n ↔ ∀ i, p.degrees.count i ≤ n := by
   simp only [mem_restrictDegree, degrees_def, Multiset.count_finset_sup, Finsupp.count_toMultiset,
     Finset.sup_le_iff]
   exact ⟨fun h n s hs => h s hs n, fun h s hs n => h n s hs⟩
 
 variable (R)
-
-/--
-theorem `restrictTotalDegree_le_restrictDegree` / 定理 `restrictTotalDegree_le_restrictDegree`
-
-English:
-theorem restrictTotalDegree_le_restrictDegree
-  given: (m : Nat)
-  proof: fun p hp => (mem_restrictDegree _ _ _).mpr fun s hs i => (degreeOf_le_iff.mp
-    (degreeOf_le_totalDegree p i) s hs).trans ((mem_restrictTotalDegree _ _ _).mp hp)
-
-中文:
-定理 restrictTotalDegree_le_restrictDegree
-  条件: (m : 自然数)
-  证明: fun p hp => (mem_restrictDegree _ _ _).mpr fun s hs i => (degreeOf_le_iff.mp
-    (degreeOf_le_totalDegree p i) s hs).trans ((mem_restrictTotalDegree _ _ _).mp hp)
-
-Depends on / 依赖: degreeOf_le_iff, degreeOf_le_iff.mp, degreeOf_le_totalDegree, mem_restrictDegree, mem_restrictTotalDegree
+/-
+**MvPolynomial.restrictTotalDegree_le_restrictDegree** 是 Mathlib 中的一个定理，位于命名空间 `
+MvPolynomial`。
+形式化陈述：restrictTotalDegree_le_restrictDegree (m : Nat) : restrictTotalDegree σ R 
+m <= restrictDegree σ R m
+参数：m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MvPolynomial.mem_restrictDegree`：mem_restrictDegree (p : MvPolynomial σ 
+R) (n : Nat) : p in restrictDegree σ R n ↔ forall s in p.support, forall i, (s :
+ σ ->₀ Nat) i <= n
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `MvPolynomial.degreeOf_le_iff`：degreeOf_le_iff {n : σ} {f : MvPolynomial 
+σ R} {d : Nat} : degreeOf n f <= d ↔ forall m in support f, m n <= d
+· 使用引理 `MvPolynomial.degreeOf_le_totalDegree`：degreeOf_le_totalDegree (f : MvPol
+ynomial σ R) (i : σ) : f.degreeOf i <= f.totalDegree
+· 使用定理 `MvPolynomial.mem_restrictTotalDegree`：mem_restrictTotalDegree (p : MvPol
+ynomial σ R) : p in restrictTotalDegree σ R m ↔ p.totalDegree <= m
 -/
-theorem restrictTotalDegree_le_restrictDegree (m : Nat) :
-    restrictTotalDegree σ R m <= restrictDegree σ R m :=
-  fun p hp => (mem_restrictDegree _ _ _).mpr fun s hs i => (degreeOf_le_iff.mp
+theorem restrictTotalDegree_le_restrictDegree (m : ℕ) :
+    restrictTotalDegree σ R m ≤ restrictDegree σ R m :=
+  fun p hp ↦ (mem_restrictDegree _ _ _).mpr fun s hs i ↦ (degreeOf_le_iff.mp
     (degreeOf_le_totalDegree p i) s hs).trans ((mem_restrictTotalDegree _ _ _).mp hp)
 
-/--
-Definition of `basisMonomials` / `basisMonomials` 的定义
+/-- The monomials form a basis on `MvPolynomial σ R`. -/
+/-
+**MvPolynomial.basisMonomials** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：basisMonomials : Basis (σ ->₀ Nat) R (MvPolynomial σ R) where repr
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basisMonomials
-  signature: : Basis (σ ->₀ Nat) R (MvPolynomial σ R) where
-  body: AddMonoidAlgebra.coeffLinearEquiv _
-
-@[simp]
-
-中文:
-定义 basisMonomials
-  签名: : 基 (σ ->₀ 自然数) R (多元多项式 σ R) where
-  定义体: AddMonoidAlgebra.coeffLinearEquiv _
-
-@[simp]
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeffLinearEquiv, coeffLinearEquiv
+--- 原说明 ---
+The monomials form a basis on `MvPolynomial σ R`.
 -/
-def basisMonomials : Basis (σ ->₀ Nat) R (MvPolynomial σ R) where
+def basisMonomials : Basis (σ →₀ ℕ) R (MvPolynomial σ R) where
   repr := AddMonoidAlgebra.coeffLinearEquiv _
 
 @[simp]
-/--
-theorem `coe_basisMonomials` / 定理 `coe_basisMonomials`
-
-English:
-theorem coe_basisMonomials
-  proof: rfl
-
-中文:
-定理 coe_basisMonomials
-  证明: rfl
+/-
+**MvPolynomial.coe_basisMonomials** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：coe_basisMonomials : (basisMonomials σ R : (σ ->₀ Nat) -> MvPolynomial σ R
+) = fun s => monomial s 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_basisMonomials :
-    (basisMonomials σ R : (σ ->₀ Nat) -> MvPolynomial σ R) = fun s => monomial s 1 :=
+    (basisMonomials σ R : (σ →₀ ℕ) → MvPolynomial σ R) = fun s => monomial s 1 :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The `R`-module `MvPolynomial σ R` is free. -/
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Module.Free R (MvPolynomial σ R)
-  body: Module.Free.of_basis (MvPolynomial.basisMonomials σ R)
-
-中文:
-实例 :
-  签名: 模.自由 R (多元多项式 σ R)
-  定义体: Module.Free.of_basis (MvPolynomial.basisMonomials σ R)
-
-Depends on / 依赖: Module, Module.Free.of_basis, MvPolynomial, MvPolynomial.basisMonomials, basisMonomials, of_basis
+--- 原说明 ---
+The `R`-module `MvPolynomial σ R` is free.
 -/
 instance : Module.Free R (MvPolynomial σ R) :=
   Module.Free.of_basis (MvPolynomial.basisMonomials σ R)
-
-/--
-theorem `linearIndependent_X` / 定理 `linearIndependent_X`
-
-English:
-theorem linearIndependent_X
-  statement: LinearIndependent R (X : σ -> MvPolynomial σ R)
-  proof: (basisMonomials σ R).linearIndependent.comp (fun s : σ => Finsupp.single s 1)
-    (Finsupp.single_left_injective one_ne_zero)
-
-中文:
-定理 linearIndependent_X
-  结论: LinearIndependent R (X : σ -> 多元多项式 σ R)
-  证明: (basisMonomials σ R).linearIndependent.comp (fun s : σ => Finsupp.single s 1)
-    (Finsupp.single_left_injective one_ne_zero)
-
-Depends on / 依赖: Finsupp, Finsupp.single, Finsupp.single_left_injective, basisMonomials, linearIndependent, linearIndependent.comp, one_ne_zero, single, single_left_injective
+/-
+**MvPolynomial.linearIndependent_X** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：linearIndependent_X : LinearIndependent R (X : σ -> MvPolynomial σ R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIndependent.comp`：LinearIndependent.comp (h : LinearIndependent R 
+v) (f : ι' -> ι) (hf : Injective f) : LinearIndependent R (v ∘ f)
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
+· 使用定理 `Finsupp.single_left_injective`：single_left_injective (h : b != 0) : Func
+tion.Injective fun a : α => single a b
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-theorem linearIndependent_X : LinearIndependent R (X : σ -> MvPolynomial σ R) :=
+theorem linearIndependent_X : LinearIndependent R (X : σ → MvPolynomial σ R) :=
   (basisMonomials σ R).linearIndependent.comp (fun s : σ => Finsupp.single s 1)
     (Finsupp.single_left_injective one_ne_zero)
-
-/--
-lemma `finite_setOfPred_bounded` / 引理 `finite_setOfPred_bounded`
-
-English:
-lemma finite_setOfPred_bounded
-  given: (α) [Finite α] (n : Nat)
-  proof: ((Set.Finite.pi' fun _ => Set.finite_le_nat _).preimage DFunLike.coe_injective.injOn).to_subtype
-
-中文:
-引理 finite_setOfPred_bounded
-  条件: (α) [有限 α] (n : 自然数)
-  证明: ((Set.Finite.pi' fun _ => Set.finite_le_nat _).preimage DFunLike.coe_injective.injOn).to_subtype
+/-
+**MvPolynomial.finite_setOfPred_bounded** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma finite_setOfPred_bounded (α) [Finite α] (n : Nat) :
-    Finite {f : α ->₀ Nat | forall a, f a <= n} :=
-  ((Set.Finite.pi' fun _ => Set.finite_le_nat _).preimage DFunLike.coe_injective.injOn).to_subtype
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: σ] (N
-  body: have := finite_setOfPred_bounded σ N
-  Module.Finite.of_basis (basisRestrictSupport R _)
-
-中文:
-实例 [有限
-  签名: σ] (N
-  定义体: have := finite_setOfPred_bounded σ N
-  Module.Finite.of_basis (basisRestrictSupport R _)
-
-Depends on / 依赖: Finite, Module, Module.Finite.of_basis, basisRestrictSupport, finite_setOfPred_bounded, of_basis
+private lemma finite_setOfPred_bounded (α) [Finite α] (n : ℕ) :
+    Finite {f : α →₀ ℕ | ∀ a, f a ≤ n} :=
+  ((Set.Finite.pi' fun _ ↦ Set.finite_le_nat _).preimage DFunLike.coe_injective.injOn).to_subtype
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Finite σ] (N : Nat) : Module.Finite R (restrictDegree σ R N) :=
+instance [Finite σ] (N : ℕ) : Module.Finite R (restrictDegree σ R N) :=
   have := finite_setOfPred_bounded σ N
   Module.Finite.of_basis (basisRestrictSupport R _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: σ] (N
-  body: have := finite_setOfPred_bounded σ N
-  have : Finite {s : σ ->₀ Nat | s.sum (fun _ e => e) <= N} := by
-    rw [Set.finite_coe_iff] at this ⊢
-    exact this.subset fun n hn i => (eq_or_ne (n i) 0).elim
-      (fun h => h.trans_le N.zero_le) fun h =>
-        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) <| Finsupp.mem_support_iff.mpr h).trans hn
-  Module.Finite.of_basis (basisRestrictSupport R _)
-
-中文:
-实例 [有限
-  签名: σ] (N
-  定义体: have := finite_setOfPred_bounded σ N
-  have : Finite {s : σ ->₀ Nat | s.sum (fun _ e => e) <= N} := by
-    rw [Set.finite_coe_iff] at this ⊢
-    exact this.subset fun n hn i => (eq_or_ne (n i) 0).elim
-      (fun h => h.trans_le N.zero_le) fun h =>
-        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) <| Finsupp.mem_support_iff.mpr h).trans hn
-  Module.Finite.of_basis (basisRestrictSupport R _)
-
-Depends on / 依赖: Finite, Finset, Finset.single_le_sum, Finsupp, Finsupp.mem_support_iff.mpr, Module, Module.Finite.of_basis, N.zero_le, Nat.zero_le, Set.finite_coe_iff, basisRestrictSupport, eq_or_ne, finite_coe_iff, finite_setOfPred_bounded, h.trans_le, mem_support_iff, of_basis, s.sum, single_le_sum, subset
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Finite σ] (N : Nat) : Module.Finite R (restrictTotalDegree σ R N) :=
+instance [Finite σ] (N : ℕ) : Module.Finite R (restrictTotalDegree σ R N) :=
   have := finite_setOfPred_bounded σ N
-  have : Finite {s : σ ->₀ Nat | s.sum (fun _ e => e) <= N} := by
+  have : Finite {s : σ →₀ ℕ | s.sum (fun _ e ↦ e) ≤ N} := by
     rw [Set.finite_coe_iff] at this ⊢
-    exact this.subset fun n hn i => (eq_or_ne (n i) 0).elim
-      (fun h => h.trans_le N.zero_le) fun h =>
-        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) <| Finsupp.mem_support_iff.mpr h).trans hn
+    exact this.subset fun n hn i ↦ (eq_or_ne (n i) 0).elim
+      (fun h ↦ h.trans_le N.zero_le) fun h ↦
+        (Finset.single_le_sum (fun _ _ ↦ Nat.zero_le _) <| Finsupp.mem_support_iff.mpr h).trans hn
   Module.Finite.of_basis (basisRestrictSupport R _)
 
 end Degree
 
 end MvPolynomial
+

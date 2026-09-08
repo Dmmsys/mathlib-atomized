@@ -62,18 +62,11 @@ then `FreeAddMonoid α` is isomorphic to `ℕ`.
 If `α` has two or more terms then `FreeAddMonoid α` is not commutative.
 One can think of `FreeAddMonoid α` as the type of lists of `α`, with addition
 given by concatenation. -/]
-/--
-Definition of `FreeMonoid` / `FreeMonoid` 的定义
-
-English:
-definition FreeMonoid
-  signature: (α)
-  body: List α
-
-中文:
-定义 自由幺半群
-  签名: (α)
-  定义体: List α
+/-
+**FreeMonoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FreeMonoid (α)
+参数：α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def FreeMonoid (α) := List α
 
@@ -81,201 +74,94 @@ namespace FreeMonoid
 
 /-- The identity equivalence between `FreeMonoid α` and `List α`. -/
 @[to_additive /-- The identity equivalence between `FreeAddMonoid α` and `List α`. -/]
-/--
-Definition of `toList` / `toList` 的定义
+/-
+**FreeMonoid.toList** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：toList : FreeMonoid α ≃ List α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toList
-  signature: : FreeMonoid α ≃ List α
-  body: Equiv.refl _
-
-中文:
-定义 toList
-  签名: : 自由幺半群 α ≃ 列表 α
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The identity equivalence between `FreeMonoid α` and `List α`.
 -/
 def toList : FreeMonoid α ≃ List α := Equiv.refl _
 
 /-- The identity equivalence between `List α` and `FreeMonoid α`. -/
 @[to_additive /-- The identity equivalence between `List α` and `FreeAddMonoid α`. -/]
-/--
-Definition of `ofList` / `ofList` 的定义
+/-
+**FreeMonoid.ofList** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList : List α ≃ FreeMonoid α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofList
-  signature: : List α ≃ FreeMonoid α
-  body: Equiv.refl _
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 ofList
-  签名: : 列表 α ≃ 自由幺半群 α
-  定义体: Equiv.refl _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The identity equivalence between `List α` and `FreeMonoid α`.
 -/
 def ofList : List α ≃ FreeMonoid α := Equiv.refl _
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_symm` / 定理 `toList_symm`
-
-English:
-theorem toList_symm
-  statement: (@toList α).symm = ofList
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toList_symm
-  结论: (@toList α).symm = ofList
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.toList_symm** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_symm : (@toList α).symm = ofList
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toList_symm : (@toList α).symm = ofList := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofList_symm` / 定理 `ofList_symm`
-
-English:
-theorem ofList_symm
-  statement: (@ofList α).symm = toList
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 ofList_symm
-  结论: (@ofList α).symm = toList
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.ofList_symm** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_symm : (@ofList α).symm = toList
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofList_symm : (@ofList α).symm = toList := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_ofList` / 定理 `toList_ofList`
-
-English:
-theorem toList_ofList
-  given: (l : List α)
-  statement: toList (ofList l) = l
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toList_ofList
-  条件: (l : 列表 α)
-  结论: toList (ofList l) = l
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.toList_ofList** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_ofList (l : List α) : toList (ofList l) = l
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_ofList (l : List α) : toList (ofList l) = l := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofList_toList` / 定理 `ofList_toList`
-
-English:
-theorem ofList_toList
-  given: (xs : FreeMonoid α)
-  statement: ofList (toList xs) = xs
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 ofList_toList
-  条件: (xs : 自由幺半群 α)
-  结论: ofList (toList xs) = xs
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.ofList_toList** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_toList (xs : FreeMonoid α) : ofList (toList xs) = xs
+参数：xs : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofList_toList (xs : FreeMonoid α) : ofList (toList xs) = xs := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_comp_ofList` / 定理 `toList_comp_ofList`
-
-English:
-theorem toList_comp_ofList
-  statement: @toList α ∘ ofList = id
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toList_comp_ofList
-  结论: @toList α ∘ ofList = id
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.toList_comp_ofList** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_comp_ofList : @toList α ∘ ofList = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_comp_ofList : @toList α ∘ ofList = id := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofList_comp_toList` / 定理 `ofList_comp_toList`
-
-English:
-theorem ofList_comp_toList
-  statement: @ofList α ∘ toList = id
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 ofList_comp_toList
-  结论: @ofList α ∘ toList = id
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.ofList_comp_toList** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_comp_toList : @ofList α ∘ toList = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofList_comp_toList : @ofList α ∘ toList = id := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CancelMonoid (FreeMonoid α)
-  body: ofList []
-  mul x y := ofList (toList x ++ toList y)
-  mul_one := List.append_nil
-  one_mul := List.nil_append
-  mul_assoc := List.append_assoc
-  mul_left_cancel _ _ _ := List.append_cancel_left
-  mul_right_cancel _ _ _ := List.append_cancel_right
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 消去幺半群 (自由幺半群 α)
-  定义体: ofList []
-  mul x y := ofList (toList x ++ toList y)
-  mul_one := List.append_nil
-  one_mul := List.nil_append
-  mul_assoc := List.append_assoc
-  mul_left_cancel _ _ _ := List.append_cancel_left
-  mul_right_cancel _ _ _ := List.append_cancel_right
-
-@[to_additive]
-
-Depends on / 依赖: ofList
+/-
+**FreeMonoid.** 是 Mathlib 中的一个实例，位于命名空间 `FreeMonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CancelMonoid (FreeMonoid α) where
   one := ofList []
@@ -287,345 +173,190 @@ instance : CancelMonoid (FreeMonoid α) where
   mul_right_cancel _ _ _ := List.append_cancel_right
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (FreeMonoid α)
-  body: ⟨1⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 (自由幺半群 α)
-  定义体: ⟨1⟩
-
-@[to_additive]
+/-
+**FreeMonoid.** 是 Mathlib 中的一个实例，位于命名空间 `FreeMonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (FreeMonoid α) := ⟨1⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] : Unique (FreeMonoid α)
-  body: inferInstanceAs Unique (List α)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [是空
-  签名: α] : 唯一 (自由幺半群 α)
-  定义体: inferInstanceAs Unique (List α)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Unique
+/-
+**FreeMonoid.** 是 Mathlib 中的一个实例，位于命名空间 `FreeMonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsEmpty α] : Unique (FreeMonoid α) := inferInstanceAs Unique (List α)
+instance [IsEmpty α] : Unique (FreeMonoid α) := inferInstanceAs <| Unique (List α)
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_one` / 定理 `toList_one`
-
-English:
-theorem toList_one
-  statement: toList (1 : FreeMonoid α) = []
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toList_one
-  结论: toList (1 : 自由幺半群 α) = []
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.toList_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_one : toList (1 : FreeMonoid α) = []
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_one : toList (1 : FreeMonoid α) = [] := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofList_nil` / 定理 `ofList_nil`
-
-English:
-theorem ofList_nil
-  statement: ofList ([] : List α) = 1
-  proof: rfl
-
-@[to_additive (attr := deprecated toList_one (since := "2026-03-26"))]
-
-中文:
-定理 ofList_nil
-  结论: ofList ([] : 列表 α) = 1
-  证明: rfl
-
-@[to_additive (attr := deprecated toList_one (since := "2026-03-26"))]
+/-
+**FreeMonoid.ofList_nil** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_nil : ofList ([] : List α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofList_nil : ofList ([] : List α) = 1 := rfl
 
 @[to_additive (attr := deprecated toList_one (since := "2026-03-26"))]
-/--
-theorem `toList_nil` / 定理 `toList_nil`
-
-English:
-theorem toList_nil
-  statement: toList ([] : FreeMonoid α) = []
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toList_nil
-  结论: toList ([] : 自由幺半群 α) = []
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.toList_nil** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_nil : toList ([] : FreeMonoid α) = []
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_nil : toList ([] : FreeMonoid α) = [] := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_mul` / 定理 `toList_mul`
-
-English:
-theorem toList_mul
-  given: (xs ys : FreeMonoid α)
-  statement: toList (xs * ys) = toList xs ++ toList ys
-  proof: rfl
-
-@[to_additive (attr := deprecated toList_mul (since := "2026-03-26"))]
-
-中文:
-定理 toList_mul
-  条件: (xs ys : 自由幺半群 α)
-  结论: toList (xs * ys) = toList xs ++ toList ys
-  证明: rfl
-
-@[to_additive (attr := deprecated toList_mul (since := "2026-03-26"))]
+/-
+**FreeMonoid.toList_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_mul (xs ys : FreeMonoid α) : toList (xs * ys) = toList xs ++ toList
+ ys
+参数：xs ys : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_mul (xs ys : FreeMonoid α) : toList (xs * ys) = toList xs ++ toList ys := rfl
 
 @[to_additive (attr := deprecated toList_mul (since := "2026-03-26"))]
-/--
-theorem `toList_cons` / 定理 `toList_cons`
-
-English:
-theorem toList_cons
-  given: (x : α) (xs : FreeMonoid α)
-  statement: toList (x :: xs) = x :: toList xs
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toList_cons
-  条件: (x : α) (xs : 自由幺半群 α)
-  结论: toList (x :: xs) = x :: toList xs
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.toList_cons** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_cons (x : α) (xs : FreeMonoid α) : toList (x :: xs) = x :: toList x
+s
+参数：x : α；xs : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_cons (x : α) (xs : FreeMonoid α) : toList (x :: xs) = x :: toList xs := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofList_append` / 定理 `ofList_append`
-
-English:
-theorem ofList_append
-  given: (xs ys : List α)
-  statement: ofList (xs ++ ys) = ofList xs * ofList ys
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 ofList_append
-  条件: (xs ys : 列表 α)
-  结论: ofList (xs ++ ys) = ofList xs * ofList ys
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.ofList_append** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_append (xs ys : List α) : ofList (xs ++ ys) = ofList xs * ofList ys
+参数：xs ys : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofList_append (xs ys : List α) : ofList (xs ++ ys) = ofList xs * ofList ys := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_prod` / 定理 `toList_prod`
-
-English:
-theorem toList_prod
-  given: (xs : List (FreeMonoid α))
-  statement: toList xs.prod = (xs.map toList).flatten
-  proof: by
-  induction xs <;> simp [*]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toList_prod
-  条件: (xs : 列表 (自由幺半群 α))
-  结论: toList xs.乘积 = (xs.map toList).flatten
-  证明: by
-  induction xs <;> simp [*]
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.toList_prod** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_prod (xs : List (FreeMonoid α)) : toList xs.prod = (xs.map toList).
+flatten
+参数：xs : List (FreeMonoid α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
 -/
 theorem toList_prod (xs : List (FreeMonoid α)) : toList xs.prod = (xs.map toList).flatten := by
   induction xs <;> simp [*]
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofList_flatten` / 定理 `ofList_flatten`
-
-English:
-theorem ofList_flatten
-  given: (xs : List (List α))
-  statement: ofList xs.flatten = (xs.map ofList).prod
-  proof: toList.injective by simp
-
-中文:
-定理 ofList_flatten
-  条件: (xs : 列表 (列表 α))
-  结论: ofList xs.flatten = (xs.map ofList).乘积
-  证明: toList.injective by simp
-
-Depends on / 依赖: injective, toList, toList.injective
+/-
+**FreeMonoid.ofList_flatten** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_flatten (xs : List (List α)) : ofList xs.flatten = (xs.map ofList).
+prod
+参数：xs : List (List α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeMonoid.toList_prod`：toList_prod (xs : List (FreeMonoid α)) : toList 
+xs.prod = (xs.map toList).flatten
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun`：∀ {α : Type u_1}, List.map id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofList_flatten (xs : List (List α)) : ofList xs.flatten = (xs.map ofList).prod :=
-toList.injective by simp
+  toList.injective <| by simp
 
 /-- Embeds an element of `α` into `FreeMonoid α` as a singleton list. -/
 @[to_additive /-- Embeds an element of `α` into `FreeAddMonoid α` as a singleton list. -/]
-/--
-Definition of `of` / `of` 的定义
+/-
+**FreeMonoid.of** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：of (x : α) : FreeMonoid α
+参数：x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: (x : α)
-  body: ofList [x]
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 of
-  签名: (x : α)
-  定义体: ofList [x]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: ofList
+--- 原说明 ---
+Embeds an element of `α` into `FreeMonoid α` as a singleton list.
 -/
 def of (x : α) : FreeMonoid α := ofList [x]
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_of` / 定理 `toList_of`
-
-English:
-theorem toList_of
-  given: (x : α)
-  statement: toList (of x) = [x]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toList_of
-  条件: (x : α)
-  结论: toList (of x) = [x]
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.toList_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_of (x : α) : toList (of x) = [x]
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_of (x : α) : toList (of x) = [x] := rfl
 
 @[to_additive]
-/--
-theorem `ofList_singleton` / 定理 `ofList_singleton`
-
-English:
-theorem ofList_singleton
-  given: (x : α)
-  statement: ofList [x] = of x
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 ofList_singleton
-  条件: (x : α)
-  结论: ofList [x] = of x
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.ofList_singleton** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_singleton (x : α) : ofList [x] = of x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofList_singleton (x : α) : ofList [x] = of x := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `ofList_cons` / 定理 `ofList_cons`
-
-English:
-theorem ofList_cons
-  given: (x : α) (xs : List α)
-  statement: ofList (x :: xs) = of x * ofList xs
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 ofList_cons
-  条件: (x : α) (xs : 列表 α)
-  结论: ofList (x :: xs) = of x * ofList xs
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.ofList_cons** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_cons (x : α) (xs : List α) : ofList (x :: xs) = of x * ofList xs
+参数：x : α；xs : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofList_cons (x : α) (xs : List α) : ofList (x :: xs) = of x * ofList xs := rfl
 
 @[to_additive]
-/--
-theorem `toList_of_mul` / 定理 `toList_of_mul`
-
-English:
-theorem toList_of_mul
-  given: (x : α) (xs : FreeMonoid α)
-  statement: toList (of x * xs) = x :: toList xs
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toList_of_mul
-  条件: (x : α) (xs : 自由幺半群 α)
-  结论: toList (of x * xs) = x :: toList xs
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.toList_of_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_of_mul (x : α) (xs : FreeMonoid α) : toList (of x * xs) = x :: toLi
+st xs
+参数：x : α；xs : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_of_mul (x : α) (xs : FreeMonoid α) : toList (of x * xs) = x :: toList xs := rfl
 
 @[to_additive]
-/--
-theorem `of_injective` / 定理 `of_injective`
-
-English:
-theorem of_injective
-  statement: Function.Injective (@of α)
-  proof: List.singleton_injective
-
-中文:
-定理 of_injective
-  结论: 函数.单射 (@of α)
-  证明: List.singleton_injective
-
-Depends on / 依赖: List.countP_append, List.singleton_injective, countP, countP_append, singleton_injective
+/-
+**FreeMonoid.of_injective** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：of_injective : Function.Injective (@of α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.singleton_injective`：singleton_injective : Injective fun a : α => [
+a]
 -/
 theorem of_injective : Function.Injective (@of α) := List.singleton_injective
 
@@ -637,272 +368,155 @@ variable {a : FreeMonoid α}
 /-- The length of a free monoid element: 1.length = 0 and (a * b).length = a.length + b.length -/
 @[to_additive /-- The length of an additive free monoid element: 1.length = 0 and (a + b).length =
   a.length + b.length -/]
-/--
-Definition of `length` / `length` 的定义
-
-English:
-definition length
-  signature: (a : FreeMonoid α)
-  body: a.toList.length
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 length
-  签名: (a : 自由幺半群 α)
-  定义体: a.toList.length
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: a.toList.length, length, toList
+/-
+**FreeMonoid.length** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：length (a : FreeMonoid α) : Nat
+参数：a : FreeMonoid α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def length (a : FreeMonoid α) : Nat := a.toList.length
+def length (a : FreeMonoid α) : ℕ := a.toList.length
 
 @[to_additive (attr := simp)]
-/--
-theorem `length_one` / 定理 `length_one`
-
-English:
-theorem length_one
-  statement: length (1 : FreeMonoid α) = 0
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 length_one
-  结论: length (1 : 自由幺半群 α) = 0
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.length_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_one : length (1 : FreeMonoid α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem length_one : length (1 : FreeMonoid α) = 0 := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `length_eq_zero` / 定理 `length_eq_zero`
-
-English:
-theorem length_eq_zero
-  statement: length a = 0 ↔ a = 1
-  proof: List.length_eq_zero_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 length_eq_zero
-  结论: length a = 0 ↔ a = 1
-  证明: List.length_eq_zero_iff
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.length_eq_zero_iff, length_eq_zero_iff
+/-
+**FreeMonoid.length_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_eq_zero : length a = 0 ↔ a = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_eq_zero_iff`：∀ {α : Type u_1} {l : List α}, l.length = 0 ↔ l
+ = []
 -/
 theorem length_eq_zero : length a = 0 ↔ a = 1 := List.length_eq_zero_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `length_of` / 定理 `length_of`
-
-English:
-theorem length_of
-  given: (m : α)
-  statement: length (of m) = 1
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 length_of
-  条件: (m : α)
-  结论: length (of m) = 1
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.length_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_of (m : α) : length (of m) = 1
+参数：m : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem length_of (m : α) : length (of m) = 1 := rfl
 
 @[to_additive]
-/--
-theorem `length_surjective` / 定理 `length_surjective`
-
-English:
-theorem length_surjective
-  given: [Nonempty α]
-  statement: (@length α).Surjective
-  proof: ‹Nonempty α›.elim fun a n => ⟨FreeMonoid.ofList (List.replicate n a), by simp [length]⟩
-
-@[to_additive FreeAddMonoid.length_eq_one]
-
-中文:
-定理 length_surjective
-  条件: [非空 α]
-  结论: (@length α).满射
-  证明: ‹Nonempty α›.elim fun a n => ⟨FreeMonoid.ofList (List.replicate n a), by simp [length]⟩
-
-@[to_additive FreeAddMonoid.length_eq_one]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.ofList, List.replicate, Nonempty, length, ofList, replicate
+/-
+**FreeMonoid.length_surjective** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_surjective [Nonempty α] : (@length α).Surjective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_replicate`：∀ {α : Type u} {n : ℕ} {a : α}, (List.replicate n
+ a).length = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem length_surjective [Nonempty α] : (@length α).Surjective :=
   ‹Nonempty α›.elim fun a n => ⟨FreeMonoid.ofList (List.replicate n a), by simp [length]⟩
 
 @[to_additive FreeAddMonoid.length_eq_one]
-/--
-theorem `length_eq_one` / 定理 `length_eq_one`
-
-English:
-theorem length_eq_one
-  statement: length a = 1 ↔ exists m, a = FreeMonoid.of m
-  proof: List.length_eq_one_iff
-
-@[to_additive]
-
-中文:
-定理 length_eq_one
-  结论: length a = 1 ↔ 存在 m, a = 自由幺半群.of m
-  证明: List.length_eq_one_iff
-
-@[to_additive]
-
-Depends on / 依赖: List.length_eq_one_iff, length_eq_one_iff
+/-
+**FreeMonoid.length_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_eq_one : length a = 1 ↔ exists m, a = FreeMonoid.of m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_eq_one_iff`：∀ {α : Type u_1} {l : List α}, l.length = 1 ↔ ∃ 
+a, l = [a]
 -/
-theorem length_eq_one : length a = 1 ↔ exists m, a = FreeMonoid.of m :=
+theorem length_eq_one : length a = 1 ↔ ∃ m, a = FreeMonoid.of m :=
   List.length_eq_one_iff
 
 @[to_additive]
-/--
-theorem `length_eq_two` / 定理 `length_eq_two`
-
-English:
-theorem length_eq_two
-  given: {v : FreeMonoid α}
-  proof: List.length_eq_two
-
-@[to_additive]
-
-中文:
-定理 length_eq_two
-  条件: {v : 自由幺半群 α}
-  证明: List.length_eq_two
-
-@[to_additive]
-
-Depends on / 依赖: List.length_eq_two, length_eq_two
+/-
+**FreeMonoid.length_eq_two** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_eq_two {v : FreeMonoid α} : v.length = 2 ↔ exists c d, v = FreeMono
+id.of c * FreeMonoid.of d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_eq_two`：length_eq_two {l : List α} : l.length = 2 ↔ exists a
+ b, l = [a, b]
 -/
 theorem length_eq_two {v : FreeMonoid α} :
-    v.length = 2 ↔ exists c d, v = FreeMonoid.of c * FreeMonoid.of d := List.length_eq_two
+    v.length = 2 ↔ ∃ c d, v = FreeMonoid.of c * FreeMonoid.of d := List.length_eq_two
 
 @[to_additive]
-/--
-theorem `length_eq_three` / 定理 `length_eq_three`
-
-English:
-theorem length_eq_three
-  given: {v : FreeMonoid α}
-  statement: v.length = 3 ↔ exists (a b c : α), v = of a * of b * of c
-  proof: List.length_eq_three
-
-@[to_additive]
-
-中文:
-定理 length_eq_three
-  条件: {v : 自由幺半群 α}
-  结论: v.length = 3 ↔ 存在 (a b c : α), v = of a * of b * of c
-  证明: List.length_eq_three
-
-@[to_additive]
-
-Depends on / 依赖: List.length_eq_three, length_eq_three
+/-
+**FreeMonoid.length_eq_three** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_eq_three {v : FreeMonoid α} : v.length = 3 ↔ exists (a b c : α), v 
+= of a * of b * of c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_eq_three`：length_eq_three {l : List α} : l.length = 3 ↔ exis
+ts a b c, l = [a, b, c]
 -/
-theorem length_eq_three {v : FreeMonoid α} : v.length = 3 ↔ exists (a b c : α), v = of a * of b * of c :=
+theorem length_eq_three {v : FreeMonoid α} : v.length = 3 ↔ ∃ (a b c : α), v = of a * of b * of c :=
   List.length_eq_three
 
 @[to_additive]
-/--
-theorem `length_eq_four` / 定理 `length_eq_four`
-
-English:
-theorem length_eq_four
-  given: {v : FreeMonoid α}
-  proof: List.length_eq_four
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 length_eq_four
-  条件: {v : 自由幺半群 α}
-  证明: List.length_eq_four
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.length_eq_four, length_eq_four
+/-
+**FreeMonoid.length_eq_four** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_eq_four {v : FreeMonoid α} : v.length = 4 ↔ exists (a b c d : α), v
+ = of a * of b * of c * of d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_eq_four`：length_eq_four {l : List α} : l.length = 4 ↔ exists
+ a b c d, l = [a, b, c, d]
 -/
 theorem length_eq_four {v : FreeMonoid α} :
-    v.length = 4 ↔ exists (a b c d : α), v = of a * of b * of c * of d := List.length_eq_four
+    v.length = 4 ↔ ∃ (a b c d : α), v = of a * of b * of c * of d := List.length_eq_four
 
 @[to_additive (attr := simp)]
-/--
-theorem `length_mul` / 定理 `length_mul`
-
-English:
-theorem length_mul
-  given: (a b : FreeMonoid α)
-  statement: (a * b).length = a.length + b.length
-  proof: List.length_append
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 length_mul
-  条件: (a b : 自由幺半群 α)
-  结论: (a * b).length = a.length + b.length
-  证明: List.length_append
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.length_append, length_append
+/-
+**FreeMonoid.length_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_mul (a b : FreeMonoid α) : (a * b).length = a.length + b.length
+参数：a b : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
 -/
 theorem length_mul (a b : FreeMonoid α) : (a * b).length = a.length + b.length :=
   List.length_append
 
 @[to_additive (attr := simp)]
-/--
-theorem `of_ne_one` / 定理 `of_ne_one`
-
-English:
-theorem of_ne_one
-  given: (a : α)
-  statement: of a != 1
-  proof: by
-  intro h
-  have := congrArg FreeMonoid.length h
-  simp only [length_of, length_one, Nat.succ_ne_self] at this
-
-@[to_additive (attr := simp)]
-.symm theorem one_ne_of (a : α) : 1 != of a := of_ne_one _
-
-中文:
-定理 of_ne_one
-  条件: (a : α)
-  结论: of a != 1
-  证明: by
-  intro h
-  have := congrArg FreeMonoid.length h
-  simp only [length_of, length_one, Nat.succ_ne_self] at this
-
-@[to_additive (attr := simp)]
-.symm theorem one_ne_of (a : α) : 1 != of a := of_ne_one _
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.length, Nat.succ_ne_self, length, length_of, length_one, succ_ne_self
+/-
+**FreeMonoid.of_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：of_ne_one (a : α) : of a != 1
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem of_ne_one (a : α) : of a != 1 := by
+theorem of_ne_one (a : α) : of a ≠ 1 := by
   intro h
   have := congrArg FreeMonoid.length h
   simp only [length_of, length_one, Nat.succ_ne_self] at this
 
 @[to_additive (attr := simp)]
-.symm theorem one_ne_of (a : α) : 1 != of a := of_ne_one _
+/-
+**FreeMonoid.one_ne_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：∀ {α : Type u_1} (a : α), 1 ≠ FreeMonoid.of a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `FreeMonoid.of_ne_one`：of_ne_one (a : α) : of a != 1
+-/
+theorem one_ne_of (a : α) : 1 ≠ of a := of_ne_one _ |>.symm
 
 end Length
 
@@ -911,134 +525,64 @@ variable {m : α}
 
 /-- Membership in a free monoid element -/
 @[to_additive /-- Membership in a free monoid element -/]
-/--
-Definition of `mem` / `mem` 的定义
+/-
+**FreeMonoid.mem** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：mem (a : FreeMonoid α) (m : α)
+参数：a : FreeMonoid α；m : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mem
-  signature: (a : FreeMonoid α) (m : α)
-  body: m in toList a
-
-@[to_additive]
-
-中文:
-定义 mem
-  签名: (a : 自由幺半群 α) (m : α)
-  定义体: m in toList a
-
-@[to_additive]
-
-Depends on / 依赖: toList
+--- 原说明 ---
+Membership in a free monoid element
 -/
-def mem (a : FreeMonoid α) (m : α) := m in toList a
+def mem (a : FreeMonoid α) (m : α) := m ∈ toList a
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership α (FreeMonoid α)
-  body: ⟨mem⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: Membership α (自由幺半群 α)
-  定义体: ⟨mem⟩
-
-@[to_additive]
+/-
+**FreeMonoid.** 是 Mathlib 中的一个实例，位于命名空间 `FreeMonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership α (FreeMonoid α) := ⟨mem⟩
 
 @[to_additive]
-/--
-theorem `notMem_one` / 定理 `notMem_one`
-
-English:
-theorem notMem_one
-  statement: m ∉ (1 : FreeMonoid α)
-  proof: List.not_mem_nil
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 notMem_one
-  结论: m ∉ (1 : 自由幺半群 α)
-  证明: List.not_mem_nil
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.not_mem_nil, not_mem_nil
+/-
+**FreeMonoid.notMem_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：notMem_one : m ∉ (1 : FreeMonoid α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.not_mem_nil`：∀ {α : Type u_1} {a : α}, a ∉ []
 -/
 theorem notMem_one : m ∉ (1 : FreeMonoid α) := List.not_mem_nil
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_of` / 定理 `mem_of`
-
-English:
-theorem mem_of
-  given: {n : α}
-  statement: m in of n ↔ m = n
-  proof: List.mem_singleton
+/-
+**FreeMonoid.mem_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：mem_of {n : α} : m in of n ↔ m = n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_singleton`：∀ {α : Type u_1} {a b : α}, a ∈ [b] ↔ a = b
+-/
+theorem mem_of {n : α} : m ∈ of n ↔ m = n := List.mem_singleton
 
 @[to_additive]
-
-中文:
-定理 mem_of
-  条件: {n : α}
-  结论: m in of n ↔ m = n
-  证明: List.mem_singleton
-
-@[to_additive]
-
-Depends on / 依赖: List.mem_singleton, mem_singleton
+/-
+**FreeMonoid.mem_of_self** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：mem_of_self : m in of m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_singleton_self`：∀ {α : Type u_1} (a : α), a ∈ [a]
 -/
-theorem mem_of {n : α} : m in of n ↔ m = n := List.mem_singleton
-
-@[to_additive]
-/--
-theorem `mem_of_self` / 定理 `mem_of_self`
-
-English:
-theorem mem_of_self
-  statement: m in of m
-  proof: List.mem_singleton_self _
+theorem mem_of_self : m ∈ of m := List.mem_singleton_self _
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 mem_of_self
-  结论: m in of m
-  证明: List.mem_singleton_self _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.mem_singleton_self, mem_singleton_self
+/-
+**FreeMonoid.mem_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：mem_mul {a b : FreeMonoid α} : m in (a * b) ↔ m in a ∨ m in b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_append`：∀ {α : Type u_1} {a : α} {s t : List α}, a ∈ s ++ t ↔ a
+ ∈ s ∨ a ∈ t
 -/
-theorem mem_of_self : m in of m := List.mem_singleton_self _
-
-@[to_additive (attr := simp)]
-/--
-theorem `mem_mul` / 定理 `mem_mul`
-
-English:
-theorem mem_mul
-  given: {a b : FreeMonoid α}
-  statement: m in (a * b) ↔ m in a ∨ m in b
-  proof: List.mem_append
-
-中文:
-定理 mem_mul
-  条件: {a b : 自由幺半群 α}
-  结论: m in (a * b) ↔ m in a ∨ m in b
-  证明: List.mem_append
-
-Depends on / 依赖: List.mem_append, mem_append
--/
-theorem mem_mul {a b : FreeMonoid α} : m in (a * b) ↔ m in a ∨ m in b := List.mem_append
+theorem mem_mul {a b : FreeMonoid α} : m ∈ (a * b) ↔ m ∈ a ∨ m ∈ b := List.mem_append
 
 end Mem
 
@@ -1047,66 +591,44 @@ end Mem
   /-- Recursor for `FreeAddMonoid` using `0` and
   `FreeAddMonoid.of x + xs` instead of `[]` and `x :: xs`. -/]
 -- Porting note: change from `List.recOn` to `List.rec` since only the latter is computable
-/--
-Definition of `recOn` / `recOn` 的定义
-
-English:
-definition recOn
-  signature: {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive 1)
-  body: List.rec one of_mul xs
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 recOn
-  签名: {motive : 自由幺半群 α -> 类型层*} (xs : 自由幺半群 α) (one : motive 1)
-  定义体: List.rec one of_mul xs
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.rec, of_mul
+/-
+**FreeMonoid.recOn** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：recOn {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive 1
+) (of_mul : forall x xs, motive xs -> motive (of x * xs)) : motive xs
+参数：xs : FreeMonoid α；one : motive 1；of_mul : forall x xs, motive xs -> motive (o
+f x * xs)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def recOn {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive 1)
-    (of_mul : forall x xs, motive xs -> motive (of x * xs)) : motive xs := List.rec one of_mul xs
+def recOn {motive : FreeMonoid α → Sort*} (xs : FreeMonoid α) (one : motive 1)
+    (of_mul : ∀ x xs, motive xs → motive (of x * xs)) : motive xs := List.rec one of_mul xs
 
 @[to_additive (attr := simp)]
-/--
-theorem `recOn_one` / 定理 `recOn_one`
-
-English:
-theorem recOn_one
-  statement: {motive : FreeMonoid α -> Sort*} (one : motive 1)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 recOn_one
-  结论: {motive : 自由幺半群 α -> 类型层*} (one : motive 1)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.recOn_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：recOn_one {motive : FreeMonoid α -> Sort*} (one : motive 1) (of_mul : fora
+ll x xs, motive xs -> motive (of x * xs)) : @recOn α motive 1 one of_mul = one
+参数：one : motive 1；of_mul : forall x xs, motive xs -> motive (of x * xs)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem recOn_one {motive : FreeMonoid α -> Sort*} (one : motive 1)
-    (of_mul : forall x xs, motive xs -> motive (of x * xs)) :
+theorem recOn_one {motive : FreeMonoid α → Sort*} (one : motive 1)
+    (of_mul : ∀ x xs, motive xs → motive (of x * xs)) :
     @recOn α motive 1 one of_mul = one := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `recOn_of_mul` / 定理 `recOn_of_mul`
-
-English:
-theorem recOn_of_mul
-  statement: {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
-  proof: rfl
-
-中文:
-定理 recOn_of_mul
-  结论: {motive : 自由幺半群 α -> 类型层*} (x : α) (xs : 自由幺半群 α) (one : motive 1)
-  证明: rfl
+/-
+**FreeMonoid.recOn_of_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：recOn_of_mul {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) 
+(one : motive 1) (of_mul : forall x xs, motive xs -> motive (of x * xs)) : @recO
+n α motive (of x * xs) one of_mul = of_mul x xs (recOn xs one of_mul)
+参数：x : α；xs : FreeMonoid α；one : motive 1；of_mul : forall x xs, motive xs -> mot
+ive (of x * xs)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem recOn_of_mul {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
-    (of_mul : forall x xs, motive xs -> motive (of x * xs)) :
+theorem recOn_of_mul {motive : FreeMonoid α → Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
+    (of_mul : ∀ x xs, motive xs → motive (of x * xs)) :
     @recOn α motive (of x * xs) one of_mul = of_mul x xs (recOn xs one of_mul) :=
   rfl
 
@@ -1117,22 +639,18 @@ section induction_principles
 /-- An induction principle on free monoids, with cases for `1`, `FreeMonoid.of` and `*`. -/
 @[to_additive (attr := elab_as_elim, induction_eliminator)
 /-- An induction principle on free monoids, with cases for `0`, `FreeAddMonoid.of` and `+`. -/]
-/--
-theorem `inductionOn` / 定理 `inductionOn`
-
-English:
-theorem inductionOn
-  statement: {motive : FreeMonoid α -> Prop} (z : FreeMonoid α) (one : motive 1)
-  proof: recOn z one fun x xs ih => mul (.of x) xs (of x) ih
-
-中文:
-定理 inductionOn
-  结论: {motive : 自由幺半群 α -> 命题} (z : 自由幺半群 α) (one : motive 1)
-  证明: recOn z one fun x xs ih => mul (.of x) xs (of x) ih
+/-
+**FreeMonoid.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：∀ {α : Type u_1} {motive : FreeMonoid α → Prop} (z : FreeMonoid α),   moti
+ve 1 →     (∀ (x : α), motive (FreeMonoid.of x)) → (∀ (x y : FreeMonoid α), moti
+ve x → motive y → motive (x * y)) → motive z
+参数：z : FreeMonoid α；∀ (x : α), motive (FreeMonoid.of x)；∀ (x y : FreeMonoid α), 
+motive x → motive y → motive (x * y)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem inductionOn {motive : FreeMonoid α -> Prop} (z : FreeMonoid α) (one : motive 1)
-    (of : forall (x : α), motive (FreeMonoid.of x))
-    (mul : forall (x y : FreeMonoid α), motive x -> motive y -> motive (x * y)) :
+protected theorem inductionOn {motive : FreeMonoid α → Prop} (z : FreeMonoid α) (one : motive 1)
+    (of : ∀ (x : α), motive (FreeMonoid.of x))
+    (mul : ∀ (x y : FreeMonoid α), motive x → motive y → motive (x * y)) :
     motive z :=
   recOn z one fun x xs ih => mul (.of x) xs (of x) ih
 
@@ -1140,21 +658,17 @@ protected theorem inductionOn {motive : FreeMonoid α -> Prop} (z : FreeMonoid �
 to the empty list and cons -/
 @[to_additive (attr := elab_as_elim) /-- An induction principle for free monoids which mirrors
 induction on lists, with cases analogous to the empty list and cons -/]
-/--
-theorem `inductionOn'` / 定理 `inductionOn'`
-
-English:
-theorem inductionOn'
-  statement: {motive : FreeMonoid α -> Prop} (a : FreeMonoid α)
-  proof: recOn a one of_mul
-
-中文:
-定理 inductionOn'
-  结论: {motive : 自由幺半群 α -> 命题} (a : 自由幺半群 α)
-  证明: recOn a one of_mul
+/-
+**FreeMonoid.inductionOn'** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：∀ {α : Type u_1} {motive : FreeMonoid α → Prop} (a : FreeMonoid α),   moti
+ve 1 → (∀ (b : α) (a : FreeMonoid α), motive a → motive (FreeMonoid.of b * a)) →
+ motive a
+参数：a : FreeMonoid α；∀ (b : α) (a : FreeMonoid α), motive a → motive (FreeMonoid.
+of b * a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem inductionOn' {motive : FreeMonoid α -> Prop} (a : FreeMonoid α)
-    (one : motive (1 : FreeMonoid α)) (of_mul : forall b a, motive a -> motive (of b * a)) : motive a :=
+protected theorem inductionOn' {motive : FreeMonoid α → Prop} (a : FreeMonoid α)
+    (one : motive (1 : FreeMonoid α)) (of_mul : ∀ b a, motive a → motive (of b * a)) : motive a :=
   recOn a one of_mul
 
 end induction_principles
@@ -1164,817 +678,505 @@ end induction_principles
 @[to_additive (attr := elab_as_elim, cases_eliminator)
   /-- A version of `List.casesOn` for `FreeAddMonoid` using `0` and
   `FreeAddMonoid.of x + xs` instead of `[]` and `x :: xs`. -/]
-/--
-Definition of `casesOn` / `casesOn` 的定义
-
-English:
-definition casesOn
-  signature: {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive 1)
-  body: List.casesOn xs one of_mul
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 casesOn
-  签名: {motive : 自由幺半群 α -> 类型层*} (xs : 自由幺半群 α) (one : motive 1)
-  定义体: List.casesOn xs one of_mul
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.casesOn, casesOn, of_mul
+/-
+**FreeMonoid.casesOn** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：casesOn {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive
+ 1) (of_mul : forall x xs, motive (of x * xs)) : motive xs
+参数：xs : FreeMonoid α；one : motive 1；of_mul : forall x xs, motive (of x * xs)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def casesOn {motive : FreeMonoid α -> Sort*} (xs : FreeMonoid α) (one : motive 1)
-    (of_mul : forall x xs, motive (of x * xs)) : motive xs := List.casesOn xs one of_mul
+def casesOn {motive : FreeMonoid α → Sort*} (xs : FreeMonoid α) (one : motive 1)
+    (of_mul : ∀ x xs, motive (of x * xs)) : motive xs := List.casesOn xs one of_mul
 
 @[to_additive (attr := simp)]
-/--
-theorem `casesOn_one` / 定理 `casesOn_one`
-
-English:
-theorem casesOn_one
-  statement: {motive : FreeMonoid α -> Sort*} (one : motive 1)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 casesOn_one
-  结论: {motive : 自由幺半群 α -> 类型层*} (one : motive 1)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.casesOn_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：casesOn_one {motive : FreeMonoid α -> Sort*} (one : motive 1) (of_mul : fo
+rall x xs, motive (of x * xs)) : @casesOn α motive 1 one of_mul = one
+参数：one : motive 1；of_mul : forall x xs, motive (of x * xs)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem casesOn_one {motive : FreeMonoid α -> Sort*} (one : motive 1)
-    (of_mul : forall x xs, motive (of x * xs)) :
+theorem casesOn_one {motive : FreeMonoid α → Sort*} (one : motive 1)
+    (of_mul : ∀ x xs, motive (of x * xs)) :
     @casesOn α motive 1 one of_mul = one := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `casesOn_of_mul` / 定理 `casesOn_of_mul`
-
-English:
-theorem casesOn_of_mul
-  statement: {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
-  proof: rfl
-
-@[to_additive (attr := ext)]
-
-中文:
-定理 casesOn_of_mul
-  结论: {motive : 自由幺半群 α -> 类型层*} (x : α) (xs : 自由幺半群 α) (one : motive 1)
-  证明: rfl
-
-@[to_additive (attr := ext)]
+/-
+**FreeMonoid.casesOn_of_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：casesOn_of_mul {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α
+) (one : motive 1) (of_mul : forall x xs, motive (of x * xs)) : @casesOn α motiv
+e (of x * xs) one of_mul = of_mul x xs
+参数：x : α；xs : FreeMonoid α；one : motive 1；of_mul : forall x xs, motive (of x * x
+s)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem casesOn_of_mul {motive : FreeMonoid α -> Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
-    (of_mul : forall x xs, motive (of x * xs)) :
+theorem casesOn_of_mul {motive : FreeMonoid α → Sort*} (x : α) (xs : FreeMonoid α) (one : motive 1)
+    (of_mul : ∀ x xs, motive (of x * xs)) :
     @casesOn α motive (of x * xs) one of_mul = of_mul x xs := rfl
 
 @[to_additive (attr := ext)]
-/--
-theorem `hom_eq` / 定理 `hom_eq`
-
-English:
-theorem hom_eq
-  given: ⦃f g
-  statement: FreeMonoid α ->* M⦄ (h : forall x, f (of x) = g (of x)) : f = g
-  proof: MonoidHom.ext fun l => recOn l (f.map_one.trans g.map_one.symm)
-    (fun x xs hxs => by simp only [h, hxs, map_mul])
-
-中文:
-定理 hom_eq
-  条件: ⦃f g
-  结论: 自由幺半群 α ->* M⦄ (h : 对任意 x, f (of x) = g (of x)) : f = g
-  证明: MonoidHom.ext fun l => recOn l (f.map_one.trans g.map_one.symm)
-    (fun x xs hxs => by simp only [h, hxs, map_mul])
-
-Depends on / 依赖: MonoidHom, MonoidHom.ext, f.map_one.trans, g.map_one.symm, map_mul, map_one
+/-
+**FreeMonoid.hom_eq** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：hom_eq ⦃f g : FreeMonoid α ->* M⦄ (h : forall x, f (of x) = g (of x)) : f 
+= g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidHom.map_one`：∀ {M : Type u_4} {N : Type u_5} [inst : MulOne M] [in
+st_1 : MulOne N] (f : M →* N), f 1 = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem hom_eq ⦃f g : FreeMonoid α ->* M⦄ (h : forall x, f (of x) = g (of x)) : f = g :=
-  MonoidHom.ext fun l => recOn l (f.map_one.trans g.map_one.symm)
-    (fun x xs hxs => by simp only [h, hxs, map_mul])
+theorem hom_eq ⦃f g : FreeMonoid α →* M⦄ (h : ∀ x, f (of x) = g (of x)) : f = g :=
+  MonoidHom.ext fun l ↦ recOn l (f.map_one.trans g.map_one.symm)
+    (fun x xs hxs ↦ by simp only [h, hxs, map_mul])
 
 /-- A variant of `List.prod` that has `[x].prod = x` true definitionally.
 The purpose is to make `FreeMonoid.lift_eval_of` true by `rfl`. -/
 @[to_additive /-- A variant of `List.sum` that has `[x].sum = x` true definitionally.
 The purpose is to make `FreeAddMonoid.lift_eval_of` true by `rfl`. -/]
-/--
-Definition of `prodAux` / `prodAux` 的定义
-
-English:
-definition prodAux
-  signature: {M} [Monoid M]
-
-中文:
-定义 prodAux
-  签名: {M} [幺半群 M]
+/-
+**FreeMonoid.prodAux** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：{M : Type u_6} → [Monoid M] → List M → M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def prodAux {M} [Monoid M] : List M -> M
+def prodAux {M} [Monoid M] : List M → M
   | [] => 1
   | (x :: xs) => List.foldl (· * ·) x xs
 
 @[to_additive]
-/--
-lemma `prodAux_eq` / 引理 `prodAux_eq`
-
-English:
-lemma prodAux_eq
-  statement: forall l : List M, FreeMonoid.prodAux l = l.prod
-
-中文:
-引理 prodAux_eq
-  结论: 对任意 l : 列表 M, 自由幺半群.prodAux l = l.乘积
+/-
+**FreeMonoid.prodAux_eq** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：∀ {M : Type u_4} [inst : Monoid M] (l : List M), FreeMonoid.prodAux l = l.
+prod
+参数：l : List M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.prod_eq_foldl`：∀ {α : Type u_1} [inst : One α] [inst_1 : Mul α] [St
+d.Associative fun x1 x2 => x1 * x2]   [Std.LawfulIdentity (fun x1 x2 => x1 * x2)
+ 1] {xs …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma prodAux_eq : forall l : List M, FreeMonoid.prodAux l = l.prod
+lemma prodAux_eq : ∀ l : List M, FreeMonoid.prodAux l = l.prod
   | [] => rfl
   | (_ :: xs) => by simp [prodAux, List.prod_eq_foldl]
 
 /-- Equivalence between maps `α → M` and monoid homomorphisms `FreeMonoid α →* M`. -/
 @[to_additive /-- Equivalence between maps `α → A` and additive monoid homomorphisms
 `FreeAddMonoid α →+ A`. -/]
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: : (α -> M) ≃ (FreeMonoid α ->* M) where
-  body: { toFun := fun l => prodAux ((toList l).map f)
-    map_one' := rfl
-    map_mul' := fun _ _ => by simp only [prodAux_eq, toList_mul, List.map_append, List.prod_append] }
-  invFun f x := f (of x)
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 lift
-  签名: : (α -> M) ≃ (自由幺半群 α ->* M) where
-  定义体: { toFun := fun l => prodAux ((toList l).map f)
-    map_one' := rfl
-    map_mul' := fun _ _ => by simp only [prodAux_eq, toList_mul, List.map_append, List.prod_append] }
-  invFun f x := f (of x)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.map_append, List.prod_append, a.out, classical, invFun, map_append, map_mul, map_one, ofRightInverse, prodAux, prodAux_eq, prod_append, split_ifs, toList, toList_mul
+/-
+**FreeMonoid.lift** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：lift : (α -> M) ≃ (FreeMonoid α ->* M) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def lift : (α -> M) ≃ (FreeMonoid α ->* M) where
+def lift : (α → M) ≃ (FreeMonoid α →* M) where
   toFun f :=
-  { toFun := fun l => prodAux ((toList l).map f)
+  { toFun := fun l ↦ prodAux ((toList l).map f)
     map_one' := rfl
-    map_mul' := fun _ _ => by simp only [prodAux_eq, toList_mul, List.map_append, List.prod_append] }
+    map_mul' := fun _ _ ↦ by simp only [prodAux_eq, toList_mul, List.map_append, List.prod_append] }
   invFun f x := f (of x)
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_ofList` / 定理 `lift_ofList`
-
-English:
-theorem lift_ofList
-  given: (f : α -> M) (l : List α)
-  statement: lift f (ofList l) = (l.map f).prod
-  proof: prodAux_eq _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 lift_ofList
-  条件: (f : α -> M) (l : 列表 α)
-  结论: lift f (ofList l) = (l.map f).乘积
-  证明: prodAux_eq _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: prodAux_eq
+/-
+**FreeMonoid.lift_ofList** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：lift_ofList (f : α -> M) (l : List α) : lift f (ofList l) = (l.map f).prod
+参数：f : α -> M；l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.prodAux_eq`：∀ {M : Type u_4} [inst : Monoid M] (l : List M), 
+FreeMonoid.prodAux l = l.prod
 -/
-theorem lift_ofList (f : α -> M) (l : List α) : lift f (ofList l) = (l.map f).prod :=
+theorem lift_ofList (f : α → M) (l : List α) : lift f (ofList l) = (l.map f).prod :=
   prodAux_eq _
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_symm_apply` / 定理 `lift_symm_apply`
-
-English:
-theorem lift_symm_apply
-  given: (f : FreeMonoid α ->* M)
-  statement: lift.symm f = f ∘ of
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 lift_symm_apply
-  条件: (f : 自由幺半群 α ->* M)
-  结论: lift.symm f = f ∘ of
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.lift_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：lift_symm_apply (f : FreeMonoid α ->* M) : lift.symm f = f ∘ of
+参数：f : FreeMonoid α ->* M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem lift_symm_apply (f : FreeMonoid α ->* M) : lift.symm f = f ∘ of := rfl
+theorem lift_symm_apply (f : FreeMonoid α →* M) : lift.symm f = f ∘ of := rfl
 
 @[to_additive]
-/--
-theorem `lift_apply` / 定理 `lift_apply`
-
-English:
-theorem lift_apply
-  given: (f : α -> M) (l : FreeMonoid α)
-  statement: lift f l = ((toList l).map f).prod
-  proof: prodAux_eq _
-
-@[to_additive]
-
-中文:
-定理 lift_apply
-  条件: (f : α -> M) (l : 自由幺半群 α)
-  结论: lift f l = ((toList l).map f).乘积
-  证明: prodAux_eq _
-
-@[to_additive]
-
-Depends on / 依赖: prodAux_eq
+/-
+**FreeMonoid.lift_apply** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：lift_apply (f : α -> M) (l : FreeMonoid α) : lift f l = ((toList l).map f)
+.prod
+参数：f : α -> M；l : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.prodAux_eq`：∀ {M : Type u_4} [inst : Monoid M] (l : List M), 
+FreeMonoid.prodAux l = l.prod
 -/
-theorem lift_apply (f : α -> M) (l : FreeMonoid α) : lift f l = ((toList l).map f).prod :=
+theorem lift_apply (f : α → M) (l : FreeMonoid α) : lift f l = ((toList l).map f).prod :=
   prodAux_eq _
 
 @[to_additive]
-/--
-theorem `lift_comp_of` / 定理 `lift_comp_of`
-
-English:
-theorem lift_comp_of
-  given: (f : α -> M)
-  statement: lift f ∘ of = f
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 lift_comp_of
-  条件: (f : α -> M)
-  结论: lift f ∘ of = f
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.lift_comp_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：lift_comp_of (f : α -> M) : lift f ∘ of = f
+参数：f : α -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_comp_of (f : α -> M) : lift f ∘ of = f := rfl
+theorem lift_comp_of (f : α → M) : lift f ∘ of = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_eval_of` / 定理 `lift_eval_of`
-
-English:
-theorem lift_eval_of
-  given: (f : α -> M) (x : α)
-  statement: lift f (of x) = f x
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 lift_eval_of
-  条件: (f : α -> M) (x : α)
-  结论: lift f (of x) = f x
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.lift_eval_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：lift_eval_of (f : α -> M) (x : α) : lift f (of x) = f x
+参数：f : α -> M；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_eval_of (f : α -> M) (x : α) : lift f (of x) = f x := rfl
+theorem lift_eval_of (f : α → M) (x : α) : lift f (of x) = f x := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `lift_restrict` / 定理 `lift_restrict`
-
-English:
-theorem lift_restrict
-  given: (f : FreeMonoid α ->* M)
-  statement: lift (f ∘ of) = f
-  proof: lift.apply_symm_apply f
+/-
+**FreeMonoid.lift_restrict** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：lift_restrict (f : FreeMonoid α ->* M) : lift (f ∘ of) = f
+参数：f : FreeMonoid α ->* M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+-/
+theorem lift_restrict (f : FreeMonoid α →* M) : lift (f ∘ of) = f := lift.apply_symm_apply f
 
 @[to_additive]
-
-中文:
-定理 lift_restrict
-  条件: (f : 自由幺半群 α ->* M)
-  结论: lift (f ∘ of) = f
-  证明: lift.apply_symm_apply f
-
-@[to_additive]
-
-Depends on / 依赖: apply_symm_apply, lift.apply_symm_apply
+/-
+**FreeMonoid.comp_lift** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：comp_lift (g : M ->* N) (f : α -> M) : g.comp (lift f) = lift (g ∘ f)
+参数：g : M ->* N；f : α -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.hom_eq`：hom_eq ⦃f g : FreeMonoid α ->* M⦄ (h : forall x, f (o
+f x) = g (of x)) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_restrict (f : FreeMonoid α ->* M) : lift (f ∘ of) = f := lift.apply_symm_apply f
-
-@[to_additive]
-/--
-theorem `comp_lift` / 定理 `comp_lift`
-
-English:
-theorem comp_lift
-  given: (g : M ->* N) (f : α -> M)
-  statement: g.comp (lift f) = lift (g ∘ f)
-  proof: by
+theorem comp_lift (g : M →* N) (f : α → M) : g.comp (lift f) = lift (g ∘ f) := by
   ext
   simp
 
 @[to_additive]
-
-中文:
-定理 comp_lift
-  条件: (g : M ->* N) (f : α -> M)
-  结论: g.comp (lift f) = lift (g ∘ f)
-  证明: by
-  ext
-  simp
-
-@[to_additive]
+/-
+**FreeMonoid.hom_map_lift** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：hom_map_lift (g : M ->* N) (f : α -> M) (x : FreeMonoid α) : g (lift f x) 
+= lift (g ∘ f) x
+参数：g : M ->* N；f : α -> M；x : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `FreeMonoid.comp_lift`：comp_lift (g : M ->* N) (f : α -> M) : g.comp (lif
+t f) = lift (g ∘ f)
 -/
-theorem comp_lift (g : M ->* N) (f : α -> M) : g.comp (lift f) = lift (g ∘ f) := by
-  ext
-  simp
-
-@[to_additive]
-/--
-theorem `hom_map_lift` / 定理 `hom_map_lift`
-
-English:
-theorem hom_map_lift
-  given: (g : M ->* N) (f : α -> M) (x : FreeMonoid α)
-  statement: g (lift f x) = lift (g ∘ f) x
-  proof: DFunLike.ext_iff.1 (comp_lift g f) x
-
-中文:
-定理 hom_map_lift
-  条件: (g : M ->* N) (f : α -> M) (x : 自由幺半群 α)
-  结论: g (lift f x) = lift (g ∘ f) x
-  证明: DFunLike.ext_iff.1 (comp_lift g f) x
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, comp_lift, ext_iff
--/
-theorem hom_map_lift (g : M ->* N) (f : α -> M) (x : FreeMonoid α) : g (lift f x) = lift (g ∘ f) x :=
+theorem hom_map_lift (g : M →* N) (f : α → M) (x : FreeMonoid α) : g (lift f x) = lift (g ∘ f) x :=
   DFunLike.ext_iff.1 (comp_lift g f) x
 
 /-- Define a multiplicative action of `FreeMonoid α` on `β`. -/
 @[to_additive (attr := instance_reducible)
   /-- Define an additive action of `FreeAddMonoid α` on `β`. -/]
-/--
-Definition of `mkMulAction` / `mkMulAction` 的定义
-
-English:
-definition mkMulAction
-  signature: (f : α -> β -> β)
-  body: l.toList.foldr f b
-  one_smul _ := rfl
-  mul_smul _ _ _ := List.foldr_append
-
-@[to_additive]
-
-中文:
-定义 mkMulAction
-  签名: (f : α -> β -> β)
-  定义体: l.toList.foldr f b
-  one_smul _ := rfl
-  mul_smul _ _ _ := List.foldr_append
-
-@[to_additive]
-
-Depends on / 依赖: l.toList.foldr, toList
+/-
+**FreeMonoid.mkMulAction** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：mkMulAction (f : α -> β -> β) : MulAction (FreeMonoid α) β where smul l b
+参数：f : α -> β -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mkMulAction (f : α -> β -> β) : MulAction (FreeMonoid α) β where
+def mkMulAction (f : α → β → β) : MulAction (FreeMonoid α) β where
   smul l b := l.toList.foldr f b
   one_smul _ := rfl
   mul_smul _ _ _ := List.foldr_append
 
 @[to_additive]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: (f : α -> β -> β) (l : FreeMonoid α) (b : β)
-  proof: mkMulAction f
-    l • b = l.toList.foldr f b := rfl
-
-@[to_additive]
-
-中文:
-定理 smul_def
-  条件: (f : α -> β -> β) (l : 自由幺半群 α) (b : β)
-  证明: mkMulAction f
-    l • b = l.toList.foldr f b := rfl
-
-@[to_additive]
-
-Depends on / 依赖: mkMulAction
+/-
+**FreeMonoid.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：smul_def (f : α -> β -> β) (l : FreeMonoid α) (b : β) : haveI
+参数：f : α -> β -> β；l : FreeMonoid α；b : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_def (f : α -> β -> β) (l : FreeMonoid α) (b : β) :
+theorem smul_def (f : α → β → β) (l : FreeMonoid α) (b : β) :
     haveI := mkMulAction f
     l • b = l.toList.foldr f b := rfl
 
 @[to_additive]
-/--
-theorem `ofList_smul` / 定理 `ofList_smul`
-
-English:
-theorem ofList_smul
-  given: (f : α -> β -> β) (l : List α) (b : β)
-  proof: mkMulAction f
-    ofList l • b = l.foldr f b := rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 ofList_smul
-  条件: (f : α -> β -> β) (l : 列表 α) (b : β)
-  证明: mkMulAction f
-    ofList l • b = l.foldr f b := rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mkMulAction
+/-
+**FreeMonoid.ofList_smul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_smul (f : α -> β -> β) (l : List α) (b : β) : haveI
+参数：f : α -> β -> β；l : List α；b : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofList_smul (f : α -> β -> β) (l : List α) (b : β) :
+theorem ofList_smul (f : α → β → β) (l : List α) (b : β) :
     haveI := mkMulAction f
     ofList l • b = l.foldr f b := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `of_smul` / 定理 `of_smul`
-
-English:
-theorem of_smul
-  given: (f : α -> β -> β) (x : α) (y : β)
-  proof: rfl
-
-中文:
-定理 of_smul
-  条件: (f : α -> β -> β) (x : α) (y : β)
-  证明: rfl
-
-Depends on / 依赖: mkMulAction
+/-
+**FreeMonoid.of_smul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：of_smul (f : α -> β -> β) (x : α) (y : β) : (haveI
+参数：f : α -> β -> β；x : α；y : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem of_smul (f : α -> β -> β) (x : α) (y : β) :
+theorem of_smul (f : α → β → β) (x : α) (y : β) :
     (haveI := mkMulAction f
     of x • y) = f x y := rfl
 
 /-! ### map -/
 
 section Map
-variable {f : α -> β} {a b : FreeMonoid α}
+variable {f : α → β} {a b : FreeMonoid α}
 /-- The unique monoid homomorphism `FreeMonoid α →* FreeMonoid β` that sends
 each `of x` to `of (f x)`. -/
 @[to_additive /-- The unique additive monoid homomorphism `FreeAddMonoid α →+ FreeAddMonoid β`
 that sends each `of x` to `of (f x)`. -/]
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (f : α -> β)
-  body: ofList l.toList.map f
+/-
+**FreeMonoid.map** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：map (f : α -> β) : FreeMonoid α ->* FreeMonoid β where toFun l
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+def map (f : α → β) : FreeMonoid α →* FreeMonoid β where
+  toFun l := ofList <| l.toList.map f
   map_one' := rfl
   map_mul' _ _ := List.map_append
 
 @[to_additive (attr := simp)]
-
-中文:
-定义 map
-  签名: (f : α -> β)
-  定义体: ofList l.toList.map f
-  map_one' := rfl
-  map_mul' _ _ := List.map_append
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: l.toList.map, ofList, toList
+/-
+**FreeMonoid.map_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：map_of (f : α -> β) (x : α) : map f (of x) = of (f x)
+参数：f : α -> β；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def map (f : α -> β) : FreeMonoid α ->* FreeMonoid β where
-toFun l := ofList l.toList.map f
-  map_one' := rfl
-  map_mul' _ _ := List.map_append
-
-@[to_additive (attr := simp)]
-/--
-theorem `map_of` / 定理 `map_of`
-
-English:
-theorem map_of
-  given: (f : α -> β) (x : α)
-  statement: map f (of x) = of (f x)
-  proof: rfl
+theorem map_of (f : α → β) (x : α) : map f (of x) = of (f x) := rfl
 
 @[to_additive]
-
-中文:
-定理 map_of
-  条件: (f : α -> β) (x : α)
-  结论: map f (of x) = of (f x)
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：mem_map {m : β} : m in map f a ↔ exists n in a, f n = m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_map`：∀ {α : Type u_1} {β : Type u_2} {b : β} {f : α → β} {l : L
+ist α}, b ∈ List.map f l ↔ ∃ a ∈ l, f a = b
 -/
-theorem map_of (f : α -> β) (x : α) : map f (of x) = of (f x) := rfl
-
-@[to_additive]
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: {m : β}
-  statement: m in map f a ↔ exists n in a, f n = m
-  proof: List.mem_map
-
-中文:
-定理 mem_map
-  条件: {m : β}
-  结论: m in map f a ↔ 存在 n in a, f n = m
-  证明: List.mem_map
-
-Depends on / 依赖: List.mem_map, mem_map
--/
-theorem mem_map {m : β} : m in map f a ↔ exists n in a, f n = m := List.mem_map
+theorem mem_map {m : β} : m ∈ map f a ↔ ∃ n ∈ a, f n = m := List.mem_map
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  given: {α₁ : Type*} {g : α₁ -> α} {x : FreeMonoid α₁}
-  proof: by
-  unfold map
-  simp only [MonoidHom.coe_mk, OneHom.coe_mk, toList_ofList, List.map_map]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_map
-  条件: {α₁ : 类型} {g : α₁ -> α} {x : 自由幺半群 α₁}
-  证明: by
-  unfold map
-  simp only [MonoidHom.coe_mk, OneHom.coe_mk, toList_ofList, List.map_map]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.map_map, MonoidHom, MonoidHom.coe_mk, OneHom, OneHom.coe_mk, coe_mk, map_map, toList_ofList
+/-
+**FreeMonoid.map_map** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：map_map {α₁ : Type*} {g : α₁ -> α} {x : FreeMonoid α₁} : map f (map g x) =
+ map (f ∘ g) x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_map {α₁ : Type*} {g : α₁ -> α} {x : FreeMonoid α₁} :
+theorem map_map {α₁ : Type*} {g : α₁ → α} {x : FreeMonoid α₁} :
     map f (map g x) = map (f ∘ g) x := by
   unfold map
   simp only [MonoidHom.coe_mk, OneHom.coe_mk, toList_ofList, List.map_map]
 
 @[to_additive (attr := simp)]
-/--
-theorem `toList_map` / 定理 `toList_map`
-
-English:
-theorem toList_map
-  given: (f : α -> β) (xs : FreeMonoid α)
-  statement: toList (map f xs) = xs.toList.map f
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toList_map
-  条件: (f : α -> β) (xs : 自由幺半群 α)
-  结论: toList (map f xs) = xs.toList.map f
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.toList_map** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：toList_map (f : α -> β) (xs : FreeMonoid α) : toList (map f xs) = xs.toLis
+t.map f
+参数：f : α -> β；xs : FreeMonoid α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toList_map (f : α -> β) (xs : FreeMonoid α) : toList (map f xs) = xs.toList.map f := rfl
+theorem toList_map (f : α → β) (xs : FreeMonoid α) : toList (map f xs) = xs.toList.map f := rfl
 
 @[to_additive]
-/--
-theorem `ofList_map` / 定理 `ofList_map`
-
-English:
-theorem ofList_map
-  given: (f : α -> β) (xs : List α)
-  statement: ofList (xs.map f) = map f (ofList xs)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 ofList_map
-  条件: (f : α -> β) (xs : 列表 α)
-  结论: ofList (xs.map f) = map f (ofList xs)
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.ofList_map** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：ofList_map (f : α -> β) (xs : List α) : ofList (xs.map f) = map f (ofList 
+xs)
+参数：f : α -> β；xs : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofList_map (f : α -> β) (xs : List α) : ofList (xs.map f) = map f (ofList xs) := rfl
+theorem ofList_map (f : α → β) (xs : List α) : ofList (xs.map f) = map f (ofList xs) := rfl
 
 @[to_additive]
-/--
-theorem `lift_of_comp_eq_map` / 定理 `lift_of_comp_eq_map`
-
-English:
-theorem lift_of_comp_eq_map
-  given: (f : α -> β)
-  statement: (lift fun x => of (f x)) = map f
-  proof: hom_eq fun _ => rfl
-
-@[to_additive]
-
-中文:
-定理 lift_of_comp_eq_map
-  条件: (f : α -> β)
-  结论: (lift fun x => of (f x)) = map f
-  证明: hom_eq fun _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: hom_eq
+/-
+**FreeMonoid.lift_of_comp_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：lift_of_comp_eq_map (f : α -> β) : (lift fun x => of (f x)) = map f
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.hom_eq`：hom_eq ⦃f g : FreeMonoid α ->* M⦄ (h : forall x, f (o
+f x) = g (of x)) : f = g
 -/
-theorem lift_of_comp_eq_map (f : α -> β) : (lift fun x => of (f x)) = map f := hom_eq fun _ => rfl
+theorem lift_of_comp_eq_map (f : α → β) : (lift fun x ↦ of (f x)) = map f := hom_eq fun _ ↦ rfl
 
 @[to_additive]
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (g : β -> γ) (f : α -> β)
-  statement: map (g ∘ f) = (map g).comp (map f)
-  proof: hom_eq fun _ => rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_comp
-  条件: (g : β -> γ) (f : α -> β)
-  结论: map (g ∘ f) = (map g).comp (map f)
-  证明: hom_eq fun _ => rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: hom_eq
+/-
+**FreeMonoid.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：map_comp (g : β -> γ) (f : α -> β) : map (g ∘ f) = (map g).comp (map f)
+参数：g : β -> γ；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.hom_eq`：hom_eq ⦃f g : FreeMonoid α ->* M⦄ (h : forall x, f (o
+f x) = g (of x)) : f = g
 -/
-theorem map_comp (g : β -> γ) (f : α -> β) : map (g ∘ f) = (map g).comp (map f) := hom_eq fun _ => rfl
+theorem map_comp (g : β → γ) (f : α → β) : map (g ∘ f) = (map g).comp (map f) := hom_eq fun _ ↦ rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: map (@id α) = MonoidHom.id (FreeMonoid α)
-  proof: hom_eq fun _ => rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_id
-  结论: map (@id α) = 幺半群态射.id (自由幺半群 α)
-  证明: hom_eq fun _ => rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: hom_eq
+/-
+**FreeMonoid.map_id** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：map_id : map (@id α) = MonoidHom.id (FreeMonoid α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.hom_eq`：hom_eq ⦃f g : FreeMonoid α ->* M⦄ (h : forall x, f (o
+f x) = g (of x)) : f = g
 -/
-theorem map_id : map (@id α) = MonoidHom.id (FreeMonoid α) := hom_eq fun _ => rfl
+theorem map_id : map (@id α) = MonoidHom.id (FreeMonoid α) := hom_eq fun _ ↦ rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_symm_apply_map_eq` / 定理 `map_symm_apply_map_eq`
-
-English:
-theorem map_symm_apply_map_eq
-  given: {x : FreeMonoid α} (e : α ≃ β)
-  proof: by simp [map_map]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_symm_apply_map_eq
-  条件: {x : 自由幺半群 α} (e : α ≃ β)
-  证明: by simp [map_map]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_map
+/-
+**FreeMonoid.map_symm_apply_map_eq** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：map_symm_apply_map_eq {x : FreeMonoid α} (e : α ≃ β) : (map ⇑e.symm) ((map
+ ⇑e) x) = x
+参数：e : α ≃ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeMonoid.map_map`：map_map {α₁ : Type*} {g : α₁ -> α} {x : FreeMonoid α
+₁} : map f (map g x) = map (f ∘ g) x
+· 使用定理 `Equiv.symm_comp_self`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e.symm ∘
+ ⇑e = id
+· 使用定理 `FreeMonoid.map_id`：map_id : map (@id α) = MonoidHom.id (FreeMonoid α)
+· 使用定理 `MonoidHom.id_apply`：∀ (M : Type u_10) [inst : MulOne M] (x : M), (Monoid
+Hom.id M) x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_symm_apply_map_eq {x : FreeMonoid α} (e : α ≃ β) :
     (map ⇑e.symm) ((map ⇑e) x) = x := by simp [map_map]
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_apply_map_symm_eq` / 定理 `map_apply_map_symm_eq`
-
-English:
-theorem map_apply_map_symm_eq
-  given: {x : FreeMonoid β} (e : α ≃ β)
-  proof: by simp [map_map]
-
-中文:
-定理 map_apply_map_symm_eq
-  条件: {x : 自由幺半群 β} (e : α ≃ β)
-  证明: by simp [map_map]
-
-Depends on / 依赖: map_map
+/-
+**FreeMonoid.map_apply_map_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：map_apply_map_symm_eq {x : FreeMonoid β} (e : α ≃ β) : (map ⇑e) ((map ⇑e.s
+ymm) x) = x
+参数：e : α ≃ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeMonoid.map_map`：map_map {α₁ : Type*} {g : α₁ -> α} {x : FreeMonoid α
+₁} : map f (map g x) = map (f ∘ g) x
+· 使用定理 `Equiv.self_comp_symm`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e ∘ ⇑e.s
+ymm = id
+· 使用定理 `FreeMonoid.map_id`：map_id : map (@id α) = MonoidHom.id (FreeMonoid α)
+· 使用定理 `MonoidHom.id_apply`：∀ (M : Type u_10) [inst : MulOne M] (x : M), (Monoid
+Hom.id M) x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_apply_map_symm_eq {x : FreeMonoid β} (e : α ≃ β) :
     (map ⇑e) ((map ⇑e.symm) x) = x := by simp [map_map]
 
 /-- The only invertible element of the free monoid is 1; this instance enables `units_eq_one`. -/
 @[to_additive]
-/--
-Instance `uniqueUnits` / 实例 `uniqueUnits`
+/-
+**FreeMonoid.uniqueUnits** 是 Mathlib 中的一个实例，位于命名空间 `FreeMonoid`。
+形式化陈述：uniqueUnits : Unique (FreeMonoid α)ˣ where uniq u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance uniqueUnits
-  signature: : Unique (FreeMonoid α)ˣ where
-  body: Units.ext toList.injective
-    have : toList u.val ++ toList u.inv = [] := DFunLike.congr_arg toList u.val_inv
-    (List.append_eq_nil_iff.mp this).1
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 uniqueUnits
-  签名: : 唯一 (自由幺半群 α)ˣ where
-  定义体: Units.ext toList.injective
-    have : toList u.val ++ toList u.inv = [] := DFunLike.congr_arg toList u.val_inv
-    (List.append_eq_nil_iff.mp this).1
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Units.ext, injective, toList, toList.injective
+--- 原说明 ---
+The only invertible element of the free monoid is 1; this instance enables `unit
+s_eq_one`.
 -/
 instance uniqueUnits : Unique (FreeMonoid α)ˣ where
-uniq u := Units.ext toList.injective
+  uniq u := Units.ext <| toList.injective <|
     have : toList u.val ++ toList u.inv = [] := DFunLike.congr_arg toList u.val_inv
     (List.append_eq_nil_iff.mp this).1
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_surjective` / 定理 `map_surjective`
-
-English:
-theorem map_surjective
-  given: {f : α -> β}
-  statement: Function.Surjective (map f) ↔ Function.Surjective f
-  proof: by
-  constructor
-  · intro fs d
-    rcases fs (FreeMonoid.of d) with ⟨b, hb⟩
-    induction b using FreeMonoid.inductionOn' with
-    | one =>
-      have H := congr_arg length hb
-      simp only [length_one, length_of, Nat.zero_ne_one, map_one] at H
-    | of_mul head _ _ =>
-      simp only [map_mul, map_of] at hb
-      use head
-      have H := congr_arg length hb
-      simp only [length_mul, length_of, add_eq_left, length_eq_zero] at H
-      rw [H]; rw [mul_one] at hb
-      exact FreeMonoid.of_injective hb
-  intro fs d
-  induction d using FreeMonoid.inductionOn' with
-  | one => use 1; rfl
-  | of_mul head tail ih =>
-    specialize fs head
-    rcases fs with ⟨a, rfl⟩
-    rcases ih with ⟨b, rfl⟩
-    use FreeMonoid.of a * b
-    rfl
-
-中文:
-定理 map_surjective
-  条件: {f : α -> β}
-  结论: 函数.满射 (map f) ↔ 函数.满射 f
-  证明: by
-  constructor
-  · intro fs d
-    rcases fs (FreeMonoid.of d) with ⟨b, hb⟩
-    induction b using FreeMonoid.inductionOn' with
-    | one =>
-      have H := congr_arg length hb
-      simp only [length_one, length_of, Nat.zero_ne_one, map_one] at H
-    | of_mul head _ _ =>
-      simp only [map_mul, map_of] at hb
-      use head
-      have H := congr_arg length hb
-      simp only [length_mul, length_of, add_eq_left, length_eq_zero] at H
-      rw [H]; rw [mul_one] at hb
-      exact FreeMonoid.of_injective hb
-  intro fs d
-  induction d using FreeMonoid.inductionOn' with
-  | one => use 1; rfl
-  | of_mul head tail ih =>
-    specialize fs head
-    rcases fs with ⟨a, rfl⟩
-    rcases ih with ⟨b, rfl⟩
-    use FreeMonoid.of a * b
-    rfl
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.inductionOn, FreeMonoid.of, FreeMonoid.of_injective, Nat.zero_ne_one, add_eq_left, congr_arg, inductionOn, length, length_eq_zero, length_mul, length_of, length_one, map_mul, map_of, map_one, mul_one, of_injective, of_mul, zero_ne_one
+/-
+**FreeMonoid.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：map_surjective {f : α -> β} : Function.Surjective (map f) ↔ Function.Surje
+ctive f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FreeMonoid.inductionOn'`：∀ {α : Type u_1} {motive : FreeMonoid α → Prop}
+ (a : FreeMonoid α),   motive 1 → (∀ (b : α) (a : FreeMonoid α), motive a → moti
+ve (FreeMonoi…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `FreeMonoid.of_injective`：of_injective : Function.Injective (@of α)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `FreeMonoid.length_mul`：length_mul (a b : FreeMonoid α) : (a * b).length 
+= a.length + b.length
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
-theorem map_surjective {f : α -> β} : Function.Surjective (map f) ↔ Function.Surjective f := by
+theorem map_surjective {f : α → β} : Function.Surjective (map f) ↔ Function.Surjective f := by
   constructor
   · intro fs d
     rcases fs (FreeMonoid.of d) with ⟨b, hb⟩
@@ -1987,7 +1189,7 @@ theorem map_surjective {f : α -> β} : Function.Surjective (map f) ↔ Function
       use head
       have H := congr_arg length hb
       simp only [length_mul, length_of, add_eq_left, length_eq_zero] at H
-      rw [H]; rw [mul_one] at hb
+      rw [H, mul_one] at hb
       exact FreeMonoid.of_injective hb
   intro fs d
   induction d using FreeMonoid.inductionOn' with
@@ -2006,118 +1208,59 @@ end Map
 section Reverse
 /-- reverses the symbols in a free monoid element -/
 @[to_additive /-- reverses the symbols in an additive free monoid element -/]
-/--
-Definition of `reverse` / `reverse` 的定义
+/-
+**FreeMonoid.reverse** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：reverse : FreeMonoid α -> FreeMonoid α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: : FreeMonoid α -> FreeMonoid α
-  body: List.reverse
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 reverse
-  签名: : 自由幺半群 α -> 自由幺半群 α
-  定义体: List.reverse
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.reverse, reverse
+--- 原说明 ---
+reverses the symbols in a free monoid element
 -/
-def reverse : FreeMonoid α -> FreeMonoid α := List.reverse
+def reverse : FreeMonoid α → FreeMonoid α := List.reverse
 
 @[to_additive (attr := simp)]
-/--
-theorem `reverse_of` / 定理 `reverse_of`
-
-English:
-theorem reverse_of
-  given: (a : α)
-  statement: reverse (of a) = of a
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 reverse_of
-  条件: (a : α)
-  结论: reverse (of a) = of a
-  证明: rfl
-
-@[to_additive]
+/-
+**FreeMonoid.reverse_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：reverse_of (a : α) : reverse (of a) = of a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reverse_of (a : α) : reverse (of a) = of a := rfl
 
 @[to_additive]
-/--
-theorem `reverse_mul` / 定理 `reverse_mul`
-
-English:
-theorem reverse_mul
-  given: {a b : FreeMonoid α}
-  statement: reverse (a * b) = reverse b * reverse a
-  proof: List.reverse_append
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 reverse_mul
-  条件: {a b : 自由幺半群 α}
-  结论: reverse (a * b) = reverse b * reverse a
-  证明: List.reverse_append
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.reverse_append, reverse_append
+/-
+**FreeMonoid.reverse_mul** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：reverse_mul {a b : FreeMonoid α} : reverse (a * b) = reverse b * reverse a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
 -/
 theorem reverse_mul {a b : FreeMonoid α} : reverse (a * b) = reverse b * reverse a :=
   List.reverse_append
 
 @[to_additive (attr := simp)]
-/--
-theorem `reverse_reverse` / 定理 `reverse_reverse`
-
-English:
-theorem reverse_reverse
-  given: {a : FreeMonoid α}
-  statement: reverse (reverse a) = a
-  proof: by
-  apply List.reverse_reverse
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 reverse_reverse
-  条件: {a : 自由幺半群 α}
-  结论: reverse (reverse a) = a
-  证明: by
-  apply List.reverse_reverse
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.reverse_reverse, reverse_reverse
+/-
+**FreeMonoid.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：reverse_reverse {a : FreeMonoid α} : reverse (reverse a) = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
 -/
 theorem reverse_reverse {a : FreeMonoid α} : reverse (reverse a) = a := by
   apply List.reverse_reverse
 
 @[to_additive (attr := simp)]
-/--
-theorem `length_reverse` / 定理 `length_reverse`
-
-English:
-theorem length_reverse
-  given: {a : FreeMonoid α}
-  statement: a.reverse.length = a.length
-  proof: List.length_reverse
-
-中文:
-定理 length_reverse
-  条件: {a : 自由幺半群 α}
-  结论: a.reverse.length = a.length
-  证明: List.length_reverse
-
-Depends on / 依赖: List.length_reverse, length_reverse
+/-
+**FreeMonoid.length_reverse** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：length_reverse {a : FreeMonoid α} : a.reverse.length = a.length
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
 -/
 theorem length_reverse {a : FreeMonoid α} : a.reverse.length = a.length :=
   List.length_reverse
@@ -2131,32 +1274,17 @@ variable {α β : Type*}
 /-- free monoids over isomorphic types are isomorphic -/
 @[to_additive /-- if two types are isomorphic, the additive free monoids over those types are
 isomorphic -/]
-/--
-Definition of `freeMonoidCongr` / `freeMonoidCongr` 的定义
-
-English:
-definition freeMonoidCongr
-  signature: (e : α ≃ β)
-  body: FreeMonoid.map ⇑e
-  invFun := FreeMonoid.map ⇑e.symm
-  left_inv _ := map_symm_apply_map_eq e
-  right_inv _ := map_apply_map_symm_eq e
-  map_mul' := by simp [map_mul]
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 freeMonoidCongr
-  签名: (e : α ≃ β)
-  定义体: FreeMonoid.map ⇑e
-  invFun := FreeMonoid.map ⇑e.symm
-  left_inv _ := map_symm_apply_map_eq e
-  right_inv _ := map_apply_map_symm_eq e
-  map_mul' := by simp [map_mul]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.map
+/-
+**FreeMonoid.freeMonoidCongr** 是 Mathlib 中的一个定义，位于命名空间 `FreeMonoid`。
+形式化陈述：freeMonoidCongr (e : α ≃ β) : FreeMonoid α ≃* FreeMonoid β where toFun
+参数：e : α ≃ β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `FreeMonoid.map_symm_apply_map_eq`：map_symm_apply_map_eq {x : FreeMonoid 
+α} (e : α ≃ β) : (map ⇑e.symm) ((map ⇑e) x) = x
+· 使用定理 `FreeMonoid.map_apply_map_symm_eq`：map_apply_map_symm_eq {x : FreeMonoid 
+β} (e : α ≃ β) : (map ⇑e) ((map ⇑e.symm) x) = x
 -/
 def freeMonoidCongr (e : α ≃ β) : FreeMonoid α ≃* FreeMonoid β where
   toFun := FreeMonoid.map ⇑e
@@ -2166,40 +1294,25 @@ def freeMonoidCongr (e : α ≃ β) : FreeMonoid α ≃* FreeMonoid β where
   map_mul' := by simp [map_mul]
 
 @[to_additive (attr := simp)]
-/--
-theorem `freeMonoidCongr_of` / 定理 `freeMonoidCongr_of`
-
-English:
-theorem freeMonoidCongr_of
-  given: (e : α ≃ β) (a : α)
-  statement: freeMonoidCongr e (of a) = of (e a)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 freeMonoidCongr_of
-  条件: (e : α ≃ β) (a : α)
-  结论: freeMonoidCongr e (of a) = of (e a)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**FreeMonoid.freeMonoidCongr_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：freeMonoidCongr_of (e : α ≃ β) (a : α) : freeMonoidCongr e (of a) = of (e 
+a)
+参数：e : α ≃ β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem freeMonoidCongr_of (e : α ≃ β) (a : α) : freeMonoidCongr e (of a) = of (e a) := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `freeMonoidCongr_symm_of` / 定理 `freeMonoidCongr_symm_of`
-
-English:
-theorem freeMonoidCongr_symm_of
-  given: (e : α ≃ β) (b : β)
-  proof: rfl
-
-中文:
-定理 freeMonoidCongr_symm_of
-  条件: (e : α ≃ β) (b : β)
-  证明: rfl
+/-
+**FreeMonoid.freeMonoidCongr_symm_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：freeMonoidCongr_symm_of (e : α ≃ β) (b : β) : freeMonoidCongr e.symm (of b
+) = of (e.symm b)
+参数：e : α ≃ β；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem freeMonoidCongr_symm_of (e : α ≃ β) (b : β) :
     freeMonoidCongr e.symm (of b) = of (e.symm b) := rfl
@@ -2207,3 +1320,4 @@ theorem freeMonoidCongr_symm_of (e : α ≃ β) (b : β) :
 end IsomorphicTypes
 
 end FreeMonoid
+

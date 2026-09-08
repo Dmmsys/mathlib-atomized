@@ -50,7 +50,7 @@ universe u
 
 open Ideal WittVector
 
-variable (R : Type u) [CommRing R] (p : Nat) [Fact p.Prime]
+variable (R : Type u) [CommRing R] (p : ℕ) [Fact p.Prime]
     [Fact ¬IsUnit (p : R)] [IsAdicComplete (span {(p : R)}) R]
 
 local notation "𝕎 " A:100 => WittVector p A
@@ -59,75 +59,78 @@ local notation A "♭" => PreTilt A p
 noncomputable section
 
 /--
-Definition of `fontaineThetaInvertP` / `fontaineThetaInvertP` 的定义
+The Fontaine's θ map inverting `p`. Note that if `p = 0` in `R`, then this is the zero map.
+-/
+/-
+**fontaineThetaInvertP** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：fontaineThetaInvertP : Localization.Away (p : 𝕎 R♭) ->+* Localization.Away
+ (p : R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fontaineThetaInvertP
-  signature: :
-  body: Localization.awayLift ((algebraMap R _).comp (fontaineTheta R p)) (p : 𝕎 R♭)
-      (by simpa using IsLocalization.Away.algebraMap_isUnit (p : R))
-
-中文:
-定义 fontaineThetaInvertP
-  签名: :
-  定义体: Localization.awayLift ((algebraMap R _).comp (fontaineTheta R p)) (p : 𝕎 R♭)
-      (by simpa using IsLocalization.Away.algebraMap_isUnit (p : R))
-
-Depends on / 依赖: IsLocalization, IsLocalization.Away.algebraMap_isUnit, Localization, Localization.awayLift, algebraMap, algebraMap_isUnit, awayLift, fontaineTheta
+--- 原说明 ---
+The Fontaine's θ map inverting `p`. Note that if `p = 0` in `R`, then this is th
+e zero map.
 -/
 def fontaineThetaInvertP :
-    Localization.Away (p : 𝕎 R♭) ->+* Localization.Away (p : R) :=
+    Localization.Away (p : 𝕎 R♭) →+* Localization.Away (p : R) :=
   Localization.awayLift ((algebraMap R _).comp (fontaineTheta R p)) (p : 𝕎 R♭)
       (by simpa using IsLocalization.Away.algebraMap_isUnit (p : R))
 
 /--
-Definition of `BDeRhamPlus` / `BDeRhamPlus` 的定义
+The de Rham period ring $\mathbb{B}_{dR}^+$ for general perfectoid ring.
+It is the completion of `𝕎 R♭` inverting `p` with respect to the kernel of
+the Fontaine's θ map. When $R = \mathcal{O}_{\mathbb{C}_p}$, it coincides
+with the classical de Rham period ring. Note that if `p = 0` in `R`,
+then this
+definition is the zero ring.
+-/
+/-
+**BDeRhamPlus** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：BDeRhamPlus : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BDeRhamPlus
-  signature: : Type u
-  body: AdicCompletion (RingHom.ker (fontaineThetaInvertP R p)) (Localization.Away (p : 𝕎 R♭))
-deriving CommRing
-
-中文:
-定义 BDeRhamPlus
-  签名: : 类型u
-  定义体: AdicCompletion (RingHom.ker (fontaineThetaInvertP R p)) (Localization.Away (p : 𝕎 R♭))
-deriving CommRing
-
-Depends on / 依赖: AdicCompletion, Localization, Localization.Away, RingHom, RingHom.ker, fontaineThetaInvertP
+--- 原说明 ---
+The de Rham period ring $\mathbb{B}_{dR}^+$ for general perfectoid ring.
+It is the completion of `𝕎 R♭` inverting `p` with respect to the kernel of
+the Fontaine's θ map. When $R = \mathcal{O}_{\mathbb{C}_p}$, it coincides
+with the classical de Rham period ring. Note that if `p = 0` in `R`,
+then this
+definition is the zero ring.
 -/
 def BDeRhamPlus : Type u :=
   AdicCompletion (RingHom.ker (fontaineThetaInvertP R p)) (Localization.Away (p : 𝕎 R♭))
 deriving CommRing
 
 /--
-Definition of `BDeRham` / `BDeRham` 的定义
+The de Rham period ring $\mathbb{B}_{dR}$ for general perfectoid ring.
+It is defined as $\mathbb{B}_{dR}^+$ inverting the generators of the ideal `ker θ`.
+Mathematically, this is equivalent to inverting *a* generator of the ideal `ker θ`
+after we show that it is principal.
+When $R = \mathcal{O}_{\mathbb{C}_p}$, it coincides
+with the classical de Rham period ring.
+Note that if `p = 0` in `R`, then this definition is the zero ring.
+-/
+/-
+**BDeRham** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：BDeRham : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BDeRham
-  signature: : Type u
-  body: Localization (M := BDeRhamPlus R p) Submonoid.closure
-    AdicCompletion.of ((RingHom.ker (fontaineThetaInvertP R p))) _ ''
-      {a | (RingHom.ker (fontaineThetaInvertP R p)) = Ideal.span {a}}
-
-local notation "𝔹_dR^+(" R ")" => BDeRhamPlus R p
-local notation "𝔹_dR(" R ")" => BDeRham R p
-
-中文:
-定义 BDeRham
-  签名: : 类型u
-  定义体: Localization (M := BDeRhamPlus R p) Submonoid.closure
-    AdicCompletion.of ((RingHom.ker (fontaineThetaInvertP R p))) _ ''
-      {a | (RingHom.ker (fontaineThetaInvertP R p)) = Ideal.span {a}}
-
-local notation "𝔹_dR^+(" R ")" => BDeRhamPlus R p
-local notation "𝔹_dR(" R ")" => BDeRham R p
-
-Depends on / 依赖: AdicCompletion, AdicCompletion.of, BDeRhamPlus, Ideal.span, Localization, RingHom, RingHom.ker, Submonoid, Submonoid.closure, closure, fontaineThetaInvertP
+--- 原说明 ---
+The de Rham period ring $\mathbb{B}_{dR}$ for general perfectoid ring.
+It is defined as $\mathbb{B}_{dR}^+$ inverting the generators of the ideal `ker 
+θ`.
+Mathematically, this is equivalent to inverting *a* generator of the ideal `ker 
+θ`
+after we show that it is principal.
+When $R = \mathcal{O}_{\mathbb{C}_p}$, it coincides
+with the classical de Rham period ring.
+Note that if `p = 0` in `R`, then this definition is the zero ring.
 -/
 def BDeRham : Type u :=
-Localization (M := BDeRhamPlus R p) Submonoid.closure
+  Localization (M := BDeRhamPlus R p) <| Submonoid.closure <|
     AdicCompletion.of ((RingHom.ker (fontaineThetaInvertP R p))) _ ''
       {a | (RingHom.ker (fontaineThetaInvertP R p)) = Ideal.span {a}}
 
@@ -135,3 +138,4 @@ local notation "𝔹_dR^+(" R ")" => BDeRhamPlus R p
 local notation "𝔹_dR(" R ")" => BDeRham R p
 
 end
+

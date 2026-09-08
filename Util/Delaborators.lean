@@ -31,24 +31,10 @@ open Mathlib
 also be written as `(x : α) → β x`. -/
 -- A direct copy of forall notation but with `Π`/`Pi` instead of `∀`/`Forall`.
 @[term_parser]
-/--
-Definition of `piNotation` / `piNotation` 的定义
-
-English:
-definition piNotation
-  body: leading_parser:leadPrec
-  unicodeSymbol "Π" "PiType" >>
-  many1 (ppSpace >> (binderIdent <|> bracketedBinder)) >>
-  optType >> ", " >> termParser
-
-中文:
-定义 piNotation
-  定义体: leading_parser:leadPrec
-  unicodeSymbol "Π" "PiType" >>
-  many1 (ppSpace >> (binderIdent <|> bracketedBinder)) >>
-  optType >> ", " >> termParser
-
-Depends on / 依赖: leadPrec, leading_parser
+/-
+**PiNotation.piNotation** 是 Mathlib 中的一个定义，位于命名空间 `PiNotation`。
+形式化陈述：piNotation
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def piNotation := leading_parser:leadPrec
   unicodeSymbol "Π" "PiType" >>
@@ -61,19 +47,19 @@ short for `Π x, x ∈ s → β x`. -/
 syntax "Π " binderIdent binderPred ", " term : term
 
 macro_rules
-  | `(Π $x:ident $pred:binderPred, $p) => `(Π $x:ident, satisfies_binder_pred% $x $pred -> $p)
-  | `(Π _ $pred:binderPred, $p) => `(Π x, satisfies_binder_pred% x $pred -> $p)
+  | `(Π $x:ident $pred:binderPred, $p) => `(Π $x:ident, satisfies_binder_pred% $x $pred → $p)
+  | `(Π _ $pred:binderPred, $p) => `(Π x, satisfies_binder_pred% x $pred → $p)
 
-/--
-Definition of `replacePiNotation` / `replacePiNotation` 的定义
+/-- Since pi notation and forall notation are interchangeable, we can
+parse it by simply using the pre-existing forall parser. -/
+/-
+**PiNotation.replacePiNotation** 是 Mathlib 中的一个定义，位于命名空间 `PiNotation`。
+形式化陈述：Macro
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition replacePiNotation
-  signature: : Lean.Macro
-
-中文:
-定义 replacePiNotation
-  签名: : Lean.Macro
+--- 原说明 ---
+Since pi notation and forall notation are interchangeable, we can
+parse it by simply using the pre-existing forall parser.
 -/
 @[macro PiNotation.piNotation] def replacePiNotation : Lean.Macro
   | .node info _ args => return .node info ``Lean.Parser.Term.forall args
@@ -82,96 +68,41 @@ definition replacePiNotation
 /-- Override the Lean 4 pi notation delaborator with one that prints cute binders
 such as `∀ ε > 0`. -/
 @[delab forallE]
-/--
-Definition of `delabPi` / `delabPi` 的定义
+/-
+**PiNotation.delabPi** 是 Mathlib 中的一个定义，位于命名空间 `PiNotation`。
+形式化陈述：delabPi : Delab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition delabPi
-  signature: : Delab
-  body: whenPPOption getPPBinderPredicates whenPPOption Lean.getPPNotation do
-  let stx ← delabForall
-  match stx with
-  | `(forall ($i:ident : $_), $j:ident in $s -> $body) =>
-    if i == j then `(forall $i:ident in $s, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident > $z -> $body) =>
-    if x == y then `(forall $x:ident > $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident < $z -> $body) =>
-    if x == y then `(forall $x:ident < $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident >= $z -> $body) =>
-    if x == y then `(forall $x:ident >= $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident <= $z -> $body) =>
-    if x == y then `(forall $x:ident <= $z, $body) else pure stx
-  | `(Π ($i:ident : $_), $j:ident in $s -> $body) =>
-    if i == j then `(Π $i:ident in $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ∉ $s -> $body) =>
-    if i == j then `(forall $i:ident ∉ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident subseteq $s -> $body) =>
-    if i == j then `(forall $i:ident subseteq $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊂ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊂ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊇ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊇ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊃ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊃ $s, $body) else pure stx
-  | _ => pure stx
-
-中文:
-定义 delabPi
-  签名: : Delab
-  定义体: whenPPOption getPPBinderPredicates whenPPOption Lean.getPPNotation do
-  let stx ← delabForall
-  match stx with
-  | `(forall ($i:ident : $_), $j:ident in $s -> $body) =>
-    if i == j then `(forall $i:ident in $s, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident > $z -> $body) =>
-    if x == y then `(forall $x:ident > $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident < $z -> $body) =>
-    if x == y then `(forall $x:ident < $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident >= $z -> $body) =>
-    if x == y then `(forall $x:ident >= $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident <= $z -> $body) =>
-    if x == y then `(forall $x:ident <= $z, $body) else pure stx
-  | `(Π ($i:ident : $_), $j:ident in $s -> $body) =>
-    if i == j then `(Π $i:ident in $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ∉ $s -> $body) =>
-    if i == j then `(forall $i:ident ∉ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident subseteq $s -> $body) =>
-    if i == j then `(forall $i:ident subseteq $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊂ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊂ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊇ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊇ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊃ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊃ $s, $body) else pure stx
-  | _ => pure stx
-
-Depends on / 依赖: Lean.getPPNotation, getPPBinderPredicates, getPPNotation, whenPPOption
+--- 原说明 ---
+Override the Lean 4 pi notation delaborator with one that prints cute binders
+such as `∀ ε > 0`.
 -/
-def delabPi : Delab := whenPPOption getPPBinderPredicates whenPPOption Lean.getPPNotation do
+def delabPi : Delab := whenPPOption getPPBinderPredicates <| whenPPOption Lean.getPPNotation do
   let stx ← delabForall
   match stx with
-  | `(forall ($i:ident : $_), $j:ident in $s -> $body) =>
-    if i == j then `(forall $i:ident in $s, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident > $z -> $body) =>
-    if x == y then `(forall $x:ident > $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident < $z -> $body) =>
-    if x == y then `(forall $x:ident < $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident >= $z -> $body) =>
-    if x == y then `(forall $x:ident >= $z, $body) else pure stx
-  | `(forall ($x:ident : $_), $y:ident <= $z -> $body) =>
-    if x == y then `(forall $x:ident <= $z, $body) else pure stx
-  | `(Π ($i:ident : $_), $j:ident in $s -> $body) =>
-    if i == j then `(Π $i:ident in $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ∉ $s -> $body) =>
-    if i == j then `(forall $i:ident ∉ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident subseteq $s -> $body) =>
-    if i == j then `(forall $i:ident subseteq $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊂ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊂ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊇ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊇ $s, $body) else pure stx
-  | `(forall ($i:ident : $_), $j:ident ⊃ $s -> $body) =>
-    if i == j then `(forall $i:ident ⊃ $s, $body) else pure stx
+  | `(∀ ($i:ident : $_), $j:ident ∈ $s → $body) =>
+    if i == j then `(∀ $i:ident ∈ $s, $body) else pure stx
+  | `(∀ ($x:ident : $_), $y:ident > $z → $body) =>
+    if x == y then `(∀ $x:ident > $z, $body) else pure stx
+  | `(∀ ($x:ident : $_), $y:ident < $z → $body) =>
+    if x == y then `(∀ $x:ident < $z, $body) else pure stx
+  | `(∀ ($x:ident : $_), $y:ident ≥ $z → $body) =>
+    if x == y then `(∀ $x:ident ≥ $z, $body) else pure stx
+  | `(∀ ($x:ident : $_), $y:ident ≤ $z → $body) =>
+    if x == y then `(∀ $x:ident ≤ $z, $body) else pure stx
+  | `(Π ($i:ident : $_), $j:ident ∈ $s → $body) =>
+    if i == j then `(Π $i:ident ∈ $s, $body) else pure stx
+  | `(∀ ($i:ident : $_), $j:ident ∉ $s → $body) =>
+    if i == j then `(∀ $i:ident ∉ $s, $body) else pure stx
+  | `(∀ ($i:ident : $_), $j:ident ⊆ $s → $body) =>
+    if i == j then `(∀ $i:ident ⊆ $s, $body) else pure stx
+  | `(∀ ($i:ident : $_), $j:ident ⊂ $s → $body) =>
+    if i == j then `(∀ $i:ident ⊂ $s, $body) else pure stx
+  | `(∀ ($i:ident : $_), $j:ident ⊇ $s → $body) =>
+    if i == j then `(∀ $i:ident ⊇ $s, $body) else pure stx
+  | `(∀ ($i:ident : $_), $j:ident ⊃ $s → $body) =>
+    if i == j then `(∀ $i:ident ⊃ $s, $body) else pure stx
   | _ => pure stx
 
 /-- Override the Lean 4 pi notation delaborator with one that uses `Π` and prints
@@ -179,50 +110,25 @@ cute binders such as `∀ ε > 0`.
 Note that this takes advantage of the fact that `(x : α) → p x` notation is
 never used for propositions, so we can match on this result and rewrite it. -/
 @[scoped delab forallE]
-/--
-Definition of `delabPi'` / `delabPi'` 的定义
+/-
+**PiNotation.delabPi'** 是 Mathlib 中的一个定义，位于命名空间 `PiNotation`。
+形式化陈述：delabPi' : Delab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition delabPi'
-  signature: : Delab
-  body: whenPPOption Lean.getPPNotation do
-  -- Use delabForall as a backup if `pp.mathlib.binderPredicates` is false.
-let stx ← delabPi > delabForall
-  -- Replacements
-  let stx : Term ←
-    match stx with
-    | `($group:bracketedBinder -> $body) => `(Π $group:bracketedBinder, $body)
-    | _ => pure stx
-  -- Merging
-  match stx with
-  | `(Π $group, Π $groups*, $body) => `(Π $group $groups*, $body)
-  | _ => pure stx
-
-中文:
-定义 delabPi'
-  签名: : Delab
-  定义体: whenPPOption Lean.getPPNotation do
-  -- Use delabForall as a backup if `pp.mathlib.binderPredicates` is false.
-let stx ← delabPi > delabForall
-  -- Replacements
-  let stx : Term ←
-    match stx with
-    | `($group:bracketedBinder -> $body) => `(Π $group:bracketedBinder, $body)
-    | _ => pure stx
-  -- Merging
-  match stx with
-  | `(Π $group, Π $groups*, $body) => `(Π $group $groups*, $body)
-  | _ => pure stx
-
-Depends on / 依赖: Lean.getPPNotation, getPPNotation, whenPPOption
+--- 原说明 ---
+Override the Lean 4 pi notation delaborator with one that uses `Π` and prints
+cute binders such as `∀ ε > 0`.
+Note that this takes advantage of the fact that `(x : α) → p x` notation is
+never used for propositions, so we can match on this result and rewrite it.
 -/
 def delabPi' : Delab := whenPPOption Lean.getPPNotation do
   -- Use delabForall as a backup if `pp.mathlib.binderPredicates` is false.
-let stx ← delabPi > delabForall
+  let stx ← delabPi <|> delabForall
   -- Replacements
   let stx : Term ←
     match stx with
-    | `($group:bracketedBinder -> $body) => `(Π $group:bracketedBinder, $body)
+    | `($group:bracketedBinder → $body) => `(Π $group:bracketedBinder, $body)
     | _ => pure stx
   -- Merging
   match stx with
@@ -237,136 +143,11 @@ open Lean Parser Term PrettyPrinter Delaborator
 /-- Delaborator for existential quantifier, including extended binders. -/
 -- TODO: reduce the duplication in this code
 @[app_delab Exists]
-/--
-Definition of `exists_delab` / `exists_delab` 的定义
-
-English:
-definition exists_delab
-  signature: : Delab
-  body: whenPPOption Lean.getPPNotation do
-  let #[ι, f] := (← SubExpr.getExpr).getAppArgs | failure
-  unless f.isLambda do failure
-  let prop ← Meta.isProp ι
-  let dep := f.bindingBody!.hasLooseBVar 0
-  let ppTypes ← getPPOption getPPFunBinderTypes
-  let stx ← SubExpr.withAppArg do
-    let dom ← SubExpr.withBindingDomain delab
-    withBindingBodyUnusedName fun x => do
-      let x : TSyntax `ident := .mk x
-      let body ← delab
-      if prop && !dep then
-        `(exists (_ : $dom), $body)
-      else if prop || ppTypes then
-        `(exists ($x:ident : $dom), $body)
-      else
-        `(exists $x:ident, $body)
-  -- Cute binders
-  let stx : Term ←
-    if ← getPPOption Mathlib.getPPBinderPredicates then
-      match stx with
-      | `(exists $i:ident, $j:ident in $s ∧ $body)
-      | `(exists ($i:ident : $_), $j:ident in $s ∧ $body) =>
-        if i == j then `(exists $i:ident in $s, $body) else pure stx
-      | `(exists $x:ident, $y:ident > $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident > $z ∧ $body) =>
-        if x == y then `(exists $x:ident > $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident < $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident < $z ∧ $body) =>
-        if x == y then `(exists $x:ident < $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident >= $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident >= $z ∧ $body) =>
-        if x == y then `(exists $x:ident >= $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident <= $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident <= $z ∧ $body) =>
-        if x == y then `(exists $x:ident <= $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ∉ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ∉ $z ∧ $body) => do
-        if x == y then `(exists $x:ident ∉ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident subseteq $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident subseteq $z ∧ $body) =>
-        if x == y then `(exists $x:ident subseteq $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊂ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊂ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊂ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊇ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊇ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊇ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊃ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊃ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊃ $z, $body) else pure stx
-      | _ => pure stx
-    else
-      pure stx
-  match stx with
-  | `(exists $group:bracketedExplicitBinders, exists $[$groups:bracketedExplicitBinders]*, $body) =>
-    `(exists $group $groups*, $body)
-  | `(exists $b:binderIdent, exists $[$bs:binderIdent]*, $body) => `(exists $b:binderIdent $[$bs]*, $body)
-  | _ => pure stx
-
-中文:
-定义 存在_delab
-  签名: : Delab
-  定义体: whenPPOption Lean.getPPNotation do
-  let #[ι, f] := (← SubExpr.getExpr).getAppArgs | failure
-  unless f.isLambda do failure
-  let prop ← Meta.isProp ι
-  let dep := f.bindingBody!.hasLooseBVar 0
-  let ppTypes ← getPPOption getPPFunBinderTypes
-  let stx ← SubExpr.withAppArg do
-    let dom ← SubExpr.withBindingDomain delab
-    withBindingBodyUnusedName fun x => do
-      let x : TSyntax `ident := .mk x
-      let body ← delab
-      if prop && !dep then
-        `(exists (_ : $dom), $body)
-      else if prop || ppTypes then
-        `(exists ($x:ident : $dom), $body)
-      else
-        `(exists $x:ident, $body)
-  -- Cute binders
-  let stx : Term ←
-    if ← getPPOption Mathlib.getPPBinderPredicates then
-      match stx with
-      | `(exists $i:ident, $j:ident in $s ∧ $body)
-      | `(exists ($i:ident : $_), $j:ident in $s ∧ $body) =>
-        if i == j then `(exists $i:ident in $s, $body) else pure stx
-      | `(exists $x:ident, $y:ident > $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident > $z ∧ $body) =>
-        if x == y then `(exists $x:ident > $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident < $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident < $z ∧ $body) =>
-        if x == y then `(exists $x:ident < $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident >= $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident >= $z ∧ $body) =>
-        if x == y then `(exists $x:ident >= $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident <= $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident <= $z ∧ $body) =>
-        if x == y then `(exists $x:ident <= $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ∉ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ∉ $z ∧ $body) => do
-        if x == y then `(exists $x:ident ∉ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident subseteq $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident subseteq $z ∧ $body) =>
-        if x == y then `(exists $x:ident subseteq $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊂ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊂ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊂ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊇ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊇ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊇ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊃ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊃ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊃ $z, $body) else pure stx
-      | _ => pure stx
-    else
-      pure stx
-  match stx with
-  | `(exists $group:bracketedExplicitBinders, exists $[$groups:bracketedExplicitBinders]*, $body) =>
-    `(exists $group $groups*, $body)
-  | `(exists $b:binderIdent, exists $[$bs:binderIdent]*, $body) => `(exists $b:binderIdent $[$bs]*, $body)
-  | _ => pure stx
-
-Depends on / 依赖: Lean.getPPNotation, getPPNotation, whenPPOption
+/-
+**exists_delab** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：exists_delab : Delab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def exists_delab : Delab := whenPPOption Lean.getPPNotation do
   let #[ι, f] := (← SubExpr.getExpr).getAppArgs | failure
@@ -380,81 +161,69 @@ def exists_delab : Delab := whenPPOption Lean.getPPNotation do
       let x : TSyntax `ident := .mk x
       let body ← delab
       if prop && !dep then
-        `(exists (_ : $dom), $body)
+        `(∃ (_ : $dom), $body)
       else if prop || ppTypes then
-        `(exists ($x:ident : $dom), $body)
+        `(∃ ($x:ident : $dom), $body)
       else
-        `(exists $x:ident, $body)
+        `(∃ $x:ident, $body)
   -- Cute binders
   let stx : Term ←
     if ← getPPOption Mathlib.getPPBinderPredicates then
       match stx with
-      | `(exists $i:ident, $j:ident in $s ∧ $body)
-      | `(exists ($i:ident : $_), $j:ident in $s ∧ $body) =>
-        if i == j then `(exists $i:ident in $s, $body) else pure stx
-      | `(exists $x:ident, $y:ident > $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident > $z ∧ $body) =>
-        if x == y then `(exists $x:ident > $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident < $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident < $z ∧ $body) =>
-        if x == y then `(exists $x:ident < $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident >= $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident >= $z ∧ $body) =>
-        if x == y then `(exists $x:ident >= $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident <= $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident <= $z ∧ $body) =>
-        if x == y then `(exists $x:ident <= $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ∉ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ∉ $z ∧ $body) => do
-        if x == y then `(exists $x:ident ∉ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident subseteq $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident subseteq $z ∧ $body) =>
-        if x == y then `(exists $x:ident subseteq $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊂ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊂ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊂ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊇ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊇ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊇ $z, $body) else pure stx
-      | `(exists $x:ident, $y:ident ⊃ $z ∧ $body)
-      | `(exists ($x:ident : $_), $y:ident ⊃ $z ∧ $body) =>
-        if x == y then `(exists $x:ident ⊃ $z, $body) else pure stx
+      | `(∃ $i:ident, $j:ident ∈ $s ∧ $body)
+      | `(∃ ($i:ident : $_), $j:ident ∈ $s ∧ $body) =>
+        if i == j then `(∃ $i:ident ∈ $s, $body) else pure stx
+      | `(∃ $x:ident, $y:ident > $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident > $z ∧ $body) =>
+        if x == y then `(∃ $x:ident > $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident < $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident < $z ∧ $body) =>
+        if x == y then `(∃ $x:ident < $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident ≥ $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident ≥ $z ∧ $body) =>
+        if x == y then `(∃ $x:ident ≥ $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident ≤ $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident ≤ $z ∧ $body) =>
+        if x == y then `(∃ $x:ident ≤ $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident ∉ $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident ∉ $z ∧ $body) => do
+        if x == y then `(∃ $x:ident ∉ $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident ⊆ $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident ⊆ $z ∧ $body) =>
+        if x == y then `(∃ $x:ident ⊆ $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident ⊂ $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident ⊂ $z ∧ $body) =>
+        if x == y then `(∃ $x:ident ⊂ $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident ⊇ $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident ⊇ $z ∧ $body) =>
+        if x == y then `(∃ $x:ident ⊇ $z, $body) else pure stx
+      | `(∃ $x:ident, $y:ident ⊃ $z ∧ $body)
+      | `(∃ ($x:ident : $_), $y:ident ⊃ $z ∧ $body) =>
+        if x == y then `(∃ $x:ident ⊃ $z, $body) else pure stx
       | _ => pure stx
     else
       pure stx
   match stx with
-  | `(exists $group:bracketedExplicitBinders, exists $[$groups:bracketedExplicitBinders]*, $body) =>
-    `(exists $group $groups*, $body)
-  | `(exists $b:binderIdent, exists $[$bs:binderIdent]*, $body) => `(exists $b:binderIdent $[$bs]*, $body)
+  | `(∃ $group:bracketedExplicitBinders, ∃ $[$groups:bracketedExplicitBinders]*, $body) =>
+    `(∃ $group $groups*, $body)
+  | `(∃ $b:binderIdent, ∃ $[$bs:binderIdent]*, $body) => `(∃ $b:binderIdent $[$bs]*, $body)
   | _ => pure stx
 end existential
 
 open Lean Lean.PrettyPrinter.Delaborator
 
-/--
-Definition of `delabNotIn` / `delabNotIn` 的定义
+/-- Delaborator for `∉`. -/
+/-
+**delabNotIn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PrettyPrinter.Delaborator.Delab
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition delabNotIn
-  body: whenPPOption Lean.getPPNotation do
-  let #[f] := (← SubExpr.getExpr).getAppArgs | failure
-guard f.isAppOfArity ``Membership.mem 5
-let stx₁ ← SubExpr.withAppArg SubExpr.withNaryArg 3 delab
-let stx₂ ← SubExpr.withAppArg SubExpr.withNaryArg 4 delab
-  return ← `($stx₂ ∉ $stx₁)
-
-中文:
-定义 delabNotIn
-  定义体: whenPPOption Lean.getPPNotation do
-  let #[f] := (← SubExpr.getExpr).getAppArgs | failure
-guard f.isAppOfArity ``Membership.mem 5
-let stx₁ ← SubExpr.withAppArg SubExpr.withNaryArg 3 delab
-let stx₂ ← SubExpr.withAppArg SubExpr.withNaryArg 4 delab
-  return ← `($stx₂ ∉ $stx₁)
+--- 原说明 ---
+Delaborator for `∉`.
 -/
 @[app_delab Not] def delabNotIn := whenPPOption Lean.getPPNotation do
   let #[f] := (← SubExpr.getExpr).getAppArgs | failure
-guard f.isAppOfArity ``Membership.mem 5
-let stx₁ ← SubExpr.withAppArg SubExpr.withNaryArg 3 delab
-let stx₂ ← SubExpr.withAppArg SubExpr.withNaryArg 4 delab
+  guard <| f.isAppOfArity ``Membership.mem 5
+  let stx₁ ← SubExpr.withAppArg <| SubExpr.withNaryArg 3 delab
+  let stx₂ ← SubExpr.withAppArg <| SubExpr.withNaryArg 4 delab
   return ← `($stx₂ ∉ $stx₁)

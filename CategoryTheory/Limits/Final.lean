@@ -93,133 +93,108 @@ variable {D : Type u₂} [Category.{v₂} D]
 A functor `F : C ⥤ D` is final if for every `d : D`, the comma category of morphisms `d ⟶ F.obj c`
 is connected. -/
 @[stacks 04E6]
-/--
-Definition of `Final` / `Final` 的定义
+/-
+**CategoryTheory.Functor.Final** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Functor
+ C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Final
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - out((d : D)) : IsConnected (StructuredArrow d F)
-
-中文:
-类 终
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - out((d : D)) : 是连通 (结构化箭头 d F)
+--- 原说明 ---
+A functor `F : C ⥤ D` is final if for every `d : D`, the comma category of morph
+isms `d ⟶ F.obj c`
+is connected.
 -/
 class Final (F : C ⥤ D) : Prop where
   out (d : D) : IsConnected (StructuredArrow d F)
 
 attribute [instance] Final.out
 
-/--
-Definition of `Initial` / `Initial` 的定义
+/-- A functor `F : C ⥤ D` is initial if for every `d : D`, the comma category of morphisms
+`F.obj c ⟶ d` is connected.
+-/
+/-
+**CategoryTheory.Functor.Initial** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Functor
+ C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Initial
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - out((d : D)) : IsConnected (CostructuredArrow F d)
-
-中文:
-类 初始
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - out((d : D)) : 是连通 (CostructuredArrow F d)
+--- 原说明 ---
+A functor `F : C ⥤ D` is initial if for every `d : D`, the comma category of mor
+phisms
+`F.obj c ⟶ d` is connected.
 -/
 class Initial (F : C ⥤ D) : Prop where
   out (d : D) : IsConnected (CostructuredArrow F d)
 
 attribute [instance] Initial.out
-
-/--
-Instance `final_op_of_initial` / 实例 `final_op_of_initial`
-
-English:
-instance final_op_of_initial
-  signature: (F : C ⥤ D) [Initial F]
-  body: isConnected_of_equivalent (costructuredArrowOpEquivalence F (unop d))
-
-中文:
-实例 final_op_of_initial
-  签名: (F : C ⥤ D) [初始 F]
-  定义体: isConnected_of_equivalent (costructuredArrowOpEquivalence F (unop d))
-
-Depends on / 依赖: costructuredArrowOpEquivalence, isConnected_of_equivalent
+/-
+**CategoryTheory.Functor.final_op_of_initial** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：final_op_of_initial (F : C ⥤ D) [Initial F] : Final F.op where out d
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 -/
 instance final_op_of_initial (F : C ⥤ D) [Initial F] : Final F.op where
   out d := isConnected_of_equivalent (costructuredArrowOpEquivalence F (unop d))
-
-/--
-Instance `initial_op_of_final` / 实例 `initial_op_of_final`
-
-English:
-instance initial_op_of_final
-  signature: (F : C ⥤ D) [Final F]
-  body: isConnected_of_equivalent (structuredArrowOpEquivalence F (unop d))
-
-中文:
-实例 initial_op_of_final
-  签名: (F : C ⥤ D) [终 F]
-  定义体: isConnected_of_equivalent (structuredArrowOpEquivalence F (unop d))
-
-Depends on / 依赖: isConnected_of_equivalent, structuredArrowOpEquivalence
+/-
+**CategoryTheory.Functor.initial_op_of_final** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：initial_op_of_final (F : C ⥤ D) [Final F] : Initial F.op where out d
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 -/
 instance initial_op_of_final (F : C ⥤ D) [Final F] : Initial F.op where
   out d := isConnected_of_equivalent (structuredArrowOpEquivalence F (unop d))
-
-/--
-theorem `final_of_initial_op` / 定理 `final_of_initial_op`
-
-English:
-theorem final_of_initial_op
-  given: (F : C ⥤ D) [Initial F.op]
-  statement: Final F
-  proof: {
-    out := fun d =>
-      @isConnected_of_isConnected_op _ _
-        (isConnected_of_equivalent (structuredArrowOpEquivalence F d).symm) }
-
-中文:
-定理 final_of_initial_op
-  条件: (F : C ⥤ D) [初始 F.op]
-  结论: 终 F
-  证明: {
-    out := fun d =>
-      @isConnected_of_isConnected_op _ _
-        (isConnected_of_equivalent (structuredArrowOpEquivalence F d).symm) }
-
-Depends on / 依赖: isConnected_of_equivalent, isConnected_of_isConnected_op, structuredArrowOpEquivalence
+/-
+**CategoryTheory.Functor.final_of_initial_op** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：final_of_initial_op (F : C ⥤ D) [Initial F.op] : Final F
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_isConnected_op`：isConnected_of_isConnected
+_op [IsConnected Jᵒᵖ] : IsConnected J
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 -/
 theorem final_of_initial_op (F : C ⥤ D) [Initial F.op] : Final F :=
   {
     out := fun d =>
       @isConnected_of_isConnected_op _ _
         (isConnected_of_equivalent (structuredArrowOpEquivalence F d).symm) }
-
-/--
-theorem `initial_of_final_op` / 定理 `initial_of_final_op`
-
-English:
-theorem initial_of_final_op
-  given: (F : C ⥤ D) [Final F.op]
-  statement: Initial F
-  proof: {
-    out := fun d =>
-      @isConnected_of_isConnected_op _ _
-        (isConnected_of_equivalent (costructuredArrowOpEquivalence F d).symm) }
-
-中文:
-定理 initial_of_final_op
-  条件: (F : C ⥤ D) [终 F.op]
-  结论: 初始 F
-  证明: {
-    out := fun d =>
-      @isConnected_of_isConnected_op _ _
-        (isConnected_of_equivalent (costructuredArrowOpEquivalence F d).symm) }
-
-Depends on / 依赖: costructuredArrowOpEquivalence, isConnected_of_equivalent, isConnected_of_isConnected_op
+/-
+**CategoryTheory.Functor.initial_of_final_op** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：initial_of_final_op (F : C ⥤ D) [Final F.op] : Initial F
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_isConnected_op`：isConnected_of_isConnected
+_op [IsConnected Jᵒᵖ] : IsConnected J
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 -/
 theorem initial_of_final_op (F : C ⥤ D) [Final F.op] : Initial F :=
   {
@@ -229,40 +204,45 @@ theorem initial_of_final_op (F : C ⥤ D) [Final F.op] : Initial F :=
 
 attribute [local simp] Adjunction.homEquiv_unit Adjunction.homEquiv_counit
 
-/--
-theorem `final_of_adjunction` / 定理 `final_of_adjunction`
+/-- If a functor `R : D ⥤ C` is a right adjoint, it is final. -/
+/-
+**CategoryTheory.Functor.final_of_adjunction** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：final_of_adjunction {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R) : Final R
+参数：adj : L ⊣ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.zigzag_isConnected`：zigzag_isConnected [Nonempty J] (h : 
+forall j₁ j₂ : J, Zigzag j₁ j₂) : IsConnected J
+· 使用定理 `Relation.ReflTransGen.trans`：trans (hab : ReflTransGen r a b) (hbc : Ref
+lTransGen r b c) : ReflTransGen r a c
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_counit`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem final_of_adjunction
-  given: {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R)
-  statement: Final R
-  proof: { out := fun c =>
-      let u : StructuredArrow c R := StructuredArrow.mk (adj.unit.app c)
-      @zigzag_isConnected _ _ ⟨u⟩ fun f g =>
-        Relation.ReflTransGen.trans
-          (Relation.ReflTransGen.single
-            (show Zag f u from
-              Or.inr ⟨StructuredArrow.homMk ((adj.homEquiv c f.right).symm f.hom) (by simp [u])⟩))
-          (Relation.ReflTransGen.single
-            (show Zag u g from
-              Or.inl ⟨StructuredArrow.homMk ((adj.homEquiv c g.right).symm g.hom) (by simp [u])⟩)) }
-
-中文:
-定理 final_of_adjunction
-  条件: {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R)
-  结论: 终 R
-  证明: { out := fun c =>
-      let u : StructuredArrow c R := StructuredArrow.mk (adj.unit.app c)
-      @zigzag_isConnected _ _ ⟨u⟩ fun f g =>
-        Relation.ReflTransGen.trans
-          (Relation.ReflTransGen.single
-            (show Zag f u from
-              Or.inr ⟨StructuredArrow.homMk ((adj.homEquiv c f.right).symm f.hom) (by simp [u])⟩))
-          (Relation.ReflTransGen.single
-            (show Zag u g from
-              Or.inl ⟨StructuredArrow.homMk ((adj.homEquiv c g.right).symm g.hom) (by simp [u])⟩)) }
-
-Depends on / 依赖: Or.inl, Or.inr, ReflTransGen, Relation, Relation.ReflTransGen.single, Relation.ReflTransGen.trans, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, adj.homEquiv, adj.unit.app, f.hom, f.right, g.hom, g.right, homEquiv, single, zigzag_isConnected
+--- 原说明 ---
+If a functor `R : D ⥤ C` is a right adjoint, it is final.
 -/
 theorem final_of_adjunction {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R) : Final R :=
   { out := fun c =>
@@ -277,40 +257,44 @@ theorem final_of_adjunction {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R) : Final 
               Or.inl ⟨StructuredArrow.homMk ((adj.homEquiv c g.right).symm g.hom) (by simp [u])⟩)) }
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `initial_of_adjunction` / 定理 `initial_of_adjunction`
+/-- If a functor `L : C ⥤ D` is a left adjoint, it is initial. -/
+/-
+**CategoryTheory.Functor.initial_of_adjunction** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：initial_of_adjunction {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R) : Initial L
+参数：adj : L ⊣ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.zigzag_isConnected`：zigzag_isConnected [Nonempty J] (h : 
+forall j₁ j₂ : J, Zigzag j₁ j₂) : IsConnected J
+· 使用定理 `Relation.ReflTransGen.trans`：trans (hab : ReflTransGen r a b) (hbc : Ref
+lTransGen r b c) : ReflTransGen r a c
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_unit`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Adjunction.counit_naturality`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem initial_of_adjunction
-  given: {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R)
-  statement: Initial L
-  proof: { out := fun d =>
-      let u : CostructuredArrow L d := CostructuredArrow.mk (adj.counit.app d)
-      @zigzag_isConnected _ _ ⟨u⟩ fun f g =>
-        Relation.ReflTransGen.trans
-          (Relation.ReflTransGen.single
-            (show Zag f u from
-              Or.inl ⟨CostructuredArrow.homMk (adj.homEquiv f.left d f.hom) (by simp [u])⟩))
-          (Relation.ReflTransGen.single
-            (show Zag u g from
-              Or.inr ⟨CostructuredArrow.homMk (adj.homEquiv g.left d g.hom) (by simp [u])⟩)) }
-
-中文:
-定理 initial_of_adjunction
-  条件: {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R)
-  结论: 初始 L
-  证明: { out := fun d =>
-      let u : CostructuredArrow L d := CostructuredArrow.mk (adj.counit.app d)
-      @zigzag_isConnected _ _ ⟨u⟩ fun f g =>
-        Relation.ReflTransGen.trans
-          (Relation.ReflTransGen.single
-            (show Zag f u from
-              Or.inl ⟨CostructuredArrow.homMk (adj.homEquiv f.left d f.hom) (by simp [u])⟩))
-          (Relation.ReflTransGen.single
-            (show Zag u g from
-              Or.inr ⟨CostructuredArrow.homMk (adj.homEquiv g.left d g.hom) (by simp [u])⟩)) }
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, Or.inl, Or.inr, ReflTransGen, Relation, Relation.ReflTransGen.single, Relation.ReflTransGen.trans, adj.counit.app, adj.homEquiv, counit, f.hom, f.left, g.hom, g.left, homEquiv, single, zigzag_isConnected
+--- 原说明 ---
+If a functor `L : C ⥤ D` is a left adjoint, it is initial.
 -/
 theorem initial_of_adjunction {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R) : Initial L :=
   { out := fun d =>
@@ -323,89 +307,71 @@ theorem initial_of_adjunction {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R) : Init
           (Relation.ReflTransGen.single
             (show Zag u g from
               Or.inr ⟨CostructuredArrow.homMk (adj.homEquiv g.left d g.hom) (by simp [u])⟩)) }
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) final_of_isRightAdjoint (F : C ⥤ D) [IsRightAdjoint F] : Final F :=
   final_of_adjunction (Adjunction.ofIsRightAdjoint F)
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) initial_of_isLeftAdjoint (F : C ⥤ D) [IsLeftAdjoint F] : Initial F :=
   initial_of_adjunction (Adjunction.ofIsLeftAdjoint F)
-
-/--
-theorem `final_of_natIso` / 定理 `final_of_natIso`
-
-English:
-theorem final_of_natIso
-  given: {F F' : C ⥤ D} [Final F] (i : F ≅ F')
-  statement: Final F' where
-  proof: isConnected_of_equivalent (StructuredArrow.mapNatIso i)
-
-中文:
-定理 final_of_natIso
-  条件: {F F' : C ⥤ D} [终 F] (i : F ≅ F')
-  结论: 终 F' where
-  证明: isConnected_of_equivalent (StructuredArrow.mapNatIso i)
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.mapNatIso, isConnected_of_equivalent, mapNatIso
+/-
+**CategoryTheory.Functor.final_of_natIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：final_of_natIso {F F' : C ⥤ D} [Final F] (i : F ≅ F') : Final F' where out
+ _
+参数：i : F ≅ F'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 -/
 theorem final_of_natIso {F F' : C ⥤ D} [Final F] (i : F ≅ F') : Final F' where
   out _ := isConnected_of_equivalent (StructuredArrow.mapNatIso i)
-
-/--
-theorem `final_natIso_iff` / 定理 `final_natIso_iff`
-
-English:
-theorem final_natIso_iff
-  given: {F F' : C ⥤ D} (i : F ≅ F')
-  statement: Final F ↔ Final F'
-  proof: ⟨fun _ => final_of_natIso i, fun _ => final_of_natIso i.symm⟩
-
-中文:
-定理 final_natIso_iff
-  条件: {F F' : C ⥤ D} (i : F ≅ F')
-  结论: 终 F ↔ 终 F'
-  证明: ⟨fun _ => final_of_natIso i, fun _ => final_of_natIso i.symm⟩
-
-Depends on / 依赖: final_of_natIso, i.symm
+/-
+**CategoryTheory.Functor.final_natIso_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：final_natIso_iff {F F' : C ⥤ D} (i : F ≅ F') : Final F ↔ Final F'
+参数：i : F ≅ F'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_natIso`：final_of_natIso {F F' : C ⥤ D} [
+Final F] (i : F ≅ F') : Final F' where out _
 -/
 theorem final_natIso_iff {F F' : C ⥤ D} (i : F ≅ F') : Final F ↔ Final F' :=
   ⟨fun _ => final_of_natIso i, fun _ => final_of_natIso i.symm⟩
-
-/--
-theorem `initial_of_natIso` / 定理 `initial_of_natIso`
-
-English:
-theorem initial_of_natIso
-  given: {F F' : C ⥤ D} [Initial F] (i : F ≅ F')
-  statement: Initial F' where
-  proof: isConnected_of_equivalent (CostructuredArrow.mapNatIso i)
-
-中文:
-定理 initial_of_natIso
-  条件: {F F' : C ⥤ D} [初始 F] (i : F ≅ F')
-  结论: 初始 F' where
-  证明: isConnected_of_equivalent (CostructuredArrow.mapNatIso i)
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.mapNatIso, isConnected_of_equivalent, mapNatIso
+/-
+**CategoryTheory.Functor.initial_of_natIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：initial_of_natIso {F F' : C ⥤ D} [Initial F] (i : F ≅ F') : Initial F' whe
+re out _
+参数：i : F ≅ F'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 -/
 theorem initial_of_natIso {F F' : C ⥤ D} [Initial F] (i : F ≅ F') : Initial F' where
   out _ := isConnected_of_equivalent (CostructuredArrow.mapNatIso i)
-
-/--
-theorem `initial_natIso_iff` / 定理 `initial_natIso_iff`
-
-English:
-theorem initial_natIso_iff
-  given: {F F' : C ⥤ D} (i : F ≅ F')
-  statement: Initial F ↔ Initial F'
-  proof: ⟨fun _ => initial_of_natIso i, fun _ => initial_of_natIso i.symm⟩
-
-中文:
-定理 initial_natIso_iff
-  条件: {F F' : C ⥤ D} (i : F ≅ F')
-  结论: 初始 F ↔ 初始 F'
-  证明: ⟨fun _ => initial_of_natIso i, fun _ => initial_of_natIso i.symm⟩
-
-Depends on / 依赖: i.symm, initial_of_natIso
+/-
+**CategoryTheory.Functor.initial_natIso_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：initial_natIso_iff {F F' : C ⥤ D} (i : F ≅ F') : Initial F ↔ Initial F'
+参数：i : F ≅ F'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_of_natIso`：initial_of_natIso {F F' : C ⥤ 
+D} [Initial F] (i : F ≅ F') : Initial F' where out _
 -/
 theorem initial_natIso_iff {F F' : C ⥤ D} (i : F ≅ F') : Initial F ↔ Initial F' :=
   ⟨fun _ => initial_of_natIso i, fun _ => initial_of_natIso i.symm⟩
@@ -414,85 +380,106 @@ namespace Final
 
 variable (F : C ⥤ D) [Final F]
 
+/-
+**CategoryTheory.Functor.Final.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functo
+r.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (d : D) : Nonempty (StructuredArrow d F) :=
   IsConnected.is_nonempty
 
 variable {E : Type u₃} [Category.{v₃} E] (G : D ⥤ E)
 
 /--
-Definition of `lift` / `lift` 的定义
+When `F : C ⥤ D` is final, we denote by `lift F d` an arbitrary choice of object in `C` such that
+there exists a morphism `d ⟶ F.obj (lift F d)`.
+-/
+/-
+**CategoryTheory.Functor.Final.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fu
+nctor.Final`。
+形式化陈述：lift (d : D) : C
+参数：d : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.instNonemptyStructuredArrow`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-definition lift
-  signature: (d : D)
-  body: (Classical.arbitrary (StructuredArrow d F)).right
-
-中文:
-定义 lift
-  签名: (d : D)
-  定义体: (Classical.arbitrary (StructuredArrow d F)).right
-
-Depends on / 依赖: Classical, Classical.arbitrary, StructuredArrow, arbitrary
+--- 原说明 ---
+When `F : C ⥤ D` is final, we denote by `lift F d` an arbitrary choice of object
+ in `C` such that
+there exists a morphism `d ⟶ F.obj (lift F d)`.
 -/
 def lift (d : D) : C :=
   (Classical.arbitrary (StructuredArrow d F)).right
 
-/--
-Definition of `homToLift` / `homToLift` 的定义
+/-- When `F : C ⥤ D` is final, we denote by `homToLift` an arbitrary choice of morphism
+`d ⟶ F.obj (lift F d)`.
+-/
+/-
+**CategoryTheory.Functor.Final.homToLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor.Final`。
+形式化陈述：homToLift (d : D) : d ⟶ F.obj (lift F d)
+参数：d : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.instNonemptyStructuredArrow`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-definition homToLift
-  signature: (d : D)
-  body: (Classical.arbitrary (StructuredArrow d F)).hom
-
-中文:
-定义 homToLift
-  签名: (d : D)
-  定义体: (Classical.arbitrary (StructuredArrow d F)).hom
-
-Depends on / 依赖: Classical, Classical.arbitrary, StructuredArrow, arbitrary
+--- 原说明 ---
+When `F : C ⥤ D` is final, we denote by `homToLift` an arbitrary choice of morph
+ism
+`d ⟶ F.obj (lift F d)`.
 -/
 def homToLift (d : D) : d ⟶ F.obj (lift F d) :=
   (Classical.arbitrary (StructuredArrow d F)).hom
 
-/--
-Definition of `induction` / `induction` 的定义
-
-English:
-definition induction
-  signature: {d : D} (Z : forall (X : C) (_ : d ⟶ F.obj X), Sort*)
-  body: by
-  apply Nonempty.some
-  refine isPreconnected_induction (Z := fun Y : StructuredArrow d F => Z Y.right Y.hom)
-    ?_ ?_ (j₀ := StructuredArrow.mk k₀) z _
-  · exact fun f a => h₁ _ _ _ _ f.right f.w a
-  · exact fun f a => h₂ _ _ _ _ f.right f.w a
-
-中文:
-定义 induction
-  签名: {d : D} (Z : 对任意 (X : C) (_ : d ⟶ F.obj X), 类型层*)
-  定义体: by
-  apply Nonempty.some
-  refine isPreconnected_induction (Z := fun Y : StructuredArrow d F => Z Y.right Y.hom)
-    ?_ ?_ (j₀ := StructuredArrow.mk k₀) z _
-  · exact fun f a => h₁ _ _ _ _ f.right f.w a
-  · exact fun f a => h₂ _ _ _ _ f.right f.w a
-
-Depends on / 依赖: Nonempty, Nonempty.some, StructuredArrow, StructuredArrow.mk, Y.hom, Y.right, f.right, isPreconnected_induction
+/-- We provide an induction principle for reasoning about `lift` and `homToLift`.
+We want to perform some construction (usually just a proof) about
+the particular choices `lift F d` and `homToLift F d`,
+it suffices to perform that construction for some other pair of choices
+(denoted `X₀ : C` and `k₀ : d ⟶ F.obj X₀` below),
+and to show how to transport such a construction
+*both* directions along a morphism between such choices.
 -/
-def induction {d : D} (Z : forall (X : C) (_ : d ⟶ F.obj X), Sort*)
+/-
+**CategoryTheory.Functor.Final.induction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor.Final`。
+形式化陈述：induction {d : D} (Z : forall (X : C) (_ : d ⟶ F.obj X), Sort*) (h₁ : fora
+ll (X₁ X₂) (k₁ : d ⟶ F.obj X₁) (k₂ : d ⟶ F.obj X₂) (f : X₁ ⟶ X₂), k₁ ≫ F.map f =
+ k₂ -> Z X₁ k₁ -> Z X₂ k₂) (h₂ : forall (X₁ X₂) (k₁ : d ⟶ F.obj X₁) (k₂ : d ⟶ F.
+obj X₂) (f : X₁ ⟶ X₂), k₁ ≫ F.map f = k₂ -> Z X₂ k₂ -> Z X₁ k₁) {X₀ : C} {k₀ : d
+ ⟶ F.obj X₀} (z : Z X₀ k₀) : Z (lift F d) (homToLift F d)
+参数：Z : forall (X : C) (_ : d ⟶ F.obj X), Sort*；h₁ : forall (X₁ X₂) (k₁ : d ⟶ F.o
+bj X₁) (k₂ : d ⟶ F.obj X₂) (f : X₁ ⟶ X₂), k₁ ≫ F.map f = k₂ -> Z X₁ k₁ -> Z X₂ k
+₂；h₂ : forall (X₁ X₂) (k₁ : d ⟶ F.obj X₁) (k₂ : d ⟶ F.obj X₂) (f : X₁ ⟶ X₂), k₁ 
+≫ F.map f = k₂ -> Z X₂ k₂ -> Z X₁ k₁；z : Z X₀ k₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We provide an induction principle for reasoning about `lift` and `homToLift`.
+We want to perform some construction (usually just a proof) about
+the particular choices `lift F d` and `homToLift F d`,
+it suffices to perform that construction for some other pair of choices
+(denoted `X₀ : C` and `k₀ : d ⟶ F.obj X₀` below),
+and to show how to transport such a construction
+*both* directions along a morphism between such choices.
+-/
+def induction {d : D} (Z : ∀ (X : C) (_ : d ⟶ F.obj X), Sort*)
     (h₁ :
-      forall (X₁ X₂) (k₁ : d ⟶ F.obj X₁) (k₂ : d ⟶ F.obj X₂) (f : X₁ ⟶ X₂),
-        k₁ ≫ F.map f = k₂ -> Z X₁ k₁ -> Z X₂ k₂)
+      ∀ (X₁ X₂) (k₁ : d ⟶ F.obj X₁) (k₂ : d ⟶ F.obj X₂) (f : X₁ ⟶ X₂),
+        k₁ ≫ F.map f = k₂ → Z X₁ k₁ → Z X₂ k₂)
     (h₂ :
-      forall (X₁ X₂) (k₁ : d ⟶ F.obj X₁) (k₂ : d ⟶ F.obj X₂) (f : X₁ ⟶ X₂),
-        k₁ ≫ F.map f = k₂ -> Z X₂ k₂ -> Z X₁ k₁)
+      ∀ (X₁ X₂) (k₁ : d ⟶ F.obj X₁) (k₂ : d ⟶ F.obj X₂) (f : X₁ ⟶ X₂),
+        k₁ ≫ F.map f = k₂ → Z X₂ k₂ → Z X₁ k₁)
     {X₀ : C} {k₀ : d ⟶ F.obj X₀} (z : Z X₀ k₀) : Z (lift F d) (homToLift F d) := by
   apply Nonempty.some
   refine isPreconnected_induction (Z := fun Y : StructuredArrow d F => Z Y.right Y.hom)
     ?_ ?_ (j₀ := StructuredArrow.mk k₀) z _
-  · exact fun f a => h₁ _ _ _ _ f.right f.w a
-  · exact fun f a => h₂ _ _ _ _ f.right f.w a
+  · exact fun f a ↦ h₁ _ _ _ _ f.right f.w a
+  · exact fun f a ↦ h₂ _ _ _ _ f.right f.w a
 
 variable {F G}
 
@@ -501,52 +488,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Given a cocone over `F ⋙ G`, we can construct a `Cocone G` with the same cocone point.
 -/
 @[simps]
-/--
-Definition of `extendCocone` / `extendCocone` 的定义
+/-
+**CategoryTheory.Functor.Final.extendCocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor.Final`。
+形式化陈述：extendCocone : Cocone (F ⋙ G) ⥤ Cocone G where obj c
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendCocone
-  signature: : Cocone (F ⋙ G) ⥤ Cocone G where
-  body: { pt := c.pt
-      ι :=
-        { app := fun X => G.map (homToLift F X) ≫ c.ι.app (lift F X)
-          naturality := fun X Y f => by
-            dsimp; simp only [Category.comp_id]
-            -- This would be true if we'd chosen `lift F X` to be `lift F Y`
-            -- and `homToLift F X` to be `f ≫ homToLift F Y`.
-            apply
-              induction F fun Z k =>
-                G.map f ≫ G.map (homToLift F Y) ≫ c.ι.app (lift F Y) = G.map k ≫ c.ι.app Z
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w]; rw [z]
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w] at z
-              rw [z]
-            · rw [← Functor.map_comp_assoc] } }
-  map f := { hom := f.hom }
-
-中文:
-定义 extendCocone
-  签名: : 余锥 (F ⋙ G) ⥤ 余锥 G where
-  定义体: { pt := c.pt
-      ι :=
-        { app := fun X => G.map (homToLift F X) ≫ c.ι.app (lift F X)
-          naturality := fun X Y f => by
-            dsimp; simp only [Category.comp_id]
-            -- This would be true if we'd chosen `lift F X` to be `lift F Y`
-            -- and `homToLift F X` to be `f ≫ homToLift F Y`.
-            apply
-              induction F fun Z k =>
-                G.map f ≫ G.map (homToLift F Y) ≫ c.ι.app (lift F Y) = G.map k ≫ c.ι.app Z
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w]; rw [z]
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w] at z
-              rw [z]
-            · rw [← Functor.map_comp_assoc] } }
-  map f := { hom := f.hom }
-
-Depends on / 依赖: Category, Category.comp_id, G.map, Nonempty, Nonempty.intro, WeakLimitCone, WeakLimitCone.ofLimitCone, c.pt, comp_id, getLimitCone, homToLift, naturality, ofLimitCone
+--- 原说明 ---
+Given a cocone over `F ⋙ G`, we can construct a `Cocone G` with the same cocone 
+point.
 -/
 def extendCocone : Cocone (F ⋙ G) ⥤ Cocone G where
   obj c :=
@@ -561,45 +512,26 @@ def extendCocone : Cocone (F ⋙ G) ⥤ Cocone G where
               induction F fun Z k =>
                 G.map f ≫ G.map (homToLift F Y) ≫ c.ι.app (lift F Y) = G.map k ≫ c.ι.app Z
             · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w]; rw [z]
+              rw [← a, Functor.map_comp, Category.assoc, ← Functor.comp_map, c.w, z]
             · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w] at z
+              rw [← a, Functor.map_comp, Category.assoc, ← Functor.comp_map, c.w] at z
               rw [z]
             · rw [← Functor.map_comp_assoc] } }
   map f := { hom := f.hom }
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `extendCocone_obj_ι_app'` / 引理 `extendCocone_obj_ι_app'`
+/-- Alternative equational lemma for `(extendCocone c).ι.app` in case a lift of the object
+is given explicitly. -/
+/-
+**CategoryTheory.Functor.Final.extendCocone_obj_** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Functor.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma extendCocone_obj_ι_app'
-  given: (c : Cocone (F ⋙ G)) {X : D} {Y : C} (f : X ⟶ F.obj Y)
-  proof: by
-  apply induction (k₀ := f) (z := rfl) F fun Z g =>
-    G.map g ≫ c.ι.app Z = G.map f ≫ c.ι.app Y
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₁, ← Functor.comp_map, c.ι.naturality, h₂]
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₂, ← h₁, ← Functor.comp_map, c.ι.naturality]
-
-@[simp]
-
-中文:
-引理 extendCocone_obj_ι_app'
-  条件: (c : 余锥 (F ⋙ G)) {X : D} {Y : C} (f : X ⟶ F.obj Y)
-  证明: by
-  apply induction (k₀ := f) (z := rfl) F fun Z g =>
-    G.map g ≫ c.ι.app Z = G.map f ≫ c.ι.app Y
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₁, ← Functor.comp_map, c.ι.naturality, h₂]
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₂, ← h₁, ← Functor.comp_map, c.ι.naturality]
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.comp_map, G.map, comp_map, naturality
+--- 原说明 ---
+Alternative equational lemma for `(extendCocone c).ι.app` in case a lift of the 
+object
+is given explicitly.
 -/
 lemma extendCocone_obj_ι_app' (c : Cocone (F ⋙ G)) {X : D} {Y : C} (f : X ⟶ F.obj Y) :
     (extendCocone.obj c).ι.app X = G.map f ≫ c.ι.app Y := by
@@ -611,42 +543,29 @@ lemma extendCocone_obj_ι_app' (c : Cocone (F ⋙ G)) {X : D} {Y : C} (f : X ⟶
     simp [← h₂, ← h₁, ← Functor.comp_map, c.ι.naturality]
 
 @[simp]
-/--
-theorem `colimit_cocone_comp_aux` / 定理 `colimit_cocone_comp_aux`
-
-English:
-theorem colimit_cocone_comp_aux
-  given: (s : Cocone (F ⋙ G)) (j : C)
-  proof: by
-  -- This point is that this would be true if we took `lift (F.obj j)` to just be `j`
-  -- and `homToLift (F.obj j)` to be `𝟙 (F.obj j)`.
-  apply induction F fun X k => G.map k ≫ s.ι.app X = (s.ι.app j :)
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← w]
-    rw [← s.w f] at h
-    simpa using! h
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← w] at h
-    rw [← s.w f]
-    simpa using! h
-  · exact s.w (𝟙 _)
-
-中文:
-定理 colimit_cocone_comp_aux
-  条件: (s : 余锥 (F ⋙ G)) (j : C)
-  证明: by
-  -- This point is that this would be true if we took `lift (F.obj j)` to just be `j`
-  -- and `homToLift (F.obj j)` to be `𝟙 (F.obj j)`.
-  apply induction F fun X k => G.map k ≫ s.ι.app X = (s.ι.app j :)
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← w]
-    rw [← s.w f] at h
-    simpa using! h
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← w] at h
-    rw [← s.w f]
-    simpa using! h
-  · exact s.w (𝟙 _)
+/-
+**CategoryTheory.Functor.Final.colimit_cocone_comp_aux** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor.Final`。
+形式化陈述：colimit_cocone_comp_aux (s : Cocone (F ⋙ G)) (j : C) : G.map (homToLift F 
+(F.obj j)) ≫ s.ι.app (lift F (F.obj j)) = s.ι.app j
+参数：s : Cocone (F ⋙ G)；j : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.Cocone.w`：∀ {J : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C] 
+  {F : CategoryTheor…
 -/
 theorem colimit_cocone_comp_aux (s : Cocone (F ⋙ G)) (j : C) :
     G.map (homToLift F (F.obj j)) ≫ s.ι.app (lift F (F.obj j)) = s.ι.app j := by
@@ -672,26 +591,18 @@ the category of cocones on `F ⋙ G` is equivalent to the category of cocones on
 for any `G : D ⥤ E`.
 -/
 @[simps]
-/--
-Definition of `coconesEquiv` / `coconesEquiv` 的定义
+/-
+**CategoryTheory.Functor.Final.coconesEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor.Final`。
+形式化陈述：coconesEquiv : Cocone (F ⋙ G) ≌ Cocone G where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconesEquiv
-  signature: : Cocone (F ⋙ G) ≌ Cocone G where
-  body: extendCocone
-  inverse := Cocone.whiskering F
-  unitIso := NatIso.ofComponents fun c => Cocone.ext (Iso.refl _)
-  counitIso := NatIso.ofComponents fun c => Cocone.ext (Iso.refl _)
-
-中文:
-定义 coconesEquiv
-  签名: : 余锥 (F ⋙ G) ≌ 余锥 G where
-  定义体: extendCocone
-  inverse := Cocone.whiskering F
-  unitIso := NatIso.ofComponents fun c => Cocone.ext (Iso.refl _)
-  counitIso := NatIso.ofComponents fun c => Cocone.ext (Iso.refl _)
-
-Depends on / 依赖: extendCocone
+--- 原说明 ---
+If `F` is final,
+the category of cocones on `F ⋙ G` is equivalent to the category of cocones on `
+G`,
+for any `G : D ⥤ E`.
 -/
 def coconesEquiv : Cocone (F ⋙ G) ≌ Cocone G where
   functor := extendCocone
@@ -701,38 +612,40 @@ def coconesEquiv : Cocone (F ⋙ G) ≌ Cocone G where
 
 variable {G}
 
-/--
-Definition of `isColimitWhiskerEquiv` / `isColimitWhiskerEquiv` 的定义
+/-- When `F : C ⥤ D` is final, and `t : Cocone G` for some `G : D ⥤ E`,
+`t.whisker F` is a colimit cocone exactly when `t` is.
+-/
+/-
+**CategoryTheory.Functor.Final.isColimitWhiskerEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor.Final`。
+形式化陈述：isColimitWhiskerEquiv (t : Cocone G) : IsColimit (t.whisker F) ≃ IsColimit
+ t
+参数：t : Cocone G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitWhiskerEquiv
-  signature: (t : Cocone G)
-  body: IsColimit.ofCoconeEquiv (coconesEquiv F G).symm
-
-中文:
-定义 isColimitWhiskerEquiv
-  签名: (t : 余锥 G)
-  定义体: IsColimit.ofCoconeEquiv (coconesEquiv F G).symm
-
-Depends on / 依赖: HasLimitsOfShape, HasWeakLimitsOfShape, IsColimit, IsColimit.ofCoconeEquiv, coconesEquiv, ofCoconeEquiv
+--- 原说明 ---
+When `F : C ⥤ D` is final, and `t : Cocone G` for some `G : D ⥤ E`,
+`t.whisker F` is a colimit cocone exactly when `t` is.
 -/
 def isColimitWhiskerEquiv (t : Cocone G) : IsColimit (t.whisker F) ≃ IsColimit t :=
   IsColimit.ofCoconeEquiv (coconesEquiv F G).symm
 
-/--
-Definition of `isColimitExtendCoconeEquiv` / `isColimitExtendCoconeEquiv` 的定义
+/-- When `F` is final, and `t : Cocone (F ⋙ G)`,
+`extendCocone.obj t` is a colimit cocone exactly when `t` is.
+-/
+/-
+**CategoryTheory.Functor.Final.isColimitExtendCoconeEquiv** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.Final`。
+形式化陈述：isColimitExtendCoconeEquiv (t : Cocone (F ⋙ G)) : IsColimit (extendCocone.
+obj t) ≃ IsColimit t
+参数：t : Cocone (F ⋙ G)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitExtendCoconeEquiv
-  signature: (t : Cocone (F ⋙ G))
-  body: IsColimit.ofCoconeEquiv (coconesEquiv F G)
-
-中文:
-定义 isColimitExtendCoconeEquiv
-  签名: (t : 余锥 (F ⋙ G))
-  定义体: IsColimit.ofCoconeEquiv (coconesEquiv F G)
-
-Depends on / 依赖: IsColimit, IsColimit.ofCoconeEquiv, coconesEquiv, ofCoconeEquiv
+--- 原说明 ---
+When `F` is final, and `t : Cocone (F ⋙ G)`,
+`extendCocone.obj t` is a colimit cocone exactly when `t` is.
 -/
 def isColimitExtendCoconeEquiv (t : Cocone (F ⋙ G)) :
     IsColimit (extendCocone.obj t) ≃ IsColimit t :=
@@ -740,29 +653,37 @@ def isColimitExtendCoconeEquiv (t : Cocone (F ⋙ G)) :
 
 /-- Given a colimit cocone over `G : D ⥤ E` we can construct a colimit cocone over `F ⋙ G`. -/
 @[simps]
-/--
-Definition of `colimitCoconeComp` / `colimitCoconeComp` 的定义
+/-
+**CategoryTheory.Functor.Final.colimitCoconeComp** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.Final`。
+形式化陈述：colimitCoconeComp (t : ColimitCocone G) : ColimitCocone (F ⋙ G) where coco
+ne
+参数：t : ColimitCocone G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition colimitCoconeComp
-  signature: (t : ColimitCocone G)
-  body: _
-  isColimit := (isColimitWhiskerEquiv F _).symm t.isColimit
-
-中文:
-定义 colimitCoconeComp
-  签名: (t : 余极限余锥 G)
-  定义体: _
-  isColimit := (isColimitWhiskerEquiv F _).symm t.isColimit
+--- 原说明 ---
+Given a colimit cocone over `G : D ⥤ E` we can construct a colimit cocone over `
+F ⋙ G`.
 -/
 def colimitCoconeComp (t : ColimitCocone G) : ColimitCocone (F ⋙ G) where
   cocone := _
   isColimit := (isColimitWhiskerEquiv F _).symm t.isColimit
-
+/-
+**CategoryTheory.Functor.Final.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functo
+r.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) comp_hasColimit [HasColimit G] : HasColimit (F ⋙ G) :=
   HasColimit.mk (colimitCoconeComp F (getColimitCocone G))
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.Functor.Final.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functo
+r.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) comp_preservesColimit {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [PreservesColimit G H] : PreservesColimit (F ⋙ G) H where
   preserves {c} hc := by
@@ -771,13 +692,22 @@ instance (priority := 100) comp_preservesColimit {B : Type u₄} [Category.{v₄
     exact IsColimit.ofIsoColimit hc' (Cocone.ext (Iso.refl _) (by simp))
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.Functor.Final.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functo
+r.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) comp_reflectsColimit {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [ReflectsColimit G H] : ReflectsColimit (F ⋙ G) H where
   reflects {c} hc := by
     refine ⟨isColimitExtendCoconeEquiv F _ (isColimitOfReflects H ?_)⟩
     let hc' := (isColimitExtendCoconeEquiv (G := G ⋙ H) F _).symm hc
     exact IsColimit.ofIsoColimit hc' (Cocone.ext (Iso.refl _) (by simp))
-
+/-
+**CategoryTheory.Functor.Final.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functo
+r.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) compCreatesColimit {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [CreatesColimit G H] : CreatesColimit (F ⋙ G) H where
   lifts {c} hc := by
@@ -787,26 +717,30 @@ instance (priority := 100) compCreatesColimit {B : Type u₄} [Category.{v₄} B
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `colimit_pre_isIso` / 实例 `colimit_pre_isIso`
-
-English:
-instance colimit_pre_isIso
-  signature: [HasColimit G]
-  body: by
-  simp only [colimit.pre_eq (colimitCoconeComp F (getColimitCocone G)) (getColimitCocone G),
-    colimitCoconeComp_cocone, IsColimit.desc_self]
-  infer_instance
-
-中文:
-实例 colimit_pre_isIso
-  签名: [有余极限 G]
-  定义体: by
-  simp only [colimit.pre_eq (colimitCoconeComp F (getColimitCocone G)) (getColimitCocone G),
-    colimitCoconeComp_cocone, IsColimit.desc_self]
-  infer_instance
-
-Depends on / 依赖: IsColimit, IsColimit.desc_self, colimit, colimit.pre_eq, colimitCoconeComp, colimitCoconeComp_cocone, desc_self, getColimitCocone, infer_instance, pre_eq
+/-
+**CategoryTheory.Functor.Final.colimit_pre_isIso** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.Functor.Final`。
+形式化陈述：colimit_pre_isIso [HasColimit G] : IsIso (colimit.pre G F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.comp_hasColimit`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.colimit.pre_eq`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} K]   {C : Type u} [inst…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsColimit.desc_self`：∀ {J : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{
+v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 instance colimit_pre_isIso [HasColimit G] : IsIso (colimit.pre G F) := by
   simp only [colimit.pre_eq (colimitCoconeComp F (getColimitCocone G)) (getColimitCocone G),
@@ -820,99 +754,62 @@ variable (G)
 /-- When `F : C ⥤ D` is final, and `G : D ⥤ E` has a colimit, then `F ⋙ G` has a colimit also and
 `colimit (F ⋙ G) ≅ colimit G`. -/
 @[simps! -isSimp, stacks 04E7]
-/--
-Definition of `colimitIso` / `colimitIso` 的定义
+/-
+**CategoryTheory.Functor.Final.colimitIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor.Final`。
+形式化陈述：colimitIso [HasColimit G] : colimit (F ⋙ G) ≅ colimit G
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.comp_hasColimit`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-definition colimitIso
-  signature: [HasColimit G]
-  body: asIso (colimit.pre G F)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 colimitIso
-  签名: [有余极限 G]
-  定义体: asIso (colimit.pre G F)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: colimit, colimit.pre
+--- 原说明 ---
+When `F : C ⥤ D` is final, and `G : D ⥤ E` has a colimit, then `F ⋙ G` has a col
+imit also and
+`colimit (F ⋙ G) ≅ colimit G`.
 -/
 def colimitIso [HasColimit G] : colimit (F ⋙ G) ≅ colimit G :=
   asIso (colimit.pre G F)
 
 @[reassoc (attr := simp)]
-/--
-theorem `ι_colimitIso_hom` / 定理 `ι_colimitIso_hom`
-
-English:
-theorem ι_colimitIso_hom
-  given: [HasColimit G] (X : C)
-  proof: by
-  simp [colimitIso]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ι_colimitIso_hom
-  条件: [有余极限 G] (X : C)
-  证明: by
-  simp [colimitIso]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: colimitIso
+/-
+**CategoryTheory.Functor.Final.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Functo
+r.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_colimitIso_hom [HasColimit G] (X : C) :
     colimit.ι (F ⋙ G) X ≫ (colimitIso F G).hom = colimit.ι G (F.obj X) := by
   simp [colimitIso]
 
 @[reassoc (attr := simp)]
-/--
-theorem `ι_colimitIso_inv` / 定理 `ι_colimitIso_inv`
-
-English:
-theorem ι_colimitIso_inv
-  given: [HasColimit G] (X : C)
-  proof: by
-  simp [colimitIso]
-
-中文:
-定理 ι_colimitIso_inv
-  条件: [有余极限 G] (X : C)
-  证明: by
-  simp [colimitIso]
-
-Depends on / 依赖: colimitIso
+/-
+**CategoryTheory.Functor.Final.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Functo
+r.Final`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_colimitIso_inv [HasColimit G] (X : C) :
     colimit.ι G (F.obj X) ≫ (colimitIso F G).inv = colimit.ι (F ⋙ G) X := by
   simp [colimitIso]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `colimIso` / `colimIso` 的定义
+/-- A pointfree version of `colimitIso`, stating that whiskering by `F` followed by taking the
+colimit is isomorphic to taking the colimit on the codomain of `F`. -/
+/-
+**CategoryTheory.Functor.Final.colimIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor.Final`。
+形式化陈述：colimIso [HasColimitsOfShape D E] [HasColimitsOfShape C E] : (whiskeringLe
+ft _ _ _).obj F ⋙ colim ≅ colim (J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition colimIso
-  signature: [HasColimitsOfShape D E] [HasColimitsOfShape C E]
-  body: NatIso.ofComponents (fun G => colimitIso F G) fun f => by
-    simp only [comp_obj, whiskeringLeft_obj_obj, colim_obj, comp_map, whiskeringLeft_obj_map,
-      colim_map, colimitIso_hom]
-    ext
-    simp only [comp_obj, ι_colimMap_assoc, whiskerLeft_app, colimit.ι_pre, colimit.ι_pre_assoc,
-      ι_colimMap]
-
-中文:
-定义 colimIso
-  签名: [有形状余极限 D E] [有形状余极限 C E]
-  定义体: NatIso.ofComponents (fun G => colimitIso F G) fun f => by
-    simp only [comp_obj, whiskeringLeft_obj_obj, colim_obj, comp_map, whiskeringLeft_obj_map,
-      colim_map, colimitIso_hom]
-    ext
-    simp only [comp_obj, ι_colimMap_assoc, whiskerLeft_app, colimit.ι_pre, colimit.ι_pre_assoc,
-      ι_colimMap]
+--- 原说明 ---
+A pointfree version of `colimitIso`, stating that whiskering by `F` followed by 
+taking the
+colimit is isomorphic to taking the colimit on the codomain of `F`.
 -/
 def colimIso [HasColimitsOfShape D E] [HasColimitsOfShape C E] :
     (whiskeringLeft _ _ _).obj F ⋙ colim ≅ colim (J := D) (C := E) :=
@@ -927,86 +824,87 @@ end
 
 /-- Given a colimit cocone over `F ⋙ G` we can construct a colimit cocone over `G`. -/
 @[simps]
-/--
-Definition of `colimitCoconeOfComp` / `colimitCoconeOfComp` 的定义
+/-
+**CategoryTheory.Functor.Final.colimitCoconeOfComp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor.Final`。
+形式化陈述：colimitCoconeOfComp (t : ColimitCocone (F ⋙ G)) : ColimitCocone G where co
+cone
+参数：t : ColimitCocone (F ⋙ G)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition colimitCoconeOfComp
-  signature: (t : ColimitCocone (F ⋙ G))
-  body: extendCocone.obj t.cocone
-  isColimit := (isColimitExtendCoconeEquiv F _).symm t.isColimit
-
-中文:
-定义 colimitCoconeOfComp
-  签名: (t : 余极限余锥 (F ⋙ G))
-  定义体: extendCocone.obj t.cocone
-  isColimit := (isColimitExtendCoconeEquiv F _).symm t.isColimit
-
-Depends on / 依赖: cocone, extendCocone, extendCocone.obj, t.cocone
+--- 原说明 ---
+Given a colimit cocone over `F ⋙ G` we can construct a colimit cocone over `G`.
 -/
 def colimitCoconeOfComp (t : ColimitCocone (F ⋙ G)) : ColimitCocone G where
   cocone := extendCocone.obj t.cocone
   isColimit := (isColimitExtendCoconeEquiv F _).symm t.isColimit
 
-/--
-theorem `hasColimit_of_comp` / 定理 `hasColimit_of_comp`
+/-- When `F` is final, and `F ⋙ G` has a colimit, then `G` has a colimit also.
 
-English:
-theorem hasColimit_of_comp
-  given: [HasColimit (F ⋙ G)]
-  statement: HasColimit G
-  proof: HasColimit.mk (colimitCoconeOfComp F (getColimitCocone (F ⋙ G)))
+We can't make this an instance, because `F` is not determined by the goal.
+(Even if this weren't a problem, it would cause a loop with `comp_hasColimit`.)
+-/
+/-
+**CategoryTheory.Functor.Final.hasColimit_of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Functor.Final`。
+形式化陈述：hasColimit_of_comp [HasColimit (F ⋙ G)] : HasColimit G
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 
-中文:
-定理 hasColimit_of_comp
-  条件: [有余极限 (F ⋙ G)]
-  结论: 有余极限 G
-  证明: HasColimit.mk (colimitCoconeOfComp F (getColimitCocone (F ⋙ G)))
+--- 原说明 ---
+When `F` is final, and `F ⋙ G` has a colimit, then `G` has a colimit also.
 
-Depends on / 依赖: HasColimit, HasColimit.mk, colimitCoconeOfComp, getColimitCocone
+We can't make this an instance, because `F` is not determined by the goal.
+(Even if this weren't a problem, it would cause a loop with `comp_hasColimit`.)
 -/
 theorem hasColimit_of_comp [HasColimit (F ⋙ G)] : HasColimit G :=
   HasColimit.mk (colimitCoconeOfComp F (getColimitCocone (F ⋙ G)))
-
-/--
-lemma `hasColimit_comp_iff` / 引理 `hasColimit_comp_iff`
-
-English:
-lemma hasColimit_comp_iff
-  proof: ⟨fun _ => Functor.Final.hasColimit_of_comp F, fun _ => inferInstance⟩
-
-中文:
-引理 hasColimit_comp_iff
-  证明: ⟨fun _ => Functor.Final.hasColimit_of_comp F, fun _ => inferInstance⟩
-
-Depends on / 依赖: Functor, Functor.Final.hasColimit_of_comp, hasColimit_of_comp
+/-
+**CategoryTheory.Functor.Final.hasColimit_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Functor.Final`。
+形式化陈述：hasColimit_comp_iff : HasColimit (F ⋙ G) ↔ HasColimit G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.hasColimit_of_comp`：hasColimit_of_comp [Has
+Colimit (F ⋙ G)] : HasColimit G
+· 使用定理 `CategoryTheory.Functor.Final.comp_hasColimit`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma hasColimit_comp_iff :
     HasColimit (F ⋙ G) ↔ HasColimit G :=
-  ⟨fun _ => Functor.Final.hasColimit_of_comp F, fun _ => inferInstance⟩
+  ⟨fun _ ↦ Functor.Final.hasColimit_of_comp F, fun _ ↦ inferInstance⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `preservesColimit_of_comp` / 定理 `preservesColimit_of_comp`
-
-English:
-theorem preservesColimit_of_comp
-  statement: {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
-  proof: by
-    refine ⟨isColimitWhiskerEquiv F _ ?_⟩
-    let hc' := isColimitOfPreserves H ((isColimitWhiskerEquiv F _).symm hc)
-    exact IsColimit.ofIsoColimit hc' (Cocone.ext (Iso.refl _) (by simp))
-
-中文:
-定理 preservesColimit_of_comp
-  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
-  证明: by
-    refine ⟨isColimitWhiskerEquiv F _ ?_⟩
-    let hc' := isColimitOfPreserves H ((isColimitWhiskerEquiv F _).symm hc)
-    exact IsColimit.ofIsoColimit hc' (Cocone.ext (Iso.refl _) (by simp))
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, Iso.refl, isColimitOfPreserves, isColimitWhiskerEquiv, ofIsoColimit
+/-
+**CategoryTheory.Functor.Final.preservesColimit_of_comp** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Functor.Final`。
+形式化陈述：preservesColimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [Pres
+ervesColimit (F ⋙ G) H] : PreservesColimit G H where preserves {c} hc
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem preservesColimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [PreservesColimit (F ⋙ G) H] : PreservesColimit G H where
@@ -1017,26 +915,28 @@ theorem preservesColimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ 
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `reflectsColimit_of_comp` / 定理 `reflectsColimit_of_comp`
-
-English:
-theorem reflectsColimit_of_comp
-  statement: {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
-  proof: by
-    refine ⟨isColimitWhiskerEquiv F _ (isColimitOfReflects H ?_)⟩
-    let hc' := (isColimitWhiskerEquiv F _).symm hc
-    exact IsColimit.ofIsoColimit hc' (Cocone.ext (Iso.refl _) (by simp))
-
-中文:
-定理 reflectsColimit_of_comp
-  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
-  证明: by
-    refine ⟨isColimitWhiskerEquiv F _ (isColimitOfReflects H ?_)⟩
-    let hc' := (isColimitWhiskerEquiv F _).symm hc
-    exact IsColimit.ofIsoColimit hc' (Cocone.ext (Iso.refl _) (by simp))
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, Iso.refl, isColimitOfReflects, isColimitWhiskerEquiv, ofIsoColimit
+/-
+**CategoryTheory.Functor.Final.reflectsColimit_of_comp** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor.Final`。
+形式化陈述：reflectsColimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [Refle
+ctsColimit (F ⋙ G) H] : ReflectsColimit G H where reflects {c} hc
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem reflectsColimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [ReflectsColimit (F ⋙ G) H] : ReflectsColimit G H where
@@ -1048,34 +948,18 @@ theorem reflectsColimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B
 set_option backward.defeqAttrib.useBackward true in
 /-- If `F` is final and `F ⋙ G` creates colimits of `H`, then so does `G`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitOfComp` / `createsColimitOfComp` 的定义
+/-
+**CategoryTheory.Functor.Final.createsColimitOfComp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.Final`。
+形式化陈述：createsColimitOfComp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [CreatesC
+olimit (F ⋙ G) H] : CreatesColimit G H where reflects
+参数：F ⋙ G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition createsColimitOfComp
-  signature: {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
-  body: (reflectsColimit_of_comp F).reflects
-  lifts {c} hc := by
-    refine ⟨(extendCocone (F := F)).obj (liftColimit ((isColimitWhiskerEquiv F _).symm hc)), ?_⟩
-    let i := liftedColimitMapsToOriginal (K := (F ⋙ G)) ((isColimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCocone (F := F)).mapIso i) ≪≫ ((coconesEquiv F (G ⋙ H)).counitIso.app _)
-    exact Cocone.ext (Iso.refl _)
-
-include F in
-
-中文:
-定义 createsColimitOfComp
-  签名: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
-  定义体: (reflectsColimit_of_comp F).reflects
-  lifts {c} hc := by
-    refine ⟨(extendCocone (F := F)).obj (liftColimit ((isColimitWhiskerEquiv F _).symm hc)), ?_⟩
-    let i := liftedColimitMapsToOriginal (K := (F ⋙ G)) ((isColimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCocone (F := F)).mapIso i) ≪≫ ((coconesEquiv F (G ⋙ H)).counitIso.app _)
-    exact Cocone.ext (Iso.refl _)
-
-include F in
-
-Depends on / 依赖: reflects, reflectsColimit_of_comp
+--- 原说明 ---
+If `F` is final and `F ⋙ G` creates colimits of `H`, then so does `G`.
 -/
 def createsColimitOfComp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [CreatesColimit (F ⋙ G) H] : CreatesColimit G H where
@@ -1087,73 +971,59 @@ def createsColimitOfComp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     exact Cocone.ext (Iso.refl _)
 
 include F in
-/--
-theorem `hasColimitsOfShape_of_final` / 定理 `hasColimitsOfShape_of_final`
-
-English:
-theorem hasColimitsOfShape_of_final
-  given: [HasColimitsOfShape C E]
-  statement: HasColimitsOfShape D E where
-  proof: fun _ => hasColimit_of_comp F
-
-include F in
-
-中文:
-定理 hasColimitsOfShape_of_final
-  条件: [有形状余极限 C E]
-  结论: 有形状余极限 D E where
-  证明: fun _ => hasColimit_of_comp F
-
-include F in
-
-Depends on / 依赖: hasColimit_of_comp
+/-
+**CategoryTheory.Functor.Final.hasColimitsOfShape_of_final** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Functor.Final`。
+形式化陈述：hasColimitsOfShape_of_final [HasColimitsOfShape C E] : HasColimitsOfShape 
+D E where has_colimit
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.hasColimit_of_comp`：hasColimit_of_comp [Has
+Colimit (F ⋙ G)] : HasColimit G
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem hasColimitsOfShape_of_final [HasColimitsOfShape C E] : HasColimitsOfShape D E where
   has_colimit := fun _ => hasColimit_of_comp F
 
 include F in
-/--
-theorem `preservesColimitsOfShape_of_final` / 定理 `preservesColimitsOfShape_of_final`
-
-English:
-theorem preservesColimitsOfShape_of_final
-  statement: {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
-  proof: preservesColimit_of_comp F
-
-include F in
-
-中文:
-定理 preservesColimitsOfShape_of_final
-  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
-  证明: preservesColimit_of_comp F
-
-include F in
-
-Depends on / 依赖: preservesColimit_of_comp
+/-
+**CategoryTheory.Functor.Final.preservesColimitsOfShape_of_final** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Functor.Final`。
+形式化陈述：preservesColimitsOfShape_of_final {B : Type u₄} [Category.{v₄} B] (H : E ⥤
+ B) [PreservesColimitsOfShape C H] : PreservesColimitsOfShape D H where preserve
+sColimit
+参数：H : E ⥤ B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.preservesColimit_of_comp`：preservesColimit_
+of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [PreservesColimit (F ⋙ G) H]
+ : PreservesColimit G H where preserves {c}…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
 -/
 theorem preservesColimitsOfShape_of_final {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
     [PreservesColimitsOfShape C H] : PreservesColimitsOfShape D H where
   preservesColimit := preservesColimit_of_comp F
 
 include F in
-/--
-theorem `reflectsColimitsOfShape_of_final` / 定理 `reflectsColimitsOfShape_of_final`
-
-English:
-theorem reflectsColimitsOfShape_of_final
-  statement: {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
-  proof: reflectsColimit_of_comp F
-
-include F in
-
-中文:
-定理 reflectsColimitsOfShape_of_final
-  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
-  证明: reflectsColimit_of_comp F
-
-include F in
-
-Depends on / 依赖: reflectsColimit_of_comp
+/-
+**CategoryTheory.Functor.Final.reflectsColimitsOfShape_of_final** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Functor.Final`。
+形式化陈述：reflectsColimitsOfShape_of_final {B : Type u₄} [Category.{v₄} B] (H : E ⥤ 
+B) [ReflectsColimitsOfShape C H] : ReflectsColimitsOfShape D H where reflectsCol
+imit
+参数：H : E ⥤ B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.reflectsColimit_of_comp`：reflectsColimit_of
+_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [ReflectsColimit (F ⋙ G) H] : 
+ReflectsColimit G H where reflects {c} hc
+· 使用定理 `CategoryTheory.Limits.reflectsColimit_of_reflectsColimitsOfShape`：∀ {C :
+ Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
 -/
 theorem reflectsColimitsOfShape_of_final {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
     [ReflectsColimitsOfShape C H] : ReflectsColimitsOfShape D H where
@@ -1163,20 +1033,19 @@ include F in
 /-- If `H` creates colimits of shape `C` and `F : C ⥤ D` is final, then `H` creates colimits of
 shape `D`. -/
 @[instance_reducible]
-/--
-Definition of `createsColimitsOfShapeOfFinal` / `createsColimitsOfShapeOfFinal` 的定义
+/-
+**CategoryTheory.Functor.Final.createsColimitsOfShapeOfFinal** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor.Final`。
+形式化陈述：createsColimitsOfShapeOfFinal {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B) 
+[CreatesColimitsOfShape C H] : CreatesColimitsOfShape D H where CreatesColimit
+参数：H : E ⥤ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsColimitsOfShapeOfFinal
-  signature: {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
-  body: createsColimitOfComp F
-
-中文:
-定义 createsColimitsOfShapeOfFinal
-  签名: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
-  定义体: createsColimitOfComp F
-
-Depends on / 依赖: createsColimitOfComp
+--- 原说明 ---
+If `H` creates colimits of shape `C` and `F : C ⥤ D` is final, then `H` creates 
+colimits of
+shape `D`.
 -/
 def createsColimitsOfShapeOfFinal {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
     [CreatesColimitsOfShape C H] : CreatesColimitsOfShape D H where
@@ -1192,42 +1061,26 @@ variable {C : Type v} [Category.{v} C] {D : Type u₁} [Category.{v} D] (F : C �
 
 namespace Final
 
-/--
-theorem `zigzag_of_eqvGen_colimitTypeRel` / 定理 `zigzag_of_eqvGen_colimitTypeRel`
-
-English:
-theorem zigzag_of_eqvGen_colimitTypeRel
-  statement: {F : C ⥤ D} {d : D} {f₁ f₂ : Σ X, d ⟶ F.obj X}
-  proof: by
-  induction t with
-  | rel x y r =>
-    obtain ⟨f, w⟩ := r
-    fconstructor
-    swap
-    · fconstructor
-    left; fconstructor
-    exact StructuredArrow.homMk f
-  | refl => fconstructor
-  | symm x y _ ih => exact ih.symm
-  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
-
-中文:
-定理 zigzag_of_eqvGen_colimitTypeRel
-  结论: {F : C ⥤ D} {d : D} {f₁ f₂ : Σ X, d ⟶ F.obj X}
-  证明: by
-  induction t with
-  | rel x y r =>
-    obtain ⟨f, w⟩ := r
-    fconstructor
-    swap
-    · fconstructor
-    left; fconstructor
-    exact StructuredArrow.homMk f
-  | refl => fconstructor
-  | symm x y _ ih => exact ih.symm
-  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.homMk, fconstructor, ih.symm
+/-
+**CategoryTheory.Functor.Final.zigzag_of_eqvGen_colimitTypeRel** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Functor.Final`。
+形式化陈述：zigzag_of_eqvGen_colimitTypeRel {F : C ⥤ D} {d : D} {f₁ f₂ : Σ X, d ⟶ F.ob
+j X} (t : Relation.EqvGen (Functor.ColimitTypeRel (F ⋙ coyoneda.obj (op d))) f₁ 
+f₂) : Zigzag (StructuredArrow.mk f₁.2) (StructuredArrow.mk f₂.2)
+参数：t : Relation.EqvGen (Functor.ColimitTypeRel (F ⋙ coyoneda.obj (op d))) f₁ f₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Zigzag.symm`：∀ {J : Type u₁} [inst : CategoryTheory.Categ
+ory.{v₁, u₁} J] {j₁ j₂ : J},   CategoryTheory.Zigzag j₁ j₂ → CategoryTheory.Zigz
+ag j₂ j₁
+· 使用定理 `CategoryTheory.Zigzag.trans`：∀ {J : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} J] {j₁ j₂ j₃ : J},   CategoryTheory.Zigzag j₁ j₂ → CategoryTheory.
+Zigzag j₂ j₃ → Ca…
 -/
 theorem zigzag_of_eqvGen_colimitTypeRel {F : C ⥤ D} {d : D} {f₁ f₂ : Σ X, d ⟶ F.obj X}
     (t : Relation.EqvGen (Functor.ColimitTypeRel (F ⋙ coyoneda.obj (op d))) f₁ f₂) :
@@ -1246,49 +1099,37 @@ theorem zigzag_of_eqvGen_colimitTypeRel {F : C ⥤ D} {d : D} {f₁ f₂ : Σ X,
 
 end Final
 
-/--
-theorem `final_of_colimit_comp_coyoneda_iso_pUnit` / 定理 `final_of_colimit_comp_coyoneda_iso_pUnit`
+/-- If `colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit` for all `d : D`, then `F` is final.
+-/
+/-
+**CategoryTheory.Functor.final_of_colimit_comp_coyoneda_iso_pUnit** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：final_of_colimit_comp_coyoneda_iso_pUnit (I : forall d, colimit (F ⋙ coyon
+eda.obj (op d)) ≅ PUnit) : Final F
+参数：I : forall d, colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Limits.Types.jointly_surjective'`：jointly_surjective' (x 
+: colimit F) : exists (j : J) (y : F.obj j), colimit.ι F j y = x
+· 使用定理 `CategoryTheory.zigzag_isConnected`：zigzag_isConnected [Nonempty J] (h : 
+forall j₁ j₂ : J, Zigzag j₁ j₂) : IsConnected J
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `PUnit.ext`：∀ (a b : PUnit.{u_1}), a = b
+· 使用定理 `CategoryTheory.Limits.Types.colimit_eq`：colimit_eq {j j' : J} {x : F.obj
+ j} {x' : F.obj j'} (w : colimit.ι F j x = colimit.ι F j' x') : Relation.EqvGen 
+F.ColimitTypeRel ⟨j, x⟩ ⟨j',…
+· 使用定理 `CategoryTheory.Functor.Final.zigzag_of_eqvGen_colimitTypeRel`：zigzag_of_
+eqvGen_colimitTypeRel {F : C ⥤ D} {d : D} {f₁ f₂ : Σ X, d ⟶ F.obj X} (t : Relati
+on.EqvGen (Functor.ColimitTypeRel (F ⋙ coyoneda.ob…
 
-English:
-theorem final_of_colimit_comp_coyoneda_iso_pUnit
-  proof: ⟨fun d => by
-    have : Nonempty (StructuredArrow d F) := by
-      have := (I d).inv PUnit.unit
-      obtain ⟨j, y, rfl⟩ := Limits.Types.jointly_surjective'.{v, v} this
-      exact ⟨StructuredArrow.mk y⟩
-    apply zigzag_isConnected
-    rintro ⟨⟨⟨⟩⟩, X₁, f₁⟩ ⟨⟨⟨⟩⟩, X₂, f₂⟩
-    let y₁ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₁ f₁
-    let y₂ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₂ f₂
-    have e : y₁ = y₂ := by
-      apply (I d).toEquiv.injective
-      ext
-    have t := Types.colimit_eq.{v, v} e
-    clear e y₁ y₂
-    exact Final.zigzag_of_eqvGen_colimitTypeRel t⟩
-
-中文:
-定理 final_of_colimit_comp_coyoneda_iso_pUnit
-  证明: ⟨fun d => by
-    have : Nonempty (StructuredArrow d F) := by
-      have := (I d).inv PUnit.unit
-      obtain ⟨j, y, rfl⟩ := Limits.Types.jointly_surjective'.{v, v} this
-      exact ⟨StructuredArrow.mk y⟩
-    apply zigzag_isConnected
-    rintro ⟨⟨⟨⟩⟩, X₁, f₁⟩ ⟨⟨⟨⟩⟩, X₂, f₂⟩
-    let y₁ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₁ f₁
-    let y₂ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₂ f₂
-    have e : y₁ = y₂ := by
-      apply (I d).toEquiv.injective
-      ext
-    have t := Types.colimit_eq.{v, v} e
-    clear e y₁ y₂
-    exact Final.zigzag_of_eqvGen_colimitTypeRel t⟩
-
-Depends on / 依赖: Final.zigzag_of_eqvGen_colimitTypeRel, Limits, Limits.Types.jointly_surjective, Nonempty, PUnit.unit, StructuredArrow, StructuredArrow.mk, Types.colimit_eq, colimit, colimit_eq, coyoneda, coyoneda.obj, injective, jointly_surjective, toEquiv, toEquiv.injective, zigzag_isConnected, zigzag_of_eqvGen_colimitTypeRel
+--- 原说明 ---
+If `colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit` for all `d : D`, then `F` is fina
+l.
 -/
 theorem final_of_colimit_comp_coyoneda_iso_pUnit
-    (I : forall d, colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit) : Final F :=
+    (I : ∀ d, colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit) : Final F :=
   ⟨fun d => by
     have : Nonempty (StructuredArrow d F) := by
       have := (I d).inv PUnit.unit
@@ -1305,48 +1146,63 @@ theorem final_of_colimit_comp_coyoneda_iso_pUnit
     clear e y₁ y₂
     exact Final.zigzag_of_eqvGen_colimitTypeRel t⟩
 
-/--
-theorem `final_of_isTerminal_colimit_comp_yoneda` / 定理 `final_of_isTerminal_colimit_comp_yoneda`
+/-- A variant of `final_of_colimit_comp_coyoneda_iso_pUnit` where we bind the various claims
+about `colimit (F ⋙ coyoneda.obj (Opposite.op d))` for each `d : D` into a single claim about
+the presheaf `colimit (F ⋙ yoneda)`. -/
+/-
+**CategoryTheory.Functor.final_of_isTerminal_colimit_comp_yoneda** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：final_of_isTerminal_colimit_comp_yoneda (h : IsTerminal (colimit (F ⋙ yone
+da))) : Final F
+参数：h : IsTerminal (colimit (F ⋙ yoneda))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Functor.final_of_colimit_comp_coyoneda_iso_pUnit`：final_o
+f_colimit_comp_coyoneda_iso_pUnit (I : forall d, colimit (F ⋙ coyoneda.obj (op d
+)) ≅ PUnit) : Final F
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
 
-English:
-theorem final_of_isTerminal_colimit_comp_yoneda
-  proof: by
-  refine final_of_colimit_comp_coyoneda_iso_pUnit _ (fun d => ?_)
-  refine Types.isTerminalEquivIsoPUnit _ ?_
-  let b := IsTerminal.isTerminalObj ((evaluation _ _).obj (Opposite.op d)) _ h
-exact b.ofIso preservesColimitIso ((evaluation _ _).obj (Opposite.op d)) (F ⋙ yoneda)
-
-中文:
-定理 final_of_isTerminal_colimit_comp_yoneda
-  证明: by
-  refine final_of_colimit_comp_coyoneda_iso_pUnit _ (fun d => ?_)
-  refine Types.isTerminalEquivIsoPUnit _ ?_
-  let b := IsTerminal.isTerminalObj ((evaluation _ _).obj (Opposite.op d)) _ h
-exact b.ofIso preservesColimitIso ((evaluation _ _).obj (Opposite.op d)) (F ⋙ yoneda)
-
-Depends on / 依赖: IsTerminal, IsTerminal.isTerminalObj, Opposite, Opposite.op, Types.isTerminalEquivIsoPUnit, b.ofIso, evaluation, final_of_colimit_comp_coyoneda_iso_pUnit, isTerminalEquivIsoPUnit, isTerminalObj, preservesColimitIso, yoneda
+--- 原说明 ---
+A variant of `final_of_colimit_comp_coyoneda_iso_pUnit` where we bind the variou
+s claims
+about `colimit (F ⋙ coyoneda.obj (Opposite.op d))` for each `d : D` into a singl
+e claim about
+the presheaf `colimit (F ⋙ yoneda)`.
 -/
 theorem final_of_isTerminal_colimit_comp_yoneda
     (h : IsTerminal (colimit (F ⋙ yoneda))) : Final F := by
   refine final_of_colimit_comp_coyoneda_iso_pUnit _ (fun d => ?_)
   refine Types.isTerminalEquivIsoPUnit _ ?_
   let b := IsTerminal.isTerminalObj ((evaluation _ _).obj (Opposite.op d)) _ h
-exact b.ofIso preservesColimitIso ((evaluation _ _).obj (Opposite.op d)) (F ⋙ yoneda)
+  exact b.ofIso <| preservesColimitIso ((evaluation _ _).obj (Opposite.op d)) (F ⋙ yoneda)
 
-/--
-Definition of `Final.colimitCompCoyonedaIso` / `Final.colimitCompCoyonedaIso` 的定义
+/-- If the universal morphism `colimit (F ⋙ coyoneda.obj (op d)) ⟶ colimit (coyoneda.obj (op d))`
+is an isomorphism (as it always is when `F` is final),
+then `colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit`
+(simply because `colimit (coyoneda.obj (op d)) ≅ PUnit`).
+-/
+/-
+**CategoryTheory.Functor.Final.colimitCompCoyonedaIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Functor.Final`。
+形式化陈述：{C : Type v} →   [inst : CategoryTheory.Category.{v, v} C] →     {D : Type
+ u₁} →       [inst_1 : CategoryTheory.Category.{v, u₁} D] →         (F : Categor
+yTheory.Functor C D) →           (d : D) →             [CategoryTheory.IsIso (Ca
+tegoryTheory.Limits.colimit.pre (CategoryTheory.coyoneda.obj (Opposite.op d)) F)
+] →               CategoryTheory.Limits.colimit (F.comp (CategoryTheory.coyoneda
+.obj (Opposite.op d))) ≅ PUnit.{v + 1}
+参数：F : CategoryTheory.Functor C D；d : D；CategoryTheory.Limits.colimit.pre (Categ
+oryTheory.coyoneda.obj (Opposite.op d)) F；F.comp (CategoryTheory.coyoneda.obj (O
+pposite.op d))。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Final.colimitCompCoyonedaIso
-  signature: (d : D) [IsIso (colimit.pre (coyoneda.obj (op d)) F)]
-  body: asIso (colimit.pre (coyoneda.obj (op d)) F) ≪≫ Coyoneda.colimitCoyonedaIso (op d)
-
-中文:
-定义 终.colimitCompCoyonedaIso
-  签名: (d : D) [是同构 (colimit.pre (coyoneda.obj (op d)) F)]
-  定义体: asIso (colimit.pre (coyoneda.obj (op d)) F) ≪≫ Coyoneda.colimitCoyonedaIso (op d)
-
-Depends on / 依赖: Coyoneda, Coyoneda.colimitCoyonedaIso, colimit, colimit.pre, colimitCoyonedaIso, coyoneda, coyoneda.obj
+--- 原说明 ---
+If the universal morphism `colimit (F ⋙ coyoneda.obj (op d)) ⟶ colimit (coyoneda
+.obj (op d))`
+is an isomorphism (as it always is when `F` is final),
+then `colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit`
+(simply because `colimit (coyoneda.obj (op d)) ≅ PUnit`).
 -/
 def Final.colimitCompCoyonedaIso (d : D) [IsIso (colimit.pre (coyoneda.obj (op d)) F)] :
     colimit (F ⋙ coyoneda.obj (op d)) ≅ PUnit :=
@@ -1358,24 +1214,19 @@ section SmallCategory
 
 variable {C : Type v} [Category.{v} C] {D : Type v} [Category.{v} D] (F : C ⥤ D)
 
-/--
-theorem `final_iff_isIso_colimit_pre` / 定理 `final_iff_isIso_colimit_pre`
-
-English:
-theorem final_iff_isIso_colimit_pre
-  statement: Final F ↔ forall G : D ⥤ Type v, IsIso (colimit.pre G F)
-  proof: ⟨fun _ => inferInstance,
-   fun _ => final_of_colimit_comp_coyoneda_iso_pUnit _ fun _ => Final.colimitCompCoyonedaIso _ _⟩
-
-中文:
-定理 final_iff_isIso_colimit_pre
-  结论: 终 F ↔ 对任意 G : D ⥤ 类型v, 是同构 (colimit.pre G F)
-  证明: ⟨fun _ => inferInstance,
-   fun _ => final_of_colimit_comp_coyoneda_iso_pUnit _ fun _ => Final.colimitCompCoyonedaIso _ _⟩
-
-Depends on / 依赖: Final.colimitCompCoyonedaIso, colimitCompCoyonedaIso, final_of_colimit_comp_coyoneda_iso_pUnit
+/-
+**CategoryTheory.Functor.final_iff_isIso_colimit_pre** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：final_iff_isIso_colimit_pre : Final F ↔ forall G : D ⥤ Type v, IsIso (coli
+mit.pre G F)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Functor.final_of_colimit_comp_coyoneda_iso_pUnit`：final_o
+f_colimit_comp_coyoneda_iso_pUnit (I : forall d, colimit (F ⋙ coyoneda.obj (op d
+)) ≅ PUnit) : Final F
 -/
-theorem final_iff_isIso_colimit_pre : Final F ↔ forall G : D ⥤ Type v, IsIso (colimit.pre G F) :=
+theorem final_iff_isIso_colimit_pre : Final F ↔ ∀ G : D ⥤ Type v, IsIso (colimit.pre G F) :=
   ⟨fun _ => inferInstance,
    fun _ => final_of_colimit_comp_coyoneda_iso_pUnit _ fun _ => Final.colimitCompCoyonedaIso _ _⟩
 
@@ -1385,94 +1236,101 @@ namespace Initial
 
 variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D] (F : C ⥤ D) [Initial F]
 
+/-
+**CategoryTheory.Functor.Initial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Func
+tor.Initial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (d : D) : Nonempty (CostructuredArrow F d) :=
   IsConnected.is_nonempty
 
 variable {E : Type u₃} [Category.{v₃} E] (G : D ⥤ E)
 
 /--
-Definition of `lift` / `lift` 的定义
+When `F : C ⥤ D` is initial, we denote by `lift F d` an arbitrary choice of object in `C` such that
+there exists a morphism `F.obj (lift F d) ⟶ d`.
+-/
+/-
+**CategoryTheory.Functor.Initial.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Functor.Initial`。
+形式化陈述：lift (d : D) : C
+参数：d : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.instNonemptyCostructuredArrow`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-definition lift
-  signature: (d : D)
-  body: (Classical.arbitrary (CostructuredArrow F d)).left
-
-中文:
-定义 lift
-  签名: (d : D)
-  定义体: (Classical.arbitrary (CostructuredArrow F d)).left
-
-Depends on / 依赖: Classical, Classical.arbitrary, CostructuredArrow, arbitrary
+--- 原说明 ---
+When `F : C ⥤ D` is initial, we denote by `lift F d` an arbitrary choice of obje
+ct in `C` such that
+there exists a morphism `F.obj (lift F d) ⟶ d`.
 -/
 def lift (d : D) : C :=
   (Classical.arbitrary (CostructuredArrow F d)).left
 
-/--
-Definition of `homToLift` / `homToLift` 的定义
+/-- When `F : C ⥤ D` is initial, we denote by `homToLift` an arbitrary choice of morphism
+`F.obj (lift F d) ⟶ d`.
+-/
+/-
+**CategoryTheory.Functor.Initial.homToLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor.Initial`。
+形式化陈述：homToLift (d : D) : F.obj (lift F d) ⟶ d
+参数：d : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.instNonemptyCostructuredArrow`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-definition homToLift
-  signature: (d : D)
-  body: (Classical.arbitrary (CostructuredArrow F d)).hom
-
-中文:
-定义 homToLift
-  签名: (d : D)
-  定义体: (Classical.arbitrary (CostructuredArrow F d)).hom
-
-Depends on / 依赖: Classical, Classical.arbitrary, CostructuredArrow, arbitrary
+--- 原说明 ---
+When `F : C ⥤ D` is initial, we denote by `homToLift` an arbitrary choice of mor
+phism
+`F.obj (lift F d) ⟶ d`.
 -/
 def homToLift (d : D) : F.obj (lift F d) ⟶ d :=
   (Classical.arbitrary (CostructuredArrow F d)).hom
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `induction` / `induction` 的定义
-
-English:
-definition induction
-  signature: {d : D} (Z : forall (X : C) (_ : F.obj X ⟶ d), Sort*)
-  body: by
-  apply Nonempty.some
-  apply
-    @isPreconnected_induction _ _ _ (fun Y : CostructuredArrow F d => Z Y.left Y.hom) _ _
-      (CostructuredArrow.mk k₀) z
-  · intro j₁ j₂ f a
-    fapply h₁ _ _ _ _ f.left _ a
-    convert! f.w
-    simp
-  · intro j₁ j₂ f a
-    fapply h₂ _ _ _ _ f.left _ a
-    convert! f.w
-    simp
-
-中文:
-定义 induction
-  签名: {d : D} (Z : 对任意 (X : C) (_ : F.obj X ⟶ d), 类型层*)
-  定义体: by
-  apply Nonempty.some
-  apply
-    @isPreconnected_induction _ _ _ (fun Y : CostructuredArrow F d => Z Y.left Y.hom) _ _
-      (CostructuredArrow.mk k₀) z
-  · intro j₁ j₂ f a
-    fapply h₁ _ _ _ _ f.left _ a
-    convert! f.w
-    simp
-  · intro j₁ j₂ f a
-    fapply h₂ _ _ _ _ f.left _ a
-    convert! f.w
-    simp
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, Nonempty, Nonempty.some, Y.hom, Y.left, convert, f.left, fapply, isPreconnected_induction
+/-- We provide an induction principle for reasoning about `lift` and `homToLift`.
+We want to perform some construction (usually just a proof) about
+the particular choices `lift F d` and `homToLift F d`,
+it suffices to perform that construction for some other pair of choices
+(denoted `X₀ : C` and `k₀ : F.obj X₀ ⟶ d` below),
+and to show how to transport such a construction
+*both* directions along a morphism between such choices.
 -/
-def induction {d : D} (Z : forall (X : C) (_ : F.obj X ⟶ d), Sort*)
+/-
+**CategoryTheory.Functor.Initial.induction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor.Initial`。
+形式化陈述：induction {d : D} (Z : forall (X : C) (_ : F.obj X ⟶ d), Sort*) (h₁ : fora
+ll (X₁ X₂) (k₁ : F.obj X₁ ⟶ d) (k₂ : F.obj X₂ ⟶ d) (f : X₁ ⟶ X₂), F.map f ≫ k₂ =
+ k₁ -> Z X₁ k₁ -> Z X₂ k₂) (h₂ : forall (X₁ X₂) (k₁ : F.obj X₁ ⟶ d) (k₂ : F.obj 
+X₂ ⟶ d) (f : X₁ ⟶ X₂), F.map f ≫ k₂ = k₁ -> Z X₂ k₂ -> Z X₁ k₁) {X₀ : C} {k₀ : F
+.obj X₀ ⟶ d} (z : Z X₀ k₀) : Z (lift F d) (homToLift F d)
+参数：Z : forall (X : C) (_ : F.obj X ⟶ d), Sort*；h₁ : forall (X₁ X₂) (k₁ : F.obj X
+₁ ⟶ d) (k₂ : F.obj X₂ ⟶ d) (f : X₁ ⟶ X₂), F.map f ≫ k₂ = k₁ -> Z X₁ k₁ -> Z X₂ k
+₂；h₂ : forall (X₁ X₂) (k₁ : F.obj X₁ ⟶ d) (k₂ : F.obj X₂ ⟶ d) (f : X₁ ⟶ X₂), F.m
+ap f ≫ k₂ = k₁ -> Z X₂ k₂ -> Z X₁ k₁；z : Z X₀ k₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We provide an induction principle for reasoning about `lift` and `homToLift`.
+We want to perform some construction (usually just a proof) about
+the particular choices `lift F d` and `homToLift F d`,
+it suffices to perform that construction for some other pair of choices
+(denoted `X₀ : C` and `k₀ : F.obj X₀ ⟶ d` below),
+and to show how to transport such a construction
+*both* directions along a morphism between such choices.
+-/
+def induction {d : D} (Z : ∀ (X : C) (_ : F.obj X ⟶ d), Sort*)
     (h₁ :
-      forall (X₁ X₂) (k₁ : F.obj X₁ ⟶ d) (k₂ : F.obj X₂ ⟶ d) (f : X₁ ⟶ X₂),
-        F.map f ≫ k₂ = k₁ -> Z X₁ k₁ -> Z X₂ k₂)
+      ∀ (X₁ X₂) (k₁ : F.obj X₁ ⟶ d) (k₂ : F.obj X₂ ⟶ d) (f : X₁ ⟶ X₂),
+        F.map f ≫ k₂ = k₁ → Z X₁ k₁ → Z X₂ k₂)
     (h₂ :
-      forall (X₁ X₂) (k₁ : F.obj X₁ ⟶ d) (k₂ : F.obj X₂ ⟶ d) (f : X₁ ⟶ X₂),
-        F.map f ≫ k₂ = k₁ -> Z X₂ k₂ -> Z X₁ k₁)
+      ∀ (X₁ X₂) (k₁ : F.obj X₁ ⟶ d) (k₂ : F.obj X₂ ⟶ d) (f : X₁ ⟶ X₂),
+        F.map f ≫ k₂ = k₁ → Z X₂ k₂ → Z X₁ k₁)
     {X₀ : C} {k₀ : F.obj X₀ ⟶ d} (z : Z X₀ k₀) : Z (lift F d) (homToLift F d) := by
   apply Nonempty.some
   apply
@@ -1494,54 +1352,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Given a cone over `F ⋙ G`, we can construct a `Cone G` with the same cocone point.
 -/
 @[simps]
-/--
-Definition of `extendCone` / `extendCone` 的定义
+/-
+**CategoryTheory.Functor.Initial.extendCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor.Initial`。
+形式化陈述：extendCone : Cone (F ⋙ G) ⥤ Cone G where obj c
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extendCone
-  signature: : Cone (F ⋙ G) ⥤ Cone G where
-  body: { pt := c.pt
-      π :=
-        { app := fun d => c.π.app (lift F d) ≫ G.map (homToLift F d)
-          naturality := fun X Y f => by
-            dsimp; simp only [Category.id_comp, Category.assoc]
-            -- This would be true if we'd chosen `lift F Y` to be `lift F X`
-            -- and `homToLift F Y` to be `homToLift F X ≫ f`.
-            apply
-              induction F fun Z k =>
-                (c.π.app Z ≫ G.map k : c.pt ⟶ _) =
-                  c.π.app (lift F X) ≫ G.map (homToLift F X) ≫ G.map f
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w] at z
-              rw [z]; rw [Category.assoc]
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w]; rw [z]; rw [Category.assoc]
-            · rw [← Functor.map_comp] } }
-  map f := { hom := f.hom }
-
-中文:
-定义 extendCone
-  签名: : 锥 (F ⋙ G) ⥤ 锥 G where
-  定义体: { pt := c.pt
-      π :=
-        { app := fun d => c.π.app (lift F d) ≫ G.map (homToLift F d)
-          naturality := fun X Y f => by
-            dsimp; simp only [Category.id_comp, Category.assoc]
-            -- This would be true if we'd chosen `lift F Y` to be `lift F X`
-            -- and `homToLift F Y` to be `homToLift F X ≫ f`.
-            apply
-              induction F fun Z k =>
-                (c.π.app Z ≫ G.map k : c.pt ⟶ _) =
-                  c.π.app (lift F X) ≫ G.map (homToLift F X) ≫ G.map f
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w] at z
-              rw [z]; rw [Category.assoc]
-            · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w]; rw [z]; rw [Category.assoc]
-            · rw [← Functor.map_comp] } }
-  map f := { hom := f.hom }
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, G.map, c.pt, homToLift, id_comp, naturality
+--- 原说明 ---
+Given a cone over `F ⋙ G`, we can construct a `Cone G` with the same cocone poin
+t.
 -/
 def extendCone : Cone (F ⋙ G) ⥤ Cone G where
   obj c :=
@@ -1557,40 +1377,27 @@ def extendCone : Cone (F ⋙ G) ⥤ Cone G where
                 (c.π.app Z ≫ G.map k : c.pt ⟶ _) =
                   c.π.app (lift F X) ≫ G.map (homToLift F X) ≫ G.map f
             · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w] at z
-              rw [z]; rw [Category.assoc]
+              rw [← a, Functor.map_comp, ← Functor.comp_map, ← Category.assoc, ← Category.assoc,
+                c.w] at z
+              rw [z, Category.assoc]
             · intro Z₁ Z₂ k₁ k₂ g a z
-              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w]; rw [z]; rw [Category.assoc]
+              rw [← a, Functor.map_comp, ← Functor.comp_map, ← Category.assoc, ← Category.assoc,
+                c.w, z, Category.assoc]
             · rw [← Functor.map_comp] } }
   map f := { hom := f.hom }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `extendCone_obj_π_app'` / 引理 `extendCone_obj_π_app'`
+/-- Alternative equational lemma for `(extendCone c).π.app` in case a lift of the object
+is given explicitly. -/
+/-
+**CategoryTheory.Functor.Initial.extendCone_obj_** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Functor.Initial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma extendCone_obj_π_app'
-  given: (c : Cone (F ⋙ G)) {X : C} {Y : D} (f : F.obj X ⟶ Y)
-  proof: by
-  apply induction (k₀ := f) (z := rfl) F fun Z g =>
-    c.π.app Z ≫ G.map g = c.π.app X ≫ G.map f
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₂, ← h₁, ← Functor.comp_map]
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₁, ← Functor.comp_map, h₂]
-
-中文:
-引理 extendCone_obj_π_app'
-  条件: (c : 锥 (F ⋙ G)) {X : C} {Y : D} (f : F.obj X ⟶ Y)
-  证明: by
-  apply induction (k₀ := f) (z := rfl) F fun Z g =>
-    c.π.app Z ≫ G.map g = c.π.app X ≫ G.map f
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₂, ← h₁, ← Functor.comp_map]
-  · intro _ _ _ _ _ h₁ h₂
-    simp [← h₁, ← Functor.comp_map, h₂]
-
-Depends on / 依赖: Functor, Functor.comp_map, G.map, comp_map
+--- 原说明 ---
+Alternative equational lemma for `(extendCone c).π.app` in case a lift of the ob
+ject
+is given explicitly.
 -/
 lemma extendCone_obj_π_app' (c : Cone (F ⋙ G)) {X : C} {Y : D} (f : F.obj X ⟶ Y) :
     (extendCone.obj c).π.app Y = c.π.app X ≫ G.map f := by
@@ -1603,42 +1410,28 @@ lemma extendCone_obj_π_app' (c : Cone (F ⋙ G)) {X : C} {Y : D} (f : F.obj X �
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `limit_cone_comp_aux` / 定理 `limit_cone_comp_aux`
-
-English:
-theorem limit_cone_comp_aux
-  given: (s : Cone (F ⋙ G)) (j : C)
-  proof: by
-  -- This point is that this would be true if we took `lift (F.obj j)` to just be `j`
-  -- and `homToLift (F.obj j)` to be `𝟙 (F.obj j)`.
-  apply induction F fun X k => s.π.app X ≫ G.map k = (s.π.app j :)
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← s.w f]
-    rw [← w] at h
-    simpa using h
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← s.w f] at h
-    rw [← w]
-    simpa using h
-  · exact s.w (𝟙 _)
-
-中文:
-定理 limit_cone_comp_aux
-  条件: (s : 锥 (F ⋙ G)) (j : C)
-  证明: by
-  -- This point is that this would be true if we took `lift (F.obj j)` to just be `j`
-  -- and `homToLift (F.obj j)` to be `𝟙 (F.obj j)`.
-  apply induction F fun X k => s.π.app X ≫ G.map k = (s.π.app j :)
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← s.w f]
-    rw [← w] at h
-    simpa using h
-  · intro j₁ j₂ k₁ k₂ f w h
-    rw [← s.w f] at h
-    rw [← w]
-    simpa using h
-  · exact s.w (𝟙 _)
+/-
+**CategoryTheory.Functor.Initial.limit_cone_comp_aux** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Functor.Initial`。
+形式化陈述：limit_cone_comp_aux (s : Cone (F ⋙ G)) (j : C) : s.π.app (lift F (F.obj j)
+) ≫ G.map (homToLift F (F.obj j)) = s.π.app j
+参数：s : Cone (F ⋙ G)；j : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem limit_cone_comp_aux (s : Cone (F ⋙ G)) (j : C) :
     s.π.app (lift F (F.obj j)) ≫ G.map (homToLift F (F.obj j)) = s.π.app j := by
@@ -1664,26 +1457,17 @@ the category of cones on `F ⋙ G` is equivalent to the category of cones on `G`
 for any `G : D ⥤ E`.
 -/
 @[simps]
-/--
-Definition of `conesEquiv` / `conesEquiv` 的定义
+/-
+**CategoryTheory.Functor.Initial.conesEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor.Initial`。
+形式化陈述：conesEquiv : Cone (F ⋙ G) ≌ Cone G where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conesEquiv
-  signature: : Cone (F ⋙ G) ≌ Cone G where
-  body: extendCone
-  inverse := Cone.whiskering F
-  unitIso := NatIso.ofComponents fun c => Cone.ext (Iso.refl _)
-  counitIso := NatIso.ofComponents fun c => Cone.ext (Iso.refl _)
-
-中文:
-定义 conesEquiv
-  签名: : 锥 (F ⋙ G) ≌ 锥 G where
-  定义体: extendCone
-  inverse := Cone.whiskering F
-  unitIso := NatIso.ofComponents fun c => Cone.ext (Iso.refl _)
-  counitIso := NatIso.ofComponents fun c => Cone.ext (Iso.refl _)
-
-Depends on / 依赖: extendCone
+--- 原说明 ---
+If `F` is initial,
+the category of cones on `F ⋙ G` is equivalent to the category of cones on `G`,
+for any `G : D ⥤ E`.
 -/
 def conesEquiv : Cone (F ⋙ G) ≌ Cone G where
   functor := extendCone
@@ -1693,67 +1477,74 @@ def conesEquiv : Cone (F ⋙ G) ≌ Cone G where
 
 variable {G}
 
-/--
-Definition of `isLimitWhiskerEquiv` / `isLimitWhiskerEquiv` 的定义
+/-- When `F : C ⥤ D` is initial, and `t : Cone G` for some `G : D ⥤ E`,
+`t.whisker F` is a limit cone exactly when `t` is.
+-/
+/-
+**CategoryTheory.Functor.Initial.isLimitWhiskerEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor.Initial`。
+形式化陈述：isLimitWhiskerEquiv (t : Cone G) : IsLimit (t.whisker F) ≃ IsLimit t
+参数：t : Cone G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitWhiskerEquiv
-  signature: (t : Cone G)
-  body: IsLimit.ofConeEquiv (conesEquiv F G).symm
-
-中文:
-定义 isLimitWhiskerEquiv
-  签名: (t : 锥 G)
-  定义体: IsLimit.ofConeEquiv (conesEquiv F G).symm
-
-Depends on / 依赖: IsLimit, IsLimit.ofConeEquiv, conesEquiv, ofConeEquiv
+--- 原说明 ---
+When `F : C ⥤ D` is initial, and `t : Cone G` for some `G : D ⥤ E`,
+`t.whisker F` is a limit cone exactly when `t` is.
 -/
 def isLimitWhiskerEquiv (t : Cone G) : IsLimit (t.whisker F) ≃ IsLimit t :=
   IsLimit.ofConeEquiv (conesEquiv F G).symm
 
-/--
-Definition of `isLimitExtendConeEquiv` / `isLimitExtendConeEquiv` 的定义
+/-- When `F` is initial, and `t : Cone (F ⋙ G)`,
+`extendCone.obj t` is a limit cone exactly when `t` is.
+-/
+/-
+**CategoryTheory.Functor.Initial.isLimitExtendConeEquiv** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Functor.Initial`。
+形式化陈述：isLimitExtendConeEquiv (t : Cone (F ⋙ G)) : IsLimit (extendCone.obj t) ≃ I
+sLimit t
+参数：t : Cone (F ⋙ G)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitExtendConeEquiv
-  signature: (t : Cone (F ⋙ G))
-  body: IsLimit.ofConeEquiv (conesEquiv F G)
-
-中文:
-定义 isLimitExtendConeEquiv
-  签名: (t : 锥 (F ⋙ G))
-  定义体: IsLimit.ofConeEquiv (conesEquiv F G)
-
-Depends on / 依赖: IsLimit, IsLimit.ofConeEquiv, conesEquiv, ofConeEquiv
+--- 原说明 ---
+When `F` is initial, and `t : Cone (F ⋙ G)`,
+`extendCone.obj t` is a limit cone exactly when `t` is.
 -/
 def isLimitExtendConeEquiv (t : Cone (F ⋙ G)) : IsLimit (extendCone.obj t) ≃ IsLimit t :=
   IsLimit.ofConeEquiv (conesEquiv F G)
 
 /-- Given a limit cone over `G : D ⥤ E` we can construct a limit cone over `F ⋙ G`. -/
 @[simps]
-/--
-Definition of `limitConeComp` / `limitConeComp` 的定义
+/-
+**CategoryTheory.Functor.Initial.limitConeComp** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor.Initial`。
+形式化陈述：limitConeComp (t : LimitCone G) : LimitCone (F ⋙ G) where cone
+参数：t : LimitCone G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition limitConeComp
-  signature: (t : LimitCone G)
-  body: _
-  isLimit := (isLimitWhiskerEquiv F _).symm t.isLimit
-
-中文:
-定义 limitConeComp
-  签名: (t : 极限锥 G)
-  定义体: _
-  isLimit := (isLimitWhiskerEquiv F _).symm t.isLimit
+--- 原说明 ---
+Given a limit cone over `G : D ⥤ E` we can construct a limit cone over `F ⋙ G`.
 -/
 def limitConeComp (t : LimitCone G) : LimitCone (F ⋙ G) where
   cone := _
   isLimit := (isLimitWhiskerEquiv F _).symm t.isLimit
-
+/-
+**CategoryTheory.Functor.Initial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Func
+tor.Initial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) comp_hasLimit [HasLimit G] : HasLimit (F ⋙ G) :=
   HasLimit.mk (limitConeComp F (getLimitCone G))
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.Functor.Initial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Func
+tor.Initial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) comp_preservesLimit {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [PreservesLimit G H] : PreservesLimit (F ⋙ G) H where
   preserves {c} hc := by
@@ -1762,13 +1553,22 @@ instance (priority := 100) comp_preservesLimit {B : Type u₄} [Category.{v₄} 
     exact IsLimit.ofIsoLimit hc' (Cone.ext (Iso.refl _) (by simp))
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.Functor.Initial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Func
+tor.Initial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) comp_reflectsLimit {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [ReflectsLimit G H] : ReflectsLimit (F ⋙ G) H where
   reflects {c} hc := by
     refine ⟨isLimitExtendConeEquiv F _ (isLimitOfReflects H ?_)⟩
     let hc' := (isLimitExtendConeEquiv (G := G ⋙ H) F _).symm hc
     exact IsLimit.ofIsoLimit hc' (Cone.ext (Iso.refl _) (by simp))
-
+/-
+**CategoryTheory.Functor.Initial.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Func
+tor.Initial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) compCreatesLimit {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [CreatesLimit G H] : CreatesLimit (F ⋙ G) H where
   lifts {c} hc := by
@@ -1778,28 +1578,33 @@ instance (priority := 100) compCreatesLimit {B : Type u₄} [Category.{v₄} B] 
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `limit_pre_isIso` / 实例 `limit_pre_isIso`
-
-English:
-instance limit_pre_isIso
-  signature: [HasLimit G]
-  body: by
-  rw [limit.pre_eq (limitConeComp F (getLimitCone G)) (getLimitCone G)]
-  simp only [limitConeComp_cone, Cone.whisker_pt, limitConeComp_isLimit, IsLimit.lift_self,
-    Category.id_comp, isIso_comp_left_iff]
-  infer_instance
-
-中文:
-实例 limit_pre_isIso
-  签名: [有极限 G]
-  定义体: by
-  rw [limit.pre_eq (limitConeComp F (getLimitCone G)) (getLimitCone G)]
-  simp only [limitConeComp_cone, Cone.whisker_pt, limitConeComp_isLimit, IsLimit.lift_self,
-    Category.id_comp, isIso_comp_left_iff]
-  infer_instance
-
-Depends on / 依赖: Category, Category.id_comp, Cone.whisker_pt, IsLimit, IsLimit.lift_self, getLimitCone, id_comp, infer_instance, isIso_comp_left_iff, lift_self, limit.pre_eq, limitConeComp, limitConeComp_cone, limitConeComp_isLimit, pre_eq, whisker_pt
+/-
+**CategoryTheory.Functor.Initial.limit_pre_isIso** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.Functor.Initial`。
+形式化陈述：limit_pre_isIso [HasLimit G] : IsIso (limit.pre G F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.comp_hasLimit`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.pre_eq`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ K]   {C : Type u} [inst…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.IsLimit.lift_self`：lift_self {c : Cone F} (t : IsL
+imit c) : t.lift c = 𝟙 c.pt
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 instance limit_pre_isIso [HasLimit G] : IsIso (limit.pre G F) := by
   rw [limit.pre_eq (limitConeComp F (getLimitCone G)) (getLimitCone G)]
@@ -1814,49 +1619,46 @@ variable (G)
 /-- When `F : C ⥤ D` is initial, and `G : D ⥤ E` has a limit, then `F ⋙ G` has a limit also and
 `limit (F ⋙ G) ≅ limit G`. -/
 @[simps! -isSimp, stacks 04E7]
-/--
-Definition of `limitIso` / `limitIso` 的定义
+/-
+**CategoryTheory.Functor.Initial.limitIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor.Initial`。
+形式化陈述：limitIso [HasLimit G] : limit (F ⋙ G) ≅ limit G
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.comp_hasLimit`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-definition limitIso
-  signature: [HasLimit G]
-  body: (asIso (limit.pre G F)).symm
-
-中文:
-定义 limitIso
-  签名: [有极限 G]
-  定义体: (asIso (limit.pre G F)).symm
-
-Depends on / 依赖: limit.pre
+--- 原说明 ---
+When `F : C ⥤ D` is initial, and `G : D ⥤ E` has a limit, then `F ⋙ G` has a lim
+it also and
+`limit (F ⋙ G) ≅ limit G`.
 -/
 def limitIso [HasLimit G] : limit (F ⋙ G) ≅ limit G :=
   (asIso (limit.pre G F)).symm
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `limIso` / `limIso` 的定义
+/-- A pointfree version of `limitIso`, stating that whiskering by `F` followed by taking the
+limit is isomorphic to taking the limit on the codomain of `F`. -/
+/-
+**CategoryTheory.Functor.Initial.limIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor.Initial`。
+形式化陈述：limIso [HasLimitsOfShape D E] [HasLimitsOfShape C E] : (whiskeringLeft _ _
+ _).obj F ⋙ lim ≅ lim (J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-definition limIso
-  signature: [HasLimitsOfShape D E] [HasLimitsOfShape C E]
-  body: Iso.symm NatIso.ofComponents (fun G => (limitIso F G).symm) fun f => by
-    simp only [comp_obj, whiskeringLeft_obj_obj, lim_obj, comp_map, whiskeringLeft_obj_map, lim_map,
-      Iso.symm_hom, limitIso_inv]
-    ext
-    simp
-
-中文:
-定义 limIso
-  签名: [有形状极限 D E] [有形状极限 C E]
-  定义体: Iso.symm NatIso.ofComponents (fun G => (limitIso F G).symm) fun f => by
-    simp only [comp_obj, whiskeringLeft_obj_obj, lim_obj, comp_map, whiskeringLeft_obj_map, lim_map,
-      Iso.symm_hom, limitIso_inv]
-    ext
-    simp
+--- 原说明 ---
+A pointfree version of `limitIso`, stating that whiskering by `F` followed by ta
+king the
+limit is isomorphic to taking the limit on the codomain of `F`.
 -/
 def limIso [HasLimitsOfShape D E] [HasLimitsOfShape C E] :
     (whiskeringLeft _ _ _).obj F ⋙ lim ≅ lim (J := D) (C := E) :=
-Iso.symm NatIso.ofComponents (fun G => (limitIso F G).symm) fun f => by
+  Iso.symm <| NatIso.ofComponents (fun G => (limitIso F G).symm) fun f => by
     simp only [comp_obj, whiskeringLeft_obj_obj, lim_obj, comp_map, whiskeringLeft_obj_map, lim_map,
       Iso.symm_hom, limitIso_inv]
     ext
@@ -1866,86 +1668,84 @@ end
 
 /-- Given a limit cone over `F ⋙ G` we can construct a limit cone over `G`. -/
 @[simps]
-/--
-Definition of `limitConeOfComp` / `limitConeOfComp` 的定义
+/-
+**CategoryTheory.Functor.Initial.limitConeOfComp** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.Initial`。
+形式化陈述：limitConeOfComp (t : LimitCone (F ⋙ G)) : LimitCone G where cone
+参数：t : LimitCone (F ⋙ G)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition limitConeOfComp
-  signature: (t : LimitCone (F ⋙ G))
-  body: extendCone.obj t.cone
-  isLimit := (isLimitExtendConeEquiv F _).symm t.isLimit
-
-中文:
-定义 limitConeOfComp
-  签名: (t : 极限锥 (F ⋙ G))
-  定义体: extendCone.obj t.cone
-  isLimit := (isLimitExtendConeEquiv F _).symm t.isLimit
-
-Depends on / 依赖: extendCone, extendCone.obj, t.cone
+--- 原说明 ---
+Given a limit cone over `F ⋙ G` we can construct a limit cone over `G`.
 -/
 def limitConeOfComp (t : LimitCone (F ⋙ G)) : LimitCone G where
   cone := extendCone.obj t.cone
   isLimit := (isLimitExtendConeEquiv F _).symm t.isLimit
 
-/--
-theorem `hasLimit_of_comp` / 定理 `hasLimit_of_comp`
+/-- When `F` is initial, and `F ⋙ G` has a limit, then `G` has a limit also.
 
-English:
-theorem hasLimit_of_comp
-  given: [HasLimit (F ⋙ G)]
-  statement: HasLimit G
-  proof: HasLimit.mk (limitConeOfComp F (getLimitCone (F ⋙ G)))
+We can't make this an instance, because `F` is not determined by the goal.
+(Even if this weren't a problem, it would cause a loop with `comp_hasLimit`.)
+-/
+/-
+**CategoryTheory.Functor.Initial.hasLimit_of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Functor.Initial`。
+形式化陈述：hasLimit_of_comp [HasLimit (F ⋙ G)] : HasLimit G
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
 
-中文:
-定理 hasLimit_of_comp
-  条件: [有极限 (F ⋙ G)]
-  结论: 有极限 G
-  证明: HasLimit.mk (limitConeOfComp F (getLimitCone (F ⋙ G)))
+--- 原说明 ---
+When `F` is initial, and `F ⋙ G` has a limit, then `G` has a limit also.
 
-Depends on / 依赖: HasEqualizers, HasLimit, HasLimit.mk, HasWeakEqualizersOfHasEqualizers, getLimitCone, limitConeOfComp
+We can't make this an instance, because `F` is not determined by the goal.
+(Even if this weren't a problem, it would cause a loop with `comp_hasLimit`.)
 -/
 theorem hasLimit_of_comp [HasLimit (F ⋙ G)] : HasLimit G :=
   HasLimit.mk (limitConeOfComp F (getLimitCone (F ⋙ G)))
-
-/--
-lemma `hasLimit_comp_iff` / 引理 `hasLimit_comp_iff`
-
-English:
-lemma hasLimit_comp_iff
-  proof: ⟨fun _ => Functor.Initial.hasLimit_of_comp F, fun _ => inferInstance⟩
-
-中文:
-引理 hasLimit_comp_iff
-  证明: ⟨fun _ => Functor.Initial.hasLimit_of_comp F, fun _ => inferInstance⟩
-
-Depends on / 依赖: Functor, Functor.Initial.hasLimit_of_comp, Initial, hasLimit_of_comp
+/-
+**CategoryTheory.Functor.Initial.hasLimit_comp_iff** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Functor.Initial`。
+形式化陈述：hasLimit_comp_iff : HasLimit (F ⋙ G) ↔ HasLimit G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.hasLimit_of_comp`：hasLimit_of_comp [HasLi
+mit (F ⋙ G)] : HasLimit G
+· 使用定理 `CategoryTheory.Functor.Initial.comp_hasLimit`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma hasLimit_comp_iff :
     HasLimit (F ⋙ G) ↔ HasLimit G :=
-  ⟨fun _ => Functor.Initial.hasLimit_of_comp F, fun _ => inferInstance⟩
+  ⟨fun _ ↦ Functor.Initial.hasLimit_of_comp F, fun _ ↦ inferInstance⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `preservesLimit_of_comp` / 定理 `preservesLimit_of_comp`
-
-English:
-theorem preservesLimit_of_comp
-  statement: {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
-  proof: by
-    refine ⟨isLimitWhiskerEquiv F _ ?_⟩
-    let hc' := isLimitOfPreserves H ((isLimitWhiskerEquiv F _).symm hc)
-    exact IsLimit.ofIsoLimit hc' (Cone.ext (Iso.refl _) (by simp))
-
-中文:
-定理 preservesLimit_of_comp
-  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
-  证明: by
-    refine ⟨isLimitWhiskerEquiv F _ ?_⟩
-    let hc' := isLimitOfPreserves H ((isLimitWhiskerEquiv F _).symm hc)
-    exact IsLimit.ofIsoLimit hc' (Cone.ext (Iso.refl _) (by simp))
-
-Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, Iso.refl, isLimitOfPreserves, isLimitWhiskerEquiv, ofIsoLimit
+/-
+**CategoryTheory.Functor.Initial.preservesLimit_of_comp** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Functor.Initial`。
+形式化陈述：preservesLimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [Preser
+vesLimit (F ⋙ G) H] : PreservesLimit G H where preserves {c} hc
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem preservesLimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [PreservesLimit (F ⋙ G) H] : PreservesLimit G H where
@@ -1956,26 +1756,26 @@ theorem preservesLimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `reflectsLimit_of_comp` / 定理 `reflectsLimit_of_comp`
-
-English:
-theorem reflectsLimit_of_comp
-  statement: {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
-  proof: by
-    refine ⟨isLimitWhiskerEquiv F _ (isLimitOfReflects H ?_)⟩
-    let hc' := (isLimitWhiskerEquiv F _).symm hc
-    exact IsLimit.ofIsoLimit hc' (Cone.ext (Iso.refl _) (by simp))
-
-中文:
-定理 reflectsLimit_of_comp
-  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
-  证明: by
-    refine ⟨isLimitWhiskerEquiv F _ (isLimitOfReflects H ?_)⟩
-    let hc' := (isLimitWhiskerEquiv F _).symm hc
-    exact IsLimit.ofIsoLimit hc' (Cone.ext (Iso.refl _) (by simp))
-
-Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, Iso.refl, isLimitOfReflects, isLimitWhiskerEquiv, ofIsoLimit
+/-
+**CategoryTheory.Functor.Initial.reflectsLimit_of_comp** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor.Initial`。
+形式化陈述：reflectsLimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [Reflect
+sLimit (F ⋙ G) H] : ReflectsLimit G H where reflects {c} hc
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem reflectsLimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [ReflectsLimit (F ⋙ G) H] : ReflectsLimit G H where
@@ -1987,34 +1787,18 @@ theorem reflectsLimit_of_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
 set_option backward.defeqAttrib.useBackward true in
 /-- If `F` is initial and `F ⋙ G` creates limits of `H`, then so does `G`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitOfComp` / `createsLimitOfComp` 的定义
+/-
+**CategoryTheory.Functor.Initial.createsLimitOfComp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.Initial`。
+形式化陈述：createsLimitOfComp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [CreatesLim
+it (F ⋙ G) H] : CreatesLimit G H where reflects
+参数：F ⋙ G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition createsLimitOfComp
-  signature: {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
-  body: (reflectsLimit_of_comp F).reflects
-  lifts {c} hc := by
-    refine ⟨(extendCone (F := F)).obj (liftLimit ((isLimitWhiskerEquiv F _).symm hc)), ?_⟩
-    let i := liftedLimitMapsToOriginal (K := (F ⋙ G)) ((isLimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCone (F := F)).mapIso i) ≪≫ ((conesEquiv F (G ⋙ H)).counitIso.app _)
-    exact Cone.ext (Iso.refl _)
-
-include F in
-
-中文:
-定义 createsLimitOfComp
-  签名: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
-  定义体: (reflectsLimit_of_comp F).reflects
-  lifts {c} hc := by
-    refine ⟨(extendCone (F := F)).obj (liftLimit ((isLimitWhiskerEquiv F _).symm hc)), ?_⟩
-    let i := liftedLimitMapsToOriginal (K := (F ⋙ G)) ((isLimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCone (F := F)).mapIso i) ≪≫ ((conesEquiv F (G ⋙ H)).counitIso.app _)
-    exact Cone.ext (Iso.refl _)
-
-include F in
-
-Depends on / 依赖: reflects, reflectsLimit_of_comp
+--- 原说明 ---
+If `F` is initial and `F ⋙ G` creates limits of `H`, then so does `G`.
 -/
 def createsLimitOfComp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     [CreatesLimit (F ⋙ G) H] : CreatesLimit G H where
@@ -2026,73 +1810,58 @@ def createsLimitOfComp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B}
     exact Cone.ext (Iso.refl _)
 
 include F in
-/--
-theorem `hasLimitsOfShape_of_initial` / 定理 `hasLimitsOfShape_of_initial`
-
-English:
-theorem hasLimitsOfShape_of_initial
-  given: [HasLimitsOfShape C E]
-  statement: HasLimitsOfShape D E where
-  proof: fun _ => hasLimit_of_comp F
-
-include F in
-
-中文:
-定理 hasLimitsOfShape_of_initial
-  条件: [有形状极限 C E]
-  结论: 有形状极限 D E where
-  证明: fun _ => hasLimit_of_comp F
-
-include F in
-
-Depends on / 依赖: hasLimit_of_comp
+/-
+**CategoryTheory.Functor.Initial.hasLimitsOfShape_of_initial** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Functor.Initial`。
+形式化陈述：hasLimitsOfShape_of_initial [HasLimitsOfShape C E] : HasLimitsOfShape D E 
+where has_limit
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.hasLimit_of_comp`：hasLimit_of_comp [HasLi
+mit (F ⋙ G)] : HasLimit G
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 theorem hasLimitsOfShape_of_initial [HasLimitsOfShape C E] : HasLimitsOfShape D E where
   has_limit := fun _ => hasLimit_of_comp F
 
 include F in
-/--
-theorem `preservesLimitsOfShape_of_initial` / 定理 `preservesLimitsOfShape_of_initial`
-
-English:
-theorem preservesLimitsOfShape_of_initial
-  statement: {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
-  proof: preservesLimit_of_comp F
-
-include F in
-
-中文:
-定理 preservesLimitsOfShape_of_initial
-  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
-  证明: preservesLimit_of_comp F
-
-include F in
-
-Depends on / 依赖: HasKernels, HasWeakKernelsOfHasKernels, preservesLimit_of_comp
+/-
+**CategoryTheory.Functor.Initial.preservesLimitsOfShape_of_initial** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Functor.Initial`。
+形式化陈述：preservesLimitsOfShape_of_initial {B : Type u₄} [Category.{v₄} B] (H : E ⥤
+ B) [PreservesLimitsOfShape C H] : PreservesLimitsOfShape D H where preservesLim
+it
+参数：H : E ⥤ B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.preservesLimit_of_comp`：preservesLimit_of
+_comp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [PreservesLimit (F ⋙ G) H] : P
+reservesLimit G H where preserves {c} hc
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
 -/
 theorem preservesLimitsOfShape_of_initial {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
     [PreservesLimitsOfShape C H] : PreservesLimitsOfShape D H where
   preservesLimit := preservesLimit_of_comp F
 
 include F in
-/--
-theorem `reflectsLimitsOfShape_of_initial` / 定理 `reflectsLimitsOfShape_of_initial`
-
-English:
-theorem reflectsLimitsOfShape_of_initial
-  statement: {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
-  proof: reflectsLimit_of_comp F
-
-include F in
-
-中文:
-定理 reflectsLimitsOfShape_of_initial
-  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
-  证明: reflectsLimit_of_comp F
-
-include F in
-
-Depends on / 依赖: reflectsLimit_of_comp
+/-
+**CategoryTheory.Functor.Initial.reflectsLimitsOfShape_of_initial** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.Functor.Initial`。
+形式化陈述：reflectsLimitsOfShape_of_initial {B : Type u₄} [Category.{v₄} B] (H : E ⥤ 
+B) [ReflectsLimitsOfShape C H] : ReflectsLimitsOfShape D H where reflectsLimit
+参数：H : E ⥤ B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.reflectsLimit_of_comp`：reflectsLimit_of_c
+omp {B : Type u₄} [Category.{v₄} B] {H : E ⥤ B} [ReflectsLimit (F ⋙ G) H] : Refl
+ectsLimit G H where reflects {c} hc
+· 使用定理 `CategoryTheory.Limits.reflectsLimit_of_reflectsLimitsOfShape`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
 -/
 theorem reflectsLimitsOfShape_of_initial {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
     [ReflectsLimitsOfShape C H] : ReflectsLimitsOfShape D H where
@@ -2102,20 +1871,19 @@ include F in
 /-- If `H` creates limits of shape `C` and `F : C ⥤ D` is initial, then `H` creates limits of shape
 `D`. -/
 @[instance_reducible]
-/--
-Definition of `createsLimitsOfShapeOfInitial` / `createsLimitsOfShapeOfInitial` 的定义
+/-
+**CategoryTheory.Functor.Initial.createsLimitsOfShapeOfInitial** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Functor.Initial`。
+形式化陈述：createsLimitsOfShapeOfInitial {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B) 
+[CreatesLimitsOfShape C H] : CreatesLimitsOfShape D H where CreatesLimit
+参数：H : E ⥤ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createsLimitsOfShapeOfInitial
-  signature: {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
-  body: createsLimitOfComp F
-
-中文:
-定义 createsLimitsOfShapeOfInitial
-  签名: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
-  定义体: createsLimitOfComp F
-
-Depends on / 依赖: createsLimitOfComp
+--- 原说明 ---
+If `H` creates limits of shape `C` and `F : C ⥤ D` is initial, then `H` creates 
+limits of shape
+`D`.
 -/
 def createsLimitsOfShapeOfInitial {B : Type u₄} [Category.{v₄} B] (H : E ⥤ B)
     [CreatesLimitsOfShape C H] : CreatesLimitsOfShape D H where
@@ -2128,296 +1896,302 @@ section
 variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 variable {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
 
-/--
-theorem `final_of_comp_full_faithful` / 定理 `final_of_comp_full_faithful`
+/-- The hypotheses also imply that `G` is final, see `final_of_comp_full_faithful'`. -/
+/-
+**CategoryTheory.Functor.final_of_comp_full_faithful** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：final_of_comp_full_faithful [Full G] [Faithful G] [Final (F ⋙ G)] : Final 
+F where out d
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.StructuredArrow.isEquivalence_post`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {B : Type u₄} [ins…
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 
-English:
-theorem final_of_comp_full_faithful
-  given: [Full G] [Faithful G] [Final (F ⋙ G)]
-  statement: Final F where
-  proof: isConnected_of_equivalent (StructuredArrow.post d F G).asEquivalence.symm
-
-中文:
-定理 final_of_comp_full_faithful
-  条件: [满 G] [忠实 G] [终 (F ⋙ G)]
-  结论: 终 F where
-  证明: isConnected_of_equivalent (StructuredArrow.post d F G).asEquivalence.symm
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.post, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
+--- 原说明 ---
+The hypotheses also imply that `G` is final, see `final_of_comp_full_faithful'`.
 -/
 theorem final_of_comp_full_faithful [Full G] [Faithful G] [Final (F ⋙ G)] : Final F where
   out d := isConnected_of_equivalent (StructuredArrow.post d F G).asEquivalence.symm
 
-/--
-theorem `initial_of_comp_full_faithful` / 定理 `initial_of_comp_full_faithful`
+/-- The hypotheses also imply that `G` is initial, see `initial_of_comp_full_faithful'`. -/
+/-
+**CategoryTheory.Functor.initial_of_comp_full_faithful** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor`。
+形式化陈述：initial_of_comp_full_faithful [Full G] [Faithful G] [Initial (F ⋙ G)] : In
+itial F where out d
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.CostructuredArrow.isEquivalence_post`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {B : Type u₄} [ins…
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 
-English:
-theorem initial_of_comp_full_faithful
-  given: [Full G] [Faithful G] [Initial (F ⋙ G)]
-  statement: Initial F where
-  proof: isConnected_of_equivalent (CostructuredArrow.post F G d).asEquivalence.symm
-
-中文:
-定理 initial_of_comp_full_faithful
-  条件: [满 G] [忠实 G] [初始 (F ⋙ G)]
-  结论: 初始 F where
-  证明: isConnected_of_equivalent (CostructuredArrow.post F G d).asEquivalence.symm
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.post, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
+--- 原说明 ---
+The hypotheses also imply that `G` is initial, see `initial_of_comp_full_faithfu
+l'`.
 -/
 theorem initial_of_comp_full_faithful [Full G] [Faithful G] [Initial (F ⋙ G)] : Initial F where
   out d := isConnected_of_equivalent (CostructuredArrow.post F G d).asEquivalence.symm
 
-/--
-theorem `final_comp_equivalence` / 定理 `final_comp_equivalence`
+/-- See also the strictly more general `final_comp` below. -/
+/-
+**CategoryTheory.Functor.final_comp_equivalence** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：final_comp_equivalence [Final F] [IsEquivalence G] : Final (F ⋙ G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_natIso`：final_of_natIso {F F' : C ⥤ D} [
+Final F] (i : F ≅ F') : Final F' where out _
+· 使用定理 `CategoryTheory.Functor.final_of_comp_full_faithful`：final_of_comp_full_f
+aithful [Full G] [Faithful G] [Final (F ⋙ G)] : Final F where out d
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-theorem final_comp_equivalence
-  given: [Final F] [IsEquivalence G]
-  statement: Final (F ⋙ G)
-  proof: let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
-  have : Final ((F ⋙ G) ⋙ G.inv) := final_of_natIso i
-  final_of_comp_full_faithful (F ⋙ G) G.inv
-
-中文:
-定理 final_comp_equivalence
-  条件: [终 F] [是等价 G]
-  结论: 终 (F ⋙ G)
-  证明: let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
-  have : Final ((F ⋙ G) ⋙ G.inv) := final_of_natIso i
-  final_of_comp_full_faithful (F ⋙ G) G.inv
-
-Depends on / 依赖: G.asEquivalence.unitIso, G.inv, asEquivalence, final_of_comp_full_faithful, final_of_natIso, isoWhiskerLeft, unitIso
+--- 原说明 ---
+See also the strictly more general `final_comp` below.
 -/
 theorem final_comp_equivalence [Final F] [IsEquivalence G] : Final (F ⋙ G) :=
   let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
   have : Final ((F ⋙ G) ⋙ G.inv) := final_of_natIso i
   final_of_comp_full_faithful (F ⋙ G) G.inv
 
-/--
-theorem `initial_comp_equivalence` / 定理 `initial_comp_equivalence`
+/-- See also the strictly more general `initial_comp` below. -/
+/-
+**CategoryTheory.Functor.initial_comp_equivalence** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：initial_comp_equivalence [Initial F] [IsEquivalence G] : Initial (F ⋙ G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_of_natIso`：initial_of_natIso {F F' : C ⥤ 
+D} [Initial F] (i : F ≅ F') : Initial F' where out _
+· 使用定理 `CategoryTheory.Functor.initial_of_comp_full_faithful`：initial_of_comp_fu
+ll_faithful [Full G] [Faithful G] [Initial (F ⋙ G)] : Initial F where out d
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-theorem initial_comp_equivalence
-  given: [Initial F] [IsEquivalence G]
-  statement: Initial (F ⋙ G)
-  proof: let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
-  have : Initial ((F ⋙ G) ⋙ G.inv) := initial_of_natIso i
-  initial_of_comp_full_faithful (F ⋙ G) G.inv
-
-中文:
-定理 initial_comp_equivalence
-  条件: [初始 F] [是等价 G]
-  结论: 初始 (F ⋙ G)
-  证明: let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
-  have : Initial ((F ⋙ G) ⋙ G.inv) := initial_of_natIso i
-  initial_of_comp_full_faithful (F ⋙ G) G.inv
-
-Depends on / 依赖: G.asEquivalence.unitIso, G.inv, Initial, asEquivalence, initial_of_comp_full_faithful, initial_of_natIso, isoWhiskerLeft, unitIso
+--- 原说明 ---
+See also the strictly more general `initial_comp` below.
 -/
 theorem initial_comp_equivalence [Initial F] [IsEquivalence G] : Initial (F ⋙ G) :=
   let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
   have : Initial ((F ⋙ G) ⋙ G.inv) := initial_of_natIso i
   initial_of_comp_full_faithful (F ⋙ G) G.inv
 
-/--
-theorem `final_equivalence_comp` / 定理 `final_equivalence_comp`
+/-- See also the strictly more general `final_comp` below. -/
+/-
+**CategoryTheory.Functor.final_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：final_equivalence_comp [IsEquivalence F] [Final G] : Final (F ⋙ G) where o
+ut d
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 
-English:
-theorem final_equivalence_comp
-  given: [IsEquivalence F] [Final G]
-  statement: Final (F ⋙ G) where
-  proof: isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence.symm
-
-中文:
-定理 final_equivalence_comp
-  条件: [是等价 F] [终 G]
-  结论: 终 (F ⋙ G) where
-  证明: isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence.symm
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.pre, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
+--- 原说明 ---
+See also the strictly more general `final_comp` below.
 -/
 theorem final_equivalence_comp [IsEquivalence F] [Final G] : Final (F ⋙ G) where
   out d := isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence.symm
 
-/--
-theorem `initial_equivalence_comp` / 定理 `initial_equivalence_comp`
+/-- See also the strictly more general `initial_comp` below. -/
+/-
+**CategoryTheory.Functor.initial_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：initial_equivalence_comp [IsEquivalence F] [Initial G] : Initial (F ⋙ G) w
+here out d
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 
-English:
-theorem initial_equivalence_comp
-  given: [IsEquivalence F] [Initial G]
-  statement: Initial (F ⋙ G) where
-  proof: isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence.symm
-
-中文:
-定理 initial_equivalence_comp
-  条件: [是等价 F] [初始 G]
-  结论: 初始 (F ⋙ G) where
-  证明: isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence.symm
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
+--- 原说明 ---
+See also the strictly more general `initial_comp` below.
 -/
 theorem initial_equivalence_comp [IsEquivalence F] [Initial G] : Initial (F ⋙ G) where
   out d := isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence.symm
 
-/--
-theorem `final_of_equivalence_comp` / 定理 `final_of_equivalence_comp`
+/-- See also the strictly more general `final_of_final_comp` below. -/
+/-
+**CategoryTheory.Functor.final_of_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Functor`。
+形式化陈述：final_of_equivalence_comp [IsEquivalence F] [Final (F ⋙ G)] : Final G wher
+e out d
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 
-English:
-theorem final_of_equivalence_comp
-  given: [IsEquivalence F] [Final (F ⋙ G)]
-  statement: Final G where
-  proof: isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence
-
-中文:
-定理 final_of_equivalence_comp
-  条件: [是等价 F] [终 (F ⋙ G)]
-  结论: 终 G where
-  证明: isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.pre, asEquivalence, isConnected_of_equivalent
+--- 原说明 ---
+See also the strictly more general `final_of_final_comp` below.
 -/
 theorem final_of_equivalence_comp [IsEquivalence F] [Final (F ⋙ G)] : Final G where
   out d := isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence
 
-/--
-theorem `initial_of_equivalence_comp` / 定理 `initial_of_equivalence_comp`
+/-- See also the strictly more general `initial_of_initial_comp` below. -/
+/-
+**CategoryTheory.Functor.initial_of_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：initial_of_equivalence_comp [IsEquivalence F] [Initial (F ⋙ G)] : Initial 
+G where out d
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isConnected_of_equivalent`：isConnected_of_equivalent {K :
+ Type u₂} [Category.{v₂} K] (e : J ≌ K) [IsConnected J] : IsConnected K
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 
-English:
-theorem initial_of_equivalence_comp
-  given: [IsEquivalence F] [Initial (F ⋙ G)]
-  statement: Initial G where
-  proof: isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence
-
-中文:
-定理 initial_of_equivalence_comp
-  条件: [是等价 F] [初始 (F ⋙ G)]
-  结论: 初始 G where
-  证明: isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, asEquivalence, isConnected_of_equivalent
+--- 原说明 ---
+See also the strictly more general `initial_of_initial_comp` below.
 -/
 theorem initial_of_equivalence_comp [IsEquivalence F] [Initial (F ⋙ G)] : Initial G where
   out d := isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence
 
-/--
-theorem `final_iff_comp_equivalence` / 定理 `final_iff_comp_equivalence`
+/-- See also the strictly more general `final_iff_comp_final_full_faithful` below. -/
+/-
+**CategoryTheory.Functor.final_iff_comp_equivalence** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：final_iff_comp_equivalence [IsEquivalence G] : Final F ↔ Final (F ⋙ G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_comp_equivalence`：final_comp_equivalence [F
+inal F] [IsEquivalence G] : Final (F ⋙ G)
+· 使用定理 `CategoryTheory.Functor.final_of_comp_full_faithful`：final_of_comp_full_f
+aithful [Full G] [Faithful G] [Final (F ⋙ G)] : Final F where out d
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-theorem final_iff_comp_equivalence
-  given: [IsEquivalence G]
-  statement: Final F ↔ Final (F ⋙ G)
-  proof: ⟨fun _ => final_comp_equivalence _ _, fun _ => final_of_comp_full_faithful _ G⟩
-
-中文:
-定理 final_iff_comp_equivalence
-  条件: [是等价 G]
-  结论: 终 F ↔ 终 (F ⋙ G)
-  证明: ⟨fun _ => final_comp_equivalence _ _, fun _ => final_of_comp_full_faithful _ G⟩
-
-Depends on / 依赖: final_comp_equivalence, final_of_comp_full_faithful
+--- 原说明 ---
+See also the strictly more general `final_iff_comp_final_full_faithful` below.
 -/
 theorem final_iff_comp_equivalence [IsEquivalence G] : Final F ↔ Final (F ⋙ G) :=
   ⟨fun _ => final_comp_equivalence _ _, fun _ => final_of_comp_full_faithful _ G⟩
 
-/--
-theorem `final_iff_equivalence_comp` / 定理 `final_iff_equivalence_comp`
+/-- See also the strictly more general `final_iff_final_comp` below. -/
+/-
+**CategoryTheory.Functor.final_iff_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：final_iff_equivalence_comp [IsEquivalence F] : Final G ↔ Final (F ⋙ G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_equivalence_comp`：final_equivalence_comp [I
+sEquivalence F] [Final G] : Final (F ⋙ G) where out d
+· 使用定理 `CategoryTheory.Functor.final_of_equivalence_comp`：final_of_equivalence_c
+omp [IsEquivalence F] [Final (F ⋙ G)] : Final G where out d
 
-English:
-theorem final_iff_equivalence_comp
-  given: [IsEquivalence F]
-  statement: Final G ↔ Final (F ⋙ G)
-  proof: ⟨fun _ => final_equivalence_comp _ _, fun _ => final_of_equivalence_comp F _⟩
-
-中文:
-定理 final_iff_equivalence_comp
-  条件: [是等价 F]
-  结论: 终 G ↔ 终 (F ⋙ G)
-  证明: ⟨fun _ => final_equivalence_comp _ _, fun _ => final_of_equivalence_comp F _⟩
-
-Depends on / 依赖: final_equivalence_comp, final_of_equivalence_comp
+--- 原说明 ---
+See also the strictly more general `final_iff_final_comp` below.
 -/
 theorem final_iff_equivalence_comp [IsEquivalence F] : Final G ↔ Final (F ⋙ G) :=
   ⟨fun _ => final_equivalence_comp _ _, fun _ => final_of_equivalence_comp F _⟩
 
-/--
-theorem `initial_iff_comp_equivalence` / 定理 `initial_iff_comp_equivalence`
+/-- See also the strictly more general `initial_iff_comp_initial_full_faithful` below. -/
+/-
+**CategoryTheory.Functor.initial_iff_comp_equivalence** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Functor`。
+形式化陈述：initial_iff_comp_equivalence [IsEquivalence G] : Initial F ↔ Initial (F ⋙ 
+G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_comp_equivalence`：initial_comp_equivalenc
+e [Initial F] [IsEquivalence G] : Initial (F ⋙ G)
+· 使用定理 `CategoryTheory.Functor.initial_of_comp_full_faithful`：initial_of_comp_fu
+ll_faithful [Full G] [Faithful G] [Initial (F ⋙ G)] : Initial F where out d
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-theorem initial_iff_comp_equivalence
-  given: [IsEquivalence G]
-  statement: Initial F ↔ Initial (F ⋙ G)
-  proof: ⟨fun _ => initial_comp_equivalence _ _, fun _ => initial_of_comp_full_faithful _ G⟩
-
-中文:
-定理 initial_iff_comp_equivalence
-  条件: [是等价 G]
-  结论: 初始 F ↔ 初始 (F ⋙ G)
-  证明: ⟨fun _ => initial_comp_equivalence _ _, fun _ => initial_of_comp_full_faithful _ G⟩
-
-Depends on / 依赖: initial_comp_equivalence, initial_of_comp_full_faithful
+--- 原说明 ---
+See also the strictly more general `initial_iff_comp_initial_full_faithful` belo
+w.
 -/
 theorem initial_iff_comp_equivalence [IsEquivalence G] : Initial F ↔ Initial (F ⋙ G) :=
   ⟨fun _ => initial_comp_equivalence _ _, fun _ => initial_of_comp_full_faithful _ G⟩
 
-/--
-theorem `initial_iff_equivalence_comp` / 定理 `initial_iff_equivalence_comp`
+/-- See also the strictly more general `initial_iff_initial_comp` below. -/
+/-
+**CategoryTheory.Functor.initial_iff_equivalence_comp** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Functor`。
+形式化陈述：initial_iff_equivalence_comp [IsEquivalence F] : Initial G ↔ Initial (F ⋙ 
+G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_equivalence_comp`：initial_equivalence_com
+p [IsEquivalence F] [Initial G] : Initial (F ⋙ G) where out d
+· 使用定理 `CategoryTheory.Functor.initial_of_equivalence_comp`：initial_of_equivalen
+ce_comp [IsEquivalence F] [Initial (F ⋙ G)] : Initial G where out d
 
-English:
-theorem initial_iff_equivalence_comp
-  given: [IsEquivalence F]
-  statement: Initial G ↔ Initial (F ⋙ G)
-  proof: ⟨fun _ => initial_equivalence_comp _ _, fun _ => initial_of_equivalence_comp F _⟩
-
-中文:
-定理 initial_iff_equivalence_comp
-  条件: [是等价 F]
-  结论: 初始 G ↔ 初始 (F ⋙ G)
-  证明: ⟨fun _ => initial_equivalence_comp _ _, fun _ => initial_of_equivalence_comp F _⟩
-
-Depends on / 依赖: initial_equivalence_comp, initial_of_equivalence_comp
+--- 原说明 ---
+See also the strictly more general `initial_iff_initial_comp` below.
 -/
 theorem initial_iff_equivalence_comp [IsEquivalence F] : Initial G ↔ Initial (F ⋙ G) :=
   ⟨fun _ => initial_equivalence_comp _ _, fun _ => initial_of_equivalence_comp F _⟩
-
-/--
-Instance `final_comp` / 实例 `final_comp`
-
-English:
-instance final_comp
-  signature: [hF : Final F] [hG : Final G]
-  body: by
-  let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
-  let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
-  let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
-  let i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
-    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
-  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff i]; rw [final_iff_isIso_colimit_pre]
-  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
-  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre] at hG
-  intro H
-  rw [← colimit.pre_pre]
-  infer_instance
-
-中文:
-实例 final_comp
-  签名: [hF : 终 F] [hG : 终 G]
-  定义体: by
-  let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
-  let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
-  let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
-  let i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
-    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
-  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff i]; rw [final_iff_isIso_colimit_pre]
-  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
-  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre] at hG
-  intro H
-  rw [← colimit.pre_pre]
-  infer_instance
-
-Depends on / 依赖: AsSmall, AsSmall.equiv, final_iff_comp_equivalence, final_iff_equivalence_comp, final_natIso_iff, functor, inverse, isoWhiskerLeft, isoWhiskerRight, unitIso
+/-
+**CategoryTheory.Functor.final_comp** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：final_comp [hF : Final F] [hG : Final G] : Final (F ⋙ G)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.final_iff_comp_equivalence`：final_iff_comp_equiva
+lence [IsEquivalence G] : Final F ↔ Final (F ⋙ G)
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
+· 使用定理 `CategoryTheory.Functor.final_iff_equivalence_comp`：final_iff_equivalence
+_comp [IsEquivalence F] : Final G ↔ Final (F ⋙ G)
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `CategoryTheory.Functor.final_natIso_iff`：final_natIso_iff {F F' : C ⥤ D}
+ (i : F ≅ F') : Final F ↔ Final F'
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Functor.final_iff_isIso_colimit_pre`：final_iff_isIso_coli
+mit_pre : Final F ↔ forall G : D ⥤ Type v, IsIso (colimit.pre G F)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.colimit.pre_pre`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} K]   {C : Type u} [inst…
 -/
 instance final_comp [hF : Final F] [hG : Final G] : Final (F ⋙ G) := by
   let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
@@ -2426,78 +2200,57 @@ instance final_comp [hF : Final F] [hG : Final G] : Final (F ⋙ G) := by
   let i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
       (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
     isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
-  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff i]; rw [final_iff_isIso_colimit_pre]
-  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
-  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre] at hG
+  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor, final_iff_equivalence_comp s₁.inverse,
+    final_natIso_iff i, final_iff_isIso_colimit_pre]
+  rw [final_iff_comp_equivalence F s₂.functor, final_iff_equivalence_comp s₁.inverse,
+    final_iff_isIso_colimit_pre] at hF
+  rw [final_iff_comp_equivalence G s₃.functor, final_iff_equivalence_comp s₂.inverse,
+    final_iff_isIso_colimit_pre] at hG
   intro H
   rw [← colimit.pre_pre]
   infer_instance
-
-/--
-Instance `initial_comp` / 实例 `initial_comp`
-
-English:
-instance initial_comp
-  signature: [Initial F] [Initial G]
-  body: by
-  suffices Final (F ⋙ G).op from initial_of_final_op _
-  exact final_comp F.op G.op
-
-中文:
-实例 initial_comp
-  签名: [初始 F] [初始 G]
-  定义体: by
-  suffices Final (F ⋙ G).op from initial_of_final_op _
-  exact final_comp F.op G.op
-
-Depends on / 依赖: F.op, G.op, final_comp, initial_of_final_op
+/-
+**CategoryTheory.Functor.initial_comp** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：initial_comp [Initial F] [Initial G] : Initial (F ⋙ G)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_of_final_op`：initial_of_final_op (F : C ⥤
+ D) [Final F.op] : Initial F
 -/
 instance initial_comp [Initial F] [Initial G] : Initial (F ⋙ G) := by
   suffices Final (F ⋙ G).op from initial_of_final_op _
   exact final_comp F.op G.op
-
-/--
-theorem `final_of_final_comp` / 定理 `final_of_final_comp`
-
-English:
-theorem final_of_final_comp
-  given: [hF : Final F] [hFG : Final (F ⋙ G)]
-  statement: Final G
-  proof: by
-  let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
-  let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
-  let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
-  let _i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
-    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
-  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre]
-  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
-  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff _i]; rw [final_iff_isIso_colimit_pre] at hFG
-  intro H
-  replace hFG := hFG H
-  rw [← colimit.pre_pre] at hFG
-  exact IsIso.of_isIso_comp_left (colimit.pre _ (s₁.inverse ⋙ F ⋙ s₂.functor)) _
-
-中文:
-定理 final_of_final_comp
-  条件: [hF : 终 F] [hFG : 终 (F ⋙ G)]
-  结论: 终 G
-  证明: by
-  let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
-  let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
-  let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
-  let _i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
-    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
-  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre]
-  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
-  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff _i]; rw [final_iff_isIso_colimit_pre] at hFG
-  intro H
-  replace hFG := hFG H
-  rw [← colimit.pre_pre] at hFG
-  exact IsIso.of_isIso_comp_left (colimit.pre _ (s₁.inverse ⋙ F ⋙ s₂.functor)) _
-
-Depends on / 依赖: AsSmall, AsSmall.equiv, final_iff_comp_equivalence, final_iff_equivalence_comp, final_iff_isIso_colimit, functor, inverse, isoWhiskerLeft, isoWhiskerRight, unitIso
+/-
+**CategoryTheory.Functor.final_of_final_comp** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：final_of_final_comp [hF : Final F] [hFG : Final (F ⋙ G)] : Final G
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.final_iff_comp_equivalence`：final_iff_comp_equiva
+lence [IsEquivalence G] : Final F ↔ Final (F ⋙ G)
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
+· 使用定理 `CategoryTheory.Functor.final_iff_equivalence_comp`：final_iff_equivalence
+_comp [IsEquivalence F] : Final G ↔ Final (F ⋙ G)
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.Functor.final_iff_isIso_colimit_pre`：final_iff_isIso_coli
+mit_pre : Final F ↔ forall G : D ⥤ Type v, IsIso (colimit.pre G F)
+· 使用定理 `CategoryTheory.Functor.final_natIso_iff`：final_natIso_iff {F F' : C ⥤ D}
+ (i : F ≅ F') : Final F ↔ Final F'
+· 使用定理 `CategoryTheory.IsIso.of_isIso_comp_left`：of_isIso_comp_left {X Y Z : C} 
+(f : X ⟶ Y) (g : Y ⟶ Z) [IsIso f] [IsIso (f ≫ g)] : IsIso g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.colimit.pre_pre`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {K : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} K]   {C : Type u} [inst…
 -/
 theorem final_of_final_comp [hF : Final F] [hFG : Final (F ⋙ G)] : Final G := by
   let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
@@ -2506,162 +2259,120 @@ theorem final_of_final_comp [hF : Final F] [hFG : Final (F ⋙ G)] : Final G := 
   let _i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
       (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
     isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
-  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre]
-  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
-  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff _i]; rw [final_iff_isIso_colimit_pre] at hFG
+  rw [final_iff_comp_equivalence G s₃.functor, final_iff_equivalence_comp s₂.inverse,
+    final_iff_isIso_colimit_pre]
+  rw [final_iff_comp_equivalence F s₂.functor, final_iff_equivalence_comp s₁.inverse,
+    final_iff_isIso_colimit_pre] at hF
+  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor, final_iff_equivalence_comp s₁.inverse,
+    final_natIso_iff _i, final_iff_isIso_colimit_pre] at hFG
   intro H
   replace hFG := hFG H
   rw [← colimit.pre_pre] at hFG
   exact IsIso.of_isIso_comp_left (colimit.pre _ (s₁.inverse ⋙ F ⋙ s₂.functor)) _
-
-/--
-theorem `initial_of_initial_comp` / 定理 `initial_of_initial_comp`
-
-English:
-theorem initial_of_initial_comp
-  given: [Initial F] [Initial (F ⋙ G)]
-  statement: Initial G
-  proof: by
-  suffices Final G.op from initial_of_final_op _
-  have : Final (F.op ⋙ G.op) := show Final (F ⋙ G).op from inferInstance
-  exact final_of_final_comp F.op G.op
-
-中文:
-定理 initial_of_initial_comp
-  条件: [初始 F] [初始 (F ⋙ G)]
-  结论: 初始 G
-  证明: by
-  suffices Final G.op from initial_of_final_op _
-  have : Final (F.op ⋙ G.op) := show Final (F ⋙ G).op from inferInstance
-  exact final_of_final_comp F.op G.op
-
-Depends on / 依赖: F.op, G.op, final_of_final_comp, initial_of_final_op
+/-
+**CategoryTheory.Functor.initial_of_initial_comp** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：initial_of_initial_comp [Initial F] [Initial (F ⋙ G)] : Initial G
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_final_comp`：final_of_final_comp [hF : Fi
+nal F] [hFG : Final (F ⋙ G)] : Final G
+· 使用定理 `CategoryTheory.Functor.initial_of_final_op`：initial_of_final_op (F : C ⥤
+ D) [Final F.op] : Initial F
 -/
 theorem initial_of_initial_comp [Initial F] [Initial (F ⋙ G)] : Initial G := by
   suffices Final G.op from initial_of_final_op _
   have : Final (F.op ⋙ G.op) := show Final (F ⋙ G).op from inferInstance
   exact final_of_final_comp F.op G.op
 
-/--
-theorem `final_of_comp_full_faithful'` / 定理 `final_of_comp_full_faithful'`
+/-- The hypotheses also imply that `F` is final, see `final_of_comp_full_faithful`. -/
+/-
+**CategoryTheory.Functor.final_of_comp_full_faithful'** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Functor`。
+形式化陈述：final_of_comp_full_faithful' [Full G] [Faithful G] [Final (F ⋙ G)] : Final
+ G
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_comp_full_faithful`：final_of_comp_full_f
+aithful [Full G] [Faithful G] [Final (F ⋙ G)] : Final F where out d
+· 使用定理 `CategoryTheory.Functor.final_of_final_comp`：final_of_final_comp [hF : Fi
+nal F] [hFG : Final (F ⋙ G)] : Final G
 
-English:
-theorem final_of_comp_full_faithful'
-  given: [Full G] [Faithful G] [Final (F ⋙ G)]
-  statement: Final G
-  proof: have := final_of_comp_full_faithful F G
-  final_of_final_comp F G
-
-中文:
-定理 final_of_comp_full_faithful'
-  条件: [满 G] [忠实 G] [终 (F ⋙ G)]
-  结论: 终 G
-  证明: have := final_of_comp_full_faithful F G
-  final_of_final_comp F G
-
-Depends on / 依赖: final_of_comp_full_faithful, final_of_final_comp
+--- 原说明 ---
+The hypotheses also imply that `F` is final, see `final_of_comp_full_faithful`.
 -/
 theorem final_of_comp_full_faithful' [Full G] [Faithful G] [Final (F ⋙ G)] : Final G :=
   have := final_of_comp_full_faithful F G
   final_of_final_comp F G
 
-/--
-theorem `initial_of_comp_full_faithful'` / 定理 `initial_of_comp_full_faithful'`
+/-- The hypotheses also imply that `F` is initial, see `initial_of_comp_full_faithful`. -/
+/-
+**CategoryTheory.Functor.initial_of_comp_full_faithful'** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Functor`。
+形式化陈述：initial_of_comp_full_faithful' [Full G] [Faithful G] [Initial (F ⋙ G)] : I
+nitial G
+参数：F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_of_comp_full_faithful`：initial_of_comp_fu
+ll_faithful [Full G] [Faithful G] [Initial (F ⋙ G)] : Initial F where out d
+· 使用定理 `CategoryTheory.Functor.initial_of_initial_comp`：initial_of_initial_comp 
+[Initial F] [Initial (F ⋙ G)] : Initial G
 
-English:
-theorem initial_of_comp_full_faithful'
-  given: [Full G] [Faithful G] [Initial (F ⋙ G)]
-  statement: Initial G
-  proof: have := initial_of_comp_full_faithful F G
-  initial_of_initial_comp F G
-
-中文:
-定理 initial_of_comp_full_faithful'
-  条件: [满 G] [忠实 G] [初始 (F ⋙ G)]
-  结论: 初始 G
-  证明: have := initial_of_comp_full_faithful F G
-  initial_of_initial_comp F G
-
-Depends on / 依赖: initial_of_comp_full_faithful, initial_of_initial_comp
+--- 原说明 ---
+The hypotheses also imply that `F` is initial, see `initial_of_comp_full_faithfu
+l`.
 -/
 theorem initial_of_comp_full_faithful' [Full G] [Faithful G] [Initial (F ⋙ G)] : Initial G :=
   have := initial_of_comp_full_faithful F G
   initial_of_initial_comp F G
-
-/--
-theorem `final_iff_comp_final_full_faithful` / 定理 `final_iff_comp_final_full_faithful`
-
-English:
-theorem final_iff_comp_final_full_faithful
-  given: [Final G] [Full G] [Faithful G]
-  proof: ⟨fun _ => final_comp _ _, fun _ => final_of_comp_full_faithful F G⟩
-
-中文:
-定理 final_iff_comp_final_full_faithful
-  条件: [终 G] [满 G] [忠实 G]
-  证明: ⟨fun _ => final_comp _ _, fun _ => final_of_comp_full_faithful F G⟩
-
-Depends on / 依赖: final_comp, final_of_comp_full_faithful
+/-
+**CategoryTheory.Functor.final_iff_comp_final_full_faithful** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Functor`。
+形式化陈述：final_iff_comp_final_full_faithful [Final G] [Full G] [Faithful G] : Final
+ F ↔ Final (F ⋙ G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_comp_full_faithful`：final_of_comp_full_f
+aithful [Full G] [Faithful G] [Final (F ⋙ G)] : Final F where out d
 -/
 theorem final_iff_comp_final_full_faithful [Final G] [Full G] [Faithful G] :
     Final F ↔ Final (F ⋙ G) :=
   ⟨fun _ => final_comp _ _, fun _ => final_of_comp_full_faithful F G⟩
-
-/--
-theorem `initial_iff_comp_initial_full_faithful` / 定理 `initial_iff_comp_initial_full_faithful`
-
-English:
-theorem initial_iff_comp_initial_full_faithful
-  given: [Initial G] [Full G] [Faithful G]
-  proof: ⟨fun _ => initial_comp _ _, fun _ => initial_of_comp_full_faithful F G⟩
-
-中文:
-定理 initial_iff_comp_initial_full_faithful
-  条件: [初始 G] [满 G] [忠实 G]
-  证明: ⟨fun _ => initial_comp _ _, fun _ => initial_of_comp_full_faithful F G⟩
-
-Depends on / 依赖: initial_comp, initial_of_comp_full_faithful
+/-
+**CategoryTheory.Functor.initial_iff_comp_initial_full_faithful** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：initial_iff_comp_initial_full_faithful [Initial G] [Full G] [Faithful G] :
+ Initial F ↔ Initial (F ⋙ G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_of_comp_full_faithful`：initial_of_comp_fu
+ll_faithful [Full G] [Faithful G] [Initial (F ⋙ G)] : Initial F where out d
 -/
 theorem initial_iff_comp_initial_full_faithful [Initial G] [Full G] [Faithful G] :
     Initial F ↔ Initial (F ⋙ G) :=
   ⟨fun _ => initial_comp _ _, fun _ => initial_of_comp_full_faithful F G⟩
-
-/--
-theorem `final_iff_final_comp` / 定理 `final_iff_final_comp`
-
-English:
-theorem final_iff_final_comp
-  given: [Final F]
-  statement: Final G ↔ Final (F ⋙ G)
-  proof: ⟨fun _ => final_comp _ _, fun _ => final_of_final_comp F G⟩
-
-中文:
-定理 final_iff_final_comp
-  条件: [终 F]
-  结论: 终 G ↔ 终 (F ⋙ G)
-  证明: ⟨fun _ => final_comp _ _, fun _ => final_of_final_comp F G⟩
-
-Depends on / 依赖: final_comp, final_of_final_comp
+/-
+**CategoryTheory.Functor.final_iff_final_comp** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：final_iff_final_comp [Final F] : Final G ↔ Final (F ⋙ G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_final_comp`：final_of_final_comp [hF : Fi
+nal F] [hFG : Final (F ⋙ G)] : Final G
 -/
 theorem final_iff_final_comp [Final F] : Final G ↔ Final (F ⋙ G) :=
   ⟨fun _ => final_comp _ _, fun _ => final_of_final_comp F G⟩
-
-/--
-theorem `initial_iff_initial_comp` / 定理 `initial_iff_initial_comp`
-
-English:
-theorem initial_iff_initial_comp
-  given: [Initial F]
-  statement: Initial G ↔ Initial (F ⋙ G)
-  proof: ⟨fun _ => initial_comp _ _, fun _ => initial_of_initial_comp F G⟩
-
-中文:
-定理 initial_iff_initial_comp
-  条件: [初始 F]
-  结论: 初始 G ↔ 初始 (F ⋙ G)
-  证明: ⟨fun _ => initial_comp _ _, fun _ => initial_of_initial_comp F G⟩
-
-Depends on / 依赖: initial_comp, initial_of_initial_comp
+/-
+**CategoryTheory.Functor.initial_iff_initial_comp** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：initial_iff_initial_comp [Initial F] : Initial G ↔ Initial (F ⋙ G)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.initial_of_initial_comp`：initial_of_initial_comp 
+[Initial F] [Initial (F ⋙ G)] : Initial G
 -/
 theorem initial_iff_initial_comp [Initial F] : Initial G ↔ Initial (F ⋙ G) :=
   ⟨fun _ => initial_comp _ _, fun _ => initial_of_initial_comp F G⟩
@@ -2672,94 +2383,65 @@ section
 
 variable {C : Type u₁} [Category.{v₁} C] {c : C}
 
-/--
-lemma `final_fromPUnit_of_isTerminal` / 引理 `final_fromPUnit_of_isTerminal`
-
-English:
-lemma final_fromPUnit_of_isTerminal
-  given: (hc : Limits.IsTerminal c)
-  statement: (fromPUnit c).Final where
-  proof: by
-    let : Inhabited (StructuredArrow c' (fromPUnit c)) := ⟨.mk (Y := default) (hc.from c')⟩
-    let : Subsingleton (StructuredArrow c' (fromPUnit c)) :=
-      ⟨fun i j => StructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
-    infer_instance
-
-中文:
-引理 final_fromPUnit_of_isTerminal
-  条件: (hc : Limits.是终止 c)
-  结论: (fromPUnit c).终 where
-  证明: by
-    let : Inhabited (StructuredArrow c' (fromPUnit c)) := ⟨.mk (Y := default) (hc.from c')⟩
-    let : Subsingleton (StructuredArrow c' (fromPUnit c)) :=
-      ⟨fun i j => StructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
-    infer_instance
-
-Depends on / 依赖: Inhabited, StructuredArrow, StructuredArrow.obj_ext, Subsingleton, cat_disch, fromPUnit, hc.from, hc.hom_ext, hom_ext, infer_instance, obj_ext
+/-
+**CategoryTheory.Functor.final_fromPUnit_of_isTerminal** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Functor`。
+形式化陈述：final_fromPUnit_of_isTerminal (hc : Limits.IsTerminal c) : (fromPUnit c).F
+inal where out c'
+参数：hc : Limits.IsTerminal c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StructuredArrow.obj_ext`：obj_ext (x y : StructuredArrow S
+ T) (hr : x.right = y.right) (hh : x.hom ≫ T.map (eqToHom hr) = y.hom) : x = y
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.Discrete.instSubsingleton`：∀ {α : Type u₁} [Subsingleton 
+α], Subsingleton (CategoryTheory.Discrete α)
+· 使用定理 `instSubsingletonPUnit`：Subsingleton PUnit.{u_1}
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
+· 使用定理 `CategoryTheory.isConnected_of_nonempty_and_subsingleton`：∀ {J : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} J] [Nonempty J] [Subsingleton J], Cate
+goryTheory.IsConnected J
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 lemma final_fromPUnit_of_isTerminal (hc : Limits.IsTerminal c) : (fromPUnit c).Final where
   out c' := by
     let : Inhabited (StructuredArrow c' (fromPUnit c)) := ⟨.mk (Y := default) (hc.from c')⟩
     let : Subsingleton (StructuredArrow c' (fromPUnit c)) :=
-      ⟨fun i j => StructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
+      ⟨fun i j ↦ StructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
     infer_instance
-
-/--
-lemma `initial_fromPUnit_of_isInitial` / 引理 `initial_fromPUnit_of_isInitial`
-
-English:
-lemma initial_fromPUnit_of_isInitial
-  given: (hc : Limits.IsInitial c)
-  statement: (fromPUnit c).Initial where
-  proof: by
-    let : Inhabited (CostructuredArrow (fromPUnit c) c') := ⟨.mk (Y := default) (hc.to c')⟩
-    let : Subsingleton (CostructuredArrow (fromPUnit c) c') :=
-      ⟨fun i j => CostructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
-    infer_instance
-
-中文:
-引理 initial_fromPUnit_of_isInitial
-  条件: (hc : Limits.IsInitial c)
-  结论: (fromPUnit c).初始 where
-  证明: by
-    let : Inhabited (CostructuredArrow (fromPUnit c) c') := ⟨.mk (Y := default) (hc.to c')⟩
-    let : Subsingleton (CostructuredArrow (fromPUnit c) c') :=
-      ⟨fun i j => CostructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
-    infer_instance
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.obj_ext, Inhabited, Subsingleton, cat_disch, fromPUnit, hc.hom_ext, hc.to, hom_ext, infer_instance, obj_ext
+/-
+**CategoryTheory.Functor.initial_fromPUnit_of_isInitial** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Functor`。
+形式化陈述：initial_fromPUnit_of_isInitial (hc : Limits.IsInitial c) : (fromPUnit c).I
+nitial where out c'
+参数：hc : Limits.IsInitial c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.obj_ext`：obj_ext (x y : CostructuredArr
+ow S T) (hl : x.left = y.left) (hh : S.map (eqToHom hl) ≫ y.hom = x.hom) : x = y
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.Discrete.instSubsingleton`：∀ {α : Type u₁} [Subsingleton 
+α], Subsingleton (CategoryTheory.Discrete α)
+· 使用定理 `instSubsingletonPUnit`：Subsingleton PUnit.{u_1}
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
+· 使用定理 `CategoryTheory.isConnected_of_nonempty_and_subsingleton`：∀ {J : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} J] [Nonempty J] [Subsingleton J], Cate
+goryTheory.IsConnected J
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
 lemma initial_fromPUnit_of_isInitial (hc : Limits.IsInitial c) : (fromPUnit c).Initial where
   out c' := by
     let : Inhabited (CostructuredArrow (fromPUnit c) c') := ⟨.mk (Y := default) (hc.to c')⟩
     let : Subsingleton (CostructuredArrow (fromPUnit c) c') :=
-      ⟨fun i j => CostructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
+      ⟨fun i j ↦ CostructuredArrow.obj_ext _ _ (by cat_disch) (hc.hom_ext _ _)⟩
     infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasTerminal
-  signature: C] {D
-  body: have : (fromPUnit.{0} (⊤_ C)).Final := final_fromPUnit_of_isTerminal terminalIsTerminal
-  have : (fromPUnit.{0} (F.obj (⊤_ C))).Final := final_fromPUnit_of_isTerminal
-    (terminalIsTerminal.isTerminalObj F (⊤_ C))
-  have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F.obj (⊤_ C)))
-    (Discrete.natIso (fun _ => Iso.refl _))
-  final_of_final_comp (fromPUnit.{0} (⊤_ C)) F
-
-中文:
-实例 [有终止
-  签名: C] {D
-  定义体: have : (fromPUnit.{0} (⊤_ C)).Final := final_fromPUnit_of_isTerminal terminalIsTerminal
-  have : (fromPUnit.{0} (F.obj (⊤_ C))).Final := final_fromPUnit_of_isTerminal
-    (terminalIsTerminal.isTerminalObj F (⊤_ C))
-  have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F.obj (⊤_ C)))
-    (Discrete.natIso (fun _ => Iso.refl _))
-  final_of_final_comp (fromPUnit.{0} (⊤_ C)) F
-
-Depends on / 依赖: Discrete, Discrete.natIso, F.obj, Iso.refl, final_fromPUnit_of_isTerminal, final_of_final_comp, final_of_natIso, fromPUnit, isTerminalObj, natIso, terminalIsTerminal, terminalIsTerminal.isTerminalObj
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasTerminal C] {D : Type u₂} [Category.{v₂} D] (F : C ⥤ D)
     [PreservesLimit (Functor.empty.{0} C) F] : F.Final :=
@@ -2769,31 +2451,9 @@ instance [HasTerminal C] {D : Type u₂} [Category.{v₂} D] (F : C ⥤ D)
   have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F.obj (⊤_ C)))
     (Discrete.natIso (fun _ => Iso.refl _))
   final_of_final_comp (fromPUnit.{0} (⊤_ C)) F
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasInitial
-  signature: C] {D
-  body: have : (fromPUnit.{0} (⊥_ C)).Initial := initial_fromPUnit_of_isInitial initialIsInitial
-  have : (fromPUnit.{0} (F.obj (⊥_ C))).Initial := initial_fromPUnit_of_isInitial
-    (initialIsInitial.isInitialObj F (⊥_ C))
-  have : ((fromPUnit.{0} (⊥_ C)) ⋙ F).Initial := initial_of_natIso
-    (F := fromPUnit.{0} (F.obj (⊥_ C))) (Discrete.natIso (fun _ => Iso.refl _))
-  initial_of_initial_comp (fromPUnit.{0} (⊥_ C)) F
-
-中文:
-实例 [HasInitial
-  签名: C] {D
-  定义体: have : (fromPUnit.{0} (⊥_ C)).Initial := initial_fromPUnit_of_isInitial initialIsInitial
-  have : (fromPUnit.{0} (F.obj (⊥_ C))).Initial := initial_fromPUnit_of_isInitial
-    (initialIsInitial.isInitialObj F (⊥_ C))
-  have : ((fromPUnit.{0} (⊥_ C)) ⋙ F).Initial := initial_of_natIso
-    (F := fromPUnit.{0} (F.obj (⊥_ C))) (Discrete.natIso (fun _ => Iso.refl _))
-  initial_of_initial_comp (fromPUnit.{0} (⊥_ C)) F
-
-Depends on / 依赖: Discrete, Discrete.natIso, F.obj, Initial, Iso.refl, fromPUnit, initialIsInitial, initialIsInitial.isInitialObj, initial_fromPUnit_of_isInitial, initial_of_initial_comp, initial_of_natIso, isInitialObj, natIso
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasInitial C] {D : Type u₂} [Category.{v₂} D] (F : C ⥤ D)
     [PreservesColimit (Functor.empty.{0} C) F] : F.Initial :=
@@ -2810,15 +2470,28 @@ section
 
 variable {C D : Type*} [Category* C] [Category* D]
 
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ Dᵒᵖ) [Initial F] : F.leftOp.Final :=
   inferInstanceAs (F.op ⋙ (opOpEquivalence D).functor).Final
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ Dᵒᵖ) [Final F] : F.leftOp.Initial :=
   inferInstanceAs (F.op ⋙ (opOpEquivalence D).functor).Initial
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : Cᵒᵖ ⥤ D) [Initial F] : F.rightOp.Final :=
   inferInstanceAs ((opOpEquivalence C).inverse ⋙ F.op).Final
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : Cᵒᵖ ⥤ D) [Final F] : F.rightOp.Initial :=
   inferInstanceAs ((opOpEquivalence C).inverse ⋙ F.op).Initial
 
@@ -2834,56 +2507,71 @@ variable {C : Type u₁} [Category.{v₁} C]
 variable {D : Type u₂} [Category.{v₂} D]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `IsFilteredOrEmpty.of_final` / 定理 `IsFilteredOrEmpty.of_final`
+/-- Final functors preserve filteredness.
 
-English:
-theorem IsFilteredOrEmpty.of_final
-  given: (F : C ⥤ D) [Final F] [IsFilteredOrEmpty C]
-  proof: ⟨F.obj (IsFiltered.max (Final.lift F X) (Final.lift F Y)),
-    Final.homToLift F X ≫ F.map (IsFiltered.leftToMax _ _),
-    ⟨Final.homToLift F Y ≫ F.map (IsFiltered.rightToMax _ _), trivial⟩⟩
-  cocone_maps {X Y} f g := by
-    let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.right ⟶ Z)
-      (q₂ : Final.lift F Y ⟶ Z), h.hom ≫ F.map q₁ = f ≫ Final.homToLift F Y ≫ F.map q₂
-    rsuffices ⟨Z, q₁, q₂, h⟩ : Nonempty (P (StructuredArrow.mk (g ≫ Final.homToLift F Y)))
-    · refine ⟨F.obj (IsFiltered.coeq q₁ q₂),
-        Final.homToLift F Y ≫ F.map (q₁ ≫ IsFiltered.coeqHom q₁ q₂), ?_⟩
-      conv_lhs => rw [IsFiltered.coeq_condition]
-      simp only [F.map_comp, ← reassoc_of% h, StructuredArrow.mk_hom_eq_self, Category.assoc]
-    have h₀ : P (StructuredArrow.mk (f ≫ Final.homToLift F Y)) := ⟨_, 𝟙 _, 𝟙 _, by simp⟩
-    refine isPreconnected_induction P ?_ ?_ h₀ _
-    · rintro U V h ⟨Z, q₁, q₂, hq⟩
-      obtain ⟨W, q₃, q₄, hq'⟩ := IsFiltered.span q₁ h.right
-      refine ⟨W, q₄, q₂ ≫ q₃, ?_⟩
-      rw [F.map_comp]; rw [← reassoc_of% hq]; rw [← F.map_comp]; rw [hq']; rw [F.map_comp]; rw [StructuredArrow.w_assoc]
-    · rintro U V h ⟨Z, q₁, q₂, hq⟩
-      exact ⟨Z, h.right ≫ q₁, q₂, by simp only [F.map_comp, StructuredArrow.w_assoc, hq]⟩
+This can be seen as a generalization of `IsFiltered.of_right_adjoint` (which states that right
+adjoints preserve filteredness), as right adjoints are always final, see `final_of_adjunction`.
+-/
+/-
+**CategoryTheory.IsFilteredOrEmpty.of_final** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsFilteredOrEmpty`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [F.Final] [CategoryTheory.IsFilteredOrEmpty C], CategoryTheory.IsFilteredOrEmpt
+y D
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.isPreconnected_induction`：isPreconnected_induction [IsPre
+connected J] (Z : J -> Sort*) (h₁ : forall {j₁ j₂ : J} (_ : j₁ ⟶ j₂), Z j₁ -> Z 
+j₂) (h₂ : forall {j₁ j₂ : J} …
+· 使用定理 `CategoryTheory.IsConnected.toIsPreconnected`：∀ {J : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} J} [self : CategoryTheory.IsConnected J],   Catego
+ryTheory.IsPreconnected J
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.IsFiltered.span`：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ 
+j') : exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g'
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.StructuredArrow.w_assoc`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {S : D} {T : Categ…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.IsFiltered.coeq_condition`：coeq_condition {j j' : C} (f f
+' : j ⟶ j') : f ≫ coeqHom f f' = f' ≫ coeqHom f f'
 
-中文:
-定理 是FilteredOrEmpty.of_final
-  条件: (F : C ⥤ D) [终 F] [是FilteredOrEmpty C]
-  证明: ⟨F.obj (IsFiltered.max (Final.lift F X) (Final.lift F Y)),
-    Final.homToLift F X ≫ F.map (IsFiltered.leftToMax _ _),
-    ⟨Final.homToLift F Y ≫ F.map (IsFiltered.rightToMax _ _), trivial⟩⟩
-  cocone_maps {X Y} f g := by
-    let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.right ⟶ Z)
-      (q₂ : Final.lift F Y ⟶ Z), h.hom ≫ F.map q₁ = f ≫ Final.homToLift F Y ≫ F.map q₂
-    rsuffices ⟨Z, q₁, q₂, h⟩ : Nonempty (P (StructuredArrow.mk (g ≫ Final.homToLift F Y)))
-    · refine ⟨F.obj (IsFiltered.coeq q₁ q₂),
-        Final.homToLift F Y ≫ F.map (q₁ ≫ IsFiltered.coeqHom q₁ q₂), ?_⟩
-      conv_lhs => rw [IsFiltered.coeq_condition]
-      simp only [F.map_comp, ← reassoc_of% h, StructuredArrow.mk_hom_eq_self, Category.assoc]
-    have h₀ : P (StructuredArrow.mk (f ≫ Final.homToLift F Y)) := ⟨_, 𝟙 _, 𝟙 _, by simp⟩
-    refine isPreconnected_induction P ?_ ?_ h₀ _
-    · rintro U V h ⟨Z, q₁, q₂, hq⟩
-      obtain ⟨W, q₃, q₄, hq'⟩ := IsFiltered.span q₁ h.right
-      refine ⟨W, q₄, q₂ ≫ q₃, ?_⟩
-      rw [F.map_comp]; rw [← reassoc_of% hq]; rw [← F.map_comp]; rw [hq']; rw [F.map_comp]; rw [StructuredArrow.w_assoc]
-    · rintro U V h ⟨Z, q₁, q₂, hq⟩
-      exact ⟨Z, h.right ≫ q₁, q₂, by simp only [F.map_comp, StructuredArrow.w_assoc, hq]⟩
+--- 原说明 ---
+Final functors preserve filteredness.
 
-Depends on / 依赖: F.obj, Final.lift, IsFiltered, IsFiltered.max
+This can be seen as a generalization of `IsFiltered.of_right_adjoint` (which sta
+tes that right
+adjoints preserve filteredness), as right adjoints are always final, see `final_
+of_adjunction`.
 -/
 theorem IsFilteredOrEmpty.of_final (F : C ⥤ D) [Final F] [IsFilteredOrEmpty C] :
     IsFilteredOrEmpty D where
@@ -2891,7 +2579,7 @@ theorem IsFilteredOrEmpty.of_final (F : C ⥤ D) [Final F] [IsFilteredOrEmpty C]
     Final.homToLift F X ≫ F.map (IsFiltered.leftToMax _ _),
     ⟨Final.homToLift F Y ≫ F.map (IsFiltered.rightToMax _ _), trivial⟩⟩
   cocone_maps {X Y} f g := by
-    let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.right ⟶ Z)
+    let P : StructuredArrow X F → Prop := fun h => ∃ (Z : C) (q₁ : h.right ⟶ Z)
       (q₂ : Final.lift F Y ⟶ Z), h.hom ≫ F.map q₁ = f ≫ Final.homToLift F Y ≫ F.map q₂
     rsuffices ⟨Z, q₁, q₂, h⟩ : Nonempty (P (StructuredArrow.mk (g ≫ Final.homToLift F Y)))
     · refine ⟨F.obj (IsFiltered.coeq q₁ q₂),
@@ -2903,73 +2591,108 @@ theorem IsFilteredOrEmpty.of_final (F : C ⥤ D) [Final F] [IsFilteredOrEmpty C]
     · rintro U V h ⟨Z, q₁, q₂, hq⟩
       obtain ⟨W, q₃, q₄, hq'⟩ := IsFiltered.span q₁ h.right
       refine ⟨W, q₄, q₂ ≫ q₃, ?_⟩
-      rw [F.map_comp]; rw [← reassoc_of% hq]; rw [← F.map_comp]; rw [hq']; rw [F.map_comp]; rw [StructuredArrow.w_assoc]
+      rw [F.map_comp, ← reassoc_of% hq, ← F.map_comp, hq', F.map_comp, StructuredArrow.w_assoc]
     · rintro U V h ⟨Z, q₁, q₂, hq⟩
       exact ⟨Z, h.right ≫ q₁, q₂, by simp only [F.map_comp, StructuredArrow.w_assoc, hq]⟩
 
-/--
-theorem `IsFiltered.of_final` / 定理 `IsFiltered.of_final`
+/-- Final functors preserve filteredness.
 
-English:
-theorem IsFiltered.of_final
-  given: (F : C ⥤ D) [Final F] [IsFiltered C]
-  statement: IsFiltered D
-  proof: { IsFilteredOrEmpty.of_final F with
-  nonempty := Nonempty.map F.obj IsFiltered.nonempty }
+This can be seen as a generalization of `IsFiltered.of_right_adjoint` (which states that right
+adjoints preserve filteredness), as right adjoints are always final, see `final_of_adjunction`.
+-/
+/-
+**CategoryTheory.IsFiltered.of_final** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sFiltered`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [F.Final] [CategoryTheory.IsFiltered C], CategoryTheory.IsFiltered D
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.of_final`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `CategoryTheory.IsFiltered.nonempty`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} [self : CategoryTheory.IsFiltered C], Nonempty C
 
-中文:
-定理 是Filtered.of_final
-  条件: (F : C ⥤ D) [终 F] [是Filtered C]
-  结论: 是Filtered D
-  证明: { IsFilteredOrEmpty.of_final F with
-  nonempty := Nonempty.map F.obj IsFiltered.nonempty }
+--- 原说明 ---
+Final functors preserve filteredness.
 
-Depends on / 依赖: F.obj, IsFiltered, IsFiltered.nonempty, IsFilteredOrEmpty, IsFilteredOrEmpty.of_final, Nonempty, Nonempty.map, nonempty, of_final
+This can be seen as a generalization of `IsFiltered.of_right_adjoint` (which sta
+tes that right
+adjoints preserve filteredness), as right adjoints are always final, see `final_
+of_adjunction`.
 -/
 theorem IsFiltered.of_final (F : C ⥤ D) [Final F] [IsFiltered C] : IsFiltered D :=
 { IsFilteredOrEmpty.of_final F with
   nonempty := Nonempty.map F.obj IsFiltered.nonempty }
 
-/--
-theorem `IsCofilteredOrEmpty.of_initial` / 定理 `IsCofilteredOrEmpty.of_initial`
+/-- Initial functors preserve cofilteredness.
 
-English:
-theorem IsCofilteredOrEmpty.of_initial
-  given: (F : C ⥤ D) [Initial F] [IsCofilteredOrEmpty C]
-  proof: have : IsFilteredOrEmpty Dᵒᵖ := IsFilteredOrEmpty.of_final F.op
-  isCofilteredOrEmpty_of_isFilteredOrEmpty_op _
+This can be seen as a generalization of `IsCofiltered.of_left_adjoint` (which states that left
+adjoints preserve cofilteredness), as right adjoints are always initial,
+see `initial_of_adjunction`.
+-/
+/-
+**CategoryTheory.IsCofilteredOrEmpty.of_initial** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.IsCofilteredOrEmpty`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [F.Initial] [CategoryTheory.IsCofilteredOrEmpty C],   CategoryTheory.IsCofilter
+edOrEmpty D
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFilteredOrEmpty.of_final`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   (F : CategoryTheor…
+· 使用引理 `CategoryTheory.isCofilteredOrEmpty_of_isFilteredOrEmpty_op`：isCofiltered
+OrEmpty_of_isFilteredOrEmpty_op [IsFilteredOrEmpty Cᵒᵖ] : IsCofilteredOrEmpty C
 
-中文:
-定理 是余filteredOrEmpty.of_initial
-  条件: (F : C ⥤ D) [初始 F] [是余filteredOrEmpty C]
-  证明: have : IsFilteredOrEmpty Dᵒᵖ := IsFilteredOrEmpty.of_final F.op
-  isCofilteredOrEmpty_of_isFilteredOrEmpty_op _
+--- 原说明 ---
+Initial functors preserve cofilteredness.
 
-Depends on / 依赖: F.op, IsFilteredOrEmpty, IsFilteredOrEmpty.of_final, isCofilteredOrEmpty_of_isFilteredOrEmpty_op, of_final
+This can be seen as a generalization of `IsCofiltered.of_left_adjoint` (which st
+ates that left
+adjoints preserve cofilteredness), as right adjoints are always initial,
+see `initial_of_adjunction`.
 -/
 theorem IsCofilteredOrEmpty.of_initial (F : C ⥤ D) [Initial F] [IsCofilteredOrEmpty C] :
     IsCofilteredOrEmpty D :=
   have : IsFilteredOrEmpty Dᵒᵖ := IsFilteredOrEmpty.of_final F.op
   isCofilteredOrEmpty_of_isFilteredOrEmpty_op _
 
-/--
-theorem `IsCofiltered.of_initial` / 定理 `IsCofiltered.of_initial`
+/-- Initial functors preserve cofilteredness.
 
-English:
-theorem IsCofiltered.of_initial
-  given: (F : C ⥤ D) [Initial F] [IsCofiltered C]
-  statement: IsCofiltered D
-  proof: have : IsFiltered Dᵒᵖ := IsFiltered.of_final F.op
-  isCofiltered_of_isFiltered_op _
+This can be seen as a generalization of `IsCofiltered.of_left_adjoint` (which states that left
+adjoints preserve cofilteredness), as right adjoints are always initial,
+see `initial_of_adjunction`.
+-/
+/-
+**CategoryTheory.IsCofiltered.of_initial** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.IsCofiltered`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [F.Initial] [CategoryTheory.IsCofiltered C], CategoryTheory.IsCofiltered D
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_final`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   (F : CategoryTheor…
+· 使用引理 `CategoryTheory.isCofiltered_of_isFiltered_op`：isCofiltered_of_isFiltered
+_op [IsFiltered Cᵒᵖ] : IsCofiltered C
 
-中文:
-定理 是余filtered.of_initial
-  条件: (F : C ⥤ D) [初始 F] [是余filtered C]
-  结论: 是余filtered D
-  证明: have : IsFiltered Dᵒᵖ := IsFiltered.of_final F.op
-  isCofiltered_of_isFiltered_op _
+--- 原说明 ---
+Initial functors preserve cofilteredness.
 
-Depends on / 依赖: F.op, IsFiltered, IsFiltered.of_final, isCofiltered_of_isFiltered_op, of_final
+This can be seen as a generalization of `IsCofiltered.of_left_adjoint` (which st
+ates that left
+adjoints preserve cofilteredness), as right adjoints are always initial,
+see `initial_of_adjunction`.
 -/
 theorem IsCofiltered.of_initial (F : C ⥤ D) [Initial F] [IsCofiltered C] : IsCofiltered D :=
   have : IsFiltered Dᵒᵖ := IsFiltered.of_final F.op
@@ -2985,26 +2708,29 @@ variable {E : Type u₃} [Category.{v₃} E]
 
 open CategoryTheory.Functor
 
-/--
-Instance `StructuredArrow.final_pre` / 实例 `StructuredArrow.final_pre`
+/-- The functor `StructuredArrow.pre X T S` is final if `T` is final. -/
+/-
+**CategoryTheory.StructuredArrow.final_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.StructuredArrow`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (T : CategoryTheory.Functor C D) [T.Final]   (S : Ca
+tegoryTheory.Functor D E) (X : E), (CategoryTheory.StructuredArrow.pre X T S).Fi
+nal
+参数：T : CategoryTheory.Functor C D；S : CategoryTheory.Functor D E；X : E；CategoryT
+heory.StructuredArrow.pre X T S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.isConnected_iff_of_equivalence`：isConnected_iff_of_equiva
+lence {K : Type u₂} [Category.{v₂} K] (e : J ≌ K) : IsConnected J ↔ IsConnected 
+K
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 
-English:
-instance StructuredArrow.final_pre
-  signature: (T : C ⥤ D) [Final T] (S : D ⥤ E) (X : E)
-  body: by
-  refine ⟨fun f => ?_⟩
-  rw [isConnected_iff_of_equivalence (StructuredArrow.preEquivalence T f)]
-  exact Final.out f.right
-
-中文:
-实例 结构化箭头.final_pre
-  签名: (T : C ⥤ D) [终 T] (S : D ⥤ E) (X : E)
-  定义体: by
-  refine ⟨fun f => ?_⟩
-  rw [isConnected_iff_of_equivalence (StructuredArrow.preEquivalence T f)]
-  exact Final.out f.right
-
-Depends on / 依赖: Final.out, StructuredArrow, StructuredArrow.preEquivalence, f.right, isConnected_iff_of_equivalence, preEquivalence
+--- 原说明 ---
+The functor `StructuredArrow.pre X T S` is final if `T` is final.
 -/
 instance StructuredArrow.final_pre (T : C ⥤ D) [Final T] (S : D ⥤ E) (X : E) :
     Final (pre X T S) := by
@@ -3012,26 +2738,29 @@ instance StructuredArrow.final_pre (T : C ⥤ D) [Final T] (S : D ⥤ E) (X : E)
   rw [isConnected_iff_of_equivalence (StructuredArrow.preEquivalence T f)]
   exact Final.out f.right
 
-/--
-Instance `CostructuredArrow.initial_pre` / 实例 `CostructuredArrow.initial_pre`
+/-- The functor `CostructuredArrow.pre X T S` is initial if `T` is initial. -/
+/-
+**CategoryTheory.CostructuredArrow.initial_pre** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.CostructuredArrow`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (T : CategoryTheory.Functor C D) [T.Initial]   (S : 
+CategoryTheory.Functor D E) (X : E), (CategoryTheory.CostructuredArrow.pre T S X
+).Initial
+参数：T : CategoryTheory.Functor C D；S : CategoryTheory.Functor D E；X : E；CategoryT
+heory.CostructuredArrow.pre T S X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.isConnected_iff_of_equivalence`：isConnected_iff_of_equiva
+lence {K : Type u₂} [Category.{v₂} K] (e : J ≌ K) : IsConnected J ↔ IsConnected 
+K
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 
-English:
-instance CostructuredArrow.initial_pre
-  signature: (T : C ⥤ D) [Initial T] (S : D ⥤ E) (X : E)
-  body: by
-  refine ⟨fun f => ?_⟩
-  rw [isConnected_iff_of_equivalence (CostructuredArrow.preEquivalence T f)]
-  exact Initial.out f.left
-
-中文:
-实例 CostructuredArrow.initial_pre
-  签名: (T : C ⥤ D) [初始 T] (S : D ⥤ E) (X : E)
-  定义体: by
-  refine ⟨fun f => ?_⟩
-  rw [isConnected_iff_of_equivalence (CostructuredArrow.preEquivalence T f)]
-  exact Initial.out f.left
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.preEquivalence, Initial, Initial.out, f.left, isConnected_iff_of_equivalence, preEquivalence
+--- 原说明 ---
+The functor `CostructuredArrow.pre X T S` is initial if `T` is initial.
 -/
 instance CostructuredArrow.initial_pre (T : C ⥤ D) [Initial T] (S : D ⥤ E) (X : E) :
     Initial (CostructuredArrow.pre T S X) := by
@@ -3050,40 +2779,25 @@ variable (F : D ⥤ Cat) (G : C ⥤ D)
 open CategoryTheory.Functor
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Grothendieck.structuredArrowToStructuredArrowPre` / `Grothendieck.structuredArrowToStructuredArrowPre` 的定义
+/-- A prefunctor mapping structured arrows on `G` to structured arrows on `pre F G` with their
+action on fibers being the identity. -/
+/-
+**CategoryTheory.Grothendieck.structuredArrowToStructuredArrowPre** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Grothendieck`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Cat
+egoryTheory.Functor D CategoryTheory.Cat) →           (G : CategoryTheory.Functo
+r C D) →             (d : D) →               (f : ↑(F.obj d)) →                 
+CategoryTheory.StructuredArrow d G ⥤q                   CategoryTheory.Structure
+dArrow { base := d, fiber := f } (CategoryTheory.Grothendieck.pre F G)
+参数：F : CategoryTheory.Functor D CategoryTheory.Cat；G : CategoryTheory.Functor C 
+D；d : D；f : ↑(F.obj d)；CategoryTheory.Grothendieck.pre F G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Grothendieck.structuredArrowToStructuredArrowPre
-  signature: (d : D) (f : F.obj d)
-  body: fun X => StructuredArrow.mk (Y := ⟨X.right, (F.map X.hom).toFunctor.obj f⟩)
-    (Grothendieck.Hom.mk (by exact X.hom) (by dsimp; exact 𝟙 _))
-  map := fun g => StructuredArrow.homMk
-    (Grothendieck.Hom.mk (by exact g.right)
-      (eqToHom (by
-        dsimp +instances
-        rw [← StructuredArrow.w g]; rw [map_comp]; rw [Cat.Hom.comp_obj])))
-    (by
-      simp only [StructuredArrow.mk_right]
-      generalize_proofs
-      apply Grothendieck.ext <;> simp)
-
-中文:
-定义 Grothendieck.structuredArrowToStructuredArrowPre
-  签名: (d : D) (f : F.obj d)
-  定义体: fun X => StructuredArrow.mk (Y := ⟨X.right, (F.map X.hom).toFunctor.obj f⟩)
-    (Grothendieck.Hom.mk (by exact X.hom) (by dsimp; exact 𝟙 _))
-  map := fun g => StructuredArrow.homMk
-    (Grothendieck.Hom.mk (by exact g.right)
-      (eqToHom (by
-        dsimp +instances
-        rw [← StructuredArrow.w g]; rw [map_comp]; rw [Cat.Hom.comp_obj])))
-    (by
-      simp only [StructuredArrow.mk_right]
-      generalize_proofs
-      apply Grothendieck.ext <;> simp)
-
-Depends on / 依赖: F.map, StructuredArrow, StructuredArrow.mk, X.hom, X.right, toFunctor, toFunctor.obj
+--- 原说明 ---
+A prefunctor mapping structured arrows on `G` to structured arrows on `pre F G` 
+with their
+action on fibers being the identity.
 -/
 def Grothendieck.structuredArrowToStructuredArrowPre (d : D) (f : F.obj d) :
     StructuredArrow d G ⥤q StructuredArrow ⟨d, f⟩ (pre F G) where
@@ -3093,7 +2807,7 @@ def Grothendieck.structuredArrowToStructuredArrowPre (d : D) (f : F.obj d) :
     (Grothendieck.Hom.mk (by exact g.right)
       (eqToHom (by
         dsimp +instances
-        rw [← StructuredArrow.w g]; rw [map_comp]; rw [Cat.Hom.comp_obj])))
+        rw [← StructuredArrow.w g, map_comp, Cat.Hom.comp_obj])))
     (by
       simp only [StructuredArrow.mk_right]
       generalize_proofs
@@ -3101,56 +2815,63 @@ def Grothendieck.structuredArrowToStructuredArrowPre (d : D) (f : F.obj d) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Grothendieck.final_pre` / 实例 `Grothendieck.final_pre`
-
-English:
-instance Grothendieck.final_pre
-  signature: [hG : Final G]
-  body: by
-  constructor
-  rintro ⟨d, f⟩
-  let ⟨u, c, g⟩ : Nonempty (StructuredArrow d G) := inferInstance
-  let : Nonempty (StructuredArrow ⟨d, f⟩ (pre F G)) :=
-    ⟨u, ⟨c, (F.map g).toFunctor.obj f⟩, ⟨(by exact g), (by exact 𝟙 _)⟩⟩
-  apply zigzag_isConnected
-  rintro ⟨⟨⟨⟩⟩, ⟨bi, fi⟩, ⟨gbi, gfi⟩⟩ ⟨⟨⟨⟩⟩, ⟨bj, fj⟩, ⟨gbj, gfj⟩⟩
-  dsimp +instances at fj fi gfi gbi gbj gfj
-  apply Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bi, ((F.map gbi).toFunctor.obj f)⟩)
-      (Grothendieck.Hom.mk gbi (𝟙 _)))
-    (.of_zag (.inr ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
-      (eqToHom (by simp) ≫ gfi)) (by apply Grothendieck.ext <;> simp)⟩))
-  refine Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bj, ((F.map gbj).toFunctor.obj f)⟩)
-      (Grothendieck.Hom.mk gbj (𝟙 _))) ?_
-    (.of_zag (.inl ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
-      (eqToHom (by simp) ≫ gfj)) (by apply Grothendieck.ext <;> simp)⟩))
-  exact zigzag_prefunctor_obj_of_zigzag (Grothendieck.structuredArrowToStructuredArrowPre F G d f)
-    (isPreconnected_zigzag (.mk gbi) (.mk gbj))
-
-中文:
-实例 Grothendieck.final_pre
-  签名: [hG : 终 G]
-  定义体: by
-  constructor
-  rintro ⟨d, f⟩
-  let ⟨u, c, g⟩ : Nonempty (StructuredArrow d G) := inferInstance
-  let : Nonempty (StructuredArrow ⟨d, f⟩ (pre F G)) :=
-    ⟨u, ⟨c, (F.map g).toFunctor.obj f⟩, ⟨(by exact g), (by exact 𝟙 _)⟩⟩
-  apply zigzag_isConnected
-  rintro ⟨⟨⟨⟩⟩, ⟨bi, fi⟩, ⟨gbi, gfi⟩⟩ ⟨⟨⟨⟩⟩, ⟨bj, fj⟩, ⟨gbj, gfj⟩⟩
-  dsimp +instances at fj fi gfi gbi gbj gfj
-  apply Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bi, ((F.map gbi).toFunctor.obj f)⟩)
-      (Grothendieck.Hom.mk gbi (𝟙 _)))
-    (.of_zag (.inr ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
-      (eqToHom (by simp) ≫ gfi)) (by apply Grothendieck.ext <;> simp)⟩))
-  refine Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bj, ((F.map gbj).toFunctor.obj f)⟩)
-      (Grothendieck.Hom.mk gbj (𝟙 _))) ?_
-    (.of_zag (.inl ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
-      (eqToHom (by simp) ≫ gfj)) (by apply Grothendieck.ext <;> simp)⟩))
-  exact zigzag_prefunctor_obj_of_zigzag (Grothendieck.structuredArrowToStructuredArrowPre F G d f)
-    (isPreconnected_zigzag (.mk gbi) (.mk gbj))
-
-Depends on / 依赖: F.map, Grothendieck, Grothendieck.Hom.mk, Nonempty, StructuredArrow, StructuredArrow.h, StructuredArrow.mk, Zigzag, Zigzag.trans, instances, of_zag, toFunctor, toFunctor.obj, zigzag_isConnected
+/-
+**CategoryTheory.Grothendieck.final_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Grothendieck`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor D Ca
+tegoryTheory.Cat) (G : CategoryTheory.Functor C D) [hG : G.Final],   (CategoryTh
+eory.Grothendieck.pre F G).Final
+参数：F : CategoryTheory.Functor D CategoryTheory.Cat；G : CategoryTheory.Functor C 
+D；CategoryTheory.Grothendieck.pre F G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Final.instNonemptyStructuredArrow`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.zigzag_isConnected`：zigzag_isConnected [Nonempty J] (h : 
+forall j₁ j₂ : J, Zigzag j₁ j₂) : IsConnected J
+· 使用定理 `CategoryTheory.Zigzag.trans`：∀ {J : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} J] {j₁ j₂ j₃ : J},   CategoryTheory.Zigzag j₁ j₂ → CategoryTheory.
+Zigzag j₂ j₃ → Ca…
+· 使用定理 `CategoryTheory.Zigzag.of_zag`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {j₁ j₂ : J},   CategoryTheory.Zag j₁ j₂ → CategoryTheory.Zigza
+g j₁ j₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Grothendieck.ext`：ext {X Y : Grothendieck F} (f g : Hom X
+ Y) (w_base : f.base = g.base) (w_fiber : eqToHom (by rw [w_base]) ≫ f.fiber = g
+.fiber) : f = g
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.eqToHom_naturality_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {β : Sort u_1} {f g : β → C} (z : (b : β) → f b ⟶ g
+ b)   {j j' : β} (w : j = j')…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.eqToHom_trans_assoc`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {X Y Z : C} (p : X = Y) (q : Y = Z) {Z_1 : C} (h : Z ⟶ Z
+_1),   CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.zigzag_prefunctor_obj_of_zigzag`：zigzag_prefunctor_obj_of
+_zigzag (F : J ⥤q K) {j₁ j₂ : J} (h : Zigzag j₁ j₂) : Zigzag (F.obj j₁) (F.obj j
+₂)
+· 使用定理 `CategoryTheory.isPreconnected_zigzag`：isPreconnected_zigzag [IsPreconnec
+ted J] (j₁ j₂ : J) : Zigzag j₁ j₂
+· 使用定理 `CategoryTheory.IsConnected.toIsPreconnected`：∀ {J : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} J} [self : CategoryTheory.IsConnected J],   Catego
+ryTheory.IsPreconnected J
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 -/
 instance Grothendieck.final_pre [hG : Final G] : (Grothendieck.pre F G).Final := by
   constructor
@@ -3176,55 +2897,31 @@ open Limits
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Grothendieck.fiberwiseColimitMapCompEquivalence` / `Grothendieck.fiberwiseColimitMapCompEquivalence` 的定义
+/-- A natural transformation `α : F ⟶ G` between functors `F G : C ⥤ Cat` which is final on each
+fiber `(α.app X)` induces an equivalence of fiberwise colimits of `map α ⋙ H` and `H` for each
+functor `H : Grothendieck G ⥤ Type`. -/
+/-
+**CategoryTheory.Grothendieck.fiberwiseColimitMapCompEquivalence** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Grothendieck`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {F G :
+ CategoryTheory.Functor C CategoryTheory.Cat} →       (α : F ⟶ G) →         [∀ (
+X : C), (α.app X).toFunctor.Final] →           (H : CategoryTheory.Functor (Cate
+goryTheory.Grothendieck G) (Type u₂)) →             CategoryTheory.Limits.fiberw
+iseColimit ((CategoryTheory.Grothendieck.map α).comp H) ≅               Category
+Theory.Limits.fiberwiseColimit H
+参数：α : F ⟶ G；X : C；α.app X；H : CategoryTheory.Functor (CategoryTheory.Grothendie
+ck G) (Type u₂)；(CategoryTheory.Grothendieck.map α).comp H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Grothendieck.fiberwiseColimitMapCompEquivalence
-  signature: {C : Type u₁} [Category.{v₁} C]
-  body: NatIso.ofComponents
-    (fun X =>
-      HasColimit.isoOfNatIso ((Functor.associator _ _ _).symm ≪≫
-        isoWhiskerRight (ιCompMap α X) H ≪≫ Functor.associator _ _ _) ≪≫
-      Final.colimitIso (α.app X).toFunctor (ι G X ⋙ H))
-    (fun f => colimit.hom_ext <| fun d => by
-      simp only [map, Cat.Hom.comp_toFunctor, comp_obj, ι_obj,
-        fiberwiseColimit_map, ιNatTrans, ιCompMap, Iso.trans_hom, Category.assoc, ι_colimMap_assoc,
-        NatTrans.comp_app, whiskerRight_app, Functor.comp_map, Cat.Hom₂.eqToHom_toNatTrans,
-        eqToHom_app, map_id, Category.comp_id, associator_hom_app, colimit.ι_pre_assoc,
-        HasColimit.isoOfNatIso_ι_hom_assoc, Iso.symm_hom, isoWhiskerRight_hom, associator_inv_app,
-        NatIso.ofComponents_hom_app, Iso.refl_hom, Final.ι_colimitIso_hom, Category.id_comp,
-        Final.ι_colimitIso_hom_assoc, colimit.ι_pre]
-      have := Functor.congr_obj congr($(α.naturality f).toFunctor) d
-      dsimp at this
-      congr
-      apply eqToHom_heq_id_dom)
-
-中文:
-定义 Grothendieck.fiberwiseColimitMapCompEquivalence
-  签名: {C : 类型u₁} [范畴.{v₁} C]
-  定义体: NatIso.ofComponents
-    (fun X =>
-      HasColimit.isoOfNatIso ((Functor.associator _ _ _).symm ≪≫
-        isoWhiskerRight (ιCompMap α X) H ≪≫ Functor.associator _ _ _) ≪≫
-      Final.colimitIso (α.app X).toFunctor (ι G X ⋙ H))
-    (fun f => colimit.hom_ext <| fun d => by
-      simp only [map, Cat.Hom.comp_toFunctor, comp_obj, ι_obj,
-        fiberwiseColimit_map, ιNatTrans, ιCompMap, Iso.trans_hom, Category.assoc, ι_colimMap_assoc,
-        NatTrans.comp_app, whiskerRight_app, Functor.comp_map, Cat.Hom₂.eqToHom_toNatTrans,
-        eqToHom_app, map_id, Category.comp_id, associator_hom_app, colimit.ι_pre_assoc,
-        HasColimit.isoOfNatIso_ι_hom_assoc, Iso.symm_hom, isoWhiskerRight_hom, associator_inv_app,
-        NatIso.ofComponents_hom_app, Iso.refl_hom, Final.ι_colimitIso_hom, Category.id_comp,
-        Final.ι_colimitIso_hom_assoc, colimit.ι_pre]
-      have := Functor.congr_obj congr($(α.naturality f).toFunctor) d
-      dsimp at this
-      congr
-      apply eqToHom_heq_id_dom)
-
-Depends on / 依赖: Cat.Hom, Cat.Hom.comp_toFunctor, Category, Category.assoc, Final.colimitIso, Functor, Functor.associator, Functor.comp_map, HasColimit, HasColimit.isoOfNatIso, Iso.trans_hom, NatIso, NatIso.ofComponents, NatTrans, NatTrans.comp_app, associator, colimit, colimit.hom_ext, colimitIso, comp_app
+--- 原说明 ---
+A natural transformation `α : F ⟶ G` between functors `F G : C ⥤ Cat` which is f
+inal on each
+fiber `(α.app X)` induces an equivalence of fiberwise colimits of `map α ⋙ H` an
+d `H` for each
+functor `H : Grothendieck G ⥤ Type`.
 -/
 def Grothendieck.fiberwiseColimitMapCompEquivalence {C : Type u₁} [Category.{v₁} C]
-    {F G : C ⥤ Cat.{v₂, u₂}} (α : F ⟶ G) [forall X, Final (α.app X).toFunctor]
+    {F G : C ⥤ Cat.{v₂, u₂}} (α : F ⟶ G) [∀ X, Final (α.app X).toFunctor]
     (H : Grothendieck G ⥤ Type u₂) : fiberwiseColimit (map α ⋙ H) ≅ fiberwiseColimit H :=
   NatIso.ofComponents
     (fun X =>
@@ -3246,37 +2943,18 @@ def Grothendieck.fiberwiseColimitMapCompEquivalence {C : Type u₁} [Category.{v
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Grothendieck.final_map_small` / 引理 `Grothendieck.final_map_small`
+/-- This is the small version of the more general lemma `Grothendieck.final_map` below. -/
+/-
+**CategoryTheory.Grothendieck.final_map_small** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Grothendieck.final_map_small
-  statement: {C : Type u₁} [SmallCategory C] {F G : C ⥤ Cat.{u₁, u₁}}
-  proof: by
-  rw [final_iff_isIso_colimit_pre]
-  intro H
-  let i := (colimitFiberwiseColimitIso _).symm ≪≫
-    HasColimit.isoOfNatIso (fiberwiseColimitMapCompEquivalence α H) ≪≫ colimitFiberwiseColimitIso _
-  convert! Iso.isIso_hom i
-  apply colimit.hom_ext
-  intro X
-  simp [i, fiberwiseColimitMapCompEquivalence]
-
-中文:
-引理 Grothendieck.final_map_small
-  结论: {C : 类型u₁} [小范畴 C] {F G : C ⥤ Cat.{u₁, u₁}}
-  证明: by
-  rw [final_iff_isIso_colimit_pre]
-  intro H
-  let i := (colimitFiberwiseColimitIso _).symm ≪≫
-    HasColimit.isoOfNatIso (fiberwiseColimitMapCompEquivalence α H) ≪≫ colimitFiberwiseColimitIso _
-  convert! Iso.isIso_hom i
-  apply colimit.hom_ext
-  intro X
-  simp [i, fiberwiseColimitMapCompEquivalence]
+--- 原说明 ---
+This is the small version of the more general lemma `Grothendieck.final_map` bel
+ow.
 -/
 private lemma Grothendieck.final_map_small {C : Type u₁} [SmallCategory C] {F G : C ⥤ Cat.{u₁, u₁}}
-    (α : F ⟶ G) [hα : forall X, Final (α.app X).toFunctor] : Final (map α) := by
+    (α : F ⟶ G) [hα : ∀ X, Final (α.app X).toFunctor] : Final (map α) := by
   rw [final_iff_isIso_colimit_pre]
   intro H
   let i := (colimitFiberwiseColimitIso _).symm ≪≫
@@ -3288,54 +2966,47 @@ private lemma Grothendieck.final_map_small {C : Type u₁} [SmallCategory C] {F 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Grothendieck.final_map` / 引理 `Grothendieck.final_map`
+/-- The functor `Grothendieck.map α` for a natural transformation `α : F ⟶ G`, with
+`F G : C ⥤ Cat`, is final if for each `X : C`, the functor `α.app X` is final. -/
+/-
+**CategoryTheory.Grothendieck.final_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Grothendieck`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F G : Categor
+yTheory.Functor C CategoryTheory.Cat}   (α : F ⟶ G) [hα : ∀ (X : C), (α.app X).t
+oFunctor.Final], (CategoryTheory.Grothendieck.map α).Final
+参数：α : F ⟶ G；X : C；α.app X；CategoryTheory.Grothendieck.map α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.CategoryTheory.Limits.Final.0.CategoryTheory.Grothendie
+ck.final_map_small`：∀ {C : Type u₁} [inst : CategoryTheory.SmallCategory C] {F G
+ : CategoryTheory.Functor C CategoryTheory.Cat} (α : F ⟶ G)   [hα : ∀ (X : C), (
+…
+· 使用定理 `CategoryTheory.Functor.final_of_natIso`：final_of_natIso {F F' : C ⥤ D} [
+Final F] (i : F ≅ F') : Final F' where out _
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.final_iff_comp_equivalence`：final_iff_comp_equiva
+lence [IsEquivalence G] : Final F ↔ Final (F ⋙ G)
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `CategoryTheory.Functor.final_iff_equivalence_comp`：final_iff_equivalence
+_comp [IsEquivalence F] : Final G ↔ Final (F ⋙ G)
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 
-English:
-lemma Grothendieck.final_map
-  statement: {F G : C ⥤ Cat.{v₂, u₂}} (α : F ⟶ G)
-  proof: by
-  let sC : C ≌ AsSmall.{max u₁ u₂ v₁ v₂} C := AsSmall.equiv
-  let F' : AsSmall C ⥤ Cat := sC.inverse ⋙ F ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
-  let G' : AsSmall C ⥤ Cat := sC.inverse ⋙ G ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
-  let α' : F' ⟶ G' := whiskerLeft _ (whiskerRight α _)
-  have : forall X, Final (α'.app X).toFunctor := fun X =>
-    inferInstanceAs (AsSmall.equiv.inverse ⋙ _ ⋙ AsSmall.equiv.functor).Final
-  have hα' : (map α').Final := final_map_small _
-  dsimp only [α', ← Equivalence.symm_functor] at hα'
-  have i := mapWhiskerLeftIsoConjPreMap sC.symm (whiskerRight α Cat.asSmallFunctor)
-    ≪≫ isoWhiskerLeft _ (isoWhiskerRight (mapWhiskerRightAsSmallFunctor α) _)
-  have := final_of_natIso i
-  rwa [← final_iff_equivalence_comp, ← final_iff_comp_equivalence,
-    ← final_iff_equivalence_comp, ← final_iff_comp_equivalence] at this
-
-中文:
-引理 Grothendieck.final_map
-  结论: {F G : C ⥤ Cat.{v₂, u₂}} (α : F ⟶ G)
-  证明: by
-  let sC : C ≌ AsSmall.{max u₁ u₂ v₁ v₂} C := AsSmall.equiv
-  let F' : AsSmall C ⥤ Cat := sC.inverse ⋙ F ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
-  let G' : AsSmall C ⥤ Cat := sC.inverse ⋙ G ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
-  let α' : F' ⟶ G' := whiskerLeft _ (whiskerRight α _)
-  have : forall X, Final (α'.app X).toFunctor := fun X =>
-    inferInstanceAs (AsSmall.equiv.inverse ⋙ _ ⋙ AsSmall.equiv.functor).Final
-  have hα' : (map α').Final := final_map_small _
-  dsimp only [α', ← Equivalence.symm_functor] at hα'
-  have i := mapWhiskerLeftIsoConjPreMap sC.symm (whiskerRight α Cat.asSmallFunctor)
-    ≪≫ isoWhiskerLeft _ (isoWhiskerRight (mapWhiskerRightAsSmallFunctor α) _)
-  have := final_of_natIso i
-  rwa [← final_iff_equivalence_comp, ← final_iff_comp_equivalence,
-    ← final_iff_equivalence_comp, ← final_iff_comp_equivalence] at this
-
-Depends on / 依赖: AsSmall, AsSmall.equiv, AsSmall.equiv.functor, AsSmall.equiv.inverse, Cat.asSmallFunctor, Equivalence, Equivalence.symm_functor, asSmallFunctor, final_map_small, functor, inverse, sC.inverse, symm_functor, toFunctor, whiskerLeft, whiskerRight
+--- 原说明 ---
+The functor `Grothendieck.map α` for a natural transformation `α : F ⟶ G`, with
+`F G : C ⥤ Cat`, is final if for each `X : C`, the functor `α.app X` is final.
 -/
 lemma Grothendieck.final_map {F G : C ⥤ Cat.{v₂, u₂}} (α : F ⟶ G)
-    [hα : forall X, Final (α.app X).toFunctor] : Final (map α) := by
+    [hα : ∀ X, Final (α.app X).toFunctor] : Final (map α) := by
   let sC : C ≌ AsSmall.{max u₁ u₂ v₁ v₂} C := AsSmall.equiv
   let F' : AsSmall C ⥤ Cat := sC.inverse ⋙ F ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
   let G' : AsSmall C ⥤ Cat := sC.inverse ⋙ G ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
   let α' : F' ⟶ G' := whiskerLeft _ (whiskerRight α _)
-  have : forall X, Final (α'.app X).toFunctor := fun X =>
+  have : ∀ X, Final (α'.app X).toFunctor := fun X =>
     inferInstanceAs (AsSmall.equiv.inverse ⋙ _ ⋙ AsSmall.equiv.functor).Final
   have hα' : (map α').Final := final_map_small _
   dsimp only [α', ← Equivalence.symm_functor] at hα'
@@ -3355,38 +3026,15 @@ variable {C' : Type u₃} [Category.{v₃} C']
 variable {D' : Type u₄} [Category.{v₄} D']
 variable (F : C ⥤ D) (G : C' ⥤ D')
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Final]
-  signature: [G.Final]
-  body: fun ⟨d, d'⟩ => isConnected_of_equivalent (StructuredArrow.prodEquivalence d d' F G).symm
-
-中文:
-实例 [F.终]
-  签名: [G.终]
-  定义体: fun ⟨d, d'⟩ => isConnected_of_equivalent (StructuredArrow.prodEquivalence d d' F G).symm
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.prodEquivalence, isConnected_of_equivalent, prodEquivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.Final] [G.Final] : (F.prod G).Final where
   out := fun ⟨d, d'⟩ => isConnected_of_equivalent (StructuredArrow.prodEquivalence d d' F G).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Initial]
-  signature: [G.Initial]
-  body: fun ⟨d, d'⟩ => isConnected_of_equivalent (CostructuredArrow.prodEquivalence F G d d').symm
-
-中文:
-实例 [F.初始]
-  签名: [G.初始]
-  定义体: fun ⟨d, d'⟩ => isConnected_of_equivalent (CostructuredArrow.prodEquivalence F G d d').symm
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.prodEquivalence, HasPullbacks, HasWeakPullbacksOfHasPullbacks, isConnected_of_equivalent, prodEquivalence
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.Initial] [G.Initial] : (F.prod G).Initial where
   out := fun ⟨d, d'⟩ => isConnected_of_equivalent (CostructuredArrow.prodEquivalence F G d d').symm
@@ -3396,41 +3044,25 @@ end Prod
 namespace ObjectProperty
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `initial_ι` / 定理 `initial_ι`
+/-- For the full subcategory induced by an object property `P` on `C`, to show initiality of
+the inclusion functor it is enough to consider arrows to objects outside of the subcategory. -/
+/-
+**CategoryTheory.ObjectProperty.initial_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem initial_ι
-  statement: {C : Type u₁} [Category.{v₁} C] (P : ObjectProperty C)
-  proof: .mk fun d => by
-  by_cases hd : P d
-  · have : Nonempty (CostructuredArrow P.ι d) := ⟨⟨d, hd⟩, ⟨⟨⟩⟩, 𝟙 _⟩
-    refine zigzag_isConnected (fun j₁ j₂ => Zigzag.trans
-      (j₂ := by exact CostructuredArrow.mk (Y := ⟨d, hd⟩) (𝟙 _)) (.of_hom ?_) (.of_inv ?_))
-    · exact CostructuredArrow.homMk (InducedCategory.homMk j₁.hom)
-    · exact CostructuredArrow.homMk (InducedCategory.homMk j₂.hom)
-  · exact h d hd
-
-中文:
-定理 initial_ι
-  结论: {C : 类型u₁} [范畴.{v₁} C] (P : ObjectProperty C)
-  证明: .mk fun d => by
-  by_cases hd : P d
-  · have : Nonempty (CostructuredArrow P.ι d) := ⟨⟨d, hd⟩, ⟨⟨⟩⟩, 𝟙 _⟩
-    refine zigzag_isConnected (fun j₁ j₂ => Zigzag.trans
-      (j₂ := by exact CostructuredArrow.mk (Y := ⟨d, hd⟩) (𝟙 _)) (.of_hom ?_) (.of_inv ?_))
-    · exact CostructuredArrow.homMk (InducedCategory.homMk j₁.hom)
-    · exact CostructuredArrow.homMk (InducedCategory.homMk j₂.hom)
-  · exact h d hd
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, InducedCategory, InducedCategory.homMk, Nonempty, Zigzag, Zigzag.trans, of_hom, of_inv, zigzag_isConnected
+--- 原说明 ---
+For the full subcategory induced by an object property `P` on `C`, to show initi
+ality of
+the inclusion functor it is enough to consider arrows to objects outside of the 
+subcategory.
 -/
 theorem initial_ι {C : Type u₁} [Category.{v₁} C] (P : ObjectProperty C)
-    (h : forall d, ¬ P d -> IsConnected (CostructuredArrow P.ι d)) :
-P.ι.Initial := .mk fun d => by
+    (h : ∀ d, ¬ P d → IsConnected (CostructuredArrow P.ι d)) :
+    P.ι.Initial := .mk <| fun d => by
   by_cases hd : P d
   · have : Nonempty (CostructuredArrow P.ι d) := ⟨⟨d, hd⟩, ⟨⟨⟩⟩, 𝟙 _⟩
-    refine zigzag_isConnected (fun j₁ j₂ => Zigzag.trans
+    refine zigzag_isConnected (fun j₁ j₂ ↦ Zigzag.trans
       (j₂ := by exact CostructuredArrow.mk (Y := ⟨d, hd⟩) (𝟙 _)) (.of_hom ?_) (.of_inv ?_))
     · exact CostructuredArrow.homMk (InducedCategory.homMk j₁.hom)
     · exact CostructuredArrow.homMk (InducedCategory.homMk j₂.hom)
@@ -3444,38 +3076,23 @@ variable {J C : Type*} [Category* J] [Category* C] {D : J ⥤ C}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Limits.IsLimit.overPost` / `Limits.IsLimit.overPost` 的定义
+/-- If `Over j ⥤ J` is initial, restricting a limit cone to the diagram above `j`,
+preserves the limit. -/
+/-
+**CategoryTheory.Limits.IsLimit.overPost** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.IsLimit`。
+形式化陈述：{J : Type u_1} →   {C : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} J] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C] →         {D
+ : CategoryTheory.Functor J C} →           {c : CategoryTheory.Limits.Cone D} → 
+            CategoryTheory.Limits.IsLimit c →               (j : J) → [(Category
+Theory.Over.forget j).Initial] → CategoryTheory.Limits.IsLimit (c.overPost j)
+参数：j : J；CategoryTheory.Over.forget j；c.overPost j。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Limits.IsLimit.overPost
-  signature: {c : Cone D} (hc : IsLimit c) (j : J)
-  body: by
-  haveI : Nonempty (Over j) := ⟨Over.mk (𝟙 j)⟩
-  letI c'' := Over.liftCone (Over.forget j ⋙ D) (X := D.obj j)
-    (Functor.whiskerRight (Over.forgetCocone j).ι D ≫ (Functor.constComp _ _ _).hom)
-    (c.whisker (CategoryTheory.Over.forget j)) (c.π.app j) (by cat_disch)
-  letI hc'' : IsLimit c'' :=
-Over.isLimitLiftCone _ _ _ _ _ (Functor.Initial.isLimitWhiskerEquiv _ _).symm hc
-  refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
-  · exact NatIso.ofComponents (fun k => CategoryTheory.Over.isoMk (Iso.refl _))
-  · exact Cone.ext (Iso.refl _)
-
-中文:
-定义 Limits.是极限.overPost
-  签名: {c : 锥 D} (hc : 是极限 c) (j : J)
-  定义体: by
-  haveI : Nonempty (Over j) := ⟨Over.mk (𝟙 j)⟩
-  letI c'' := Over.liftCone (Over.forget j ⋙ D) (X := D.obj j)
-    (Functor.whiskerRight (Over.forgetCocone j).ι D ≫ (Functor.constComp _ _ _).hom)
-    (c.whisker (CategoryTheory.Over.forget j)) (c.π.app j) (by cat_disch)
-  letI hc'' : IsLimit c'' :=
-Over.isLimitLiftCone _ _ _ _ _ (Functor.Initial.isLimitWhiskerEquiv _ _).symm hc
-  refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
-  · exact NatIso.ofComponents (fun k => CategoryTheory.Over.isoMk (Iso.refl _))
-  · exact Cone.ext (Iso.refl _)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Over.forget, CategoryTheory.Over.isoMk, D.obj, Functor, Functor.Initial.isLimitWhiskerEquiv, Functor.constComp, Functor.whiskerRight, Initial, IsLimit, IsLimit.equivOfNatIsoOfIso, Iso.refl, NatIso, NatIso.ofComponents, Nonempty, Over.forget, Over.forgetCocone, Over.isLimitLiftCone, Over.liftCone, Over.mk
+--- 原说明 ---
+If `Over j ⥤ J` is initial, restricting a limit cone to the diagram above `j`,
+preserves the limit.
 -/
 noncomputable def Limits.IsLimit.overPost {c : Cone D} (hc : IsLimit c) (j : J)
     [(CategoryTheory.Over.forget j).Initial] : IsLimit (c.overPost j) := by
@@ -3484,45 +3101,31 @@ noncomputable def Limits.IsLimit.overPost {c : Cone D} (hc : IsLimit c) (j : J)
     (Functor.whiskerRight (Over.forgetCocone j).ι D ≫ (Functor.constComp _ _ _).hom)
     (c.whisker (CategoryTheory.Over.forget j)) (c.π.app j) (by cat_disch)
   letI hc'' : IsLimit c'' :=
-Over.isLimitLiftCone _ _ _ _ _ (Functor.Initial.isLimitWhiskerEquiv _ _).symm hc
+    Over.isLimitLiftCone _ _ _ _ _ <| (Functor.Initial.isLimitWhiskerEquiv _ _).symm hc
   refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
-  · exact NatIso.ofComponents (fun k => CategoryTheory.Over.isoMk (Iso.refl _))
+  · exact NatIso.ofComponents (fun k ↦ CategoryTheory.Over.isoMk (Iso.refl _))
   · exact Cone.ext (Iso.refl _)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Limits.IsColimit.underPost` / `Limits.IsColimit.underPost` 的定义
+/-- If `Over j ⥤ J` is final, restricting a colimit cocone to the diagram below `j`,
+preserves the limit. -/
+/-
+**CategoryTheory.Limits.IsColimit.underPost** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.IsColimit`。
+形式化陈述：{J : Type u_1} →   {C : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} J] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} C] →         {D
+ : CategoryTheory.Functor J C} →           {c : CategoryTheory.Limits.Cocone D} 
+→             CategoryTheory.Limits.IsColimit c →               (j : J) → [(Cate
+goryTheory.Under.forget j).Final] → CategoryTheory.Limits.IsColimit (c.underPost
+ j)
+参数：j : J；CategoryTheory.Under.forget j；c.underPost j。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Limits.IsColimit.underPost
-  signature: {c : Cocone D} (hc : IsColimit c) (j : J)
-  body: by
-  haveI : Nonempty (Under j) := ⟨CategoryTheory.Under.mk (𝟙 j)⟩
-  letI c'' := Under.liftCocone (CategoryTheory.Under.forget j ⋙ D) (X := D.obj j)
-    ((Functor.constComp _ _ _).inv ≫ Functor.whiskerRight ((Under.forgetCone j).π) D)
-    (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by cat_disch)
-  letI hc'' : IsColimit c'' :=
-Under.isColimitLiftCocone _ _ _ _ _ (Functor.Final.isColimitWhiskerEquiv _ _).symm hc
-  refine IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
-  · exact NatIso.ofComponents (fun k => CategoryTheory.Under.isoMk (Iso.refl _))
-  · exact Cocone.ext (Iso.refl _)
-
-中文:
-定义 Limits.是余极限.underPost
-  签名: {c : 余锥 D} (hc : 是余极限 c) (j : J)
-  定义体: by
-  haveI : Nonempty (Under j) := ⟨CategoryTheory.Under.mk (𝟙 j)⟩
-  letI c'' := Under.liftCocone (CategoryTheory.Under.forget j ⋙ D) (X := D.obj j)
-    ((Functor.constComp _ _ _).inv ≫ Functor.whiskerRight ((Under.forgetCone j).π) D)
-    (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by cat_disch)
-  letI hc'' : IsColimit c'' :=
-Under.isColimitLiftCocone _ _ _ _ _ (Functor.Final.isColimitWhiskerEquiv _ _).symm hc
-  refine IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
-  · exact NatIso.ofComponents (fun k => CategoryTheory.Under.isoMk (Iso.refl _))
-  · exact Cocone.ext (Iso.refl _)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Under.forget, CategoryTheory.Under.mk, D.obj, Functor, Functor.Final.isColimitWhiskerEquiv, Functor.constComp, Functor.whiskerRight, IsColimit, IsColimit.equivOfNatIsoOfIso, NatIso, NatIso.ofComponents, Nonempty, Under.forgetCone, Under.isColimitLiftCocone, Under.liftCocone, c.whisker, cat_disch, constComp, equivOfNatIsoOfIso
+--- 原说明 ---
+If `Over j ⥤ J` is final, restricting a colimit cocone to the diagram below `j`,
+preserves the limit.
 -/
 noncomputable def Limits.IsColimit.underPost {c : Cocone D} (hc : IsColimit c) (j : J)
     [(CategoryTheory.Under.forget j).Final] : IsColimit (c.underPost j) := by
@@ -3531,13 +3134,17 @@ noncomputable def Limits.IsColimit.underPost {c : Cocone D} (hc : IsColimit c) (
     ((Functor.constComp _ _ _).inv ≫ Functor.whiskerRight ((Under.forgetCone j).π) D)
     (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by cat_disch)
   letI hc'' : IsColimit c'' :=
-Under.isColimitLiftCocone _ _ _ _ _ (Functor.Final.isColimitWhiskerEquiv _ _).symm hc
+    Under.isColimitLiftCocone _ _ _ _ _ <| (Functor.Final.isColimitWhiskerEquiv _ _).symm hc
   refine IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
-  · exact NatIso.ofComponents (fun k => CategoryTheory.Under.isoMk (Iso.refl _))
+  · exact NatIso.ofComponents (fun k ↦ CategoryTheory.Under.isoMk (Iso.refl _))
   · exact Cocone.ext (Iso.refl _)
 
 end Restriction
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {C₀ C : Type*} [Category* C₀] [Category* C]
     (F : C₀ ⥤ C) (X : C) [F.Initial] :
     (CostructuredArrow.toOver F X).Initial where
@@ -3547,3 +3154,4 @@ instance {C₀ C : Type*} [Category* C₀] [Category* C]
     infer_instance
 
 end CategoryTheory
+

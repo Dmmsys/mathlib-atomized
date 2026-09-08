@@ -37,21 +37,20 @@ variable {X : SSet.{u}}
 section
 
 variable {A : X.Subcomplex} {ι : Type*}
-  {U : ι -> X.Subcomplex} {V : ι -> ι -> X.Subcomplex}
+  {U : ι → X.Subcomplex} {V : ι → ι → X.Subcomplex}
 
 variable (A U V) in
-/--
-Definition of `MulticoequalizerDiagram` / `MulticoequalizerDiagram` 的定义
+/-- Abbreviation for multicoequalizer diagrams in the complete lattice of
+subcomplexes of a simplicial set. -/
+/-
+**SSet.Subcomplex.MulticoequalizerDiagram** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.Subc
+omplex`。
+形式化陈述：MulticoequalizerDiagram
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation MulticoequalizerDiagram
-  body: CompleteLattice.MulticoequalizerDiagram A U V
-
-中文:
-缩写 MulticoequalizerDiagram
-  定义体: CompleteLattice.MulticoequalizerDiagram A U V
-
-Depends on / 依赖: CompleteLattice, CompleteLattice.MulticoequalizerDiagram, MulticoequalizerDiagram
+--- 原说明 ---
+Abbreviation for multicoequalizer diagrams in the complete lattice of
+subcomplexes of a simplicial set.
 -/
 abbrev MulticoequalizerDiagram := CompleteLattice.MulticoequalizerDiagram A U V
 
@@ -59,38 +58,29 @@ namespace MulticoequalizerDiagram
 
 variable (h : MulticoequalizerDiagram A U V)
 
-/--
-Definition of `isColimit` / `isColimit` 的定义
+/-- The colimit multicofork attached to a `MulticoequalizerDiagram`
+/-
+**SSet.Subcomplex.MulticoequalizerDiagram.in** 是 Mathlib 中的一个结构，位于命名空间 `SSet.Sub
+complex.MulticoequalizerDiagram`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+structure in the complete lattice of subcomplexes of a simplicial set. -/
+/-
+**SSet.Subcomplex.MulticoequalizerDiagram.isColimit** 是 Mathlib 中的一个定义，位于命名空间 `S
+Set.Subcomplex.MulticoequalizerDiagram`。
+形式化陈述：isColimit : IsColimit (h.multicofork.map toSSetFunctor)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimit
-  signature: :
-  body: evaluationJointlyReflectsColimits _ (fun n => by
-    have h' : CompleteLattice.MulticoequalizerDiagram (A.obj n) (fun i => (U i).obj n)
-        (fun i j => (V i j).obj n) :=
-      { eq_inf := by simp [h.eq_inf]
-        iSup_eq := by simp [← h.iSup_eq] }
-    exact (Multicofork.isColimitMapEquiv _ _).2
-      (Types.isColimitOfMulticoequalizerDiagram h'))
-
-中文:
-定义 isColimit
-  签名: :
-  定义体: evaluationJointlyReflectsColimits _ (fun n => by
-    have h' : CompleteLattice.MulticoequalizerDiagram (A.obj n) (fun i => (U i).obj n)
-        (fun i j => (V i j).obj n) :=
-      { eq_inf := by simp [h.eq_inf]
-        iSup_eq := by simp [← h.iSup_eq] }
-    exact (Multicofork.isColimitMapEquiv _ _).2
-      (Types.isColimitOfMulticoequalizerDiagram h'))
-
-Depends on / 依赖: A.obj, CompleteLattice, CompleteLattice.MulticoequalizerDiagram, MulticoequalizerDiagram, Multicofork, Multicofork.isColimitMapEquiv, Types.isColimitOfMulticoequalizerDiagram, eq_inf, evaluationJointlyReflectsColimits, h.eq_inf, h.iSup_eq, iSup_eq, isColimitMapEquiv, isColimitOfMulticoequalizerDiagram
+--- 原说明 ---
+The colimit multicofork attached to a `MulticoequalizerDiagram`
+structure in the complete lattice of subcomplexes of a simplicial set.
 -/
 noncomputable def isColimit :
     IsColimit (h.multicofork.map toSSetFunctor) :=
-  evaluationJointlyReflectsColimits _ (fun n => by
-    have h' : CompleteLattice.MulticoequalizerDiagram (A.obj n) (fun i => (U i).obj n)
-        (fun i j => (V i j).obj n) :=
+  evaluationJointlyReflectsColimits _ (fun n ↦ by
+    have h' : CompleteLattice.MulticoequalizerDiagram (A.obj n) (fun i ↦ (U i).obj n)
+        (fun i j ↦ (V i j).obj n) :=
       { eq_inf := by simp [h.eq_inf]
         iSup_eq := by simp [← h.iSup_eq] }
     exact (Multicofork.isColimitMapEquiv _ _).2
@@ -98,39 +88,31 @@ noncomputable def isColimit :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `isColimit'` / `isColimit'` 的定义
+/-- A colimit multicofork attached to a `MulticoequalizerDiagram`
+structure in the complete lattice of subcomplexes of a simplicial set.
+In this variant, we assume that the index type `ι` has a linear order. This allows
+to consider only the "relations" given by tuples `(i, j)` such that `i < j`. -/
+/-
+**SSet.Subcomplex.MulticoequalizerDiagram.isColimit'** 是 Mathlib 中的一个定义，位于命名空间 `
+SSet.Subcomplex.MulticoequalizerDiagram`。
+形式化陈述：isColimit' [LinearOrder ι] : IsColimit (h.multicofork.toLinearOrder.map to
+SSetFunctor)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimit'
-  signature: [LinearOrder ι]
-  body: Multicofork.isColimitToLinearOrder _ h.isColimit
-    { iso i j := toSSetFunctor.mapIso (eqToIso (by
-        dsimp
-        rw [h.eq_inf]; rw [h.eq_inf]; rw [inf_comm]))
-      iso_hom_fst _ _ := rfl
-      iso_hom_snd _ _ := rfl
-      fst_eq_snd _ := rfl }
-
-中文:
-定义 isColimit'
-  签名: [线性序 ι]
-  定义体: Multicofork.isColimitToLinearOrder _ h.isColimit
-    { iso i j := toSSetFunctor.mapIso (eqToIso (by
-        dsimp
-        rw [h.eq_inf]; rw [h.eq_inf]; rw [inf_comm]))
-      iso_hom_fst _ _ := rfl
-      iso_hom_snd _ _ := rfl
-      fst_eq_snd _ := rfl }
-
-Depends on / 依赖: Multicofork, Multicofork.isColimitToLinearOrder, eqToIso, eq_inf, fst_eq_snd, h.eq_inf, h.isColimit, inf_comm, isColimit, isColimitToLinearOrder, iso_hom_fst, iso_hom_snd, mapIso, toSSetFunctor, toSSetFunctor.mapIso
+--- 原说明 ---
+A colimit multicofork attached to a `MulticoequalizerDiagram`
+structure in the complete lattice of subcomplexes of a simplicial set.
+In this variant, we assume that the index type `ι` has a linear order. This allo
+ws
+to consider only the "relations" given by tuples `(i, j)` such that `i < j`.
 -/
 noncomputable def isColimit' [LinearOrder ι] :
     IsColimit (h.multicofork.toLinearOrder.map toSSetFunctor) :=
   Multicofork.isColimitToLinearOrder _ h.isColimit
     { iso i j := toSSetFunctor.mapIso (eqToIso (by
         dsimp
-        rw [h.eq_inf]; rw [h.eq_inf]; rw [inf_comm]))
+        rw [h.eq_inf, h.eq_inf, inf_comm]))
       iso_hom_fst _ _ := rfl
       iso_hom_snd _ _ := rfl
       fst_eq_snd _ := rfl }
@@ -139,57 +121,41 @@ end MulticoequalizerDiagram
 
 end
 
-/--
-Definition of `BicartSq` / `BicartSq` 的定义
+/-- Abbreviation for bicartesian squares in the lattice of subcomplexes of a simplicial set. -/
+/-
+**SSet.Subcomplex.BicartSq** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.Subcomplex`。
+形式化陈述：BicartSq (A₁ A₂ A₃ A₄ : X.Subcomplex)
+参数：A₁ A₂ A₃ A₄ : X.Subcomplex。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation BicartSq
-  signature: (A₁ A₂ A₃ A₄ : X.Subcomplex)
-  body: Lattice.BicartSq A₁ A₂ A₃ A₄
-
-中文:
-缩写 BicartSq
-  签名: (A₁ A₂ A₃ A₄ : X.子复形)
-  定义体: Lattice.BicartSq A₁ A₂ A₃ A₄
-
-Depends on / 依赖: BicartSq, Lattice, Lattice.BicartSq
+--- 原说明 ---
+Abbreviation for bicartesian squares in the lattice of subcomplexes of a simplic
+ial set.
 -/
 abbrev BicartSq (A₁ A₂ A₃ A₄ : X.Subcomplex) := Lattice.BicartSq A₁ A₂ A₃ A₄
-
-/--
-lemma `BicartSq.isPushout` / 引理 `BicartSq.isPushout`
-
-English:
-lemma BicartSq.isPushout
-  given: {A₁ A₂ A₃ A₄ : X.Subcomplex} (sq : BicartSq A₁ A₂ A₃ A₄)
-  proof: rfl
-  isColimit' :=
-    ⟨evaluationJointlyReflectsColimits _
-      (fun n => (PushoutCocone.isColimitMapCoconeEquiv _ _).2 (by
-        have h : Lattice.BicartSq (A₁.obj n) (A₂.obj n) (A₃.obj n) (A₄.obj n) :=
-          { sup_eq := by
-              rw [← sq.sup_eq]
-              rfl
-            inf_eq := by
-              rw [← sq.inf_eq]
-              rfl }
-        exact (Types.isPushout_of_bicartSq h).isColimit))⟩
-
-中文:
-引理 BicartSq.isPushout
-  条件: {A₁ A₂ A₃ A₄ : X.子复形} (sq : BicartSq A₁ A₂ A₃ A₄)
-  证明: rfl
-  isColimit' :=
-    ⟨evaluationJointlyReflectsColimits _
-      (fun n => (PushoutCocone.isColimitMapCoconeEquiv _ _).2 (by
-        have h : Lattice.BicartSq (A₁.obj n) (A₂.obj n) (A₃.obj n) (A₄.obj n) :=
-          { sup_eq := by
-              rw [← sq.sup_eq]
-              rfl
-            inf_eq := by
-              rw [← sq.inf_eq]
-              rfl }
-        exact (Types.isPushout_of_bicartSq h).isColimit))⟩
+/-
+**SSet.Subcomplex.BicartSq.isPushout** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Subcomplex.
+BicartSq`。
+形式化陈述：∀ {X : _root_.SSet} {A₁ A₂ A₃ A₄ : X.Subcomplex} (sq : A₁.BicartSq A₂ A₃ A
+₄),   CategoryTheory.IsPushout (SSet.Subcomplex.homOfLE ⋯) (SSet.Subcomplex.homO
+fLE ⋯) (SSet.Subcomplex.homOfLE ⋯)     (SSet.Subcomplex.homOfLE ⋯)
+参数：sq : A₁.BicartSq A₂ A₃ A₄；SSet.Subcomplex.homOfLE ⋯；SSet.Subcomplex.homOfLE ⋯
+；SSet.Subcomplex.homOfLE ⋯；SSet.Subcomplex.homOfLE ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Lattice.BicartSq.le₁₂`：le₁₂ : x₁ <= x₂
+· 使用引理 `Lattice.BicartSq.le₁₃`：le₁₃ : x₁ <= x₃
+· 使用引理 `Lattice.BicartSq.le₂₄`：le₂₄ : x₂ <= x₄
+· 使用引理 `Lattice.BicartSq.le₃₄`：le₃₄ : x₃ <= x₄
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lattice.BicartSq.sup_eq`：∀ {T : Type u} {x₁ x₂ x₃ x₄ : T} [inst : Lattic
+e T], Lattice.BicartSq x₁ x₂ x₃ x₄ → x₂ ⊔ x₃ = x₄
+· 使用定理 `Lattice.BicartSq.inf_eq`：∀ {T : Type u} {x₁ x₂ x₃ x₄ : T} [inst : Lattic
+e T], Lattice.BicartSq x₁ x₂ x₃ x₄ → x₂ ⊓ x₃ = x₁
+· 使用引理 `CategoryTheory.Limits.Types.isPushout_of_bicartSq`：isPushout_of_bicartSq
+ {S₁ S₂ S₃ S₄ : Set X} (h : Lattice.BicartSq S₁ S₂ S₃ S₄) : IsPushout (Set.funct
+orToTypes.map (homOfLE h.le₁₂)) (Set.fu…
 -/
 lemma BicartSq.isPushout {A₁ A₂ A₃ A₄ : X.Subcomplex} (sq : BicartSq A₁ A₂ A₃ A₄) :
     IsPushout (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)
@@ -197,7 +163,7 @@ lemma BicartSq.isPushout {A₁ A₂ A₃ A₄ : X.Subcomplex} (sq : BicartSq A�
   w := rfl
   isColimit' :=
     ⟨evaluationJointlyReflectsColimits _
-      (fun n => (PushoutCocone.isColimitMapCoconeEquiv _ _).2 (by
+      (fun n ↦ (PushoutCocone.isColimitMapCoconeEquiv _ _).2 (by
         have h : Lattice.BicartSq (A₁.obj n) (A₂.obj n) (A₃.obj n) (A₄.obj n) :=
           { sup_eq := by
               rw [← sq.sup_eq]
@@ -210,3 +176,4 @@ lemma BicartSq.isPushout {A₁ A₂ A₃ A₄ : X.Subcomplex} (sq : BicartSq A�
 end Subcomplex
 
 end SSet
+

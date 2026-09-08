@@ -32,48 +32,32 @@ variable (C : Type*) [Category* C]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `idem_f` / 引理 `idem_f`
-
-English:
-lemma idem_f
-  given: (P : Karoubi (Karoubi C))
-  statement: P.p.f ≫ P.p.f = P.p.f
-  proof: by
-  simpa only [hom_ext_iff, comp_f] using P.idem
-
-中文:
-引理 idem_f
-  条件: (P : Karoubi (Karoubi C))
-  结论: P.p.f ≫ P.p.f = P.p.f
-  证明: by
-  simpa only [hom_ext_iff, comp_f] using P.idem
-
-Depends on / 依赖: P.idem, comp_f, hom_ext_iff
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.idem_f** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Idempotents.KaroubiKaroubi`。
+形式化陈述：idem_f (P : Karoubi (Karoubi C)) : P.p.f ≫ P.p.f = P.p.f
+参数：P : Karoubi (Karoubi C)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Idempotents.Karoubi.idem`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] (self : CategoryTheory.Idempotents.Karoubi C),  
+ CategoryTheory.CategoryStruc…
 -/
 lemma idem_f (P : Karoubi (Karoubi C)) : P.p.f ≫ P.p.f = P.p.f := by
   simpa only [hom_ext_iff, comp_f] using P.idem
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `p_comm_f` / 引理 `p_comm_f`
-
-English:
-lemma p_comm_f
-  given: {P Q : Karoubi (Karoubi C)} (f : P ⟶ Q)
-  statement: P.p.f ≫ f.f.f = f.f.f ≫ Q.p.f
-  proof: by
-  simpa only [hom_ext_iff, comp_f] using p_comm f
-
-中文:
-引理 p_comm_f
-  条件: {P Q : Karoubi (Karoubi C)} (f : P ⟶ Q)
-  结论: P.p.f ≫ f.f.f = f.f.f ≫ Q.p.f
-  证明: by
-  simpa only [hom_ext_iff, comp_f] using p_comm f
-
-Depends on / 依赖: comp_f, hom_ext_iff, p_comm
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.p_comm_f** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Idempotents.KaroubiKaroubi`。
+形式化陈述：p_comm_f {P Q : Karoubi (Karoubi C)} (f : P ⟶ Q) : P.p.f ≫ f.f.f = f.f.f ≫
+ Q.p.f
+参数：Karoubi C；f : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Idempotents.Karoubi.p_comm`：p_comm {P Q : Karoubi C} (f :
+ Hom P Q) : P.p ≫ f.f = f.f ≫ Q.p
 -/
 lemma p_comm_f {P Q : Karoubi (Karoubi C)} (f : P ⟶ Q) : P.p.f ≫ f.f.f = f.f.f ≫ Q.p.f := by
   simpa only [hom_ext_iff, comp_f] using p_comm f
@@ -81,38 +65,25 @@ lemma p_comm_f {P Q : Karoubi (Karoubi C)} (f : P ⟶ Q) : P.p.f ≫ f.f.f = f.f
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The canonical functor `Karoubi (Karoubi C) ⥤ Karoubi C` -/
 @[simps]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.inverse** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Idempotents.KaroubiKaroubi`。
+形式化陈述：inverse : Karoubi (Karoubi C) ⥤ Karoubi C where obj P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: : Karoubi (Karoubi C) ⥤ Karoubi C where
-  body: ⟨P.X.X, P.p.f, by simpa only [hom_ext_iff] using! P.idem⟩
-  map f := ⟨f.f.f, by simpa only [hom_ext_iff] using! f.comm⟩
-
-中文:
-定义 inverse
-  签名: : Karoubi (Karoubi C) ⥤ Karoubi C where
-  定义体: ⟨P.X.X, P.p.f, by simpa only [hom_ext_iff] using! P.idem⟩
-  map f := ⟨f.f.f, by simpa only [hom_ext_iff] using! f.comm⟩
-
-Depends on / 依赖: P.X.X, P.idem, P.p.f, hom_ext_iff
+--- 原说明 ---
+The canonical functor `Karoubi (Karoubi C) ⥤ Karoubi C`
 -/
 def inverse : Karoubi (Karoubi C) ⥤ Karoubi C where
   obj P := ⟨P.X.X, P.p.f, by simpa only [hom_ext_iff] using! P.idem⟩
   map f := ⟨f.f.f, by simpa only [hom_ext_iff] using! f.comm⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preadditive
-  signature: C] : Functor.Additive (inverse C) where
-
-中文:
-实例 [预加性
-  签名: C] : 函子.加性 (inverse C) where
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Idempotents.KaroubiKaroubi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preadditive C] : Functor.Additive (inverse C) where
 
@@ -120,20 +91,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The unit isomorphism of the equivalence -/
 @[simps!]
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.unitIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Idempotents.KaroubiKaroubi`。
+形式化陈述：unitIso : 𝟭 (Karoubi C) ≅ toKaroubi (Karoubi C) ⋙ inverse C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIso
-  signature: : 𝟭 (Karoubi C) ≅ toKaroubi (Karoubi C) ⋙ inverse C
-  body: eqToIso (Functor.ext (by cat_disch) (by simp))
-
-中文:
-定义 unitIso
-  签名: : 𝟭 (Karoubi C) ≅ toKaroubi (Karoubi C) ⋙ inverse C
-  定义体: eqToIso (Functor.ext (by cat_disch) (by simp))
-
-Depends on / 依赖: Functor, Functor.ext, cat_disch, eqToIso
+--- 原说明 ---
+The unit isomorphism of the equivalence
 -/
 def unitIso : 𝟭 (Karoubi C) ≅ toKaroubi (Karoubi C) ⋙ inverse C :=
   eqToIso (Functor.ext (by cat_disch) (by simp))
@@ -143,20 +109,16 @@ set_option backward.defeqAttrib.useBackward true in
 attribute [local simp] p_comm_f in
 /-- The counit isomorphism of the equivalence -/
 @[simps]
-/--
-Definition of `counitIso` / `counitIso` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.counitIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Idempotents.KaroubiKaroubi`。
+形式化陈述：counitIso : inverse C ⋙ toKaroubi (Karoubi C) ≅ 𝟭 (Karoubi (Karoubi C)) wh
+ere hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIso
-  signature: : inverse C ⋙ toKaroubi (Karoubi C) ≅ 𝟭 (Karoubi (Karoubi C)) where
-  body: { app := fun P => { f := { f := P.p.1 } } }
-  inv := { app := fun P => { f := { f := P.p.1 } } }
-
-中文:
-定义 counitIso
-  签名: : inverse C ⋙ toKaroubi (Karoubi C) ≅ 𝟭 (Karoubi (Karoubi C)) where
-  定义体: { app := fun P => { f := { f := P.p.1 } } }
-  inv := { app := fun P => { f := { f := P.p.1 } } }
+--- 原说明 ---
+The counit isomorphism of the equivalence
 -/
 def counitIso : inverse C ⋙ toKaroubi (Karoubi C) ≅ 𝟭 (Karoubi (Karoubi C)) where
   hom := { app := fun P => { f := { f := P.p.1 } } }
@@ -166,26 +128,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The equivalence `Karoubi C ≌ Karoubi (Karoubi C)` -/
 @[simps]
-/--
-Definition of `equivalence` / `equivalence` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.equivalence** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Idempotents.KaroubiKaroubi`。
+形式化陈述：equivalence : Karoubi C ≌ Karoubi (Karoubi C) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence
-  signature: : Karoubi C ≌ Karoubi (Karoubi C) where
-  body: toKaroubi (Karoubi C)
-  inverse := KaroubiKaroubi.inverse C
-  unitIso := KaroubiKaroubi.unitIso C
-  counitIso := KaroubiKaroubi.counitIso C
-
-中文:
-定义 equivalence
-  签名: : Karoubi C ≌ Karoubi (Karoubi C) where
-  定义体: toKaroubi (Karoubi C)
-  inverse := KaroubiKaroubi.inverse C
-  unitIso := KaroubiKaroubi.unitIso C
-  counitIso := KaroubiKaroubi.counitIso C
-
-Depends on / 依赖: Karoubi, toKaroubi
+--- 原说明 ---
+The equivalence `Karoubi C ≌ Karoubi (Karoubi C)`
 -/
 def equivalence : Karoubi C ≌ Karoubi (Karoubi C) where
   functor := toKaroubi (Karoubi C)
@@ -194,31 +145,27 @@ def equivalence : Karoubi C ≌ Karoubi (Karoubi C) where
   counitIso := KaroubiKaroubi.counitIso C
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `equivalence.additive_functor` / 实例 `equivalence.additive_functor`
-
-English:
-instance equivalence.additive_functor
-  signature: [Preadditive C]
-
-中文:
-实例 equivalence.additive_functor
-  签名: [预加性 C]
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.equivalence.additive_functor** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.Idempotents.KaroubiKaroubi.equivalence`。
+形式化陈述：∀ (C : Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Preadditive C],   (CategoryTheory.Idempotents.KaroubiKaroubi.equiv
+alence C).functor.Additive
+参数：C : Type u_1；CategoryTheory.Idempotents.KaroubiKaroubi.equivalence C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance equivalence.additive_functor [Preadditive C] :
     Functor.Additive (equivalence C).functor where
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `equivalence.additive_inverse` / 实例 `equivalence.additive_inverse`
-
-English:
-instance equivalence.additive_inverse
-  signature: [Preadditive C]
-
-中文:
-实例 equivalence.additive_inverse
-  签名: [预加性 C]
+/-
+**CategoryTheory.Idempotents.KaroubiKaroubi.equivalence.additive_inverse** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.Idempotents.KaroubiKaroubi.equivalence`。
+形式化陈述：∀ (C : Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Preadditive C],   (CategoryTheory.Idempotents.KaroubiKaroubi.equiv
+alence C).inverse.Additive
+参数：C : Type u_1；CategoryTheory.Idempotents.KaroubiKaroubi.equivalence C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance equivalence.additive_inverse [Preadditive C] :
     Functor.Additive (equivalence C).inverse where
@@ -228,3 +175,4 @@ end KaroubiKaroubi
 end Idempotents
 
 end CategoryTheory
+

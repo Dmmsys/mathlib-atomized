@@ -27,43 +27,30 @@ section Category
 
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `IsIsomorphic` / `IsIsomorphic` 的定义
+/-- An object `X` is isomorphic to an object `Y` if `X ≅ Y` is nonempty. -/
+/-
+**CategoryTheory.IsIsomorphic** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：IsIsomorphic : C -> C -> Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsIsomorphic
-  signature: : C -> C -> Prop
-  body: fun X Y => Nonempty (X ≅ Y)
-
-中文:
-定义 IsIsomorphic
-  签名: : C -> C -> 命题
-  定义体: fun X Y => Nonempty (X ≅ Y)
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+An object `X` is isomorphic to an object `Y` if `X ≅ Y` is nonempty.
 -/
-def IsIsomorphic : C -> C -> Prop := fun X Y => Nonempty (X ≅ Y)
+def IsIsomorphic : C → C → Prop := fun X Y => Nonempty (X ≅ Y)
 
 variable (C)
 
 /-- `IsIsomorphic` defines a setoid. -/
 @[instance_reducible]
-/--
-Definition of `isIsomorphicSetoid` / `isIsomorphicSetoid` 的定义
+/-
+**CategoryTheory.isIsomorphicSetoid** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：isIsomorphicSetoid : Setoid C where r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isIsomorphicSetoid
-  signature: : Setoid C where
-  body: IsIsomorphic
-  iseqv := ⟨fun X => ⟨Iso.refl X⟩, fun ⟨α⟩ => ⟨α.symm⟩, fun ⟨α⟩ ⟨β⟩ => ⟨α.trans β⟩⟩
-
-中文:
-定义 isIsomorphicSetoid
-  签名: : 集合等价关系 C where
-  定义体: IsIsomorphic
-  iseqv := ⟨fun X => ⟨Iso.refl X⟩, fun ⟨α⟩ => ⟨α.symm⟩, fun ⟨α⟩ ⟨β⟩ => ⟨α.trans β⟩⟩
-
-Depends on / 依赖: IsIsomorphic
+--- 原说明 ---
+`IsIsomorphic` defines a setoid.
 -/
 def isIsomorphicSetoid : Setoid C where
   r := IsIsomorphic
@@ -71,43 +58,22 @@ def isIsomorphicSetoid : Setoid C where
 
 end Category
 
-/--
-Definition of `isomorphismClasses` / `isomorphismClasses` 的定义
+/-- The functor that sends each category to the quotient space of its objects up to an isomorphism.
+-/
+/-
+**CategoryTheory.isomorphismClasses** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：isomorphismClasses : Cat.{v, u} ⥤ Type u where obj C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isomorphismClasses
-  signature: : Cat.{v, u} ⥤ Type u where
-  body: Quotient (isIsomorphicSetoid C.α)
-  map {_ _} F := ↾(Quot.map F.toFunctor.obj fun _ _ ⟨f⟩ => ⟨F.toFunctor.mapIso f⟩)
-  map_id {C} := by -- Porting note: this used to be `tidy`
-    ext x
-    apply @Quot.recOn _ _ _ x
-    all_goals cat_disch
-  map_comp {C D E} f g := by -- Porting note(s): idem
-    ext x
-    apply @Quot.recOn _ _ _ x
-    all_goals cat_disch
-
-中文:
-定义 isomorphismClasses
-  签名: : Cat.{v, u} ⥤ 类型u where
-  定义体: Quotient (isIsomorphicSetoid C.α)
-  map {_ _} F := ↾(Quot.map F.toFunctor.obj fun _ _ ⟨f⟩ => ⟨F.toFunctor.mapIso f⟩)
-  map_id {C} := by -- Porting note: this used to be `tidy`
-    ext x
-    apply @Quot.recOn _ _ _ x
-    all_goals cat_disch
-  map_comp {C D E} f g := by -- Porting note(s): idem
-    ext x
-    apply @Quot.recOn _ _ _ x
-    all_goals cat_disch
-
-Depends on / 依赖: Quotient, isIsomorphicSetoid
+--- 原说明 ---
+The functor that sends each category to the quotient space of its objects up to 
+an isomorphism.
 -/
 def isomorphismClasses : Cat.{v, u} ⥤ Type u where
   obj C := Quotient (isIsomorphicSetoid C.α)
   map {_ _} F := ↾(Quot.map F.toFunctor.obj fun _ _ ⟨f⟩ => ⟨F.toFunctor.mapIso f⟩)
-  map_id {C} := by -- Porting note: this used to be `tidy`
+  map_id {C} := by  -- Porting note: this used to be `tidy`
     ext x
     apply @Quot.recOn _ _ _ x
     all_goals cat_disch
@@ -115,24 +81,19 @@ def isomorphismClasses : Cat.{v, u} ⥤ Type u where
     ext x
     apply @Quot.recOn _ _ _ x
     all_goals cat_disch
-
-/--
-theorem `Groupoid.isIsomorphic_iff_nonempty_hom` / 定理 `Groupoid.isIsomorphic_iff_nonempty_hom`
-
-English:
-theorem Groupoid.isIsomorphic_iff_nonempty_hom
-  given: {C : Type u} [Groupoid.{v} C] {X Y : C}
-  proof: (Groupoid.isoEquivHom X Y).nonempty_congr
-
-中文:
-定理 群胚.isIsomorphic_iff_nonempty_hom
-  条件: {C : 类型u} [群胚.{v} C] {X Y : C}
-  证明: (Groupoid.isoEquivHom X Y).nonempty_congr
-
-Depends on / 依赖: Groupoid, Groupoid.isoEquivHom, isoEquivHom, nonempty_congr
+/-
+**CategoryTheory.Groupoid.isIsomorphic_iff_nonempty_hom** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Groupoid`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Groupoid C] {X Y : C}, CategoryTheor
+y.IsIsomorphic X Y ↔ Nonempty (X ⟶ Y)
+参数：X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
 -/
 theorem Groupoid.isIsomorphic_iff_nonempty_hom {C : Type u} [Groupoid.{v} C] {X Y : C} :
     IsIsomorphic X Y ↔ Nonempty (X ⟶ Y) :=
   (Groupoid.isoEquivHom X Y).nonempty_congr
 
 end CategoryTheory
+
